@@ -117,6 +117,8 @@ public class RecyclerListView extends RecyclerView {
     private float pinnedHeaderShadowTargetAlpha;
     /* access modifiers changed from: private */
     public Runnable removeHighlighSelectionRunnable;
+    /* access modifiers changed from: private */
+    public boolean resetSelectorOnChanged;
     /* access modifiers changed from: protected */
     public final Theme.ResourcesProvider resourcesProvider;
     private boolean scrollEnabled;
@@ -1907,6 +1909,10 @@ public class RecyclerListView extends RecyclerView {
         this.interceptedByChild = false;
     }
 
+    public void setResetSelectorOnChanged(boolean z) {
+        this.resetSelectorOnChanged = z;
+    }
+
     public int[] getResourceDeclareStyleableIntArray(String str, String str2) {
         try {
             Field field = Class.forName(str + ".R$styleable").getField(str2);
@@ -1943,12 +1949,15 @@ public class RecyclerListView extends RecyclerView {
                 }
             }
         };
+        this.resetSelectorOnChanged = true;
         this.observer = new RecyclerView.AdapterDataObserver() {
             public void onChanged() {
                 RecyclerListView.this.checkIfEmpty(true);
-                int unused = RecyclerListView.this.currentFirst = -1;
-                if (RecyclerListView.this.removeHighlighSelectionRunnable == null) {
-                    RecyclerListView.this.selectorRect.setEmpty();
+                if (RecyclerListView.this.resetSelectorOnChanged) {
+                    int unused = RecyclerListView.this.currentFirst = -1;
+                    if (RecyclerListView.this.removeHighlighSelectionRunnable == null) {
+                        RecyclerListView.this.selectorRect.setEmpty();
+                    }
                 }
                 RecyclerListView.this.invalidate();
             }
@@ -2122,19 +2131,21 @@ public class RecyclerListView extends RecyclerView {
         if (drawable != null) {
             drawable.setCallback((Drawable.Callback) null);
         }
-        int i2 = this.topBottomSelectorRadius;
-        if (i2 > 0) {
-            this.selectorDrawable = Theme.createRadSelectorDrawable(i, i2, i2);
+        int i2 = this.selectorType;
+        if (i2 == 8) {
+            this.selectorDrawable = Theme.createRadSelectorDrawable(i, this.selectorRadius, 0);
         } else {
-            int i3 = this.selectorRadius;
+            int i3 = this.topBottomSelectorRadius;
             if (i3 > 0) {
-                this.selectorDrawable = Theme.createSimpleSelectorRoundRectDrawable(i3, 0, i, -16777216);
+                this.selectorDrawable = Theme.createRadSelectorDrawable(i, i3, i3);
             } else {
-                int i4 = this.selectorType;
-                if (i4 == 2) {
+                int i4 = this.selectorRadius;
+                if (i4 > 0) {
+                    this.selectorDrawable = Theme.createSimpleSelectorRoundRectDrawable(i4, 0, i, -16777216);
+                } else if (i2 == 2) {
                     this.selectorDrawable = Theme.getSelectorDrawable(i, false);
                 } else {
-                    this.selectorDrawable = Theme.createSelectorDrawable(i, i4);
+                    this.selectorDrawable = Theme.createSelectorDrawable(i, i2);
                 }
             }
         }
@@ -2647,7 +2658,9 @@ public class RecyclerListView extends RecyclerView {
             if (i != -1) {
                 this.selectorPosition = i;
             }
-            if (this.topBottomSelectorRadius > 0 && getAdapter() != null) {
+            if (this.selectorType == 8) {
+                Theme.setMaskDrawableRad(this.selectorDrawable, this.selectorRadius, 0);
+            } else if (this.topBottomSelectorRadius > 0 && getAdapter() != null) {
                 Theme.setMaskDrawableRad(this.selectorDrawable, i == 0 ? this.topBottomSelectorRadius : 0, i == getAdapter().getItemCount() + -2 ? this.topBottomSelectorRadius : 0);
             }
             this.selectorRect.set(view.getLeft(), view.getTop(), view.getRight(), view.getBottom() - selectionBottomPadding);

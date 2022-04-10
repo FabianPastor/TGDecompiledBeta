@@ -1,16 +1,13 @@
 package org.telegram.ui.Components;
 
-import org.telegram.tgnet.RequestDelegate;
-import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC$TL_error;
+public final /* synthetic */ class AlertsCreator$$ExternalSyntheticLambda87 implements Runnable {
+    public final /* synthetic */ EditTextBoldCursor f$0;
 
-public final /* synthetic */ class AlertsCreator$$ExternalSyntheticLambda87 implements RequestDelegate {
-    public static final /* synthetic */ AlertsCreator$$ExternalSyntheticLambda87 INSTANCE = new AlertsCreator$$ExternalSyntheticLambda87();
-
-    private /* synthetic */ AlertsCreator$$ExternalSyntheticLambda87() {
+    public /* synthetic */ AlertsCreator$$ExternalSyntheticLambda87(EditTextBoldCursor editTextBoldCursor) {
+        this.f$0 = editTextBoldCursor;
     }
 
-    public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        AlertsCreator.lambda$createDeleteMessagesAlert$100(tLObject, tLRPC$TL_error);
+    public final void run() {
+        AlertsCreator.lambda$createThemeCreateDialog$123(this.f$0);
     }
 }

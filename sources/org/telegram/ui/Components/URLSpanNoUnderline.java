@@ -9,6 +9,7 @@ import org.telegram.tgnet.TLObject;
 import org.telegram.ui.Components.TextStyleSpan;
 
 public class URLSpanNoUnderline extends URLSpan {
+    private boolean forceNoUnderline;
     private TLObject object;
     private TextStyleSpan.TextStyleRun style;
 
@@ -16,9 +17,15 @@ public class URLSpanNoUnderline extends URLSpan {
         this(str, (TextStyleSpan.TextStyleRun) null);
     }
 
+    public URLSpanNoUnderline(String str, boolean z) {
+        this(str, (TextStyleSpan.TextStyleRun) null);
+        this.forceNoUnderline = z;
+    }
+
     /* JADX INFO: super call moved to the top of the method (can break code semantics) */
     public URLSpanNoUnderline(String str, TextStyleSpan.TextStyleRun textStyleRun) {
         super(str != null ? str.replace(8238, ' ') : str);
+        this.forceNoUnderline = false;
         this.style = textStyleRun;
     }
 
@@ -39,7 +46,7 @@ public class URLSpanNoUnderline extends URLSpan {
         if (textStyleRun != null) {
             textStyleRun.applyStyle(textPaint);
         }
-        textPaint.setUnderlineText(i == color);
+        textPaint.setUnderlineText(i == color && !this.forceNoUnderline);
     }
 
     public void setObject(TLObject tLObject) {

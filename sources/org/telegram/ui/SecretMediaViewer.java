@@ -10,6 +10,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.graphics.Path;
 import android.graphics.Point;
 import android.graphics.RectF;
 import android.graphics.SurfaceTexture;
@@ -61,9 +62,13 @@ public class SecretMediaViewer implements NotificationCenter.NotificationCenterD
     private static volatile SecretMediaViewer Instance;
     /* access modifiers changed from: private */
     public ActionBar actionBar;
+    private int[] animateFromRadius;
     private float animateToClipBottom;
+    private float animateToClipBottomOrigin;
     private float animateToClipHorizontal;
     private float animateToClipTop;
+    private float animateToClipTopOrigin;
+    private boolean animateToRadius;
     private float animateToScale;
     private float animateToX;
     private float animateToY;
@@ -76,8 +81,10 @@ public class SecretMediaViewer implements NotificationCenter.NotificationCenterD
     private boolean canDragDown = true;
     private ImageReceiver centerImage = new ImageReceiver();
     private float clipBottom;
+    private float clipBottomOrigin;
     private float clipHorizontal;
     private float clipTop;
+    private float clipTopOrigin;
     private boolean closeAfterAnimation;
     private long closeTime;
     /* access modifiers changed from: private */
@@ -92,6 +99,7 @@ public class SecretMediaViewer implements NotificationCenter.NotificationCenterD
     /* access modifiers changed from: private */
     public MessageObject currentMessageObject;
     private PhotoViewer.PhotoViewerProvider currentProvider;
+    private float[] currentRadii;
     private ImageReceiver.BitmapHolder currentThumb;
     private boolean disableShowCheck;
     private boolean discardTap;
@@ -138,6 +146,7 @@ public class SecretMediaViewer implements NotificationCenter.NotificationCenterD
     private float pinchStartY;
     /* access modifiers changed from: private */
     public int playerRetryPlayCount;
+    private Path roundRectPath = new Path();
     /* access modifiers changed from: private */
     public float scale = 1.0f;
     private Scroller scroller;
@@ -669,6 +678,7 @@ public class SecretMediaViewer implements NotificationCenter.NotificationCenterD
 
     public void openMedia(MessageObject messageObject, PhotoViewer.PhotoViewerProvider photoViewerProvider, Runnable runnable) {
         PhotoViewer.PlaceProviderObject placeForPhoto;
+        int i;
         MessageObject messageObject2 = messageObject;
         PhotoViewer.PhotoViewerProvider photoViewerProvider2 = photoViewerProvider;
         if (this.parentActivity != null && messageObject2 != null && messageObject.needDrawBluredPreview() && photoViewerProvider2 != null && (placeForPhoto = photoViewerProvider2.getPlaceForPhoto(messageObject2, (TLRPC$FileLocation) null, 0, true)) != null) {
@@ -710,42 +720,54 @@ public class SecretMediaViewer implements NotificationCenter.NotificationCenterD
             float width = drawRegion.width();
             float height = drawRegion.height();
             Point point = AndroidUtilities.displaySize;
-            int i = point.x;
-            int i2 = point.y;
-            int i3 = Build.VERSION.SDK_INT;
-            int i4 = i2 + (i3 >= 21 ? AndroidUtilities.statusBarHeight : 0);
-            this.scale = Math.max(width / ((float) i), height / ((float) i4));
+            int i2 = point.x;
+            int i3 = point.y + (Build.VERSION.SDK_INT >= 21 ? AndroidUtilities.statusBarHeight : 0);
+            this.scale = Math.max(width / ((float) i2), height / ((float) i3));
+            int[] iArr = placeForPhoto.radius;
+            if (iArr != null) {
+                this.animateFromRadius = new int[iArr.length];
+                int i4 = 0;
+                while (true) {
+                    int[] iArr2 = placeForPhoto.radius;
+                    if (i4 >= iArr2.length) {
+                        break;
+                    }
+                    this.animateFromRadius[i4] = iArr2[i4];
+                    i4++;
+                }
+            } else {
+                this.animateFromRadius = null;
+            }
             float f = drawRegion.left;
-            this.translationX = ((((float) placeForPhoto.viewX) + f) + (width / 2.0f)) - ((float) (i / 2));
-            this.translationY = ((((float) placeForPhoto.viewY) + drawRegion.top) + (height / 2.0f)) - ((float) (i4 / 2));
+            this.translationX = ((((float) placeForPhoto.viewX) + f) + (width / 2.0f)) - ((float) (i2 / 2));
+            this.translationY = ((((float) placeForPhoto.viewY) + drawRegion.top) + (height / 2.0f)) - ((float) (i3 / 2));
             this.clipHorizontal = Math.abs(f - placeForPhoto.imageReceiver.getImageX());
             int abs = (int) Math.abs(drawRegion.top - placeForPhoto.imageReceiver.getImageY());
-            int[] iArr = new int[2];
-            placeForPhoto.parentView.getLocationInWindow(iArr);
-            int i5 = iArr[1];
-            int i6 = i3 >= 21 ? 0 : AndroidUtilities.statusBarHeight;
-            int i7 = placeForPhoto.viewY;
-            float f2 = drawRegion.top;
-            float f3 = (((float) (i5 - i6)) - (((float) i7) + f2)) + ((float) placeForPhoto.clipTopAddition);
-            this.clipTop = f3;
-            if (f3 < 0.0f) {
-                this.clipTop = 0.0f;
-            }
-            float height2 = (((((float) i7) + f2) + ((float) ((int) height))) - ((float) ((iArr[1] + placeForPhoto.parentView.getHeight()) - (i3 >= 21 ? 0 : AndroidUtilities.statusBarHeight)))) + ((float) placeForPhoto.clipBottomAddition);
+            int[] iArr3 = new int[2];
+            placeForPhoto.parentView.getLocationInWindow(iArr3);
+            int i5 = iArr3[1];
+            int i6 = Build.VERSION.SDK_INT;
+            float f2 = (((float) (i5 - (i6 >= 21 ? 0 : AndroidUtilities.statusBarHeight))) - (((float) placeForPhoto.viewY) + drawRegion.top)) + ((float) placeForPhoto.clipTopAddition);
+            this.clipTop = f2;
+            float f3 = (float) abs;
+            this.clipTop = Math.max(0.0f, Math.max(f2, f3));
+            float height2 = (((((float) placeForPhoto.viewY) + drawRegion.top) + ((float) ((int) height))) - ((float) ((iArr3[1] + placeForPhoto.parentView.getHeight()) - (i6 >= 21 ? 0 : AndroidUtilities.statusBarHeight)))) + ((float) placeForPhoto.clipBottomAddition);
             this.clipBottom = height2;
-            if (height2 < 0.0f) {
-                this.clipBottom = 0.0f;
-            }
-            float f4 = (float) abs;
-            this.clipTop = Math.max(this.clipTop, f4);
-            this.clipBottom = Math.max(this.clipBottom, f4);
+            this.clipBottom = Math.max(0.0f, Math.max(height2, f3));
+            this.clipTopOrigin = 0.0f;
+            this.clipTopOrigin = Math.max(0.0f, Math.max(0.0f, f3));
+            this.clipBottomOrigin = 0.0f;
+            this.clipBottomOrigin = Math.max(0.0f, Math.max(0.0f, f3));
             this.animationStartTime = System.currentTimeMillis();
             this.animateToX = 0.0f;
             this.animateToY = 0.0f;
             this.animateToClipBottom = 0.0f;
+            this.animateToClipBottomOrigin = 0.0f;
             this.animateToClipHorizontal = 0.0f;
             this.animateToClipTop = 0.0f;
+            this.animateToClipTopOrigin = 0.0f;
             this.animateToScale = 1.0f;
+            this.animateToRadius = true;
             this.zoomAnimation = true;
             NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.messagesDeleted);
             NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.updateMessageMedia);
@@ -761,6 +783,7 @@ public class SecretMediaViewer implements NotificationCenter.NotificationCenterD
             }
             this.currentThumb = placeForPhoto.imageReceiver.getThumbBitmapSafe();
             if (document == null) {
+                i = 2;
                 this.actionBar.setTitle(LocaleController.getString("DisappearingPhoto", NUM));
                 this.centerImage.setImage(ImageLocation.getForObject(FileLoader.getClosestPhotoSizeWithSize(messageObject2.photoThumbs, AndroidUtilities.getPhotoSize()), messageObject2.photoThumbsObject), (String) null, (Drawable) this.currentThumb != null ? new BitmapDrawable(this.currentThumb.bitmap) : null, -1, (String) null, (Object) messageObject, 2);
                 SecretDeleteTimer secretDeleteTimer2 = this.secretDeleteTimer;
@@ -768,11 +791,13 @@ public class SecretMediaViewer implements NotificationCenter.NotificationCenterD
                 secretDeleteTimer2.setDestroyTime(((long) tLRPC$Message.destroyTime) * 1000, (long) tLRPC$Message.ttl, false);
             } else if (MessageObject.isGifDocument(document)) {
                 this.actionBar.setTitle(LocaleController.getString("DisappearingGif", NUM));
+                i = 2;
                 this.centerImage.setImage(ImageLocation.getForDocument(document), (String) null, (Drawable) this.currentThumb != null ? new BitmapDrawable(this.currentThumb.bitmap) : null, -1, (String) null, (Object) messageObject, 1);
                 SecretDeleteTimer secretDeleteTimer3 = this.secretDeleteTimer;
                 TLRPC$Message tLRPC$Message2 = messageObject2.messageOwner;
                 secretDeleteTimer3.setDestroyTime(((long) tLRPC$Message2.destroyTime) * 1000, (long) tLRPC$Message2.ttl, false);
             } else {
+                i = 2;
                 this.playerRetryPlayCount = 1;
                 this.actionBar.setTitle(LocaleController.getString("DisappearingVideo", NUM));
                 File file = new File(messageObject2.messageOwner.attachPath);
@@ -807,8 +832,8 @@ public class SecretMediaViewer implements NotificationCenter.NotificationCenterD
             this.secretDeleteTimer.invalidate();
             this.isVisible = true;
             Window window = this.parentActivity.getWindow();
-            int i8 = Build.VERSION.SDK_INT;
-            if (i8 >= 21) {
+            int i7 = Build.VERSION.SDK_INT;
+            if (i7 >= 21) {
                 this.wasNavigationBarColor = window.getNavigationBarColor();
                 this.wasLightNavigationBar = AndroidUtilities.getLightNavigationBar(window);
                 AndroidUtilities.setLightNavigationBar(window, false);
@@ -816,7 +841,33 @@ public class SecretMediaViewer implements NotificationCenter.NotificationCenterD
             }
             AnimatorSet animatorSet = new AnimatorSet();
             this.imageMoveAnimation = animatorSet;
-            animatorSet.playTogether(new Animator[]{ObjectAnimator.ofFloat(this.actionBar, View.ALPHA, new float[]{0.0f, 1.0f}), ObjectAnimator.ofFloat(this.secretDeleteTimer, View.ALPHA, new float[]{0.0f, 1.0f}), ObjectAnimator.ofInt(this.photoBackgroundDrawable, AnimationProperties.COLOR_DRAWABLE_ALPHA, new int[]{0, 255}), ObjectAnimator.ofFloat(this.secretDeleteTimer, View.ALPHA, new float[]{0.0f, 1.0f}), ObjectAnimator.ofFloat(this, "animationValue", new float[]{0.0f, 1.0f})});
+            Animator[] animatorArr = new Animator[5];
+            float[] fArr = new float[i];
+            // fill-array-data instruction
+            fArr[0] = 0;
+            fArr[1] = NUM;
+            animatorArr[0] = ObjectAnimator.ofFloat(this.actionBar, View.ALPHA, fArr);
+            float[] fArr2 = new float[i];
+            // fill-array-data instruction
+            fArr2[0] = 0;
+            fArr2[1] = NUM;
+            animatorArr[1] = ObjectAnimator.ofFloat(this.secretDeleteTimer, View.ALPHA, fArr2);
+            int[] iArr4 = new int[i];
+            // fill-array-data instruction
+            iArr4[0] = 0;
+            iArr4[1] = 255;
+            animatorArr[i] = ObjectAnimator.ofInt(this.photoBackgroundDrawable, AnimationProperties.COLOR_DRAWABLE_ALPHA, iArr4);
+            float[] fArr3 = new float[i];
+            // fill-array-data instruction
+            fArr3[0] = 0;
+            fArr3[1] = NUM;
+            animatorArr[3] = ObjectAnimator.ofFloat(this.secretDeleteTimer, View.ALPHA, fArr3);
+            float[] fArr4 = new float[i];
+            // fill-array-data instruction
+            fArr4[0] = 0;
+            fArr4[1] = NUM;
+            animatorArr[4] = ObjectAnimator.ofFloat(this, "animationValue", fArr4);
+            animatorSet.playTogether(animatorArr);
             this.photoAnimationInProgress = 3;
             this.photoAnimationEndRunnable = new SecretMediaViewer$$ExternalSyntheticLambda2(this, runnable);
             this.imageMoveAnimation.setDuration(250);
@@ -829,8 +880,8 @@ public class SecretMediaViewer implements NotificationCenter.NotificationCenterD
                 }
             });
             this.photoTransitionAnimationStartTime = System.currentTimeMillis();
-            if (i8 >= 18) {
-                this.containerView.setLayerType(2, (Paint) null);
+            if (i7 >= 18) {
+                this.containerView.setLayerType(i, (Paint) null);
             }
             this.imageMoveAnimation.setInterpolator(new DecelerateInterpolator());
             int unused = this.photoBackgroundDrawable.frame = 0;
@@ -966,35 +1017,37 @@ public class SecretMediaViewer implements NotificationCenter.NotificationCenterD
     }
 
     /* access modifiers changed from: private */
-    /* JADX WARNING: Removed duplicated region for block: B:85:0x0277  */
+    /* JADX WARNING: Removed duplicated region for block: B:104:0x0315  */
+    /* JADX WARNING: Removed duplicated region for block: B:83:0x0245  */
+    /* JADX WARNING: Removed duplicated region for block: B:84:0x0248  */
+    /* JADX WARNING: Removed duplicated region for block: B:94:0x02d4  */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    public void onDraw(android.graphics.Canvas r17) {
+    public void onDraw(android.graphics.Canvas r21) {
         /*
-            r16 = this;
-            r0 = r16
-            r1 = r17
+            r20 = this;
+            r0 = r20
+            r1 = r21
             boolean r2 = r0.isPhotoVisible
             if (r2 != 0) goto L_0x0009
             return
         L_0x0009:
             android.animation.AnimatorSet r2 = r0.imageMoveAnimation
-            r3 = -1082130432(0xffffffffbvar_, float:-1.0)
             r4 = 0
             r5 = 0
             r6 = 1065353216(0x3var_, float:1.0)
-            if (r2 == 0) goto L_0x00c9
+            if (r2 == 0) goto L_0x00e7
             org.telegram.ui.Components.Scroller r2 = r0.scroller
             boolean r2 = r2.isFinished()
-            if (r2 != 0) goto L_0x0020
+            if (r2 != 0) goto L_0x001e
             org.telegram.ui.Components.Scroller r2 = r0.scroller
             r2.abortAnimation()
-        L_0x0020:
+        L_0x001e:
             boolean r2 = r0.useOvershootForScale
-            if (r2 == 0) goto L_0x0079
+            if (r2 == 0) goto L_0x0087
             float r2 = r0.animationValue
             r7 = 1063675494(0x3var_, float:0.9)
             int r8 = (r2 > r7 ? 1 : (r2 == r7 ? 0 : -1))
-            if (r8 >= 0) goto L_0x003c
+            if (r8 >= 0) goto L_0x003a
             float r2 = r2 / r7
             float r7 = r0.scale
             float r8 = r0.animateToScale
@@ -1003,8 +1056,8 @@ public class SecretMediaViewer implements NotificationCenter.NotificationCenterD
             float r8 = r8 - r7
             float r8 = r8 * r2
             float r7 = r7 + r8
-            goto L_0x0050
-        L_0x003c:
+            goto L_0x004e
+        L_0x003a:
             float r8 = r0.animateToScale
             r9 = 1017370368(0x3ca3d700, float:0.01999998)
             float r9 = r9 * r8
@@ -1015,7 +1068,7 @@ public class SecretMediaViewer implements NotificationCenter.NotificationCenterD
             float r9 = r9 * r2
             float r7 = r8 + r9
             r2 = 1065353216(0x3var_, float:1.0)
-        L_0x0050:
+        L_0x004e:
             float r8 = r0.translationY
             float r9 = r0.animateToY
             float r9 = r9 - r8
@@ -1036,13 +1089,23 @@ public class SecretMediaViewer implements NotificationCenter.NotificationCenterD
             float r12 = r12 - r11
             float r12 = r12 * r2
             float r11 = r11 + r12
-            float r12 = r0.clipHorizontal
-            float r13 = r0.animateToClipHorizontal
+            float r12 = r0.clipTopOrigin
+            float r13 = r0.animateToClipTopOrigin
             float r13 = r13 - r12
             float r13 = r13 * r2
             float r12 = r12 + r13
-            goto L_0x00ac
-        L_0x0079:
+            float r13 = r0.clipBottomOrigin
+            float r14 = r0.animateToClipBottomOrigin
+            float r14 = r14 - r13
+            float r14 = r14 * r2
+            float r13 = r13 + r14
+            float r14 = r0.clipHorizontal
+            float r15 = r0.animateToClipHorizontal
+            float r15 = r15 - r14
+            float r15 = r15 * r2
+            float r14 = r14 + r15
+            goto L_0x00ca
+        L_0x0087:
             float r2 = r0.scale
             float r7 = r0.animateToScale
             float r7 = r7 - r2
@@ -1069,35 +1132,45 @@ public class SecretMediaViewer implements NotificationCenter.NotificationCenterD
             float r12 = r12 - r11
             float r12 = r12 * r8
             float r11 = r11 + r12
-            float r12 = r0.clipHorizontal
-            float r13 = r0.animateToClipHorizontal
+            float r12 = r0.clipTopOrigin
+            float r13 = r0.animateToClipTopOrigin
             float r13 = r13 - r12
             float r13 = r13 * r8
             float r12 = r12 + r13
+            float r13 = r0.clipBottomOrigin
+            float r14 = r0.animateToClipBottomOrigin
+            float r14 = r14 - r13
+            float r14 = r14 * r8
+            float r13 = r13 + r14
+            float r14 = r0.clipHorizontal
+            float r15 = r0.animateToClipHorizontal
+            float r15 = r15 - r14
+            float r15 = r15 * r8
+            float r14 = r14 + r15
             r8 = r2
-        L_0x00ac:
+        L_0x00ca:
             float r2 = r0.animateToScale
             int r2 = (r2 > r6 ? 1 : (r2 == r6 ? 0 : -1))
-            if (r2 != 0) goto L_0x00c0
+            if (r2 != 0) goto L_0x00de
             float r2 = r0.scale
             int r2 = (r2 > r6 ? 1 : (r2 == r6 ? 0 : -1))
-            if (r2 != 0) goto L_0x00c0
+            if (r2 != 0) goto L_0x00de
             float r2 = r0.translationX
             int r2 = (r2 > r4 ? 1 : (r2 == r4 ? 0 : -1))
-            if (r2 != 0) goto L_0x00c0
+            if (r2 != 0) goto L_0x00de
             r2 = r8
-            goto L_0x00c2
-        L_0x00c0:
+            goto L_0x00e0
+        L_0x00de:
             r2 = -1082130432(0xffffffffbvar_, float:-1.0)
-        L_0x00c2:
-            org.telegram.ui.SecretMediaViewer$FrameLayoutDrawer r13 = r0.containerView
-            r13.invalidate()
-            goto L_0x0161
-        L_0x00c9:
+        L_0x00e0:
+            org.telegram.ui.SecretMediaViewer$FrameLayoutDrawer r15 = r0.containerView
+            r15.invalidate()
+            goto L_0x018b
+        L_0x00e7:
             long r7 = r0.animationStartTime
             r9 = 0
             int r2 = (r7 > r9 ? 1 : (r7 == r9 ? 0 : -1))
-            if (r2 == 0) goto L_0x00f2
+            if (r2 == 0) goto L_0x0118
             float r2 = r0.animateToX
             r0.translationX = r2
             float r2 = r0.animateToY
@@ -1106,6 +1179,10 @@ public class SecretMediaViewer implements NotificationCenter.NotificationCenterD
             r0.clipBottom = r2
             float r2 = r0.animateToClipTop
             r0.clipTop = r2
+            float r2 = r0.animateToClipTopOrigin
+            r0.clipTopOrigin = r2
+            float r2 = r0.animateToClipBottomOrigin
+            r0.clipBottomOrigin = r2
             float r2 = r0.animateToClipHorizontal
             r0.clipHorizontal = r2
             float r2 = r0.animateToScale
@@ -1114,231 +1191,301 @@ public class SecretMediaViewer implements NotificationCenter.NotificationCenterD
             r0.updateMinMax(r2)
             r0.zoomAnimation = r5
             r0.useOvershootForScale = r5
-        L_0x00f2:
+        L_0x0118:
             org.telegram.ui.Components.Scroller r2 = r0.scroller
             boolean r2 = r2.isFinished()
-            if (r2 != 0) goto L_0x014d
+            if (r2 != 0) goto L_0x0173
             org.telegram.ui.Components.Scroller r2 = r0.scroller
             boolean r2 = r2.computeScrollOffset()
-            if (r2 == 0) goto L_0x014d
+            if (r2 == 0) goto L_0x0173
             org.telegram.ui.Components.Scroller r2 = r0.scroller
             int r2 = r2.getStartX()
             float r2 = (float) r2
             float r7 = r0.maxX
             int r2 = (r2 > r7 ? 1 : (r2 == r7 ? 0 : -1))
-            if (r2 >= 0) goto L_0x0125
+            if (r2 >= 0) goto L_0x014b
             org.telegram.ui.Components.Scroller r2 = r0.scroller
             int r2 = r2.getStartX()
             float r2 = (float) r2
             float r7 = r0.minX
             int r2 = (r2 > r7 ? 1 : (r2 == r7 ? 0 : -1))
-            if (r2 <= 0) goto L_0x0125
+            if (r2 <= 0) goto L_0x014b
             org.telegram.ui.Components.Scroller r2 = r0.scroller
             int r2 = r2.getCurrX()
             float r2 = (float) r2
             r0.translationX = r2
-        L_0x0125:
+        L_0x014b:
             org.telegram.ui.Components.Scroller r2 = r0.scroller
             int r2 = r2.getStartY()
             float r2 = (float) r2
             float r7 = r0.maxY
             int r2 = (r2 > r7 ? 1 : (r2 == r7 ? 0 : -1))
-            if (r2 >= 0) goto L_0x0148
+            if (r2 >= 0) goto L_0x016e
             org.telegram.ui.Components.Scroller r2 = r0.scroller
             int r2 = r2.getStartY()
             float r2 = (float) r2
             float r7 = r0.minY
             int r2 = (r2 > r7 ? 1 : (r2 == r7 ? 0 : -1))
-            if (r2 <= 0) goto L_0x0148
+            if (r2 <= 0) goto L_0x016e
             org.telegram.ui.Components.Scroller r2 = r0.scroller
             int r2 = r2.getCurrY()
             float r2 = (float) r2
             r0.translationY = r2
-        L_0x0148:
+        L_0x016e:
             org.telegram.ui.SecretMediaViewer$FrameLayoutDrawer r2 = r0.containerView
             r2.invalidate()
-        L_0x014d:
+        L_0x0173:
             float r7 = r0.scale
             float r8 = r0.translationY
             float r9 = r0.translationX
             float r10 = r0.clipTop
             float r11 = r0.clipBottom
-            float r12 = r0.clipHorizontal
+            float r12 = r0.clipTopOrigin
+            float r13 = r0.clipBottomOrigin
+            float r14 = r0.clipHorizontal
             boolean r2 = r0.moving
-            if (r2 != 0) goto L_0x015f
+            if (r2 != 0) goto L_0x0189
             r2 = r8
-            goto L_0x0161
-        L_0x015f:
+            goto L_0x018b
+        L_0x0189:
             r2 = -1082130432(0xffffffffbvar_, float:-1.0)
-        L_0x0161:
-            int r13 = r0.photoAnimationInProgress
-            r14 = 3
-            if (r13 == r14) goto L_0x01be
-            float r13 = r0.scale
-            int r13 = (r13 > r6 ? 1 : (r13 == r6 ? 0 : -1))
-            if (r13 != 0) goto L_0x0198
+        L_0x018b:
+            int[] r15 = r0.animateFromRadius
+            if (r15 == 0) goto L_0x01d1
+            float[] r15 = r0.currentRadii
+            r5 = 8
+            if (r15 != 0) goto L_0x0199
+            float[] r15 = new float[r5]
+            r0.currentRadii = r15
+        L_0x0199:
+            boolean r15 = r0.animateToRadius
+            if (r15 == 0) goto L_0x01a0
+            float r15 = r0.animationValue
+            goto L_0x01a4
+        L_0x01a0:
+            float r15 = r0.animationValue
+            float r15 = r6 - r15
+        L_0x01a4:
+            r3 = 0
+            r17 = 1
+        L_0x01a7:
+            if (r3 >= r5) goto L_0x01d3
+            float[] r5 = r0.currentRadii
+            int r18 = r3 + 1
+            int[] r6 = r0.animateFromRadius
+            int r19 = r3 / 2
+            r6 = r6[r19]
+            float r6 = (float) r6
+            r19 = 1073741824(0x40000000, float:2.0)
+            float r6 = r6 * r19
+            float r6 = org.telegram.messenger.AndroidUtilities.lerp((float) r6, (float) r4, (float) r15)
+            r5[r18] = r6
+            r5[r3] = r6
+            float[] r5 = r0.currentRadii
+            r5 = r5[r3]
+            int r5 = (r5 > r4 ? 1 : (r5 == r4 ? 0 : -1))
+            if (r5 <= 0) goto L_0x01ca
+            r17 = 0
+        L_0x01ca:
+            int r3 = r3 + 2
+            r5 = 8
+            r6 = 1065353216(0x3var_, float:1.0)
+            goto L_0x01a7
+        L_0x01d1:
+            r17 = 1
+        L_0x01d3:
+            int r3 = r0.photoAnimationInProgress
+            r5 = 3
+            if (r3 == r5) goto L_0x0238
+            float r3 = r0.scale
+            r5 = 1065353216(0x3var_, float:1.0)
+            int r3 = (r3 > r5 ? 1 : (r3 == r5 ? 0 : -1))
+            if (r3 != 0) goto L_0x0210
+            r3 = -1082130432(0xffffffffbvar_, float:-1.0)
             int r3 = (r2 > r3 ? 1 : (r2 == r3 ? 0 : -1))
-            if (r3 == 0) goto L_0x0198
+            if (r3 == 0) goto L_0x0210
             boolean r3 = r0.zoomAnimation
-            if (r3 != 0) goto L_0x0198
-            int r3 = r16.getContainerViewHeight()
+            if (r3 != 0) goto L_0x0210
+            int r3 = r20.getContainerViewHeight()
             float r3 = (float) r3
-            r13 = 1082130432(0x40800000, float:4.0)
-            float r3 = r3 / r13
-            org.telegram.ui.SecretMediaViewer$PhotoBackgroundDrawable r13 = r0.photoBackgroundDrawable
-            r14 = 1123942400(0x42fe0000, float:127.0)
+            r5 = 1082130432(0x40800000, float:4.0)
+            float r3 = r3 / r5
+            org.telegram.ui.SecretMediaViewer$PhotoBackgroundDrawable r5 = r0.photoBackgroundDrawable
+            r6 = 1123942400(0x42fe0000, float:127.0)
             r15 = 1132396544(0x437var_, float:255.0)
             float r2 = java.lang.Math.abs(r2)
             float r2 = java.lang.Math.min(r2, r3)
             float r2 = r2 / r3
-            float r2 = r6 - r2
+            r3 = 1065353216(0x3var_, float:1.0)
+            float r2 = r3 - r2
             float r2 = r2 * r15
-            float r2 = java.lang.Math.max(r14, r2)
+            float r2 = java.lang.Math.max(r6, r2)
             int r2 = (int) r2
-            r13.setAlpha(r2)
-            goto L_0x019f
-        L_0x0198:
+            r5.setAlpha(r2)
+            goto L_0x0217
+        L_0x0210:
             org.telegram.ui.SecretMediaViewer$PhotoBackgroundDrawable r2 = r0.photoBackgroundDrawable
             r3 = 255(0xff, float:3.57E-43)
             r2.setAlpha(r3)
-        L_0x019f:
+        L_0x0217:
             boolean r2 = r0.zoomAnimation
-            if (r2 != 0) goto L_0x01be
+            if (r2 != 0) goto L_0x0238
             float r2 = r0.maxX
             int r3 = (r9 > r2 ? 1 : (r9 == r2 ? 0 : -1))
-            if (r3 <= 0) goto L_0x01be
+            if (r3 <= 0) goto L_0x0238
             float r9 = r9 - r2
-            int r2 = r17.getWidth()
+            int r2 = r21.getWidth()
             float r2 = (float) r2
             float r9 = r9 / r2
-            float r2 = java.lang.Math.min(r6, r9)
-            r3 = 1050253722(0x3e99999a, float:0.3)
-            float r3 = r3 * r2
-            float r2 = r6 - r2
-            float r9 = r0.maxX
-            goto L_0x01c1
-        L_0x01be:
             r2 = 1065353216(0x3var_, float:1.0)
-            r3 = 0
-        L_0x01c1:
-            com.google.android.exoplayer2.ui.AspectRatioFrameLayout r13 = r0.aspectRatioFrameLayout
-            r14 = 1
-            if (r13 == 0) goto L_0x01cd
-            int r13 = r13.getVisibility()
-            if (r13 != 0) goto L_0x01cd
-            r5 = 1
-        L_0x01cd:
-            r17.save()
-            float r7 = r7 - r3
-            int r3 = r16.getContainerViewWidth()
-            int r3 = r3 / 2
-            float r3 = (float) r3
-            float r3 = r3 + r9
-            int r9 = r16.getContainerViewHeight()
-            int r9 = r9 / 2
-            float r9 = (float) r9
-            float r9 = r9 + r8
-            r1.translate(r3, r9)
+            float r3 = java.lang.Math.min(r2, r9)
+            r5 = 1050253722(0x3e99999a, float:0.3)
+            float r5 = r5 * r3
+            float r3 = r2 - r3
+            float r9 = r0.maxX
+            goto L_0x023b
+        L_0x0238:
+            r3 = 1065353216(0x3var_, float:1.0)
+            r5 = 0
+        L_0x023b:
+            com.google.android.exoplayer2.ui.AspectRatioFrameLayout r2 = r0.aspectRatioFrameLayout
+            if (r2 == 0) goto L_0x0248
+            int r2 = r2.getVisibility()
+            if (r2 != 0) goto L_0x0248
+            r16 = 1
+            goto L_0x024a
+        L_0x0248:
+            r16 = 0
+        L_0x024a:
+            r21.save()
+            float r7 = r7 - r5
+            int r2 = r20.getContainerViewWidth()
+            int r2 = r2 / 2
+            float r2 = (float) r2
+            float r2 = r2 + r9
+            int r5 = r20.getContainerViewHeight()
+            int r5 = r5 / 2
+            float r5 = (float) r5
+            float r5 = r5 + r8
+            r1.translate(r2, r5)
             r1.scale(r7, r7)
-            org.telegram.messenger.ImageReceiver r3 = r0.centerImage
-            int r3 = r3.getBitmapWidth()
-            org.telegram.messenger.ImageReceiver r8 = r0.centerImage
-            int r8 = r8.getBitmapHeight()
-            if (r5 == 0) goto L_0x0223
-            boolean r9 = r0.textureUploaded
-            if (r9 == 0) goto L_0x0223
-            float r9 = (float) r3
-            float r13 = (float) r8
-            float r9 = r9 / r13
-            android.view.TextureView r13 = r0.videoTextureView
-            int r13 = r13.getMeasuredWidth()
-            float r13 = (float) r13
-            android.view.TextureView r15 = r0.videoTextureView
-            int r15 = r15.getMeasuredHeight()
-            float r15 = (float) r15
-            float r13 = r13 / r15
-            float r9 = r9 - r13
-            float r9 = java.lang.Math.abs(r9)
-            r13 = 1008981770(0x3CLASSNAMEd70a, float:0.01)
-            int r9 = (r9 > r13 ? 1 : (r9 == r13 ? 0 : -1))
-            if (r9 <= 0) goto L_0x0223
-            android.view.TextureView r3 = r0.videoTextureView
-            int r3 = r3.getMeasuredWidth()
+            org.telegram.messenger.ImageReceiver r2 = r0.centerImage
+            int r2 = r2.getBitmapWidth()
+            org.telegram.messenger.ImageReceiver r5 = r0.centerImage
+            int r5 = r5.getBitmapHeight()
+            if (r16 == 0) goto L_0x02a0
+            boolean r6 = r0.textureUploaded
+            if (r6 == 0) goto L_0x02a0
+            float r6 = (float) r2
+            float r8 = (float) r5
+            float r6 = r6 / r8
             android.view.TextureView r8 = r0.videoTextureView
-            int r8 = r8.getMeasuredHeight()
-        L_0x0223:
-            int r9 = r16.getContainerViewHeight()
-            float r9 = (float) r9
+            int r8 = r8.getMeasuredWidth()
             float r8 = (float) r8
-            float r9 = r9 / r8
-            int r13 = r16.getContainerViewWidth()
-            float r13 = (float) r13
-            float r3 = (float) r3
-            float r13 = r13 / r3
-            float r9 = java.lang.Math.min(r9, r13)
-            float r3 = r3 * r9
-            int r3 = (int) r3
-            float r8 = r8 * r9
-            int r8 = (int) r8
-            int r9 = -r3
+            android.view.TextureView r9 = r0.videoTextureView
+            int r9 = r9.getMeasuredHeight()
+            float r9 = (float) r9
+            float r8 = r8 / r9
+            float r6 = r6 - r8
+            float r6 = java.lang.Math.abs(r6)
+            r8 = 1008981770(0x3CLASSNAMEd70a, float:0.01)
+            int r6 = (r6 > r8 ? 1 : (r6 == r8 ? 0 : -1))
+            if (r6 <= 0) goto L_0x02a0
+            android.view.TextureView r2 = r0.videoTextureView
+            int r2 = r2.getMeasuredWidth()
+            android.view.TextureView r5 = r0.videoTextureView
+            int r5 = r5.getMeasuredHeight()
+        L_0x02a0:
+            int r6 = r20.getContainerViewHeight()
+            float r6 = (float) r6
+            float r5 = (float) r5
+            float r6 = r6 / r5
+            int r8 = r20.getContainerViewWidth()
+            float r8 = (float) r8
+            float r2 = (float) r2
+            float r8 = r8 / r2
+            float r6 = java.lang.Math.min(r6, r8)
+            float r2 = r2 * r6
+            int r2 = (int) r2
+            float r5 = r5 * r6
+            int r5 = (int) r5
+            int r6 = -r2
+            int r6 = r6 / 2
+            float r6 = (float) r6
+            float r14 = r14 / r7
+            float r8 = r6 + r14
+            int r9 = -r5
             int r9 = r9 / 2
             float r9 = (float) r9
-            float r12 = r12 / r7
-            float r13 = r9 + r12
-            int r15 = -r8
-            int r15 = r15 / 2
-            float r15 = (float) r15
             float r10 = r10 / r7
-            float r10 = r10 + r15
-            int r4 = r3 / 2
-            float r4 = (float) r4
-            float r4 = r4 - r12
-            int r12 = r8 / 2
-            float r12 = (float) r12
+            float r10 = r10 + r9
+            int r15 = r2 / 2
+            float r15 = (float) r15
+            float r15 = r15 - r14
+            int r14 = r5 / 2
+            float r14 = (float) r14
             float r11 = r11 / r7
-            float r12 = r12 - r11
-            r1.clipRect(r13, r10, r4, r12)
-            if (r5 == 0) goto L_0x0264
-            boolean r4 = r0.textureUploaded
-            if (r4 == 0) goto L_0x0264
-            boolean r4 = r0.videoCrossfadeStarted
-            if (r4 == 0) goto L_0x0264
+            float r11 = r14 - r11
+            r1.clipRect(r8, r10, r15, r11)
+            if (r17 != 0) goto L_0x02f0
+            android.graphics.Path r10 = r0.roundRectPath
+            r10.reset()
+            android.graphics.RectF r10 = org.telegram.messenger.AndroidUtilities.rectTmp
+            float r12 = r12 / r7
+            float r12 = r12 + r9
+            float r13 = r13 / r7
+            float r14 = r14 - r13
+            r10.set(r8, r12, r15, r14)
+            android.graphics.Path r7 = r0.roundRectPath
+            float[] r8 = r0.currentRadii
+            android.graphics.Path$Direction r11 = android.graphics.Path.Direction.CW
+            r7.addRoundRect(r10, r8, r11)
+            android.graphics.Path r7 = r0.roundRectPath
+            r1.clipPath(r7)
+        L_0x02f0:
+            if (r16 == 0) goto L_0x0302
+            boolean r7 = r0.textureUploaded
+            if (r7 == 0) goto L_0x0302
+            boolean r7 = r0.videoCrossfadeStarted
+            if (r7 == 0) goto L_0x0302
+            float r7 = r0.videoCrossfadeAlpha
+            r8 = 1065353216(0x3var_, float:1.0)
+            int r7 = (r7 > r8 ? 1 : (r7 == r8 ? 0 : -1))
+            if (r7 == 0) goto L_0x0313
+        L_0x0302:
+            org.telegram.messenger.ImageReceiver r7 = r0.centerImage
+            r7.setAlpha(r3)
+            org.telegram.messenger.ImageReceiver r7 = r0.centerImage
+            float r2 = (float) r2
+            float r5 = (float) r5
+            r7.setImageCoords(r6, r9, r2, r5)
+            org.telegram.messenger.ImageReceiver r2 = r0.centerImage
+            r2.draw(r1)
+        L_0x0313:
+            if (r16 == 0) goto L_0x0367
+            boolean r2 = r0.videoCrossfadeStarted
+            if (r2 != 0) goto L_0x0328
+            boolean r2 = r0.textureUploaded
+            if (r2 == 0) goto L_0x0328
+            r2 = 1
+            r0.videoCrossfadeStarted = r2
+            r0.videoCrossfadeAlpha = r4
+            long r4 = java.lang.System.currentTimeMillis()
+            r0.videoCrossfadeAlphaLastTime = r4
+        L_0x0328:
+            r1.translate(r6, r9)
+            android.view.TextureView r2 = r0.videoTextureView
             float r4 = r0.videoCrossfadeAlpha
-            int r4 = (r4 > r6 ? 1 : (r4 == r6 ? 0 : -1))
-            if (r4 == 0) goto L_0x0275
-        L_0x0264:
-            org.telegram.messenger.ImageReceiver r4 = r0.centerImage
-            r4.setAlpha(r2)
-            org.telegram.messenger.ImageReceiver r4 = r0.centerImage
-            float r3 = (float) r3
-            float r7 = (float) r8
-            r4.setImageCoords(r9, r15, r3, r7)
-            org.telegram.messenger.ImageReceiver r3 = r0.centerImage
-            r3.draw(r1)
-        L_0x0275:
-            if (r5 == 0) goto L_0x02c5
-            boolean r3 = r0.videoCrossfadeStarted
-            if (r3 != 0) goto L_0x028a
-            boolean r3 = r0.textureUploaded
-            if (r3 == 0) goto L_0x028a
-            r0.videoCrossfadeStarted = r14
-            r3 = 0
-            r0.videoCrossfadeAlpha = r3
-            long r3 = java.lang.System.currentTimeMillis()
-            r0.videoCrossfadeAlphaLastTime = r3
-        L_0x028a:
-            r1.translate(r9, r15)
-            android.view.TextureView r3 = r0.videoTextureView
-            float r4 = r0.videoCrossfadeAlpha
-            float r2 = r2 * r4
-            r3.setAlpha(r2)
+            float r3 = r3 * r4
+            r2.setAlpha(r3)
             com.google.android.exoplayer2.ui.AspectRatioFrameLayout r2 = r0.aspectRatioFrameLayout
             r2.draw(r1)
             boolean r2 = r0.videoCrossfadeStarted
-            if (r2 == 0) goto L_0x02c5
+            if (r2 == 0) goto L_0x0367
             float r2 = r0.videoCrossfadeAlpha
-            int r2 = (r2 > r6 ? 1 : (r2 == r6 ? 0 : -1))
-            if (r2 >= 0) goto L_0x02c5
+            r3 = 1065353216(0x3var_, float:1.0)
+            int r2 = (r2 > r3 ? 1 : (r2 == r3 ? 0 : -1))
+            if (r2 >= 0) goto L_0x0367
             long r2 = java.lang.System.currentTimeMillis()
             long r4 = r0.videoCrossfadeAlphaLastTime
             long r4 = r2 - r4
@@ -1352,11 +1499,12 @@ public class SecretMediaViewer implements NotificationCenter.NotificationCenterD
             org.telegram.ui.SecretMediaViewer$FrameLayoutDrawer r2 = r0.containerView
             r2.invalidate()
             float r2 = r0.videoCrossfadeAlpha
-            int r2 = (r2 > r6 ? 1 : (r2 == r6 ? 0 : -1))
-            if (r2 <= 0) goto L_0x02c5
-            r0.videoCrossfadeAlpha = r6
-        L_0x02c5:
-            r17.restore()
+            r3 = 1065353216(0x3var_, float:1.0)
+            int r2 = (r2 > r3 ? 1 : (r2 == r3 ? 0 : -1))
+            if (r2 <= 0) goto L_0x0367
+            r0.videoCrossfadeAlpha = r3
+        L_0x0367:
+            r21.restore()
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.SecretMediaViewer.onDraw(android.graphics.Canvas):void");
@@ -1402,7 +1550,7 @@ public class SecretMediaViewer implements NotificationCenter.NotificationCenterD
 
     /* JADX WARNING: Removed duplicated region for block: B:22:0x007a  */
     /* JADX WARNING: Removed duplicated region for block: B:25:0x0082  */
-    /* JADX WARNING: Removed duplicated region for block: B:65:0x0261  */
+    /* JADX WARNING: Removed duplicated region for block: B:59:0x0277  */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public boolean closePhoto(boolean r19, boolean r20) {
         /*
@@ -1410,18 +1558,18 @@ public class SecretMediaViewer implements NotificationCenter.NotificationCenterD
             r0 = r18
             android.app.Activity r1 = r0.parentActivity
             r2 = 0
-            if (r1 == 0) goto L_0x02d3
+            if (r1 == 0) goto L_0x02e9
             boolean r1 = r0.isPhotoVisible
-            if (r1 == 0) goto L_0x02d3
+            if (r1 == 0) goto L_0x02e9
             boolean r1 = r18.checkPhotoAnimation()
             if (r1 == 0) goto L_0x0013
-            goto L_0x02d3
+            goto L_0x02e9
         L_0x0013:
             android.app.Activity r1 = r0.parentActivity
             if (r1 == 0) goto L_0x0025
             android.view.Window r1 = r1.getWindow()
             boolean r3 = r0.wasLightNavigationBar
-            org.telegram.messenger.AndroidUtilities.setLightNavigationBar(r1, r3)
+            org.telegram.messenger.AndroidUtilities.setLightNavigationBar((android.view.Window) r1, (boolean) r3)
             int r3 = r0.wasNavigationBarColor
             org.telegram.messenger.AndroidUtilities.setNavigationBarColor(r1, r3)
         L_0x0025:
@@ -1472,7 +1620,7 @@ public class SecretMediaViewer implements NotificationCenter.NotificationCenterD
             r7 = 3
             r8 = 2
             r9 = 0
-            if (r19 == 0) goto L_0x0261
+            if (r19 == 0) goto L_0x0277
             r0.photoAnimationInProgress = r7
             org.telegram.ui.SecretMediaViewer$FrameLayoutDrawer r10 = r0.containerView
             r10.invalidate()
@@ -1480,11 +1628,11 @@ public class SecretMediaViewer implements NotificationCenter.NotificationCenterD
             r10.<init>()
             r0.imageMoveAnimation = r10
             r10 = 21
-            if (r1 == 0) goto L_0x016a
+            if (r1 == 0) goto L_0x017e
             org.telegram.messenger.ImageReceiver r11 = r1.imageReceiver
             android.graphics.Bitmap r11 = r11.getThumbBitmap()
-            if (r11 == 0) goto L_0x016a
-            if (r20 != 0) goto L_0x016a
+            if (r11 == 0) goto L_0x017e
+            if (r20 != 0) goto L_0x017e
             org.telegram.messenger.ImageReceiver r11 = r1.imageReceiver
             r11.setVisible(r2, r4)
             org.telegram.messenger.ImageReceiver r11 = r1.imageReceiver
@@ -1557,19 +1705,21 @@ public class SecretMediaViewer implements NotificationCenter.NotificationCenterD
             int r12 = r12 - r14
             float r12 = (float) r12
             int r14 = r1.viewY
-            float r15 = (float) r14
-            float r11 = r11.top
-            float r15 = r15 + r11
-            float r12 = r12 - r15
-            int r15 = r1.clipTopAddition
-            float r15 = (float) r15
-            float r12 = r12 + r15
+            float r14 = (float) r14
+            float r15 = r11.top
+            float r14 = r14 + r15
+            float r12 = r12 - r14
+            int r14 = r1.clipTopAddition
+            float r14 = (float) r14
+            float r12 = r12 + r14
             r0.animateToClipTop = r12
-            int r12 = (r12 > r9 ? 1 : (r12 == r9 ? 0 : -1))
-            if (r12 >= 0) goto L_0x012d
-            r0.animateToClipTop = r9
-        L_0x012d:
-            float r12 = (float) r14
+            float r5 = (float) r5
+            float r12 = java.lang.Math.max(r12, r5)
+            float r12 = java.lang.Math.max(r9, r12)
+            r0.animateToClipTop = r12
+            int r12 = r1.viewY
+            float r12 = (float) r12
+            float r11 = r11.top
             float r12 = r12 + r11
             int r11 = (int) r13
             float r11 = (float) r11
@@ -1578,12 +1728,12 @@ public class SecretMediaViewer implements NotificationCenter.NotificationCenterD
             android.view.View r11 = r1.parentView
             int r11 = r11.getHeight()
             int r6 = r6 + r11
-            if (r3 < r10) goto L_0x013f
+            if (r3 < r10) goto L_0x0148
             r3 = 0
-            goto L_0x0141
-        L_0x013f:
+            goto L_0x014a
+        L_0x0148:
             int r3 = org.telegram.messenger.AndroidUtilities.statusBarHeight
-        L_0x0141:
+        L_0x014a:
             int r6 = r6 - r3
             float r3 = (float) r6
             float r12 = r12 - r3
@@ -1591,46 +1741,47 @@ public class SecretMediaViewer implements NotificationCenter.NotificationCenterD
             float r3 = (float) r3
             float r12 = r12 + r3
             r0.animateToClipBottom = r12
-            int r3 = (r12 > r9 ? 1 : (r12 == r9 ? 0 : -1))
-            if (r3 >= 0) goto L_0x0150
-            r0.animateToClipBottom = r9
-        L_0x0150:
-            long r10 = java.lang.System.currentTimeMillis()
-            r0.animationStartTime = r10
-            float r3 = r0.animateToClipBottom
-            float r5 = (float) r5
-            float r3 = java.lang.Math.max(r3, r5)
+            float r3 = java.lang.Math.max(r12, r5)
+            float r3 = java.lang.Math.max(r9, r3)
             r0.animateToClipBottom = r3
-            float r3 = r0.animateToClipTop
-            float r3 = java.lang.Math.max(r3, r5)
-            r0.animateToClipTop = r3
+            r0.animateToClipTopOrigin = r9
+            float r3 = java.lang.Math.max(r9, r5)
+            float r3 = java.lang.Math.max(r9, r3)
+            r0.animateToClipTopOrigin = r3
+            r0.animateToClipBottomOrigin = r9
+            float r3 = java.lang.Math.max(r9, r5)
+            float r3 = java.lang.Math.max(r9, r3)
+            r0.animateToClipBottomOrigin = r3
+            long r5 = java.lang.System.currentTimeMillis()
+            r0.animationStartTime = r5
             r0.zoomAnimation = r4
-            goto L_0x0182
-        L_0x016a:
+            goto L_0x0196
+        L_0x017e:
             android.graphics.Point r3 = org.telegram.messenger.AndroidUtilities.displaySize
             int r3 = r3.y
             int r5 = android.os.Build.VERSION.SDK_INT
-            if (r5 < r10) goto L_0x0175
+            if (r5 < r10) goto L_0x0189
             int r5 = org.telegram.messenger.AndroidUtilities.statusBarHeight
-            goto L_0x0176
-        L_0x0175:
+            goto L_0x018a
+        L_0x0189:
             r5 = 0
-        L_0x0176:
+        L_0x018a:
             int r3 = r3 + r5
             float r5 = r0.translationY
             int r5 = (r5 > r9 ? 1 : (r5 == r9 ? 0 : -1))
-            if (r5 < 0) goto L_0x017e
-            goto L_0x017f
-        L_0x017e:
+            if (r5 < 0) goto L_0x0192
+            goto L_0x0193
+        L_0x0192:
             int r3 = -r3
-        L_0x017f:
+        L_0x0193:
             float r3 = (float) r3
             r0.animateToY = r3
-        L_0x0182:
+        L_0x0196:
+            r0.animateToRadius = r2
             boolean r3 = r0.isVideo
             java.lang.String r5 = "animationValue"
             r6 = 5
-            if (r3 == 0) goto L_0x01d7
+            if (r3 == 0) goto L_0x01ed
             r0.videoCrossfadeStarted = r2
             r0.textureUploaded = r2
             android.animation.AnimatorSet r3 = r0.imageMoveAnimation
@@ -1664,8 +1815,8 @@ public class SecretMediaViewer implements NotificationCenter.NotificationCenterD
             r5 = 4
             r6[r5] = r2
             r3.playTogether(r6)
-            goto L_0x0227
-        L_0x01d7:
+            goto L_0x023d
+        L_0x01ed:
             org.telegram.messenger.ImageReceiver r3 = r0.centerImage
             r3.setManualAlphaAnimator(r4)
             android.animation.AnimatorSet r3 = r0.imageMoveAnimation
@@ -1700,7 +1851,7 @@ public class SecretMediaViewer implements NotificationCenter.NotificationCenterD
             r5 = 4
             r6[r5] = r2
             r3.playTogether(r6)
-        L_0x0227:
+        L_0x023d:
             org.telegram.ui.SecretMediaViewer$$ExternalSyntheticLambda5 r2 = new org.telegram.ui.SecretMediaViewer$$ExternalSyntheticLambda5
             r2.<init>(r0, r1)
             r0.photoAnimationEndRunnable = r2
@@ -1719,15 +1870,15 @@ public class SecretMediaViewer implements NotificationCenter.NotificationCenterD
             r0.photoTransitionAnimationStartTime = r1
             int r1 = android.os.Build.VERSION.SDK_INT
             r2 = 18
-            if (r1 < r2) goto L_0x025b
+            if (r1 < r2) goto L_0x0271
             org.telegram.ui.SecretMediaViewer$FrameLayoutDrawer r1 = r0.containerView
             r2 = 0
             r1.setLayerType(r8, r2)
-        L_0x025b:
+        L_0x0271:
             android.animation.AnimatorSet r1 = r0.imageMoveAnimation
             r1.start()
-            goto L_0x02d2
-        L_0x0261:
+            goto L_0x02e8
+        L_0x0277:
             android.animation.AnimatorSet r3 = new android.animation.AnimatorSet
             r3.<init>()
             r5 = 4
@@ -1771,15 +1922,15 @@ public class SecretMediaViewer implements NotificationCenter.NotificationCenterD
             r0.photoTransitionAnimationStartTime = r1
             int r1 = android.os.Build.VERSION.SDK_INT
             r2 = 18
-            if (r1 < r2) goto L_0x02cf
+            if (r1 < r2) goto L_0x02e5
             org.telegram.ui.SecretMediaViewer$FrameLayoutDrawer r1 = r0.containerView
             r2 = 0
             r1.setLayerType(r8, r2)
-        L_0x02cf:
+        L_0x02e5:
             r3.start()
-        L_0x02d2:
+        L_0x02e8:
             return r4
-        L_0x02d3:
+        L_0x02e9:
             return r2
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.SecretMediaViewer.closePhoto(boolean, boolean):boolean");

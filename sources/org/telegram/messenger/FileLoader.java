@@ -54,7 +54,9 @@ public class FileLoader extends BaseController {
     public static final int MEDIA_DIR_CACHE = 4;
     public static final int MEDIA_DIR_DOCUMENT = 3;
     public static final int MEDIA_DIR_IMAGE = 0;
+    public static final int MEDIA_DIR_IMAGE_PUBLIC = 100;
     public static final int MEDIA_DIR_VIDEO = 2;
+    public static final int MEDIA_DIR_VIDEO_PUBLIC = 101;
     public static final int QUEUE_TYPE_AUDIO = 2;
     public static final int QUEUE_TYPE_FILE = 0;
     public static final int QUEUE_TYPE_IMAGE = 1;
@@ -96,7 +98,7 @@ public class FileLoader extends BaseController {
 
         void fileDidFailedUpload(String str, boolean z);
 
-        void fileDidLoaded(String str, File file, int i);
+        void fileDidLoaded(String str, File file, Object obj, int i);
 
         void fileDidUploaded(String str, TLRPC$InputFile tLRPC$InputFile, TLRPC$InputEncryptedFile tLRPC$InputEncryptedFile, byte[] bArr, byte[] bArr2, long j);
 

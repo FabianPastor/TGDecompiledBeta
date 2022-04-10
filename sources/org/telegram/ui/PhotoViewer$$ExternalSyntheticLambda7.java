@@ -1,16 +1,23 @@
 package org.telegram.ui;
 
-import android.view.View;
-import android.view.WindowInsets;
+import android.content.DialogInterface;
+import android.text.style.URLSpan;
+import android.widget.TextView;
 
-public final /* synthetic */ class PhotoViewer$$ExternalSyntheticLambda7 implements View.OnApplyWindowInsetsListener {
+public final /* synthetic */ class PhotoViewer$$ExternalSyntheticLambda7 implements DialogInterface.OnClickListener {
     public final /* synthetic */ PhotoViewer f$0;
+    public final /* synthetic */ URLSpan f$1;
+    public final /* synthetic */ TextView f$2;
+    public final /* synthetic */ int f$3;
 
-    public /* synthetic */ PhotoViewer$$ExternalSyntheticLambda7(PhotoViewer photoViewer) {
+    public /* synthetic */ PhotoViewer$$ExternalSyntheticLambda7(PhotoViewer photoViewer, URLSpan uRLSpan, TextView textView, int i) {
         this.f$0 = photoViewer;
+        this.f$1 = uRLSpan;
+        this.f$2 = textView;
+        this.f$3 = i;
     }
 
-    public final WindowInsets onApplyWindowInsets(View view, WindowInsets windowInsets) {
-        return this.f$0.lambda$setParentActivity$2(view, windowInsets);
+    public final void onClick(DialogInterface dialogInterface, int i) {
+        this.f$0.lambda$onLinkLongPress$1(this.f$1, this.f$2, this.f$3, dialogInterface, i);
     }
 }

@@ -10,6 +10,6 @@ public final /* synthetic */ class ChatAttachAlert$$ExternalSyntheticLambda5 imp
     }
 
     public final void onClick(View view) {
-        this.f$0.lambda$new$1(view);
+        this.f$0.lambda$new$9(view);
     }
 }

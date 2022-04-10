@@ -94,7 +94,8 @@ public class ChatActionCell extends BaseCell implements DownloadController.FileD
             public static void $default$didClickImage(ChatActionCellDelegate chatActionCellDelegate, ChatActionCell chatActionCell) {
             }
 
-            public static void $default$didLongPress(ChatActionCellDelegate chatActionCellDelegate, ChatActionCell chatActionCell, float f, float f2) {
+            public static boolean $default$didLongPress(ChatActionCellDelegate chatActionCellDelegate, ChatActionCell chatActionCell, float f, float f2) {
+                return false;
             }
 
             public static void $default$didPressReplyMessage(ChatActionCellDelegate chatActionCellDelegate, ChatActionCell chatActionCell, int i) {
@@ -109,7 +110,7 @@ public class ChatActionCell extends BaseCell implements DownloadController.FileD
 
         void didClickImage(ChatActionCell chatActionCell);
 
-        void didLongPress(ChatActionCell chatActionCell, float f, float f2);
+        boolean didLongPress(ChatActionCell chatActionCell, float f, float f2);
 
         void didPressReplyMessage(ChatActionCell chatActionCell, int i);
 
@@ -297,11 +298,10 @@ public class ChatActionCell extends BaseCell implements DownloadController.FileD
     /* access modifiers changed from: protected */
     public boolean onLongPress() {
         ChatActionCellDelegate chatActionCellDelegate = this.delegate;
-        if (chatActionCellDelegate == null) {
-            return true;
+        if (chatActionCellDelegate != null) {
+            return chatActionCellDelegate.didLongPress(this, this.lastTouchX, this.lastTouchY);
         }
-        chatActionCellDelegate.didLongPress(this, this.lastTouchX, this.lastTouchY);
-        return true;
+        return false;
     }
 
     /* access modifiers changed from: protected */

@@ -1,19 +1,17 @@
 package org.telegram.ui;
 
-import org.telegram.ui.ActionBar.ThemeDescription;
+import org.telegram.tgnet.RequestDelegate;
+import org.telegram.tgnet.TLObject;
+import org.telegram.tgnet.TLRPC$TL_error;
 
-public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda205 implements ThemeDescription.ThemeDescriptionDelegate {
+public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda205 implements RequestDelegate {
     public final /* synthetic */ ChatActivity f$0;
 
     public /* synthetic */ ChatActivity$$ExternalSyntheticLambda205(ChatActivity chatActivity) {
         this.f$0 = chatActivity;
     }
 
-    public final void didSetColor() {
-        this.f$0.lambda$getThemeDescriptions$219();
-    }
-
-    public /* synthetic */ void onAnimationProgress(float f) {
-        ThemeDescription.ThemeDescriptionDelegate.CC.$default$onAnimationProgress(this, f);
+    public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+        this.f$0.lambda$onTransitionAnimationEnd$134(tLObject, tLRPC$TL_error);
     }
 }

@@ -1,13 +1,16 @@
 package org.telegram.ui.ActionBar;
 
-public final /* synthetic */ class ActionBarMenuItem$$ExternalSyntheticLambda9 implements Runnable {
+import android.view.KeyEvent;
+import android.widget.TextView;
+
+public final /* synthetic */ class ActionBarMenuItem$$ExternalSyntheticLambda9 implements TextView.OnEditorActionListener {
     public final /* synthetic */ ActionBarMenuItem f$0;
 
     public /* synthetic */ ActionBarMenuItem$$ExternalSyntheticLambda9(ActionBarMenuItem actionBarMenuItem) {
         this.f$0 = actionBarMenuItem;
     }
 
-    public final void run() {
-        this.f$0.lambda$onTouchEvent$0();
+    public final boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
+        return this.f$0.lambda$setIsSearchField$11(textView, i, keyEvent);
     }
 }

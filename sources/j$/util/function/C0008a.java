@@ -5,7 +5,7 @@ import j$.util.function.Predicate;
 import java.util.Comparator;
 
 /* renamed from: j$.util.function.a  reason: case insensitive filesystem */
-public final /* synthetic */ class CLASSNAMEa implements CLASSNAMEb, Predicate {
+public final /* synthetic */ class CLASSNAMEa implements b, Predicate {
     public final /* synthetic */ int a;
     public final /* synthetic */ Object b;
 

@@ -1,15 +1,16 @@
 package org.telegram.ui.Components;
 
 import android.animation.ValueAnimator;
+import org.telegram.ui.Components.ChatAttachAlert;
 
 public final /* synthetic */ class ChatAttachAlert$11$$ExternalSyntheticLambda0 implements ValueAnimator.AnimatorUpdateListener {
-    public final /* synthetic */ EditTextCaption f$0;
+    public final /* synthetic */ ChatAttachAlert.AnonymousClass11 f$0;
 
-    public /* synthetic */ ChatAttachAlert$11$$ExternalSyntheticLambda0(EditTextCaption editTextCaption) {
-        this.f$0 = editTextCaption;
+    public /* synthetic */ ChatAttachAlert$11$$ExternalSyntheticLambda0(ChatAttachAlert.AnonymousClass11 r1) {
+        this.f$0 = r1;
     }
 
     public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-        this.f$0.setOffsetY(((Float) valueAnimator.getAnimatedValue()).floatValue());
+        this.f$0.lambda$onDraw$0(valueAnimator);
     }
 }

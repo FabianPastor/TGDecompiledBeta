@@ -154,8 +154,14 @@ public abstract class TLRPC$Update extends TLObject {
             case 357013699:
                 tLRPC$Update = new TLRPC$TL_updateMessageReactions();
                 break;
+            case 361936797:
+                tLRPC$Update = new TLRPC$TL_updateWebViewResultSent();
+                break;
             case 386986326:
                 tLRPC$Update = new TLRPC$TL_updateEncryptedChatTyping();
+                break;
+            case 397910539:
+                tLRPC$Update = new TLRPC$TL_updateAttachMenuBots();
                 break;
             case 422972864:
                 tLRPC$Update = new TLRPC$TL_updateFolderPeers();
@@ -249,6 +255,9 @@ public abstract class TLRPC$Update extends TLObject {
                 break;
             case 1887741886:
                 tLRPC$Update = new TLRPC$TL_updateContactsReset();
+                break;
+            case 1960361625:
+                tLRPC$Update = new TLRPC$TL_updateSavedRingtones();
                 break;
             case 2139689491:
                 tLRPC$Update = new TLRPC$TL_updateWebPage();

@@ -1,17 +1,15 @@
 package org.telegram.ui.Components;
 
-import android.view.KeyEvent;
 import android.view.View;
-import org.telegram.ui.ActionBar.ActionBarPopupWindow;
 
-public final /* synthetic */ class AlertsCreator$$ExternalSyntheticLambda68 implements View.OnKeyListener {
-    public final /* synthetic */ ActionBarPopupWindow f$0;
+public final /* synthetic */ class AlertsCreator$$ExternalSyntheticLambda68 implements View.OnClickListener {
+    public final /* synthetic */ boolean[] f$0;
 
-    public /* synthetic */ AlertsCreator$$ExternalSyntheticLambda68(ActionBarPopupWindow actionBarPopupWindow) {
-        this.f$0 = actionBarPopupWindow;
+    public /* synthetic */ AlertsCreator$$ExternalSyntheticLambda68(boolean[] zArr) {
+        this.f$0 = zArr;
     }
 
-    public final boolean onKey(View view, int i, KeyEvent keyEvent) {
-        return AlertsCreator.lambda$showPopupMenu$110(this.f$0, view, i, keyEvent);
+    public final void onClick(View view) {
+        AlertsCreator.lambda$createDeleteMessagesAlert$117(this.f$0, view);
     }
 }

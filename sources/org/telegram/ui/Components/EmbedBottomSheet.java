@@ -36,6 +36,7 @@ import org.telegram.ui.ActionBar.BottomSheet;
 import org.telegram.ui.LaunchActivity;
 import org.telegram.ui.PhotoViewer;
 
+@SuppressLint({"WrongConstant"})
 public class EmbedBottomSheet extends BottomSheet {
     /* access modifiers changed from: private */
     @SuppressLint({"StaticFieldLeak"})
@@ -66,7 +67,7 @@ public class EmbedBottomSheet extends BottomSheet {
     /* access modifiers changed from: private */
     public DialogInterface.OnShowListener onShowListener = new DialogInterface.OnShowListener() {
         public void onShow(DialogInterface dialogInterface) {
-            if (EmbedBottomSheet.this.pipVideoView != null && EmbedBottomSheet.this.videoView.isInline()) {
+            if (PipVideoOverlay.isVisible() && EmbedBottomSheet.this.videoView.isInline()) {
                 EmbedBottomSheet.this.videoView.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
                     public boolean onPreDraw() {
                         EmbedBottomSheet.this.videoView.getViewTreeObserver().removeOnPreDrawListener(this);
@@ -84,8 +85,6 @@ public class EmbedBottomSheet extends BottomSheet {
     public Activity parentActivity;
     /* access modifiers changed from: private */
     public ImageView pipButton;
-    /* access modifiers changed from: private */
-    public PipVideoView pipVideoView;
     /* access modifiers changed from: private */
     public int[] position = new int[2];
     /* access modifiers changed from: private */
@@ -493,7 +492,7 @@ public class EmbedBottomSheet extends BottomSheet {
             r2.setBackgroundColor(r10)
             android.widget.FrameLayout r10 = r0.containerLayout
             r13 = 48
-            android.widget.FrameLayout$LayoutParams r15 = org.telegram.ui.Components.LayoutHelper.createFrame(r14, r13, r15)
+            android.widget.FrameLayout$LayoutParams r15 = org.telegram.ui.Components.LayoutHelper.createFrame((int) r14, (int) r13, (int) r15)
             r10.addView(r2, r15)
             android.widget.LinearLayout r10 = new android.widget.LinearLayout
             r10.<init>(r1)
@@ -501,7 +500,7 @@ public class EmbedBottomSheet extends BottomSheet {
             r15 = 1065353216(0x3var_, float:1.0)
             r10.setWeightSum(r15)
             r15 = 53
-            android.widget.FrameLayout$LayoutParams r15 = org.telegram.ui.Components.LayoutHelper.createFrame(r8, r14, r15)
+            android.widget.FrameLayout$LayoutParams r15 = org.telegram.ui.Components.LayoutHelper.createFrame((int) r8, (int) r14, (int) r15)
             r2.addView(r10, r15)
             android.widget.TextView r15 = new android.widget.TextView
             r15.<init>(r1)
@@ -520,7 +519,7 @@ public class EmbedBottomSheet extends BottomSheet {
             int r9 = org.telegram.messenger.AndroidUtilities.dp(r7)
             int r13 = org.telegram.messenger.AndroidUtilities.dp(r7)
             r15.setPadding(r9, r6, r13, r6)
-            r9 = 2131625026(0x7f0e0442, float:1.8877248E38)
+            r9 = 2131625068(0x7f0e046c, float:1.8877334E38)
             java.lang.String r13 = "Close"
             java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r13, r9)
             java.lang.String r9 = r9.toUpperCase()
@@ -538,7 +537,7 @@ public class EmbedBottomSheet extends BottomSheet {
             r0.imageButtonsContainer = r13
             r13.setVisibility(r12)
             android.widget.LinearLayout r13 = r0.imageButtonsContainer
-            android.widget.FrameLayout$LayoutParams r15 = org.telegram.ui.Components.LayoutHelper.createFrame(r8, r14, r11)
+            android.widget.FrameLayout$LayoutParams r15 = org.telegram.ui.Components.LayoutHelper.createFrame((int) r8, (int) r14, (int) r11)
             r2.addView(r13, r15)
             android.widget.ImageView r2 = new android.widget.ImageView
             r2.<init>(r1)
@@ -546,7 +545,7 @@ public class EmbedBottomSheet extends BottomSheet {
             android.widget.ImageView$ScaleType r13 = android.widget.ImageView.ScaleType.CENTER
             r2.setScaleType(r13)
             android.widget.ImageView r2 = r0.pipButton
-            r13 = 2131166188(0x7var_ec, float:1.7946614E38)
+            r13 = 2131166216(0x7var_, float:1.7946671E38)
             r2.setImageResource(r13)
             android.widget.ImageView r2 = r0.pipButton
             r13 = 2131624011(0x7f0e004b, float:1.887519E38)
@@ -589,9 +588,9 @@ public class EmbedBottomSheet extends BottomSheet {
             r12.<init>(r1)
             android.widget.ImageView$ScaleType r13 = android.widget.ImageView.ScaleType.CENTER
             r12.setScaleType(r13)
-            r13 = 2131166180(0x7var_e4, float:1.7946598E38)
+            r13 = 2131166208(0x7var_, float:1.7946655E38)
             r12.setImageResource(r13)
-            r13 = 2131625115(0x7f0e049b, float:1.8877429E38)
+            r13 = 2131625157(0x7f0e04c5, float:1.8877514E38)
             java.lang.String r15 = "CopyLink"
             java.lang.String r13 = org.telegram.messenger.LocaleController.getString(r15, r13)
             r12.setContentDescription(r13)
@@ -605,7 +604,7 @@ public class EmbedBottomSheet extends BottomSheet {
             r12.setBackgroundDrawable(r8)
             android.widget.LinearLayout r8 = r0.imageButtonsContainer
             r13 = 48
-            android.widget.FrameLayout$LayoutParams r13 = org.telegram.ui.Components.LayoutHelper.createFrame(r13, r13, r9)
+            android.widget.FrameLayout$LayoutParams r13 = org.telegram.ui.Components.LayoutHelper.createFrame((int) r13, (int) r13, (int) r9)
             r8.addView(r12, r13)
             r12.setOnClickListener(r2)
             android.widget.TextView r8 = new android.widget.TextView
@@ -633,7 +632,7 @@ public class EmbedBottomSheet extends BottomSheet {
             int r13 = org.telegram.messenger.AndroidUtilities.dp(r7)
             r8.setPadding(r12, r6, r13, r6)
             android.widget.TextView r8 = r0.copyTextButton
-            r12 = 2131625113(0x7f0e0499, float:1.8877425E38)
+            r12 = 2131625155(0x7f0e04c3, float:1.887751E38)
             java.lang.String r13 = "Copy"
             java.lang.String r12 = org.telegram.messenger.LocaleController.getString(r13, r12)
             java.lang.String r12 = r12.toUpperCase()
@@ -643,7 +642,7 @@ public class EmbedBottomSheet extends BottomSheet {
             r8.setTypeface(r12)
             android.widget.TextView r8 = r0.copyTextButton
             r12 = -2
-            android.widget.FrameLayout$LayoutParams r13 = org.telegram.ui.Components.LayoutHelper.createFrame(r12, r14, r9)
+            android.widget.FrameLayout$LayoutParams r13 = org.telegram.ui.Components.LayoutHelper.createFrame((int) r12, (int) r14, (int) r9)
             r10.addView(r8, r13)
             android.widget.TextView r8 = r0.copyTextButton
             r8.setOnClickListener(r2)
@@ -664,7 +663,7 @@ public class EmbedBottomSheet extends BottomSheet {
             int r1 = org.telegram.messenger.AndroidUtilities.dp(r7)
             int r4 = org.telegram.messenger.AndroidUtilities.dp(r7)
             r2.setPadding(r1, r6, r4, r6)
-            r1 = 2131626856(0x7f0e0b68, float:1.888096E38)
+            r1 = 2131626928(0x7f0e0bb0, float:1.8881106E38)
             java.lang.String r4 = "OpenInBrowser"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r4, r1)
             java.lang.String r1 = r1.toUpperCase()
@@ -672,7 +671,7 @@ public class EmbedBottomSheet extends BottomSheet {
             android.graphics.Typeface r1 = org.telegram.messenger.AndroidUtilities.getTypeface(r5)
             r2.setTypeface(r1)
             r1 = -2
-            android.widget.FrameLayout$LayoutParams r1 = org.telegram.ui.Components.LayoutHelper.createFrame(r1, r14, r9)
+            android.widget.FrameLayout$LayoutParams r1 = org.telegram.ui.Components.LayoutHelper.createFrame((int) r1, (int) r14, (int) r9)
             r10.addView(r2, r1)
             org.telegram.ui.Components.EmbedBottomSheet$$ExternalSyntheticLambda2 r1 = new org.telegram.ui.Components.EmbedBottomSheet$$ExternalSyntheticLambda2
             r1.<init>(r0)
@@ -782,14 +781,17 @@ public class EmbedBottomSheet extends BottomSheet {
 
     /* access modifiers changed from: private */
     public /* synthetic */ void lambda$new$3(View view) {
-        int i;
+        if (PipVideoOverlay.isVisible()) {
+            PipVideoOverlay.dismiss();
+            view.getClass();
+            AndroidUtilities.runOnUIThread(new EmbedBottomSheet$$ExternalSyntheticLambda7(view), 300);
+            return;
+        }
         boolean z = this.isYouTube && "inapp".equals(MessagesController.getInstance(this.currentAccount).youtubePipType);
         if ((z || checkInlinePermissions()) && this.progressBar.getVisibility() != 0) {
-            PipVideoView pipVideoView2 = new PipVideoView(z);
-            this.pipVideoView = pipVideoView2;
-            Activity activity = this.parentActivity;
-            int i2 = this.width;
-            pipVideoView2.show(activity, this, (View) null, (i2 == 0 || (i = this.height) == 0) ? 1.0f : ((float) i2) / ((float) i), 0, this.webView);
+            if (PipVideoOverlay.show(z, this.parentActivity, this.webView, this.width, this.height)) {
+                PipVideoOverlay.setParentSheet(this);
+            }
             if (this.isYouTube) {
                 runJsCode("hideControls();");
             }
@@ -858,10 +860,6 @@ public class EmbedBottomSheet extends BottomSheet {
                 this.videoView.exitFullscreen();
             }
         }
-        PipVideoView pipVideoView2 = this.pipVideoView;
-        if (pipVideoView2 != null) {
-            pipVideoView2.onConfigurationChanged();
-        }
     }
 
     public void destroy() {
@@ -872,11 +870,7 @@ public class EmbedBottomSheet extends BottomSheet {
             this.webView.loadUrl("about:blank");
             this.webView.destroy();
         }
-        PipVideoView pipVideoView2 = this.pipVideoView;
-        if (pipVideoView2 != null) {
-            pipVideoView2.close();
-            this.pipVideoView = null;
-        }
+        PipVideoOverlay.dismiss();
         WebPlayerView webPlayerView = this.videoView;
         if (webPlayerView != null) {
             webPlayerView.destroy();
@@ -895,7 +889,7 @@ public class EmbedBottomSheet extends BottomSheet {
     }
 
     public void exitFromPip() {
-        if (this.webView != null && this.pipVideoView != null) {
+        if (this.webView != null && PipVideoOverlay.isVisible()) {
             if (ApplicationLoader.mainInterfacePaused) {
                 try {
                     this.parentActivity.startService(new Intent(ApplicationLoader.applicationContext, BringAppForegroundService.class));
@@ -913,8 +907,7 @@ public class EmbedBottomSheet extends BottomSheet {
             this.containerLayout.addView(this.webView, 0, LayoutHelper.createFrame(-1, -1.0f, 51, 0.0f, 0.0f, 0.0f, (float) ((this.hasDescription ? 22 : 0) + 84)));
             setShowWithoutAnimation(true);
             show();
-            this.pipVideoView.close();
-            this.pipVideoView = null;
+            PipVideoOverlay.dismiss(true);
         }
     }
 
@@ -987,8 +980,7 @@ public class EmbedBottomSheet extends BottomSheet {
             this.waitingForDraw = i2;
             if (i2 == 0) {
                 this.videoView.updateTextureImageView();
-                this.pipVideoView.close();
-                this.pipVideoView = null;
+                PipVideoOverlay.dismiss();
                 return;
             }
             this.container.invalidate();

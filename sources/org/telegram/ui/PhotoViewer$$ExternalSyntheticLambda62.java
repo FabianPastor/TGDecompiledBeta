@@ -1,16 +1,17 @@
 package org.telegram.ui;
 
-import android.view.KeyEvent;
-import org.telegram.ui.ActionBar.ActionBarPopupWindow;
+import android.view.View;
 
-public final /* synthetic */ class PhotoViewer$$ExternalSyntheticLambda62 implements ActionBarPopupWindow.OnDispatchKeyEventListener {
-    public final /* synthetic */ PhotoViewer f$0;
+public final /* synthetic */ class PhotoViewer$$ExternalSyntheticLambda62 implements Runnable {
+    public final /* synthetic */ boolean f$0;
+    public final /* synthetic */ View f$1;
 
-    public /* synthetic */ PhotoViewer$$ExternalSyntheticLambda62(PhotoViewer photoViewer) {
-        this.f$0 = photoViewer;
+    public /* synthetic */ PhotoViewer$$ExternalSyntheticLambda62(boolean z, View view) {
+        this.f$0 = z;
+        this.f$1 = view;
     }
 
-    public final void onDispatchKeyEvent(KeyEvent keyEvent) {
-        this.f$0.lambda$setParentActivity$12(keyEvent);
+    public final void run() {
+        PhotoViewer.lambda$setItemVisible$61(this.f$0, this.f$1);
     }
 }

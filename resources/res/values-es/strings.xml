@@ -3983,7 +3983,6 @@
     <string name="UserRestrictionsCanDo">¿Qué puede hacer este usuario?</string>
     <string name="UserRestrictionsChangeInfo">Editar info. del chat</string>
     <string name="UserRestrictionsCustom">Personalizada</string>
-    <string name="UserRestrictionsDisabled">Esta opción está desactivada para todos los miembros en Permisos de grupo</string>
     <string name="UserRestrictionsDuration">Duración</string>
     <string name="UserRestrictionsEmbedLinks">Incrustar enlaces</string>
     <string name="UserRestrictionsInviteUsers">Añadir usuarios</string>

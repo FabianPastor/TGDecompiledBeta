@@ -1,17 +1,15 @@
 package org.telegram.ui;
 
-import androidx.core.util.Consumer;
-import java.util.List;
-import org.telegram.ui.Components.ReactedUsersListView;
+import android.view.MotionEvent;
+import android.view.View;
 
-public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda100 implements Consumer {
-    public final /* synthetic */ ReactedUsersListView f$0;
+public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda100 implements View.OnTouchListener {
+    public static final /* synthetic */ ChatActivity$$ExternalSyntheticLambda100 INSTANCE = new ChatActivity$$ExternalSyntheticLambda100();
 
-    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda100(ReactedUsersListView reactedUsersListView) {
-        this.f$0 = reactedUsersListView;
+    private /* synthetic */ ChatActivity$$ExternalSyntheticLambda100() {
     }
 
-    public final void accept(Object obj) {
-        this.f$0.setSeenUsers((List) obj);
+    public final boolean onTouch(View view, MotionEvent motionEvent) {
+        return ChatActivity.lambda$createView$24(view, motionEvent);
     }
 }

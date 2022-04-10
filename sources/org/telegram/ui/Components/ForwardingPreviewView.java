@@ -179,7 +179,7 @@ public class ForwardingPreviewView extends FrameLayout {
                 if ((chatMessageCell.getCurrentPosition() != null && chatMessageCell.getCurrentPosition().last) || chatMessageCell.getTransitionParams().animateBackgroundBoundsInner) {
                     chatMessageCell.drawTime(canvas, 1.0f, true);
                 }
-                if ((chatMessageCell.getCurrentPosition() != null && chatMessageCell.getCurrentPosition().last) || chatMessageCell.getCurrentPosition() == null) {
+                if (chatMessageCell.getCurrentPosition() == null || chatMessageCell.getCurrentPosition().last || chatMessageCell.getCurrentMessagesGroup().isDocuments) {
                     chatMessageCell.drawCaptionLayout(canvas, false, 1.0f);
                 }
                 chatMessageCell.getTransitionParams().recordDrawingStatePreview();

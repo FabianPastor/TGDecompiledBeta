@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.ColorFilter;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 import android.graphics.drawable.BitmapDrawable;
@@ -156,6 +157,7 @@ public class BackupImageView extends View {
     public void setSize(int i, int i2) {
         this.width = i;
         this.height = i2;
+        invalidate();
     }
 
     /* access modifiers changed from: protected */
@@ -180,5 +182,9 @@ public class BackupImageView extends View {
             this.imageReceiver.setImageCoords((float) ((getWidth() - this.width) / 2), (float) ((height2 - i) / 2), (float) this.width, (float) i);
         }
         this.imageReceiver.draw(canvas);
+    }
+
+    public void setColorFilter(ColorFilter colorFilter) {
+        this.imageReceiver.setColorFilter(colorFilter);
     }
 }

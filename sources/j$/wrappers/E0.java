@@ -1,20 +1,19 @@
 package j$.wrappers;
 
-import j$.util.function.A;
 import java.util.function.ToIntFunction;
 
 public final /* synthetic */ class E0 implements ToIntFunction {
-    final /* synthetic */ A a;
+    final /* synthetic */ j$.util.function.ToIntFunction a;
 
-    private /* synthetic */ E0(A a2) {
-        this.a = a2;
+    private /* synthetic */ E0(j$.util.function.ToIntFunction toIntFunction) {
+        this.a = toIntFunction;
     }
 
-    public static /* synthetic */ ToIntFunction a(A a2) {
-        if (a2 == null) {
+    public static /* synthetic */ ToIntFunction a(j$.util.function.ToIntFunction toIntFunction) {
+        if (toIntFunction == null) {
             return null;
         }
-        return a2 instanceof D0 ? ((D0) a2).a : new E0(a2);
+        return toIntFunction instanceof D0 ? ((D0) toIntFunction).a : new E0(toIntFunction);
     }
 
     public /* synthetic */ int applyAsInt(Object obj) {

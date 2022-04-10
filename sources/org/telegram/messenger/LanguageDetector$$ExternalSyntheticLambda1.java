@@ -11,6 +11,6 @@ public final /* synthetic */ class LanguageDetector$$ExternalSyntheticLambda1 im
     }
 
     public final void onSuccess(Object obj) {
-        this.f$0.run((String) obj);
+        LanguageDetector.lambda$detectLanguage$0(this.f$0, (String) obj);
     }
 }

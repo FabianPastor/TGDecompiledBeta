@@ -6,6 +6,7 @@ public abstract class TLRPC$User extends TLObject {
     public long access_hash;
     public boolean apply_min_photo;
     public boolean bot;
+    public boolean bot_attach_menu;
     public boolean bot_chat_history;
     public int bot_info_version;
     public boolean bot_inline_geo;

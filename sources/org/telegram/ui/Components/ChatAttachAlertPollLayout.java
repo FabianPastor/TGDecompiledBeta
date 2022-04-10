@@ -448,7 +448,7 @@ public class ChatAttachAlertPollLayout extends ChatAttachAlert.AttachAlertLayout
                     return;
                 }
                 this.delegate.sendPoll(tLRPC$TL_messageMediaPoll, hashMap, true, 0);
-                this.parentAlert.dismiss();
+                this.parentAlert.dismiss(true);
                 return;
             }
             int i3 = 0;
@@ -466,7 +466,7 @@ public class ChatAttachAlertPollLayout extends ChatAttachAlert.AttachAlertLayout
     /* access modifiers changed from: private */
     public /* synthetic */ void lambda$onMenuItemClick$1(TLRPC$TL_messageMediaPoll tLRPC$TL_messageMediaPoll, HashMap hashMap, boolean z, int i) {
         this.delegate.sendPoll(tLRPC$TL_messageMediaPoll, hashMap, z, i);
-        this.parentAlert.dismiss();
+        this.parentAlert.dismiss(true);
     }
 
     /* access modifiers changed from: package-private */
@@ -1110,7 +1110,7 @@ public class ChatAttachAlertPollLayout extends ChatAttachAlert.AttachAlertLayout
                 android.content.Context r12 = r10.mContext
                 r11.<init>(r12)
                 android.content.Context r12 = r10.mContext
-                r2 = 2131165471(0x7var_f, float:1.794516E38)
+                r2 = 2131165477(0x7var_, float:1.7945172E38)
                 java.lang.String r3 = "windowBackgroundGrayShadow"
                 android.graphics.drawable.Drawable r12 = org.telegram.ui.ActionBar.Theme.getThemedDrawable((android.content.Context) r12, (int) r2, (java.lang.String) r3)
                 org.telegram.ui.Components.CombinedDrawable r2 = new org.telegram.ui.Components.CombinedDrawable

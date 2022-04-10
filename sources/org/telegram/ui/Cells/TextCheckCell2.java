@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.text.TextUtils;
 import android.view.View;
+import android.view.ViewPropertyAnimator;
 import android.view.accessibility.AccessibilityNodeInfo;
 import android.widget.FrameLayout;
 import android.widget.TextView;
@@ -78,6 +79,9 @@ public class TextCheckCell2 extends FrameLayout {
 
     public void setEnabled(boolean z) {
         super.setEnabled(z);
+        this.textView.clearAnimation();
+        this.valueTextView.clearAnimation();
+        this.checkBox.clearAnimation();
         if (z) {
             this.textView.setAlpha(1.0f);
             this.valueTextView.setAlpha(1.0f);
@@ -87,6 +91,31 @@ public class TextCheckCell2 extends FrameLayout {
         this.checkBox.setAlpha(0.5f);
         this.textView.setAlpha(0.5f);
         this.valueTextView.setAlpha(0.5f);
+    }
+
+    public void setEnabled(boolean z, boolean z2) {
+        super.setEnabled(z);
+        float f = 1.0f;
+        if (z2) {
+            this.textView.clearAnimation();
+            this.valueTextView.clearAnimation();
+            this.checkBox.clearAnimation();
+            this.textView.animate().alpha(z ? 1.0f : 0.5f).start();
+            this.valueTextView.animate().alpha(z ? 1.0f : 0.5f).start();
+            ViewPropertyAnimator animate = this.checkBox.animate();
+            if (!z) {
+                f = 0.5f;
+            }
+            animate.alpha(f).start();
+        } else if (z) {
+            this.textView.setAlpha(1.0f);
+            this.valueTextView.setAlpha(1.0f);
+            this.checkBox.setAlpha(1.0f);
+        } else {
+            this.checkBox.setAlpha(0.5f);
+            this.textView.setAlpha(0.5f);
+            this.valueTextView.setAlpha(0.5f);
+        }
     }
 
     public void setChecked(boolean z) {

@@ -1,13 +1,15 @@
 package org.telegram.ui.Components;
 
-public final /* synthetic */ class AlertsCreator$$ExternalSyntheticLambda78 implements Runnable {
-    public final /* synthetic */ EditTextBoldCursor f$0;
+import android.view.MotionEvent;
+import android.view.View;
 
-    public /* synthetic */ AlertsCreator$$ExternalSyntheticLambda78(EditTextBoldCursor editTextBoldCursor) {
-        this.f$0 = editTextBoldCursor;
+public final /* synthetic */ class AlertsCreator$$ExternalSyntheticLambda78 implements View.OnTouchListener {
+    public static final /* synthetic */ AlertsCreator$$ExternalSyntheticLambda78 INSTANCE = new AlertsCreator$$ExternalSyntheticLambda78();
+
+    private /* synthetic */ AlertsCreator$$ExternalSyntheticLambda78() {
     }
 
-    public final void run() {
-        AlertsCreator.lambda$createThemeCreateDialog$105(this.f$0);
+    public final boolean onTouch(View view, MotionEvent motionEvent) {
+        return AlertsCreator.lambda$createCalendarPickerDialog$77(view, motionEvent);
     }
 }

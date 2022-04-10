@@ -40,6 +40,7 @@ import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.MessagesStorage;
 import org.telegram.messenger.Utilities;
 import org.telegram.tgnet.TLObject;
+import org.telegram.tgnet.TLRPC$Chat;
 import org.telegram.tgnet.TLRPC$Document;
 import org.telegram.tgnet.TLRPC$Message;
 import org.telegram.tgnet.TLRPC$MessageMedia;
@@ -314,7 +315,7 @@ public class CalendarActivity extends BaseFragment {
             this.selectDaysHint.showForView(this.bottomBar, true);
             return;
         }
-        AlertsCreator.createClearDaysDialogAlert(this, i, getMessagesController().getUser(Long.valueOf(this.dialogId)), new MessagesStorage.BooleanCallback() {
+        AlertsCreator.createClearDaysDialogAlert(this, i, getMessagesController().getUser(Long.valueOf(this.dialogId)), (TLRPC$Chat) null, false, new MessagesStorage.BooleanCallback() {
             public void run(boolean z) {
                 CalendarActivity.this.finishFragment();
                 if (CalendarActivity.this.parentLayout.fragmentsStack.size() >= 2) {
@@ -745,7 +746,7 @@ public class CalendarActivity extends BaseFragment {
                         final BaseFragment baseFragment = CalendarActivity.this.parentLayout.fragmentsStack.get(CalendarActivity.this.parentLayout.fragmentsStack.size() - 3);
                         if (baseFragment instanceof ChatActivity) {
                             CalendarActivity calendarActivity = CalendarActivity.this;
-                            AlertsCreator.createClearDaysDialogAlert(calendarActivity, 1, calendarActivity.getMessagesController().getUser(Long.valueOf(CalendarActivity.this.dialogId)), new MessagesStorage.BooleanCallback() {
+                            AlertsCreator.createClearDaysDialogAlert(calendarActivity, 1, calendarActivity.getMessagesController().getUser(Long.valueOf(CalendarActivity.this.dialogId)), (TLRPC$Chat) null, false, new MessagesStorage.BooleanCallback() {
                                 public void run(boolean z) {
                                     CalendarActivity.this.finishFragment();
                                     ((ChatActivity) baseFragment).deleteHistory(CalendarActivity.this.dateSelectedStart, CalendarActivity.this.dateSelectedEnd + 86400, z);

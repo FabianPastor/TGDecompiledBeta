@@ -2,7 +2,7 @@ package j$.util.stream;
 
 import j$.util.function.BiConsumer;
 import j$.util.function.BiFunction;
-import j$.util.function.CLASSNAMEb;
+import j$.util.function.b;
 import j$.util.function.u;
 import j$.util.function.v;
 import j$.util.function.w;
@@ -25,20 +25,20 @@ class A2 extends V2 {
     public T2 a() {
         switch (this.b) {
             case 0:
-                return new B2((y) this.e, (w) this.d, (CLASSNAMEb) this.c);
+                return new B2((y) this.e, (w) this.d, (b) this.c);
             case 1:
-                return new G2((y) this.e, (u) this.d, (CLASSNAMEb) this.c);
+                return new G2((y) this.e, (u) this.d, (b) this.c);
             case 2:
-                return new H2(this.e, (BiFunction) this.d, (CLASSNAMEb) this.c);
+                return new H2(this.e, (BiFunction) this.d, (b) this.c);
             case 3:
                 return new L2((y) this.e, (BiConsumer) this.d, (BiConsumer) this.c);
             default:
-                return new P2((y) this.e, (v) this.d, (CLASSNAMEb) this.c);
+                return new P2((y) this.e, (v) this.d, (b) this.c);
         }
     }
 
     /* JADX INFO: super call moved to the top of the method (can break code semantics) */
-    public A2(CLASSNAMEf4 f4Var, CLASSNAMEb bVar, BiFunction biFunction, Object obj) {
+    public A2(CLASSNAMEf4 f4Var, b bVar, BiFunction biFunction, Object obj) {
         super(f4Var);
         this.c = bVar;
         this.d = biFunction;
@@ -46,7 +46,7 @@ class A2 extends V2 {
     }
 
     /* JADX INFO: super call moved to the top of the method (can break code semantics) */
-    public A2(CLASSNAMEf4 f4Var, CLASSNAMEb bVar, u uVar, y yVar) {
+    public A2(CLASSNAMEf4 f4Var, b bVar, u uVar, y yVar) {
         super(f4Var);
         this.c = bVar;
         this.d = uVar;
@@ -54,7 +54,7 @@ class A2 extends V2 {
     }
 
     /* JADX INFO: super call moved to the top of the method (can break code semantics) */
-    public A2(CLASSNAMEf4 f4Var, CLASSNAMEb bVar, v vVar, y yVar) {
+    public A2(CLASSNAMEf4 f4Var, b bVar, v vVar, y yVar) {
         super(f4Var);
         this.c = bVar;
         this.d = vVar;
@@ -62,7 +62,7 @@ class A2 extends V2 {
     }
 
     /* JADX INFO: super call moved to the top of the method (can break code semantics) */
-    public A2(CLASSNAMEf4 f4Var, CLASSNAMEb bVar, w wVar, y yVar) {
+    public A2(CLASSNAMEf4 f4Var, b bVar, w wVar, y yVar) {
         super(f4Var);
         this.c = bVar;
         this.d = wVar;

@@ -1,30 +1,19 @@
 package org.telegram.ui.Components;
 
-import android.view.View;
-import java.util.Calendar;
-import org.telegram.messenger.MessagesStorage;
-import org.telegram.ui.ActionBar.BottomSheet;
+import android.content.DialogInterface;
+import androidx.core.util.Consumer;
+import java.util.concurrent.atomic.AtomicBoolean;
 
-public final /* synthetic */ class AlertsCreator$$ExternalSyntheticLambda45 implements View.OnClickListener {
-    public final /* synthetic */ long f$0;
-    public final /* synthetic */ NumberPicker f$1;
-    public final /* synthetic */ NumberPicker f$2;
-    public final /* synthetic */ NumberPicker f$3;
-    public final /* synthetic */ Calendar f$4;
-    public final /* synthetic */ MessagesStorage.IntCallback f$5;
-    public final /* synthetic */ BottomSheet.Builder f$6;
+public final /* synthetic */ class AlertsCreator$$ExternalSyntheticLambda45 implements DialogInterface.OnDismissListener {
+    public final /* synthetic */ AtomicBoolean f$0;
+    public final /* synthetic */ Consumer f$1;
 
-    public /* synthetic */ AlertsCreator$$ExternalSyntheticLambda45(long j, NumberPicker numberPicker, NumberPicker numberPicker2, NumberPicker numberPicker3, Calendar calendar, MessagesStorage.IntCallback intCallback, BottomSheet.Builder builder) {
-        this.f$0 = j;
-        this.f$1 = numberPicker;
-        this.f$2 = numberPicker2;
-        this.f$3 = numberPicker3;
-        this.f$4 = calendar;
-        this.f$5 = intCallback;
-        this.f$6 = builder;
+    public /* synthetic */ AlertsCreator$$ExternalSyntheticLambda45(AtomicBoolean atomicBoolean, Consumer consumer) {
+        this.f$0 = atomicBoolean;
+        this.f$1 = consumer;
     }
 
-    public final void onClick(View view) {
-        AlertsCreator.lambda$createCalendarPickerDialog$64(this.f$0, this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6, view);
+    public final void onDismiss(DialogInterface dialogInterface) {
+        AlertsCreator.lambda$createWebViewPermissionsRequestDialog$4(this.f$0, this.f$1, dialogInterface);
     }
 }

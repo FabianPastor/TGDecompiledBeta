@@ -12,6 +12,6 @@ public final /* synthetic */ class ProfileActivity$$ExternalSyntheticLambda28 im
     }
 
     public final int compare(Object obj, Object obj2) {
-        return this.f$0.lambda$updateOnlineCount$29(this.f$1, (Integer) obj, (Integer) obj2);
+        return this.f$0.lambda$updateOnlineCount$28(this.f$1, (Integer) obj, (Integer) obj2);
     }
 }

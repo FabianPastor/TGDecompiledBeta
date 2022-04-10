@@ -1,15 +1,17 @@
 package org.telegram.ui.Components;
 
-import android.view.MotionEvent;
 import android.view.View;
 
-public final /* synthetic */ class AlertsCreator$$ExternalSyntheticLambda72 implements View.OnTouchListener {
-    public static final /* synthetic */ AlertsCreator$$ExternalSyntheticLambda72 INSTANCE = new AlertsCreator$$ExternalSyntheticLambda72();
+public final /* synthetic */ class AlertsCreator$$ExternalSyntheticLambda72 implements View.OnClickListener {
+    public final /* synthetic */ boolean[] f$0;
+    public final /* synthetic */ int f$1;
 
-    private /* synthetic */ AlertsCreator$$ExternalSyntheticLambda72() {
+    public /* synthetic */ AlertsCreator$$ExternalSyntheticLambda72(boolean[] zArr, int i) {
+        this.f$0 = zArr;
+        this.f$1 = i;
     }
 
-    public final boolean onTouch(View view, MotionEvent motionEvent) {
-        return AlertsCreator.lambda$createDatePickerDialog$53(view, motionEvent);
+    public final void onClick(View view) {
+        AlertsCreator.lambda$createBlockDialogAlert$38(this.f$0, this.f$1, view);
     }
 }

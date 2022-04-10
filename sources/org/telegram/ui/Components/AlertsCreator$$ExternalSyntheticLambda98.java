@@ -1,14 +1,16 @@
 package org.telegram.ui.Components;
 
-import org.telegram.ui.Components.NumberPicker;
+import org.telegram.tgnet.RequestDelegate;
+import org.telegram.tgnet.TLObject;
+import org.telegram.tgnet.TLRPC$TL_error;
 
-public final /* synthetic */ class AlertsCreator$$ExternalSyntheticLambda98 implements NumberPicker.Formatter {
+public final /* synthetic */ class AlertsCreator$$ExternalSyntheticLambda98 implements RequestDelegate {
     public static final /* synthetic */ AlertsCreator$$ExternalSyntheticLambda98 INSTANCE = new AlertsCreator$$ExternalSyntheticLambda98();
 
     private /* synthetic */ AlertsCreator$$ExternalSyntheticLambda98() {
     }
 
-    public final String format(int i) {
-        return AlertsCreator.lambda$createCalendarPickerDialog$62(i);
+    public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+        AlertsCreator.lambda$sendReport$84(tLObject, tLRPC$TL_error);
     }
 }

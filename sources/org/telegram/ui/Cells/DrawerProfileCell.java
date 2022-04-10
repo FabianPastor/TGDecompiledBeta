@@ -25,6 +25,7 @@ import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.UserObject;
 import org.telegram.tgnet.TLRPC$User;
+import org.telegram.ui.ActionBar.DrawerLayoutContainer;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.AvatarDrawable;
 import org.telegram.ui.Components.BackupImageView;
@@ -33,6 +34,7 @@ import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.RLottieDrawable;
 import org.telegram.ui.Components.RLottieImageView;
 import org.telegram.ui.Components.SnowflakesEffect;
+import org.telegram.ui.ThemeActivity;
 
 public class DrawerProfileCell extends FrameLayout {
     public static boolean switchingTheme;
@@ -54,7 +56,7 @@ public class DrawerProfileCell extends FrameLayout {
     /* access modifiers changed from: private */
     public RLottieDrawable sunDrawable;
 
-    public DrawerProfileCell(Context context) {
+    public DrawerProfileCell(Context context, DrawerLayoutContainer drawerLayoutContainer) {
         super(context);
         ImageView imageView = new ImageView(context);
         this.shadowView = imageView;
@@ -98,7 +100,7 @@ public class DrawerProfileCell extends FrameLayout {
             this.sunDrawable.setCurrentFrame(36);
         }
         this.sunDrawable.setPlayInDirectionOfCustomEndFrame(true);
-        this.darkThemeView = new RLottieImageView(context) {
+        AnonymousClass1 r2 = new RLottieImageView(context) {
             public void onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo accessibilityNodeInfo) {
                 super.onInitializeAccessibilityNodeInfo(accessibilityNodeInfo);
                 if (DrawerProfileCell.this.sunDrawable.getCustomEndFrame() != 0) {
@@ -108,6 +110,8 @@ public class DrawerProfileCell extends FrameLayout {
                 }
             }
         };
+        this.darkThemeView = r2;
+        r2.setBackground(Theme.createCircleSelectorDrawable(Theme.getColor("dialogButtonSelector"), 0, 0));
         this.sunDrawable.beginApplyLayerColors();
         int color = Theme.getColor("chats_menuName");
         this.sunDrawable.setLayerColor("Sunny.**", color);
@@ -125,6 +129,7 @@ public class DrawerProfileCell extends FrameLayout {
             Theme.setRippleDrawableForceSoftware((RippleDrawable) this.darkThemeView.getBackground());
         }
         this.darkThemeView.setOnClickListener(new DrawerProfileCell$$ExternalSyntheticLambda0(this));
+        this.darkThemeView.setOnLongClickListener(new DrawerProfileCell$$ExternalSyntheticLambda1(drawerLayoutContainer));
         addView(this.darkThemeView, LayoutHelper.createFrame(48, 48.0f, 85, 0.0f, 0.0f, 6.0f, 90.0f));
         if (Theme.getEventType() == 0) {
             SnowflakesEffect snowflakesEffect2 = new SnowflakesEffect(0);
@@ -209,7 +214,7 @@ public class DrawerProfileCell extends FrameLayout {
             int r2 = org.telegram.ui.ActionBar.Theme.selectedAutoNightType
             if (r2 == 0) goto L_0x00a9
             android.content.Context r2 = r6.getContext()
-            r3 = 2131624532(0x7f0e0254, float:1.8876246E38)
+            r3 = 2131624550(0x7f0e0266, float:1.8876283E38)
             java.lang.String r4 = "AutoNightModeOff"
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r4, r3)
             android.widget.Toast r2 = android.widget.Toast.makeText(r2, r3, r1)
@@ -222,6 +227,15 @@ public class DrawerProfileCell extends FrameLayout {
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Cells.DrawerProfileCell.lambda$new$0(android.view.View):void");
+    }
+
+    /* access modifiers changed from: private */
+    public static /* synthetic */ boolean lambda$new$1(DrawerLayoutContainer drawerLayoutContainer, View view) {
+        if (drawerLayoutContainer == null) {
+            return false;
+        }
+        drawerLayoutContainer.presentFragment(new ThemeActivity(0));
+        return true;
     }
 
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r6v1, resolved type: java.lang.Object[]} */

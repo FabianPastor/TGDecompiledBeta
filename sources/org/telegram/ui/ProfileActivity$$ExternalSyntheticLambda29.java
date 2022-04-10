@@ -10,6 +10,6 @@ public final /* synthetic */ class ProfileActivity$$ExternalSyntheticLambda29 im
     }
 
     public final void run(boolean z) {
-        this.f$0.lambda$leaveChatPressed$23(z);
+        this.f$0.lambda$leaveChatPressed$22(z);
     }
 }

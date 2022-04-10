@@ -41,6 +41,7 @@ public class SenderSelectPopup extends ActionBarPopupWindow {
     private TLRPC$ChatFull chatFull;
     private boolean clicked;
     public View dimView;
+    private boolean dismissed;
     /* access modifiers changed from: private */
     public View headerShadow;
     public TextView headerText;
@@ -67,6 +68,8 @@ public class SenderSelectPopup extends ActionBarPopupWindow {
         this.scrimPopupContainerLayout = backButtonFrameLayout;
         backButtonFrameLayout.setLayoutParams(LayoutHelper.createFrame(-2, -2.0f));
         setContentView(this.scrimPopupContainerLayout);
+        setWidth(-2);
+        setHeight(-2);
         setBackgroundDrawable((Drawable) null);
         Drawable mutate = ContextCompat.getDrawable(context, NUM).mutate();
         mutate.setColorFilter(new PorterDuffColorFilter(Theme.getColor("actionBarDefaultSubmenuBackground"), PorterDuff.Mode.MULTIPLY));
@@ -188,6 +191,13 @@ public class SenderSelectPopup extends ActionBarPopupWindow {
         if (!this.clicked) {
             this.clicked = true;
             onSelectCallback.onPeerSelected(this.recyclerView, (SenderView) view, (TLRPC$Peer) list.get(i));
+        }
+    }
+
+    public void dismiss() {
+        if (!this.dismissed) {
+            this.dismissed = true;
+            super.dismiss();
         }
     }
 

@@ -20,6 +20,6 @@ public final /* synthetic */ class LocaleController$$ExternalSyntheticLambda2 im
     }
 
     public final void run() {
-        this.f$0.lambda$saveRemoteLocaleStrings$4(this.f$1, this.f$2, this.f$3, this.f$4);
+        this.f$0.lambda$saveRemoteLocaleStrings$5(this.f$1, this.f$2, this.f$3, this.f$4);
     }
 }

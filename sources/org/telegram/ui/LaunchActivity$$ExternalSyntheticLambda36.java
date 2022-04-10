@@ -1,34 +1,32 @@
 package org.telegram.ui;
 
-import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC$Chat;
-import org.telegram.tgnet.TLRPC$TL_messages_getDiscussionMessage;
-import org.telegram.ui.ActionBar.AlertDialog;
+import org.telegram.tgnet.TLRPC$TL_chatAdminRights;
+import org.telegram.tgnet.TLRPC$User;
 
 public final /* synthetic */ class LaunchActivity$$ExternalSyntheticLambda36 implements Runnable {
     public final /* synthetic */ LaunchActivity f$0;
-    public final /* synthetic */ TLObject f$1;
-    public final /* synthetic */ int f$2;
-    public final /* synthetic */ Integer f$3;
-    public final /* synthetic */ TLRPC$Chat f$4;
-    public final /* synthetic */ TLRPC$TL_messages_getDiscussionMessage f$5;
-    public final /* synthetic */ Integer f$6;
-    public final /* synthetic */ Integer f$7;
-    public final /* synthetic */ AlertDialog f$8;
+    public final /* synthetic */ String f$1;
+    public final /* synthetic */ TLRPC$TL_chatAdminRights f$2;
+    public final /* synthetic */ TLRPC$User f$3;
+    public final /* synthetic */ long f$4;
+    public final /* synthetic */ String f$5;
+    public final /* synthetic */ boolean f$6;
+    public final /* synthetic */ DialogsActivity f$7;
+    public final /* synthetic */ int f$8;
 
-    public /* synthetic */ LaunchActivity$$ExternalSyntheticLambda36(LaunchActivity launchActivity, TLObject tLObject, int i, Integer num, TLRPC$Chat tLRPC$Chat, TLRPC$TL_messages_getDiscussionMessage tLRPC$TL_messages_getDiscussionMessage, Integer num2, Integer num3, AlertDialog alertDialog) {
+    public /* synthetic */ LaunchActivity$$ExternalSyntheticLambda36(LaunchActivity launchActivity, String str, TLRPC$TL_chatAdminRights tLRPC$TL_chatAdminRights, TLRPC$User tLRPC$User, long j, String str2, boolean z, DialogsActivity dialogsActivity, int i) {
         this.f$0 = launchActivity;
-        this.f$1 = tLObject;
-        this.f$2 = i;
-        this.f$3 = num;
-        this.f$4 = tLRPC$Chat;
-        this.f$5 = tLRPC$TL_messages_getDiscussionMessage;
-        this.f$6 = num2;
-        this.f$7 = num3;
-        this.f$8 = alertDialog;
+        this.f$1 = str;
+        this.f$2 = tLRPC$TL_chatAdminRights;
+        this.f$3 = tLRPC$User;
+        this.f$4 = j;
+        this.f$5 = str2;
+        this.f$6 = z;
+        this.f$7 = dialogsActivity;
+        this.f$8 = i;
     }
 
     public final void run() {
-        this.f$0.lambda$runCommentRequest$23(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6, this.f$7, this.f$8);
+        this.f$0.lambda$runLinkRequest$34(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6, this.f$7, this.f$8);
     }
 }

@@ -50,6 +50,7 @@ import android.text.StaticLayout;
 import android.text.TextPaint;
 import android.text.TextUtils;
 import android.text.method.LinkMovementMethod;
+import android.text.style.ClickableSpan;
 import android.text.style.URLSpan;
 import android.text.util.Linkify;
 import android.util.DisplayMetrics;
@@ -194,6 +195,7 @@ public class AndroidUtilities {
     public static int roundPlayingMessageSize;
     public static final Linkify.MatchFilter sUrlMatchFilter = AndroidUtilities$$ExternalSyntheticLambda2.INSTANCE;
     public static float screenRefreshRate = 60.0f;
+    private static Pattern singleTagPatter = null;
     private static final Object smsLock = new Object();
     public static int statusBarHeight = 0;
     private static final Hashtable<String, Typeface> typefaceCache = new Hashtable<>();
@@ -201,6 +203,10 @@ public class AndroidUtilities {
     public static boolean usingHardwareInput;
     private static boolean waitingForCall = false;
     private static boolean waitingForSms = false;
+
+    public interface IntColorCallback {
+        void run(int i);
+    }
 
     public static int compare(int i, int i2) {
         if (i == i2) {
@@ -408,6 +414,34 @@ public class AndroidUtilities {
             return findActivity(((ContextWrapper) context).getBaseContext());
         }
         return null;
+    }
+
+    public static CharSequence replaceSingleTag(String str, final Runnable runnable) {
+        int i;
+        int i2;
+        int indexOf = str.indexOf("**");
+        int indexOf2 = str.indexOf("**", indexOf + 1);
+        String replace = str.replace("**", "");
+        if (indexOf < 0 || indexOf2 < 0 || (i2 = indexOf2 - indexOf) <= 2) {
+            indexOf = -1;
+            i = 0;
+        } else {
+            i = i2 - 2;
+        }
+        SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(replace);
+        if (indexOf >= 0) {
+            spannableStringBuilder.setSpan(new ClickableSpan() {
+                public void updateDrawState(TextPaint textPaint) {
+                    super.updateDrawState(textPaint);
+                    textPaint.setUnderlineText(false);
+                }
+
+                public void onClick(View view) {
+                    runnable.run();
+                }
+            }, indexOf, i + indexOf, 0);
+        }
+        return spannableStringBuilder;
     }
 
     private static class LinkSpec {
@@ -1158,7 +1192,7 @@ public class AndroidUtilities {
                 int r0 = r9.type
                 r1 = 5
                 if (r0 != r1) goto L_0x000f
-                r0 = 2131625087(0x7f0e047f, float:1.8877372E38)
+                r0 = 2131625129(0x7f0e04a9, float:1.8877457E38)
                 java.lang.String r1 = "ContactBirthday"
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
                 return r0
@@ -1170,12 +1204,12 @@ public class AndroidUtilities {
                 java.lang.String r1 = "ORG"
                 boolean r0 = r1.equalsIgnoreCase(r0)
                 if (r0 == 0) goto L_0x0029
-                r0 = 2131625088(0x7f0e0480, float:1.8877374E38)
+                r0 = 2131625130(0x7f0e04aa, float:1.887746E38)
                 java.lang.String r1 = "ContactJob"
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
                 return r0
             L_0x0029:
-                r0 = 2131625089(0x7f0e0481, float:1.8877376E38)
+                r0 = 2131625131(0x7f0e04ab, float:1.8877461E38)
                 java.lang.String r1 = "ContactJobTitle"
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
                 return r0
@@ -1293,27 +1327,27 @@ public class AndroidUtilities {
             L_0x00cf:
                 goto L_0x0101
             L_0x00d0:
-                r0 = 2131627253(0x7f0e0cf5, float:1.8881765E38)
+                r0 = 2131627326(0x7f0e0d3e, float:1.8881913E38)
                 java.lang.String r1 = "PhoneOther"
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
                 goto L_0x0101
             L_0x00da:
-                r0 = 2131627254(0x7f0e0cf6, float:1.8881767E38)
+                r0 = 2131627327(0x7f0e0d3f, float:1.8881915E38)
                 java.lang.String r1 = "PhoneWork"
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
                 goto L_0x0101
             L_0x00e4:
-                r0 = 2131627244(0x7f0e0cec, float:1.8881747E38)
+                r0 = 2131627316(0x7f0e0d34, float:1.8881893E38)
                 java.lang.String r1 = "PhoneMain"
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
                 goto L_0x0101
             L_0x00ee:
-                r0 = 2131627243(0x7f0e0ceb, float:1.8881745E38)
+                r0 = 2131627315(0x7f0e0d33, float:1.888189E38)
                 java.lang.String r1 = "PhoneHome"
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
                 goto L_0x0101
             L_0x00f8:
-                r0 = 2131627245(0x7f0e0ced, float:1.888175E38)
+                r0 = 2131627317(0x7f0e0d35, float:1.8881895E38)
                 java.lang.String r1 = "PhoneMobile"
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             L_0x0101:
@@ -2871,7 +2905,7 @@ public class AndroidUtilities {
     }
 
     public static boolean shouldShowClipboardToast() {
-        return Build.VERSION.SDK_INT < 31 || !OneUIUtilities.isOneUI();
+        return Build.VERSION.SDK_INT < 31 || !OneUIUtilities.hasBuiltInClipboardToasts();
     }
 
     public static void addToClipboard(CharSequence charSequence) {
@@ -3497,9 +3531,9 @@ public class AndroidUtilities {
             if (r5 == 0) goto L_0x0157
             boolean r7 = r5.exists()
             if (r7 == 0) goto L_0x0157
-            r7 = 2131626832(0x7f0e0b50, float:1.8880911E38)
+            r7 = 2131626904(0x7f0e0b98, float:1.8881057E38)
             java.lang.String r8 = "OK"
-            r9 = 2131624306(0x7f0e0172, float:1.8875788E38)
+            r9 = 2131624316(0x7f0e017c, float:1.8875808E38)
             java.lang.String r10 = "AppName"
             r11 = 1
             if (r2 == 0) goto L_0x00a4
@@ -3520,7 +3554,7 @@ public class AndroidUtilities {
             r0.<init>((android.content.Context) r1)
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r10, r9)
             r0.setTitle(r1)
-            r1 = 2131626053(0x7f0e0845, float:1.8879331E38)
+            r1 = 2131626111(0x7f0e087f, float:1.8879449E38)
             java.lang.String r3 = "IncorrectTheme"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r3, r1)
             r0.setMessage(r1)
@@ -3604,7 +3638,7 @@ public class AndroidUtilities {
             r3.setTitle(r1)
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r8, r7)
             r3.setPositiveButton(r1, r6)
-            r1 = 2131626595(0x7f0e0a63, float:1.888043E38)
+            r1 = 2131626661(0x7f0e0aa5, float:1.8880564E38)
             r4 = 1
             java.lang.Object[] r4 = new java.lang.Object[r4]
             r5 = 0
@@ -4706,11 +4740,16 @@ public class AndroidUtilities {
         return true;
     }
 
+    public static void setLightNavigationBar(View view, boolean z) {
+        if (view != null && Build.VERSION.SDK_INT >= 26) {
+            int systemUiVisibility = view.getSystemUiVisibility();
+            view.setSystemUiVisibility(z ? systemUiVisibility | 16 : systemUiVisibility & -17);
+        }
+    }
+
     public static void setLightNavigationBar(Window window, boolean z) {
-        if (Build.VERSION.SDK_INT >= 26) {
-            View decorView = window.getDecorView();
-            int systemUiVisibility = decorView.getSystemUiVisibility();
-            decorView.setSystemUiVisibility(z ? systemUiVisibility | 16 : systemUiVisibility & -17);
+        if (window != null) {
+            setLightNavigationBar(window.getDecorView(), z);
         }
     }
 
@@ -4718,7 +4757,11 @@ public class AndroidUtilities {
         setNavigationBarColor(window, i, true);
     }
 
-    public static void setNavigationBarColor(final Window window, int i, boolean z) {
+    public static void setNavigationBarColor(Window window, int i, boolean z) {
+        setNavigationBarColor(window, i, z, (IntColorCallback) null);
+    }
+
+    public static void setNavigationBarColor(final Window window, int i, boolean z, IntColorCallback intColorCallback) {
         ValueAnimator valueAnimator;
         if (Build.VERSION.SDK_INT >= 21) {
             HashMap<Window, ValueAnimator> hashMap = navigationBarColorAnimators;
@@ -4727,25 +4770,43 @@ public class AndroidUtilities {
                 navigationBarColorAnimators.remove(window);
             }
             if (!z) {
-                window.setNavigationBarColor(i);
-                return;
-            }
-            ValueAnimator ofArgb = ValueAnimator.ofArgb(new int[]{window.getNavigationBarColor(), i});
-            ofArgb.addUpdateListener(new AndroidUtilities$$ExternalSyntheticLambda0(window));
-            ofArgb.addListener(new AnimatorListenerAdapter() {
-                public void onAnimationEnd(Animator animator) {
-                    if (AndroidUtilities.navigationBarColorAnimators != null) {
-                        AndroidUtilities.navigationBarColorAnimators.remove(window);
-                    }
+                if (intColorCallback != null) {
+                    intColorCallback.run(i);
                 }
-            });
-            ofArgb.setDuration(200);
-            ofArgb.setInterpolator(CubicBezierInterpolator.DEFAULT);
-            ofArgb.start();
-            if (navigationBarColorAnimators == null) {
-                navigationBarColorAnimators = new HashMap<>();
+                try {
+                    window.setNavigationBarColor(i);
+                } catch (Exception unused) {
+                }
+            } else {
+                ValueAnimator ofArgb = ValueAnimator.ofArgb(new int[]{window.getNavigationBarColor(), i});
+                ofArgb.addUpdateListener(new AndroidUtilities$$ExternalSyntheticLambda0(intColorCallback, window));
+                ofArgb.addListener(new AnimatorListenerAdapter() {
+                    public void onAnimationEnd(Animator animator) {
+                        if (AndroidUtilities.navigationBarColorAnimators != null) {
+                            AndroidUtilities.navigationBarColorAnimators.remove(window);
+                        }
+                    }
+                });
+                ofArgb.setDuration(200);
+                ofArgb.setInterpolator(CubicBezierInterpolator.DEFAULT);
+                ofArgb.start();
+                if (navigationBarColorAnimators == null) {
+                    navigationBarColorAnimators = new HashMap<>();
+                }
+                navigationBarColorAnimators.put(window, ofArgb);
             }
-            navigationBarColorAnimators.put(window, ofArgb);
+        }
+    }
+
+    /* access modifiers changed from: private */
+    public static /* synthetic */ void lambda$setNavigationBarColor$10(IntColorCallback intColorCallback, Window window, ValueAnimator valueAnimator) {
+        int intValue = ((Integer) valueAnimator.getAnimatedValue()).intValue();
+        if (intColorCallback != null) {
+            intColorCallback.run(intValue);
+        }
+        try {
+            window.setNavigationBarColor(intValue);
+        } catch (Exception unused) {
         }
     }
 
@@ -5048,21 +5109,21 @@ public class AndroidUtilities {
         L_0x0014:
             java.io.File r1 = new java.io.File
             r1.<init>(r0, r4)
-            java.io.FileOutputStream r4 = new java.io.FileOutputStream     // Catch:{ IOException -> 0x0037 }
-            r4.<init>(r1)     // Catch:{ IOException -> 0x0037 }
+            java.io.FileOutputStream r4 = new java.io.FileOutputStream     // Catch:{ Exception -> 0x0037 }
+            r4.<init>(r1)     // Catch:{ Exception -> 0x0037 }
             r0 = 100
             r3.compress(r5, r0, r4)     // Catch:{ all -> 0x0032 }
             r4.close()     // Catch:{ all -> 0x0032 }
             android.content.Context r3 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ all -> 0x0032 }
             java.lang.String r5 = "org.telegram.messenger.beta.provider"
             android.net.Uri r3 = androidx.core.content.FileProvider.getUriForFile(r3, r5, r1)     // Catch:{ all -> 0x0032 }
-            r4.close()     // Catch:{ IOException -> 0x0037 }
+            r4.close()     // Catch:{ Exception -> 0x0037 }
             return r3
         L_0x0032:
             r3 = move-exception
             r4.close()     // Catch:{ all -> 0x0036 }
         L_0x0036:
-            throw r3     // Catch:{ IOException -> 0x0037 }
+            throw r3     // Catch:{ Exception -> 0x0037 }
         L_0x0037:
             r3 = move-exception
             org.telegram.messenger.FileLog.e((java.lang.Throwable) r3)

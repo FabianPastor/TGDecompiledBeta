@@ -18,9 +18,11 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import java.util.Locale;
 import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.Utilities;
 import org.telegram.ui.ActionBar.Theme;
 
 public class NumberPicker extends LinearLayout {
+    private static final CubicBezierInterpolator interpolator = new CubicBezierInterpolator(0.0f, 0.5f, 0.5f, 1.0f);
     private int SELECTOR_MIDDLE_ITEM_INDEX;
     private int SELECTOR_WHEEL_ITEM_COUNT;
     private boolean drawDividers;
@@ -61,7 +63,6 @@ public class NumberPicker extends LinearLayout {
     private int mScrollState;
     private Paint mSelectionDivider;
     private int mSelectionDividerHeight;
-    private int mSelectionDividersDistance;
     private int mSelectorElementHeight;
     private final SparseArray<String> mSelectorIndexToStringCache;
     private int[] mSelectorIndices;
@@ -101,14 +102,14 @@ public class NumberPicker extends LinearLayout {
         return 0.9f;
     }
 
-    /* JADX WARNING: type inference failed for: r2v2, types: [boolean, byte] */
+    /* JADX WARNING: type inference failed for: r2v2, types: [byte, boolean] */
     static /* synthetic */ boolean access$380(NumberPicker numberPicker, int i) {
         ? r2 = (byte) (i ^ numberPicker.mIncrementVirtualButtonPressed);
         numberPicker.mIncrementVirtualButtonPressed = r2;
         return r2;
     }
 
-    /* JADX WARNING: type inference failed for: r2v2, types: [boolean, byte] */
+    /* JADX WARNING: type inference failed for: r2v2, types: [byte, boolean] */
     static /* synthetic */ boolean access$580(NumberPicker numberPicker, int i) {
         ? r2 = (byte) (i ^ numberPicker.mDecrementVirtualButtonPressed);
         numberPicker.mDecrementVirtualButtonPressed = r2;
@@ -130,7 +131,7 @@ public class NumberPicker extends LinearLayout {
         this.mSelectionDivider = paint;
         paint.setColor(getThemedColor("dialogButton"));
         this.mSelectionDividerHeight = (int) TypedValue.applyDimension(1, 2.0f, getResources().getDisplayMetrics());
-        this.mSelectionDividersDistance = (int) TypedValue.applyDimension(1, 48.0f, getResources().getDisplayMetrics());
+        TypedValue.applyDimension(1, 48.0f, getResources().getDisplayMetrics());
         this.mMinHeight = -1;
         int applyDimension = (int) TypedValue.applyDimension(1, 180.0f, getResources().getDisplayMetrics());
         this.mMaxHeight = applyDimension;
@@ -245,12 +246,8 @@ public class NumberPicker extends LinearLayout {
         if (z) {
             initializeSelectorWheel();
             initializeFadingEdges();
-            int height = getHeight();
-            int i7 = this.mSelectionDividersDistance;
-            int i8 = this.mSelectionDividerHeight;
-            int i9 = ((height - i7) / 2) - i8;
-            this.mTopSelectionDividerTop = i9;
-            this.mBottomSelectionDividerBottom = i9 + (i8 * 2) + i7;
+            this.mTopSelectionDividerTop = ((getHeight() - this.mTextSize) - this.mSelectorTextGapHeight) / 2;
+            this.mBottomSelectionDividerBottom = ((getHeight() + this.mTextSize) + this.mSelectorTextGapHeight) / 2;
         }
     }
 
@@ -516,7 +513,6 @@ public class NumberPicker extends LinearLayout {
                 }
                 this.mCurrentScrollOffset = i7 - this.mSelectorElementHeight;
                 decrementSelectorIndices(iArr);
-                setValueInternal(iArr[this.SELECTOR_MIDDLE_ITEM_INDEX], true);
                 if (!this.mWrapSelectorWheel && iArr[this.SELECTOR_MIDDLE_ITEM_INDEX] <= this.mMinValue && this.mCurrentScrollOffset > (i4 = this.mInitialScrollOffset)) {
                     this.mCurrentScrollOffset = i4;
                 }
@@ -526,11 +522,11 @@ public class NumberPicker extends LinearLayout {
                 if (i8 - this.mInitialScrollOffset < (-this.mSelectorTextGapHeight)) {
                     this.mCurrentScrollOffset = i8 + this.mSelectorElementHeight;
                     incrementSelectorIndices(iArr);
-                    setValueInternal(iArr[this.SELECTOR_MIDDLE_ITEM_INDEX], true);
                     if (!this.mWrapSelectorWheel && iArr[this.SELECTOR_MIDDLE_ITEM_INDEX] >= this.mMaxValue && this.mCurrentScrollOffset < (i3 = this.mInitialScrollOffset)) {
                         this.mCurrentScrollOffset = i3;
                     }
                 } else {
+                    setValueInternal(iArr[this.SELECTOR_MIDDLE_ITEM_INDEX], true);
                     return;
                 }
             }
@@ -709,22 +705,52 @@ public class NumberPicker extends LinearLayout {
 
     /* access modifiers changed from: protected */
     public void onDraw(Canvas canvas) {
+        boolean z;
+        float f;
+        int i;
         float right = (float) (((getRight() - getLeft()) / 2) + this.textOffset);
-        float f = (float) this.mCurrentScrollOffset;
+        float f2 = (float) this.mCurrentScrollOffset;
         int[] iArr = this.mSelectorIndices;
-        for (int i = 0; i < iArr.length; i++) {
-            String str = this.mSelectorIndexToStringCache.get(iArr[i]);
-            if (!(str == null || (i == this.SELECTOR_MIDDLE_ITEM_INDEX && this.mInputText.getVisibility() == 0))) {
-                canvas.drawText(str, right, f, this.mSelectorWheelPaint);
+        for (int i2 = 0; i2 < iArr.length; i2++) {
+            String str = this.mSelectorIndexToStringCache.get(iArr[i2]);
+            float measuredHeight = ((float) getMeasuredHeight()) * 0.5f;
+            float textSize = f2 - (this.mSelectorWheelPaint.getTextSize() / 2.0f);
+            if (textSize < ((float) getMeasuredHeight()) / 2.0f) {
+                f = textSize / measuredHeight;
+                z = true;
+            } else {
+                f = (((float) getMeasuredHeight()) - textSize) / measuredHeight;
+                z = false;
             }
-            f += (float) this.mSelectorElementHeight;
+            float interpolation = interpolator.getInterpolation(Utilities.clamp(f, 1.0f, 0.0f));
+            float textSize2 = (1.0f - interpolation) * this.mSelectorWheelPaint.getTextSize();
+            if (!z) {
+                textSize2 = -textSize2;
+            }
+            if (!(str == null || (i2 == this.SELECTOR_MIDDLE_ITEM_INDEX && this.mInputText.getVisibility() == 0))) {
+                canvas.save();
+                canvas.translate(0.0f, textSize2);
+                canvas.scale((0.2f * interpolation) + 0.8f, interpolation, right, textSize);
+                if (interpolation < 0.1f) {
+                    i = this.mSelectorWheelPaint.getAlpha();
+                    this.mSelectorWheelPaint.setAlpha((int) ((((float) i) * interpolation) / 0.1f));
+                } else {
+                    i = -1;
+                }
+                canvas.drawText(str, right, f2, this.mSelectorWheelPaint);
+                canvas.restore();
+                if (i != -1) {
+                    this.mSelectorWheelPaint.setAlpha(i);
+                }
+            }
+            f2 += (float) this.mSelectorElementHeight;
         }
         if (this.drawDividers) {
-            int i2 = this.mTopSelectionDividerTop;
+            int i3 = this.mTopSelectionDividerTop;
             Canvas canvas2 = canvas;
-            canvas2.drawRect(0.0f, (float) i2, (float) getRight(), (float) (this.mSelectionDividerHeight + i2), this.mSelectionDivider);
-            int i3 = this.mBottomSelectionDividerBottom;
-            canvas2.drawRect(0.0f, (float) (i3 - this.mSelectionDividerHeight), (float) getRight(), (float) i3, this.mSelectionDivider);
+            canvas2.drawRect(0.0f, (float) i3, (float) getRight(), (float) (this.mSelectionDividerHeight + i3), this.mSelectionDivider);
+            int i4 = this.mBottomSelectionDividerBottom;
+            canvas2.drawRect(0.0f, (float) (i4 - this.mSelectionDividerHeight), (float) getRight(), (float) i4, this.mSelectionDivider);
         }
     }
 
@@ -814,9 +840,12 @@ public class NumberPicker extends LinearLayout {
     private void initializeSelectorWheel() {
         initializeSelectorWheelIndices();
         int[] iArr = this.mSelectorIndices;
-        int bottom = (int) ((((float) ((getBottom() - getTop()) - (iArr.length * this.mTextSize))) / ((float) iArr.length)) + 0.5f);
-        this.mSelectorTextGapHeight = bottom;
-        this.mSelectorElementHeight = this.mTextSize + bottom;
+        int length = iArr.length * this.mTextSize;
+        int bottom = getBottom() - getTop();
+        int i = this.mTextSize;
+        int length2 = (int) ((((float) ((bottom + i) - length)) / ((float) iArr.length)) + 0.5f);
+        this.mSelectorTextGapHeight = length2;
+        this.mSelectorElementHeight = i + length2;
         int baseline = (this.mInputText.getBaseline() + this.mInputText.getTop()) - (this.mSelectorElementHeight * this.SELECTOR_MIDDLE_ITEM_INDEX);
         this.mInitialScrollOffset = baseline;
         this.mCurrentScrollOffset = baseline;

@@ -12,12 +12,12 @@ import org.telegram.messenger.AndroidUtilities;
 public class CellFlickerDrawable {
     public float animationSpeedScale;
     public boolean drawFrame;
-    private final Shader gradientShader;
-    private final Shader gradientShader2;
+    private Shader gradientShader;
+    private Shader gradientShader2;
     long lastUpdateTime;
     Matrix matrix;
-    private final Paint paint;
-    private final Paint paintOutline;
+    private Paint paint;
+    private Paint paintOutline;
     int parentWidth;
     float progress;
     public boolean repeatEnabled;
@@ -29,25 +29,29 @@ public class CellFlickerDrawable {
     }
 
     public CellFlickerDrawable(int i, int i2) {
-        Paint paint2 = new Paint(1);
-        this.paint = paint2;
-        Paint paint3 = new Paint(1);
-        this.paintOutline = paint3;
+        this.paint = new Paint(1);
+        this.paintOutline = new Paint(1);
         this.matrix = new Matrix();
         this.repeatEnabled = true;
         this.drawFrame = true;
         this.repeatProgress = 1.2f;
         this.animationSpeedScale = 1.0f;
         this.size = AndroidUtilities.dp(160.0f);
-        LinearGradient linearGradient = new LinearGradient(0.0f, 0.0f, (float) this.size, 0.0f, new int[]{0, ColorUtils.setAlphaComponent(-1, i), 0}, (float[]) null, Shader.TileMode.CLAMP);
-        this.gradientShader = linearGradient;
+        this.gradientShader = new LinearGradient(0.0f, 0.0f, (float) this.size, 0.0f, new int[]{0, ColorUtils.setAlphaComponent(-1, i), 0}, (float[]) null, Shader.TileMode.CLAMP);
         int[] iArr = {0, ColorUtils.setAlphaComponent(-1, i2), 0};
-        LinearGradient linearGradient2 = new LinearGradient(0.0f, 0.0f, (float) this.size, 0.0f, iArr, (float[]) null, Shader.TileMode.CLAMP);
-        this.gradientShader2 = linearGradient2;
-        paint2.setShader(linearGradient);
-        paint3.setShader(linearGradient2);
-        paint3.setStyle(Paint.Style.STROKE);
-        paint3.setStrokeWidth((float) AndroidUtilities.dp(2.0f));
+        this.gradientShader2 = new LinearGradient(0.0f, 0.0f, (float) this.size, 0.0f, iArr, (float[]) null, Shader.TileMode.CLAMP);
+        this.paint.setShader(this.gradientShader);
+        this.paintOutline.setShader(this.gradientShader2);
+        this.paintOutline.setStyle(Paint.Style.STROKE);
+        this.paintOutline.setStrokeWidth((float) AndroidUtilities.dp(2.0f));
+    }
+
+    public void setColors(int i, int i2, int i3) {
+        this.gradientShader = new LinearGradient(0.0f, 0.0f, (float) this.size, 0.0f, new int[]{0, ColorUtils.setAlphaComponent(i, i2), 0}, (float[]) null, Shader.TileMode.CLAMP);
+        int[] iArr = {0, ColorUtils.setAlphaComponent(i, i3), 0};
+        this.gradientShader2 = new LinearGradient(0.0f, 0.0f, (float) this.size, 0.0f, iArr, (float[]) null, Shader.TileMode.CLAMP);
+        this.paint.setShader(this.gradientShader);
+        this.paintOutline.setShader(this.gradientShader2);
     }
 
     public float getProgress() {

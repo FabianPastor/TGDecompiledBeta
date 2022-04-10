@@ -1,24 +1,19 @@
 package org.telegram.ui;
 
-import org.telegram.messenger.UserConfig;
-import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC$Photo;
+import android.content.DialogInterface;
+import org.telegram.tgnet.TLRPC$User;
 import org.telegram.ui.ProfileActivity;
 
-public final /* synthetic */ class ProfileActivity$5$$ExternalSyntheticLambda4 implements Runnable {
+public final /* synthetic */ class ProfileActivity$5$$ExternalSyntheticLambda4 implements DialogInterface.OnClickListener {
     public final /* synthetic */ ProfileActivity.AnonymousClass5 f$0;
-    public final /* synthetic */ TLObject f$1;
-    public final /* synthetic */ UserConfig f$2;
-    public final /* synthetic */ TLRPC$Photo f$3;
+    public final /* synthetic */ TLRPC$User f$1;
 
-    public /* synthetic */ ProfileActivity$5$$ExternalSyntheticLambda4(ProfileActivity.AnonymousClass5 r1, TLObject tLObject, UserConfig userConfig, TLRPC$Photo tLRPC$Photo) {
+    public /* synthetic */ ProfileActivity$5$$ExternalSyntheticLambda4(ProfileActivity.AnonymousClass5 r1, TLRPC$User tLRPC$User) {
         this.f$0 = r1;
-        this.f$1 = tLObject;
-        this.f$2 = userConfig;
-        this.f$3 = tLRPC$Photo;
+        this.f$1 = tLRPC$User;
     }
 
-    public final void run() {
-        this.f$0.lambda$onItemClick$6(this.f$1, this.f$2, this.f$3);
+    public final void onClick(DialogInterface dialogInterface, int i) {
+        this.f$0.lambda$onItemClick$2(this.f$1, dialogInterface, i);
     }
 }

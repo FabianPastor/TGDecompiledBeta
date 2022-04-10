@@ -1,16 +1,16 @@
 package org.telegram.ui;
 
-import android.window.SplashScreen;
-import android.window.SplashScreenView;
+import android.view.MotionEvent;
+import android.view.View;
 
-public final /* synthetic */ class LaunchActivity$$ExternalSyntheticLambda18 implements SplashScreen.OnExitAnimationListener {
+public final /* synthetic */ class LaunchActivity$$ExternalSyntheticLambda18 implements View.OnTouchListener {
     public final /* synthetic */ LaunchActivity f$0;
 
     public /* synthetic */ LaunchActivity$$ExternalSyntheticLambda18(LaunchActivity launchActivity) {
         this.f$0 = launchActivity;
     }
 
-    public final void onSplashScreenExit(SplashScreenView splashScreenView) {
-        this.f$0.lambda$onCreate$0(splashScreenView);
+    public final boolean onTouch(View view, MotionEvent motionEvent) {
+        return this.f$0.lambda$onCreate$0(view, motionEvent);
     }
 }

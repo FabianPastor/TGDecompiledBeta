@@ -3983,7 +3983,6 @@
     <string name="UserRestrictionsCanDo">이 사용자가 할 수 있는 일</string>
     <string name="UserRestrictionsChangeInfo">대화방 정보 수정</string>
     <string name="UserRestrictionsCustom">맞춤</string>
-    <string name="UserRestrictionsDisabled">이 설정은 그룹 권한을 가진 참가자 모두에게서 꺼져 있습니다</string>
     <string name="UserRestrictionsDuration">지속 기간</string>
     <string name="UserRestrictionsEmbedLinks">링크 보내기</string>
     <string name="UserRestrictionsInviteUsers">사용자 추가</string>

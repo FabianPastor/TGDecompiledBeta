@@ -231,9 +231,9 @@ public class ActionBarMenuItem extends FrameLayout {
         ActionBarPopupWindow actionBarPopupWindow3;
         if (motionEvent.getActionMasked() == 0) {
             if (this.longClickEnabled && hasSubMenu() && ((actionBarPopupWindow3 = this.popupWindow) == null || !actionBarPopupWindow3.isShowing())) {
-                ActionBarMenuItem$$ExternalSyntheticLambda9 actionBarMenuItem$$ExternalSyntheticLambda9 = new ActionBarMenuItem$$ExternalSyntheticLambda9(this);
-                this.showMenuRunnable = actionBarMenuItem$$ExternalSyntheticLambda9;
-                AndroidUtilities.runOnUIThread(actionBarMenuItem$$ExternalSyntheticLambda9, 200);
+                ActionBarMenuItem$$ExternalSyntheticLambda10 actionBarMenuItem$$ExternalSyntheticLambda10 = new ActionBarMenuItem$$ExternalSyntheticLambda10(this);
+                this.showMenuRunnable = actionBarMenuItem$$ExternalSyntheticLambda10;
+                AndroidUtilities.runOnUIThread(actionBarMenuItem$$ExternalSyntheticLambda10, 200);
             }
         } else if (motionEvent.getActionMasked() != 2) {
             ActionBarPopupWindow actionBarPopupWindow4 = this.popupWindow;
@@ -360,10 +360,10 @@ public class ActionBarMenuItem extends FrameLayout {
         if (this.popupLayout == null) {
             this.rect = new Rect();
             this.location = new int[2];
-            ActionBarPopupWindow.ActionBarPopupWindowLayout actionBarPopupWindowLayout = new ActionBarPopupWindow.ActionBarPopupWindowLayout(getContext(), this.resourcesProvider);
+            ActionBarPopupWindow.ActionBarPopupWindowLayout actionBarPopupWindowLayout = new ActionBarPopupWindow.ActionBarPopupWindowLayout(getContext(), NUM, this.resourcesProvider, 1);
             this.popupLayout = actionBarPopupWindowLayout;
-            actionBarPopupWindowLayout.setOnTouchListener(new ActionBarMenuItem$$ExternalSyntheticLambda6(this));
-            this.popupLayout.setDispatchKeyEventListener(new ActionBarMenuItem$$ExternalSyntheticLambda11(this));
+            actionBarPopupWindowLayout.setOnTouchListener(new ActionBarMenuItem$$ExternalSyntheticLambda7(this));
+            this.popupLayout.setDispatchKeyEventListener(new ActionBarMenuItem$$ExternalSyntheticLambda13(this));
         }
     }
 
@@ -561,6 +561,33 @@ public class ActionBarMenuItem extends FrameLayout {
         }
     }
 
+    public ActionBarMenuSubItem addSwipeBackItem(int i, String str, View view) {
+        createPopupLayout();
+        ActionBarMenuSubItem actionBarMenuSubItem = new ActionBarMenuSubItem(getContext(), false, false, false, this.resourcesProvider);
+        actionBarMenuSubItem.setTextAndIcon(str, i, (Drawable) null);
+        actionBarMenuSubItem.setMinimumWidth(AndroidUtilities.dp(196.0f));
+        actionBarMenuSubItem.setRightIcon(NUM);
+        this.popupLayout.addView(actionBarMenuSubItem);
+        LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) actionBarMenuSubItem.getLayoutParams();
+        if (LocaleController.isRTL) {
+            layoutParams.gravity = 5;
+        }
+        layoutParams.width = -1;
+        layoutParams.height = AndroidUtilities.dp(48.0f);
+        actionBarMenuSubItem.setLayoutParams(layoutParams);
+        actionBarMenuSubItem.openSwipeBackLayout = new ActionBarMenuItem$$ExternalSyntheticLambda12(this, this.popupLayout.addViewToSwipeBack(view));
+        actionBarMenuSubItem.setOnClickListener(new ActionBarMenuItem$$ExternalSyntheticLambda5(actionBarMenuSubItem));
+        this.popupLayout.swipeBackGravityRight = true;
+        return actionBarMenuSubItem;
+    }
+
+    /* access modifiers changed from: private */
+    public /* synthetic */ void lambda$addSwipeBackItem$6(int i) {
+        if (this.popupLayout.getSwipeBack() != null) {
+            this.popupLayout.getSwipeBack().openForeground(i);
+        }
+    }
+
     public View addDivider(int i) {
         createPopupLayout();
         TextView textView2 = new TextView(getContext());
@@ -634,6 +661,9 @@ public class ActionBarMenuItem extends FrameLayout {
     }
 
     public ActionBarPopupWindow.ActionBarPopupWindowLayout getPopupLayout() {
+        if (this.popupLayout == null) {
+            createPopupLayout();
+        }
         return this.popupLayout;
     }
 
@@ -641,16 +671,16 @@ public class ActionBarMenuItem extends FrameLayout {
         this.yOffset = i;
     }
 
-    /* JADX WARNING: type inference failed for: r11v6, types: [android.widget.LinearLayout, org.telegram.ui.ActionBar.ActionBarMenuItem$1] */
+    /* JADX WARNING: type inference failed for: r12v6, types: [android.widget.LinearLayout, org.telegram.ui.ActionBar.ActionBarMenuItem$1] */
     /* JADX WARNING: Multi-variable type inference failed */
     /* JADX WARNING: Unknown variable types count: 1 */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    public void toggleSubMenu(final android.view.View r10, android.view.View r11) {
+    public void toggleSubMenu(final android.view.View r11, android.view.View r12) {
         /*
-            r9 = this;
-            org.telegram.ui.ActionBar.ActionBarPopupWindow$ActionBarPopupWindowLayout r0 = r9.popupLayout
-            if (r0 == 0) goto L_0x0156
-            org.telegram.ui.ActionBar.ActionBarMenu r0 = r9.parentMenu
+            r10 = this;
+            org.telegram.ui.ActionBar.ActionBarPopupWindow$ActionBarPopupWindowLayout r0 = r10.popupLayout
+            if (r0 == 0) goto L_0x016c
+            org.telegram.ui.ActionBar.ActionBarMenu r0 = r10.parentMenu
             if (r0 == 0) goto L_0x0018
             boolean r1 = r0.isActionMode
             if (r1 == 0) goto L_0x0018
@@ -658,46 +688,46 @@ public class ActionBarMenuItem extends FrameLayout {
             if (r0 == 0) goto L_0x0018
             boolean r0 = r0.isActionModeShowed()
             if (r0 != 0) goto L_0x0018
-            goto L_0x0156
+            goto L_0x016c
         L_0x0018:
-            java.lang.Runnable r0 = r9.showMenuRunnable
+            java.lang.Runnable r0 = r10.showMenuRunnable
             if (r0 == 0) goto L_0x0022
             org.telegram.messenger.AndroidUtilities.cancelRunOnUIThread(r0)
             r0 = 0
-            r9.showMenuRunnable = r0
+            r10.showMenuRunnable = r0
         L_0x0022:
-            org.telegram.ui.ActionBar.ActionBarPopupWindow r0 = r9.popupWindow
+            org.telegram.ui.ActionBar.ActionBarPopupWindow r0 = r10.popupWindow
             if (r0 == 0) goto L_0x0032
             boolean r0 = r0.isShowing()
             if (r0 == 0) goto L_0x0032
-            org.telegram.ui.ActionBar.ActionBarPopupWindow r10 = r9.popupWindow
-            r10.dismiss()
+            org.telegram.ui.ActionBar.ActionBarPopupWindow r11 = r10.popupWindow
+            r11.dismiss()
             return
         L_0x0032:
-            r9.showSubMenuFrom = r11
-            org.telegram.ui.ActionBar.ActionBarMenuItem$ActionBarSubMenuItemDelegate r11 = r9.subMenuDelegate
-            if (r11 == 0) goto L_0x003b
-            r11.onShowSubMenu()
+            r10.showSubMenuFrom = r12
+            org.telegram.ui.ActionBar.ActionBarMenuItem$ActionBarSubMenuItemDelegate r12 = r10.subMenuDelegate
+            if (r12 == 0) goto L_0x003b
+            r12.onShowSubMenu()
         L_0x003b:
-            org.telegram.ui.ActionBar.ActionBarPopupWindow$ActionBarPopupWindowLayout r11 = r9.popupLayout
-            android.view.ViewParent r11 = r11.getParent()
-            if (r11 == 0) goto L_0x0050
-            org.telegram.ui.ActionBar.ActionBarPopupWindow$ActionBarPopupWindowLayout r11 = r9.popupLayout
-            android.view.ViewParent r11 = r11.getParent()
-            android.view.ViewGroup r11 = (android.view.ViewGroup) r11
-            org.telegram.ui.ActionBar.ActionBarPopupWindow$ActionBarPopupWindowLayout r0 = r9.popupLayout
-            r11.removeView(r0)
+            org.telegram.ui.ActionBar.ActionBarPopupWindow$ActionBarPopupWindowLayout r12 = r10.popupLayout
+            android.view.ViewParent r12 = r12.getParent()
+            if (r12 == 0) goto L_0x0050
+            org.telegram.ui.ActionBar.ActionBarPopupWindow$ActionBarPopupWindowLayout r12 = r10.popupLayout
+            android.view.ViewParent r12 = r12.getParent()
+            android.view.ViewGroup r12 = (android.view.ViewGroup) r12
+            org.telegram.ui.ActionBar.ActionBarPopupWindow$ActionBarPopupWindowLayout r0 = r10.popupLayout
+            r12.removeView(r0)
         L_0x0050:
-            org.telegram.ui.ActionBar.ActionBarPopupWindow$ActionBarPopupWindowLayout r11 = r9.popupLayout
+            org.telegram.ui.ActionBar.ActionBarPopupWindow$ActionBarPopupWindowLayout r12 = r10.popupLayout
             r0 = -2
             r1 = 1
-            if (r10 == 0) goto L_0x00c4
-            org.telegram.ui.ActionBar.ActionBarMenuItem$1 r11 = new org.telegram.ui.ActionBar.ActionBarMenuItem$1
-            android.content.Context r2 = r9.getContext()
-            r11.<init>(r2, r10)
-            r11.setOrientation(r1)
+            if (r11 == 0) goto L_0x00c9
+            org.telegram.ui.ActionBar.ActionBarMenuItem$1 r12 = new org.telegram.ui.ActionBar.ActionBarMenuItem$1
+            android.content.Context r2 = r10.getContext()
+            r12.<init>(r2, r11)
+            r12.setOrientation(r1)
             android.widget.FrameLayout r2 = new android.widget.FrameLayout
-            android.content.Context r3 = r9.getContext()
+            android.content.Context r3 = r10.getContext()
             r2.<init>(r3)
             r3 = 0
             r2.setAlpha(r3)
@@ -707,108 +737,117 @@ public class ActionBarMenuItem extends FrameLayout {
             r4 = 100
             android.view.ViewPropertyAnimator r3 = r3.setDuration(r4)
             r3.start()
-            android.content.Context r3 = r9.getContext()
-            r4 = 2131166026(0x7var_a, float:1.7946286E38)
+            android.content.Context r3 = r10.getContext()
+            r4 = 2131166053(0x7var_, float:1.794634E38)
             android.graphics.drawable.Drawable r3 = androidx.core.content.ContextCompat.getDrawable(r3, r4)
             android.graphics.drawable.Drawable r3 = r3.mutate()
             android.graphics.PorterDuffColorFilter r4 = new android.graphics.PorterDuffColorFilter
-            org.telegram.ui.ActionBar.ActionBarPopupWindow$ActionBarPopupWindowLayout r5 = r9.popupLayout
+            org.telegram.ui.ActionBar.ActionBarPopupWindow$ActionBarPopupWindowLayout r5 = r10.popupLayout
             int r5 = r5.getBackgroundColor()
             android.graphics.PorterDuff$Mode r6 = android.graphics.PorterDuff.Mode.MULTIPLY
             r4.<init>(r5, r6)
             r3.setColorFilter(r4)
             r2.setBackground(r3)
-            r2.addView(r10)
-            android.widget.LinearLayout$LayoutParams r10 = org.telegram.ui.Components.LayoutHelper.createLinear(r0, r0)
-            r11.addView(r2, r10)
-            org.telegram.ui.ActionBar.ActionBarPopupWindow$ActionBarPopupWindowLayout r10 = r9.popupLayout
-            r2 = -2
+            r2.addView(r11)
+            android.widget.LinearLayout$LayoutParams r11 = org.telegram.ui.Components.LayoutHelper.createLinear(r0, r0)
+            r12.addView(r2, r11)
+            org.telegram.ui.ActionBar.ActionBarPopupWindow$ActionBarPopupWindowLayout r11 = r10.popupLayout
             r3 = -2
-            r4 = 0
+            r4 = -2
             r5 = 0
-            r6 = 1082130432(0x40800000, float:4.0)
-            int r6 = org.telegram.messenger.AndroidUtilities.dp(r6)
-            int r6 = -r6
-            r7 = 0
+            r6 = 0
+            r7 = 1082130432(0x40800000, float:4.0)
+            int r7 = org.telegram.messenger.AndroidUtilities.dp(r7)
+            int r7 = -r7
             r8 = 0
-            android.widget.LinearLayout$LayoutParams r2 = org.telegram.ui.Components.LayoutHelper.createLinear((int) r2, (int) r3, (int) r4, (int) r5, (int) r6, (int) r7, (int) r8)
-            r11.addView(r10, r2)
-        L_0x00c4:
-            org.telegram.ui.ActionBar.ActionBarPopupWindow r10 = new org.telegram.ui.ActionBar.ActionBarPopupWindow
-            r10.<init>(r11, r0, r0)
-            r9.popupWindow = r10
-            boolean r0 = r9.animationEnabled
+            r9 = 0
+            android.widget.LinearLayout$LayoutParams r3 = org.telegram.ui.Components.LayoutHelper.createLinear((int) r3, (int) r4, (int) r5, (int) r6, (int) r7, (int) r8, (int) r9)
+            r12.addView(r11, r3)
+            org.telegram.ui.ActionBar.ActionBarPopupWindow$ActionBarPopupWindowLayout r11 = r10.popupLayout
+            r11.setTopView(r2)
+        L_0x00c9:
+            org.telegram.ui.ActionBar.ActionBarPopupWindow r11 = new org.telegram.ui.ActionBar.ActionBarPopupWindow
+            r11.<init>(r12, r0, r0)
+            r10.popupWindow = r11
+            boolean r0 = r10.animationEnabled
             r2 = 0
-            if (r0 == 0) goto L_0x00da
+            if (r0 == 0) goto L_0x00df
             int r0 = android.os.Build.VERSION.SDK_INT
             r3 = 19
-            if (r0 < r3) goto L_0x00da
-            r10.setAnimationStyle(r2)
-            goto L_0x00e0
-        L_0x00da:
+            if (r0 < r3) goto L_0x00df
+            r11.setAnimationStyle(r2)
+            goto L_0x00e5
+        L_0x00df:
             r0 = 2131689479(0x7f0var_, float:1.9007975E38)
-            r10.setAnimationStyle(r0)
-        L_0x00e0:
-            boolean r10 = r9.animationEnabled
-            if (r10 != 0) goto L_0x00e9
-            org.telegram.ui.ActionBar.ActionBarPopupWindow r0 = r9.popupWindow
-            r0.setAnimationEnabled(r10)
-        L_0x00e9:
-            org.telegram.ui.ActionBar.ActionBarPopupWindow r10 = r9.popupWindow
-            r10.setOutsideTouchable(r1)
-            org.telegram.ui.ActionBar.ActionBarPopupWindow r10 = r9.popupWindow
-            r10.setClippingEnabled(r1)
-            boolean r10 = r9.layoutInScreen
-            if (r10 == 0) goto L_0x00fc
-            org.telegram.ui.ActionBar.ActionBarPopupWindow r10 = r9.popupWindow
-            r10.setLayoutInScreen(r1)
-        L_0x00fc:
-            org.telegram.ui.ActionBar.ActionBarPopupWindow r10 = r9.popupWindow
+            r11.setAnimationStyle(r0)
+        L_0x00e5:
+            boolean r11 = r10.animationEnabled
+            if (r11 != 0) goto L_0x00ee
+            org.telegram.ui.ActionBar.ActionBarPopupWindow r0 = r10.popupWindow
+            r0.setAnimationEnabled(r11)
+        L_0x00ee:
+            org.telegram.ui.ActionBar.ActionBarPopupWindow r11 = r10.popupWindow
+            r11.setOutsideTouchable(r1)
+            org.telegram.ui.ActionBar.ActionBarPopupWindow r11 = r10.popupWindow
+            r11.setClippingEnabled(r1)
+            boolean r11 = r10.layoutInScreen
+            if (r11 == 0) goto L_0x0101
+            org.telegram.ui.ActionBar.ActionBarPopupWindow r11 = r10.popupWindow
+            r11.setLayoutInScreen(r1)
+        L_0x0101:
+            org.telegram.ui.ActionBar.ActionBarPopupWindow r11 = r10.popupWindow
             r0 = 2
-            r10.setInputMethodMode(r0)
-            org.telegram.ui.ActionBar.ActionBarPopupWindow r10 = r9.popupWindow
-            r10.setSoftInputMode(r2)
-            r11.setFocusableInTouchMode(r1)
-            org.telegram.ui.ActionBar.ActionBarMenuItem$$ExternalSyntheticLambda5 r10 = new org.telegram.ui.ActionBar.ActionBarMenuItem$$ExternalSyntheticLambda5
-            r10.<init>(r9)
-            r11.setOnKeyListener(r10)
-            org.telegram.ui.ActionBar.ActionBarPopupWindow r10 = r9.popupWindow
-            org.telegram.ui.ActionBar.ActionBarMenuItem$$ExternalSyntheticLambda7 r0 = new org.telegram.ui.ActionBar.ActionBarMenuItem$$ExternalSyntheticLambda7
-            r0.<init>(r9)
-            r10.setOnDismissListener(r0)
-            android.graphics.Point r10 = org.telegram.messenger.AndroidUtilities.displaySize
-            int r10 = r10.x
+            r11.setInputMethodMode(r0)
+            org.telegram.ui.ActionBar.ActionBarPopupWindow r11 = r10.popupWindow
+            r11.setSoftInputMode(r2)
+            r12.setFocusableInTouchMode(r1)
+            org.telegram.ui.ActionBar.ActionBarMenuItem$$ExternalSyntheticLambda6 r11 = new org.telegram.ui.ActionBar.ActionBarMenuItem$$ExternalSyntheticLambda6
+            r11.<init>(r10)
+            r12.setOnKeyListener(r11)
+            org.telegram.ui.ActionBar.ActionBarPopupWindow r11 = r10.popupWindow
+            org.telegram.ui.ActionBar.ActionBarMenuItem$$ExternalSyntheticLambda8 r0 = new org.telegram.ui.ActionBar.ActionBarMenuItem$$ExternalSyntheticLambda8
+            r0.<init>(r10)
+            r11.setOnDismissListener(r0)
+            android.graphics.Point r11 = org.telegram.messenger.AndroidUtilities.displaySize
+            int r11 = r11.x
             r0 = 1109393408(0x42200000, float:40.0)
             int r0 = org.telegram.messenger.AndroidUtilities.dp(r0)
-            int r10 = r10 - r0
+            int r11 = r11 - r0
             r0 = -2147483648(0xfffffffvar_, float:-0.0)
-            int r10 = android.view.View.MeasureSpec.makeMeasureSpec(r10, r0)
+            int r11 = android.view.View.MeasureSpec.makeMeasureSpec(r11, r0)
             android.graphics.Point r3 = org.telegram.messenger.AndroidUtilities.displaySize
             int r3 = r3.y
             int r0 = android.view.View.MeasureSpec.makeMeasureSpec(r3, r0)
-            r11.measure(r10, r0)
-            r9.processedPopupClick = r2
-            org.telegram.ui.ActionBar.ActionBarPopupWindow r10 = r9.popupWindow
-            r10.setFocusable(r1)
-            int r10 = r11.getMeasuredWidth()
-            if (r10 != 0) goto L_0x0149
-            r9.updateOrShowPopup(r1, r1)
-            goto L_0x014c
-        L_0x0149:
-            r9.updateOrShowPopup(r1, r2)
-        L_0x014c:
-            org.telegram.ui.ActionBar.ActionBarPopupWindow$ActionBarPopupWindowLayout r10 = r9.popupLayout
-            r10.updateRadialSelectors()
-            org.telegram.ui.ActionBar.ActionBarPopupWindow r10 = r9.popupWindow
-            r10.startAnimation()
-        L_0x0156:
+            r12.measure(r11, r0)
+            r10.processedPopupClick = r2
+            org.telegram.ui.ActionBar.ActionBarPopupWindow r11 = r10.popupWindow
+            r11.setFocusable(r1)
+            int r11 = r12.getMeasuredWidth()
+            if (r11 != 0) goto L_0x014e
+            r10.updateOrShowPopup(r1, r1)
+            goto L_0x0151
+        L_0x014e:
+            r10.updateOrShowPopup(r1, r2)
+        L_0x0151:
+            org.telegram.ui.ActionBar.ActionBarPopupWindow$ActionBarPopupWindowLayout r11 = r10.popupLayout
+            r11.updateRadialSelectors()
+            org.telegram.ui.ActionBar.ActionBarPopupWindow$ActionBarPopupWindowLayout r11 = r10.popupLayout
+            org.telegram.ui.Components.PopupSwipeBackLayout r11 = r11.getSwipeBack()
+            if (r11 == 0) goto L_0x0167
+            org.telegram.ui.ActionBar.ActionBarPopupWindow$ActionBarPopupWindowLayout r11 = r10.popupLayout
+            org.telegram.ui.Components.PopupSwipeBackLayout r11 = r11.getSwipeBack()
+            r11.closeForeground(r2)
+        L_0x0167:
+            org.telegram.ui.ActionBar.ActionBarPopupWindow r11 = r10.popupWindow
+            r11.startAnimation()
+        L_0x016c:
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ActionBar.ActionBarMenuItem.toggleSubMenu(android.view.View, android.view.View):void");
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ boolean lambda$toggleSubMenu$6(View view, int i, KeyEvent keyEvent) {
+    public /* synthetic */ boolean lambda$toggleSubMenu$8(View view, int i, KeyEvent keyEvent) {
         ActionBarPopupWindow actionBarPopupWindow;
         if (i != 82 || keyEvent.getRepeatCount() != 0 || keyEvent.getAction() != 1 || (actionBarPopupWindow = this.popupWindow) == null || !actionBarPopupWindow.isShowing()) {
             return false;
@@ -818,7 +857,7 @@ public class ActionBarMenuItem extends FrameLayout {
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$toggleSubMenu$7() {
+    public /* synthetic */ void lambda$toggleSubMenu$9() {
         onDismiss();
         ActionBarSubMenuItemDelegate actionBarSubMenuItemDelegate = this.subMenuDelegate;
         if (actionBarSubMenuItemDelegate != null) {
@@ -1071,7 +1110,7 @@ public class ActionBarMenuItem extends FrameLayout {
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$onFiltersChanged$8(SearchFilterView searchFilterView, View view) {
+    public /* synthetic */ void lambda$onFiltersChanged$10(SearchFilterView searchFilterView, View view) {
         int indexOf = this.currentSearchFilters.indexOf(searchFilterView.getFilter());
         if (this.selectedFilterIndex != indexOf) {
             this.selectedFilterIndex = indexOf;
@@ -1380,7 +1419,7 @@ public class ActionBarMenuItem extends FrameLayout {
                     }
                 });
             }
-            this.searchField.setOnEditorActionListener(new ActionBarMenuItem$$ExternalSyntheticLambda8(this));
+            this.searchField.setOnEditorActionListener(new ActionBarMenuItem$$ExternalSyntheticLambda9(this));
             this.searchField.addTextChangedListener(new TextWatcher() {
                 public void afterTextChanged(Editable editable) {
                 }
@@ -1466,7 +1505,7 @@ public class ActionBarMenuItem extends FrameLayout {
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ boolean lambda$setIsSearchField$9(TextView textView2, int i, KeyEvent keyEvent) {
+    public /* synthetic */ boolean lambda$setIsSearchField$11(TextView textView2, int i, KeyEvent keyEvent) {
         if (keyEvent == null) {
             return false;
         }
@@ -1483,7 +1522,7 @@ public class ActionBarMenuItem extends FrameLayout {
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$setIsSearchField$10(View view) {
+    public /* synthetic */ void lambda$setIsSearchField$12(View view) {
         if (this.searchField.length() != 0) {
             this.searchField.setText("");
         } else if (hasRemovableFilters()) {
@@ -1534,7 +1573,7 @@ public class ActionBarMenuItem extends FrameLayout {
             this.clearButton.setTag((Object) null);
             this.clearButton.clearAnimation();
             if (this.animateClear) {
-                this.clearButton.animate().setInterpolator(new DecelerateInterpolator()).alpha(0.0f).setDuration(180).scaleY(0.0f).scaleX(0.0f).rotation(45.0f).withEndAction(new ActionBarMenuItem$$ExternalSyntheticLambda10(this)).start();
+                this.clearButton.animate().setInterpolator(new DecelerateInterpolator()).alpha(0.0f).setDuration(180).scaleY(0.0f).scaleX(0.0f).rotation(45.0f).withEndAction(new ActionBarMenuItem$$ExternalSyntheticLambda11(this)).start();
                 return;
             }
             this.clearButton.setAlpha(0.0f);
@@ -1547,7 +1586,7 @@ public class ActionBarMenuItem extends FrameLayout {
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$checkClearButton$11() {
+    public /* synthetic */ void lambda$checkClearButton$13() {
         this.clearButton.setVisibility(4);
     }
 
@@ -1982,5 +2021,28 @@ public class ActionBarMenuItem extends FrameLayout {
             Integer color = resourcesProvider2 != null ? resourcesProvider2.getColor(str) : null;
             return color != null ? color.intValue() : Theme.getColor(str);
         }
+    }
+
+    public View addColoredGap() {
+        createPopupLayout();
+        ActionBarPopupWindow.GapView gapView = new ActionBarPopupWindow.GapView(getContext(), "graySection");
+        gapView.setTag(NUM, 1);
+        this.popupLayout.addView(gapView, LayoutHelper.createLinear(-1, 8));
+        return gapView;
+    }
+
+    public static ActionBarMenuSubItem addItem(ActionBarPopupWindow.ActionBarPopupWindowLayout actionBarPopupWindowLayout, int i, String str, boolean z, Theme.ResourcesProvider resourcesProvider2) {
+        ActionBarMenuSubItem actionBarMenuSubItem = new ActionBarMenuSubItem(actionBarPopupWindowLayout.getContext(), z, false, false, resourcesProvider2);
+        actionBarMenuSubItem.setTextAndIcon(str, i);
+        actionBarMenuSubItem.setMinimumWidth(AndroidUtilities.dp(196.0f));
+        actionBarPopupWindowLayout.addView(actionBarMenuSubItem);
+        LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) actionBarMenuSubItem.getLayoutParams();
+        if (LocaleController.isRTL) {
+            layoutParams.gravity = 5;
+        }
+        layoutParams.width = -1;
+        layoutParams.height = AndroidUtilities.dp(48.0f);
+        actionBarMenuSubItem.setLayoutParams(layoutParams);
+        return actionBarMenuSubItem;
     }
 }

@@ -10,6 +10,6 @@ public final /* synthetic */ class ArticleViewer$$ExternalSyntheticLambda6 imple
     }
 
     public final void onClick(View view) {
-        this.f$0.lambda$setParentActivity$18(view);
+        this.f$0.lambda$setParentActivity$19(view);
     }
 }

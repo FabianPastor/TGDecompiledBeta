@@ -15,8 +15,6 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.os.Build;
-import android.os.Environment;
 import android.os.SystemClock;
 import android.text.TextUtils;
 import android.util.SparseArray;
@@ -111,8 +109,7 @@ public class ImageLoader {
     private HashMap<String, Runnable> retryHttpsTasks;
     /* access modifiers changed from: private */
     public LruCache<BitmapDrawable> smallImagesMemCache;
-    /* access modifiers changed from: private */
-    public File telegramPath;
+    private File telegramPath;
     /* access modifiers changed from: private */
     public ConcurrentHashMap<String, WebFile> testWebFile;
     /* access modifiers changed from: private */
@@ -3712,14 +3709,14 @@ public class ImageLoader {
                     ImageLoader.this.fileProgresses.remove(str);
                 }
 
-                public void fileDidLoaded(String str, File file, int i) {
+                public void fileDidLoaded(String str, File file, Object obj, int i) {
                     ImageLoader.this.fileProgresses.remove(str);
-                    AndroidUtilities.runOnUIThread(new ImageLoader$5$$ExternalSyntheticLambda6(this, file, str, i, i));
+                    AndroidUtilities.runOnUIThread(new ImageLoader$5$$ExternalSyntheticLambda6(this, file, str, obj, i, i));
                 }
 
                 /* access modifiers changed from: private */
-                public /* synthetic */ void lambda$fileDidLoaded$5(File file, String str, int i, int i2) {
-                    if (SharedConfig.saveToGallery && ImageLoader.this.telegramPath != null && file != null && ((str.endsWith(".mp4") || str.endsWith(".jpg")) && file.toString().startsWith(ImageLoader.this.telegramPath.toString()))) {
+                public /* synthetic */ void lambda$fileDidLoaded$5(File file, String str, Object obj, int i, int i2) {
+                    if (SharedConfig.saveToGallery && file != null && ((str.endsWith(".mp4") || str.endsWith(".jpg")) && (obj instanceof MessageObject) && ((MessageObject) obj).getDialogId() >= 0)) {
                         AndroidUtilities.addMediaToGallery(file.toString());
                     }
                     NotificationCenter.getInstance(i).postNotificationName(NotificationCenter.fileLoaded, str, file);
@@ -3858,125 +3855,315 @@ public class ImageLoader {
         }
     }
 
-    public SparseArray<File> createMediaPaths() {
-        ArrayList<File> rootDirs;
-        SparseArray<File> sparseArray = new SparseArray<>();
-        File cacheDir = AndroidUtilities.getCacheDir();
-        if (!cacheDir.isDirectory()) {
-            try {
-                cacheDir.mkdirs();
-            } catch (Exception e) {
-                FileLog.e((Throwable) e);
-            }
-        }
-        AndroidUtilities.createEmptyFile(new File(cacheDir, ".nomedia"));
-        sparseArray.put(4, cacheDir);
-        if (BuildVars.LOGS_ENABLED) {
-            FileLog.d("cache path = " + cacheDir);
-        }
-        try {
-            if ("mounted".equals(Environment.getExternalStorageState())) {
-                File externalStorageDirectory = Environment.getExternalStorageDirectory();
-                if (Build.VERSION.SDK_INT >= 19 && !TextUtils.isEmpty(SharedConfig.storageCacheDir) && (rootDirs = AndroidUtilities.getRootDirs()) != null) {
-                    int size = rootDirs.size();
-                    int i = 0;
-                    while (true) {
-                        if (i >= size) {
-                            break;
-                        }
-                        File file = rootDirs.get(i);
-                        if (file.getAbsolutePath().startsWith(SharedConfig.storageCacheDir)) {
-                            externalStorageDirectory = file;
-                            break;
-                        }
-                        i++;
-                    }
-                }
-                int i2 = Build.VERSION.SDK_INT;
-                if (i2 >= 30) {
-                    this.telegramPath = new File(ApplicationLoader.applicationContext.getExternalFilesDir((String) null), "Telegram");
-                } else {
-                    this.telegramPath = new File(externalStorageDirectory, "Telegram");
-                }
-                this.telegramPath.mkdirs();
-                if (i2 >= 19 && !this.telegramPath.isDirectory()) {
-                    ArrayList<File> dataDirs = AndroidUtilities.getDataDirs();
-                    int size2 = dataDirs.size();
-                    int i3 = 0;
-                    while (true) {
-                        if (i3 >= size2) {
-                            break;
-                        }
-                        File file2 = dataDirs.get(i3);
-                        if (file2.getAbsolutePath().startsWith(SharedConfig.storageCacheDir)) {
-                            File file3 = new File(file2, "Telegram");
-                            this.telegramPath = file3;
-                            file3.mkdirs();
-                            break;
-                        }
-                        i3++;
-                    }
-                }
-                if (this.telegramPath.isDirectory()) {
-                    try {
-                        File file4 = new File(this.telegramPath, "Telegram Images");
-                        file4.mkdir();
-                        if (file4.isDirectory() && canMoveFiles(cacheDir, file4, 0)) {
-                            sparseArray.put(0, file4);
-                            if (BuildVars.LOGS_ENABLED) {
-                                FileLog.d("image path = " + file4);
-                            }
-                        }
-                    } catch (Exception e2) {
-                        FileLog.e((Throwable) e2);
-                    }
-                    try {
-                        File file5 = new File(this.telegramPath, "Telegram Video");
-                        file5.mkdir();
-                        if (file5.isDirectory() && canMoveFiles(cacheDir, file5, 2)) {
-                            sparseArray.put(2, file5);
-                            if (BuildVars.LOGS_ENABLED) {
-                                FileLog.d("video path = " + file5);
-                            }
-                        }
-                    } catch (Exception e3) {
-                        FileLog.e((Throwable) e3);
-                    }
-                    try {
-                        File file6 = new File(this.telegramPath, "Telegram Audio");
-                        file6.mkdir();
-                        if (file6.isDirectory() && canMoveFiles(cacheDir, file6, 1)) {
-                            AndroidUtilities.createEmptyFile(new File(file6, ".nomedia"));
-                            sparseArray.put(1, file6);
-                            if (BuildVars.LOGS_ENABLED) {
-                                FileLog.d("audio path = " + file6);
-                            }
-                        }
-                    } catch (Exception e4) {
-                        FileLog.e((Throwable) e4);
-                    }
-                    try {
-                        File file7 = new File(this.telegramPath, "Telegram Documents");
-                        file7.mkdir();
-                        if (file7.isDirectory() && canMoveFiles(cacheDir, file7, 3)) {
-                            AndroidUtilities.createEmptyFile(new File(file7, ".nomedia"));
-                            sparseArray.put(3, file7);
-                            if (BuildVars.LOGS_ENABLED) {
-                                FileLog.d("documents path = " + file7);
-                            }
-                        }
-                    } catch (Exception e5) {
-                        FileLog.e((Throwable) e5);
-                    }
-                }
-            } else if (BuildVars.LOGS_ENABLED) {
-                FileLog.d("this Android can't rename files");
-            }
-            SharedConfig.checkSaveToGalleryFiles();
-        } catch (Exception e6) {
-            FileLog.e((Throwable) e6);
-        }
-        return sparseArray;
+    /* JADX WARNING: Removed duplicated region for block: B:113:0x0223 A[Catch:{ Exception -> 0x0236 }] */
+    /* JADX WARNING: Removed duplicated region for block: B:124:0x0257 A[Catch:{ Exception -> 0x026a }] */
+    /* JADX WARNING: Removed duplicated region for block: B:137:0x0103 A[EDGE_INSN: B:137:0x0103->B:56:0x0103 ?: BREAK  , SYNTHETIC] */
+    /* JADX WARNING: Removed duplicated region for block: B:52:0x00e3 A[Catch:{ Exception -> 0x027c }] */
+    /* JADX WARNING: Removed duplicated region for block: B:59:0x0114 A[SYNTHETIC, Splitter:B:59:0x0114] */
+    /* Code decompiled incorrectly, please refer to instructions dump. */
+    public android.util.SparseArray<java.io.File> createMediaPaths() {
+        /*
+            r14 = this;
+            android.util.SparseArray r0 = new android.util.SparseArray
+            r0.<init>()
+            java.io.File r1 = org.telegram.messenger.AndroidUtilities.getCacheDir()
+            boolean r2 = r1.isDirectory()
+            if (r2 != 0) goto L_0x0017
+            r1.mkdirs()     // Catch:{ Exception -> 0x0013 }
+            goto L_0x0017
+        L_0x0013:
+            r2 = move-exception
+            org.telegram.messenger.FileLog.e((java.lang.Throwable) r2)
+        L_0x0017:
+            java.io.File r2 = new java.io.File
+            java.lang.String r3 = ".nomedia"
+            r2.<init>(r1, r3)
+            org.telegram.messenger.AndroidUtilities.createEmptyFile(r2)
+            r2 = 4
+            r0.put(r2, r1)
+            boolean r2 = org.telegram.messenger.BuildVars.LOGS_ENABLED
+            if (r2 == 0) goto L_0x003d
+            java.lang.StringBuilder r2 = new java.lang.StringBuilder
+            r2.<init>()
+            java.lang.String r4 = "cache path = "
+            r2.append(r4)
+            r2.append(r1)
+            java.lang.String r2 = r2.toString()
+            org.telegram.messenger.FileLog.d(r2)
+        L_0x003d:
+            java.lang.String r2 = "mounted"
+            java.lang.String r4 = android.os.Environment.getExternalStorageState()     // Catch:{ Exception -> 0x027c }
+            boolean r2 = r2.equals(r4)     // Catch:{ Exception -> 0x027c }
+            if (r2 == 0) goto L_0x026f
+            java.io.File r2 = android.os.Environment.getExternalStorageDirectory()     // Catch:{ Exception -> 0x027c }
+            int r4 = android.os.Build.VERSION.SDK_INT     // Catch:{ Exception -> 0x027c }
+            r5 = 19
+            r6 = 0
+            if (r4 < r5) goto L_0x0080
+            java.lang.String r4 = org.telegram.messenger.SharedConfig.storageCacheDir     // Catch:{ Exception -> 0x027c }
+            boolean r4 = android.text.TextUtils.isEmpty(r4)     // Catch:{ Exception -> 0x027c }
+            if (r4 != 0) goto L_0x0080
+            java.util.ArrayList r4 = org.telegram.messenger.AndroidUtilities.getRootDirs()     // Catch:{ Exception -> 0x027c }
+            if (r4 == 0) goto L_0x0080
+            int r7 = r4.size()     // Catch:{ Exception -> 0x027c }
+            r8 = 0
+        L_0x0067:
+            if (r8 >= r7) goto L_0x0080
+            java.lang.Object r9 = r4.get(r8)     // Catch:{ Exception -> 0x027c }
+            java.io.File r9 = (java.io.File) r9     // Catch:{ Exception -> 0x027c }
+            java.lang.String r10 = r9.getAbsolutePath()     // Catch:{ Exception -> 0x027c }
+            java.lang.String r11 = org.telegram.messenger.SharedConfig.storageCacheDir     // Catch:{ Exception -> 0x027c }
+            boolean r10 = r10.startsWith(r11)     // Catch:{ Exception -> 0x027c }
+            if (r10 == 0) goto L_0x007d
+            r2 = r9
+            goto L_0x0080
+        L_0x007d:
+            int r8 = r8 + 1
+            goto L_0x0067
+        L_0x0080:
+            int r4 = android.os.Build.VERSION.SDK_INT     // Catch:{ Exception -> 0x027c }
+            r7 = 30
+            r8 = 0
+            java.lang.String r9 = "Telegram"
+            if (r4 < r7) goto L_0x00c0
+            android.content.Context r2 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ Exception -> 0x00ac }
+            java.io.File[] r2 = r2.getExternalMediaDirs()     // Catch:{ Exception -> 0x00ac }
+            int r2 = r2.length     // Catch:{ Exception -> 0x00ac }
+            if (r2 <= 0) goto L_0x00aa
+            android.content.Context r2 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ Exception -> 0x00ac }
+            java.io.File[] r2 = r2.getExternalMediaDirs()     // Catch:{ Exception -> 0x00ac }
+            r2 = r2[r6]     // Catch:{ Exception -> 0x00ac }
+            java.io.File r4 = new java.io.File     // Catch:{ Exception -> 0x00a5 }
+            r4.<init>(r2, r9)     // Catch:{ Exception -> 0x00a5 }
+            r4.mkdirs()     // Catch:{ Exception -> 0x00a3 }
+            goto L_0x00b1
+        L_0x00a3:
+            r2 = move-exception
+            goto L_0x00ae
+        L_0x00a5:
+            r4 = move-exception
+            r13 = r4
+            r4 = r2
+            r2 = r13
+            goto L_0x00ae
+        L_0x00aa:
+            r4 = r8
+            goto L_0x00b1
+        L_0x00ac:
+            r2 = move-exception
+            r4 = r8
+        L_0x00ae:
+            org.telegram.messenger.FileLog.e((java.lang.Throwable) r2)     // Catch:{ Exception -> 0x027c }
+        L_0x00b1:
+            android.content.Context r2 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ Exception -> 0x027c }
+            java.io.File r2 = r2.getExternalFilesDir(r8)     // Catch:{ Exception -> 0x027c }
+            java.io.File r7 = new java.io.File     // Catch:{ Exception -> 0x027c }
+            r7.<init>(r2, r9)     // Catch:{ Exception -> 0x027c }
+            r14.telegramPath = r7     // Catch:{ Exception -> 0x027c }
+            r8 = r4
+            goto L_0x00c7
+        L_0x00c0:
+            java.io.File r4 = new java.io.File     // Catch:{ Exception -> 0x027c }
+            r4.<init>(r2, r9)     // Catch:{ Exception -> 0x027c }
+            r14.telegramPath = r4     // Catch:{ Exception -> 0x027c }
+        L_0x00c7:
+            java.io.File r2 = r14.telegramPath     // Catch:{ Exception -> 0x027c }
+            r2.mkdirs()     // Catch:{ Exception -> 0x027c }
+            int r2 = android.os.Build.VERSION.SDK_INT     // Catch:{ Exception -> 0x027c }
+            if (r2 < r5) goto L_0x0103
+            java.io.File r2 = r14.telegramPath     // Catch:{ Exception -> 0x027c }
+            boolean r2 = r2.isDirectory()     // Catch:{ Exception -> 0x027c }
+            if (r2 != 0) goto L_0x0103
+            java.util.ArrayList r2 = org.telegram.messenger.AndroidUtilities.getDataDirs()     // Catch:{ Exception -> 0x027c }
+            int r4 = r2.size()     // Catch:{ Exception -> 0x027c }
+            r5 = 0
+        L_0x00e1:
+            if (r5 >= r4) goto L_0x0103
+            java.lang.Object r7 = r2.get(r5)     // Catch:{ Exception -> 0x027c }
+            java.io.File r7 = (java.io.File) r7     // Catch:{ Exception -> 0x027c }
+            java.lang.String r10 = r7.getAbsolutePath()     // Catch:{ Exception -> 0x027c }
+            java.lang.String r11 = org.telegram.messenger.SharedConfig.storageCacheDir     // Catch:{ Exception -> 0x027c }
+            boolean r10 = r10.startsWith(r11)     // Catch:{ Exception -> 0x027c }
+            if (r10 == 0) goto L_0x0100
+            java.io.File r2 = new java.io.File     // Catch:{ Exception -> 0x027c }
+            r2.<init>(r7, r9)     // Catch:{ Exception -> 0x027c }
+            r14.telegramPath = r2     // Catch:{ Exception -> 0x027c }
+            r2.mkdirs()     // Catch:{ Exception -> 0x027c }
+            goto L_0x0103
+        L_0x0100:
+            int r5 = r5 + 1
+            goto L_0x00e1
+        L_0x0103:
+            java.io.File r2 = r14.telegramPath     // Catch:{ Exception -> 0x027c }
+            boolean r2 = r2.isDirectory()     // Catch:{ Exception -> 0x027c }
+            java.lang.String r4 = "video path = "
+            java.lang.String r5 = "image path = "
+            java.lang.String r7 = "Telegram Video"
+            java.lang.String r9 = "Telegram Images"
+            r10 = 2
+            if (r2 == 0) goto L_0x01fe
+            java.io.File r2 = new java.io.File     // Catch:{ Exception -> 0x0144 }
+            java.io.File r11 = r14.telegramPath     // Catch:{ Exception -> 0x0144 }
+            r2.<init>(r11, r9)     // Catch:{ Exception -> 0x0144 }
+            r2.mkdir()     // Catch:{ Exception -> 0x0144 }
+            boolean r11 = r2.isDirectory()     // Catch:{ Exception -> 0x0144 }
+            if (r11 == 0) goto L_0x0148
+            boolean r11 = r14.canMoveFiles(r1, r2, r6)     // Catch:{ Exception -> 0x0144 }
+            if (r11 == 0) goto L_0x0148
+            r0.put(r6, r2)     // Catch:{ Exception -> 0x0144 }
+            boolean r11 = org.telegram.messenger.BuildVars.LOGS_ENABLED     // Catch:{ Exception -> 0x0144 }
+            if (r11 == 0) goto L_0x0148
+            java.lang.StringBuilder r11 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x0144 }
+            r11.<init>()     // Catch:{ Exception -> 0x0144 }
+            r11.append(r5)     // Catch:{ Exception -> 0x0144 }
+            r11.append(r2)     // Catch:{ Exception -> 0x0144 }
+            java.lang.String r2 = r11.toString()     // Catch:{ Exception -> 0x0144 }
+            org.telegram.messenger.FileLog.d(r2)     // Catch:{ Exception -> 0x0144 }
+            goto L_0x0148
+        L_0x0144:
+            r2 = move-exception
+            org.telegram.messenger.FileLog.e((java.lang.Throwable) r2)     // Catch:{ Exception -> 0x027c }
+        L_0x0148:
+            java.io.File r2 = new java.io.File     // Catch:{ Exception -> 0x0178 }
+            java.io.File r11 = r14.telegramPath     // Catch:{ Exception -> 0x0178 }
+            r2.<init>(r11, r7)     // Catch:{ Exception -> 0x0178 }
+            r2.mkdir()     // Catch:{ Exception -> 0x0178 }
+            boolean r11 = r2.isDirectory()     // Catch:{ Exception -> 0x0178 }
+            if (r11 == 0) goto L_0x017c
+            boolean r11 = r14.canMoveFiles(r1, r2, r10)     // Catch:{ Exception -> 0x0178 }
+            if (r11 == 0) goto L_0x017c
+            r0.put(r10, r2)     // Catch:{ Exception -> 0x0178 }
+            boolean r11 = org.telegram.messenger.BuildVars.LOGS_ENABLED     // Catch:{ Exception -> 0x0178 }
+            if (r11 == 0) goto L_0x017c
+            java.lang.StringBuilder r11 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x0178 }
+            r11.<init>()     // Catch:{ Exception -> 0x0178 }
+            r11.append(r4)     // Catch:{ Exception -> 0x0178 }
+            r11.append(r2)     // Catch:{ Exception -> 0x0178 }
+            java.lang.String r2 = r11.toString()     // Catch:{ Exception -> 0x0178 }
+            org.telegram.messenger.FileLog.d(r2)     // Catch:{ Exception -> 0x0178 }
+            goto L_0x017c
+        L_0x0178:
+            r2 = move-exception
+            org.telegram.messenger.FileLog.e((java.lang.Throwable) r2)     // Catch:{ Exception -> 0x027c }
+        L_0x017c:
+            java.io.File r2 = new java.io.File     // Catch:{ Exception -> 0x01b9 }
+            java.io.File r11 = r14.telegramPath     // Catch:{ Exception -> 0x01b9 }
+            java.lang.String r12 = "Telegram Audio"
+            r2.<init>(r11, r12)     // Catch:{ Exception -> 0x01b9 }
+            r2.mkdir()     // Catch:{ Exception -> 0x01b9 }
+            boolean r11 = r2.isDirectory()     // Catch:{ Exception -> 0x01b9 }
+            if (r11 == 0) goto L_0x01bd
+            r11 = 1
+            boolean r12 = r14.canMoveFiles(r1, r2, r11)     // Catch:{ Exception -> 0x01b9 }
+            if (r12 == 0) goto L_0x01bd
+            java.io.File r12 = new java.io.File     // Catch:{ Exception -> 0x01b9 }
+            r12.<init>(r2, r3)     // Catch:{ Exception -> 0x01b9 }
+            org.telegram.messenger.AndroidUtilities.createEmptyFile(r12)     // Catch:{ Exception -> 0x01b9 }
+            r0.put(r11, r2)     // Catch:{ Exception -> 0x01b9 }
+            boolean r11 = org.telegram.messenger.BuildVars.LOGS_ENABLED     // Catch:{ Exception -> 0x01b9 }
+            if (r11 == 0) goto L_0x01bd
+            java.lang.StringBuilder r11 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x01b9 }
+            r11.<init>()     // Catch:{ Exception -> 0x01b9 }
+            java.lang.String r12 = "audio path = "
+            r11.append(r12)     // Catch:{ Exception -> 0x01b9 }
+            r11.append(r2)     // Catch:{ Exception -> 0x01b9 }
+            java.lang.String r2 = r11.toString()     // Catch:{ Exception -> 0x01b9 }
+            org.telegram.messenger.FileLog.d(r2)     // Catch:{ Exception -> 0x01b9 }
+            goto L_0x01bd
+        L_0x01b9:
+            r2 = move-exception
+            org.telegram.messenger.FileLog.e((java.lang.Throwable) r2)     // Catch:{ Exception -> 0x027c }
+        L_0x01bd:
+            java.io.File r2 = new java.io.File     // Catch:{ Exception -> 0x01fa }
+            java.io.File r11 = r14.telegramPath     // Catch:{ Exception -> 0x01fa }
+            java.lang.String r12 = "Telegram Documents"
+            r2.<init>(r11, r12)     // Catch:{ Exception -> 0x01fa }
+            r2.mkdir()     // Catch:{ Exception -> 0x01fa }
+            boolean r11 = r2.isDirectory()     // Catch:{ Exception -> 0x01fa }
+            if (r11 == 0) goto L_0x01fe
+            r11 = 3
+            boolean r12 = r14.canMoveFiles(r1, r2, r11)     // Catch:{ Exception -> 0x01fa }
+            if (r12 == 0) goto L_0x01fe
+            java.io.File r12 = new java.io.File     // Catch:{ Exception -> 0x01fa }
+            r12.<init>(r2, r3)     // Catch:{ Exception -> 0x01fa }
+            org.telegram.messenger.AndroidUtilities.createEmptyFile(r12)     // Catch:{ Exception -> 0x01fa }
+            r0.put(r11, r2)     // Catch:{ Exception -> 0x01fa }
+            boolean r3 = org.telegram.messenger.BuildVars.LOGS_ENABLED     // Catch:{ Exception -> 0x01fa }
+            if (r3 == 0) goto L_0x01fe
+            java.lang.StringBuilder r3 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x01fa }
+            r3.<init>()     // Catch:{ Exception -> 0x01fa }
+            java.lang.String r11 = "documents path = "
+            r3.append(r11)     // Catch:{ Exception -> 0x01fa }
+            r3.append(r2)     // Catch:{ Exception -> 0x01fa }
+            java.lang.String r2 = r3.toString()     // Catch:{ Exception -> 0x01fa }
+            org.telegram.messenger.FileLog.d(r2)     // Catch:{ Exception -> 0x01fa }
+            goto L_0x01fe
+        L_0x01fa:
+            r2 = move-exception
+            org.telegram.messenger.FileLog.e((java.lang.Throwable) r2)     // Catch:{ Exception -> 0x027c }
+        L_0x01fe:
+            if (r8 == 0) goto L_0x0278
+            boolean r2 = r8.isDirectory()     // Catch:{ Exception -> 0x027c }
+            if (r2 == 0) goto L_0x0278
+            java.io.File r2 = new java.io.File     // Catch:{ Exception -> 0x0236 }
+            r2.<init>(r8, r9)     // Catch:{ Exception -> 0x0236 }
+            r2.mkdir()     // Catch:{ Exception -> 0x0236 }
+            boolean r3 = r2.isDirectory()     // Catch:{ Exception -> 0x0236 }
+            if (r3 == 0) goto L_0x023a
+            boolean r3 = r14.canMoveFiles(r1, r2, r6)     // Catch:{ Exception -> 0x0236 }
+            if (r3 == 0) goto L_0x023a
+            r3 = 100
+            r0.put(r3, r2)     // Catch:{ Exception -> 0x0236 }
+            boolean r3 = org.telegram.messenger.BuildVars.LOGS_ENABLED     // Catch:{ Exception -> 0x0236 }
+            if (r3 == 0) goto L_0x023a
+            java.lang.StringBuilder r3 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x0236 }
+            r3.<init>()     // Catch:{ Exception -> 0x0236 }
+            r3.append(r5)     // Catch:{ Exception -> 0x0236 }
+            r3.append(r2)     // Catch:{ Exception -> 0x0236 }
+            java.lang.String r2 = r3.toString()     // Catch:{ Exception -> 0x0236 }
+            org.telegram.messenger.FileLog.d(r2)     // Catch:{ Exception -> 0x0236 }
+            goto L_0x023a
+        L_0x0236:
+            r2 = move-exception
+            org.telegram.messenger.FileLog.e((java.lang.Throwable) r2)     // Catch:{ Exception -> 0x027c }
+        L_0x023a:
+            java.io.File r2 = new java.io.File     // Catch:{ Exception -> 0x026a }
+            r2.<init>(r8, r7)     // Catch:{ Exception -> 0x026a }
+            r2.mkdir()     // Catch:{ Exception -> 0x026a }
+            boolean r3 = r2.isDirectory()     // Catch:{ Exception -> 0x026a }
+            if (r3 == 0) goto L_0x0278
+            boolean r1 = r14.canMoveFiles(r1, r2, r10)     // Catch:{ Exception -> 0x026a }
+            if (r1 == 0) goto L_0x0278
+            r1 = 101(0x65, float:1.42E-43)
+            r0.put(r1, r2)     // Catch:{ Exception -> 0x026a }
+            boolean r1 = org.telegram.messenger.BuildVars.LOGS_ENABLED     // Catch:{ Exception -> 0x026a }
+            if (r1 == 0) goto L_0x0278
+            java.lang.StringBuilder r1 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x026a }
+            r1.<init>()     // Catch:{ Exception -> 0x026a }
+            r1.append(r4)     // Catch:{ Exception -> 0x026a }
+            r1.append(r2)     // Catch:{ Exception -> 0x026a }
+            java.lang.String r1 = r1.toString()     // Catch:{ Exception -> 0x026a }
+            org.telegram.messenger.FileLog.d(r1)     // Catch:{ Exception -> 0x026a }
+            goto L_0x0278
+        L_0x026a:
+            r1 = move-exception
+            org.telegram.messenger.FileLog.e((java.lang.Throwable) r1)     // Catch:{ Exception -> 0x027c }
+            goto L_0x0278
+        L_0x026f:
+            boolean r1 = org.telegram.messenger.BuildVars.LOGS_ENABLED     // Catch:{ Exception -> 0x027c }
+            if (r1 == 0) goto L_0x0278
+            java.lang.String r1 = "this Android can't rename files"
+            org.telegram.messenger.FileLog.d(r1)     // Catch:{ Exception -> 0x027c }
+        L_0x0278:
+            org.telegram.messenger.SharedConfig.checkSaveToGalleryFiles()     // Catch:{ Exception -> 0x027c }
+            goto L_0x0280
+        L_0x027c:
+            r1 = move-exception
+            org.telegram.messenger.FileLog.e((java.lang.Throwable) r1)
+        L_0x0280:
+            return r0
+        */
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.ImageLoader.createMediaPaths():android.util.SparseArray");
     }
 
     /* JADX WARNING: Removed duplicated region for block: B:31:0x006d A[SYNTHETIC, Splitter:B:31:0x006d] */
@@ -7047,6 +7234,10 @@ public class ImageLoader {
             }
         }
         return null;
+    }
+
+    public DispatchQueue getCacheOutQueue() {
+        return this.cacheOutQueue;
     }
 
     public static class MessageThumb {

@@ -1,15 +1,18 @@
 package org.telegram.ui;
 
 import android.view.View;
+import org.telegram.messenger.MessageObject;
 
-public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda86 implements View.OnLongClickListener {
+public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda86 implements View.OnClickListener {
     public final /* synthetic */ ChatActivity f$0;
+    public final /* synthetic */ MessageObject f$1;
 
-    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda86(ChatActivity chatActivity) {
+    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda86(ChatActivity chatActivity, MessageObject messageObject) {
         this.f$0 = chatActivity;
+        this.f$1 = messageObject;
     }
 
-    public final boolean onLongClick(View view) {
-        return this.f$0.lambda$createView$51(view);
+    public final void onClick(View view) {
+        this.f$0.lambda$createMenu$156(this.f$1, view);
     }
 }

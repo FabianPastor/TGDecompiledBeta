@@ -531,7 +531,7 @@ public class ChatAttachAlertContactsLayout extends ChatAttachAlert.AttachAlertLa
 
     /* access modifiers changed from: private */
     public /* synthetic */ void lambda$new$0(TLRPC$User tLRPC$User, boolean z, int i) {
-        this.parentAlert.dismiss();
+        this.parentAlert.dismiss(true);
         this.delegate.didSelectContact(tLRPC$User, z, i);
     }
 

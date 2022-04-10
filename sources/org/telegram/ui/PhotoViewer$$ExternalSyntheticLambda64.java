@@ -1,14 +1,15 @@
 package org.telegram.ui;
 
-import org.telegram.ui.Components.NumberPicker;
+import org.telegram.ui.ActionBar.ActionBarMenuItem;
 
-public final /* synthetic */ class PhotoViewer$$ExternalSyntheticLambda64 implements NumberPicker.Formatter {
-    public static final /* synthetic */ PhotoViewer$$ExternalSyntheticLambda64 INSTANCE = new PhotoViewer$$ExternalSyntheticLambda64();
+public final /* synthetic */ class PhotoViewer$$ExternalSyntheticLambda64 implements ActionBarMenuItem.ActionBarMenuItemDelegate {
+    public final /* synthetic */ PhotoViewer f$0;
 
-    private /* synthetic */ PhotoViewer$$ExternalSyntheticLambda64() {
+    public /* synthetic */ PhotoViewer$$ExternalSyntheticLambda64(PhotoViewer photoViewer) {
+        this.f$0 = photoViewer;
     }
 
-    public final String format(int i) {
-        return PhotoViewer.lambda$setParentActivity$25(i);
+    public final void onItemClick(int i) {
+        this.f$0.lambda$setParentActivity$5(i);
     }
 }

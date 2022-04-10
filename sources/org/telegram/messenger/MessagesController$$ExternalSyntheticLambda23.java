@@ -8,6 +8,6 @@ public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda23
     }
 
     public final void run() {
-        this.f$0.lambda$processUpdateArray$312();
+        this.f$0.lambda$migrateDialogs$169();
     }
 }

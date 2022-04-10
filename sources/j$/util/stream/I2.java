@@ -1,15 +1,15 @@
 package j$.util.stream;
 
 import j$.util.Optional;
-import j$.util.function.CLASSNAMEb;
 import j$.util.function.Consumer;
+import j$.util.function.b;
 
 class I2 implements T2 {
     private boolean a;
     private Object b;
-    final /* synthetic */ CLASSNAMEb c;
+    final /* synthetic */ b c;
 
-    I2(CLASSNAMEb bVar) {
+    I2(b bVar) {
         this.c = bVar;
     }
 

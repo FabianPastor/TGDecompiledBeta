@@ -23,9 +23,12 @@ import android.os.Build;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.SystemClock;
+import android.text.Layout;
+import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.TextUtils;
+import android.text.style.ClickableSpan;
 import android.util.Property;
 import android.view.MotionEvent;
 import android.view.View;
@@ -63,6 +66,7 @@ import org.telegram.ui.Components.AnimationProperties;
 import org.telegram.ui.Components.CubicBezierInterpolator;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.LinkPath;
+import org.telegram.ui.Components.LinkSpanDrawable;
 import org.telegram.ui.Components.TypefaceSpan;
 import org.telegram.ui.Components.URLSpanNoUnderline;
 import org.telegram.ui.PhotoAlbumPickerActivity;
@@ -463,7 +467,7 @@ public class CameraScanActivity extends BaseFragment {
         this.fragmentView = r2;
         int i = this.currentType;
         if (i == 1 || i == 2) {
-            r2.postDelayed(new CameraScanActivity$$ExternalSyntheticLambda9(this), 200);
+            r2.postDelayed(new CameraScanActivity$$ExternalSyntheticLambda9(this), 350);
         } else {
             initCameraView();
         }
@@ -482,9 +486,11 @@ public class CameraScanActivity extends BaseFragment {
             this.actionBar.setTitle(LocaleController.getString("AuthAnotherClientScan", NUM));
         }
         final Paint paint2 = new Paint(1);
-        paint2.setPathEffect(LinkPath.roundedEffect);
-        paint2.setColor(ColorUtils.setAlphaComponent(-1, 50));
+        paint2.setPathEffect(LinkPath.getRoundedEffect());
+        paint2.setColor(ColorUtils.setAlphaComponent(-1, 40));
         AnonymousClass4 r11 = new TextView(this, context2) {
+            LinkSpanDrawable.LinkCollector links = new LinkSpanDrawable.LinkCollector(this);
+            private LinkSpanDrawable<URLSpanNoUnderline> pressedLink;
             LinkPath textPath;
 
             /* access modifiers changed from: protected */
@@ -517,11 +523,57 @@ public class CameraScanActivity extends BaseFragment {
                 }
             }
 
+            public boolean onTouchEvent(MotionEvent motionEvent) {
+                Layout layout = getLayout();
+                float f = (float) 0;
+                int x = (int) (motionEvent.getX() - f);
+                int y = (int) (motionEvent.getY() - f);
+                if (motionEvent.getAction() == 0 || motionEvent.getAction() == 1) {
+                    int lineForVertical = layout.getLineForVertical(y);
+                    float f2 = (float) x;
+                    int offsetForHorizontal = layout.getOffsetForHorizontal(lineForVertical, f2);
+                    float lineLeft = layout.getLineLeft(lineForVertical);
+                    if (lineLeft <= f2 && lineLeft + layout.getLineWidth(lineForVertical) >= f2 && y >= 0 && y <= layout.getHeight()) {
+                        Spannable spannable = (Spannable) layout.getText();
+                        ClickableSpan[] clickableSpanArr = (ClickableSpan[]) spannable.getSpans(offsetForHorizontal, offsetForHorizontal, ClickableSpan.class);
+                        if (clickableSpanArr.length != 0) {
+                            this.links.clear();
+                            if (motionEvent.getAction() == 0) {
+                                LinkSpanDrawable<URLSpanNoUnderline> linkSpanDrawable = new LinkSpanDrawable<>(clickableSpanArr[0], (Theme.ResourcesProvider) null, motionEvent.getX(), motionEvent.getY());
+                                this.pressedLink = linkSpanDrawable;
+                                linkSpanDrawable.setColor(NUM);
+                                this.links.addLink(this.pressedLink);
+                                int spanStart = spannable.getSpanStart(this.pressedLink.getSpan());
+                                int spanEnd = spannable.getSpanEnd(this.pressedLink.getSpan());
+                                LinkPath obtainNewPath = this.pressedLink.obtainNewPath();
+                                obtainNewPath.setCurrentLayout(layout, spanStart, f);
+                                layout.getSelectionPath(spanStart, spanEnd, obtainNewPath);
+                            } else if (motionEvent.getAction() == 1) {
+                                LinkSpanDrawable<URLSpanNoUnderline> linkSpanDrawable2 = this.pressedLink;
+                                if (linkSpanDrawable2 != null && linkSpanDrawable2.getSpan() == clickableSpanArr[0]) {
+                                    clickableSpanArr[0].onClick(this);
+                                }
+                                this.pressedLink = null;
+                            }
+                            return true;
+                        }
+                    }
+                }
+                if (motionEvent.getAction() == 1 || motionEvent.getAction() == 3) {
+                    this.links.clear();
+                    this.pressedLink = null;
+                }
+                return super.onTouchEvent(motionEvent);
+            }
+
             /* access modifiers changed from: protected */
             public void onDraw(Canvas canvas) {
                 LinkPath linkPath = this.textPath;
                 if (linkPath != null) {
                     canvas.drawPath(linkPath, paint2);
+                }
+                if (this.links.draw(canvas)) {
+                    invalidate();
                 }
                 super.onDraw(canvas);
             }
@@ -553,7 +605,7 @@ public class CameraScanActivity extends BaseFragment {
                     this.titleTextView.setText(LocaleController.getString("AuthAnotherClientScan", NUM));
                 } else {
                     SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(LocaleController.getString("AuthAnotherClientInfo5", NUM));
-                    String[] strArr = {LocaleController.getString("AuthAnotherWebClientUrl", NUM), LocaleController.getString("AuthAnotherClientDownloadClientUrl", NUM)};
+                    String[] strArr = {LocaleController.getString("AuthAnotherClientDownloadClientUrl", NUM), LocaleController.getString("AuthAnotherWebClientUrl", NUM)};
                     int i3 = 0;
                     for (int i4 = 2; i3 < i4; i4 = 2) {
                         String spannableStringBuilder2 = spannableStringBuilder.toString();
@@ -568,12 +620,11 @@ public class CameraScanActivity extends BaseFragment {
                         spannableStringBuilder.replace(indexOf2, i6, " ");
                         spannableStringBuilder.replace(indexOf, i5, " ");
                         int i7 = i6 - 1;
-                        spannableStringBuilder.setSpan(new URLSpanNoUnderline(strArr[i3]), i5, i7, 33);
+                        spannableStringBuilder.setSpan(new URLSpanNoUnderline(strArr[i3], true), i5, i7, 33);
                         spannableStringBuilder.setSpan(new TypefaceSpan(AndroidUtilities.getTypeface("fonts/rmedium.ttf")), i5, i7, 33);
                         i3++;
                     }
                     this.titleTextView.setLinkTextColor(-1);
-                    this.titleTextView.setHighlightColor(Theme.getColor("windowBackgroundWhiteLinkSelection"));
                     this.titleTextView.setTextSize(1, 16.0f);
                     this.titleTextView.setLineSpacing((float) AndroidUtilities.dp(2.0f), 1.0f);
                     this.titleTextView.setPadding(0, 0, 0, 0);
@@ -836,13 +887,12 @@ public class CameraScanActivity extends BaseFragment {
         if (this.normalBounds == null) {
             this.normalBounds = new RectF();
         }
-        Point point = AndroidUtilities.displaySize;
-        int i = point.x;
-        int i2 = point.y;
-        int min = (int) (((float) Math.min(i, i2)) / 1.5f);
-        float f = (float) i;
-        float f2 = (float) i2;
-        this.normalBounds.set((((float) (i - min)) / 2.0f) / f, (((float) (i2 - min)) / 2.0f) / f2, (((float) (i + min)) / 2.0f) / f, (((float) (i2 + min)) / 2.0f) / f2);
+        int max = Math.max(AndroidUtilities.displaySize.x, this.fragmentView.getWidth());
+        int max2 = Math.max(AndroidUtilities.displaySize.y, this.fragmentView.getHeight());
+        int min = (int) (((float) Math.min(max, max2)) / 1.5f);
+        float f = (float) max;
+        float f2 = (float) max2;
+        this.normalBounds.set((((float) (max - min)) / 2.0f) / f, (((float) (max2 - min)) / 2.0f) / f2, (((float) (max + min)) / 2.0f) / f, (((float) (max2 + min)) / 2.0f) / f2);
     }
 
     /* access modifiers changed from: private */

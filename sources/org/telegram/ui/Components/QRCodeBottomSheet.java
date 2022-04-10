@@ -34,7 +34,7 @@ public class QRCodeBottomSheet extends BottomSheet {
             r2 = 0
             r0.<init>(r1, r2)
             java.lang.String r3 = "InviteByQRCode"
-            r4 = 2131626078(0x7f0e085e, float:1.8879382E38)
+            r4 = 2131626137(0x7f0e0899, float:1.8879502E38)
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r3, r4)
             r4 = 1
             r0.setTitle(r3, r4)
@@ -69,7 +69,7 @@ public class QRCodeBottomSheet extends BottomSheet {
             org.telegram.ui.Components.RLottieImageView r6 = r0.iconImage
             r6.setAutoRepeat(r4)
             org.telegram.ui.Components.RLottieImageView r6 = r0.iconImage
-            r8 = 2131558498(0x7f0d0062, float:1.8742314E38)
+            r8 = 2131558499(0x7f0d0063, float:1.8742316E38)
             r9 = 60
             r6.setAnimation(r8, r9, r9)
             org.telegram.ui.Components.RLottieImageView r6 = r0.iconImage
@@ -81,7 +81,7 @@ public class QRCodeBottomSheet extends BottomSheet {
             r6.addView(r3, r7)
             org.telegram.ui.Components.RLottieImageView r3 = r0.iconImage
             r7 = 17
-            android.widget.FrameLayout$LayoutParams r8 = org.telegram.ui.Components.LayoutHelper.createFrame(r9, r9, r7)
+            android.widget.FrameLayout$LayoutParams r8 = org.telegram.ui.Components.LayoutHelper.createFrame((int) r9, (int) r9, (int) r7)
             r6.addView(r3, r8)
             r9 = 220(0xdc, float:3.08E-43)
             r10 = 220(0xdc, float:3.08E-43)
@@ -121,7 +121,7 @@ public class QRCodeBottomSheet extends BottomSheet {
             java.lang.String r2 = "fonts/rmedium.ttf"
             android.graphics.Typeface r2 = org.telegram.messenger.AndroidUtilities.getTypeface(r2)
             r3.setTypeface(r2)
-            r2 = 2131627982(0x7f0e0fce, float:1.8883244E38)
+            r2 = 2131628056(0x7f0e1018, float:1.8883394E38)
             java.lang.String r4 = "ShareQrCode"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r4, r2)
             r3.setText(r2)

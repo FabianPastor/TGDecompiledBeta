@@ -3983,7 +3983,6 @@
     <string name="UserRestrictionsCanDo">Wat mag dit lid?</string>
     <string name="UserRestrictionsChangeInfo">Chatinformatie wijzigen</string>
     <string name="UserRestrictionsCustom">Aangepast</string>
-    <string name="UserRestrictionsDisabled">Deze optie is voor alle leden uitgeschakeld via de groepsrechten</string>
     <string name="UserRestrictionsDuration">Tijdsduur</string>
     <string name="UserRestrictionsEmbedLinks">Link-voorbeeld sturen</string>
     <string name="UserRestrictionsInviteUsers">Gebruikers toevoegen</string>

@@ -1,22 +1,19 @@
 package org.telegram.ui;
 
-import java.util.HashMap;
-import org.telegram.messenger.MessageObject;
-import org.telegram.messenger.SendMessagesHelper;
-import org.telegram.tgnet.TLRPC$MessageMedia;
-import org.telegram.tgnet.TLRPC$ReplyMarkup;
-import org.telegram.ui.LocationActivity;
+import android.view.View;
+import androidx.recyclerview.widget.ItemTouchHelper;
+import org.telegram.ui.Components.RecyclerListView;
 
-public final /* synthetic */ class LaunchActivity$$ExternalSyntheticLambda90 implements LocationActivity.LocationActivityDelegate {
-    public final /* synthetic */ int[] f$0;
-    public final /* synthetic */ long f$1;
+public final /* synthetic */ class LaunchActivity$$ExternalSyntheticLambda90 implements RecyclerListView.OnItemLongClickListener {
+    public final /* synthetic */ LaunchActivity f$0;
+    public final /* synthetic */ ItemTouchHelper f$1;
 
-    public /* synthetic */ LaunchActivity$$ExternalSyntheticLambda90(int[] iArr, long j) {
-        this.f$0 = iArr;
-        this.f$1 = j;
+    public /* synthetic */ LaunchActivity$$ExternalSyntheticLambda90(LaunchActivity launchActivity, ItemTouchHelper itemTouchHelper) {
+        this.f$0 = launchActivity;
+        this.f$1 = itemTouchHelper;
     }
 
-    public final void didSelectLocation(TLRPC$MessageMedia tLRPC$MessageMedia, int i, boolean z, int i2) {
-        SendMessagesHelper.getInstance(this.f$0[0]).sendMessage(tLRPC$MessageMedia, this.f$1, (MessageObject) null, (MessageObject) null, (TLRPC$ReplyMarkup) null, (HashMap<String, String>) null, z, i2);
+    public final boolean onItemClick(View view, int i) {
+        return this.f$0.lambda$onCreate$3(this.f$1, view, i);
     }
 }

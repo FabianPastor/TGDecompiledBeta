@@ -1,16 +1,15 @@
 package org.telegram.ui.Components;
 
-import android.view.KeyEvent;
-import org.telegram.ui.ActionBar.ActionBarPopupWindow;
+import org.telegram.messenger.AndroidUtilities;
 
-public final /* synthetic */ class ChatAttachAlert$$ExternalSyntheticLambda21 implements ActionBarPopupWindow.OnDispatchKeyEventListener {
-    public final /* synthetic */ ChatAttachAlert f$0;
+public final /* synthetic */ class ChatAttachAlert$$ExternalSyntheticLambda21 implements Runnable {
+    public final /* synthetic */ EditTextBoldCursor f$0;
 
-    public /* synthetic */ ChatAttachAlert$$ExternalSyntheticLambda21(ChatAttachAlert chatAttachAlert) {
-        this.f$0 = chatAttachAlert;
+    public /* synthetic */ ChatAttachAlert$$ExternalSyntheticLambda21(EditTextBoldCursor editTextBoldCursor) {
+        this.f$0 = editTextBoldCursor;
     }
 
-    public final void onDispatchKeyEvent(KeyEvent keyEvent) {
-        this.f$0.lambda$new$13(keyEvent);
+    public final void run() {
+        AndroidUtilities.showKeyboard(this.f$0);
     }
 }

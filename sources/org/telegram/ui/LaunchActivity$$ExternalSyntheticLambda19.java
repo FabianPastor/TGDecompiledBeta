@@ -1,13 +1,16 @@
 package org.telegram.ui;
 
-public final /* synthetic */ class LaunchActivity$$ExternalSyntheticLambda19 implements Runnable {
-    public final /* synthetic */ int f$0;
+import android.view.View;
+import android.view.ViewTreeObserver;
 
-    public /* synthetic */ LaunchActivity$$ExternalSyntheticLambda19(int i) {
-        this.f$0 = i;
+public final /* synthetic */ class LaunchActivity$$ExternalSyntheticLambda19 implements ViewTreeObserver.OnGlobalLayoutListener {
+    public final /* synthetic */ View f$0;
+
+    public /* synthetic */ LaunchActivity$$ExternalSyntheticLambda19(View view) {
+        this.f$0 = view;
     }
 
-    public final void run() {
-        LaunchActivity.lambda$onPause$67(this.f$0);
+    public final void onGlobalLayout() {
+        LaunchActivity.lambda$onCreate$5(this.f$0);
     }
 }

@@ -1,7 +1,6 @@
 package j$.util;
 
 import j$.util.function.A;
-import j$.util.function.B;
 import j$.util.function.z;
 import j$.wrappers.B0;
 import j$.wrappers.D0;
@@ -37,13 +36,11 @@ enum CLASSNAMEf implements Comparator, CLASSNAMEe {
     }
 
     public Comparator thenComparingInt(ToIntFunction toIntFunction) {
-        A a2 = D0.a(toIntFunction);
-        a2.getClass();
-        return CLASSNAMEa.H(this, new CLASSNAMEd(a2));
+        return CLASSNAMEa.H(this, Comparator$CC.comparingInt(D0.a(toIntFunction)));
     }
 
     public Comparator thenComparingLong(ToLongFunction toLongFunction) {
-        B a2 = F0.a(toLongFunction);
+        A a2 = F0.a(toLongFunction);
         a2.getClass();
         return CLASSNAMEa.H(this, new CLASSNAMEd(a2));
     }

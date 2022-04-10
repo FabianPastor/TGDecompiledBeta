@@ -16,6 +16,7 @@ import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.Switch;
 
 public class NotificationsCheckCell extends FrameLayout {
+    private boolean animationsEnabled;
     private Switch checkBox;
     private int currentHeight;
     private boolean drawLine;
@@ -125,7 +126,7 @@ public class NotificationsCheckCell extends FrameLayout {
     public void setTextAndValueAndCheck(String str, CharSequence charSequence, boolean z, int i, boolean z2, boolean z3) {
         this.textView.setText(str);
         this.valueTextView.setText(charSequence);
-        this.checkBox.setChecked(z, i, false);
+        this.checkBox.setChecked(z, i, this.animationsEnabled);
         this.valueTextView.setVisibility(0);
         this.needDivider = z3;
         this.isMultiline = z2;
@@ -171,5 +172,9 @@ public class NotificationsCheckCell extends FrameLayout {
             int measuredHeight = (getMeasuredHeight() - AndroidUtilities.dp(22.0f)) / 2;
             canvas.drawRect((float) dp, (float) measuredHeight, (float) (dp + 2), (float) (measuredHeight + AndroidUtilities.dp(22.0f)), Theme.dividerPaint);
         }
+    }
+
+    public void setAnimationsEnabled(boolean z) {
+        this.animationsEnabled = z;
     }
 }

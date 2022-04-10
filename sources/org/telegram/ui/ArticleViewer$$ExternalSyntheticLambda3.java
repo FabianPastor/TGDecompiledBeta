@@ -1,15 +1,15 @@
 package org.telegram.ui;
 
-import android.view.View;
-import android.view.WindowInsets;
+import android.content.DialogInterface;
 
-public final /* synthetic */ class ArticleViewer$$ExternalSyntheticLambda3 implements View.OnApplyWindowInsetsListener {
-    public static final /* synthetic */ ArticleViewer$$ExternalSyntheticLambda3 INSTANCE = new ArticleViewer$$ExternalSyntheticLambda3();
+public final /* synthetic */ class ArticleViewer$$ExternalSyntheticLambda3 implements DialogInterface.OnDismissListener {
+    public final /* synthetic */ ArticleViewer f$0;
 
-    private /* synthetic */ ArticleViewer$$ExternalSyntheticLambda3() {
+    public /* synthetic */ ArticleViewer$$ExternalSyntheticLambda3(ArticleViewer articleViewer) {
+        this.f$0 = articleViewer;
     }
 
-    public final WindowInsets onApplyWindowInsets(View view, WindowInsets windowInsets) {
-        return ArticleViewer.lambda$setParentActivity$7(view, windowInsets);
+    public final void onDismiss(DialogInterface dialogInterface) {
+        this.f$0.lambda$showDialog$44(dialogInterface);
     }
 }

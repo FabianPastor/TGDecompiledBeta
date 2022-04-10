@@ -10,6 +10,6 @@ public final /* synthetic */ class ProfileActivity$$ExternalSyntheticLambda15 im
     }
 
     public final boolean onLongClick(View view) {
-        return this.f$0.lambda$createView$13(view);
+        return this.f$0.lambda$createView$12(view);
     }
 }

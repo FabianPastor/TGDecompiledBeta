@@ -1,18 +1,19 @@
 package org.telegram.ui.Components;
 
 import android.content.DialogInterface;
-import org.telegram.messenger.MessagesStorage;
+import androidx.core.util.Consumer;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public final /* synthetic */ class AlertsCreator$$ExternalSyntheticLambda17 implements DialogInterface.OnClickListener {
-    public final /* synthetic */ MessagesStorage.BooleanCallback f$0;
-    public final /* synthetic */ boolean[] f$1;
+    public final /* synthetic */ AtomicBoolean f$0;
+    public final /* synthetic */ Consumer f$1;
 
-    public /* synthetic */ AlertsCreator$$ExternalSyntheticLambda17(MessagesStorage.BooleanCallback booleanCallback, boolean[] zArr) {
-        this.f$0 = booleanCallback;
-        this.f$1 = zArr;
+    public /* synthetic */ AlertsCreator$$ExternalSyntheticLambda17(AtomicBoolean atomicBoolean, Consumer consumer) {
+        this.f$0 = atomicBoolean;
+        this.f$1 = consumer;
     }
 
     public final void onClick(DialogInterface dialogInterface, int i) {
-        this.f$0.run(this.f$1[0]);
+        AlertsCreator.lambda$createWebViewPermissionsRequestDialog$2(this.f$0, this.f$1, dialogInterface, i);
     }
 }

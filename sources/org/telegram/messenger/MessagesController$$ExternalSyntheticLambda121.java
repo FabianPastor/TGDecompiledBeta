@@ -10,6 +10,6 @@ public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda12
     }
 
     public final void run() {
-        this.f$0.lambda$addToViewsQueue$185(this.f$1);
+        this.f$0.lambda$addToViewsQueue$186(this.f$1);
     }
 }

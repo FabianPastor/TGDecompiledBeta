@@ -12,6 +12,6 @@ public final /* synthetic */ class ProfileActivity$$ExternalSyntheticLambda21 im
     }
 
     public final void run() {
-        this.f$0.lambda$createView$9(this.f$1);
+        this.f$0.lambda$createView$8(this.f$1);
     }
 }

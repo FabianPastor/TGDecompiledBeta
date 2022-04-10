@@ -33,7 +33,6 @@ import android.widget.ImageView;
 import com.google.android.exoplayer2.analytics.AnalyticsListener;
 import com.google.android.exoplayer2.ui.AspectRatioFrameLayout;
 import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Locale;
@@ -147,7 +146,11 @@ public class WebPlayerView extends ViewGroup implements VideoPlayer.VideoPlayerD
     /* access modifiers changed from: private */
     public ViewGroup textureViewContainer;
     /* access modifiers changed from: private */
+    public int videoHeight;
+    /* access modifiers changed from: private */
     public VideoPlayer videoPlayer;
+    /* access modifiers changed from: private */
+    public int videoWidth;
     /* access modifiers changed from: private */
     public int waitingForFirstTextureUpload;
     /* access modifiers changed from: private */
@@ -170,7 +173,7 @@ public class WebPlayerView extends ViewGroup implements VideoPlayer.VideoPlayerD
 
         void onSharePressed();
 
-        TextureView onSwitchInlineMode(View view, boolean z, float f, int i, boolean z2);
+        TextureView onSwitchInlineMode(View view, boolean z, int i, int i2, int i3, boolean z2);
 
         TextureView onSwitchToFullscreen(View view, boolean z, float f, int i, boolean z2);
 
@@ -191,7 +194,7 @@ public class WebPlayerView extends ViewGroup implements VideoPlayer.VideoPlayerD
         VideoPlayer.VideoPlayerDelegate.CC.$default$onSeekStarted(this, eventTime);
     }
 
-    static /* synthetic */ float access$4524(WebPlayerView webPlayerView, float f) {
+    static /* synthetic */ float access$4724(WebPlayerView webPlayerView, float f) {
         float f2 = webPlayerView.currentAlpha - f;
         webPlayerView.currentAlpha = f2;
         return f2;
@@ -640,7 +643,7 @@ public class WebPlayerView extends ViewGroup implements VideoPlayer.VideoPlayerD
             r2 = r4
         L_0x0158:
             java.lang.String r4 = new java.lang.String     // Catch:{ Exception -> 0x016d }
-            java.nio.charset.Charset r5 = java.nio.charset.StandardCharsets.UTF_8     // Catch:{ Exception -> 0x016d }
+            java.lang.String r5 = "UTF-8"
             r6 = 0
             r4.<init>(r0, r6, r3, r5)     // Catch:{ Exception -> 0x0164 }
             r2.append(r4)     // Catch:{ Exception -> 0x0164 }
@@ -1311,7 +1314,7 @@ public class WebPlayerView extends ViewGroup implements VideoPlayer.VideoPlayerD
                 return;
             }
             try {
-                String encodeToString = Base64.encodeToString(("<script>" + str + "</script>").getBytes(StandardCharsets.UTF_8), 0);
+                String encodeToString = Base64.encodeToString(("<script>" + str + "</script>").getBytes("UTF-8"), 0);
                 WebView access$2100 = WebPlayerView.this.webView;
                 access$2100.loadUrl("data:text/html;charset=utf-8;base64," + encodeToString);
             } catch (Exception e) {
@@ -1854,7 +1857,7 @@ public class WebPlayerView extends ViewGroup implements VideoPlayer.VideoPlayerD
                 float r3 = (float) r5
                 r4 = 1125515264(0x43160000, float:150.0)
                 float r3 = r3 / r4
-                org.telegram.ui.Components.WebPlayerView.access$4524(r1, r3)
+                org.telegram.ui.Components.WebPlayerView.access$4724(r1, r3)
                 org.telegram.ui.Components.WebPlayerView r1 = org.telegram.ui.Components.WebPlayerView.this
                 float r1 = r1.currentAlpha
                 int r1 = (r1 > r2 ? 1 : (r1 == r2 ? 0 : -1))
@@ -2178,7 +2181,7 @@ public class WebPlayerView extends ViewGroup implements VideoPlayer.VideoPlayerD
                     viewGroup.removeView(WebPlayerView.this.controlsView);
                 }
                 WebPlayerView webPlayerView2 = WebPlayerView.this;
-                TextureView unused7 = webPlayerView2.changedTextureView = webPlayerView2.delegate.onSwitchInlineMode(WebPlayerView.this.controlsView, WebPlayerView.this.isInline, WebPlayerView.this.aspectRatioFrameLayout.getAspectRatio(), WebPlayerView.this.aspectRatioFrameLayout.getVideoRotation(), WebPlayerView.this.allowInlineAnimation);
+                TextureView unused7 = webPlayerView2.changedTextureView = webPlayerView2.delegate.onSwitchInlineMode(WebPlayerView.this.controlsView, WebPlayerView.this.isInline, WebPlayerView.this.videoWidth, WebPlayerView.this.videoHeight, WebPlayerView.this.aspectRatioFrameLayout.getVideoRotation(), WebPlayerView.this.allowInlineAnimation);
                 WebPlayerView.this.changedTextureView.setVisibility(4);
                 ViewGroup viewGroup2 = (ViewGroup) WebPlayerView.this.textureView.getParent();
                 if (viewGroup2 != null) {
@@ -2449,15 +2452,18 @@ public class WebPlayerView extends ViewGroup implements VideoPlayer.VideoPlayerD
     public void onVideoSizeChanged(int i, int i2, int i3, float f) {
         AspectRatioFrameLayout aspectRatioFrameLayout2 = this.aspectRatioFrameLayout;
         if (aspectRatioFrameLayout2 != null) {
-            if (!(i3 == 90 || i3 == 270)) {
+            if (i3 == 90 || i3 == 270) {
                 int i4 = i2;
                 i2 = i;
                 i = i4;
             }
-            float f2 = i == 0 ? 1.0f : (((float) i2) * f) / ((float) i);
-            aspectRatioFrameLayout2.setAspectRatio(f2, i3);
+            float f2 = ((float) i) * f;
+            this.videoWidth = (int) f2;
+            this.videoHeight = i2;
+            float f3 = i2 == 0 ? 1.0f : f2 / ((float) i2);
+            aspectRatioFrameLayout2.setAspectRatio(f3, i3);
             if (this.inFullscreen) {
-                this.delegate.onVideoSizeChanged(f2, i3);
+                this.delegate.onVideoSizeChanged(f3, i3);
             }
         }
     }
@@ -2497,7 +2503,7 @@ public class WebPlayerView extends ViewGroup implements VideoPlayer.VideoPlayerD
                 }
             }
             this.switchingInlineMode = false;
-            this.delegate.onSwitchInlineMode(this.controlsView, false, this.aspectRatioFrameLayout.getAspectRatio(), this.aspectRatioFrameLayout.getVideoRotation(), this.allowInlineAnimation);
+            this.delegate.onSwitchInlineMode(this.controlsView, false, this.videoWidth, this.videoHeight, this.aspectRatioFrameLayout.getVideoRotation(), this.allowInlineAnimation);
             this.waitingForFirstTextureUpload = 0;
         }
     }

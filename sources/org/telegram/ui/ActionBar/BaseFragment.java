@@ -53,16 +53,19 @@ public abstract class BaseFragment {
     /* access modifiers changed from: protected */
     public int currentAccount;
     protected boolean finishing;
-    protected boolean fragmentBeginToShow;
+    /* access modifiers changed from: protected */
+    public boolean fragmentBeginToShow;
     /* access modifiers changed from: protected */
     public View fragmentView;
     protected boolean hasOwnBackground;
-    protected boolean inBubbleMode;
+    /* access modifiers changed from: protected */
+    public boolean inBubbleMode;
     protected boolean inMenuMode;
     /* access modifiers changed from: protected */
     public boolean inPreviewMode;
     private boolean isFinished;
-    protected boolean isPaused;
+    /* access modifiers changed from: protected */
+    public boolean isPaused;
     protected Dialog parentDialog;
     /* access modifiers changed from: protected */
     public ActionBarLayout parentLayout;
@@ -905,10 +908,12 @@ public abstract class BaseFragment {
             return true;
         }
         Theme.ResourcesProvider resourceProvider = getResourceProvider();
+        ActionBar actionBar2 = this.actionBar;
+        String str = (actionBar2 == null || !actionBar2.isActionModeShowed()) ? "actionBarDefault" : "actionBarActionModeDefault";
         if (resourceProvider != null) {
-            i = resourceProvider.getColorOrDefault("actionBarDefault");
+            i = resourceProvider.getColorOrDefault(str);
         } else {
-            i = Theme.getColor("actionBarDefault", (boolean[]) null, true);
+            i = Theme.getColor(str, (boolean[]) null, true);
         }
         if (ColorUtils.calculateLuminance(i) > 0.699999988079071d) {
             return true;

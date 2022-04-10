@@ -44,6 +44,12 @@ public class TLRPC$TL_userFull extends TLRPC$UserFull {
         if ((this.flags & 65536) != 0) {
             this.private_forward_name = abstractSerializedData.readString(z);
         }
+        if ((this.flags & 131072) != 0) {
+            this.bot_group_admin_rights = TLRPC$TL_chatAdminRights.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
+        }
+        if ((this.flags & 262144) != 0) {
+            this.bot_broadcast_admin_rights = TLRPC$TL_chatAdminRights.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
+        }
     }
 
     public void serializeToStream(AbstractSerializedData abstractSerializedData) {
@@ -88,6 +94,12 @@ public class TLRPC$TL_userFull extends TLRPC$UserFull {
         }
         if ((this.flags & 65536) != 0) {
             abstractSerializedData.writeString(this.private_forward_name);
+        }
+        if ((this.flags & 131072) != 0) {
+            this.bot_group_admin_rights.serializeToStream(abstractSerializedData);
+        }
+        if ((this.flags & 262144) != 0) {
+            this.bot_broadcast_admin_rights.serializeToStream(abstractSerializedData);
         }
     }
 }

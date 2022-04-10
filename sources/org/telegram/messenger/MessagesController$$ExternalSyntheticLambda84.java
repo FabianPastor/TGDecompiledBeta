@@ -12,6 +12,6 @@ public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda84
     }
 
     public final void run() {
-        this.f$0.lambda$getChannelDifference$257(this.f$1);
+        this.f$0.lambda$getChannelDifference$258(this.f$1);
     }
 }

@@ -1,19 +1,24 @@
 package org.telegram.ui;
 
-import org.telegram.messenger.ImageReceiver;
+import java.io.File;
+import org.telegram.messenger.MessageObject;
 
 public final /* synthetic */ class PhotoViewer$$ExternalSyntheticLambda55 implements Runnable {
     public final /* synthetic */ PhotoViewer f$0;
-    public final /* synthetic */ ImageReceiver.BitmapHolder f$1;
-    public final /* synthetic */ String f$2;
+    public final /* synthetic */ File f$1;
+    public final /* synthetic */ boolean f$2;
+    public final /* synthetic */ MessageObject f$3;
+    public final /* synthetic */ boolean f$4;
 
-    public /* synthetic */ PhotoViewer$$ExternalSyntheticLambda55(PhotoViewer photoViewer, ImageReceiver.BitmapHolder bitmapHolder, String str) {
+    public /* synthetic */ PhotoViewer$$ExternalSyntheticLambda55(PhotoViewer photoViewer, File file, boolean z, MessageObject messageObject, boolean z2) {
         this.f$0 = photoViewer;
-        this.f$1 = bitmapHolder;
-        this.f$2 = str;
+        this.f$1 = file;
+        this.f$2 = z;
+        this.f$3 = messageObject;
+        this.f$4 = z2;
     }
 
     public final void run() {
-        this.f$0.lambda$detectFaces$48(this.f$1, this.f$2);
+        this.f$0.lambda$openCurrentPhotoInPaintModeForSelect$64(this.f$1, this.f$2, this.f$3, this.f$4);
     }
 }

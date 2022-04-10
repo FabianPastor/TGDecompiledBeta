@@ -74,6 +74,9 @@ public abstract class TLRPC$MessageAction extends TLObject {
             case -1281329567:
                 tLRPC$MessageAction = new TLRPC$TL_messageActionGroupCallScheduled();
                 break;
+            case -1262252875:
+                tLRPC$MessageAction = new TLRPC$TL_messageActionWebViewDataSent();
+                break;
             case -1247687078:
                 tLRPC$MessageAction = new TLRPC$TL_messageActionChatEditTitle();
                 break;
@@ -118,6 +121,9 @@ public abstract class TLRPC$MessageAction extends TLObject {
                 break;
             case 1200788123:
                 tLRPC$MessageAction = new TLRPC$TL_messageActionScreenshotTaken();
+                break;
+            case 1205698681:
+                tLRPC$MessageAction = new TLRPC$TL_messageActionWebViewDataSentMe();
                 break;
             case 1217033015:
                 tLRPC$MessageAction = new TLRPC$TL_messageActionChatAddUser_layer131();

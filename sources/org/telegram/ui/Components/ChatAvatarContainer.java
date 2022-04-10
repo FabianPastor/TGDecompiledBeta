@@ -32,10 +32,11 @@ import org.telegram.tgnet.TLRPC$User;
 import org.telegram.tgnet.TLRPC$UserFull;
 import org.telegram.tgnet.TLRPC$UserStatus;
 import org.telegram.ui.ActionBar.ActionBar;
+import org.telegram.ui.ActionBar.ActionBarPopupWindow;
 import org.telegram.ui.ActionBar.SimpleTextView;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.ChatActivity;
-import org.telegram.ui.Components.ClearHistoryAlert;
+import org.telegram.ui.Components.AutoDeletePopupWrapper;
 import org.telegram.ui.Components.SharedMediaLayout;
 
 public class ChatAvatarContainer extends FrameLayout implements NotificationCenter.NotificationCenterDelegate {
@@ -131,7 +132,7 @@ public class ChatAvatarContainer extends FrameLayout implements NotificationCent
             this.timeItem.setScaleX(0.0f);
             this.timeItem.setVisibility(8);
             ImageView imageView2 = this.timeItem;
-            TimerDrawable timerDrawable2 = new TimerDrawable(context);
+            TimerDrawable timerDrawable2 = new TimerDrawable(context, resourcesProvider2);
             this.timerDrawable = timerDrawable2;
             imageView2.setImageDrawable(timerDrawable2);
             addView(this.timeItem);
@@ -188,27 +189,60 @@ public class ChatAvatarContainer extends FrameLayout implements NotificationCent
     }
 
     public boolean openSetTimer() {
+        int i;
         if (this.parentFragment.getParentActivity() == null) {
             return false;
         }
         TLRPC$Chat currentChat = this.parentFragment.getCurrentChat();
         if (currentChat == null || ChatObject.canUserDoAdminAction(currentChat, 13)) {
-            ClearHistoryAlert clearHistoryAlert = new ClearHistoryAlert(this.parentFragment.getParentActivity(), this.parentFragment.getCurrentUser(), this.parentFragment.getCurrentChat(), false, (Theme.ResourcesProvider) null);
-            clearHistoryAlert.setDelegate(new ClearHistoryAlert.ClearHistoryAlertDelegate() {
-                public /* synthetic */ void onClearHistory(boolean z) {
-                    ClearHistoryAlert.ClearHistoryAlertDelegate.CC.$default$onClearHistory(this, z);
-                }
-
-                public void onAutoDeleteHistory(int i, int i2) {
-                    ChatAvatarContainer.this.parentFragment.getMessagesController().setDialogHistoryTTL(ChatAvatarContainer.this.parentFragment.getDialogId(), i);
-                    TLRPC$ChatFull currentChatInfo = ChatAvatarContainer.this.parentFragment.getCurrentChatInfo();
-                    TLRPC$UserFull currentUserInfo = ChatAvatarContainer.this.parentFragment.getCurrentUserInfo();
-                    if (currentUserInfo != null || currentChatInfo != null) {
-                        ChatAvatarContainer.this.parentFragment.getUndoView().showWithAction(ChatAvatarContainer.this.parentFragment.getDialogId(), i2, (Object) ChatAvatarContainer.this.parentFragment.getCurrentUser(), (Object) Integer.valueOf(currentUserInfo != null ? currentUserInfo.ttl_period : currentChatInfo.ttl_period), (Runnable) null, (Runnable) null);
+            TLRPC$ChatFull currentChatInfo = this.parentFragment.getCurrentChatInfo();
+            TLRPC$UserFull currentUserInfo = this.parentFragment.getCurrentUserInfo();
+            if (currentUserInfo != null) {
+                i = currentUserInfo.ttl_period;
+            } else {
+                i = currentChatInfo != null ? currentChatInfo.ttl_period : 0;
+            }
+            AutoDeletePopupWrapper autoDeletePopupWrapper = new AutoDeletePopupWrapper(getContext(), (PopupSwipeBackLayout) null, new AutoDeletePopupWrapper.Callback() {
+                public void dismiss() {
+                    ActionBarPopupWindow[] actionBarPopupWindowArr = r3;
+                    if (actionBarPopupWindowArr[0] != null) {
+                        actionBarPopupWindowArr[0].dismiss();
                     }
                 }
-            });
-            this.parentFragment.showDialog(clearHistoryAlert);
+
+                public void setAutoDeleteHistory(int i, int i2) {
+                    if (ChatAvatarContainer.this.parentFragment != null) {
+                        ChatAvatarContainer.this.parentFragment.getMessagesController().setDialogHistoryTTL(ChatAvatarContainer.this.parentFragment.getDialogId(), i);
+                        TLRPC$ChatFull currentChatInfo = ChatAvatarContainer.this.parentFragment.getCurrentChatInfo();
+                        TLRPC$UserFull currentUserInfo = ChatAvatarContainer.this.parentFragment.getCurrentUserInfo();
+                        if (currentUserInfo != null || currentChatInfo != null) {
+                            ChatAvatarContainer.this.parentFragment.getUndoView().showWithAction(ChatAvatarContainer.this.parentFragment.getDialogId(), i2, (Object) ChatAvatarContainer.this.parentFragment.getCurrentUser(), (Object) Integer.valueOf(currentUserInfo != null ? currentUserInfo.ttl_period : currentChatInfo.ttl_period), (Runnable) null, (Runnable) null);
+                        }
+                    }
+                }
+            }, true, this.resourcesProvider);
+            autoDeletePopupWrapper.lambda$updateItems$8(i);
+            final ActionBarPopupWindow[] actionBarPopupWindowArr = {new ActionBarPopupWindow(autoDeletePopupWrapper.windowLayout, -2, -2) {
+                public void dismiss() {
+                    super.dismiss();
+                    if (ChatAvatarContainer.this.parentFragment != null) {
+                        ChatAvatarContainer.this.parentFragment.dimBehindView(false);
+                    }
+                }
+            }};
+            actionBarPopupWindowArr[0].setPauseNotifications(true);
+            actionBarPopupWindowArr[0].setDismissAnimationDuration(220);
+            actionBarPopupWindowArr[0].setOutsideTouchable(true);
+            actionBarPopupWindowArr[0].setClippingEnabled(true);
+            actionBarPopupWindowArr[0].setAnimationStyle(NUM);
+            actionBarPopupWindowArr[0].setFocusable(true);
+            autoDeletePopupWrapper.windowLayout.measure(View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(1000.0f), Integer.MIN_VALUE), View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(1000.0f), Integer.MIN_VALUE));
+            actionBarPopupWindowArr[0].setInputMethodMode(2);
+            actionBarPopupWindowArr[0].getContentView().setFocusableInTouchMode(true);
+            ActionBarPopupWindow actionBarPopupWindow = actionBarPopupWindowArr[0];
+            BackupImageView backupImageView = this.avatarImageView;
+            actionBarPopupWindow.showAtLocation(backupImageView, 0, (int) (backupImageView.getX() + getX()), (int) this.avatarImageView.getY());
+            this.parentFragment.dimBehindView(true);
             return true;
         }
         if (this.timeItem.getTag() != null) {
@@ -395,7 +429,7 @@ public class ChatAvatarContainer extends FrameLayout implements NotificationCent
 
     public void showTimeItem(boolean z) {
         ImageView imageView = this.timeItem;
-        if (imageView != null && imageView.getTag() == null) {
+        if (imageView != null && imageView.getTag() == null && this.avatarImageView.getVisibility() == 0) {
             this.timeItem.clearAnimation();
             this.timeItem.setVisibility(0);
             this.timeItem.setTag(1);
@@ -430,11 +464,11 @@ public class ChatAvatarContainer extends FrameLayout implements NotificationCent
         }
     }
 
-    public void setTime(int i) {
-        TimerDrawable timerDrawable2 = this.timerDrawable;
-        if (timerDrawable2 != null) {
+    public void setTime(int i, boolean z) {
+        if (this.timerDrawable != null) {
             if (i != 0 || this.secretChatTimer) {
-                timerDrawable2.setTime(i);
+                showTimeItem(z);
+                this.timerDrawable.setTime(i);
             }
         }
     }

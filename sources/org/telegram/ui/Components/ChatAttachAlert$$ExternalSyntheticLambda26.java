@@ -1,16 +1,16 @@
 package org.telegram.ui.Components;
 
-import org.telegram.tgnet.TLRPC$MessageMedia;
-import org.telegram.ui.Components.ChatAttachAlertLocationLayout;
+import android.view.KeyEvent;
+import org.telegram.ui.ActionBar.ActionBarPopupWindow;
 
-public final /* synthetic */ class ChatAttachAlert$$ExternalSyntheticLambda26 implements ChatAttachAlertLocationLayout.LocationActivityDelegate {
+public final /* synthetic */ class ChatAttachAlert$$ExternalSyntheticLambda26 implements ActionBarPopupWindow.OnDispatchKeyEventListener {
     public final /* synthetic */ ChatAttachAlert f$0;
 
     public /* synthetic */ ChatAttachAlert$$ExternalSyntheticLambda26(ChatAttachAlert chatAttachAlert) {
         this.f$0 = chatAttachAlert;
     }
 
-    public final void didSelectLocation(TLRPC$MessageMedia tLRPC$MessageMedia, int i, boolean z, int i2) {
-        this.f$0.lambda$new$5(tLRPC$MessageMedia, i, z, i2);
+    public final void onDispatchKeyEvent(KeyEvent keyEvent) {
+        this.f$0.lambda$new$13(keyEvent);
     }
 }

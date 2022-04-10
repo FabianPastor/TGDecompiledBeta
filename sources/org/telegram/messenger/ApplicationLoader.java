@@ -117,6 +117,7 @@ public class ApplicationLoader extends Application {
                 e4.printStackTrace();
             }
             SharedConfig.loadConfig();
+            SharedPrefsHelper.init(applicationContext);
             for (int i = 0; i < 3; i++) {
                 UserConfig.getInstance(i).loadConfig();
                 MessagesController.getInstance(i);

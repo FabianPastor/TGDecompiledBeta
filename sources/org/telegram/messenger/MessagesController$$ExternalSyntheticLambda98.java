@@ -18,6 +18,6 @@ public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda98
     }
 
     public final void run() {
-        this.f$0.lambda$saveThemeToServer$94(this.f$1, this.f$2, this.f$3, this.f$4);
+        this.f$0.lambda$saveThemeToServer$95(this.f$1, this.f$2, this.f$3, this.f$4);
     }
 }

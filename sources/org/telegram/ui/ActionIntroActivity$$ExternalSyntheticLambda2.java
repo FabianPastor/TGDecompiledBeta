@@ -10,6 +10,6 @@ public final /* synthetic */ class ActionIntroActivity$$ExternalSyntheticLambda2
     }
 
     public final void onClick(View view) {
-        this.f$0.lambda$createView$2(view);
+        this.f$0.lambda$createView$5(view);
     }
 }

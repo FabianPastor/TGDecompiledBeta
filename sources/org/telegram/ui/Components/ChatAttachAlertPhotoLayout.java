@@ -9,7 +9,6 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Outline;
-import android.graphics.Path;
 import android.graphics.Point;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
@@ -18,6 +17,7 @@ import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.text.TextUtils;
+import android.util.Log;
 import android.util.Property;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
@@ -426,7 +426,7 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
             r1.addObserver(r7, r2)
             android.widget.FrameLayout r15 = r24.getContainer()
             android.content.res.Resources r0 = r25.getResources()
-            r1 = 2131165575(0x7var_, float:1.794537E38)
+            r1 = 2131165581(0x7var_d, float:1.7945383E38)
             android.graphics.drawable.Drawable r0 = r0.getDrawable(r1)
             android.graphics.drawable.Drawable r0 = r0.mutate()
             r7.cameraDrawable = r0
@@ -489,7 +489,7 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
             int r2 = r7.getThemedColor(r1)
             r0.setTextColor(r2)
             android.widget.TextView r0 = r7.dropDown
-            r2 = 2131624884(0x7f0e03b4, float:1.887696E38)
+            r2 = 2131624924(0x7f0e03dc, float:1.8877041E38)
             java.lang.String r4 = "ChatGallery"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r4, r2)
             r0.setText(r2)
@@ -498,7 +498,7 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
             android.graphics.Typeface r4 = org.telegram.messenger.AndroidUtilities.getTypeface(r2)
             r0.setTypeface(r4)
             android.content.res.Resources r0 = r25.getResources()
-            r4 = 2131165509(0x7var_, float:1.7945237E38)
+            r4 = 2131165515(0x7var_b, float:1.794525E38)
             android.graphics.drawable.Drawable r0 = r0.getDrawable(r4)
             android.graphics.drawable.Drawable r0 = r0.mutate()
             r7.dropDownDrawable = r0
@@ -526,26 +526,26 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
             r7.checkCamera(r3)
             org.telegram.ui.Components.ChatAttachAlert r0 = r7.parentAlert
             org.telegram.ui.ActionBar.ActionBarMenuItem r0 = r0.selectedMenuItem
-            r5 = 2131627911(0x7f0e0var_, float:1.88831E38)
+            r5 = 2131627985(0x7f0e0fd1, float:1.888325E38)
             java.lang.String r6 = "SendWithoutGrouping"
             java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r6, r5)
             r0.addSubItem(r3, r5)
             org.telegram.ui.Components.ChatAttachAlert r0 = r7.parentAlert
             org.telegram.ui.ActionBar.ActionBarMenuItem r0 = r0.selectedMenuItem
-            r5 = 2131627910(0x7f0e0var_, float:1.8883098E38)
+            r5 = 2131627984(0x7f0e0fd0, float:1.8883248E38)
             java.lang.String r6 = "SendWithoutCompression"
             java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r6, r5)
             r0.addSubItem(r13, r5)
             org.telegram.ui.Components.ChatAttachAlert r0 = r7.parentAlert
             org.telegram.ui.ActionBar.ActionBarMenuItem r0 = r0.selectedMenuItem
-            r5 = 2131165821(0x7var_d, float:1.794587E38)
-            r6 = 2131626858(0x7f0e0b6a, float:1.8880964E38)
+            r5 = 2131165841(0x7var_, float:1.794591E38)
+            r6 = 2131626930(0x7f0e0bb2, float:1.888111E38)
             java.lang.String r11 = "OpenInExternalApp"
             java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r11, r6)
             r0.addSubItem(r10, r5, r6)
             org.telegram.ui.Components.ChatAttachAlert r0 = r7.parentAlert
             org.telegram.ui.ActionBar.ActionBarMenuItem r0 = r0.selectedMenuItem
-            r5 = 2131624426(0x7f0e01ea, float:1.8876031E38)
+            r5 = 2131624436(0x7f0e01f4, float:1.8876052E38)
             java.lang.String r6 = "AttachMediaPreviewButton"
             java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r6, r5)
             r0.addSubItem(r12, r5)
@@ -607,7 +607,7 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
             org.telegram.ui.Components.EmptyTextProgressView r0 = new org.telegram.ui.Components.EmptyTextProgressView
             r0.<init>(r8, r5, r9)
             r7.progressView = r0
-            r6 = 2131626613(0x7f0e0a75, float:1.8880467E38)
+            r6 = 2131626679(0x7f0e0ab7, float:1.88806E38)
             java.lang.String r11 = "NoPhotos"
             java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r11, r6)
             r0.setText(r6)
@@ -639,7 +639,7 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
             r0 = 1065353216(0x3var_, float:1.0)
             org.telegram.messenger.AndroidUtilities.updateViewVisibilityAnimated(r6, r3, r0, r3)
             android.widget.TextView r0 = r7.recordTime
-            r6 = 2131166151(0x7var_c7, float:1.794654E38)
+            r6 = 2131166178(0x7var_e2, float:1.7946594E38)
             r0.setBackgroundResource(r6)
             android.widget.TextView r0 = r7.recordTime
             android.graphics.drawable.Drawable r0 = r0.getBackground()
@@ -687,12 +687,12 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
             android.widget.FrameLayout r0 = r7.cameraPanel
             r5 = 126(0x7e, float:1.77E-43)
             r6 = 83
-            android.widget.FrameLayout$LayoutParams r5 = org.telegram.ui.Components.LayoutHelper.createFrame(r14, r5, r6)
+            android.widget.FrameLayout$LayoutParams r5 = org.telegram.ui.Components.LayoutHelper.createFrame((int) r14, (int) r5, (int) r6)
             r15.addView(r0, r5)
             android.widget.TextView r0 = new android.widget.TextView
             r0.<init>(r8)
             r7.counterTextView = r0
-            r5 = 2131165993(0x7var_, float:1.7946219E38)
+            r5 = 2131166017(0x7var_, float:1.7946267E38)
             r0.setBackgroundResource(r5)
             android.widget.TextView r0 = r7.counterTextView
             r0.setVisibility(r4)
@@ -709,7 +709,7 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
             android.graphics.Typeface r2 = org.telegram.messenger.AndroidUtilities.getTypeface(r2)
             r0.setTypeface(r2)
             android.widget.TextView r0 = r7.counterTextView
-            r2 = 2131165991(0x7var_, float:1.7946215E38)
+            r2 = 2131166015(0x7var_f, float:1.7946263E38)
             r0.setCompoundDrawablesWithIntrinsicBounds(r3, r3, r2, r3)
             android.widget.TextView r0 = r7.counterTextView
             int r1 = org.telegram.messenger.AndroidUtilities.dp(r1)
@@ -749,7 +749,7 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
             r7.shutterButton = r0
             android.widget.FrameLayout r1 = r7.cameraPanel
             r2 = 84
-            android.widget.FrameLayout$LayoutParams r2 = org.telegram.ui.Components.LayoutHelper.createFrame(r2, r2, r5)
+            android.widget.FrameLayout$LayoutParams r2 = org.telegram.ui.Components.LayoutHelper.createFrame((int) r2, (int) r2, (int) r5)
             r1.addView(r0, r2)
             org.telegram.ui.Components.ShutterButton r0 = r7.shutterButton
             org.telegram.ui.Components.ChatAttachAlertPhotoLayout$10 r1 = new org.telegram.ui.Components.ChatAttachAlertPhotoLayout$10
@@ -771,7 +771,7 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
             android.widget.ImageView r1 = r7.switchCameraButton
             r2 = 21
             r4 = 48
-            android.widget.FrameLayout$LayoutParams r2 = org.telegram.ui.Components.LayoutHelper.createFrame(r4, r4, r2)
+            android.widget.FrameLayout$LayoutParams r2 = org.telegram.ui.Components.LayoutHelper.createFrame((int) r4, (int) r4, (int) r2)
             r0.addView(r1, r2)
             android.widget.ImageView r0 = r7.switchCameraButton
             org.telegram.ui.Components.ChatAttachAlertPhotoLayout$$ExternalSyntheticLambda1 r1 = new org.telegram.ui.Components.ChatAttachAlertPhotoLayout$$ExternalSyntheticLambda1
@@ -801,7 +801,7 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
             android.widget.ImageView[] r2 = r7.flashModeButton
             r2 = r2[r0]
             r5 = 51
-            android.widget.FrameLayout$LayoutParams r5 = org.telegram.ui.Components.LayoutHelper.createFrame(r4, r4, r5)
+            android.widget.FrameLayout$LayoutParams r5 = org.telegram.ui.Components.LayoutHelper.createFrame((int) r4, (int) r4, (int) r5)
             r1.addView(r2, r5)
             android.widget.ImageView[] r1 = r7.flashModeButton
             r1 = r1[r0]
@@ -828,7 +828,7 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
             android.widget.TextView r0 = r7.tooltipTextView
             r0.setTextColor(r14)
             android.widget.TextView r0 = r7.tooltipTextView
-            r2 = 2131628222(0x7f0e10be, float:1.888373E38)
+            r2 = 2131628303(0x7f0e110f, float:1.8883895E38)
             java.lang.String r4 = "TapForVideo"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r4, r2)
             r0.setText(r2)
@@ -1637,9 +1637,6 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
             this.cameraView.setFpsLimit(-1);
             AndroidUtilities.hideKeyboard(this);
             AndroidUtilities.setLightNavigationBar(this.parentAlert.getWindow(), false);
-            if (Build.VERSION.SDK_INT >= 26) {
-                this.parentAlert.getWindow().setNavigationBarColor(-16777216);
-            }
             if (z) {
                 setCameraOpenProgress(0.0f);
                 this.cameraAnimationInProgress = true;
@@ -1765,7 +1762,6 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
                 this.cameraView.setFocusable(true);
                 this.cameraView.setFpsLimit(30);
                 if (Build.VERSION.SDK_INT >= 21) {
-                    new Path();
                     this.cameraView.setOutlineProvider(new ViewOutlineProvider() {
                         public void getOutline(View view, Outline outline) {
                             if (ChatAttachAlertPhotoLayout.this.cameraAnimationInProgress) {
@@ -2235,6 +2231,7 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
                 AndroidUtilities.cancelRunOnUIThread(runnable);
                 this.zoomControlHideRunnable = null;
             }
+            AndroidUtilities.setLightNavigationBar(this.parentAlert.getWindow(), ((double) AndroidUtilities.computePerceivedBrightness(getThemedColor("windowBackgroundGray"))) > 0.721d);
             if (z) {
                 this.additionCloseCameraY = this.cameraView.getTranslationY();
                 this.cameraAnimationInProgress = true;
@@ -2349,7 +2346,7 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
             int i3 = point.x;
             int i4 = point.y;
             float width = (float) ((this.parentAlert.getContainer().getWidth() - this.parentAlert.getLeftInset()) - this.parentAlert.getRightInset());
-            float height = (float) (this.parentAlert.getContainer().getHeight() - this.parentAlert.getBottomInset());
+            float height = (float) this.parentAlert.getContainer().getHeight();
             float[] fArr = this.cameraViewLocation;
             float f5 = fArr[0];
             float f6 = fArr[1];
@@ -2394,6 +2391,7 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
             } else {
                 this.cameraIcon.setAlpha(0.0f);
             }
+            Log.i("caapl", "cameraViewH=" + i2 + " (endHeight=" + height + ") value=" + f2);
             if (!(layoutParams.width == i && layoutParams.height == i2)) {
                 layoutParams.width = i;
                 layoutParams.height = i2;
@@ -2667,7 +2665,7 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
                         } else {
                             chatAttachAlert4.baseFragment.startActivityForResult(intent, 1);
                         }
-                        this.parentAlert.dismiss();
+                        this.parentAlert.dismiss(true);
                     }
                 }
                 Intent intent2 = new Intent();
@@ -2684,7 +2682,7 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
                 } else {
                     chatAttachAlert5.baseFragment.startActivityForResult(createChooser, 1);
                 }
-                this.parentAlert.dismiss();
+                this.parentAlert.dismiss(true);
             } catch (Exception e) {
                 FileLog.e((Throwable) e);
             }
@@ -3445,7 +3443,7 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
                 return true;
             }
         } else if (this.cameraOpened && !this.cameraAnimationInProgress) {
-            cameraView2.measure(View.MeasureSpec.makeMeasureSpec(i, NUM), View.MeasureSpec.makeMeasureSpec(i2, NUM));
+            cameraView2.measure(View.MeasureSpec.makeMeasureSpec(i, NUM), View.MeasureSpec.makeMeasureSpec(i2 + this.parentAlert.getBottomInset(), NUM));
             return true;
         }
         return false;

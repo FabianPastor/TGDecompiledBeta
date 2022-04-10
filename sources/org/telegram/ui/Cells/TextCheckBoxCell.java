@@ -18,10 +18,6 @@ public class TextCheckBoxCell extends FrameLayout {
     private boolean needDivider;
     private TextView textView;
 
-    public TextCheckBoxCell(Context context) {
-        this(context, false, false);
-    }
-
     public TextCheckBoxCell(Context context, boolean z, boolean z2) {
         super(context);
         boolean z3 = LocaleController.isRTL;

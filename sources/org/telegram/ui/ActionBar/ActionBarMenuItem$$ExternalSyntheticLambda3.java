@@ -13,6 +13,6 @@ public final /* synthetic */ class ActionBarMenuItem$$ExternalSyntheticLambda3 i
     }
 
     public final void onClick(View view) {
-        this.f$0.lambda$onFiltersChanged$8(this.f$1, view);
+        this.f$0.lambda$onFiltersChanged$10(this.f$1, view);
     }
 }

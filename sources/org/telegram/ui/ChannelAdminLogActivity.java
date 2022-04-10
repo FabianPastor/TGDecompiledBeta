@@ -1364,7 +1364,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
     }
 
     /* access modifiers changed from: private */
-    public void createMenu(View view) {
+    public boolean createMenu(View view) {
         MessageObject messageObject;
         View view2 = view;
         if (view2 instanceof ChatMessageCell) {
@@ -1372,131 +1372,135 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
         } else {
             messageObject = view2 instanceof ChatActionCell ? ((ChatActionCell) view2).getMessageObject() : null;
         }
-        if (messageObject != null) {
-            int messageType = getMessageType(messageObject);
-            this.selectedObject = messageObject;
-            if (getParentActivity() != null) {
-                AlertDialog.Builder builder = new AlertDialog.Builder((Context) getParentActivity());
-                ArrayList arrayList = new ArrayList();
-                ArrayList arrayList2 = new ArrayList();
-                MessageObject messageObject2 = this.selectedObject;
-                if (messageObject2.type == 0 || messageObject2.caption != null) {
-                    arrayList.add(LocaleController.getString("Copy", NUM));
-                    arrayList2.add(3);
-                }
-                if (messageType == 1) {
-                    TLRPC$TL_channelAdminLogEvent tLRPC$TL_channelAdminLogEvent = this.selectedObject.currentEvent;
-                    if (tLRPC$TL_channelAdminLogEvent != null) {
-                        TLRPC$ChannelAdminLogEventAction tLRPC$ChannelAdminLogEventAction = tLRPC$TL_channelAdminLogEvent.action;
-                        if (tLRPC$ChannelAdminLogEventAction instanceof TLRPC$TL_channelAdminLogEventActionChangeStickerSet) {
-                            TLRPC$TL_channelAdminLogEventActionChangeStickerSet tLRPC$TL_channelAdminLogEventActionChangeStickerSet = (TLRPC$TL_channelAdminLogEventActionChangeStickerSet) tLRPC$ChannelAdminLogEventAction;
-                            TLRPC$InputStickerSet tLRPC$InputStickerSet = tLRPC$TL_channelAdminLogEventActionChangeStickerSet.new_stickerset;
-                            if (tLRPC$InputStickerSet == null || (tLRPC$InputStickerSet instanceof TLRPC$TL_inputStickerSetEmpty)) {
-                                tLRPC$InputStickerSet = tLRPC$TL_channelAdminLogEventActionChangeStickerSet.prev_stickerset;
-                            }
-                            TLRPC$InputStickerSet tLRPC$InputStickerSet2 = tLRPC$InputStickerSet;
-                            if (tLRPC$InputStickerSet2 != null) {
-                                showDialog(new StickersAlert((Context) getParentActivity(), (BaseFragment) this, tLRPC$InputStickerSet2, (TLRPC$TL_messages_stickerSet) null, (StickersAlert.StickersAlertDelegate) null));
-                                return;
-                            }
-                        }
+        if (messageObject == null) {
+            return false;
+        }
+        int messageType = getMessageType(messageObject);
+        this.selectedObject = messageObject;
+        if (getParentActivity() == null) {
+            return false;
+        }
+        AlertDialog.Builder builder = new AlertDialog.Builder((Context) getParentActivity());
+        ArrayList arrayList = new ArrayList();
+        ArrayList arrayList2 = new ArrayList();
+        MessageObject messageObject2 = this.selectedObject;
+        if (messageObject2.type == 0 || messageObject2.caption != null) {
+            arrayList.add(LocaleController.getString("Copy", NUM));
+            arrayList2.add(3);
+        }
+        if (messageType == 1) {
+            TLRPC$TL_channelAdminLogEvent tLRPC$TL_channelAdminLogEvent = this.selectedObject.currentEvent;
+            if (tLRPC$TL_channelAdminLogEvent != null) {
+                TLRPC$ChannelAdminLogEventAction tLRPC$ChannelAdminLogEventAction = tLRPC$TL_channelAdminLogEvent.action;
+                if (tLRPC$ChannelAdminLogEventAction instanceof TLRPC$TL_channelAdminLogEventActionChangeStickerSet) {
+                    TLRPC$TL_channelAdminLogEventActionChangeStickerSet tLRPC$TL_channelAdminLogEventActionChangeStickerSet = (TLRPC$TL_channelAdminLogEventActionChangeStickerSet) tLRPC$ChannelAdminLogEventAction;
+                    TLRPC$InputStickerSet tLRPC$InputStickerSet = tLRPC$TL_channelAdminLogEventActionChangeStickerSet.new_stickerset;
+                    if (tLRPC$InputStickerSet == null || (tLRPC$InputStickerSet instanceof TLRPC$TL_inputStickerSetEmpty)) {
+                        tLRPC$InputStickerSet = tLRPC$TL_channelAdminLogEventActionChangeStickerSet.prev_stickerset;
                     }
-                    if (tLRPC$TL_channelAdminLogEvent != null && (tLRPC$TL_channelAdminLogEvent.action instanceof TLRPC$TL_channelAdminLogEventActionChangeHistoryTTL) && ChatObject.canUserDoAdminAction(this.currentChat, 13)) {
-                        ClearHistoryAlert clearHistoryAlert = new ClearHistoryAlert(getParentActivity(), (TLRPC$User) null, this.currentChat, false, (Theme.ResourcesProvider) null);
-                        clearHistoryAlert.setDelegate(new ClearHistoryAlert.ClearHistoryAlertDelegate() {
-                            public /* synthetic */ void onClearHistory(boolean z) {
-                                ClearHistoryAlert.ClearHistoryAlertDelegate.CC.$default$onClearHistory(this, z);
-                            }
-
-                            public void onAutoDeleteHistory(int i, int i2) {
-                                ChannelAdminLogActivity.this.getMessagesController().setDialogHistoryTTL(-ChannelAdminLogActivity.this.currentChat.id, i);
-                                TLRPC$ChatFull chatFull = ChannelAdminLogActivity.this.getMessagesController().getChatFull(ChannelAdminLogActivity.this.currentChat.id);
-                                if (chatFull != null) {
-                                    ChannelAdminLogActivity.this.undoView.showWithAction(-ChannelAdminLogActivity.this.currentChat.id, i2, (Object) null, (Object) Integer.valueOf(chatFull.ttl_period), (Runnable) null, (Runnable) null);
-                                }
-                            }
-                        });
-                        showDialog(clearHistoryAlert);
+                    TLRPC$InputStickerSet tLRPC$InputStickerSet2 = tLRPC$InputStickerSet;
+                    if (tLRPC$InputStickerSet2 != null) {
+                        showDialog(new StickersAlert((Context) getParentActivity(), (BaseFragment) this, tLRPC$InputStickerSet2, (TLRPC$TL_messages_stickerSet) null, (StickersAlert.StickersAlertDelegate) null));
+                        return true;
                     }
-                } else if (messageType == 3) {
-                    TLRPC$MessageMedia tLRPC$MessageMedia = this.selectedObject.messageOwner.media;
-                    if ((tLRPC$MessageMedia instanceof TLRPC$TL_messageMediaWebPage) && MessageObject.isNewGifDocument(tLRPC$MessageMedia.webpage.document)) {
-                        arrayList.add(LocaleController.getString("SaveToGIFs", NUM));
-                        arrayList2.add(11);
-                    }
-                } else if (messageType == 4) {
-                    if (this.selectedObject.isVideo()) {
-                        arrayList.add(LocaleController.getString("SaveToGallery", NUM));
-                        arrayList2.add(4);
-                        arrayList.add(LocaleController.getString("ShareFile", NUM));
-                        arrayList2.add(6);
-                    } else if (this.selectedObject.isMusic()) {
-                        arrayList.add(LocaleController.getString("SaveToMusic", NUM));
-                        arrayList2.add(10);
-                        arrayList.add(LocaleController.getString("ShareFile", NUM));
-                        arrayList2.add(6);
-                    } else if (this.selectedObject.getDocument() != null) {
-                        if (MessageObject.isNewGifDocument(this.selectedObject.getDocument())) {
-                            arrayList.add(LocaleController.getString("SaveToGIFs", NUM));
-                            arrayList2.add(11);
-                        }
-                        arrayList.add(LocaleController.getString("SaveToDownloads", NUM));
-                        arrayList2.add(10);
-                        arrayList.add(LocaleController.getString("ShareFile", NUM));
-                        arrayList2.add(6);
-                    } else {
-                        arrayList.add(LocaleController.getString("SaveToGallery", NUM));
-                        arrayList2.add(4);
-                    }
-                } else if (messageType == 5) {
-                    arrayList.add(LocaleController.getString("ApplyLocalizationFile", NUM));
-                    arrayList2.add(5);
-                    arrayList.add(LocaleController.getString("SaveToDownloads", NUM));
-                    arrayList2.add(10);
-                    arrayList.add(LocaleController.getString("ShareFile", NUM));
-                    arrayList2.add(6);
-                } else if (messageType == 10) {
-                    arrayList.add(LocaleController.getString("ApplyThemeFile", NUM));
-                    arrayList2.add(5);
-                    arrayList.add(LocaleController.getString("SaveToDownloads", NUM));
-                    arrayList2.add(10);
-                    arrayList.add(LocaleController.getString("ShareFile", NUM));
-                    arrayList2.add(6);
-                } else if (messageType == 6) {
-                    arrayList.add(LocaleController.getString("SaveToGallery", NUM));
-                    arrayList2.add(7);
-                    arrayList.add(LocaleController.getString("SaveToDownloads", NUM));
-                    arrayList2.add(10);
-                    arrayList.add(LocaleController.getString("ShareFile", NUM));
-                    arrayList2.add(6);
-                } else if (messageType == 7) {
-                    if (this.selectedObject.isMask()) {
-                        arrayList.add(LocaleController.getString("AddToMasks", NUM));
-                    } else {
-                        arrayList.add(LocaleController.getString("AddToStickers", NUM));
-                    }
-                    arrayList2.add(9);
-                } else if (messageType == 8) {
-                    long j = this.selectedObject.messageOwner.media.user_id;
-                    TLRPC$User user = j != 0 ? MessagesController.getInstance(this.currentAccount).getUser(Long.valueOf(j)) : null;
-                    if (!(user == null || user.id == UserConfig.getInstance(this.currentAccount).getClientUserId() || ContactsController.getInstance(this.currentAccount).contactsDict.get(Long.valueOf(user.id)) != null)) {
-                        arrayList.add(LocaleController.getString("AddContactTitle", NUM));
-                        arrayList2.add(15);
-                    }
-                    if (!TextUtils.isEmpty(this.selectedObject.messageOwner.media.phone_number)) {
-                        arrayList.add(LocaleController.getString("Copy", NUM));
-                        arrayList2.add(16);
-                        arrayList.add(LocaleController.getString("Call", NUM));
-                        arrayList2.add(17);
-                    }
-                }
-                if (!arrayList2.isEmpty()) {
-                    builder.setItems((CharSequence[]) arrayList.toArray(new CharSequence[0]), new ChannelAdminLogActivity$$ExternalSyntheticLambda1(this, arrayList2));
-                    builder.setTitle(LocaleController.getString("Message", NUM));
-                    showDialog(builder.create());
                 }
             }
+            if (tLRPC$TL_channelAdminLogEvent != null && (tLRPC$TL_channelAdminLogEvent.action instanceof TLRPC$TL_channelAdminLogEventActionChangeHistoryTTL) && ChatObject.canUserDoAdminAction(this.currentChat, 13)) {
+                ClearHistoryAlert clearHistoryAlert = new ClearHistoryAlert(getParentActivity(), (TLRPC$User) null, this.currentChat, false, (Theme.ResourcesProvider) null);
+                clearHistoryAlert.setDelegate(new ClearHistoryAlert.ClearHistoryAlertDelegate() {
+                    public /* synthetic */ void onClearHistory(boolean z) {
+                        ClearHistoryAlert.ClearHistoryAlertDelegate.CC.$default$onClearHistory(this, z);
+                    }
+
+                    public void onAutoDeleteHistory(int i, int i2) {
+                        ChannelAdminLogActivity.this.getMessagesController().setDialogHistoryTTL(-ChannelAdminLogActivity.this.currentChat.id, i);
+                        TLRPC$ChatFull chatFull = ChannelAdminLogActivity.this.getMessagesController().getChatFull(ChannelAdminLogActivity.this.currentChat.id);
+                        if (chatFull != null) {
+                            ChannelAdminLogActivity.this.undoView.showWithAction(-ChannelAdminLogActivity.this.currentChat.id, i2, (Object) null, (Object) Integer.valueOf(chatFull.ttl_period), (Runnable) null, (Runnable) null);
+                        }
+                    }
+                });
+                showDialog(clearHistoryAlert);
+            }
+        } else if (messageType == 3) {
+            TLRPC$MessageMedia tLRPC$MessageMedia = this.selectedObject.messageOwner.media;
+            if ((tLRPC$MessageMedia instanceof TLRPC$TL_messageMediaWebPage) && MessageObject.isNewGifDocument(tLRPC$MessageMedia.webpage.document)) {
+                arrayList.add(LocaleController.getString("SaveToGIFs", NUM));
+                arrayList2.add(11);
+            }
+        } else if (messageType == 4) {
+            if (this.selectedObject.isVideo()) {
+                arrayList.add(LocaleController.getString("SaveToGallery", NUM));
+                arrayList2.add(4);
+                arrayList.add(LocaleController.getString("ShareFile", NUM));
+                arrayList2.add(6);
+            } else if (this.selectedObject.isMusic()) {
+                arrayList.add(LocaleController.getString("SaveToMusic", NUM));
+                arrayList2.add(10);
+                arrayList.add(LocaleController.getString("ShareFile", NUM));
+                arrayList2.add(6);
+            } else if (this.selectedObject.getDocument() != null) {
+                if (MessageObject.isNewGifDocument(this.selectedObject.getDocument())) {
+                    arrayList.add(LocaleController.getString("SaveToGIFs", NUM));
+                    arrayList2.add(11);
+                }
+                arrayList.add(LocaleController.getString("SaveToDownloads", NUM));
+                arrayList2.add(10);
+                arrayList.add(LocaleController.getString("ShareFile", NUM));
+                arrayList2.add(6);
+            } else {
+                arrayList.add(LocaleController.getString("SaveToGallery", NUM));
+                arrayList2.add(4);
+            }
+        } else if (messageType == 5) {
+            arrayList.add(LocaleController.getString("ApplyLocalizationFile", NUM));
+            arrayList2.add(5);
+            arrayList.add(LocaleController.getString("SaveToDownloads", NUM));
+            arrayList2.add(10);
+            arrayList.add(LocaleController.getString("ShareFile", NUM));
+            arrayList2.add(6);
+        } else if (messageType == 10) {
+            arrayList.add(LocaleController.getString("ApplyThemeFile", NUM));
+            arrayList2.add(5);
+            arrayList.add(LocaleController.getString("SaveToDownloads", NUM));
+            arrayList2.add(10);
+            arrayList.add(LocaleController.getString("ShareFile", NUM));
+            arrayList2.add(6);
+        } else if (messageType == 6) {
+            arrayList.add(LocaleController.getString("SaveToGallery", NUM));
+            arrayList2.add(7);
+            arrayList.add(LocaleController.getString("SaveToDownloads", NUM));
+            arrayList2.add(10);
+            arrayList.add(LocaleController.getString("ShareFile", NUM));
+            arrayList2.add(6);
+        } else if (messageType == 7) {
+            if (this.selectedObject.isMask()) {
+                arrayList.add(LocaleController.getString("AddToMasks", NUM));
+            } else {
+                arrayList.add(LocaleController.getString("AddToStickers", NUM));
+            }
+            arrayList2.add(9);
+        } else if (messageType == 8) {
+            long j = this.selectedObject.messageOwner.media.user_id;
+            TLRPC$User user = j != 0 ? MessagesController.getInstance(this.currentAccount).getUser(Long.valueOf(j)) : null;
+            if (!(user == null || user.id == UserConfig.getInstance(this.currentAccount).getClientUserId() || ContactsController.getInstance(this.currentAccount).contactsDict.get(Long.valueOf(user.id)) != null)) {
+                arrayList.add(LocaleController.getString("AddContactTitle", NUM));
+                arrayList2.add(15);
+            }
+            if (!TextUtils.isEmpty(this.selectedObject.messageOwner.media.phone_number)) {
+                arrayList.add(LocaleController.getString("Copy", NUM));
+                arrayList2.add(16);
+                arrayList.add(LocaleController.getString("Call", NUM));
+                arrayList2.add(17);
+            }
         }
+        if (arrayList2.isEmpty()) {
+            return false;
+        }
+        builder.setItems((CharSequence[]) arrayList.toArray(new CharSequence[0]), new ChannelAdminLogActivity$$ExternalSyntheticLambda1(this, arrayList2));
+        builder.setTitle(LocaleController.getString("Message", NUM));
+        showDialog(builder.create());
+        return true;
     }
 
     /* access modifiers changed from: private */
@@ -1882,7 +1886,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
             r2.putExtra(r5, r0)
         L_0x0209:
             android.app.Activity r0 = r10.getParentActivity()
-            r3 = 2131627973(0x7f0e0fc5, float:1.8883226E38)
+            r3 = 2131628047(0x7f0e100f, float:1.8883376E38)
             java.lang.String r4 = "ShareFile"
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r4, r3)
             android.content.Intent r2 = android.content.Intent.createChooser(r2, r3)
@@ -1918,9 +1922,9 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
             java.lang.String r1 = r1.toLowerCase()
             java.lang.String r2 = "attheme"
             boolean r1 = r1.endsWith(r2)
-            r2 = 2131626832(0x7f0e0b50, float:1.8880911E38)
+            r2 = 2131626904(0x7f0e0b98, float:1.8881057E38)
             java.lang.String r3 = "OK"
-            r4 = 2131624306(0x7f0e0172, float:1.8875788E38)
+            r4 = 2131624316(0x7f0e017c, float:1.8875808E38)
             java.lang.String r5 = "AppName"
             if (r1 == 0) goto L_0x02ea
             androidx.recyclerview.widget.LinearLayoutManager r1 = r10.chatLayoutManager
@@ -1968,7 +1972,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
             r0.<init>((android.content.Context) r1)
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r5, r4)
             r0.setTitle(r1)
-            r1 = 2131626053(0x7f0e0845, float:1.8879331E38)
+            r1 = 2131626111(0x7f0e087f, float:1.8879449E38)
             java.lang.String r4 = "IncorrectTheme"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r4, r1)
             r0.setMessage(r1)
@@ -1997,7 +2001,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
             r0.<init>((android.content.Context) r1)
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r5, r4)
             r0.setTitle(r1)
-            r1 = 2131626052(0x7f0e0844, float:1.887933E38)
+            r1 = 2131626110(0x7f0e087e, float:1.8879447E38)
             java.lang.String r4 = "IncorrectLocalization"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r4, r1)
             r0.setMessage(r1)
@@ -2702,7 +2706,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
                     }
 
                     public void didPressOther(ChatMessageCell chatMessageCell, float f, float f2) {
-                        ChannelAdminLogActivity.this.createMenu(chatMessageCell);
+                        boolean unused = ChannelAdminLogActivity.this.createMenu(chatMessageCell);
                     }
 
                     public void didPressUserAvatar(ChatMessageCell chatMessageCell, TLRPC$User tLRPC$User, float f, float f2) {
@@ -2759,7 +2763,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
                     }
 
                     public void didLongPress(ChatMessageCell chatMessageCell, float f, float f2) {
-                        ChannelAdminLogActivity.this.createMenu(chatMessageCell);
+                        boolean unused = ChannelAdminLogActivity.this.createMenu(chatMessageCell);
                     }
 
                     public void didPressUrl(ChatMessageCell chatMessageCell, CharacterStyle characterStyle, boolean z) {
@@ -3112,8 +3116,8 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
                         PhotoViewer.getInstance().openPhoto(messageObject, (ChatActivity) null, 0, 0, ChannelAdminLogActivity.this.provider);
                     }
 
-                    public void didLongPress(ChatActionCell chatActionCell, float f, float f2) {
-                        ChannelAdminLogActivity.this.createMenu(chatActionCell);
+                    public boolean didLongPress(ChatActionCell chatActionCell, float f, float f2) {
+                        return ChannelAdminLogActivity.this.createMenu(chatActionCell);
                     }
 
                     public void needOpenUserProfile(long j) {
@@ -3600,7 +3604,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
         arrayList.add(new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, (Paint) null, new Drawable[]{Theme.chat_msgOutSelectedDrawable, Theme.chat_msgOutMediaSelectedDrawable}, (ThemeDescription.ThemeDescriptionDelegate) null, "chat_outBubbleSelected"));
         arrayList.add(new ThemeDescription(this.chatListView, ThemeDescription.FLAG_TEXTCOLOR, new Class[]{ChatActionCell.class}, Theme.chat_actionTextPaint, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "chat_serviceText"));
         arrayList.add(new ThemeDescription(this.chatListView, ThemeDescription.FLAG_LINKCOLOR, new Class[]{ChatActionCell.class}, Theme.chat_actionTextPaint, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "chat_serviceLink"));
-        arrayList.add(new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, (Paint) null, new Drawable[]{Theme.chat_botCardDrawalbe, Theme.chat_shareIconDrawable, Theme.chat_botInlineDrawable, Theme.chat_botLinkDrawalbe, Theme.chat_goIconDrawable, Theme.chat_commentStickerDrawable}, (ThemeDescription.ThemeDescriptionDelegate) null, "chat_serviceIcon"));
+        arrayList.add(new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, (Paint) null, new Drawable[]{Theme.chat_botCardDrawable, Theme.chat_shareIconDrawable, Theme.chat_botInlineDrawable, Theme.chat_botLinkDrawable, Theme.chat_goIconDrawable, Theme.chat_commentStickerDrawable}, (ThemeDescription.ThemeDescriptionDelegate) null, "chat_serviceIcon"));
         arrayList.add(new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class, ChatActionCell.class}, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "chat_serviceBackground"));
         arrayList.add(new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class, ChatActionCell.class}, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "chat_serviceBackgroundSelected"));
         arrayList.add(new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "chat_messageTextIn"));

@@ -1,7 +1,7 @@
 package j$.util.stream;
 
-import j$.util.function.CLASSNAMEb;
 import j$.util.function.Consumer;
+import j$.util.function.b;
 import j$.util.function.p;
 import j$.util.function.q;
 import j$.util.function.w;
@@ -10,9 +10,9 @@ import j$.util.function.y;
 class B2 extends U2 implements T2, CLASSNAMEm3 {
     final /* synthetic */ y b;
     final /* synthetic */ w c;
-    final /* synthetic */ CLASSNAMEb d;
+    final /* synthetic */ b d;
 
-    B2(y yVar, w wVar, CLASSNAMEb bVar) {
+    B2(y yVar, w wVar, b bVar) {
         this.b = yVar;
         this.c = wVar;
         this.d = bVar;

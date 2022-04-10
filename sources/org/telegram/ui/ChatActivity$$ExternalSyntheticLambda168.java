@@ -1,24 +1,21 @@
 package org.telegram.ui;
 
-import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC$TL_messages_requestUrlAuth;
+import org.telegram.messenger.MessagesController;
 
 public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda168 implements Runnable {
     public final /* synthetic */ ChatActivity f$0;
-    public final /* synthetic */ TLObject f$1;
-    public final /* synthetic */ String f$2;
-    public final /* synthetic */ TLRPC$TL_messages_requestUrlAuth f$3;
-    public final /* synthetic */ boolean f$4;
+    public final /* synthetic */ MessagesController f$1;
+    public final /* synthetic */ CharSequence f$2;
+    public final /* synthetic */ boolean f$3;
 
-    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda168(ChatActivity chatActivity, TLObject tLObject, String str, TLRPC$TL_messages_requestUrlAuth tLRPC$TL_messages_requestUrlAuth, boolean z) {
+    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda168(ChatActivity chatActivity, MessagesController messagesController, CharSequence charSequence, boolean z) {
         this.f$0 = chatActivity;
-        this.f$1 = tLObject;
-        this.f$2 = str;
-        this.f$3 = tLRPC$TL_messages_requestUrlAuth;
-        this.f$4 = z;
+        this.f$1 = messagesController;
+        this.f$2 = charSequence;
+        this.f$3 = z;
     }
 
     public final void run() {
-        this.f$0.lambda$showRequestUrlAlert$206(this.f$1, this.f$2, this.f$3, this.f$4);
+        this.f$0.lambda$searchLinks$95(this.f$1, this.f$2, this.f$3);
     }
 }

@@ -1,17 +1,18 @@
 package org.telegram.ui;
 
 import android.content.DialogInterface;
+import org.telegram.tgnet.TLRPC$User;
 
 public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda39 implements DialogInterface.OnClickListener {
     public final /* synthetic */ ChatActivity f$0;
-    public final /* synthetic */ boolean f$1;
+    public final /* synthetic */ TLRPC$User f$1;
 
-    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda39(ChatActivity chatActivity, boolean z) {
+    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda39(ChatActivity chatActivity, TLRPC$User tLRPC$User) {
         this.f$0 = chatActivity;
-        this.f$1 = z;
+        this.f$1 = tLRPC$User;
     }
 
     public final void onClick(DialogInterface dialogInterface, int i) {
-        this.f$0.lambda$checkRecordLocked$195(this.f$1, dialogInterface, i);
+        this.f$0.lambda$onTransitionAnimationEnd$130(this.f$1, dialogInterface, i);
     }
 }

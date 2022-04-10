@@ -1,12 +1,15 @@
 package org.telegram.messenger;
 
-public final /* synthetic */ class MediaDataController$$ExternalSyntheticLambda119 implements GenericProvider {
+import java.util.Comparator;
+import org.telegram.tgnet.TLRPC$MessageEntity;
+
+public final /* synthetic */ class MediaDataController$$ExternalSyntheticLambda119 implements Comparator {
     public static final /* synthetic */ MediaDataController$$ExternalSyntheticLambda119 INSTANCE = new MediaDataController$$ExternalSyntheticLambda119();
 
     private /* synthetic */ MediaDataController$$ExternalSyntheticLambda119() {
     }
 
-    public final Object provide(Object obj) {
-        return MediaDataController.lambda$getEntities$129((Void) obj);
+    public final int compare(Object obj, Object obj2) {
+        return MediaDataController.lambda$getTextStyleRuns$129((TLRPC$MessageEntity) obj, (TLRPC$MessageEntity) obj2);
     }
 }

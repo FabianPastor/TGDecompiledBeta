@@ -8,6 +8,6 @@ public final /* synthetic */ class ActionBarMenuItem$$ExternalSyntheticLambda10 
     }
 
     public final void run() {
-        this.f$0.lambda$checkClearButton$11();
+        this.f$0.lambda$onTouchEvent$0();
     }
 }

@@ -12,6 +12,6 @@ public final /* synthetic */ class ProfileActivity$$ExternalSyntheticLambda7 imp
     }
 
     public final void onClick(DialogInterface dialogInterface, int i) {
-        this.f$0.lambda$processOnClickOrPress$20(this.f$1, dialogInterface, i);
+        this.f$0.lambda$processOnClickOrPress$19(this.f$1, dialogInterface, i);
     }
 }

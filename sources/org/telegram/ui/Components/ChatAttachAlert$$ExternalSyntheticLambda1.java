@@ -10,6 +10,6 @@ public final /* synthetic */ class ChatAttachAlert$$ExternalSyntheticLambda1 imp
     }
 
     public final void onClick(DialogInterface dialogInterface, int i) {
-        this.f$0.lambda$dismiss$26(dialogInterface, i);
+        this.f$0.lambda$dismiss$30(dialogInterface, i);
     }
 }

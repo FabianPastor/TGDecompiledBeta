@@ -1,15 +1,15 @@
 package org.telegram.ui.Components;
 
-import org.telegram.ui.Components.EditTextCaption;
+import org.telegram.messenger.MediaController;
+import org.telegram.ui.Components.AlertsCreator;
 
-public final /* synthetic */ class ChatActivityEnterView$$ExternalSyntheticLambda51 implements EditTextCaption.EditTextCaptionDelegate {
-    public final /* synthetic */ ChatActivityEnterView f$0;
+public final /* synthetic */ class ChatActivityEnterView$$ExternalSyntheticLambda51 implements AlertsCreator.ScheduleDatePickerDelegate {
+    public static final /* synthetic */ ChatActivityEnterView$$ExternalSyntheticLambda51 INSTANCE = new ChatActivityEnterView$$ExternalSyntheticLambda51();
 
-    public /* synthetic */ ChatActivityEnterView$$ExternalSyntheticLambda51(ChatActivityEnterView chatActivityEnterView) {
-        this.f$0 = chatActivityEnterView;
+    private /* synthetic */ ChatActivityEnterView$$ExternalSyntheticLambda51() {
     }
 
-    public final void onSpansChanged() {
-        this.f$0.lambda$new$2();
+    public final void didSelectDate(boolean z, int i) {
+        MediaController.getInstance().stopRecording(1, z, i);
     }
 }

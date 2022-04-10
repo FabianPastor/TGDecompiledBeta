@@ -47,7 +47,7 @@ public class DownloadController extends BaseController implements NotificationCe
     public static final int PRESET_SIZE_NUM_VIDEO = 1;
     private HashMap<String, FileDownloadProgressListener> addLaterArray = new HashMap<>();
     private ArrayList<DownloadObject> audioDownloadQueue = new ArrayList<>();
-    Runnable clearUnviewedDownloadsRunnbale = new Runnable() {
+    Runnable clearUnviewedDownloadsRunnale = new Runnable() {
         public void run() {
             DownloadController.this.clearUnviewedDownloads();
             DownloadController.this.getNotificationCenter().postNotificationName(NotificationCenter.onDownloadingFilesChanged, new Object[0]);
@@ -1365,41 +1365,73 @@ public class DownloadController extends BaseController implements NotificationCe
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$startDownloadFile$5(MessageObject messageObject) {
-        boolean z;
-        boolean z2;
-        int i = 0;
-        while (true) {
-            z = true;
-            if (i >= this.recentDownloadingFiles.size()) {
-                break;
-            } else if (this.recentDownloadingFiles.get(i).getDocument().id != messageObject.getDocument().id) {
-                i++;
-            } else if (messageObject.mediaExists) {
-                z2 = true;
-            } else {
-                this.recentDownloadingFiles.remove(i);
-            }
-        }
-        z2 = false;
-        if (!z2) {
-            int i2 = 0;
-            while (true) {
-                if (i2 >= this.downloadingFiles.size()) {
-                    break;
-                } else if (this.downloadingFiles.get(i2).getDocument().id == messageObject.getDocument().id) {
-                    break;
-                } else {
-                    i2++;
-                }
-            }
-        }
-        z = z2;
-        if (!z) {
-            this.downloadingFiles.add(messageObject);
-            getMessagesStorage().getStorageQueue().postRunnable(new DownloadController$$ExternalSyntheticLambda7(this, messageObject));
-        }
-        getNotificationCenter().postNotificationName(NotificationCenter.onDownloadingFilesChanged, new Object[0]);
+    /* JADX WARNING: Removed duplicated region for block: B:17:0x0053  */
+    /* Code decompiled incorrectly, please refer to instructions dump. */
+    public /* synthetic */ void lambda$startDownloadFile$5(org.telegram.messenger.MessageObject r10) {
+        /*
+            r9 = this;
+            r0 = 0
+            r1 = 0
+        L_0x0002:
+            java.util.ArrayList<org.telegram.messenger.MessageObject> r2 = r9.recentDownloadingFiles
+            int r2 = r2.size()
+            r3 = 1
+            if (r1 >= r2) goto L_0x0028
+            java.util.ArrayList<org.telegram.messenger.MessageObject> r2 = r9.recentDownloadingFiles
+            java.lang.Object r2 = r2.get(r1)
+            org.telegram.messenger.MessageObject r2 = (org.telegram.messenger.MessageObject) r2
+            org.telegram.tgnet.TLRPC$Document r2 = r2.getDocument()
+            long r4 = r2.id
+            org.telegram.tgnet.TLRPC$Document r2 = r10.getDocument()
+            long r6 = r2.id
+            int r2 = (r4 > r6 ? 1 : (r4 == r6 ? 0 : -1))
+            if (r2 != 0) goto L_0x0025
+            r1 = 1
+            goto L_0x0029
+        L_0x0025:
+            int r1 = r1 + 1
+            goto L_0x0002
+        L_0x0028:
+            r1 = 0
+        L_0x0029:
+            if (r1 != 0) goto L_0x0050
+            r2 = 0
+        L_0x002c:
+            java.util.ArrayList<org.telegram.messenger.MessageObject> r4 = r9.downloadingFiles
+            int r4 = r4.size()
+            if (r2 >= r4) goto L_0x0050
+            java.util.ArrayList<org.telegram.messenger.MessageObject> r4 = r9.downloadingFiles
+            java.lang.Object r4 = r4.get(r2)
+            org.telegram.messenger.MessageObject r4 = (org.telegram.messenger.MessageObject) r4
+            org.telegram.tgnet.TLRPC$Document r4 = r4.getDocument()
+            long r4 = r4.id
+            org.telegram.tgnet.TLRPC$Document r6 = r10.getDocument()
+            long r6 = r6.id
+            int r8 = (r4 > r6 ? 1 : (r4 == r6 ? 0 : -1))
+            if (r8 != 0) goto L_0x004d
+            goto L_0x0051
+        L_0x004d:
+            int r2 = r2 + 1
+            goto L_0x002c
+        L_0x0050:
+            r3 = r1
+        L_0x0051:
+            if (r3 != 0) goto L_0x0068
+            java.util.ArrayList<org.telegram.messenger.MessageObject> r1 = r9.downloadingFiles
+            r1.add(r10)
+            org.telegram.messenger.MessagesStorage r1 = r9.getMessagesStorage()
+            org.telegram.messenger.DispatchQueue r1 = r1.getStorageQueue()
+            org.telegram.messenger.DownloadController$$ExternalSyntheticLambda7 r2 = new org.telegram.messenger.DownloadController$$ExternalSyntheticLambda7
+            r2.<init>(r9, r10)
+            r1.postRunnable(r2)
+        L_0x0068:
+            org.telegram.messenger.NotificationCenter r10 = r9.getNotificationCenter()
+            int r1 = org.telegram.messenger.NotificationCenter.onDownloadingFilesChanged
+            java.lang.Object[] r0 = new java.lang.Object[r0]
+            r10.postNotificationName(r1, r0)
+            return
+        */
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.DownloadController.lambda$startDownloadFile$5(org.telegram.messenger.MessageObject):void");
     }
 
     /* access modifiers changed from: private */
@@ -1423,13 +1455,12 @@ public class DownloadController extends BaseController implements NotificationCe
 
     public void onDownloadComplete(MessageObject messageObject) {
         if (messageObject != null) {
-            AndroidUtilities.runOnUIThread(new DownloadController$$ExternalSyntheticLambda6(this, messageObject));
-            getMessagesStorage().getStorageQueue().postRunnable(new DownloadController$$ExternalSyntheticLambda5(this, messageObject));
+            AndroidUtilities.runOnUIThread(new DownloadController$$ExternalSyntheticLambda5(this, messageObject));
         }
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$onDownloadComplete$6(MessageObject messageObject) {
+    public /* synthetic */ void lambda$onDownloadComplete$7(MessageObject messageObject) {
         boolean z;
         boolean z2;
         int i = 0;
@@ -1463,11 +1494,12 @@ public class DownloadController extends BaseController implements NotificationCe
                 putToUnviewedDownloads(messageObject);
             }
             getNotificationCenter().postNotificationName(NotificationCenter.onDownloadingFilesChanged, new Object[0]);
+            getMessagesStorage().getStorageQueue().postRunnable(new DownloadController$$ExternalSyntheticLambda6(this, messageObject));
         }
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$onDownloadComplete$7(MessageObject messageObject) {
+    public /* synthetic */ void lambda$onDownloadComplete$6(MessageObject messageObject) {
         try {
             getMessagesStorage().getDatabase().executeFast(String.format(Locale.ENGLISH, "UPDATE downloading_documents SET state = 1, date = %d WHERE hash = %d AND id = %d", new Object[]{Long.valueOf(System.currentTimeMillis()), Integer.valueOf(messageObject.getDocument().dc_id), Long.valueOf(messageObject.getDocument().id)})).stepThis().dispose();
             SQLiteCursor queryFinalized = getMessagesStorage().getDatabase().queryFinalized("SELECT COUNT(*) FROM downloading_documents WHERE state = 1", new Object[0]);
@@ -1549,8 +1581,8 @@ public class DownloadController extends BaseController implements NotificationCe
 
     private void putToUnviewedDownloads(MessageObject messageObject) {
         this.unviewedDownloads.put(messageObject.getId(), messageObject);
-        AndroidUtilities.cancelRunOnUIThread(this.clearUnviewedDownloadsRunnbale);
-        AndroidUtilities.runOnUIThread(this.clearUnviewedDownloadsRunnbale, 60000);
+        AndroidUtilities.cancelRunOnUIThread(this.clearUnviewedDownloadsRunnale);
+        AndroidUtilities.runOnUIThread(this.clearUnviewedDownloadsRunnale, 60000);
     }
 
     public void clearUnviewedDownloads() {

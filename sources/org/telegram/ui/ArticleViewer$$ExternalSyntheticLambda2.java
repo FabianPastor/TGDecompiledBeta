@@ -10,6 +10,6 @@ public final /* synthetic */ class ArticleViewer$$ExternalSyntheticLambda2 imple
     }
 
     public final void onDismiss(DialogInterface dialogInterface) {
-        this.f$0.lambda$showDialog$43(dialogInterface);
+        this.f$0.lambda$showCopyPopup$1(dialogInterface);
     }
 }

@@ -16,7 +16,7 @@ public class RadioButtonCell extends FrameLayout {
     private boolean needDivider;
     private RadioButton radioButton;
     private TextView textView;
-    private TextView valueTextView;
+    public TextView valueTextView;
 
     public RadioButtonCell(Context context) {
         this(context, false);

@@ -1,16 +1,20 @@
 package org.telegram.ui.Components;
 
-import org.telegram.tgnet.RequestDelegate;
-import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC$TL_error;
+import org.telegram.ui.ActionBar.AlertDialog;
+import org.telegram.ui.ActionBar.BaseFragment;
 
-public final /* synthetic */ class AlertsCreator$$ExternalSyntheticLambda89 implements RequestDelegate {
-    public static final /* synthetic */ AlertsCreator$$ExternalSyntheticLambda89 INSTANCE = new AlertsCreator$$ExternalSyntheticLambda89();
+public final /* synthetic */ class AlertsCreator$$ExternalSyntheticLambda89 implements Runnable {
+    public final /* synthetic */ EditTextBoldCursor f$0;
+    public final /* synthetic */ AlertDialog f$1;
+    public final /* synthetic */ BaseFragment f$2;
 
-    private /* synthetic */ AlertsCreator$$ExternalSyntheticLambda89() {
+    public /* synthetic */ AlertsCreator$$ExternalSyntheticLambda89(EditTextBoldCursor editTextBoldCursor, AlertDialog alertDialog, BaseFragment baseFragment) {
+        this.f$0 = editTextBoldCursor;
+        this.f$1 = alertDialog;
+        this.f$2 = baseFragment;
     }
 
-    public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        AlertsCreator.lambda$sendReport$66(tLObject, tLRPC$TL_error);
+    public final void run() {
+        AlertsCreator.processCreate(this.f$0, this.f$1, this.f$2);
     }
 }

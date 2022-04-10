@@ -3,13 +3,13 @@ package j$.wrappers;
 import j$.util.CLASSNAMEa;
 import j$.util.Optional;
 import j$.util.function.A;
-import j$.util.function.B;
 import j$.util.function.BiConsumer;
 import j$.util.function.BiFunction;
-import j$.util.function.CLASSNAMEb;
 import j$.util.function.Consumer;
 import j$.util.function.Function;
 import j$.util.function.Predicate;
+import j$.util.function.ToIntFunction;
+import j$.util.function.b;
 import j$.util.function.m;
 import j$.util.function.y;
 import j$.util.function.z;
@@ -36,7 +36,7 @@ public final /* synthetic */ class C$r8$wrapper$java$util$stream$Stream$VWRP imp
         return stream instanceof R0 ? ((R0) stream).a : new C$r8$wrapper$java$util$stream$Stream$VWRP(stream);
     }
 
-    public /* synthetic */ Object B(Object obj, BiFunction biFunction, CLASSNAMEb bVar) {
+    public /* synthetic */ Object B(Object obj, BiFunction biFunction, b bVar) {
         return this.a.reduce(obj, CLASSNAMEt.a(biFunction), CLASSNAMEv.a(bVar));
     }
 
@@ -104,8 +104,8 @@ public final /* synthetic */ class C$r8$wrapper$java$util$stream$Stream$VWRP imp
         this.a.forEach(CLASSNAMEx.a(consumer));
     }
 
-    public /* synthetic */ CLASSNAMEf1 g0(B b) {
-        return P0.n0(this.a.mapToLong(G0.a(b)));
+    public /* synthetic */ CLASSNAMEf1 g0(A a2) {
+        return P0.n0(this.a.mapToLong(G0.a(a2)));
     }
 
     public /* synthetic */ Object i(y yVar, BiConsumer biConsumer, BiConsumer biConsumer2) {
@@ -132,11 +132,11 @@ public final /* synthetic */ class C$r8$wrapper$java$util$stream$Stream$VWRP imp
         return convert(this.a.limit(j));
     }
 
-    public /* synthetic */ M0 m(A a2) {
-        return N0.n0(this.a.mapToInt(E0.a(a2)));
+    public /* synthetic */ M0 m(ToIntFunction toIntFunction) {
+        return N0.n0(this.a.mapToInt(E0.a(toIntFunction)));
     }
 
-    public /* synthetic */ Object m0(Object obj, CLASSNAMEb bVar) {
+    public /* synthetic */ Object m0(Object obj, b bVar) {
         return this.a.reduce(obj, CLASSNAMEv.a(bVar));
     }
 
@@ -184,7 +184,7 @@ public final /* synthetic */ class C$r8$wrapper$java$util$stream$Stream$VWRP imp
         return CLASSNAMEg.a(this.a.spliterator());
     }
 
-    public /* synthetic */ Optional t(CLASSNAMEb bVar) {
+    public /* synthetic */ Optional t(b bVar) {
         return CLASSNAMEa.p(this.a.reduce(CLASSNAMEv.a(bVar)));
     }
 

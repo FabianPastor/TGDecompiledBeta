@@ -1,16 +1,15 @@
 package j$.wrappers;
 
-import j$.util.function.A;
-import java.util.function.ToIntFunction;
+import j$.util.function.ToIntFunction;
 
-public final /* synthetic */ class D0 implements A {
-    final /* synthetic */ ToIntFunction a;
+public final /* synthetic */ class D0 implements ToIntFunction {
+    final /* synthetic */ java.util.function.ToIntFunction a;
 
-    private /* synthetic */ D0(ToIntFunction toIntFunction) {
+    private /* synthetic */ D0(java.util.function.ToIntFunction toIntFunction) {
         this.a = toIntFunction;
     }
 
-    public static /* synthetic */ A a(ToIntFunction toIntFunction) {
+    public static /* synthetic */ ToIntFunction a(java.util.function.ToIntFunction toIntFunction) {
         if (toIntFunction == null) {
             return null;
         }

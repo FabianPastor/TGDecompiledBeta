@@ -1,21 +1,17 @@
 package org.telegram.ui;
 
 import android.view.View;
-import android.widget.FrameLayout;
-import org.telegram.ui.Components.ChatActivityEnterTopView;
 
 public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda81 implements View.OnClickListener {
     public final /* synthetic */ ChatActivity f$0;
-    public final /* synthetic */ ChatActivityEnterTopView.EditViewButton f$1;
-    public final /* synthetic */ FrameLayout f$2;
+    public final /* synthetic */ int f$1;
 
-    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda81(ChatActivity chatActivity, ChatActivityEnterTopView.EditViewButton editViewButton, FrameLayout frameLayout) {
+    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda81(ChatActivity chatActivity, int i) {
         this.f$0 = chatActivity;
-        this.f$1 = editViewButton;
-        this.f$2 = frameLayout;
+        this.f$1 = i;
     }
 
     public final void onClick(View view) {
-        this.f$0.lambda$createView$58(this.f$1, this.f$2, view);
+        this.f$0.lambda$createView$16(this.f$1, view);
     }
 }

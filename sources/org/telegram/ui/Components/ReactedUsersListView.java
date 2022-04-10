@@ -16,7 +16,7 @@ import android.widget.FrameLayout;
 import android.widget.TextView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import com.google.android.gms.internal.mlkit_language_id.zzdp$$ExternalSyntheticBackport0;
+import j$.util.Comparator$CC;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
@@ -234,7 +234,7 @@ public class ReactedUsersListView extends FrameLayout {
                 this.peerReactionMap.put(peerId, tLRPC$TL_messages_messageReactionsList.reactions.get(i));
             }
             if (this.onlySeenNow) {
-                Collections.sort(this.userReactions, ReactedUsersListView$$ExternalSyntheticLambda3.INSTANCE);
+                Collections.sort(this.userReactions, Comparator$CC.comparingInt(ReactedUsersListView$$ExternalSyntheticLambda3.INSTANCE));
             }
             if (this.onlySeenNow) {
                 this.onlySeenNow = false;
@@ -265,13 +265,8 @@ public class ReactedUsersListView extends FrameLayout {
     }
 
     /* access modifiers changed from: private */
-    public static /* synthetic */ int lambda$load$1(TLRPC$TL_messagePeerReaction tLRPC$TL_messagePeerReaction, TLRPC$TL_messagePeerReaction tLRPC$TL_messagePeerReaction2) {
-        int i = 1;
-        int i2 = tLRPC$TL_messagePeerReaction.reaction != null ? 1 : 0;
-        if (tLRPC$TL_messagePeerReaction2.reaction == null) {
-            i = 0;
-        }
-        return zzdp$$ExternalSyntheticBackport0.m(i2, i);
+    public static /* synthetic */ int lambda$load$1(TLRPC$TL_messagePeerReaction tLRPC$TL_messagePeerReaction) {
+        return tLRPC$TL_messagePeerReaction.reaction != null ? 0 : 1;
     }
 
     /* access modifiers changed from: private */

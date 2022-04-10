@@ -1567,7 +1567,8 @@ public class FilterTabsView extends FrameLayout {
         this.itemAnimator = r32;
         r32.setDelayAnimations(false);
         this.listView.setItemAnimator(this.itemAnimator);
-        this.listView.setSelectorType(7);
+        this.listView.setSelectorType(8);
+        this.listView.setSelectorRadius(6);
         this.listView.setSelectorDrawableColor(Theme.getColor(this.selectorColorKey));
         RecyclerListView recyclerListView = this.listView;
         AnonymousClass5 r33 = new LinearLayoutManager(context, 0, false) {

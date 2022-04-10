@@ -407,10 +407,14 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
         AnonymousClass6 r14 = new TextView(context2) {
             public void draw(Canvas canvas) {
                 super.draw(canvas);
+                int dp = AndroidUtilities.dp(1.0f);
                 RectF rectF = AndroidUtilities.rectTmp;
-                rectF.set(0.0f, 0.0f, (float) getWidth(), (float) getHeight());
-                FragmentContextView.this.joinButtonFlicker.draw(canvas, rectF, (float) AndroidUtilities.dp(4.0f));
-                invalidate();
+                float f = (float) dp;
+                rectF.set(f, f, (float) (getWidth() - dp), (float) (getHeight() - dp));
+                FragmentContextView.this.joinButtonFlicker.draw(canvas, rectF, (float) AndroidUtilities.dp(16.0f));
+                if (FragmentContextView.this.joinButtonFlicker.getProgress() < 1.0f && !FragmentContextView.this.joinButtonFlicker.repeatEnabled) {
+                    invalidate();
+                }
             }
 
             /* access modifiers changed from: protected */
@@ -422,7 +426,7 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
         this.joinButton = r14;
         r14.setText(LocaleController.getString("VoipChatJoin", NUM));
         this.joinButton.setTextColor(getThemedColor("featuredStickers_buttonText"));
-        this.joinButton.setBackground(Theme.createSimpleSelectorRoundRectDrawable(AndroidUtilities.dp(4.0f), getThemedColor("featuredStickers_addButton"), getThemedColor("featuredStickers_addButtonPressed")));
+        this.joinButton.setBackground(Theme.createSimpleSelectorRoundRectDrawable(AndroidUtilities.dp(16.0f), getThemedColor("featuredStickers_addButton"), getThemedColor("featuredStickers_addButtonPressed")));
         this.joinButton.setTextSize(1, 14.0f);
         this.joinButton.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         this.joinButton.setGravity(17);
@@ -430,9 +434,10 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
         addView(this.joinButton, LayoutHelper.createFrame(-2, 28.0f, 53, 0.0f, 10.0f, 14.0f, 0.0f));
         this.joinButton.setOnClickListener(new FragmentContextView$$ExternalSyntheticLambda2(this));
         if (!z2) {
+            ActionBarMenuItem actionBarMenuItem = r1;
             i = 36;
             f = 14.0f;
-            ActionBarMenuItem actionBarMenuItem = new ActionBarMenuItem(context, (ActionBarMenu) null, 0, getThemedColor("dialogTextBlack"), resourcesProvider2);
+            ActionBarMenuItem actionBarMenuItem2 = new ActionBarMenuItem(context, (ActionBarMenu) null, 0, getThemedColor("dialogTextBlack"), resourcesProvider2);
             this.playbackSpeedButton = actionBarMenuItem;
             actionBarMenuItem.setLongClickEnabled(false);
             this.playbackSpeedButton.setShowSubmenuByMove(false);
@@ -863,7 +868,7 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
             LocationActivity locationActivity = new LocationActivity(2);
             locationActivity.setMessageObject(sharingLocationInfo.messageObject);
             locationActivity.setDelegate(new FragmentContextView$$ExternalSyntheticLambda13(sharingLocationInfo, sharingLocationInfo.messageObject.getDialogId()));
-            launchActivity.lambda$runLinkRequest$47(locationActivity);
+            launchActivity.lambda$runLinkRequest$54(locationActivity);
         }
     }
 
@@ -1029,7 +1034,7 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
             org.telegram.ui.Components.AvatarsImageView r7 = r0.avatars
             r9 = 108(0x6c, float:1.51E-43)
             int r10 = r19.getStyleHeight()
-            android.widget.FrameLayout$LayoutParams r9 = org.telegram.ui.Components.LayoutHelper.createFrame(r9, r10, r8)
+            android.widget.FrameLayout$LayoutParams r9 = org.telegram.ui.Components.LayoutHelper.createFrame((int) r9, (int) r10, (int) r8)
             r7.setLayoutParams(r9)
         L_0x0050:
             android.widget.FrameLayout r7 = r0.frameLayout
@@ -2409,7 +2414,7 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
             org.telegram.ui.ActionBar.BaseFragment r1 = r0.fragment
             org.telegram.ui.Components.BulletinFactory r1 = org.telegram.ui.Components.BulletinFactory.of(r1)
             r2 = 2131558474(0x7f0d004a, float:1.8742265E38)
-            r3 = 2131626079(0x7f0e085f, float:1.8879384E38)
+            r3 = 2131626138(0x7f0e089a, float:1.8879504E38)
             java.lang.String r4 = "InviteExpired"
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r4, r3)
             org.telegram.ui.Components.Bulletin r1 = r1.createSimpleBulletin(r2, r3)
@@ -2528,14 +2533,14 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
             boolean r6 = org.telegram.messenger.ChatObject.isChannelOrGiga(r6)
             if (r6 == 0) goto L_0x0237
             org.telegram.ui.Components.AudioPlayerAlert$ClippingTextViewSwitcher r6 = r0.titleTextView
-            r9 = 2131628647(0x7f0e1267, float:1.8884593E38)
+            r9 = 2131628737(0x7f0e12c1, float:1.8884775E38)
             java.lang.String r11 = "VoipChannelScheduledVoiceChat"
             java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r11, r9)
             r6.setText(r9, r5)
             goto L_0x0245
         L_0x0237:
             org.telegram.ui.Components.AudioPlayerAlert$ClippingTextViewSwitcher r6 = r0.titleTextView
-            r9 = 2131628757(0x7f0e12d5, float:1.8884816E38)
+            r9 = 2131628847(0x7f0e132f, float:1.8884998E38)
             java.lang.String r11 = "VoipGroupScheduledVoiceChat"
             java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r11, r9)
             r6.setText(r9, r5)
@@ -2558,7 +2563,7 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
             r9.setVisibility(r5)
             org.telegram.tgnet.TLRPC$GroupCall r9 = r4.call
             boolean r9 = r9.rtmp_stream
-            r11 = 2131628661(0x7f0e1275, float:1.888462E38)
+            r11 = 2131628751(0x7f0e12cf, float:1.8884804E38)
             if (r9 == 0) goto L_0x0279
             org.telegram.ui.Components.AudioPlayerAlert$ClippingTextViewSwitcher r6 = r0.titleTextView
             java.lang.String r9 = org.telegram.messenger.LocaleController.getString((int) r11)
@@ -2574,7 +2579,7 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
             goto L_0x0299
         L_0x028b:
             org.telegram.ui.Components.AudioPlayerAlert$ClippingTextViewSwitcher r6 = r0.titleTextView
-            r9 = 2131628791(0x7f0e12f7, float:1.8884885E38)
+            r9 = 2131628881(0x7f0e1351, float:1.8885067E38)
             java.lang.String r11 = "VoipGroupVoiceChat"
             java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r11, r9)
             r6.setText(r9, r5)
@@ -2585,10 +2590,10 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
             org.telegram.ui.Components.AudioPlayerAlert$ClippingTextViewSwitcher r6 = r0.subtitleTextView
             boolean r4 = r4.rtmp_stream
             if (r4 == 0) goto L_0x02a9
-            r4 = 2131628589(0x7f0e122d, float:1.8884475E38)
+            r4 = 2131628679(0x7f0e1287, float:1.8884657E38)
             goto L_0x02ac
         L_0x02a9:
-            r4 = 2131626383(0x7f0e098f, float:1.888E38)
+            r4 = 2131626442(0x7f0e09ca, float:1.888012E38)
         L_0x02ac:
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString((int) r4)
             r6.setText(r4, r5)
@@ -2737,6 +2742,7 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
     /* access modifiers changed from: private */
     public /* synthetic */ void lambda$startJoinFlickerAnimation$12() {
         this.joinButtonFlicker.setProgress(0.0f);
+        this.joinButton.invalidate();
     }
 
     private void updateAvatars(boolean z) {

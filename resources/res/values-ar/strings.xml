@@ -3983,7 +3983,6 @@
     <string name="UserRestrictionsCanDo">ما هي صلاحيات هذا المستخدم؟</string>
     <string name="UserRestrictionsChangeInfo">تغيير معلومات المحادثة</string>
     <string name="UserRestrictionsCustom">مخصصة</string>
-    <string name="UserRestrictionsDisabled">تم تعطيل هذا الخيار لجميع الأعضاء في صلاحيات المجموعة.</string>
     <string name="UserRestrictionsDuration">المدة</string>
     <string name="UserRestrictionsEmbedLinks">معاينة للروابط</string>
     <string name="UserRestrictionsInviteUsers">إضافة مستخدمين</string>

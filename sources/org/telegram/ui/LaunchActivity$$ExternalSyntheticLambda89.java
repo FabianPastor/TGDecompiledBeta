@@ -1,19 +1,24 @@
 package org.telegram.ui;
 
-import java.util.HashMap;
-import org.telegram.tgnet.TLRPC$MessageMedia;
-import org.telegram.ui.LocationActivity;
+import android.view.View;
+import org.telegram.ui.Components.RecyclerListView;
 
-public final /* synthetic */ class LaunchActivity$$ExternalSyntheticLambda89 implements LocationActivity.LocationActivityDelegate {
-    public final /* synthetic */ HashMap f$0;
-    public final /* synthetic */ int f$1;
+public final /* synthetic */ class LaunchActivity$$ExternalSyntheticLambda89 implements RecyclerListView.OnItemClickListenerExtended {
+    public final /* synthetic */ LaunchActivity f$0;
 
-    public /* synthetic */ LaunchActivity$$ExternalSyntheticLambda89(HashMap hashMap, int i) {
-        this.f$0 = hashMap;
-        this.f$1 = i;
+    public /* synthetic */ LaunchActivity$$ExternalSyntheticLambda89(LaunchActivity launchActivity) {
+        this.f$0 = launchActivity;
     }
 
-    public final void didSelectLocation(TLRPC$MessageMedia tLRPC$MessageMedia, int i, boolean z, int i2) {
-        LaunchActivity.lambda$didReceivedNotification$71(this.f$0, this.f$1, tLRPC$MessageMedia, i, z, i2);
+    public /* synthetic */ boolean hasDoubleTap(View view, int i) {
+        return RecyclerListView.OnItemClickListenerExtended.CC.$default$hasDoubleTap(this, view, i);
+    }
+
+    public /* synthetic */ void onDoubleTap(View view, int i, float f, float f2) {
+        RecyclerListView.OnItemClickListenerExtended.CC.$default$onDoubleTap(this, view, i, f, f2);
+    }
+
+    public final void onItemClick(View view, int i, float f, float f2) {
+        this.f$0.lambda$onCreate$2(view, i, f, f2);
     }
 }

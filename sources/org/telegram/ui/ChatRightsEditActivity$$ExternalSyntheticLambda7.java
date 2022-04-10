@@ -3,12 +3,13 @@ package org.telegram.ui;
 import android.content.DialogInterface;
 
 public final /* synthetic */ class ChatRightsEditActivity$$ExternalSyntheticLambda7 implements DialogInterface.OnClickListener {
-    public static final /* synthetic */ ChatRightsEditActivity$$ExternalSyntheticLambda7 INSTANCE = new ChatRightsEditActivity$$ExternalSyntheticLambda7();
+    public final /* synthetic */ ChatRightsEditActivity f$0;
 
-    private /* synthetic */ ChatRightsEditActivity$$ExternalSyntheticLambda7() {
+    public /* synthetic */ ChatRightsEditActivity$$ExternalSyntheticLambda7(ChatRightsEditActivity chatRightsEditActivity) {
+        this.f$0 = chatRightsEditActivity;
     }
 
     public final void onClick(DialogInterface dialogInterface, int i) {
-        ChatRightsEditActivity.lambda$createView$3(dialogInterface, i);
+        this.f$0.lambda$initTransfer$10(dialogInterface, i);
     }
 }

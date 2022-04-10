@@ -220,7 +220,7 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
             r2.setBrush(r5)
             org.telegram.ui.Components.Paint.RenderView r2 = r0.renderView
             r5 = 51
-            android.widget.FrameLayout$LayoutParams r10 = org.telegram.ui.Components.LayoutHelper.createFrame(r6, r6, r5)
+            android.widget.FrameLayout$LayoutParams r10 = org.telegram.ui.Components.LayoutHelper.createFrame((int) r6, (int) r6, (int) r5)
             r0.addView(r2, r10)
             org.telegram.ui.Components.Paint.Views.EntitiesContainerView r2 = new org.telegram.ui.Components.Paint.Views.EntitiesContainerView
             org.telegram.ui.Components.PhotoPaintView$2 r10 = new org.telegram.ui.Components.PhotoPaintView$2
@@ -273,7 +273,7 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
             android.widget.FrameLayout r2 = r0.toolsView
             r10 = 48
             r11 = 83
-            android.widget.FrameLayout$LayoutParams r10 = org.telegram.ui.Components.LayoutHelper.createFrame(r6, r10, r11)
+            android.widget.FrameLayout$LayoutParams r10 = org.telegram.ui.Components.LayoutHelper.createFrame((int) r6, (int) r10, (int) r11)
             r0.addView(r2, r10)
             android.widget.TextView r2 = new android.widget.TextView
             r2.<init>(r1)
@@ -296,7 +296,7 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
             r2.setPadding(r14, r7, r15, r7)
             android.widget.TextView r2 = r0.cancelTextView
             java.lang.String r14 = "Cancel"
-            r15 = 2131624707(0x7f0e0303, float:1.8876601E38)
+            r15 = 2131624747(0x7f0e032b, float:1.8876682E38)
             java.lang.String r14 = org.telegram.messenger.LocaleController.getString(r14, r15)
             java.lang.String r14 = r14.toUpperCase()
             r2.setText(r14)
@@ -307,7 +307,7 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
             android.widget.FrameLayout r2 = r0.toolsView
             android.widget.TextView r15 = r0.cancelTextView
             r4 = -2
-            android.widget.FrameLayout$LayoutParams r5 = org.telegram.ui.Components.LayoutHelper.createFrame(r4, r6, r5)
+            android.widget.FrameLayout$LayoutParams r5 = org.telegram.ui.Components.LayoutHelper.createFrame((int) r4, (int) r6, (int) r5)
             r2.addView(r15, r5)
             android.widget.TextView r2 = new android.widget.TextView
             r2.<init>(r1)
@@ -328,7 +328,7 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
             r2.setPadding(r5, r7, r10, r7)
             android.widget.TextView r2 = r0.doneTextView
             java.lang.String r5 = "Done"
-            r10 = 2131625362(0x7f0e0592, float:1.887793E38)
+            r10 = 2131625417(0x7f0e05c9, float:1.8878041E38)
             java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r5, r10)
             java.lang.String r5 = r5.toUpperCase()
             r2.setText(r5)
@@ -338,7 +338,7 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
             android.widget.FrameLayout r2 = r0.toolsView
             android.widget.TextView r5 = r0.doneTextView
             r10 = 53
-            android.widget.FrameLayout$LayoutParams r4 = org.telegram.ui.Components.LayoutHelper.createFrame(r4, r6, r10)
+            android.widget.FrameLayout$LayoutParams r4 = org.telegram.ui.Components.LayoutHelper.createFrame((int) r4, (int) r6, (int) r10)
             r2.addView(r5, r4)
             android.widget.ImageView r2 = new android.widget.ImageView
             r2.<init>(r1)
@@ -346,7 +346,7 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
             android.widget.ImageView$ScaleType r4 = android.widget.ImageView.ScaleType.CENTER
             r2.setScaleType(r4)
             android.widget.ImageView r2 = r0.paintButton
-            r4 = 2131165979(0x7var_b, float:1.794619E38)
+            r4 = 2131166003(0x7var_, float:1.794624E38)
             r2.setImageResource(r4)
             android.widget.ImageView r2 = r0.paintButton
             r4 = 1090519039(0x40ffffff, float:7.9999995)
@@ -371,13 +371,13 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
             r2.<init>(r1)
             android.widget.ImageView$ScaleType r5 = android.widget.ImageView.ScaleType.CENTER
             r2.setScaleType(r5)
-            r5 = 2131165983(0x7var_f, float:1.7946199E38)
+            r5 = 2131166007(0x7var_, float:1.7946247E38)
             r2.setImageResource(r5)
             android.graphics.drawable.Drawable r5 = org.telegram.ui.ActionBar.Theme.createSelectorDrawable(r4)
             r2.setBackgroundDrawable(r5)
             android.widget.FrameLayout r5 = r0.toolsView
             r10 = 54
-            android.widget.FrameLayout$LayoutParams r6 = org.telegram.ui.Components.LayoutHelper.createFrame(r10, r6, r11)
+            android.widget.FrameLayout$LayoutParams r6 = org.telegram.ui.Components.LayoutHelper.createFrame((int) r10, (int) r6, (int) r11)
             r5.addView(r2, r6)
             org.telegram.ui.Components.PhotoPaintView$$ExternalSyntheticLambda2 r5 = new org.telegram.ui.Components.PhotoPaintView$$ExternalSyntheticLambda2
             r5.<init>(r0)
@@ -386,7 +386,7 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
             r2.<init>(r1)
             android.widget.ImageView$ScaleType r1 = android.widget.ImageView.ScaleType.CENTER
             r2.setScaleType(r1)
-            r1 = 2131165981(0x7var_d, float:1.7946194E38)
+            r1 = 2131166005(0x7var_, float:1.7946243E38)
             r2.setImageResource(r1)
             android.graphics.drawable.Drawable r1 = org.telegram.ui.ActionBar.Theme.createSelectorDrawable(r4)
             r2.setBackgroundDrawable(r1)
@@ -677,16 +677,21 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
 
     public Bitmap getBitmap(ArrayList<VideoEditedInfo.MediaEntity> arrayList, Bitmap[] bitmapArr) {
         int i;
+        int i2;
+        boolean z;
+        Canvas canvas;
+        int i3;
+        PhotoPaintView photoPaintView = this;
         ArrayList<VideoEditedInfo.MediaEntity> arrayList2 = arrayList;
-        Bitmap resultBitmap = this.renderView.getResultBitmap();
-        this.lcm = BigInteger.ONE;
-        if (resultBitmap != null && this.entitiesView.entitiesCount() > 0) {
-            int childCount = this.entitiesView.getChildCount();
+        Bitmap resultBitmap = photoPaintView.renderView.getResultBitmap();
+        photoPaintView.lcm = BigInteger.ONE;
+        if (resultBitmap != null && photoPaintView.entitiesView.entitiesCount() > 0) {
+            int childCount = photoPaintView.entitiesView.getChildCount();
             byte b = 0;
-            Canvas canvas = null;
-            int i2 = 0;
-            while (i2 < childCount) {
-                View childAt = this.entitiesView.getChildAt(i2);
+            Canvas canvas2 = null;
+            int i4 = 0;
+            while (i4 < childCount) {
+                View childAt = photoPaintView.entitiesView.getChildAt(i4);
                 if (childAt instanceof EntityView) {
                     EntityView entityView = (EntityView) childAt;
                     Point position = entityView.getPosition();
@@ -698,12 +703,13 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
                             mediaEntity.text = textPaintView.getText();
                             int type = textPaintView.getType();
                             if (type == 0) {
-                                mediaEntity.subType = (byte) (1 | mediaEntity.subType);
+                                mediaEntity.subType = (byte) (mediaEntity.subType | 1);
                             } else if (type == 2) {
                                 mediaEntity.subType = (byte) (mediaEntity.subType | 4);
                             }
                             mediaEntity.color = textPaintView.getSwatch().color;
                             mediaEntity.fontSize = textPaintView.getTextSize();
+                            z = false;
                         } else if (entityView instanceof StickerView) {
                             mediaEntity.type = b;
                             StickerView stickerView = (StickerView) entityView;
@@ -714,13 +720,17 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
                             mediaEntity.parentObject = stickerView.getParentObject();
                             TLRPC$Document sticker = stickerView.getSticker();
                             mediaEntity.text = FileLoader.getPathToAttach(sticker, true).getAbsolutePath();
-                            if (MessageObject.isAnimatedStickerDocument(sticker, true)) {
-                                mediaEntity.subType = (byte) (mediaEntity.subType | 1);
-                                long duration = stickerView.getDuration();
+                            if (MessageObject.isAnimatedStickerDocument(sticker, true) || MessageObject.isVideoStickerDocument(sticker)) {
+                                boolean isAnimatedStickerDocument = MessageObject.isAnimatedStickerDocument(sticker, true);
+                                mediaEntity.subType = (byte) (mediaEntity.subType | (isAnimatedStickerDocument ? (byte) 1 : 4));
+                                long duration = isAnimatedStickerDocument ? stickerView.getDuration() : 5000;
                                 if (duration != 0) {
                                     BigInteger valueOf = BigInteger.valueOf(duration);
-                                    this.lcm = this.lcm.multiply(valueOf).divide(this.lcm.gcd(valueOf));
+                                    photoPaintView.lcm = photoPaintView.lcm.multiply(valueOf).divide(photoPaintView.lcm.gcd(valueOf));
                                 }
+                                z = true;
+                            } else {
+                                z = false;
                             }
                             if (stickerView.isMirrored()) {
                                 mediaEntity.subType = (byte) (mediaEntity.subType | 2);
@@ -733,57 +743,78 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
                         float y = childAt.getY();
                         mediaEntity.viewWidth = childAt.getWidth();
                         mediaEntity.viewHeight = childAt.getHeight();
-                        mediaEntity.width = (((float) childAt.getWidth()) * scaleX) / ((float) this.entitiesView.getMeasuredWidth());
-                        mediaEntity.height = (((float) childAt.getHeight()) * scaleY) / ((float) this.entitiesView.getMeasuredHeight());
-                        mediaEntity.x = (((((float) childAt.getWidth()) * (1.0f - scaleX)) / 2.0f) + x) / ((float) this.entitiesView.getMeasuredWidth());
-                        mediaEntity.y = (((((float) childAt.getHeight()) * (1.0f - scaleY)) / 2.0f) + y) / ((float) this.entitiesView.getMeasuredHeight());
-                        i = i2;
+                        mediaEntity.width = (((float) childAt.getWidth()) * scaleX) / ((float) photoPaintView.entitiesView.getMeasuredWidth());
+                        mediaEntity.height = (((float) childAt.getHeight()) * scaleY) / ((float) photoPaintView.entitiesView.getMeasuredHeight());
+                        mediaEntity.x = (((((float) childAt.getWidth()) * (1.0f - scaleX)) / 2.0f) + x) / ((float) photoPaintView.entitiesView.getMeasuredWidth());
+                        mediaEntity.y = (y + ((((float) childAt.getHeight()) * (1.0f - scaleY)) / 2.0f)) / ((float) photoPaintView.entitiesView.getMeasuredHeight());
+                        i2 = i4;
                         double d = (double) (-childAt.getRotation());
                         Double.isNaN(d);
                         mediaEntity.rotation = (float) (d * 0.017453292519943295d);
-                        mediaEntity.textViewX = (x + ((float) (childAt.getWidth() / 2))) / ((float) this.entitiesView.getMeasuredWidth());
-                        mediaEntity.textViewY = (y + ((float) (childAt.getHeight() / 2))) / ((float) this.entitiesView.getMeasuredHeight());
-                        mediaEntity.textViewWidth = ((float) mediaEntity.viewWidth) / ((float) this.entitiesView.getMeasuredWidth());
-                        mediaEntity.textViewHeight = ((float) mediaEntity.viewHeight) / ((float) this.entitiesView.getMeasuredHeight());
+                        mediaEntity.textViewX = (x + ((float) (childAt.getWidth() / 2))) / ((float) photoPaintView.entitiesView.getMeasuredWidth());
+                        mediaEntity.textViewY = (y + ((float) (childAt.getHeight() / 2))) / ((float) photoPaintView.entitiesView.getMeasuredHeight());
+                        mediaEntity.textViewWidth = ((float) mediaEntity.viewWidth) / ((float) photoPaintView.entitiesView.getMeasuredWidth());
+                        mediaEntity.textViewHeight = ((float) mediaEntity.viewHeight) / ((float) photoPaintView.entitiesView.getMeasuredHeight());
                         mediaEntity.scale = scaleX;
                         if (bitmapArr[0] == null) {
                             bitmapArr[0] = Bitmap.createBitmap(resultBitmap.getWidth(), resultBitmap.getHeight(), resultBitmap.getConfig());
-                            canvas = new Canvas(bitmapArr[0]);
-                            canvas.drawBitmap(resultBitmap, 0.0f, 0.0f, (Paint) null);
+                            canvas2 = new Canvas(bitmapArr[0]);
+                            canvas2.drawBitmap(resultBitmap, 0.0f, 0.0f, (Paint) null);
                         }
+                        canvas = canvas2;
                     } else {
-                        i = i2;
+                        i2 = i4;
+                        canvas = canvas2;
+                        z = false;
                     }
-                    if (canvas == null) {
-                        canvas = new Canvas(resultBitmap);
-                    }
-                    Canvas canvas2 = canvas;
-                    canvas2.save();
-                    canvas2.translate(position.x, position.y);
-                    canvas2.scale(childAt.getScaleX(), childAt.getScaleY());
-                    canvas2.rotate(childAt.getRotation());
-                    canvas2.translate((float) ((-entityView.getWidth()) / 2), (float) ((-entityView.getHeight()) / 2));
-                    if (childAt instanceof TextPaintView) {
-                        Bitmap createBitmap = Bitmaps.createBitmap(childAt.getWidth(), childAt.getHeight(), Bitmap.Config.ARGB_8888);
-                        Canvas canvas3 = new Canvas(createBitmap);
-                        childAt.draw(canvas3);
-                        canvas2.drawBitmap(createBitmap, (Rect) null, new Rect(0, 0, createBitmap.getWidth(), createBitmap.getHeight()), (Paint) null);
-                        try {
-                            canvas3.setBitmap((Bitmap) null);
-                        } catch (Exception e) {
-                            FileLog.e((Throwable) e);
+                    Canvas canvas3 = new Canvas(resultBitmap);
+                    int i5 = 0;
+                    while (i5 < 2) {
+                        Canvas canvas4 = i5 == 0 ? canvas3 : canvas;
+                        if (canvas4 == null || (i5 == 0 && z)) {
+                            i3 = childCount;
+                        } else {
+                            canvas4.save();
+                            canvas4.translate(position.x, position.y);
+                            canvas4.scale(childAt.getScaleX(), childAt.getScaleY());
+                            canvas4.rotate(childAt.getRotation());
+                            canvas4.translate((float) ((-entityView.getWidth()) / 2), (float) ((-entityView.getHeight()) / 2));
+                            if (childAt instanceof TextPaintView) {
+                                Bitmap createBitmap = Bitmaps.createBitmap(childAt.getWidth(), childAt.getHeight(), Bitmap.Config.ARGB_8888);
+                                Canvas canvas5 = new Canvas(createBitmap);
+                                childAt.draw(canvas5);
+                                i3 = childCount;
+                                canvas4.drawBitmap(createBitmap, (Rect) null, new Rect(0, 0, createBitmap.getWidth(), createBitmap.getHeight()), (Paint) null);
+                                try {
+                                    canvas5.setBitmap((Bitmap) null);
+                                } catch (Exception e) {
+                                    FileLog.e((Throwable) e);
+                                }
+                                createBitmap.recycle();
+                            } else {
+                                i3 = childCount;
+                                childAt.draw(canvas4);
+                            }
+                            canvas4.restore();
                         }
-                        createBitmap.recycle();
-                    } else {
-                        childAt.draw(canvas2);
+                        i5++;
+                        ArrayList<VideoEditedInfo.MediaEntity> arrayList3 = arrayList;
+                        childCount = i3;
                     }
-                    canvas2.restore();
-                    canvas = canvas2;
-                    i2 = i + 1;
+                    i = childCount;
+                    canvas2 = canvas;
+                    i4 = i2 + 1;
+                    photoPaintView = this;
+                    arrayList2 = arrayList;
+                    childCount = i;
                     b = 0;
                 }
-                i = i2;
-                i2 = i + 1;
+                i2 = i4;
+                i = childCount;
+                i4 = i2 + 1;
+                photoPaintView = this;
+                arrayList2 = arrayList;
+                childCount = i;
                 b = 0;
             }
         }

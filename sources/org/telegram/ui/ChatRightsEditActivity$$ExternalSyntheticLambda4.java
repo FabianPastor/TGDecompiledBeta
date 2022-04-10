@@ -10,6 +10,6 @@ public final /* synthetic */ class ChatRightsEditActivity$$ExternalSyntheticLamb
     }
 
     public final void onClick(DialogInterface dialogInterface, int i) {
-        this.f$0.lambda$initTransfer$10(dialogInterface, i);
+        this.f$0.lambda$checkDiscard$23(dialogInterface, i);
     }
 }

@@ -98,6 +98,14 @@ public class HeaderCell extends FrameLayout {
         super.onMeasure(View.MeasureSpec.makeMeasureSpec(View.MeasureSpec.getSize(i), NUM), View.MeasureSpec.makeMeasureSpec(0, 0));
     }
 
+    public void setTextSize(float f) {
+        this.textView.setTextSize(1, f);
+    }
+
+    public void setTextColor(int i) {
+        this.textView.setTextColor(i);
+    }
+
     public void setText(CharSequence charSequence) {
         this.textView.setText(charSequence);
     }

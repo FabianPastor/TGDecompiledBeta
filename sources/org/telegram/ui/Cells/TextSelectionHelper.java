@@ -2096,13 +2096,12 @@ public abstract class TextSelectionHelper<Cell extends SelectableView> {
             }
         }
         canvas2.drawPath(this.selectionPath, this.selectionPaint);
-        int i8 = (int) (this.cornerRadius * 1.66f);
+        float f2 = this.cornerRadius * 1.9f;
         float primaryHorizontal2 = staticLayout.getPrimaryHorizontal(i);
         float primaryHorizontal3 = staticLayout2.getPrimaryHorizontal(i4);
         if (i3 + 1 < staticLayout2.getLineEnd(lineForOffset) && (lineForOffset == lineForOffset2 || (lineForOffset + 1 == lineForOffset2 && primaryHorizontal2 > primaryHorizontal3))) {
             float lineBottom = (float) staticLayout2.getLineBottom(lineForOffset);
             this.tempPath.reset();
-            float f2 = (float) i8;
             float f3 = primaryHorizontal2 + f2;
             this.tempPath.moveTo(f3, lineBottom);
             this.tempPath.lineTo(primaryHorizontal2, lineBottom);
@@ -2116,14 +2115,13 @@ public abstract class TextSelectionHelper<Cell extends SelectableView> {
         if (staticLayout2.getLineStart(lineForOffset2) < i4) {
             float lineBottom2 = (float) staticLayout2.getLineBottom(lineForOffset2);
             this.tempPath.reset();
-            float f5 = (float) i8;
-            float f6 = primaryHorizontal3 - f5;
-            this.tempPath.moveTo(f6, lineBottom2);
+            float f5 = primaryHorizontal3 - f2;
+            this.tempPath.moveTo(f5, lineBottom2);
             this.tempPath.lineTo(primaryHorizontal3, lineBottom2);
-            float f7 = lineBottom2 - f5;
-            this.tempPath.lineTo(primaryHorizontal3, f7);
+            float f6 = lineBottom2 - f2;
+            this.tempPath.lineTo(primaryHorizontal3, f6);
             RectF rectF2 = AndroidUtilities.rectTmp;
-            rectF2.set(f6, f7, primaryHorizontal3, lineBottom2);
+            rectF2.set(f5, f6, primaryHorizontal3, lineBottom2);
             this.tempPath.arcTo(rectF2, 0.0f, 90.0f);
             canvas2.drawPath(this.tempPath, this.selectionHandlePaint);
         }

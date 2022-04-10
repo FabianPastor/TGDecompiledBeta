@@ -61,6 +61,8 @@ public class AlertDialog extends Dialog implements Drawable.Callback {
     /* access modifiers changed from: private */
     public String dialogButtonColorKey;
     /* access modifiers changed from: private */
+    public float dimAlpha;
+    /* access modifiers changed from: private */
     public boolean dimEnabled;
     private boolean dismissDialogByButtons;
     /* access modifiers changed from: private */
@@ -252,6 +254,7 @@ public class AlertDialog extends Dialog implements Drawable.Callback {
         this.showRunnable = new AlertDialog$$ExternalSyntheticLambda7(this);
         this.itemViews = new ArrayList<>();
         this.dimEnabled = true;
+        this.dimAlpha = 0.6f;
         this.topAnimationAutoRepeat = true;
         this.resourcesProvider = resourcesProvider2;
         this.backgroundPaddings = new Rect();
@@ -1187,7 +1190,7 @@ public class AlertDialog extends Dialog implements Drawable.Callback {
             layoutParams.width = -1;
         } else {
             if (this.dimEnabled) {
-                layoutParams.dimAmount = 0.6f;
+                layoutParams.dimAmount = this.dimAlpha;
                 layoutParams.flags |= 2;
             } else {
                 layoutParams.dimAmount = 0.0f;
@@ -1664,6 +1667,11 @@ public class AlertDialog extends Dialog implements Drawable.Callback {
 
         public Builder setDimEnabled(boolean z) {
             boolean unused = this.alertDialog.dimEnabled = z;
+            return this;
+        }
+
+        public Builder setDimAlpha(float f) {
+            float unused = this.alertDialog.dimAlpha = f;
             return this;
         }
 

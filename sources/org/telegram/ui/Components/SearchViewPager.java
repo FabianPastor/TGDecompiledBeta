@@ -8,6 +8,7 @@ import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.SpannableStringBuilder;
+import android.text.TextUtils;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -184,8 +185,14 @@ public class SearchViewPager extends ViewPagerFixed implements FilteredSearchVie
     }
 
     public void onTextChanged(String str) {
+        View currentView = getCurrentView();
+        boolean z = true;
+        boolean z2 = !this.attached;
+        if (!TextUtils.isEmpty(this.lastSearchString)) {
+            z = z2;
+        }
         this.lastSearchString = str;
-        search(getCurrentView(), getCurrentPosition(), str, !this.attached);
+        search(currentView, getCurrentPosition(), str, z);
     }
 
     /* access modifiers changed from: private */

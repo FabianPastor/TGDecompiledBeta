@@ -159,20 +159,6 @@ public class AnimatedFileDrawable extends BitmapDrawable implements Animatable {
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$new$0() {
-        View view;
-        if (!this.secondParentViews.isEmpty()) {
-            int size = this.secondParentViews.size();
-            for (int i = 0; i < size; i++) {
-                this.secondParentViews.get(i).invalidate();
-            }
-        }
-        if ((this.secondParentViews.isEmpty() || this.invalidateParentViewWithSecond) && (view = this.parentView) != null) {
-            view.invalidate();
-        }
-    }
-
-    /* access modifiers changed from: private */
     public void updateScaleFactor() {
         int i;
         int i2;
@@ -192,7 +178,7 @@ public class AnimatedFileDrawable extends BitmapDrawable implements Animatable {
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$new$1() {
+    public /* synthetic */ void lambda$new$0() {
         View view;
         if (!this.secondParentViews.isEmpty()) {
             int size = this.secondParentViews.size();
@@ -230,7 +216,6 @@ public class AnimatedFileDrawable extends BitmapDrawable implements Animatable {
         this.secondParentViews = new ArrayList<>();
         this.parents = new ArrayList<>();
         this.invalidatePath = true;
-        new AnimatedFileDrawable$$ExternalSyntheticLambda0(this);
         this.uiRunnableNoFrame = new Runnable() {
             public void run() {
                 if (AnimatedFileDrawable.this.destroyWhenDone && AnimatedFileDrawable.this.nativePtr != 0) {
@@ -391,7 +376,7 @@ public class AnimatedFileDrawable extends BitmapDrawable implements Animatable {
                 AndroidUtilities.runOnUIThread(AnimatedFileDrawable.this.uiRunnable);
             }
         };
-        this.mStartTask = new AnimatedFileDrawable$$ExternalSyntheticLambda1(this);
+        this.mStartTask = new AnimatedFileDrawable$$ExternalSyntheticLambda0(this);
         this.path = file;
         this.streamFileSize = j3;
         this.currentAccount = i;
@@ -851,6 +836,10 @@ public class AnimatedFileDrawable extends BitmapDrawable implements Animatable {
         return i == 0 ? AndroidUtilities.dp(100.0f) : i;
     }
 
+    public Bitmap getBackgroundBitmap() {
+        return this.backgroundBitmap;
+    }
+
     public Bitmap getAnimatedBitmap() {
         Bitmap bitmap = this.renderingBitmap;
         if (bitmap != null) {
@@ -961,5 +950,17 @@ public class AnimatedFileDrawable extends BitmapDrawable implements Animatable {
 
     public boolean isRecycled() {
         return this.isRecycled;
+    }
+
+    public Bitmap getNextFrame() {
+        if (this.backgroundBitmap == null) {
+            int[] iArr = this.metaData;
+            float f = this.scaleFactor;
+            this.backgroundBitmap = Bitmap.createBitmap((int) (((float) iArr[0]) * f), (int) (((float) iArr[1]) * f), Bitmap.Config.ARGB_8888);
+        }
+        long j = this.nativePtr;
+        Bitmap bitmap = this.backgroundBitmap;
+        getVideoFrame(j, bitmap, this.metaData, bitmap.getRowBytes(), false, this.startTime, this.endTime);
+        return this.backgroundBitmap;
     }
 }

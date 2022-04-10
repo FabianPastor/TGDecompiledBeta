@@ -1,16 +1,20 @@
 package org.telegram.ui;
 
-import org.telegram.ui.Components.PopupSwipeBackLayout;
-import org.telegram.ui.Components.ReactionsContainerLayout;
+import org.telegram.tgnet.RequestDelegate;
+import org.telegram.tgnet.TLObject;
+import org.telegram.tgnet.TLRPC$TL_error;
+import org.telegram.tgnet.TLRPC$User;
 
-public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda214 implements PopupSwipeBackLayout.OnSwipeBackProgressListener {
-    public final /* synthetic */ ReactionsContainerLayout f$0;
+public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda214 implements RequestDelegate {
+    public final /* synthetic */ ChatActivity f$0;
+    public final /* synthetic */ TLRPC$User f$1;
 
-    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda214(ReactionsContainerLayout reactionsContainerLayout) {
-        this.f$0 = reactionsContainerLayout;
+    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda214(ChatActivity chatActivity, TLRPC$User tLRPC$User) {
+        this.f$0 = chatActivity;
+        this.f$1 = tLRPC$User;
     }
 
-    public final void onSwipeBackProgress(PopupSwipeBackLayout popupSwipeBackLayout, float f, float f2) {
-        ChatActivity.lambda$createMenu$158(this.f$0, popupSwipeBackLayout, f, f2);
+    public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+        this.f$0.lambda$onTransitionAnimationEnd$129(this.f$1, tLObject, tLRPC$TL_error);
     }
 }

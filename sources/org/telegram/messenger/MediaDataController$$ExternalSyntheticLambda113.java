@@ -1,17 +1,22 @@
 package org.telegram.messenger;
 
 import java.util.ArrayList;
-import java.util.Comparator;
-import org.telegram.tgnet.TLRPC$TL_messages_stickerSet;
+import org.telegram.messenger.MediaDataController;
 
-public final /* synthetic */ class MediaDataController$$ExternalSyntheticLambda113 implements Comparator {
-    public final /* synthetic */ ArrayList f$0;
+public final /* synthetic */ class MediaDataController$$ExternalSyntheticLambda113 implements Runnable {
+    public final /* synthetic */ MediaDataController f$0;
+    public final /* synthetic */ String[] f$1;
+    public final /* synthetic */ MediaDataController.KeywordResultCallback f$2;
+    public final /* synthetic */ ArrayList f$3;
 
-    public /* synthetic */ MediaDataController$$ExternalSyntheticLambda113(ArrayList arrayList) {
-        this.f$0 = arrayList;
+    public /* synthetic */ MediaDataController$$ExternalSyntheticLambda113(MediaDataController mediaDataController, String[] strArr, MediaDataController.KeywordResultCallback keywordResultCallback, ArrayList arrayList) {
+        this.f$0 = mediaDataController;
+        this.f$1 = strArr;
+        this.f$2 = keywordResultCallback;
+        this.f$3 = arrayList;
     }
 
-    public final int compare(Object obj, Object obj2) {
-        return MediaDataController.lambda$reorderStickers$25(this.f$0, (TLRPC$TL_messages_stickerSet) obj, (TLRPC$TL_messages_stickerSet) obj2);
+    public final void run() {
+        this.f$0.lambda$getEmojiSuggestions$160(this.f$1, this.f$2, this.f$3);
     }
 }

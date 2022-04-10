@@ -168,7 +168,7 @@ public class InviteMembersBottomSheet extends UsersAlertBase implements Notifica
             org.telegram.ui.Components.UsersAlertBase$SearchField r1 = r7.searchView
             org.telegram.ui.Components.EditTextBoldCursor r1 = r1.searchEditText
             java.lang.String r2 = "SearchForChats"
-            r3 = 2131627807(0x7f0e0f1f, float:1.8882889E38)
+            r3 = 2131627881(0x7f0e0var_, float:1.8883039E38)
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r2, r3)
             r1.setHint(r2)
             android.view.ViewConfiguration r1 = android.view.ViewConfiguration.get(r17)
@@ -254,7 +254,7 @@ public class InviteMembersBottomSheet extends UsersAlertBase implements Notifica
             r4 = 21
             if (r3 >= r4) goto L_0x012d
             android.content.res.Resources r5 = r17.getResources()
-            r6 = 2131165439(0x7var_ff, float:1.7945095E38)
+            r6 = 2131165445(0x7var_, float:1.7945107E38)
             android.graphics.drawable.Drawable r5 = r5.getDrawable(r6)
             android.graphics.drawable.Drawable r5 = r5.mutate()
             android.graphics.PorterDuffColorFilter r6 = new android.graphics.PorterDuffColorFilter
@@ -276,7 +276,7 @@ public class InviteMembersBottomSheet extends UsersAlertBase implements Notifica
             android.graphics.PorterDuff$Mode r5 = android.graphics.PorterDuff.Mode.MULTIPLY
             r1.<init>(r2, r5)
             r0.setColorFilter(r1)
-            r1 = 2131165436(0x7var_fc, float:1.794509E38)
+            r1 = 2131165442(0x7var_, float:1.7945101E38)
             r0.setImageResource(r1)
             r1 = 1082130432(0x40800000, float:4.0)
             if (r3 < r4) goto L_0x01a4
@@ -327,7 +327,7 @@ public class InviteMembersBottomSheet extends UsersAlertBase implements Notifica
             r0.setScaleX(r2)
             r0.setScaleY(r2)
             r0.setAlpha(r2)
-            r2 = 2131626568(0x7f0e0a48, float:1.8880376E38)
+            r2 = 2131626634(0x7f0e0a8a, float:1.888051E38)
             java.lang.String r4 = "Next"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r4, r2)
             r0.setContentDescription(r2)
@@ -1327,7 +1327,7 @@ public class InviteMembersBottomSheet extends UsersAlertBase implements Notifica
             L_0x0172:
                 android.view.View r12 = r12.itemView
                 org.telegram.ui.Cells.GroupCreateSectionCell r12 = (org.telegram.ui.Cells.GroupCreateSectionCell) r12
-                r13 = 2131625904(0x7f0e07b0, float:1.887903E38)
+                r13 = 2131625962(0x7f0e07ea, float:1.8879147E38)
                 java.lang.String r0 = "GlobalSearch"
                 java.lang.String r13 = org.telegram.messenger.LocaleController.getString(r0, r13)
                 r12.setText(r13)

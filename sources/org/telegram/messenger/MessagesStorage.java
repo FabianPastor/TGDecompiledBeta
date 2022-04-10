@@ -115,7 +115,7 @@ import org.telegram.ui.Adapters.DialogsSearchAdapter;
 
 public class MessagesStorage extends BaseController {
     private static volatile MessagesStorage[] Instance = new MessagesStorage[3];
-    private static final int LAST_DB_VERSION = 92;
+    private static final int LAST_DB_VERSION = 93;
     private int archiveUnreadCount;
     private int[][] bots = {new int[2], new int[2]};
     private File cacheFile;
@@ -447,7 +447,8 @@ public class MessagesStorage extends BaseController {
                 this.database.executeFast("CREATE TABLE reaction_mentions(message_id INTEGER, state INTEGER, dialog_id INTEGER, PRIMARY KEY(message_id, dialog_id))").stepThis().dispose();
                 this.database.executeFast("CREATE INDEX IF NOT EXISTS reaction_mentions_did ON reaction_mentions(dialog_id);").stepThis().dispose();
                 this.database.executeFast("CREATE TABLE downloading_documents(data BLOB, hash INTEGER, id INTEGER, state INTEGER, date INTEGER, PRIMARY KEY(hash, id));").stepThis().dispose();
-                this.database.executeFast("PRAGMA user_version = 92").stepThis().dispose();
+                this.database.executeFast("CREATE TABLE attach_menu_bots(data BLOB, hash INTEGER, date INTEGER);").stepThis().dispose();
+                this.database.executeFast("PRAGMA user_version = 93").stepThis().dispose();
                 AndroidUtilities.runOnUIThread(new MessagesStorage$$ExternalSyntheticLambda16(this));
                 loadDialogFilters();
                 loadUnreadMessages();
@@ -483,7 +484,7 @@ public class MessagesStorage extends BaseController {
                     }
                 }
                 queryFinalized.dispose();
-                if (intValue < 92) {
+                if (intValue < 93) {
                     updateDbToLastVersion(intValue);
                 }
                 AndroidUtilities.runOnUIThread(new MessagesStorage$$ExternalSyntheticLambda16(this));
@@ -573,7 +574,7 @@ public class MessagesStorage extends BaseController {
         MessagesStorage messagesStorage = this;
         int i4 = i;
         AndroidUtilities.runOnUIThread(new MessagesStorage$$ExternalSyntheticLambda19(messagesStorage));
-        FileLog.d("MessagesStorage start db migration from " + i4 + " to " + 92);
+        FileLog.d("MessagesStorage start db migration from " + i4 + " to " + 93);
         int i5 = 4;
         if (i4 < 4) {
             messagesStorage.database.executeFast("CREATE TABLE IF NOT EXISTS user_photos(uid INTEGER, id INTEGER, data BLOB, PRIMARY KEY (uid, id))").stepThis().dispose();
@@ -1571,6 +1572,11 @@ public class MessagesStorage extends BaseController {
             messagesStorage.database.executeFast("DROP TABLE IF EXISTS downloading_documents;").stepThis().dispose();
             messagesStorage.database.executeFast("CREATE TABLE downloading_documents(data BLOB, hash INTEGER, id INTEGER, state INTEGER, date INTEGER, PRIMARY KEY(hash, id));").stepThis().dispose();
             messagesStorage.database.executeFast("PRAGMA user_version = 92").stepThis().dispose();
+            i4 = 92;
+        }
+        if (i4 == 92) {
+            messagesStorage.database.executeFast("CREATE TABLE IF NOT EXISTS attach_menu_bots(data BLOB, hash INTEGER, date INTEGER);").stepThis().dispose();
+            messagesStorage.database.executeFast("PRAGMA user_version = 93").stepThis().dispose();
         }
         FileLog.d("MessagesStorage db migration finished");
         AndroidUtilities.runOnUIThread(new MessagesStorage$$ExternalSyntheticLambda8(messagesStorage));
@@ -20794,12 +20800,12 @@ public class MessagesStorage extends BaseController {
     }
 
     /* JADX WARNING: type inference failed for: r6v0 */
-    /* JADX WARNING: type inference failed for: r6v1, types: [boolean, int] */
+    /* JADX WARNING: type inference failed for: r6v1, types: [int, boolean] */
     /* JADX WARNING: type inference failed for: r15v5 */
     /* JADX WARNING: type inference failed for: r15v10 */
     /* JADX WARNING: type inference failed for: r6v24 */
     /* access modifiers changed from: private */
-    /* JADX WARNING: Incorrect type for immutable var: ssa=int, code=?, for r15v2, types: [boolean, int] */
+    /* JADX WARNING: Incorrect type for immutable var: ssa=int, code=?, for r15v2, types: [int, boolean] */
     /* JADX WARNING: Removed duplicated region for block: B:46:0x0109 A[Catch:{ Exception -> 0x0286 }] */
     /* JADX WARNING: Removed duplicated region for block: B:53:0x01d8 A[Catch:{ Exception -> 0x0286 }] */
     /* JADX WARNING: Removed duplicated region for block: B:54:0x01dd A[Catch:{ Exception -> 0x0286 }] */
@@ -21121,12 +21127,12 @@ public class MessagesStorage extends BaseController {
             TLRPC$MessageMedia tLRPC$MessageMedia = tLRPC$Message.media;
             if (tLRPC$MessageMedia instanceof TLRPC$TL_messageMediaUnsupported_old) {
                 if (tLRPC$MessageMedia.bytes.length == 0) {
-                    tLRPC$MessageMedia.bytes = Utilities.intToBytes(139);
+                    tLRPC$MessageMedia.bytes = Utilities.intToBytes(140);
                 }
             } else if (tLRPC$MessageMedia instanceof TLRPC$TL_messageMediaUnsupported) {
                 TLRPC$TL_messageMediaUnsupported_old tLRPC$TL_messageMediaUnsupported_old = new TLRPC$TL_messageMediaUnsupported_old();
                 tLRPC$Message.media = tLRPC$TL_messageMediaUnsupported_old;
-                tLRPC$TL_messageMediaUnsupported_old.bytes = Utilities.intToBytes(139);
+                tLRPC$TL_messageMediaUnsupported_old.bytes = Utilities.intToBytes(140);
                 tLRPC$Message.flags |= 512;
             }
         }
@@ -24543,7 +24549,7 @@ public class MessagesStorage extends BaseController {
             return
         L_0x0021:
             java.lang.String r7 = "SavedMessages"
-            r8 = 2131627778(0x7f0e0var_, float:1.888283E38)
+            r8 = 2131627852(0x7f0e0f4c, float:1.888298E38)
             java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r7, r8)     // Catch:{ Exception -> 0x0654 }
             java.lang.String r7 = r7.toLowerCase()     // Catch:{ Exception -> 0x0654 }
             java.lang.String r8 = "saved messages"
@@ -25337,7 +25343,7 @@ public class MessagesStorage extends BaseController {
     public /* synthetic */ void lambda$updateUnreadReactionsCount$194(int i, long j) {
         try {
             SQLitePreparedStatement executeFast = this.database.executeFast("UPDATE dialogs SET unread_reactions = ? WHERE did = ?");
-            executeFast.bindInteger(1, i);
+            executeFast.bindInteger(1, Math.max(i, 0));
             executeFast.bindLong(2, j);
             executeFast.step();
             executeFast.dispose();

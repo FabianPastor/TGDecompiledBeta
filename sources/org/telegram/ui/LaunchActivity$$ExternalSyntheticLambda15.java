@@ -3,12 +3,13 @@ package org.telegram.ui;
 import android.view.View;
 
 public final /* synthetic */ class LaunchActivity$$ExternalSyntheticLambda15 implements View.OnClickListener {
-    public static final /* synthetic */ LaunchActivity$$ExternalSyntheticLambda15 INSTANCE = new LaunchActivity$$ExternalSyntheticLambda15();
+    public final /* synthetic */ LaunchActivity f$0;
 
-    private /* synthetic */ LaunchActivity$$ExternalSyntheticLambda15() {
+    public /* synthetic */ LaunchActivity$$ExternalSyntheticLambda15(LaunchActivity launchActivity) {
+        this.f$0 = launchActivity;
     }
 
     public final void onClick(View view) {
-        LaunchActivity.lambda$onCreate$2(view);
+        this.f$0.lambda$showLanguageAlertInternal$91(view);
     }
 }

@@ -1,19 +1,14 @@
 package org.telegram.ui;
 
-import android.view.View;
-import org.telegram.ui.ActionBar.Theme;
-import org.telegram.ui.Components.RecyclerListView;
+import org.telegram.ui.Components.NumberPicker;
 
-public final /* synthetic */ class PhotoViewer$$ExternalSyntheticLambda67 implements RecyclerListView.OnItemLongClickListener {
-    public final /* synthetic */ PhotoViewer f$0;
-    public final /* synthetic */ Theme.ResourcesProvider f$1;
+public final /* synthetic */ class PhotoViewer$$ExternalSyntheticLambda67 implements NumberPicker.Formatter {
+    public static final /* synthetic */ PhotoViewer$$ExternalSyntheticLambda67 INSTANCE = new PhotoViewer$$ExternalSyntheticLambda67();
 
-    public /* synthetic */ PhotoViewer$$ExternalSyntheticLambda67(PhotoViewer photoViewer, Theme.ResourcesProvider resourcesProvider) {
-        this.f$0 = photoViewer;
-        this.f$1 = resourcesProvider;
+    private /* synthetic */ PhotoViewer$$ExternalSyntheticLambda67() {
     }
 
-    public final boolean onItemClick(View view, int i) {
-        return this.f$0.lambda$setParentActivity$38(this.f$1, view, i);
+    public final String format(int i) {
+        return PhotoViewer.lambda$setParentActivity$27(i);
     }
 }

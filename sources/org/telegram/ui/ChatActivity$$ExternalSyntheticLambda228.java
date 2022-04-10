@@ -1,23 +1,16 @@
 package org.telegram.ui;
 
-import java.util.ArrayList;
-import org.telegram.tgnet.TLRPC$User;
-import org.telegram.ui.GroupCreateActivity;
+import org.telegram.ui.Components.PopupSwipeBackLayout;
+import org.telegram.ui.Components.ReactionsContainerLayout;
 
-public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda228 implements GroupCreateActivity.ContactsAddActivityDelegate {
-    public final /* synthetic */ ChatActivity f$0;
-    public final /* synthetic */ long f$1;
+public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda228 implements PopupSwipeBackLayout.OnSwipeBackProgressListener {
+    public final /* synthetic */ ReactionsContainerLayout f$0;
 
-    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda228(ChatActivity chatActivity, long j) {
-        this.f$0 = chatActivity;
-        this.f$1 = j;
+    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda228(ReactionsContainerLayout reactionsContainerLayout) {
+        this.f$0 = reactionsContainerLayout;
     }
 
-    public final void didSelectUsers(ArrayList arrayList, int i) {
-        this.f$0.lambda$createView$32(this.f$1, arrayList, i);
-    }
-
-    public /* synthetic */ void needAddBot(TLRPC$User tLRPC$User) {
-        GroupCreateActivity.ContactsAddActivityDelegate.CC.$default$needAddBot(this, tLRPC$User);
+    public final void onSwipeBackProgress(PopupSwipeBackLayout popupSwipeBackLayout, float f, float f2) {
+        ChatActivity.lambda$createMenu$169(this.f$0, popupSwipeBackLayout, f, f2);
     }
 }

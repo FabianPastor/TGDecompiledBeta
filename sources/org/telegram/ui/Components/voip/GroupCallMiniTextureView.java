@@ -1454,7 +1454,7 @@ public class GroupCallMiniTextureView extends FrameLayout implements GroupCallSt
             org.telegram.ui.Components.voip.GroupCallRenderersContainer r1 = r0.parentContainer
             r10 = 51
             r11 = 46
-            android.widget.FrameLayout$LayoutParams r10 = org.telegram.ui.Components.LayoutHelper.createFrame(r11, r11, r10)
+            android.widget.FrameLayout$LayoutParams r10 = org.telegram.ui.Components.LayoutHelper.createFrame((int) r11, (int) r11, (int) r10)
             r1.addView(r0, r10)
             org.telegram.ui.Components.voip.GroupCallRenderersContainer r1 = r0.parentContainer
             r1.attach(r0)

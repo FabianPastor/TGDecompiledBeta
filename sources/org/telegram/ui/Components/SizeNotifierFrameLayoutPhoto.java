@@ -37,6 +37,10 @@ public class SizeNotifierFrameLayoutPhoto extends FrameLayout {
     }
 
     public int getKeyboardHeight() {
+        return this.keyboardHeight;
+    }
+
+    public int measureKeyboardHeight() {
         View rootView = getRootView();
         getWindowVisibleDisplayFrame(this.rect);
         int i = 0;
@@ -58,7 +62,7 @@ public class SizeNotifierFrameLayoutPhoto extends FrameLayout {
 
     public void notifyHeightChanged() {
         if (this.delegate != null) {
-            this.keyboardHeight = getKeyboardHeight();
+            this.keyboardHeight = measureKeyboardHeight();
             Point point = AndroidUtilities.displaySize;
             post(new SizeNotifierFrameLayoutPhoto$$ExternalSyntheticLambda0(this, point.x > point.y));
         }

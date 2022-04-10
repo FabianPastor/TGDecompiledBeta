@@ -1,22 +1,19 @@
 package org.telegram.ui;
 
-import org.telegram.tgnet.RequestDelegate;
-import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC$TL_channels_getParticipants;
-import org.telegram.tgnet.TLRPC$TL_error;
+import org.telegram.ui.ActionBar.ThemeDescription;
 
-public final /* synthetic */ class ProfileActivity$$ExternalSyntheticLambda33 implements RequestDelegate {
+public final /* synthetic */ class ProfileActivity$$ExternalSyntheticLambda33 implements ThemeDescription.ThemeDescriptionDelegate {
     public final /* synthetic */ ProfileActivity f$0;
-    public final /* synthetic */ TLRPC$TL_channels_getParticipants f$1;
-    public final /* synthetic */ int f$2;
 
-    public /* synthetic */ ProfileActivity$$ExternalSyntheticLambda33(ProfileActivity profileActivity, TLRPC$TL_channels_getParticipants tLRPC$TL_channels_getParticipants, int i) {
+    public /* synthetic */ ProfileActivity$$ExternalSyntheticLambda33(ProfileActivity profileActivity) {
         this.f$0 = profileActivity;
-        this.f$1 = tLRPC$TL_channels_getParticipants;
-        this.f$2 = i;
     }
 
-    public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        this.f$0.lambda$getChannelParticipants$25(this.f$1, this.f$2, tLObject, tLRPC$TL_error);
+    public final void didSetColor() {
+        this.f$0.lambda$getThemeDescriptions$36();
+    }
+
+    public /* synthetic */ void onAnimationProgress(float f) {
+        ThemeDescription.ThemeDescriptionDelegate.CC.$default$onAnimationProgress(this, f);
     }
 }

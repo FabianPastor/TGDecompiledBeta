@@ -38,7 +38,6 @@ public class PhotoViewerWebView extends FrameLayout {
     public boolean isYouTube;
     /* access modifiers changed from: private */
     public View pipItem;
-    private PipVideoView pipVideoView;
     /* access modifiers changed from: private */
     public float playbackSpeed;
     /* access modifiers changed from: private */
@@ -190,20 +189,22 @@ public class PhotoViewerWebView extends FrameLayout {
         return this.progressBar.getVisibility() != 0;
     }
 
-    public PipVideoView openInPip() {
-        int i;
+    public boolean openInPip() {
         boolean z = this.isYouTube && "inapp".equals(MessagesController.getInstance(this.currentAccount).youtubePipType);
         if ((!z && !checkInlinePermissions()) || this.progressBar.getVisibility() == 0) {
-            return null;
+            return false;
         }
-        PipVideoView pipVideoView2 = new PipVideoView(z);
-        this.pipVideoView = pipVideoView2;
-        Activity activity = (Activity) getContext();
-        PhotoViewer instance = PhotoViewer.getInstance();
+        if (PipVideoOverlay.isVisible()) {
+            PipVideoOverlay.dismiss();
+            AndroidUtilities.runOnUIThread(new PhotoViewerWebView$$ExternalSyntheticLambda0(this), 300);
+            return true;
+        }
+        WebView webView2 = this.webView;
         TLRPC$WebPage tLRPC$WebPage = this.currentWebpage;
-        int i2 = tLRPC$WebPage.embed_width;
-        pipVideoView2.show(activity, instance, (i2 == 0 || (i = tLRPC$WebPage.embed_height) == 0) ? 1.0f : ((float) i2) / ((float) i), 0, this.webView);
-        return this.pipVideoView;
+        if (PipVideoOverlay.show(z, (Activity) getContext(), webView2, tLRPC$WebPage.embed_width, tLRPC$WebPage.embed_height)) {
+            PipVideoOverlay.setPhotoViewer(PhotoViewer.getInstance());
+        }
+        return true;
     }
 
     public void setPlaybackSpeed(float f) {
@@ -284,7 +285,7 @@ public class PhotoViewerWebView extends FrameLayout {
     }
 
     public void exitFromPip() {
-        if (this.webView != null && this.pipVideoView != null) {
+        if (this.webView != null) {
             if (ApplicationLoader.mainInterfacePaused) {
                 try {
                     getContext().startService(new Intent(ApplicationLoader.applicationContext, BringAppForegroundService.class));
@@ -297,8 +298,7 @@ public class PhotoViewerWebView extends FrameLayout {
                 viewGroup.removeView(this.webView);
             }
             addView(this.webView, 0, LayoutHelper.createFrame(-1, -1, 51));
-            this.pipVideoView.close();
-            this.pipVideoView = null;
+            PipVideoOverlay.dismiss();
         }
     }
 

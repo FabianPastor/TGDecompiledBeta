@@ -14,6 +14,6 @@ public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda81
     }
 
     public final void run() {
-        this.f$0.lambda$updateTimerProc$125(this.f$1, this.f$2);
+        this.f$0.lambda$updateTimerProc$126(this.f$1, this.f$2);
     }
 }

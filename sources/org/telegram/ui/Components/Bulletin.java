@@ -1044,6 +1044,7 @@ public class Bulletin {
             rLottieImageView.setScaleType(ImageView.ScaleType.CENTER);
             addView(rLottieImageView, LayoutHelper.createFrameRelatively(56.0f, 48.0f, 8388627));
             int themedColor = getThemedColor("undo_infoColor");
+            int themedColor2 = getThemedColor("voipgroup_overlayBlue1");
             LinearLayout linearLayout = new LinearLayout(context);
             linearLayout.setOrientation(1);
             addView(linearLayout, LayoutHelper.createFrameRelatively(-2.0f, -2.0f, 8388627, 56.0f, 8.0f, 12.0f, 8.0f));
@@ -1057,6 +1058,7 @@ public class Bulletin {
             TextView textView2 = new TextView(context);
             this.subtitleTextView = textView2;
             textView2.setTextColor(themedColor);
+            textView2.setLinkTextColor(themedColor2);
             textView2.setTypeface(Typeface.SANS_SERIF);
             textView2.setTextSize(1, 13.0f);
             linearLayout.addView(textView2);
@@ -1066,6 +1068,10 @@ public class Bulletin {
         public void onShow() {
             super.onShow();
             this.imageView.playAnimation();
+        }
+
+        public void setAnimation(int i, String... strArr) {
+            setAnimation(i, 32, 32, strArr);
         }
 
         public void setAnimation(int i, int i2, int i3, String... strArr) {

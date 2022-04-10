@@ -354,7 +354,7 @@ public class ThemeEditorView {
                     r7.<init>(r8)
                     r0.circlePaint = r7
                     android.content.res.Resources r7 = r19.getResources()
-                    r9 = 2131165599(0x7var_f, float:1.794542E38)
+                    r9 = 2131165605(0x7var_a5, float:1.7945432E38)
                     android.graphics.drawable.Drawable r7 = r7.getDrawable(r9)
                     android.graphics.drawable.Drawable r7 = r7.mutate()
                     r0.circleDrawable = r7
@@ -377,7 +377,7 @@ public class ThemeEditorView {
                     android.widget.LinearLayout r7 = r0.linearLayout
                     r9 = -2
                     r10 = 49
-                    android.widget.FrameLayout$LayoutParams r9 = org.telegram.ui.Components.LayoutHelper.createFrame(r9, r9, r10)
+                    android.widget.FrameLayout$LayoutParams r9 = org.telegram.ui.Components.LayoutHelper.createFrame((int) r9, (int) r9, (int) r10)
                     r0.addView(r7, r9)
                     r7 = 0
                 L_0x0081:
@@ -1000,7 +1000,7 @@ public class ThemeEditorView {
                 android.animation.AnimatorSet[] r4 = new android.animation.AnimatorSet[r4]
                 r0.shadowAnimation = r4
                 android.content.res.Resources r4 = r18.getResources()
-                r5 = 2131166096(0x7var_, float:1.7946428E38)
+                r5 = 2131166123(0x7var_ab, float:1.7946482E38)
                 android.graphics.drawable.Drawable r4 = r4.getDrawable(r5)
                 android.graphics.drawable.Drawable r4 = r4.mutate()
                 r0.shadowDrawable = r4
@@ -1022,7 +1022,7 @@ public class ThemeEditorView {
                 r0.searchField = r4
                 android.widget.FrameLayout r7 = r0.frameLayout
                 r8 = 51
-                android.widget.FrameLayout$LayoutParams r9 = org.telegram.ui.Components.LayoutHelper.createFrame(r6, r6, r8)
+                android.widget.FrameLayout$LayoutParams r9 = org.telegram.ui.Components.LayoutHelper.createFrame((int) r6, (int) r6, (int) r8)
                 r7.addView(r4, r9)
                 org.telegram.ui.Components.ThemeEditorView$EditorAlert$2 r4 = new org.telegram.ui.Components.ThemeEditorView$EditorAlert$2
                 r4.<init>(r2, r1)
@@ -1047,7 +1047,7 @@ public class ThemeEditorView {
                 r4.setVerticalScrollBarEnabled(r5)
                 android.view.ViewGroup r4 = r0.containerView
                 org.telegram.ui.Components.RecyclerListView r9 = r0.listView
-                android.widget.FrameLayout$LayoutParams r10 = org.telegram.ui.Components.LayoutHelper.createFrame(r6, r6, r8)
+                android.widget.FrameLayout$LayoutParams r10 = org.telegram.ui.Components.LayoutHelper.createFrame((int) r6, (int) r6, (int) r8)
                 r4.addView(r9, r10)
                 org.telegram.ui.Components.RecyclerListView r4 = r0.listView
                 org.telegram.ui.Components.ThemeEditorView$EditorAlert$ListAdapter r9 = new org.telegram.ui.Components.ThemeEditorView$EditorAlert$ListAdapter
@@ -1082,7 +1082,7 @@ public class ThemeEditorView {
                 r1.showTextView()
                 org.telegram.ui.Components.EmptyTextProgressView r1 = r0.searchEmptyView
                 java.lang.String r4 = "NoResult"
-                r9 = 2131626624(0x7f0e0a80, float:1.888049E38)
+                r9 = 2131626690(0x7f0e0ac2, float:1.8880623E38)
                 java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r4, r9)
                 r1.setText(r4)
                 org.telegram.ui.Components.RecyclerListView r1 = r0.listView
@@ -1128,7 +1128,7 @@ public class ThemeEditorView {
                 android.view.ViewGroup r1 = r0.containerView
                 android.widget.FrameLayout r4 = r0.frameLayout
                 r10 = 58
-                android.widget.FrameLayout$LayoutParams r10 = org.telegram.ui.Components.LayoutHelper.createFrame(r6, r10, r8)
+                android.widget.FrameLayout$LayoutParams r10 = org.telegram.ui.Components.LayoutHelper.createFrame((int) r6, (int) r10, (int) r8)
                 r1.addView(r4, r10)
                 org.telegram.ui.Components.ThemeEditorView$EditorAlert$ColorPicker r1 = new org.telegram.ui.Components.ThemeEditorView$EditorAlert$ColorPicker
                 r1.<init>(r0, r2)
@@ -1137,7 +1137,7 @@ public class ThemeEditorView {
                 r1.setVisibility(r4)
                 android.view.ViewGroup r1 = r0.containerView
                 org.telegram.ui.Components.ThemeEditorView$EditorAlert$ColorPicker r10 = r0.colorPicker
-                android.widget.FrameLayout$LayoutParams r11 = org.telegram.ui.Components.LayoutHelper.createFrame(r6, r6, r3)
+                android.widget.FrameLayout$LayoutParams r11 = org.telegram.ui.Components.LayoutHelper.createFrame((int) r6, (int) r6, (int) r3)
                 r1.addView(r10, r11)
                 android.widget.FrameLayout$LayoutParams r1 = new android.widget.FrameLayout$LayoutParams
                 int r10 = org.telegram.messenger.AndroidUtilities.getShadowHeight()
@@ -1163,7 +1163,7 @@ public class ThemeEditorView {
                 android.view.ViewGroup r1 = r0.containerView
                 android.widget.FrameLayout r7 = r0.bottomSaveLayout
                 r9 = 48
-                android.widget.FrameLayout$LayoutParams r10 = org.telegram.ui.Components.LayoutHelper.createFrame(r6, r9, r11)
+                android.widget.FrameLayout$LayoutParams r10 = org.telegram.ui.Components.LayoutHelper.createFrame((int) r6, (int) r9, (int) r11)
                 r1.addView(r7, r10)
                 android.widget.TextView r1 = new android.widget.TextView
                 r1.<init>(r2)
@@ -1181,7 +1181,7 @@ public class ThemeEditorView {
                 int r9 = org.telegram.messenger.AndroidUtilities.dp(r14)
                 r1.setPadding(r15, r5, r9, r5)
                 java.lang.String r9 = "CloseEditor"
-                r15 = 2131625027(0x7f0e0443, float:1.887725E38)
+                r15 = 2131625069(0x7f0e046d, float:1.8877336E38)
                 java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r9, r15)
                 java.lang.String r9 = r9.toUpperCase()
                 r1.setText(r9)
@@ -1190,7 +1190,7 @@ public class ThemeEditorView {
                 r1.setTypeface(r15)
                 android.widget.FrameLayout r15 = r0.bottomSaveLayout
                 r11 = -2
-                android.widget.FrameLayout$LayoutParams r4 = org.telegram.ui.Components.LayoutHelper.createFrame(r11, r6, r8)
+                android.widget.FrameLayout$LayoutParams r4 = org.telegram.ui.Components.LayoutHelper.createFrame((int) r11, (int) r6, (int) r8)
                 r15.addView(r1, r4)
                 org.telegram.ui.Components.ThemeEditorView$EditorAlert$$ExternalSyntheticLambda1 r4 = new org.telegram.ui.Components.ThemeEditorView$EditorAlert$$ExternalSyntheticLambda1
                 r4.<init>(r0)
@@ -1206,7 +1206,7 @@ public class ThemeEditorView {
                 int r15 = org.telegram.messenger.AndroidUtilities.dp(r14)
                 r1.setPadding(r4, r5, r15, r5)
                 java.lang.String r4 = "SaveTheme"
-                r15 = 2131627772(0x7f0e0efc, float:1.8882818E38)
+                r15 = 2131627846(0x7f0e0var_, float:1.8882968E38)
                 java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r4, r15)
                 java.lang.String r4 = r4.toUpperCase()
                 r1.setText(r4)
@@ -1214,7 +1214,7 @@ public class ThemeEditorView {
                 r1.setTypeface(r4)
                 android.widget.FrameLayout r4 = r0.bottomSaveLayout
                 r15 = 53
-                android.widget.FrameLayout$LayoutParams r8 = org.telegram.ui.Components.LayoutHelper.createFrame(r11, r6, r15)
+                android.widget.FrameLayout$LayoutParams r8 = org.telegram.ui.Components.LayoutHelper.createFrame((int) r11, (int) r6, (int) r15)
                 r4.addView(r1, r8)
                 org.telegram.ui.Components.ThemeEditorView$EditorAlert$$ExternalSyntheticLambda3 r4 = new org.telegram.ui.Components.ThemeEditorView$EditorAlert$$ExternalSyntheticLambda3
                 r4.<init>(r0)
@@ -1230,7 +1230,7 @@ public class ThemeEditorView {
                 android.widget.FrameLayout r4 = r0.bottomLayout
                 r8 = 48
                 r15 = 83
-                android.widget.FrameLayout$LayoutParams r8 = org.telegram.ui.Components.LayoutHelper.createFrame(r6, r8, r15)
+                android.widget.FrameLayout$LayoutParams r8 = org.telegram.ui.Components.LayoutHelper.createFrame((int) r6, (int) r8, (int) r15)
                 r1.addView(r4, r8)
                 android.widget.TextView r1 = new android.widget.TextView
                 r1.<init>(r2)
@@ -1243,7 +1243,7 @@ public class ThemeEditorView {
                 int r8 = org.telegram.messenger.AndroidUtilities.dp(r14)
                 r1.setPadding(r4, r5, r8, r5)
                 java.lang.String r4 = "Cancel"
-                r8 = 2131624707(0x7f0e0303, float:1.8876601E38)
+                r8 = 2131624747(0x7f0e032b, float:1.8876682E38)
                 java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r4, r8)
                 java.lang.String r4 = r4.toUpperCase()
                 r1.setText(r4)
@@ -1251,7 +1251,7 @@ public class ThemeEditorView {
                 r1.setTypeface(r4)
                 android.widget.FrameLayout r4 = r0.bottomLayout
                 r8 = 51
-                android.widget.FrameLayout$LayoutParams r15 = org.telegram.ui.Components.LayoutHelper.createFrame(r11, r6, r8)
+                android.widget.FrameLayout$LayoutParams r15 = org.telegram.ui.Components.LayoutHelper.createFrame((int) r11, (int) r6, (int) r8)
                 r4.addView(r1, r15)
                 org.telegram.ui.Components.ThemeEditorView$EditorAlert$$ExternalSyntheticLambda4 r4 = new org.telegram.ui.Components.ThemeEditorView$EditorAlert$$ExternalSyntheticLambda4
                 r4.<init>(r0)
@@ -1261,7 +1261,7 @@ public class ThemeEditorView {
                 r1.setOrientation(r5)
                 android.widget.FrameLayout r4 = r0.bottomLayout
                 r8 = 53
-                android.widget.FrameLayout$LayoutParams r8 = org.telegram.ui.Components.LayoutHelper.createFrame(r11, r6, r8)
+                android.widget.FrameLayout$LayoutParams r8 = org.telegram.ui.Components.LayoutHelper.createFrame((int) r11, (int) r6, (int) r8)
                 r4.addView(r1, r8)
                 android.widget.TextView r4 = new android.widget.TextView
                 r4.<init>(r2)
@@ -1274,14 +1274,14 @@ public class ThemeEditorView {
                 int r15 = org.telegram.messenger.AndroidUtilities.dp(r14)
                 r4.setPadding(r8, r5, r15, r5)
                 java.lang.String r8 = "Default"
-                r15 = 2131625217(0x7f0e0501, float:1.8877636E38)
+                r15 = 2131625259(0x7f0e052b, float:1.887772E38)
                 java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r8, r15)
                 java.lang.String r8 = r8.toUpperCase()
                 r4.setText(r8)
                 android.graphics.Typeface r8 = org.telegram.messenger.AndroidUtilities.getTypeface(r9)
                 r4.setTypeface(r8)
                 r8 = 51
-                android.widget.FrameLayout$LayoutParams r15 = org.telegram.ui.Components.LayoutHelper.createFrame(r11, r6, r8)
+                android.widget.FrameLayout$LayoutParams r15 = org.telegram.ui.Components.LayoutHelper.createFrame((int) r11, (int) r6, (int) r8)
                 r1.addView(r4, r15)
                 org.telegram.ui.Components.ThemeEditorView$EditorAlert$$ExternalSyntheticLambda0 r8 = new org.telegram.ui.Components.ThemeEditorView$EditorAlert$$ExternalSyntheticLambda0
                 r8.<init>(r0)
@@ -1297,14 +1297,14 @@ public class ThemeEditorView {
                 int r3 = org.telegram.messenger.AndroidUtilities.dp(r14)
                 r4.setPadding(r2, r5, r3, r5)
                 java.lang.String r2 = "Save"
-                r3 = 2131627767(0x7f0e0ef7, float:1.8882808E38)
+                r3 = 2131627840(0x7f0e0var_, float:1.8882956E38)
                 java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r2, r3)
                 java.lang.String r2 = r2.toUpperCase()
                 r4.setText(r2)
                 android.graphics.Typeface r2 = org.telegram.messenger.AndroidUtilities.getTypeface(r9)
                 r4.setTypeface(r2)
                 r2 = 51
-                android.widget.FrameLayout$LayoutParams r2 = org.telegram.ui.Components.LayoutHelper.createFrame(r11, r6, r2)
+                android.widget.FrameLayout$LayoutParams r2 = org.telegram.ui.Components.LayoutHelper.createFrame((int) r11, (int) r6, (int) r2)
                 r1.addView(r4, r2)
                 org.telegram.ui.Components.ThemeEditorView$EditorAlert$$ExternalSyntheticLambda2 r1 = new org.telegram.ui.Components.ThemeEditorView$EditorAlert$$ExternalSyntheticLambda2
                 r1.<init>(r0)

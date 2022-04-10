@@ -18,6 +18,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Utilities {
+    private static final String RANDOM_STRING_CHARS = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
     public static volatile DispatchQueue cacheClearQueue = new DispatchQueue("cacheClearQueue");
     public static Random fastRandom = new Xoroshiro128PlusRandom(random.nextLong());
     public static volatile DispatchQueue globalQueue = new DispatchQueue("globalQueue");
@@ -409,5 +410,17 @@ public class Utilities {
 
     public static float clamp(float f, float f2, float f3) {
         return Math.max(Math.min(f, f2), f3);
+    }
+
+    public static String generateRandomString() {
+        return generateRandomString(16);
+    }
+
+    public static String generateRandomString(int i) {
+        StringBuilder sb = new StringBuilder();
+        for (int i2 = 0; i2 < i; i2++) {
+            sb.append("0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ".charAt(fastRandom.nextInt(62)));
+        }
+        return sb.toString();
     }
 }

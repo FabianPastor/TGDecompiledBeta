@@ -56,11 +56,11 @@ public class PhotoPickerAlbumsCell extends FrameLayout {
                 r1.<init>(r2)
                 r5 = 0
                 r1.setOrientation(r5)
-                r6 = 2131165263(0x7var_f, float:1.7944738E38)
+                r6 = 2131165267(0x7var_, float:1.7944746E38)
                 r1.setBackgroundResource(r6)
                 r6 = 60
                 r7 = 83
-                android.widget.FrameLayout$LayoutParams r6 = org.telegram.ui.Components.LayoutHelper.createFrame(r3, r6, r7)
+                android.widget.FrameLayout$LayoutParams r6 = org.telegram.ui.Components.LayoutHelper.createFrame((int) r3, (int) r6, (int) r7)
                 r0.addView(r1, r6)
                 android.widget.TextView r6 = new android.widget.TextView
                 r6.<init>(r2)

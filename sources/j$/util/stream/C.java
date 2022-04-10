@@ -3,10 +3,10 @@ package j$.util.stream;
 import j$.util.concurrent.a;
 import j$.util.function.BiConsumer;
 import j$.util.function.BiFunction;
-import j$.util.function.CLASSNAMEb;
 import j$.util.function.Function;
+import j$.util.function.b;
 
-public final /* synthetic */ class C implements CLASSNAMEb {
+public final /* synthetic */ class C implements b {
     public final /* synthetic */ int a;
     public final /* synthetic */ BiConsumer b;
 

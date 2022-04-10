@@ -7,9 +7,8 @@ import android.text.Layout;
 import org.telegram.messenger.AndroidUtilities;
 
 public class LinkPath extends Path {
-    private static final int halfRadius;
-    private static final int radius;
-    public static final CornerPathEffect roundedEffect;
+    private static CornerPathEffect roundedEffect;
+    private static int roundedEffectRadius;
     private boolean allowReset = true;
     private int baselineShift;
     private Layout currentLayout;
@@ -19,11 +18,17 @@ public class LinkPath extends Path {
     private int lineHeight;
     private boolean useRoundRect;
 
-    static {
-        int dp = AndroidUtilities.dp(4.0f);
-        radius = dp;
-        halfRadius = dp >> 1;
-        roundedEffect = new CornerPathEffect((float) dp);
+    public static int getRadius() {
+        return AndroidUtilities.dp(4.0f);
+    }
+
+    public static CornerPathEffect getRoundedEffect() {
+        if (roundedEffect == null || roundedEffectRadius != getRadius()) {
+            int radius = getRadius();
+            roundedEffectRadius = radius;
+            roundedEffect = new CornerPathEffect((float) radius);
+        }
+        return roundedEffect;
     }
 
     public LinkPath() {
@@ -100,11 +105,10 @@ public class LinkPath extends Path {
             float var_ = f7;
             float var_ = f6;
             if (this.useRoundRect) {
-                int i2 = halfRadius;
-                super.addRect(lineLeft - ((float) i2), var_, f9 + ((float) i2), var_, direction);
-                return;
+                super.addRect(lineLeft - (((float) getRadius()) / 2.0f), var_, f9 + (((float) getRadius()) / 2.0f), var_, direction);
+            } else {
+                super.addRect(lineLeft, var_, f9, var_, direction);
             }
-            super.addRect(lineLeft, var_, f9, var_, direction);
         }
     }
 

@@ -14,6 +14,6 @@ public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda13
     }
 
     public final void run() {
-        this.f$0.lambda$loadGlobalNotificationsSettings$159(this.f$1, this.f$2);
+        this.f$0.lambda$loadGlobalNotificationsSettings$160(this.f$1, this.f$2);
     }
 }

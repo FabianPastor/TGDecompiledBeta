@@ -1,15 +1,15 @@
 package org.telegram.ui.Components;
 
-import org.telegram.ui.ActionBar.AlertDialog;
+import android.view.MotionEvent;
+import android.view.View;
 
-public final /* synthetic */ class AlertsCreator$$ExternalSyntheticLambda77 implements Runnable {
-    public final /* synthetic */ AlertDialog f$0;
+public final /* synthetic */ class AlertsCreator$$ExternalSyntheticLambda77 implements View.OnTouchListener {
+    public static final /* synthetic */ AlertsCreator$$ExternalSyntheticLambda77 INSTANCE = new AlertsCreator$$ExternalSyntheticLambda77();
 
-    public /* synthetic */ AlertsCreator$$ExternalSyntheticLambda77(AlertDialog alertDialog) {
-        this.f$0 = alertDialog;
+    private /* synthetic */ AlertsCreator$$ExternalSyntheticLambda77() {
     }
 
-    public final void run() {
-        AlertsCreator.lambda$performAskAQuestion$17(this.f$0);
+    public final boolean onTouch(View view, MotionEvent motionEvent) {
+        return AlertsCreator.lambda$createMuteForPickerDialog$72(view, motionEvent);
     }
 }
