@@ -12,6 +12,6 @@ public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda25
     }
 
     public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        this.f$0.lambda$updateTimerProc$120(tLObject, tLRPC$TL_error);
+        this.f$0.lambda$setDialogHistoryTTL$107(tLObject, tLRPC$TL_error);
     }
 }

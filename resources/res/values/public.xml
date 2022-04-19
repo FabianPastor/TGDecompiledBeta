@@ -2199,6 +2199,7 @@
     <public type="string" name="AreYouSureClearHistoryFewChats" id="NUM" />
     <public type="string" name="AreYouSureClearHistoryGroup" id="NUM" />
     <public type="string" name="AreYouSureClearHistorySavedMessages" id="NUM" />
+    <public type="string" name="AreYouSureClearHistoryWithChannel" id="NUM" />
     <public type="string" name="AreYouSureClearHistoryWithChat" id="NUM" />
     <public type="string" name="AreYouSureClearHistoryWithSecretUser" id="NUM" />
     <public type="string" name="AreYouSureClearHistoryWithUser" id="NUM" />
@@ -2489,6 +2490,7 @@
     <public type="string" name="BotPermissionGameAlert" id="NUM" />
     <public type="string" name="BotRemoveFromMenu" id="NUM" />
     <public type="string" name="BotRemoveFromMenuTitle" id="NUM" />
+    <public type="string" name="BotRemoveInlineFromMenu" id="NUM" />
     <public type="string" name="BotRequestAttachPermission" id="NUM" />
     <public type="string" name="BotRestart" id="NUM" />
     <public type="string" name="BotRestrictionsCanDo" id="NUM" />
@@ -2877,6 +2879,8 @@
     <public type="string" name="ClearCacheInfo" id="NUM" />
     <public type="string" name="ClearDownloadsList" id="NUM" />
     <public type="string" name="ClearFewChatsTitle" id="NUM" />
+    <public type="string" name="ClearForAll" id="NUM" />
+    <public type="string" name="ClearForMe" id="NUM" />
     <public type="string" name="ClearHistory" id="NUM" />
     <public type="string" name="ClearHistoryCache" id="NUM" />
     <public type="string" name="ClearHistoryForTheseDays" id="NUM" />
@@ -3032,6 +3036,7 @@
     <public type="string" name="CustomP2PInfo" id="NUM" />
     <public type="string" name="CustomShareInfo" id="NUM" />
     <public type="string" name="CustomShareSettingsHelp" id="NUM" />
+    <public type="string" name="CustomSound" id="NUM" />
     <public type="string" name="CustomThemes" id="NUM" />
     <public type="string" name="DartInfo" id="NUM" />
     <public type="string" name="DataSettings" id="NUM" />
@@ -3077,11 +3082,13 @@
     <public type="string" name="DebugMenuEnableLogs" id="NUM" />
     <public type="string" name="DebugMenuEnablePauseMusic" id="NUM" />
     <public type="string" name="DebugMenuEnableSmoothKeyboard" id="NUM" />
+    <public type="string" name="DebugMenuEnableWebViewDebug" id="NUM" />
     <public type="string" name="DebugMenuImportContacts" id="NUM" />
     <public type="string" name="DebugMenuReadAllDialogs" id="NUM" />
     <public type="string" name="DebugMenuReloadContacts" id="NUM" />
     <public type="string" name="DebugMenuResetContacts" id="NUM" />
     <public type="string" name="DebugMenuResetDialogs" id="NUM" />
+    <public type="string" name="DebugMenuWebViewDebugEnabled" id="NUM" />
     <public type="string" name="DebugSendLastLogs" id="NUM" />
     <public type="string" name="DebugSendLogs" id="NUM" />
     <public type="string" name="December" id="NUM" />
@@ -3100,6 +3107,7 @@
     <public type="string" name="DeleteAllCallsText" id="NUM" />
     <public type="string" name="DeleteAllFrom" id="NUM" />
     <public type="string" name="DeleteAllMessagesAlert" id="NUM" />
+    <public type="string" name="DeleteAllMessagesChannelAlert" id="NUM" />
     <public type="string" name="DeleteAllMessagesSavedAlert" id="NUM" />
     <public type="string" name="DeleteAllRevokedLinkHelp" id="NUM" />
     <public type="string" name="DeleteAllRevokedLinks" id="NUM" />
@@ -4415,6 +4423,7 @@
     <public type="string" name="MuteForAlert" id="NUM" />
     <public type="string" name="MuteForButton" id="NUM" />
     <public type="string" name="MuteForPopup" id="NUM" />
+    <public type="string" name="MuteNever" id="NUM" />
     <public type="string" name="MuteNotifications" id="NUM" />
     <public type="string" name="MyChannels" id="NUM" />
     <public type="string" name="MyGroups" id="NUM" />

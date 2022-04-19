@@ -8,6 +8,6 @@ public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda19
     }
 
     public final void run() {
-        this.f$0.lambda$toggleChatNoForwards$223();
+        this.f$0.lambda$processUpdateArray$315();
     }
 }

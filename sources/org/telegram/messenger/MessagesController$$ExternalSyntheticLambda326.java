@@ -17,6 +17,6 @@ public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda32
     }
 
     public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        this.f$0.lambda$didReceivedNotification$30(this.f$1, this.f$2, tLObject, tLRPC$TL_error);
+        this.f$0.lambda$didReceivedNotification$28(this.f$1, this.f$2, tLObject, tLRPC$TL_error);
     }
 }

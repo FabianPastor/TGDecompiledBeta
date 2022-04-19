@@ -1,28 +1,22 @@
 package org.telegram.ui.Components;
 
 import android.view.View;
-import java.util.Calendar;
-import org.telegram.ui.ActionBar.BottomSheet;
-import org.telegram.ui.Components.AlertsCreator;
+import org.telegram.ui.ActionBar.AlertDialog;
 
 public final /* synthetic */ class AlertsCreator$$ExternalSyntheticLambda57 implements View.OnClickListener {
-    public final /* synthetic */ NumberPicker f$0;
-    public final /* synthetic */ NumberPicker f$1;
-    public final /* synthetic */ NumberPicker f$2;
-    public final /* synthetic */ Calendar f$3;
-    public final /* synthetic */ AlertsCreator.ScheduleDatePickerDelegate f$4;
-    public final /* synthetic */ BottomSheet.Builder f$5;
+    public final /* synthetic */ int[] f$0;
+    public final /* synthetic */ int f$1;
+    public final /* synthetic */ AlertDialog.Builder f$2;
+    public final /* synthetic */ Runnable f$3;
 
-    public /* synthetic */ AlertsCreator$$ExternalSyntheticLambda57(NumberPicker numberPicker, NumberPicker numberPicker2, NumberPicker numberPicker3, Calendar calendar, AlertsCreator.ScheduleDatePickerDelegate scheduleDatePickerDelegate, BottomSheet.Builder builder) {
-        this.f$0 = numberPicker;
-        this.f$1 = numberPicker2;
-        this.f$2 = numberPicker3;
-        this.f$3 = calendar;
-        this.f$4 = scheduleDatePickerDelegate;
-        this.f$5 = builder;
+    public /* synthetic */ AlertsCreator$$ExternalSyntheticLambda57(int[] iArr, int i, AlertDialog.Builder builder, Runnable runnable) {
+        this.f$0 = iArr;
+        this.f$1 = i;
+        this.f$2 = builder;
+        this.f$3 = runnable;
     }
 
     public final void onClick(View view) {
-        AlertsCreator.lambda$createDatePickerDialog$61(this.f$0, this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, view);
+        AlertsCreator.lambda$createPopupSelectDialog$105(this.f$0, this.f$1, this.f$2, this.f$3, view);
     }
 }

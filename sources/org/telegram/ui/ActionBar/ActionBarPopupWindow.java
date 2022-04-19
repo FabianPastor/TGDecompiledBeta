@@ -752,6 +752,10 @@ public class ActionBarPopupWindow extends PopupWindow {
         public void setTopView(View view) {
             this.topView = view;
         }
+
+        public void setSwipeBackForegroundColor(int i) {
+            getSwipeBack().setForegroundColor(i);
+        }
     }
 
     public ActionBarPopupWindow() {
@@ -1033,6 +1037,7 @@ public class ActionBarPopupWindow extends PopupWindow {
     }
 
     public static class GapView extends FrameLayout {
+        int color = 0;
         String colorKey;
         Paint paint = new Paint();
 
@@ -1043,8 +1048,17 @@ public class ActionBarPopupWindow extends PopupWindow {
 
         /* access modifiers changed from: protected */
         public void onDraw(Canvas canvas) {
-            this.paint.setColor(Theme.getColor(this.colorKey));
+            int i = this.color;
+            if (i == 0) {
+                this.paint.setColor(Theme.getColor(this.colorKey));
+            } else {
+                this.paint.setColor(i);
+            }
             canvas.drawRect(0.0f, 0.0f, (float) getMeasuredWidth(), (float) getMeasuredHeight(), this.paint);
+        }
+
+        public void setColor(int i) {
+            this.color = i;
         }
     }
 }

@@ -40,6 +40,7 @@ import org.telegram.ui.PhotoViewer;
 
 public class SearchDownloadsContainer extends FrameLayout implements NotificationCenter.NotificationCenterDelegate {
     DownloadsAdapter adapter = new DownloadsAdapter();
+    boolean checkingFilesExist;
     private final int currentAccount;
     ArrayList<MessageObject> currentLoadingFiles = new ArrayList<>();
     ArrayList<MessageObject> currentLoadingFilesTmp = new ArrayList<>();
@@ -92,8 +93,8 @@ public class SearchDownloadsContainer extends FrameLayout implements Notificatio
         defaultItemAnimator.setDelayAnimations(false);
         defaultItemAnimator.setSupportsChangeAnimations(false);
         this.recyclerListView.setItemAnimator(defaultItemAnimator);
-        this.recyclerListView.setOnItemClickListener((RecyclerListView.OnItemClickListener) new SearchDownloadsContainer$$ExternalSyntheticLambda4(this));
-        this.recyclerListView.setOnItemLongClickListener((RecyclerListView.OnItemLongClickListener) new SearchDownloadsContainer$$ExternalSyntheticLambda5(this));
+        this.recyclerListView.setOnItemClickListener((RecyclerListView.OnItemClickListener) new SearchDownloadsContainer$$ExternalSyntheticLambda6(this));
+        this.recyclerListView.setOnItemLongClickListener((RecyclerListView.OnItemLongClickListener) new SearchDownloadsContainer$$ExternalSyntheticLambda7(this));
         this.itemsEnterAnimator = new RecyclerItemsEnterAnimator(this.recyclerListView, true);
         FlickerLoadingView flickerLoadingView = new FlickerLoadingView(getContext());
         this.loadingView = flickerLoadingView;
@@ -106,7 +107,6 @@ public class SearchDownloadsContainer extends FrameLayout implements Notificatio
         addView(stickerEmptyView);
         this.recyclerListView.setEmptyView(this.emptyView);
         FileLoader.getInstance(i).getCurrentLoadingFiles(this.currentLoadingFiles);
-        update(false);
     }
 
     /* access modifiers changed from: private */
@@ -171,10 +171,54 @@ public class SearchDownloadsContainer extends FrameLayout implements Notificatio
         return true;
     }
 
+    private void checkFilesExist() {
+        if (!this.checkingFilesExist) {
+            this.checkingFilesExist = true;
+            Utilities.searchQueue.postRunnable(new SearchDownloadsContainer$$ExternalSyntheticLambda2(this));
+        }
+    }
+
+    /* access modifiers changed from: private */
+    public /* synthetic */ void lambda$checkFilesExist$3() {
+        ArrayList arrayList = new ArrayList();
+        ArrayList arrayList2 = new ArrayList();
+        ArrayList arrayList3 = new ArrayList();
+        ArrayList arrayList4 = new ArrayList();
+        FileLoader.getInstance(this.currentAccount).getCurrentLoadingFiles(arrayList);
+        FileLoader.getInstance(this.currentAccount).getRecentLoadingFiles(arrayList2);
+        for (int i = 0; i < arrayList.size(); i++) {
+            if (FileLoader.getPathToMessage(((MessageObject) arrayList.get(i)).messageOwner).exists()) {
+                arrayList3.add((MessageObject) arrayList.get(i));
+            }
+        }
+        for (int i2 = 0; i2 < arrayList2.size(); i2++) {
+            if (!FileLoader.getPathToMessage(((MessageObject) arrayList2.get(i2)).messageOwner).exists()) {
+                arrayList4.add((MessageObject) arrayList2.get(i2));
+            }
+        }
+        AndroidUtilities.runOnUIThread(new SearchDownloadsContainer$$ExternalSyntheticLambda5(this, arrayList3, arrayList4));
+    }
+
+    /* access modifiers changed from: private */
+    public /* synthetic */ void lambda$checkFilesExist$2(ArrayList arrayList, ArrayList arrayList2) {
+        for (int i = 0; i < arrayList.size(); i++) {
+            DownloadController.getInstance(this.currentAccount).onDownloadComplete((MessageObject) arrayList.get(i));
+        }
+        if (!arrayList2.isEmpty()) {
+            DownloadController.getInstance(this.currentAccount).deleteRecentFiles(arrayList2);
+        }
+        this.checkingFilesExist = false;
+        update(true);
+    }
+
     public void update(boolean z) {
         if (TextUtils.isEmpty(this.searchQuery) || isEmptyDownloads()) {
             if (this.rowCount == 0) {
                 this.itemsEnterAnimator.showItemsAnimated(0);
+            }
+            if (this.checkingFilesExist) {
+                this.currentLoadingFilesTmp.clear();
+                this.recentLoadingFilesTmp.clear();
             }
             FileLoader.getInstance(this.currentAccount).getCurrentLoadingFiles(this.currentLoadingFilesTmp);
             FileLoader.getInstance(this.currentAccount).getRecentLoadingFiles(this.recentLoadingFilesTmp);
@@ -204,9 +248,9 @@ public class SearchDownloadsContainer extends FrameLayout implements Notificatio
         this.lastQueryString = lowerCase;
         Utilities.searchQueue.cancelRunnable(this.lastSearchRunnable);
         DispatchQueue dispatchQueue = Utilities.searchQueue;
-        SearchDownloadsContainer$$ExternalSyntheticLambda3 searchDownloadsContainer$$ExternalSyntheticLambda3 = new SearchDownloadsContainer$$ExternalSyntheticLambda3(this, arrayList, lowerCase, arrayList2);
-        this.lastSearchRunnable = searchDownloadsContainer$$ExternalSyntheticLambda3;
-        dispatchQueue.postRunnable(searchDownloadsContainer$$ExternalSyntheticLambda3, equals ? 0 : 300);
+        SearchDownloadsContainer$$ExternalSyntheticLambda4 searchDownloadsContainer$$ExternalSyntheticLambda4 = new SearchDownloadsContainer$$ExternalSyntheticLambda4(this, arrayList, lowerCase, arrayList2);
+        this.lastSearchRunnable = searchDownloadsContainer$$ExternalSyntheticLambda4;
+        dispatchQueue.postRunnable(searchDownloadsContainer$$ExternalSyntheticLambda4, equals ? 0 : 300);
         this.recentLoadingFilesTmp.clear();
         this.currentLoadingFilesTmp.clear();
         if (!equals) {
@@ -216,7 +260,7 @@ public class SearchDownloadsContainer extends FrameLayout implements Notificatio
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$update$3(ArrayList arrayList, String str, ArrayList arrayList2) {
+    public /* synthetic */ void lambda$update$5(ArrayList arrayList, String str, ArrayList arrayList2) {
         ArrayList arrayList3 = new ArrayList();
         ArrayList arrayList4 = new ArrayList();
         for (int i = 0; i < arrayList.size(); i++) {
@@ -235,11 +279,11 @@ public class SearchDownloadsContainer extends FrameLayout implements Notificatio
                 arrayList4.add(messageObject2);
             }
         }
-        AndroidUtilities.runOnUIThread(new SearchDownloadsContainer$$ExternalSyntheticLambda2(this, str, arrayList3, arrayList4));
+        AndroidUtilities.runOnUIThread(new SearchDownloadsContainer$$ExternalSyntheticLambda3(this, str, arrayList3, arrayList4));
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$update$2(String str, ArrayList arrayList, ArrayList arrayList2) {
+    public /* synthetic */ void lambda$update$4(String str, ArrayList arrayList, ArrayList arrayList2) {
         if (str.equals(this.lastQueryString)) {
             if (this.rowCount == 0) {
                 this.itemsEnterAnimator.showItemsAnimated(0);
@@ -558,13 +602,13 @@ public class SearchDownloadsContainer extends FrameLayout implements Notificatio
             nestedScrollView.addView(linearLayout);
             bottomSheet.setCustomView(nestedScrollView);
             bottomSheet.show();
-            textView3.setOnClickListener(new SearchDownloadsContainer$$ExternalSyntheticLambda1(this, bottomSheet));
-            textView4.setOnClickListener(new SearchDownloadsContainer$$ExternalSyntheticLambda0(this, bottomSheet));
+            textView3.setOnClickListener(new SearchDownloadsContainer$$ExternalSyntheticLambda0(this, bottomSheet));
+            textView4.setOnClickListener(new SearchDownloadsContainer$$ExternalSyntheticLambda1(this, bottomSheet));
         }
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$showSettingsDialog$4(BottomSheet bottomSheet, View view) {
+    public /* synthetic */ void lambda$showSettingsDialog$6(BottomSheet bottomSheet, View view) {
         bottomSheet.dismiss();
         BaseFragment baseFragment = this.parentFragment;
         if (baseFragment != null) {
@@ -573,7 +617,7 @@ public class SearchDownloadsContainer extends FrameLayout implements Notificatio
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$showSettingsDialog$5(BottomSheet bottomSheet, View view) {
+    public /* synthetic */ void lambda$showSettingsDialog$7(BottomSheet bottomSheet, View view) {
         bottomSheet.dismiss();
         DownloadController.getInstance(this.currentAccount).clearRecentDownloadedFiles();
     }
@@ -585,6 +629,8 @@ public class SearchDownloadsContainer extends FrameLayout implements Notificatio
         if (getVisibility() == 0) {
             DownloadController.getInstance(this.currentAccount).clearUnviewedDownloads();
         }
+        checkFilesExist();
+        update(false);
     }
 
     /* access modifiers changed from: protected */

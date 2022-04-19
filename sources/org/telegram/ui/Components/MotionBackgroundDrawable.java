@@ -348,7 +348,7 @@ public class MotionBackgroundDrawable extends Drawable {
             this.gradientDrawable = null;
         }
         int[] iArr = this.colors;
-        if (iArr[0] != i6 && iArr[1] != i7 && iArr[2] != i8 && iArr[3] != i9) {
+        if (iArr[0] != i6 || iArr[1] != i7 || iArr[2] != i8 || iArr[3] != i9) {
             iArr[0] = i6;
             iArr[1] = i7;
             iArr[2] = i8;

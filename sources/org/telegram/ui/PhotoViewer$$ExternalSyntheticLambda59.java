@@ -12,6 +12,6 @@ public final /* synthetic */ class PhotoViewer$$ExternalSyntheticLambda59 implem
     }
 
     public final void run() {
-        this.f$0.lambda$closePhoto$66(this.f$1);
+        this.f$0.lambda$closePhoto$65(this.f$1);
     }
 }

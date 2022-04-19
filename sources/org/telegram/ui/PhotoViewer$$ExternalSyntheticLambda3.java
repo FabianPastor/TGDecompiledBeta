@@ -27,6 +27,6 @@ public final /* synthetic */ class PhotoViewer$$ExternalSyntheticLambda3 impleme
     }
 
     public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-        this.f$0.lambda$switchToPip$44(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6, this.f$7, this.f$8, valueAnimator);
+        this.f$0.lambda$switchToPip$43(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6, this.f$7, this.f$8, valueAnimator);
     }
 }

@@ -91,10 +91,11 @@ public class ChatNotificationsPopupWrapper {
 
     /* access modifiers changed from: private */
     public static /* synthetic */ void lambda$new$4(int i, int i2, Callback callback2) {
-        SharedPreferences notificationsSettings = MessagesController.getNotificationsSettings(i);
-        int i3 = i2 * 60;
-        notificationsSettings.edit().putInt("last_selected_mute_until_time", i3).putInt("last_selected_mute_until_time2", notificationsSettings.getInt("last_selected_mute_until_time", 0)).apply();
-        callback2.muteFor(i3);
+        if (i != 0) {
+            SharedPreferences notificationsSettings = MessagesController.getNotificationsSettings(i2);
+            notificationsSettings.edit().putInt("last_selected_mute_until_time", i).putInt("last_selected_mute_until_time2", notificationsSettings.getInt("last_selected_mute_until_time", 0)).apply();
+        }
+        callback2.muteFor(i);
     }
 
     /* access modifiers changed from: private */

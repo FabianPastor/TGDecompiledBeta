@@ -10,6 +10,6 @@ public final /* synthetic */ class PhotoViewer$$ExternalSyntheticLambda42 implem
     }
 
     public final boolean onTouch(View view, MotionEvent motionEvent) {
-        return PhotoViewer.lambda$setParentActivity$26(view, motionEvent);
+        return PhotoViewer.lambda$setParentActivity$25(view, motionEvent);
     }
 }

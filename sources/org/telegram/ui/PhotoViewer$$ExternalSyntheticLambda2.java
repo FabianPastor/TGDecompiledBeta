@@ -14,6 +14,6 @@ public final /* synthetic */ class PhotoViewer$$ExternalSyntheticLambda2 impleme
     }
 
     public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-        this.f$0.lambda$animateNavBarColorTo$41(this.f$1, this.f$2, valueAnimator);
+        this.f$0.lambda$animateNavBarColorTo$40(this.f$1, this.f$2, valueAnimator);
     }
 }

@@ -28,7 +28,7 @@ import org.telegram.tgnet.TLRPC$TL_error;
 public class RingtoneDataStore {
     private static volatile long lastReloadTimeMs;
     private static volatile long queryHash;
-    public static final HashSet<String> ringtoneSupportedMimeType = new HashSet<>(Arrays.asList(new String[]{"audio/mpeg", "audio/ogg", "audio/m4a"}));
+    public static final HashSet<String> ringtoneSupportedMimeType = new HashSet<>(Arrays.asList(new String[]{"audio/mpeg3", "audio/mpeg", "audio/ogg", "audio/m4a"}));
     private final long clientUserId;
     private final int currentAccount;
     private boolean loaded;
@@ -279,7 +279,7 @@ public class RingtoneDataStore {
 
     /* access modifiers changed from: private */
     public /* synthetic */ void lambda$checkRingtoneSoundsLoaded$2(TLRPC$Document tLRPC$Document) {
-        FileLoader.getInstance(this.currentAccount).loadFile(tLRPC$Document, (Object) null, 0, 0);
+        FileLoader.getInstance(this.currentAccount).loadFile(tLRPC$Document, tLRPC$Document, 0, 0);
     }
 
     public boolean isLoaded() {

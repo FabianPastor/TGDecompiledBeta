@@ -235,6 +235,7 @@ public class CameraScanActivity extends BaseFragment {
                 this.val$actionBarLayout[0] = null;
             }
         };
+        r1.setUseLightStatusBar(false);
         AndroidUtilities.setLightNavigationBar(r1.getWindow(), false);
         if (Build.VERSION.SDK_INT >= 26) {
             r1.getWindow().setNavigationBarColor(-16777216);
@@ -477,6 +478,7 @@ public class CameraScanActivity extends BaseFragment {
         } else {
             this.actionBar.setBackgroundDrawable((Drawable) null);
             this.actionBar.setAddToContainer(false);
+            this.actionBar.setTitleColor(-1);
             this.actionBar.setItemsColor(-1, false);
             this.actionBar.setItemsBackgroundColor(NUM, false);
             r2.setBackgroundColor(Theme.getColor("wallet_blackBackground"));

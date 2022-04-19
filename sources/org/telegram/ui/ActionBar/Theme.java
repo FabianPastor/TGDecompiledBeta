@@ -10609,7 +10609,7 @@ public class Theme {
         L_0x3853:
             r2 = 0
             applyTheme(r0, r2, r2, r1)
-            org.telegram.messenger.MessagesController$$ExternalSyntheticLambda212 r0 = org.telegram.messenger.MessagesController$$ExternalSyntheticLambda212.INSTANCE
+            org.telegram.messenger.MessagesController$$ExternalSyntheticLambda213 r0 = org.telegram.messenger.MessagesController$$ExternalSyntheticLambda213.INSTANCE
             org.telegram.messenger.AndroidUtilities.runOnUIThread(r0)
             android.content.Context r0 = org.telegram.messenger.ApplicationLoader.applicationContext
             java.lang.String r1 = "emojithemes_config"
@@ -11927,7 +11927,7 @@ public class Theme {
             switchNightThemeDelay = r0     // Catch:{ Exception -> 0x01e8 }
             long r0 = android.os.SystemClock.elapsedRealtime()     // Catch:{ Exception -> 0x01e8 }
             lastDelayUpdateTime = r0     // Catch:{ Exception -> 0x01e8 }
-            org.telegram.messenger.MessagesController$$ExternalSyntheticLambda212 r0 = org.telegram.messenger.MessagesController$$ExternalSyntheticLambda212.INSTANCE     // Catch:{ Exception -> 0x01e8 }
+            org.telegram.messenger.MessagesController$$ExternalSyntheticLambda213 r0 = org.telegram.messenger.MessagesController$$ExternalSyntheticLambda213.INSTANCE     // Catch:{ Exception -> 0x01e8 }
             r1 = 2100(0x834, double:1.0375E-320)
             org.telegram.messenger.AndroidUtilities.runOnUIThread(r0, r1)     // Catch:{ Exception -> 0x01e8 }
         L_0x01e2:

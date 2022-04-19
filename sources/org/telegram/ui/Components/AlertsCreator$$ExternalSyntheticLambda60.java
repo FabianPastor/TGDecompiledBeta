@@ -1,24 +1,18 @@
 package org.telegram.ui.Components;
 
 import android.view.View;
-import org.telegram.ui.ActionBar.AlertDialog;
+import android.widget.LinearLayout;
 
 public final /* synthetic */ class AlertsCreator$$ExternalSyntheticLambda60 implements View.OnClickListener {
     public final /* synthetic */ int[] f$0;
-    public final /* synthetic */ long f$1;
-    public final /* synthetic */ String f$2;
-    public final /* synthetic */ AlertDialog.Builder f$3;
-    public final /* synthetic */ Runnable f$4;
+    public final /* synthetic */ LinearLayout f$1;
 
-    public /* synthetic */ AlertsCreator$$ExternalSyntheticLambda60(int[] iArr, long j, String str, AlertDialog.Builder builder, Runnable runnable) {
+    public /* synthetic */ AlertsCreator$$ExternalSyntheticLambda60(int[] iArr, LinearLayout linearLayout) {
         this.f$0 = iArr;
-        this.f$1 = j;
-        this.f$2 = str;
-        this.f$3 = builder;
-        this.f$4 = runnable;
+        this.f$1 = linearLayout;
     }
 
     public final void onClick(View view) {
-        AlertsCreator.lambda$createVibrationSelectDialog$93(this.f$0, this.f$1, this.f$2, this.f$3, this.f$4, view);
+        AlertsCreator.lambda$createFreeSpaceDialog$101(this.f$0, this.f$1, view);
     }
 }

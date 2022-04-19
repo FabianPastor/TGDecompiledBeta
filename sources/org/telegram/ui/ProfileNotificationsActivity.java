@@ -649,7 +649,10 @@ public class ProfileNotificationsActivity extends BaseFragment implements Notifi
 
     public void didReceivedNotification(int i, int i2, Object... objArr) {
         if (i == NotificationCenter.notificationsSettingsUpdated) {
-            this.adapter.notifyDataSetChanged();
+            try {
+                this.adapter.notifyDataSetChanged();
+            } catch (Exception unused) {
+            }
         }
     }
 
@@ -665,9 +668,15 @@ public class ProfileNotificationsActivity extends BaseFragment implements Notifi
             RecyclerListView.Holder holder = (RecyclerListView.Holder) this.listView.getChildViewHolder(this.listView.getChildAt(i));
             int itemViewType = holder.getItemViewType();
             int adapterPosition = holder.getAdapterPosition();
-            if (!(adapterPosition == this.customRow || adapterPosition == this.enableRow || itemViewType == 0)) {
+            if (!(adapterPosition == this.customRow || adapterPosition == this.enableRow)) {
                 boolean z = true;
-                if (itemViewType == 1) {
+                if (itemViewType == 0) {
+                    HeaderCell headerCell = (HeaderCell) holder.itemView;
+                    if (!this.customEnabled || !this.notificationsEnabled) {
+                        z = false;
+                    }
+                    headerCell.setEnabled(z, arrayList);
+                } else if (itemViewType == 1) {
                     TextSettingsCell textSettingsCell = (TextSettingsCell) holder.itemView;
                     if (!this.customEnabled || !this.notificationsEnabled) {
                         z = false;
@@ -839,7 +848,11 @@ public class ProfileNotificationsActivity extends BaseFragment implements Notifi
                         long j = notificationsSettings.getLong("sound_document_id_" + ProfileNotificationsActivity.this.dialogId, 0);
                         if (j != 0) {
                             TLRPC$Document document = ProfileNotificationsActivity.this.getMediaDataController().ringtoneDataStore.getDocument(j);
-                            string = NotificationsSoundActivity.trimTitle(document, document.file_name_fixed);
+                            if (document == null) {
+                                string = LocaleController.getString("CustomSound", NUM);
+                            } else {
+                                string = NotificationsSoundActivity.trimTitle(document, document.file_name_fixed);
+                            }
                         } else if (string.equals("NoSound")) {
                             string = LocaleController.getString("NoSound", NUM);
                         } else if (string.equals("Default")) {
@@ -1072,44 +1085,48 @@ public class ProfileNotificationsActivity extends BaseFragment implements Notifi
         }
 
         public void onViewAttachedToWindow(RecyclerView.ViewHolder viewHolder) {
-            if (viewHolder.getItemViewType() != 0) {
-                int itemViewType = viewHolder.getItemViewType();
-                boolean z = false;
-                if (itemViewType == 1) {
-                    TextSettingsCell textSettingsCell = (TextSettingsCell) viewHolder.itemView;
-                    if (ProfileNotificationsActivity.this.customEnabled && ProfileNotificationsActivity.this.notificationsEnabled) {
-                        z = true;
-                    }
-                    textSettingsCell.setEnabled(z, (ArrayList<Animator>) null);
-                } else if (itemViewType == 2) {
-                    TextInfoPrivacyCell textInfoPrivacyCell = (TextInfoPrivacyCell) viewHolder.itemView;
-                    if (ProfileNotificationsActivity.this.customEnabled && ProfileNotificationsActivity.this.notificationsEnabled) {
-                        z = true;
-                    }
-                    textInfoPrivacyCell.setEnabled(z, (ArrayList<Animator>) null);
-                } else if (itemViewType == 3) {
-                    TextColorCell textColorCell = (TextColorCell) viewHolder.itemView;
-                    if (ProfileNotificationsActivity.this.customEnabled && ProfileNotificationsActivity.this.notificationsEnabled) {
-                        z = true;
-                    }
-                    textColorCell.setEnabled(z, (ArrayList<Animator>) null);
-                } else if (itemViewType == 4) {
-                    RadioCell radioCell = (RadioCell) viewHolder.itemView;
-                    if (ProfileNotificationsActivity.this.customEnabled && ProfileNotificationsActivity.this.notificationsEnabled) {
-                        z = true;
-                    }
-                    radioCell.setEnabled(z, (ArrayList<Animator>) null);
-                } else if (itemViewType == 8) {
-                    TextCheckCell textCheckCell = (TextCheckCell) viewHolder.itemView;
-                    if (viewHolder.getAdapterPosition() == ProfileNotificationsActivity.this.previewRow) {
-                        if (ProfileNotificationsActivity.this.customEnabled && ProfileNotificationsActivity.this.notificationsEnabled) {
-                            z = true;
-                        }
-                        textCheckCell.setEnabled(z, (ArrayList<Animator>) null);
-                        return;
-                    }
-                    textCheckCell.setEnabled(true, (ArrayList<Animator>) null);
+            int itemViewType = viewHolder.getItemViewType();
+            boolean z = false;
+            if (itemViewType == 0) {
+                HeaderCell headerCell = (HeaderCell) viewHolder.itemView;
+                if (ProfileNotificationsActivity.this.customEnabled && ProfileNotificationsActivity.this.notificationsEnabled) {
+                    z = true;
                 }
+                headerCell.setEnabled(z, (ArrayList<Animator>) null);
+            } else if (itemViewType == 1) {
+                TextSettingsCell textSettingsCell = (TextSettingsCell) viewHolder.itemView;
+                if (ProfileNotificationsActivity.this.customEnabled && ProfileNotificationsActivity.this.notificationsEnabled) {
+                    z = true;
+                }
+                textSettingsCell.setEnabled(z, (ArrayList<Animator>) null);
+            } else if (itemViewType == 2) {
+                TextInfoPrivacyCell textInfoPrivacyCell = (TextInfoPrivacyCell) viewHolder.itemView;
+                if (ProfileNotificationsActivity.this.customEnabled && ProfileNotificationsActivity.this.notificationsEnabled) {
+                    z = true;
+                }
+                textInfoPrivacyCell.setEnabled(z, (ArrayList<Animator>) null);
+            } else if (itemViewType == 3) {
+                TextColorCell textColorCell = (TextColorCell) viewHolder.itemView;
+                if (ProfileNotificationsActivity.this.customEnabled && ProfileNotificationsActivity.this.notificationsEnabled) {
+                    z = true;
+                }
+                textColorCell.setEnabled(z, (ArrayList<Animator>) null);
+            } else if (itemViewType == 4) {
+                RadioCell radioCell = (RadioCell) viewHolder.itemView;
+                if (ProfileNotificationsActivity.this.customEnabled && ProfileNotificationsActivity.this.notificationsEnabled) {
+                    z = true;
+                }
+                radioCell.setEnabled(z, (ArrayList<Animator>) null);
+            } else if (itemViewType == 8) {
+                TextCheckCell textCheckCell = (TextCheckCell) viewHolder.itemView;
+                if (viewHolder.getAdapterPosition() == ProfileNotificationsActivity.this.previewRow) {
+                    if (ProfileNotificationsActivity.this.customEnabled && ProfileNotificationsActivity.this.notificationsEnabled) {
+                        z = true;
+                    }
+                    textCheckCell.setEnabled(z, (ArrayList<Animator>) null);
+                    return;
+                }
+                textCheckCell.setEnabled(true, (ArrayList<Animator>) null);
             }
         }
 

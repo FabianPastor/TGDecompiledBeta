@@ -30,6 +30,7 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.FrameLayout;
+import androidx.core.graphics.ColorUtils;
 import androidx.core.util.Consumer;
 import androidx.core.util.ObjectsCompat$$ExternalSyntheticBackport0;
 import java.io.UnsupportedEncodingException;
@@ -81,9 +82,9 @@ public class BotWebViewContainer extends FrameLayout implements NotificationCent
     public boolean isFlickeringCenter;
     /* access modifiers changed from: private */
     public boolean isPageLoaded;
-    private int lastButtonColor = Theme.getColor("featuredStickers_addButton");
+    private int lastButtonColor = getColor("featuredStickers_addButton");
     private String lastButtonText = "";
-    private int lastButtonTextColor = Theme.getColor("featuredStickers_buttonText");
+    private int lastButtonTextColor = getColor("featuredStickers_buttonText");
     private boolean lastExpanded;
     /* access modifiers changed from: private */
     public ValueCallback<Uri[]> mFilePathCallback;
@@ -93,7 +94,6 @@ public class BotWebViewContainer extends FrameLayout implements NotificationCent
     /* access modifiers changed from: private */
     public Activity parentActivity;
     private Theme.ResourcesProvider resourcesProvider;
-    private int viewPortOffset;
     private WebView webView;
     /* access modifiers changed from: private */
     public Consumer<Float> webViewProgressListener;
@@ -101,6 +101,13 @@ public class BotWebViewContainer extends FrameLayout implements NotificationCent
     public WebViewScrollListener webViewScrollListener;
 
     public interface Delegate {
+
+        /* renamed from: org.telegram.ui.Components.BotWebViewContainer$Delegate$-CC  reason: invalid class name */
+        public final /* synthetic */ class CC {
+            public static void $default$onSendWebViewData(Delegate delegate, String str) {
+            }
+        }
+
         void onCloseRequested();
 
         void onSendWebViewData(String str);
@@ -162,7 +169,7 @@ public class BotWebViewContainer extends FrameLayout implements NotificationCent
             }
         };
         this.flickerView = r7;
-        r7.setColorFilter(new PorterDuffColorFilter(Theme.getColor("windowBackgroundGray"), PorterDuff.Mode.SRC_IN));
+        r7.setColorFilter(new PorterDuffColorFilter(getColor("windowBackgroundGray"), PorterDuff.Mode.SRC_IN));
         this.flickerView.getImageReceiver().setAspectFit(true);
         addView(this.flickerView, LayoutHelper.createFrame(-1, -2, 48));
         AnonymousClass2 r72 = new WebView(context) {
@@ -199,7 +206,7 @@ public class BotWebViewContainer extends FrameLayout implements NotificationCent
             }
         };
         this.webView = r72;
-        r72.setBackgroundColor(Theme.getColor("windowBackgroundWhite"));
+        r72.setBackgroundColor(getColor("windowBackgroundWhite"));
         WebSettings settings = this.webView.getSettings();
         settings.setJavaScriptEnabled(true);
         settings.setGeolocationEnabled(true);
@@ -384,6 +391,26 @@ public class BotWebViewContainer extends FrameLayout implements NotificationCent
         }
     }
 
+    public static int getMainButtonRippleColor(int i) {
+        return ColorUtils.calculateLuminance(i) >= 0.30000001192092896d ? NUM : NUM;
+    }
+
+    public static Drawable getMainButtonRippleDrawable(int i) {
+        return Theme.createSelectorWithBackgroundDrawable(i, getMainButtonRippleColor(i));
+    }
+
+    public void updateFlickerBackgroundColor(int i) {
+        this.flickerDrawable.setColors(i, 153, 204);
+    }
+
+    public boolean onBackPressed() {
+        if (!this.webView.canGoBack()) {
+            return false;
+        }
+        this.webView.goBack();
+        return true;
+    }
+
     /* access modifiers changed from: private */
     public void setPageLoaded(String str) {
         if (!this.isPageLoaded) {
@@ -467,11 +494,6 @@ public class BotWebViewContainer extends FrameLayout implements NotificationCent
         }
     }
 
-    public void setViewPortOffset(int i) {
-        this.viewPortOffset = i;
-        invalidateViewPortHeight(true);
-    }
-
     /* access modifiers changed from: protected */
     public void onSizeChanged(int i, int i2, int i3, int i4) {
         super.onSizeChanged(i, i2, i3, i4);
@@ -492,7 +514,7 @@ public class BotWebViewContainer extends FrameLayout implements NotificationCent
             if (z) {
                 this.lastExpanded = webViewSwipeContainer.getSwipeOffsetY() == (-webViewSwipeContainer.getOffsetY()) + webViewSwipeContainer.getTopActionBarOffsetY();
             }
-            int measuredHeight = (int) (((((float) webViewSwipeContainer.getMeasuredHeight()) - webViewSwipeContainer.getOffsetY()) - webViewSwipeContainer.getSwipeOffsetY()) + webViewSwipeContainer.getTopActionBarOffsetY() + ((float) this.viewPortOffset));
+            int measuredHeight = (int) (((((float) webViewSwipeContainer.getMeasuredHeight()) - webViewSwipeContainer.getOffsetY()) - webViewSwipeContainer.getSwipeOffsetY()) + webViewSwipeContainer.getTopActionBarOffsetY());
             try {
                 JSONObject jSONObject = new JSONObject();
                 jSONObject.put("height", (double) (((float) measuredHeight) / AndroidUtilities.density));
@@ -579,7 +601,7 @@ public class BotWebViewContainer extends FrameLayout implements NotificationCent
         }
         this.flickerView.setVisibility(0);
         this.flickerView.setAlpha(1.0f);
-        this.flickerView.setImageDrawable(SvgHelper.getDrawable(NUM, Theme.getColor("windowBackgroundGray")));
+        this.flickerView.setImageDrawable(SvgHelper.getDrawable(NUM, getColor("windowBackgroundGray")));
         setupFlickerParams(false);
     }
 
@@ -622,6 +644,12 @@ public class BotWebViewContainer extends FrameLayout implements NotificationCent
             layoutParams.height = -2;
         }
         this.flickerView.requestLayout();
+    }
+
+    public void reload() {
+        this.isPageLoaded = false;
+        this.hasUserPermissions = false;
+        this.webView.reload();
     }
 
     public void loadUrl(String str) {
@@ -667,12 +695,18 @@ public class BotWebViewContainer extends FrameLayout implements NotificationCent
 
     public void didReceivedNotification(int i, int i2, Object... objArr) {
         if (i == NotificationCenter.didSetNewTheme) {
-            evaluateJs("window.Telegram.WebView.receiveEvent('theme_changed', {theme_params: " + buildThemeParams() + "});");
+            this.webView.setBackgroundColor(getColor("windowBackgroundWhite"));
+            this.flickerView.setColorFilter(new PorterDuffColorFilter(getColor("windowBackgroundGray"), PorterDuff.Mode.SRC_IN));
+            notifyThemeChanged();
         } else if (i == NotificationCenter.onActivityResultReceived) {
             onActivityResult(objArr[0].intValue(), objArr[1].intValue(), objArr[2]);
         } else if (i == NotificationCenter.onRequestPermissionResultReceived) {
             onRequestPermissionsResult(objArr[0].intValue(), objArr[1], objArr[2]);
         }
+    }
+
+    private void notifyThemeChanged() {
+        evaluateJs("window.Telegram.WebView.receiveEvent('theme_changed', {theme_params: " + buildThemeParams() + "});");
     }
 
     public void setWebViewScrollListener(WebViewScrollListener webViewScrollListener2) {
@@ -689,60 +723,74 @@ public class BotWebViewContainer extends FrameLayout implements NotificationCent
         boolean z = false;
         char c = 65535;
         switch (str.hashCode()) {
+            case -1259935152:
+                if (str.equals("web_app_request_theme")) {
+                    c = 0;
+                    break;
+                }
+                break;
             case -921083201:
                 if (str.equals("web_app_request_viewport")) {
-                    c = 0;
+                    c = 1;
                     break;
                 }
                 break;
             case -71726289:
                 if (str.equals("web_app_close")) {
-                    c = 1;
+                    c = 2;
                     break;
                 }
                 break;
             case -58095910:
                 if (str.equals("web_app_ready")) {
-                    c = 2;
+                    c = 3;
                     break;
                 }
                 break;
             case 668142772:
                 if (str.equals("web_app_data_send")) {
-                    c = 3;
+                    c = 4;
                     break;
                 }
                 break;
             case 1398490221:
                 if (str.equals("web_app_setup_main_button")) {
-                    c = 4;
+                    c = 5;
                     break;
                 }
                 break;
             case 2139805763:
                 if (str.equals("web_app_expand")) {
-                    c = 5;
+                    c = 6;
                     break;
                 }
                 break;
         }
         switch (c) {
             case 0:
+                notifyThemeChanged();
+                return;
+            case 1:
                 if ((getParent() instanceof ChatAttachAlertBotWebViewLayout.WebViewSwipeContainer) && ((ChatAttachAlertBotWebViewLayout.WebViewSwipeContainer) getParent()).isSwipeInProgress()) {
                     z = true;
                 }
                 invalidateViewPortHeight(!z, true);
                 return;
-            case 1:
+            case 2:
                 this.delegate.onCloseRequested();
                 return;
-            case 2:
+            case 3:
                 setPageLoaded(this.webView.getUrl());
                 return;
-            case 3:
-                this.delegate.onSendWebViewData(str2);
-                return;
             case 4:
+                try {
+                    this.delegate.onSendWebViewData(new JSONObject(str2).optString("data"));
+                    return;
+                } catch (JSONException e) {
+                    FileLog.e((Throwable) e);
+                    return;
+                }
+            case 5:
                 try {
                     JSONObject jSONObject = new JSONObject(str2);
                     boolean optBoolean = jSONObject.optBoolean("is_active", false);
@@ -757,11 +805,11 @@ public class BotWebViewContainer extends FrameLayout implements NotificationCent
                     this.buttonData = str2;
                     this.delegate.onSetupMainButton(z2, optBoolean, trim, parseColor, parseColor2, z3);
                     return;
-                } catch (IllegalArgumentException | JSONException e) {
-                    FileLog.e(e);
+                } catch (IllegalArgumentException | JSONException e2) {
+                    FileLog.e(e2);
                     return;
                 }
-            case 5:
+            case 6:
                 this.delegate.onWebAppExpand();
                 return;
             default:
@@ -785,13 +833,18 @@ public class BotWebViewContainer extends FrameLayout implements NotificationCent
         }
     }
 
-    private String formatColor(String str) {
+    private int getColor(String str) {
         Theme.ResourcesProvider resourcesProvider2 = this.resourcesProvider;
         Integer valueOf = Integer.valueOf(resourcesProvider2 != null ? resourcesProvider2.getColor(str).intValue() : Theme.getColor(str));
         if (valueOf == null) {
             valueOf = Integer.valueOf(Theme.getColor(str));
         }
-        return "#" + hexFixed(Color.red(valueOf.intValue())) + hexFixed(Color.green(valueOf.intValue())) + hexFixed(Color.blue(valueOf.intValue()));
+        return valueOf.intValue();
+    }
+
+    private String formatColor(String str) {
+        int color = getColor(str);
+        return "#" + hexFixed(Color.red(color)) + hexFixed(Color.green(color)) + hexFixed(Color.blue(color));
     }
 
     private String hexFixed(int i) {

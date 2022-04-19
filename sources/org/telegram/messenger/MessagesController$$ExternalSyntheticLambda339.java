@@ -11,6 +11,6 @@ public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda33
     }
 
     public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        MessagesController.lambda$installTheme$93(tLObject, tLRPC$TL_error);
+        MessagesController.lambda$hidePeerSettingsBar$53(tLObject, tLRPC$TL_error);
     }
 }

@@ -2347,6 +2347,7 @@ public final class R {
         public static final int AreYouSureClearHistoryFewChats = NUM;
         public static final int AreYouSureClearHistoryGroup = NUM;
         public static final int AreYouSureClearHistorySavedMessages = NUM;
+        public static final int AreYouSureClearHistoryWithChannel = NUM;
         public static final int AreYouSureClearHistoryWithChat = NUM;
         public static final int AreYouSureClearHistoryWithSecretUser = NUM;
         public static final int AreYouSureClearHistoryWithUser = NUM;
@@ -2637,6 +2638,7 @@ public final class R {
         public static final int BotPermissionGameAlert = NUM;
         public static final int BotRemoveFromMenu = NUM;
         public static final int BotRemoveFromMenuTitle = NUM;
+        public static final int BotRemoveInlineFromMenu = NUM;
         public static final int BotRequestAttachPermission = NUM;
         public static final int BotRestart = NUM;
         public static final int BotRestrictionsCanDo = NUM;
@@ -3025,6 +3027,8 @@ public final class R {
         public static final int ClearCacheInfo = NUM;
         public static final int ClearDownloadsList = NUM;
         public static final int ClearFewChatsTitle = NUM;
+        public static final int ClearForAll = NUM;
+        public static final int ClearForMe = NUM;
         public static final int ClearHistory = NUM;
         public static final int ClearHistoryCache = NUM;
         public static final int ClearHistoryForTheseDays = NUM;
@@ -3180,6 +3184,7 @@ public final class R {
         public static final int CustomP2PInfo = NUM;
         public static final int CustomShareInfo = NUM;
         public static final int CustomShareSettingsHelp = NUM;
+        public static final int CustomSound = NUM;
         public static final int CustomThemes = NUM;
         public static final int DartInfo = NUM;
         public static final int DataSettings = NUM;
@@ -3225,11 +3230,13 @@ public final class R {
         public static final int DebugMenuEnableLogs = NUM;
         public static final int DebugMenuEnablePauseMusic = NUM;
         public static final int DebugMenuEnableSmoothKeyboard = NUM;
+        public static final int DebugMenuEnableWebViewDebug = NUM;
         public static final int DebugMenuImportContacts = NUM;
         public static final int DebugMenuReadAllDialogs = NUM;
         public static final int DebugMenuReloadContacts = NUM;
         public static final int DebugMenuResetContacts = NUM;
         public static final int DebugMenuResetDialogs = NUM;
+        public static final int DebugMenuWebViewDebugEnabled = NUM;
         public static final int DebugSendLastLogs = NUM;
         public static final int DebugSendLogs = NUM;
         public static final int December = NUM;
@@ -3248,6 +3255,7 @@ public final class R {
         public static final int DeleteAllCallsText = NUM;
         public static final int DeleteAllFrom = NUM;
         public static final int DeleteAllMessagesAlert = NUM;
+        public static final int DeleteAllMessagesChannelAlert = NUM;
         public static final int DeleteAllMessagesSavedAlert = NUM;
         public static final int DeleteAllRevokedLinkHelp = NUM;
         public static final int DeleteAllRevokedLinks = NUM;
@@ -4563,6 +4571,7 @@ public final class R {
         public static final int MuteForAlert = NUM;
         public static final int MuteForButton = NUM;
         public static final int MuteForPopup = NUM;
+        public static final int MuteNever = NUM;
         public static final int MuteNotifications = NUM;
         public static final int MyChannels = NUM;
         public static final int MyGroups = NUM;

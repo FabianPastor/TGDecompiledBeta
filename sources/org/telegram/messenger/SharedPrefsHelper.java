@@ -20,13 +20,16 @@ public class SharedPrefsHelper {
     }
 
     public static void cleanupAccount(int i) {
-        SharedPreferences.Editor edit = webViewBotsPrefs.edit();
-        for (String next : webViewBotsPrefs.getAll().keySet()) {
-            if (next.startsWith("confirm_shown_" + i + "_")) {
-                edit.remove(next);
+        SharedPreferences sharedPreferences = webViewBotsPrefs;
+        if (sharedPreferences != null) {
+            SharedPreferences.Editor edit = sharedPreferences.edit();
+            for (String next : webViewBotsPrefs.getAll().keySet()) {
+                if (next.startsWith("confirm_shown_" + i + "_")) {
+                    edit.remove(next);
+                }
             }
+            edit.apply();
         }
-        edit.apply();
     }
 
     public static SharedPreferences getWebViewBotsPrefs() {

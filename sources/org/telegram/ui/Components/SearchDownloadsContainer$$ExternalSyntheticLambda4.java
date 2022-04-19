@@ -1,16 +1,21 @@
 package org.telegram.ui.Components;
 
-import android.view.View;
-import org.telegram.ui.Components.RecyclerListView;
+import java.util.ArrayList;
 
-public final /* synthetic */ class SearchDownloadsContainer$$ExternalSyntheticLambda4 implements RecyclerListView.OnItemClickListener {
+public final /* synthetic */ class SearchDownloadsContainer$$ExternalSyntheticLambda4 implements Runnable {
     public final /* synthetic */ SearchDownloadsContainer f$0;
+    public final /* synthetic */ ArrayList f$1;
+    public final /* synthetic */ String f$2;
+    public final /* synthetic */ ArrayList f$3;
 
-    public /* synthetic */ SearchDownloadsContainer$$ExternalSyntheticLambda4(SearchDownloadsContainer searchDownloadsContainer) {
+    public /* synthetic */ SearchDownloadsContainer$$ExternalSyntheticLambda4(SearchDownloadsContainer searchDownloadsContainer, ArrayList arrayList, String str, ArrayList arrayList2) {
         this.f$0 = searchDownloadsContainer;
+        this.f$1 = arrayList;
+        this.f$2 = str;
+        this.f$3 = arrayList2;
     }
 
-    public final void onItemClick(View view, int i) {
-        this.f$0.lambda$new$0(view, i);
+    public final void run() {
+        this.f$0.lambda$update$5(this.f$1, this.f$2, this.f$3);
     }
 }

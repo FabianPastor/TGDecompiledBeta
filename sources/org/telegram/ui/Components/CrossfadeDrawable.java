@@ -18,9 +18,6 @@ public class CrossfadeDrawable extends Drawable {
     public void setAlpha(int i) {
     }
 
-    public void setColorFilter(ColorFilter colorFilter) {
-    }
-
     public CrossfadeDrawable(Drawable drawable, Drawable drawable2) {
         this.topDrawable = drawable;
         this.bottomDrawable = drawable2;
@@ -73,6 +70,10 @@ public class CrossfadeDrawable extends Drawable {
             this.bottomDrawable.setAlpha((int) (f2 * 255.0f));
             this.bottomDrawable.draw(canvas);
         }
+    }
+
+    public void setColorFilter(ColorFilter colorFilter) {
+        this.topDrawable.setColorFilter(colorFilter);
     }
 
     public int getIntrinsicWidth() {

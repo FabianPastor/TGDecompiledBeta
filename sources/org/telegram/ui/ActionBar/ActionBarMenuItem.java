@@ -2044,7 +2044,7 @@ public class ActionBarMenuItem extends FrameLayout {
         }
     }
 
-    public View addColoredGap() {
+    public ActionBarPopupWindow.GapView addColoredGap() {
         createPopupLayout();
         ActionBarPopupWindow.GapView gapView = new ActionBarPopupWindow.GapView(getContext(), "graySection");
         gapView.setTag(NUM, 1);

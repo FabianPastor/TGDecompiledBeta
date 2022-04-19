@@ -14,6 +14,6 @@ public final /* synthetic */ class ChatNotificationsPopupWrapper$$ExternalSynthe
     }
 
     public final void didSelectDate(boolean z, int i) {
-        AndroidUtilities.runOnUIThread(new ChatNotificationsPopupWrapper$$ExternalSyntheticLambda7(this.f$0, i, this.f$1), 16);
+        AndroidUtilities.runOnUIThread(new ChatNotificationsPopupWrapper$$ExternalSyntheticLambda7(i, this.f$0, this.f$1), 16);
     }
 }

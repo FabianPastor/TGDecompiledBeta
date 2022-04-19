@@ -12,6 +12,6 @@ public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda24
     }
 
     public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        this.f$0.lambda$setDialogHistoryTTL$107(tLObject, tLRPC$TL_error);
+        this.f$0.lambda$loadSignUpNotificationsSettings$163(tLObject, tLRPC$TL_error);
     }
 }

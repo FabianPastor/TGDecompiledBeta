@@ -10,7 +10,7 @@ public final /* synthetic */ class PhotoViewer$$ExternalSyntheticLambda63 implem
     }
 
     public final void didSetImage(ImageReceiver imageReceiver, boolean z, boolean z2, boolean z3) {
-        this.f$0.lambda$setParentActivity$34(imageReceiver, z, z2, z3);
+        this.f$0.lambda$setParentActivity$33(imageReceiver, z, z2, z3);
     }
 
     public /* synthetic */ void onAnimationReady(ImageReceiver imageReceiver) {

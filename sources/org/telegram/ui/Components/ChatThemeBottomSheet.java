@@ -139,7 +139,7 @@ public class ChatThemeBottomSheet extends BottomSheet implements NotificationCen
             r4.setLines(r3)
             r4.setSingleLine(r3)
             java.lang.String r6 = "SelectTheme"
-            r7 = 2131627949(0x7f0e0fad, float:1.8883177E38)
+            r7 = 2131627958(0x7f0e0fb6, float:1.8883195E38)
             java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r6, r7)
             r4.setText(r6)
             java.lang.String r6 = "dialogTextBlack"
@@ -304,11 +304,11 @@ public class ChatThemeBottomSheet extends BottomSheet implements NotificationCen
             android.widget.TextView r2 = r0.resetTextView
             org.telegram.ui.ActionBar.EmojiThemes r1 = r19.getCurrentTheme()
             if (r1 != 0) goto L_0x0218
-            r1 = 2131625418(0x7f0e05ca, float:1.8878043E38)
+            r1 = 2131625426(0x7f0e05d2, float:1.887806E38)
             java.lang.String r5 = "DoNoSetTheme"
             goto L_0x021d
         L_0x0218:
-            r1 = 2131624944(0x7f0e03f0, float:1.8877082E38)
+            r1 = 2131624946(0x7f0e03f2, float:1.8877086E38)
             java.lang.String r5 = "ChatResetTheme"
         L_0x021d:
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r5, r1)
@@ -350,7 +350,7 @@ public class ChatThemeBottomSheet extends BottomSheet implements NotificationCen
             android.widget.TextView r1 = r0.applyTextView
             r1.setSingleLine(r3)
             android.widget.TextView r1 = r0.applyTextView
-            r4 = 2131624919(0x7f0e03d7, float:1.8877031E38)
+            r4 = 2131624921(0x7f0e03d9, float:1.8877035E38)
             java.lang.String r8 = "ChatApplyTheme"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r8, r4)
             r1.setText(r4)

@@ -8,6 +8,6 @@ public final /* synthetic */ class AlertsCreator$$ExternalSyntheticLambda87 impl
     }
 
     public final void run() {
-        AlertsCreator.lambda$createThemeCreateDialog$123(this.f$0);
+        AlertsCreator.lambda$createThemeCreateDialog$122(this.f$0);
     }
 }

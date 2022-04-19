@@ -13,6 +13,6 @@ public final /* synthetic */ class PhotoViewer$$ExternalSyntheticLambda40 implem
     }
 
     public final boolean onLongClick(View view) {
-        return this.f$0.lambda$setParentActivity$16(this.f$1, view);
+        return this.f$0.lambda$setParentActivity$15(this.f$1, view);
     }
 }

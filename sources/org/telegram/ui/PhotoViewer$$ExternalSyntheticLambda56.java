@@ -12,6 +12,6 @@ public final /* synthetic */ class PhotoViewer$$ExternalSyntheticLambda56 implem
     }
 
     public final void run() {
-        this.f$0.lambda$detectFaces$50(this.f$1, this.f$2);
+        this.f$0.lambda$detectFaces$49(this.f$1, this.f$2);
     }
 }

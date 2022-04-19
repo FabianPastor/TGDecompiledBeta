@@ -3,6 +3,8 @@ package org.telegram.ui;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffColorFilter;
 import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
 import android.view.View;
@@ -19,6 +21,7 @@ import org.telegram.ui.Components.RLottieDrawable;
 
 public class DownloadProgressIcon extends View implements NotificationCenter.NotificationCenterDelegate {
     private int currentAccount;
+    int currentColor;
     ArrayList<ProgressObserver> currentListeners = new ArrayList<>();
     float currentProgress;
     RLottieDrawable downloadCompleteDrawable;
@@ -58,9 +61,13 @@ public class DownloadProgressIcon extends View implements NotificationCenter.Not
     public void onDraw(Canvas canvas) {
         super.onDraw(canvas);
         if (getAlpha() != 0.0f) {
-            this.paint.setColor(Theme.getColor("actionBarDefaultIcon"));
-            this.paint2.setColor(Theme.getColor("actionBarDefaultIcon"));
-            this.paint2.setAlpha(100);
+            if (this.currentColor != Theme.getColor("actionBarDefaultIcon")) {
+                this.currentColor = Theme.getColor("actionBarDefaultIcon");
+                this.paint.setColor(Theme.getColor("actionBarDefaultIcon"));
+                this.paint2.setColor(Theme.getColor("actionBarDefaultIcon"));
+                this.downloadImageReceiver.setColorFilter(new PorterDuffColorFilter(Theme.getColor("actionBarDefaultIcon"), PorterDuff.Mode.MULTIPLY));
+                this.paint2.setAlpha(100);
+            }
             float f = this.currentProgress;
             float f2 = this.progress;
             if (f != f2) {

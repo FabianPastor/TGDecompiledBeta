@@ -1,5 +1,6 @@
 package org.telegram.ui.Components;
 
+import org.telegram.messenger.AndroidUtilities;
 import org.telegram.ui.ActionBar.AlertDialog;
 import org.telegram.ui.ActionBar.BaseFragment;
 
@@ -15,6 +16,6 @@ public final /* synthetic */ class AlertsCreator$$ExternalSyntheticLambda89 impl
     }
 
     public final void run() {
-        AlertsCreator.processCreate(this.f$0, this.f$1, this.f$2);
+        AndroidUtilities.runOnUIThread(new AlertsCreator$$ExternalSyntheticLambda88(this.f$0, this.f$1, this.f$2));
     }
 }

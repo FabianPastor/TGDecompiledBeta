@@ -143,8 +143,7 @@ public class TimerDrawable extends Drawable {
                 }
             }
             Rect rect = AndroidUtilities.rectTmp2;
-            rect.set(getBounds());
-            rect.inset(AndroidUtilities.dp(1.0f), AndroidUtilities.dp(1.0f));
+            rect.set(getBounds().centerX() - AndroidUtilities.dp(10.5f), getBounds().centerY() - AndroidUtilities.dp(10.5f), (getBounds().centerX() - AndroidUtilities.dp(10.5f)) + this.currentTtlIcon.getIntrinsicWidth(), (getBounds().centerY() - AndroidUtilities.dp(10.5f)) + this.currentTtlIcon.getIntrinsicHeight());
             this.currentTtlIcon.setBounds(rect);
             this.currentTtlIcon.draw(canvas);
         }

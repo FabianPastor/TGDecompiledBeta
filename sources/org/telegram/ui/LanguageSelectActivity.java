@@ -624,7 +624,7 @@ public class LanguageSelectActivity extends BaseFragment implements Notification
                 r3.<init>(r0)
                 int r2 = org.telegram.ui.ActionBar.Theme.getColor(r2)
                 r3.setBackgroundColor(r2)
-                r2 = 2131626219(0x7f0e08eb, float:1.8879668E38)
+                r2 = 2131626227(0x7f0e08f3, float:1.8879684E38)
                 java.lang.String r0 = "Language"
                 java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r0, r2)
                 r3.setText(r2)
@@ -789,7 +789,7 @@ public class LanguageSelectActivity extends BaseFragment implements Notification
                 java.lang.Object[] r1 = new java.lang.Object[r1]
                 java.lang.String r4 = r0.name
                 r1[r2] = r4
-                r4 = 2131626222(0x7f0e08ee, float:1.8879674E38)
+                r4 = 2131626230(0x7f0e08f6, float:1.887969E38)
                 java.lang.String r5 = "LanguageCustom"
                 java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r5, r4)
                 r1[r3] = r4

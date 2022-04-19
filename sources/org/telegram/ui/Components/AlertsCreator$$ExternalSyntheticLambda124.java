@@ -19,6 +19,6 @@ public final /* synthetic */ class AlertsCreator$$ExternalSyntheticLambda124 imp
     }
 
     public final void onValueChange(NumberPicker numberPicker, int i, int i2) {
-        AlertsCreator.lambda$createCalendarPickerDialog$79(this.f$0, this.f$1, this.f$2, this.f$3, this.f$4, numberPicker, i, i2);
+        AlertsCreator.lambda$createCalendarPickerDialog$78(this.f$0, this.f$1, this.f$2, this.f$3, this.f$4, numberPicker, i, i2);
     }
 }

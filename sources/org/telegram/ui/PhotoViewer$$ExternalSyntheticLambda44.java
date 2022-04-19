@@ -11,6 +11,6 @@ public final /* synthetic */ class PhotoViewer$$ExternalSyntheticLambda44 implem
     }
 
     public final View makeView() {
-        return this.f$0.lambda$setParentActivity$7();
+        return this.f$0.lambda$setParentActivity$6();
     }
 }

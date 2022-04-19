@@ -11,6 +11,6 @@ public final /* synthetic */ class AlertsCreator$$ExternalSyntheticLambda122 imp
     }
 
     public final void onValueChange(NumberPicker numberPicker, int i, int i2) {
-        AlertsCreator.lambda$createAutoDeleteDatePickerDialog$64(this.f$0, numberPicker, i, i2);
+        AlertsCreator.lambda$createMuteForPickerDialog$74(this.f$0, numberPicker, i, i2);
     }
 }

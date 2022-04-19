@@ -28,6 +28,7 @@ public class PopupSwipeBackLayout extends FrameLayout {
     private int currentForegroundIndex = -1;
     private GestureDetectorCompat detector;
     private ValueAnimator foregroundAnimator;
+    private int foregroundColor = 0;
     private Paint foregroundPaint = new Paint();
     private Rect hitRect = new Rect();
     /* access modifiers changed from: private */
@@ -115,7 +116,12 @@ public class PopupSwipeBackLayout extends FrameLayout {
         int indexOfChild = indexOfChild(view);
         int save = canvas.save();
         if (indexOfChild != 0) {
-            this.foregroundPaint.setColor(Theme.getColor("actionBarDefaultSubmenuBackground", this.resourcesProvider));
+            int i = this.foregroundColor;
+            if (i == 0) {
+                this.foregroundPaint.setColor(Theme.getColor("actionBarDefaultSubmenuBackground", this.resourcesProvider));
+            } else {
+                this.foregroundPaint.setColor(i);
+            }
             canvas.drawRect(view.getX(), 0.0f, view.getX() + ((float) view.getMeasuredWidth()), (float) getMeasuredHeight(), this.foregroundPaint);
         }
         boolean drawChild = super.drawChild(canvas, view, j);
@@ -409,5 +415,9 @@ public class PopupSwipeBackLayout extends FrameLayout {
     public /* synthetic */ void lambda$setNewForegroundHeight$1(ValueAnimator valueAnimator) {
         this.overrideForegroundHeight = ((Float) valueAnimator.getAnimatedValue()).floatValue();
         invalidateTransforms();
+    }
+
+    public void setForegroundColor(int i) {
+        this.foregroundColor = i;
     }
 }

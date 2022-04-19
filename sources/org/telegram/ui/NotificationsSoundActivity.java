@@ -1,6 +1,5 @@
 package org.telegram.ui;
 
-import android.app.NotificationManager;
 import android.content.ClipData;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -278,8 +277,10 @@ public class NotificationsSoundActivity extends BaseFragment implements ChatAtta
                 this.avatarContainer.setTitle(chat.title);
             } else {
                 TLRPC$User user = getMessagesController().getUser(Long.valueOf(this.dialogId));
-                this.avatarContainer.setUserAvatar(user);
-                this.avatarContainer.setTitle(ContactsController.formatName(user.first_name, user.last_name));
+                if (user != null) {
+                    this.avatarContainer.setUserAvatar(user);
+                    this.avatarContainer.setTitle(ContactsController.formatName(user.first_name, user.last_name));
+                }
             }
             this.avatarContainer.setSubtitle(LocaleController.getString("NotificationsSound", NUM));
         }
@@ -335,14 +336,14 @@ public class NotificationsSoundActivity extends BaseFragment implements ChatAtta
             r9.show()
         L_0x0019:
             boolean r9 = r8 instanceof org.telegram.ui.NotificationsSoundActivity.ToneCell
-            if (r9 == 0) goto L_0x00da
+            if (r9 == 0) goto L_0x00dd
             org.telegram.ui.NotificationsSoundActivity$ToneCell r8 = (org.telegram.ui.NotificationsSoundActivity.ToneCell) r8
             org.telegram.ui.ActionBar.ActionBar r9 = r6.actionBar
             boolean r9 = r9.isActionModeShowed()
-            if (r9 == 0) goto L_0x002d
-            org.telegram.ui.NotificationsSoundActivity$Tone r7 = r8.tone
-            r6.checkSelection(r7)
-            return
+            if (r9 != 0) goto L_0x00d8
+            org.telegram.ui.NotificationsSoundActivity$Tone r9 = r8.tone
+            if (r9 != 0) goto L_0x002d
+            goto L_0x00d8
         L_0x002d:
             android.media.Ringtone r9 = r6.lastPlayedRingtone
             if (r9 == 0) goto L_0x0034
@@ -350,12 +351,12 @@ public class NotificationsSoundActivity extends BaseFragment implements ChatAtta
         L_0x0034:
             org.telegram.ui.NotificationsSoundActivity$Tone r9 = r8.tone
             boolean r0 = r9.isSystemDefault
-            r2 = 2
-            r3 = 0
+            r2 = 0
+            r3 = 2
             r4 = 4
             if (r0 == 0) goto L_0x0053
             android.content.Context r7 = r7.getApplicationContext()
-            android.net.Uri r9 = android.media.RingtoneManager.getDefaultUri(r2)
+            android.net.Uri r9 = android.media.RingtoneManager.getDefaultUri(r3)
             android.media.Ringtone r7 = android.media.RingtoneManager.getRingtone(r7, r9)
             r7.setStreamType(r4)
             r6.lastPlayedRingtone = r7
@@ -388,7 +389,7 @@ public class NotificationsSoundActivity extends BaseFragment implements ChatAtta
             if (r0 == 0) goto L_0x008e
             goto L_0x008f
         L_0x008e:
-            r9 = r3
+            r9 = r2
         L_0x008f:
             if (r9 != 0) goto L_0x0099
             org.telegram.ui.NotificationsSoundActivity$Tone r9 = r8.tone
@@ -410,9 +411,9 @@ public class NotificationsSoundActivity extends BaseFragment implements ChatAtta
             org.telegram.messenger.FileLoader r7 = r6.getFileLoader()
             org.telegram.ui.NotificationsSoundActivity$Tone r9 = r8.tone
             org.telegram.tgnet.TLRPC$Document r9 = r9.document
-            r7.loadFile(r9, r3, r2, r1)
+            r7.loadFile(r9, r9, r3, r1)
         L_0x00c5:
-            r6.startSelectedTone = r3
+            r6.startSelectedTone = r2
             org.telegram.ui.NotificationsSoundActivity$Tone r7 = r8.tone
             r6.selectedTone = r7
             r7 = 1
@@ -420,8 +421,11 @@ public class NotificationsSoundActivity extends BaseFragment implements ChatAtta
             org.telegram.ui.NotificationsSoundActivity$Adapter r7 = r6.adapter
             int r8 = r7.getItemCount()
             r7.notifyItemRangeChanged(r1, r8)
-            r6.checkDisabledBySystem()
-        L_0x00da:
+            goto L_0x00dd
+        L_0x00d8:
+            org.telegram.ui.NotificationsSoundActivity$Tone r7 = r8.tone
+            r6.checkSelection(r7)
+        L_0x00dd:
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.NotificationsSoundActivity.lambda$createView$1(android.content.Context, android.view.View, int):void");
@@ -474,6 +478,8 @@ public class NotificationsSoundActivity extends BaseFragment implements ChatAtta
         TLRPC$Document tLRPC$Document;
         TLRPC$Document tLRPC$Document2;
         getMediaDataController().ringtoneDataStore.loadUserRingtones();
+        this.serverTones.clear();
+        this.systemTones.clear();
         for (int i = 0; i < getMediaDataController().ringtoneDataStore.userRingtones.size(); i++) {
             RingtoneDataStore.CachedTone cachedTone = getMediaDataController().ringtoneDataStore.userRingtones.get(i);
             Tone tone = new Tone();
@@ -497,7 +503,6 @@ public class NotificationsSoundActivity extends BaseFragment implements ChatAtta
         RingtoneManager ringtoneManager = new RingtoneManager(ApplicationLoader.applicationContext);
         ringtoneManager.setType(2);
         Cursor cursor = ringtoneManager.getCursor();
-        this.systemTones.clear();
         Tone tone3 = new Tone();
         int i3 = this.stableIds;
         this.stableIds = i3 + 1;
@@ -1050,13 +1055,6 @@ public class NotificationsSoundActivity extends BaseFragment implements ChatAtta
                 }
             }
             return Uri.fromFile(file);
-        }
-    }
-
-    private void checkDisabledBySystem() {
-        NotificationManager notificationManager = (NotificationManager) ApplicationLoader.applicationContext.getSystemService("notification");
-        if (Build.VERSION.SDK_INT >= 24) {
-            notificationManager.areNotificationsEnabled();
         }
     }
 }

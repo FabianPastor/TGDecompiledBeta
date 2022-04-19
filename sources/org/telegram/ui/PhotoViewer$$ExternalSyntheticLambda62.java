@@ -12,6 +12,6 @@ public final /* synthetic */ class PhotoViewer$$ExternalSyntheticLambda62 implem
     }
 
     public final void run() {
-        PhotoViewer.lambda$setItemVisible$61(this.f$0, this.f$1);
+        PhotoViewer.lambda$setItemVisible$60(this.f$0, this.f$1);
     }
 }

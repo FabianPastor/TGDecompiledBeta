@@ -10,6 +10,6 @@ public final /* synthetic */ class PhotoViewer$$ExternalSyntheticLambda9 impleme
     }
 
     public final void onDismiss(DialogInterface dialogInterface) {
-        this.f$0.lambda$showAlertDialog$49(dialogInterface);
+        this.f$0.lambda$showAlertDialog$48(dialogInterface);
     }
 }

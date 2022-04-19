@@ -1,18 +1,15 @@
 package org.telegram.ui;
 
-import org.telegram.messenger.MediaController;
-import org.telegram.ui.Components.FilterGLThread;
-import org.telegram.ui.Components.FilterShaders;
-import org.telegram.ui.Components.VideoEditTextureView;
+import org.telegram.ui.Components.VideoSeekPreviewImage;
 
-public final /* synthetic */ class PhotoViewer$$ExternalSyntheticLambda71 implements VideoEditTextureView.VideoEditTextureViewDelegate {
-    public final /* synthetic */ MediaController.SavedFilterState f$0;
+public final /* synthetic */ class PhotoViewer$$ExternalSyntheticLambda71 implements VideoSeekPreviewImage.VideoSeekPreviewImageDelegate {
+    public final /* synthetic */ PhotoViewer f$0;
 
-    public /* synthetic */ PhotoViewer$$ExternalSyntheticLambda71(MediaController.SavedFilterState savedFilterState) {
-        this.f$0 = savedFilterState;
+    public /* synthetic */ PhotoViewer$$ExternalSyntheticLambda71(PhotoViewer photoViewer) {
+        this.f$0 = photoViewer;
     }
 
-    public final void onEGLThreadAvailable(FilterGLThread filterGLThread) {
-        filterGLThread.setFilterGLThreadDelegate(FilterShaders.getFilterShadersDelegate(this.f$0));
+    public final void onReady() {
+        this.f$0.lambda$createVideoControlsInterface$44();
     }
 }

@@ -48,7 +48,7 @@ public class ChatActivityBotWebViewButton extends FrameLayout {
         addView(this.progressView, LayoutHelper.createFrame(28, 28.0f, 21, 0.0f, 0.0f, 12.0f, 4.0f));
         View view = new View(context);
         this.rippleView = view;
-        view.setBackground(Theme.createSelectorDrawable(Theme.getColor("listSelectorSDK21"), 2));
+        view.setBackground(Theme.createSelectorDrawable(Theme.getColor("featuredStickers_addButtonPressed"), 2));
         addView(this.rippleView, LayoutHelper.createFrame(-1, -1.0f, 3, 0.0f, -4.0f, 0.0f, 0.0f));
         setWillNotDraw(false);
     }
@@ -64,6 +64,7 @@ public class ChatActivityBotWebViewButton extends FrameLayout {
         this.textView.setText(str);
         this.textView.setTextColor(i2);
         this.buttonColor = i;
+        this.rippleView.setBackground(Theme.createSelectorDrawable(BotWebViewContainer.getMainButtonRippleColor(i), 2));
         this.progressView.setProgressColor(i2);
         if (this.progressWasVisible != z2) {
             this.progressWasVisible = z2;
@@ -90,6 +91,7 @@ public class ChatActivityBotWebViewButton extends FrameLayout {
                 }
             }).start();
         }
+        invalidate();
     }
 
     public void setProgress(float f) {

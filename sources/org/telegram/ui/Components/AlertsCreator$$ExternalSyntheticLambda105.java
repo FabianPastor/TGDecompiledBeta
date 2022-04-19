@@ -1,15 +1,15 @@
 package org.telegram.ui.Components;
 
-import org.telegram.messenger.LocaleController;
 import org.telegram.ui.Components.NumberPicker;
 
 public final /* synthetic */ class AlertsCreator$$ExternalSyntheticLambda105 implements NumberPicker.Formatter {
-    public static final /* synthetic */ AlertsCreator$$ExternalSyntheticLambda105 INSTANCE = new AlertsCreator$$ExternalSyntheticLambda105();
+    public final /* synthetic */ int[] f$0;
 
-    private /* synthetic */ AlertsCreator$$ExternalSyntheticLambda105() {
+    public /* synthetic */ AlertsCreator$$ExternalSyntheticLambda105(int[] iArr) {
+        this.f$0 = iArr;
     }
 
     public final String format(int i) {
-        return LocaleController.formatPluralString("Hours", i);
+        return AlertsCreator.lambda$createMuteForPickerDialog$72(this.f$0, i);
     }
 }

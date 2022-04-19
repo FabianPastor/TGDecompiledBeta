@@ -18,6 +18,6 @@ public final /* synthetic */ class AlertsCreator$$ExternalSyntheticLambda63 impl
     }
 
     public final void onClick(View view) {
-        AlertsCreator.lambda$createAutoDeleteDatePickerDialog$65(this.f$0, this.f$1, this.f$2, this.f$3, view);
+        AlertsCreator.lambda$createMuteForPickerDialog$75(this.f$0, this.f$1, this.f$2, this.f$3, view);
     }
 }

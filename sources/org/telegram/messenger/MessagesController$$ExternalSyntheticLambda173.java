@@ -1,17 +1,17 @@
 package org.telegram.messenger;
 
-import org.telegram.tgnet.TLRPC$TL_updatePeerBlocked;
+import org.telegram.tgnet.TLRPC$TL_updateLangPack;
 
 public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda173 implements Runnable {
     public final /* synthetic */ MessagesController f$0;
-    public final /* synthetic */ TLRPC$TL_updatePeerBlocked f$1;
+    public final /* synthetic */ TLRPC$TL_updateLangPack f$1;
 
-    public /* synthetic */ MessagesController$$ExternalSyntheticLambda173(MessagesController messagesController, TLRPC$TL_updatePeerBlocked tLRPC$TL_updatePeerBlocked) {
+    public /* synthetic */ MessagesController$$ExternalSyntheticLambda173(MessagesController messagesController, TLRPC$TL_updateLangPack tLRPC$TL_updateLangPack) {
         this.f$0 = messagesController;
-        this.f$1 = tLRPC$TL_updatePeerBlocked;
+        this.f$1 = tLRPC$TL_updateLangPack;
     }
 
     public final void run() {
-        this.f$0.lambda$processUpdateArray$303(this.f$1);
+        this.f$0.lambda$processUpdateArray$307(this.f$1);
     }
 }

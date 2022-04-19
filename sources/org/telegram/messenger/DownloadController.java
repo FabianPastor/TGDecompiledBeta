@@ -1675,27 +1675,29 @@ public class DownloadController extends BaseController implements NotificationCe
         for (int i = 0; i < arrayList.size(); i++) {
             int i2 = 0;
             while (true) {
-                if (i2 >= this.recentDownloadingFiles.size()) {
+                if (i2 < this.recentDownloadingFiles.size()) {
+                    if (arrayList.get(i).getId() == this.recentDownloadingFiles.get(i2).getId() && this.recentDownloadingFiles.get(i2).getDialogId() == arrayList.get(i).getDialogId()) {
+                        this.recentDownloadingFiles.remove(i2);
+                        z = true;
+                        break;
+                    }
+                    i2++;
+                } else {
                     z = false;
                     break;
-                } else if (arrayList.get(i).getId() == this.recentDownloadingFiles.get(i2).getId()) {
-                    this.recentDownloadingFiles.remove(i2);
-                    z = true;
-                    break;
-                } else {
-                    i2++;
                 }
             }
             if (!z) {
                 int i3 = 0;
                 while (true) {
-                    if (i3 >= this.downloadingFiles.size()) {
-                        break;
-                    } else if (arrayList.get(i).getId() == this.downloadingFiles.get(i3).getId()) {
-                        this.downloadingFiles.remove(i3);
-                        break;
-                    } else {
+                    if (i3 < this.downloadingFiles.size()) {
+                        if (arrayList.get(i).getId() == this.downloadingFiles.get(i3).getId() && this.downloadingFiles.get(i3).getDialogId() == arrayList.get(i).getDialogId()) {
+                            this.downloadingFiles.remove(i3);
+                            break;
+                        }
                         i3++;
+                    } else {
+                        break;
                     }
                 }
             }

@@ -1,16 +1,15 @@
 package org.telegram.ui;
 
-import android.view.KeyEvent;
-import org.telegram.ui.ActionBar.ActionBarPopupWindow;
+import org.telegram.ui.Components.AlertsCreator;
 
-public final /* synthetic */ class PhotoViewer$$ExternalSyntheticLambda65 implements ActionBarPopupWindow.OnDispatchKeyEventListener {
+public final /* synthetic */ class PhotoViewer$$ExternalSyntheticLambda65 implements AlertsCreator.ScheduleDatePickerDelegate {
     public final /* synthetic */ PhotoViewer f$0;
 
     public /* synthetic */ PhotoViewer$$ExternalSyntheticLambda65(PhotoViewer photoViewer) {
         this.f$0 = photoViewer;
     }
 
-    public final void onDispatchKeyEvent(KeyEvent keyEvent) {
-        this.f$0.lambda$setParentActivity$14(keyEvent);
+    public final void didSelectDate(boolean z, int i) {
+        this.f$0.sendPressed(z, i);
     }
 }

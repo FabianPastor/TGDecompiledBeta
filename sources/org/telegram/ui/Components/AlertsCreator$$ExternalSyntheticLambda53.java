@@ -21,6 +21,6 @@ public final /* synthetic */ class AlertsCreator$$ExternalSyntheticLambda53 impl
     }
 
     public final void onClick(View view) {
-        AlertsCreator.lambda$createThemeCreateDialog$127(this.f$0, this.f$1, this.f$2, this.f$3, this.f$4, view);
+        AlertsCreator.lambda$createThemeCreateDialog$126(this.f$0, this.f$1, this.f$2, this.f$3, this.f$4, view);
     }
 }
