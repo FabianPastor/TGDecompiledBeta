@@ -797,7 +797,7 @@ public class PhonebookShareAlert extends BottomSheet {
             boolean r4 = r0.isImport
             r8 = 2131624222(0x7f0e011e, float:1.8875618E38)
             java.lang.String r10 = "AddContactPhonebookTitle"
-            r11 = 2131628059(0x7f0e101b, float:1.88834E38)
+            r11 = 2131628060(0x7f0e101c, float:1.8883402E38)
             java.lang.String r12 = "ShareContactTitle"
             if (r4 == 0) goto L_0x023b
             org.telegram.ui.ActionBar.ActionBar r4 = r0.actionBar

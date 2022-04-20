@@ -38,18 +38,18 @@ public class ChatActivityBotWebViewButton extends FrameLayout {
         this.textView.setAlpha(0.0f);
         this.textView.setGravity(17);
         this.textView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
-        addView(this.textView, LayoutHelper.createFrame(-1, -1.0f, 3, 0.0f, 0.0f, 0.0f, 4.0f));
+        addView(this.textView, LayoutHelper.createFrame(-1, -1.0f, 3, 0.0f, 0.0f, 0.0f, 0.0f));
         RadialProgressView radialProgressView = new RadialProgressView(context);
         this.progressView = radialProgressView;
         radialProgressView.setSize(AndroidUtilities.dp(18.0f));
         this.progressView.setAlpha(0.0f);
         this.progressView.setScaleX(0.0f);
         this.progressView.setScaleY(0.0f);
-        addView(this.progressView, LayoutHelper.createFrame(28, 28.0f, 21, 0.0f, 0.0f, 12.0f, 4.0f));
+        addView(this.progressView, LayoutHelper.createFrame(28, 28.0f, 21, 0.0f, 0.0f, 12.0f, 0.0f));
         View view = new View(context);
         this.rippleView = view;
         view.setBackground(Theme.createSelectorDrawable(Theme.getColor("featuredStickers_addButtonPressed"), 2));
-        addView(this.rippleView, LayoutHelper.createFrame(-1, -1.0f, 3, 0.0f, -4.0f, 0.0f, 0.0f));
+        addView(this.rippleView, LayoutHelper.createFrame(-1, -1.0f, 3, 0.0f, 0.0f, 0.0f, 0.0f));
         setWillNotDraw(false);
     }
 
@@ -110,16 +110,17 @@ public class ChatActivityBotWebViewButton extends FrameLayout {
 
     public void draw(Canvas canvas) {
         canvas.save();
+        float height = ((float) (getHeight() - AndroidUtilities.dp(32.0f))) / 2.0f;
         float max = ((float) Math.max((getWidth() - this.menuButtonWidth) - AndroidUtilities.dp(4.0f), getHeight())) * this.progress;
         float dp = ((float) AndroidUtilities.dp(16.0f)) + max;
         RectF rectF = AndroidUtilities.rectTmp;
-        rectF.set(((float) AndroidUtilities.dp(14.0f)) - max, ((float) AndroidUtilities.dp(8.0f)) - max, ((float) (AndroidUtilities.dp(6.0f) + this.menuButtonWidth)) + max, ((float) (getHeight() - AndroidUtilities.dp(12.0f))) + max);
+        rectF.set(((float) AndroidUtilities.dp(14.0f)) - max, (((float) AndroidUtilities.dp(4.0f)) + height) - max, ((float) (AndroidUtilities.dp(6.0f) + this.menuButtonWidth)) + max, ((float) (getHeight() - AndroidUtilities.dp(12.0f))) + max);
         this.path.rewind();
         this.path.addRoundRect(rectF, dp, dp, Path.Direction.CW);
         canvas.clipPath(this.path);
         canvas.drawColor(this.backgroundColor);
         canvas.saveLayerAlpha(rectF, (int) ((1.0f - (Math.min(0.5f, this.progress) / 0.5f)) * 255.0f), 31);
-        canvas.translate((float) AndroidUtilities.dp(10.0f), (float) AndroidUtilities.dp(4.0f));
+        canvas.translate((float) AndroidUtilities.dp(10.0f), height);
         BotCommandsMenuView botCommandsMenuView = this.menuButton;
         if (botCommandsMenuView != null) {
             botCommandsMenuView.setDrawBackgroundDrawable(false);

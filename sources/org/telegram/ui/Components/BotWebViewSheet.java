@@ -14,6 +14,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.TextView;
 import androidx.core.graphics.ColorUtils;
+import androidx.core.math.MathUtils;
 import androidx.dynamicanimation.animation.SpringAnimation;
 import androidx.dynamicanimation.animation.SpringForce;
 import org.json.JSONObject;
@@ -169,77 +170,73 @@ public class BotWebViewSheet extends Dialog implements NotificationCenter.Notifi
             int r6 = r0.getColor(r6)
             r4.<init>(r1, r2, r6)
             r0.webViewContainer = r4
-            android.webkit.WebView r4 = r4.getWebView()
-            r6 = 0
-            r4.setVerticalScrollBarEnabled(r6)
-            org.telegram.ui.Components.BotWebViewContainer r4 = r0.webViewContainer
-            org.telegram.ui.Components.BotWebViewSheet$2 r7 = new org.telegram.ui.Components.BotWebViewSheet$2
-            r7.<init>()
-            r4.setDelegate(r7)
+            org.telegram.ui.Components.BotWebViewSheet$2 r6 = new org.telegram.ui.Components.BotWebViewSheet$2
+            r6.<init>()
+            r4.setDelegate(r6)
             android.graphics.Paint r4 = r0.linePaint
-            android.graphics.Paint$Style r7 = android.graphics.Paint.Style.FILL_AND_STROKE
-            r4.setStyle(r7)
+            android.graphics.Paint$Style r6 = android.graphics.Paint.Style.FILL_AND_STROKE
+            r4.setStyle(r6)
             android.graphics.Paint r4 = r0.linePaint
-            r7 = 1082130432(0x40800000, float:4.0)
-            int r7 = org.telegram.messenger.AndroidUtilities.dp(r7)
-            float r7 = (float) r7
-            r4.setStrokeWidth(r7)
+            r6 = 1082130432(0x40800000, float:4.0)
+            int r6 = org.telegram.messenger.AndroidUtilities.dp(r6)
+            float r6 = (float) r6
+            r4.setStrokeWidth(r6)
             android.graphics.Paint r4 = r0.linePaint
-            android.graphics.Paint$Cap r7 = android.graphics.Paint.Cap.ROUND
-            r4.setStrokeCap(r7)
+            android.graphics.Paint$Cap r6 = android.graphics.Paint.Cap.ROUND
+            r4.setStrokeCap(r6)
             android.graphics.Paint r4 = r0.dimPaint
-            r7 = 1073741824(0x40000000, float:2.0)
-            r4.setColor(r7)
+            r6 = 1073741824(0x40000000, float:2.0)
+            r4.setColor(r6)
             org.telegram.ui.Components.BotWebViewSheet$3 r4 = new org.telegram.ui.Components.BotWebViewSheet$3
             r4.<init>(r1)
             r0.frameLayout = r4
-            org.telegram.ui.Components.BotWebViewSheet$$ExternalSyntheticLambda17 r7 = new org.telegram.ui.Components.BotWebViewSheet$$ExternalSyntheticLambda17
-            r7.<init>(r0)
-            r4.setDelegate(r7)
+            org.telegram.ui.Components.BotWebViewSheet$$ExternalSyntheticLambda17 r6 = new org.telegram.ui.Components.BotWebViewSheet$$ExternalSyntheticLambda17
+            r6.<init>(r0)
+            r4.setDelegate(r6)
             org.telegram.ui.Components.SizeNotifierFrameLayout r4 = r0.frameLayout
-            org.telegram.ui.Components.ChatAttachAlertBotWebViewLayout$WebViewSwipeContainer r7 = r0.swipeContainer
-            r8 = -1
-            r9 = -1082130432(0xffffffffbvar_, float:-1.0)
-            r10 = 48
-            r11 = 0
-            r12 = 1103101952(0x41CLASSNAME, float:24.0)
+            org.telegram.ui.Components.ChatAttachAlertBotWebViewLayout$WebViewSwipeContainer r6 = r0.swipeContainer
+            r7 = -1
+            r8 = -1082130432(0xffffffffbvar_, float:-1.0)
+            r9 = 48
+            r10 = 0
+            r11 = 1103101952(0x41CLASSNAME, float:24.0)
+            r12 = 0
             r13 = 0
-            r14 = 0
-            android.widget.FrameLayout$LayoutParams r8 = org.telegram.ui.Components.LayoutHelper.createFrame(r8, r9, r10, r11, r12, r13, r14)
-            r4.addView(r7, r8)
+            android.widget.FrameLayout$LayoutParams r7 = org.telegram.ui.Components.LayoutHelper.createFrame(r7, r8, r9, r10, r11, r12, r13)
+            r4.addView(r6, r7)
             android.widget.TextView r4 = new android.widget.TextView
             r4.<init>(r1)
             r0.mainButton = r4
-            r7 = 8
-            r4.setVisibility(r7)
+            r6 = 8
+            r4.setVisibility(r6)
             android.widget.TextView r4 = r0.mainButton
             r4.setAlpha(r3)
             android.widget.TextView r4 = r0.mainButton
             r4.setSingleLine()
             android.widget.TextView r4 = r0.mainButton
-            r8 = 17
-            r4.setGravity(r8)
+            r7 = 17
+            r4.setGravity(r7)
             android.widget.TextView r4 = r0.mainButton
-            java.lang.String r8 = "fonts/rmedium.ttf"
-            android.graphics.Typeface r8 = org.telegram.messenger.AndroidUtilities.getTypeface(r8)
-            r4.setTypeface(r8)
+            java.lang.String r7 = "fonts/rmedium.ttf"
+            android.graphics.Typeface r7 = org.telegram.messenger.AndroidUtilities.getTypeface(r7)
+            r4.setTypeface(r7)
             r4 = 1098907648(0x41800000, float:16.0)
             int r4 = org.telegram.messenger.AndroidUtilities.dp(r4)
-            android.widget.TextView r8 = r0.mainButton
-            r8.setPadding(r4, r6, r4, r6)
+            android.widget.TextView r7 = r0.mainButton
+            r8 = 0
+            r7.setPadding(r4, r8, r4, r8)
             android.widget.TextView r4 = r0.mainButton
-            r8 = 1096810496(0x41600000, float:14.0)
-            r4.setTextSize(r5, r8)
+            r7 = 1096810496(0x41600000, float:14.0)
+            r4.setTextSize(r5, r7)
             android.widget.TextView r4 = r0.mainButton
             org.telegram.ui.Components.BotWebViewSheet$$ExternalSyntheticLambda2 r5 = new org.telegram.ui.Components.BotWebViewSheet$$ExternalSyntheticLambda2
             r5.<init>(r0)
             r4.setOnClickListener(r5)
             org.telegram.ui.Components.SizeNotifierFrameLayout r4 = r0.frameLayout
             android.widget.TextView r5 = r0.mainButton
-            r8 = -1
-            r9 = 48
+            r7 = -1
             r10 = 80
-            android.widget.FrameLayout$LayoutParams r10 = org.telegram.ui.Components.LayoutHelper.createFrame((int) r8, (int) r9, (int) r10)
+            android.widget.FrameLayout$LayoutParams r10 = org.telegram.ui.Components.LayoutHelper.createFrame((int) r7, (int) r9, (int) r10)
             r4.addView(r5, r10)
             android.widget.TextView r4 = r0.mainButton
             org.telegram.ui.Components.VerticalPositionAutoAnimator r4 = org.telegram.ui.Components.VerticalPositionAutoAnimator.attach(r4)
@@ -258,16 +255,17 @@ public class BotWebViewSheet extends Dialog implements NotificationCenter.Notifi
             org.telegram.ui.Components.RadialProgressView r4 = r0.radialProgressView
             r4.setScaleY(r5)
             org.telegram.ui.Components.RadialProgressView r4 = r0.radialProgressView
-            r4.setVisibility(r7)
+            r4.setVisibility(r6)
             org.telegram.ui.Components.SizeNotifierFrameLayout r4 = r0.frameLayout
             org.telegram.ui.Components.RadialProgressView r5 = r0.radialProgressView
             r10 = 28
             r11 = 1105199104(0x41e00000, float:28.0)
             r12 = 85
+            r14 = 0
             r15 = 1092616192(0x41200000, float:10.0)
             r16 = 1092616192(0x41200000, float:10.0)
-            android.widget.FrameLayout$LayoutParams r7 = org.telegram.ui.Components.LayoutHelper.createFrame(r10, r11, r12, r13, r14, r15, r16)
-            r4.addView(r5, r7)
+            android.widget.FrameLayout$LayoutParams r6 = org.telegram.ui.Components.LayoutHelper.createFrame(r10, r11, r12, r13, r14, r15, r16)
+            r4.addView(r5, r6)
             org.telegram.ui.Components.RadialProgressView r4 = r0.radialProgressView
             org.telegram.ui.Components.VerticalPositionAutoAnimator r4 = org.telegram.ui.Components.VerticalPositionAutoAnimator.attach(r4)
             r0.radialProgressAutoAnimator = r4
@@ -279,7 +277,7 @@ public class BotWebViewSheet extends Dialog implements NotificationCenter.Notifi
             org.telegram.ui.ActionBar.ActionBar r4 = new org.telegram.ui.ActionBar.ActionBar
             r4.<init>(r1, r2)
             r0.actionBar = r4
-            r4.setBackgroundColor(r6)
+            r4.setBackgroundColor(r8)
             org.telegram.ui.ActionBar.ActionBar r4 = r0.actionBar
             r5 = 2131165503(0x7var_f, float:1.7945225E38)
             r4.setBackButtonImage(r5)
@@ -293,18 +291,18 @@ public class BotWebViewSheet extends Dialog implements NotificationCenter.Notifi
             org.telegram.ui.Components.SizeNotifierFrameLayout r3 = r0.frameLayout
             org.telegram.ui.ActionBar.ActionBar r4 = r0.actionBar
             r5 = -2
-            android.widget.FrameLayout$LayoutParams r5 = org.telegram.ui.Components.LayoutHelper.createFrame((int) r8, (int) r5, (int) r9)
+            android.widget.FrameLayout$LayoutParams r5 = org.telegram.ui.Components.LayoutHelper.createFrame((int) r7, (int) r5, (int) r9)
             r3.addView(r4, r5)
             org.telegram.ui.Components.SizeNotifierFrameLayout r3 = r0.frameLayout
             org.telegram.ui.Components.ChatAttachAlertBotWebViewLayout$WebProgressView r4 = new org.telegram.ui.Components.ChatAttachAlertBotWebViewLayout$WebProgressView
             r4.<init>(r1, r2)
             r0.progressView = r4
-            r9 = -1
-            r10 = -1073741824(0xffffffffCLASSNAME, float:-2.0)
-            r11 = 80
+            r8 = -1
+            r9 = -1073741824(0xffffffffCLASSNAME, float:-2.0)
+            r10 = 80
+            r11 = 0
             r12 = 0
-            r15 = 0
-            android.widget.FrameLayout$LayoutParams r1 = org.telegram.ui.Components.LayoutHelper.createFrame(r9, r10, r11, r12, r13, r14, r15)
+            android.widget.FrameLayout$LayoutParams r1 = org.telegram.ui.Components.LayoutHelper.createFrame(r8, r9, r10, r11, r12, r13, r14)
             r3.addView(r4, r1)
             org.telegram.ui.Components.BotWebViewContainer r1 = r0.webViewContainer
             org.telegram.ui.Components.BotWebViewSheet$$ExternalSyntheticLambda3 r2 = new org.telegram.ui.Components.BotWebViewSheet$$ExternalSyntheticLambda3
@@ -313,12 +311,8 @@ public class BotWebViewSheet extends Dialog implements NotificationCenter.Notifi
             org.telegram.ui.Components.ChatAttachAlertBotWebViewLayout$WebViewSwipeContainer r1 = r0.swipeContainer
             org.telegram.ui.Components.BotWebViewContainer r2 = r0.webViewContainer
             r3 = -1082130432(0xffffffffbvar_, float:-1.0)
-            android.widget.FrameLayout$LayoutParams r3 = org.telegram.ui.Components.LayoutHelper.createFrame(r8, r3)
+            android.widget.FrameLayout$LayoutParams r3 = org.telegram.ui.Components.LayoutHelper.createFrame(r7, r3)
             r1.addView(r2, r3)
-            org.telegram.ui.Components.ChatAttachAlertBotWebViewLayout$WebViewSwipeContainer r1 = r0.swipeContainer
-            org.telegram.ui.Components.BotWebViewContainer r2 = r0.webViewContainer
-            android.webkit.WebView r2 = r2.getWebView()
-            r1.setWebView(r2)
             org.telegram.ui.Components.ChatAttachAlertBotWebViewLayout$WebViewSwipeContainer r1 = r0.swipeContainer
             org.telegram.ui.Components.BotWebViewSheet$$ExternalSyntheticLambda7 r2 = new org.telegram.ui.Components.BotWebViewSheet$$ExternalSyntheticLambda7
             r2.<init>(r0)
@@ -342,7 +336,7 @@ public class BotWebViewSheet extends Dialog implements NotificationCenter.Notifi
             r1.setTopActionBarOffsetY(r2)
             org.telegram.ui.Components.SizeNotifierFrameLayout r1 = r0.frameLayout
             android.view.ViewGroup$LayoutParams r2 = new android.view.ViewGroup$LayoutParams
-            r2.<init>(r8, r8)
+            r2.<init>(r7, r7)
             r0.setContentView(r1, r2)
             return
         */
@@ -386,7 +380,7 @@ public class BotWebViewSheet extends Dialog implements NotificationCenter.Notifi
     /* access modifiers changed from: private */
     public /* synthetic */ void lambda$new$9() {
         if (this.swipeContainer.getSwipeOffsetY() > 0.0f) {
-            this.dimPaint.setAlpha((int) ((1.0f - (this.swipeContainer.getSwipeOffsetY() / ((float) this.swipeContainer.getHeight()))) * 64.0f));
+            this.dimPaint.setAlpha((int) ((1.0f - MathUtils.clamp(this.swipeContainer.getSwipeOffsetY() / ((float) this.swipeContainer.getHeight()), 0.0f, 1.0f)) * 64.0f));
         } else {
             this.dimPaint.setAlpha(64);
         }
@@ -521,8 +515,10 @@ public class BotWebViewSheet extends Dialog implements NotificationCenter.Notifi
                     }
                     BotWebViewSheet.this.dismiss();
                 } else if (i == NUM) {
-                    BotWebViewSheet.this.webViewContainer.getWebView().animate().cancel();
-                    BotWebViewSheet.this.webViewContainer.getWebView().animate().alpha(0.0f).start();
+                    if (BotWebViewSheet.this.webViewContainer.getWebView() != null) {
+                        BotWebViewSheet.this.webViewContainer.getWebView().animate().cancel();
+                        BotWebViewSheet.this.webViewContainer.getWebView().animate().alpha(0.0f).start();
+                    }
                     BotWebViewSheet.this.progressView.setLoadProgress(0.0f);
                     BotWebViewSheet.this.progressView.setAlpha(1.0f);
                     BotWebViewSheet.this.progressView.setVisibility(0);
@@ -592,6 +588,7 @@ public class BotWebViewSheet extends Dialog implements NotificationCenter.Notifi
         if (tLObject instanceof TLRPC$TL_simpleWebViewResultUrl) {
             this.queryId = 0;
             this.webViewContainer.loadUrl(((TLRPC$TL_simpleWebViewResultUrl) tLObject).url);
+            this.swipeContainer.setWebView(this.webViewContainer.getWebView());
         }
     }
 
@@ -606,6 +603,7 @@ public class BotWebViewSheet extends Dialog implements NotificationCenter.Notifi
             TLRPC$TL_webViewResultUrl tLRPC$TL_webViewResultUrl = (TLRPC$TL_webViewResultUrl) tLObject;
             this.queryId = tLRPC$TL_webViewResultUrl.query_id;
             this.webViewContainer.loadUrl(tLRPC$TL_webViewResultUrl.url);
+            this.swipeContainer.setWebView(this.webViewContainer.getWebView());
             AndroidUtilities.runOnUIThread(this.pollRunnable, 60000);
         }
     }

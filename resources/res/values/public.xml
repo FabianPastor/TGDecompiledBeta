@@ -2504,6 +2504,7 @@
     <public type="string" name="BotUnblock" id="NUM" />
     <public type="string" name="BotWebViewDeleteBot" id="NUM" />
     <public type="string" name="BotWebViewFileChooserTitle" id="NUM" />
+    <public type="string" name="BotWebViewNotAvailablePlaceholder" id="NUM" />
     <public type="string" name="BotWebViewOpenBot" id="NUM" />
     <public type="string" name="BotWebViewReloadPage" id="NUM" />
     <public type="string" name="BotWebViewRequestAllow" id="NUM" />

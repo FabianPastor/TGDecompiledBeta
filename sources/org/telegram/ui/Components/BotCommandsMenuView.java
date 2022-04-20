@@ -295,6 +295,9 @@ public class BotCommandsMenuView extends View {
     }
 
     public void setMenuText(String str) {
+        if (str == null) {
+            str = LocaleController.getString(NUM);
+        }
         this.menuText = str;
         this.menuTextLayout = null;
         requestLayout();

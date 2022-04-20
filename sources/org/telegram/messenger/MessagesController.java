@@ -24584,7 +24584,7 @@ public class MessagesController extends BaseController implements NotificationCe
             if (r0 == 0) goto L_0x0bf0
             org.telegram.messenger.MediaDataController r0 = r43.getMediaDataController()
             org.telegram.messenger.ringtone.RingtoneDataStore r0 = r0.ringtoneDataStore
-            r0.loadUserRingtones()
+            r0.lambda$new$0()
         L_0x0bf0:
             int r1 = r22 + 1
             r14 = r51

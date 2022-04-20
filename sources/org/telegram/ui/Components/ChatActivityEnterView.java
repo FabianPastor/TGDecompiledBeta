@@ -101,8 +101,6 @@ import org.telegram.tgnet.TLRPC$ReplyMarkup;
 import org.telegram.tgnet.TLRPC$StickerSet;
 import org.telegram.tgnet.TLRPC$StickerSetCovered;
 import org.telegram.tgnet.TLRPC$TL_botMenuButton;
-import org.telegram.tgnet.TLRPC$TL_botMenuButtonCommands;
-import org.telegram.tgnet.TLRPC$TL_botMenuButtonDefault;
 import org.telegram.tgnet.TLRPC$TL_channels_sendAsPeers;
 import org.telegram.tgnet.TLRPC$TL_chatAdminRights;
 import org.telegram.tgnet.TLRPC$TL_document;
@@ -3122,7 +3120,7 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
             r5 = 8
             r1.setVisibility(r5)
             android.widget.ImageView r1 = r7.scheduledButton
-            r5 = 2131627872(0x7f0e0var_, float:1.888302E38)
+            r5 = 2131627873(0x7f0e0var_, float:1.8883023E38)
             java.lang.String r6 = "ScheduledMessages"
             java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r6, r5)
             r1.setContentDescription(r5)
@@ -3431,7 +3429,7 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
             r0.setInvalidateOnProgressSet(r1)
             r38.updateRecordedDeleteIconColors()
             org.telegram.ui.Components.RLottieImageView r0 = r7.recordDeleteImageView
-            r1 = 2131625272(0x7f0e0538, float:1.8877747E38)
+            r1 = 2131625273(0x7f0e0539, float:1.887775E38)
             java.lang.String r2 = "Delete"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             r0.setContentDescription(r1)
@@ -3771,7 +3769,7 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
             r7.progressDrawable = r6
             r1.setImageDrawable(r6)
             android.widget.ImageView r1 = r7.cancelBotButton
-            r6 = 2131624752(0x7f0e0330, float:1.8876693E38)
+            r6 = 2131624753(0x7f0e0331, float:1.8876695E38)
             java.lang.String r9 = "Cancel"
             java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r9, r6)
             r1.setContentDescription(r6)
@@ -3838,7 +3836,7 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
             java.lang.String r1 = "chat_messagePanelSend"
             int r1 = r7.getThemedColor(r1)
             android.view.View r6 = r7.sendButton
-            r9 = 2131627962(0x7f0e0fba, float:1.8883203E38)
+            r9 = 2131627963(0x7f0e0fbb, float:1.8883205E38)
             java.lang.String r10 = "Send"
             java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r10, r9)
             r6.setContentDescription(r9)
@@ -4004,7 +4002,7 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
             android.widget.ImageView r0 = r7.doneButtonImage
             r0.setImageDrawable(r3)
             android.widget.ImageView r0 = r7.doneButtonImage
-            r1 = 2131625429(0x7f0e05d5, float:1.8878066E38)
+            r1 = 2131625430(0x7f0e05d6, float:1.8878068E38)
             java.lang.String r3 = "Done"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r3, r1)
             r0.setContentDescription(r1)
@@ -11686,13 +11684,13 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
                     long longValue = objArr[0].longValue();
                     TLRPC$BotMenuButton tLRPC$BotMenuButton = objArr[1];
                     if (longValue == this.dialog_id) {
-                        if ((tLRPC$BotMenuButton instanceof TLRPC$TL_botMenuButtonCommands) || (tLRPC$BotMenuButton instanceof TLRPC$TL_botMenuButtonDefault)) {
-                            this.botMenuButtonType = !this.hasBotCommands ? BotMenuButtonType.NO_BUTTON : BotMenuButtonType.COMMANDS;
-                        } else if (tLRPC$BotMenuButton instanceof TLRPC$TL_botMenuButton) {
+                        if (tLRPC$BotMenuButton instanceof TLRPC$TL_botMenuButton) {
                             TLRPC$TL_botMenuButton tLRPC$TL_botMenuButton = (TLRPC$TL_botMenuButton) tLRPC$BotMenuButton;
                             this.botMenuWebViewTitle = tLRPC$TL_botMenuButton.text;
                             this.botMenuWebViewUrl = tLRPC$TL_botMenuButton.url;
                             this.botMenuButtonType = BotMenuButtonType.WEB_VIEW;
+                        } else if (this.hasBotCommands) {
+                            this.botMenuButtonType = BotMenuButtonType.COMMANDS;
                         } else {
                             this.botMenuButtonType = BotMenuButtonType.NO_BUTTON;
                         }
@@ -12632,7 +12630,7 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
         L_0x0166:
             super.onMeasure(r7, r8)
             org.telegram.ui.Components.ChatActivityBotWebViewButton r0 = r6.botWebViewButton
-            if (r0 == 0) goto L_0x018b
+            if (r0 == 0) goto L_0x0190
             org.telegram.ui.Components.BotCommandsMenuView r1 = r6.botCommandsMenuButton
             if (r1 == 0) goto L_0x0178
             int r1 = r1.getMeasuredWidth()
@@ -12640,14 +12638,16 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
         L_0x0178:
             org.telegram.ui.Components.ChatActivityBotWebViewButton r0 = r6.botWebViewButton
             android.view.ViewGroup$LayoutParams r0 = r0.getLayoutParams()
-            org.telegram.ui.Components.EditTextCaption r1 = r6.messageEditText
-            int r1 = r1.getMeasuredHeight()
+            int r1 = r6.getMeasuredHeight()
+            r2 = 1073741824(0x40000000, float:2.0)
+            int r2 = org.telegram.messenger.AndroidUtilities.dp(r2)
+            int r1 = r1 - r2
             r0.height = r1
             org.telegram.ui.Components.ChatActivityBotWebViewButton r0 = r6.botWebViewButton
             r6.measureChild(r0, r7, r8)
-        L_0x018b:
+        L_0x0190:
             org.telegram.ui.Components.BotWebViewMenuContainer r0 = r6.botWebViewMenuContainer
-            if (r0 == 0) goto L_0x01a2
+            if (r0 == 0) goto L_0x01a7
             android.view.ViewGroup$LayoutParams r0 = r0.getLayoutParams()
             android.view.ViewGroup$MarginLayoutParams r0 = (android.view.ViewGroup.MarginLayoutParams) r0
             org.telegram.ui.Components.EditTextCaption r1 = r6.messageEditText
@@ -12655,7 +12655,7 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
             r0.bottomMargin = r1
             org.telegram.ui.Components.BotWebViewMenuContainer r0 = r6.botWebViewMenuContainer
             r6.measureChild(r0, r7, r8)
-        L_0x01a2:
+        L_0x01a7:
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.ChatActivityEnterView.onMeasure(int, int):void");
@@ -12689,13 +12689,13 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
         if (longSparseArray.size() == 1 && longSparseArray.valueAt(0).user_id == this.dialog_id) {
             TLRPC$BotInfo valueAt = longSparseArray.valueAt(0);
             TLRPC$BotMenuButton tLRPC$BotMenuButton = valueAt.menu_button;
-            if ((tLRPC$BotMenuButton instanceof TLRPC$TL_botMenuButtonCommands) || (tLRPC$BotMenuButton instanceof TLRPC$TL_botMenuButtonDefault)) {
-                this.botMenuButtonType = valueAt.commands.isEmpty() ? BotMenuButtonType.NO_BUTTON : BotMenuButtonType.COMMANDS;
-            } else if (tLRPC$BotMenuButton instanceof TLRPC$TL_botMenuButton) {
+            if (tLRPC$BotMenuButton instanceof TLRPC$TL_botMenuButton) {
                 TLRPC$TL_botMenuButton tLRPC$TL_botMenuButton = (TLRPC$TL_botMenuButton) tLRPC$BotMenuButton;
                 this.botMenuWebViewTitle = tLRPC$TL_botMenuButton.text;
                 this.botMenuWebViewUrl = tLRPC$TL_botMenuButton.url;
                 this.botMenuButtonType = BotMenuButtonType.WEB_VIEW;
+            } else if (!valueAt.commands.isEmpty()) {
+                this.botMenuButtonType = BotMenuButtonType.COMMANDS;
             } else {
                 this.botMenuButtonType = BotMenuButtonType.NO_BUTTON;
             }

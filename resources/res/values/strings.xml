@@ -739,6 +739,7 @@
     <string name="BotUnblock">RESTART</string>
     <string name="BotWebViewDeleteBot">Delete bot</string>
     <string name="BotWebViewFileChooserTitle">Choose a file</string>
+    <string name="BotWebViewNotAvailablePlaceholder">WebView not available. Please update it to use WebView bots.</string>
     <string name="BotWebViewOpenBot">Open bot</string>
     <string name="BotWebViewReloadPage">Reload page</string>
     <string name="BotWebViewRequestAllow">Allow</string>

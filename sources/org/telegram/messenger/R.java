@@ -2652,6 +2652,7 @@ public final class R {
         public static final int BotUnblock = NUM;
         public static final int BotWebViewDeleteBot = NUM;
         public static final int BotWebViewFileChooserTitle = NUM;
+        public static final int BotWebViewNotAvailablePlaceholder = NUM;
         public static final int BotWebViewOpenBot = NUM;
         public static final int BotWebViewReloadPage = NUM;
         public static final int BotWebViewRequestAllow = NUM;

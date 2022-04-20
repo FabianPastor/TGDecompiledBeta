@@ -131,6 +131,10 @@ public class BotWebViewMenuContainer extends FrameLayout implements Notification
                 BotWebViewContainer.Delegate.CC.$default$onSendWebViewData(this, str);
             }
 
+            public /* synthetic */ void onWebAppReady() {
+                BotWebViewContainer.Delegate.CC.$default$onWebAppReady(this);
+            }
+
             public void onCloseRequested() {
                 BotWebViewMenuContainer.this.dismiss();
             }
@@ -242,8 +246,7 @@ public class BotWebViewMenuContainer extends FrameLayout implements Notification
             }
         };
         this.swipeContainer = r0;
-        r0.setWebView(this.webViewContainer.getWebView());
-        this.swipeContainer.setScrollListener(new BotWebViewMenuContainer$$ExternalSyntheticLambda11(this));
+        r0.setScrollListener(new BotWebViewMenuContainer$$ExternalSyntheticLambda11(this));
         this.swipeContainer.setScrollEndListener(new BotWebViewMenuContainer$$ExternalSyntheticLambda12(this));
         this.swipeContainer.addView(this.webViewContainer);
         this.swipeContainer.setDelegate(new BotWebViewMenuContainer$$ExternalSyntheticLambda18(this));
@@ -392,8 +395,10 @@ public class BotWebViewMenuContainer extends FrameLayout implements Notification
                 if (i == -1) {
                     BotWebViewMenuContainer.this.dismiss();
                 } else if (i == NUM) {
-                    BotWebViewMenuContainer.this.webViewContainer.getWebView().animate().cancel();
-                    BotWebViewMenuContainer.this.webViewContainer.getWebView().animate().alpha(0.0f).start();
+                    if (BotWebViewMenuContainer.this.webViewContainer.getWebView() != null) {
+                        BotWebViewMenuContainer.this.webViewContainer.getWebView().animate().cancel();
+                        BotWebViewMenuContainer.this.webViewContainer.getWebView().animate().alpha(0.0f).start();
+                    }
                     boolean unused = BotWebViewMenuContainer.this.isLoaded = false;
                     BotWebViewMenuContainer.this.progressView.setLoadProgress(0.0f);
                     BotWebViewMenuContainer.this.progressView.setAlpha(1.0f);
@@ -437,21 +442,23 @@ public class BotWebViewMenuContainer extends FrameLayout implements Notification
                 valueAnimator.cancel();
                 this.webViewScrollAnimator = null;
             }
-            int scrollY = this.webViewContainer.getWebView().getScrollY();
-            final int i2 = (measureKeyboardHeight - i) + scrollY;
-            ValueAnimator duration = ValueAnimator.ofInt(new int[]{scrollY, i2}).setDuration(250);
-            this.webViewScrollAnimator = duration;
-            duration.setInterpolator(ChatListItemAnimator.DEFAULT_INTERPOLATOR);
-            this.webViewScrollAnimator.addUpdateListener(new BotWebViewMenuContainer$$ExternalSyntheticLambda2(this));
-            this.webViewScrollAnimator.addListener(new AnimatorListenerAdapter() {
-                public void onAnimationEnd(Animator animator) {
-                    BotWebViewMenuContainer.this.webViewContainer.getWebView().setScrollY(i2);
-                    if (animator == BotWebViewMenuContainer.this.webViewScrollAnimator) {
-                        ValueAnimator unused = BotWebViewMenuContainer.this.webViewScrollAnimator = null;
+            if (this.webViewContainer.getWebView() != null) {
+                int scrollY = this.webViewContainer.getWebView().getScrollY();
+                final int i2 = (measureKeyboardHeight - i) + scrollY;
+                ValueAnimator duration = ValueAnimator.ofInt(new int[]{scrollY, i2}).setDuration(250);
+                this.webViewScrollAnimator = duration;
+                duration.setInterpolator(ChatListItemAnimator.DEFAULT_INTERPOLATOR);
+                this.webViewScrollAnimator.addUpdateListener(new BotWebViewMenuContainer$$ExternalSyntheticLambda2(this));
+                this.webViewScrollAnimator.addListener(new AnimatorListenerAdapter() {
+                    public void onAnimationEnd(Animator animator) {
+                        BotWebViewMenuContainer.this.webViewContainer.getWebView().setScrollY(i2);
+                        if (animator == BotWebViewMenuContainer.this.webViewScrollAnimator) {
+                            ValueAnimator unused = BotWebViewMenuContainer.this.webViewScrollAnimator = null;
+                        }
                     }
-                }
-            });
-            this.webViewScrollAnimator.start();
+                });
+                this.webViewScrollAnimator.start();
+            }
         }
     }
 
@@ -593,6 +600,7 @@ public class BotWebViewMenuContainer extends FrameLayout implements Notification
             TLRPC$TL_webViewResultUrl tLRPC$TL_webViewResultUrl = (TLRPC$TL_webViewResultUrl) tLObject;
             this.queryId = tLRPC$TL_webViewResultUrl.query_id;
             this.webViewContainer.loadUrl(tLRPC$TL_webViewResultUrl.url);
+            this.swipeContainer.setWebView(this.webViewContainer.getWebView());
             AndroidUtilities.runOnUIThread(this.pollRunnable, 60000);
         }
     }
@@ -637,7 +645,6 @@ public class BotWebViewMenuContainer extends FrameLayout implements Notification
         botWebViewContainer.setDelegate(this.webViewDelegate);
         this.webViewContainer.setWebViewProgressListener(new BotWebViewMenuContainer$$ExternalSyntheticLambda4(this));
         this.swipeContainer.addView(this.webViewContainer);
-        this.swipeContainer.setWebView(this.webViewContainer.getWebView());
         this.isLoaded = false;
         AndroidUtilities.cancelRunOnUIThread(this.pollRunnable);
         boolean z = this.botWebViewButtonWasVisible;

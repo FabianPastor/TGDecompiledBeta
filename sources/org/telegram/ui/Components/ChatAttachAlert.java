@@ -289,6 +289,10 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
                         BotWebViewContainer.Delegate.CC.$default$onSendWebViewData(this, str);
                     }
 
+                    public /* synthetic */ void onWebAppReady() {
+                        BotWebViewContainer.Delegate.CC.$default$onWebAppReady(this);
+                    }
+
                     public void onCloseRequested() {
                         if (ChatAttachAlert.this.currentAttachLayout == chatAttachAlertBotWebViewLayout) {
                             ChatAttachAlert.this.dismiss();
@@ -1216,7 +1220,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
             r7.doneItem = r12
             r12.setLongClickEnabled(r11)
             org.telegram.ui.ActionBar.ActionBarMenuItem r0 = r7.doneItem
-            r1 = 2131625174(0x7f0e04d6, float:1.8877549E38)
+            r1 = 2131625175(0x7f0e04d7, float:1.887755E38)
             java.lang.String r2 = "Create"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             java.lang.String r1 = r1.toUpperCase()
@@ -1254,7 +1258,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
             r1 = 2131165513(0x7var_, float:1.7945245E38)
             r0.setIcon((int) r1)
             org.telegram.ui.ActionBar.ActionBarMenuItem r0 = r7.searchItem
-            r1 = 2131627880(0x7f0e0var_, float:1.8883037E38)
+            r1 = 2131627881(0x7f0e0var_, float:1.8883039E38)
             java.lang.String r2 = "Search"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             r0.setContentDescription(r1)
