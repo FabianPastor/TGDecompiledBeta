@@ -1,21 +1,16 @@
 package org.telegram.messenger;
 
-import java.util.ArrayList;
+import org.telegram.tgnet.RequestDelegate;
+import org.telegram.tgnet.TLObject;
+import org.telegram.tgnet.TLRPC;
 
-public final /* synthetic */ class MediaDataController$$ExternalSyntheticLambda68 implements Runnable {
-    public final /* synthetic */ MediaDataController f$0;
-    public final /* synthetic */ ArrayList f$1;
-    public final /* synthetic */ long f$2;
-    public final /* synthetic */ int f$3;
+public final /* synthetic */ class MediaDataController$$ExternalSyntheticLambda68 implements RequestDelegate {
+    public static final /* synthetic */ MediaDataController$$ExternalSyntheticLambda68 INSTANCE = new MediaDataController$$ExternalSyntheticLambda68();
 
-    public /* synthetic */ MediaDataController$$ExternalSyntheticLambda68(MediaDataController mediaDataController, ArrayList arrayList, long j, int i) {
-        this.f$0 = mediaDataController;
-        this.f$1 = arrayList;
-        this.f$2 = j;
-        this.f$3 = i;
+    private /* synthetic */ MediaDataController$$ExternalSyntheticLambda68() {
     }
 
-    public final void run() {
-        this.f$0.lambda$processLoadedStickers$64(this.f$1, this.f$2, this.f$3);
+    public final void run(TLObject tLObject, TLRPC.TL_error tL_error) {
+        MediaDataController.lambda$markFaturedStickersAsRead$39(tLObject, tL_error);
     }
 }

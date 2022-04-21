@@ -1,14 +1,15 @@
 package org.telegram.ui;
 
-import org.telegram.ui.ActionBar.Theme;
+import org.telegram.ui.Components.WallpaperParallaxEffect;
 
-public final /* synthetic */ class ThemePreviewActivity$$ExternalSyntheticLambda18 implements Runnable {
-    public static final /* synthetic */ ThemePreviewActivity$$ExternalSyntheticLambda18 INSTANCE = new ThemePreviewActivity$$ExternalSyntheticLambda18();
+public final /* synthetic */ class ThemePreviewActivity$$ExternalSyntheticLambda18 implements WallpaperParallaxEffect.Callback {
+    public final /* synthetic */ ThemePreviewActivity f$0;
 
-    private /* synthetic */ ThemePreviewActivity$$ExternalSyntheticLambda18() {
+    public /* synthetic */ ThemePreviewActivity$$ExternalSyntheticLambda18(ThemePreviewActivity themePreviewActivity) {
+        this.f$0 = themePreviewActivity;
     }
 
-    public final void run() {
-        Theme.setChangingWallpaper(false);
+    public final void onOffsetsChanged(int i, int i2, float f) {
+        this.f$0.m3314lambda$createView$5$orgtelegramuiThemePreviewActivity(i, i2, f);
     }
 }

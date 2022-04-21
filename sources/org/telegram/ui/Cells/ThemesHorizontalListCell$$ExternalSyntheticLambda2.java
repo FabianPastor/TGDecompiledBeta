@@ -11,6 +11,6 @@ public final /* synthetic */ class ThemesHorizontalListCell$$ExternalSyntheticLa
     }
 
     public final void onItemClick(View view, int i) {
-        this.f$0.lambda$new$0(view, i);
+        this.f$0.m1535lambda$new$0$orgtelegramuiCellsThemesHorizontalListCell(view, i);
     }
 }

@@ -12,6 +12,6 @@ public final /* synthetic */ class Bulletin$ParentLayout$$ExternalSyntheticLambd
     }
 
     public final void run() {
-        this.f$0.lambda$onTouchEvent$0(this.f$1);
+        this.f$0.m3688x9108f6b1(this.f$1);
     }
 }

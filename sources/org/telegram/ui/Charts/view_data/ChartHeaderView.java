@@ -70,8 +70,8 @@ public class ChartHeaderView extends FrameLayout {
         recolor();
     }
 
-    /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$new$0(View view, int i, int i2, int i3, int i4, int i5, int i6, int i7, int i8) {
+    /* renamed from: lambda$new$0$org-telegram-ui-Charts-view_data-ChartHeaderView  reason: not valid java name */
+    public /* synthetic */ void m1631lambda$new$0$orgtelegramuiChartsview_dataChartHeaderView(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
         TextView textView = this.datesTmp;
         textView.setPivotX(((float) textView.getMeasuredWidth()) * 0.7f);
         TextView textView2 = this.dates;
@@ -86,33 +86,33 @@ public class ChartHeaderView extends FrameLayout {
         this.zoomIcon.setColorFilter(Theme.getColor("statisticChartBackZoomColor"), PorterDuff.Mode.SRC_IN);
     }
 
-    public void setDates(long j, long j2) {
-        String str;
+    public void setDates(long start, long end) {
+        String newText;
         if (!this.showDate) {
             this.dates.setVisibility(8);
             this.datesTmp.setVisibility(8);
             return;
         }
         if (this.useWeekInterval) {
-            j2 += NUM;
+            end += NUM;
         }
-        if (j2 - j >= 86400000) {
-            str = this.formatter.format(new Date(j)) + " — " + this.formatter.format(new Date(j2));
+        if (end - start >= 86400000) {
+            newText = this.formatter.format(new Date(start)) + " — " + this.formatter.format(new Date(end));
         } else {
-            str = this.formatter.format(new Date(j));
+            newText = this.formatter.format(new Date(start));
         }
-        this.dates.setText(str);
+        this.dates.setText(newText);
         this.dates.setVisibility(0);
     }
 
-    public void setTitle(String str) {
-        this.title.setText(str);
+    public void setTitle(String s) {
+        this.title.setText(s);
     }
 
-    public void zoomTo(BaseChartView baseChartView, long j, boolean z) {
-        setDates(j, j);
+    public void zoomTo(BaseChartView chartView, long d, boolean animate) {
+        setDates(d, d);
         this.back.setVisibility(0);
-        if (z) {
+        if (animate) {
             this.back.setAlpha(0.0f);
             this.back.setScaleX(0.3f);
             this.back.setScaleY(0.3f);
@@ -137,9 +137,9 @@ public class ChartHeaderView extends FrameLayout {
         this.title.setAlpha(0.0f);
     }
 
-    public void zoomOut(BaseChartView baseChartView, boolean z) {
-        setDates(baseChartView.getStartDate(), baseChartView.getEndDate());
-        if (z) {
+    public void zoomOut(BaseChartView chartView, boolean animated) {
+        setDates(chartView.getStartDate(), chartView.getEndDate());
+        if (animated) {
             this.title.setAlpha(0.0f);
             this.title.setScaleX(0.3f);
             this.title.setScaleY(0.3f);
@@ -161,13 +161,13 @@ public class ChartHeaderView extends FrameLayout {
         this.back.setAlpha(0.0f);
     }
 
-    public void setUseWeekInterval(boolean z) {
-        this.useWeekInterval = z;
+    public void setUseWeekInterval(boolean useWeekInterval2) {
+        this.useWeekInterval = useWeekInterval2;
     }
 
-    public void showDate(boolean z) {
-        this.showDate = z;
-        if (!z) {
+    public void showDate(boolean b) {
+        this.showDate = b;
+        if (!b) {
             this.datesTmp.setVisibility(8);
             this.dates.setVisibility(8);
             this.title.setLayoutParams(LayoutHelper.createFrame(-2, -2.0f, 8388627, 16.0f, 0.0f, 16.0f, 0.0f));

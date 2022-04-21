@@ -1,19 +1,15 @@
 package org.telegram.messenger;
 
-import org.telegram.tgnet.TLRPC$TL_updates_channelDifferenceTooLong;
+import java.util.Comparator;
+import org.telegram.tgnet.TLRPC;
 
-public final /* synthetic */ class MessagesStorage$$ExternalSyntheticLambda106 implements Runnable {
-    public final /* synthetic */ MessagesStorage f$0;
-    public final /* synthetic */ long f$1;
-    public final /* synthetic */ TLRPC$TL_updates_channelDifferenceTooLong f$2;
+public final /* synthetic */ class MessagesStorage$$ExternalSyntheticLambda106 implements Comparator {
+    public static final /* synthetic */ MessagesStorage$$ExternalSyntheticLambda106 INSTANCE = new MessagesStorage$$ExternalSyntheticLambda106();
 
-    public /* synthetic */ MessagesStorage$$ExternalSyntheticLambda106(MessagesStorage messagesStorage, long j, TLRPC$TL_updates_channelDifferenceTooLong tLRPC$TL_updates_channelDifferenceTooLong) {
-        this.f$0 = messagesStorage;
-        this.f$1 = j;
-        this.f$2 = tLRPC$TL_updates_channelDifferenceTooLong;
+    private /* synthetic */ MessagesStorage$$ExternalSyntheticLambda106() {
     }
 
-    public final void run() {
-        this.f$0.lambda$overwriteChannel$147(this.f$1, this.f$2);
+    public final int compare(Object obj, Object obj2) {
+        return MessagesStorage.lambda$getMessagesInternal$120((TLRPC.Message) obj, (TLRPC.Message) obj2);
     }
 }

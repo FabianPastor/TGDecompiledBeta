@@ -10,6 +10,6 @@ public final /* synthetic */ class ThemePreviewActivity$$ExternalSyntheticLambda
     }
 
     public final void onClick(DialogInterface dialogInterface, int i) {
-        this.f$0.lambda$selectColorType$17(dialogInterface, i);
+        this.f$0.m3304lambda$checkDiscard$18$orgtelegramuiThemePreviewActivity(dialogInterface, i);
     }
 }

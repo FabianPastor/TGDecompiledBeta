@@ -1,15 +1,14 @@
 package org.telegram.ui;
 
-import android.content.DialogInterface;
+import android.view.animation.Interpolator;
 
-public final /* synthetic */ class DialogsActivity$$ExternalSyntheticLambda17 implements DialogInterface.OnDismissListener {
-    public final /* synthetic */ DialogsActivity f$0;
+public final /* synthetic */ class DialogsActivity$$ExternalSyntheticLambda17 implements Interpolator {
+    public static final /* synthetic */ DialogsActivity$$ExternalSyntheticLambda17 INSTANCE = new DialogsActivity$$ExternalSyntheticLambda17();
 
-    public /* synthetic */ DialogsActivity$$ExternalSyntheticLambda17(DialogsActivity dialogsActivity) {
-        this.f$0 = dialogsActivity;
+    private /* synthetic */ DialogsActivity$$ExternalSyntheticLambda17() {
     }
 
-    public final void onDismiss(DialogInterface dialogInterface) {
-        this.f$0.lambda$showSuggestion$40(dialogInterface);
+    public final float getInterpolation(float f) {
+        return DialogsActivity.lambda$static$0(f);
     }
 }

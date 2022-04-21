@@ -1,20 +1,15 @@
 package org.telegram.messenger;
 
-import android.view.Window;
-import java.util.ArrayList;
+import androidx.dynamicanimation.animation.DynamicAnimation;
 
-public final /* synthetic */ class AndroidUtilities$$ExternalSyntheticLambda7 implements Runnable {
-    public final /* synthetic */ ArrayList f$0;
-    public final /* synthetic */ long f$1;
-    public final /* synthetic */ Window f$2;
+public final /* synthetic */ class AndroidUtilities$$ExternalSyntheticLambda7 implements DynamicAnimation.OnAnimationEndListener {
+    public final /* synthetic */ Runnable f$0;
 
-    public /* synthetic */ AndroidUtilities$$ExternalSyntheticLambda7(ArrayList arrayList, long j, Window window) {
-        this.f$0 = arrayList;
-        this.f$1 = j;
-        this.f$2 = window;
+    public /* synthetic */ AndroidUtilities$$ExternalSyntheticLambda7(Runnable runnable) {
+        this.f$0 = runnable;
     }
 
-    public final void run() {
-        AndroidUtilities.lambda$registerFlagSecure$9(this.f$0, this.f$1, this.f$2);
+    public final void onAnimationEnd(DynamicAnimation dynamicAnimation, boolean z, float f, float f2) {
+        AndroidUtilities.lambda$shakeViewSpring$4(this.f$0, dynamicAnimation, z, f, f2);
     }
 }

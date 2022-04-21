@@ -11,6 +11,6 @@ public final /* synthetic */ class LoginActivity$LoginActivityPasswordView$$Exte
     }
 
     public final void onClick(DialogInterface dialogInterface, int i) {
-        this.f$0.lambda$new$5(dialogInterface, i);
+        this.f$0.m2477x3da70566(dialogInterface, i);
     }
 }

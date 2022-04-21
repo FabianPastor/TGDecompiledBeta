@@ -1,17 +1,15 @@
 package org.telegram.ui.Components;
 
-import org.telegram.ui.Components.Paint.Views.EntityView;
+import android.view.View;
 
-public final /* synthetic */ class PhotoPaintView$$ExternalSyntheticLambda16 implements Runnable {
+public final /* synthetic */ class PhotoPaintView$$ExternalSyntheticLambda16 implements View.OnClickListener {
     public final /* synthetic */ PhotoPaintView f$0;
-    public final /* synthetic */ EntityView f$1;
 
-    public /* synthetic */ PhotoPaintView$$ExternalSyntheticLambda16(PhotoPaintView photoPaintView, EntityView entityView) {
+    public /* synthetic */ PhotoPaintView$$ExternalSyntheticLambda16(PhotoPaintView photoPaintView) {
         this.f$0 = photoPaintView;
-        this.f$1 = entityView;
     }
 
-    public final void run() {
-        this.f$0.lambda$showMenuForEntity$13(this.f$1);
+    public final void onClick(View view) {
+        this.f$0.m4200lambda$new$3$orgtelegramuiComponentsPhotoPaintView(view);
     }
 }

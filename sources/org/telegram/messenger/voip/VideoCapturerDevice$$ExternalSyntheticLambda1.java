@@ -8,6 +8,6 @@ public final /* synthetic */ class VideoCapturerDevice$$ExternalSyntheticLambda1
     }
 
     public final void run() {
-        this.f$0.lambda$onDestroy$9();
+        this.f$0.m504x8d16623b();
     }
 }

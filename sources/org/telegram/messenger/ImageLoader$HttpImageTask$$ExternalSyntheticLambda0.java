@@ -10,6 +10,6 @@ public final /* synthetic */ class ImageLoader$HttpImageTask$$ExternalSyntheticL
     }
 
     public final void run() {
-        this.f$0.lambda$onPostExecute$5();
+        this.f$0.m635xa7d226e2();
     }
 }

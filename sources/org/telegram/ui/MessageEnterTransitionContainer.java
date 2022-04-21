@@ -1,13 +1,11 @@
 package org.telegram.ui;
 
-import android.annotation.SuppressLint;
 import android.graphics.Canvas;
 import android.view.View;
 import android.view.ViewGroup;
 import java.util.ArrayList;
 import org.telegram.messenger.NotificationCenter;
 
-@SuppressLint({"ViewConstructor"})
 public class MessageEnterTransitionContainer extends View {
     private final int currentAccount;
     Runnable hideRunnable = new MessageEnterTransitionContainer$$ExternalSyntheticLambda0(this);
@@ -18,15 +16,15 @@ public class MessageEnterTransitionContainer extends View {
         void onDraw(Canvas canvas);
     }
 
-    /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$new$0() {
+    /* renamed from: lambda$new$0$org-telegram-ui-MessageEnterTransitionContainer  reason: not valid java name */
+    public /* synthetic */ void m2615lambda$new$0$orgtelegramuiMessageEnterTransitionContainer() {
         setVisibility(8);
     }
 
-    public MessageEnterTransitionContainer(ViewGroup viewGroup, int i) {
-        super(viewGroup.getContext());
-        this.parent = viewGroup;
-        this.currentAccount = i;
+    public MessageEnterTransitionContainer(ViewGroup parent2, int currentAccount2) {
+        super(parent2.getContext());
+        this.parent = parent2;
+        this.currentAccount = currentAccount2;
     }
 
     /* access modifiers changed from: package-private */

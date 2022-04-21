@@ -10,6 +10,6 @@ public final /* synthetic */ class ChangeUsernameActivity$$ExternalSyntheticLamb
     }
 
     public final void run() {
-        this.f$0.lambda$checkUserName$4(this.f$1);
+        this.f$0.m1574lambda$checkUserName$4$orgtelegramuiChangeUsernameActivity(this.f$1);
     }
 }

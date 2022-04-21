@@ -11,6 +11,6 @@ public final /* synthetic */ class TrendingStickersLayout$TrendingStickersAdapte
     }
 
     public final void onClick(View view) {
-        this.f$0.lambda$onCreateViewHolder$0(view);
+        this.f$0.m4502xd64a6007(view);
     }
 }

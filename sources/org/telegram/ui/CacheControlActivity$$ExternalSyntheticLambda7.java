@@ -10,7 +10,7 @@ public final /* synthetic */ class CacheControlActivity$$ExternalSyntheticLambda
     }
 
     public final void didSetColor() {
-        this.f$0.lambda$getThemeDescriptions$8();
+        this.f$0.m1434x48b51629();
     }
 
     public /* synthetic */ void onAnimationProgress(float f) {

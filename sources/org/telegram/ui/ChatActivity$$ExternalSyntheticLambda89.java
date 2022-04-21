@@ -1,16 +1,22 @@
 package org.telegram.ui;
 
-import android.view.View;
-import org.telegram.ui.Cells.CheckBoxCell;
+import org.telegram.tgnet.TLObject;
+import org.telegram.tgnet.TLRPC;
 
-public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda89 implements View.OnClickListener {
-    public final /* synthetic */ CheckBoxCell[] f$0;
+public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda89 implements Runnable {
+    public final /* synthetic */ ChatActivity f$0;
+    public final /* synthetic */ TLRPC.TL_error f$1;
+    public final /* synthetic */ TLObject f$2;
+    public final /* synthetic */ TLRPC.TL_messages_getWebPagePreview f$3;
 
-    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda89(CheckBoxCell[] checkBoxCellArr) {
-        this.f$0 = checkBoxCellArr;
+    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda89(ChatActivity chatActivity, TLRPC.TL_error tL_error, TLObject tLObject, TLRPC.TL_messages_getWebPagePreview tL_messages_getWebPagePreview) {
+        this.f$0 = chatActivity;
+        this.f$1 = tL_error;
+        this.f$2 = tLObject;
+        this.f$3 = tL_messages_getWebPagePreview;
     }
 
-    public final void onClick(View view) {
-        ChatActivity.lambda$showRequestUrlAlert$216(this.f$0, view);
+    public final void run() {
+        this.f$0.m1805lambda$searchLinks$96$orgtelegramuiChatActivity(this.f$1, this.f$2, this.f$3);
     }
 }

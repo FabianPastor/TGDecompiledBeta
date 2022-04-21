@@ -10,6 +10,6 @@ public final /* synthetic */ class CalendarActivity$$ExternalSyntheticLambda0 im
     }
 
     public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-        this.f$0.lambda$animateSelection$4(valueAnimator);
+        this.f$0.m1437lambda$animateSelection$4$orgtelegramuiCalendarActivity(valueAnimator);
     }
 }

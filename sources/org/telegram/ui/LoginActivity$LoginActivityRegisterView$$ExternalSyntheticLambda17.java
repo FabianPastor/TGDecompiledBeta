@@ -1,18 +1,16 @@
 package org.telegram.ui;
 
-import org.telegram.tgnet.TLRPC$FileLocation;
+import android.view.View;
 import org.telegram.ui.LoginActivity;
 
-public final /* synthetic */ class LoginActivity$LoginActivityRegisterView$$ExternalSyntheticLambda17 implements Runnable {
+public final /* synthetic */ class LoginActivity$LoginActivityRegisterView$$ExternalSyntheticLambda17 implements View.OnClickListener {
     public final /* synthetic */ LoginActivity.LoginActivityRegisterView f$0;
-    public final /* synthetic */ TLRPC$FileLocation f$1;
 
-    public /* synthetic */ LoginActivity$LoginActivityRegisterView$$ExternalSyntheticLambda17(LoginActivity.LoginActivityRegisterView loginActivityRegisterView, TLRPC$FileLocation tLRPC$FileLocation) {
+    public /* synthetic */ LoginActivity$LoginActivityRegisterView$$ExternalSyntheticLambda17(LoginActivity.LoginActivityRegisterView loginActivityRegisterView) {
         this.f$0 = loginActivityRegisterView;
-        this.f$1 = tLRPC$FileLocation;
     }
 
-    public final void run() {
-        this.f$0.lambda$onNextPressed$16(this.f$1);
+    public final void onClick(View view) {
+        this.f$0.m2503x1384770(view);
     }
 }

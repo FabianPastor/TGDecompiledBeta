@@ -10,6 +10,6 @@ public final /* synthetic */ class ChatLinkActivity$$ExternalSyntheticLambda0 im
     }
 
     public final void onCancel(DialogInterface dialogInterface) {
-        this.f$0.lambda$showLinkAlert$7(dialogInterface);
+        this.f$0.m1956lambda$showLinkAlert$7$orgtelegramuiChatLinkActivity(dialogInterface);
     }
 }

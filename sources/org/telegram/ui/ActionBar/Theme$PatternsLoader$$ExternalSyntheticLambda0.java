@@ -13,6 +13,6 @@ public final /* synthetic */ class Theme$PatternsLoader$$ExternalSyntheticLambda
     }
 
     public final void run() {
-        this.f$0.lambda$new$1(this.f$1);
+        this.f$0.m1291lambda$new$1$orgtelegramuiActionBarTheme$PatternsLoader(this.f$1);
     }
 }

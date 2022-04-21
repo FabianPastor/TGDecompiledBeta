@@ -12,6 +12,6 @@ public final /* synthetic */ class PhotoAlbumPickerActivity$$ExternalSyntheticLa
     }
 
     public final void onClick(View view) {
-        this.f$0.lambda$createView$6(this.f$1, view);
+        this.f$0.m2880lambda$createView$6$orgtelegramuiPhotoAlbumPickerActivity(this.f$1, view);
     }
 }

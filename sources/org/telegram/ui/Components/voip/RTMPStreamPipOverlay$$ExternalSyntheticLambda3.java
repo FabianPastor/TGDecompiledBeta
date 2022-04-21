@@ -8,6 +8,6 @@ public final /* synthetic */ class RTMPStreamPipOverlay$$ExternalSyntheticLambda
     }
 
     public final void run() {
-        this.f$0.lambda$new$4();
+        this.f$0.m4571xc9eadd9b();
     }
 }

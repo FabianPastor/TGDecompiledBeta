@@ -1,16 +1,15 @@
 package org.telegram.ui;
 
-import android.view.KeyEvent;
-import android.widget.TextView;
+import org.telegram.tgnet.TLObject;
 
-public final /* synthetic */ class PassportActivity$$ExternalSyntheticLambda40 implements TextView.OnEditorActionListener {
-    public final /* synthetic */ PassportActivity f$0;
+public final /* synthetic */ class PassportActivity$$ExternalSyntheticLambda40 implements Runnable {
+    public final /* synthetic */ TLObject f$0;
 
-    public /* synthetic */ PassportActivity$$ExternalSyntheticLambda40(PassportActivity passportActivity) {
-        this.f$0 = passportActivity;
+    public /* synthetic */ PassportActivity$$ExternalSyntheticLambda40(TLObject tLObject) {
+        this.f$0 = tLObject;
     }
 
-    public final boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
-        return this.f$0.lambda$createPasswordInterface$7(textView, i, keyEvent);
+    public final void run() {
+        PassportActivity.lambda$new$0(this.f$0);
     }
 }

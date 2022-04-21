@@ -1,19 +1,15 @@
 package org.telegram.ui;
 
-import android.animation.ValueAnimator;
+import android.content.DialogInterface;
+import org.telegram.messenger.MessagesController;
 
-public final /* synthetic */ class DialogsActivity$$ExternalSyntheticLambda6 implements ValueAnimator.AnimatorUpdateListener {
-    public final /* synthetic */ DialogsActivity f$0;
-    public final /* synthetic */ boolean f$1;
-    public final /* synthetic */ float f$2;
+public final /* synthetic */ class DialogsActivity$$ExternalSyntheticLambda6 implements DialogInterface.OnClickListener {
+    public static final /* synthetic */ DialogsActivity$$ExternalSyntheticLambda6 INSTANCE = new DialogsActivity$$ExternalSyntheticLambda6();
 
-    public /* synthetic */ DialogsActivity$$ExternalSyntheticLambda6(DialogsActivity dialogsActivity, boolean z, float f) {
-        this.f$0 = dialogsActivity;
-        this.f$1 = z;
-        this.f$2 = f;
+    private /* synthetic */ DialogsActivity$$ExternalSyntheticLambda6() {
     }
 
-    public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-        this.f$0.lambda$updateFilterTabsVisibility$19(this.f$1, this.f$2, valueAnimator);
+    public final void onClick(DialogInterface dialogInterface, int i) {
+        MessagesController.getGlobalNotificationsSettings().edit().putBoolean("askedAboutMiuiLockscreen", true).commit();
     }
 }

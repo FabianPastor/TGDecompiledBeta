@@ -1,23 +1,16 @@
 package org.telegram.messenger;
 
-import java.util.ArrayList;
+import org.telegram.tgnet.RequestDelegate;
+import org.telegram.tgnet.TLObject;
+import org.telegram.tgnet.TLRPC;
 
-public final /* synthetic */ class MediaDataController$$ExternalSyntheticLambda71 implements Runnable {
-    public final /* synthetic */ MediaDataController f$0;
-    public final /* synthetic */ ArrayList f$1;
-    public final /* synthetic */ ArrayList f$2;
-    public final /* synthetic */ int f$3;
-    public final /* synthetic */ long f$4;
+public final /* synthetic */ class MediaDataController$$ExternalSyntheticLambda71 implements RequestDelegate {
+    public static final /* synthetic */ MediaDataController$$ExternalSyntheticLambda71 INSTANCE = new MediaDataController$$ExternalSyntheticLambda71();
 
-    public /* synthetic */ MediaDataController$$ExternalSyntheticLambda71(MediaDataController mediaDataController, ArrayList arrayList, ArrayList arrayList2, int i, long j) {
-        this.f$0 = mediaDataController;
-        this.f$1 = arrayList;
-        this.f$2 = arrayList2;
-        this.f$3 = i;
-        this.f$4 = j;
+    private /* synthetic */ MediaDataController$$ExternalSyntheticLambda71() {
     }
 
-    public final void run() {
-        this.f$0.lambda$putFeaturedStickersToCache$38(this.f$1, this.f$2, this.f$3, this.f$4);
+    public final void run(TLObject tLObject, TLRPC.TL_error tL_error) {
+        MediaDataController.lambda$removePeer$106(tLObject, tL_error);
     }
 }

@@ -8,6 +8,6 @@ public final /* synthetic */ class QrActivity$$ExternalSyntheticLambda4 implemen
     }
 
     public final void run() {
-        this.f$0.lambda$onItemSelected$7();
+        this.f$0.m3202lambda$onItemSelected$7$orgtelegramuiQrActivity();
     }
 }

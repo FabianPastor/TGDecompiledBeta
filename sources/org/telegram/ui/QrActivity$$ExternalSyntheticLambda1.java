@@ -12,6 +12,6 @@ public final /* synthetic */ class QrActivity$$ExternalSyntheticLambda1 implemen
     }
 
     public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-        this.f$0.lambda$onItemSelected$6(this.f$1, valueAnimator);
+        this.f$0.m3201lambda$onItemSelected$6$orgtelegramuiQrActivity(this.f$1, valueAnimator);
     }
 }

@@ -1,25 +1,16 @@
 package org.telegram.ui;
 
-import org.telegram.tgnet.TLRPC$InputCheckPasswordSRP;
-import org.telegram.tgnet.TLRPC$TL_channels_editCreator;
-import org.telegram.tgnet.TLRPC$TL_error;
+import android.app.DatePickerDialog;
+import android.widget.DatePicker;
 
-public final /* synthetic */ class ChatRightsEditActivity$$ExternalSyntheticLambda19 implements Runnable {
+public final /* synthetic */ class ChatRightsEditActivity$$ExternalSyntheticLambda19 implements DatePickerDialog.OnDateSetListener {
     public final /* synthetic */ ChatRightsEditActivity f$0;
-    public final /* synthetic */ TLRPC$TL_error f$1;
-    public final /* synthetic */ TLRPC$InputCheckPasswordSRP f$2;
-    public final /* synthetic */ TwoStepVerificationActivity f$3;
-    public final /* synthetic */ TLRPC$TL_channels_editCreator f$4;
 
-    public /* synthetic */ ChatRightsEditActivity$$ExternalSyntheticLambda19(ChatRightsEditActivity chatRightsEditActivity, TLRPC$TL_error tLRPC$TL_error, TLRPC$InputCheckPasswordSRP tLRPC$InputCheckPasswordSRP, TwoStepVerificationActivity twoStepVerificationActivity, TLRPC$TL_channels_editCreator tLRPC$TL_channels_editCreator) {
+    public /* synthetic */ ChatRightsEditActivity$$ExternalSyntheticLambda19(ChatRightsEditActivity chatRightsEditActivity) {
         this.f$0 = chatRightsEditActivity;
-        this.f$1 = tLRPC$TL_error;
-        this.f$2 = tLRPC$InputCheckPasswordSRP;
-        this.f$3 = twoStepVerificationActivity;
-        this.f$4 = tLRPC$TL_channels_editCreator;
     }
 
-    public final void run() {
-        this.f$0.lambda$initTransfer$13(this.f$1, this.f$2, this.f$3, this.f$4);
+    public final void onDateSet(DatePicker datePicker, int i, int i2, int i3) {
+        this.f$0.m1975lambda$createView$2$orgtelegramuiChatRightsEditActivity(datePicker, i, i2, i3);
     }
 }

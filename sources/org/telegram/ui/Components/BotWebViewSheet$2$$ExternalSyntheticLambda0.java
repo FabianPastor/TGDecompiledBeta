@@ -10,6 +10,6 @@ public final /* synthetic */ class BotWebViewSheet$2$$ExternalSyntheticLambda0 i
     }
 
     public final void run() {
-        this.f$0.lambda$onSendWebViewData$0();
+        this.f$0.m3681x8641var_();
     }
 }

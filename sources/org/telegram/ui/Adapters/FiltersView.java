@@ -20,6 +20,11 @@ import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.ListUpdateCallback;
 import androidx.recyclerview.widget.RecyclerView;
+import j$.time.LocalDate;
+import j$.time.LocalDateTime;
+import j$.time.LocalTime;
+import j$.time.format.DateTimeFormatter;
+import j$.time.format.DateTimeParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -32,14 +37,7 @@ import org.telegram.messenger.ContactsController;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.UserConfig;
 import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC$Chat;
-import org.telegram.tgnet.TLRPC$MessagesFilter;
-import org.telegram.tgnet.TLRPC$TL_inputMessagesFilterDocument;
-import org.telegram.tgnet.TLRPC$TL_inputMessagesFilterMusic;
-import org.telegram.tgnet.TLRPC$TL_inputMessagesFilterPhotoVideo;
-import org.telegram.tgnet.TLRPC$TL_inputMessagesFilterRoundVoice;
-import org.telegram.tgnet.TLRPC$TL_inputMessagesFilterUrl;
-import org.telegram.tgnet.TLRPC$User;
+import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.ActionBar.ThemeDescription;
 import org.telegram.ui.Components.BackupImageView;
@@ -48,18 +46,28 @@ import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.RecyclerListView;
 
 public class FiltersView extends RecyclerListView {
-    public static final MediaFilterData[] filters = {new MediaFilterData(NUM, NUM, LocaleController.getString("SharedMediaTab2", NUM), new TLRPC$TL_inputMessagesFilterPhotoVideo(), 0), new MediaFilterData(NUM, NUM, LocaleController.getString("SharedLinksTab2", NUM), new TLRPC$TL_inputMessagesFilterUrl(), 2), new MediaFilterData(NUM, NUM, LocaleController.getString("SharedFilesTab2", NUM), new TLRPC$TL_inputMessagesFilterDocument(), 1), new MediaFilterData(NUM, NUM, LocaleController.getString("SharedMusicTab2", NUM), new TLRPC$TL_inputMessagesFilterMusic(), 3), new MediaFilterData(NUM, NUM, LocaleController.getString("SharedVoiceTab2", NUM), new TLRPC$TL_inputMessagesFilterRoundVoice(), 5)};
+    public static final int FILTER_INDEX_FILES = 2;
+    public static final int FILTER_INDEX_LINKS = 1;
+    public static final int FILTER_INDEX_MEDIA = 0;
+    public static final int FILTER_INDEX_MUSIC = 3;
+    public static final int FILTER_INDEX_VOICE = 4;
+    public static final int FILTER_TYPE_ARCHIVE = 7;
+    public static final int FILTER_TYPE_CHAT = 4;
+    public static final int FILTER_TYPE_DATE = 6;
+    public static final int FILTER_TYPE_FILES = 1;
+    public static final int FILTER_TYPE_LINKS = 2;
+    public static final int FILTER_TYPE_MEDIA = 0;
+    public static final int FILTER_TYPE_MUSIC = 3;
+    public static final int FILTER_TYPE_VOICE = 5;
+    public static final MediaFilterData[] filters = {new MediaFilterData(NUM, NUM, LocaleController.getString("SharedMediaTab2", NUM), new TLRPC.TL_inputMessagesFilterPhotoVideo(), 0), new MediaFilterData(NUM, NUM, LocaleController.getString("SharedLinksTab2", NUM), new TLRPC.TL_inputMessagesFilterUrl(), 2), new MediaFilterData(NUM, NUM, LocaleController.getString("SharedFilesTab2", NUM), new TLRPC.TL_inputMessagesFilterDocument(), 1), new MediaFilterData(NUM, NUM, LocaleController.getString("SharedMusicTab2", NUM), new TLRPC.TL_inputMessagesFilterMusic(), 3), new MediaFilterData(NUM, NUM, LocaleController.getString("SharedVoiceTab2", NUM), new TLRPC.TL_inputMessagesFilterRoundVoice(), 5)};
     private static final Pattern longDate = Pattern.compile("^([0-9]{1,2})(\\.| |/|\\-)([0-9]{1,2})(\\.| |/|\\-)([0-9]{1,4})$");
+    private static final int minYear = 2013;
     private static final Pattern monthYearOrDayPatter = Pattern.compile("(\\w{3,}) ([0-9]{0,4})");
     private static final int[] numberOfDaysEachMonth = {31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
     private static final Pattern shortDate = Pattern.compile("^([0-9]{1,4})(\\.| |/|\\-)([0-9]{1,4})$");
     private static final Pattern yearOrDayAndMonthPatter = Pattern.compile("([0-9]{0,4}) (\\w{2,})");
     private static final Pattern yearPatter = Pattern.compile("20[0-9]{1,2}");
     DiffUtil.Callback diffUtilsCallback = new DiffUtil.Callback() {
-        public boolean areContentsTheSame(int i, int i2) {
-            return true;
-        }
-
         public int getOldListSize() {
             return FiltersView.this.oldItems.size();
         }
@@ -68,38 +76,34 @@ public class FiltersView extends RecyclerListView {
             return FiltersView.this.usersFilters.size();
         }
 
-        public boolean areItemsTheSame(int i, int i2) {
-            MediaFilterData mediaFilterData = (MediaFilterData) FiltersView.this.oldItems.get(i);
-            MediaFilterData mediaFilterData2 = (MediaFilterData) FiltersView.this.usersFilters.get(i2);
-            if (mediaFilterData.isSameType(mediaFilterData2)) {
-                int i3 = mediaFilterData.filterType;
-                if (i3 == 4) {
-                    TLObject tLObject = mediaFilterData.chat;
-                    if (tLObject instanceof TLRPC$User) {
-                        TLObject tLObject2 = mediaFilterData2.chat;
-                        if (tLObject2 instanceof TLRPC$User) {
-                            if (((TLRPC$User) tLObject).id == ((TLRPC$User) tLObject2).id) {
-                                return true;
-                            }
-                            return false;
-                        }
-                    }
-                    if (tLObject instanceof TLRPC$Chat) {
-                        TLObject tLObject3 = mediaFilterData2.chat;
-                        if (!(tLObject3 instanceof TLRPC$Chat) || ((TLRPC$Chat) tLObject).id != ((TLRPC$Chat) tLObject3).id) {
+        public boolean areItemsTheSame(int oldItemPosition, int newItemPosition) {
+            MediaFilterData oldItem = (MediaFilterData) FiltersView.this.oldItems.get(oldItemPosition);
+            MediaFilterData newItem = (MediaFilterData) FiltersView.this.usersFilters.get(newItemPosition);
+            if (oldItem.isSameType(newItem)) {
+                if (oldItem.filterType == 4) {
+                    if (!(oldItem.chat instanceof TLRPC.User) || !(newItem.chat instanceof TLRPC.User)) {
+                        if (!(oldItem.chat instanceof TLRPC.Chat) || !(newItem.chat instanceof TLRPC.Chat) || ((TLRPC.Chat) oldItem.chat).id != ((TLRPC.Chat) newItem.chat).id) {
                             return false;
                         }
                         return true;
+                    } else if (((TLRPC.User) oldItem.chat).id == ((TLRPC.User) newItem.chat).id) {
+                        return true;
+                    } else {
+                        return false;
                     }
-                } else if (i3 == 6) {
-                    return mediaFilterData.title.equals(mediaFilterData2.title);
+                } else if (oldItem.filterType == 6) {
+                    return oldItem.title.equals(newItem.title);
                 } else {
-                    if (i3 == 7) {
+                    if (oldItem.filterType == 7) {
                         return true;
                     }
                 }
             }
             return false;
+        }
+
+        public boolean areContentsTheSame(int oldItemPosition, int newItemPosition) {
+            return true;
         }
     };
     LinearLayoutManager layoutManager;
@@ -110,47 +114,45 @@ public class FiltersView extends RecyclerListView {
 
     public FiltersView(Context context, Theme.ResourcesProvider resourcesProvider) {
         super(context, resourcesProvider);
-        AnonymousClass1 r3 = new LinearLayoutManager(context) {
+        AnonymousClass1 r0 = new LinearLayoutManager(context) {
             public boolean supportsPredictiveItemAnimations() {
                 return false;
             }
 
-            public void onInitializeAccessibilityNodeInfo(RecyclerView.Recycler recycler, RecyclerView.State state, AccessibilityNodeInfoCompat accessibilityNodeInfoCompat) {
-                super.onInitializeAccessibilityNodeInfo(recycler, state, accessibilityNodeInfoCompat);
+            public void onInitializeAccessibilityNodeInfo(RecyclerView.Recycler recycler, RecyclerView.State state, AccessibilityNodeInfoCompat info) {
+                super.onInitializeAccessibilityNodeInfo(recycler, state, info);
                 if (!FiltersView.this.isEnabled()) {
-                    accessibilityNodeInfoCompat.setVisibleToUser(false);
+                    info.setVisibleToUser(false);
                 }
             }
         };
-        this.layoutManager = r3;
-        r3.setOrientation(0);
+        this.layoutManager = r0;
+        r0.setOrientation(0);
         setLayoutManager(this.layoutManager);
         setAdapter(new Adapter());
-        addItemDecoration(new RecyclerView.ItemDecoration(this) {
-            public void getItemOffsets(Rect rect, View view, RecyclerView recyclerView, RecyclerView.State state) {
-                super.getItemOffsets(rect, view, recyclerView, state);
-                int childAdapterPosition = recyclerView.getChildAdapterPosition(view);
-                rect.left = AndroidUtilities.dp(8.0f);
-                if (childAdapterPosition == state.getItemCount() - 1) {
-                    rect.right = AndroidUtilities.dp(10.0f);
+        addItemDecoration(new RecyclerView.ItemDecoration() {
+            public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
+                super.getItemOffsets(outRect, view, parent, state);
+                int position = parent.getChildAdapterPosition(view);
+                outRect.left = AndroidUtilities.dp(8.0f);
+                if (position == state.getItemCount() - 1) {
+                    outRect.right = AndroidUtilities.dp(10.0f);
                 }
-                if (childAdapterPosition == 0) {
-                    rect.left = AndroidUtilities.dp(10.0f);
+                if (position == 0) {
+                    outRect.left = AndroidUtilities.dp(10.0f);
                 }
             }
         });
-        setItemAnimator(new DefaultItemAnimator(this) {
-            /* access modifiers changed from: protected */
-            public long getAddAnimationDelay(long j, long j2, long j3) {
-                return 0;
-            }
-
-            public long getAddDuration() {
-                return 220;
-            }
+        setItemAnimator(new DefaultItemAnimator() {
+            private final float scaleFrom = 0.0f;
 
             /* access modifiers changed from: protected */
             public long getMoveAnimationDelay() {
+                return 0;
+            }
+
+            /* access modifiers changed from: protected */
+            public long getAddAnimationDelay(long removeDuration, long moveDuration, long changeDuration) {
                 return 0;
             }
 
@@ -158,22 +160,26 @@ public class FiltersView extends RecyclerListView {
                 return 220;
             }
 
-            public boolean animateAdd(RecyclerView.ViewHolder viewHolder) {
-                boolean animateAdd = super.animateAdd(viewHolder);
-                if (animateAdd) {
-                    viewHolder.itemView.setScaleX(0.0f);
-                    viewHolder.itemView.setScaleY(0.0f);
-                }
-                return animateAdd;
+            public long getAddDuration() {
+                return 220;
             }
 
-            public void animateAddImpl(final RecyclerView.ViewHolder viewHolder) {
-                final View view = viewHolder.itemView;
-                final ViewPropertyAnimator animate = view.animate();
-                this.mAddAnimations.add(viewHolder);
-                animate.alpha(1.0f).scaleX(1.0f).scaleY(1.0f).setDuration(getAddDuration()).setListener(new AnimatorListenerAdapter() {
+            public boolean animateAdd(RecyclerView.ViewHolder holder) {
+                boolean r = super.animateAdd(holder);
+                if (r) {
+                    holder.itemView.setScaleX(0.0f);
+                    holder.itemView.setScaleY(0.0f);
+                }
+                return r;
+            }
+
+            public void animateAddImpl(final RecyclerView.ViewHolder holder) {
+                final View view = holder.itemView;
+                final ViewPropertyAnimator animation = view.animate();
+                this.mAddAnimations.add(holder);
+                animation.alpha(1.0f).scaleX(1.0f).scaleY(1.0f).setDuration(getAddDuration()).setListener(new AnimatorListenerAdapter() {
                     public void onAnimationStart(Animator animator) {
-                        AnonymousClass3.this.dispatchAddStarting(viewHolder);
+                        AnonymousClass3.this.dispatchAddStarting(holder);
                     }
 
                     public void onAnimationCancel(Animator animator) {
@@ -181,33 +187,33 @@ public class FiltersView extends RecyclerListView {
                     }
 
                     public void onAnimationEnd(Animator animator) {
-                        animate.setListener((Animator.AnimatorListener) null);
-                        AnonymousClass3.this.dispatchAddFinished(viewHolder);
-                        AnonymousClass3.this.mAddAnimations.remove(viewHolder);
+                        animation.setListener((Animator.AnimatorListener) null);
+                        AnonymousClass3.this.dispatchAddFinished(holder);
+                        AnonymousClass3.this.mAddAnimations.remove(holder);
                         AnonymousClass3.this.dispatchFinishedWhenDone();
                     }
                 }).start();
             }
 
             /* access modifiers changed from: protected */
-            public void animateRemoveImpl(final RecyclerView.ViewHolder viewHolder) {
-                final View view = viewHolder.itemView;
-                final ViewPropertyAnimator animate = view.animate();
-                this.mRemoveAnimations.add(viewHolder);
-                animate.setDuration(getRemoveDuration()).alpha(0.0f).scaleX(0.0f).scaleY(0.0f).setListener(new AnimatorListenerAdapter() {
+            public void animateRemoveImpl(final RecyclerView.ViewHolder holder) {
+                final View view = holder.itemView;
+                final ViewPropertyAnimator animation = view.animate();
+                this.mRemoveAnimations.add(holder);
+                animation.setDuration(getRemoveDuration()).alpha(0.0f).scaleX(0.0f).scaleY(0.0f).setListener(new AnimatorListenerAdapter() {
                     public void onAnimationStart(Animator animator) {
-                        AnonymousClass3.this.dispatchRemoveStarting(viewHolder);
+                        AnonymousClass3.this.dispatchRemoveStarting(holder);
                     }
 
                     public void onAnimationEnd(Animator animator) {
-                        animate.setListener((Animator.AnimatorListener) null);
+                        animation.setListener((Animator.AnimatorListener) null);
                         view.setAlpha(1.0f);
                         view.setTranslationX(0.0f);
                         view.setTranslationY(0.0f);
                         view.setScaleX(1.0f);
                         view.setScaleY(1.0f);
-                        AnonymousClass3.this.dispatchRemoveFinished(viewHolder);
-                        AnonymousClass3.this.mRemoveAnimations.remove(viewHolder);
+                        AnonymousClass3.this.dispatchRemoveFinished(holder);
+                        AnonymousClass3.this.mRemoveAnimations.remove(holder);
                         AnonymousClass3.this.dispatchFinishedWhenDone();
                     }
                 }).start();
@@ -220,8 +226,8 @@ public class FiltersView extends RecyclerListView {
     }
 
     /* access modifiers changed from: protected */
-    public void onMeasure(int i, int i2) {
-        super.onMeasure(i, View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(44.0f), NUM));
+    public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        super.onMeasure(widthMeasureSpec, View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(44.0f), NUM));
     }
 
     public MediaFilterData getFilterAt(int i) {
@@ -231,46 +237,46 @@ public class FiltersView extends RecyclerListView {
         return this.usersFilters.get(i);
     }
 
-    public void setUsersAndDates(ArrayList<Object> arrayList, ArrayList<DateData> arrayList2, boolean z) {
-        String str;
+    public void setUsersAndDates(ArrayList<Object> localUsers, ArrayList<DateData> dates, boolean archive) {
+        String title;
         this.oldItems.clear();
         this.oldItems.addAll(this.usersFilters);
         this.usersFilters.clear();
-        if (arrayList != null) {
-            for (int i = 0; i < arrayList.size(); i++) {
-                Object obj = arrayList.get(i);
-                if (obj instanceof TLRPC$User) {
-                    TLRPC$User tLRPC$User = (TLRPC$User) obj;
-                    if (UserConfig.getInstance(UserConfig.selectedAccount).getCurrentUser().id == tLRPC$User.id) {
-                        str = LocaleController.getString("SavedMessages", NUM);
+        if (localUsers != null) {
+            for (int i = 0; i < localUsers.size(); i++) {
+                Object object = localUsers.get(i);
+                if (object instanceof TLRPC.User) {
+                    TLRPC.User user = (TLRPC.User) object;
+                    if (UserConfig.getInstance(UserConfig.selectedAccount).getCurrentUser().id == user.id) {
+                        title = LocaleController.getString("SavedMessages", NUM);
                     } else {
-                        str = ContactsController.formatName(tLRPC$User.first_name, tLRPC$User.last_name, 10);
+                        title = ContactsController.formatName(user.first_name, user.last_name, 10);
                     }
-                    MediaFilterData mediaFilterData = new MediaFilterData(NUM, NUM, str, (TLRPC$MessagesFilter) null, 4);
-                    mediaFilterData.setUser(tLRPC$User);
+                    MediaFilterData data = new MediaFilterData(NUM, NUM, title, (TLRPC.MessagesFilter) null, 4);
+                    data.setUser(user);
+                    this.usersFilters.add(data);
+                } else if (object instanceof TLRPC.Chat) {
+                    TLRPC.Chat chat = (TLRPC.Chat) object;
+                    String title2 = chat.title;
+                    if (chat.title.length() > 12) {
+                        title2 = String.format("%s...", new Object[]{title2.substring(0, 10)});
+                    }
+                    MediaFilterData mediaFilterData = new MediaFilterData(NUM, NUM, title2, (TLRPC.MessagesFilter) null, 4);
+                    mediaFilterData.setUser(chat);
                     this.usersFilters.add(mediaFilterData);
-                } else if (obj instanceof TLRPC$Chat) {
-                    TLRPC$Chat tLRPC$Chat = (TLRPC$Chat) obj;
-                    String str2 = tLRPC$Chat.title;
-                    if (str2.length() > 12) {
-                        str2 = String.format("%s...", new Object[]{str2.substring(0, 10)});
-                    }
-                    MediaFilterData mediaFilterData2 = new MediaFilterData(NUM, NUM, str2, (TLRPC$MessagesFilter) null, 4);
-                    mediaFilterData2.setUser(tLRPC$Chat);
-                    this.usersFilters.add(mediaFilterData2);
                 }
             }
         }
-        if (arrayList2 != null) {
-            for (int i2 = 0; i2 < arrayList2.size(); i2++) {
-                DateData dateData = arrayList2.get(i2);
-                MediaFilterData mediaFilterData3 = new MediaFilterData(NUM, NUM, dateData.title, (TLRPC$MessagesFilter) null, 6);
-                mediaFilterData3.setDate(dateData);
-                this.usersFilters.add(mediaFilterData3);
+        if (dates != null) {
+            for (int i2 = 0; i2 < dates.size(); i2++) {
+                DateData dateData = dates.get(i2);
+                MediaFilterData data2 = new MediaFilterData(NUM, NUM, dateData.title, (TLRPC.MessagesFilter) null, 6);
+                data2.setDate(dateData);
+                this.usersFilters.add(data2);
             }
         }
-        if (z) {
-            this.usersFilters.add(new MediaFilterData(NUM, NUM, LocaleController.getString("ArchiveSearchFilter", NUM), (TLRPC$MessagesFilter) null, 7));
+        if (archive) {
+            this.usersFilters.add(new MediaFilterData(NUM, NUM, LocaleController.getString("ArchiveSearchFilter", NUM), (TLRPC.MessagesFilter) null, 7));
         }
         if (getAdapter() != null) {
             UpdateCallback updateCallback = new UpdateCallback(getAdapter());
@@ -281,159 +287,184 @@ public class FiltersView extends RecyclerListView {
         }
     }
 
-    public static void fillTipDates(String str, ArrayList<DateData> arrayList) {
-        ArrayList<DateData> arrayList2 = arrayList;
-        arrayList.clear();
-        if (str != null) {
-            String trim = str.trim();
-            if (trim.length() >= 3) {
-                if (LocaleController.getString("SearchTipToday", NUM).toLowerCase().startsWith(trim) || "today".startsWith(trim)) {
-                    Calendar instance = Calendar.getInstance();
-                    int i = instance.get(1);
-                    int i2 = instance.get(2);
-                    int i3 = instance.get(5);
-                    Calendar calendar = instance;
-                    int i4 = i;
-                    int i5 = i2;
-                    calendar.set(i4, i5, i3, 0, 0, 0);
-                    long timeInMillis = instance.getTimeInMillis();
-                    calendar.set(i4, i5, i3 + 1, 0, 0, 0);
-                    arrayList2.add(new DateData(LocaleController.getString("SearchTipToday", NUM), timeInMillis, instance.getTimeInMillis() - 1));
-                } else if (LocaleController.getString("SearchTipYesterday", NUM).toLowerCase().startsWith(trim) || "yesterday".startsWith(trim)) {
-                    Calendar instance2 = Calendar.getInstance();
-                    int i6 = instance2.get(1);
-                    int i7 = instance2.get(2);
-                    int i8 = instance2.get(5);
-                    int i9 = i6;
-                    int i10 = i7;
-                    instance2.set(i9, i10, i8, 0, 0, 0);
-                    instance2.set(i9, i10, i8 + 1, 0, 0, 0);
-                    arrayList2.add(new DateData(LocaleController.getString("SearchTipYesterday", NUM), instance2.getTimeInMillis() - 86400000, instance2.getTimeInMillis() - 86400001));
+    public static void fillTipDates(String query, ArrayList<DateData> dates) {
+        int year;
+        ArrayList<DateData> arrayList = dates;
+        dates.clear();
+        if (query != null) {
+            String q = query.trim();
+            if (q.length() >= 3) {
+                int i = 2;
+                if (LocaleController.getString("SearchTipToday", NUM).toLowerCase().startsWith(q) || "today".startsWith(q)) {
+                    Calendar calendar = Calendar.getInstance();
+                    int year2 = calendar.get(1);
+                    int month = calendar.get(2);
+                    int day = calendar.get(5);
+                    Calendar calendar2 = calendar;
+                    int i2 = year2;
+                    int i3 = month;
+                    calendar2.set(i2, i3, day, 0, 0, 0);
+                    long minDate = calendar.getTimeInMillis();
+                    calendar2.set(i2, i3, day + 1, 0, 0, 0);
+                    DateData dateData = r8;
+                    DateData dateData2 = new DateData(LocaleController.getString("SearchTipToday", NUM), minDate, calendar.getTimeInMillis() - 1);
+                    arrayList.add(dateData);
+                } else if (LocaleController.getString("SearchTipYesterday", NUM).toLowerCase().startsWith(q) || "yesterday".startsWith(q)) {
+                    Calendar calendar3 = Calendar.getInstance();
+                    int year3 = calendar3.get(1);
+                    int month2 = calendar3.get(2);
+                    int day2 = calendar3.get(5);
+                    Calendar calendar4 = calendar3;
+                    int i4 = year3;
+                    int i5 = month2;
+                    calendar4.set(i4, i5, day2, 0, 0, 0);
+                    calendar4.set(i4, i5, day2 + 1, 0, 0, 0);
+                    DateData dateData3 = r12;
+                    DateData dateData4 = new DateData(LocaleController.getString("SearchTipYesterday", NUM), calendar3.getTimeInMillis() - 86400000, calendar3.getTimeInMillis() - 86400001);
+                    arrayList.add(dateData3);
                 } else {
-                    int dayOfWeek = getDayOfWeek(trim);
+                    int dayOfWeek = getDayOfWeek(q);
                     if (dayOfWeek >= 0) {
-                        Calendar instance3 = Calendar.getInstance();
-                        long timeInMillis2 = instance3.getTimeInMillis();
-                        instance3.set(7, dayOfWeek);
-                        if (instance3.getTimeInMillis() > timeInMillis2) {
-                            instance3.setTimeInMillis(instance3.getTimeInMillis() - NUM);
+                        Calendar calendar5 = Calendar.getInstance();
+                        long now = calendar5.getTimeInMillis();
+                        calendar5.set(7, dayOfWeek);
+                        if (calendar5.getTimeInMillis() > now) {
+                            calendar5.setTimeInMillis(calendar5.getTimeInMillis() - NUM);
                         }
-                        int i11 = instance3.get(1);
-                        int i12 = instance3.get(2);
-                        int i13 = instance3.get(5);
-                        Calendar calendar2 = instance3;
-                        int i14 = i11;
-                        int i15 = i12;
-                        calendar2.set(i14, i15, i13, 0, 0, 0);
-                        long timeInMillis3 = instance3.getTimeInMillis();
-                        calendar2.set(i14, i15, i13 + 1, 0, 0, 0);
-                        arrayList2.add(new DateData(LocaleController.getInstance().formatterWeekLong.format(timeInMillis3), timeInMillis3, instance3.getTimeInMillis() - 1));
+                        int year4 = calendar5.get(1);
+                        int month3 = calendar5.get(2);
+                        int day3 = calendar5.get(5);
+                        Calendar calendar6 = calendar5;
+                        int i6 = year4;
+                        int i7 = month3;
+                        calendar6.set(i6, i7, day3, 0, 0, 0);
+                        long minDate2 = calendar5.getTimeInMillis();
+                        calendar6.set(i6, i7, day3 + 1, 0, 0, 0);
+                        long minDate3 = minDate2;
+                        arrayList.add(new DateData(LocaleController.getInstance().formatterWeekLong.format(minDate3), minDate3, calendar5.getTimeInMillis() - 1));
                         return;
                     }
-                    Matcher matcher = shortDate.matcher(trim);
+                    Matcher matcher = shortDate.matcher(q);
+                    Matcher matcher2 = matcher;
                     if (matcher.matches()) {
-                        String group = matcher.group(1);
-                        String group2 = matcher.group(3);
-                        int parseInt = Integer.parseInt(group);
-                        int parseInt2 = Integer.parseInt(group2);
-                        if (parseInt <= 0 || parseInt > 31) {
-                            if (parseInt >= 2013 && parseInt2 <= 12) {
-                                createForMonthYear(arrayList2, parseInt2 - 1, parseInt);
+                        String g1 = matcher2.group(1);
+                        String g2 = matcher2.group(3);
+                        int k = Integer.parseInt(g1);
+                        int k1 = Integer.parseInt(g2);
+                        if (k <= 0 || k > 31) {
+                            if (k >= 2013 && k1 <= 12) {
+                                createForMonthYear(arrayList, k1 - 1, k);
                             }
-                        } else if (parseInt2 >= 2013 && parseInt <= 12) {
-                            createForMonthYear(arrayList2, parseInt - 1, parseInt2);
-                        } else if (parseInt2 <= 12) {
-                            createForDayMonth(arrayList2, parseInt - 1, parseInt2 - 1);
+                        } else if (k1 >= 2013 && k <= 12) {
+                            createForMonthYear(arrayList, k - 1, k1);
+                        } else if (k1 <= 12) {
+                            createForDayMonth(arrayList, k - 1, k1 - 1);
                         }
                     } else {
-                        Matcher matcher2 = longDate.matcher(trim);
-                        if (matcher2.matches()) {
-                            String group3 = matcher2.group(1);
-                            String group4 = matcher2.group(3);
-                            String group5 = matcher2.group(5);
-                            if (matcher2.group(2).equals(matcher2.group(4))) {
-                                int parseInt3 = Integer.parseInt(group3);
-                                int parseInt4 = Integer.parseInt(group4) - 1;
-                                int parseInt5 = Integer.parseInt(group5);
-                                if (parseInt5 >= 10 && parseInt5 <= 99) {
-                                    parseInt5 += 2000;
+                        Matcher matcher3 = longDate.matcher(q);
+                        Matcher matcher4 = matcher3;
+                        if (matcher3.matches()) {
+                            String g12 = matcher4.group(1);
+                            String g22 = matcher4.group(3);
+                            String g3 = matcher4.group(5);
+                            if (matcher4.group(2).equals(matcher4.group(4))) {
+                                int day4 = Integer.parseInt(g12);
+                                int month4 = Integer.parseInt(g22) - 1;
+                                int year5 = Integer.parseInt(g3);
+                                if (year5 < 10 || year5 > 99) {
+                                    year = year5;
+                                } else {
+                                    year = year5 + 2000;
                                 }
-                                int i16 = Calendar.getInstance().get(1);
-                                if (validDateForMont(parseInt3 - 1, parseInt4) && parseInt5 >= 2013 && parseInt5 <= i16) {
-                                    Calendar instance4 = Calendar.getInstance();
-                                    Calendar calendar3 = instance4;
-                                    int i17 = parseInt5;
-                                    int i18 = parseInt4;
-                                    calendar3.set(i17, i18, parseInt3, 0, 0, 0);
-                                    long timeInMillis4 = instance4.getTimeInMillis();
-                                    calendar3.set(i17, i18, parseInt3 + 1, 0, 0, 0);
-                                    arrayList2.add(new DateData(LocaleController.getInstance().formatterYearMax.format(timeInMillis4), timeInMillis4, instance4.getTimeInMillis() - 1));
+                                int currentYear = Calendar.getInstance().get(1);
+                                if (!validDateForMont(day4 - 1, month4) || year < 2013 || year > currentYear) {
+                                    int i8 = year;
+                                    int year6 = dayOfWeek;
+                                    return;
                                 }
+                                Calendar calendar7 = Calendar.getInstance();
+                                Calendar calendar8 = calendar7;
+                                calendar8.set(year, month4, day4, 0, 0, 0);
+                                long minDate4 = calendar7.getTimeInMillis();
+                                calendar8.set(year, month4, day4 + 1, 0, 0, 0);
+                                int i9 = dayOfWeek;
+                                String str = g22;
+                                long minDate5 = minDate4;
+                                arrayList.add(new DateData(LocaleController.getInstance().formatterYearMax.format(minDate5), minDate5, calendar7.getTimeInMillis() - 1));
+                                return;
                             }
-                        } else if (yearPatter.matcher(trim).matches()) {
-                            int intValue = Integer.valueOf(trim).intValue();
-                            int i19 = Calendar.getInstance().get(1);
-                            if (intValue < 2013) {
-                                while (i19 >= 2013) {
-                                    Calendar instance5 = Calendar.getInstance();
-                                    Calendar calendar4 = instance5;
-                                    calendar4.set(i19, 0, 1, 0, 0, 0);
-                                    long timeInMillis5 = instance5.getTimeInMillis();
-                                    calendar4.set(i19 + 1, 0, 1, 0, 0, 0);
-                                    arrayList2.add(new DateData(Integer.toString(i19), timeInMillis5, instance5.getTimeInMillis() - 1));
-                                    i19--;
+                            return;
+                        }
+                        Matcher matcher5 = yearPatter.matcher(q);
+                        Matcher matcher6 = matcher5;
+                        if (matcher5.matches()) {
+                            int selectedYear = Integer.valueOf(q).intValue();
+                            int currentYear2 = Calendar.getInstance().get(1);
+                            if (selectedYear < 2013) {
+                                for (int i10 = currentYear2; i10 >= 2013; i10--) {
+                                    Calendar calendar9 = Calendar.getInstance();
+                                    Calendar calendar10 = calendar9;
+                                    calendar10.set(i10, 0, 1, 0, 0, 0);
+                                    long minDate6 = calendar9.getTimeInMillis();
+                                    calendar10.set(i10 + 1, 0, 1, 0, 0, 0);
+                                    arrayList.add(new DateData(Integer.toString(i10), minDate6, calendar9.getTimeInMillis() - 1));
                                 }
-                            } else if (intValue <= i19) {
-                                Calendar instance6 = Calendar.getInstance();
-                                Calendar calendar5 = instance6;
-                                calendar5.set(intValue, 0, 1, 0, 0, 0);
-                                long timeInMillis6 = instance6.getTimeInMillis();
-                                calendar5.set(intValue + 1, 0, 1, 0, 0, 0);
-                                arrayList2.add(new DateData(Integer.toString(intValue), timeInMillis6, instance6.getTimeInMillis() - 1));
+                            } else if (selectedYear <= currentYear2) {
+                                Calendar calendar11 = Calendar.getInstance();
+                                Calendar calendar12 = calendar11;
+                                calendar12.set(selectedYear, 0, 1, 0, 0, 0);
+                                long minDate7 = calendar11.getTimeInMillis();
+                                calendar12.set(selectedYear + 1, 0, 1, 0, 0, 0);
+                                arrayList.add(new DateData(Integer.toString(selectedYear), minDate7, calendar11.getTimeInMillis() - 1));
                             }
                         } else {
-                            Matcher matcher3 = monthYearOrDayPatter.matcher(trim);
-                            if (matcher3.matches()) {
-                                String group6 = matcher3.group(1);
-                                String group7 = matcher3.group(2);
-                                int month = getMonth(group6);
-                                if (month >= 0) {
-                                    int intValue2 = Integer.valueOf(group7).intValue();
-                                    if (intValue2 > 0 && intValue2 <= 31) {
-                                        createForDayMonth(arrayList2, intValue2 - 1, month);
+                            Matcher matcher7 = monthYearOrDayPatter.matcher(q);
+                            Matcher matcher8 = matcher7;
+                            if (matcher7.matches()) {
+                                String g13 = matcher8.group(1);
+                                String g23 = matcher8.group(2);
+                                int month5 = getMonth(g13);
+                                if (month5 >= 0) {
+                                    int k2 = Integer.valueOf(g23).intValue();
+                                    if (k2 > 0 && k2 <= 31) {
+                                        createForDayMonth(arrayList, k2 - 1, month5);
                                         return;
-                                    } else if (intValue2 >= 2013) {
-                                        createForMonthYear(arrayList2, month, intValue2);
+                                    } else if (k2 >= 2013) {
+                                        createForMonthYear(arrayList, month5, k2);
                                         return;
                                     }
                                 }
                             }
-                            Matcher matcher4 = yearOrDayAndMonthPatter.matcher(trim);
-                            if (matcher4.matches()) {
-                                String group8 = matcher4.group(1);
-                                int month2 = getMonth(matcher4.group(2));
-                                if (month2 >= 0) {
-                                    int intValue3 = Integer.valueOf(group8).intValue();
-                                    if (intValue3 > 0 && intValue3 <= 31) {
-                                        createForDayMonth(arrayList2, intValue3 - 1, month2);
+                            Matcher matcher9 = yearOrDayAndMonthPatter.matcher(q);
+                            Matcher matcher10 = matcher9;
+                            if (matcher9.matches()) {
+                                String g14 = matcher10.group(1);
+                                int month6 = getMonth(matcher10.group(2));
+                                if (month6 >= 0) {
+                                    int k3 = Integer.valueOf(g14).intValue();
+                                    if (k3 > 0 && k3 <= 31) {
+                                        createForDayMonth(arrayList, k3 - 1, month6);
                                         return;
-                                    } else if (intValue3 >= 2013) {
-                                        createForMonthYear(arrayList2, month2, intValue3);
+                                    } else if (k3 >= 2013) {
+                                        createForMonthYear(arrayList, month6, k3);
                                     }
                                 }
                             }
-                            if (!TextUtils.isEmpty(trim) && trim.length() > 2) {
-                                int month3 = getMonth(trim);
-                                long timeInMillis7 = Calendar.getInstance().getTimeInMillis();
-                                if (month3 >= 0) {
-                                    for (int i20 = Calendar.getInstance().get(1); i20 >= 2013; i20--) {
-                                        Calendar instance7 = Calendar.getInstance();
-                                        instance7.set(i20, month3, 1, 0, 0, 0);
-                                        long timeInMillis8 = instance7.getTimeInMillis();
-                                        if (timeInMillis8 <= timeInMillis7) {
-                                            instance7.add(2, 1);
-                                            arrayList2.add(new DateData(LocaleController.getInstance().formatterMonthYear.format(timeInMillis8), timeInMillis8, instance7.getTimeInMillis() - 1));
+                            if (!TextUtils.isEmpty(q) && q.length() > 2) {
+                                int month7 = getMonth(q);
+                                long today = Calendar.getInstance().getTimeInMillis();
+                                if (month7 >= 0) {
+                                    int j = Calendar.getInstance().get(1);
+                                    while (j >= 2013) {
+                                        Calendar calendar13 = Calendar.getInstance();
+                                        calendar13.set(j, month7, 1, 0, 0, 0);
+                                        long minDate8 = calendar13.getTimeInMillis();
+                                        if (minDate8 <= today) {
+                                            calendar13.add(i, 1);
+                                            arrayList.add(new DateData(LocaleController.getInstance().formatterMonthYear.format(minDate8), minDate8, calendar13.getTimeInMillis() - 1));
                                         }
+                                        j--;
+                                        i = 2;
                                     }
                                 }
                             }
@@ -444,74 +475,82 @@ public class FiltersView extends RecyclerListView {
         }
     }
 
-    private static void createForMonthYear(ArrayList<DateData> arrayList, int i, int i2) {
-        int i3 = i2;
-        int i4 = Calendar.getInstance().get(1);
-        long timeInMillis = Calendar.getInstance().getTimeInMillis();
-        if (i3 >= 2013 && i3 <= i4) {
-            Calendar instance = Calendar.getInstance();
-            instance.set(i2, i, 1, 0, 0, 0);
-            long timeInMillis2 = instance.getTimeInMillis();
-            if (timeInMillis2 <= timeInMillis) {
-                instance.add(2, 1);
-                ArrayList<DateData> arrayList2 = arrayList;
-                arrayList2.add(new DateData(LocaleController.getInstance().formatterMonthYear.format(timeInMillis2), timeInMillis2, instance.getTimeInMillis() - 1));
-            }
+    private static void createForMonthYear(ArrayList<DateData> dates, int month, int selectedYear) {
+        int i = selectedYear;
+        int currentYear = Calendar.getInstance().get(1);
+        long today = Calendar.getInstance().getTimeInMillis();
+        if (i < 2013 || i > currentYear) {
+            ArrayList<DateData> arrayList = dates;
+            return;
+        }
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(selectedYear, month, 1, 0, 0, 0);
+        long minDate = calendar.getTimeInMillis();
+        if (minDate <= today) {
+            calendar.add(2, 1);
+            dates.add(new DateData(LocaleController.getInstance().formatterMonthYear.format(minDate), minDate, calendar.getTimeInMillis() - 1));
         }
     }
 
-    private static void createForDayMonth(ArrayList<DateData> arrayList, int i, int i2) {
-        long j;
-        ArrayList<DateData> arrayList2 = arrayList;
-        int i3 = i;
-        if (validDateForMont(i, i2)) {
-            int i4 = 1;
-            int i5 = Calendar.getInstance().get(1);
-            long timeInMillis = Calendar.getInstance().getTimeInMillis();
-            GregorianCalendar gregorianCalendar = (GregorianCalendar) GregorianCalendar.getInstance();
-            int i6 = i5;
-            while (i6 >= 2013) {
-                if (!(i2 == i4 && i3 == 28 && !gregorianCalendar.isLeapYear(i6))) {
-                    Calendar instance = Calendar.getInstance();
-                    instance.set(i6, i2, i3 + 1, 0, 0, 0);
-                    long timeInMillis2 = instance.getTimeInMillis();
-                    if (timeInMillis2 <= timeInMillis) {
-                        j = timeInMillis;
-                        long j2 = timeInMillis2;
-                        instance.set(i6, i2, i3 + 2, 0, 0, 0);
-                        long timeInMillis3 = instance.getTimeInMillis() - 1;
-                        if (i6 == i5) {
-                            arrayList2.add(new DateData(LocaleController.getInstance().formatterDayMonth.format(j2), j2, timeInMillis3));
+    private static void createForDayMonth(ArrayList<DateData> dates, int day, int month) {
+        long today;
+        ArrayList<DateData> arrayList = dates;
+        int i = day;
+        if (validDateForMont(day, month)) {
+            int i2 = 1;
+            int currentYear = Calendar.getInstance().get(1);
+            long today2 = Calendar.getInstance().getTimeInMillis();
+            GregorianCalendar georgianCal = (GregorianCalendar) GregorianCalendar.getInstance();
+            int i3 = currentYear;
+            while (i3 >= 2013) {
+                if (month == i2 && i == 28 && !georgianCal.isLeapYear(i3)) {
+                    today = today2;
+                } else {
+                    Calendar calendar = Calendar.getInstance();
+                    calendar.set(i3, month, i + 1, 0, 0, 0);
+                    long minDate = calendar.getTimeInMillis();
+                    if (minDate > today2) {
+                        today = today2;
+                    } else {
+                        today = today2;
+                        long minDate2 = minDate;
+                        calendar.set(i3, month, i + 2, 0, 0, 0);
+                        long maxDate = calendar.getTimeInMillis() - 1;
+                        if (i3 == currentYear) {
+                            arrayList.add(new DateData(LocaleController.getInstance().formatterDayMonth.format(minDate2), minDate2, maxDate));
                         } else {
-                            arrayList2.add(new DateData(LocaleController.getInstance().formatterYearMax.format(j2), j2, timeInMillis3));
+                            arrayList.add(new DateData(LocaleController.getInstance().formatterYearMax.format(minDate2), minDate2, maxDate));
                         }
-                        i6--;
-                        timeInMillis = j;
-                        i4 = 1;
                     }
                 }
-                j = timeInMillis;
-                i6--;
-                timeInMillis = j;
-                i4 = 1;
+                i3--;
+                today2 = today;
+                i2 = 1;
             }
+            int i4 = month;
+            long j = today2;
+            return;
         }
+        int i5 = month;
     }
 
-    private static boolean validDateForMont(int i, int i2) {
-        return i2 >= 0 && i2 < 12 && i >= 0 && i < numberOfDaysEachMonth[i2];
+    private static boolean validDateForMont(int day, int month) {
+        if (month < 0 || month >= 12 || day < 0 || day >= numberOfDaysEachMonth[month]) {
+            return false;
+        }
+        return true;
     }
 
-    public static int getDayOfWeek(String str) {
-        Calendar instance = Calendar.getInstance();
-        if (str.length() <= 3) {
+    public static int getDayOfWeek(String q) {
+        Calendar c = Calendar.getInstance();
+        if (q.length() <= 3) {
             return -1;
         }
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("EEEE", Locale.ENGLISH);
+        SimpleDateFormat dateFormat = new SimpleDateFormat("EEEE", Locale.ENGLISH);
         int i = 0;
         while (i < 7) {
-            instance.set(7, i);
-            if (LocaleController.getInstance().formatterWeekLong.format(instance.getTime()).toLowerCase().startsWith(str) || simpleDateFormat.format(instance.getTime()).toLowerCase().startsWith(str)) {
+            c.set(7, i);
+            if (LocaleController.getInstance().formatterWeekLong.format(c.getTime()).toLowerCase().startsWith(q) || dateFormat.format(c.getTime()).toLowerCase().startsWith(q)) {
                 return i;
             }
             i++;
@@ -519,73 +558,90 @@ public class FiltersView extends RecyclerListView {
         return -1;
     }
 
-    public static int getMonth(String str) {
-        String[] strArr = {LocaleController.getString("January", NUM).toLowerCase(), LocaleController.getString("February", NUM).toLowerCase(), LocaleController.getString("March", NUM).toLowerCase(), LocaleController.getString("April", NUM).toLowerCase(), LocaleController.getString("May", NUM).toLowerCase(), LocaleController.getString("June", NUM).toLowerCase(), LocaleController.getString("July", NUM).toLowerCase(), LocaleController.getString("August", NUM).toLowerCase(), LocaleController.getString("September", NUM).toLowerCase(), LocaleController.getString("October", NUM).toLowerCase(), LocaleController.getString("November", NUM).toLowerCase(), LocaleController.getString("December", NUM).toLowerCase()};
-        String[] strArr2 = new String[12];
-        Calendar instance = Calendar.getInstance();
+    public static int getMonth(String q) {
+        String[] months = {LocaleController.getString("January", NUM).toLowerCase(), LocaleController.getString("February", NUM).toLowerCase(), LocaleController.getString("March", NUM).toLowerCase(), LocaleController.getString("April", NUM).toLowerCase(), LocaleController.getString("May", NUM).toLowerCase(), LocaleController.getString("June", NUM).toLowerCase(), LocaleController.getString("July", NUM).toLowerCase(), LocaleController.getString("August", NUM).toLowerCase(), LocaleController.getString("September", NUM).toLowerCase(), LocaleController.getString("October", NUM).toLowerCase(), LocaleController.getString("November", NUM).toLowerCase(), LocaleController.getString("December", NUM).toLowerCase()};
+        String[] monthsEng = new String[12];
+        Calendar c = Calendar.getInstance();
         for (int i = 1; i <= 12; i++) {
-            instance.set(0, 0, 0, 0, 0, 0);
-            instance.set(2, i);
-            strArr2[i - 1] = instance.getDisplayName(2, 2, Locale.ENGLISH).toLowerCase();
+            c.set(0, 0, 0, 0, 0, 0);
+            c.set(2, i);
+            monthsEng[i - 1] = c.getDisplayName(2, 2, Locale.ENGLISH).toLowerCase();
         }
         for (int i2 = 0; i2 < 12; i2++) {
-            if (strArr2[i2].startsWith(str) || strArr[i2].startsWith(str)) {
+            if (monthsEng[i2].startsWith(q) || months[i2].startsWith(q)) {
                 return i2;
             }
         }
         return -1;
     }
 
-    public void onDraw(Canvas canvas) {
-        super.onDraw(canvas);
-        canvas.drawRect(0.0f, (float) (getMeasuredHeight() - 1), (float) getMeasuredWidth(), (float) getMeasuredHeight(), Theme.dividerPaint);
+    public static boolean isValidFormat(String format, String value, Locale locale) {
+        DateTimeFormatter fomatter = DateTimeFormatter.ofPattern(format, locale);
+        try {
+            return LocalDateTime.parse(value, fomatter).format(fomatter).equals(value);
+        } catch (DateTimeParseException e) {
+            try {
+                return LocalDate.parse(value, fomatter).format(fomatter).equals(value);
+            } catch (DateTimeParseException e2) {
+                try {
+                    return LocalTime.parse(value, fomatter).format(fomatter).equals(value);
+                } catch (DateTimeParseException e3) {
+                    return false;
+                }
+            }
+        }
+    }
+
+    public void onDraw(Canvas c) {
+        super.onDraw(c);
+        c.drawRect(0.0f, (float) (getMeasuredHeight() - 1), (float) getMeasuredWidth(), (float) getMeasuredHeight(), Theme.dividerPaint);
     }
 
     public void updateColors() {
         getRecycledViewPool().clear();
         for (int i = 0; i < getChildCount(); i++) {
-            View childAt = getChildAt(i);
-            if (childAt instanceof FilterView) {
-                ((FilterView) childAt).updateColors();
+            View view = getChildAt(i);
+            if (view instanceof FilterView) {
+                ((FilterView) view).updateColors();
             }
         }
         for (int i2 = 0; i2 < getCachedChildCount(); i2++) {
-            View cachedChildAt = getCachedChildAt(i2);
-            if (cachedChildAt instanceof FilterView) {
-                ((FilterView) cachedChildAt).updateColors();
+            View view2 = getCachedChildAt(i2);
+            if (view2 instanceof FilterView) {
+                ((FilterView) view2).updateColors();
             }
         }
         for (int i3 = 0; i3 < getAttachedScrapChildCount(); i3++) {
-            View attachedScrapChildAt = getAttachedScrapChildAt(i3);
-            if (attachedScrapChildAt instanceof FilterView) {
-                ((FilterView) attachedScrapChildAt).updateColors();
+            View view3 = getAttachedScrapChildAt(i3);
+            if (view3 instanceof FilterView) {
+                ((FilterView) view3).updateColors();
             }
         }
         setSelectorDrawableColor(getThemedColor("listSelectorSDK21"));
     }
 
     private class Adapter extends RecyclerListView.SelectionAdapter {
-        public boolean isEnabled(RecyclerView.ViewHolder viewHolder) {
-            return true;
-        }
-
         private Adapter() {
         }
 
-        public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
-            ViewHolder viewHolder = new ViewHolder(FiltersView.this, new FilterView(viewGroup.getContext(), FiltersView.this.resourcesProvider));
-            RecyclerView.LayoutParams layoutParams = new RecyclerView.LayoutParams(-2, AndroidUtilities.dp(32.0f));
-            layoutParams.topMargin = AndroidUtilities.dp(6.0f);
-            viewHolder.itemView.setLayoutParams(layoutParams);
-            return viewHolder;
+        public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            ViewHolder holder = new ViewHolder(new FilterView(parent.getContext(), FiltersView.this.resourcesProvider));
+            RecyclerView.LayoutParams lp = new RecyclerView.LayoutParams(-2, AndroidUtilities.dp(32.0f));
+            lp.topMargin = AndroidUtilities.dp(6.0f);
+            holder.itemView.setLayoutParams(lp);
+            return holder;
         }
 
-        public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int i) {
-            ((ViewHolder) viewHolder).filterView.setData((MediaFilterData) FiltersView.this.usersFilters.get(i));
+        public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+            ((ViewHolder) holder).filterView.setData((MediaFilterData) FiltersView.this.usersFilters.get(position));
         }
 
         public int getItemCount() {
             return FiltersView.this.usersFilters.size();
+        }
+
+        public boolean isEnabled(RecyclerView.ViewHolder holder) {
+            return true;
         }
     }
 
@@ -613,101 +669,99 @@ public class FiltersView extends RecyclerListView {
         public void updateColors() {
             setBackground(Theme.createRoundRectDrawable(AndroidUtilities.dp(28.0f), getThemedColor("groupcreate_spanBackground")));
             this.titleView.setTextColor(getThemedColor("windowBackgroundWhiteBlackText"));
-            CombinedDrawable combinedDrawable = this.thumbDrawable;
-            if (combinedDrawable == null) {
+            if (this.thumbDrawable == null) {
                 return;
             }
             if (this.data.filterType == 7) {
-                Theme.setCombinedDrawableColor(combinedDrawable, getThemedColor("avatar_backgroundArchived"), false);
+                Theme.setCombinedDrawableColor(this.thumbDrawable, getThemedColor("avatar_backgroundArchived"), false);
                 Theme.setCombinedDrawableColor(this.thumbDrawable, getThemedColor("avatar_actionBarIconBlue"), true);
                 return;
             }
-            Theme.setCombinedDrawableColor(combinedDrawable, getThemedColor("avatar_backgroundBlue"), false);
+            Theme.setCombinedDrawableColor(this.thumbDrawable, getThemedColor("avatar_backgroundBlue"), false);
             Theme.setCombinedDrawableColor(this.thumbDrawable, getThemedColor("avatar_actionBarIconBlue"), true);
         }
 
-        public void setData(MediaFilterData mediaFilterData) {
-            this.data = mediaFilterData;
+        public void setData(MediaFilterData data2) {
+            this.data = data2;
             this.avatarImageView.getImageReceiver().clearImage();
-            if (mediaFilterData.filterType == 7) {
+            if (data2.filterType == 7) {
                 CombinedDrawable createCircleDrawableWithIcon = Theme.createCircleDrawableWithIcon(AndroidUtilities.dp(32.0f), NUM);
                 this.thumbDrawable = createCircleDrawableWithIcon;
                 createCircleDrawableWithIcon.setIconSize(AndroidUtilities.dp(16.0f), AndroidUtilities.dp(16.0f));
                 Theme.setCombinedDrawableColor(this.thumbDrawable, getThemedColor("avatar_backgroundArchived"), false);
                 Theme.setCombinedDrawableColor(this.thumbDrawable, getThemedColor("avatar_actionBarIconBlue"), true);
                 this.avatarImageView.setImageDrawable(this.thumbDrawable);
-                this.titleView.setText(mediaFilterData.title);
+                this.titleView.setText(data2.title);
                 return;
             }
-            CombinedDrawable createCircleDrawableWithIcon2 = Theme.createCircleDrawableWithIcon(AndroidUtilities.dp(32.0f), mediaFilterData.iconResFilled);
+            CombinedDrawable createCircleDrawableWithIcon2 = Theme.createCircleDrawableWithIcon(AndroidUtilities.dp(32.0f), data2.iconResFilled);
             this.thumbDrawable = createCircleDrawableWithIcon2;
             Theme.setCombinedDrawableColor(createCircleDrawableWithIcon2, getThemedColor("avatar_backgroundBlue"), false);
             Theme.setCombinedDrawableColor(this.thumbDrawable, getThemedColor("avatar_actionBarIconBlue"), true);
-            if (mediaFilterData.filterType == 4) {
-                TLObject tLObject = mediaFilterData.chat;
-                if (tLObject instanceof TLRPC$User) {
-                    TLRPC$User tLRPC$User = (TLRPC$User) tLObject;
-                    if (UserConfig.getInstance(UserConfig.selectedAccount).getCurrentUser().id == tLRPC$User.id) {
-                        CombinedDrawable createCircleDrawableWithIcon3 = Theme.createCircleDrawableWithIcon(AndroidUtilities.dp(32.0f), NUM);
-                        createCircleDrawableWithIcon3.setIconSize(AndroidUtilities.dp(16.0f), AndroidUtilities.dp(16.0f));
-                        Theme.setCombinedDrawableColor(createCircleDrawableWithIcon3, getThemedColor("avatar_backgroundSaved"), false);
-                        Theme.setCombinedDrawableColor(createCircleDrawableWithIcon3, getThemedColor("avatar_actionBarIconBlue"), true);
-                        this.avatarImageView.setImageDrawable(createCircleDrawableWithIcon3);
-                    } else {
-                        this.avatarImageView.getImageReceiver().setRoundRadius(AndroidUtilities.dp(16.0f));
-                        this.avatarImageView.getImageReceiver().setForUserOrChat(tLRPC$User, this.thumbDrawable);
-                    }
-                } else if (tLObject instanceof TLRPC$Chat) {
-                    this.avatarImageView.getImageReceiver().setRoundRadius(AndroidUtilities.dp(16.0f));
-                    this.avatarImageView.getImageReceiver().setForUserOrChat((TLRPC$Chat) tLObject, this.thumbDrawable);
-                }
-            } else {
+            if (data2.filterType != 4) {
                 this.avatarImageView.setImageDrawable(this.thumbDrawable);
+            } else if (data2.chat instanceof TLRPC.User) {
+                TLRPC.User user = (TLRPC.User) data2.chat;
+                if (UserConfig.getInstance(UserConfig.selectedAccount).getCurrentUser().id == user.id) {
+                    CombinedDrawable combinedDrawable = Theme.createCircleDrawableWithIcon(AndroidUtilities.dp(32.0f), NUM);
+                    combinedDrawable.setIconSize(AndroidUtilities.dp(16.0f), AndroidUtilities.dp(16.0f));
+                    Theme.setCombinedDrawableColor(combinedDrawable, getThemedColor("avatar_backgroundSaved"), false);
+                    Theme.setCombinedDrawableColor(combinedDrawable, getThemedColor("avatar_actionBarIconBlue"), true);
+                    this.avatarImageView.setImageDrawable(combinedDrawable);
+                } else {
+                    this.avatarImageView.getImageReceiver().setRoundRadius(AndroidUtilities.dp(16.0f));
+                    this.avatarImageView.getImageReceiver().setForUserOrChat(user, this.thumbDrawable);
+                }
+            } else if (data2.chat instanceof TLRPC.Chat) {
+                this.avatarImageView.getImageReceiver().setRoundRadius(AndroidUtilities.dp(16.0f));
+                this.avatarImageView.getImageReceiver().setForUserOrChat((TLRPC.Chat) data2.chat, this.thumbDrawable);
             }
-            this.titleView.setText(mediaFilterData.title);
+            this.titleView.setText(data2.title);
         }
 
-        private int getThemedColor(String str) {
+        private int getThemedColor(String key) {
             Theme.ResourcesProvider resourcesProvider2 = this.resourcesProvider;
-            Integer color = resourcesProvider2 != null ? resourcesProvider2.getColor(str) : null;
-            return color != null ? color.intValue() : Theme.getColor(str);
+            Integer color = resourcesProvider2 != null ? resourcesProvider2.getColor(key) : null;
+            return color != null ? color.intValue() : Theme.getColor(key);
         }
     }
 
     private class ViewHolder extends RecyclerView.ViewHolder {
         FilterView filterView;
 
-        public ViewHolder(FiltersView filtersView, FilterView filterView2) {
-            super(filterView2);
-            this.filterView = filterView2;
+        public ViewHolder(FilterView itemView) {
+            super(itemView);
+            this.filterView = itemView;
         }
     }
 
     public static class MediaFilterData {
         public TLObject chat;
         public DateData dateData;
-        public final TLRPC$MessagesFilter filter;
+        public final TLRPC.MessagesFilter filter;
         public final int filterType;
+        public final int iconRes;
         public final int iconResFilled;
         public boolean removable = true;
         public final String title;
 
-        public MediaFilterData(int i, int i2, String str, TLRPC$MessagesFilter tLRPC$MessagesFilter, int i3) {
-            this.iconResFilled = i2;
-            this.title = str;
-            this.filter = tLRPC$MessagesFilter;
-            this.filterType = i3;
+        public MediaFilterData(int iconRes2, int iconResFilled2, String title2, TLRPC.MessagesFilter filter2, int filterType2) {
+            this.iconRes = iconRes2;
+            this.iconResFilled = iconResFilled2;
+            this.title = title2;
+            this.filter = filter2;
+            this.filterType = filterType2;
         }
 
-        public void setUser(TLObject tLObject) {
-            this.chat = tLObject;
+        public void setUser(TLObject chat2) {
+            this.chat = chat2;
         }
 
-        public boolean isSameType(MediaFilterData mediaFilterData) {
-            if (this.filterType == mediaFilterData.filterType) {
+        public boolean isSameType(MediaFilterData filterData) {
+            if (this.filterType == filterData.filterType) {
                 return true;
             }
-            if (!isMedia() || !mediaFilterData.isMedia()) {
+            if (!isMedia() || !filterData.isMedia()) {
                 return false;
             }
             return true;
@@ -728,10 +782,10 @@ public class FiltersView extends RecyclerListView {
         public final long minDate;
         public final String title;
 
-        private DateData(String str, long j, long j2) {
-            this.title = str;
-            this.minDate = j;
-            this.maxDate = j2;
+        private DateData(String title2, long minDate2, long maxDate2) {
+            this.title = title2;
+            this.minDate = minDate2;
+            this.maxDate = maxDate2;
         }
     }
 
@@ -742,18 +796,18 @@ public class FiltersView extends RecyclerListView {
         return arrayList;
     }
 
-    public boolean onInterceptTouchEvent(MotionEvent motionEvent) {
+    public boolean onInterceptTouchEvent(MotionEvent e) {
         if (!isEnabled()) {
             return false;
         }
-        return super.onInterceptTouchEvent(motionEvent);
+        return super.onInterceptTouchEvent(e);
     }
 
-    public boolean onTouchEvent(MotionEvent motionEvent) {
+    public boolean onTouchEvent(MotionEvent e) {
         if (!isEnabled()) {
             return false;
         }
-        return super.onTouchEvent(motionEvent);
+        return super.onTouchEvent(e);
     }
 
     private static class UpdateCallback implements ListUpdateCallback {
@@ -764,23 +818,23 @@ public class FiltersView extends RecyclerListView {
             this.adapter = adapter2;
         }
 
-        public void onInserted(int i, int i2) {
+        public void onInserted(int position, int count) {
             this.changed = true;
-            this.adapter.notifyItemRangeInserted(i, i2);
+            this.adapter.notifyItemRangeInserted(position, count);
         }
 
-        public void onRemoved(int i, int i2) {
+        public void onRemoved(int position, int count) {
             this.changed = true;
-            this.adapter.notifyItemRangeRemoved(i, i2);
+            this.adapter.notifyItemRangeRemoved(position, count);
         }
 
-        public void onMoved(int i, int i2) {
+        public void onMoved(int fromPosition, int toPosition) {
             this.changed = true;
-            this.adapter.notifyItemMoved(i, i2);
+            this.adapter.notifyItemMoved(fromPosition, toPosition);
         }
 
-        public void onChanged(int i, int i2, Object obj) {
-            this.adapter.notifyItemRangeChanged(i, i2, obj);
+        public void onChanged(int position, int count, Object payload) {
+            this.adapter.notifyItemRangeChanged(position, count, payload);
         }
     }
 }

@@ -8,6 +8,6 @@ public final /* synthetic */ class ActionIntroActivity$$ExternalSyntheticLambda7
     }
 
     public final void run() {
-        this.f$0.lambda$onRequestPermissionsResultFragment$6();
+        this.f$0.m1300x15419b5b();
     }
 }

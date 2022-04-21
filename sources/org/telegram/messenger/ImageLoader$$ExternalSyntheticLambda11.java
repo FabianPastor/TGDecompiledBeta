@@ -1,19 +1,15 @@
 package org.telegram.messenger;
 
-import org.telegram.messenger.ImageLoader;
-
 public final /* synthetic */ class ImageLoader$$ExternalSyntheticLambda11 implements Runnable {
     public final /* synthetic */ ImageLoader f$0;
-    public final /* synthetic */ ImageLoader.HttpFileTask f$1;
-    public final /* synthetic */ int f$2;
+    public final /* synthetic */ String f$1;
 
-    public /* synthetic */ ImageLoader$$ExternalSyntheticLambda11(ImageLoader imageLoader, ImageLoader.HttpFileTask httpFileTask, int i) {
+    public /* synthetic */ ImageLoader$$ExternalSyntheticLambda11(ImageLoader imageLoader, String str) {
         this.f$0 = imageLoader;
-        this.f$1 = httpFileTask;
-        this.f$2 = i;
+        this.f$1 = str;
     }
 
     public final void run() {
-        this.f$0.lambda$runHttpFileLoadTasks$13(this.f$1, this.f$2);
+        this.f$0.m616lambda$preloadArtwork$7$orgtelegrammessengerImageLoader(this.f$1);
     }
 }

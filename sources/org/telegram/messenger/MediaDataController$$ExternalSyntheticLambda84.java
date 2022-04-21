@@ -1,17 +1,15 @@
 package org.telegram.messenger;
 
-import org.telegram.tgnet.TLRPC$Document;
-
 public final /* synthetic */ class MediaDataController$$ExternalSyntheticLambda84 implements Runnable {
     public final /* synthetic */ MediaDataController f$0;
-    public final /* synthetic */ TLRPC$Document f$1;
+    public final /* synthetic */ long f$1;
 
-    public /* synthetic */ MediaDataController$$ExternalSyntheticLambda84(MediaDataController mediaDataController, TLRPC$Document tLRPC$Document) {
+    public /* synthetic */ MediaDataController$$ExternalSyntheticLambda84(MediaDataController mediaDataController, long j) {
         this.f$0 = mediaDataController;
-        this.f$1 = tLRPC$Document;
+        this.f$1 = j;
     }
 
     public final void run() {
-        this.f$0.lambda$addRecentGif$16(this.f$1);
+        this.f$0.m726xb1dfa34(this.f$1);
     }
 }

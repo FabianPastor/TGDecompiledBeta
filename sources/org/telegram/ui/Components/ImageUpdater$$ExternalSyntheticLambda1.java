@@ -14,6 +14,6 @@ public final /* synthetic */ class ImageUpdater$$ExternalSyntheticLambda1 implem
     }
 
     public final void run() {
-        this.f$0.lambda$startCrop$1(this.f$1, this.f$2);
+        this.f$0.m4060lambda$startCrop$1$orgtelegramuiComponentsImageUpdater(this.f$1, this.f$2);
     }
 }

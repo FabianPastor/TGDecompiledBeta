@@ -1,17 +1,19 @@
 package org.telegram.messenger;
 
+import org.telegram.tgnet.TLRPC;
+
 public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda61 implements Runnable {
     public final /* synthetic */ MessagesController f$0;
-    public final /* synthetic */ long f$1;
-    public final /* synthetic */ int f$2;
+    public final /* synthetic */ TLRPC.TL_error f$1;
+    public final /* synthetic */ long f$2;
 
-    public /* synthetic */ MessagesController$$ExternalSyntheticLambda61(MessagesController messagesController, long j, int i) {
+    public /* synthetic */ MessagesController$$ExternalSyntheticLambda61(MessagesController messagesController, TLRPC.TL_error tL_error, long j) {
         this.f$0 = messagesController;
-        this.f$1 = j;
-        this.f$2 = i;
+        this.f$1 = tL_error;
+        this.f$2 = j;
     }
 
     public final void run() {
-        this.f$0.lambda$processUpdateArray$323(this.f$1, this.f$2);
+        this.f$0.m216x4be5e3d4(this.f$1, this.f$2);
     }
 }

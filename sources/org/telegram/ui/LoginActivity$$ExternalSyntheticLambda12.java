@@ -1,18 +1,19 @@
 package org.telegram.ui;
 
-import android.text.TextWatcher;
-import android.widget.EditText;
+import org.telegram.ui.ActionBar.ThemeDescription;
 
-public final /* synthetic */ class LoginActivity$$ExternalSyntheticLambda12 implements Runnable {
-    public final /* synthetic */ EditText f$0;
-    public final /* synthetic */ TextWatcher f$1;
+public final /* synthetic */ class LoginActivity$$ExternalSyntheticLambda12 implements ThemeDescription.ThemeDescriptionDelegate {
+    public final /* synthetic */ LoginActivity f$0;
 
-    public /* synthetic */ LoginActivity$$ExternalSyntheticLambda12(EditText editText, TextWatcher textWatcher) {
-        this.f$0 = editText;
-        this.f$1 = textWatcher;
+    public /* synthetic */ LoginActivity$$ExternalSyntheticLambda12(LoginActivity loginActivity) {
+        this.f$0 = loginActivity;
     }
 
-    public final void run() {
-        this.f$0.removeTextChangedListener(this.f$1);
+    public final void didSetColor() {
+        this.f$0.updateColors();
+    }
+
+    public /* synthetic */ void onAnimationProgress(float f) {
+        ThemeDescription.ThemeDescriptionDelegate.CC.$default$onAnimationProgress(this, f);
     }
 }

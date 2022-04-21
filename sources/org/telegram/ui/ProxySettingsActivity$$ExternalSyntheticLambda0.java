@@ -10,6 +10,6 @@ public final /* synthetic */ class ProxySettingsActivity$$ExternalSyntheticLambd
     }
 
     public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-        this.f$0.lambda$setShareDoneEnabled$5(valueAnimator);
+        this.f$0.m3194x3401043c(valueAnimator);
     }
 }

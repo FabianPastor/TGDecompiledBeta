@@ -10,6 +10,6 @@ public final /* synthetic */ class SessionsActivity$5$$ExternalSyntheticLambda1 
     }
 
     public final void run() {
-        this.f$0.lambda$didFindQr$0();
+        this.f$0.m3246lambda$processQr$3$orgtelegramuiSessionsActivity$5();
     }
 }

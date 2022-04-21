@@ -13,33 +13,33 @@ public class VideoTrack extends MediaStreamTrack {
 
     private static native long nativeWrapSink(VideoSink videoSink);
 
-    public VideoTrack(long j) {
-        super(j);
+    public VideoTrack(long nativeTrack) {
+        super(nativeTrack);
     }
 
-    public void addSink(VideoSink videoSink) {
-        if (videoSink == null) {
+    public void addSink(VideoSink sink) {
+        if (sink == null) {
             throw new IllegalArgumentException("The VideoSink is not allowed to be null");
-        } else if (!this.sinks.containsKey(videoSink)) {
-            long nativeWrapSink = nativeWrapSink(videoSink);
-            this.sinks.put(videoSink, Long.valueOf(nativeWrapSink));
-            nativeAddSink(getNativeMediaStreamTrack(), nativeWrapSink);
+        } else if (!this.sinks.containsKey(sink)) {
+            long nativeSink = nativeWrapSink(sink);
+            this.sinks.put(sink, Long.valueOf(nativeSink));
+            nativeAddSink(getNativeMediaStreamTrack(), nativeSink);
         }
     }
 
-    public void removeSink(VideoSink videoSink) {
-        Long remove = this.sinks.remove(videoSink);
-        if (remove != null) {
-            nativeRemoveSink(getNativeMediaStreamTrack(), remove.longValue());
-            nativeFreeSink(remove.longValue());
+    public void removeSink(VideoSink sink) {
+        Long nativeSink = this.sinks.remove(sink);
+        if (nativeSink != null) {
+            nativeRemoveSink(getNativeMediaStreamTrack(), nativeSink.longValue());
+            nativeFreeSink(nativeSink.longValue());
         }
     }
 
     public void dispose() {
         for (Long longValue : this.sinks.values()) {
-            long longValue2 = longValue.longValue();
-            nativeRemoveSink(getNativeMediaStreamTrack(), longValue2);
-            nativeFreeSink(longValue2);
+            long nativeSink = longValue.longValue();
+            nativeRemoveSink(getNativeMediaStreamTrack(), nativeSink);
+            nativeFreeSink(nativeSink);
         }
         this.sinks.clear();
         super.dispose();

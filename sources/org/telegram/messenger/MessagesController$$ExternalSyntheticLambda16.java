@@ -1,13 +1,31 @@
 package org.telegram.messenger;
 
+import androidx.collection.LongSparseArray;
+import java.util.ArrayList;
+import org.telegram.tgnet.TLRPC;
+
 public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda16 implements Runnable {
     public final /* synthetic */ MessagesController f$0;
+    public final /* synthetic */ ArrayList f$1;
+    public final /* synthetic */ long f$2;
+    public final /* synthetic */ TLRPC.updates_ChannelDifference f$3;
+    public final /* synthetic */ TLRPC.Chat f$4;
+    public final /* synthetic */ LongSparseArray f$5;
+    public final /* synthetic */ int f$6;
+    public final /* synthetic */ long f$7;
 
-    public /* synthetic */ MessagesController$$ExternalSyntheticLambda16(MessagesController messagesController) {
+    public /* synthetic */ MessagesController$$ExternalSyntheticLambda16(MessagesController messagesController, ArrayList arrayList, long j, TLRPC.updates_ChannelDifference updates_channeldifference, TLRPC.Chat chat, LongSparseArray longSparseArray, int i, long j2) {
         this.f$0 = messagesController;
+        this.f$1 = arrayList;
+        this.f$2 = j;
+        this.f$3 = updates_channeldifference;
+        this.f$4 = chat;
+        this.f$5 = longSparseArray;
+        this.f$6 = i;
+        this.f$7 = j2;
     }
 
     public final void run() {
-        this.f$0.lambda$loadRemoteFilters$17();
+        this.f$0.m215x66a47513(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6, this.f$7);
     }
 }

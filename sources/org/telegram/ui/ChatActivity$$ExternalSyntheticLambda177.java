@@ -1,24 +1,18 @@
 package org.telegram.ui;
 
-import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC$TL_messages_requestUrlAuth;
+import android.content.DialogInterface;
+import org.telegram.tgnet.TLRPC;
 
-public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda177 implements Runnable {
+public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda177 implements DialogInterface.OnClickListener {
     public final /* synthetic */ ChatActivity f$0;
-    public final /* synthetic */ TLObject f$1;
-    public final /* synthetic */ String f$2;
-    public final /* synthetic */ TLRPC$TL_messages_requestUrlAuth f$3;
-    public final /* synthetic */ boolean f$4;
+    public final /* synthetic */ TLRPC.User f$1;
 
-    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda177(ChatActivity chatActivity, TLObject tLObject, String str, TLRPC$TL_messages_requestUrlAuth tLRPC$TL_messages_requestUrlAuth, boolean z) {
+    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda177(ChatActivity chatActivity, TLRPC.User user) {
         this.f$0 = chatActivity;
-        this.f$1 = tLObject;
-        this.f$2 = str;
-        this.f$3 = tLRPC$TL_messages_requestUrlAuth;
-        this.f$4 = z;
+        this.f$1 = user;
     }
 
-    public final void run() {
-        this.f$0.lambda$showRequestUrlAlert$217(this.f$1, this.f$2, this.f$3, this.f$4);
+    public final void onClick(DialogInterface dialogInterface, int i) {
+        this.f$0.m1755lambda$onTransitionAnimationEnd$130$orgtelegramuiChatActivity(this.f$1, dialogInterface, i);
     }
 }

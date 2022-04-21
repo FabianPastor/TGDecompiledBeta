@@ -1,18 +1,21 @@
 package org.telegram.ui.Components;
 
-import android.view.View;
-import android.widget.LinearLayout;
+import android.content.DialogInterface;
+import org.telegram.tgnet.TLRPC;
+import org.telegram.ui.ActionBar.BaseFragment;
 
-public final /* synthetic */ class AlertsCreator$$ExternalSyntheticLambda49 implements View.OnClickListener {
-    public final /* synthetic */ LinearLayout f$0;
-    public final /* synthetic */ int[] f$1;
+public final /* synthetic */ class AlertsCreator$$ExternalSyntheticLambda49 implements DialogInterface.OnClickListener {
+    public final /* synthetic */ BaseFragment f$0;
+    public final /* synthetic */ TLRPC.User f$1;
+    public final /* synthetic */ boolean f$2;
 
-    public /* synthetic */ AlertsCreator$$ExternalSyntheticLambda49(LinearLayout linearLayout, int[] iArr) {
-        this.f$0 = linearLayout;
-        this.f$1 = iArr;
+    public /* synthetic */ AlertsCreator$$ExternalSyntheticLambda49(BaseFragment baseFragment, TLRPC.User user, boolean z) {
+        this.f$0 = baseFragment;
+        this.f$1 = user;
+        this.f$2 = z;
     }
 
-    public final void onClick(View view) {
-        AlertsCreator.lambda$createColorSelectDialog$88(this.f$0, this.f$1, view);
+    public final void onClick(DialogInterface dialogInterface, int i) {
+        AlertsCreator.lambda$createCallDialogAlert$28(this.f$0, this.f$1, this.f$2, dialogInterface, i);
     }
 }

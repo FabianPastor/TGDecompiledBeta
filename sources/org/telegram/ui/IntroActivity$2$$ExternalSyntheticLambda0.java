@@ -10,6 +10,6 @@ public final /* synthetic */ class IntroActivity$2$$ExternalSyntheticLambda0 imp
     }
 
     public final void run() {
-        this.f$0.lambda$onSurfaceTextureAvailable$0();
+        this.f$0.m2295x770CLASSNAMEa();
     }
 }

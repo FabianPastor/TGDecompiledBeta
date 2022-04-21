@@ -10,6 +10,6 @@ public final /* synthetic */ class SimpleAvatarView$$ExternalSyntheticLambda0 im
     }
 
     public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-        this.f$0.lambda$setSelected$0(valueAnimator);
+        this.f$0.m4391lambda$setSelected$0$orgtelegramuiComponentsSimpleAvatarView(valueAnimator);
     }
 }

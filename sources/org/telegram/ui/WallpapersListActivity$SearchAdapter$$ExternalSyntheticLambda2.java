@@ -13,6 +13,6 @@ public final /* synthetic */ class WallpapersListActivity$SearchAdapter$$Externa
     }
 
     public final void run() {
-        this.f$0.lambda$searchBotUser$1(this.f$1);
+        this.f$0.m3485x5f3a27e1(this.f$1);
     }
 }

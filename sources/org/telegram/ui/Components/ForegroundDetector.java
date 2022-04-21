@@ -11,7 +11,7 @@ import org.telegram.messenger.BuildVars;
 import org.telegram.messenger.FileLog;
 
 public class ForegroundDetector implements Application.ActivityLifecycleCallbacks {
-    private static ForegroundDetector Instance;
+    private static ForegroundDetector Instance = null;
     private long enterBackgroundTime = 0;
     private CopyOnWriteArrayList<Listener> listeners = new CopyOnWriteArrayList<>();
     private int refs;
@@ -21,21 +21,6 @@ public class ForegroundDetector implements Application.ActivityLifecycleCallback
         void onBecameBackground();
 
         void onBecameForeground();
-    }
-
-    public void onActivityCreated(Activity activity, Bundle bundle) {
-    }
-
-    public void onActivityDestroyed(Activity activity) {
-    }
-
-    public void onActivityPaused(Activity activity) {
-    }
-
-    public void onActivityResumed(Activity activity) {
-    }
-
-    public void onActivitySaveInstanceState(Activity activity, Bundle bundle) {
     }
 
     public static ForegroundDetector getInstance() {
@@ -84,8 +69,8 @@ public class ForegroundDetector implements Application.ActivityLifecycleCallback
         }
     }
 
-    public boolean isWasInBackground(boolean z) {
-        if (z && Build.VERSION.SDK_INT >= 21 && SystemClock.elapsedRealtime() - this.enterBackgroundTime < 200) {
+    public boolean isWasInBackground(boolean reset) {
+        if (reset && Build.VERSION.SDK_INT >= 21 && SystemClock.elapsedRealtime() - this.enterBackgroundTime < 200) {
             this.wasInBackground = false;
         }
         return this.wasInBackground;
@@ -113,5 +98,20 @@ public class ForegroundDetector implements Application.ActivityLifecycleCallback
                 }
             }
         }
+    }
+
+    public void onActivityCreated(Activity activity, Bundle savedInstanceState) {
+    }
+
+    public void onActivityResumed(Activity activity) {
+    }
+
+    public void onActivityPaused(Activity activity) {
+    }
+
+    public void onActivitySaveInstanceState(Activity activity, Bundle outState) {
+    }
+
+    public void onActivityDestroyed(Activity activity) {
     }
 }

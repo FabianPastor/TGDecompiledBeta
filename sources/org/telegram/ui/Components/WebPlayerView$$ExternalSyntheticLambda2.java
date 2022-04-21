@@ -10,6 +10,6 @@ public final /* synthetic */ class WebPlayerView$$ExternalSyntheticLambda2 imple
     }
 
     public final void onClick(View view) {
-        this.f$0.lambda$new$3(view);
+        this.f$0.m4531lambda$new$3$orgtelegramuiComponentsWebPlayerView(view);
     }
 }

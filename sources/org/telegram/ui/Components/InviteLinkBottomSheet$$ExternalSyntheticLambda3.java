@@ -3,7 +3,7 @@ package org.telegram.ui.Components;
 import java.util.List;
 import org.telegram.tgnet.RequestDelegate;
 import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC$TL_error;
+import org.telegram.tgnet.TLRPC;
 
 public final /* synthetic */ class InviteLinkBottomSheet$$ExternalSyntheticLambda3 implements RequestDelegate {
     public final /* synthetic */ InviteLinkBottomSheet f$0;
@@ -18,7 +18,7 @@ public final /* synthetic */ class InviteLinkBottomSheet$$ExternalSyntheticLambd
         this.f$3 = z2;
     }
 
-    public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        this.f$0.lambda$loadUsers$4(this.f$1, this.f$2, this.f$3, tLObject, tLRPC$TL_error);
+    public final void run(TLObject tLObject, TLRPC.TL_error tL_error) {
+        this.f$0.m4082x3da8babf(this.f$1, this.f$2, this.f$3, tLObject, tL_error);
     }
 }

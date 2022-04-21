@@ -5,7 +5,6 @@ import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.ActivityManager;
 import android.content.Context;
@@ -16,9 +15,7 @@ import android.graphics.Canvas;
 import android.graphics.Outline;
 import android.graphics.Paint;
 import android.graphics.Path;
-import android.graphics.Point;
 import android.graphics.PorterDuff;
-import android.graphics.RectF;
 import android.os.Build;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
@@ -46,9 +43,11 @@ import org.telegram.ui.LaunchActivity;
 import org.telegram.ui.PhotoViewer;
 
 public class PipVideoOverlay {
-    private static final FloatPropertyCompat<PipVideoOverlay> PIP_X_PROPERTY = new SimpleFloatPropertyCompat("pipX", PipVideoOverlay$$ExternalSyntheticLambda10.INSTANCE, PipVideoOverlay$$ExternalSyntheticLambda12.INSTANCE);
-    private static final FloatPropertyCompat<PipVideoOverlay> PIP_Y_PROPERTY = new SimpleFloatPropertyCompat("pipY", PipVideoOverlay$$ExternalSyntheticLambda9.INSTANCE, PipVideoOverlay$$ExternalSyntheticLambda11.INSTANCE);
-    @SuppressLint({"StaticFieldLeak"})
+    public static final boolean IS_TRANSITION_ANIMATION_SUPPORTED = true;
+    private static final FloatPropertyCompat<PipVideoOverlay> PIP_X_PROPERTY = new SimpleFloatPropertyCompat("pipX", PipVideoOverlay$$ExternalSyntheticLambda1.INSTANCE, PipVideoOverlay$$ExternalSyntheticLambda3.INSTANCE);
+    private static final FloatPropertyCompat<PipVideoOverlay> PIP_Y_PROPERTY = new SimpleFloatPropertyCompat("pipY", PipVideoOverlay$$ExternalSyntheticLambda2.INSTANCE, PipVideoOverlay$$ExternalSyntheticLambda4.INSTANCE);
+    public static final float ROUNDED_CORNERS_DP = 10.0f;
+    private static final float SIDE_PADDING_DP = 16.0f;
     private static PipVideoOverlay instance = new PipVideoOverlay();
     private Float aspectRatio;
     /* access modifiers changed from: private */
@@ -63,7 +62,7 @@ public class PipVideoOverlay {
     public ValueAnimator controlsAnimator;
     private FrameLayout controlsView;
     /* access modifiers changed from: private */
-    public Runnable dismissControlsCallback = new PipVideoOverlay$$ExternalSyntheticLambda7(this);
+    public Runnable dismissControlsCallback = new PipVideoOverlay$$ExternalSyntheticLambda10(this);
     /* access modifiers changed from: private */
     public GestureDetectorCompat gestureDetector;
     private View innerView;
@@ -103,7 +102,7 @@ public class PipVideoOverlay {
     private ImageView playPauseButton;
     /* access modifiers changed from: private */
     public boolean postedDismissControls;
-    private Runnable progressRunnable = new PipVideoOverlay$$ExternalSyntheticLambda8(this);
+    private Runnable progressRunnable = new PipVideoOverlay$$ExternalSyntheticLambda11(this);
     /* access modifiers changed from: private */
     public float scaleFactor = 1.0f;
     /* access modifiers changed from: private */
@@ -116,39 +115,37 @@ public class PipVideoOverlay {
     /* access modifiers changed from: private */
     public WindowManager windowManager;
 
-    /* access modifiers changed from: private */
-    public static /* synthetic */ void lambda$static$1(PipVideoOverlay pipVideoOverlay, float f) {
-        WindowManager.LayoutParams layoutParams = pipVideoOverlay.windowLayoutParams;
-        pipVideoOverlay.pipX = f;
-        layoutParams.x = (int) f;
+    static /* synthetic */ void lambda$static$1(PipVideoOverlay obj, float value) {
+        WindowManager.LayoutParams layoutParams = obj.windowLayoutParams;
+        obj.pipX = value;
+        layoutParams.x = (int) value;
         try {
-            pipVideoOverlay.windowManager.updateViewLayout(pipVideoOverlay.contentView, layoutParams);
-        } catch (IllegalArgumentException unused) {
-            pipVideoOverlay.pipXSpring.cancel();
+            obj.windowManager.updateViewLayout(obj.contentView, obj.windowLayoutParams);
+        } catch (IllegalArgumentException e) {
+            obj.pipXSpring.cancel();
         }
     }
 
-    /* access modifiers changed from: private */
-    public static /* synthetic */ void lambda$static$3(PipVideoOverlay pipVideoOverlay, float f) {
-        WindowManager.LayoutParams layoutParams = pipVideoOverlay.windowLayoutParams;
-        pipVideoOverlay.pipY = f;
-        layoutParams.y = (int) f;
+    static /* synthetic */ void lambda$static$3(PipVideoOverlay obj, float value) {
+        WindowManager.LayoutParams layoutParams = obj.windowLayoutParams;
+        obj.pipY = value;
+        layoutParams.y = (int) value;
         try {
-            pipVideoOverlay.windowManager.updateViewLayout(pipVideoOverlay.contentView, layoutParams);
-        } catch (IllegalArgumentException unused) {
-            pipVideoOverlay.pipYSpring.cancel();
+            obj.windowManager.updateViewLayout(obj.contentView, obj.windowLayoutParams);
+        } catch (IllegalArgumentException e) {
+            obj.pipYSpring.cancel();
         }
     }
 
-    /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$new$4() {
+    /* renamed from: lambda$new$4$org-telegram-ui-Components-PipVideoOverlay  reason: not valid java name */
+    public /* synthetic */ void m4228lambda$new$4$orgtelegramuiComponentsPipVideoOverlay() {
         this.isShowingControls = false;
         toggleControls(false);
         this.postedDismissControls = false;
     }
 
-    /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$new$5() {
+    /* renamed from: lambda$new$5$org-telegram-ui-Components-PipVideoOverlay  reason: not valid java name */
+    public /* synthetic */ void m4229lambda$new$5$orgtelegramuiComponentsPipVideoOverlay() {
         VideoPlayer videoPlayer;
         PhotoViewer photoViewer2 = this.photoViewer;
         if (photoViewer2 != null && (videoPlayer = photoViewer2.getVideoPlayer()) != null) {
@@ -164,8 +161,7 @@ public class PipVideoOverlay {
     /* access modifiers changed from: private */
     public PipConfig getPipConfig() {
         if (this.pipConfig == null) {
-            Point point = AndroidUtilities.displaySize;
-            this.pipConfig = new PipConfig(point.x, point.y);
+            this.pipConfig = new PipConfig(AndroidUtilities.displaySize.x, AndroidUtilities.displaySize.y);
         }
         return this.pipConfig;
     }
@@ -179,19 +175,11 @@ public class PipVideoOverlay {
         return getSuggestedWidth(getRatio());
     }
 
-    private static int getSuggestedWidth(float f) {
-        float min;
-        float f2;
-        if (f >= 1.0f) {
-            Point point = AndroidUtilities.displaySize;
-            min = (float) Math.min(point.x, point.y);
-            f2 = 0.35f;
-        } else {
-            Point point2 = AndroidUtilities.displaySize;
-            min = (float) Math.min(point2.x, point2.y);
-            f2 = 0.6f;
+    private static int getSuggestedWidth(float ratio) {
+        if (ratio >= 1.0f) {
+            return (int) (((float) Math.min(AndroidUtilities.displaySize.x, AndroidUtilities.displaySize.y)) * 0.35f);
         }
-        return (int) (min * f2);
+        return (int) (((float) Math.min(AndroidUtilities.displaySize.x, AndroidUtilities.displaySize.y)) * 0.6f);
     }
 
     /* access modifiers changed from: private */
@@ -199,25 +187,24 @@ public class PipVideoOverlay {
         return getSuggestedHeight(getRatio());
     }
 
-    private static int getSuggestedHeight(float f) {
-        return (int) (((float) getSuggestedWidth(f)) * f);
+    private static int getSuggestedHeight(float ratio) {
+        return (int) (((float) getSuggestedWidth(ratio)) * ratio);
     }
 
     private float getRatio() {
         if (this.aspectRatio == null) {
             this.aspectRatio = Float.valueOf(((float) this.mVideoHeight) / ((float) this.mVideoWidth));
-            Point point = AndroidUtilities.displaySize;
-            this.maxScaleFactor = ((float) (Math.min(point.x, point.y) - AndroidUtilities.dp(32.0f))) / ((float) getSuggestedWidth());
+            this.maxScaleFactor = ((float) (Math.min(AndroidUtilities.displaySize.x, AndroidUtilities.displaySize.y) - AndroidUtilities.dp(32.0f))) / ((float) getSuggestedWidth());
         }
         return this.aspectRatio.floatValue();
     }
 
     /* access modifiers changed from: private */
-    public void toggleControls(boolean z) {
+    public void toggleControls(boolean show) {
         float[] fArr = new float[2];
         float f = 0.0f;
-        fArr[0] = z ? 0.0f : 1.0f;
-        if (z) {
+        fArr[0] = show ? 0.0f : 1.0f;
+        if (show) {
             f = 1.0f;
         }
         fArr[1] = f;
@@ -226,16 +213,16 @@ public class PipVideoOverlay {
         duration.setInterpolator(CubicBezierInterpolator.DEFAULT);
         this.controlsAnimator.addUpdateListener(new PipVideoOverlay$$ExternalSyntheticLambda0(this));
         this.controlsAnimator.addListener(new AnimatorListenerAdapter() {
-            public void onAnimationEnd(Animator animator) {
+            public void onAnimationEnd(Animator animation) {
                 ValueAnimator unused = PipVideoOverlay.this.controlsAnimator = null;
             }
         });
         this.controlsAnimator.start();
     }
 
-    /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$toggleControls$6(ValueAnimator valueAnimator) {
-        this.controlsView.setAlpha(((Float) valueAnimator.getAnimatedValue()).floatValue());
+    /* renamed from: lambda$toggleControls$6$org-telegram-ui-Components-PipVideoOverlay  reason: not valid java name */
+    public /* synthetic */ void m4234x6d8831f6(ValueAnimator animation) {
+        this.controlsView.setAlpha(((Float) animation.getAnimatedValue()).floatValue());
     }
 
     public static void dimissAndDestroy() {
@@ -256,11 +243,11 @@ public class PipVideoOverlay {
         dismiss(false);
     }
 
-    public static void dismiss(boolean z) {
-        instance.dismissInternal(z);
+    public static void dismiss(boolean animate) {
+        instance.dismissInternal(animate);
     }
 
-    private void dismissInternal(boolean z) {
+    private void dismissInternal(boolean animate) {
         if (!this.isDismissing) {
             this.isDismissing = true;
             ValueAnimator valueAnimator = this.controlsAnimator;
@@ -276,20 +263,20 @@ public class PipVideoOverlay {
                 springAnimation.cancel();
                 this.pipYSpring.cancel();
             }
-            if (z) {
-                AndroidUtilities.runOnUIThread(new PipVideoOverlay$$ExternalSyntheticLambda6(this), 100);
+            if (animate) {
+                AndroidUtilities.runOnUIThread(new PipVideoOverlay$$ExternalSyntheticLambda12(this), 100);
                 return;
             }
-            AnimatorSet animatorSet = new AnimatorSet();
-            animatorSet.setDuration(250);
-            animatorSet.setInterpolator(CubicBezierInterpolator.DEFAULT);
-            animatorSet.playTogether(new Animator[]{ObjectAnimator.ofFloat(this.contentView, View.ALPHA, new float[]{0.0f}), ObjectAnimator.ofFloat(this.contentView, View.SCALE_X, new float[]{0.1f}), ObjectAnimator.ofFloat(this.contentView, View.SCALE_Y, new float[]{0.1f})});
-            animatorSet.addListener(new AnimatorListenerAdapter() {
-                public void onAnimationEnd(Animator animator) {
+            AnimatorSet set = new AnimatorSet();
+            set.setDuration(250);
+            set.setInterpolator(CubicBezierInterpolator.DEFAULT);
+            set.playTogether(new Animator[]{ObjectAnimator.ofFloat(this.contentView, View.ALPHA, new float[]{0.0f}), ObjectAnimator.ofFloat(this.contentView, View.SCALE_X, new float[]{0.1f}), ObjectAnimator.ofFloat(this.contentView, View.SCALE_Y, new float[]{0.1f})});
+            set.addListener(new AnimatorListenerAdapter() {
+                public void onAnimationEnd(Animator animation) {
                     PipVideoOverlay.this.onDismissedInternal();
                 }
             });
-            animatorSet.start();
+            set.start();
         }
     }
 
@@ -299,7 +286,7 @@ public class PipVideoOverlay {
             if (this.controlsView.getParent() != null) {
                 this.windowManager.removeViewImmediate(this.contentView);
             }
-        } catch (IllegalArgumentException unused) {
+        } catch (IllegalArgumentException e) {
         }
         this.videoProgressView = null;
         this.innerView = null;
@@ -353,17 +340,17 @@ public class PipVideoOverlay {
         }
     }
 
-    public static void setBufferedProgress(float f) {
+    public static void setBufferedProgress(float progress) {
         PipVideoOverlay pipVideoOverlay = instance;
-        pipVideoOverlay.bufferProgress = f;
+        pipVideoOverlay.bufferProgress = progress;
         VideoProgressView videoProgressView2 = pipVideoOverlay.videoProgressView;
         if (videoProgressView2 != null) {
             videoProgressView2.invalidate();
         }
     }
 
-    public static void setParentSheet(EmbedBottomSheet embedBottomSheet) {
-        instance.parentSheet = embedBottomSheet;
+    public static void setParentSheet(EmbedBottomSheet parentSheet2) {
+        instance.parentSheet = parentSheet2;
     }
 
     public static void setPhotoViewer(PhotoViewer photoViewer2) {
@@ -372,102 +359,95 @@ public class PipVideoOverlay {
         pipVideoOverlay.updatePlayButtonInternal();
     }
 
-    public static Rect getPipRect(boolean z, float f) {
+    public static Rect getPipRect(boolean inAnimation, float aspectRatio2) {
         Rect rect = new Rect();
-        float f2 = 1.0f / f;
+        float ratio = 1.0f / aspectRatio2;
         PipVideoOverlay pipVideoOverlay = instance;
-        if (!pipVideoOverlay.isVisible || z) {
-            float access$300 = pipVideoOverlay.getPipConfig().getPipX();
-            float access$400 = instance.getPipConfig().getPipY();
-            float access$500 = instance.getPipConfig().getScaleFactor();
-            rect.width = ((float) getSuggestedWidth(f2)) * access$500;
-            rect.height = ((float) getSuggestedHeight(f2)) * access$500;
-            if (access$300 != -1.0f) {
-                float f3 = rect.width;
-                float f4 = access$300 + (f3 / 2.0f);
-                int i = AndroidUtilities.displaySize.x;
-                rect.x = f4 >= ((float) i) / 2.0f ? (((float) i) - f3) - ((float) AndroidUtilities.dp(16.0f)) : (float) AndroidUtilities.dp(16.0f);
+        if (!pipVideoOverlay.isVisible || inAnimation) {
+            float savedPipX = pipVideoOverlay.getPipConfig().getPipX();
+            float savedPipY = instance.getPipConfig().getPipY();
+            float scaleFactor2 = instance.getPipConfig().getScaleFactor();
+            rect.width = ((float) getSuggestedWidth(ratio)) * scaleFactor2;
+            rect.height = ((float) getSuggestedHeight(ratio)) * scaleFactor2;
+            if (savedPipX != -1.0f) {
+                rect.x = (rect.width / 2.0f) + savedPipX >= ((float) AndroidUtilities.displaySize.x) / 2.0f ? (((float) AndroidUtilities.displaySize.x) - rect.width) - ((float) AndroidUtilities.dp(16.0f)) : (float) AndroidUtilities.dp(16.0f);
             } else {
                 rect.x = (((float) AndroidUtilities.displaySize.x) - rect.width) - ((float) AndroidUtilities.dp(16.0f));
             }
-            if (access$400 != -1.0f) {
-                rect.y = MathUtils.clamp(access$400, (float) AndroidUtilities.dp(16.0f), ((float) (AndroidUtilities.displaySize.y - AndroidUtilities.dp(16.0f))) - rect.height) + ((float) AndroidUtilities.statusBarHeight);
+            if (savedPipY != -1.0f) {
+                rect.y = MathUtils.clamp(savedPipY, (float) AndroidUtilities.dp(16.0f), ((float) (AndroidUtilities.displaySize.y - AndroidUtilities.dp(16.0f))) - rect.height) + ((float) AndroidUtilities.statusBarHeight);
             } else {
                 rect.y = (float) (AndroidUtilities.dp(16.0f) + AndroidUtilities.statusBarHeight);
             }
             return rect;
         }
         rect.x = pipVideoOverlay.pipX;
-        rect.y = pipVideoOverlay.pipY + ((float) AndroidUtilities.statusBarHeight);
-        PipVideoOverlay pipVideoOverlay2 = instance;
-        rect.width = (float) pipVideoOverlay2.pipWidth;
-        rect.height = (float) pipVideoOverlay2.pipHeight;
+        rect.y = instance.pipY + ((float) AndroidUtilities.statusBarHeight);
+        rect.width = (float) instance.pipWidth;
+        rect.height = (float) instance.pipHeight;
         return rect;
     }
 
-    public static boolean show(boolean z, Activity activity, View view, int i, int i2) {
-        return show(z, activity, view, i, i2, false);
+    public static boolean show(boolean inAppOnly, Activity activity, View pipContentView, int videoWidth, int videoHeight) {
+        return show(inAppOnly, activity, pipContentView, videoWidth, videoHeight, false);
     }
 
-    public static boolean show(boolean z, Activity activity, View view, int i, int i2, boolean z2) {
-        return instance.showInternal(z, activity, view, i, i2, z2);
+    public static boolean show(boolean inAppOnly, Activity activity, View pipContentView, int videoWidth, int videoHeight, boolean animate) {
+        return instance.showInternal(inAppOnly, activity, pipContentView, videoWidth, videoHeight, animate);
     }
 
-    private boolean showInternal(boolean z, Activity activity, View view, int i, int i2, boolean z2) {
-        Context context;
-        boolean z3 = z;
+    private boolean showInternal(boolean inAppOnly, Activity activity, View pipContentView, int videoWidth, int videoHeight, boolean animate) {
+        boolean z = inAppOnly;
         if (this.isVisible) {
             return false;
         }
         this.isVisible = true;
-        this.mVideoWidth = i;
-        this.mVideoHeight = i2;
+        this.mVideoWidth = videoWidth;
+        this.mVideoHeight = videoHeight;
         this.aspectRatio = null;
-        float access$300 = getPipConfig().getPipX();
-        float access$400 = getPipConfig().getPipY();
+        float savedPipX = getPipConfig().getPipX();
+        float savedPipY = getPipConfig().getPipY();
         this.scaleFactor = getPipConfig().getScaleFactor();
         this.pipWidth = (int) (((float) getSuggestedWidth()) * this.scaleFactor);
         this.pipHeight = (int) (((float) getSuggestedHeight()) * this.scaleFactor);
         this.isShowingControls = false;
-        this.pipXSpring = (SpringAnimation) new SpringAnimation(this, PIP_X_PROPERTY).setSpring(new SpringForce().setDampingRatio(0.75f).setStiffness(650.0f)).addEndListener(new PipVideoOverlay$$ExternalSyntheticLambda4(this));
-        this.pipYSpring = (SpringAnimation) new SpringAnimation(this, PIP_Y_PROPERTY).setSpring(new SpringForce().setDampingRatio(0.75f).setStiffness(650.0f)).addEndListener(new PipVideoOverlay$$ExternalSyntheticLambda5(this));
-        Context context2 = ApplicationLoader.applicationContext;
-        final int scaledTouchSlop = ViewConfiguration.get(context2).getScaledTouchSlop();
-        ScaleGestureDetector scaleGestureDetector2 = new ScaleGestureDetector(context2, new ScaleGestureDetector.OnScaleGestureListener() {
-            public boolean onScale(ScaleGestureDetector scaleGestureDetector) {
+        this.pipXSpring = (SpringAnimation) new SpringAnimation(this, PIP_X_PROPERTY).setSpring(new SpringForce().setDampingRatio(0.75f).setStiffness(650.0f)).addEndListener(new PipVideoOverlay$$ExternalSyntheticLambda8(this));
+        this.pipYSpring = (SpringAnimation) new SpringAnimation(this, PIP_Y_PROPERTY).setSpring(new SpringForce().setDampingRatio(0.75f).setStiffness(650.0f)).addEndListener(new PipVideoOverlay$$ExternalSyntheticLambda9(this));
+        Context context = ApplicationLoader.applicationContext;
+        final int touchSlop = ViewConfiguration.get(context).getScaledTouchSlop();
+        this.scaleGestureDetector = new ScaleGestureDetector(context, new ScaleGestureDetector.OnScaleGestureListener() {
+            public boolean onScale(ScaleGestureDetector detector) {
                 PipVideoOverlay pipVideoOverlay = PipVideoOverlay.this;
-                float unused = pipVideoOverlay.scaleFactor = MathUtils.clamp(pipVideoOverlay.scaleFactor * scaleGestureDetector.getScaleFactor(), PipVideoOverlay.this.minScaleFactor, PipVideoOverlay.this.maxScaleFactor);
+                float unused = pipVideoOverlay.scaleFactor = MathUtils.clamp(pipVideoOverlay.scaleFactor * detector.getScaleFactor(), PipVideoOverlay.this.minScaleFactor, PipVideoOverlay.this.maxScaleFactor);
                 PipVideoOverlay pipVideoOverlay2 = PipVideoOverlay.this;
                 int unused2 = pipVideoOverlay2.pipWidth = (int) (((float) pipVideoOverlay2.getSuggestedWidth()) * PipVideoOverlay.this.scaleFactor);
                 PipVideoOverlay pipVideoOverlay3 = PipVideoOverlay.this;
                 int unused3 = pipVideoOverlay3.pipHeight = (int) (((float) pipVideoOverlay3.getSuggestedHeight()) * PipVideoOverlay.this.scaleFactor);
                 AndroidUtilities.runOnUIThread(new PipVideoOverlay$3$$ExternalSyntheticLambda0(this));
-                float focusX = scaleGestureDetector.getFocusX();
-                int i = AndroidUtilities.displaySize.x;
-                float access$900 = focusX >= ((float) i) / 2.0f ? (float) ((i - PipVideoOverlay.this.pipWidth) - AndroidUtilities.dp(16.0f)) : (float) AndroidUtilities.dp(16.0f);
+                float finalX = (float) (detector.getFocusX() >= ((float) AndroidUtilities.displaySize.x) / 2.0f ? (AndroidUtilities.displaySize.x - PipVideoOverlay.this.pipWidth) - AndroidUtilities.dp(16.0f) : AndroidUtilities.dp(16.0f));
                 if (!PipVideoOverlay.this.pipXSpring.isRunning()) {
-                    ((SpringAnimation) PipVideoOverlay.this.pipXSpring.setStartValue(PipVideoOverlay.this.pipX)).getSpring().setFinalPosition(access$900);
+                    ((SpringAnimation) PipVideoOverlay.this.pipXSpring.setStartValue(PipVideoOverlay.this.pipX)).getSpring().setFinalPosition(finalX);
                 } else {
-                    PipVideoOverlay.this.pipXSpring.getSpring().setFinalPosition(access$900);
+                    PipVideoOverlay.this.pipXSpring.getSpring().setFinalPosition(finalX);
                 }
                 PipVideoOverlay.this.pipXSpring.start();
-                float clamp = MathUtils.clamp(scaleGestureDetector.getFocusY() - (((float) PipVideoOverlay.this.pipHeight) / 2.0f), (float) AndroidUtilities.dp(16.0f), (float) ((AndroidUtilities.displaySize.y - PipVideoOverlay.this.pipHeight) - AndroidUtilities.dp(16.0f)));
+                float finalY = MathUtils.clamp(detector.getFocusY() - (((float) PipVideoOverlay.this.pipHeight) / 2.0f), (float) AndroidUtilities.dp(16.0f), (float) ((AndroidUtilities.displaySize.y - PipVideoOverlay.this.pipHeight) - AndroidUtilities.dp(16.0f)));
                 if (!PipVideoOverlay.this.pipYSpring.isRunning()) {
-                    ((SpringAnimation) PipVideoOverlay.this.pipYSpring.setStartValue(PipVideoOverlay.this.pipY)).getSpring().setFinalPosition(clamp);
+                    ((SpringAnimation) PipVideoOverlay.this.pipYSpring.setStartValue(PipVideoOverlay.this.pipY)).getSpring().setFinalPosition(finalY);
                 } else {
-                    PipVideoOverlay.this.pipYSpring.getSpring().setFinalPosition(clamp);
+                    PipVideoOverlay.this.pipYSpring.getSpring().setFinalPosition(finalY);
                 }
                 PipVideoOverlay.this.pipYSpring.start();
                 return true;
             }
 
-            /* access modifiers changed from: private */
-            public /* synthetic */ void lambda$onScale$0() {
+            /* renamed from: lambda$onScale$0$org-telegram-ui-Components-PipVideoOverlay$3  reason: not valid java name */
+            public /* synthetic */ void m4235lambda$onScale$0$orgtelegramuiComponentsPipVideoOverlay$3() {
                 PipVideoOverlay.this.contentView.invalidate();
                 PipVideoOverlay.this.contentFrameLayout.requestLayout();
             }
 
-            public boolean onScaleBegin(ScaleGestureDetector scaleGestureDetector) {
+            public boolean onScaleBegin(ScaleGestureDetector detector) {
                 if (PipVideoOverlay.this.isScrolling) {
                     boolean unused = PipVideoOverlay.this.isScrolling = false;
                 }
@@ -478,27 +458,27 @@ public class PipVideoOverlay {
                 return true;
             }
 
-            public void onScaleEnd(ScaleGestureDetector scaleGestureDetector) {
+            public void onScaleEnd(ScaleGestureDetector detector) {
                 if (PipVideoOverlay.this.pipXSpring.isRunning() || PipVideoOverlay.this.pipYSpring.isRunning()) {
-                    final ArrayList arrayList = new ArrayList();
-                    AnonymousClass1 r0 = new DynamicAnimation.OnAnimationEndListener() {
-                        public void onAnimationEnd(DynamicAnimation dynamicAnimation, boolean z, float f, float f2) {
-                            dynamicAnimation.removeEndListener(this);
-                            arrayList.add((SpringAnimation) dynamicAnimation);
-                            if (arrayList.size() == 2) {
+                    final List<SpringAnimation> springs = new ArrayList<>();
+                    DynamicAnimation.OnAnimationEndListener endListener = new DynamicAnimation.OnAnimationEndListener() {
+                        public void onAnimationEnd(DynamicAnimation animation, boolean canceled, float value, float velocity) {
+                            animation.removeEndListener(this);
+                            springs.add((SpringAnimation) animation);
+                            if (springs.size() == 2) {
                                 AnonymousClass3.this.updateLayout();
                             }
                         }
                     };
                     if (!PipVideoOverlay.this.pipXSpring.isRunning()) {
-                        arrayList.add(PipVideoOverlay.this.pipXSpring);
+                        springs.add(PipVideoOverlay.this.pipXSpring);
                     } else {
-                        PipVideoOverlay.this.pipXSpring.addEndListener(r0);
+                        PipVideoOverlay.this.pipXSpring.addEndListener(endListener);
                     }
                     if (!PipVideoOverlay.this.pipYSpring.isRunning()) {
-                        arrayList.add(PipVideoOverlay.this.pipYSpring);
+                        springs.add(PipVideoOverlay.this.pipYSpring);
                     } else {
-                        PipVideoOverlay.this.pipYSpring.addEndListener(r0);
+                        PipVideoOverlay.this.pipYSpring.addEndListener(endListener);
                     }
                 } else {
                     updateLayout();
@@ -519,28 +499,26 @@ public class PipVideoOverlay {
                 int unused2 = pipVideoOverlay2.pipHeight = access$1200;
                 try {
                     PipVideoOverlay.this.windowManager.updateViewLayout(PipVideoOverlay.this.contentView, PipVideoOverlay.this.windowLayoutParams);
-                } catch (IllegalArgumentException unused3) {
+                } catch (IllegalArgumentException e) {
                 }
             }
         });
-        this.scaleGestureDetector = scaleGestureDetector2;
-        int i3 = Build.VERSION.SDK_INT;
-        if (i3 >= 19) {
-            scaleGestureDetector2.setQuickScaleEnabled(false);
+        if (Build.VERSION.SDK_INT >= 19) {
+            this.scaleGestureDetector.setQuickScaleEnabled(false);
         }
-        if (i3 >= 23) {
+        if (Build.VERSION.SDK_INT >= 23) {
             this.scaleGestureDetector.setStylusScaleEnabled(false);
         }
-        this.gestureDetector = new GestureDetectorCompat(context2, new GestureDetector.SimpleOnGestureListener() {
+        this.gestureDetector = new GestureDetectorCompat(context, new GestureDetector.SimpleOnGestureListener() {
             private float startPipX;
             private float startPipY;
 
-            public boolean onDown(MotionEvent motionEvent) {
+            public boolean onDown(MotionEvent e) {
                 if (PipVideoOverlay.this.isShowingControls) {
                     for (int i = 1; i < PipVideoOverlay.this.contentFrameLayout.getChildCount(); i++) {
-                        View childAt = PipVideoOverlay.this.contentFrameLayout.getChildAt(i);
-                        if (childAt.dispatchTouchEvent(motionEvent)) {
-                            View unused = PipVideoOverlay.this.consumingChild = childAt;
+                        View child = PipVideoOverlay.this.contentFrameLayout.getChildAt(i);
+                        if (child.dispatchTouchEvent(e)) {
+                            View unused = PipVideoOverlay.this.consumingChild = child;
                             return true;
                         }
                     }
@@ -550,7 +528,7 @@ public class PipVideoOverlay {
                 return true;
             }
 
-            public boolean onSingleTapUp(MotionEvent motionEvent) {
+            public boolean onSingleTapUp(MotionEvent e) {
                 if (PipVideoOverlay.this.controlsAnimator != null) {
                     return true;
                 }
@@ -569,37 +547,34 @@ public class PipVideoOverlay {
                 return true;
             }
 
-            public boolean onFling(MotionEvent motionEvent, MotionEvent motionEvent2, float f, float f2) {
+            public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
                 if (!PipVideoOverlay.this.isScrolling || PipVideoOverlay.this.isScrollDisallowed) {
                     return false;
                 }
-                SpringForce spring = ((SpringAnimation) ((SpringAnimation) PipVideoOverlay.this.pipXSpring.setStartVelocity(f)).setStartValue(PipVideoOverlay.this.pipX)).getSpring();
-                float access$1400 = PipVideoOverlay.this.pipX + (((float) PipVideoOverlay.this.pipWidth) / 2.0f) + (f / 7.0f);
-                int i = AndroidUtilities.displaySize.x;
-                spring.setFinalPosition(access$1400 >= ((float) i) / 2.0f ? (float) ((i - PipVideoOverlay.this.pipWidth) - AndroidUtilities.dp(16.0f)) : (float) AndroidUtilities.dp(16.0f));
+                ((SpringAnimation) ((SpringAnimation) PipVideoOverlay.this.pipXSpring.setStartVelocity(velocityX)).setStartValue(PipVideoOverlay.this.pipX)).getSpring().setFinalPosition((float) ((PipVideoOverlay.this.pipX + (((float) PipVideoOverlay.this.pipWidth) / 2.0f)) + (velocityX / 7.0f) >= ((float) AndroidUtilities.displaySize.x) / 2.0f ? (AndroidUtilities.displaySize.x - PipVideoOverlay.this.pipWidth) - AndroidUtilities.dp(16.0f) : AndroidUtilities.dp(16.0f)));
                 PipVideoOverlay.this.pipXSpring.start();
-                ((SpringAnimation) ((SpringAnimation) PipVideoOverlay.this.pipYSpring.setStartVelocity(f)).setStartValue(PipVideoOverlay.this.pipY)).getSpring().setFinalPosition(MathUtils.clamp(PipVideoOverlay.this.pipY + (f2 / 10.0f), (float) AndroidUtilities.dp(16.0f), (float) ((AndroidUtilities.displaySize.y - PipVideoOverlay.this.pipHeight) - AndroidUtilities.dp(16.0f))));
+                ((SpringAnimation) ((SpringAnimation) PipVideoOverlay.this.pipYSpring.setStartVelocity(velocityX)).setStartValue(PipVideoOverlay.this.pipY)).getSpring().setFinalPosition(MathUtils.clamp(PipVideoOverlay.this.pipY + (velocityY / 10.0f), (float) AndroidUtilities.dp(16.0f), (float) ((AndroidUtilities.displaySize.y - PipVideoOverlay.this.pipHeight) - AndroidUtilities.dp(16.0f))));
                 PipVideoOverlay.this.pipYSpring.start();
                 return true;
             }
 
-            public boolean onScroll(MotionEvent motionEvent, MotionEvent motionEvent2, float f, float f2) {
+            public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
                 int i;
-                if (!PipVideoOverlay.this.isScrolling && PipVideoOverlay.this.controlsAnimator == null && !PipVideoOverlay.this.isScrollDisallowed && (Math.abs(f) >= ((float) scaledTouchSlop) || Math.abs(f2) >= ((float) scaledTouchSlop))) {
+                int i2;
+                if (!PipVideoOverlay.this.isScrolling && PipVideoOverlay.this.controlsAnimator == null && !PipVideoOverlay.this.isScrollDisallowed && (Math.abs(distanceX) >= ((float) touchSlop) || Math.abs(distanceY) >= ((float) touchSlop))) {
                     boolean unused = PipVideoOverlay.this.isScrolling = true;
                     PipVideoOverlay.this.pipXSpring.cancel();
                     PipVideoOverlay.this.pipYSpring.cancel();
                 }
                 if (PipVideoOverlay.this.isScrolling) {
-                    float access$1400 = PipVideoOverlay.this.pipX;
-                    float rawX = (this.startPipX + motionEvent2.getRawX()) - motionEvent.getRawX();
-                    float unused2 = PipVideoOverlay.this.pipY = (this.startPipY + motionEvent2.getRawY()) - motionEvent.getRawY();
-                    if (rawX <= ((float) (-PipVideoOverlay.this.pipWidth)) * 0.25f || rawX >= ((float) AndroidUtilities.displaySize.x) - (((float) PipVideoOverlay.this.pipWidth) * 0.75f)) {
+                    float wasPipX = PipVideoOverlay.this.pipX;
+                    float newPipX = (this.startPipX + e2.getRawX()) - e1.getRawX();
+                    float unused2 = PipVideoOverlay.this.pipY = (this.startPipY + e2.getRawY()) - e1.getRawY();
+                    if (newPipX <= ((float) (-PipVideoOverlay.this.pipWidth)) * 0.25f || newPipX >= ((float) AndroidUtilities.displaySize.x) - (((float) PipVideoOverlay.this.pipWidth) * 0.75f)) {
                         if (!PipVideoOverlay.this.onSideToDismiss) {
-                            SpringForce spring = ((SpringAnimation) PipVideoOverlay.this.pipXSpring.setStartValue(access$1400)).getSpring();
-                            float access$900 = rawX + (((float) PipVideoOverlay.this.pipWidth) / 2.0f);
-                            int i2 = AndroidUtilities.displaySize.x;
-                            if (access$900 >= ((float) i2) / 2.0f) {
+                            SpringForce spring = ((SpringAnimation) PipVideoOverlay.this.pipXSpring.setStartValue(wasPipX)).getSpring();
+                            if ((((float) PipVideoOverlay.this.pipWidth) / 2.0f) + newPipX >= ((float) AndroidUtilities.displaySize.x) / 2.0f) {
+                                i2 = AndroidUtilities.displaySize.x;
                                 i = AndroidUtilities.dp(16.0f);
                             } else {
                                 i2 = AndroidUtilities.dp(16.0f);
@@ -611,17 +586,17 @@ public class PipVideoOverlay {
                         boolean unused3 = PipVideoOverlay.this.onSideToDismiss = true;
                     } else if (PipVideoOverlay.this.onSideToDismiss) {
                         if (PipVideoOverlay.this.onSideToDismiss) {
-                            PipVideoOverlay.this.pipXSpring.addEndListener(new PipVideoOverlay$4$$ExternalSyntheticLambda0(this, rawX));
-                            ((SpringAnimation) PipVideoOverlay.this.pipXSpring.setStartValue(access$1400)).getSpring().setFinalPosition(rawX);
+                            PipVideoOverlay.this.pipXSpring.addEndListener(new PipVideoOverlay$4$$ExternalSyntheticLambda0(this, newPipX));
+                            ((SpringAnimation) PipVideoOverlay.this.pipXSpring.setStartValue(wasPipX)).getSpring().setFinalPosition(newPipX);
                             PipVideoOverlay.this.pipXSpring.start();
                         }
                         boolean unused4 = PipVideoOverlay.this.onSideToDismiss = false;
                     } else {
                         if (PipVideoOverlay.this.pipXSpring.isRunning()) {
-                            PipVideoOverlay.this.pipXSpring.getSpring().setFinalPosition(rawX);
+                            PipVideoOverlay.this.pipXSpring.getSpring().setFinalPosition(newPipX);
                         } else {
-                            PipVideoOverlay.this.windowLayoutParams.x = (int) PipVideoOverlay.this.pipX = rawX;
-                            PipVideoOverlay.this.getPipConfig().setPipX(rawX);
+                            PipVideoOverlay.this.windowLayoutParams.x = (int) PipVideoOverlay.this.pipX = newPipX;
+                            PipVideoOverlay.this.getPipConfig().setPipX(newPipX);
                         }
                         PipVideoOverlay.this.windowLayoutParams.y = (int) PipVideoOverlay.this.pipY;
                         PipVideoOverlay.this.getPipConfig().setPipY(PipVideoOverlay.this.pipY);
@@ -631,38 +606,35 @@ public class PipVideoOverlay {
                 return true;
             }
 
-            /* access modifiers changed from: private */
-            public /* synthetic */ void lambda$onScroll$0(float f, DynamicAnimation dynamicAnimation, boolean z, float f2, float f3) {
-                if (!z) {
-                    SpringForce spring = PipVideoOverlay.this.pipXSpring.getSpring();
-                    float access$900 = f + (((float) PipVideoOverlay.this.pipWidth) / 2.0f);
-                    int i = AndroidUtilities.displaySize.x;
-                    spring.setFinalPosition(access$900 >= ((float) i) / 2.0f ? (float) ((i - PipVideoOverlay.this.pipWidth) - AndroidUtilities.dp(16.0f)) : (float) AndroidUtilities.dp(16.0f));
+            /* renamed from: lambda$onScroll$0$org-telegram-ui-Components-PipVideoOverlay$4  reason: not valid java name */
+            public /* synthetic */ void m4236lambda$onScroll$0$orgtelegramuiComponentsPipVideoOverlay$4(float newPipX, DynamicAnimation animation, boolean canceled, float value, float velocity) {
+                if (!canceled) {
+                    PipVideoOverlay.this.pipXSpring.getSpring().setFinalPosition((float) ((((float) PipVideoOverlay.this.pipWidth) / 2.0f) + newPipX >= ((float) AndroidUtilities.displaySize.x) / 2.0f ? (AndroidUtilities.displaySize.x - PipVideoOverlay.this.pipWidth) - AndroidUtilities.dp(16.0f) : AndroidUtilities.dp(16.0f)));
                 }
             }
         });
-        this.contentFrameLayout = new FrameLayout(context2) {
+        this.contentFrameLayout = new FrameLayout(context) {
             private Path path = new Path();
 
-            public boolean dispatchTouchEvent(MotionEvent motionEvent) {
-                int action = motionEvent.getAction();
+            public boolean dispatchTouchEvent(MotionEvent ev) {
+                int action = ev.getAction();
                 if (PipVideoOverlay.this.consumingChild != null) {
-                    MotionEvent obtain = MotionEvent.obtain(motionEvent);
-                    obtain.offsetLocation(PipVideoOverlay.this.consumingChild.getX(), PipVideoOverlay.this.consumingChild.getY());
-                    boolean dispatchTouchEvent = PipVideoOverlay.this.consumingChild.dispatchTouchEvent(motionEvent);
-                    obtain.recycle();
+                    MotionEvent newEvent = MotionEvent.obtain(ev);
+                    newEvent.offsetLocation(PipVideoOverlay.this.consumingChild.getX(), PipVideoOverlay.this.consumingChild.getY());
+                    boolean consumed = PipVideoOverlay.this.consumingChild.dispatchTouchEvent(ev);
+                    newEvent.recycle();
                     if (action == 1 || action == 3) {
                         View unused = PipVideoOverlay.this.consumingChild = null;
                     }
-                    if (dispatchTouchEvent) {
+                    if (consumed) {
                         return true;
                     }
                 }
-                MotionEvent obtain2 = MotionEvent.obtain(motionEvent);
-                obtain2.offsetLocation(motionEvent.getRawX() - motionEvent.getX(), motionEvent.getRawY() - motionEvent.getY());
-                boolean onTouchEvent = PipVideoOverlay.this.scaleGestureDetector.onTouchEvent(obtain2);
-                obtain2.recycle();
-                boolean z = !PipVideoOverlay.this.scaleGestureDetector.isInProgress() && PipVideoOverlay.this.gestureDetector.onTouchEvent(motionEvent);
+                MotionEvent newEvent2 = MotionEvent.obtain(ev);
+                newEvent2.offsetLocation(ev.getRawX() - ev.getX(), ev.getRawY() - ev.getY());
+                boolean scaleDetector = PipVideoOverlay.this.scaleGestureDetector.onTouchEvent(newEvent2);
+                newEvent2.recycle();
+                boolean detector = !PipVideoOverlay.this.scaleGestureDetector.isInProgress() && PipVideoOverlay.this.gestureDetector.onTouchEvent(ev);
                 if (action == 1 || action == 3) {
                     boolean unused2 = PipVideoOverlay.this.isScrolling = false;
                     boolean unused3 = PipVideoOverlay.this.isScrollDisallowed = false;
@@ -671,10 +643,7 @@ public class PipVideoOverlay {
                         PipVideoOverlay.dimissAndDestroy();
                     } else {
                         if (!PipVideoOverlay.this.pipXSpring.isRunning()) {
-                            SpringForce spring = ((SpringAnimation) PipVideoOverlay.this.pipXSpring.setStartValue(PipVideoOverlay.this.pipX)).getSpring();
-                            float access$1400 = PipVideoOverlay.this.pipX + (((float) PipVideoOverlay.this.pipWidth) / 2.0f);
-                            int i = AndroidUtilities.displaySize.x;
-                            spring.setFinalPosition(access$1400 >= ((float) i) / 2.0f ? (float) ((i - PipVideoOverlay.this.pipWidth) - AndroidUtilities.dp(16.0f)) : (float) AndroidUtilities.dp(16.0f));
+                            ((SpringAnimation) PipVideoOverlay.this.pipXSpring.setStartValue(PipVideoOverlay.this.pipX)).getSpring().setFinalPosition((float) (PipVideoOverlay.this.pipX + (((float) PipVideoOverlay.this.pipWidth) / 2.0f) >= ((float) AndroidUtilities.displaySize.x) / 2.0f ? (AndroidUtilities.displaySize.x - PipVideoOverlay.this.pipWidth) - AndroidUtilities.dp(16.0f) : AndroidUtilities.dp(16.0f)));
                             PipVideoOverlay.this.pipXSpring.start();
                         }
                         if (!PipVideoOverlay.this.pipYSpring.isRunning()) {
@@ -683,15 +652,15 @@ public class PipVideoOverlay {
                         }
                     }
                 }
-                if (onTouchEvent || z) {
+                if (scaleDetector || detector) {
                     return true;
                 }
                 return false;
             }
 
             /* access modifiers changed from: protected */
-            public void onConfigurationChanged(Configuration configuration) {
-                AndroidUtilities.checkDisplaySize(getContext(), configuration);
+            public void onConfigurationChanged(Configuration newConfig) {
+                AndroidUtilities.checkDisplaySize(getContext(), newConfig);
                 PipConfig unused = PipVideoOverlay.this.pipConfig = null;
                 if (((float) PipVideoOverlay.this.pipWidth) != ((float) PipVideoOverlay.this.getSuggestedWidth()) * PipVideoOverlay.this.scaleFactor || ((float) PipVideoOverlay.this.pipHeight) != ((float) PipVideoOverlay.this.getSuggestedHeight()) * PipVideoOverlay.this.scaleFactor) {
                     WindowManager.LayoutParams access$1900 = PipVideoOverlay.this.windowLayoutParams;
@@ -701,10 +670,7 @@ public class PipVideoOverlay {
                     PipVideoOverlay pipVideoOverlay2 = PipVideoOverlay.this;
                     access$19002.height = pipVideoOverlay2.pipHeight = (int) (((float) pipVideoOverlay2.getSuggestedHeight()) * PipVideoOverlay.this.scaleFactor);
                     PipVideoOverlay.this.windowManager.updateViewLayout(PipVideoOverlay.this.contentView, PipVideoOverlay.this.windowLayoutParams);
-                    SpringForce spring = ((SpringAnimation) PipVideoOverlay.this.pipXSpring.setStartValue(PipVideoOverlay.this.pipX)).getSpring();
-                    float access$1400 = PipVideoOverlay.this.pipX + ((((float) PipVideoOverlay.this.getSuggestedWidth()) * PipVideoOverlay.this.scaleFactor) / 2.0f);
-                    int i = AndroidUtilities.displaySize.x;
-                    spring.setFinalPosition(access$1400 >= ((float) i) / 2.0f ? (((float) i) - (((float) PipVideoOverlay.this.getSuggestedWidth()) * PipVideoOverlay.this.scaleFactor)) - ((float) AndroidUtilities.dp(16.0f)) : (float) AndroidUtilities.dp(16.0f));
+                    ((SpringAnimation) PipVideoOverlay.this.pipXSpring.setStartValue(PipVideoOverlay.this.pipX)).getSpring().setFinalPosition(PipVideoOverlay.this.pipX + ((((float) PipVideoOverlay.this.getSuggestedWidth()) * PipVideoOverlay.this.scaleFactor) / 2.0f) >= ((float) AndroidUtilities.displaySize.x) / 2.0f ? (((float) AndroidUtilities.displaySize.x) - (((float) PipVideoOverlay.this.getSuggestedWidth()) * PipVideoOverlay.this.scaleFactor)) - ((float) AndroidUtilities.dp(16.0f)) : (float) AndroidUtilities.dp(16.0f));
                     PipVideoOverlay.this.pipXSpring.start();
                     ((SpringAnimation) PipVideoOverlay.this.pipYSpring.setStartValue(PipVideoOverlay.this.pipY)).getSpring().setFinalPosition(MathUtils.clamp(PipVideoOverlay.this.pipY, (float) AndroidUtilities.dp(16.0f), (((float) AndroidUtilities.displaySize.y) - (((float) PipVideoOverlay.this.getSuggestedHeight()) * PipVideoOverlay.this.scaleFactor)) - ((float) AndroidUtilities.dp(16.0f))));
                     PipVideoOverlay.this.pipYSpring.start();
@@ -723,23 +689,22 @@ public class PipVideoOverlay {
             }
 
             /* access modifiers changed from: protected */
-            public void onSizeChanged(int i, int i2, int i3, int i4) {
-                super.onSizeChanged(i, i2, i3, i4);
+            public void onSizeChanged(int w, int h, int oldw, int oldh) {
+                super.onSizeChanged(w, h, oldw, oldh);
                 this.path.rewind();
-                RectF rectF = AndroidUtilities.rectTmp;
-                rectF.set(0.0f, 0.0f, (float) i, (float) i2);
-                this.path.addRoundRect(rectF, (float) AndroidUtilities.dp(10.0f), (float) AndroidUtilities.dp(10.0f), Path.Direction.CW);
+                AndroidUtilities.rectTmp.set(0.0f, 0.0f, (float) w, (float) h);
+                this.path.addRoundRect(AndroidUtilities.rectTmp, (float) AndroidUtilities.dp(10.0f), (float) AndroidUtilities.dp(10.0f), Path.Direction.CW);
             }
         };
-        AnonymousClass6 r7 = new ViewGroup(context2) {
+        AnonymousClass6 r11 = new ViewGroup(context) {
             /* access modifiers changed from: protected */
-            public void onLayout(boolean z, int i, int i2, int i3, int i4) {
+            public void onLayout(boolean changed, int l, int t, int r, int b) {
                 PipVideoOverlay.this.contentFrameLayout.layout(0, 0, PipVideoOverlay.this.pipWidth, PipVideoOverlay.this.pipHeight);
             }
 
             /* access modifiers changed from: protected */
-            public void onMeasure(int i, int i2) {
-                setMeasuredDimension(View.MeasureSpec.getSize(i), View.MeasureSpec.getSize(i2));
+            public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+                setMeasuredDimension(View.MeasureSpec.getSize(widthMeasureSpec), View.MeasureSpec.getSize(heightMeasureSpec));
                 PipVideoOverlay.this.contentFrameLayout.measure(View.MeasureSpec.makeMeasureSpec(PipVideoOverlay.this.pipWidth, NUM), View.MeasureSpec.makeMeasureSpec(PipVideoOverlay.this.pipHeight, NUM));
             }
 
@@ -750,10 +715,10 @@ public class PipVideoOverlay {
                 canvas.restore();
             }
         };
-        this.contentView = r7;
-        r7.addView(this.contentFrameLayout, LayoutHelper.createFrame(-1, -1.0f));
-        if (i3 >= 21) {
-            this.contentFrameLayout.setOutlineProvider(new ViewOutlineProvider(this) {
+        this.contentView = r11;
+        r11.addView(this.contentFrameLayout, LayoutHelper.createFrame(-1, -1.0f));
+        if (Build.VERSION.SDK_INT >= 21) {
+            this.contentFrameLayout.setOutlineProvider(new ViewOutlineProvider() {
                 public void getOutline(View view, Outline outline) {
                     outline.setRoundRect(0, 0, view.getMeasuredWidth(), view.getMeasuredHeight(), (float) AndroidUtilities.dp(10.0f));
                 }
@@ -761,118 +726,117 @@ public class PipVideoOverlay {
             this.contentFrameLayout.setClipToOutline(true);
         }
         this.contentFrameLayout.setBackgroundColor(Theme.getColor("voipgroup_actionBar"));
-        this.innerView = view;
-        if (view.getParent() != null) {
+        this.innerView = pipContentView;
+        if (pipContentView.getParent() != null) {
             ((ViewGroup) this.innerView.getParent()).removeView(this.innerView);
         }
         this.contentFrameLayout.addView(this.innerView, LayoutHelper.createFrame(-1, -1.0f));
-        FrameLayout frameLayout = new FrameLayout(context2);
+        FrameLayout frameLayout = new FrameLayout(context);
         this.controlsView = frameLayout;
         frameLayout.setAlpha(0.0f);
-        View view2 = new View(context2);
-        view2.setBackgroundColor(NUM);
-        this.controlsView.addView(view2, LayoutHelper.createFrame(-1, -1.0f));
-        int dp = AndroidUtilities.dp(8.0f);
-        ImageView imageView = new ImageView(context2);
-        imageView.setImageResource(NUM);
+        View scrim = new View(context);
+        scrim.setBackgroundColor(NUM);
+        this.controlsView.addView(scrim, LayoutHelper.createFrame(-1, -1.0f));
+        int padding = AndroidUtilities.dp(8.0f);
+        ImageView closeButton = new ImageView(context);
+        closeButton.setImageResource(NUM);
+        View view = scrim;
+        closeButton.setColorFilter(Theme.getColor("voipgroup_actionBarItems"), PorterDuff.Mode.MULTIPLY);
+        closeButton.setBackground(Theme.createSelectorDrawable(Theme.getColor("listSelectorSDK21")));
+        closeButton.setPadding(padding, padding, padding, padding);
+        closeButton.setOnClickListener(PipVideoOverlay$$ExternalSyntheticLambda7.INSTANCE);
+        int i = touchSlop;
+        this.controlsView.addView(closeButton, LayoutHelper.createFrame(38, (float) 38, 5, 0.0f, (float) 4, (float) 4, 0.0f));
+        ImageView expandButton = new ImageView(context);
+        expandButton.setImageResource(NUM);
+        expandButton.setColorFilter(Theme.getColor("voipgroup_actionBarItems"), PorterDuff.Mode.MULTIPLY);
+        expandButton.setBackground(Theme.createSelectorDrawable(Theme.getColor("listSelectorSDK21")));
+        expandButton.setPadding(padding, padding, padding, padding);
+        expandButton.setOnClickListener(new PipVideoOverlay$$ExternalSyntheticLambda6(this, z));
+        int i2 = padding;
+        this.controlsView.addView(expandButton, LayoutHelper.createFrame(38, (float) 38, 5, 0.0f, (float) 4, (float) (38 + 4 + 6), 0.0f));
+        ImageView imageView = new ImageView(context);
+        this.playPauseButton = imageView;
         imageView.setColorFilter(Theme.getColor("voipgroup_actionBarItems"), PorterDuff.Mode.MULTIPLY);
-        imageView.setBackground(Theme.createSelectorDrawable(Theme.getColor("listSelectorSDK21")));
-        imageView.setPadding(dp, dp, dp, dp);
-        imageView.setOnClickListener(PipVideoOverlay$$ExternalSyntheticLambda3.INSTANCE);
-        float f = (float) 4;
-        float f2 = (float) 38;
-        float f3 = f;
-        this.controlsView.addView(imageView, LayoutHelper.createFrame(38, f2, 5, 0.0f, f3, f, 0.0f));
-        ImageView imageView2 = new ImageView(context2);
-        imageView2.setImageResource(NUM);
-        imageView2.setColorFilter(Theme.getColor("voipgroup_actionBarItems"), PorterDuff.Mode.MULTIPLY);
-        imageView2.setBackground(Theme.createSelectorDrawable(Theme.getColor("listSelectorSDK21")));
-        imageView2.setPadding(dp, dp, dp, dp);
-        imageView2.setOnClickListener(new PipVideoOverlay$$ExternalSyntheticLambda2(this, z3));
-        this.controlsView.addView(imageView2, LayoutHelper.createFrame(38, f2, 5, 0.0f, f3, (float) 48, 0.0f));
-        ImageView imageView3 = new ImageView(context2);
-        this.playPauseButton = imageView3;
-        imageView3.setColorFilter(Theme.getColor("voipgroup_actionBarItems"), PorterDuff.Mode.MULTIPLY);
         this.playPauseButton.setBackground(Theme.createSelectorDrawable(Theme.getColor("listSelectorSDK21")));
-        this.playPauseButton.setOnClickListener(new PipVideoOverlay$$ExternalSyntheticLambda1(this));
+        this.playPauseButton.setOnClickListener(new PipVideoOverlay$$ExternalSyntheticLambda5(this));
         this.playPauseButton.setVisibility(this.innerView instanceof WebView ? 8 : 0);
         this.controlsView.addView(this.playPauseButton, LayoutHelper.createFrame(38, 38, 17));
-        VideoProgressView videoProgressView2 = new VideoProgressView(context2);
+        VideoProgressView videoProgressView2 = new VideoProgressView(context);
         this.videoProgressView = videoProgressView2;
         this.controlsView.addView(videoProgressView2, LayoutHelper.createFrame(-1, -1.0f));
         this.contentFrameLayout.addView(this.controlsView, LayoutHelper.createFrame(-1, -1.0f));
-        if (z3) {
-            context = activity;
-        } else {
-            context = ApplicationLoader.applicationContext;
-        }
-        this.windowManager = (WindowManager) context.getSystemService("window");
-        WindowManager.LayoutParams createWindowLayoutParams = createWindowLayoutParams(z);
+        this.windowManager = (WindowManager) (z ? activity : ApplicationLoader.applicationContext).getSystemService("window");
+        WindowManager.LayoutParams createWindowLayoutParams = createWindowLayoutParams(inAppOnly);
         this.windowLayoutParams = createWindowLayoutParams;
-        int i4 = this.pipWidth;
-        createWindowLayoutParams.width = i4;
-        createWindowLayoutParams.height = this.pipHeight;
-        if (access$300 != -1.0f) {
-            float f4 = access$300 + (((float) i4) / 2.0f);
-            int i5 = AndroidUtilities.displaySize.x;
-            float dp2 = f4 >= ((float) i5) / 2.0f ? (float) ((i5 - i4) - AndroidUtilities.dp(16.0f)) : (float) AndroidUtilities.dp(16.0f);
-            this.pipX = dp2;
-            createWindowLayoutParams.x = (int) dp2;
-        } else {
-            float dp3 = (float) ((AndroidUtilities.displaySize.x - i4) - AndroidUtilities.dp(16.0f));
-            this.pipX = dp3;
-            createWindowLayoutParams.x = (int) dp3;
-        }
-        if (access$400 != -1.0f) {
+        createWindowLayoutParams.width = this.pipWidth;
+        this.windowLayoutParams.height = this.pipHeight;
+        if (savedPipX != -1.0f) {
             WindowManager.LayoutParams layoutParams = this.windowLayoutParams;
-            float clamp = MathUtils.clamp(access$400, (float) AndroidUtilities.dp(16.0f), (float) ((AndroidUtilities.displaySize.y - AndroidUtilities.dp(16.0f)) - this.pipHeight));
-            this.pipY = clamp;
-            layoutParams.y = (int) clamp;
+            float dp = (float) ((((float) this.pipWidth) / 2.0f) + savedPipX >= ((float) AndroidUtilities.displaySize.x) / 2.0f ? (AndroidUtilities.displaySize.x - this.pipWidth) - AndroidUtilities.dp(16.0f) : AndroidUtilities.dp(16.0f));
+            this.pipX = dp;
+            layoutParams.x = (int) dp;
         } else {
             WindowManager.LayoutParams layoutParams2 = this.windowLayoutParams;
-            float dp4 = (float) AndroidUtilities.dp(16.0f);
-            this.pipY = dp4;
-            layoutParams2.y = (int) dp4;
+            float dp2 = (float) ((AndroidUtilities.displaySize.x - this.pipWidth) - AndroidUtilities.dp(16.0f));
+            this.pipX = dp2;
+            layoutParams2.x = (int) dp2;
         }
-        WindowManager.LayoutParams layoutParams3 = this.windowLayoutParams;
-        layoutParams3.dimAmount = 0.0f;
-        layoutParams3.flags = 520;
-        if (z2) {
-            this.windowManager.addView(this.contentView, layoutParams3);
+        if (savedPipY != -1.0f) {
+            WindowManager.LayoutParams layoutParams3 = this.windowLayoutParams;
+            float clamp = MathUtils.clamp(savedPipY, (float) AndroidUtilities.dp(16.0f), (float) ((AndroidUtilities.displaySize.y - AndroidUtilities.dp(16.0f)) - this.pipHeight));
+            this.pipY = clamp;
+            layoutParams3.y = (int) clamp;
+        } else {
+            WindowManager.LayoutParams layoutParams4 = this.windowLayoutParams;
+            float dp3 = (float) AndroidUtilities.dp(16.0f);
+            this.pipY = dp3;
+            layoutParams4.y = (int) dp3;
+        }
+        this.windowLayoutParams.dimAmount = 0.0f;
+        this.windowLayoutParams.flags = 520;
+        if (animate) {
+            this.windowManager.addView(this.contentView, this.windowLayoutParams);
+            ImageView imageView2 = expandButton;
             return true;
         }
         this.contentView.setAlpha(0.0f);
         this.contentView.setScaleX(0.1f);
         this.contentView.setScaleY(0.1f);
         this.windowManager.addView(this.contentView, this.windowLayoutParams);
-        AnimatorSet animatorSet = new AnimatorSet();
-        animatorSet.setDuration(250);
-        animatorSet.setInterpolator(CubicBezierInterpolator.DEFAULT);
-        animatorSet.playTogether(new Animator[]{ObjectAnimator.ofFloat(this.contentView, View.ALPHA, new float[]{1.0f}), ObjectAnimator.ofFloat(this.contentView, View.SCALE_X, new float[]{1.0f}), ObjectAnimator.ofFloat(this.contentView, View.SCALE_Y, new float[]{1.0f})});
-        animatorSet.start();
+        AnimatorSet set = new AnimatorSet();
+        ImageView imageView3 = expandButton;
+        set.setDuration(250);
+        set.setInterpolator(CubicBezierInterpolator.DEFAULT);
+        set.playTogether(new Animator[]{ObjectAnimator.ofFloat(this.contentView, View.ALPHA, new float[]{1.0f}), ObjectAnimator.ofFloat(this.contentView, View.SCALE_X, new float[]{1.0f}), ObjectAnimator.ofFloat(this.contentView, View.SCALE_Y, new float[]{1.0f})});
+        set.start();
         return true;
     }
 
-    /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$showInternal$7(DynamicAnimation dynamicAnimation, boolean z, float f, float f2) {
-        getPipConfig().setPipX(f);
+    /* renamed from: lambda$showInternal$7$org-telegram-ui-Components-PipVideoOverlay  reason: not valid java name */
+    public /* synthetic */ void m4232lambda$showInternal$7$orgtelegramuiComponentsPipVideoOverlay(DynamicAnimation animation, boolean canceled, float value, float velocity) {
+        getPipConfig().setPipX(value);
     }
 
-    /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$showInternal$8(DynamicAnimation dynamicAnimation, boolean z, float f, float f2) {
-        getPipConfig().setPipY(f);
+    /* renamed from: lambda$showInternal$8$org-telegram-ui-Components-PipVideoOverlay  reason: not valid java name */
+    public /* synthetic */ void m4233lambda$showInternal$8$orgtelegramuiComponentsPipVideoOverlay(DynamicAnimation animation, boolean canceled, float value, float velocity) {
+        getPipConfig().setPipY(value);
     }
 
-    /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$showInternal$10(boolean z, View view) {
-        boolean z2 = true;
+    /* renamed from: lambda$showInternal$10$org-telegram-ui-Components-PipVideoOverlay  reason: not valid java name */
+    public /* synthetic */ void m4230x4var_a443(boolean inAppOnly, View v) {
+        boolean isResumedByActivityManager = true;
         if (Build.VERSION.SDK_INT >= 21) {
-            List<ActivityManager.RunningAppProcessInfo> runningAppProcesses = ((ActivityManager) view.getContext().getSystemService("activity")).getRunningAppProcesses();
-            if (!runningAppProcesses.isEmpty() && runningAppProcesses.get(0).importance != 100) {
-                z2 = false;
+            List<ActivityManager.RunningAppProcessInfo> appProcessInfos = ((ActivityManager) v.getContext().getSystemService("activity")).getRunningAppProcesses();
+            if (!appProcessInfos.isEmpty()) {
+                boolean z = false;
+                if (appProcessInfos.get(0).importance == 100) {
+                    z = true;
+                }
+                isResumedByActivityManager = z;
             }
         }
-        if (z || (z2 && LaunchActivity.isResumed)) {
+        if (inAppOnly || (isResumedByActivityManager && LaunchActivity.isResumed)) {
             EmbedBottomSheet embedBottomSheet = this.parentSheet;
             if (embedBottomSheet != null) {
                 embedBottomSheet.exitFromPip();
@@ -885,16 +849,16 @@ public class PipVideoOverlay {
             }
             return;
         }
-        view.getClass();
-        LaunchActivity.onResumeStaticCallback = new ChatActivityEnterView$$ExternalSyntheticLambda33(view);
-        Context context = ApplicationLoader.applicationContext;
-        Intent intent = new Intent(context, LaunchActivity.class);
+        v.getClass();
+        LaunchActivity.onResumeStaticCallback = new ChatActivityEnterView$$ExternalSyntheticLambda26(v);
+        Context ctx = ApplicationLoader.applicationContext;
+        Intent intent = new Intent(ctx, LaunchActivity.class);
         intent.addFlags(NUM);
-        context.startActivity(intent);
+        ctx.startActivity(intent);
     }
 
-    /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$showInternal$11(View view) {
+    /* renamed from: lambda$showInternal$11$org-telegram-ui-Components-PipVideoOverlay  reason: not valid java name */
+    public /* synthetic */ void m4231x12330da2(View v) {
         VideoPlayer videoPlayer;
         PhotoViewer photoViewer2 = this.photoViewer;
         if (photoViewer2 != null && (videoPlayer = photoViewer2.getVideoPlayer()) != null) {
@@ -907,20 +871,19 @@ public class PipVideoOverlay {
         }
     }
 
-    @SuppressLint({"WrongConstant"})
-    private WindowManager.LayoutParams createWindowLayoutParams(boolean z) {
-        WindowManager.LayoutParams layoutParams = new WindowManager.LayoutParams();
-        layoutParams.gravity = 51;
-        layoutParams.format = -3;
-        if (z || !AndroidUtilities.checkInlinePermissions(ApplicationLoader.applicationContext)) {
-            layoutParams.type = 99;
+    private WindowManager.LayoutParams createWindowLayoutParams(boolean inAppOnly) {
+        WindowManager.LayoutParams windowLayoutParams2 = new WindowManager.LayoutParams();
+        windowLayoutParams2.gravity = 51;
+        windowLayoutParams2.format = -3;
+        if (inAppOnly || !AndroidUtilities.checkInlinePermissions(ApplicationLoader.applicationContext)) {
+            windowLayoutParams2.type = 99;
         } else if (Build.VERSION.SDK_INT >= 26) {
-            layoutParams.type = 2038;
+            windowLayoutParams2.type = 2038;
         } else {
-            layoutParams.type = 2003;
+            windowLayoutParams2.type = 2003;
         }
-        layoutParams.flags = 520;
-        return layoutParams;
+        windowLayoutParams2.flags = 520;
+        return windowLayoutParams2;
     }
 
     private final class VideoProgressView extends View {
@@ -944,34 +907,37 @@ public class PipVideoOverlay {
         public void onDraw(Canvas canvas) {
             super.onDraw(canvas);
             int width = getWidth();
-            int dp = AndroidUtilities.dp(10.0f);
-            float f = (float) ((width - dp) - dp);
-            int access$3600 = ((int) (PipVideoOverlay.this.videoProgress * f)) + dp;
-            float height = (float) (getHeight() - AndroidUtilities.dp(8.0f));
+            int progressSidePadding = AndroidUtilities.dp(10.0f);
+            int progressLeft = progressSidePadding;
+            int progressRight = ((int) (((float) ((width - progressLeft) - progressSidePadding)) * PipVideoOverlay.this.videoProgress)) + progressLeft;
+            float y = (float) (getHeight() - AndroidUtilities.dp(8.0f));
             if (PipVideoOverlay.this.bufferProgress != 0.0f) {
-                float f2 = (float) dp;
-                canvas.drawLine(f2, height, f2 + (f * PipVideoOverlay.this.bufferProgress), height, this.bufferPaint);
+                canvas.drawLine((float) progressLeft, y, ((float) progressLeft) + (((float) ((width - progressLeft) - progressSidePadding)) * PipVideoOverlay.this.bufferProgress), y, this.bufferPaint);
             }
-            canvas.drawLine((float) dp, height, (float) access$3600, height, this.progressPaint);
+            canvas.drawLine((float) progressLeft, y, (float) progressRight, y, this.progressPaint);
         }
     }
 
     private static final class PipConfig {
         private SharedPreferences mPrefs;
 
-        private PipConfig(int i, int i2) {
+        private PipConfig(int width, int height) {
             Context context = ApplicationLoader.applicationContext;
-            this.mPrefs = context.getSharedPreferences("pip_layout_" + i + "_" + i2, 0);
+            this.mPrefs = context.getSharedPreferences("pip_layout_" + width + "_" + height, 0);
         }
 
         /* access modifiers changed from: private */
-        public void setPipX(float f) {
-            this.mPrefs.edit().putFloat("x", f).apply();
+        public void setPipX(float x) {
+            this.mPrefs.edit().putFloat("x", x).apply();
         }
 
         /* access modifiers changed from: private */
-        public void setPipY(float f) {
-            this.mPrefs.edit().putFloat("y", f).apply();
+        public void setPipY(float y) {
+            this.mPrefs.edit().putFloat("y", y).apply();
+        }
+
+        private void setScaleFactor(float scaleFactor) {
+            this.mPrefs.edit().putFloat("scale_factor", scaleFactor).apply();
         }
 
         /* access modifiers changed from: private */

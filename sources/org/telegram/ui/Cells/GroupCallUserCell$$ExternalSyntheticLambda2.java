@@ -8,6 +8,6 @@ public final /* synthetic */ class GroupCallUserCell$$ExternalSyntheticLambda2 i
     }
 
     public final void run() {
-        this.f$0.lambda$new$1();
+        this.f$0.m1500lambda$new$0$orgtelegramuiCellsGroupCallUserCell();
     }
 }

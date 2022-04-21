@@ -10,7 +10,6 @@ import android.graphics.Path;
 import android.graphics.RectF;
 import android.graphics.Shader;
 import android.view.View;
-import androidx.annotation.Keep;
 import java.util.Arrays;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.FileLog;
@@ -55,42 +54,40 @@ public class ClippingImageView extends View {
         this.shaderMatrix = new Matrix();
     }
 
-    public void setAnimationValues(float[][] fArr) {
-        this.animationValues = fArr;
+    public void setAnimationValues(float[][] values) {
+        this.animationValues = values;
     }
 
-    public void setAdditionalTranslationY(float f) {
-        this.additionalTranslationY = f;
+    public void setAdditionalTranslationY(float value) {
+        this.additionalTranslationY = value;
     }
 
-    public void setAdditionalTranslationX(float f) {
-        this.additionalTranslationX = f;
+    public void setAdditionalTranslationX(float value) {
+        this.additionalTranslationX = value;
     }
 
-    public void setTranslationY(float f) {
-        super.setTranslationY(f + this.additionalTranslationY);
+    public void setTranslationY(float translationY) {
+        super.setTranslationY(this.additionalTranslationY + translationY);
     }
 
     public float getTranslationY() {
         return super.getTranslationY() - this.additionalTranslationY;
     }
 
-    @Keep
     public float getAnimationProgress() {
         return this.animationProgress;
     }
 
-    @Keep
-    public void setAnimationProgress(float f) {
-        this.animationProgress = f;
+    public void setAnimationProgress(float progress) {
+        this.animationProgress = progress;
         float[][] fArr = this.animationValues;
-        setScaleX(fArr[0][0] + ((fArr[1][0] - fArr[0][0]) * f));
+        setScaleX(fArr[0][0] + ((fArr[1][0] - fArr[0][0]) * progress));
         float[][] fArr2 = this.animationValues;
         setScaleY(fArr2[0][1] + ((fArr2[1][1] - fArr2[0][1]) * this.animationProgress));
         float[][] fArr3 = this.animationValues;
-        float f2 = fArr3[0][2];
-        float f3 = this.additionalTranslationX;
-        setTranslationX(f2 + f3 + ((((fArr3[1][2] + f3) - fArr3[0][2]) - f3) * this.animationProgress));
+        float f = fArr3[0][2];
+        float f2 = this.additionalTranslationX;
+        setTranslationX(f + f2 + ((((fArr3[1][2] + f2) - fArr3[0][2]) - f2) * this.animationProgress));
         float[][] fArr4 = this.animationValues;
         setTranslationY(fArr4[0][3] + ((fArr4[1][3] - fArr4[0][3]) * this.animationProgress));
         float[][] fArr5 = this.animationValues;
@@ -99,17 +96,16 @@ public class ClippingImageView extends View {
         setClipTop((int) (fArr6[0][5] + ((fArr6[1][5] - fArr6[0][5]) * this.animationProgress)));
         float[][] fArr7 = this.animationValues;
         setClipBottom((int) (fArr7[0][6] + ((fArr7[1][6] - fArr7[0][6]) * this.animationProgress)));
-        int i = 0;
+        int a = 0;
         while (true) {
             int[] iArr = this.radius;
-            if (i >= iArr.length) {
+            if (a >= iArr.length) {
                 break;
             }
             float[][] fArr8 = this.animationValues;
-            int i2 = i + 7;
-            iArr[i] = (int) (fArr8[0][i2] + ((fArr8[1][i2] - fArr8[0][i2]) * this.animationProgress));
+            iArr[a] = (int) (fArr8[0][a + 7] + ((fArr8[1][a + 7] - fArr8[0][a + 7]) * this.animationProgress));
             setRadius(iArr);
-            i++;
+            a++;
         }
         float[][] fArr9 = this.animationValues;
         if (fArr9[0].length > 11) {
@@ -120,16 +116,15 @@ public class ClippingImageView extends View {
         invalidate();
     }
 
-    public void getClippedVisibleRect(RectF rectF) {
-        rectF.left = getTranslationX();
-        rectF.top = getTranslationY();
-        rectF.right = rectF.left + (((float) getMeasuredWidth()) * getScaleX());
-        float measuredHeight = rectF.top + (((float) getMeasuredHeight()) * getScaleY());
-        rectF.bottom = measuredHeight;
-        rectF.left += (float) this.clipLeft;
-        rectF.top += (float) this.clipTop;
-        rectF.right -= (float) this.clipRight;
-        rectF.bottom = measuredHeight - ((float) this.clipBottom);
+    public void getClippedVisibleRect(RectF rect) {
+        rect.left = getTranslationX();
+        rect.top = getTranslationY();
+        rect.right = rect.left + (((float) getMeasuredWidth()) * getScaleX());
+        rect.bottom = rect.top + (((float) getMeasuredHeight()) * getScaleY());
+        rect.left += (float) this.clipLeft;
+        rect.top += (float) this.clipTop;
+        rect.right -= (float) this.clipRight;
+        rect.bottom -= (float) this.clipBottom;
     }
 
     public int getClipBottom() {
@@ -165,33 +160,32 @@ public class ClippingImageView extends View {
                 this.shaderMatrix.reset();
                 this.roundRect.set(((float) this.imageX) / scaleY, ((float) this.imageY) / scaleY, ((float) getWidth()) - (((float) this.imageX) / scaleY), ((float) getHeight()) - (((float) this.imageY) / scaleY));
                 this.bitmapRect.set(0.0f, 0.0f, (float) this.bmp.getWidth(), (float) this.bmp.getHeight());
-                int i = 0;
                 AndroidUtilities.setRectToRect(this.shaderMatrix, this.bitmapRect, this.roundRect, this.orientation, false);
                 this.bitmapShader.setLocalMatrix(this.shaderMatrix);
                 canvas.clipRect(((float) this.clipLeft) / scaleY, ((float) this.clipTop) / scaleY, ((float) getWidth()) - (((float) this.clipRight) / scaleY), ((float) getHeight()) - (((float) this.clipBottom) / scaleY));
+                int a = 0;
                 while (true) {
                     int[] iArr = this.radius;
-                    if (i >= iArr.length) {
+                    if (a >= iArr.length) {
                         break;
                     }
                     float[] fArr = radii;
-                    int i2 = i * 2;
-                    fArr[i2] = (float) iArr[i];
-                    fArr[i2 + 1] = (float) iArr[i];
-                    i++;
+                    fArr[a * 2] = (float) iArr[a];
+                    fArr[(a * 2) + 1] = (float) iArr[a];
+                    a++;
                 }
                 this.roundPath.reset();
                 this.roundPath.addRoundRect(this.roundRect, radii, Path.Direction.CW);
                 this.roundPath.close();
                 canvas.drawPath(this.roundPath, this.roundPaint);
             } else {
-                int i3 = this.orientation;
-                if (i3 == 90 || i3 == 270) {
+                int i = this.orientation;
+                if (i == 90 || i == 270) {
                     this.drawRect.set((float) ((-getHeight()) / 2), (float) ((-getWidth()) / 2), (float) (getHeight() / 2), (float) (getWidth() / 2));
                     this.matrix.setRectToRect(this.bitmapRect, this.drawRect, Matrix.ScaleToFit.FILL);
                     this.matrix.postRotate((float) this.orientation, 0.0f, 0.0f);
                     this.matrix.postTranslate((float) (getWidth() / 2), (float) (getHeight() / 2));
-                } else if (i3 == 180) {
+                } else if (i == 180) {
                     this.drawRect.set((float) ((-getWidth()) / 2), (float) ((-getHeight()) / 2), (float) (getWidth() / 2), (float) (getHeight() / 2));
                     this.matrix.setRectToRect(this.bitmapRect, this.drawRect, Matrix.ScaleToFit.FILL);
                     this.matrix.postRotate((float) this.orientation, 0.0f, 0.0f);
@@ -211,62 +205,60 @@ public class ClippingImageView extends View {
         }
     }
 
-    public void setClipBottom(int i) {
-        this.clipBottom = i;
+    public void setClipBottom(int value) {
+        this.clipBottom = value;
         invalidate();
     }
 
-    public void setClipHorizontal(int i) {
-        this.clipRight = i;
-        this.clipLeft = i;
+    public void setClipHorizontal(int value) {
+        this.clipRight = value;
+        this.clipLeft = value;
         invalidate();
     }
 
-    public void setClipLeft(int i) {
-        this.clipLeft = i;
+    public void setClipLeft(int value) {
+        this.clipLeft = value;
         invalidate();
     }
 
-    public void setClipRight(int i) {
-        this.clipRight = i;
+    public void setClipRight(int value) {
+        this.clipRight = value;
         invalidate();
     }
 
-    public void setClipTop(int i) {
-        this.clipTop = i;
+    public void setClipTop(int value) {
+        this.clipTop = value;
         invalidate();
     }
 
-    public void setClipVertical(int i) {
-        this.clipBottom = i;
-        this.clipTop = i;
+    public void setClipVertical(int value) {
+        this.clipBottom = value;
+        this.clipTop = value;
         invalidate();
     }
 
-    public void setImageY(int i) {
-        this.imageY = i;
+    public void setImageY(int value) {
+        this.imageY = value;
     }
 
-    public void setImageX(int i) {
-        this.imageX = i;
+    public void setImageX(int value) {
+        this.imageX = value;
     }
 
-    public void setOrientation(int i) {
-        this.orientation = i;
+    public void setOrientation(int angle) {
+        this.orientation = angle;
     }
 
-    public void setImageBitmap(ImageReceiver.BitmapHolder bitmapHolder) {
-        ImageReceiver.BitmapHolder bitmapHolder2 = this.bmp;
-        if (bitmapHolder2 != null) {
-            bitmapHolder2.release();
+    public void setImageBitmap(ImageReceiver.BitmapHolder bitmap) {
+        ImageReceiver.BitmapHolder bitmapHolder = this.bmp;
+        if (bitmapHolder != null) {
+            bitmapHolder.release();
             this.bitmapShader = null;
         }
-        this.bmp = bitmapHolder;
-        if (!(bitmapHolder == null || bitmapHolder.bitmap == null)) {
-            this.bitmapRect.set(0.0f, 0.0f, (float) bitmapHolder.getWidth(), (float) bitmapHolder.getHeight());
-            Bitmap bitmap = this.bmp.bitmap;
-            Shader.TileMode tileMode = Shader.TileMode.CLAMP;
-            BitmapShader bitmapShader2 = new BitmapShader(bitmap, tileMode, tileMode);
+        this.bmp = bitmap;
+        if (!(bitmap == null || bitmap.bitmap == null)) {
+            this.bitmapRect.set(0.0f, 0.0f, (float) bitmap.getWidth(), (float) bitmap.getHeight());
+            BitmapShader bitmapShader2 = new BitmapShader(this.bmp.bitmap, Shader.TileMode.CLAMP, Shader.TileMode.CLAMP);
             this.bitmapShader = bitmapShader2;
             this.roundPaint.setShader(bitmapShader2);
         }
@@ -285,15 +277,15 @@ public class ClippingImageView extends View {
         return this.orientation;
     }
 
-    public void setRadius(int[] iArr) {
-        if (iArr == null) {
+    public void setRadius(int[] value) {
+        if (value == null) {
             this.needRadius = false;
             Arrays.fill(this.radius, 0);
             return;
         }
-        System.arraycopy(iArr, 0, this.radius, 0, iArr.length);
+        System.arraycopy(value, 0, this.radius, 0, value.length);
         this.needRadius = false;
-        for (int i : iArr) {
+        for (int i : value) {
             if (i != 0) {
                 this.needRadius = true;
                 return;

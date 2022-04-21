@@ -11,8 +11,8 @@ public interface Predicate<T> {
 
     /* renamed from: org.webrtc.Predicate$-CC  reason: invalid class name */
     public final /* synthetic */ class CC {
-        public static Predicate $default$or(Predicate _this, Predicate predicate) {
-            return new Predicate<T>(predicate) {
+        public static Predicate $default$or(Predicate _this, Predicate other) {
+            return new Predicate<T>(other) {
                 final /* synthetic */ Predicate val$other;
 
                 public /* synthetic */ Predicate and(Predicate predicate) {
@@ -31,14 +31,14 @@ public interface Predicate<T> {
                     this.val$other = r2;
                 }
 
-                public boolean test(T t) {
-                    return Predicate.this.test(t) || this.val$other.test(t);
+                public boolean test(T arg) {
+                    return Predicate.this.test(arg) || this.val$other.test(arg);
                 }
             };
         }
 
-        public static Predicate $default$and(Predicate _this, Predicate predicate) {
-            return new Predicate<T>(predicate) {
+        public static Predicate $default$and(Predicate _this, Predicate other) {
+            return new Predicate<T>(other) {
                 final /* synthetic */ Predicate val$other;
 
                 public /* synthetic */ Predicate and(Predicate predicate) {
@@ -57,8 +57,8 @@ public interface Predicate<T> {
                     this.val$other = r2;
                 }
 
-                public boolean test(T t) {
-                    return Predicate.this.test(t) && this.val$other.test(t);
+                public boolean test(T arg) {
+                    return Predicate.this.test(arg) && this.val$other.test(arg);
                 }
             };
         }
@@ -77,8 +77,8 @@ public interface Predicate<T> {
                     return CC.$default$or(this, predicate);
                 }
 
-                public boolean test(T t) {
-                    return !Predicate.this.test(t);
+                public boolean test(T arg) {
+                    return !Predicate.this.test(arg);
                 }
             };
         }

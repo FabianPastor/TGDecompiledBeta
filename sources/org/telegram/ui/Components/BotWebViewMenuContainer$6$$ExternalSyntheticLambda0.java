@@ -11,6 +11,6 @@ public final /* synthetic */ class BotWebViewMenuContainer$6$$ExternalSyntheticL
     }
 
     public final void onAnimationEnd(DynamicAnimation dynamicAnimation, boolean z, float f, float f2) {
-        this.f$0.lambda$onLayoutChange$0(dynamicAnimation, z, f, f2);
+        this.f$0.m3666xd1dae4c3(dynamicAnimation, z, f, f2);
     }
 }

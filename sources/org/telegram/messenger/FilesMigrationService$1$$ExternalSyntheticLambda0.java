@@ -10,6 +10,6 @@ public final /* synthetic */ class FilesMigrationService$1$$ExternalSyntheticLam
     }
 
     public final void run() {
-        this.f$0.lambda$run$0();
+        this.f$0.m606lambda$run$0$orgtelegrammessengerFilesMigrationService$1();
     }
 }

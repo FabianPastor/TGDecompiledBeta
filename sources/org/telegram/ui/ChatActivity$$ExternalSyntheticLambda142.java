@@ -1,13 +1,16 @@
 package org.telegram.ui;
 
-public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda142 implements Runnable {
-    public final /* synthetic */ ChatActivity f$0;
+import org.telegram.ui.Components.PopupSwipeBackLayout;
+import org.telegram.ui.Components.ReactionsContainerLayout;
 
-    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda142(ChatActivity chatActivity) {
-        this.f$0 = chatActivity;
+public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda142 implements PopupSwipeBackLayout.OnSwipeBackProgressListener {
+    public final /* synthetic */ ReactionsContainerLayout f$0;
+
+    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda142(ReactionsContainerLayout reactionsContainerLayout) {
+        this.f$0 = reactionsContainerLayout;
     }
 
-    public final void run() {
-        this.f$0.lambda$didReceivedNotification$114();
+    public final void onSwipeBackProgress(PopupSwipeBackLayout popupSwipeBackLayout, float f, float f2) {
+        ChatActivity.lambda$createMenu$169(this.f$0, popupSwipeBackLayout, f, f2);
     }
 }

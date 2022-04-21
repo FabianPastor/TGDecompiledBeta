@@ -1,23 +1,16 @@
 package org.telegram.messenger;
 
-import java.util.ArrayList;
+import org.telegram.tgnet.RequestDelegate;
+import org.telegram.tgnet.TLObject;
+import org.telegram.tgnet.TLRPC;
 
-public final /* synthetic */ class MediaDataController$$ExternalSyntheticLambda72 implements Runnable {
-    public final /* synthetic */ MediaDataController f$0;
-    public final /* synthetic */ ArrayList f$1;
-    public final /* synthetic */ ArrayList f$2;
-    public final /* synthetic */ ArrayList f$3;
-    public final /* synthetic */ ArrayList f$4;
+public final /* synthetic */ class MediaDataController$$ExternalSyntheticLambda72 implements RequestDelegate {
+    public static final /* synthetic */ MediaDataController$$ExternalSyntheticLambda72 INSTANCE = new MediaDataController$$ExternalSyntheticLambda72();
 
-    public /* synthetic */ MediaDataController$$ExternalSyntheticLambda72(MediaDataController mediaDataController, ArrayList arrayList, ArrayList arrayList2, ArrayList arrayList3, ArrayList arrayList4) {
-        this.f$0 = mediaDataController;
-        this.f$1 = arrayList;
-        this.f$2 = arrayList2;
-        this.f$3 = arrayList3;
-        this.f$4 = arrayList4;
+    private /* synthetic */ MediaDataController$$ExternalSyntheticLambda72() {
     }
 
-    public final void run() {
-        this.f$0.lambda$loadHints$96(this.f$1, this.f$2, this.f$3, this.f$4);
+    public final void run(TLObject tLObject, TLRPC.TL_error tL_error) {
+        MediaDataController.lambda$saveDraft$138(tLObject, tL_error);
     }
 }

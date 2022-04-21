@@ -11,6 +11,6 @@ public final /* synthetic */ class PrivacyUsersActivity$ListAdapter$$ExternalSyn
     }
 
     public final boolean onOptionsButtonCheck(ManageChatUserCell manageChatUserCell, boolean z) {
-        return this.f$0.lambda$onCreateViewHolder$0(manageChatUserCell, z);
+        return this.f$0.m3034xd7d3d381(manageChatUserCell, z);
     }
 }

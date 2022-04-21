@@ -1,26 +1,23 @@
 package org.telegram.messenger;
 
-import java.util.ArrayList;
-import org.telegram.messenger.MessagesStorage;
+import org.telegram.tgnet.TLRPC;
 
 public final /* synthetic */ class SendMessagesHelper$$ExternalSyntheticLambda29 implements Runnable {
     public final /* synthetic */ SendMessagesHelper f$0;
-    public final /* synthetic */ String f$1;
-    public final /* synthetic */ String f$2;
-    public final /* synthetic */ String f$3;
-    public final /* synthetic */ ArrayList f$4;
-    public final /* synthetic */ MessagesStorage.StringCallback f$5;
+    public final /* synthetic */ MessageObject f$1;
+    public final /* synthetic */ TLRPC.Message f$2;
+    public final /* synthetic */ int f$3;
+    public final /* synthetic */ int f$4;
 
-    public /* synthetic */ SendMessagesHelper$$ExternalSyntheticLambda29(SendMessagesHelper sendMessagesHelper, String str, String str2, String str3, ArrayList arrayList, MessagesStorage.StringCallback stringCallback) {
+    public /* synthetic */ SendMessagesHelper$$ExternalSyntheticLambda29(SendMessagesHelper sendMessagesHelper, MessageObject messageObject, TLRPC.Message message, int i, int i2) {
         this.f$0 = sendMessagesHelper;
-        this.f$1 = str;
-        this.f$2 = str2;
-        this.f$3 = str3;
-        this.f$4 = arrayList;
-        this.f$5 = stringCallback;
+        this.f$1 = messageObject;
+        this.f$2 = message;
+        this.f$3 = i;
+        this.f$4 = i2;
     }
 
     public final void run() {
-        this.f$0.lambda$prepareImportStickers$72(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5);
+        this.f$0.m483lambda$sendMessage$7$orgtelegrammessengerSendMessagesHelper(this.f$1, this.f$2, this.f$3, this.f$4);
     }
 }

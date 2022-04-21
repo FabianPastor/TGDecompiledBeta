@@ -14,6 +14,6 @@ public final /* synthetic */ class ForwardingPreviewView$$ExternalSyntheticLambd
     }
 
     public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-        this.f$0.lambda$updatePositions$8(this.f$1, this.f$2, valueAnimator);
+        this.f$0.m4015x83256e3b(this.f$1, this.f$2, valueAnimator);
     }
 }

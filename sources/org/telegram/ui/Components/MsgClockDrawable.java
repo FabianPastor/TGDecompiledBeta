@@ -17,13 +17,6 @@ public class MsgClockDrawable extends Drawable {
     private Paint paint;
     private long startTime;
 
-    public int getOpacity() {
-        return -2;
-    }
-
-    public void setColorFilter(ColorFilter colorFilter) {
-    }
-
     public MsgClockDrawable() {
         Paint paint2 = new Paint(1);
         this.paint = paint2;
@@ -34,26 +27,28 @@ public class MsgClockDrawable extends Drawable {
     }
 
     public void draw(Canvas canvas) {
+        Canvas canvas2 = canvas;
         Rect bounds = getBounds();
-        canvas.drawCircle((float) bounds.centerX(), (float) bounds.centerY(), (float) ((Math.min(bounds.width(), bounds.height()) >> 1) - AndroidUtilities.dp(0.5f)), this.paint);
-        long currentTimeMillis = System.currentTimeMillis();
+        canvas2.drawCircle((float) bounds.centerX(), (float) bounds.centerY(), (float) ((Math.min(bounds.width(), bounds.height()) >> 1) - AndroidUtilities.dp(0.5f)), this.paint);
+        long currentTime = System.currentTimeMillis();
+        float rotateHourTime = 1500.0f * 3.0f;
         canvas.save();
-        canvas.rotate(((((float) (currentTimeMillis - this.startTime)) % 1500.0f) * 360.0f) / 1500.0f, (float) bounds.centerX(), (float) bounds.centerY());
+        canvas2.rotate(((((float) (currentTime - this.startTime)) % 1500.0f) * 360.0f) / 1500.0f, (float) bounds.centerX(), (float) bounds.centerY());
         canvas.drawLine((float) bounds.centerX(), (float) bounds.centerY(), (float) bounds.centerX(), (float) (bounds.centerY() - AndroidUtilities.dp(3.0f)), this.paint);
         canvas.restore();
         canvas.save();
-        canvas.rotate(((((float) (currentTimeMillis - this.startTime)) % 4500.0f) * 360.0f) / 4500.0f, (float) bounds.centerX(), (float) bounds.centerY());
+        canvas2.rotate(((((float) (currentTime - this.startTime)) % rotateHourTime) * 360.0f) / rotateHourTime, (float) bounds.centerX(), (float) bounds.centerY());
         canvas.drawLine((float) bounds.centerX(), (float) bounds.centerY(), (float) (bounds.centerX() + AndroidUtilities.dp(2.3f)), (float) bounds.centerY(), this.paint);
         canvas.restore();
     }
 
-    public void setColor(int i) {
-        if (i != this.color) {
-            int alpha2 = Color.alpha(i);
+    public void setColor(int color2) {
+        if (color2 != this.color) {
+            int alpha2 = Color.alpha(color2);
             this.colorAlpha = alpha2;
-            this.paint.setColor(ColorUtils.setAlphaComponent(i, (int) (((float) this.alpha) * (((float) alpha2) / 255.0f))));
+            this.paint.setColor(ColorUtils.setAlphaComponent(color2, (int) (((float) this.alpha) * (((float) alpha2) / 255.0f))));
         }
-        this.color = i;
+        this.color = color2;
     }
 
     public int getIntrinsicHeight() {
@@ -71,15 +66,22 @@ public class MsgClockDrawable extends Drawable {
         }
     }
 
+    public void setColorFilter(ColorFilter colorFilter) {
+    }
+
+    public int getOpacity() {
+        return -2;
+    }
+
     public Drawable.ConstantState getConstantState() {
         if (this.constantState == null) {
-            this.constantState = new Drawable.ConstantState(this) {
-                public int getChangingConfigurations() {
-                    return 0;
-                }
-
+            this.constantState = new Drawable.ConstantState() {
                 public Drawable newDrawable() {
                     return new MsgClockDrawable();
+                }
+
+                public int getChangingConfigurations() {
+                    return 0;
                 }
             };
         }

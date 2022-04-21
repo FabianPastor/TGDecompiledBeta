@@ -15,12 +15,12 @@ import org.telegram.ui.Components.AnimationProperties;
 
 public class AnimatedNumberLayout {
     public static final Property<AnimatedNumberLayout, Float> PROGRESS = new AnimationProperties.FloatProperty<AnimatedNumberLayout>("progress") {
-        public void setValue(AnimatedNumberLayout animatedNumberLayout, float f) {
-            animatedNumberLayout.setProgress(f);
+        public void setValue(AnimatedNumberLayout object, float value) {
+            object.setProgress(value);
         }
 
-        public Float get(AnimatedNumberLayout animatedNumberLayout) {
-            return Float.valueOf(animatedNumberLayout.progress);
+        public Float get(AnimatedNumberLayout object) {
+            return Float.valueOf(object.progress);
         }
     };
     /* access modifiers changed from: private */
@@ -34,31 +34,35 @@ public class AnimatedNumberLayout {
     public float progress = 0.0f;
     private final TextPaint textPaint;
 
-    public AnimatedNumberLayout(View view, TextPaint textPaint2) {
-        this.textPaint = textPaint2;
-        this.parentView = view;
+    public AnimatedNumberLayout(View parent, TextPaint paint) {
+        this.textPaint = paint;
+        this.parentView = parent;
     }
 
     /* access modifiers changed from: private */
-    public void setProgress(float f) {
-        if (this.progress != f) {
-            this.progress = f;
+    public void setProgress(float value) {
+        if (this.progress != value) {
+            this.progress = value;
             this.parentView.invalidate();
         }
     }
 
-    public int getWidth() {
-        int size = this.letters.size();
-        float f = 0.0f;
-        for (int i = 0; i < size; i++) {
-            f += this.letters.get(i).getLineWidth(0);
-        }
-        return (int) Math.ceil((double) f);
+    private float getProgress() {
+        return this.progress;
     }
 
-    public void setNumber(int i, boolean z) {
-        int i2 = i;
-        if (this.currentNumber != i2 || this.letters.isEmpty()) {
+    public int getWidth() {
+        float width = 0.0f;
+        int count = this.letters.size();
+        for (int a = 0; a < count; a++) {
+            width += this.letters.get(a).getLineWidth(0);
+        }
+        return (int) Math.ceil((double) width);
+    }
+
+    public void setNumber(int number, boolean animated) {
+        int i = number;
+        if (this.currentNumber != i || this.letters.isEmpty()) {
             ObjectAnimator objectAnimator = this.animator;
             if (objectAnimator != null) {
                 objectAnimator.cancel();
@@ -67,36 +71,35 @@ public class AnimatedNumberLayout {
             this.oldLetters.clear();
             this.oldLetters.addAll(this.letters);
             this.letters.clear();
-            Locale locale = Locale.US;
-            String format = String.format(locale, "%d", new Object[]{Integer.valueOf(this.currentNumber)});
-            String format2 = String.format(locale, "%d", new Object[]{Integer.valueOf(i)});
-            boolean z2 = i2 > this.currentNumber;
-            this.currentNumber = i2;
+            String oldText = String.format(Locale.US, "%d", new Object[]{Integer.valueOf(this.currentNumber)});
+            String text = String.format(Locale.US, "%d", new Object[]{Integer.valueOf(number)});
+            boolean forwardAnimation = i > this.currentNumber;
+            this.currentNumber = i;
             this.progress = 0.0f;
-            int i3 = 0;
-            while (i3 < format2.length()) {
-                int i4 = i3 + 1;
-                String substring = format2.substring(i3, i4);
-                String substring2 = (this.oldLetters.isEmpty() || i3 >= format.length()) ? null : format.substring(i3, i4);
-                if (substring2 == null || !substring2.equals(substring)) {
+            int a = 0;
+            while (a < text.length()) {
+                String ch = text.substring(a, a + 1);
+                String oldCh = (this.oldLetters.isEmpty() || a >= oldText.length()) ? null : oldText.substring(a, a + 1);
+                if (oldCh == null || !oldCh.equals(ch)) {
                     TextPaint textPaint2 = this.textPaint;
-                    this.letters.add(new StaticLayout(substring, textPaint2, (int) Math.ceil((double) textPaint2.measureText(substring)), Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false));
+                    String str = oldCh;
+                    this.letters.add(new StaticLayout(ch, textPaint2, (int) Math.ceil((double) textPaint2.measureText(ch)), Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false));
                 } else {
-                    this.letters.add(this.oldLetters.get(i3));
-                    this.oldLetters.set(i3, (Object) null);
+                    this.letters.add(this.oldLetters.get(a));
+                    this.oldLetters.set(a, (Object) null);
                 }
-                i3 = i4;
+                a++;
             }
-            if (z && !this.oldLetters.isEmpty()) {
+            if (animated && !this.oldLetters.isEmpty()) {
                 Property<AnimatedNumberLayout, Float> property = PROGRESS;
                 float[] fArr = new float[2];
-                fArr[0] = z2 ? -1.0f : 1.0f;
+                fArr[0] = forwardAnimation ? -1.0f : 1.0f;
                 fArr[1] = 0.0f;
                 ObjectAnimator ofFloat = ObjectAnimator.ofFloat(this, property, fArr);
                 this.animator = ofFloat;
                 ofFloat.setDuration(150);
                 this.animator.addListener(new AnimatorListenerAdapter() {
-                    public void onAnimationEnd(Animator animator) {
+                    public void onAnimationEnd(Animator animation) {
                         ObjectAnimator unused = AnimatedNumberLayout.this.animator = null;
                         AnimatedNumberLayout.this.oldLetters.clear();
                     }
@@ -110,58 +113,57 @@ public class AnimatedNumberLayout {
     public void draw(Canvas canvas) {
         if (!this.letters.isEmpty()) {
             float height = (float) this.letters.get(0).getHeight();
-            int max = Math.max(this.letters.size(), this.oldLetters.size());
+            int count = Math.max(this.letters.size(), this.oldLetters.size());
             canvas.save();
-            int alpha = this.textPaint.getAlpha();
-            int i = 0;
-            while (i < max) {
+            int currentAlpha = this.textPaint.getAlpha();
+            int a = 0;
+            while (a < count) {
                 canvas.save();
-                StaticLayout staticLayout = null;
-                StaticLayout staticLayout2 = i < this.oldLetters.size() ? this.oldLetters.get(i) : null;
-                if (i < this.letters.size()) {
-                    staticLayout = this.letters.get(i);
+                StaticLayout layout = null;
+                StaticLayout old = a < this.oldLetters.size() ? this.oldLetters.get(a) : null;
+                if (a < this.letters.size()) {
+                    layout = this.letters.get(a);
                 }
                 float f = this.progress;
                 if (f > 0.0f) {
-                    if (staticLayout2 != null) {
-                        float f2 = (float) alpha;
-                        this.textPaint.setAlpha((int) (f * f2));
+                    if (old != null) {
+                        this.textPaint.setAlpha((int) (((float) currentAlpha) * f));
                         canvas.save();
                         canvas.translate(0.0f, (this.progress - 1.0f) * height);
-                        staticLayout2.draw(canvas);
+                        old.draw(canvas);
                         canvas.restore();
-                        if (staticLayout != null) {
-                            this.textPaint.setAlpha((int) (f2 * (1.0f - this.progress)));
+                        if (layout != null) {
+                            this.textPaint.setAlpha((int) (((float) currentAlpha) * (1.0f - this.progress)));
                             canvas.translate(0.0f, this.progress * height);
                         }
                     } else {
-                        this.textPaint.setAlpha(alpha);
+                        this.textPaint.setAlpha(currentAlpha);
                     }
                 } else if (f < 0.0f) {
-                    if (staticLayout2 != null) {
-                        this.textPaint.setAlpha((int) (((float) alpha) * (-f)));
+                    if (old != null) {
+                        this.textPaint.setAlpha((int) (((float) currentAlpha) * (-f)));
                         canvas.save();
                         canvas.translate(0.0f, (this.progress + 1.0f) * height);
-                        staticLayout2.draw(canvas);
+                        old.draw(canvas);
                         canvas.restore();
                     }
-                    if (staticLayout != null) {
-                        if (i == max - 1 || staticLayout2 != null) {
-                            this.textPaint.setAlpha((int) (((float) alpha) * (this.progress + 1.0f)));
+                    if (layout != null) {
+                        if (a == count - 1 || old != null) {
+                            this.textPaint.setAlpha((int) (((float) currentAlpha) * (this.progress + 1.0f)));
                             canvas.translate(0.0f, this.progress * height);
                         } else {
-                            this.textPaint.setAlpha(alpha);
+                            this.textPaint.setAlpha(currentAlpha);
                         }
                     }
-                } else if (staticLayout != null) {
-                    this.textPaint.setAlpha(alpha);
+                } else if (layout != null) {
+                    this.textPaint.setAlpha(currentAlpha);
                 }
-                if (staticLayout != null) {
-                    staticLayout.draw(canvas);
+                if (layout != null) {
+                    layout.draw(canvas);
                 }
                 canvas.restore();
-                canvas.translate(staticLayout != null ? staticLayout.getLineWidth(0) : staticLayout2.getLineWidth(0), 0.0f);
-                i++;
+                canvas.translate(layout != null ? layout.getLineWidth(0) : old.getLineWidth(0), 0.0f);
+                a++;
             }
             canvas.restore();
         }

@@ -1,15 +1,16 @@
 package org.telegram.ui;
 
-import org.telegram.ui.ActionBar.AlertDialog;
+import android.view.View;
+import org.telegram.ui.ActionBar.ActionBarPopupWindow;
 
-public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda194 implements Runnable {
-    public final /* synthetic */ AlertDialog[] f$0;
+public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda194 implements View.OnClickListener {
+    public final /* synthetic */ ActionBarPopupWindow.ActionBarPopupWindowLayout f$0;
 
-    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda194(AlertDialog[] alertDialogArr) {
-        this.f$0 = alertDialogArr;
+    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda194(ActionBarPopupWindow.ActionBarPopupWindowLayout actionBarPopupWindowLayout) {
+        this.f$0 = actionBarPopupWindowLayout;
     }
 
-    public final void run() {
-        ChatActivity.lambda$processSelectedOption$191(this.f$0);
+    public final void onClick(View view) {
+        this.f$0.getSwipeBack().closeForeground();
     }
 }

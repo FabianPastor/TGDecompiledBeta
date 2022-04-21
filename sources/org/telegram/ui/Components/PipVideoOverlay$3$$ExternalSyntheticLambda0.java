@@ -10,6 +10,6 @@ public final /* synthetic */ class PipVideoOverlay$3$$ExternalSyntheticLambda0 i
     }
 
     public final void run() {
-        this.f$0.lambda$onScale$0();
+        this.f$0.m4235lambda$onScale$0$orgtelegramuiComponentsPipVideoOverlay$3();
     }
 }

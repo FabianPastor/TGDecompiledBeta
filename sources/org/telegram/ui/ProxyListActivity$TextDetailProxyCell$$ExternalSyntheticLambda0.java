@@ -11,6 +11,6 @@ public final /* synthetic */ class ProxyListActivity$TextDetailProxyCell$$Extern
     }
 
     public final void onClick(View view) {
-        this.f$0.lambda$new$0(view);
+        this.f$0.m3187xe9540bfe(view);
     }
 }

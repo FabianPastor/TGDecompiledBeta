@@ -1,13 +1,23 @@
 package org.telegram.ui;
 
-public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda121 implements Runnable {
-    public final /* synthetic */ ChatActivity f$0;
+import org.telegram.tgnet.RequestDelegate;
+import org.telegram.tgnet.TLObject;
+import org.telegram.tgnet.TLRPC;
 
-    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda121(ChatActivity chatActivity) {
+public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda121 implements RequestDelegate {
+    public final /* synthetic */ ChatActivity f$0;
+    public final /* synthetic */ String f$1;
+    public final /* synthetic */ TLRPC.TL_messages_requestUrlAuth f$2;
+    public final /* synthetic */ boolean f$3;
+
+    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda121(ChatActivity chatActivity, String str, TLRPC.TL_messages_requestUrlAuth tL_messages_requestUrlAuth, boolean z) {
         this.f$0 = chatActivity;
+        this.f$1 = str;
+        this.f$2 = tL_messages_requestUrlAuth;
+        this.f$3 = z;
     }
 
-    public final void run() {
-        this.f$0.lambda$onResume$143();
+    public final void run(TLObject tLObject, TLRPC.TL_error tL_error) {
+        this.f$0.m1825lambda$showRequestUrlAlert$218$orgtelegramuiChatActivity(this.f$1, this.f$2, this.f$3, tLObject, tL_error);
     }
 }

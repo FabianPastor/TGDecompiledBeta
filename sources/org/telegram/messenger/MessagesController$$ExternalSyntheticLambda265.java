@@ -2,23 +2,15 @@ package org.telegram.messenger;
 
 import org.telegram.tgnet.RequestDelegate;
 import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC$TL_error;
-import org.telegram.tgnet.TLRPC$TL_help_promoData;
+import org.telegram.tgnet.TLRPC;
 
 public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda265 implements RequestDelegate {
-    public final /* synthetic */ MessagesController f$0;
-    public final /* synthetic */ int f$1;
-    public final /* synthetic */ TLRPC$TL_help_promoData f$2;
-    public final /* synthetic */ long f$3;
+    public static final /* synthetic */ MessagesController$$ExternalSyntheticLambda265 INSTANCE = new MessagesController$$ExternalSyntheticLambda265();
 
-    public /* synthetic */ MessagesController$$ExternalSyntheticLambda265(MessagesController messagesController, int i, TLRPC$TL_help_promoData tLRPC$TL_help_promoData, long j) {
-        this.f$0 = messagesController;
-        this.f$1 = i;
-        this.f$2 = tLRPC$TL_help_promoData;
-        this.f$3 = j;
+    private /* synthetic */ MessagesController$$ExternalSyntheticLambda265() {
     }
 
-    public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        this.f$0.lambda$checkPromoInfoInternal$134(this.f$1, this.f$2, this.f$3, tLObject, tLRPC$TL_error);
+    public final void run(TLObject tLObject, TLRPC.TL_error tL_error) {
+        MessagesController.lambda$hidePromoDialog$105(tLObject, tL_error);
     }
 }

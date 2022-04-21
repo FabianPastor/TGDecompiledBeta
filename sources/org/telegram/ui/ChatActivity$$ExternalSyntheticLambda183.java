@@ -1,17 +1,16 @@
 package org.telegram.ui;
 
-import org.telegram.tgnet.TLRPC$TL_messages_sendScheduledMessages;
+import android.content.DialogInterface;
+import org.telegram.ui.Cells.ChatMessageCell;
 
-public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda183 implements Runnable {
-    public final /* synthetic */ ChatActivity f$0;
-    public final /* synthetic */ TLRPC$TL_messages_sendScheduledMessages f$1;
+public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda183 implements DialogInterface.OnDismissListener {
+    public final /* synthetic */ ChatMessageCell f$0;
 
-    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda183(ChatActivity chatActivity, TLRPC$TL_messages_sendScheduledMessages tLRPC$TL_messages_sendScheduledMessages) {
-        this.f$0 = chatActivity;
-        this.f$1 = tLRPC$TL_messages_sendScheduledMessages;
+    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda183(ChatMessageCell chatMessageCell) {
+        this.f$0 = chatMessageCell;
     }
 
-    public final void run() {
-        this.f$0.lambda$processSelectedOption$201(this.f$1);
+    public final void onDismiss(DialogInterface dialogInterface) {
+        this.f$0.resetPressedLink(-1);
     }
 }

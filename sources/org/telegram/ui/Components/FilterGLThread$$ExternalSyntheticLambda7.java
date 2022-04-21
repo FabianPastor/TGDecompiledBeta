@@ -15,6 +15,6 @@ public final /* synthetic */ class FilterGLThread$$ExternalSyntheticLambda7 impl
     }
 
     public final void run() {
-        this.f$0.lambda$getTexture$4(this.f$1, this.f$2);
+        this.f$0.m3993lambda$getTexture$4$orgtelegramuiComponentsFilterGLThread(this.f$1, this.f$2);
     }
 }

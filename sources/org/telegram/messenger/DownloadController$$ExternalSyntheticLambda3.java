@@ -1,17 +1,17 @@
 package org.telegram.messenger;
 
-import java.util.ArrayList;
+import org.telegram.tgnet.RequestDelegate;
+import org.telegram.tgnet.TLObject;
+import org.telegram.tgnet.TLRPC;
 
-public final /* synthetic */ class DownloadController$$ExternalSyntheticLambda3 implements Runnable {
+public final /* synthetic */ class DownloadController$$ExternalSyntheticLambda3 implements RequestDelegate {
     public final /* synthetic */ DownloadController f$0;
-    public final /* synthetic */ ArrayList f$1;
 
-    public /* synthetic */ DownloadController$$ExternalSyntheticLambda3(DownloadController downloadController, ArrayList arrayList) {
+    public /* synthetic */ DownloadController$$ExternalSyntheticLambda3(DownloadController downloadController) {
         this.f$0 = downloadController;
-        this.f$1 = arrayList;
     }
 
-    public final void run() {
-        this.f$0.lambda$deleteRecentFiles$13(this.f$1);
+    public final void run(TLObject tLObject, TLRPC.TL_error tL_error) {
+        this.f$0.m58xc6var_CLASSNAME(tLObject, tL_error);
     }
 }

@@ -2,24 +2,20 @@ package org.telegram.messenger;
 
 import org.telegram.tgnet.RequestDelegate;
 import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC$TL_error;
+import org.telegram.tgnet.TLRPC;
 
 public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda256 implements RequestDelegate {
     public final /* synthetic */ MessagesController f$0;
-    public final /* synthetic */ int f$1;
-    public final /* synthetic */ int f$2;
-    public final /* synthetic */ int f$3;
-    public final /* synthetic */ int f$4;
+    public final /* synthetic */ boolean f$1;
+    public final /* synthetic */ TLRPC.TL_contacts_getBlocked f$2;
 
-    public /* synthetic */ MessagesController$$ExternalSyntheticLambda256(MessagesController messagesController, int i, int i2, int i3, int i4) {
+    public /* synthetic */ MessagesController$$ExternalSyntheticLambda256(MessagesController messagesController, boolean z, TLRPC.TL_contacts_getBlocked tL_contacts_getBlocked) {
         this.f$0 = messagesController;
-        this.f$1 = i;
-        this.f$2 = i2;
-        this.f$3 = i3;
-        this.f$4 = i4;
+        this.f$1 = z;
+        this.f$2 = tL_contacts_getBlocked;
     }
 
-    public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        this.f$0.lambda$resetDialogs$166(this.f$1, this.f$2, this.f$3, this.f$4, tLObject, tLRPC$TL_error);
+    public final void run(TLObject tLObject, TLRPC.TL_error tL_error) {
+        this.f$0.m208x8c4d8766(this.f$1, this.f$2, tLObject, tL_error);
     }
 }

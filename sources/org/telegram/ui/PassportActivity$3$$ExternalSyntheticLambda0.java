@@ -13,6 +13,6 @@ public final /* synthetic */ class PassportActivity$3$$ExternalSyntheticLambda0 
     }
 
     public final void onClick(DialogInterface dialogInterface, int i) {
-        this.f$0.lambda$onIdentityDone$1(this.f$1, dialogInterface, i);
+        this.f$0.m2772lambda$onIdentityDone$1$orgtelegramuiPassportActivity$3(this.f$1, dialogInterface, i);
     }
 }

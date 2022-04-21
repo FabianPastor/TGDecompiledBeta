@@ -11,24 +11,6 @@ public class MapPlaceholderDrawable extends Drawable {
     private Paint linePaint;
     private Paint paint = new Paint();
 
-    public int getIntrinsicHeight() {
-        return 0;
-    }
-
-    public int getIntrinsicWidth() {
-        return 0;
-    }
-
-    public int getOpacity() {
-        return 0;
-    }
-
-    public void setAlpha(int i) {
-    }
-
-    public void setColorFilter(ColorFilter colorFilter) {
-    }
-
     public MapPlaceholderDrawable() {
         Paint paint2 = new Paint();
         this.linePaint = paint2;
@@ -44,22 +26,34 @@ public class MapPlaceholderDrawable extends Drawable {
 
     public void draw(Canvas canvas) {
         canvas.drawRect(getBounds(), this.paint);
-        int dp = AndroidUtilities.dp(9.0f);
-        int width = getBounds().width() / dp;
-        int height = getBounds().height() / dp;
-        int i = getBounds().left;
-        int i2 = getBounds().top;
-        int i3 = 0;
-        int i4 = 0;
-        while (i4 < width) {
-            i4++;
-            float f = (float) ((dp * i4) + i);
-            canvas.drawLine(f, (float) i2, f, (float) (getBounds().height() + i2), this.linePaint);
+        int gap = AndroidUtilities.dp(9.0f);
+        int xcount = getBounds().width() / gap;
+        int ycount = getBounds().height() / gap;
+        int x = getBounds().left;
+        int y = getBounds().top;
+        for (int a = 0; a < xcount; a++) {
+            canvas.drawLine((float) (((a + 1) * gap) + x), (float) y, (float) (((a + 1) * gap) + x), (float) (getBounds().height() + y), this.linePaint);
         }
-        while (i3 < height) {
-            i3++;
-            float f2 = (float) ((dp * i3) + i2);
-            canvas.drawLine((float) i, f2, (float) (getBounds().width() + i), f2, this.linePaint);
+        for (int a2 = 0; a2 < ycount; a2++) {
+            canvas.drawLine((float) x, (float) (((a2 + 1) * gap) + y), (float) (getBounds().width() + x), (float) (((a2 + 1) * gap) + y), this.linePaint);
         }
+    }
+
+    public void setAlpha(int alpha) {
+    }
+
+    public void setColorFilter(ColorFilter cf) {
+    }
+
+    public int getOpacity() {
+        return 0;
+    }
+
+    public int getIntrinsicWidth() {
+        return 0;
+    }
+
+    public int getIntrinsicHeight() {
+        return 0;
     }
 }

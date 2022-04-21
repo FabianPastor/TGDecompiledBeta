@@ -2,12 +2,12 @@ package org.webrtc;
 
 public class VideoSource extends MediaSource {
     private final CapturerObserver capturerObserver = new CapturerObserver() {
-        public void onCapturerStarted(boolean z) {
-            VideoSource.this.nativeAndroidVideoTrackSource.setState(z);
+        public void onCapturerStarted(boolean success) {
+            VideoSource.this.nativeAndroidVideoTrackSource.setState(success);
             synchronized (VideoSource.this.videoProcessorLock) {
-                boolean unused = VideoSource.this.isCapturerRunning = z;
+                boolean unused = VideoSource.this.isCapturerRunning = success;
                 if (VideoSource.this.videoProcessor != null) {
-                    VideoSource.this.videoProcessor.onCapturerStarted(z);
+                    VideoSource.this.videoProcessor.onCapturerStarted(success);
                 }
             }
         }
@@ -23,11 +23,11 @@ public class VideoSource extends MediaSource {
         }
 
         /* JADX WARNING: Code restructure failed: missing block: B:10:0x0029, code lost:
-            if (r4 == null) goto L_?;
+            if (r1 == null) goto L_?;
          */
         /* JADX WARNING: Code restructure failed: missing block: B:11:0x002b, code lost:
-            org.webrtc.VideoSource.access$000(r3.this$0).onFrameCaptured(r4);
-            r4.release();
+            org.webrtc.VideoSource.access$000(r3.this$0).onFrameCaptured(r1);
+            r1.release();
          */
         /* JADX WARNING: Code restructure failed: missing block: B:19:?, code lost:
             return;
@@ -36,7 +36,7 @@ public class VideoSource extends MediaSource {
             return;
          */
         /* JADX WARNING: Code restructure failed: missing block: B:9:0x0025, code lost:
-            r4 = org.webrtc.VideoProcessor.CC.applyFrameAdaptationParameters(r4, r0);
+            r1 = org.webrtc.VideoProcessor.CC.applyFrameAdaptationParameters(r4, r0);
          */
         /* Code decompiled incorrectly, please refer to instructions dump. */
         public void onFrameCaptured(org.webrtc.VideoFrame r4) {
@@ -58,18 +58,18 @@ public class VideoSource extends MediaSource {
                 return
             L_0x0024:
                 monitor-exit(r1)     // Catch:{ all -> 0x0038 }
-                org.webrtc.VideoFrame r4 = org.webrtc.VideoProcessor.CC.applyFrameAdaptationParameters(r4, r0)
-                if (r4 == 0) goto L_0x0037
-                org.webrtc.VideoSource r0 = org.webrtc.VideoSource.this
-                org.webrtc.NativeAndroidVideoTrackSource r0 = r0.nativeAndroidVideoTrackSource
-                r0.onFrameCaptured(r4)
-                r4.release()
+                org.webrtc.VideoFrame r1 = org.webrtc.VideoProcessor.CC.applyFrameAdaptationParameters(r4, r0)
+                if (r1 == 0) goto L_0x0037
+                org.webrtc.VideoSource r2 = org.webrtc.VideoSource.this
+                org.webrtc.NativeAndroidVideoTrackSource r2 = r2.nativeAndroidVideoTrackSource
+                r2.onFrameCaptured(r1)
+                r1.release()
             L_0x0037:
                 return
             L_0x0038:
-                r4 = move-exception
+                r2 = move-exception
                 monitor-exit(r1)     // Catch:{ all -> 0x0038 }
-                throw r4
+                throw r2
             */
             throw new UnsupportedOperationException("Method not decompiled: org.webrtc.VideoSource.AnonymousClass1.onFrameCaptured(org.webrtc.VideoFrame):void");
         }
@@ -88,62 +88,62 @@ public class VideoSource extends MediaSource {
         public final int height;
         public final int width;
 
-        public AspectRatio(int i, int i2) {
-            this.width = i;
-            this.height = i2;
+        public AspectRatio(int width2, int height2) {
+            this.width = width2;
+            this.height = height2;
         }
     }
 
-    public VideoSource(long j) {
-        super(j);
-        this.nativeAndroidVideoTrackSource = new NativeAndroidVideoTrackSource(j);
+    public VideoSource(long nativeSource) {
+        super(nativeSource);
+        this.nativeAndroidVideoTrackSource = new NativeAndroidVideoTrackSource(nativeSource);
     }
 
-    public void adaptOutputFormat(int i, int i2, int i3) {
-        int max = Math.max(i, i2);
-        int min = Math.min(i, i2);
-        adaptOutputFormat(max, min, min, max, i3);
+    public void adaptOutputFormat(int width, int height, int fps) {
+        int maxSide = Math.max(width, height);
+        int minSide = Math.min(width, height);
+        adaptOutputFormat(maxSide, minSide, minSide, maxSide, fps);
     }
 
-    public void adaptOutputFormat(int i, int i2, int i3, int i4, int i5) {
-        adaptOutputFormat(new AspectRatio(i, i2), Integer.valueOf(i * i2), new AspectRatio(i3, i4), Integer.valueOf(i3 * i4), Integer.valueOf(i5));
+    public void adaptOutputFormat(int landscapeWidth, int landscapeHeight, int portraitWidth, int portraitHeight, int fps) {
+        adaptOutputFormat(new AspectRatio(landscapeWidth, landscapeHeight), Integer.valueOf(landscapeWidth * landscapeHeight), new AspectRatio(portraitWidth, portraitHeight), Integer.valueOf(portraitWidth * portraitHeight), Integer.valueOf(fps));
     }
 
-    public void adaptOutputFormat(AspectRatio aspectRatio, Integer num, AspectRatio aspectRatio2, Integer num2, Integer num3) {
-        this.nativeAndroidVideoTrackSource.adaptOutputFormat(aspectRatio, num, aspectRatio2, num2, num3);
+    public void adaptOutputFormat(AspectRatio targetLandscapeAspectRatio, Integer maxLandscapePixelCount, AspectRatio targetPortraitAspectRatio, Integer maxPortraitPixelCount, Integer maxFps) {
+        this.nativeAndroidVideoTrackSource.adaptOutputFormat(targetLandscapeAspectRatio, maxLandscapePixelCount, targetPortraitAspectRatio, maxPortraitPixelCount, maxFps);
     }
 
-    public void setIsScreencast(boolean z) {
-        this.nativeAndroidVideoTrackSource.setIsScreencast(z);
+    public void setIsScreencast(boolean isScreencast) {
+        this.nativeAndroidVideoTrackSource.setIsScreencast(isScreencast);
     }
 
-    public void setVideoProcessor(VideoProcessor videoProcessor2) {
+    public void setVideoProcessor(VideoProcessor newVideoProcessor) {
         synchronized (this.videoProcessorLock) {
-            VideoProcessor videoProcessor3 = this.videoProcessor;
-            if (videoProcessor3 != null) {
-                videoProcessor3.setSink((VideoSink) null);
+            VideoProcessor videoProcessor2 = this.videoProcessor;
+            if (videoProcessor2 != null) {
+                videoProcessor2.setSink((VideoSink) null);
                 if (this.isCapturerRunning) {
                     this.videoProcessor.onCapturerStopped();
                 }
             }
-            this.videoProcessor = videoProcessor2;
-            if (videoProcessor2 != null) {
-                videoProcessor2.setSink(new VideoSource$$ExternalSyntheticLambda1(this));
+            this.videoProcessor = newVideoProcessor;
+            if (newVideoProcessor != null) {
+                newVideoProcessor.setSink(new VideoSource$$ExternalSyntheticLambda1(this));
                 if (this.isCapturerRunning) {
-                    videoProcessor2.onCapturerStarted(true);
+                    newVideoProcessor.onCapturerStarted(true);
                 }
             }
         }
     }
 
-    /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$setVideoProcessor$0(VideoFrame videoFrame) {
-        this.nativeAndroidVideoTrackSource.onFrameCaptured(videoFrame);
+    /* renamed from: lambda$setVideoProcessor$0$org-webrtc-VideoSource  reason: not valid java name */
+    public /* synthetic */ void m4642lambda$setVideoProcessor$0$orgwebrtcVideoSource(VideoFrame frame) {
+        this.nativeAndroidVideoTrackSource.onFrameCaptured(frame);
     }
 
-    /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$setVideoProcessor$1(VideoFrame videoFrame) {
-        runWithReference(new VideoSource$$ExternalSyntheticLambda0(this, videoFrame));
+    /* renamed from: lambda$setVideoProcessor$1$org-webrtc-VideoSource  reason: not valid java name */
+    public /* synthetic */ void m4643lambda$setVideoProcessor$1$orgwebrtcVideoSource(VideoFrame frame) {
+        runWithReference(new VideoSource$$ExternalSyntheticLambda0(this, frame));
     }
 
     public CapturerObserver getCapturerObserver() {

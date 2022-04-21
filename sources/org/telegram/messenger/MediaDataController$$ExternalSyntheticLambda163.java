@@ -1,16 +1,17 @@
 package org.telegram.messenger;
 
-import org.telegram.tgnet.RequestDelegate;
-import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC$TL_error;
+import org.telegram.tgnet.TLRPC;
 
-public final /* synthetic */ class MediaDataController$$ExternalSyntheticLambda163 implements RequestDelegate {
-    public static final /* synthetic */ MediaDataController$$ExternalSyntheticLambda163 INSTANCE = new MediaDataController$$ExternalSyntheticLambda163();
+public final /* synthetic */ class MediaDataController$$ExternalSyntheticLambda163 implements Runnable {
+    public final /* synthetic */ MediaDataController f$0;
+    public final /* synthetic */ TLRPC.TL_messages_stickerSet f$1;
 
-    private /* synthetic */ MediaDataController$$ExternalSyntheticLambda163() {
+    public /* synthetic */ MediaDataController$$ExternalSyntheticLambda163(MediaDataController mediaDataController, TLRPC.TL_messages_stickerSet tL_messages_stickerSet) {
+        this.f$0 = mediaDataController;
+        this.f$1 = tL_messages_stickerSet;
     }
 
-    public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        MediaDataController.lambda$saveDraft$138(tLObject, tLRPC$TL_error);
+    public final void run() {
+        this.f$0.m813xddde01a4(this.f$1);
     }
 }

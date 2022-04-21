@@ -11,6 +11,6 @@ public final /* synthetic */ class ChannelCreateActivity$1$$ExternalSyntheticLam
     }
 
     public final void onCancel(DialogInterface dialogInterface) {
-        this.f$0.lambda$onItemClick$0(dialogInterface);
+        this.f$0.m1620lambda$onItemClick$0$orgtelegramuiChannelCreateActivity$1(dialogInterface);
     }
 }

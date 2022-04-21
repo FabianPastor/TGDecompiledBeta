@@ -10,6 +10,6 @@ public final /* synthetic */ class LanguageSelectActivity$$ExternalSyntheticLamb
     }
 
     public final void run() {
-        this.f$0.lambda$processSearch$6(this.f$1);
+        this.f$0.m2308lambda$processSearch$6$orgtelegramuiLanguageSelectActivity(this.f$1);
     }
 }

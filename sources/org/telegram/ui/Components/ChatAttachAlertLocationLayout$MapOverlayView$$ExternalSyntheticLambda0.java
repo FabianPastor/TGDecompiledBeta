@@ -13,6 +13,6 @@ public final /* synthetic */ class ChatAttachAlertLocationLayout$MapOverlayView$
     }
 
     public final void onClick(View view) {
-        this.f$0.lambda$addInfoView$1(this.f$1, view);
+        this.f$0.m3864x73b338e0(this.f$1, view);
     }
 }

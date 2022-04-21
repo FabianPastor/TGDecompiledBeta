@@ -10,6 +10,6 @@ public final /* synthetic */ class HardwareVideoEncoder$$ExternalSyntheticLambda
     }
 
     public final void run() {
-        this.f$0.lambda$deliverEncodedImage$0(this.f$1);
+        this.f$0.m4621lambda$deliverEncodedImage$0$orgwebrtcHardwareVideoEncoder(this.f$1);
     }
 }

@@ -1,15 +1,15 @@
 package org.telegram.ui;
 
-import android.animation.ValueAnimator;
+import java.util.concurrent.atomic.AtomicReference;
 
-public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda10 implements ValueAnimator.AnimatorUpdateListener {
-    public final /* synthetic */ ChatActivity f$0;
+public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda10 implements Runnable {
+    public final /* synthetic */ AtomicReference f$0;
 
-    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda10(ChatActivity chatActivity) {
-        this.f$0 = chatActivity;
+    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda10(AtomicReference atomicReference) {
+        this.f$0 = atomicReference;
     }
 
-    public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-        this.f$0.lambda$updateTopPanel$140(valueAnimator);
+    public final void run() {
+        ChatActivity.lambda$createMenu$165(this.f$0);
     }
 }

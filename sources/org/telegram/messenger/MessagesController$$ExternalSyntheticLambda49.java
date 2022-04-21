@@ -1,22 +1,21 @@
 package org.telegram.messenger;
 
-import org.telegram.tgnet.TLRPC$TL_error;
-import org.telegram.tgnet.TLRPC$TL_messages_getReplies;
+import org.telegram.tgnet.TLRPC;
 
 public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda49 implements Runnable {
     public final /* synthetic */ MessagesController f$0;
-    public final /* synthetic */ int f$1;
-    public final /* synthetic */ TLRPC$TL_messages_getReplies f$2;
-    public final /* synthetic */ TLRPC$TL_error f$3;
+    public final /* synthetic */ TLRPC.Chat f$1;
+    public final /* synthetic */ boolean f$2;
+    public final /* synthetic */ int f$3;
 
-    public /* synthetic */ MessagesController$$ExternalSyntheticLambda49(MessagesController messagesController, int i, TLRPC$TL_messages_getReplies tLRPC$TL_messages_getReplies, TLRPC$TL_error tLRPC$TL_error) {
+    public /* synthetic */ MessagesController$$ExternalSyntheticLambda49(MessagesController messagesController, TLRPC.Chat chat, boolean z, int i) {
         this.f$0 = messagesController;
-        this.f$1 = i;
-        this.f$2 = tLRPC$TL_messages_getReplies;
-        this.f$3 = tLRPC$TL_error;
+        this.f$1 = chat;
+        this.f$2 = z;
+        this.f$3 = i;
     }
 
     public final void run() {
-        this.f$0.lambda$loadMessagesInternal$142(this.f$1, this.f$2, this.f$3);
+        this.f$0.m406x7d70da6(this.f$1, this.f$2, this.f$3);
     }
 }

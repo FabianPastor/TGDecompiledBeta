@@ -13,6 +13,6 @@ public final /* synthetic */ class SearchDownloadsContainer$$ExternalSyntheticLa
     }
 
     public final void onClick(View view) {
-        this.f$0.lambda$showSettingsDialog$7(this.f$1, view);
+        this.f$0.m4313x95a01173(this.f$1, view);
     }
 }

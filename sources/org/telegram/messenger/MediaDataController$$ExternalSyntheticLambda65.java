@@ -1,19 +1,19 @@
 package org.telegram.messenger;
 
-import java.util.ArrayList;
+import org.telegram.tgnet.RequestDelegate;
+import org.telegram.tgnet.TLObject;
+import org.telegram.tgnet.TLRPC;
 
-public final /* synthetic */ class MediaDataController$$ExternalSyntheticLambda65 implements Runnable {
+public final /* synthetic */ class MediaDataController$$ExternalSyntheticLambda65 implements RequestDelegate {
     public final /* synthetic */ MediaDataController f$0;
-    public final /* synthetic */ ArrayList f$1;
-    public final /* synthetic */ long f$2;
+    public final /* synthetic */ TLRPC.TL_messages_saveGif f$1;
 
-    public /* synthetic */ MediaDataController$$ExternalSyntheticLambda65(MediaDataController mediaDataController, ArrayList arrayList, long j) {
+    public /* synthetic */ MediaDataController$$ExternalSyntheticLambda65(MediaDataController mediaDataController, TLRPC.TL_messages_saveGif tL_messages_saveGif) {
         this.f$0 = mediaDataController;
-        this.f$1 = arrayList;
-        this.f$2 = j;
+        this.f$1 = tL_messages_saveGif;
     }
 
-    public final void run() {
-        this.f$0.lambda$clearBotKeyboard$143(this.f$1, this.f$2);
+    public final void run(TLObject tLObject, TLRPC.TL_error tL_error) {
+        this.f$0.m815x800332(this.f$1, tLObject, tL_error);
     }
 }

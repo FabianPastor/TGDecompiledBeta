@@ -10,6 +10,6 @@ public final /* synthetic */ class SizeNotifierFrameLayout$$ExternalSyntheticLam
     }
 
     public final void onOffsetsChanged(int i, int i2, float f) {
-        this.f$0.lambda$setBackgroundImage$0(i, i2, f);
+        this.f$0.m4393x49b6021f(i, i2, f);
     }
 }

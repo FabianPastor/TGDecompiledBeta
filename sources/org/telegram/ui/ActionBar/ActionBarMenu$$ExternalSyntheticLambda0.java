@@ -10,6 +10,6 @@ public final /* synthetic */ class ActionBarMenu$$ExternalSyntheticLambda0 imple
     }
 
     public final void onClick(View view) {
-        this.f$0.lambda$addItem$0(view);
+        this.f$0.m1247lambda$addItem$0$orgtelegramuiActionBarActionBarMenu(view);
     }
 }

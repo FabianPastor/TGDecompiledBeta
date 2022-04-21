@@ -1,20 +1,17 @@
 package org.telegram.ui;
 
-import android.view.View;
-import org.telegram.ui.Components.WallpaperCheckBoxView;
+import org.telegram.tgnet.RequestDelegate;
+import org.telegram.tgnet.TLObject;
+import org.telegram.tgnet.TLRPC;
 
-public final /* synthetic */ class ThemePreviewActivity$$ExternalSyntheticLambda12 implements View.OnClickListener {
+public final /* synthetic */ class ThemePreviewActivity$$ExternalSyntheticLambda12 implements RequestDelegate {
     public final /* synthetic */ ThemePreviewActivity f$0;
-    public final /* synthetic */ int f$1;
-    public final /* synthetic */ WallpaperCheckBoxView f$2;
 
-    public /* synthetic */ ThemePreviewActivity$$ExternalSyntheticLambda12(ThemePreviewActivity themePreviewActivity, int i, WallpaperCheckBoxView wallpaperCheckBoxView) {
+    public /* synthetic */ ThemePreviewActivity$$ExternalSyntheticLambda12(ThemePreviewActivity themePreviewActivity) {
         this.f$0 = themePreviewActivity;
-        this.f$1 = i;
-        this.f$2 = wallpaperCheckBoxView;
     }
 
-    public final void onClick(View view) {
-        this.f$0.lambda$createView$8(this.f$1, this.f$2, view);
+    public final void run(TLObject tLObject, TLRPC.TL_error tL_error) {
+        this.f$0.m3320x151a5892(tLObject, tL_error);
     }
 }

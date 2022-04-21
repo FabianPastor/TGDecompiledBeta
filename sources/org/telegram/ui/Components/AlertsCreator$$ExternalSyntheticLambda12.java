@@ -1,18 +1,14 @@
 package org.telegram.ui.Components;
 
-import android.content.Context;
-import android.content.DialogInterface;
-import org.telegram.messenger.BuildVars;
-import org.telegram.messenger.browser.Browser;
+import org.telegram.ui.Components.NumberPicker;
 
-public final /* synthetic */ class AlertsCreator$$ExternalSyntheticLambda12 implements DialogInterface.OnClickListener {
-    public final /* synthetic */ Context f$0;
+public final /* synthetic */ class AlertsCreator$$ExternalSyntheticLambda12 implements NumberPicker.Formatter {
+    public static final /* synthetic */ AlertsCreator$$ExternalSyntheticLambda12 INSTANCE = new AlertsCreator$$ExternalSyntheticLambda12();
 
-    public /* synthetic */ AlertsCreator$$ExternalSyntheticLambda12(Context context) {
-        this.f$0 = context;
+    private /* synthetic */ AlertsCreator$$ExternalSyntheticLambda12() {
     }
 
-    public final void onClick(DialogInterface dialogInterface, int i) {
-        Browser.openUrl(this.f$0, BuildVars.PLAYSTORE_APP_URL);
+    public final String format(int i) {
+        return String.format("%02d", new Object[]{Integer.valueOf(i)});
     }
 }

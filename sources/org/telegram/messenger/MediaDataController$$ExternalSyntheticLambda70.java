@@ -1,26 +1,16 @@
 package org.telegram.messenger;
 
-import androidx.collection.LongSparseArray;
-import java.util.ArrayList;
+import org.telegram.tgnet.RequestDelegate;
+import org.telegram.tgnet.TLObject;
+import org.telegram.tgnet.TLRPC;
 
-public final /* synthetic */ class MediaDataController$$ExternalSyntheticLambda70 implements Runnable {
-    public final /* synthetic */ MediaDataController f$0;
-    public final /* synthetic */ ArrayList f$1;
-    public final /* synthetic */ LongSparseArray f$2;
-    public final /* synthetic */ ArrayList f$3;
-    public final /* synthetic */ long f$4;
-    public final /* synthetic */ int f$5;
+public final /* synthetic */ class MediaDataController$$ExternalSyntheticLambda70 implements RequestDelegate {
+    public static final /* synthetic */ MediaDataController$$ExternalSyntheticLambda70 INSTANCE = new MediaDataController$$ExternalSyntheticLambda70();
 
-    public /* synthetic */ MediaDataController$$ExternalSyntheticLambda70(MediaDataController mediaDataController, ArrayList arrayList, LongSparseArray longSparseArray, ArrayList arrayList2, long j, int i) {
-        this.f$0 = mediaDataController;
-        this.f$1 = arrayList;
-        this.f$2 = longSparseArray;
-        this.f$3 = arrayList2;
-        this.f$4 = j;
-        this.f$5 = i;
+    private /* synthetic */ MediaDataController$$ExternalSyntheticLambda70() {
     }
 
-    public final void run() {
-        this.f$0.lambda$processLoadedFeaturedStickers$35(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5);
+    public final void run(TLObject tLObject, TLRPC.TL_error tL_error) {
+        MediaDataController.lambda$removeInline$105(tLObject, tL_error);
     }
 }

@@ -1,15 +1,15 @@
 package org.telegram.ui;
 
-import android.content.DialogInterface;
+import android.view.ViewTreeObserver;
 
-public final /* synthetic */ class ThemePreviewActivity$$ExternalSyntheticLambda4 implements DialogInterface.OnClickListener {
+public final /* synthetic */ class ThemePreviewActivity$$ExternalSyntheticLambda4 implements ViewTreeObserver.OnGlobalLayoutListener {
     public final /* synthetic */ ThemePreviewActivity f$0;
 
     public /* synthetic */ ThemePreviewActivity$$ExternalSyntheticLambda4(ThemePreviewActivity themePreviewActivity) {
         this.f$0 = themePreviewActivity;
     }
 
-    public final void onClick(DialogInterface dialogInterface, int i) {
-        this.f$0.lambda$selectColorType$15(dialogInterface, i);
+    public final void onGlobalLayout() {
+        this.f$0.m3308lambda$createView$12$orgtelegramuiThemePreviewActivity();
     }
 }

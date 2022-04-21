@@ -1,13 +1,15 @@
 package org.telegram.ui.Components;
 
-public final /* synthetic */ class ChatAttachAlertPhotoLayout$$ExternalSyntheticLambda4 implements Runnable {
+import org.telegram.ui.Components.AlertsCreator;
+
+public final /* synthetic */ class ChatAttachAlertPhotoLayout$$ExternalSyntheticLambda4 implements AlertsCreator.ScheduleDatePickerDelegate {
     public final /* synthetic */ ChatAttachAlertPhotoLayout f$0;
 
     public /* synthetic */ ChatAttachAlertPhotoLayout$$ExternalSyntheticLambda4(ChatAttachAlertPhotoLayout chatAttachAlertPhotoLayout) {
         this.f$0 = chatAttachAlertPhotoLayout;
     }
 
-    public final void run() {
-        this.f$0.lambda$showZoomControls$10();
+    public final void didSelectDate(boolean z, int i) {
+        this.f$0.m3876x320ee4a7(z, i);
     }
 }

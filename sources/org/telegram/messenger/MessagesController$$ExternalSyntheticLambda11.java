@@ -8,6 +8,6 @@ public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda11
     }
 
     public final void run() {
-        this.f$0.removePromoDialog();
+        this.f$0.m153lambda$cleanup$33$orgtelegrammessengerMessagesController();
     }
 }

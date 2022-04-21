@@ -10,6 +10,6 @@ public final /* synthetic */ class SizeNotifierFrameLayout$BlurBackgroundTask$$E
     }
 
     public final void run() {
-        this.f$0.lambda$run$1();
+        this.f$0.m4396xa0CLASSNAME();
     }
 }

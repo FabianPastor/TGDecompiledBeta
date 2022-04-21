@@ -13,6 +13,6 @@ public final /* synthetic */ class PipVideoOverlay$4$$ExternalSyntheticLambda0 i
     }
 
     public final void onAnimationEnd(DynamicAnimation dynamicAnimation, boolean z, float f, float f2) {
-        this.f$0.lambda$onScroll$0(this.f$1, dynamicAnimation, z, f, f2);
+        this.f$0.m4236lambda$onScroll$0$orgtelegramuiComponentsPipVideoOverlay$4(this.f$1, dynamicAnimation, z, f, f2);
     }
 }

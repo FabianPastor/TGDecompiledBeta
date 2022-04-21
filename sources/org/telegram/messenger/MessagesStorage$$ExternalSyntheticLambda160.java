@@ -1,21 +1,17 @@
 package org.telegram.messenger;
 
-import org.telegram.tgnet.TLRPC$Document;
-
 public final /* synthetic */ class MessagesStorage$$ExternalSyntheticLambda160 implements Runnable {
     public final /* synthetic */ MessagesStorage f$0;
-    public final /* synthetic */ TLRPC$Document f$1;
-    public final /* synthetic */ String f$2;
-    public final /* synthetic */ String f$3;
+    public final /* synthetic */ long f$1;
+    public final /* synthetic */ int f$2;
 
-    public /* synthetic */ MessagesStorage$$ExternalSyntheticLambda160(MessagesStorage messagesStorage, TLRPC$Document tLRPC$Document, String str, String str2) {
+    public /* synthetic */ MessagesStorage$$ExternalSyntheticLambda160(MessagesStorage messagesStorage, long j, int i) {
         this.f$0 = messagesStorage;
-        this.f$1 = tLRPC$Document;
-        this.f$2 = str;
-        this.f$3 = str2;
+        this.f$1 = j;
+        this.f$2 = i;
     }
 
     public final void run() {
-        this.f$0.lambda$addRecentLocalFile$55(this.f$1, this.f$2, this.f$3);
+        this.f$0.m941x396dbbd8(this.f$1, this.f$2);
     }
 }

@@ -1,18 +1,15 @@
 package org.telegram.ui.ActionBar;
 
-import org.telegram.messenger.AndroidUtilities;
-import org.telegram.tgnet.RequestDelegate;
-import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC$TL_error;
+import java.util.Comparator;
+import org.telegram.ui.ActionBar.Theme;
 
-public final /* synthetic */ class Theme$$ExternalSyntheticLambda9 implements RequestDelegate {
-    public final /* synthetic */ int f$0;
+public final /* synthetic */ class Theme$$ExternalSyntheticLambda9 implements Comparator {
+    public static final /* synthetic */ Theme$$ExternalSyntheticLambda9 INSTANCE = new Theme$$ExternalSyntheticLambda9();
 
-    public /* synthetic */ Theme$$ExternalSyntheticLambda9(int i) {
-        this.f$0 = i;
+    private /* synthetic */ Theme$$ExternalSyntheticLambda9() {
     }
 
-    public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        AndroidUtilities.runOnUIThread(new Theme$$ExternalSyntheticLambda0(this.f$0, tLObject));
+    public final int compare(Object obj, Object obj2) {
+        return Theme.lambda$sortAccents$0((Theme.ThemeAccent) obj, (Theme.ThemeAccent) obj2);
     }
 }

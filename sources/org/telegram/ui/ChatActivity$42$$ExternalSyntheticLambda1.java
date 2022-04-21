@@ -13,6 +13,6 @@ public final /* synthetic */ class ChatActivity$42$$ExternalSyntheticLambda1 imp
     }
 
     public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-        this.f$0.lambda$checkAnimation$0(this.f$1, valueAnimator);
+        this.f$0.m1870lambda$checkAnimation$0$orgtelegramuiChatActivity$42(this.f$1, valueAnimator);
     }
 }

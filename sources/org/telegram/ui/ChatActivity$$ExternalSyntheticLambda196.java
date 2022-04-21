@@ -1,19 +1,15 @@
 package org.telegram.ui;
 
-import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.atomic.AtomicReference;
-import org.telegram.messenger.LanguageDetector;
+import android.view.View;
 
-public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda196 implements LanguageDetector.ExceptionCallback {
-    public final /* synthetic */ AtomicBoolean f$0;
-    public final /* synthetic */ AtomicReference f$1;
+public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda196 implements View.OnClickListener {
+    public final /* synthetic */ ChatActivity f$0;
 
-    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda196(AtomicBoolean atomicBoolean, AtomicReference atomicReference) {
-        this.f$0 = atomicBoolean;
-        this.f$1 = atomicReference;
+    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda196(ChatActivity chatActivity) {
+        this.f$0 = chatActivity;
     }
 
-    public final void run(Exception exc) {
-        ChatActivity.lambda$createMenu$162(this.f$0, this.f$1, exc);
+    public final void onClick(View view) {
+        this.f$0.m1645lambda$createMenu$157$orgtelegramuiChatActivity(view);
     }
 }

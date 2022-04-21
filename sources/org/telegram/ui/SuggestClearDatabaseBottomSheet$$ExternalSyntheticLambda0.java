@@ -13,6 +13,6 @@ public final /* synthetic */ class SuggestClearDatabaseBottomSheet$$ExternalSynt
     }
 
     public final void onClick(DialogInterface dialogInterface, int i) {
-        this.f$0.lambda$new$0(this.f$1, dialogInterface, i);
+        this.f$0.m3285lambda$new$0$orgtelegramuiSuggestClearDatabaseBottomSheet(this.f$1, dialogInterface, i);
     }
 }

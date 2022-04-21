@@ -11,6 +11,6 @@ public final /* synthetic */ class PhotoViewer$CaptionScrollView$$ExternalSynthe
     }
 
     public final void onAnimationUpdate(DynamicAnimation dynamicAnimation, float f, float f2) {
-        this.f$0.lambda$new$0(dynamicAnimation, f, f2);
+        this.f$0.m2986lambda$new$0$orgtelegramuiPhotoViewer$CaptionScrollView(dynamicAnimation, f, f2);
     }
 }

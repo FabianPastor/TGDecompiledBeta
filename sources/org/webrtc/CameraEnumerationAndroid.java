@@ -21,21 +21,21 @@ public class CameraEnumerationAndroid {
             public int max;
             public int min;
 
-            public FramerateRange(int i, int i2) {
-                this.min = i;
-                this.max = i2;
+            public FramerateRange(int min2, int max2) {
+                this.min = min2;
+                this.max = max2;
             }
 
             public String toString() {
                 return "[" + (((float) this.min) / 1000.0f) + ":" + (((float) this.max) / 1000.0f) + "]";
             }
 
-            public boolean equals(Object obj) {
-                if (!(obj instanceof FramerateRange)) {
+            public boolean equals(Object other) {
+                if (!(other instanceof FramerateRange)) {
                     return false;
                 }
-                FramerateRange framerateRange = (FramerateRange) obj;
-                if (this.min == framerateRange.min && this.max == framerateRange.max) {
+                FramerateRange otherFramerate = (FramerateRange) other;
+                if (this.min == otherFramerate.min && this.max == otherFramerate.max) {
                     return true;
                 }
                 return false;
@@ -46,25 +46,25 @@ public class CameraEnumerationAndroid {
             }
         }
 
-        public CaptureFormat(int i, int i2, int i3, int i4) {
-            this.width = i;
-            this.height = i2;
-            this.framerate = new FramerateRange(i3, i4);
+        public CaptureFormat(int width2, int height2, int minFramerate, int maxFramerate) {
+            this.width = width2;
+            this.height = height2;
+            this.framerate = new FramerateRange(minFramerate, maxFramerate);
         }
 
-        public CaptureFormat(int i, int i2, FramerateRange framerateRange) {
-            this.width = i;
-            this.height = i2;
-            this.framerate = framerateRange;
+        public CaptureFormat(int width2, int height2, FramerateRange framerate2) {
+            this.width = width2;
+            this.height = height2;
+            this.framerate = framerate2;
         }
 
         public int frameSize() {
             return frameSize(this.width, this.height, 17);
         }
 
-        public static int frameSize(int i, int i2, int i3) {
-            if (i3 == 17) {
-                return ((i * i2) * ImageFormat.getBitsPerPixel(i3)) / 8;
+        public static int frameSize(int width2, int height2, int imageFormat2) {
+            if (imageFormat2 == 17) {
+                return ((width2 * height2) * ImageFormat.getBitsPerPixel(imageFormat2)) / 8;
             }
             throw new UnsupportedOperationException("Don't know how to calculate the frame size of non-NV21 image formats.");
         }
@@ -73,12 +73,12 @@ public class CameraEnumerationAndroid {
             return this.width + "x" + this.height + "@" + this.framerate;
         }
 
-        public boolean equals(Object obj) {
-            if (!(obj instanceof CaptureFormat)) {
+        public boolean equals(Object other) {
+            if (!(other instanceof CaptureFormat)) {
                 return false;
             }
-            CaptureFormat captureFormat = (CaptureFormat) obj;
-            if (this.width == captureFormat.width && this.height == captureFormat.height && this.framerate.equals(captureFormat.framerate)) {
+            CaptureFormat otherFormat = (CaptureFormat) other;
+            if (this.width == otherFormat.width && this.height == otherFormat.height && this.framerate.equals(otherFormat.framerate)) {
                 return true;
             }
             return false;
@@ -96,13 +96,13 @@ public class CameraEnumerationAndroid {
         private ClosestComparator() {
         }
 
-        public int compare(T t, T t2) {
-            return diff(t) - diff(t2);
+        public int compare(T t1, T t2) {
+            return diff(t1) - diff(t2);
         }
     }
 
-    public static CaptureFormat.FramerateRange getClosestSupportedFramerateRange(List<CaptureFormat.FramerateRange> list, final int i) {
-        return (CaptureFormat.FramerateRange) Collections.min(list, new ClosestComparator<CaptureFormat.FramerateRange>() {
+    public static CaptureFormat.FramerateRange getClosestSupportedFramerateRange(List<CaptureFormat.FramerateRange> supportedFramerates, final int requestedFps) {
+        return (CaptureFormat.FramerateRange) Collections.min(supportedFramerates, new ClosestComparator<CaptureFormat.FramerateRange>() {
             private static final int MAX_FPS_DIFF_THRESHOLD = 5000;
             private static final int MAX_FPS_HIGH_DIFF_WEIGHT = 3;
             private static final int MAX_FPS_LOW_DIFF_WEIGHT = 1;
@@ -110,30 +110,30 @@ public class CameraEnumerationAndroid {
             private static final int MIN_FPS_LOW_VALUE_WEIGHT = 1;
             private static final int MIN_FPS_THRESHOLD = 8000;
 
-            private int progressivePenalty(int i, int i2, int i3, int i4) {
-                if (i < i2) {
-                    return i * i3;
+            private int progressivePenalty(int value, int threshold, int lowWeight, int highWeight) {
+                if (value < threshold) {
+                    return value * lowWeight;
                 }
-                return ((i - i2) * i4) + (i3 * i2);
+                return (threshold * lowWeight) + ((value - threshold) * highWeight);
             }
 
             /* access modifiers changed from: package-private */
-            public int diff(CaptureFormat.FramerateRange framerateRange) {
-                return progressivePenalty(framerateRange.min, 8000, 1, 4) + progressivePenalty(Math.abs((i * 1000) - framerateRange.max), 5000, 1, 3);
+            public int diff(CaptureFormat.FramerateRange range) {
+                return progressivePenalty(range.min, 8000, 1, 4) + progressivePenalty(Math.abs((requestedFps * 1000) - range.max), 5000, 1, 3);
             }
         });
     }
 
-    public static Size getClosestSupportedSize(List<Size> list, final int i, final int i2) {
-        return (Size) Collections.min(list, new ClosestComparator<Size>() {
+    public static Size getClosestSupportedSize(List<Size> supportedSizes, final int requestedWidth, final int requestedHeight) {
+        return (Size) Collections.min(supportedSizes, new ClosestComparator<Size>() {
             /* access modifiers changed from: package-private */
             public int diff(Size size) {
-                return Math.abs(i - size.width) + Math.abs(i2 - size.height);
+                return Math.abs(requestedWidth - size.width) + Math.abs(requestedHeight - size.height);
             }
         });
     }
 
-    static void reportCameraResolution(Histogram histogram, Size size) {
-        histogram.addSample(COMMON_RESOLUTIONS.indexOf(size) + 1);
+    static void reportCameraResolution(Histogram histogram, Size resolution) {
+        histogram.addSample(COMMON_RESOLUTIONS.indexOf(resolution) + 1);
     }
 }

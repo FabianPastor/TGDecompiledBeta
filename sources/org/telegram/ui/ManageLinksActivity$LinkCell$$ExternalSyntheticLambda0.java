@@ -14,6 +14,6 @@ public final /* synthetic */ class ManageLinksActivity$LinkCell$$ExternalSynthet
     }
 
     public final void onClick(DialogInterface dialogInterface, int i) {
-        this.f$0.lambda$new$2(this.f$1, dialogInterface, i);
+        this.f$0.m2613lambda$new$2$orgtelegramuiManageLinksActivity$LinkCell(this.f$1, dialogInterface, i);
     }
 }

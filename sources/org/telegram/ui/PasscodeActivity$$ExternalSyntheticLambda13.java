@@ -1,13 +1,14 @@
 package org.telegram.ui;
 
-public final /* synthetic */ class PasscodeActivity$$ExternalSyntheticLambda13 implements Runnable {
-    public final /* synthetic */ PasscodeActivity f$0;
+import org.telegram.ui.Components.NumberPicker;
 
-    public /* synthetic */ PasscodeActivity$$ExternalSyntheticLambda13(PasscodeActivity passcodeActivity) {
-        this.f$0 = passcodeActivity;
+public final /* synthetic */ class PasscodeActivity$$ExternalSyntheticLambda13 implements NumberPicker.Formatter {
+    public static final /* synthetic */ PasscodeActivity$$ExternalSyntheticLambda13 INSTANCE = new PasscodeActivity$$ExternalSyntheticLambda13();
+
+    private /* synthetic */ PasscodeActivity$$ExternalSyntheticLambda13() {
     }
 
-    public final void run() {
-        this.f$0.lambda$onPasscodeError$21();
+    public final String format(int i) {
+        return PasscodeActivity.lambda$createView$3(i);
     }
 }

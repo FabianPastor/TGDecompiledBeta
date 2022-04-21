@@ -1,10 +1,6 @@
 package org.telegram.ui;
 
-import org.telegram.tgnet.RequestDelegate;
-import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC$TL_error;
-
-public final /* synthetic */ class ChatEditTypeActivity$$ExternalSyntheticLambda16 implements RequestDelegate {
+public final /* synthetic */ class ChatEditTypeActivity$$ExternalSyntheticLambda16 implements Runnable {
     public final /* synthetic */ ChatEditTypeActivity f$0;
     public final /* synthetic */ String f$1;
 
@@ -13,7 +9,7 @@ public final /* synthetic */ class ChatEditTypeActivity$$ExternalSyntheticLambda
         this.f$1 = str;
     }
 
-    public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        this.f$0.lambda$checkUserName$14(this.f$1, tLObject, tLRPC$TL_error);
+    public final void run() {
+        this.f$0.m1923lambda$checkUserName$15$orgtelegramuiChatEditTypeActivity(this.f$1);
     }
 }

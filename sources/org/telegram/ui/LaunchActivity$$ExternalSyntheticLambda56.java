@@ -1,19 +1,18 @@
 package org.telegram.ui;
 
-import org.telegram.ui.ActionBar.BaseFragment;
+import android.content.Intent;
+import org.telegram.messenger.ContactsLoadingObserver;
 
-public final /* synthetic */ class LaunchActivity$$ExternalSyntheticLambda56 implements Runnable {
+public final /* synthetic */ class LaunchActivity$$ExternalSyntheticLambda56 implements ContactsLoadingObserver.Callback {
     public final /* synthetic */ LaunchActivity f$0;
-    public final /* synthetic */ BaseFragment f$1;
-    public final /* synthetic */ boolean f$2;
+    public final /* synthetic */ Intent f$1;
 
-    public /* synthetic */ LaunchActivity$$ExternalSyntheticLambda56(LaunchActivity launchActivity, BaseFragment baseFragment, boolean z) {
+    public /* synthetic */ LaunchActivity$$ExternalSyntheticLambda56(LaunchActivity launchActivity, Intent intent) {
         this.f$0 = launchActivity;
-        this.f$1 = baseFragment;
-        this.f$2 = z;
+        this.f$1 = intent;
     }
 
-    public final void run() {
-        this.f$0.lambda$handleIntent$15(this.f$1, this.f$2);
+    public final void onResult(boolean z) {
+        this.f$0.m2334lambda$handleIntent$9$orgtelegramuiLaunchActivity(this.f$1, z);
     }
 }

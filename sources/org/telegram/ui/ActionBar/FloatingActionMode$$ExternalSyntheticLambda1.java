@@ -11,6 +11,6 @@ public final /* synthetic */ class FloatingActionMode$$ExternalSyntheticLambda1 
     }
 
     public final boolean onMenuItemClick(MenuItem menuItem) {
-        return this.f$0.lambda$new$0(menuItem);
+        return this.f$0.m1281lambda$new$0$orgtelegramuiActionBarFloatingActionMode(menuItem);
     }
 }

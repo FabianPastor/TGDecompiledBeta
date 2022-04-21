@@ -14,6 +14,6 @@ public final /* synthetic */ class ArticleViewer$BlockEmbedCell$TelegramWebviewP
     }
 
     public final void run() {
-        this.f$0.lambda$postEvent$0(this.f$1, this.f$2);
+        this.f$0.m1417x9281b05f(this.f$1, this.f$2);
     }
 }

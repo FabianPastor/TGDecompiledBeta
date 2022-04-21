@@ -1,16 +1,15 @@
 package org.telegram.ui.Components;
 
+import android.view.MotionEvent;
 import android.view.View;
-import org.telegram.ui.Components.RecyclerListView;
 
-public final /* synthetic */ class ShareAlert$$ExternalSyntheticLambda14 implements RecyclerListView.OnItemClickListener {
-    public final /* synthetic */ ShareAlert f$0;
+public final /* synthetic */ class ShareAlert$$ExternalSyntheticLambda14 implements View.OnTouchListener {
+    public static final /* synthetic */ ShareAlert$$ExternalSyntheticLambda14 INSTANCE = new ShareAlert$$ExternalSyntheticLambda14();
 
-    public /* synthetic */ ShareAlert$$ExternalSyntheticLambda14(ShareAlert shareAlert) {
-        this.f$0 = shareAlert;
+    private /* synthetic */ ShareAlert$$ExternalSyntheticLambda14() {
     }
 
-    public final void onItemClick(View view, int i) {
-        this.f$0.lambda$new$2(view, i);
+    public final boolean onTouch(View view, MotionEvent motionEvent) {
+        return ShareAlert.lambda$new$6(view, motionEvent);
     }
 }

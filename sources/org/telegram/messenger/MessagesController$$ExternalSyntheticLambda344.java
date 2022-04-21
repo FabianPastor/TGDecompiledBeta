@@ -1,16 +1,17 @@
 package org.telegram.messenger;
 
-import org.telegram.tgnet.RequestDelegate;
-import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC$TL_error;
+import androidx.collection.LongSparseArray;
 
-public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda344 implements RequestDelegate {
-    public static final /* synthetic */ MessagesController$$ExternalSyntheticLambda344 INSTANCE = new MessagesController$$ExternalSyntheticLambda344();
+public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda344 implements Runnable {
+    public final /* synthetic */ MessagesController f$0;
+    public final /* synthetic */ LongSparseArray f$1;
 
-    private /* synthetic */ MessagesController$$ExternalSyntheticLambda344() {
+    public /* synthetic */ MessagesController$$ExternalSyntheticLambda344(MessagesController messagesController, LongSparseArray longSparseArray) {
+        this.f$0 = messagesController;
+        this.f$1 = longSparseArray;
     }
 
-    public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        MessagesController.lambda$removeSuggestion$21(tLObject, tLRPC$TL_error);
+    public final void run() {
+        this.f$0.m339x22b50d6e(this.f$1);
     }
 }

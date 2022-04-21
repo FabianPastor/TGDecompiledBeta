@@ -1,21 +1,21 @@
 package org.telegram.ui;
 
 import java.util.HashMap;
+import org.telegram.tgnet.RequestDelegate;
 import org.telegram.tgnet.TLObject;
+import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.LoginActivity;
 
-public final /* synthetic */ class LoginActivity$PhoneView$$ExternalSyntheticLambda13 implements Runnable {
+public final /* synthetic */ class LoginActivity$PhoneView$$ExternalSyntheticLambda13 implements RequestDelegate {
     public final /* synthetic */ LoginActivity.PhoneView f$0;
-    public final /* synthetic */ TLObject f$1;
-    public final /* synthetic */ HashMap f$2;
+    public final /* synthetic */ HashMap f$1;
 
-    public /* synthetic */ LoginActivity$PhoneView$$ExternalSyntheticLambda13(LoginActivity.PhoneView phoneView, TLObject tLObject, HashMap hashMap) {
+    public /* synthetic */ LoginActivity$PhoneView$$ExternalSyntheticLambda13(LoginActivity.PhoneView phoneView, HashMap hashMap) {
         this.f$0 = phoneView;
-        this.f$1 = tLObject;
-        this.f$2 = hashMap;
+        this.f$1 = hashMap;
     }
 
-    public final void run() {
-        this.f$0.lambda$new$10(this.f$1, this.f$2);
+    public final void run(TLObject tLObject, TLRPC.TL_error tL_error) {
+        this.f$0.m2570lambda$new$11$orgtelegramuiLoginActivity$PhoneView(this.f$1, tLObject, tL_error);
     }
 }

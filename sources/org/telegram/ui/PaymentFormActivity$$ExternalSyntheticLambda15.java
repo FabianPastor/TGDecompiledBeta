@@ -1,15 +1,15 @@
 package org.telegram.ui;
 
+import android.view.MotionEvent;
 import android.view.View;
 
-public final /* synthetic */ class PaymentFormActivity$$ExternalSyntheticLambda15 implements View.OnClickListener {
-    public final /* synthetic */ PaymentFormActivity f$0;
+public final /* synthetic */ class PaymentFormActivity$$ExternalSyntheticLambda15 implements View.OnTouchListener {
+    public static final /* synthetic */ PaymentFormActivity$$ExternalSyntheticLambda15 INSTANCE = new PaymentFormActivity$$ExternalSyntheticLambda15();
 
-    public /* synthetic */ PaymentFormActivity$$ExternalSyntheticLambda15(PaymentFormActivity paymentFormActivity) {
-        this.f$0 = paymentFormActivity;
+    private /* synthetic */ PaymentFormActivity$$ExternalSyntheticLambda15() {
     }
 
-    public final void onClick(View view) {
-        this.f$0.lambda$createView$4(view);
+    public final boolean onTouch(View view, MotionEvent motionEvent) {
+        return PaymentFormActivity.lambda$createView$10(view, motionEvent);
     }
 }

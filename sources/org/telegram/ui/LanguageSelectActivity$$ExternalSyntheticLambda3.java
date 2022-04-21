@@ -12,6 +12,6 @@ public final /* synthetic */ class LanguageSelectActivity$$ExternalSyntheticLamb
     }
 
     public final void run() {
-        this.f$0.lambda$updateSearchResults$7(this.f$1);
+        this.f$0.m2309x9dcfe282(this.f$1);
     }
 }

@@ -16,10 +16,10 @@ public class ChatActivityEnterTopView extends FrameLayout {
         super(context);
     }
 
-    public void addReplyView(View view, FrameLayout.LayoutParams layoutParams) {
+    public void addReplyView(View replyView2, FrameLayout.LayoutParams layoutParams) {
         if (this.replyView == null) {
-            this.replyView = view;
-            addView(view, layoutParams);
+            this.replyView = replyView2;
+            addView(replyView2, layoutParams);
         }
     }
 
@@ -31,13 +31,13 @@ public class ChatActivityEnterTopView extends FrameLayout {
         }
     }
 
-    public void setEditMode(boolean z) {
-        if (z != this.editMode) {
-            this.editMode = z;
+    public void setEditMode(boolean editMode2) {
+        if (editMode2 != this.editMode) {
+            this.editMode = editMode2;
             int i = 8;
-            this.replyView.setVisibility(z ? 8 : 0);
+            this.replyView.setVisibility(editMode2 ? 8 : 0);
             EditView editView2 = this.editView;
-            if (z) {
+            if (editMode2) {
                 i = 0;
             }
             editView2.setVisibility(i);
@@ -59,11 +59,11 @@ public class ChatActivityEnterTopView extends FrameLayout {
             super(context);
         }
 
-        public void addButton(EditViewButton editViewButton, LinearLayout.LayoutParams layoutParams) {
+        public void addButton(EditViewButton button, LinearLayout.LayoutParams layoutParams) {
             int childCount = getChildCount();
             if (childCount < 2) {
-                this.buttons[childCount] = editViewButton;
-                addView(editViewButton, layoutParams);
+                this.buttons[childCount] = button;
+                addView(button, layoutParams);
             }
         }
 
@@ -72,8 +72,8 @@ public class ChatActivityEnterTopView extends FrameLayout {
         }
 
         public void updateColors() {
-            for (EditViewButton updateColors : this.buttons) {
-                updateColors.updateColors();
+            for (EditViewButton button : this.buttons) {
+                button.updateColors();
             }
         }
     }
@@ -111,8 +111,8 @@ public class ChatActivityEnterTopView extends FrameLayout {
             return this.textView;
         }
 
-        public void setEditButton(boolean z) {
-            this.editButton = z;
+        public void setEditButton(boolean editButton2) {
+            this.editButton = editButton2;
         }
 
         public boolean isEditButton() {

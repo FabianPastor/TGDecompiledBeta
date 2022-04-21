@@ -1,23 +1,19 @@
 package org.telegram.messenger;
 
+import org.telegram.tgnet.TLRPC;
+
 public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda62 implements Runnable {
     public final /* synthetic */ MessagesController f$0;
-    public final /* synthetic */ long f$1;
-    public final /* synthetic */ int f$2;
-    public final /* synthetic */ int f$3;
-    public final /* synthetic */ long f$4;
-    public final /* synthetic */ Runnable f$5;
+    public final /* synthetic */ TLRPC.TL_error f$1;
+    public final /* synthetic */ long f$2;
 
-    public /* synthetic */ MessagesController$$ExternalSyntheticLambda62(MessagesController messagesController, long j, int i, int i2, long j2, Runnable runnable) {
+    public /* synthetic */ MessagesController$$ExternalSyntheticLambda62(MessagesController messagesController, TLRPC.TL_error tL_error, long j) {
         this.f$0 = messagesController;
-        this.f$1 = j;
-        this.f$2 = i;
-        this.f$3 = i2;
-        this.f$4 = j2;
-        this.f$5 = runnable;
+        this.f$1 = tL_error;
+        this.f$2 = j;
     }
 
     public final void run() {
-        this.f$0.lambda$deleteMessagesRange$346(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5);
+        this.f$0.m250lambda$loadFullChat$46$orgtelegrammessengerMessagesController(this.f$1, this.f$2);
     }
 }

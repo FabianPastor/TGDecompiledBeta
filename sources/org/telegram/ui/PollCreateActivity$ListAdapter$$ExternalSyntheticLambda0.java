@@ -11,6 +11,6 @@ public final /* synthetic */ class PollCreateActivity$ListAdapter$$ExternalSynth
     }
 
     public final void onClick(View view) {
-        this.f$0.lambda$onCreateViewHolder$0(view);
+        this.f$0.m2995xvar_c(view);
     }
 }

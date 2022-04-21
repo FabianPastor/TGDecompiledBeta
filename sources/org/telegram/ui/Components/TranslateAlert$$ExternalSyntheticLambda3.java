@@ -10,6 +10,6 @@ public final /* synthetic */ class TranslateAlert$$ExternalSyntheticLambda3 impl
     }
 
     public final void onClick(View view) {
-        this.f$0.lambda$new$3(view);
+        this.f$0.m4489lambda$new$2$orgtelegramuiComponentsTranslateAlert(view);
     }
 }

@@ -10,6 +10,6 @@ public final /* synthetic */ class ProfileNotificationsActivity$3$$ExternalSynth
     }
 
     public final void run() {
-        this.f$0.lambda$onItemClick$4();
+        this.f$0.m3179xb2d964b2();
     }
 }

@@ -10,6 +10,6 @@ public final /* synthetic */ class CameraScanActivity$$ExternalSyntheticLambda0 
     }
 
     public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-        this.f$0.lambda$updateRecognized$5(valueAnimator);
+        this.f$0.m1465lambda$createView$3$orgtelegramuiCameraScanActivity(valueAnimator);
     }
 }

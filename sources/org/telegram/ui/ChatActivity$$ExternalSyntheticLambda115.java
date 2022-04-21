@@ -1,13 +1,17 @@
 package org.telegram.ui;
 
-public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda115 implements Runnable {
+import org.telegram.tgnet.RequestDelegate;
+import org.telegram.tgnet.TLObject;
+import org.telegram.tgnet.TLRPC;
+
+public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda115 implements RequestDelegate {
     public final /* synthetic */ ChatActivity f$0;
 
     public /* synthetic */ ChatActivity$$ExternalSyntheticLambda115(ChatActivity chatActivity) {
         this.f$0 = chatActivity;
     }
 
-    public final void run() {
-        this.f$0.lambda$createDeleteMessagesAlert$146();
+    public final void run(TLObject tLObject, TLRPC.TL_error tL_error) {
+        this.f$0.m1759lambda$onTransitionAnimationEnd$134$orgtelegramuiChatActivity(tLObject, tL_error);
     }
 }

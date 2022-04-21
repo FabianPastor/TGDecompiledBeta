@@ -15,7 +15,7 @@ import android.widget.TextView;
 import androidx.core.widget.NestedScrollView;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.FileLoader;
-import org.telegram.tgnet.TLRPC$TL_help_appUpdate;
+import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.ActionBar.BottomSheet;
 import org.telegram.ui.ActionBar.Theme;
 
@@ -23,10 +23,15 @@ public class UpdateAppAlertDialog extends BottomSheet {
     private int accountNum;
     /* access modifiers changed from: private */
     public boolean animationInProgress;
-    private TLRPC$TL_help_appUpdate appUpdate;
+    private TLRPC.TL_help_appUpdate appUpdate;
+    private boolean ignoreLayout;
     /* access modifiers changed from: private */
     public LinearLayout linearLayout;
     private int[] location = new int[2];
+    private TextView messageTextView;
+    private AnimatorSet progressAnimation;
+    private RadialProgress radialProgress;
+    private FrameLayout radialProgressView;
     /* access modifiers changed from: private */
     public int scrollOffsetY;
     private NestedScrollView scrollView;
@@ -36,11 +41,7 @@ public class UpdateAppAlertDialog extends BottomSheet {
     public AnimatorSet shadowAnimation;
     /* access modifiers changed from: private */
     public Drawable shadowDrawable;
-
-    /* access modifiers changed from: protected */
-    public boolean canDismissWithSwipe() {
-        return false;
-    }
+    private TextView textView;
 
     public class BottomSheetCell extends FrameLayout {
         /* access modifiers changed from: private */
@@ -49,60 +50,60 @@ public class UpdateAppAlertDialog extends BottomSheet {
         /* access modifiers changed from: private */
         public TextView[] textView = new TextView[2];
 
-        public BottomSheetCell(Context context, boolean z) {
+        public BottomSheetCell(Context context, boolean withoutBackground) {
             super(context);
-            this.hasBackground = !z;
+            this.hasBackground = !withoutBackground;
             setBackground((Drawable) null);
             View view = new View(context);
             this.background = view;
             if (this.hasBackground) {
                 view.setBackground(Theme.createSimpleSelectorRoundRectDrawable(AndroidUtilities.dp(4.0f), Theme.getColor("featuredStickers_addButton"), Theme.getColor("featuredStickers_addButtonPressed")));
             }
-            addView(this.background, LayoutHelper.createFrame(-1, -1.0f, 0, 16.0f, z ? 0.0f : 16.0f, 16.0f, 16.0f));
-            for (int i = 0; i < 2; i++) {
-                this.textView[i] = new TextView(context);
-                this.textView[i].setLines(1);
-                this.textView[i].setSingleLine(true);
-                this.textView[i].setGravity(1);
-                this.textView[i].setEllipsize(TextUtils.TruncateAt.END);
-                this.textView[i].setGravity(17);
+            addView(this.background, LayoutHelper.createFrame(-1, -1.0f, 0, 16.0f, withoutBackground ? 0.0f : 16.0f, 16.0f, 16.0f));
+            for (int a = 0; a < 2; a++) {
+                this.textView[a] = new TextView(context);
+                this.textView[a].setLines(1);
+                this.textView[a].setSingleLine(true);
+                this.textView[a].setGravity(1);
+                this.textView[a].setEllipsize(TextUtils.TruncateAt.END);
+                this.textView[a].setGravity(17);
                 if (this.hasBackground) {
-                    this.textView[i].setTextColor(Theme.getColor("featuredStickers_buttonText"));
-                    this.textView[i].setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
+                    this.textView[a].setTextColor(Theme.getColor("featuredStickers_buttonText"));
+                    this.textView[a].setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
                 } else {
-                    this.textView[i].setTextColor(Theme.getColor("featuredStickers_addButton"));
+                    this.textView[a].setTextColor(Theme.getColor("featuredStickers_addButton"));
                 }
-                this.textView[i].setTextSize(1, 14.0f);
-                this.textView[i].setPadding(0, 0, 0, this.hasBackground ? 0 : AndroidUtilities.dp(13.0f));
-                addView(this.textView[i], LayoutHelper.createFrame(-2, -2, 17));
-                if (i == 1) {
-                    this.textView[i].setAlpha(0.0f);
+                this.textView[a].setTextSize(1, 14.0f);
+                this.textView[a].setPadding(0, 0, 0, this.hasBackground ? 0 : AndroidUtilities.dp(13.0f));
+                addView(this.textView[a], LayoutHelper.createFrame(-2, -2, 17));
+                if (a == 1) {
+                    this.textView[a].setAlpha(0.0f);
                 }
             }
         }
 
         /* access modifiers changed from: protected */
-        public void onMeasure(int i, int i2) {
-            super.onMeasure(i, View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(this.hasBackground ? 80.0f : 50.0f), NUM));
+        public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+            super.onMeasure(widthMeasureSpec, View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(this.hasBackground ? 80.0f : 50.0f), NUM));
         }
 
-        public void setText(CharSequence charSequence, boolean z) {
-            if (!z) {
-                this.textView[0].setText(charSequence);
+        public void setText(CharSequence text, boolean animated) {
+            if (!animated) {
+                this.textView[0].setText(text);
                 return;
             }
-            this.textView[1].setText(charSequence);
+            this.textView[1].setText(text);
             boolean unused = UpdateAppAlertDialog.this.animationInProgress = true;
             AnimatorSet animatorSet = new AnimatorSet();
             animatorSet.setDuration(180);
             animatorSet.setInterpolator(CubicBezierInterpolator.EASE_OUT);
             animatorSet.playTogether(new Animator[]{ObjectAnimator.ofFloat(this.textView[0], View.ALPHA, new float[]{1.0f, 0.0f}), ObjectAnimator.ofFloat(this.textView[0], View.TRANSLATION_Y, new float[]{0.0f, (float) (-AndroidUtilities.dp(10.0f))}), ObjectAnimator.ofFloat(this.textView[1], View.ALPHA, new float[]{0.0f, 1.0f}), ObjectAnimator.ofFloat(this.textView[1], View.TRANSLATION_Y, new float[]{(float) AndroidUtilities.dp(10.0f), 0.0f})});
             animatorSet.addListener(new AnimatorListenerAdapter() {
-                public void onAnimationEnd(Animator animator) {
+                public void onAnimationEnd(Animator animation) {
                     boolean unused = UpdateAppAlertDialog.this.animationInProgress = false;
-                    TextView textView = BottomSheetCell.this.textView[0];
+                    TextView temp = BottomSheetCell.this.textView[0];
                     BottomSheetCell.this.textView[0] = BottomSheetCell.this.textView[1];
-                    BottomSheetCell.this.textView[1] = textView;
+                    BottomSheetCell.this.textView[1] = temp;
                 }
             });
             animatorSet.start();
@@ -111,312 +112,318 @@ public class UpdateAppAlertDialog extends BottomSheet {
 
     /* JADX WARNING: Illegal instructions before constructor call */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    public UpdateAppAlertDialog(android.content.Context r21, org.telegram.tgnet.TLRPC$TL_help_appUpdate r22, int r23) {
+    public UpdateAppAlertDialog(android.content.Context r29, org.telegram.tgnet.TLRPC.TL_help_appUpdate r30, int r31) {
         /*
-            r20 = this;
-            r0 = r20
-            r1 = r21
-            r2 = r22
+            r28 = this;
+            r0 = r28
+            r1 = r29
+            r2 = r30
             r3 = 0
             r0.<init>(r1, r3)
             r4 = 2
             int[] r5 = new int[r4]
             r0.location = r5
             r0.appUpdate = r2
-            r5 = r23
+            r5 = r31
             r0.accountNum = r5
             r0.setCanceledOnTouchOutside(r3)
             r0.setApplyTopPadding(r3)
             r0.setApplyBottomPadding(r3)
-            android.content.res.Resources r5 = r21.getResources()
-            r6 = 2131166129(0x7var_b1, float:1.7946495E38)
-            android.graphics.drawable.Drawable r5 = r5.getDrawable(r6)
-            android.graphics.drawable.Drawable r5 = r5.mutate()
-            r0.shadowDrawable = r5
-            android.graphics.PorterDuffColorFilter r6 = new android.graphics.PorterDuffColorFilter
-            java.lang.String r7 = "dialogBackground"
-            int r7 = org.telegram.ui.ActionBar.Theme.getColor(r7)
-            android.graphics.PorterDuff$Mode r8 = android.graphics.PorterDuff.Mode.MULTIPLY
-            r6.<init>(r7, r8)
-            r5.setColorFilter(r6)
-            org.telegram.ui.Components.UpdateAppAlertDialog$1 r5 = new org.telegram.ui.Components.UpdateAppAlertDialog$1
-            r5.<init>(r1)
-            r5.setWillNotDraw(r3)
-            r0.containerView = r5
-            org.telegram.ui.Components.UpdateAppAlertDialog$2 r6 = new org.telegram.ui.Components.UpdateAppAlertDialog$2
+            android.content.res.Resources r6 = r29.getResources()
+            r7 = 2131166129(0x7var_b1, float:1.7946495E38)
+            android.graphics.drawable.Drawable r6 = r6.getDrawable(r7)
+            android.graphics.drawable.Drawable r6 = r6.mutate()
+            r0.shadowDrawable = r6
+            android.graphics.PorterDuffColorFilter r7 = new android.graphics.PorterDuffColorFilter
+            java.lang.String r8 = "dialogBackground"
+            int r8 = org.telegram.ui.ActionBar.Theme.getColor(r8)
+            android.graphics.PorterDuff$Mode r9 = android.graphics.PorterDuff.Mode.MULTIPLY
+            r7.<init>(r8, r9)
+            r6.setColorFilter(r7)
+            org.telegram.ui.Components.UpdateAppAlertDialog$1 r6 = new org.telegram.ui.Components.UpdateAppAlertDialog$1
             r6.<init>(r1)
-            r0.scrollView = r6
-            r7 = 1
-            r6.setFillViewport(r7)
-            androidx.core.widget.NestedScrollView r6 = r0.scrollView
             r6.setWillNotDraw(r3)
-            androidx.core.widget.NestedScrollView r6 = r0.scrollView
-            r6.setClipToPadding(r3)
-            androidx.core.widget.NestedScrollView r6 = r0.scrollView
-            r6.setVerticalScrollBarEnabled(r3)
-            androidx.core.widget.NestedScrollView r6 = r0.scrollView
-            r8 = -1
-            r9 = -1082130432(0xffffffffbvar_, float:-1.0)
-            r10 = 51
-            r11 = 0
+            r0.containerView = r6
+            org.telegram.ui.Components.UpdateAppAlertDialog$2 r7 = new org.telegram.ui.Components.UpdateAppAlertDialog$2
+            r7.<init>(r1)
+            r0.scrollView = r7
+            r8 = 1
+            r7.setFillViewport(r8)
+            androidx.core.widget.NestedScrollView r7 = r0.scrollView
+            r7.setWillNotDraw(r3)
+            androidx.core.widget.NestedScrollView r7 = r0.scrollView
+            r7.setClipToPadding(r3)
+            androidx.core.widget.NestedScrollView r7 = r0.scrollView
+            r7.setVerticalScrollBarEnabled(r3)
+            androidx.core.widget.NestedScrollView r7 = r0.scrollView
+            r9 = -1
+            r10 = -1082130432(0xffffffffbvar_, float:-1.0)
+            r11 = 51
             r12 = 0
             r13 = 0
-            r14 = 1124204544(0x43020000, float:130.0)
-            android.widget.FrameLayout$LayoutParams r8 = org.telegram.ui.Components.LayoutHelper.createFrame(r8, r9, r10, r11, r12, r13, r14)
-            r5.addView(r6, r8)
-            android.widget.LinearLayout r6 = new android.widget.LinearLayout
-            r6.<init>(r1)
-            r0.linearLayout = r6
-            r6.setOrientation(r7)
-            androidx.core.widget.NestedScrollView r6 = r0.scrollView
-            android.widget.LinearLayout r8 = r0.linearLayout
-            r9 = -1
-            r10 = -2
-            r11 = 51
-            android.widget.FrameLayout$LayoutParams r10 = org.telegram.ui.Components.LayoutHelper.createScroll(r9, r10, r11)
-            r6.addView((android.view.View) r8, (android.view.ViewGroup.LayoutParams) r10)
-            org.telegram.tgnet.TLRPC$TL_help_appUpdate r6 = r0.appUpdate
-            org.telegram.tgnet.TLRPC$Document r6 = r6.sticker
-            if (r6 == 0) goto L_0x00fd
-            org.telegram.ui.Components.BackupImageView r6 = new org.telegram.ui.Components.BackupImageView
-            r6.<init>(r1)
-            org.telegram.tgnet.TLRPC$TL_help_appUpdate r8 = r0.appUpdate
-            org.telegram.tgnet.TLRPC$Document r8 = r8.sticker
-            java.util.ArrayList<org.telegram.tgnet.TLRPC$PhotoSize> r8 = r8.thumbs
-            r10 = 1065353216(0x3var_, float:1.0)
-            java.lang.String r12 = "windowBackgroundGray"
-            org.telegram.messenger.SvgHelper$SvgDrawable r15 = org.telegram.messenger.DocumentObject.getSvgThumb((java.util.ArrayList<org.telegram.tgnet.TLRPC$PhotoSize>) r8, (java.lang.String) r12, (float) r10)
-            org.telegram.tgnet.TLRPC$TL_help_appUpdate r8 = r0.appUpdate
-            org.telegram.tgnet.TLRPC$Document r8 = r8.sticker
-            java.util.ArrayList<org.telegram.tgnet.TLRPC$PhotoSize> r8 = r8.thumbs
-            r10 = 90
-            org.telegram.tgnet.TLRPC$PhotoSize r8 = org.telegram.messenger.FileLoader.getClosestPhotoSizeWithSize(r8, r10)
-            org.telegram.tgnet.TLRPC$TL_help_appUpdate r10 = r0.appUpdate
-            org.telegram.tgnet.TLRPC$Document r10 = r10.sticker
-            org.telegram.messenger.ImageLocation r8 = org.telegram.messenger.ImageLocation.getForDocument((org.telegram.tgnet.TLRPC$PhotoSize) r8, (org.telegram.tgnet.TLRPC$Document) r10)
-            if (r15 == 0) goto L_0x00d1
-            org.telegram.tgnet.TLRPC$TL_help_appUpdate r8 = r0.appUpdate
-            org.telegram.tgnet.TLRPC$Document r8 = r8.sticker
-            org.telegram.messenger.ImageLocation r13 = org.telegram.messenger.ImageLocation.getForDocument(r8)
-            r16 = 0
-            java.lang.String r14 = "250_250"
-            java.lang.String r17 = "update"
-            r12 = r6
-            r12.setImage((org.telegram.messenger.ImageLocation) r13, (java.lang.String) r14, (android.graphics.drawable.Drawable) r15, (int) r16, (java.lang.Object) r17)
-            goto L_0x00e6
-        L_0x00d1:
-            org.telegram.tgnet.TLRPC$TL_help_appUpdate r10 = r0.appUpdate
-            org.telegram.tgnet.TLRPC$Document r10 = r10.sticker
-            org.telegram.messenger.ImageLocation r13 = org.telegram.messenger.ImageLocation.getForDocument(r10)
-            r16 = 0
+            r14 = 0
+            r15 = 1124204544(0x43020000, float:130.0)
+            android.widget.FrameLayout$LayoutParams r9 = org.telegram.ui.Components.LayoutHelper.createFrame(r9, r10, r11, r12, r13, r14, r15)
+            r6.addView(r7, r9)
+            android.widget.LinearLayout r7 = new android.widget.LinearLayout
+            r7.<init>(r1)
+            r0.linearLayout = r7
+            r7.setOrientation(r8)
+            androidx.core.widget.NestedScrollView r7 = r0.scrollView
+            android.widget.LinearLayout r9 = r0.linearLayout
+            r10 = -1
+            r11 = -2
+            r12 = 51
+            android.widget.FrameLayout$LayoutParams r11 = org.telegram.ui.Components.LayoutHelper.createScroll(r10, r11, r12)
+            r7.addView((android.view.View) r9, (android.view.ViewGroup.LayoutParams) r11)
+            org.telegram.tgnet.TLRPC$TL_help_appUpdate r7 = r0.appUpdate
+            org.telegram.tgnet.TLRPC$Document r7 = r7.sticker
+            if (r7 == 0) goto L_0x0100
+            org.telegram.ui.Components.BackupImageView r7 = new org.telegram.ui.Components.BackupImageView
+            r7.<init>(r1)
+            org.telegram.tgnet.TLRPC$TL_help_appUpdate r9 = r0.appUpdate
+            org.telegram.tgnet.TLRPC$Document r9 = r9.sticker
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$PhotoSize> r9 = r9.thumbs
+            r11 = 1065353216(0x3var_, float:1.0)
+            java.lang.String r13 = "windowBackgroundGray"
+            org.telegram.messenger.SvgHelper$SvgDrawable r9 = org.telegram.messenger.DocumentObject.getSvgThumb((java.util.ArrayList<org.telegram.tgnet.TLRPC.PhotoSize>) r9, (java.lang.String) r13, (float) r11)
+            org.telegram.tgnet.TLRPC$TL_help_appUpdate r11 = r0.appUpdate
+            org.telegram.tgnet.TLRPC$Document r11 = r11.sticker
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$PhotoSize> r11 = r11.thumbs
+            r13 = 90
+            org.telegram.tgnet.TLRPC$PhotoSize r11 = org.telegram.messenger.FileLoader.getClosestPhotoSizeWithSize(r11, r13)
+            org.telegram.tgnet.TLRPC$TL_help_appUpdate r13 = r0.appUpdate
+            org.telegram.tgnet.TLRPC$Document r13 = r13.sticker
+            org.telegram.messenger.ImageLocation r20 = org.telegram.messenger.ImageLocation.getForDocument((org.telegram.tgnet.TLRPC.PhotoSize) r11, (org.telegram.tgnet.TLRPC.Document) r13)
+            if (r9 == 0) goto L_0x00d3
+            org.telegram.tgnet.TLRPC$TL_help_appUpdate r13 = r0.appUpdate
+            org.telegram.tgnet.TLRPC$Document r13 = r13.sticker
+            org.telegram.messenger.ImageLocation r14 = org.telegram.messenger.ImageLocation.getForDocument(r13)
             r17 = 0
-            java.lang.String r14 = "250_250"
+            java.lang.String r15 = "250_250"
             java.lang.String r18 = "update"
-            r12 = r6
-            r15 = r8
-            r12.setImage((org.telegram.messenger.ImageLocation) r13, (java.lang.String) r14, (org.telegram.messenger.ImageLocation) r15, (java.lang.String) r16, (int) r17, (java.lang.Object) r18)
-        L_0x00e6:
-            android.widget.LinearLayout r8 = r0.linearLayout
-            r12 = 160(0xa0, float:2.24E-43)
-            r13 = 160(0xa0, float:2.24E-43)
-            r14 = 49
-            r15 = 17
-            r16 = 8
-            r17 = 17
+            r13 = r7
+            r16 = r9
+            r13.setImage((org.telegram.messenger.ImageLocation) r14, (java.lang.String) r15, (android.graphics.drawable.Drawable) r16, (int) r17, (java.lang.Object) r18)
+            goto L_0x00e9
+        L_0x00d3:
+            org.telegram.tgnet.TLRPC$TL_help_appUpdate r13 = r0.appUpdate
+            org.telegram.tgnet.TLRPC$Document r13 = r13.sticker
+            org.telegram.messenger.ImageLocation r14 = org.telegram.messenger.ImageLocation.getForDocument(r13)
+            r17 = 0
             r18 = 0
-            android.widget.LinearLayout$LayoutParams r10 = org.telegram.ui.Components.LayoutHelper.createLinear((int) r12, (int) r13, (int) r14, (int) r15, (int) r16, (int) r17, (int) r18)
-            r8.addView(r6, r10)
-        L_0x00fd:
-            android.widget.TextView r6 = new android.widget.TextView
-            r6.<init>(r1)
-            java.lang.String r8 = "fonts/rmedium.ttf"
-            android.graphics.Typeface r8 = org.telegram.messenger.AndroidUtilities.getTypeface(r8)
-            r6.setTypeface(r8)
-            r8 = 1101004800(0x41a00000, float:20.0)
-            r6.setTextSize(r7, r8)
-            java.lang.String r8 = "dialogTextBlack"
-            int r10 = org.telegram.ui.ActionBar.Theme.getColor(r8)
-            r6.setTextColor(r10)
-            r6.setSingleLine(r7)
-            android.text.TextUtils$TruncateAt r10 = android.text.TextUtils.TruncateAt.END
-            r6.setEllipsize(r10)
-            r10 = 2131624318(0x7f0e017e, float:1.8875812E38)
-            java.lang.String r12 = "AppUpdate"
-            java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r12, r10)
-            r6.setText(r10)
-            android.widget.LinearLayout r10 = r0.linearLayout
-            r12 = -2
-            r13 = -2
-            r14 = 49
-            r15 = 23
-            r16 = 16
-            r17 = 23
-            r18 = 0
-            android.widget.LinearLayout$LayoutParams r12 = org.telegram.ui.Components.LayoutHelper.createLinear((int) r12, (int) r13, (int) r14, (int) r15, (int) r16, (int) r17, (int) r18)
-            r10.addView(r6, r12)
-            android.widget.TextView r6 = new android.widget.TextView
-            android.content.Context r10 = r20.getContext()
-            r6.<init>(r10)
-            java.lang.String r10 = "dialogTextGray3"
-            int r10 = org.telegram.ui.ActionBar.Theme.getColor(r10)
-            r6.setTextColor(r10)
-            r10 = 1096810496(0x41600000, float:14.0)
-            r6.setTextSize(r7, r10)
-            org.telegram.messenger.AndroidUtilities$LinkMovementMethodMy r12 = new org.telegram.messenger.AndroidUtilities$LinkMovementMethodMy
-            r12.<init>()
-            r6.setMovementMethod(r12)
-            java.lang.String r12 = "dialogTextLink"
-            int r13 = org.telegram.ui.ActionBar.Theme.getColor(r12)
-            r6.setLinkTextColor(r13)
-            r13 = 2131624324(0x7f0e0184, float:1.8875824E38)
-            java.lang.Object[] r4 = new java.lang.Object[r4]
-            org.telegram.tgnet.TLRPC$TL_help_appUpdate r14 = r0.appUpdate
-            java.lang.String r15 = r14.version
-            r4[r3] = r15
-            org.telegram.tgnet.TLRPC$Document r14 = r14.document
-            int r14 = r14.size
-            long r14 = (long) r14
-            java.lang.String r14 = org.telegram.messenger.AndroidUtilities.formatFileSize(r14)
-            r4[r7] = r14
-            java.lang.String r14 = "AppUpdateVersionAndSize"
-            java.lang.String r4 = org.telegram.messenger.LocaleController.formatString(r14, r13, r4)
-            r6.setText(r4)
-            r4 = 49
-            r6.setGravity(r4)
-            android.widget.LinearLayout r4 = r0.linearLayout
+            java.lang.String r15 = "250_250"
+            java.lang.String r19 = "update"
+            r13 = r7
+            r16 = r20
+            r13.setImage((org.telegram.messenger.ImageLocation) r14, (java.lang.String) r15, (org.telegram.messenger.ImageLocation) r16, (java.lang.String) r17, (int) r18, (java.lang.Object) r19)
+        L_0x00e9:
+            android.widget.LinearLayout r13 = r0.linearLayout
+            r21 = 160(0xa0, float:2.24E-43)
+            r22 = 160(0xa0, float:2.24E-43)
+            r23 = 49
+            r24 = 17
+            r25 = 8
+            r26 = 17
+            r27 = 0
+            android.widget.LinearLayout$LayoutParams r14 = org.telegram.ui.Components.LayoutHelper.createLinear((int) r21, (int) r22, (int) r23, (int) r24, (int) r25, (int) r26, (int) r27)
+            r13.addView(r7, r14)
+        L_0x0100:
+            android.widget.TextView r7 = new android.widget.TextView
+            r7.<init>(r1)
+            java.lang.String r9 = "fonts/rmedium.ttf"
+            android.graphics.Typeface r9 = org.telegram.messenger.AndroidUtilities.getTypeface(r9)
+            r7.setTypeface(r9)
+            r9 = 1101004800(0x41a00000, float:20.0)
+            r7.setTextSize(r8, r9)
+            java.lang.String r9 = "dialogTextBlack"
+            int r11 = org.telegram.ui.ActionBar.Theme.getColor(r9)
+            r7.setTextColor(r11)
+            r7.setSingleLine(r8)
+            android.text.TextUtils$TruncateAt r11 = android.text.TextUtils.TruncateAt.END
+            r7.setEllipsize(r11)
+            r11 = 2131624318(0x7f0e017e, float:1.8875812E38)
+            java.lang.String r13 = "AppUpdate"
+            java.lang.String r11 = org.telegram.messenger.LocaleController.getString(r13, r11)
+            r7.setText(r11)
+            android.widget.LinearLayout r11 = r0.linearLayout
             r13 = -2
             r14 = -2
             r15 = 49
             r16 = 23
-            r17 = 0
+            r17 = 16
             r18 = 23
-            r19 = 5
+            r19 = 0
             android.widget.LinearLayout$LayoutParams r13 = org.telegram.ui.Components.LayoutHelper.createLinear((int) r13, (int) r14, (int) r15, (int) r16, (int) r17, (int) r18, (int) r19)
-            r4.addView(r6, r13)
+            r11.addView(r7, r13)
+            android.widget.TextView r11 = new android.widget.TextView
+            android.content.Context r13 = r28.getContext()
+            r11.<init>(r13)
+            java.lang.String r13 = "dialogTextGray3"
+            int r13 = org.telegram.ui.ActionBar.Theme.getColor(r13)
+            r11.setTextColor(r13)
+            r13 = 1096810496(0x41600000, float:14.0)
+            r11.setTextSize(r8, r13)
+            org.telegram.messenger.AndroidUtilities$LinkMovementMethodMy r14 = new org.telegram.messenger.AndroidUtilities$LinkMovementMethodMy
+            r14.<init>()
+            r11.setMovementMethod(r14)
+            java.lang.String r14 = "dialogTextLink"
+            int r15 = org.telegram.ui.ActionBar.Theme.getColor(r14)
+            r11.setLinkTextColor(r15)
+            r15 = 2131624324(0x7f0e0184, float:1.8875824E38)
+            java.lang.Object[] r4 = new java.lang.Object[r4]
+            org.telegram.tgnet.TLRPC$TL_help_appUpdate r10 = r0.appUpdate
+            java.lang.String r10 = r10.version
+            r4[r3] = r10
+            org.telegram.tgnet.TLRPC$TL_help_appUpdate r10 = r0.appUpdate
+            org.telegram.tgnet.TLRPC$Document r10 = r10.document
+            int r10 = r10.size
+            long r12 = (long) r10
+            java.lang.String r10 = org.telegram.messenger.AndroidUtilities.formatFileSize(r12)
+            r4[r8] = r10
+            java.lang.String r10 = "AppUpdateVersionAndSize"
+            java.lang.String r4 = org.telegram.messenger.LocaleController.formatString(r10, r15, r4)
+            r11.setText(r4)
+            r4 = 49
+            r11.setGravity(r4)
+            android.widget.LinearLayout r4 = r0.linearLayout
+            r19 = -2
+            r20 = -2
+            r21 = 49
+            r22 = 23
+            r23 = 0
+            r24 = 23
+            r25 = 5
+            android.widget.LinearLayout$LayoutParams r10 = org.telegram.ui.Components.LayoutHelper.createLinear((int) r19, (int) r20, (int) r21, (int) r22, (int) r23, (int) r24, (int) r25)
+            r4.addView(r11, r10)
             android.widget.TextView r4 = new android.widget.TextView
-            android.content.Context r6 = r20.getContext()
-            r4.<init>(r6)
-            int r6 = org.telegram.ui.ActionBar.Theme.getColor(r8)
-            r4.setTextColor(r6)
-            r4.setTextSize(r7, r10)
-            org.telegram.messenger.AndroidUtilities$LinkMovementMethodMy r6 = new org.telegram.messenger.AndroidUtilities$LinkMovementMethodMy
-            r6.<init>()
-            r4.setMovementMethod(r6)
-            int r6 = org.telegram.ui.ActionBar.Theme.getColor(r12)
-            r4.setLinkTextColor(r6)
-            org.telegram.tgnet.TLRPC$TL_help_appUpdate r6 = r0.appUpdate
-            java.lang.String r6 = r6.text
-            boolean r6 = android.text.TextUtils.isEmpty(r6)
-            if (r6 == 0) goto L_0x01e0
-            r2 = 2131624319(0x7f0e017f, float:1.8875814E38)
-            java.lang.String r6 = "AppUpdateChangelogEmpty"
-            java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r6, r2)
-            android.text.SpannableStringBuilder r2 = org.telegram.messenger.AndroidUtilities.replaceTags(r2)
-            r4.setText(r2)
-            goto L_0x01f8
-        L_0x01e0:
-            android.text.SpannableStringBuilder r6 = new android.text.SpannableStringBuilder
-            org.telegram.tgnet.TLRPC$TL_help_appUpdate r8 = r0.appUpdate
-            java.lang.String r8 = r8.text
-            r6.<init>(r8)
-            java.util.ArrayList<org.telegram.tgnet.TLRPC$MessageEntity> r13 = r2.entities
-            r14 = 0
-            r15 = 0
-            r16 = 0
-            r17 = 0
-            r12 = r6
-            org.telegram.messenger.MessageObject.addEntitiesToText(r12, r13, r14, r15, r16, r17)
-            r4.setText(r6)
-        L_0x01f8:
-            r4.setGravity(r11)
-            android.widget.LinearLayout r2 = r0.linearLayout
-            r10 = -2
-            r11 = -2
-            r12 = 51
-            r13 = 23
-            r14 = 15
-            r15 = 23
-            r16 = 0
-            android.widget.LinearLayout$LayoutParams r6 = org.telegram.ui.Components.LayoutHelper.createLinear((int) r10, (int) r11, (int) r12, (int) r13, (int) r14, (int) r15, (int) r16)
-            r2.addView(r4, r6)
-            android.widget.FrameLayout$LayoutParams r2 = new android.widget.FrameLayout$LayoutParams
-            int r4 = org.telegram.messenger.AndroidUtilities.getShadowHeight()
-            r6 = 83
-            r2.<init>(r9, r4, r6)
-            r4 = 1124204544(0x43020000, float:130.0)
-            int r4 = org.telegram.messenger.AndroidUtilities.dp(r4)
-            r2.bottomMargin = r4
-            android.view.View r4 = new android.view.View
-            r4.<init>(r1)
-            r0.shadow = r4
-            java.lang.String r6 = "dialogShadowLine"
-            int r6 = org.telegram.ui.ActionBar.Theme.getColor(r6)
-            r4.setBackgroundColor(r6)
-            android.view.View r4 = r0.shadow
-            r6 = 0
-            r4.setAlpha(r6)
-            android.view.View r4 = r0.shadow
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r7)
-            r4.setTag(r6)
-            android.view.View r4 = r0.shadow
-            r5.addView(r4, r2)
-            org.telegram.ui.Components.UpdateAppAlertDialog$BottomSheetCell r2 = new org.telegram.ui.Components.UpdateAppAlertDialog$BottomSheetCell
-            r2.<init>(r1, r3)
-            r4 = 2131624320(0x7f0e0180, float:1.8875816E38)
-            java.lang.Object[] r6 = new java.lang.Object[r3]
-            java.lang.String r8 = "AppUpdateDownloadNow"
-            java.lang.String r4 = org.telegram.messenger.LocaleController.formatString(r8, r4, r6)
-            r2.setText(r4, r3)
-            android.view.View r4 = r2.background
-            org.telegram.ui.Components.UpdateAppAlertDialog$$ExternalSyntheticLambda0 r6 = new org.telegram.ui.Components.UpdateAppAlertDialog$$ExternalSyntheticLambda0
-            r6.<init>(r0)
-            r4.setOnClickListener(r6)
-            r8 = -1
-            r9 = 1112014848(0x42480000, float:50.0)
-            r10 = 83
-            r11 = 0
+            android.content.Context r10 = r28.getContext()
+            r4.<init>(r10)
+            int r9 = org.telegram.ui.ActionBar.Theme.getColor(r9)
+            r4.setTextColor(r9)
+            r9 = 1096810496(0x41600000, float:14.0)
+            r4.setTextSize(r8, r9)
+            org.telegram.messenger.AndroidUtilities$LinkMovementMethodMy r9 = new org.telegram.messenger.AndroidUtilities$LinkMovementMethodMy
+            r9.<init>()
+            r4.setMovementMethod(r9)
+            int r9 = org.telegram.ui.ActionBar.Theme.getColor(r14)
+            r4.setLinkTextColor(r9)
+            org.telegram.tgnet.TLRPC$TL_help_appUpdate r9 = r0.appUpdate
+            java.lang.String r9 = r9.text
+            boolean r9 = android.text.TextUtils.isEmpty(r9)
+            if (r9 == 0) goto L_0x01e9
+            r9 = 2131624319(0x7f0e017f, float:1.8875814E38)
+            java.lang.String r10 = "AppUpdateChangelogEmpty"
+            java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r10, r9)
+            android.text.SpannableStringBuilder r9 = org.telegram.messenger.AndroidUtilities.replaceTags(r9)
+            r4.setText(r9)
+            goto L_0x0206
+        L_0x01e9:
+            android.text.SpannableStringBuilder r9 = new android.text.SpannableStringBuilder
+            org.telegram.tgnet.TLRPC$TL_help_appUpdate r10 = r0.appUpdate
+            java.lang.String r10 = r10.text
+            r9.<init>(r10)
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$MessageEntity> r10 = r2.entities
+            r20 = 0
+            r21 = 0
+            r22 = 0
+            r23 = 0
+            r18 = r9
+            r19 = r10
+            org.telegram.messenger.MessageObject.addEntitiesToText(r18, r19, r20, r21, r22, r23)
+            r4.setText(r9)
+        L_0x0206:
+            r9 = 51
+            r4.setGravity(r9)
+            android.widget.LinearLayout r9 = r0.linearLayout
+            r17 = -2
+            r18 = -2
+            r19 = 51
+            r20 = 23
+            r21 = 15
+            r22 = 23
+            r23 = 0
+            android.widget.LinearLayout$LayoutParams r10 = org.telegram.ui.Components.LayoutHelper.createLinear((int) r17, (int) r18, (int) r19, (int) r20, (int) r21, (int) r22, (int) r23)
+            r9.addView(r4, r10)
+            android.widget.FrameLayout$LayoutParams r9 = new android.widget.FrameLayout$LayoutParams
+            int r10 = org.telegram.messenger.AndroidUtilities.getShadowHeight()
+            r12 = 83
+            r13 = -1
+            r9.<init>(r13, r10, r12)
+            r10 = 1124204544(0x43020000, float:130.0)
+            int r10 = org.telegram.messenger.AndroidUtilities.dp(r10)
+            r9.bottomMargin = r10
+            android.view.View r10 = new android.view.View
+            r10.<init>(r1)
+            r0.shadow = r10
+            java.lang.String r12 = "dialogShadowLine"
+            int r12 = org.telegram.ui.ActionBar.Theme.getColor(r12)
+            r10.setBackgroundColor(r12)
+            android.view.View r10 = r0.shadow
             r12 = 0
-            r13 = 0
+            r10.setAlpha(r12)
+            android.view.View r10 = r0.shadow
+            java.lang.Integer r12 = java.lang.Integer.valueOf(r8)
+            r10.setTag(r12)
+            android.view.View r10 = r0.shadow
+            r6.addView(r10, r9)
+            org.telegram.ui.Components.UpdateAppAlertDialog$BottomSheetCell r10 = new org.telegram.ui.Components.UpdateAppAlertDialog$BottomSheetCell
+            r10.<init>(r1, r3)
+            r12 = 2131624320(0x7f0e0180, float:1.8875816E38)
+            java.lang.Object[] r13 = new java.lang.Object[r3]
+            java.lang.String r14 = "AppUpdateDownloadNow"
+            java.lang.String r12 = org.telegram.messenger.LocaleController.formatString(r14, r12, r13)
+            r10.setText(r12, r3)
+            android.view.View r12 = r10.background
+            org.telegram.ui.Components.UpdateAppAlertDialog$$ExternalSyntheticLambda0 r13 = new org.telegram.ui.Components.UpdateAppAlertDialog$$ExternalSyntheticLambda0
+            r13.<init>(r0)
+            r12.setOnClickListener(r13)
+            r14 = -1
+            r15 = 1112014848(0x42480000, float:50.0)
+            r16 = 83
+            r17 = 0
+            r18 = 0
+            r19 = 0
+            r20 = 1112014848(0x42480000, float:50.0)
+            android.widget.FrameLayout$LayoutParams r12 = org.telegram.ui.Components.LayoutHelper.createFrame(r14, r15, r16, r17, r18, r19, r20)
+            r6.addView(r10, r12)
+            org.telegram.ui.Components.UpdateAppAlertDialog$BottomSheetCell r12 = new org.telegram.ui.Components.UpdateAppAlertDialog$BottomSheetCell
+            r12.<init>(r1, r8)
+            r8 = r12
+            r12 = 2131624323(0x7f0e0183, float:1.8875822E38)
+            java.lang.String r13 = "AppUpdateRemindMeLater"
+            java.lang.String r12 = org.telegram.messenger.LocaleController.getString(r13, r12)
+            r8.setText(r12, r3)
+            android.view.View r3 = r8.background
+            org.telegram.ui.Components.UpdateAppAlertDialog$$ExternalSyntheticLambda1 r12 = new org.telegram.ui.Components.UpdateAppAlertDialog$$ExternalSyntheticLambda1
+            r12.<init>(r0)
+            r3.setOnClickListener(r12)
+            r13 = -1
             r14 = 1112014848(0x42480000, float:50.0)
-            android.widget.FrameLayout$LayoutParams r4 = org.telegram.ui.Components.LayoutHelper.createFrame(r8, r9, r10, r11, r12, r13, r14)
-            r5.addView(r2, r4)
-            org.telegram.ui.Components.UpdateAppAlertDialog$BottomSheetCell r2 = new org.telegram.ui.Components.UpdateAppAlertDialog$BottomSheetCell
-            r2.<init>(r1, r7)
-            r1 = 2131624323(0x7f0e0183, float:1.8875822E38)
-            java.lang.String r4 = "AppUpdateRemindMeLater"
-            java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r4, r1)
-            r2.setText(r1, r3)
-            android.view.View r1 = r2.background
-            org.telegram.ui.Components.UpdateAppAlertDialog$$ExternalSyntheticLambda1 r3 = new org.telegram.ui.Components.UpdateAppAlertDialog$$ExternalSyntheticLambda1
-            r3.<init>(r0)
-            r1.setOnClickListener(r3)
-            r6 = -1
-            r7 = 1112014848(0x42480000, float:50.0)
-            r8 = 83
-            r9 = 0
-            r10 = 0
-            android.widget.FrameLayout$LayoutParams r1 = org.telegram.ui.Components.LayoutHelper.createFrame(r6, r7, r8, r9, r10, r11, r12)
-            r5.addView(r2, r1)
+            r15 = 83
+            r16 = 0
+            android.widget.FrameLayout$LayoutParams r3 = org.telegram.ui.Components.LayoutHelper.createFrame(r13, r14, r15, r16, r17, r18, r19)
+            r6.addView(r8, r3)
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.UpdateAppAlertDialog.<init>(android.content.Context, org.telegram.tgnet.TLRPC$TL_help_appUpdate, int):void");
     }
 
-    /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$new$0(View view) {
+    /* renamed from: lambda$new$0$org-telegram-ui-Components-UpdateAppAlertDialog  reason: not valid java name */
+    public /* synthetic */ void m4510lambda$new$0$orgtelegramuiComponentsUpdateAppAlertDialog(View v) {
         FileLoader.getInstance(this.accountNum).loadFile(this.appUpdate.document, "update", 1, 1);
         dismiss();
     }
 
-    /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$new$1(View view) {
+    /* renamed from: lambda$new$1$org-telegram-ui-Components-UpdateAppAlertDialog  reason: not valid java name */
+    public /* synthetic */ void m4511lambda$new$1$orgtelegramuiComponentsUpdateAppAlertDialog(View v) {
         dismiss();
     }
 
-    private void runShadowAnimation(int i, final boolean z) {
-        if ((z && this.shadow.getTag() != null) || (!z && this.shadow.getTag() == null)) {
-            this.shadow.setTag(z ? null : 1);
-            if (z) {
+    private void runShadowAnimation(int num, final boolean show) {
+        if ((show && this.shadow.getTag() != null) || (!show && this.shadow.getTag() == null)) {
+            this.shadow.setTag(show ? null : 1);
+            if (show) {
                 this.shadow.setVisibility(0);
             }
             AnimatorSet animatorSet = this.shadowAnimation;
@@ -429,22 +436,22 @@ public class UpdateAppAlertDialog extends BottomSheet {
             View view = this.shadow;
             Property property = View.ALPHA;
             float[] fArr = new float[1];
-            fArr[0] = z ? 1.0f : 0.0f;
+            fArr[0] = show ? 1.0f : 0.0f;
             animatorArr[0] = ObjectAnimator.ofFloat(view, property, fArr);
             animatorSet2.playTogether(animatorArr);
             this.shadowAnimation.setDuration(150);
             this.shadowAnimation.addListener(new AnimatorListenerAdapter() {
-                public void onAnimationEnd(Animator animator) {
-                    if (UpdateAppAlertDialog.this.shadowAnimation != null && UpdateAppAlertDialog.this.shadowAnimation.equals(animator)) {
-                        if (!z) {
+                public void onAnimationEnd(Animator animation) {
+                    if (UpdateAppAlertDialog.this.shadowAnimation != null && UpdateAppAlertDialog.this.shadowAnimation.equals(animation)) {
+                        if (!show) {
                             UpdateAppAlertDialog.this.shadow.setVisibility(4);
                         }
                         AnimatorSet unused = UpdateAppAlertDialog.this.shadowAnimation = null;
                     }
                 }
 
-                public void onAnimationCancel(Animator animator) {
-                    if (UpdateAppAlertDialog.this.shadowAnimation != null && UpdateAppAlertDialog.this.shadowAnimation.equals(animator)) {
+                public void onAnimationCancel(Animator animation) {
+                    if (UpdateAppAlertDialog.this.shadowAnimation != null && UpdateAppAlertDialog.this.shadowAnimation.equals(animation)) {
                         AnimatorSet unused = UpdateAppAlertDialog.this.shadowAnimation = null;
                     }
                 }
@@ -456,15 +463,20 @@ public class UpdateAppAlertDialog extends BottomSheet {
     /* access modifiers changed from: private */
     public void updateLayout() {
         this.linearLayout.getChildAt(0).getLocationInWindow(this.location);
-        int max = Math.max(this.location[1] - AndroidUtilities.dp(24.0f), 0);
+        int newOffset = Math.max(this.location[1] - AndroidUtilities.dp(24.0f), 0);
         if (((float) (this.location[1] + this.linearLayout.getMeasuredHeight())) <= ((float) (this.container.getMeasuredHeight() - AndroidUtilities.dp(113.0f))) + this.containerView.getTranslationY()) {
             runShadowAnimation(0, false);
         } else {
             runShadowAnimation(0, true);
         }
-        if (this.scrollOffsetY != max) {
-            this.scrollOffsetY = max;
+        if (this.scrollOffsetY != newOffset) {
+            this.scrollOffsetY = newOffset;
             this.scrollView.invalidate();
         }
+    }
+
+    /* access modifiers changed from: protected */
+    public boolean canDismissWithSwipe() {
+        return false;
     }
 }

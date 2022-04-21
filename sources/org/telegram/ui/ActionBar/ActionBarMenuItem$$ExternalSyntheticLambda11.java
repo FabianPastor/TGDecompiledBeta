@@ -1,13 +1,15 @@
 package org.telegram.ui.ActionBar;
 
-public final /* synthetic */ class ActionBarMenuItem$$ExternalSyntheticLambda11 implements Runnable {
-    public final /* synthetic */ ActionBarMenuItem f$0;
+import android.view.View;
 
-    public /* synthetic */ ActionBarMenuItem$$ExternalSyntheticLambda11(ActionBarMenuItem actionBarMenuItem) {
-        this.f$0 = actionBarMenuItem;
+public final /* synthetic */ class ActionBarMenuItem$$ExternalSyntheticLambda11 implements View.OnClickListener {
+    public final /* synthetic */ ActionBarMenuSubItem f$0;
+
+    public /* synthetic */ ActionBarMenuItem$$ExternalSyntheticLambda11(ActionBarMenuSubItem actionBarMenuSubItem) {
+        this.f$0 = actionBarMenuSubItem;
     }
 
-    public final void run() {
-        this.f$0.lambda$onTouchEvent$0();
+    public final void onClick(View view) {
+        this.f$0.openSwipeBack();
     }
 }

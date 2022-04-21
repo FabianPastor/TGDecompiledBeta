@@ -10,6 +10,6 @@ public final /* synthetic */ class StickersSearchAdapter$$ExternalSyntheticLambd
     }
 
     public final void onClick(View view) {
-        this.f$0.lambda$onCreateViewHolder$0(view);
+        this.f$0.m1360x31f1c9cd(view);
     }
 }

@@ -11,6 +11,6 @@ public final /* synthetic */ class PassportActivity$3$$ExternalSyntheticLambda5 
     }
 
     public final int compare(Object obj, Object obj2) {
-        return this.f$0.lambda$onIdentityDone$3((String) obj, (String) obj2);
+        return this.f$0.m2774lambda$onIdentityDone$3$orgtelegramuiPassportActivity$3((String) obj, (String) obj2);
     }
 }

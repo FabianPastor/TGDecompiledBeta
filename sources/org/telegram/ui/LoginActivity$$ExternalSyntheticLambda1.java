@@ -1,15 +1,15 @@
 package org.telegram.ui;
 
-import android.animation.ValueAnimator;
+import android.view.View;
 
-public final /* synthetic */ class LoginActivity$$ExternalSyntheticLambda1 implements ValueAnimator.AnimatorUpdateListener {
+public final /* synthetic */ class LoginActivity$$ExternalSyntheticLambda1 implements View.OnClickListener {
     public final /* synthetic */ LoginActivity f$0;
 
     public /* synthetic */ LoginActivity$$ExternalSyntheticLambda1(LoginActivity loginActivity) {
         this.f$0 = loginActivity;
     }
 
-    public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-        this.f$0.lambda$setCustomKeyboardVisible$4(valueAnimator);
+    public final void onClick(View view) {
+        this.f$0.m2448lambda$createView$3$orgtelegramuiLoginActivity(view);
     }
 }

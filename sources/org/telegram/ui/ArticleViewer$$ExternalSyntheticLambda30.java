@@ -1,27 +1,26 @@
 package org.telegram.ui;
 
 import org.telegram.messenger.MessageObject;
+import org.telegram.tgnet.RequestDelegate;
 import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC$WebPage;
+import org.telegram.tgnet.TLRPC;
 
-public final /* synthetic */ class ArticleViewer$$ExternalSyntheticLambda30 implements Runnable {
+public final /* synthetic */ class ArticleViewer$$ExternalSyntheticLambda30 implements RequestDelegate {
     public final /* synthetic */ ArticleViewer f$0;
-    public final /* synthetic */ TLObject f$1;
-    public final /* synthetic */ TLRPC$WebPage f$2;
-    public final /* synthetic */ MessageObject f$3;
-    public final /* synthetic */ int f$4;
-    public final /* synthetic */ String f$5;
+    public final /* synthetic */ TLRPC.WebPage f$1;
+    public final /* synthetic */ MessageObject f$2;
+    public final /* synthetic */ int f$3;
+    public final /* synthetic */ String f$4;
 
-    public /* synthetic */ ArticleViewer$$ExternalSyntheticLambda30(ArticleViewer articleViewer, TLObject tLObject, TLRPC$WebPage tLRPC$WebPage, MessageObject messageObject, int i, String str) {
+    public /* synthetic */ ArticleViewer$$ExternalSyntheticLambda30(ArticleViewer articleViewer, TLRPC.WebPage webPage, MessageObject messageObject, int i, String str) {
         this.f$0 = articleViewer;
-        this.f$1 = tLObject;
-        this.f$2 = tLRPC$WebPage;
-        this.f$3 = messageObject;
-        this.f$4 = i;
-        this.f$5 = str;
+        this.f$1 = webPage;
+        this.f$2 = messageObject;
+        this.f$3 = i;
+        this.f$4 = str;
     }
 
-    public final void run() {
-        this.f$0.lambda$open$30(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5);
+    public final void run(TLObject tLObject, TLRPC.TL_error tL_error) {
+        this.f$0.m1380lambda$open$31$orgtelegramuiArticleViewer(this.f$1, this.f$2, this.f$3, this.f$4, tLObject, tL_error);
     }
 }

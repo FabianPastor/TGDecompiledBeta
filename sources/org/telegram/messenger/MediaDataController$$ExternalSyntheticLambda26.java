@@ -1,15 +1,12 @@
 package org.telegram.messenger;
 
-public final /* synthetic */ class MediaDataController$$ExternalSyntheticLambda26 implements Runnable {
-    public final /* synthetic */ MediaDataController f$0;
-    public final /* synthetic */ long f$1;
+public final /* synthetic */ class MediaDataController$$ExternalSyntheticLambda26 implements GenericProvider {
+    public static final /* synthetic */ MediaDataController$$ExternalSyntheticLambda26 INSTANCE = new MediaDataController$$ExternalSyntheticLambda26();
 
-    public /* synthetic */ MediaDataController$$ExternalSyntheticLambda26(MediaDataController mediaDataController, long j) {
-        this.f$0 = mediaDataController;
-        this.f$1 = j;
+    private /* synthetic */ MediaDataController$$ExternalSyntheticLambda26() {
     }
 
-    public final void run() {
-        this.f$0.lambda$increasePeerRaiting$109(this.f$1);
+    public final Object provide(Object obj) {
+        return MediaDataController.lambda$getEntities$132((Void) obj);
     }
 }

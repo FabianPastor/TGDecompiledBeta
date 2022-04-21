@@ -10,6 +10,6 @@ public final /* synthetic */ class ShareActivity$$ExternalSyntheticLambda0 imple
     }
 
     public final void onDismiss(DialogInterface dialogInterface) {
-        this.f$0.lambda$onCreate$0(dialogInterface);
+        this.f$0.m3249lambda$onCreate$0$orgtelegramuiShareActivity(dialogInterface);
     }
 }

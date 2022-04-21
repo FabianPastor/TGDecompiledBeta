@@ -10,6 +10,6 @@ public final /* synthetic */ class WallpapersListActivity$$ExternalSyntheticLamb
     }
 
     public final void onClick(DialogInterface dialogInterface, int i) {
-        this.f$0.lambda$createView$3(dialogInterface, i);
+        this.f$0.m3474lambda$createView$3$orgtelegramuiWallpapersListActivity(dialogInterface, i);
     }
 }

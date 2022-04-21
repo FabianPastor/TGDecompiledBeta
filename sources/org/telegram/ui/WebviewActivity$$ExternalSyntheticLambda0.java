@@ -12,6 +12,6 @@ public final /* synthetic */ class WebviewActivity$$ExternalSyntheticLambda0 imp
     }
 
     public final void run() {
-        this.f$0.lambda$reloadStats$0(this.f$1);
+        this.f$0.m3489lambda$reloadStats$0$orgtelegramuiWebviewActivity(this.f$1);
     }
 }

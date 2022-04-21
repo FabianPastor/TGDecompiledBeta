@@ -10,6 +10,6 @@ public final /* synthetic */ class CacheControlActivity$$ExternalSyntheticLambda
     }
 
     public final void onClick(View view) {
-        this.f$0.lambda$createView$5(view);
+        this.f$0.m1432lambda$createView$5$orgtelegramuiCacheControlActivity(view);
     }
 }

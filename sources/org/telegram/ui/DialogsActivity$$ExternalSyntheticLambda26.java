@@ -1,16 +1,13 @@
 package org.telegram.ui;
 
-import android.content.Context;
-import org.telegram.ui.ActionBar.Theme;
-
 public final /* synthetic */ class DialogsActivity$$ExternalSyntheticLambda26 implements Runnable {
-    public final /* synthetic */ Context f$0;
+    public final /* synthetic */ DialogsActivity f$0;
 
-    public /* synthetic */ DialogsActivity$$ExternalSyntheticLambda26(Context context) {
-        this.f$0 = context;
+    public /* synthetic */ DialogsActivity$$ExternalSyntheticLambda26(DialogsActivity dialogsActivity) {
+        this.f$0 = dialogsActivity;
     }
 
     public final void run() {
-        Theme.createChatResources(this.f$0, false);
+        this.f$0.m2111lambda$showFiltersHint$42$orgtelegramuiDialogsActivity();
     }
 }

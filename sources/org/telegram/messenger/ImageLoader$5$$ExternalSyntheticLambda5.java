@@ -16,6 +16,6 @@ public final /* synthetic */ class ImageLoader$5$$ExternalSyntheticLambda5 imple
     }
 
     public final void run() {
-        this.f$0.lambda$fileDidFailedUpload$4(this.f$1, this.f$2, this.f$3);
+        this.f$0.m621xaCLASSNAMEfd2(this.f$1, this.f$2, this.f$3);
     }
 }

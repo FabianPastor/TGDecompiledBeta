@@ -1,15 +1,15 @@
 package org.telegram.ui;
 
-import android.view.View;
+import org.telegram.messenger.AccountInstance;
 
-public final /* synthetic */ class DialogsActivity$$ExternalSyntheticLambda19 implements View.OnClickListener {
-    public final /* synthetic */ DialogsActivity f$0;
+public final /* synthetic */ class DialogsActivity$$ExternalSyntheticLambda19 implements Runnable {
+    public final /* synthetic */ AccountInstance f$0;
 
-    public /* synthetic */ DialogsActivity$$ExternalSyntheticLambda19(DialogsActivity dialogsActivity) {
-        this.f$0 = dialogsActivity;
+    public /* synthetic */ DialogsActivity$$ExternalSyntheticLambda19(AccountInstance accountInstance) {
+        this.f$0 = accountInstance;
     }
 
-    public final void onClick(View view) {
-        this.f$0.lambda$createView$3(view);
+    public final void run() {
+        this.f$0.getDownloadController().loadDownloadingFiles();
     }
 }

@@ -1,24 +1,23 @@
 package org.telegram.ui;
 
-import android.view.View;
-import org.telegram.ui.Components.RecyclerListView;
+import androidx.recyclerview.widget.RecyclerView;
+import org.telegram.messenger.MessagesStorage;
+import org.telegram.ui.Cells.NotificationsCheckCell;
 
-public final /* synthetic */ class NotificationsCustomSettingsActivity$$ExternalSyntheticLambda10 implements RecyclerListView.OnItemClickListenerExtended {
+public final /* synthetic */ class NotificationsCustomSettingsActivity$$ExternalSyntheticLambda10 implements MessagesStorage.IntCallback {
     public final /* synthetic */ NotificationsCustomSettingsActivity f$0;
+    public final /* synthetic */ NotificationsCheckCell f$1;
+    public final /* synthetic */ RecyclerView.ViewHolder f$2;
+    public final /* synthetic */ int f$3;
 
-    public /* synthetic */ NotificationsCustomSettingsActivity$$ExternalSyntheticLambda10(NotificationsCustomSettingsActivity notificationsCustomSettingsActivity) {
+    public /* synthetic */ NotificationsCustomSettingsActivity$$ExternalSyntheticLambda10(NotificationsCustomSettingsActivity notificationsCustomSettingsActivity, NotificationsCheckCell notificationsCheckCell, RecyclerView.ViewHolder viewHolder, int i) {
         this.f$0 = notificationsCustomSettingsActivity;
+        this.f$1 = notificationsCheckCell;
+        this.f$2 = viewHolder;
+        this.f$3 = i;
     }
 
-    public /* synthetic */ boolean hasDoubleTap(View view, int i) {
-        return RecyclerListView.OnItemClickListenerExtended.CC.$default$hasDoubleTap(this, view, i);
-    }
-
-    public /* synthetic */ void onDoubleTap(View view, int i, float f, float f2) {
-        RecyclerListView.OnItemClickListenerExtended.CC.$default$onDoubleTap(this, view, i, f, f2);
-    }
-
-    public final void onItemClick(View view, int i, float f, float f2) {
-        this.f$0.lambda$createView$9(view, i, f, f2);
+    public final void run(int i) {
+        this.f$0.m2649x5cCLASSNAMEf(this.f$1, this.f$2, this.f$3, i);
     }
 }

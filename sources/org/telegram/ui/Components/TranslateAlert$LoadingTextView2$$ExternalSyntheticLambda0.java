@@ -11,6 +11,6 @@ public final /* synthetic */ class TranslateAlert$LoadingTextView2$$ExternalSynt
     }
 
     public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-        this.f$0.lambda$loaded$1(valueAnimator);
+        this.f$0.m4495xe960660e(valueAnimator);
     }
 }

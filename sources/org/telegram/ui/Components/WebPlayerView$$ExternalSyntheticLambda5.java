@@ -10,6 +10,6 @@ public final /* synthetic */ class WebPlayerView$$ExternalSyntheticLambda5 imple
     }
 
     public final void jsCallFinished(String str) {
-        this.f$0.lambda$new$0(str);
+        this.f$0.m4528lambda$new$0$orgtelegramuiComponentsWebPlayerView(str);
     }
 }

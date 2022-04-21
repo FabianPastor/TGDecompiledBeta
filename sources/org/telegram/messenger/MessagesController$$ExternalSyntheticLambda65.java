@@ -1,21 +1,22 @@
 package org.telegram.messenger;
 
-import java.util.ArrayList;
+import org.telegram.tgnet.TLRPC;
+import org.telegram.ui.ActionBar.BaseFragment;
 
 public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda65 implements Runnable {
     public final /* synthetic */ MessagesController f$0;
-    public final /* synthetic */ long f$1;
-    public final /* synthetic */ int f$2;
-    public final /* synthetic */ ArrayList f$3;
+    public final /* synthetic */ TLRPC.TL_error f$1;
+    public final /* synthetic */ BaseFragment f$2;
+    public final /* synthetic */ TLRPC.TL_channels_createChannel f$3;
 
-    public /* synthetic */ MessagesController$$ExternalSyntheticLambda65(MessagesController messagesController, long j, int i, ArrayList arrayList) {
+    public /* synthetic */ MessagesController$$ExternalSyntheticLambda65(MessagesController messagesController, TLRPC.TL_error tL_error, BaseFragment baseFragment, TLRPC.TL_channels_createChannel tL_channels_createChannel) {
         this.f$0 = messagesController;
-        this.f$1 = j;
-        this.f$2 = i;
-        this.f$3 = arrayList;
+        this.f$1 = tL_error;
+        this.f$2 = baseFragment;
+        this.f$3 = tL_channels_createChannel;
     }
 
     public final void run() {
-        this.f$0.lambda$checkUnreadReactions$326(this.f$1, this.f$2, this.f$3);
+        this.f$0.m168lambda$createChat$207$orgtelegrammessengerMessagesController(this.f$1, this.f$2, this.f$3);
     }
 }

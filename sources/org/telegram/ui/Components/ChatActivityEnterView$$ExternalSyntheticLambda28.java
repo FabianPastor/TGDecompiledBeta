@@ -1,15 +1,13 @@
 package org.telegram.ui.Components;
 
-import android.view.View;
-
-public final /* synthetic */ class ChatActivityEnterView$$ExternalSyntheticLambda28 implements View.OnLongClickListener {
+public final /* synthetic */ class ChatActivityEnterView$$ExternalSyntheticLambda28 implements Runnable {
     public final /* synthetic */ ChatActivityEnterView f$0;
 
     public /* synthetic */ ChatActivityEnterView$$ExternalSyntheticLambda28(ChatActivityEnterView chatActivityEnterView) {
         this.f$0 = chatActivityEnterView;
     }
 
-    public final boolean onLongClick(View view) {
-        return this.f$0.onSendLongClick(view);
+    public final void run() {
+        this.f$0.m3701lambda$new$0$orgtelegramuiComponentsChatActivityEnterView();
     }
 }

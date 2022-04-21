@@ -1,17 +1,13 @@
 package org.telegram.ui;
 
-import org.telegram.tgnet.TLRPC$TL_error;
-
 public final /* synthetic */ class LaunchActivity$$ExternalSyntheticLambda24 implements Runnable {
-    public final /* synthetic */ ActionIntroActivity f$0;
-    public final /* synthetic */ TLRPC$TL_error f$1;
+    public final /* synthetic */ LaunchActivity f$0;
 
-    public /* synthetic */ LaunchActivity$$ExternalSyntheticLambda24(ActionIntroActivity actionIntroActivity, TLRPC$TL_error tLRPC$TL_error) {
-        this.f$0 = actionIntroActivity;
-        this.f$1 = tLRPC$TL_error;
+    public /* synthetic */ LaunchActivity$$ExternalSyntheticLambda24(LaunchActivity launchActivity) {
+        this.f$0 = launchActivity;
     }
 
     public final void run() {
-        LaunchActivity.lambda$handleIntent$17(this.f$0, this.f$1);
+        this.f$0.m2339lambda$onCreate$4$orgtelegramuiLaunchActivity();
     }
 }

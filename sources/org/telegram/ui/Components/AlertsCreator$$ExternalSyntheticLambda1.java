@@ -1,20 +1,16 @@
 package org.telegram.ui.Components;
 
-import android.content.DialogInterface;
-import android.widget.EditText;
+import org.telegram.tgnet.RequestDelegate;
+import org.telegram.tgnet.TLObject;
+import org.telegram.tgnet.TLRPC;
 
-public final /* synthetic */ class AlertsCreator$$ExternalSyntheticLambda1 implements DialogInterface.OnClickListener {
-    public final /* synthetic */ long f$0;
-    public final /* synthetic */ int f$1;
-    public final /* synthetic */ EditText f$2;
+public final /* synthetic */ class AlertsCreator$$ExternalSyntheticLambda1 implements RequestDelegate {
+    public static final /* synthetic */ AlertsCreator$$ExternalSyntheticLambda1 INSTANCE = new AlertsCreator$$ExternalSyntheticLambda1();
 
-    public /* synthetic */ AlertsCreator$$ExternalSyntheticLambda1(long j, int i, EditText editText) {
-        this.f$0 = j;
-        this.f$1 = i;
-        this.f$2 = editText;
+    private /* synthetic */ AlertsCreator$$ExternalSyntheticLambda1() {
     }
 
-    public final void onClick(DialogInterface dialogInterface, int i) {
-        AlertsCreator.lambda$createChangeBioAlert$30(this.f$0, this.f$1, this.f$2, dialogInterface, i);
+    public final void run(TLObject tLObject, TLRPC.TL_error tL_error) {
+        AlertsCreator.lambda$sendReport$83(tLObject, tL_error);
     }
 }

@@ -12,6 +12,6 @@ public final /* synthetic */ class ConnectionsManager$MozillaDnsLoadTask$$Extern
     }
 
     public final void run() {
-        this.f$0.lambda$onPostExecute$1(this.f$1);
+        this.f$0.m1239x8645eae8(this.f$1);
     }
 }

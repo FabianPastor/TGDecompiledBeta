@@ -1,26 +1,23 @@
 package org.telegram.messenger;
 
-import java.io.File;
-import org.telegram.tgnet.TLRPC$TL_wallPaperSettings;
-import org.telegram.tgnet.TLRPC$WallPaper;
-import org.telegram.ui.ActionBar.Theme;
+import org.telegram.tgnet.RequestDelegate;
+import org.telegram.tgnet.TLObject;
+import org.telegram.tgnet.TLRPC;
 
-public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda183 implements Runnable {
+public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda183 implements RequestDelegate {
     public final /* synthetic */ MessagesController f$0;
-    public final /* synthetic */ TLRPC$WallPaper f$1;
-    public final /* synthetic */ TLRPC$TL_wallPaperSettings f$2;
-    public final /* synthetic */ Theme.OverrideWallpaperInfo f$3;
-    public final /* synthetic */ File f$4;
+    public final /* synthetic */ int f$1;
+    public final /* synthetic */ TLRPC.TL_help_promoData f$2;
+    public final /* synthetic */ long f$3;
 
-    public /* synthetic */ MessagesController$$ExternalSyntheticLambda183(MessagesController messagesController, TLRPC$WallPaper tLRPC$WallPaper, TLRPC$TL_wallPaperSettings tLRPC$TL_wallPaperSettings, Theme.OverrideWallpaperInfo overrideWallpaperInfo, File file) {
+    public /* synthetic */ MessagesController$$ExternalSyntheticLambda183(MessagesController messagesController, int i, TLRPC.TL_help_promoData tL_help_promoData, long j) {
         this.f$0 = messagesController;
-        this.f$1 = tLRPC$WallPaper;
-        this.f$2 = tLRPC$TL_wallPaperSettings;
-        this.f$3 = overrideWallpaperInfo;
-        this.f$4 = file;
+        this.f$1 = i;
+        this.f$2 = tL_help_promoData;
+        this.f$3 = j;
     }
 
-    public final void run() {
-        this.f$0.lambda$didReceivedNotification$25(this.f$1, this.f$2, this.f$3, this.f$4);
+    public final void run(TLObject tLObject, TLRPC.TL_error tL_error) {
+        this.f$0.m144xd848721e(this.f$1, this.f$2, this.f$3, tLObject, tL_error);
     }
 }

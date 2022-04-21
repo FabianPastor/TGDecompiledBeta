@@ -8,6 +8,6 @@ public final /* synthetic */ class MessageEnterTransitionContainer$$ExternalSynt
     }
 
     public final void run() {
-        this.f$0.lambda$new$0();
+        this.f$0.m2615lambda$new$0$orgtelegramuiMessageEnterTransitionContainer();
     }
 }

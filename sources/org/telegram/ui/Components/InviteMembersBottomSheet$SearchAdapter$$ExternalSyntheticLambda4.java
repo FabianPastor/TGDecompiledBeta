@@ -26,7 +26,7 @@ public final /* synthetic */ class InviteMembersBottomSheet$SearchAdapter$$Exter
     }
 
     public final void onDataSetChanged(int i) {
-        this.f$0.lambda$new$0(i);
+        this.f$0.m4096xef2d3d33(i);
     }
 
     public /* synthetic */ void onSetHashtags(ArrayList arrayList, HashMap hashMap) {

@@ -13,7 +13,7 @@ import android.widget.FrameLayout;
 import android.widget.TextView;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
-import org.telegram.tgnet.TLRPC$TL_messageMediaVenue;
+import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.BackupImageView;
 import org.telegram.ui.Components.FlickerLoadingView;
@@ -31,21 +31,21 @@ public class LocationCell extends FrameLayout {
     private final Theme.ResourcesProvider resourcesProvider;
     private boolean wrapContent;
 
-    public LocationCell(Context context, boolean z, Theme.ResourcesProvider resourcesProvider2) {
+    /* JADX INFO: super call moved to the top of the method (can break code semantics) */
+    public LocationCell(Context context, boolean wrap, Theme.ResourcesProvider resourcesProvider2) {
         super(context);
+        Context context2 = context;
         this.resourcesProvider = resourcesProvider2;
-        this.wrapContent = z;
-        BackupImageView backupImageView = new BackupImageView(context);
+        this.wrapContent = wrap;
+        BackupImageView backupImageView = new BackupImageView(context2);
         this.imageView = backupImageView;
         ShapeDrawable createCircleDrawable = Theme.createCircleDrawable(AndroidUtilities.dp(42.0f), -1);
         this.circleDrawable = createCircleDrawable;
         backupImageView.setBackground(createCircleDrawable);
         this.imageView.setSize(AndroidUtilities.dp(30.0f), AndroidUtilities.dp(30.0f));
-        BackupImageView backupImageView2 = this.imageView;
-        boolean z2 = LocaleController.isRTL;
         int i = 5;
-        addView(backupImageView2, LayoutHelper.createFrame(42, 42.0f, (z2 ? 5 : 3) | 48, z2 ? 0.0f : 15.0f, 11.0f, z2 ? 15.0f : 0.0f, 0.0f));
-        TextView textView = new TextView(context);
+        addView(this.imageView, LayoutHelper.createFrame(42, 42.0f, (LocaleController.isRTL ? 5 : 3) | 48, LocaleController.isRTL ? 0.0f : 15.0f, 11.0f, LocaleController.isRTL ? 15.0f : 0.0f, 0.0f));
+        TextView textView = new TextView(context2);
         this.nameTextView = textView;
         textView.setTextSize(1, 16.0f);
         this.nameTextView.setMaxLines(1);
@@ -54,32 +54,27 @@ public class LocationCell extends FrameLayout {
         this.nameTextView.setTextColor(getThemedColor("windowBackgroundWhiteBlackText"));
         this.nameTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         this.nameTextView.setGravity(LocaleController.isRTL ? 5 : 3);
-        TextView textView2 = this.nameTextView;
-        boolean z3 = LocaleController.isRTL;
-        int i2 = 16;
-        addView(textView2, LayoutHelper.createFrame(-2, -2.0f, (z3 ? 5 : 3) | 48, (float) (z3 ? 16 : 73), 10.0f, (float) (z3 ? 73 : 16), 0.0f));
-        TextView textView3 = new TextView(context);
-        this.addressTextView = textView3;
-        textView3.setTextSize(1, 14.0f);
+        addView(this.nameTextView, LayoutHelper.createFrame(-2, -2.0f, (LocaleController.isRTL ? 5 : 3) | 48, (float) (LocaleController.isRTL ? 16 : 73), 10.0f, (float) (LocaleController.isRTL ? 73 : 16), 0.0f));
+        TextView textView2 = new TextView(context2);
+        this.addressTextView = textView2;
+        textView2.setTextSize(1, 14.0f);
         this.addressTextView.setMaxLines(1);
         this.addressTextView.setEllipsize(TextUtils.TruncateAt.END);
         this.addressTextView.setSingleLine(true);
         this.addressTextView.setTextColor(getThemedColor("windowBackgroundWhiteGrayText3"));
         this.addressTextView.setGravity(LocaleController.isRTL ? 5 : 3);
-        TextView textView4 = this.addressTextView;
-        boolean z4 = LocaleController.isRTL;
-        addView(textView4, LayoutHelper.createFrame(-2, -2.0f, (!z4 ? 3 : i) | 48, (float) (z4 ? 16 : 73), 35.0f, (float) (z4 ? 73 : i2), 0.0f));
+        addView(this.addressTextView, LayoutHelper.createFrame(-2, -2.0f, (!LocaleController.isRTL ? 3 : i) | 48, (float) (LocaleController.isRTL ? 16 : 73), 35.0f, (float) (LocaleController.isRTL ? 73 : 16), 0.0f));
         this.imageView.setAlpha(this.enterAlpha);
         this.nameTextView.setAlpha(this.enterAlpha);
         this.addressTextView.setAlpha(this.enterAlpha);
     }
 
     /* access modifiers changed from: protected */
-    public void onMeasure(int i, int i2) {
+    public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         if (this.wrapContent) {
-            super.onMeasure(i, View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(64.0f) + (this.needDivider ? 1 : 0), NUM));
+            super.onMeasure(widthMeasureSpec, View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(64.0f) + (this.needDivider ? 1 : 0), NUM));
         } else {
-            super.onMeasure(View.MeasureSpec.makeMeasureSpec(View.MeasureSpec.getSize(i), NUM), View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(64.0f) + (this.needDivider ? 1 : 0), NUM));
+            super.onMeasure(View.MeasureSpec.makeMeasureSpec(View.MeasureSpec.getSize(widthMeasureSpec), NUM), View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(64.0f) + (this.needDivider ? 1 : 0), NUM));
         }
     }
 
@@ -87,76 +82,78 @@ public class LocationCell extends FrameLayout {
         return this.imageView;
     }
 
-    public void setLocation(TLRPC$TL_messageMediaVenue tLRPC$TL_messageMediaVenue, String str, int i, boolean z) {
-        setLocation(tLRPC$TL_messageMediaVenue, str, (String) null, i, z);
+    public void setLocation(TLRPC.TL_messageMediaVenue location, String icon, int pos, boolean divider) {
+        setLocation(location, icon, (String) null, pos, divider);
     }
 
-    public static int getColorForIndex(int i) {
-        int i2 = i % 7;
-        if (i2 == 0) {
-            return -1351584;
+    public static int getColorForIndex(int index) {
+        switch (index % 7) {
+            case 0:
+                return -1351584;
+            case 1:
+                return -868277;
+            case 2:
+                return -12214795;
+            case 3:
+                return -13187226;
+            case 4:
+                return -7900675;
+            case 5:
+                return -12338729;
+            default:
+                return -1285237;
         }
-        if (i2 == 1) {
-            return -868277;
-        }
-        if (i2 == 2) {
-            return -12214795;
-        }
-        if (i2 == 3) {
-            return -13187226;
-        }
-        if (i2 != 4) {
-            return i2 != 5 ? -1285237 : -12338729;
-        }
-        return -7900675;
     }
 
-    public void setLocation(TLRPC$TL_messageMediaVenue tLRPC$TL_messageMediaVenue, String str, String str2, int i, boolean z) {
-        this.needDivider = z;
-        this.circleDrawable.getPaint().setColor(getColorForIndex(i));
-        if (tLRPC$TL_messageMediaVenue != null) {
-            this.nameTextView.setText(tLRPC$TL_messageMediaVenue.title);
+    public void setLocation(TLRPC.TL_messageMediaVenue location, String icon, String label, int pos, boolean divider) {
+        TLRPC.TL_messageMediaVenue tL_messageMediaVenue = location;
+        String str = icon;
+        String str2 = label;
+        this.needDivider = divider;
+        this.circleDrawable.getPaint().setColor(getColorForIndex(pos));
+        if (tL_messageMediaVenue != null) {
+            this.nameTextView.setText(tL_messageMediaVenue.title);
         }
         if (str2 != null) {
             this.addressTextView.setText(str2);
-        } else if (tLRPC$TL_messageMediaVenue != null) {
-            this.addressTextView.setText(tLRPC$TL_messageMediaVenue.address);
+        } else if (tL_messageMediaVenue != null) {
+            this.addressTextView.setText(tL_messageMediaVenue.address);
         }
         if (str != null) {
             this.imageView.setImage(str, (String) null, (Drawable) null);
         }
         setWillNotDraw(false);
-        setClickable(tLRPC$TL_messageMediaVenue == null);
+        setClickable(tL_messageMediaVenue == null);
         ValueAnimator valueAnimator = this.enterAnimator;
         if (valueAnimator != null) {
             valueAnimator.cancel();
         }
-        boolean z2 = tLRPC$TL_messageMediaVenue == null;
-        float f = this.enterAlpha;
-        float f2 = z2 ? 0.0f : 1.0f;
-        long abs = (long) (Math.abs(f - f2) * 150.0f);
-        this.enterAnimator = ValueAnimator.ofFloat(new float[]{f, f2});
-        this.enterAnimator.addUpdateListener(new LocationCell$$ExternalSyntheticLambda0(this, SystemClock.elapsedRealtime(), abs, f, f2));
+        boolean loading = tL_messageMediaVenue == null;
+        float fromEnterAlpha = this.enterAlpha;
+        float toEnterAlpha = loading ? 0.0f : 1.0f;
+        long duration = (long) (Math.abs(fromEnterAlpha - toEnterAlpha) * 150.0f);
+        this.enterAnimator = ValueAnimator.ofFloat(new float[]{fromEnterAlpha, toEnterAlpha});
+        long start = SystemClock.elapsedRealtime();
         ValueAnimator valueAnimator2 = this.enterAnimator;
-        if (z2) {
-            abs = Long.MAX_VALUE;
-        }
-        valueAnimator2.setDuration(abs);
+        LocationCell$$ExternalSyntheticLambda0 locationCell$$ExternalSyntheticLambda0 = r0;
+        long duration2 = duration;
+        LocationCell$$ExternalSyntheticLambda0 locationCell$$ExternalSyntheticLambda02 = new LocationCell$$ExternalSyntheticLambda0(this, start, duration, fromEnterAlpha, toEnterAlpha);
+        valueAnimator2.addUpdateListener(locationCell$$ExternalSyntheticLambda0);
+        this.enterAnimator.setDuration(loading ? Long.MAX_VALUE : duration2);
         this.enterAnimator.start();
-        this.imageView.setAlpha(f);
-        this.nameTextView.setAlpha(f);
-        this.addressTextView.setAlpha(f);
+        this.imageView.setAlpha(fromEnterAlpha);
+        this.nameTextView.setAlpha(fromEnterAlpha);
+        this.addressTextView.setAlpha(fromEnterAlpha);
         invalidate();
     }
 
-    /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$setLocation$0(long j, long j2, float f, float f2, ValueAnimator valueAnimator) {
-        float f3 = 1.0f;
-        float min = Math.min(Math.max(((float) (SystemClock.elapsedRealtime() - j)) / ((float) j2), 0.0f), 1.0f);
-        if (j2 > 0) {
-            f3 = min;
+    /* renamed from: lambda$setLocation$0$org-telegram-ui-Cells-LocationCell  reason: not valid java name */
+    public /* synthetic */ void m1508lambda$setLocation$0$orgtelegramuiCellsLocationCell(long start, long duration, float fromEnterAlpha, float toEnterAlpha, ValueAnimator a) {
+        float t = Math.min(Math.max(((float) (SystemClock.elapsedRealtime() - start)) / ((float) duration), 0.0f), 1.0f);
+        if (duration <= 0) {
+            t = 1.0f;
         }
-        float lerp = AndroidUtilities.lerp(f, f2, f3);
+        float lerp = AndroidUtilities.lerp(fromEnterAlpha, toEnterAlpha, t);
         this.enterAlpha = lerp;
         this.imageView.setAlpha(lerp);
         this.nameTextView.setAlpha(this.enterAlpha);
@@ -185,9 +182,9 @@ public class LocationCell extends FrameLayout {
         }
     }
 
-    private int getThemedColor(String str) {
+    private int getThemedColor(String key) {
         Theme.ResourcesProvider resourcesProvider2 = this.resourcesProvider;
-        Integer color = resourcesProvider2 != null ? resourcesProvider2.getColor(str) : null;
-        return color != null ? color.intValue() : Theme.getColor(str);
+        Integer color = resourcesProvider2 != null ? resourcesProvider2.getColor(key) : null;
+        return color != null ? color.intValue() : Theme.getColor(key);
     }
 }

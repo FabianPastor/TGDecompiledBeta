@@ -17,26 +17,21 @@ import org.telegram.messenger.ImageReceiver;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.SvgHelper;
-import org.telegram.tgnet.TLRPC$Document;
-import org.telegram.tgnet.TLRPC$DocumentAttribute;
-import org.telegram.tgnet.TLRPC$PhotoSize;
-import org.telegram.tgnet.TLRPC$TL_documentAttributeSticker;
+import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.BackupImageView;
 import org.telegram.ui.Components.LayoutHelper;
 
 public class StickerCell extends FrameLayout {
+    private static AccelerateInterpolator interpolator = new AccelerateInterpolator(0.5f);
     private boolean clearsInputField;
     private BackupImageView imageView;
     private long lastUpdateTime;
     private Object parentObject;
     private float scale;
     private boolean scaled;
-    private TLRPC$Document sticker;
-
-    static {
-        new AccelerateInterpolator(0.5f);
-    }
+    private TLRPC.Document sticker;
+    private long time = 0;
 
     public StickerCell(Context context) {
         super(context);
@@ -49,49 +44,49 @@ public class StickerCell extends FrameLayout {
     }
 
     /* access modifiers changed from: protected */
-    public void onMeasure(int i, int i2) {
+    public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(76.0f) + getPaddingLeft() + getPaddingRight(), NUM), View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(78.0f), NUM));
     }
 
-    public void setPressed(boolean z) {
-        if (this.imageView.getImageReceiver().getPressed() != z) {
-            this.imageView.getImageReceiver().setPressed(z ? 1 : 0);
+    public void setPressed(boolean pressed) {
+        if (this.imageView.getImageReceiver().getPressed() != pressed) {
+            this.imageView.getImageReceiver().setPressed(pressed);
             this.imageView.invalidate();
         }
-        super.setPressed(z);
+        super.setPressed(pressed);
     }
 
-    public void setClearsInputField(boolean z) {
-        this.clearsInputField = z;
+    public void setClearsInputField(boolean value) {
+        this.clearsInputField = value;
     }
 
     public boolean isClearsInputField() {
         return this.clearsInputField;
     }
 
-    public void setSticker(TLRPC$Document tLRPC$Document, Object obj) {
-        TLRPC$Document tLRPC$Document2 = tLRPC$Document;
-        this.parentObject = obj;
-        if (tLRPC$Document2 != null) {
-            TLRPC$PhotoSize closestPhotoSizeWithSize = FileLoader.getClosestPhotoSizeWithSize(tLRPC$Document2.thumbs, 90);
-            SvgHelper.SvgDrawable svgThumb = DocumentObject.getSvgThumb(tLRPC$Document2, "windowBackgroundGray", 1.0f);
-            if (MessageObject.canAutoplayAnimatedSticker(tLRPC$Document)) {
+    public void setSticker(TLRPC.Document document, Object parent) {
+        TLRPC.Document document2 = document;
+        this.parentObject = parent;
+        if (document2 != null) {
+            TLRPC.PhotoSize thumb = FileLoader.getClosestPhotoSizeWithSize(document2.thumbs, 90);
+            SvgHelper.SvgDrawable svgThumb = DocumentObject.getSvgThumb(document2, "windowBackgroundGray", 1.0f);
+            if (MessageObject.canAutoplayAnimatedSticker(document)) {
                 if (svgThumb != null) {
-                    this.imageView.setImage(ImageLocation.getForDocument(tLRPC$Document), "80_80", (String) null, (Drawable) svgThumb, this.parentObject);
-                } else if (closestPhotoSizeWithSize != null) {
-                    this.imageView.setImage(ImageLocation.getForDocument(tLRPC$Document), "80_80", ImageLocation.getForDocument(closestPhotoSizeWithSize, tLRPC$Document2), (String) null, 0, this.parentObject);
+                    this.imageView.setImage(ImageLocation.getForDocument(document), "80_80", (String) null, (Drawable) svgThumb, this.parentObject);
+                } else if (thumb != null) {
+                    this.imageView.setImage(ImageLocation.getForDocument(document), "80_80", ImageLocation.getForDocument(thumb, document2), (String) null, 0, this.parentObject);
                 } else {
-                    this.imageView.setImage(ImageLocation.getForDocument(tLRPC$Document), "80_80", (String) null, (Drawable) null, this.parentObject);
+                    this.imageView.setImage(ImageLocation.getForDocument(document), "80_80", (String) null, (Drawable) null, this.parentObject);
                 }
             } else if (svgThumb == null) {
-                this.imageView.setImage(ImageLocation.getForDocument(closestPhotoSizeWithSize, tLRPC$Document2), (String) null, "webp", (Drawable) null, this.parentObject);
-            } else if (closestPhotoSizeWithSize != null) {
-                this.imageView.setImage(ImageLocation.getForDocument(closestPhotoSizeWithSize, tLRPC$Document2), (String) null, "webp", (Drawable) svgThumb, this.parentObject);
+                this.imageView.setImage(ImageLocation.getForDocument(thumb, document2), (String) null, "webp", (Drawable) null, this.parentObject);
+            } else if (thumb != null) {
+                this.imageView.setImage(ImageLocation.getForDocument(thumb, document2), (String) null, "webp", (Drawable) svgThumb, this.parentObject);
             } else {
-                this.imageView.setImage(ImageLocation.getForDocument(tLRPC$Document), (String) null, "webp", (Drawable) svgThumb, this.parentObject);
+                this.imageView.setImage(ImageLocation.getForDocument(document), (String) null, "webp", (Drawable) svgThumb, this.parentObject);
             }
         }
-        this.sticker = tLRPC$Document2;
+        this.sticker = document2;
         Drawable background = getBackground();
         if (background != null) {
             background.setAlpha(230);
@@ -99,7 +94,7 @@ public class StickerCell extends FrameLayout {
         }
     }
 
-    public TLRPC$Document getSticker() {
+    public TLRPC.Document getSticker() {
         return this.sticker;
     }
 
@@ -107,8 +102,8 @@ public class StickerCell extends FrameLayout {
         return this.parentObject;
     }
 
-    public void setScaled(boolean z) {
-        this.scaled = z;
+    public void setScaled(boolean value) {
+        this.scaled = value;
         this.lastUpdateTime = System.currentTimeMillis();
         invalidate();
     }
@@ -122,28 +117,28 @@ public class StickerCell extends FrameLayout {
         if (!imageReceiver.hasNotThumb()) {
             return null;
         }
-        MessageObject.SendAnimationData sendAnimationData = new MessageObject.SendAnimationData();
-        int[] iArr = new int[2];
-        this.imageView.getLocationInWindow(iArr);
-        sendAnimationData.x = imageReceiver.getCenterX() + ((float) iArr[0]);
-        sendAnimationData.y = imageReceiver.getCenterY() + ((float) iArr[1]);
-        sendAnimationData.width = imageReceiver.getImageWidth();
-        sendAnimationData.height = imageReceiver.getImageHeight();
-        return sendAnimationData;
+        MessageObject.SendAnimationData data = new MessageObject.SendAnimationData();
+        int[] position = new int[2];
+        this.imageView.getLocationInWindow(position);
+        data.x = imageReceiver.getCenterX() + ((float) position[0]);
+        data.y = imageReceiver.getCenterY() + ((float) position[1]);
+        data.width = imageReceiver.getImageWidth();
+        data.height = imageReceiver.getImageHeight();
+        return data;
     }
 
     /* access modifiers changed from: protected */
-    public boolean drawChild(Canvas canvas, View view, long j) {
+    public boolean drawChild(Canvas canvas, View child, long drawingTime) {
         boolean z;
-        boolean drawChild = super.drawChild(canvas, view, j);
-        if (view == this.imageView && ((z && this.scale != 0.8f) || (!(z = this.scaled) && this.scale != 1.0f))) {
-            long currentTimeMillis = System.currentTimeMillis();
-            long j2 = currentTimeMillis - this.lastUpdateTime;
-            this.lastUpdateTime = currentTimeMillis;
+        boolean result = super.drawChild(canvas, child, drawingTime);
+        if (child == this.imageView && ((z && this.scale != 0.8f) || (!(z = this.scaled) && this.scale != 1.0f))) {
+            long newTime = System.currentTimeMillis();
+            long dt = newTime - this.lastUpdateTime;
+            this.lastUpdateTime = newTime;
             if (this.scaled) {
                 float f = this.scale;
                 if (f != 0.8f) {
-                    float f2 = f - (((float) j2) / 400.0f);
+                    float f2 = f - (((float) dt) / 400.0f);
                     this.scale = f2;
                     if (f2 < 0.8f) {
                         this.scale = 0.8f;
@@ -154,7 +149,7 @@ public class StickerCell extends FrameLayout {
                     invalidate();
                 }
             }
-            float f3 = this.scale + (((float) j2) / 400.0f);
+            float f3 = this.scale + (((float) dt) / 400.0f);
             this.scale = f3;
             if (f3 > 1.0f) {
                 this.scale = 1.0f;
@@ -164,26 +159,25 @@ public class StickerCell extends FrameLayout {
             this.imageView.invalidate();
             invalidate();
         }
-        return drawChild;
+        return result;
     }
 
-    public void onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo accessibilityNodeInfo) {
-        super.onInitializeAccessibilityNodeInfo(accessibilityNodeInfo);
+    public void onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo info) {
+        super.onInitializeAccessibilityNodeInfo(info);
         if (this.sticker != null) {
-            String str = null;
-            for (int i = 0; i < this.sticker.attributes.size(); i++) {
-                TLRPC$DocumentAttribute tLRPC$DocumentAttribute = this.sticker.attributes.get(i);
-                if (tLRPC$DocumentAttribute instanceof TLRPC$TL_documentAttributeSticker) {
-                    String str2 = tLRPC$DocumentAttribute.alt;
-                    str = (str2 == null || str2.length() <= 0) ? null : tLRPC$DocumentAttribute.alt;
+            String emoji = null;
+            for (int a = 0; a < this.sticker.attributes.size(); a++) {
+                TLRPC.DocumentAttribute attribute = this.sticker.attributes.get(a);
+                if (attribute instanceof TLRPC.TL_documentAttributeSticker) {
+                    emoji = (attribute.alt == null || attribute.alt.length() <= 0) ? null : attribute.alt;
                 }
             }
-            if (str != null) {
-                accessibilityNodeInfo.setText(str + " " + LocaleController.getString("AttachSticker", NUM));
+            if (emoji != null) {
+                info.setText(emoji + " " + LocaleController.getString("AttachSticker", NUM));
             } else {
-                accessibilityNodeInfo.setText(LocaleController.getString("AttachSticker", NUM));
+                info.setText(LocaleController.getString("AttachSticker", NUM));
             }
-            accessibilityNodeInfo.setEnabled(true);
+            info.setEnabled(true);
         }
     }
 }

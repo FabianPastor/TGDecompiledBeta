@@ -16,6 +16,6 @@ public final /* synthetic */ class EditTextCaption$$ExternalSyntheticLambda0 imp
     }
 
     public final void onClick(DialogInterface dialogInterface, int i) {
-        this.f$0.lambda$makeSelectedUrl$0(this.f$1, this.f$2, this.f$3, dialogInterface, i);
+        this.f$0.m3945x8e956f7d(this.f$1, this.f$2, this.f$3, dialogInterface, i);
     }
 }

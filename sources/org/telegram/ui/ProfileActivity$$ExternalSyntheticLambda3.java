@@ -1,21 +1,15 @@
 package org.telegram.ui;
 
-import android.animation.ValueAnimator;
+import android.view.View;
 
-public final /* synthetic */ class ProfileActivity$$ExternalSyntheticLambda3 implements ValueAnimator.AnimatorUpdateListener {
+public final /* synthetic */ class ProfileActivity$$ExternalSyntheticLambda3 implements View.OnClickListener {
     public final /* synthetic */ ProfileActivity f$0;
-    public final /* synthetic */ ValueAnimator f$1;
-    public final /* synthetic */ float f$2;
-    public final /* synthetic */ boolean f$3;
 
-    public /* synthetic */ ProfileActivity$$ExternalSyntheticLambda3(ProfileActivity profileActivity, ValueAnimator valueAnimator, float f, boolean z) {
+    public /* synthetic */ ProfileActivity$$ExternalSyntheticLambda3(ProfileActivity profileActivity) {
         this.f$0 = profileActivity;
-        this.f$1 = valueAnimator;
-        this.f$2 = f;
-        this.f$3 = z;
     }
 
-    public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-        this.f$0.lambda$searchExpandTransition$29(this.f$1, this.f$2, this.f$3, valueAnimator);
+    public final void onClick(View view) {
+        this.f$0.m3038lambda$createView$11$orgtelegramuiProfileActivity(view);
     }
 }

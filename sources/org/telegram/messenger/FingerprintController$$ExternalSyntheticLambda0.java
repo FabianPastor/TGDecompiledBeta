@@ -8,6 +8,6 @@ public final /* synthetic */ class FingerprintController$$ExternalSyntheticLambd
     }
 
     public final void run() {
-        NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.didGenerateFingerprintKeyPair, Boolean.valueOf(this.f$0));
+        FingerprintController.generateNewKey(this.f$0);
     }
 }

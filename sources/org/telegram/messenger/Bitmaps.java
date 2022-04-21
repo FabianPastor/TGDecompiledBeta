@@ -20,7 +20,7 @@ public class Bitmaps {
     };
     private static volatile Matrix sScaleMatrix;
 
-    public static Bitmap createBitmap(int i, int i2, Bitmap.Config config) {
+    public static Bitmap createBitmap(int width, int height, Bitmap.Config config) {
         Bitmap bitmap;
         if (Build.VERSION.SDK_INT < 21) {
             BitmapFactory.Options options = new BitmapFactory.Options();
@@ -29,17 +29,17 @@ public class Bitmaps {
             options.inPurgeable = true;
             options.inSampleSize = 1;
             options.inMutable = true;
-            byte[] bArr = jpegData.get();
-            bArr[76] = (byte) (i2 >> 8);
-            bArr[77] = (byte) (i2 & 255);
-            bArr[78] = (byte) (i >> 8);
-            bArr[79] = (byte) (i & 255);
-            bitmap = BitmapFactory.decodeByteArray(bArr, 0, bArr.length, options);
+            byte[] array = jpegData.get();
+            array[76] = (byte) (height >> 8);
+            array[77] = (byte) (height & 255);
+            array[78] = (byte) (width >> 8);
+            array[79] = (byte) (width & 255);
+            bitmap = BitmapFactory.decodeByteArray(array, 0, array.length, options);
             Utilities.pinBitmap(bitmap);
             bitmap.setHasAlpha(true);
             bitmap.eraseColor(0);
         } else {
-            bitmap = Bitmap.createBitmap(i, i2, config);
+            bitmap = Bitmap.createBitmap(width, height, config);
         }
         if (config == Bitmap.Config.ARGB_8888 || config == Bitmap.Config.ARGB_4444) {
             bitmap.eraseColor(0);
@@ -47,90 +47,95 @@ public class Bitmaps {
         return bitmap;
     }
 
-    private static void checkXYSign(int i, int i2) {
-        if (i < 0) {
+    private static void checkXYSign(int x, int y) {
+        if (x < 0) {
             throw new IllegalArgumentException("x must be >= 0");
-        } else if (i2 < 0) {
+        } else if (y < 0) {
             throw new IllegalArgumentException("y must be >= 0");
         }
     }
 
-    private static void checkWidthHeight(int i, int i2) {
-        if (i <= 0) {
+    private static void checkWidthHeight(int width, int height) {
+        if (width <= 0) {
             throw new IllegalArgumentException("width must be > 0");
-        } else if (i2 <= 0) {
+        } else if (height <= 0) {
             throw new IllegalArgumentException("height must be > 0");
         }
     }
 
-    public static Bitmap createBitmap(Bitmap bitmap, int i, int i2, int i3, int i4, Matrix matrix, boolean z) {
+    public static Bitmap createBitmap(Bitmap source, int x, int y, int width, int height, Matrix m, boolean filter) {
+        Bitmap bitmap;
         Paint paint;
-        Bitmap bitmap2;
-        int i5 = Build.VERSION.SDK_INT;
-        if (i5 >= 21) {
-            return Bitmap.createBitmap(bitmap, i, i2, i3, i4, matrix, z);
+        Bitmap bitmap2 = source;
+        int i = x;
+        int i2 = y;
+        int i3 = width;
+        int i4 = height;
+        Matrix matrix = m;
+        if (Build.VERSION.SDK_INT >= 21) {
+            return Bitmap.createBitmap(source, x, y, width, height, m, filter);
         }
-        checkXYSign(i, i2);
-        checkWidthHeight(i3, i4);
-        int i6 = i + i3;
-        if (i6 <= bitmap.getWidth()) {
-            int i7 = i2 + i4;
-            if (i7 > bitmap.getHeight()) {
-                throw new IllegalArgumentException("y + height must be <= bitmap.height()");
-            } else if (!bitmap.isMutable() && i == 0 && i2 == 0 && i3 == bitmap.getWidth() && i4 == bitmap.getHeight() && (matrix == null || matrix.isIdentity())) {
-                return bitmap;
-            } else {
-                Canvas canvas = new Canvas();
-                Rect rect = new Rect(i, i2, i6, i7);
-                RectF rectF = new RectF(0.0f, 0.0f, (float) i3, (float) i4);
-                Bitmap.Config config = Bitmap.Config.ARGB_8888;
-                Bitmap.Config config2 = bitmap.getConfig();
-                if (config2 != null) {
-                    int i8 = AnonymousClass2.$SwitchMap$android$graphics$Bitmap$Config[config2.ordinal()];
-                    if (i8 == 1) {
-                        config = Bitmap.Config.ARGB_8888;
-                    } else if (i8 != 2) {
-                        config = Bitmap.Config.ARGB_8888;
-                    } else {
-                        config = Bitmap.Config.ALPHA_8;
-                    }
-                }
-                if (matrix == null || matrix.isIdentity()) {
-                    bitmap2 = createBitmap(i3, i4, config);
-                    paint = null;
-                } else {
-                    boolean z2 = !matrix.rectStaysRect();
-                    RectF rectF2 = new RectF();
-                    matrix.mapRect(rectF2, rectF);
-                    int round = Math.round(rectF2.width());
-                    int round2 = Math.round(rectF2.height());
-                    if (z2) {
-                        config = Bitmap.Config.ARGB_8888;
-                    }
-                    bitmap2 = createBitmap(round, round2, config);
-                    canvas.translate(-rectF2.left, -rectF2.top);
-                    canvas.concat(matrix);
-                    paint = new Paint();
-                    paint.setFilterBitmap(z);
-                    if (z2) {
-                        paint.setAntiAlias(true);
-                    }
-                }
-                bitmap2.setDensity(bitmap.getDensity());
-                bitmap2.setHasAlpha(bitmap.hasAlpha());
-                if (i5 >= 19) {
-                    bitmap2.setPremultiplied(bitmap.isPremultiplied());
-                }
-                canvas.setBitmap(bitmap2);
-                canvas.drawBitmap(bitmap, rect, rectF, paint);
-                try {
-                    canvas.setBitmap((Bitmap) null);
-                } catch (Exception unused) {
-                }
-                return bitmap2;
-            }
-        } else {
+        checkXYSign(x, y);
+        checkWidthHeight(width, height);
+        if (i + i3 > source.getWidth()) {
             throw new IllegalArgumentException("x + width must be <= bitmap.width()");
+        } else if (i2 + i4 > source.getHeight()) {
+            throw new IllegalArgumentException("y + height must be <= bitmap.height()");
+        } else if (!source.isMutable() && i == 0 && i2 == 0 && i3 == source.getWidth() && i4 == source.getHeight() && (matrix == null || m.isIdentity())) {
+            return bitmap2;
+        } else {
+            int neww = width;
+            int newh = height;
+            Canvas canvas = new Canvas();
+            Rect srcR = new Rect(i, i2, i + i3, i2 + i4);
+            RectF dstR = new RectF(0.0f, 0.0f, (float) i3, (float) i4);
+            Bitmap.Config newConfig = Bitmap.Config.ARGB_8888;
+            Bitmap.Config config = source.getConfig();
+            if (config != null) {
+                switch (AnonymousClass2.$SwitchMap$android$graphics$Bitmap$Config[config.ordinal()]) {
+                    case 1:
+                        newConfig = Bitmap.Config.ARGB_8888;
+                        break;
+                    case 2:
+                        newConfig = Bitmap.Config.ALPHA_8;
+                        break;
+                    default:
+                        newConfig = Bitmap.Config.ARGB_8888;
+                        break;
+                }
+            }
+            if (matrix == null || m.isIdentity()) {
+                bitmap = createBitmap(neww, newh, newConfig);
+                paint = null;
+                int i5 = neww;
+            } else {
+                boolean transformed = !m.rectStaysRect();
+                RectF deviceR = new RectF();
+                matrix.mapRect(deviceR, dstR);
+                int neww2 = Math.round(deviceR.width());
+                bitmap = createBitmap(neww2, Math.round(deviceR.height()), transformed ? Bitmap.Config.ARGB_8888 : newConfig);
+                int i6 = neww2;
+                canvas.translate(-deviceR.left, -deviceR.top);
+                canvas.concat(matrix);
+                Paint paint2 = new Paint();
+                paint2.setFilterBitmap(filter);
+                if (transformed) {
+                    paint2.setAntiAlias(true);
+                }
+                paint = paint2;
+            }
+            bitmap.setDensity(source.getDensity());
+            bitmap.setHasAlpha(source.hasAlpha());
+            if (Build.VERSION.SDK_INT >= 19) {
+                bitmap.setPremultiplied(source.isPremultiplied());
+            }
+            canvas.setBitmap(bitmap);
+            canvas.drawBitmap(bitmap2, srcR, dstR, paint);
+            try {
+                canvas.setBitmap((Bitmap) null);
+            } catch (Exception e) {
+            }
+            return bitmap;
         }
     }
 
@@ -138,71 +143,102 @@ public class Bitmaps {
     static /* synthetic */ class AnonymousClass2 {
         static final /* synthetic */ int[] $SwitchMap$android$graphics$Bitmap$Config;
 
-        /* JADX WARNING: Can't wrap try/catch for region: R(8:0|1|2|3|4|5|6|(3:7|8|10)) */
-        /* JADX WARNING: Failed to process nested try/catch */
-        /* JADX WARNING: Missing exception handler attribute for start block: B:3:0x0012 */
-        /* JADX WARNING: Missing exception handler attribute for start block: B:5:0x001d */
-        /* JADX WARNING: Missing exception handler attribute for start block: B:7:0x0028 */
         static {
-            /*
-                android.graphics.Bitmap$Config[] r0 = android.graphics.Bitmap.Config.values()
-                int r0 = r0.length
-                int[] r0 = new int[r0]
-                $SwitchMap$android$graphics$Bitmap$Config = r0
-                android.graphics.Bitmap$Config r1 = android.graphics.Bitmap.Config.RGB_565     // Catch:{ NoSuchFieldError -> 0x0012 }
-                int r1 = r1.ordinal()     // Catch:{ NoSuchFieldError -> 0x0012 }
-                r2 = 1
-                r0[r1] = r2     // Catch:{ NoSuchFieldError -> 0x0012 }
-            L_0x0012:
-                int[] r0 = $SwitchMap$android$graphics$Bitmap$Config     // Catch:{ NoSuchFieldError -> 0x001d }
-                android.graphics.Bitmap$Config r1 = android.graphics.Bitmap.Config.ALPHA_8     // Catch:{ NoSuchFieldError -> 0x001d }
-                int r1 = r1.ordinal()     // Catch:{ NoSuchFieldError -> 0x001d }
-                r2 = 2
-                r0[r1] = r2     // Catch:{ NoSuchFieldError -> 0x001d }
-            L_0x001d:
-                int[] r0 = $SwitchMap$android$graphics$Bitmap$Config     // Catch:{ NoSuchFieldError -> 0x0028 }
-                android.graphics.Bitmap$Config r1 = android.graphics.Bitmap.Config.ARGB_4444     // Catch:{ NoSuchFieldError -> 0x0028 }
-                int r1 = r1.ordinal()     // Catch:{ NoSuchFieldError -> 0x0028 }
-                r2 = 3
-                r0[r1] = r2     // Catch:{ NoSuchFieldError -> 0x0028 }
-            L_0x0028:
-                int[] r0 = $SwitchMap$android$graphics$Bitmap$Config     // Catch:{ NoSuchFieldError -> 0x0033 }
-                android.graphics.Bitmap$Config r1 = android.graphics.Bitmap.Config.ARGB_8888     // Catch:{ NoSuchFieldError -> 0x0033 }
-                int r1 = r1.ordinal()     // Catch:{ NoSuchFieldError -> 0x0033 }
-                r2 = 4
-                r0[r1] = r2     // Catch:{ NoSuchFieldError -> 0x0033 }
-            L_0x0033:
-                return
-            */
-            throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.Bitmaps.AnonymousClass2.<clinit>():void");
-        }
-    }
-
-    public static Bitmap createBitmap(Bitmap bitmap, int i, int i2, int i3, int i4) {
-        return createBitmap(bitmap, i, i2, i3, i4, (Matrix) null, false);
-    }
-
-    public static Bitmap createScaledBitmap(Bitmap bitmap, int i, int i2, boolean z) {
-        Matrix matrix;
-        if (Build.VERSION.SDK_INT >= 21) {
-            return Bitmap.createScaledBitmap(bitmap, i, i2, z);
-        }
-        synchronized (Bitmap.class) {
-            matrix = sScaleMatrix;
-            sScaleMatrix = null;
-        }
-        if (matrix == null) {
-            matrix = new Matrix();
-        }
-        int width = bitmap.getWidth();
-        int height = bitmap.getHeight();
-        matrix.setScale(((float) i) / ((float) width), ((float) i2) / ((float) height));
-        Bitmap createBitmap = createBitmap(bitmap, 0, 0, width, height, matrix, z);
-        synchronized (Bitmap.class) {
-            if (sScaleMatrix == null) {
-                sScaleMatrix = matrix;
+            int[] iArr = new int[Bitmap.Config.values().length];
+            $SwitchMap$android$graphics$Bitmap$Config = iArr;
+            try {
+                iArr[Bitmap.Config.RGB_565.ordinal()] = 1;
+            } catch (NoSuchFieldError e) {
+            }
+            try {
+                $SwitchMap$android$graphics$Bitmap$Config[Bitmap.Config.ALPHA_8.ordinal()] = 2;
+            } catch (NoSuchFieldError e2) {
+            }
+            try {
+                $SwitchMap$android$graphics$Bitmap$Config[Bitmap.Config.ARGB_4444.ordinal()] = 3;
+            } catch (NoSuchFieldError e3) {
+            }
+            try {
+                $SwitchMap$android$graphics$Bitmap$Config[Bitmap.Config.ARGB_8888.ordinal()] = 4;
+            } catch (NoSuchFieldError e4) {
             }
         }
-        return createBitmap;
+    }
+
+    public static Bitmap createBitmap(Bitmap source, int x, int y, int width, int height) {
+        return createBitmap(source, x, y, width, height, (Matrix) null, false);
+    }
+
+    /* JADX INFO: finally extract failed */
+    /* JADX WARNING: Code restructure failed: missing block: B:28:0x0057, code lost:
+        r0 = th;
+     */
+    /* Code decompiled incorrectly, please refer to instructions dump. */
+    public static android.graphics.Bitmap createScaledBitmap(android.graphics.Bitmap r15, int r16, int r17, boolean r18) {
+        /*
+            int r0 = android.os.Build.VERSION.SDK_INT
+            r1 = 21
+            if (r0 < r1) goto L_0x000b
+            android.graphics.Bitmap r0 = android.graphics.Bitmap.createScaledBitmap(r15, r16, r17, r18)
+            return r0
+        L_0x000b:
+            java.lang.Class<android.graphics.Bitmap> r1 = android.graphics.Bitmap.class
+            monitor-enter(r1)
+            android.graphics.Matrix r0 = sScaleMatrix     // Catch:{ all -> 0x0050 }
+            r2 = 0
+            sScaleMatrix = r2     // Catch:{ all -> 0x0050 }
+            monitor-exit(r1)     // Catch:{ all -> 0x0050 }
+            if (r0 != 0) goto L_0x001e
+            android.graphics.Matrix r1 = new android.graphics.Matrix
+            r1.<init>()
+            r0 = r1
+            r8 = r0
+            goto L_0x001f
+        L_0x001e:
+            r8 = r0
+        L_0x001f:
+            int r9 = r15.getWidth()
+            int r10 = r15.getHeight()
+            r11 = r16
+            float r0 = (float) r11
+            float r1 = (float) r9
+            float r12 = r0 / r1
+            r13 = r17
+            float r0 = (float) r13
+            float r1 = (float) r10
+            float r14 = r0 / r1
+            r8.setScale(r12, r14)
+            r2 = 0
+            r3 = 0
+            r1 = r15
+            r4 = r9
+            r5 = r10
+            r6 = r8
+            r7 = r18
+            android.graphics.Bitmap r2 = createBitmap(r1, r2, r3, r4, r5, r6, r7)
+            java.lang.Class<android.graphics.Bitmap> r3 = android.graphics.Bitmap.class
+            monitor-enter(r3)
+            android.graphics.Matrix r0 = sScaleMatrix     // Catch:{ all -> 0x004d }
+            if (r0 != 0) goto L_0x004b
+            sScaleMatrix = r8     // Catch:{ all -> 0x004d }
+        L_0x004b:
+            monitor-exit(r3)     // Catch:{ all -> 0x004d }
+            return r2
+        L_0x004d:
+            r0 = move-exception
+            monitor-exit(r3)     // Catch:{ all -> 0x004d }
+            throw r0
+        L_0x0050:
+            r0 = move-exception
+            r11 = r16
+            r13 = r17
+        L_0x0055:
+            monitor-exit(r1)     // Catch:{ all -> 0x0057 }
+            throw r0
+        L_0x0057:
+            r0 = move-exception
+            goto L_0x0055
+        */
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.Bitmaps.createScaledBitmap(android.graphics.Bitmap, int, int, boolean):android.graphics.Bitmap");
     }
 }

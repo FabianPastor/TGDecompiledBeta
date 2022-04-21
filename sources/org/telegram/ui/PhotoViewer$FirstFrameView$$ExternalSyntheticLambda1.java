@@ -15,6 +15,6 @@ public final /* synthetic */ class PhotoViewer$FirstFrameView$$ExternalSynthetic
     }
 
     public final void run() {
-        this.f$0.lambda$checkFromPlayer$0(this.f$1, this.f$2);
+        this.f$0.m2987x13var_a(this.f$1, this.f$2);
     }
 }

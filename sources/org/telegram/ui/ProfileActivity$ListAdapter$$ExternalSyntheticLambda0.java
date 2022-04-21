@@ -16,6 +16,6 @@ public final /* synthetic */ class ProfileActivity$ListAdapter$$ExternalSyntheti
     }
 
     public final void onClick(View view) {
-        this.f$0.lambda$onBindViewHolder$1(this.f$1, this.f$2, view);
+        this.f$0.m3087x59793722(this.f$1, this.f$2, view);
     }
 }

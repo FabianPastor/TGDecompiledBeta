@@ -1,20 +1,16 @@
 package org.telegram.ui.Components;
 
 import android.view.View;
-import org.telegram.ui.ActionBar.ActionBarMenuSubItem;
+import org.telegram.ui.Components.RecyclerListView;
 
-public final /* synthetic */ class ShareAlert$$ExternalSyntheticLambda6 implements View.OnClickListener {
+public final /* synthetic */ class ShareAlert$$ExternalSyntheticLambda6 implements RecyclerListView.OnItemClickListener {
     public final /* synthetic */ ShareAlert f$0;
-    public final /* synthetic */ ActionBarMenuSubItem f$1;
-    public final /* synthetic */ ActionBarMenuSubItem f$2;
 
-    public /* synthetic */ ShareAlert$$ExternalSyntheticLambda6(ShareAlert shareAlert, ActionBarMenuSubItem actionBarMenuSubItem, ActionBarMenuSubItem actionBarMenuSubItem2) {
+    public /* synthetic */ ShareAlert$$ExternalSyntheticLambda6(ShareAlert shareAlert) {
         this.f$0 = shareAlert;
-        this.f$1 = actionBarMenuSubItem;
-        this.f$2 = actionBarMenuSubItem2;
     }
 
-    public final void onClick(View view) {
-        this.f$0.lambda$onSendLongClick$10(this.f$1, this.f$2, view);
+    public final void onItemClick(View view, int i) {
+        this.f$0.m4337lambda$new$3$orgtelegramuiComponentsShareAlert(view, i);
     }
 }

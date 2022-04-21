@@ -18,6 +18,6 @@ public final /* synthetic */ class MessageStatisticActivity$ListAdapter$1$$Exter
     }
 
     public final void run() {
-        this.f$0.lambda$onZoomed$0(this.f$1, this.f$2, this.f$3);
+        this.f$0.m2632x952a21f2(this.f$1, this.f$2, this.f$3);
     }
 }

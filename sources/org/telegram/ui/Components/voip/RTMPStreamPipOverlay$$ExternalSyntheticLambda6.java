@@ -9,6 +9,6 @@ public final /* synthetic */ class RTMPStreamPipOverlay$$ExternalSyntheticLambda
     }
 
     public final float get(Object obj) {
-        return ((RTMPStreamPipOverlay) obj).pipX;
+        return ((RTMPStreamPipOverlay) obj).pipY;
     }
 }

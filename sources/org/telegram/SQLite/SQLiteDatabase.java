@@ -25,55 +25,52 @@ public class SQLiteDatabase {
         return this.sqliteHandle;
     }
 
-    public SQLiteDatabase(String str) throws SQLiteException {
-        this.sqliteHandle = opendb(str, ApplicationLoader.getFilesDirFixed().getPath());
+    public SQLiteDatabase(String fileName) throws SQLiteException {
+        this.sqliteHandle = opendb(fileName, ApplicationLoader.getFilesDirFixed().getPath());
     }
 
-    public boolean tableExists(String str) throws SQLiteException {
+    public boolean tableExists(String tableName) throws SQLiteException {
         checkOpened();
-        if (executeInt("SELECT rowid FROM sqlite_master WHERE type='table' AND name=?;", str) != null) {
-            return true;
-        }
-        return false;
+        return executeInt("SELECT rowid FROM sqlite_master WHERE type='table' AND name=?;", tableName) != null;
     }
 
-    public SQLitePreparedStatement executeFast(String str) throws SQLiteException {
-        return new SQLitePreparedStatement(this, str);
+    public SQLitePreparedStatement executeFast(String sql) throws SQLiteException {
+        return new SQLitePreparedStatement(this, sql);
     }
 
-    public Integer executeInt(String str, Object... objArr) throws SQLiteException {
+    public Integer executeInt(String sql, Object... args) throws SQLiteException {
         checkOpened();
-        SQLiteCursor queryFinalized = queryFinalized(str, objArr);
+        SQLiteCursor cursor = queryFinalized(sql, args);
         try {
-            if (!queryFinalized.next()) {
+            if (!cursor.next()) {
                 return null;
             }
-            Integer valueOf = Integer.valueOf(queryFinalized.intValue(0));
-            queryFinalized.dispose();
+            Integer valueOf = Integer.valueOf(cursor.intValue(0));
+            cursor.dispose();
             return valueOf;
         } finally {
-            queryFinalized.dispose();
+            cursor.dispose();
         }
     }
 
-    public void explainQuery(String str, Object... objArr) throws SQLiteException {
+    public void explainQuery(String sql, Object... args) throws SQLiteException {
         checkOpened();
-        SQLiteCursor query = new SQLitePreparedStatement(this, "EXPLAIN QUERY PLAN " + str).query(objArr);
-        while (query.next()) {
-            int columnCount = query.getColumnCount();
-            StringBuilder sb = new StringBuilder();
-            for (int i = 0; i < columnCount; i++) {
-                sb.append(query.stringValue(i));
-                sb.append(", ");
+        SQLiteCursor cursor = new SQLitePreparedStatement(this, "EXPLAIN QUERY PLAN " + sql).query(args);
+        while (cursor.next()) {
+            int count = cursor.getColumnCount();
+            StringBuilder builder = new StringBuilder();
+            for (int a = 0; a < count; a++) {
+                builder.append(cursor.stringValue(a));
+                builder.append(", ");
             }
-            FileLog.d("EXPLAIN QUERY PLAN " + sb.toString());
+            FileLog.d("EXPLAIN QUERY PLAN " + builder.toString());
         }
-        query.dispose();
+        cursor.dispose();
     }
 
-    public SQLiteCursor queryFinalized(String str, Object... objArr) throws SQLiteException {
+    public SQLiteCursor queryFinalized(String sql, Object... args) throws SQLiteException {
         checkOpened();
-        return new SQLitePreparedStatement(this, str).query(objArr);
+        return new SQLitePreparedStatement(this, sql).query(args);
     }
 
     public void close() {

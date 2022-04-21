@@ -17,6 +17,6 @@ public final /* synthetic */ class GroupCreateFinalActivity$$ExternalSyntheticLa
     }
 
     public final void run() {
-        this.f$0.lambda$onFragmentCreate$0(this.f$1, this.f$2, this.f$3);
+        this.f$0.m2275xd3eevar_(this.f$1, this.f$2, this.f$3);
     }
 }

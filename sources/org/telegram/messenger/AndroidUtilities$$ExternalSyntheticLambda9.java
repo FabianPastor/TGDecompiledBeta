@@ -1,12 +1,20 @@
 package org.telegram.messenger;
 
-public final /* synthetic */ class AndroidUtilities$$ExternalSyntheticLambda9 implements GenericProvider {
-    public static final /* synthetic */ AndroidUtilities$$ExternalSyntheticLambda9 INSTANCE = new AndroidUtilities$$ExternalSyntheticLambda9();
+import android.view.Window;
+import java.util.ArrayList;
 
-    private /* synthetic */ AndroidUtilities$$ExternalSyntheticLambda9() {
+public final /* synthetic */ class AndroidUtilities$$ExternalSyntheticLambda9 implements Runnable {
+    public final /* synthetic */ ArrayList f$0;
+    public final /* synthetic */ long f$1;
+    public final /* synthetic */ Window f$2;
+
+    public /* synthetic */ AndroidUtilities$$ExternalSyntheticLambda9(ArrayList arrayList, long j, Window window) {
+        this.f$0 = arrayList;
+        this.f$1 = j;
+        this.f$2 = window;
     }
 
-    public final Object provide(Object obj) {
-        return AndroidUtilities.lambda$formatSpannable$6((Integer) obj);
+    public final void run() {
+        AndroidUtilities.lambda$registerFlagSecure$9(this.f$0, this.f$1, this.f$2);
     }
 }

@@ -10,6 +10,6 @@ public final /* synthetic */ class VideoSource$$ExternalSyntheticLambda0 impleme
     }
 
     public final void run() {
-        this.f$0.lambda$setVideoProcessor$0(this.f$1);
+        this.f$0.m4642lambda$setVideoProcessor$0$orgwebrtcVideoSource(this.f$1);
     }
 }

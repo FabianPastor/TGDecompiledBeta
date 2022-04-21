@@ -11,6 +11,6 @@ public final /* synthetic */ class LoginActivity$LoginActivityRecoverView$$Exter
     }
 
     public final void onFocusChange(View view, boolean z) {
-        this.f$0.lambda$new$1(view, z);
+        this.f$0.m2487xce4a9467(view, z);
     }
 }

@@ -10,6 +10,6 @@ public final /* synthetic */ class PasscodeView$9$$ExternalSyntheticLambda1 impl
     }
 
     public final void run() {
-        this.f$0.lambda$onGlobalLayout$0();
+        this.f$0.m4167x50b696ea();
     }
 }

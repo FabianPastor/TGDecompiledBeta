@@ -17,6 +17,6 @@ public final /* synthetic */ class StickersSearchAdapter$1$$ExternalSyntheticLam
     }
 
     public final void run(ArrayList arrayList, String str) {
-        this.f$0.lambda$run$0(this.f$1, this.f$2, arrayList, str);
+        this.f$0.m1361lambda$run$0$orgtelegramuiAdaptersStickersSearchAdapter$1(this.f$1, this.f$2, arrayList, str);
     }
 }

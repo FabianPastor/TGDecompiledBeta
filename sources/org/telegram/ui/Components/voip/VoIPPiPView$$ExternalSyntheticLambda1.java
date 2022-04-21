@@ -13,6 +13,6 @@ public final /* synthetic */ class VoIPPiPView$$ExternalSyntheticLambda1 impleme
     }
 
     public final void onClick(View view) {
-        this.f$0.lambda$new$2(this.f$1, view);
+        this.f$0.m4583lambda$new$2$orgtelegramuiComponentsvoipVoIPPiPView(this.f$1, view);
     }
 }

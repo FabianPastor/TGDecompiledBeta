@@ -1,17 +1,29 @@
 package org.telegram.ui;
 
-import java.util.Comparator;
+import android.content.Context;
+import android.view.View;
+import org.telegram.ui.Components.RecyclerListView;
 
-public final /* synthetic */ class ProfileActivity$$ExternalSyntheticLambda28 implements Comparator {
+public final /* synthetic */ class ProfileActivity$$ExternalSyntheticLambda28 implements RecyclerListView.OnItemClickListenerExtended {
     public final /* synthetic */ ProfileActivity f$0;
-    public final /* synthetic */ int f$1;
+    public final /* synthetic */ long f$1;
+    public final /* synthetic */ Context f$2;
 
-    public /* synthetic */ ProfileActivity$$ExternalSyntheticLambda28(ProfileActivity profileActivity, int i) {
+    public /* synthetic */ ProfileActivity$$ExternalSyntheticLambda28(ProfileActivity profileActivity, long j, Context context) {
         this.f$0 = profileActivity;
-        this.f$1 = i;
+        this.f$1 = j;
+        this.f$2 = context;
     }
 
-    public final int compare(Object obj, Object obj2) {
-        return this.f$0.lambda$updateOnlineCount$28(this.f$1, (Integer) obj, (Integer) obj2);
+    public /* synthetic */ boolean hasDoubleTap(View view, int i) {
+        return RecyclerListView.OnItemClickListenerExtended.CC.$default$hasDoubleTap(this, view, i);
+    }
+
+    public /* synthetic */ void onDoubleTap(View view, int i, float f, float f2) {
+        RecyclerListView.OnItemClickListenerExtended.CC.$default$onDoubleTap(this, view, i, f, f2);
+    }
+
+    public final void onItemClick(View view, int i, float f, float f2) {
+        this.f$0.m3043lambda$createView$4$orgtelegramuiProfileActivity(this.f$1, this.f$2, view, i, f, f2);
     }
 }

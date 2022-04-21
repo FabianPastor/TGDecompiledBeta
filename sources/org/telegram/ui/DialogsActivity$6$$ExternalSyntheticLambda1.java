@@ -18,6 +18,6 @@ public final /* synthetic */ class DialogsActivity$6$$ExternalSyntheticLambda1 i
     }
 
     public final void onClick(View view) {
-        this.f$0.lambda$didSelectTab$4(this.f$1, this.f$2, this.f$3, view);
+        this.f$0.m2124lambda$didSelectTab$4$orgtelegramuiDialogsActivity$6(this.f$1, this.f$2, this.f$3, view);
     }
 }

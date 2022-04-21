@@ -1,11 +1,14 @@
 package org.telegram.ui.Cells;
 
+import android.animation.Animator;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.FrameLayout;
+import java.util.ArrayList;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
 import org.telegram.ui.ActionBar.Theme;
@@ -37,8 +40,8 @@ public class EditTextSettingsCell extends FrameLayout {
     }
 
     /* access modifiers changed from: protected */
-    public void onMeasure(int i, int i2) {
-        setMeasuredDimension(View.MeasureSpec.getSize(i), AndroidUtilities.dp(50.0f) + (this.needDivider ? 1 : 0));
+    public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        setMeasuredDimension(View.MeasureSpec.getSize(widthMeasureSpec), AndroidUtilities.dp(50.0f) + (this.needDivider ? 1 : 0));
         this.textView.measure(View.MeasureSpec.makeMeasureSpec(((getMeasuredWidth() - getPaddingLeft()) - getPaddingRight()) - AndroidUtilities.dp(42.0f), NUM), View.MeasureSpec.makeMeasureSpec(getMeasuredHeight(), NUM));
     }
 
@@ -46,25 +49,37 @@ public class EditTextSettingsCell extends FrameLayout {
         return this.textView;
     }
 
+    public void addTextWatcher(TextWatcher watcher) {
+        this.textView.addTextChangedListener(watcher);
+    }
+
     public String getText() {
         return this.textView.getText().toString();
     }
 
-    public void setTextColor(int i) {
-        this.textView.setTextColor(i);
+    public int length() {
+        return this.textView.length();
     }
 
-    public void setText(String str, boolean z) {
-        this.textView.setText(str);
-        this.needDivider = z;
-        setWillNotDraw(!z);
+    public void setTextColor(int color) {
+        this.textView.setTextColor(color);
     }
 
-    public void setTextAndHint(String str, String str2, boolean z) {
-        this.textView.setText(str);
-        this.textView.setHint(str2);
-        this.needDivider = z;
-        setWillNotDraw(!z);
+    public void setText(String text, boolean divider) {
+        this.textView.setText(text);
+        this.needDivider = divider;
+        setWillNotDraw(!divider);
+    }
+
+    public void setTextAndHint(String text, String hint, boolean divider) {
+        this.textView.setText(text);
+        this.textView.setHint(hint);
+        this.needDivider = divider;
+        setWillNotDraw(!divider);
+    }
+
+    public void setEnabled(boolean value, ArrayList<Animator> arrayList) {
+        setEnabled(value);
     }
 
     /* access modifiers changed from: protected */

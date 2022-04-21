@@ -1,17 +1,19 @@
 package org.telegram.messenger;
 
-import org.telegram.tgnet.TLRPC$TL_messages_stickerSet;
-
 public final /* synthetic */ class MediaDataController$$ExternalSyntheticLambda96 implements Runnable {
     public final /* synthetic */ MediaDataController f$0;
-    public final /* synthetic */ TLRPC$TL_messages_stickerSet f$1;
+    public final /* synthetic */ long f$1;
+    public final /* synthetic */ long f$2;
+    public final /* synthetic */ int f$3;
 
-    public /* synthetic */ MediaDataController$$ExternalSyntheticLambda96(MediaDataController mediaDataController, TLRPC$TL_messages_stickerSet tLRPC$TL_messages_stickerSet) {
+    public /* synthetic */ MediaDataController$$ExternalSyntheticLambda96(MediaDataController mediaDataController, long j, long j2, int i) {
         this.f$0 = mediaDataController;
-        this.f$1 = tLRPC$TL_messages_stickerSet;
+        this.f$1 = j;
+        this.f$2 = j2;
+        this.f$3 = i;
     }
 
     public final void run() {
-        this.f$0.lambda$putSetToCache$22(this.f$1);
+        this.f$0.m732x64e88e6f(this.f$1, this.f$2, this.f$3);
     }
 }

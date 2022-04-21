@@ -11,6 +11,6 @@ public final /* synthetic */ class LoginActivity$LoginActivityRecoverView$$Exter
     }
 
     public final void onClick(View view) {
-        this.f$0.lambda$new$4(view);
+        this.f$0.m2490xd1ed8d04(view);
     }
 }

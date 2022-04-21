@@ -14,6 +14,6 @@ public final /* synthetic */ class ThemeActivity$ListAdapter$$ExternalSyntheticL
     }
 
     public final boolean onItemClick(View view, int i) {
-        return this.f$0.lambda$onCreateViewHolder$5(this.f$1, view, i);
+        return this.f$0.m3301xb2208205(this.f$1, view, i);
     }
 }

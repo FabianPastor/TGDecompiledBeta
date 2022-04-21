@@ -8,6 +8,6 @@ public final /* synthetic */ class PeopleNearbyActivity$$ExternalSyntheticLambda
     }
 
     public final void run() {
-        this.f$0.lambda$sendRequest$5();
+        this.f$0.m2867x726f6feb();
     }
 }

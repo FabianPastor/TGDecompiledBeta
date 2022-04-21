@@ -24,29 +24,29 @@ public class AudioRecordJNI {
 
     private native void nativeCallback(ByteBuffer byteBuffer);
 
-    public AudioRecordJNI(long j) {
-        this.nativeInst = j;
+    public AudioRecordJNI(long ptr) {
+        this.nativeInst = ptr;
     }
 
-    private int getBufferSize(int i, int i2) {
-        return Math.max(AudioRecord.getMinBufferSize(i2, 16, 2), i);
+    private int getBufferSize(int min, int sampleRate) {
+        return Math.max(AudioRecord.getMinBufferSize(sampleRate, 16, 2), min);
     }
 
-    public void init(int i, int i2, int i3, int i4) {
+    public void init(int sampleRate, int bitsPerSample, int channels, int bufferSize2) {
         if (this.audioRecord == null) {
-            this.bufferSize = i4;
-            boolean tryInit = tryInit(7, 48000);
+            this.bufferSize = bufferSize2;
+            boolean res = tryInit(7, 48000);
             boolean z = true;
-            if (!tryInit) {
-                tryInit = tryInit(1, 48000);
+            if (!res) {
+                res = tryInit(1, 48000);
             }
-            if (!tryInit) {
-                tryInit = tryInit(7, 44100);
+            if (!res) {
+                res = tryInit(7, 44100);
             }
-            if (!tryInit) {
-                tryInit = tryInit(1, 44100);
+            if (!res) {
+                res = tryInit(1, 44100);
             }
-            if (tryInit) {
+            if (res) {
                 if (Build.VERSION.SDK_INT >= 16) {
                     try {
                         if (AutomaticGainControl.isAvailable()) {
@@ -58,8 +58,8 @@ public class AudioRecordJNI {
                         } else {
                             VLog.w("AutomaticGainControl is not available on this device :(");
                         }
-                    } catch (Throwable th) {
-                        VLog.e("error creating AutomaticGainControl", th);
+                    } catch (Throwable x) {
+                        VLog.e("error creating AutomaticGainControl", x);
                     }
                     try {
                         if (NoiseSuppressor.isAvailable()) {
@@ -71,8 +71,8 @@ public class AudioRecordJNI {
                         } else {
                             VLog.w("NoiseSuppressor is not available on this device :(");
                         }
-                    } catch (Throwable th2) {
-                        VLog.e("error creating NoiseSuppressor", th2);
+                    } catch (Throwable x2) {
+                        VLog.e("error creating NoiseSuppressor", x2);
                     }
                     try {
                         if (AcousticEchoCanceler.isAvailable()) {
@@ -87,11 +87,11 @@ public class AudioRecordJNI {
                         } else {
                             VLog.w("AcousticEchoCanceler is not available on this device");
                         }
-                    } catch (Throwable th3) {
-                        VLog.e("error creating AcousticEchoCanceler", th3);
+                    } catch (Throwable x3) {
+                        VLog.e("error creating AcousticEchoCanceler", x3);
                     }
                 }
-                this.buffer = ByteBuffer.allocateDirect(i4);
+                this.buffer = ByteBuffer.allocateDirect(bufferSize2);
                 return;
             }
             return;
@@ -99,21 +99,21 @@ public class AudioRecordJNI {
         throw new IllegalStateException("already inited");
     }
 
-    private boolean tryInit(int i, int i2) {
+    private boolean tryInit(int source, int sampleRate) {
         AudioRecord audioRecord2 = this.audioRecord;
         if (audioRecord2 != null) {
             try {
                 audioRecord2.release();
-            } catch (Exception unused) {
+            } catch (Exception e) {
             }
         }
-        VLog.i("Trying to initialize AudioRecord with source=" + i + " and sample rate=" + i2);
+        VLog.i("Trying to initialize AudioRecord with source=" + source + " and sample rate=" + sampleRate);
         try {
-            this.audioRecord = new AudioRecord(i, i2, 16, 2, getBufferSize(this.bufferSize, 48000));
-        } catch (Exception e) {
-            VLog.e("AudioRecord init failed!", e);
+            this.audioRecord = new AudioRecord(source, sampleRate, 16, 2, getBufferSize(this.bufferSize, 48000));
+        } catch (Exception x) {
+            VLog.e("AudioRecord init failed!", x);
         }
-        this.needResampling = i2 != 48000;
+        this.needResampling = sampleRate != 48000;
         AudioRecord audioRecord3 = this.audioRecord;
         if (audioRecord3 == null || audioRecord3.getState() != 1) {
             return false;
@@ -127,7 +127,7 @@ public class AudioRecordJNI {
             if (audioRecord2 != null) {
                 audioRecord2.stop();
             }
-        } catch (Exception unused) {
+        } catch (Exception e) {
         }
     }
 
@@ -166,24 +166,25 @@ public class AudioRecordJNI {
 
     public boolean start() {
         AudioRecord audioRecord2 = this.audioRecord;
-        if (audioRecord2 != null && audioRecord2.getState() == 1) {
-            try {
-                if (this.thread == null) {
-                    AudioRecord audioRecord3 = this.audioRecord;
-                    if (audioRecord3 == null) {
-                        return false;
-                    }
-                    audioRecord3.startRecording();
-                    startThread();
-                } else {
-                    this.audioRecord.startRecording();
-                }
-                return true;
-            } catch (Exception e) {
-                VLog.e("Error initializing AudioRecord", e);
-            }
+        if (audioRecord2 == null || audioRecord2.getState() != 1) {
+            return false;
         }
-        return false;
+        try {
+            if (this.thread == null) {
+                AudioRecord audioRecord3 = this.audioRecord;
+                if (audioRecord3 == null) {
+                    return false;
+                }
+                audioRecord3.startRecording();
+                startThread();
+            } else {
+                this.audioRecord.startRecording();
+            }
+            return true;
+        } catch (Exception x) {
+            VLog.e("Error initializing AudioRecord", x);
+            return false;
+        }
     }
 
     private void startThread() {
@@ -197,8 +198,8 @@ public class AudioRecordJNI {
         throw new IllegalStateException("thread already started");
     }
 
-    /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$startThread$0(ByteBuffer byteBuffer) {
+    /* renamed from: lambda$startThread$0$org-telegram-messenger-voip-AudioRecordJNI  reason: not valid java name */
+    public /* synthetic */ void m1139lambda$startThread$0$orgtelegrammessengervoipAudioRecordJNI(ByteBuffer tmpBuf) {
         while (true) {
             if (!this.running) {
                 break;
@@ -207,8 +208,8 @@ public class AudioRecordJNI {
                 if (!this.needResampling) {
                     this.audioRecord.read(this.buffer, 1920);
                 } else {
-                    this.audioRecord.read(byteBuffer, 1764);
-                    Resampler.convert44to48(byteBuffer, this.buffer);
+                    this.audioRecord.read(tmpBuf, 1764);
+                    Resampler.convert44to48(tmpBuf, this.buffer);
                 }
                 if (!this.running) {
                     this.audioRecord.stop();
@@ -223,55 +224,61 @@ public class AudioRecordJNI {
     }
 
     public int getEnabledEffectsMask() {
+        int r = 0;
         AcousticEchoCanceler acousticEchoCanceler = this.aec;
-        int i = (acousticEchoCanceler == null || !acousticEchoCanceler.getEnabled()) ? 0 : 1;
+        if (acousticEchoCanceler != null && acousticEchoCanceler.getEnabled()) {
+            r = 0 | 1;
+        }
         NoiseSuppressor noiseSuppressor = this.ns;
-        return (noiseSuppressor == null || !noiseSuppressor.getEnabled()) ? i : i | 2;
+        if (noiseSuppressor == null || !noiseSuppressor.getEnabled()) {
+            return r;
+        }
+        return r | 2;
     }
 
-    private static Pattern makeNonEmptyRegex(String str) {
-        String string = Instance.getGlobalServerConfig().getString(str);
-        if (TextUtils.isEmpty(string)) {
+    private static Pattern makeNonEmptyRegex(String configKey) {
+        String r = Instance.getGlobalServerConfig().getString(configKey);
+        if (TextUtils.isEmpty(r)) {
             return null;
         }
         try {
-            return Pattern.compile(string);
-        } catch (Exception e) {
-            VLog.e((Throwable) e);
+            return Pattern.compile(r);
+        } catch (Exception x) {
+            VLog.e((Throwable) x);
             return null;
         }
     }
 
-    private static boolean isGoodAudioEffect(AudioEffect audioEffect) {
-        Pattern makeNonEmptyRegex = makeNonEmptyRegex("adsp_good_impls");
-        Pattern makeNonEmptyRegex2 = makeNonEmptyRegex("adsp_good_names");
-        AudioEffect.Descriptor descriptor = audioEffect.getDescriptor();
-        VLog.d(audioEffect.getClass().getSimpleName() + ": implementor=" + descriptor.implementor + ", name=" + descriptor.name);
-        if (makeNonEmptyRegex != null && makeNonEmptyRegex.matcher(descriptor.implementor).find()) {
+    private static boolean isGoodAudioEffect(AudioEffect effect) {
+        Pattern globalImpl = makeNonEmptyRegex("adsp_good_impls");
+        Pattern globalName = makeNonEmptyRegex("adsp_good_names");
+        AudioEffect.Descriptor desc = effect.getDescriptor();
+        VLog.d(effect.getClass().getSimpleName() + ": implementor=" + desc.implementor + ", name=" + desc.name);
+        if (globalImpl != null && globalImpl.matcher(desc.implementor).find()) {
             return true;
         }
-        if (makeNonEmptyRegex2 != null && makeNonEmptyRegex2.matcher(descriptor.name).find()) {
+        if (globalName != null && globalName.matcher(desc.name).find()) {
             return true;
         }
-        if (audioEffect instanceof AcousticEchoCanceler) {
-            Pattern makeNonEmptyRegex3 = makeNonEmptyRegex("aaec_good_impls");
-            Pattern makeNonEmptyRegex4 = makeNonEmptyRegex("aaec_good_names");
-            if (makeNonEmptyRegex3 != null && makeNonEmptyRegex3.matcher(descriptor.implementor).find()) {
+        if (effect instanceof AcousticEchoCanceler) {
+            Pattern impl = makeNonEmptyRegex("aaec_good_impls");
+            Pattern name = makeNonEmptyRegex("aaec_good_names");
+            if (impl != null && impl.matcher(desc.implementor).find()) {
                 return true;
             }
-            if (makeNonEmptyRegex4 != null && makeNonEmptyRegex4.matcher(descriptor.name).find()) {
+            if (name != null && name.matcher(desc.name).find()) {
                 return true;
             }
         }
-        if (!(audioEffect instanceof NoiseSuppressor)) {
+        if (!(effect instanceof NoiseSuppressor)) {
             return false;
         }
-        Pattern makeNonEmptyRegex5 = makeNonEmptyRegex("ans_good_impls");
-        Pattern makeNonEmptyRegex6 = makeNonEmptyRegex("ans_good_names");
-        if (makeNonEmptyRegex5 != null && makeNonEmptyRegex5.matcher(descriptor.implementor).find()) {
+        Pattern impl2 = makeNonEmptyRegex("ans_good_impls");
+        Pattern name2 = makeNonEmptyRegex("ans_good_names");
+        if (impl2 != null && impl2.matcher(desc.implementor).find()) {
             return true;
         }
-        if (makeNonEmptyRegex6 == null || !makeNonEmptyRegex6.matcher(descriptor.name).find()) {
+        if (name2 == null || !name2.matcher(desc.name).find()) {
             return false;
         }
         return true;

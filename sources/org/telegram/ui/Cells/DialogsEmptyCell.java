@@ -11,12 +11,14 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import androidx.core.util.Consumer;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
 import java.util.ArrayList;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.UserConfig;
-import org.telegram.tgnet.TLRPC$RecentMeUrl;
+import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.ActionBar.ActionBar;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.BlurredRecyclerView;
@@ -26,6 +28,11 @@ import org.telegram.ui.Components.RLottieImageView;
 import org.telegram.ui.Components.TextViewSwitcher;
 
 public class DialogsEmptyCell extends LinearLayout {
+    public static final int TYPE_FILTER_ADDING_CHATS = 3;
+    public static final int TYPE_FILTER_NO_CHATS_TO_DISPLAY = 2;
+    private static final int TYPE_UNSPECIFIED = -1;
+    public static final int TYPE_WELCOME_NO_CONTACTS = 0;
+    public static final int TYPE_WELCOME_WITH_CONTACTS = 1;
     private int currentAccount = UserConfig.selectedAccount;
     private int currentType = -1;
     private RLottieImageView imageView;
@@ -40,9 +47,8 @@ public class DialogsEmptyCell extends LinearLayout {
     public ValueAnimator utyanAnimator;
     private float utyanCollapseProgress;
 
-    /* access modifiers changed from: private */
-    public static /* synthetic */ boolean lambda$new$0(View view, MotionEvent motionEvent) {
-        return true;
+    @Retention(RetentionPolicy.SOURCE)
+    public @interface EmptyType {
     }
 
     public DialogsEmptyCell(Context context) {
@@ -70,79 +76,87 @@ public class DialogsEmptyCell extends LinearLayout {
         addView(this.subtitleView, LayoutHelper.createFrame(-1, -2.0f, 51, 52.0f, 7.0f, 52.0f, 0.0f));
     }
 
-    /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$new$1(View view) {
+    static /* synthetic */ boolean lambda$new$0(View v, MotionEvent event) {
+        return true;
+    }
+
+    /* renamed from: lambda$new$1$org-telegram-ui-Cells-DialogsEmptyCell  reason: not valid java name */
+    public /* synthetic */ void m1495lambda$new$1$orgtelegramuiCellsDialogsEmptyCell(View v) {
         if (!this.imageView.isPlaying()) {
             this.imageView.setProgress(0.0f);
             this.imageView.playAnimation();
         }
     }
 
-    /* access modifiers changed from: private */
-    public static /* synthetic */ View lambda$new$2(Context context) {
-        TextView textView = new TextView(context);
-        textView.setTextColor(Theme.getColor("chats_message"));
-        textView.setTextSize(1, 14.0f);
-        textView.setGravity(17);
-        textView.setLineSpacing((float) AndroidUtilities.dp(2.0f), 1.0f);
-        return textView;
+    static /* synthetic */ View lambda$new$2(Context context) {
+        TextView tv = new TextView(context);
+        tv.setTextColor(Theme.getColor("chats_message"));
+        tv.setTextSize(1, 14.0f);
+        tv.setGravity(17);
+        tv.setLineSpacing((float) AndroidUtilities.dp(2.0f), 1.0f);
+        return tv;
     }
 
-    public void setOnUtyanAnimationEndListener(Runnable runnable) {
-        this.onUtyanAnimationEndListener = runnable;
+    public void setOnUtyanAnimationEndListener(Runnable onUtyanAnimationEndListener2) {
+        this.onUtyanAnimationEndListener = onUtyanAnimationEndListener2;
     }
 
-    public void setOnUtyanAnimationUpdateListener(Consumer<Float> consumer) {
-        this.onUtyanAnimationUpdateListener = consumer;
+    public void setOnUtyanAnimationUpdateListener(Consumer<Float> onUtyanAnimationUpdateListener2) {
+        this.onUtyanAnimationUpdateListener = onUtyanAnimationUpdateListener2;
     }
 
-    public void setType(int i) {
-        int i2;
-        String str;
-        if (this.currentType != i) {
-            this.currentType = i;
-            if (i == 0 || i == 1) {
-                i2 = NUM;
-                str = LocaleController.getString("NoChatsHelp", NUM);
-                this.titleView.setText(LocaleController.getString("NoChats", NUM));
-            } else if (i != 2) {
-                this.imageView.setAutoRepeat(true);
-                i2 = NUM;
-                str = LocaleController.getString("FilterAddingChatsInfo", NUM);
-                this.titleView.setText(LocaleController.getString("FilterAddingChats", NUM));
-            } else {
-                this.imageView.setAutoRepeat(false);
-                i2 = NUM;
-                str = LocaleController.getString("FilterNoChatsToDisplayInfo", NUM);
-                this.titleView.setText(LocaleController.getString("FilterNoChatsToDisplay", NUM));
+    public void setType(int value) {
+        String help;
+        int icon;
+        if (this.currentType != value) {
+            this.currentType = value;
+            switch (value) {
+                case 0:
+                case 1:
+                    icon = NUM;
+                    help = LocaleController.getString("NoChatsHelp", NUM);
+                    this.titleView.setText(LocaleController.getString("NoChats", NUM));
+                    break;
+                case 2:
+                    this.imageView.setAutoRepeat(false);
+                    icon = NUM;
+                    help = LocaleController.getString("FilterNoChatsToDisplayInfo", NUM);
+                    this.titleView.setText(LocaleController.getString("FilterNoChatsToDisplay", NUM));
+                    break;
+                default:
+                    this.imageView.setAutoRepeat(true);
+                    icon = NUM;
+                    help = LocaleController.getString("FilterAddingChatsInfo", NUM);
+                    this.titleView.setText(LocaleController.getString("FilterAddingChats", NUM));
+                    break;
             }
-            if (i2 != 0) {
+            if (icon != 0) {
                 this.imageView.setVisibility(0);
                 if (this.currentType == 1) {
                     if (isUtyanAnimationTriggered()) {
                         this.utyanCollapseProgress = 1.0f;
-                        String string = LocaleController.getString("NoChatsContactsHelp", NUM);
+                        String noChatsContactsHelp = LocaleController.getString("NoChatsContactsHelp", NUM);
                         if (AndroidUtilities.isTablet() && !AndroidUtilities.isSmallTablet()) {
-                            string = string.replace(10, ' ');
+                            noChatsContactsHelp = noChatsContactsHelp.replace(10, ' ');
                         }
-                        this.subtitleView.setText(string, true);
+                        this.subtitleView.setText(noChatsContactsHelp, true);
                         requestLayout();
                     } else {
                         startUtyanCollapseAnimation(true);
                     }
                 }
-                if (this.prevIcon != i2) {
-                    this.imageView.setAnimation(i2, 100, 100);
+                if (this.prevIcon != icon) {
+                    this.imageView.setAnimation(icon, 100, 100);
                     this.imageView.playAnimation();
-                    this.prevIcon = i2;
+                    this.prevIcon = icon;
                 }
             } else {
                 this.imageView.setVisibility(8);
             }
             if (AndroidUtilities.isTablet() && !AndroidUtilities.isSmallTablet()) {
-                str = str.replace(10, ' ');
+                help = help.replace(10, ' ');
             }
-            this.subtitleView.setText(str, false);
+            this.subtitleView.setText(help, false);
         }
     }
 
@@ -159,13 +173,13 @@ public class DialogsEmptyCell extends LinearLayout {
         ValueAnimator duration = ValueAnimator.ofFloat(new float[]{this.utyanCollapseProgress, 0.0f}).setDuration(250);
         this.utyanAnimator = duration;
         duration.setInterpolator(Easings.easeOutQuad);
-        this.utyanAnimator.addUpdateListener(new DialogsEmptyCell$$ExternalSyntheticLambda0(this));
+        this.utyanAnimator.addUpdateListener(new DialogsEmptyCell$$ExternalSyntheticLambda1(this));
         this.utyanAnimator.addListener(new AnimatorListenerAdapter() {
-            public void onAnimationEnd(Animator animator) {
+            public void onAnimationEnd(Animator animation) {
                 if (DialogsEmptyCell.this.onUtyanAnimationEndListener != null) {
                     DialogsEmptyCell.this.onUtyanAnimationEndListener.run();
                 }
-                if (animator == DialogsEmptyCell.this.utyanAnimator) {
+                if (animation == DialogsEmptyCell.this.utyanAnimator) {
                     ValueAnimator unused = DialogsEmptyCell.this.utyanAnimator = null;
                 }
             }
@@ -173,9 +187,9 @@ public class DialogsEmptyCell extends LinearLayout {
         this.utyanAnimator.start();
     }
 
-    /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$startUtyanExpandAnimation$3(ValueAnimator valueAnimator) {
-        this.utyanCollapseProgress = ((Float) valueAnimator.getAnimatedValue()).floatValue();
+    /* renamed from: lambda$startUtyanExpandAnimation$3$org-telegram-ui-Cells-DialogsEmptyCell  reason: not valid java name */
+    public /* synthetic */ void m1497x3a8422e3(ValueAnimator animation) {
+        this.utyanCollapseProgress = ((Float) animation.getAnimatedValue()).floatValue();
         requestLayout();
         Consumer<Float> consumer = this.onUtyanAnimationUpdateListener;
         if (consumer != null) {
@@ -183,29 +197,29 @@ public class DialogsEmptyCell extends LinearLayout {
         }
     }
 
-    public void startUtyanCollapseAnimation(boolean z) {
+    public void startUtyanCollapseAnimation(boolean changeContactsHelp) {
         ValueAnimator valueAnimator = this.utyanAnimator;
         if (valueAnimator != null) {
             valueAnimator.cancel();
         }
         this.utyanAnimationTriggered = true;
-        if (z) {
-            String string = LocaleController.getString("NoChatsContactsHelp", NUM);
+        if (changeContactsHelp) {
+            String noChatsContactsHelp = LocaleController.getString("NoChatsContactsHelp", NUM);
             if (AndroidUtilities.isTablet() && !AndroidUtilities.isSmallTablet()) {
-                string = string.replace(10, ' ');
+                noChatsContactsHelp = noChatsContactsHelp.replace(10, ' ');
             }
-            this.subtitleView.setText(string, true);
+            this.subtitleView.setText(noChatsContactsHelp, true);
         }
         ValueAnimator duration = ValueAnimator.ofFloat(new float[]{this.utyanCollapseProgress, 1.0f}).setDuration(250);
         this.utyanAnimator = duration;
         duration.setInterpolator(Easings.easeOutQuad);
-        this.utyanAnimator.addUpdateListener(new DialogsEmptyCell$$ExternalSyntheticLambda1(this));
+        this.utyanAnimator.addUpdateListener(new DialogsEmptyCell$$ExternalSyntheticLambda0(this));
         this.utyanAnimator.addListener(new AnimatorListenerAdapter() {
-            public void onAnimationEnd(Animator animator) {
+            public void onAnimationEnd(Animator animation) {
                 if (DialogsEmptyCell.this.onUtyanAnimationEndListener != null) {
                     DialogsEmptyCell.this.onUtyanAnimationEndListener.run();
                 }
-                if (animator == DialogsEmptyCell.this.utyanAnimator) {
+                if (animation == DialogsEmptyCell.this.utyanAnimator) {
                     ValueAnimator unused = DialogsEmptyCell.this.utyanAnimator = null;
                 }
             }
@@ -213,9 +227,9 @@ public class DialogsEmptyCell extends LinearLayout {
         this.utyanAnimator.start();
     }
 
-    /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$startUtyanCollapseAnimation$4(ValueAnimator valueAnimator) {
-        this.utyanCollapseProgress = ((Float) valueAnimator.getAnimatedValue()).floatValue();
+    /* renamed from: lambda$startUtyanCollapseAnimation$4$org-telegram-ui-Cells-DialogsEmptyCell  reason: not valid java name */
+    public /* synthetic */ void m1496x5deb8595(ValueAnimator animation) {
+        this.utyanCollapseProgress = ((Float) animation.getAnimatedValue()).floatValue();
         requestLayout();
         Consumer<Float> consumer = this.onUtyanAnimationUpdateListener;
         if (consumer != null) {
@@ -224,81 +238,80 @@ public class DialogsEmptyCell extends LinearLayout {
     }
 
     /* access modifiers changed from: protected */
-    public void onLayout(boolean z, int i, int i2, int i3, int i4) {
-        super.onLayout(z, i, i2, i3, i4);
+    public void onLayout(boolean changed, int l, int t, int r, int b) {
+        super.onLayout(changed, l, t, r, b);
         updateLayout();
     }
 
-    public void offsetTopAndBottom(int i) {
-        super.offsetTopAndBottom(i);
+    public void offsetTopAndBottom(int offset) {
+        super.offsetTopAndBottom(offset);
         updateLayout();
     }
 
     public void updateLayout() {
         int i;
-        int i2 = 0;
+        int offset = 0;
         if ((getParent() instanceof View) && (((i = this.currentType) == 2 || i == 3) && ((View) getParent()).getPaddingTop() != 0)) {
-            i2 = 0 - (getTop() / 2);
+            offset = 0 - (getTop() / 2);
         }
-        int i3 = this.currentType;
-        if (i3 == 0 || i3 == 1) {
-            i2 = (int) (((float) i2) - (((float) ((int) (((float) ActionBar.getCurrentActionBarHeight()) / 2.0f))) * (1.0f - this.utyanCollapseProgress)));
+        int i2 = this.currentType;
+        if (i2 == 0 || i2 == 1) {
+            offset = (int) (((float) offset) - (((float) ((int) (((float) ActionBar.getCurrentActionBarHeight()) / 2.0f))) * (1.0f - this.utyanCollapseProgress)));
         }
-        float f = (float) i2;
-        this.imageView.setTranslationY(f);
-        this.titleView.setTranslationY(f);
-        this.subtitleView.setTranslationY(f);
+        this.imageView.setTranslationY((float) offset);
+        this.titleView.setTranslationY((float) offset);
+        this.subtitleView.setTranslationY((float) offset);
     }
 
-    private int measureUtyanHeight(int i) {
-        int i2;
+    private int measureUtyanHeight(int heightMeasureSpec) {
+        int totalHeight;
         if (getParent() instanceof View) {
             View view = (View) getParent();
-            i2 = view.getMeasuredHeight();
+            totalHeight = view.getMeasuredHeight();
             if (view.getPaddingTop() != 0 && Build.VERSION.SDK_INT >= 21) {
-                i2 -= AndroidUtilities.statusBarHeight;
+                totalHeight -= AndroidUtilities.statusBarHeight;
             }
         } else {
-            i2 = View.MeasureSpec.getSize(i);
+            totalHeight = View.MeasureSpec.getSize(heightMeasureSpec);
         }
-        if (i2 == 0) {
-            i2 = (AndroidUtilities.displaySize.y - ActionBar.getCurrentActionBarHeight()) - (Build.VERSION.SDK_INT >= 21 ? AndroidUtilities.statusBarHeight : 0);
+        if (totalHeight == 0) {
+            totalHeight = (AndroidUtilities.displaySize.y - ActionBar.getCurrentActionBarHeight()) - (Build.VERSION.SDK_INT >= 21 ? AndroidUtilities.statusBarHeight : 0);
         }
         if (getParent() instanceof BlurredRecyclerView) {
-            i2 -= ((BlurredRecyclerView) getParent()).blurTopPadding;
+            totalHeight -= ((BlurredRecyclerView) getParent()).blurTopPadding;
         }
-        return (int) (((float) i2) + (((float) (AndroidUtilities.dp(320.0f) - i2)) * this.utyanCollapseProgress));
+        return (int) (((float) totalHeight) + (((float) (AndroidUtilities.dp(320.0f) - totalHeight)) * this.utyanCollapseProgress));
     }
 
     /* access modifiers changed from: protected */
-    public void onMeasure(int i, int i2) {
-        int i3;
-        int i4 = this.currentType;
-        if (i4 == 0 || i4 == 1) {
-            super.onMeasure(View.MeasureSpec.makeMeasureSpec(View.MeasureSpec.getSize(i), NUM), View.MeasureSpec.makeMeasureSpec(measureUtyanHeight(i2), NUM));
-        } else if (i4 == 2 || i4 == 3) {
+    public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        int totalHeight;
+        int i = this.currentType;
+        if (i == 0 || i == 1) {
+            super.onMeasure(View.MeasureSpec.makeMeasureSpec(View.MeasureSpec.getSize(widthMeasureSpec), NUM), View.MeasureSpec.makeMeasureSpec(measureUtyanHeight(heightMeasureSpec), NUM));
+        } else if (i == 2 || i == 3) {
             if (getParent() instanceof View) {
                 View view = (View) getParent();
-                i3 = view.getMeasuredHeight();
+                totalHeight = view.getMeasuredHeight();
                 if (view.getPaddingTop() != 0 && Build.VERSION.SDK_INT >= 21) {
-                    i3 -= AndroidUtilities.statusBarHeight;
+                    totalHeight -= AndroidUtilities.statusBarHeight;
                 }
             } else {
-                i3 = View.MeasureSpec.getSize(i2);
+                totalHeight = View.MeasureSpec.getSize(heightMeasureSpec);
             }
-            if (i3 == 0) {
-                i3 = (AndroidUtilities.displaySize.y - ActionBar.getCurrentActionBarHeight()) - (Build.VERSION.SDK_INT >= 21 ? AndroidUtilities.statusBarHeight : 0);
+            if (totalHeight == 0) {
+                totalHeight = (AndroidUtilities.displaySize.y - ActionBar.getCurrentActionBarHeight()) - (Build.VERSION.SDK_INT >= 21 ? AndroidUtilities.statusBarHeight : 0);
             }
             if (getParent() instanceof BlurredRecyclerView) {
-                i3 -= ((BlurredRecyclerView) getParent()).blurTopPadding;
+                totalHeight -= ((BlurredRecyclerView) getParent()).blurTopPadding;
             }
-            ArrayList<TLRPC$RecentMeUrl> arrayList = MessagesController.getInstance(this.currentAccount).hintDialogs;
+            ArrayList<TLRPC.RecentMeUrl> arrayList = MessagesController.getInstance(this.currentAccount).hintDialogs;
             if (!arrayList.isEmpty()) {
-                i3 -= (((AndroidUtilities.dp(72.0f) * arrayList.size()) + arrayList.size()) - 1) + AndroidUtilities.dp(50.0f);
+                totalHeight -= (((AndroidUtilities.dp(72.0f) * arrayList.size()) + arrayList.size()) - 1) + AndroidUtilities.dp(50.0f);
             }
-            super.onMeasure(View.MeasureSpec.makeMeasureSpec(View.MeasureSpec.getSize(i), NUM), View.MeasureSpec.makeMeasureSpec(i3, NUM));
+            super.onMeasure(View.MeasureSpec.makeMeasureSpec(View.MeasureSpec.getSize(widthMeasureSpec), NUM), View.MeasureSpec.makeMeasureSpec(totalHeight, NUM));
         } else {
-            super.onMeasure(i, View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(166.0f), NUM));
+            super.onMeasure(widthMeasureSpec, View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(166.0f), NUM));
         }
     }
 }

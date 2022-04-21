@@ -16,6 +16,6 @@ public final /* synthetic */ class ChatActivityEnterView$12$$ExternalSyntheticLa
     }
 
     public final boolean onCommitContent(InputContentInfoCompat inputContentInfoCompat, int i, Bundle bundle) {
-        return this.f$0.lambda$onCreateInputConnection$1(this.f$1, inputContentInfoCompat, i, bundle);
+        return this.f$0.m3748x6fvar_c9(this.f$1, inputContentInfoCompat, i, bundle);
     }
 }

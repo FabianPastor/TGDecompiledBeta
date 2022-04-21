@@ -10,6 +10,6 @@ public final /* synthetic */ class PhotoViewer$BackgroundDrawable$$ExternalSynth
     }
 
     public final void run() {
-        this.f$0.lambda$setAlpha$0();
+        this.f$0.m2985lambda$setAlpha$0$orgtelegramuiPhotoViewer$BackgroundDrawable();
     }
 }

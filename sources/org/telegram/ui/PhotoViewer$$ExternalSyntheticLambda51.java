@@ -2,12 +2,16 @@ package org.telegram.ui;
 
 public final /* synthetic */ class PhotoViewer$$ExternalSyntheticLambda51 implements Runnable {
     public final /* synthetic */ PhotoViewer f$0;
+    public final /* synthetic */ String f$1;
+    public final /* synthetic */ boolean f$2;
 
-    public /* synthetic */ PhotoViewer$$ExternalSyntheticLambda51(PhotoViewer photoViewer) {
+    public /* synthetic */ PhotoViewer$$ExternalSyntheticLambda51(PhotoViewer photoViewer, String str, boolean z) {
         this.f$0 = photoViewer;
+        this.f$1 = str;
+        this.f$2 = z;
     }
 
     public final void run() {
-        this.f$0.lambda$createPaintView$55();
+        this.f$0.m2908lambda$detectFaces$49$orgtelegramuiPhotoViewer(this.f$1, this.f$2);
     }
 }

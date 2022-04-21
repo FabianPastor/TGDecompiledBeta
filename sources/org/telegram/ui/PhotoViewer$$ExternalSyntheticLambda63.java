@@ -1,19 +1,16 @@
 package org.telegram.ui;
 
-import org.telegram.messenger.ImageReceiver;
+import android.view.View;
+import org.telegram.ui.Components.RecyclerListView;
 
-public final /* synthetic */ class PhotoViewer$$ExternalSyntheticLambda63 implements ImageReceiver.ImageReceiverDelegate {
+public final /* synthetic */ class PhotoViewer$$ExternalSyntheticLambda63 implements RecyclerListView.OnItemClickListener {
     public final /* synthetic */ PhotoViewer f$0;
 
     public /* synthetic */ PhotoViewer$$ExternalSyntheticLambda63(PhotoViewer photoViewer) {
         this.f$0 = photoViewer;
     }
 
-    public final void didSetImage(ImageReceiver imageReceiver, boolean z, boolean z2, boolean z3) {
-        this.f$0.lambda$setParentActivity$33(imageReceiver, z, z2, z3);
-    }
-
-    public /* synthetic */ void onAnimationReady(ImageReceiver imageReceiver) {
-        ImageReceiver.ImageReceiverDelegate.CC.$default$onAnimationReady(this, imageReceiver);
+    public final void onItemClick(View view, int i) {
+        this.f$0.m2941lambda$setParentActivity$36$orgtelegramuiPhotoViewer(view, i);
     }
 }

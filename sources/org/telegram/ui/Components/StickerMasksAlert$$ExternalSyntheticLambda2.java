@@ -14,6 +14,6 @@ public final /* synthetic */ class StickerMasksAlert$$ExternalSyntheticLambda2 i
     }
 
     public final boolean onTouch(View view, MotionEvent motionEvent) {
-        return this.f$0.lambda$new$0(this.f$1, view, motionEvent);
+        return this.f$0.m4408lambda$new$0$orgtelegramuiComponentsStickerMasksAlert(this.f$1, view, motionEvent);
     }
 }

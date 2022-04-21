@@ -10,6 +10,6 @@ public final /* synthetic */ class ColorPicker$$ExternalSyntheticLambda1 impleme
     }
 
     public final void onClick(View view) {
-        this.f$0.lambda$new$6(view);
+        this.f$0.m3924lambda$new$2$orgtelegramuiComponentsColorPicker(view);
     }
 }

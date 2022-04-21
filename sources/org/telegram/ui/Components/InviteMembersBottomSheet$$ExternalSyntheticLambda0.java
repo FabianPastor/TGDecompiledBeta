@@ -10,6 +10,6 @@ public final /* synthetic */ class InviteMembersBottomSheet$$ExternalSyntheticLa
     }
 
     public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-        this.f$0.lambda$spansCountChanged$3(valueAnimator);
+        this.f$0.m4095x2ee01541(valueAnimator);
     }
 }

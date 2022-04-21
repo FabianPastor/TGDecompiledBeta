@@ -1,22 +1,19 @@
 package org.telegram.messenger;
 
-import java.util.ArrayList;
-import java.util.concurrent.CountDownLatch;
+import org.telegram.tgnet.TLRPC;
 
 public final /* synthetic */ class MessagesStorage$$ExternalSyntheticLambda97 implements Runnable {
     public final /* synthetic */ MessagesStorage f$0;
-    public final /* synthetic */ long f$1;
-    public final /* synthetic */ ArrayList f$2;
-    public final /* synthetic */ CountDownLatch f$3;
+    public final /* synthetic */ boolean f$1;
+    public final /* synthetic */ TLRPC.UserFull f$2;
 
-    public /* synthetic */ MessagesStorage$$ExternalSyntheticLambda97(MessagesStorage messagesStorage, long j, ArrayList arrayList, CountDownLatch countDownLatch) {
+    public /* synthetic */ MessagesStorage$$ExternalSyntheticLambda97(MessagesStorage messagesStorage, boolean z, TLRPC.UserFull userFull) {
         this.f$0 = messagesStorage;
-        this.f$1 = j;
-        this.f$2 = arrayList;
-        this.f$3 = countDownLatch;
+        this.f$1 = z;
+        this.f$2 = userFull;
     }
 
     public final void run() {
-        this.f$0.lambda$getEncryptedChat$136(this.f$1, this.f$2, this.f$3);
+        this.f$0.m1030lambda$updateUserInfo$93$orgtelegrammessengerMessagesStorage(this.f$1, this.f$2);
     }
 }

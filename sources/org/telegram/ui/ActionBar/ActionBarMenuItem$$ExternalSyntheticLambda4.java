@@ -1,18 +1,15 @@
 package org.telegram.ui.ActionBar;
 
-import android.view.View;
-import org.telegram.ui.ActionBar.ActionBarMenuItem;
-
-public final /* synthetic */ class ActionBarMenuItem$$ExternalSyntheticLambda4 implements View.OnClickListener {
+public final /* synthetic */ class ActionBarMenuItem$$ExternalSyntheticLambda4 implements Runnable {
     public final /* synthetic */ ActionBarMenuItem f$0;
-    public final /* synthetic */ ActionBarMenuItem.SearchFilterView f$1;
+    public final /* synthetic */ int f$1;
 
-    public /* synthetic */ ActionBarMenuItem$$ExternalSyntheticLambda4(ActionBarMenuItem actionBarMenuItem, ActionBarMenuItem.SearchFilterView searchFilterView) {
+    public /* synthetic */ ActionBarMenuItem$$ExternalSyntheticLambda4(ActionBarMenuItem actionBarMenuItem, int i) {
         this.f$0 = actionBarMenuItem;
-        this.f$1 = searchFilterView;
+        this.f$1 = i;
     }
 
-    public final void onClick(View view) {
-        this.f$0.lambda$onFiltersChanged$11(this.f$1, view);
+    public final void run() {
+        this.f$0.m1251xd1635648(this.f$1);
     }
 }

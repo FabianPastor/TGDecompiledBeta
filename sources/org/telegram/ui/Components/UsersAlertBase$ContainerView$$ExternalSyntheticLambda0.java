@@ -11,6 +11,6 @@ public final /* synthetic */ class UsersAlertBase$ContainerView$$ExternalSynthet
     }
 
     public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-        this.f$0.lambda$onMeasure$0(valueAnimator);
+        this.f$0.m4512x41a7edb2(valueAnimator);
     }
 }

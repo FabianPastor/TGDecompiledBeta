@@ -1,22 +1,18 @@
 package org.telegram.messenger;
 
+import androidx.core.util.Consumer;
+import org.telegram.tgnet.RequestDelegate;
 import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC$TL_contacts_getBlocked;
+import org.telegram.tgnet.TLRPC;
 
-public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda138 implements Runnable {
-    public final /* synthetic */ MessagesController f$0;
-    public final /* synthetic */ TLObject f$1;
-    public final /* synthetic */ boolean f$2;
-    public final /* synthetic */ TLRPC$TL_contacts_getBlocked f$3;
+public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda138 implements RequestDelegate {
+    public final /* synthetic */ Consumer f$0;
 
-    public /* synthetic */ MessagesController$$ExternalSyntheticLambda138(MessagesController messagesController, TLObject tLObject, boolean z, TLRPC$TL_contacts_getBlocked tLRPC$TL_contacts_getBlocked) {
-        this.f$0 = messagesController;
-        this.f$1 = tLObject;
-        this.f$2 = z;
-        this.f$3 = tLRPC$TL_contacts_getBlocked;
+    public /* synthetic */ MessagesController$$ExternalSyntheticLambda138(Consumer consumer) {
+        this.f$0 = consumer;
     }
 
-    public final void run() {
-        this.f$0.lambda$getBlockedPeers$86(this.f$1, this.f$2, this.f$3);
+    public final void run(TLObject tLObject, TLRPC.TL_error tL_error) {
+        AndroidUtilities.runOnUIThread(new MessagesController$$ExternalSyntheticLambda125(tLObject, tL_error, this.f$0));
     }
 }

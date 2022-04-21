@@ -1,13 +1,19 @@
 package org.telegram.ui;
 
-public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda143 implements Runnable {
-    public final /* synthetic */ ChatActivity f$0;
+import org.telegram.messenger.AndroidUtilities;
+import org.telegram.ui.ActionBar.ActionBarPopupWindow;
+import org.telegram.ui.Components.ReactedUsersListView;
 
-    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda143(ChatActivity chatActivity) {
-        this.f$0 = chatActivity;
+public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda143 implements ReactedUsersListView.OnHeightChangedListener {
+    public final /* synthetic */ ActionBarPopupWindow.ActionBarPopupWindowLayout f$0;
+    public final /* synthetic */ int[] f$1;
+
+    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda143(ActionBarPopupWindow.ActionBarPopupWindowLayout actionBarPopupWindowLayout, int[] iArr) {
+        this.f$0 = actionBarPopupWindowLayout;
+        this.f$1 = iArr;
     }
 
-    public final void run() {
-        this.f$0.lambda$scrollToMessageId$104();
+    public final void onHeightChanged(ReactedUsersListView reactedUsersListView, int i) {
+        this.f$0.getSwipeBack().setNewForegroundHeight(this.f$1[0], AndroidUtilities.dp(52.0f) + i);
     }
 }

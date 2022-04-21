@@ -3,13 +3,13 @@ package org.telegram.ui;
 import android.view.View;
 
 public final /* synthetic */ class PassportActivity$$ExternalSyntheticLambda24 implements View.OnClickListener {
-    public final /* synthetic */ PassportActivity f$0;
+    public final /* synthetic */ boolean[] f$0;
 
-    public /* synthetic */ PassportActivity$$ExternalSyntheticLambda24(PassportActivity passportActivity) {
-        this.f$0 = passportActivity;
+    public /* synthetic */ PassportActivity$$ExternalSyntheticLambda24(boolean[] zArr) {
+        this.f$0 = zArr;
     }
 
     public final void onClick(View view) {
-        this.f$0.lambda$createIdentityInterface$41(view);
+        PassportActivity.lambda$createDocumentDeleteAlert$39(this.f$0, view);
     }
 }

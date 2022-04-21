@@ -1,18 +1,17 @@
 package org.telegram.messenger;
 
-import android.content.Context;
-import org.telegram.ui.ActionBar.AlertDialog;
+import java.util.ArrayList;
 
 public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda5 implements Runnable {
-    public final /* synthetic */ Context f$0;
-    public final /* synthetic */ AlertDialog f$1;
+    public final /* synthetic */ MessagesController f$0;
+    public final /* synthetic */ ArrayList f$1;
 
-    public /* synthetic */ MessagesController$$ExternalSyntheticLambda5(Context context, AlertDialog alertDialog) {
-        this.f$0 = context;
-        this.f$1 = alertDialog;
+    public /* synthetic */ MessagesController$$ExternalSyntheticLambda5(MessagesController messagesController, ArrayList arrayList) {
+        this.f$0 = messagesController;
+        this.f$1 = arrayList;
     }
 
     public final void run() {
-        MessagesController.lambda$convertToMegaGroup$210(this.f$0, this.f$1);
+        this.f$0.m212xb6e028d0(this.f$1);
     }
 }

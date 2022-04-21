@@ -10,6 +10,6 @@ public final /* synthetic */ class PhotoFilterView$$ExternalSyntheticLambda4 imp
     }
 
     public final void onClick(View view) {
-        this.f$0.lambda$new$5(view);
+        this.f$0.m4188lambda$new$7$orgtelegramuiComponentsPhotoFilterView(view);
     }
 }

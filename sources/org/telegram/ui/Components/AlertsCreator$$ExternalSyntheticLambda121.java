@@ -1,16 +1,26 @@
 package org.telegram.ui.Components;
 
-import android.widget.LinearLayout;
-import org.telegram.ui.Components.NumberPicker;
+import android.content.SharedPreferences;
+import org.telegram.tgnet.RequestDelegate;
+import org.telegram.tgnet.TLObject;
+import org.telegram.tgnet.TLRPC;
+import org.telegram.ui.ActionBar.AlertDialog;
+import org.telegram.ui.ActionBar.BaseFragment;
 
-public final /* synthetic */ class AlertsCreator$$ExternalSyntheticLambda121 implements NumberPicker.OnValueChangeListener {
-    public final /* synthetic */ LinearLayout f$0;
+public final /* synthetic */ class AlertsCreator$$ExternalSyntheticLambda121 implements RequestDelegate {
+    public final /* synthetic */ SharedPreferences f$0;
+    public final /* synthetic */ AlertDialog f$1;
+    public final /* synthetic */ int f$2;
+    public final /* synthetic */ BaseFragment f$3;
 
-    public /* synthetic */ AlertsCreator$$ExternalSyntheticLambda121(LinearLayout linearLayout) {
-        this.f$0 = linearLayout;
+    public /* synthetic */ AlertsCreator$$ExternalSyntheticLambda121(SharedPreferences sharedPreferences, AlertDialog alertDialog, int i, BaseFragment baseFragment) {
+        this.f$0 = sharedPreferences;
+        this.f$1 = alertDialog;
+        this.f$2 = i;
+        this.f$3 = baseFragment;
     }
 
-    public final void onValueChange(NumberPicker numberPicker, int i, int i2) {
-        AlertsCreator.lambda$createAutoDeleteDatePickerDialog$64(this.f$0, numberPicker, i, i2);
+    public final void run(TLObject tLObject, TLRPC.TL_error tL_error) {
+        AlertsCreator.lambda$performAskAQuestion$21(this.f$0, this.f$1, this.f$2, this.f$3, tLObject, tL_error);
     }
 }

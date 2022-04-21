@@ -1,17 +1,15 @@
 package org.telegram.ui;
 
-import org.telegram.tgnet.TLObject;
+import org.telegram.messenger.MessagesStorage;
 
-public final /* synthetic */ class ProfileActivity$$ExternalSyntheticLambda21 implements Runnable {
+public final /* synthetic */ class ProfileActivity$$ExternalSyntheticLambda21 implements MessagesStorage.BooleanCallback {
     public final /* synthetic */ ProfileActivity f$0;
-    public final /* synthetic */ TLObject f$1;
 
-    public /* synthetic */ ProfileActivity$$ExternalSyntheticLambda21(ProfileActivity profileActivity, TLObject tLObject) {
+    public /* synthetic */ ProfileActivity$$ExternalSyntheticLambda21(ProfileActivity profileActivity) {
         this.f$0 = profileActivity;
-        this.f$1 = tLObject;
     }
 
-    public final void run() {
-        this.f$0.lambda$createView$8(this.f$1);
+    public final void run(boolean z) {
+        this.f$0.m3057lambda$leaveChatPressed$22$orgtelegramuiProfileActivity(z);
     }
 }

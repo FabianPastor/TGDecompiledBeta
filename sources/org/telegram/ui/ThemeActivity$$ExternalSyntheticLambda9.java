@@ -1,24 +1,16 @@
 package org.telegram.ui;
 
-import android.view.View;
-import org.telegram.ui.Components.RecyclerListView;
+import com.google.android.gms.internal.icing.zzby$$ExternalSyntheticBackport0;
+import java.util.Comparator;
+import org.telegram.ui.ActionBar.Theme;
 
-public final /* synthetic */ class ThemeActivity$$ExternalSyntheticLambda9 implements RecyclerListView.OnItemClickListenerExtended {
-    public final /* synthetic */ ThemeActivity f$0;
+public final /* synthetic */ class ThemeActivity$$ExternalSyntheticLambda9 implements Comparator {
+    public static final /* synthetic */ ThemeActivity$$ExternalSyntheticLambda9 INSTANCE = new ThemeActivity$$ExternalSyntheticLambda9();
 
-    public /* synthetic */ ThemeActivity$$ExternalSyntheticLambda9(ThemeActivity themeActivity) {
-        this.f$0 = themeActivity;
+    private /* synthetic */ ThemeActivity$$ExternalSyntheticLambda9() {
     }
 
-    public /* synthetic */ boolean hasDoubleTap(View view, int i) {
-        return RecyclerListView.OnItemClickListenerExtended.CC.$default$hasDoubleTap(this, view, i);
-    }
-
-    public /* synthetic */ void onDoubleTap(View view, int i, float f, float f2) {
-        RecyclerListView.OnItemClickListenerExtended.CC.$default$onDoubleTap(this, view, i, f, f2);
-    }
-
-    public final void onItemClick(View view, int i, float f, float f2) {
-        this.f$0.lambda$createView$5(view, i, f, f2);
+    public final int compare(Object obj, Object obj2) {
+        return zzby$$ExternalSyntheticBackport0.m(((Theme.ThemeInfo) obj).sortIndex, ((Theme.ThemeInfo) obj2).sortIndex);
     }
 }

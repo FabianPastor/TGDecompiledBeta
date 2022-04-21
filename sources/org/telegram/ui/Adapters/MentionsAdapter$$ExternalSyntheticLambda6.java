@@ -11,6 +11,6 @@ public final /* synthetic */ class MentionsAdapter$$ExternalSyntheticLambda6 imp
     }
 
     public final void run(ArrayList arrayList, String str) {
-        this.f$0.lambda$searchUsernameOrHashtag$8(arrayList, str);
+        this.f$0.m1342xf1b585d5(arrayList, str);
     }
 }

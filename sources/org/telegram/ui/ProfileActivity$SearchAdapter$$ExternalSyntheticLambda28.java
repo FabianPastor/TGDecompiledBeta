@@ -10,6 +10,6 @@ public final /* synthetic */ class ProfileActivity$SearchAdapter$$ExternalSynthe
     }
 
     public final void run() {
-        this.f$0.lambda$new$46();
+        this.f$0.m3127lambda$new$40$orgtelegramuiProfileActivity$SearchAdapter();
     }
 }

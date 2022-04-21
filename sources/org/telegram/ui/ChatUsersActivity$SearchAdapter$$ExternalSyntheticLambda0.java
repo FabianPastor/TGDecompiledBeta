@@ -12,6 +12,6 @@ public final /* synthetic */ class ChatUsersActivity$SearchAdapter$$ExternalSynt
     }
 
     public final void run() {
-        this.f$0.lambda$processSearch$3(this.f$1);
+        this.f$0.m2020x148bavar_(this.f$1);
     }
 }

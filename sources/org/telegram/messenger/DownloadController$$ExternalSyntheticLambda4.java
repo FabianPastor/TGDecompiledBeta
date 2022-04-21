@@ -1,19 +1,16 @@
 package org.telegram.messenger;
 
-import java.util.ArrayList;
+import org.telegram.tgnet.RequestDelegate;
+import org.telegram.tgnet.TLObject;
+import org.telegram.tgnet.TLRPC;
 
-public final /* synthetic */ class DownloadController$$ExternalSyntheticLambda4 implements Runnable {
-    public final /* synthetic */ DownloadController f$0;
-    public final /* synthetic */ ArrayList f$1;
-    public final /* synthetic */ ArrayList f$2;
+public final /* synthetic */ class DownloadController$$ExternalSyntheticLambda4 implements RequestDelegate {
+    public static final /* synthetic */ DownloadController$$ExternalSyntheticLambda4 INSTANCE = new DownloadController$$ExternalSyntheticLambda4();
 
-    public /* synthetic */ DownloadController$$ExternalSyntheticLambda4(DownloadController downloadController, ArrayList arrayList, ArrayList arrayList2) {
-        this.f$0 = downloadController;
-        this.f$1 = arrayList;
-        this.f$2 = arrayList2;
+    private /* synthetic */ DownloadController$$ExternalSyntheticLambda4() {
     }
 
-    public final void run() {
-        this.f$0.lambda$loadDownloadingFiles$10(this.f$1, this.f$2);
+    public final void run(TLObject tLObject, TLRPC.TL_error tL_error) {
+        DownloadController.lambda$savePresetToServer$3(tLObject, tL_error);
     }
 }

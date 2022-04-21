@@ -1,23 +1,17 @@
 package org.telegram.messenger;
 
-import org.telegram.tgnet.RequestDelegate;
-import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC$TL_error;
-import org.telegram.tgnet.TLRPC$TL_messages_createChat;
-import org.telegram.ui.ActionBar.BaseFragment;
-
-public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda324 implements RequestDelegate {
+public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda324 implements Runnable {
     public final /* synthetic */ MessagesController f$0;
-    public final /* synthetic */ BaseFragment f$1;
-    public final /* synthetic */ TLRPC$TL_messages_createChat f$2;
+    public final /* synthetic */ long f$1;
+    public final /* synthetic */ Runnable f$2;
 
-    public /* synthetic */ MessagesController$$ExternalSyntheticLambda324(MessagesController messagesController, BaseFragment baseFragment, TLRPC$TL_messages_createChat tLRPC$TL_messages_createChat) {
+    public /* synthetic */ MessagesController$$ExternalSyntheticLambda324(MessagesController messagesController, long j, Runnable runnable) {
         this.f$0 = messagesController;
-        this.f$1 = baseFragment;
-        this.f$2 = tLRPC$TL_messages_createChat;
+        this.f$1 = j;
+        this.f$2 = runnable;
     }
 
-    public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        this.f$0.lambda$createChat$206(this.f$1, this.f$2, tLObject, tLRPC$TL_error);
+    public final void run() {
+        this.f$0.m398xvar_cf0(this.f$1, this.f$2);
     }
 }

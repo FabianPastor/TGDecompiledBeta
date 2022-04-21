@@ -8,6 +8,6 @@ public final /* synthetic */ class ChatAttachAlertAudioLayout$$ExternalSynthetic
     }
 
     public final void run() {
-        this.f$0.lambda$loadAudio$4();
+        this.f$0.m3796x5var_a1();
     }
 }

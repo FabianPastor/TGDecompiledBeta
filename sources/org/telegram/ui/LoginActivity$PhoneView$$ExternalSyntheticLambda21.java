@@ -1,21 +1,18 @@
 package org.telegram.ui;
 
-import java.util.HashMap;
-import org.telegram.tgnet.RequestDelegate;
-import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC$TL_error;
+import android.content.Context;
+import android.view.View;
+import android.widget.ViewSwitcher;
 import org.telegram.ui.LoginActivity;
 
-public final /* synthetic */ class LoginActivity$PhoneView$$ExternalSyntheticLambda21 implements RequestDelegate {
-    public final /* synthetic */ LoginActivity.PhoneView f$0;
-    public final /* synthetic */ HashMap f$1;
+public final /* synthetic */ class LoginActivity$PhoneView$$ExternalSyntheticLambda21 implements ViewSwitcher.ViewFactory {
+    public final /* synthetic */ Context f$0;
 
-    public /* synthetic */ LoginActivity$PhoneView$$ExternalSyntheticLambda21(LoginActivity.PhoneView phoneView, HashMap hashMap) {
-        this.f$0 = phoneView;
-        this.f$1 = hashMap;
+    public /* synthetic */ LoginActivity$PhoneView$$ExternalSyntheticLambda21(Context context) {
+        this.f$0 = context;
     }
 
-    public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        this.f$0.lambda$new$11(this.f$1, tLObject, tLRPC$TL_error);
+    public final View makeView() {
+        return LoginActivity.PhoneView.lambda$new$0(this.f$0);
     }
 }

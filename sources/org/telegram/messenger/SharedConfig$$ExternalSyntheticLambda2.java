@@ -7,6 +7,6 @@ public final /* synthetic */ class SharedConfig$$ExternalSyntheticLambda2 implem
     }
 
     public final void run() {
-        SharedConfig.checkSaveToGalleryFiles();
+        SharedConfig.lambda$checkSaveToGalleryFiles$3();
     }
 }

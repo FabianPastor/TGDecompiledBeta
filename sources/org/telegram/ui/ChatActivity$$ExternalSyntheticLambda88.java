@@ -1,21 +1,17 @@
 package org.telegram.ui;
 
-import android.view.View;
-import android.widget.FrameLayout;
-import org.telegram.ui.Components.ChatActivityEnterTopView;
+import android.content.DialogInterface;
 
-public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda88 implements View.OnClickListener {
+public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda88 implements DialogInterface.OnCancelListener {
     public final /* synthetic */ ChatActivity f$0;
-    public final /* synthetic */ ChatActivityEnterTopView.EditViewButton f$1;
-    public final /* synthetic */ FrameLayout f$2;
+    public final /* synthetic */ int f$1;
 
-    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda88(ChatActivity chatActivity, ChatActivityEnterTopView.EditViewButton editViewButton, FrameLayout frameLayout) {
+    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda88(ChatActivity chatActivity, int i) {
         this.f$0 = chatActivity;
-        this.f$1 = editViewButton;
-        this.f$2 = frameLayout;
+        this.f$1 = i;
     }
 
-    public final void onClick(View view) {
-        this.f$0.lambda$createView$60(this.f$1, this.f$2, view);
+    public final void onCancel(DialogInterface dialogInterface) {
+        this.f$0.m1785lambda$processSelectedOption$192$orgtelegramuiChatActivity(this.f$1, dialogInterface);
     }
 }

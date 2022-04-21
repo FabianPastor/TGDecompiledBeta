@@ -1,15 +1,15 @@
 package org.telegram.ui;
 
-import android.animation.ValueAnimator;
+import android.content.DialogInterface;
 
-public final /* synthetic */ class DialogsActivity$$ExternalSyntheticLambda1 implements ValueAnimator.AnimatorUpdateListener {
+public final /* synthetic */ class DialogsActivity$$ExternalSyntheticLambda1 implements DialogInterface.OnClickListener {
     public final /* synthetic */ DialogsActivity f$0;
 
     public /* synthetic */ DialogsActivity$$ExternalSyntheticLambda1(DialogsActivity dialogsActivity) {
         this.f$0 = dialogsActivity;
     }
 
-    public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-        this.f$0.lambda$showOrUpdateActionMode$35(valueAnimator);
+    public final void onClick(DialogInterface dialogInterface, int i) {
+        this.f$0.m2105xf3e91b3f(dialogInterface, i);
     }
 }

@@ -1,21 +1,18 @@
 package org.telegram.ui.Components;
 
-import android.content.DialogInterface;
-import org.telegram.tgnet.TLRPC$TL_attachMenuBot;
-import org.telegram.tgnet.TLRPC$User;
+import android.view.View;
+import org.telegram.ui.ActionBar.Theme;
 
-public final /* synthetic */ class ChatAttachAlert$$ExternalSyntheticLambda2 implements DialogInterface.OnClickListener {
+public final /* synthetic */ class ChatAttachAlert$$ExternalSyntheticLambda2 implements View.OnLongClickListener {
     public final /* synthetic */ ChatAttachAlert f$0;
-    public final /* synthetic */ TLRPC$TL_attachMenuBot f$1;
-    public final /* synthetic */ TLRPC$User f$2;
+    public final /* synthetic */ Theme.ResourcesProvider f$1;
 
-    public /* synthetic */ ChatAttachAlert$$ExternalSyntheticLambda2(ChatAttachAlert chatAttachAlert, TLRPC$TL_attachMenuBot tLRPC$TL_attachMenuBot, TLRPC$User tLRPC$User) {
+    public /* synthetic */ ChatAttachAlert$$ExternalSyntheticLambda2(ChatAttachAlert chatAttachAlert, Theme.ResourcesProvider resourcesProvider) {
         this.f$0 = chatAttachAlert;
-        this.f$1 = tLRPC$TL_attachMenuBot;
-        this.f$2 = tLRPC$User;
+        this.f$1 = resourcesProvider;
     }
 
-    public final void onClick(DialogInterface dialogInterface, int i) {
-        this.f$0.lambda$onLongClickBotButton$19(this.f$1, this.f$2, dialogInterface, i);
+    public final boolean onLongClick(View view) {
+        return this.f$0.m3769lambda$new$16$orgtelegramuiComponentsChatAttachAlert(this.f$1, view);
     }
 }

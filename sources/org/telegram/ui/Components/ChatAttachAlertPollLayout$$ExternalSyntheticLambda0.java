@@ -10,6 +10,6 @@ public final /* synthetic */ class ChatAttachAlertPollLayout$$ExternalSyntheticL
     }
 
     public final void onClick(DialogInterface dialogInterface, int i) {
-        this.f$0.lambda$checkDiscard$2(dialogInterface, i);
+        this.f$0.m3895x9CLASSNAMEa(dialogInterface, i);
     }
 }

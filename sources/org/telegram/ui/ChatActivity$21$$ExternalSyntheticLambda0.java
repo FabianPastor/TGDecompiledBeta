@@ -11,6 +11,6 @@ public final /* synthetic */ class ChatActivity$21$$ExternalSyntheticLambda0 imp
     }
 
     public final boolean onLongClick(View view) {
-        return this.f$0.lambda$new$0(view);
+        return this.f$0.m1866lambda$new$0$orgtelegramuiChatActivity$21(view);
     }
 }

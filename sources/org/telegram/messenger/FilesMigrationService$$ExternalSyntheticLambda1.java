@@ -14,7 +14,7 @@ public final /* synthetic */ class FilesMigrationService$$ExternalSyntheticLambd
     }
 
     public final void accept(Object obj) {
-        this.f$0.lambda$moveDirectory$0(this.f$1, (Path) obj);
+        this.f$0.m604x55fd53fa(this.f$1, (Path) obj);
     }
 
     public /* synthetic */ Consumer andThen(Consumer consumer) {

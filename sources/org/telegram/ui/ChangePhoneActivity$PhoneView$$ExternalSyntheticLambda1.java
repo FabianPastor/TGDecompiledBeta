@@ -12,6 +12,6 @@ public final /* synthetic */ class ChangePhoneActivity$PhoneView$$ExternalSynthe
     }
 
     public final boolean onKey(View view, int i, KeyEvent keyEvent) {
-        return this.f$0.lambda$new$5(view, i, keyEvent);
+        return this.f$0.m1569lambda$new$5$orgtelegramuiChangePhoneActivity$PhoneView(view, i, keyEvent);
     }
 }

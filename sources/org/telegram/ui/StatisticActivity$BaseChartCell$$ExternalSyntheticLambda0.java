@@ -11,6 +11,6 @@ public final /* synthetic */ class StatisticActivity$BaseChartCell$$ExternalSynt
     }
 
     public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-        this.f$0.lambda$updateData$5(valueAnimator);
+        this.f$0.m3264x59519991(valueAnimator);
     }
 }

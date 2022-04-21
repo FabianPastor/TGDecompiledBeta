@@ -22,57 +22,45 @@ public class InviteUserCell extends FrameLayout {
     private SimpleTextView nameTextView;
     private SimpleTextView statusTextView;
 
-    public boolean hasOverlappingRendering() {
-        return false;
-    }
-
     /* JADX INFO: super call moved to the top of the method (can break code semantics) */
-    public InviteUserCell(Context context, boolean z) {
+    public InviteUserCell(Context context, boolean needCheck) {
         super(context);
         Context context2 = context;
         BackupImageView backupImageView = new BackupImageView(context2);
         this.avatarImageView = backupImageView;
         backupImageView.setRoundRadius(AndroidUtilities.dp(24.0f));
-        BackupImageView backupImageView2 = this.avatarImageView;
-        boolean z2 = LocaleController.isRTL;
         int i = 5;
-        addView(backupImageView2, LayoutHelper.createFrame(50, 50.0f, (z2 ? 5 : 3) | 48, z2 ? 0.0f : 11.0f, 11.0f, z2 ? 11.0f : 0.0f, 0.0f));
+        addView(this.avatarImageView, LayoutHelper.createFrame(50, 50.0f, (LocaleController.isRTL ? 5 : 3) | 48, LocaleController.isRTL ? 0.0f : 11.0f, 11.0f, LocaleController.isRTL ? 11.0f : 0.0f, 0.0f));
         SimpleTextView simpleTextView = new SimpleTextView(context2);
         this.nameTextView = simpleTextView;
         simpleTextView.setTextColor(Theme.getColor("windowBackgroundWhiteBlackText"));
         this.nameTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         this.nameTextView.setTextSize(17);
         this.nameTextView.setGravity((LocaleController.isRTL ? 5 : 3) | 48);
-        SimpleTextView simpleTextView2 = this.nameTextView;
-        boolean z3 = LocaleController.isRTL;
-        addView(simpleTextView2, LayoutHelper.createFrame(-1, 20.0f, (z3 ? 5 : 3) | 48, z3 ? 28.0f : 72.0f, 14.0f, z3 ? 72.0f : 28.0f, 0.0f));
-        SimpleTextView simpleTextView3 = new SimpleTextView(context2);
-        this.statusTextView = simpleTextView3;
-        simpleTextView3.setTextSize(16);
+        addView(this.nameTextView, LayoutHelper.createFrame(-1, 20.0f, (LocaleController.isRTL ? 5 : 3) | 48, LocaleController.isRTL ? 28.0f : 72.0f, 14.0f, LocaleController.isRTL ? 72.0f : 28.0f, 0.0f));
+        SimpleTextView simpleTextView2 = new SimpleTextView(context2);
+        this.statusTextView = simpleTextView2;
+        simpleTextView2.setTextSize(16);
         this.statusTextView.setGravity((LocaleController.isRTL ? 5 : 3) | 48);
-        SimpleTextView simpleTextView4 = this.statusTextView;
-        boolean z4 = LocaleController.isRTL;
-        addView(simpleTextView4, LayoutHelper.createFrame(-1, 20.0f, (z4 ? 5 : 3) | 48, z4 ? 28.0f : 72.0f, 39.0f, z4 ? 72.0f : 28.0f, 0.0f));
-        if (z) {
+        addView(this.statusTextView, LayoutHelper.createFrame(-1, 20.0f, (LocaleController.isRTL ? 5 : 3) | 48, LocaleController.isRTL ? 28.0f : 72.0f, 39.0f, LocaleController.isRTL ? 72.0f : 28.0f, 0.0f));
+        if (needCheck) {
             CheckBox2 checkBox2 = new CheckBox2(context2, 21);
             this.checkBox = checkBox2;
             checkBox2.setColor((String) null, "windowBackgroundWhite", "checkboxCheck");
             this.checkBox.setDrawUnchecked(false);
             this.checkBox.setDrawBackgroundAsArc(3);
-            CheckBox2 checkBox22 = this.checkBox;
-            boolean z5 = LocaleController.isRTL;
-            addView(checkBox22, LayoutHelper.createFrame(24, 24.0f, (!z5 ? 3 : i) | 48, z5 ? 0.0f : 40.0f, 40.0f, z5 ? 39.0f : 0.0f, 0.0f));
+            addView(this.checkBox, LayoutHelper.createFrame(24, 24.0f, (!LocaleController.isRTL ? 3 : i) | 48, LocaleController.isRTL ? 0.0f : 40.0f, 40.0f, LocaleController.isRTL ? 39.0f : 0.0f, 0.0f));
         }
     }
 
-    public void setUser(ContactsController.Contact contact, CharSequence charSequence) {
+    public void setUser(ContactsController.Contact contact, CharSequence name) {
         this.currentContact = contact;
-        this.currentName = charSequence;
+        this.currentName = name;
         update(0);
     }
 
-    public void setChecked(boolean z, boolean z2) {
-        this.checkBox.setChecked(z, z2);
+    public void setChecked(boolean checked, boolean animated) {
+        this.checkBox.setChecked(checked, animated);
     }
 
     public ContactsController.Contact getContact() {
@@ -80,36 +68,36 @@ public class InviteUserCell extends FrameLayout {
     }
 
     /* access modifiers changed from: protected */
-    public void onMeasure(int i, int i2) {
-        super.onMeasure(View.MeasureSpec.makeMeasureSpec(View.MeasureSpec.getSize(i), NUM), View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(72.0f), NUM));
+    public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        super.onMeasure(View.MeasureSpec.makeMeasureSpec(View.MeasureSpec.getSize(widthMeasureSpec), NUM), View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(72.0f), NUM));
     }
 
     public void recycle() {
         this.avatarImageView.getImageReceiver().cancelLoadImage();
     }
 
-    public void update(int i) {
+    public void update(int mask) {
         ContactsController.Contact contact = this.currentContact;
         if (contact != null) {
-            this.avatarDrawable.setInfo((long) contact.contact_id, contact.first_name, contact.last_name);
+            this.avatarDrawable.setInfo((long) contact.contact_id, this.currentContact.first_name, this.currentContact.last_name);
             CharSequence charSequence = this.currentName;
             if (charSequence != null) {
                 this.nameTextView.setText(charSequence, true);
             } else {
-                SimpleTextView simpleTextView = this.nameTextView;
-                ContactsController.Contact contact2 = this.currentContact;
-                simpleTextView.setText(ContactsController.formatName(contact2.first_name, contact2.last_name));
+                this.nameTextView.setText(ContactsController.formatName(this.currentContact.first_name, this.currentContact.last_name));
             }
             this.statusTextView.setTag("windowBackgroundWhiteGrayText");
             this.statusTextView.setTextColor(Theme.getColor("windowBackgroundWhiteGrayText"));
-            ContactsController.Contact contact3 = this.currentContact;
-            int i2 = contact3.imported;
-            if (i2 > 0) {
-                this.statusTextView.setText(LocaleController.formatPluralString("TelegramContacts", i2));
+            if (this.currentContact.imported > 0) {
+                this.statusTextView.setText(LocaleController.formatPluralString("TelegramContacts", this.currentContact.imported));
             } else {
-                this.statusTextView.setText(contact3.phones.get(0));
+                this.statusTextView.setText(this.currentContact.phones.get(0));
             }
             this.avatarImageView.setImageDrawable(this.avatarDrawable);
         }
+    }
+
+    public boolean hasOverlappingRendering() {
+        return false;
     }
 }

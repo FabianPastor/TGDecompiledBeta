@@ -8,6 +8,6 @@ public final /* synthetic */ class PermanentLinkBottomSheet$$ExternalSyntheticLa
     }
 
     public final void run() {
-        this.f$0.lambda$show$4();
+        this.f$0.m4174x3915b8b3();
     }
 }

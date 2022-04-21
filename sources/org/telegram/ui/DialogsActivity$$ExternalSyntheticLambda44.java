@@ -1,15 +1,15 @@
 package org.telegram.ui;
 
-import org.telegram.messenger.MessagesStorage;
+import android.animation.ValueAnimator;
 
-public final /* synthetic */ class DialogsActivity$$ExternalSyntheticLambda44 implements MessagesStorage.IntCallback {
+public final /* synthetic */ class DialogsActivity$$ExternalSyntheticLambda44 implements ValueAnimator.AnimatorUpdateListener {
     public final /* synthetic */ DialogsActivity f$0;
 
     public /* synthetic */ DialogsActivity$$ExternalSyntheticLambda44(DialogsActivity dialogsActivity) {
         this.f$0 = dialogsActivity;
     }
 
-    public final void run(int i) {
-        this.f$0.lambda$onResume$14(i);
+    public final void onAnimationUpdate(ValueAnimator valueAnimator) {
+        this.f$0.m2112lambda$showOrUpdateActionMode$35$orgtelegramuiDialogsActivity(valueAnimator);
     }
 }

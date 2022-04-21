@@ -1,24 +1,16 @@
 package org.telegram.messenger;
 
-import androidx.collection.LongSparseArray;
-import java.util.ArrayList;
+import org.telegram.tgnet.RequestDelegate;
+import org.telegram.tgnet.TLObject;
+import org.telegram.tgnet.TLRPC;
 
-public final /* synthetic */ class MediaDataController$$ExternalSyntheticLambda69 implements Runnable {
-    public final /* synthetic */ MediaDataController f$0;
-    public final /* synthetic */ ArrayList f$1;
-    public final /* synthetic */ long f$2;
-    public final /* synthetic */ LongSparseArray f$3;
-    public final /* synthetic */ Runnable f$4;
+public final /* synthetic */ class MediaDataController$$ExternalSyntheticLambda69 implements RequestDelegate {
+    public static final /* synthetic */ MediaDataController$$ExternalSyntheticLambda69 INSTANCE = new MediaDataController$$ExternalSyntheticLambda69();
 
-    public /* synthetic */ MediaDataController$$ExternalSyntheticLambda69(MediaDataController mediaDataController, ArrayList arrayList, long j, LongSparseArray longSparseArray, Runnable runnable) {
-        this.f$0 = mediaDataController;
-        this.f$1 = arrayList;
-        this.f$2 = j;
-        this.f$3 = longSparseArray;
-        this.f$4 = runnable;
+    private /* synthetic */ MediaDataController$$ExternalSyntheticLambda69() {
     }
 
-    public final void run() {
-        this.f$0.lambda$loadReplyMessagesForMessages$123(this.f$1, this.f$2, this.f$3, this.f$4);
+    public final void run(TLObject tLObject, TLRPC.TL_error tL_error) {
+        MediaDataController.lambda$markFaturedStickersByIdAsRead$40(tLObject, tL_error);
     }
 }

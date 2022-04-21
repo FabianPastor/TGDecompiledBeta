@@ -22,6 +22,6 @@ public final /* synthetic */ class DataSettingsActivity$$ExternalSyntheticLambda
     }
 
     public final void onItemClick(View view, int i, float f, float f2) {
-        this.f$0.lambda$createView$6(this.f$1, view, i, f, f2);
+        this.f$0.m2062lambda$createView$6$orgtelegramuiDataSettingsActivity(this.f$1, view, i, f, f2);
     }
 }

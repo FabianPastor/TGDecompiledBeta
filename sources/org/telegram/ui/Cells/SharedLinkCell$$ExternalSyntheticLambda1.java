@@ -8,6 +8,6 @@ public final /* synthetic */ class SharedLinkCell$$ExternalSyntheticLambda1 impl
     }
 
     public final void run() {
-        this.f$0.lambda$startSpoilerRipples$1();
+        this.f$0.m1520xd74f5b04();
     }
 }

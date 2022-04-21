@@ -10,6 +10,6 @@ public final /* synthetic */ class CameraView$VideoRecorder$$ExternalSyntheticLa
     }
 
     public final void run() {
-        this.f$0.lambda$handleStopRecording$0();
+        this.f$0.m1129x81855938();
     }
 }

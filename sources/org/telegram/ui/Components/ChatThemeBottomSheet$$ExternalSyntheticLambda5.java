@@ -10,6 +10,6 @@ public final /* synthetic */ class ChatThemeBottomSheet$$ExternalSyntheticLambda
     }
 
     public final void run() {
-        this.f$0.lambda$setupLightDarkTheme$6(this.f$1);
+        this.f$0.m3917xc4b3db8f(this.f$1);
     }
 }

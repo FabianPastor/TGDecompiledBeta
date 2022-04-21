@@ -11,6 +11,6 @@ public final /* synthetic */ class PassportActivity$PhoneConfirmationView$$Exter
     }
 
     public final void onClick(DialogInterface dialogInterface, int i) {
-        this.f$0.lambda$resendCode$1(dialogInterface, i);
+        this.f$0.m2796xa758ab2c(dialogInterface, i);
     }
 }

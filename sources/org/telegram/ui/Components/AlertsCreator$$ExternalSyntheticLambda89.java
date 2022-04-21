@@ -1,21 +1,21 @@
 package org.telegram.ui.Components;
 
-import org.telegram.messenger.AndroidUtilities;
+import android.view.View;
 import org.telegram.ui.ActionBar.AlertDialog;
-import org.telegram.ui.ActionBar.BaseFragment;
+import org.telegram.ui.Components.AlertsCreator;
 
-public final /* synthetic */ class AlertsCreator$$ExternalSyntheticLambda89 implements Runnable {
-    public final /* synthetic */ EditTextBoldCursor f$0;
-    public final /* synthetic */ AlertDialog f$1;
-    public final /* synthetic */ BaseFragment f$2;
+public final /* synthetic */ class AlertsCreator$$ExternalSyntheticLambda89 implements View.OnClickListener {
+    public final /* synthetic */ AlertDialog[] f$0;
+    public final /* synthetic */ Runnable f$1;
+    public final /* synthetic */ AlertsCreator.AccountSelectDelegate f$2;
 
-    public /* synthetic */ AlertsCreator$$ExternalSyntheticLambda89(EditTextBoldCursor editTextBoldCursor, AlertDialog alertDialog, BaseFragment baseFragment) {
-        this.f$0 = editTextBoldCursor;
-        this.f$1 = alertDialog;
-        this.f$2 = baseFragment;
+    public /* synthetic */ AlertsCreator$$ExternalSyntheticLambda89(AlertDialog[] alertDialogArr, Runnable runnable, AlertsCreator.AccountSelectDelegate accountSelectDelegate) {
+        this.f$0 = alertDialogArr;
+        this.f$1 = runnable;
+        this.f$2 = accountSelectDelegate;
     }
 
-    public final void run() {
-        AndroidUtilities.runOnUIThread(new AlertsCreator$$ExternalSyntheticLambda88(this.f$0, this.f$1, this.f$2));
+    public final void onClick(View view) {
+        AlertsCreator.lambda$createAccountSelectDialog$109(this.f$0, this.f$1, this.f$2, view);
     }
 }

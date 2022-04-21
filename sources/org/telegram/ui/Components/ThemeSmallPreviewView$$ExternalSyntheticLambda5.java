@@ -2,7 +2,7 @@ package org.telegram.ui.Components;
 
 import android.util.Pair;
 import org.telegram.tgnet.ResultCallback;
-import org.telegram.tgnet.TLRPC$TL_error;
+import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.Components.ChatThemeBottomSheet;
 
 public final /* synthetic */ class ThemeSmallPreviewView$$ExternalSyntheticLambda5 implements ResultCallback {
@@ -19,10 +19,14 @@ public final /* synthetic */ class ThemeSmallPreviewView$$ExternalSyntheticLambd
     }
 
     public final void onComplete(Object obj) {
-        this.f$0.lambda$setItem$0(this.f$1, this.f$2, this.f$3, (Pair) obj);
+        this.f$0.m4477x81a3CLASSNAMEe(this.f$1, this.f$2, this.f$3, (Pair) obj);
     }
 
-    public /* synthetic */ void onError(TLRPC$TL_error tLRPC$TL_error) {
-        ResultCallback.CC.$default$onError((ResultCallback) this, tLRPC$TL_error);
+    public /* synthetic */ void onError(Throwable th) {
+        ResultCallback.CC.$default$onError((ResultCallback) this, th);
+    }
+
+    public /* synthetic */ void onError(TLRPC.TL_error tL_error) {
+        ResultCallback.CC.$default$onError((ResultCallback) this, tL_error);
     }
 }

@@ -13,6 +13,6 @@ public final /* synthetic */ class WebRtcAudioRecord$$ExternalSyntheticLambda0 i
     }
 
     public final Object call() {
-        return this.f$0.lambda$scheduleLogRecordingConfigurationsTask$0(this.f$1);
+        return this.f$0.m4644xd3061741(this.f$1);
     }
 }

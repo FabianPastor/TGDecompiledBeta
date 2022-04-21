@@ -1,17 +1,15 @@
 package org.telegram.ui.Components;
 
-import org.telegram.tgnet.TLRPC$TL_error;
+import androidx.core.util.Consumer;
 
-public final /* synthetic */ class BotWebViewMenuContainer$$ExternalSyntheticLambda15 implements Runnable {
+public final /* synthetic */ class BotWebViewMenuContainer$$ExternalSyntheticLambda15 implements Consumer {
     public final /* synthetic */ BotWebViewMenuContainer f$0;
-    public final /* synthetic */ TLRPC$TL_error f$1;
 
-    public /* synthetic */ BotWebViewMenuContainer$$ExternalSyntheticLambda15(BotWebViewMenuContainer botWebViewMenuContainer, TLRPC$TL_error tLRPC$TL_error) {
+    public /* synthetic */ BotWebViewMenuContainer$$ExternalSyntheticLambda15(BotWebViewMenuContainer botWebViewMenuContainer) {
         this.f$0 = botWebViewMenuContainer;
-        this.f$1 = tLRPC$TL_error;
     }
 
-    public final void run() {
-        this.f$0.lambda$new$2(this.f$1);
+    public final void accept(Object obj) {
+        this.f$0.m3659lambda$new$8$orgtelegramuiComponentsBotWebViewMenuContainer((Float) obj);
     }
 }

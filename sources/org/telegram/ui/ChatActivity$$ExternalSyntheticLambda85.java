@@ -1,18 +1,24 @@
 package org.telegram.ui;
 
-import android.content.Context;
-import android.view.View;
+import org.telegram.tgnet.TLObject;
+import org.telegram.tgnet.TLRPC;
 
-public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda85 implements View.OnClickListener {
+public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda85 implements Runnable {
     public final /* synthetic */ ChatActivity f$0;
-    public final /* synthetic */ Context f$1;
+    public final /* synthetic */ TLObject f$1;
+    public final /* synthetic */ String f$2;
+    public final /* synthetic */ TLRPC.TL_messages_requestUrlAuth f$3;
+    public final /* synthetic */ boolean f$4;
 
-    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda85(ChatActivity chatActivity, Context context) {
+    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda85(ChatActivity chatActivity, TLObject tLObject, String str, TLRPC.TL_messages_requestUrlAuth tL_messages_requestUrlAuth, boolean z) {
         this.f$0 = chatActivity;
-        this.f$1 = context;
+        this.f$1 = tLObject;
+        this.f$2 = str;
+        this.f$3 = tL_messages_requestUrlAuth;
+        this.f$4 = z;
     }
 
-    public final void onClick(View view) {
-        this.f$0.lambda$createView$36(this.f$1, view);
+    public final void run() {
+        this.f$0.m1824lambda$showRequestUrlAlert$217$orgtelegramuiChatActivity(this.f$1, this.f$2, this.f$3, this.f$4);
     }
 }

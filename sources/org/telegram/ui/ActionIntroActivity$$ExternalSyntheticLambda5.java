@@ -10,6 +10,6 @@ public final /* synthetic */ class ActionIntroActivity$$ExternalSyntheticLambda5
     }
 
     public final void onClick(View view) {
-        this.f$0.lambda$createView$3(view);
+        this.f$0.m1299lambda$createView$5$orgtelegramuiActionIntroActivity(view);
     }
 }

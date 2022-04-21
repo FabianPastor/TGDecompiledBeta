@@ -11,6 +11,6 @@ public final /* synthetic */ class ChatAttachAlert$AttachBotButton$$ExternalSynt
     }
 
     public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-        this.f$0.lambda$updateCheckedState$0(valueAnimator);
+        this.f$0.m3794x7fcd93d6(valueAnimator);
     }
 }

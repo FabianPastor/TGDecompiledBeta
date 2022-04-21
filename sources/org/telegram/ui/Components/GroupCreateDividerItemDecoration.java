@@ -10,37 +10,40 @@ import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Cells.GroupCreateSectionCell;
 
 public class GroupCreateDividerItemDecoration extends RecyclerView.ItemDecoration {
+    private boolean searching;
     private boolean single;
     private int skipRows;
 
-    public void setSearching(boolean z) {
+    public void setSearching(boolean value) {
+        this.searching = value;
     }
 
-    public void setSingle(boolean z) {
-        this.single = z;
+    public void setSingle(boolean value) {
+        this.single = value;
     }
 
-    public void setSkipRows(int i) {
-        this.skipRows = i;
+    public void setSkipRows(int value) {
+        this.skipRows = value;
     }
 
-    public void onDraw(Canvas canvas, RecyclerView recyclerView, RecyclerView.State state) {
-        int width = recyclerView.getWidth();
-        int childCount = recyclerView.getChildCount() - (this.single ^ true ? 1 : 0);
+    public void onDraw(Canvas canvas, RecyclerView parent, RecyclerView.State state) {
+        RecyclerView recyclerView = parent;
+        int width = parent.getWidth();
+        int childCount = parent.getChildCount() - (this.single ^ true ? 1 : 0);
         int i = 0;
         while (i < childCount) {
-            View childAt = recyclerView.getChildAt(i);
-            View childAt2 = i < childCount + -1 ? recyclerView.getChildAt(i + 1) : null;
-            if (recyclerView.getChildAdapterPosition(childAt) >= this.skipRows && !(childAt instanceof GroupCreateSectionCell) && !(childAt2 instanceof GroupCreateSectionCell)) {
-                float bottom = (float) childAt.getBottom();
-                canvas.drawLine(LocaleController.isRTL ? 0.0f : (float) AndroidUtilities.dp(72.0f), bottom, (float) (width - (LocaleController.isRTL ? AndroidUtilities.dp(72.0f) : 0)), bottom, Theme.dividerPaint);
+            View child = recyclerView.getChildAt(i);
+            View nextChild = i < childCount + -1 ? recyclerView.getChildAt(i + 1) : null;
+            if (recyclerView.getChildAdapterPosition(child) >= this.skipRows && !(child instanceof GroupCreateSectionCell) && !(nextChild instanceof GroupCreateSectionCell)) {
+                int top = child.getBottom();
+                canvas.drawLine(LocaleController.isRTL ? 0.0f : (float) AndroidUtilities.dp(72.0f), (float) top, (float) (width - (LocaleController.isRTL ? AndroidUtilities.dp(72.0f) : 0)), (float) top, Theme.dividerPaint);
             }
             i++;
         }
     }
 
-    public void getItemOffsets(Rect rect, View view, RecyclerView recyclerView, RecyclerView.State state) {
-        super.getItemOffsets(rect, view, recyclerView, state);
-        rect.top = 1;
+    public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
+        super.getItemOffsets(outRect, view, parent, state);
+        outRect.top = 1;
     }
 }

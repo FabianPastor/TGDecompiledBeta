@@ -1,15 +1,19 @@
 package org.telegram.ui;
 
-import android.view.MotionEvent;
-import android.view.View;
+import org.telegram.ui.ActionBar.AlertDialog;
 
-public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda100 implements View.OnTouchListener {
-    public static final /* synthetic */ ChatActivity$$ExternalSyntheticLambda100 INSTANCE = new ChatActivity$$ExternalSyntheticLambda100();
+public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda100 implements Runnable {
+    public final /* synthetic */ ChatActivity f$0;
+    public final /* synthetic */ AlertDialog[] f$1;
+    public final /* synthetic */ int f$2;
 
-    private /* synthetic */ ChatActivity$$ExternalSyntheticLambda100() {
+    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda100(ChatActivity chatActivity, AlertDialog[] alertDialogArr, int i) {
+        this.f$0 = chatActivity;
+        this.f$1 = alertDialogArr;
+        this.f$2 = i;
     }
 
-    public final boolean onTouch(View view, MotionEvent motionEvent) {
-        return ChatActivity.lambda$createView$24(view, motionEvent);
+    public final void run() {
+        this.f$0.m1827lambda$showRequestUrlAlert$220$orgtelegramuiChatActivity(this.f$1, this.f$2);
     }
 }

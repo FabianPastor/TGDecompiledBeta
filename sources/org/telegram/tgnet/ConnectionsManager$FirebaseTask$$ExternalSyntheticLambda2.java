@@ -10,6 +10,6 @@ public final /* synthetic */ class ConnectionsManager$FirebaseTask$$ExternalSynt
     }
 
     public final void run() {
-        this.f$0.lambda$doInBackground$3();
+        this.f$0.m1237xead75ac();
     }
 }

@@ -11,6 +11,6 @@ public final /* synthetic */ class NotificationsSoundActivity$1$$ExternalSynthet
     }
 
     public final void onClick(DialogInterface dialogInterface, int i) {
-        this.f$0.lambda$onItemClick$1(dialogInterface, i);
+        this.f$0.m2674xe3a080d7(dialogInterface, i);
     }
 }

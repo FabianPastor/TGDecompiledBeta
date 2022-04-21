@@ -11,52 +11,45 @@ public class CrossfadeDrawable extends Drawable {
     public float progress;
     private final Drawable topDrawable;
 
-    public int getOpacity() {
-        return -3;
-    }
-
-    public void setAlpha(int i) {
-    }
-
-    public CrossfadeDrawable(Drawable drawable, Drawable drawable2) {
-        this.topDrawable = drawable;
-        this.bottomDrawable = drawable2;
-        if (drawable != null) {
-            drawable.setCallback(new Drawable.Callback() {
-                public void scheduleDrawable(Drawable drawable, Runnable runnable, long j) {
-                }
-
-                public void unscheduleDrawable(Drawable drawable, Runnable runnable) {
-                }
-
+    public CrossfadeDrawable(Drawable topDrawable2, Drawable bottomDrawable2) {
+        this.topDrawable = topDrawable2;
+        this.bottomDrawable = bottomDrawable2;
+        if (topDrawable2 != null) {
+            topDrawable2.setCallback(new Drawable.Callback() {
                 public void invalidateDrawable(Drawable drawable) {
                     if (CrossfadeDrawable.this.progress < 1.0f) {
                         CrossfadeDrawable.this.invalidateSelf();
                     }
                 }
-            });
-        }
-        if (drawable2 != null) {
-            drawable2.setCallback(new Drawable.Callback() {
-                public void scheduleDrawable(Drawable drawable, Runnable runnable, long j) {
+
+                public void scheduleDrawable(Drawable drawable, Runnable runnable, long l) {
                 }
 
                 public void unscheduleDrawable(Drawable drawable, Runnable runnable) {
                 }
-
+            });
+        }
+        if (bottomDrawable2 != null) {
+            bottomDrawable2.setCallback(new Drawable.Callback() {
                 public void invalidateDrawable(Drawable drawable) {
                     if (CrossfadeDrawable.this.progress > 0.0f) {
                         CrossfadeDrawable.this.invalidateSelf();
                     }
+                }
+
+                public void scheduleDrawable(Drawable drawable, Runnable runnable, long l) {
+                }
+
+                public void unscheduleDrawable(Drawable drawable, Runnable runnable) {
                 }
             });
         }
     }
 
     /* access modifiers changed from: protected */
-    public void onBoundsChange(Rect rect) {
-        this.topDrawable.setBounds(rect);
-        this.bottomDrawable.setBounds(rect);
+    public void onBoundsChange(Rect bounds) {
+        this.topDrawable.setBounds(bounds);
+        this.bottomDrawable.setBounds(bounds);
     }
 
     public void draw(Canvas canvas) {
@@ -72,8 +65,15 @@ public class CrossfadeDrawable extends Drawable {
         }
     }
 
+    public void setAlpha(int alpha) {
+    }
+
     public void setColorFilter(ColorFilter colorFilter) {
         this.topDrawable.setColorFilter(colorFilter);
+    }
+
+    public int getOpacity() {
+        return -3;
     }
 
     public int getIntrinsicWidth() {
@@ -88,7 +88,7 @@ public class CrossfadeDrawable extends Drawable {
         return this.progress;
     }
 
-    public void setProgress(float f) {
-        this.progress = f;
+    public void setProgress(float value) {
+        this.progress = value;
     }
 }

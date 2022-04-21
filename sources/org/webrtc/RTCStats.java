@@ -8,11 +8,11 @@ public class RTCStats {
     private final long timestampUs;
     private final String type;
 
-    public RTCStats(long j, String str, String str2, Map<String, Object> map) {
-        this.timestampUs = j;
-        this.type = str;
-        this.id = str2;
-        this.members = map;
+    public RTCStats(long timestampUs2, String type2, String id2, Map<String, Object> members2) {
+        this.timestampUs = timestampUs2;
+        this.type = type2;
+        this.id = id2;
+        this.members = members2;
     }
 
     public double getTimestampUs() {
@@ -32,45 +32,44 @@ public class RTCStats {
     }
 
     public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append("{ timestampUs: ");
-        sb.append(this.timestampUs);
-        sb.append(", type: ");
-        sb.append(this.type);
-        sb.append(", id: ");
-        sb.append(this.id);
-        for (Map.Entry next : this.members.entrySet()) {
-            sb.append(", ");
-            sb.append((String) next.getKey());
-            sb.append(": ");
-            appendValue(sb, next.getValue());
+        StringBuilder builder = new StringBuilder();
+        builder.append("{ timestampUs: ");
+        builder.append(this.timestampUs);
+        builder.append(", type: ");
+        builder.append(this.type);
+        builder.append(", id: ");
+        builder.append(this.id);
+        for (Map.Entry<String, Object> entry : this.members.entrySet()) {
+            builder.append(", ");
+            builder.append(entry.getKey());
+            builder.append(": ");
+            appendValue(builder, entry.getValue());
         }
-        sb.append(" }");
-        return sb.toString();
+        builder.append(" }");
+        return builder.toString();
     }
 
-    private static void appendValue(StringBuilder sb, Object obj) {
-        if (obj instanceof Object[]) {
-            Object[] objArr = (Object[]) obj;
-            sb.append('[');
-            for (int i = 0; i < objArr.length; i++) {
+    private static void appendValue(StringBuilder builder, Object value) {
+        if (value instanceof Object[]) {
+            Object[] arrayValue = (Object[]) value;
+            builder.append('[');
+            for (int i = 0; i < arrayValue.length; i++) {
                 if (i != 0) {
-                    sb.append(", ");
+                    builder.append(", ");
                 }
-                appendValue(sb, objArr[i]);
+                appendValue(builder, arrayValue[i]);
             }
-            sb.append(']');
-        } else if (obj instanceof String) {
-            sb.append('\"');
-            sb.append(obj);
-            sb.append('\"');
+            builder.append(']');
+        } else if (value instanceof String) {
+            builder.append('\"');
+            builder.append(value);
+            builder.append('\"');
         } else {
-            sb.append(obj);
+            builder.append(value);
         }
     }
 
-    @CalledByNative
-    static RTCStats create(long j, String str, String str2, Map map) {
-        return new RTCStats(j, str, str2, map);
+    static RTCStats create(long timestampUs2, String type2, String id2, Map members2) {
+        return new RTCStats(timestampUs2, type2, id2, members2);
     }
 }

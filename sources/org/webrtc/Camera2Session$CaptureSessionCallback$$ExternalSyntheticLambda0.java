@@ -11,7 +11,7 @@ public final /* synthetic */ class Camera2Session$CaptureSessionCallback$$Extern
     }
 
     public final void onFrame(VideoFrame videoFrame) {
-        this.f$0.lambda$onConfigured$0(videoFrame);
+        this.f$0.m4611x8bd2b057(videoFrame);
     }
 
     public /* synthetic */ void setParentSink(VideoSink videoSink) {

@@ -1,28 +1,31 @@
 package org.telegram.messenger;
 
-import org.telegram.tgnet.TLRPC$InputCheckPasswordSRP;
-import org.telegram.tgnet.TLRPC$KeyboardButton;
-import org.telegram.ui.ChatActivity;
-import org.telegram.ui.TwoStepVerificationActivity;
+import java.util.ArrayList;
 
-public final /* synthetic */ class SendMessagesHelper$$ExternalSyntheticLambda91 implements TwoStepVerificationActivity.TwoStepVerificationActivityDelegate {
-    public final /* synthetic */ SendMessagesHelper f$0;
-    public final /* synthetic */ boolean f$1;
-    public final /* synthetic */ MessageObject f$2;
-    public final /* synthetic */ TLRPC$KeyboardButton f$3;
-    public final /* synthetic */ TwoStepVerificationActivity f$4;
-    public final /* synthetic */ ChatActivity f$5;
+public final /* synthetic */ class SendMessagesHelper$$ExternalSyntheticLambda91 implements Runnable {
+    public final /* synthetic */ ArrayList f$0;
+    public final /* synthetic */ long f$1;
+    public final /* synthetic */ AccountInstance f$2;
+    public final /* synthetic */ String f$3;
+    public final /* synthetic */ MessageObject f$4;
+    public final /* synthetic */ MessageObject f$5;
+    public final /* synthetic */ MessageObject f$6;
+    public final /* synthetic */ boolean f$7;
+    public final /* synthetic */ int f$8;
 
-    public /* synthetic */ SendMessagesHelper$$ExternalSyntheticLambda91(SendMessagesHelper sendMessagesHelper, boolean z, MessageObject messageObject, TLRPC$KeyboardButton tLRPC$KeyboardButton, TwoStepVerificationActivity twoStepVerificationActivity, ChatActivity chatActivity) {
-        this.f$0 = sendMessagesHelper;
-        this.f$1 = z;
-        this.f$2 = messageObject;
-        this.f$3 = tLRPC$KeyboardButton;
-        this.f$4 = twoStepVerificationActivity;
-        this.f$5 = chatActivity;
+    public /* synthetic */ SendMessagesHelper$$ExternalSyntheticLambda91(ArrayList arrayList, long j, AccountInstance accountInstance, String str, MessageObject messageObject, MessageObject messageObject2, MessageObject messageObject3, boolean z, int i) {
+        this.f$0 = arrayList;
+        this.f$1 = j;
+        this.f$2 = accountInstance;
+        this.f$3 = str;
+        this.f$4 = messageObject;
+        this.f$5 = messageObject2;
+        this.f$6 = messageObject3;
+        this.f$7 = z;
+        this.f$8 = i;
     }
 
-    public final void didEnterPassword(TLRPC$InputCheckPasswordSRP tLRPC$InputCheckPasswordSRP) {
-        this.f$0.lambda$sendCallback$24(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, tLRPC$InputCheckPasswordSRP);
+    public final void run() {
+        SendMessagesHelper.lambda$prepareSendingAudioDocuments$75(this.f$0, this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6, this.f$7, this.f$8);
     }
 }

@@ -19,10 +19,7 @@ import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.SharedConfig;
 import org.telegram.messenger.UserConfig;
-import org.telegram.tgnet.TLRPC$Document;
-import org.telegram.tgnet.TLRPC$PhotoSize;
-import org.telegram.tgnet.TLRPC$TL_photoSize;
-import org.telegram.tgnet.TLRPC$TL_photoSizeProgressive;
+import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.CheckBox2;
 import org.telegram.ui.Components.DotDividerSpan;
@@ -31,6 +28,8 @@ import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.RadialProgress2;
 
 public class SharedAudioCell extends FrameLayout implements DownloadController.FileDownloadProgressListener, NotificationCenter.NotificationCenterDelegate {
+    public static final int VIEW_TYPE_DEFAULT = 0;
+    public static final int VIEW_TYPE_GLOBAL_SEARCH = 1;
     private int TAG;
     private boolean buttonPressed;
     private int buttonState;
@@ -61,14 +60,6 @@ public class SharedAudioCell extends FrameLayout implements DownloadController.F
     private int titleY;
     private int viewType;
 
-    /* access modifiers changed from: protected */
-    public boolean needPlayMessage(MessageObject messageObject) {
-        return false;
-    }
-
-    public void onProgressUpload(String str, long j, long j2, boolean z) {
-    }
-
     public SharedAudioCell(Context context) {
         this(context, 0, (Theme.ResourcesProvider) null);
     }
@@ -77,7 +68,7 @@ public class SharedAudioCell extends FrameLayout implements DownloadController.F
         this(context, 0, resourcesProvider2);
     }
 
-    public SharedAudioCell(Context context, int i, Theme.ResourcesProvider resourcesProvider2) {
+    public SharedAudioCell(Context context, int viewType2, Theme.ResourcesProvider resourcesProvider2) {
         super(context);
         this.titleY = AndroidUtilities.dp(9.0f);
         this.descriptionY = AndroidUtilities.dp(29.0f);
@@ -85,7 +76,7 @@ public class SharedAudioCell extends FrameLayout implements DownloadController.F
         this.currentAccount = UserConfig.selectedAccount;
         this.enterAlpha = 1.0f;
         this.resourcesProvider = resourcesProvider2;
-        this.viewType = i;
+        this.viewType = viewType2;
         setFocusable(true);
         RadialProgress2 radialProgress2 = new RadialProgress2(this, resourcesProvider2);
         this.radialProgress = radialProgress2;
@@ -97,12 +88,10 @@ public class SharedAudioCell extends FrameLayout implements DownloadController.F
         checkBox2.setVisibility(4);
         this.checkBox.setColor((String) null, "windowBackgroundWhite", "checkboxCheck");
         this.checkBox.setDrawUnchecked(false);
-        int i2 = 3;
+        int i = 3;
         this.checkBox.setDrawBackgroundAsArc(3);
-        CheckBox2 checkBox22 = this.checkBox;
-        boolean z = LocaleController.isRTL;
-        addView(checkBox22, LayoutHelper.createFrame(24, 24.0f, (z ? 5 : i2) | 48, z ? 0.0f : 38.1f, 32.1f, z ? 6.0f : 0.0f, 0.0f));
-        if (i == 1) {
+        addView(this.checkBox, LayoutHelper.createFrame(24, 24.0f, (LocaleController.isRTL ? 5 : i) | 48, LocaleController.isRTL ? 0.0f : 38.1f, 32.1f, LocaleController.isRTL ? 6.0f : 0.0f, 0.0f));
+        if (viewType2 == 1) {
             TextPaint textPaint = new TextPaint(1);
             this.description2TextPaint = textPaint;
             textPaint.setTextSize((float) AndroidUtilities.dp(13.0f));
@@ -116,334 +105,341 @@ public class SharedAudioCell extends FrameLayout implements DownloadController.F
     }
 
     /* access modifiers changed from: protected */
-    /* JADX WARNING: Removed duplicated region for block: B:52:0x01ea  */
-    /* JADX WARNING: Removed duplicated region for block: B:55:0x01ff  */
-    /* JADX WARNING: Removed duplicated region for block: B:56:0x020a  */
-    /* JADX WARNING: Removed duplicated region for block: B:59:0x0242  */
-    /* JADX WARNING: Removed duplicated region for block: B:60:0x0254  */
-    @android.annotation.SuppressLint({"DrawAllocation"})
+    /* JADX WARNING: Removed duplicated region for block: B:52:0x01f5  */
+    /* JADX WARNING: Removed duplicated region for block: B:55:0x020a  */
+    /* JADX WARNING: Removed duplicated region for block: B:56:0x0215  */
+    /* JADX WARNING: Removed duplicated region for block: B:59:0x024e  */
+    /* JADX WARNING: Removed duplicated region for block: B:60:0x0260  */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    public void onMeasure(int r23, int r24) {
+    public void onMeasure(int r25, int r26) {
         /*
-            r22 = this;
-            r7 = r22
+            r24 = this;
+            r7 = r24
             r0 = 0
             r7.descriptionLayout = r0
             r7.titleLayout = r0
             r7.captionLayout = r0
-            int r0 = android.view.View.MeasureSpec.getSize(r23)
-            int r1 = org.telegram.messenger.AndroidUtilities.leftBaseline
-            float r1 = (float) r1
-            int r1 = org.telegram.messenger.AndroidUtilities.dp(r1)
-            int r0 = r0 - r1
+            int r8 = android.view.View.MeasureSpec.getSize(r25)
+            int r0 = org.telegram.messenger.AndroidUtilities.leftBaseline
+            float r0 = (float) r0
+            int r0 = org.telegram.messenger.AndroidUtilities.dp(r0)
+            int r0 = r8 - r0
             r1 = 1105199104(0x41e00000, float:28.0)
             int r1 = org.telegram.messenger.AndroidUtilities.dp(r1)
-            int r1 = r0 - r1
-            int r0 = r7.viewType
+            int r9 = r0 - r1
+            r0 = 0
+            int r1 = r7.viewType
             r2 = 1101004800(0x41a00000, float:20.0)
             r3 = 1090519040(0x41000000, float:8.0)
-            r4 = 0
-            r5 = 1
-            if (r0 != r5) goto L_0x0060
-            org.telegram.messenger.MessageObject r0 = r7.currentMessageObject
-            org.telegram.tgnet.TLRPC$Message r0 = r0.messageOwner
-            int r0 = r0.date
-            long r8 = (long) r0
-            java.lang.String r10 = org.telegram.messenger.LocaleController.stringForMessageListDate(r8)
-            android.text.TextPaint r0 = r7.description2TextPaint
-            float r0 = r0.measureText(r10)
-            double r8 = (double) r0
-            double r8 = java.lang.Math.ceil(r8)
-            int r0 = (int) r8
+            r4 = 1
+            if (r1 != r4) goto L_0x0064
+            org.telegram.messenger.MessageObject r1 = r7.currentMessageObject
+            org.telegram.tgnet.TLRPC$Message r1 = r1.messageOwner
+            int r1 = r1.date
+            long r5 = (long) r1
+            java.lang.String r1 = org.telegram.messenger.LocaleController.stringForMessageListDate(r5)
+            android.text.TextPaint r5 = r7.description2TextPaint
+            float r5 = r5.measureText(r1)
+            double r5 = (double) r5
+            double r5 = java.lang.Math.ceil(r5)
+            int r5 = (int) r5
             android.text.TextPaint r11 = r7.description2TextPaint
             r14 = 0
             r15 = 1
-            r12 = r0
-            r13 = r0
+            r10 = r1
+            r12 = r5
+            r13 = r5
             android.text.StaticLayout r6 = org.telegram.ui.Cells.ChatMessageCell.generateStaticLayout(r10, r11, r12, r13, r14, r15)
             r7.dateLayout = r6
-            int r6 = r1 - r0
-            int r8 = org.telegram.messenger.AndroidUtilities.dp(r3)
-            int r6 = r6 - r8
-            int r8 = org.telegram.messenger.AndroidUtilities.dp(r2)
-            int r6 = r6 + r8
+            int r6 = r9 - r5
+            int r10 = org.telegram.messenger.AndroidUtilities.dp(r3)
+            int r6 = r6 - r10
+            int r10 = org.telegram.messenger.AndroidUtilities.dp(r2)
+            int r6 = r6 + r10
             r7.dateLayoutX = r6
             r6 = 1094713344(0x41400000, float:12.0)
             int r6 = org.telegram.messenger.AndroidUtilities.dp(r6)
-            int r0 = r0 + r6
-            goto L_0x0061
-        L_0x0060:
-            r0 = 0
-        L_0x0061:
-            r6 = 10
-            r8 = 32
-            r9 = 1082130432(0x40800000, float:4.0)
-            int r10 = r7.viewType     // Catch:{ Exception -> 0x00be }
-            if (r10 != r5) goto L_0x0082
-            org.telegram.messenger.MessageObject r10 = r7.currentMessageObject     // Catch:{ Exception -> 0x00be }
-            boolean r10 = r10.isVoice()     // Catch:{ Exception -> 0x00be }
-            if (r10 != 0) goto L_0x007b
-            org.telegram.messenger.MessageObject r10 = r7.currentMessageObject     // Catch:{ Exception -> 0x00be }
-            boolean r10 = r10.isRoundVideo()     // Catch:{ Exception -> 0x00be }
-            if (r10 == 0) goto L_0x0082
-        L_0x007b:
-            org.telegram.messenger.MessageObject r10 = r7.currentMessageObject     // Catch:{ Exception -> 0x00be }
-            java.lang.CharSequence r10 = org.telegram.ui.FilteredSearchView.createFromInfoString(r10)     // Catch:{ Exception -> 0x00be }
-            goto L_0x008c
-        L_0x0082:
-            org.telegram.messenger.MessageObject r10 = r7.currentMessageObject     // Catch:{ Exception -> 0x00be }
-            java.lang.String r10 = r10.getMusicTitle()     // Catch:{ Exception -> 0x00be }
-            java.lang.String r10 = r10.replace(r6, r8)     // Catch:{ Exception -> 0x00be }
-        L_0x008c:
-            org.telegram.messenger.MessageObject r11 = r7.currentMessageObject     // Catch:{ Exception -> 0x00be }
-            java.util.ArrayList<java.lang.String> r11 = r11.highlightedWords     // Catch:{ Exception -> 0x00be }
-            org.telegram.ui.ActionBar.Theme$ResourcesProvider r12 = r7.resourcesProvider     // Catch:{ Exception -> 0x00be }
-            java.lang.CharSequence r11 = org.telegram.messenger.AndroidUtilities.highlightText((java.lang.CharSequence) r10, (java.util.ArrayList<java.lang.String>) r11, (org.telegram.ui.ActionBar.Theme.ResourcesProvider) r12)     // Catch:{ Exception -> 0x00be }
-            if (r11 == 0) goto L_0x0099
-            r10 = r11
-        L_0x0099:
-            android.text.TextPaint r11 = org.telegram.ui.ActionBar.Theme.chat_contextResult_titleTextPaint     // Catch:{ Exception -> 0x00be }
-            int r12 = r1 - r0
-            float r12 = (float) r12     // Catch:{ Exception -> 0x00be }
-            android.text.TextUtils$TruncateAt r13 = android.text.TextUtils.TruncateAt.END     // Catch:{ Exception -> 0x00be }
-            java.lang.CharSequence r15 = android.text.TextUtils.ellipsize(r10, r11, r12, r13)     // Catch:{ Exception -> 0x00be }
-            android.text.StaticLayout r10 = new android.text.StaticLayout     // Catch:{ Exception -> 0x00be }
-            android.text.TextPaint r16 = org.telegram.ui.ActionBar.Theme.chat_contextResult_titleTextPaint     // Catch:{ Exception -> 0x00be }
-            int r11 = org.telegram.messenger.AndroidUtilities.dp(r9)     // Catch:{ Exception -> 0x00be }
-            int r11 = r11 + r1
-            int r17 = r11 - r0
-            android.text.Layout$Alignment r18 = android.text.Layout.Alignment.ALIGN_NORMAL     // Catch:{ Exception -> 0x00be }
-            r19 = 1065353216(0x3var_, float:1.0)
-            r20 = 0
+            int r0 = r5 + r6
+            r10 = r0
+            goto L_0x0065
+        L_0x0064:
+            r10 = r0
+        L_0x0065:
+            r1 = 10
+            r5 = 32
+            r6 = 1082130432(0x40800000, float:4.0)
+            int r0 = r7.viewType     // Catch:{ Exception -> 0x00c2 }
+            if (r0 != r4) goto L_0x0086
+            org.telegram.messenger.MessageObject r0 = r7.currentMessageObject     // Catch:{ Exception -> 0x00c2 }
+            boolean r0 = r0.isVoice()     // Catch:{ Exception -> 0x00c2 }
+            if (r0 != 0) goto L_0x007f
+            org.telegram.messenger.MessageObject r0 = r7.currentMessageObject     // Catch:{ Exception -> 0x00c2 }
+            boolean r0 = r0.isRoundVideo()     // Catch:{ Exception -> 0x00c2 }
+            if (r0 == 0) goto L_0x0086
+        L_0x007f:
+            org.telegram.messenger.MessageObject r0 = r7.currentMessageObject     // Catch:{ Exception -> 0x00c2 }
+            java.lang.CharSequence r0 = org.telegram.ui.FilteredSearchView.createFromInfoString(r0)     // Catch:{ Exception -> 0x00c2 }
+            goto L_0x0090
+        L_0x0086:
+            org.telegram.messenger.MessageObject r0 = r7.currentMessageObject     // Catch:{ Exception -> 0x00c2 }
+            java.lang.String r0 = r0.getMusicTitle()     // Catch:{ Exception -> 0x00c2 }
+            java.lang.String r0 = r0.replace(r1, r5)     // Catch:{ Exception -> 0x00c2 }
+        L_0x0090:
+            org.telegram.messenger.MessageObject r11 = r7.currentMessageObject     // Catch:{ Exception -> 0x00c2 }
+            java.util.ArrayList<java.lang.String> r11 = r11.highlightedWords     // Catch:{ Exception -> 0x00c2 }
+            org.telegram.ui.ActionBar.Theme$ResourcesProvider r12 = r7.resourcesProvider     // Catch:{ Exception -> 0x00c2 }
+            java.lang.CharSequence r11 = org.telegram.messenger.AndroidUtilities.highlightText((java.lang.CharSequence) r0, (java.util.ArrayList<java.lang.String>) r11, (org.telegram.ui.ActionBar.Theme.ResourcesProvider) r12)     // Catch:{ Exception -> 0x00c2 }
+            if (r11 == 0) goto L_0x009d
+            r0 = r11
+        L_0x009d:
+            android.text.TextPaint r12 = org.telegram.ui.ActionBar.Theme.chat_contextResult_titleTextPaint     // Catch:{ Exception -> 0x00c2 }
+            int r13 = r9 - r10
+            float r13 = (float) r13     // Catch:{ Exception -> 0x00c2 }
+            android.text.TextUtils$TruncateAt r14 = android.text.TextUtils.TruncateAt.END     // Catch:{ Exception -> 0x00c2 }
+            java.lang.CharSequence r16 = android.text.TextUtils.ellipsize(r0, r12, r13, r14)     // Catch:{ Exception -> 0x00c2 }
+            android.text.StaticLayout r12 = new android.text.StaticLayout     // Catch:{ Exception -> 0x00c2 }
+            android.text.TextPaint r17 = org.telegram.ui.ActionBar.Theme.chat_contextResult_titleTextPaint     // Catch:{ Exception -> 0x00c2 }
+            int r13 = org.telegram.messenger.AndroidUtilities.dp(r6)     // Catch:{ Exception -> 0x00c2 }
+            int r13 = r13 + r9
+            int r18 = r13 - r10
+            android.text.Layout$Alignment r19 = android.text.Layout.Alignment.ALIGN_NORMAL     // Catch:{ Exception -> 0x00c2 }
+            r20 = 1065353216(0x3var_, float:1.0)
             r21 = 0
-            r14 = r10
-            r14.<init>(r15, r16, r17, r18, r19, r20, r21)     // Catch:{ Exception -> 0x00be }
-            r7.titleLayout = r10     // Catch:{ Exception -> 0x00be }
-            goto L_0x00c2
-        L_0x00be:
+            r22 = 0
+            r15 = r12
+            r15.<init>(r16, r17, r18, r19, r20, r21, r22)     // Catch:{ Exception -> 0x00c2 }
+            r7.titleLayout = r12     // Catch:{ Exception -> 0x00c2 }
+            goto L_0x00c6
+        L_0x00c2:
             r0 = move-exception
             org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)
-        L_0x00c2:
+        L_0x00c6:
             org.telegram.messenger.MessageObject r0 = r7.currentMessageObject
             boolean r0 = r0.hasHighlightedWords()
-            if (r0 == 0) goto L_0x012f
+            r11 = 0
+            if (r0 == 0) goto L_0x0139
             org.telegram.messenger.MessageObject r0 = r7.currentMessageObject
             org.telegram.tgnet.TLRPC$Message r0 = r0.messageOwner
             java.lang.String r0 = r0.message
-            java.lang.String r10 = "\n"
-            java.lang.String r11 = " "
-            java.lang.String r0 = r0.replace(r10, r11)
-            java.lang.String r10 = " +"
-            java.lang.String r0 = r0.replaceAll(r10, r11)
+            java.lang.String r12 = "\n"
+            java.lang.String r13 = " "
+            java.lang.String r0 = r0.replace(r12, r13)
+            java.lang.String r12 = " +"
+            java.lang.String r0 = r0.replaceAll(r12, r13)
             java.lang.String r0 = r0.trim()
-            android.text.TextPaint r10 = org.telegram.ui.ActionBar.Theme.chat_msgTextPaint
-            android.graphics.Paint$FontMetricsInt r10 = r10.getFontMetricsInt()
+            android.text.TextPaint r12 = org.telegram.ui.ActionBar.Theme.chat_msgTextPaint
+            android.graphics.Paint$FontMetricsInt r12 = r12.getFontMetricsInt()
             int r2 = org.telegram.messenger.AndroidUtilities.dp(r2)
-            java.lang.CharSequence r0 = org.telegram.messenger.Emoji.replaceEmoji(r0, r10, r2, r4)
+            java.lang.CharSequence r0 = org.telegram.messenger.Emoji.replaceEmoji(r0, r12, r2, r11)
             org.telegram.messenger.MessageObject r2 = r7.currentMessageObject
             java.util.ArrayList<java.lang.String> r2 = r2.highlightedWords
-            org.telegram.ui.ActionBar.Theme$ResourcesProvider r10 = r7.resourcesProvider
-            java.lang.CharSequence r0 = org.telegram.messenger.AndroidUtilities.highlightText((java.lang.CharSequence) r0, (java.util.ArrayList<java.lang.String>) r2, (org.telegram.ui.ActionBar.Theme.ResourcesProvider) r10)
-            if (r0 == 0) goto L_0x012f
-            org.telegram.messenger.MessageObject r2 = r7.currentMessageObject
-            java.util.ArrayList<java.lang.String> r2 = r2.highlightedWords
-            java.lang.Object r2 = r2.get(r4)
-            java.lang.String r2 = (java.lang.String) r2
-            android.text.TextPaint r10 = r7.captionTextPaint
-            r11 = 130(0x82, float:1.82E-43)
-            java.lang.CharSequence r0 = org.telegram.messenger.AndroidUtilities.ellipsizeCenterEnd(r0, r2, r1, r10, r11)
-            android.text.TextPaint r2 = r7.captionTextPaint
-            float r10 = (float) r1
-            android.text.TextUtils$TruncateAt r11 = android.text.TextUtils.TruncateAt.END
-            java.lang.CharSequence r13 = android.text.TextUtils.ellipsize(r0, r2, r10, r11)
-            android.text.StaticLayout r0 = new android.text.StaticLayout
-            android.text.TextPaint r14 = r7.captionTextPaint
-            int r2 = org.telegram.messenger.AndroidUtilities.dp(r9)
-            int r15 = r1 + r2
-            android.text.Layout$Alignment r16 = android.text.Layout.Alignment.ALIGN_NORMAL
+            org.telegram.ui.ActionBar.Theme$ResourcesProvider r12 = r7.resourcesProvider
+            java.lang.CharSequence r2 = org.telegram.messenger.AndroidUtilities.highlightText((java.lang.CharSequence) r0, (java.util.ArrayList<java.lang.String>) r2, (org.telegram.ui.ActionBar.Theme.ResourcesProvider) r12)
+            if (r2 == 0) goto L_0x0139
+            org.telegram.messenger.MessageObject r12 = r7.currentMessageObject
+            java.util.ArrayList<java.lang.String> r12 = r12.highlightedWords
+            java.lang.Object r12 = r12.get(r11)
+            java.lang.String r12 = (java.lang.String) r12
+            android.text.TextPaint r13 = r7.captionTextPaint
+            r14 = 130(0x82, float:1.82E-43)
+            java.lang.CharSequence r12 = org.telegram.messenger.AndroidUtilities.ellipsizeCenterEnd(r2, r12, r9, r13, r14)
+            android.text.TextPaint r13 = r7.captionTextPaint
+            float r14 = (float) r9
+            android.text.TextUtils$TruncateAt r15 = android.text.TextUtils.TruncateAt.END
+            java.lang.CharSequence r2 = android.text.TextUtils.ellipsize(r12, r13, r14, r15)
+            android.text.StaticLayout r12 = new android.text.StaticLayout
+            android.text.TextPaint r13 = r7.captionTextPaint
+            int r14 = org.telegram.messenger.AndroidUtilities.dp(r6)
+            int r19 = r9 + r14
+            android.text.Layout$Alignment r20 = android.text.Layout.Alignment.ALIGN_NORMAL
+            r21 = 1065353216(0x3var_, float:1.0)
+            r22 = 0
+            r23 = 0
+            r16 = r12
+            r17 = r2
+            r18 = r13
+            r16.<init>(r17, r18, r19, r20, r21, r22, r23)
+            r7.captionLayout = r12
+        L_0x0139:
+            int r0 = r7.viewType     // Catch:{ Exception -> 0x01e0 }
+            if (r0 != r4) goto L_0x017f
+            org.telegram.messenger.MessageObject r0 = r7.currentMessageObject     // Catch:{ Exception -> 0x01e0 }
+            boolean r0 = r0.isVoice()     // Catch:{ Exception -> 0x01e0 }
+            if (r0 != 0) goto L_0x014d
+            org.telegram.messenger.MessageObject r0 = r7.currentMessageObject     // Catch:{ Exception -> 0x01e0 }
+            boolean r0 = r0.isRoundVideo()     // Catch:{ Exception -> 0x01e0 }
+            if (r0 == 0) goto L_0x017f
+        L_0x014d:
+            org.telegram.messenger.MessageObject r0 = r7.currentMessageObject     // Catch:{ Exception -> 0x01e0 }
+            int r0 = r0.getDuration()     // Catch:{ Exception -> 0x01e0 }
+            java.lang.String r0 = org.telegram.messenger.AndroidUtilities.formatDuration(r0, r11)     // Catch:{ Exception -> 0x01e0 }
+            int r1 = r7.viewType     // Catch:{ Exception -> 0x01e0 }
+            if (r1 != r4) goto L_0x015e
+            android.text.TextPaint r1 = r7.description2TextPaint     // Catch:{ Exception -> 0x01e0 }
+            goto L_0x0160
+        L_0x015e:
+            android.text.TextPaint r1 = org.telegram.ui.ActionBar.Theme.chat_contextResult_descriptionTextPaint     // Catch:{ Exception -> 0x01e0 }
+        L_0x0160:
+            float r2 = (float) r9     // Catch:{ Exception -> 0x01e0 }
+            android.text.TextUtils$TruncateAt r4 = android.text.TextUtils.TruncateAt.END     // Catch:{ Exception -> 0x01e0 }
+            java.lang.CharSequence r13 = android.text.TextUtils.ellipsize(r0, r1, r2, r4)     // Catch:{ Exception -> 0x01e0 }
+            android.text.StaticLayout r0 = new android.text.StaticLayout     // Catch:{ Exception -> 0x01e0 }
+            int r2 = org.telegram.messenger.AndroidUtilities.dp(r6)     // Catch:{ Exception -> 0x01e0 }
+            int r15 = r9 + r2
+            android.text.Layout$Alignment r16 = android.text.Layout.Alignment.ALIGN_NORMAL     // Catch:{ Exception -> 0x01e0 }
             r17 = 1065353216(0x3var_, float:1.0)
             r18 = 0
             r19 = 0
             r12 = r0
-            r12.<init>(r13, r14, r15, r16, r17, r18, r19)
-            r7.captionLayout = r0
-        L_0x012f:
-            int r0 = r7.viewType     // Catch:{ Exception -> 0x01d5 }
-            if (r0 != r5) goto L_0x0175
-            org.telegram.messenger.MessageObject r0 = r7.currentMessageObject     // Catch:{ Exception -> 0x01d5 }
-            boolean r0 = r0.isVoice()     // Catch:{ Exception -> 0x01d5 }
-            if (r0 != 0) goto L_0x0143
-            org.telegram.messenger.MessageObject r0 = r7.currentMessageObject     // Catch:{ Exception -> 0x01d5 }
-            boolean r0 = r0.isRoundVideo()     // Catch:{ Exception -> 0x01d5 }
-            if (r0 == 0) goto L_0x0175
-        L_0x0143:
-            org.telegram.messenger.MessageObject r0 = r7.currentMessageObject     // Catch:{ Exception -> 0x01d5 }
-            int r0 = r0.getDuration()     // Catch:{ Exception -> 0x01d5 }
-            java.lang.String r0 = org.telegram.messenger.AndroidUtilities.formatDuration(r0, r4)     // Catch:{ Exception -> 0x01d5 }
-            int r2 = r7.viewType     // Catch:{ Exception -> 0x01d5 }
-            if (r2 != r5) goto L_0x0154
-            android.text.TextPaint r2 = r7.description2TextPaint     // Catch:{ Exception -> 0x01d5 }
-            goto L_0x0156
-        L_0x0154:
-            android.text.TextPaint r2 = org.telegram.ui.ActionBar.Theme.chat_contextResult_descriptionTextPaint     // Catch:{ Exception -> 0x01d5 }
-        L_0x0156:
-            r12 = r2
-            float r2 = (float) r1     // Catch:{ Exception -> 0x01d5 }
-            android.text.TextUtils$TruncateAt r5 = android.text.TextUtils.TruncateAt.END     // Catch:{ Exception -> 0x01d5 }
-            java.lang.CharSequence r11 = android.text.TextUtils.ellipsize(r0, r12, r2, r5)     // Catch:{ Exception -> 0x01d5 }
-            android.text.StaticLayout r0 = new android.text.StaticLayout     // Catch:{ Exception -> 0x01d5 }
-            int r2 = org.telegram.messenger.AndroidUtilities.dp(r9)     // Catch:{ Exception -> 0x01d5 }
-            int r13 = r1 + r2
-            android.text.Layout$Alignment r14 = android.text.Layout.Alignment.ALIGN_NORMAL     // Catch:{ Exception -> 0x01d5 }
-            r15 = 1065353216(0x3var_, float:1.0)
-            r16 = 0
-            r17 = 0
-            r10 = r0
-            r10.<init>(r11, r12, r13, r14, r15, r16, r17)     // Catch:{ Exception -> 0x01d5 }
-            r7.descriptionLayout = r0     // Catch:{ Exception -> 0x01d5 }
-            goto L_0x01d9
-        L_0x0175:
-            org.telegram.messenger.MessageObject r0 = r7.currentMessageObject     // Catch:{ Exception -> 0x01d5 }
-            java.lang.String r0 = r0.getMusicAuthor()     // Catch:{ Exception -> 0x01d5 }
-            java.lang.String r0 = r0.replace(r6, r8)     // Catch:{ Exception -> 0x01d5 }
-            org.telegram.messenger.MessageObject r2 = r7.currentMessageObject     // Catch:{ Exception -> 0x01d5 }
-            java.util.ArrayList<java.lang.String> r2 = r2.highlightedWords     // Catch:{ Exception -> 0x01d5 }
-            org.telegram.ui.ActionBar.Theme$ResourcesProvider r6 = r7.resourcesProvider     // Catch:{ Exception -> 0x01d5 }
-            java.lang.CharSequence r2 = org.telegram.messenger.AndroidUtilities.highlightText((java.lang.CharSequence) r0, (java.util.ArrayList<java.lang.String>) r2, (org.telegram.ui.ActionBar.Theme.ResourcesProvider) r6)     // Catch:{ Exception -> 0x01d5 }
-            if (r2 == 0) goto L_0x018c
+            r14 = r1
+            r12.<init>(r13, r14, r15, r16, r17, r18, r19)     // Catch:{ Exception -> 0x01e0 }
+            r7.descriptionLayout = r0     // Catch:{ Exception -> 0x01e0 }
+            goto L_0x01df
+        L_0x017f:
+            org.telegram.messenger.MessageObject r0 = r7.currentMessageObject     // Catch:{ Exception -> 0x01e0 }
+            java.lang.String r0 = r0.getMusicAuthor()     // Catch:{ Exception -> 0x01e0 }
+            java.lang.String r0 = r0.replace(r1, r5)     // Catch:{ Exception -> 0x01e0 }
+            org.telegram.messenger.MessageObject r1 = r7.currentMessageObject     // Catch:{ Exception -> 0x01e0 }
+            java.util.ArrayList<java.lang.String> r1 = r1.highlightedWords     // Catch:{ Exception -> 0x01e0 }
+            org.telegram.ui.ActionBar.Theme$ResourcesProvider r2 = r7.resourcesProvider     // Catch:{ Exception -> 0x01e0 }
+            java.lang.CharSequence r1 = org.telegram.messenger.AndroidUtilities.highlightText((java.lang.CharSequence) r0, (java.util.ArrayList<java.lang.String>) r1, (org.telegram.ui.ActionBar.Theme.ResourcesProvider) r2)     // Catch:{ Exception -> 0x01e0 }
+            if (r1 == 0) goto L_0x0196
+            r0 = r1
+        L_0x0196:
+            int r2 = r7.viewType     // Catch:{ Exception -> 0x01e0 }
+            if (r2 != r4) goto L_0x01b8
+            android.text.SpannableStringBuilder r2 = new android.text.SpannableStringBuilder     // Catch:{ Exception -> 0x01e0 }
+            r2.<init>(r0)     // Catch:{ Exception -> 0x01e0 }
+            android.text.SpannableStringBuilder r2 = r2.append(r5)     // Catch:{ Exception -> 0x01e0 }
+            android.text.SpannableStringBuilder r12 = r7.dotSpan     // Catch:{ Exception -> 0x01e0 }
+            android.text.SpannableStringBuilder r2 = r2.append(r12)     // Catch:{ Exception -> 0x01e0 }
+            android.text.SpannableStringBuilder r2 = r2.append(r5)     // Catch:{ Exception -> 0x01e0 }
+            org.telegram.messenger.MessageObject r5 = r7.currentMessageObject     // Catch:{ Exception -> 0x01e0 }
+            java.lang.CharSequence r5 = org.telegram.ui.FilteredSearchView.createFromInfoString(r5)     // Catch:{ Exception -> 0x01e0 }
+            android.text.SpannableStringBuilder r2 = r2.append(r5)     // Catch:{ Exception -> 0x01e0 }
             r0 = r2
-        L_0x018c:
-            int r2 = r7.viewType     // Catch:{ Exception -> 0x01d5 }
-            if (r2 != r5) goto L_0x01ad
-            android.text.SpannableStringBuilder r2 = new android.text.SpannableStringBuilder     // Catch:{ Exception -> 0x01d5 }
-            r2.<init>(r0)     // Catch:{ Exception -> 0x01d5 }
-            android.text.SpannableStringBuilder r0 = r2.append(r8)     // Catch:{ Exception -> 0x01d5 }
-            android.text.SpannableStringBuilder r2 = r7.dotSpan     // Catch:{ Exception -> 0x01d5 }
-            android.text.SpannableStringBuilder r0 = r0.append(r2)     // Catch:{ Exception -> 0x01d5 }
-            android.text.SpannableStringBuilder r0 = r0.append(r8)     // Catch:{ Exception -> 0x01d5 }
-            org.telegram.messenger.MessageObject r2 = r7.currentMessageObject     // Catch:{ Exception -> 0x01d5 }
-            java.lang.CharSequence r2 = org.telegram.ui.FilteredSearchView.createFromInfoString(r2)     // Catch:{ Exception -> 0x01d5 }
-            android.text.SpannableStringBuilder r0 = r0.append(r2)     // Catch:{ Exception -> 0x01d5 }
-        L_0x01ad:
-            int r2 = r7.viewType     // Catch:{ Exception -> 0x01d5 }
-            if (r2 != r5) goto L_0x01b4
-            android.text.TextPaint r2 = r7.description2TextPaint     // Catch:{ Exception -> 0x01d5 }
-            goto L_0x01b6
-        L_0x01b4:
-            android.text.TextPaint r2 = org.telegram.ui.ActionBar.Theme.chat_contextResult_descriptionTextPaint     // Catch:{ Exception -> 0x01d5 }
-        L_0x01b6:
-            r12 = r2
-            float r2 = (float) r1     // Catch:{ Exception -> 0x01d5 }
-            android.text.TextUtils$TruncateAt r5 = android.text.TextUtils.TruncateAt.END     // Catch:{ Exception -> 0x01d5 }
-            java.lang.CharSequence r11 = android.text.TextUtils.ellipsize(r0, r12, r2, r5)     // Catch:{ Exception -> 0x01d5 }
-            android.text.StaticLayout r0 = new android.text.StaticLayout     // Catch:{ Exception -> 0x01d5 }
-            int r2 = org.telegram.messenger.AndroidUtilities.dp(r9)     // Catch:{ Exception -> 0x01d5 }
-            int r13 = r1 + r2
-            android.text.Layout$Alignment r14 = android.text.Layout.Alignment.ALIGN_NORMAL     // Catch:{ Exception -> 0x01d5 }
-            r15 = 1065353216(0x3var_, float:1.0)
-            r16 = 0
-            r17 = 0
-            r10 = r0
-            r10.<init>(r11, r12, r13, r14, r15, r16, r17)     // Catch:{ Exception -> 0x01d5 }
-            r7.descriptionLayout = r0     // Catch:{ Exception -> 0x01d5 }
-            goto L_0x01d9
-        L_0x01d5:
+        L_0x01b8:
+            int r2 = r7.viewType     // Catch:{ Exception -> 0x01e0 }
+            if (r2 != r4) goto L_0x01bf
+            android.text.TextPaint r2 = r7.description2TextPaint     // Catch:{ Exception -> 0x01e0 }
+            goto L_0x01c1
+        L_0x01bf:
+            android.text.TextPaint r2 = org.telegram.ui.ActionBar.Theme.chat_contextResult_descriptionTextPaint     // Catch:{ Exception -> 0x01e0 }
+        L_0x01c1:
+            float r4 = (float) r9     // Catch:{ Exception -> 0x01e0 }
+            android.text.TextUtils$TruncateAt r5 = android.text.TextUtils.TruncateAt.END     // Catch:{ Exception -> 0x01e0 }
+            java.lang.CharSequence r13 = android.text.TextUtils.ellipsize(r0, r2, r4, r5)     // Catch:{ Exception -> 0x01e0 }
+            android.text.StaticLayout r0 = new android.text.StaticLayout     // Catch:{ Exception -> 0x01e0 }
+            int r4 = org.telegram.messenger.AndroidUtilities.dp(r6)     // Catch:{ Exception -> 0x01e0 }
+            int r15 = r9 + r4
+            android.text.Layout$Alignment r16 = android.text.Layout.Alignment.ALIGN_NORMAL     // Catch:{ Exception -> 0x01e0 }
+            r17 = 1065353216(0x3var_, float:1.0)
+            r18 = 0
+            r19 = 0
+            r12 = r0
+            r14 = r2
+            r12.<init>(r13, r14, r15, r16, r17, r18, r19)     // Catch:{ Exception -> 0x01e0 }
+            r7.descriptionLayout = r0     // Catch:{ Exception -> 0x01e0 }
+        L_0x01df:
+            goto L_0x01e4
+        L_0x01e0:
             r0 = move-exception
             org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)
-        L_0x01d9:
-            int r0 = android.view.View.MeasureSpec.getSize(r23)
+        L_0x01e4:
+            int r0 = android.view.View.MeasureSpec.getSize(r25)
             r1 = 1113587712(0x42600000, float:56.0)
             int r1 = org.telegram.messenger.AndroidUtilities.dp(r1)
             android.text.StaticLayout r2 = r7.captionLayout
-            r8 = 1099956224(0x41900000, float:18.0)
-            if (r2 != 0) goto L_0x01ea
-            goto L_0x01ee
-        L_0x01ea:
-            int r4 = org.telegram.messenger.AndroidUtilities.dp(r8)
-        L_0x01ee:
-            int r1 = r1 + r4
+            r12 = 1099956224(0x41900000, float:18.0)
+            if (r2 != 0) goto L_0x01f5
+            goto L_0x01f9
+        L_0x01f5:
+            int r11 = org.telegram.messenger.AndroidUtilities.dp(r12)
+        L_0x01f9:
+            int r1 = r1 + r11
             boolean r2 = r7.needDivider
             int r1 = r1 + r2
             r7.setMeasuredDimension(r0, r1)
             r0 = 1112539136(0x42500000, float:52.0)
             int r0 = org.telegram.messenger.AndroidUtilities.dp(r0)
             boolean r1 = org.telegram.messenger.LocaleController.isRTL
-            if (r1 == 0) goto L_0x020a
-            int r1 = android.view.View.MeasureSpec.getSize(r23)
+            if (r1 == 0) goto L_0x0215
+            int r1 = android.view.View.MeasureSpec.getSize(r25)
             int r2 = org.telegram.messenger.AndroidUtilities.dp(r3)
             int r1 = r1 - r2
             int r1 = r1 - r0
-            goto L_0x020e
-        L_0x020a:
+            goto L_0x0219
+        L_0x0215:
             int r1 = org.telegram.messenger.AndroidUtilities.dp(r3)
-        L_0x020e:
-            org.telegram.ui.Components.RadialProgress2 r0 = r7.radialProgress
-            int r2 = org.telegram.messenger.AndroidUtilities.dp(r9)
-            int r2 = r2 + r1
+        L_0x0219:
+            r11 = r1
+            org.telegram.ui.Components.RadialProgress2 r1 = r7.radialProgress
+            int r2 = org.telegram.messenger.AndroidUtilities.dp(r6)
+            int r2 = r2 + r11
             r7.buttonX = r2
             r3 = 1086324736(0x40CLASSNAME, float:6.0)
             int r3 = org.telegram.messenger.AndroidUtilities.dp(r3)
             r7.buttonY = r3
             r4 = 1111490560(0x42400000, float:48.0)
             int r4 = org.telegram.messenger.AndroidUtilities.dp(r4)
-            int r1 = r1 + r4
-            r4 = 1112014848(0x42480000, float:50.0)
-            int r4 = org.telegram.messenger.AndroidUtilities.dp(r4)
-            r0.setProgressRect(r2, r3, r1, r4)
+            int r4 = r4 + r11
+            r5 = 1112014848(0x42480000, float:50.0)
+            int r5 = org.telegram.messenger.AndroidUtilities.dp(r5)
+            r1.setProgressRect(r2, r3, r4, r5)
             org.telegram.ui.Components.CheckBox2 r2 = r7.checkBox
             r4 = 0
             r6 = 0
-            r1 = r22
-            r3 = r23
-            r5 = r24
+            r1 = r24
+            r3 = r25
+            r5 = r26
             r1.measureChildWithMargins(r2, r3, r4, r5, r6)
-            android.text.StaticLayout r0 = r7.captionLayout
-            r1 = 1105723392(0x41e80000, float:29.0)
-            if (r0 == 0) goto L_0x0254
-            int r0 = org.telegram.messenger.AndroidUtilities.dp(r1)
-            r7.captionY = r0
-            int r0 = org.telegram.messenger.AndroidUtilities.dp(r1)
-            int r1 = org.telegram.messenger.AndroidUtilities.dp(r8)
-            int r0 = r0 + r1
-            r7.descriptionY = r0
-            goto L_0x025a
-        L_0x0254:
-            int r0 = org.telegram.messenger.AndroidUtilities.dp(r1)
-            r7.descriptionY = r0
-        L_0x025a:
+            android.text.StaticLayout r1 = r7.captionLayout
+            r2 = 1105723392(0x41e80000, float:29.0)
+            if (r1 == 0) goto L_0x0260
+            int r1 = org.telegram.messenger.AndroidUtilities.dp(r2)
+            r7.captionY = r1
+            int r1 = org.telegram.messenger.AndroidUtilities.dp(r2)
+            int r2 = org.telegram.messenger.AndroidUtilities.dp(r12)
+            int r1 = r1 + r2
+            r7.descriptionY = r1
+            goto L_0x0266
+        L_0x0260:
+            int r1 = org.telegram.messenger.AndroidUtilities.dp(r2)
+            r7.descriptionY = r1
+        L_0x0266:
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Cells.SharedAudioCell.onMeasure(int, int):void");
     }
 
-    public void setMessageObject(MessageObject messageObject, boolean z) {
-        this.needDivider = z;
+    public void setMessageObject(MessageObject messageObject, boolean divider) {
+        this.needDivider = divider;
         this.currentMessageObject = messageObject;
-        TLRPC$Document document = messageObject.getDocument();
-        TLRPC$PhotoSize closestPhotoSizeWithSize = document != null ? FileLoader.getClosestPhotoSizeWithSize(document.thumbs, 360) : null;
-        if ((closestPhotoSizeWithSize instanceof TLRPC$TL_photoSize) || (closestPhotoSizeWithSize instanceof TLRPC$TL_photoSizeProgressive)) {
-            this.radialProgress.setImageOverlay(closestPhotoSizeWithSize, document, messageObject);
+        TLRPC.Document document = messageObject.getDocument();
+        TLRPC.PhotoSize thumb = document != null ? FileLoader.getClosestPhotoSizeWithSize(document.thumbs, 360) : null;
+        if ((thumb instanceof TLRPC.TL_photoSize) || (thumb instanceof TLRPC.TL_photoSizeProgressive)) {
+            this.radialProgress.setImageOverlay(thumb, document, messageObject);
         } else {
             String artworkUrl = messageObject.getArtworkUrl(true);
             if (!TextUtils.isEmpty(artworkUrl)) {
                 this.radialProgress.setImageOverlay(artworkUrl);
             } else {
-                this.radialProgress.setImageOverlay((TLRPC$PhotoSize) null, (TLRPC$Document) null, (Object) null);
+                this.radialProgress.setImageOverlay((TLRPC.PhotoSize) null, (TLRPC.Document) null, (Object) null);
             }
         }
         updateButtonState(false, false);
         requestLayout();
     }
 
-    public void setChecked(boolean z, boolean z2) {
+    public void setChecked(boolean checked, boolean animated) {
         if (this.checkBox.getVisibility() != 0) {
             this.checkBox.setVisibility(0);
         }
-        this.checkBox.setChecked(z, z2);
+        this.checkBox.setChecked(checked, animated);
     }
 
-    public void setCheckForButtonPress(boolean z) {
-        this.checkForButtonPress = z;
+    public void setCheckForButtonPress(boolean value) {
+        this.checkForButtonPress = value;
     }
 
     /* access modifiers changed from: protected */
@@ -474,116 +470,69 @@ public class SharedAudioCell extends FrameLayout implements DownloadController.F
         this.radialProgress.initMiniIcons();
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:14:0x0039  */
-    /* JADX WARNING: Removed duplicated region for block: B:22:0x0064  */
-    /* Code decompiled incorrectly, please refer to instructions dump. */
-    private boolean checkAudioMotionEvent(android.view.MotionEvent r9) {
-        /*
-            r8 = this;
-            float r0 = r9.getX()
-            int r0 = (int) r0
-            float r1 = r9.getY()
-            int r1 = (int) r1
-            r2 = 1108344832(0x42100000, float:36.0)
-            int r2 = org.telegram.messenger.AndroidUtilities.dp(r2)
-            int r3 = r8.miniButtonState
-            r4 = 1
-            r5 = 0
-            if (r3 < 0) goto L_0x0032
-            r3 = 1104674816(0x41d80000, float:27.0)
-            int r3 = org.telegram.messenger.AndroidUtilities.dp(r3)
-            int r6 = r8.buttonX
-            int r7 = r6 + r3
-            if (r0 < r7) goto L_0x0032
-            int r6 = r6 + r3
-            int r6 = r6 + r2
-            if (r0 > r6) goto L_0x0032
-            int r6 = r8.buttonY
-            int r7 = r6 + r3
-            if (r1 < r7) goto L_0x0032
-            int r6 = r6 + r3
-            int r6 = r6 + r2
-            if (r1 > r6) goto L_0x0032
-            r2 = 1
-            goto L_0x0033
-        L_0x0032:
-            r2 = 0
-        L_0x0033:
-            int r3 = r9.getAction()
-            if (r3 != 0) goto L_0x0064
-            if (r2 == 0) goto L_0x0047
-            r8.miniButtonPressed = r4
-            org.telegram.ui.Components.RadialProgress2 r9 = r8.radialProgress
-            r9.setPressed(r4, r4)
-            r8.invalidate()
-        L_0x0045:
-            r5 = 1
-            goto L_0x00ab
-        L_0x0047:
-            boolean r9 = r8.checkForButtonPress
-            if (r9 == 0) goto L_0x00ab
-            org.telegram.ui.Components.RadialProgress2 r9 = r8.radialProgress
-            android.graphics.RectF r9 = r9.getProgressRect()
-            float r0 = (float) r0
-            float r1 = (float) r1
-            boolean r9 = r9.contains(r0, r1)
-            if (r9 == 0) goto L_0x00ab
-            r8.buttonPressed = r4
-            org.telegram.ui.Components.RadialProgress2 r9 = r8.radialProgress
-            r9.setPressed(r4, r5)
-            r8.invalidate()
-            goto L_0x0045
-        L_0x0064:
-            int r0 = r9.getAction()
-            if (r0 != r4) goto L_0x008a
-            boolean r9 = r8.miniButtonPressed
-            if (r9 == 0) goto L_0x007a
-            r8.miniButtonPressed = r5
-            r8.playSoundEffect(r5)
-            r8.didPressedMiniButton(r4)
-            r8.invalidate()
-            goto L_0x00ab
-        L_0x007a:
-            boolean r9 = r8.buttonPressed
-            if (r9 == 0) goto L_0x00ab
-            r8.buttonPressed = r5
-            r8.playSoundEffect(r5)
-            r8.didPressedButton()
-            r8.invalidate()
-            goto L_0x00ab
-        L_0x008a:
-            int r0 = r9.getAction()
-            r1 = 3
-            if (r0 != r1) goto L_0x0099
-            r8.miniButtonPressed = r5
-            r8.buttonPressed = r5
-            r8.invalidate()
-            goto L_0x00ab
-        L_0x0099:
-            int r9 = r9.getAction()
-            r0 = 2
-            if (r9 != r0) goto L_0x00ab
-            if (r2 != 0) goto L_0x00ab
-            boolean r9 = r8.miniButtonPressed
-            if (r9 == 0) goto L_0x00ab
-            r8.miniButtonPressed = r5
-            r8.invalidate()
-        L_0x00ab:
-            org.telegram.ui.Components.RadialProgress2 r9 = r8.radialProgress
-            boolean r0 = r8.miniButtonPressed
-            r9.setPressed(r0, r4)
-            return r5
-        */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Cells.SharedAudioCell.checkAudioMotionEvent(android.view.MotionEvent):boolean");
+    private boolean checkAudioMotionEvent(MotionEvent event) {
+        boolean z;
+        int x = (int) event.getX();
+        int y = (int) event.getY();
+        boolean result = false;
+        int side = AndroidUtilities.dp(36.0f);
+        boolean area = false;
+        if (this.miniButtonState >= 0) {
+            int offset = AndroidUtilities.dp(27.0f);
+            int i = this.buttonX;
+            if (x >= i + offset && x <= i + offset + side) {
+                int i2 = this.buttonY;
+                if (y >= i2 + offset && y <= i2 + offset + side) {
+                    z = true;
+                    area = z;
+                }
+            }
+            z = false;
+            area = z;
+        }
+        if (event.getAction() == 0) {
+            if (area) {
+                this.miniButtonPressed = true;
+                this.radialProgress.setPressed(true, true);
+                invalidate();
+                result = true;
+            } else if (this.checkForButtonPress && this.radialProgress.getProgressRect().contains((float) x, (float) y)) {
+                this.buttonPressed = true;
+                this.radialProgress.setPressed(true, false);
+                invalidate();
+                result = true;
+            }
+        } else if (event.getAction() == 1) {
+            if (this.miniButtonPressed) {
+                this.miniButtonPressed = false;
+                playSoundEffect(0);
+                didPressedMiniButton(true);
+                invalidate();
+            } else if (this.buttonPressed) {
+                this.buttonPressed = false;
+                playSoundEffect(0);
+                didPressedButton();
+                invalidate();
+            }
+        } else if (event.getAction() == 3) {
+            this.miniButtonPressed = false;
+            this.buttonPressed = false;
+            invalidate();
+        } else if (event.getAction() == 2 && !area && this.miniButtonPressed) {
+            this.miniButtonPressed = false;
+            invalidate();
+        }
+        this.radialProgress.setPressed(this.miniButtonPressed, true);
+        return result;
     }
 
-    public boolean onTouchEvent(MotionEvent motionEvent) {
+    public boolean onTouchEvent(MotionEvent event) {
         if (this.currentMessageObject == null) {
-            return super.onTouchEvent(motionEvent);
+            return super.onTouchEvent(event);
         }
-        boolean checkAudioMotionEvent = checkAudioMotionEvent(motionEvent);
-        if (motionEvent.getAction() != 3) {
-            return checkAudioMotionEvent;
+        boolean result = checkAudioMotionEvent(event);
+        if (event.getAction() != 3) {
+            return result;
         }
         this.miniButtonPressed = false;
         this.buttonPressed = false;
@@ -592,7 +541,7 @@ public class SharedAudioCell extends FrameLayout implements DownloadController.F
         return false;
     }
 
-    private void didPressedMiniButton(boolean z) {
+    private void didPressedMiniButton(boolean animated) {
         int i = this.miniButtonState;
         if (i == 0) {
             this.miniButtonState = 1;
@@ -629,7 +578,7 @@ public class SharedAudioCell extends FrameLayout implements DownloadController.F
                 invalidate();
             }
         } else if (i == 1) {
-            if (MediaController.getInstance().lambda$startAudioAgain$7(this.currentMessageObject)) {
+            if (MediaController.getInstance().m102lambda$startAudioAgain$7$orgtelegrammessengerMediaController(this.currentMessageObject)) {
                 this.buttonState = 0;
                 this.radialProgress.setIcon(getIconForCurrentState(), false, true);
                 invalidate();
@@ -654,7 +603,10 @@ public class SharedAudioCell extends FrameLayout implements DownloadController.F
         if (i < 0) {
             return 4;
         }
-        return i == 0 ? 2 : 3;
+        if (i == 0) {
+            return 2;
+        }
+        return 3;
     }
 
     private int getIconForCurrentState() {
@@ -665,92 +617,94 @@ public class SharedAudioCell extends FrameLayout implements DownloadController.F
         if (i == 2) {
             return 2;
         }
-        return i == 4 ? 3 : 0;
+        if (i == 4) {
+            return 3;
+        }
+        return 0;
     }
 
-    public void updateButtonState(boolean z, boolean z2) {
+    public void updateButtonState(boolean ifSame, boolean animated) {
         String fileName = this.currentMessageObject.getFileName();
         if (!TextUtils.isEmpty(fileName)) {
-            MessageObject messageObject = this.currentMessageObject;
-            boolean z3 = messageObject.attachPathExists || messageObject.mediaExists;
-            if (!SharedConfig.streamMedia || !messageObject.isMusic() || ((int) this.currentMessageObject.getDialogId()) == 0) {
+            boolean fileExists = this.currentMessageObject.attachPathExists || this.currentMessageObject.mediaExists;
+            if (!SharedConfig.streamMedia || !this.currentMessageObject.isMusic() || ((int) this.currentMessageObject.getDialogId()) == 0) {
                 this.hasMiniProgress = 0;
                 this.miniButtonState = -1;
             } else {
-                this.hasMiniProgress = z3 ? 1 : 2;
-                z3 = true;
+                this.hasMiniProgress = fileExists ? 1 : 2;
+                fileExists = true;
             }
             if (this.hasMiniProgress != 0) {
                 this.radialProgress.setMiniProgressBackgroundColor(getThemedColor(this.currentMessageObject.isOutOwner() ? "chat_outLoader" : "chat_inLoader"));
-                boolean isPlayingMessage = MediaController.getInstance().isPlayingMessage(this.currentMessageObject);
-                if (!isPlayingMessage || (isPlayingMessage && MediaController.getInstance().isMessagePaused())) {
+                boolean playing = MediaController.getInstance().isPlayingMessage(this.currentMessageObject);
+                if (!playing || (playing && MediaController.getInstance().isMessagePaused())) {
                     this.buttonState = 0;
                 } else {
                     this.buttonState = 1;
                 }
-                this.radialProgress.setIcon(getIconForCurrentState(), z, z2);
+                this.radialProgress.setIcon(getIconForCurrentState(), ifSame, animated);
                 if (this.hasMiniProgress == 1) {
                     DownloadController.getInstance(this.currentAccount).removeLoadingFileObserver(this);
                     this.miniButtonState = -1;
-                    this.radialProgress.setMiniIcon(getMiniIconForCurrentState(), z, z2);
+                    this.radialProgress.setMiniIcon(getMiniIconForCurrentState(), ifSame, animated);
                     return;
                 }
                 DownloadController.getInstance(this.currentAccount).addLoadingFileObserver(fileName, this.currentMessageObject, this);
                 if (!FileLoader.getInstance(this.currentAccount).isLoadingFile(fileName)) {
                     this.miniButtonState = 0;
-                    this.radialProgress.setMiniIcon(getMiniIconForCurrentState(), z, z2);
+                    this.radialProgress.setMiniIcon(getMiniIconForCurrentState(), ifSame, animated);
                     return;
                 }
                 this.miniButtonState = 1;
-                this.radialProgress.setMiniIcon(getMiniIconForCurrentState(), z, z2);
-                Float fileProgress = ImageLoader.getInstance().getFileProgress(fileName);
-                if (fileProgress != null) {
-                    this.radialProgress.setProgress(fileProgress.floatValue(), z2);
+                this.radialProgress.setMiniIcon(getMiniIconForCurrentState(), ifSame, animated);
+                Float progress = ImageLoader.getInstance().getFileProgress(fileName);
+                if (progress != null) {
+                    this.radialProgress.setProgress(progress.floatValue(), animated);
                 } else {
-                    this.radialProgress.setProgress(0.0f, z2);
+                    this.radialProgress.setProgress(0.0f, animated);
                 }
-            } else if (z3) {
+            } else if (fileExists) {
                 DownloadController.getInstance(this.currentAccount).removeLoadingFileObserver(this);
-                boolean isPlayingMessage2 = MediaController.getInstance().isPlayingMessage(this.currentMessageObject);
-                if (!isPlayingMessage2 || (isPlayingMessage2 && MediaController.getInstance().isMessagePaused())) {
+                boolean playing2 = MediaController.getInstance().isPlayingMessage(this.currentMessageObject);
+                if (!playing2 || (playing2 && MediaController.getInstance().isMessagePaused())) {
                     this.buttonState = 0;
                 } else {
                     this.buttonState = 1;
                 }
-                this.radialProgress.setProgress(1.0f, z2);
-                this.radialProgress.setIcon(getIconForCurrentState(), z, z2);
+                this.radialProgress.setProgress(1.0f, animated);
+                this.radialProgress.setIcon(getIconForCurrentState(), ifSame, animated);
                 invalidate();
             } else {
                 DownloadController.getInstance(this.currentAccount).addLoadingFileObserver(fileName, this.currentMessageObject, this);
                 if (!FileLoader.getInstance(this.currentAccount).isLoadingFile(fileName)) {
                     this.buttonState = 2;
-                    this.radialProgress.setProgress(0.0f, z2);
+                    this.radialProgress.setProgress(0.0f, animated);
                 } else {
                     this.buttonState = 4;
-                    Float fileProgress2 = ImageLoader.getInstance().getFileProgress(fileName);
-                    if (fileProgress2 != null) {
-                        this.radialProgress.setProgress(fileProgress2.floatValue(), z2);
+                    Float progress2 = ImageLoader.getInstance().getFileProgress(fileName);
+                    if (progress2 != null) {
+                        this.radialProgress.setProgress(progress2.floatValue(), animated);
                     } else {
-                        this.radialProgress.setProgress(0.0f, z2);
+                        this.radialProgress.setProgress(0.0f, animated);
                     }
                 }
-                this.radialProgress.setIcon(getIconForCurrentState(), z, z2);
+                this.radialProgress.setIcon(getIconForCurrentState(), ifSame, animated);
                 invalidate();
             }
         }
     }
 
-    public void onFailedDownload(String str, boolean z) {
-        updateButtonState(true, z);
+    public void onFailedDownload(String fileName, boolean canceled) {
+        updateButtonState(true, canceled);
     }
 
-    public void onSuccessDownload(String str) {
+    public void onSuccessDownload(String fileName) {
         this.radialProgress.setProgress(1.0f, true);
         updateButtonState(false, true);
     }
 
-    public void onProgressDownload(String str, long j, long j2) {
-        this.radialProgress.setProgress(Math.min(1.0f, ((float) j) / ((float) j2)), true);
+    public void onProgressDownload(String fileName, long downloadSize, long totalSize) {
+        this.radialProgress.setProgress(Math.min(1.0f, ((float) downloadSize) / ((float) totalSize)), true);
         if (this.hasMiniProgress != 0) {
             if (this.miniButtonState != 1) {
                 updateButtonState(false, true);
@@ -760,35 +714,43 @@ public class SharedAudioCell extends FrameLayout implements DownloadController.F
         }
     }
 
+    public void onProgressUpload(String fileName, long uploadedSize, long totalSize, boolean isEncrypted) {
+    }
+
     public int getObserverTag() {
         return this.TAG;
     }
 
-    public void onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo accessibilityNodeInfo) {
-        super.onInitializeAccessibilityNodeInfo(accessibilityNodeInfo);
+    /* access modifiers changed from: protected */
+    public boolean needPlayMessage(MessageObject messageObject) {
+        return false;
+    }
+
+    public void onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo info) {
+        super.onInitializeAccessibilityNodeInfo(info);
         if (this.currentMessageObject.isMusic()) {
-            accessibilityNodeInfo.setText(LocaleController.formatString("AccDescrMusicInfo", NUM, this.currentMessageObject.getMusicAuthor(), this.currentMessageObject.getMusicTitle()));
+            info.setText(LocaleController.formatString("AccDescrMusicInfo", NUM, this.currentMessageObject.getMusicAuthor(), this.currentMessageObject.getMusicTitle()));
         } else if (!(this.titleLayout == null || this.descriptionLayout == null)) {
-            accessibilityNodeInfo.setText(this.titleLayout.getText() + ", " + this.descriptionLayout.getText());
+            info.setText(this.titleLayout.getText() + ", " + this.descriptionLayout.getText());
         }
         if (this.checkBox.isChecked()) {
-            accessibilityNodeInfo.setCheckable(true);
-            accessibilityNodeInfo.setChecked(true);
+            info.setCheckable(true);
+            info.setChecked(true);
         }
     }
 
-    public void didReceivedNotification(int i, int i2, Object... objArr) {
+    public void didReceivedNotification(int id, int account, Object... args) {
         updateButtonState(false, true);
     }
 
-    private int getThemedColor(String str) {
+    private int getThemedColor(String key) {
         Theme.ResourcesProvider resourcesProvider2 = this.resourcesProvider;
-        Integer color = resourcesProvider2 != null ? resourcesProvider2.getColor(str) : null;
-        return color != null ? color.intValue() : Theme.getColor(str);
+        Integer color = resourcesProvider2 != null ? resourcesProvider2.getColor(key) : null;
+        return color != null ? color.intValue() : Theme.getColor(key);
     }
 
-    public void setGlobalGradientView(FlickerLoadingView flickerLoadingView) {
-        this.globalGradientView = flickerLoadingView;
+    public void setGlobalGradientView(FlickerLoadingView globalGradientView2) {
+        this.globalGradientView = globalGradientView2;
     }
 
     /* access modifiers changed from: protected */
@@ -857,9 +819,9 @@ public class SharedAudioCell extends FrameLayout implements DownloadController.F
         }
     }
 
-    public void setEnterAnimationAlpha(float f) {
-        if (this.enterAlpha != f) {
-            this.enterAlpha = f;
+    public void setEnterAnimationAlpha(float alpha) {
+        if (this.enterAlpha != alpha) {
+            this.enterAlpha = alpha;
             invalidate();
         }
     }

@@ -1,22 +1,16 @@
 package org.telegram.ui.Components;
 
-import android.widget.LinearLayout;
-import org.telegram.ui.Components.NumberPicker;
+import org.telegram.tgnet.RequestDelegate;
+import org.telegram.tgnet.TLObject;
+import org.telegram.tgnet.TLRPC;
 
-public final /* synthetic */ class AlertsCreator$$ExternalSyntheticLambda126 implements NumberPicker.OnValueChangeListener {
-    public final /* synthetic */ LinearLayout f$0;
-    public final /* synthetic */ NumberPicker f$1;
-    public final /* synthetic */ NumberPicker f$2;
-    public final /* synthetic */ NumberPicker f$3;
+public final /* synthetic */ class AlertsCreator$$ExternalSyntheticLambda126 implements RequestDelegate {
+    public static final /* synthetic */ AlertsCreator$$ExternalSyntheticLambda126 INSTANCE = new AlertsCreator$$ExternalSyntheticLambda126();
 
-    public /* synthetic */ AlertsCreator$$ExternalSyntheticLambda126(LinearLayout linearLayout, NumberPicker numberPicker, NumberPicker numberPicker2, NumberPicker numberPicker3) {
-        this.f$0 = linearLayout;
-        this.f$1 = numberPicker;
-        this.f$2 = numberPicker2;
-        this.f$3 = numberPicker3;
+    private /* synthetic */ AlertsCreator$$ExternalSyntheticLambda126() {
     }
 
-    public final void onValueChange(NumberPicker numberPicker, int i, int i2) {
-        AlertsCreator.lambda$createDatePickerDialog$58(this.f$0, this.f$1, this.f$2, this.f$3, numberPicker, i, i2);
+    public final void run(TLObject tLObject, TLRPC.TL_error tL_error) {
+        AlertsCreator.lambda$createDeleteMessagesAlert$117(tLObject, tL_error);
     }
 }

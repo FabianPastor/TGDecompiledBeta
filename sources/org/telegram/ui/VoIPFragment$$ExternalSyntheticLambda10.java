@@ -1,16 +1,18 @@
 package org.telegram.ui;
 
 import android.view.View;
-import android.view.WindowInsets;
+import org.telegram.messenger.voip.VoIPService;
 
-public final /* synthetic */ class VoIPFragment$$ExternalSyntheticLambda10 implements View.OnApplyWindowInsetsListener {
+public final /* synthetic */ class VoIPFragment$$ExternalSyntheticLambda10 implements View.OnClickListener {
     public final /* synthetic */ VoIPFragment f$0;
+    public final /* synthetic */ VoIPService f$1;
 
-    public /* synthetic */ VoIPFragment$$ExternalSyntheticLambda10(VoIPFragment voIPFragment) {
+    public /* synthetic */ VoIPFragment$$ExternalSyntheticLambda10(VoIPFragment voIPFragment, VoIPService voIPService) {
         this.f$0 = voIPFragment;
+        this.f$1 = voIPService;
     }
 
-    public final WindowInsets onApplyWindowInsets(View view, WindowInsets windowInsets) {
-        return VoIPFragment.lambda$show$3(this.f$0, view, windowInsets);
+    public final void onClick(View view) {
+        this.f$0.m3458lambda$setVideoAction$25$orgtelegramuiVoIPFragment(this.f$1, view);
     }
 }

@@ -1,17 +1,13 @@
 package org.telegram.messenger;
 
-import org.telegram.tgnet.RequestDelegate;
-import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC$TL_error;
-
-public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda233 implements RequestDelegate {
+public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda233 implements Runnable {
     public final /* synthetic */ MessagesController f$0;
 
     public /* synthetic */ MessagesController$$ExternalSyntheticLambda233(MessagesController messagesController) {
         this.f$0 = messagesController;
     }
 
-    public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        this.f$0.lambda$generateUpdateMessage$247(tLObject, tLRPC$TL_error);
+    public final void run() {
+        this.f$0.m411x4e8b5347();
     }
 }

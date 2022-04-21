@@ -1,28 +1,29 @@
 package org.telegram.messenger;
 
+import org.telegram.tgnet.RequestDelegate;
 import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC$TL_error;
-import org.telegram.ui.ActionBar.AlertDialog;
-import org.telegram.ui.ActionBar.BaseFragment;
+import org.telegram.tgnet.TLRPC;
 
-public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda208 implements Runnable {
+public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda208 implements RequestDelegate {
     public final /* synthetic */ MessagesController f$0;
-    public final /* synthetic */ AlertDialog[] f$1;
-    public final /* synthetic */ BaseFragment f$2;
-    public final /* synthetic */ TLRPC$TL_error f$3;
-    public final /* synthetic */ TLObject f$4;
-    public final /* synthetic */ int f$5;
+    public final /* synthetic */ long f$1;
+    public final /* synthetic */ long f$2;
+    public final /* synthetic */ int f$3;
+    public final /* synthetic */ int f$4;
+    public final /* synthetic */ boolean f$5;
+    public final /* synthetic */ TLRPC.InputPeer f$6;
 
-    public /* synthetic */ MessagesController$$ExternalSyntheticLambda208(MessagesController messagesController, AlertDialog[] alertDialogArr, BaseFragment baseFragment, TLRPC$TL_error tLRPC$TL_error, TLObject tLObject, int i) {
+    public /* synthetic */ MessagesController$$ExternalSyntheticLambda208(MessagesController messagesController, long j, long j2, int i, int i2, boolean z, TLRPC.InputPeer inputPeer) {
         this.f$0 = messagesController;
-        this.f$1 = alertDialogArr;
-        this.f$2 = baseFragment;
-        this.f$3 = tLRPC$TL_error;
-        this.f$4 = tLObject;
-        this.f$5 = i;
+        this.f$1 = j;
+        this.f$2 = j2;
+        this.f$3 = i;
+        this.f$4 = i2;
+        this.f$5 = z;
+        this.f$6 = inputPeer;
     }
 
-    public final void run() {
-        this.f$0.lambda$openByUserName$339(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5);
+    public final void run(TLObject tLObject, TLRPC.TL_error tL_error) {
+        this.f$0.m175xCLASSNAMEf(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6, tLObject, tL_error);
     }
 }

@@ -1,15 +1,13 @@
 package org.telegram.ui;
 
-import android.view.View;
-
-public final /* synthetic */ class TwoStepVerificationSetupActivity$$ExternalSyntheticLambda13 implements View.OnFocusChangeListener {
+public final /* synthetic */ class TwoStepVerificationSetupActivity$$ExternalSyntheticLambda13 implements Runnable {
     public final /* synthetic */ TwoStepVerificationSetupActivity f$0;
 
     public /* synthetic */ TwoStepVerificationSetupActivity$$ExternalSyntheticLambda13(TwoStepVerificationSetupActivity twoStepVerificationSetupActivity) {
         this.f$0 = twoStepVerificationSetupActivity;
     }
 
-    public final void onFocusChange(View view, boolean z) {
-        this.f$0.lambda$createView$12(view, z);
+    public final void run() {
+        this.f$0.m3410lambda$new$1$orgtelegramuiTwoStepVerificationSetupActivity();
     }
 }

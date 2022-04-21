@@ -1,18 +1,26 @@
 package org.telegram.messenger;
 
-import androidx.core.util.Consumer;
 import org.telegram.tgnet.RequestDelegate;
 import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC$TL_error;
+import org.telegram.tgnet.TLRPC;
+import org.telegram.ui.ActionBar.BaseFragment;
 
 public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda224 implements RequestDelegate {
-    public final /* synthetic */ Consumer f$0;
+    public final /* synthetic */ MessagesController f$0;
+    public final /* synthetic */ long f$1;
+    public final /* synthetic */ BaseFragment f$2;
+    public final /* synthetic */ TLRPC.TL_messages_editChatDefaultBannedRights f$3;
+    public final /* synthetic */ boolean f$4;
 
-    public /* synthetic */ MessagesController$$ExternalSyntheticLambda224(Consumer consumer) {
-        this.f$0 = consumer;
+    public /* synthetic */ MessagesController$$ExternalSyntheticLambda224(MessagesController messagesController, long j, BaseFragment baseFragment, TLRPC.TL_messages_editChatDefaultBannedRights tL_messages_editChatDefaultBannedRights, boolean z) {
+        this.f$0 = messagesController;
+        this.f$1 = j;
+        this.f$2 = baseFragment;
+        this.f$3 = tL_messages_editChatDefaultBannedRights;
+        this.f$4 = z;
     }
 
-    public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        AndroidUtilities.runOnUIThread(new MessagesController$$ExternalSyntheticLambda212(tLObject, tLRPC$TL_error, this.f$0));
+    public final void run(TLObject tLObject, TLRPC.TL_error tL_error) {
+        this.f$0.m391xCLASSNAME(this.f$1, this.f$2, this.f$3, this.f$4, tLObject, tL_error);
     }
 }

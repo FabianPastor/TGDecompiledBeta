@@ -19,8 +19,7 @@ import org.telegram.messenger.DocumentObject;
 import org.telegram.messenger.ImageLocation;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MediaDataController;
-import org.telegram.tgnet.TLRPC$TL_availableReaction;
-import org.telegram.tgnet.TLRPC$TL_reactionCount;
+import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.ActionBar.Theme;
 
 public class ReactionTabHolderView extends FrameLayout {
@@ -31,15 +30,13 @@ public class ReactionTabHolderView extends FrameLayout {
     private Paint outlinePaint = new Paint(1);
     private float outlineProgress;
     View overlaySelectorView;
-    private float radius;
+    private Path path = new Path();
+    private float radius = ((float) AndroidUtilities.dp(32.0f));
     private BackupImageView reactView;
-    private RectF rect;
+    private RectF rect = new RectF();
 
     public ReactionTabHolderView(Context context) {
         super(context);
-        new Path();
-        this.rect = new RectF();
-        this.radius = (float) AndroidUtilities.dp(32.0f);
         View view = new View(context);
         this.overlaySelectorView = view;
         addView(view, LayoutHelper.createFrame(-1, -1.0f));
@@ -62,34 +59,34 @@ public class ReactionTabHolderView extends FrameLayout {
         setOutlineProgress(this.outlineProgress);
     }
 
-    public void setOutlineProgress(float f) {
-        this.outlineProgress = f;
-        int color = Theme.getColor("chat_inReactionButtonBackground");
-        int alphaComponent = ColorUtils.setAlphaComponent(Theme.getColor("chat_inReactionButtonBackground"), 16);
-        int blendARGB = ColorUtils.blendARGB(Theme.getColor("chat_inReactionButtonText"), Theme.getColor("chat_inReactionButtonTextSelected"), f);
-        this.bgPaint.setColor(ColorUtils.blendARGB(alphaComponent, color, f));
-        this.counterView.setTextColor(blendARGB);
-        this.drawable.setColorFilter(new PorterDuffColorFilter(blendARGB, PorterDuff.Mode.MULTIPLY));
-        if (f == 1.0f) {
+    public void setOutlineProgress(float outlineProgress2) {
+        this.outlineProgress = outlineProgress2;
+        int backgroundSelectedColor = Theme.getColor("chat_inReactionButtonBackground");
+        int backgroundColor = ColorUtils.setAlphaComponent(Theme.getColor("chat_inReactionButtonBackground"), 16);
+        int textFinalColor = ColorUtils.blendARGB(Theme.getColor("chat_inReactionButtonText"), Theme.getColor("chat_inReactionButtonTextSelected"), outlineProgress2);
+        this.bgPaint.setColor(ColorUtils.blendARGB(backgroundColor, backgroundSelectedColor, outlineProgress2));
+        this.counterView.setTextColor(textFinalColor);
+        this.drawable.setColorFilter(new PorterDuffColorFilter(textFinalColor, PorterDuff.Mode.MULTIPLY));
+        if (outlineProgress2 == 1.0f) {
             this.overlaySelectorView.setBackground(Theme.createSimpleSelectorRoundRectDrawable((int) this.radius, 0, ColorUtils.setAlphaComponent(Theme.getColor("chat_inReactionButtonTextSelected"), 76)));
-        } else if (f == 0.0f) {
-            this.overlaySelectorView.setBackground(Theme.createSimpleSelectorRoundRectDrawable((int) this.radius, 0, ColorUtils.setAlphaComponent(color, 76)));
+        } else if (outlineProgress2 == 0.0f) {
+            this.overlaySelectorView.setBackground(Theme.createSimpleSelectorRoundRectDrawable((int) this.radius, 0, ColorUtils.setAlphaComponent(backgroundSelectedColor, 76)));
         }
         invalidate();
     }
 
-    public void setCounter(int i) {
-        this.counterView.setText(String.format("%s", new Object[]{LocaleController.formatShortNumber(i, (int[]) null)}));
+    public void setCounter(int count) {
+        this.counterView.setText(String.format("%s", new Object[]{LocaleController.formatShortNumber(count, (int[]) null)}));
         this.iconView.setVisibility(0);
         this.reactView.setVisibility(8);
     }
 
-    public void setCounter(int i, TLRPC$TL_reactionCount tLRPC$TL_reactionCount) {
-        this.counterView.setText(String.format("%s", new Object[]{LocaleController.formatShortNumber(tLRPC$TL_reactionCount.count, (int[]) null)}));
-        String str = tLRPC$TL_reactionCount.reaction;
-        for (TLRPC$TL_availableReaction next : MediaDataController.getInstance(i).getReactionsList()) {
-            if (next.reaction.equals(str)) {
-                this.reactView.setImage(ImageLocation.getForDocument(next.static_icon), "50_50", "webp", (Drawable) DocumentObject.getSvgThumb(next.static_icon, "windowBackgroundGray", 1.0f), (Object) next);
+    public void setCounter(int currentAccount, TLRPC.TL_reactionCount counter) {
+        this.counterView.setText(String.format("%s", new Object[]{LocaleController.formatShortNumber(counter.count, (int[]) null)}));
+        String e = counter.reaction;
+        for (TLRPC.TL_availableReaction r : MediaDataController.getInstance(currentAccount).getReactionsList()) {
+            if (r.reaction.equals(e)) {
+                this.reactView.setImage(ImageLocation.getForDocument(r.static_icon), "50_50", "webp", (Drawable) DocumentObject.getSvgThumb(r.static_icon, "windowBackgroundGray", 1.0f), (Object) r);
                 this.reactView.setVisibility(0);
                 this.iconView.setVisibility(8);
                 return;

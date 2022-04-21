@@ -10,6 +10,6 @@ public final /* synthetic */ class PhotoViewerCaptionEnterView$$ExternalSyntheti
     }
 
     public final void onSpansChanged() {
-        this.f$0.lambda$new$2();
+        this.f$0.m4216x3250632d();
     }
 }

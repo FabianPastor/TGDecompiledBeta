@@ -8,6 +8,6 @@ public final /* synthetic */ class ScreenCapturerAndroid$$ExternalSyntheticLambd
     }
 
     public final void run() {
-        this.f$0.lambda$stopCapture$0();
+        this.f$0.m4624lambda$stopCapture$0$orgwebrtcScreenCapturerAndroid();
     }
 }

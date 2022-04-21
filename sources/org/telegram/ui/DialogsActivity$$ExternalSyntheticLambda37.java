@@ -1,17 +1,15 @@
 package org.telegram.ui;
 
-import java.util.ArrayList;
+import org.telegram.messenger.MessagesStorage;
 
-public final /* synthetic */ class DialogsActivity$$ExternalSyntheticLambda37 implements Runnable {
+public final /* synthetic */ class DialogsActivity$$ExternalSyntheticLambda37 implements MessagesStorage.IntCallback {
     public final /* synthetic */ DialogsActivity f$0;
-    public final /* synthetic */ ArrayList f$1;
 
-    public /* synthetic */ DialogsActivity$$ExternalSyntheticLambda37(DialogsActivity dialogsActivity, ArrayList arrayList) {
+    public /* synthetic */ DialogsActivity$$ExternalSyntheticLambda37(DialogsActivity dialogsActivity) {
         this.f$0 = dialogsActivity;
-        this.f$1 = arrayList;
     }
 
-    public final void run() {
-        this.f$0.lambda$performSelectedDialogsAction$25(this.f$1);
+    public final void run(int i) {
+        this.f$0.m2070lambda$askForPermissons$36$orgtelegramuiDialogsActivity(i);
     }
 }

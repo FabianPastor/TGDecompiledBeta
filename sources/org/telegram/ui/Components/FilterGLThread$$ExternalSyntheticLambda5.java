@@ -12,6 +12,6 @@ public final /* synthetic */ class FilterGLThread$$ExternalSyntheticLambda5 impl
     }
 
     public final void run() {
-        this.f$0.lambda$setFilterGLThreadDelegate$0(this.f$1);
+        this.f$0.m3997xa51347c1(this.f$1);
     }
 }

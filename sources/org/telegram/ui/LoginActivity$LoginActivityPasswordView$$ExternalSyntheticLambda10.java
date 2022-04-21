@@ -1,21 +1,17 @@
 package org.telegram.ui;
 
-import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC$TL_error;
 import org.telegram.ui.LoginActivity;
 
 public final /* synthetic */ class LoginActivity$LoginActivityPasswordView$$ExternalSyntheticLambda10 implements Runnable {
     public final /* synthetic */ LoginActivity.LoginActivityPasswordView f$0;
-    public final /* synthetic */ TLRPC$TL_error f$1;
-    public final /* synthetic */ TLObject f$2;
+    public final /* synthetic */ String f$1;
 
-    public /* synthetic */ LoginActivity$LoginActivityPasswordView$$ExternalSyntheticLambda10(LoginActivity.LoginActivityPasswordView loginActivityPasswordView, TLRPC$TL_error tLRPC$TL_error, TLObject tLObject) {
+    public /* synthetic */ LoginActivity$LoginActivityPasswordView$$ExternalSyntheticLambda10(LoginActivity.LoginActivityPasswordView loginActivityPasswordView, String str) {
         this.f$0 = loginActivityPasswordView;
-        this.f$1 = tLRPC$TL_error;
-        this.f$2 = tLObject;
+        this.f$1 = str;
     }
 
     public final void run() {
-        this.f$0.lambda$onNextPressed$10(this.f$1, this.f$2);
+        this.f$0.m2481xCLASSNAMEd084(this.f$1);
     }
 }

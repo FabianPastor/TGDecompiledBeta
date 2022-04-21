@@ -1,30 +1,22 @@
 package org.telegram.messenger;
 
-import java.util.ArrayList;
-import java.util.HashMap;
+import org.telegram.tgnet.TLObject;
+import org.telegram.tgnet.TLRPC;
 
 public final /* synthetic */ class ContactsController$$ExternalSyntheticLambda34 implements Runnable {
     public final /* synthetic */ ContactsController f$0;
-    public final /* synthetic */ HashMap f$1;
-    public final /* synthetic */ HashMap f$2;
-    public final /* synthetic */ boolean f$3;
-    public final /* synthetic */ HashMap f$4;
-    public final /* synthetic */ ArrayList f$5;
-    public final /* synthetic */ HashMap f$6;
-    public final /* synthetic */ boolean[] f$7;
+    public final /* synthetic */ TLRPC.TL_error f$1;
+    public final /* synthetic */ TLObject f$2;
+    public final /* synthetic */ int f$3;
 
-    public /* synthetic */ ContactsController$$ExternalSyntheticLambda34(ContactsController contactsController, HashMap hashMap, HashMap hashMap2, boolean z, HashMap hashMap3, ArrayList arrayList, HashMap hashMap4, boolean[] zArr) {
+    public /* synthetic */ ContactsController$$ExternalSyntheticLambda34(ContactsController contactsController, TLRPC.TL_error tL_error, TLObject tLObject, int i) {
         this.f$0 = contactsController;
-        this.f$1 = hashMap;
-        this.f$2 = hashMap2;
-        this.f$3 = z;
-        this.f$4 = hashMap3;
-        this.f$5 = arrayList;
-        this.f$6 = hashMap4;
-        this.f$7 = zArr;
+        this.f$1 = tL_error;
+        this.f$2 = tLObject;
+        this.f$3 = i;
     }
 
     public final void run() {
-        this.f$0.lambda$performSyncPhoneBook$18(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6, this.f$7);
+        this.f$0.m24xCLASSNAME(this.f$1, this.f$2, this.f$3);
     }
 }

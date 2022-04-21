@@ -10,6 +10,6 @@ public final /* synthetic */ class MediaController$9$$ExternalSyntheticLambda0 i
     }
 
     public final void run() {
-        this.f$0.lambda$onSurfaceDestroyed$0();
+        this.f$0.m684x819a588();
     }
 }

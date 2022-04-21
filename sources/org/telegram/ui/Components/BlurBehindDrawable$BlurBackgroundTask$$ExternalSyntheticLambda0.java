@@ -10,6 +10,6 @@ public final /* synthetic */ class BlurBehindDrawable$BlurBackgroundTask$$Extern
     }
 
     public final void run() {
-        this.f$0.lambda$run$0();
+        this.f$0.m3633xc3c2eb08();
     }
 }

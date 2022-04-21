@@ -1,17 +1,15 @@
 package org.telegram.ui.Components;
 
-import org.telegram.tgnet.TLObject;
+import org.telegram.ui.Components.SizeNotifierFrameLayout;
 
-public final /* synthetic */ class BotWebViewSheet$$ExternalSyntheticLambda8 implements Runnable {
+public final /* synthetic */ class BotWebViewSheet$$ExternalSyntheticLambda8 implements SizeNotifierFrameLayout.SizeNotifierFrameLayoutDelegate {
     public final /* synthetic */ BotWebViewSheet f$0;
-    public final /* synthetic */ TLObject f$1;
 
-    public /* synthetic */ BotWebViewSheet$$ExternalSyntheticLambda8(BotWebViewSheet botWebViewSheet, TLObject tLObject) {
+    public /* synthetic */ BotWebViewSheet$$ExternalSyntheticLambda8(BotWebViewSheet botWebViewSheet) {
         this.f$0 = botWebViewSheet;
-        this.f$1 = tLObject;
     }
 
-    public final void run() {
-        this.f$0.lambda$requestWebView$14(this.f$1);
+    public final void onSizeChanged(int i, boolean z) {
+        this.f$0.m3672lambda$new$5$orgtelegramuiComponentsBotWebViewSheet(i, z);
     }
 }

@@ -1,6 +1,5 @@
 package org.telegram.ui.Components;
 
-import android.graphics.Point;
 import android.view.View;
 import androidx.dynamicanimation.animation.DynamicAnimation;
 import androidx.dynamicanimation.animation.SpringAnimation;
@@ -14,24 +13,24 @@ public final class VerticalPositionAutoAnimator {
     /* access modifiers changed from: private */
     public float offsetY;
 
-    public static VerticalPositionAutoAnimator attach(View view) {
-        return attach(view, 350.0f);
+    public static VerticalPositionAutoAnimator attach(View floatingButtonView2) {
+        return attach(floatingButtonView2, 350.0f);
     }
 
-    public static VerticalPositionAutoAnimator attach(View view, float f) {
-        return new VerticalPositionAutoAnimator(view, f);
+    public static VerticalPositionAutoAnimator attach(View floatingButtonView2, float springStiffness) {
+        return new VerticalPositionAutoAnimator(floatingButtonView2, springStiffness);
     }
 
     public void addUpdateListener(DynamicAnimation.OnAnimationUpdateListener onAnimationUpdateListener) {
         this.floatingButtonAnimator.addUpdateListener(onAnimationUpdateListener);
     }
 
-    public void setOffsetY(float f) {
-        this.offsetY = f;
+    public void setOffsetY(float offsetY2) {
+        this.offsetY = offsetY2;
         if (this.floatingButtonAnimator.isRunning()) {
-            this.floatingButtonAnimator.getSpring().setFinalPosition(f);
+            this.floatingButtonAnimator.getSpring().setFinalPosition(offsetY2);
         } else {
-            this.floatingButtonView.setTranslationY(f);
+            this.floatingButtonView.setTranslationY(offsetY2);
         }
     }
 
@@ -39,11 +38,11 @@ public final class VerticalPositionAutoAnimator {
         return this.offsetY;
     }
 
-    private VerticalPositionAutoAnimator(View view, float f) {
-        this.floatingButtonView = view;
-        AnimatorLayoutChangeListener animatorLayoutChangeListener2 = new AnimatorLayoutChangeListener(view, f);
+    private VerticalPositionAutoAnimator(View floatingButtonView2, float springStiffness) {
+        this.floatingButtonView = floatingButtonView2;
+        AnimatorLayoutChangeListener animatorLayoutChangeListener2 = new AnimatorLayoutChangeListener(floatingButtonView2, springStiffness);
         this.animatorLayoutChangeListener = animatorLayoutChangeListener2;
-        view.addOnLayoutChangeListener(animatorLayoutChangeListener2);
+        floatingButtonView2.addOnLayoutChangeListener(animatorLayoutChangeListener2);
     }
 
     public void ignoreNextLayout() {
@@ -55,34 +54,33 @@ public final class VerticalPositionAutoAnimator {
         public boolean ignoreNextLayout;
         private Boolean orientation;
 
-        public AnimatorLayoutChangeListener(View view, float f) {
+        public AnimatorLayoutChangeListener(View view, float springStiffness) {
             SpringAnimation unused = VerticalPositionAutoAnimator.this.floatingButtonAnimator = new SpringAnimation(view, DynamicAnimation.TRANSLATION_Y, VerticalPositionAutoAnimator.this.offsetY);
             VerticalPositionAutoAnimator.this.floatingButtonAnimator.getSpring().setDampingRatio(1.0f);
-            VerticalPositionAutoAnimator.this.floatingButtonAnimator.getSpring().setStiffness(f);
+            VerticalPositionAutoAnimator.this.floatingButtonAnimator.getSpring().setStiffness(springStiffness);
         }
 
-        public void onLayoutChange(View view, int i, int i2, int i3, int i4, int i5, int i6, int i7, int i8) {
+        public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
             checkOrientation();
-            if (i6 == 0 || i6 == i2 || this.ignoreNextLayout) {
+            if (oldTop == 0 || oldTop == top || this.ignoreNextLayout) {
                 this.ignoreNextLayout = false;
                 return;
             }
             VerticalPositionAutoAnimator.this.floatingButtonAnimator.cancel();
-            if (view.getVisibility() != 0) {
-                view.setTranslationY(VerticalPositionAutoAnimator.this.offsetY);
+            if (v.getVisibility() != 0) {
+                v.setTranslationY(VerticalPositionAutoAnimator.this.offsetY);
                 return;
             }
             VerticalPositionAutoAnimator.this.floatingButtonAnimator.getSpring().setFinalPosition(VerticalPositionAutoAnimator.this.offsetY);
-            view.setTranslationY(((float) (i6 - i2)) + VerticalPositionAutoAnimator.this.offsetY);
+            v.setTranslationY(((float) (oldTop - top)) + VerticalPositionAutoAnimator.this.offsetY);
             VerticalPositionAutoAnimator.this.floatingButtonAnimator.start();
         }
 
         private void checkOrientation() {
-            Point point = AndroidUtilities.displaySize;
-            boolean z = point.x > point.y;
+            boolean orientation2 = AndroidUtilities.displaySize.x > AndroidUtilities.displaySize.y;
             Boolean bool = this.orientation;
-            if (bool == null || bool.booleanValue() != z) {
-                this.orientation = Boolean.valueOf(z);
+            if (bool == null || bool.booleanValue() != orientation2) {
+                this.orientation = Boolean.valueOf(orientation2);
                 this.ignoreNextLayout = true;
             }
         }

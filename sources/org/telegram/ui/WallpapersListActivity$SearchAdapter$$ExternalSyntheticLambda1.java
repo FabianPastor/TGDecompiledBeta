@@ -12,6 +12,6 @@ public final /* synthetic */ class WallpapersListActivity$SearchAdapter$$Externa
     }
 
     public final void run() {
-        this.f$0.lambda$processSearch$0(this.f$1);
+        this.f$0.m3484xd2243515(this.f$1);
     }
 }

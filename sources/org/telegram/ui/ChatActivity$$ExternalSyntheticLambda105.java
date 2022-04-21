@@ -1,15 +1,14 @@
 package org.telegram.ui;
 
-import android.widget.PopupWindow;
+import java.util.Comparator;
 
-public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda105 implements PopupWindow.OnDismissListener {
-    public final /* synthetic */ ChatActivity f$0;
+public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda105 implements Comparator {
+    public static final /* synthetic */ ChatActivity$$ExternalSyntheticLambda105 INSTANCE = new ChatActivity$$ExternalSyntheticLambda105();
 
-    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda105(ChatActivity chatActivity) {
-        this.f$0 = chatActivity;
+    private /* synthetic */ ChatActivity$$ExternalSyntheticLambda105() {
     }
 
-    public final void onDismiss() {
-        this.f$0.lambda$createView$13();
+    public final int compare(Object obj, Object obj2) {
+        return ((Integer) obj2).compareTo((Integer) obj);
     }
 }

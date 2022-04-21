@@ -1,20 +1,23 @@
 package org.telegram.ui.Components;
 
-import org.telegram.ui.ActionBar.AlertDialog;
-import org.telegram.ui.ActionBar.BaseFragment;
+import android.view.View;
+import org.telegram.ui.ActionBar.BottomSheet;
+import org.telegram.ui.Components.AlertsCreator;
 
-public final /* synthetic */ class AlertsCreator$$ExternalSyntheticLambda88 implements Runnable {
-    public final /* synthetic */ EditTextBoldCursor f$0;
-    public final /* synthetic */ AlertDialog f$1;
-    public final /* synthetic */ BaseFragment f$2;
+public final /* synthetic */ class AlertsCreator$$ExternalSyntheticLambda88 implements View.OnClickListener {
+    public final /* synthetic */ int[] f$0;
+    public final /* synthetic */ NumberPicker f$1;
+    public final /* synthetic */ AlertsCreator.ScheduleDatePickerDelegate f$2;
+    public final /* synthetic */ BottomSheet.Builder f$3;
 
-    public /* synthetic */ AlertsCreator$$ExternalSyntheticLambda88(EditTextBoldCursor editTextBoldCursor, AlertDialog alertDialog, BaseFragment baseFragment) {
-        this.f$0 = editTextBoldCursor;
-        this.f$1 = alertDialog;
-        this.f$2 = baseFragment;
+    public /* synthetic */ AlertsCreator$$ExternalSyntheticLambda88(int[] iArr, NumberPicker numberPicker, AlertsCreator.ScheduleDatePickerDelegate scheduleDatePickerDelegate, BottomSheet.Builder builder) {
+        this.f$0 = iArr;
+        this.f$1 = numberPicker;
+        this.f$2 = scheduleDatePickerDelegate;
+        this.f$3 = builder;
     }
 
-    public final void run() {
-        AlertsCreator.processCreate(this.f$0, this.f$1, this.f$2);
+    public final void onClick(View view) {
+        AlertsCreator.lambda$createMuteForPickerDialog$75(this.f$0, this.f$1, this.f$2, this.f$3, view);
     }
 }

@@ -15,6 +15,6 @@ public final /* synthetic */ class CalendarActivity$MonthView$2$$ExternalSynthet
     }
 
     public final void run() {
-        this.f$0.lambda$onLongPress$0(this.f$1, this.f$2);
+        this.f$0.m1444x8b76627f(this.f$1, this.f$2);
     }
 }

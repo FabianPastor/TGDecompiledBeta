@@ -8,6 +8,6 @@ public final /* synthetic */ class LanguageSelectActivity$$ExternalSyntheticLamb
     }
 
     public final void run() {
-        this.f$0.lambda$didReceivedNotification$4();
+        this.f$0.m2307x8b9d827f();
     }
 }

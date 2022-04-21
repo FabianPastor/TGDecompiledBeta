@@ -1,8 +1,11 @@
 package org.telegram.messenger;
 
 import org.telegram.messenger.LocaleController;
+import org.telegram.tgnet.RequestDelegate;
+import org.telegram.tgnet.TLObject;
+import org.telegram.tgnet.TLRPC;
 
-public final /* synthetic */ class LocaleController$$ExternalSyntheticLambda4 implements Runnable {
+public final /* synthetic */ class LocaleController$$ExternalSyntheticLambda4 implements RequestDelegate {
     public final /* synthetic */ LocaleController f$0;
     public final /* synthetic */ LocaleController.LocaleInfo f$1;
     public final /* synthetic */ int f$2;
@@ -13,7 +16,7 @@ public final /* synthetic */ class LocaleController$$ExternalSyntheticLambda4 im
         this.f$2 = i;
     }
 
-    public final void run() {
-        this.f$0.lambda$applyLanguage$2(this.f$1, this.f$2);
+    public final void run(TLObject tLObject, TLRPC.TL_error tL_error) {
+        this.f$0.m75xa46fd1e6(this.f$1, this.f$2, tLObject, tL_error);
     }
 }

@@ -1,26 +1,15 @@
 package org.telegram.ui.Components;
 
-import android.widget.TextView;
-import org.telegram.tgnet.RequestDelegate;
-import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC$TL_error;
+import android.view.View;
 
-public final /* synthetic */ class StickersAlert$$ExternalSyntheticLambda31 implements RequestDelegate {
+public final /* synthetic */ class StickersAlert$$ExternalSyntheticLambda31 implements View.OnClickListener {
     public final /* synthetic */ StickersAlert f$0;
-    public final /* synthetic */ EditTextBoldCursor f$1;
-    public final /* synthetic */ TextView f$2;
-    public final /* synthetic */ TextView f$3;
-    public final /* synthetic */ int[] f$4;
 
-    public /* synthetic */ StickersAlert$$ExternalSyntheticLambda31(StickersAlert stickersAlert, EditTextBoldCursor editTextBoldCursor, TextView textView, TextView textView2, int[] iArr) {
+    public /* synthetic */ StickersAlert$$ExternalSyntheticLambda31(StickersAlert stickersAlert) {
         this.f$0 = stickersAlert;
-        this.f$1 = editTextBoldCursor;
-        this.f$2 = textView;
-        this.f$3 = textView2;
-        this.f$4 = iArr;
     }
 
-    public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        this.f$0.lambda$showNameEnterAlert$26(this.f$1, this.f$2, this.f$3, this.f$4, tLObject, tLRPC$TL_error);
+    public final void onClick(View view) {
+        this.f$0.m4439lambda$updateFields$15$orgtelegramuiComponentsStickersAlert(view);
     }
 }

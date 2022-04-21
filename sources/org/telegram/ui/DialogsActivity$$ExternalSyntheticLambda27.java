@@ -1,15 +1,25 @@
 package org.telegram.ui;
 
-import org.telegram.messenger.AccountInstance;
+import org.telegram.tgnet.TLRPC;
 
 public final /* synthetic */ class DialogsActivity$$ExternalSyntheticLambda27 implements Runnable {
-    public final /* synthetic */ AccountInstance f$0;
+    public final /* synthetic */ DialogsActivity f$0;
+    public final /* synthetic */ int f$1;
+    public final /* synthetic */ long f$2;
+    public final /* synthetic */ TLRPC.Chat f$3;
+    public final /* synthetic */ boolean f$4;
+    public final /* synthetic */ boolean f$5;
 
-    public /* synthetic */ DialogsActivity$$ExternalSyntheticLambda27(AccountInstance accountInstance) {
-        this.f$0 = accountInstance;
+    public /* synthetic */ DialogsActivity$$ExternalSyntheticLambda27(DialogsActivity dialogsActivity, int i, long j, TLRPC.Chat chat, boolean z, boolean z2) {
+        this.f$0 = dialogsActivity;
+        this.f$1 = i;
+        this.f$2 = j;
+        this.f$3 = chat;
+        this.f$4 = z;
+        this.f$5 = z2;
     }
 
     public final void run() {
-        this.f$0.getDownloadController().loadDownloadingFiles();
+        this.f$0.m2106x71c0d740(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5);
     }
 }

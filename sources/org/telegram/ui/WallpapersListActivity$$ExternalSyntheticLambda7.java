@@ -11,6 +11,6 @@ public final /* synthetic */ class WallpapersListActivity$$ExternalSyntheticLamb
     }
 
     public final void onItemClick(View view, int i) {
-        this.f$0.lambda$createView$4(view, i);
+        this.f$0.m3475lambda$createView$4$orgtelegramuiWallpapersListActivity(view, i);
     }
 }

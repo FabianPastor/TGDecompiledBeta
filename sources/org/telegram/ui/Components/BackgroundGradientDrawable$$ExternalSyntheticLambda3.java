@@ -16,6 +16,6 @@ public final /* synthetic */ class BackgroundGradientDrawable$$ExternalSynthetic
     }
 
     public final void dispose() {
-        this.f$0.lambda$startDitheringInternal$3(this.f$1, this.f$2, this.f$3);
+        this.f$0.m3625x2724CLASSNAMEc(this.f$1, this.f$2, this.f$3);
     }
 }

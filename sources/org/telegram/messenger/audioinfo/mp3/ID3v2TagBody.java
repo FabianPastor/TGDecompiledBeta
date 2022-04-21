@@ -11,11 +11,11 @@ public class ID3v2TagBody {
     private final RangeInputStream input;
     private final ID3v2TagHeader tagHeader;
 
-    ID3v2TagBody(InputStream inputStream, long j, int i, ID3v2TagHeader iD3v2TagHeader) throws IOException {
-        RangeInputStream rangeInputStream = new RangeInputStream(inputStream, j, (long) i);
+    ID3v2TagBody(InputStream delegate, long position, int length, ID3v2TagHeader tagHeader2) throws IOException {
+        RangeInputStream rangeInputStream = new RangeInputStream(delegate, position, (long) length);
         this.input = rangeInputStream;
         this.data = new ID3v2DataInput(rangeInputStream);
-        this.tagHeader = iD3v2TagHeader;
+        this.tagHeader = tagHeader2;
     }
 
     public ID3v2DataInput getData() {
@@ -34,36 +34,31 @@ public class ID3v2TagBody {
         return this.tagHeader;
     }
 
-    public ID3v2FrameBody frameBody(ID3v2FrameHeader iD3v2FrameHeader) throws IOException, ID3v2Exception {
-        int i;
-        InflaterInputStream inflaterInputStream;
-        int bodySize = iD3v2FrameHeader.getBodySize();
-        InputStream inputStream = this.input;
-        if (iD3v2FrameHeader.isUnsynchronization()) {
-            byte[] readFully = this.data.readFully(iD3v2FrameHeader.getBodySize());
-            int length = readFully.length;
-            int i2 = 0;
-            boolean z = false;
-            for (int i3 = 0; i3 < length; i3++) {
-                byte b = readFully[i3];
-                if (!z || b != 0) {
-                    readFully[i2] = b;
-                    i2++;
+    public ID3v2FrameBody frameBody(ID3v2FrameHeader frameHeader) throws IOException, ID3v2Exception {
+        int dataLength = frameHeader.getBodySize();
+        InputStream input2 = this.input;
+        if (frameHeader.isUnsynchronization()) {
+            byte[] bytes = this.data.readFully(frameHeader.getBodySize());
+            boolean ff = false;
+            int len = 0;
+            int length = bytes.length;
+            for (int i = 0; i < length; i++) {
+                byte b = bytes[i];
+                if (!ff || b != 0) {
+                    bytes[len] = b;
+                    len++;
                 }
-                z = b == -1;
+                ff = b == -1;
             }
-            inputStream = new ByteArrayInputStream(readFully, 0, i2);
-            bodySize = i2;
+            dataLength = len;
+            input2 = new ByteArrayInputStream(bytes, 0, len);
         }
-        if (!iD3v2FrameHeader.isEncryption()) {
-            if (iD3v2FrameHeader.isCompression()) {
-                i = iD3v2FrameHeader.getDataLengthIndicator();
-                inflaterInputStream = new InflaterInputStream(inputStream);
-            } else {
-                i = bodySize;
-                inflaterInputStream = inputStream;
+        if (!frameHeader.isEncryption()) {
+            if (frameHeader.isCompression()) {
+                dataLength = frameHeader.getDataLengthIndicator();
+                input2 = new InflaterInputStream(input2);
             }
-            return new ID3v2FrameBody(inflaterInputStream, (long) iD3v2FrameHeader.getHeaderSize(), i, this.tagHeader, iD3v2FrameHeader);
+            return new ID3v2FrameBody(input2, (long) frameHeader.getHeaderSize(), dataLength, this.tagHeader, frameHeader);
         }
         throw new ID3v2Exception("Frame encryption is not supported");
     }

@@ -1,7 +1,6 @@
 package org.telegram.ui.Components;
 
 import android.content.Context;
-import android.graphics.Point;
 import android.graphics.drawable.Drawable;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -15,10 +14,7 @@ import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MediaDataController;
 import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.SvgHelper;
-import org.telegram.tgnet.TLRPC$Document;
-import org.telegram.tgnet.TLRPC$DocumentAttribute;
-import org.telegram.tgnet.TLRPC$TL_documentAttributeImageSize;
-import org.telegram.tgnet.TLRPC$User;
+import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.ActionBar.Theme;
 
 public class ChatGreetingsView extends LinearLayout {
@@ -26,19 +22,19 @@ public class ChatGreetingsView extends LinearLayout {
     private TextView descriptionView;
     boolean ignoreLayot;
     private Listener listener;
-    private TLRPC$Document preloadedGreetingsSticker;
+    private TLRPC.Document preloadedGreetingsSticker;
     private final Theme.ResourcesProvider resourcesProvider;
     public BackupImageView stickerToSendView;
     private TextView titleView;
 
     public interface Listener {
-        void onGreetings(TLRPC$Document tLRPC$Document);
+        void onGreetings(TLRPC.Document document);
     }
 
-    public ChatGreetingsView(Context context, TLRPC$User tLRPC$User, int i, int i2, TLRPC$Document tLRPC$Document, Theme.ResourcesProvider resourcesProvider2) {
+    public ChatGreetingsView(Context context, TLRPC.User user, int distance, int currentAccount2, TLRPC.Document sticker, Theme.ResourcesProvider resourcesProvider2) {
         super(context);
         setOrientation(1);
-        this.currentAccount = i2;
+        this.currentAccount = currentAccount2;
         this.resourcesProvider = resourcesProvider2;
         TextView textView = new TextView(context);
         this.titleView = textView;
@@ -54,88 +50,80 @@ public class ChatGreetingsView extends LinearLayout {
         addView(this.descriptionView, LayoutHelper.createLinear(-1, -2, 20.0f, 12.0f, 20.0f, 0.0f));
         addView(this.stickerToSendView, LayoutHelper.createLinear(112, 112, 1, 0, 16, 0, 16));
         updateColors();
-        if (i <= 0) {
+        if (distance <= 0) {
             this.titleView.setText(LocaleController.getString("NoMessages", NUM));
             this.descriptionView.setText(LocaleController.getString("NoMessagesGreetingsDescription", NUM));
         } else {
-            this.titleView.setText(LocaleController.formatString("NearbyPeopleGreetingsMessage", NUM, tLRPC$User.first_name, LocaleController.formatDistance((float) i, 1)));
+            this.titleView.setText(LocaleController.formatString("NearbyPeopleGreetingsMessage", NUM, user.first_name, LocaleController.formatDistance((float) distance, 1)));
             this.descriptionView.setText(LocaleController.getString("NearbyPeopleGreetingsDescription", NUM));
         }
-        this.preloadedGreetingsSticker = tLRPC$Document;
-        if (tLRPC$Document == null) {
-            this.preloadedGreetingsSticker = MediaDataController.getInstance(i2).getGreetingsSticker();
+        this.preloadedGreetingsSticker = sticker;
+        if (sticker == null) {
+            this.preloadedGreetingsSticker = MediaDataController.getInstance(currentAccount2).getGreetingsSticker();
         }
         setSticker(this.preloadedGreetingsSticker);
     }
 
-    private void setSticker(TLRPC$Document tLRPC$Document) {
-        if (tLRPC$Document != null) {
-            SvgHelper.SvgDrawable svgThumb = DocumentObject.getSvgThumb(tLRPC$Document, "chat_serviceBackground", 1.0f);
+    private void setSticker(TLRPC.Document sticker) {
+        if (sticker != null) {
+            SvgHelper.SvgDrawable svgThumb = DocumentObject.getSvgThumb(sticker, "chat_serviceBackground", 1.0f);
             if (svgThumb != null) {
-                this.stickerToSendView.setImage(ImageLocation.getForDocument(tLRPC$Document), createFilter(tLRPC$Document), (Drawable) svgThumb, 0, (Object) tLRPC$Document);
+                this.stickerToSendView.setImage(ImageLocation.getForDocument(sticker), createFilter(sticker), (Drawable) svgThumb, 0, (Object) sticker);
             } else {
-                this.stickerToSendView.setImage(ImageLocation.getForDocument(tLRPC$Document), createFilter(tLRPC$Document), ImageLocation.getForDocument(FileLoader.getClosestPhotoSizeWithSize(tLRPC$Document.thumbs, 90), tLRPC$Document), (String) null, 0, (Object) tLRPC$Document);
+                this.stickerToSendView.setImage(ImageLocation.getForDocument(sticker), createFilter(sticker), ImageLocation.getForDocument(FileLoader.getClosestPhotoSizeWithSize(sticker.thumbs, 90), sticker), (String) null, 0, (Object) sticker);
             }
-            this.stickerToSendView.setOnClickListener(new ChatGreetingsView$$ExternalSyntheticLambda0(this, tLRPC$Document));
+            this.stickerToSendView.setOnClickListener(new ChatGreetingsView$$ExternalSyntheticLambda0(this, sticker));
         }
     }
 
-    /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$setSticker$0(TLRPC$Document tLRPC$Document, View view) {
+    /* renamed from: lambda$setSticker$0$org-telegram-ui-Components-ChatGreetingsView  reason: not valid java name */
+    public /* synthetic */ void m3903lambda$setSticker$0$orgtelegramuiComponentsChatGreetingsView(TLRPC.Document sticker, View v) {
         Listener listener2 = this.listener;
         if (listener2 != null) {
-            listener2.onGreetings(tLRPC$Document);
+            listener2.onGreetings(sticker);
         }
     }
 
-    public static String createFilter(TLRPC$Document tLRPC$Document) {
-        float f;
-        float f2;
-        int i;
-        int i2;
+    public static String createFilter(TLRPC.Document document) {
+        float maxWidth;
+        float maxHeight;
+        int photoWidth = 0;
+        int photoHeight = 0;
         if (AndroidUtilities.isTablet()) {
-            f2 = (float) AndroidUtilities.getMinTabletSide();
-            f = 0.4f;
+            maxHeight = ((float) AndroidUtilities.getMinTabletSide()) * 0.4f;
+            maxWidth = maxHeight;
         } else {
-            Point point = AndroidUtilities.displaySize;
-            f2 = (float) Math.min(point.x, point.y);
-            f = 0.5f;
+            maxHeight = ((float) Math.min(AndroidUtilities.displaySize.x, AndroidUtilities.displaySize.y)) * 0.5f;
+            maxWidth = maxHeight;
         }
-        float f3 = f2 * f;
-        int i3 = 0;
+        int a = 0;
         while (true) {
-            if (i3 >= tLRPC$Document.attributes.size()) {
-                i = 0;
-                i2 = 0;
+            if (a >= document.attributes.size()) {
                 break;
             }
-            TLRPC$DocumentAttribute tLRPC$DocumentAttribute = tLRPC$Document.attributes.get(i3);
-            if (tLRPC$DocumentAttribute instanceof TLRPC$TL_documentAttributeImageSize) {
-                i = tLRPC$DocumentAttribute.w;
-                i2 = tLRPC$DocumentAttribute.h;
+            TLRPC.DocumentAttribute attribute = document.attributes.get(a);
+            if (attribute instanceof TLRPC.TL_documentAttributeImageSize) {
+                photoWidth = attribute.w;
+                photoHeight = attribute.h;
                 break;
             }
-            i3++;
+            a++;
         }
-        if (MessageObject.isAnimatedStickerDocument(tLRPC$Document, true) && i == 0 && i2 == 0) {
-            i = 512;
-            i2 = 512;
+        if (MessageObject.isAnimatedStickerDocument(document, true) && photoWidth == 0 && photoHeight == 0) {
+            photoHeight = 512;
+            photoWidth = 512;
         }
-        if (i == 0) {
-            i2 = (int) f3;
-            i = i2 + AndroidUtilities.dp(100.0f);
+        if (photoWidth == 0) {
+            photoHeight = (int) maxHeight;
+            photoWidth = photoHeight + AndroidUtilities.dp(100.0f);
         }
-        int i4 = (int) (((float) i2) * (f3 / ((float) i)));
-        int i5 = (int) f3;
-        float f4 = (float) i4;
-        if (f4 > f3) {
-            int i6 = i5;
-            i5 = (int) (((float) i5) * (f3 / f4));
-            i4 = i6;
+        int photoHeight2 = (int) (((float) photoHeight) * (maxWidth / ((float) photoWidth)));
+        int photoWidth2 = (int) maxWidth;
+        if (((float) photoHeight2) > maxHeight) {
+            photoWidth2 = (int) (((float) photoWidth2) * (maxHeight / ((float) photoHeight2)));
+            photoHeight2 = (int) maxHeight;
         }
-        float f5 = (float) i5;
-        float f6 = AndroidUtilities.density;
-        return String.format(Locale.US, "%d_%d", new Object[]{Integer.valueOf((int) (f5 / f6)), Integer.valueOf((int) (((float) i4) / f6))});
+        return String.format(Locale.US, "%d_%d", new Object[]{Integer.valueOf((int) (((float) photoWidth2) / AndroidUtilities.density)), Integer.valueOf((int) (((float) photoHeight2) / AndroidUtilities.density))});
     }
 
     private void updateColors() {
@@ -148,12 +136,12 @@ public class ChatGreetingsView extends LinearLayout {
     }
 
     /* access modifiers changed from: protected */
-    public void onMeasure(int i, int i2) {
+    public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         this.ignoreLayot = true;
         this.descriptionView.setVisibility(0);
         this.stickerToSendView.setVisibility(0);
-        super.onMeasure(i, i2);
-        if (getMeasuredHeight() > View.MeasureSpec.getSize(i2)) {
+        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+        if (getMeasuredHeight() > View.MeasureSpec.getSize(heightMeasureSpec)) {
             this.descriptionView.setVisibility(8);
             this.stickerToSendView.setVisibility(8);
         } else {
@@ -161,7 +149,7 @@ public class ChatGreetingsView extends LinearLayout {
             this.stickerToSendView.setVisibility(0);
         }
         this.ignoreLayot = false;
-        super.onMeasure(i, i2);
+        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
     }
 
     public void requestLayout() {
@@ -183,15 +171,15 @@ public class ChatGreetingsView extends LinearLayout {
 
     private void fetchSticker() {
         if (this.preloadedGreetingsSticker == null) {
-            TLRPC$Document greetingsSticker = MediaDataController.getInstance(this.currentAccount).getGreetingsSticker();
+            TLRPC.Document greetingsSticker = MediaDataController.getInstance(this.currentAccount).getGreetingsSticker();
             this.preloadedGreetingsSticker = greetingsSticker;
             setSticker(greetingsSticker);
         }
     }
 
-    private int getThemedColor(String str) {
+    private int getThemedColor(String key) {
         Theme.ResourcesProvider resourcesProvider2 = this.resourcesProvider;
-        Integer color = resourcesProvider2 != null ? resourcesProvider2.getColor(str) : null;
-        return color != null ? color.intValue() : Theme.getColor(str);
+        Integer color = resourcesProvider2 != null ? resourcesProvider2.getColor(key) : null;
+        return color != null ? color.intValue() : Theme.getColor(key);
     }
 }

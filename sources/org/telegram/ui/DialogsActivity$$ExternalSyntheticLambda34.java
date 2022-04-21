@@ -1,25 +1,21 @@
 package org.telegram.ui;
 
-import org.telegram.tgnet.TLRPC$Chat;
+import android.app.Activity;
 
 public final /* synthetic */ class DialogsActivity$$ExternalSyntheticLambda34 implements Runnable {
     public final /* synthetic */ DialogsActivity f$0;
-    public final /* synthetic */ int f$1;
-    public final /* synthetic */ long f$2;
-    public final /* synthetic */ TLRPC$Chat f$3;
-    public final /* synthetic */ boolean f$4;
-    public final /* synthetic */ boolean f$5;
+    public final /* synthetic */ boolean f$1;
+    public final /* synthetic */ boolean f$2;
+    public final /* synthetic */ Activity f$3;
 
-    public /* synthetic */ DialogsActivity$$ExternalSyntheticLambda34(DialogsActivity dialogsActivity, int i, long j, TLRPC$Chat tLRPC$Chat, boolean z, boolean z2) {
+    public /* synthetic */ DialogsActivity$$ExternalSyntheticLambda34(DialogsActivity dialogsActivity, boolean z, boolean z2, Activity activity) {
         this.f$0 = dialogsActivity;
-        this.f$1 = i;
-        this.f$2 = j;
-        this.f$3 = tLRPC$Chat;
-        this.f$4 = z;
-        this.f$5 = z2;
+        this.f$1 = z;
+        this.f$2 = z2;
+        this.f$3 = activity;
     }
 
     public final void run() {
-        this.f$0.lambda$performSelectedDialogsAction$31(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5);
+        this.f$0.m2096lambda$onResume$15$orgtelegramuiDialogsActivity(this.f$1, this.f$2, this.f$3);
     }
 }

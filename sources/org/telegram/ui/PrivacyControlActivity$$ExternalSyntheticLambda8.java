@@ -13,6 +13,6 @@ public final /* synthetic */ class PrivacyControlActivity$$ExternalSyntheticLamb
     }
 
     public final void didSelectUsers(ArrayList arrayList) {
-        this.f$0.lambda$createView$0(this.f$1, arrayList);
+        this.f$0.m3010lambda$createView$0$orgtelegramuiPrivacyControlActivity(this.f$1, arrayList);
     }
 }

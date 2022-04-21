@@ -11,6 +11,6 @@ public final /* synthetic */ class MemberRequestsDelegate$PreviewDialog$$Externa
     }
 
     public final void onClick(View view) {
-        this.f$0.lambda$new$1(view);
+        this.f$0.m4605x86var_(view);
     }
 }

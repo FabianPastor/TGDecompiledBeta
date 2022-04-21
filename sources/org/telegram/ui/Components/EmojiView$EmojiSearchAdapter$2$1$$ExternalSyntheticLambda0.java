@@ -13,6 +13,6 @@ public final /* synthetic */ class EmojiView$EmojiSearchAdapter$2$1$$ExternalSyn
     }
 
     public final void onCancel(DialogInterface dialogInterface) {
-        this.f$0.lambda$onClick$2(this.f$1, dialogInterface);
+        this.f$0.m3974x27eeab4c(this.f$1, dialogInterface);
     }
 }

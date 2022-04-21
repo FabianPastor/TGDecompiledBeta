@@ -8,6 +8,6 @@ public final /* synthetic */ class ChatThemeBottomSheet$$ExternalSyntheticLambda
     }
 
     public final void run() {
-        this.f$0.lambda$onCreate$3();
+        this.f$0.m3916xc8d0fdc7();
     }
 }

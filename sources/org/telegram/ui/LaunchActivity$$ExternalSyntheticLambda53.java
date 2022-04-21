@@ -1,20 +1,15 @@
 package org.telegram.ui;
 
-import org.telegram.tgnet.TLRPC$TL_error;
-import org.telegram.ui.ActionBar.AlertDialog;
-
 public final /* synthetic */ class LaunchActivity$$ExternalSyntheticLambda53 implements Runnable {
     public final /* synthetic */ LaunchActivity f$0;
-    public final /* synthetic */ AlertDialog f$1;
-    public final /* synthetic */ TLRPC$TL_error f$2;
+    public final /* synthetic */ ThemePreviewActivity f$1;
 
-    public /* synthetic */ LaunchActivity$$ExternalSyntheticLambda53(LaunchActivity launchActivity, AlertDialog alertDialog, TLRPC$TL_error tLRPC$TL_error) {
+    public /* synthetic */ LaunchActivity$$ExternalSyntheticLambda53(LaunchActivity launchActivity, ThemePreviewActivity themePreviewActivity) {
         this.f$0 = launchActivity;
-        this.f$1 = alertDialog;
-        this.f$2 = tLRPC$TL_error;
+        this.f$1 = themePreviewActivity;
     }
 
     public final void run() {
-        this.f$0.lambda$runLinkRequest$48(this.f$1, this.f$2);
+        this.f$0.m2367lambda$runLinkRequest$54$orgtelegramuiLaunchActivity(this.f$1);
     }
 }

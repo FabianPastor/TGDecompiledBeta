@@ -1,18 +1,24 @@
 package org.telegram.messenger;
 
-import org.telegram.messenger.MessagesController;
+import java.util.ArrayList;
 import org.telegram.tgnet.RequestDelegate;
 import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC$TL_error;
+import org.telegram.tgnet.TLRPC;
 
 public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda225 implements RequestDelegate {
-    public final /* synthetic */ MessagesController.IsInChatCheckedCallback f$0;
+    public final /* synthetic */ MessagesController f$0;
+    public final /* synthetic */ long f$1;
+    public final /* synthetic */ boolean f$2;
+    public final /* synthetic */ ArrayList f$3;
 
-    public /* synthetic */ MessagesController$$ExternalSyntheticLambda225(MessagesController.IsInChatCheckedCallback isInChatCheckedCallback) {
-        this.f$0 = isInChatCheckedCallback;
+    public /* synthetic */ MessagesController$$ExternalSyntheticLambda225(MessagesController messagesController, long j, boolean z, ArrayList arrayList) {
+        this.f$0 = messagesController;
+        this.f$1 = j;
+        this.f$2 = z;
+        this.f$3 = arrayList;
     }
 
-    public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        MessagesController.lambda$checkIsInChat$351(this.f$0, tLObject, tLRPC$TL_error);
+    public final void run(TLObject tLObject, TLRPC.TL_error tL_error) {
+        this.f$0.m367xaavar_fe0(this.f$1, this.f$2, this.f$3, tLObject, tL_error);
     }
 }

@@ -8,6 +8,6 @@ public final /* synthetic */ class ProxySettingsActivity$$ExternalSyntheticLambd
     }
 
     public final void run() {
-        this.f$0.lambda$createView$2();
+        this.f$0.m3190lambda$createView$2$orgtelegramuiProxySettingsActivity();
     }
 }

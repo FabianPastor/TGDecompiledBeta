@@ -10,6 +10,6 @@ public final /* synthetic */ class PopupNotificationActivity$$ExternalSyntheticL
     }
 
     public final void onClick(View view) {
-        this.f$0.lambda$getViewForMessage$7(view);
+        this.f$0.m2999xvar_bc(view);
     }
 }

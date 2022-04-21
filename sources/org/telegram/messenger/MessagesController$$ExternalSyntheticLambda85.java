@@ -1,21 +1,17 @@
 package org.telegram.messenger;
 
-import org.telegram.tgnet.TLRPC$TL_messages_chatFull;
+import org.telegram.tgnet.TLRPC;
 
 public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda85 implements Runnable {
     public final /* synthetic */ MessagesController f$0;
-    public final /* synthetic */ long f$1;
-    public final /* synthetic */ TLRPC$TL_messages_chatFull f$2;
-    public final /* synthetic */ int f$3;
+    public final /* synthetic */ TLRPC.TL_updateUserTyping f$1;
 
-    public /* synthetic */ MessagesController$$ExternalSyntheticLambda85(MessagesController messagesController, long j, TLRPC$TL_messages_chatFull tLRPC$TL_messages_chatFull, int i) {
+    public /* synthetic */ MessagesController$$ExternalSyntheticLambda85(MessagesController messagesController, TLRPC.TL_updateUserTyping tL_updateUserTyping) {
         this.f$0 = messagesController;
-        this.f$1 = j;
-        this.f$2 = tLRPC$TL_messages_chatFull;
-        this.f$3 = i;
+        this.f$1 = tL_updateUserTyping;
     }
 
     public final void run() {
-        this.f$0.lambda$loadFullChat$45(this.f$1, this.f$2, this.f$3);
+        this.f$0.m330x450a12d0(this.f$1);
     }
 }

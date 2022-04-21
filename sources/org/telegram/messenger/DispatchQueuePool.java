@@ -11,19 +11,19 @@ public class DispatchQueuePool {
     private Runnable cleanupRunnable = new Runnable() {
         public void run() {
             if (!DispatchQueuePool.this.queues.isEmpty()) {
-                long elapsedRealtime = SystemClock.elapsedRealtime();
-                int size = DispatchQueuePool.this.queues.size();
-                int i = 0;
-                while (i < size) {
-                    DispatchQueue dispatchQueue = (DispatchQueue) DispatchQueuePool.this.queues.get(i);
-                    if (dispatchQueue.getLastTaskTime() < elapsedRealtime - 30000) {
-                        dispatchQueue.recycle();
-                        DispatchQueuePool.this.queues.remove(i);
+                long currentTime = SystemClock.elapsedRealtime();
+                int a = 0;
+                int N = DispatchQueuePool.this.queues.size();
+                while (a < N) {
+                    DispatchQueue queue = (DispatchQueue) DispatchQueuePool.this.queues.get(a);
+                    if (queue.getLastTaskTime() < currentTime - 30000) {
+                        queue.recycle();
+                        DispatchQueuePool.this.queues.remove(a);
                         DispatchQueuePool.access$110(DispatchQueuePool.this);
-                        i--;
-                        size--;
+                        a--;
+                        N--;
                     }
-                    i++;
+                    a++;
                 }
             }
             if (!DispatchQueuePool.this.queues.isEmpty() || !DispatchQueuePool.this.busyQueues.isEmpty()) {
@@ -43,54 +43,54 @@ public class DispatchQueuePool {
     public LinkedList<DispatchQueue> queues = new LinkedList<>();
     private int totalTasksCount;
 
-    static /* synthetic */ int access$110(DispatchQueuePool dispatchQueuePool) {
-        int i = dispatchQueuePool.createdCount;
-        dispatchQueuePool.createdCount = i - 1;
+    static /* synthetic */ int access$110(DispatchQueuePool x0) {
+        int i = x0.createdCount;
+        x0.createdCount = i - 1;
         return i;
     }
 
-    public DispatchQueuePool(int i) {
-        this.maxCount = i;
+    public DispatchQueuePool(int count) {
+        this.maxCount = count;
         this.guid = Utilities.random.nextInt();
     }
 
     public void execute(Runnable runnable) {
-        DispatchQueue dispatchQueue;
+        DispatchQueue queue;
         if (!this.busyQueues.isEmpty() && (this.totalTasksCount / 2 <= this.busyQueues.size() || (this.queues.isEmpty() && this.createdCount >= this.maxCount))) {
-            dispatchQueue = this.busyQueues.remove(0);
+            queue = this.busyQueues.remove(0);
         } else if (this.queues.isEmpty()) {
-            dispatchQueue = new DispatchQueue("DispatchQueuePool" + this.guid + "_" + Utilities.random.nextInt());
-            dispatchQueue.setPriority(10);
+            queue = new DispatchQueue("DispatchQueuePool" + this.guid + "_" + Utilities.random.nextInt());
+            queue.setPriority(10);
             this.createdCount = this.createdCount + 1;
         } else {
-            dispatchQueue = this.queues.remove(0);
+            queue = this.queues.remove(0);
         }
         if (!this.cleanupScheduled) {
             AndroidUtilities.runOnUIThread(this.cleanupRunnable, 30000);
             this.cleanupScheduled = true;
         }
         this.totalTasksCount++;
-        this.busyQueues.add(dispatchQueue);
-        this.busyQueuesMap.put(dispatchQueue.index, this.busyQueuesMap.get(dispatchQueue.index, 0) + 1);
-        dispatchQueue.postRunnable(new DispatchQueuePool$$ExternalSyntheticLambda0(this, runnable, dispatchQueue));
+        this.busyQueues.add(queue);
+        this.busyQueuesMap.put(queue.index, this.busyQueuesMap.get(queue.index, 0) + 1);
+        queue.postRunnable(new DispatchQueuePool$$ExternalSyntheticLambda0(this, runnable, queue));
     }
 
-    /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$execute$1(Runnable runnable, DispatchQueue dispatchQueue) {
+    /* renamed from: lambda$execute$1$org-telegram-messenger-DispatchQueuePool  reason: not valid java name */
+    public /* synthetic */ void m537lambda$execute$1$orgtelegrammessengerDispatchQueuePool(Runnable runnable, DispatchQueue queue) {
         runnable.run();
-        AndroidUtilities.runOnUIThread(new DispatchQueuePool$$ExternalSyntheticLambda1(this, dispatchQueue));
+        AndroidUtilities.runOnUIThread(new DispatchQueuePool$$ExternalSyntheticLambda1(this, queue));
     }
 
-    /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$execute$0(DispatchQueue dispatchQueue) {
+    /* renamed from: lambda$execute$0$org-telegram-messenger-DispatchQueuePool  reason: not valid java name */
+    public /* synthetic */ void m536lambda$execute$0$orgtelegrammessengerDispatchQueuePool(DispatchQueue queue) {
         this.totalTasksCount--;
-        int i = this.busyQueuesMap.get(dispatchQueue.index) - 1;
-        if (i == 0) {
-            this.busyQueuesMap.delete(dispatchQueue.index);
-            this.busyQueues.remove(dispatchQueue);
-            this.queues.add(dispatchQueue);
+        int remainingTasksCount = this.busyQueuesMap.get(queue.index) - 1;
+        if (remainingTasksCount == 0) {
+            this.busyQueuesMap.delete(queue.index);
+            this.busyQueues.remove(queue);
+            this.queues.add(queue);
             return;
         }
-        this.busyQueuesMap.put(dispatchQueue.index, i);
+        this.busyQueuesMap.put(queue.index, remainingTasksCount);
     }
 }

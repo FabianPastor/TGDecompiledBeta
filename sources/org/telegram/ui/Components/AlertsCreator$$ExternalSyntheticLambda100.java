@@ -1,16 +1,17 @@
 package org.telegram.ui.Components;
 
-import org.telegram.tgnet.RequestDelegate;
-import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC$TL_error;
+import android.view.KeyEvent;
+import android.view.View;
+import org.telegram.ui.ActionBar.ActionBarPopupWindow;
 
-public final /* synthetic */ class AlertsCreator$$ExternalSyntheticLambda100 implements RequestDelegate {
-    public static final /* synthetic */ AlertsCreator$$ExternalSyntheticLambda100 INSTANCE = new AlertsCreator$$ExternalSyntheticLambda100();
+public final /* synthetic */ class AlertsCreator$$ExternalSyntheticLambda100 implements View.OnKeyListener {
+    public final /* synthetic */ ActionBarPopupWindow f$0;
 
-    private /* synthetic */ AlertsCreator$$ExternalSyntheticLambda100() {
+    public /* synthetic */ AlertsCreator$$ExternalSyntheticLambda100(ActionBarPopupWindow actionBarPopupWindow) {
+        this.f$0 = actionBarPopupWindow;
     }
 
-    public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        AlertsCreator.lambda$createChangeNameAlert$33(tLObject, tLRPC$TL_error);
+    public final boolean onKey(View view, int i, KeyEvent keyEvent) {
+        return AlertsCreator.lambda$showPopupMenu$127(this.f$0, view, i, keyEvent);
     }
 }

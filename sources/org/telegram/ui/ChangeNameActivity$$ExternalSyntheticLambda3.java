@@ -8,6 +8,6 @@ public final /* synthetic */ class ChangeNameActivity$$ExternalSyntheticLambda3 
     }
 
     public final void run() {
-        this.f$0.lambda$onTransitionAnimationEnd$4();
+        this.f$0.m1548xCLASSNAMEd94ac();
     }
 }

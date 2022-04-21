@@ -21,6 +21,6 @@ public final /* synthetic */ class MemberRequestsDelegate$PreviewDialog$$Externa
     }
 
     public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-        this.f$0.lambda$runAnimation$4(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, valueAnimator);
+        this.f$0.m4606x49c0d8e2(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, valueAnimator);
     }
 }

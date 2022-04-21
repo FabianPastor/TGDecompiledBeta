@@ -13,6 +13,6 @@ public final /* synthetic */ class ChatNotificationsPopupWrapper$$ExternalSynthe
     }
 
     public final void onClick(View view) {
-        this.f$0.lambda$new$7(this.f$1, view);
+        this.f$0.m3904xfd410a(this.f$1, view);
     }
 }

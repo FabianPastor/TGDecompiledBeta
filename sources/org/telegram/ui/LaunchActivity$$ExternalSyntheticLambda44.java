@@ -1,20 +1,23 @@
 package org.telegram.ui;
 
-import org.telegram.tgnet.TLObject;
-import org.telegram.ui.ActionBar.Theme;
+import android.content.DialogInterface;
+import java.util.HashMap;
+import org.telegram.messenger.ContactsController;
 
-public final /* synthetic */ class LaunchActivity$$ExternalSyntheticLambda44 implements Runnable {
-    public final /* synthetic */ LaunchActivity f$0;
-    public final /* synthetic */ TLObject f$1;
-    public final /* synthetic */ Theme.ThemeInfo f$2;
+public final /* synthetic */ class LaunchActivity$$ExternalSyntheticLambda44 implements DialogInterface.OnClickListener {
+    public final /* synthetic */ int f$0;
+    public final /* synthetic */ HashMap f$1;
+    public final /* synthetic */ boolean f$2;
+    public final /* synthetic */ boolean f$3;
 
-    public /* synthetic */ LaunchActivity$$ExternalSyntheticLambda44(LaunchActivity launchActivity, TLObject tLObject, Theme.ThemeInfo themeInfo) {
-        this.f$0 = launchActivity;
-        this.f$1 = tLObject;
-        this.f$2 = themeInfo;
+    public /* synthetic */ LaunchActivity$$ExternalSyntheticLambda44(int i, HashMap hashMap, boolean z, boolean z2) {
+        this.f$0 = i;
+        this.f$1 = hashMap;
+        this.f$2 = z;
+        this.f$3 = z2;
     }
 
-    public final void run() {
-        this.f$0.lambda$didReceivedNotification$84(this.f$1, this.f$2);
+    public final void onClick(DialogInterface dialogInterface, int i) {
+        ContactsController.getInstance(this.f$0).syncPhoneBookByAlert(this.f$1, this.f$2, this.f$3, false);
     }
 }

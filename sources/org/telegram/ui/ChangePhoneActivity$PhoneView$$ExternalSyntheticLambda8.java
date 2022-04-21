@@ -11,6 +11,6 @@ public final /* synthetic */ class ChangePhoneActivity$PhoneView$$ExternalSynthe
     }
 
     public final void didSelectCountry(CountrySelectActivity.Country country) {
-        this.f$0.lambda$new$1(country);
+        this.f$0.m1565lambda$new$1$orgtelegramuiChangePhoneActivity$PhoneView(country);
     }
 }

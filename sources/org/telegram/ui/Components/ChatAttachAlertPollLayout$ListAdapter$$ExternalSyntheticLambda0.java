@@ -11,6 +11,6 @@ public final /* synthetic */ class ChatAttachAlertPollLayout$ListAdapter$$Extern
     }
 
     public final void onClick(View view) {
-        this.f$0.lambda$onCreateViewHolder$0(view);
+        this.f$0.m3898xd77380a3(view);
     }
 }

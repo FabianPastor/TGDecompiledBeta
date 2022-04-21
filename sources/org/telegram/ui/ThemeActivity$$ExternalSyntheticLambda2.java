@@ -10,6 +10,6 @@ public final /* synthetic */ class ThemeActivity$$ExternalSyntheticLambda2 imple
     }
 
     public final void onClick(DialogInterface dialogInterface, int i) {
-        this.f$0.lambda$updateSunTime$7(dialogInterface, i);
+        this.f$0.m3288lambda$createNewTheme$6$orgtelegramuiThemeActivity(dialogInterface, i);
     }
 }

@@ -12,6 +12,6 @@ public final /* synthetic */ class QrActivity$ThemeListViewController$$ExternalS
     }
 
     public final void run() {
-        this.f$0.lambda$onItemClicked$1(this.f$1);
+        this.f$0.m3206xb3111e29(this.f$1);
     }
 }

@@ -1,17 +1,17 @@
 package org.telegram.messenger;
 
-public final /* synthetic */ class MediaDataController$$ExternalSyntheticLambda18 implements Runnable {
-    public final /* synthetic */ MediaDataController f$0;
-    public final /* synthetic */ int f$1;
-    public final /* synthetic */ int f$2;
+import java.util.ArrayList;
+import java.util.Comparator;
+import org.telegram.messenger.MediaDataController;
 
-    public /* synthetic */ MediaDataController$$ExternalSyntheticLambda18(MediaDataController mediaDataController, int i, int i2) {
-        this.f$0 = mediaDataController;
-        this.f$1 = i;
-        this.f$2 = i2;
+public final /* synthetic */ class MediaDataController$$ExternalSyntheticLambda18 implements Comparator {
+    public final /* synthetic */ ArrayList f$0;
+
+    public /* synthetic */ MediaDataController$$ExternalSyntheticLambda18(ArrayList arrayList) {
+        this.f$0 = arrayList;
     }
 
-    public final void run() {
-        this.f$0.lambda$processLoadedStickers$66(this.f$1, this.f$2);
+    public final int compare(Object obj, Object obj2) {
+        return MediaDataController.lambda$getEmojiSuggestions$162(this.f$0, (MediaDataController.KeywordResult) obj, (MediaDataController.KeywordResult) obj2);
     }
 }

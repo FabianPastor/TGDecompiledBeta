@@ -12,7 +12,7 @@ import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.UserObject;
-import org.telegram.tgnet.TLRPC$User;
+import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.ActionBar.SimpleTextView;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.AvatarDrawable;
@@ -22,17 +22,13 @@ import org.telegram.ui.Components.LayoutHelper;
 public class GroupCallInvitedCell extends FrameLayout {
     private AvatarDrawable avatarDrawable;
     private BackupImageView avatarImageView;
-    private TLRPC$User currentUser;
+    private TLRPC.User currentUser;
     private Paint dividerPaint;
     private String grayIconColor = "voipgroup_mutedIcon";
     private ImageView muteButton;
     private SimpleTextView nameTextView;
     private boolean needDivider;
     private SimpleTextView statusTextView;
-
-    public boolean hasOverlappingRendering() {
-        return false;
-    }
 
     public GroupCallInvitedCell(Context context) {
         super(context);
@@ -43,29 +39,22 @@ public class GroupCallInvitedCell extends FrameLayout {
         BackupImageView backupImageView = new BackupImageView(context);
         this.avatarImageView = backupImageView;
         backupImageView.setRoundRadius(AndroidUtilities.dp(24.0f));
-        BackupImageView backupImageView2 = this.avatarImageView;
-        boolean z = LocaleController.isRTL;
         int i = 5;
-        addView(backupImageView2, LayoutHelper.createFrame(46, 46.0f, (z ? 5 : 3) | 48, z ? 0.0f : 11.0f, 6.0f, z ? 11.0f : 0.0f, 0.0f));
+        addView(this.avatarImageView, LayoutHelper.createFrame(46, 46.0f, (LocaleController.isRTL ? 5 : 3) | 48, LocaleController.isRTL ? 0.0f : 11.0f, 6.0f, LocaleController.isRTL ? 11.0f : 0.0f, 0.0f));
         SimpleTextView simpleTextView = new SimpleTextView(context);
         this.nameTextView = simpleTextView;
         simpleTextView.setTextColor(Theme.getColor("voipgroup_nameText"));
         this.nameTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         this.nameTextView.setTextSize(16);
         this.nameTextView.setGravity((LocaleController.isRTL ? 5 : 3) | 48);
-        SimpleTextView simpleTextView2 = this.nameTextView;
-        boolean z2 = LocaleController.isRTL;
-        float f = 54.0f;
-        addView(simpleTextView2, LayoutHelper.createFrame(-1, 20.0f, (z2 ? 5 : 3) | 48, z2 ? 54.0f : 67.0f, 10.0f, z2 ? 67.0f : 54.0f, 0.0f));
-        SimpleTextView simpleTextView3 = new SimpleTextView(context);
-        this.statusTextView = simpleTextView3;
-        simpleTextView3.setTextSize(15);
+        addView(this.nameTextView, LayoutHelper.createFrame(-1, 20.0f, (LocaleController.isRTL ? 5 : 3) | 48, LocaleController.isRTL ? 54.0f : 67.0f, 10.0f, LocaleController.isRTL ? 67.0f : 54.0f, 0.0f));
+        SimpleTextView simpleTextView2 = new SimpleTextView(context);
+        this.statusTextView = simpleTextView2;
+        simpleTextView2.setTextSize(15);
         this.statusTextView.setGravity((LocaleController.isRTL ? 5 : 3) | 48);
         this.statusTextView.setTextColor(Theme.getColor(this.grayIconColor));
         this.statusTextView.setText(LocaleController.getString("Invited", NUM));
-        SimpleTextView simpleTextView4 = this.statusTextView;
-        boolean z3 = LocaleController.isRTL;
-        addView(simpleTextView4, LayoutHelper.createFrame(-1, 20.0f, (z3 ? 5 : 3) | 48, z3 ? 54.0f : 67.0f, 32.0f, z3 ? 67.0f : f, 0.0f));
+        addView(this.statusTextView, LayoutHelper.createFrame(-1, 20.0f, (LocaleController.isRTL ? 5 : 3) | 48, LocaleController.isRTL ? 54.0f : 67.0f, 32.0f, LocaleController.isRTL ? 67.0f : 54.0f, 0.0f));
         ImageView imageView = new ImageView(context);
         this.muteButton = imageView;
         imageView.setScaleType(ImageView.ScaleType.CENTER);
@@ -82,30 +71,30 @@ public class GroupCallInvitedCell extends FrameLayout {
         return this.nameTextView.getText();
     }
 
-    public void setData(int i, Long l) {
-        TLRPC$User user = MessagesController.getInstance(i).getUser(l);
+    public void setData(int account, Long uid) {
+        TLRPC.User user = MessagesController.getInstance(account).getUser(uid);
         this.currentUser = user;
         this.avatarDrawable.setInfo(user);
         this.nameTextView.setText(UserObject.getUserName(this.currentUser));
-        this.avatarImageView.getImageReceiver().setCurrentAccount(i);
+        this.avatarImageView.getImageReceiver().setCurrentAccount(account);
         this.avatarImageView.setForUserOrChat(this.currentUser, this.avatarDrawable);
     }
 
-    public void setDrawDivider(boolean z) {
-        this.needDivider = z;
+    public void setDrawDivider(boolean draw) {
+        this.needDivider = draw;
         invalidate();
     }
 
-    public void setGrayIconColor(String str, int i) {
-        if (!this.grayIconColor.equals(str)) {
-            this.grayIconColor = str;
+    public void setGrayIconColor(String key, int value) {
+        if (!this.grayIconColor.equals(key)) {
+            this.grayIconColor = key;
         }
-        this.muteButton.setColorFilter(new PorterDuffColorFilter(i, PorterDuff.Mode.MULTIPLY));
-        this.statusTextView.setTextColor(i);
-        Theme.setSelectorDrawableColor(this.muteButton.getDrawable(), i & NUM, true);
+        this.muteButton.setColorFilter(new PorterDuffColorFilter(value, PorterDuff.Mode.MULTIPLY));
+        this.statusTextView.setTextColor(value);
+        Theme.setSelectorDrawableColor(this.muteButton.getDrawable(), NUM & value, true);
     }
 
-    public TLRPC$User getUser() {
+    public TLRPC.User getUser() {
         return this.currentUser;
     }
 
@@ -114,8 +103,12 @@ public class GroupCallInvitedCell extends FrameLayout {
     }
 
     /* access modifiers changed from: protected */
-    public void onMeasure(int i, int i2) {
-        super.onMeasure(View.MeasureSpec.makeMeasureSpec(View.MeasureSpec.getSize(i), NUM), View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(58.0f), NUM));
+    public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        super.onMeasure(View.MeasureSpec.makeMeasureSpec(View.MeasureSpec.getSize(widthMeasureSpec), NUM), View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(58.0f), NUM));
+    }
+
+    public boolean hasOverlappingRendering() {
+        return false;
     }
 
     /* access modifiers changed from: protected */

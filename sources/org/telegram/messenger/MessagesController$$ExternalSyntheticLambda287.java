@@ -1,21 +1,20 @@
 package org.telegram.messenger;
 
-import org.telegram.tgnet.RequestDelegate;
-import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC$TL_error;
+import android.content.DialogInterface;
+import org.telegram.ui.ActionBar.BaseFragment;
 
-public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda287 implements RequestDelegate {
+public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda287 implements DialogInterface.OnCancelListener {
     public final /* synthetic */ MessagesController f$0;
-    public final /* synthetic */ long f$1;
-    public final /* synthetic */ long f$2;
+    public final /* synthetic */ int f$1;
+    public final /* synthetic */ BaseFragment f$2;
 
-    public /* synthetic */ MessagesController$$ExternalSyntheticLambda287(MessagesController messagesController, long j, long j2) {
+    public /* synthetic */ MessagesController$$ExternalSyntheticLambda287(MessagesController messagesController, int i, BaseFragment baseFragment) {
         this.f$0 = messagesController;
-        this.f$1 = j;
-        this.f$2 = j2;
+        this.f$1 = i;
+        this.f$2 = baseFragment;
     }
 
-    public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        this.f$0.lambda$deleteMessages$99(this.f$1, this.f$2, tLObject, tLRPC$TL_error);
+    public final void onCancel(DialogInterface dialogInterface) {
+        this.f$0.m129x4795005c(this.f$1, this.f$2, dialogInterface);
     }
 }

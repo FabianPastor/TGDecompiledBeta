@@ -10,6 +10,6 @@ public final /* synthetic */ class NotificationsCustomSettingsActivity$$External
     }
 
     public final void onClick(DialogInterface dialogInterface, int i) {
-        this.f$0.lambda$createView$3(dialogInterface, i);
+        this.f$0.m2648xcvar_b41e(dialogInterface, i);
     }
 }

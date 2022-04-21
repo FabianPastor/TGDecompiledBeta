@@ -1,15 +1,19 @@
 package org.telegram.ui;
 
-import android.view.View;
-
-public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda59 implements View.OnClickListener {
+public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda59 implements Runnable {
     public final /* synthetic */ ChatActivity f$0;
+    public final /* synthetic */ int f$1;
+    public final /* synthetic */ int f$2;
+    public final /* synthetic */ boolean f$3;
 
-    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda59(ChatActivity chatActivity) {
+    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda59(ChatActivity chatActivity, int i, int i2, boolean z) {
         this.f$0 = chatActivity;
+        this.f$1 = i;
+        this.f$2 = i2;
+        this.f$3 = z;
     }
 
-    public final void onClick(View view) {
-        this.f$0.lambda$createView$29(view);
+    public final void run() {
+        this.f$0.m1716lambda$deleteHistory$3$orgtelegramuiChatActivity(this.f$1, this.f$2, this.f$3);
     }
 }

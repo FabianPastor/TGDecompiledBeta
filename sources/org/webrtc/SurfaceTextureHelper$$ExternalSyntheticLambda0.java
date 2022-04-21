@@ -10,6 +10,6 @@ public final /* synthetic */ class SurfaceTextureHelper$$ExternalSyntheticLambda
     }
 
     public final void onFrameAvailable(SurfaceTexture surfaceTexture) {
-        this.f$0.lambda$new$0(surfaceTexture);
+        this.f$0.m4627lambda$new$0$orgwebrtcSurfaceTextureHelper(surfaceTexture);
     }
 }

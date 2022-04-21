@@ -10,6 +10,6 @@ public final /* synthetic */ class Input$$ExternalSyntheticLambda0 implements Ru
     }
 
     public final void run() {
-        this.f$0.lambda$paintPath$0(this.f$1);
+        this.f$0.m4137lambda$paintPath$0$orgtelegramuiComponentsPaintInput(this.f$1);
     }
 }

@@ -11,6 +11,6 @@ public final /* synthetic */ class PhotoViewerCaptionEnterView$$ExternalSyntheti
     }
 
     public final boolean onKey(View view, int i, KeyEvent keyEvent) {
-        return this.f$0.lambda$new$3(view, i, keyEvent);
+        return this.f$0.m4217x3386b60c(view, i, keyEvent);
     }
 }

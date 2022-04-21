@@ -10,6 +10,6 @@ public final /* synthetic */ class LoginActivity$LoginActivitySmsView$$ExternalS
     }
 
     public final void run() {
-        this.f$0.lambda$shakeWrongCode$32();
+        this.f$0.m2556x1fa354f();
     }
 }

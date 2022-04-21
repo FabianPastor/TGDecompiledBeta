@@ -1,20 +1,19 @@
 package org.telegram.ui;
 
 import android.content.DialogInterface;
-import java.util.HashMap;
 
-public final /* synthetic */ class LaunchActivity$$ExternalSyntheticLambda11 implements DialogInterface.OnClickListener {
-    public final /* synthetic */ LaunchActivity f$0;
-    public final /* synthetic */ HashMap f$1;
-    public final /* synthetic */ int f$2;
+public final /* synthetic */ class LaunchActivity$$ExternalSyntheticLambda11 implements DialogInterface.OnCancelListener {
+    public final /* synthetic */ int f$0;
+    public final /* synthetic */ int[] f$1;
+    public final /* synthetic */ Runnable f$2;
 
-    public /* synthetic */ LaunchActivity$$ExternalSyntheticLambda11(LaunchActivity launchActivity, HashMap hashMap, int i) {
-        this.f$0 = launchActivity;
-        this.f$1 = hashMap;
-        this.f$2 = i;
+    public /* synthetic */ LaunchActivity$$ExternalSyntheticLambda11(int i, int[] iArr, Runnable runnable) {
+        this.f$0 = i;
+        this.f$1 = iArr;
+        this.f$2 = runnable;
     }
 
-    public final void onClick(DialogInterface dialogInterface, int i) {
-        this.f$0.lambda$didReceivedNotification$79(this.f$1, this.f$2, dialogInterface, i);
+    public final void onCancel(DialogInterface dialogInterface) {
+        LaunchActivity.lambda$runLinkRequest$65(this.f$0, this.f$1, this.f$2, dialogInterface);
     }
 }

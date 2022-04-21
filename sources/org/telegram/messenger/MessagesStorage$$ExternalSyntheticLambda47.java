@@ -1,25 +1,24 @@
 package org.telegram.messenger;
 
+import androidx.collection.LongSparseArray;
 import java.util.ArrayList;
 
 public final /* synthetic */ class MessagesStorage$$ExternalSyntheticLambda47 implements Runnable {
     public final /* synthetic */ MessagesStorage f$0;
-    public final /* synthetic */ int f$1;
-    public final /* synthetic */ long f$2;
-    public final /* synthetic */ int f$3;
-    public final /* synthetic */ ArrayList f$4;
-    public final /* synthetic */ int f$5;
+    public final /* synthetic */ ArrayList f$1;
+    public final /* synthetic */ ArrayList f$2;
+    public final /* synthetic */ ArrayList f$3;
+    public final /* synthetic */ LongSparseArray f$4;
 
-    public /* synthetic */ MessagesStorage$$ExternalSyntheticLambda47(MessagesStorage messagesStorage, int i, long j, int i2, ArrayList arrayList, int i3) {
+    public /* synthetic */ MessagesStorage$$ExternalSyntheticLambda47(MessagesStorage messagesStorage, ArrayList arrayList, ArrayList arrayList2, ArrayList arrayList3, LongSparseArray longSparseArray) {
         this.f$0 = messagesStorage;
-        this.f$1 = i;
-        this.f$2 = j;
-        this.f$3 = i2;
-        this.f$4 = arrayList;
-        this.f$5 = i3;
+        this.f$1 = arrayList;
+        this.f$2 = arrayList2;
+        this.f$3 = arrayList3;
+        this.f$4 = longSparseArray;
     }
 
     public final void run() {
-        this.f$0.lambda$updateRepliesCount$151(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5);
+        this.f$0.m976lambda$readAllDialogs$38$orgtelegrammessengerMessagesStorage(this.f$1, this.f$2, this.f$3, this.f$4);
     }
 }

@@ -10,6 +10,6 @@ public final /* synthetic */ class EditTextBoldCursor$$ExternalSyntheticLambda0 
     }
 
     public final boolean onPreDraw() {
-        return this.f$0.lambda$startActionMode$0();
+        return this.f$0.m3944x60d1var_();
     }
 }

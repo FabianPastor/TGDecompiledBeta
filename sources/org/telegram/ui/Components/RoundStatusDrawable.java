@@ -14,43 +14,33 @@ public class RoundStatusDrawable extends StatusDrawable {
     private int progressDirection = 1;
     private boolean started = false;
 
-    public int getOpacity() {
-        return 0;
-    }
-
-    public void setAlpha(int i) {
-    }
-
-    public void setColorFilter(ColorFilter colorFilter) {
-    }
-
-    public RoundStatusDrawable(boolean z) {
-        if (z) {
+    public RoundStatusDrawable(boolean createPaint) {
+        if (createPaint) {
             this.currentPaint = new Paint(1);
         }
     }
 
-    public void setColor(int i) {
+    public void setColor(int color) {
         Paint paint = this.currentPaint;
         if (paint != null) {
-            paint.setColor(i);
+            paint.setColor(color);
         }
     }
 
-    public void setIsChat(boolean z) {
-        this.isChat = z;
+    public void setIsChat(boolean value) {
+        this.isChat = value;
     }
 
     private void update() {
-        long currentTimeMillis = System.currentTimeMillis();
-        long j = currentTimeMillis - this.lastUpdateTime;
-        this.lastUpdateTime = currentTimeMillis;
-        if (j > 50) {
-            j = 50;
+        long newTime = System.currentTimeMillis();
+        long dt = newTime - this.lastUpdateTime;
+        this.lastUpdateTime = newTime;
+        if (dt > 50) {
+            dt = 50;
         }
         float f = this.progress;
         int i = this.progressDirection;
-        float f2 = f + (((float) (((long) i) * j)) / 400.0f);
+        float f2 = f + (((float) (((long) i) * dt)) / 400.0f);
         this.progress = f2;
         if (i > 0 && f2 >= 1.0f) {
             this.progressDirection = -1;
@@ -82,6 +72,16 @@ public class RoundStatusDrawable extends StatusDrawable {
         if (this.started) {
             update();
         }
+    }
+
+    public void setAlpha(int alpha) {
+    }
+
+    public void setColorFilter(ColorFilter cf) {
+    }
+
+    public int getOpacity() {
+        return 0;
     }
 
     public int getIntrinsicWidth() {

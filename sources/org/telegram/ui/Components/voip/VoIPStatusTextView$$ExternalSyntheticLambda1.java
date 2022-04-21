@@ -8,6 +8,6 @@ public final /* synthetic */ class VoIPStatusTextView$$ExternalSyntheticLambda1 
     }
 
     public final void run() {
-        this.f$0.lambda$setText$0();
+        this.f$0.m4586x89ca5ab6();
     }
 }

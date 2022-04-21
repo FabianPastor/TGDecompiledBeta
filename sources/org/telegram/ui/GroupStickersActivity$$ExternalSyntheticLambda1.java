@@ -8,6 +8,6 @@ public final /* synthetic */ class GroupStickersActivity$$ExternalSyntheticLambd
     }
 
     public final void run() {
-        this.f$0.lambda$onTransitionAnimationEnd$5();
+        this.f$0.m2282xa3CLASSNAMEa83();
     }
 }

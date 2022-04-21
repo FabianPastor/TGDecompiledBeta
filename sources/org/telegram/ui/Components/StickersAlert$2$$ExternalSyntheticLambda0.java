@@ -15,6 +15,6 @@ public final /* synthetic */ class StickersAlert$2$$ExternalSyntheticLambda0 imp
     }
 
     public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-        this.f$0.lambda$createAnimator$0(this.f$1, this.f$2, valueAnimator);
+        this.f$0.m4444xe8fa752b(this.f$1, this.f$2, valueAnimator);
     }
 }

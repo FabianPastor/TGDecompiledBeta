@@ -13,6 +13,6 @@ public final /* synthetic */ class ChatAttachAlertLocationLayout$MapOverlayView$
     }
 
     public final void didSelectDate(boolean z, int i) {
-        this.f$0.lambda$addInfoView$0(this.f$1, z, i);
+        this.f$0.m3863xaca751df(this.f$1, z, i);
     }
 }

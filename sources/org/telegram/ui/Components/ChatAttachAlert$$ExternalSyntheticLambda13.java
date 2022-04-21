@@ -1,17 +1,15 @@
 package org.telegram.ui.Components;
 
-import androidx.dynamicanimation.animation.DynamicAnimation;
+import org.telegram.messenger.AndroidUtilities;
 
-public final /* synthetic */ class ChatAttachAlert$$ExternalSyntheticLambda13 implements DynamicAnimation.OnAnimationEndListener {
-    public final /* synthetic */ ChatAttachAlert f$0;
-    public final /* synthetic */ Runnable f$1;
+public final /* synthetic */ class ChatAttachAlert$$ExternalSyntheticLambda13 implements Runnable {
+    public final /* synthetic */ EditTextBoldCursor f$0;
 
-    public /* synthetic */ ChatAttachAlert$$ExternalSyntheticLambda13(ChatAttachAlert chatAttachAlert, Runnable runnable) {
-        this.f$0 = chatAttachAlert;
-        this.f$1 = runnable;
+    public /* synthetic */ ChatAttachAlert$$ExternalSyntheticLambda13(EditTextBoldCursor editTextBoldCursor) {
+        this.f$0 = editTextBoldCursor;
     }
 
-    public final void onAnimationEnd(DynamicAnimation dynamicAnimation, boolean z, float f, float f2) {
-        this.f$0.lambda$onCustomOpenAnimation$27(this.f$1, dynamicAnimation, z, f, f2);
+    public final void run() {
+        AndroidUtilities.showKeyboard(this.f$0);
     }
 }

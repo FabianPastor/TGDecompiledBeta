@@ -1,19 +1,15 @@
 package org.telegram.ui.Components;
 
-import android.content.DialogInterface;
+import android.view.View;
 
-public final /* synthetic */ class ChatActivityEnterView$$ExternalSyntheticLambda9 implements DialogInterface.OnClickListener {
+public final /* synthetic */ class ChatActivityEnterView$$ExternalSyntheticLambda9 implements View.OnClickListener {
     public final /* synthetic */ ChatActivityEnterView f$0;
-    public final /* synthetic */ Runnable f$1;
-    public final /* synthetic */ long f$2;
 
-    public /* synthetic */ ChatActivityEnterView$$ExternalSyntheticLambda9(ChatActivityEnterView chatActivityEnterView, Runnable runnable, long j) {
+    public /* synthetic */ ChatActivityEnterView$$ExternalSyntheticLambda9(ChatActivityEnterView chatActivityEnterView) {
         this.f$0 = chatActivityEnterView;
-        this.f$1 = runnable;
-        this.f$2 = j;
     }
 
-    public final void onClick(DialogInterface dialogInterface, int i) {
-        this.f$0.lambda$didPressedBotButton$46(this.f$1, this.f$2, dialogInterface, i);
+    public final void onClick(View view) {
+        this.f$0.m3717lambda$new$28$orgtelegramuiComponentsChatActivityEnterView(view);
     }
 }

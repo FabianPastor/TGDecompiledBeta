@@ -11,6 +11,6 @@ public final /* synthetic */ class ChatRightsEditActivity$ListAdapter$$ExternalS
     }
 
     public final void onClick(View view) {
-        this.f$0.lambda$onCreateViewHolder$0(view);
+        this.f$0.m1996x1beb1a5a(view);
     }
 }

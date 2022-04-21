@@ -12,6 +12,6 @@ public final /* synthetic */ class DispatchQueuePool$$ExternalSyntheticLambda0 i
     }
 
     public final void run() {
-        this.f$0.lambda$execute$1(this.f$1, this.f$2);
+        this.f$0.m537lambda$execute$1$orgtelegrammessengerDispatchQueuePool(this.f$1, this.f$2);
     }
 }

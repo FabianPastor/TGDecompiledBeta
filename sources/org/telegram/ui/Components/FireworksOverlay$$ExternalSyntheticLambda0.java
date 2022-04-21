@@ -8,6 +8,6 @@ public final /* synthetic */ class FireworksOverlay$$ExternalSyntheticLambda0 im
     }
 
     public final void run() {
-        this.f$0.lambda$onDraw$0();
+        this.f$0.m4005lambda$onDraw$0$orgtelegramuiComponentsFireworksOverlay();
     }
 }

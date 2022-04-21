@@ -11,6 +11,6 @@ public final /* synthetic */ class LoginActivity$LoginActivityNewPasswordView$$E
     }
 
     public final void onClick(View view) {
-        this.f$0.lambda$new$3(view);
+        this.f$0.m2462x8115ecde(view);
     }
 }

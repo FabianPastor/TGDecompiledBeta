@@ -21,6 +21,6 @@ public final /* synthetic */ class ChatActivity$60$$ExternalSyntheticLambda1 imp
     }
 
     public final void run() {
-        this.f$0.lambda$onUnpin$0(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5);
+        this.f$0.m1874lambda$onUnpin$0$orgtelegramuiChatActivity$60(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5);
     }
 }

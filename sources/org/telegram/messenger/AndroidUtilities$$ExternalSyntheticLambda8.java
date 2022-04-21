@@ -1,15 +1,14 @@
 package org.telegram.messenger;
 
-import java.util.Comparator;
-import org.telegram.messenger.AndroidUtilities;
+import com.google.android.gms.tasks.OnSuccessListener;
 
-public final /* synthetic */ class AndroidUtilities$$ExternalSyntheticLambda8 implements Comparator {
+public final /* synthetic */ class AndroidUtilities$$ExternalSyntheticLambda8 implements OnSuccessListener {
     public static final /* synthetic */ AndroidUtilities$$ExternalSyntheticLambda8 INSTANCE = new AndroidUtilities$$ExternalSyntheticLambda8();
 
     private /* synthetic */ AndroidUtilities$$ExternalSyntheticLambda8() {
     }
 
-    public final int compare(Object obj, Object obj2) {
-        return AndroidUtilities.lambda$pruneOverlaps$1((AndroidUtilities.LinkSpec) obj, (AndroidUtilities.LinkSpec) obj2);
+    public final void onSuccess(Object obj) {
+        AndroidUtilities.lambda$setWaitingForSms$3((Void) obj);
     }
 }

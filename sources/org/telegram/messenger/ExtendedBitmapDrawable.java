@@ -7,10 +7,10 @@ public class ExtendedBitmapDrawable extends BitmapDrawable {
     private boolean canInvert;
     private int orientation;
 
-    public ExtendedBitmapDrawable(Bitmap bitmap, boolean z, int i) {
+    public ExtendedBitmapDrawable(Bitmap bitmap, boolean invert, int orient) {
         super(bitmap);
-        this.canInvert = z;
-        this.orientation = i;
+        this.canInvert = invert;
+        this.orientation = orient;
     }
 
     public boolean isCanInvert() {

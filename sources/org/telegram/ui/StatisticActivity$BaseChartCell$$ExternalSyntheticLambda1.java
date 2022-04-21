@@ -16,6 +16,6 @@ public final /* synthetic */ class StatisticActivity$BaseChartCell$$ExternalSynt
     }
 
     public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-        this.f$0.lambda$createTransitionAnimator$4(this.f$1, this.f$2, valueAnimator);
+        this.f$0.m3259x8c3e0af5(this.f$1, this.f$2, valueAnimator);
     }
 }

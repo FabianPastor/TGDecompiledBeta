@@ -1,16 +1,19 @@
 package org.telegram.messenger;
 
-import org.telegram.tgnet.RequestDelegate;
-import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC$TL_error;
+import androidx.collection.LongSparseArray;
 
-public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda346 implements RequestDelegate {
-    public static final /* synthetic */ MessagesController$$ExternalSyntheticLambda346 INSTANCE = new MessagesController$$ExternalSyntheticLambda346();
+public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda346 implements Runnable {
+    public final /* synthetic */ MessagesController f$0;
+    public final /* synthetic */ LongSparseArray f$1;
+    public final /* synthetic */ LongSparseArray f$2;
 
-    private /* synthetic */ MessagesController$$ExternalSyntheticLambda346() {
+    public /* synthetic */ MessagesController$$ExternalSyntheticLambda346(MessagesController messagesController, LongSparseArray longSparseArray, LongSparseArray longSparseArray2) {
+        this.f$0 = messagesController;
+        this.f$1 = longSparseArray;
+        this.f$2 = longSparseArray2;
     }
 
-    public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        MessagesController.lambda$markMentionMessageAsRead$190(tLObject, tLRPC$TL_error);
+    public final void run() {
+        this.f$0.m136x8dfdd6a(this.f$1, this.f$2);
     }
 }

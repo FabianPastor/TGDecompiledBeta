@@ -1,15 +1,15 @@
 package org.telegram.ui;
 
-import android.content.DialogInterface;
+import android.view.View;
 
-public final /* synthetic */ class ProfileActivity$$ExternalSyntheticLambda4 implements DialogInterface.OnClickListener {
+public final /* synthetic */ class ProfileActivity$$ExternalSyntheticLambda4 implements View.OnClickListener {
     public final /* synthetic */ ProfileActivity f$0;
 
     public /* synthetic */ ProfileActivity$$ExternalSyntheticLambda4(ProfileActivity profileActivity) {
         this.f$0 = profileActivity;
     }
 
-    public final void onClick(DialogInterface dialogInterface, int i) {
-        this.f$0.lambda$createView$3(dialogInterface, i);
+    public final void onClick(View view) {
+        this.f$0.m3040lambda$createView$13$orgtelegramuiProfileActivity(view);
     }
 }

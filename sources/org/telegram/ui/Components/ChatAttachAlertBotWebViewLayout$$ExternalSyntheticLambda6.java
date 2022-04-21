@@ -8,6 +8,6 @@ public final /* synthetic */ class ChatAttachAlertBotWebViewLayout$$ExternalSynt
     }
 
     public final void run() {
-        this.f$0.lambda$new$3();
+        this.f$0.m3804xcCLASSNAMEdcad();
     }
 }

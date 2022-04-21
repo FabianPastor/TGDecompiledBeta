@@ -14,6 +14,6 @@ public final /* synthetic */ class ThemeEditorView$EditorAlert$SearchAdapter$$Ex
     }
 
     public final void run() {
-        this.f$0.lambda$searchDialogs$1(this.f$1, this.f$2);
+        this.f$0.m4472x282ed99(this.f$1, this.f$2);
     }
 }

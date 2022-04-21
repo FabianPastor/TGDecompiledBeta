@@ -1,27 +1,25 @@
 package org.telegram.ui;
 
+import android.net.Uri;
 import org.telegram.tgnet.RequestDelegate;
 import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC$TL_contacts_resolvedPeer;
-import org.telegram.tgnet.TLRPC$TL_error;
-import org.telegram.tgnet.TLRPC$User;
+import org.telegram.tgnet.TLRPC;
+import org.telegram.ui.ActionBar.AlertDialog;
 
 public final /* synthetic */ class LaunchActivity$$ExternalSyntheticLambda68 implements RequestDelegate {
     public final /* synthetic */ LaunchActivity f$0;
-    public final /* synthetic */ int f$1;
-    public final /* synthetic */ TLRPC$User f$2;
-    public final /* synthetic */ String f$3;
-    public final /* synthetic */ TLRPC$TL_contacts_resolvedPeer f$4;
+    public final /* synthetic */ Uri f$1;
+    public final /* synthetic */ int f$2;
+    public final /* synthetic */ AlertDialog f$3;
 
-    public /* synthetic */ LaunchActivity$$ExternalSyntheticLambda68(LaunchActivity launchActivity, int i, TLRPC$User tLRPC$User, String str, TLRPC$TL_contacts_resolvedPeer tLRPC$TL_contacts_resolvedPeer) {
+    public /* synthetic */ LaunchActivity$$ExternalSyntheticLambda68(LaunchActivity launchActivity, Uri uri, int i, AlertDialog alertDialog) {
         this.f$0 = launchActivity;
-        this.f$1 = i;
-        this.f$2 = tLRPC$User;
-        this.f$3 = str;
-        this.f$4 = tLRPC$TL_contacts_resolvedPeer;
+        this.f$1 = uri;
+        this.f$2 = i;
+        this.f$3 = alertDialog;
     }
 
-    public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        this.f$0.lambda$runLinkRequest$32(this.f$1, this.f$2, this.f$3, this.f$4, tLObject, tLRPC$TL_error);
+    public final void run(TLObject tLObject, TLRPC.TL_error tL_error) {
+        this.f$0.m2343lambda$runImportRequest$25$orgtelegramuiLaunchActivity(this.f$1, this.f$2, this.f$3, tLObject, tL_error);
     }
 }

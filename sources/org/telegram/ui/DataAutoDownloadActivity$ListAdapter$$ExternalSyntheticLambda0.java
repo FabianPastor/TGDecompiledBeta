@@ -11,7 +11,7 @@ public final /* synthetic */ class DataAutoDownloadActivity$ListAdapter$$Externa
     }
 
     public final void onOptionSelected(int i) {
-        this.f$0.lambda$onCreateViewHolder$0(i);
+        this.f$0.m2055x3dca3var_(i);
     }
 
     public /* synthetic */ void onTouchEnd() {

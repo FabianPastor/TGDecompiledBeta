@@ -1,17 +1,17 @@
 package org.telegram.ui;
 
-import android.animation.Animator;
+import android.content.DialogInterface;
 
-public final /* synthetic */ class VoIPFragment$$ExternalSyntheticLambda28 implements Runnable {
+public final /* synthetic */ class VoIPFragment$$ExternalSyntheticLambda28 implements DialogInterface.OnClickListener {
     public final /* synthetic */ VoIPFragment f$0;
-    public final /* synthetic */ Animator f$1;
+    public final /* synthetic */ boolean[] f$1;
 
-    public /* synthetic */ VoIPFragment$$ExternalSyntheticLambda28(VoIPFragment voIPFragment, Animator animator) {
+    public /* synthetic */ VoIPFragment$$ExternalSyntheticLambda28(VoIPFragment voIPFragment, boolean[] zArr) {
         this.f$0 = voIPFragment;
-        this.f$1 = animator;
+        this.f$1 = zArr;
     }
 
-    public final void run() {
-        this.f$0.lambda$startTransitionFromPiP$13(this.f$1);
+    public final void onClick(DialogInterface dialogInterface, int i) {
+        this.f$0.m3464lambda$updateViewState$18$orgtelegramuiVoIPFragment(this.f$1, dialogInterface, i);
     }
 }

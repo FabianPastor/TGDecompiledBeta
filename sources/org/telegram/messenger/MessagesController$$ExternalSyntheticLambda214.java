@@ -1,16 +1,21 @@
 package org.telegram.messenger;
 
-import java.util.Comparator;
-import org.telegram.tgnet.TLRPC$Dialog;
+import org.telegram.tgnet.RequestDelegate;
+import org.telegram.tgnet.TLObject;
+import org.telegram.tgnet.TLRPC;
 
-public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda214 implements Comparator {
+public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda214 implements RequestDelegate {
     public final /* synthetic */ MessagesController f$0;
+    public final /* synthetic */ long f$1;
+    public final /* synthetic */ String f$2;
 
-    public /* synthetic */ MessagesController$$ExternalSyntheticLambda214(MessagesController messagesController) {
+    public /* synthetic */ MessagesController$$ExternalSyntheticLambda214(MessagesController messagesController, long j, String str) {
         this.f$0 = messagesController;
+        this.f$1 = j;
+        this.f$2 = str;
     }
 
-    public final int compare(Object obj, Object obj2) {
-        return this.f$0.lambda$new$6((TLRPC$Dialog) obj, (TLRPC$Dialog) obj2);
+    public final void run(TLObject tLObject, TLRPC.TL_error tL_error) {
+        this.f$0.m415x7e0a481(this.f$1, this.f$2, tLObject, tL_error);
     }
 }

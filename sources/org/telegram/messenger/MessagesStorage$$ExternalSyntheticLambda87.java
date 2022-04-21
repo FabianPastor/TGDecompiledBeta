@@ -1,21 +1,15 @@
 package org.telegram.messenger;
 
-import org.telegram.tgnet.TLObject;
-
 public final /* synthetic */ class MessagesStorage$$ExternalSyntheticLambda87 implements Runnable {
     public final /* synthetic */ MessagesStorage f$0;
-    public final /* synthetic */ long f$1;
-    public final /* synthetic */ long f$2;
-    public final /* synthetic */ TLObject f$3;
+    public final /* synthetic */ boolean f$1;
 
-    public /* synthetic */ MessagesStorage$$ExternalSyntheticLambda87(MessagesStorage messagesStorage, long j, long j2, TLObject tLObject) {
+    public /* synthetic */ MessagesStorage$$ExternalSyntheticLambda87(MessagesStorage messagesStorage, boolean z) {
         this.f$0 = messagesStorage;
-        this.f$1 = j;
-        this.f$2 = j2;
-        this.f$3 = tLObject;
+        this.f$1 = z;
     }
 
     public final void run() {
-        this.f$0.lambda$loadPendingTasks$27(this.f$1, this.f$2, this.f$3);
+        this.f$0.m855lambda$cleanup$6$orgtelegrammessengerMessagesStorage(this.f$1);
     }
 }

@@ -10,6 +10,6 @@ public final /* synthetic */ class ReplaceableIconDrawable$$ExternalSyntheticLam
     }
 
     public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-        this.f$0.lambda$setIcon$0(valueAnimator);
+        this.f$0.m4293xd9f8d97e(valueAnimator);
     }
 }

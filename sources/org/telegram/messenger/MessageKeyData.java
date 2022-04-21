@@ -6,73 +6,78 @@ public class MessageKeyData {
     public byte[] aesIv;
     public byte[] aesKey;
 
-    public static MessageKeyData generateMessageKeyData(byte[] bArr, byte[] bArr2, boolean z, int i) {
-        MessageKeyData messageKeyData = new MessageKeyData();
+    public static MessageKeyData generateMessageKeyData(byte[] authKey, byte[] messageKey, boolean incoming, int version) {
+        byte[] bArr = authKey;
+        byte[] bArr2 = messageKey;
+        MessageKeyData keyData = new MessageKeyData();
         if (bArr == null || bArr.length == 0) {
-            messageKeyData.aesIv = null;
-            messageKeyData.aesKey = null;
-            return messageKeyData;
+            keyData.aesIv = null;
+            keyData.aesKey = null;
+            return keyData;
         }
-        int i2 = z ? 8 : 0;
-        if (i == 1) {
-            SerializedData serializedData = new SerializedData();
-            serializedData.writeBytes(bArr2);
-            serializedData.writeBytes(bArr, i2, 32);
-            byte[] computeSHA1 = Utilities.computeSHA1(serializedData.toByteArray());
-            serializedData.cleanup();
-            SerializedData serializedData2 = new SerializedData();
-            serializedData2.writeBytes(bArr, i2 + 32, 16);
-            serializedData2.writeBytes(bArr2);
-            serializedData2.writeBytes(bArr, i2 + 48, 16);
-            byte[] computeSHA12 = Utilities.computeSHA1(serializedData2.toByteArray());
-            serializedData2.cleanup();
-            SerializedData serializedData3 = new SerializedData();
-            serializedData3.writeBytes(bArr, i2 + 64, 32);
-            serializedData3.writeBytes(bArr2);
-            byte[] computeSHA13 = Utilities.computeSHA1(serializedData3.toByteArray());
-            serializedData3.cleanup();
-            SerializedData serializedData4 = new SerializedData();
-            serializedData4.writeBytes(bArr2);
-            serializedData4.writeBytes(bArr, i2 + 96, 32);
-            byte[] computeSHA14 = Utilities.computeSHA1(serializedData4.toByteArray());
-            serializedData4.cleanup();
-            SerializedData serializedData5 = new SerializedData();
-            serializedData5.writeBytes(computeSHA1, 0, 8);
-            serializedData5.writeBytes(computeSHA12, 8, 12);
-            serializedData5.writeBytes(computeSHA13, 4, 12);
-            messageKeyData.aesKey = serializedData5.toByteArray();
-            serializedData5.cleanup();
-            SerializedData serializedData6 = new SerializedData();
-            serializedData6.writeBytes(computeSHA1, 8, 12);
-            serializedData6.writeBytes(computeSHA12, 0, 8);
-            serializedData6.writeBytes(computeSHA13, 16, 4);
-            serializedData6.writeBytes(computeSHA14, 0, 8);
-            messageKeyData.aesIv = serializedData6.toByteArray();
-            serializedData6.cleanup();
-        } else if (i == 2) {
-            SerializedData serializedData7 = new SerializedData();
-            serializedData7.writeBytes(bArr2, 0, 16);
-            serializedData7.writeBytes(bArr, i2, 36);
-            byte[] computeSHA256 = Utilities.computeSHA256(serializedData7.toByteArray());
-            serializedData7.cleanup();
-            SerializedData serializedData8 = new SerializedData();
-            serializedData8.writeBytes(bArr, i2 + 40, 36);
-            serializedData8.writeBytes(bArr2, 0, 16);
-            byte[] computeSHA2562 = Utilities.computeSHA256(serializedData8.toByteArray());
-            serializedData8.cleanup();
-            SerializedData serializedData9 = new SerializedData();
-            serializedData9.writeBytes(computeSHA256, 0, 8);
-            serializedData9.writeBytes(computeSHA2562, 8, 16);
-            serializedData9.writeBytes(computeSHA256, 24, 8);
-            messageKeyData.aesKey = serializedData9.toByteArray();
-            serializedData9.cleanup();
-            SerializedData serializedData10 = new SerializedData();
-            serializedData10.writeBytes(computeSHA2562, 0, 8);
-            serializedData10.writeBytes(computeSHA256, 8, 16);
-            serializedData10.writeBytes(computeSHA2562, 24, 8);
-            messageKeyData.aesIv = serializedData10.toByteArray();
-            serializedData10.cleanup();
+        int x = incoming ? 8 : 0;
+        switch (version) {
+            case 1:
+                SerializedData data = new SerializedData();
+                data.writeBytes(bArr2);
+                data.writeBytes(authKey, x, 32);
+                byte[] sha1_a = Utilities.computeSHA1(data.toByteArray());
+                data.cleanup();
+                SerializedData data2 = new SerializedData();
+                data2.writeBytes(authKey, x + 32, 16);
+                data2.writeBytes(bArr2);
+                data2.writeBytes(authKey, x + 48, 16);
+                byte[] sha1_b = Utilities.computeSHA1(data2.toByteArray());
+                data2.cleanup();
+                SerializedData data3 = new SerializedData();
+                data3.writeBytes(authKey, x + 64, 32);
+                data3.writeBytes(bArr2);
+                byte[] sha1_c = Utilities.computeSHA1(data3.toByteArray());
+                data3.cleanup();
+                SerializedData data4 = new SerializedData();
+                data4.writeBytes(bArr2);
+                data4.writeBytes(authKey, x + 96, 32);
+                byte[] sha1_d = Utilities.computeSHA1(data4.toByteArray());
+                data4.cleanup();
+                SerializedData data5 = new SerializedData();
+                data5.writeBytes(sha1_a, 0, 8);
+                data5.writeBytes(sha1_b, 8, 12);
+                data5.writeBytes(sha1_c, 4, 12);
+                keyData.aesKey = data5.toByteArray();
+                data5.cleanup();
+                SerializedData data6 = new SerializedData();
+                data6.writeBytes(sha1_a, 8, 12);
+                data6.writeBytes(sha1_b, 0, 8);
+                data6.writeBytes(sha1_c, 16, 4);
+                data6.writeBytes(sha1_d, 0, 8);
+                keyData.aesIv = data6.toByteArray();
+                data6.cleanup();
+                break;
+            case 2:
+                SerializedData data7 = new SerializedData();
+                data7.writeBytes(bArr2, 0, 16);
+                data7.writeBytes(authKey, x, 36);
+                byte[] sha256_a = Utilities.computeSHA256(data7.toByteArray());
+                data7.cleanup();
+                SerializedData data8 = new SerializedData();
+                data8.writeBytes(authKey, x + 40, 36);
+                data8.writeBytes(bArr2, 0, 16);
+                byte[] sha256_b = Utilities.computeSHA256(data8.toByteArray());
+                data8.cleanup();
+                SerializedData data9 = new SerializedData();
+                data9.writeBytes(sha256_a, 0, 8);
+                data9.writeBytes(sha256_b, 8, 16);
+                data9.writeBytes(sha256_a, 24, 8);
+                keyData.aesKey = data9.toByteArray();
+                data9.cleanup();
+                SerializedData data10 = new SerializedData();
+                data10.writeBytes(sha256_b, 0, 8);
+                data10.writeBytes(sha256_a, 8, 16);
+                data10.writeBytes(sha256_b, 24, 8);
+                keyData.aesIv = data10.toByteArray();
+                data10.cleanup();
+                break;
         }
-        return messageKeyData;
+        return keyData;
     }
 }

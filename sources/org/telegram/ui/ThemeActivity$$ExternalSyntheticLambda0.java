@@ -1,21 +1,24 @@
 package org.telegram.ui;
 
-import android.app.TimePickerDialog;
-import android.widget.TimePicker;
-import org.telegram.ui.Cells.TextSettingsCell;
+import android.view.View;
+import org.telegram.ui.Components.RecyclerListView;
 
-public final /* synthetic */ class ThemeActivity$$ExternalSyntheticLambda0 implements TimePickerDialog.OnTimeSetListener {
+public final /* synthetic */ class ThemeActivity$$ExternalSyntheticLambda0 implements RecyclerListView.OnItemClickListenerExtended {
     public final /* synthetic */ ThemeActivity f$0;
-    public final /* synthetic */ int f$1;
-    public final /* synthetic */ TextSettingsCell f$2;
 
-    public /* synthetic */ ThemeActivity$$ExternalSyntheticLambda0(ThemeActivity themeActivity, int i, TextSettingsCell textSettingsCell) {
+    public /* synthetic */ ThemeActivity$$ExternalSyntheticLambda0(ThemeActivity themeActivity) {
         this.f$0 = themeActivity;
-        this.f$1 = i;
-        this.f$2 = textSettingsCell;
     }
 
-    public final void onTimeSet(TimePicker timePicker, int i, int i2) {
-        this.f$0.lambda$createView$4(this.f$1, this.f$2, timePicker, i, i2);
+    public /* synthetic */ boolean hasDoubleTap(View view, int i) {
+        return RecyclerListView.OnItemClickListenerExtended.CC.$default$hasDoubleTap(this, view, i);
+    }
+
+    public /* synthetic */ void onDoubleTap(View view, int i, float f, float f2) {
+        RecyclerListView.OnItemClickListenerExtended.CC.$default$onDoubleTap(this, view, i, f, f2);
+    }
+
+    public final void onItemClick(View view, int i, float f, float f2) {
+        this.f$0.m3292lambda$createView$5$orgtelegramuiThemeActivity(view, i, f, f2);
     }
 }

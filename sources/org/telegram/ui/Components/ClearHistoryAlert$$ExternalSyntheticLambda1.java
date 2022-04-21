@@ -10,6 +10,6 @@ public final /* synthetic */ class ClearHistoryAlert$$ExternalSyntheticLambda1 i
     }
 
     public final void onClick(View view) {
-        this.f$0.lambda$new$1(view);
+        this.f$0.m3922lambda$new$2$orgtelegramuiComponentsClearHistoryAlert(view);
     }
 }

@@ -1,17 +1,17 @@
 package org.telegram.messenger;
 
+import java.util.ArrayList;
+
 public final /* synthetic */ class NotificationsController$$ExternalSyntheticLambda23 implements Runnable {
     public final /* synthetic */ NotificationsController f$0;
-    public final /* synthetic */ long f$1;
-    public final /* synthetic */ int f$2;
+    public final /* synthetic */ ArrayList f$1;
 
-    public /* synthetic */ NotificationsController$$ExternalSyntheticLambda23(NotificationsController notificationsController, long j, int i) {
+    public /* synthetic */ NotificationsController$$ExternalSyntheticLambda23(NotificationsController notificationsController, ArrayList arrayList) {
         this.f$0 = notificationsController;
-        this.f$1 = j;
-        this.f$2 = i;
+        this.f$1 = arrayList;
     }
 
     public final void run() {
-        this.f$0.lambda$deleteNotificationChannel$31(this.f$1, this.f$2);
+        this.f$0.m1061xf0ee5e7e(this.f$1);
     }
 }

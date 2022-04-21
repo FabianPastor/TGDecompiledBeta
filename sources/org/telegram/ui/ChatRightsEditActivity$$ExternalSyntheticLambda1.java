@@ -1,15 +1,14 @@
 package org.telegram.ui;
 
-import android.animation.ValueAnimator;
+import android.content.DialogInterface;
 
-public final /* synthetic */ class ChatRightsEditActivity$$ExternalSyntheticLambda1 implements ValueAnimator.AnimatorUpdateListener {
-    public final /* synthetic */ ChatRightsEditActivity f$0;
+public final /* synthetic */ class ChatRightsEditActivity$$ExternalSyntheticLambda1 implements DialogInterface.OnClickListener {
+    public static final /* synthetic */ ChatRightsEditActivity$$ExternalSyntheticLambda1 INSTANCE = new ChatRightsEditActivity$$ExternalSyntheticLambda1();
 
-    public /* synthetic */ ChatRightsEditActivity$$ExternalSyntheticLambda1(ChatRightsEditActivity chatRightsEditActivity) {
-        this.f$0 = chatRightsEditActivity;
+    private /* synthetic */ ChatRightsEditActivity$$ExternalSyntheticLambda1() {
     }
 
-    public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-        this.f$0.lambda$updateAsAdmin$25(valueAnimator);
+    public final void onClick(DialogInterface dialogInterface, int i) {
+        ChatRightsEditActivity.lambda$createView$3(dialogInterface, i);
     }
 }

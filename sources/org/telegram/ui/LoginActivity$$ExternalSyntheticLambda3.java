@@ -1,15 +1,18 @@
 package org.telegram.ui;
 
-import android.animation.ValueAnimator;
+import android.text.TextWatcher;
+import android.widget.EditText;
 
-public final /* synthetic */ class LoginActivity$$ExternalSyntheticLambda3 implements ValueAnimator.AnimatorUpdateListener {
-    public final /* synthetic */ LoginActivity f$0;
+public final /* synthetic */ class LoginActivity$$ExternalSyntheticLambda3 implements Runnable {
+    public final /* synthetic */ EditText f$0;
+    public final /* synthetic */ TextWatcher f$1;
 
-    public /* synthetic */ LoginActivity$$ExternalSyntheticLambda3(LoginActivity loginActivity) {
-        this.f$0 = loginActivity;
+    public /* synthetic */ LoginActivity$$ExternalSyntheticLambda3(EditText editText, TextWatcher textWatcher) {
+        this.f$0 = editText;
+        this.f$1 = textWatcher;
     }
 
-    public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-        this.f$0.lambda$showDoneButton$12(valueAnimator);
+    public final void run() {
+        this.f$0.removeTextChangedListener(this.f$1);
     }
 }

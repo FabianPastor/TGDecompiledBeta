@@ -10,18 +10,18 @@ public final class ExtendedDefaultDataSourceFactory implements DataSource.Factor
     private final Context context;
     private final TransferListener listener;
 
-    public ExtendedDefaultDataSourceFactory(Context context2, String str) {
-        this(context2, str, (TransferListener) null);
+    public ExtendedDefaultDataSourceFactory(Context context2, String userAgent) {
+        this(context2, userAgent, (TransferListener) null);
     }
 
-    public ExtendedDefaultDataSourceFactory(Context context2, String str, TransferListener transferListener) {
-        this(context2, transferListener, (DataSource.Factory) new DefaultHttpDataSourceFactory(str, transferListener));
+    public ExtendedDefaultDataSourceFactory(Context context2, String userAgent, TransferListener listener2) {
+        this(context2, listener2, (DataSource.Factory) new DefaultHttpDataSourceFactory(userAgent, listener2));
     }
 
-    public ExtendedDefaultDataSourceFactory(Context context2, TransferListener transferListener, DataSource.Factory factory) {
+    public ExtendedDefaultDataSourceFactory(Context context2, TransferListener listener2, DataSource.Factory baseDataSourceFactory2) {
         this.context = context2.getApplicationContext();
-        this.listener = transferListener;
-        this.baseDataSourceFactory = factory;
+        this.listener = listener2;
+        this.baseDataSourceFactory = baseDataSourceFactory2;
     }
 
     public ExtendedDefaultDataSource createDataSource() {

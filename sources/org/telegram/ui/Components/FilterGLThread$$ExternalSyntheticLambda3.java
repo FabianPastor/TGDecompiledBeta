@@ -12,6 +12,6 @@ public final /* synthetic */ class FilterGLThread$$ExternalSyntheticLambda3 impl
     }
 
     public final void run() {
-        this.f$0.lambda$setVideoSize$3(this.f$1, this.f$2);
+        this.f$0.m3998x6eCLASSNAMEaa(this.f$1, this.f$2);
     }
 }

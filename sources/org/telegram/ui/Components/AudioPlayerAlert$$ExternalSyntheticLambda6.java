@@ -1,13 +1,14 @@
 package org.telegram.ui.Components;
 
-public final /* synthetic */ class AudioPlayerAlert$$ExternalSyntheticLambda6 implements Runnable {
-    public final /* synthetic */ AudioPlayerAlert f$0;
+import android.view.View;
 
-    public /* synthetic */ AudioPlayerAlert$$ExternalSyntheticLambda6(AudioPlayerAlert audioPlayerAlert) {
-        this.f$0 = audioPlayerAlert;
+public final /* synthetic */ class AudioPlayerAlert$$ExternalSyntheticLambda6 implements View.OnClickListener {
+    public static final /* synthetic */ AudioPlayerAlert$$ExternalSyntheticLambda6 INSTANCE = new AudioPlayerAlert$$ExternalSyntheticLambda6();
+
+    private /* synthetic */ AudioPlayerAlert$$ExternalSyntheticLambda6() {
     }
 
-    public final void run() {
-        this.f$0.lambda$onSubItemClick$10();
+    public final void onClick(View view) {
+        AudioPlayerAlert.lambda$new$5(view);
     }
 }

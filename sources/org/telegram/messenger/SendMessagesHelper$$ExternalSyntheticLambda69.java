@@ -1,22 +1,39 @@
 package org.telegram.messenger;
 
-import org.telegram.tgnet.TLRPC$Message;
-import org.telegram.tgnet.TLRPC$Updates;
+import java.util.ArrayList;
 
 public final /* synthetic */ class SendMessagesHelper$$ExternalSyntheticLambda69 implements Runnable {
-    public final /* synthetic */ SendMessagesHelper f$0;
-    public final /* synthetic */ TLRPC$Updates f$1;
-    public final /* synthetic */ TLRPC$Message f$2;
-    public final /* synthetic */ boolean f$3;
+    public final /* synthetic */ VideoEditedInfo f$0;
+    public final /* synthetic */ String f$1;
+    public final /* synthetic */ boolean f$10;
+    public final /* synthetic */ int f$11;
+    public final /* synthetic */ boolean f$12;
+    public final /* synthetic */ long f$2;
+    public final /* synthetic */ int f$3;
+    public final /* synthetic */ AccountInstance f$4;
+    public final /* synthetic */ CharSequence f$5;
+    public final /* synthetic */ MessageObject f$6;
+    public final /* synthetic */ MessageObject f$7;
+    public final /* synthetic */ MessageObject f$8;
+    public final /* synthetic */ ArrayList f$9;
 
-    public /* synthetic */ SendMessagesHelper$$ExternalSyntheticLambda69(SendMessagesHelper sendMessagesHelper, TLRPC$Updates tLRPC$Updates, TLRPC$Message tLRPC$Message, boolean z) {
-        this.f$0 = sendMessagesHelper;
-        this.f$1 = tLRPC$Updates;
-        this.f$2 = tLRPC$Message;
-        this.f$3 = z;
+    public /* synthetic */ SendMessagesHelper$$ExternalSyntheticLambda69(VideoEditedInfo videoEditedInfo, String str, long j, int i, AccountInstance accountInstance, CharSequence charSequence, MessageObject messageObject, MessageObject messageObject2, MessageObject messageObject3, ArrayList arrayList, boolean z, int i2, boolean z2) {
+        this.f$0 = videoEditedInfo;
+        this.f$1 = str;
+        this.f$2 = j;
+        this.f$3 = i;
+        this.f$4 = accountInstance;
+        this.f$5 = charSequence;
+        this.f$6 = messageObject;
+        this.f$7 = messageObject2;
+        this.f$8 = messageObject3;
+        this.f$9 = arrayList;
+        this.f$10 = z;
+        this.f$11 = i2;
+        this.f$12 = z2;
     }
 
     public final void run() {
-        this.f$0.lambda$performSendMessageRequest$49(this.f$1, this.f$2, this.f$3);
+        SendMessagesHelper.lambda$prepareSendingVideo$91(this.f$0, this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6, this.f$7, this.f$8, this.f$9, this.f$10, this.f$11, this.f$12);
     }
 }

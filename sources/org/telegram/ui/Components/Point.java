@@ -7,8 +7,8 @@ public class Point {
     public Point() {
     }
 
-    public Point(float f, float f2) {
-        this.x = f;
-        this.y = f2;
+    public Point(float x2, float y2) {
+        this.x = x2;
+        this.y = y2;
     }
 }

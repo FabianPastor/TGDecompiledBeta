@@ -10,12 +10,12 @@ public class ForegroundColorSpanThemable extends CharacterStyle implements Updat
     private String colorKey;
     private final Theme.ResourcesProvider resourcesProvider;
 
-    public ForegroundColorSpanThemable(String str) {
-        this(str, (Theme.ResourcesProvider) null);
+    public ForegroundColorSpanThemable(String colorKey2) {
+        this(colorKey2, (Theme.ResourcesProvider) null);
     }
 
-    public ForegroundColorSpanThemable(String str, Theme.ResourcesProvider resourcesProvider2) {
-        this.colorKey = str;
+    public ForegroundColorSpanThemable(String colorKey2, Theme.ResourcesProvider resourcesProvider2) {
+        this.colorKey = colorKey2;
         this.resourcesProvider = resourcesProvider2;
     }
 

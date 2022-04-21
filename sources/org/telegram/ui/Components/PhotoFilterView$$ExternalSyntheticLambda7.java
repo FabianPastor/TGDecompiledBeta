@@ -10,6 +10,6 @@ public final /* synthetic */ class PhotoFilterView$$ExternalSyntheticLambda7 imp
     }
 
     public final void valueChanged(Point point, float f, float f2, float f3) {
-        this.f$0.lambda$new$1(point, f, f2, f3);
+        this.f$0.m4182lambda$new$1$orgtelegramuiComponentsPhotoFilterView(point, f, f2, f3);
     }
 }

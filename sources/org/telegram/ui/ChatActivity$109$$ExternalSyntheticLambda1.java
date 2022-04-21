@@ -11,6 +11,6 @@ public final /* synthetic */ class ChatActivity$109$$ExternalSyntheticLambda1 im
     }
 
     public final void onProfileSelected(ReactedUsersListView reactedUsersListView, long j) {
-        this.f$0.lambda$instantiateItem$0(reactedUsersListView, j);
+        this.f$0.m1852lambda$instantiateItem$0$orgtelegramuiChatActivity$109(reactedUsersListView, j);
     }
 }

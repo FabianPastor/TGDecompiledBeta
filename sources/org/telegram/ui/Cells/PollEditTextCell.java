@@ -18,6 +18,7 @@ import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputConnection;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import java.util.ArrayList;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
 import org.telegram.ui.ActionBar.SimpleTextView;
@@ -39,50 +40,23 @@ public class PollEditTextCell extends FrameLayout {
     private EditTextBoldCursor textView;
     private SimpleTextView textView2;
 
-    /* access modifiers changed from: protected */
-    public boolean drawDivider() {
-        return true;
-    }
-
-    /* access modifiers changed from: protected */
-    public boolean isChecked(PollEditTextCell pollEditTextCell) {
-        return false;
-    }
-
-    /* access modifiers changed from: protected */
-    public void onActionModeStart(EditTextBoldCursor editTextBoldCursor, ActionMode actionMode) {
-    }
-
-    /* access modifiers changed from: protected */
-    public void onEditTextDraw(EditTextBoldCursor editTextBoldCursor, Canvas canvas) {
-    }
-
-    /* access modifiers changed from: protected */
-    public void onFieldTouchUp(EditTextBoldCursor editTextBoldCursor) {
-    }
-
-    /* access modifiers changed from: protected */
-    public boolean shouldShowCheckBox() {
-        return false;
-    }
-
-    public PollEditTextCell(Context context, View.OnClickListener onClickListener) {
-        this(context, false, onClickListener);
+    public PollEditTextCell(Context context, View.OnClickListener onDelete) {
+        this(context, false, onDelete);
     }
 
     /* JADX INFO: super call moved to the top of the method (can break code semantics) */
-    public PollEditTextCell(Context context, boolean z, View.OnClickListener onClickListener) {
+    public PollEditTextCell(Context context, boolean caption, View.OnClickListener onDelete) {
         super(context);
         Context context2 = context;
-        View.OnClickListener onClickListener2 = onClickListener;
-        if (z) {
+        View.OnClickListener onClickListener = onDelete;
+        if (caption) {
             AnonymousClass1 r5 = new EditTextCaption(context2, (Theme.ResourcesProvider) null) {
-                public InputConnection onCreateInputConnection(EditorInfo editorInfo) {
-                    InputConnection onCreateInputConnection = super.onCreateInputConnection(editorInfo);
+                public InputConnection onCreateInputConnection(EditorInfo outAttrs) {
+                    InputConnection conn = super.onCreateInputConnection(outAttrs);
                     if (PollEditTextCell.this.showNextButton) {
-                        editorInfo.imeOptions &= -NUM;
+                        outAttrs.imeOptions &= -NUM;
                     }
-                    return onCreateInputConnection;
+                    return conn;
                 }
 
                 /* access modifiers changed from: protected */
@@ -91,38 +65,38 @@ public class PollEditTextCell extends FrameLayout {
                     PollEditTextCell.this.onEditTextDraw(this, canvas);
                 }
 
-                public boolean onTouchEvent(MotionEvent motionEvent) {
+                public boolean onTouchEvent(MotionEvent event) {
                     if (!isEnabled()) {
                         return false;
                     }
-                    if (motionEvent.getAction() == 1) {
+                    if (event.getAction() == 1) {
                         PollEditTextCell.this.onFieldTouchUp(this);
                     }
-                    return super.onTouchEvent(motionEvent);
+                    return super.onTouchEvent(event);
                 }
 
-                public ActionMode startActionMode(ActionMode.Callback callback, int i) {
-                    ActionMode startActionMode = super.startActionMode(callback, i);
-                    PollEditTextCell.this.onActionModeStart(this, startActionMode);
-                    return startActionMode;
+                public ActionMode startActionMode(ActionMode.Callback callback, int type) {
+                    ActionMode actionMode = super.startActionMode(callback, type);
+                    PollEditTextCell.this.onActionModeStart(this, actionMode);
+                    return actionMode;
                 }
 
                 public ActionMode startActionMode(ActionMode.Callback callback) {
-                    ActionMode startActionMode = super.startActionMode(callback);
-                    PollEditTextCell.this.onActionModeStart(this, startActionMode);
-                    return startActionMode;
+                    ActionMode actionMode = super.startActionMode(callback);
+                    PollEditTextCell.this.onActionModeStart(this, actionMode);
+                    return actionMode;
                 }
             };
             this.textView = r5;
             r5.setAllowTextEntitiesIntersection(true);
         } else {
             this.textView = new EditTextBoldCursor(context2) {
-                public InputConnection onCreateInputConnection(EditorInfo editorInfo) {
-                    InputConnection onCreateInputConnection = super.onCreateInputConnection(editorInfo);
+                public InputConnection onCreateInputConnection(EditorInfo outAttrs) {
+                    InputConnection conn = super.onCreateInputConnection(outAttrs);
                     if (PollEditTextCell.this.showNextButton) {
-                        editorInfo.imeOptions &= -NUM;
+                        outAttrs.imeOptions &= -NUM;
                     }
-                    return onCreateInputConnection;
+                    return conn;
                 }
 
                 /* access modifiers changed from: protected */
@@ -131,14 +105,14 @@ public class PollEditTextCell extends FrameLayout {
                     PollEditTextCell.this.onEditTextDraw(this, canvas);
                 }
 
-                public boolean onTouchEvent(MotionEvent motionEvent) {
+                public boolean onTouchEvent(MotionEvent event) {
                     if (!isEnabled()) {
                         return false;
                     }
-                    if (motionEvent.getAction() == 1) {
+                    if (event.getAction() == 1) {
                         PollEditTextCell.this.onFieldTouchUp(this);
                     }
-                    return super.onTouchEvent(motionEvent);
+                    return super.onTouchEvent(event);
                 }
             };
         }
@@ -153,10 +127,8 @@ public class PollEditTextCell extends FrameLayout {
         EditTextBoldCursor editTextBoldCursor2 = this.textView;
         editTextBoldCursor2.setInputType(editTextBoldCursor2.getInputType() | 16384);
         this.textView.setPadding(AndroidUtilities.dp(4.0f), AndroidUtilities.dp(10.0f), AndroidUtilities.dp(4.0f), AndroidUtilities.dp(11.0f));
-        if (onClickListener2 != null) {
-            EditTextBoldCursor editTextBoldCursor3 = this.textView;
-            boolean z2 = LocaleController.isRTL;
-            addView(editTextBoldCursor3, LayoutHelper.createFrame(-1, -2.0f, (z2 ? 5 : 3) | 16, z2 ? 58.0f : 64.0f, 0.0f, !z2 ? 58.0f : 64.0f, 0.0f));
+        if (onClickListener != null) {
+            addView(this.textView, LayoutHelper.createFrame(-1, -2.0f, (LocaleController.isRTL ? 5 : 3) | 16, LocaleController.isRTL ? 58.0f : 64.0f, 0.0f, !LocaleController.isRTL ? 58.0f : 64.0f, 0.0f));
             ImageView imageView = new ImageView(context2);
             this.moveImageView = imageView;
             imageView.setFocusable(false);
@@ -170,19 +142,15 @@ public class PollEditTextCell extends FrameLayout {
             this.deleteImageView.setScaleType(ImageView.ScaleType.CENTER);
             this.deleteImageView.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.getColor("stickers_menuSelector")));
             this.deleteImageView.setImageResource(NUM);
-            this.deleteImageView.setOnClickListener(onClickListener2);
+            this.deleteImageView.setOnClickListener(onClickListener);
             this.deleteImageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor("windowBackgroundWhiteGrayIcon"), PorterDuff.Mode.MULTIPLY));
             this.deleteImageView.setContentDescription(LocaleController.getString("Delete", NUM));
-            ImageView imageView3 = this.deleteImageView;
-            boolean z3 = LocaleController.isRTL;
-            addView(imageView3, LayoutHelper.createFrame(48, 50.0f, (z3 ? 3 : 5) | 48, z3 ? 3.0f : 0.0f, 0.0f, z3 ? 0.0f : 3.0f, 0.0f));
+            addView(this.deleteImageView, LayoutHelper.createFrame(48, 50.0f, (LocaleController.isRTL ? 3 : 5) | 48, LocaleController.isRTL ? 3.0f : 0.0f, 0.0f, LocaleController.isRTL ? 0.0f : 3.0f, 0.0f));
             SimpleTextView simpleTextView = new SimpleTextView(context2);
             this.textView2 = simpleTextView;
             simpleTextView.setTextSize(13);
             this.textView2.setGravity((LocaleController.isRTL ? 3 : 5) | 48);
-            SimpleTextView simpleTextView2 = this.textView2;
-            boolean z4 = LocaleController.isRTL;
-            addView(simpleTextView2, LayoutHelper.createFrame(48, 24.0f, (z4 ? 3 : 5) | 48, z4 ? 20.0f : 0.0f, 43.0f, z4 ? 0.0f : 20.0f, 0.0f));
+            addView(this.textView2, LayoutHelper.createFrame(48, 24.0f, (LocaleController.isRTL ? 3 : 5) | 48, LocaleController.isRTL ? 20.0f : 0.0f, 43.0f, LocaleController.isRTL ? 0.0f : 20.0f, 0.0f));
             CheckBox2 checkBox2 = new CheckBox2(context2, 21);
             this.checkBox = checkBox2;
             checkBox2.setColor((String) null, "windowBackgroundWhiteGrayIcon", "checkboxCheck");
@@ -198,8 +166,8 @@ public class PollEditTextCell extends FrameLayout {
         addView(this.textView, LayoutHelper.createFrame(-1, -2.0f, (!LocaleController.isRTL ? 3 : i) | 16, 19.0f, 0.0f, 19.0f, 0.0f));
     }
 
-    /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$new$0(View view) {
+    /* renamed from: lambda$new$0$org-telegram-ui-Cells-PollEditTextCell  reason: not valid java name */
+    public /* synthetic */ void m1515lambda$new$0$orgtelegramuiCellsPollEditTextCell(View v) {
         if (this.checkBox.getTag() != null) {
             onCheckBoxClick(this, !this.checkBox.isChecked());
         }
@@ -213,17 +181,16 @@ public class PollEditTextCell extends FrameLayout {
         int i = 3;
         this.textView2.setGravity((LocaleController.isRTL ? 3 : 5) | 48);
         SimpleTextView simpleTextView2 = this.textView2;
-        boolean z = LocaleController.isRTL;
-        if (!z) {
+        if (!LocaleController.isRTL) {
             i = 5;
         }
-        addView(simpleTextView2, LayoutHelper.createFrame(48, 24.0f, i | 48, z ? 20.0f : 0.0f, 17.0f, z ? 0.0f : 20.0f, 0.0f));
+        addView(simpleTextView2, LayoutHelper.createFrame(48, 24.0f, i | 48, LocaleController.isRTL ? 20.0f : 0.0f, 17.0f, LocaleController.isRTL ? 0.0f : 20.0f, 0.0f));
     }
 
     /* access modifiers changed from: protected */
-    public void onMeasure(int i, int i2) {
-        int i3;
-        int size = View.MeasureSpec.getSize(i);
+    public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        int right;
+        int width = View.MeasureSpec.getSize(widthMeasureSpec);
         ImageView imageView = this.deleteImageView;
         if (imageView != null) {
             imageView.measure(View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(48.0f), NUM), View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(48.0f), NUM));
@@ -241,16 +208,18 @@ public class PollEditTextCell extends FrameLayout {
             checkBox2.measure(View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(48.0f), NUM), View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(48.0f), NUM));
         }
         if (this.textView2 == null) {
-            i3 = 42;
+            right = 42;
+        } else if (this.deleteImageView == null) {
+            right = 70;
         } else {
-            i3 = this.deleteImageView == null ? 70 : 122;
+            right = 122;
         }
-        this.textView.measure(View.MeasureSpec.makeMeasureSpec(((size - getPaddingLeft()) - getPaddingRight()) - AndroidUtilities.dp((float) i3), NUM), View.MeasureSpec.makeMeasureSpec(0, 0));
-        int measuredHeight = this.textView.getMeasuredHeight();
-        setMeasuredDimension(size, Math.max(AndroidUtilities.dp(50.0f), this.textView.getMeasuredHeight()) + (this.needDivider ? 1 : 0));
+        this.textView.measure(View.MeasureSpec.makeMeasureSpec(((width - getPaddingLeft()) - getPaddingRight()) - AndroidUtilities.dp((float) right), NUM), View.MeasureSpec.makeMeasureSpec(0, 0));
+        int h = this.textView.getMeasuredHeight();
+        setMeasuredDimension(width, Math.max(AndroidUtilities.dp(50.0f), this.textView.getMeasuredHeight()) + (this.needDivider ? 1 : 0));
         SimpleTextView simpleTextView2 = this.textView2;
         if (simpleTextView2 != null && !this.alwaysShowText2) {
-            simpleTextView2.setAlpha(measuredHeight >= AndroidUtilities.dp(52.0f) ? 1.0f : 0.0f);
+            simpleTextView2.setAlpha(h >= AndroidUtilities.dp(52.0f) ? 1.0f : 0.0f);
         }
     }
 
@@ -264,8 +233,17 @@ public class PollEditTextCell extends FrameLayout {
     }
 
     /* access modifiers changed from: protected */
-    public void onCheckBoxClick(PollEditTextCell pollEditTextCell, boolean z) {
-        this.checkBox.setChecked(z, true);
+    public void onCheckBoxClick(PollEditTextCell editText, boolean checked) {
+        this.checkBox.setChecked(checked, true);
+    }
+
+    /* access modifiers changed from: protected */
+    public boolean isChecked(PollEditTextCell editText) {
+        return false;
+    }
+
+    /* access modifiers changed from: protected */
+    public void onActionModeStart(EditTextBoldCursor editText, ActionMode actionMode) {
     }
 
     public void callOnDelete() {
@@ -275,8 +253,8 @@ public class PollEditTextCell extends FrameLayout {
         }
     }
 
-    public void setShowNextButton(boolean z) {
-        this.showNextButton = z;
+    public void setShowNextButton(boolean value) {
+        this.showNextButton = value;
     }
 
     public EditTextBoldCursor getTextView() {
@@ -287,24 +265,42 @@ public class PollEditTextCell extends FrameLayout {
         return this.checkBox;
     }
 
-    public void addTextWatcher(TextWatcher textWatcher) {
-        this.textView.addTextChangedListener(textWatcher);
+    public void addTextWatcher(TextWatcher watcher) {
+        this.textView.addTextChangedListener(watcher);
     }
 
-    public void setChecked(boolean z, boolean z2) {
-        this.checkBox.setChecked(z, z2);
+    /* access modifiers changed from: protected */
+    public boolean drawDivider() {
+        return true;
+    }
+
+    /* access modifiers changed from: protected */
+    public void onEditTextDraw(EditTextBoldCursor editText, Canvas canvas) {
+    }
+
+    /* access modifiers changed from: protected */
+    public boolean shouldShowCheckBox() {
+        return false;
+    }
+
+    public void setChecked(boolean checked, boolean animated) {
+        this.checkBox.setChecked(checked, animated);
     }
 
     public String getText() {
         return this.textView.getText().toString();
     }
 
-    public void setTextColor(int i) {
-        this.textView.setTextColor(i);
+    public int length() {
+        return this.textView.length();
     }
 
-    public void setShowCheckBox(boolean z, boolean z2) {
-        if (z != (this.checkBox.getTag() != null)) {
+    public void setTextColor(int color) {
+        this.textView.setTextColor(color);
+    }
+
+    public void setShowCheckBox(boolean show, boolean animated) {
+        if (show != (this.checkBox.getTag() != null)) {
             AnimatorSet animatorSet = this.checkBoxAnimation;
             int i = null;
             if (animatorSet != null) {
@@ -312,24 +308,24 @@ public class PollEditTextCell extends FrameLayout {
                 this.checkBoxAnimation = null;
             }
             CheckBox2 checkBox2 = this.checkBox;
-            if (z) {
+            if (show) {
                 i = 1;
             }
             checkBox2.setTag(i);
             float f = 1.0f;
-            if (z2) {
+            if (animated) {
                 AnimatorSet animatorSet2 = new AnimatorSet();
                 this.checkBoxAnimation = animatorSet2;
                 Animator[] animatorArr = new Animator[2];
                 CheckBox2 checkBox22 = this.checkBox;
                 Property property = View.ALPHA;
                 float[] fArr = new float[1];
-                fArr[0] = z ? 1.0f : 0.0f;
+                fArr[0] = show ? 1.0f : 0.0f;
                 animatorArr[0] = ObjectAnimator.ofFloat(checkBox22, property, fArr);
                 ImageView imageView = this.moveImageView;
                 Property property2 = View.ALPHA;
                 float[] fArr2 = new float[1];
-                if (z) {
+                if (show) {
                     f = 0.0f;
                 }
                 fArr2[0] = f;
@@ -339,34 +335,48 @@ public class PollEditTextCell extends FrameLayout {
                 this.checkBoxAnimation.start();
                 return;
             }
-            this.checkBox.setAlpha(z ? 1.0f : 0.0f);
+            this.checkBox.setAlpha(show ? 1.0f : 0.0f);
             ImageView imageView2 = this.moveImageView;
-            if (z) {
+            if (show) {
                 f = 0.0f;
             }
             imageView2.setAlpha(f);
         }
     }
 
-    public void setTextAndHint(CharSequence charSequence, String str, boolean z) {
+    public void setText(CharSequence text, boolean divider) {
+        this.textView.setText(text);
+        this.needDivider = divider;
+        setWillNotDraw(!divider);
+    }
+
+    public void setTextAndHint(CharSequence text, String hint, boolean divider) {
         ImageView imageView = this.deleteImageView;
         if (imageView != null) {
             imageView.setTag((Object) null);
         }
-        this.textView.setText(charSequence);
-        if (!TextUtils.isEmpty(charSequence)) {
+        this.textView.setText(text);
+        if (!TextUtils.isEmpty(text)) {
             EditTextBoldCursor editTextBoldCursor = this.textView;
             editTextBoldCursor.setSelection(editTextBoldCursor.length());
         }
-        this.textView.setHint(str);
-        this.needDivider = z;
-        setWillNotDraw(!z);
+        this.textView.setHint(hint);
+        this.needDivider = divider;
+        setWillNotDraw(!divider);
     }
 
-    public void setText2(String str) {
+    public void setEnabled(boolean value, ArrayList<Animator> arrayList) {
+        setEnabled(value);
+    }
+
+    /* access modifiers changed from: protected */
+    public void onFieldTouchUp(EditTextBoldCursor editText) {
+    }
+
+    public void setText2(String text) {
         SimpleTextView simpleTextView = this.textView2;
         if (simpleTextView != null) {
-            simpleTextView.setText(str);
+            simpleTextView.setText(text);
         }
     }
 

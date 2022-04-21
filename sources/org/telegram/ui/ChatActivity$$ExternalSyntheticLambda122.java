@@ -1,13 +1,20 @@
 package org.telegram.ui;
 
-public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda122 implements Runnable {
-    public final /* synthetic */ ChatActivity f$0;
+import android.content.DialogInterface;
+import org.telegram.ui.Cells.ChatMessageCell;
 
-    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda122(ChatActivity chatActivity) {
+public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda122 implements DialogInterface.OnCancelListener {
+    public final /* synthetic */ ChatActivity f$0;
+    public final /* synthetic */ int f$1;
+    public final /* synthetic */ ChatMessageCell f$2;
+
+    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda122(ChatActivity chatActivity, int i, ChatMessageCell chatMessageCell) {
         this.f$0 = chatActivity;
+        this.f$1 = i;
+        this.f$2 = chatMessageCell;
     }
 
-    public final void run() {
-        this.f$0.lambda$checkSecretMessageForLocation$119();
+    public final void onCancel(DialogInterface dialogInterface) {
+        this.f$0.m1721lambda$didPressMessageUrl$226$orgtelegramuiChatActivity(this.f$1, this.f$2, dialogInterface);
     }
 }

@@ -1,22 +1,20 @@
 package org.telegram.ui;
 
-import java.util.concurrent.CountDownLatch;
-import org.telegram.messenger.MessagesStorage;
+import android.content.DialogInterface;
+import org.telegram.messenger.MessageObject;
 
-public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda169 implements Runnable {
+public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda169 implements DialogInterface.OnClickListener {
     public final /* synthetic */ ChatActivity f$0;
-    public final /* synthetic */ MessagesStorage f$1;
-    public final /* synthetic */ int f$2;
-    public final /* synthetic */ CountDownLatch f$3;
+    public final /* synthetic */ int f$1;
+    public final /* synthetic */ MessageObject f$2;
 
-    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda169(ChatActivity chatActivity, MessagesStorage messagesStorage, int i, CountDownLatch countDownLatch) {
+    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda169(ChatActivity chatActivity, int i, MessageObject messageObject) {
         this.f$0 = chatActivity;
-        this.f$1 = messagesStorage;
-        this.f$2 = i;
-        this.f$3 = countDownLatch;
+        this.f$1 = i;
+        this.f$2 = messageObject;
     }
 
-    public final void run() {
-        this.f$0.lambda$onFragmentCreate$8(this.f$1, this.f$2, this.f$3);
+    public final void onClick(DialogInterface dialogInterface, int i) {
+        this.f$0.m1811lambda$shareMyContact$90$orgtelegramuiChatActivity(this.f$1, this.f$2, dialogInterface, i);
     }
 }

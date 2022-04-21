@@ -8,6 +8,6 @@ public final /* synthetic */ class BlurBehindDrawable$$ExternalSyntheticLambda2 
     }
 
     public final void run() {
-        this.f$0.lambda$clear$1();
+        this.f$0.m3632lambda$draw$0$orgtelegramuiComponentsBlurBehindDrawable();
     }
 }

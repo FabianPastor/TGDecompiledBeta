@@ -1,15 +1,15 @@
 package org.telegram.messenger;
 
-import java.util.Comparator;
-import org.telegram.tgnet.TLRPC$TL_updateGroupCallParticipants;
+import org.telegram.messenger.ChatObject;
 
-public final /* synthetic */ class ChatObject$Call$$ExternalSyntheticLambda8 implements Comparator {
-    public static final /* synthetic */ ChatObject$Call$$ExternalSyntheticLambda8 INSTANCE = new ChatObject$Call$$ExternalSyntheticLambda8();
+public final /* synthetic */ class ChatObject$Call$$ExternalSyntheticLambda8 implements Runnable {
+    public final /* synthetic */ ChatObject.Call f$0;
 
-    private /* synthetic */ ChatObject$Call$$ExternalSyntheticLambda8() {
+    public /* synthetic */ ChatObject$Call$$ExternalSyntheticLambda8(ChatObject.Call call) {
+        this.f$0 = call;
     }
 
-    public final int compare(Object obj, Object obj2) {
-        return AndroidUtilities.compare(((TLRPC$TL_updateGroupCallParticipants) obj).version, ((TLRPC$TL_updateGroupCallParticipants) obj2).version);
+    public final void run() {
+        this.f$0.checkQueue();
     }
 }

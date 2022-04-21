@@ -1,13 +1,15 @@
 package org.telegram.ui;
 
-public final /* synthetic */ class PasscodeActivity$$ExternalSyntheticLambda11 implements Runnable {
-    public final /* synthetic */ CodeNumberField f$0;
+import android.animation.ValueAnimator;
 
-    public /* synthetic */ PasscodeActivity$$ExternalSyntheticLambda11(CodeNumberField codeNumberField) {
-        this.f$0 = codeNumberField;
+public final /* synthetic */ class PasscodeActivity$$ExternalSyntheticLambda11 implements ValueAnimator.AnimatorUpdateListener {
+    public final /* synthetic */ PasscodeActivity f$0;
+
+    public /* synthetic */ PasscodeActivity$$ExternalSyntheticLambda11(PasscodeActivity passcodeActivity) {
+        this.f$0 = passcodeActivity;
     }
 
-    public final void run() {
-        this.f$0.animateSuccessProgress(1.0f);
+    public final void onAnimationUpdate(ValueAnimator valueAnimator) {
+        this.f$0.m2692xvar_avar_(valueAnimator);
     }
 }

@@ -8,6 +8,6 @@ public final /* synthetic */ class CameraView$$ExternalSyntheticLambda0 implemen
     }
 
     public final void run() {
-        this.f$0.lambda$createCamera$3();
+        this.f$0.m1121lambda$createCamera$2$orgtelegrammessengercameraCameraView();
     }
 }

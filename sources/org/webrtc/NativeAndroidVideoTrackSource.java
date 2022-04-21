@@ -17,32 +17,31 @@ public class NativeAndroidVideoTrackSource {
 
     private static native void nativeSetState(long j, boolean z);
 
-    public NativeAndroidVideoTrackSource(long j) {
-        this.nativeAndroidVideoTrackSource = j;
+    public NativeAndroidVideoTrackSource(long nativeAndroidVideoTrackSource2) {
+        this.nativeAndroidVideoTrackSource = nativeAndroidVideoTrackSource2;
     }
 
-    public void setState(boolean z) {
-        nativeSetState(this.nativeAndroidVideoTrackSource, z);
+    public void setState(boolean isLive) {
+        nativeSetState(this.nativeAndroidVideoTrackSource, isLive);
     }
 
-    public VideoProcessor.FrameAdaptationParameters adaptFrame(VideoFrame videoFrame) {
-        return nativeAdaptFrame(this.nativeAndroidVideoTrackSource, videoFrame.getBuffer().getWidth(), videoFrame.getBuffer().getHeight(), videoFrame.getRotation(), videoFrame.getTimestampNs());
+    public VideoProcessor.FrameAdaptationParameters adaptFrame(VideoFrame frame) {
+        return nativeAdaptFrame(this.nativeAndroidVideoTrackSource, frame.getBuffer().getWidth(), frame.getBuffer().getHeight(), frame.getRotation(), frame.getTimestampNs());
     }
 
-    public void onFrameCaptured(VideoFrame videoFrame) {
-        nativeOnFrameCaptured(this.nativeAndroidVideoTrackSource, videoFrame.getRotation(), videoFrame.getTimestampNs(), videoFrame.getBuffer());
+    public void onFrameCaptured(VideoFrame frame) {
+        nativeOnFrameCaptured(this.nativeAndroidVideoTrackSource, frame.getRotation(), frame.getTimestampNs(), frame.getBuffer());
     }
 
-    public void adaptOutputFormat(VideoSource.AspectRatio aspectRatio, Integer num, VideoSource.AspectRatio aspectRatio2, Integer num2, Integer num3) {
-        nativeAdaptOutputFormat(this.nativeAndroidVideoTrackSource, aspectRatio.width, aspectRatio.height, num, aspectRatio2.width, aspectRatio2.height, num2, num3);
+    public void adaptOutputFormat(VideoSource.AspectRatio targetLandscapeAspectRatio, Integer maxLandscapePixelCount, VideoSource.AspectRatio targetPortraitAspectRatio, Integer maxPortraitPixelCount, Integer maxFps) {
+        nativeAdaptOutputFormat(this.nativeAndroidVideoTrackSource, targetLandscapeAspectRatio.width, targetLandscapeAspectRatio.height, maxLandscapePixelCount, targetPortraitAspectRatio.width, targetPortraitAspectRatio.height, maxPortraitPixelCount, maxFps);
     }
 
-    public void setIsScreencast(boolean z) {
-        nativeSetIsScreencast(this.nativeAndroidVideoTrackSource, z);
+    public void setIsScreencast(boolean isScreencast) {
+        nativeSetIsScreencast(this.nativeAndroidVideoTrackSource, isScreencast);
     }
 
-    @CalledByNative
-    static VideoProcessor.FrameAdaptationParameters createFrameAdaptationParameters(int i, int i2, int i3, int i4, int i5, int i6, long j, boolean z) {
-        return new VideoProcessor.FrameAdaptationParameters(i, i2, i3, i4, i5, i6, j, z);
+    static VideoProcessor.FrameAdaptationParameters createFrameAdaptationParameters(int cropX, int cropY, int cropWidth, int cropHeight, int scaleWidth, int scaleHeight, long timestampNs, boolean drop) {
+        return new VideoProcessor.FrameAdaptationParameters(cropX, cropY, cropWidth, cropHeight, scaleWidth, scaleHeight, timestampNs, drop);
     }
 }

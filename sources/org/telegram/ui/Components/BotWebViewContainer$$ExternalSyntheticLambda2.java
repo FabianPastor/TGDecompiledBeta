@@ -12,6 +12,6 @@ public final /* synthetic */ class BotWebViewContainer$$ExternalSyntheticLambda2
     }
 
     public final void run() {
-        this.f$0.lambda$loadFlicker$1(this.f$1);
+        this.f$0.m3635x8be786f0(this.f$1);
     }
 }

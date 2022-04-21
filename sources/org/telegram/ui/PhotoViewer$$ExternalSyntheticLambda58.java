@@ -1,19 +1,17 @@
 package org.telegram.ui;
 
-import org.telegram.messenger.ImageReceiver;
+import android.view.View;
 
 public final /* synthetic */ class PhotoViewer$$ExternalSyntheticLambda58 implements Runnable {
-    public final /* synthetic */ PhotoViewer f$0;
-    public final /* synthetic */ ImageReceiver.BitmapHolder f$1;
-    public final /* synthetic */ String f$2;
+    public final /* synthetic */ boolean f$0;
+    public final /* synthetic */ View f$1;
 
-    public /* synthetic */ PhotoViewer$$ExternalSyntheticLambda58(PhotoViewer photoViewer, ImageReceiver.BitmapHolder bitmapHolder, String str) {
-        this.f$0 = photoViewer;
-        this.f$1 = bitmapHolder;
-        this.f$2 = str;
+    public /* synthetic */ PhotoViewer$$ExternalSyntheticLambda58(boolean z, View view) {
+        this.f$0 = z;
+        this.f$1 = view;
     }
 
     public final void run() {
-        this.f$0.lambda$detectFaces$50(this.f$1, this.f$2);
+        PhotoViewer.lambda$setItemVisible$60(this.f$0, this.f$1);
     }
 }

@@ -1,17 +1,15 @@
 package org.telegram.ui.Components;
 
-import android.view.View;
+import android.content.DialogInterface;
 
-public final /* synthetic */ class ChatAttachAlert$$ExternalSyntheticLambda10 implements View.OnClickListener {
+public final /* synthetic */ class ChatAttachAlert$$ExternalSyntheticLambda10 implements DialogInterface.OnCancelListener {
     public final /* synthetic */ ChatAttachAlert f$0;
-    public final /* synthetic */ boolean f$1;
 
-    public /* synthetic */ ChatAttachAlert$$ExternalSyntheticLambda10(ChatAttachAlert chatAttachAlert, boolean z) {
+    public /* synthetic */ ChatAttachAlert$$ExternalSyntheticLambda10(ChatAttachAlert chatAttachAlert) {
         this.f$0 = chatAttachAlert;
-        this.f$1 = z;
     }
 
-    public final void onClick(View view) {
-        this.f$0.lambda$new$3(this.f$1, view);
+    public final void onCancel(DialogInterface dialogInterface) {
+        this.f$0.m3758lambda$dismiss$31$orgtelegramuiComponentsChatAttachAlert(dialogInterface);
     }
 }

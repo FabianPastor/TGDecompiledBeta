@@ -10,6 +10,6 @@ public final /* synthetic */ class ChannelAdminLogActivity$6$$ExternalSyntheticL
     }
 
     public final void run() {
-        this.f$0.lambda$onAllAnimationsDone$0();
+        this.f$0.m1592xa4fb96a1();
     }
 }

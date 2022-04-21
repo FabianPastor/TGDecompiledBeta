@@ -9,8 +9,7 @@ class JNILogging {
         this.loggable = loggable2;
     }
 
-    @CalledByNative
-    public void logToInjectable(String str, Integer num, String str2) {
-        this.loggable.onLogMessage(str, Logging.Severity.values()[num.intValue()], str2);
+    public void logToInjectable(String message, Integer severity, String tag) {
+        this.loggable.onLogMessage(message, Logging.Severity.values()[severity.intValue()], tag);
     }
 }

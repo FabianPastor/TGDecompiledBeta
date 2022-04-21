@@ -1,15 +1,19 @@
 package org.telegram.ui;
 
-import android.animation.ValueAnimator;
+import org.telegram.ui.ActionBar.Theme;
 
-public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda12 implements ValueAnimator.AnimatorUpdateListener {
-    public final /* synthetic */ ChatActivity f$0;
+public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda12 implements Runnable {
+    public final /* synthetic */ Theme.ThemeAccent f$0;
+    public final /* synthetic */ Theme.ThemeInfo f$1;
+    public final /* synthetic */ boolean f$2;
 
-    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda12(ChatActivity chatActivity) {
-        this.f$0 = chatActivity;
+    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda12(Theme.ThemeAccent themeAccent, Theme.ThemeInfo themeInfo, boolean z) {
+        this.f$0 = themeAccent;
+        this.f$1 = themeInfo;
+        this.f$2 = z;
     }
 
-    public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-        this.f$0.lambda$showAlert$136(valueAnimator);
+    public final void run() {
+        ChatActivity.lambda$didReceivedNotification$117(this.f$0, this.f$1, this.f$2);
     }
 }

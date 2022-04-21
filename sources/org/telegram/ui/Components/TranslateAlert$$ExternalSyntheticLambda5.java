@@ -8,6 +8,6 @@ public final /* synthetic */ class TranslateAlert$$ExternalSyntheticLambda5 impl
     }
 
     public final void run() {
-        this.f$0.lambda$new$1();
+        this.f$0.m4484x59187c0d();
     }
 }

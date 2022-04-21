@@ -1,16 +1,15 @@
 package org.telegram.ui;
 
-import android.view.View;
-import org.telegram.ui.ActionBar.ActionBarPopupWindow;
+public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda54 implements Runnable {
+    public final /* synthetic */ ChatActivity f$0;
+    public final /* synthetic */ int f$1;
 
-public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda54 implements View.OnClickListener {
-    public final /* synthetic */ ActionBarPopupWindow.ActionBarPopupWindowLayout f$0;
-
-    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda54(ActionBarPopupWindow.ActionBarPopupWindowLayout actionBarPopupWindowLayout) {
-        this.f$0 = actionBarPopupWindowLayout;
+    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda54(ChatActivity chatActivity, int i) {
+        this.f$0 = chatActivity;
+        this.f$1 = i;
     }
 
-    public final void onClick(View view) {
-        this.f$0.getSwipeBack().closeForeground();
+    public final void run() {
+        this.f$0.m1661lambda$createView$18$orgtelegramuiChatActivity(this.f$1);
     }
 }

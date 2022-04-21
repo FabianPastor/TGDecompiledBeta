@@ -16,6 +16,6 @@ public final /* synthetic */ class GroupCallRenderersContainer$$ExternalSyntheti
     }
 
     public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-        this.f$0.lambda$finishZoom$8(this.f$1, this.f$2, this.f$3, valueAnimator);
+        this.f$0.m4555x102cdcf5(this.f$1, this.f$2, this.f$3, valueAnimator);
     }
 }

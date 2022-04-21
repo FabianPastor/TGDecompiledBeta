@@ -1,23 +1,18 @@
 package org.telegram.ui.Components;
 
-import android.view.View;
-import org.telegram.ui.ActionBar.BottomSheet;
-import org.telegram.ui.Components.AlertsCreator;
+import android.content.DialogInterface;
+import android.widget.EditText;
 
-public final /* synthetic */ class AlertsCreator$$ExternalSyntheticLambda63 implements View.OnClickListener {
-    public final /* synthetic */ int[] f$0;
-    public final /* synthetic */ NumberPicker f$1;
-    public final /* synthetic */ AlertsCreator.ScheduleDatePickerDelegate f$2;
-    public final /* synthetic */ BottomSheet.Builder f$3;
+public final /* synthetic */ class AlertsCreator$$ExternalSyntheticLambda63 implements DialogInterface.OnDismissListener {
+    public final /* synthetic */ EditText f$0;
+    public final /* synthetic */ EditText f$1;
 
-    public /* synthetic */ AlertsCreator$$ExternalSyntheticLambda63(int[] iArr, NumberPicker numberPicker, AlertsCreator.ScheduleDatePickerDelegate scheduleDatePickerDelegate, BottomSheet.Builder builder) {
-        this.f$0 = iArr;
-        this.f$1 = numberPicker;
-        this.f$2 = scheduleDatePickerDelegate;
-        this.f$3 = builder;
+    public /* synthetic */ AlertsCreator$$ExternalSyntheticLambda63(EditText editText, EditText editText2) {
+        this.f$0 = editText;
+        this.f$1 = editText2;
     }
 
-    public final void onClick(View view) {
-        AlertsCreator.lambda$createMuteForPickerDialog$75(this.f$0, this.f$1, this.f$2, this.f$3, view);
+    public final void onDismiss(DialogInterface dialogInterface) {
+        AlertsCreator.lambda$createChangeNameAlert$35(this.f$0, this.f$1, dialogInterface);
     }
 }

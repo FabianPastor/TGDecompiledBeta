@@ -10,6 +10,6 @@ public final /* synthetic */ class InviteMembersBottomSheet$$ExternalSyntheticLa
     }
 
     public final void onClick(DialogInterface dialogInterface, int i) {
-        this.f$0.lambda$new$1(dialogInterface, i);
+        this.f$0.m4092lambda$new$1$orgtelegramuiComponentsInviteMembersBottomSheet(dialogInterface, i);
     }
 }

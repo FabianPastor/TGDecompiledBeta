@@ -11,6 +11,6 @@ public final /* synthetic */ class LanguageSelectActivity$TranslateSettings$$Ext
     }
 
     public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-        this.f$0.lambda$update$2(valueAnimator);
+        this.f$0.m2312xc1a1edb6(valueAnimator);
     }
 }

@@ -12,26 +12,20 @@ import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.UserConfig;
-import org.telegram.tgnet.TLRPC$User;
+import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.URLSpanNoUnderline;
 
 public class SettingsSuggestionCell extends LinearLayout {
+    public static final int TYPE_PASSWORD = 1;
+    public static final int TYPE_PHONE = 0;
     private int currentAccount = UserConfig.selectedAccount;
     private int currentType;
     private TextView detailTextView;
     private TextView noButton;
     private TextView textView;
     private TextView yesButton;
-
-    /* access modifiers changed from: protected */
-    public void onNoClick(int i) {
-    }
-
-    /* access modifiers changed from: protected */
-    public void onYesClick(int i) {
-    }
 
     public SettingsSuggestionCell(Context context) {
         super(context);
@@ -56,8 +50,8 @@ public class SettingsSuggestionCell extends LinearLayout {
         LinearLayout linearLayout = new LinearLayout(context);
         linearLayout.setOrientation(0);
         addView(linearLayout, LayoutHelper.createLinear(-1, 40, 21.0f, 17.0f, 21.0f, 20.0f));
-        int i = 0;
-        while (i < 2) {
+        int a = 0;
+        while (a < 2) {
             TextView textView4 = new TextView(context);
             textView4.setBackground(Theme.createSimpleSelectorRoundRectDrawable(AndroidUtilities.dp(4.0f), Theme.getColor("featuredStickers_addButton"), Theme.getColor("featuredStickers_addButtonPressed")));
             textView4.setLines(1);
@@ -68,52 +62,52 @@ public class SettingsSuggestionCell extends LinearLayout {
             textView4.setTextColor(Theme.getColor("featuredStickers_buttonText"));
             textView4.setTextSize(1, 14.0f);
             textView4.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
-            linearLayout.addView(textView4, LayoutHelper.createLinear(0, 40, 0.5f, i == 0 ? 0 : 4, 0, i == 0 ? 4 : 0, 0));
-            if (i == 0) {
+            linearLayout.addView(textView4, LayoutHelper.createLinear(0, 40, 0.5f, a == 0 ? 0 : 4, 0, a == 0 ? 4 : 0, 0));
+            if (a == 0) {
                 this.yesButton = textView4;
-                textView4.setOnClickListener(new SettingsSuggestionCell$$ExternalSyntheticLambda1(this));
+                textView4.setOnClickListener(new SettingsSuggestionCell$$ExternalSyntheticLambda0(this));
             } else {
                 this.noButton = textView4;
-                textView4.setOnClickListener(new SettingsSuggestionCell$$ExternalSyntheticLambda0(this));
+                textView4.setOnClickListener(new SettingsSuggestionCell$$ExternalSyntheticLambda1(this));
             }
-            i++;
+            a++;
         }
     }
 
-    /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$new$0(View view) {
+    /* renamed from: lambda$new$0$org-telegram-ui-Cells-SettingsSuggestionCell  reason: not valid java name */
+    public /* synthetic */ void m1516lambda$new$0$orgtelegramuiCellsSettingsSuggestionCell(View v) {
         onYesClick(this.currentType);
     }
 
-    /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$new$1(View view) {
+    /* renamed from: lambda$new$1$org-telegram-ui-Cells-SettingsSuggestionCell  reason: not valid java name */
+    public /* synthetic */ void m1517lambda$new$1$orgtelegramuiCellsSettingsSuggestionCell(View v) {
         onNoClick(this.currentType);
     }
 
-    public void setType(int i) {
-        this.currentType = i;
-        if (i == 0) {
-            TLRPC$User user = MessagesController.getInstance(this.currentAccount).getUser(Long.valueOf(UserConfig.getInstance(this.currentAccount).clientUserId));
+    public void setType(int type) {
+        this.currentType = type;
+        if (type == 0) {
+            TLRPC.User user = MessagesController.getInstance(this.currentAccount).getUser(Long.valueOf(UserConfig.getInstance(this.currentAccount).clientUserId));
             TextView textView2 = this.textView;
             PhoneFormat instance = PhoneFormat.getInstance();
             textView2.setText(LocaleController.formatString("CheckPhoneNumber", NUM, instance.format("+" + user.phone)));
-            String string = LocaleController.getString("CheckPhoneNumberInfo", NUM);
-            SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(string);
-            int indexOf = string.indexOf("**");
-            int lastIndexOf = string.lastIndexOf("**");
-            if (indexOf >= 0 && lastIndexOf >= 0 && indexOf != lastIndexOf) {
-                spannableStringBuilder.replace(lastIndexOf, lastIndexOf + 2, "");
-                spannableStringBuilder.replace(indexOf, indexOf + 2, "");
+            String text = LocaleController.getString("CheckPhoneNumberInfo", NUM);
+            SpannableStringBuilder builder = new SpannableStringBuilder(text);
+            int index1 = text.indexOf("**");
+            int index2 = text.lastIndexOf("**");
+            if (index1 >= 0 && index2 >= 0 && index1 != index2) {
+                builder.replace(index2, index2 + 2, "");
+                builder.replace(index1, index1 + 2, "");
                 try {
-                    spannableStringBuilder.setSpan(new URLSpanNoUnderline(LocaleController.getString("CheckPhoneNumberLearnMoreUrl", NUM)), indexOf, lastIndexOf - 2, 33);
+                    builder.setSpan(new URLSpanNoUnderline(LocaleController.getString("CheckPhoneNumberLearnMoreUrl", NUM)), index1, index2 - 2, 33);
                 } catch (Exception e) {
                     FileLog.e((Throwable) e);
                 }
             }
-            this.detailTextView.setText(spannableStringBuilder);
+            this.detailTextView.setText(builder);
             this.yesButton.setText(LocaleController.getString("CheckPhoneNumberYes", NUM));
             this.noButton.setText(LocaleController.getString("CheckPhoneNumberNo", NUM));
-        } else if (i == 1) {
+        } else if (type == 1) {
             this.textView.setText(LocaleController.getString("YourPasswordHeader", NUM));
             this.detailTextView.setText(LocaleController.getString("YourPasswordRemember", NUM));
             this.yesButton.setText(LocaleController.getString("YourPasswordRememberYes", NUM));
@@ -122,7 +116,15 @@ public class SettingsSuggestionCell extends LinearLayout {
     }
 
     /* access modifiers changed from: protected */
-    public void onMeasure(int i, int i2) {
-        super.onMeasure(View.MeasureSpec.makeMeasureSpec(View.MeasureSpec.getSize(i), NUM), i2);
+    public void onYesClick(int type) {
+    }
+
+    /* access modifiers changed from: protected */
+    public void onNoClick(int type) {
+    }
+
+    /* access modifiers changed from: protected */
+    public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        super.onMeasure(View.MeasureSpec.makeMeasureSpec(View.MeasureSpec.getSize(widthMeasureSpec), NUM), heightMeasureSpec);
     }
 }

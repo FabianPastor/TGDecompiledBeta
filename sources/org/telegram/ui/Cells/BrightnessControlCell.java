@@ -19,40 +19,36 @@ public class BrightnessControlCell extends FrameLayout {
     private ImageView rightImageView;
     private SeekBarView seekBarView;
 
-    /* access modifiers changed from: protected */
-    public void didChangedValue(float f) {
-    }
-
     public BrightnessControlCell(Context context) {
         super(context);
         ImageView imageView = new ImageView(context);
         this.leftImageView = imageView;
         imageView.setImageResource(NUM);
         addView(this.leftImageView, LayoutHelper.createFrame(24, 24.0f, 51, 17.0f, 12.0f, 0.0f, 0.0f));
-        AnonymousClass1 r0 = new SeekBarView(this, context, true, (Theme.ResourcesProvider) null) {
-            public boolean onTouchEvent(MotionEvent motionEvent) {
-                if (motionEvent.getAction() == 0) {
+        AnonymousClass1 r0 = new SeekBarView(context, true, (Theme.ResourcesProvider) null) {
+            public boolean onTouchEvent(MotionEvent event) {
+                if (event.getAction() == 0) {
                     getParent().requestDisallowInterceptTouchEvent(true);
                 }
-                return super.onTouchEvent(motionEvent);
+                return super.onTouchEvent(event);
             }
         };
         this.seekBarView = r0;
         r0.setReportChanges(true);
         this.seekBarView.setDelegate(new SeekBarView.SeekBarViewDelegate() {
-            public CharSequence getContentDescription() {
-                return " ";
-            }
-
             public /* synthetic */ int getStepsCount() {
                 return SeekBarView.SeekBarViewDelegate.CC.$default$getStepsCount(this);
             }
 
-            public void onSeekBarPressed(boolean z) {
+            public void onSeekBarDrag(boolean stop, float progress) {
+                BrightnessControlCell.this.didChangedValue(progress);
             }
 
-            public void onSeekBarDrag(boolean z, float f) {
-                BrightnessControlCell.this.didChangedValue(f);
+            public void onSeekBarPressed(boolean pressed) {
+            }
+
+            public CharSequence getContentDescription() {
+                return " ";
             }
         });
         this.seekBarView.setImportantForAccessibility(2);
@@ -71,20 +67,24 @@ public class BrightnessControlCell extends FrameLayout {
     }
 
     /* access modifiers changed from: protected */
-    public void onMeasure(int i, int i2) {
-        super.onMeasure(View.MeasureSpec.makeMeasureSpec(View.MeasureSpec.getSize(i), NUM), View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(48.0f), NUM));
+    public void didChangedValue(float value) {
     }
 
-    public void setProgress(float f) {
-        this.seekBarView.setProgress(f);
+    /* access modifiers changed from: protected */
+    public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        super.onMeasure(View.MeasureSpec.makeMeasureSpec(View.MeasureSpec.getSize(widthMeasureSpec), NUM), View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(48.0f), NUM));
     }
 
-    public void onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo accessibilityNodeInfo) {
-        super.onInitializeAccessibilityNodeInfo(accessibilityNodeInfo);
-        this.seekBarView.getSeekBarAccessibilityDelegate().onInitializeAccessibilityNodeInfoInternal(this, accessibilityNodeInfo);
+    public void setProgress(float value) {
+        this.seekBarView.setProgress(value);
     }
 
-    public boolean performAccessibilityAction(int i, Bundle bundle) {
-        return super.performAccessibilityAction(i, bundle) || this.seekBarView.getSeekBarAccessibilityDelegate().performAccessibilityActionInternal(this, i, bundle);
+    public void onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo info) {
+        super.onInitializeAccessibilityNodeInfo(info);
+        this.seekBarView.getSeekBarAccessibilityDelegate().onInitializeAccessibilityNodeInfoInternal(this, info);
+    }
+
+    public boolean performAccessibilityAction(int action, Bundle arguments) {
+        return super.performAccessibilityAction(action, arguments) || this.seekBarView.getSeekBarAccessibilityDelegate().performAccessibilityActionInternal(this, action, arguments);
     }
 }

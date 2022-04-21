@@ -11,6 +11,6 @@ public final /* synthetic */ class GroupInviteActivity$$ExternalSyntheticLambda3
     }
 
     public final void onItemClick(View view, int i) {
-        this.f$0.lambda$createView$1(view, i);
+        this.f$0.m2277lambda$createView$1$orgtelegramuiGroupInviteActivity(view, i);
     }
 }

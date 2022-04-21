@@ -1,15 +1,19 @@
 package org.telegram.ui;
 
-import android.view.MotionEvent;
-import android.view.View;
+import org.telegram.tgnet.RequestDelegate;
+import org.telegram.tgnet.TLObject;
+import org.telegram.tgnet.TLRPC;
 
-public final /* synthetic */ class ThemeSetUrlActivity$$ExternalSyntheticLambda4 implements View.OnTouchListener {
-    public static final /* synthetic */ ThemeSetUrlActivity$$ExternalSyntheticLambda4 INSTANCE = new ThemeSetUrlActivity$$ExternalSyntheticLambda4();
+public final /* synthetic */ class ThemeSetUrlActivity$$ExternalSyntheticLambda4 implements RequestDelegate {
+    public final /* synthetic */ ThemeSetUrlActivity f$0;
+    public final /* synthetic */ TLRPC.TL_account_updateTheme f$1;
 
-    private /* synthetic */ ThemeSetUrlActivity$$ExternalSyntheticLambda4() {
+    public /* synthetic */ ThemeSetUrlActivity$$ExternalSyntheticLambda4(ThemeSetUrlActivity themeSetUrlActivity, TLRPC.TL_account_updateTheme tL_account_updateTheme) {
+        this.f$0 = themeSetUrlActivity;
+        this.f$1 = tL_account_updateTheme;
     }
 
-    public final boolean onTouch(View view, MotionEvent motionEvent) {
-        return ThemeSetUrlActivity.lambda$createView$4(view, motionEvent);
+    public final void run(TLObject tLObject, TLRPC.TL_error tL_error) {
+        this.f$0.m3339lambda$saveTheme$12$orgtelegramuiThemeSetUrlActivity(this.f$1, tLObject, tL_error);
     }
 }

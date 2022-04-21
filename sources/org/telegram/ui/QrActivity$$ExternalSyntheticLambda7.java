@@ -10,7 +10,7 @@ public final /* synthetic */ class QrActivity$$ExternalSyntheticLambda7 implemen
     }
 
     public final void didSetColor() {
-        this.f$0.lambda$getThemeDescriptions$9();
+        this.f$0.m3199lambda$getThemeDescriptions$9$orgtelegramuiQrActivity();
     }
 
     public /* synthetic */ void onAnimationProgress(float f) {

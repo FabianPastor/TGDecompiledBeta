@@ -1,19 +1,17 @@
 package org.telegram.ui;
 
-import org.telegram.ui.ActionBar.AlertDialog;
+import android.content.DialogInterface;
 
-public final /* synthetic */ class ChatLinkActivity$$ExternalSyntheticLambda10 implements Runnable {
+public final /* synthetic */ class ChatLinkActivity$$ExternalSyntheticLambda10 implements DialogInterface.OnCancelListener {
     public final /* synthetic */ ChatLinkActivity f$0;
-    public final /* synthetic */ AlertDialog[] f$1;
-    public final /* synthetic */ int f$2;
+    public final /* synthetic */ int f$1;
 
-    public /* synthetic */ ChatLinkActivity$$ExternalSyntheticLambda10(ChatLinkActivity chatLinkActivity, AlertDialog[] alertDialogArr, int i) {
+    public /* synthetic */ ChatLinkActivity$$ExternalSyntheticLambda10(ChatLinkActivity chatLinkActivity, int i) {
         this.f$0 = chatLinkActivity;
-        this.f$1 = alertDialogArr;
-        this.f$2 = i;
+        this.f$1 = i;
     }
 
-    public final void run() {
-        this.f$0.lambda$createView$4(this.f$1, this.f$2);
+    public final void onCancel(DialogInterface dialogInterface) {
+        this.f$0.m1943lambda$createView$3$orgtelegramuiChatLinkActivity(this.f$1, dialogInterface);
     }
 }

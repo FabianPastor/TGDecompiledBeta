@@ -13,6 +13,6 @@ public final /* synthetic */ class ChannelAdminLogActivity$ChatActivityAdapter$3
     }
 
     public final void onCancel(DialogInterface dialogInterface) {
-        this.f$0.lambda$needOpenInviteLink$0(this.f$1, dialogInterface);
+        this.f$0.m1595xaf0CLASSNAMEcc(this.f$1, dialogInterface);
     }
 }

@@ -1,18 +1,16 @@
 package org.telegram.ui;
 
-import android.os.Bundle;
+import android.content.DialogInterface;
 import org.telegram.ui.LoginActivity;
 
-public final /* synthetic */ class LoginActivity$LoginActivitySmsView$$ExternalSyntheticLambda22 implements Runnable {
+public final /* synthetic */ class LoginActivity$LoginActivitySmsView$$ExternalSyntheticLambda22 implements DialogInterface.OnClickListener {
     public final /* synthetic */ LoginActivity.LoginActivitySmsView f$0;
-    public final /* synthetic */ Bundle f$1;
 
-    public /* synthetic */ LoginActivity$LoginActivitySmsView$$ExternalSyntheticLambda22(LoginActivity.LoginActivitySmsView loginActivitySmsView, Bundle bundle) {
+    public /* synthetic */ LoginActivity$LoginActivitySmsView$$ExternalSyntheticLambda22(LoginActivity.LoginActivitySmsView loginActivitySmsView) {
         this.f$0 = loginActivitySmsView;
-        this.f$1 = bundle;
     }
 
-    public final void run() {
-        this.f$0.lambda$onNextPressed$24(this.f$1);
+    public final void onClick(DialogInterface dialogInterface, int i) {
+        this.f$0.m2532x1var_CLASSNAME(dialogInterface, i);
     }
 }

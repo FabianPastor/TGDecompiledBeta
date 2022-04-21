@@ -2,7 +2,7 @@ package org.telegram.ui;
 
 import org.telegram.tgnet.RequestDelegate;
 import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC$TL_error;
+import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.Components.RecyclerListView;
 import org.telegram.ui.StatisticActivity;
 
@@ -17,7 +17,7 @@ public final /* synthetic */ class StatisticActivity$ChartViewData$$ExternalSynt
         this.f$2 = diffUtilsCallback;
     }
 
-    public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        this.f$0.lambda$load$1(this.f$1, this.f$2, tLObject, tLRPC$TL_error);
+    public final void run(TLObject tLObject, TLRPC.TL_error tL_error) {
+        this.f$0.m3270lambda$load$1$orgtelegramuiStatisticActivity$ChartViewData(this.f$1, this.f$2, tLObject, tL_error);
     }
 }

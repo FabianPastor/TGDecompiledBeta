@@ -1,15 +1,17 @@
 package org.telegram.messenger;
 
-public final /* synthetic */ class MediaDataController$$ExternalSyntheticLambda29 implements Runnable {
-    public final /* synthetic */ MediaDataController f$0;
-    public final /* synthetic */ long f$1;
+import org.telegram.tgnet.RequestDelegate;
+import org.telegram.tgnet.TLObject;
+import org.telegram.tgnet.TLRPC;
 
-    public /* synthetic */ MediaDataController$$ExternalSyntheticLambda29(MediaDataController mediaDataController, long j) {
+public final /* synthetic */ class MediaDataController$$ExternalSyntheticLambda29 implements RequestDelegate {
+    public final /* synthetic */ MediaDataController f$0;
+
+    public /* synthetic */ MediaDataController$$ExternalSyntheticLambda29(MediaDataController mediaDataController) {
         this.f$0 = mediaDataController;
-        this.f$1 = j;
     }
 
-    public final void run() {
-        this.f$0.lambda$loadBotKeyboard$145(this.f$1);
+    public final void run(TLObject tLObject, TLRPC.TL_error tL_error) {
+        this.f$0.m730x98ad0def(tLObject, tL_error);
     }
 }

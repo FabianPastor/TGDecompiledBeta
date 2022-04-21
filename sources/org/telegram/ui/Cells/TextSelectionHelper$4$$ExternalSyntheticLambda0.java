@@ -10,6 +10,6 @@ public final /* synthetic */ class TextSelectionHelper$4$$ExternalSyntheticLambd
     }
 
     public final void run() {
-        this.f$0.lambda$onActionItemClicked$2();
+        this.f$0.m1528x2de5aa17();
     }
 }

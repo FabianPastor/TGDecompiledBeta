@@ -1,17 +1,19 @@
 package org.telegram.ui;
 
-import org.telegram.tgnet.TLObject;
+import org.telegram.ui.ActionBar.ThemeDescription;
 
-public final /* synthetic */ class ChatEditTypeActivity$$ExternalSyntheticLambda9 implements Runnable {
+public final /* synthetic */ class ChatEditTypeActivity$$ExternalSyntheticLambda9 implements ThemeDescription.ThemeDescriptionDelegate {
     public final /* synthetic */ ChatEditTypeActivity f$0;
-    public final /* synthetic */ TLObject f$1;
 
-    public /* synthetic */ ChatEditTypeActivity$$ExternalSyntheticLambda9(ChatEditTypeActivity chatEditTypeActivity, TLObject tLObject) {
+    public /* synthetic */ ChatEditTypeActivity$$ExternalSyntheticLambda9(ChatEditTypeActivity chatEditTypeActivity) {
         this.f$0 = chatEditTypeActivity;
-        this.f$1 = tLObject;
     }
 
-    public final void run() {
-        this.f$0.lambda$loadAdminedChannels$11(this.f$1);
+    public final void didSetColor() {
+        this.f$0.m1930xCLASSNAMEd2e1();
+    }
+
+    public /* synthetic */ void onAnimationProgress(float f) {
+        ThemeDescription.ThemeDescriptionDelegate.CC.$default$onAnimationProgress(this, f);
     }
 }

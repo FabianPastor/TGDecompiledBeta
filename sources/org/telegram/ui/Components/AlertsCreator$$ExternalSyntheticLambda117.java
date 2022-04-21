@@ -1,15 +1,16 @@
 package org.telegram.ui.Components;
 
-import org.telegram.messenger.LocaleController;
-import org.telegram.ui.Components.NumberPicker;
+import android.content.Context;
+import android.content.DialogInterface;
 
-public final /* synthetic */ class AlertsCreator$$ExternalSyntheticLambda117 implements NumberPicker.Formatter {
-    public static final /* synthetic */ AlertsCreator$$ExternalSyntheticLambda117 INSTANCE = new AlertsCreator$$ExternalSyntheticLambda117();
+public final /* synthetic */ class AlertsCreator$$ExternalSyntheticLambda117 implements DialogInterface.OnClickListener {
+    public final /* synthetic */ Context f$0;
 
-    private /* synthetic */ AlertsCreator$$ExternalSyntheticLambda117() {
+    public /* synthetic */ AlertsCreator$$ExternalSyntheticLambda117(Context context) {
+        this.f$0 = context;
     }
 
-    public final String format(int i) {
-        return LocaleController.formatPluralString("Times", i + 1);
+    public final void onClick(DialogInterface dialogInterface, int i) {
+        AlertsCreator.lambda$createApkRestrictedDialog$5(this.f$0, dialogInterface, i);
     }
 }

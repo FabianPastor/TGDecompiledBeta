@@ -10,6 +10,6 @@ public final /* synthetic */ class GroupCreateActivity$$ExternalSyntheticLambda3
     }
 
     public final void onClick(View view) {
-        this.f$0.lambda$createView$4(view);
+        this.f$0.m2259lambda$createView$4$orgtelegramuiGroupCreateActivity(view);
     }
 }

@@ -10,6 +10,6 @@ public final /* synthetic */ class LinkActionView$$ExternalSyntheticLambda5 impl
     }
 
     public final void onClick(View view) {
-        this.f$0.lambda$new$6(view);
+        this.f$0.m4121lambda$new$1$orgtelegramuiComponentsLinkActionView(view);
     }
 }

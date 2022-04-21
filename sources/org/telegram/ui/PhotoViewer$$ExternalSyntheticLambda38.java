@@ -1,18 +1,16 @@
 package org.telegram.ui;
 
 import android.view.View;
-import org.telegram.ui.ActionBar.Theme;
+import android.widget.ViewSwitcher;
 
-public final /* synthetic */ class PhotoViewer$$ExternalSyntheticLambda38 implements View.OnClickListener {
+public final /* synthetic */ class PhotoViewer$$ExternalSyntheticLambda38 implements ViewSwitcher.ViewFactory {
     public final /* synthetic */ PhotoViewer f$0;
-    public final /* synthetic */ Theme.ResourcesProvider f$1;
 
-    public /* synthetic */ PhotoViewer$$ExternalSyntheticLambda38(PhotoViewer photoViewer, Theme.ResourcesProvider resourcesProvider) {
+    public /* synthetic */ PhotoViewer$$ExternalSyntheticLambda38(PhotoViewer photoViewer) {
         this.f$0 = photoViewer;
-        this.f$1 = resourcesProvider;
     }
 
-    public final void onClick(View view) {
-        this.f$0.lambda$setParentActivity$29(this.f$1, view);
+    public final View makeView() {
+        return this.f$0.m2947lambda$setParentActivity$6$orgtelegramuiPhotoViewer();
     }
 }

@@ -21,22 +21,21 @@ public class EncodedImage implements RefCounted {
         
         private final int nativeIndex;
 
-        private FrameType(int i) {
-            this.nativeIndex = i;
+        private FrameType(int nativeIndex2) {
+            this.nativeIndex = nativeIndex2;
         }
 
         public int getNative() {
             return this.nativeIndex;
         }
 
-        @CalledByNative("FrameType")
-        static FrameType fromNativeIndex(int i) {
-            for (FrameType frameType : values()) {
-                if (frameType.getNative() == i) {
-                    return frameType;
+        static FrameType fromNativeIndex(int nativeIndex2) {
+            for (FrameType type : values()) {
+                if (type.getNative() == nativeIndex2) {
+                    return type;
                 }
             }
-            throw new IllegalArgumentException("Unknown native frame type: " + i);
+            throw new IllegalArgumentException("Unknown native frame type: " + nativeIndex2);
         }
     }
 
@@ -48,50 +47,42 @@ public class EncodedImage implements RefCounted {
         this.refCountDelegate.release();
     }
 
-    @CalledByNative
-    private EncodedImage(ByteBuffer byteBuffer, Runnable runnable, int i, int i2, long j, FrameType frameType2, int i3, Integer num) {
-        this.buffer = byteBuffer;
-        this.encodedWidth = i;
-        this.encodedHeight = i2;
-        this.captureTimeMs = TimeUnit.NANOSECONDS.toMillis(j);
-        this.captureTimeNs = j;
+    private EncodedImage(ByteBuffer buffer2, Runnable releaseCallback, int encodedWidth2, int encodedHeight2, long captureTimeNs2, FrameType frameType2, int rotation2, Integer qp2) {
+        this.buffer = buffer2;
+        this.encodedWidth = encodedWidth2;
+        this.encodedHeight = encodedHeight2;
+        this.captureTimeMs = TimeUnit.NANOSECONDS.toMillis(captureTimeNs2);
+        this.captureTimeNs = captureTimeNs2;
         this.frameType = frameType2;
-        this.rotation = i3;
-        this.qp = num;
-        this.refCountDelegate = new RefCountDelegate(runnable);
+        this.rotation = rotation2;
+        this.qp = qp2;
+        this.refCountDelegate = new RefCountDelegate(releaseCallback);
     }
 
-    @CalledByNative
     private ByteBuffer getBuffer() {
         return this.buffer;
     }
 
-    @CalledByNative
     private int getEncodedWidth() {
         return this.encodedWidth;
     }
 
-    @CalledByNative
     private int getEncodedHeight() {
         return this.encodedHeight;
     }
 
-    @CalledByNative
     private long getCaptureTimeNs() {
         return this.captureTimeNs;
     }
 
-    @CalledByNative
     private int getFrameType() {
         return this.frameType.getNative();
     }
 
-    @CalledByNative
     private int getRotation() {
         return this.rotation;
     }
 
-    @CalledByNative
     private Integer getQp() {
         return this.qp;
     }
@@ -113,30 +104,30 @@ public class EncodedImage implements RefCounted {
         private Builder() {
         }
 
-        public Builder setBuffer(ByteBuffer byteBuffer, Runnable runnable) {
-            this.buffer = byteBuffer;
-            this.releaseCallback = runnable;
+        public Builder setBuffer(ByteBuffer buffer2, Runnable releaseCallback2) {
+            this.buffer = buffer2;
+            this.releaseCallback = releaseCallback2;
             return this;
         }
 
-        public Builder setEncodedWidth(int i) {
-            this.encodedWidth = i;
+        public Builder setEncodedWidth(int encodedWidth2) {
+            this.encodedWidth = encodedWidth2;
             return this;
         }
 
-        public Builder setEncodedHeight(int i) {
-            this.encodedHeight = i;
+        public Builder setEncodedHeight(int encodedHeight2) {
+            this.encodedHeight = encodedHeight2;
             return this;
         }
 
         @Deprecated
-        public Builder setCaptureTimeMs(long j) {
-            this.captureTimeNs = TimeUnit.MILLISECONDS.toNanos(j);
+        public Builder setCaptureTimeMs(long captureTimeMs) {
+            this.captureTimeNs = TimeUnit.MILLISECONDS.toNanos(captureTimeMs);
             return this;
         }
 
-        public Builder setCaptureTimeNs(long j) {
-            this.captureTimeNs = j;
+        public Builder setCaptureTimeNs(long captureTimeNs2) {
+            this.captureTimeNs = captureTimeNs2;
             return this;
         }
 
@@ -145,13 +136,13 @@ public class EncodedImage implements RefCounted {
             return this;
         }
 
-        public Builder setRotation(int i) {
-            this.rotation = i;
+        public Builder setRotation(int rotation2) {
+            this.rotation = rotation2;
             return this;
         }
 
-        public Builder setQp(Integer num) {
-            this.qp = num;
+        public Builder setQp(Integer qp2) {
+            this.qp = qp2;
             return this;
         }
 

@@ -1,20 +1,17 @@
 package org.telegram.messenger;
 
-import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC$TL_error;
+import androidx.collection.LongSparseArray;
+import java.util.Comparator;
+import org.telegram.tgnet.TLRPC;
 
-public final /* synthetic */ class ContactsController$$ExternalSyntheticLambda38 implements Runnable {
-    public final /* synthetic */ ContactsController f$0;
-    public final /* synthetic */ TLRPC$TL_error f$1;
-    public final /* synthetic */ TLObject f$2;
+public final /* synthetic */ class ContactsController$$ExternalSyntheticLambda38 implements Comparator {
+    public final /* synthetic */ LongSparseArray f$0;
 
-    public /* synthetic */ ContactsController$$ExternalSyntheticLambda38(ContactsController contactsController, TLRPC$TL_error tLRPC$TL_error, TLObject tLObject) {
-        this.f$0 = contactsController;
-        this.f$1 = tLRPC$TL_error;
-        this.f$2 = tLObject;
+    public /* synthetic */ ContactsController$$ExternalSyntheticLambda38(LongSparseArray longSparseArray) {
+        this.f$0 = longSparseArray;
     }
 
-    public final void run() {
-        this.f$0.lambda$loadPrivacySettings$58(this.f$1, this.f$2);
+    public final int compare(Object obj, Object obj2) {
+        return UserObject.getFirstName((TLRPC.User) this.f$0.get(((TLRPC.TL_contact) obj).user_id)).compareTo(UserObject.getFirstName((TLRPC.User) this.f$0.get(((TLRPC.TL_contact) obj2).user_id)));
     }
 }

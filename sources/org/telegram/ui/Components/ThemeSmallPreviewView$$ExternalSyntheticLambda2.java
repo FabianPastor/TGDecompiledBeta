@@ -12,6 +12,6 @@ public final /* synthetic */ class ThemeSmallPreviewView$$ExternalSyntheticLambd
     }
 
     public final void run() {
-        this.f$0.lambda$setItem$3(this.f$1);
+        this.f$0.m4480x56a0b6cb(this.f$1);
     }
 }

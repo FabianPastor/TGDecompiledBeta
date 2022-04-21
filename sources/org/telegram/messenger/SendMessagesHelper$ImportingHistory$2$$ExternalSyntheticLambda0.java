@@ -12,6 +12,6 @@ public final /* synthetic */ class SendMessagesHelper$ImportingHistory$2$$Extern
     }
 
     public final void run() {
-        this.f$0.lambda$run$0(this.f$1);
+        this.f$0.m1100x6fa5ea94(this.f$1);
     }
 }

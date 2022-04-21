@@ -1,26 +1,17 @@
 package org.telegram.messenger;
 
-import java.io.File;
-import org.telegram.tgnet.TLRPC$TL_document;
+import org.telegram.ui.ActionBar.AlertDialog;
 
 public final /* synthetic */ class MediaController$$ExternalSyntheticLambda31 implements Runnable {
-    public final /* synthetic */ MediaController f$0;
-    public final /* synthetic */ TLRPC$TL_document f$1;
-    public final /* synthetic */ File f$2;
-    public final /* synthetic */ int f$3;
-    public final /* synthetic */ boolean f$4;
-    public final /* synthetic */ int f$5;
+    public final /* synthetic */ AlertDialog f$0;
+    public final /* synthetic */ boolean[] f$1;
 
-    public /* synthetic */ MediaController$$ExternalSyntheticLambda31(MediaController mediaController, TLRPC$TL_document tLRPC$TL_document, File file, int i, boolean z, int i2) {
-        this.f$0 = mediaController;
-        this.f$1 = tLRPC$TL_document;
-        this.f$2 = file;
-        this.f$3 = i;
-        this.f$4 = z;
-        this.f$5 = i2;
+    public /* synthetic */ MediaController$$ExternalSyntheticLambda31(AlertDialog alertDialog, boolean[] zArr) {
+        this.f$0 = alertDialog;
+        this.f$1 = zArr;
     }
 
     public final void run() {
-        this.f$0.lambda$stopRecordingInternal$30(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5);
+        MediaController.lambda$saveFile$37(this.f$0, this.f$1);
     }
 }

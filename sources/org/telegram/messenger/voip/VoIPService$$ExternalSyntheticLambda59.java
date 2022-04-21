@@ -9,6 +9,6 @@ public final /* synthetic */ class VoIPService$$ExternalSyntheticLambda59 implem
     }
 
     public final void run() {
-        NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.didEndCall, new Object[0]);
+        NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.didStartedCall, new Object[0]);
     }
 }

@@ -11,6 +11,6 @@ public final /* synthetic */ class BotWebViewContainer$1$1$$ExternalSyntheticLam
     }
 
     public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-        this.f$0.lambda$setImageBitmapByKey$0(valueAnimator);
+        this.f$0.m3638x2638d59d(valueAnimator);
     }
 }

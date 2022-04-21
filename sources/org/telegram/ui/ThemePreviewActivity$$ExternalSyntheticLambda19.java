@@ -1,19 +1,15 @@
 package org.telegram.ui;
 
-import org.telegram.messenger.ImageReceiver;
+import android.content.DialogInterface;
 
-public final /* synthetic */ class ThemePreviewActivity$$ExternalSyntheticLambda19 implements ImageReceiver.ImageReceiverDelegate {
+public final /* synthetic */ class ThemePreviewActivity$$ExternalSyntheticLambda19 implements DialogInterface.OnClickListener {
     public final /* synthetic */ ThemePreviewActivity f$0;
 
     public /* synthetic */ ThemePreviewActivity$$ExternalSyntheticLambda19(ThemePreviewActivity themePreviewActivity) {
         this.f$0 = themePreviewActivity;
     }
 
-    public final void didSetImage(ImageReceiver imageReceiver, boolean z, boolean z2, boolean z3) {
-        this.f$0.lambda$createView$2(imageReceiver, z, z2, z3);
-    }
-
-    public /* synthetic */ void onAnimationReady(ImageReceiver imageReceiver) {
-        ImageReceiver.ImageReceiverDelegate.CC.$default$onAnimationReady(this, imageReceiver);
+    public final void onClick(DialogInterface dialogInterface, int i) {
+        this.f$0.m3325lambda$selectColorType$15$orgtelegramuiThemePreviewActivity(dialogInterface, i);
     }
 }

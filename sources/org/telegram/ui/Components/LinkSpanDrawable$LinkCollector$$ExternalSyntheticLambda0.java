@@ -12,6 +12,6 @@ public final /* synthetic */ class LinkSpanDrawable$LinkCollector$$ExternalSynth
     }
 
     public final void run() {
-        this.f$0.lambda$removeLink$0(this.f$1);
+        this.f$0.m4131xCLASSNAME(this.f$1);
     }
 }

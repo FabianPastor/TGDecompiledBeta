@@ -1,16 +1,14 @@
 package org.telegram.ui.Components;
 
-import android.app.Activity;
-import android.content.DialogInterface;
+import org.telegram.ui.Components.NumberPicker;
 
-public final /* synthetic */ class AlertsCreator$$ExternalSyntheticLambda7 implements DialogInterface.OnClickListener {
-    public final /* synthetic */ Activity f$0;
+public final /* synthetic */ class AlertsCreator$$ExternalSyntheticLambda7 implements NumberPicker.Formatter {
+    public static final /* synthetic */ AlertsCreator$$ExternalSyntheticLambda7 INSTANCE = new AlertsCreator$$ExternalSyntheticLambda7();
 
-    public /* synthetic */ AlertsCreator$$ExternalSyntheticLambda7(Activity activity) {
-        this.f$0 = activity;
+    private /* synthetic */ AlertsCreator$$ExternalSyntheticLambda7() {
     }
 
-    public final void onClick(DialogInterface dialogInterface, int i) {
-        AlertsCreator.lambda$createBackgroundLocationPermissionDialog$95(this.f$0, dialogInterface, i);
+    public final String format(int i) {
+        return AlertsCreator.lambda$createCalendarPickerDialog$77(i);
     }
 }

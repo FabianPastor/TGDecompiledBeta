@@ -7,13 +7,10 @@ public class DataChannel {
     private long nativeObserver;
 
     public interface Observer {
-        @CalledByNative("Observer")
         void onBufferedAmountChange(long j);
 
-        @CalledByNative("Observer")
         void onMessage(Buffer buffer);
 
-        @CalledByNative("Observer")
         void onStateChange();
     }
 
@@ -42,37 +39,31 @@ public class DataChannel {
         public String protocol = "";
 
         /* access modifiers changed from: package-private */
-        @CalledByNative("Init")
         public boolean getOrdered() {
             return this.ordered;
         }
 
         /* access modifiers changed from: package-private */
-        @CalledByNative("Init")
         public int getMaxRetransmitTimeMs() {
             return this.maxRetransmitTimeMs;
         }
 
         /* access modifiers changed from: package-private */
-        @CalledByNative("Init")
         public int getMaxRetransmits() {
             return this.maxRetransmits;
         }
 
         /* access modifiers changed from: package-private */
-        @CalledByNative("Init")
         public String getProtocol() {
             return this.protocol;
         }
 
         /* access modifiers changed from: package-private */
-        @CalledByNative("Init")
         public boolean getNegotiated() {
             return this.negotiated;
         }
 
         /* access modifiers changed from: package-private */
-        @CalledByNative("Init")
         public int getId() {
             return this.id;
         }
@@ -82,10 +73,9 @@ public class DataChannel {
         public final boolean binary;
         public final ByteBuffer data;
 
-        @CalledByNative("Buffer")
-        public Buffer(ByteBuffer byteBuffer, boolean z) {
-            this.data = byteBuffer;
-            this.binary = z;
+        public Buffer(ByteBuffer data2, boolean binary2) {
+            this.data = data2;
+            this.binary = binary2;
         }
     }
 
@@ -95,15 +85,13 @@ public class DataChannel {
         CLOSING,
         CLOSED;
 
-        @CalledByNative("State")
-        static State fromNativeIndex(int i) {
-            return values()[i];
+        static State fromNativeIndex(int nativeIndex) {
+            return values()[nativeIndex];
         }
     }
 
-    @CalledByNative
-    public DataChannel(long j) {
-        this.nativeDataChannel = j;
+    public DataChannel(long nativeDataChannel2) {
+        this.nativeDataChannel = nativeDataChannel2;
     }
 
     public void registerObserver(Observer observer) {
@@ -147,9 +135,9 @@ public class DataChannel {
 
     public boolean send(Buffer buffer) {
         checkDataChannelExists();
-        byte[] bArr = new byte[buffer.data.remaining()];
-        buffer.data.get(bArr);
-        return nativeSend(bArr, buffer.binary);
+        byte[] data = new byte[buffer.data.remaining()];
+        buffer.data.get(data);
+        return nativeSend(data, buffer.binary);
     }
 
     public void dispose() {
@@ -159,7 +147,6 @@ public class DataChannel {
     }
 
     /* access modifiers changed from: package-private */
-    @CalledByNative
     public long getNativeDataChannel() {
         return this.nativeDataChannel;
     }

@@ -15,6 +15,6 @@ public final /* synthetic */ class InviteMembersBottomSheet$$ExternalSyntheticLa
     }
 
     public final void onClick(View view) {
-        this.f$0.lambda$new$2(this.f$1, this.f$2, view);
+        this.f$0.m4093lambda$new$2$orgtelegramuiComponentsInviteMembersBottomSheet(this.f$1, this.f$2, view);
     }
 }

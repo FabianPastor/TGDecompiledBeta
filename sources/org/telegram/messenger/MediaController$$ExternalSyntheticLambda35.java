@@ -1,17 +1,14 @@
 package org.telegram.messenger;
 
-import java.io.File;
+import java.util.Comparator;
 
-public final /* synthetic */ class MediaController$$ExternalSyntheticLambda35 implements Runnable {
-    public final /* synthetic */ MessageObject f$0;
-    public final /* synthetic */ File f$1;
+public final /* synthetic */ class MediaController$$ExternalSyntheticLambda35 implements Comparator {
+    public static final /* synthetic */ MediaController$$ExternalSyntheticLambda35 INSTANCE = new MediaController$$ExternalSyntheticLambda35();
 
-    public /* synthetic */ MediaController$$ExternalSyntheticLambda35(MessageObject messageObject, File file) {
-        this.f$0 = messageObject;
-        this.f$1 = file;
+    private /* synthetic */ MediaController$$ExternalSyntheticLambda35() {
     }
 
-    public final void run() {
-        NotificationCenter.getInstance(this.f$0.currentAccount).postNotificationName(NotificationCenter.fileLoaded, FileLoader.getAttachFileName(this.f$0.getDocument()), this.f$1);
+    public final int compare(Object obj, Object obj2) {
+        return MediaController.lambda$sortPlaylist$13((MessageObject) obj, (MessageObject) obj2);
     }
 }

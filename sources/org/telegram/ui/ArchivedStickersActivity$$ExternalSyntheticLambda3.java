@@ -11,6 +11,6 @@ public final /* synthetic */ class ArchivedStickersActivity$$ExternalSyntheticLa
     }
 
     public final void onItemClick(View view, int i) {
-        this.f$0.lambda$createView$0(view, i);
+        this.f$0.m1366lambda$createView$0$orgtelegramuiArchivedStickersActivity(view, i);
     }
 }

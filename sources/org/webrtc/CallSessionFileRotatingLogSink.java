@@ -11,16 +11,16 @@ public class CallSessionFileRotatingLogSink {
 
     private static native byte[] nativeGetLogData(String str);
 
-    public static byte[] getLogData(String str) {
-        if (str != null) {
-            return nativeGetLogData(str);
+    public static byte[] getLogData(String dirPath) {
+        if (dirPath != null) {
+            return nativeGetLogData(dirPath);
         }
         throw new IllegalArgumentException("dirPath may not be null.");
     }
 
-    public CallSessionFileRotatingLogSink(String str, int i, Logging.Severity severity) {
-        if (str != null) {
-            this.nativeSink = nativeAddSink(str, i, severity.ordinal());
+    public CallSessionFileRotatingLogSink(String dirPath, int maxFileSize, Logging.Severity severity) {
+        if (dirPath != null) {
+            this.nativeSink = nativeAddSink(dirPath, maxFileSize, severity.ordinal());
             return;
         }
         throw new IllegalArgumentException("dirPath may not be null.");

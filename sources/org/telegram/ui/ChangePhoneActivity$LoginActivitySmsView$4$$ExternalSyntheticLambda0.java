@@ -10,6 +10,6 @@ public final /* synthetic */ class ChangePhoneActivity$LoginActivitySmsView$4$$E
     }
 
     public final void run() {
-        this.f$0.lambda$run$0();
+        this.f$0.m1560x3c3d6bad();
     }
 }

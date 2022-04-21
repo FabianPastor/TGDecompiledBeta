@@ -11,6 +11,6 @@ public final /* synthetic */ class SearchDownloadsContainer$$ExternalSyntheticLa
     }
 
     public final boolean onItemClick(View view, int i) {
-        return this.f$0.lambda$new$1(view, i);
+        return this.f$0.m4311lambda$new$1$orgtelegramuiComponentsSearchDownloadsContainer(view, i);
     }
 }
