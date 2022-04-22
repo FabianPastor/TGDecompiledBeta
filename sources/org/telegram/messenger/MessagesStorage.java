@@ -25419,7 +25419,7 @@ public class MessagesStorage extends BaseController {
             executeFast.step();
             executeFast.dispose();
             if (i == 0) {
-                SQLitePreparedStatement executeFast2 = this.database.executeFast("UPDATE reaction_mentions SET state = 0 WHERE dialog_id ?");
+                SQLitePreparedStatement executeFast2 = this.database.executeFast("UPDATE reaction_mentions SET state = 0 WHERE dialog_id = ?");
                 executeFast2.bindLong(1, j);
                 executeFast2.step();
                 executeFast2.dispose();

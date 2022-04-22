@@ -66,6 +66,7 @@ public class DownloadProgressIcon extends View implements NotificationCenter.Not
                 this.paint.setColor(Theme.getColor("actionBarDefaultIcon"));
                 this.paint2.setColor(Theme.getColor("actionBarDefaultIcon"));
                 this.downloadImageReceiver.setColorFilter(new PorterDuffColorFilter(Theme.getColor("actionBarDefaultIcon"), PorterDuff.Mode.MULTIPLY));
+                this.downloadCompleteImageReceiver.setColorFilter(new PorterDuffColorFilter(Theme.getColor("actionBarDefaultIcon"), PorterDuff.Mode.MULTIPLY));
                 this.paint2.setAlpha(100);
             }
             float f = this.currentProgress;

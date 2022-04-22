@@ -86,6 +86,7 @@ public class BotWebViewContainer extends FrameLayout implements NotificationCent
     public boolean isFlickeringCenter;
     /* access modifiers changed from: private */
     public boolean isPageLoaded;
+    private boolean isViewPortByMeasureSuppressed;
     private int lastButtonColor = getColor("featuredStickers_addButton");
     private String lastButtonText = "";
     private int lastButtonTextColor = getColor("featuredStickers_buttonText");
@@ -199,6 +200,10 @@ public class BotWebViewContainer extends FrameLayout implements NotificationCent
         this.webViewNotAvailableText.setPadding(dp, dp, dp, dp);
         addView(this.webViewNotAvailableText, LayoutHelper.createFrame(-1, -2, 17));
         setFocusable(false);
+    }
+
+    public void setViewPortByMeasureSuppressed(boolean z) {
+        this.isViewPortByMeasureSuppressed = z;
     }
 
     private void checkCreateWebView() {
@@ -569,7 +574,9 @@ public class BotWebViewContainer extends FrameLayout implements NotificationCent
     /* access modifiers changed from: protected */
     public void onSizeChanged(int i, int i2, int i3, int i4) {
         super.onSizeChanged(i, i2, i3, i4);
-        invalidateViewPortHeight(true);
+        if (!this.isViewPortByMeasureSuppressed) {
+            invalidateViewPortHeight(true);
+        }
     }
 
     public void invalidateViewPortHeight() {

@@ -285,6 +285,9 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
                 final ChatAttachAlertBotWebViewLayout chatAttachAlertBotWebViewLayout = new ChatAttachAlertBotWebViewLayout(this, getContext(), this.resourcesProvider);
                 this.botAttachLayouts.put(j, chatAttachAlertBotWebViewLayout);
                 this.botAttachLayouts.get(j).setDelegate(new BotWebViewContainer.Delegate() {
+                    /* access modifiers changed from: private */
+                    public ValueAnimator botButtonAnimator;
+
                     public /* synthetic */ void onSendWebViewData(String str) {
                         BotWebViewContainer.Delegate.CC.$default$onSendWebViewData(this, str);
                     }
@@ -328,12 +331,18 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
                             float f = 0.0f;
                             float f2 = 1.0f;
                             if (ChatAttachAlert.this.botButtonWasVisible != z) {
+                                boolean unused = ChatAttachAlert.this.botButtonWasVisible = z;
+                                ValueAnimator valueAnimator = this.botButtonAnimator;
+                                if (valueAnimator != null) {
+                                    valueAnimator.cancel();
+                                }
                                 float[] fArr = new float[2];
                                 fArr[0] = z ? 0.0f : 1.0f;
                                 fArr[1] = z ? 1.0f : 0.0f;
                                 ValueAnimator duration = ValueAnimator.ofFloat(fArr).setDuration(250);
+                                this.botButtonAnimator = duration;
                                 duration.addUpdateListener(new ChatAttachAlert$1$$ExternalSyntheticLambda0(this));
-                                duration.addListener(new AnimatorListenerAdapter() {
+                                this.botButtonAnimator.addListener(new AnimatorListenerAdapter() {
                                     public void onAnimationStart(Animator animator) {
                                         if (z) {
                                             ChatAttachAlert.this.botMainButtonTextView.setAlpha(0.0f);
@@ -349,7 +358,6 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
                                     }
 
                                     public void onAnimationEnd(Animator animator) {
-                                        boolean unused = ChatAttachAlert.this.botButtonWasVisible = z;
                                         if (!z) {
                                             ChatAttachAlert.this.botMainButtonTextView.setVisibility(8);
                                         } else {
@@ -359,9 +367,12 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
                                         for (int i = 0; i < ChatAttachAlert.this.botAttachLayouts.size(); i++) {
                                             ((ChatAttachAlertBotWebViewLayout) ChatAttachAlert.this.botAttachLayouts.valueAt(i)).setMeasureOffsetY(dp);
                                         }
+                                        if (AnonymousClass1.this.botButtonAnimator == animator) {
+                                            ValueAnimator unused = AnonymousClass1.this.botButtonAnimator = null;
+                                        }
                                     }
                                 });
-                                duration.start();
+                                this.botButtonAnimator.start();
                             }
                             ChatAttachAlert.this.botProgressView.setProgressColor(i2);
                             if (ChatAttachAlert.this.botButtonProgressWasVisible != z3) {

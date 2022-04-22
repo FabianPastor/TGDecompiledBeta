@@ -249,33 +249,45 @@ public class ChatAttachAlertBotWebViewLayout extends ChatAttachAlert.AttachAlert
     }
 
     public void onPanTransitionStart(boolean z, int i) {
+        boolean z2;
         if (z) {
+            this.webViewContainer.setViewPortByMeasureSuppressed(true);
+            float topActionBarOffsetY = (-this.swipeContainer.getOffsetY()) + this.swipeContainer.getTopActionBarOffsetY();
+            if (this.swipeContainer.getSwipeOffsetY() != topActionBarOffsetY) {
+                this.swipeContainer.stickTo(topActionBarOffsetY);
+                z2 = true;
+            } else {
+                z2 = false;
+            }
             int measureKeyboardHeight = this.parentAlert.sizeNotifierFrameLayout.measureKeyboardHeight() + i;
             setMeasuredDimension(getMeasuredWidth(), i);
             this.ignoreMeasure = true;
-            ValueAnimator valueAnimator = this.webViewScrollAnimator;
-            if (valueAnimator != null) {
-                valueAnimator.cancel();
-                this.webViewScrollAnimator = null;
-            }
-            if (this.webViewContainer.getWebView() != null) {
-                int scrollY = this.webViewContainer.getWebView().getScrollY();
-                final int i2 = (measureKeyboardHeight - i) + scrollY;
-                ValueAnimator duration = ValueAnimator.ofInt(new int[]{scrollY, i2}).setDuration(250);
-                this.webViewScrollAnimator = duration;
-                duration.setInterpolator(ChatListItemAnimator.DEFAULT_INTERPOLATOR);
-                this.webViewScrollAnimator.addUpdateListener(new ChatAttachAlertBotWebViewLayout$$ExternalSyntheticLambda1(this));
-                this.webViewScrollAnimator.addListener(new AnimatorListenerAdapter() {
-                    public void onAnimationEnd(Animator animator) {
-                        if (ChatAttachAlertBotWebViewLayout.this.webViewContainer.getWebView() != null) {
-                            ChatAttachAlertBotWebViewLayout.this.webViewContainer.getWebView().setScrollY(i2);
+            this.swipeContainer.setSwipeOffsetAnimationDisallowed(true);
+            if (!z2) {
+                ValueAnimator valueAnimator = this.webViewScrollAnimator;
+                if (valueAnimator != null) {
+                    valueAnimator.cancel();
+                    this.webViewScrollAnimator = null;
+                }
+                if (this.webViewContainer.getWebView() != null) {
+                    int scrollY = this.webViewContainer.getWebView().getScrollY();
+                    final int i2 = (measureKeyboardHeight - i) + scrollY;
+                    ValueAnimator duration = ValueAnimator.ofInt(new int[]{scrollY, i2}).setDuration(250);
+                    this.webViewScrollAnimator = duration;
+                    duration.setInterpolator(ChatListItemAnimator.DEFAULT_INTERPOLATOR);
+                    this.webViewScrollAnimator.addUpdateListener(new ChatAttachAlertBotWebViewLayout$$ExternalSyntheticLambda1(this));
+                    this.webViewScrollAnimator.addListener(new AnimatorListenerAdapter() {
+                        public void onAnimationEnd(Animator animator) {
+                            if (ChatAttachAlertBotWebViewLayout.this.webViewContainer.getWebView() != null) {
+                                ChatAttachAlertBotWebViewLayout.this.webViewContainer.getWebView().setScrollY(i2);
+                            }
+                            if (animator == ChatAttachAlertBotWebViewLayout.this.webViewScrollAnimator) {
+                                ValueAnimator unused = ChatAttachAlertBotWebViewLayout.this.webViewScrollAnimator = null;
+                            }
                         }
-                        if (animator == ChatAttachAlertBotWebViewLayout.this.webViewScrollAnimator) {
-                            ValueAnimator unused = ChatAttachAlertBotWebViewLayout.this.webViewScrollAnimator = null;
-                        }
-                    }
-                });
-                this.webViewScrollAnimator.start();
+                    });
+                    this.webViewScrollAnimator.start();
+                }
             }
         }
     }
@@ -290,6 +302,8 @@ public class ChatAttachAlertBotWebViewLayout extends ChatAttachAlert.AttachAlert
 
     public void onPanTransitionEnd() {
         this.ignoreMeasure = false;
+        this.swipeContainer.setSwipeOffsetAnimationDisallowed(false);
+        this.webViewContainer.setViewPortByMeasureSuppressed(false);
         requestLayout();
     }
 
@@ -498,7 +512,7 @@ public class ChatAttachAlertBotWebViewLayout extends ChatAttachAlert.AttachAlert
 
     /* access modifiers changed from: package-private */
     public int getButtonsHideOffset() {
-        return AndroidUtilities.dp(56.0f);
+        return ((int) this.swipeContainer.getTopActionBarOffsetY()) + AndroidUtilities.dp(12.0f);
     }
 
     /* access modifiers changed from: package-private */
@@ -556,6 +570,10 @@ public class ChatAttachAlertBotWebViewLayout extends ChatAttachAlert.AttachAlert
         private boolean isSwipeOffsetAnimationDisallowed;
         /* access modifiers changed from: private */
         public float offsetY = -1.0f;
+        /* access modifiers changed from: private */
+        public ValueAnimator offsetYAnimator;
+        /* access modifiers changed from: private */
+        public float pendingOffsetY = -1.0f;
         private SpringAnimation scrollAnimator;
         private Runnable scrollEndListener;
         private Runnable scrollListener;
@@ -691,7 +709,7 @@ public class ChatAttachAlertBotWebViewLayout extends ChatAttachAlert.AttachAlert
             invalidateTranslation();
         }
 
-        public void setOffsetY(float f) {
+        public void setOffsetY(final float f) {
             float f2 = this.offsetY;
             float f3 = this.swipeOffsetY;
             float f4 = this.topActionBarOffsetY;
@@ -705,19 +723,43 @@ public class ChatAttachAlertBotWebViewLayout extends ChatAttachAlert.AttachAlert
                 return;
             }
             ValueAnimator duration = ValueAnimator.ofFloat(new float[]{f2, f}).setDuration(200);
+            this.offsetYAnimator = duration;
             duration.setInterpolator(CubicBezierInterpolator.DEFAULT);
-            duration.addUpdateListener(new ChatAttachAlertBotWebViewLayout$WebViewSwipeContainer$$ExternalSyntheticLambda0(this, z));
-            duration.start();
+            this.offsetYAnimator.addUpdateListener(new ChatAttachAlertBotWebViewLayout$WebViewSwipeContainer$$ExternalSyntheticLambda0(this, z, f2, f));
+            this.offsetYAnimator.addListener(new AnimatorListenerAdapter() {
+                private boolean isCanceled;
+
+                public void onAnimationEnd(Animator animator) {
+                    if (WebViewSwipeContainer.this.offsetYAnimator == animator) {
+                        ValueAnimator unused = WebViewSwipeContainer.this.offsetYAnimator = null;
+                        if (!this.isCanceled) {
+                            float unused2 = WebViewSwipeContainer.this.offsetY = f;
+                            WebViewSwipeContainer.this.invalidateTranslation();
+                            return;
+                        }
+                        float unused3 = WebViewSwipeContainer.this.pendingOffsetY = f;
+                    }
+                }
+
+                public void onAnimationCancel(Animator animator) {
+                    this.isCanceled = true;
+                }
+            });
+            this.offsetYAnimator.start();
         }
 
         /* access modifiers changed from: private */
-        public /* synthetic */ void lambda$setOffsetY$0(boolean z, ValueAnimator valueAnimator) {
+        public /* synthetic */ void lambda$setOffsetY$0(boolean z, float f, float f2, ValueAnimator valueAnimator) {
             float floatValue = ((Float) valueAnimator.getAnimatedValue()).floatValue();
             this.offsetY = floatValue;
             if (z) {
                 this.swipeOffsetY = (-floatValue) + this.topActionBarOffsetY;
             } else {
                 this.swipeOffsetY = MathUtils.clamp(this.swipeOffsetY, (-floatValue) + this.topActionBarOffsetY, (((float) getHeight()) - this.offsetY) + this.topActionBarOffsetY);
+            }
+            SpringAnimation springAnimation = this.scrollAnimator;
+            if (springAnimation != null && springAnimation.getSpring().getFinalPosition() == (-f) + this.topActionBarOffsetY) {
+                this.scrollAnimator.getSpring().setFinalPosition((-f2) + this.topActionBarOffsetY);
             }
             invalidateTranslation();
         }
@@ -769,13 +811,17 @@ public class ChatAttachAlertBotWebViewLayout extends ChatAttachAlert.AttachAlert
                     float f = this.swipeOffsetY;
                     int i = this.swipeStickyRange;
                     if (f <= ((float) (-i))) {
-                        stickTo((-this.offsetY) + this.topActionBarOffsetY);
+                        float f2 = this.offsetY;
+                        float f3 = this.topActionBarOffsetY;
+                        if (f != (-f2) + f3) {
+                            stickTo((-f2) + f3);
+                        }
                     } else if (f <= ((float) (-i)) || f > ((float) i)) {
                         Delegate delegate2 = this.delegate;
                         if (delegate2 != null) {
                             delegate2.onDismiss();
                         }
-                    } else {
+                    } else if (f != 0.0f) {
                         stickTo(0.0f);
                     }
                 }
@@ -792,7 +838,8 @@ public class ChatAttachAlertBotWebViewLayout extends ChatAttachAlert.AttachAlert
         }
 
         public void stickTo(float f, Runnable runnable) {
-            if (this.swipeOffsetY == f) {
+            SpringAnimation springAnimation;
+            if (this.swipeOffsetY == f || ((springAnimation = this.scrollAnimator) != null && springAnimation.getSpring().getFinalPosition() == f)) {
                 if (runnable != null) {
                     runnable.run();
                 }
@@ -803,13 +850,17 @@ public class ChatAttachAlertBotWebViewLayout extends ChatAttachAlert.AttachAlert
                 }
                 return;
             }
-            SpringAnimation springAnimation = this.scrollAnimator;
-            if (springAnimation != null) {
-                springAnimation.cancel();
+            ValueAnimator valueAnimator = this.offsetYAnimator;
+            if (valueAnimator != null) {
+                valueAnimator.cancel();
             }
-            SpringAnimation springAnimation2 = (SpringAnimation) new SpringAnimation(this, SWIPE_OFFSET_Y, f).setSpring(new SpringForce(f).setStiffness(1400.0f).setDampingRatio(1.0f)).addEndListener(new ChatAttachAlertBotWebViewLayout$WebViewSwipeContainer$$ExternalSyntheticLambda1(this, runnable));
-            this.scrollAnimator = springAnimation2;
-            springAnimation2.start();
+            SpringAnimation springAnimation2 = this.scrollAnimator;
+            if (springAnimation2 != null) {
+                springAnimation2.cancel();
+            }
+            SpringAnimation springAnimation3 = (SpringAnimation) new SpringAnimation(this, SWIPE_OFFSET_Y, f).setSpring(new SpringForce(f).setStiffness(1400.0f).setDampingRatio(1.0f)).addEndListener(new ChatAttachAlertBotWebViewLayout$WebViewSwipeContainer$$ExternalSyntheticLambda1(this, runnable));
+            this.scrollAnimator = springAnimation3;
+            springAnimation3.start();
         }
 
         /* access modifiers changed from: private */
@@ -822,6 +873,14 @@ public class ChatAttachAlertBotWebViewLayout extends ChatAttachAlert.AttachAlert
                 Runnable runnable2 = this.scrollEndListener;
                 if (runnable2 != null) {
                     runnable2.run();
+                }
+                float f3 = this.pendingOffsetY;
+                if (f3 != -1.0f) {
+                    boolean z2 = this.isSwipeOffsetAnimationDisallowed;
+                    this.isSwipeOffsetAnimationDisallowed = true;
+                    setOffsetY(f3);
+                    this.pendingOffsetY = -1.0f;
+                    this.isSwipeOffsetAnimationDisallowed = z2;
                 }
             }
         }
