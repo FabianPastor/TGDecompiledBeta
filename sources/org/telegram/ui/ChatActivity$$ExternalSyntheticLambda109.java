@@ -1,15 +1,15 @@
 package org.telegram.ui;
 
-import org.telegram.messenger.MessagesStorage;
+import java.util.concurrent.atomic.AtomicReference;
 
-public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda109 implements MessagesStorage.IntCallback {
-    public final /* synthetic */ ChatActivity f$0;
+public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda109 implements Runnable {
+    public final /* synthetic */ AtomicReference f$0;
 
-    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda109(ChatActivity chatActivity) {
-        this.f$0 = chatActivity;
+    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda109(AtomicReference atomicReference) {
+        this.f$0 = atomicReference;
     }
 
-    public final void run(int i) {
-        this.f$0.m1673lambda$createView$32$orgtelegramuiChatActivity(i);
+    public final void run() {
+        ChatActivity.lambda$createMenu$165(this.f$0);
     }
 }

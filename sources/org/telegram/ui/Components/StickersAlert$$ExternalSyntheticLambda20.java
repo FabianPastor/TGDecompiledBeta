@@ -1,22 +1,19 @@
 package org.telegram.ui.Components;
 
-import android.widget.TextView;
-import org.telegram.tgnet.RequestDelegate;
-import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC;
+import java.util.ArrayList;
 
-public final /* synthetic */ class StickersAlert$$ExternalSyntheticLambda20 implements RequestDelegate {
+public final /* synthetic */ class StickersAlert$$ExternalSyntheticLambda20 implements Runnable {
     public final /* synthetic */ StickersAlert f$0;
-    public final /* synthetic */ String f$1;
-    public final /* synthetic */ TextView f$2;
+    public final /* synthetic */ ArrayList f$1;
+    public final /* synthetic */ ArrayList f$2;
 
-    public /* synthetic */ StickersAlert$$ExternalSyntheticLambda20(StickersAlert stickersAlert, String str, TextView textView) {
+    public /* synthetic */ StickersAlert$$ExternalSyntheticLambda20(StickersAlert stickersAlert, ArrayList arrayList, ArrayList arrayList2) {
         this.f$0 = stickersAlert;
-        this.f$1 = str;
-        this.f$2 = textView;
+        this.f$1 = arrayList;
+        this.f$2 = arrayList2;
     }
 
-    public final void run(TLObject tLObject, TLRPC.TL_error tL_error) {
-        this.f$0.m4418xb15ab52d(this.f$1, this.f$2, tLObject, tL_error);
+    public final void run() {
+        this.f$0.lambda$new$4(this.f$1, this.f$2);
     }
 }

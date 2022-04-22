@@ -1,13 +1,16 @@
 package org.telegram.ui.Adapters;
 
-public final /* synthetic */ class DialogsSearchAdapter$$ExternalSyntheticLambda20 implements Runnable {
+import android.view.View;
+import org.telegram.ui.Components.RecyclerListView;
+
+public final /* synthetic */ class DialogsSearchAdapter$$ExternalSyntheticLambda20 implements RecyclerListView.OnItemClickListener {
     public final /* synthetic */ DialogsSearchAdapter f$0;
 
     public /* synthetic */ DialogsSearchAdapter$$ExternalSyntheticLambda20(DialogsSearchAdapter dialogsSearchAdapter) {
         this.f$0 = dialogsSearchAdapter;
     }
 
-    public final void run() {
-        this.f$0.m1327xd91b03c3();
+    public final void onItemClick(View view, int i) {
+        this.f$0.lambda$onCreateViewHolder$15(view, i);
     }
 }

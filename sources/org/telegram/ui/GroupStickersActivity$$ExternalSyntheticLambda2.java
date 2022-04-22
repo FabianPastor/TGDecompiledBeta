@@ -10,6 +10,6 @@ public final /* synthetic */ class GroupStickersActivity$$ExternalSyntheticLambd
     }
 
     public final void run() {
-        this.f$0.m2285lambda$resolveStickerSet$4$orgtelegramuiGroupStickersActivity(this.f$1);
+        this.f$0.lambda$resolveStickerSet$4(this.f$1);
     }
 }

@@ -1,18 +1,17 @@
 package org.telegram.ui;
 
-import android.view.View;
-import org.telegram.ui.ActionBar.AlertDialog;
+import org.telegram.tgnet.RequestDelegate;
+import org.telegram.tgnet.TLObject;
+import org.telegram.tgnet.TLRPC$TL_error;
 
-public final /* synthetic */ class SessionsActivity$$ExternalSyntheticLambda12 implements View.OnClickListener {
+public final /* synthetic */ class SessionsActivity$$ExternalSyntheticLambda12 implements RequestDelegate {
     public final /* synthetic */ SessionsActivity f$0;
-    public final /* synthetic */ AlertDialog.Builder f$1;
 
-    public /* synthetic */ SessionsActivity$$ExternalSyntheticLambda12(SessionsActivity sessionsActivity, AlertDialog.Builder builder) {
+    public /* synthetic */ SessionsActivity$$ExternalSyntheticLambda12(SessionsActivity sessionsActivity) {
         this.f$0 = sessionsActivity;
-        this.f$1 = builder;
     }
 
-    public final void onClick(View view) {
-        this.f$0.m3224lambda$createView$1$orgtelegramuiSessionsActivity(this.f$1, view);
+    public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+        this.f$0.lambda$loadSessions$15(tLObject, tLRPC$TL_error);
     }
 }

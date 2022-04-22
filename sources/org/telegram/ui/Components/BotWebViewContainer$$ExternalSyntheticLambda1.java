@@ -14,6 +14,6 @@ public final /* synthetic */ class BotWebViewContainer$$ExternalSyntheticLambda1
     }
 
     public final void run() {
-        this.f$0.m3637x9fe69576(this.f$1, this.f$2);
+        this.f$0.lambda$runWithPermissions$0(this.f$1, this.f$2);
     }
 }

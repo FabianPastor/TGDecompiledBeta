@@ -1,7 +1,6 @@
 package org.telegram.ui.Components;
 
 import android.app.Activity;
-import android.content.Context;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -17,7 +16,8 @@ import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ImageLocation;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.UserObject;
-import org.telegram.tgnet.TLRPC;
+import org.telegram.tgnet.TLRPC$Chat;
+import org.telegram.tgnet.TLRPC$User;
 import org.telegram.ui.ActionBar.ActionBarLayout;
 import org.telegram.ui.ActionBar.ActionBarPopupWindow;
 import org.telegram.ui.ActionBar.BaseFragment;
@@ -29,366 +29,341 @@ public class BackButtonMenu {
 
     public static class PulledDialog<T> {
         Class<T> activity;
-        TLRPC.Chat chat;
+        TLRPC$Chat chat;
         long dialogId;
         int filterId;
         int folderId;
         int stackIndex;
-        TLRPC.User user;
+        TLRPC$User user;
     }
 
-    public static ActionBarPopupWindow show(BaseFragment thisFragment, View backButton, long currentDialogId) {
-        Drawable shadowDrawable;
-        String name;
-        BaseFragment baseFragment = thisFragment;
-        if (baseFragment == null) {
+    public static ActionBarPopupWindow show(BaseFragment baseFragment, View view, long j) {
+        ArrayList<PulledDialog> arrayList;
+        String str;
+        BaseFragment baseFragment2 = baseFragment;
+        if (baseFragment2 == null) {
             return null;
         }
-        ActionBarLayout parentLayout = thisFragment.getParentLayout();
-        Context context = thisFragment.getParentActivity();
-        View fragmentView = thisFragment.getFragmentView();
-        if (parentLayout == null || context == null) {
-        } else if (fragmentView == null) {
-            Activity activity = context;
-        } else {
-            ArrayList<PulledDialog> dialogs = getStackedHistoryDialogs(baseFragment, currentDialogId);
-            if (dialogs.size() <= 0) {
-                return null;
-            }
-            ActionBarPopupWindow.ActionBarPopupWindowLayout layout = new ActionBarPopupWindow.ActionBarPopupWindowLayout(context);
-            Rect backgroundPaddings = new Rect();
-            Drawable shadowDrawable2 = thisFragment.getParentActivity().getResources().getDrawable(NUM).mutate();
-            shadowDrawable2.getPadding(backgroundPaddings);
-            layout.setBackgroundColor(Theme.getColor("actionBarDefaultSubmenuBackground"));
-            AtomicReference<ActionBarPopupWindow> scrimPopupWindowRef = new AtomicReference<>();
-            int i = 0;
-            while (i < dialogs.size()) {
-                PulledDialog pDialog = dialogs.get(i);
-                TLRPC.Chat chat = pDialog.chat;
-                TLRPC.User user = pDialog.user;
-                FrameLayout cell = new FrameLayout(context);
-                cell.setMinimumWidth(AndroidUtilities.dp(200.0f));
-                BackupImageView imageView = new BackupImageView(context);
-                imageView.setRoundRadius(AndroidUtilities.dp(32.0f));
-                cell.addView(imageView, LayoutHelper.createFrameRelatively(32.0f, 32.0f, 8388627, 13.0f, 0.0f, 0.0f, 0.0f));
-                TextView titleView = new TextView(context);
-                Context context2 = context;
-                titleView.setLines(1);
-                ArrayList<PulledDialog> dialogs2 = dialogs;
-                titleView.setTextSize(1, 16.0f);
-                titleView.setTextColor(Theme.getColor("actionBarDefaultSubmenuItem"));
-                titleView.setEllipsize(TextUtils.TruncateAt.END);
-                cell.addView(titleView, LayoutHelper.createFrameRelatively(-1.0f, -2.0f, 8388627, 59.0f, 0.0f, 12.0f, 0.0f));
-                AvatarDrawable avatarDrawable = new AvatarDrawable();
-                avatarDrawable.setSmallSize(true);
-                if (chat != null) {
-                    avatarDrawable.setInfo(chat);
-                    shadowDrawable = shadowDrawable2;
-                    imageView.setImage(ImageLocation.getForChat(chat, 1), "50_50", (Drawable) avatarDrawable, (Object) chat);
-                    titleView.setText(chat.title);
-                    TLRPC.Chat chat2 = chat;
-                } else {
-                    shadowDrawable = shadowDrawable2;
-                    if (user != null) {
-                        TLRPC.Chat chat3 = chat;
-                        if (pDialog.activity == ChatActivity.class && UserObject.isUserSelf(user)) {
-                            name = LocaleController.getString("SavedMessages", NUM);
-                            avatarDrawable.setAvatarType(1);
-                            imageView.setImageDrawable(avatarDrawable);
-                        } else if (UserObject.isReplyUser(user)) {
-                            name = LocaleController.getString("RepliesTitle", NUM);
-                            avatarDrawable.setAvatarType(12);
-                            imageView.setImageDrawable(avatarDrawable);
-                        } else if (UserObject.isDeleted(user)) {
-                            String name2 = LocaleController.getString("HiddenName", NUM);
-                            avatarDrawable.setInfo(user);
-                            imageView.setImage(ImageLocation.getForUser(user, 1), "50_50", (Drawable) avatarDrawable, (Object) user);
-                            name = name2;
-                        } else {
-                            String name3 = UserObject.getUserName(user);
-                            avatarDrawable.setInfo(user);
-                            imageView.setImage(ImageLocation.getForUser(user, 1), "50_50", (Drawable) avatarDrawable, (Object) user);
-                            name = name3;
-                        }
-                        titleView.setText(name);
-                    }
-                }
-                cell.setBackground(Theme.getSelectorDrawable(Theme.getColor("listSelectorSDK21"), false));
-                cell.setOnClickListener(new BackButtonMenu$$ExternalSyntheticLambda0(scrimPopupWindowRef, pDialog, parentLayout, baseFragment));
-                layout.addView(cell, LayoutHelper.createLinear(-1, 48));
-                i++;
-                long j = currentDialogId;
-                context = context2;
-                dialogs = dialogs2;
-                shadowDrawable2 = shadowDrawable;
-            }
-            ArrayList<PulledDialog> arrayList = dialogs;
-            Drawable drawable = shadowDrawable2;
-            ActionBarPopupWindow scrimPopupWindow = new ActionBarPopupWindow(layout, -2, -2);
-            scrimPopupWindowRef.set(scrimPopupWindow);
-            scrimPopupWindow.setPauseNotifications(true);
-            scrimPopupWindow.setDismissAnimationDuration(220);
-            scrimPopupWindow.setOutsideTouchable(true);
-            scrimPopupWindow.setClippingEnabled(true);
-            scrimPopupWindow.setAnimationStyle(NUM);
-            scrimPopupWindow.setFocusable(true);
-            layout.measure(View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(1000.0f), Integer.MIN_VALUE), View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(1000.0f), Integer.MIN_VALUE));
-            scrimPopupWindow.setInputMethodMode(2);
-            scrimPopupWindow.setSoftInputMode(0);
-            scrimPopupWindow.getContentView().setFocusableInTouchMode(true);
-            layout.setFitItems(true);
-            int popupX = AndroidUtilities.dp(8.0f) - backgroundPaddings.left;
-            if (AndroidUtilities.isTablet()) {
-                int[] location = new int[2];
-                fragmentView.getLocationInWindow(location);
-                popupX += location[0];
-            }
-            scrimPopupWindow.showAtLocation(fragmentView, 51, popupX, (backButton.getBottom() - backgroundPaddings.top) - AndroidUtilities.dp(8.0f));
-            try {
-                fragmentView.performHapticFeedback(3, 2);
-            } catch (Exception e) {
-            }
-            return scrimPopupWindow;
+        ActionBarLayout parentLayout = baseFragment.getParentLayout();
+        Activity parentActivity = baseFragment.getParentActivity();
+        View fragmentView = baseFragment.getFragmentView();
+        if (parentLayout == null || parentActivity == null || fragmentView == null) {
+            return null;
         }
-        return null;
+        ArrayList<PulledDialog> stackedHistoryDialogs = getStackedHistoryDialogs(baseFragment2, j);
+        if (stackedHistoryDialogs.size() <= 0) {
+            return null;
+        }
+        ActionBarPopupWindow.ActionBarPopupWindowLayout actionBarPopupWindowLayout = new ActionBarPopupWindow.ActionBarPopupWindowLayout(parentActivity);
+        Rect rect = new Rect();
+        baseFragment.getParentActivity().getResources().getDrawable(NUM).mutate().getPadding(rect);
+        actionBarPopupWindowLayout.setBackgroundColor(Theme.getColor("actionBarDefaultSubmenuBackground"));
+        AtomicReference atomicReference = new AtomicReference();
+        int i = 0;
+        while (i < stackedHistoryDialogs.size()) {
+            PulledDialog pulledDialog = stackedHistoryDialogs.get(i);
+            TLRPC$Chat tLRPC$Chat = pulledDialog.chat;
+            TLRPC$User tLRPC$User = pulledDialog.user;
+            FrameLayout frameLayout = new FrameLayout(parentActivity);
+            frameLayout.setMinimumWidth(AndroidUtilities.dp(200.0f));
+            BackupImageView backupImageView = new BackupImageView(parentActivity);
+            backupImageView.setRoundRadius(AndroidUtilities.dp(32.0f));
+            frameLayout.addView(backupImageView, LayoutHelper.createFrameRelatively(32.0f, 32.0f, 8388627, 13.0f, 0.0f, 0.0f, 0.0f));
+            TextView textView = new TextView(parentActivity);
+            textView.setLines(1);
+            Activity activity = parentActivity;
+            textView.setTextSize(1, 16.0f);
+            textView.setTextColor(Theme.getColor("actionBarDefaultSubmenuItem"));
+            textView.setEllipsize(TextUtils.TruncateAt.END);
+            frameLayout.addView(textView, LayoutHelper.createFrameRelatively(-1.0f, -2.0f, 8388627, 59.0f, 0.0f, 12.0f, 0.0f));
+            AvatarDrawable avatarDrawable = new AvatarDrawable();
+            avatarDrawable.setSmallSize(true);
+            if (tLRPC$Chat != null) {
+                avatarDrawable.setInfo(tLRPC$Chat);
+                backupImageView.setImage(ImageLocation.getForChat(tLRPC$Chat, 1), "50_50", (Drawable) avatarDrawable, (Object) tLRPC$Chat);
+                textView.setText(tLRPC$Chat.title);
+            } else if (tLRPC$User != null) {
+                arrayList = stackedHistoryDialogs;
+                if (pulledDialog.activity == ChatActivity.class && UserObject.isUserSelf(tLRPC$User)) {
+                    str = LocaleController.getString("SavedMessages", NUM);
+                    avatarDrawable.setAvatarType(1);
+                    backupImageView.setImageDrawable(avatarDrawable);
+                } else if (UserObject.isReplyUser(tLRPC$User)) {
+                    str = LocaleController.getString("RepliesTitle", NUM);
+                    avatarDrawable.setAvatarType(12);
+                    backupImageView.setImageDrawable(avatarDrawable);
+                } else if (UserObject.isDeleted(tLRPC$User)) {
+                    str = LocaleController.getString("HiddenName", NUM);
+                    avatarDrawable.setInfo(tLRPC$User);
+                    backupImageView.setImage(ImageLocation.getForUser(tLRPC$User, 1), "50_50", (Drawable) avatarDrawable, (Object) tLRPC$User);
+                } else {
+                    str = UserObject.getUserName(tLRPC$User);
+                    avatarDrawable.setInfo(tLRPC$User);
+                    backupImageView.setImage(ImageLocation.getForUser(tLRPC$User, 1), "50_50", (Drawable) avatarDrawable, (Object) tLRPC$User);
+                }
+                textView.setText(str);
+                frameLayout.setBackground(Theme.getSelectorDrawable(Theme.getColor("listSelectorSDK21"), false));
+                frameLayout.setOnClickListener(new BackButtonMenu$$ExternalSyntheticLambda0(atomicReference, pulledDialog, parentLayout, baseFragment2));
+                actionBarPopupWindowLayout.addView(frameLayout, LayoutHelper.createLinear(-1, 48));
+                i++;
+                parentActivity = activity;
+                stackedHistoryDialogs = arrayList;
+            }
+            arrayList = stackedHistoryDialogs;
+            frameLayout.setBackground(Theme.getSelectorDrawable(Theme.getColor("listSelectorSDK21"), false));
+            frameLayout.setOnClickListener(new BackButtonMenu$$ExternalSyntheticLambda0(atomicReference, pulledDialog, parentLayout, baseFragment2));
+            actionBarPopupWindowLayout.addView(frameLayout, LayoutHelper.createLinear(-1, 48));
+            i++;
+            parentActivity = activity;
+            stackedHistoryDialogs = arrayList;
+        }
+        ActionBarPopupWindow actionBarPopupWindow = new ActionBarPopupWindow(actionBarPopupWindowLayout, -2, -2);
+        atomicReference.set(actionBarPopupWindow);
+        actionBarPopupWindow.setPauseNotifications(true);
+        actionBarPopupWindow.setDismissAnimationDuration(220);
+        actionBarPopupWindow.setOutsideTouchable(true);
+        actionBarPopupWindow.setClippingEnabled(true);
+        actionBarPopupWindow.setAnimationStyle(NUM);
+        actionBarPopupWindow.setFocusable(true);
+        actionBarPopupWindowLayout.measure(View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(1000.0f), Integer.MIN_VALUE), View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(1000.0f), Integer.MIN_VALUE));
+        actionBarPopupWindow.setInputMethodMode(2);
+        actionBarPopupWindow.setSoftInputMode(0);
+        actionBarPopupWindow.getContentView().setFocusableInTouchMode(true);
+        actionBarPopupWindowLayout.setFitItems(true);
+        int dp = AndroidUtilities.dp(8.0f) - rect.left;
+        if (AndroidUtilities.isTablet()) {
+            int[] iArr = new int[2];
+            fragmentView.getLocationInWindow(iArr);
+            dp += iArr[0];
+        }
+        actionBarPopupWindow.showAtLocation(fragmentView, 51, dp, (view.getBottom() - rect.top) - AndroidUtilities.dp(8.0f));
+        try {
+            fragmentView.performHapticFeedback(3, 2);
+        } catch (Exception unused) {
+        }
+        return actionBarPopupWindow;
     }
 
-    static /* synthetic */ void lambda$show$0(AtomicReference scrimPopupWindowRef, PulledDialog pDialog, ActionBarLayout parentLayout, BaseFragment thisFragment, View e2) {
-        if (scrimPopupWindowRef.get() != null) {
-            ((ActionBarPopupWindow) scrimPopupWindowRef.getAndSet((Object) null)).dismiss();
+    /* access modifiers changed from: private */
+    public static /* synthetic */ void lambda$show$0(AtomicReference atomicReference, PulledDialog pulledDialog, ActionBarLayout actionBarLayout, BaseFragment baseFragment, View view) {
+        ArrayList<BaseFragment> arrayList;
+        int i;
+        ArrayList<BaseFragment> arrayList2;
+        Long l = null;
+        if (atomicReference.get() != null) {
+            ((ActionBarPopupWindow) atomicReference.getAndSet((Object) null)).dismiss();
         }
-        if (pDialog.stackIndex >= 0) {
-            Long nextFragmentDialogId = null;
-            if (parentLayout == null || parentLayout.fragmentsStack == null || pDialog.stackIndex >= parentLayout.fragmentsStack.size()) {
-                nextFragmentDialogId = null;
-            } else {
-                BaseFragment nextFragment = parentLayout.fragmentsStack.get(pDialog.stackIndex);
-                if (nextFragment instanceof ChatActivity) {
-                    nextFragmentDialogId = Long.valueOf(((ChatActivity) nextFragment).getDialogId());
-                } else if (nextFragment instanceof ProfileActivity) {
-                    nextFragmentDialogId = Long.valueOf(((ProfileActivity) nextFragment).getDialogId());
+        int i2 = pulledDialog.stackIndex;
+        if (i2 >= 0) {
+            if (!(actionBarLayout == null || (arrayList2 = actionBarLayout.fragmentsStack) == null || i2 >= arrayList2.size())) {
+                BaseFragment baseFragment2 = actionBarLayout.fragmentsStack.get(pulledDialog.stackIndex);
+                if (baseFragment2 instanceof ChatActivity) {
+                    l = Long.valueOf(((ChatActivity) baseFragment2).getDialogId());
+                } else if (baseFragment2 instanceof ProfileActivity) {
+                    l = Long.valueOf(((ProfileActivity) baseFragment2).getDialogId());
                 }
             }
-            if (nextFragmentDialogId != null && nextFragmentDialogId.longValue() != pDialog.dialogId) {
-                for (int j = parentLayout.fragmentsStack.size() - 2; j > pDialog.stackIndex; j--) {
-                    parentLayout.removeFragmentFromStack(j);
+            if (l != null && l.longValue() != pulledDialog.dialogId) {
+                for (int size = actionBarLayout.fragmentsStack.size() - 2; size > pulledDialog.stackIndex; size--) {
+                    actionBarLayout.removeFragmentFromStack(size);
                 }
-            } else if (!(parentLayout == null || parentLayout.fragmentsStack == null)) {
-                for (int j2 = parentLayout.fragmentsStack.size() - 2; j2 > pDialog.stackIndex; j2--) {
-                    if (j2 >= 0 && j2 < parentLayout.fragmentsStack.size()) {
-                        parentLayout.removeFragmentFromStack(j2);
+            } else if (!(actionBarLayout == null || (arrayList = actionBarLayout.fragmentsStack) == null)) {
+                int size2 = arrayList.size() - 2;
+                while (true) {
+                    i = pulledDialog.stackIndex;
+                    if (size2 <= i) {
+                        break;
                     }
+                    if (size2 >= 0 && size2 < actionBarLayout.fragmentsStack.size()) {
+                        actionBarLayout.removeFragmentFromStack(size2);
+                    }
+                    size2--;
                 }
-                if (pDialog.stackIndex < parentLayout.fragmentsStack.size()) {
-                    parentLayout.showFragment(pDialog.stackIndex);
-                    parentLayout.closeLastFragment(true);
+                if (i < actionBarLayout.fragmentsStack.size()) {
+                    actionBarLayout.showFragment(pulledDialog.stackIndex);
+                    actionBarLayout.closeLastFragment(true);
                     return;
                 }
             }
         }
-        goToPulledDialog(thisFragment, pDialog);
+        goToPulledDialog(baseFragment, pulledDialog);
     }
 
-    public static void goToPulledDialog(BaseFragment fragment, PulledDialog dialog) {
-        if (dialog != null) {
-            if (dialog.activity == ChatActivity.class) {
+    public static void goToPulledDialog(BaseFragment baseFragment, PulledDialog pulledDialog) {
+        if (pulledDialog != null) {
+            Class<T> cls = pulledDialog.activity;
+            if (cls == ChatActivity.class) {
                 Bundle bundle = new Bundle();
-                if (dialog.chat != null) {
-                    bundle.putLong("chat_id", dialog.chat.id);
-                } else if (dialog.user != null) {
-                    bundle.putLong("user_id", dialog.user.id);
+                TLRPC$Chat tLRPC$Chat = pulledDialog.chat;
+                if (tLRPC$Chat != null) {
+                    bundle.putLong("chat_id", tLRPC$Chat.id);
+                } else {
+                    TLRPC$User tLRPC$User = pulledDialog.user;
+                    if (tLRPC$User != null) {
+                        bundle.putLong("user_id", tLRPC$User.id);
+                    }
                 }
-                bundle.putInt("dialog_folder_id", dialog.folderId);
-                bundle.putInt("dialog_filter_id", dialog.filterId);
-                fragment.presentFragment(new ChatActivity(bundle), true);
-            } else if (dialog.activity == ProfileActivity.class) {
+                bundle.putInt("dialog_folder_id", pulledDialog.folderId);
+                bundle.putInt("dialog_filter_id", pulledDialog.filterId);
+                baseFragment.presentFragment(new ChatActivity(bundle), true);
+            } else if (cls == ProfileActivity.class) {
                 Bundle bundle2 = new Bundle();
-                bundle2.putLong("dialog_id", dialog.dialogId);
-                fragment.presentFragment(new ProfileActivity(bundle2), true);
+                bundle2.putLong("dialog_id", pulledDialog.dialogId);
+                baseFragment.presentFragment(new ProfileActivity(bundle2), true);
             }
         }
     }
 
-    public static ArrayList<PulledDialog> getStackedHistoryDialogs(BaseFragment thisFragment, long ignoreDialogId) {
+    public static ArrayList<PulledDialog> getStackedHistoryDialogs(BaseFragment baseFragment, long j) {
         ActionBarLayout parentLayout;
-        ArrayList<BaseFragment> fragmentsStack;
-        ActionBarLayout parentLayout2;
-        int folderId;
-        long dialogId;
-        TLRPC.Chat chat;
-        int filterId;
-        Class activity;
-        ArrayList<PulledDialog> dialogs = new ArrayList<>();
-        if (thisFragment == null || (parentLayout = thisFragment.getParentLayout()) == null) {
-            return dialogs;
+        boolean z;
+        int i;
+        long j2;
+        TLRPC$User tLRPC$User;
+        TLRPC$Chat tLRPC$Chat;
+        Class cls;
+        int i2;
+        boolean z2;
+        ArrayList<PulledDialog> arrayList = new ArrayList<>();
+        if (baseFragment == null || (parentLayout = baseFragment.getParentLayout()) == null) {
+            return arrayList;
         }
-        ArrayList<BaseFragment> fragmentsStack2 = parentLayout.fragmentsStack;
-        ArrayList<PulledDialog> pulledDialogs = parentLayout.pulledDialogs;
-        if (fragmentsStack2 != null) {
-            int count = fragmentsStack2.size();
-            int i = 0;
-            while (i < count) {
-                BaseFragment fragment = fragmentsStack2.get(i);
-                TLRPC.User user = null;
-                if (fragment instanceof ChatActivity) {
-                    activity = ChatActivity.class;
-                    ChatActivity chatActivity = (ChatActivity) fragment;
-                    if (chatActivity.getChatMode() != 0) {
-                        parentLayout2 = parentLayout;
-                        fragmentsStack = fragmentsStack2;
-                    } else if (chatActivity.isReport()) {
-                        parentLayout2 = parentLayout;
-                        fragmentsStack = fragmentsStack2;
-                    } else {
-                        chat = chatActivity.getCurrentChat();
-                        user = chatActivity.getCurrentUser();
-                        dialogId = chatActivity.getDialogId();
-                        folderId = chatActivity.getDialogFolderId();
-                        filterId = chatActivity.getDialogFilterId();
+        ArrayList<BaseFragment> arrayList2 = parentLayout.fragmentsStack;
+        ArrayList<PulledDialog> arrayList3 = parentLayout.pulledDialogs;
+        if (arrayList2 != null) {
+            int size = arrayList2.size();
+            for (int i3 = 0; i3 < size; i3++) {
+                BaseFragment baseFragment2 = arrayList2.get(i3);
+                TLRPC$User tLRPC$User2 = null;
+                if (baseFragment2 instanceof ChatActivity) {
+                    cls = ChatActivity.class;
+                    ChatActivity chatActivity = (ChatActivity) baseFragment2;
+                    if (chatActivity.getChatMode() == 0 && !chatActivity.isReport()) {
+                        tLRPC$Chat = chatActivity.getCurrentChat();
+                        tLRPC$User = chatActivity.getCurrentUser();
+                        j2 = chatActivity.getDialogId();
+                        i = chatActivity.getDialogFolderId();
+                        i2 = chatActivity.getDialogFilterId();
                     }
-                    i++;
-                    parentLayout = parentLayout2;
-                    fragmentsStack2 = fragmentsStack;
-                } else if (fragment instanceof ProfileActivity) {
-                    Class activity2 = ProfileActivity.class;
-                    ProfileActivity profileActivity = (ProfileActivity) fragment;
-                    TLRPC.Chat chat2 = profileActivity.getCurrentChat();
+                } else if (baseFragment2 instanceof ProfileActivity) {
+                    Class cls2 = ProfileActivity.class;
+                    ProfileActivity profileActivity = (ProfileActivity) baseFragment2;
+                    TLRPC$Chat currentChat = profileActivity.getCurrentChat();
                     try {
-                        user = profileActivity.getUserInfo().user;
-                    } catch (Exception e) {
+                        tLRPC$User2 = profileActivity.getUserInfo().user;
+                    } catch (Exception unused) {
                     }
-                    long dialogId2 = profileActivity.getDialogId();
-                    chat = chat2;
-                    dialogId = dialogId2;
-                    folderId = 0;
-                    activity = activity2;
-                    filterId = 0;
-                } else {
-                    parentLayout2 = parentLayout;
-                    fragmentsStack = fragmentsStack2;
-                    i++;
-                    parentLayout = parentLayout2;
-                    fragmentsStack2 = fragmentsStack;
+                    j2 = profileActivity.getDialogId();
+                    i2 = 0;
+                    i = 0;
+                    TLRPC$Chat tLRPC$Chat2 = currentChat;
+                    tLRPC$User = tLRPC$User2;
+                    cls = cls2;
+                    tLRPC$Chat = tLRPC$Chat2;
                 }
-                if (dialogId == ignoreDialogId) {
-                    parentLayout2 = parentLayout;
-                    fragmentsStack = fragmentsStack2;
-                } else if (ignoreDialogId != 0 || !UserObject.isUserSelf(user)) {
-                    boolean alreadyAddedDialog = false;
-                    int d = 0;
+                if (j2 != j && (j != 0 || !UserObject.isUserSelf(tLRPC$User))) {
+                    int i4 = 0;
                     while (true) {
-                        parentLayout2 = parentLayout;
-                        if (d >= dialogs.size()) {
-                            fragmentsStack = fragmentsStack2;
+                        if (i4 >= arrayList.size()) {
+                            z2 = false;
                             break;
-                        }
-                        fragmentsStack = fragmentsStack2;
-                        if (dialogs.get(d).dialogId == dialogId) {
-                            alreadyAddedDialog = true;
-                            break;
-                        }
-                        d++;
-                        parentLayout = parentLayout2;
-                        fragmentsStack2 = fragmentsStack;
-                    }
-                    if (!alreadyAddedDialog) {
-                        PulledDialog pDialog = new PulledDialog();
-                        pDialog.activity = activity;
-                        pDialog.stackIndex = i;
-                        pDialog.chat = chat;
-                        pDialog.user = user;
-                        pDialog.dialogId = dialogId;
-                        pDialog.folderId = folderId;
-                        pDialog.filterId = filterId;
-                        if (pDialog.chat != null || pDialog.user != null) {
-                            dialogs.add(pDialog);
-                        }
-                    }
-                } else {
-                    parentLayout2 = parentLayout;
-                    fragmentsStack = fragmentsStack2;
-                }
-                i++;
-                parentLayout = parentLayout2;
-                fragmentsStack2 = fragmentsStack;
-            }
-            ArrayList<BaseFragment> arrayList = fragmentsStack2;
-        } else {
-            ArrayList<BaseFragment> arrayList2 = fragmentsStack2;
-        }
-        if (pulledDialogs != null) {
-            Iterator<PulledDialog> it = pulledDialogs.iterator();
-            while (it.hasNext()) {
-                PulledDialog pulledDialog = it.next();
-                if (pulledDialog.dialogId != ignoreDialogId) {
-                    boolean alreadyAddedDialog2 = false;
-                    int d2 = 0;
-                    while (true) {
-                        if (d2 >= dialogs.size()) {
-                            break;
-                        } else if (dialogs.get(d2).dialogId == pulledDialog.dialogId) {
-                            alreadyAddedDialog2 = true;
+                        } else if (arrayList.get(i4).dialogId == j2) {
+                            z2 = true;
                             break;
                         } else {
-                            d2++;
+                            i4++;
                         }
                     }
-                    if (!alreadyAddedDialog2) {
-                        dialogs.add(pulledDialog);
+                    if (!z2) {
+                        PulledDialog pulledDialog = new PulledDialog();
+                        pulledDialog.activity = cls;
+                        pulledDialog.stackIndex = i3;
+                        pulledDialog.chat = tLRPC$Chat;
+                        pulledDialog.user = tLRPC$User;
+                        pulledDialog.dialogId = j2;
+                        pulledDialog.folderId = i;
+                        pulledDialog.filterId = i2;
+                        if (tLRPC$Chat != null || tLRPC$User != null) {
+                            arrayList.add(pulledDialog);
+                        }
                     }
                 }
             }
         }
-        Collections.sort(dialogs, BackButtonMenu$$ExternalSyntheticLambda1.INSTANCE);
-        return dialogs;
+        if (arrayList3 != null) {
+            Iterator<PulledDialog> it = arrayList3.iterator();
+            while (it.hasNext()) {
+                PulledDialog next = it.next();
+                if (next.dialogId != j) {
+                    int i5 = 0;
+                    while (true) {
+                        if (i5 >= arrayList.size()) {
+                            z = false;
+                            break;
+                        } else if (arrayList.get(i5).dialogId == next.dialogId) {
+                            z = true;
+                            break;
+                        } else {
+                            i5++;
+                        }
+                    }
+                    if (!z) {
+                        arrayList.add(next);
+                    }
+                }
+            }
+        }
+        Collections.sort(arrayList, BackButtonMenu$$ExternalSyntheticLambda1.INSTANCE);
+        return arrayList;
     }
 
-    static /* synthetic */ int lambda$getStackedHistoryDialogs$1(PulledDialog d1, PulledDialog d2) {
-        return d2.stackIndex - d1.stackIndex;
+    /* access modifiers changed from: private */
+    public static /* synthetic */ int lambda$getStackedHistoryDialogs$1(PulledDialog pulledDialog, PulledDialog pulledDialog2) {
+        return pulledDialog2.stackIndex - pulledDialog.stackIndex;
     }
 
-    public static void addToPulledDialogs(BaseFragment thisFragment, int stackIndex, TLRPC.Chat chat, TLRPC.User user, long dialogId, int folderId, int filterId) {
+    public static void addToPulledDialogs(BaseFragment baseFragment, int i, TLRPC$Chat tLRPC$Chat, TLRPC$User tLRPC$User, long j, int i2, int i3) {
         ActionBarLayout parentLayout;
-        if ((chat != null || user != null) && thisFragment != null && (parentLayout = thisFragment.getParentLayout()) != null) {
+        if ((tLRPC$Chat != null || tLRPC$User != null) && baseFragment != null && (parentLayout = baseFragment.getParentLayout()) != null) {
             if (parentLayout.pulledDialogs == null) {
                 parentLayout.pulledDialogs = new ArrayList<>();
             }
-            boolean alreadyAdded = false;
+            boolean z = false;
             Iterator<PulledDialog> it = parentLayout.pulledDialogs.iterator();
             while (true) {
                 if (it.hasNext()) {
-                    if (it.next().dialogId == dialogId) {
-                        alreadyAdded = true;
+                    if (it.next().dialogId == j) {
+                        z = true;
                         break;
                     }
                 } else {
                     break;
                 }
             }
-            if (!alreadyAdded) {
-                PulledDialog d = new PulledDialog();
-                d.activity = ChatActivity.class;
-                d.stackIndex = stackIndex;
-                d.dialogId = dialogId;
-                d.filterId = filterId;
-                d.folderId = folderId;
-                d.chat = chat;
-                d.user = user;
-                parentLayout.pulledDialogs.add(d);
+            if (!z) {
+                PulledDialog pulledDialog = new PulledDialog();
+                pulledDialog.activity = ChatActivity.class;
+                pulledDialog.stackIndex = i;
+                pulledDialog.dialogId = j;
+                pulledDialog.filterId = i3;
+                pulledDialog.folderId = i2;
+                pulledDialog.chat = tLRPC$Chat;
+                pulledDialog.user = tLRPC$User;
+                parentLayout.pulledDialogs.add(pulledDialog);
             }
         }
     }
 
-    public static void clearPulledDialogs(BaseFragment thisFragment, int fromIndex) {
+    public static void clearPulledDialogs(BaseFragment baseFragment, int i) {
         ActionBarLayout parentLayout;
-        if (thisFragment != null && (parentLayout = thisFragment.getParentLayout()) != null && parentLayout.pulledDialogs != null) {
-            int i = 0;
-            while (i < parentLayout.pulledDialogs.size()) {
-                if (parentLayout.pulledDialogs.get(i).stackIndex > fromIndex) {
-                    parentLayout.pulledDialogs.remove(i);
-                    i--;
+        if (baseFragment != null && (parentLayout = baseFragment.getParentLayout()) != null && parentLayout.pulledDialogs != null) {
+            int i2 = 0;
+            while (i2 < parentLayout.pulledDialogs.size()) {
+                if (parentLayout.pulledDialogs.get(i2).stackIndex > i) {
+                    parentLayout.pulledDialogs.remove(i2);
+                    i2--;
                 }
-                i++;
+                i2++;
             }
         }
     }

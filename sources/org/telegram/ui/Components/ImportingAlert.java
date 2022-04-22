@@ -78,31 +78,31 @@ public class ImportingAlert extends BottomSheet implements NotificationCenter.No
         }
 
         /* access modifiers changed from: protected */
-        public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-            super.onMeasure(widthMeasureSpec, View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(80.0f), NUM));
+        public void onMeasure(int i, int i2) {
+            super.onMeasure(i, View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(80.0f), NUM));
         }
 
-        public void setTextColor(int color) {
-            this.textView.setTextColor(color);
+        public void setTextColor(int i) {
+            this.textView.setTextColor(i);
         }
 
-        public void setGravity(int gravity) {
-            this.textView.setGravity(gravity);
+        public void setGravity(int i) {
+            this.textView.setGravity(i);
         }
 
-        public void setText(CharSequence text) {
-            this.textView.setText(text);
+        public void setText(CharSequence charSequence) {
+            this.textView.setText(charSequence);
         }
 
-        private int getThemedColor(String key) {
+        private int getThemedColor(String str) {
             Theme.ResourcesProvider resourcesProvider2 = this.resourcesProvider;
-            Integer color = resourcesProvider2 != null ? resourcesProvider2.getColor(key) : null;
-            return color != null ? color.intValue() : Theme.getColor(key);
+            Integer color = resourcesProvider2 != null ? resourcesProvider2.getColor(str) : null;
+            return color != null ? color.intValue() : Theme.getColor(str);
         }
     }
 
-    /* renamed from: lambda$new$0$org-telegram-ui-Components-ImportingAlert  reason: not valid java name */
-    public /* synthetic */ void m4061lambda$new$0$orgtelegramuiComponentsImportingAlert() {
+    /* access modifiers changed from: private */
+    public /* synthetic */ void lambda$new$0() {
         if (this.completed) {
             this.imageView.getAnimatedDrawable().setAutoRepeat(0);
             this.imageView.setAnimation(this.completedDrawable);
@@ -112,13 +112,13 @@ public class ImportingAlert extends BottomSheet implements NotificationCenter.No
 
     /* JADX WARNING: Illegal instructions before constructor call */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    public ImportingAlert(android.content.Context r22, java.lang.String r23, org.telegram.ui.ChatActivity r24, org.telegram.ui.ActionBar.Theme.ResourcesProvider r25) {
+    public ImportingAlert(android.content.Context r21, java.lang.String r22, org.telegram.ui.ChatActivity r23, org.telegram.ui.ActionBar.Theme.ResourcesProvider r24) {
         /*
-            r21 = this;
-            r0 = r21
-            r1 = r22
-            r2 = r23
-            r3 = r25
+            r20 = this;
+            r0 = r20
+            r1 = r21
+            r2 = r22
+            r3 = r24
             r4 = 0
             r0.<init>(r1, r4, r3)
             r5 = 2
@@ -131,348 +131,344 @@ public class ImportingAlert extends BottomSheet implements NotificationCenter.No
             r0.onFinishCallback = r6
             r0.setApplyBottomPadding(r4)
             r0.setApplyTopPadding(r4)
-            r7 = r24
+            r7 = r23
             r0.parentFragment = r7
             r0.stickersShortName = r2
-            android.widget.FrameLayout r8 = new android.widget.FrameLayout
+            android.widget.FrameLayout r7 = new android.widget.FrameLayout
+            r7.<init>(r1)
+            r0.setCustomView(r7)
+            android.widget.TextView r8 = new android.widget.TextView
             r8.<init>(r1)
-            r0.setCustomView(r8)
-            android.widget.TextView r9 = new android.widget.TextView
-            r9.<init>(r1)
-            java.lang.String r10 = "fonts/rmedium.ttf"
-            android.graphics.Typeface r11 = org.telegram.messenger.AndroidUtilities.getTypeface(r10)
-            r9.setTypeface(r11)
-            r11 = 1
-            r12 = 1101004800(0x41a00000, float:20.0)
-            r9.setTextSize(r11, r12)
-            java.lang.String r12 = "dialogTextBlack"
-            int r13 = r0.getThemedColor(r12)
-            r9.setTextColor(r13)
-            r9.setSingleLine(r11)
-            android.text.TextUtils$TruncateAt r13 = android.text.TextUtils.TruncateAt.END
-            r9.setEllipsize(r13)
-            r14 = -2
-            r15 = -1073741824(0xffffffffCLASSNAME, float:-2.0)
-            r16 = 51
-            r17 = 1099431936(0x41880000, float:17.0)
-            r18 = 1101004800(0x41a00000, float:20.0)
-            r19 = 1099431936(0x41880000, float:17.0)
-            r20 = 0
-            android.widget.FrameLayout$LayoutParams r13 = org.telegram.ui.Components.LayoutHelper.createFrame(r14, r15, r16, r17, r18, r19, r20)
-            r8.addView(r9, r13)
-            org.telegram.ui.Components.RLottieDrawable r13 = new org.telegram.ui.Components.RLottieDrawable
-            r14 = 1123024896(0x42var_, float:120.0)
-            int r17 = org.telegram.messenger.AndroidUtilities.dp(r14)
-            int r18 = org.telegram.messenger.AndroidUtilities.dp(r14)
-            r15 = 2131558470(0x7f0d0046, float:1.8742257E38)
-            java.lang.String r16 = "NUM"
-            r19 = 0
-            r20 = 0
-            r14 = r13
-            r14.<init>(r15, r16, r17, r18, r19, r20)
-            r0.completedDrawable = r13
-            r13.setAllowDecodeSingleFrame(r11)
-            org.telegram.ui.Components.RLottieImageView r13 = new org.telegram.ui.Components.RLottieImageView
-            r13.<init>(r1)
-            r0.imageView = r13
-            r13.setAutoRepeat(r11)
-            org.telegram.ui.Components.RLottieImageView r13 = r0.imageView
-            r14 = 2131558471(0x7f0d0047, float:1.8742259E38)
-            r15 = 120(0x78, float:1.68E-43)
-            r13.setAnimation(r14, r15, r15)
-            org.telegram.ui.Components.RLottieImageView r13 = r0.imageView
-            r13.playAnimation()
-            org.telegram.ui.Components.RLottieImageView r13 = r0.imageView
-            r14 = 160(0xa0, float:2.24E-43)
-            r15 = 1126170624(0x43200000, float:160.0)
-            r16 = 49
-            r17 = 1099431936(0x41880000, float:17.0)
-            r18 = 1117650944(0x429e0000, float:79.0)
-            r19 = 1099431936(0x41880000, float:17.0)
-            r20 = 0
-            android.widget.FrameLayout$LayoutParams r14 = org.telegram.ui.Components.LayoutHelper.createFrame(r14, r15, r16, r17, r18, r19, r20)
-            r8.addView(r13, r14)
-            org.telegram.ui.Components.RLottieImageView r13 = r0.imageView
-            org.telegram.ui.Components.RLottieDrawable r13 = r13.getAnimatedDrawable()
-            r14 = 178(0xb2, float:2.5E-43)
-            r13.setOnFinishCallback(r6, r14)
-            android.widget.TextView r6 = new android.widget.TextView
-            r6.<init>(r1)
-            r0.percentTextView = r6
-            android.graphics.Typeface r13 = org.telegram.messenger.AndroidUtilities.getTypeface(r10)
-            r6.setTypeface(r13)
-            android.widget.TextView r6 = r0.percentTextView
-            r13 = 1103101952(0x41CLASSNAME, float:24.0)
-            r6.setTextSize(r11, r13)
-            android.widget.TextView r6 = r0.percentTextView
-            int r13 = r0.getThemedColor(r12)
-            r6.setTextColor(r13)
-            android.widget.TextView r6 = r0.percentTextView
+            java.lang.String r9 = "fonts/rmedium.ttf"
+            android.graphics.Typeface r10 = org.telegram.messenger.AndroidUtilities.getTypeface(r9)
+            r8.setTypeface(r10)
+            r10 = 1
+            r11 = 1101004800(0x41a00000, float:20.0)
+            r8.setTextSize(r10, r11)
+            java.lang.String r11 = "dialogTextBlack"
+            int r12 = r0.getThemedColor(r11)
+            r8.setTextColor(r12)
+            r8.setSingleLine(r10)
+            android.text.TextUtils$TruncateAt r12 = android.text.TextUtils.TruncateAt.END
+            r8.setEllipsize(r12)
             r13 = -2
             r14 = -1073741824(0xffffffffCLASSNAME, float:-2.0)
+            r15 = 51
+            r16 = 1099431936(0x41880000, float:17.0)
+            r17 = 1101004800(0x41a00000, float:20.0)
+            r18 = 1099431936(0x41880000, float:17.0)
+            r19 = 0
+            android.widget.FrameLayout$LayoutParams r12 = org.telegram.ui.Components.LayoutHelper.createFrame(r13, r14, r15, r16, r17, r18, r19)
+            r7.addView(r8, r12)
+            org.telegram.ui.Components.RLottieDrawable r12 = new org.telegram.ui.Components.RLottieDrawable
+            r13 = 1123024896(0x42var_, float:120.0)
+            int r16 = org.telegram.messenger.AndroidUtilities.dp(r13)
+            int r17 = org.telegram.messenger.AndroidUtilities.dp(r13)
+            r14 = 2131558470(0x7f0d0046, float:1.8742257E38)
+            java.lang.String r15 = "NUM"
+            r18 = 0
+            r19 = 0
+            r13 = r12
+            r13.<init>(r14, r15, r16, r17, r18, r19)
+            r0.completedDrawable = r12
+            r12.setAllowDecodeSingleFrame(r10)
+            org.telegram.ui.Components.RLottieImageView r12 = new org.telegram.ui.Components.RLottieImageView
+            r12.<init>(r1)
+            r0.imageView = r12
+            r12.setAutoRepeat(r10)
+            org.telegram.ui.Components.RLottieImageView r12 = r0.imageView
+            r13 = 2131558471(0x7f0d0047, float:1.8742259E38)
+            r14 = 120(0x78, float:1.68E-43)
+            r12.setAnimation(r13, r14, r14)
+            org.telegram.ui.Components.RLottieImageView r12 = r0.imageView
+            r12.playAnimation()
+            org.telegram.ui.Components.RLottieImageView r12 = r0.imageView
+            r13 = 160(0xa0, float:2.24E-43)
+            r14 = 1126170624(0x43200000, float:160.0)
             r15 = 49
             r16 = 1099431936(0x41880000, float:17.0)
-            r17 = 1132658688(0x43830000, float:262.0)
+            r17 = 1117650944(0x429e0000, float:79.0)
             r18 = 1099431936(0x41880000, float:17.0)
             r19 = 0
             android.widget.FrameLayout$LayoutParams r13 = org.telegram.ui.Components.LayoutHelper.createFrame(r13, r14, r15, r16, r17, r18, r19)
-            r8.addView(r6, r13)
+            r7.addView(r12, r13)
+            org.telegram.ui.Components.RLottieImageView r12 = r0.imageView
+            org.telegram.ui.Components.RLottieDrawable r12 = r12.getAnimatedDrawable()
+            r13 = 178(0xb2, float:2.5E-43)
+            r12.setOnFinishCallback(r6, r13)
+            android.widget.TextView r6 = new android.widget.TextView
+            r6.<init>(r1)
+            r0.percentTextView = r6
+            android.graphics.Typeface r12 = org.telegram.messenger.AndroidUtilities.getTypeface(r9)
+            r6.setTypeface(r12)
+            android.widget.TextView r6 = r0.percentTextView
+            r12 = 1103101952(0x41CLASSNAME, float:24.0)
+            r6.setTextSize(r10, r12)
+            android.widget.TextView r6 = r0.percentTextView
+            int r12 = r0.getThemedColor(r11)
+            r6.setTextColor(r12)
+            android.widget.TextView r6 = r0.percentTextView
+            r12 = -2
+            r13 = -1073741824(0xffffffffCLASSNAME, float:-2.0)
+            r14 = 49
+            r15 = 1099431936(0x41880000, float:17.0)
+            r16 = 1132658688(0x43830000, float:262.0)
+            r17 = 1099431936(0x41880000, float:17.0)
+            r18 = 0
+            android.widget.FrameLayout$LayoutParams r12 = org.telegram.ui.Components.LayoutHelper.createFrame(r12, r13, r14, r15, r16, r17, r18)
+            r7.addView(r6, r12)
             org.telegram.ui.Components.LineProgressView r6 = new org.telegram.ui.Components.LineProgressView
-            android.content.Context r13 = r21.getContext()
-            r6.<init>(r13)
+            android.content.Context r12 = r20.getContext()
+            r6.<init>(r12)
             r0.lineProgressView = r6
-            java.lang.String r13 = "featuredStickers_addButton"
-            int r13 = r0.getThemedColor(r13)
-            r6.setProgressColor(r13)
+            java.lang.String r12 = "featuredStickers_addButton"
+            int r12 = r0.getThemedColor(r12)
+            r6.setProgressColor(r12)
             org.telegram.ui.Components.LineProgressView r6 = r0.lineProgressView
-            java.lang.String r13 = "dialogLineProgressBackground"
-            int r13 = r0.getThemedColor(r13)
-            r6.setBackColor(r13)
+            java.lang.String r12 = "dialogLineProgressBackground"
+            int r12 = r0.getThemedColor(r12)
+            r6.setBackColor(r12)
             org.telegram.ui.Components.LineProgressView r6 = r0.lineProgressView
-            r13 = -1
-            r14 = 1082130432(0x40800000, float:4.0)
-            r15 = 51
-            r16 = 1112014848(0x42480000, float:50.0)
-            r17 = 1134133248(0x43998000, float:307.0)
-            r18 = 1112014848(0x42480000, float:50.0)
-            android.widget.FrameLayout$LayoutParams r13 = org.telegram.ui.Components.LayoutHelper.createFrame(r13, r14, r15, r16, r17, r18, r19)
-            r8.addView(r6, r13)
+            r12 = -1
+            r13 = 1082130432(0x40800000, float:4.0)
+            r14 = 51
+            r15 = 1112014848(0x42480000, float:50.0)
+            r16 = 1134133248(0x43998000, float:307.0)
+            r17 = 1112014848(0x42480000, float:50.0)
+            android.widget.FrameLayout$LayoutParams r12 = org.telegram.ui.Components.LayoutHelper.createFrame(r12, r13, r14, r15, r16, r17, r18)
+            r7.addView(r6, r12)
             org.telegram.ui.Components.ImportingAlert$BottomSheetCell r6 = new org.telegram.ui.Components.ImportingAlert$BottomSheetCell
             r6.<init>(r1, r3)
             r0.cell = r6
-            r13 = 0
-            r6.setBackground(r13)
-            org.telegram.ui.Components.ImportingAlert$BottomSheetCell r6 = r0.cell
-            java.lang.String r13 = "ImportDone"
-            r14 = 2131626071(0x7f0e0857, float:1.8879368E38)
-            java.lang.String r13 = org.telegram.messenger.LocaleController.getString(r13, r14)
-            r6.setText(r13)
-            org.telegram.ui.Components.ImportingAlert$BottomSheetCell r6 = r0.cell
-            r13 = 4
-            r6.setVisibility(r13)
-            org.telegram.ui.Components.ImportingAlert$BottomSheetCell r6 = r0.cell
-            android.view.View r6 = r6.background
-            org.telegram.ui.Components.ImportingAlert$$ExternalSyntheticLambda0 r13 = new org.telegram.ui.Components.ImportingAlert$$ExternalSyntheticLambda0
-            r13.<init>(r0)
-            r6.setOnClickListener(r13)
-            org.telegram.ui.Components.ImportingAlert$BottomSheetCell r6 = r0.cell
-            android.view.View r6 = r6.background
-            r13 = 1111490560(0x42400000, float:48.0)
-            int r13 = org.telegram.messenger.AndroidUtilities.dp(r13)
-            float r13 = (float) r13
-            r6.setPivotY(r13)
-            org.telegram.ui.Components.ImportingAlert$BottomSheetCell r6 = r0.cell
-            android.view.View r6 = r6.background
-            r13 = 1025758986(0x3d23d70a, float:0.04)
-            r6.setScaleY(r13)
-            org.telegram.ui.Components.ImportingAlert$BottomSheetCell r6 = r0.cell
-            r13 = -1
-            r14 = 1112014848(0x42480000, float:50.0)
-            r16 = 1107820544(0x42080000, float:34.0)
-            r17 = 1131872256(0x43770000, float:247.0)
-            r18 = 1107820544(0x42080000, float:34.0)
-            android.widget.FrameLayout$LayoutParams r13 = org.telegram.ui.Components.LayoutHelper.createFrame(r13, r14, r15, r16, r17, r18, r19)
-            r8.addView(r6, r13)
-            r6 = 0
+            r3 = 0
+            r6.setBackground(r3)
+            org.telegram.ui.Components.ImportingAlert$BottomSheetCell r3 = r0.cell
+            java.lang.String r6 = "ImportDone"
+            r12 = 2131626071(0x7f0e0857, float:1.8879368E38)
+            java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r6, r12)
+            r3.setText(r6)
+            org.telegram.ui.Components.ImportingAlert$BottomSheetCell r3 = r0.cell
+            r6 = 4
+            r3.setVisibility(r6)
+            org.telegram.ui.Components.ImportingAlert$BottomSheetCell r3 = r0.cell
+            android.view.View r3 = r3.background
+            org.telegram.ui.Components.ImportingAlert$$ExternalSyntheticLambda0 r6 = new org.telegram.ui.Components.ImportingAlert$$ExternalSyntheticLambda0
+            r6.<init>(r0)
+            r3.setOnClickListener(r6)
+            org.telegram.ui.Components.ImportingAlert$BottomSheetCell r3 = r0.cell
+            android.view.View r3 = r3.background
+            r6 = 1111490560(0x42400000, float:48.0)
+            int r6 = org.telegram.messenger.AndroidUtilities.dp(r6)
+            float r6 = (float) r6
+            r3.setPivotY(r6)
+            org.telegram.ui.Components.ImportingAlert$BottomSheetCell r3 = r0.cell
+            android.view.View r3 = r3.background
+            r6 = 1025758986(0x3d23d70a, float:0.04)
+            r3.setScaleY(r6)
+            org.telegram.ui.Components.ImportingAlert$BottomSheetCell r3 = r0.cell
+            r12 = -1
+            r13 = 1112014848(0x42480000, float:50.0)
+            r15 = 1107820544(0x42080000, float:34.0)
+            r16 = 1131872256(0x43770000, float:247.0)
+            r17 = 1107820544(0x42080000, float:34.0)
+            android.widget.FrameLayout$LayoutParams r6 = org.telegram.ui.Components.LayoutHelper.createFrame(r12, r13, r14, r15, r16, r17, r18)
+            r7.addView(r3, r6)
+            r3 = 0
         L_0x0186:
-            if (r6 >= r5) goto L_0x0243
-            android.widget.TextView[] r13 = r0.importCountTextView
-            android.widget.TextView r14 = new android.widget.TextView
-            r14.<init>(r1)
-            r13[r6] = r14
-            android.widget.TextView[] r13 = r0.importCountTextView
-            r13 = r13[r6]
-            r14 = 1098907648(0x41800000, float:16.0)
-            r13.setTextSize(r11, r14)
-            android.widget.TextView[] r13 = r0.importCountTextView
-            r13 = r13[r6]
-            android.graphics.Typeface r14 = org.telegram.messenger.AndroidUtilities.getTypeface(r10)
-            r13.setTypeface(r14)
-            android.widget.TextView[] r13 = r0.importCountTextView
-            r13 = r13[r6]
-            int r14 = r0.getThemedColor(r12)
-            r13.setTextColor(r14)
-            android.widget.TextView[] r13 = r0.importCountTextView
-            r13 = r13[r6]
-            r14 = -2
-            r15 = -1073741824(0xffffffffCLASSNAME, float:-2.0)
-            r16 = 49
+            if (r3 >= r5) goto L_0x0242
+            android.widget.TextView[] r6 = r0.importCountTextView
+            android.widget.TextView r12 = new android.widget.TextView
+            r12.<init>(r1)
+            r6[r3] = r12
+            android.widget.TextView[] r6 = r0.importCountTextView
+            r6 = r6[r3]
+            r12 = 1098907648(0x41800000, float:16.0)
+            r6.setTextSize(r10, r12)
+            android.widget.TextView[] r6 = r0.importCountTextView
+            r6 = r6[r3]
+            android.graphics.Typeface r12 = org.telegram.messenger.AndroidUtilities.getTypeface(r9)
+            r6.setTypeface(r12)
+            android.widget.TextView[] r6 = r0.importCountTextView
+            r6 = r6[r3]
+            int r12 = r0.getThemedColor(r11)
+            r6.setTextColor(r12)
+            android.widget.TextView[] r6 = r0.importCountTextView
+            r6 = r6[r3]
+            r12 = -2
+            r13 = -1073741824(0xffffffffCLASSNAME, float:-2.0)
+            r14 = 49
+            r15 = 1099431936(0x41880000, float:17.0)
+            r16 = 1135214592(0x43aa0000, float:340.0)
             r17 = 1099431936(0x41880000, float:17.0)
-            r18 = 1135214592(0x43aa0000, float:340.0)
-            r19 = 1099431936(0x41880000, float:17.0)
-            r20 = 0
-            android.widget.FrameLayout$LayoutParams r14 = org.telegram.ui.Components.LayoutHelper.createFrame(r14, r15, r16, r17, r18, r19, r20)
-            r8.addView(r13, r14)
-            android.widget.TextView[] r13 = r0.infoTextView
-            android.widget.TextView r14 = new android.widget.TextView
-            r14.<init>(r1)
-            r13[r6] = r14
-            android.widget.TextView[] r13 = r0.infoTextView
-            r13 = r13[r6]
-            r14 = 1096810496(0x41600000, float:14.0)
-            r13.setTextSize(r11, r14)
-            android.widget.TextView[] r13 = r0.infoTextView
-            r13 = r13[r6]
-            java.lang.String r14 = "dialogTextGray3"
-            int r14 = r0.getThemedColor(r14)
-            r13.setTextColor(r14)
-            android.widget.TextView[] r13 = r0.infoTextView
-            r13 = r13[r6]
-            r13.setGravity(r11)
-            android.widget.TextView[] r13 = r0.infoTextView
-            r13 = r13[r6]
-            r14 = -2
+            r18 = 0
+            android.widget.FrameLayout$LayoutParams r12 = org.telegram.ui.Components.LayoutHelper.createFrame(r12, r13, r14, r15, r16, r17, r18)
+            r7.addView(r6, r12)
+            android.widget.TextView[] r6 = r0.infoTextView
+            android.widget.TextView r12 = new android.widget.TextView
+            r12.<init>(r1)
+            r6[r3] = r12
+            android.widget.TextView[] r6 = r0.infoTextView
+            r6 = r6[r3]
+            r12 = 1096810496(0x41600000, float:14.0)
+            r6.setTextSize(r10, r12)
+            android.widget.TextView[] r6 = r0.infoTextView
+            r6 = r6[r3]
+            java.lang.String r12 = "dialogTextGray3"
+            int r12 = r0.getThemedColor(r12)
+            r6.setTextColor(r12)
+            android.widget.TextView[] r6 = r0.infoTextView
+            r6 = r6[r3]
+            r6.setGravity(r10)
+            android.widget.TextView[] r6 = r0.infoTextView
+            r6 = r6[r3]
+            r12 = -2
+            r15 = 1106247680(0x41var_, float:30.0)
+            r16 = 1136132096(0x43b80000, float:368.0)
             r17 = 1106247680(0x41var_, float:30.0)
-            r18 = 1136132096(0x43b80000, float:368.0)
-            r19 = 1106247680(0x41var_, float:30.0)
-            r20 = 1110441984(0x42300000, float:44.0)
-            android.widget.FrameLayout$LayoutParams r14 = org.telegram.ui.Components.LayoutHelper.createFrame(r14, r15, r16, r17, r18, r19, r20)
-            r8.addView(r13, r14)
-            if (r6 != 0) goto L_0x0215
-            android.widget.TextView[] r13 = r0.infoTextView
-            r13 = r13[r6]
-            r14 = 2131626086(0x7f0e0866, float:1.8879398E38)
-            java.lang.String r15 = "ImportImportingInfo"
-            java.lang.String r14 = org.telegram.messenger.LocaleController.getString(r15, r14)
-            r13.setText(r14)
+            r18 = 1110441984(0x42300000, float:44.0)
+            android.widget.FrameLayout$LayoutParams r12 = org.telegram.ui.Components.LayoutHelper.createFrame(r12, r13, r14, r15, r16, r17, r18)
+            r7.addView(r6, r12)
+            if (r3 != 0) goto L_0x0215
+            android.widget.TextView[] r6 = r0.infoTextView
+            r6 = r6[r3]
+            r12 = 2131626086(0x7f0e0866, float:1.8879398E38)
+            java.lang.String r13 = "ImportImportingInfo"
+            java.lang.String r12 = org.telegram.messenger.LocaleController.getString(r13, r12)
+            r6.setText(r12)
             goto L_0x023e
         L_0x0215:
-            android.widget.TextView[] r13 = r0.infoTextView
-            r13 = r13[r6]
-            r14 = 0
-            r13.setAlpha(r14)
-            android.widget.TextView[] r13 = r0.infoTextView
-            r13 = r13[r6]
-            r15 = 1092616192(0x41200000, float:10.0)
-            int r5 = org.telegram.messenger.AndroidUtilities.dp(r15)
-            float r5 = (float) r5
-            r13.setTranslationY(r5)
-            android.widget.TextView[] r5 = r0.importCountTextView
-            r5 = r5[r6]
-            r5.setAlpha(r14)
-            android.widget.TextView[] r5 = r0.importCountTextView
-            r5 = r5[r6]
-            int r13 = org.telegram.messenger.AndroidUtilities.dp(r15)
-            float r13 = (float) r13
-            r5.setTranslationY(r13)
+            android.widget.TextView[] r6 = r0.infoTextView
+            r6 = r6[r3]
+            r12 = 0
+            r6.setAlpha(r12)
+            android.widget.TextView[] r6 = r0.infoTextView
+            r6 = r6[r3]
+            r13 = 1092616192(0x41200000, float:10.0)
+            int r14 = org.telegram.messenger.AndroidUtilities.dp(r13)
+            float r14 = (float) r14
+            r6.setTranslationY(r14)
+            android.widget.TextView[] r6 = r0.importCountTextView
+            r6 = r6[r3]
+            r6.setAlpha(r12)
+            android.widget.TextView[] r6 = r0.importCountTextView
+            r6 = r6[r3]
+            int r12 = org.telegram.messenger.AndroidUtilities.dp(r13)
+            float r12 = (float) r12
+            r6.setTranslationY(r12)
         L_0x023e:
-            int r6 = r6 + 1
-            r5 = 2
+            int r3 = r3 + 1
             goto L_0x0186
-        L_0x0243:
-            org.telegram.ui.ChatActivity r5 = r0.parentFragment
-            java.lang.String r10 = "ImportCount"
-            r12 = 1120403456(0x42CLASSNAME, float:100.0)
-            java.lang.String r13 = "%d%%"
-            if (r5 == 0) goto L_0x02d7
-            r5 = 2131626087(0x7f0e0867, float:1.88794E38)
-            java.lang.String r14 = "ImportImportingTitle"
-            java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r14, r5)
-            r9.setText(r5)
-            org.telegram.ui.ChatActivity r5 = r0.parentFragment
-            org.telegram.messenger.SendMessagesHelper r5 = r5.getSendMessagesHelper()
-            org.telegram.ui.ChatActivity r14 = r0.parentFragment
-            long r14 = r14.getDialogId()
-            org.telegram.messenger.SendMessagesHelper$ImportingHistory r5 = r5.getImportingHistory(r14)
-            android.widget.TextView r14 = r0.percentTextView
-            java.lang.Object[] r15 = new java.lang.Object[r11]
-            int r6 = r5.uploadProgress
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            r15[r4] = r6
-            java.lang.String r6 = java.lang.String.format(r13, r15)
-            r14.setText(r6)
-            org.telegram.ui.Components.LineProgressView r6 = r0.lineProgressView
-            int r13 = r5.uploadProgress
-            float r13 = (float) r13
-            float r13 = r13 / r12
-            r6.setProgress(r13, r4)
-            android.widget.TextView[] r6 = r0.importCountTextView
-            r6 = r6[r4]
-            r12 = 2
-            java.lang.Object[] r12 = new java.lang.Object[r12]
-            long r13 = r5.getUploadedCount()
-            java.lang.String r13 = org.telegram.messenger.AndroidUtilities.formatFileSize(r13)
-            r12[r4] = r13
-            long r13 = r5.getTotalCount()
-            java.lang.String r4 = org.telegram.messenger.AndroidUtilities.formatFileSize(r13)
-            r12[r11] = r4
-            r4 = 2131626070(0x7f0e0856, float:1.8879366E38)
-            java.lang.String r4 = org.telegram.messenger.LocaleController.formatString(r10, r4, r12)
-            r6.setText(r4)
-            android.widget.TextView[] r4 = r0.infoTextView
-            r4 = r4[r11]
-            r6 = 2131626072(0x7f0e0858, float:1.887937E38)
-            java.lang.String r10 = "ImportDoneInfo"
-            java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r10, r6)
-            r4.setText(r6)
-            android.widget.TextView[] r4 = r0.importCountTextView
-            r4 = r4[r11]
-            r6 = 2131626073(0x7f0e0859, float:1.8879372E38)
-            java.lang.String r10 = "ImportDoneTitle"
-            java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r10, r6)
-            r4.setText(r6)
-            org.telegram.ui.ChatActivity r4 = r0.parentFragment
-            org.telegram.messenger.NotificationCenter r4 = r4.getNotificationCenter()
-            int r6 = org.telegram.messenger.NotificationCenter.historyImportProgressChanged
-            r4.addObserver(r0, r6)
-            goto L_0x0359
-        L_0x02d7:
-            r5 = 2131626097(0x7f0e0871, float:1.887942E38)
-            java.lang.String r6 = "ImportStickersImportingTitle"
-            java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r6, r5)
-            r9.setText(r5)
-            int r5 = r0.currentAccount
-            org.telegram.messenger.SendMessagesHelper r5 = org.telegram.messenger.SendMessagesHelper.getInstance(r5)
-            org.telegram.messenger.SendMessagesHelper$ImportingStickers r5 = r5.getImportingStickers(r2)
-            android.widget.TextView r6 = r0.percentTextView
-            java.lang.Object[] r14 = new java.lang.Object[r11]
-            int r15 = r5.uploadProgress
-            java.lang.Integer r15 = java.lang.Integer.valueOf(r15)
-            r14[r4] = r15
-            java.lang.String r13 = java.lang.String.format(r13, r14)
-            r6.setText(r13)
-            org.telegram.ui.Components.LineProgressView r6 = r0.lineProgressView
-            int r13 = r5.uploadProgress
-            float r13 = (float) r13
-            float r13 = r13 / r12
-            r6.setProgress(r13, r4)
-            android.widget.TextView[] r6 = r0.importCountTextView
-            r6 = r6[r4]
-            r12 = 2
-            java.lang.Object[] r12 = new java.lang.Object[r12]
-            long r13 = r5.getUploadedCount()
-            java.lang.String r13 = org.telegram.messenger.AndroidUtilities.formatFileSize(r13)
-            r12[r4] = r13
-            long r13 = r5.getTotalCount()
-            java.lang.String r4 = org.telegram.messenger.AndroidUtilities.formatFileSize(r13)
-            r12[r11] = r4
-            r4 = 2131626070(0x7f0e0856, float:1.8879366E38)
-            java.lang.String r4 = org.telegram.messenger.LocaleController.formatString(r10, r4, r12)
-            r6.setText(r4)
-            android.widget.TextView[] r4 = r0.infoTextView
-            r4 = r4[r11]
-            r6 = 2131626092(0x7f0e086c, float:1.887941E38)
-            java.lang.String r10 = "ImportStickersDoneInfo"
-            java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r10, r6)
-            r4.setText(r6)
-            android.widget.TextView[] r4 = r0.importCountTextView
-            r4 = r4[r11]
-            r6 = 2131626093(0x7f0e086d, float:1.8879412E38)
-            java.lang.String r10 = "ImportStickersDoneTitle"
-            java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r10, r6)
-            r4.setText(r6)
-            int r4 = r0.currentAccount
-            org.telegram.messenger.NotificationCenter r4 = org.telegram.messenger.NotificationCenter.getInstance(r4)
-            int r6 = org.telegram.messenger.NotificationCenter.stickersImportProgressChanged
-            r4.addObserver(r0, r6)
-        L_0x0359:
+        L_0x0242:
+            org.telegram.ui.ChatActivity r1 = r0.parentFragment
+            r3 = 2131626070(0x7f0e0856, float:1.8879366E38)
+            java.lang.String r6 = "ImportCount"
+            r7 = 1120403456(0x42CLASSNAME, float:100.0)
+            java.lang.String r9 = "%d%%"
+            if (r1 == 0) goto L_0x02d5
+            r1 = 2131626087(0x7f0e0867, float:1.88794E38)
+            java.lang.String r2 = "ImportImportingTitle"
+            java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
+            r8.setText(r1)
+            org.telegram.ui.ChatActivity r1 = r0.parentFragment
+            org.telegram.messenger.SendMessagesHelper r1 = r1.getSendMessagesHelper()
+            org.telegram.ui.ChatActivity r2 = r0.parentFragment
+            long r11 = r2.getDialogId()
+            org.telegram.messenger.SendMessagesHelper$ImportingHistory r1 = r1.getImportingHistory(r11)
+            android.widget.TextView r2 = r0.percentTextView
+            java.lang.Object[] r8 = new java.lang.Object[r10]
+            int r11 = r1.uploadProgress
+            java.lang.Integer r11 = java.lang.Integer.valueOf(r11)
+            r8[r4] = r11
+            java.lang.String r8 = java.lang.String.format(r9, r8)
+            r2.setText(r8)
+            org.telegram.ui.Components.LineProgressView r2 = r0.lineProgressView
+            int r8 = r1.uploadProgress
+            float r8 = (float) r8
+            float r8 = r8 / r7
+            r2.setProgress(r8, r4)
+            android.widget.TextView[] r2 = r0.importCountTextView
+            r2 = r2[r4]
+            java.lang.Object[] r5 = new java.lang.Object[r5]
+            long r7 = r1.getUploadedCount()
+            java.lang.String r7 = org.telegram.messenger.AndroidUtilities.formatFileSize(r7)
+            r5[r4] = r7
+            long r7 = r1.getTotalCount()
+            java.lang.String r1 = org.telegram.messenger.AndroidUtilities.formatFileSize(r7)
+            r5[r10] = r1
+            java.lang.String r1 = org.telegram.messenger.LocaleController.formatString(r6, r3, r5)
+            r2.setText(r1)
+            android.widget.TextView[] r1 = r0.infoTextView
+            r1 = r1[r10]
+            r2 = 2131626072(0x7f0e0858, float:1.887937E38)
+            java.lang.String r3 = "ImportDoneInfo"
+            java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
+            r1.setText(r2)
+            android.widget.TextView[] r1 = r0.importCountTextView
+            r1 = r1[r10]
+            r2 = 2131626073(0x7f0e0859, float:1.8879372E38)
+            java.lang.String r3 = "ImportDoneTitle"
+            java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
+            r1.setText(r2)
+            org.telegram.ui.ChatActivity r1 = r0.parentFragment
+            org.telegram.messenger.NotificationCenter r1 = r1.getNotificationCenter()
+            int r2 = org.telegram.messenger.NotificationCenter.historyImportProgressChanged
+            r1.addObserver(r0, r2)
+            goto L_0x0353
+        L_0x02d5:
+            r1 = 2131626097(0x7f0e0871, float:1.887942E38)
+            java.lang.String r11 = "ImportStickersImportingTitle"
+            java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r11, r1)
+            r8.setText(r1)
+            int r1 = r0.currentAccount
+            org.telegram.messenger.SendMessagesHelper r1 = org.telegram.messenger.SendMessagesHelper.getInstance(r1)
+            org.telegram.messenger.SendMessagesHelper$ImportingStickers r1 = r1.getImportingStickers(r2)
+            android.widget.TextView r2 = r0.percentTextView
+            java.lang.Object[] r8 = new java.lang.Object[r10]
+            int r11 = r1.uploadProgress
+            java.lang.Integer r11 = java.lang.Integer.valueOf(r11)
+            r8[r4] = r11
+            java.lang.String r8 = java.lang.String.format(r9, r8)
+            r2.setText(r8)
+            org.telegram.ui.Components.LineProgressView r2 = r0.lineProgressView
+            int r8 = r1.uploadProgress
+            float r8 = (float) r8
+            float r8 = r8 / r7
+            r2.setProgress(r8, r4)
+            android.widget.TextView[] r2 = r0.importCountTextView
+            r2 = r2[r4]
+            java.lang.Object[] r5 = new java.lang.Object[r5]
+            long r7 = r1.getUploadedCount()
+            java.lang.String r7 = org.telegram.messenger.AndroidUtilities.formatFileSize(r7)
+            r5[r4] = r7
+            long r7 = r1.getTotalCount()
+            java.lang.String r1 = org.telegram.messenger.AndroidUtilities.formatFileSize(r7)
+            r5[r10] = r1
+            java.lang.String r1 = org.telegram.messenger.LocaleController.formatString(r6, r3, r5)
+            r2.setText(r1)
+            android.widget.TextView[] r1 = r0.infoTextView
+            r1 = r1[r10]
+            r2 = 2131626092(0x7f0e086c, float:1.887941E38)
+            java.lang.String r3 = "ImportStickersDoneInfo"
+            java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
+            r1.setText(r2)
+            android.widget.TextView[] r1 = r0.importCountTextView
+            r1 = r1[r10]
+            r2 = 2131626093(0x7f0e086d, float:1.8879412E38)
+            java.lang.String r3 = "ImportStickersDoneTitle"
+            java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
+            r1.setText(r2)
+            int r1 = r0.currentAccount
+            org.telegram.messenger.NotificationCenter r1 = org.telegram.messenger.NotificationCenter.getInstance(r1)
+            int r2 = org.telegram.messenger.NotificationCenter.stickersImportProgressChanged
+            r1.addObserver(r0, r2)
+        L_0x0353:
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.ImportingAlert.<init>(android.content.Context, java.lang.String, org.telegram.ui.ChatActivity, org.telegram.ui.ActionBar.Theme$ResourcesProvider):void");
     }
 
-    /* renamed from: lambda$new$1$org-telegram-ui-Components-ImportingAlert  reason: not valid java name */
-    public /* synthetic */ void m4062lambda$new$1$orgtelegramuiComponentsImportingAlert(View v) {
+    /* access modifiers changed from: private */
+    public /* synthetic */ void lambda$new$1(View view) {
         dismiss();
     }
 
@@ -490,14 +486,30 @@ public class ImportingAlert extends BottomSheet implements NotificationCenter.No
         animatorSet.start();
     }
 
-    public void didReceivedNotification(int id, int account, Object... args) {
-        int i = id;
-        Object[] objArr = args;
-        if (i != NotificationCenter.historyImportProgressChanged) {
-            String str = "ImportCount";
-            if (i != NotificationCenter.stickersImportProgressChanged) {
+    public void didReceivedNotification(int i, int i2, Object... objArr) {
+        if (i == NotificationCenter.historyImportProgressChanged) {
+            if (objArr.length > 1) {
+                dismiss();
                 return;
             }
+            SendMessagesHelper.ImportingHistory importingHistory = this.parentFragment.getSendMessagesHelper().getImportingHistory(this.parentFragment.getDialogId());
+            if (importingHistory == null) {
+                setCompleted();
+                return;
+            }
+            if (!this.completed) {
+                double currentFrame = (double) (180 - this.imageView.getAnimatedDrawable().getCurrentFrame());
+                Double.isNaN(currentFrame);
+                if ((currentFrame * 16.6d) + 3000.0d >= ((double) importingHistory.timeUntilFinish)) {
+                    this.imageView.setAutoRepeat(false);
+                    this.completed = true;
+                }
+            }
+            this.percentTextView.setText(String.format("%d%%", new Object[]{Integer.valueOf(importingHistory.uploadProgress)}));
+            this.importCountTextView[0].setText(LocaleController.formatString("ImportCount", NUM, AndroidUtilities.formatFileSize(importingHistory.getUploadedCount()), AndroidUtilities.formatFileSize(importingHistory.getTotalCount())));
+            this.lineProgressView.setProgress(((float) importingHistory.uploadProgress) / 100.0f, true);
+        } else if (i != NotificationCenter.stickersImportProgressChanged) {
+        } else {
             if (objArr.length > 1) {
                 dismiss();
                 return;
@@ -508,36 +520,16 @@ public class ImportingAlert extends BottomSheet implements NotificationCenter.No
                 return;
             }
             if (!this.completed) {
-                double currentFrame = (double) (180 - this.imageView.getAnimatedDrawable().getCurrentFrame());
-                Double.isNaN(currentFrame);
-                if ((currentFrame * 16.6d) + 3000.0d >= ((double) importingStickers.timeUntilFinish)) {
+                double currentFrame2 = (double) (180 - this.imageView.getAnimatedDrawable().getCurrentFrame());
+                Double.isNaN(currentFrame2);
+                if ((currentFrame2 * 16.6d) + 3000.0d >= ((double) importingStickers.timeUntilFinish)) {
                     this.imageView.setAutoRepeat(false);
                     this.completed = true;
                 }
             }
             this.percentTextView.setText(String.format("%d%%", new Object[]{Integer.valueOf(importingStickers.uploadProgress)}));
-            this.importCountTextView[0].setText(LocaleController.formatString(str, NUM, AndroidUtilities.formatFileSize(importingStickers.getUploadedCount()), AndroidUtilities.formatFileSize(importingStickers.getTotalCount())));
+            this.importCountTextView[0].setText(LocaleController.formatString("ImportCount", NUM, AndroidUtilities.formatFileSize(importingStickers.getUploadedCount()), AndroidUtilities.formatFileSize(importingStickers.getTotalCount())));
             this.lineProgressView.setProgress(((float) importingStickers.uploadProgress) / 100.0f, true);
-        } else if (objArr.length > 1) {
-            dismiss();
-        } else {
-            String str2 = "ImportCount";
-            SendMessagesHelper.ImportingHistory importingHistory = this.parentFragment.getSendMessagesHelper().getImportingHistory(this.parentFragment.getDialogId());
-            if (importingHistory == null) {
-                setCompleted();
-                return;
-            }
-            if (!this.completed) {
-                double currentFrame2 = (double) (180 - this.imageView.getAnimatedDrawable().getCurrentFrame());
-                Double.isNaN(currentFrame2);
-                if ((currentFrame2 * 16.6d) + 3000.0d >= ((double) importingHistory.timeUntilFinish)) {
-                    this.imageView.setAutoRepeat(false);
-                    this.completed = true;
-                }
-            }
-            this.percentTextView.setText(String.format("%d%%", new Object[]{Integer.valueOf(importingHistory.uploadProgress)}));
-            this.importCountTextView[0].setText(LocaleController.formatString(str2, NUM, AndroidUtilities.formatFileSize(importingHistory.getUploadedCount()), AndroidUtilities.formatFileSize(importingHistory.getTotalCount())));
-            this.lineProgressView.setProgress(((float) importingHistory.uploadProgress) / 100.0f, true);
         }
     }
 

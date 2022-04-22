@@ -8,6 +8,6 @@ public final /* synthetic */ class ContactsController$$ExternalSyntheticLambda1 
     }
 
     public final void run() {
-        this.f$0.m51lambda$readContacts$10$orgtelegrammessengerContactsController();
+        this.f$0.lambda$readContacts$10();
     }
 }

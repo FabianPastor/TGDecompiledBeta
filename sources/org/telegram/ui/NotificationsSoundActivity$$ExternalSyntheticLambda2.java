@@ -11,6 +11,6 @@ public final /* synthetic */ class NotificationsSoundActivity$$ExternalSynthetic
     }
 
     public final boolean onItemClick(View view, int i) {
-        return this.f$0.m2673lambda$createView$2$orgtelegramuiNotificationsSoundActivity(view, i);
+        return this.f$0.lambda$createView$2(view, i);
     }
 }

@@ -1,15 +1,15 @@
 package org.telegram.ui;
 
-import org.telegram.messenger.MessagesStorage;
+import android.view.View;
 
-public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda108 implements MessagesStorage.BooleanCallback {
-    public final /* synthetic */ ChatActivity f$0;
+public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda108 implements Runnable {
+    public final /* synthetic */ View f$0;
 
-    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda108(ChatActivity chatActivity) {
-        this.f$0 = chatActivity;
+    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda108(View view) {
+        this.f$0 = view;
     }
 
-    public final void run(boolean z) {
-        this.f$0.m1709lambda$createView$69$orgtelegramuiChatActivity(z);
+    public final void run() {
+        this.f$0.performHapticFeedback(3, 2);
     }
 }

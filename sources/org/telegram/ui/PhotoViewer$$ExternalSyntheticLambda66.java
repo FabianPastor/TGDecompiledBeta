@@ -1,15 +1,14 @@
 package org.telegram.ui;
 
-import android.content.DialogInterface;
+import org.telegram.ui.Components.NumberPicker;
 
-public final /* synthetic */ class PhotoViewer$$ExternalSyntheticLambda66 implements DialogInterface.OnClickListener {
-    public final /* synthetic */ PhotoViewer f$0;
+public final /* synthetic */ class PhotoViewer$$ExternalSyntheticLambda66 implements NumberPicker.Formatter {
+    public static final /* synthetic */ PhotoViewer$$ExternalSyntheticLambda66 INSTANCE = new PhotoViewer$$ExternalSyntheticLambda66();
 
-    public /* synthetic */ PhotoViewer$$ExternalSyntheticLambda66(PhotoViewer photoViewer) {
-        this.f$0 = photoViewer;
+    private /* synthetic */ PhotoViewer$$ExternalSyntheticLambda66() {
     }
 
-    public final void onClick(DialogInterface dialogInterface, int i) {
-        this.f$0.m2954lambda$switchToEditMode$53$orgtelegramuiPhotoViewer(dialogInterface, i);
+    public final String format(int i) {
+        return PhotoViewer.lambda$setParentActivity$26(i);
     }
 }

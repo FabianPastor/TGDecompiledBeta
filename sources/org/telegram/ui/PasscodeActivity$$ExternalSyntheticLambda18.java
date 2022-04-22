@@ -1,17 +1,15 @@
 package org.telegram.ui;
 
-import android.content.Context;
-import android.view.View;
-import org.telegram.ui.Components.AlertsCreator;
+public final /* synthetic */ class PasscodeActivity$$ExternalSyntheticLambda18 implements Runnable {
+    public final /* synthetic */ PasscodeActivity f$0;
+    public final /* synthetic */ Runnable f$1;
 
-public final /* synthetic */ class PasscodeActivity$$ExternalSyntheticLambda18 implements View.OnClickListener {
-    public final /* synthetic */ Context f$0;
-
-    public /* synthetic */ PasscodeActivity$$ExternalSyntheticLambda18(Context context) {
-        this.f$0 = context;
+    public /* synthetic */ PasscodeActivity$$ExternalSyntheticLambda18(PasscodeActivity passcodeActivity, Runnable runnable) {
+        this.f$0 = passcodeActivity;
+        this.f$1 = runnable;
     }
 
-    public final void onClick(View view) {
-        AlertsCreator.createForgotPasscodeDialog(this.f$0).show();
+    public final void run() {
+        this.f$0.lambda$animateSuccessAnimation$16(this.f$1);
     }
 }

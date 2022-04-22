@@ -1,14 +1,20 @@
 package org.telegram.ui;
 
-import org.telegram.messenger.GenericProvider;
+import java.io.File;
+import org.telegram.ui.ActionBar.Theme;
 
-public final /* synthetic */ class LaunchActivity$$ExternalSyntheticLambda57 implements GenericProvider {
-    public static final /* synthetic */ LaunchActivity$$ExternalSyntheticLambda57 INSTANCE = new LaunchActivity$$ExternalSyntheticLambda57();
+public final /* synthetic */ class LaunchActivity$$ExternalSyntheticLambda57 implements Runnable {
+    public final /* synthetic */ LaunchActivity f$0;
+    public final /* synthetic */ Theme.ThemeInfo f$1;
+    public final /* synthetic */ File f$2;
 
-    private /* synthetic */ LaunchActivity$$ExternalSyntheticLambda57() {
+    public /* synthetic */ LaunchActivity$$ExternalSyntheticLambda57(LaunchActivity launchActivity, Theme.ThemeInfo themeInfo, File file) {
+        this.f$0 = launchActivity;
+        this.f$1 = themeInfo;
+        this.f$2 = file;
     }
 
-    public final Object provide(Object obj) {
-        return LaunchActivity.lambda$switchToAccount$6((Void) obj);
+    public final void run() {
+        this.f$0.lambda$didReceivedNotification$87(this.f$1, this.f$2);
     }
 }

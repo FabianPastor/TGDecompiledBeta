@@ -1,15 +1,16 @@
 package org.telegram.ui.Components;
 
-import android.content.DialogInterface;
+import java.util.ArrayList;
+import org.telegram.ui.Components.ChatAttachAlertAudioLayout;
 
-public final /* synthetic */ class ChatAttachAlert$$ExternalSyntheticLambda29 implements DialogInterface.OnDismissListener {
+public final /* synthetic */ class ChatAttachAlert$$ExternalSyntheticLambda29 implements ChatAttachAlertAudioLayout.AudioSelectDelegate {
     public final /* synthetic */ ChatAttachAlert f$0;
 
     public /* synthetic */ ChatAttachAlert$$ExternalSyntheticLambda29(ChatAttachAlert chatAttachAlert) {
         this.f$0 = chatAttachAlert;
     }
 
-    public final void onDismiss(DialogInterface dialogInterface) {
-        this.f$0.m3759lambda$dismiss$32$orgtelegramuiComponentsChatAttachAlert(dialogInterface);
+    public final void didSelectAudio(ArrayList arrayList, CharSequence charSequence, boolean z, int i) {
+        this.f$0.lambda$openAudioLayout$25(arrayList, charSequence, z, i);
     }
 }

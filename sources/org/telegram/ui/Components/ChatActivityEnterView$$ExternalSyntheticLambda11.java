@@ -1,15 +1,15 @@
 package org.telegram.ui.Components;
 
-import android.animation.ValueAnimator;
+import android.content.DialogInterface;
 
-public final /* synthetic */ class ChatActivityEnterView$$ExternalSyntheticLambda11 implements ValueAnimator.AnimatorUpdateListener {
+public final /* synthetic */ class ChatActivityEnterView$$ExternalSyntheticLambda11 implements DialogInterface.OnDismissListener {
     public final /* synthetic */ ChatActivityEnterView f$0;
 
     public /* synthetic */ ChatActivityEnterView$$ExternalSyntheticLambda11(ChatActivityEnterView chatActivityEnterView) {
         this.f$0 = chatActivityEnterView;
     }
 
-    public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-        this.f$0.m3696x98dfb494(valueAnimator);
+    public final void onDismiss(DialogInterface dialogInterface) {
+        this.f$0.lambda$openWebViewMenu$32(dialogInterface);
     }
 }

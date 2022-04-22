@@ -16,8 +16,15 @@ public class RecordStatusDrawable extends StatusDrawable {
     private RectF rect = new RectF();
     private boolean started = false;
 
-    public RecordStatusDrawable(boolean createPaint) {
-        if (createPaint) {
+    public int getOpacity() {
+        return 0;
+    }
+
+    public void setColorFilter(ColorFilter colorFilter) {
+    }
+
+    public RecordStatusDrawable(boolean z) {
+        if (z) {
             Paint paint = new Paint(1);
             this.currentPaint = paint;
             paint.setStyle(Paint.Style.STROKE);
@@ -26,25 +33,25 @@ public class RecordStatusDrawable extends StatusDrawable {
         }
     }
 
-    public void setIsChat(boolean value) {
-        this.isChat = value;
+    public void setIsChat(boolean z) {
+        this.isChat = z;
     }
 
-    public void setColor(int color) {
+    public void setColor(int i) {
         Paint paint = this.currentPaint;
         if (paint != null) {
-            paint.setColor(color);
+            paint.setColor(i);
         }
     }
 
     private void update() {
-        long newTime = System.currentTimeMillis();
-        long dt = newTime - this.lastUpdateTime;
-        this.lastUpdateTime = newTime;
-        if (dt > 50) {
-            dt = 50;
+        long currentTimeMillis = System.currentTimeMillis();
+        long j = currentTimeMillis - this.lastUpdateTime;
+        this.lastUpdateTime = currentTimeMillis;
+        if (j > 50) {
+            j = 50;
         }
-        this.progress += ((float) dt) / 800.0f;
+        this.progress += ((float) j) / 800.0f;
         while (true) {
             float f = this.progress;
             if (f > 1.0f) {
@@ -81,16 +88,17 @@ public class RecordStatusDrawable extends StatusDrawable {
             f = 1.0f;
         }
         canvas.translate(0.0f, (float) (intrinsicHeight + AndroidUtilities.dp(f)));
-        for (int a = 0; a < 4; a++) {
-            if (a == 0) {
+        for (int i = 0; i < 4; i++) {
+            if (i == 0) {
                 paint.setAlpha((int) (((float) this.alpha) * this.progress));
-            } else if (a == 3) {
+            } else if (i == 3) {
                 paint.setAlpha((int) (((float) this.alpha) * (1.0f - this.progress)));
             } else {
                 paint.setAlpha(this.alpha);
             }
-            float side = ((float) (AndroidUtilities.dp(4.0f) * a)) + (((float) AndroidUtilities.dp(4.0f)) * this.progress);
-            this.rect.set(-side, -side, side, side);
+            float dp = ((float) (AndroidUtilities.dp(4.0f) * i)) + (((float) AndroidUtilities.dp(4.0f)) * this.progress);
+            float f2 = -dp;
+            this.rect.set(f2, f2, dp, dp);
             canvas.drawArc(this.rect, -15.0f, 30.0f, false, paint);
         }
         canvas.restore();
@@ -99,15 +107,8 @@ public class RecordStatusDrawable extends StatusDrawable {
         }
     }
 
-    public void setAlpha(int alpha2) {
-        this.alpha = alpha2;
-    }
-
-    public void setColorFilter(ColorFilter cf) {
-    }
-
-    public int getOpacity() {
-        return 0;
+    public void setAlpha(int i) {
+        this.alpha = i;
     }
 
     public int getIntrinsicWidth() {

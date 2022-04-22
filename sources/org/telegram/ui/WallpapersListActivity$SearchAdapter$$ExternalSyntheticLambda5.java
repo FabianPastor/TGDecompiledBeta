@@ -12,6 +12,6 @@ public final /* synthetic */ class WallpapersListActivity$SearchAdapter$$Externa
     }
 
     public final void onItemClick(View view, int i) {
-        this.f$0.m3483x5CLASSNAME(view, i);
+        this.f$0.lambda$onCreateViewHolder$5(view, i);
     }
 }

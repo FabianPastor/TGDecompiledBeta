@@ -11,6 +11,6 @@ public final /* synthetic */ class TrendingStickersLayout$$ExternalSyntheticLamb
     }
 
     public final void onItemClick(View view, int i) {
-        this.f$0.m4498lambda$new$0$orgtelegramuiComponentsTrendingStickersLayout(view, i);
+        this.f$0.lambda$new$0(view, i);
     }
 }

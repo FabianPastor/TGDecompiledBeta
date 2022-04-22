@@ -1,18 +1,18 @@
 package org.telegram.ui;
 
-import android.animation.ValueAnimator;
 import android.view.View;
+import org.telegram.ui.ActionBar.ActionBarPopupWindow;
 
-public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda55 implements ValueAnimator.AnimatorUpdateListener {
-    public final /* synthetic */ ChatActivity f$0;
-    public final /* synthetic */ View f$1;
+public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda55 implements View.OnClickListener {
+    public final /* synthetic */ ActionBarPopupWindow.ActionBarPopupWindowLayout f$0;
+    public final /* synthetic */ int[] f$1;
 
-    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda55(ChatActivity chatActivity, View view) {
-        this.f$0 = chatActivity;
-        this.f$1 = view;
+    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda55(ActionBarPopupWindow.ActionBarPopupWindowLayout actionBarPopupWindowLayout, int[] iArr) {
+        this.f$0 = actionBarPopupWindowLayout;
+        this.f$1 = iArr;
     }
 
-    public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-        this.f$0.m1837lambda$updateInfoTopView$80$orgtelegramuiChatActivity(this.f$1, valueAnimator);
+    public final void onClick(View view) {
+        this.f$0.getSwipeBack().openForeground(this.f$1[0]);
     }
 }

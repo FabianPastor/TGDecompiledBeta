@@ -11,6 +11,6 @@ public final /* synthetic */ class LoginActivity$LoginActivityRegisterView$$Exte
     }
 
     public final void onClick(DialogInterface dialogInterface, int i) {
-        this.f$0.m2506x8c6b3var_(dialogInterface, i);
+        this.f$0.lambda$showTermsOfService$0(dialogInterface, i);
     }
 }

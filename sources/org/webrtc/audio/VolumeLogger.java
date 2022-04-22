@@ -31,9 +31,9 @@ class VolumeLogger {
         private final int maxRingVolume;
         private final int maxVoiceCallVolume;
 
-        LogVolumeTask(int maxRingVolume2, int maxVoiceCallVolume2) {
-            this.maxRingVolume = maxRingVolume2;
-            this.maxVoiceCallVolume = maxVoiceCallVolume2;
+        LogVolumeTask(int i, int i2) {
+            this.maxRingVolume = i;
+            this.maxVoiceCallVolume = i2;
         }
 
         public void run() {

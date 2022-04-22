@@ -1,16 +1,19 @@
 package org.telegram.messenger;
 
-import java.util.Comparator;
-import org.telegram.messenger.support.LongSparseIntArray;
+import org.telegram.tgnet.NativeByteBuffer;
 
-public final /* synthetic */ class MessagesStorage$$ExternalSyntheticLambda103 implements Comparator {
-    public final /* synthetic */ LongSparseIntArray f$0;
+public final /* synthetic */ class MessagesStorage$$ExternalSyntheticLambda103 implements Runnable {
+    public final /* synthetic */ MessagesStorage f$0;
+    public final /* synthetic */ long f$1;
+    public final /* synthetic */ NativeByteBuffer f$2;
 
-    public /* synthetic */ MessagesStorage$$ExternalSyntheticLambda103(LongSparseIntArray longSparseIntArray) {
-        this.f$0 = longSparseIntArray;
+    public /* synthetic */ MessagesStorage$$ExternalSyntheticLambda103(MessagesStorage messagesStorage, long j, NativeByteBuffer nativeByteBuffer) {
+        this.f$0 = messagesStorage;
+        this.f$1 = j;
+        this.f$2 = nativeByteBuffer;
     }
 
-    public final int compare(Object obj, Object obj2) {
-        return MessagesStorage.lambda$resetDialogs$67(this.f$0, (Long) obj, (Long) obj2);
+    public final void run() {
+        this.f$0.lambda$createPendingTask$9(this.f$1, this.f$2);
     }
 }

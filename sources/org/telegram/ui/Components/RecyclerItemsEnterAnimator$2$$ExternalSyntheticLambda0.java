@@ -13,6 +13,6 @@ public final /* synthetic */ class RecyclerItemsEnterAnimator$2$$ExternalSynthet
     }
 
     public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-        this.f$0.m4290x18071e0(this.f$1, valueAnimator);
+        this.f$0.lambda$onPreDraw$0(this.f$1, valueAnimator);
     }
 }

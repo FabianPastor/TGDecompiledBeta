@@ -11,6 +11,6 @@ public final /* synthetic */ class PhotoViewer$ListAdapter$$ExternalSyntheticLam
     }
 
     public final void onClick(View view) {
-        this.f$0.m2990x660e23ec(view);
+        this.f$0.lambda$onCreateViewHolder$0(view);
     }
 }

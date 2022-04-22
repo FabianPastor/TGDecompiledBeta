@@ -1,15 +1,14 @@
 package org.telegram.ui.Components;
 
-import android.view.MotionEvent;
-import android.view.View;
+import org.telegram.ui.Components.NumberPicker;
 
-public final /* synthetic */ class AlertsCreator$$ExternalSyntheticLambda108 implements View.OnTouchListener {
+public final /* synthetic */ class AlertsCreator$$ExternalSyntheticLambda108 implements NumberPicker.Formatter {
     public static final /* synthetic */ AlertsCreator$$ExternalSyntheticLambda108 INSTANCE = new AlertsCreator$$ExternalSyntheticLambda108();
 
     private /* synthetic */ AlertsCreator$$ExternalSyntheticLambda108() {
     }
 
-    public final boolean onTouch(View view, MotionEvent motionEvent) {
-        return AlertsCreator.lambda$createSoundFrequencyPickerDialog$69(view, motionEvent);
+    public final String format(int i) {
+        return String.format("%02d", new Object[]{Integer.valueOf(i)});
     }
 }

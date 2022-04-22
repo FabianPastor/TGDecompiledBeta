@@ -11,6 +11,6 @@ public final /* synthetic */ class LoginActivity$PhoneNumberConfirmView$$Externa
     }
 
     public final void onClick(View view) {
-        this.f$0.m2562x2b64fCLASSNAME(view);
+        this.f$0.lambda$new$0(view);
     }
 }

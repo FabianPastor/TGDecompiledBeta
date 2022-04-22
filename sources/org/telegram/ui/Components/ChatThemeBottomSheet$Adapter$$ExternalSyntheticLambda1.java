@@ -2,7 +2,7 @@ package org.telegram.ui.Components;
 
 import org.telegram.tgnet.RequestDelegate;
 import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC;
+import org.telegram.tgnet.TLRPC$TL_error;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.ChatThemeBottomSheet;
 
@@ -15,7 +15,7 @@ public final /* synthetic */ class ChatThemeBottomSheet$Adapter$$ExternalSynthet
         this.f$1 = themeInfo;
     }
 
-    public final void run(TLObject tLObject, TLRPC.TL_error tL_error) {
-        this.f$0.m3919xe20fb76b(this.f$1, tLObject, tL_error);
+    public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+        this.f$0.lambda$parseTheme$1(this.f$1, tLObject, tLRPC$TL_error);
     }
 }

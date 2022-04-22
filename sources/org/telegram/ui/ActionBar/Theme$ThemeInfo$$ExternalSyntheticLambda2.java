@@ -15,6 +15,6 @@ public final /* synthetic */ class Theme$ThemeInfo$$ExternalSyntheticLambda2 imp
     }
 
     public final void run() {
-        this.f$0.m1293xefd4724d(this.f$1, this.f$2);
+        this.f$0.lambda$didReceivedNotification$1(this.f$1, this.f$2);
     }
 }

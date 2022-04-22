@@ -1,16 +1,15 @@
 package org.telegram.ui;
 
-import android.view.View;
-import android.view.WindowInsets;
+import android.animation.ValueAnimator;
 
-public final /* synthetic */ class PhotoViewer$$ExternalSyntheticLambda1 implements View.OnApplyWindowInsetsListener {
+public final /* synthetic */ class PhotoViewer$$ExternalSyntheticLambda1 implements ValueAnimator.AnimatorUpdateListener {
     public final /* synthetic */ PhotoViewer f$0;
 
     public /* synthetic */ PhotoViewer$$ExternalSyntheticLambda1(PhotoViewer photoViewer) {
         this.f$0 = photoViewer;
     }
 
-    public final WindowInsets onApplyWindowInsets(View view, WindowInsets windowInsets) {
-        return this.f$0.m2945lambda$setParentActivity$4$orgtelegramuiPhotoViewer(view, windowInsets);
+    public final void onAnimationUpdate(ValueAnimator valueAnimator) {
+        this.f$0.lambda$toggleActionBar$59(valueAnimator);
     }
 }

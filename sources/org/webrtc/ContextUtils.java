@@ -6,9 +6,9 @@ public class ContextUtils {
     private static final String TAG = "ContextUtils";
     private static Context applicationContext;
 
-    public static void initialize(Context applicationContext2) {
-        if (applicationContext2 != null) {
-            applicationContext = applicationContext2;
+    public static void initialize(Context context) {
+        if (context != null) {
+            applicationContext = context;
             return;
         }
         throw new IllegalArgumentException("Application context cannot be null for ContextUtils.initialize.");

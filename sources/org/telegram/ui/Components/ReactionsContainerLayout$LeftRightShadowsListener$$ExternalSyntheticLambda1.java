@@ -11,6 +11,6 @@ public final /* synthetic */ class ReactionsContainerLayout$LeftRightShadowsList
     }
 
     public final void accept(Object obj) {
-        this.f$0.m4285x9b48f4c4((Float) obj);
+        this.f$0.lambda$onScrolled$0((Float) obj);
     }
 }

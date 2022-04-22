@@ -1,17 +1,21 @@
 package org.telegram.ui;
 
-import org.telegram.tgnet.TLRPC;
+import android.view.View;
+import org.telegram.messenger.MessageObject;
+import org.telegram.tgnet.TLRPC$KeyboardButton;
 
-public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda87 implements Runnable {
+public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda87 implements View.OnClickListener {
     public final /* synthetic */ ChatActivity f$0;
-    public final /* synthetic */ TLRPC.TL_error f$1;
+    public final /* synthetic */ TLRPC$KeyboardButton f$1;
+    public final /* synthetic */ MessageObject f$2;
 
-    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda87(ChatActivity chatActivity, TLRPC.TL_error tL_error) {
+    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda87(ChatActivity chatActivity, TLRPC$KeyboardButton tLRPC$KeyboardButton, MessageObject messageObject) {
         this.f$0 = chatActivity;
-        this.f$1 = tL_error;
+        this.f$1 = tLRPC$KeyboardButton;
+        this.f$2 = messageObject;
     }
 
-    public final void run() {
-        this.f$0.m1794lambda$processSelectedOption$202$orgtelegramuiChatActivity(this.f$1);
+    public final void onClick(View view) {
+        this.f$0.lambda$updatePinnedMessageView$138(this.f$1, this.f$2, view);
     }
 }

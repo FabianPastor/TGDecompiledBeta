@@ -1,17 +1,15 @@
 package org.telegram.ui.Components;
 
-import org.telegram.tgnet.RequestDelegate;
-import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC;
+import android.animation.ValueAnimator;
 
-public final /* synthetic */ class ChatAttachAlertBotWebViewLayout$$ExternalSyntheticLambda1 implements RequestDelegate {
+public final /* synthetic */ class ChatAttachAlertBotWebViewLayout$$ExternalSyntheticLambda1 implements ValueAnimator.AnimatorUpdateListener {
     public final /* synthetic */ ChatAttachAlertBotWebViewLayout f$0;
 
     public /* synthetic */ ChatAttachAlertBotWebViewLayout$$ExternalSyntheticLambda1(ChatAttachAlertBotWebViewLayout chatAttachAlertBotWebViewLayout) {
         this.f$0 = chatAttachAlertBotWebViewLayout;
     }
 
-    public final void run(TLObject tLObject, TLRPC.TL_error tL_error) {
-        this.f$0.m3803xCLASSNAMEd114e(tLObject, tL_error);
+    public final void onAnimationUpdate(ValueAnimator valueAnimator) {
+        this.f$0.lambda$onPanTransitionStart$8(valueAnimator);
     }
 }

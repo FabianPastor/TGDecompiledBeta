@@ -11,6 +11,6 @@ public final /* synthetic */ class SessionsActivity$ScanQRCodeView$$ExternalSynt
     }
 
     public final void onClick(View view) {
-        this.f$0.m3248lambda$new$0$orgtelegramuiSessionsActivity$ScanQRCodeView(view);
+        this.f$0.lambda$new$0(view);
     }
 }

@@ -1,15 +1,17 @@
 package org.telegram.ui;
 
-import android.animation.ValueAnimator;
+import android.content.DialogInterface;
 
-public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda33 implements ValueAnimator.AnimatorUpdateListener {
+public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda33 implements DialogInterface.OnClickListener {
     public final /* synthetic */ ChatActivity f$0;
+    public final /* synthetic */ String f$1;
 
-    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda33(ChatActivity chatActivity) {
+    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda33(ChatActivity chatActivity, String str) {
         this.f$0 = chatActivity;
+        this.f$1 = str;
     }
 
-    public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-        this.f$0.m1846lambda$updateTopPanel$140$orgtelegramuiChatActivity(valueAnimator);
+    public final void onClick(DialogInterface dialogInterface, int i) {
+        this.f$0.lambda$didPressMessageUrl$230(this.f$1, dialogInterface, i);
     }
 }

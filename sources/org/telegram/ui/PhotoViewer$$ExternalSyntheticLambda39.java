@@ -1,13 +1,21 @@
 package org.telegram.ui;
 
-public final /* synthetic */ class PhotoViewer$$ExternalSyntheticLambda39 implements Runnable {
-    public final /* synthetic */ PhotoViewer f$0;
+import android.view.View;
+import org.telegram.ui.ActionBar.BottomSheet;
+import org.telegram.ui.Components.NumberPicker;
 
-    public /* synthetic */ PhotoViewer$$ExternalSyntheticLambda39(PhotoViewer photoViewer) {
+public final /* synthetic */ class PhotoViewer$$ExternalSyntheticLambda39 implements View.OnClickListener {
+    public final /* synthetic */ PhotoViewer f$0;
+    public final /* synthetic */ NumberPicker f$1;
+    public final /* synthetic */ BottomSheet f$2;
+
+    public /* synthetic */ PhotoViewer$$ExternalSyntheticLambda39(PhotoViewer photoViewer, NumberPicker numberPicker, BottomSheet bottomSheet) {
         this.f$0 = photoViewer;
+        this.f$1 = numberPicker;
+        this.f$2 = bottomSheet;
     }
 
-    public final void run() {
-        this.f$0.m2899lambda$closePaintMode$58$orgtelegramuiPhotoViewer();
+    public final void onClick(View view) {
+        this.f$0.lambda$setParentActivity$27(this.f$1, this.f$2, view);
     }
 }

@@ -8,6 +8,6 @@ public final /* synthetic */ class LocaleController$$ExternalSyntheticLambda0 im
     }
 
     public final void run() {
-        this.f$0.m82lambda$new$0$orgtelegrammessengerLocaleController();
+        this.f$0.lambda$new$1();
     }
 }

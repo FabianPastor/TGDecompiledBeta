@@ -1,21 +1,17 @@
 package org.telegram.messenger;
 
-import org.telegram.tgnet.TLRPC;
-
 public final /* synthetic */ class MessagesStorage$$ExternalSyntheticLambda67 implements Runnable {
     public final /* synthetic */ MessagesStorage f$0;
-    public final /* synthetic */ TLRPC.Document f$1;
-    public final /* synthetic */ String f$2;
-    public final /* synthetic */ String f$3;
+    public final /* synthetic */ long f$1;
+    public final /* synthetic */ int f$2;
 
-    public /* synthetic */ MessagesStorage$$ExternalSyntheticLambda67(MessagesStorage messagesStorage, TLRPC.Document document, String str, String str2) {
+    public /* synthetic */ MessagesStorage$$ExternalSyntheticLambda67(MessagesStorage messagesStorage, long j, int i) {
         this.f$0 = messagesStorage;
-        this.f$1 = document;
-        this.f$2 = str;
-        this.f$3 = str2;
+        this.f$1 = j;
+        this.f$2 = i;
     }
 
     public final void run() {
-        this.f$0.m846x589807da(this.f$1, this.f$2, this.f$3);
+        this.f$0.lambda$markMessageReactionsAsRead$195(this.f$1, this.f$2);
     }
 }

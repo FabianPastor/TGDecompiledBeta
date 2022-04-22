@@ -9,6 +9,6 @@ public final /* synthetic */ class CodeNumberField$$ExternalSyntheticLambda4 imp
     }
 
     public final float get(Object obj) {
-        return ((CodeNumberField) obj).successProgress;
+        return ((CodeNumberField) obj).focusedProgress;
     }
 }

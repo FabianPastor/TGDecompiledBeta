@@ -16,7 +16,12 @@ import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.UserConfig;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC;
+import org.telegram.tgnet.TLRPC$Chat;
+import org.telegram.tgnet.TLRPC$ChatFull;
+import org.telegram.tgnet.TLRPC$TL_chatInviteExported;
+import org.telegram.tgnet.TLRPC$TL_error;
+import org.telegram.tgnet.TLRPC$TL_messages_exportChatInvite;
+import org.telegram.tgnet.TLRPC$User;
 import org.telegram.ui.ActionBar.AlertDialog;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.BottomSheet;
@@ -28,9 +33,7 @@ public class PermanentLinkBottomSheet extends BottomSheet {
     private long chatId;
     private BaseFragment fragment;
     private final RLottieImageView imageView;
-    TLRPC.ChatFull info;
-    TLRPC.TL_chatInviteExported invite;
-    private boolean isChannel;
+    TLRPC$TL_chatInviteExported invite;
     private final LinkActionView linkActionView;
     boolean linkGenerating;
     RLottieDrawable linkIcon;
@@ -39,20 +42,17 @@ public class PermanentLinkBottomSheet extends BottomSheet {
     private final TextView titleView;
 
     /* JADX INFO: super call moved to the top of the method (can break code semantics) */
-    public PermanentLinkBottomSheet(Context context, boolean needFocus, BaseFragment fragment2, TLRPC.ChatFull info2, long chatId2, boolean isChannel2) {
-        super(context, needFocus);
+    public PermanentLinkBottomSheet(Context context, boolean z, BaseFragment baseFragment, TLRPC$ChatFull tLRPC$ChatFull, long j, boolean z2) {
+        super(context, z);
         String str;
         int i;
+        TLRPC$TL_chatInviteExported tLRPC$TL_chatInviteExported;
         Context context2 = context;
-        TLRPC.ChatFull chatFull = info2;
-        boolean z = isChannel2;
-        this.info = chatFull;
-        this.chatId = chatId2;
-        this.isChannel = z;
+        TLRPC$ChatFull tLRPC$ChatFull2 = tLRPC$ChatFull;
+        this.chatId = j;
         setAllowNestedScroll(true);
         setApplyBottomPadding(false);
-        LinkActionView linkActionView2 = r0;
-        LinkActionView linkActionView3 = new LinkActionView(context, fragment2, this, chatId2, true, isChannel2);
+        LinkActionView linkActionView2 = new LinkActionView(context, baseFragment, this, j, true, z2);
         this.linkActionView = linkActionView2;
         linkActionView2.setPermanent(true);
         RLottieImageView rLottieImageView = new RLottieImageView(context2);
@@ -62,7 +62,7 @@ public class PermanentLinkBottomSheet extends BottomSheet {
         this.linkIcon = rLottieDrawable;
         rLottieDrawable.setCustomEndFrame(42);
         rLottieImageView.setAnimation(this.linkIcon);
-        linkActionView2.setUsers(0, (ArrayList<TLRPC.User>) null);
+        linkActionView2.setUsers(0, (ArrayList<TLRPC$User>) null);
         linkActionView2.hideRevokeOption(true);
         linkActionView2.setDelegate(new PermanentLinkBottomSheet$$ExternalSyntheticLambda5(this));
         TextView textView = new TextView(context2);
@@ -73,7 +73,7 @@ public class PermanentLinkBottomSheet extends BottomSheet {
         textView.setTextColor(Theme.getColor("windowBackgroundWhiteBlackText"));
         TextView textView2 = new TextView(context2);
         this.subtitle = textView2;
-        if (z) {
+        if (z2) {
             i = NUM;
             str = "LinkInfoChannel";
         } else {
@@ -91,7 +91,7 @@ public class PermanentLinkBottomSheet extends BottomSheet {
         textView3.setTextColor(Theme.getColor("windowBackgroundWhiteBlueText"));
         textView3.setBackground(Theme.createRadSelectorDrawable(ColorUtils.setAlphaComponent(Theme.getColor("windowBackgroundWhiteBlueText"), 76), AndroidUtilities.dp(4.0f), AndroidUtilities.dp(4.0f)));
         textView3.setPadding(AndroidUtilities.dp(12.0f), AndroidUtilities.dp(4.0f), AndroidUtilities.dp(12.0f), AndroidUtilities.dp(4.0f));
-        textView3.setOnClickListener(new PermanentLinkBottomSheet$$ExternalSyntheticLambda0(this, chatFull, fragment2));
+        textView3.setOnClickListener(new PermanentLinkBottomSheet$$ExternalSyntheticLambda0(this, tLRPC$ChatFull2, baseFragment));
         LinearLayout linearLayout = new LinearLayout(context2);
         linearLayout.setOrientation(1);
         linearLayout.addView(rLottieImageView, LayoutHelper.createLinear(90, 90, 1, 0, 24, 0, 0));
@@ -99,60 +99,60 @@ public class PermanentLinkBottomSheet extends BottomSheet {
         linearLayout.addView(textView2, LayoutHelper.createLinear(-1, -2, 1, 60, 16, 60, 0));
         linearLayout.addView(linkActionView2, LayoutHelper.createLinear(-1, -2));
         linearLayout.addView(textView3, LayoutHelper.createLinear(-2, -2, 1, 60, 26, 60, 26));
-        NestedScrollView scrollView = new NestedScrollView(context2);
-        scrollView.setVerticalScrollBarEnabled(false);
-        scrollView.addView(linearLayout);
-        setCustomView(scrollView);
-        TLRPC.Chat chat = MessagesController.getInstance(UserConfig.selectedAccount).getChat(Long.valueOf(chatId2));
+        NestedScrollView nestedScrollView = new NestedScrollView(context2);
+        nestedScrollView.setVerticalScrollBarEnabled(false);
+        nestedScrollView.addView(linearLayout);
+        setCustomView(nestedScrollView);
+        TLRPC$Chat chat = MessagesController.getInstance(UserConfig.selectedAccount).getChat(Long.valueOf(j));
         if (chat != null && chat.username != null) {
             linkActionView2.setLink("https://t.me/" + chat.username);
             textView3.setVisibility(8);
-        } else if (chatFull == null || chatFull.exported_invite == null) {
+        } else if (tLRPC$ChatFull2 == null || (tLRPC$TL_chatInviteExported = tLRPC$ChatFull2.exported_invite) == null) {
             generateLink(false);
         } else {
-            linkActionView2.setLink(chatFull.exported_invite.link);
+            linkActionView2.setLink(tLRPC$TL_chatInviteExported.link);
         }
         updateColors();
     }
 
-    /* renamed from: lambda$new$0$org-telegram-ui-Components-PermanentLinkBottomSheet  reason: not valid java name */
-    public /* synthetic */ void m4172lambda$new$0$orgtelegramuiComponentsPermanentLinkBottomSheet() {
+    /* access modifiers changed from: private */
+    public /* synthetic */ void lambda$new$0() {
         generateLink(true);
     }
 
-    /* renamed from: lambda$new$1$org-telegram-ui-Components-PermanentLinkBottomSheet  reason: not valid java name */
-    public /* synthetic */ void m4173lambda$new$1$orgtelegramuiComponentsPermanentLinkBottomSheet(TLRPC.ChatFull info2, BaseFragment fragment2, View view) {
-        ManageLinksActivity manageFragment = new ManageLinksActivity(info2.id, 0, 0);
-        manageFragment.setInfo(info2, info2.exported_invite);
-        fragment2.presentFragment(manageFragment);
+    /* access modifiers changed from: private */
+    public /* synthetic */ void lambda$new$1(TLRPC$ChatFull tLRPC$ChatFull, BaseFragment baseFragment, View view) {
+        ManageLinksActivity manageLinksActivity = new ManageLinksActivity(tLRPC$ChatFull.id, 0, 0);
+        manageLinksActivity.setInfo(tLRPC$ChatFull, tLRPC$ChatFull.exported_invite);
+        baseFragment.presentFragment(manageLinksActivity);
         dismiss();
     }
 
-    private void generateLink(boolean showDialog) {
+    private void generateLink(boolean z) {
         if (!this.linkGenerating) {
             this.linkGenerating = true;
-            TLRPC.TL_messages_exportChatInvite req = new TLRPC.TL_messages_exportChatInvite();
-            req.legacy_revoke_permanent = true;
-            req.peer = MessagesController.getInstance(this.currentAccount).getInputPeer(-this.chatId);
-            ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new PermanentLinkBottomSheet$$ExternalSyntheticLambda3(this, showDialog));
+            TLRPC$TL_messages_exportChatInvite tLRPC$TL_messages_exportChatInvite = new TLRPC$TL_messages_exportChatInvite();
+            tLRPC$TL_messages_exportChatInvite.legacy_revoke_permanent = true;
+            tLRPC$TL_messages_exportChatInvite.peer = MessagesController.getInstance(this.currentAccount).getInputPeer(-this.chatId);
+            ConnectionsManager.getInstance(this.currentAccount).sendRequest(tLRPC$TL_messages_exportChatInvite, new PermanentLinkBottomSheet$$ExternalSyntheticLambda3(this, z));
         }
     }
 
-    /* renamed from: lambda$generateLink$3$org-telegram-ui-Components-PermanentLinkBottomSheet  reason: not valid java name */
-    public /* synthetic */ void m4171xdCLASSNAMEc4(boolean showDialog, TLObject response, TLRPC.TL_error error) {
-        AndroidUtilities.runOnUIThread(new PermanentLinkBottomSheet$$ExternalSyntheticLambda2(this, error, response, showDialog));
+    /* access modifiers changed from: private */
+    public /* synthetic */ void lambda$generateLink$3(boolean z, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+        AndroidUtilities.runOnUIThread(new PermanentLinkBottomSheet$$ExternalSyntheticLambda2(this, tLRPC$TL_error, tLObject, z));
     }
 
-    /* renamed from: lambda$generateLink$2$org-telegram-ui-Components-PermanentLinkBottomSheet  reason: not valid java name */
-    public /* synthetic */ void m4170x4ec9a343(TLRPC.TL_error error, TLObject response, boolean showDialog) {
-        if (error == null) {
-            this.invite = (TLRPC.TL_chatInviteExported) response;
-            TLRPC.ChatFull chatInfo = MessagesController.getInstance(this.currentAccount).getChatFull(this.chatId);
-            if (chatInfo != null) {
-                chatInfo.exported_invite = this.invite;
+    /* access modifiers changed from: private */
+    public /* synthetic */ void lambda$generateLink$2(TLRPC$TL_error tLRPC$TL_error, TLObject tLObject, boolean z) {
+        if (tLRPC$TL_error == null) {
+            this.invite = (TLRPC$TL_chatInviteExported) tLObject;
+            TLRPC$ChatFull chatFull = MessagesController.getInstance(this.currentAccount).getChatFull(this.chatId);
+            if (chatFull != null) {
+                chatFull.exported_invite = this.invite;
             }
             this.linkActionView.setLink(this.invite.link);
-            if (showDialog && this.fragment != null) {
+            if (z && this.fragment != null) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
                 builder.setMessage(LocaleController.getString("RevokeAlertNewLink", NUM));
                 builder.setTitle(LocaleController.getString("RevokeLink", NUM));
@@ -168,20 +168,21 @@ public class PermanentLinkBottomSheet extends BottomSheet {
         AndroidUtilities.runOnUIThread(new PermanentLinkBottomSheet$$ExternalSyntheticLambda1(this), 50);
     }
 
-    /* renamed from: lambda$show$4$org-telegram-ui-Components-PermanentLinkBottomSheet  reason: not valid java name */
-    public /* synthetic */ void m4174x3915b8b3() {
+    /* access modifiers changed from: private */
+    public /* synthetic */ void lambda$show$4() {
         this.linkIcon.start();
     }
 
     public ArrayList<ThemeDescription> getThemeDescriptions() {
         ArrayList<ThemeDescription> arrayList = new ArrayList<>();
-        ThemeDescription.ThemeDescriptionDelegate descriptionDelegate = new PermanentLinkBottomSheet$$ExternalSyntheticLambda4(this);
+        PermanentLinkBottomSheet$$ExternalSyntheticLambda4 permanentLinkBottomSheet$$ExternalSyntheticLambda4 = new PermanentLinkBottomSheet$$ExternalSyntheticLambda4(this);
         arrayList.add(new ThemeDescription(this.titleView, ThemeDescription.FLAG_TEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlackText"));
         arrayList.add(new ThemeDescription(this.subtitle, ThemeDescription.FLAG_TEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteGrayText"));
         arrayList.add(new ThemeDescription(this.manage, ThemeDescription.FLAG_TEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlueText"));
-        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, descriptionDelegate, "featuredStickers_addButton"));
-        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, descriptionDelegate, "featuredStickers_buttonText"));
-        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, descriptionDelegate, "windowBackgroundWhiteBlueText"));
+        PermanentLinkBottomSheet$$ExternalSyntheticLambda4 permanentLinkBottomSheet$$ExternalSyntheticLambda42 = permanentLinkBottomSheet$$ExternalSyntheticLambda4;
+        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, permanentLinkBottomSheet$$ExternalSyntheticLambda42, "featuredStickers_addButton"));
+        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, permanentLinkBottomSheet$$ExternalSyntheticLambda42, "featuredStickers_buttonText"));
+        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, permanentLinkBottomSheet$$ExternalSyntheticLambda42, "windowBackgroundWhiteBlueText"));
         return arrayList;
     }
 

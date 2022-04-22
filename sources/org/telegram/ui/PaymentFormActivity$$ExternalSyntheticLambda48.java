@@ -2,18 +2,16 @@ package org.telegram.ui;
 
 import org.telegram.tgnet.RequestDelegate;
 import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC;
+import org.telegram.tgnet.TLRPC$TL_error;
 
 public final /* synthetic */ class PaymentFormActivity$$ExternalSyntheticLambda48 implements RequestDelegate {
     public final /* synthetic */ PaymentFormActivity f$0;
-    public final /* synthetic */ boolean f$1;
 
-    public /* synthetic */ PaymentFormActivity$$ExternalSyntheticLambda48(PaymentFormActivity paymentFormActivity, boolean z) {
+    public /* synthetic */ PaymentFormActivity$$ExternalSyntheticLambda48(PaymentFormActivity paymentFormActivity) {
         this.f$0 = paymentFormActivity;
-        this.f$1 = z;
     }
 
-    public final void run(TLObject tLObject, TLRPC.TL_error tL_error) {
-        this.f$0.m2857lambda$sendSavePassword$41$orgtelegramuiPaymentFormActivity(this.f$1, tLObject, tL_error);
+    public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+        this.f$0.lambda$loadPasswordInfo$33(tLObject, tLRPC$TL_error);
     }
 }

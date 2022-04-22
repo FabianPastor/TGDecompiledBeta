@@ -1,17 +1,18 @@
 package org.telegram.messenger;
 
-public final /* synthetic */ class LocationController$$ExternalSyntheticLambda1 implements Runnable {
-    public final /* synthetic */ LocationController f$0;
-    public final /* synthetic */ int f$1;
-    public final /* synthetic */ long f$2;
+import android.location.Location;
+import org.telegram.messenger.LocationController;
 
-    public /* synthetic */ LocationController$$ExternalSyntheticLambda1(LocationController locationController, int i, long j) {
-        this.f$0 = locationController;
-        this.f$1 = i;
-        this.f$2 = j;
+public final /* synthetic */ class LocationController$$ExternalSyntheticLambda1 implements Runnable {
+    public final /* synthetic */ Location f$0;
+    public final /* synthetic */ LocationController.LocationFetchCallback f$1;
+
+    public /* synthetic */ LocationController$$ExternalSyntheticLambda1(Location location, LocationController.LocationFetchCallback locationFetchCallback) {
+        this.f$0 = location;
+        this.f$1 = locationFetchCallback;
     }
 
     public final void run() {
-        this.f$0.m670x2fvar_(this.f$1, this.f$2);
+        LocationController.lambda$fetchLocationAddress$31(this.f$0, this.f$1);
     }
 }

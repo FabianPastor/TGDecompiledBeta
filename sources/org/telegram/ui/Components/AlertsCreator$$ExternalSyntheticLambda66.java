@@ -1,15 +1,16 @@
 package org.telegram.ui.Components;
 
-import android.content.DialogInterface;
+import android.view.View;
+import org.telegram.ui.Cells.CheckBoxCell;
 
-public final /* synthetic */ class AlertsCreator$$ExternalSyntheticLambda66 implements DialogInterface.OnDismissListener {
-    public final /* synthetic */ Runnable f$0;
+public final /* synthetic */ class AlertsCreator$$ExternalSyntheticLambda66 implements View.OnClickListener {
+    public final /* synthetic */ CheckBoxCell[] f$0;
 
-    public /* synthetic */ AlertsCreator$$ExternalSyntheticLambda66(Runnable runnable) {
-        this.f$0 = runnable;
+    public /* synthetic */ AlertsCreator$$ExternalSyntheticLambda66(CheckBoxCell[] checkBoxCellArr) {
+        this.f$0 = checkBoxCellArr;
     }
 
-    public final void onDismiss(DialogInterface dialogInterface) {
-        AlertsCreator.lambda$showBlockReportSpamReplyAlert$9(this.f$0, dialogInterface);
+    public final void onClick(View view) {
+        AlertsCreator.lambda$showBlockReportSpamAlert$13(this.f$0, view);
     }
 }

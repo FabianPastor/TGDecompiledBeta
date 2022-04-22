@@ -10,30 +10,26 @@ import org.telegram.ui.Components.TextStyleSpan;
 public class URLSpanBrowser extends URLSpan {
     private TextStyleSpan.TextStyleRun style;
 
-    public URLSpanBrowser(String url) {
-        this(url, (TextStyleSpan.TextStyleRun) null);
-    }
-
     /* JADX INFO: super call moved to the top of the method (can break code semantics) */
-    public URLSpanBrowser(String url, TextStyleSpan.TextStyleRun run) {
-        super(url != null ? url.replace(8238, ' ') : url);
-        this.style = run;
+    public URLSpanBrowser(String str, TextStyleSpan.TextStyleRun textStyleRun) {
+        super(str != null ? str.replace(8238, ' ') : str);
+        this.style = textStyleRun;
     }
 
     public TextStyleSpan.TextStyleRun getStyle() {
         return this.style;
     }
 
-    public void onClick(View widget) {
-        Browser.openUrl(widget.getContext(), Uri.parse(getURL()));
+    public void onClick(View view) {
+        Browser.openUrl(view.getContext(), Uri.parse(getURL()));
     }
 
-    public void updateDrawState(TextPaint p) {
-        super.updateDrawState(p);
+    public void updateDrawState(TextPaint textPaint) {
+        super.updateDrawState(textPaint);
         TextStyleSpan.TextStyleRun textStyleRun = this.style;
         if (textStyleRun != null) {
-            textStyleRun.applyStyle(p);
+            textStyleRun.applyStyle(textPaint);
         }
-        p.setUnderlineText(true);
+        textPaint.setUnderlineText(true);
     }
 }

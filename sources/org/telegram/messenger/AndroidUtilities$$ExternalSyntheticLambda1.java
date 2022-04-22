@@ -1,12 +1,16 @@
 package org.telegram.messenger;
 
-public final /* synthetic */ class AndroidUtilities$$ExternalSyntheticLambda1 implements GenericProvider {
-    public static final /* synthetic */ AndroidUtilities$$ExternalSyntheticLambda1 INSTANCE = new AndroidUtilities$$ExternalSyntheticLambda1();
+import android.content.DialogInterface;
+import org.telegram.ui.ActionBar.BaseFragment;
 
-    private /* synthetic */ AndroidUtilities$$ExternalSyntheticLambda1() {
+public final /* synthetic */ class AndroidUtilities$$ExternalSyntheticLambda1 implements DialogInterface.OnClickListener {
+    public final /* synthetic */ BaseFragment f$0;
+
+    public /* synthetic */ AndroidUtilities$$ExternalSyntheticLambda1(BaseFragment baseFragment) {
+        this.f$0 = baseFragment;
     }
 
-    public final Object provide(Object obj) {
-        return AndroidUtilities.lambda$formatSpannableSimple$5((Integer) obj);
+    public final void onClick(DialogInterface dialogInterface, int i) {
+        AndroidUtilities.lambda$isGoogleMapsInstalled$2(this.f$0, dialogInterface, i);
     }
 }

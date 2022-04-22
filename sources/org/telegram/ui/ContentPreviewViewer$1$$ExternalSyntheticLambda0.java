@@ -14,6 +14,6 @@ public final /* synthetic */ class ContentPreviewViewer$1$$ExternalSyntheticLamb
     }
 
     public final void onClick(DialogInterface dialogInterface, int i) {
-        this.f$0.m2047lambda$run$4$orgtelegramuiContentPreviewViewer$1(this.f$1, dialogInterface, i);
+        this.f$0.lambda$run$4(this.f$1, dialogInterface, i);
     }
 }

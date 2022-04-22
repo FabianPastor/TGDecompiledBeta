@@ -1,26 +1,19 @@
 package org.telegram.messenger;
 
-import java.io.File;
-import org.telegram.tgnet.TLRPC;
-
 public final /* synthetic */ class MediaController$$ExternalSyntheticLambda25 implements Runnable {
     public final /* synthetic */ MediaController f$0;
-    public final /* synthetic */ TLRPC.TL_document f$1;
-    public final /* synthetic */ File f$2;
-    public final /* synthetic */ int f$3;
-    public final /* synthetic */ boolean f$4;
-    public final /* synthetic */ int f$5;
+    public final /* synthetic */ String f$1;
+    public final /* synthetic */ String f$2;
+    public final /* synthetic */ MessageObject f$3;
 
-    public /* synthetic */ MediaController$$ExternalSyntheticLambda25(MediaController mediaController, TLRPC.TL_document tL_document, File file, int i, boolean z, int i2) {
+    public /* synthetic */ MediaController$$ExternalSyntheticLambda25(MediaController mediaController, String str, String str2, MessageObject messageObject) {
         this.f$0 = mediaController;
-        this.f$1 = tL_document;
-        this.f$2 = file;
-        this.f$3 = i;
-        this.f$4 = z;
-        this.f$5 = i2;
+        this.f$1 = str;
+        this.f$2 = str2;
+        this.f$3 = messageObject;
     }
 
     public final void run() {
-        this.f$0.m113xb01e7e15(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5);
+        this.f$0.lambda$generateWaveform$28(this.f$1, this.f$2, this.f$3);
     }
 }

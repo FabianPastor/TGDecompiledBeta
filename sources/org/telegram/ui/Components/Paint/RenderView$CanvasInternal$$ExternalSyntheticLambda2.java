@@ -10,6 +10,6 @@ public final /* synthetic */ class RenderView$CanvasInternal$$ExternalSyntheticL
     }
 
     public final void run() {
-        this.f$0.m4152x36125971();
+        this.f$0.lambda$scheduleRedraw$1();
     }
 }

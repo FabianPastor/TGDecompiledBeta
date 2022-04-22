@@ -12,6 +12,6 @@ public final /* synthetic */ class PhotoAlbumPickerActivity$ListAdapter$$Externa
     }
 
     public final void didSelectAlbum(MediaController.AlbumEntry albumEntry) {
-        this.f$0.m2882x4evar_c(albumEntry);
+        this.f$0.lambda$onCreateViewHolder$0(albumEntry);
     }
 }

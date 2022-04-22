@@ -11,6 +11,6 @@ public final /* synthetic */ class QrActivity$ThemeListViewController$$ExternalS
     }
 
     public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-        this.f$0.m3207x3var_c3(valueAnimator);
+        this.f$0.lambda$setupLightDarkTheme$2(valueAnimator);
     }
 }

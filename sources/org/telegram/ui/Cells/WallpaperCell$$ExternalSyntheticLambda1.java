@@ -15,6 +15,6 @@ public final /* synthetic */ class WallpaperCell$$ExternalSyntheticLambda1 imple
     }
 
     public final boolean onLongClick(View view) {
-        return this.f$0.m1540lambda$new$1$orgtelegramuiCellsWallpaperCell(this.f$1, this.f$2, view);
+        return this.f$0.lambda$new$1(this.f$1, this.f$2, view);
     }
 }

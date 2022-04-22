@@ -1,13 +1,13 @@
 package org.telegram.ui;
 
 public final /* synthetic */ class TwoStepVerificationSetupActivity$$ExternalSyntheticLambda19 implements Runnable {
-    public final /* synthetic */ TwoStepVerificationSetupActivity f$0;
+    public final /* synthetic */ CodeNumberField f$0;
 
-    public /* synthetic */ TwoStepVerificationSetupActivity$$ExternalSyntheticLambda19(TwoStepVerificationSetupActivity twoStepVerificationSetupActivity) {
-        this.f$0 = twoStepVerificationSetupActivity;
+    public /* synthetic */ TwoStepVerificationSetupActivity$$ExternalSyntheticLambda19(CodeNumberField codeNumberField) {
+        this.f$0 = codeNumberField;
     }
 
     public final void run() {
-        this.f$0.m3436xc4dba19f();
+        this.f$0.animateSuccessProgress(1.0f);
     }
 }

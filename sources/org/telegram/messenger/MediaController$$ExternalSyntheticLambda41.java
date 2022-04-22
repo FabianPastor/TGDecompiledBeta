@@ -1,17 +1,14 @@
 package org.telegram.messenger;
 
-import org.telegram.tgnet.TLRPC;
+import java.util.Comparator;
 
-public final /* synthetic */ class MediaController$$ExternalSyntheticLambda41 implements Runnable {
-    public final /* synthetic */ AccountInstance f$0;
-    public final /* synthetic */ TLRPC.Document f$1;
+public final /* synthetic */ class MediaController$$ExternalSyntheticLambda41 implements Comparator {
+    public static final /* synthetic */ MediaController$$ExternalSyntheticLambda41 INSTANCE = new MediaController$$ExternalSyntheticLambda41();
 
-    public /* synthetic */ MediaController$$ExternalSyntheticLambda41(AccountInstance accountInstance, TLRPC.Document document) {
-        this.f$0 = accountInstance;
-        this.f$1 = document;
+    private /* synthetic */ MediaController$$ExternalSyntheticLambda41() {
     }
 
-    public final void run() {
-        this.f$0.getFileLoader().loadFile(this.f$1, (Object) null, 1, 1);
+    public final int compare(Object obj, Object obj2) {
+        return MediaController.lambda$sortPlaylist$13((MessageObject) obj, (MessageObject) obj2);
     }
 }

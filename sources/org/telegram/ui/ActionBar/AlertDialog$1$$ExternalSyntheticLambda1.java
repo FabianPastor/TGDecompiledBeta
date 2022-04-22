@@ -10,6 +10,6 @@ public final /* synthetic */ class AlertDialog$1$$ExternalSyntheticLambda1 imple
     }
 
     public final void run() {
-        this.f$0.m1272lambda$onMeasure$0$orgtelegramuiActionBarAlertDialog$1();
+        this.f$0.lambda$onMeasure$0();
     }
 }

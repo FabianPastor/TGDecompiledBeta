@@ -13,6 +13,6 @@ public final /* synthetic */ class BotWebViewContainer$3$$ExternalSyntheticLambd
     }
 
     public final void run() {
-        this.f$0.m3639x6avar_ac(this.f$1);
+        this.f$0.lambda$shouldOverrideUrlLoading$0(this.f$1);
     }
 }

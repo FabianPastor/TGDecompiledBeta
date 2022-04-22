@@ -12,6 +12,6 @@ public final /* synthetic */ class VoIPOverlayBackground$$ExternalSyntheticLambd
     }
 
     public final void run() {
-        this.f$0.m4580xCLASSNAMEae(this.f$1);
+        this.f$0.lambda$setBackground$1(this.f$1);
     }
 }

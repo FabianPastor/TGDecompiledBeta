@@ -15,6 +15,6 @@ public final /* synthetic */ class InviteContactsActivity$InviteAdapter$$Externa
     }
 
     public final void run() {
-        this.f$0.m2301xCLASSNAMEafcf3(this.f$1, this.f$2);
+        this.f$0.lambda$updateSearchResults$0(this.f$1, this.f$2);
     }
 }

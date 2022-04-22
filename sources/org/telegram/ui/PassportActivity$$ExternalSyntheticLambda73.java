@@ -1,20 +1,15 @@
 package org.telegram.ui;
 
-import android.content.DialogInterface;
-import org.telegram.tgnet.TLRPC;
+import org.telegram.ui.PassportActivity;
 
-public final /* synthetic */ class PassportActivity$$ExternalSyntheticLambda73 implements DialogInterface.OnClickListener {
+public final /* synthetic */ class PassportActivity$$ExternalSyntheticLambda73 implements PassportActivity.ErrorRunnable {
     public final /* synthetic */ PassportActivity f$0;
-    public final /* synthetic */ TLRPC.TL_secureRequiredType f$1;
-    public final /* synthetic */ boolean f$2;
 
-    public /* synthetic */ PassportActivity$$ExternalSyntheticLambda73(PassportActivity passportActivity, TLRPC.TL_secureRequiredType tL_secureRequiredType, boolean z) {
+    public /* synthetic */ PassportActivity$$ExternalSyntheticLambda73(PassportActivity passportActivity) {
         this.f$0 = passportActivity;
-        this.f$1 = tL_secureRequiredType;
-        this.f$2 = z;
     }
 
-    public final void onClick(DialogInterface dialogInterface, int i) {
-        this.f$0.m2702lambda$addField$63$orgtelegramuiPassportActivity(this.f$1, this.f$2, dialogInterface, i);
+    public final void onError(String str, String str2) {
+        this.f$0.lambda$addField$62(str, str2);
     }
 }

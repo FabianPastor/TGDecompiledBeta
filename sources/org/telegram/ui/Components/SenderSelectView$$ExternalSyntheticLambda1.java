@@ -10,6 +10,6 @@ public final /* synthetic */ class SenderSelectView$$ExternalSyntheticLambda1 im
     }
 
     public final void onAnimationEnd(DynamicAnimation dynamicAnimation, boolean z, float f, float f2) {
-        this.f$0.m4331lambda$setProgress$3$orgtelegramuiComponentsSenderSelectView(dynamicAnimation, z, f, f2);
+        this.f$0.lambda$setProgress$3(dynamicAnimation, z, f, f2);
     }
 }

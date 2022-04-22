@@ -8,6 +8,6 @@ public final /* synthetic */ class UndoStore$$ExternalSyntheticLambda0 implement
     }
 
     public final void run() {
-        this.f$0.m4154xe8ebcvar_();
+        this.f$0.lambda$notifyOfHistoryChanges$0();
     }
 }

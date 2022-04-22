@@ -18,6 +18,6 @@ public final /* synthetic */ class ChartPickerDelegate$$ExternalSyntheticLambda0
     }
 
     public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-        this.f$0.m1628lambda$uncapture$0$orgtelegramuiChartsChartPickerDelegate(this.f$1, this.f$2, this.f$3, this.f$4, valueAnimator);
+        this.f$0.lambda$uncapture$0(this.f$1, this.f$2, this.f$3, this.f$4, valueAnimator);
     }
 }

@@ -12,6 +12,6 @@ public final /* synthetic */ class SpoilerEffectBitmapFactory$$ExternalSynthetic
     }
 
     public final void run() {
-        this.f$0.m4539xcca05127(this.f$1);
+        this.f$0.lambda$checkUpdate$1(this.f$1);
     }
 }

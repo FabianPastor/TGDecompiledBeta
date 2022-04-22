@@ -1,16 +1,15 @@
 package org.telegram.ui;
 
-import android.view.KeyEvent;
-import android.widget.TextView;
+import org.telegram.ui.Components.SizeNotifierFrameLayout;
 
-public final /* synthetic */ class PasscodeActivity$$ExternalSyntheticLambda23 implements TextView.OnEditorActionListener {
+public final /* synthetic */ class PasscodeActivity$$ExternalSyntheticLambda23 implements SizeNotifierFrameLayout.SizeNotifierFrameLayoutDelegate {
     public final /* synthetic */ PasscodeActivity f$0;
 
     public /* synthetic */ PasscodeActivity$$ExternalSyntheticLambda23(PasscodeActivity passcodeActivity) {
         this.f$0 = passcodeActivity;
     }
 
-    public final boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
-        return this.f$0.m2677lambda$createView$10$orgtelegramuiPasscodeActivity(textView, i, keyEvent);
+    public final void onSizeChanged(int i, boolean z) {
+        this.f$0.lambda$createView$1(i, z);
     }
 }

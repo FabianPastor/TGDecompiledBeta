@@ -16,6 +16,6 @@ public final /* synthetic */ class ChatThemeBottomSheet$Adapter$$ExternalSynthet
     }
 
     public final void run() {
-        this.f$0.m3918xbc7bae6a(this.f$1, this.f$2);
+        this.f$0.lambda$parseTheme$0(this.f$1, this.f$2);
     }
 }

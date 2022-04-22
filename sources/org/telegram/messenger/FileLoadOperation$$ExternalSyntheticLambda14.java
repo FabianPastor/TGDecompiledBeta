@@ -1,20 +1,22 @@
 package org.telegram.messenger;
 
-import java.io.File;
-import java.util.concurrent.CountDownLatch;
+import org.telegram.messenger.FileLoadOperation;
+import org.telegram.tgnet.RequestDelegate;
+import org.telegram.tgnet.TLObject;
+import org.telegram.tgnet.TLRPC$TL_error;
 
-public final /* synthetic */ class FileLoadOperation$$ExternalSyntheticLambda14 implements Runnable {
+public final /* synthetic */ class FileLoadOperation$$ExternalSyntheticLambda14 implements RequestDelegate {
     public final /* synthetic */ FileLoadOperation f$0;
-    public final /* synthetic */ File[] f$1;
-    public final /* synthetic */ CountDownLatch f$2;
+    public final /* synthetic */ FileLoadOperation.RequestInfo f$1;
+    public final /* synthetic */ TLObject f$2;
 
-    public /* synthetic */ FileLoadOperation$$ExternalSyntheticLambda14(FileLoadOperation fileLoadOperation, File[] fileArr, CountDownLatch countDownLatch) {
+    public /* synthetic */ FileLoadOperation$$ExternalSyntheticLambda14(FileLoadOperation fileLoadOperation, FileLoadOperation.RequestInfo requestInfo, TLObject tLObject) {
         this.f$0 = fileLoadOperation;
-        this.f$1 = fileArr;
-        this.f$2 = countDownLatch;
+        this.f$1 = requestInfo;
+        this.f$2 = tLObject;
     }
 
-    public final void run() {
-        this.f$0.m540lambda$getCurrentFile$1$orgtelegrammessengerFileLoadOperation(this.f$1, this.f$2);
+    public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+        this.f$0.lambda$startDownloadRequest$13(this.f$1, this.f$2, tLObject, tLRPC$TL_error);
     }
 }

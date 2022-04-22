@@ -8,6 +8,6 @@ public final /* synthetic */ class FileUploadOperation$$ExternalSyntheticLambda2
     }
 
     public final void run() {
-        this.f$0.m602xd2d14d37();
+        this.f$0.lambda$start$0();
     }
 }

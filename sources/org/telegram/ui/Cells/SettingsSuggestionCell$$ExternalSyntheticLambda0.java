@@ -10,6 +10,6 @@ public final /* synthetic */ class SettingsSuggestionCell$$ExternalSyntheticLamb
     }
 
     public final void onClick(View view) {
-        this.f$0.m1516lambda$new$0$orgtelegramuiCellsSettingsSuggestionCell(view);
+        this.f$0.lambda$new$1(view);
     }
 }

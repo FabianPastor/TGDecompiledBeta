@@ -1,17 +1,17 @@
 package org.telegram.messenger;
 
-import org.telegram.tgnet.RequestDelegate;
-import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC;
+import org.telegram.tgnet.TLRPC$TL_channels_channelParticipant;
 
-public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda150 implements RequestDelegate {
+public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda150 implements Runnable {
     public final /* synthetic */ MessagesController f$0;
+    public final /* synthetic */ TLRPC$TL_channels_channelParticipant f$1;
 
-    public /* synthetic */ MessagesController$$ExternalSyntheticLambda150(MessagesController messagesController) {
+    public /* synthetic */ MessagesController$$ExternalSyntheticLambda150(MessagesController messagesController, TLRPC$TL_channels_channelParticipant tLRPC$TL_channels_channelParticipant) {
         this.f$0 = messagesController;
+        this.f$1 = tLRPC$TL_channels_channelParticipant;
     }
 
-    public final void run(TLObject tLObject, TLRPC.TL_error tL_error) {
-        this.f$0.m271xa9davar_b(tLObject, tL_error);
+    public final void run() {
+        this.f$0.lambda$checkChatInviter$289(this.f$1);
     }
 }

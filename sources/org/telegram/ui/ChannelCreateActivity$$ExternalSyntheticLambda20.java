@@ -1,16 +1,17 @@
 package org.telegram.ui;
 
-import android.view.KeyEvent;
-import android.widget.TextView;
+import org.telegram.tgnet.RequestDelegate;
+import org.telegram.tgnet.TLObject;
+import org.telegram.tgnet.TLRPC$TL_error;
 
-public final /* synthetic */ class ChannelCreateActivity$$ExternalSyntheticLambda20 implements TextView.OnEditorActionListener {
+public final /* synthetic */ class ChannelCreateActivity$$ExternalSyntheticLambda20 implements RequestDelegate {
     public final /* synthetic */ ChannelCreateActivity f$0;
 
     public /* synthetic */ ChannelCreateActivity$$ExternalSyntheticLambda20(ChannelCreateActivity channelCreateActivity) {
         this.f$0 = channelCreateActivity;
     }
 
-    public final boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
-        return this.f$0.m1604lambda$createView$6$orgtelegramuiChannelCreateActivity(textView, i, keyEvent);
+    public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+        this.f$0.lambda$loadAdminedChannels$18(tLObject, tLRPC$TL_error);
     }
 }

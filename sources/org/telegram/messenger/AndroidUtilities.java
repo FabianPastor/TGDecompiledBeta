@@ -5,21 +5,20 @@ import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.KeyguardManager;
 import android.content.ClipData;
 import android.content.ClipboardManager;
+import android.content.ContentUris;
 import android.content.Context;
 import android.content.ContextWrapper;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
-import android.database.Cursor;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.ColorMatrix;
@@ -37,7 +36,8 @@ import android.os.Build;
 import android.os.Environment;
 import android.os.PowerManager;
 import android.os.SystemClock;
-import android.provider.CallLog;
+import android.provider.DocumentsContract;
+import android.provider.MediaStore;
 import android.provider.Settings;
 import android.telephony.TelephonyManager;
 import android.text.Layout;
@@ -69,15 +69,12 @@ import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
 import android.view.animation.OvershootInterpolator;
 import android.view.inputmethod.InputMethodManager;
-import android.view.inputmethod.InputMethodSubtype;
-import android.webkit.MimeTypeMap;
 import android.widget.EdgeEffect;
 import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ScrollView;
 import android.widget.TextView;
-import androidx.core.content.FileProvider;
 import androidx.dynamicanimation.animation.DynamicAnimation;
 import androidx.dynamicanimation.animation.SpringAnimation;
 import androidx.dynamicanimation.animation.SpringForce;
@@ -89,16 +86,13 @@ import com.google.android.gms.auth.api.phone.SmsRetriever;
 import com.microsoft.appcenter.AppCenter;
 import com.microsoft.appcenter.crashes.Crashes;
 import com.microsoft.appcenter.distribute.Distribute;
-import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.lang.ref.WeakReference;
 import java.lang.reflect.Field;
@@ -122,8 +116,10 @@ import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.SharedConfig;
 import org.telegram.messenger.browser.Browser;
 import org.telegram.tgnet.ConnectionsManager;
-import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC;
+import org.telegram.tgnet.TLRPC$Document;
+import org.telegram.tgnet.TLRPC$TL_chatBannedRights;
+import org.telegram.tgnet.TLRPC$TL_wallPaper;
+import org.telegram.tgnet.TLRPC$WallPaperSettings;
 import org.telegram.ui.ActionBar.ActionBarLayout;
 import org.telegram.ui.ActionBar.AlertDialog;
 import org.telegram.ui.ActionBar.BaseFragment;
@@ -141,7 +137,6 @@ import org.telegram.ui.Components.PickerBottomLayout;
 import org.telegram.ui.Components.RecyclerListView;
 import org.telegram.ui.Components.ShareAlert;
 import org.telegram.ui.Components.TypefaceSpan;
-import org.telegram.ui.ThemePreviewActivity;
 import org.telegram.ui.WallpapersListActivity;
 
 public class AndroidUtilities {
@@ -198,7 +193,7 @@ public class AndroidUtilities {
     public static int roundMessageSize;
     private static Paint roundPaint;
     public static int roundPlayingMessageSize;
-    public static final Linkify.MatchFilter sUrlMatchFilter = AndroidUtilities$$ExternalSyntheticLambda4.INSTANCE;
+    public static final Linkify.MatchFilter sUrlMatchFilter = AndroidUtilities$$ExternalSyntheticLambda2.INSTANCE;
     public static float screenRefreshRate = 60.0f;
     private static Pattern singleTagPatter = null;
     private static final Object smsLock = new Object();
@@ -213,35 +208,88 @@ public class AndroidUtilities {
         void run(int i);
     }
 
+    public static int compare(int i, int i2) {
+        if (i == i2) {
+            return 0;
+        }
+        return i > i2 ? 1 : -1;
+    }
+
+    public static int compare(long j, long j2) {
+        if (j == j2) {
+            return 0;
+        }
+        return j > j2 ? 1 : -1;
+    }
+
+    public static int getMyLayerVersion(int i) {
+        return i & 65535;
+    }
+
+    public static int getWallpaperRotation(int i, boolean z) {
+        int i2 = z ? i + 180 : i - 180;
+        while (i2 >= 360) {
+            i2 -= 360;
+        }
+        while (i2 < 0) {
+            i2 += 360;
+        }
+        return i2;
+    }
+
+    public static boolean isValidWallChar(char c) {
+        return c == '-' || c == '~';
+    }
+
+    /* access modifiers changed from: private */
+    public static /* synthetic */ String lambda$formatSpannableSimple$5(Integer num) {
+        return "%s";
+    }
+
+    public static float lerp(float f, float f2, float f3) {
+        return f + (f3 * (f2 - f));
+    }
+
+    public static int lerp(int i, int i2, float f) {
+        return (int) (((float) i) + (f * ((float) (i2 - i))));
+    }
+
+    public static int setMyLayerVersion(int i, int i2) {
+        return (i & -65536) | i2;
+    }
+
+    public static int setPeerLayerVersion(int i, int i2) {
+        return (i & 65535) | (i2 << 16);
+    }
+
     static {
         WEB_URL = null;
         BAD_CHARS_PATTERN = null;
         BAD_CHARS_MESSAGE_PATTERN = null;
         BAD_CHARS_MESSAGE_LONG_PATTERN = null;
-        Object obj = "a-zA-Z0-9 -퟿豈-﷏ﷰ-￯";
         try {
             BAD_CHARS_PATTERN = Pattern.compile("[─-◿]");
             BAD_CHARS_MESSAGE_LONG_PATTERN = Pattern.compile("[̀-ͯ⁦-⁧]+");
             BAD_CHARS_MESSAGE_PATTERN = Pattern.compile("[⁦-⁧]+");
-            Pattern IP_ADDRESS = Pattern.compile("((25[0-5]|2[0-4][0-9]|[0-1][0-9]{2}|[1-9][0-9]|[1-9])\\.(25[0-5]|2[0-4][0-9]|[0-1][0-9]{2}|[1-9][0-9]|[1-9]|0)\\.(25[0-5]|2[0-4][0-9]|[0-1][0-9]{2}|[1-9][0-9]|[1-9]|0)\\.(25[0-5]|2[0-4][0-9]|[0-1][0-9]{2}|[1-9][0-9]|[0-9]))");
-            Pattern DOMAIN_NAME = Pattern.compile("(([a-zA-Z0-9 -퟿豈-﷏ﷰ-￯]([a-zA-Z0-9 -퟿豈-﷏ﷰ-￯\\-]{0,61}[a-zA-Z0-9 -퟿豈-﷏ﷰ-￯]){0,1}\\.)+[a-zA-Z -퟿豈-﷏ﷰ-￯]{2,63}|" + IP_ADDRESS + ")");
-            WEB_URL = Pattern.compile("((?:(http|https|Http|Https|ton|tg):\\/\\/(?:(?:[a-zA-Z0-9\\$\\-\\_\\.\\+\\!\\*\\'\\(\\)\\,\\;\\?\\&\\=]|(?:\\%[a-fA-F0-9]{2})){1,64}(?:\\:(?:[a-zA-Z0-9\\$\\-\\_\\.\\+\\!\\*\\'\\(\\)\\,\\;\\?\\&\\=]|(?:\\%[a-fA-F0-9]{2})){1,25})?\\@)?)?(?:" + DOMAIN_NAME + ")(?:\\:\\d{1,5})?)(\\/(?:(?:[" + "a-zA-Z0-9 -퟿豈-﷏ﷰ-￯" + "\\;\\/\\?\\:\\@\\&\\=\\#\\~\\-\\.\\+\\!\\*\\'\\(\\)\\,\\_])|(?:\\%[a-fA-F0-9]{2}))*)?(?:\\b|$)");
+            Pattern compile = Pattern.compile("((25[0-5]|2[0-4][0-9]|[0-1][0-9]{2}|[1-9][0-9]|[1-9])\\.(25[0-5]|2[0-4][0-9]|[0-1][0-9]{2}|[1-9][0-9]|[1-9]|0)\\.(25[0-5]|2[0-4][0-9]|[0-1][0-9]{2}|[1-9][0-9]|[1-9]|0)\\.(25[0-5]|2[0-4][0-9]|[0-1][0-9]{2}|[1-9][0-9]|[0-9]))");
+            Pattern compile2 = Pattern.compile("(([a-zA-Z0-9 -퟿豈-﷏ﷰ-￯]([a-zA-Z0-9 -퟿豈-﷏ﷰ-￯\\-]{0,61}[a-zA-Z0-9 -퟿豈-﷏ﷰ-￯]){0,1}\\.)+[a-zA-Z -퟿豈-﷏ﷰ-￯]{2,63}|" + compile + ")");
+            WEB_URL = Pattern.compile("((?:(http|https|Http|Https|ton|tg):\\/\\/(?:(?:[a-zA-Z0-9\\$\\-\\_\\.\\+\\!\\*\\'\\(\\)\\,\\;\\?\\&\\=]|(?:\\%[a-fA-F0-9]{2})){1,64}(?:\\:(?:[a-zA-Z0-9\\$\\-\\_\\.\\+\\!\\*\\'\\(\\)\\,\\;\\?\\&\\=]|(?:\\%[a-fA-F0-9]{2})){1,25})?\\@)?)?(?:" + compile2 + ")(?:\\:\\d{1,5})?)(\\/(?:(?:[" + "a-zA-Z0-9 -퟿豈-﷏ﷰ-￯" + "\\;\\/\\?\\:\\@\\&\\=\\#\\~\\-\\.\\+\\!\\*\\'\\(\\)\\,\\_])|(?:\\%[a-fA-F0-9]{2}))*)?(?:\\b|$)");
         } catch (Exception e) {
             FileLog.e((Throwable) e);
         }
         checkDisplaySize(ApplicationLoader.applicationContext, (Configuration) null);
     }
 
-    private static boolean containsUnsupportedCharacters(String text) {
-        if (text.contains("‬") || text.contains("‭") || text.contains("‮")) {
+    private static boolean containsUnsupportedCharacters(String str) {
+        if (str.contains("‬") || str.contains("‭") || str.contains("‮")) {
             return true;
         }
         try {
-            if (BAD_CHARS_PATTERN.matcher(text).find()) {
+            if (BAD_CHARS_PATTERN.matcher(str).find()) {
                 return true;
             }
             return false;
-        } catch (Throwable th) {
+        } catch (Throwable unused) {
             return true;
         }
     }
@@ -249,159 +297,113 @@ public class AndroidUtilities {
     public static String getSafeString(String str) {
         try {
             return BAD_CHARS_MESSAGE_PATTERN.matcher(str).replaceAll("‌");
-        } catch (Throwable th) {
+        } catch (Throwable unused) {
             return str;
         }
     }
 
-    public static CharSequence ellipsizeCenterEnd(CharSequence str, String query, int availableWidth, TextPaint textPaint, int maxSymbols) {
-        CharSequence str2;
-        CharSequence charSequence;
-        int startHighlightedIndex;
-        CharSequence sub;
-        CharSequence str3;
-        int i = availableWidth;
-        TextPaint textPaint2 = textPaint;
-        int i2 = maxSymbols;
+    public static CharSequence ellipsizeCenterEnd(CharSequence charSequence, String str, int i, TextPaint textPaint, int i2) {
+        CharSequence charSequence2;
         try {
-            int lastIndex = str.length();
-            try {
-                int startHighlightedIndex2 = str.toString().toLowerCase().indexOf(query);
-                if (lastIndex > i2) {
-                    charSequence = str;
-                    try {
-                        str3 = charSequence.subSequence(Math.max(0, startHighlightedIndex2 - (i2 / 2)), Math.min(lastIndex, (i2 / 2) + startHighlightedIndex2));
-                    } catch (Exception e) {
-                        e = e;
-                        str2 = charSequence;
-                        FileLog.e((Throwable) e);
-                        return str2;
+            int length = charSequence.length();
+            int indexOf = charSequence.toString().toLowerCase().indexOf(str);
+            if (length > i2) {
+                charSequence = charSequence.subSequence(Math.max(0, indexOf - (i2 / 2)), Math.min(length, (i2 / 2) + indexOf));
+                indexOf -= Math.max(0, indexOf - (i2 / 2));
+                charSequence.length();
+            }
+            StaticLayout staticLayout = new StaticLayout(charSequence, textPaint, Integer.MAX_VALUE, Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+            float lineWidth = staticLayout.getLineWidth(0);
+            float f = (float) i;
+            if (textPaint.measureText("...") + lineWidth < f) {
+                return charSequence;
+            }
+            int i3 = indexOf + 1;
+            int i4 = i3;
+            while (i4 < charSequence.length() - 1 && !Character.isWhitespace(charSequence.charAt(i4))) {
+                i4++;
+            }
+            float primaryHorizontal = staticLayout.getPrimaryHorizontal(i4);
+            if (staticLayout.isRtlCharAt(i4)) {
+                primaryHorizontal = lineWidth - primaryHorizontal;
+            }
+            if (primaryHorizontal < f) {
+                return charSequence;
+            }
+            float measureText = (primaryHorizontal - f) + (textPaint.measureText("...") * 2.0f);
+            float f2 = 0.1f * f;
+            float f3 = measureText + f2;
+            if (charSequence.length() - i4 > 20) {
+                f3 += f2;
+            }
+            if (f3 > 0.0f) {
+                int offsetForHorizontal = staticLayout.getOffsetForHorizontal(0, f3);
+                if (offsetForHorizontal > charSequence.length() - 1) {
+                    offsetForHorizontal = charSequence.length() - 1;
+                }
+                int i5 = 0;
+                while (true) {
+                    if (Character.isWhitespace(charSequence.charAt(offsetForHorizontal)) || i5 >= 10) {
+                        break;
                     }
-                    try {
-                        int startHighlightedIndex3 = startHighlightedIndex2 - Math.max(0, startHighlightedIndex2 - (i2 / 2));
-                        int length = str3.length();
-                        startHighlightedIndex = startHighlightedIndex3;
-                        str2 = str3;
-                    } catch (Exception e2) {
-                        e = e2;
-                        str2 = str3;
-                        FileLog.e((Throwable) e);
-                        return str2;
+                    i5++;
+                    offsetForHorizontal++;
+                    if (offsetForHorizontal > charSequence.length() - 1) {
+                        offsetForHorizontal = staticLayout.getOffsetForHorizontal(0, f3);
+                        break;
                     }
+                }
+                if (i5 >= 10) {
+                    charSequence2 = charSequence.subSequence(staticLayout.getOffsetForHorizontal(0, staticLayout.getPrimaryHorizontal(i3) - (f * 0.3f)), charSequence.length());
                 } else {
-                    int i3 = lastIndex;
-                    startHighlightedIndex = startHighlightedIndex2;
-                    str2 = str;
+                    if (offsetForHorizontal > 0 && offsetForHorizontal < charSequence.length() - 2 && Character.isWhitespace(charSequence.charAt(offsetForHorizontal))) {
+                        offsetForHorizontal++;
+                    }
+                    charSequence2 = charSequence.subSequence(offsetForHorizontal, charSequence.length());
                 }
-            } catch (Exception e3) {
-                e = e3;
-                charSequence = str;
-                str2 = charSequence;
-                FileLog.e((Throwable) e);
-                return str2;
+                return SpannableStringBuilder.valueOf("...").append(charSequence2);
             }
-            try {
-                StaticLayout staticLayout = new StaticLayout(str2, textPaint, Integer.MAX_VALUE, Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
-                float endOfTextX = staticLayout.getLineWidth(0);
-                if (textPaint2.measureText("...") + endOfTextX < ((float) i)) {
-                    return str2;
-                }
-                int i4 = startHighlightedIndex + 1;
-                while (i4 < str2.length() - 1 && !Character.isWhitespace(str2.charAt(i4))) {
-                    i4++;
-                }
-                int endHighlightedIndex = i4;
-                float endOfHighlight = staticLayout.getPrimaryHorizontal(endHighlightedIndex);
-                if (staticLayout.isRtlCharAt(endHighlightedIndex)) {
-                    endOfHighlight = endOfTextX - endOfHighlight;
-                }
-                if (endOfHighlight < ((float) i)) {
-                    return str2;
-                }
-                float x = (endOfHighlight - ((float) i)) + (textPaint2.measureText("...") * 2.0f) + (((float) i) * 0.1f);
-                if (str2.length() - endHighlightedIndex > 20) {
-                    x += ((float) i) * 0.1f;
-                }
-                if (x > 0.0f) {
-                    int charOf = staticLayout.getOffsetForHorizontal(0, x);
-                    int k = 0;
-                    if (charOf > str2.length() - 1) {
-                        charOf = str2.length() - 1;
-                    }
-                    while (true) {
-                        float endOfTextX2 = endOfTextX;
-                        if (Character.isWhitespace(str2.charAt(charOf)) || k >= 10) {
-                            break;
-                        }
-                        k++;
-                        charOf++;
-                        if (charOf > str2.length() - 1) {
-                            charOf = staticLayout.getOffsetForHorizontal(0, x);
-                            break;
-                        }
-                        endOfTextX = endOfTextX2;
-                    }
-                    if (k >= 10) {
-                        sub = str2.subSequence(staticLayout.getOffsetForHorizontal(0, staticLayout.getPrimaryHorizontal(startHighlightedIndex + 1) - (((float) i) * 0.3f)), str2.length());
-                    } else {
-                        if (charOf > 0 && charOf < str2.length() - 2 && Character.isWhitespace(str2.charAt(charOf))) {
-                            charOf++;
-                        }
-                        sub = str2.subSequence(charOf, str2.length());
-                    }
-                    return SpannableStringBuilder.valueOf("...").append(sub);
-                }
-                return str2;
-            } catch (Exception e4) {
-                e = e4;
-                FileLog.e((Throwable) e);
-                return str2;
-            }
-        } catch (Exception e5) {
-            e = e5;
-            charSequence = str;
-            String str4 = query;
-            str2 = charSequence;
+            return charSequence;
+        } catch (Exception e) {
             FileLog.e((Throwable) e);
-            return str2;
         }
     }
 
-    public static CharSequence highlightText(CharSequence str, ArrayList<String> query, Theme.ResourcesProvider resourcesProvider) {
-        if (query == null) {
+    public static CharSequence highlightText(CharSequence charSequence, ArrayList<String> arrayList, Theme.ResourcesProvider resourcesProvider) {
+        if (arrayList == null) {
             return null;
         }
-        int emptyCount = 0;
-        for (int i = 0; i < query.size(); i++) {
-            CharSequence strTmp = highlightText(str, query.get(i), resourcesProvider);
-            if (strTmp != null) {
-                str = strTmp;
+        int i = 0;
+        for (int i2 = 0; i2 < arrayList.size(); i2++) {
+            CharSequence highlightText = highlightText(charSequence, arrayList.get(i2), resourcesProvider);
+            if (highlightText != null) {
+                charSequence = highlightText;
             } else {
-                emptyCount++;
+                i++;
             }
         }
-        if (emptyCount == query.size()) {
+        if (i == arrayList.size()) {
             return null;
         }
-        return str;
+        return charSequence;
     }
 
-    public static CharSequence highlightText(CharSequence str, String query, Theme.ResourcesProvider resourcesProvider) {
-        if (TextUtils.isEmpty(query) || TextUtils.isEmpty(str)) {
+    public static CharSequence highlightText(CharSequence charSequence, String str, Theme.ResourcesProvider resourcesProvider) {
+        if (TextUtils.isEmpty(str) || TextUtils.isEmpty(charSequence)) {
             return null;
         }
-        String s = str.toString().toLowerCase();
-        SpannableStringBuilder spannableStringBuilder = SpannableStringBuilder.valueOf(str);
-        int i = s.indexOf(query);
-        while (i >= 0) {
+        String lowerCase = charSequence.toString().toLowerCase();
+        SpannableStringBuilder valueOf = SpannableStringBuilder.valueOf(charSequence);
+        int indexOf = lowerCase.indexOf(str);
+        while (indexOf >= 0) {
             try {
-                spannableStringBuilder.setSpan(new ForegroundColorSpanThemable("windowBackgroundWhiteBlueText4", resourcesProvider), i, Math.min(query.length() + i, str.length()), 0);
+                valueOf.setSpan(new ForegroundColorSpanThemable("windowBackgroundWhiteBlueText4", resourcesProvider), indexOf, Math.min(str.length() + indexOf, charSequence.length()), 0);
             } catch (Exception e) {
                 FileLog.e((Throwable) e);
             }
-            i = s.indexOf(query, i + 1);
+            indexOf = lowerCase.indexOf(str, indexOf + 1);
         }
-        return spannableStringBuilder;
+        return valueOf;
     }
 
     public static Activity findActivity(Context context) {
@@ -415,27 +417,29 @@ public class AndroidUtilities {
     }
 
     public static CharSequence replaceSingleTag(String str, final Runnable runnable) {
-        int startIndex = str.indexOf("**");
-        int endIndex = str.indexOf("**", startIndex + 1);
-        String str2 = str.replace("**", "");
-        int index = -1;
-        int len = 0;
-        if (startIndex >= 0 && endIndex >= 0 && endIndex - startIndex > 2) {
-            len = (endIndex - startIndex) - 2;
-            index = startIndex;
+        int i;
+        int i2;
+        int indexOf = str.indexOf("**");
+        int indexOf2 = str.indexOf("**", indexOf + 1);
+        String replace = str.replace("**", "");
+        if (indexOf < 0 || indexOf2 < 0 || (i2 = indexOf2 - indexOf) <= 2) {
+            indexOf = -1;
+            i = 0;
+        } else {
+            i = i2 - 2;
         }
-        SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(str2);
-        if (index >= 0) {
+        SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(replace);
+        if (indexOf >= 0) {
             spannableStringBuilder.setSpan(new ClickableSpan() {
-                public void updateDrawState(TextPaint ds) {
-                    super.updateDrawState(ds);
-                    ds.setUnderlineText(false);
+                public void updateDrawState(TextPaint textPaint) {
+                    super.updateDrawState(textPaint);
+                    textPaint.setUnderlineText(false);
                 }
 
                 public void onClick(View view) {
                     runnable.run();
                 }
-            }, index, index + len, 0);
+            }, indexOf, i + indexOf, 0);
         }
         return spannableStringBuilder;
     }
@@ -449,126 +453,128 @@ public class AndroidUtilities {
         }
     }
 
-    private static String makeUrl(String url, String[] prefixes, Matcher matcher) {
-        boolean hasPrefix = false;
+    private static String makeUrl(String str, String[] strArr, Matcher matcher) {
+        boolean z;
         int i = 0;
         while (true) {
-            if (i >= prefixes.length) {
+            z = true;
+            if (i >= strArr.length) {
+                z = false;
                 break;
             }
-            if (url.regionMatches(true, 0, prefixes[i], 0, prefixes[i].length())) {
-                hasPrefix = true;
-                if (!url.regionMatches(false, 0, prefixes[i], 0, prefixes[i].length())) {
-                    url = prefixes[i] + url.substring(prefixes[i].length());
+            if (str.regionMatches(true, 0, strArr[i], 0, strArr[i].length())) {
+                if (!str.regionMatches(false, 0, strArr[i], 0, strArr[i].length())) {
+                    str = strArr[i] + str.substring(strArr[i].length());
                 }
             } else {
                 i++;
             }
         }
-        if (hasPrefix || prefixes.length <= 0) {
-            return url;
+        if (z || strArr.length <= 0) {
+            return str;
         }
-        return prefixes[0] + url;
+        return strArr[0] + str;
     }
 
-    private static void gatherLinks(ArrayList<LinkSpec> links, Spannable s, Pattern pattern, String[] schemes, Linkify.MatchFilter matchFilter, boolean internalOnly) {
-        if (TextUtils.indexOf(s, 9472) >= 0) {
-            s = new SpannableStringBuilder(s.toString().replace(9472, ' '));
+    private static void gatherLinks(ArrayList<LinkSpec> arrayList, Spannable spannable, Pattern pattern, String[] strArr, Linkify.MatchFilter matchFilter, boolean z) {
+        if (TextUtils.indexOf(spannable, 9472) >= 0) {
+            spannable = new SpannableStringBuilder(spannable.toString().replace(9472, ' '));
         }
-        Matcher m = pattern.matcher(s);
-        while (m.find()) {
-            int start = m.start();
-            int end = m.end();
-            if (matchFilter == null || matchFilter.acceptMatch(s, start, end)) {
-                LinkSpec spec = new LinkSpec();
-                String url = makeUrl(m.group(0), schemes, m);
-                if (!internalOnly || Browser.isInternalUrl(url, true, (boolean[]) null)) {
-                    spec.url = url;
-                    spec.start = start;
-                    spec.end = end;
-                    links.add(spec);
+        Matcher matcher = pattern.matcher(spannable);
+        while (matcher.find()) {
+            int start = matcher.start();
+            int end = matcher.end();
+            if (matchFilter == null || matchFilter.acceptMatch(spannable, start, end)) {
+                LinkSpec linkSpec = new LinkSpec();
+                String makeUrl = makeUrl(matcher.group(0), strArr, matcher);
+                if (!z || Browser.isInternalUrl(makeUrl, true, (boolean[]) null)) {
+                    linkSpec.url = makeUrl;
+                    linkSpec.start = start;
+                    linkSpec.end = end;
+                    arrayList.add(linkSpec);
                 }
             }
         }
     }
 
-    static /* synthetic */ boolean lambda$static$0(CharSequence s, int start, int end) {
-        if (start != 0 && s.charAt(start - 1) == '@') {
+    /* access modifiers changed from: private */
+    public static /* synthetic */ boolean lambda$static$0(CharSequence charSequence, int i, int i2) {
+        return i == 0 || charSequence.charAt(i - 1) != '@';
+    }
+
+    public static boolean addLinks(Spannable spannable, int i) {
+        return addLinks(spannable, i, false);
+    }
+
+    public static boolean addLinks(Spannable spannable, int i, boolean z) {
+        if (spannable == null || containsUnsupportedCharacters(spannable.toString()) || i == 0) {
             return false;
+        }
+        URLSpan[] uRLSpanArr = (URLSpan[]) spannable.getSpans(0, spannable.length(), URLSpan.class);
+        for (int length = uRLSpanArr.length - 1; length >= 0; length--) {
+            spannable.removeSpan(uRLSpanArr[length]);
+        }
+        ArrayList arrayList = new ArrayList();
+        if (!z && (i & 4) != 0) {
+            Linkify.addLinks(spannable, 4);
+        }
+        if ((i & 1) != 0) {
+            gatherLinks(arrayList, spannable, LinkifyPort.WEB_URL, new String[]{"http://", "https://", "ton://", "tg://"}, sUrlMatchFilter, z);
+        }
+        pruneOverlaps(arrayList);
+        if (arrayList.size() == 0) {
+            return false;
+        }
+        int size = arrayList.size();
+        for (int i2 = 0; i2 < size; i2++) {
+            LinkSpec linkSpec = (LinkSpec) arrayList.get(i2);
+            URLSpan[] uRLSpanArr2 = (URLSpan[]) spannable.getSpans(linkSpec.start, linkSpec.end, URLSpan.class);
+            if (uRLSpanArr2 != null && uRLSpanArr2.length > 0) {
+                for (URLSpan removeSpan : uRLSpanArr2) {
+                    spannable.removeSpan(removeSpan);
+                }
+            }
+            spannable.setSpan(new URLSpan(linkSpec.url), linkSpec.start, linkSpec.end, 33);
         }
         return true;
     }
 
-    public static boolean addLinks(Spannable text, int mask) {
-        return addLinks(text, mask, false);
-    }
-
-    public static boolean addLinks(Spannable text, int mask, boolean internalOnly) {
-        if (text == null || containsUnsupportedCharacters(text.toString()) || mask == 0) {
-            return false;
-        }
-        URLSpan[] old = (URLSpan[]) text.getSpans(0, text.length(), URLSpan.class);
-        for (int i = old.length - 1; i >= 0; i--) {
-            text.removeSpan(old[i]);
-        }
-        ArrayList<LinkSpec> links = new ArrayList<>();
-        if (!internalOnly && (mask & 4) != 0) {
-            Linkify.addLinks(text, 4);
-        }
-        if ((mask & 1) != 0) {
-            gatherLinks(links, text, LinkifyPort.WEB_URL, new String[]{"http://", "https://", "ton://", "tg://"}, sUrlMatchFilter, internalOnly);
-        }
-        pruneOverlaps(links);
-        if (links.size() == 0) {
-            return false;
-        }
-        int N = links.size();
-        for (int a = 0; a < N; a++) {
-            LinkSpec link = links.get(a);
-            URLSpan[] oldSpans = (URLSpan[]) text.getSpans(link.start, link.end, URLSpan.class);
-            if (oldSpans != null && oldSpans.length > 0) {
-                for (URLSpan removeSpan : oldSpans) {
-                    text.removeSpan(removeSpan);
+    private static void pruneOverlaps(ArrayList<LinkSpec> arrayList) {
+        int i;
+        Collections.sort(arrayList, AndroidUtilities$$ExternalSyntheticLambda8.INSTANCE);
+        int size = arrayList.size();
+        int i2 = 0;
+        while (i2 < size - 1) {
+            LinkSpec linkSpec = arrayList.get(i2);
+            int i3 = i2 + 1;
+            LinkSpec linkSpec2 = arrayList.get(i3);
+            int i4 = linkSpec.start;
+            int i5 = linkSpec2.start;
+            if (i4 <= i5 && (i = linkSpec.end) > i5) {
+                int i6 = linkSpec2.end;
+                int i7 = (i6 > i && i - i4 <= i6 - i5) ? i - i4 < i6 - i5 ? i2 : -1 : i3;
+                if (i7 != -1) {
+                    arrayList.remove(i7);
+                    size--;
                 }
             }
-            text.setSpan(new URLSpan(link.url), link.start, link.end, 33);
-        }
-        return true;
-    }
-
-    private static void pruneOverlaps(ArrayList<LinkSpec> links) {
-        Collections.sort(links, AndroidUtilities$$ExternalSyntheticLambda10.INSTANCE);
-        int len = links.size();
-        int i = 0;
-        while (i < len - 1) {
-            LinkSpec a = links.get(i);
-            LinkSpec b = links.get(i + 1);
-            int remove = -1;
-            if (a.start <= b.start && a.end > b.start) {
-                if (b.end <= a.end) {
-                    remove = i + 1;
-                } else if (a.end - a.start > b.end - b.start) {
-                    remove = i + 1;
-                } else if (a.end - a.start < b.end - b.start) {
-                    remove = i;
-                }
-                if (remove != -1) {
-                    links.remove(remove);
-                    len--;
-                }
-            }
-            i++;
+            i2 = i3;
         }
     }
 
-    static /* synthetic */ int lambda$pruneOverlaps$1(LinkSpec a, LinkSpec b) {
-        if (a.start < b.start) {
+    /* access modifiers changed from: private */
+    public static /* synthetic */ int lambda$pruneOverlaps$1(LinkSpec linkSpec, LinkSpec linkSpec2) {
+        int i;
+        int i2;
+        int i3 = linkSpec.start;
+        int i4 = linkSpec2.start;
+        if (i3 < i4) {
             return -1;
         }
-        if (a.start > b.start || a.end < b.end) {
+        if (i3 > i4 || (i = linkSpec.end) < (i2 = linkSpec2.end)) {
             return 1;
         }
-        if (a.end > b.end) {
+        if (i > i2) {
             return -1;
         }
         return 0;
@@ -582,56 +588,47 @@ public class AndroidUtilities {
     }
 
     public static int getStatusBarHeight(Context context) {
-        int resourceId = context.getResources().getIdentifier("status_bar_height", "dimen", "android");
-        if (resourceId > 0) {
-            return context.getResources().getDimensionPixelSize(resourceId);
+        int identifier = context.getResources().getIdentifier("status_bar_height", "dimen", "android");
+        if (identifier > 0) {
+            return context.getResources().getDimensionPixelSize(identifier);
         }
         return 0;
     }
 
     private static int getNavigationBarHeight(Context context) {
-        int resourceId = context.getResources().getIdentifier("navigation_bar_height", "dimen", "android");
-        if (resourceId > 0) {
-            return context.getResources().getDimensionPixelSize(resourceId);
+        int identifier = context.getResources().getIdentifier("navigation_bar_height", "dimen", "android");
+        if (identifier > 0) {
+            return context.getResources().getDimensionPixelSize(identifier);
         }
         return 0;
     }
 
-    public static int getThumbForNameOrMime(String name, String mime, boolean media) {
-        if (name == null || name.length() == 0) {
-            return media ? documentMediaIcons[0] : documentIcons[0];
+    public static int getThumbForNameOrMime(String str, String str2, boolean z) {
+        if (str == null || str.length() == 0) {
+            return z ? documentMediaIcons[0] : documentIcons[0];
         }
-        int color = -1;
-        if (name.contains(".doc") || name.contains(".txt") || name.contains(".psd")) {
-            color = 0;
-        } else if (name.contains(".xls") || name.contains(".csv")) {
-            color = 1;
-        } else if (name.contains(".pdf") || name.contains(".ppt") || name.contains(".key")) {
-            color = 2;
-        } else if (name.contains(".zip") || name.contains(".rar") || name.contains(".ai") || name.contains(".mp3") || name.contains(".mov") || name.contains(".avi")) {
-            color = 3;
-        }
-        if (color == -1) {
-            int idx = name.lastIndexOf(46);
-            String ext = idx == -1 ? "" : name.substring(idx + 1);
-            if (ext.length() != 0) {
-                color = ext.charAt(0) % documentIcons.length;
+        int i = (str.contains(".doc") || str.contains(".txt") || str.contains(".psd")) ? 0 : (str.contains(".xls") || str.contains(".csv")) ? 1 : (str.contains(".pdf") || str.contains(".ppt") || str.contains(".key")) ? 2 : (str.contains(".zip") || str.contains(".rar") || str.contains(".ai") || str.contains(".mp3") || str.contains(".mov") || str.contains(".avi")) ? 3 : -1;
+        if (i == -1) {
+            int lastIndexOf = str.lastIndexOf(46);
+            String substring = lastIndexOf == -1 ? "" : str.substring(lastIndexOf + 1);
+            if (substring.length() != 0) {
+                i = substring.charAt(0) % documentIcons.length;
             } else {
-                color = name.charAt(0) % documentIcons.length;
+                i = str.charAt(0) % documentIcons.length;
             }
         }
-        return media ? documentMediaIcons[color] : documentIcons[color];
+        return z ? documentMediaIcons[i] : documentIcons[i];
     }
 
     public static int calcBitmapColor(Bitmap bitmap) {
         try {
-            Bitmap b = Bitmaps.createScaledBitmap(bitmap, 1, 1, true);
-            if (b != null) {
-                int bitmapColor = b.getPixel(0, 0);
-                if (bitmap != b) {
-                    b.recycle();
+            Bitmap createScaledBitmap = Bitmaps.createScaledBitmap(bitmap, 1, 1, true);
+            if (createScaledBitmap != null) {
+                int pixel = createScaledBitmap.getPixel(0, 0);
+                if (bitmap != createScaledBitmap) {
+                    createScaledBitmap.recycle();
                 }
-                return bitmapColor;
+                return pixel;
             }
         } catch (Exception e) {
             FileLog.e((Throwable) e);
@@ -640,382 +637,383 @@ public class AndroidUtilities {
     }
 
     public static int[] calcDrawableColor(Drawable drawable) {
+        int i;
         Drawable drawable2 = drawable;
-        int bitmapColor = -16777216;
-        int[] result = new int[4];
+        int[] iArr = new int[4];
+        int i2 = -16777216;
         try {
             if (drawable2 instanceof BitmapDrawable) {
-                bitmapColor = calcBitmapColor(((BitmapDrawable) drawable2).getBitmap());
+                i2 = calcBitmapColor(((BitmapDrawable) drawable2).getBitmap());
             } else if (drawable2 instanceof ColorDrawable) {
-                bitmapColor = ((ColorDrawable) drawable2).getColor();
+                i2 = ((ColorDrawable) drawable2).getColor();
             } else if (drawable2 instanceof BackgroundGradientDrawable) {
-                int[] colors = ((BackgroundGradientDrawable) drawable2).getColorsList();
-                if (colors != null) {
-                    if (colors.length > 1) {
-                        bitmapColor = getAverageColor(colors[0], colors[1]);
-                    } else if (colors.length > 0) {
-                        bitmapColor = colors[0];
+                int[] colorsList = ((BackgroundGradientDrawable) drawable2).getColorsList();
+                if (colorsList != null) {
+                    if (colorsList.length > 1) {
+                        i = getAverageColor(colorsList[0], colorsList[1]);
+                    } else if (colorsList.length > 0) {
+                        i = colorsList[0];
                     }
+                    i2 = i;
                 }
             } else if (drawable2 instanceof MotionBackgroundDrawable) {
                 int argb = Color.argb(45, 0, 0, 0);
-                result[2] = argb;
-                result[0] = argb;
+                iArr[2] = argb;
+                iArr[0] = argb;
                 int argb2 = Color.argb(61, 0, 0, 0);
-                result[3] = argb2;
-                result[1] = argb2;
-                return result;
+                iArr[3] = argb2;
+                iArr[1] = argb2;
+                return iArr;
             }
         } catch (Exception e) {
             FileLog.e((Throwable) e);
         }
-        double[] hsv = rgbToHsv((bitmapColor >> 16) & 255, (bitmapColor >> 8) & 255, bitmapColor & 255);
-        hsv[1] = Math.min(1.0d, hsv[1] + 0.05d + ((1.0d - hsv[1]) * 0.1d));
-        int[] rgb = hsvToRgb(hsv[0], hsv[1], Math.max(0.0d, hsv[2] * 0.65d));
-        result[0] = Color.argb(102, rgb[0], rgb[1], rgb[2]);
-        result[1] = Color.argb(136, rgb[0], rgb[1], rgb[2]);
-        int[] rgb2 = hsvToRgb(hsv[0], hsv[1], Math.max(0.0d, hsv[2] * 0.72d));
-        result[2] = Color.argb(102, rgb2[0], rgb2[1], rgb2[2]);
-        result[3] = Color.argb(136, rgb2[0], rgb2[1], rgb2[2]);
-        return result;
+        double[] rgbToHsv = rgbToHsv((i2 >> 16) & 255, (i2 >> 8) & 255, i2 & 255);
+        rgbToHsv[1] = Math.min(1.0d, rgbToHsv[1] + 0.05d + ((1.0d - rgbToHsv[1]) * 0.1d));
+        int[] hsvToRgb = hsvToRgb(rgbToHsv[0], rgbToHsv[1], Math.max(0.0d, rgbToHsv[2] * 0.65d));
+        iArr[0] = Color.argb(102, hsvToRgb[0], hsvToRgb[1], hsvToRgb[2]);
+        iArr[1] = Color.argb(136, hsvToRgb[0], hsvToRgb[1], hsvToRgb[2]);
+        int[] hsvToRgb2 = hsvToRgb(rgbToHsv[0], rgbToHsv[1], Math.max(0.0d, rgbToHsv[2] * 0.72d));
+        iArr[2] = Color.argb(102, hsvToRgb2[0], hsvToRgb2[1], hsvToRgb2[2]);
+        iArr[3] = Color.argb(136, hsvToRgb2[0], hsvToRgb2[1], hsvToRgb2[2]);
+        return iArr;
     }
 
-    public static double[] rgbToHsv(int color) {
-        return rgbToHsv(Color.red(color), Color.green(color), Color.blue(color));
+    public static double[] rgbToHsv(int i) {
+        return rgbToHsv(Color.red(i), Color.green(i), Color.blue(i));
     }
 
-    public static double[] rgbToHsv(int r, int g, int b) {
-        double h;
-        double h2;
-        double d = (double) r;
-        Double.isNaN(d);
-        double rf = d / 255.0d;
-        double d2 = (double) g;
-        Double.isNaN(d2);
-        double gf = d2 / 255.0d;
-        double d3 = (double) b;
-        Double.isNaN(d3);
-        double bf = d3 / 255.0d;
-        double max = (rf <= gf || rf <= bf) ? Math.max(gf, bf) : rf;
-        double min = (rf >= gf || rf >= bf) ? Math.min(gf, bf) : rf;
-        double d4 = max - min;
-        double s = 0.0d;
-        if (max != 0.0d) {
-            s = d4 / max;
-        }
-        if (max == min) {
-            h = 0.0d;
-            double d5 = min;
+    public static double[] rgbToHsv(int i, int i2, int i3) {
+        double d;
+        double d2;
+        double d3;
+        double d4;
+        double d5;
+        double d6 = (double) i;
+        Double.isNaN(d6);
+        double d7 = d6 / 255.0d;
+        double d8 = (double) i2;
+        Double.isNaN(d8);
+        double d9 = d8 / 255.0d;
+        double d10 = (double) i3;
+        Double.isNaN(d10);
+        double d11 = d10 / 255.0d;
+        if (d7 <= d9 || d7 <= d11) {
+            d = Math.max(d9, d11);
         } else {
-            if (rf <= gf || rf <= bf) {
-                if (gf > bf) {
-                    h2 = ((bf - rf) / d4) + 2.0d;
-                } else {
-                    h2 = ((rf - gf) / d4) + 4.0d;
-                }
+            d = d7;
+        }
+        if (d7 >= d9 || d7 >= d11) {
+            d2 = Math.min(d9, d11);
+        } else {
+            d2 = d7;
+        }
+        double d12 = d - d2;
+        double d13 = 0.0d;
+        double d14 = d == 0.0d ? 0.0d : d12 / d;
+        if (d != d2) {
+            if (d7 > d9 && d7 > d11) {
+                d5 = (d9 - d11) / d12;
+                d4 = (double) (d9 < d11 ? 6 : 0);
+                Double.isNaN(d4);
+            } else if (d9 > d11) {
+                d3 = 2.0d + ((d11 - d7) / d12);
+                d13 = d3 / 6.0d;
             } else {
-                double d6 = (gf - bf) / d4;
-                double d7 = min;
-                double min2 = (double) (gf < bf ? 6 : 0);
-                Double.isNaN(min2);
-                h2 = d6 + min2;
+                d5 = (d7 - d9) / d12;
+                d4 = 4.0d;
             }
-            h = h2 / 6.0d;
+            d3 = d5 + d4;
+            d13 = d3 / 6.0d;
         }
-        return new double[]{h, s, max};
+        return new double[]{d13, d14, d};
     }
 
-    public static int hsvToColor(double h, double s, double v) {
-        int[] rgb = hsvToRgb(h, s, v);
-        return Color.argb(255, rgb[0], rgb[1], rgb[2]);
+    public static int hsvToColor(double d, double d2, double d3) {
+        int[] hsvToRgb = hsvToRgb(d, d2, d3);
+        return Color.argb(255, hsvToRgb[0], hsvToRgb[1], hsvToRgb[2]);
     }
 
-    public static int[] hsvToRgb(double h, double s, double v) {
-        double r;
-        double g = 0.0d;
-        double b = 0.0d;
-        double i = (double) ((int) Math.floor(h * 6.0d));
-        Double.isNaN(i);
-        double f = (6.0d * h) - i;
-        double p = (1.0d - s) * v;
-        double q = (1.0d - (f * s)) * v;
-        double t = (1.0d - ((1.0d - f) * s)) * v;
-        switch (((int) i) % 6) {
-            case 0:
-                r = v;
-                g = t;
-                b = p;
-                break;
-            case 1:
-                r = q;
-                g = v;
-                b = p;
-                break;
-            case 2:
-                r = p;
-                g = v;
-                b = t;
-                break;
-            case 3:
-                r = p;
-                g = q;
-                b = v;
-                break;
-            case 4:
-                r = t;
-                g = p;
-                b = v;
-                break;
-            case 5:
-                r = v;
-                g = p;
-                b = q;
-                break;
-            default:
-                r = 0.0d;
-                break;
+    public static int[] hsvToRgb(double d, double d2, double d3) {
+        double d4 = 6.0d * d;
+        double floor = (double) ((int) Math.floor(d4));
+        Double.isNaN(floor);
+        double d5 = d4 - floor;
+        double d6 = (1.0d - d2) * d3;
+        double d7 = (1.0d - (d5 * d2)) * d3;
+        double d8 = d3 * (1.0d - ((1.0d - d5) * d2));
+        int i = ((int) floor) % 6;
+        double d9 = 0.0d;
+        if (i != 0) {
+            if (i == 1) {
+                d9 = d3;
+                d8 = d6;
+                d6 = d7;
+            } else if (i == 2) {
+                d9 = d3;
+            } else if (i == 3) {
+                d8 = d3;
+                d9 = d7;
+            } else if (i == 4) {
+                d9 = d6;
+                d6 = d8;
+                d8 = d3;
+            } else if (i != 5) {
+                d8 = 0.0d;
+                d6 = 0.0d;
+            } else {
+                d9 = d6;
+                d8 = d7;
+            }
+            return new int[]{(int) (d6 * 255.0d), (int) (d9 * 255.0d), (int) (d8 * 255.0d)};
         }
-        double d = f;
-        double d2 = i;
-        return new int[]{(int) (r * 255.0d), (int) (g * 255.0d), (int) (b * 255.0d)};
+        d9 = d8;
+        d8 = d6;
+        d6 = d3;
+        return new int[]{(int) (d6 * 255.0d), (int) (d9 * 255.0d), (int) (d8 * 255.0d)};
     }
 
-    public static void adjustSaturationColorMatrix(ColorMatrix colorMatrix, float saturation) {
+    public static void adjustSaturationColorMatrix(ColorMatrix colorMatrix, float f) {
         if (colorMatrix != null) {
-            float x = saturation + 1.0f;
-            colorMatrix.postConcat(new ColorMatrix(new float[]{((1.0f - x) * 0.3086f) + x, (1.0f - x) * 0.6094f, (1.0f - x) * 0.082f, 0.0f, 0.0f, (1.0f - x) * 0.3086f, ((1.0f - x) * 0.6094f) + x, (1.0f - x) * 0.082f, 0.0f, 0.0f, (1.0f - x) * 0.3086f, (1.0f - x) * 0.6094f, ((1.0f - x) * 0.082f) + x, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f}));
+            float f2 = f + 1.0f;
+            float f3 = 1.0f - f2;
+            float f4 = 0.3086f * f3;
+            float f5 = 0.6094f * f3;
+            float f6 = f3 * 0.082f;
+            colorMatrix.postConcat(new ColorMatrix(new float[]{f4 + f2, f5, f6, 0.0f, 0.0f, f4, f5 + f2, f6, 0.0f, 0.0f, f4, f5, f6 + f2, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f}));
         }
     }
 
-    public static void adjustBrightnessColorMatrix(ColorMatrix colorMatrix, float brightness) {
+    public static void adjustBrightnessColorMatrix(ColorMatrix colorMatrix, float f) {
         if (colorMatrix != null) {
-            float brightness2 = brightness * 255.0f;
-            colorMatrix.postConcat(new ColorMatrix(new float[]{1.0f, 0.0f, 0.0f, 0.0f, brightness2, 0.0f, 1.0f, 0.0f, 0.0f, brightness2, 0.0f, 0.0f, 1.0f, 0.0f, brightness2, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f}));
+            float f2 = f * 255.0f;
+            colorMatrix.postConcat(new ColorMatrix(new float[]{1.0f, 0.0f, 0.0f, 0.0f, f2, 0.0f, 1.0f, 0.0f, 0.0f, f2, 0.0f, 0.0f, 1.0f, 0.0f, f2, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f}));
         }
     }
 
-    public static void multiplyBrightnessColorMatrix(ColorMatrix colorMatrix, float v) {
+    public static void multiplyBrightnessColorMatrix(ColorMatrix colorMatrix, float f) {
         if (colorMatrix != null) {
-            colorMatrix.postConcat(new ColorMatrix(new float[]{v, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, v, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, v, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f}));
+            colorMatrix.postConcat(new ColorMatrix(new float[]{f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f}));
         }
     }
 
-    public static Bitmap snapshotView(View v) {
-        Bitmap bm = Bitmap.createBitmap(v.getWidth(), v.getHeight(), Bitmap.Config.ARGB_8888);
-        Canvas canvas = new Canvas(bm);
-        v.draw(canvas);
-        int[] loc = new int[2];
-        v.getLocationInWindow(loc);
-        snapshotTextureViews(loc[0], loc[1], loc, canvas, v);
-        return bm;
+    public static Bitmap snapshotView(View view) {
+        Bitmap createBitmap = Bitmap.createBitmap(view.getWidth(), view.getHeight(), Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(createBitmap);
+        view.draw(canvas);
+        int[] iArr = new int[2];
+        view.getLocationInWindow(iArr);
+        snapshotTextureViews(iArr[0], iArr[1], iArr, canvas, view);
+        return createBitmap;
     }
 
-    private static void snapshotTextureViews(int rootX, int rootY, int[] loc, Canvas canvas, View v) {
-        if (v instanceof TextureView) {
-            TextureView tv = (TextureView) v;
-            tv.getLocationInWindow(loc);
-            Bitmap textureSnapshot = tv.getBitmap();
-            if (textureSnapshot != null) {
+    private static void snapshotTextureViews(int i, int i2, int[] iArr, Canvas canvas, View view) {
+        if (view instanceof TextureView) {
+            TextureView textureView = (TextureView) view;
+            textureView.getLocationInWindow(iArr);
+            Bitmap bitmap = textureView.getBitmap();
+            if (bitmap != null) {
                 canvas.save();
-                canvas.drawBitmap(textureSnapshot, (float) (loc[0] - rootX), (float) (loc[1] - rootY), (Paint) null);
+                canvas.drawBitmap(bitmap, (float) (iArr[0] - i), (float) (iArr[1] - i2), (Paint) null);
                 canvas.restore();
-                textureSnapshot.recycle();
+                bitmap.recycle();
             }
         }
-        if (v instanceof ViewGroup) {
-            ViewGroup vg = (ViewGroup) v;
-            for (int i = 0; i < vg.getChildCount(); i++) {
-                snapshotTextureViews(rootX, rootY, loc, canvas, vg.getChildAt(i));
+        if (view instanceof ViewGroup) {
+            ViewGroup viewGroup = (ViewGroup) view;
+            for (int i3 = 0; i3 < viewGroup.getChildCount(); i3++) {
+                snapshotTextureViews(i, i2, iArr, canvas, viewGroup.getChildAt(i3));
             }
         }
     }
 
-    public static void requestAltFocusable(Activity activity, int classGuid) {
+    public static void requestAltFocusable(Activity activity, int i) {
         if (activity != null) {
             activity.getWindow().setFlags(131072, 131072);
-            altFocusableClassGuid = classGuid;
+            altFocusableClassGuid = i;
         }
     }
 
-    public static void removeAltFocusable(Activity activity, int classGuid) {
-        if (activity != null && altFocusableClassGuid == classGuid) {
+    public static void removeAltFocusable(Activity activity, int i) {
+        if (activity != null && altFocusableClassGuid == i) {
             activity.getWindow().clearFlags(131072);
         }
     }
 
-    public static void requestAdjustResize(Activity activity, int classGuid) {
+    public static void requestAdjustResize(Activity activity, int i) {
         if (activity != null && !isTablet()) {
             activity.getWindow().setSoftInputMode(16);
-            adjustOwnerClassGuid = classGuid;
+            adjustOwnerClassGuid = i;
         }
     }
 
-    public static void requestAdjustNothing(Activity activity, int classGuid) {
+    public static void requestAdjustNothing(Activity activity, int i) {
         if (activity != null && !isTablet()) {
             activity.getWindow().setSoftInputMode(48);
-            adjustOwnerClassGuid = classGuid;
+            adjustOwnerClassGuid = i;
         }
     }
 
-    public static void setAdjustResizeToNothing(Activity activity, int classGuid) {
+    public static void setAdjustResizeToNothing(Activity activity, int i) {
         if (activity != null && !isTablet()) {
-            int i = adjustOwnerClassGuid;
-            if (i == 0 || i == classGuid) {
+            int i2 = adjustOwnerClassGuid;
+            if (i2 == 0 || i2 == i) {
                 activity.getWindow().setSoftInputMode(48);
             }
         }
     }
 
-    public static void removeAdjustResize(Activity activity, int classGuid) {
-        if (activity != null && !isTablet() && adjustOwnerClassGuid == classGuid) {
+    public static void removeAdjustResize(Activity activity, int i) {
+        if (activity != null && !isTablet() && adjustOwnerClassGuid == i) {
             activity.getWindow().setSoftInputMode(32);
         }
     }
 
-    public static void createEmptyFile(File f) {
+    public static void createEmptyFile(File file) {
         try {
-            if (!f.exists()) {
-                FileWriter writer = new FileWriter(f);
-                writer.flush();
-                writer.close();
+            if (!file.exists()) {
+                FileWriter fileWriter = new FileWriter(file);
+                fileWriter.flush();
+                fileWriter.close();
             }
-        } catch (Throwable e) {
-            FileLog.e(e, false);
+        } catch (Throwable th) {
+            FileLog.e(th, false);
         }
     }
 
-    public static boolean isGoogleMapsInstalled(BaseFragment fragment) {
+    public static boolean isGoogleMapsInstalled(BaseFragment baseFragment) {
         try {
             ApplicationLoader.applicationContext.getPackageManager().getApplicationInfo("com.google.android.apps.maps", 0);
             return true;
-        } catch (PackageManager.NameNotFoundException e) {
-            if (fragment.getParentActivity() == null) {
+        } catch (PackageManager.NameNotFoundException unused) {
+            if (baseFragment.getParentActivity() == null) {
                 return false;
             }
-            AlertDialog.Builder builder = new AlertDialog.Builder((Context) fragment.getParentActivity());
+            AlertDialog.Builder builder = new AlertDialog.Builder((Context) baseFragment.getParentActivity());
             builder.setMessage(LocaleController.getString("InstallGoogleMaps", NUM));
-            builder.setPositiveButton(LocaleController.getString("OK", NUM), new AndroidUtilities$$ExternalSyntheticLambda3(fragment));
+            builder.setPositiveButton(LocaleController.getString("OK", NUM), new AndroidUtilities$$ExternalSyntheticLambda1(baseFragment));
             builder.setNegativeButton(LocaleController.getString("Cancel", NUM), (DialogInterface.OnClickListener) null);
-            fragment.showDialog(builder.create());
+            baseFragment.showDialog(builder.create());
             return false;
         }
     }
 
-    static /* synthetic */ void lambda$isGoogleMapsInstalled$2(BaseFragment fragment, DialogInterface dialogInterface, int i) {
+    /* access modifiers changed from: private */
+    public static /* synthetic */ void lambda$isGoogleMapsInstalled$2(BaseFragment baseFragment, DialogInterface dialogInterface, int i) {
         try {
-            fragment.getParentActivity().startActivityForResult(new Intent("android.intent.action.VIEW", Uri.parse("market://details?id=com.google.android.apps.maps")), 500);
-        } catch (Exception e1) {
-            FileLog.e((Throwable) e1);
+            baseFragment.getParentActivity().startActivityForResult(new Intent("android.intent.action.VIEW", Uri.parse("market://details?id=com.google.android.apps.maps")), 500);
+        } catch (Exception e) {
+            FileLog.e((Throwable) e);
         }
     }
 
-    public static int[] toIntArray(List<Integer> integers) {
-        int[] ret = new int[integers.size()];
-        for (int i = 0; i < ret.length; i++) {
-            ret[i] = integers.get(i).intValue();
+    public static int[] toIntArray(List<Integer> list) {
+        int size = list.size();
+        int[] iArr = new int[size];
+        for (int i = 0; i < size; i++) {
+            iArr[i] = list.get(i).intValue();
         }
-        return ret;
+        return iArr;
     }
 
     public static boolean isInternalUri(Uri uri) {
         return isInternalUri(uri, 0);
     }
 
-    public static boolean isInternalUri(int fd) {
-        return isInternalUri((Uri) null, fd);
+    public static boolean isInternalUri(int i) {
+        return isInternalUri((Uri) null, i);
     }
 
-    private static boolean isInternalUri(Uri uri, int fd) {
-        String pathString;
+    private static boolean isInternalUri(Uri uri, int i) {
+        String str;
         if (uri != null) {
-            pathString = uri.getPath();
-            if (pathString == null) {
+            str = uri.getPath();
+            if (str == null) {
                 return false;
             }
-            if (pathString.matches(Pattern.quote(new File(ApplicationLoader.applicationContext.getCacheDir(), "voip_logs").getAbsolutePath()) + "/\\d+\\.log")) {
+            if (str.matches(Pattern.quote(new File(ApplicationLoader.applicationContext.getCacheDir(), "voip_logs").getAbsolutePath()) + "/\\d+\\.log")) {
                 return false;
             }
-            int tries = 0;
-            do {
-                if (pathString != null && pathString.length() > 4096) {
-                    return true;
-                }
+            int i2 = 0;
+            while (str.length() <= 4096) {
                 try {
-                    String newPath = Utilities.readlink(pathString);
-                    if (newPath != null && !newPath.equals(pathString)) {
-                        pathString = newPath;
-                        tries++;
+                    String readlink = Utilities.readlink(str);
+                    if (readlink != null && !readlink.equals(str)) {
+                        i2++;
+                        if (i2 >= 10) {
+                            return true;
+                        }
+                        str = readlink;
                     }
-                } catch (Throwable th) {
+                } catch (Throwable unused) {
                     return true;
                 }
-            } while (tries < 10);
+            }
             return true;
         }
-        String pathString2 = "";
-        int tries2 = 0;
-        do {
-            if (pathString != null && pathString.length() > 4096) {
-                return true;
-            }
+        String str2 = "";
+        int i3 = 0;
+        while (str.length() <= 4096) {
             try {
-                String newPath2 = Utilities.readlinkFd(fd);
-                if (newPath2 != null && !newPath2.equals(pathString)) {
-                    pathString2 = newPath2;
-                    tries2++;
+                String readlinkFd = Utilities.readlinkFd(i);
+                if (readlinkFd != null && !readlinkFd.equals(str)) {
+                    i3++;
+                    if (i3 >= 10) {
+                        return true;
+                    }
+                    str2 = readlinkFd;
                 }
-            } catch (Throwable th2) {
+            } catch (Throwable unused2) {
                 return true;
-            }
-        } while (tries2 < 10);
-        return true;
-        if (pathString != null) {
-            try {
-                String path = new File(pathString).getCanonicalPath();
-                if (path != null) {
-                    pathString = path;
-                }
-            } catch (Exception e) {
-                pathString.replace("/./", "/");
             }
         }
-        if (pathString.endsWith(".attheme") || pathString == null) {
+        return true;
+        try {
+            String canonicalPath = new File(str).getCanonicalPath();
+            if (canonicalPath != null) {
+                str = canonicalPath;
+            }
+        } catch (Exception unused3) {
+            str.replace("/./", "/");
+        }
+        if (str.endsWith(".attheme")) {
             return false;
         }
-        String lowerCase = pathString.toLowerCase();
+        String lowerCase = str.toLowerCase();
         if (lowerCase.contains("/data/data/" + ApplicationLoader.applicationContext.getPackageName())) {
             return true;
         }
         return false;
     }
 
+    @SuppressLint({"WrongConstant"})
     public static void lockOrientation(Activity activity) {
         if (activity != null && prevOrientation == -10) {
             try {
                 prevOrientation = activity.getRequestedOrientation();
-                WindowManager manager = (WindowManager) activity.getSystemService("window");
-                if (manager != null && manager.getDefaultDisplay() != null) {
-                    int rotation = manager.getDefaultDisplay().getRotation();
-                    int orientation = activity.getResources().getConfiguration().orientation;
+                WindowManager windowManager = (WindowManager) activity.getSystemService("window");
+                if (windowManager != null && windowManager.getDefaultDisplay() != null) {
+                    int rotation = windowManager.getDefaultDisplay().getRotation();
+                    int i = activity.getResources().getConfiguration().orientation;
                     if (rotation == 3) {
-                        if (orientation == 1) {
+                        if (i == 1) {
                             activity.setRequestedOrientation(1);
                         } else {
                             activity.setRequestedOrientation(8);
                         }
                     } else if (rotation == 1) {
-                        if (orientation == 1) {
+                        if (i == 1) {
                             activity.setRequestedOrientation(9);
                         } else {
                             activity.setRequestedOrientation(0);
                         }
                     } else if (rotation == 0) {
-                        if (orientation == 2) {
+                        if (i == 2) {
                             activity.setRequestedOrientation(0);
                         } else {
                             activity.setRequestedOrientation(1);
                         }
-                    } else if (orientation == 2) {
+                    } else if (i == 2) {
                         activity.setRequestedOrientation(8);
                     } else {
                         activity.setRequestedOrientation(9);
@@ -1027,6 +1025,7 @@ public class AndroidUtilities {
         }
     }
 
+    @SuppressLint({"WrongConstant"})
     public static void unlockOrientation(Activity activity) {
         if (activity != null) {
             try {
@@ -1059,138 +1058,138 @@ public class AndroidUtilities {
         public ArrayList<String> vcardData = new ArrayList<>();
 
         public String[] getRawValue() {
-            byte[] bytes;
-            int idx = this.fullData.indexOf(58);
-            if (idx < 0) {
+            byte[] decodeQuotedPrintable;
+            int indexOf = this.fullData.indexOf(58);
+            if (indexOf < 0) {
                 return new String[0];
             }
-            String valueType = this.fullData.substring(0, idx);
-            String value = this.fullData.substring(idx + 1);
-            String nameEncoding = null;
-            String nameCharset = "UTF-8";
-            String[] params = valueType.split(";");
-            for (String split : params) {
-                String[] args2 = split.split("=");
-                if (args2.length == 2) {
-                    if (args2[0].equals("CHARSET")) {
-                        nameCharset = args2[1];
-                    } else if (args2[0].equals("ENCODING")) {
-                        nameEncoding = args2[1];
+            String substring = this.fullData.substring(0, indexOf);
+            String substring2 = this.fullData.substring(indexOf + 1);
+            String str = null;
+            String[] split = substring.split(";");
+            String str2 = "UTF-8";
+            for (String split2 : split) {
+                String[] split3 = split2.split("=");
+                if (split3.length == 2) {
+                    if (split3[0].equals("CHARSET")) {
+                        str2 = split3[1];
+                    } else if (split3[0].equals("ENCODING")) {
+                        str = split3[1];
                     }
                 }
             }
-            String[] args = value.split(";");
-            for (int a = 0; a < args.length; a++) {
-                if (!(TextUtils.isEmpty(args[a]) || nameEncoding == null || !nameEncoding.equalsIgnoreCase("QUOTED-PRINTABLE") || (bytes = AndroidUtilities.decodeQuotedPrintable(AndroidUtilities.getStringBytes(args[a]))) == null || bytes.length == 0)) {
+            String[] split4 = substring2.split(";");
+            for (int i = 0; i < split4.length; i++) {
+                if (!(TextUtils.isEmpty(split4[i]) || str == null || !str.equalsIgnoreCase("QUOTED-PRINTABLE") || (decodeQuotedPrintable = AndroidUtilities.decodeQuotedPrintable(AndroidUtilities.getStringBytes(split4[i]))) == null || decodeQuotedPrintable.length == 0)) {
                     try {
-                        args[a] = new String(bytes, nameCharset);
-                    } catch (Exception e) {
+                        split4[i] = new String(decodeQuotedPrintable, str2);
+                    } catch (Exception unused) {
                     }
                 }
             }
-            return args;
+            return split4;
         }
 
-        public String getValue(boolean format) {
-            byte[] bytes;
-            StringBuilder result = new StringBuilder();
-            int idx = this.fullData.indexOf(58);
-            if (idx < 0) {
+        public String getValue(boolean z) {
+            byte[] decodeQuotedPrintable;
+            StringBuilder sb = new StringBuilder();
+            int indexOf = this.fullData.indexOf(58);
+            if (indexOf < 0) {
                 return "";
             }
-            if (result.length() > 0) {
-                result.append(", ");
+            if (sb.length() > 0) {
+                sb.append(", ");
             }
-            String valueType = this.fullData.substring(0, idx);
-            String value = this.fullData.substring(idx + 1);
-            String[] params = valueType.split(";");
-            String nameEncoding = null;
-            String nameCharset = "UTF-8";
-            for (String split : params) {
-                String[] args2 = split.split("=");
-                if (args2.length == 2) {
-                    if (args2[0].equals("CHARSET")) {
-                        nameCharset = args2[1];
-                    } else if (args2[0].equals("ENCODING")) {
-                        nameEncoding = args2[1];
+            String substring = this.fullData.substring(0, indexOf);
+            String substring2 = this.fullData.substring(indexOf + 1);
+            String str = null;
+            String[] split = substring.split(";");
+            String str2 = "UTF-8";
+            for (String split2 : split) {
+                String[] split3 = split2.split("=");
+                if (split3.length == 2) {
+                    if (split3[0].equals("CHARSET")) {
+                        str2 = split3[1];
+                    } else if (split3[0].equals("ENCODING")) {
+                        str = split3[1];
                     }
                 }
             }
-            String[] args = value.split(";");
-            boolean added = false;
-            for (int a = 0; a < args.length; a++) {
-                if (!TextUtils.isEmpty(args[a])) {
-                    if (!(nameEncoding == null || !nameEncoding.equalsIgnoreCase("QUOTED-PRINTABLE") || (bytes = AndroidUtilities.decodeQuotedPrintable(AndroidUtilities.getStringBytes(args[a]))) == null || bytes.length == 0)) {
+            String[] split4 = substring2.split(";");
+            boolean z2 = false;
+            for (int i = 0; i < split4.length; i++) {
+                if (!TextUtils.isEmpty(split4[i])) {
+                    if (!(str == null || !str.equalsIgnoreCase("QUOTED-PRINTABLE") || (decodeQuotedPrintable = AndroidUtilities.decodeQuotedPrintable(AndroidUtilities.getStringBytes(split4[i]))) == null || decodeQuotedPrintable.length == 0)) {
                         try {
-                            args[a] = new String(bytes, nameCharset);
-                        } catch (Exception e) {
+                            split4[i] = new String(decodeQuotedPrintable, str2);
+                        } catch (Exception unused) {
                         }
                     }
-                    if (added && result.length() > 0) {
-                        result.append(" ");
+                    if (z2 && sb.length() > 0) {
+                        sb.append(" ");
                     }
-                    result.append(args[a]);
-                    if (!added) {
-                        added = args[a].length() > 0;
+                    sb.append(split4[i]);
+                    if (!z2) {
+                        z2 = split4[i].length() > 0;
                     }
                 }
             }
-            if (format) {
-                int i = this.type;
-                if (i == 0) {
-                    return PhoneFormat.getInstance().format(result.toString());
+            if (z) {
+                int i2 = this.type;
+                if (i2 == 0) {
+                    return PhoneFormat.getInstance().format(sb.toString());
                 }
-                if (i == 5) {
-                    String[] date = result.toString().split("T");
-                    if (date.length > 0) {
-                        String[] date2 = date[0].split("-");
-                        if (date2.length == 3) {
-                            Calendar calendar = Calendar.getInstance();
-                            calendar.set(1, Utilities.parseInt(date2[0]).intValue());
-                            calendar.set(2, Utilities.parseInt(date2[1]).intValue() - 1);
-                            calendar.set(5, Utilities.parseInt(date2[2]).intValue());
-                            return LocaleController.getInstance().formatterYearMax.format(calendar.getTime());
+                if (i2 == 5) {
+                    String[] split5 = sb.toString().split("T");
+                    if (split5.length > 0) {
+                        String[] split6 = split5[0].split("-");
+                        if (split6.length == 3) {
+                            Calendar instance = Calendar.getInstance();
+                            instance.set(1, Utilities.parseInt(split6[0]).intValue());
+                            instance.set(2, Utilities.parseInt(split6[1]).intValue() - 1);
+                            instance.set(5, Utilities.parseInt(split6[2]).intValue());
+                            return LocaleController.getInstance().formatterYearMax.format(instance.getTime());
                         }
                     }
                 }
             }
-            return result.toString();
+            return sb.toString();
         }
 
-        public String getRawType(boolean first) {
-            int idx = this.fullData.indexOf(58);
-            if (idx < 0) {
+        public String getRawType(boolean z) {
+            int indexOf = this.fullData.indexOf(58);
+            if (indexOf < 0) {
                 return "";
             }
-            String value = this.fullData.substring(0, idx);
+            String substring = this.fullData.substring(0, indexOf);
             if (this.type == 20) {
-                String[] args = value.substring(2).split(";");
-                if (first) {
-                    return args[0];
+                String[] split = substring.substring(2).split(";");
+                if (z) {
+                    return split[0];
                 }
-                if (args.length > 1) {
-                    return args[args.length - 1];
+                if (split.length > 1) {
+                    return split[split.length - 1];
                 }
                 return "";
             }
-            String[] args2 = value.split(";");
-            for (int a = 0; a < args2.length; a++) {
-                if (args2[a].indexOf(61) < 0) {
-                    value = args2[a];
+            String[] split2 = substring.split(";");
+            for (int i = 0; i < split2.length; i++) {
+                if (split2[i].indexOf(61) < 0) {
+                    substring = split2[i];
                 }
             }
-            return value;
+            return substring;
         }
 
         /* JADX WARNING: Can't fix incorrect switch cases order */
-        /* JADX WARNING: Code restructure failed: missing block: B:34:0x0099, code lost:
-            if (r2.equals("WORK") != false) goto L_0x00c5;
+        /* JADX WARNING: Code restructure failed: missing block: B:32:0x0093, code lost:
+            if (r0.equals("OTHER") == false) goto L_0x008b;
          */
         /* Code decompiled incorrectly, please refer to instructions dump. */
         public java.lang.String getType() {
             /*
-                r10 = this;
-                int r0 = r10.type
+                r9 = this;
+                int r0 = r9.type
                 r1 = 5
                 if (r0 != r1) goto L_0x000f
                 r0 = 2131625137(0x7f0e04b1, float:1.8877473E38)
@@ -1201,7 +1200,7 @@ public class AndroidUtilities {
                 r2 = 6
                 r3 = 1
                 if (r0 != r2) goto L_0x0033
-                java.lang.String r0 = r10.getRawType(r3)
+                java.lang.String r0 = r9.getRawType(r3)
                 java.lang.String r1 = "ORG"
                 boolean r0 = r1.equalsIgnoreCase(r0)
                 if (r0 == 0) goto L_0x0029
@@ -1215,483 +1214,699 @@ public class AndroidUtilities {
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
                 return r0
             L_0x0033:
-                java.lang.String r0 = r10.fullData
+                java.lang.String r0 = r9.fullData
                 r2 = 58
                 int r0 = r0.indexOf(r2)
                 if (r0 >= 0) goto L_0x0040
-                java.lang.String r1 = ""
-                return r1
+                java.lang.String r0 = ""
+                return r0
             L_0x0040:
-                java.lang.String r2 = r10.fullData
+                java.lang.String r2 = r9.fullData
                 r4 = 0
-                java.lang.String r2 = r2.substring(r4, r0)
-                int r5 = r10.type
-                r6 = 20
-                java.lang.String r7 = ";"
-                r8 = 2
-                if (r5 != r6) goto L_0x005c
-                java.lang.String r1 = r2.substring(r8)
-                java.lang.String[] r2 = r1.split(r7)
-                r1 = r2[r4]
-                goto L_0x00fc
+                java.lang.String r0 = r2.substring(r4, r0)
+                int r2 = r9.type
+                r5 = 20
+                java.lang.String r6 = ";"
+                r7 = 2
+                if (r2 != r5) goto L_0x005c
+                java.lang.String r0 = r0.substring(r7)
+                java.lang.String[] r0 = r0.split(r6)
+                r0 = r0[r4]
+                goto L_0x0101
             L_0x005c:
-                java.lang.String[] r5 = r2.split(r7)
-                r6 = 0
+                java.lang.String[] r2 = r0.split(r6)
+                r5 = 0
             L_0x0061:
-                int r7 = r5.length
-                if (r6 >= r7) goto L_0x0074
-                r7 = r5[r6]
-                r9 = 61
-                int r7 = r7.indexOf(r9)
-                if (r7 < 0) goto L_0x006f
+                int r6 = r2.length
+                if (r5 >= r6) goto L_0x0074
+                r6 = r2[r5]
+                r8 = 61
+                int r6 = r6.indexOf(r8)
+                if (r6 < 0) goto L_0x006f
                 goto L_0x0071
             L_0x006f:
-                r2 = r5[r6]
+                r0 = r2[r5]
             L_0x0071:
-                int r6 = r6 + 1
+                int r5 = r5 + 1
                 goto L_0x0061
             L_0x0074:
-                java.lang.String r6 = "X-"
-                boolean r6 = r2.startsWith(r6)
-                if (r6 == 0) goto L_0x0080
-                java.lang.String r2 = r2.substring(r8)
+                java.lang.String r2 = "X-"
+                boolean r2 = r0.startsWith(r2)
+                if (r2 == 0) goto L_0x0080
+                java.lang.String r0 = r0.substring(r7)
             L_0x0080:
-                r6 = -1
-                int r7 = r2.hashCode()
-                switch(r7) {
-                    case -2015525726: goto L_0x00ba;
-                    case 2064738: goto L_0x00b0;
-                    case 2223327: goto L_0x00a6;
-                    case 2464291: goto L_0x009c;
-                    case 2670353: goto L_0x0093;
-                    case 75532016: goto L_0x0089;
-                    default: goto L_0x0088;
+                r0.hashCode()
+                r2 = -1
+                int r5 = r0.hashCode()
+                switch(r5) {
+                    case -2015525726: goto L_0x00c2;
+                    case 2064738: goto L_0x00b7;
+                    case 2223327: goto L_0x00ac;
+                    case 2464291: goto L_0x00a1;
+                    case 2670353: goto L_0x0096;
+                    case 75532016: goto L_0x008d;
+                    default: goto L_0x008b;
                 }
-            L_0x0088:
-                goto L_0x00c4
-            L_0x0089:
-                java.lang.String r1 = "OTHER"
-                boolean r1 = r2.equals(r1)
-                if (r1 == 0) goto L_0x0088
-                r1 = 4
-                goto L_0x00c5
-            L_0x0093:
-                java.lang.String r7 = "WORK"
-                boolean r7 = r2.equals(r7)
-                if (r7 == 0) goto L_0x0088
-                goto L_0x00c5
-            L_0x009c:
-                java.lang.String r1 = "PREF"
-                boolean r1 = r2.equals(r1)
-                if (r1 == 0) goto L_0x0088
-                r1 = 0
-                goto L_0x00c5
-            L_0x00a6:
-                java.lang.String r1 = "HOME"
-                boolean r1 = r2.equals(r1)
-                if (r1 == 0) goto L_0x0088
-                r1 = 1
-                goto L_0x00c5
-            L_0x00b0:
-                java.lang.String r1 = "CELL"
-                boolean r1 = r2.equals(r1)
-                if (r1 == 0) goto L_0x0088
-                r1 = 3
-                goto L_0x00c5
-            L_0x00ba:
-                java.lang.String r1 = "MOBILE"
-                boolean r1 = r2.equals(r1)
-                if (r1 == 0) goto L_0x0088
-                r1 = 2
-                goto L_0x00c5
-            L_0x00c4:
+            L_0x008b:
                 r1 = -1
-            L_0x00c5:
+                goto L_0x00cc
+            L_0x008d:
+                java.lang.String r5 = "OTHER"
+                boolean r5 = r0.equals(r5)
+                if (r5 != 0) goto L_0x00cc
+                goto L_0x008b
+            L_0x0096:
+                java.lang.String r1 = "WORK"
+                boolean r1 = r0.equals(r1)
+                if (r1 != 0) goto L_0x009f
+                goto L_0x008b
+            L_0x009f:
+                r1 = 4
+                goto L_0x00cc
+            L_0x00a1:
+                java.lang.String r1 = "PREF"
+                boolean r1 = r0.equals(r1)
+                if (r1 != 0) goto L_0x00aa
+                goto L_0x008b
+            L_0x00aa:
+                r1 = 3
+                goto L_0x00cc
+            L_0x00ac:
+                java.lang.String r1 = "HOME"
+                boolean r1 = r0.equals(r1)
+                if (r1 != 0) goto L_0x00b5
+                goto L_0x008b
+            L_0x00b5:
+                r1 = 2
+                goto L_0x00cc
+            L_0x00b7:
+                java.lang.String r1 = "CELL"
+                boolean r1 = r0.equals(r1)
+                if (r1 != 0) goto L_0x00c0
+                goto L_0x008b
+            L_0x00c0:
+                r1 = 1
+                goto L_0x00cc
+            L_0x00c2:
+                java.lang.String r1 = "MOBILE"
+                boolean r1 = r0.equals(r1)
+                if (r1 != 0) goto L_0x00cb
+                goto L_0x008b
+            L_0x00cb:
+                r1 = 0
+            L_0x00cc:
                 switch(r1) {
-                    case 0: goto L_0x00f2;
-                    case 1: goto L_0x00e8;
-                    case 2: goto L_0x00de;
-                    case 3: goto L_0x00de;
-                    case 4: goto L_0x00d4;
-                    case 5: goto L_0x00ca;
-                    default: goto L_0x00c8;
+                    case 0: goto L_0x00f8;
+                    case 1: goto L_0x00f8;
+                    case 2: goto L_0x00ee;
+                    case 3: goto L_0x00e4;
+                    case 4: goto L_0x00da;
+                    case 5: goto L_0x00d0;
+                    default: goto L_0x00cf;
                 }
-            L_0x00c8:
-                r1 = r2
-                goto L_0x00fc
-            L_0x00ca:
-                r1 = 2131627341(0x7f0e0d4d, float:1.8881944E38)
-                java.lang.String r6 = "PhoneWork"
-                java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r6, r1)
-                goto L_0x00fc
-            L_0x00d4:
-                r1 = 2131627340(0x7f0e0d4c, float:1.8881942E38)
-                java.lang.String r6 = "PhoneOther"
-                java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r6, r1)
-                goto L_0x00fc
-            L_0x00de:
-                r1 = 2131627331(0x7f0e0d43, float:1.8881923E38)
-                java.lang.String r6 = "PhoneMobile"
-                java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r6, r1)
-                goto L_0x00fc
-            L_0x00e8:
-                r1 = 2131627329(0x7f0e0d41, float:1.888192E38)
-                java.lang.String r6 = "PhoneHome"
-                java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r6, r1)
-                goto L_0x00fc
-            L_0x00f2:
-                r1 = 2131627330(0x7f0e0d42, float:1.8881921E38)
-                java.lang.String r6 = "PhoneMain"
-                java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r6, r1)
-            L_0x00fc:
-                java.lang.StringBuilder r2 = new java.lang.StringBuilder
-                r2.<init>()
-                java.lang.String r4 = r1.substring(r4, r3)
-                java.lang.String r4 = r4.toUpperCase()
-                r2.append(r4)
-                java.lang.String r3 = r1.substring(r3)
-                java.lang.String r3 = r3.toLowerCase()
-                r2.append(r3)
-                java.lang.String r1 = r2.toString()
-                return r1
+            L_0x00cf:
+                goto L_0x0101
+            L_0x00d0:
+                r0 = 2131627340(0x7f0e0d4c, float:1.8881942E38)
+                java.lang.String r1 = "PhoneOther"
+                java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
+                goto L_0x0101
+            L_0x00da:
+                r0 = 2131627341(0x7f0e0d4d, float:1.8881944E38)
+                java.lang.String r1 = "PhoneWork"
+                java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
+                goto L_0x0101
+            L_0x00e4:
+                r0 = 2131627330(0x7f0e0d42, float:1.8881921E38)
+                java.lang.String r1 = "PhoneMain"
+                java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
+                goto L_0x0101
+            L_0x00ee:
+                r0 = 2131627329(0x7f0e0d41, float:1.888192E38)
+                java.lang.String r1 = "PhoneHome"
+                java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
+                goto L_0x0101
+            L_0x00f8:
+                r0 = 2131627331(0x7f0e0d43, float:1.8881923E38)
+                java.lang.String r1 = "PhoneMobile"
+                java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
+            L_0x0101:
+                java.lang.StringBuilder r1 = new java.lang.StringBuilder
+                r1.<init>()
+                java.lang.String r2 = r0.substring(r4, r3)
+                java.lang.String r2 = r2.toUpperCase()
+                r1.append(r2)
+                java.lang.String r0 = r0.substring(r3)
+                java.lang.String r0 = r0.toLowerCase()
+                r1.append(r0)
+                java.lang.String r0 = r1.toString()
+                return r0
             */
             throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.AndroidUtilities.VcardItem.getType():java.lang.String");
         }
     }
 
-    public static byte[] getStringBytes(String src) {
+    public static byte[] getStringBytes(String str) {
         try {
-            return src.getBytes("UTF-8");
-        } catch (Exception e) {
+            return str.getBytes("UTF-8");
+        } catch (Exception unused) {
             return new byte[0];
         }
     }
 
-    public static ArrayList<TLRPC.User> loadVCardFromStream(Uri uri, int currentAccount, boolean asset, ArrayList<VcardItem> items, String name) {
-        InputStream stream;
-        ArrayList<TLRPC.User> result;
-        InputStream stream2;
-        String[] args;
-        VcardItem currentItem;
-        boolean currentIsPhoto;
-        String pendingLine;
-        byte[] bytes;
-        Uri uri2 = uri;
-        ArrayList<VcardItem> arrayList = items;
-        ArrayList<TLRPC.User> result2 = null;
-        if (asset) {
-            try {
-                stream = ApplicationLoader.applicationContext.getContentResolver().openAssetFileDescriptor(uri2, "r").createInputStream();
-                InputStream inputStream = stream;
-            } catch (Throwable th) {
-                e = th;
-                FileLog.e(e);
-                return result2;
-            }
-        } else {
-            try {
-                stream = ApplicationLoader.applicationContext.getContentResolver().openInputStream(uri2);
-                InputStream inputStream2 = stream;
-            } catch (Throwable th2) {
-                e = th2;
-                ArrayList<TLRPC.User> arrayList2 = result2;
-                FileLog.e(e);
-                return result2;
-            }
-        }
-        ArrayList arrayList3 = new ArrayList();
-        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(stream, "UTF-8"));
-        VcardItem currentItem2 = null;
-        boolean currentIsPhoto2 = false;
-        String pendingLine2 = null;
-        VcardData currentData = null;
-        while (true) {
-            String readLine = bufferedReader.readLine();
-            String line = readLine;
-            String originalLine = readLine;
-            if (readLine == null) {
-                break;
-            } else if (originalLine.startsWith("PHOTO")) {
-                currentIsPhoto2 = true;
-            } else {
-                if (originalLine.indexOf(58) >= 0) {
-                    VcardItem currentItem3 = null;
-                    currentIsPhoto2 = false;
-                    if (originalLine.startsWith("BEGIN:VCARD")) {
-                        VcardData vcardData = new VcardData();
-                        VcardData currentData2 = vcardData;
-                        arrayList3.add(vcardData);
-                        currentData2.name = name;
-                        currentItem2 = null;
-                        currentData = currentData2;
-                    } else {
-                        String str = name;
-                        if (!originalLine.startsWith("END:VCARD")) {
-                            if (arrayList != null) {
-                                if (originalLine.startsWith("TEL")) {
-                                    currentItem3 = new VcardItem();
-                                    currentItem3.type = 0;
-                                } else if (originalLine.startsWith("EMAIL")) {
-                                    currentItem3 = new VcardItem();
-                                    currentItem3.type = 1;
-                                } else {
-                                    if (!originalLine.startsWith("ADR") && !originalLine.startsWith("LABEL")) {
-                                        if (!originalLine.startsWith("GEO")) {
-                                            if (originalLine.startsWith("URL")) {
-                                                currentItem3 = new VcardItem();
-                                                currentItem3.type = 3;
-                                            } else if (originalLine.startsWith("NOTE")) {
-                                                currentItem3 = new VcardItem();
-                                                currentItem3.type = 4;
-                                            } else if (originalLine.startsWith("BDAY")) {
-                                                currentItem3 = new VcardItem();
-                                                currentItem3.type = 5;
-                                            } else {
-                                                if (!originalLine.startsWith("ORG") && !originalLine.startsWith("TITLE")) {
-                                                    if (!originalLine.startsWith("ROLE")) {
-                                                        if (originalLine.startsWith("X-ANDROID")) {
-                                                            currentItem3 = new VcardItem();
-                                                            currentItem3.type = -1;
-                                                        } else if (originalLine.startsWith("X-PHONETIC")) {
-                                                            currentItem3 = null;
-                                                        } else if (originalLine.startsWith("X-")) {
-                                                            currentItem3 = new VcardItem();
-                                                            currentItem3.type = 20;
-                                                        }
-                                                    }
-                                                }
-                                                if (0 == 0) {
-                                                    currentItem3 = new VcardItem();
-                                                    currentItem3.type = 6;
-                                                }
-                                            }
-                                        }
-                                    }
-                                    currentItem3 = new VcardItem();
-                                    currentItem3.type = 2;
-                                }
-                                if (currentItem3 != null && currentItem3.type >= 0) {
-                                    arrayList.add(currentItem3);
-                                }
-                            }
-                        }
-                        currentItem2 = currentItem3;
-                    }
-                }
-                if (!currentIsPhoto2 && currentData != null) {
-                    if (currentItem2 == null) {
-                        if (currentData.vcard.length() > 0) {
-                            currentData.vcard.append(10);
-                        }
-                        currentData.vcard.append(originalLine);
-                    } else {
-                        currentItem2.vcardData.add(originalLine);
-                    }
-                }
-                if (pendingLine2 != null) {
-                    line = pendingLine2 + line;
-                    pendingLine2 = null;
-                }
-                String str2 = "=";
-                if (line.contains("=QUOTED-PRINTABLE")) {
-                    if (line.endsWith(str2)) {
-                        pendingLine2 = line.substring(0, line.length() - 1);
-                        Uri uri3 = uri;
-                    }
-                }
-                if (!(currentIsPhoto2 || currentData == null || currentItem2 == null)) {
-                    currentItem2.fullData = line;
-                }
-                int idx = line.indexOf(":");
-                if (idx >= 0) {
-                    result = result2;
-                    try {
-                        args = new String[]{line.substring(0, idx), line.substring(idx + 1).trim()};
-                    } catch (Exception e) {
-                        FileLog.e((Throwable) e);
-                    } catch (Throwable th3) {
-                        e = th3;
-                        result2 = result;
-                        FileLog.e(e);
-                        return result2;
-                    }
-                } else {
-                    result = result2;
-                    args = new String[]{line.trim()};
-                }
-                int i = idx;
-                if (args.length < 2) {
-                    pendingLine = pendingLine2;
-                    currentIsPhoto = currentIsPhoto2;
-                    currentItem = currentItem2;
-                } else if (currentData == null) {
-                    pendingLine = pendingLine2;
-                    currentIsPhoto = currentIsPhoto2;
-                    currentItem = currentItem2;
-                } else {
-                    if (!args[0].startsWith("FN")) {
-                        if (!args[0].startsWith("N")) {
-                            if (!args[0].startsWith("ORG") || !TextUtils.isEmpty(currentData.name)) {
-                                if (args[0].startsWith("TEL")) {
-                                    currentData.phones.add(args[1]);
-                                    pendingLine = pendingLine2;
-                                    currentIsPhoto = currentIsPhoto2;
-                                    currentItem = currentItem2;
-                                } else {
-                                    pendingLine = pendingLine2;
-                                    currentIsPhoto = currentIsPhoto2;
-                                    currentItem = currentItem2;
-                                }
-                            }
-                        }
-                    }
-                    String[] params = args[0].split(";");
-                    int length = params.length;
-                    currentIsPhoto = currentIsPhoto2;
-                    int i2 = 0;
-                    pendingLine = pendingLine2;
-                    String nameCharset = null;
-                    String nameEncoding = null;
-                    while (i2 < length) {
-                        String[] params2 = params;
-                        String param = params[i2];
-                        String str3 = param;
-                        String[] args2 = param.split(str2);
-                        String str4 = str2;
-                        VcardItem currentItem4 = currentItem2;
-                        if (args2.length == 2) {
-                            if (args2[0].equals("CHARSET")) {
-                                nameCharset = args2[1];
-                            } else if (args2[0].equals("ENCODING")) {
-                                nameEncoding = args2[1];
-                            }
-                        }
-                        i2++;
-                        params = params2;
-                        str2 = str4;
-                        currentItem2 = currentItem4;
-                    }
-                    currentItem = currentItem2;
-                    if (args[0].startsWith("N")) {
-                        currentData.name = args[1].replace(';', ' ').trim();
-                    } else {
-                        currentData.name = args[1];
-                    }
-                    if (!(nameEncoding == null || !nameEncoding.equalsIgnoreCase("QUOTED-PRINTABLE") || (bytes = decodeQuotedPrintable(getStringBytes(currentData.name))) == null || bytes.length == 0)) {
-                        currentData.name = new String(bytes, nameCharset);
-                    }
-                }
-                Uri uri4 = uri;
-                arrayList = items;
-                result2 = result;
-                pendingLine2 = pendingLine;
-                currentIsPhoto2 = currentIsPhoto;
-                currentItem2 = currentItem;
-            }
-        }
-        result = result2;
-        bufferedReader.close();
-        stream.close();
-        int a = 0;
-        result2 = result;
-        while (a < arrayList3.size()) {
-            VcardData vcardData2 = (VcardData) arrayList3.get(a);
-            if (vcardData2.name == null || vcardData2.phones.isEmpty()) {
-                stream2 = stream;
-            } else {
-                if (result2 == null) {
-                    result2 = new ArrayList<>();
-                }
-                String phoneToUse = vcardData2.phones.get(0);
-                int b = 0;
-                while (true) {
-                    if (b >= vcardData2.phones.size()) {
-                        stream2 = stream;
-                        break;
-                    }
-                    String phone = vcardData2.phones.get(b);
-                    String phoneToUse2 = phoneToUse;
-                    stream2 = stream;
-                    if (ContactsController.getInstance(currentAccount).contactsByShortPhone.get(phone.substring(Math.max(0, phone.length() - 7))) != null) {
-                        phoneToUse = phone;
-                        break;
-                    }
-                    b++;
-                    stream = stream2;
-                    phoneToUse = phoneToUse2;
-                }
-                TLRPC.User user = new TLRPC.TL_userContact_old2();
-                user.phone = phoneToUse;
-                user.first_name = vcardData2.name;
-                user.last_name = "";
-                user.id = 0;
-                TLRPC.TL_restrictionReason reason = new TLRPC.TL_restrictionReason();
-                reason.text = vcardData2.vcard.toString();
-                reason.platform = "";
-                reason.reason = "";
-                user.restriction_reason.add(reason);
-                result2.add(user);
-            }
-            a++;
-            stream = stream2;
-        }
-        return result2;
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v0, resolved type: org.telegram.messenger.AndroidUtilities$1} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r11v1, resolved type: org.telegram.messenger.AndroidUtilities$VcardItem} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v4, resolved type: org.telegram.messenger.AndroidUtilities$1} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v6, resolved type: java.util.ArrayList} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v9, resolved type: java.util.ArrayList} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r11v2, resolved type: org.telegram.messenger.AndroidUtilities$VcardItem} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r11v3, resolved type: org.telegram.messenger.AndroidUtilities$VcardItem} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r11v4, resolved type: org.telegram.messenger.AndroidUtilities$VcardItem} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r11v5, resolved type: org.telegram.messenger.AndroidUtilities$VcardItem} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r11v6, resolved type: org.telegram.messenger.AndroidUtilities$VcardItem} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r11v8, resolved type: org.telegram.messenger.AndroidUtilities$VcardItem} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r11v15, resolved type: org.telegram.messenger.AndroidUtilities$VcardItem} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v63, resolved type: org.telegram.messenger.AndroidUtilities$1} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v65, resolved type: org.telegram.messenger.AndroidUtilities$1} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v67, resolved type: org.telegram.messenger.AndroidUtilities$1} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v73, resolved type: org.telegram.messenger.AndroidUtilities$1} */
+    /* JADX WARNING: type inference failed for: r3v1, types: [java.util.ArrayList<org.telegram.tgnet.TLRPC$User>] */
+    /* JADX WARNING: type inference failed for: r11v0 */
+    /* JADX WARNING: type inference failed for: r3v8, types: [java.util.ArrayList] */
+    /* JADX WARNING: type inference failed for: r3v64 */
+    /* JADX WARNING: type inference failed for: r3v68 */
+    /* JADX WARNING: type inference failed for: r3v70 */
+    /* JADX WARNING: Multi-variable type inference failed */
+    /* JADX WARNING: Unknown variable types count: 1 */
+    /* Code decompiled incorrectly, please refer to instructions dump. */
+    public static java.util.ArrayList<org.telegram.tgnet.TLRPC$User> loadVCardFromStream(android.net.Uri r21, int r22, boolean r23, java.util.ArrayList<org.telegram.messenger.AndroidUtilities.VcardItem> r24, java.lang.String r25) {
+        /*
+            r0 = r21
+            r1 = r24
+            java.lang.String r2 = ""
+            r3 = 0
+            if (r23 == 0) goto L_0x001d
+            android.content.Context r4 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ all -> 0x001a }
+            android.content.ContentResolver r4 = r4.getContentResolver()     // Catch:{ all -> 0x001a }
+            java.lang.String r5 = "r"
+            android.content.res.AssetFileDescriptor r0 = r4.openAssetFileDescriptor(r0, r5)     // Catch:{ all -> 0x001a }
+            java.io.FileInputStream r0 = r0.createInputStream()     // Catch:{ all -> 0x001a }
+            goto L_0x0027
+        L_0x001a:
+            r0 = move-exception
+            goto L_0x0347
+        L_0x001d:
+            android.content.Context r4 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ all -> 0x0345 }
+            android.content.ContentResolver r4 = r4.getContentResolver()     // Catch:{ all -> 0x0345 }
+            java.io.InputStream r0 = r4.openInputStream(r0)     // Catch:{ all -> 0x0345 }
+        L_0x0027:
+            java.util.ArrayList r4 = new java.util.ArrayList     // Catch:{ all -> 0x0345 }
+            r4.<init>()     // Catch:{ all -> 0x0345 }
+            java.io.BufferedReader r5 = new java.io.BufferedReader     // Catch:{ all -> 0x0345 }
+            java.io.InputStreamReader r6 = new java.io.InputStreamReader     // Catch:{ all -> 0x0345 }
+            java.lang.String r7 = "UTF-8"
+            r6.<init>(r0, r7)     // Catch:{ all -> 0x0345 }
+            r5.<init>(r6)     // Catch:{ all -> 0x0345 }
+            r7 = 0
+            r8 = r3
+            r9 = r8
+            r11 = r9
+            r10 = 0
+        L_0x003d:
+            java.lang.String r12 = r5.readLine()     // Catch:{ all -> 0x0345 }
+            if (r12 == 0) goto L_0x02ad
+            java.lang.String r13 = "PHOTO"
+            boolean r13 = r12.startsWith(r13)     // Catch:{ all -> 0x0345 }
+            if (r13 == 0) goto L_0x004d
+            r10 = 1
+            goto L_0x003d
+        L_0x004d:
+            r13 = 58
+            int r13 = r12.indexOf(r13)     // Catch:{ all -> 0x0345 }
+            java.lang.String r14 = "ORG"
+            java.lang.String r15 = "TEL"
+            r6 = 2
+            if (r13 < 0) goto L_0x0153
+            java.lang.String r10 = "BEGIN:VCARD"
+            boolean r10 = r12.startsWith(r10)     // Catch:{ all -> 0x001a }
+            if (r10 == 0) goto L_0x0070
+            org.telegram.messenger.AndroidUtilities$VcardData r8 = new org.telegram.messenger.AndroidUtilities$VcardData     // Catch:{ all -> 0x001a }
+            r8.<init>()     // Catch:{ all -> 0x001a }
+            r4.add(r8)     // Catch:{ all -> 0x001a }
+            r13 = r25
+            r8.name = r13     // Catch:{ all -> 0x001a }
+            goto L_0x0150
+        L_0x0070:
+            r13 = r25
+            java.lang.String r10 = "END:VCARD"
+            boolean r10 = r12.startsWith(r10)     // Catch:{ all -> 0x001a }
+            if (r10 == 0) goto L_0x007c
+            goto L_0x0150
+        L_0x007c:
+            if (r1 == 0) goto L_0x0150
+            boolean r10 = r12.startsWith(r15)     // Catch:{ all -> 0x001a }
+            if (r10 == 0) goto L_0x008e
+            org.telegram.messenger.AndroidUtilities$VcardItem r10 = new org.telegram.messenger.AndroidUtilities$VcardItem     // Catch:{ all -> 0x001a }
+            r10.<init>()     // Catch:{ all -> 0x001a }
+            r10.type = r7     // Catch:{ all -> 0x001a }
+        L_0x008b:
+            r11 = r10
+            goto L_0x0146
+        L_0x008e:
+            java.lang.String r10 = "EMAIL"
+            boolean r10 = r12.startsWith(r10)     // Catch:{ all -> 0x001a }
+            if (r10 == 0) goto L_0x009f
+            org.telegram.messenger.AndroidUtilities$VcardItem r10 = new org.telegram.messenger.AndroidUtilities$VcardItem     // Catch:{ all -> 0x001a }
+            r10.<init>()     // Catch:{ all -> 0x001a }
+            r11 = 1
+            r10.type = r11     // Catch:{ all -> 0x001a }
+            goto L_0x008b
+        L_0x009f:
+            java.lang.String r10 = "ADR"
+            boolean r10 = r12.startsWith(r10)     // Catch:{ all -> 0x001a }
+            if (r10 != 0) goto L_0x013d
+            java.lang.String r10 = "LABEL"
+            boolean r10 = r12.startsWith(r10)     // Catch:{ all -> 0x001a }
+            if (r10 != 0) goto L_0x013d
+            java.lang.String r10 = "GEO"
+            boolean r10 = r12.startsWith(r10)     // Catch:{ all -> 0x001a }
+            if (r10 == 0) goto L_0x00b9
+            goto L_0x013d
+        L_0x00b9:
+            java.lang.String r10 = "URL"
+            boolean r10 = r12.startsWith(r10)     // Catch:{ all -> 0x001a }
+            if (r10 == 0) goto L_0x00ca
+            org.telegram.messenger.AndroidUtilities$VcardItem r10 = new org.telegram.messenger.AndroidUtilities$VcardItem     // Catch:{ all -> 0x001a }
+            r10.<init>()     // Catch:{ all -> 0x001a }
+            r11 = 3
+            r10.type = r11     // Catch:{ all -> 0x001a }
+            goto L_0x008b
+        L_0x00ca:
+            java.lang.String r10 = "NOTE"
+            boolean r10 = r12.startsWith(r10)     // Catch:{ all -> 0x001a }
+            if (r10 == 0) goto L_0x00db
+            org.telegram.messenger.AndroidUtilities$VcardItem r10 = new org.telegram.messenger.AndroidUtilities$VcardItem     // Catch:{ all -> 0x001a }
+            r10.<init>()     // Catch:{ all -> 0x001a }
+            r11 = 4
+            r10.type = r11     // Catch:{ all -> 0x001a }
+            goto L_0x008b
+        L_0x00db:
+            java.lang.String r10 = "BDAY"
+            boolean r10 = r12.startsWith(r10)     // Catch:{ all -> 0x001a }
+            if (r10 == 0) goto L_0x00ec
+            org.telegram.messenger.AndroidUtilities$VcardItem r10 = new org.telegram.messenger.AndroidUtilities$VcardItem     // Catch:{ all -> 0x001a }
+            r10.<init>()     // Catch:{ all -> 0x001a }
+            r11 = 5
+            r10.type = r11     // Catch:{ all -> 0x001a }
+            goto L_0x008b
+        L_0x00ec:
+            boolean r10 = r12.startsWith(r14)     // Catch:{ all -> 0x001a }
+            if (r10 != 0) goto L_0x0133
+            java.lang.String r10 = "TITLE"
+            boolean r10 = r12.startsWith(r10)     // Catch:{ all -> 0x001a }
+            if (r10 != 0) goto L_0x0133
+            java.lang.String r10 = "ROLE"
+            boolean r10 = r12.startsWith(r10)     // Catch:{ all -> 0x001a }
+            if (r10 == 0) goto L_0x0103
+            goto L_0x0133
+        L_0x0103:
+            java.lang.String r10 = "X-ANDROID"
+            boolean r10 = r12.startsWith(r10)     // Catch:{ all -> 0x001a }
+            if (r10 == 0) goto L_0x0115
+            org.telegram.messenger.AndroidUtilities$VcardItem r10 = new org.telegram.messenger.AndroidUtilities$VcardItem     // Catch:{ all -> 0x001a }
+            r10.<init>()     // Catch:{ all -> 0x001a }
+            r11 = -1
+            r10.type = r11     // Catch:{ all -> 0x001a }
+            goto L_0x008b
+        L_0x0115:
+            java.lang.String r10 = "X-PHONETIC"
+            boolean r10 = r12.startsWith(r10)     // Catch:{ all -> 0x001a }
+            if (r10 == 0) goto L_0x011e
+            goto L_0x0131
+        L_0x011e:
+            java.lang.String r10 = "X-"
+            boolean r10 = r12.startsWith(r10)     // Catch:{ all -> 0x001a }
+            if (r10 == 0) goto L_0x0131
+            org.telegram.messenger.AndroidUtilities$VcardItem r10 = new org.telegram.messenger.AndroidUtilities$VcardItem     // Catch:{ all -> 0x001a }
+            r10.<init>()     // Catch:{ all -> 0x001a }
+            r11 = 20
+            r10.type = r11     // Catch:{ all -> 0x001a }
+            goto L_0x008b
+        L_0x0131:
+            r11 = r3
+            goto L_0x0146
+        L_0x0133:
+            org.telegram.messenger.AndroidUtilities$VcardItem r10 = new org.telegram.messenger.AndroidUtilities$VcardItem     // Catch:{ all -> 0x001a }
+            r10.<init>()     // Catch:{ all -> 0x001a }
+            r11 = 6
+            r10.type = r11     // Catch:{ all -> 0x001a }
+            goto L_0x008b
+        L_0x013d:
+            org.telegram.messenger.AndroidUtilities$VcardItem r10 = new org.telegram.messenger.AndroidUtilities$VcardItem     // Catch:{ all -> 0x001a }
+            r10.<init>()     // Catch:{ all -> 0x001a }
+            r10.type = r6     // Catch:{ all -> 0x001a }
+            goto L_0x008b
+        L_0x0146:
+            if (r11 == 0) goto L_0x0151
+            int r10 = r11.type     // Catch:{ all -> 0x001a }
+            if (r10 < 0) goto L_0x0151
+            r1.add(r11)     // Catch:{ all -> 0x001a }
+            goto L_0x0151
+        L_0x0150:
+            r11 = r3
+        L_0x0151:
+            r10 = 0
+            goto L_0x0155
+        L_0x0153:
+            r13 = r25
+        L_0x0155:
+            if (r10 != 0) goto L_0x0175
+            if (r8 == 0) goto L_0x0175
+            if (r11 != 0) goto L_0x0170
+            java.lang.StringBuilder r3 = r8.vcard     // Catch:{ all -> 0x0345 }
+            int r3 = r3.length()     // Catch:{ all -> 0x0345 }
+            if (r3 <= 0) goto L_0x016a
+            java.lang.StringBuilder r3 = r8.vcard     // Catch:{ all -> 0x0345 }
+            r6 = 10
+            r3.append(r6)     // Catch:{ all -> 0x0345 }
+        L_0x016a:
+            java.lang.StringBuilder r3 = r8.vcard     // Catch:{ all -> 0x0345 }
+            r3.append(r12)     // Catch:{ all -> 0x0345 }
+            goto L_0x0175
+        L_0x0170:
+            java.util.ArrayList<java.lang.String> r3 = r11.vcardData     // Catch:{ all -> 0x0345 }
+            r3.add(r12)     // Catch:{ all -> 0x0345 }
+        L_0x0175:
+            if (r9 == 0) goto L_0x0187
+            java.lang.StringBuilder r3 = new java.lang.StringBuilder     // Catch:{ all -> 0x0345 }
+            r3.<init>()     // Catch:{ all -> 0x0345 }
+            r3.append(r9)     // Catch:{ all -> 0x0345 }
+            r3.append(r12)     // Catch:{ all -> 0x0345 }
+            java.lang.String r12 = r3.toString()     // Catch:{ all -> 0x0345 }
+            r9 = 0
+        L_0x0187:
+            java.lang.String r3 = "=QUOTED-PRINTABLE"
+            boolean r3 = r12.contains(r3)     // Catch:{ all -> 0x0345 }
+            java.lang.String r6 = "="
+            if (r3 == 0) goto L_0x01a4
+            boolean r3 = r12.endsWith(r6)     // Catch:{ all -> 0x0345 }
+            if (r3 == 0) goto L_0x01a4
+            int r3 = r12.length()     // Catch:{ all -> 0x0345 }
+            r6 = 1
+            int r3 = r3 - r6
+            java.lang.String r9 = r12.substring(r7, r3)     // Catch:{ all -> 0x0345 }
+            r3 = 0
+            goto L_0x003d
+        L_0x01a4:
+            if (r10 != 0) goto L_0x01ac
+            if (r8 == 0) goto L_0x01ac
+            if (r11 == 0) goto L_0x01ac
+            r11.fullData = r12     // Catch:{ all -> 0x0345 }
+        L_0x01ac:
+            java.lang.String r3 = ":"
+            int r3 = r12.indexOf(r3)     // Catch:{ all -> 0x0345 }
+            if (r3 < 0) goto L_0x01cd
+            r7 = 2
+            java.lang.String[] r1 = new java.lang.String[r7]     // Catch:{ all -> 0x0345 }
+            r7 = 0
+            java.lang.String r16 = r12.substring(r7, r3)     // Catch:{ all -> 0x0345 }
+            r1[r7] = r16     // Catch:{ all -> 0x0345 }
+            int r3 = r3 + 1
+            java.lang.String r3 = r12.substring(r3)     // Catch:{ all -> 0x0345 }
+            java.lang.String r3 = r3.trim()     // Catch:{ all -> 0x0345 }
+            r7 = 1
+            r1[r7] = r3     // Catch:{ all -> 0x0345 }
+            r7 = 0
+            goto L_0x01d8
+        L_0x01cd:
+            r1 = 1
+            java.lang.String[] r3 = new java.lang.String[r1]     // Catch:{ all -> 0x0345 }
+            java.lang.String r1 = r12.trim()     // Catch:{ all -> 0x0345 }
+            r7 = 0
+            r3[r7] = r1     // Catch:{ all -> 0x0345 }
+            r1 = r3
+        L_0x01d8:
+            int r3 = r1.length     // Catch:{ all -> 0x0345 }
+            r12 = 2
+            if (r3 < r12) goto L_0x02a2
+            if (r8 != 0) goto L_0x01e0
+            goto L_0x02a2
+        L_0x01e0:
+            r3 = r1[r7]     // Catch:{ all -> 0x0345 }
+            java.lang.String r12 = "FN"
+            boolean r3 = r3.startsWith(r12)     // Catch:{ all -> 0x0345 }
+            java.lang.String r12 = "N"
+            if (r3 != 0) goto L_0x0218
+            r3 = r1[r7]     // Catch:{ all -> 0x0345 }
+            boolean r3 = r3.startsWith(r12)     // Catch:{ all -> 0x0345 }
+            if (r3 != 0) goto L_0x0218
+            r3 = r1[r7]     // Catch:{ all -> 0x0345 }
+            boolean r3 = r3.startsWith(r14)     // Catch:{ all -> 0x0345 }
+            if (r3 == 0) goto L_0x0205
+            java.lang.String r3 = r8.name     // Catch:{ all -> 0x0345 }
+            boolean r3 = android.text.TextUtils.isEmpty(r3)     // Catch:{ all -> 0x0345 }
+            if (r3 == 0) goto L_0x0205
+            goto L_0x0218
+        L_0x0205:
+            r3 = 0
+            r6 = r1[r3]     // Catch:{ all -> 0x0345 }
+            boolean r3 = r6.startsWith(r15)     // Catch:{ all -> 0x0345 }
+            if (r3 == 0) goto L_0x02a2
+            java.util.ArrayList<java.lang.String> r3 = r8.phones     // Catch:{ all -> 0x0345 }
+            r6 = 1
+            r1 = r1[r6]     // Catch:{ all -> 0x0345 }
+            r3.add(r1)     // Catch:{ all -> 0x0345 }
+            goto L_0x02a2
+        L_0x0218:
+            r3 = 0
+            r7 = r1[r3]     // Catch:{ all -> 0x0345 }
+            java.lang.String r3 = ";"
+            java.lang.String[] r3 = r7.split(r3)     // Catch:{ all -> 0x0345 }
+            int r7 = r3.length     // Catch:{ all -> 0x0345 }
+            r17 = r9
+            r9 = 0
+            r14 = 0
+            r15 = 0
+        L_0x0227:
+            if (r14 >= r7) goto L_0x0260
+            r18 = r7
+            r7 = r3[r14]     // Catch:{ all -> 0x0345 }
+            java.lang.String[] r7 = r7.split(r6)     // Catch:{ all -> 0x0345 }
+            r19 = r3
+            int r3 = r7.length     // Catch:{ all -> 0x0345 }
+            r20 = r6
+            r6 = 2
+            if (r3 == r6) goto L_0x023a
+            goto L_0x0257
+        L_0x023a:
+            r3 = 0
+            r6 = r7[r3]     // Catch:{ all -> 0x0345 }
+            java.lang.String r3 = "CHARSET"
+            boolean r3 = r6.equals(r3)     // Catch:{ all -> 0x0345 }
+            if (r3 == 0) goto L_0x0249
+            r3 = 1
+            r9 = r7[r3]     // Catch:{ all -> 0x0345 }
+            goto L_0x0257
+        L_0x0249:
+            r3 = 0
+            r6 = r7[r3]     // Catch:{ all -> 0x0345 }
+            java.lang.String r3 = "ENCODING"
+            boolean r3 = r6.equals(r3)     // Catch:{ all -> 0x0345 }
+            if (r3 == 0) goto L_0x0257
+            r3 = 1
+            r15 = r7[r3]     // Catch:{ all -> 0x0345 }
+        L_0x0257:
+            int r14 = r14 + 1
+            r7 = r18
+            r3 = r19
+            r6 = r20
+            goto L_0x0227
+        L_0x0260:
+            r3 = 0
+            r6 = r1[r3]     // Catch:{ all -> 0x0345 }
+            boolean r3 = r6.startsWith(r12)     // Catch:{ all -> 0x0345 }
+            if (r3 == 0) goto L_0x027c
+            r3 = 1
+            r1 = r1[r3]     // Catch:{ all -> 0x0345 }
+            r3 = 59
+            r6 = 32
+            java.lang.String r1 = r1.replace(r3, r6)     // Catch:{ all -> 0x0345 }
+            java.lang.String r1 = r1.trim()     // Catch:{ all -> 0x0345 }
+            r8.name = r1     // Catch:{ all -> 0x0345 }
+            r3 = 1
+            goto L_0x0281
+        L_0x027c:
+            r3 = 1
+            r1 = r1[r3]     // Catch:{ all -> 0x0345 }
+            r8.name = r1     // Catch:{ all -> 0x0345 }
+        L_0x0281:
+            if (r15 == 0) goto L_0x02a5
+            java.lang.String r1 = "QUOTED-PRINTABLE"
+            boolean r1 = r15.equalsIgnoreCase(r1)     // Catch:{ all -> 0x0345 }
+            if (r1 == 0) goto L_0x02a5
+            java.lang.String r1 = r8.name     // Catch:{ all -> 0x0345 }
+            byte[] r1 = getStringBytes(r1)     // Catch:{ all -> 0x0345 }
+            byte[] r1 = decodeQuotedPrintable(r1)     // Catch:{ all -> 0x0345 }
+            if (r1 == 0) goto L_0x02a5
+            int r6 = r1.length     // Catch:{ all -> 0x0345 }
+            if (r6 == 0) goto L_0x02a5
+            java.lang.String r6 = new java.lang.String     // Catch:{ all -> 0x0345 }
+            r6.<init>(r1, r9)     // Catch:{ all -> 0x0345 }
+            r8.name = r6     // Catch:{ all -> 0x0345 }
+            goto L_0x02a5
+        L_0x02a2:
+            r17 = r9
+            r3 = 1
+        L_0x02a5:
+            r1 = r24
+            r9 = r17
+            r3 = 0
+            r7 = 0
+            goto L_0x003d
+        L_0x02ad:
+            r5.close()     // Catch:{ Exception -> 0x02b4 }
+            r0.close()     // Catch:{ Exception -> 0x02b4 }
+            goto L_0x02b8
+        L_0x02b4:
+            r0 = move-exception
+            org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)     // Catch:{ all -> 0x0345 }
+        L_0x02b8:
+            r3 = 0
+            r7 = 0
+        L_0x02ba:
+            int r0 = r4.size()     // Catch:{ all -> 0x001a }
+            if (r7 >= r0) goto L_0x034a
+            java.lang.Object r0 = r4.get(r7)     // Catch:{ all -> 0x001a }
+            org.telegram.messenger.AndroidUtilities$VcardData r0 = (org.telegram.messenger.AndroidUtilities.VcardData) r0     // Catch:{ all -> 0x001a }
+            java.lang.String r1 = r0.name     // Catch:{ all -> 0x001a }
+            if (r1 == 0) goto L_0x0340
+            java.util.ArrayList<java.lang.String> r1 = r0.phones     // Catch:{ all -> 0x001a }
+            boolean r1 = r1.isEmpty()     // Catch:{ all -> 0x001a }
+            if (r1 != 0) goto L_0x0340
+            if (r3 != 0) goto L_0x02da
+            java.util.ArrayList r1 = new java.util.ArrayList     // Catch:{ all -> 0x001a }
+            r1.<init>()     // Catch:{ all -> 0x001a }
+            r3 = r1
+        L_0x02da:
+            java.util.ArrayList<java.lang.String> r1 = r0.phones     // Catch:{ all -> 0x001a }
+            r5 = 0
+            java.lang.Object r1 = r1.get(r5)     // Catch:{ all -> 0x001a }
+            java.lang.String r1 = (java.lang.String) r1     // Catch:{ all -> 0x001a }
+            r5 = 0
+        L_0x02e4:
+            java.util.ArrayList<java.lang.String> r6 = r0.phones     // Catch:{ all -> 0x001a }
+            int r6 = r6.size()     // Catch:{ all -> 0x001a }
+            if (r5 >= r6) goto L_0x0314
+            java.util.ArrayList<java.lang.String> r6 = r0.phones     // Catch:{ all -> 0x001a }
+            java.lang.Object r6 = r6.get(r5)     // Catch:{ all -> 0x001a }
+            java.lang.String r6 = (java.lang.String) r6     // Catch:{ all -> 0x001a }
+            int r8 = r6.length()     // Catch:{ all -> 0x001a }
+            int r8 = r8 + -7
+            r9 = 0
+            int r8 = java.lang.Math.max(r9, r8)     // Catch:{ all -> 0x001a }
+            java.lang.String r8 = r6.substring(r8)     // Catch:{ all -> 0x001a }
+            org.telegram.messenger.ContactsController r10 = org.telegram.messenger.ContactsController.getInstance(r22)     // Catch:{ all -> 0x001a }
+            java.util.HashMap<java.lang.String, org.telegram.tgnet.TLRPC$TL_contact> r10 = r10.contactsByShortPhone     // Catch:{ all -> 0x001a }
+            java.lang.Object r8 = r10.get(r8)     // Catch:{ all -> 0x001a }
+            if (r8 == 0) goto L_0x0311
+            r1 = r6
+            goto L_0x0315
+        L_0x0311:
+            int r5 = r5 + 1
+            goto L_0x02e4
+        L_0x0314:
+            r9 = 0
+        L_0x0315:
+            org.telegram.tgnet.TLRPC$TL_userContact_old2 r5 = new org.telegram.tgnet.TLRPC$TL_userContact_old2     // Catch:{ all -> 0x001a }
+            r5.<init>()     // Catch:{ all -> 0x001a }
+            r5.phone = r1     // Catch:{ all -> 0x001a }
+            java.lang.String r1 = r0.name     // Catch:{ all -> 0x001a }
+            r5.first_name = r1     // Catch:{ all -> 0x001a }
+            r5.last_name = r2     // Catch:{ all -> 0x001a }
+            r10 = 0
+            r5.id = r10     // Catch:{ all -> 0x001a }
+            org.telegram.tgnet.TLRPC$TL_restrictionReason r1 = new org.telegram.tgnet.TLRPC$TL_restrictionReason     // Catch:{ all -> 0x001a }
+            r1.<init>()     // Catch:{ all -> 0x001a }
+            java.lang.StringBuilder r0 = r0.vcard     // Catch:{ all -> 0x001a }
+            java.lang.String r0 = r0.toString()     // Catch:{ all -> 0x001a }
+            r1.text = r0     // Catch:{ all -> 0x001a }
+            r1.platform = r2     // Catch:{ all -> 0x001a }
+            r1.reason = r2     // Catch:{ all -> 0x001a }
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$TL_restrictionReason> r0 = r5.restriction_reason     // Catch:{ all -> 0x001a }
+            r0.add(r1)     // Catch:{ all -> 0x001a }
+            r3.add(r5)     // Catch:{ all -> 0x001a }
+            goto L_0x0341
+        L_0x0340:
+            r9 = 0
+        L_0x0341:
+            int r7 = r7 + 1
+            goto L_0x02ba
+        L_0x0345:
+            r0 = move-exception
+            r3 = 0
+        L_0x0347:
+            org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)
+        L_0x034a:
+            return r3
+        */
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.AndroidUtilities.loadVCardFromStream(android.net.Uri, int, boolean, java.util.ArrayList, java.lang.String):java.util.ArrayList");
     }
 
-    public static Typeface getTypeface(String assetPath) {
+    public static Typeface getTypeface(String str) {
         Typeface typeface;
-        Typeface t;
+        Typeface typeface2;
         Hashtable<String, Typeface> hashtable = typefaceCache;
         synchronized (hashtable) {
-            if (!hashtable.containsKey(assetPath)) {
+            if (!hashtable.containsKey(str)) {
                 try {
                     if (Build.VERSION.SDK_INT >= 26) {
-                        Typeface.Builder builder = new Typeface.Builder(ApplicationLoader.applicationContext.getAssets(), assetPath);
-                        if (assetPath.contains("medium")) {
+                        Typeface.Builder builder = new Typeface.Builder(ApplicationLoader.applicationContext.getAssets(), str);
+                        if (str.contains("medium")) {
                             builder.setWeight(700);
                         }
-                        if (assetPath.contains("italic")) {
+                        if (str.contains("italic")) {
                             builder.setItalic(true);
                         }
-                        t = builder.build();
+                        typeface2 = builder.build();
                     } else {
-                        t = Typeface.createFromAsset(ApplicationLoader.applicationContext.getAssets(), assetPath);
+                        typeface2 = Typeface.createFromAsset(ApplicationLoader.applicationContext.getAssets(), str);
                     }
-                    hashtable.put(assetPath, t);
+                    hashtable.put(str, typeface2);
                 } catch (Exception e) {
                     if (BuildVars.LOGS_ENABLED) {
-                        FileLog.e("Could not get typeface '" + assetPath + "' because " + e.getMessage());
+                        FileLog.e("Could not get typeface '" + str + "' because " + e.getMessage());
                     }
                     return null;
                 }
             }
-            typeface = hashtable.get(assetPath);
+            typeface = hashtable.get(str);
         }
         return typeface;
     }
 
     public static boolean isWaitingForSms() {
-        boolean value;
+        boolean z;
         synchronized (smsLock) {
-            value = waitingForSms;
+            z = waitingForSms;
         }
-        return value;
+        return z;
     }
 
-    public static void setWaitingForSms(boolean value) {
+    public static void setWaitingForSms(boolean z) {
         synchronized (smsLock) {
-            waitingForSms = value;
-            if (value) {
+            waitingForSms = z;
+            if (z) {
                 try {
-                    SmsRetriever.getClient(ApplicationLoader.applicationContext).startSmsRetriever().addOnSuccessListener(AndroidUtilities$$ExternalSyntheticLambda8.INSTANCE);
-                } catch (Throwable e) {
-                    FileLog.e(e);
+                    SmsRetriever.getClient(ApplicationLoader.applicationContext).startSmsRetriever().addOnSuccessListener(AndroidUtilities$$ExternalSyntheticLambda6.INSTANCE);
+                } catch (Throwable th) {
+                    FileLog.e(th);
                 }
             }
         }
     }
 
-    static /* synthetic */ void lambda$setWaitingForSms$3(Void aVoid) {
+    /* access modifiers changed from: private */
+    public static /* synthetic */ void lambda$setWaitingForSms$3(Void voidR) {
         if (BuildVars.DEBUG_VERSION) {
             FileLog.d("sms listener registered");
         }
@@ -1702,39 +1917,57 @@ public class AndroidUtilities {
         if (f >= 4.0f) {
             return 3;
         }
-        if (f >= 2.0f) {
-            return 2;
-        }
-        return 1;
+        return f >= 2.0f ? 2 : 1;
     }
 
     public static boolean isWaitingForCall() {
-        boolean value;
+        boolean z;
         synchronized (callLock) {
-            value = waitingForCall;
+            z = waitingForCall;
         }
-        return value;
+        return z;
     }
 
-    public static void setWaitingForCall(boolean value) {
-        synchronized (callLock) {
-            if (value) {
-                try {
-                    if (callReceiver == null) {
-                        IntentFilter filter = new IntentFilter("android.intent.action.PHONE_STATE");
-                        Context context = ApplicationLoader.applicationContext;
-                        CallReceiver callReceiver2 = new CallReceiver();
-                        callReceiver = callReceiver2;
-                        context.registerReceiver(callReceiver2, filter);
-                    }
-                } catch (Exception e) {
-                }
-            } else if (callReceiver != null) {
-                ApplicationLoader.applicationContext.unregisterReceiver(callReceiver);
-                callReceiver = null;
-            }
-            waitingForCall = value;
-        }
+    /* JADX WARNING: Exception block dominator not found, dom blocks: [] */
+    /* JADX WARNING: Missing exception handler attribute for start block: B:11:0x002e */
+    /* Code decompiled incorrectly, please refer to instructions dump. */
+    public static void setWaitingForCall(boolean r4) {
+        /*
+            java.lang.Object r0 = callLock
+            monitor-enter(r0)
+            if (r4 == 0) goto L_0x001d
+            org.telegram.messenger.CallReceiver r1 = callReceiver     // Catch:{ Exception -> 0x002e }
+            if (r1 != 0) goto L_0x002e
+            android.content.IntentFilter r1 = new android.content.IntentFilter     // Catch:{ Exception -> 0x002e }
+            java.lang.String r2 = "android.intent.action.PHONE_STATE"
+            r1.<init>(r2)     // Catch:{ Exception -> 0x002e }
+            android.content.Context r2 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ Exception -> 0x002e }
+            org.telegram.messenger.CallReceiver r3 = new org.telegram.messenger.CallReceiver     // Catch:{ Exception -> 0x002e }
+            r3.<init>()     // Catch:{ Exception -> 0x002e }
+            callReceiver = r3     // Catch:{ Exception -> 0x002e }
+            r2.registerReceiver(r3, r1)     // Catch:{ Exception -> 0x002e }
+            goto L_0x002e
+        L_0x001d:
+            org.telegram.messenger.CallReceiver r1 = callReceiver     // Catch:{ Exception -> 0x002e }
+            if (r1 == 0) goto L_0x002e
+            android.content.Context r1 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ Exception -> 0x002e }
+            org.telegram.messenger.CallReceiver r2 = callReceiver     // Catch:{ Exception -> 0x002e }
+            r1.unregisterReceiver(r2)     // Catch:{ Exception -> 0x002e }
+            r1 = 0
+            callReceiver = r1     // Catch:{ Exception -> 0x002e }
+            goto L_0x002e
+        L_0x002c:
+            r4 = move-exception
+            goto L_0x0032
+        L_0x002e:
+            waitingForCall = r4     // Catch:{ all -> 0x002c }
+            monitor-exit(r0)     // Catch:{ all -> 0x002c }
+            return
+        L_0x0032:
+            monitor-exit(r0)     // Catch:{ all -> 0x002c }
+            throw r4
+        */
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.AndroidUtilities.setWaitingForCall(boolean):void");
     }
 
     public static boolean showKeyboard(View view) {
@@ -1749,60 +1982,110 @@ public class AndroidUtilities {
         }
     }
 
-    public static String[] getCurrentKeyboardLanguage() {
-        try {
-            InputMethodManager inputManager = (InputMethodManager) ApplicationLoader.applicationContext.getSystemService("input_method");
-            InputMethodSubtype inputMethodSubtype = inputManager.getCurrentInputMethodSubtype();
-            String locale = null;
-            if (inputMethodSubtype != null) {
-                if (Build.VERSION.SDK_INT >= 24) {
-                    locale = inputMethodSubtype.getLanguageTag();
-                }
-                if (TextUtils.isEmpty(locale)) {
-                    locale = inputMethodSubtype.getLocale();
-                }
-            } else {
-                InputMethodSubtype inputMethodSubtype2 = inputManager.getLastInputMethodSubtype();
-                if (inputMethodSubtype2 != null) {
-                    if (Build.VERSION.SDK_INT >= 24) {
-                        locale = inputMethodSubtype2.getLanguageTag();
-                    }
-                    if (TextUtils.isEmpty(locale)) {
-                        locale = inputMethodSubtype2.getLocale();
-                    }
-                }
-            }
-            if (TextUtils.isEmpty(locale)) {
-                String locale2 = LocaleController.getSystemLocaleStringIso639();
-                LocaleController.LocaleInfo localeInfo = LocaleController.getInstance().getCurrentLocaleInfo();
-                String locale22 = localeInfo.getBaseLangCode();
-                if (TextUtils.isEmpty(locale22)) {
-                    locale22 = localeInfo.getLangCode();
-                }
-                if (locale2.contains(locale22) || locale22.contains(locale2)) {
-                    if (!locale2.contains("en")) {
-                        locale22 = "en";
-                    } else {
-                        locale22 = null;
-                    }
-                }
-                if (!TextUtils.isEmpty(locale22)) {
-                    return new String[]{locale2.replace('_', '-'), locale22};
-                }
-                return new String[]{locale2.replace('_', '-')};
-            }
-            return new String[]{locale.replace('_', '-')};
-        } catch (Exception e) {
-            return new String[]{"en"};
-        }
+    /* JADX WARNING: Removed duplicated region for block: B:38:0x008a A[Catch:{ Exception -> 0x00a8 }] */
+    /* JADX WARNING: Removed duplicated region for block: B:40:0x0096 A[Catch:{ Exception -> 0x00a8 }] */
+    /* Code decompiled incorrectly, please refer to instructions dump. */
+    public static java.lang.String[] getCurrentKeyboardLanguage() {
+        /*
+            java.lang.String r0 = "en"
+            r1 = 0
+            r2 = 1
+            android.content.Context r3 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ Exception -> 0x00a8 }
+            java.lang.String r4 = "input_method"
+            java.lang.Object r3 = r3.getSystemService(r4)     // Catch:{ Exception -> 0x00a8 }
+            android.view.inputmethod.InputMethodManager r3 = (android.view.inputmethod.InputMethodManager) r3     // Catch:{ Exception -> 0x00a8 }
+            android.view.inputmethod.InputMethodSubtype r4 = r3.getCurrentInputMethodSubtype()     // Catch:{ Exception -> 0x00a8 }
+            r5 = 24
+            r6 = 0
+            if (r4 == 0) goto L_0x002c
+            int r3 = android.os.Build.VERSION.SDK_INT     // Catch:{ Exception -> 0x00a8 }
+            if (r3 < r5) goto L_0x0020
+            java.lang.String r3 = r4.getLanguageTag()     // Catch:{ Exception -> 0x00a8 }
+            goto L_0x0021
+        L_0x0020:
+            r3 = r6
+        L_0x0021:
+            boolean r5 = android.text.TextUtils.isEmpty(r3)     // Catch:{ Exception -> 0x00a8 }
+            if (r5 == 0) goto L_0x004a
+            java.lang.String r3 = r4.getLocale()     // Catch:{ Exception -> 0x00a8 }
+            goto L_0x004a
+        L_0x002c:
+            android.view.inputmethod.InputMethodSubtype r3 = r3.getLastInputMethodSubtype()     // Catch:{ Exception -> 0x00a8 }
+            if (r3 == 0) goto L_0x0049
+            int r4 = android.os.Build.VERSION.SDK_INT     // Catch:{ Exception -> 0x00a8 }
+            if (r4 < r5) goto L_0x003b
+            java.lang.String r4 = r3.getLanguageTag()     // Catch:{ Exception -> 0x00a8 }
+            goto L_0x003c
+        L_0x003b:
+            r4 = r6
+        L_0x003c:
+            boolean r5 = android.text.TextUtils.isEmpty(r4)     // Catch:{ Exception -> 0x00a8 }
+            if (r5 == 0) goto L_0x0047
+            java.lang.String r3 = r3.getLocale()     // Catch:{ Exception -> 0x00a8 }
+            goto L_0x004a
+        L_0x0047:
+            r3 = r4
+            goto L_0x004a
+        L_0x0049:
+            r3 = r6
+        L_0x004a:
+            boolean r4 = android.text.TextUtils.isEmpty(r3)     // Catch:{ Exception -> 0x00a8 }
+            r5 = 45
+            r7 = 95
+            if (r4 == 0) goto L_0x009f
+            java.lang.String r3 = org.telegram.messenger.LocaleController.getSystemLocaleStringIso639()     // Catch:{ Exception -> 0x00a8 }
+            org.telegram.messenger.LocaleController r4 = org.telegram.messenger.LocaleController.getInstance()     // Catch:{ Exception -> 0x00a8 }
+            org.telegram.messenger.LocaleController$LocaleInfo r4 = r4.getCurrentLocaleInfo()     // Catch:{ Exception -> 0x00a8 }
+            java.lang.String r8 = r4.getBaseLangCode()     // Catch:{ Exception -> 0x00a8 }
+            boolean r9 = android.text.TextUtils.isEmpty(r8)     // Catch:{ Exception -> 0x00a8 }
+            if (r9 == 0) goto L_0x006e
+            java.lang.String r8 = r4.getLangCode()     // Catch:{ Exception -> 0x00a8 }
+        L_0x006e:
+            boolean r4 = r3.contains(r8)     // Catch:{ Exception -> 0x00a8 }
+            if (r4 != 0) goto L_0x007d
+            boolean r4 = r8.contains(r3)     // Catch:{ Exception -> 0x00a8 }
+            if (r4 == 0) goto L_0x007b
+            goto L_0x007d
+        L_0x007b:
+            r6 = r8
+            goto L_0x0084
+        L_0x007d:
+            boolean r4 = r3.contains(r0)     // Catch:{ Exception -> 0x00a8 }
+            if (r4 != 0) goto L_0x0084
+            r6 = r0
+        L_0x0084:
+            boolean r4 = android.text.TextUtils.isEmpty(r6)     // Catch:{ Exception -> 0x00a8 }
+            if (r4 != 0) goto L_0x0096
+            r4 = 2
+            java.lang.String[] r4 = new java.lang.String[r4]     // Catch:{ Exception -> 0x00a8 }
+            java.lang.String r3 = r3.replace(r7, r5)     // Catch:{ Exception -> 0x00a8 }
+            r4[r1] = r3     // Catch:{ Exception -> 0x00a8 }
+            r4[r2] = r6     // Catch:{ Exception -> 0x00a8 }
+            return r4
+        L_0x0096:
+            java.lang.String[] r4 = new java.lang.String[r2]     // Catch:{ Exception -> 0x00a8 }
+            java.lang.String r3 = r3.replace(r7, r5)     // Catch:{ Exception -> 0x00a8 }
+            r4[r1] = r3     // Catch:{ Exception -> 0x00a8 }
+            return r4
+        L_0x009f:
+            java.lang.String[] r4 = new java.lang.String[r2]     // Catch:{ Exception -> 0x00a8 }
+            java.lang.String r3 = r3.replace(r7, r5)     // Catch:{ Exception -> 0x00a8 }
+            r4[r1] = r3     // Catch:{ Exception -> 0x00a8 }
+            return r4
+        L_0x00a8:
+            java.lang.String[] r2 = new java.lang.String[r2]
+            r2[r1] = r0
+            return r2
+        */
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.AndroidUtilities.getCurrentKeyboardLanguage():java.lang.String[]");
     }
 
     public static void hideKeyboard(View view) {
         if (view != null) {
             try {
-                InputMethodManager imm = (InputMethodManager) view.getContext().getSystemService("input_method");
-                if (imm.isActive()) {
-                    imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+                InputMethodManager inputMethodManager = (InputMethodManager) view.getContext().getSystemService("input_method");
+                if (inputMethodManager.isActive()) {
+                    inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
                 }
             } catch (Exception e) {
                 FileLog.e((Throwable) e);
@@ -1811,106 +2094,104 @@ public class AndroidUtilities {
     }
 
     public static ArrayList<File> getDataDirs() {
-        File[] dirs;
-        ArrayList<File> result = null;
-        if (Build.VERSION.SDK_INT >= 19 && (dirs = ApplicationLoader.applicationContext.getExternalFilesDirs((String) null)) != null) {
-            for (int a = 0; a < dirs.length; a++) {
-                if (dirs[a] != null) {
-                    String absolutePath = dirs[a].getAbsolutePath();
-                    if (result == null) {
-                        result = new ArrayList<>();
+        File[] externalFilesDirs;
+        ArrayList<File> arrayList = null;
+        if (Build.VERSION.SDK_INT >= 19 && (externalFilesDirs = ApplicationLoader.applicationContext.getExternalFilesDirs((String) null)) != null) {
+            for (int i = 0; i < externalFilesDirs.length; i++) {
+                if (externalFilesDirs[i] != null) {
+                    externalFilesDirs[i].getAbsolutePath();
+                    if (arrayList == null) {
+                        arrayList = new ArrayList<>();
                     }
-                    result.add(dirs[a]);
+                    arrayList.add(externalFilesDirs[i]);
                 }
             }
         }
-        if (result == null) {
-            result = new ArrayList<>();
+        if (arrayList == null) {
+            arrayList = new ArrayList<>();
         }
-        if (result.isEmpty()) {
-            result.add(Environment.getExternalStorageDirectory());
+        if (arrayList.isEmpty()) {
+            arrayList.add(Environment.getExternalStorageDirectory());
         }
-        return result;
+        return arrayList;
     }
 
     /* JADX WARNING: Code restructure failed: missing block: B:9:0x0019, code lost:
-        r3 = r1[r2].getAbsolutePath();
+        r4 = r0[r3].getAbsolutePath();
      */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public static java.util.ArrayList<java.io.File> getRootDirs() {
         /*
-            r0 = 0
-            int r1 = android.os.Build.VERSION.SDK_INT
+            int r0 = android.os.Build.VERSION.SDK_INT
+            r1 = 0
             r2 = 19
-            if (r1 < r2) goto L_0x003f
-            android.content.Context r1 = org.telegram.messenger.ApplicationLoader.applicationContext
+            if (r0 < r2) goto L_0x003d
+            android.content.Context r0 = org.telegram.messenger.ApplicationLoader.applicationContext
+            java.io.File[] r0 = r0.getExternalFilesDirs(r1)
+            if (r0 == 0) goto L_0x003d
             r2 = 0
-            java.io.File[] r1 = r1.getExternalFilesDirs(r2)
-            if (r1 == 0) goto L_0x003f
-            r2 = 0
+            r3 = 0
         L_0x0011:
-            int r3 = r1.length
-            if (r2 >= r3) goto L_0x003f
-            r3 = r1[r2]
-            if (r3 != 0) goto L_0x0019
-            goto L_0x003c
+            int r4 = r0.length
+            if (r3 >= r4) goto L_0x003d
+            r4 = r0[r3]
+            if (r4 != 0) goto L_0x0019
+            goto L_0x003a
         L_0x0019:
-            r3 = r1[r2]
-            java.lang.String r3 = r3.getAbsolutePath()
-            java.lang.String r4 = "/Android"
-            int r4 = r3.indexOf(r4)
-            if (r4 < 0) goto L_0x003c
-            if (r0 != 0) goto L_0x002f
-            java.util.ArrayList r5 = new java.util.ArrayList
-            r5.<init>()
-            r0 = r5
-        L_0x002f:
-            java.io.File r5 = new java.io.File
-            r6 = 0
-            java.lang.String r6 = r3.substring(r6, r4)
-            r5.<init>(r6)
-            r0.add(r5)
-        L_0x003c:
-            int r2 = r2 + 1
-            goto L_0x0011
-        L_0x003f:
-            if (r0 != 0) goto L_0x0047
+            r4 = r0[r3]
+            java.lang.String r4 = r4.getAbsolutePath()
+            java.lang.String r5 = "/Android"
+            int r5 = r4.indexOf(r5)
+            if (r5 < 0) goto L_0x003a
+            if (r1 != 0) goto L_0x002e
             java.util.ArrayList r1 = new java.util.ArrayList
             r1.<init>()
-            r0 = r1
-        L_0x0047:
-            boolean r1 = r0.isEmpty()
-            if (r1 == 0) goto L_0x0054
-            java.io.File r1 = android.os.Environment.getExternalStorageDirectory()
-            r0.add(r1)
-        L_0x0054:
-            return r0
+        L_0x002e:
+            java.io.File r6 = new java.io.File
+            java.lang.String r4 = r4.substring(r2, r5)
+            r6.<init>(r4)
+            r1.add(r6)
+        L_0x003a:
+            int r3 = r3 + 1
+            goto L_0x0011
+        L_0x003d:
+            if (r1 != 0) goto L_0x0044
+            java.util.ArrayList r1 = new java.util.ArrayList
+            r1.<init>()
+        L_0x0044:
+            boolean r0 = r1.isEmpty()
+            if (r0 == 0) goto L_0x0051
+            java.io.File r0 = android.os.Environment.getExternalStorageDirectory()
+            r1.add(r0)
+        L_0x0051:
+            return r1
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.AndroidUtilities.getRootDirs():java.util.ArrayList");
     }
 
     public static File getCacheDir() {
+        String str;
         File file;
-        String state = null;
         try {
-            state = Environment.getExternalStorageState();
+            str = Environment.getExternalStorageState();
         } catch (Exception e) {
             FileLog.e((Throwable) e);
+            str = null;
         }
-        if (state == null || state.startsWith("mounted")) {
+        if (str == null || str.startsWith("mounted")) {
             try {
                 if (Build.VERSION.SDK_INT >= 19) {
-                    File[] dirs = ApplicationLoader.applicationContext.getExternalCacheDirs();
-                    file = dirs[0];
+                    File[] externalCacheDirs = ApplicationLoader.applicationContext.getExternalCacheDirs();
+                    int i = 0;
+                    file = externalCacheDirs[0];
                     if (!TextUtils.isEmpty(SharedConfig.storageCacheDir)) {
-                        int a = 0;
                         while (true) {
-                            if (a < dirs.length) {
-                                if (dirs[a] != null && dirs[a].getAbsolutePath().startsWith(SharedConfig.storageCacheDir)) {
-                                    file = dirs[a];
+                            if (i < externalCacheDirs.length) {
+                                if (externalCacheDirs[i] != null && externalCacheDirs[i].getAbsolutePath().startsWith(SharedConfig.storageCacheDir)) {
+                                    file = externalCacheDirs[i];
                                     break;
                                 }
-                                a++;
+                                i++;
                             } else {
                                 break;
                             }
@@ -1927,9 +2208,9 @@ public class AndroidUtilities {
             }
         }
         try {
-            File file2 = ApplicationLoader.applicationContext.getCacheDir();
-            if (file2 != null) {
-                return file2;
+            File cacheDir = ApplicationLoader.applicationContext.getCacheDir();
+            if (cacheDir != null) {
+                return cacheDir;
             }
         } catch (Exception e3) {
             FileLog.e((Throwable) e3);
@@ -1937,66 +2218,45 @@ public class AndroidUtilities {
         return new File("");
     }
 
-    public static int dp(float value) {
-        if (value == 0.0f) {
+    public static int dp(float f) {
+        if (f == 0.0f) {
             return 0;
         }
-        return (int) Math.ceil((double) (density * value));
+        return (int) Math.ceil((double) (density * f));
     }
 
-    public static int dpr(float value) {
-        if (value == 0.0f) {
+    public static int dpr(float f) {
+        if (f == 0.0f) {
             return 0;
         }
-        return Math.round(density * value);
+        return Math.round(density * f);
     }
 
-    public static int dp2(float value) {
-        if (value == 0.0f) {
+    public static int dp2(float f) {
+        if (f == 0.0f) {
             return 0;
         }
-        return (int) Math.floor((double) (density * value));
+        return (int) Math.floor((double) (density * f));
     }
 
-    public static int compare(int lhs, int rhs) {
-        if (lhs == rhs) {
-            return 0;
-        }
-        if (lhs > rhs) {
-            return 1;
-        }
-        return -1;
-    }
-
-    public static int compare(long lhs, long rhs) {
-        if (lhs == rhs) {
-            return 0;
-        }
-        if (lhs > rhs) {
-            return 1;
-        }
-        return -1;
-    }
-
-    public static float dpf2(float value) {
-        if (value == 0.0f) {
+    public static float dpf2(float f) {
+        if (f == 0.0f) {
             return 0.0f;
         }
-        return density * value;
+        return density * f;
     }
 
-    public static void checkDisplaySize(Context context, Configuration newConfiguration) {
-        Display display;
+    public static void checkDisplaySize(Context context, Configuration configuration) {
+        Display defaultDisplay;
         try {
-            float oldDensity = density;
-            float newDensity = context.getResources().getDisplayMetrics().density;
-            density = newDensity;
-            if (firstConfigurationWas && ((double) Math.abs(oldDensity - newDensity)) > 0.001d) {
+            float f = density;
+            float f2 = context.getResources().getDisplayMetrics().density;
+            density = f2;
+            if (firstConfigurationWas && ((double) Math.abs(f - f2)) > 0.001d) {
                 Theme.reloadAllResources(context);
             }
             boolean z = true;
             firstConfigurationWas = true;
-            Configuration configuration = newConfiguration;
             if (configuration == null) {
                 configuration = context.getResources().getConfiguration();
             }
@@ -2004,22 +2264,24 @@ public class AndroidUtilities {
                 z = false;
             }
             usingHardwareInput = z;
-            WindowManager manager = (WindowManager) context.getSystemService("window");
-            if (!(manager == null || (display = manager.getDefaultDisplay()) == null)) {
-                display.getMetrics(displayMetrics);
-                display.getSize(displaySize);
-                screenRefreshRate = display.getRefreshRate();
+            WindowManager windowManager = (WindowManager) context.getSystemService("window");
+            if (!(windowManager == null || (defaultDisplay = windowManager.getDefaultDisplay()) == null)) {
+                defaultDisplay.getMetrics(displayMetrics);
+                defaultDisplay.getSize(displaySize);
+                screenRefreshRate = defaultDisplay.getRefreshRate();
             }
-            if (configuration.screenWidthDp != 0) {
-                int newSize = (int) Math.ceil((double) (((float) configuration.screenWidthDp) * density));
-                if (Math.abs(displaySize.x - newSize) > 3) {
-                    displaySize.x = newSize;
+            int i = configuration.screenWidthDp;
+            if (i != 0) {
+                int ceil = (int) Math.ceil((double) (((float) i) * density));
+                if (Math.abs(displaySize.x - ceil) > 3) {
+                    displaySize.x = ceil;
                 }
             }
-            if (configuration.screenHeightDp != 0) {
-                int newSize2 = (int) Math.ceil((double) (((float) configuration.screenHeightDp) * density));
-                if (Math.abs(displaySize.y - newSize2) > 3) {
-                    displaySize.y = newSize2;
+            int i2 = configuration.screenHeightDp;
+            if (i2 != 0) {
+                int ceil2 = (int) Math.ceil((double) (((float) i2) * density));
+                if (Math.abs(displaySize.y - ceil2) > 3) {
+                    displaySize.y = ceil2;
                 }
             }
             if (roundMessageSize == 0) {
@@ -2027,8 +2289,10 @@ public class AndroidUtilities {
                     roundMessageSize = (int) (((float) getMinTabletSide()) * 0.6f);
                     roundPlayingMessageSize = getMinTabletSide() - dp(28.0f);
                 } else {
-                    roundMessageSize = (int) (((float) Math.min(displaySize.x, displaySize.y)) * 0.6f);
-                    roundPlayingMessageSize = Math.min(displaySize.x, displaySize.y) - dp(28.0f);
+                    Point point = displaySize;
+                    roundMessageSize = (int) (((float) Math.min(point.x, point.y)) * 0.6f);
+                    Point point2 = displaySize;
+                    roundPlayingMessageSize = Math.min(point2.x, point2.y) - dp(28.0f);
                 }
                 roundMessageInset = dp(2.0f);
             }
@@ -2043,83 +2307,64 @@ public class AndroidUtilities {
         }
     }
 
-    public static double fixLocationCoord(double value) {
-        double d = (double) ((long) (value * 1000000.0d));
-        Double.isNaN(d);
-        return d / 1000000.0d;
+    public static double fixLocationCoord(double d) {
+        double d2 = (double) ((long) (d * 1000000.0d));
+        Double.isNaN(d2);
+        return d2 / 1000000.0d;
     }
 
-    public static String formapMapUrl(int account, double lat, double lon, int width, int height, boolean marker, int zoom, int provider) {
-        int provider2;
-        int scale = Math.min(2, (int) Math.ceil((double) density));
-        int i = provider;
-        if (i == -1) {
-            provider2 = MessagesController.getInstance(account).mapProvider;
-        } else {
-            provider2 = i;
-        }
-        if (provider2 == 1 || provider2 == 3) {
-            String lang = null;
-            String[] availableLangs = {"ru_RU", "tr_TR"};
-            LocaleController.LocaleInfo localeInfo = LocaleController.getInstance().getCurrentLocaleInfo();
-            for (int a = 0; a < availableLangs.length; a++) {
-                if (availableLangs[a].toLowerCase().contains(localeInfo.shortName)) {
-                    lang = availableLangs[a];
+    public static String formapMapUrl(int i, double d, double d2, int i2, int i3, boolean z, int i4, int i5) {
+        int min = Math.min(2, (int) Math.ceil((double) density));
+        int i6 = i5;
+        int i7 = i6 == -1 ? MessagesController.getInstance(i).mapProvider : i6;
+        if (i7 == 1 || i7 == 3) {
+            String str = null;
+            String[] strArr = {"ru_RU", "tr_TR"};
+            LocaleController.LocaleInfo currentLocaleInfo = LocaleController.getInstance().getCurrentLocaleInfo();
+            for (int i8 = 0; i8 < 2; i8++) {
+                if (strArr[i8].toLowerCase().contains(currentLocaleInfo.shortName)) {
+                    str = strArr[i8];
                 }
             }
-            if (lang == null) {
-                lang = "en_US";
+            if (str == null) {
+                str = "en_US";
             }
-            if (marker) {
-                return String.format(Locale.US, "https://static-maps.yandex.ru/1.x/?ll=%.6f,%.6f&z=%d&size=%d,%d&l=map&scale=%d&pt=%.6f,%.6f,vkbkm&lang=%s", new Object[]{Double.valueOf(lon), Double.valueOf(lat), Integer.valueOf(zoom), Integer.valueOf(width * scale), Integer.valueOf(height * scale), Integer.valueOf(scale), Double.valueOf(lon), Double.valueOf(lat), lang});
+            if (z) {
+                return String.format(Locale.US, "https://static-maps.yandex.ru/1.x/?ll=%.6f,%.6f&z=%d&size=%d,%d&l=map&scale=%d&pt=%.6f,%.6f,vkbkm&lang=%s", new Object[]{Double.valueOf(d2), Double.valueOf(d), Integer.valueOf(i4), Integer.valueOf(i2 * min), Integer.valueOf(i3 * min), Integer.valueOf(min), Double.valueOf(d2), Double.valueOf(d), str});
             }
-            return String.format(Locale.US, "https://static-maps.yandex.ru/1.x/?ll=%.6f,%.6f&z=%d&size=%d,%d&l=map&scale=%d&lang=%s", new Object[]{Double.valueOf(lon), Double.valueOf(lat), Integer.valueOf(zoom), Integer.valueOf(width * scale), Integer.valueOf(height * scale), Integer.valueOf(scale), lang});
+            return String.format(Locale.US, "https://static-maps.yandex.ru/1.x/?ll=%.6f,%.6f&z=%d&size=%d,%d&l=map&scale=%d&lang=%s", new Object[]{Double.valueOf(d2), Double.valueOf(d), Integer.valueOf(i4), Integer.valueOf(i2 * min), Integer.valueOf(i3 * min), Integer.valueOf(min), str});
         }
-        String k = MessagesController.getInstance(account).mapKey;
-        if (!TextUtils.isEmpty(k)) {
-            if (marker) {
-                return String.format(Locale.US, "https://maps.googleapis.com/maps/api/staticmap?center=%.6f,%.6f&zoom=%d&size=%dx%d&maptype=roadmap&scale=%d&markers=color:red%%7Csize:mid%%7C%.6f,%.6f&sensor=false&key=%s", new Object[]{Double.valueOf(lat), Double.valueOf(lon), Integer.valueOf(zoom), Integer.valueOf(width), Integer.valueOf(height), Integer.valueOf(scale), Double.valueOf(lat), Double.valueOf(lon), k});
+        String str2 = MessagesController.getInstance(i).mapKey;
+        if (!TextUtils.isEmpty(str2)) {
+            if (z) {
+                return String.format(Locale.US, "https://maps.googleapis.com/maps/api/staticmap?center=%.6f,%.6f&zoom=%d&size=%dx%d&maptype=roadmap&scale=%d&markers=color:red%%7Csize:mid%%7C%.6f,%.6f&sensor=false&key=%s", new Object[]{Double.valueOf(d), Double.valueOf(d2), Integer.valueOf(i4), Integer.valueOf(i2), Integer.valueOf(i3), Integer.valueOf(min), Double.valueOf(d), Double.valueOf(d2), str2});
             }
-            return String.format(Locale.US, "https://maps.googleapis.com/maps/api/staticmap?center=%.6f,%.6f&zoom=%d&size=%dx%d&maptype=roadmap&scale=%d&key=%s", new Object[]{Double.valueOf(lat), Double.valueOf(lon), Integer.valueOf(zoom), Integer.valueOf(width), Integer.valueOf(height), Integer.valueOf(scale), k});
-        } else if (marker) {
-            return String.format(Locale.US, "https://maps.googleapis.com/maps/api/staticmap?center=%.6f,%.6f&zoom=%d&size=%dx%d&maptype=roadmap&scale=%d&markers=color:red%%7Csize:mid%%7C%.6f,%.6f&sensor=false", new Object[]{Double.valueOf(lat), Double.valueOf(lon), Integer.valueOf(zoom), Integer.valueOf(width), Integer.valueOf(height), Integer.valueOf(scale), Double.valueOf(lat), Double.valueOf(lon)});
+            return String.format(Locale.US, "https://maps.googleapis.com/maps/api/staticmap?center=%.6f,%.6f&zoom=%d&size=%dx%d&maptype=roadmap&scale=%d&key=%s", new Object[]{Double.valueOf(d), Double.valueOf(d2), Integer.valueOf(i4), Integer.valueOf(i2), Integer.valueOf(i3), Integer.valueOf(min), str2});
+        } else if (z) {
+            return String.format(Locale.US, "https://maps.googleapis.com/maps/api/staticmap?center=%.6f,%.6f&zoom=%d&size=%dx%d&maptype=roadmap&scale=%d&markers=color:red%%7Csize:mid%%7C%.6f,%.6f&sensor=false", new Object[]{Double.valueOf(d), Double.valueOf(d2), Integer.valueOf(i4), Integer.valueOf(i2), Integer.valueOf(i3), Integer.valueOf(min), Double.valueOf(d), Double.valueOf(d2)});
         } else {
-            return String.format(Locale.US, "https://maps.googleapis.com/maps/api/staticmap?center=%.6f,%.6f&zoom=%d&size=%dx%d&maptype=roadmap&scale=%d", new Object[]{Double.valueOf(lat), Double.valueOf(lon), Integer.valueOf(zoom), Integer.valueOf(width), Integer.valueOf(height), Integer.valueOf(scale)});
+            return String.format(Locale.US, "https://maps.googleapis.com/maps/api/staticmap?center=%.6f,%.6f&zoom=%d&size=%dx%d&maptype=roadmap&scale=%d", new Object[]{Double.valueOf(d), Double.valueOf(d2), Integer.valueOf(i4), Integer.valueOf(i2), Integer.valueOf(i3), Integer.valueOf(min)});
         }
     }
 
-    public static float getPixelsInCM(float cm, boolean isX) {
-        float f = cm / 2.54f;
-        DisplayMetrics displayMetrics2 = displayMetrics;
-        return f * (isX ? displayMetrics2.xdpi : displayMetrics2.ydpi);
+    public static float getPixelsInCM(float f, boolean z) {
+        return (f / 2.54f) * (z ? displayMetrics.xdpi : displayMetrics.ydpi);
     }
 
-    public static int getMyLayerVersion(int layer) {
-        return 65535 & layer;
-    }
-
-    public static int getPeerLayerVersion(int layer) {
-        return Math.max(73, (layer >> 16) & 65535);
-    }
-
-    public static int setMyLayerVersion(int layer, int version) {
-        return (-65536 & layer) | version;
-    }
-
-    public static int setPeerLayerVersion(int layer, int version) {
-        return (65535 & layer) | (version << 16);
+    public static int getPeerLayerVersion(int i) {
+        return Math.max(73, (i >> 16) & 65535);
     }
 
     public static void runOnUIThread(Runnable runnable) {
         runOnUIThread(runnable, 0);
     }
 
-    public static void runOnUIThread(Runnable runnable, long delay) {
+    public static void runOnUIThread(Runnable runnable, long j) {
         if (ApplicationLoader.applicationHandler != null) {
-            if (delay == 0) {
+            if (j == 0) {
                 ApplicationLoader.applicationHandler.post(runnable);
             } else {
-                ApplicationLoader.applicationHandler.postDelayed(runnable, delay);
+                ApplicationLoader.applicationHandler.postDelayed(runnable, j);
             }
         }
     }
@@ -2128,10 +2373,6 @@ public class AndroidUtilities {
         if (ApplicationLoader.applicationHandler != null) {
             ApplicationLoader.applicationHandler.removeCallbacks(runnable);
         }
-    }
-
-    public static boolean isValidWallChar(char ch) {
-        return ch == '-' || ch == '~';
     }
 
     public static boolean isTablet() {
@@ -2143,31 +2384,36 @@ public class AndroidUtilities {
 
     public static boolean isSmallScreen() {
         if (isSmallScreen == null) {
-            isSmallScreen = Boolean.valueOf(((float) ((Math.max(displaySize.x, displaySize.y) - statusBarHeight) - navigationBarHeight)) / density <= 650.0f);
+            Point point = displaySize;
+            isSmallScreen = Boolean.valueOf(((float) ((Math.max(point.x, point.y) - statusBarHeight) - navigationBarHeight)) / density <= 650.0f);
         }
         return isSmallScreen.booleanValue();
     }
 
     public static boolean isSmallTablet() {
-        return ((float) Math.min(displaySize.x, displaySize.y)) / density <= 690.0f;
+        Point point = displaySize;
+        return ((float) Math.min(point.x, point.y)) / density <= 690.0f;
     }
 
     public static int getMinTabletSide() {
         if (!isSmallTablet()) {
-            int smallSide = Math.min(displaySize.x, displaySize.y);
-            int leftSide = (smallSide * 35) / 100;
-            if (leftSide < dp(320.0f)) {
-                leftSide = dp(320.0f);
+            Point point = displaySize;
+            int min = Math.min(point.x, point.y);
+            int i = (min * 35) / 100;
+            if (i < dp(320.0f)) {
+                i = dp(320.0f);
             }
-            return smallSide - leftSide;
+            return min - i;
         }
-        int smallSide2 = Math.min(displaySize.x, displaySize.y);
-        int maxSide = Math.max(displaySize.x, displaySize.y);
-        int leftSide2 = (maxSide * 35) / 100;
-        if (leftSide2 < dp(320.0f)) {
-            leftSide2 = dp(320.0f);
+        Point point2 = displaySize;
+        int min2 = Math.min(point2.x, point2.y);
+        Point point3 = displaySize;
+        int max = Math.max(point3.x, point3.y);
+        int i2 = (max * 35) / 100;
+        if (i2 < dp(320.0f)) {
+            i2 = dp(320.0f);
         }
-        return Math.min(smallSide2, maxSide - leftSide2);
+        return Math.min(min2, max - i2);
     }
 
     public static int getPhotoSize() {
@@ -2180,214 +2426,250 @@ public class AndroidUtilities {
     public static void endIncomingCall() {
         if (hasCallPermissions) {
             try {
-                TelephonyManager tm = (TelephonyManager) ApplicationLoader.applicationContext.getSystemService("phone");
-                Method m = Class.forName(tm.getClass().getName()).getDeclaredMethod("getITelephony", new Class[0]);
-                m.setAccessible(true);
-                ITelephony iTelephony = (ITelephony) m.invoke(tm, new Object[0]);
-                ITelephony telephonyService = (ITelephony) m.invoke(tm, new Object[0]);
-                telephonyService.silenceRinger();
-                telephonyService.endCall();
-            } catch (Throwable e) {
-                FileLog.e(e);
+                TelephonyManager telephonyManager = (TelephonyManager) ApplicationLoader.applicationContext.getSystemService("phone");
+                Method declaredMethod = Class.forName(telephonyManager.getClass().getName()).getDeclaredMethod("getITelephony", new Class[0]);
+                declaredMethod.setAccessible(true);
+                ITelephony iTelephony = (ITelephony) declaredMethod.invoke(telephonyManager, new Object[0]);
+                ITelephony iTelephony2 = (ITelephony) declaredMethod.invoke(telephonyManager, new Object[0]);
+                iTelephony2.silenceRinger();
+                iTelephony2.endCall();
+            } catch (Throwable th) {
+                FileLog.e(th);
             }
         }
     }
 
-    public static String obtainLoginPhoneCall(String pattern) {
-        Cursor cursor;
-        if (!hasCallPermissions) {
-            return null;
-        }
-        try {
-            cursor = ApplicationLoader.applicationContext.getContentResolver().query(CallLog.Calls.CONTENT_URI, new String[]{"number", "date"}, "type IN (3,1,5)", (String[]) null, "date DESC LIMIT 5");
-            while (cursor.moveToNext()) {
-                String number = cursor.getString(0);
-                long date = cursor.getLong(1);
-                if (BuildVars.LOGS_ENABLED) {
-                    FileLog.e("number = " + number);
-                }
-                if (Math.abs(System.currentTimeMillis() - date) < 3600000) {
-                    if (checkPhonePattern(pattern, number)) {
-                        if (cursor != null) {
-                            cursor.close();
-                        }
-                        return number;
+    /* JADX WARNING: Missing exception handler attribute for start block: B:24:0x006f */
+    /* Code decompiled incorrectly, please refer to instructions dump. */
+    public static java.lang.String obtainLoginPhoneCall(java.lang.String r10) {
+        /*
+            boolean r0 = hasCallPermissions
+            r1 = 0
+            if (r0 != 0) goto L_0x0006
+            return r1
+        L_0x0006:
+            android.content.Context r0 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ Exception -> 0x0070 }
+            android.content.ContentResolver r2 = r0.getContentResolver()     // Catch:{ Exception -> 0x0070 }
+            android.net.Uri r3 = android.provider.CallLog.Calls.CONTENT_URI     // Catch:{ Exception -> 0x0070 }
+            r0 = 2
+            java.lang.String[] r4 = new java.lang.String[r0]     // Catch:{ Exception -> 0x0070 }
+            java.lang.String r0 = "number"
+            r8 = 0
+            r4[r8] = r0     // Catch:{ Exception -> 0x0070 }
+            java.lang.String r0 = "date"
+            r9 = 1
+            r4[r9] = r0     // Catch:{ Exception -> 0x0070 }
+            java.lang.String r5 = "type IN (3,1,5)"
+            r6 = 0
+            java.lang.String r7 = "date DESC LIMIT 5"
+            android.database.Cursor r0 = r2.query(r3, r4, r5, r6, r7)     // Catch:{ Exception -> 0x0070 }
+        L_0x0024:
+            boolean r2 = r0.moveToNext()     // Catch:{ all -> 0x0069 }
+            if (r2 == 0) goto L_0x0065
+            java.lang.String r2 = r0.getString(r8)     // Catch:{ all -> 0x0069 }
+            long r3 = r0.getLong(r9)     // Catch:{ all -> 0x0069 }
+            boolean r5 = org.telegram.messenger.BuildVars.LOGS_ENABLED     // Catch:{ all -> 0x0069 }
+            if (r5 == 0) goto L_0x004a
+            java.lang.StringBuilder r5 = new java.lang.StringBuilder     // Catch:{ all -> 0x0069 }
+            r5.<init>()     // Catch:{ all -> 0x0069 }
+            java.lang.String r6 = "number = "
+            r5.append(r6)     // Catch:{ all -> 0x0069 }
+            r5.append(r2)     // Catch:{ all -> 0x0069 }
+            java.lang.String r5 = r5.toString()     // Catch:{ all -> 0x0069 }
+            org.telegram.messenger.FileLog.e((java.lang.String) r5)     // Catch:{ all -> 0x0069 }
+        L_0x004a:
+            long r5 = java.lang.System.currentTimeMillis()     // Catch:{ all -> 0x0069 }
+            long r5 = r5 - r3
+            long r3 = java.lang.Math.abs(r5)     // Catch:{ all -> 0x0069 }
+            r5 = 3600000(0x36ee80, double:1.7786363E-317)
+            int r7 = (r3 > r5 ? 1 : (r3 == r5 ? 0 : -1))
+            if (r7 < 0) goto L_0x005b
+            goto L_0x0024
+        L_0x005b:
+            boolean r3 = checkPhonePattern(r10, r2)     // Catch:{ all -> 0x0069 }
+            if (r3 == 0) goto L_0x0024
+            r0.close()     // Catch:{ Exception -> 0x0070 }
+            return r2
+        L_0x0065:
+            r0.close()     // Catch:{ Exception -> 0x0070 }
+            goto L_0x0074
+        L_0x0069:
+            r10 = move-exception
+            if (r0 == 0) goto L_0x006f
+            r0.close()     // Catch:{ all -> 0x006f }
+        L_0x006f:
+            throw r10     // Catch:{ Exception -> 0x0070 }
+        L_0x0070:
+            r10 = move-exception
+            org.telegram.messenger.FileLog.e((java.lang.Throwable) r10)
+        L_0x0074:
+            return r1
+        */
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.AndroidUtilities.obtainLoginPhoneCall(java.lang.String):java.lang.String");
+    }
+
+    public static boolean checkPhonePattern(String str, String str2) {
+        if (!TextUtils.isEmpty(str) && !str.equals("*")) {
+            String[] split = str.split("\\*");
+            String stripExceptNumbers = PhoneFormat.stripExceptNumbers(str2);
+            int i = 0;
+            for (String str3 : split) {
+                if (!TextUtils.isEmpty(str3)) {
+                    int indexOf = stripExceptNumbers.indexOf(str3, i);
+                    if (indexOf == -1) {
+                        return false;
                     }
+                    i = indexOf + str3.length();
                 }
-            }
-            if (cursor != null) {
-                cursor.close();
-            }
-        } catch (Exception e) {
-            FileLog.e((Throwable) e);
-        } catch (Throwable th) {
-        }
-        return null;
-        throw th;
-    }
-
-    public static boolean checkPhonePattern(String pattern, String phone) {
-        if (TextUtils.isEmpty(pattern) || pattern.equals("*")) {
-            return true;
-        }
-        String[] args = pattern.split("\\*");
-        String phone2 = PhoneFormat.stripExceptNumbers(phone);
-        int checkStart = 0;
-        for (String arg : args) {
-            if (!TextUtils.isEmpty(arg)) {
-                int indexOf = phone2.indexOf(arg, checkStart);
-                int index = indexOf;
-                if (indexOf == -1) {
-                    return false;
-                }
-                checkStart = arg.length() + index;
             }
         }
         return true;
     }
 
     public static int getViewInset(View view) {
-        if (view == null || Build.VERSION.SDK_INT < 21 || view.getHeight() == displaySize.y || view.getHeight() == displaySize.y - statusBarHeight) {
-            return 0;
-        }
-        try {
-            if (Build.VERSION.SDK_INT >= 23) {
-                WindowInsets insets = view.getRootWindowInsets();
-                if (insets != null) {
-                    return insets.getStableInsetBottom();
+        int i;
+        if (!(view == null || (i = Build.VERSION.SDK_INT) < 21 || view.getHeight() == displaySize.y || view.getHeight() == displaySize.y - statusBarHeight)) {
+            if (i >= 23) {
+                try {
+                    WindowInsets rootWindowInsets = view.getRootWindowInsets();
+                    if (rootWindowInsets != null) {
+                        return rootWindowInsets.getStableInsetBottom();
+                    }
+                    return 0;
+                } catch (Exception e) {
+                    FileLog.e((Throwable) e);
                 }
-                return 0;
-            }
-            if (mAttachInfoField == null) {
-                Field declaredField = View.class.getDeclaredField("mAttachInfo");
-                mAttachInfoField = declaredField;
-                declaredField.setAccessible(true);
-            }
-            Object mAttachInfo = mAttachInfoField.get(view);
-            if (mAttachInfo != null) {
-                if (mStableInsetsField == null) {
-                    Field declaredField2 = mAttachInfo.getClass().getDeclaredField("mStableInsets");
-                    mStableInsetsField = declaredField2;
-                    declaredField2.setAccessible(true);
+            } else {
+                if (mAttachInfoField == null) {
+                    Field declaredField = View.class.getDeclaredField("mAttachInfo");
+                    mAttachInfoField = declaredField;
+                    declaredField.setAccessible(true);
                 }
-                return ((Rect) mStableInsetsField.get(mAttachInfo)).bottom;
+                Object obj = mAttachInfoField.get(view);
+                if (obj != null) {
+                    if (mStableInsetsField == null) {
+                        Field declaredField2 = obj.getClass().getDeclaredField("mStableInsets");
+                        mStableInsetsField = declaredField2;
+                        declaredField2.setAccessible(true);
+                    }
+                    return ((Rect) mStableInsetsField.get(obj)).bottom;
+                }
             }
-            return 0;
-        } catch (Exception e) {
-            FileLog.e((Throwable) e);
         }
+        return 0;
     }
 
     public static Point getRealScreenSize() {
-        Point size = new Point();
+        Point point = new Point();
         try {
             WindowManager windowManager = (WindowManager) ApplicationLoader.applicationContext.getSystemService("window");
             if (Build.VERSION.SDK_INT >= 17) {
-                windowManager.getDefaultDisplay().getRealSize(size);
+                windowManager.getDefaultDisplay().getRealSize(point);
             } else {
                 try {
-                    size.set(((Integer) Display.class.getMethod("getRawWidth", new Class[0]).invoke(windowManager.getDefaultDisplay(), new Object[0])).intValue(), ((Integer) Display.class.getMethod("getRawHeight", new Class[0]).invoke(windowManager.getDefaultDisplay(), new Object[0])).intValue());
+                    point.set(((Integer) Display.class.getMethod("getRawWidth", new Class[0]).invoke(windowManager.getDefaultDisplay(), new Object[0])).intValue(), ((Integer) Display.class.getMethod("getRawHeight", new Class[0]).invoke(windowManager.getDefaultDisplay(), new Object[0])).intValue());
                 } catch (Exception e) {
-                    size.set(windowManager.getDefaultDisplay().getWidth(), windowManager.getDefaultDisplay().getHeight());
+                    point.set(windowManager.getDefaultDisplay().getWidth(), windowManager.getDefaultDisplay().getHeight());
                     FileLog.e((Throwable) e);
                 }
             }
         } catch (Exception e2) {
             FileLog.e((Throwable) e2);
         }
-        return size;
+        return point;
     }
 
-    public static void setEnabled(View view, boolean enabled) {
+    public static void setEnabled(View view, boolean z) {
         if (view != null) {
-            view.setEnabled(enabled);
+            view.setEnabled(z);
             if (view instanceof ViewGroup) {
                 ViewGroup viewGroup = (ViewGroup) view;
                 for (int i = 0; i < viewGroup.getChildCount(); i++) {
-                    setEnabled(viewGroup.getChildAt(i), enabled);
+                    setEnabled(viewGroup.getChildAt(i), z);
                 }
             }
         }
     }
 
-    public static int charSequenceIndexOf(CharSequence cs, CharSequence needle, int fromIndex) {
-        for (int i = fromIndex; i < cs.length() - needle.length(); i++) {
-            boolean eq = true;
-            int j = 0;
+    public static int charSequenceIndexOf(CharSequence charSequence, CharSequence charSequence2, int i) {
+        while (i < charSequence.length() - charSequence2.length()) {
+            boolean z = false;
+            int i2 = 0;
             while (true) {
-                if (j >= needle.length()) {
+                if (i2 >= charSequence2.length()) {
+                    z = true;
                     break;
-                } else if (needle.charAt(j) != cs.charAt(i + j)) {
-                    eq = false;
+                } else if (charSequence2.charAt(i2) != charSequence.charAt(i + i2)) {
                     break;
                 } else {
-                    j++;
+                    i2++;
                 }
             }
-            if (eq) {
+            if (z) {
                 return i;
             }
+            i++;
         }
         return -1;
     }
 
-    public static int charSequenceIndexOf(CharSequence cs, CharSequence needle) {
-        return charSequenceIndexOf(cs, needle, 0);
+    public static int charSequenceIndexOf(CharSequence charSequence, CharSequence charSequence2) {
+        return charSequenceIndexOf(charSequence, charSequence2, 0);
     }
 
-    public static boolean charSequenceContains(CharSequence cs, CharSequence needle) {
-        return charSequenceIndexOf(cs, needle) != -1;
+    public static boolean charSequenceContains(CharSequence charSequence, CharSequence charSequence2) {
+        return charSequenceIndexOf(charSequence, charSequence2) != -1;
     }
 
-    public static CharSequence getTrimmedString(CharSequence src) {
-        if (src == null || src.length() == 0) {
-            return src;
+    public static CharSequence getTrimmedString(CharSequence charSequence) {
+        if (!(charSequence == null || charSequence.length() == 0)) {
+            while (charSequence.length() > 0 && (charSequence.charAt(0) == 10 || charSequence.charAt(0) == ' ')) {
+                charSequence = charSequence.subSequence(1, charSequence.length());
+            }
+            while (charSequence.length() > 0 && (charSequence.charAt(charSequence.length() - 1) == 10 || charSequence.charAt(charSequence.length() - 1) == ' ')) {
+                charSequence = charSequence.subSequence(0, charSequence.length() - 1);
+            }
         }
-        while (src.length() > 0 && (src.charAt(0) == 10 || src.charAt(0) == ' ')) {
-            src = src.subSequence(1, src.length());
-        }
-        while (src.length() > 0 && (src.charAt(src.length() - 1) == 10 || src.charAt(src.length() - 1) == ' ')) {
-            src = src.subSequence(0, src.length() - 1);
-        }
-        return src;
+        return charSequence;
     }
 
-    public static void setViewPagerEdgeEffectColor(ViewPager viewPager, int color) {
+    public static void setViewPagerEdgeEffectColor(ViewPager viewPager, int i) {
         if (Build.VERSION.SDK_INT >= 21) {
             try {
-                Field field = ViewPager.class.getDeclaredField("mLeftEdge");
-                field.setAccessible(true);
-                EdgeEffect mLeftEdge = (EdgeEffect) field.get(viewPager);
-                if (mLeftEdge != null) {
-                    mLeftEdge.setColor(color);
+                Field declaredField = ViewPager.class.getDeclaredField("mLeftEdge");
+                declaredField.setAccessible(true);
+                EdgeEffect edgeEffect = (EdgeEffect) declaredField.get(viewPager);
+                if (edgeEffect != null) {
+                    edgeEffect.setColor(i);
                 }
-                Field field2 = ViewPager.class.getDeclaredField("mRightEdge");
-                field2.setAccessible(true);
-                EdgeEffect mRightEdge = (EdgeEffect) field2.get(viewPager);
-                if (mRightEdge != null) {
-                    mRightEdge.setColor(color);
+                Field declaredField2 = ViewPager.class.getDeclaredField("mRightEdge");
+                declaredField2.setAccessible(true);
+                EdgeEffect edgeEffect2 = (EdgeEffect) declaredField2.get(viewPager);
+                if (edgeEffect2 != null) {
+                    edgeEffect2.setColor(i);
                 }
-            } catch (Exception e) {
+            } catch (Exception unused) {
             }
         }
     }
 
-    public static void setScrollViewEdgeEffectColor(HorizontalScrollView scrollView, int color) {
-        if (Build.VERSION.SDK_INT >= 29) {
-            scrollView.setEdgeEffectColor(color);
-        } else if (Build.VERSION.SDK_INT >= 21) {
+    public static void setScrollViewEdgeEffectColor(HorizontalScrollView horizontalScrollView, int i) {
+        int i2 = Build.VERSION.SDK_INT;
+        if (i2 >= 29) {
+            horizontalScrollView.setEdgeEffectColor(i);
+        } else if (i2 >= 21) {
             try {
-                Field field = HorizontalScrollView.class.getDeclaredField("mEdgeGlowLeft");
-                field.setAccessible(true);
-                EdgeEffect mEdgeGlowTop = (EdgeEffect) field.get(scrollView);
-                if (mEdgeGlowTop != null) {
-                    mEdgeGlowTop.setColor(color);
+                Field declaredField = HorizontalScrollView.class.getDeclaredField("mEdgeGlowLeft");
+                declaredField.setAccessible(true);
+                EdgeEffect edgeEffect = (EdgeEffect) declaredField.get(horizontalScrollView);
+                if (edgeEffect != null) {
+                    edgeEffect.setColor(i);
                 }
-                Field field2 = HorizontalScrollView.class.getDeclaredField("mEdgeGlowRight");
-                field2.setAccessible(true);
-                EdgeEffect mEdgeGlowBottom = (EdgeEffect) field2.get(scrollView);
-                if (mEdgeGlowBottom != null) {
-                    mEdgeGlowBottom.setColor(color);
+                Field declaredField2 = HorizontalScrollView.class.getDeclaredField("mEdgeGlowRight");
+                declaredField2.setAccessible(true);
+                EdgeEffect edgeEffect2 = (EdgeEffect) declaredField2.get(horizontalScrollView);
+                if (edgeEffect2 != null) {
+                    edgeEffect2.setColor(i);
                 }
             } catch (Exception e) {
                 FileLog.e((Throwable) e);
@@ -2395,43 +2677,45 @@ public class AndroidUtilities {
         }
     }
 
-    public static void setScrollViewEdgeEffectColor(ScrollView scrollView, int color) {
-        if (Build.VERSION.SDK_INT >= 29) {
-            scrollView.setTopEdgeEffectColor(color);
-            scrollView.setBottomEdgeEffectColor(color);
-        } else if (Build.VERSION.SDK_INT >= 21) {
+    public static void setScrollViewEdgeEffectColor(ScrollView scrollView, int i) {
+        int i2 = Build.VERSION.SDK_INT;
+        if (i2 >= 29) {
+            scrollView.setTopEdgeEffectColor(i);
+            scrollView.setBottomEdgeEffectColor(i);
+        } else if (i2 >= 21) {
             try {
-                Field field = ScrollView.class.getDeclaredField("mEdgeGlowTop");
-                field.setAccessible(true);
-                EdgeEffect mEdgeGlowTop = (EdgeEffect) field.get(scrollView);
-                if (mEdgeGlowTop != null) {
-                    mEdgeGlowTop.setColor(color);
+                Field declaredField = ScrollView.class.getDeclaredField("mEdgeGlowTop");
+                declaredField.setAccessible(true);
+                EdgeEffect edgeEffect = (EdgeEffect) declaredField.get(scrollView);
+                if (edgeEffect != null) {
+                    edgeEffect.setColor(i);
                 }
-                Field field2 = ScrollView.class.getDeclaredField("mEdgeGlowBottom");
-                field2.setAccessible(true);
-                EdgeEffect mEdgeGlowBottom = (EdgeEffect) field2.get(scrollView);
-                if (mEdgeGlowBottom != null) {
-                    mEdgeGlowBottom.setColor(color);
+                Field declaredField2 = ScrollView.class.getDeclaredField("mEdgeGlowBottom");
+                declaredField2.setAccessible(true);
+                EdgeEffect edgeEffect2 = (EdgeEffect) declaredField2.get(scrollView);
+                if (edgeEffect2 != null) {
+                    edgeEffect2.setColor(i);
                 }
-            } catch (Exception e) {
+            } catch (Exception unused) {
             }
         }
     }
 
+    @SuppressLint({"NewApi"})
     public static void clearDrawableAnimation(View view) {
         if (Build.VERSION.SDK_INT >= 21 && view != null) {
             if (view instanceof ListView) {
-                Drawable drawable = ((ListView) view).getSelector();
-                if (drawable != null) {
-                    drawable.setState(StateSet.NOTHING);
+                Drawable selector = ((ListView) view).getSelector();
+                if (selector != null) {
+                    selector.setState(StateSet.NOTHING);
                     return;
                 }
                 return;
             }
-            Drawable drawable2 = view.getBackground();
-            if (drawable2 != null) {
-                drawable2.setState(StateSet.NOTHING);
-                drawable2.jumpToCurrentState();
+            Drawable background = view.getBackground();
+            if (background != null) {
+                background.setState(StateSet.NOTHING);
+                background.jumpToCurrentState();
             }
         }
     }
@@ -2440,78 +2724,74 @@ public class AndroidUtilities {
         return replaceTags(str, 11, new Object[0]);
     }
 
-    public static SpannableStringBuilder replaceTags(String str, int flag, Object... args) {
+    public static SpannableStringBuilder replaceTags(String str, int i, Object... objArr) {
         try {
-            StringBuilder stringBuilder = new StringBuilder(str);
-            if ((flag & 1) != 0) {
+            StringBuilder sb = new StringBuilder(str);
+            if ((i & 1) != 0) {
                 while (true) {
-                    int indexOf = stringBuilder.indexOf("<br>");
-                    int start = indexOf;
+                    int indexOf = sb.indexOf("<br>");
                     if (indexOf == -1) {
                         break;
                     }
-                    stringBuilder.replace(start, start + 4, "\n");
+                    sb.replace(indexOf, indexOf + 4, "\n");
                 }
                 while (true) {
-                    int indexOf2 = stringBuilder.indexOf("<br/>");
-                    int start2 = indexOf2;
+                    int indexOf2 = sb.indexOf("<br/>");
                     if (indexOf2 == -1) {
                         break;
                     }
-                    stringBuilder.replace(start2, start2 + 5, "\n");
+                    sb.replace(indexOf2, indexOf2 + 5, "\n");
                 }
             }
-            ArrayList<Integer> bolds = new ArrayList<>();
-            if ((flag & 2) != 0) {
+            ArrayList arrayList = new ArrayList();
+            if ((i & 2) != 0) {
                 while (true) {
-                    int indexOf3 = stringBuilder.indexOf("<b>");
-                    int start3 = indexOf3;
+                    int indexOf3 = sb.indexOf("<b>");
                     if (indexOf3 == -1) {
                         break;
                     }
-                    stringBuilder.replace(start3, start3 + 3, "");
-                    int end = stringBuilder.indexOf("</b>");
-                    if (end == -1) {
-                        end = stringBuilder.indexOf("<b>");
-                    }
-                    stringBuilder.replace(end, end + 4, "");
-                    bolds.add(Integer.valueOf(start3));
-                    bolds.add(Integer.valueOf(end));
-                }
-                while (true) {
-                    int indexOf4 = stringBuilder.indexOf("**");
-                    int start4 = indexOf4;
+                    sb.replace(indexOf3, indexOf3 + 3, "");
+                    int indexOf4 = sb.indexOf("</b>");
                     if (indexOf4 == -1) {
-                        break;
+                        indexOf4 = sb.indexOf("<b>");
                     }
-                    stringBuilder.replace(start4, start4 + 2, "");
-                    int end2 = stringBuilder.indexOf("**");
-                    if (end2 >= 0) {
-                        stringBuilder.replace(end2, end2 + 2, "");
-                        bolds.add(Integer.valueOf(start4));
-                        bolds.add(Integer.valueOf(end2));
-                    }
+                    sb.replace(indexOf4, indexOf4 + 4, "");
+                    arrayList.add(Integer.valueOf(indexOf3));
+                    arrayList.add(Integer.valueOf(indexOf4));
                 }
-            }
-            if ((flag & 8) != 0) {
                 while (true) {
-                    int indexOf5 = stringBuilder.indexOf("**");
-                    int start5 = indexOf5;
+                    int indexOf5 = sb.indexOf("**");
                     if (indexOf5 == -1) {
                         break;
                     }
-                    stringBuilder.replace(start5, start5 + 2, "");
-                    int end3 = stringBuilder.indexOf("**");
-                    if (end3 >= 0) {
-                        stringBuilder.replace(end3, end3 + 2, "");
-                        bolds.add(Integer.valueOf(start5));
-                        bolds.add(Integer.valueOf(end3));
+                    sb.replace(indexOf5, indexOf5 + 2, "");
+                    int indexOf6 = sb.indexOf("**");
+                    if (indexOf6 >= 0) {
+                        sb.replace(indexOf6, indexOf6 + 2, "");
+                        arrayList.add(Integer.valueOf(indexOf5));
+                        arrayList.add(Integer.valueOf(indexOf6));
                     }
                 }
             }
-            SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(stringBuilder);
-            for (int a = 0; a < bolds.size() / 2; a++) {
-                spannableStringBuilder.setSpan(new TypefaceSpan(getTypeface("fonts/rmedium.ttf")), bolds.get(a * 2).intValue(), bolds.get((a * 2) + 1).intValue(), 33);
+            if ((i & 8) != 0) {
+                while (true) {
+                    int indexOf7 = sb.indexOf("**");
+                    if (indexOf7 == -1) {
+                        break;
+                    }
+                    sb.replace(indexOf7, indexOf7 + 2, "");
+                    int indexOf8 = sb.indexOf("**");
+                    if (indexOf8 >= 0) {
+                        sb.replace(indexOf8, indexOf8 + 2, "");
+                        arrayList.add(Integer.valueOf(indexOf7));
+                        arrayList.add(Integer.valueOf(indexOf8));
+                    }
+                }
+            }
+            SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(sb);
+            for (int i2 = 0; i2 < arrayList.size() / 2; i2++) {
+                int i3 = i2 * 2;
+                spannableStringBuilder.setSpan(new TypefaceSpan(getTypeface("fonts/rmedium.ttf")), ((Integer) arrayList.get(i3)).intValue(), ((Integer) arrayList.get(i3 + 1)).intValue(), 33);
             }
             return spannableStringBuilder;
         } catch (Exception e) {
@@ -2521,13 +2801,13 @@ public class AndroidUtilities {
     }
 
     public static class LinkMovementMethodMy extends LinkMovementMethod {
-        public boolean onTouchEvent(TextView widget, Spannable buffer, MotionEvent event) {
+        public boolean onTouchEvent(TextView textView, Spannable spannable, MotionEvent motionEvent) {
             try {
-                boolean result = super.onTouchEvent(widget, buffer, event);
-                if (event.getAction() == 1 || event.getAction() == 3) {
-                    Selection.removeSelection(buffer);
+                boolean onTouchEvent = super.onTouchEvent(textView, spannable, motionEvent);
+                if (motionEvent.getAction() == 1 || motionEvent.getAction() == 3) {
+                    Selection.removeSelection(spannable);
                 }
-                return result;
+                return onTouchEvent;
             } catch (Exception e) {
                 FileLog.e((Throwable) e);
                 return false;
@@ -2539,32 +2819,32 @@ public class AndroidUtilities {
         return needShowPasscode(false);
     }
 
-    public static boolean needShowPasscode(boolean reset) {
-        boolean wasInBackground = ForegroundDetector.getInstance().isWasInBackground(reset);
-        if (reset) {
+    public static boolean needShowPasscode(boolean z) {
+        boolean isWasInBackground = ForegroundDetector.getInstance().isWasInBackground(z);
+        if (z) {
             ForegroundDetector.getInstance().resetBackgroundVar();
         }
-        int uptime = (int) (SystemClock.elapsedRealtime() / 1000);
-        if (BuildVars.LOGS_ENABLED && reset && SharedConfig.passcodeHash.length() > 0) {
-            FileLog.d("wasInBackground = " + wasInBackground + " appLocked = " + SharedConfig.appLocked + " autoLockIn = " + SharedConfig.autoLockIn + " lastPauseTime = " + SharedConfig.lastPauseTime + " uptime = " + uptime);
+        int elapsedRealtime = (int) (SystemClock.elapsedRealtime() / 1000);
+        if (BuildVars.LOGS_ENABLED && z && SharedConfig.passcodeHash.length() > 0) {
+            FileLog.d("wasInBackground = " + isWasInBackground + " appLocked = " + SharedConfig.appLocked + " autoLockIn = " + SharedConfig.autoLockIn + " lastPauseTime = " + SharedConfig.lastPauseTime + " uptime = " + elapsedRealtime);
         }
-        return SharedConfig.passcodeHash.length() > 0 && wasInBackground && (SharedConfig.appLocked || ((SharedConfig.autoLockIn != 0 && SharedConfig.lastPauseTime != 0 && !SharedConfig.appLocked && SharedConfig.lastPauseTime + SharedConfig.autoLockIn <= uptime) || uptime + 5 < SharedConfig.lastPauseTime));
+        return SharedConfig.passcodeHash.length() > 0 && isWasInBackground && (SharedConfig.appLocked || ((SharedConfig.autoLockIn != 0 && SharedConfig.lastPauseTime != 0 && !SharedConfig.appLocked && SharedConfig.lastPauseTime + SharedConfig.autoLockIn <= elapsedRealtime) || elapsedRealtime + 5 < SharedConfig.lastPauseTime));
     }
 
-    public static void shakeView(final View view, final float x, final int num) {
+    public static void shakeView(final View view, final float f, final int i) {
         if (view != null) {
-            if (num == 6) {
+            if (i == 6) {
                 view.setTranslationX(0.0f);
                 return;
             }
             AnimatorSet animatorSet = new AnimatorSet();
-            animatorSet.playTogether(new Animator[]{ObjectAnimator.ofFloat(view, "translationX", new float[]{(float) dp(x)})});
+            animatorSet.playTogether(new Animator[]{ObjectAnimator.ofFloat(view, "translationX", new float[]{(float) dp(f)})});
             animatorSet.setDuration(50);
             animatorSet.addListener(new AnimatorListenerAdapter() {
-                public void onAnimationEnd(Animator animation) {
+                public void onAnimationEnd(Animator animator) {
                     View view = view;
-                    int i = num;
-                    AndroidUtilities.shakeView(view, i == 5 ? 0.0f : -x, i + 1);
+                    int i = i;
+                    AndroidUtilities.shakeView(view, i == 5 ? 0.0f : -f, i + 1);
                 }
             });
             animatorSet.start();
@@ -2575,35 +2855,34 @@ public class AndroidUtilities {
         shakeViewSpring(view, 10.0f, (Runnable) null);
     }
 
-    public static void shakeViewSpring(View view, float shiftDp) {
-        shakeViewSpring(view, shiftDp, (Runnable) null);
+    public static void shakeViewSpring(View view, float f) {
+        shakeViewSpring(view, f, (Runnable) null);
     }
 
-    public static void shakeViewSpring(View view, Runnable endCallback) {
-        shakeViewSpring(view, 10.0f, endCallback);
+    public static void shakeViewSpring(View view, Runnable runnable) {
+        shakeViewSpring(view, 10.0f, runnable);
     }
 
-    public static void shakeViewSpring(View view, float shiftDp, Runnable endCallback) {
-        ((SpringAnimation) ((SpringAnimation) new SpringAnimation(view, DynamicAnimation.TRANSLATION_X, 0.0f).setSpring(new SpringForce(0.0f).setStiffness(600.0f)).setStartVelocity((float) ((-dp(shiftDp)) * 100))).addEndListener(new AndroidUtilities$$ExternalSyntheticLambda7(endCallback))).start();
+    public static void shakeViewSpring(View view, float f, Runnable runnable) {
+        ((SpringAnimation) ((SpringAnimation) new SpringAnimation(view, DynamicAnimation.TRANSLATION_X, 0.0f).setSpring(new SpringForce(0.0f).setStiffness(600.0f)).setStartVelocity((float) ((-dp(f)) * 100))).addEndListener(new AndroidUtilities$$ExternalSyntheticLambda5(runnable))).start();
     }
 
-    static /* synthetic */ void lambda$shakeViewSpring$4(Runnable endCallback, DynamicAnimation animation, boolean canceled, float value, float velocity) {
-        if (endCallback != null) {
-            endCallback.run();
+    /* access modifiers changed from: private */
+    public static /* synthetic */ void lambda$shakeViewSpring$4(Runnable runnable, DynamicAnimation dynamicAnimation, boolean z, float f, float f2) {
+        if (runnable != null) {
+            runnable.run();
         }
     }
 
-    public static void startAppCenter(Activity context) {
-        if (!BuildConfig.DEBUG) {
-            try {
-                if (BuildVars.DEBUG_VERSION) {
-                    Distribute.setEnabledForDebuggableBuild(true);
-                    AppCenter.start(context.getApplication(), BuildVars.DEBUG_VERSION ? BuildVars.APPCENTER_HASH_DEBUG : BuildVars.APPCENTER_HASH, Distribute.class, Crashes.class);
-                    AppCenter.setUserId("uid=" + UserConfig.getInstance(UserConfig.selectedAccount).clientUserId);
-                }
-            } catch (Throwable e) {
-                FileLog.e(e);
+    public static void startAppCenter(Activity activity) {
+        try {
+            if (BuildVars.DEBUG_VERSION) {
+                Distribute.setEnabledForDebuggableBuild(true);
+                AppCenter.start(activity.getApplication(), BuildVars.DEBUG_VERSION ? BuildVars.APPCENTER_HASH_DEBUG : BuildVars.APPCENTER_HASH, Distribute.class, Crashes.class);
+                AppCenter.setUserId("uid=" + UserConfig.getInstance(UserConfig.selectedAccount).clientUserId);
             }
+        } catch (Throwable th) {
+            FileLog.e(th);
         }
     }
 
@@ -2613,15 +2892,15 @@ public class AndroidUtilities {
                 lastUpdateCheckTime = SystemClock.elapsedRealtime();
                 Distribute.checkForUpdate();
             }
-        } catch (Throwable e) {
-            FileLog.e(e);
+        } catch (Throwable th) {
+            FileLog.e(th);
         }
     }
 
-    public static void appCenterLog(Throwable e) {
+    public static void appCenterLog(Throwable th) {
         try {
-            Crashes.trackError(e);
-        } catch (Throwable th) {
+            Crashes.trackError(th);
+        } catch (Throwable unused) {
         }
     }
 
@@ -2629,222 +2908,159 @@ public class AndroidUtilities {
         return Build.VERSION.SDK_INT < 31 || !OneUIUtilities.hasBuiltInClipboardToasts();
     }
 
-    public static void addToClipboard(CharSequence str) {
+    public static void addToClipboard(CharSequence charSequence) {
         try {
-            ((ClipboardManager) ApplicationLoader.applicationContext.getSystemService("clipboard")).setPrimaryClip(ClipData.newPlainText("label", str));
+            ((ClipboardManager) ApplicationLoader.applicationContext.getSystemService("clipboard")).setPrimaryClip(ClipData.newPlainText("label", charSequence));
         } catch (Exception e) {
             FileLog.e((Throwable) e);
         }
     }
 
-    public static void addMediaToGallery(String fromPath) {
-        if (fromPath != null) {
-            addMediaToGallery(new File(fromPath));
+    public static void addMediaToGallery(String str) {
+        if (str != null) {
+            addMediaToGallery(new File(str));
         }
     }
 
     public static void addMediaToGallery(File file) {
-        Uri uri = Uri.fromFile(file);
-        if (uri != null) {
+        Uri fromFile = Uri.fromFile(file);
+        if (fromFile != null) {
             try {
-                Intent mediaScanIntent = new Intent("android.intent.action.MEDIA_SCANNER_SCAN_FILE");
-                mediaScanIntent.setData(uri);
-                ApplicationLoader.applicationContext.sendBroadcast(mediaScanIntent);
+                Intent intent = new Intent("android.intent.action.MEDIA_SCANNER_SCAN_FILE");
+                intent.setData(fromFile);
+                ApplicationLoader.applicationContext.sendBroadcast(intent);
             } catch (Exception e) {
                 FileLog.e((Throwable) e);
             }
         }
     }
 
-    private static File getAlbumDir(boolean secretChat) {
-        if (secretChat || !BuildVars.NO_SCOPED_STORAGE || (Build.VERSION.SDK_INT >= 23 && ApplicationLoader.applicationContext.checkSelfPermission("android.permission.READ_EXTERNAL_STORAGE") != 0)) {
+    private static File getAlbumDir(boolean z) {
+        if (z || !BuildVars.NO_SCOPED_STORAGE || (Build.VERSION.SDK_INT >= 23 && ApplicationLoader.applicationContext.checkSelfPermission("android.permission.READ_EXTERNAL_STORAGE") != 0)) {
             return FileLoader.getDirectory(0);
         }
-        File storageDir = null;
         if ("mounted".equals(Environment.getExternalStorageState())) {
-            storageDir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), "Telegram");
-            if (!storageDir.mkdirs() && !storageDir.exists()) {
-                if (!BuildVars.LOGS_ENABLED) {
-                    return null;
-                }
+            File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), "Telegram");
+            if (file.mkdirs() || file.exists()) {
+                return file;
+            }
+            if (BuildVars.LOGS_ENABLED) {
                 FileLog.d("failed to create directory");
+            }
+            return null;
+        } else if (!BuildVars.LOGS_ENABLED) {
+            return null;
+        } else {
+            FileLog.d("External storage is not mounted READ/WRITE.");
+            return null;
+        }
+    }
+
+    @SuppressLint({"NewApi"})
+    public static String getPath(Uri uri) {
+        Uri uri2;
+        try {
+            if ((Build.VERSION.SDK_INT >= 19) && DocumentsContract.isDocumentUri(ApplicationLoader.applicationContext, uri)) {
+                if (isExternalStorageDocument(uri)) {
+                    String[] split = DocumentsContract.getDocumentId(uri).split(":");
+                    if ("primary".equalsIgnoreCase(split[0])) {
+                        return Environment.getExternalStorageDirectory() + "/" + split[1];
+                    }
+                } else if (isDownloadsDocument(uri)) {
+                    return getDataColumn(ApplicationLoader.applicationContext, ContentUris.withAppendedId(Uri.parse("content://downloads/public_downloads"), Long.valueOf(DocumentsContract.getDocumentId(uri)).longValue()), (String) null, (String[]) null);
+                } else if (isMediaDocument(uri)) {
+                    String[] split2 = DocumentsContract.getDocumentId(uri).split(":");
+                    String str = split2[0];
+                    char c = 65535;
+                    int hashCode = str.hashCode();
+                    if (hashCode != 93166550) {
+                        if (hashCode != NUM) {
+                            if (hashCode == NUM) {
+                                if (str.equals("video")) {
+                                    c = 1;
+                                }
+                            }
+                        } else if (str.equals("image")) {
+                            c = 0;
+                        }
+                    } else if (str.equals("audio")) {
+                        c = 2;
+                    }
+                    if (c == 0) {
+                        uri2 = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
+                    } else if (c == 1) {
+                        uri2 = MediaStore.Video.Media.EXTERNAL_CONTENT_URI;
+                    } else if (c != 2) {
+                        uri2 = null;
+                    } else {
+                        uri2 = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
+                    }
+                    return getDataColumn(ApplicationLoader.applicationContext, uri2, "_id=?", new String[]{split2[1]});
+                }
+                return null;
+            } else if ("content".equalsIgnoreCase(uri.getScheme())) {
+                return getDataColumn(ApplicationLoader.applicationContext, uri, (String) null, (String[]) null);
+            } else {
+                if ("file".equalsIgnoreCase(uri.getScheme())) {
+                    return uri.getPath();
+                }
                 return null;
             }
-        } else if (BuildVars.LOGS_ENABLED) {
-            FileLog.d("External storage is not mounted READ/WRITE.");
-        }
-        return storageDir;
-    }
-
-    /* JADX WARNING: Can't fix incorrect switch cases order */
-    /* Code decompiled incorrectly, please refer to instructions dump. */
-    public static java.lang.String getPath(android.net.Uri r11) {
-        /*
-            java.lang.String r0 = "_id=?"
-            r1 = 0
-            int r2 = android.os.Build.VERSION.SDK_INT     // Catch:{ Exception -> 0x00ed }
-            r3 = 19
-            r4 = 1
-            r5 = 0
-            if (r2 < r3) goto L_0x000d
-            r2 = 1
-            goto L_0x000e
-        L_0x000d:
-            r2 = 0
-        L_0x000e:
-            if (r2 == 0) goto L_0x00c8
-            android.content.Context r3 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ Exception -> 0x00ed }
-            boolean r3 = android.provider.DocumentsContract.isDocumentUri(r3, r11)     // Catch:{ Exception -> 0x00ed }
-            if (r3 == 0) goto L_0x00c8
-            boolean r3 = isExternalStorageDocument(r11)     // Catch:{ Exception -> 0x00ed }
-            java.lang.String r6 = ":"
-            if (r3 == 0) goto L_0x004f
-            java.lang.String r0 = android.provider.DocumentsContract.getDocumentId(r11)     // Catch:{ Exception -> 0x00ed }
-            java.lang.String[] r3 = r0.split(r6)     // Catch:{ Exception -> 0x00ed }
-            r5 = r3[r5]     // Catch:{ Exception -> 0x00ed }
-            java.lang.String r6 = "primary"
-            boolean r6 = r6.equalsIgnoreCase(r5)     // Catch:{ Exception -> 0x00ed }
-            if (r6 == 0) goto L_0x004d
-            java.lang.StringBuilder r6 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x00ed }
-            r6.<init>()     // Catch:{ Exception -> 0x00ed }
-            java.io.File r7 = android.os.Environment.getExternalStorageDirectory()     // Catch:{ Exception -> 0x00ed }
-            r6.append(r7)     // Catch:{ Exception -> 0x00ed }
-            java.lang.String r7 = "/"
-            r6.append(r7)     // Catch:{ Exception -> 0x00ed }
-            r4 = r3[r4]     // Catch:{ Exception -> 0x00ed }
-            r6.append(r4)     // Catch:{ Exception -> 0x00ed }
-            java.lang.String r1 = r6.toString()     // Catch:{ Exception -> 0x00ed }
-            return r1
-        L_0x004d:
-            goto L_0x00ec
-        L_0x004f:
-            boolean r3 = isDownloadsDocument(r11)     // Catch:{ Exception -> 0x00ed }
-            if (r3 == 0) goto L_0x0072
-            java.lang.String r0 = android.provider.DocumentsContract.getDocumentId(r11)     // Catch:{ Exception -> 0x00ed }
-            java.lang.String r3 = "content://downloads/public_downloads"
-            android.net.Uri r3 = android.net.Uri.parse(r3)     // Catch:{ Exception -> 0x00ed }
-            java.lang.Long r4 = java.lang.Long.valueOf(r0)     // Catch:{ Exception -> 0x00ed }
-            long r4 = r4.longValue()     // Catch:{ Exception -> 0x00ed }
-            android.net.Uri r3 = android.content.ContentUris.withAppendedId(r3, r4)     // Catch:{ Exception -> 0x00ed }
-            android.content.Context r4 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ Exception -> 0x00ed }
-            java.lang.String r1 = getDataColumn(r4, r3, r1, r1)     // Catch:{ Exception -> 0x00ed }
-            return r1
-        L_0x0072:
-            boolean r3 = isMediaDocument(r11)     // Catch:{ Exception -> 0x00ed }
-            if (r3 == 0) goto L_0x00ec
-            java.lang.String r3 = android.provider.DocumentsContract.getDocumentId(r11)     // Catch:{ Exception -> 0x00ed }
-            java.lang.String[] r6 = r3.split(r6)     // Catch:{ Exception -> 0x00ed }
-            r7 = r6[r5]     // Catch:{ Exception -> 0x00ed }
-            r8 = 0
-            r9 = -1
-            int r10 = r7.hashCode()     // Catch:{ Exception -> 0x00ed }
-            switch(r10) {
-                case 93166550: goto L_0x00a0;
-                case 100313435: goto L_0x0096;
-                case 112202875: goto L_0x008c;
-                default: goto L_0x008b;
-            }     // Catch:{ Exception -> 0x00ed }
-        L_0x008b:
-            goto L_0x00a9
-        L_0x008c:
-            java.lang.String r10 = "video"
-            boolean r10 = r7.equals(r10)     // Catch:{ Exception -> 0x00ed }
-            if (r10 == 0) goto L_0x008b
-            r9 = 1
-            goto L_0x00a9
-        L_0x0096:
-            java.lang.String r10 = "image"
-            boolean r10 = r7.equals(r10)     // Catch:{ Exception -> 0x00ed }
-            if (r10 == 0) goto L_0x008b
-            r9 = 0
-            goto L_0x00a9
-        L_0x00a0:
-            java.lang.String r10 = "audio"
-            boolean r10 = r7.equals(r10)     // Catch:{ Exception -> 0x00ed }
-            if (r10 == 0) goto L_0x008b
-            r9 = 2
-        L_0x00a9:
-            switch(r9) {
-                case 0: goto L_0x00b5;
-                case 1: goto L_0x00b1;
-                case 2: goto L_0x00ad;
-                default: goto L_0x00ac;
-            }     // Catch:{ Exception -> 0x00ed }
-        L_0x00ac:
-            goto L_0x00b9
-        L_0x00ad:
-            android.net.Uri r9 = android.provider.MediaStore.Audio.Media.EXTERNAL_CONTENT_URI     // Catch:{ Exception -> 0x00ed }
-            r8 = r9
-            goto L_0x00b9
-        L_0x00b1:
-            android.net.Uri r9 = android.provider.MediaStore.Video.Media.EXTERNAL_CONTENT_URI     // Catch:{ Exception -> 0x00ed }
-            r8 = r9
-            goto L_0x00b9
-        L_0x00b5:
-            android.net.Uri r9 = android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI     // Catch:{ Exception -> 0x00ed }
-            r8 = r9
-        L_0x00b9:
-            r9 = r0
-            java.lang.String[] r10 = new java.lang.String[r4]     // Catch:{ Exception -> 0x00ed }
-            r4 = r6[r4]     // Catch:{ Exception -> 0x00ed }
-            r10[r5] = r4     // Catch:{ Exception -> 0x00ed }
-            r4 = r10
-            android.content.Context r5 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ Exception -> 0x00ed }
-            java.lang.String r0 = getDataColumn(r5, r8, r0, r4)     // Catch:{ Exception -> 0x00ed }
-            return r0
-        L_0x00c8:
-            java.lang.String r0 = "content"
-            java.lang.String r3 = r11.getScheme()     // Catch:{ Exception -> 0x00ed }
-            boolean r0 = r0.equalsIgnoreCase(r3)     // Catch:{ Exception -> 0x00ed }
-            if (r0 == 0) goto L_0x00db
-            android.content.Context r0 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ Exception -> 0x00ed }
-            java.lang.String r0 = getDataColumn(r0, r11, r1, r1)     // Catch:{ Exception -> 0x00ed }
-            return r0
-        L_0x00db:
-            java.lang.String r0 = "file"
-            java.lang.String r3 = r11.getScheme()     // Catch:{ Exception -> 0x00ed }
-            boolean r0 = r0.equalsIgnoreCase(r3)     // Catch:{ Exception -> 0x00ed }
-            if (r0 == 0) goto L_0x00ec
-            java.lang.String r0 = r11.getPath()     // Catch:{ Exception -> 0x00ed }
-            return r0
-        L_0x00ec:
-            goto L_0x00f1
-        L_0x00ed:
-            r0 = move-exception
-            org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)
-        L_0x00f1:
-            return r1
-        */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.AndroidUtilities.getPath(android.net.Uri):java.lang.String");
-    }
-
-    public static String getDataColumn(Context context, Uri uri, String selection, String[] selectionArgs) {
-        Cursor cursor;
-        try {
-            cursor = context.getContentResolver().query(uri, new String[]{"_data"}, selection, selectionArgs, (String) null);
-            if (cursor != null) {
-                if (cursor.moveToFirst()) {
-                    String value = cursor.getString(cursor.getColumnIndexOrThrow("_data"));
-                    if (value.startsWith("content://") || (!value.startsWith("/") && !value.startsWith("file://"))) {
-                        if (cursor != null) {
-                            cursor.close();
-                        }
-                        return null;
-                    }
-                    if (cursor != null) {
-                        cursor.close();
-                    }
-                    return value;
-                }
-            }
-            if (cursor != null) {
-                cursor.close();
-            }
         } catch (Exception e) {
-        } catch (Throwable th) {
+            FileLog.e((Throwable) e);
         }
-        return null;
-        throw th;
+    }
+
+    /* JADX WARNING: Missing exception handler attribute for start block: B:21:0x004a */
+    /* JADX WARNING: Unknown top exception splitter block from list: {B:21:0x004a=Splitter:B:21:0x004a, B:13:0x003e=Splitter:B:13:0x003e} */
+    /* Code decompiled incorrectly, please refer to instructions dump. */
+    public static java.lang.String getDataColumn(android.content.Context r8, android.net.Uri r9, java.lang.String r10, java.lang.String[] r11) {
+        /*
+            r0 = 1
+            java.lang.String[] r3 = new java.lang.String[r0]
+            r0 = 0
+            java.lang.String r7 = "_data"
+            r3[r0] = r7
+            r0 = 0
+            android.content.ContentResolver r1 = r8.getContentResolver()     // Catch:{ Exception -> 0x0050 }
+            r6 = 0
+            r2 = r9
+            r4 = r10
+            r5 = r11
+            android.database.Cursor r8 = r1.query(r2, r3, r4, r5, r6)     // Catch:{ Exception -> 0x0050 }
+            if (r8 == 0) goto L_0x004b
+            boolean r9 = r8.moveToFirst()     // Catch:{ all -> 0x0046 }
+            if (r9 == 0) goto L_0x004b
+            int r9 = r8.getColumnIndexOrThrow(r7)     // Catch:{ all -> 0x0046 }
+            java.lang.String r9 = r8.getString(r9)     // Catch:{ all -> 0x0046 }
+            java.lang.String r10 = "content://"
+            boolean r10 = r9.startsWith(r10)     // Catch:{ all -> 0x0046 }
+            if (r10 != 0) goto L_0x0042
+            java.lang.String r10 = "/"
+            boolean r10 = r9.startsWith(r10)     // Catch:{ all -> 0x0046 }
+            if (r10 != 0) goto L_0x003e
+            java.lang.String r10 = "file://"
+            boolean r10 = r9.startsWith(r10)     // Catch:{ all -> 0x0046 }
+            if (r10 != 0) goto L_0x003e
+            goto L_0x0042
+        L_0x003e:
+            r8.close()     // Catch:{ Exception -> 0x0050 }
+            return r9
+        L_0x0042:
+            r8.close()     // Catch:{ Exception -> 0x0050 }
+            return r0
+        L_0x0046:
+            r9 = move-exception
+            r8.close()     // Catch:{ all -> 0x004a }
+        L_0x004a:
+            throw r9     // Catch:{ Exception -> 0x0050 }
+        L_0x004b:
+            if (r8 == 0) goto L_0x0050
+            r8.close()     // Catch:{ Exception -> 0x0050 }
+        L_0x0050:
+            return r0
+        */
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.AndroidUtilities.getDataColumn(android.content.Context, android.net.Uri, java.lang.String, java.lang.String[]):java.lang.String");
     }
 
     public static boolean isExternalStorageDocument(Uri uri) {
@@ -2863,76 +3079,77 @@ public class AndroidUtilities {
         return generatePicturePath(false, (String) null);
     }
 
-    public static File generatePicturePath(boolean secretChat, String ext) {
+    public static File generatePicturePath(boolean z, String str) {
         try {
-            return new File(ApplicationLoader.applicationContext.getExternalFilesDir(Environment.DIRECTORY_PICTURES), generateFileName(0, ext));
+            return new File(ApplicationLoader.applicationContext.getExternalFilesDir(Environment.DIRECTORY_PICTURES), generateFileName(0, str));
         } catch (Exception e) {
             FileLog.e((Throwable) e);
             return null;
         }
     }
 
-    public static String generateFileName(int type, String ext) {
+    public static String generateFileName(int i, String str) {
         Date date = new Date();
         date.setTime(System.currentTimeMillis() + ((long) Utilities.random.nextInt(1000)) + 1);
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss_SSS", Locale.US).format(date);
-        if (type == 0) {
+        String format = new SimpleDateFormat("yyyyMMdd_HHmmss_SSS", Locale.US).format(date);
+        if (i == 0) {
             StringBuilder sb = new StringBuilder();
             sb.append("IMG_");
-            sb.append(timeStamp);
+            sb.append(format);
             sb.append(".");
-            sb.append(TextUtils.isEmpty(ext) ? "jpg" : ext);
+            if (TextUtils.isEmpty(str)) {
+                str = "jpg";
+            }
+            sb.append(str);
             return sb.toString();
         }
-        return "VID_" + timeStamp + ".mp4";
+        return "VID_" + format + ".mp4";
     }
 
-    public static CharSequence generateSearchName(String name, String name2, String q) {
-        if ((name == null && name2 == null) || TextUtils.isEmpty(q)) {
+    public static CharSequence generateSearchName(String str, String str2, String str3) {
+        if ((str == null && str2 == null) || TextUtils.isEmpty(str3)) {
             return "";
         }
-        SpannableStringBuilder builder = new SpannableStringBuilder();
-        String wholeString = name;
-        if (wholeString == null || wholeString.length() == 0) {
-            wholeString = name2;
-        } else if (!(name2 == null || name2.length() == 0)) {
-            wholeString = wholeString + " " + name2;
+        SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder();
+        if (str == null || str.length() == 0) {
+            str = str2;
+        } else if (!(str2 == null || str2.length() == 0)) {
+            str = str + " " + str2;
         }
-        String wholeString2 = wholeString.trim();
-        String lower = " " + wholeString2.toLowerCase();
-        int lastIndex = 0;
+        String trim = str.trim();
+        String str4 = " " + trim.toLowerCase();
+        int i = 0;
         while (true) {
-            int indexOf = lower.indexOf(" " + q, lastIndex);
-            int index = indexOf;
+            int indexOf = str4.indexOf(" " + str3, i);
             if (indexOf == -1) {
                 break;
             }
-            int i = 1;
-            int idx = index - (index == 0 ? 0 : 1);
-            int length = q.length();
-            if (index == 0) {
-                i = 0;
+            int i2 = 1;
+            int i3 = indexOf - (indexOf == 0 ? 0 : 1);
+            int length = str3.length();
+            if (indexOf == 0) {
+                i2 = 0;
             }
-            int end = length + i + idx;
-            if (lastIndex != 0 && lastIndex != idx + 1) {
-                builder.append(wholeString2.substring(lastIndex, idx));
-            } else if (lastIndex == 0 && idx != 0) {
-                builder.append(wholeString2.substring(0, idx));
+            int i4 = length + i2 + i3;
+            if (i != 0 && i != i3 + 1) {
+                spannableStringBuilder.append(trim.substring(i, i3));
+            } else if (i == 0 && i3 != 0) {
+                spannableStringBuilder.append(trim.substring(0, i3));
             }
-            String query = wholeString2.substring(idx, Math.min(wholeString2.length(), end));
-            if (query.startsWith(" ")) {
-                builder.append(" ");
+            String substring = trim.substring(i3, Math.min(trim.length(), i4));
+            if (substring.startsWith(" ")) {
+                spannableStringBuilder.append(" ");
             }
-            String query2 = query.trim();
-            int start = builder.length();
-            builder.append(query2);
-            builder.setSpan(new ForegroundColorSpanThemable("windowBackgroundWhiteBlueText4"), start, query2.length() + start, 33);
-            lastIndex = end;
+            String trim2 = substring.trim();
+            int length2 = spannableStringBuilder.length();
+            spannableStringBuilder.append(trim2);
+            spannableStringBuilder.setSpan(new ForegroundColorSpanThemable("windowBackgroundWhiteBlueText4"), length2, trim2.length() + length2, 33);
+            i = i4;
         }
-        if (lastIndex != -1 && lastIndex < wholeString2.length()) {
-            builder.append(wholeString2.substring(lastIndex));
+        if (i != -1 && i < trim.length()) {
+            spannableStringBuilder.append(trim.substring(i));
         }
-        return builder;
+        return spannableStringBuilder;
     }
 
     public static boolean isKeyguardSecure() {
@@ -2940,9 +3157,12 @@ public class AndroidUtilities {
     }
 
     public static boolean isSimAvailable() {
-        TelephonyManager tm = (TelephonyManager) ApplicationLoader.applicationContext.getSystemService("phone");
-        int state = tm.getSimState();
-        return (state == 1 || state == 0 || tm.getPhoneType() == 0 || isAirplaneModeOn()) ? false : true;
+        TelephonyManager telephonyManager = (TelephonyManager) ApplicationLoader.applicationContext.getSystemService("phone");
+        int simState = telephonyManager.getSimState();
+        if (simState == 1 || simState == 0 || telephonyManager.getPhoneType() == 0 || isAirplaneModeOn()) {
+            return false;
+        }
+        return true;
     }
 
     public static boolean isAirplaneModeOn() {
@@ -2962,697 +3182,858 @@ public class AndroidUtilities {
         return generateVideoPath(false);
     }
 
-    public static File generateVideoPath(boolean secretChat) {
+    public static File generateVideoPath(boolean z) {
         try {
-            File storageDir = getAlbumDir(secretChat);
+            File albumDir = getAlbumDir(z);
             Date date = new Date();
             date.setTime(System.currentTimeMillis() + ((long) Utilities.random.nextInt(1000)) + 1);
             if (generatingVideoPathFormat == null) {
                 generatingVideoPathFormat = new SimpleDateFormat("yyyyMMdd_HHmmss_SSS", Locale.US);
             }
-            String timeStamp = generatingVideoPathFormat.format(date);
-            return new File(storageDir, "VID_" + timeStamp + ".mp4");
+            String format = generatingVideoPathFormat.format(date);
+            return new File(albumDir, "VID_" + format + ".mp4");
         } catch (Exception e) {
             FileLog.e((Throwable) e);
             return null;
         }
     }
 
-    public static String formatFileSize(long size) {
-        return formatFileSize(size, false);
+    public static String formatFileSize(long j) {
+        return formatFileSize(j, false);
     }
 
-    public static String formatFileSize(long size, boolean removeZero) {
-        if (size < 1024) {
-            return String.format("%d B", new Object[]{Long.valueOf(size)});
-        } else if (size < 1048576) {
-            float value = ((float) size) / 1024.0f;
-            if (!removeZero || (value - ((float) ((int) value))) * 10.0f != 0.0f) {
-                return String.format("%.1f KB", new Object[]{Float.valueOf(value)});
+    public static String formatFileSize(long j, boolean z) {
+        if (j < 1024) {
+            return String.format("%d B", new Object[]{Long.valueOf(j)});
+        } else if (j < 1048576) {
+            float f = ((float) j) / 1024.0f;
+            if (z) {
+                int i = (int) f;
+                if ((f - ((float) i)) * 10.0f == 0.0f) {
+                    return String.format("%d KB", new Object[]{Integer.valueOf(i)});
+                }
             }
-            return String.format("%d KB", new Object[]{Integer.valueOf((int) value)});
-        } else if (size < NUM) {
-            float value2 = (((float) size) / 1024.0f) / 1024.0f;
-            if (!removeZero || (value2 - ((float) ((int) value2))) * 10.0f != 0.0f) {
-                return String.format("%.1f MB", new Object[]{Float.valueOf(value2)});
+            return String.format("%.1f KB", new Object[]{Float.valueOf(f)});
+        } else if (j < NUM) {
+            float f2 = (((float) j) / 1024.0f) / 1024.0f;
+            if (z) {
+                int i2 = (int) f2;
+                if ((f2 - ((float) i2)) * 10.0f == 0.0f) {
+                    return String.format("%d MB", new Object[]{Integer.valueOf(i2)});
+                }
             }
-            return String.format("%d MB", new Object[]{Integer.valueOf((int) value2)});
+            return String.format("%.1f MB", new Object[]{Float.valueOf(f2)});
         } else {
-            float value3 = ((((float) size) / 1024.0f) / 1024.0f) / 1024.0f;
-            if (!removeZero || (value3 - ((float) ((int) value3))) * 10.0f != 0.0f) {
-                return String.format("%.1f GB", new Object[]{Float.valueOf(value3)});
+            float f3 = ((((float) j) / 1024.0f) / 1024.0f) / 1024.0f;
+            if (z) {
+                int i3 = (int) f3;
+                if ((f3 - ((float) i3)) * 10.0f == 0.0f) {
+                    return String.format("%d GB", new Object[]{Integer.valueOf(i3)});
+                }
             }
-            return String.format("%d GB", new Object[]{Integer.valueOf((int) value3)});
+            return String.format("%.1f GB", new Object[]{Float.valueOf(f3)});
         }
     }
 
-    public static String formatShortDuration(int duration) {
-        return formatDuration(duration, false);
+    public static String formatShortDuration(int i) {
+        return formatDuration(i, false);
     }
 
-    public static String formatLongDuration(int duration) {
-        return formatDuration(duration, true);
+    public static String formatLongDuration(int i) {
+        return formatDuration(i, true);
     }
 
-    public static String formatDuration(int duration, boolean isLong) {
-        int h = duration / 3600;
-        int m = (duration / 60) % 60;
-        int s = duration % 60;
-        if (h != 0) {
-            return String.format(Locale.US, "%d:%02d:%02d", new Object[]{Integer.valueOf(h), Integer.valueOf(m), Integer.valueOf(s)});
-        } else if (isLong) {
-            return String.format(Locale.US, "%02d:%02d", new Object[]{Integer.valueOf(m), Integer.valueOf(s)});
+    public static String formatDuration(int i, boolean z) {
+        int i2 = i / 3600;
+        int i3 = (i / 60) % 60;
+        int i4 = i % 60;
+        if (i2 != 0) {
+            return String.format(Locale.US, "%d:%02d:%02d", new Object[]{Integer.valueOf(i2), Integer.valueOf(i3), Integer.valueOf(i4)});
+        } else if (z) {
+            return String.format(Locale.US, "%02d:%02d", new Object[]{Integer.valueOf(i3), Integer.valueOf(i4)});
         } else {
-            return String.format(Locale.US, "%d:%02d", new Object[]{Integer.valueOf(m), Integer.valueOf(s)});
+            return String.format(Locale.US, "%d:%02d", new Object[]{Integer.valueOf(i3), Integer.valueOf(i4)});
         }
     }
 
-    public static String formatFullDuration(int duration) {
-        int h = duration / 3600;
-        int m = (duration / 60) % 60;
-        int s = duration % 60;
-        if (duration < 0) {
-            return String.format(Locale.US, "-%02d:%02d:%02d", new Object[]{Integer.valueOf(Math.abs(h)), Integer.valueOf(Math.abs(m)), Integer.valueOf(Math.abs(s))});
+    public static String formatFullDuration(int i) {
+        int i2 = i / 3600;
+        int i3 = (i / 60) % 60;
+        int i4 = i % 60;
+        if (i < 0) {
+            return String.format(Locale.US, "-%02d:%02d:%02d", new Object[]{Integer.valueOf(Math.abs(i2)), Integer.valueOf(Math.abs(i3)), Integer.valueOf(Math.abs(i4))});
         }
-        return String.format(Locale.US, "%02d:%02d:%02d", new Object[]{Integer.valueOf(h), Integer.valueOf(m), Integer.valueOf(s)});
+        return String.format(Locale.US, "%02d:%02d:%02d", new Object[]{Integer.valueOf(i2), Integer.valueOf(i3), Integer.valueOf(i4)});
     }
 
-    public static String formatDurationNoHours(int duration, boolean isLong) {
-        int m = duration / 60;
-        int s = duration % 60;
-        if (isLong) {
-            return String.format(Locale.US, "%02d:%02d", new Object[]{Integer.valueOf(m), Integer.valueOf(s)});
+    public static String formatDurationNoHours(int i, boolean z) {
+        int i2 = i / 60;
+        int i3 = i % 60;
+        if (z) {
+            return String.format(Locale.US, "%02d:%02d", new Object[]{Integer.valueOf(i2), Integer.valueOf(i3)});
         }
-        return String.format(Locale.US, "%d:%02d", new Object[]{Integer.valueOf(m), Integer.valueOf(s)});
+        return String.format(Locale.US, "%d:%02d", new Object[]{Integer.valueOf(i2), Integer.valueOf(i3)});
     }
 
-    public static String formatShortDuration(int progress, int duration) {
-        return formatDuration(progress, duration, false);
+    public static String formatShortDuration(int i, int i2) {
+        return formatDuration(i, i2, false);
     }
 
-    public static String formatLongDuration(int progress, int duration) {
-        return formatDuration(progress, duration, true);
+    public static String formatLongDuration(int i, int i2) {
+        return formatDuration(i, i2, true);
     }
 
-    public static String formatDuration(int progress, int duration, boolean isLong) {
-        int i = progress;
-        int i2 = duration;
-        int h = i2 / 3600;
-        int m = (i2 / 60) % 60;
-        int s = i2 % 60;
-        int ph = i / 3600;
-        int pm = (i / 60) % 60;
-        int ps = i % 60;
+    public static String formatDuration(int i, int i2, boolean z) {
+        int i3 = i2 / 3600;
+        int i4 = (i2 / 60) % 60;
+        int i5 = i2 % 60;
+        int i6 = i / 3600;
+        int i7 = (i / 60) % 60;
+        int i8 = i % 60;
         if (i2 == 0) {
-            if (ph != 0) {
-                return String.format(Locale.US, "%d:%02d:%02d / -:--", new Object[]{Integer.valueOf(ph), Integer.valueOf(pm), Integer.valueOf(ps)});
-            } else if (isLong) {
-                return String.format(Locale.US, "%02d:%02d / -:--", new Object[]{Integer.valueOf(pm), Integer.valueOf(ps)});
+            if (i6 != 0) {
+                return String.format(Locale.US, "%d:%02d:%02d / -:--", new Object[]{Integer.valueOf(i6), Integer.valueOf(i7), Integer.valueOf(i8)});
+            } else if (z) {
+                return String.format(Locale.US, "%02d:%02d / -:--", new Object[]{Integer.valueOf(i7), Integer.valueOf(i8)});
             } else {
-                return String.format(Locale.US, "%d:%02d / -:--", new Object[]{Integer.valueOf(pm), Integer.valueOf(ps)});
+                return String.format(Locale.US, "%d:%02d / -:--", new Object[]{Integer.valueOf(i7), Integer.valueOf(i8)});
             }
-        } else if (ph != 0 || h != 0) {
-            return String.format(Locale.US, "%d:%02d:%02d / %d:%02d:%02d", new Object[]{Integer.valueOf(ph), Integer.valueOf(pm), Integer.valueOf(ps), Integer.valueOf(h), Integer.valueOf(m), Integer.valueOf(s)});
-        } else if (isLong) {
-            return String.format(Locale.US, "%02d:%02d / %02d:%02d", new Object[]{Integer.valueOf(pm), Integer.valueOf(ps), Integer.valueOf(m), Integer.valueOf(s)});
+        } else if (i6 != 0 || i3 != 0) {
+            return String.format(Locale.US, "%d:%02d:%02d / %d:%02d:%02d", new Object[]{Integer.valueOf(i6), Integer.valueOf(i7), Integer.valueOf(i8), Integer.valueOf(i3), Integer.valueOf(i4), Integer.valueOf(i5)});
+        } else if (z) {
+            return String.format(Locale.US, "%02d:%02d / %02d:%02d", new Object[]{Integer.valueOf(i7), Integer.valueOf(i8), Integer.valueOf(i4), Integer.valueOf(i5)});
         } else {
-            return String.format(Locale.US, "%d:%02d / %d:%02d", new Object[]{Integer.valueOf(pm), Integer.valueOf(ps), Integer.valueOf(m), Integer.valueOf(s)});
+            return String.format(Locale.US, "%d:%02d / %d:%02d", new Object[]{Integer.valueOf(i7), Integer.valueOf(i8), Integer.valueOf(i4), Integer.valueOf(i5)});
         }
     }
 
-    public static String formatVideoDuration(int progress, int duration) {
-        int i = progress;
-        int i2 = duration;
-        int h = i2 / 3600;
-        int m = (i2 / 60) % 60;
-        int s = i2 % 60;
-        int ph = i / 3600;
-        int pm = (i / 60) % 60;
-        int ps = i % 60;
-        if (ph == 0 && h == 0) {
-            return String.format(Locale.US, "%02d:%02d / %02d:%02d", new Object[]{Integer.valueOf(pm), Integer.valueOf(ps), Integer.valueOf(m), Integer.valueOf(s)});
-        } else if (h == 0) {
-            return String.format(Locale.US, "%d:%02d:%02d / %02d:%02d", new Object[]{Integer.valueOf(ph), Integer.valueOf(pm), Integer.valueOf(ps), Integer.valueOf(m), Integer.valueOf(s)});
-        } else if (ph == 0) {
-            return String.format(Locale.US, "%02d:%02d / %d:%02d:%02d", new Object[]{Integer.valueOf(pm), Integer.valueOf(ps), Integer.valueOf(h), Integer.valueOf(m), Integer.valueOf(s)});
+    public static String formatVideoDuration(int i, int i2) {
+        int i3 = i2 / 3600;
+        int i4 = (i2 / 60) % 60;
+        int i5 = i2 % 60;
+        int i6 = i / 3600;
+        int i7 = (i / 60) % 60;
+        int i8 = i % 60;
+        if (i6 == 0 && i3 == 0) {
+            return String.format(Locale.US, "%02d:%02d / %02d:%02d", new Object[]{Integer.valueOf(i7), Integer.valueOf(i8), Integer.valueOf(i4), Integer.valueOf(i5)});
+        } else if (i3 == 0) {
+            return String.format(Locale.US, "%d:%02d:%02d / %02d:%02d", new Object[]{Integer.valueOf(i6), Integer.valueOf(i7), Integer.valueOf(i8), Integer.valueOf(i4), Integer.valueOf(i5)});
+        } else if (i6 == 0) {
+            return String.format(Locale.US, "%02d:%02d / %d:%02d:%02d", new Object[]{Integer.valueOf(i7), Integer.valueOf(i8), Integer.valueOf(i3), Integer.valueOf(i4), Integer.valueOf(i5)});
         } else {
-            return String.format(Locale.US, "%d:%02d:%02d / %d:%02d:%02d", new Object[]{Integer.valueOf(ph), Integer.valueOf(pm), Integer.valueOf(ps), Integer.valueOf(h), Integer.valueOf(m), Integer.valueOf(s)});
+            return String.format(Locale.US, "%d:%02d:%02d / %d:%02d:%02d", new Object[]{Integer.valueOf(i6), Integer.valueOf(i7), Integer.valueOf(i8), Integer.valueOf(i3), Integer.valueOf(i4), Integer.valueOf(i5)});
         }
     }
 
-    public static String formatCount(int count) {
-        if (count < 1000) {
-            return Integer.toString(count);
+    public static String formatCount(int i) {
+        if (i < 1000) {
+            return Integer.toString(i);
         }
-        ArrayList<String> strings = new ArrayList<>();
-        while (count != 0) {
-            int mod = count % 1000;
-            count /= 1000;
-            if (count > 0) {
-                strings.add(String.format(Locale.ENGLISH, "%03d", new Object[]{Integer.valueOf(mod)}));
+        ArrayList arrayList = new ArrayList();
+        while (i != 0) {
+            int i2 = i % 1000;
+            i /= 1000;
+            if (i > 0) {
+                arrayList.add(String.format(Locale.ENGLISH, "%03d", new Object[]{Integer.valueOf(i2)}));
             } else {
-                strings.add(Integer.toString(mod));
+                arrayList.add(Integer.toString(i2));
             }
         }
-        StringBuilder stringBuilder = new StringBuilder();
-        for (int i = strings.size() - 1; i >= 0; i--) {
-            stringBuilder.append(strings.get(i));
-            if (i != 0) {
-                stringBuilder.append(",");
+        StringBuilder sb = new StringBuilder();
+        for (int size = arrayList.size() - 1; size >= 0; size--) {
+            sb.append((String) arrayList.get(size));
+            if (size != 0) {
+                sb.append(",");
             }
         }
-        return stringBuilder.toString();
+        return sb.toString();
     }
 
-    public static String formatWholeNumber(int v, int dif) {
-        if (v == 0) {
+    public static String formatWholeNumber(int i, int i2) {
+        if (i == 0) {
             return "0";
         }
-        float num_ = (float) v;
-        int count = 0;
-        if (dif == 0) {
-            dif = v;
+        float f = (float) i;
+        if (i2 == 0) {
+            i2 = i;
         }
-        if (dif < 1000) {
-            return formatCount(v);
+        if (i2 < 1000) {
+            return formatCount(i);
         }
-        while (dif >= 1000 && count < numbersSignatureArray.length - 1) {
-            dif /= 1000;
-            num_ /= 1000.0f;
-            count++;
+        int i3 = 0;
+        while (i2 >= 1000 && i3 < numbersSignatureArray.length - 1) {
+            i2 /= 1000;
+            f /= 1000.0f;
+            i3++;
         }
-        if (((double) num_) < 0.1d) {
+        if (((double) f) < 0.1d) {
             return "0";
         }
-        if (num_ * 10.0f == ((float) ((int) (num_ * 10.0f)))) {
-            return String.format(Locale.ENGLISH, "%s%s", new Object[]{formatCount((int) num_), numbersSignatureArray[count]});
+        float f2 = f * 10.0f;
+        float f3 = (float) ((int) f2);
+        if (f2 == f3) {
+            return String.format(Locale.ENGLISH, "%s%s", new Object[]{formatCount((int) f), numbersSignatureArray[i3]});
         }
-        return String.format(Locale.ENGLISH, "%.1f%s", new Object[]{Float.valueOf(((float) ((int) (num_ * 10.0f))) / 10.0f), numbersSignatureArray[count]});
+        return String.format(Locale.ENGLISH, "%.1f%s", new Object[]{Float.valueOf(f3 / 10.0f), numbersSignatureArray[i3]});
     }
 
-    public static byte[] decodeQuotedPrintable(byte[] bytes) {
-        if (bytes == null) {
+    public static byte[] decodeQuotedPrintable(byte[] bArr) {
+        if (bArr == null) {
             return null;
         }
-        ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         int i = 0;
-        while (i < bytes.length) {
-            byte b = bytes[i];
+        while (i < bArr.length) {
+            byte b = bArr[i];
             if (b == 61) {
                 int i2 = i + 1;
                 try {
-                    int u = Character.digit((char) bytes[i2], 16);
+                    int digit = Character.digit((char) bArr[i2], 16);
                     i = i2 + 1;
-                    buffer.write((char) ((u << 4) + Character.digit((char) bytes[i], 16)));
+                    byteArrayOutputStream.write((char) ((digit << 4) + Character.digit((char) bArr[i], 16)));
                 } catch (Exception e) {
                     FileLog.e((Throwable) e);
                     return null;
                 }
             } else {
-                buffer.write(b);
+                byteArrayOutputStream.write(b);
             }
             i++;
         }
-        byte[] array = buffer.toByteArray();
+        byte[] byteArray = byteArrayOutputStream.toByteArray();
         try {
-            buffer.close();
+            byteArrayOutputStream.close();
         } catch (Exception e2) {
             FileLog.e((Throwable) e2);
         }
-        return array;
+        return byteArray;
     }
 
-    public static boolean copyFile(InputStream sourceFile, File destFile) throws IOException {
-        return copyFile(sourceFile, (OutputStream) new FileOutputStream(destFile));
+    public static boolean copyFile(InputStream inputStream, File file) throws IOException {
+        return copyFile(inputStream, (OutputStream) new FileOutputStream(file));
     }
 
-    public static boolean copyFile(InputStream sourceFile, OutputStream out) throws IOException {
-        byte[] buf = new byte[4096];
+    public static boolean copyFile(InputStream inputStream, OutputStream outputStream) throws IOException {
+        byte[] bArr = new byte[4096];
         while (true) {
-            int read = sourceFile.read(buf);
-            int len = read;
+            int read = inputStream.read(bArr);
             if (read > 0) {
                 Thread.yield();
-                out.write(buf, 0, len);
+                outputStream.write(bArr, 0, read);
             } else {
-                out.close();
+                outputStream.close();
                 return true;
             }
         }
     }
 
-    public static boolean copyFile(File sourceFile, File destFile) throws IOException {
-        FileOutputStream destination;
-        if (sourceFile.equals(destFile)) {
-            return true;
-        }
-        if (!destFile.exists()) {
-            destFile.createNewFile();
-        }
-        try {
-            FileInputStream source = new FileInputStream(sourceFile);
-            try {
-                destination = new FileOutputStream(destFile);
-                destination.getChannel().transferFrom(source.getChannel(), 0, source.getChannel().size());
-                destination.close();
-                source.close();
-                return true;
-            } catch (Throwable th) {
-                source.close();
-                throw th;
-            }
-        } catch (Exception e) {
-            FileLog.e((Throwable) e);
-            return false;
-        } catch (Throwable th2) {
-        }
-        throw th;
-    }
-
-    public static byte[] calcAuthKeyHash(byte[] auth_key) {
-        byte[] key_hash = new byte[16];
-        System.arraycopy(Utilities.computeSHA1(auth_key), 0, key_hash, 0, 16);
-        return key_hash;
-    }
-
-    public static void openDocument(MessageObject message, Activity activity, BaseFragment parentFragment) {
-        TLRPC.Document document;
-        File f;
-        String str;
-        String str2;
-        MessageObject messageObject = message;
-        Activity activity2 = activity;
-        BaseFragment baseFragment = parentFragment;
-        if (messageObject != null && (document = message.getDocument()) != null) {
-            File f2 = null;
-            String fileName = messageObject.messageOwner.media != null ? FileLoader.getAttachFileName(document) : "";
-            if (!(messageObject.messageOwner.attachPath == null || messageObject.messageOwner.attachPath.length() == 0)) {
-                f2 = new File(messageObject.messageOwner.attachPath);
-            }
-            if (f2 == null || (f2 != null && !f2.exists())) {
-                f = FileLoader.getPathToMessage(messageObject.messageOwner);
-            } else {
-                f = f2;
-            }
-            if (f != null && f.exists()) {
-                if (baseFragment == null || !f.getName().toLowerCase().endsWith("attheme")) {
-                    String realMimeType = null;
-                    try {
-                        Intent intent = new Intent("android.intent.action.VIEW");
-                        intent.setFlags(1);
-                        MimeTypeMap myMime = MimeTypeMap.getSingleton();
-                        int idx = fileName.lastIndexOf(46);
-                        if (idx != -1 && (realMimeType = myMime.getMimeTypeFromExtension(fileName.substring(idx + 1).toLowerCase())) == null && ((realMimeType = document.mime_type) == null || realMimeType.length() == 0)) {
-                            realMimeType = null;
-                        }
-                        if (Build.VERSION.SDK_INT >= 24) {
-                            Uri uriForFile = FileProvider.getUriForFile(activity2, "org.telegram.messenger.beta.provider", f);
-                            if (realMimeType != null) {
-                                str2 = realMimeType;
-                            } else {
-                                str2 = "text/plain";
-                            }
-                            intent.setDataAndType(uriForFile, str2);
-                        } else {
-                            Uri fromFile = Uri.fromFile(f);
-                            if (realMimeType != null) {
-                                str = realMimeType;
-                            } else {
-                                str = "text/plain";
-                            }
-                            intent.setDataAndType(fromFile, str);
-                        }
-                        if (realMimeType != null) {
-                            try {
-                                activity2.startActivityForResult(intent, 500);
-                            } catch (Exception e) {
-                                Exception exc = e;
-                                if (Build.VERSION.SDK_INT >= 24) {
-                                    intent.setDataAndType(FileProvider.getUriForFile(activity2, "org.telegram.messenger.beta.provider", f), "text/plain");
-                                } else {
-                                    intent.setDataAndType(Uri.fromFile(f), "text/plain");
-                                }
-                                activity2.startActivityForResult(intent, 500);
-                            }
-                        } else {
-                            activity2.startActivityForResult(intent, 500);
-                        }
-                    } catch (Exception e2) {
-                        if (activity2 != null) {
-                            AlertDialog.Builder builder = new AlertDialog.Builder((Context) activity2);
-                            builder.setTitle(LocaleController.getString("AppName", NUM));
-                            builder.setPositiveButton(LocaleController.getString("OK", NUM), (DialogInterface.OnClickListener) null);
-                            builder.setMessage(LocaleController.formatString("NoHandleAppInstalled", NUM, message.getDocument().mime_type));
-                            if (baseFragment != null) {
-                                baseFragment.showDialog(builder.create());
-                            } else {
-                                builder.show();
-                            }
-                        }
-                    }
-                } else {
-                    Theme.ThemeInfo themeInfo = Theme.applyThemeFile(f, message.getDocumentName(), (TLRPC.TL_theme) null, true);
-                    if (themeInfo != null) {
-                        baseFragment.presentFragment(new ThemePreviewActivity(themeInfo));
-                        return;
-                    }
-                    AlertDialog.Builder builder2 = new AlertDialog.Builder((Context) activity2);
-                    builder2.setTitle(LocaleController.getString("AppName", NUM));
-                    builder2.setMessage(LocaleController.getString("IncorrectTheme", NUM));
-                    builder2.setPositiveButton(LocaleController.getString("OK", NUM), (DialogInterface.OnClickListener) null);
-                    baseFragment.showDialog(builder2.create());
-                }
-            }
-        }
-    }
-
-    /*  JADX ERROR: JadxRuntimeException in pass: CodeShrinkVisitor
-        jadx.core.utils.exceptions.JadxRuntimeException: Don't wrap MOVE or CONST insns: 0x0031: MOVE  (r0v6 'realMimeType' java.lang.String) = (r13v0 'mimeType' java.lang.String)
-        	at jadx.core.dex.instructions.args.InsnArg.wrapArg(InsnArg.java:164)
-        	at jadx.core.dex.visitors.shrink.CodeShrinkVisitor.assignInline(CodeShrinkVisitor.java:133)
-        	at jadx.core.dex.visitors.shrink.CodeShrinkVisitor.checkInline(CodeShrinkVisitor.java:118)
-        	at jadx.core.dex.visitors.shrink.CodeShrinkVisitor.shrinkBlock(CodeShrinkVisitor.java:65)
-        	at jadx.core.dex.visitors.shrink.CodeShrinkVisitor.shrinkMethod(CodeShrinkVisitor.java:43)
-        	at jadx.core.dex.visitors.shrink.CodeShrinkVisitor.visit(CodeShrinkVisitor.java:35)
-        */
-    public static boolean openForView(java.io.File r11, java.lang.String r12, java.lang.String r13, android.app.Activity r14, org.telegram.ui.ActionBar.Theme.ResourcesProvider r15) {
+    /* JADX WARNING: Missing exception handler attribute for start block: B:20:0x003b */
+    /* JADX WARNING: Missing exception handler attribute for start block: B:25:0x0040 */
+    /* Code decompiled incorrectly, please refer to instructions dump. */
+    public static boolean copyFile(java.io.File r8, java.io.File r9) throws java.io.IOException {
         /*
-            if (r11 == 0) goto L_0x00a6
-            boolean r0 = r11.exists()
-            if (r0 == 0) goto L_0x00a6
-            r0 = 0
-            android.content.Intent r1 = new android.content.Intent
-            java.lang.String r2 = "android.intent.action.VIEW"
-            r1.<init>(r2)
-            r2 = 1
-            r1.setFlags(r2)
-            android.webkit.MimeTypeMap r3 = android.webkit.MimeTypeMap.getSingleton()
-            r4 = 46
-            int r4 = r12.lastIndexOf(r4)
-            r5 = -1
-            if (r4 == r5) goto L_0x003b
-            int r5 = r4 + 1
-            java.lang.String r5 = r12.substring(r5)
-            java.lang.String r6 = r5.toLowerCase()
-            java.lang.String r0 = r3.getMimeTypeFromExtension(r6)
-            if (r0 != 0) goto L_0x003b
-            r0 = r13
-            if (r0 == 0) goto L_0x003a
-            int r6 = r0.length()
-            if (r6 != 0) goto L_0x003b
-        L_0x003a:
-            r0 = 0
-        L_0x003b:
-            int r5 = android.os.Build.VERSION.SDK_INT
-            r6 = 26
-            if (r5 < r6) goto L_0x005f
-            if (r0 == 0) goto L_0x005f
-            java.lang.String r5 = "application/vnd.android.package-archive"
-            boolean r5 = r0.equals(r5)
-            if (r5 == 0) goto L_0x005f
-            android.content.Context r5 = org.telegram.messenger.ApplicationLoader.applicationContext
-            android.content.pm.PackageManager r5 = r5.getPackageManager()
-            boolean r5 = r5.canRequestPackageInstalls()
-            if (r5 != 0) goto L_0x005f
-            android.app.Dialog r5 = org.telegram.ui.Components.AlertsCreator.createApkRestrictedDialog(r14, r15)
-            r5.show()
-            return r2
-        L_0x005f:
-            int r5 = android.os.Build.VERSION.SDK_INT
-            java.lang.String r6 = "org.telegram.messenger.beta.provider"
-            r7 = 24
-            java.lang.String r8 = "text/plain"
-            if (r5 < r7) goto L_0x0076
-            android.net.Uri r5 = androidx.core.content.FileProvider.getUriForFile(r14, r6, r11)
-            if (r0 == 0) goto L_0x0071
-            r9 = r0
-            goto L_0x0072
-        L_0x0071:
-            r9 = r8
-        L_0x0072:
-            r1.setDataAndType(r5, r9)
-            goto L_0x0082
-        L_0x0076:
-            android.net.Uri r5 = android.net.Uri.fromFile(r11)
-            if (r0 == 0) goto L_0x007e
-            r9 = r0
-            goto L_0x007f
-        L_0x007e:
-            r9 = r8
-        L_0x007f:
-            r1.setDataAndType(r5, r9)
-        L_0x0082:
-            r5 = 500(0x1f4, float:7.0E-43)
-            if (r0 == 0) goto L_0x00a2
-            r14.startActivityForResult(r1, r5)     // Catch:{ Exception -> 0x008a }
-        L_0x0089:
-            goto L_0x00a5
-        L_0x008a:
+            boolean r0 = r8.equals(r9)
+            r1 = 1
+            if (r0 == 0) goto L_0x0008
+            return r1
+        L_0x0008:
+            boolean r0 = r9.exists()
+            if (r0 != 0) goto L_0x0011
+            r9.createNewFile()
+        L_0x0011:
+            java.io.FileInputStream r0 = new java.io.FileInputStream     // Catch:{ Exception -> 0x0041 }
+            r0.<init>(r8)     // Catch:{ Exception -> 0x0041 }
+            java.io.FileOutputStream r8 = new java.io.FileOutputStream     // Catch:{ all -> 0x003c }
+            r8.<init>(r9)     // Catch:{ all -> 0x003c }
+            java.nio.channels.FileChannel r2 = r8.getChannel()     // Catch:{ all -> 0x0037 }
+            java.nio.channels.FileChannel r3 = r0.getChannel()     // Catch:{ all -> 0x0037 }
+            r4 = 0
+            java.nio.channels.FileChannel r9 = r0.getChannel()     // Catch:{ all -> 0x0037 }
+            long r6 = r9.size()     // Catch:{ all -> 0x0037 }
+            r2.transferFrom(r3, r4, r6)     // Catch:{ all -> 0x0037 }
+            r8.close()     // Catch:{ all -> 0x003c }
+            r0.close()     // Catch:{ Exception -> 0x0041 }
+            return r1
+        L_0x0037:
             r9 = move-exception
-            int r10 = android.os.Build.VERSION.SDK_INT
-            if (r10 < r7) goto L_0x0097
-            android.net.Uri r6 = androidx.core.content.FileProvider.getUriForFile(r14, r6, r11)
-            r1.setDataAndType(r6, r8)
-            goto L_0x009e
-        L_0x0097:
-            android.net.Uri r6 = android.net.Uri.fromFile(r11)
-            r1.setDataAndType(r6, r8)
-        L_0x009e:
-            r14.startActivityForResult(r1, r5)
-            goto L_0x0089
-        L_0x00a2:
-            r14.startActivityForResult(r1, r5)
-        L_0x00a5:
-            return r2
-        L_0x00a6:
-            r0 = 0
-            return r0
+            r8.close()     // Catch:{ all -> 0x003b }
+        L_0x003b:
+            throw r9     // Catch:{ all -> 0x003c }
+        L_0x003c:
+            r8 = move-exception
+            r0.close()     // Catch:{ all -> 0x0040 }
+        L_0x0040:
+            throw r8     // Catch:{ Exception -> 0x0041 }
+        L_0x0041:
+            r8 = move-exception
+            org.telegram.messenger.FileLog.e((java.lang.Throwable) r8)
+            r8 = 0
+            return r8
+        */
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.AndroidUtilities.copyFile(java.io.File, java.io.File):boolean");
+    }
+
+    public static byte[] calcAuthKeyHash(byte[] bArr) {
+        byte[] bArr2 = new byte[16];
+        System.arraycopy(Utilities.computeSHA1(bArr), 0, bArr2, 0, 16);
+        return bArr2;
+    }
+
+    /* JADX WARNING: Code restructure failed: missing block: B:80:?, code lost:
+        return;
+     */
+    /* JADX WARNING: Exception block dominator not found, dom blocks: [] */
+    /* JADX WARNING: Missing exception handler attribute for start block: B:59:0x0100 */
+    /* JADX WARNING: Removed duplicated region for block: B:62:0x0104 A[Catch:{ Exception -> 0x011b }] */
+    /* JADX WARNING: Removed duplicated region for block: B:63:0x010c A[Catch:{ Exception -> 0x011b }] */
+    /* Code decompiled incorrectly, please refer to instructions dump. */
+    public static void openDocument(org.telegram.messenger.MessageObject r16, android.app.Activity r17, org.telegram.ui.ActionBar.BaseFragment r18) {
+        /*
+            r0 = r16
+            r1 = r17
+            r2 = r18
+            if (r0 != 0) goto L_0x0009
+            return
+        L_0x0009:
+            org.telegram.tgnet.TLRPC$Document r3 = r16.getDocument()
+            if (r3 != 0) goto L_0x0010
+            return
+        L_0x0010:
+            org.telegram.tgnet.TLRPC$Message r4 = r0.messageOwner
+            org.telegram.tgnet.TLRPC$MessageMedia r4 = r4.media
+            if (r4 == 0) goto L_0x001b
+            java.lang.String r4 = org.telegram.messenger.FileLoader.getAttachFileName(r3)
+            goto L_0x001d
+        L_0x001b:
+            java.lang.String r4 = ""
+        L_0x001d:
+            org.telegram.tgnet.TLRPC$Message r5 = r0.messageOwner
+            java.lang.String r5 = r5.attachPath
+            r6 = 0
+            if (r5 == 0) goto L_0x0034
+            int r5 = r5.length()
+            if (r5 == 0) goto L_0x0034
+            java.io.File r5 = new java.io.File
+            org.telegram.tgnet.TLRPC$Message r7 = r0.messageOwner
+            java.lang.String r7 = r7.attachPath
+            r5.<init>(r7)
+            goto L_0x0035
+        L_0x0034:
+            r5 = r6
+        L_0x0035:
+            if (r5 == 0) goto L_0x003d
+            boolean r7 = r5.exists()
+            if (r7 != 0) goto L_0x0043
+        L_0x003d:
+            org.telegram.tgnet.TLRPC$Message r5 = r0.messageOwner
+            java.io.File r5 = org.telegram.messenger.FileLoader.getPathToMessage(r5)
+        L_0x0043:
+            if (r5 == 0) goto L_0x0157
+            boolean r7 = r5.exists()
+            if (r7 == 0) goto L_0x0157
+            r7 = 2131626918(0x7f0e0ba6, float:1.8881086E38)
+            java.lang.String r8 = "OK"
+            r9 = 2131624316(0x7f0e017c, float:1.8875808E38)
+            java.lang.String r10 = "AppName"
+            r11 = 1
+            if (r2 == 0) goto L_0x00a4
+            java.lang.String r12 = r5.getName()
+            java.lang.String r12 = r12.toLowerCase()
+            java.lang.String r13 = "attheme"
+            boolean r12 = r12.endsWith(r13)
+            if (r12 == 0) goto L_0x00a4
+            java.lang.String r0 = r16.getDocumentName()
+            org.telegram.ui.ActionBar.Theme$ThemeInfo r0 = org.telegram.ui.ActionBar.Theme.applyThemeFile(r5, r0, r6, r11)
+            if (r0 == 0) goto L_0x007c
+            org.telegram.ui.ThemePreviewActivity r1 = new org.telegram.ui.ThemePreviewActivity
+            r1.<init>(r0)
+            r2.presentFragment(r1)
+            goto L_0x0157
+        L_0x007c:
+            org.telegram.ui.ActionBar.AlertDialog$Builder r0 = new org.telegram.ui.ActionBar.AlertDialog$Builder
+            r0.<init>((android.content.Context) r1)
+            java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r10, r9)
+            r0.setTitle(r1)
+            r1 = 2131626124(0x7f0e088c, float:1.8879475E38)
+            java.lang.String r3 = "IncorrectTheme"
+            java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r3, r1)
+            r0.setMessage(r1)
+            java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r8, r7)
+            r0.setPositiveButton(r1, r6)
+            org.telegram.ui.ActionBar.AlertDialog r0 = r0.create()
+            r2.showDialog(r0)
+            goto L_0x0157
+        L_0x00a4:
+            android.content.Intent r12 = new android.content.Intent     // Catch:{ Exception -> 0x011b }
+            java.lang.String r13 = "android.intent.action.VIEW"
+            r12.<init>(r13)     // Catch:{ Exception -> 0x011b }
+            r12.setFlags(r11)     // Catch:{ Exception -> 0x011b }
+            android.webkit.MimeTypeMap r13 = android.webkit.MimeTypeMap.getSingleton()     // Catch:{ Exception -> 0x011b }
+            r14 = 46
+            int r14 = r4.lastIndexOf(r14)     // Catch:{ Exception -> 0x011b }
+            r15 = -1
+            if (r14 == r15) goto L_0x00d4
+            int r14 = r14 + r11
+            java.lang.String r4 = r4.substring(r14)     // Catch:{ Exception -> 0x011b }
+            java.lang.String r4 = r4.toLowerCase()     // Catch:{ Exception -> 0x011b }
+            java.lang.String r4 = r13.getMimeTypeFromExtension(r4)     // Catch:{ Exception -> 0x011b }
+            if (r4 != 0) goto L_0x00d5
+            java.lang.String r4 = r3.mime_type     // Catch:{ Exception -> 0x011b }
+            if (r4 == 0) goto L_0x00d4
+            int r3 = r4.length()     // Catch:{ Exception -> 0x011b }
+            if (r3 != 0) goto L_0x00d5
+        L_0x00d4:
+            r4 = r6
+        L_0x00d5:
+            int r3 = android.os.Build.VERSION.SDK_INT     // Catch:{ Exception -> 0x011b }
+            java.lang.String r13 = "org.telegram.messenger.beta.provider"
+            r14 = 24
+            java.lang.String r15 = "text/plain"
+            if (r3 < r14) goto L_0x00ec
+            android.net.Uri r3 = androidx.core.content.FileProvider.getUriForFile(r1, r13, r5)     // Catch:{ Exception -> 0x011b }
+            if (r4 == 0) goto L_0x00e7
+            r11 = r4
+            goto L_0x00e8
+        L_0x00e7:
+            r11 = r15
+        L_0x00e8:
+            r12.setDataAndType(r3, r11)     // Catch:{ Exception -> 0x011b }
+            goto L_0x00f8
+        L_0x00ec:
+            android.net.Uri r3 = android.net.Uri.fromFile(r5)     // Catch:{ Exception -> 0x011b }
+            if (r4 == 0) goto L_0x00f4
+            r11 = r4
+            goto L_0x00f5
+        L_0x00f4:
+            r11 = r15
+        L_0x00f5:
+            r12.setDataAndType(r3, r11)     // Catch:{ Exception -> 0x011b }
+        L_0x00f8:
+            r3 = 500(0x1f4, float:7.0E-43)
+            if (r4 == 0) goto L_0x0117
+            r1.startActivityForResult(r12, r3)     // Catch:{ Exception -> 0x0100 }
+            goto L_0x0157
+        L_0x0100:
+            int r4 = android.os.Build.VERSION.SDK_INT     // Catch:{ Exception -> 0x011b }
+            if (r4 < r14) goto L_0x010c
+            android.net.Uri r4 = androidx.core.content.FileProvider.getUriForFile(r1, r13, r5)     // Catch:{ Exception -> 0x011b }
+            r12.setDataAndType(r4, r15)     // Catch:{ Exception -> 0x011b }
+            goto L_0x0113
+        L_0x010c:
+            android.net.Uri r4 = android.net.Uri.fromFile(r5)     // Catch:{ Exception -> 0x011b }
+            r12.setDataAndType(r4, r15)     // Catch:{ Exception -> 0x011b }
+        L_0x0113:
+            r1.startActivityForResult(r12, r3)     // Catch:{ Exception -> 0x011b }
+            goto L_0x0157
+        L_0x0117:
+            r1.startActivityForResult(r12, r3)     // Catch:{ Exception -> 0x011b }
+            goto L_0x0157
+        L_0x011b:
+            if (r1 != 0) goto L_0x011f
+            return
+        L_0x011f:
+            org.telegram.ui.ActionBar.AlertDialog$Builder r3 = new org.telegram.ui.ActionBar.AlertDialog$Builder
+            r3.<init>((android.content.Context) r1)
+            java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r10, r9)
+            r3.setTitle(r1)
+            java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r8, r7)
+            r3.setPositiveButton(r1, r6)
+            r1 = 2131626675(0x7f0e0ab3, float:1.8880593E38)
+            r4 = 1
+            java.lang.Object[] r4 = new java.lang.Object[r4]
+            r5 = 0
+            org.telegram.tgnet.TLRPC$Document r0 = r16.getDocument()
+            java.lang.String r0 = r0.mime_type
+            r4[r5] = r0
+            java.lang.String r0 = "NoHandleAppInstalled"
+            java.lang.String r0 = org.telegram.messenger.LocaleController.formatString(r0, r1, r4)
+            r3.setMessage(r0)
+            if (r2 == 0) goto L_0x0154
+            org.telegram.ui.ActionBar.AlertDialog r0 = r3.create()
+            r2.showDialog(r0)
+            goto L_0x0157
+        L_0x0154:
+            r3.show()
+        L_0x0157:
+            return
+        */
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.AndroidUtilities.openDocument(org.telegram.messenger.MessageObject, android.app.Activity, org.telegram.ui.ActionBar.BaseFragment):void");
+    }
+
+    /* JADX WARNING: Code restructure failed: missing block: B:9:0x0036, code lost:
+        if (r8.length() != 0) goto L_0x003c;
+     */
+    /* JADX WARNING: Removed duplicated region for block: B:23:0x0068  */
+    /* JADX WARNING: Removed duplicated region for block: B:28:0x0075  */
+    /* JADX WARNING: Removed duplicated region for block: B:35:0x0085 A[SYNTHETIC, Splitter:B:35:0x0085] */
+    /* JADX WARNING: Removed duplicated region for block: B:43:0x00a0  */
+    /* Code decompiled incorrectly, please refer to instructions dump. */
+    public static boolean openForView(java.io.File r6, java.lang.String r7, java.lang.String r8, android.app.Activity r9, org.telegram.ui.ActionBar.Theme.ResourcesProvider r10) {
+        /*
+            if (r6 == 0) goto L_0x00a4
+            boolean r0 = r6.exists()
+            if (r0 == 0) goto L_0x00a4
+            android.content.Intent r0 = new android.content.Intent
+            java.lang.String r1 = "android.intent.action.VIEW"
+            r0.<init>(r1)
+            r1 = 1
+            r0.setFlags(r1)
+            android.webkit.MimeTypeMap r2 = android.webkit.MimeTypeMap.getSingleton()
+            r3 = 46
+            int r3 = r7.lastIndexOf(r3)
+            r4 = -1
+            r5 = 0
+            if (r3 == r4) goto L_0x003b
+            int r3 = r3 + r1
+            java.lang.String r7 = r7.substring(r3)
+            java.lang.String r7 = r7.toLowerCase()
+            java.lang.String r7 = r2.getMimeTypeFromExtension(r7)
+            if (r7 != 0) goto L_0x0039
+            if (r8 == 0) goto L_0x003b
+            int r7 = r8.length()
+            if (r7 != 0) goto L_0x003c
+            goto L_0x003b
+        L_0x0039:
+            r8 = r7
+            goto L_0x003c
+        L_0x003b:
+            r8 = r5
+        L_0x003c:
+            int r7 = android.os.Build.VERSION.SDK_INT
+            r2 = 26
+            if (r7 < r2) goto L_0x0060
+            if (r8 == 0) goto L_0x0060
+            java.lang.String r2 = "application/vnd.android.package-archive"
+            boolean r2 = r8.equals(r2)
+            if (r2 == 0) goto L_0x0060
+            android.content.Context r2 = org.telegram.messenger.ApplicationLoader.applicationContext
+            android.content.pm.PackageManager r2 = r2.getPackageManager()
+            boolean r2 = r2.canRequestPackageInstalls()
+            if (r2 != 0) goto L_0x0060
+            android.app.Dialog r6 = org.telegram.ui.Components.AlertsCreator.createApkRestrictedDialog(r9, r10)
+            r6.show()
+            return r1
+        L_0x0060:
+            java.lang.String r10 = "org.telegram.messenger.beta.provider"
+            r2 = 24
+            java.lang.String r3 = "text/plain"
+            if (r7 < r2) goto L_0x0075
+            android.net.Uri r7 = androidx.core.content.FileProvider.getUriForFile(r9, r10, r6)
+            if (r8 == 0) goto L_0x0070
+            r4 = r8
+            goto L_0x0071
+        L_0x0070:
+            r4 = r3
+        L_0x0071:
+            r0.setDataAndType(r7, r4)
+            goto L_0x0081
+        L_0x0075:
+            android.net.Uri r7 = android.net.Uri.fromFile(r6)
+            if (r8 == 0) goto L_0x007d
+            r4 = r8
+            goto L_0x007e
+        L_0x007d:
+            r4 = r3
+        L_0x007e:
+            r0.setDataAndType(r7, r4)
+        L_0x0081:
+            r7 = 500(0x1f4, float:7.0E-43)
+            if (r8 == 0) goto L_0x00a0
+            r9.startActivityForResult(r0, r7)     // Catch:{ Exception -> 0x0089 }
+            goto L_0x00a3
+        L_0x0089:
+            int r8 = android.os.Build.VERSION.SDK_INT
+            if (r8 < r2) goto L_0x0095
+            android.net.Uri r6 = androidx.core.content.FileProvider.getUriForFile(r9, r10, r6)
+            r0.setDataAndType(r6, r3)
+            goto L_0x009c
+        L_0x0095:
+            android.net.Uri r6 = android.net.Uri.fromFile(r6)
+            r0.setDataAndType(r6, r3)
+        L_0x009c:
+            r9.startActivityForResult(r0, r7)
+            goto L_0x00a3
+        L_0x00a0:
+            r9.startActivityForResult(r0, r7)
+        L_0x00a3:
+            return r1
+        L_0x00a4:
+            r6 = 0
+            return r6
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.AndroidUtilities.openForView(java.io.File, java.lang.String, java.lang.String, android.app.Activity, org.telegram.ui.ActionBar.Theme$ResourcesProvider):boolean");
     }
 
-    public static boolean openForView(MessageObject message, Activity activity, Theme.ResourcesProvider resourcesProvider) {
-        File f = null;
-        if (!(message.messageOwner.attachPath == null || message.messageOwner.attachPath.length() == 0)) {
-            f = new File(message.messageOwner.attachPath);
+    public static boolean openForView(MessageObject messageObject, Activity activity, Theme.ResourcesProvider resourcesProvider) {
+        String str = messageObject.messageOwner.attachPath;
+        String str2 = null;
+        File file = (str == null || str.length() == 0) ? null : new File(messageObject.messageOwner.attachPath);
+        if (file == null || !file.exists()) {
+            file = FileLoader.getPathToMessage(messageObject.messageOwner);
         }
-        if (f == null || !f.exists()) {
-            f = FileLoader.getPathToMessage(message.messageOwner);
+        int i = messageObject.type;
+        if (i == 9 || i == 0) {
+            str2 = messageObject.getMimeType();
         }
-        return openForView(f, message.getFileName(), (message.type == 9 || message.type == 0) ? message.getMimeType() : null, activity, resourcesProvider);
+        return openForView(file, messageObject.getFileName(), str2, activity, resourcesProvider);
     }
 
-    public static boolean openForView(TLRPC.Document document, boolean forceCache, Activity activity) {
-        return openForView(FileLoader.getPathToAttach(document, true), FileLoader.getAttachFileName(document), document.mime_type, activity, (Theme.ResourcesProvider) null);
+    public static boolean openForView(TLRPC$Document tLRPC$Document, boolean z, Activity activity) {
+        return openForView(FileLoader.getPathToAttach(tLRPC$Document, true), FileLoader.getAttachFileName(tLRPC$Document), tLRPC$Document.mime_type, activity, (Theme.ResourcesProvider) null);
     }
 
-    public static SpannableStringBuilder formatSpannableSimple(String format, CharSequence... cs) {
-        return formatSpannable(format, AndroidUtilities$$ExternalSyntheticLambda1.INSTANCE, cs);
+    public static SpannableStringBuilder formatSpannableSimple(String str, CharSequence... charSequenceArr) {
+        return formatSpannable(str, AndroidUtilities$$ExternalSyntheticLambda10.INSTANCE, charSequenceArr);
     }
 
-    static /* synthetic */ String lambda$formatSpannableSimple$5(Integer i) {
-        return "%s";
-    }
-
-    public static SpannableStringBuilder formatSpannable(String format, CharSequence... cs) {
-        if (format.contains("%s")) {
-            return formatSpannableSimple(format, cs);
+    public static SpannableStringBuilder formatSpannable(String str, CharSequence... charSequenceArr) {
+        if (str.contains("%s")) {
+            return formatSpannableSimple(str, charSequenceArr);
         }
-        return formatSpannable(format, AndroidUtilities$$ExternalSyntheticLambda11.INSTANCE, cs);
+        return formatSpannable(str, AndroidUtilities$$ExternalSyntheticLambda9.INSTANCE, charSequenceArr);
     }
 
-    static /* synthetic */ String lambda$formatSpannable$6(Integer i) {
-        return "%" + (i.intValue() + 1) + "$s";
+    /* access modifiers changed from: private */
+    public static /* synthetic */ String lambda$formatSpannable$6(Integer num) {
+        return "%" + (num.intValue() + 1) + "$s";
     }
 
-    public static SpannableStringBuilder formatSpannable(String format, GenericProvider<Integer, String> keysProvider, CharSequence... cs) {
-        SpannableStringBuilder stringBuilder = new SpannableStringBuilder(format);
-        for (int i = 0; i < cs.length; i++) {
-            String key = keysProvider.provide(Integer.valueOf(i));
-            int j = format.indexOf(key);
-            if (j != -1) {
-                stringBuilder.replace(j, key.length() + j, cs[i]);
-                format = format.substring(0, j) + cs[i].toString() + format.substring(key.length() + j);
+    public static SpannableStringBuilder formatSpannable(String str, GenericProvider<Integer, String> genericProvider, CharSequence... charSequenceArr) {
+        SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(str);
+        for (int i = 0; i < charSequenceArr.length; i++) {
+            String provide = genericProvider.provide(Integer.valueOf(i));
+            int indexOf = str.indexOf(provide);
+            if (indexOf != -1) {
+                spannableStringBuilder.replace(indexOf, provide.length() + indexOf, charSequenceArr[i]);
+                str = str.substring(0, indexOf) + charSequenceArr[i].toString() + str.substring(indexOf + provide.length());
             }
         }
-        return stringBuilder;
+        return spannableStringBuilder;
     }
 
-    public static CharSequence replaceTwoNewLinesToOne(CharSequence original) {
-        char[] buf = new char[2];
-        if (original instanceof StringBuilder) {
-            StringBuilder stringBuilder = (StringBuilder) original;
-            int a = 0;
-            int N = original.length();
-            while (a < N - 2) {
-                stringBuilder.getChars(a, a + 2, buf, 0);
-                if (buf[0] == 10 && buf[1] == 10) {
-                    stringBuilder = stringBuilder.replace(a, a + 2, "\n");
-                    a--;
-                    N--;
+    public static CharSequence replaceTwoNewLinesToOne(CharSequence charSequence) {
+        char[] cArr = new char[2];
+        if (charSequence instanceof StringBuilder) {
+            StringBuilder sb = (StringBuilder) charSequence;
+            int length = charSequence.length();
+            int i = 0;
+            while (i < length - 2) {
+                int i2 = i + 2;
+                sb.getChars(i, i2, cArr, 0);
+                if (cArr[0] == 10 && cArr[1] == 10) {
+                    sb = sb.replace(i, i2, "\n");
+                    i--;
+                    length--;
                 }
-                a++;
+                i++;
             }
-            return original;
-        } else if (!(original instanceof SpannableStringBuilder)) {
-            return original.toString().replace("\n\n", "\n");
+            return charSequence;
+        } else if (!(charSequence instanceof SpannableStringBuilder)) {
+            return charSequence.toString().replace("\n\n", "\n");
         } else {
-            SpannableStringBuilder stringBuilder2 = (SpannableStringBuilder) original;
-            int a2 = 0;
-            int N2 = original.length();
-            while (a2 < N2 - 2) {
-                stringBuilder2.getChars(a2, a2 + 2, buf, 0);
-                if (buf[0] == 10 && buf[1] == 10) {
-                    stringBuilder2 = stringBuilder2.replace(a2, a2 + 2, "\n");
-                    a2--;
-                    N2--;
+            SpannableStringBuilder spannableStringBuilder = (SpannableStringBuilder) charSequence;
+            int length2 = charSequence.length();
+            int i3 = 0;
+            while (i3 < length2 - 2) {
+                int i4 = i3 + 2;
+                spannableStringBuilder.getChars(i3, i4, cArr, 0);
+                if (cArr[0] == 10 && cArr[1] == 10) {
+                    spannableStringBuilder = spannableStringBuilder.replace(i3, i4, "\n");
+                    i3--;
+                    length2--;
                 }
-                a2++;
+                i3++;
             }
-            return original;
+            return charSequence;
         }
     }
 
-    public static CharSequence replaceNewLines(CharSequence original) {
-        if (original instanceof StringBuilder) {
-            StringBuilder stringBuilder = (StringBuilder) original;
-            int N = original.length();
-            for (int a = 0; a < N; a++) {
-                if (original.charAt(a) == 10) {
-                    stringBuilder.setCharAt(a, ' ');
+    public static CharSequence replaceNewLines(CharSequence charSequence) {
+        int i = 0;
+        if (charSequence instanceof StringBuilder) {
+            StringBuilder sb = (StringBuilder) charSequence;
+            int length = charSequence.length();
+            while (i < length) {
+                if (charSequence.charAt(i) == 10) {
+                    sb.setCharAt(i, ' ');
                 }
+                i++;
             }
-            return original;
-        } else if (!(original instanceof SpannableStringBuilder)) {
-            return original.toString().replace(10, ' ');
+            return charSequence;
+        } else if (!(charSequence instanceof SpannableStringBuilder)) {
+            return charSequence.toString().replace(10, ' ');
         } else {
-            SpannableStringBuilder stringBuilder2 = (SpannableStringBuilder) original;
-            int N2 = original.length();
-            for (int a2 = 0; a2 < N2; a2++) {
-                if (original.charAt(a2) == 10) {
-                    stringBuilder2.replace(a2, a2 + 1, " ");
+            SpannableStringBuilder spannableStringBuilder = (SpannableStringBuilder) charSequence;
+            int length2 = charSequence.length();
+            while (i < length2) {
+                if (charSequence.charAt(i) == 10) {
+                    spannableStringBuilder.replace(i, i + 1, " ");
                 }
+                i++;
             }
-            return original;
+            return charSequence;
         }
     }
 
-    public static boolean openForView(TLObject media, Activity activity) {
-        String str;
-        String str2;
-        if (media == null || activity == null) {
-            return false;
-        }
-        String fileName = FileLoader.getAttachFileName(media);
-        File f = FileLoader.getPathToAttach(media, true);
-        if (f == null || !f.exists()) {
-            return false;
-        }
-        String realMimeType = null;
-        Intent intent = new Intent("android.intent.action.VIEW");
-        intent.setFlags(1);
-        MimeTypeMap myMime = MimeTypeMap.getSingleton();
-        int idx = fileName.lastIndexOf(46);
-        if (idx != -1 && (realMimeType = myMime.getMimeTypeFromExtension(fileName.substring(idx + 1).toLowerCase())) == null) {
-            if (media instanceof TLRPC.TL_document) {
-                realMimeType = ((TLRPC.TL_document) media).mime_type;
-            }
-            if (realMimeType == null || realMimeType.length() == 0) {
-                realMimeType = null;
-            }
-        }
-        if (Build.VERSION.SDK_INT >= 24) {
-            Uri uriForFile = FileProvider.getUriForFile(activity, "org.telegram.messenger.beta.provider", f);
-            if (realMimeType != null) {
-                str2 = realMimeType;
-            } else {
-                str2 = "text/plain";
-            }
-            intent.setDataAndType(uriForFile, str2);
-        } else {
-            Uri fromFile = Uri.fromFile(f);
-            if (realMimeType != null) {
-                str = realMimeType;
-            } else {
-                str = "text/plain";
-            }
-            intent.setDataAndType(fromFile, str);
-        }
-        if (realMimeType != null) {
-            try {
-                activity.startActivityForResult(intent, 500);
-            } catch (Exception e) {
-                if (Build.VERSION.SDK_INT >= 24) {
-                    intent.setDataAndType(FileProvider.getUriForFile(activity, "org.telegram.messenger.beta.provider", f), "text/plain");
-                } else {
-                    intent.setDataAndType(Uri.fromFile(f), "text/plain");
-                }
-                activity.startActivityForResult(intent, 500);
-            }
-        } else {
-            activity.startActivityForResult(intent, 500);
-        }
-        return true;
+    /* JADX WARNING: Code restructure failed: missing block: B:16:0x004d, code lost:
+        if (r1.length() != 0) goto L_0x0050;
+     */
+    /* Code decompiled incorrectly, please refer to instructions dump. */
+    public static boolean openForView(org.telegram.tgnet.TLObject r8, android.app.Activity r9) {
+        /*
+            r0 = 0
+            if (r8 == 0) goto L_0x0097
+            if (r9 != 0) goto L_0x0007
+            goto L_0x0097
+        L_0x0007:
+            java.lang.String r1 = org.telegram.messenger.FileLoader.getAttachFileName(r8)
+            r2 = 1
+            java.io.File r3 = org.telegram.messenger.FileLoader.getPathToAttach(r8, r2)
+            if (r3 == 0) goto L_0x0097
+            boolean r4 = r3.exists()
+            if (r4 == 0) goto L_0x0097
+            android.content.Intent r0 = new android.content.Intent
+            java.lang.String r4 = "android.intent.action.VIEW"
+            r0.<init>(r4)
+            r0.setFlags(r2)
+            android.webkit.MimeTypeMap r4 = android.webkit.MimeTypeMap.getSingleton()
+            r5 = 46
+            int r5 = r1.lastIndexOf(r5)
+            r6 = -1
+            r7 = 0
+            if (r5 == r6) goto L_0x0051
+            int r5 = r5 + r2
+            java.lang.String r1 = r1.substring(r5)
+            java.lang.String r1 = r1.toLowerCase()
+            java.lang.String r1 = r4.getMimeTypeFromExtension(r1)
+            if (r1 != 0) goto L_0x0050
+            boolean r4 = r8 instanceof org.telegram.tgnet.TLRPC$TL_document
+            if (r4 == 0) goto L_0x0047
+            org.telegram.tgnet.TLRPC$TL_document r8 = (org.telegram.tgnet.TLRPC$TL_document) r8
+            java.lang.String r1 = r8.mime_type
+        L_0x0047:
+            if (r1 == 0) goto L_0x0051
+            int r8 = r1.length()
+            if (r8 != 0) goto L_0x0050
+            goto L_0x0051
+        L_0x0050:
+            r7 = r1
+        L_0x0051:
+            int r8 = android.os.Build.VERSION.SDK_INT
+            java.lang.String r1 = "org.telegram.messenger.beta.provider"
+            r4 = 24
+            java.lang.String r5 = "text/plain"
+            if (r8 < r4) goto L_0x0068
+            android.net.Uri r8 = androidx.core.content.FileProvider.getUriForFile(r9, r1, r3)
+            if (r7 == 0) goto L_0x0063
+            r6 = r7
+            goto L_0x0064
+        L_0x0063:
+            r6 = r5
+        L_0x0064:
+            r0.setDataAndType(r8, r6)
+            goto L_0x0074
+        L_0x0068:
+            android.net.Uri r8 = android.net.Uri.fromFile(r3)
+            if (r7 == 0) goto L_0x0070
+            r6 = r7
+            goto L_0x0071
+        L_0x0070:
+            r6 = r5
+        L_0x0071:
+            r0.setDataAndType(r8, r6)
+        L_0x0074:
+            r8 = 500(0x1f4, float:7.0E-43)
+            if (r7 == 0) goto L_0x0093
+            r9.startActivityForResult(r0, r8)     // Catch:{ Exception -> 0x007c }
+            goto L_0x0096
+        L_0x007c:
+            int r6 = android.os.Build.VERSION.SDK_INT
+            if (r6 < r4) goto L_0x0088
+            android.net.Uri r1 = androidx.core.content.FileProvider.getUriForFile(r9, r1, r3)
+            r0.setDataAndType(r1, r5)
+            goto L_0x008f
+        L_0x0088:
+            android.net.Uri r1 = android.net.Uri.fromFile(r3)
+            r0.setDataAndType(r1, r5)
+        L_0x008f:
+            r9.startActivityForResult(r0, r8)
+            goto L_0x0096
+        L_0x0093:
+            r9.startActivityForResult(r0, r8)
+        L_0x0096:
+            return r2
+        L_0x0097:
+            return r0
+        */
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.AndroidUtilities.openForView(org.telegram.tgnet.TLObject, android.app.Activity):boolean");
     }
 
-    public static boolean isBannedForever(TLRPC.TL_chatBannedRights rights) {
-        return rights == null || Math.abs(((long) rights.until_date) - (System.currentTimeMillis() / 1000)) > NUM;
+    public static boolean isBannedForever(TLRPC$TL_chatBannedRights tLRPC$TL_chatBannedRights) {
+        return tLRPC$TL_chatBannedRights == null || Math.abs(((long) tLRPC$TL_chatBannedRights.until_date) - (System.currentTimeMillis() / 1000)) > NUM;
     }
 
-    public static void setRectToRect(Matrix matrix, RectF src, RectF dst, int rotation, boolean translate) {
-        float sy;
-        float sx;
-        float ty;
-        float tx;
-        float diff;
-        boolean xLarger = false;
-        if (rotation == 90 || rotation == 270) {
-            sx = dst.height() / src.width();
-            sy = dst.width() / src.height();
+    public static void setRectToRect(Matrix matrix, RectF rectF, RectF rectF2, int i, boolean z) {
+        float f;
+        float f2;
+        float f3;
+        boolean z2;
+        float f4;
+        float f5;
+        float f6;
+        float f7;
+        if (i == 90 || i == 270) {
+            f3 = rectF2.height() / rectF.width();
+            f2 = rectF2.width();
+            f = rectF.height();
         } else {
-            sx = dst.width() / src.width();
-            sy = dst.height() / src.height();
+            f3 = rectF2.width() / rectF.width();
+            f2 = rectF2.height();
+            f = rectF.height();
         }
-        if (sx < sy) {
-            sx = sy;
-            xLarger = true;
+        float f8 = f2 / f;
+        if (f3 < f8) {
+            f3 = f8;
+            z2 = true;
         } else {
-            sy = sx;
+            z2 = false;
         }
-        if (translate) {
-            matrix.setTranslate(dst.left, dst.top);
+        if (z) {
+            matrix.setTranslate(rectF2.left, rectF2.top);
         }
-        if (rotation == 90) {
+        if (i == 90) {
             matrix.preRotate(90.0f);
-            matrix.preTranslate(0.0f, -dst.width());
-        } else if (rotation == 180) {
+            matrix.preTranslate(0.0f, -rectF2.width());
+        } else if (i == 180) {
             matrix.preRotate(180.0f);
-            matrix.preTranslate(-dst.width(), -dst.height());
-        } else if (rotation == 270) {
+            matrix.preTranslate(-rectF2.width(), -rectF2.height());
+        } else if (i == 270) {
             matrix.preRotate(270.0f);
-            matrix.preTranslate(-dst.height(), 0.0f);
+            matrix.preTranslate(-rectF2.height(), 0.0f);
         }
-        if (translate) {
-            tx = (-src.left) * sx;
-            ty = (-src.top) * sy;
+        if (z) {
+            f4 = (-rectF.left) * f3;
+            f5 = (-rectF.top) * f3;
         } else {
-            tx = dst.left - (src.left * sx);
-            ty = dst.top - (src.top * sy);
+            f4 = rectF2.left - (rectF.left * f3);
+            f5 = rectF2.top - (rectF.top * f3);
         }
-        if (xLarger) {
-            diff = dst.width() - (src.width() * sy);
+        if (z2) {
+            f6 = rectF2.width();
+            f7 = rectF.width();
         } else {
-            diff = dst.height() - (src.height() * sy);
+            f6 = rectF2.height();
+            f7 = rectF.height();
         }
-        float diff2 = diff / 2.0f;
-        if (xLarger) {
-            tx += diff2;
+        float f9 = (f6 - (f7 * f3)) / 2.0f;
+        if (z2) {
+            f4 += f9;
         } else {
-            ty += diff2;
+            f5 += f9;
         }
-        matrix.preScale(sx, sy);
-        if (translate) {
-            matrix.preTranslate(tx, ty);
+        matrix.preScale(f3, f3);
+        if (z) {
+            matrix.preTranslate(f4, f5);
         }
     }
 
@@ -3663,200 +4044,178 @@ public class AndroidUtilities {
         return accessibilityManager.isEnabled() && accessibilityManager.isTouchExplorationEnabled();
     }
 
-    /* JADX WARNING: Code restructure failed: missing block: B:30:0x006f, code lost:
-        if (r11.startsWith("tg://socks") == false) goto L_0x0120;
+    /* JADX WARNING: Code restructure failed: missing block: B:30:0x0063, code lost:
+        if (r3.startsWith("tg://socks") == false) goto L_0x00fe;
      */
-    /* JADX WARNING: Removed duplicated region for block: B:63:0x0130  */
-    /* JADX WARNING: Removed duplicated region for block: B:78:? A[RETURN, SYNTHETIC] */
+    /* JADX WARNING: Removed duplicated region for block: B:60:0x0112  */
+    /* JADX WARNING: Removed duplicated region for block: B:61:0x0114  */
+    /* JADX WARNING: Removed duplicated region for block: B:63:0x0117  */
+    /* JADX WARNING: Removed duplicated region for block: B:64:0x0119  */
+    /* JADX WARNING: Removed duplicated region for block: B:66:0x011c  */
+    /* JADX WARNING: Removed duplicated region for block: B:67:0x011e  */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    public static boolean handleProxyIntent(android.app.Activity r19, android.content.Intent r20) {
+    public static boolean handleProxyIntent(android.app.Activity r16, android.content.Intent r17) {
         /*
             java.lang.String r0 = "tg:proxy"
             java.lang.String r1 = "tg://telegram.org"
             r2 = 0
-            if (r20 != 0) goto L_0x0008
+            if (r17 != 0) goto L_0x0008
             return r2
         L_0x0008:
-            int r3 = r20.getFlags()     // Catch:{ Exception -> 0x0148 }
+            int r3 = r17.getFlags()     // Catch:{ Exception -> 0x0125 }
             r4 = 1048576(0x100000, float:1.469368E-39)
             r3 = r3 & r4
             if (r3 == 0) goto L_0x0012
             return r2
         L_0x0012:
-            android.net.Uri r3 = r20.getData()     // Catch:{ Exception -> 0x0148 }
-            if (r3 == 0) goto L_0x0147
-            r4 = 0
-            r5 = 0
+            android.net.Uri r3 = r17.getData()     // Catch:{ Exception -> 0x0125 }
+            if (r3 == 0) goto L_0x0125
+            java.lang.String r4 = r3.getScheme()     // Catch:{ Exception -> 0x0125 }
+            r5 = 1
             r6 = 0
-            r7 = 0
-            r8 = 0
-            java.lang.String r9 = r3.getScheme()     // Catch:{ Exception -> 0x0148 }
-            if (r9 == 0) goto L_0x011c
-            java.lang.String r11 = "http"
-            boolean r11 = r9.equals(r11)     // Catch:{ Exception -> 0x0148 }
-            java.lang.String r12 = "secret"
-            java.lang.String r13 = "pass"
-            java.lang.String r14 = "user"
-            java.lang.String r15 = "port"
-            java.lang.String r2 = "server"
-            if (r11 != 0) goto L_0x00b5
-            java.lang.String r11 = "https"
-            boolean r11 = r9.equals(r11)     // Catch:{ Exception -> 0x0148 }
-            if (r11 == 0) goto L_0x0043
-            r17 = r4
-            r18 = r5
-            goto L_0x00b9
-        L_0x0043:
-            java.lang.String r11 = "tg"
-            boolean r11 = r9.equals(r11)     // Catch:{ Exception -> 0x0148 }
-            if (r11 == 0) goto L_0x00af
-            java.lang.String r11 = r3.toString()     // Catch:{ Exception -> 0x0148 }
-            boolean r16 = r11.startsWith(r0)     // Catch:{ Exception -> 0x0148 }
-            java.lang.String r10 = "tg://socks"
-            r17 = r4
-            java.lang.String r4 = "tg:socks"
-            r18 = r5
-            java.lang.String r5 = "tg://proxy"
-            if (r16 != 0) goto L_0x0071
-            boolean r16 = r11.startsWith(r5)     // Catch:{ Exception -> 0x0148 }
-            if (r16 != 0) goto L_0x0071
-            boolean r16 = r11.startsWith(r4)     // Catch:{ Exception -> 0x0148 }
-            if (r16 != 0) goto L_0x0071
-            boolean r16 = r11.startsWith(r10)     // Catch:{ Exception -> 0x0148 }
-            if (r16 == 0) goto L_0x0120
-        L_0x0071:
-            java.lang.String r0 = r11.replace(r0, r1)     // Catch:{ Exception -> 0x0148 }
-            java.lang.String r0 = r0.replace(r5, r1)     // Catch:{ Exception -> 0x0148 }
-            java.lang.String r0 = r0.replace(r10, r1)     // Catch:{ Exception -> 0x0148 }
-            java.lang.String r0 = r0.replace(r4, r1)     // Catch:{ Exception -> 0x0148 }
-            android.net.Uri r1 = android.net.Uri.parse(r0)     // Catch:{ Exception -> 0x0148 }
-            r3 = r1
-            java.lang.String r1 = r3.getQueryParameter(r2)     // Catch:{ Exception -> 0x0148 }
-            boolean r2 = checkHostForPunycode(r1)     // Catch:{ Exception -> 0x0148 }
-            if (r2 == 0) goto L_0x0098
-            r2 = 1
-            java.lang.String r4 = java.net.IDN.toASCII(r1, r2)     // Catch:{ Exception -> 0x0148 }
-            r1 = r4
-            r7 = r1
-            goto L_0x0099
-        L_0x0098:
-            r7 = r1
-        L_0x0099:
-            java.lang.String r1 = r3.getQueryParameter(r15)     // Catch:{ Exception -> 0x0148 }
+            if (r4 == 0) goto L_0x00fe
+            java.lang.String r7 = "http"
+            boolean r7 = r4.equals(r7)     // Catch:{ Exception -> 0x0125 }
+            java.lang.String r8 = "secret"
+            java.lang.String r9 = "pass"
+            java.lang.String r10 = "user"
+            java.lang.String r11 = "port"
+            java.lang.String r12 = "server"
+            if (r7 != 0) goto L_0x009d
+            java.lang.String r7 = "https"
+            boolean r7 = r4.equals(r7)     // Catch:{ Exception -> 0x0125 }
+            if (r7 == 0) goto L_0x003b
+            goto L_0x009d
+        L_0x003b:
+            java.lang.String r7 = "tg"
+            boolean r4 = r4.equals(r7)     // Catch:{ Exception -> 0x0125 }
+            if (r4 == 0) goto L_0x00fe
+            java.lang.String r3 = r3.toString()     // Catch:{ Exception -> 0x0125 }
+            boolean r4 = r3.startsWith(r0)     // Catch:{ Exception -> 0x0125 }
+            java.lang.String r7 = "tg://socks"
+            java.lang.String r13 = "tg:socks"
+            java.lang.String r14 = "tg://proxy"
+            if (r4 != 0) goto L_0x0065
+            boolean r4 = r3.startsWith(r14)     // Catch:{ Exception -> 0x0125 }
+            if (r4 != 0) goto L_0x0065
+            boolean r4 = r3.startsWith(r13)     // Catch:{ Exception -> 0x0125 }
+            if (r4 != 0) goto L_0x0065
+            boolean r4 = r3.startsWith(r7)     // Catch:{ Exception -> 0x0125 }
+            if (r4 == 0) goto L_0x00fe
+        L_0x0065:
+            java.lang.String r0 = r3.replace(r0, r1)     // Catch:{ Exception -> 0x0125 }
+            java.lang.String r0 = r0.replace(r14, r1)     // Catch:{ Exception -> 0x0125 }
+            java.lang.String r0 = r0.replace(r7, r1)     // Catch:{ Exception -> 0x0125 }
+            java.lang.String r0 = r0.replace(r13, r1)     // Catch:{ Exception -> 0x0125 }
+            android.net.Uri r0 = android.net.Uri.parse(r0)     // Catch:{ Exception -> 0x0125 }
+            java.lang.String r1 = r0.getQueryParameter(r12)     // Catch:{ Exception -> 0x0125 }
+            boolean r3 = checkHostForPunycode(r1)     // Catch:{ Exception -> 0x0125 }
+            if (r3 == 0) goto L_0x0087
+            java.lang.String r1 = java.net.IDN.toASCII(r1, r5)     // Catch:{ Exception -> 0x0125 }
+        L_0x0087:
             r6 = r1
-            java.lang.String r1 = r3.getQueryParameter(r14)     // Catch:{ Exception -> 0x0148 }
-            r4 = r1
-            java.lang.String r1 = r3.getQueryParameter(r13)     // Catch:{ Exception -> 0x0148 }
-            r5 = r1
-            java.lang.String r1 = r3.getQueryParameter(r12)     // Catch:{ Exception -> 0x0148 }
-            r8 = r1
-            goto L_0x0124
-        L_0x00af:
-            r17 = r4
-            r18 = r5
-            goto L_0x0120
-        L_0x00b5:
-            r17 = r4
-            r18 = r5
-        L_0x00b9:
-            java.lang.String r0 = r3.getHost()     // Catch:{ Exception -> 0x0148 }
-            java.lang.String r0 = r0.toLowerCase()     // Catch:{ Exception -> 0x0148 }
-            java.lang.String r1 = "telegram.me"
-            boolean r1 = r0.equals(r1)     // Catch:{ Exception -> 0x0148 }
-            if (r1 != 0) goto L_0x00d9
-            java.lang.String r1 = "t.me"
-            boolean r1 = r0.equals(r1)     // Catch:{ Exception -> 0x0148 }
-            if (r1 != 0) goto L_0x00d9
-            java.lang.String r1 = "telegram.dog"
-            boolean r1 = r0.equals(r1)     // Catch:{ Exception -> 0x0148 }
-            if (r1 == 0) goto L_0x0117
-        L_0x00d9:
-            java.lang.String r1 = r3.getPath()     // Catch:{ Exception -> 0x0148 }
-            if (r1 == 0) goto L_0x0117
-            java.lang.String r4 = "/socks"
-            boolean r4 = r1.startsWith(r4)     // Catch:{ Exception -> 0x0148 }
-            if (r4 != 0) goto L_0x00ef
-            java.lang.String r4 = "/proxy"
-            boolean r4 = r1.startsWith(r4)     // Catch:{ Exception -> 0x0148 }
-            if (r4 == 0) goto L_0x0117
-        L_0x00ef:
-            java.lang.String r2 = r3.getQueryParameter(r2)     // Catch:{ Exception -> 0x0148 }
-            boolean r4 = checkHostForPunycode(r2)     // Catch:{ Exception -> 0x0148 }
-            if (r4 == 0) goto L_0x0101
-            r4 = 1
-            java.lang.String r5 = java.net.IDN.toASCII(r2, r4)     // Catch:{ Exception -> 0x0148 }
-            r2 = r5
-            r7 = r2
+            java.lang.String r1 = r0.getQueryParameter(r11)     // Catch:{ Exception -> 0x0125 }
+            java.lang.String r3 = r0.getQueryParameter(r10)     // Catch:{ Exception -> 0x0125 }
+            java.lang.String r4 = r0.getQueryParameter(r9)     // Catch:{ Exception -> 0x0125 }
+            java.lang.String r0 = r0.getQueryParameter(r8)     // Catch:{ Exception -> 0x0125 }
+            r9 = r1
+            r8 = r6
+            r6 = r3
             goto L_0x0102
-        L_0x0101:
-            r7 = r2
-        L_0x0102:
-            java.lang.String r2 = r3.getQueryParameter(r15)     // Catch:{ Exception -> 0x0148 }
-            r6 = r2
-            java.lang.String r2 = r3.getQueryParameter(r14)     // Catch:{ Exception -> 0x0148 }
-            r4 = r2
-            java.lang.String r2 = r3.getQueryParameter(r13)     // Catch:{ Exception -> 0x0148 }
-            r5 = r2
-            java.lang.String r2 = r3.getQueryParameter(r12)     // Catch:{ Exception -> 0x0148 }
-            r8 = r2
-            goto L_0x011b
-        L_0x0117:
-            r4 = r17
-            r5 = r18
-        L_0x011b:
-            goto L_0x0124
-        L_0x011c:
-            r17 = r4
-            r18 = r5
-        L_0x0120:
-            r4 = r17
-            r5 = r18
-        L_0x0124:
-            boolean r0 = android.text.TextUtils.isEmpty(r7)     // Catch:{ Exception -> 0x0148 }
-            if (r0 != 0) goto L_0x0147
-            boolean r0 = android.text.TextUtils.isEmpty(r6)     // Catch:{ Exception -> 0x0148 }
-            if (r0 != 0) goto L_0x0147
-            java.lang.String r0 = ""
-            if (r4 != 0) goto L_0x0135
+        L_0x009d:
+            java.lang.String r0 = r3.getHost()     // Catch:{ Exception -> 0x0125 }
+            java.lang.String r0 = r0.toLowerCase()     // Catch:{ Exception -> 0x0125 }
+            java.lang.String r1 = "telegram.me"
+            boolean r1 = r0.equals(r1)     // Catch:{ Exception -> 0x0125 }
+            if (r1 != 0) goto L_0x00bd
+            java.lang.String r1 = "t.me"
+            boolean r1 = r0.equals(r1)     // Catch:{ Exception -> 0x0125 }
+            if (r1 != 0) goto L_0x00bd
+            java.lang.String r1 = "telegram.dog"
+            boolean r0 = r0.equals(r1)     // Catch:{ Exception -> 0x0125 }
+            if (r0 == 0) goto L_0x00f6
+        L_0x00bd:
+            java.lang.String r0 = r3.getPath()     // Catch:{ Exception -> 0x0125 }
+            if (r0 == 0) goto L_0x00f6
+            java.lang.String r1 = "/socks"
+            boolean r1 = r0.startsWith(r1)     // Catch:{ Exception -> 0x0125 }
+            if (r1 != 0) goto L_0x00d3
+            java.lang.String r1 = "/proxy"
+            boolean r0 = r0.startsWith(r1)     // Catch:{ Exception -> 0x0125 }
+            if (r0 == 0) goto L_0x00f6
+        L_0x00d3:
+            java.lang.String r0 = r3.getQueryParameter(r12)     // Catch:{ Exception -> 0x0125 }
+            boolean r1 = checkHostForPunycode(r0)     // Catch:{ Exception -> 0x0125 }
+            if (r1 == 0) goto L_0x00e1
+            java.lang.String r0 = java.net.IDN.toASCII(r0, r5)     // Catch:{ Exception -> 0x0125 }
+        L_0x00e1:
+            r6 = r0
+            java.lang.String r0 = r3.getQueryParameter(r11)     // Catch:{ Exception -> 0x0125 }
+            java.lang.String r1 = r3.getQueryParameter(r10)     // Catch:{ Exception -> 0x0125 }
+            java.lang.String r4 = r3.getQueryParameter(r9)     // Catch:{ Exception -> 0x0125 }
+            java.lang.String r3 = r3.getQueryParameter(r8)     // Catch:{ Exception -> 0x0125 }
+            r15 = r6
+            r6 = r1
+            r1 = r15
+            goto L_0x00fa
+        L_0x00f6:
+            r0 = r6
+            r1 = r0
+            r3 = r1
+            r4 = r3
+        L_0x00fa:
+            r9 = r0
+            r8 = r1
+            r0 = r3
+            goto L_0x0102
+        L_0x00fe:
+            r0 = r6
             r4 = r0
-        L_0x0135:
-            if (r5 != 0) goto L_0x0138
-            r5 = r0
-        L_0x0138:
-            if (r8 != 0) goto L_0x013b
-            r8 = r0
-        L_0x013b:
-            r10 = r19
-            r11 = r7
-            r12 = r6
-            r13 = r4
-            r14 = r5
-            r15 = r8
-            showProxyAlert(r10, r11, r12, r13, r14, r15)     // Catch:{ Exception -> 0x0148 }
-            r0 = 1
-            return r0
-        L_0x0147:
-            goto L_0x0149
-        L_0x0148:
-            r0 = move-exception
-        L_0x0149:
-            r1 = 0
-            return r1
+            r8 = r4
+            r9 = r8
+        L_0x0102:
+            boolean r1 = android.text.TextUtils.isEmpty(r8)     // Catch:{ Exception -> 0x0125 }
+            if (r1 != 0) goto L_0x0125
+            boolean r1 = android.text.TextUtils.isEmpty(r9)     // Catch:{ Exception -> 0x0125 }
+            if (r1 != 0) goto L_0x0125
+            java.lang.String r1 = ""
+            if (r6 != 0) goto L_0x0114
+            r10 = r1
+            goto L_0x0115
+        L_0x0114:
+            r10 = r6
+        L_0x0115:
+            if (r4 != 0) goto L_0x0119
+            r11 = r1
+            goto L_0x011a
+        L_0x0119:
+            r11 = r4
+        L_0x011a:
+            if (r0 != 0) goto L_0x011e
+            r12 = r1
+            goto L_0x011f
+        L_0x011e:
+            r12 = r0
+        L_0x011f:
+            r7 = r16
+            showProxyAlert(r7, r8, r9, r10, r11, r12)     // Catch:{ Exception -> 0x0125 }
+            return r5
+        L_0x0125:
+            return r2
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.AndroidUtilities.handleProxyIntent(android.app.Activity, android.content.Intent):boolean");
     }
 
     public static boolean shouldEnableAnimation() {
-        if (Build.VERSION.SDK_INT < 26 || Build.VERSION.SDK_INT >= 28) {
-            return true;
-        }
-        if (!((PowerManager) ApplicationLoader.applicationContext.getSystemService("power")).isPowerSaveMode() && Settings.Global.getFloat(ApplicationLoader.applicationContext.getContentResolver(), "animator_duration_scale", 1.0f) > 0.0f) {
+        int i = Build.VERSION.SDK_INT;
+        if (i < 26 || i >= 28 || (!((PowerManager) ApplicationLoader.applicationContext.getSystemService("power")).isPowerSaveMode() && Settings.Global.getFloat(ApplicationLoader.applicationContext.getContentResolver(), "animator_duration_scale", 1.0f) > 0.0f)) {
             return true;
         }
         return false;
     }
 
-    public static void showProxyAlert(Activity activity, String address, String port, String user, String password, String secret) {
+    public static void showProxyAlert(Activity activity, String str, String str2, String str3, String str4, String str5) {
+        String str6;
         Activity activity2 = activity;
         BottomSheet.Builder builder = new BottomSheet.Builder(activity2);
         Runnable dismissRunnable = builder.getDismissRunnable();
@@ -3864,61 +4223,58 @@ public class AndroidUtilities {
         builder.setApplyBottomPadding(false);
         LinearLayout linearLayout = new LinearLayout(activity2);
         builder.setCustomView(linearLayout);
-        boolean z = true;
         linearLayout.setOrientation(1);
-        int i = 5;
-        if (!TextUtils.isEmpty(secret)) {
-            TextView titleTextView = new TextView(activity2);
-            titleTextView.setText(LocaleController.getString("UseProxyTelegramInfo2", NUM));
-            titleTextView.setTextColor(Theme.getColor("dialogTextGray4"));
-            titleTextView.setTextSize(1, 14.0f);
-            titleTextView.setGravity(49);
-            linearLayout.addView(titleTextView, LayoutHelper.createLinear(-2, -2, (LocaleController.isRTL ? 5 : 3) | 48, 17, 8, 17, 8));
-            View lineView = new View(activity2);
-            lineView.setBackgroundColor(Theme.getColor("divider"));
-            linearLayout.addView(lineView, new LinearLayout.LayoutParams(-1, 1));
+        if (!TextUtils.isEmpty(str5)) {
+            TextView textView = new TextView(activity2);
+            textView.setText(LocaleController.getString("UseProxyTelegramInfo2", NUM));
+            textView.setTextColor(Theme.getColor("dialogTextGray4"));
+            textView.setTextSize(1, 14.0f);
+            textView.setGravity(49);
+            linearLayout.addView(textView, LayoutHelper.createLinear(-2, -2, (LocaleController.isRTL ? 5 : 3) | 48, 17, 8, 17, 8));
+            View view = new View(activity2);
+            view.setBackgroundColor(Theme.getColor("divider"));
+            linearLayout.addView(view, new LinearLayout.LayoutParams(-1, 1));
         }
-        int a = 0;
+        int i = 0;
         while (true) {
-            if (a >= i) {
-                String str = port;
+            if (i >= 5) {
+                String str7 = str2;
                 break;
             }
-            String text = null;
-            String detail = null;
-            if (a == 0) {
-                text = address;
-                detail = LocaleController.getString("UseProxyAddress", NUM);
-                String str2 = port;
-            } else if (a == z) {
-                text = "" + port;
-                detail = LocaleController.getString("UseProxyPort", NUM);
+            String str8 = null;
+            if (i == 0) {
+                String str9 = str2;
+                str6 = LocaleController.getString("UseProxyAddress", NUM);
+                str8 = str;
+            } else if (i == 1) {
+                str8 = "" + str2;
+                str6 = LocaleController.getString("UseProxyPort", NUM);
             } else {
-                String str3 = port;
-                if (a == 2) {
-                    text = secret;
-                    detail = LocaleController.getString("UseProxySecret", NUM);
-                } else if (a == 3) {
-                    text = user;
-                    detail = LocaleController.getString("UseProxyUsername", NUM);
-                } else if (a == 4) {
-                    text = password;
-                    detail = LocaleController.getString("UseProxyPassword", NUM);
+                String str10 = str2;
+                if (i == 2) {
+                    str6 = LocaleController.getString("UseProxySecret", NUM);
+                    str8 = str5;
+                } else if (i == 3) {
+                    str6 = LocaleController.getString("UseProxyUsername", NUM);
+                    str8 = str3;
+                } else if (i == 4) {
+                    str6 = LocaleController.getString("UseProxyPassword", NUM);
+                    str8 = str4;
+                } else {
+                    str6 = null;
                 }
             }
-            if (!TextUtils.isEmpty(text)) {
-                TextDetailSettingsCell cell = new TextDetailSettingsCell(activity2);
-                cell.setTextAndValue(text, detail, z);
-                cell.getTextView().setTextColor(Theme.getColor("dialogTextBlack"));
-                cell.getValueTextView().setTextColor(Theme.getColor("dialogTextGray3"));
-                linearLayout.addView(cell, LayoutHelper.createLinear(-1, -2));
-                if (a == 2) {
+            if (!TextUtils.isEmpty(str8)) {
+                TextDetailSettingsCell textDetailSettingsCell = new TextDetailSettingsCell(activity2);
+                textDetailSettingsCell.setTextAndValue(str8, str6, true);
+                textDetailSettingsCell.getTextView().setTextColor(Theme.getColor("dialogTextBlack"));
+                textDetailSettingsCell.getValueTextView().setTextColor(Theme.getColor("dialogTextGray3"));
+                linearLayout.addView(textDetailSettingsCell, LayoutHelper.createLinear(-1, -2));
+                if (i == 2) {
                     break;
                 }
             }
-            a++;
-            z = true;
-            i = 5;
+            i++;
         }
         PickerBottomLayout pickerBottomLayout = new PickerBottomLayout(activity2, false);
         pickerBottomLayout.setBackgroundColor(Theme.getColor("dialogBackground"));
@@ -3926,270 +4282,241 @@ public class AndroidUtilities {
         pickerBottomLayout.cancelButton.setPadding(dp(18.0f), 0, dp(18.0f), 0);
         pickerBottomLayout.cancelButton.setTextColor(Theme.getColor("dialogTextBlue2"));
         pickerBottomLayout.cancelButton.setText(LocaleController.getString("Cancel", NUM).toUpperCase());
-        pickerBottomLayout.cancelButton.setOnClickListener(new AndroidUtilities$$ExternalSyntheticLambda5(dismissRunnable));
+        pickerBottomLayout.cancelButton.setOnClickListener(new AndroidUtilities$$ExternalSyntheticLambda3(dismissRunnable));
         pickerBottomLayout.doneButtonTextView.setTextColor(Theme.getColor("dialogTextBlue2"));
         pickerBottomLayout.doneButton.setPadding(dp(18.0f), 0, dp(18.0f), 0);
         pickerBottomLayout.doneButtonBadgeTextView.setVisibility(8);
         pickerBottomLayout.doneButtonTextView.setText(LocaleController.getString("ConnectingConnectProxy", NUM).toUpperCase());
-        pickerBottomLayout.doneButton.setOnClickListener(new AndroidUtilities$$ExternalSyntheticLambda6(address, port, secret, password, user, dismissRunnable));
+        pickerBottomLayout.doneButton.setOnClickListener(new AndroidUtilities$$ExternalSyntheticLambda4(str, str2, str5, str4, str3, dismissRunnable));
         builder.show();
     }
 
-    static /* synthetic */ void lambda$showProxyAlert$8(String address, String port, String secret, String password, String user, Runnable dismissRunnable, View v) {
-        SharedConfig.ProxyInfo info;
-        SharedPreferences.Editor editor = MessagesController.getGlobalMainSettings().edit();
-        editor.putBoolean("proxy_enabled", true);
-        editor.putString("proxy_ip", address);
-        int p = Utilities.parseInt(port).intValue();
-        editor.putInt("proxy_port", p);
-        if (TextUtils.isEmpty(secret)) {
-            editor.remove("proxy_secret");
-            if (TextUtils.isEmpty(password)) {
-                editor.remove("proxy_pass");
+    /* access modifiers changed from: private */
+    public static /* synthetic */ void lambda$showProxyAlert$8(String str, String str2, String str3, String str4, String str5, Runnable runnable, View view) {
+        SharedConfig.ProxyInfo proxyInfo;
+        SharedPreferences.Editor edit = MessagesController.getGlobalMainSettings().edit();
+        edit.putBoolean("proxy_enabled", true);
+        edit.putString("proxy_ip", str);
+        int intValue = Utilities.parseInt(str2).intValue();
+        edit.putInt("proxy_port", intValue);
+        if (TextUtils.isEmpty(str3)) {
+            edit.remove("proxy_secret");
+            if (TextUtils.isEmpty(str4)) {
+                edit.remove("proxy_pass");
             } else {
-                editor.putString("proxy_pass", password);
+                edit.putString("proxy_pass", str4);
             }
-            if (TextUtils.isEmpty(user)) {
-                editor.remove("proxy_user");
+            if (TextUtils.isEmpty(str5)) {
+                edit.remove("proxy_user");
             } else {
-                editor.putString("proxy_user", user);
+                edit.putString("proxy_user", str5);
             }
-            info = new SharedConfig.ProxyInfo(address, p, user, password, "");
+            proxyInfo = new SharedConfig.ProxyInfo(str, intValue, str5, str4, "");
         } else {
-            editor.remove("proxy_pass");
-            editor.remove("proxy_user");
-            editor.putString("proxy_secret", secret);
-            info = new SharedConfig.ProxyInfo(address, p, "", "", secret);
+            edit.remove("proxy_pass");
+            edit.remove("proxy_user");
+            edit.putString("proxy_secret", str3);
+            proxyInfo = new SharedConfig.ProxyInfo(str, intValue, "", "", str3);
         }
-        editor.commit();
-        SharedConfig.currentProxy = SharedConfig.addProxy(info);
-        ConnectionsManager.setProxySettings(true, address, p, user, password, secret);
+        edit.commit();
+        SharedConfig.currentProxy = SharedConfig.addProxy(proxyInfo);
+        ConnectionsManager.setProxySettings(true, str, intValue, str5, str4, str3);
         NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.proxySettingsChanged, new Object[0]);
-        dismissRunnable.run();
+        runnable.run();
     }
 
-    public static String getSystemProperty(String key) {
+    @SuppressLint({"PrivateApi"})
+    public static String getSystemProperty(String str) {
         try {
-            return (String) Class.forName("android.os.SystemProperties").getMethod("get", new Class[]{String.class}).invoke((Object) null, new Object[]{key});
-        } catch (Exception e) {
+            return (String) Class.forName("android.os.SystemProperties").getMethod("get", new Class[]{String.class}).invoke((Object) null, new Object[]{str});
+        } catch (Exception unused) {
             return null;
         }
     }
 
     public static void fixGoogleMapsBug() {
-        SharedPreferences googleBug = ApplicationLoader.applicationContext.getSharedPreferences("google_bug_NUM", 0);
-        if (!googleBug.contains("fixed")) {
+        SharedPreferences sharedPreferences = ApplicationLoader.applicationContext.getSharedPreferences("google_bug_NUM", 0);
+        if (!sharedPreferences.contains("fixed")) {
             new File(ApplicationLoader.getFilesDirFixed(), "ZoomTables.data").delete();
-            googleBug.edit().putBoolean("fixed", true).apply();
+            sharedPreferences.edit().putBoolean("fixed", true).apply();
         }
     }
 
-    public static CharSequence concat(CharSequence... text) {
-        if (text.length == 0) {
+    public static CharSequence concat(CharSequence... charSequenceArr) {
+        if (charSequenceArr.length == 0) {
             return "";
         }
         int i = 0;
-        if (text.length == 1) {
-            return text[0];
+        boolean z = true;
+        if (charSequenceArr.length == 1) {
+            return charSequenceArr[0];
         }
-        boolean spanned = false;
-        int length = text.length;
+        int length = charSequenceArr.length;
         int i2 = 0;
         while (true) {
             if (i2 >= length) {
+                z = false;
                 break;
-            } else if (text[i2] instanceof Spanned) {
-                spanned = true;
+            } else if (charSequenceArr[i2] instanceof Spanned) {
                 break;
             } else {
                 i2++;
             }
         }
-        if (spanned) {
-            SpannableStringBuilder ssb = new SpannableStringBuilder();
-            int length2 = text.length;
+        if (z) {
+            SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder();
+            int length2 = charSequenceArr.length;
             while (i < length2) {
-                CharSequence piece = text[i];
-                ssb.append(piece == null ? "null" : piece);
+                String str = charSequenceArr[i];
+                if (str == null) {
+                    str = "null";
+                }
+                spannableStringBuilder.append(str);
                 i++;
             }
-            return new SpannedString(ssb);
+            return new SpannedString(spannableStringBuilder);
         }
         StringBuilder sb = new StringBuilder();
-        int length3 = text.length;
+        int length3 = charSequenceArr.length;
         while (i < length3) {
-            sb.append(text[i]);
+            sb.append(charSequenceArr[i]);
             i++;
         }
         return sb.toString();
     }
 
-    public static float[] RGBtoHSB(int r, int g, int b) {
-        float saturation;
-        float hue;
-        float hue2;
-        float[] hsbvals = new float[3];
-        int cmax = Math.max(r, g);
-        if (b > cmax) {
-            cmax = b;
+    public static float[] RGBtoHSB(int i, int i2, int i3) {
+        float[] fArr = new float[3];
+        int max = Math.max(i, i2);
+        if (i3 > max) {
+            max = i3;
         }
-        int cmin = Math.min(r, g);
-        if (b < cmin) {
-            cmin = b;
+        int min = Math.min(i, i2);
+        if (i3 < min) {
+            min = i3;
         }
-        float brightness = ((float) cmax) / 255.0f;
-        if (cmax != 0) {
-            saturation = ((float) (cmax - cmin)) / ((float) cmax);
+        float f = (float) max;
+        float f2 = f / 255.0f;
+        float f3 = 0.0f;
+        float f4 = max != 0 ? ((float) (max - min)) / f : 0.0f;
+        if (f4 != 0.0f) {
+            float f5 = (float) (max - min);
+            float f6 = ((float) (max - i)) / f5;
+            float f7 = ((float) (max - i2)) / f5;
+            float f8 = ((float) (max - i3)) / f5;
+            float f9 = (i == max ? f8 - f7 : i2 == max ? (f6 + 2.0f) - f8 : (f7 + 4.0f) - f6) / 6.0f;
+            f3 = f9 < 0.0f ? f9 + 1.0f : f9;
+        }
+        fArr[0] = f3;
+        fArr[1] = f4;
+        fArr[2] = f2;
+        return fArr;
+    }
+
+    public static int HSBtoRGB(float f, float f2, float f3) {
+        int i;
+        int i2;
+        int i3;
+        int i4;
+        int i5 = 0;
+        if (f2 == 0.0f) {
+            i5 = (int) ((f3 * 255.0f) + 0.5f);
+            i2 = i5;
+            i = i2;
         } else {
-            saturation = 0.0f;
-        }
-        if (saturation == 0.0f) {
-            hue = 0.0f;
-        } else {
-            float redc = ((float) (cmax - r)) / ((float) (cmax - cmin));
-            float greenc = ((float) (cmax - g)) / ((float) (cmax - cmin));
-            float bluec = ((float) (cmax - b)) / ((float) (cmax - cmin));
-            if (r == cmax) {
-                hue2 = bluec - greenc;
-            } else if (g == cmax) {
-                hue2 = (2.0f + redc) - bluec;
-            } else {
-                hue2 = (4.0f + greenc) - redc;
-            }
-            float hue3 = hue2 / 6.0f;
-            if (hue3 < 0.0f) {
-                hue = 1.0f + hue3;
-            } else {
-                hue = hue3;
-            }
-        }
-        hsbvals[0] = hue;
-        hsbvals[1] = saturation;
-        hsbvals[2] = brightness;
-        return hsbvals;
-    }
-
-    public static int HSBtoRGB(float hue, float saturation, float brightness) {
-        int r = 0;
-        int g = 0;
-        int b = 0;
-        if (saturation != 0.0f) {
-            float h = (hue - ((float) Math.floor((double) hue))) * 6.0f;
-            float f = h - ((float) Math.floor((double) h));
-            float p = (1.0f - saturation) * brightness;
-            float q = (1.0f - (saturation * f)) * brightness;
-            float t = (1.0f - ((1.0f - f) * saturation)) * brightness;
-            switch ((int) h) {
-                case 0:
-                    r = (int) ((brightness * 255.0f) + 0.5f);
-                    g = (int) ((t * 255.0f) + 0.5f);
-                    b = (int) ((255.0f * p) + 0.5f);
-                    break;
-                case 1:
-                    r = (int) ((q * 255.0f) + 0.5f);
-                    g = (int) ((brightness * 255.0f) + 0.5f);
-                    b = (int) ((255.0f * p) + 0.5f);
-                    break;
-                case 2:
-                    r = (int) ((p * 255.0f) + 0.5f);
-                    g = (int) ((brightness * 255.0f) + 0.5f);
-                    b = (int) ((255.0f * t) + 0.5f);
-                    break;
-                case 3:
-                    r = (int) ((p * 255.0f) + 0.5f);
-                    g = (int) ((q * 255.0f) + 0.5f);
-                    b = (int) ((255.0f * brightness) + 0.5f);
-                    break;
-                case 4:
-                    r = (int) ((t * 255.0f) + 0.5f);
-                    g = (int) ((p * 255.0f) + 0.5f);
-                    b = (int) ((255.0f * brightness) + 0.5f);
-                    break;
-                case 5:
-                    r = (int) ((brightness * 255.0f) + 0.5f);
-                    g = (int) ((p * 255.0f) + 0.5f);
-                    b = (int) ((255.0f * q) + 0.5f);
-                    break;
-            }
-        } else {
-            int i = (int) ((255.0f * brightness) + 0.5f);
-            b = i;
-            g = i;
-            r = i;
-        }
-        return -16777216 | ((r & 255) << 16) | ((g & 255) << 8) | (b & 255);
-    }
-
-    public static float computePerceivedBrightness(int color) {
-        return (((((float) Color.red(color)) * 0.2126f) + (((float) Color.green(color)) * 0.7152f)) + (((float) Color.blue(color)) * 0.0722f)) / 255.0f;
-    }
-
-    public static int getPatternColor(int color) {
-        return getPatternColor(color, false);
-    }
-
-    public static int getPatternColor(int color, boolean alwaysDark) {
-        float[] hsb = RGBtoHSB(Color.red(color), Color.green(color), Color.blue(color));
-        if (hsb[1] > 0.0f || (hsb[2] < 1.0f && hsb[2] > 0.0f)) {
-            hsb[1] = Math.min(1.0f, hsb[1] + (alwaysDark ? 0.15f : 0.05f) + ((1.0f - hsb[1]) * 0.1f));
-        }
-        if (alwaysDark || hsb[2] > 0.5f) {
-            hsb[2] = Math.max(0.0f, hsb[2] * 0.65f);
-        } else {
-            hsb[2] = Math.max(0.0f, Math.min(1.0f, 1.0f - (hsb[2] * 0.65f)));
-        }
-        return HSBtoRGB(hsb[0], hsb[1], hsb[2]) & (alwaysDark ? -NUM : NUM);
-    }
-
-    public static int getPatternSideColor(int color) {
-        float[] hsb = RGBtoHSB(Color.red(color), Color.green(color), Color.blue(color));
-        hsb[1] = Math.min(1.0f, hsb[1] + 0.05f);
-        if (hsb[2] > 0.5f) {
-            hsb[2] = Math.max(0.0f, hsb[2] * 0.9f);
-        } else {
-            hsb[2] = Math.max(0.0f, hsb[2] * 0.9f);
-        }
-        return HSBtoRGB(hsb[0], hsb[1], hsb[2]) | -16777216;
-    }
-
-    public static int getWallpaperRotation(int angle, boolean iOS) {
-        int angle2;
-        if (iOS) {
-            angle2 = angle + 180;
-        } else {
-            angle2 = angle - 180;
-        }
-        while (angle2 >= 360) {
-            angle2 -= 360;
-        }
-        while (angle2 < 0) {
-            angle2 += 360;
-        }
-        return angle2;
-    }
-
-    public static String getWallPaperUrl(Object object) {
-        if (object instanceof TLRPC.TL_wallPaper) {
-            TLRPC.TL_wallPaper wallPaper = (TLRPC.TL_wallPaper) object;
-            String link = "https://" + MessagesController.getInstance(UserConfig.selectedAccount).linkPrefix + "/bg/" + wallPaper.slug;
-            StringBuilder modes = new StringBuilder();
-            if (wallPaper.settings != null) {
-                if (wallPaper.settings.blur) {
-                    modes.append("blur");
+            float floor = (f - ((float) Math.floor((double) f))) * 6.0f;
+            float floor2 = floor - ((float) Math.floor((double) floor));
+            float f4 = (1.0f - f2) * f3;
+            float f5 = (1.0f - (f2 * floor2)) * f3;
+            float f6 = (1.0f - (f2 * (1.0f - floor2))) * f3;
+            int i6 = (int) floor;
+            if (i6 == 0) {
+                i3 = (int) ((f3 * 255.0f) + 0.5f);
+                i4 = (int) ((f6 * 255.0f) + 0.5f);
+            } else if (i6 == 1) {
+                i3 = (int) ((f5 * 255.0f) + 0.5f);
+                i4 = (int) ((f3 * 255.0f) + 0.5f);
+            } else if (i6 != 2) {
+                if (i6 == 3) {
+                    i5 = (int) ((f4 * 255.0f) + 0.5f);
+                    i2 = (int) ((f5 * 255.0f) + 0.5f);
+                } else if (i6 == 4) {
+                    i5 = (int) ((f6 * 255.0f) + 0.5f);
+                    i2 = (int) ((f4 * 255.0f) + 0.5f);
+                } else if (i6 != 5) {
+                    i2 = 0;
+                    i = 0;
+                } else {
+                    i5 = (int) ((f3 * 255.0f) + 0.5f);
+                    i2 = (int) ((f4 * 255.0f) + 0.5f);
+                    i = (int) ((f5 * 255.0f) + 0.5f);
                 }
-                if (wallPaper.settings.motion) {
-                    if (modes.length() > 0) {
-                        modes.append("+");
+                i = (int) ((f3 * 255.0f) + 0.5f);
+            } else {
+                i5 = (int) ((f4 * 255.0f) + 0.5f);
+                i2 = (int) ((f3 * 255.0f) + 0.5f);
+                i = (int) ((f6 * 255.0f) + 0.5f);
+            }
+            i = (int) ((f4 * 255.0f) + 0.5f);
+        }
+        return ((i2 & 255) << 8) | -16777216 | ((i5 & 255) << 16) | (i & 255);
+    }
+
+    public static float computePerceivedBrightness(int i) {
+        return (((((float) Color.red(i)) * 0.2126f) + (((float) Color.green(i)) * 0.7152f)) + (((float) Color.blue(i)) * 0.0722f)) / 255.0f;
+    }
+
+    public static int getPatternColor(int i) {
+        return getPatternColor(i, false);
+    }
+
+    public static int getPatternColor(int i, boolean z) {
+        float[] RGBtoHSB = RGBtoHSB(Color.red(i), Color.green(i), Color.blue(i));
+        if (RGBtoHSB[1] > 0.0f || (RGBtoHSB[2] < 1.0f && RGBtoHSB[2] > 0.0f)) {
+            RGBtoHSB[1] = Math.min(1.0f, RGBtoHSB[1] + (z ? 0.15f : 0.05f) + ((1.0f - RGBtoHSB[1]) * 0.1f));
+        }
+        if (z || RGBtoHSB[2] > 0.5f) {
+            RGBtoHSB[2] = Math.max(0.0f, RGBtoHSB[2] * 0.65f);
+        } else {
+            RGBtoHSB[2] = Math.max(0.0f, Math.min(1.0f, 1.0f - (RGBtoHSB[2] * 0.65f)));
+        }
+        return HSBtoRGB(RGBtoHSB[0], RGBtoHSB[1], RGBtoHSB[2]) & (z ? -NUM : NUM);
+    }
+
+    public static int getPatternSideColor(int i) {
+        float[] RGBtoHSB = RGBtoHSB(Color.red(i), Color.green(i), Color.blue(i));
+        RGBtoHSB[1] = Math.min(1.0f, RGBtoHSB[1] + 0.05f);
+        if (RGBtoHSB[2] > 0.5f) {
+            RGBtoHSB[2] = Math.max(0.0f, RGBtoHSB[2] * 0.9f);
+        } else {
+            RGBtoHSB[2] = Math.max(0.0f, RGBtoHSB[2] * 0.9f);
+        }
+        return HSBtoRGB(RGBtoHSB[0], RGBtoHSB[1], RGBtoHSB[2]) | -16777216;
+    }
+
+    public static String getWallPaperUrl(Object obj) {
+        if (obj instanceof TLRPC$TL_wallPaper) {
+            TLRPC$TL_wallPaper tLRPC$TL_wallPaper = (TLRPC$TL_wallPaper) obj;
+            String str = "https://" + MessagesController.getInstance(UserConfig.selectedAccount).linkPrefix + "/bg/" + tLRPC$TL_wallPaper.slug;
+            StringBuilder sb = new StringBuilder();
+            TLRPC$WallPaperSettings tLRPC$WallPaperSettings = tLRPC$TL_wallPaper.settings;
+            if (tLRPC$WallPaperSettings != null) {
+                if (tLRPC$WallPaperSettings.blur) {
+                    sb.append("blur");
+                }
+                if (tLRPC$TL_wallPaper.settings.motion) {
+                    if (sb.length() > 0) {
+                        sb.append("+");
                     }
-                    modes.append("motion");
+                    sb.append("motion");
                 }
             }
-            if (modes.length() <= 0) {
-                return link;
+            if (sb.length() <= 0) {
+                return str;
             }
-            return link + "?mode=" + modes.toString();
-        } else if (object instanceof WallpapersListActivity.ColorWallpaper) {
-            return ((WallpapersListActivity.ColorWallpaper) object).getUrl();
+            return str + "?mode=" + sb.toString();
+        } else if (obj instanceof WallpapersListActivity.ColorWallpaper) {
+            return ((WallpapersListActivity.ColorWallpaper) obj).getUrl();
         } else {
             return null;
         }
@@ -4199,41 +4526,41 @@ public class AndroidUtilities {
         return (float) Math.sin((double) ((f - 0.5f) * 0.47123894f));
     }
 
-    public static void makeAccessibilityAnnouncement(CharSequence what) {
-        AccessibilityManager am = (AccessibilityManager) ApplicationLoader.applicationContext.getSystemService("accessibility");
-        if (am.isEnabled()) {
-            AccessibilityEvent ev = AccessibilityEvent.obtain();
-            ev.setEventType(16384);
-            ev.getText().add(what);
-            am.sendAccessibilityEvent(ev);
+    public static void makeAccessibilityAnnouncement(CharSequence charSequence) {
+        AccessibilityManager accessibilityManager2 = (AccessibilityManager) ApplicationLoader.applicationContext.getSystemService("accessibility");
+        if (accessibilityManager2.isEnabled()) {
+            AccessibilityEvent obtain = AccessibilityEvent.obtain();
+            obtain.setEventType(16384);
+            obtain.getText().add(charSequence);
+            accessibilityManager2.sendAccessibilityEvent(obtain);
         }
     }
 
-    public static int getOffsetColor(int color1, int color2, float offset, float alpha) {
-        int rF = Color.red(color2);
-        int gF = Color.green(color2);
-        int bF = Color.blue(color2);
-        int aF = Color.alpha(color2);
-        int rS = Color.red(color1);
-        int gS = Color.green(color1);
-        int bS = Color.blue(color1);
-        int aS = Color.alpha(color1);
-        return Color.argb((int) ((((float) aS) + (((float) (aF - aS)) * offset)) * alpha), (int) (((float) rS) + (((float) (rF - rS)) * offset)), (int) (((float) gS) + (((float) (gF - gS)) * offset)), (int) (((float) bS) + (((float) (bF - bS)) * offset)));
+    public static int getOffsetColor(int i, int i2, float f, float f2) {
+        int red = Color.red(i2);
+        int green = Color.green(i2);
+        int blue = Color.blue(i2);
+        int alpha = Color.alpha(i2);
+        int red2 = Color.red(i);
+        int green2 = Color.green(i);
+        int blue2 = Color.blue(i);
+        int alpha2 = Color.alpha(i);
+        return Color.argb((int) ((((float) alpha2) + (((float) (alpha - alpha2)) * f)) * f2), (int) (((float) red2) + (((float) (red - red2)) * f)), (int) (((float) green2) + (((float) (green - green2)) * f)), (int) (((float) blue2) + (((float) (blue - blue2)) * f)));
     }
 
-    public static int indexOfIgnoreCase(String origin, String searchStr) {
-        if (searchStr.isEmpty() || origin.isEmpty()) {
-            return origin.indexOf(searchStr);
+    public static int indexOfIgnoreCase(String str, String str2) {
+        if (str2.isEmpty() || str.isEmpty()) {
+            return str.indexOf(str2);
         }
         int i = 0;
-        while (i < origin.length() && searchStr.length() + i <= origin.length()) {
-            int j = 0;
-            int ii = i;
-            while (ii < origin.length() && j < searchStr.length() && Character.toLowerCase(origin.charAt(ii)) == Character.toLowerCase(searchStr.charAt(j))) {
-                j++;
-                ii++;
+        while (i < str.length() && str2.length() + i <= str.length()) {
+            int i2 = i;
+            int i3 = 0;
+            while (i2 < str.length() && i3 < str2.length() && Character.toLowerCase(str.charAt(i2)) == Character.toLowerCase(str2.charAt(i3))) {
+                i3++;
+                i2++;
             }
-            if (j == searchStr.length()) {
+            if (i3 == str2.length()) {
                 return i;
             }
             i++;
@@ -4241,31 +4568,23 @@ public class AndroidUtilities {
         return -1;
     }
 
-    public static int lerp(int a, int b, float f) {
-        return (int) (((float) a) + (((float) (b - a)) * f));
+    public static float lerp(float[] fArr, float f) {
+        return lerp(fArr[0], fArr[1], f);
     }
 
-    public static float lerp(float a, float b, float f) {
-        return ((b - a) * f) + a;
+    public static int lerpColor(int i, int i2, float f) {
+        return Color.argb(lerp(Color.alpha(i), Color.alpha(i2), f), lerp(Color.red(i), Color.red(i2), f), lerp(Color.green(i), Color.green(i2), f), lerp(Color.blue(i), Color.blue(i2), f));
     }
 
-    public static float lerp(float[] ab, float f) {
-        return lerp(ab[0], ab[1], f);
-    }
-
-    public static int lerpColor(int a, int b, float f) {
-        return Color.argb(lerp(Color.alpha(a), Color.alpha(b), f), lerp(Color.red(a), Color.red(b), f), lerp(Color.green(a), Color.green(b), f), lerp(Color.blue(a), Color.blue(b), f));
-    }
-
-    public static void lerp(RectF a, RectF b, float f, RectF to) {
-        if (to != null) {
-            to.set(lerp(a.left, b.left, f), lerp(a.top, b.top, f), lerp(a.right, b.right, f), lerp(a.bottom, b.bottom, f));
+    public static void lerp(RectF rectF, RectF rectF2, float f, RectF rectF3) {
+        if (rectF3 != null) {
+            rectF3.set(lerp(rectF.left, rectF2.left, f), lerp(rectF.top, rectF2.top, f), lerp(rectF.right, rectF2.right, f), lerp(rectF.bottom, rectF2.bottom, f));
         }
     }
 
-    public static void lerp(Rect a, Rect b, float f, Rect to) {
-        if (to != null) {
-            to.set(lerp(a.left, b.left, f), lerp(a.top, b.top, f), lerp(a.right, b.right, f), lerp(a.bottom, b.bottom, f));
+    public static void lerp(Rect rect, Rect rect2, float f, Rect rect3) {
+        if (rect3 != null) {
+            rect3.set(lerp(rect.left, rect2.left, f), lerp(rect.top, rect2.top, f), lerp(rect.right, rect2.right, f), lerp(rect.bottom, rect2.bottom, f));
         }
     }
 
@@ -4273,20 +4592,20 @@ public class AndroidUtilities {
         return flagSecureFragment != null;
     }
 
-    public static void setFlagSecure(BaseFragment parentFragment, boolean set) {
-        if (parentFragment != null && parentFragment.getParentActivity() != null) {
-            if (set) {
+    public static void setFlagSecure(BaseFragment baseFragment, boolean z) {
+        if (baseFragment != null && baseFragment.getParentActivity() != null) {
+            if (z) {
                 try {
-                    parentFragment.getParentActivity().getWindow().setFlags(8192, 8192);
-                    flagSecureFragment = new WeakReference<>(parentFragment);
-                } catch (Exception e) {
+                    baseFragment.getParentActivity().getWindow().setFlags(8192, 8192);
+                    flagSecureFragment = new WeakReference<>(baseFragment);
+                } catch (Exception unused) {
                 }
             } else {
                 WeakReference<BaseFragment> weakReference = flagSecureFragment;
-                if (weakReference != null && weakReference.get() == parentFragment) {
+                if (weakReference != null && weakReference.get() == baseFragment) {
                     try {
-                        parentFragment.getParentActivity().getWindow().clearFlags(8192);
-                    } catch (Exception e2) {
+                        baseFragment.getParentActivity().getWindow().clearFlags(8192);
+                    } catch (Exception unused2) {
                     }
                     flagSecureFragment = null;
                 }
@@ -4295,23 +4614,24 @@ public class AndroidUtilities {
     }
 
     public static Runnable registerFlagSecure(Window window) {
-        ArrayList<Long> reasonIds;
-        long reasonId = (long) (Math.random() * 9.99999999E8d);
+        ArrayList arrayList;
+        long random = (long) (Math.random() * 9.99999999E8d);
         HashMap<Window, ArrayList<Long>> hashMap = flagSecureReasons;
         if (hashMap.containsKey(window)) {
-            reasonIds = hashMap.get(window);
+            arrayList = hashMap.get(window);
         } else {
-            ArrayList<Long> reasonIds2 = new ArrayList<>();
-            hashMap.put(window, reasonIds2);
-            reasonIds = reasonIds2;
+            ArrayList arrayList2 = new ArrayList();
+            hashMap.put(window, arrayList2);
+            arrayList = arrayList2;
         }
-        reasonIds.add(Long.valueOf(reasonId));
+        arrayList.add(Long.valueOf(random));
         updateFlagSecure(window);
-        return new AndroidUtilities$$ExternalSyntheticLambda9(reasonIds, reasonId, window);
+        return new AndroidUtilities$$ExternalSyntheticLambda7(arrayList, random, window);
     }
 
-    static /* synthetic */ void lambda$registerFlagSecure$9(ArrayList reasonIds, long reasonId, Window window) {
-        reasonIds.remove(Long.valueOf(reasonId));
+    /* access modifiers changed from: private */
+    public static /* synthetic */ void lambda$registerFlagSecure$9(ArrayList arrayList, long j, Window window) {
+        arrayList.remove(Long.valueOf(j));
         updateFlagSecure(window);
     }
 
@@ -4321,7 +4641,7 @@ public class AndroidUtilities {
             if (hashMap.containsKey(window) && hashMap.get(window).size() > 0) {
                 try {
                     window.addFlags(8192);
-                } catch (Exception e) {
+                } catch (Exception unused) {
                 }
             } else {
                 window.clearFlags(8192);
@@ -4329,9 +4649,9 @@ public class AndroidUtilities {
         }
     }
 
-    public static void openSharing(BaseFragment fragment, String url) {
-        if (fragment != null && fragment.getParentActivity() != null) {
-            fragment.showDialog(new ShareAlert(fragment.getParentActivity(), (ArrayList<MessageObject>) null, url, false, url, false));
+    public static void openSharing(BaseFragment baseFragment, String str) {
+        if (baseFragment != null && baseFragment.getParentActivity() != null) {
+            baseFragment.showDialog(new ShareAlert(baseFragment.getParentActivity(), (ArrayList<MessageObject>) null, str, false, str, false));
         }
     }
 
@@ -4346,65 +4666,65 @@ public class AndroidUtilities {
     public static String getCertificateSHA256Fingerprint() {
         try {
             return Utilities.bytesToHex(Utilities.computeSHA256(((X509Certificate) CertificateFactory.getInstance("X509").generateCertificate(new ByteArrayInputStream(ApplicationLoader.applicationContext.getPackageManager().getPackageInfo(ApplicationLoader.applicationContext.getPackageName(), 64).signatures[0].toByteArray()))).getEncoded()));
-        } catch (Throwable th) {
+        } catch (Throwable unused) {
             return "";
         }
     }
 
-    public static boolean isPunctuationCharacter(char ch) {
+    public static boolean isPunctuationCharacter(char c) {
         if (charactersMap == null) {
             charactersMap = new HashSet<>();
-            int a = 0;
+            int i = 0;
             while (true) {
                 char[] cArr = characters;
-                if (a >= cArr.length) {
+                if (i >= cArr.length) {
                     break;
                 }
-                charactersMap.add(Character.valueOf(cArr[a]));
-                a++;
+                charactersMap.add(Character.valueOf(cArr[i]));
+                i++;
             }
         }
-        return charactersMap.contains(Character.valueOf(ch));
+        return charactersMap.contains(Character.valueOf(c));
     }
 
-    public static int getColorDistance(int color1, int color2) {
-        int r1 = Color.red(color1);
-        int g1 = Color.green(color1);
-        int b1 = Color.blue(color1);
-        int r2 = Color.red(color2);
-        int rMean = (r1 + r2) / 2;
-        int r = r1 - r2;
-        int g = g1 - Color.green(color2);
-        int b = b1 - Color.blue(color2);
-        return ((((rMean + 512) * r) * r) >> 8) + (g * 4 * g) + ((((767 - rMean) * b) * b) >> 8);
+    public static int getColorDistance(int i, int i2) {
+        int red = Color.red(i);
+        int green = Color.green(i);
+        int blue = Color.blue(i);
+        int red2 = Color.red(i2);
+        int i3 = (red + red2) / 2;
+        int i4 = red - red2;
+        int green2 = green - Color.green(i2);
+        int blue2 = blue - Color.blue(i2);
+        return ((((i3 + 512) * i4) * i4) >> 8) + (green2 * 4 * green2) + ((((767 - i3) * blue2) * blue2) >> 8);
     }
 
-    public static int getAverageColor(int color1, int color2) {
-        return Color.argb(255, (Color.red(color1) / 2) + (Color.red(color2) / 2), (Color.green(color1) / 2) + (Color.green(color2) / 2), (Color.blue(color1) / 2) + (Color.blue(color2) / 2));
+    public static int getAverageColor(int i, int i2) {
+        return Color.argb(255, (Color.red(i) / 2) + (Color.red(i2) / 2), (Color.green(i) / 2) + (Color.green(i2) / 2), (Color.blue(i) / 2) + (Color.blue(i2) / 2));
     }
 
-    public static void setLightStatusBar(Window window, boolean enable) {
-        setLightStatusBar(window, enable, false);
+    public static void setLightStatusBar(Window window, boolean z) {
+        setLightStatusBar(window, z, false);
     }
 
-    public static void setLightStatusBar(Window window, boolean enable, boolean forceTransparentStatusbar) {
+    public static void setLightStatusBar(Window window, boolean z, boolean z2) {
         if (Build.VERSION.SDK_INT >= 23) {
             View decorView = window.getDecorView();
-            int flags = decorView.getSystemUiVisibility();
-            if (enable) {
-                if ((flags & 8192) == 0) {
-                    decorView.setSystemUiVisibility(flags | 8192);
+            int systemUiVisibility = decorView.getSystemUiVisibility();
+            if (z) {
+                if ((systemUiVisibility & 8192) == 0) {
+                    decorView.setSystemUiVisibility(systemUiVisibility | 8192);
                 }
-                if (SharedConfig.noStatusBar || forceTransparentStatusbar) {
+                if (SharedConfig.noStatusBar || z2) {
                     window.setStatusBarColor(0);
                 } else {
                     window.setStatusBarColor(NUM);
                 }
             } else {
-                if ((flags & 8192) != 0) {
-                    decorView.setSystemUiVisibility(flags & -8193);
+                if ((systemUiVisibility & 8192) != 0) {
+                    decorView.setSystemUiVisibility(systemUiVisibility & -8193);
                 }
-                if (SharedConfig.noStatusBar || forceTransparentStatusbar) {
+                if (SharedConfig.noStatusBar || z2) {
                     window.setStatusBarColor(0);
                 } else {
                     window.setStatusBarColor(NUM);
@@ -4420,145 +4740,183 @@ public class AndroidUtilities {
         return true;
     }
 
-    public static void setLightNavigationBar(View view, boolean enable) {
-        int flags;
+    public static void setLightNavigationBar(View view, boolean z) {
         if (view != null && Build.VERSION.SDK_INT >= 26) {
-            int flags2 = view.getSystemUiVisibility();
-            if (enable) {
-                flags = flags2 | 16;
-            } else {
-                flags = flags2 & -17;
-            }
-            view.setSystemUiVisibility(flags);
+            int systemUiVisibility = view.getSystemUiVisibility();
+            view.setSystemUiVisibility(z ? systemUiVisibility | 16 : systemUiVisibility & -17);
         }
     }
 
-    public static void setLightNavigationBar(Window window, boolean enable) {
+    public static void setLightNavigationBar(Window window, boolean z) {
         if (window != null) {
-            setLightNavigationBar(window.getDecorView(), enable);
+            setLightNavigationBar(window.getDecorView(), z);
         }
     }
 
-    public static void setNavigationBarColor(Window window, int color) {
-        setNavigationBarColor(window, color, true);
+    public static void setNavigationBarColor(Window window, int i) {
+        setNavigationBarColor(window, i, true);
     }
 
-    public static void setNavigationBarColor(Window window, int color, boolean animated) {
-        setNavigationBarColor(window, color, animated, (IntColorCallback) null);
+    public static void setNavigationBarColor(Window window, int i, boolean z) {
+        setNavigationBarColor(window, i, z, (IntColorCallback) null);
     }
 
-    public static void setNavigationBarColor(final Window window, int color, boolean animated, IntColorCallback onUpdate) {
-        ValueAnimator animator;
+    public static void setNavigationBarColor(final Window window, int i, boolean z, IntColorCallback intColorCallback) {
+        ValueAnimator valueAnimator;
         if (Build.VERSION.SDK_INT >= 21) {
             HashMap<Window, ValueAnimator> hashMap = navigationBarColorAnimators;
-            if (!(hashMap == null || (animator = hashMap.get(window)) == null)) {
-                animator.cancel();
+            if (!(hashMap == null || (valueAnimator = hashMap.get(window)) == null)) {
+                valueAnimator.cancel();
                 navigationBarColorAnimators.remove(window);
             }
-            if (!animated) {
-                if (onUpdate != null) {
-                    onUpdate.run(color);
+            if (!z) {
+                if (intColorCallback != null) {
+                    intColorCallback.run(i);
                 }
                 try {
-                    window.setNavigationBarColor(color);
-                } catch (Exception e) {
+                    window.setNavigationBarColor(i);
+                } catch (Exception unused) {
                 }
             } else {
-                ValueAnimator animator2 = ValueAnimator.ofArgb(new int[]{window.getNavigationBarColor(), color});
-                animator2.addUpdateListener(new AndroidUtilities$$ExternalSyntheticLambda0(onUpdate, window));
-                animator2.addListener(new AnimatorListenerAdapter() {
-                    public void onAnimationEnd(Animator animation) {
+                ValueAnimator ofArgb = ValueAnimator.ofArgb(new int[]{window.getNavigationBarColor(), i});
+                ofArgb.addUpdateListener(new AndroidUtilities$$ExternalSyntheticLambda0(intColorCallback, window));
+                ofArgb.addListener(new AnimatorListenerAdapter() {
+                    public void onAnimationEnd(Animator animator) {
                         if (AndroidUtilities.navigationBarColorAnimators != null) {
                             AndroidUtilities.navigationBarColorAnimators.remove(window);
                         }
                     }
                 });
-                animator2.setDuration(200);
-                animator2.setInterpolator(CubicBezierInterpolator.DEFAULT);
-                animator2.start();
+                ofArgb.setDuration(200);
+                ofArgb.setInterpolator(CubicBezierInterpolator.DEFAULT);
+                ofArgb.start();
                 if (navigationBarColorAnimators == null) {
                     navigationBarColorAnimators = new HashMap<>();
                 }
-                navigationBarColorAnimators.put(window, animator2);
+                navigationBarColorAnimators.put(window, ofArgb);
             }
         }
     }
 
-    static /* synthetic */ void lambda$setNavigationBarColor$10(IntColorCallback onUpdate, Window window, ValueAnimator a) {
-        int tcolor = ((Integer) a.getAnimatedValue()).intValue();
-        if (onUpdate != null) {
-            onUpdate.run(tcolor);
+    /* access modifiers changed from: private */
+    public static /* synthetic */ void lambda$setNavigationBarColor$10(IntColorCallback intColorCallback, Window window, ValueAnimator valueAnimator) {
+        int intValue = ((Integer) valueAnimator.getAnimatedValue()).intValue();
+        if (intColorCallback != null) {
+            intColorCallback.run(intValue);
         }
         try {
-            window.setNavigationBarColor(tcolor);
-        } catch (Exception e) {
+            window.setNavigationBarColor(intValue);
+        } catch (Exception unused) {
         }
     }
 
-    public static boolean checkHostForPunycode(String url) {
-        if (url == null) {
-            return false;
-        }
-        boolean hasLatin = false;
-        boolean hasNonLatin = false;
+    /* JADX WARNING: Removed duplicated region for block: B:40:0x0050 A[ADDED_TO_REGION] */
+    /* JADX WARNING: Removed duplicated region for block: B:51:? A[ADDED_TO_REGION, RETURN, SYNTHETIC] */
+    /* Code decompiled incorrectly, please refer to instructions dump. */
+    public static boolean checkHostForPunycode(java.lang.String r8) {
+        /*
+            r0 = 0
+            if (r8 != 0) goto L_0x0004
+            return r0
+        L_0x0004:
+            r1 = 1
+            int r2 = r8.length()     // Catch:{ Exception -> 0x0048 }
+            r3 = 0
+            r4 = 0
+            r5 = 0
+        L_0x000c:
+            if (r3 >= r2) goto L_0x004e
+            char r6 = r8.charAt(r3)     // Catch:{ Exception -> 0x0046 }
+            r7 = 46
+            if (r6 == r7) goto L_0x0043
+            r7 = 45
+            if (r6 == r7) goto L_0x0043
+            r7 = 47
+            if (r6 == r7) goto L_0x0043
+            r7 = 43
+            if (r6 == r7) goto L_0x0043
+            r7 = 48
+            if (r6 < r7) goto L_0x002b
+            r7 = 57
+            if (r6 > r7) goto L_0x002b
+            goto L_0x0043
+        L_0x002b:
+            r7 = 97
+            if (r6 < r7) goto L_0x0033
+            r7 = 122(0x7a, float:1.71E-43)
+            if (r6 <= r7) goto L_0x003b
+        L_0x0033:
+            r7 = 65
+            if (r6 < r7) goto L_0x003d
+            r7 = 90
+            if (r6 > r7) goto L_0x003d
+        L_0x003b:
+            r4 = 1
+            goto L_0x003e
+        L_0x003d:
+            r5 = 1
+        L_0x003e:
+            if (r4 == 0) goto L_0x0043
+            if (r5 == 0) goto L_0x0043
+            goto L_0x004e
+        L_0x0043:
+            int r3 = r3 + 1
+            goto L_0x000c
+        L_0x0046:
+            r8 = move-exception
+            goto L_0x004b
+        L_0x0048:
+            r8 = move-exception
+            r4 = 0
+            r5 = 0
+        L_0x004b:
+            org.telegram.messenger.FileLog.e((java.lang.Throwable) r8)
+        L_0x004e:
+            if (r4 == 0) goto L_0x0053
+            if (r5 == 0) goto L_0x0053
+            r0 = 1
+        L_0x0053:
+            return r0
+        */
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.AndroidUtilities.checkHostForPunycode(java.lang.String):boolean");
+    }
+
+    public static boolean shouldShowUrlInAlert(String str) {
         try {
-            int N = url.length();
-            for (int a = 0; a < N; a++) {
-                char ch = url.charAt(a);
-                if (!(ch == '.' || ch == '-' || ch == '/' || ch == '+' || (ch >= '0' && ch <= '9'))) {
-                    if ((ch < 'a' || ch > 'z') && (ch < 'A' || ch > 'Z')) {
-                        hasNonLatin = true;
-                    } else {
-                        hasLatin = true;
-                    }
-                    if (hasLatin && hasNonLatin) {
-                        break;
-                    }
-                }
-            }
+            return checkHostForPunycode(Uri.parse(str).getHost());
         } catch (Exception e) {
             FileLog.e((Throwable) e);
-        }
-        if (!hasLatin || !hasNonLatin) {
-            return false;
-        }
-        return true;
-    }
-
-    public static boolean shouldShowUrlInAlert(String url) {
-        try {
-            return checkHostForPunycode(Uri.parse(url).getHost());
-        } catch (Exception e) {
-            FileLog.e((Throwable) e);
             return false;
         }
     }
 
-    public static void scrollToFragmentRow(ActionBarLayout parentLayout, String rowName) {
-        if (parentLayout != null && rowName != null) {
-            BaseFragment openingFragment = parentLayout.fragmentsStack.get(parentLayout.fragmentsStack.size() - 1);
+    public static void scrollToFragmentRow(ActionBarLayout actionBarLayout, String str) {
+        if (actionBarLayout != null && str != null) {
+            ArrayList<BaseFragment> arrayList = actionBarLayout.fragmentsStack;
+            BaseFragment baseFragment = arrayList.get(arrayList.size() - 1);
             try {
-                Field listViewField = openingFragment.getClass().getDeclaredField("listView");
-                listViewField.setAccessible(true);
-                RecyclerListView listView = (RecyclerListView) listViewField.get(openingFragment);
-                listView.highlightRow(new AndroidUtilities$$ExternalSyntheticLambda2(openingFragment, rowName, listView));
-                listViewField.setAccessible(false);
-            } catch (Throwable th) {
+                Field declaredField = baseFragment.getClass().getDeclaredField("listView");
+                declaredField.setAccessible(true);
+                RecyclerListView recyclerListView = (RecyclerListView) declaredField.get(baseFragment);
+                recyclerListView.highlightRow(new AndroidUtilities$$ExternalSyntheticLambda11(baseFragment, str, recyclerListView));
+                declaredField.setAccessible(false);
+            } catch (Throwable unused) {
             }
         }
     }
 
-    static /* synthetic */ int lambda$scrollToFragmentRow$11(BaseFragment openingFragment, String rowName, RecyclerListView listView) {
-        int position = -1;
+    /* access modifiers changed from: private */
+    public static /* synthetic */ int lambda$scrollToFragmentRow$11(BaseFragment baseFragment, String str, RecyclerListView recyclerListView) {
+        int i = -1;
         try {
-            Field rowField = openingFragment.getClass().getDeclaredField(rowName);
-            rowField.setAccessible(true);
-            position = rowField.getInt(openingFragment);
-            ((LinearLayoutManager) listView.getLayoutManager()).scrollToPositionWithOffset(position, dp(60.0f));
-            rowField.setAccessible(false);
-            return position;
-        } catch (Throwable th) {
-            return position;
+            Field declaredField = baseFragment.getClass().getDeclaredField(str);
+            declaredField.setAccessible(true);
+            i = declaredField.getInt(baseFragment);
+            ((LinearLayoutManager) recyclerListView.getLayoutManager()).scrollToPositionWithOffset(i, dp(60.0f));
+            declaredField.setAccessible(false);
+            return i;
+        } catch (Throwable unused) {
+            return i;
         }
     }
 
@@ -4566,162 +4924,219 @@ public class AndroidUtilities {
         return Build.VERSION.SDK_INT < 23 || Settings.canDrawOverlays(context);
     }
 
-    public static void updateVisibleRows(RecyclerListView listView) {
+    public static void updateVisibleRows(RecyclerListView recyclerListView) {
         RecyclerView.Adapter adapter;
-        RecyclerView.ViewHolder holder;
-        if (listView != null && (adapter = listView.getAdapter()) != null) {
-            for (int i = 0; i < listView.getChildCount(); i++) {
-                View child = listView.getChildAt(i);
-                int p = listView.getChildAdapterPosition(child);
-                if (p >= 0 && (holder = listView.getChildViewHolder(child)) != null && !holder.shouldIgnore()) {
-                    adapter.onBindViewHolder(holder, p);
+        RecyclerView.ViewHolder childViewHolder;
+        if (recyclerListView != null && (adapter = recyclerListView.getAdapter()) != null) {
+            for (int i = 0; i < recyclerListView.getChildCount(); i++) {
+                View childAt = recyclerListView.getChildAt(i);
+                int childAdapterPosition = recyclerListView.getChildAdapterPosition(childAt);
+                if (childAdapterPosition >= 0 && (childViewHolder = recyclerListView.getChildViewHolder(childAt)) != null && !childViewHolder.shouldIgnore()) {
+                    adapter.onBindViewHolder(childViewHolder, childAdapterPosition);
                 }
             }
         }
     }
 
-    public static void updateViewVisibilityAnimated(View view, boolean show) {
-        updateViewVisibilityAnimated(view, show, 1.0f, true);
+    public static void updateViewVisibilityAnimated(View view, boolean z) {
+        updateViewVisibilityAnimated(view, z, 1.0f, true);
     }
 
-    public static void updateViewVisibilityAnimated(View view, boolean show, float scaleFactor, boolean animated) {
-        if (view.getParent() == null) {
-            animated = false;
-        }
+    public static void updateViewVisibilityAnimated(View view, boolean z, float f, boolean z2) {
         int i = 0;
+        if (view.getParent() == null) {
+            z2 = false;
+        }
         int i2 = null;
-        if (!animated) {
+        if (!z2) {
             view.animate().setListener((Animator.AnimatorListener) null).cancel();
-            if (!show) {
+            if (!z) {
                 i = 8;
             }
             view.setVisibility(i);
-            if (show) {
+            if (z) {
                 i2 = 1;
             }
             view.setTag(i2);
             view.setAlpha(1.0f);
             view.setScaleX(1.0f);
             view.setScaleY(1.0f);
-        } else if (show && view.getTag() == null) {
+        } else if (z && view.getTag() == null) {
             view.animate().setListener((Animator.AnimatorListener) null).cancel();
             if (view.getVisibility() != 0) {
                 view.setVisibility(0);
                 view.setAlpha(0.0f);
-                view.setScaleX(scaleFactor);
-                view.setScaleY(scaleFactor);
+                view.setScaleX(f);
+                view.setScaleY(f);
             }
             view.animate().alpha(1.0f).scaleY(1.0f).scaleX(1.0f).setDuration(150).start();
             view.setTag(1);
-        } else if (!show && view.getTag() != null) {
+        } else if (!z && view.getTag() != null) {
             view.animate().setListener((Animator.AnimatorListener) null).cancel();
-            view.animate().alpha(0.0f).scaleY(scaleFactor).scaleX(scaleFactor).setListener(new HideViewAfterAnimation(view)).setDuration(150).start();
+            view.animate().alpha(0.0f).scaleY(f).scaleX(f).setListener(new HideViewAfterAnimation(view)).setDuration(150).start();
             view.setTag((Object) null);
         }
     }
 
-    public static long getPrefIntOrLong(SharedPreferences preferences, String key, long defaultValue) {
+    public static long getPrefIntOrLong(SharedPreferences sharedPreferences, String str, long j) {
         try {
-            return preferences.getLong(key, defaultValue);
-        } catch (Exception e) {
-            return (long) preferences.getInt(key, (int) defaultValue);
+            return sharedPreferences.getLong(str, j);
+        } catch (Exception unused) {
+            return (long) sharedPreferences.getInt(str, (int) j);
         }
     }
 
-    public static Bitmap getScaledBitmap(float w, float h, String path, String streamPath, int streamOffset) {
-        Bitmap wallpaper;
-        FileInputStream stream = null;
-        try {
-            BitmapFactory.Options options = new BitmapFactory.Options();
-            options.inJustDecodeBounds = true;
-            if (path != null) {
-                BitmapFactory.decodeFile(path, options);
-            } else {
-                stream = new FileInputStream(streamPath);
-                stream.getChannel().position((long) streamOffset);
-                BitmapFactory.decodeStream(stream, (Rect) null, options);
-            }
-            if (options.outWidth <= 0 || options.outHeight <= 0) {
-                if (stream != null) {
-                    try {
-                        stream.close();
-                    } catch (Exception e2) {
-                        FileLog.e((Throwable) e2);
-                    }
-                }
-                return null;
-            }
-            if (w > h && options.outWidth < options.outHeight) {
-                float temp = w;
-                w = h;
-                h = temp;
-            }
-            float scale = Math.min(((float) options.outWidth) / w, ((float) options.outHeight) / h);
-            options.inSampleSize = 1;
-            if (scale > 1.0f) {
-                do {
-                    options.inSampleSize *= 2;
-                } while (((float) options.inSampleSize) < scale);
-            }
-            options.inJustDecodeBounds = false;
-            if (path != null) {
-                wallpaper = BitmapFactory.decodeFile(path, options);
-            } else {
-                stream.getChannel().position((long) streamOffset);
-                wallpaper = BitmapFactory.decodeStream(stream, (Rect) null, options);
-            }
-            if (stream != null) {
-                try {
-                    stream.close();
-                } catch (Exception e22) {
-                    FileLog.e((Throwable) e22);
-                }
-            }
-            return wallpaper;
-        } catch (Throwable th) {
-            if (stream != null) {
-                try {
-                    stream.close();
-                } catch (Exception e23) {
-                    FileLog.e((Throwable) e23);
-                }
-            }
-            throw th;
-        }
+    /* JADX WARNING: Removed duplicated region for block: B:39:0x007c A[SYNTHETIC, Splitter:B:39:0x007c] */
+    /* Code decompiled incorrectly, please refer to instructions dump. */
+    public static android.graphics.Bitmap getScaledBitmap(float r7, float r8, java.lang.String r9, java.lang.String r10, int r11) {
+        /*
+            r0 = 0
+            android.graphics.BitmapFactory$Options r1 = new android.graphics.BitmapFactory$Options     // Catch:{ all -> 0x0075 }
+            r1.<init>()     // Catch:{ all -> 0x0075 }
+            r2 = 1
+            r1.inJustDecodeBounds = r2     // Catch:{ all -> 0x0075 }
+            if (r9 == 0) goto L_0x0010
+            android.graphics.BitmapFactory.decodeFile(r9, r1)     // Catch:{ all -> 0x0075 }
+            r3 = r0
+            goto L_0x0020
+        L_0x0010:
+            java.io.FileInputStream r3 = new java.io.FileInputStream     // Catch:{ all -> 0x0075 }
+            r3.<init>(r10)     // Catch:{ all -> 0x0075 }
+            java.nio.channels.FileChannel r10 = r3.getChannel()     // Catch:{ all -> 0x0073 }
+            long r4 = (long) r11     // Catch:{ all -> 0x0073 }
+            r10.position(r4)     // Catch:{ all -> 0x0073 }
+            android.graphics.BitmapFactory.decodeStream(r3, r0, r1)     // Catch:{ all -> 0x0073 }
+        L_0x0020:
+            int r10 = r1.outWidth     // Catch:{ all -> 0x0073 }
+            if (r10 <= 0) goto L_0x006d
+            int r4 = r1.outHeight     // Catch:{ all -> 0x0073 }
+            if (r4 <= 0) goto L_0x006d
+            int r5 = (r7 > r8 ? 1 : (r7 == r8 ? 0 : -1))
+            if (r5 <= 0) goto L_0x0031
+            if (r10 >= r4) goto L_0x0031
+            r6 = r8
+            r8 = r7
+            r7 = r6
+        L_0x0031:
+            float r10 = (float) r10     // Catch:{ all -> 0x0073 }
+            float r10 = r10 / r7
+            float r7 = (float) r4     // Catch:{ all -> 0x0073 }
+            float r7 = r7 / r8
+            float r7 = java.lang.Math.min(r10, r7)     // Catch:{ all -> 0x0073 }
+            r1.inSampleSize = r2     // Catch:{ all -> 0x0073 }
+            r8 = 1065353216(0x3var_, float:1.0)
+            int r8 = (r7 > r8 ? 1 : (r7 == r8 ? 0 : -1))
+            if (r8 <= 0) goto L_0x004c
+        L_0x0041:
+            int r8 = r1.inSampleSize     // Catch:{ all -> 0x0073 }
+            int r8 = r8 * 2
+            r1.inSampleSize = r8     // Catch:{ all -> 0x0073 }
+            float r8 = (float) r8     // Catch:{ all -> 0x0073 }
+            int r8 = (r8 > r7 ? 1 : (r8 == r7 ? 0 : -1))
+            if (r8 < 0) goto L_0x0041
+        L_0x004c:
+            r7 = 0
+            r1.inJustDecodeBounds = r7     // Catch:{ all -> 0x0073 }
+            if (r9 == 0) goto L_0x0056
+            android.graphics.Bitmap r7 = android.graphics.BitmapFactory.decodeFile(r9, r1)     // Catch:{ all -> 0x0073 }
+            goto L_0x0062
+        L_0x0056:
+            java.nio.channels.FileChannel r7 = r3.getChannel()     // Catch:{ all -> 0x0073 }
+            long r8 = (long) r11     // Catch:{ all -> 0x0073 }
+            r7.position(r8)     // Catch:{ all -> 0x0073 }
+            android.graphics.Bitmap r7 = android.graphics.BitmapFactory.decodeStream(r3, r0, r1)     // Catch:{ all -> 0x0073 }
+        L_0x0062:
+            if (r3 == 0) goto L_0x006c
+            r3.close()     // Catch:{ Exception -> 0x0068 }
+            goto L_0x006c
+        L_0x0068:
+            r8 = move-exception
+            org.telegram.messenger.FileLog.e((java.lang.Throwable) r8)
+        L_0x006c:
+            return r7
+        L_0x006d:
+            if (r3 == 0) goto L_0x0084
+            r3.close()     // Catch:{ Exception -> 0x0080 }
+            goto L_0x0084
+        L_0x0073:
+            r7 = move-exception
+            goto L_0x0077
+        L_0x0075:
+            r7 = move-exception
+            r3 = r0
+        L_0x0077:
+            org.telegram.messenger.FileLog.e((java.lang.Throwable) r7)     // Catch:{ all -> 0x0085 }
+            if (r3 == 0) goto L_0x0084
+            r3.close()     // Catch:{ Exception -> 0x0080 }
+            goto L_0x0084
+        L_0x0080:
+            r7 = move-exception
+            org.telegram.messenger.FileLog.e((java.lang.Throwable) r7)
+        L_0x0084:
+            return r0
+        L_0x0085:
+            r7 = move-exception
+            if (r3 == 0) goto L_0x0090
+            r3.close()     // Catch:{ Exception -> 0x008c }
+            goto L_0x0090
+        L_0x008c:
+            r8 = move-exception
+            org.telegram.messenger.FileLog.e((java.lang.Throwable) r8)
+        L_0x0090:
+            goto L_0x0092
+        L_0x0091:
+            throw r7
+        L_0x0092:
+            goto L_0x0091
+        */
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.AndroidUtilities.getScaledBitmap(float, float, java.lang.String, java.lang.String, int):android.graphics.Bitmap");
     }
 
-    public static Uri getBitmapShareUri(Bitmap bitmap, String fileName, Bitmap.CompressFormat format) {
-        FileOutputStream out;
-        File cachePath = getCacheDir();
-        if (!cachePath.isDirectory()) {
-            try {
-                cachePath.mkdirs();
-            } catch (Exception e) {
-                FileLog.e((Throwable) e);
-                return null;
-            }
-        }
-        File file = new File(cachePath, fileName);
-        try {
-            out = new FileOutputStream(file);
-            bitmap.compress(format, 100, out);
-            out.close();
-            Uri uriForFile = FileProvider.getUriForFile(ApplicationLoader.applicationContext, "org.telegram.messenger.beta.provider", file);
-            out.close();
-            return uriForFile;
-        } catch (Exception e2) {
-            FileLog.e((Throwable) e2);
-            return null;
-        } catch (Throwable th) {
-        }
-        throw th;
+    /* JADX WARNING: Missing exception handler attribute for start block: B:19:0x0036 */
+    /* Code decompiled incorrectly, please refer to instructions dump. */
+    public static android.net.Uri getBitmapShareUri(android.graphics.Bitmap r3, java.lang.String r4, android.graphics.Bitmap.CompressFormat r5) {
+        /*
+            java.io.File r0 = getCacheDir()
+            boolean r1 = r0.isDirectory()
+            r2 = 0
+            if (r1 != 0) goto L_0x0014
+            r0.mkdirs()     // Catch:{ Exception -> 0x000f }
+            goto L_0x0014
+        L_0x000f:
+            r3 = move-exception
+            org.telegram.messenger.FileLog.e((java.lang.Throwable) r3)
+            return r2
+        L_0x0014:
+            java.io.File r1 = new java.io.File
+            r1.<init>(r0, r4)
+            java.io.FileOutputStream r4 = new java.io.FileOutputStream     // Catch:{ Exception -> 0x0037 }
+            r4.<init>(r1)     // Catch:{ Exception -> 0x0037 }
+            r0 = 100
+            r3.compress(r5, r0, r4)     // Catch:{ all -> 0x0032 }
+            r4.close()     // Catch:{ all -> 0x0032 }
+            android.content.Context r3 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ all -> 0x0032 }
+            java.lang.String r5 = "org.telegram.messenger.beta.provider"
+            android.net.Uri r3 = androidx.core.content.FileProvider.getUriForFile(r3, r5, r1)     // Catch:{ all -> 0x0032 }
+            r4.close()     // Catch:{ Exception -> 0x0037 }
+            return r3
+        L_0x0032:
+            r3 = move-exception
+            r4.close()     // Catch:{ all -> 0x0036 }
+        L_0x0036:
+            throw r3     // Catch:{ Exception -> 0x0037 }
+        L_0x0037:
+            r3 = move-exception
+            org.telegram.messenger.FileLog.e((java.lang.Throwable) r3)
+            return r2
+        */
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.AndroidUtilities.getBitmapShareUri(android.graphics.Bitmap, java.lang.String, android.graphics.Bitmap$CompressFormat):android.net.Uri");
     }
 
     public static boolean isNumeric(String str) {
         try {
             Double.parseDouble(str);
             return true;
-        } catch (NumberFormatException e) {
+        } catch (NumberFormatException unused) {
             return false;
         }
     }

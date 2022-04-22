@@ -1,19 +1,15 @@
 package org.telegram.messenger;
 
-import org.telegram.tgnet.TLRPC;
+import java.util.Comparator;
+import org.telegram.tgnet.TLRPC$MessageEntity;
 
-public final /* synthetic */ class MediaDataController$$ExternalSyntheticLambda119 implements Runnable {
-    public final /* synthetic */ MediaDataController f$0;
-    public final /* synthetic */ String f$1;
-    public final /* synthetic */ TLRPC.TL_messages_stickerSet f$2;
+public final /* synthetic */ class MediaDataController$$ExternalSyntheticLambda119 implements Comparator {
+    public static final /* synthetic */ MediaDataController$$ExternalSyntheticLambda119 INSTANCE = new MediaDataController$$ExternalSyntheticLambda119();
 
-    public /* synthetic */ MediaDataController$$ExternalSyntheticLambda119(MediaDataController mediaDataController, String str, TLRPC.TL_messages_stickerSet tL_messages_stickerSet) {
-        this.f$0 = mediaDataController;
-        this.f$1 = str;
-        this.f$2 = tL_messages_stickerSet;
+    private /* synthetic */ MediaDataController$$ExternalSyntheticLambda119() {
     }
 
-    public final void run() {
-        this.f$0.m785x7f0avar_(this.f$1, this.f$2);
+    public final int compare(Object obj, Object obj2) {
+        return MediaDataController.lambda$getTextStyleRuns$130((TLRPC$MessageEntity) obj, (TLRPC$MessageEntity) obj2);
     }
 }

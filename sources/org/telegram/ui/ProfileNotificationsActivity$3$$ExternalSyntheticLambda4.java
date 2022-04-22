@@ -11,6 +11,6 @@ public final /* synthetic */ class ProfileNotificationsActivity$3$$ExternalSynth
     }
 
     public final void didSelectValues(int i, int i2) {
-        this.f$0.m3182x60394a4f(i, i2);
+        this.f$0.lambda$onItemClick$3(i, i2);
     }
 }

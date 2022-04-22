@@ -2,7 +2,7 @@ package org.telegram.ui.Adapters;
 
 import org.telegram.tgnet.RequestDelegate;
 import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC;
+import org.telegram.tgnet.TLRPC$TL_error;
 
 public final /* synthetic */ class SearchAdapterHelper$$ExternalSyntheticLambda6 implements RequestDelegate {
     public final /* synthetic */ SearchAdapterHelper f$0;
@@ -23,7 +23,7 @@ public final /* synthetic */ class SearchAdapterHelper$$ExternalSyntheticLambda6
         this.f$6 = str;
     }
 
-    public final void run(TLObject tLObject, TLRPC.TL_error tL_error) {
-        this.f$0.m1355xc4CLASSNAMEvar_(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6, tLObject, tL_error);
+    public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+        this.f$0.lambda$queryServerSearch$1(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6, tLObject, tLRPC$TL_error);
     }
 }

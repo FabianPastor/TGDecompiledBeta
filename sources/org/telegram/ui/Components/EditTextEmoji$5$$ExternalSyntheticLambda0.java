@@ -11,6 +11,6 @@ public final /* synthetic */ class EditTextEmoji$5$$ExternalSyntheticLambda0 imp
     }
 
     public final void onClick(DialogInterface dialogInterface, int i) {
-        this.f$0.m3954xad0var_c7(dialogInterface, i);
+        this.f$0.lambda$onClearEmojiRecent$0(dialogInterface, i);
     }
 }

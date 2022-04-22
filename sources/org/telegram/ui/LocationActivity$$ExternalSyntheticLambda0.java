@@ -12,6 +12,6 @@ public final /* synthetic */ class LocationActivity$$ExternalSyntheticLambda0 im
     }
 
     public final void onCancel(DialogInterface dialogInterface) {
-        this.f$0.m2408lambda$createView$11$orgtelegramuiLocationActivity(this.f$1, dialogInterface);
+        this.f$0.lambda$createView$11(this.f$1, dialogInterface);
     }
 }

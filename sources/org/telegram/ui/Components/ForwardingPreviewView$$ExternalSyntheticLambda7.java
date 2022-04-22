@@ -11,6 +11,6 @@ public final /* synthetic */ class ForwardingPreviewView$$ExternalSyntheticLambd
     }
 
     public final boolean onTouch(View view, MotionEvent motionEvent) {
-        return this.f$0.m4013lambda$new$6$orgtelegramuiComponentsForwardingPreviewView(view, motionEvent);
+        return this.f$0.lambda$new$7(view, motionEvent);
     }
 }

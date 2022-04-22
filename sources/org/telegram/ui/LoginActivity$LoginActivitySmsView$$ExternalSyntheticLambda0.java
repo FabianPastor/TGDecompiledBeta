@@ -11,6 +11,6 @@ public final /* synthetic */ class LoginActivity$LoginActivitySmsView$$ExternalS
     }
 
     public final void onClick(DialogInterface dialogInterface, int i) {
-        this.f$0.m2529lambda$new$4$orgtelegramuiLoginActivity$LoginActivitySmsView(dialogInterface, i);
+        this.f$0.lambda$onBackPressed$33(dialogInterface, i);
     }
 }

@@ -1,16 +1,19 @@
 package org.telegram.ui;
 
-import android.view.MotionEvent;
+import android.text.style.URLSpan;
 import android.view.View;
+import org.telegram.ui.Components.TranslateAlert;
 
-public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda239 implements View.OnTouchListener {
+public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda239 implements TranslateAlert.OnLinkPress {
     public final /* synthetic */ ChatActivity f$0;
+    public final /* synthetic */ View f$1;
 
-    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda239(ChatActivity chatActivity) {
+    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda239(ChatActivity chatActivity, View view) {
         this.f$0 = chatActivity;
+        this.f$1 = view;
     }
 
-    public final boolean onTouch(View view, MotionEvent motionEvent) {
-        return this.f$0.m1658lambda$createView$15$orgtelegramuiChatActivity(view, motionEvent);
+    public final void run(URLSpan uRLSpan) {
+        this.f$0.lambda$createMenu$160(this.f$1, uRLSpan);
     }
 }

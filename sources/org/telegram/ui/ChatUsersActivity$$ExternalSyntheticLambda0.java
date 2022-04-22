@@ -10,6 +10,6 @@ public final /* synthetic */ class ChatUsersActivity$$ExternalSyntheticLambda0 i
     }
 
     public final void onClick(DialogInterface dialogInterface, int i) {
-        this.f$0.m1997lambda$checkDiscard$11$orgtelegramuiChatUsersActivity(dialogInterface, i);
+        this.f$0.lambda$checkDiscard$12(dialogInterface, i);
     }
 }

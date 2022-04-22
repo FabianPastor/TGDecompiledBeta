@@ -1,15 +1,19 @@
 package org.telegram.ui;
 
-import android.content.DialogInterface;
+import org.telegram.ui.ActionBar.AlertDialog;
 
-public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda188 implements DialogInterface.OnDismissListener {
+public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda188 implements Runnable {
     public final /* synthetic */ ChatActivity f$0;
+    public final /* synthetic */ AlertDialog[] f$1;
+    public final /* synthetic */ int f$2;
 
-    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda188(ChatActivity chatActivity) {
+    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda188(ChatActivity chatActivity, AlertDialog[] alertDialogArr, int i) {
         this.f$0 = chatActivity;
+        this.f$1 = alertDialogArr;
+        this.f$2 = i;
     }
 
-    public final void onDismiss(DialogInterface dialogInterface) {
-        this.f$0.m1787lambda$processSelectedOption$194$orgtelegramuiChatActivity(dialogInterface);
+    public final void run() {
+        this.f$0.lambda$showRequestUrlAlert$220(this.f$1, this.f$2);
     }
 }

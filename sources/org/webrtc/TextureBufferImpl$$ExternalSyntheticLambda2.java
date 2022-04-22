@@ -10,6 +10,6 @@ public final /* synthetic */ class TextureBufferImpl$$ExternalSyntheticLambda2 i
     }
 
     public final Object call() {
-        return this.f$0.m4634lambda$toI420$1$orgwebrtcTextureBufferImpl();
+        return this.f$0.lambda$toI420$1();
     }
 }

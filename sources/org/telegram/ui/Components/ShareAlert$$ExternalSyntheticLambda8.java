@@ -1,15 +1,15 @@
 package org.telegram.ui.Components;
 
+import android.view.MotionEvent;
 import android.view.View;
 
-public final /* synthetic */ class ShareAlert$$ExternalSyntheticLambda8 implements View.OnClickListener {
-    public final /* synthetic */ ShareAlert f$0;
+public final /* synthetic */ class ShareAlert$$ExternalSyntheticLambda8 implements View.OnTouchListener {
+    public static final /* synthetic */ ShareAlert$$ExternalSyntheticLambda8 INSTANCE = new ShareAlert$$ExternalSyntheticLambda8();
 
-    public /* synthetic */ ShareAlert$$ExternalSyntheticLambda8(ShareAlert shareAlert) {
-        this.f$0 = shareAlert;
+    private /* synthetic */ ShareAlert$$ExternalSyntheticLambda8() {
     }
 
-    public final void onClick(View view) {
-        this.f$0.m4345lambda$onSendLongClick$13$orgtelegramuiComponentsShareAlert(view);
+    public final boolean onTouch(View view, MotionEvent motionEvent) {
+        return ShareAlert.lambda$new$6(view, motionEvent);
     }
 }

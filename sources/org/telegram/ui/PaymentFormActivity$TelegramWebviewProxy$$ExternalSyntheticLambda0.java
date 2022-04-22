@@ -14,6 +14,6 @@ public final /* synthetic */ class PaymentFormActivity$TelegramWebviewProxy$$Ext
     }
 
     public final void run() {
-        this.f$0.m2864x74var_d2(this.f$1, this.f$2);
+        this.f$0.lambda$postEvent$0(this.f$1, this.f$2);
     }
 }

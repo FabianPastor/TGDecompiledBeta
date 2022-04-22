@@ -1,13 +1,15 @@
 package org.telegram.ui;
 
-public final /* synthetic */ class TwoStepVerificationActivity$$ExternalSyntheticLambda2 implements Runnable {
+import android.content.DialogInterface;
+
+public final /* synthetic */ class TwoStepVerificationActivity$$ExternalSyntheticLambda2 implements DialogInterface.OnClickListener {
     public final /* synthetic */ TwoStepVerificationActivity f$0;
 
     public /* synthetic */ TwoStepVerificationActivity$$ExternalSyntheticLambda2(TwoStepVerificationActivity twoStepVerificationActivity) {
         this.f$0 = twoStepVerificationActivity;
     }
 
-    public final void run() {
-        this.f$0.m3371lambda$new$0$orgtelegramuiTwoStepVerificationActivity();
+    public final void onClick(DialogInterface dialogInterface, int i) {
+        this.f$0.lambda$onPasswordForgot$16(dialogInterface, i);
     }
 }

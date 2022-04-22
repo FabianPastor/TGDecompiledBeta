@@ -10,6 +10,6 @@ public final /* synthetic */ class FloatingToolbar$FloatingToolbarPopup$3$$Exter
     }
 
     public final void run() {
-        this.f$0.m1286xe3adaCLASSNAME();
+        this.f$0.lambda$onAnimationEnd$0();
     }
 }

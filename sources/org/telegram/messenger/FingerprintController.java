@@ -50,16 +50,16 @@ public class FingerprintController {
     }
 
     /* access modifiers changed from: private */
-    public static void generateNewKey(boolean notifyCheckFingerprint) {
-        KeyPairGenerator generator = getKeyPairGenerator();
-        if (generator != null) {
+    public static void generateNewKey(boolean z) {
+        KeyPairGenerator keyPairGenerator2 = getKeyPairGenerator();
+        if (keyPairGenerator2 != null) {
             try {
-                Locale realLocale = Locale.getDefault();
+                Locale locale = Locale.getDefault();
                 setLocale(Locale.ENGLISH);
-                generator.initialize(new KeyGenParameterSpec.Builder("tmessages_passcode", 3).setDigests(new String[]{"SHA-256", "SHA-512"}).setEncryptionPaddings(new String[]{"OAEPPadding"}).setUserAuthenticationRequired(true).build());
-                generator.generateKeyPair();
-                setLocale(realLocale);
-                AndroidUtilities.runOnUIThread(new FingerprintController$$ExternalSyntheticLambda1(notifyCheckFingerprint));
+                keyPairGenerator2.initialize(new KeyGenParameterSpec.Builder("tmessages_passcode", 3).setDigests(new String[]{"SHA-256", "SHA-512"}).setEncryptionPaddings(new String[]{"OAEPPadding"}).setUserAuthenticationRequired(true).build());
+                keyPairGenerator2.generateKeyPair();
+                setLocale(locale);
+                AndroidUtilities.runOnUIThread(new FingerprintController$$ExternalSyntheticLambda0(z));
             } catch (InvalidAlgorithmParameterException e) {
                 FileLog.e((Throwable) e);
             } catch (Exception e2) {
@@ -84,9 +84,9 @@ public class FingerprintController {
         checkKeyReady(true);
     }
 
-    public static void checkKeyReady(boolean notifyCheckFingerprint) {
+    public static void checkKeyReady(boolean z) {
         if (!isKeyReady() && AndroidUtilities.isKeyguardSecure() && FingerprintManagerCompat.from(ApplicationLoader.applicationContext).isHardwareDetected() && FingerprintManagerCompat.from(ApplicationLoader.applicationContext).hasEnrolledFingerprints()) {
-            Utilities.globalQueue.postRunnable(new FingerprintController$$ExternalSyntheticLambda0(notifyCheckFingerprint));
+            Utilities.globalQueue.postRunnable(new FingerprintController$$ExternalSyntheticLambda1(z));
         }
     }
 
@@ -106,26 +106,23 @@ public class FingerprintController {
         }
         try {
             Cipher.getInstance("RSA/ECB/OAEPWithSHA-256AndMGF1Padding").init(2, keyStore.getKey("tmessages_passcode", (char[]) null));
-            Boolean bool2 = false;
-            hasChangedFingerprints = bool2;
-            return bool2.booleanValue();
-        } catch (KeyPermanentlyInvalidatedException e) {
-            Boolean bool3 = true;
-            hasChangedFingerprints = bool3;
-            return bool3.booleanValue();
-        } catch (Exception e2) {
-            FileLog.e((Throwable) e2);
-            Boolean bool4 = false;
-            hasChangedFingerprints = bool4;
-            return bool4.booleanValue();
+            hasChangedFingerprints = Boolean.FALSE;
+            return false;
+        } catch (KeyPermanentlyInvalidatedException unused) {
+            hasChangedFingerprints = Boolean.TRUE;
+            return true;
+        } catch (Exception e) {
+            FileLog.e((Throwable) e);
+            hasChangedFingerprints = Boolean.FALSE;
+            return false;
         }
     }
 
     private static void setLocale(Locale locale) {
         Locale.setDefault(locale);
         Resources resources = ApplicationLoader.applicationContext.getResources();
-        Configuration config = resources.getConfiguration();
-        config.setLocale(locale);
-        resources.updateConfiguration(config, resources.getDisplayMetrics());
+        Configuration configuration = resources.getConfiguration();
+        configuration.setLocale(locale);
+        resources.updateConfiguration(configuration, resources.getDisplayMetrics());
     }
 }

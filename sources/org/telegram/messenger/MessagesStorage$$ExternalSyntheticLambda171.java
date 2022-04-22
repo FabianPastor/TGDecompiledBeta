@@ -1,21 +1,17 @@
 package org.telegram.messenger;
 
-import org.telegram.tgnet.TLRPC;
+import org.telegram.tgnet.TLRPC$TL_updates;
 
 public final /* synthetic */ class MessagesStorage$$ExternalSyntheticLambda171 implements Runnable {
     public final /* synthetic */ MessagesStorage f$0;
-    public final /* synthetic */ long f$1;
-    public final /* synthetic */ int f$2;
-    public final /* synthetic */ TLRPC.TL_chatBannedRights f$3;
+    public final /* synthetic */ TLRPC$TL_updates f$1;
 
-    public /* synthetic */ MessagesStorage$$ExternalSyntheticLambda171(MessagesStorage messagesStorage, long j, int i, TLRPC.TL_chatBannedRights tL_chatBannedRights) {
+    public /* synthetic */ MessagesStorage$$ExternalSyntheticLambda171(MessagesStorage messagesStorage, TLRPC$TL_updates tLRPC$TL_updates) {
         this.f$0 = messagesStorage;
-        this.f$1 = j;
-        this.f$2 = i;
-        this.f$3 = tL_chatBannedRights;
+        this.f$1 = tLRPC$TL_updates;
     }
 
     public final void run() {
-        this.f$0.m1001x4497b6cc(this.f$1, this.f$2, this.f$3);
+        this.f$0.lambda$updateMessageStateAndIdInternal$157(this.f$1);
     }
 }

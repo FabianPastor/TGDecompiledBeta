@@ -1,17 +1,15 @@
 package org.telegram.ui;
 
-import java.util.HashMap;
-import org.telegram.tgnet.TLRPC;
-import org.telegram.ui.PollCreateActivity;
-
-public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda160 implements PollCreateActivity.PollCreateActivityDelegate {
+public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda160 implements Runnable {
     public final /* synthetic */ ChatActivity f$0;
+    public final /* synthetic */ Runnable f$1;
 
-    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda160(ChatActivity chatActivity) {
+    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda160(ChatActivity chatActivity, Runnable runnable) {
         this.f$0 = chatActivity;
+        this.f$1 = runnable;
     }
 
-    public final void sendPoll(TLRPC.TL_messageMediaPoll tL_messageMediaPoll, HashMap hashMap, boolean z, int i) {
-        this.f$0.m1769lambda$openPollCreate$91$orgtelegramuiChatActivity(tL_messageMediaPoll, hashMap, z, i);
+    public final void run() {
+        this.f$0.lambda$openDiscussionMessageChat$214(this.f$1);
     }
 }

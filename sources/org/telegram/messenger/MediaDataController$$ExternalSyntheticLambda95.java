@@ -1,21 +1,24 @@
 package org.telegram.messenger;
 
-import org.telegram.tgnet.TLRPC;
+import org.telegram.tgnet.TLObject;
+import org.telegram.tgnet.TLRPC$TL_error;
 
 public final /* synthetic */ class MediaDataController$$ExternalSyntheticLambda95 implements Runnable {
     public final /* synthetic */ MediaDataController f$0;
-    public final /* synthetic */ long f$1;
-    public final /* synthetic */ int f$2;
-    public final /* synthetic */ TLRPC.Message f$3;
+    public final /* synthetic */ TLRPC$TL_error f$1;
+    public final /* synthetic */ TLObject f$2;
+    public final /* synthetic */ String f$3;
+    public final /* synthetic */ boolean f$4;
 
-    public /* synthetic */ MediaDataController$$ExternalSyntheticLambda95(MediaDataController mediaDataController, long j, int i, TLRPC.Message message) {
+    public /* synthetic */ MediaDataController$$ExternalSyntheticLambda95(MediaDataController mediaDataController, TLRPC$TL_error tLRPC$TL_error, TLObject tLObject, String str, boolean z) {
         this.f$0 = mediaDataController;
-        this.f$1 = j;
-        this.f$2 = i;
-        this.f$3 = message;
+        this.f$1 = tLRPC$TL_error;
+        this.f$2 = tLObject;
+        this.f$3 = str;
+        this.f$4 = z;
     }
 
     public final void run() {
-        this.f$0.m821x18d97e62(this.f$1, this.f$2, this.f$3);
+        this.f$0.lambda$loadStickersByEmojiOrName$50(this.f$1, this.f$2, this.f$3, this.f$4);
     }
 }

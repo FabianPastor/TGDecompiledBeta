@@ -1,24 +1,14 @@
 package org.telegram.ui;
 
-import android.view.View;
-import org.telegram.ui.Components.RecyclerListView;
+import org.telegram.ui.Components.NumberPicker;
 
-public final /* synthetic */ class GroupCallActivity$$ExternalSyntheticLambda57 implements RecyclerListView.OnItemClickListenerExtended {
-    public final /* synthetic */ GroupCallActivity f$0;
+public final /* synthetic */ class GroupCallActivity$$ExternalSyntheticLambda57 implements NumberPicker.Formatter {
+    public static final /* synthetic */ GroupCallActivity$$ExternalSyntheticLambda57 INSTANCE = new GroupCallActivity$$ExternalSyntheticLambda57();
 
-    public /* synthetic */ GroupCallActivity$$ExternalSyntheticLambda57(GroupCallActivity groupCallActivity) {
-        this.f$0 = groupCallActivity;
+    private /* synthetic */ GroupCallActivity$$ExternalSyntheticLambda57() {
     }
 
-    public /* synthetic */ boolean hasDoubleTap(View view, int i) {
-        return RecyclerListView.OnItemClickListenerExtended.CC.$default$hasDoubleTap(this, view, i);
-    }
-
-    public /* synthetic */ void onDoubleTap(View view, int i, float f, float f2) {
-        RecyclerListView.OnItemClickListenerExtended.CC.$default$onDoubleTap(this, view, i, f, f2);
-    }
-
-    public final void onItemClick(View view, int i, float f, float f2) {
-        this.f$0.m2200lambda$new$12$orgtelegramuiGroupCallActivity(view, i, f, f2);
+    public final String format(int i) {
+        return String.format("%02d", new Object[]{Integer.valueOf(i)});
     }
 }

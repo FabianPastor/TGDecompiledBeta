@@ -10,6 +10,6 @@ public final /* synthetic */ class ProxySettingsActivity$$ExternalSyntheticLambd
     }
 
     public final void onClick(View view) {
-        this.f$0.m3192lambda$createView$4$orgtelegramuiProxySettingsActivity(view);
+        this.f$0.lambda$createView$4(view);
     }
 }

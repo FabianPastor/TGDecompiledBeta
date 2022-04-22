@@ -1,19 +1,16 @@
 package org.telegram.messenger;
 
-import android.util.SparseBooleanArray;
+import org.telegram.tgnet.RequestDelegate;
+import org.telegram.tgnet.TLObject;
+import org.telegram.tgnet.TLRPC$TL_error;
 
-public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda340 implements Runnable {
-    public final /* synthetic */ MessagesController f$0;
-    public final /* synthetic */ SparseBooleanArray f$1;
-    public final /* synthetic */ long f$2;
+public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda340 implements RequestDelegate {
+    public static final /* synthetic */ MessagesController$$ExternalSyntheticLambda340 INSTANCE = new MessagesController$$ExternalSyntheticLambda340();
 
-    public /* synthetic */ MessagesController$$ExternalSyntheticLambda340(MessagesController messagesController, SparseBooleanArray sparseBooleanArray, long j) {
-        this.f$0 = messagesController;
-        this.f$1 = sparseBooleanArray;
-        this.f$2 = j;
+    private /* synthetic */ MessagesController$$ExternalSyntheticLambda340() {
     }
 
-    public final void run() {
-        this.f$0.m152xe7fb7dc5(this.f$1, this.f$2);
+    public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+        MessagesController.lambda$installTheme$93(tLObject, tLRPC$TL_error);
     }
 }

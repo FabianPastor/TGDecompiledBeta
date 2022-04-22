@@ -1,20 +1,15 @@
 package org.telegram.ui;
 
-import android.view.View;
-import org.telegram.ui.Components.WallpaperCheckBoxView;
+import android.content.DialogInterface;
 
-public final /* synthetic */ class ThemePreviewActivity$$ExternalSyntheticLambda3 implements View.OnClickListener {
+public final /* synthetic */ class ThemePreviewActivity$$ExternalSyntheticLambda3 implements DialogInterface.OnClickListener {
     public final /* synthetic */ ThemePreviewActivity f$0;
-    public final /* synthetic */ int f$1;
-    public final /* synthetic */ WallpaperCheckBoxView f$2;
 
-    public /* synthetic */ ThemePreviewActivity$$ExternalSyntheticLambda3(ThemePreviewActivity themePreviewActivity, int i, WallpaperCheckBoxView wallpaperCheckBoxView) {
+    public /* synthetic */ ThemePreviewActivity$$ExternalSyntheticLambda3(ThemePreviewActivity themePreviewActivity) {
         this.f$0 = themePreviewActivity;
-        this.f$1 = i;
-        this.f$2 = wallpaperCheckBoxView;
     }
 
-    public final void onClick(View view) {
-        this.f$0.m3317lambda$createView$8$orgtelegramuiThemePreviewActivity(this.f$1, this.f$2, view);
+    public final void onClick(DialogInterface dialogInterface, int i) {
+        this.f$0.lambda$selectColorType$16(dialogInterface, i);
     }
 }

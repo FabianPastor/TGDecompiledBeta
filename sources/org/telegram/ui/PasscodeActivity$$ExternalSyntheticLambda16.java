@@ -1,15 +1,13 @@
 package org.telegram.ui;
 
-import android.content.DialogInterface;
-
-public final /* synthetic */ class PasscodeActivity$$ExternalSyntheticLambda16 implements DialogInterface.OnClickListener {
+public final /* synthetic */ class PasscodeActivity$$ExternalSyntheticLambda16 implements Runnable {
     public final /* synthetic */ PasscodeActivity f$0;
 
     public /* synthetic */ PasscodeActivity$$ExternalSyntheticLambda16(PasscodeActivity passcodeActivity) {
         this.f$0 = passcodeActivity;
     }
 
-    public final void onClick(DialogInterface dialogInterface, int i) {
-        this.f$0.m2680lambda$createView$2$orgtelegramuiPasscodeActivity(dialogInterface, i);
+    public final void run() {
+        this.f$0.lambda$onPasscodeError$22();
     }
 }

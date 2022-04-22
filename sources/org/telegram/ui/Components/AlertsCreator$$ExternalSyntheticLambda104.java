@@ -1,15 +1,15 @@
 package org.telegram.ui.Components;
 
-import android.view.MotionEvent;
-import android.view.View;
+import org.telegram.ui.Components.NumberPicker;
 
-public final /* synthetic */ class AlertsCreator$$ExternalSyntheticLambda104 implements View.OnTouchListener {
-    public static final /* synthetic */ AlertsCreator$$ExternalSyntheticLambda104 INSTANCE = new AlertsCreator$$ExternalSyntheticLambda104();
+public final /* synthetic */ class AlertsCreator$$ExternalSyntheticLambda104 implements NumberPicker.Formatter {
+    public final /* synthetic */ int[] f$0;
 
-    private /* synthetic */ AlertsCreator$$ExternalSyntheticLambda104() {
+    public /* synthetic */ AlertsCreator$$ExternalSyntheticLambda104(int[] iArr) {
+        this.f$0 = iArr;
     }
 
-    public final boolean onTouch(View view, MotionEvent motionEvent) {
-        return AlertsCreator.lambda$createDatePickerDialog$56(view, motionEvent);
+    public final String format(int i) {
+        return AlertsCreator.lambda$createAutoDeleteDatePickerDialog$62(this.f$0, i);
     }
 }

@@ -2,7 +2,7 @@ package org.telegram.ui;
 
 import org.telegram.tgnet.RequestDelegate;
 import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC;
+import org.telegram.tgnet.TLRPC$TL_error;
 
 public final /* synthetic */ class DataSettingsActivity$$ExternalSyntheticLambda5 implements RequestDelegate {
     public final /* synthetic */ DataSettingsActivity f$0;
@@ -11,7 +11,7 @@ public final /* synthetic */ class DataSettingsActivity$$ExternalSyntheticLambda
         this.f$0 = dataSettingsActivity;
     }
 
-    public final void run(TLObject tLObject, TLRPC.TL_error tL_error) {
-        this.f$0.m2060lambda$createView$4$orgtelegramuiDataSettingsActivity(tLObject, tL_error);
+    public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+        this.f$0.lambda$createView$4(tLObject, tLRPC$TL_error);
     }
 }

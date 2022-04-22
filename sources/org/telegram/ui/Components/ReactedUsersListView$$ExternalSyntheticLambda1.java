@@ -12,6 +12,6 @@ public final /* synthetic */ class ReactedUsersListView$$ExternalSyntheticLambda
     }
 
     public final void run() {
-        this.f$0.m4278lambda$load$3$orgtelegramuiComponentsReactedUsersListView(this.f$1);
+        this.f$0.lambda$load$3(this.f$1);
     }
 }

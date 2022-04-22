@@ -1,18 +1,21 @@
 package org.telegram.ui.Components;
 
-import android.content.DialogInterface;
-import org.telegram.ui.Components.AlertsCreator;
+import android.view.View;
+import java.util.ArrayList;
+import org.telegram.ui.ActionBar.AlertDialog;
 
-public final /* synthetic */ class AlertsCreator$$ExternalSyntheticLambda50 implements DialogInterface.OnClickListener {
-    public final /* synthetic */ AlertsCreator.BlockDialogCallback f$0;
-    public final /* synthetic */ boolean[] f$1;
+public final /* synthetic */ class AlertsCreator$$ExternalSyntheticLambda50 implements View.OnClickListener {
+    public final /* synthetic */ ArrayList f$0;
+    public final /* synthetic */ Runnable f$1;
+    public final /* synthetic */ AlertDialog.Builder f$2;
 
-    public /* synthetic */ AlertsCreator$$ExternalSyntheticLambda50(AlertsCreator.BlockDialogCallback blockDialogCallback, boolean[] zArr) {
-        this.f$0 = blockDialogCallback;
-        this.f$1 = zArr;
+    public /* synthetic */ AlertsCreator$$ExternalSyntheticLambda50(ArrayList arrayList, Runnable runnable, AlertDialog.Builder builder) {
+        this.f$0 = arrayList;
+        this.f$1 = runnable;
+        this.f$2 = builder;
     }
 
-    public final void onClick(DialogInterface dialogInterface, int i) {
-        this.f$0.run(this.f$1[0], this.f$1[1]);
+    public final void onClick(View view) {
+        AlertsCreator.lambda$showSecretLocationAlert$16(this.f$0, this.f$1, this.f$2, view);
     }
 }

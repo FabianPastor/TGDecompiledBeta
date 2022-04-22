@@ -10,6 +10,6 @@ public final /* synthetic */ class VoIPService$$ExternalSyntheticLambda0 impleme
     }
 
     public final void onClick(DialogInterface dialogInterface, int i) {
-        this.f$0.m1226x6676e26b(dialogInterface, i);
+        this.f$0.lambda$toggleSpeakerphoneOrShowRouteSheet$62(dialogInterface, i);
     }
 }

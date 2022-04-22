@@ -8,6 +8,6 @@ public final /* synthetic */ class AlertDialog$$ExternalSyntheticLambda7 impleme
     }
 
     public final void run() {
-        this.f$0.m1264lambda$new$0$orgtelegramuiActionBarAlertDialog();
+        this.f$0.lambda$new$0();
     }
 }

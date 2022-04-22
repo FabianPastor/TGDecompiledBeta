@@ -1,19 +1,12 @@
 package org.telegram.messenger;
 
-import org.telegram.messenger.LocaleController;
-
 public final /* synthetic */ class LocaleController$$ExternalSyntheticLambda10 implements Runnable {
-    public final /* synthetic */ LocaleController f$0;
-    public final /* synthetic */ LocaleController.LocaleInfo f$1;
-    public final /* synthetic */ int f$2;
+    public static final /* synthetic */ LocaleController$$ExternalSyntheticLambda10 INSTANCE = new LocaleController$$ExternalSyntheticLambda10();
 
-    public /* synthetic */ LocaleController$$ExternalSyntheticLambda10(LocaleController localeController, LocaleController.LocaleInfo localeInfo, int i) {
-        this.f$0 = localeController;
-        this.f$1 = localeInfo;
-        this.f$2 = i;
+    private /* synthetic */ LocaleController$$ExternalSyntheticLambda10() {
     }
 
     public final void run() {
-        this.f$0.m70lambda$applyLanguage$2$orgtelegrammessengerLocaleController(this.f$1, this.f$2);
+        NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.reloadInterface, new Object[0]);
     }
 }

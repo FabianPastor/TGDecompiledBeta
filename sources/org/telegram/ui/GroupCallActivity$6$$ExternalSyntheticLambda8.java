@@ -1,18 +1,18 @@
 package org.telegram.ui;
 
-import android.view.KeyEvent;
-import android.widget.TextView;
-import org.telegram.ui.ActionBar.AlertDialog;
+import org.telegram.tgnet.RequestDelegate;
+import org.telegram.tgnet.TLObject;
+import org.telegram.tgnet.TLRPC$TL_error;
 import org.telegram.ui.GroupCallActivity;
 
-public final /* synthetic */ class GroupCallActivity$6$$ExternalSyntheticLambda8 implements TextView.OnEditorActionListener {
-    public final /* synthetic */ AlertDialog.Builder f$0;
+public final /* synthetic */ class GroupCallActivity$6$$ExternalSyntheticLambda8 implements RequestDelegate {
+    public final /* synthetic */ GroupCallActivity.AnonymousClass6 f$0;
 
-    public /* synthetic */ GroupCallActivity$6$$ExternalSyntheticLambda8(AlertDialog.Builder builder) {
-        this.f$0 = builder;
+    public /* synthetic */ GroupCallActivity$6$$ExternalSyntheticLambda8(GroupCallActivity.AnonymousClass6 r1) {
+        this.f$0 = r1;
     }
 
-    public final boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
-        return GroupCallActivity.AnonymousClass6.lambda$onItemClick$4(this.f$0, textView, i, keyEvent);
+    public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+        this.f$0.lambda$onItemClick$0(tLObject, tLRPC$TL_error);
     }
 }

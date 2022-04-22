@@ -15,6 +15,6 @@ public final /* synthetic */ class ChatActivityEnterView$SeekBarWaveformView$$Ex
     }
 
     public final void onSeekBarDrag(float f) {
-        this.f$0.m3755x426e2bc3(f);
+        this.f$0.lambda$new$0(f);
     }
 }

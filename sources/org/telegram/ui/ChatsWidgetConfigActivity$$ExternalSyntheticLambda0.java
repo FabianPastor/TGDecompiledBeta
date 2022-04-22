@@ -11,6 +11,6 @@ public final /* synthetic */ class ChatsWidgetConfigActivity$$ExternalSyntheticL
     }
 
     public final void didSelectDialogs(ArrayList arrayList) {
-        this.f$0.m2023lambda$handleIntent$0$orgtelegramuiChatsWidgetConfigActivity(arrayList);
+        this.f$0.lambda$handleIntent$0(arrayList);
     }
 }

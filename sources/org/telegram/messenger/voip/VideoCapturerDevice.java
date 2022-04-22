@@ -1,5 +1,6 @@
 package org.telegram.messenger.voip;
 
+import android.annotation.TargetApi;
 import android.content.Intent;
 import android.graphics.Point;
 import android.media.projection.MediaProjection;
@@ -23,10 +24,11 @@ import org.webrtc.SurfaceTextureHelper;
 import org.webrtc.VideoCapturer;
 import org.webrtc.voiceengine.WebRtcAudioRecord;
 
+@TargetApi(18)
 public class VideoCapturerDevice {
     private static final int CAPTURE_FPS = 30;
-    private static final int CAPTURE_HEIGHT = (Build.VERSION.SDK_INT <= 19 ? 320 : 720);
-    private static final int CAPTURE_WIDTH = (Build.VERSION.SDK_INT <= 19 ? 480 : 1280);
+    private static final int CAPTURE_HEIGHT;
+    private static final int CAPTURE_WIDTH;
     public static EglBase eglBase;
     private static VideoCapturerDevice[] instance = new VideoCapturerDevice[2];
     public static Intent mediaProjectionPermissionResultData;
@@ -41,19 +43,28 @@ public class VideoCapturerDevice {
 
     private static native CapturerObserver nativeGetJavaVideoCapturerObserver(long j);
 
-    public VideoCapturerDevice(boolean screencast) {
+    private void onAspectRatioRequested(float f) {
+    }
+
+    static {
+        int i = Build.VERSION.SDK_INT;
+        CAPTURE_WIDTH = i <= 19 ? 480 : 1280;
+        CAPTURE_HEIGHT = i <= 19 ? 320 : 720;
+    }
+
+    public VideoCapturerDevice(boolean z) {
         if (Build.VERSION.SDK_INT >= 18) {
             Logging.enableLogToDebugOutput(Logging.Severity.LS_INFO);
             Logging.d("VideoCapturerDevice", "device model = " + Build.MANUFACTURER + Build.MODEL);
-            AndroidUtilities.runOnUIThread(new VideoCapturerDevice$$ExternalSyntheticLambda9(this, screencast));
+            AndroidUtilities.runOnUIThread(new VideoCapturerDevice$$ExternalSyntheticLambda9(this, z));
         }
     }
 
     /* JADX WARNING: type inference failed for: r3v0, types: [boolean] */
+    /* access modifiers changed from: private */
     /* JADX WARNING: Unknown variable types count: 1 */
-    /* renamed from: lambda$new$0$org-telegram-messenger-voip-VideoCapturerDevice  reason: not valid java name */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    public /* synthetic */ void m503lambda$new$0$orgtelegrammessengervoipVideoCapturerDevice(boolean r3) {
+    public /* synthetic */ void lambda$new$0(boolean r3) {
         /*
             r2 = this;
             org.webrtc.EglBase r0 = eglBase
@@ -65,148 +76,152 @@ public class VideoCapturerDevice {
         L_0x000d:
             org.telegram.messenger.voip.VideoCapturerDevice[] r0 = instance
             r0[r3] = r2
-            android.os.HandlerThread r0 = new android.os.HandlerThread
-            java.lang.String r1 = "CallThread"
-            r0.<init>(r1)
-            r2.thread = r0
-            r0.start()
-            android.os.Handler r0 = new android.os.Handler
-            android.os.HandlerThread r1 = r2.thread
-            android.os.Looper r1 = r1.getLooper()
-            r0.<init>(r1)
-            r2.handler = r0
+            android.os.HandlerThread r3 = new android.os.HandlerThread
+            java.lang.String r0 = "CallThread"
+            r3.<init>(r0)
+            r2.thread = r3
+            r3.start()
+            android.os.Handler r3 = new android.os.Handler
+            android.os.HandlerThread r0 = r2.thread
+            android.os.Looper r0 = r0.getLooper()
+            r3.<init>(r0)
+            r2.handler = r3
             return
         */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.voip.VideoCapturerDevice.m503lambda$new$0$orgtelegrammessengervoipVideoCapturerDevice(boolean):void");
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.voip.VideoCapturerDevice.lambda$new$0(boolean):void");
     }
 
     public static void checkScreenCapturerSize() {
         if (instance[1] != null) {
-            Point size = getScreenCaptureSize();
-            if (instance[1].currentWidth != size.x || instance[1].currentHeight != size.y) {
-                instance[1].currentWidth = size.x;
-                instance[1].currentHeight = size.y;
-                VideoCapturerDevice[] videoCapturerDeviceArr = instance;
-                videoCapturerDeviceArr[1].handler.post(new VideoCapturerDevice$$ExternalSyntheticLambda7(videoCapturerDeviceArr[1], size));
+            Point screenCaptureSize = getScreenCaptureSize();
+            VideoCapturerDevice[] videoCapturerDeviceArr = instance;
+            int i = videoCapturerDeviceArr[1].currentWidth;
+            int i2 = screenCaptureSize.x;
+            if (i != i2 || videoCapturerDeviceArr[1].currentHeight != screenCaptureSize.y) {
+                videoCapturerDeviceArr[1].currentWidth = i2;
+                videoCapturerDeviceArr[1].currentHeight = screenCaptureSize.y;
+                videoCapturerDeviceArr[1].handler.post(new VideoCapturerDevice$$ExternalSyntheticLambda7(videoCapturerDeviceArr[1], screenCaptureSize));
             }
         }
     }
 
-    static /* synthetic */ void lambda$checkScreenCapturerSize$1(VideoCapturerDevice device, Point size) {
-        VideoCapturer videoCapturer2 = device.videoCapturer;
+    /* access modifiers changed from: private */
+    public static /* synthetic */ void lambda$checkScreenCapturerSize$1(VideoCapturerDevice videoCapturerDevice, Point point) {
+        VideoCapturer videoCapturer2 = videoCapturerDevice.videoCapturer;
         if (videoCapturer2 != null) {
-            videoCapturer2.changeCaptureFormat(size.x, size.y, 30);
+            videoCapturer2.changeCaptureFormat(point.x, point.y, 30);
         }
     }
 
     private static Point getScreenCaptureSize() {
-        float aspect;
-        Display display = ((WindowManager) ApplicationLoader.applicationContext.getSystemService("window")).getDefaultDisplay();
-        Point size = new Point();
-        display.getRealSize(size);
-        if (size.x > size.y) {
-            aspect = ((float) size.y) / ((float) size.x);
-        } else {
-            aspect = ((float) size.x) / ((float) size.y);
-        }
-        int dx = -1;
-        int dy = -1;
-        int a = 1;
+        int i;
+        int i2;
+        Display defaultDisplay = ((WindowManager) ApplicationLoader.applicationContext.getSystemService("window")).getDefaultDisplay();
+        Point point = new Point();
+        defaultDisplay.getRealSize(point);
+        int i3 = point.x;
+        int i4 = point.y;
+        float f = i3 > i4 ? ((float) i4) / ((float) i3) : ((float) i3) / ((float) i4);
+        int i5 = 1;
         while (true) {
-            if (a > 100) {
+            if (i5 > 100) {
+                i5 = -1;
+                i = -1;
                 break;
             }
-            float val = ((float) a) * aspect;
-            if (val != ((float) ((int) val))) {
-                a++;
-            } else if (size.x > size.y) {
-                dx = a;
-                dy = (int) (((float) a) * aspect);
-            } else {
-                dy = a;
-                dx = (int) (((float) a) * aspect);
+            float f2 = ((float) i5) * f;
+            i = (int) f2;
+            if (f2 != ((float) i)) {
+                i5++;
+            } else if (point.x <= point.y) {
+                int i6 = i;
+                i = i5;
+                i5 = i6;
             }
         }
-        if (dx != -1 && aspect != 1.0f) {
+        if (i5 != -1 && f != 1.0f) {
             while (true) {
-                if (size.x <= 1000 && size.y <= 1000 && size.x % 4 == 0 && size.y % 4 == 0) {
+                int i7 = point.x;
+                if (i7 <= 1000 && (i2 = point.y) <= 1000 && i7 % 4 == 0 && i2 % 4 == 0) {
                     break;
                 }
-                size.x -= dx;
-                size.y -= dy;
-                if (size.x < 800 && size.y < 800) {
-                    dx = -1;
+                int i8 = i7 - i5;
+                point.x = i8;
+                int i9 = point.y - i;
+                point.y = i9;
+                if (i8 < 800 && i9 < 800) {
+                    i5 = -1;
                     break;
                 }
             }
         }
-        if (dx == -1 || aspect == 1.0f) {
-            float scale = Math.max(((float) size.x) / 970.0f, ((float) size.y) / 970.0f);
-            size.x = ((int) Math.ceil((double) ((((float) size.x) / scale) / 4.0f))) * 4;
-            size.y = ((int) Math.ceil((double) ((((float) size.y) / scale) / 4.0f))) * 4;
+        if (i5 == -1 || f == 1.0f) {
+            float max = Math.max(((float) point.x) / 970.0f, ((float) point.y) / 970.0f);
+            point.x = ((int) Math.ceil((double) ((((float) point.x) / max) / 4.0f))) * 4;
+            point.y = ((int) Math.ceil((double) ((((float) point.y) / max) / 4.0f))) * 4;
         }
-        return size;
+        return point;
     }
 
-    private void init(long ptr, String deviceName) {
+    private void init(long j, String str) {
         if (Build.VERSION.SDK_INT >= 18) {
-            AndroidUtilities.runOnUIThread(new VideoCapturerDevice$$ExternalSyntheticLambda5(this, ptr, deviceName));
+            AndroidUtilities.runOnUIThread(new VideoCapturerDevice$$ExternalSyntheticLambda5(this, j, str));
         }
     }
 
-    /* renamed from: lambda$init$5$org-telegram-messenger-voip-VideoCapturerDevice  reason: not valid java name */
-    public /* synthetic */ void m502lambda$init$5$orgtelegrammessengervoipVideoCapturerDevice(long ptr, String deviceName) {
+    /* access modifiers changed from: private */
+    public /* synthetic */ void lambda$init$5(long j, String str) {
         if (eglBase != null) {
-            this.nativePtr = ptr;
-            if (!"screen".equals(deviceName)) {
-                CameraEnumerator enumerator = Camera2Enumerator.isSupported(ApplicationLoader.applicationContext) ? new Camera2Enumerator(ApplicationLoader.applicationContext) : new Camera1Enumerator();
-                int index = -1;
-                String[] names = enumerator.getDeviceNames();
-                int a = 0;
+            this.nativePtr = j;
+            if (!"screen".equals(str)) {
+                CameraEnumerator camera2Enumerator = Camera2Enumerator.isSupported(ApplicationLoader.applicationContext) ? new Camera2Enumerator(ApplicationLoader.applicationContext) : new Camera1Enumerator();
+                String[] deviceNames = camera2Enumerator.getDeviceNames();
+                int i = 0;
                 while (true) {
-                    if (a >= names.length) {
+                    if (i >= deviceNames.length) {
+                        i = -1;
                         break;
-                    } else if (enumerator.isFrontFacing(names[a]) == "front".equals(deviceName)) {
-                        index = a;
+                    } else if (camera2Enumerator.isFrontFacing(deviceNames[i]) == "front".equals(str)) {
                         break;
                     } else {
-                        a++;
+                        i++;
                     }
                 }
-                if (index != -1) {
-                    String cameraName = names[index];
+                if (i != -1) {
+                    String str2 = deviceNames[i];
                     if (this.videoCapturer == null) {
-                        this.videoCapturer = enumerator.createCapturer(cameraName, new CameraVideoCapturer.CameraEventsHandler() {
-                            public void onCameraError(String errorDescription) {
+                        this.videoCapturer = camera2Enumerator.createCapturer(str2, new CameraVideoCapturer.CameraEventsHandler() {
+                            public void onCameraClosed() {
                             }
 
                             public void onCameraDisconnected() {
                             }
 
-                            public void onCameraFreezed(String errorDescription) {
+                            public void onCameraError(String str) {
                             }
 
-                            public void onCameraOpening(String cameraName) {
+                            public void onCameraFreezed(String str) {
+                            }
+
+                            public void onCameraOpening(String str) {
                             }
 
                             public void onFirstFrameAvailable() {
                                 AndroidUtilities.runOnUIThread(VideoCapturerDevice$2$$ExternalSyntheticLambda0.INSTANCE);
                             }
 
-                            static /* synthetic */ void lambda$onFirstFrameAvailable$0() {
+                            /* access modifiers changed from: private */
+                            public static /* synthetic */ void lambda$onFirstFrameAvailable$0() {
                                 if (VoIPService.getSharedInstance() != null) {
                                     VoIPService.getSharedInstance().onCameraFirstFrameAvailable();
                                 }
-                            }
-
-                            public void onCameraClosed() {
                             }
                         });
                         this.videoCapturerSurfaceTextureHelper = SurfaceTextureHelper.create("VideoCapturerThread", eglBase.getEglBaseContext());
                         this.handler.post(new VideoCapturerDevice$$ExternalSyntheticLambda0(this));
                         return;
                     }
-                    this.handler.post(new VideoCapturerDevice$$ExternalSyntheticLambda8(this, cameraName));
+                    this.handler.post(new VideoCapturerDevice$$ExternalSyntheticLambda8(this, str2));
                 }
             } else if (Build.VERSION.SDK_INT >= 21 && this.videoCapturer == null) {
                 this.videoCapturer = new ScreenCapturerAndroid(mediaProjectionPermissionResultData, new MediaProjection.Callback() {
@@ -214,39 +229,40 @@ public class VideoCapturerDevice {
                         AndroidUtilities.runOnUIThread(VideoCapturerDevice$1$$ExternalSyntheticLambda0.INSTANCE);
                     }
 
-                    static /* synthetic */ void lambda$onStop$0() {
+                    /* access modifiers changed from: private */
+                    public static /* synthetic */ void lambda$onStop$0() {
                         if (VoIPService.getSharedInstance() != null) {
                             VoIPService.getSharedInstance().stopScreenCapture();
                         }
                     }
                 });
-                Point size = getScreenCaptureSize();
-                this.currentWidth = size.x;
-                this.currentHeight = size.y;
+                Point screenCaptureSize = getScreenCaptureSize();
+                this.currentWidth = screenCaptureSize.x;
+                this.currentHeight = screenCaptureSize.y;
                 this.videoCapturerSurfaceTextureHelper = SurfaceTextureHelper.create("ScreenCapturerThread", eglBase.getEglBaseContext());
-                this.handler.post(new VideoCapturerDevice$$ExternalSyntheticLambda6(this, size));
+                this.handler.post(new VideoCapturerDevice$$ExternalSyntheticLambda6(this, screenCaptureSize));
             }
         }
     }
 
-    /* renamed from: lambda$init$2$org-telegram-messenger-voip-VideoCapturerDevice  reason: not valid java name */
-    public /* synthetic */ void m499lambda$init$2$orgtelegrammessengervoipVideoCapturerDevice(Point size) {
+    /* access modifiers changed from: private */
+    public /* synthetic */ void lambda$init$2(Point point) {
         if (this.videoCapturerSurfaceTextureHelper != null) {
             long j = this.nativePtr;
             if (j != 0) {
                 this.nativeCapturerObserver = nativeGetJavaVideoCapturerObserver(j);
                 this.videoCapturer.initialize(this.videoCapturerSurfaceTextureHelper, ApplicationLoader.applicationContext, this.nativeCapturerObserver);
-                this.videoCapturer.startCapture(size.x, size.y, 30);
-                WebRtcAudioRecord audioRecord = WebRtcAudioRecord.Instance;
-                if (audioRecord != null) {
-                    audioRecord.initDeviceAudioRecord(((ScreenCapturerAndroid) this.videoCapturer).getMediaProjection());
+                this.videoCapturer.startCapture(point.x, point.y, 30);
+                WebRtcAudioRecord webRtcAudioRecord = WebRtcAudioRecord.Instance;
+                if (webRtcAudioRecord != null) {
+                    webRtcAudioRecord.initDeviceAudioRecord(((ScreenCapturerAndroid) this.videoCapturer).getMediaProjection());
                 }
             }
         }
     }
 
-    /* renamed from: lambda$init$3$org-telegram-messenger-voip-VideoCapturerDevice  reason: not valid java name */
-    public /* synthetic */ void m500lambda$init$3$orgtelegrammessengervoipVideoCapturerDevice() {
+    /* access modifiers changed from: private */
+    public /* synthetic */ void lambda$init$3() {
         if (this.videoCapturerSurfaceTextureHelper != null) {
             this.nativeCapturerObserver = nativeGetJavaVideoCapturerObserver(this.nativePtr);
             this.videoCapturer.initialize(this.videoCapturerSurfaceTextureHelper, ApplicationLoader.applicationContext, this.nativeCapturerObserver);
@@ -254,22 +270,23 @@ public class VideoCapturerDevice {
         }
     }
 
-    /* renamed from: lambda$init$4$org-telegram-messenger-voip-VideoCapturerDevice  reason: not valid java name */
-    public /* synthetic */ void m501lambda$init$4$orgtelegrammessengervoipVideoCapturerDevice(String cameraName) {
+    /* access modifiers changed from: private */
+    public /* synthetic */ void lambda$init$4(String str) {
         ((CameraVideoCapturer) this.videoCapturer).switchCamera(new CameraVideoCapturer.CameraSwitchHandler() {
-            public void onCameraSwitchDone(boolean isFrontCamera) {
-                AndroidUtilities.runOnUIThread(new VideoCapturerDevice$3$$ExternalSyntheticLambda0(isFrontCamera));
+            public void onCameraSwitchError(String str) {
             }
 
-            static /* synthetic */ void lambda$onCameraSwitchDone$0(boolean isFrontCamera) {
+            public void onCameraSwitchDone(boolean z) {
+                AndroidUtilities.runOnUIThread(new VideoCapturerDevice$3$$ExternalSyntheticLambda0(z));
+            }
+
+            /* access modifiers changed from: private */
+            public static /* synthetic */ void lambda$onCameraSwitchDone$0(boolean z) {
                 if (VoIPService.getSharedInstance() != null) {
-                    VoIPService.getSharedInstance().setSwitchingCamera(false, isFrontCamera);
+                    VoIPService.getSharedInstance().setSwitchingCamera(false, z);
                 }
             }
-
-            public void onCameraSwitchError(String errorDescription) {
-            }
-        }, cameraName);
+        }, str);
     }
 
     public static MediaProjection getMediaProjection() {
@@ -280,27 +297,24 @@ public class VideoCapturerDevice {
         return ((ScreenCapturerAndroid) videoCapturerDeviceArr[1].videoCapturer).getMediaProjection();
     }
 
-    private void onAspectRatioRequested(float aspectRatio) {
-    }
-
-    private void onStateChanged(long ptr, int state) {
+    private void onStateChanged(long j, int i) {
         if (Build.VERSION.SDK_INT >= 18) {
-            AndroidUtilities.runOnUIThread(new VideoCapturerDevice$$ExternalSyntheticLambda4(this, ptr, state));
+            AndroidUtilities.runOnUIThread(new VideoCapturerDevice$$ExternalSyntheticLambda4(this, j, i));
         }
     }
 
-    /* renamed from: lambda$onStateChanged$7$org-telegram-messenger-voip-VideoCapturerDevice  reason: not valid java name */
-    public /* synthetic */ void m507x7b06e05b(long ptr, int state) {
-        if (this.nativePtr == ptr) {
-            this.handler.post(new VideoCapturerDevice$$ExternalSyntheticLambda3(this, state));
+    /* access modifiers changed from: private */
+    public /* synthetic */ void lambda$onStateChanged$7(long j, int i) {
+        if (this.nativePtr == j) {
+            this.handler.post(new VideoCapturerDevice$$ExternalSyntheticLambda3(this, i));
         }
     }
 
-    /* renamed from: lambda$onStateChanged$6$org-telegram-messenger-voip-VideoCapturerDevice  reason: not valid java name */
-    public /* synthetic */ void m506x7b7d465a(int state) {
+    /* access modifiers changed from: private */
+    public /* synthetic */ void lambda$onStateChanged$6(int i) {
         VideoCapturer videoCapturer2 = this.videoCapturer;
         if (videoCapturer2 != null) {
-            if (state == 2) {
+            if (i == 2) {
                 videoCapturer2.startCapture(CAPTURE_WIDTH, CAPTURE_HEIGHT, 30);
                 return;
             }
@@ -315,25 +329,25 @@ public class VideoCapturerDevice {
     private void onDestroy() {
         if (Build.VERSION.SDK_INT >= 18) {
             this.nativePtr = 0;
-            AndroidUtilities.runOnUIThread(new VideoCapturerDevice$$ExternalSyntheticLambda2(this));
+            AndroidUtilities.runOnUIThread(new VideoCapturerDevice$$ExternalSyntheticLambda1(this));
         }
     }
 
-    /* renamed from: lambda$onDestroy$9$org-telegram-messenger-voip-VideoCapturerDevice  reason: not valid java name */
-    public /* synthetic */ void m505x8c9ffc3c() {
-        int a = 0;
+    /* access modifiers changed from: private */
+    public /* synthetic */ void lambda$onDestroy$9() {
+        int i = 0;
         while (true) {
             VideoCapturerDevice[] videoCapturerDeviceArr = instance;
-            if (a >= videoCapturerDeviceArr.length) {
+            if (i >= videoCapturerDeviceArr.length) {
                 break;
-            } else if (videoCapturerDeviceArr[a] == this) {
-                videoCapturerDeviceArr[a] = null;
+            } else if (videoCapturerDeviceArr[i] == this) {
+                videoCapturerDeviceArr[i] = null;
                 break;
             } else {
-                a++;
+                i++;
             }
         }
-        this.handler.post(new VideoCapturerDevice$$ExternalSyntheticLambda1(this));
+        this.handler.post(new VideoCapturerDevice$$ExternalSyntheticLambda2(this));
         try {
             this.thread.quitSafely();
         } catch (Exception e) {
@@ -341,11 +355,11 @@ public class VideoCapturerDevice {
         }
     }
 
-    /* renamed from: lambda$onDestroy$8$org-telegram-messenger-voip-VideoCapturerDevice  reason: not valid java name */
-    public /* synthetic */ void m504x8d16623b() {
-        WebRtcAudioRecord audioRecord;
-        if ((this.videoCapturer instanceof ScreenCapturerAndroid) && (audioRecord = WebRtcAudioRecord.Instance) != null) {
-            audioRecord.stopDeviceAudioRecord();
+    /* access modifiers changed from: private */
+    public /* synthetic */ void lambda$onDestroy$8() {
+        WebRtcAudioRecord webRtcAudioRecord;
+        if ((this.videoCapturer instanceof ScreenCapturerAndroid) && (webRtcAudioRecord = WebRtcAudioRecord.Instance) != null) {
+            webRtcAudioRecord.stopDeviceAudioRecord();
         }
         VideoCapturer videoCapturer2 = this.videoCapturer;
         if (videoCapturer2 != null) {

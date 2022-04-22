@@ -13,6 +13,6 @@ public final /* synthetic */ class DialogsActivity$16$$ExternalSyntheticLambda1 
     }
 
     public final void onClick(DialogInterface dialogInterface, int i) {
-        this.f$0.m2118lambda$needRemoveHint$0$orgtelegramuiDialogsActivity$16(this.f$1, dialogInterface, i);
+        this.f$0.lambda$needRemoveHint$0(this.f$1, dialogInterface, i);
     }
 }

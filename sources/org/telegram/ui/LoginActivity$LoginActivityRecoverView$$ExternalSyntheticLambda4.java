@@ -10,6 +10,6 @@ public final /* synthetic */ class LoginActivity$LoginActivityRecoverView$$Exter
     }
 
     public final void run() {
-        this.f$0.m2486xcd144188();
+        this.f$0.lambda$onShow$9();
     }
 }

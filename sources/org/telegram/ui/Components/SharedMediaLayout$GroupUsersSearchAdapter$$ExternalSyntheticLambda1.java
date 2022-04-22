@@ -12,6 +12,6 @@ public final /* synthetic */ class SharedMediaLayout$GroupUsersSearchAdapter$$Ex
     }
 
     public final void run() {
-        this.f$0.m4381x8ccdb494(this.f$1);
+        this.f$0.lambda$processSearch$3(this.f$1);
     }
 }

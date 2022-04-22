@@ -1,13 +1,14 @@
 package org.telegram.ui.Components;
 
-public final /* synthetic */ class AlertsCreator$$ExternalSyntheticLambda114 implements Runnable {
-    public final /* synthetic */ EditTextBoldCursor f$0;
+import org.telegram.ui.Components.NumberPicker;
 
-    public /* synthetic */ AlertsCreator$$ExternalSyntheticLambda114(EditTextBoldCursor editTextBoldCursor) {
-        this.f$0 = editTextBoldCursor;
+public final /* synthetic */ class AlertsCreator$$ExternalSyntheticLambda114 implements NumberPicker.Formatter {
+    public static final /* synthetic */ AlertsCreator$$ExternalSyntheticLambda114 INSTANCE = new AlertsCreator$$ExternalSyntheticLambda114();
+
+    private /* synthetic */ AlertsCreator$$ExternalSyntheticLambda114() {
     }
 
-    public final void run() {
-        AlertsCreator.lambda$createThemeCreateDialog$122(this.f$0);
+    public final String format(int i) {
+        return AlertsCreator.lambda$createCalendarPickerDialog$79(i);
     }
 }

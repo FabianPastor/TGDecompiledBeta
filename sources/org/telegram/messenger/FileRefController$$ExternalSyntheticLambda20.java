@@ -2,7 +2,7 @@ package org.telegram.messenger;
 
 import org.telegram.tgnet.RequestDelegate;
 import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC;
+import org.telegram.tgnet.TLRPC$TL_error;
 
 public final /* synthetic */ class FileRefController$$ExternalSyntheticLambda20 implements RequestDelegate {
     public final /* synthetic */ FileRefController f$0;
@@ -15,7 +15,7 @@ public final /* synthetic */ class FileRefController$$ExternalSyntheticLambda20 
         this.f$2 = str2;
     }
 
-    public final void run(TLObject tLObject, TLRPC.TL_error tL_error) {
-        this.f$0.m591x1a0e4d82(this.f$1, this.f$2, tLObject, tL_error);
+    public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+        this.f$0.lambda$requestReferenceFromServer$14(this.f$1, this.f$2, tLObject, tLRPC$TL_error);
     }
 }

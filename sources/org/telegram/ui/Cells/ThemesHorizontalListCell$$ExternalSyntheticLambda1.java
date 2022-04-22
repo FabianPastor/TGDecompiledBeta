@@ -15,6 +15,6 @@ public final /* synthetic */ class ThemesHorizontalListCell$$ExternalSyntheticLa
     }
 
     public final void run() {
-        this.f$0.m1534x4f4ea2e7(this.f$1, this.f$2);
+        this.f$0.lambda$didReceivedNotification$3(this.f$1, this.f$2);
     }
 }

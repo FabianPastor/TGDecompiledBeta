@@ -10,6 +10,6 @@ public final /* synthetic */ class ProximitySheet$$ExternalSyntheticLambda4 impl
     }
 
     public final void onValueChange(NumberPicker numberPicker, int i, int i2) {
-        this.f$0.m4250lambda$new$2$orgtelegramuiComponentsProximitySheet(numberPicker, i, i2);
+        this.f$0.lambda$new$2(numberPicker, i, i2);
     }
 }

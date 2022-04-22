@@ -1,15 +1,17 @@
 package org.telegram.ui;
 
-import android.animation.ValueAnimator;
+import org.telegram.messenger.MessagesStorage;
 
-public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda200 implements ValueAnimator.AnimatorUpdateListener {
+public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda200 implements MessagesStorage.IntCallback {
     public final /* synthetic */ ChatActivity f$0;
+    public final /* synthetic */ boolean f$1;
 
-    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda200(ChatActivity chatActivity) {
+    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda200(ChatActivity chatActivity, boolean z) {
         this.f$0 = chatActivity;
+        this.f$1 = z;
     }
 
-    public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-        this.f$0.m1820lambda$showMentionDownButton$109$orgtelegramuiChatActivity(valueAnimator);
+    public final void run(int i) {
+        this.f$0.lambda$processSelectedOption$180(this.f$1, i);
     }
 }

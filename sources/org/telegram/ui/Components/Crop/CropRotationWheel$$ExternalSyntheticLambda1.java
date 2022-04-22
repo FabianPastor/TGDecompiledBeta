@@ -10,6 +10,6 @@ public final /* synthetic */ class CropRotationWheel$$ExternalSyntheticLambda1 i
     }
 
     public final void onClick(View view) {
-        this.f$0.m3932lambda$new$2$orgtelegramuiComponentsCropCropRotationWheel(view);
+        this.f$0.lambda$new$0(view);
     }
 }

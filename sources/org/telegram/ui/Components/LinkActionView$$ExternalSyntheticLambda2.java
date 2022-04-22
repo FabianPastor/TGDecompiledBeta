@@ -1,19 +1,15 @@
 package org.telegram.ui.Components;
 
-import org.telegram.tgnet.RequestDelegate;
-import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC;
+import android.view.View;
 
-public final /* synthetic */ class LinkActionView$$ExternalSyntheticLambda2 implements RequestDelegate {
+public final /* synthetic */ class LinkActionView$$ExternalSyntheticLambda2 implements View.OnClickListener {
     public final /* synthetic */ LinkActionView f$0;
-    public final /* synthetic */ TLRPC.TL_chatInviteExported f$1;
 
-    public /* synthetic */ LinkActionView$$ExternalSyntheticLambda2(LinkActionView linkActionView, TLRPC.TL_chatInviteExported tL_chatInviteExported) {
+    public /* synthetic */ LinkActionView$$ExternalSyntheticLambda2(LinkActionView linkActionView) {
         this.f$0 = linkActionView;
-        this.f$1 = tL_chatInviteExported;
     }
 
-    public final void run(TLObject tLObject, TLRPC.TL_error tL_error) {
-        this.f$0.m4119lambda$loadUsers$12$orgtelegramuiComponentsLinkActionView(this.f$1, tLObject, tL_error);
+    public final void onClick(View view) {
+        this.f$0.lambda$new$7(view);
     }
 }

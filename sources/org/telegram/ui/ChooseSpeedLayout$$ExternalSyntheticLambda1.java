@@ -11,6 +11,6 @@ public final /* synthetic */ class ChooseSpeedLayout$$ExternalSyntheticLambda1 i
     }
 
     public final void onClick(View view) {
-        this.f$0.onSpeedSelected(0.5f);
+        this.f$0.onSpeedSelected(2.0f);
     }
 }

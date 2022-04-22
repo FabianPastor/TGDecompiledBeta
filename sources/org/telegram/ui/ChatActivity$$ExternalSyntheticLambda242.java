@@ -1,19 +1,23 @@
 package org.telegram.ui;
 
-import android.view.MotionEvent;
-import android.view.View;
-import org.telegram.ui.ContentPreviewViewer;
+import java.util.ArrayList;
+import org.telegram.tgnet.TLRPC$User;
+import org.telegram.ui.GroupCreateActivity;
 
-public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda242 implements View.OnTouchListener {
+public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda242 implements GroupCreateActivity.ContactsAddActivityDelegate {
     public final /* synthetic */ ChatActivity f$0;
-    public final /* synthetic */ ContentPreviewViewer.ContentPreviewViewerDelegate f$1;
+    public final /* synthetic */ long f$1;
 
-    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda242(ChatActivity chatActivity, ContentPreviewViewer.ContentPreviewViewerDelegate contentPreviewViewerDelegate) {
+    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda242(ChatActivity chatActivity, long j) {
         this.f$0 = chatActivity;
-        this.f$1 = contentPreviewViewerDelegate;
+        this.f$1 = j;
     }
 
-    public final boolean onTouch(View view, MotionEvent motionEvent) {
-        return this.f$0.m1683lambda$createView$42$orgtelegramuiChatActivity(this.f$1, view, motionEvent);
+    public final void didSelectUsers(ArrayList arrayList, int i) {
+        this.f$0.lambda$createView$34(this.f$1, arrayList, i);
+    }
+
+    public /* synthetic */ void needAddBot(TLRPC$User tLRPC$User) {
+        GroupCreateActivity.ContactsAddActivityDelegate.CC.$default$needAddBot(this, tLRPC$User);
     }
 }

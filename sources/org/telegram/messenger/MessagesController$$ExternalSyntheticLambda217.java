@@ -1,22 +1,16 @@
 package org.telegram.messenger;
 
-import org.telegram.messenger.MessagesController;
-import org.telegram.tgnet.RequestDelegate;
-import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC;
+import java.util.Comparator;
+import org.telegram.tgnet.TLRPC$Updates;
 
-public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda217 implements RequestDelegate {
+public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda217 implements Comparator {
     public final /* synthetic */ MessagesController f$0;
-    public final /* synthetic */ long f$1;
-    public final /* synthetic */ MessagesController.SendAsPeersInfo f$2;
 
-    public /* synthetic */ MessagesController$$ExternalSyntheticLambda217(MessagesController messagesController, long j, MessagesController.SendAsPeersInfo sendAsPeersInfo) {
+    public /* synthetic */ MessagesController$$ExternalSyntheticLambda217(MessagesController messagesController) {
         this.f$0 = messagesController;
-        this.f$1 = j;
-        this.f$2 = sendAsPeersInfo;
     }
 
-    public final void run(TLObject tLObject, TLRPC.TL_error tL_error) {
-        this.f$0.m234x8var_a2f(this.f$1, this.f$2, tLObject, tL_error);
+    public final int compare(Object obj, Object obj2) {
+        return this.f$0.lambda$processUpdatesQueue$252((TLRPC$Updates) obj, (TLRPC$Updates) obj2);
     }
 }

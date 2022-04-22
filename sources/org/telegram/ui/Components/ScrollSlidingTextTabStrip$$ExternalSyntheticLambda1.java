@@ -12,6 +12,6 @@ public final /* synthetic */ class ScrollSlidingTextTabStrip$$ExternalSyntheticL
     }
 
     public final void onClick(View view) {
-        this.f$0.m4305x28370d04(this.f$1, view);
+        this.f$0.lambda$addTextTab$0(this.f$1, view);
     }
 }

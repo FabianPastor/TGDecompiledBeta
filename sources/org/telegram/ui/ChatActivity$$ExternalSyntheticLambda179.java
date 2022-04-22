@@ -1,17 +1,17 @@
 package org.telegram.ui;
 
-import android.content.DialogInterface;
+import org.telegram.tgnet.TLRPC$TL_error;
 
-public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda179 implements DialogInterface.OnClickListener {
+public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda179 implements Runnable {
     public final /* synthetic */ ChatActivity f$0;
-    public final /* synthetic */ boolean f$1;
+    public final /* synthetic */ TLRPC$TL_error f$1;
 
-    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda179(ChatActivity chatActivity, boolean z) {
+    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda179(ChatActivity chatActivity, TLRPC$TL_error tLRPC$TL_error) {
         this.f$0 = chatActivity;
-        this.f$1 = z;
+        this.f$1 = tLRPC$TL_error;
     }
 
-    public final void onClick(DialogInterface dialogInterface, int i) {
-        this.f$0.m1635lambda$checkRecordLocked$206$orgtelegramuiChatActivity(this.f$1, dialogInterface, i);
+    public final void run() {
+        this.f$0.lambda$processSelectedOption$202(this.f$1);
     }
 }

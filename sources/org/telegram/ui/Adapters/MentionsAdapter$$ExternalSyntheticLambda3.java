@@ -14,6 +14,6 @@ public final /* synthetic */ class MentionsAdapter$$ExternalSyntheticLambda3 imp
     }
 
     public final void run() {
-        this.f$0.m1339x53b20cad(this.f$1, this.f$2);
+        this.f$0.lambda$searchServerStickers$0(this.f$1, this.f$2);
     }
 }

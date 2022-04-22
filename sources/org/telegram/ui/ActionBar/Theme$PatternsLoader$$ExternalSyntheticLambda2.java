@@ -12,6 +12,6 @@ public final /* synthetic */ class Theme$PatternsLoader$$ExternalSyntheticLambda
     }
 
     public final void run() {
-        this.f$0.m1289x5var_e(this.f$1);
+        this.f$0.lambda$didReceivedNotification$3(this.f$1);
     }
 }

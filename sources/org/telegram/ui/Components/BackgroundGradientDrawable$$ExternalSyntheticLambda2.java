@@ -15,6 +15,6 @@ public final /* synthetic */ class BackgroundGradientDrawable$$ExternalSynthetic
     }
 
     public final void dispose() {
-        this.f$0.m3622xc8CLASSNAMEd9(this.f$1, this.f$2);
+        this.f$0.lambda$drawExactBoundsSize$0(this.f$1, this.f$2);
     }
 }

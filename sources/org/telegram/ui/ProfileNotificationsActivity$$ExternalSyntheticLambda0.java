@@ -10,7 +10,7 @@ public final /* synthetic */ class ProfileNotificationsActivity$$ExternalSynthet
     }
 
     public final void didSetColor() {
-        this.f$0.m3178x84cbvar_();
+        this.f$0.lambda$getThemeDescriptions$0();
     }
 
     public /* synthetic */ void onAnimationProgress(float f) {

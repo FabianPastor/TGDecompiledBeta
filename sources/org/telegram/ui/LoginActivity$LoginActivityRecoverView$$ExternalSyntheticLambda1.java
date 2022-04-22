@@ -11,6 +11,6 @@ public final /* synthetic */ class LoginActivity$LoginActivityRecoverView$$Exter
     }
 
     public final void onClick(DialogInterface dialogInterface, int i) {
-        this.f$0.m2489xd0b73a25(dialogInterface, i);
+        this.f$0.lambda$new$2(dialogInterface, i);
     }
 }

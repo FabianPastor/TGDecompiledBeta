@@ -1,15 +1,15 @@
 package org.telegram.ui.Components;
 
-import android.view.View;
+import androidx.dynamicanimation.animation.DynamicAnimation;
 
-public final /* synthetic */ class PipVideoOverlay$$ExternalSyntheticLambda5 implements View.OnClickListener {
+public final /* synthetic */ class PipVideoOverlay$$ExternalSyntheticLambda5 implements DynamicAnimation.OnAnimationEndListener {
     public final /* synthetic */ PipVideoOverlay f$0;
 
     public /* synthetic */ PipVideoOverlay$$ExternalSyntheticLambda5(PipVideoOverlay pipVideoOverlay) {
         this.f$0 = pipVideoOverlay;
     }
 
-    public final void onClick(View view) {
-        this.f$0.m4231x12330da2(view);
+    public final void onAnimationEnd(DynamicAnimation dynamicAnimation, boolean z, float f, float f2) {
+        this.f$0.lambda$showInternal$8(dynamicAnimation, z, f, f2);
     }
 }

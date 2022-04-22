@@ -1,6 +1,5 @@
 package org.telegram.ui.ActionBar;
 
-import android.graphics.Canvas;
 import android.graphics.ColorFilter;
 import android.graphics.Paint;
 import android.graphics.RectF;
@@ -8,7 +7,6 @@ import android.graphics.drawable.Drawable;
 import android.os.SystemClock;
 import android.view.animation.DecelerateInterpolator;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.ui.Components.MediaActionDrawable;
 
 public class MenuDrawable extends Drawable {
     public static int TYPE_DEFAULT = 0;
@@ -16,7 +14,6 @@ public class MenuDrawable extends Drawable {
     public static int TYPE_UDPATE_DOWNLOADING = 2;
     private int alpha;
     private float animatedDownloadProgress;
-    private boolean animationInProgress;
     private int backColor;
     private Paint backPaint;
     private int currentAnimationTime;
@@ -38,11 +35,18 @@ public class MenuDrawable extends Drawable {
     private int type;
     private float typeAnimationProgress;
 
+    public int getOpacity() {
+        return -2;
+    }
+
+    public void setColorFilter(ColorFilter colorFilter) {
+    }
+
     public MenuDrawable() {
         this(TYPE_DEFAULT);
     }
 
-    public MenuDrawable(int type2) {
+    public MenuDrawable(int i) {
         this.paint = new Paint(1);
         this.backPaint = new Paint(1);
         this.rotateToBack = true;
@@ -54,48 +58,44 @@ public class MenuDrawable extends Drawable {
         this.backPaint.setStrokeCap(Paint.Cap.ROUND);
         this.backPaint.setStyle(Paint.Style.STROKE);
         this.previousType = TYPE_DEFAULT;
-        this.type = type2;
+        this.type = i;
         this.typeAnimationProgress = 1.0f;
     }
 
-    public void setRotateToBack(boolean value) {
-        this.rotateToBack = value;
+    public void setRotateToBack(boolean z) {
+        this.rotateToBack = z;
     }
 
-    public float getCurrentRotation() {
-        return this.currentRotation;
-    }
-
-    public void setRotation(float rotation, boolean animated) {
+    public void setRotation(float f, boolean z) {
         this.lastFrameTime = 0;
-        float f = this.currentRotation;
-        if (f == 1.0f) {
+        float f2 = this.currentRotation;
+        if (f2 == 1.0f) {
             this.reverseAngle = true;
-        } else if (f == 0.0f) {
+        } else if (f2 == 0.0f) {
             this.reverseAngle = false;
         }
         this.lastFrameTime = 0;
-        if (animated) {
-            if (f < rotation) {
-                this.currentAnimationTime = (int) (f * 200.0f);
+        if (z) {
+            if (f2 < f) {
+                this.currentAnimationTime = (int) (f2 * 200.0f);
             } else {
-                this.currentAnimationTime = (int) ((1.0f - f) * 200.0f);
+                this.currentAnimationTime = (int) ((1.0f - f2) * 200.0f);
             }
             this.lastFrameTime = SystemClock.elapsedRealtime();
-            this.finalRotation = rotation;
+            this.finalRotation = f;
         } else {
-            this.currentRotation = rotation;
-            this.finalRotation = rotation;
+            this.currentRotation = f;
+            this.finalRotation = f;
         }
         invalidateSelf();
     }
 
-    public void setType(int value, boolean animated) {
-        int i = this.type;
-        if (i != value) {
-            this.previousType = i;
-            this.type = value;
-            if (animated) {
+    public void setType(int i, boolean z) {
+        int i2 = this.type;
+        if (i2 != i) {
+            this.previousType = i2;
+            this.type = i;
+            if (z) {
                 this.typeAnimationProgress = 0.0f;
             } else {
                 this.typeAnimationProgress = 1.0f;
@@ -104,241 +104,628 @@ public class MenuDrawable extends Drawable {
         }
     }
 
-    public void draw(Canvas canvas) {
-        float diffMiddle;
-        float diffUp;
-        float startXDiff;
-        float endXDiff;
-        float endYDiff;
-        float startYDiff;
-        int backColor1;
-        int backColor12;
-        float rad;
-        float cy;
-        float cx;
-        int backColor13;
-        Canvas canvas2 = canvas;
-        long newTime = SystemClock.elapsedRealtime();
-        long j = this.lastFrameTime;
-        long dt = newTime - j;
-        float f = this.currentRotation;
-        float f2 = this.finalRotation;
-        if (f != f2) {
-            if (j != 0) {
-                int i = (int) (((long) this.currentAnimationTime) + dt);
-                this.currentAnimationTime = i;
-                if (i >= 200) {
-                    this.currentRotation = f2;
-                } else if (f < f2) {
-                    this.currentRotation = this.interpolator.getInterpolation(((float) i) / 200.0f) * this.finalRotation;
-                } else {
-                    this.currentRotation = 1.0f - this.interpolator.getInterpolation(((float) i) / 200.0f);
-                }
-            }
-            invalidateSelf();
-        }
-        float f3 = this.typeAnimationProgress;
-        if (f3 < 1.0f) {
-            float f4 = f3 + (((float) dt) / 200.0f);
-            this.typeAnimationProgress = f4;
-            if (f4 > 1.0f) {
-                this.typeAnimationProgress = 1.0f;
-            }
-            invalidateSelf();
-        }
-        this.lastFrameTime = newTime;
-        canvas.save();
-        canvas2.translate((float) ((getIntrinsicWidth() / 2) - AndroidUtilities.dp(9.0f)), (float) (getIntrinsicHeight() / 2));
-        int i2 = this.iconColor;
-        if (i2 == 0) {
-            i2 = Theme.getColor("actionBarDefaultIcon");
-        }
-        int color1 = i2;
-        int i3 = this.backColor;
-        if (i3 == 0) {
-            i3 = Theme.getColor("actionBarDefault");
-        }
-        int backColor14 = i3;
-        int i4 = this.type;
-        int i5 = TYPE_DEFAULT;
-        if (i4 == i5) {
-            if (this.previousType != i5) {
-                diffUp = ((float) AndroidUtilities.dp(9.0f)) * (1.0f - this.typeAnimationProgress);
-                diffMiddle = ((float) AndroidUtilities.dp(7.0f)) * (1.0f - this.typeAnimationProgress);
-            } else {
-                diffUp = 0.0f;
-                diffMiddle = 0.0f;
-            }
-        } else if (this.previousType == i5) {
-            diffUp = ((float) AndroidUtilities.dp(9.0f)) * this.typeAnimationProgress * (1.0f - this.currentRotation);
-            diffMiddle = ((float) AndroidUtilities.dp(7.0f)) * this.typeAnimationProgress * (1.0f - this.currentRotation);
-        } else {
-            diffUp = ((float) AndroidUtilities.dp(9.0f)) * (1.0f - this.currentRotation);
-            diffMiddle = ((float) AndroidUtilities.dp(7.0f)) * (1.0f - this.currentRotation);
-        }
-        if (this.rotateToBack) {
-            canvas2.rotate(this.currentRotation * ((float) (this.reverseAngle ? -180 : 180)), (float) AndroidUtilities.dp(9.0f), 0.0f);
-            this.paint.setColor(color1);
-            this.paint.setAlpha(this.alpha);
-            int backColor15 = backColor14;
-            canvas.drawLine(0.0f, 0.0f, (((float) AndroidUtilities.dp(18.0f)) - (((float) AndroidUtilities.dp(3.0f)) * this.currentRotation)) - diffMiddle, 0.0f, this.paint);
-            float endYDiff2 = (((float) AndroidUtilities.dp(5.0f)) * (1.0f - Math.abs(this.currentRotation))) - (((float) AndroidUtilities.dp(0.5f)) * Math.abs(this.currentRotation));
-            float endXDiff2 = ((float) AndroidUtilities.dp(18.0f)) - (((float) AndroidUtilities.dp(2.5f)) * Math.abs(this.currentRotation));
-            endYDiff = endYDiff2;
-            startYDiff = ((float) AndroidUtilities.dp(5.0f)) + (((float) AndroidUtilities.dp(2.0f)) * Math.abs(this.currentRotation));
-            startXDiff = ((float) AndroidUtilities.dp(7.5f)) * Math.abs(this.currentRotation);
-            backColor1 = backColor15;
-            endXDiff = endXDiff2;
-        } else {
-            canvas2.rotate(this.currentRotation * ((float) (this.reverseAngle ? -225 : 135)), (float) AndroidUtilities.dp(9.0f), 0.0f);
-            if (this.miniIcon) {
-                this.paint.setColor(color1);
-                this.paint.setAlpha(this.alpha);
-                int backColor16 = backColor14;
-                canvas.drawLine((((float) AndroidUtilities.dp(1.0f)) * this.currentRotation) + (AndroidUtilities.dpf2(2.0f) * (1.0f - Math.abs(this.currentRotation))), 0.0f, ((AndroidUtilities.dpf2(16.0f) * (1.0f - this.currentRotation)) + (((float) AndroidUtilities.dp(17.0f)) * this.currentRotation)) - diffMiddle, 0.0f, this.paint);
-                float endYDiff3 = (AndroidUtilities.dpf2(5.0f) * (1.0f - Math.abs(this.currentRotation))) - (AndroidUtilities.dpf2(0.5f) * Math.abs(this.currentRotation));
-                endXDiff = (AndroidUtilities.dpf2(16.0f) * (1.0f - Math.abs(this.currentRotation))) + (AndroidUtilities.dpf2(9.0f) * Math.abs(this.currentRotation));
-                startYDiff = AndroidUtilities.dpf2(5.0f) + (AndroidUtilities.dpf2(3.0f) * Math.abs(this.currentRotation));
-                startXDiff = AndroidUtilities.dpf2(2.0f) + (AndroidUtilities.dpf2(7.0f) * Math.abs(this.currentRotation));
-                backColor1 = backColor16;
-                endYDiff = endYDiff3;
-            } else {
-                int backColor17 = backColor14;
-                int color2 = Theme.getColor("actionBarActionModeDefaultIcon");
-                int backColor2 = Theme.getColor("actionBarActionModeDefault");
-                int backColor18 = AndroidUtilities.getOffsetColor(backColor17, backColor2, this.currentRotation, 1.0f);
-                this.paint.setColor(AndroidUtilities.getOffsetColor(color1, color2, this.currentRotation, 1.0f));
-                this.paint.setAlpha(this.alpha);
-                int i6 = backColor2;
-                int i7 = color2;
-                canvas.drawLine(this.currentRotation * ((float) AndroidUtilities.dp(1.0f)), 0.0f, (((float) AndroidUtilities.dp(18.0f)) - (((float) AndroidUtilities.dp(1.0f)) * this.currentRotation)) - diffMiddle, 0.0f, this.paint);
-                float endYDiff4 = (((float) AndroidUtilities.dp(5.0f)) * (1.0f - Math.abs(this.currentRotation))) - (((float) AndroidUtilities.dp(0.5f)) * Math.abs(this.currentRotation));
-                endXDiff = ((float) AndroidUtilities.dp(18.0f)) - (((float) AndroidUtilities.dp(9.0f)) * Math.abs(this.currentRotation));
-                startYDiff = ((float) AndroidUtilities.dp(5.0f)) + (((float) AndroidUtilities.dp(3.0f)) * Math.abs(this.currentRotation));
-                startXDiff = ((float) AndroidUtilities.dp(9.0f)) * Math.abs(this.currentRotation);
-                backColor1 = backColor18;
-                endYDiff = endYDiff4;
-            }
-        }
-        if (this.miniIcon) {
-            Canvas canvas3 = canvas;
-            float f5 = startXDiff;
-            float f6 = endXDiff;
-            backColor12 = backColor1;
-            canvas3.drawLine(f5, -startYDiff, f6, -endYDiff, this.paint);
-            canvas3.drawLine(f5, startYDiff, f6, endYDiff, this.paint);
-        } else {
-            backColor12 = backColor1;
-            Canvas canvas4 = canvas;
-            float f7 = startXDiff;
-            canvas4.drawLine(f7, -startYDiff, endXDiff - diffUp, -endYDiff, this.paint);
-            canvas4.drawLine(f7, startYDiff, endXDiff, endYDiff, this.paint);
-        }
-        int i8 = this.type;
-        int i9 = TYPE_DEFAULT;
-        if ((i8 == i9 || this.currentRotation == 1.0f) && (this.previousType == i9 || this.typeAnimationProgress == 1.0f)) {
-        } else {
-            float cx2 = (float) AndroidUtilities.dp(17.0f);
-            float cy2 = (float) (-AndroidUtilities.dp(4.5f));
-            float rad2 = AndroidUtilities.density * 5.5f;
-            float f8 = this.currentRotation;
-            canvas2.scale(1.0f - f8, 1.0f - f8, cx2, cy2);
-            if (this.type == TYPE_DEFAULT) {
-                rad = rad2 * (1.0f - this.typeAnimationProgress);
-            } else {
-                rad = rad2;
-            }
-            int backColor19 = backColor12;
-            this.backPaint.setColor(backColor19);
-            this.backPaint.setAlpha(this.alpha);
-            canvas2.drawCircle(cx2, cy2, rad, this.paint);
-            int i10 = this.type;
-            int i11 = TYPE_UDPATE_AVAILABLE;
-            if (i10 == i11 || this.previousType == i11) {
-                this.backPaint.setStrokeWidth(AndroidUtilities.density * 1.66f);
-                if (this.previousType == TYPE_UDPATE_AVAILABLE) {
-                    backColor13 = backColor19;
-                    this.backPaint.setAlpha((int) (((float) this.alpha) * (1.0f - this.typeAnimationProgress)));
-                } else {
-                    backColor13 = backColor19;
-                    this.backPaint.setAlpha(this.alpha);
-                }
-                int i12 = backColor13;
-                float f9 = rad;
-                cy = cy2;
-                cx = cx2;
-                canvas.drawLine(cx2, cy2 - ((float) AndroidUtilities.dp(2.0f)), cx2, cy2, this.backPaint);
-                canvas2.drawPoint(cx, cy + ((float) AndroidUtilities.dp(2.5f)), this.backPaint);
-            } else {
-                int i13 = backColor19;
-                float var_ = rad;
-                cy = cy2;
-                cx = cx2;
-            }
-            int i14 = this.type;
-            int i15 = TYPE_UDPATE_DOWNLOADING;
-            if (i14 == i15 || this.previousType == i15) {
-                this.backPaint.setStrokeWidth((float) AndroidUtilities.dp(2.0f));
-                if (this.previousType == TYPE_UDPATE_DOWNLOADING) {
-                    this.backPaint.setAlpha((int) (((float) this.alpha) * (1.0f - this.typeAnimationProgress)));
-                } else {
-                    this.backPaint.setAlpha(this.alpha);
-                }
-                float arcRad = Math.max(4.0f, this.animatedDownloadProgress * 360.0f);
-                this.rect.set(cx - ((float) AndroidUtilities.dp(3.0f)), cy - ((float) AndroidUtilities.dp(3.0f)), ((float) AndroidUtilities.dp(3.0f)) + cx, cy + ((float) AndroidUtilities.dp(3.0f)));
-                canvas.drawArc(this.rect, this.downloadRadOffset, arcRad, false, this.backPaint);
-                float var_ = this.downloadRadOffset + (((float) (360 * dt)) / 2500.0f);
-                this.downloadRadOffset = var_;
-                this.downloadRadOffset = MediaActionDrawable.getCircleValue(var_);
-                float var_ = this.downloadProgress;
-                float var_ = this.downloadProgressAnimationStart;
-                float progressDiff = var_ - var_;
-                if (progressDiff > 0.0f) {
-                    float var_ = this.downloadProgressTime + ((float) dt);
-                    this.downloadProgressTime = var_;
-                    if (var_ >= 200.0f) {
-                        this.animatedDownloadProgress = var_;
-                        this.downloadProgressAnimationStart = var_;
-                        this.downloadProgressTime = 0.0f;
-                    } else {
-                        this.animatedDownloadProgress = var_ + (this.interpolator.getInterpolation(var_ / 200.0f) * progressDiff);
-                    }
-                }
-                invalidateSelf();
-            }
-        }
-        canvas.restore();
+    /* JADX WARNING: Removed duplicated region for block: B:37:0x0101  */
+    /* JADX WARNING: Removed duplicated region for block: B:44:0x019b  */
+    /* JADX WARNING: Removed duplicated region for block: B:54:0x02fa  */
+    /* JADX WARNING: Removed duplicated region for block: B:55:0x0319  */
+    /* JADX WARNING: Removed duplicated region for block: B:66:0x036d  */
+    /* JADX WARNING: Removed duplicated region for block: B:73:0x03a0  */
+    /* JADX WARNING: Removed duplicated region for block: B:74:0x03b0  */
+    /* JADX WARNING: Removed duplicated region for block: B:82:0x03ed  */
+    /* JADX WARNING: Removed duplicated region for block: B:83:0x03fc  */
+    /* JADX WARNING: Removed duplicated region for block: B:86:0x0458  */
+    /* Code decompiled incorrectly, please refer to instructions dump. */
+    public void draw(android.graphics.Canvas r26) {
+        /*
+            r25 = this;
+            r0 = r25
+            r7 = r26
+            long r1 = android.os.SystemClock.elapsedRealtime()
+            long r3 = r0.lastFrameTime
+            long r8 = r1 - r3
+            float r5 = r0.currentRotation
+            float r6 = r0.finalRotation
+            r10 = 1128792064(0x43480000, float:200.0)
+            r11 = 1065353216(0x3var_, float:1.0)
+            int r12 = (r5 > r6 ? 1 : (r5 == r6 ? 0 : -1))
+            if (r12 == 0) goto L_0x004e
+            r12 = 0
+            int r14 = (r3 > r12 ? 1 : (r3 == r12 ? 0 : -1))
+            if (r14 == 0) goto L_0x004b
+            int r3 = r0.currentAnimationTime
+            long r3 = (long) r3
+            long r3 = r3 + r8
+            int r4 = (int) r3
+            r0.currentAnimationTime = r4
+            r3 = 200(0xc8, float:2.8E-43)
+            if (r4 < r3) goto L_0x002c
+            r0.currentRotation = r6
+            goto L_0x004b
+        L_0x002c:
+            int r3 = (r5 > r6 ? 1 : (r5 == r6 ? 0 : -1))
+            if (r3 >= 0) goto L_0x003f
+            android.view.animation.DecelerateInterpolator r3 = r0.interpolator
+            float r4 = (float) r4
+            float r4 = r4 / r10
+            float r3 = r3.getInterpolation(r4)
+            float r4 = r0.finalRotation
+            float r3 = r3 * r4
+            r0.currentRotation = r3
+            goto L_0x004b
+        L_0x003f:
+            android.view.animation.DecelerateInterpolator r3 = r0.interpolator
+            float r4 = (float) r4
+            float r4 = r4 / r10
+            float r3 = r3.getInterpolation(r4)
+            float r3 = r11 - r3
+            r0.currentRotation = r3
+        L_0x004b:
+            r25.invalidateSelf()
+        L_0x004e:
+            float r3 = r0.typeAnimationProgress
+            int r4 = (r3 > r11 ? 1 : (r3 == r11 ? 0 : -1))
+            if (r4 >= 0) goto L_0x0062
+            float r4 = (float) r8
+            float r4 = r4 / r10
+            float r3 = r3 + r4
+            r0.typeAnimationProgress = r3
+            int r3 = (r3 > r11 ? 1 : (r3 == r11 ? 0 : -1))
+            if (r3 <= 0) goto L_0x005f
+            r0.typeAnimationProgress = r11
+        L_0x005f:
+            r25.invalidateSelf()
+        L_0x0062:
+            r0.lastFrameTime = r1
+            r26.save()
+            int r1 = r25.getIntrinsicWidth()
+            int r1 = r1 / 2
+            r12 = 1091567616(0x41100000, float:9.0)
+            int r2 = org.telegram.messenger.AndroidUtilities.dp(r12)
+            int r1 = r1 - r2
+            float r1 = (float) r1
+            int r2 = r25.getIntrinsicHeight()
+            int r2 = r2 / 2
+            float r2 = (float) r2
+            r7.translate(r1, r2)
+            int r1 = r0.iconColor
+            if (r1 != 0) goto L_0x0089
+            java.lang.String r1 = "actionBarDefaultIcon"
+            int r1 = org.telegram.ui.ActionBar.Theme.getColor(r1)
+        L_0x0089:
+            int r2 = r0.backColor
+            if (r2 != 0) goto L_0x0093
+            java.lang.String r2 = "actionBarDefault"
+            int r2 = org.telegram.ui.ActionBar.Theme.getColor(r2)
+        L_0x0093:
+            r13 = r2
+            int r2 = r0.type
+            int r3 = TYPE_DEFAULT
+            r14 = 1088421888(0x40e00000, float:7.0)
+            r15 = 0
+            if (r2 != r3) goto L_0x00b8
+            int r2 = r0.previousType
+            if (r2 == r3) goto L_0x00b4
+            int r2 = org.telegram.messenger.AndroidUtilities.dp(r12)
+            float r2 = (float) r2
+            float r3 = r0.typeAnimationProgress
+            float r3 = r11 - r3
+            float r2 = r2 * r3
+            int r3 = org.telegram.messenger.AndroidUtilities.dp(r14)
+            float r3 = (float) r3
+            float r4 = r0.typeAnimationProgress
+            goto L_0x00e9
+        L_0x00b4:
+            r3 = 0
+            r16 = 0
+            goto L_0x00ef
+        L_0x00b8:
+            int r2 = r0.previousType
+            if (r2 != r3) goto L_0x00d7
+            int r2 = org.telegram.messenger.AndroidUtilities.dp(r12)
+            float r2 = (float) r2
+            float r3 = r0.typeAnimationProgress
+            float r2 = r2 * r3
+            float r3 = r0.currentRotation
+            float r3 = r11 - r3
+            float r2 = r2 * r3
+            int r3 = org.telegram.messenger.AndroidUtilities.dp(r14)
+            float r3 = (float) r3
+            float r4 = r0.typeAnimationProgress
+            float r3 = r3 * r4
+            float r4 = r0.currentRotation
+            goto L_0x00e9
+        L_0x00d7:
+            int r2 = org.telegram.messenger.AndroidUtilities.dp(r12)
+            float r2 = (float) r2
+            float r3 = r0.currentRotation
+            float r3 = r11 - r3
+            float r2 = r2 * r3
+            int r3 = org.telegram.messenger.AndroidUtilities.dp(r14)
+            float r3 = (float) r3
+            float r4 = r0.currentRotation
+        L_0x00e9:
+            float r4 = r11 - r4
+            float r3 = r3 * r4
+            r16 = r2
+        L_0x00ef:
+            boolean r2 = r0.rotateToBack
+            r17 = 1099431936(0x41880000, float:17.0)
+            r18 = 1075838976(0x40200000, float:2.5)
+            r19 = 1056964608(0x3var_, float:0.5)
+            r20 = 1099956224(0x41900000, float:18.0)
+            r21 = 1073741824(0x40000000, float:2.0)
+            r22 = 1084227584(0x40a00000, float:5.0)
+            r23 = 1077936128(0x40400000, float:3.0)
+            if (r2 == 0) goto L_0x019b
+            float r2 = r0.currentRotation
+            boolean r4 = r0.reverseAngle
+            if (r4 == 0) goto L_0x010a
+            r4 = -180(0xffffffffffffff4c, float:NaN)
+            goto L_0x010c
+        L_0x010a:
+            r4 = 180(0xb4, float:2.52E-43)
+        L_0x010c:
+            float r4 = (float) r4
+            float r2 = r2 * r4
+            int r4 = org.telegram.messenger.AndroidUtilities.dp(r12)
+            float r4 = (float) r4
+            r7.rotate(r2, r4, r15)
+            android.graphics.Paint r2 = r0.paint
+            r2.setColor(r1)
+            android.graphics.Paint r1 = r0.paint
+            int r2 = r0.alpha
+            r1.setAlpha(r2)
+            r2 = 0
+            r4 = 0
+            int r1 = org.telegram.messenger.AndroidUtilities.dp(r20)
+            float r1 = (float) r1
+            int r5 = org.telegram.messenger.AndroidUtilities.dp(r23)
+            float r5 = (float) r5
+            float r6 = r0.currentRotation
+            float r5 = r5 * r6
+            float r1 = r1 - r5
+            float r5 = r1 - r3
+            r6 = 0
+            android.graphics.Paint r12 = r0.paint
+            r1 = r26
+            r3 = r4
+            r4 = r5
+            r5 = r6
+            r6 = r12
+            r1.drawLine(r2, r3, r4, r5, r6)
+            int r1 = org.telegram.messenger.AndroidUtilities.dp(r22)
+            float r1 = (float) r1
+            float r2 = r0.currentRotation
+            float r2 = java.lang.Math.abs(r2)
+            float r2 = r11 - r2
+            float r1 = r1 * r2
+            int r2 = org.telegram.messenger.AndroidUtilities.dp(r19)
+            float r2 = (float) r2
+            float r3 = r0.currentRotation
+            float r3 = java.lang.Math.abs(r3)
+            float r2 = r2 * r3
+            float r1 = r1 - r2
+            int r2 = org.telegram.messenger.AndroidUtilities.dp(r20)
+            float r2 = (float) r2
+            int r3 = org.telegram.messenger.AndroidUtilities.dp(r18)
+            float r3 = (float) r3
+            float r4 = r0.currentRotation
+            float r4 = java.lang.Math.abs(r4)
+            float r3 = r3 * r4
+            float r2 = r2 - r3
+            int r3 = org.telegram.messenger.AndroidUtilities.dp(r22)
+            float r3 = (float) r3
+            int r4 = org.telegram.messenger.AndroidUtilities.dp(r21)
+            float r4 = (float) r4
+            float r5 = r0.currentRotation
+            float r5 = java.lang.Math.abs(r5)
+            float r4 = r4 * r5
+            float r3 = r3 + r4
+            r4 = 1089470464(0x40var_, float:7.5)
+            int r4 = org.telegram.messenger.AndroidUtilities.dp(r4)
+            float r4 = (float) r4
+            float r5 = r0.currentRotation
+            float r5 = java.lang.Math.abs(r5)
+        L_0x0192:
+            float r4 = r4 * r5
+        L_0x0194:
+            r6 = r1
+            r14 = r2
+            r12 = r4
+            r5 = r13
+            r13 = r3
+            goto L_0x02f6
+        L_0x019b:
+            float r2 = r0.currentRotation
+            boolean r4 = r0.reverseAngle
+            if (r4 == 0) goto L_0x01a4
+            r4 = -225(0xffffffffffffff1f, float:NaN)
+            goto L_0x01a6
+        L_0x01a4:
+            r4 = 135(0x87, float:1.89E-43)
+        L_0x01a6:
+            float r4 = (float) r4
+            float r2 = r2 * r4
+            int r4 = org.telegram.messenger.AndroidUtilities.dp(r12)
+            float r4 = (float) r4
+            r7.rotate(r2, r4, r15)
+            boolean r2 = r0.miniIcon
+            if (r2 == 0) goto L_0x025b
+            android.graphics.Paint r2 = r0.paint
+            r2.setColor(r1)
+            android.graphics.Paint r1 = r0.paint
+            int r2 = r0.alpha
+            r1.setAlpha(r2)
+            float r1 = org.telegram.messenger.AndroidUtilities.dpf2(r21)
+            float r2 = r0.currentRotation
+            float r2 = java.lang.Math.abs(r2)
+            float r2 = r11 - r2
+            float r1 = r1 * r2
+            int r2 = org.telegram.messenger.AndroidUtilities.dp(r11)
+            float r2 = (float) r2
+            float r4 = r0.currentRotation
+            float r2 = r2 * r4
+            float r2 = r2 + r1
+            r4 = 0
+            r20 = 1098907648(0x41800000, float:16.0)
+            float r1 = org.telegram.messenger.AndroidUtilities.dpf2(r20)
+            float r5 = r0.currentRotation
+            float r5 = r11 - r5
+            float r1 = r1 * r5
+            int r5 = org.telegram.messenger.AndroidUtilities.dp(r17)
+            float r5 = (float) r5
+            float r6 = r0.currentRotation
+            float r5 = r5 * r6
+            float r1 = r1 + r5
+            float r5 = r1 - r3
+            r6 = 0
+            android.graphics.Paint r3 = r0.paint
+            r1 = r26
+            r24 = r3
+            r3 = r4
+            r4 = r5
+            r5 = r6
+            r6 = r24
+            r1.drawLine(r2, r3, r4, r5, r6)
+            float r1 = org.telegram.messenger.AndroidUtilities.dpf2(r22)
+            float r2 = r0.currentRotation
+            float r2 = java.lang.Math.abs(r2)
+            float r2 = r11 - r2
+            float r1 = r1 * r2
+            float r2 = org.telegram.messenger.AndroidUtilities.dpf2(r19)
+            float r3 = r0.currentRotation
+            float r3 = java.lang.Math.abs(r3)
+            float r2 = r2 * r3
+            float r1 = r1 - r2
+            float r2 = org.telegram.messenger.AndroidUtilities.dpf2(r20)
+            float r3 = r0.currentRotation
+            float r3 = java.lang.Math.abs(r3)
+            float r3 = r11 - r3
+            float r2 = r2 * r3
+            float r3 = org.telegram.messenger.AndroidUtilities.dpf2(r12)
+            float r4 = r0.currentRotation
+            float r4 = java.lang.Math.abs(r4)
+            float r3 = r3 * r4
+            float r2 = r2 + r3
+            float r3 = org.telegram.messenger.AndroidUtilities.dpf2(r22)
+            float r4 = org.telegram.messenger.AndroidUtilities.dpf2(r23)
+            float r5 = r0.currentRotation
+            float r5 = java.lang.Math.abs(r5)
+            float r4 = r4 * r5
+            float r3 = r3 + r4
+            float r4 = org.telegram.messenger.AndroidUtilities.dpf2(r21)
+            float r5 = org.telegram.messenger.AndroidUtilities.dpf2(r14)
+            float r6 = r0.currentRotation
+            float r6 = java.lang.Math.abs(r6)
+            float r5 = r5 * r6
+            float r4 = r4 + r5
+            goto L_0x0194
+        L_0x025b:
+            java.lang.String r2 = "actionBarActionModeDefaultIcon"
+            int r2 = org.telegram.ui.ActionBar.Theme.getColor(r2)
+            java.lang.String r4 = "actionBarActionModeDefault"
+            int r4 = org.telegram.ui.ActionBar.Theme.getColor(r4)
+            float r5 = r0.currentRotation
+            int r13 = org.telegram.messenger.AndroidUtilities.getOffsetColor(r13, r4, r5, r11)
+            android.graphics.Paint r4 = r0.paint
+            float r5 = r0.currentRotation
+            int r1 = org.telegram.messenger.AndroidUtilities.getOffsetColor(r1, r2, r5, r11)
+            r4.setColor(r1)
+            android.graphics.Paint r1 = r0.paint
+            int r2 = r0.alpha
+            r1.setAlpha(r2)
+            int r1 = org.telegram.messenger.AndroidUtilities.dp(r11)
+            float r1 = (float) r1
+            float r2 = r0.currentRotation
+            float r2 = r2 * r1
+            r4 = 0
+            int r1 = org.telegram.messenger.AndroidUtilities.dp(r20)
+            float r1 = (float) r1
+            int r5 = org.telegram.messenger.AndroidUtilities.dp(r11)
+            float r5 = (float) r5
+            float r6 = r0.currentRotation
+            float r5 = r5 * r6
+            float r1 = r1 - r5
+            float r5 = r1 - r3
+            r6 = 0
+            android.graphics.Paint r14 = r0.paint
+            r1 = r26
+            r3 = r4
+            r4 = r5
+            r5 = r6
+            r6 = r14
+            r1.drawLine(r2, r3, r4, r5, r6)
+            int r1 = org.telegram.messenger.AndroidUtilities.dp(r22)
+            float r1 = (float) r1
+            float r2 = r0.currentRotation
+            float r2 = java.lang.Math.abs(r2)
+            float r2 = r11 - r2
+            float r1 = r1 * r2
+            int r2 = org.telegram.messenger.AndroidUtilities.dp(r19)
+            float r2 = (float) r2
+            float r3 = r0.currentRotation
+            float r3 = java.lang.Math.abs(r3)
+            float r2 = r2 * r3
+            float r1 = r1 - r2
+            int r2 = org.telegram.messenger.AndroidUtilities.dp(r20)
+            float r2 = (float) r2
+            int r3 = org.telegram.messenger.AndroidUtilities.dp(r12)
+            float r3 = (float) r3
+            float r4 = r0.currentRotation
+            float r4 = java.lang.Math.abs(r4)
+            float r3 = r3 * r4
+            float r2 = r2 - r3
+            int r3 = org.telegram.messenger.AndroidUtilities.dp(r22)
+            float r3 = (float) r3
+            int r4 = org.telegram.messenger.AndroidUtilities.dp(r23)
+            float r4 = (float) r4
+            float r5 = r0.currentRotation
+            float r5 = java.lang.Math.abs(r5)
+            float r4 = r4 * r5
+            float r3 = r3 + r4
+            int r4 = org.telegram.messenger.AndroidUtilities.dp(r12)
+            float r4 = (float) r4
+            float r5 = r0.currentRotation
+            float r5 = java.lang.Math.abs(r5)
+            goto L_0x0192
+        L_0x02f6:
+            boolean r1 = r0.miniIcon
+            if (r1 == 0) goto L_0x0319
+            float r3 = -r13
+            float r4 = -r6
+            android.graphics.Paint r2 = r0.paint
+            r1 = r26
+            r16 = r2
+            r2 = r12
+            r19 = r4
+            r4 = r14
+            r10 = r5
+            r5 = r19
+            r19 = r6
+            r6 = r16
+            r1.drawLine(r2, r3, r4, r5, r6)
+            android.graphics.Paint r6 = r0.paint
+            r3 = r13
+            r5 = r19
+            r1.drawLine(r2, r3, r4, r5, r6)
+            goto L_0x0335
+        L_0x0319:
+            r10 = r5
+            r19 = r6
+            float r3 = -r13
+            float r4 = r14 - r16
+            float r5 = -r6
+            android.graphics.Paint r2 = r0.paint
+            r1 = r26
+            r16 = r2
+            r2 = r12
+            r6 = r16
+            r1.drawLine(r2, r3, r4, r5, r6)
+            android.graphics.Paint r6 = r0.paint
+            r3 = r13
+            r4 = r14
+            r5 = r19
+            r1.drawLine(r2, r3, r4, r5, r6)
+        L_0x0335:
+            int r1 = r0.type
+            int r2 = TYPE_DEFAULT
+            if (r1 == r2) goto L_0x0341
+            float r1 = r0.currentRotation
+            int r1 = (r1 > r11 ? 1 : (r1 == r11 ? 0 : -1))
+            if (r1 != 0) goto L_0x034b
+        L_0x0341:
+            int r1 = r0.previousType
+            if (r1 == r2) goto L_0x047a
+            float r1 = r0.typeAnimationProgress
+            int r1 = (r1 > r11 ? 1 : (r1 == r11 ? 0 : -1))
+            if (r1 == 0) goto L_0x047a
+        L_0x034b:
+            int r1 = org.telegram.messenger.AndroidUtilities.dp(r17)
+            float r12 = (float) r1
+            r1 = 1083179008(0x40900000, float:4.5)
+            int r1 = org.telegram.messenger.AndroidUtilities.dp(r1)
+            int r1 = -r1
+            float r13 = (float) r1
+            float r1 = org.telegram.messenger.AndroidUtilities.density
+            r2 = 1085276160(0x40b00000, float:5.5)
+            float r1 = r1 * r2
+            float r2 = r0.currentRotation
+            float r3 = r11 - r2
+            float r2 = r11 - r2
+            r7.scale(r3, r2, r12, r13)
+            int r2 = r0.type
+            int r3 = TYPE_DEFAULT
+            if (r2 != r3) goto L_0x0373
+            float r2 = r0.typeAnimationProgress
+            float r2 = r11 - r2
+            float r1 = r1 * r2
+        L_0x0373:
+            android.graphics.Paint r2 = r0.backPaint
+            r2.setColor(r10)
+            android.graphics.Paint r2 = r0.backPaint
+            int r3 = r0.alpha
+            r2.setAlpha(r3)
+            android.graphics.Paint r2 = r0.paint
+            r7.drawCircle(r12, r13, r1, r2)
+            int r1 = r0.type
+            int r2 = TYPE_UDPATE_AVAILABLE
+            if (r1 == r2) goto L_0x038e
+            int r1 = r0.previousType
+            if (r1 != r2) goto L_0x03d3
+        L_0x038e:
+            android.graphics.Paint r1 = r0.backPaint
+            float r2 = org.telegram.messenger.AndroidUtilities.density
+            r3 = 1070889697(0x3fd47ae1, float:1.66)
+            float r2 = r2 * r3
+            r1.setStrokeWidth(r2)
+            int r1 = r0.previousType
+            int r2 = TYPE_UDPATE_AVAILABLE
+            if (r1 != r2) goto L_0x03b0
+            android.graphics.Paint r1 = r0.backPaint
+            int r2 = r0.alpha
+            float r2 = (float) r2
+            float r3 = r0.typeAnimationProgress
+            float r3 = r11 - r3
+            float r2 = r2 * r3
+            int r2 = (int) r2
+            r1.setAlpha(r2)
+            goto L_0x03b7
+        L_0x03b0:
+            android.graphics.Paint r1 = r0.backPaint
+            int r2 = r0.alpha
+            r1.setAlpha(r2)
+        L_0x03b7:
+            int r1 = org.telegram.messenger.AndroidUtilities.dp(r21)
+            float r1 = (float) r1
+            float r3 = r13 - r1
+            android.graphics.Paint r6 = r0.backPaint
+            r1 = r26
+            r2 = r12
+            r4 = r12
+            r5 = r13
+            r1.drawLine(r2, r3, r4, r5, r6)
+            int r1 = org.telegram.messenger.AndroidUtilities.dp(r18)
+            float r1 = (float) r1
+            float r1 = r1 + r13
+            android.graphics.Paint r2 = r0.backPaint
+            r7.drawPoint(r12, r1, r2)
+        L_0x03d3:
+            int r1 = r0.type
+            int r2 = TYPE_UDPATE_DOWNLOADING
+            if (r1 == r2) goto L_0x03dd
+            int r1 = r0.previousType
+            if (r1 != r2) goto L_0x047a
+        L_0x03dd:
+            android.graphics.Paint r1 = r0.backPaint
+            int r2 = org.telegram.messenger.AndroidUtilities.dp(r21)
+            float r2 = (float) r2
+            r1.setStrokeWidth(r2)
+            int r1 = r0.previousType
+            int r2 = TYPE_UDPATE_DOWNLOADING
+            if (r1 != r2) goto L_0x03fc
+            android.graphics.Paint r1 = r0.backPaint
+            int r2 = r0.alpha
+            float r2 = (float) r2
+            float r3 = r0.typeAnimationProgress
+            float r11 = r11 - r3
+            float r2 = r2 * r11
+            int r2 = (int) r2
+            r1.setAlpha(r2)
+            goto L_0x0403
+        L_0x03fc:
+            android.graphics.Paint r1 = r0.backPaint
+            int r2 = r0.alpha
+            r1.setAlpha(r2)
+        L_0x0403:
+            r1 = 1082130432(0x40800000, float:4.0)
+            r2 = 1135869952(0x43b40000, float:360.0)
+            float r3 = r0.animatedDownloadProgress
+            float r3 = r3 * r2
+            float r4 = java.lang.Math.max(r1, r3)
+            android.graphics.RectF r1 = r0.rect
+            int r2 = org.telegram.messenger.AndroidUtilities.dp(r23)
+            float r2 = (float) r2
+            float r2 = r12 - r2
+            int r3 = org.telegram.messenger.AndroidUtilities.dp(r23)
+            float r3 = (float) r3
+            float r3 = r13 - r3
+            int r5 = org.telegram.messenger.AndroidUtilities.dp(r23)
+            float r5 = (float) r5
+            float r12 = r12 + r5
+            int r5 = org.telegram.messenger.AndroidUtilities.dp(r23)
+            float r5 = (float) r5
+            float r13 = r13 + r5
+            r1.set(r2, r3, r12, r13)
+            android.graphics.RectF r2 = r0.rect
+            float r3 = r0.downloadRadOffset
+            r5 = 0
+            android.graphics.Paint r6 = r0.backPaint
+            r1 = r26
+            r1.drawArc(r2, r3, r4, r5, r6)
+            float r1 = r0.downloadRadOffset
+            r2 = 360(0x168, double:1.78E-321)
+            long r2 = r2 * r8
+            float r2 = (float) r2
+            r3 = 1159479296(0x451CLASSNAME, float:2500.0)
+            float r2 = r2 / r3
+            float r1 = r1 + r2
+            r0.downloadRadOffset = r1
+            float r1 = org.telegram.ui.Components.MediaActionDrawable.getCircleValue(r1)
+            r0.downloadRadOffset = r1
+            float r1 = r0.downloadProgress
+            float r2 = r0.downloadProgressAnimationStart
+            float r3 = r1 - r2
+            int r4 = (r3 > r15 ? 1 : (r3 == r15 ? 0 : -1))
+            if (r4 <= 0) goto L_0x0477
+            float r4 = r0.downloadProgressTime
+            float r5 = (float) r8
+            float r4 = r4 + r5
+            r0.downloadProgressTime = r4
+            r5 = 1128792064(0x43480000, float:200.0)
+            int r6 = (r4 > r5 ? 1 : (r4 == r5 ? 0 : -1))
+            if (r6 < 0) goto L_0x046b
+            r0.animatedDownloadProgress = r1
+            r0.downloadProgressAnimationStart = r1
+            r0.downloadProgressTime = r15
+            goto L_0x0477
+        L_0x046b:
+            android.view.animation.DecelerateInterpolator r1 = r0.interpolator
+            float r4 = r4 / r5
+            float r1 = r1.getInterpolation(r4)
+            float r3 = r3 * r1
+            float r2 = r2 + r3
+            r0.animatedDownloadProgress = r2
+        L_0x0477:
+            r25.invalidateSelf()
+        L_0x047a:
+            r26.restore()
+            return
+        */
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ActionBar.MenuDrawable.draw(android.graphics.Canvas):void");
     }
 
-    public void setUpdateDownloadProgress(float value, boolean animated) {
-        if (!animated) {
-            this.animatedDownloadProgress = value;
-            this.downloadProgressAnimationStart = value;
+    public void setUpdateDownloadProgress(float f, boolean z) {
+        if (!z) {
+            this.animatedDownloadProgress = f;
+            this.downloadProgressAnimationStart = f;
         } else {
-            if (this.animatedDownloadProgress > value) {
-                this.animatedDownloadProgress = value;
+            if (this.animatedDownloadProgress > f) {
+                this.animatedDownloadProgress = f;
             }
             this.downloadProgressAnimationStart = this.animatedDownloadProgress;
         }
-        this.downloadProgress = value;
+        this.downloadProgress = f;
         this.downloadProgressTime = 0.0f;
         invalidateSelf();
     }
 
-    public void setAlpha(int alpha2) {
-        if (this.alpha != alpha2) {
-            this.alpha = alpha2;
-            this.paint.setAlpha(alpha2);
-            this.backPaint.setAlpha(alpha2);
+    public void setAlpha(int i) {
+        if (this.alpha != i) {
+            this.alpha = i;
+            this.paint.setAlpha(i);
+            this.backPaint.setAlpha(i);
             invalidateSelf();
         }
-    }
-
-    public void setColorFilter(ColorFilter cf) {
-    }
-
-    public int getOpacity() {
-        return -2;
     }
 
     public int getIntrinsicWidth() {
@@ -349,19 +736,19 @@ public class MenuDrawable extends Drawable {
         return AndroidUtilities.dp(24.0f);
     }
 
-    public void setIconColor(int iconColor2) {
-        this.iconColor = iconColor2;
+    public void setIconColor(int i) {
+        this.iconColor = i;
     }
 
-    public void setBackColor(int backColor2) {
-        this.backColor = backColor2;
+    public void setBackColor(int i) {
+        this.backColor = i;
     }
 
     public void setRoundCap() {
         this.paint.setStrokeCap(Paint.Cap.ROUND);
     }
 
-    public void setMiniIcon(boolean miniIcon2) {
-        this.miniIcon = miniIcon2;
+    public void setMiniIcon(boolean z) {
+        this.miniIcon = z;
     }
 }

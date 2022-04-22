@@ -1,5 +1,6 @@
 package org.webrtc;
 
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
 import android.hardware.display.VirtualDisplay;
@@ -10,6 +11,7 @@ import android.view.Surface;
 import org.telegram.messenger.FileLog;
 import org.webrtc.VideoSink;
 
+@TargetApi(21)
 public class ScreenCapturerAndroid implements VideoCapturer, VideoSink {
     private static final int DISPLAY_FLAGS = 3;
     private static final int VIRTUAL_DISPLAY_DPI = 400;
@@ -25,13 +27,17 @@ public class ScreenCapturerAndroid implements VideoCapturer, VideoSink {
     private VirtualDisplay virtualDisplay;
     private int width;
 
+    public boolean isScreencast() {
+        return true;
+    }
+
     public /* synthetic */ void setParentSink(VideoSink videoSink) {
         VideoSink.CC.$default$setParentSink(this, videoSink);
     }
 
-    public ScreenCapturerAndroid(Intent mediaProjectionPermissionResultData2, MediaProjection.Callback mediaProjectionCallback2) {
-        this.mediaProjectionPermissionResultData = mediaProjectionPermissionResultData2;
-        this.mediaProjectionCallback = mediaProjectionCallback2;
+    public ScreenCapturerAndroid(Intent intent, MediaProjection.Callback callback) {
+        this.mediaProjectionPermissionResultData = intent;
+        this.mediaProjectionCallback = callback;
     }
 
     private void checkNotDisposed() {
@@ -44,13 +50,13 @@ public class ScreenCapturerAndroid implements VideoCapturer, VideoSink {
         return this.mediaProjection;
     }
 
-    public synchronized void initialize(SurfaceTextureHelper surfaceTextureHelper2, Context applicationContext, CapturerObserver capturerObserver2) {
+    public synchronized void initialize(SurfaceTextureHelper surfaceTextureHelper2, Context context, CapturerObserver capturerObserver2) {
         checkNotDisposed();
         if (capturerObserver2 != null) {
             this.capturerObserver = capturerObserver2;
             if (surfaceTextureHelper2 != null) {
                 this.surfaceTextureHelper = surfaceTextureHelper2;
-                this.mediaProjectionManager = (MediaProjectionManager) applicationContext.getSystemService("media_projection");
+                this.mediaProjectionManager = (MediaProjectionManager) context.getSystemService("media_projection");
             } else {
                 throw new RuntimeException("surfaceTextureHelper not set.");
             }
@@ -63,50 +69,50 @@ public class ScreenCapturerAndroid implements VideoCapturer, VideoSink {
         return;
      */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    public synchronized void startCapture(int r4, int r5, int r6) {
+    public synchronized void startCapture(int r1, int r2, int r3) {
         /*
-            r3 = this;
-            monitor-enter(r3)
-            android.media.projection.MediaProjection r0 = r3.mediaProjection     // Catch:{ all -> 0x0043 }
-            if (r0 != 0) goto L_0x0041
-            android.media.projection.MediaProjectionManager r0 = r3.mediaProjectionManager     // Catch:{ all -> 0x0043 }
-            if (r0 != 0) goto L_0x000a
+            r0 = this;
+            monitor-enter(r0)
+            android.media.projection.MediaProjection r3 = r0.mediaProjection     // Catch:{ all -> 0x0043 }
+            if (r3 != 0) goto L_0x0041
+            android.media.projection.MediaProjectionManager r3 = r0.mediaProjectionManager     // Catch:{ all -> 0x0043 }
+            if (r3 != 0) goto L_0x000a
             goto L_0x0041
         L_0x000a:
-            r3.checkNotDisposed()     // Catch:{ all -> 0x0036 }
-            r3.width = r4     // Catch:{ all -> 0x0036 }
-            r3.height = r5     // Catch:{ all -> 0x0036 }
-            android.media.projection.MediaProjectionManager r0 = r3.mediaProjectionManager     // Catch:{ all -> 0x0036 }
-            r1 = -1
-            android.content.Intent r2 = r3.mediaProjectionPermissionResultData     // Catch:{ all -> 0x0036 }
-            android.media.projection.MediaProjection r0 = r0.getMediaProjection(r1, r2)     // Catch:{ all -> 0x0036 }
-            r3.mediaProjection = r0     // Catch:{ all -> 0x0036 }
-            android.media.projection.MediaProjection$Callback r1 = r3.mediaProjectionCallback     // Catch:{ all -> 0x0036 }
-            org.webrtc.SurfaceTextureHelper r2 = r3.surfaceTextureHelper     // Catch:{ all -> 0x0036 }
-            android.os.Handler r2 = r2.getHandler()     // Catch:{ all -> 0x0036 }
-            r0.registerCallback(r1, r2)     // Catch:{ all -> 0x0036 }
-            r3.createVirtualDisplay()     // Catch:{ all -> 0x0036 }
-            org.webrtc.CapturerObserver r0 = r3.capturerObserver     // Catch:{ all -> 0x0036 }
-            r1 = 1
-            r0.onCapturerStarted(r1)     // Catch:{ all -> 0x0036 }
-            org.webrtc.SurfaceTextureHelper r0 = r3.surfaceTextureHelper     // Catch:{ all -> 0x0036 }
-            r0.startListening(r3)     // Catch:{ all -> 0x0036 }
+            r0.checkNotDisposed()     // Catch:{ all -> 0x0036 }
+            r0.width = r1     // Catch:{ all -> 0x0036 }
+            r0.height = r2     // Catch:{ all -> 0x0036 }
+            android.media.projection.MediaProjectionManager r1 = r0.mediaProjectionManager     // Catch:{ all -> 0x0036 }
+            r2 = -1
+            android.content.Intent r3 = r0.mediaProjectionPermissionResultData     // Catch:{ all -> 0x0036 }
+            android.media.projection.MediaProjection r1 = r1.getMediaProjection(r2, r3)     // Catch:{ all -> 0x0036 }
+            r0.mediaProjection = r1     // Catch:{ all -> 0x0036 }
+            android.media.projection.MediaProjection$Callback r2 = r0.mediaProjectionCallback     // Catch:{ all -> 0x0036 }
+            org.webrtc.SurfaceTextureHelper r3 = r0.surfaceTextureHelper     // Catch:{ all -> 0x0036 }
+            android.os.Handler r3 = r3.getHandler()     // Catch:{ all -> 0x0036 }
+            r1.registerCallback(r2, r3)     // Catch:{ all -> 0x0036 }
+            r0.createVirtualDisplay()     // Catch:{ all -> 0x0036 }
+            org.webrtc.CapturerObserver r1 = r0.capturerObserver     // Catch:{ all -> 0x0036 }
+            r2 = 1
+            r1.onCapturerStarted(r2)     // Catch:{ all -> 0x0036 }
+            org.webrtc.SurfaceTextureHelper r1 = r0.surfaceTextureHelper     // Catch:{ all -> 0x0036 }
+            r1.startListening(r0)     // Catch:{ all -> 0x0036 }
             goto L_0x003f
         L_0x0036:
-            r0 = move-exception
-            android.media.projection.MediaProjection$Callback r1 = r3.mediaProjectionCallback     // Catch:{ all -> 0x0043 }
-            r1.onStop()     // Catch:{ all -> 0x0043 }
-            org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)     // Catch:{ all -> 0x0043 }
+            r1 = move-exception
+            android.media.projection.MediaProjection$Callback r2 = r0.mediaProjectionCallback     // Catch:{ all -> 0x0043 }
+            r2.onStop()     // Catch:{ all -> 0x0043 }
+            org.telegram.messenger.FileLog.e((java.lang.Throwable) r1)     // Catch:{ all -> 0x0043 }
         L_0x003f:
-            monitor-exit(r3)
+            monitor-exit(r0)
             return
         L_0x0041:
-            monitor-exit(r3)
+            monitor-exit(r0)
             return
         L_0x0043:
-            r4 = move-exception
-            monitor-exit(r3)
-            throw r4
+            r1 = move-exception
+            monitor-exit(r0)
+            throw r1
         */
         throw new UnsupportedOperationException("Method not decompiled: org.webrtc.ScreenCapturerAndroid.startCapture(int, int, int):void");
     }
@@ -116,8 +122,8 @@ public class ScreenCapturerAndroid implements VideoCapturer, VideoSink {
         ThreadUtils.invokeAtFrontUninterruptibly(this.surfaceTextureHelper.getHandler(), (Runnable) new ScreenCapturerAndroid$$ExternalSyntheticLambda1(this));
     }
 
-    /* renamed from: lambda$stopCapture$0$org-webrtc-ScreenCapturerAndroid  reason: not valid java name */
-    public /* synthetic */ void m4624lambda$stopCapture$0$orgwebrtcScreenCapturerAndroid() {
+    /* access modifiers changed from: private */
+    public /* synthetic */ void lambda$stopCapture$0() {
         this.surfaceTextureHelper.stopListening();
         this.capturerObserver.onCapturerStopped();
         VirtualDisplay virtualDisplay2 = this.virtualDisplay;
@@ -137,17 +143,17 @@ public class ScreenCapturerAndroid implements VideoCapturer, VideoSink {
         this.isDisposed = true;
     }
 
-    public synchronized void changeCaptureFormat(int width2, int height2, int ignoredFramerate) {
+    public synchronized void changeCaptureFormat(int i, int i2, int i3) {
         checkNotDisposed();
-        this.width = width2;
-        this.height = height2;
+        this.width = i;
+        this.height = i2;
         if (this.virtualDisplay != null) {
             ThreadUtils.invokeAtFrontUninterruptibly(this.surfaceTextureHelper.getHandler(), (Runnable) new ScreenCapturerAndroid$$ExternalSyntheticLambda0(this));
         }
     }
 
-    /* renamed from: lambda$changeCaptureFormat$1$org-webrtc-ScreenCapturerAndroid  reason: not valid java name */
-    public /* synthetic */ void m4623lambda$changeCaptureFormat$1$orgwebrtcScreenCapturerAndroid() {
+    /* access modifiers changed from: private */
+    public /* synthetic */ void lambda$changeCaptureFormat$1() {
         this.virtualDisplay.release();
         createVirtualDisplay();
     }
@@ -156,18 +162,14 @@ public class ScreenCapturerAndroid implements VideoCapturer, VideoSink {
         this.surfaceTextureHelper.setTextureSize(this.width, this.height);
         try {
             this.virtualDisplay = this.mediaProjection.createVirtualDisplay("WebRTC_ScreenCapture", this.width, this.height, 400, 3, new Surface(this.surfaceTextureHelper.getSurfaceTexture()), (VirtualDisplay.Callback) null, (Handler) null);
-        } catch (Throwable e) {
-            FileLog.e(e);
+        } catch (Throwable th) {
+            FileLog.e(th);
         }
     }
 
-    public void onFrame(VideoFrame frame) {
+    public void onFrame(VideoFrame videoFrame) {
         this.numCapturedFrames++;
-        this.capturerObserver.onFrameCaptured(frame);
-    }
-
-    public boolean isScreencast() {
-        return true;
+        this.capturerObserver.onFrameCaptured(videoFrame);
     }
 
     public long getNumCapturedFrames() {

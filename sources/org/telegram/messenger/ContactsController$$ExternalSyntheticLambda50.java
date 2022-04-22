@@ -1,17 +1,15 @@
 package org.telegram.messenger;
 
-import org.telegram.tgnet.RequestDelegate;
-import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC;
+import java.util.Comparator;
+import org.telegram.tgnet.TLRPC$TL_contact;
 
-public final /* synthetic */ class ContactsController$$ExternalSyntheticLambda50 implements RequestDelegate {
-    public final /* synthetic */ ContactsController f$0;
+public final /* synthetic */ class ContactsController$$ExternalSyntheticLambda50 implements Comparator {
+    public static final /* synthetic */ ContactsController$$ExternalSyntheticLambda50 INSTANCE = new ContactsController$$ExternalSyntheticLambda50();
 
-    public /* synthetic */ ContactsController$$ExternalSyntheticLambda50(ContactsController contactsController) {
-        this.f$0 = contactsController;
+    private /* synthetic */ ContactsController$$ExternalSyntheticLambda50() {
     }
 
-    public final void run(TLObject tLObject, TLRPC.TL_error tL_error) {
-        this.f$0.m23xe027CLASSNAMEf(tLObject, tL_error);
+    public final int compare(Object obj, Object obj2) {
+        return ContactsController.lambda$getContactsHash$25((TLRPC$TL_contact) obj, (TLRPC$TL_contact) obj2);
     }
 }

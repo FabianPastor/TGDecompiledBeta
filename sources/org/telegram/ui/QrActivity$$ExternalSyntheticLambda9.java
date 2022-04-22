@@ -10,6 +10,6 @@ public final /* synthetic */ class QrActivity$$ExternalSyntheticLambda9 implemen
     }
 
     public final void onCenterChanged(int i, int i2, int i3, int i4) {
-        this.f$0.m3195lambda$createView$0$orgtelegramuiQrActivity(i, i2, i3, i4);
+        this.f$0.lambda$createView$0(i, i2, i3, i4);
     }
 }

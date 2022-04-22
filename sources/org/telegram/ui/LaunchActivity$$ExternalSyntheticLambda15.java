@@ -1,23 +1,15 @@
 package org.telegram.ui;
 
-import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC;
-import org.telegram.ui.ActionBar.AlertDialog;
+import android.view.View;
 
-public final /* synthetic */ class LaunchActivity$$ExternalSyntheticLambda15 implements Runnable {
-    public final /* synthetic */ AlertDialog f$0;
-    public final /* synthetic */ TLObject f$1;
-    public final /* synthetic */ ActionIntroActivity f$2;
-    public final /* synthetic */ TLRPC.TL_error f$3;
+public final /* synthetic */ class LaunchActivity$$ExternalSyntheticLambda15 implements View.OnClickListener {
+    public final /* synthetic */ LaunchActivity f$0;
 
-    public /* synthetic */ LaunchActivity$$ExternalSyntheticLambda15(AlertDialog alertDialog, TLObject tLObject, ActionIntroActivity actionIntroActivity, TLRPC.TL_error tL_error) {
-        this.f$0 = alertDialog;
-        this.f$1 = tLObject;
-        this.f$2 = actionIntroActivity;
-        this.f$3 = tL_error;
+    public /* synthetic */ LaunchActivity$$ExternalSyntheticLambda15(LaunchActivity launchActivity) {
+        this.f$0 = launchActivity;
     }
 
-    public final void run() {
-        LaunchActivity.lambda$handleIntent$18(this.f$0, this.f$1, this.f$2, this.f$3);
+    public final void onClick(View view) {
+        this.f$0.lambda$showLanguageAlertInternal$91(view);
     }
 }

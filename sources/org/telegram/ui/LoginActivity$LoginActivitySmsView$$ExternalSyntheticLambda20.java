@@ -1,23 +1,19 @@
 package org.telegram.ui;
 
-import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.LoginActivity;
 
 public final /* synthetic */ class LoginActivity$LoginActivitySmsView$$ExternalSyntheticLambda20 implements Runnable {
     public final /* synthetic */ LoginActivity.LoginActivitySmsView f$0;
-    public final /* synthetic */ TLRPC.TL_error f$1;
-    public final /* synthetic */ TLObject f$2;
-    public final /* synthetic */ TLRPC.TL_auth_signIn f$3;
+    public final /* synthetic */ int f$1;
+    public final /* synthetic */ boolean f$2;
 
-    public /* synthetic */ LoginActivity$LoginActivitySmsView$$ExternalSyntheticLambda20(LoginActivity.LoginActivitySmsView loginActivitySmsView, TLRPC.TL_error tL_error, TLObject tLObject, TLRPC.TL_auth_signIn tL_auth_signIn) {
+    public /* synthetic */ LoginActivity$LoginActivitySmsView$$ExternalSyntheticLambda20(LoginActivity.LoginActivitySmsView loginActivitySmsView, int i, boolean z) {
         this.f$0 = loginActivitySmsView;
-        this.f$1 = tL_error;
-        this.f$2 = tLObject;
-        this.f$3 = tL_auth_signIn;
+        this.f$1 = i;
+        this.f$2 = z;
     }
 
     public final void run() {
-        this.f$0.m2542x192d49d6(this.f$1, this.f$2, this.f$3);
+        this.f$0.lambda$tryShowProgress$10(this.f$1, this.f$2);
     }
 }

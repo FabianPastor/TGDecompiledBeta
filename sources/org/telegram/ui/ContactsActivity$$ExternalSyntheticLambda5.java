@@ -17,6 +17,6 @@ public final /* synthetic */ class ContactsActivity$$ExternalSyntheticLambda5 im
     }
 
     public final void run() {
-        this.f$0.m2038xa0ce3b06(this.f$1, this.f$2, this.f$3);
+        this.f$0.lambda$onCustomTransitionAnimation$8(this.f$1, this.f$2, this.f$3);
     }
 }

@@ -8,6 +8,6 @@ public final /* synthetic */ class TranslateAlert$$ExternalSyntheticLambda6 impl
     }
 
     public final void run() {
-        this.f$0.m4485lambda$fetchNext$6$orgtelegramuiComponentsTranslateAlert();
+        this.f$0.lambda$fetchNext$6();
     }
 }

@@ -1,27 +1,19 @@
 package org.telegram.ui;
 
-import java.util.ArrayList;
+import org.telegram.ui.ActionBar.ThemeDescription;
 
-public final /* synthetic */ class NotificationsCustomSettingsActivity$$ExternalSyntheticLambda9 implements Runnable {
+public final /* synthetic */ class NotificationsCustomSettingsActivity$$ExternalSyntheticLambda9 implements ThemeDescription.ThemeDescriptionDelegate {
     public final /* synthetic */ NotificationsCustomSettingsActivity f$0;
-    public final /* synthetic */ ArrayList f$1;
-    public final /* synthetic */ ArrayList f$2;
-    public final /* synthetic */ ArrayList f$3;
-    public final /* synthetic */ ArrayList f$4;
-    public final /* synthetic */ ArrayList f$5;
-    public final /* synthetic */ ArrayList f$6;
 
-    public /* synthetic */ NotificationsCustomSettingsActivity$$ExternalSyntheticLambda9(NotificationsCustomSettingsActivity notificationsCustomSettingsActivity, ArrayList arrayList, ArrayList arrayList2, ArrayList arrayList3, ArrayList arrayList4, ArrayList arrayList5, ArrayList arrayList6) {
+    public /* synthetic */ NotificationsCustomSettingsActivity$$ExternalSyntheticLambda9(NotificationsCustomSettingsActivity notificationsCustomSettingsActivity) {
         this.f$0 = notificationsCustomSettingsActivity;
-        this.f$1 = arrayList;
-        this.f$2 = arrayList2;
-        this.f$3 = arrayList3;
-        this.f$4 = arrayList4;
-        this.f$5 = arrayList5;
-        this.f$6 = arrayList6;
     }
 
-    public final void run() {
-        this.f$0.m2656x1eb530ad(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6);
+    public final void didSetColor() {
+        this.f$0.lambda$getThemeDescriptions$12();
+    }
+
+    public /* synthetic */ void onAnimationProgress(float f) {
+        ThemeDescription.ThemeDescriptionDelegate.CC.$default$onAnimationProgress(this, f);
     }
 }

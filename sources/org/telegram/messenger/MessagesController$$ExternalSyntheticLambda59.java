@@ -1,22 +1,15 @@
 package org.telegram.messenger;
 
-import org.telegram.messenger.MessagesController;
-import org.telegram.tgnet.TLRPC;
-
 public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda59 implements Runnable {
     public final /* synthetic */ MessagesController f$0;
-    public final /* synthetic */ TLRPC.TL_channels_sendAsPeers f$1;
-    public final /* synthetic */ long f$2;
-    public final /* synthetic */ MessagesController.SendAsPeersInfo f$3;
+    public final /* synthetic */ long f$1;
 
-    public /* synthetic */ MessagesController$$ExternalSyntheticLambda59(MessagesController messagesController, TLRPC.TL_channels_sendAsPeers tL_channels_sendAsPeers, long j, MessagesController.SendAsPeersInfo sendAsPeersInfo) {
+    public /* synthetic */ MessagesController$$ExternalSyntheticLambda59(MessagesController messagesController, long j) {
         this.f$0 = messagesController;
-        this.f$1 = tL_channels_sendAsPeers;
-        this.f$2 = j;
-        this.f$3 = sendAsPeersInfo;
+        this.f$1 = j;
     }
 
     public final void run() {
-        this.f$0.m233xaa57eb6e(this.f$1, this.f$2, this.f$3);
+        this.f$0.lambda$deleteDialog$110(this.f$1);
     }
 }

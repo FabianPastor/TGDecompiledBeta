@@ -8,6 +8,6 @@ public final /* synthetic */ class ChatActivityEnterView$$ExternalSyntheticLambd
     }
 
     public final void run() {
-        this.f$0.m3742xcc8d2b11();
+        this.f$0.lambda$new$0();
     }
 }

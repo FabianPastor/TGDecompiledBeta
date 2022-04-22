@@ -1,20 +1,15 @@
 package org.telegram.messenger;
 
-import androidx.collection.LongSparseArray;
-import java.util.ArrayList;
-
 public final /* synthetic */ class NotificationsController$$ExternalSyntheticLambda17 implements Runnable {
     public final /* synthetic */ NotificationsController f$0;
-    public final /* synthetic */ LongSparseArray f$1;
-    public final /* synthetic */ ArrayList f$2;
+    public final /* synthetic */ int f$1;
 
-    public /* synthetic */ NotificationsController$$ExternalSyntheticLambda17(NotificationsController notificationsController, LongSparseArray longSparseArray, ArrayList arrayList) {
+    public /* synthetic */ NotificationsController$$ExternalSyntheticLambda17(NotificationsController notificationsController, int i) {
         this.f$0 = notificationsController;
-        this.f$1 = longSparseArray;
-        this.f$2 = arrayList;
+        this.f$1 = i;
     }
 
     public final void run() {
-        this.f$0.m1063x6483a23c(this.f$1, this.f$2);
+        this.f$0.lambda$processDialogsUpdateRead$20(this.f$1);
     }
 }

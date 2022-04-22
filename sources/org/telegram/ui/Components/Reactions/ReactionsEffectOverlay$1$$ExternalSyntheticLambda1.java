@@ -10,6 +10,6 @@ public final /* synthetic */ class ReactionsEffectOverlay$1$$ExternalSyntheticLa
     }
 
     public final void run() {
-        this.f$0.m4283xCLASSNAMEd7aa();
+        this.f$0.lambda$dispatchDraw$0();
     }
 }

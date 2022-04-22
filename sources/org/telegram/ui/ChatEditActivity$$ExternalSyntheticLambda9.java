@@ -10,6 +10,6 @@ public final /* synthetic */ class ChatEditActivity$$ExternalSyntheticLambda9 im
     }
 
     public final void onClick(View view) {
-        this.f$0.m1914lambda$createView$9$orgtelegramuiChatEditActivity(view);
+        this.f$0.lambda$createView$17(view);
     }
 }

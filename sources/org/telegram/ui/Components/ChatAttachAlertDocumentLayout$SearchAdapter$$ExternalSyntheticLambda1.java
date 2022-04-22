@@ -27,6 +27,6 @@ public final /* synthetic */ class ChatAttachAlertDocumentLayout$SearchAdapter$$
     }
 
     public final void run() {
-        this.f$0.m3837x66d53cb2(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6, this.f$7, this.f$8);
+        this.f$0.lambda$searchGlobal$4(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6, this.f$7, this.f$8);
     }
 }

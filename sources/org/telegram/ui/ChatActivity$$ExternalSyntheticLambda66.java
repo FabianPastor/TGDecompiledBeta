@@ -1,19 +1,15 @@
 package org.telegram.ui;
 
-import android.animation.ValueAnimator;
+import android.view.View;
 
-public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda66 implements ValueAnimator.AnimatorUpdateListener {
+public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda66 implements View.OnClickListener {
     public final /* synthetic */ ChatActivity f$0;
-    public final /* synthetic */ ChatActivity f$1;
-    public final /* synthetic */ boolean f$2;
 
-    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda66(ChatActivity chatActivity, ChatActivity chatActivity2, boolean z) {
+    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda66(ChatActivity chatActivity) {
         this.f$0 = chatActivity;
-        this.f$1 = chatActivity2;
-        this.f$2 = z;
     }
 
-    public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-        this.f$0.m1741xdvar_fa90(this.f$1, this.f$2, valueAnimator);
+    public final void onClick(View view) {
+        this.f$0.lambda$updateInfoTopView$78(view);
     }
 }

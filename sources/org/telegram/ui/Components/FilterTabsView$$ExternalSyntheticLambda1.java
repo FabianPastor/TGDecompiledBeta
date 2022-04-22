@@ -19,6 +19,6 @@ public final /* synthetic */ class FilterTabsView$$ExternalSyntheticLambda1 impl
     }
 
     public final void onItemClick(View view, int i, float f, float f2) {
-        this.f$0.m4001lambda$new$0$orgtelegramuiComponentsFilterTabsView(view, i, f, f2);
+        this.f$0.lambda$new$0(view, i, f, f2);
     }
 }

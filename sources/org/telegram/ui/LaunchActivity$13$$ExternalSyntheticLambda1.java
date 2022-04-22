@@ -18,6 +18,6 @@ public final /* synthetic */ class LaunchActivity$13$$ExternalSyntheticLambda1 i
     }
 
     public final void run() {
-        this.f$0.m2389lambda$onMessagesLoaded$0$orgtelegramuiLaunchActivity$13(this.f$1, this.f$2, this.f$3);
+        this.f$0.lambda$onMessagesLoaded$1(this.f$1, this.f$2, this.f$3);
     }
 }

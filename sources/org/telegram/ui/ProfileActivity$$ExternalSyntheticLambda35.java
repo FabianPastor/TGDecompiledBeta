@@ -1,17 +1,29 @@
 package org.telegram.ui;
 
-import android.content.DialogInterface;
+import android.content.Context;
+import android.view.View;
+import org.telegram.ui.Components.RecyclerListView;
 
-public final /* synthetic */ class ProfileActivity$$ExternalSyntheticLambda35 implements DialogInterface.OnClickListener {
+public final /* synthetic */ class ProfileActivity$$ExternalSyntheticLambda35 implements RecyclerListView.OnItemClickListenerExtended {
     public final /* synthetic */ ProfileActivity f$0;
-    public final /* synthetic */ String f$1;
+    public final /* synthetic */ long f$1;
+    public final /* synthetic */ Context f$2;
 
-    public /* synthetic */ ProfileActivity$$ExternalSyntheticLambda35(ProfileActivity profileActivity, String str) {
+    public /* synthetic */ ProfileActivity$$ExternalSyntheticLambda35(ProfileActivity profileActivity, long j, Context context) {
         this.f$0 = profileActivity;
-        this.f$1 = str;
+        this.f$1 = j;
+        this.f$2 = context;
     }
 
-    public final void onClick(DialogInterface dialogInterface, int i) {
-        this.f$0.m3065lambda$processOnClickOrPress$19$orgtelegramuiProfileActivity(this.f$1, dialogInterface, i);
+    public /* synthetic */ boolean hasDoubleTap(View view, int i) {
+        return RecyclerListView.OnItemClickListenerExtended.CC.$default$hasDoubleTap(this, view, i);
+    }
+
+    public /* synthetic */ void onDoubleTap(View view, int i, float f, float f2) {
+        RecyclerListView.OnItemClickListenerExtended.CC.$default$onDoubleTap(this, view, i, f, f2);
+    }
+
+    public final void onItemClick(View view, int i, float f, float f2) {
+        this.f$0.lambda$createView$4(this.f$1, this.f$2, view, i, f, f2);
     }
 }

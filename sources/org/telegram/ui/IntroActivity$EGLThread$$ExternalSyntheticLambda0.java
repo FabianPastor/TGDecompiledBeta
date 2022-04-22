@@ -10,6 +10,6 @@ public final /* synthetic */ class IntroActivity$EGLThread$$ExternalSyntheticLam
     }
 
     public final void run() {
-        this.f$0.m2297lambda$shutdown$2$orgtelegramuiIntroActivity$EGLThread();
+        this.f$0.lambda$shutdown$2();
     }
 }

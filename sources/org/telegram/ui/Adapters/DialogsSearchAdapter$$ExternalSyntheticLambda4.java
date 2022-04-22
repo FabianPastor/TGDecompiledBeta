@@ -1,15 +1,21 @@
 package org.telegram.ui.Adapters;
 
-public final /* synthetic */ class DialogsSearchAdapter$$ExternalSyntheticLambda4 implements Runnable {
-    public final /* synthetic */ DialogsSearchAdapter f$0;
-    public final /* synthetic */ long f$1;
+import androidx.collection.LongSparseArray;
+import java.util.ArrayList;
+import org.telegram.ui.Adapters.DialogsSearchAdapter;
 
-    public /* synthetic */ DialogsSearchAdapter$$ExternalSyntheticLambda4(DialogsSearchAdapter dialogsSearchAdapter, long j) {
-        this.f$0 = dialogsSearchAdapter;
-        this.f$1 = j;
+public final /* synthetic */ class DialogsSearchAdapter$$ExternalSyntheticLambda4 implements Runnable {
+    public final /* synthetic */ DialogsSearchAdapter.OnRecentSearchLoaded f$0;
+    public final /* synthetic */ ArrayList f$1;
+    public final /* synthetic */ LongSparseArray f$2;
+
+    public /* synthetic */ DialogsSearchAdapter$$ExternalSyntheticLambda4(DialogsSearchAdapter.OnRecentSearchLoaded onRecentSearchLoaded, ArrayList arrayList, LongSparseArray longSparseArray) {
+        this.f$0 = onRecentSearchLoaded;
+        this.f$1 = arrayList;
+        this.f$2 = longSparseArray;
     }
 
     public final void run() {
-        this.f$0.m1323xfb99f9e3(this.f$1);
+        this.f$0.setRecentSearch(this.f$1, this.f$2);
     }
 }

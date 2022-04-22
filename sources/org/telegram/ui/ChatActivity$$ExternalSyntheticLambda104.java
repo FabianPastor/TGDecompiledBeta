@@ -1,15 +1,15 @@
 package org.telegram.ui;
 
-import org.telegram.ui.ActionBar.AlertDialog;
+import android.widget.PopupWindow;
 
-public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda104 implements Runnable {
-    public final /* synthetic */ AlertDialog[] f$0;
+public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda104 implements PopupWindow.OnDismissListener {
+    public final /* synthetic */ ChatActivity f$0;
 
-    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda104(AlertDialog[] alertDialogArr) {
-        this.f$0 = alertDialogArr;
+    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda104(ChatActivity chatActivity) {
+        this.f$0 = chatActivity;
     }
 
-    public final void run() {
-        ChatActivity.lambda$processSelectedOption$195(this.f$0);
+    public final void onDismiss() {
+        this.f$0.lambda$createView$52();
     }
 }

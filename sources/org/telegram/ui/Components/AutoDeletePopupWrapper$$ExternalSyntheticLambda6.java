@@ -10,6 +10,6 @@ public final /* synthetic */ class AutoDeletePopupWrapper$$ExternalSyntheticLamb
     }
 
     public final void run() {
-        this.f$0.m3620xf8eeadab(this.f$1);
+        this.f$0.lambda$updateItems$7(this.f$1);
     }
 }

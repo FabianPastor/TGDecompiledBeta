@@ -1,14 +1,15 @@
 package org.telegram.ui.Components;
 
-import org.telegram.ui.Components.SimpleFloatPropertyCompat;
+import android.view.View;
 
-public final /* synthetic */ class PipVideoOverlay$$ExternalSyntheticLambda1 implements SimpleFloatPropertyCompat.Getter {
-    public static final /* synthetic */ PipVideoOverlay$$ExternalSyntheticLambda1 INSTANCE = new PipVideoOverlay$$ExternalSyntheticLambda1();
+public final /* synthetic */ class PipVideoOverlay$$ExternalSyntheticLambda1 implements View.OnClickListener {
+    public final /* synthetic */ PipVideoOverlay f$0;
 
-    private /* synthetic */ PipVideoOverlay$$ExternalSyntheticLambda1() {
+    public /* synthetic */ PipVideoOverlay$$ExternalSyntheticLambda1(PipVideoOverlay pipVideoOverlay) {
+        this.f$0 = pipVideoOverlay;
     }
 
-    public final float get(Object obj) {
-        return ((PipVideoOverlay) obj).pipX;
+    public final void onClick(View view) {
+        this.f$0.lambda$showInternal$11(view);
     }
 }

@@ -1,15 +1,15 @@
 package org.telegram.ui;
 
-import android.view.View;
+import android.content.DialogInterface;
 
-public final /* synthetic */ class VoIPFragment$$ExternalSyntheticLambda8 implements View.OnClickListener {
+public final /* synthetic */ class VoIPFragment$$ExternalSyntheticLambda8 implements DialogInterface.OnDismissListener {
     public final /* synthetic */ VoIPFragment f$0;
 
     public /* synthetic */ VoIPFragment$$ExternalSyntheticLambda8(VoIPFragment voIPFragment) {
         this.f$0 = voIPFragment;
     }
 
-    public final void onClick(View view) {
-        this.f$0.m3456lambda$setSpeakerPhoneAction$26$orgtelegramuiVoIPFragment(view);
+    public final void onDismiss(DialogInterface dialogInterface) {
+        this.f$0.lambda$showErrorDialog$29(dialogInterface);
     }
 }

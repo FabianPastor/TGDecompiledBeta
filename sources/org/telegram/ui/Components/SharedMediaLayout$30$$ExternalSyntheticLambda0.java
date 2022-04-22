@@ -13,6 +13,6 @@ public final /* synthetic */ class SharedMediaLayout$30$$ExternalSyntheticLambda
     }
 
     public final void onClick(DialogInterface dialogInterface, int i) {
-        this.f$0.m4373xe9a1eee(this.f$1, dialogInterface, i);
+        this.f$0.lambda$onLinkPress$0(this.f$1, dialogInterface, i);
     }
 }

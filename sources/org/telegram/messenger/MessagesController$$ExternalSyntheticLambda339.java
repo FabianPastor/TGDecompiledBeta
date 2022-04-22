@@ -1,17 +1,16 @@
 package org.telegram.messenger;
 
-import android.util.SparseArray;
+import org.telegram.tgnet.RequestDelegate;
+import org.telegram.tgnet.TLObject;
+import org.telegram.tgnet.TLRPC$TL_error;
 
-public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda339 implements Runnable {
-    public final /* synthetic */ MessagesController f$0;
-    public final /* synthetic */ SparseArray f$1;
+public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda339 implements RequestDelegate {
+    public static final /* synthetic */ MessagesController$$ExternalSyntheticLambda339 INSTANCE = new MessagesController$$ExternalSyntheticLambda339();
 
-    public /* synthetic */ MessagesController$$ExternalSyntheticLambda339(MessagesController messagesController, SparseArray sparseArray) {
-        this.f$0 = messagesController;
-        this.f$1 = sparseArray;
+    private /* synthetic */ MessagesController$$ExternalSyntheticLambda339() {
     }
 
-    public final void run() {
-        this.f$0.m220x28981507(this.f$1);
+    public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+        MessagesController.lambda$hidePeerSettingsBar$53(tLObject, tLRPC$TL_error);
     }
 }

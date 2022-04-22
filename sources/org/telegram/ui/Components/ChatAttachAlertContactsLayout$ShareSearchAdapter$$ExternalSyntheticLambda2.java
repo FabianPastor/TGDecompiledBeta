@@ -14,6 +14,6 @@ public final /* synthetic */ class ChatAttachAlertContactsLayout$ShareSearchAdap
     }
 
     public final void run() {
-        this.f$0.m3821x8377var_e(this.f$1, this.f$2);
+        this.f$0.lambda$processSearch$2(this.f$1, this.f$2);
     }
 }

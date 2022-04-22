@@ -1,13 +1,15 @@
 package org.telegram.ui;
 
-public final /* synthetic */ class CameraScanActivity$$ExternalSyntheticLambda4 implements Runnable {
-    public final /* synthetic */ CameraScanActivity f$0;
+import android.view.MotionEvent;
+import android.view.View;
 
-    public /* synthetic */ CameraScanActivity$$ExternalSyntheticLambda4(CameraScanActivity cameraScanActivity) {
-        this.f$0 = cameraScanActivity;
+public final /* synthetic */ class CameraScanActivity$$ExternalSyntheticLambda4 implements View.OnTouchListener {
+    public static final /* synthetic */ CameraScanActivity$$ExternalSyntheticLambda4 INSTANCE = new CameraScanActivity$$ExternalSyntheticLambda4();
+
+    private /* synthetic */ CameraScanActivity$$ExternalSyntheticLambda4() {
     }
 
-    public final void run() {
-        this.f$0.m1476lambda$processShot$15$orgtelegramuiCameraScanActivity();
+    public final boolean onTouch(View view, MotionEvent motionEvent) {
+        return CameraScanActivity.lambda$createView$1(view, motionEvent);
     }
 }

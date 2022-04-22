@@ -1,19 +1,16 @@
 package org.telegram.ui.Components;
 
-import android.view.View;
-import org.telegram.ui.ActionBar.Theme;
-import org.telegram.ui.Components.RecyclerListView;
+import android.view.KeyEvent;
+import org.telegram.ui.ActionBar.ActionBarPopupWindow;
 
-public final /* synthetic */ class ChatAttachAlert$$ExternalSyntheticLambda26 implements RecyclerListView.OnItemClickListener {
+public final /* synthetic */ class ChatAttachAlert$$ExternalSyntheticLambda26 implements ActionBarPopupWindow.OnDispatchKeyEventListener {
     public final /* synthetic */ ChatAttachAlert f$0;
-    public final /* synthetic */ Theme.ResourcesProvider f$1;
 
-    public /* synthetic */ ChatAttachAlert$$ExternalSyntheticLambda26(ChatAttachAlert chatAttachAlert, Theme.ResourcesProvider resourcesProvider) {
+    public /* synthetic */ ChatAttachAlert$$ExternalSyntheticLambda26(ChatAttachAlert chatAttachAlert) {
         this.f$0 = chatAttachAlert;
-        this.f$1 = resourcesProvider;
     }
 
-    public final void onItemClick(View view, int i) {
-        this.f$0.m3775lambda$new$7$orgtelegramuiComponentsChatAttachAlert(this.f$1, view, i);
+    public final void onDispatchKeyEvent(KeyEvent keyEvent) {
+        this.f$0.lambda$new$13(keyEvent);
     }
 }

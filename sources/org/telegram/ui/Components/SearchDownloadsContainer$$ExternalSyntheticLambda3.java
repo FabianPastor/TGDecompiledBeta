@@ -16,6 +16,6 @@ public final /* synthetic */ class SearchDownloadsContainer$$ExternalSyntheticLa
     }
 
     public final void run() {
-        this.f$0.m4314x95bb3ed1(this.f$1, this.f$2, this.f$3);
+        this.f$0.lambda$update$4(this.f$1, this.f$2, this.f$3);
     }
 }

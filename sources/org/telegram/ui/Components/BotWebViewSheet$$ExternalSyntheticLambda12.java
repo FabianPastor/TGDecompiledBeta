@@ -1,13 +1,17 @@
 package org.telegram.ui.Components;
 
-public final /* synthetic */ class BotWebViewSheet$$ExternalSyntheticLambda12 implements Runnable {
+import org.telegram.tgnet.RequestDelegate;
+import org.telegram.tgnet.TLObject;
+import org.telegram.tgnet.TLRPC$TL_error;
+
+public final /* synthetic */ class BotWebViewSheet$$ExternalSyntheticLambda12 implements RequestDelegate {
     public final /* synthetic */ BotWebViewSheet f$0;
 
     public /* synthetic */ BotWebViewSheet$$ExternalSyntheticLambda12(BotWebViewSheet botWebViewSheet) {
         this.f$0 = botWebViewSheet;
     }
 
-    public final void run() {
-        this.f$0.m3668lambda$new$10$orgtelegramuiComponentsBotWebViewSheet();
+    public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+        this.f$0.lambda$requestWebView$13(tLObject, tLRPC$TL_error);
     }
 }

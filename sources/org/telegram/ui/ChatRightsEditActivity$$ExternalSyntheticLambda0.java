@@ -10,6 +10,6 @@ public final /* synthetic */ class ChatRightsEditActivity$$ExternalSyntheticLamb
     }
 
     public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-        this.f$0.m1994lambda$setLoading$22$orgtelegramuiChatRightsEditActivity(valueAnimator);
+        this.f$0.lambda$setLoading$22(valueAnimator);
     }
 }

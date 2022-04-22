@@ -1,15 +1,15 @@
 package org.telegram.ui;
 
-import android.content.DialogInterface;
+import org.telegram.ui.Components.VideoSeekPreviewImage;
 
-public final /* synthetic */ class PhotoViewer$$ExternalSyntheticLambda71 implements DialogInterface.OnDismissListener {
+public final /* synthetic */ class PhotoViewer$$ExternalSyntheticLambda71 implements VideoSeekPreviewImage.VideoSeekPreviewImageDelegate {
     public final /* synthetic */ PhotoViewer f$0;
 
     public /* synthetic */ PhotoViewer$$ExternalSyntheticLambda71(PhotoViewer photoViewer) {
         this.f$0 = photoViewer;
     }
 
-    public final void onDismiss(DialogInterface dialogInterface) {
-        this.f$0.m2952lambda$showAlertDialog$48$orgtelegramuiPhotoViewer(dialogInterface);
+    public final void onReady() {
+        this.f$0.lambda$createVideoControlsInterface$44();
     }
 }

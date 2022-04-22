@@ -25,7 +25,6 @@ public class GraySectionCell extends FrameLayout {
         this(context, (Theme.ResourcesProvider) null);
     }
 
-    /* JADX INFO: super call moved to the top of the method (can break code semantics) */
     public GraySectionCell(Context context, Theme.ResourcesProvider resourcesProvider2) {
         super(context);
         this.resourcesProvider = resourcesProvider2;
@@ -38,13 +37,13 @@ public class GraySectionCell extends FrameLayout {
         int i = 5;
         this.textView.setGravity((LocaleController.isRTL ? 5 : 3) | 16);
         addView(this.textView, LayoutHelper.createFrame(-1, -1.0f, (LocaleController.isRTL ? 5 : 3) | 48, 16.0f, 0.0f, 16.0f, 0.0f));
-        AnonymousClass1 r2 = new TextView(getContext()) {
+        AnonymousClass1 r13 = new TextView(this, getContext()) {
             public CharSequence getAccessibilityClassName() {
                 return Button.class.getName();
             }
         };
-        this.rightTextView = r2;
-        r2.setTextSize(1, 14.0f);
+        this.rightTextView = r13;
+        r13.setTextSize(1, 14.0f);
         this.rightTextView.setTextColor(getThemedColor("key_graySectionText"));
         this.rightTextView.setGravity((LocaleController.isRTL ? 3 : 5) | 16);
         addView(this.rightTextView, LayoutHelper.createFrame(-2, -1.0f, (LocaleController.isRTL ? 3 : i) | 48, 16.0f, 0.0f, 16.0f, 0.0f));
@@ -52,43 +51,42 @@ public class GraySectionCell extends FrameLayout {
     }
 
     /* access modifiers changed from: protected */
-    public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        super.onMeasure(View.MeasureSpec.makeMeasureSpec(View.MeasureSpec.getSize(widthMeasureSpec), NUM), View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(32.0f), NUM));
+    public void onMeasure(int i, int i2) {
+        super.onMeasure(View.MeasureSpec.makeMeasureSpec(View.MeasureSpec.getSize(i), NUM), View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(32.0f), NUM));
     }
 
-    public void setTextColor(String key) {
-        int color = getThemedColor(key);
-        this.textView.setTextColor(color);
-        this.rightTextView.setTextColor(color);
+    public void setTextColor(String str) {
+        int themedColor = getThemedColor(str);
+        this.textView.setTextColor(themedColor);
+        this.rightTextView.setTextColor(themedColor);
     }
 
-    public void setText(String text) {
-        this.textView.setText(text);
+    public void setText(String str) {
+        this.textView.setText(str);
         this.rightTextView.setVisibility(8);
     }
 
-    public void setText(String left, String right, View.OnClickListener onClickListener) {
-        this.textView.setText(left);
-        this.rightTextView.setText(right);
+    public void setText(String str, String str2, View.OnClickListener onClickListener) {
+        this.textView.setText(str);
+        this.rightTextView.setText(str2);
         this.rightTextView.setOnClickListener(onClickListener);
         this.rightTextView.setVisibility(0);
     }
 
-    public static void createThemeDescriptions(List<ThemeDescription> descriptions, RecyclerListView listView) {
-        List<ThemeDescription> list = descriptions;
-        Class<GraySectionCell> cls = GraySectionCell.class;
-        list.add(new ThemeDescription((View) listView, 0, new Class[]{cls}, new String[]{"textView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "key_graySectionText"));
-        list.add(new ThemeDescription((View) listView, 0, new Class[]{cls}, new String[]{"rightTextView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "key_graySectionText"));
-        list.add(new ThemeDescription(listView, ThemeDescription.FLAG_CELLBACKGROUNDCOLOR, new Class[]{cls}, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "graySection"));
+    public static void createThemeDescriptions(List<ThemeDescription> list, RecyclerListView recyclerListView) {
+        List<ThemeDescription> list2 = list;
+        list2.add(new ThemeDescription((View) recyclerListView, 0, new Class[]{GraySectionCell.class}, new String[]{"textView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "key_graySectionText"));
+        list2.add(new ThemeDescription((View) recyclerListView, 0, new Class[]{GraySectionCell.class}, new String[]{"rightTextView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "key_graySectionText"));
+        list2.add(new ThemeDescription(recyclerListView, ThemeDescription.FLAG_CELLBACKGROUNDCOLOR, new Class[]{GraySectionCell.class}, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "graySection"));
     }
 
     public TextView getTextView() {
         return this.textView;
     }
 
-    private int getThemedColor(String key) {
+    private int getThemedColor(String str) {
         Theme.ResourcesProvider resourcesProvider2 = this.resourcesProvider;
-        Integer color = resourcesProvider2 != null ? resourcesProvider2.getColor(key) : null;
-        return color != null ? color.intValue() : Theme.getColor(key);
+        Integer color = resourcesProvider2 != null ? resourcesProvider2.getColor(str) : null;
+        return color != null ? color.intValue() : Theme.getColor(str);
     }
 }

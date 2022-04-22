@@ -11,6 +11,6 @@ public final /* synthetic */ class ChatActivityEnterView$15$$ExternalSyntheticLa
     }
 
     public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-        this.f$0.m3750xe529eea3(valueAnimator);
+        this.f$0.lambda$afterTextChanged$0(valueAnimator);
     }
 }

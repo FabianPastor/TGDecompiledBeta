@@ -1,16 +1,15 @@
 package org.telegram.ui;
 
-import android.view.View;
-import org.telegram.ui.Components.RecyclerListView;
-
-public final /* synthetic */ class ProfileActivity$$ExternalSyntheticLambda27 implements RecyclerListView.OnItemClickListener {
+public final /* synthetic */ class ProfileActivity$$ExternalSyntheticLambda27 implements Runnable {
     public final /* synthetic */ ProfileActivity f$0;
+    public final /* synthetic */ Object[] f$1;
 
-    public /* synthetic */ ProfileActivity$$ExternalSyntheticLambda27(ProfileActivity profileActivity) {
+    public /* synthetic */ ProfileActivity$$ExternalSyntheticLambda27(ProfileActivity profileActivity, Object[] objArr) {
         this.f$0 = profileActivity;
+        this.f$1 = objArr;
     }
 
-    public final void onItemClick(View view, int i) {
-        this.f$0.m3044lambda$createView$5$orgtelegramuiProfileActivity(view, i);
+    public final void run() {
+        this.f$0.lambda$didReceivedNotification$26(this.f$1);
     }
 }

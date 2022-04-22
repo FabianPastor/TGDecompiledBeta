@@ -1,15 +1,17 @@
 package org.telegram.ui;
 
-import android.view.View;
+import android.content.DialogInterface;
 
-public final /* synthetic */ class PaymentFormActivity$$ExternalSyntheticLambda4 implements View.OnClickListener {
+public final /* synthetic */ class PaymentFormActivity$$ExternalSyntheticLambda4 implements DialogInterface.OnClickListener {
     public final /* synthetic */ PaymentFormActivity f$0;
+    public final /* synthetic */ String f$1;
 
-    public /* synthetic */ PaymentFormActivity$$ExternalSyntheticLambda4(PaymentFormActivity paymentFormActivity) {
+    public /* synthetic */ PaymentFormActivity$$ExternalSyntheticLambda4(PaymentFormActivity paymentFormActivity, String str) {
         this.f$0 = paymentFormActivity;
+        this.f$1 = str;
     }
 
-    public final void onClick(View view) {
-        this.f$0.m2830lambda$createView$26$orgtelegramuiPaymentFormActivity(view);
+    public final void onClick(DialogInterface dialogInterface, int i) {
+        this.f$0.lambda$sendSavePassword$42(this.f$1, dialogInterface, i);
     }
 }

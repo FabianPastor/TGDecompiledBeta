@@ -8,7 +8,4 @@ public final class Easings {
     public static final Interpolator easeInQuad = new CubicBezierInterpolator(0.55d, 0.085d, 0.68d, 0.53d);
     public static final Interpolator easeOutQuad = new CubicBezierInterpolator(0.25d, 0.46d, 0.45d, 0.94d);
     public static final Interpolator easeOutSine = new CubicBezierInterpolator(0.39d, 0.575d, 0.565d, 1.0d);
-
-    private Easings() {
-    }
 }

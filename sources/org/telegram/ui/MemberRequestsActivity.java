@@ -11,18 +11,17 @@ import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.Delegates.MemberRequestsDelegate;
 
 public class MemberRequestsActivity extends BaseFragment {
-    public static final int searchMenuItem = 0;
     /* access modifiers changed from: private */
     public final MemberRequestsDelegate delegate;
 
-    public MemberRequestsActivity(long chatId) {
-        this.delegate = new MemberRequestsDelegate(this, getLayoutContainer(), chatId, true) {
+    public MemberRequestsActivity(long j) {
+        this.delegate = new MemberRequestsDelegate(this, getLayoutContainer(), j, true) {
             /* access modifiers changed from: protected */
-            public void onImportersChanged(String query, boolean fromCache, boolean fromHide) {
-                if (fromHide) {
+            public void onImportersChanged(String str, boolean z, boolean z2) {
+                if (z2) {
                     MemberRequestsActivity.this.actionBar.setSearchFieldText("");
                 } else {
-                    super.onImportersChanged(query, fromCache, fromHide);
+                    super.onImportersChanged(str, z, z2);
                 }
             }
         };
@@ -33,8 +32,8 @@ public class MemberRequestsActivity extends BaseFragment {
         int i;
         this.actionBar.setAllowOverlayTitle(true);
         this.actionBar.setActionBarMenuOnItemClick(new ActionBar.ActionBarMenuOnItemClick() {
-            public void onItemClick(int id) {
-                if (id == -1) {
+            public void onItemClick(int i) {
+                if (i == -1) {
                     MemberRequestsActivity.this.finishFragment();
                 }
             }
@@ -49,7 +48,7 @@ public class MemberRequestsActivity extends BaseFragment {
             str = "MemberRequests";
         }
         actionBar.setTitle(LocaleController.getString(str, i));
-        ActionBarMenuItem searchItem = this.actionBar.createMenu().addItem(0, NUM).setIsSearchField(true).setActionBarMenuItemSearchListener(new ActionBarMenuItem.ActionBarMenuItemSearchListener() {
+        ActionBarMenuItem actionBarMenuItemSearchListener = this.actionBar.createMenu().addItem(0, NUM).setIsSearchField(true).setActionBarMenuItemSearchListener(new ActionBarMenuItem.ActionBarMenuItemSearchListener() {
             public void onSearchExpand() {
                 super.onSearchExpand();
                 MemberRequestsActivity.this.delegate.setSearchExpanded(true);
@@ -66,8 +65,8 @@ public class MemberRequestsActivity extends BaseFragment {
                 MemberRequestsActivity.this.delegate.setQuery(editText.getText().toString());
             }
         });
-        searchItem.setSearchFieldHint(LocaleController.getString("Search", NUM));
-        searchItem.setVisibility(8);
+        actionBarMenuItemSearchListener.setSearchFieldHint(LocaleController.getString("Search", NUM));
+        actionBarMenuItemSearchListener.setVisibility(8);
         FrameLayout rootLayout = this.delegate.getRootLayout();
         this.delegate.loadMembers();
         this.fragmentView = rootLayout;

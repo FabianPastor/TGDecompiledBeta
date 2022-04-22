@@ -14,6 +14,6 @@ public final /* synthetic */ class ChatActivityEnterView$12$$ExternalSyntheticLa
     }
 
     public final void didSelectDate(boolean z, int i) {
-        this.f$0.m3747xe2b77348(this.f$1, z, i);
+        this.f$0.lambda$onCreateInputConnection$0(this.f$1, z, i);
     }
 }

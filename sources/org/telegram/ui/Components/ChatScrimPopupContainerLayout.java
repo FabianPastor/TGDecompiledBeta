@@ -20,61 +20,64 @@ public class ChatScrimPopupContainerLayout extends LinearLayout {
     }
 
     /* access modifiers changed from: protected */
-    public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+    public void onMeasure(int i, int i2) {
         if (this.reactionsLayout == null || this.popupWindowLayout == null) {
-            super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+            super.onMeasure(i, i2);
             return;
         }
-        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-        int reactionsLayoutTotalWidth = this.reactionsLayout.getTotalWidth();
-        int maxReactionsLayoutWidth = (this.popupWindowLayout.getSwipeBack() != null ? this.popupWindowLayout.getSwipeBack().getChildAt(0) : this.popupWindowLayout.getChildAt(0)).getMeasuredWidth() + AndroidUtilities.dp(16.0f) + AndroidUtilities.dp(16.0f) + AndroidUtilities.dp(36.0f);
-        if (reactionsLayoutTotalWidth > maxReactionsLayoutWidth) {
-            int maxFullCount = ((maxReactionsLayoutWidth - AndroidUtilities.dp(16.0f)) / AndroidUtilities.dp(36.0f)) + 1;
-            int newWidth = ((AndroidUtilities.dp(36.0f) * maxFullCount) + AndroidUtilities.dp(16.0f)) - AndroidUtilities.dp(8.0f);
-            if (newWidth > reactionsLayoutTotalWidth || maxFullCount == this.reactionsLayout.getItemsCount()) {
-                newWidth = reactionsLayoutTotalWidth;
+        super.onMeasure(i, i2);
+        int totalWidth = this.reactionsLayout.getTotalWidth();
+        int i3 = 0;
+        int measuredWidth = (this.popupWindowLayout.getSwipeBack() != null ? this.popupWindowLayout.getSwipeBack() : this.popupWindowLayout).getChildAt(0).getMeasuredWidth() + AndroidUtilities.dp(16.0f) + AndroidUtilities.dp(16.0f) + AndroidUtilities.dp(36.0f);
+        if (totalWidth > measuredWidth) {
+            int dp = ((measuredWidth - AndroidUtilities.dp(16.0f)) / AndroidUtilities.dp(36.0f)) + 1;
+            int dp2 = ((AndroidUtilities.dp(36.0f) * dp) + AndroidUtilities.dp(16.0f)) - AndroidUtilities.dp(8.0f);
+            if (dp2 <= totalWidth && dp != this.reactionsLayout.getItemsCount()) {
+                totalWidth = dp2;
             }
-            this.reactionsLayout.getLayoutParams().width = newWidth;
+            this.reactionsLayout.getLayoutParams().width = totalWidth;
         } else {
             this.reactionsLayout.getLayoutParams().width = -2;
         }
-        int widthDiff = 0;
         if (this.popupWindowLayout.getSwipeBack() != null) {
-            widthDiff = this.popupWindowLayout.getSwipeBack().getMeasuredWidth() - this.popupWindowLayout.getSwipeBack().getChildAt(0).getMeasuredWidth();
+            i3 = this.popupWindowLayout.getSwipeBack().getMeasuredWidth() - this.popupWindowLayout.getSwipeBack().getChildAt(0).getMeasuredWidth();
         }
-        ((LinearLayout.LayoutParams) this.reactionsLayout.getLayoutParams()).rightMargin = widthDiff;
+        if (this.reactionsLayout.getLayoutParams().width != -2 && this.reactionsLayout.getLayoutParams().width + i3 > getMeasuredWidth()) {
+            i3 = (getMeasuredWidth() - this.reactionsLayout.getLayoutParams().width) + AndroidUtilities.dp(8.0f);
+        }
+        ((LinearLayout.LayoutParams) this.reactionsLayout.getLayoutParams()).rightMargin = i3;
         if (this.bottomView != null) {
             if (this.popupWindowLayout.getSwipeBack() != null) {
-                ((LinearLayout.LayoutParams) this.bottomView.getLayoutParams()).rightMargin = AndroidUtilities.dp(36.0f) + widthDiff;
+                ((LinearLayout.LayoutParams) this.bottomView.getLayoutParams()).rightMargin = i3 + AndroidUtilities.dp(36.0f);
             } else {
                 ((LinearLayout.LayoutParams) this.bottomView.getLayoutParams()).rightMargin = AndroidUtilities.dp(36.0f);
             }
         }
-        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+        super.onMeasure(i, i2);
     }
 
-    public void applyViewBottom(FrameLayout bottomView2) {
-        this.bottomView = bottomView2;
+    public void applyViewBottom(FrameLayout frameLayout) {
+        this.bottomView = frameLayout;
     }
 
-    public void setReactionsLayout(ReactionsContainerLayout reactionsLayout2) {
-        this.reactionsLayout = reactionsLayout2;
+    public void setReactionsLayout(ReactionsContainerLayout reactionsContainerLayout) {
+        this.reactionsLayout = reactionsContainerLayout;
     }
 
-    public void setPopupWindowLayout(final ActionBarPopupWindow.ActionBarPopupWindowLayout popupWindowLayout2) {
-        this.popupWindowLayout = popupWindowLayout2;
-        popupWindowLayout2.setOnSizeChangedListener(new ActionBarPopupWindow.onSizeChangedListener() {
+    public void setPopupWindowLayout(final ActionBarPopupWindow.ActionBarPopupWindowLayout actionBarPopupWindowLayout) {
+        this.popupWindowLayout = actionBarPopupWindowLayout;
+        actionBarPopupWindowLayout.setOnSizeChangedListener(new ActionBarPopupWindow.onSizeChangedListener() {
             public void onSizeChanged() {
                 if (ChatScrimPopupContainerLayout.this.bottomView != null) {
-                    ChatScrimPopupContainerLayout.this.bottomView.setTranslationY((float) (popupWindowLayout2.getVisibleHeight() - popupWindowLayout2.getMeasuredHeight()));
+                    ChatScrimPopupContainerLayout.this.bottomView.setTranslationY((float) (actionBarPopupWindowLayout.getVisibleHeight() - actionBarPopupWindowLayout.getMeasuredHeight()));
                 }
             }
         });
-        if (popupWindowLayout2.getSwipeBack() != null) {
-            popupWindowLayout2.getSwipeBack().addOnSwipeBackProgressListener(new PopupSwipeBackLayout.OnSwipeBackProgressListener() {
-                public void onSwipeBackProgress(PopupSwipeBackLayout layout, float toProgress, float progress) {
+        if (actionBarPopupWindowLayout.getSwipeBack() != null) {
+            actionBarPopupWindowLayout.getSwipeBack().addOnSwipeBackProgressListener(new PopupSwipeBackLayout.OnSwipeBackProgressListener() {
+                public void onSwipeBackProgress(PopupSwipeBackLayout popupSwipeBackLayout, float f, float f2) {
                     if (ChatScrimPopupContainerLayout.this.bottomView != null) {
-                        ChatScrimPopupContainerLayout.this.bottomView.setAlpha(1.0f - progress);
+                        ChatScrimPopupContainerLayout.this.bottomView.setAlpha(1.0f - f2);
                     }
                 }
             });

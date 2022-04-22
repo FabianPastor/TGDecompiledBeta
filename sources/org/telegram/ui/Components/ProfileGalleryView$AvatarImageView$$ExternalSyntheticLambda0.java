@@ -11,6 +11,6 @@ public final /* synthetic */ class ProfileGalleryView$AvatarImageView$$ExternalS
     }
 
     public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-        this.f$0.m4248xe910519a(valueAnimator);
+        this.f$0.lambda$onDraw$0(valueAnimator);
     }
 }

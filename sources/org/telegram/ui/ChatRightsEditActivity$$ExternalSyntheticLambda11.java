@@ -1,15 +1,16 @@
 package org.telegram.ui;
 
-import android.animation.ValueAnimator;
+import android.content.DialogInterface;
+import android.widget.DatePicker;
 
-public final /* synthetic */ class ChatRightsEditActivity$$ExternalSyntheticLambda11 implements ValueAnimator.AnimatorUpdateListener {
-    public final /* synthetic */ ChatRightsEditActivity f$0;
+public final /* synthetic */ class ChatRightsEditActivity$$ExternalSyntheticLambda11 implements DialogInterface.OnShowListener {
+    public final /* synthetic */ DatePicker f$0;
 
-    public /* synthetic */ ChatRightsEditActivity$$ExternalSyntheticLambda11(ChatRightsEditActivity chatRightsEditActivity) {
-        this.f$0 = chatRightsEditActivity;
+    public /* synthetic */ ChatRightsEditActivity$$ExternalSyntheticLambda11(DatePicker datePicker) {
+        this.f$0 = datePicker;
     }
 
-    public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-        this.f$0.m1995lambda$updateAsAdmin$25$orgtelegramuiChatRightsEditActivity(valueAnimator);
+    public final void onShow(DialogInterface dialogInterface) {
+        ChatRightsEditActivity.lambda$createView$4(this.f$0, dialogInterface);
     }
 }

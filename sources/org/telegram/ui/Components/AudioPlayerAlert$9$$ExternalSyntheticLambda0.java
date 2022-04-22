@@ -14,6 +14,6 @@ public final /* synthetic */ class AudioPlayerAlert$9$$ExternalSyntheticLambda0 
     }
 
     public final void onClick(View view) {
-        this.f$0.m3607xa7dff3ce(this.f$1, view);
+        this.f$0.lambda$createTextView$0(this.f$1, view);
     }
 }

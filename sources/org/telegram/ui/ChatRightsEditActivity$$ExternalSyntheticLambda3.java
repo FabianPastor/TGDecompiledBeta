@@ -1,18 +1,18 @@
 package org.telegram.ui;
 
-import android.view.View;
-import org.telegram.ui.ActionBar.BottomSheet;
+import android.app.TimePickerDialog;
+import android.widget.TimePicker;
 
-public final /* synthetic */ class ChatRightsEditActivity$$ExternalSyntheticLambda3 implements View.OnClickListener {
+public final /* synthetic */ class ChatRightsEditActivity$$ExternalSyntheticLambda3 implements TimePickerDialog.OnTimeSetListener {
     public final /* synthetic */ ChatRightsEditActivity f$0;
-    public final /* synthetic */ BottomSheet.Builder f$1;
+    public final /* synthetic */ int f$1;
 
-    public /* synthetic */ ChatRightsEditActivity$$ExternalSyntheticLambda3(ChatRightsEditActivity chatRightsEditActivity, BottomSheet.Builder builder) {
+    public /* synthetic */ ChatRightsEditActivity$$ExternalSyntheticLambda3(ChatRightsEditActivity chatRightsEditActivity, int i) {
         this.f$0 = chatRightsEditActivity;
-        this.f$1 = builder;
+        this.f$1 = i;
     }
 
-    public final void onClick(View view) {
-        this.f$0.m1976lambda$createView$5$orgtelegramuiChatRightsEditActivity(this.f$1, view);
+    public final void onTimeSet(TimePicker timePicker, int i, int i2) {
+        this.f$0.lambda$createView$0(this.f$1, timePicker, i, i2);
     }
 }

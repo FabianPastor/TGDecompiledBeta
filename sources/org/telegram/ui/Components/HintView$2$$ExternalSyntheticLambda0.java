@@ -10,6 +10,6 @@ public final /* synthetic */ class HintView$2$$ExternalSyntheticLambda0 implemen
     }
 
     public final void run() {
-        this.f$0.m4058lambda$onAnimationEnd$0$orgtelegramuiComponentsHintView$2();
+        this.f$0.lambda$onAnimationEnd$0();
     }
 }

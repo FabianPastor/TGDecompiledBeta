@@ -14,6 +14,6 @@ public final /* synthetic */ class BotWebViewContainer$3$$ExternalSyntheticLambd
     }
 
     public final void onClick(DialogInterface dialogInterface, int i) {
-        this.f$0.m3640x5c9CLASSNAMEcb(this.f$1, dialogInterface, i);
+        this.f$0.lambda$shouldOverrideUrlLoading$1(this.f$1, dialogInterface, i);
     }
 }

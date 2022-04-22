@@ -1,23 +1,16 @@
 package org.telegram.messenger;
 
-import org.telegram.ui.ActionBar.Theme;
+import org.telegram.tgnet.RequestDelegate;
+import org.telegram.tgnet.TLObject;
+import org.telegram.tgnet.TLRPC$TL_error;
 
-public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda352 implements Runnable {
-    public final /* synthetic */ MessagesController f$0;
-    public final /* synthetic */ String f$1;
-    public final /* synthetic */ String f$2;
-    public final /* synthetic */ Theme.ThemeAccent f$3;
-    public final /* synthetic */ Theme.ThemeInfo f$4;
+public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda352 implements RequestDelegate {
+    public static final /* synthetic */ MessagesController$$ExternalSyntheticLambda352 INSTANCE = new MessagesController$$ExternalSyntheticLambda352();
 
-    public /* synthetic */ MessagesController$$ExternalSyntheticLambda352(MessagesController messagesController, String str, String str2, Theme.ThemeAccent themeAccent, Theme.ThemeInfo themeInfo) {
-        this.f$0 = messagesController;
-        this.f$1 = str;
-        this.f$2 = str2;
-        this.f$3 = themeAccent;
-        this.f$4 = themeInfo;
+    private /* synthetic */ MessagesController$$ExternalSyntheticLambda352() {
     }
 
-    public final void run() {
-        this.f$0.m376x55704794(this.f$1, this.f$2, this.f$3, this.f$4);
+    public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+        MessagesController.lambda$markMentionsAsRead$198(tLObject, tLRPC$TL_error);
     }
 }

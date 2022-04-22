@@ -10,6 +10,6 @@ public final /* synthetic */ class PhotoViewerWebView$YoutubeProxy$$ExternalSynt
     }
 
     public final void run() {
-        this.f$0.m4225x81e88var_();
+        this.f$0.lambda$postEvent$0();
     }
 }

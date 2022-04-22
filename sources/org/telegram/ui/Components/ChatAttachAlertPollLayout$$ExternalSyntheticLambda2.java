@@ -11,6 +11,6 @@ public final /* synthetic */ class ChatAttachAlertPollLayout$$ExternalSyntheticL
     }
 
     public final void onItemClick(View view, int i) {
-        this.f$0.m3896x3180e5dc(view, i);
+        this.f$0.lambda$new$0(view, i);
     }
 }

@@ -2,7 +2,7 @@ package org.telegram.ui;
 
 import android.util.Pair;
 import org.telegram.tgnet.ResultCallback;
-import org.telegram.tgnet.TLRPC;
+import org.telegram.tgnet.TLRPC$TL_error;
 
 public final /* synthetic */ class QrActivity$$ExternalSyntheticLambda6 implements ResultCallback {
     public final /* synthetic */ QrActivity f$0;
@@ -16,14 +16,10 @@ public final /* synthetic */ class QrActivity$$ExternalSyntheticLambda6 implemen
     }
 
     public final void onComplete(Object obj) {
-        this.f$0.m3200lambda$onItemSelected$5$orgtelegramuiQrActivity(this.f$1, this.f$2, (Pair) obj);
+        this.f$0.lambda$onItemSelected$5(this.f$1, this.f$2, (Pair) obj);
     }
 
-    public /* synthetic */ void onError(Throwable th) {
-        ResultCallback.CC.$default$onError((ResultCallback) this, th);
-    }
-
-    public /* synthetic */ void onError(TLRPC.TL_error tL_error) {
-        ResultCallback.CC.$default$onError((ResultCallback) this, tL_error);
+    public /* synthetic */ void onError(TLRPC$TL_error tLRPC$TL_error) {
+        ResultCallback.CC.$default$onError((ResultCallback) this, tLRPC$TL_error);
     }
 }

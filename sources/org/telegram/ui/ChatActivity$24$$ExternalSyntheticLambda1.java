@@ -11,6 +11,6 @@ public final /* synthetic */ class ChatActivity$24$$ExternalSyntheticLambda1 imp
     }
 
     public final void run(int i) {
-        this.f$0.m1867lambda$loadLastUnreadMention$0$orgtelegramuiChatActivity$24(i);
+        this.f$0.lambda$loadLastUnreadMention$0(i);
     }
 }

@@ -10,6 +10,6 @@ public final /* synthetic */ class PaymentFormActivity$25$$ExternalSyntheticLamb
     }
 
     public final void run() {
-        this.f$0.m2863lambda$onSuccess$0$orgtelegramuiPaymentFormActivity$25();
+        this.f$0.lambda$onSuccess$0();
     }
 }

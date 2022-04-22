@@ -13,6 +13,6 @@ public final /* synthetic */ class PasscodeView$9$$ExternalSyntheticLambda0 impl
     }
 
     public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-        this.f$0.m4168x35var_ab(this.f$1, valueAnimator);
+        this.f$0.lambda$onGlobalLayout$1(this.f$1, valueAnimator);
     }
 }

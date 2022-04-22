@@ -1,21 +1,25 @@
 package org.telegram.messenger;
 
-import androidx.core.util.Consumer;
-import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC;
+import org.telegram.messenger.MessagesController;
 
 public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda125 implements Runnable {
-    public final /* synthetic */ TLObject f$0;
-    public final /* synthetic */ TLRPC.TL_error f$1;
-    public final /* synthetic */ Consumer f$2;
+    public final /* synthetic */ MessagesController f$0;
+    public final /* synthetic */ MessagesStorage f$1;
+    public final /* synthetic */ long f$2;
+    public final /* synthetic */ long f$3;
+    public final /* synthetic */ int f$4;
+    public final /* synthetic */ MessagesController.MessagesLoadedCallback f$5;
 
-    public /* synthetic */ MessagesController$$ExternalSyntheticLambda125(TLObject tLObject, TLRPC.TL_error tL_error, Consumer consumer) {
-        this.f$0 = tLObject;
-        this.f$1 = tL_error;
-        this.f$2 = consumer;
+    public /* synthetic */ MessagesController$$ExternalSyntheticLambda125(MessagesController messagesController, MessagesStorage messagesStorage, long j, long j2, int i, MessagesController.MessagesLoadedCallback messagesLoadedCallback) {
+        this.f$0 = messagesController;
+        this.f$1 = messagesStorage;
+        this.f$2 = j;
+        this.f$3 = j2;
+        this.f$4 = i;
+        this.f$5 = messagesLoadedCallback;
     }
 
     public final void run() {
-        MessagesController.lambda$getNextReactionMention$3(this.f$0, this.f$1, this.f$2);
+        this.f$0.lambda$ensureMessagesLoaded$344(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5);
     }
 }

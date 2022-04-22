@@ -10,6 +10,6 @@ public final /* synthetic */ class DialogsActivity$$ExternalSyntheticLambda0 imp
     }
 
     public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-        this.f$0.m2069lambda$animateContactsAlpha$44$orgtelegramuiDialogsActivity(valueAnimator);
+        this.f$0.lambda$hideFloatingButton$44(valueAnimator);
     }
 }

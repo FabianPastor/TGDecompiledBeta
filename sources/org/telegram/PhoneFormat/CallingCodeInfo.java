@@ -5,18 +5,21 @@ import java.util.Iterator;
 
 public class CallingCodeInfo {
     public String callingCode = "";
-    public ArrayList<String> countries = new ArrayList<>();
     public ArrayList<String> intlPrefixes = new ArrayList<>();
     public ArrayList<RuleSet> ruleSets = new ArrayList<>();
     public ArrayList<String> trunkPrefixes = new ArrayList<>();
+
+    public CallingCodeInfo() {
+        new ArrayList();
+    }
 
     /* access modifiers changed from: package-private */
     public String matchingAccessCode(String str) {
         Iterator<String> it = this.intlPrefixes.iterator();
         while (it.hasNext()) {
-            String code = it.next();
-            if (str.startsWith(code)) {
-                return code;
+            String next = it.next();
+            if (str.startsWith(next)) {
+                return next;
             }
         }
         return null;
@@ -26,76 +29,50 @@ public class CallingCodeInfo {
     public String matchingTrunkCode(String str) {
         Iterator<String> it = this.trunkPrefixes.iterator();
         while (it.hasNext()) {
-            String code = it.next();
-            if (str.startsWith(code)) {
-                return code;
+            String next = it.next();
+            if (str.startsWith(next)) {
+                return next;
             }
         }
         return null;
     }
 
     /* access modifiers changed from: package-private */
-    public String format(String orig) {
-        String str = orig;
-        String trunkPrefix = null;
-        String intlPrefix = null;
+    public String format(String str) {
+        String str2;
+        String str3;
+        String str4 = null;
         if (str.startsWith(this.callingCode)) {
-            intlPrefix = this.callingCode;
-            str = str.substring(intlPrefix.length());
+            str3 = this.callingCode;
+            str2 = str.substring(str3.length());
         } else {
-            String trunk = matchingTrunkCode(str);
-            if (trunk != null) {
-                trunkPrefix = trunk;
-                str = str.substring(trunkPrefix.length());
+            String matchingTrunkCode = matchingTrunkCode(str);
+            if (matchingTrunkCode != null) {
+                str2 = str.substring(matchingTrunkCode.length());
+                str4 = matchingTrunkCode;
+                str3 = null;
+            } else {
+                str2 = str;
+                str3 = null;
             }
         }
         Iterator<RuleSet> it = this.ruleSets.iterator();
         while (it.hasNext()) {
-            String phone = it.next().format(str, intlPrefix, trunkPrefix, true);
-            if (phone != null) {
-                return phone;
+            String format = it.next().format(str2, str3, str4, true);
+            if (format != null) {
+                return format;
             }
         }
         Iterator<RuleSet> it2 = this.ruleSets.iterator();
         while (it2.hasNext()) {
-            String phone2 = it2.next().format(str, intlPrefix, trunkPrefix, false);
-            if (phone2 != null) {
-                return phone2;
+            String format2 = it2.next().format(str2, str3, str4, false);
+            if (format2 != null) {
+                return format2;
             }
         }
-        if (intlPrefix == null || str.length() == 0) {
-            return orig;
+        if (str3 == null || str2.length() == 0) {
+            return str;
         }
-        return String.format("%s %s", new Object[]{intlPrefix, str});
-    }
-
-    /* access modifiers changed from: package-private */
-    public boolean isValidPhoneNumber(String orig) {
-        String str = orig;
-        String trunkPrefix = null;
-        String intlPrefix = null;
-        if (str.startsWith(this.callingCode)) {
-            intlPrefix = this.callingCode;
-            str = str.substring(intlPrefix.length());
-        } else {
-            String trunk = matchingTrunkCode(str);
-            if (trunk != null) {
-                trunkPrefix = trunk;
-                str = str.substring(trunkPrefix.length());
-            }
-        }
-        Iterator<RuleSet> it = this.ruleSets.iterator();
-        while (it.hasNext()) {
-            if (it.next().isValid(str, intlPrefix, trunkPrefix, true)) {
-                return true;
-            }
-        }
-        Iterator<RuleSet> it2 = this.ruleSets.iterator();
-        while (it2.hasNext()) {
-            if (it2.next().isValid(str, intlPrefix, trunkPrefix, false)) {
-                return true;
-            }
-        }
-        return false;
+        return String.format("%s %s", new Object[]{str3, str2});
     }
 }

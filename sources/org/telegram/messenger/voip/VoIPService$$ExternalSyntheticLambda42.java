@@ -1,22 +1,19 @@
 package org.telegram.messenger.voip;
 
-import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC;
-
 public final /* synthetic */ class VoIPService$$ExternalSyntheticLambda42 implements Runnable {
     public final /* synthetic */ VoIPService f$0;
-    public final /* synthetic */ TLObject f$1;
-    public final /* synthetic */ TLRPC.TL_phone_checkGroupCall f$2;
-    public final /* synthetic */ TLRPC.TL_error f$3;
+    public final /* synthetic */ int f$1;
+    public final /* synthetic */ long f$2;
+    public final /* synthetic */ int f$3;
 
-    public /* synthetic */ VoIPService$$ExternalSyntheticLambda42(VoIPService voIPService, TLObject tLObject, TLRPC.TL_phone_checkGroupCall tL_phone_checkGroupCall, TLRPC.TL_error tL_error) {
+    public /* synthetic */ VoIPService$$ExternalSyntheticLambda42(VoIPService voIPService, int i, long j, int i2) {
         this.f$0 = voIPService;
-        this.f$1 = tLObject;
-        this.f$2 = tL_phone_checkGroupCall;
-        this.f$3 = tL_error;
+        this.f$1 = i;
+        this.f$2 = j;
+        this.f$3 = i2;
     }
 
     public final void run() {
-        this.f$0.m1212xe7efab58(this.f$1, this.f$2, this.f$3);
+        this.f$0.lambda$createGroupInstance$46(this.f$1, this.f$2, this.f$3);
     }
 }

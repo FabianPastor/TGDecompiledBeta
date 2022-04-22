@@ -1,23 +1,18 @@
 package org.telegram.ui;
 
-import android.content.DialogInterface;
-import java.util.ArrayList;
-import org.telegram.tgnet.TLRPC;
+import android.view.View;
+import org.telegram.ui.CountrySelectActivity;
 
-public final /* synthetic */ class PassportActivity$$ExternalSyntheticLambda72 implements DialogInterface.OnClickListener {
+public final /* synthetic */ class PassportActivity$$ExternalSyntheticLambda72 implements CountrySelectActivity.CountrySelectActivityDelegate {
     public final /* synthetic */ PassportActivity f$0;
-    public final /* synthetic */ TLRPC.TL_secureRequiredType f$1;
-    public final /* synthetic */ ArrayList f$2;
-    public final /* synthetic */ boolean f$3;
+    public final /* synthetic */ View f$1;
 
-    public /* synthetic */ PassportActivity$$ExternalSyntheticLambda72(PassportActivity passportActivity, TLRPC.TL_secureRequiredType tL_secureRequiredType, ArrayList arrayList, boolean z) {
+    public /* synthetic */ PassportActivity$$ExternalSyntheticLambda72(PassportActivity passportActivity, View view) {
         this.f$0 = passportActivity;
-        this.f$1 = tL_secureRequiredType;
-        this.f$2 = arrayList;
-        this.f$3 = z;
+        this.f$1 = view;
     }
 
-    public final void onClick(DialogInterface dialogInterface, int i) {
-        this.f$0.m2700lambda$addField$61$orgtelegramuiPassportActivity(this.f$1, this.f$2, this.f$3, dialogInterface, i);
+    public final void didSelectCountry(CountrySelectActivity.Country country) {
+        this.f$0.lambda$createIdentityInterface$45(this.f$1, country);
     }
 }

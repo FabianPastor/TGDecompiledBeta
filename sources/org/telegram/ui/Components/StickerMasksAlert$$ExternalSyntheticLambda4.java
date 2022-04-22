@@ -10,6 +10,6 @@ public final /* synthetic */ class StickerMasksAlert$$ExternalSyntheticLambda4 i
     }
 
     public final void onPageSelected(int i) {
-        this.f$0.m4410lambda$new$2$orgtelegramuiComponentsStickerMasksAlert(i);
+        this.f$0.lambda$new$2(i);
     }
 }

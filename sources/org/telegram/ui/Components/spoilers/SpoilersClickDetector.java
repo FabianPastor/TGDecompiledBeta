@@ -15,25 +15,25 @@ public class SpoilersClickDetector {
         void onSpoilerClicked(SpoilerEffect spoilerEffect, float f, float f2);
     }
 
-    public SpoilersClickDetector(View v, List<SpoilerEffect> spoilers, OnSpoilerClickedListener clickedListener) {
-        this(v, spoilers, true, clickedListener);
+    public SpoilersClickDetector(View view, List<SpoilerEffect> list, OnSpoilerClickedListener onSpoilerClickedListener) {
+        this(view, list, true, onSpoilerClickedListener);
     }
 
-    public SpoilersClickDetector(View v, List<SpoilerEffect> spoilers, boolean offsetPadding, OnSpoilerClickedListener clickedListener) {
-        final View view = v;
-        final boolean z = offsetPadding;
-        final List<SpoilerEffect> list = spoilers;
-        final OnSpoilerClickedListener onSpoilerClickedListener = clickedListener;
-        this.gestureDetector = new GestureDetectorCompat(v.getContext(), new GestureDetector.SimpleOnGestureListener() {
-            public boolean onDown(MotionEvent e) {
-                int x = (int) e.getX();
-                int y = ((int) e.getY()) + view.getScrollY();
-                if (z) {
-                    x -= view.getPaddingLeft();
-                    y -= view.getPaddingTop();
+    public SpoilersClickDetector(View view, List<SpoilerEffect> list, boolean z, OnSpoilerClickedListener onSpoilerClickedListener) {
+        final View view2 = view;
+        final boolean z2 = z;
+        final List<SpoilerEffect> list2 = list;
+        final OnSpoilerClickedListener onSpoilerClickedListener2 = onSpoilerClickedListener;
+        this.gestureDetector = new GestureDetectorCompat(view.getContext(), new GestureDetector.SimpleOnGestureListener() {
+            public boolean onDown(MotionEvent motionEvent) {
+                int x = (int) motionEvent.getX();
+                int y = ((int) motionEvent.getY()) + view2.getScrollY();
+                if (z2) {
+                    x -= view2.getPaddingLeft();
+                    y -= view2.getPaddingTop();
                 }
-                for (SpoilerEffect eff : list) {
-                    if (eff.getBounds().contains(x, y)) {
+                for (SpoilerEffect bounds : list2) {
+                    if (bounds.getBounds().contains(x, y)) {
                         boolean unused = SpoilersClickDetector.this.trackingTap = true;
                         return true;
                     }
@@ -41,19 +41,19 @@ public class SpoilersClickDetector {
                 return false;
             }
 
-            public boolean onSingleTapUp(MotionEvent e) {
+            public boolean onSingleTapUp(MotionEvent motionEvent) {
                 if (SpoilersClickDetector.this.trackingTap) {
-                    view.playSoundEffect(0);
+                    view2.playSoundEffect(0);
                     boolean unused = SpoilersClickDetector.this.trackingTap = false;
-                    int x = (int) e.getX();
-                    int y = ((int) e.getY()) + view.getScrollY();
-                    if (z) {
-                        x -= view.getPaddingLeft();
-                        y -= view.getPaddingTop();
+                    int x = (int) motionEvent.getX();
+                    int y = ((int) motionEvent.getY()) + view2.getScrollY();
+                    if (z2) {
+                        x -= view2.getPaddingLeft();
+                        y -= view2.getPaddingTop();
                     }
-                    for (SpoilerEffect eff : list) {
-                        if (eff.getBounds().contains(x, y)) {
-                            onSpoilerClickedListener.onSpoilerClicked(eff, (float) x, (float) y);
+                    for (SpoilerEffect spoilerEffect : list2) {
+                        if (spoilerEffect.getBounds().contains(x, y)) {
+                            onSpoilerClickedListener2.onSpoilerClicked(spoilerEffect, (float) x, (float) y);
                             return true;
                         }
                     }
@@ -63,7 +63,7 @@ public class SpoilersClickDetector {
         });
     }
 
-    public boolean onTouchEvent(MotionEvent ev) {
-        return this.gestureDetector.onTouchEvent(ev);
+    public boolean onTouchEvent(MotionEvent motionEvent) {
+        return this.gestureDetector.onTouchEvent(motionEvent);
     }
 }

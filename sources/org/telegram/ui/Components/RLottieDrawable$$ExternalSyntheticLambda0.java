@@ -8,6 +8,6 @@ public final /* synthetic */ class RLottieDrawable$$ExternalSyntheticLambda0 imp
     }
 
     public final void run() {
-        this.f$0.m4263lambda$setBaseDice$0$orgtelegramuiComponentsRLottieDrawable();
+        this.f$0.lambda$setBaseDice$0();
     }
 }

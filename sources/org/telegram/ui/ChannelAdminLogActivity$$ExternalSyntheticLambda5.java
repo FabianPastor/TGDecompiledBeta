@@ -1,15 +1,15 @@
 package org.telegram.ui;
 
+import android.view.MotionEvent;
 import android.view.View;
 
-public final /* synthetic */ class ChannelAdminLogActivity$$ExternalSyntheticLambda5 implements View.OnClickListener {
-    public final /* synthetic */ ChannelAdminLogActivity f$0;
+public final /* synthetic */ class ChannelAdminLogActivity$$ExternalSyntheticLambda5 implements View.OnTouchListener {
+    public static final /* synthetic */ ChannelAdminLogActivity$$ExternalSyntheticLambda5 INSTANCE = new ChannelAdminLogActivity$$ExternalSyntheticLambda5();
 
-    public /* synthetic */ ChannelAdminLogActivity$$ExternalSyntheticLambda5(ChannelAdminLogActivity channelAdminLogActivity) {
-        this.f$0 = channelAdminLogActivity;
+    private /* synthetic */ ChannelAdminLogActivity$$ExternalSyntheticLambda5() {
     }
 
-    public final void onClick(View view) {
-        this.f$0.m1583lambda$createView$5$orgtelegramuiChannelAdminLogActivity(view);
+    public final boolean onTouch(View view, MotionEvent motionEvent) {
+        return ChannelAdminLogActivity.lambda$createView$2(view, motionEvent);
     }
 }

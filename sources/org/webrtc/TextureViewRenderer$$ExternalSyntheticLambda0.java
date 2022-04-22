@@ -12,6 +12,6 @@ public final /* synthetic */ class TextureViewRenderer$$ExternalSyntheticLambda0
     }
 
     public final void run() {
-        this.f$0.m4636lambda$updateVideoSizes$1$orgwebrtcTextureViewRenderer(this.f$1, this.f$2);
+        this.f$0.lambda$updateVideoSizes$1(this.f$1, this.f$2);
     }
 }

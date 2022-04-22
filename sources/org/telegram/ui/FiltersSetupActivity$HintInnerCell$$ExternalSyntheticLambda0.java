@@ -11,6 +11,6 @@ public final /* synthetic */ class FiltersSetupActivity$HintInnerCell$$ExternalS
     }
 
     public final void onClick(View view) {
-        this.f$0.m2176lambda$new$0$orgtelegramuiFiltersSetupActivity$HintInnerCell(view);
+        this.f$0.lambda$new$0(view);
     }
 }

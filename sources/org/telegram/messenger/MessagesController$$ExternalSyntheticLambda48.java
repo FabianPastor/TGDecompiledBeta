@@ -1,24 +1,22 @@
 package org.telegram.messenger;
 
-import org.telegram.messenger.MessagesController;
-import org.telegram.tgnet.TLRPC;
+import org.telegram.tgnet.TLRPC$TL_error;
+import org.telegram.tgnet.TLRPC$TL_messages_getPeerDialogs;
 
 public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda48 implements Runnable {
     public final /* synthetic */ MessagesController f$0;
-    public final /* synthetic */ TLRPC.Chat f$1;
-    public final /* synthetic */ long f$2;
-    public final /* synthetic */ int f$3;
-    public final /* synthetic */ MessagesController.MessagesLoadedCallback f$4;
+    public final /* synthetic */ int f$1;
+    public final /* synthetic */ TLRPC$TL_messages_getPeerDialogs f$2;
+    public final /* synthetic */ TLRPC$TL_error f$3;
 
-    public /* synthetic */ MessagesController$$ExternalSyntheticLambda48(MessagesController messagesController, TLRPC.Chat chat, long j, int i, MessagesController.MessagesLoadedCallback messagesLoadedCallback) {
+    public /* synthetic */ MessagesController$$ExternalSyntheticLambda48(MessagesController messagesController, int i, TLRPC$TL_messages_getPeerDialogs tLRPC$TL_messages_getPeerDialogs, TLRPC$TL_error tLRPC$TL_error) {
         this.f$0 = messagesController;
-        this.f$1 = chat;
-        this.f$2 = j;
-        this.f$3 = i;
-        this.f$4 = messagesLoadedCallback;
+        this.f$1 = i;
+        this.f$2 = tLRPC$TL_messages_getPeerDialogs;
+        this.f$3 = tLRPC$TL_error;
     }
 
     public final void run() {
-        this.f$0.m201x6382a67b(this.f$1, this.f$2, this.f$3, this.f$4);
+        this.f$0.lambda$loadMessagesInternal$145(this.f$1, this.f$2, this.f$3);
     }
 }

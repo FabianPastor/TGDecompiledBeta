@@ -1,17 +1,21 @@
 package org.telegram.messenger;
 
-import org.telegram.ui.ActionBar.AlertDialog;
+import org.telegram.messenger.MessagesController;
 
 public final /* synthetic */ class MediaController$$ExternalSyntheticLambda30 implements Runnable {
-    public final /* synthetic */ AlertDialog f$0;
-    public final /* synthetic */ int f$1;
+    public final /* synthetic */ MediaController f$0;
+    public final /* synthetic */ MessagesController.EmojiSound f$1;
+    public final /* synthetic */ AccountInstance f$2;
+    public final /* synthetic */ boolean f$3;
 
-    public /* synthetic */ MediaController$$ExternalSyntheticLambda30(AlertDialog alertDialog, int i) {
-        this.f$0 = alertDialog;
-        this.f$1 = i;
+    public /* synthetic */ MediaController$$ExternalSyntheticLambda30(MediaController mediaController, MessagesController.EmojiSound emojiSound, AccountInstance accountInstance, boolean z) {
+        this.f$0 = mediaController;
+        this.f$1 = emojiSound;
+        this.f$2 = accountInstance;
+        this.f$3 = z;
     }
 
     public final void run() {
-        MediaController.lambda$saveFile$36(this.f$0, this.f$1);
+        this.f$0.lambda$playEmojiSound$18(this.f$1, this.f$2, this.f$3);
     }
 }

@@ -1,28 +1,19 @@
 package org.telegram.ui;
 
-import android.os.Bundle;
-import org.telegram.tgnet.TLObject;
-import org.telegram.ui.ActionBar.AlertDialog;
-import org.telegram.ui.ActionBar.BaseFragment;
+import org.telegram.tgnet.TLRPC$TL_help_appUpdate;
 
 public final /* synthetic */ class LaunchActivity$$ExternalSyntheticLambda47 implements Runnable {
     public final /* synthetic */ LaunchActivity f$0;
-    public final /* synthetic */ AlertDialog f$1;
-    public final /* synthetic */ TLObject f$2;
-    public final /* synthetic */ BaseFragment f$3;
-    public final /* synthetic */ int f$4;
-    public final /* synthetic */ Bundle f$5;
+    public final /* synthetic */ TLRPC$TL_help_appUpdate f$1;
+    public final /* synthetic */ int f$2;
 
-    public /* synthetic */ LaunchActivity$$ExternalSyntheticLambda47(LaunchActivity launchActivity, AlertDialog alertDialog, TLObject tLObject, BaseFragment baseFragment, int i, Bundle bundle) {
+    public /* synthetic */ LaunchActivity$$ExternalSyntheticLambda47(LaunchActivity launchActivity, TLRPC$TL_help_appUpdate tLRPC$TL_help_appUpdate, int i) {
         this.f$0 = launchActivity;
-        this.f$1 = alertDialog;
-        this.f$2 = tLObject;
-        this.f$3 = baseFragment;
-        this.f$4 = i;
-        this.f$5 = bundle;
+        this.f$1 = tLRPC$TL_help_appUpdate;
+        this.f$2 = i;
     }
 
     public final void run() {
-        this.f$0.m2375lambda$runLinkRequest$62$orgtelegramuiLaunchActivity(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5);
+        this.f$0.lambda$checkAppUpdate$68(this.f$1, this.f$2);
     }
 }

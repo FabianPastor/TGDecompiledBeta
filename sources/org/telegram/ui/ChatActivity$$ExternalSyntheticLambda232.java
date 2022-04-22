@@ -1,16 +1,15 @@
 package org.telegram.ui;
 
-import android.view.View;
-import org.telegram.ui.Cells.CheckBoxCell;
+import org.telegram.ui.Components.RecyclerAnimationScrollHelper;
 
-public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda232 implements View.OnClickListener {
-    public final /* synthetic */ CheckBoxCell[] f$0;
+public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda232 implements RecyclerAnimationScrollHelper.ScrollListener {
+    public final /* synthetic */ ChatActivity f$0;
 
-    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda232(CheckBoxCell[] checkBoxCellArr) {
-        this.f$0 = checkBoxCellArr;
+    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda232(ChatActivity chatActivity) {
+        this.f$0 = chatActivity;
     }
 
-    public final void onClick(View view) {
-        ChatActivity.lambda$showRequestUrlAlert$216(this.f$0, view);
+    public final void onScroll() {
+        this.f$0.invalidateMessagesVisiblePart();
     }
 }

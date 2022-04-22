@@ -12,6 +12,6 @@ public final /* synthetic */ class ThemeEditorView$EditorAlert$SearchField$$Exte
     }
 
     public final boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
-        return this.f$0.m4475x49326be7(textView, i, keyEvent);
+        return this.f$0.lambda$new$1(textView, i, keyEvent);
     }
 }

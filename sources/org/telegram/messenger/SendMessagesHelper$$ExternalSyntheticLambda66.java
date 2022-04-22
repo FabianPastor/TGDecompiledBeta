@@ -1,21 +1,17 @@
 package org.telegram.messenger;
 
-public final /* synthetic */ class SendMessagesHelper$$ExternalSyntheticLambda66 implements Runnable {
-    public final /* synthetic */ String f$0;
-    public final /* synthetic */ AccountInstance f$1;
-    public final /* synthetic */ long f$2;
-    public final /* synthetic */ boolean f$3;
-    public final /* synthetic */ int f$4;
+import org.telegram.tgnet.TLRPC$TL_updateShortSentMessage;
 
-    public /* synthetic */ SendMessagesHelper$$ExternalSyntheticLambda66(String str, AccountInstance accountInstance, long j, boolean z, int i) {
-        this.f$0 = str;
-        this.f$1 = accountInstance;
-        this.f$2 = j;
-        this.f$3 = z;
-        this.f$4 = i;
+public final /* synthetic */ class SendMessagesHelper$$ExternalSyntheticLambda66 implements Runnable {
+    public final /* synthetic */ SendMessagesHelper f$0;
+    public final /* synthetic */ TLRPC$TL_updateShortSentMessage f$1;
+
+    public /* synthetic */ SendMessagesHelper$$ExternalSyntheticLambda66(SendMessagesHelper sendMessagesHelper, TLRPC$TL_updateShortSentMessage tLRPC$TL_updateShortSentMessage) {
+        this.f$0 = sendMessagesHelper;
+        this.f$1 = tLRPC$TL_updateShortSentMessage;
     }
 
     public final void run() {
-        SendMessagesHelper.lambda$prepareSendingText$81(this.f$0, this.f$1, this.f$2, this.f$3, this.f$4);
+        this.f$0.lambda$performSendMessageRequest$51(this.f$1);
     }
 }

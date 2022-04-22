@@ -7,8 +7,8 @@ import org.telegram.ui.LaunchActivity;
 
 public class OpenChatReceiver extends Activity {
     /* access modifiers changed from: protected */
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    public void onCreate(Bundle bundle) {
+        super.onCreate(bundle);
         Intent intent = getIntent();
         if (intent == null) {
             finish();
@@ -16,18 +16,18 @@ public class OpenChatReceiver extends Activity {
             finish();
         } else {
             try {
-                long chatId = intent.getLongExtra("chatId", (long) intent.getIntExtra("chatId", 0));
-                long userId = intent.getLongExtra("userId", (long) intent.getIntExtra("userId", 0));
-                int encId = intent.getIntExtra("encId", 0);
-                if (chatId != 0 || userId != 0 || encId != 0) {
+                long longExtra = intent.getLongExtra("chatId", (long) intent.getIntExtra("chatId", 0));
+                long longExtra2 = intent.getLongExtra("userId", (long) intent.getIntExtra("userId", 0));
+                int intExtra = intent.getIntExtra("encId", 0);
+                if (longExtra != 0 || longExtra2 != 0 || intExtra != 0) {
                     Intent intent2 = new Intent(this, LaunchActivity.class);
                     intent2.setAction(intent.getAction());
                     intent2.putExtras(intent);
                     startActivity(intent2);
                     finish();
                 }
-            } catch (Throwable e) {
-                FileLog.e(e);
+            } catch (Throwable th) {
+                FileLog.e(th);
             }
         }
     }

@@ -1,14 +1,19 @@
 package org.telegram.messenger;
 
-import org.telegram.ui.ActionBar.Theme;
+import org.telegram.messenger.support.LongSparseIntArray;
 
 public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda126 implements Runnable {
-    public static final /* synthetic */ MessagesController$$ExternalSyntheticLambda126 INSTANCE = new MessagesController$$ExternalSyntheticLambda126();
+    public final /* synthetic */ MessagesController f$0;
+    public final /* synthetic */ LongSparseIntArray f$1;
+    public final /* synthetic */ LongSparseIntArray f$2;
 
-    private /* synthetic */ MessagesController$$ExternalSyntheticLambda126() {
+    public /* synthetic */ MessagesController$$ExternalSyntheticLambda126(MessagesController messagesController, LongSparseIntArray longSparseIntArray, LongSparseIntArray longSparseIntArray2) {
+        this.f$0 = messagesController;
+        this.f$1 = longSparseIntArray;
+        this.f$2 = longSparseIntArray2;
     }
 
     public final void run() {
-        Theme.checkAutoNightThemeConditions();
+        this.f$0.lambda$processDialogsUpdateRead$179(this.f$1, this.f$2);
     }
 }

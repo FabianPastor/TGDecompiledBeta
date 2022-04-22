@@ -12,25 +12,25 @@ public class TextViewSwitcher extends ViewSwitcher {
         super(context);
     }
 
-    public void setText(CharSequence text) {
-        setText(text, true);
+    public void setText(CharSequence charSequence) {
+        setText(charSequence, true);
     }
 
-    public void setText(CharSequence text, boolean animated) {
-        if (TextUtils.equals(text, getCurrentView().getText())) {
+    public void setText(CharSequence charSequence, boolean z) {
+        if (TextUtils.equals(charSequence, getCurrentView().getText())) {
             return;
         }
-        if (animated) {
-            getNextView().setText(text);
+        if (z) {
+            getNextView().setText(charSequence);
             showNext();
             return;
         }
-        getCurrentView().setText(text);
+        getCurrentView().setText(charSequence);
     }
 
-    public void addView(View child, int index, ViewGroup.LayoutParams params) {
-        if (child instanceof TextView) {
-            super.addView(child, index, params);
+    public void addView(View view, int i, ViewGroup.LayoutParams layoutParams) {
+        if (view instanceof TextView) {
+            super.addView(view, i, layoutParams);
             return;
         }
         throw new IllegalArgumentException();

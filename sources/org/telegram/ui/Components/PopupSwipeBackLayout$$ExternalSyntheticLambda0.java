@@ -10,6 +10,6 @@ public final /* synthetic */ class PopupSwipeBackLayout$$ExternalSyntheticLambda
     }
 
     public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-        this.f$0.m4246xb053141a(valueAnimator);
+        this.f$0.lambda$setNewForegroundHeight$1(valueAnimator);
     }
 }

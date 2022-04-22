@@ -11,6 +11,6 @@ public final /* synthetic */ class FeaturedStickersActivity$ListAdapter$$Externa
     }
 
     public final void onClick(View view) {
-        this.f$0.m2144x669df8c5(view);
+        this.f$0.lambda$onCreateViewHolder$0(view);
     }
 }

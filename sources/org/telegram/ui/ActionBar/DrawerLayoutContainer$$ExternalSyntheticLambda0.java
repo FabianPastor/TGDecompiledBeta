@@ -11,6 +11,6 @@ public final /* synthetic */ class DrawerLayoutContainer$$ExternalSyntheticLambd
     }
 
     public final WindowInsets onApplyWindowInsets(View view, WindowInsets windowInsets) {
-        return this.f$0.m1280lambda$new$0$orgtelegramuiActionBarDrawerLayoutContainer(view, windowInsets);
+        return this.f$0.lambda$new$0(view, windowInsets);
     }
 }

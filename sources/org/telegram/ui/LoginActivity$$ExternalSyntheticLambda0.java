@@ -10,6 +10,6 @@ public final /* synthetic */ class LoginActivity$$ExternalSyntheticLambda0 imple
     }
 
     public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-        this.f$0.m2452lambda$setCustomKeyboardVisible$4$orgtelegramuiLoginActivity(valueAnimator);
+        this.f$0.lambda$showDoneButton$11(valueAnimator);
     }
 }

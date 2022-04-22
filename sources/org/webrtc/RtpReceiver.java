@@ -8,6 +8,7 @@ public class RtpReceiver {
     private long nativeRtpReceiver;
 
     public interface Observer {
+        @CalledByNative("Observer")
         void onFirstPacketReceived(MediaStreamTrack.MediaType mediaType);
     }
 
@@ -23,9 +24,10 @@ public class RtpReceiver {
 
     private static native void nativeUnsetObserver(long j, long j2);
 
-    public RtpReceiver(long nativeRtpReceiver2) {
-        this.nativeRtpReceiver = nativeRtpReceiver2;
-        this.cachedTrack = MediaStreamTrack.createMediaStreamTrack(nativeGetTrack(nativeRtpReceiver2));
+    @CalledByNative
+    public RtpReceiver(long j) {
+        this.nativeRtpReceiver = j;
+        this.cachedTrack = MediaStreamTrack.createMediaStreamTrack(nativeGetTrack(j));
     }
 
     public MediaStreamTrack track() {
@@ -42,6 +44,7 @@ public class RtpReceiver {
         return nativeGetId(this.nativeRtpReceiver);
     }
 
+    @CalledByNative
     public void dispose() {
         checkRtpReceiverExists();
         this.cachedTrack.dispose();

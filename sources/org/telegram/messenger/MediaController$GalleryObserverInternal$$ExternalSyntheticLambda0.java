@@ -10,6 +10,6 @@ public final /* synthetic */ class MediaController$GalleryObserverInternal$$Exte
     }
 
     public final void run() {
-        this.f$0.m685x25ddcvar_();
+        this.f$0.lambda$scheduleReloadRunnable$0();
     }
 }

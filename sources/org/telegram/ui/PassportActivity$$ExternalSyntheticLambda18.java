@@ -10,6 +10,6 @@ public final /* synthetic */ class PassportActivity$$ExternalSyntheticLambda18 i
     }
 
     public final void onClick(View view) {
-        this.f$0.m2740x4cb36144(view);
+        this.f$0.lambda$createManageInterface$21(view);
     }
 }

@@ -19,7 +19,7 @@ public abstract class WrappedNativeVideoEncoder implements VideoEncoder {
         return VideoEncoder.CC.$default$setRates(this, rateControlParameters);
     }
 
-    public final VideoCodecStatus initEncode(VideoEncoder.Settings settings, VideoEncoder.Callback encodeCallback) {
+    public final VideoCodecStatus initEncode(VideoEncoder.Settings settings, VideoEncoder.Callback callback) {
         throw new UnsupportedOperationException("Not implemented.");
     }
 
@@ -27,11 +27,11 @@ public abstract class WrappedNativeVideoEncoder implements VideoEncoder {
         throw new UnsupportedOperationException("Not implemented.");
     }
 
-    public final VideoCodecStatus encode(VideoFrame frame, VideoEncoder.EncodeInfo info) {
+    public final VideoCodecStatus encode(VideoFrame videoFrame, VideoEncoder.EncodeInfo encodeInfo) {
         throw new UnsupportedOperationException("Not implemented.");
     }
 
-    public final VideoCodecStatus setRateAllocation(VideoEncoder.BitrateAllocation allocation, int framerate) {
+    public final VideoCodecStatus setRateAllocation(VideoEncoder.BitrateAllocation bitrateAllocation, int i) {
         throw new UnsupportedOperationException("Not implemented.");
     }
 

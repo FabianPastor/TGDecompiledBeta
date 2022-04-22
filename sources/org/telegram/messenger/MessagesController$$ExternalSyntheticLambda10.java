@@ -1,17 +1,13 @@
 package org.telegram.messenger;
 
-import java.util.ArrayList;
-
 public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda10 implements Runnable {
     public final /* synthetic */ MessagesController f$0;
-    public final /* synthetic */ ArrayList f$1;
 
-    public /* synthetic */ MessagesController$$ExternalSyntheticLambda10(MessagesController messagesController, ArrayList arrayList) {
+    public /* synthetic */ MessagesController$$ExternalSyntheticLambda10(MessagesController messagesController) {
         this.f$0 = messagesController;
-        this.f$1 = arrayList;
     }
 
     public final void run() {
-        this.f$0.m365x1a5fc3d8(this.f$1);
+        this.f$0.lambda$new$9();
     }
 }

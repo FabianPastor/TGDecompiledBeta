@@ -1,20 +1,24 @@
 package org.telegram.ui;
 
-import org.telegram.tgnet.RequestDelegate;
+import android.os.Bundle;
 import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC;
+import org.telegram.tgnet.TLRPC$TL_error;
 import org.telegram.ui.LoginActivity;
 
-public final /* synthetic */ class LoginActivity$LoginActivitySmsView$$ExternalSyntheticLambda26 implements RequestDelegate {
+public final /* synthetic */ class LoginActivity$LoginActivitySmsView$$ExternalSyntheticLambda26 implements Runnable {
     public final /* synthetic */ LoginActivity.LoginActivitySmsView f$0;
-    public final /* synthetic */ TLRPC.TL_auth_signIn f$1;
+    public final /* synthetic */ TLRPC$TL_error f$1;
+    public final /* synthetic */ Bundle f$2;
+    public final /* synthetic */ TLObject f$3;
 
-    public /* synthetic */ LoginActivity$LoginActivitySmsView$$ExternalSyntheticLambda26(LoginActivity.LoginActivitySmsView loginActivitySmsView, TLRPC.TL_auth_signIn tL_auth_signIn) {
+    public /* synthetic */ LoginActivity$LoginActivitySmsView$$ExternalSyntheticLambda26(LoginActivity.LoginActivitySmsView loginActivitySmsView, TLRPC$TL_error tLRPC$TL_error, Bundle bundle, TLObject tLObject) {
         this.f$0 = loginActivitySmsView;
-        this.f$1 = tL_auth_signIn;
+        this.f$1 = tLRPC$TL_error;
+        this.f$2 = bundle;
+        this.f$3 = tLObject;
     }
 
-    public final void run(TLObject tLObject, TLRPC.TL_error tL_error) {
-        this.f$0.m2541xeb54avar_(this.f$1, tLObject, tL_error);
+    public final void run() {
+        this.f$0.lambda$resendCode$7(this.f$1, this.f$2, this.f$3);
     }
 }

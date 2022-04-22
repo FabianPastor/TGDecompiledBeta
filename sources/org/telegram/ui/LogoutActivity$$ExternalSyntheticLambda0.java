@@ -10,6 +10,6 @@ public final /* synthetic */ class LogoutActivity$$ExternalSyntheticLambda0 impl
     }
 
     public final void onClick(DialogInterface dialogInterface, int i) {
-        this.f$0.m2590lambda$createView$0$orgtelegramuiLogoutActivity(dialogInterface, i);
+        this.f$0.lambda$createView$0(dialogInterface, i);
     }
 }

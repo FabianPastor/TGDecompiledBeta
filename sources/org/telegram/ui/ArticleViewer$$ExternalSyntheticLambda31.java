@@ -1,26 +1,25 @@
 package org.telegram.ui;
 
-import org.telegram.tgnet.RequestDelegate;
-import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC;
+import org.telegram.tgnet.TLRPC$TL_channels_joinChannel;
+import org.telegram.tgnet.TLRPC$TL_error;
 import org.telegram.ui.ArticleViewer;
 
-public final /* synthetic */ class ArticleViewer$$ExternalSyntheticLambda31 implements RequestDelegate {
+public final /* synthetic */ class ArticleViewer$$ExternalSyntheticLambda31 implements Runnable {
     public final /* synthetic */ ArticleViewer f$0;
     public final /* synthetic */ ArticleViewer.BlockChannelCell f$1;
     public final /* synthetic */ int f$2;
-    public final /* synthetic */ TLRPC.TL_channels_joinChannel f$3;
-    public final /* synthetic */ TLRPC.Chat f$4;
+    public final /* synthetic */ TLRPC$TL_error f$3;
+    public final /* synthetic */ TLRPC$TL_channels_joinChannel f$4;
 
-    public /* synthetic */ ArticleViewer$$ExternalSyntheticLambda31(ArticleViewer articleViewer, ArticleViewer.BlockChannelCell blockChannelCell, int i, TLRPC.TL_channels_joinChannel tL_channels_joinChannel, TLRPC.Chat chat) {
+    public /* synthetic */ ArticleViewer$$ExternalSyntheticLambda31(ArticleViewer articleViewer, ArticleViewer.BlockChannelCell blockChannelCell, int i, TLRPC$TL_error tLRPC$TL_error, TLRPC$TL_channels_joinChannel tLRPC$TL_channels_joinChannel) {
         this.f$0 = articleViewer;
         this.f$1 = blockChannelCell;
         this.f$2 = i;
-        this.f$3 = tL_channels_joinChannel;
-        this.f$4 = chat;
+        this.f$3 = tLRPC$TL_error;
+        this.f$4 = tLRPC$TL_channels_joinChannel;
     }
 
-    public final void run(TLObject tLObject, TLRPC.TL_error tL_error) {
-        this.f$0.m1375lambda$joinChannel$43$orgtelegramuiArticleViewer(this.f$1, this.f$2, this.f$3, this.f$4, tLObject, tL_error);
+    public final void run() {
+        this.f$0.lambda$joinChannel$40(this.f$1, this.f$2, this.f$3, this.f$4);
     }
 }

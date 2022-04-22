@@ -10,6 +10,6 @@ public final /* synthetic */ class SizeNotifierFrameLayout$$ExternalSyntheticLam
     }
 
     public final void run() {
-        this.f$0.m4392xe23b7f7f(this.f$1);
+        this.f$0.lambda$notifyHeightChanged$1(this.f$1);
     }
 }

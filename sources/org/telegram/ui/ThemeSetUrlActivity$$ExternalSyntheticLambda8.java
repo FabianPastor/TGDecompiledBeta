@@ -1,15 +1,15 @@
 package org.telegram.ui;
 
-import android.view.MotionEvent;
-import android.view.View;
+public final /* synthetic */ class ThemeSetUrlActivity$$ExternalSyntheticLambda8 implements Runnable {
+    public final /* synthetic */ ThemeSetUrlActivity f$0;
+    public final /* synthetic */ String f$1;
 
-public final /* synthetic */ class ThemeSetUrlActivity$$ExternalSyntheticLambda8 implements View.OnTouchListener {
-    public static final /* synthetic */ ThemeSetUrlActivity$$ExternalSyntheticLambda8 INSTANCE = new ThemeSetUrlActivity$$ExternalSyntheticLambda8();
-
-    private /* synthetic */ ThemeSetUrlActivity$$ExternalSyntheticLambda8() {
+    public /* synthetic */ ThemeSetUrlActivity$$ExternalSyntheticLambda8(ThemeSetUrlActivity themeSetUrlActivity, String str) {
+        this.f$0 = themeSetUrlActivity;
+        this.f$1 = str;
     }
 
-    public final boolean onTouch(View view, MotionEvent motionEvent) {
-        return ThemeSetUrlActivity.lambda$createView$0(view, motionEvent);
+    public final void run() {
+        this.f$0.lambda$checkUrl$8(this.f$1);
     }
 }

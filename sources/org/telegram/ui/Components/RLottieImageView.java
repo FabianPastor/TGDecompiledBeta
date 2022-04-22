@@ -13,7 +13,6 @@ public class RLottieImageView extends ImageView {
     private RLottieDrawable drawable;
     private HashMap<String, Integer> layerColors;
     private boolean playing;
-    private boolean startOnAttach;
 
     public RLottieImageView(Context context) {
         super(context);
@@ -23,49 +22,49 @@ public class RLottieImageView extends ImageView {
         this.layerColors.clear();
     }
 
-    public void setLayerColor(String layer, int color) {
+    public void setLayerColor(String str, int i) {
         if (this.layerColors == null) {
             this.layerColors = new HashMap<>();
         }
-        this.layerColors.put(layer, Integer.valueOf(color));
+        this.layerColors.put(str, Integer.valueOf(i));
         RLottieDrawable rLottieDrawable = this.drawable;
         if (rLottieDrawable != null) {
-            rLottieDrawable.setLayerColor(layer, color);
+            rLottieDrawable.setLayerColor(str, i);
         }
     }
 
-    public void replaceColors(int[] colors) {
+    public void replaceColors(int[] iArr) {
         RLottieDrawable rLottieDrawable = this.drawable;
         if (rLottieDrawable != null) {
-            rLottieDrawable.replaceColors(colors);
+            rLottieDrawable.replaceColors(iArr);
         }
     }
 
-    public void setAnimation(int resId, int w, int h) {
-        setAnimation(resId, w, h, (int[]) null);
+    public void setAnimation(int i, int i2, int i3) {
+        setAnimation(i, i2, i3, (int[]) null);
     }
 
-    public void setAnimation(int resId, int w, int h, int[] colorReplacement) {
-        setAnimation(new RLottieDrawable(resId, "" + resId, AndroidUtilities.dp((float) w), AndroidUtilities.dp((float) h), false, colorReplacement));
+    public void setAnimation(int i, int i2, int i3, int[] iArr) {
+        setAnimation(new RLottieDrawable(i, "" + i, AndroidUtilities.dp((float) i2), AndroidUtilities.dp((float) i3), false, iArr));
     }
 
-    public void setOnAnimationEndListener(Runnable r) {
+    public void setOnAnimationEndListener(Runnable runnable) {
         RLottieDrawable rLottieDrawable = this.drawable;
         if (rLottieDrawable != null) {
-            rLottieDrawable.setOnAnimationEndListener(r);
+            rLottieDrawable.setOnAnimationEndListener(runnable);
         }
     }
 
-    public void setAnimation(RLottieDrawable lottieDrawable) {
-        if (this.drawable != lottieDrawable) {
-            this.drawable = lottieDrawable;
+    public void setAnimation(RLottieDrawable rLottieDrawable) {
+        if (this.drawable != rLottieDrawable) {
+            this.drawable = rLottieDrawable;
             if (this.autoRepeat) {
-                lottieDrawable.setAutoRepeat(1);
+                rLottieDrawable.setAutoRepeat(1);
             }
             if (this.layerColors != null) {
                 this.drawable.beginApplyLayerColors();
-                for (Map.Entry<String, Integer> entry : this.layerColors.entrySet()) {
-                    this.drawable.setLayerColor(entry.getKey(), entry.getValue().intValue());
+                for (Map.Entry next : this.layerColors.entrySet()) {
+                    this.drawable.setLayerColor((String) next.getKey(), ((Integer) next.getValue()).intValue());
                 }
                 this.drawable.commitApplyLayerColors();
             }
@@ -111,19 +110,19 @@ public class RLottieImageView extends ImageView {
         return rLottieDrawable != null && rLottieDrawable.isRunning();
     }
 
-    public void setAutoRepeat(boolean repeat) {
-        this.autoRepeat = repeat;
+    public void setAutoRepeat(boolean z) {
+        this.autoRepeat = z;
     }
 
-    public void setProgress(float progress) {
+    public void setProgress(float f) {
         RLottieDrawable rLottieDrawable = this.drawable;
         if (rLottieDrawable != null) {
-            rLottieDrawable.setProgress(progress);
+            rLottieDrawable.setProgress(f);
         }
     }
 
-    public void setImageResource(int resId) {
-        super.setImageResource(resId);
+    public void setImageResource(int i) {
+        super.setImageResource(i);
         this.drawable = null;
     }
 
@@ -133,8 +132,6 @@ public class RLottieImageView extends ImageView {
             this.playing = true;
             if (this.attachedToWindow) {
                 rLottieDrawable.start();
-            } else {
-                this.startOnAttach = true;
             }
         }
     }
@@ -145,8 +142,6 @@ public class RLottieImageView extends ImageView {
             this.playing = false;
             if (this.attachedToWindow) {
                 rLottieDrawable.stop();
-            } else {
-                this.startOnAttach = false;
             }
         }
     }

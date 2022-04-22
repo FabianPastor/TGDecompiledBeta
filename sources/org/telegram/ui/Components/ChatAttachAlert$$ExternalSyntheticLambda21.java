@@ -1,15 +1,15 @@
 package org.telegram.ui.Components;
 
-import android.content.DialogInterface;
+import org.telegram.messenger.AndroidUtilities;
 
-public final /* synthetic */ class ChatAttachAlert$$ExternalSyntheticLambda21 implements DialogInterface.OnClickListener {
-    public final /* synthetic */ ChatAttachAlert f$0;
+public final /* synthetic */ class ChatAttachAlert$$ExternalSyntheticLambda21 implements Runnable {
+    public final /* synthetic */ EditTextBoldCursor f$0;
 
-    public /* synthetic */ ChatAttachAlert$$ExternalSyntheticLambda21(ChatAttachAlert chatAttachAlert) {
-        this.f$0 = chatAttachAlert;
+    public /* synthetic */ ChatAttachAlert$$ExternalSyntheticLambda21(EditTextBoldCursor editTextBoldCursor) {
+        this.f$0 = editTextBoldCursor;
     }
 
-    public final void onClick(DialogInterface dialogInterface, int i) {
-        this.f$0.m3757lambda$dismiss$30$orgtelegramuiComponentsChatAttachAlert(dialogInterface, i);
+    public final void run() {
+        AndroidUtilities.showKeyboard(this.f$0);
     }
 }

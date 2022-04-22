@@ -11,6 +11,6 @@ public final /* synthetic */ class LanguageSelectActivity$TranslateSettings$$Ext
     }
 
     public final void onClick(View view) {
-        this.f$0.m2311x1fd7317a(view);
+        this.f$0.lambda$new$1(view);
     }
 }

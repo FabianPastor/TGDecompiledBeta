@@ -10,6 +10,6 @@ public final /* synthetic */ class ImageLoader$6$$ExternalSyntheticLambda0 imple
     }
 
     public final void run() {
-        this.f$0.m624lambda$onReceive$0$orgtelegrammessengerImageLoader$6();
+        this.f$0.lambda$onReceive$0();
     }
 }

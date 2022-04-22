@@ -1,17 +1,15 @@
 package org.telegram.ui.Components;
 
-import org.telegram.tgnet.RequestDelegate;
-import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC;
+import android.view.View;
 
-public final /* synthetic */ class BotWebViewSheet$$ExternalSyntheticLambda2 implements RequestDelegate {
+public final /* synthetic */ class BotWebViewSheet$$ExternalSyntheticLambda2 implements View.OnClickListener {
     public final /* synthetic */ BotWebViewSheet f$0;
 
     public /* synthetic */ BotWebViewSheet$$ExternalSyntheticLambda2(BotWebViewSheet botWebViewSheet) {
         this.f$0 = botWebViewSheet;
     }
 
-    public final void run(TLObject tLObject, TLRPC.TL_error tL_error) {
-        this.f$0.m3670lambda$new$3$orgtelegramuiComponentsBotWebViewSheet(tLObject, tL_error);
+    public final void onClick(View view) {
+        this.f$0.lambda$new$6(view);
     }
 }

@@ -5,18 +5,16 @@ import java.util.ArrayList;
 
 public final /* synthetic */ class NotificationsController$$ExternalSyntheticLambda25 implements Runnable {
     public final /* synthetic */ NotificationsController f$0;
-    public final /* synthetic */ ArrayList f$1;
-    public final /* synthetic */ LongSparseArray f$2;
-    public final /* synthetic */ ArrayList f$3;
+    public final /* synthetic */ LongSparseArray f$1;
+    public final /* synthetic */ ArrayList f$2;
 
-    public /* synthetic */ NotificationsController$$ExternalSyntheticLambda25(NotificationsController notificationsController, ArrayList arrayList, LongSparseArray longSparseArray, ArrayList arrayList2) {
+    public /* synthetic */ NotificationsController$$ExternalSyntheticLambda25(NotificationsController notificationsController, LongSparseArray longSparseArray, ArrayList arrayList) {
         this.f$0 = notificationsController;
-        this.f$1 = arrayList;
-        this.f$2 = longSparseArray;
-        this.f$3 = arrayList2;
+        this.f$1 = longSparseArray;
+        this.f$2 = arrayList;
     }
 
     public final void run() {
-        this.f$0.m1052xf8b52a58(this.f$1, this.f$2, this.f$3);
+        this.f$0.lambda$removeDeletedMessagesFromNotifications$9(this.f$1, this.f$2);
     }
 }

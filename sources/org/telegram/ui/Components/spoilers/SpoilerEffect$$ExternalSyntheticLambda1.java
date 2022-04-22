@@ -12,6 +12,6 @@ public final /* synthetic */ class SpoilerEffect$$ExternalSyntheticLambda1 imple
     }
 
     public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-        this.f$0.m4538x4218b496(this.f$1, valueAnimator);
+        this.f$0.lambda$startRipple$1(this.f$1, valueAnimator);
     }
 }

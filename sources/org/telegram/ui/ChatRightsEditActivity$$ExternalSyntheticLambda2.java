@@ -1,16 +1,16 @@
 package org.telegram.ui;
 
-import android.content.DialogInterface;
+import android.app.DatePickerDialog;
 import android.widget.DatePicker;
 
-public final /* synthetic */ class ChatRightsEditActivity$$ExternalSyntheticLambda2 implements DialogInterface.OnShowListener {
-    public final /* synthetic */ DatePicker f$0;
+public final /* synthetic */ class ChatRightsEditActivity$$ExternalSyntheticLambda2 implements DatePickerDialog.OnDateSetListener {
+    public final /* synthetic */ ChatRightsEditActivity f$0;
 
-    public /* synthetic */ ChatRightsEditActivity$$ExternalSyntheticLambda2(DatePicker datePicker) {
-        this.f$0 = datePicker;
+    public /* synthetic */ ChatRightsEditActivity$$ExternalSyntheticLambda2(ChatRightsEditActivity chatRightsEditActivity) {
+        this.f$0 = chatRightsEditActivity;
     }
 
-    public final void onShow(DialogInterface dialogInterface) {
-        ChatRightsEditActivity.lambda$createView$4(this.f$0, dialogInterface);
+    public final void onDateSet(DatePicker datePicker, int i, int i2, int i3) {
+        this.f$0.lambda$createView$2(datePicker, i, i2, i3);
     }
 }

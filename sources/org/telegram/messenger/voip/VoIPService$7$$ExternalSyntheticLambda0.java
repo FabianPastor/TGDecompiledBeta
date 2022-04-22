@@ -10,6 +10,6 @@ public final /* synthetic */ class VoIPService$7$$ExternalSyntheticLambda0 imple
     }
 
     public final void run() {
-        this.f$0.m1232lambda$run$0$orgtelegrammessengervoipVoIPService$7();
+        this.f$0.lambda$run$0();
     }
 }

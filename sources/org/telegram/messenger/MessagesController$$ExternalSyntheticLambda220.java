@@ -1,21 +1,15 @@
 package org.telegram.messenger;
 
-import org.telegram.tgnet.RequestDelegate;
-import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC;
+import java.util.Comparator;
+import org.telegram.tgnet.TLRPC$Updates;
 
-public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda220 implements RequestDelegate {
-    public final /* synthetic */ MessagesController f$0;
-    public final /* synthetic */ long f$1;
-    public final /* synthetic */ TLRPC.TL_messages_getMessagesViews f$2;
+public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda220 implements Comparator {
+    public static final /* synthetic */ MessagesController$$ExternalSyntheticLambda220 INSTANCE = new MessagesController$$ExternalSyntheticLambda220();
 
-    public /* synthetic */ MessagesController$$ExternalSyntheticLambda220(MessagesController messagesController, long j, TLRPC.TL_messages_getMessagesViews tL_messages_getMessagesViews) {
-        this.f$0 = messagesController;
-        this.f$1 = j;
-        this.f$2 = tL_messages_getMessagesViews;
+    private /* synthetic */ MessagesController$$ExternalSyntheticLambda220() {
     }
 
-    public final void run(TLObject tLObject, TLRPC.TL_error tL_error) {
-        this.f$0.m424x821321c3(this.f$1, this.f$2, tLObject, tL_error);
+    public final int compare(Object obj, Object obj2) {
+        return AndroidUtilities.compare(((TLRPC$Updates) obj).pts, ((TLRPC$Updates) obj2).pts);
     }
 }

@@ -10,6 +10,6 @@ public final /* synthetic */ class ProfileActivity$10$$ExternalSyntheticLambda1 
     }
 
     public final void run() {
-        this.f$0.m3072lambda$onAllAnimationsDone$0$orgtelegramuiProfileActivity$10();
+        this.f$0.lambda$onAllAnimationsDone$0();
     }
 }

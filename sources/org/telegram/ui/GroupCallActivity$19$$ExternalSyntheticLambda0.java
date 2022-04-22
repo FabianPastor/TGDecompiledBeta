@@ -10,6 +10,6 @@ public final /* synthetic */ class GroupCallActivity$19$$ExternalSyntheticLambda
     }
 
     public final void run() {
-        this.f$0.m2237lambda$onClick$0$orgtelegramuiGroupCallActivity$19();
+        this.f$0.lambda$onClick$0();
     }
 }

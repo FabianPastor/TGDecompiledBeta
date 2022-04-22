@@ -7,16 +7,16 @@ import android.util.Log;
 
 public class Utils {
     public static void HasGLError() {
-        int error = GLES20.glGetError();
-        if (error != 0) {
-            Log.d("Paint", GLUtils.getEGLErrorString(error));
+        int glGetError = GLES20.glGetError();
+        if (glGetError != 0) {
+            Log.d("Paint", GLUtils.getEGLErrorString(glGetError));
         }
     }
 
-    public static void RectFIntegral(RectF rect) {
-        rect.left = (float) ((int) Math.floor((double) rect.left));
-        rect.top = (float) ((int) Math.floor((double) rect.top));
-        rect.right = (float) ((int) Math.ceil((double) rect.right));
-        rect.bottom = (float) ((int) Math.ceil((double) rect.bottom));
+    public static void RectFIntegral(RectF rectF) {
+        rectF.left = (float) ((int) Math.floor((double) rectF.left));
+        rectF.top = (float) ((int) Math.floor((double) rectF.top));
+        rectF.right = (float) ((int) Math.ceil((double) rectF.right));
+        rectF.bottom = (float) ((int) Math.ceil((double) rectF.bottom));
     }
 }

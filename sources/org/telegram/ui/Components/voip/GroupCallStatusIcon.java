@@ -6,32 +6,31 @@ import android.os.SystemClock;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.Utilities;
 import org.telegram.messenger.voip.VoIPService;
-import org.telegram.tgnet.TLRPC;
+import org.telegram.tgnet.TLRPC$TL_groupCallParticipant;
 import org.telegram.ui.Components.RLottieDrawable;
 import org.telegram.ui.Components.RLottieImageView;
 
 public class GroupCallStatusIcon {
     Callback callback;
-    private Runnable checkRaiseRunnable = new GroupCallStatusIcon$$ExternalSyntheticLambda3(this);
+    private Runnable checkRaiseRunnable = new GroupCallStatusIcon$$ExternalSyntheticLambda2(this);
     RLottieImageView iconView;
     boolean isSpeaking;
-    boolean lastMuted;
     boolean lastRaisedHand;
     RLottieDrawable micDrawable = new RLottieDrawable(NUM, "NUM", AndroidUtilities.dp(24.0f), AndroidUtilities.dp(24.0f), true, (int[]) null);
     private boolean mutedByMe;
-    TLRPC.TL_groupCallParticipant participant;
-    private Runnable raiseHandCallback = new GroupCallStatusIcon$$ExternalSyntheticLambda1(this);
-    private Runnable shakeHandCallback = new GroupCallStatusIcon$$ExternalSyntheticLambda0(this);
+    TLRPC$TL_groupCallParticipant participant;
+    private Runnable raiseHandCallback = new GroupCallStatusIcon$$ExternalSyntheticLambda0(this);
+    private Runnable shakeHandCallback = new GroupCallStatusIcon$$ExternalSyntheticLambda3(this);
     RLottieDrawable shakeHandDrawable = new RLottieDrawable(NUM, "NUM", AndroidUtilities.dp(15.0f), AndroidUtilities.dp(15.0f), true, (int[]) null);
-    private Runnable updateRunnable = new GroupCallStatusIcon$$ExternalSyntheticLambda2(this);
+    private Runnable updateRunnable = new GroupCallStatusIcon$$ExternalSyntheticLambda1(this);
     boolean updateRunnableScheduled;
 
     public interface Callback {
         void onStatusChanged();
     }
 
-    /* renamed from: lambda$new$0$org-telegram-ui-Components-voip-GroupCallStatusIcon  reason: not valid java name */
-    public /* synthetic */ void m4564lambda$new$0$orgtelegramuiComponentsvoipGroupCallStatusIcon() {
+    /* access modifiers changed from: private */
+    public /* synthetic */ void lambda$new$0() {
         this.shakeHandDrawable.setOnFinishCallback((Runnable) null, 0);
         this.micDrawable.setOnFinishCallback((Runnable) null, 0);
         RLottieImageView rLottieImageView = this.iconView;
@@ -40,30 +39,27 @@ public class GroupCallStatusIcon {
         }
     }
 
-    /* renamed from: lambda$new$1$org-telegram-ui-Components-voip-GroupCallStatusIcon  reason: not valid java name */
-    public /* synthetic */ void m4565lambda$new$1$orgtelegramuiComponentsvoipGroupCallStatusIcon() {
-        int endFrame;
-        int startFrame;
-        int num = Utilities.random.nextInt(100);
-        if (num < 32) {
-            startFrame = 0;
-            endFrame = 120;
-        } else if (num < 64) {
-            startFrame = 120;
-            endFrame = 240;
-        } else if (num < 97) {
-            startFrame = 240;
-            endFrame = 420;
-        } else if (num == 98) {
-            startFrame = 420;
-            endFrame = 540;
-        } else {
-            startFrame = 540;
-            endFrame = 720;
+    /* access modifiers changed from: private */
+    public /* synthetic */ void lambda$new$1() {
+        int nextInt = Utilities.random.nextInt(100);
+        int i = 540;
+        int i2 = 420;
+        if (nextInt < 32) {
+            i = 120;
+            i2 = 0;
+        } else if (nextInt < 64) {
+            i = 240;
+            i2 = 120;
+        } else if (nextInt < 97) {
+            i = 420;
+            i2 = 240;
+        } else if (nextInt != 98) {
+            i = 720;
+            i2 = 540;
         }
-        this.shakeHandDrawable.setCustomEndFrame(endFrame);
-        this.shakeHandDrawable.setOnFinishCallback(this.shakeHandCallback, endFrame - 1);
-        this.shakeHandDrawable.setCurrentFrame(startFrame);
+        this.shakeHandDrawable.setCustomEndFrame(i);
+        this.shakeHandDrawable.setOnFinishCallback(this.shakeHandCallback, i - 1);
+        this.shakeHandDrawable.setCurrentFrame(i2);
         RLottieImageView rLottieImageView = this.iconView;
         if (rLottieImageView != null) {
             rLottieImageView.setAnimation(this.shakeHandDrawable);
@@ -71,8 +67,8 @@ public class GroupCallStatusIcon {
         }
     }
 
-    /* renamed from: lambda$new$2$org-telegram-ui-Components-voip-GroupCallStatusIcon  reason: not valid java name */
-    public /* synthetic */ void m4566lambda$new$2$orgtelegramuiComponentsvoipGroupCallStatusIcon() {
+    /* access modifiers changed from: private */
+    public /* synthetic */ void lambda$new$2() {
         this.isSpeaking = false;
         Callback callback2 = this.callback;
         if (callback2 != null) {
@@ -81,8 +77,8 @@ public class GroupCallStatusIcon {
         this.updateRunnableScheduled = false;
     }
 
-    public void setAmplitude(double value) {
-        if (value > 1.5d) {
+    public void setAmplitude(double d) {
+        if (d > 1.5d) {
             if (this.updateRunnableScheduled) {
                 AndroidUtilities.cancelRunOnUIThread(this.updateRunnable);
             }
@@ -98,68 +94,67 @@ public class GroupCallStatusIcon {
         }
     }
 
-    /* renamed from: lambda$new$3$org-telegram-ui-Components-voip-GroupCallStatusIcon  reason: not valid java name */
-    public /* synthetic */ void m4567lambda$new$3$orgtelegramuiComponentsvoipGroupCallStatusIcon() {
+    /* access modifiers changed from: private */
+    public /* synthetic */ void lambda$new$3() {
         updateIcon(true);
     }
 
-    public void setImageView(RLottieImageView iconView2) {
-        this.iconView = iconView2;
+    public void setImageView(RLottieImageView rLottieImageView) {
+        this.iconView = rLottieImageView;
         updateIcon(false);
     }
 
-    public void setParticipant(TLRPC.TL_groupCallParticipant participant2, boolean animated) {
-        this.participant = participant2;
-        updateIcon(animated);
+    public void setParticipant(TLRPC$TL_groupCallParticipant tLRPC$TL_groupCallParticipant, boolean z) {
+        this.participant = tLRPC$TL_groupCallParticipant;
+        updateIcon(z);
     }
 
-    public void updateIcon(boolean animated) {
-        TLRPC.TL_groupCallParticipant tL_groupCallParticipant;
-        boolean hasVoice;
-        boolean newMuted;
-        boolean changed;
-        if (this.iconView != null && (tL_groupCallParticipant = this.participant) != null && this.micDrawable != null) {
-            boolean newMutedByMe = tL_groupCallParticipant.muted_by_you && !this.participant.self;
-            if (SystemClock.elapsedRealtime() - this.participant.lastVoiceUpdateTime < 500) {
-                hasVoice = this.participant.hasVoiceDelayed;
+    public void updateIcon(boolean z) {
+        TLRPC$TL_groupCallParticipant tLRPC$TL_groupCallParticipant;
+        boolean z2;
+        boolean z3;
+        boolean z4;
+        if (this.iconView != null && (tLRPC$TL_groupCallParticipant = this.participant) != null && this.micDrawable != null) {
+            boolean z5 = tLRPC$TL_groupCallParticipant.muted_by_you && !tLRPC$TL_groupCallParticipant.self;
+            long elapsedRealtime = SystemClock.elapsedRealtime();
+            TLRPC$TL_groupCallParticipant tLRPC$TL_groupCallParticipant2 = this.participant;
+            if (elapsedRealtime - tLRPC$TL_groupCallParticipant2.lastVoiceUpdateTime < 500) {
+                z2 = tLRPC$TL_groupCallParticipant2.hasVoiceDelayed;
             } else {
-                hasVoice = this.participant.hasVoice;
+                z2 = tLRPC$TL_groupCallParticipant2.hasVoice;
             }
-            if (this.participant.self) {
-                newMuted = VoIPService.getSharedInstance() != null && VoIPService.getSharedInstance().isMicMute() && (!this.isSpeaking || !hasVoice);
-            } else {
-                newMuted = (this.participant.muted && (!this.isSpeaking || !hasVoice)) || newMutedByMe;
-            }
-            boolean newRaisedHand = ((this.participant.muted && !this.isSpeaking) || newMutedByMe) && (!this.participant.can_self_unmute || newMutedByMe) && !this.participant.can_self_unmute && this.participant.raise_hand_rating != 0;
-            if (newRaisedHand) {
-                long time = SystemClock.elapsedRealtime() - this.participant.lastRaiseHandDate;
-                if (this.participant.lastRaiseHandDate == 0 || time > 5000) {
-                    int newStatus = newMutedByMe ? (char) 2 : 0;
-                } else {
-                    AndroidUtilities.runOnUIThread(this.checkRaiseRunnable, 5000 - time);
+            boolean z6 = !tLRPC$TL_groupCallParticipant2.self ? !((!tLRPC$TL_groupCallParticipant2.muted || (this.isSpeaking && z2)) && !z5) : !(VoIPService.getSharedInstance() == null || !VoIPService.getSharedInstance().isMicMute() || (this.isSpeaking && z2));
+            TLRPC$TL_groupCallParticipant tLRPC$TL_groupCallParticipant3 = this.participant;
+            boolean z7 = ((tLRPC$TL_groupCallParticipant3.muted && !this.isSpeaking) || z5) && (!(z4 = tLRPC$TL_groupCallParticipant3.can_self_unmute) || z5) && !z4 && tLRPC$TL_groupCallParticipant3.raise_hand_rating != 0;
+            if (z7) {
+                long elapsedRealtime2 = SystemClock.elapsedRealtime();
+                long j = this.participant.lastRaiseHandDate;
+                long j2 = elapsedRealtime2 - j;
+                if (j != 0 && j2 <= 5000) {
+                    AndroidUtilities.runOnUIThread(this.checkRaiseRunnable, 5000 - j2);
                 }
-                changed = this.micDrawable.setCustomEndFrame(136);
+                z3 = this.micDrawable.setCustomEndFrame(136);
             } else {
                 this.iconView.setAnimation(this.micDrawable);
                 this.micDrawable.setOnFinishCallback((Runnable) null, 0);
-                if (!newMuted || !this.lastRaisedHand) {
-                    changed = this.micDrawable.setCustomEndFrame(newMuted ? 99 : 69);
+                if (!z6 || !this.lastRaisedHand) {
+                    z3 = this.micDrawable.setCustomEndFrame(z6 ? 99 : 69);
                 } else {
-                    changed = this.micDrawable.setCustomEndFrame(36);
+                    z3 = this.micDrawable.setCustomEndFrame(36);
                 }
             }
-            if (!animated) {
+            if (!z) {
                 RLottieDrawable rLottieDrawable = this.micDrawable;
                 rLottieDrawable.setCurrentFrame(rLottieDrawable.getCustomEndFrame() - 1, false, true);
                 this.iconView.invalidate();
-            } else if (changed) {
-                if (newRaisedHand) {
+            } else if (z3) {
+                if (z7) {
                     this.micDrawable.setCurrentFrame(99);
                     this.micDrawable.setCustomEndFrame(136);
-                } else if (newMuted && this.lastRaisedHand && !newRaisedHand) {
+                } else if (z6 && this.lastRaisedHand && !z7) {
                     this.micDrawable.setCurrentFrame(0);
                     this.micDrawable.setCustomEndFrame(36);
-                } else if (newMuted) {
+                } else if (z6) {
                     this.micDrawable.setCurrentFrame(69);
                     this.micDrawable.setCustomEndFrame(99);
                 } else {
@@ -170,10 +165,9 @@ public class GroupCallStatusIcon {
                 this.iconView.invalidate();
             }
             this.iconView.setAnimation(this.micDrawable);
-            this.lastMuted = newMuted;
-            this.lastRaisedHand = newRaisedHand;
-            if (this.mutedByMe != newMutedByMe) {
-                this.mutedByMe = newMutedByMe;
+            this.lastRaisedHand = z7;
+            if (this.mutedByMe != z5) {
+                this.mutedByMe = z5;
                 Callback callback2 = this.callback;
                 if (callback2 != null) {
                     callback2.onStatusChanged();
@@ -191,8 +185,8 @@ public class GroupCallStatusIcon {
     }
 
     public boolean isMutedByAdmin() {
-        TLRPC.TL_groupCallParticipant tL_groupCallParticipant = this.participant;
-        return tL_groupCallParticipant != null && tL_groupCallParticipant.muted && !this.participant.can_self_unmute;
+        TLRPC$TL_groupCallParticipant tLRPC$TL_groupCallParticipant = this.participant;
+        return tLRPC$TL_groupCallParticipant != null && tLRPC$TL_groupCallParticipant.muted && !tLRPC$TL_groupCallParticipant.can_self_unmute;
     }
 
     public void setCallback(Callback callback2) {

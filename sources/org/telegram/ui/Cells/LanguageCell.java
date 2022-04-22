@@ -34,8 +34,10 @@ public class LanguageCell extends FrameLayout {
         this.radioButton = radioButton2;
         radioButton2.setSize(AndroidUtilities.dp(20.0f));
         this.radioButton.setColor(Theme.getColor("dialogRadioBackground"), Theme.getColor("dialogRadioBackgroundChecked"));
+        RadioButton radioButton3 = this.radioButton;
+        boolean z = LocaleController.isRTL;
         int i2 = 5;
-        addView(this.radioButton, LayoutHelper.createFrame(22, 22.0f, (LocaleController.isRTL ? 5 : 3) | 16, (float) (LocaleController.isRTL ? 0 : 20), 0.0f, (float) (LocaleController.isRTL ? 20 : i), 0.0f));
+        addView(radioButton3, LayoutHelper.createFrame(22, 22.0f, (z ? 5 : 3) | 16, (float) (z ? 0 : 20), 0.0f, (float) (z ? 20 : i), 0.0f));
         TextView textView3 = new TextView(context2);
         this.textView = textView3;
         textView3.setTextColor(Theme.getColor("dialogTextBlack"));
@@ -43,32 +45,40 @@ public class LanguageCell extends FrameLayout {
         this.textView.setSingleLine(true);
         this.textView.setEllipsize(TextUtils.TruncateAt.END);
         this.textView.setGravity((LocaleController.isRTL ? 5 : 3) | 16);
-        addView(this.textView, LayoutHelper.createFrame(-1, -1.0f, (LocaleController.isRTL ? 5 : 3) | 48, (float) (LocaleController.isRTL ? this.marginEndDp : this.marginStartDp), 0.0f, (float) (LocaleController.isRTL ? this.marginStartDp : this.marginEndDp), 17.0f));
-        TextView textView4 = new TextView(context2);
-        this.textView2 = textView4;
-        textView4.setTextColor(Theme.getColor("dialogTextGray3"));
+        TextView textView4 = this.textView;
+        boolean z2 = LocaleController.isRTL;
+        addView(textView4, LayoutHelper.createFrame(-1, -1.0f, (z2 ? 5 : 3) | 48, (float) (z2 ? this.marginEndDp : this.marginStartDp), 0.0f, (float) (z2 ? this.marginStartDp : this.marginEndDp), 17.0f));
+        TextView textView5 = new TextView(context2);
+        this.textView2 = textView5;
+        textView5.setTextColor(Theme.getColor("dialogTextGray3"));
         this.textView2.setTextSize(1, 13.0f);
         this.textView2.setSingleLine(true);
         this.textView2.setEllipsize(TextUtils.TruncateAt.END);
         this.textView2.setGravity((LocaleController.isRTL ? 5 : 3) | 16);
-        addView(this.textView2, LayoutHelper.createFrame(-1, -1.0f, (!LocaleController.isRTL ? 3 : i2) | 48, (float) (LocaleController.isRTL ? this.marginEndDp : this.marginStartDp), 20.0f, (float) (LocaleController.isRTL ? this.marginStartDp : this.marginEndDp), 0.0f));
+        TextView textView6 = this.textView2;
+        boolean z3 = LocaleController.isRTL;
+        addView(textView6, LayoutHelper.createFrame(-1, -1.0f, (!z3 ? 3 : i2) | 48, (float) (z3 ? this.marginEndDp : this.marginStartDp), 20.0f, (float) (z3 ? this.marginStartDp : this.marginEndDp), 0.0f));
     }
 
     /* access modifiers changed from: protected */
-    public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        super.onMeasure(View.MeasureSpec.makeMeasureSpec(View.MeasureSpec.getSize(widthMeasureSpec), NUM), View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(60.0f) + (this.needDivider ? 1 : 0), NUM));
+    public void onMeasure(int i, int i2) {
+        super.onMeasure(View.MeasureSpec.makeMeasureSpec(View.MeasureSpec.getSize(i), NUM), View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(60.0f) + (this.needDivider ? 1 : 0), NUM));
     }
 
-    public void setLanguage(LocaleController.LocaleInfo language, String desc, boolean divider) {
-        this.textView.setText(desc != null ? desc : language.name);
-        this.textView2.setText(language.nameEnglish);
-        this.currentLocale = language;
-        this.needDivider = divider;
+    public void setLanguage(LocaleController.LocaleInfo localeInfo, String str, boolean z) {
+        TextView textView3 = this.textView;
+        if (str == null) {
+            str = localeInfo.name;
+        }
+        textView3.setText(str);
+        this.textView2.setText(localeInfo.nameEnglish);
+        this.currentLocale = localeInfo;
+        this.needDivider = z;
     }
 
-    public void setValue(String name, String nameEnglish) {
-        this.textView.setText(name);
-        this.textView2.setText(nameEnglish);
+    public void setValue(String str, String str2) {
+        this.textView.setText(str);
+        this.textView2.setText(str2);
         this.radioButton.setChecked(false, false);
         this.currentLocale = null;
         this.needDivider = false;
@@ -78,8 +88,8 @@ public class LanguageCell extends FrameLayout {
         return this.currentLocale;
     }
 
-    public void setLanguageSelected(boolean value, boolean animated) {
-        this.radioButton.setChecked(value, animated);
+    public void setLanguageSelected(boolean z, boolean z2) {
+        this.radioButton.setChecked(z, z2);
     }
 
     /* access modifiers changed from: protected */

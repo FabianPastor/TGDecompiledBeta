@@ -1,18 +1,16 @@
 package org.telegram.ui;
 
-import android.animation.ValueAnimator;
-import android.view.View;
+import android.content.DialogInterface;
+import org.telegram.ui.Cells.ChatMessageCell;
 
-public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda44 implements ValueAnimator.AnimatorUpdateListener {
-    public final /* synthetic */ ChatActivity f$0;
-    public final /* synthetic */ View f$1;
+public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda44 implements DialogInterface.OnDismissListener {
+    public final /* synthetic */ ChatMessageCell f$0;
 
-    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda44(ChatActivity chatActivity, View view) {
-        this.f$0 = chatActivity;
-        this.f$1 = view;
+    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda44(ChatMessageCell chatMessageCell) {
+        this.f$0 = chatMessageCell;
     }
 
-    public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-        this.f$0.m1731lambda$hideInfoView$83$orgtelegramuiChatActivity(this.f$1, valueAnimator);
+    public final void onDismiss(DialogInterface dialogInterface) {
+        this.f$0.resetPressedLink(-1);
     }
 }

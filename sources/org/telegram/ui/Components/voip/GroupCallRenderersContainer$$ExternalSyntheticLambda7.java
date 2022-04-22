@@ -8,6 +8,6 @@ public final /* synthetic */ class GroupCallRenderersContainer$$ExternalSyntheti
     }
 
     public final void run() {
-        this.f$0.m4563x9var_CLASSNAME();
+        this.f$0.lambda$setVisibleParticipant$9();
     }
 }

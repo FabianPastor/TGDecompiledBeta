@@ -13,6 +13,6 @@ public final /* synthetic */ class LocationActivity$MapOverlayView$$ExternalSynt
     }
 
     public final void didSelectDate(boolean z, int i) {
-        this.f$0.m2442x40ff7d82(this.f$1, z, i);
+        this.f$0.lambda$addInfoView$0(this.f$1, z, i);
     }
 }

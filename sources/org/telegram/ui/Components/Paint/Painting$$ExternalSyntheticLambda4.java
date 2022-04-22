@@ -10,6 +10,6 @@ public final /* synthetic */ class Painting$$ExternalSyntheticLambda4 implements
     }
 
     public final void run() {
-        this.f$0.m4143lambda$registerUndo$3$orgtelegramuiComponentsPaintPainting(this.f$1);
+        this.f$0.lambda$registerUndo$3(this.f$1);
     }
 }

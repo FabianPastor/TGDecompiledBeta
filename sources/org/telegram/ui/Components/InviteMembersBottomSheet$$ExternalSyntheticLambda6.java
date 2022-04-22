@@ -10,6 +10,6 @@ public final /* synthetic */ class InviteMembersBottomSheet$$ExternalSyntheticLa
     }
 
     public final void run() {
-        this.f$0.m4094xvar_b33a7(this.f$1);
+        this.f$0.lambda$onSearchViewTouched$5(this.f$1);
     }
 }

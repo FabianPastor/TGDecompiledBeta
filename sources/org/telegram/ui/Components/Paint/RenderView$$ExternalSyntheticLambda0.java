@@ -8,6 +8,6 @@ public final /* synthetic */ class RenderView$$ExternalSyntheticLambda0 implemen
     }
 
     public final void run() {
-        this.f$0.m4146lambda$shutdown$0$orgtelegramuiComponentsPaintRenderView();
+        this.f$0.lambda$shutdown$0();
     }
 }

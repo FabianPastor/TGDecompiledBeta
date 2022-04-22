@@ -10,6 +10,6 @@ public final /* synthetic */ class TextSelectionHint$$ExternalSyntheticLambda4 i
     }
 
     public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-        this.f$0.m4464lambda$show$3$orgtelegramuiComponentsTextSelectionHint(valueAnimator);
+        this.f$0.lambda$show$0(valueAnimator);
     }
 }

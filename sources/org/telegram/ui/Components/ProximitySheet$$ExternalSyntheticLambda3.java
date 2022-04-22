@@ -10,6 +10,6 @@ public final /* synthetic */ class ProximitySheet$$ExternalSyntheticLambda3 impl
     }
 
     public final String format(int i) {
-        return this.f$0.m4251lambda$new$3$orgtelegramuiComponentsProximitySheet(i);
+        return this.f$0.lambda$new$3(i);
     }
 }

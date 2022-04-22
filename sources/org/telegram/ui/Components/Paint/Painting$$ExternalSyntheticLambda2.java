@@ -10,6 +10,6 @@ public final /* synthetic */ class Painting$$ExternalSyntheticLambda2 implements
     }
 
     public final void run() {
-        this.f$0.m4141lambda$onPause$5$orgtelegramuiComponentsPaintPainting(this.f$1);
+        this.f$0.lambda$onPause$5(this.f$1);
     }
 }

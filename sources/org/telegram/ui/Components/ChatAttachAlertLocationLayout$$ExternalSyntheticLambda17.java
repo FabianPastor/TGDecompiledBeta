@@ -1,18 +1,17 @@
 package org.telegram.ui.Components;
 
-import org.telegram.tgnet.TLRPC;
-import org.telegram.ui.Components.AlertsCreator;
+import com.google.android.gms.maps.MapView;
 
-public final /* synthetic */ class ChatAttachAlertLocationLayout$$ExternalSyntheticLambda17 implements AlertsCreator.ScheduleDatePickerDelegate {
+public final /* synthetic */ class ChatAttachAlertLocationLayout$$ExternalSyntheticLambda17 implements Runnable {
     public final /* synthetic */ ChatAttachAlertLocationLayout f$0;
-    public final /* synthetic */ TLRPC.TL_messageMediaVenue f$1;
+    public final /* synthetic */ MapView f$1;
 
-    public /* synthetic */ ChatAttachAlertLocationLayout$$ExternalSyntheticLambda17(ChatAttachAlertLocationLayout chatAttachAlertLocationLayout, TLRPC.TL_messageMediaVenue tL_messageMediaVenue) {
+    public /* synthetic */ ChatAttachAlertLocationLayout$$ExternalSyntheticLambda17(ChatAttachAlertLocationLayout chatAttachAlertLocationLayout, MapView mapView) {
         this.f$0 = chatAttachAlertLocationLayout;
-        this.f$1 = tL_messageMediaVenue;
+        this.f$1 = mapView;
     }
 
-    public final void didSelectDate(boolean z, int i) {
-        this.f$0.m3846xe2809d5d(this.f$1, z, i);
+    public final void run() {
+        this.f$0.lambda$new$12(this.f$1);
     }
 }

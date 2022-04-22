@@ -1,17 +1,19 @@
 package org.telegram.ui;
 
-import org.telegram.tgnet.RequestDelegate;
-import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC;
+import org.telegram.ui.Components.SlideChooseView;
 
-public final /* synthetic */ class LinkEditActivity$$ExternalSyntheticLambda11 implements RequestDelegate {
+public final /* synthetic */ class LinkEditActivity$$ExternalSyntheticLambda11 implements SlideChooseView.Callback {
     public final /* synthetic */ LinkEditActivity f$0;
 
     public /* synthetic */ LinkEditActivity$$ExternalSyntheticLambda11(LinkEditActivity linkEditActivity) {
         this.f$0 = linkEditActivity;
     }
 
-    public final void run(TLObject tLObject, TLRPC.TL_error tL_error) {
-        this.f$0.m2402lambda$onCreateClicked$8$orgtelegramuiLinkEditActivity(tLObject, tL_error);
+    public final void onOptionSelected(int i) {
+        this.f$0.lambda$createView$3(i);
+    }
+
+    public /* synthetic */ void onTouchEnd() {
+        SlideChooseView.Callback.CC.$default$onTouchEnd(this);
     }
 }

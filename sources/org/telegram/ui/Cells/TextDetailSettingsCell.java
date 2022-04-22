@@ -10,7 +10,6 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.Emoji;
 import org.telegram.messenger.LocaleController;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.LayoutHelper;
@@ -54,11 +53,11 @@ public class TextDetailSettingsCell extends FrameLayout {
     }
 
     /* access modifiers changed from: protected */
-    public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+    public void onMeasure(int i, int i2) {
         if (!this.multiline) {
-            super.onMeasure(View.MeasureSpec.makeMeasureSpec(View.MeasureSpec.getSize(widthMeasureSpec), NUM), View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(64.0f) + (this.needDivider ? 1 : 0), NUM));
+            super.onMeasure(View.MeasureSpec.makeMeasureSpec(View.MeasureSpec.getSize(i), NUM), View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(64.0f) + (this.needDivider ? 1 : 0), NUM));
         } else {
-            super.onMeasure(View.MeasureSpec.makeMeasureSpec(View.MeasureSpec.getSize(widthMeasureSpec), NUM), View.MeasureSpec.makeMeasureSpec(0, 0));
+            super.onMeasure(View.MeasureSpec.makeMeasureSpec(View.MeasureSpec.getSize(i), NUM), View.MeasureSpec.makeMeasureSpec(0, 0));
         }
     }
 
@@ -70,9 +69,9 @@ public class TextDetailSettingsCell extends FrameLayout {
         return this.valueTextView;
     }
 
-    public void setMultilineDetail(boolean value) {
-        this.multiline = value;
-        if (value) {
+    public void setMultilineDetail(boolean z) {
+        this.multiline = z;
+        if (z) {
             this.valueTextView.setLines(0);
             this.valueTextView.setMaxLines(0);
             this.valueTextView.setSingleLine(false);
@@ -85,35 +84,27 @@ public class TextDetailSettingsCell extends FrameLayout {
         this.valueTextView.setPadding(0, 0, 0, 0);
     }
 
-    public void setTextAndValue(String text, CharSequence value, boolean divider) {
-        this.textView.setText(text);
-        this.valueTextView.setText(value);
-        this.needDivider = divider;
+    public void setTextAndValue(String str, CharSequence charSequence, boolean z) {
+        this.textView.setText(str);
+        this.valueTextView.setText(charSequence);
+        this.needDivider = z;
         this.imageView.setVisibility(8);
-        setWillNotDraw(!divider);
+        setWillNotDraw(!z);
     }
 
-    public void setTextAndValueAndIcon(String text, CharSequence value, int resId, boolean divider) {
-        this.textView.setText(text);
-        this.valueTextView.setText(value);
-        this.imageView.setImageResource(resId);
+    public void setTextAndValueAndIcon(String str, CharSequence charSequence, int i, boolean z) {
+        this.textView.setText(str);
+        this.valueTextView.setText(charSequence);
+        this.imageView.setImageResource(i);
         this.imageView.setVisibility(0);
         this.textView.setPadding(LocaleController.isRTL ? 0 : AndroidUtilities.dp(50.0f), 0, LocaleController.isRTL ? AndroidUtilities.dp(50.0f) : 0, 0);
         this.valueTextView.setPadding(LocaleController.isRTL ? 0 : AndroidUtilities.dp(50.0f), 0, LocaleController.isRTL ? AndroidUtilities.dp(50.0f) : 0, this.multiline ? AndroidUtilities.dp(12.0f) : 0);
-        this.needDivider = divider;
-        setWillNotDraw(!divider);
+        this.needDivider = z;
+        setWillNotDraw(!z);
     }
 
-    public void setValue(CharSequence value) {
-        this.valueTextView.setText(value);
-    }
-
-    public void setTextWithEmojiAnd21Value(String text, CharSequence value, boolean divider) {
-        TextView textView2 = this.textView;
-        textView2.setText(Emoji.replaceEmoji(text, textView2.getPaint().getFontMetricsInt(), AndroidUtilities.dp(14.0f), false));
-        this.valueTextView.setText(value);
-        this.needDivider = divider;
-        setWillNotDraw(!divider);
+    public void setValue(CharSequence charSequence) {
+        this.valueTextView.setText(charSequence);
     }
 
     public void invalidate() {

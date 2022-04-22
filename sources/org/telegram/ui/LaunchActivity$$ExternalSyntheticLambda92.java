@@ -1,27 +1,20 @@
 package org.telegram.ui;
 
-import java.util.ArrayList;
-import org.telegram.tgnet.TLRPC;
-import org.telegram.ui.DialogsActivity;
+import org.telegram.tgnet.TLRPC$User;
+import org.telegram.ui.ContactsActivity;
 
-public final /* synthetic */ class LaunchActivity$$ExternalSyntheticLambda92 implements DialogsActivity.DialogsActivityDelegate {
+public final /* synthetic */ class LaunchActivity$$ExternalSyntheticLambda92 implements ContactsActivity.ContactsActivityDelegate {
     public final /* synthetic */ LaunchActivity f$0;
-    public final /* synthetic */ int f$1;
-    public final /* synthetic */ TLRPC.User f$2;
-    public final /* synthetic */ String f$3;
-    public final /* synthetic */ DialogsActivity f$4;
-    public final /* synthetic */ String f$5;
+    public final /* synthetic */ boolean f$1;
+    public final /* synthetic */ int[] f$2;
 
-    public /* synthetic */ LaunchActivity$$ExternalSyntheticLambda92(LaunchActivity launchActivity, int i, TLRPC.User user, String str, DialogsActivity dialogsActivity, String str2) {
+    public /* synthetic */ LaunchActivity$$ExternalSyntheticLambda92(LaunchActivity launchActivity, boolean z, int[] iArr) {
         this.f$0 = launchActivity;
-        this.f$1 = i;
-        this.f$2 = user;
-        this.f$3 = str;
-        this.f$4 = dialogsActivity;
-        this.f$5 = str2;
+        this.f$1 = z;
+        this.f$2 = iArr;
     }
 
-    public final void didSelectDialogs(DialogsActivity dialogsActivity, ArrayList arrayList, CharSequence charSequence, boolean z) {
-        this.f$0.m2351lambda$runLinkRequest$37$orgtelegramuiLaunchActivity(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, dialogsActivity, arrayList, charSequence, z);
+    public final void didSelectContact(TLRPC$User tLRPC$User, String str, ContactsActivity contactsActivity) {
+        this.f$0.lambda$handleIntent$16(this.f$1, this.f$2, tLRPC$User, str, contactsActivity);
     }
 }

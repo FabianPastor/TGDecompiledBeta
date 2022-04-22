@@ -12,6 +12,6 @@ public final /* synthetic */ class CropView$$ExternalSyntheticLambda3 implements
     }
 
     public final void onClick(DialogInterface dialogInterface, int i) {
-        this.f$0.m3936xeff4eac6(this.f$1, dialogInterface, i);
+        this.f$0.lambda$showAspectRatioDialog$2(this.f$1, dialogInterface, i);
     }
 }

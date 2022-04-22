@@ -8,6 +8,6 @@ public final /* synthetic */ class QrActivity$$ExternalSyntheticLambda5 implemen
     }
 
     public final void run() {
-        this.f$0.m3204lambda$performShare$8$orgtelegramuiQrActivity();
+        this.f$0.lambda$performShare$8();
     }
 }

@@ -11,6 +11,6 @@ public final /* synthetic */ class ThemePreviewMessagesCell$1$1$1$$ExternalSynth
     }
 
     public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-        this.f$0.m1532x31463cd3(valueAnimator);
+        this.f$0.lambda$onPreDraw$0(valueAnimator);
     }
 }

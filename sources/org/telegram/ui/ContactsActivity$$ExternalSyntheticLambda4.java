@@ -10,6 +10,6 @@ public final /* synthetic */ class ContactsActivity$$ExternalSyntheticLambda4 im
     }
 
     public final void onClick(View view) {
-        this.f$0.m2034lambda$createView$2$orgtelegramuiContactsActivity(view);
+        this.f$0.lambda$createView$2(view);
     }
 }

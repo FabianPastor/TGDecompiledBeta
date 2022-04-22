@@ -1,15 +1,23 @@
 package org.telegram.ui;
 
-import android.view.View;
+import org.telegram.tgnet.RequestDelegate;
+import org.telegram.tgnet.TLObject;
+import org.telegram.tgnet.TLRPC$TL_error;
+import org.telegram.tgnet.TLRPC$TL_messages_editMessage;
+import org.telegram.ui.ActionBar.AlertDialog;
 
-public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda216 implements View.OnClickListener {
+public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda216 implements RequestDelegate {
     public final /* synthetic */ ChatActivity f$0;
+    public final /* synthetic */ AlertDialog[] f$1;
+    public final /* synthetic */ TLRPC$TL_messages_editMessage f$2;
 
-    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda216(ChatActivity chatActivity) {
+    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda216(ChatActivity chatActivity, AlertDialog[] alertDialogArr, TLRPC$TL_messages_editMessage tLRPC$TL_messages_editMessage) {
         this.f$0 = chatActivity;
+        this.f$1 = alertDialogArr;
+        this.f$2 = tLRPC$TL_messages_editMessage;
     }
 
-    public final void onClick(View view) {
-        this.f$0.m1707lambda$createView$67$orgtelegramuiChatActivity(view);
+    public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+        this.f$0.lambda$processSelectedOption$197(this.f$1, this.f$2, tLObject, tLRPC$TL_error);
     }
 }

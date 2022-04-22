@@ -16,6 +16,6 @@ public final /* synthetic */ class WallpapersListActivity$$ExternalSyntheticLamb
     }
 
     public final int compare(Object obj, Object obj2) {
-        return this.f$0.m3476x891910bd(this.f$1, this.f$2, this.f$3, obj, obj2);
+        return this.f$0.lambda$fillWallpapersWithCustom$7(this.f$1, this.f$2, this.f$3, obj, obj2);
     }
 }

@@ -1,23 +1,15 @@
 package org.telegram.ui;
 
-import org.telegram.tgnet.TLRPC;
-import org.telegram.ui.ActionBar.AlertDialog;
-import org.telegram.ui.ActionBar.BaseFragment;
+import android.content.DialogInterface;
 
-public final /* synthetic */ class ChatLinkActivity$$ExternalSyntheticLambda3 implements Runnable {
+public final /* synthetic */ class ChatLinkActivity$$ExternalSyntheticLambda3 implements DialogInterface.OnClickListener {
     public final /* synthetic */ ChatLinkActivity f$0;
-    public final /* synthetic */ AlertDialog[] f$1;
-    public final /* synthetic */ TLRPC.Chat f$2;
-    public final /* synthetic */ BaseFragment f$3;
 
-    public /* synthetic */ ChatLinkActivity$$ExternalSyntheticLambda3(ChatLinkActivity chatLinkActivity, AlertDialog[] alertDialogArr, TLRPC.Chat chat, BaseFragment baseFragment) {
+    public /* synthetic */ ChatLinkActivity$$ExternalSyntheticLambda3(ChatLinkActivity chatLinkActivity) {
         this.f$0 = chatLinkActivity;
-        this.f$1 = alertDialogArr;
-        this.f$2 = chat;
-        this.f$3 = baseFragment;
     }
 
-    public final void run() {
-        this.f$0.m1950lambda$linkChat$12$orgtelegramuiChatLinkActivity(this.f$1, this.f$2, this.f$3);
+    public final void onClick(DialogInterface dialogInterface, int i) {
+        this.f$0.lambda$createView$5(dialogInterface, i);
     }
 }

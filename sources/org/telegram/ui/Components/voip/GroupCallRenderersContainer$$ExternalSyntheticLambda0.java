@@ -10,6 +10,6 @@ public final /* synthetic */ class GroupCallRenderersContainer$$ExternalSyntheti
     }
 
     public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-        this.f$0.m4554x200965e9(valueAnimator);
+        this.f$0.lambda$requestFullscreen$6(valueAnimator);
     }
 }

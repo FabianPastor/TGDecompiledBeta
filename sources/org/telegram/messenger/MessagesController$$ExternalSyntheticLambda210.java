@@ -1,13 +1,18 @@
 package org.telegram.messenger;
 
-public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda210 implements Runnable {
-    public final /* synthetic */ MessagesController f$0;
+import org.telegram.messenger.MessagesStorage;
+import org.telegram.tgnet.TLRPC$Updates;
 
-    public /* synthetic */ MessagesController$$ExternalSyntheticLambda210(MessagesController messagesController) {
-        this.f$0 = messagesController;
+public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda210 implements Runnable {
+    public final /* synthetic */ MessagesStorage.LongCallback f$0;
+    public final /* synthetic */ TLRPC$Updates f$1;
+
+    public /* synthetic */ MessagesController$$ExternalSyntheticLambda210(MessagesStorage.LongCallback longCallback, TLRPC$Updates tLRPC$Updates) {
+        this.f$0 = longCallback;
+        this.f$1 = tLRPC$Updates;
     }
 
     public final void run() {
-        this.f$0.m407xa658a108();
+        MessagesController.lambda$convertToMegaGroup$211(this.f$0, this.f$1);
     }
 }

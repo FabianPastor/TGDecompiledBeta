@@ -29,188 +29,207 @@ public class RendererCommon {
     }
 
     public static class VideoLayoutMeasure {
-        private float visibleFractionMatchOrientation = RendererCommon.convertScalingTypeToVisibleFraction(ScalingType.SCALE_ASPECT_BALANCED);
-        private float visibleFractionMismatchOrientation = RendererCommon.convertScalingTypeToVisibleFraction(ScalingType.SCALE_ASPECT_BALANCED);
+        private float visibleFractionMatchOrientation;
+        private float visibleFractionMismatchOrientation;
+
+        public VideoLayoutMeasure() {
+            ScalingType scalingType = ScalingType.SCALE_ASPECT_BALANCED;
+            this.visibleFractionMatchOrientation = RendererCommon.convertScalingTypeToVisibleFraction(scalingType);
+            this.visibleFractionMismatchOrientation = RendererCommon.convertScalingTypeToVisibleFraction(scalingType);
+        }
 
         public void setScalingType(ScalingType scalingType) {
             setScalingType(scalingType, scalingType);
         }
 
-        public void setScalingType(ScalingType scalingTypeMatchOrientation, ScalingType scalingTypeMismatchOrientation) {
-            this.visibleFractionMatchOrientation = RendererCommon.convertScalingTypeToVisibleFraction(scalingTypeMatchOrientation);
-            this.visibleFractionMismatchOrientation = RendererCommon.convertScalingTypeToVisibleFraction(scalingTypeMismatchOrientation);
+        public void setScalingType(ScalingType scalingType, ScalingType scalingType2) {
+            this.visibleFractionMatchOrientation = RendererCommon.convertScalingTypeToVisibleFraction(scalingType);
+            this.visibleFractionMismatchOrientation = RendererCommon.convertScalingTypeToVisibleFraction(scalingType2);
         }
 
-        public void setVisibleFraction(float visibleFractionMatchOrientation2, float visibleFractionMismatchOrientation2) {
-            this.visibleFractionMatchOrientation = visibleFractionMatchOrientation2;
-            this.visibleFractionMismatchOrientation = visibleFractionMismatchOrientation2;
+        public void setVisibleFraction(float f, float f2) {
+            this.visibleFractionMatchOrientation = f;
+            this.visibleFractionMismatchOrientation = f2;
         }
 
-        /* JADX WARNING: Code restructure failed: missing block: B:30:0x0061, code lost:
-            if (r14 == r9) goto L_0x0063;
+        /* JADX WARNING: Code restructure failed: missing block: B:30:0x0056, code lost:
+            if (r8 == r2) goto L_0x0058;
          */
         /* Code decompiled incorrectly, please refer to instructions dump. */
-        public android.graphics.Point measure(boolean r17, int r18, int r19, int r20, int r21) {
+        public android.graphics.Point measure(boolean r8, int r9, int r10, int r11, int r12) {
             /*
-                r16 = this;
-                r0 = r16
-                r1 = r20
-                r2 = r21
-                r3 = 2147483647(0x7fffffff, float:NaN)
-                r4 = r18
-                int r5 = android.view.View.getDefaultSize(r3, r4)
-                r6 = r19
-                int r3 = android.view.View.getDefaultSize(r3, r6)
-                if (r1 == 0) goto L_0x0066
-                if (r2 == 0) goto L_0x0066
-                if (r5 == 0) goto L_0x0066
-                if (r3 != 0) goto L_0x001e
-                goto L_0x0066
-            L_0x001e:
-                float r7 = (float) r1
-                float r8 = (float) r2
-                float r7 = r7 / r8
-                float r8 = (float) r5
-                float r9 = (float) r3
-                float r8 = r8 / r9
-                r9 = 1
-                r10 = 0
-                r11 = 1065353216(0x3var_, float:1.0)
-                int r12 = (r7 > r11 ? 1 : (r7 == r11 ? 0 : -1))
-                if (r12 <= 0) goto L_0x002e
-                r12 = 1
-                goto L_0x002f
-            L_0x002e:
-                r12 = 0
-            L_0x002f:
-                int r13 = (r8 > r11 ? 1 : (r8 == r11 ? 0 : -1))
-                if (r13 <= 0) goto L_0x0035
-                r13 = 1
-                goto L_0x0036
-            L_0x0035:
-                r13 = 0
-            L_0x0036:
-                if (r12 != r13) goto L_0x003b
-                float r12 = r0.visibleFractionMatchOrientation
-                goto L_0x003d
-            L_0x003b:
-                float r12 = r0.visibleFractionMismatchOrientation
-            L_0x003d:
-                android.graphics.Point r13 = org.webrtc.RendererCommon.getDisplaySize((float) r12, (float) r7, (int) r5, (int) r3)
-                if (r17 != 0) goto L_0x0065
-                int r14 = android.view.View.MeasureSpec.getMode(r18)
-                r15 = 1073741824(0x40000000, float:2.0)
-                if (r14 != r15) goto L_0x004e
-                r13.x = r5
-            L_0x004e:
-                int r14 = android.view.View.MeasureSpec.getMode(r19)
-                if (r14 == r15) goto L_0x0063
-                int r14 = (r7 > r11 ? 1 : (r7 == r11 ? 0 : -1))
-                if (r14 <= 0) goto L_0x005a
-                r14 = 1
+                r7 = this;
+                r0 = 2147483647(0x7fffffff, float:NaN)
+                int r1 = android.view.View.getDefaultSize(r0, r9)
+                int r0 = android.view.View.getDefaultSize(r0, r10)
+                if (r11 == 0) goto L_0x005b
+                if (r12 == 0) goto L_0x005b
+                if (r1 == 0) goto L_0x005b
+                if (r0 != 0) goto L_0x0014
                 goto L_0x005b
+            L_0x0014:
+                float r11 = (float) r11
+                float r12 = (float) r12
+                float r11 = r11 / r12
+                float r12 = (float) r1
+                float r2 = (float) r0
+                float r12 = r12 / r2
+                r2 = 1
+                r3 = 0
+                r4 = 1065353216(0x3var_, float:1.0)
+                int r5 = (r11 > r4 ? 1 : (r11 == r4 ? 0 : -1))
+                if (r5 <= 0) goto L_0x0024
+                r5 = 1
+                goto L_0x0025
+            L_0x0024:
+                r5 = 0
+            L_0x0025:
+                int r6 = (r12 > r4 ? 1 : (r12 == r4 ? 0 : -1))
+                if (r6 <= 0) goto L_0x002b
+                r6 = 1
+                goto L_0x002c
+            L_0x002b:
+                r6 = 0
+            L_0x002c:
+                if (r5 != r6) goto L_0x0031
+                float r5 = r7.visibleFractionMatchOrientation
+                goto L_0x0033
+            L_0x0031:
+                float r5 = r7.visibleFractionMismatchOrientation
+            L_0x0033:
+                android.graphics.Point r5 = org.webrtc.RendererCommon.getDisplaySize((float) r5, (float) r11, (int) r1, (int) r0)
+                if (r8 != 0) goto L_0x005a
+                int r8 = android.view.View.MeasureSpec.getMode(r9)
+                r9 = 1073741824(0x40000000, float:2.0)
+                if (r8 != r9) goto L_0x0043
+                r5.x = r1
+            L_0x0043:
+                int r8 = android.view.View.MeasureSpec.getMode(r10)
+                if (r8 == r9) goto L_0x0058
+                int r8 = (r11 > r4 ? 1 : (r11 == r4 ? 0 : -1))
+                if (r8 <= 0) goto L_0x004f
+                r8 = 1
+                goto L_0x0050
+            L_0x004f:
+                r8 = 0
+            L_0x0050:
+                int r9 = (r12 > r4 ? 1 : (r12 == r4 ? 0 : -1))
+                if (r9 <= 0) goto L_0x0055
+                goto L_0x0056
+            L_0x0055:
+                r2 = 0
+            L_0x0056:
+                if (r8 != r2) goto L_0x005a
+            L_0x0058:
+                r5.y = r0
             L_0x005a:
-                r14 = 0
+                return r5
             L_0x005b:
-                int r11 = (r8 > r11 ? 1 : (r8 == r11 ? 0 : -1))
-                if (r11 <= 0) goto L_0x0060
-                goto L_0x0061
-            L_0x0060:
-                r9 = 0
-            L_0x0061:
-                if (r14 != r9) goto L_0x0065
-            L_0x0063:
-                r13.y = r3
-            L_0x0065:
-                return r13
-            L_0x0066:
-                android.graphics.Point r7 = new android.graphics.Point
-                r7.<init>(r5, r3)
-                return r7
+                android.graphics.Point r8 = new android.graphics.Point
+                r8.<init>(r1, r0)
+                return r8
             */
             throw new UnsupportedOperationException("Method not decompiled: org.webrtc.RendererCommon.VideoLayoutMeasure.measure(boolean, int, int, int, int):android.graphics.Point");
         }
     }
 
-    public static float[] getLayoutMatrix(boolean mirror, float videoAspectRatio, float displayAspectRatio) {
-        float scaleX = 1.0f;
-        float scaleY = 1.0f;
-        if (displayAspectRatio > videoAspectRatio) {
-            scaleY = videoAspectRatio / displayAspectRatio;
+    public static float[] getLayoutMatrix(boolean z, float f, float f2) {
+        float f3;
+        float f4;
+        if (f2 > f) {
+            f4 = f / f2;
+            f3 = 1.0f;
         } else {
-            scaleX = displayAspectRatio / videoAspectRatio;
+            f3 = f2 / f;
+            f4 = 1.0f;
         }
-        if (mirror) {
-            scaleX *= -1.0f;
+        if (z) {
+            f3 *= -1.0f;
         }
-        float[] matrix = new float[16];
-        Matrix.setIdentityM(matrix, 0);
-        Matrix.scaleM(matrix, 0, scaleX, scaleY, 1.0f);
-        adjustOrigin(matrix);
-        return matrix;
+        float[] fArr = new float[16];
+        Matrix.setIdentityM(fArr, 0);
+        Matrix.scaleM(fArr, 0, f3, f4, 1.0f);
+        adjustOrigin(fArr);
+        return fArr;
     }
 
-    public static android.graphics.Matrix convertMatrixToAndroidGraphicsMatrix(float[] matrix4x4) {
-        float[] values = {matrix4x4[0], matrix4x4[4], matrix4x4[12], matrix4x4[1], matrix4x4[5], matrix4x4[13], matrix4x4[3], matrix4x4[7], matrix4x4[15]};
+    public static android.graphics.Matrix convertMatrixToAndroidGraphicsMatrix(float[] fArr) {
+        float[] fArr2 = {fArr[0], fArr[4], fArr[12], fArr[1], fArr[5], fArr[13], fArr[3], fArr[7], fArr[15]};
         android.graphics.Matrix matrix = new android.graphics.Matrix();
-        matrix.setValues(values);
+        matrix.setValues(fArr2);
         return matrix;
     }
 
     public static float[] convertMatrixFromAndroidGraphicsMatrix(android.graphics.Matrix matrix) {
-        float[] values = new float[9];
-        matrix.getValues(values);
-        return new float[]{values[0], values[3], 0.0f, values[6], values[1], values[4], 0.0f, values[7], 0.0f, 0.0f, 1.0f, 0.0f, values[2], values[5], 0.0f, values[8]};
+        float[] fArr = new float[9];
+        matrix.getValues(fArr);
+        return new float[]{fArr[0], fArr[3], 0.0f, fArr[6], fArr[1], fArr[4], 0.0f, fArr[7], 0.0f, 0.0f, 1.0f, 0.0f, fArr[2], fArr[5], 0.0f, fArr[8]};
     }
 
-    public static Point getDisplaySize(ScalingType scalingType, float videoAspectRatio, int maxDisplayWidth, int maxDisplayHeight) {
-        return getDisplaySize(convertScalingTypeToVisibleFraction(scalingType), videoAspectRatio, maxDisplayWidth, maxDisplayHeight);
+    public static Point getDisplaySize(ScalingType scalingType, float f, int i, int i2) {
+        return getDisplaySize(convertScalingTypeToVisibleFraction(scalingType), f, i, i2);
     }
 
-    private static void adjustOrigin(float[] matrix) {
-        matrix[12] = matrix[12] - ((matrix[0] + matrix[4]) * 0.5f);
-        matrix[13] = matrix[13] - ((matrix[1] + matrix[5]) * 0.5f);
-        matrix[12] = matrix[12] + 0.5f;
-        matrix[13] = matrix[13] + 0.5f;
+    private static void adjustOrigin(float[] fArr) {
+        fArr[12] = fArr[12] - ((fArr[0] + fArr[4]) * 0.5f);
+        fArr[13] = fArr[13] - ((fArr[1] + fArr[5]) * 0.5f);
+        fArr[12] = fArr[12] + 0.5f;
+        fArr[13] = fArr[13] + 0.5f;
     }
 
     /* renamed from: org.webrtc.RendererCommon$1  reason: invalid class name */
     static /* synthetic */ class AnonymousClass1 {
         static final /* synthetic */ int[] $SwitchMap$org$webrtc$RendererCommon$ScalingType;
 
+        /* JADX WARNING: Can't wrap try/catch for region: R(6:0|1|2|3|4|(3:5|6|8)) */
+        /* JADX WARNING: Failed to process nested try/catch */
+        /* JADX WARNING: Missing exception handler attribute for start block: B:3:0x0012 */
+        /* JADX WARNING: Missing exception handler attribute for start block: B:5:0x001d */
         static {
-            int[] iArr = new int[ScalingType.values().length];
-            $SwitchMap$org$webrtc$RendererCommon$ScalingType = iArr;
-            try {
-                iArr[ScalingType.SCALE_ASPECT_FIT.ordinal()] = 1;
-            } catch (NoSuchFieldError e) {
-            }
-            try {
-                $SwitchMap$org$webrtc$RendererCommon$ScalingType[ScalingType.SCALE_ASPECT_FILL.ordinal()] = 2;
-            } catch (NoSuchFieldError e2) {
-            }
-            try {
-                $SwitchMap$org$webrtc$RendererCommon$ScalingType[ScalingType.SCALE_ASPECT_BALANCED.ordinal()] = 3;
-            } catch (NoSuchFieldError e3) {
-            }
+            /*
+                org.webrtc.RendererCommon$ScalingType[] r0 = org.webrtc.RendererCommon.ScalingType.values()
+                int r0 = r0.length
+                int[] r0 = new int[r0]
+                $SwitchMap$org$webrtc$RendererCommon$ScalingType = r0
+                org.webrtc.RendererCommon$ScalingType r1 = org.webrtc.RendererCommon.ScalingType.SCALE_ASPECT_FIT     // Catch:{ NoSuchFieldError -> 0x0012 }
+                int r1 = r1.ordinal()     // Catch:{ NoSuchFieldError -> 0x0012 }
+                r2 = 1
+                r0[r1] = r2     // Catch:{ NoSuchFieldError -> 0x0012 }
+            L_0x0012:
+                int[] r0 = $SwitchMap$org$webrtc$RendererCommon$ScalingType     // Catch:{ NoSuchFieldError -> 0x001d }
+                org.webrtc.RendererCommon$ScalingType r1 = org.webrtc.RendererCommon.ScalingType.SCALE_ASPECT_FILL     // Catch:{ NoSuchFieldError -> 0x001d }
+                int r1 = r1.ordinal()     // Catch:{ NoSuchFieldError -> 0x001d }
+                r2 = 2
+                r0[r1] = r2     // Catch:{ NoSuchFieldError -> 0x001d }
+            L_0x001d:
+                int[] r0 = $SwitchMap$org$webrtc$RendererCommon$ScalingType     // Catch:{ NoSuchFieldError -> 0x0028 }
+                org.webrtc.RendererCommon$ScalingType r1 = org.webrtc.RendererCommon.ScalingType.SCALE_ASPECT_BALANCED     // Catch:{ NoSuchFieldError -> 0x0028 }
+                int r1 = r1.ordinal()     // Catch:{ NoSuchFieldError -> 0x0028 }
+                r2 = 3
+                r0[r1] = r2     // Catch:{ NoSuchFieldError -> 0x0028 }
+            L_0x0028:
+                return
+            */
+            throw new UnsupportedOperationException("Method not decompiled: org.webrtc.RendererCommon.AnonymousClass1.<clinit>():void");
         }
     }
 
     /* access modifiers changed from: private */
     public static float convertScalingTypeToVisibleFraction(ScalingType scalingType) {
-        switch (AnonymousClass1.$SwitchMap$org$webrtc$RendererCommon$ScalingType[scalingType.ordinal()]) {
-            case 1:
-                return 1.0f;
-            case 2:
-                return 0.0f;
-            case 3:
-                return BALANCED_VISIBLE_FRACTION;
-            default:
-                throw new IllegalArgumentException();
+        int i = AnonymousClass1.$SwitchMap$org$webrtc$RendererCommon$ScalingType[scalingType.ordinal()];
+        if (i == 1) {
+            return 1.0f;
         }
+        if (i == 2) {
+            return 0.0f;
+        }
+        if (i == 3) {
+            return BALANCED_VISIBLE_FRACTION;
+        }
+        throw new IllegalArgumentException();
     }
 
-    public static Point getDisplaySize(float minVisibleFraction, float videoAspectRatio, int maxDisplayWidth, int maxDisplayHeight) {
-        return (minVisibleFraction == 0.0f || videoAspectRatio == 0.0f) ? new Point(maxDisplayWidth, maxDisplayHeight) : new Point(Math.min(maxDisplayWidth, Math.round((((float) maxDisplayHeight) / minVisibleFraction) * videoAspectRatio)), Math.min(maxDisplayHeight, Math.round((((float) maxDisplayWidth) / minVisibleFraction) / videoAspectRatio)));
+    public static Point getDisplaySize(float f, float f2, int i, int i2) {
+        return (f == 0.0f || f2 == 0.0f) ? new Point(i, i2) : new Point(Math.min(i, Math.round((((float) i2) / f) * f2)), Math.min(i2, Math.round((((float) i) / f) / f2)));
     }
 }

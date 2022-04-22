@@ -5,7 +5,7 @@ import org.webrtc.VideoDecoder;
 public abstract class WrappedNativeVideoDecoder implements VideoDecoder {
     public abstract long createNativeVideoDecoder();
 
-    public final VideoCodecStatus initDecode(VideoDecoder.Settings settings, VideoDecoder.Callback decodeCallback) {
+    public final VideoCodecStatus initDecode(VideoDecoder.Settings settings, VideoDecoder.Callback callback) {
         throw new UnsupportedOperationException("Not implemented.");
     }
 
@@ -13,7 +13,7 @@ public abstract class WrappedNativeVideoDecoder implements VideoDecoder {
         throw new UnsupportedOperationException("Not implemented.");
     }
 
-    public final VideoCodecStatus decode(EncodedImage frame, VideoDecoder.DecodeInfo info) {
+    public final VideoCodecStatus decode(EncodedImage encodedImage, VideoDecoder.DecodeInfo decodeInfo) {
         throw new UnsupportedOperationException("Not implemented.");
     }
 

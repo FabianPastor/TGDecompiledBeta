@@ -12,6 +12,6 @@ public final /* synthetic */ class TextureBufferImpl$$ExternalSyntheticLambda1 i
     }
 
     public final void run() {
-        this.f$0.m4633lambda$new$0$orgwebrtcTextureBufferImpl(this.f$1);
+        this.f$0.lambda$new$0(this.f$1);
     }
 }

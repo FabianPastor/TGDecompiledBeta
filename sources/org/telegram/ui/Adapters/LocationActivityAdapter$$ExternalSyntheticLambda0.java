@@ -10,6 +10,6 @@ public final /* synthetic */ class LocationActivityAdapter$$ExternalSyntheticLam
     }
 
     public final void onClick(View view) {
-        this.f$0.m1332x64aa3647(view);
+        this.f$0.lambda$onCreateViewHolder$0(view);
     }
 }

@@ -16,6 +16,6 @@ public final /* synthetic */ class LoginActivity$8$$ExternalSyntheticLambda0 imp
     }
 
     public final void run() {
-        this.f$0.m2461lambda$beforeTextChanged$0$orgtelegramuiLoginActivity$8(this.f$1, this.f$2);
+        this.f$0.lambda$beforeTextChanged$0(this.f$1, this.f$2);
     }
 }

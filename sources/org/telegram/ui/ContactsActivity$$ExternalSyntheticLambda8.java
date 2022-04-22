@@ -10,7 +10,7 @@ public final /* synthetic */ class ContactsActivity$$ExternalSyntheticLambda8 im
     }
 
     public final void didSetColor() {
-        this.f$0.m2037lambda$getThemeDescriptions$9$orgtelegramuiContactsActivity();
+        this.f$0.lambda$getThemeDescriptions$9();
     }
 
     public /* synthetic */ void onAnimationProgress(float f) {

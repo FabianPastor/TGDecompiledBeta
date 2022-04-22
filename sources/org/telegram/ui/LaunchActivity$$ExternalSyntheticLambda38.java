@@ -1,20 +1,22 @@
 package org.telegram.ui;
 
-import org.telegram.tgnet.TLObject;
-import org.telegram.ui.ActionBar.Theme;
+import java.util.HashMap;
+import org.telegram.messenger.LocaleController;
 
 public final /* synthetic */ class LaunchActivity$$ExternalSyntheticLambda38 implements Runnable {
     public final /* synthetic */ LaunchActivity f$0;
-    public final /* synthetic */ TLObject f$1;
-    public final /* synthetic */ Theme.ThemeInfo f$2;
+    public final /* synthetic */ HashMap f$1;
+    public final /* synthetic */ LocaleController.LocaleInfo[] f$2;
+    public final /* synthetic */ String f$3;
 
-    public /* synthetic */ LaunchActivity$$ExternalSyntheticLambda38(LaunchActivity launchActivity, TLObject tLObject, Theme.ThemeInfo themeInfo) {
+    public /* synthetic */ LaunchActivity$$ExternalSyntheticLambda38(LaunchActivity launchActivity, HashMap hashMap, LocaleController.LocaleInfo[] localeInfoArr, String str) {
         this.f$0 = launchActivity;
-        this.f$1 = tLObject;
-        this.f$2 = themeInfo;
+        this.f$1 = hashMap;
+        this.f$2 = localeInfoArr;
+        this.f$3 = str;
     }
 
     public final void run() {
-        this.f$0.m2321lambda$didReceivedNotification$84$orgtelegramuiLaunchActivity(this.f$1, this.f$2);
+        this.f$0.lambda$showLanguageAlert$95(this.f$1, this.f$2, this.f$3);
     }
 }

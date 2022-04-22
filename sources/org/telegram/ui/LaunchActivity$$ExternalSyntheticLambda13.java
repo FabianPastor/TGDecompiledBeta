@@ -1,15 +1,15 @@
 package org.telegram.ui;
 
-import android.view.View;
+import android.content.DialogInterface;
 
-public final /* synthetic */ class LaunchActivity$$ExternalSyntheticLambda13 implements Runnable {
-    public final /* synthetic */ View f$0;
+public final /* synthetic */ class LaunchActivity$$ExternalSyntheticLambda13 implements DialogInterface.OnDismissListener {
+    public final /* synthetic */ LaunchActivity f$0;
 
-    public /* synthetic */ LaunchActivity$$ExternalSyntheticLambda13(View view) {
-        this.f$0 = view;
+    public /* synthetic */ LaunchActivity$$ExternalSyntheticLambda13(LaunchActivity launchActivity) {
+        this.f$0 = launchActivity;
     }
 
-    public final void run() {
-        LaunchActivity.lambda$updateAppUpdateViews$67(this.f$0);
+    public final void onDismiss(DialogInterface dialogInterface) {
+        this.f$0.lambda$showAlertDialog$70(dialogInterface);
     }
 }

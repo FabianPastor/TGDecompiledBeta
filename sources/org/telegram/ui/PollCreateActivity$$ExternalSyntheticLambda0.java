@@ -10,6 +10,6 @@ public final /* synthetic */ class PollCreateActivity$$ExternalSyntheticLambda0 
     }
 
     public final void onClick(DialogInterface dialogInterface, int i) {
-        this.f$0.m2992lambda$checkDiscard$1$orgtelegramuiPollCreateActivity(dialogInterface, i);
+        this.f$0.lambda$checkDiscard$1(dialogInterface, i);
     }
 }

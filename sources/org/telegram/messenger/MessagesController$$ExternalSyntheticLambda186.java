@@ -1,19 +1,22 @@
 package org.telegram.messenger;
 
-import org.telegram.tgnet.RequestDelegate;
-import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC;
+import androidx.collection.LongSparseArray;
+import org.telegram.tgnet.TLRPC$messages_Dialogs;
 
-public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda186 implements RequestDelegate {
+public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda186 implements Runnable {
     public final /* synthetic */ MessagesController f$0;
-    public final /* synthetic */ long f$1;
+    public final /* synthetic */ TLRPC$messages_Dialogs f$1;
+    public final /* synthetic */ LongSparseArray f$2;
+    public final /* synthetic */ LongSparseArray f$3;
 
-    public /* synthetic */ MessagesController$$ExternalSyntheticLambda186(MessagesController messagesController, long j) {
+    public /* synthetic */ MessagesController$$ExternalSyntheticLambda186(MessagesController messagesController, TLRPC$messages_Dialogs tLRPC$messages_Dialogs, LongSparseArray longSparseArray, LongSparseArray longSparseArray2) {
         this.f$0 = messagesController;
-        this.f$1 = j;
+        this.f$1 = tLRPC$messages_Dialogs;
+        this.f$2 = longSparseArray;
+        this.f$3 = longSparseArray2;
     }
 
-    public final void run(TLObject tLObject, TLRPC.TL_error tL_error) {
-        this.f$0.m176x4ea94b42(this.f$1, tLObject, tL_error);
+    public final void run() {
+        this.f$0.lambda$completeDialogsReset$167(this.f$1, this.f$2, this.f$3);
     }
 }

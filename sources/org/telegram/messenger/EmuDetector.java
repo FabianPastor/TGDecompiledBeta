@@ -1,9 +1,9 @@
 package org.telegram.messenger;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.os.Build;
 import android.os.Environment;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
@@ -28,6 +28,7 @@ public class EmuDetector {
     private static final Property[] PROPERTIES = {new Property("init.svc.qemud", (String) null), new Property("init.svc.qemu-props", (String) null), new Property("qemu.hw.mainkeys", (String) null), new Property("qemu.sf.fake_camera", (String) null), new Property("qemu.sf.lcd_density", (String) null), new Property("ro.bootloader", "unknown"), new Property("ro.bootmode", "unknown"), new Property("ro.hardware", "goldfish"), new Property("ro.kernel.android.qemud", (String) null), new Property("ro.kernel.qemu.gles", (String) null), new Property("ro.kernel.qemu", "1"), new Property("ro.product.device", "generic"), new Property("ro.product.model", "sdk"), new Property("ro.product.name", "sdk"), new Property("ro.serialno", (String) null)};
     private static final String[] QEMU_DRIVERS = {"goldfish"};
     private static final String[] X86_FILES = {"ueventd.android_x86.rc", "x86.prop", "ueventd.ttVM_x86.rc", "init.ttVM_x86.rc", "fstab.ttVM_x86", "fstab.vbox86", "init.vbox86.rc", "ueventd.vbox86.rc"};
+    @SuppressLint({"StaticFieldLeak"})
     private static EmuDetector mEmulatorDetector;
     private boolean detectResult;
     private boolean detected;
@@ -53,26 +54,26 @@ public class EmuDetector {
         public String name;
         public String seek_value;
 
-        public Property(String name2, String seek_value2) {
-            this.name = name2;
-            this.seek_value = seek_value2;
+        public Property(String str, String str2) {
+            this.name = str;
+            this.seek_value = str2;
         }
     }
 
-    public static EmuDetector with(Context pContext) {
-        if (pContext != null) {
+    public static EmuDetector with(Context context) {
+        if (context != null) {
             if (mEmulatorDetector == null) {
-                mEmulatorDetector = new EmuDetector(pContext.getApplicationContext());
+                mEmulatorDetector = new EmuDetector(context.getApplicationContext());
             }
             return mEmulatorDetector;
         }
         throw new IllegalArgumentException("Context must not be null.");
     }
 
-    private EmuDetector(Context pContext) {
+    private EmuDetector(Context context) {
         ArrayList arrayList = new ArrayList();
         this.mListPackageName = arrayList;
-        this.mContext = pContext;
+        this.mContext = context;
         arrayList.add("com.google.android.launcher.layouts.genymotion");
         this.mListPackageName.add("com.bluestacks");
         this.mListPackageName.add("com.bignox.app");
@@ -87,23 +88,23 @@ public class EmuDetector {
         return this.isCheckPackage;
     }
 
-    public EmuDetector setCheckTelephony(boolean telephony) {
-        this.isTelephony = telephony;
+    public EmuDetector setCheckTelephony(boolean z) {
+        this.isTelephony = z;
         return this;
     }
 
-    public EmuDetector setCheckPackage(boolean chkPackage) {
-        this.isCheckPackage = chkPackage;
+    public EmuDetector setCheckPackage(boolean z) {
+        this.isCheckPackage = z;
         return this;
     }
 
-    public EmuDetector addPackageName(String pPackageName) {
-        this.mListPackageName.add(pPackageName);
+    public EmuDetector addPackageName(String str) {
+        this.mListPackageName.add(str);
         return this;
     }
 
-    public EmuDetector addPackageName(List<String> pListPackageName) {
-        this.mListPackageName.addAll(pListPackageName);
+    public EmuDetector addPackageName(List<String> list) {
+        this.mListPackageName.addAll(list);
         return this;
     }
 
@@ -126,25 +127,116 @@ public class EmuDetector {
                 this.detectResult = EmuInputDevicesDetector.detect();
             }
             return this.detectResult;
-        } catch (Exception e) {
+        } catch (Exception unused) {
             return false;
         }
     }
 
+    /* JADX WARNING: Removed duplicated region for block: B:39:0x00ce A[RETURN] */
+    /* JADX WARNING: Removed duplicated region for block: B:40:0x00cf  */
+    /* Code decompiled incorrectly, please refer to instructions dump. */
     private boolean checkBasic() {
-        boolean z = false;
-        boolean result = Build.BOARD.toLowerCase().contains("nox") || Build.BOOTLOADER.toLowerCase().contains("nox") || Build.FINGERPRINT.startsWith("generic") || Build.MODEL.toLowerCase().contains("google_sdk") || Build.MODEL.toLowerCase().contains("droid4x") || Build.MODEL.toLowerCase().contains("emulator") || Build.MODEL.contains("Android SDK built for x86") || Build.MANUFACTURER.toLowerCase().contains("genymotion") || Build.HARDWARE.toLowerCase().contains("goldfish") || Build.HARDWARE.toLowerCase().contains("vbox86") || Build.HARDWARE.toLowerCase().contains("android_x86") || Build.HARDWARE.toLowerCase().contains("nox") || Build.PRODUCT.equals("sdk") || Build.PRODUCT.equals("google_sdk") || Build.PRODUCT.equals("sdk_x86") || Build.PRODUCT.equals("vbox86p") || Build.PRODUCT.toLowerCase().contains("nox") || Build.SERIAL.toLowerCase().contains("nox");
-        if (result) {
-            return true;
-        }
-        if (Build.BRAND.startsWith("generic") && Build.DEVICE.startsWith("generic")) {
-            z = true;
-        }
-        boolean result2 = result | z;
-        if (result2) {
-            return true;
-        }
-        return result2 | "google_sdk".equals(Build.PRODUCT);
+        /*
+            r8 = this;
+            java.lang.String r0 = android.os.Build.BOARD
+            java.lang.String r0 = r0.toLowerCase()
+            java.lang.String r1 = "nox"
+            boolean r0 = r0.contains(r1)
+            r2 = 0
+            java.lang.String r3 = "google_sdk"
+            java.lang.String r4 = "generic"
+            r5 = 1
+            if (r0 != 0) goto L_0x00cb
+            java.lang.String r0 = android.os.Build.BOOTLOADER
+            java.lang.String r0 = r0.toLowerCase()
+            boolean r0 = r0.contains(r1)
+            if (r0 != 0) goto L_0x00cb
+            java.lang.String r0 = android.os.Build.FINGERPRINT
+            boolean r0 = r0.startsWith(r4)
+            if (r0 != 0) goto L_0x00cb
+            java.lang.String r0 = android.os.Build.MODEL
+            java.lang.String r6 = r0.toLowerCase()
+            boolean r6 = r6.contains(r3)
+            if (r6 != 0) goto L_0x00cb
+            java.lang.String r6 = r0.toLowerCase()
+            java.lang.String r7 = "droid4x"
+            boolean r6 = r6.contains(r7)
+            if (r6 != 0) goto L_0x00cb
+            java.lang.String r6 = r0.toLowerCase()
+            java.lang.String r7 = "emulator"
+            boolean r6 = r6.contains(r7)
+            if (r6 != 0) goto L_0x00cb
+            java.lang.String r6 = "Android SDK built for x86"
+            boolean r0 = r0.contains(r6)
+            if (r0 != 0) goto L_0x00cb
+            java.lang.String r0 = android.os.Build.MANUFACTURER
+            java.lang.String r0 = r0.toLowerCase()
+            java.lang.String r6 = "genymotion"
+            boolean r0 = r0.contains(r6)
+            if (r0 != 0) goto L_0x00cb
+            java.lang.String r0 = android.os.Build.HARDWARE
+            java.lang.String r6 = r0.toLowerCase()
+            java.lang.String r7 = "goldfish"
+            boolean r6 = r6.contains(r7)
+            if (r6 != 0) goto L_0x00cb
+            java.lang.String r6 = r0.toLowerCase()
+            java.lang.String r7 = "vbox86"
+            boolean r6 = r6.contains(r7)
+            if (r6 != 0) goto L_0x00cb
+            java.lang.String r6 = r0.toLowerCase()
+            java.lang.String r7 = "android_x86"
+            boolean r6 = r6.contains(r7)
+            if (r6 != 0) goto L_0x00cb
+            java.lang.String r0 = r0.toLowerCase()
+            boolean r0 = r0.contains(r1)
+            if (r0 != 0) goto L_0x00cb
+            java.lang.String r0 = android.os.Build.PRODUCT
+            java.lang.String r6 = "sdk"
+            boolean r6 = r0.equals(r6)
+            if (r6 != 0) goto L_0x00cb
+            boolean r6 = r0.equals(r3)
+            if (r6 != 0) goto L_0x00cb
+            java.lang.String r6 = "sdk_x86"
+            boolean r6 = r0.equals(r6)
+            if (r6 != 0) goto L_0x00cb
+            java.lang.String r6 = "vbox86p"
+            boolean r6 = r0.equals(r6)
+            if (r6 != 0) goto L_0x00cb
+            java.lang.String r0 = r0.toLowerCase()
+            boolean r0 = r0.contains(r1)
+            if (r0 != 0) goto L_0x00cb
+            java.lang.String r0 = android.os.Build.SERIAL
+            java.lang.String r0 = r0.toLowerCase()
+            boolean r0 = r0.contains(r1)
+            if (r0 == 0) goto L_0x00c9
+            goto L_0x00cb
+        L_0x00c9:
+            r0 = 0
+            goto L_0x00cc
+        L_0x00cb:
+            r0 = 1
+        L_0x00cc:
+            if (r0 == 0) goto L_0x00cf
+            return r5
+        L_0x00cf:
+            java.lang.String r1 = android.os.Build.BRAND
+            boolean r1 = r1.startsWith(r4)
+            if (r1 == 0) goto L_0x00e0
+            java.lang.String r1 = android.os.Build.DEVICE
+            boolean r1 = r1.startsWith(r4)
+            if (r1 == 0) goto L_0x00e0
+            r2 = 1
+        L_0x00e0:
+            r0 = r0 | r2
+            if (r0 == 0) goto L_0x00e4
+            return r5
+        L_0x00e4:
+            java.lang.String r1 = android.os.Build.PRODUCT
+            boolean r1 = r3.equals(r1)
+            r0 = r0 | r1
+            return r0
+        */
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.EmuDetector.checkBasic():boolean");
     }
 
     private boolean checkAdvanced() {
@@ -152,14 +244,13 @@ public class EmuDetector {
     }
 
     private boolean checkPackageName() {
-        if (!this.isCheckPackage || this.mListPackageName.isEmpty()) {
-            return false;
-        }
-        PackageManager packageManager = this.mContext.getPackageManager();
-        for (String pkgName : this.mListPackageName) {
-            Intent tryIntent = packageManager.getLaunchIntentForPackage(pkgName);
-            if (tryIntent != null && !packageManager.queryIntentActivities(tryIntent, 65536).isEmpty()) {
-                return true;
+        if (this.isCheckPackage && !this.mListPackageName.isEmpty()) {
+            PackageManager packageManager = this.mContext.getPackageManager();
+            for (String launchIntentForPackage : this.mListPackageName) {
+                Intent launchIntentForPackage2 = packageManager.getLaunchIntentForPackage(launchIntentForPackage);
+                if (launchIntentForPackage2 != null && !packageManager.queryIntentActivities(launchIntentForPackage2, 65536).isEmpty()) {
+                    return true;
+                }
             }
         }
         return false;
@@ -170,9 +261,9 @@ public class EmuDetector {
     }
 
     private boolean checkPhoneNumber() {
-        String phoneNumber = ((TelephonyManager) this.mContext.getSystemService("phone")).getLine1Number();
-        for (String number : PHONE_NUMBERS) {
-            if (number.equalsIgnoreCase(phoneNumber)) {
+        String line1Number = ((TelephonyManager) this.mContext.getSystemService("phone")).getLine1Number();
+        for (String equalsIgnoreCase : PHONE_NUMBERS) {
+            if (equalsIgnoreCase.equalsIgnoreCase(line1Number)) {
                 return true;
             }
         }
@@ -181,8 +272,8 @@ public class EmuDetector {
 
     private boolean checkDeviceId() {
         String deviceId = ((TelephonyManager) this.mContext.getSystemService("phone")).getDeviceId();
-        for (String known_deviceId : DEVICE_IDS) {
-            if (known_deviceId.equalsIgnoreCase(deviceId)) {
+        for (String equalsIgnoreCase : DEVICE_IDS) {
+            if (equalsIgnoreCase.equalsIgnoreCase(deviceId)) {
                 return true;
             }
         }
@@ -190,9 +281,9 @@ public class EmuDetector {
     }
 
     private boolean checkImsi() {
-        String imsi = ((TelephonyManager) this.mContext.getSystemService("phone")).getSubscriberId();
-        for (String known_imsi : IMSI_IDS) {
-            if (known_imsi.equalsIgnoreCase(imsi)) {
+        String subscriberId = ((TelephonyManager) this.mContext.getSystemService("phone")).getSubscriberId();
+        for (String equalsIgnoreCase : IMSI_IDS) {
+            if (equalsIgnoreCase.equalsIgnoreCase(subscriberId)) {
                 return true;
             }
         }
@@ -206,19 +297,19 @@ public class EmuDetector {
     private boolean checkQEmuDrivers() {
         File[] fileArr = {new File("/proc/tty/drivers"), new File("/proc/cpuinfo")};
         for (int i = 0; i < 2; i++) {
-            File drivers_file = fileArr[i];
-            if (drivers_file.exists() && drivers_file.canRead()) {
-                byte[] data = new byte[1024];
+            File file = fileArr[i];
+            if (file.exists() && file.canRead()) {
+                byte[] bArr = new byte[1024];
                 try {
-                    InputStream is = new FileInputStream(drivers_file);
-                    is.read(data);
-                    is.close();
-                } catch (Exception exception) {
-                    exception.printStackTrace();
+                    FileInputStream fileInputStream = new FileInputStream(file);
+                    fileInputStream.read(bArr);
+                    fileInputStream.close();
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
-                String driver_data = new String(data);
-                for (String known_qemu_driver : QEMU_DRIVERS) {
-                    if (driver_data.contains(known_qemu_driver)) {
+                String str = new String(bArr);
+                for (String contains : QEMU_DRIVERS) {
+                    if (str.contains(contains)) {
                         return true;
                     }
                 }
@@ -228,17 +319,17 @@ public class EmuDetector {
         return false;
     }
 
-    private boolean checkFiles(String[] targets, EmulatorTypes type) {
-        File qemu_file;
-        for (String pipe : targets) {
+    private boolean checkFiles(String[] strArr, EmulatorTypes emulatorTypes) {
+        File file;
+        for (String str : strArr) {
             if (ContextCompat.checkSelfPermission(this.mContext, "android.permission.READ_EXTERNAL_STORAGE") != 0) {
-                qemu_file = new File(pipe);
-            } else if ((!pipe.contains("/") || type != EmulatorTypes.NOX) && type != EmulatorTypes.BLUE) {
-                qemu_file = new File(pipe);
+                file = new File(str);
+            } else if ((!str.contains("/") || emulatorTypes != EmulatorTypes.NOX) && emulatorTypes != EmulatorTypes.BLUE) {
+                file = new File(str);
             } else {
-                qemu_file = new File(Environment.getExternalStorageDirectory() + pipe);
+                file = new File(Environment.getExternalStorageDirectory() + str);
             }
-            if (qemu_file.exists()) {
+            if (file.exists()) {
                 return true;
             }
         }
@@ -246,17 +337,18 @@ public class EmuDetector {
     }
 
     private boolean checkQEmuProps() {
-        int found_props = 0;
+        int i = 0;
         for (Property property : PROPERTIES) {
-            String property_value = getProp(this.mContext, property.name);
-            if (property.seek_value == null && property_value != null) {
-                found_props++;
+            String prop = getProp(this.mContext, property.name);
+            String str = property.seek_value;
+            if (str == null && prop != null) {
+                i++;
             }
-            if (property.seek_value != null && property_value.contains(property.seek_value)) {
-                found_props++;
+            if (str != null && prop.contains(str)) {
+                i++;
             }
         }
-        if (found_props >= 5) {
+        if (i >= 5) {
             return true;
         }
         return false;
@@ -266,37 +358,37 @@ public class EmuDetector {
         if (ContextCompat.checkSelfPermission(this.mContext, "android.permission.INTERNET") != 0) {
             return false;
         }
-        String[] args = {"/system/bin/netcfg"};
-        StringBuilder stringBuilder = new StringBuilder();
+        String[] strArr = {"/system/bin/netcfg"};
+        StringBuilder sb = new StringBuilder();
         try {
-            ProcessBuilder builder = new ProcessBuilder(args);
-            builder.directory(new File("/system/bin/"));
-            builder.redirectErrorStream(true);
-            InputStream in = builder.start().getInputStream();
-            byte[] re = new byte[1024];
-            while (in.read(re) != -1) {
-                stringBuilder.append(new String(re));
+            ProcessBuilder processBuilder = new ProcessBuilder(strArr);
+            processBuilder.directory(new File("/system/bin/"));
+            processBuilder.redirectErrorStream(true);
+            InputStream inputStream = processBuilder.start().getInputStream();
+            byte[] bArr = new byte[1024];
+            while (inputStream.read(bArr) != -1) {
+                sb.append(new String(bArr));
             }
-            in.close();
-        } catch (Exception e) {
+            inputStream.close();
+        } catch (Exception unused) {
         }
-        String netData = stringBuilder.toString();
-        if (TextUtils.isEmpty(netData)) {
+        String sb2 = sb.toString();
+        if (TextUtils.isEmpty(sb2)) {
             return false;
         }
-        for (String lan : netData.split("\n")) {
-            if ((lan.contains("wlan0") || lan.contains("tunl0") || lan.contains("eth0")) && lan.contains("10.0.2.15")) {
+        for (String str : sb2.split("\n")) {
+            if ((str.contains("wlan0") || str.contains("tunl0") || str.contains("eth0")) && str.contains("10.0.2.15")) {
                 return true;
             }
         }
         return false;
     }
 
-    private String getProp(Context context, String property) {
+    private String getProp(Context context, String str) {
         try {
-            Class<?> systemProperties = context.getClassLoader().loadClass("android.os.SystemProperties");
-            return (String) systemProperties.getMethod("get", new Class[]{String.class}).invoke(systemProperties, new Object[]{property});
-        } catch (Exception e) {
+            Class<?> loadClass = context.getClassLoader().loadClass("android.os.SystemProperties");
+            return (String) loadClass.getMethod("get", new Class[]{String.class}).invoke(loadClass, new Object[]{str});
+        } catch (Exception unused) {
             return null;
         }
     }

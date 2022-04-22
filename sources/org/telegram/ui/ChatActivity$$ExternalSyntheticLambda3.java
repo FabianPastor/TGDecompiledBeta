@@ -1,15 +1,15 @@
 package org.telegram.ui;
 
-import android.view.MotionEvent;
-import android.view.View;
+import android.animation.ValueAnimator;
 
-public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda3 implements View.OnTouchListener {
-    public static final /* synthetic */ ChatActivity$$ExternalSyntheticLambda3 INSTANCE = new ChatActivity$$ExternalSyntheticLambda3();
+public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda3 implements ValueAnimator.AnimatorUpdateListener {
+    public final /* synthetic */ ChatActivity f$0;
 
-    private /* synthetic */ ChatActivity$$ExternalSyntheticLambda3() {
+    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda3(ChatActivity chatActivity) {
+        this.f$0 = chatActivity;
     }
 
-    public final boolean onTouch(View view, MotionEvent motionEvent) {
-        return ChatActivity.lambda$createView$56(view, motionEvent);
+    public final void onAnimationUpdate(ValueAnimator valueAnimator) {
+        this.f$0.lambda$showMentionDownButton$110(valueAnimator);
     }
 }

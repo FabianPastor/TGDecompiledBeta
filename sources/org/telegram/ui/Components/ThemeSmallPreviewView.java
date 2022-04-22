@@ -19,6 +19,7 @@ import android.text.StaticLayout;
 import android.text.TextPaint;
 import android.text.TextUtils;
 import android.util.Pair;
+import android.util.SparseArray;
 import android.view.View;
 import android.widget.FrameLayout;
 import java.util.List;
@@ -34,15 +35,15 @@ import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MediaDataController;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.SvgHelper;
-import org.telegram.tgnet.TLRPC;
+import org.telegram.tgnet.TLRPC$Document;
+import org.telegram.tgnet.TLRPC$TL_theme;
+import org.telegram.tgnet.TLRPC$WallPaper;
+import org.telegram.tgnet.TLRPC$WallPaperSettings;
 import org.telegram.ui.ActionBar.EmojiThemes;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.ChatThemeBottomSheet;
 
 public class ThemeSmallPreviewView extends FrameLayout implements NotificationCenter.NotificationCenterDelegate {
-    public static final int TYPE_DEFAULT = 0;
-    public static final int TYPE_GRID = 1;
-    public static final int TYPE_QR = 2;
     /* access modifiers changed from: private */
     public final float BUBBLE_HEIGHT = ((float) AndroidUtilities.dp(21.0f));
     /* access modifiers changed from: private */
@@ -65,7 +66,6 @@ public class ThemeSmallPreviewView extends FrameLayout implements NotificationCe
     private final int currentAccount;
     /* access modifiers changed from: private */
     public int currentType;
-    private boolean hasAnimatedEmoji;
     boolean isSelected;
     public int lastThemeIndex;
     Theme.MessageDrawable messageDrawableIn = new Theme.MessageDrawable(0, false, false);
@@ -83,10 +83,10 @@ public class ThemeSmallPreviewView extends FrameLayout implements NotificationCe
     private StaticLayout textLayout;
     ThemeDrawable themeDrawable = new ThemeDrawable();
 
-    public ThemeSmallPreviewView(Context context, int currentAccount2, Theme.ResourcesProvider resourcesProvider2, int currentType2) {
+    public ThemeSmallPreviewView(Context context, int i, Theme.ResourcesProvider resourcesProvider2, int i2) {
         super(context);
-        this.currentType = currentType2;
-        this.currentAccount = currentAccount2;
+        this.currentType = i2;
+        this.currentAccount = i;
         this.resourcesProvider = resourcesProvider2;
         setBackgroundColor(getThemedColor("dialogBackgroundGray"));
         BackupImageView backupImageView2 = new BackupImageView(context);
@@ -94,7 +94,7 @@ public class ThemeSmallPreviewView extends FrameLayout implements NotificationCe
         backupImageView2.getImageReceiver().setCrossfadeWithOldImage(true);
         this.backupImageView.getImageReceiver().setAllowStartLottieAnimation(false);
         this.backupImageView.getImageReceiver().setAutoRepeat(0);
-        if (currentType2 == 0 || currentType2 == 2) {
+        if (i2 == 0 || i2 == 2) {
             addView(this.backupImageView, LayoutHelper.createFrame(28, 28.0f, 81, 0.0f, 0.0f, 0.0f, 12.0f));
         } else {
             addView(this.backupImageView, LayoutHelper.createFrame(36, 36.0f, 81, 0.0f, 0.0f, 0.0f, 12.0f));
@@ -105,17 +105,17 @@ public class ThemeSmallPreviewView extends FrameLayout implements NotificationCe
     }
 
     /* access modifiers changed from: protected */
-    public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+    public void onMeasure(int i, int i2) {
         if (this.currentType == 1) {
-            int width = View.MeasureSpec.getSize(widthMeasureSpec);
-            super.onMeasure(View.MeasureSpec.makeMeasureSpec(width, NUM), View.MeasureSpec.makeMeasureSpec((int) (((float) width) * 1.2f), NUM));
+            int size = View.MeasureSpec.getSize(i);
+            super.onMeasure(View.MeasureSpec.makeMeasureSpec(size, NUM), View.MeasureSpec.makeMeasureSpec((int) (((float) size) * 1.2f), NUM));
         } else {
-            int width2 = AndroidUtilities.dp(77.0f);
-            int height = View.MeasureSpec.getSize(heightMeasureSpec);
-            if (height == 0) {
-                height = (int) (((float) width2) * 1.35f);
+            int dp = AndroidUtilities.dp(77.0f);
+            int size2 = View.MeasureSpec.getSize(i2);
+            if (size2 == 0) {
+                size2 = (int) (((float) dp) * 1.35f);
             }
-            super.onMeasure(View.MeasureSpec.makeMeasureSpec(width2, NUM), View.MeasureSpec.makeMeasureSpec(height, NUM));
+            super.onMeasure(View.MeasureSpec.makeMeasureSpec(dp, NUM), View.MeasureSpec.makeMeasureSpec(size2, NUM));
         }
         BackupImageView backupImageView2 = this.backupImageView;
         backupImageView2.setPivotY((float) backupImageView2.getMeasuredHeight());
@@ -124,12 +124,12 @@ public class ThemeSmallPreviewView extends FrameLayout implements NotificationCe
     }
 
     /* access modifiers changed from: protected */
-    public void onSizeChanged(int w, int h, int oldw, int oldh) {
-        super.onSizeChanged(w, h, oldw, oldh);
-        if (w != oldw || h != oldh) {
+    public void onSizeChanged(int i, int i2, int i3, int i4) {
+        super.onSizeChanged(i, i2, i3, i4);
+        if (i != i3 || i2 != i4) {
             RectF rectF2 = this.rectF;
             float f = this.INNER_RECT_SPACE;
-            rectF2.set(f, f, ((float) w) - f, ((float) h) - f);
+            rectF2.set(f, f, ((float) i) - f, ((float) i2) - f);
             this.clipPath.reset();
             Path path = this.clipPath;
             RectF rectF3 = this.rectF;
@@ -172,24 +172,21 @@ public class ThemeSmallPreviewView extends FrameLayout implements NotificationCe
         super.dispatchDraw(canvas);
     }
 
-    public void setItem(ChatThemeBottomSheet.ChatThemeItem item, boolean animated) {
-        TLRPC.Document document;
-        ChatThemeBottomSheet.ChatThemeItem chatThemeItem2 = item;
-        boolean z = true;
-        boolean itemChanged = this.chatThemeItem != chatThemeItem2;
-        if (this.lastThemeIndex == chatThemeItem2.themeIndex) {
-            z = false;
+    public void setItem(ChatThemeBottomSheet.ChatThemeItem chatThemeItem2, boolean z) {
+        TLRPC$TL_theme tLRPC$TL_theme;
+        TLRPC$Document tLRPC$Document;
+        boolean z2 = true;
+        boolean z3 = this.chatThemeItem != chatThemeItem2;
+        int i = this.lastThemeIndex;
+        int i2 = chatThemeItem2.themeIndex;
+        if (i == i2) {
+            z2 = false;
         }
-        boolean darkModeChanged = z;
-        this.lastThemeIndex = chatThemeItem2.themeIndex;
+        this.lastThemeIndex = i2;
         this.chatThemeItem = chatThemeItem2;
-        this.hasAnimatedEmoji = false;
-        if (chatThemeItem2.chatTheme.getEmoticon() != null) {
-            document = MediaDataController.getInstance(this.currentAccount).getEmojiAnimatedSticker(chatThemeItem2.chatTheme.getEmoticon());
-        } else {
-            document = null;
-        }
-        if (itemChanged) {
+        Theme.ThemeAccent themeAccent = null;
+        TLRPC$Document emojiAnimatedSticker = chatThemeItem2.chatTheme.getEmoticon() != null ? MediaDataController.getInstance(this.currentAccount).getEmojiAnimatedSticker(chatThemeItem2.chatTheme.getEmoticon()) : null;
+        if (z3) {
             Runnable runnable = this.animationCancelRunnable;
             if (runnable != null) {
                 AndroidUtilities.cancelRunOnUIThread(runnable);
@@ -199,19 +196,16 @@ public class ThemeSmallPreviewView extends FrameLayout implements NotificationCe
             this.backupImageView.setScaleX(1.0f);
             this.backupImageView.setScaleY(1.0f);
         }
-        if (itemChanged) {
-            Drawable thumb = null;
-            if (document != null) {
-                thumb = DocumentObject.getSvgThumb(document, "emptyListPlaceholder", 0.2f);
-            }
-            if (thumb == null) {
+        if (z3) {
+            Drawable svgThumb = emojiAnimatedSticker != null ? DocumentObject.getSvgThumb(emojiAnimatedSticker, "emptyListPlaceholder", 0.2f) : null;
+            if (svgThumb == null) {
                 Emoji.preloadEmoji(chatThemeItem2.chatTheme.getEmoticon());
-                thumb = Emoji.getEmojiDrawable(chatThemeItem2.chatTheme.getEmoticon());
+                svgThumb = Emoji.getEmojiDrawable(chatThemeItem2.chatTheme.getEmoticon());
             }
-            this.backupImageView.setImage(ImageLocation.getForDocument(document), "50_50", thumb, (Object) null);
+            this.backupImageView.setImage(ImageLocation.getForDocument(emojiAnimatedSticker), "50_50", svgThumb, (Object) null);
         }
-        if (itemChanged || darkModeChanged) {
-            if (animated) {
+        if (z3 || z2) {
+            if (z) {
                 this.changeThemeProgress = 0.0f;
                 this.animateOutThemeDrawable = this.themeDrawable;
                 this.themeDrawable = new ThemeDrawable();
@@ -220,45 +214,33 @@ public class ThemeSmallPreviewView extends FrameLayout implements NotificationCe
                 this.changeThemeProgress = 1.0f;
             }
             updatePreviewBackground(this.themeDrawable);
-            TLRPC.TL_theme theme = chatThemeItem2.chatTheme.getTlTheme(this.lastThemeIndex);
-            if (theme != null) {
-                long themeId = theme.id;
-                TLRPC.WallPaper wallPaper = chatThemeItem2.chatTheme.getWallpaper(this.lastThemeIndex);
-                if (wallPaper != null) {
-                    int intensity = wallPaper.settings.intensity;
-                    EmojiThemes emojiThemes = chatThemeItem2.chatTheme;
-                    ThemeSmallPreviewView$$ExternalSyntheticLambda5 themeSmallPreviewView$$ExternalSyntheticLambda5 = r0;
-                    boolean z2 = itemChanged;
-                    TLRPC.WallPaper wallPaper2 = wallPaper;
-                    ThemeSmallPreviewView$$ExternalSyntheticLambda5 themeSmallPreviewView$$ExternalSyntheticLambda52 = new ThemeSmallPreviewView$$ExternalSyntheticLambda5(this, themeId, item, intensity);
-                    emojiThemes.loadWallpaperThumb(this.lastThemeIndex, themeSmallPreviewView$$ExternalSyntheticLambda5);
-                } else {
-                    boolean z3 = itemChanged;
+            TLRPC$TL_theme tlTheme = chatThemeItem2.chatTheme.getTlTheme(this.lastThemeIndex);
+            if (tlTheme != null) {
+                long j = tlTheme.id;
+                TLRPC$WallPaper wallpaper = chatThemeItem2.chatTheme.getWallpaper(this.lastThemeIndex);
+                if (wallpaper != null) {
+                    chatThemeItem2.chatTheme.loadWallpaperThumb(this.lastThemeIndex, new ThemeSmallPreviewView$$ExternalSyntheticLambda5(this, j, chatThemeItem2, wallpaper.settings.intensity));
                 }
             } else {
-                Theme.ThemeInfo themeInfo = chatThemeItem2.chatTheme.getThemeInfo(this.lastThemeIndex);
-                Theme.ThemeAccent accent = null;
-                if (themeInfo.themeAccentsMap != null) {
-                    accent = themeInfo.themeAccentsMap.get(chatThemeItem2.chatTheme.getAccentId(this.lastThemeIndex));
+                SparseArray<Theme.ThemeAccent> sparseArray = chatThemeItem2.chatTheme.getThemeInfo(this.lastThemeIndex).themeAccentsMap;
+                if (sparseArray != null) {
+                    themeAccent = sparseArray.get(chatThemeItem2.chatTheme.getAccentId(this.lastThemeIndex));
                 }
-                if (accent != null && accent.info != null && accent.info.settings.size() > 0) {
-                    TLRPC.WallPaper wallPaper3 = accent.info.settings.get(0).wallpaper;
-                    if (!(wallPaper3 == null || wallPaper3.document == null)) {
-                        TLRPC.Document wallpaperDocument = wallPaper3.document;
-                        ImageLocation imageLocation = ImageLocation.getForDocument(FileLoader.getClosestPhotoSizeWithSize(wallpaperDocument.thumbs, 120), wallpaperDocument);
+                if (themeAccent != null && (tLRPC$TL_theme = themeAccent.info) != null && tLRPC$TL_theme.settings.size() > 0) {
+                    TLRPC$WallPaper tLRPC$WallPaper = themeAccent.info.settings.get(0).wallpaper;
+                    if (!(tLRPC$WallPaper == null || (tLRPC$Document = tLRPC$WallPaper.document) == null)) {
+                        ImageLocation forDocument = ImageLocation.getForDocument(FileLoader.getClosestPhotoSizeWithSize(tLRPC$Document.thumbs, 120), tLRPC$Document);
                         ImageReceiver imageReceiver = new ImageReceiver();
-                        imageReceiver.setImage(imageLocation, "120_80", (Drawable) null, (String) null, (Object) null, 1);
-                        imageReceiver.setDelegate(new ThemeSmallPreviewView$$ExternalSyntheticLambda4(this, chatThemeItem2, wallPaper3));
+                        imageReceiver.setImage(forDocument, "120_80", (Drawable) null, (String) null, (Object) null, 1);
+                        imageReceiver.setDelegate(new ThemeSmallPreviewView$$ExternalSyntheticLambda4(this, chatThemeItem2, tLRPC$WallPaper));
                         ImageLoader.getInstance().loadImageForImageReceiver(imageReceiver);
                     }
-                } else if (accent != null && accent.info == null) {
+                } else if (themeAccent != null && themeAccent.info == null) {
                     ChatThemeController.chatThemeQueue.postRunnable(new ThemeSmallPreviewView$$ExternalSyntheticLambda2(this, chatThemeItem2));
                 }
             }
-        } else {
-            boolean z4 = itemChanged;
         }
-        if (!animated) {
+        if (!z) {
             this.backupImageView.animate().cancel();
             this.backupImageView.setScaleX(1.0f);
             this.backupImageView.setScaleY(1.0f);
@@ -270,69 +252,75 @@ public class ThemeSmallPreviewView extends FrameLayout implements NotificationCe
         }
     }
 
-    /* renamed from: lambda$setItem$0$org-telegram-ui-Components-ThemeSmallPreviewView  reason: not valid java name */
-    public /* synthetic */ void m4477x81a3CLASSNAMEe(long themeId, ChatThemeBottomSheet.ChatThemeItem item, int intensity, Pair result) {
-        if (result != null && ((Long) result.first).longValue() == themeId) {
-            if (item.previewDrawable instanceof MotionBackgroundDrawable) {
-                MotionBackgroundDrawable motionBackgroundDrawable = (MotionBackgroundDrawable) item.previewDrawable;
-                motionBackgroundDrawable.setPatternBitmap(intensity >= 0 ? 100 : -100, (Bitmap) result.second);
+    /* access modifiers changed from: private */
+    public /* synthetic */ void lambda$setItem$0(long j, ChatThemeBottomSheet.ChatThemeItem chatThemeItem2, int i, Pair pair) {
+        if (pair != null && ((Long) pair.first).longValue() == j) {
+            Drawable drawable = chatThemeItem2.previewDrawable;
+            if (drawable instanceof MotionBackgroundDrawable) {
+                MotionBackgroundDrawable motionBackgroundDrawable = (MotionBackgroundDrawable) drawable;
+                motionBackgroundDrawable.setPatternBitmap(i >= 0 ? 100 : -100, (Bitmap) pair.second);
                 motionBackgroundDrawable.setPatternColorFilter(this.patternColor);
             }
             invalidate();
         }
     }
 
-    /* renamed from: lambda$setItem$1$org-telegram-ui-Components-ThemeSmallPreviewView  reason: not valid java name */
-    public /* synthetic */ void m4478x734d6a8d(ChatThemeBottomSheet.ChatThemeItem item, TLRPC.WallPaper wallPaper, ImageReceiver receiver, boolean set, boolean thumb, boolean memCache) {
-        Bitmap resultBitmap;
-        ImageReceiver.BitmapHolder holder = receiver.getBitmapSafe();
-        if (set && holder != null && (resultBitmap = holder.bitmap) != null && (item.previewDrawable instanceof MotionBackgroundDrawable)) {
-            MotionBackgroundDrawable motionBackgroundDrawable = (MotionBackgroundDrawable) item.previewDrawable;
-            motionBackgroundDrawable.setPatternBitmap((wallPaper.settings == null || wallPaper.settings.intensity >= 0) ? 100 : -100, resultBitmap);
-            motionBackgroundDrawable.setPatternColorFilter(this.patternColor);
-            invalidate();
+    /* access modifiers changed from: private */
+    public /* synthetic */ void lambda$setItem$1(ChatThemeBottomSheet.ChatThemeItem chatThemeItem2, TLRPC$WallPaper tLRPC$WallPaper, ImageReceiver imageReceiver, boolean z, boolean z2, boolean z3) {
+        Bitmap bitmap;
+        ImageReceiver.BitmapHolder bitmapSafe = imageReceiver.getBitmapSafe();
+        if (z && bitmapSafe != null && (bitmap = bitmapSafe.bitmap) != null) {
+            Drawable drawable = chatThemeItem2.previewDrawable;
+            if (drawable instanceof MotionBackgroundDrawable) {
+                MotionBackgroundDrawable motionBackgroundDrawable = (MotionBackgroundDrawable) drawable;
+                TLRPC$WallPaperSettings tLRPC$WallPaperSettings = tLRPC$WallPaper.settings;
+                motionBackgroundDrawable.setPatternBitmap((tLRPC$WallPaperSettings == null || tLRPC$WallPaperSettings.intensity >= 0) ? 100 : -100, bitmap);
+                motionBackgroundDrawable.setPatternColorFilter(this.patternColor);
+                invalidate();
+            }
         }
     }
 
-    /* renamed from: lambda$setItem$3$org-telegram-ui-Components-ThemeSmallPreviewView  reason: not valid java name */
-    public /* synthetic */ void m4480x56a0b6cb(ChatThemeBottomSheet.ChatThemeItem item) {
-        AndroidUtilities.runOnUIThread(new ThemeSmallPreviewView$$ExternalSyntheticLambda3(this, item, SvgHelper.getBitmap(NUM, AndroidUtilities.dp(80.0f), AndroidUtilities.dp(120.0f), -16777216, 3.0f)));
+    /* access modifiers changed from: private */
+    public /* synthetic */ void lambda$setItem$3(ChatThemeBottomSheet.ChatThemeItem chatThemeItem2) {
+        AndroidUtilities.runOnUIThread(new ThemeSmallPreviewView$$ExternalSyntheticLambda3(this, chatThemeItem2, SvgHelper.getBitmap(NUM, AndroidUtilities.dp(80.0f), AndroidUtilities.dp(120.0f), -16777216, 3.0f)));
     }
 
-    /* renamed from: lambda$setItem$2$org-telegram-ui-Components-ThemeSmallPreviewView  reason: not valid java name */
-    public /* synthetic */ void m4479x64var_ac(ChatThemeBottomSheet.ChatThemeItem item, Bitmap bitmap) {
-        if (item.previewDrawable instanceof MotionBackgroundDrawable) {
-            MotionBackgroundDrawable motionBackgroundDrawable = (MotionBackgroundDrawable) item.previewDrawable;
+    /* access modifiers changed from: private */
+    public /* synthetic */ void lambda$setItem$2(ChatThemeBottomSheet.ChatThemeItem chatThemeItem2, Bitmap bitmap) {
+        Drawable drawable = chatThemeItem2.previewDrawable;
+        if (drawable instanceof MotionBackgroundDrawable) {
+            MotionBackgroundDrawable motionBackgroundDrawable = (MotionBackgroundDrawable) drawable;
             motionBackgroundDrawable.setPatternBitmap(100, bitmap);
             motionBackgroundDrawable.setPatternColorFilter(this.patternColor);
             invalidate();
         }
     }
 
-    public void setSelected(final boolean selected, boolean animated) {
+    public void setSelected(final boolean z, boolean z2) {
         float f = 1.0f;
-        if (!animated) {
+        if (!z2) {
             ValueAnimator valueAnimator = this.strokeAlphaAnimator;
             if (valueAnimator != null) {
                 valueAnimator.cancel();
             }
-            this.isSelected = selected;
-            if (!selected) {
+            this.isSelected = z;
+            if (!z) {
                 f = 0.0f;
             }
             this.selectionProgress = f;
             invalidate();
             return;
         }
-        if (this.isSelected != selected) {
-            float currentProgress = this.selectionProgress;
+        if (this.isSelected != z) {
+            float f2 = this.selectionProgress;
             ValueAnimator valueAnimator2 = this.strokeAlphaAnimator;
             if (valueAnimator2 != null) {
                 valueAnimator2.cancel();
             }
             float[] fArr = new float[2];
-            fArr[0] = currentProgress;
-            if (!selected) {
+            fArr[0] = f2;
+            if (!z) {
                 f = 0.0f;
             }
             fArr[1] = f;
@@ -340,25 +328,25 @@ public class ThemeSmallPreviewView extends FrameLayout implements NotificationCe
             this.strokeAlphaAnimator = ofFloat;
             ofFloat.addUpdateListener(new ThemeSmallPreviewView$$ExternalSyntheticLambda0(this));
             this.strokeAlphaAnimator.addListener(new AnimatorListenerAdapter() {
-                public void onAnimationEnd(Animator animation) {
-                    super.onAnimationEnd(animation);
-                    float unused = ThemeSmallPreviewView.this.selectionProgress = selected ? 1.0f : 0.0f;
+                public void onAnimationEnd(Animator animator) {
+                    super.onAnimationEnd(animator);
+                    float unused = ThemeSmallPreviewView.this.selectionProgress = z ? 1.0f : 0.0f;
                     ThemeSmallPreviewView.this.invalidate();
                 }
             });
             this.strokeAlphaAnimator.setDuration(250);
             this.strokeAlphaAnimator.start();
         }
-        this.isSelected = selected;
+        this.isSelected = z;
     }
 
-    /* renamed from: lambda$setSelected$4$org-telegram-ui-Components-ThemeSmallPreviewView  reason: not valid java name */
-    public /* synthetic */ void m4481x9e27f2e2(ValueAnimator valueAnimator) {
+    /* access modifiers changed from: private */
+    public /* synthetic */ void lambda$setSelected$4(ValueAnimator valueAnimator) {
         this.selectionProgress = ((Float) valueAnimator.getAnimatedValue()).floatValue();
         invalidate();
     }
 
-    public void setBackgroundColor(int color) {
+    public void setBackgroundColor(int i) {
         this.backgroundFillPaint.setColor(getThemedColor("dialogBackgroundGray"));
         TextPaint textPaint = this.noThemeTextPaint;
         if (textPaint != null) {
@@ -367,108 +355,192 @@ public class ThemeSmallPreviewView extends FrameLayout implements NotificationCe
         invalidate();
     }
 
-    private void fillOutBubblePaint(Paint paint, List<Integer> messageColors) {
-        if (messageColors.size() > 1) {
-            int[] colors = new int[messageColors.size()];
-            for (int i = 0; i != messageColors.size(); i++) {
-                colors[i] = messageColors.get(i).intValue();
+    private void fillOutBubblePaint(Paint paint, List<Integer> list) {
+        if (list.size() > 1) {
+            int[] iArr = new int[list.size()];
+            for (int i = 0; i != list.size(); i++) {
+                iArr[i] = list.get(i).intValue();
             }
-            float top = this.INNER_RECT_SPACE + ((float) AndroidUtilities.dp(8.0f));
-            paint.setShader(new LinearGradient(0.0f, top, 0.0f, top + this.BUBBLE_HEIGHT, colors, (float[]) null, Shader.TileMode.CLAMP));
+            float dp = this.INNER_RECT_SPACE + ((float) AndroidUtilities.dp(8.0f));
+            paint.setShader(new LinearGradient(0.0f, dp, 0.0f, dp + this.BUBBLE_HEIGHT, iArr, (float[]) null, Shader.TileMode.CLAMP));
             return;
         }
         paint.setShader((Shader) null);
     }
 
     public void updatePreviewBackground(ThemeDrawable themeDrawable2) {
-        int strokeColor;
+        EmojiThemes emojiThemes;
+        int i;
         ChatThemeBottomSheet.ChatThemeItem chatThemeItem2 = this.chatThemeItem;
-        if (chatThemeItem2 != null && chatThemeItem2.chatTheme != null) {
-            EmojiThemes.ThemeItem themeItem = this.chatThemeItem.chatTheme.getThemeItem(this.chatThemeItem.themeIndex);
+        if (chatThemeItem2 != null && (emojiThemes = chatThemeItem2.chatTheme) != null) {
+            EmojiThemes.ThemeItem themeItem = emojiThemes.getThemeItem(chatThemeItem2.themeIndex);
             themeDrawable2.inBubblePaint.setColor(themeItem.inBubbleColor);
             themeDrawable2.outBubblePaintSecond.setColor(themeItem.outBubbleColor);
             if (this.chatThemeItem.chatTheme.showAsDefaultStub) {
-                strokeColor = getThemedColor("featuredStickers_addButton");
+                i = getThemedColor("featuredStickers_addButton");
             } else {
-                strokeColor = themeItem.outLineColor;
+                i = themeItem.outLineColor;
             }
-            int strokeAlpha = themeDrawable2.strokePaint.getAlpha();
-            themeDrawable2.strokePaint.setColor(strokeColor);
-            themeDrawable2.strokePaint.setAlpha(strokeAlpha);
-            TLRPC.TL_theme tlTheme = this.chatThemeItem.chatTheme.getTlTheme(this.chatThemeItem.themeIndex);
+            int alpha = themeDrawable2.strokePaint.getAlpha();
+            themeDrawable2.strokePaint.setColor(i);
+            themeDrawable2.strokePaint.setAlpha(alpha);
+            ChatThemeBottomSheet.ChatThemeItem chatThemeItem3 = this.chatThemeItem;
+            TLRPC$TL_theme tlTheme = chatThemeItem3.chatTheme.getTlTheme(chatThemeItem3.themeIndex);
             if (tlTheme != null) {
-                int index = this.chatThemeItem.chatTheme.getSettingsIndex(this.chatThemeItem.themeIndex);
-                fillOutBubblePaint(themeDrawable2.outBubblePaintSecond, tlTheme.settings.get(index).message_colors);
+                ChatThemeBottomSheet.ChatThemeItem chatThemeItem4 = this.chatThemeItem;
+                int settingsIndex = chatThemeItem4.chatTheme.getSettingsIndex(chatThemeItem4.themeIndex);
+                fillOutBubblePaint(themeDrawable2.outBubblePaintSecond, tlTheme.settings.get(settingsIndex).message_colors);
                 themeDrawable2.outBubblePaintSecond.setAlpha(255);
-                getPreviewDrawable(tlTheme, index);
+                getPreviewDrawable(tlTheme, settingsIndex);
             } else {
-                getPreviewDrawable(this.chatThemeItem.chatTheme.getThemeItem(this.chatThemeItem.themeIndex));
+                ChatThemeBottomSheet.ChatThemeItem chatThemeItem5 = this.chatThemeItem;
+                getPreviewDrawable(chatThemeItem5.chatTheme.getThemeItem(chatThemeItem5.themeIndex));
             }
             themeDrawable2.previewDrawable = this.chatThemeItem.previewDrawable;
             invalidate();
         }
     }
 
-    private Drawable getPreviewDrawable(TLRPC.TL_theme theme, int settingsIndex) {
+    private Drawable getPreviewDrawable(TLRPC$TL_theme tLRPC$TL_theme, int i) {
+        int i2;
+        int i3;
+        int i4;
+        int i5;
         MotionBackgroundDrawable motionBackgroundDrawable;
         if (this.chatThemeItem == null) {
             return null;
         }
-        int color1 = 0;
-        int color2 = 0;
-        int color3 = 0;
-        int color4 = 0;
-        if (settingsIndex >= 0) {
-            TLRPC.WallPaperSettings wallPaperSettings = theme.settings.get(settingsIndex).wallpaper.settings;
-            color1 = wallPaperSettings.background_color;
-            color2 = wallPaperSettings.second_background_color;
-            color3 = wallPaperSettings.third_background_color;
-            color4 = wallPaperSettings.fourth_background_color;
+        if (i >= 0) {
+            TLRPC$WallPaperSettings tLRPC$WallPaperSettings = tLRPC$TL_theme.settings.get(i).wallpaper.settings;
+            int i6 = tLRPC$WallPaperSettings.background_color;
+            int i7 = tLRPC$WallPaperSettings.second_background_color;
+            int i8 = tLRPC$WallPaperSettings.third_background_color;
+            i3 = tLRPC$WallPaperSettings.fourth_background_color;
+            i5 = i7;
+            i2 = i6;
+            i4 = i8;
+        } else {
+            i5 = 0;
+            i4 = 0;
+            i3 = 0;
+            i2 = 0;
         }
-        if (color2 != 0) {
-            motionBackgroundDrawable = new MotionBackgroundDrawable(color1, color2, color3, color4, true);
+        if (i5 != 0) {
+            motionBackgroundDrawable = new MotionBackgroundDrawable(i2, i5, i4, i3, true);
             this.patternColor = motionBackgroundDrawable.getPatternColor();
         } else {
-            motionBackgroundDrawable = new MotionBackgroundDrawable(color1, color1, color1, color1, true);
+            motionBackgroundDrawable = new MotionBackgroundDrawable(i2, i2, i2, i2, true);
             this.patternColor = -16777216;
         }
         this.chatThemeItem.previewDrawable = motionBackgroundDrawable;
         return motionBackgroundDrawable;
     }
 
-    private Drawable getPreviewDrawable(EmojiThemes.ThemeItem item) {
-        if (this.chatThemeItem == null) {
-            return null;
-        }
-        Drawable drawable = null;
-        int color1 = item.patternBgColor;
-        int color2 = item.patternBgGradientColor1;
-        int color3 = item.patternBgGradientColor2;
-        int color4 = item.patternBgGradientColor3;
-        int rotation = item.patternBgRotation;
-        if (item.themeInfo.getAccent(false) != null) {
-            if (color2 != 0) {
-                MotionBackgroundDrawable motionBackgroundDrawable = new MotionBackgroundDrawable(color1, color2, color3, color4, rotation, true);
-                this.patternColor = motionBackgroundDrawable.getPatternColor();
-                drawable = motionBackgroundDrawable;
-            } else {
-                drawable = new MotionBackgroundDrawable(color1, color1, color1, color1, rotation, true);
-                this.patternColor = -16777216;
-            }
-        } else if (color1 != 0 && color2 != 0) {
-            drawable = new MotionBackgroundDrawable(color1, color2, color3, color4, rotation, true);
-        } else if (color1 != 0) {
-            drawable = new ColorDrawable(color1);
-        } else if (item.themeInfo == null || (item.themeInfo.previewWallpaperOffset <= 0 && item.themeInfo.pathToWallpaper == null)) {
-            drawable = new MotionBackgroundDrawable(-2368069, -9722489, -2762611, -7817084, true);
-        } else {
-            Bitmap wallpaper = AndroidUtilities.getScaledBitmap((float) AndroidUtilities.dp(76.0f), (float) AndroidUtilities.dp(97.0f), item.themeInfo.pathToWallpaper, item.themeInfo.pathToFile, item.themeInfo.previewWallpaperOffset);
-            if (wallpaper != null) {
-                drawable = new BitmapDrawable(wallpaper);
-            }
-        }
-        this.chatThemeItem.previewDrawable = drawable;
-        return drawable;
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r1v0, resolved type: android.graphics.drawable.BitmapDrawable} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r1v1, resolved type: android.graphics.drawable.BitmapDrawable} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r10v6, resolved type: org.telegram.ui.Components.MotionBackgroundDrawable} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r1v2, resolved type: android.graphics.drawable.BitmapDrawable} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r10v7, resolved type: android.graphics.drawable.ColorDrawable} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v10, resolved type: org.telegram.ui.Components.MotionBackgroundDrawable} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r10v8, resolved type: org.telegram.ui.Components.MotionBackgroundDrawable} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v11, resolved type: org.telegram.ui.Components.MotionBackgroundDrawable} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v12, resolved type: org.telegram.ui.Components.MotionBackgroundDrawable} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v13, resolved type: org.telegram.ui.Components.MotionBackgroundDrawable} */
+    /* JADX WARNING: type inference failed for: r10v1, types: [android.graphics.drawable.Drawable] */
+    /* JADX WARNING: Multi-variable type inference failed */
+    /* Code decompiled incorrectly, please refer to instructions dump. */
+    private android.graphics.drawable.Drawable getPreviewDrawable(org.telegram.ui.ActionBar.EmojiThemes.ThemeItem r10) {
+        /*
+            r9 = this;
+            org.telegram.ui.Components.ChatThemeBottomSheet$ChatThemeItem r0 = r9.chatThemeItem
+            r1 = 0
+            if (r0 != 0) goto L_0x0006
+            return r1
+        L_0x0006:
+            int r0 = r10.patternBgColor
+            int r4 = r10.patternBgGradientColor1
+            int r5 = r10.patternBgGradientColor2
+            int r6 = r10.patternBgGradientColor3
+            int r7 = r10.patternBgRotation
+            org.telegram.ui.ActionBar.Theme$ThemeInfo r2 = r10.themeInfo
+            r3 = 0
+            org.telegram.ui.ActionBar.Theme$ThemeAccent r2 = r2.getAccent(r3)
+            if (r2 == 0) goto L_0x003b
+            if (r4 == 0) goto L_0x002b
+            org.telegram.ui.Components.MotionBackgroundDrawable r10 = new org.telegram.ui.Components.MotionBackgroundDrawable
+            r8 = 1
+            r2 = r10
+            r3 = r0
+            r2.<init>(r3, r4, r5, r6, r7, r8)
+            int r0 = r10.getPatternColor()
+            r9.patternColor = r0
+            goto L_0x0092
+        L_0x002b:
+            org.telegram.ui.Components.MotionBackgroundDrawable r10 = new org.telegram.ui.Components.MotionBackgroundDrawable
+            r8 = 1
+            r2 = r10
+            r3 = r0
+            r4 = r0
+            r5 = r0
+            r6 = r0
+            r2.<init>(r3, r4, r5, r6, r7, r8)
+            r0 = -16777216(0xfffffffffvar_, float:-1.7014118E38)
+            r9.patternColor = r0
+            goto L_0x0092
+        L_0x003b:
+            if (r0 == 0) goto L_0x0048
+            if (r4 == 0) goto L_0x0048
+            org.telegram.ui.Components.MotionBackgroundDrawable r10 = new org.telegram.ui.Components.MotionBackgroundDrawable
+            r8 = 1
+            r2 = r10
+            r3 = r0
+            r2.<init>(r3, r4, r5, r6, r7, r8)
+            goto L_0x0092
+        L_0x0048:
+            if (r0 == 0) goto L_0x0050
+            android.graphics.drawable.ColorDrawable r10 = new android.graphics.drawable.ColorDrawable
+            r10.<init>(r0)
+            goto L_0x0092
+        L_0x0050:
+            org.telegram.ui.ActionBar.Theme$ThemeInfo r0 = r10.themeInfo
+            if (r0 == 0) goto L_0x007f
+            int r2 = r0.previewWallpaperOffset
+            if (r2 > 0) goto L_0x005c
+            java.lang.String r0 = r0.pathToWallpaper
+            if (r0 == 0) goto L_0x007f
+        L_0x005c:
+            r0 = 1117257728(0x42980000, float:76.0)
+            int r0 = org.telegram.messenger.AndroidUtilities.dp(r0)
+            float r0 = (float) r0
+            r2 = 1120010240(0x42CLASSNAME, float:97.0)
+            int r2 = org.telegram.messenger.AndroidUtilities.dp(r2)
+            float r2 = (float) r2
+            org.telegram.ui.ActionBar.Theme$ThemeInfo r10 = r10.themeInfo
+            java.lang.String r3 = r10.pathToWallpaper
+            java.lang.String r4 = r10.pathToFile
+            int r10 = r10.previewWallpaperOffset
+            android.graphics.Bitmap r10 = org.telegram.messenger.AndroidUtilities.getScaledBitmap(r0, r2, r3, r4, r10)
+            if (r10 == 0) goto L_0x007d
+            android.graphics.drawable.BitmapDrawable r1 = new android.graphics.drawable.BitmapDrawable
+            r1.<init>(r10)
+        L_0x007d:
+            r10 = r1
+            goto L_0x0092
+        L_0x007f:
+            org.telegram.ui.Components.MotionBackgroundDrawable r10 = new org.telegram.ui.Components.MotionBackgroundDrawable
+            r3 = -2368069(0xffffffffffdbddbb, float:NaN)
+            r4 = -9722489(0xffffffffff6ba587, float:-3.1322805E38)
+            r5 = -2762611(0xffffffffffd5d88d, float:NaN)
+            r6 = -7817084(0xfffffffffvar_b884, float:NaN)
+            r7 = 1
+            r2 = r10
+            r2.<init>(r3, r4, r5, r6, r7)
+        L_0x0092:
+            org.telegram.ui.Components.ChatThemeBottomSheet$ChatThemeItem r0 = r9.chatThemeItem
+            r0.previewDrawable = r10
+            return r10
+        */
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.ThemeSmallPreviewView.getPreviewDrawable(org.telegram.ui.ActionBar.EmojiThemes$ThemeItem):android.graphics.drawable.Drawable");
     }
 
     /* access modifiers changed from: private */
@@ -488,10 +560,10 @@ public class ThemeSmallPreviewView extends FrameLayout implements NotificationCe
     }
 
     /* access modifiers changed from: private */
-    public int getThemedColor(String key) {
+    public int getThemedColor(String str) {
         Theme.ResourcesProvider resourcesProvider2 = this.resourcesProvider;
-        Integer color = resourcesProvider2 != null ? resourcesProvider2.getColor(key) : null;
-        return color != null ? color.intValue() : Theme.getColor(key);
+        Integer color = resourcesProvider2 != null ? resourcesProvider2.getColor(str) : null;
+        return color != null ? color.intValue() : Theme.getColor(str);
     }
 
     public void playEmojiAnimation() {
@@ -509,8 +581,8 @@ public class ThemeSmallPreviewView extends FrameLayout implements NotificationCe
         }
     }
 
-    /* renamed from: lambda$playEmojiAnimation$5$org-telegram-ui-Components-ThemeSmallPreviewView  reason: not valid java name */
-    public /* synthetic */ void m4476x92d17632() {
+    /* access modifiers changed from: private */
+    public /* synthetic */ void lambda$playEmojiAnimation$5() {
         this.animationCancelRunnable = null;
         this.backupImageView.animate().scaleX(1.0f).scaleY(1.0f).setDuration(150).setInterpolator(CubicBezierInterpolator.DEFAULT).start();
     }
@@ -539,34 +611,36 @@ public class ThemeSmallPreviewView extends FrameLayout implements NotificationCe
             paint.setStrokeWidth((float) AndroidUtilities.dp(2.0f));
         }
 
-        public void drawBackground(Canvas canvas, float alpha) {
+        public void drawBackground(Canvas canvas, float f) {
             if (this.previewDrawable != null) {
                 canvas.save();
                 canvas.clipPath(ThemeSmallPreviewView.this.clipPath);
                 Drawable drawable = this.previewDrawable;
                 if (drawable instanceof BitmapDrawable) {
-                    int drawableW = drawable.getIntrinsicWidth();
-                    int drawableH = this.previewDrawable.getIntrinsicHeight();
-                    if (((float) drawableW) / ((float) drawableH) > ((float) ThemeSmallPreviewView.this.getWidth()) / ((float) ThemeSmallPreviewView.this.getHeight())) {
-                        int w = (int) ((((float) ThemeSmallPreviewView.this.getWidth()) * ((float) drawableH)) / ((float) drawableW));
-                        int padding = (w - ThemeSmallPreviewView.this.getWidth()) / 2;
-                        this.previewDrawable.setBounds(padding, 0, padding + w, ThemeSmallPreviewView.this.getHeight());
+                    float intrinsicWidth = (float) drawable.getIntrinsicWidth();
+                    float intrinsicHeight = (float) this.previewDrawable.getIntrinsicHeight();
+                    if (intrinsicWidth / intrinsicHeight > ((float) ThemeSmallPreviewView.this.getWidth()) / ((float) ThemeSmallPreviewView.this.getHeight())) {
+                        int width = (int) ((((float) ThemeSmallPreviewView.this.getWidth()) * intrinsicHeight) / intrinsicWidth);
+                        int width2 = (width - ThemeSmallPreviewView.this.getWidth()) / 2;
+                        this.previewDrawable.setBounds(width2, 0, width + width2, ThemeSmallPreviewView.this.getHeight());
                     } else {
-                        int h = (int) ((((float) ThemeSmallPreviewView.this.getHeight()) * ((float) drawableH)) / ((float) drawableW));
-                        int padding2 = (ThemeSmallPreviewView.this.getHeight() - h) / 2;
-                        this.previewDrawable.setBounds(0, padding2, ThemeSmallPreviewView.this.getWidth(), padding2 + h);
+                        int height = (int) ((((float) ThemeSmallPreviewView.this.getHeight()) * intrinsicHeight) / intrinsicWidth);
+                        int height2 = (ThemeSmallPreviewView.this.getHeight() - height) / 2;
+                        this.previewDrawable.setBounds(0, height2, ThemeSmallPreviewView.this.getWidth(), height + height2);
                     }
                 } else {
                     drawable.setBounds(0, 0, ThemeSmallPreviewView.this.getWidth(), ThemeSmallPreviewView.this.getHeight());
                 }
-                this.previewDrawable.setAlpha((int) (alpha * 255.0f));
+                int i = (int) (f * 255.0f);
+                this.previewDrawable.setAlpha(i);
                 this.previewDrawable.draw(canvas);
                 Drawable drawable2 = this.previewDrawable;
                 if ((drawable2 instanceof ColorDrawable) || ((drawable2 instanceof MotionBackgroundDrawable) && ((MotionBackgroundDrawable) drawable2).isOneColor())) {
-                    ThemeSmallPreviewView.this.outlineBackgroundPaint.setAlpha((int) (255.0f * alpha));
-                    float padding3 = ThemeSmallPreviewView.this.INNER_RECT_SPACE;
-                    AndroidUtilities.rectTmp.set(padding3, padding3, ((float) ThemeSmallPreviewView.this.getWidth()) - padding3, ((float) ThemeSmallPreviewView.this.getHeight()) - padding3);
-                    canvas.drawRoundRect(AndroidUtilities.rectTmp, ThemeSmallPreviewView.this.INNER_RADIUS, ThemeSmallPreviewView.this.INNER_RADIUS, ThemeSmallPreviewView.this.outlineBackgroundPaint);
+                    ThemeSmallPreviewView.this.outlineBackgroundPaint.setAlpha(i);
+                    float access$500 = ThemeSmallPreviewView.this.INNER_RECT_SPACE;
+                    RectF rectF = AndroidUtilities.rectTmp;
+                    rectF.set(access$500, access$500, ((float) ThemeSmallPreviewView.this.getWidth()) - access$500, ((float) ThemeSmallPreviewView.this.getHeight()) - access$500);
+                    canvas.drawRoundRect(rectF, ThemeSmallPreviewView.this.INNER_RADIUS, ThemeSmallPreviewView.this.INNER_RADIUS, ThemeSmallPreviewView.this.outlineBackgroundPaint);
                 }
                 canvas.restore();
                 return;
@@ -574,66 +648,78 @@ public class ThemeSmallPreviewView extends FrameLayout implements NotificationCe
             canvas.drawRoundRect(ThemeSmallPreviewView.this.rectF, ThemeSmallPreviewView.this.INNER_RADIUS, ThemeSmallPreviewView.this.INNER_RADIUS, ThemeSmallPreviewView.this.backgroundFillPaint);
         }
 
-        public void draw(Canvas canvas, float alpha) {
-            int strokeColor;
-            Canvas canvas2 = canvas;
-            if (ThemeSmallPreviewView.this.isSelected || ThemeSmallPreviewView.this.strokeAlphaAnimator != null) {
-                EmojiThemes.ThemeItem themeItem = ThemeSmallPreviewView.this.chatThemeItem.chatTheme.getThemeItem(ThemeSmallPreviewView.this.chatThemeItem.themeIndex);
-                if (ThemeSmallPreviewView.this.chatThemeItem.chatTheme.showAsDefaultStub) {
-                    strokeColor = ThemeSmallPreviewView.this.getThemedColor("featuredStickers_addButton");
+        public void draw(Canvas canvas, float f) {
+            int i;
+            ThemeSmallPreviewView themeSmallPreviewView = ThemeSmallPreviewView.this;
+            if (themeSmallPreviewView.isSelected || themeSmallPreviewView.strokeAlphaAnimator != null) {
+                ChatThemeBottomSheet.ChatThemeItem chatThemeItem = ThemeSmallPreviewView.this.chatThemeItem;
+                EmojiThemes.ThemeItem themeItem = chatThemeItem.chatTheme.getThemeItem(chatThemeItem.themeIndex);
+                ThemeSmallPreviewView themeSmallPreviewView2 = ThemeSmallPreviewView.this;
+                if (themeSmallPreviewView2.chatThemeItem.chatTheme.showAsDefaultStub) {
+                    i = themeSmallPreviewView2.getThemedColor("featuredStickers_addButton");
                 } else {
-                    strokeColor = themeItem.outLineColor;
+                    i = themeItem.outLineColor;
                 }
-                this.strokePaint.setColor(strokeColor);
-                this.strokePaint.setAlpha((int) (ThemeSmallPreviewView.this.selectionProgress * alpha * 255.0f));
-                float rectSpace = (this.strokePaint.getStrokeWidth() * 0.5f) + (((float) AndroidUtilities.dp(4.0f)) * (1.0f - ThemeSmallPreviewView.this.selectionProgress));
-                ThemeSmallPreviewView.this.rectF.set(rectSpace, rectSpace, ((float) ThemeSmallPreviewView.this.getWidth()) - rectSpace, ((float) ThemeSmallPreviewView.this.getHeight()) - rectSpace);
-                canvas2.drawRoundRect(ThemeSmallPreviewView.this.rectF, ThemeSmallPreviewView.this.STROKE_RADIUS, ThemeSmallPreviewView.this.STROKE_RADIUS, this.strokePaint);
+                this.strokePaint.setColor(i);
+                this.strokePaint.setAlpha((int) (ThemeSmallPreviewView.this.selectionProgress * f * 255.0f));
+                float strokeWidth = (this.strokePaint.getStrokeWidth() * 0.5f) + (((float) AndroidUtilities.dp(4.0f)) * (1.0f - ThemeSmallPreviewView.this.selectionProgress));
+                ThemeSmallPreviewView.this.rectF.set(strokeWidth, strokeWidth, ((float) ThemeSmallPreviewView.this.getWidth()) - strokeWidth, ((float) ThemeSmallPreviewView.this.getHeight()) - strokeWidth);
+                canvas.drawRoundRect(ThemeSmallPreviewView.this.rectF, ThemeSmallPreviewView.this.STROKE_RADIUS, ThemeSmallPreviewView.this.STROKE_RADIUS, this.strokePaint);
             }
-            this.outBubblePaintSecond.setAlpha((int) (alpha * 255.0f));
-            this.inBubblePaint.setAlpha((int) (255.0f * alpha));
+            int i2 = (int) (f * 255.0f);
+            this.outBubblePaintSecond.setAlpha(i2);
+            this.inBubblePaint.setAlpha(i2);
             ThemeSmallPreviewView.this.rectF.set(ThemeSmallPreviewView.this.INNER_RECT_SPACE, ThemeSmallPreviewView.this.INNER_RECT_SPACE, ((float) ThemeSmallPreviewView.this.getWidth()) - ThemeSmallPreviewView.this.INNER_RECT_SPACE, ((float) ThemeSmallPreviewView.this.getHeight()) - ThemeSmallPreviewView.this.INNER_RECT_SPACE);
-            if (ThemeSmallPreviewView.this.chatThemeItem.chatTheme == null || ThemeSmallPreviewView.this.chatThemeItem.chatTheme.showAsDefaultStub) {
-                canvas2.drawRoundRect(ThemeSmallPreviewView.this.rectF, ThemeSmallPreviewView.this.INNER_RADIUS, ThemeSmallPreviewView.this.INNER_RADIUS, ThemeSmallPreviewView.this.backgroundFillPaint);
+            ThemeSmallPreviewView themeSmallPreviewView3 = ThemeSmallPreviewView.this;
+            EmojiThemes emojiThemes = themeSmallPreviewView3.chatThemeItem.chatTheme;
+            if (emojiThemes == null || emojiThemes.showAsDefaultStub) {
+                canvas.drawRoundRect(themeSmallPreviewView3.rectF, ThemeSmallPreviewView.this.INNER_RADIUS, ThemeSmallPreviewView.this.INNER_RADIUS, ThemeSmallPreviewView.this.backgroundFillPaint);
                 canvas.save();
-                StaticLayout textLayout = ThemeSmallPreviewView.this.getNoThemeStaticLayout();
-                canvas2.translate(((float) (ThemeSmallPreviewView.this.getWidth() - textLayout.getWidth())) * 0.5f, (float) AndroidUtilities.dp(18.0f));
-                textLayout.draw(canvas2);
+                StaticLayout access$1200 = ThemeSmallPreviewView.this.getNoThemeStaticLayout();
+                canvas.translate(((float) (ThemeSmallPreviewView.this.getWidth() - access$1200.getWidth())) * 0.5f, (float) AndroidUtilities.dp(18.0f));
+                access$1200.draw(canvas);
                 canvas.restore();
-            } else if (ThemeSmallPreviewView.this.currentType != 2) {
-                float bubbleTop = ThemeSmallPreviewView.this.INNER_RECT_SPACE + ((float) AndroidUtilities.dp(8.0f));
-                float bubbleLeft = ThemeSmallPreviewView.this.INNER_RECT_SPACE + ((float) AndroidUtilities.dp(22.0f));
+            } else if (themeSmallPreviewView3.currentType == 2) {
+                ThemeSmallPreviewView themeSmallPreviewView4 = ThemeSmallPreviewView.this;
+                if (themeSmallPreviewView4.chatThemeItem.icon != null) {
+                    canvas.drawBitmap(ThemeSmallPreviewView.this.chatThemeItem.icon, ((float) (themeSmallPreviewView4.getWidth() - ThemeSmallPreviewView.this.chatThemeItem.icon.getWidth())) * 0.5f, (float) AndroidUtilities.dp(21.0f), (Paint) null);
+                }
+            } else {
+                float access$500 = ThemeSmallPreviewView.this.INNER_RECT_SPACE + ((float) AndroidUtilities.dp(8.0f));
+                float access$5002 = ThemeSmallPreviewView.this.INNER_RECT_SPACE + ((float) AndroidUtilities.dp(22.0f));
                 if (ThemeSmallPreviewView.this.currentType == 0) {
-                    ThemeSmallPreviewView.this.rectF.set(bubbleLeft, bubbleTop, ThemeSmallPreviewView.this.BUBBLE_WIDTH + bubbleLeft, ThemeSmallPreviewView.this.BUBBLE_HEIGHT + bubbleTop);
+                    ThemeSmallPreviewView.this.rectF.set(access$5002, access$500, ThemeSmallPreviewView.this.BUBBLE_WIDTH + access$5002, ThemeSmallPreviewView.this.BUBBLE_HEIGHT + access$500);
                 } else {
-                    bubbleTop = ((float) ThemeSmallPreviewView.this.getMeasuredHeight()) * 0.12f;
-                    ThemeSmallPreviewView.this.rectF.set(((float) ThemeSmallPreviewView.this.getMeasuredWidth()) - (((float) ThemeSmallPreviewView.this.getMeasuredWidth()) * 0.65f), bubbleTop, ((float) ThemeSmallPreviewView.this.getMeasuredWidth()) - (((float) ThemeSmallPreviewView.this.getMeasuredWidth()) * 0.1f), ((float) ThemeSmallPreviewView.this.getMeasuredHeight()) * 0.32f);
+                    access$500 = ((float) ThemeSmallPreviewView.this.getMeasuredHeight()) * 0.12f;
+                    ThemeSmallPreviewView.this.rectF.set(((float) ThemeSmallPreviewView.this.getMeasuredWidth()) - (((float) ThemeSmallPreviewView.this.getMeasuredWidth()) * 0.65f), access$500, ((float) ThemeSmallPreviewView.this.getMeasuredWidth()) - (((float) ThemeSmallPreviewView.this.getMeasuredWidth()) * 0.1f), ((float) ThemeSmallPreviewView.this.getMeasuredHeight()) * 0.32f);
                 }
                 Paint paint = this.outBubblePaintSecond;
                 if (ThemeSmallPreviewView.this.currentType == 0) {
-                    canvas2.drawRoundRect(ThemeSmallPreviewView.this.rectF, ThemeSmallPreviewView.this.rectF.height() * 0.5f, ThemeSmallPreviewView.this.rectF.height() * 0.5f, paint);
+                    canvas.drawRoundRect(ThemeSmallPreviewView.this.rectF, ThemeSmallPreviewView.this.rectF.height() * 0.5f, ThemeSmallPreviewView.this.rectF.height() * 0.5f, paint);
                 } else {
-                    ThemeSmallPreviewView.this.messageDrawableOut.setBounds((int) ThemeSmallPreviewView.this.rectF.left, ((int) ThemeSmallPreviewView.this.rectF.top) - AndroidUtilities.dp(2.0f), ((int) ThemeSmallPreviewView.this.rectF.right) + AndroidUtilities.dp(4.0f), ((int) ThemeSmallPreviewView.this.rectF.bottom) + AndroidUtilities.dp(2.0f));
-                    ThemeSmallPreviewView.this.messageDrawableOut.setRoundRadius((int) (ThemeSmallPreviewView.this.rectF.height() * 0.5f));
-                    ThemeSmallPreviewView.this.messageDrawableOut.draw(canvas2, paint);
+                    ThemeSmallPreviewView themeSmallPreviewView5 = ThemeSmallPreviewView.this;
+                    themeSmallPreviewView5.messageDrawableOut.setBounds((int) themeSmallPreviewView5.rectF.left, ((int) ThemeSmallPreviewView.this.rectF.top) - AndroidUtilities.dp(2.0f), ((int) ThemeSmallPreviewView.this.rectF.right) + AndroidUtilities.dp(4.0f), ((int) ThemeSmallPreviewView.this.rectF.bottom) + AndroidUtilities.dp(2.0f));
+                    ThemeSmallPreviewView themeSmallPreviewView6 = ThemeSmallPreviewView.this;
+                    themeSmallPreviewView6.messageDrawableOut.setRoundRadius((int) (themeSmallPreviewView6.rectF.height() * 0.5f));
+                    ThemeSmallPreviewView.this.messageDrawableOut.draw(canvas, paint);
                 }
                 if (ThemeSmallPreviewView.this.currentType == 0) {
-                    float bubbleLeft2 = ThemeSmallPreviewView.this.INNER_RECT_SPACE + ((float) AndroidUtilities.dp(5.0f));
-                    float bubbleTop2 = bubbleTop + ThemeSmallPreviewView.this.BUBBLE_HEIGHT + ((float) AndroidUtilities.dp(4.0f));
-                    ThemeSmallPreviewView.this.rectF.set(bubbleLeft2, bubbleTop2, ThemeSmallPreviewView.this.BUBBLE_WIDTH + bubbleLeft2, ThemeSmallPreviewView.this.BUBBLE_HEIGHT + bubbleTop2);
+                    float access$5003 = ThemeSmallPreviewView.this.INNER_RECT_SPACE + ((float) AndroidUtilities.dp(5.0f));
+                    float access$1500 = access$500 + ThemeSmallPreviewView.this.BUBBLE_HEIGHT + ((float) AndroidUtilities.dp(4.0f));
+                    ThemeSmallPreviewView.this.rectF.set(access$5003, access$1500, ThemeSmallPreviewView.this.BUBBLE_WIDTH + access$5003, ThemeSmallPreviewView.this.BUBBLE_HEIGHT + access$1500);
                 } else {
-                    float bubbleTop3 = ((float) ThemeSmallPreviewView.this.getMeasuredHeight()) * 0.35f;
-                    ThemeSmallPreviewView.this.rectF.set(0.1f * ((float) ThemeSmallPreviewView.this.getMeasuredWidth()), bubbleTop3, ((float) ThemeSmallPreviewView.this.getMeasuredWidth()) * 0.65f, ((float) ThemeSmallPreviewView.this.getMeasuredHeight()) * 0.55f);
+                    float measuredWidth = ((float) ThemeSmallPreviewView.this.getMeasuredWidth()) * 0.1f;
+                    ThemeSmallPreviewView.this.rectF.set(measuredWidth, ((float) ThemeSmallPreviewView.this.getMeasuredHeight()) * 0.35f, ((float) ThemeSmallPreviewView.this.getMeasuredWidth()) * 0.65f, ((float) ThemeSmallPreviewView.this.getMeasuredHeight()) * 0.55f);
                 }
                 if (ThemeSmallPreviewView.this.currentType == 0) {
-                    canvas2.drawRoundRect(ThemeSmallPreviewView.this.rectF, ThemeSmallPreviewView.this.rectF.height() * 0.5f, ThemeSmallPreviewView.this.rectF.height() * 0.5f, this.inBubblePaint);
+                    canvas.drawRoundRect(ThemeSmallPreviewView.this.rectF, ThemeSmallPreviewView.this.rectF.height() * 0.5f, ThemeSmallPreviewView.this.rectF.height() * 0.5f, this.inBubblePaint);
                     return;
                 }
-                ThemeSmallPreviewView.this.messageDrawableIn.setBounds(((int) ThemeSmallPreviewView.this.rectF.left) - AndroidUtilities.dp(4.0f), ((int) ThemeSmallPreviewView.this.rectF.top) - AndroidUtilities.dp(2.0f), (int) ThemeSmallPreviewView.this.rectF.right, ((int) ThemeSmallPreviewView.this.rectF.bottom) + AndroidUtilities.dp(2.0f));
-                ThemeSmallPreviewView.this.messageDrawableIn.setRoundRadius((int) (ThemeSmallPreviewView.this.rectF.height() * 0.5f));
-                ThemeSmallPreviewView.this.messageDrawableIn.draw(canvas2, this.inBubblePaint);
-            } else if (ThemeSmallPreviewView.this.chatThemeItem.icon != null) {
-                canvas2.drawBitmap(ThemeSmallPreviewView.this.chatThemeItem.icon, ((float) (ThemeSmallPreviewView.this.getWidth() - ThemeSmallPreviewView.this.chatThemeItem.icon.getWidth())) * 0.5f, (float) AndroidUtilities.dp(21.0f), (Paint) null);
+                ThemeSmallPreviewView themeSmallPreviewView7 = ThemeSmallPreviewView.this;
+                themeSmallPreviewView7.messageDrawableIn.setBounds(((int) themeSmallPreviewView7.rectF.left) - AndroidUtilities.dp(4.0f), ((int) ThemeSmallPreviewView.this.rectF.top) - AndroidUtilities.dp(2.0f), (int) ThemeSmallPreviewView.this.rectF.right, ((int) ThemeSmallPreviewView.this.rectF.bottom) + AndroidUtilities.dp(2.0f));
+                ThemeSmallPreviewView themeSmallPreviewView8 = ThemeSmallPreviewView.this;
+                themeSmallPreviewView8.messageDrawableIn.setRoundRadius((int) (themeSmallPreviewView8.rectF.height() * 0.5f));
+                ThemeSmallPreviewView.this.messageDrawableIn.draw(canvas, this.inBubblePaint);
             }
         }
     }
@@ -650,8 +736,8 @@ public class ThemeSmallPreviewView extends FrameLayout implements NotificationCe
         NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.emojiLoaded);
     }
 
-    public void didReceivedNotification(int id, int account, Object... args) {
-        if (id == NotificationCenter.emojiLoaded) {
+    public void didReceivedNotification(int i, int i2, Object... objArr) {
+        if (i == NotificationCenter.emojiLoaded) {
             invalidate();
         }
     }

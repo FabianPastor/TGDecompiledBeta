@@ -36,14 +36,14 @@ class WebRtcAudioEffects {
         Logging.d("WebRtcAudioEffectsExternal", "ctor" + WebRtcAudioUtils.getThreadInfo());
     }
 
-    public boolean setAEC(boolean enable) {
-        Logging.d("WebRtcAudioEffectsExternal", "setAEC(" + enable + ")");
+    public boolean setAEC(boolean z) {
+        Logging.d("WebRtcAudioEffectsExternal", "setAEC(" + z + ")");
         if (!isAcousticEchoCancelerSupported()) {
             Logging.w("WebRtcAudioEffectsExternal", "Platform AEC is not supported");
             this.shouldEnableAec = false;
             return false;
-        } else if (this.aec == null || enable == this.shouldEnableAec) {
-            this.shouldEnableAec = enable;
+        } else if (this.aec == null || z == this.shouldEnableAec) {
+            this.shouldEnableAec = z;
             return true;
         } else {
             Logging.e("WebRtcAudioEffectsExternal", "Platform AEC state can't be modified while recording");
@@ -51,14 +51,14 @@ class WebRtcAudioEffects {
         }
     }
 
-    public boolean setNS(boolean enable) {
-        Logging.d("WebRtcAudioEffectsExternal", "setNS(" + enable + ")");
+    public boolean setNS(boolean z) {
+        Logging.d("WebRtcAudioEffectsExternal", "setNS(" + z + ")");
         if (!isNoiseSuppressorSupported()) {
             Logging.w("WebRtcAudioEffectsExternal", "Platform NS is not supported");
             this.shouldEnableNs = false;
             return false;
-        } else if (this.ns == null || enable == this.shouldEnableNs) {
-            this.shouldEnableNs = enable;
+        } else if (this.ns == null || z == this.shouldEnableNs) {
+            this.shouldEnableNs = z;
             return true;
         } else {
             Logging.e("WebRtcAudioEffectsExternal", "Platform NS state can't be modified while recording");
@@ -66,22 +66,22 @@ class WebRtcAudioEffects {
         }
     }
 
-    public void enable(int audioSession) {
+    public void enable(int i) {
         String str;
         String str2;
         String str3;
-        Logging.d("WebRtcAudioEffectsExternal", "enable(audioSession=" + audioSession + ")");
-        boolean enable = true;
+        Logging.d("WebRtcAudioEffectsExternal", "enable(audioSession=" + i + ")");
+        boolean z = true;
         assertTrue(this.aec == null);
         assertTrue(this.ns == null);
         String str4 = "enabled";
         if (isAcousticEchoCancelerSupported()) {
-            AcousticEchoCanceler create = AcousticEchoCanceler.create(audioSession);
+            AcousticEchoCanceler create = AcousticEchoCanceler.create(i);
             this.aec = create;
             if (create != null) {
                 boolean enabled = create.getEnabled();
-                boolean enable2 = this.shouldEnableAec && isAcousticEchoCancelerSupported();
-                if (this.aec.setEnabled(enable2) != 0) {
+                boolean z2 = this.shouldEnableAec && isAcousticEchoCancelerSupported();
+                if (this.aec.setEnabled(z2) != 0) {
                     Logging.e("WebRtcAudioEffectsExternal", "Failed to set the AcousticEchoCanceler state");
                 }
                 StringBuilder sb = new StringBuilder();
@@ -93,7 +93,7 @@ class WebRtcAudioEffects {
                 }
                 sb.append(str2);
                 sb.append(", enable: ");
-                sb.append(enable2);
+                sb.append(z2);
                 sb.append(", is now: ");
                 if (this.aec.getEnabled()) {
                     str3 = str4;
@@ -107,14 +107,14 @@ class WebRtcAudioEffects {
             }
         }
         if (isNoiseSuppressorSupported()) {
-            NoiseSuppressor create2 = NoiseSuppressor.create(audioSession);
+            NoiseSuppressor create2 = NoiseSuppressor.create(i);
             this.ns = create2;
             if (create2 != null) {
                 boolean enabled2 = create2.getEnabled();
                 if (!this.shouldEnableNs || !isNoiseSuppressorSupported()) {
-                    enable = false;
+                    z = false;
                 }
-                if (this.ns.setEnabled(enable) != 0) {
+                if (this.ns.setEnabled(z) != 0) {
                     Logging.e("WebRtcAudioEffectsExternal", "Failed to set the NoiseSuppressor state");
                 }
                 StringBuilder sb2 = new StringBuilder();
@@ -126,7 +126,7 @@ class WebRtcAudioEffects {
                 }
                 sb2.append(str);
                 sb2.append(", enable: ");
-                sb2.append(enable);
+                sb2.append(z);
                 sb2.append(", is now: ");
                 if (!this.ns.getEnabled()) {
                     str4 = "disabled";
@@ -153,18 +153,18 @@ class WebRtcAudioEffects {
         }
     }
 
-    private boolean effectTypeIsVoIP(UUID type) {
+    private boolean effectTypeIsVoIP(UUID uuid) {
         if (Build.VERSION.SDK_INT < 18) {
             return false;
         }
-        if ((!AudioEffect.EFFECT_TYPE_AEC.equals(type) || !isAcousticEchoCancelerSupported()) && (!AudioEffect.EFFECT_TYPE_NS.equals(type) || !isNoiseSuppressorSupported())) {
+        if ((!AudioEffect.EFFECT_TYPE_AEC.equals(uuid) || !isAcousticEchoCancelerSupported()) && (!AudioEffect.EFFECT_TYPE_NS.equals(uuid) || !isNoiseSuppressorSupported())) {
             return false;
         }
         return true;
     }
 
-    private static void assertTrue(boolean condition) {
-        if (!condition) {
+    private static void assertTrue(boolean z) {
+        if (!z) {
             throw new AssertionError("Expected condition to be true");
         }
     }
@@ -179,14 +179,14 @@ class WebRtcAudioEffects {
         return queryEffects;
     }
 
-    private static boolean isEffectTypeAvailable(UUID effectType, UUID blockListedUuid) {
-        AudioEffect.Descriptor[] effects = getAvailableEffects();
-        if (effects == null) {
+    private static boolean isEffectTypeAvailable(UUID uuid, UUID uuid2) {
+        AudioEffect.Descriptor[] availableEffects = getAvailableEffects();
+        if (availableEffects == null) {
             return false;
         }
-        for (AudioEffect.Descriptor d : effects) {
-            if (d.type.equals(effectType)) {
-                return !d.uuid.equals(blockListedUuid);
+        for (AudioEffect.Descriptor descriptor : availableEffects) {
+            if (descriptor.type.equals(uuid)) {
+                return !descriptor.uuid.equals(uuid2);
             }
         }
         return false;

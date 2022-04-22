@@ -11,6 +11,6 @@ public final /* synthetic */ class ThemeEditorView$EditorAlert$$ExternalSyntheti
     }
 
     public final void onClick(View view) {
-        this.f$0.m4467xCLASSNAMEbf9(view);
+        this.f$0.lambda$new$4(view);
     }
 }

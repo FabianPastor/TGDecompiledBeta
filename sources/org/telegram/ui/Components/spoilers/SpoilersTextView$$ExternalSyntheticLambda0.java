@@ -8,6 +8,6 @@ public final /* synthetic */ class SpoilersTextView$$ExternalSyntheticLambda0 im
     }
 
     public final void run() {
-        this.f$0.m4541x35CLASSNAME();
+        this.f$0.lambda$new$1();
     }
 }

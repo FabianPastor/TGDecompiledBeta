@@ -1,15 +1,15 @@
 package org.telegram.ui;
 
-import android.view.View;
+import org.telegram.ui.Adapters.StickersAdapter;
 
-public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda220 implements View.OnClickListener {
+public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda220 implements StickersAdapter.StickersAdapterDelegate {
     public final /* synthetic */ ChatActivity f$0;
 
     public /* synthetic */ ChatActivity$$ExternalSyntheticLambda220(ChatActivity chatActivity) {
         this.f$0 = chatActivity;
     }
 
-    public final void onClick(View view) {
-        this.f$0.m1713lambda$createView$73$orgtelegramuiChatActivity(view);
+    public final void needChangePanelVisibility(boolean z) {
+        this.f$0.lambda$initStickers$87(z);
     }
 }

@@ -1,19 +1,19 @@
 package org.telegram.ui.Components.voip;
 
-import android.content.SharedPreferences;
-import android.view.View;
-import org.telegram.ui.Cells.TextCheckCell;
+import android.app.Activity;
+import android.content.DialogInterface;
+import android.content.Intent;
 
-public final /* synthetic */ class VoIPHelper$$ExternalSyntheticLambda2 implements View.OnClickListener {
-    public final /* synthetic */ SharedPreferences f$0;
-    public final /* synthetic */ TextCheckCell f$1;
+public final /* synthetic */ class VoIPHelper$$ExternalSyntheticLambda2 implements DialogInterface.OnClickListener {
+    public final /* synthetic */ Activity f$0;
+    public final /* synthetic */ Intent f$1;
 
-    public /* synthetic */ VoIPHelper$$ExternalSyntheticLambda2(SharedPreferences sharedPreferences, TextCheckCell textCheckCell) {
-        this.f$0 = sharedPreferences;
-        this.f$1 = textCheckCell;
+    public /* synthetic */ VoIPHelper$$ExternalSyntheticLambda2(Activity activity, Intent intent) {
+        this.f$0 = activity;
+        this.f$1 = intent;
     }
 
-    public final void onClick(View view) {
-        VoIPHelper.lambda$showCallDebugSettings$19(this.f$0, this.f$1, view);
+    public final void onClick(DialogInterface dialogInterface, int i) {
+        this.f$0.startActivity(this.f$1);
     }
 }

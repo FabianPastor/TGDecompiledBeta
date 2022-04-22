@@ -14,10 +14,6 @@ import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.ChatActivity;
 
 public class BlurBehindDrawable {
-    public static final int ADJUST_PAN_TRANSLATION_CONTENT = 1;
-    public static final int STATIC_CONTENT = 0;
-    public static final int TAG_DRAWING_AS_BACKGROUND = 67108867;
-    private final float DOWN_SCALE = 6.0f;
     private boolean animateAlpha = true;
     /* access modifiers changed from: private */
     public Bitmap[] backgroundBitmap;
@@ -53,12 +49,12 @@ public class BlurBehindDrawable {
     private final int type;
     private boolean wasDraw;
 
-    public BlurBehindDrawable(View behindView2, View parentView2, int type2, Theme.ResourcesProvider resourcesProvider2) {
+    public BlurBehindDrawable(View view, View view2, int i, Theme.ResourcesProvider resourcesProvider2) {
         Paint paint = new Paint();
         this.errorBlackoutPaint = paint;
-        this.type = type2;
-        this.behindView = behindView2;
-        this.parentView = parentView2;
+        this.type = i;
+        this.behindView = view;
+        this.parentView = view2;
         this.resourcesProvider = resourcesProvider2;
         paint.setColor(-16777216);
     }
@@ -68,8 +64,8 @@ public class BlurBehindDrawable {
             generateBlurredBitmaps();
             this.invalidate = false;
         }
-        Bitmap[] bitmap = this.renderingBitmap;
-        if ((bitmap != null || this.error) && this.animateAlpha) {
+        Bitmap[] bitmapArr = this.renderingBitmap;
+        if ((bitmapArr != null || this.error) && this.animateAlpha) {
             boolean z = this.show;
             if (z) {
                 float f = this.blurAlpha;
@@ -94,28 +90,28 @@ public class BlurBehindDrawable {
                 }
             }
         }
-        float alpha = this.animateAlpha ? this.blurAlpha : 1.0f;
-        if (bitmap != null || !this.error) {
-            if (alpha == 1.0f) {
+        float f5 = this.animateAlpha ? this.blurAlpha : 1.0f;
+        if (bitmapArr != null || !this.error) {
+            if (f5 == 1.0f) {
                 canvas.save();
             } else {
-                canvas.saveLayerAlpha(0.0f, 0.0f, (float) this.parentView.getMeasuredWidth(), (float) this.parentView.getMeasuredHeight(), (int) (alpha * 255.0f), 31);
+                canvas.saveLayerAlpha(0.0f, 0.0f, (float) this.parentView.getMeasuredWidth(), (float) this.parentView.getMeasuredHeight(), (int) (f5 * 255.0f), 31);
             }
-            if (bitmap != null) {
-                this.emptyPaint.setAlpha((int) (255.0f * alpha));
+            if (bitmapArr != null) {
+                this.emptyPaint.setAlpha((int) (f5 * 255.0f));
                 if (this.type == 1) {
                     canvas.translate(0.0f, this.panTranslationY);
                 }
                 canvas.save();
-                canvas.scale(((float) this.parentView.getMeasuredWidth()) / ((float) bitmap[1].getWidth()), ((float) this.parentView.getMeasuredHeight()) / ((float) bitmap[1].getHeight()));
-                canvas.drawBitmap(bitmap[1], 0.0f, 0.0f, this.emptyPaint);
+                canvas.scale(((float) this.parentView.getMeasuredWidth()) / ((float) bitmapArr[1].getWidth()), ((float) this.parentView.getMeasuredHeight()) / ((float) bitmapArr[1].getHeight()));
+                canvas.drawBitmap(bitmapArr[1], 0.0f, 0.0f, this.emptyPaint);
                 canvas.restore();
                 canvas.save();
                 if (this.type == 0) {
                     canvas.translate(0.0f, this.panTranslationY);
                 }
-                canvas.scale(((float) this.parentView.getMeasuredWidth()) / ((float) bitmap[0].getWidth()), ((float) this.toolbarH) / ((float) bitmap[0].getHeight()));
-                canvas.drawBitmap(bitmap[0], 0.0f, 0.0f, this.emptyPaint);
+                canvas.scale(((float) this.parentView.getMeasuredWidth()) / ((float) bitmapArr[0].getWidth()), ((float) this.toolbarH) / ((float) bitmapArr[0].getHeight()));
+                canvas.drawBitmap(bitmapArr[0], 0.0f, 0.0f, this.emptyPaint);
                 canvas.restore();
                 this.wasDraw = true;
                 canvas.drawColor(NUM);
@@ -133,19 +129,19 @@ public class BlurBehindDrawable {
                         if (this.blurredBitmapTmp[i] != null && this.parentView.getMeasuredWidth() == this.lastW && this.parentView.getMeasuredHeight() == this.lastH) {
                             this.blurredBitmapTmp[i].eraseColor(0);
                         } else {
-                            int lastH2 = this.parentView.getMeasuredHeight();
-                            int lastW2 = this.parentView.getMeasuredWidth();
-                            int h = AndroidUtilities.statusBarHeight + AndroidUtilities.dp(200.0f);
-                            this.toolbarH = h;
-                            if (i != 0) {
-                                h = lastH2;
+                            int measuredHeight = this.parentView.getMeasuredHeight();
+                            int measuredWidth = this.parentView.getMeasuredWidth();
+                            int dp = AndroidUtilities.statusBarHeight + AndroidUtilities.dp(200.0f);
+                            this.toolbarH = dp;
+                            if (i == 0) {
+                                measuredHeight = dp;
                             }
                             try {
-                                this.blurredBitmapTmp[i] = Bitmap.createBitmap((int) (((float) lastW2) / 6.0f), (int) (((float) h) / 6.0f), Bitmap.Config.ARGB_8888);
+                                this.blurredBitmapTmp[i] = Bitmap.createBitmap((int) (((float) measuredWidth) / 6.0f), (int) (((float) measuredHeight) / 6.0f), Bitmap.Config.ARGB_8888);
                                 this.blurCanvas[i] = new Canvas(this.blurredBitmapTmp[i]);
                             } catch (Exception e) {
                                 FileLog.e((Throwable) e);
-                                AndroidUtilities.runOnUIThread(new BlurBehindDrawable$$ExternalSyntheticLambda2(this));
+                                AndroidUtilities.runOnUIThread(new BlurBehindDrawable$$ExternalSyntheticLambda0(this));
                                 return;
                             }
                         }
@@ -154,20 +150,20 @@ public class BlurBehindDrawable {
                         }
                         this.blurCanvas[i].save();
                         this.blurCanvas[i].scale(0.16666667f, 0.16666667f, 0.0f, 0.0f);
-                        Drawable backDrawable = this.behindView.getBackground();
-                        if (backDrawable == null) {
-                            backDrawable = getBackgroundDrawable();
+                        Drawable background = this.behindView.getBackground();
+                        if (background == null) {
+                            background = getBackgroundDrawable();
                         }
                         this.behindView.setTag(67108867, Integer.valueOf(i));
                         if (i == 0) {
                             this.blurCanvas[i].translate(0.0f, -this.panTranslationY);
                             this.behindView.draw(this.blurCanvas[i]);
                         }
-                        if (backDrawable != null && i == 1) {
-                            Rect oldBounds = backDrawable.getBounds();
-                            backDrawable.setBounds(0, 0, this.behindView.getMeasuredWidth(), this.behindView.getMeasuredHeight());
-                            backDrawable.draw(this.blurCanvas[i]);
-                            backDrawable.setBounds(oldBounds);
+                        if (background != null && i == 1) {
+                            Rect bounds = background.getBounds();
+                            background.setBounds(0, 0, this.behindView.getMeasuredWidth(), this.behindView.getMeasuredHeight());
+                            background.draw(this.blurCanvas[i]);
+                            background.setBounds(bounds);
                             this.behindView.draw(this.blurCanvas[i]);
                         }
                         this.behindView.setTag(67108867, (Object) null);
@@ -177,7 +173,8 @@ public class BlurBehindDrawable {
                     this.lastW = this.parentView.getMeasuredWidth();
                     this.blurBackgroundTask.width = this.parentView.getMeasuredWidth();
                     this.blurBackgroundTask.height = this.parentView.getMeasuredHeight();
-                    if (this.blurBackgroundTask.width == 0 || this.blurBackgroundTask.height == 0) {
+                    BlurBackgroundTask blurBackgroundTask2 = this.blurBackgroundTask;
+                    if (blurBackgroundTask2.width == 0 || blurBackgroundTask2.height == 0) {
                         this.processingNextFrame = false;
                         return;
                     }
@@ -191,12 +188,12 @@ public class BlurBehindDrawable {
             }
             return;
         }
-        this.errorBlackoutPaint.setAlpha((int) (50.0f * alpha));
+        this.errorBlackoutPaint.setAlpha((int) (f5 * 50.0f));
         canvas.drawPaint(this.errorBlackoutPaint);
     }
 
-    /* renamed from: lambda$draw$0$org-telegram-ui-Components-BlurBehindDrawable  reason: not valid java name */
-    public /* synthetic */ void m3632lambda$draw$0$orgtelegramuiComponentsBlurBehindDrawable() {
+    /* access modifiers changed from: private */
+    public /* synthetic */ void lambda$draw$0() {
         this.error = true;
         this.parentView.invalidate();
     }
@@ -220,8 +217,8 @@ public class BlurBehindDrawable {
         }
     }
 
-    /* renamed from: lambda$clear$2$org-telegram-ui-Components-BlurBehindDrawable  reason: not valid java name */
-    public /* synthetic */ void m3631lambda$clear$2$orgtelegramuiComponentsBlurBehindDrawable() {
+    /* access modifiers changed from: private */
+    public /* synthetic */ void lambda$clear$2() {
         Bitmap[] bitmapArr = this.renderingBitmap;
         if (bitmapArr != null) {
             if (bitmapArr[0] != null) {
@@ -246,11 +243,11 @@ public class BlurBehindDrawable {
         }
         this.renderingBitmapCanvas = null;
         this.skipDraw = false;
-        AndroidUtilities.runOnUIThread(new BlurBehindDrawable$$ExternalSyntheticLambda0(this));
+        AndroidUtilities.runOnUIThread(new BlurBehindDrawable$$ExternalSyntheticLambda2(this));
     }
 
-    /* renamed from: lambda$clear$1$org-telegram-ui-Components-BlurBehindDrawable  reason: not valid java name */
-    public /* synthetic */ void m3630lambda$clear$1$orgtelegramuiComponentsBlurBehindDrawable() {
+    /* access modifiers changed from: private */
+    public /* synthetic */ void lambda$clear$1() {
         DispatchQueue dispatchQueue = this.queue;
         if (dispatchQueue != null) {
             dispatchQueue.recycle();
@@ -279,11 +276,10 @@ public class BlurBehindDrawable {
     }
 
     private void generateBlurredBitmaps() {
-        Bitmap[] bitmap = this.renderingBitmap;
-        if (bitmap == null) {
-            Bitmap[] bitmapArr = new Bitmap[2];
+        Bitmap[] bitmapArr = this.renderingBitmap;
+        if (bitmapArr == null) {
+            bitmapArr = new Bitmap[2];
             this.renderingBitmap = bitmapArr;
-            bitmap = bitmapArr;
             this.renderingBitmapCanvas = new Canvas[2];
         }
         if (this.blurredBitmapTmp == null) {
@@ -292,33 +288,36 @@ public class BlurBehindDrawable {
         }
         this.blurBackgroundTask.canceled = true;
         this.blurBackgroundTask = new BlurBackgroundTask();
-        int i = 0;
-        for (int i2 = 2; i < i2; i2 = 2) {
-            int lastH2 = this.parentView.getMeasuredHeight();
-            int lastW2 = this.parentView.getMeasuredWidth();
-            int h = AndroidUtilities.statusBarHeight + AndroidUtilities.dp(200.0f);
-            this.toolbarH = h;
+        for (int i = 0; i < 2; i++) {
+            int measuredHeight = this.parentView.getMeasuredHeight();
+            int measuredWidth = this.parentView.getMeasuredWidth();
+            int dp = AndroidUtilities.statusBarHeight + AndroidUtilities.dp(200.0f);
+            this.toolbarH = dp;
             if (i != 0) {
-                h = lastH2;
+                dp = measuredHeight;
             }
-            if (bitmap[i] == null || bitmap[i].getHeight() != h || bitmap[i].getWidth() != this.parentView.getMeasuredWidth()) {
+            if (bitmapArr[i] == null || bitmapArr[i].getHeight() != dp || bitmapArr[i].getWidth() != this.parentView.getMeasuredWidth()) {
                 DispatchQueue dispatchQueue = this.queue;
                 if (dispatchQueue != null) {
                     dispatchQueue.cleanupQueue();
                 }
-                this.blurredBitmapTmp[i] = Bitmap.createBitmap((int) (((float) lastW2) / 6.0f), (int) (((float) h) / 6.0f), Bitmap.Config.ARGB_8888);
+                int i2 = (int) (((float) measuredWidth) / 6.0f);
+                this.blurredBitmapTmp[i] = Bitmap.createBitmap(i2, (int) (((float) dp) / 6.0f), Bitmap.Config.ARGB_8888);
                 if (i == 1) {
                     this.blurredBitmapTmp[i].eraseColor(getThemedColor("windowBackgroundWhite"));
                 }
                 this.blurCanvas[i] = new Canvas(this.blurredBitmapTmp[i]);
-                this.renderingBitmap[i] = Bitmap.createBitmap((int) (((float) lastW2) / 6.0f), (int) (((float) (i == 0 ? this.toolbarH : lastH2)) / 6.0f), Bitmap.Config.ARGB_8888);
+                if (i == 0) {
+                    measuredHeight = this.toolbarH;
+                }
+                this.renderingBitmap[i] = Bitmap.createBitmap(i2, (int) (((float) measuredHeight) / 6.0f), Bitmap.Config.ARGB_8888);
                 this.renderingBitmapCanvas[i] = new Canvas(this.renderingBitmap[i]);
                 this.renderingBitmapCanvas[i].scale(((float) this.renderingBitmap[i].getWidth()) / ((float) this.blurredBitmapTmp[i].getWidth()), ((float) this.renderingBitmap[i].getHeight()) / ((float) this.blurredBitmapTmp[i].getHeight()));
                 this.blurCanvas[i].save();
                 this.blurCanvas[i].scale(0.16666667f, 0.16666667f, 0.0f, 0.0f);
-                Drawable backDrawable = this.behindView.getBackground();
-                if (backDrawable == null) {
-                    backDrawable = getBackgroundDrawable();
+                Drawable background = this.behindView.getBackground();
+                if (background == null) {
+                    background = getBackgroundDrawable();
                 }
                 this.behindView.setTag(67108867, Integer.valueOf(i));
                 if (i == 0) {
@@ -326,10 +325,10 @@ public class BlurBehindDrawable {
                     this.behindView.draw(this.blurCanvas[i]);
                 }
                 if (i == 1) {
-                    Rect oldBounds = backDrawable.getBounds();
-                    backDrawable.setBounds(0, 0, this.behindView.getMeasuredWidth(), this.behindView.getMeasuredHeight());
-                    backDrawable.draw(this.blurCanvas[i]);
-                    backDrawable.setBounds(oldBounds);
+                    Rect bounds = background.getBounds();
+                    background.setBounds(0, 0, this.behindView.getMeasuredWidth(), this.behindView.getMeasuredHeight());
+                    background.draw(this.blurCanvas[i]);
+                    background.setBounds(bounds);
                     this.behindView.draw(this.blurCanvas[i]);
                 }
                 this.behindView.setTag(67108867, (Object) null);
@@ -341,20 +340,19 @@ public class BlurBehindDrawable {
                 }
                 this.renderingBitmapCanvas[i].drawBitmap(this.blurredBitmapTmp[i], 0.0f, 0.0f, this.emptyPaint);
             }
-            i++;
         }
     }
 
-    public void show(boolean show2) {
-        this.show = show2;
+    public void show(boolean z) {
+        this.show = z;
     }
 
-    public void setAnimateAlpha(boolean animateAlpha2) {
-        this.animateAlpha = animateAlpha2;
+    public void setAnimateAlpha(boolean z) {
+        this.animateAlpha = z;
     }
 
-    public void onPanTranslationUpdate(float y) {
-        this.panTranslationY = y;
+    public void onPanTranslationUpdate(float f) {
+        this.panTranslationY = f;
         this.parentView.invalidate();
     }
 
@@ -371,36 +369,36 @@ public class BlurBehindDrawable {
                 Bitmap[] unused = BlurBehindDrawable.this.backgroundBitmap = new Bitmap[2];
                 Canvas[] unused2 = BlurBehindDrawable.this.backgroundBitmapCanvas = new Canvas[2];
             }
-            int bitmapWidth = (int) (((float) this.width) / 6.0f);
-            int i = 0;
-            while (i < 2) {
-                int h = (int) (((float) (i == 0 ? BlurBehindDrawable.this.toolbarH : this.height)) / 6.0f);
-                if (!(BlurBehindDrawable.this.backgroundBitmap[i] == null || ((BlurBehindDrawable.this.backgroundBitmap[i].getHeight() == h && BlurBehindDrawable.this.backgroundBitmap[i].getWidth() == bitmapWidth) || BlurBehindDrawable.this.backgroundBitmap[i] == null))) {
-                    BlurBehindDrawable.this.backgroundBitmap[i].recycle();
-                    BlurBehindDrawable.this.backgroundBitmap[i] = null;
+            int i = (int) (((float) this.width) / 6.0f);
+            int i2 = 0;
+            while (i2 < 2) {
+                int access$200 = (int) (((float) (i2 == 0 ? BlurBehindDrawable.this.toolbarH : this.height)) / 6.0f);
+                if (!(BlurBehindDrawable.this.backgroundBitmap[i2] == null || ((BlurBehindDrawable.this.backgroundBitmap[i2].getHeight() == access$200 && BlurBehindDrawable.this.backgroundBitmap[i2].getWidth() == i) || BlurBehindDrawable.this.backgroundBitmap[i2] == null))) {
+                    BlurBehindDrawable.this.backgroundBitmap[i2].recycle();
+                    BlurBehindDrawable.this.backgroundBitmap[i2] = null;
                 }
-                long currentTimeMillis = System.currentTimeMillis();
-                if (BlurBehindDrawable.this.backgroundBitmap[i] == null) {
+                System.currentTimeMillis();
+                if (BlurBehindDrawable.this.backgroundBitmap[i2] == null) {
                     try {
-                        BlurBehindDrawable.this.backgroundBitmap[i] = Bitmap.createBitmap(bitmapWidth, h, Bitmap.Config.ARGB_8888);
-                        BlurBehindDrawable.this.backgroundBitmapCanvas[i] = new Canvas(BlurBehindDrawable.this.backgroundBitmap[i]);
-                        BlurBehindDrawable.this.backgroundBitmapCanvas[i].scale(((float) bitmapWidth) / ((float) BlurBehindDrawable.this.blurredBitmapTmp[i].getWidth()), ((float) h) / ((float) BlurBehindDrawable.this.blurredBitmapTmp[i].getHeight()));
-                    } catch (Throwable e) {
-                        FileLog.e(e);
+                        BlurBehindDrawable.this.backgroundBitmap[i2] = Bitmap.createBitmap(i, access$200, Bitmap.Config.ARGB_8888);
+                        BlurBehindDrawable.this.backgroundBitmapCanvas[i2] = new Canvas(BlurBehindDrawable.this.backgroundBitmap[i2]);
+                        BlurBehindDrawable.this.backgroundBitmapCanvas[i2].scale(((float) i) / ((float) BlurBehindDrawable.this.blurredBitmapTmp[i2].getWidth()), ((float) access$200) / ((float) BlurBehindDrawable.this.blurredBitmapTmp[i2].getHeight()));
+                    } catch (Throwable th) {
+                        FileLog.e(th);
                     }
                 }
-                if (i == 1) {
-                    BlurBehindDrawable.this.backgroundBitmap[i].eraseColor(BlurBehindDrawable.this.getThemedColor("windowBackgroundWhite"));
+                if (i2 == 1) {
+                    BlurBehindDrawable.this.backgroundBitmap[i2].eraseColor(BlurBehindDrawable.this.getThemedColor("windowBackgroundWhite"));
                 } else {
-                    BlurBehindDrawable.this.backgroundBitmap[i].eraseColor(0);
+                    BlurBehindDrawable.this.backgroundBitmap[i2].eraseColor(0);
                 }
                 BlurBehindDrawable.this.emptyPaint.setAlpha(255);
-                Utilities.stackBlurBitmap(BlurBehindDrawable.this.blurredBitmapTmp[i], BlurBehindDrawable.this.getBlurRadius());
-                if (BlurBehindDrawable.this.backgroundBitmapCanvas[i] != null) {
-                    BlurBehindDrawable.this.backgroundBitmapCanvas[i].drawBitmap(BlurBehindDrawable.this.blurredBitmapTmp[i], 0.0f, 0.0f, BlurBehindDrawable.this.emptyPaint);
+                Utilities.stackBlurBitmap(BlurBehindDrawable.this.blurredBitmapTmp[i2], BlurBehindDrawable.this.getBlurRadius());
+                if (BlurBehindDrawable.this.backgroundBitmapCanvas[i2] != null) {
+                    BlurBehindDrawable.this.backgroundBitmapCanvas[i2].drawBitmap(BlurBehindDrawable.this.blurredBitmapTmp[i2], 0.0f, 0.0f, BlurBehindDrawable.this.emptyPaint);
                 }
                 if (!this.canceled) {
-                    i++;
+                    i2++;
                 } else {
                     return;
                 }
@@ -408,17 +406,17 @@ public class BlurBehindDrawable {
             AndroidUtilities.runOnUIThread(new BlurBehindDrawable$BlurBackgroundTask$$ExternalSyntheticLambda0(this));
         }
 
-        /* renamed from: lambda$run$0$org-telegram-ui-Components-BlurBehindDrawable$BlurBackgroundTask  reason: not valid java name */
-        public /* synthetic */ void m3633xc3c2eb08() {
+        /* access modifiers changed from: private */
+        public /* synthetic */ void lambda$run$0() {
             if (!this.canceled) {
-                Bitmap[] bitmap = BlurBehindDrawable.this.renderingBitmap;
-                Canvas[] canvas = BlurBehindDrawable.this.renderingBitmapCanvas;
+                Bitmap[] access$600 = BlurBehindDrawable.this.renderingBitmap;
+                Canvas[] access$700 = BlurBehindDrawable.this.renderingBitmapCanvas;
                 BlurBehindDrawable blurBehindDrawable = BlurBehindDrawable.this;
                 Bitmap[] unused = blurBehindDrawable.renderingBitmap = blurBehindDrawable.backgroundBitmap;
                 BlurBehindDrawable blurBehindDrawable2 = BlurBehindDrawable.this;
                 Canvas[] unused2 = blurBehindDrawable2.renderingBitmapCanvas = blurBehindDrawable2.backgroundBitmapCanvas;
-                Bitmap[] unused3 = BlurBehindDrawable.this.backgroundBitmap = bitmap;
-                Canvas[] unused4 = BlurBehindDrawable.this.backgroundBitmapCanvas = canvas;
+                Bitmap[] unused3 = BlurBehindDrawable.this.backgroundBitmap = access$600;
+                Canvas[] unused4 = BlurBehindDrawable.this.backgroundBitmapCanvas = access$700;
                 boolean unused5 = BlurBehindDrawable.this.processingNextFrame = false;
                 if (BlurBehindDrawable.this.parentView != null) {
                     BlurBehindDrawable.this.parentView.invalidate();
@@ -436,9 +434,9 @@ public class BlurBehindDrawable {
     }
 
     /* access modifiers changed from: private */
-    public int getThemedColor(String key) {
+    public int getThemedColor(String str) {
         Theme.ResourcesProvider resourcesProvider2 = this.resourcesProvider;
-        Integer color = resourcesProvider2 != null ? resourcesProvider2.getColor(key) : null;
-        return color != null ? color.intValue() : Theme.getColor(key);
+        Integer color = resourcesProvider2 != null ? resourcesProvider2.getColor(str) : null;
+        return color != null ? color.intValue() : Theme.getColor(str);
     }
 }

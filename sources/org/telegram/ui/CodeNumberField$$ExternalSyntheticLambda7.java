@@ -9,6 +9,6 @@ public final /* synthetic */ class CodeNumberField$$ExternalSyntheticLambda7 imp
     }
 
     public final void set(Object obj, float f) {
-        CodeNumberField.lambda$static$3((CodeNumberField) obj, f);
+        CodeNumberField.lambda$static$5((CodeNumberField) obj, f);
     }
 }

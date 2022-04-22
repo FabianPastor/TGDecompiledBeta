@@ -16,20 +16,20 @@ public class OneUIUtilities {
             return bool.booleanValue();
         }
         try {
-            Field f = Build.VERSION.class.getDeclaredField("SEM_PLATFORM_INT");
-            f.setAccessible(true);
-            int semPlatformInt = ((Integer) f.get((Object) null)).intValue();
-            if (semPlatformInt < 100000) {
+            Field declaredField = Build.VERSION.class.getDeclaredField("SEM_PLATFORM_INT");
+            declaredField.setAccessible(true);
+            int intValue = ((Integer) declaredField.get((Object) null)).intValue();
+            if (intValue < 100000) {
                 return false;
             }
-            int i = semPlatformInt - 90000;
+            int i = intValue - 90000;
             oneUIEncodedVersion = i;
             oneUIMajorVersion = i / 10000;
             oneUIMinorVersion = ((float) (i % 10000)) / 100.0f;
-            isOneUI = true;
+            isOneUI = Boolean.TRUE;
             return isOneUI.booleanValue();
-        } catch (Exception e) {
-            isOneUI = false;
+        } catch (Exception unused) {
+            isOneUI = Boolean.FALSE;
         }
     }
 

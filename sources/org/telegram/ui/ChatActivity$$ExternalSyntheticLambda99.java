@@ -1,17 +1,19 @@
 package org.telegram.ui;
 
-import android.content.DialogInterface;
+import android.view.MotionEvent;
+import android.view.View;
+import org.telegram.ui.ContentPreviewViewer;
 
-public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda99 implements DialogInterface.OnCancelListener {
+public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda99 implements View.OnTouchListener {
     public final /* synthetic */ ChatActivity f$0;
-    public final /* synthetic */ int f$1;
+    public final /* synthetic */ ContentPreviewViewer.ContentPreviewViewerDelegate f$1;
 
-    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda99(ChatActivity chatActivity, int i) {
+    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda99(ChatActivity chatActivity, ContentPreviewViewer.ContentPreviewViewerDelegate contentPreviewViewerDelegate) {
         this.f$0 = chatActivity;
-        this.f$1 = i;
+        this.f$1 = contentPreviewViewerDelegate;
     }
 
-    public final void onCancel(DialogInterface dialogInterface) {
-        this.f$0.m1790lambda$processSelectedOption$198$orgtelegramuiChatActivity(this.f$1, dialogInterface);
+    public final boolean onTouch(View view, MotionEvent motionEvent) {
+        return this.f$0.lambda$createView$42(this.f$1, view, motionEvent);
     }
 }

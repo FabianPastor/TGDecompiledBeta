@@ -10,6 +10,6 @@ public final /* synthetic */ class NotificationsSettingsActivity$$ExternalSynthe
     }
 
     public final void run() {
-        this.f$0.m2666xd2var_(this.f$1);
+        this.f$0.lambda$createView$6(this.f$1);
     }
 }

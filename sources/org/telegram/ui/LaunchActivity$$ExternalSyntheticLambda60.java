@@ -1,25 +1,18 @@
 package org.telegram.ui;
 
-import org.telegram.messenger.AndroidUtilities;
-import org.telegram.tgnet.RequestDelegate;
-import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC;
-import org.telegram.ui.ActionBar.BaseFragment;
+import android.content.Intent;
+import org.telegram.messenger.ContactsLoadingObserver;
 
-public final /* synthetic */ class LaunchActivity$$ExternalSyntheticLambda60 implements RequestDelegate {
-    public final /* synthetic */ int f$0;
-    public final /* synthetic */ BaseFragment f$1;
-    public final /* synthetic */ TLRPC.User f$2;
-    public final /* synthetic */ String f$3;
+public final /* synthetic */ class LaunchActivity$$ExternalSyntheticLambda60 implements ContactsLoadingObserver.Callback {
+    public final /* synthetic */ LaunchActivity f$0;
+    public final /* synthetic */ Intent f$1;
 
-    public /* synthetic */ LaunchActivity$$ExternalSyntheticLambda60(int i, BaseFragment baseFragment, TLRPC.User user, String str) {
-        this.f$0 = i;
-        this.f$1 = baseFragment;
-        this.f$2 = user;
-        this.f$3 = str;
+    public /* synthetic */ LaunchActivity$$ExternalSyntheticLambda60(LaunchActivity launchActivity, Intent intent) {
+        this.f$0 = launchActivity;
+        this.f$1 = intent;
     }
 
-    public final void run(TLObject tLObject, TLRPC.TL_error tL_error) {
-        AndroidUtilities.runOnUIThread(new LaunchActivity$$ExternalSyntheticLambda14(tL_error, this.f$0, this.f$1, this.f$2, this.f$3));
+    public final void onResult(boolean z) {
+        this.f$0.lambda$handleIntent$9(this.f$1, z);
     }
 }

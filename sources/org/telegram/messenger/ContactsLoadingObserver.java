@@ -18,14 +18,14 @@ public final class ContactsLoadingObserver {
         void onResult(boolean z);
     }
 
-    public static void observe(Callback callback2, long expirationTime) {
-        new ContactsLoadingObserver(callback2).start(expirationTime);
+    public static void observe(Callback callback2, long j) {
+        new ContactsLoadingObserver(callback2).start(j);
     }
 
-    /* renamed from: lambda$new$0$org-telegram-messenger-ContactsLoadingObserver  reason: not valid java name */
-    public /* synthetic */ void m534lambda$new$0$orgtelegrammessengerContactsLoadingObserver(int id, int account, Object[] args) {
-        if (id == NotificationCenter.contactsDidLoad) {
-            onContactsLoadingStateUpdated(account, false);
+    /* access modifiers changed from: private */
+    public /* synthetic */ void lambda$new$0(int i, int i2, Object[] objArr) {
+        if (i == NotificationCenter.contactsDidLoad) {
+            onContactsLoadingStateUpdated(i2, false);
         }
     }
 
@@ -39,15 +39,15 @@ public final class ContactsLoadingObserver {
         this.handler = new Handler(Looper.myLooper());
     }
 
-    /* renamed from: lambda$new$1$org-telegram-messenger-ContactsLoadingObserver  reason: not valid java name */
-    public /* synthetic */ void m535lambda$new$1$orgtelegrammessengerContactsLoadingObserver() {
+    /* access modifiers changed from: private */
+    public /* synthetic */ void lambda$new$1() {
         onContactsLoadingStateUpdated(this.currentAccount, true);
     }
 
-    public void start(long expirationTime) {
+    public void start(long j) {
         if (!onContactsLoadingStateUpdated(this.currentAccount, false)) {
             this.notificationCenter.addObserver(this.observer, NotificationCenter.contactsDidLoad);
-            this.handler.postDelayed(this.releaseRunnable, expirationTime);
+            this.handler.postDelayed(this.releaseRunnable, j);
         }
     }
 
@@ -65,16 +65,16 @@ public final class ContactsLoadingObserver {
         }
     }
 
-    private boolean onContactsLoadingStateUpdated(int account, boolean force) {
+    private boolean onContactsLoadingStateUpdated(int i, boolean z) {
         if (this.released) {
             return false;
         }
-        boolean contactsLoaded = this.contactsController.contactsLoaded;
-        if (!contactsLoaded && !force) {
+        boolean z2 = this.contactsController.contactsLoaded;
+        if (!z2 && !z) {
             return false;
         }
         release();
-        this.callback.onResult(contactsLoaded);
+        this.callback.onResult(z2);
         return true;
     }
 }

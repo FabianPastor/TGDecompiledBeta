@@ -11,6 +11,6 @@ public final /* synthetic */ class ChangePhoneActivity$LoginActivitySmsView$$Ext
     }
 
     public final void onClick(DialogInterface dialogInterface, int i) {
-        this.f$0.m1551x91b6var_(dialogInterface, i);
+        this.f$0.lambda$resendCode$1(dialogInterface, i);
     }
 }

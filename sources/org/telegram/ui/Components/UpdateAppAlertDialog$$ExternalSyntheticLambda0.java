@@ -10,6 +10,6 @@ public final /* synthetic */ class UpdateAppAlertDialog$$ExternalSyntheticLambda
     }
 
     public final void onClick(View view) {
-        this.f$0.m4510lambda$new$0$orgtelegramuiComponentsUpdateAppAlertDialog(view);
+        this.f$0.lambda$new$0(view);
     }
 }

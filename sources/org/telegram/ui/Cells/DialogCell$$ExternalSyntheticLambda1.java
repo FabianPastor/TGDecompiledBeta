@@ -10,6 +10,6 @@ public final /* synthetic */ class DialogCell$$ExternalSyntheticLambda1 implemen
     }
 
     public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-        this.f$0.m1493lambda$update$0$orgtelegramuiCellsDialogCell(valueAnimator);
+        this.f$0.lambda$createStatusDrawableAnimator$2(valueAnimator);
     }
 }

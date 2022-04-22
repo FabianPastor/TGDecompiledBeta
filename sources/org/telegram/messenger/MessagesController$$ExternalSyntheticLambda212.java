@@ -1,30 +1,21 @@
 package org.telegram.messenger;
 
-import org.telegram.tgnet.RequestDelegate;
+import androidx.core.util.Consumer;
 import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC;
-import org.telegram.ui.ActionBar.BaseFragment;
+import org.telegram.tgnet.TLRPC$TL_error;
 
-public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda212 implements RequestDelegate {
-    public final /* synthetic */ MessagesController f$0;
-    public final /* synthetic */ long f$1;
-    public final /* synthetic */ Runnable f$2;
-    public final /* synthetic */ BaseFragment f$3;
-    public final /* synthetic */ TLRPC.TL_channels_editAdmin f$4;
-    public final /* synthetic */ boolean f$5;
-    public final /* synthetic */ Runnable f$6;
+public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda212 implements Runnable {
+    public final /* synthetic */ TLObject f$0;
+    public final /* synthetic */ TLRPC$TL_error f$1;
+    public final /* synthetic */ Consumer f$2;
 
-    public /* synthetic */ MessagesController$$ExternalSyntheticLambda212(MessagesController messagesController, long j, Runnable runnable, BaseFragment baseFragment, TLRPC.TL_channels_editAdmin tL_channels_editAdmin, boolean z, Runnable runnable2) {
-        this.f$0 = messagesController;
-        this.f$1 = j;
-        this.f$2 = runnable;
-        this.f$3 = baseFragment;
-        this.f$4 = tL_channels_editAdmin;
-        this.f$5 = z;
-        this.f$6 = runnable2;
+    public /* synthetic */ MessagesController$$ExternalSyntheticLambda212(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error, Consumer consumer) {
+        this.f$0 = tLObject;
+        this.f$1 = tLRPC$TL_error;
+        this.f$2 = consumer;
     }
 
-    public final void run(TLObject tLObject, TLRPC.TL_error tL_error) {
-        this.f$0.m400xc3a34a72(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6, tLObject, tL_error);
+    public final void run() {
+        MessagesController.lambda$getNextReactionMention$3(this.f$0, this.f$1, this.f$2);
     }
 }

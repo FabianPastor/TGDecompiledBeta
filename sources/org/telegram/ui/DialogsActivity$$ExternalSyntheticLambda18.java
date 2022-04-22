@@ -1,16 +1,15 @@
 package org.telegram.ui;
 
-import android.content.Context;
-import org.telegram.ui.ActionBar.Theme;
+import android.view.View;
 
-public final /* synthetic */ class DialogsActivity$$ExternalSyntheticLambda18 implements Runnable {
-    public final /* synthetic */ Context f$0;
+public final /* synthetic */ class DialogsActivity$$ExternalSyntheticLambda18 implements View.OnClickListener {
+    public final /* synthetic */ DialogsActivity f$0;
 
-    public /* synthetic */ DialogsActivity$$ExternalSyntheticLambda18(Context context) {
-        this.f$0 = context;
+    public /* synthetic */ DialogsActivity$$ExternalSyntheticLambda18(DialogsActivity dialogsActivity) {
+        this.f$0 = dialogsActivity;
     }
 
-    public final void run() {
-        Theme.createChatResources(this.f$0, false);
+    public final void onClick(View view) {
+        this.f$0.lambda$createView$3(view);
     }
 }

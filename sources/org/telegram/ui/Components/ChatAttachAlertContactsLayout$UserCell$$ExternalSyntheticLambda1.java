@@ -10,6 +10,6 @@ public final /* synthetic */ class ChatAttachAlertContactsLayout$UserCell$$Exter
     }
 
     public final void run() {
-        this.f$0.m3826x8718aCLASSNAME();
+        this.f$0.lambda$setStatus$2();
     }
 }

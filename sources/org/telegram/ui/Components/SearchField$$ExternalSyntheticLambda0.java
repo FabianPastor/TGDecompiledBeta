@@ -10,6 +10,6 @@ public final /* synthetic */ class SearchField$$ExternalSyntheticLambda0 impleme
     }
 
     public final void onClick(View view) {
-        this.f$0.m4316lambda$new$0$orgtelegramuiComponentsSearchField(view);
+        this.f$0.lambda$new$0(view);
     }
 }

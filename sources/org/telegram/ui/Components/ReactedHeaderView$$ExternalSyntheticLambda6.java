@@ -3,7 +3,7 @@ package org.telegram.ui.Components;
 import java.util.List;
 import org.telegram.tgnet.RequestDelegate;
 import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC;
+import org.telegram.tgnet.TLRPC$TL_error;
 
 public final /* synthetic */ class ReactedHeaderView$$ExternalSyntheticLambda6 implements RequestDelegate {
     public final /* synthetic */ ReactedHeaderView f$0;
@@ -18,7 +18,7 @@ public final /* synthetic */ class ReactedHeaderView$$ExternalSyntheticLambda6 i
         this.f$3 = runnable;
     }
 
-    public final void run(TLObject tLObject, TLRPC.TL_error tL_error) {
-        this.f$0.m4273xb49bce5a(this.f$1, this.f$2, this.f$3, tLObject, tL_error);
+    public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+        this.f$0.lambda$onAttachedToWindow$4(this.f$1, this.f$2, this.f$3, tLObject, tLRPC$TL_error);
     }
 }

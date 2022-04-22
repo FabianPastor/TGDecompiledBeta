@@ -17,10 +17,11 @@ public enum VideoCodecStatus {
     
     private final int number;
 
-    private VideoCodecStatus(int number2) {
-        this.number = number2;
+    private VideoCodecStatus(int i) {
+        this.number = i;
     }
 
+    @CalledByNative
     public int getNumber() {
         return this.number;
     }

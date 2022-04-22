@@ -1,15 +1,15 @@
 package org.telegram.ui;
 
-import android.animation.ValueAnimator;
+import android.view.MotionEvent;
+import org.telegram.ui.Components.RecyclerListView;
 
-public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda233 implements ValueAnimator.AnimatorUpdateListener {
-    public final /* synthetic */ ChatActivity f$0;
+public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda233 implements RecyclerListView.OnInterceptTouchListener {
+    public static final /* synthetic */ ChatActivity$$ExternalSyntheticLambda233 INSTANCE = new ChatActivity$$ExternalSyntheticLambda233();
 
-    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda233(ChatActivity chatActivity) {
-        this.f$0 = chatActivity;
+    private /* synthetic */ ChatActivity$$ExternalSyntheticLambda233() {
     }
 
-    public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-        this.f$0.m1841xe81de171(valueAnimator);
+    public final boolean onInterceptTouchEvent(MotionEvent motionEvent) {
+        return ChatActivity.lambda$showChatThemeBottomSheet$235(motionEvent);
     }
 }

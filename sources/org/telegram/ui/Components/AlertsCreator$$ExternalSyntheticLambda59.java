@@ -1,18 +1,24 @@
 package org.telegram.ui.Components;
 
-import android.content.DialogInterface;
-import org.telegram.messenger.MessagesStorage;
+import android.view.View;
+import org.telegram.ui.ActionBar.AlertDialog;
 
-public final /* synthetic */ class AlertsCreator$$ExternalSyntheticLambda59 implements DialogInterface.OnClickListener {
+public final /* synthetic */ class AlertsCreator$$ExternalSyntheticLambda59 implements View.OnClickListener {
     public final /* synthetic */ int[] f$0;
-    public final /* synthetic */ MessagesStorage.IntCallback f$1;
+    public final /* synthetic */ long f$1;
+    public final /* synthetic */ String f$2;
+    public final /* synthetic */ AlertDialog.Builder f$3;
+    public final /* synthetic */ Runnable f$4;
 
-    public /* synthetic */ AlertsCreator$$ExternalSyntheticLambda59(int[] iArr, MessagesStorage.IntCallback intCallback) {
+    public /* synthetic */ AlertsCreator$$ExternalSyntheticLambda59(int[] iArr, long j, String str, AlertDialog.Builder builder, Runnable runnable) {
         this.f$0 = iArr;
-        this.f$1 = intCallback;
+        this.f$1 = j;
+        this.f$2 = str;
+        this.f$3 = builder;
+        this.f$4 = runnable;
     }
 
-    public final void onClick(DialogInterface dialogInterface, int i) {
-        AlertsCreator.lambda$createLocationUpdateDialog$94(this.f$0, this.f$1, dialogInterface, i);
+    public final void onClick(View view) {
+        AlertsCreator.lambda$createVibrationSelectDialog$92(this.f$0, this.f$1, this.f$2, this.f$3, this.f$4, view);
     }
 }

@@ -12,6 +12,6 @@ public final /* synthetic */ class ImageLoader$ThumbGenerateTask$$ExternalSynthe
     }
 
     public final void run() {
-        this.f$0.m643x21var_f(this.f$1);
+        this.f$0.lambda$removeTask$0(this.f$1);
     }
 }

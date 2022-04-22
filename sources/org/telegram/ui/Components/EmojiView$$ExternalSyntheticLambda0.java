@@ -12,6 +12,6 @@ public final /* synthetic */ class EmojiView$$ExternalSyntheticLambda0 implement
     }
 
     public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-        this.f$0.m3961lambda$animateTabsY$8$orgtelegramuiComponentsEmojiView(this.f$1, valueAnimator);
+        this.f$0.lambda$animateTabsY$8(this.f$1, valueAnimator);
     }
 }

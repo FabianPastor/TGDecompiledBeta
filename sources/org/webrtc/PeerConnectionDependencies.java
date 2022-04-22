@@ -14,8 +14,8 @@ public final class PeerConnectionDependencies {
             this.observer = observer2;
         }
 
-        public Builder setSSLCertificateVerifier(SSLCertificateVerifier sslCertificateVerifier2) {
-            this.sslCertificateVerifier = sslCertificateVerifier2;
+        public Builder setSSLCertificateVerifier(SSLCertificateVerifier sSLCertificateVerifier) {
+            this.sslCertificateVerifier = sSLCertificateVerifier;
             return this;
         }
 
@@ -38,8 +38,8 @@ public final class PeerConnectionDependencies {
         return this.sslCertificateVerifier;
     }
 
-    private PeerConnectionDependencies(PeerConnection.Observer observer2, SSLCertificateVerifier sslCertificateVerifier2) {
+    private PeerConnectionDependencies(PeerConnection.Observer observer2, SSLCertificateVerifier sSLCertificateVerifier) {
         this.observer = observer2;
-        this.sslCertificateVerifier = sslCertificateVerifier2;
+        this.sslCertificateVerifier = sSLCertificateVerifier;
     }
 }

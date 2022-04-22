@@ -11,6 +11,6 @@ public final /* synthetic */ class CalendarActivity$MonthView$$ExternalSynthetic
     }
 
     public final boolean onLongClick(View view) {
-        return this.f$0.m1443lambda$new$0$orgtelegramuiCalendarActivity$MonthView(view);
+        return this.f$0.lambda$new$0(view);
     }
 }

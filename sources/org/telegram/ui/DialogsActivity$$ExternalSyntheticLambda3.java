@@ -1,17 +1,15 @@
 package org.telegram.ui;
 
-import android.content.DialogInterface;
+import android.animation.ValueAnimator;
 
-public final /* synthetic */ class DialogsActivity$$ExternalSyntheticLambda3 implements DialogInterface.OnClickListener {
+public final /* synthetic */ class DialogsActivity$$ExternalSyntheticLambda3 implements ValueAnimator.AnimatorUpdateListener {
     public final /* synthetic */ DialogsActivity f$0;
-    public final /* synthetic */ long f$1;
 
-    public /* synthetic */ DialogsActivity$$ExternalSyntheticLambda3(DialogsActivity dialogsActivity, long j) {
+    public /* synthetic */ DialogsActivity$$ExternalSyntheticLambda3(DialogsActivity dialogsActivity) {
         this.f$0 = dialogsActivity;
-        this.f$1 = j;
     }
 
-    public final void onClick(DialogInterface dialogInterface, int i) {
-        this.f$0.m2086lambda$didSelectResult$48$orgtelegramuiDialogsActivity(this.f$1, dialogInterface, i);
+    public final void onAnimationUpdate(ValueAnimator valueAnimator) {
+        this.f$0.lambda$getCustomSlideTransition$53(valueAnimator);
     }
 }

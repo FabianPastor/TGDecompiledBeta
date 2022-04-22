@@ -12,6 +12,6 @@ public final /* synthetic */ class NotificationsCustomSettingsActivity$SearchAda
     }
 
     public final void run() {
-        this.f$0.m2660xe4abCLASSNAMEd(this.f$1);
+        this.f$0.lambda$processSearch$3(this.f$1);
     }
 }

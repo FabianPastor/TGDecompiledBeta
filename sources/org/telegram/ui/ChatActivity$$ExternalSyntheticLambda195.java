@@ -1,18 +1,14 @@
 package org.telegram.ui;
 
-import android.view.View;
-import org.telegram.ui.ActionBar.ActionBarPopupWindow;
+import java.util.Comparator;
 
-public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda195 implements View.OnClickListener {
-    public final /* synthetic */ ActionBarPopupWindow.ActionBarPopupWindowLayout f$0;
-    public final /* synthetic */ int[] f$1;
+public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda195 implements Comparator {
+    public static final /* synthetic */ ChatActivity$$ExternalSyntheticLambda195 INSTANCE = new ChatActivity$$ExternalSyntheticLambda195();
 
-    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda195(ActionBarPopupWindow.ActionBarPopupWindowLayout actionBarPopupWindowLayout, int[] iArr) {
-        this.f$0 = actionBarPopupWindowLayout;
-        this.f$1 = iArr;
+    private /* synthetic */ ChatActivity$$ExternalSyntheticLambda195() {
     }
 
-    public final void onClick(View view) {
-        this.f$0.getSwipeBack().openForeground(this.f$1[0]);
+    public final int compare(Object obj, Object obj2) {
+        return ((Integer) obj2).compareTo((Integer) obj);
     }
 }

@@ -8,6 +8,6 @@ public final /* synthetic */ class CameraView$$ExternalSyntheticLambda2 implemen
     }
 
     public final void run() {
-        this.f$0.m1124lambda$new$1$orgtelegrammessengercameraCameraView();
+        this.f$0.lambda$onSurfaceTextureDestroyed$0();
     }
 }

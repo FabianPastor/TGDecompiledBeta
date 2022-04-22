@@ -8,6 +8,6 @@ public final /* synthetic */ class MemberRequestsDelegate$$ExternalSyntheticLamb
     }
 
     public final void run() {
-        this.f$0.m4597xe6CLASSNAMEb8();
+        this.f$0.loadMembers();
     }
 }

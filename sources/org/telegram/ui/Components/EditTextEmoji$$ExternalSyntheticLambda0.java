@@ -10,6 +10,6 @@ public final /* synthetic */ class EditTextEmoji$$ExternalSyntheticLambda0 imple
     }
 
     public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-        this.f$0.m3953lambda$showPopup$2$orgtelegramuiComponentsEditTextEmoji(valueAnimator);
+        this.f$0.lambda$showPopup$2(valueAnimator);
     }
 }

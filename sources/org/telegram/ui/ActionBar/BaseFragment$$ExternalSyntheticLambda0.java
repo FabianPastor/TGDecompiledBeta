@@ -12,6 +12,6 @@ public final /* synthetic */ class BaseFragment$$ExternalSyntheticLambda0 implem
     }
 
     public final void onDismiss(DialogInterface dialogInterface) {
-        this.f$0.m1273lambda$showDialog$0$orgtelegramuiActionBarBaseFragment(this.f$1, dialogInterface);
+        this.f$0.lambda$showDialog$0(this.f$1, dialogInterface);
     }
 }

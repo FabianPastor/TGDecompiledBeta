@@ -27,18 +27,18 @@ import org.telegram.messenger.ChatObject;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.UserObject;
-import org.telegram.tgnet.TLRPC;
+import org.telegram.tgnet.TLRPC$Chat;
+import org.telegram.tgnet.TLRPC$ChatFull;
+import org.telegram.tgnet.TLRPC$Peer;
+import org.telegram.tgnet.TLRPC$TL_channels_sendAsPeers;
+import org.telegram.tgnet.TLRPC$User;
 import org.telegram.ui.ActionBar.ActionBarPopupWindow;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.ChatActivity;
 import org.telegram.ui.Components.RecyclerListView;
 
 public class SenderSelectPopup extends ActionBarPopupWindow {
-    public static final int AVATAR_SIZE_DP = 40;
-    private static final float SCALE_START = 0.25f;
-    private static final int SHADOW_DURATION = 150;
-    public static final float SPRING_STIFFNESS = 750.0f;
-    private TLRPC.ChatFull chatFull;
+    private TLRPC$ChatFull chatFull;
     private boolean clicked;
     public View dimView;
     private boolean dismissed;
@@ -53,43 +53,39 @@ public class SenderSelectPopup extends ActionBarPopupWindow {
     private RecyclerListView recyclerView;
     protected boolean runningCustomSprings;
     private FrameLayout scrimPopupContainerLayout;
-    private TLRPC.TL_channels_sendAsPeers sendAsPeers;
+    private TLRPC$TL_channels_sendAsPeers sendAsPeers;
     protected List<SpringAnimation> springAnimations = new ArrayList();
 
     public interface OnSelectCallback {
-        void onPeerSelected(RecyclerView recyclerView, SenderView senderView, TLRPC.Peer peer);
+        void onPeerSelected(RecyclerView recyclerView, SenderView senderView, TLRPC$Peer tLRPC$Peer);
     }
 
-    /* JADX INFO: super call moved to the top of the method (can break code semantics) */
-    public SenderSelectPopup(Context context, ChatActivity parentFragment, MessagesController messagesController, TLRPC.ChatFull chatFull2, TLRPC.TL_channels_sendAsPeers sendAsPeers2, OnSelectCallback selectCallback) {
+    public SenderSelectPopup(Context context, ChatActivity chatActivity, final MessagesController messagesController, final TLRPC$ChatFull tLRPC$ChatFull, TLRPC$TL_channels_sendAsPeers tLRPC$TL_channels_sendAsPeers, OnSelectCallback onSelectCallback) {
         super(context);
-        Context context2 = context;
-        final TLRPC.ChatFull chatFull3 = chatFull2;
-        TLRPC.TL_channels_sendAsPeers tL_channels_sendAsPeers = sendAsPeers2;
-        this.chatFull = chatFull3;
-        this.sendAsPeers = tL_channels_sendAsPeers;
-        BackButtonFrameLayout backButtonFrameLayout = new BackButtonFrameLayout(context2);
+        this.chatFull = tLRPC$ChatFull;
+        this.sendAsPeers = tLRPC$TL_channels_sendAsPeers;
+        BackButtonFrameLayout backButtonFrameLayout = new BackButtonFrameLayout(context);
         this.scrimPopupContainerLayout = backButtonFrameLayout;
         backButtonFrameLayout.setLayoutParams(LayoutHelper.createFrame(-2, -2.0f));
         setContentView(this.scrimPopupContainerLayout);
         setWidth(-2);
         setHeight(-2);
         setBackgroundDrawable((Drawable) null);
-        Drawable shadowDrawable = ContextCompat.getDrawable(context2, NUM).mutate();
-        shadowDrawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor("actionBarDefaultSubmenuBackground"), PorterDuff.Mode.MULTIPLY));
-        this.scrimPopupContainerLayout.setBackground(shadowDrawable);
-        Rect padding = new Rect();
-        shadowDrawable.getPadding(padding);
-        this.scrimPopupContainerLayout.setPadding(padding.left, padding.top, padding.right, padding.bottom);
-        View view = new View(context2);
+        Drawable mutate = ContextCompat.getDrawable(context, NUM).mutate();
+        mutate.setColorFilter(new PorterDuffColorFilter(Theme.getColor("actionBarDefaultSubmenuBackground"), PorterDuff.Mode.MULTIPLY));
+        this.scrimPopupContainerLayout.setBackground(mutate);
+        Rect rect = new Rect();
+        mutate.getPadding(rect);
+        this.scrimPopupContainerLayout.setPadding(rect.left, rect.top, rect.right, rect.bottom);
+        View view = new View(context);
         this.dimView = view;
         view.setBackgroundColor(NUM);
-        final int maxHeight = AndroidUtilities.dp(450.0f);
-        final int maxWidth = (int) (((float) parentFragment.contentView.getWidth()) * 0.75f);
-        AnonymousClass1 r10 = new LinearLayout(context2) {
+        final int dp = AndroidUtilities.dp(450.0f);
+        final int width = (int) (((float) chatActivity.contentView.getWidth()) * 0.75f);
+        AnonymousClass1 r1 = new LinearLayout(this, context) {
             /* access modifiers changed from: protected */
-            public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-                super.onMeasure(View.MeasureSpec.makeMeasureSpec(Math.min(View.MeasureSpec.getSize(widthMeasureSpec), maxWidth), Integer.MIN_VALUE), View.MeasureSpec.makeMeasureSpec(Math.min(View.MeasureSpec.getSize(heightMeasureSpec), maxHeight), View.MeasureSpec.getMode(heightMeasureSpec)));
+            public void onMeasure(int i, int i2) {
+                super.onMeasure(View.MeasureSpec.makeMeasureSpec(Math.min(View.MeasureSpec.getSize(i), width), Integer.MIN_VALUE), View.MeasureSpec.makeMeasureSpec(Math.min(View.MeasureSpec.getSize(i2), dp), View.MeasureSpec.getMode(i2)));
             }
 
             /* access modifiers changed from: protected */
@@ -97,102 +93,104 @@ public class SenderSelectPopup extends ActionBarPopupWindow {
                 return AndroidUtilities.dp(260.0f);
             }
         };
-        this.recyclerContainer = r10;
-        r10.setOrientation(1);
-        TextView textView = new TextView(context2);
+        this.recyclerContainer = r1;
+        r1.setOrientation(1);
+        TextView textView = new TextView(context);
         this.headerText = textView;
         textView.setTextColor(Theme.getColor("dialogTextBlue"));
         this.headerText.setTextSize(1, 16.0f);
         this.headerText.setText(LocaleController.getString("SendMessageAsTitle", NUM));
         this.headerText.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"), 1);
-        int dp = AndroidUtilities.dp(18.0f);
-        this.headerText.setPadding(dp, AndroidUtilities.dp(12.0f), dp, AndroidUtilities.dp(12.0f));
+        int dp2 = AndroidUtilities.dp(18.0f);
+        this.headerText.setPadding(dp2, AndroidUtilities.dp(12.0f), dp2, AndroidUtilities.dp(12.0f));
         this.recyclerContainer.addView(this.headerText);
-        FrameLayout recyclerFrameLayout = new FrameLayout(context2);
-        final List<TLRPC.Peer> peers = tL_channels_sendAsPeers.peers;
-        this.recyclerView = new RecyclerListView(context2);
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context2);
+        FrameLayout frameLayout = new FrameLayout(context);
+        final ArrayList<TLRPC$Peer> arrayList = tLRPC$TL_channels_sendAsPeers.peers;
+        this.recyclerView = new RecyclerListView(context);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context);
         this.layoutManager = linearLayoutManager;
         this.recyclerView.setLayoutManager(linearLayoutManager);
-        final MessagesController messagesController2 = messagesController;
-        this.recyclerView.setAdapter(new RecyclerListView.SelectionAdapter() {
-            public boolean isEnabled(RecyclerView.ViewHolder holder) {
+        this.recyclerView.setAdapter(new RecyclerListView.SelectionAdapter(this) {
+            public boolean isEnabled(RecyclerView.ViewHolder viewHolder) {
                 return true;
             }
 
-            public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-                return new RecyclerListView.Holder(new SenderView(parent.getContext()));
+            public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
+                return new RecyclerListView.Holder(new SenderView(viewGroup.getContext()));
             }
 
-            public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-                SenderView senderView = (SenderView) holder.itemView;
-                TLRPC.Peer peer = (TLRPC.Peer) peers.get(position);
-                long peerId = 0;
-                if (peer.channel_id != 0) {
-                    peerId = -peer.channel_id;
-                }
-                if (peerId == 0 && peer.user_id != 0) {
-                    peerId = peer.user_id;
+            public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int i) {
+                SenderView senderView = (SenderView) viewHolder.itemView;
+                TLRPC$Peer tLRPC$Peer = (TLRPC$Peer) arrayList.get(i);
+                long j = tLRPC$Peer.channel_id;
+                long j2 = j != 0 ? -j : 0;
+                if (j2 == 0) {
+                    long j3 = tLRPC$Peer.user_id;
+                    if (j3 != 0) {
+                        j2 = j3;
+                    }
                 }
                 boolean z = true;
-                if (peerId < 0) {
-                    TLRPC.Chat chat = messagesController2.getChat(Long.valueOf(-peerId));
+                if (j2 < 0) {
+                    TLRPC$Chat chat = messagesController.getChat(Long.valueOf(-j2));
                     if (chat != null) {
                         senderView.title.setText(chat.title);
                         senderView.subtitle.setText(LocaleController.formatPluralString((!ChatObject.isChannel(chat) || chat.megagroup) ? "Members" : "Subscribers", chat.participants_count));
                         senderView.avatar.setAvatar(chat);
                     }
                     SimpleAvatarView simpleAvatarView = senderView.avatar;
-                    if (chatFull3.default_send_as == null || chatFull3.default_send_as.channel_id != peer.channel_id) {
+                    TLRPC$Peer tLRPC$Peer2 = tLRPC$ChatFull.default_send_as;
+                    if (tLRPC$Peer2 == null || tLRPC$Peer2.channel_id != tLRPC$Peer.channel_id) {
                         z = false;
                     }
                     simpleAvatarView.setSelected(z, false);
                     return;
                 }
-                TLRPC.User user = messagesController2.getUser(Long.valueOf(peerId));
+                TLRPC$User user = messagesController.getUser(Long.valueOf(j2));
                 if (user != null) {
                     senderView.title.setText(UserObject.getUserName(user));
                     senderView.subtitle.setText(LocaleController.getString("VoipGroupPersonalAccount", NUM));
                     senderView.avatar.setAvatar(user);
                 }
                 SimpleAvatarView simpleAvatarView2 = senderView.avatar;
-                if (chatFull3.default_send_as == null || chatFull3.default_send_as.user_id != peer.user_id) {
+                TLRPC$Peer tLRPC$Peer3 = tLRPC$ChatFull.default_send_as;
+                if (tLRPC$Peer3 == null || tLRPC$Peer3.user_id != tLRPC$Peer.user_id) {
                     z = false;
                 }
                 simpleAvatarView2.setSelected(z, false);
             }
 
             public int getItemCount() {
-                return peers.size();
+                return arrayList.size();
             }
         });
         this.recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                boolean show = SenderSelectPopup.this.layoutManager.findFirstCompletelyVisibleItemPosition() != 0;
-                if (SenderSelectPopup.this.isHeaderShadowVisible == null || show != SenderSelectPopup.this.isHeaderShadowVisible.booleanValue()) {
+            public void onScrolled(RecyclerView recyclerView, int i, int i2) {
+                boolean z = SenderSelectPopup.this.layoutManager.findFirstCompletelyVisibleItemPosition() != 0;
+                if (SenderSelectPopup.this.isHeaderShadowVisible == null || z != SenderSelectPopup.this.isHeaderShadowVisible.booleanValue()) {
                     SenderSelectPopup.this.headerShadow.animate().cancel();
-                    SenderSelectPopup.this.headerShadow.animate().alpha(show ? 1.0f : 0.0f).setDuration(150).start();
-                    Boolean unused = SenderSelectPopup.this.isHeaderShadowVisible = Boolean.valueOf(show);
+                    SenderSelectPopup.this.headerShadow.animate().alpha(z ? 1.0f : 0.0f).setDuration(150).start();
+                    Boolean unused = SenderSelectPopup.this.isHeaderShadowVisible = Boolean.valueOf(z);
                 }
             }
         });
-        this.recyclerView.setOnItemClickListener((RecyclerListView.OnItemClickListener) new SenderSelectPopup$$ExternalSyntheticLambda8(this, selectCallback, peers));
-        recyclerFrameLayout.addView(this.recyclerView);
-        this.headerShadow = new View(context2);
-        Drawable shadowDrawable2 = ContextCompat.getDrawable(context2, NUM);
-        shadowDrawable2.setAlpha(153);
-        this.headerShadow.setBackground(shadowDrawable2);
+        this.recyclerView.setOnItemClickListener((RecyclerListView.OnItemClickListener) new SenderSelectPopup$$ExternalSyntheticLambda8(this, onSelectCallback, arrayList));
+        frameLayout.addView(this.recyclerView);
+        this.headerShadow = new View(context);
+        Drawable drawable = ContextCompat.getDrawable(context, NUM);
+        drawable.setAlpha(153);
+        this.headerShadow.setBackground(drawable);
         this.headerShadow.setAlpha(0.0f);
-        recyclerFrameLayout.addView(this.headerShadow, LayoutHelper.createFrame(-1, 4.0f));
-        this.recyclerContainer.addView(recyclerFrameLayout, LayoutHelper.createFrame(-1, -2.0f));
+        frameLayout.addView(this.headerShadow, LayoutHelper.createFrame(-1, 4.0f));
+        this.recyclerContainer.addView(frameLayout, LayoutHelper.createFrame(-1, -2.0f));
         this.scrimPopupContainerLayout.addView(this.recyclerContainer);
     }
 
-    /* renamed from: lambda$new$0$org-telegram-ui-Components-SenderSelectPopup  reason: not valid java name */
-    public /* synthetic */ void m4321lambda$new$0$orgtelegramuiComponentsSenderSelectPopup(OnSelectCallback selectCallback, List peers, View view, int position) {
+    /* access modifiers changed from: private */
+    public /* synthetic */ void lambda$new$0(OnSelectCallback onSelectCallback, List list, View view, int i) {
         if (!this.clicked) {
             this.clicked = true;
-            selectCallback.onPeerSelected(this.recyclerView, (SenderView) view, (TLRPC.Peer) peers.get(position));
+            onSelectCallback.onPeerSelected(this.recyclerView, (SenderView) view, (TLRPC$Peer) list.get(i));
         }
     }
 
@@ -204,9 +202,8 @@ public class SenderSelectPopup extends ActionBarPopupWindow {
     }
 
     public void startShowAnimation() {
-        int itemHeight;
-        for (SpringAnimation springAnimation : this.springAnimations) {
-            springAnimation.cancel();
+        for (SpringAnimation cancel : this.springAnimations) {
+            cancel.cancel();
         }
         this.springAnimations.clear();
         this.scrimPopupContainerLayout.setPivotX((float) AndroidUtilities.dp(8.0f));
@@ -214,36 +211,35 @@ public class SenderSelectPopup extends ActionBarPopupWindow {
         frameLayout.setPivotY((float) (frameLayout.getMeasuredHeight() - AndroidUtilities.dp(8.0f)));
         this.recyclerContainer.setPivotX(0.0f);
         this.recyclerContainer.setPivotY(0.0f);
-        List<TLRPC.Peer> peers = this.sendAsPeers.peers;
-        TLRPC.Peer defPeer = this.chatFull.default_send_as != null ? this.chatFull.default_send_as : null;
-        if (defPeer != null) {
-            int itemHeight2 = AndroidUtilities.dp(54.0f);
-            int totalRecyclerHeight = peers.size() * itemHeight2;
+        ArrayList<TLRPC$Peer> arrayList = this.sendAsPeers.peers;
+        TLRPC$Peer tLRPC$Peer = this.chatFull.default_send_as;
+        if (tLRPC$Peer == null) {
+            tLRPC$Peer = null;
+        }
+        if (tLRPC$Peer != null) {
+            int dp = AndroidUtilities.dp(54.0f);
+            int size = arrayList.size() * dp;
             int i = 0;
             while (true) {
-                if (i >= peers.size()) {
+                if (i >= arrayList.size()) {
                     break;
                 }
-                TLRPC.Peer p = peers.get(i);
-                if (p.channel_id != 0) {
-                    itemHeight = itemHeight2;
-                    if (p.channel_id == defPeer.channel_id) {
-                        break;
-                    }
-                } else {
-                    itemHeight = itemHeight2;
+                TLRPC$Peer tLRPC$Peer2 = arrayList.get(i);
+                long j = tLRPC$Peer2.channel_id;
+                if (j != 0 && j == tLRPC$Peer.channel_id) {
+                    break;
                 }
-                if ((p.user_id != 0 && p.user_id == defPeer.user_id) || (p.chat_id != 0 && p.chat_id == defPeer.chat_id)) {
+                long j2 = tLRPC$Peer2.user_id;
+                if (j2 != 0 && j2 == tLRPC$Peer.user_id) {
+                    break;
+                }
+                long j3 = tLRPC$Peer2.chat_id;
+                if (j3 != 0 && j3 == tLRPC$Peer.chat_id) {
                     break;
                 }
                 i++;
-                itemHeight2 = itemHeight;
             }
-            int off = 0;
-            if (i != peers.size() - 1 && this.recyclerView.getMeasuredHeight() < totalRecyclerHeight) {
-                off = this.recyclerView.getMeasuredHeight() % itemHeight;
-            }
-            this.layoutManager.scrollToPositionWithOffset(i, AndroidUtilities.dp(7.0f) + off + (totalRecyclerHeight - ((peers.size() - 2) * itemHeight)));
+            this.layoutManager.scrollToPositionWithOffset(i, ((i == arrayList.size() - 1 || this.recyclerView.getMeasuredHeight() >= size) ? 0 : this.recyclerView.getMeasuredHeight() % dp) + AndroidUtilities.dp(7.0f) + (size - ((arrayList.size() - 2) * dp)));
             if (this.recyclerView.computeVerticalScrollOffset() > 0) {
                 this.headerShadow.animate().cancel();
                 this.headerShadow.animate().alpha(1.0f).setDuration(150).start();
@@ -253,34 +249,36 @@ public class SenderSelectPopup extends ActionBarPopupWindow {
         this.scrimPopupContainerLayout.setScaleY(0.25f);
         this.recyclerContainer.setAlpha(0.25f);
         this.dimView.setAlpha(0.0f);
-        for (SpringAnimation animation : Arrays.asList(new SpringAnimation[]{(SpringAnimation) new SpringAnimation(this.scrimPopupContainerLayout, DynamicAnimation.SCALE_X).setSpring(new SpringForce(1.0f).setStiffness(750.0f).setDampingRatio(1.0f)).addUpdateListener(new SenderSelectPopup$$ExternalSyntheticLambda6(this)), (SpringAnimation) new SpringAnimation(this.scrimPopupContainerLayout, DynamicAnimation.SCALE_Y).setSpring(new SpringForce(1.0f).setStiffness(750.0f).setDampingRatio(1.0f)).addUpdateListener(new SenderSelectPopup$$ExternalSyntheticLambda7(this)), new SpringAnimation(this.scrimPopupContainerLayout, DynamicAnimation.ALPHA).setSpring(new SpringForce(1.0f).setStiffness(750.0f).setDampingRatio(1.0f)), new SpringAnimation(this.recyclerContainer, DynamicAnimation.ALPHA).setSpring(new SpringForce(1.0f).setStiffness(750.0f).setDampingRatio(1.0f)), new SpringAnimation(this.dimView, DynamicAnimation.ALPHA).setSpring(new SpringForce(1.0f).setStiffness(750.0f).setDampingRatio(1.0f))})) {
-            this.springAnimations.add(animation);
-            animation.addEndListener(new SenderSelectPopup$$ExternalSyntheticLambda3(this, animation));
-            animation.start();
+        FrameLayout frameLayout2 = this.scrimPopupContainerLayout;
+        DynamicAnimation.ViewProperty viewProperty = DynamicAnimation.ALPHA;
+        for (SpringAnimation springAnimation : Arrays.asList(new SpringAnimation[]{(SpringAnimation) new SpringAnimation(this.scrimPopupContainerLayout, DynamicAnimation.SCALE_X).setSpring(new SpringForce(1.0f).setStiffness(750.0f).setDampingRatio(1.0f)).addUpdateListener(new SenderSelectPopup$$ExternalSyntheticLambda6(this)), (SpringAnimation) new SpringAnimation(this.scrimPopupContainerLayout, DynamicAnimation.SCALE_Y).setSpring(new SpringForce(1.0f).setStiffness(750.0f).setDampingRatio(1.0f)).addUpdateListener(new SenderSelectPopup$$ExternalSyntheticLambda4(this)), new SpringAnimation(frameLayout2, viewProperty).setSpring(new SpringForce(1.0f).setStiffness(750.0f).setDampingRatio(1.0f)), new SpringAnimation(this.recyclerContainer, viewProperty).setSpring(new SpringForce(1.0f).setStiffness(750.0f).setDampingRatio(1.0f)), new SpringAnimation(this.dimView, viewProperty).setSpring(new SpringForce(1.0f).setStiffness(750.0f).setDampingRatio(1.0f))})) {
+            this.springAnimations.add(springAnimation);
+            springAnimation.addEndListener(new SenderSelectPopup$$ExternalSyntheticLambda2(this, springAnimation));
+            springAnimation.start();
         }
     }
 
-    /* renamed from: lambda$startShowAnimation$1$org-telegram-ui-Components-SenderSelectPopup  reason: not valid java name */
-    public /* synthetic */ void m4327xdbb89fef(DynamicAnimation animation, float value, float velocity) {
-        this.recyclerContainer.setScaleX(1.0f / value);
+    /* access modifiers changed from: private */
+    public /* synthetic */ void lambda$startShowAnimation$1(DynamicAnimation dynamicAnimation, float f, float f2) {
+        this.recyclerContainer.setScaleX(1.0f / f);
     }
 
-    /* renamed from: lambda$startShowAnimation$2$org-telegram-ui-Components-SenderSelectPopup  reason: not valid java name */
-    public /* synthetic */ void m4328x95302d8e(DynamicAnimation animation, float value, float velocity) {
-        this.recyclerContainer.setScaleY(1.0f / value);
+    /* access modifiers changed from: private */
+    public /* synthetic */ void lambda$startShowAnimation$2(DynamicAnimation dynamicAnimation, float f, float f2) {
+        this.recyclerContainer.setScaleY(1.0f / f);
     }
 
-    /* renamed from: lambda$startShowAnimation$3$org-telegram-ui-Components-SenderSelectPopup  reason: not valid java name */
-    public /* synthetic */ void m4329x4ea7bb2d(SpringAnimation animation, DynamicAnimation animation1, boolean canceled, float value, float velocity) {
-        if (!canceled) {
-            this.springAnimations.remove(animation);
-            animation1.cancel();
+    /* access modifiers changed from: private */
+    public /* synthetic */ void lambda$startShowAnimation$3(SpringAnimation springAnimation, DynamicAnimation dynamicAnimation, boolean z, float f, float f2) {
+        if (!z) {
+            this.springAnimations.remove(springAnimation);
+            dynamicAnimation.cancel();
         }
     }
 
-    public void startDismissAnimation(SpringAnimation... animations) {
-        for (SpringAnimation springAnimation : this.springAnimations) {
-            springAnimation.cancel();
+    public void startDismissAnimation(SpringAnimation... springAnimationArr) {
+        for (SpringAnimation cancel : this.springAnimations) {
+            cancel.cancel();
         }
         this.springAnimations.clear();
         this.scrimPopupContainerLayout.setPivotX((float) AndroidUtilities.dp(8.0f));
@@ -292,50 +290,52 @@ public class SenderSelectPopup extends ActionBarPopupWindow {
         this.scrimPopupContainerLayout.setScaleY(1.0f);
         this.recyclerContainer.setAlpha(1.0f);
         this.dimView.setAlpha(1.0f);
-        List<SpringAnimation> newSpringAnimations = new ArrayList<>();
+        ArrayList<SpringAnimation> arrayList = new ArrayList<>();
         boolean z = true;
-        newSpringAnimations.addAll(Arrays.asList(new SpringAnimation[]{(SpringAnimation) new SpringAnimation(this.scrimPopupContainerLayout, DynamicAnimation.SCALE_X).setSpring(new SpringForce(0.25f).setStiffness(750.0f).setDampingRatio(1.0f)).addUpdateListener(new SenderSelectPopup$$ExternalSyntheticLambda4(this)), (SpringAnimation) new SpringAnimation(this.scrimPopupContainerLayout, DynamicAnimation.SCALE_Y).setSpring(new SpringForce(0.25f).setStiffness(750.0f).setDampingRatio(1.0f)).addUpdateListener(new SenderSelectPopup$$ExternalSyntheticLambda5(this)), new SpringAnimation(this.scrimPopupContainerLayout, DynamicAnimation.ALPHA).setSpring(new SpringForce(0.0f).setStiffness(750.0f).setDampingRatio(1.0f)), new SpringAnimation(this.recyclerContainer, DynamicAnimation.ALPHA).setSpring(new SpringForce(0.25f).setStiffness(750.0f).setDampingRatio(1.0f)), (SpringAnimation) new SpringAnimation(this.dimView, DynamicAnimation.ALPHA).setSpring(new SpringForce(0.0f).setStiffness(750.0f).setDampingRatio(1.0f)).addEndListener(new SenderSelectPopup$$ExternalSyntheticLambda0(this))}));
-        newSpringAnimations.addAll(Arrays.asList(animations));
-        if (animations.length <= 0) {
+        FrameLayout frameLayout2 = this.scrimPopupContainerLayout;
+        DynamicAnimation.ViewProperty viewProperty = DynamicAnimation.ALPHA;
+        arrayList.addAll(Arrays.asList(new SpringAnimation[]{(SpringAnimation) new SpringAnimation(this.scrimPopupContainerLayout, DynamicAnimation.SCALE_X).setSpring(new SpringForce(0.25f).setStiffness(750.0f).setDampingRatio(1.0f)).addUpdateListener(new SenderSelectPopup$$ExternalSyntheticLambda7(this)), (SpringAnimation) new SpringAnimation(this.scrimPopupContainerLayout, DynamicAnimation.SCALE_Y).setSpring(new SpringForce(0.25f).setStiffness(750.0f).setDampingRatio(1.0f)).addUpdateListener(new SenderSelectPopup$$ExternalSyntheticLambda5(this)), new SpringAnimation(frameLayout2, viewProperty).setSpring(new SpringForce(0.0f).setStiffness(750.0f).setDampingRatio(1.0f)), new SpringAnimation(this.recyclerContainer, viewProperty).setSpring(new SpringForce(0.25f).setStiffness(750.0f).setDampingRatio(1.0f)), (SpringAnimation) new SpringAnimation(this.dimView, viewProperty).setSpring(new SpringForce(0.0f).setStiffness(750.0f).setDampingRatio(1.0f)).addEndListener(new SenderSelectPopup$$ExternalSyntheticLambda1(this))}));
+        arrayList.addAll(Arrays.asList(springAnimationArr));
+        if (springAnimationArr.length <= 0) {
             z = false;
         }
         this.runningCustomSprings = z;
-        newSpringAnimations.get(0).addEndListener(new SenderSelectPopup$$ExternalSyntheticLambda1(this));
-        for (SpringAnimation springAnimation2 : newSpringAnimations) {
-            this.springAnimations.add(springAnimation2);
-            springAnimation2.addEndListener(new SenderSelectPopup$$ExternalSyntheticLambda2(this, springAnimation2));
-            springAnimation2.start();
+        ((SpringAnimation) arrayList.get(0)).addEndListener(new SenderSelectPopup$$ExternalSyntheticLambda0(this));
+        for (SpringAnimation springAnimation : arrayList) {
+            this.springAnimations.add(springAnimation);
+            springAnimation.addEndListener(new SenderSelectPopup$$ExternalSyntheticLambda3(this, springAnimation));
+            springAnimation.start();
         }
     }
 
-    /* renamed from: lambda$startDismissAnimation$4$org-telegram-ui-Components-SenderSelectPopup  reason: not valid java name */
-    public /* synthetic */ void m4322x4cc0e76f(DynamicAnimation animation, float value, float velocity) {
-        this.recyclerContainer.setScaleX(1.0f / value);
+    /* access modifiers changed from: private */
+    public /* synthetic */ void lambda$startDismissAnimation$4(DynamicAnimation dynamicAnimation, float f, float f2) {
+        this.recyclerContainer.setScaleX(1.0f / f);
     }
 
-    /* renamed from: lambda$startDismissAnimation$5$org-telegram-ui-Components-SenderSelectPopup  reason: not valid java name */
-    public /* synthetic */ void m4323x638750e(DynamicAnimation animation, float value, float velocity) {
-        this.recyclerContainer.setScaleY(1.0f / value);
+    /* access modifiers changed from: private */
+    public /* synthetic */ void lambda$startDismissAnimation$5(DynamicAnimation dynamicAnimation, float f, float f2) {
+        this.recyclerContainer.setScaleY(1.0f / f);
     }
 
-    /* renamed from: lambda$startDismissAnimation$6$org-telegram-ui-Components-SenderSelectPopup  reason: not valid java name */
-    public /* synthetic */ void m4324xbfb002ad(DynamicAnimation animation, boolean canceled, float value, float velocity) {
+    /* access modifiers changed from: private */
+    public /* synthetic */ void lambda$startDismissAnimation$6(DynamicAnimation dynamicAnimation, boolean z, float f, float f2) {
         if (this.dimView.getParent() != null) {
             ((ViewGroup) this.dimView.getParent()).removeView(this.dimView);
         }
         dismiss();
     }
 
-    /* renamed from: lambda$startDismissAnimation$7$org-telegram-ui-Components-SenderSelectPopup  reason: not valid java name */
-    public /* synthetic */ void m4325x7927904c(DynamicAnimation animation, boolean canceled, float value, float velocity) {
+    /* access modifiers changed from: private */
+    public /* synthetic */ void lambda$startDismissAnimation$7(DynamicAnimation dynamicAnimation, boolean z, float f, float f2) {
         this.runningCustomSprings = false;
     }
 
-    /* renamed from: lambda$startDismissAnimation$8$org-telegram-ui-Components-SenderSelectPopup  reason: not valid java name */
-    public /* synthetic */ void m4326x329f1deb(SpringAnimation springAnimation, DynamicAnimation animation, boolean canceled, float value, float velocity) {
-        if (!canceled) {
+    /* access modifiers changed from: private */
+    public /* synthetic */ void lambda$startDismissAnimation$8(SpringAnimation springAnimation, DynamicAnimation dynamicAnimation, boolean z, float f, float f2) {
+        if (!z) {
             this.springAnimations.remove(springAnimation);
-            animation.cancel();
+            dynamicAnimation.cancel();
         }
     }
 
@@ -349,14 +349,15 @@ public class SenderSelectPopup extends ActionBarPopupWindow {
             setLayoutParams(new RecyclerView.LayoutParams(-1, -2));
             setOrientation(0);
             setGravity(16);
-            int padding = AndroidUtilities.dp(14.0f);
-            setPadding(padding, padding / 2, padding, padding / 2);
+            int dp = AndroidUtilities.dp(14.0f);
+            int i = dp / 2;
+            setPadding(dp, i, dp, i);
             SimpleAvatarView simpleAvatarView = new SimpleAvatarView(context);
             this.avatar = simpleAvatarView;
             addView(simpleAvatarView, LayoutHelper.createFrame(40, 40.0f));
-            LinearLayout textRow = new LinearLayout(context);
-            textRow.setOrientation(1);
-            addView(textRow, LayoutHelper.createLinear(0, -1, 1.0f, 12, 0, 0, 0));
+            LinearLayout linearLayout = new LinearLayout(context);
+            linearLayout.setOrientation(1);
+            addView(linearLayout, LayoutHelper.createLinear(0, -1, 1.0f, 12, 0, 0, 0));
             TextView textView = new TextView(context);
             this.title = textView;
             textView.setTextColor(Theme.getColor("actionBarDefaultSubmenuItem"));
@@ -364,7 +365,7 @@ public class SenderSelectPopup extends ActionBarPopupWindow {
             textView.setTag(textView);
             textView.setMaxLines(1);
             textView.setEllipsize(TextUtils.TruncateAt.END);
-            textRow.addView(textView);
+            linearLayout.addView(textView);
             TextView textView2 = new TextView(context);
             this.subtitle = textView2;
             textView2.setTextColor(ColorUtils.setAlphaComponent(Theme.getColor("actionBarDefaultSubmenuItem"), 102));
@@ -372,7 +373,7 @@ public class SenderSelectPopup extends ActionBarPopupWindow {
             textView2.setTag(textView2);
             textView2.setMaxLines(1);
             textView2.setEllipsize(TextUtils.TruncateAt.END);
-            textRow.addView(textView2);
+            linearLayout.addView(textView2);
         }
     }
 
@@ -381,11 +382,11 @@ public class SenderSelectPopup extends ActionBarPopupWindow {
             super(context);
         }
 
-        public boolean dispatchKeyEvent(KeyEvent event) {
-            if (event.getKeyCode() == 4 && event.getRepeatCount() == 0 && SenderSelectPopup.this.isShowing()) {
+        public boolean dispatchKeyEvent(KeyEvent keyEvent) {
+            if (keyEvent.getKeyCode() == 4 && keyEvent.getRepeatCount() == 0 && SenderSelectPopup.this.isShowing()) {
                 SenderSelectPopup.this.dismiss();
             }
-            return super.dispatchKeyEvent(event);
+            return super.dispatchKeyEvent(keyEvent);
         }
     }
 }

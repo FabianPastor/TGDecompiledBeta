@@ -1,17 +1,12 @@
 package org.telegram.messenger;
 
-import java.util.ArrayList;
+public final /* synthetic */ class MediaDataController$$ExternalSyntheticLambda123 implements GenericProvider {
+    public static final /* synthetic */ MediaDataController$$ExternalSyntheticLambda123 INSTANCE = new MediaDataController$$ExternalSyntheticLambda123();
 
-public final /* synthetic */ class MediaDataController$$ExternalSyntheticLambda123 implements Runnable {
-    public final /* synthetic */ MediaDataController f$0;
-    public final /* synthetic */ ArrayList f$1;
-
-    public /* synthetic */ MediaDataController$$ExternalSyntheticLambda123(MediaDataController mediaDataController, ArrayList arrayList) {
-        this.f$0 = mediaDataController;
-        this.f$1 = arrayList;
+    private /* synthetic */ MediaDataController$$ExternalSyntheticLambda123() {
     }
 
-    public final void run() {
-        this.f$0.m702xff4dfd5b(this.f$1);
+    public final Object provide(Object obj) {
+        return MediaDataController.lambda$getEntities$132((Void) obj);
     }
 }

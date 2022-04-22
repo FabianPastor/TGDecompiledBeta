@@ -1,16 +1,17 @@
 package org.telegram.ui;
 
 import android.view.View;
+import org.telegram.ui.Components.OutlineTextContainerView;
 import org.telegram.ui.LoginActivity;
 
-public final /* synthetic */ class LoginActivity$LoginActivityNewPasswordView$$ExternalSyntheticLambda3 implements View.OnClickListener {
-    public final /* synthetic */ LoginActivity.LoginActivityNewPasswordView f$0;
+public final /* synthetic */ class LoginActivity$LoginActivityNewPasswordView$$ExternalSyntheticLambda3 implements View.OnFocusChangeListener {
+    public final /* synthetic */ OutlineTextContainerView f$0;
 
-    public /* synthetic */ LoginActivity$LoginActivityNewPasswordView$$ExternalSyntheticLambda3(LoginActivity.LoginActivityNewPasswordView loginActivityNewPasswordView) {
-        this.f$0 = loginActivityNewPasswordView;
+    public /* synthetic */ LoginActivity$LoginActivityNewPasswordView$$ExternalSyntheticLambda3(OutlineTextContainerView outlineTextContainerView) {
+        this.f$0 = outlineTextContainerView;
     }
 
-    public final void onClick(View view) {
-        this.f$0.m2464x8d1d839c(view);
+    public final void onFocusChange(View view, boolean z) {
+        LoginActivity.LoginActivityNewPasswordView.lambda$new$0(this.f$0, view, z);
     }
 }

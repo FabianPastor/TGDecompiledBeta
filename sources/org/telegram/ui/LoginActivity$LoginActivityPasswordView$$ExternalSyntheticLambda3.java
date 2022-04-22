@@ -1,18 +1,16 @@
 package org.telegram.ui;
 
-import org.telegram.tgnet.RequestDelegate;
-import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC;
+import android.view.View;
 import org.telegram.ui.LoginActivity;
 
-public final /* synthetic */ class LoginActivity$LoginActivityPasswordView$$ExternalSyntheticLambda3 implements RequestDelegate {
+public final /* synthetic */ class LoginActivity$LoginActivityPasswordView$$ExternalSyntheticLambda3 implements View.OnFocusChangeListener {
     public final /* synthetic */ LoginActivity.LoginActivityPasswordView f$0;
 
     public /* synthetic */ LoginActivity$LoginActivityPasswordView$$ExternalSyntheticLambda3(LoginActivity.LoginActivityPasswordView loginActivityPasswordView) {
         this.f$0 = loginActivityPasswordView;
     }
 
-    public final void run(TLObject tLObject, TLRPC.TL_error tL_error) {
-        this.f$0.m2480xa1e3CLASSNAME(tLObject, tL_error);
+    public final void onFocusChange(View view, boolean z) {
+        this.f$0.lambda$new$0(view, z);
     }
 }

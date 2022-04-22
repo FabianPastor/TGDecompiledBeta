@@ -11,6 +11,6 @@ public final /* synthetic */ class ChatAttachAlert$11$$ExternalSyntheticLambda0 
     }
 
     public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-        this.f$0.m3790lambda$onDraw$0$orgtelegramuiComponentsChatAttachAlert$11(valueAnimator);
+        this.f$0.lambda$onDraw$0(valueAnimator);
     }
 }

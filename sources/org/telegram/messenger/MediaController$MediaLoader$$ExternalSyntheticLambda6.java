@@ -12,6 +12,6 @@ public final /* synthetic */ class MediaController$MediaLoader$$ExternalSyntheti
     }
 
     public final void run() {
-        this.f$0.m690xc6f8b4f9(this.f$1);
+        this.f$0.lambda$copyFile$7(this.f$1);
     }
 }

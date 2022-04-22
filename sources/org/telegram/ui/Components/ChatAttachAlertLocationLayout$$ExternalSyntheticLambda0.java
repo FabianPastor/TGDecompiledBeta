@@ -10,6 +10,6 @@ public final /* synthetic */ class ChatAttachAlertLocationLayout$$ExternalSynthe
     }
 
     public final void onClick(DialogInterface dialogInterface, int i) {
-        this.f$0.m3860x3bb9042d(dialogInterface, i);
+        this.f$0.lambda$onMapInit$22(dialogInterface, i);
     }
 }

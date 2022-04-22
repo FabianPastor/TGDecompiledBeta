@@ -10,14 +10,17 @@ import org.telegram.messenger.Utilities;
 public class EncryptedFileInputStream extends FileInputStream {
     private static final int MODE_CBC = 1;
     private static final int MODE_CTR = 0;
-    private int currentMode = 0;
+    private int currentMode;
     private int fileOffset;
-    private byte[] iv = new byte[16];
-    private byte[] key = new byte[32];
+    private byte[] iv;
+    private byte[] key;
 
-    public EncryptedFileInputStream(File file, File keyFile) throws Exception {
+    public EncryptedFileInputStream(File file, File file2) throws Exception {
         super(file);
-        RandomAccessFile randomAccessFile = new RandomAccessFile(keyFile, "r");
+        this.key = new byte[32];
+        this.iv = new byte[16];
+        this.currentMode = 0;
+        RandomAccessFile randomAccessFile = new RandomAccessFile(file2, "r");
         randomAccessFile.read(this.key, 0, 32);
         randomAccessFile.read(this.iv, 0, 16);
         randomAccessFile.close();
@@ -25,49 +28,51 @@ public class EncryptedFileInputStream extends FileInputStream {
 
     public EncryptedFileInputStream(File file, SecureDocumentKey secureDocumentKey) throws Exception {
         super(file);
-        byte[] bArr = secureDocumentKey.file_key;
-        byte[] bArr2 = this.key;
-        System.arraycopy(bArr, 0, bArr2, 0, bArr2.length);
-        byte[] bArr3 = secureDocumentKey.file_iv;
-        byte[] bArr4 = this.iv;
-        System.arraycopy(bArr3, 0, bArr4, 0, bArr4.length);
+        byte[] bArr = new byte[32];
+        this.key = bArr;
+        this.iv = new byte[16];
+        this.currentMode = 1;
+        System.arraycopy(secureDocumentKey.file_key, 0, bArr, 0, bArr.length);
+        byte[] bArr2 = secureDocumentKey.file_iv;
+        byte[] bArr3 = this.iv;
+        System.arraycopy(bArr2, 0, bArr3, 0, bArr3.length);
     }
 
-    public int read(byte[] b, int off, int len) throws IOException {
+    public int read(byte[] bArr, int i, int i2) throws IOException {
         if (this.currentMode == 1 && this.fileOffset == 0) {
-            byte[] temp = new byte[32];
-            super.read(temp, 0, 32);
-            Utilities.aesCbcEncryptionByteArraySafe(b, this.key, this.iv, off, len, this.fileOffset, 0);
+            byte[] bArr2 = new byte[32];
+            super.read(bArr2, 0, 32);
+            Utilities.aesCbcEncryptionByteArraySafe(bArr, this.key, this.iv, i, i2, this.fileOffset, 0);
             this.fileOffset += 32;
-            skip((long) ((temp[0] & 255) - 32));
+            skip((long) ((bArr2[0] & 255) - 32));
         }
-        int result = super.read(b, off, len);
-        int i = this.currentMode;
-        if (i == 1) {
-            Utilities.aesCbcEncryptionByteArraySafe(b, this.key, this.iv, off, len, this.fileOffset, 0);
-        } else if (i == 0) {
-            Utilities.aesCtrDecryptionByteArray(b, this.key, this.iv, off, len, this.fileOffset);
+        int read = super.read(bArr, i, i2);
+        int i3 = this.currentMode;
+        if (i3 == 1) {
+            Utilities.aesCbcEncryptionByteArraySafe(bArr, this.key, this.iv, i, i2, this.fileOffset, 0);
+        } else if (i3 == 0) {
+            Utilities.aesCtrDecryptionByteArray(bArr, this.key, this.iv, i, i2, this.fileOffset);
         }
-        this.fileOffset += len;
-        return result;
+        this.fileOffset += i2;
+        return read;
     }
 
-    public long skip(long n) throws IOException {
-        this.fileOffset = (int) (((long) this.fileOffset) + n);
-        return super.skip(n);
+    public long skip(long j) throws IOException {
+        this.fileOffset = (int) (((long) this.fileOffset) + j);
+        return super.skip(j);
     }
 
-    public static void decryptBytesWithKeyFile(byte[] bytes, int offset, int length, SecureDocumentKey secureDocumentKey) {
-        Utilities.aesCbcEncryptionByteArraySafe(bytes, secureDocumentKey.file_key, secureDocumentKey.file_iv, offset, length, 0, 0);
+    public static void decryptBytesWithKeyFile(byte[] bArr, int i, int i2, SecureDocumentKey secureDocumentKey) {
+        Utilities.aesCbcEncryptionByteArraySafe(bArr, secureDocumentKey.file_key, secureDocumentKey.file_iv, i, i2, 0, 0);
     }
 
-    public static void decryptBytesWithKeyFile(byte[] bytes, int offset, int length, File keyFile) throws Exception {
-        byte[] key2 = new byte[32];
-        byte[] iv2 = new byte[16];
-        RandomAccessFile randomAccessFile = new RandomAccessFile(keyFile, "r");
-        randomAccessFile.read(key2, 0, 32);
-        randomAccessFile.read(iv2, 0, 16);
+    public static void decryptBytesWithKeyFile(byte[] bArr, int i, int i2, File file) throws Exception {
+        byte[] bArr2 = new byte[32];
+        byte[] bArr3 = new byte[16];
+        RandomAccessFile randomAccessFile = new RandomAccessFile(file, "r");
+        randomAccessFile.read(bArr2, 0, 32);
+        randomAccessFile.read(bArr3, 0, 16);
         randomAccessFile.close();
-        Utilities.aesCtrDecryptionByteArray(bytes, key2, iv2, offset, length, 0);
+        Utilities.aesCtrDecryptionByteArray(bArr, bArr2, bArr3, i, i2, 0);
     }
 }

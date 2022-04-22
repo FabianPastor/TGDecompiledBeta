@@ -11,6 +11,6 @@ public final /* synthetic */ class QrActivity$$ExternalSyntheticLambda8 implemen
     }
 
     public final void onItemSelected(EmojiThemes emojiThemes, int i) {
-        this.f$0.m3197lambda$createView$2$orgtelegramuiQrActivity(emojiThemes, i);
+        this.f$0.lambda$createView$2(emojiThemes, i);
     }
 }

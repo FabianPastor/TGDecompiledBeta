@@ -9,6 +9,6 @@ public final /* synthetic */ class RTMPStreamPipOverlay$$ExternalSyntheticLambda
     }
 
     public final void set(Object obj, float f) {
-        RTMPStreamPipOverlay.lambda$static$3((RTMPStreamPipOverlay) obj, f);
+        RTMPStreamPipOverlay.lambda$static$1((RTMPStreamPipOverlay) obj, f);
     }
 }

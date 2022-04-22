@@ -13,6 +13,6 @@ public final /* synthetic */ class GroupCreateActivity$$ExternalSyntheticLambda1
     }
 
     public final void onClick(DialogInterface dialogInterface, int i) {
-        this.f$0.m2261lambda$onDonePressed$6$orgtelegramuiGroupCreateActivity(this.f$1, dialogInterface, i);
+        this.f$0.lambda$onDonePressed$6(this.f$1, dialogInterface, i);
     }
 }

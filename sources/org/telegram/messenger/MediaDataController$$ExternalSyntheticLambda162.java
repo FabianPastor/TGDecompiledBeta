@@ -1,17 +1,16 @@
 package org.telegram.messenger;
 
-import org.telegram.tgnet.TLRPC;
+import org.telegram.tgnet.RequestDelegate;
+import org.telegram.tgnet.TLObject;
+import org.telegram.tgnet.TLRPC$TL_error;
 
-public final /* synthetic */ class MediaDataController$$ExternalSyntheticLambda162 implements Runnable {
-    public final /* synthetic */ MediaDataController f$0;
-    public final /* synthetic */ TLRPC.TL_messages_stickerSet f$1;
+public final /* synthetic */ class MediaDataController$$ExternalSyntheticLambda162 implements RequestDelegate {
+    public static final /* synthetic */ MediaDataController$$ExternalSyntheticLambda162 INSTANCE = new MediaDataController$$ExternalSyntheticLambda162();
 
-    public /* synthetic */ MediaDataController$$ExternalSyntheticLambda162(MediaDataController mediaDataController, TLRPC.TL_messages_stickerSet tL_messages_stickerSet) {
-        this.f$0 = mediaDataController;
-        this.f$1 = tL_messages_stickerSet;
+    private /* synthetic */ MediaDataController$$ExternalSyntheticLambda162() {
     }
 
-    public final void run() {
-        this.f$0.m743x391c4fb0(this.f$1);
+    public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+        MediaDataController.lambda$removePeer$106(tLObject, tLRPC$TL_error);
     }
 }

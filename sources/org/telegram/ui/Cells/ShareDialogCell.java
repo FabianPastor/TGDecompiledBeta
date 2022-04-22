@@ -3,7 +3,6 @@ package org.telegram.ui.Cells;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
-import android.os.SystemClock;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -16,8 +15,8 @@ import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.UserObject;
-import org.telegram.tgnet.ConnectionsManager;
-import org.telegram.tgnet.TLRPC;
+import org.telegram.tgnet.TLRPC$Chat;
+import org.telegram.tgnet.TLRPC$User;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.AvatarDrawable;
 import org.telegram.ui.Components.BackupImageView;
@@ -25,9 +24,6 @@ import org.telegram.ui.Components.CheckBox2;
 import org.telegram.ui.Components.LayoutHelper;
 
 public class ShareDialogCell extends FrameLayout {
-    public static final int TYPE_CALL = 1;
-    public static final int TYPE_CREATE = 2;
-    public static final int TYPE_SHARE = 0;
     private AvatarDrawable avatarDrawable = new AvatarDrawable();
     private CheckBox2 checkBox;
     private int currentAccount = UserConfig.selectedAccount;
@@ -38,24 +34,24 @@ public class ShareDialogCell extends FrameLayout {
     private TextView nameTextView;
     private float onlineProgress;
     private final Theme.ResourcesProvider resourcesProvider;
-    private TLRPC.User user;
+    private TLRPC$User user;
 
-    public ShareDialogCell(Context context, int type, Theme.ResourcesProvider resourcesProvider2) {
+    public ShareDialogCell(Context context, int i, Theme.ResourcesProvider resourcesProvider2) {
         super(context);
         this.resourcesProvider = resourcesProvider2;
         setWillNotDraw(false);
-        this.currentType = type;
+        this.currentType = i;
         BackupImageView backupImageView = new BackupImageView(context);
         this.imageView = backupImageView;
         backupImageView.setRoundRadius(AndroidUtilities.dp(28.0f));
-        if (type == 2) {
+        if (i == 2) {
             addView(this.imageView, LayoutHelper.createFrame(48, 48.0f, 49, 0.0f, 7.0f, 0.0f, 0.0f));
         } else {
             addView(this.imageView, LayoutHelper.createFrame(56, 56.0f, 49, 0.0f, 7.0f, 0.0f, 0.0f));
         }
         TextView textView = new TextView(context);
         this.nameTextView = textView;
-        textView.setTextColor(getThemedColor(type == 1 ? "voipgroup_nameText" : "dialogTextBlack"));
+        textView.setTextColor(getThemedColor(i == 1 ? "voipgroup_nameText" : "dialogTextBlack"));
         this.nameTextView.setTextSize(1, 12.0f);
         this.nameTextView.setMaxLines(2);
         this.nameTextView.setGravity(49);
@@ -64,7 +60,7 @@ public class ShareDialogCell extends FrameLayout {
         addView(this.nameTextView, LayoutHelper.createFrame(-1, -2.0f, 51, 6.0f, this.currentType == 2 ? 58.0f : 66.0f, 6.0f, 0.0f));
         CheckBox2 checkBox2 = new CheckBox2(context, 21, resourcesProvider2);
         this.checkBox = checkBox2;
-        checkBox2.setColor("dialogRoundCheckBox", type == 1 ? "voipgroup_inviteMembersBackground" : "dialogBackground", "dialogRoundCheckBoxCheck");
+        checkBox2.setColor("dialogRoundCheckBox", i == 1 ? "voipgroup_inviteMembersBackground" : "dialogBackground", "dialogRoundCheckBoxCheck");
         this.checkBox.setDrawUnchecked(false);
         this.checkBox.setDrawBackgroundAsArc(4);
         this.checkBox.setProgressDelegate(new ShareDialogCell$$ExternalSyntheticLambda0(this));
@@ -72,22 +68,22 @@ public class ShareDialogCell extends FrameLayout {
         setBackground(Theme.createRadSelectorDrawable(Theme.getColor("listSelectorSDK21"), AndroidUtilities.dp(2.0f), AndroidUtilities.dp(2.0f)));
     }
 
-    /* renamed from: lambda$new$0$org-telegram-ui-Cells-ShareDialogCell  reason: not valid java name */
-    public /* synthetic */ void m1518lambda$new$0$orgtelegramuiCellsShareDialogCell(float progress) {
-        float scale = 1.0f - (this.checkBox.getProgress() * 0.143f);
-        this.imageView.setScaleX(scale);
-        this.imageView.setScaleY(scale);
+    /* access modifiers changed from: private */
+    public /* synthetic */ void lambda$new$0(float f) {
+        float progress = 1.0f - (this.checkBox.getProgress() * 0.143f);
+        this.imageView.setScaleX(progress);
+        this.imageView.setScaleY(progress);
         invalidate();
     }
 
     /* access modifiers changed from: protected */
-    public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        super.onMeasure(widthMeasureSpec, View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(this.currentType == 2 ? 95.0f : 103.0f), NUM));
+    public void onMeasure(int i, int i2) {
+        super.onMeasure(i, View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(this.currentType == 2 ? 95.0f : 103.0f), NUM));
     }
 
-    public void setDialog(long uid, boolean checked, CharSequence name) {
-        if (DialogObject.isUserDialog(uid)) {
-            TLRPC.User user2 = MessagesController.getInstance(this.currentAccount).getUser(Long.valueOf(uid));
+    public void setDialog(long j, boolean z, CharSequence charSequence) {
+        if (DialogObject.isUserDialog(j)) {
+            TLRPC$User user2 = MessagesController.getInstance(this.currentAccount).getUser(Long.valueOf(j));
             this.user = user2;
             this.avatarDrawable.setInfo(user2);
             if (this.currentType != 2 && UserObject.isReplyUser(this.user)) {
@@ -95,12 +91,12 @@ public class ShareDialogCell extends FrameLayout {
                 this.avatarDrawable.setAvatarType(12);
                 this.imageView.setImage((ImageLocation) null, (String) null, (Drawable) this.avatarDrawable, (Object) this.user);
             } else if (this.currentType == 2 || !UserObject.isUserSelf(this.user)) {
-                if (name != null) {
-                    this.nameTextView.setText(name);
+                if (charSequence != null) {
+                    this.nameTextView.setText(charSequence);
                 } else {
-                    TLRPC.User user3 = this.user;
-                    if (user3 != null) {
-                        this.nameTextView.setText(ContactsController.formatName(user3.first_name, this.user.last_name));
+                    TLRPC$User tLRPC$User = this.user;
+                    if (tLRPC$User != null) {
+                        this.nameTextView.setText(ContactsController.formatName(tLRPC$User.first_name, tLRPC$User.last_name));
                     } else {
                         this.nameTextView.setText("");
                     }
@@ -113,9 +109,9 @@ public class ShareDialogCell extends FrameLayout {
             }
         } else {
             this.user = null;
-            TLRPC.Chat chat = MessagesController.getInstance(this.currentAccount).getChat(Long.valueOf(-uid));
-            if (name != null) {
-                this.nameTextView.setText(name);
+            TLRPC$Chat chat = MessagesController.getInstance(this.currentAccount).getChat(Long.valueOf(-j));
+            if (charSequence != null) {
+                this.nameTextView.setText(charSequence);
             } else if (chat != null) {
                 this.nameTextView.setText(chat.title);
             } else {
@@ -124,79 +120,171 @@ public class ShareDialogCell extends FrameLayout {
             this.avatarDrawable.setInfo(chat);
             this.imageView.setForUserOrChat(chat, this.avatarDrawable);
         }
-        this.currentDialog = uid;
-        this.checkBox.setChecked(checked, false);
+        this.currentDialog = j;
+        this.checkBox.setChecked(z, false);
     }
 
     public long getCurrentDialog() {
         return this.currentDialog;
     }
 
-    public void setChecked(boolean checked, boolean animated) {
-        this.checkBox.setChecked(checked, animated);
+    public void setChecked(boolean z, boolean z2) {
+        this.checkBox.setChecked(z, z2);
     }
 
     /* access modifiers changed from: protected */
-    public boolean drawChild(Canvas canvas, View child, long drawingTime) {
-        TLRPC.User user2;
-        Canvas canvas2 = canvas;
-        boolean result = super.drawChild(canvas, child, drawingTime);
-        if (child == this.imageView && this.currentType != 2 && (user2 = this.user) != null && !MessagesController.isSupportUser(user2)) {
-            long newTime = SystemClock.elapsedRealtime();
-            long dt = newTime - this.lastUpdateTime;
-            if (dt > 17) {
-                dt = 17;
-            }
-            this.lastUpdateTime = newTime;
-            boolean isOnline = !this.user.self && !this.user.bot && ((this.user.status != null && this.user.status.expires > ConnectionsManager.getInstance(this.currentAccount).getCurrentTime()) || MessagesController.getInstance(this.currentAccount).onlinePrivacy.containsKey(Long.valueOf(this.user.id)));
-            if (isOnline || this.onlineProgress != 0.0f) {
-                int top = this.imageView.getBottom() - AndroidUtilities.dp(6.0f);
-                int left = this.imageView.getRight() - AndroidUtilities.dp(10.0f);
-                Theme.dialogs_onlineCirclePaint.setColor(getThemedColor(this.currentType == 1 ? "voipgroup_inviteMembersBackground" : "windowBackgroundWhite"));
-                canvas2.drawCircle((float) left, (float) top, ((float) AndroidUtilities.dp(7.0f)) * this.onlineProgress, Theme.dialogs_onlineCirclePaint);
-                Theme.dialogs_onlineCirclePaint.setColor(getThemedColor("chats_onlineCircle"));
-                canvas2.drawCircle((float) left, (float) top, ((float) AndroidUtilities.dp(5.0f)) * this.onlineProgress, Theme.dialogs_onlineCirclePaint);
-                if (isOnline) {
-                    float f = this.onlineProgress;
-                    if (f < 1.0f) {
-                        float f2 = f + (((float) dt) / 150.0f);
-                        this.onlineProgress = f2;
-                        if (f2 > 1.0f) {
-                            this.onlineProgress = 1.0f;
-                        }
-                        this.imageView.invalidate();
-                        invalidate();
-                    }
-                } else {
-                    float f3 = this.onlineProgress;
-                    if (f3 > 0.0f) {
-                        float f4 = f3 - (((float) dt) / 150.0f);
-                        this.onlineProgress = f4;
-                        if (f4 < 0.0f) {
-                            this.onlineProgress = 0.0f;
-                        }
-                        this.imageView.invalidate();
-                        invalidate();
-                    }
-                }
-            }
-        }
-        return result;
+    /* JADX WARNING: Code restructure failed: missing block: B:15:0x0033, code lost:
+        r9 = r9.status;
+     */
+    /* Code decompiled incorrectly, please refer to instructions dump. */
+    public boolean drawChild(android.graphics.Canvas r8, android.view.View r9, long r10) {
+        /*
+            r7 = this;
+            boolean r10 = super.drawChild(r8, r9, r10)
+            org.telegram.ui.Components.BackupImageView r11 = r7.imageView
+            if (r9 != r11) goto L_0x00f9
+            int r9 = r7.currentType
+            r11 = 2
+            if (r9 == r11) goto L_0x00f9
+            org.telegram.tgnet.TLRPC$User r9 = r7.user
+            if (r9 == 0) goto L_0x00f9
+            boolean r9 = org.telegram.messenger.MessagesController.isSupportUser(r9)
+            if (r9 != 0) goto L_0x00f9
+            long r0 = android.os.SystemClock.elapsedRealtime()
+            long r2 = r7.lastUpdateTime
+            long r2 = r0 - r2
+            r4 = 17
+            int r9 = (r2 > r4 ? 1 : (r2 == r4 ? 0 : -1))
+            if (r9 <= 0) goto L_0x0026
+            r2 = r4
+        L_0x0026:
+            r7.lastUpdateTime = r0
+            org.telegram.tgnet.TLRPC$User r9 = r7.user
+            boolean r11 = r9.self
+            r0 = 1
+            if (r11 != 0) goto L_0x005d
+            boolean r11 = r9.bot
+            if (r11 != 0) goto L_0x005d
+            org.telegram.tgnet.TLRPC$UserStatus r9 = r9.status
+            if (r9 == 0) goto L_0x0045
+            int r9 = r9.expires
+            int r11 = r7.currentAccount
+            org.telegram.tgnet.ConnectionsManager r11 = org.telegram.tgnet.ConnectionsManager.getInstance(r11)
+            int r11 = r11.getCurrentTime()
+            if (r9 > r11) goto L_0x005b
+        L_0x0045:
+            int r9 = r7.currentAccount
+            org.telegram.messenger.MessagesController r9 = org.telegram.messenger.MessagesController.getInstance(r9)
+            j$.util.concurrent.ConcurrentHashMap<java.lang.Long, java.lang.Integer> r9 = r9.onlinePrivacy
+            org.telegram.tgnet.TLRPC$User r11 = r7.user
+            long r4 = r11.id
+            java.lang.Long r11 = java.lang.Long.valueOf(r4)
+            boolean r9 = r9.containsKey(r11)
+            if (r9 == 0) goto L_0x005d
+        L_0x005b:
+            r9 = 1
+            goto L_0x005e
+        L_0x005d:
+            r9 = 0
+        L_0x005e:
+            r11 = 0
+            if (r9 != 0) goto L_0x0067
+            float r1 = r7.onlineProgress
+            int r1 = (r1 > r11 ? 1 : (r1 == r11 ? 0 : -1))
+            if (r1 == 0) goto L_0x00f9
+        L_0x0067:
+            org.telegram.ui.Components.BackupImageView r1 = r7.imageView
+            int r1 = r1.getBottom()
+            r4 = 1086324736(0x40CLASSNAME, float:6.0)
+            int r4 = org.telegram.messenger.AndroidUtilities.dp(r4)
+            int r1 = r1 - r4
+            org.telegram.ui.Components.BackupImageView r4 = r7.imageView
+            int r4 = r4.getRight()
+            r5 = 1092616192(0x41200000, float:10.0)
+            int r5 = org.telegram.messenger.AndroidUtilities.dp(r5)
+            int r4 = r4 - r5
+            android.graphics.Paint r5 = org.telegram.ui.ActionBar.Theme.dialogs_onlineCirclePaint
+            int r6 = r7.currentType
+            if (r6 != r0) goto L_0x008a
+            java.lang.String r0 = "voipgroup_inviteMembersBackground"
+            goto L_0x008c
+        L_0x008a:
+            java.lang.String r0 = "windowBackgroundWhite"
+        L_0x008c:
+            int r0 = r7.getThemedColor(r0)
+            r5.setColor(r0)
+            float r0 = (float) r4
+            float r1 = (float) r1
+            r4 = 1088421888(0x40e00000, float:7.0)
+            int r4 = org.telegram.messenger.AndroidUtilities.dp(r4)
+            float r4 = (float) r4
+            float r5 = r7.onlineProgress
+            float r4 = r4 * r5
+            android.graphics.Paint r5 = org.telegram.ui.ActionBar.Theme.dialogs_onlineCirclePaint
+            r8.drawCircle(r0, r1, r4, r5)
+            android.graphics.Paint r4 = org.telegram.ui.ActionBar.Theme.dialogs_onlineCirclePaint
+            java.lang.String r5 = "chats_onlineCircle"
+            int r5 = r7.getThemedColor(r5)
+            r4.setColor(r5)
+            r4 = 1084227584(0x40a00000, float:5.0)
+            int r4 = org.telegram.messenger.AndroidUtilities.dp(r4)
+            float r4 = (float) r4
+            float r5 = r7.onlineProgress
+            float r4 = r4 * r5
+            android.graphics.Paint r5 = org.telegram.ui.ActionBar.Theme.dialogs_onlineCirclePaint
+            r8.drawCircle(r0, r1, r4, r5)
+            r8 = 1125515264(0x43160000, float:150.0)
+            if (r9 == 0) goto L_0x00e0
+            float r9 = r7.onlineProgress
+            r11 = 1065353216(0x3var_, float:1.0)
+            int r0 = (r9 > r11 ? 1 : (r9 == r11 ? 0 : -1))
+            if (r0 >= 0) goto L_0x00f9
+            float r0 = (float) r2
+            float r0 = r0 / r8
+            float r9 = r9 + r0
+            r7.onlineProgress = r9
+            int r8 = (r9 > r11 ? 1 : (r9 == r11 ? 0 : -1))
+            if (r8 <= 0) goto L_0x00d7
+            r7.onlineProgress = r11
+        L_0x00d7:
+            org.telegram.ui.Components.BackupImageView r8 = r7.imageView
+            r8.invalidate()
+            r7.invalidate()
+            goto L_0x00f9
+        L_0x00e0:
+            float r9 = r7.onlineProgress
+            int r0 = (r9 > r11 ? 1 : (r9 == r11 ? 0 : -1))
+            if (r0 <= 0) goto L_0x00f9
+            float r0 = (float) r2
+            float r0 = r0 / r8
+            float r9 = r9 - r0
+            r7.onlineProgress = r9
+            int r8 = (r9 > r11 ? 1 : (r9 == r11 ? 0 : -1))
+            if (r8 >= 0) goto L_0x00f1
+            r7.onlineProgress = r11
+        L_0x00f1:
+            org.telegram.ui.Components.BackupImageView r8 = r7.imageView
+            r8.invalidate()
+            r7.invalidate()
+        L_0x00f9:
+            return r10
+        */
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Cells.ShareDialogCell.drawChild(android.graphics.Canvas, android.view.View, long):boolean");
     }
 
     /* access modifiers changed from: protected */
     public void onDraw(Canvas canvas) {
-        int cx = this.imageView.getLeft() + (this.imageView.getMeasuredWidth() / 2);
-        int cy = this.imageView.getTop() + (this.imageView.getMeasuredHeight() / 2);
+        int left = this.imageView.getLeft() + (this.imageView.getMeasuredWidth() / 2);
+        int top = this.imageView.getTop() + (this.imageView.getMeasuredHeight() / 2);
         Theme.checkboxSquare_checkPaint.setColor(getThemedColor("dialogRoundCheckBox"));
         Theme.checkboxSquare_checkPaint.setAlpha((int) (this.checkBox.getProgress() * 255.0f));
-        canvas.drawCircle((float) cx, (float) cy, (float) AndroidUtilities.dp(this.currentType == 2 ? 24.0f : 28.0f), Theme.checkboxSquare_checkPaint);
+        canvas.drawCircle((float) left, (float) top, (float) AndroidUtilities.dp(this.currentType == 2 ? 24.0f : 28.0f), Theme.checkboxSquare_checkPaint);
         super.onDraw(canvas);
     }
 
-    private int getThemedColor(String key) {
+    private int getThemedColor(String str) {
         Theme.ResourcesProvider resourcesProvider2 = this.resourcesProvider;
-        Integer color = resourcesProvider2 != null ? resourcesProvider2.getColor(key) : null;
-        return color != null ? color.intValue() : Theme.getColor(key);
+        Integer color = resourcesProvider2 != null ? resourcesProvider2.getColor(str) : null;
+        return color != null ? color.intValue() : Theme.getColor(str);
     }
 }

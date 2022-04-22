@@ -1,5 +1,6 @@
 package org.telegram.ui.Components;
 
+import android.annotation.SuppressLint;
 import android.graphics.Bitmap;
 import android.graphics.BitmapShader;
 import android.graphics.BlendMode;
@@ -29,10 +30,9 @@ import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.Utilities;
 
 public class MotionBackgroundDrawable extends Drawable {
-    private static final int ANIMATION_CACHE_BITMAPS_COUNT = 3;
     private static boolean errorWhileGenerateLegacyBitmap = false;
     private static float legacyBitmapScale = 0.7f;
-    private static final boolean useLegacyBitmap = (Build.VERSION.SDK_INT < 28);
+    private static final boolean useLegacyBitmap;
     private static final boolean useSoftLight;
     private int alpha;
     private float backgroundAlpha;
@@ -78,16 +78,25 @@ public class MotionBackgroundDrawable extends Drawable {
     private int translationY;
     private Runnable updateAnimationRunnable;
 
+    public int getOpacity() {
+        return -2;
+    }
+
+    public void setColorFilter(ColorFilter colorFilter) {
+    }
+
     static {
+        int i = Build.VERSION.SDK_INT;
         boolean z = true;
-        if (Build.VERSION.SDK_INT < 29) {
+        useLegacyBitmap = i < 28;
+        if (i < 29) {
             z = false;
         }
         useSoftLight = z;
     }
 
-    /* renamed from: lambda$new$0$org-telegram-ui-Components-MotionBackgroundDrawable  reason: not valid java name */
-    public /* synthetic */ void m4135lambda$new$0$orgtelegramuiComponentsMotionBackgroundDrawable() {
+    /* access modifiers changed from: private */
+    public /* synthetic */ void lambda$new$0() {
         updateAnimation(true);
     }
 
@@ -110,11 +119,11 @@ public class MotionBackgroundDrawable extends Drawable {
         init();
     }
 
-    public MotionBackgroundDrawable(int c1, int c2, int c3, int c4, boolean preview) {
-        this(c1, c2, c3, c4, 0, preview);
+    public MotionBackgroundDrawable(int i, int i2, int i3, int i4, boolean z) {
+        this(i, i2, i3, i4, 0, z);
     }
 
-    public MotionBackgroundDrawable(int c1, int c2, int c3, int c4, int rotation, boolean preview) {
+    public MotionBackgroundDrawable(int i, int i2, int i3, int i4, int i5, boolean z) {
         this.colors = new int[]{-12423849, -531317, -7888252, -133430};
         this.interpolator = new CubicBezierInterpolator(0.33d, 0.0d, 0.0d, 1.0d);
         this.posAnimationProgress = 1.0f;
@@ -130,11 +139,12 @@ public class MotionBackgroundDrawable extends Drawable {
         this.patternAlpha = 1.0f;
         this.backgroundAlpha = 1.0f;
         this.alpha = 255;
-        this.isPreview = preview;
-        setColors(c1, c2, c3, c4, rotation, false);
+        this.isPreview = z;
+        setColors(i, i2, i3, i4, i5, false);
         init();
     }
 
+    @SuppressLint({"NewApi"})
     private void init() {
         this.currentBitmap = Bitmap.createBitmap(60, 80, Bitmap.Config.ARGB_8888);
         for (int i = 0; i < 3; i++) {
@@ -149,10 +159,12 @@ public class MotionBackgroundDrawable extends Drawable {
         }
     }
 
-    public void setRoundRadius(int rad) {
-        this.roundRadius = rad;
+    public void setRoundRadius(int i) {
+        this.roundRadius = i;
         this.matrix = new Matrix();
-        BitmapShader bitmapShader2 = new BitmapShader(this.currentBitmap, Shader.TileMode.CLAMP, Shader.TileMode.CLAMP);
+        Bitmap bitmap = this.currentBitmap;
+        Shader.TileMode tileMode = Shader.TileMode.CLAMP;
+        BitmapShader bitmapShader2 = new BitmapShader(bitmap, tileMode, tileMode);
         this.bitmapShader = bitmapShader2;
         this.paint.setShader(bitmapShader2);
         invalidateParent();
@@ -170,36 +182,32 @@ public class MotionBackgroundDrawable extends Drawable {
         return this.intensity;
     }
 
-    public static boolean isDark(int color1, int color2, int color3, int color4) {
-        int averageColor = AndroidUtilities.getAverageColor(color1, color2);
-        if (color3 != 0) {
-            averageColor = AndroidUtilities.getAverageColor(averageColor, color3);
+    public static boolean isDark(int i, int i2, int i3, int i4) {
+        int averageColor = AndroidUtilities.getAverageColor(i, i2);
+        if (i3 != 0) {
+            averageColor = AndroidUtilities.getAverageColor(averageColor, i3);
         }
-        if (color4 != 0) {
-            averageColor = AndroidUtilities.getAverageColor(averageColor, color4);
+        if (i4 != 0) {
+            averageColor = AndroidUtilities.getAverageColor(averageColor, i4);
         }
         return AndroidUtilities.RGBtoHSB(Color.red(averageColor), Color.green(averageColor), Color.blue(averageColor))[2] < 0.3f;
     }
 
-    public void setBounds(Rect bounds) {
-        super.setBounds(bounds);
-        this.patternBounds.set(bounds);
+    public void setBounds(Rect rect2) {
+        super.setBounds(rect2);
+        this.patternBounds.set(rect2);
     }
 
-    public void setPatternBounds(int left, int top, int right, int bottom) {
-        this.patternBounds.set(left, top, right, bottom);
-    }
-
-    public static int getPatternColor(int color1, int color2, int color3, int color4) {
-        if (isDark(color1, color2, color3, color4)) {
+    public static int getPatternColor(int i, int i2, int i3, int i4) {
+        if (isDark(i, i2, i3, i4)) {
             return !useSoftLight ? Integer.MAX_VALUE : -1;
         }
         if (useSoftLight) {
             return -16777216;
         }
-        int averageColor = AndroidUtilities.getAverageColor(color3, AndroidUtilities.getAverageColor(color1, color2));
-        if (color4 != 0) {
-            averageColor = AndroidUtilities.getAverageColor(color4, averageColor);
+        int averageColor = AndroidUtilities.getAverageColor(i3, AndroidUtilities.getAverageColor(i, i2));
+        if (i4 != 0) {
+            averageColor = AndroidUtilities.getAverageColor(i4, averageColor);
         }
         return (AndroidUtilities.getPatternColor(averageColor, true) & 16777215) | NUM;
     }
@@ -213,24 +221,24 @@ public class MotionBackgroundDrawable extends Drawable {
         return this.phase;
     }
 
-    public void setPostInvalidateParent(boolean value) {
-        this.postInvalidateParent = value;
+    public void setPostInvalidateParent(boolean z) {
+        this.postInvalidateParent = z;
     }
 
-    public void rotatePreview(boolean back) {
+    public void rotatePreview(boolean z) {
         if (this.posAnimationProgress >= 1.0f) {
             this.rotatingPreview = true;
             this.posAnimationProgress = 0.0f;
-            this.rotationBack = back;
+            this.rotationBack = z;
             invalidateParent();
         }
     }
 
-    public void setPhase(int value) {
-        this.phase = value;
-        if (value < 0) {
+    public void setPhase(int i) {
+        this.phase = i;
+        if (i < 0) {
             this.phase = 0;
-        } else if (value > 7) {
+        } else if (i > 7) {
             this.phase = 7;
         }
         Utilities.generateGradient(this.currentBitmap, true, this.phase, this.interpolator.getInterpolation(this.posAnimationProgress), this.currentBitmap.getWidth(), this.currentBitmap.getHeight(), this.currentBitmap.getRowBytes(), this.colors);
@@ -240,11 +248,11 @@ public class MotionBackgroundDrawable extends Drawable {
         switchToNextPosition(false);
     }
 
-    public void switchToNextPosition(boolean fast) {
+    public void switchToNextPosition(boolean z) {
         if (this.posAnimationProgress >= 1.0f) {
             this.rotatingPreview = false;
             this.rotationBack = false;
-            this.fastAnimation = fast;
+            this.fastAnimation = z;
             this.posAnimationProgress = 0.0f;
             int i = this.phase - 1;
             this.phase = i;
@@ -258,6 +266,7 @@ public class MotionBackgroundDrawable extends Drawable {
     }
 
     private void generateNextGradient() {
+        int i = 0;
         if (useLegacyBitmap && this.intensity < 0) {
             try {
                 if (this.legacyBitmap != null) {
@@ -288,15 +297,17 @@ public class MotionBackgroundDrawable extends Drawable {
             Utilities.generateGradient(bitmap4, true, this.phase, 1.0f, bitmap4.getWidth(), this.currentBitmap.getHeight(), this.currentBitmap.getRowBytes(), this.colors);
             this.invalidateLegacy = true;
         }
-        for (int i = 0; i < 3; i++) {
-            Utilities.generateGradient(this.gradientToBitmap[i], true, this.phase, ((float) (i + 1)) / 3.0f, this.currentBitmap.getWidth(), this.currentBitmap.getHeight(), this.currentBitmap.getRowBytes(), this.colors);
+        while (i < 3) {
+            int i2 = i + 1;
+            Utilities.generateGradient(this.gradientToBitmap[i], true, this.phase, ((float) i2) / 3.0f, this.currentBitmap.getWidth(), this.currentBitmap.getHeight(), this.currentBitmap.getRowBytes(), this.colors);
+            i = i2;
         }
     }
 
-    public void switchToPrevPosition(boolean fast) {
+    public void switchToPrevPosition(boolean z) {
         if (this.posAnimationProgress >= 1.0f) {
             this.rotatingPreview = false;
-            this.fastAnimation = fast;
+            this.fastAnimation = z;
             this.rotationBack = true;
             this.posAnimationProgress = 0.0f;
             invalidateParent();
@@ -313,39 +324,39 @@ public class MotionBackgroundDrawable extends Drawable {
         this.parentView = new WeakReference<>(view);
     }
 
-    public void setColors(int c1, int c2, int c3, int c4) {
-        setColors(c1, c2, c3, c4, 0, true);
+    public void setColors(int i, int i2, int i3, int i4) {
+        setColors(i, i2, i3, i4, 0, true);
     }
 
-    public void setColors(int c1, int c2, int c3, int c4, Bitmap bitmap) {
+    public void setColors(int i, int i2, int i3, int i4, Bitmap bitmap) {
         int[] iArr = this.colors;
-        iArr[0] = c1;
-        iArr[1] = c2;
-        iArr[2] = c3;
-        iArr[3] = c4;
+        iArr[0] = i;
+        iArr[1] = i2;
+        iArr[2] = i3;
+        iArr[3] = i4;
         Utilities.generateGradient(bitmap, true, this.phase, this.interpolator.getInterpolation(this.posAnimationProgress), this.currentBitmap.getWidth(), this.currentBitmap.getHeight(), this.currentBitmap.getRowBytes(), this.colors);
     }
 
-    public void setColors(int c1, int c2, int c3, int c4, int rotation, boolean invalidate) {
-        int i = c1;
-        int i2 = c2;
-        int i3 = c3;
-        int i4 = c4;
-        if (this.isPreview && i3 == 0 && i4 == 0) {
-            this.gradientDrawable = new GradientDrawable(BackgroundGradientDrawable.getGradientOrientation(rotation), new int[]{i, i2});
+    public void setColors(int i, int i2, int i3, int i4, int i5, boolean z) {
+        int i6 = i;
+        int i7 = i2;
+        int i8 = i3;
+        int i9 = i4;
+        if (this.isPreview && i8 == 0 && i9 == 0) {
+            this.gradientDrawable = new GradientDrawable(BackgroundGradientDrawable.getGradientOrientation(i5), new int[]{i6, i7});
         } else {
             this.gradientDrawable = null;
         }
         int[] iArr = this.colors;
-        if (iArr[0] != i || iArr[1] != i2 || iArr[2] != i3 || iArr[3] != i4) {
-            iArr[0] = i;
-            iArr[1] = i2;
-            iArr[2] = i3;
-            iArr[3] = i4;
+        if (iArr[0] != i6 || iArr[1] != i7 || iArr[2] != i8 || iArr[3] != i9) {
+            iArr[0] = i6;
+            iArr[1] = i7;
+            iArr[2] = i8;
+            iArr[3] = i9;
             Bitmap bitmap = this.currentBitmap;
             if (bitmap != null) {
                 Utilities.generateGradient(bitmap, true, this.phase, this.interpolator.getInterpolation(this.posAnimationProgress), this.currentBitmap.getWidth(), this.currentBitmap.getHeight(), this.currentBitmap.getRowBytes(), this.colors);
-                if (invalidate) {
+                if (z) {
                     invalidateParent();
                 }
             }
@@ -386,30 +397,35 @@ public class MotionBackgroundDrawable extends Drawable {
         return super.getIntrinsicHeight();
     }
 
-    public void setTranslationY(int y) {
-        this.translationY = y;
+    public void setTranslationY(int i) {
+        this.translationY = i;
     }
 
-    public void setPatternBitmap(int intensity2) {
-        setPatternBitmap(intensity2, this.patternBitmap);
+    public void setPatternBitmap(int i) {
+        setPatternBitmap(i, this.patternBitmap);
     }
 
-    public void setPatternBitmap(int intensity2, Bitmap bitmap) {
-        this.intensity = intensity2;
+    @SuppressLint({"NewApi"})
+    public void setPatternBitmap(int i, Bitmap bitmap) {
+        this.intensity = i;
         this.patternBitmap = bitmap;
         this.invalidateLegacy = true;
         if (bitmap != null) {
             if (useSoftLight) {
-                if (intensity2 >= 0) {
+                if (i >= 0) {
                     this.paint2.setBlendMode(BlendMode.SOFT_LIGHT);
                 } else {
                     this.paint2.setBlendMode((BlendMode) null);
                 }
             }
-            if (intensity2 < 0) {
+            if (i < 0) {
                 if (!useLegacyBitmap) {
-                    this.bitmapShader = new BitmapShader(this.currentBitmap, Shader.TileMode.CLAMP, Shader.TileMode.CLAMP);
-                    this.gradientShader = new BitmapShader(this.patternBitmap, Shader.TileMode.CLAMP, Shader.TileMode.CLAMP);
+                    Bitmap bitmap2 = this.currentBitmap;
+                    Shader.TileMode tileMode = Shader.TileMode.CLAMP;
+                    this.bitmapShader = new BitmapShader(bitmap2, tileMode, tileMode);
+                    Bitmap bitmap3 = this.patternBitmap;
+                    Shader.TileMode tileMode2 = Shader.TileMode.CLAMP;
+                    this.gradientShader = new BitmapShader(bitmap3, tileMode2, tileMode2);
                     this.paint2.setShader(new ComposeShader(this.bitmapShader, this.gradientShader, PorterDuff.Mode.DST_IN));
                     this.matrix = new Matrix();
                     return;
@@ -426,34 +442,34 @@ public class MotionBackgroundDrawable extends Drawable {
         }
     }
 
-    public void setPatternColorFilter(int color) {
-        this.patternColorFilter = new PorterDuffColorFilter(color, PorterDuff.Mode.SRC_IN);
+    public void setPatternColorFilter(int i) {
+        this.patternColorFilter = new PorterDuffColorFilter(i, PorterDuff.Mode.SRC_IN);
         invalidateParent();
     }
 
-    public void setPatternAlpha(float alpha2) {
-        this.patternAlpha = alpha2;
+    public void setPatternAlpha(float f) {
+        this.patternAlpha = f;
         invalidateParent();
     }
 
-    public void setBackgroundAlpha(float alpha2) {
-        this.backgroundAlpha = alpha2;
+    public void setBackgroundAlpha(float f) {
+        this.backgroundAlpha = f;
         invalidateParent();
     }
 
-    public void setBounds(int left, int top, int right, int bottom) {
-        super.setBounds(left, top, right, bottom);
-        this.patternBounds.set(left, top, right, bottom);
+    public void setBounds(int i, int i2, int i3, int i4) {
+        super.setBounds(i, i2, i3, i4);
+        this.patternBounds.set(i, i2, i3, i4);
         createLegacyBitmap();
     }
 
     private void createLegacyBitmap() {
         if (useLegacyBitmap && this.intensity < 0 && !errorWhileGenerateLegacyBitmap) {
-            int w = (int) (((float) this.patternBounds.width()) * legacyBitmapScale);
-            int h = (int) (((float) this.patternBounds.height()) * legacyBitmapScale);
-            if (w > 0 && h > 0) {
+            int width = (int) (((float) this.patternBounds.width()) * legacyBitmapScale);
+            int height = (int) (((float) this.patternBounds.height()) * legacyBitmapScale);
+            if (width > 0 && height > 0) {
                 Bitmap bitmap = this.legacyBitmap;
-                if (bitmap == null || bitmap.getWidth() != w || this.legacyBitmap.getHeight() != h) {
+                if (bitmap == null || bitmap.getWidth() != width || this.legacyBitmap.getHeight() != height) {
                     Bitmap bitmap2 = this.legacyBitmap;
                     if (bitmap2 != null) {
                         bitmap2.recycle();
@@ -464,7 +480,7 @@ public class MotionBackgroundDrawable extends Drawable {
                         this.legacyBitmap2 = null;
                     }
                     try {
-                        this.legacyBitmap = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
+                        this.legacyBitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
                         this.legacyCanvas = new Canvas(this.legacyBitmap);
                         this.invalidateLegacy = true;
                     } catch (Exception e) {
@@ -483,67 +499,59 @@ public class MotionBackgroundDrawable extends Drawable {
     }
 
     public void drawBackground(Canvas canvas) {
-        Canvas canvas2 = canvas;
         Rect bounds = getBounds();
         canvas.save();
-        float tr = (float) (this.patternBitmap != null ? bounds.top : this.translationY);
-        int bitmapWidth = this.currentBitmap.getWidth();
-        int bitmapHeight = this.currentBitmap.getHeight();
-        float w = (float) bounds.width();
-        float h = (float) bounds.height();
-        float maxScale = Math.max(w / ((float) bitmapWidth), h / ((float) bitmapHeight));
-        float width = ((float) bitmapWidth) * maxScale;
-        float height = ((float) bitmapHeight) * maxScale;
-        float x = (w - width) / 2.0f;
-        float y = (h - height) / 2.0f;
+        float f = (float) (this.patternBitmap != null ? bounds.top : this.translationY);
+        int width = this.currentBitmap.getWidth();
+        int height = this.currentBitmap.getHeight();
+        float width2 = (float) bounds.width();
+        float height2 = (float) bounds.height();
+        float f2 = (float) width;
+        float f3 = (float) height;
+        float max = Math.max(width2 / f2, height2 / f3);
+        float f4 = f2 * max;
+        float f5 = f3 * max;
+        float f6 = (width2 - f4) / 2.0f;
+        float f7 = (height2 - f5) / 2.0f;
         if (this.isPreview) {
-            x += (float) bounds.left;
-            y += (float) bounds.top;
-            int i = bitmapWidth;
-            canvas2.clipRect(bounds.left, bounds.top, bounds.right, bounds.bottom);
+            int i = bounds.left;
+            f6 += (float) i;
+            int i2 = bounds.top;
+            f7 += (float) i2;
+            canvas.clipRect(i, i2, bounds.right, bounds.bottom);
         }
         if (this.intensity < 0) {
-            canvas2.drawColor(ColorUtils.setAlphaComponent(-16777216, (int) (((float) this.alpha) * this.backgroundAlpha)));
-            int i2 = bitmapHeight;
-            float f = w;
-            float f2 = h;
+            canvas.drawColor(ColorUtils.setAlphaComponent(-16777216, (int) (((float) this.alpha) * this.backgroundAlpha)));
         } else if (this.roundRadius != 0) {
             this.matrix.reset();
-            this.matrix.setTranslate(x, y);
-            float scaleW = ((float) this.currentBitmap.getWidth()) / ((float) bounds.width());
-            float scale = 1.0f / Math.min(scaleW, ((float) this.currentBitmap.getHeight()) / ((float) bounds.height()));
-            this.matrix.preScale(scale, scale);
-            float f3 = scaleW;
+            this.matrix.setTranslate(f6, f7);
+            float min = 1.0f / Math.min(((float) this.currentBitmap.getWidth()) / ((float) bounds.width()), ((float) this.currentBitmap.getHeight()) / ((float) bounds.height()));
+            this.matrix.preScale(min, min);
             this.bitmapShader.setLocalMatrix(this.matrix);
-            int i3 = bitmapHeight;
-            float f4 = w;
-            float f5 = h;
             this.rect.set((float) bounds.left, (float) bounds.top, (float) bounds.right, (float) bounds.bottom);
-            int wasAlpha = this.paint.getAlpha();
-            this.paint.setAlpha((int) (((float) wasAlpha) * this.backgroundAlpha));
+            int alpha2 = this.paint.getAlpha();
+            this.paint.setAlpha((int) (((float) alpha2) * this.backgroundAlpha));
             RectF rectF = this.rect;
-            int i4 = this.roundRadius;
-            canvas2.drawRoundRect(rectF, (float) i4, (float) i4, this.paint);
-            this.paint.setAlpha(wasAlpha);
+            int i3 = this.roundRadius;
+            canvas.drawRoundRect(rectF, (float) i3, (float) i3, this.paint);
+            this.paint.setAlpha(alpha2);
         } else {
-            float f6 = w;
-            float f7 = h;
-            canvas2.translate(0.0f, tr);
+            canvas.translate(0.0f, f);
             GradientDrawable gradientDrawable2 = this.gradientDrawable;
             if (gradientDrawable2 != null) {
-                gradientDrawable2.setBounds((int) x, (int) y, (int) (x + width), (int) (y + height));
+                gradientDrawable2.setBounds((int) f6, (int) f7, (int) (f6 + f4), (int) (f7 + f5));
                 this.gradientDrawable.setAlpha((int) (this.backgroundAlpha * 255.0f));
-                this.gradientDrawable.draw(canvas2);
+                this.gradientDrawable.draw(canvas);
             } else {
-                this.rect.set(x, y, x + width, y + height);
-                Paint bitmapPaint = this.overrideBitmapPaint;
-                if (bitmapPaint == null) {
-                    bitmapPaint = this.paint;
+                this.rect.set(f6, f7, f4 + f6, f5 + f7);
+                Paint paint4 = this.overrideBitmapPaint;
+                if (paint4 == null) {
+                    paint4 = this.paint;
                 }
-                int wasAlpha2 = bitmapPaint.getAlpha();
-                bitmapPaint.setAlpha((int) (((float) wasAlpha2) * this.backgroundAlpha));
-                canvas2.drawBitmap(this.currentBitmap, (Rect) null, this.rect, bitmapPaint);
-                bitmapPaint.setAlpha(wasAlpha2);
+                int alpha3 = paint4.getAlpha();
+                paint4.setAlpha((int) (((float) alpha3) * this.backgroundAlpha));
+                canvas.drawBitmap(this.currentBitmap, (Rect) null, this.rect, paint4);
+                paint4.setAlpha(alpha3);
             }
         }
         canvas.restore();
@@ -551,74 +559,59 @@ public class MotionBackgroundDrawable extends Drawable {
     }
 
     public void drawPattern(Canvas canvas) {
-        int bitmapWidth;
-        float maxScale;
-        int bitmapHeight;
-        int bitmapWidth2;
-        Canvas canvas2 = canvas;
         Rect bounds = getBounds();
         canvas.save();
-        float tr = (float) (this.patternBitmap != null ? bounds.top : this.translationY);
-        int bitmapWidth3 = this.currentBitmap.getWidth();
-        int bitmapHeight2 = this.currentBitmap.getHeight();
-        float w = (float) bounds.width();
-        float h = (float) bounds.height();
-        float maxScale2 = Math.max(w / ((float) bitmapWidth3), h / ((float) bitmapHeight2));
-        float x = (w - (((float) bitmapWidth3) * maxScale2)) / 2.0f;
-        float y = (h - (((float) bitmapHeight2) * maxScale2)) / 2.0f;
+        float f = (float) (this.patternBitmap != null ? bounds.top : this.translationY);
+        int width = this.currentBitmap.getWidth();
+        int height = this.currentBitmap.getHeight();
+        float width2 = (float) bounds.width();
+        float height2 = (float) bounds.height();
+        float f2 = (float) width;
+        float f3 = (float) height;
+        float max = Math.max(width2 / f2, height2 / f3);
+        float f4 = (width2 - (f2 * max)) / 2.0f;
+        float f5 = (height2 - (f3 * max)) / 2.0f;
         if (this.isPreview) {
-            x += (float) bounds.left;
-            y += (float) bounds.top;
-            bitmapWidth = bitmapWidth3;
-            canvas2.clipRect(bounds.left, bounds.top, bounds.right, bounds.bottom);
-        } else {
-            bitmapWidth = bitmapWidth3;
+            int i = bounds.left;
+            f4 += (float) i;
+            int i2 = bounds.top;
+            f5 += (float) i2;
+            canvas.clipRect(i, i2, bounds.right, bounds.bottom);
         }
         if (this.intensity < 0) {
             Bitmap bitmap = this.patternBitmap;
             if (bitmap != null) {
                 if (!useLegacyBitmap) {
-                    float f = maxScale2;
                     if (this.matrix == null) {
                         this.matrix = new Matrix();
                     }
                     this.matrix.reset();
-                    this.matrix.setTranslate(x, y + tr);
-                    float scaleW = ((float) this.currentBitmap.getWidth()) / ((float) bounds.width());
-                    float scaleH = ((float) this.currentBitmap.getHeight()) / ((float) bounds.height());
-                    float scale = 1.0f / Math.min(scaleW, scaleH);
-                    this.matrix.preScale(scale, scale);
+                    this.matrix.setTranslate(f4, f5 + f);
+                    float min = 1.0f / Math.min(((float) this.currentBitmap.getWidth()) / ((float) bounds.width()), ((float) this.currentBitmap.getHeight()) / ((float) bounds.height()));
+                    this.matrix.preScale(min, min);
                     this.bitmapShader.setLocalMatrix(this.matrix);
                     this.matrix.reset();
-                    int bitmapWidth4 = this.patternBitmap.getWidth();
-                    int bitmapHeight3 = this.patternBitmap.getHeight();
-                    float f2 = scaleW;
-                    float maxScale3 = Math.max(w / ((float) bitmapWidth4), h / ((float) bitmapHeight3));
-                    float f3 = scaleH;
-                    this.matrix.setTranslate((w - (((float) bitmapWidth4) * maxScale3)) / 2.0f, ((h - (((float) bitmapHeight3) * maxScale3)) / 2.0f) + tr);
-                    this.matrix.preScale(maxScale3, maxScale3);
+                    float width3 = (float) this.patternBitmap.getWidth();
+                    float height3 = (float) this.patternBitmap.getHeight();
+                    float max2 = Math.max(width2 / width3, height2 / height3);
+                    this.matrix.setTranslate((width2 - (width3 * max2)) / 2.0f, ((height2 - (height3 * max2)) / 2.0f) + f);
+                    this.matrix.preScale(max2, max2);
                     this.gradientShader.setLocalMatrix(this.matrix);
                     this.paint2.setColorFilter((ColorFilter) null);
-                    float f4 = tr;
                     this.paint2.setAlpha((int) ((((float) Math.abs(this.intensity)) / 100.0f) * ((float) this.alpha) * this.patternAlpha));
-                    float maxScale4 = maxScale3;
-                    float f5 = scale;
                     this.rect.set((float) bounds.left, (float) bounds.top, (float) bounds.right, (float) bounds.bottom);
                     RectF rectF = this.rect;
-                    int i = this.roundRadius;
-                    canvas2.drawRoundRect(rectF, (float) i, (float) i, this.paint2);
-                    int i2 = bitmapWidth4;
-                    int i3 = bitmapHeight3;
-                    float f6 = maxScale4;
+                    int i3 = this.roundRadius;
+                    canvas.drawRoundRect(rectF, (float) i3, (float) i3, this.paint2);
                 } else if (errorWhileGenerateLegacyBitmap) {
-                    int bitmapWidth5 = bitmap.getWidth();
-                    int bitmapHeight4 = this.patternBitmap.getHeight();
-                    float maxScale5 = Math.max(w / ((float) bitmapWidth5), h / ((float) bitmapHeight4));
-                    float width = ((float) bitmapWidth5) * maxScale5;
-                    float height = ((float) bitmapHeight4) * maxScale5;
-                    float x2 = (w - width) / 2.0f;
-                    float y2 = (h - height) / 2.0f;
-                    this.rect.set(x2, y2, x2 + width, y2 + height);
+                    float width4 = (float) bitmap.getWidth();
+                    float height4 = (float) this.patternBitmap.getHeight();
+                    float max3 = Math.max(width2 / width4, height2 / height4);
+                    float f6 = width4 * max3;
+                    float f7 = height4 * max3;
+                    float f8 = (width2 - f6) / 2.0f;
+                    float f9 = (height2 - f7) / 2.0f;
+                    this.rect.set(f8, f9, f6 + f8, f7 + f9);
                     int[] iArr = this.colors;
                     int averageColor = AndroidUtilities.getAverageColor(iArr[2], AndroidUtilities.getAverageColor(iArr[0], iArr[1]));
                     int[] iArr2 = this.colors;
@@ -631,179 +624,128 @@ public class MotionBackgroundDrawable extends Drawable {
                     }
                     this.paint2.setColorFilter(this.legacyBitmapColorFilter);
                     this.paint2.setAlpha((int) ((((float) Math.abs(this.intensity)) / 100.0f) * ((float) this.alpha) * this.patternAlpha));
-                    canvas2.translate(0.0f, tr);
-                    canvas2.drawBitmap(this.patternBitmap, (Rect) null, this.rect, this.paint2);
-                    float f7 = tr;
-                    int i4 = bitmapWidth5;
-                    int i5 = bitmapHeight4;
+                    canvas.translate(0.0f, f);
+                    canvas.drawBitmap(this.patternBitmap, (Rect) null, this.rect, this.paint2);
                 } else {
                     Bitmap bitmap2 = this.legacyBitmap;
                     if (bitmap2 != null) {
                         if (this.invalidateLegacy) {
                             this.rect.set(0.0f, 0.0f, (float) bitmap2.getWidth(), (float) this.legacyBitmap.getHeight());
-                            int oldAlpha = this.paint.getAlpha();
+                            int alpha2 = this.paint.getAlpha();
                             this.paint.setAlpha(255);
-                            int i6 = bitmapHeight2;
-                            float f8 = maxScale2;
                             this.legacyCanvas.drawBitmap(this.currentBitmap, (Rect) null, this.rect, this.paint);
-                            this.paint.setAlpha(oldAlpha);
-                            int bitmapWidth6 = this.patternBitmap.getWidth();
-                            int bitmapHeight5 = this.patternBitmap.getHeight();
-                            float maxScale6 = Math.max(w / ((float) bitmapWidth6), h / ((float) bitmapHeight5));
-                            float width2 = ((float) bitmapWidth6) * maxScale6;
-                            float height2 = ((float) bitmapHeight5) * maxScale6;
-                            float x3 = (w - width2) / 2.0f;
-                            float y3 = (h - height2) / 2.0f;
-                            int i7 = oldAlpha;
-                            this.rect.set(x3, y3, x3 + width2, y3 + height2);
+                            this.paint.setAlpha(alpha2);
+                            float width5 = (float) this.patternBitmap.getWidth();
+                            float height5 = (float) this.patternBitmap.getHeight();
+                            float max4 = Math.max(width2 / width5, height2 / height5);
+                            float var_ = width5 * max4;
+                            float var_ = height5 * max4;
+                            float var_ = (width2 - var_) / 2.0f;
+                            float var_ = (height2 - var_) / 2.0f;
+                            this.rect.set(var_, var_, var_ + var_, var_ + var_);
                             this.paint2.setColorFilter((ColorFilter) null);
                             this.paint2.setAlpha((int) ((((float) Math.abs(this.intensity)) / 100.0f) * 255.0f));
                             this.legacyCanvas.save();
-                            Canvas canvas3 = this.legacyCanvas;
-                            float f9 = legacyBitmapScale;
-                            canvas3.scale(f9, f9);
-                            int bitmapHeight6 = bitmapHeight5;
+                            Canvas canvas2 = this.legacyCanvas;
+                            float var_ = legacyBitmapScale;
+                            canvas2.scale(var_, var_);
                             this.legacyCanvas.drawBitmap(this.patternBitmap, (Rect) null, this.rect, this.paint2);
                             this.legacyCanvas.restore();
                             this.invalidateLegacy = false;
-                            float var_ = maxScale6;
-                            bitmapWidth2 = bitmapWidth6;
-                            bitmapHeight2 = bitmapHeight6;
-                        } else {
-                            float var_ = maxScale2;
-                            bitmapWidth2 = bitmapWidth;
                         }
-                        int bitmapWidth7 = bitmapWidth2;
-                        int bitmapHeight7 = bitmapHeight2;
                         this.rect.set((float) bounds.left, (float) bounds.top, (float) bounds.right, (float) bounds.bottom);
                         if (this.legacyBitmap2 != null) {
                             float var_ = this.posAnimationProgress;
                             if (var_ != 1.0f) {
                                 this.paint.setAlpha((int) (((float) this.alpha) * this.patternAlpha * (1.0f - var_)));
-                                canvas2.drawBitmap(this.legacyBitmap2, (Rect) null, this.rect, this.paint);
+                                canvas.drawBitmap(this.legacyBitmap2, (Rect) null, this.rect, this.paint);
                                 this.paint.setAlpha((int) (((float) this.alpha) * this.patternAlpha * this.posAnimationProgress));
-                                canvas2.drawBitmap(this.legacyBitmap, (Rect) null, this.rect, this.paint);
+                                canvas.drawBitmap(this.legacyBitmap, (Rect) null, this.rect, this.paint);
                                 this.paint.setAlpha(this.alpha);
-                                float var_ = tr;
-                                int i8 = bitmapWidth7;
-                                int i9 = bitmapHeight7;
                             }
                         }
-                        canvas2.drawBitmap(this.legacyBitmap, (Rect) null, this.rect, this.paint);
-                        float var_ = tr;
-                        int i82 = bitmapWidth7;
-                        int i92 = bitmapHeight7;
-                    } else {
-                        bitmapHeight = bitmapHeight2;
-                        maxScale = maxScale2;
-                        float var_ = tr;
+                        canvas.drawBitmap(this.legacyBitmap, (Rect) null, this.rect, this.paint);
                     }
                 }
-                canvas.restore();
-                updateAnimation(true);
             }
-            bitmapHeight = bitmapHeight2;
-            maxScale = maxScale2;
         } else {
-            bitmapHeight = bitmapHeight2;
-            maxScale = maxScale2;
             Bitmap bitmap3 = this.patternBitmap;
             if (bitmap3 != null) {
-                int bitmapWidth8 = bitmap3.getWidth();
-                int bitmapHeight8 = this.patternBitmap.getHeight();
-                float maxScale7 = Math.max(w / ((float) bitmapWidth8), h / ((float) bitmapHeight8));
-                float width3 = ((float) bitmapWidth8) * maxScale7;
-                float height3 = ((float) bitmapHeight8) * maxScale7;
-                float x4 = (w - width3) / 2.0f;
-                float y4 = (h - height3) / 2.0f;
-                this.rect.set(x4, y4, x4 + width3, y4 + height3);
+                float width6 = (float) bitmap3.getWidth();
+                float height6 = (float) this.patternBitmap.getHeight();
+                float max5 = Math.max(width2 / width6, height2 / height6);
+                float var_ = width6 * max5;
+                float var_ = height6 * max5;
+                float var_ = (width2 - var_) / 2.0f;
+                float var_ = (height2 - var_) / 2.0f;
+                this.rect.set(var_, var_, var_ + var_, var_ + var_);
                 this.paint2.setColorFilter(this.patternColorFilter);
                 this.paint2.setAlpha((int) ((((float) Math.abs(this.intensity)) / 100.0f) * ((float) this.alpha) * this.patternAlpha));
-                canvas2.drawBitmap(this.patternBitmap, (Rect) null, this.rect, this.paint2);
-                canvas.restore();
-                updateAnimation(true);
+                canvas.drawBitmap(this.patternBitmap, (Rect) null, this.rect, this.paint2);
             }
         }
-        int i10 = bitmapHeight;
-        float var_ = maxScale;
         canvas.restore();
         updateAnimation(true);
     }
 
     public void draw(Canvas canvas) {
-        int bitmapWidth;
-        float maxScale;
-        int bitmapHeight;
-        int bitmapWidth2;
         Canvas canvas2 = canvas;
         Rect bounds = getBounds();
         canvas.save();
-        float tr = (float) (this.patternBitmap != null ? bounds.top : this.translationY);
-        int bitmapWidth3 = this.currentBitmap.getWidth();
-        int bitmapHeight2 = this.currentBitmap.getHeight();
-        float w = (float) bounds.width();
-        float h = (float) bounds.height();
-        float maxScale2 = Math.max(w / ((float) bitmapWidth3), h / ((float) bitmapHeight2));
-        float width = ((float) bitmapWidth3) * maxScale2;
-        float height = ((float) bitmapHeight2) * maxScale2;
-        float x = (w - width) / 2.0f;
-        float y = (h - height) / 2.0f;
+        float f = (float) (this.patternBitmap != null ? bounds.top : this.translationY);
+        int width = this.currentBitmap.getWidth();
+        int height = this.currentBitmap.getHeight();
+        float width2 = (float) bounds.width();
+        float height2 = (float) bounds.height();
+        float f2 = (float) width;
+        float f3 = (float) height;
+        float max = Math.max(width2 / f2, height2 / f3);
+        float f4 = f2 * max;
+        float f5 = f3 * max;
+        float f6 = (width2 - f4) / 2.0f;
+        float f7 = (height2 - f5) / 2.0f;
         if (this.isPreview) {
-            x += (float) bounds.left;
-            y += (float) bounds.top;
-            bitmapWidth = bitmapWidth3;
-            canvas2.clipRect(bounds.left, bounds.top, bounds.right, bounds.bottom);
-        } else {
-            bitmapWidth = bitmapWidth3;
+            int i = bounds.left;
+            f6 += (float) i;
+            int i2 = bounds.top;
+            f7 += (float) i2;
+            canvas2.clipRect(i, i2, bounds.right, bounds.bottom);
         }
         if (this.intensity < 0) {
             canvas2.drawColor(ColorUtils.setAlphaComponent(-16777216, (int) (((float) this.alpha) * this.backgroundAlpha)));
             Bitmap bitmap = this.patternBitmap;
             if (bitmap != null) {
                 if (!useLegacyBitmap) {
-                    float f = maxScale2;
                     if (this.matrix == null) {
                         this.matrix = new Matrix();
                     }
                     this.matrix.reset();
-                    this.matrix.setTranslate(x, y + tr);
-                    float scaleW = ((float) this.currentBitmap.getWidth()) / ((float) bounds.width());
-                    float scaleH = ((float) this.currentBitmap.getHeight()) / ((float) bounds.height());
-                    float scale = 1.0f / Math.min(scaleW, scaleH);
-                    this.matrix.preScale(scale, scale);
+                    this.matrix.setTranslate(f6, f7 + f);
+                    float min = 1.0f / Math.min(((float) this.currentBitmap.getWidth()) / ((float) bounds.width()), ((float) this.currentBitmap.getHeight()) / ((float) bounds.height()));
+                    this.matrix.preScale(min, min);
                     this.bitmapShader.setLocalMatrix(this.matrix);
                     this.matrix.reset();
-                    int bitmapWidth4 = this.patternBitmap.getWidth();
-                    int bitmapHeight3 = this.patternBitmap.getHeight();
-                    float f2 = scaleW;
-                    float maxScale3 = Math.max(w / ((float) bitmapWidth4), h / ((float) bitmapHeight3));
-                    float width2 = ((float) bitmapWidth4) * maxScale3;
-                    float f3 = scaleH;
-                    this.matrix.setTranslate((w - width2) / 2.0f, ((h - (((float) bitmapHeight3) * maxScale3)) / 2.0f) + tr);
-                    this.matrix.preScale(maxScale3, maxScale3);
+                    float width3 = (float) this.patternBitmap.getWidth();
+                    float height3 = (float) this.patternBitmap.getHeight();
+                    float max2 = Math.max(width2 / width3, height2 / height3);
+                    this.matrix.setTranslate((width2 - (width3 * max2)) / 2.0f, ((height2 - (height3 * max2)) / 2.0f) + f);
+                    this.matrix.preScale(max2, max2);
                     this.gradientShader.setLocalMatrix(this.matrix);
                     this.paint2.setColorFilter((ColorFilter) null);
-                    float maxScale4 = maxScale3;
                     this.paint2.setAlpha((int) ((((float) Math.abs(this.intensity)) / 100.0f) * ((float) this.alpha) * this.patternAlpha));
-                    float f4 = scale;
                     this.rect.set((float) bounds.left, (float) bounds.top, (float) bounds.right, (float) bounds.bottom);
                     RectF rectF = this.rect;
-                    int i = this.roundRadius;
-                    canvas2.drawRoundRect(rectF, (float) i, (float) i, this.paint2);
-                    Rect rect2 = bounds;
-                    int i2 = bitmapWidth4;
-                    int i3 = bitmapHeight3;
-                    float f5 = maxScale4;
-                    float f6 = width2;
+                    int i3 = this.roundRadius;
+                    canvas2.drawRoundRect(rectF, (float) i3, (float) i3, this.paint2);
                 } else if (errorWhileGenerateLegacyBitmap) {
-                    int bitmapWidth5 = bitmap.getWidth();
-                    int bitmapHeight4 = this.patternBitmap.getHeight();
-                    float maxScale5 = Math.max(w / ((float) bitmapWidth5), h / ((float) bitmapHeight4));
-                    float width3 = ((float) bitmapWidth5) * maxScale5;
-                    float height2 = ((float) bitmapHeight4) * maxScale5;
-                    float x2 = (w - width3) / 2.0f;
-                    float y2 = (h - height2) / 2.0f;
-                    this.rect.set(x2, y2, x2 + width3, y2 + height2);
+                    float width4 = (float) bitmap.getWidth();
+                    float height4 = (float) this.patternBitmap.getHeight();
+                    float max3 = Math.max(width2 / width4, height2 / height4);
+                    float f8 = width4 * max3;
+                    float f9 = height4 * max3;
+                    float var_ = (width2 - f8) / 2.0f;
+                    float var_ = (height2 - f9) / 2.0f;
+                    this.rect.set(var_, var_, f8 + var_, f9 + var_);
                     int[] iArr = this.colors;
                     int averageColor = AndroidUtilities.getAverageColor(iArr[2], AndroidUtilities.getAverageColor(iArr[0], iArr[1]));
                     int[] iArr2 = this.colors;
@@ -816,51 +758,35 @@ public class MotionBackgroundDrawable extends Drawable {
                     }
                     this.paint2.setColorFilter(this.legacyBitmapColorFilter);
                     this.paint2.setAlpha((int) ((((float) Math.abs(this.intensity)) / 100.0f) * ((float) this.alpha) * this.patternAlpha));
-                    canvas2.translate(0.0f, tr);
+                    canvas2.translate(0.0f, f);
                     canvas2.drawBitmap(this.patternBitmap, (Rect) null, this.rect, this.paint2);
-                    int i4 = bitmapWidth5;
-                    int i5 = bitmapHeight4;
-                    Rect rect3 = bounds;
                 } else {
                     Bitmap bitmap2 = this.legacyBitmap;
                     if (bitmap2 != null) {
                         if (this.invalidateLegacy) {
                             this.rect.set(0.0f, 0.0f, (float) bitmap2.getWidth(), (float) this.legacyBitmap.getHeight());
-                            int oldAlpha = this.paint.getAlpha();
+                            int alpha2 = this.paint.getAlpha();
                             this.paint.setAlpha(255);
-                            int i6 = bitmapHeight2;
-                            float f7 = maxScale2;
                             this.legacyCanvas.drawBitmap(this.currentBitmap, (Rect) null, this.rect, this.paint);
-                            this.paint.setAlpha(oldAlpha);
-                            int bitmapWidth6 = this.patternBitmap.getWidth();
-                            int bitmapHeight5 = this.patternBitmap.getHeight();
-                            float maxScale6 = Math.max(w / ((float) bitmapWidth6), h / ((float) bitmapHeight5));
-                            float width4 = ((float) bitmapWidth6) * maxScale6;
-                            float height3 = ((float) bitmapHeight5) * maxScale6;
-                            float x3 = (w - width4) / 2.0f;
-                            float y3 = (h - height3) / 2.0f;
-                            int i7 = oldAlpha;
-                            this.rect.set(x3, y3, x3 + width4, y3 + height3);
+                            this.paint.setAlpha(alpha2);
+                            float width5 = (float) this.patternBitmap.getWidth();
+                            float height5 = (float) this.patternBitmap.getHeight();
+                            float max4 = Math.max(width2 / width5, height2 / height5);
+                            float var_ = width5 * max4;
+                            float var_ = height5 * max4;
+                            float var_ = (width2 - var_) / 2.0f;
+                            float var_ = (height2 - var_) / 2.0f;
+                            this.rect.set(var_, var_, var_ + var_, var_ + var_);
                             this.paint2.setColorFilter((ColorFilter) null);
                             this.paint2.setAlpha((int) ((((float) Math.abs(this.intensity)) / 100.0f) * 255.0f));
                             this.legacyCanvas.save();
                             Canvas canvas3 = this.legacyCanvas;
-                            float f8 = legacyBitmapScale;
-                            canvas3.scale(f8, f8);
-                            int bitmapHeight6 = bitmapHeight5;
+                            float var_ = legacyBitmapScale;
+                            canvas3.scale(var_, var_);
                             this.legacyCanvas.drawBitmap(this.patternBitmap, (Rect) null, this.rect, this.paint2);
                             this.legacyCanvas.restore();
                             this.invalidateLegacy = false;
-                            float f9 = maxScale6;
-                            bitmapWidth2 = bitmapWidth6;
-                            bitmapHeight2 = bitmapHeight6;
-                        } else {
-                            int i8 = bitmapHeight2;
-                            float var_ = maxScale2;
-                            bitmapWidth2 = bitmapWidth;
                         }
-                        int bitmapWidth7 = bitmapWidth2;
-                        int bitmapHeight7 = bitmapHeight2;
                         this.rect.set((float) bounds.left, (float) bounds.top, (float) bounds.right, (float) bounds.bottom);
                         if (this.legacyBitmap2 != null) {
                             float var_ = this.posAnimationProgress;
@@ -870,224 +796,181 @@ public class MotionBackgroundDrawable extends Drawable {
                                 this.paint.setAlpha((int) (((float) this.alpha) * this.patternAlpha * this.posAnimationProgress));
                                 canvas2.drawBitmap(this.legacyBitmap, (Rect) null, this.rect, this.paint);
                                 this.paint.setAlpha(this.alpha);
-                                int i9 = bitmapWidth7;
-                                int i10 = bitmapHeight7;
-                                Rect rect4 = bounds;
                             }
                         }
                         canvas2.drawBitmap(this.legacyBitmap, (Rect) null, this.rect, this.paint);
-                        int i92 = bitmapWidth7;
-                        int i102 = bitmapHeight7;
-                        Rect rect42 = bounds;
-                    } else {
-                        bitmapHeight = bitmapHeight2;
-                        maxScale = maxScale2;
-                        Rect rect5 = bounds;
                     }
                 }
-                canvas.restore();
-                updateAnimation(true);
             }
-            bitmapHeight = bitmapHeight2;
-            maxScale = maxScale2;
-            Rect rect6 = bounds;
         } else {
-            bitmapHeight = bitmapHeight2;
-            maxScale = maxScale2;
             if (this.roundRadius != 0) {
                 this.matrix.reset();
-                this.matrix.setTranslate(x, y);
-                float scaleW2 = ((float) this.currentBitmap.getWidth()) / ((float) bounds.width());
-                float scaleH2 = ((float) this.currentBitmap.getHeight()) / ((float) bounds.height());
-                float scale2 = 1.0f / Math.min(scaleW2, scaleH2);
-                this.matrix.preScale(scale2, scale2);
+                this.matrix.setTranslate(f6, f7);
+                float min2 = 1.0f / Math.min(((float) this.currentBitmap.getWidth()) / ((float) bounds.width()), ((float) this.currentBitmap.getHeight()) / ((float) bounds.height()));
+                this.matrix.preScale(min2, min2);
                 this.bitmapShader.setLocalMatrix(this.matrix);
-                float var_ = scaleW2;
-                float var_ = scaleH2;
                 this.rect.set((float) bounds.left, (float) bounds.top, (float) bounds.right, (float) bounds.bottom);
                 RectF rectF2 = this.rect;
-                int i11 = this.roundRadius;
-                canvas2.drawRoundRect(rectF2, (float) i11, (float) i11, this.paint);
+                int i4 = this.roundRadius;
+                canvas2.drawRoundRect(rectF2, (float) i4, (float) i4, this.paint);
             } else {
-                canvas2.translate(0.0f, tr);
+                canvas2.translate(0.0f, f);
                 GradientDrawable gradientDrawable2 = this.gradientDrawable;
                 if (gradientDrawable2 != null) {
-                    gradientDrawable2.setBounds((int) x, (int) y, (int) (x + width), (int) (y + height));
+                    gradientDrawable2.setBounds((int) f6, (int) f7, (int) (f6 + f4), (int) (f7 + f5));
                     this.gradientDrawable.setAlpha((int) (this.backgroundAlpha * 255.0f));
                     this.gradientDrawable.draw(canvas2);
                 } else {
-                    this.rect.set(x, y, x + width, y + height);
-                    Paint bitmapPaint = this.overrideBitmapPaint;
-                    if (bitmapPaint == null) {
-                        bitmapPaint = this.paint;
+                    this.rect.set(f6, f7, f4 + f6, f5 + f7);
+                    Paint paint4 = this.overrideBitmapPaint;
+                    if (paint4 == null) {
+                        paint4 = this.paint;
                     }
-                    int wasAlpha = bitmapPaint.getAlpha();
-                    bitmapPaint.setAlpha((int) (((float) wasAlpha) * this.backgroundAlpha));
-                    canvas2.drawBitmap(this.currentBitmap, (Rect) null, this.rect, bitmapPaint);
-                    bitmapPaint.setAlpha(wasAlpha);
+                    int alpha3 = paint4.getAlpha();
+                    paint4.setAlpha((int) (((float) alpha3) * this.backgroundAlpha));
+                    canvas2.drawBitmap(this.currentBitmap, (Rect) null, this.rect, paint4);
+                    paint4.setAlpha(alpha3);
                 }
             }
             Bitmap bitmap3 = this.patternBitmap;
             if (bitmap3 != null) {
-                int bitmapWidth8 = bitmap3.getWidth();
-                int bitmapHeight8 = this.patternBitmap.getHeight();
-                float maxScale7 = Math.max(w / ((float) bitmapWidth8), h / ((float) bitmapHeight8));
-                float width5 = ((float) bitmapWidth8) * maxScale7;
-                float height4 = ((float) bitmapHeight8) * maxScale7;
-                float x4 = (w - width5) / 2.0f;
-                float y4 = (h - height4) / 2.0f;
-                this.rect.set(x4, y4, x4 + width5, y4 + height4);
+                float width6 = (float) bitmap3.getWidth();
+                float height6 = (float) this.patternBitmap.getHeight();
+                float max5 = Math.max(width2 / width6, height2 / height6);
+                float var_ = width6 * max5;
+                float var_ = height6 * max5;
+                float var_ = (width2 - var_) / 2.0f;
+                float var_ = (height2 - var_) / 2.0f;
+                this.rect.set(var_, var_, var_ + var_, var_ + var_);
                 this.paint2.setColorFilter(this.patternColorFilter);
                 this.paint2.setAlpha((int) ((((float) Math.abs(this.intensity)) / 100.0f) * ((float) this.alpha) * this.patternAlpha));
-                Rect rect7 = bounds;
                 canvas2.drawBitmap(this.patternBitmap, (Rect) null, this.rect, this.paint2);
-                canvas.restore();
-                updateAnimation(true);
             }
         }
-        int i12 = bitmapWidth;
-        int i13 = bitmapHeight;
-        float var_ = maxScale;
         canvas.restore();
         updateAnimation(true);
     }
 
-    public void updateAnimation(boolean invalidate) {
-        float progress;
-        int stageBefore;
-        long newTime = SystemClock.elapsedRealtime();
-        long dt = newTime - this.lastUpdateTime;
-        if (dt > 20) {
-            dt = 17;
+    public void updateAnimation(boolean z) {
+        float f;
+        float f2;
+        long elapsedRealtime = SystemClock.elapsedRealtime();
+        long j = elapsedRealtime - this.lastUpdateTime;
+        if (j > 20) {
+            j = 17;
         }
-        this.lastUpdateTime = newTime;
-        if (dt > 1) {
-            boolean z = this.isIndeterminateAnimation;
-            if (z && this.posAnimationProgress == 1.0f) {
+        this.lastUpdateTime = elapsedRealtime;
+        if (j > 1) {
+            boolean z2 = this.isIndeterminateAnimation;
+            if (z2 && this.posAnimationProgress == 1.0f) {
                 this.posAnimationProgress = 0.0f;
             }
-            float f = this.posAnimationProgress;
-            if (f < 1.0f) {
-                boolean isNeedGenerateGradient = this.postInvalidateParent || this.rotatingPreview;
-                if (z) {
-                    float f2 = f + (((float) dt) / 12000.0f);
-                    this.posAnimationProgress = f2;
-                    if (f2 >= 1.0f) {
+            float f3 = this.posAnimationProgress;
+            if (f3 < 1.0f) {
+                boolean z3 = this.postInvalidateParent || this.rotatingPreview;
+                if (z2) {
+                    float f4 = f3 + (((float) j) / 12000.0f);
+                    this.posAnimationProgress = f4;
+                    if (f4 >= 1.0f) {
                         this.posAnimationProgress = 0.0f;
                     }
-                    float f3 = this.posAnimationProgress;
-                    int i = (int) (f3 / 0.125f);
+                    float f5 = this.posAnimationProgress;
+                    int i = (int) (f5 / 0.125f);
                     this.phase = i;
-                    progress = 1.0f - ((f3 - (((float) i) * 0.125f)) / 0.125f);
-                    isNeedGenerateGradient = true;
-                } else if (this.rotatingPreview) {
-                    float progressBefore = this.interpolator.getInterpolation(f);
-                    if (progressBefore <= 0.25f) {
-                        stageBefore = 0;
-                    } else if (progressBefore <= 0.5f) {
-                        stageBefore = 1;
-                    } else if (progressBefore <= 0.75f) {
-                        stageBefore = 2;
-                    } else {
-                        stageBefore = 3;
-                    }
-                    float f4 = this.posAnimationProgress + (((float) dt) / (this.rotationBack ? 1000.0f : 2000.0f));
-                    this.posAnimationProgress = f4;
-                    if (f4 > 1.0f) {
-                        this.posAnimationProgress = 1.0f;
-                    }
-                    float progress2 = this.interpolator.getInterpolation(this.posAnimationProgress);
-                    if ((stageBefore == 0 && progress2 > 0.25f) || ((stageBefore == 1 && progress2 > 0.5f) || (stageBefore == 2 && progress2 > 0.75f))) {
+                    f = 1.0f - ((f5 - (((float) i) * 0.125f)) / 0.125f);
+                    z3 = true;
+                } else {
+                    if (this.rotatingPreview) {
+                        float interpolation = this.interpolator.getInterpolation(f3);
+                        char c = interpolation <= 0.25f ? 0 : interpolation <= 0.5f ? 1 : interpolation <= 0.75f ? (char) 2 : 3;
+                        float f6 = this.posAnimationProgress + (((float) j) / (this.rotationBack ? 1000.0f : 2000.0f));
+                        this.posAnimationProgress = f6;
+                        if (f6 > 1.0f) {
+                            this.posAnimationProgress = 1.0f;
+                        }
+                        float interpolation2 = this.interpolator.getInterpolation(this.posAnimationProgress);
+                        if ((c == 0 && interpolation2 > 0.25f) || ((c == 1 && interpolation2 > 0.5f) || (c == 2 && interpolation2 > 0.75f))) {
+                            if (this.rotationBack) {
+                                int i2 = this.phase + 1;
+                                this.phase = i2;
+                                if (i2 > 7) {
+                                    this.phase = 0;
+                                }
+                            } else {
+                                int i3 = this.phase - 1;
+                                this.phase = i3;
+                                if (i3 < 0) {
+                                    this.phase = 7;
+                                }
+                            }
+                        }
+                        if (interpolation2 > 0.25f) {
+                            interpolation2 = interpolation2 <= 0.5f ? interpolation2 - 0.25f : interpolation2 <= 0.75f ? interpolation2 - 0.5f : interpolation2 - 0.75f;
+                        }
+                        float f7 = interpolation2 / 0.25f;
                         if (this.rotationBack) {
-                            int i2 = this.phase + 1;
-                            this.phase = i2;
-                            if (i2 > 7) {
-                                this.phase = 0;
+                            f2 = 1.0f - f7;
+                            if (this.posAnimationProgress >= 1.0f) {
+                                int i4 = this.phase + 1;
+                                this.phase = i4;
+                                if (i4 > 7) {
+                                    this.phase = 0;
+                                }
+                                f2 = 1.0f;
                             }
                         } else {
-                            int i3 = this.phase - 1;
-                            this.phase = i3;
-                            if (i3 < 0) {
-                                this.phase = 7;
-                            }
+                            f2 = f7;
                         }
-                    }
-                    if (progress2 <= 0.25f) {
-                        progress = progress2 / 0.25f;
-                    } else if (progress2 <= 0.5f) {
-                        progress = (progress2 - 0.25f) / 0.25f;
-                    } else if (progress2 <= 0.75f) {
-                        progress = (progress2 - 0.5f) / 0.25f;
                     } else {
-                        progress = (progress2 - 0.75f) / 0.25f;
-                    }
-                    if (this.rotationBack) {
-                        float f5 = progress;
-                        progress = 1.0f - progress;
-                        if (this.posAnimationProgress >= 1.0f) {
-                            int i4 = this.phase + 1;
-                            this.phase = i4;
-                            if (i4 > 7) {
-                                this.phase = 0;
+                        float f8 = f3 + (((float) j) / (this.fastAnimation ? 300.0f : 500.0f));
+                        this.posAnimationProgress = f8;
+                        if (f8 > 1.0f) {
+                            this.posAnimationProgress = 1.0f;
+                        }
+                        f2 = this.interpolator.getInterpolation(this.posAnimationProgress);
+                        if (this.rotationBack) {
+                            f2 = 1.0f - f2;
+                            if (this.posAnimationProgress >= 1.0f) {
+                                int i5 = this.phase + 1;
+                                this.phase = i5;
+                                if (i5 > 7) {
+                                    this.phase = 0;
+                                }
+                                f = 1.0f;
                             }
-                            progress = 1.0f;
                         }
                     }
-                } else {
-                    float f6 = f + (((float) dt) / (this.fastAnimation ? 300.0f : 500.0f));
-                    this.posAnimationProgress = f6;
-                    if (f6 > 1.0f) {
-                        this.posAnimationProgress = 1.0f;
-                    }
-                    progress = this.interpolator.getInterpolation(this.posAnimationProgress);
-                    if (this.rotationBack) {
-                        progress = 1.0f - progress;
-                        if (this.posAnimationProgress >= 1.0f) {
-                            int i5 = this.phase + 1;
-                            this.phase = i5;
-                            if (i5 > 7) {
-                                this.phase = 0;
-                            }
-                            progress = 1.0f;
-                        }
-                    }
+                    f = f2;
                 }
-                if (isNeedGenerateGradient) {
+                if (z3) {
                     Bitmap bitmap = this.currentBitmap;
-                    Utilities.generateGradient(bitmap, true, this.phase, progress, bitmap.getWidth(), this.currentBitmap.getHeight(), this.currentBitmap.getRowBytes(), this.colors);
+                    Utilities.generateGradient(bitmap, true, this.phase, f, bitmap.getWidth(), this.currentBitmap.getHeight(), this.currentBitmap.getRowBytes(), this.colors);
                     this.invalidateLegacy = true;
                 } else if (!useLegacyBitmap || this.intensity >= 0) {
-                    if (progress != 1.0f) {
-                        int i6 = (int) (progress / 0.33333334f);
+                    if (f != 1.0f) {
+                        int i6 = (int) (f / 0.33333334f);
                         if (i6 == 0) {
                             this.gradientCanvas.drawBitmap(this.gradientFromBitmap, 0.0f, 0.0f, (Paint) null);
                         } else {
                             this.gradientCanvas.drawBitmap(this.gradientToBitmap[i6 - 1], 0.0f, 0.0f, (Paint) null);
                         }
-                        this.paint3.setAlpha((int) (255.0f * ((progress - (((float) i6) * 0.33333334f)) / 0.33333334f)));
+                        this.paint3.setAlpha((int) (((f - (((float) i6) * 0.33333334f)) / 0.33333334f) * 255.0f));
                         this.gradientCanvas.drawBitmap(this.gradientToBitmap[i6], 0.0f, 0.0f, this.paint3);
                     } else {
                         this.gradientCanvas.drawBitmap(this.gradientToBitmap[2], 0.0f, 0.0f, this.paint3);
                     }
                 }
-                if (invalidate) {
+                if (z) {
                     invalidateParent();
                 }
             }
         }
     }
 
-    public void setAlpha(int alpha2) {
-        this.alpha = alpha2;
-        this.paint.setAlpha(alpha2);
-        this.paint2.setAlpha(alpha2);
-    }
-
-    public void setColorFilter(ColorFilter colorFilter) {
-    }
-
-    public int getOpacity() {
-        return -2;
+    public void setAlpha(int i) {
+        this.alpha = i;
+        this.paint.setAlpha(i);
+        this.paint2.setAlpha(i);
     }
 
     public boolean isOneColor() {
@@ -1095,11 +978,7 @@ public class MotionBackgroundDrawable extends Drawable {
         return iArr[0] == iArr[1] && iArr[0] == iArr[2] && iArr[0] == iArr[3];
     }
 
-    public void setIndeterminateAnimation(boolean isIndeterminateAnimation2) {
-        this.isIndeterminateAnimation = isIndeterminateAnimation2;
-    }
-
-    public void setOverrideBitmapPaint(Paint overrideBitmapPaint2) {
-        this.overrideBitmapPaint = overrideBitmapPaint2;
+    public void setIndeterminateAnimation(boolean z) {
+        this.isIndeterminateAnimation = z;
     }
 }

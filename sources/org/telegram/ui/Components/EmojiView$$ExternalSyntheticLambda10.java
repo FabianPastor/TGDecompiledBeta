@@ -10,6 +10,6 @@ public final /* synthetic */ class EmojiView$$ExternalSyntheticLambda10 implemen
     }
 
     public final void onPageSelected(int i) {
-        this.f$0.m3964lambda$new$3$orgtelegramuiComponentsEmojiView(i);
+        this.f$0.lambda$new$6(i);
     }
 }

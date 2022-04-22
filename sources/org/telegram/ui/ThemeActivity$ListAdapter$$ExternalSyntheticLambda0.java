@@ -16,6 +16,6 @@ public final /* synthetic */ class ThemeActivity$ListAdapter$$ExternalSyntheticL
     }
 
     public final void onClick(DialogInterface dialogInterface, int i) {
-        this.f$0.m3300xccdvar_(this.f$1, this.f$2, dialogInterface, i);
+        this.f$0.lambda$onCreateViewHolder$4(this.f$1, this.f$2, dialogInterface, i);
     }
 }

@@ -15,6 +15,6 @@ public final /* synthetic */ class ImageLoader$CacheOutTask$$ExternalSyntheticLa
     }
 
     public final void run() {
-        this.f$0.m631xbb000127(this.f$1, this.f$2);
+        this.f$0.lambda$onPostExecute$2(this.f$1, this.f$2);
     }
 }

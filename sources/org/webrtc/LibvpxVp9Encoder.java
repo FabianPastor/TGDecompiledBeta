@@ -5,11 +5,11 @@ public class LibvpxVp9Encoder extends WrappedNativeVideoEncoder {
 
     static native boolean nativeIsSupported();
 
-    public long createNativeVideoEncoder() {
-        return nativeCreateEncoder();
-    }
-
     public boolean isHardwareEncoder() {
         return false;
+    }
+
+    public long createNativeVideoEncoder() {
+        return nativeCreateEncoder();
     }
 }

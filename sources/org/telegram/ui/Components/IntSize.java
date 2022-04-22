@@ -7,29 +7,19 @@ public class IntSize {
     public IntSize() {
     }
 
-    public IntSize(IntSize size) {
-        this.width = size.width;
-        this.height = size.height;
+    public IntSize(int i, int i2) {
+        this.width = i;
+        this.height = i2;
     }
 
-    public IntSize(int width2, int height2) {
-        this.width = width2;
-        this.height = height2;
-    }
-
-    public void set(int width2, int height2) {
-        this.width = width2;
-        this.height = height2;
-    }
-
-    public boolean equals(Object o) {
-        if (this == o) {
+    public boolean equals(Object obj) {
+        if (this == obj) {
             return true;
         }
-        if (o == null || getClass() != o.getClass()) {
+        if (obj == null || IntSize.class != obj.getClass()) {
             return false;
         }
-        IntSize intSize = (IntSize) o;
+        IntSize intSize = (IntSize) obj;
         if (this.width == intSize.width && this.height == intSize.height) {
             return true;
         }

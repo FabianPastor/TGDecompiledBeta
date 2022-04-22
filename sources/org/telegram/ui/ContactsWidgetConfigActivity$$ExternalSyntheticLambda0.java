@@ -11,6 +11,6 @@ public final /* synthetic */ class ContactsWidgetConfigActivity$$ExternalSynthet
     }
 
     public final void didSelectDialogs(ArrayList arrayList) {
-        this.f$0.m2040x77d48fd5(arrayList);
+        this.f$0.lambda$handleIntent$0(arrayList);
     }
 }

@@ -20,9 +20,6 @@ import org.telegram.ui.Cells.DialogCell;
 import org.telegram.ui.Cells.DialogsEmptyCell;
 
 public class DialogsItemAnimator extends SimpleItemAnimator {
-    private static final boolean DEBUG = false;
-    private static final int changeDuration = 180;
-    private static final int deleteDuration = 180;
     private static TimeInterpolator sDefaultInterpolator = new DecelerateInterpolator();
     private int bottomClip;
     private final RecyclerListView listView;
@@ -40,6 +37,11 @@ public class DialogsItemAnimator extends SimpleItemAnimator {
     private DialogCell removingDialog;
     private int topClip;
 
+    /* access modifiers changed from: protected */
+    public void onAllAnimationsDone() {
+        throw null;
+    }
+
     private static class MoveInfo {
         public int fromX;
         public int fromY;
@@ -47,17 +49,17 @@ public class DialogsItemAnimator extends SimpleItemAnimator {
         public int toX;
         public int toY;
 
-        MoveInfo(RecyclerView.ViewHolder holder2, int fromX2, int fromY2, int toX2, int toY2) {
-            this.holder = holder2;
-            this.fromX = fromX2;
-            this.fromY = fromY2;
-            this.toX = toX2;
-            this.toY = toY2;
+        MoveInfo(RecyclerView.ViewHolder viewHolder, int i, int i2, int i3, int i4) {
+            this.holder = viewHolder;
+            this.fromX = i;
+            this.fromY = i2;
+            this.toX = i3;
+            this.toY = i4;
         }
     }
 
-    public DialogsItemAnimator(RecyclerListView listView2) {
-        this.listView = listView2;
+    public DialogsItemAnimator(RecyclerListView recyclerListView) {
+        this.listView = recyclerListView;
     }
 
     private static class ChangeInfo {
@@ -68,17 +70,17 @@ public class DialogsItemAnimator extends SimpleItemAnimator {
         public int toX;
         public int toY;
 
-        private ChangeInfo(RecyclerView.ViewHolder oldHolder2, RecyclerView.ViewHolder newHolder2) {
-            this.oldHolder = oldHolder2;
-            this.newHolder = newHolder2;
+        private ChangeInfo(RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder viewHolder2) {
+            this.oldHolder = viewHolder;
+            this.newHolder = viewHolder2;
         }
 
-        ChangeInfo(RecyclerView.ViewHolder oldHolder2, RecyclerView.ViewHolder newHolder2, int fromX2, int fromY2, int toX2, int toY2) {
-            this(oldHolder2, newHolder2);
-            this.fromX = fromX2;
-            this.fromY = fromY2;
-            this.toX = toX2;
-            this.toY = toY2;
+        ChangeInfo(RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder viewHolder2, int i, int i2, int i3, int i4) {
+            this(viewHolder, viewHolder2);
+            this.fromX = i;
+            this.fromY = i2;
+            this.toX = i3;
+            this.toY = i4;
         }
 
         public String toString() {
@@ -87,105 +89,83 @@ public class DialogsItemAnimator extends SimpleItemAnimator {
     }
 
     public void runPendingAnimations() {
-        boolean removalsPending = !this.mPendingRemovals.isEmpty();
-        boolean movesPending = !this.mPendingMoves.isEmpty();
-        boolean changesPending = !this.mPendingChanges.isEmpty();
-        boolean additionsPending = !this.mPendingAdditions.isEmpty();
-        if (removalsPending || movesPending || additionsPending || changesPending) {
+        boolean z = !this.mPendingRemovals.isEmpty();
+        boolean z2 = !this.mPendingMoves.isEmpty();
+        boolean z3 = !this.mPendingChanges.isEmpty();
+        boolean z4 = !this.mPendingAdditions.isEmpty();
+        if (z || z2 || z4 || z3) {
             Iterator<RecyclerView.ViewHolder> it = this.mPendingRemovals.iterator();
             while (it.hasNext()) {
                 animateRemoveImpl(it.next());
             }
             this.mPendingRemovals.clear();
-            if (movesPending) {
-                ArrayList<MoveInfo> moves = new ArrayList<>(this.mPendingMoves);
-                this.mMovesList.add(moves);
+            if (z2) {
+                ArrayList arrayList = new ArrayList(this.mPendingMoves);
+                this.mMovesList.add(arrayList);
                 this.mPendingMoves.clear();
-                new DialogsItemAnimator$$ExternalSyntheticLambda0(this, moves).run();
+                new DialogsItemAnimator$$ExternalSyntheticLambda2(this, arrayList).run();
             }
-            if (changesPending) {
-                ArrayList<ChangeInfo> changes = new ArrayList<>(this.mPendingChanges);
-                this.mChangesList.add(changes);
+            if (z3) {
+                ArrayList arrayList2 = new ArrayList(this.mPendingChanges);
+                this.mChangesList.add(arrayList2);
                 this.mPendingChanges.clear();
-                new DialogsItemAnimator$$ExternalSyntheticLambda1(this, changes).run();
+                new DialogsItemAnimator$$ExternalSyntheticLambda0(this, arrayList2).run();
             }
-            if (additionsPending) {
-                ArrayList<RecyclerView.ViewHolder> additions = new ArrayList<>(this.mPendingAdditions);
-                this.mAdditionsList.add(additions);
+            if (z4) {
+                ArrayList arrayList3 = new ArrayList(this.mPendingAdditions);
+                this.mAdditionsList.add(arrayList3);
                 this.mPendingAdditions.clear();
-                new DialogsItemAnimator$$ExternalSyntheticLambda2(this, additions).run();
+                new DialogsItemAnimator$$ExternalSyntheticLambda1(this, arrayList3).run();
             }
         }
     }
 
-    /* renamed from: lambda$runPendingAnimations$0$org-telegram-ui-Components-DialogsItemAnimator  reason: not valid java name */
-    public /* synthetic */ void m3941x2251e704(ArrayList moves) {
-        Iterator it = moves.iterator();
+    /* access modifiers changed from: private */
+    public /* synthetic */ void lambda$runPendingAnimations$0(ArrayList arrayList) {
+        Iterator it = arrayList.iterator();
         while (it.hasNext()) {
             MoveInfo moveInfo = (MoveInfo) it.next();
             animateMoveImpl(moveInfo.holder, (RecyclerView.ItemAnimator.ItemHolderInfo) null, moveInfo.fromX, moveInfo.fromY, moveInfo.toX, moveInfo.toY);
         }
-        moves.clear();
-        this.mMovesList.remove(moves);
+        arrayList.clear();
+        this.mMovesList.remove(arrayList);
     }
 
-    /* renamed from: lambda$runPendingAnimations$1$org-telegram-ui-Components-DialogsItemAnimator  reason: not valid java name */
-    public /* synthetic */ void m3942x5c1CLASSNAMEe3(ArrayList changes) {
-        Iterator it = changes.iterator();
+    /* access modifiers changed from: private */
+    public /* synthetic */ void lambda$runPendingAnimations$1(ArrayList arrayList) {
+        Iterator it = arrayList.iterator();
         while (it.hasNext()) {
             animateChangeImpl((ChangeInfo) it.next());
         }
-        changes.clear();
-        this.mChangesList.remove(changes);
+        arrayList.clear();
+        this.mChangesList.remove(arrayList);
     }
 
-    /* renamed from: lambda$runPendingAnimations$2$org-telegram-ui-Components-DialogsItemAnimator  reason: not valid java name */
-    public /* synthetic */ void m3943x95e72ac2(ArrayList additions) {
-        Iterator it = additions.iterator();
+    /* access modifiers changed from: private */
+    public /* synthetic */ void lambda$runPendingAnimations$2(ArrayList arrayList) {
+        Iterator it = arrayList.iterator();
         while (it.hasNext()) {
             animateAddImpl((RecyclerView.ViewHolder) it.next());
         }
-        additions.clear();
-        this.mAdditionsList.remove(additions);
+        arrayList.clear();
+        this.mAdditionsList.remove(arrayList);
     }
 
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v3, resolved type: android.view.View} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r1v3, resolved type: org.telegram.ui.Cells.DialogCell} */
-    /* JADX WARNING: Multi-variable type inference failed */
-    /* Code decompiled incorrectly, please refer to instructions dump. */
-    public boolean animateRemove(androidx.recyclerview.widget.RecyclerView.ViewHolder r6, androidx.recyclerview.widget.RecyclerView.ItemAnimator.ItemHolderInfo r7) {
-        /*
-            r5 = this;
-            r5.resetAnimation(r6)
-            java.util.ArrayList<androidx.recyclerview.widget.RecyclerView$ViewHolder> r0 = r5.mPendingRemovals
-            r0.add(r6)
-            r0 = -2147483648(0xfffffffvar_, float:-0.0)
-            r1 = 0
-            r2 = 0
-        L_0x000c:
-            org.telegram.ui.Components.RecyclerListView r3 = r5.listView
-            int r3 = r3.getChildCount()
-            if (r2 >= r3) goto L_0x002a
-            org.telegram.ui.Components.RecyclerListView r3 = r5.listView
-            android.view.View r3 = r3.getChildAt(r2)
-            int r4 = r3.getTop()
-            if (r4 <= r0) goto L_0x0027
-            boolean r4 = r3 instanceof org.telegram.ui.Cells.DialogCell
-            if (r4 == 0) goto L_0x0027
-            r1 = r3
-            org.telegram.ui.Cells.DialogCell r1 = (org.telegram.ui.Cells.DialogCell) r1
-        L_0x0027:
-            int r2 = r2 + 1
-            goto L_0x000c
-        L_0x002a:
-            android.view.View r2 = r6.itemView
-            if (r2 != r1) goto L_0x0030
-            r5.removingDialog = r1
-        L_0x0030:
-            r2 = 1
-            return r2
-        */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.DialogsItemAnimator.animateRemove(androidx.recyclerview.widget.RecyclerView$ViewHolder, androidx.recyclerview.widget.RecyclerView$ItemAnimator$ItemHolderInfo):boolean");
+    public boolean animateRemove(RecyclerView.ViewHolder viewHolder, RecyclerView.ItemAnimator.ItemHolderInfo itemHolderInfo) {
+        resetAnimation(viewHolder);
+        this.mPendingRemovals.add(viewHolder);
+        DialogCell dialogCell = null;
+        for (int i = 0; i < this.listView.getChildCount(); i++) {
+            View childAt = this.listView.getChildAt(i);
+            if (childAt.getTop() > Integer.MIN_VALUE && (childAt instanceof DialogCell)) {
+                dialogCell = (DialogCell) childAt;
+            }
+        }
+        if (viewHolder.itemView != dialogCell) {
+            return true;
+        }
+        this.removingDialog = dialogCell;
+        return true;
     }
 
     public void prepareForRemove() {
@@ -194,9 +174,9 @@ public class DialogsItemAnimator extends SimpleItemAnimator {
         this.removingDialog = null;
     }
 
-    private void animateRemoveImpl(final RecyclerView.ViewHolder holder) {
-        final View view = holder.itemView;
-        this.mRemoveAnimations.add(holder);
+    private void animateRemoveImpl(final RecyclerView.ViewHolder viewHolder) {
+        final View view = viewHolder.itemView;
+        this.mRemoveAnimations.add(viewHolder);
         if (view instanceof DialogCell) {
             final DialogCell dialogCell = (DialogCell) view;
             DialogCell dialogCell2 = this.removingDialog;
@@ -217,11 +197,11 @@ public class DialogsItemAnimator extends SimpleItemAnimator {
                     dialogCell.setElevation(-1.0f);
                     dialogCell.setOutlineProvider((ViewOutlineProvider) null);
                 }
-                ObjectAnimator animator = ObjectAnimator.ofFloat(dialogCell, AnimationProperties.CLIP_DIALOG_CELL_PROGRESS, new float[]{1.0f}).setDuration(180);
-                animator.setInterpolator(sDefaultInterpolator);
-                animator.addListener(new AnimatorListenerAdapter() {
+                ObjectAnimator duration = ObjectAnimator.ofFloat(dialogCell, AnimationProperties.CLIP_DIALOG_CELL_PROGRESS, new float[]{1.0f}).setDuration(180);
+                duration.setInterpolator(sDefaultInterpolator);
+                duration.addListener(new AnimatorListenerAdapter() {
                     public void onAnimationStart(Animator animator) {
-                        DialogsItemAnimator.this.dispatchRemoveStarting(holder);
+                        DialogsItemAnimator.this.dispatchRemoveStarting(viewHolder);
                     }
 
                     public void onAnimationEnd(Animator animator) {
@@ -230,19 +210,19 @@ public class DialogsItemAnimator extends SimpleItemAnimator {
                         if (Build.VERSION.SDK_INT >= 21) {
                             dialogCell.setElevation(0.0f);
                         }
-                        DialogsItemAnimator.this.dispatchRemoveFinished(holder);
-                        DialogsItemAnimator.this.mRemoveAnimations.remove(holder);
+                        DialogsItemAnimator.this.dispatchRemoveFinished(viewHolder);
+                        DialogsItemAnimator.this.mRemoveAnimations.remove(viewHolder);
                         DialogsItemAnimator.this.dispatchFinishedWhenDone();
                     }
                 });
-                animator.start();
+                duration.start();
                 return;
             }
-            ObjectAnimator animator2 = ObjectAnimator.ofFloat(dialogCell, View.ALPHA, new float[]{1.0f}).setDuration(180);
-            animator2.setInterpolator(sDefaultInterpolator);
-            animator2.addListener(new AnimatorListenerAdapter() {
+            ObjectAnimator duration2 = ObjectAnimator.ofFloat(dialogCell, View.ALPHA, new float[]{1.0f}).setDuration(180);
+            duration2.setInterpolator(sDefaultInterpolator);
+            duration2.addListener(new AnimatorListenerAdapter() {
                 public void onAnimationStart(Animator animator) {
-                    DialogsItemAnimator.this.dispatchRemoveStarting(holder);
+                    DialogsItemAnimator.this.dispatchRemoveStarting(viewHolder);
                 }
 
                 public void onAnimationEnd(Animator animator) {
@@ -251,36 +231,37 @@ public class DialogsItemAnimator extends SimpleItemAnimator {
                     if (Build.VERSION.SDK_INT >= 21) {
                         dialogCell.setElevation(0.0f);
                     }
-                    DialogsItemAnimator.this.dispatchRemoveFinished(holder);
-                    DialogsItemAnimator.this.mRemoveAnimations.remove(holder);
+                    DialogsItemAnimator.this.dispatchRemoveFinished(viewHolder);
+                    DialogsItemAnimator.this.mRemoveAnimations.remove(viewHolder);
                     DialogsItemAnimator.this.dispatchFinishedWhenDone();
                 }
             });
-            animator2.start();
+            duration2.start();
             return;
         }
-        final ViewPropertyAnimator animation = view.animate();
-        animation.setDuration(180).alpha(0.0f).setListener(new AnimatorListenerAdapter() {
+        final ViewPropertyAnimator animate = view.animate();
+        animate.setDuration(180).alpha(0.0f).setListener(new AnimatorListenerAdapter() {
             public void onAnimationStart(Animator animator) {
-                DialogsItemAnimator.this.dispatchRemoveStarting(holder);
+                DialogsItemAnimator.this.dispatchRemoveStarting(viewHolder);
             }
 
             public void onAnimationEnd(Animator animator) {
-                animation.setListener((Animator.AnimatorListener) null);
+                animate.setListener((Animator.AnimatorListener) null);
                 view.setAlpha(1.0f);
-                DialogsItemAnimator.this.dispatchRemoveFinished(holder);
-                DialogsItemAnimator.this.mRemoveAnimations.remove(holder);
+                DialogsItemAnimator.this.dispatchRemoveFinished(viewHolder);
+                DialogsItemAnimator.this.mRemoveAnimations.remove(viewHolder);
                 DialogsItemAnimator.this.dispatchFinishedWhenDone();
             }
         }).start();
     }
 
-    public boolean animateAdd(RecyclerView.ViewHolder holder) {
-        resetAnimation(holder);
-        if (!(holder.itemView instanceof DialogCell)) {
-            holder.itemView.setAlpha(0.0f);
+    public boolean animateAdd(RecyclerView.ViewHolder viewHolder) {
+        resetAnimation(viewHolder);
+        View view = viewHolder.itemView;
+        if (!(view instanceof DialogCell)) {
+            view.setAlpha(0.0f);
         }
-        this.mPendingAdditions.add(holder);
+        this.mPendingAdditions.add(viewHolder);
         if (this.mPendingAdditions.size() > 2) {
             for (int i = 0; i < this.mPendingAdditions.size(); i++) {
                 this.mPendingAdditions.get(i).itemView.setAlpha(0.0f);
@@ -293,13 +274,13 @@ public class DialogsItemAnimator extends SimpleItemAnimator {
     }
 
     /* access modifiers changed from: package-private */
-    public void animateAddImpl(final RecyclerView.ViewHolder holder) {
-        final View view = holder.itemView;
-        this.mAddAnimations.add(holder);
-        final ViewPropertyAnimator animation = view.animate();
-        animation.alpha(1.0f).setDuration(180).setListener(new AnimatorListenerAdapter() {
+    public void animateAddImpl(final RecyclerView.ViewHolder viewHolder) {
+        final View view = viewHolder.itemView;
+        this.mAddAnimations.add(viewHolder);
+        final ViewPropertyAnimator animate = view.animate();
+        animate.alpha(1.0f).setDuration(180).setListener(new AnimatorListenerAdapter() {
             public void onAnimationStart(Animator animator) {
-                DialogsItemAnimator.this.dispatchAddStarting(holder);
+                DialogsItemAnimator.this.dispatchAddStarting(viewHolder);
             }
 
             public void onAnimationCancel(Animator animator) {
@@ -307,87 +288,85 @@ public class DialogsItemAnimator extends SimpleItemAnimator {
             }
 
             public void onAnimationEnd(Animator animator) {
-                animation.setListener((Animator.AnimatorListener) null);
-                DialogsItemAnimator.this.dispatchAddFinished(holder);
-                DialogsItemAnimator.this.mAddAnimations.remove(holder);
+                animate.setListener((Animator.AnimatorListener) null);
+                DialogsItemAnimator.this.dispatchAddFinished(viewHolder);
+                DialogsItemAnimator.this.mAddAnimations.remove(viewHolder);
                 DialogsItemAnimator.this.dispatchFinishedWhenDone();
-                if (holder.itemView instanceof DialogCell) {
-                    ((DialogCell) holder.itemView).setMoving(false);
+                View view = viewHolder.itemView;
+                if (view instanceof DialogCell) {
+                    ((DialogCell) view).setMoving(false);
                 }
             }
         }).start();
     }
 
-    public boolean animateMove(RecyclerView.ViewHolder holder, RecyclerView.ItemAnimator.ItemHolderInfo info, int fromX, int fromY, int toX, int toY) {
-        RecyclerView.ViewHolder viewHolder = holder;
+    public boolean animateMove(RecyclerView.ViewHolder viewHolder, RecyclerView.ItemAnimator.ItemHolderInfo itemHolderInfo, int i, int i2, int i3, int i4) {
         View view = viewHolder.itemView;
-        int fromX2 = fromX + ((int) viewHolder.itemView.getTranslationX());
-        int fromY2 = fromY + ((int) viewHolder.itemView.getTranslationY());
-        resetAnimation(holder);
-        int deltaX = toX - fromX2;
-        int deltaY = toY - fromY2;
-        if (deltaX == 0 && deltaY == 0) {
-            dispatchMoveFinished(holder);
+        int translationX = i + ((int) view.getTranslationX());
+        int translationY = i2 + ((int) viewHolder.itemView.getTranslationY());
+        resetAnimation(viewHolder);
+        int i5 = i3 - translationX;
+        int i6 = i4 - translationY;
+        if (i5 == 0 && i6 == 0) {
+            dispatchMoveFinished(viewHolder);
             return false;
         }
-        if (deltaX != 0) {
-            view.setTranslationX((float) (-deltaX));
+        if (i5 != 0) {
+            view.setTranslationX((float) (-i5));
         }
-        if (deltaY != 0) {
-            view.setTranslationY((float) (-deltaY));
+        if (i6 != 0) {
+            view.setTranslationY((float) (-i6));
         }
-        if (viewHolder.itemView instanceof DialogCell) {
-            ((DialogCell) viewHolder.itemView).setMoving(true);
-        } else if (viewHolder.itemView instanceof DialogsAdapter.LastEmptyView) {
-            ((DialogsAdapter.LastEmptyView) viewHolder.itemView).moving = true;
+        View view2 = viewHolder.itemView;
+        if (view2 instanceof DialogCell) {
+            ((DialogCell) view2).setMoving(true);
+        } else if (view2 instanceof DialogsAdapter.LastEmptyView) {
+            ((DialogsAdapter.LastEmptyView) view2).moving = true;
         }
-        this.mPendingMoves.add(new MoveInfo(holder, fromX2, fromY2, toX, toY));
+        this.mPendingMoves.add(new MoveInfo(viewHolder, translationX, translationY, i3, i4));
         return true;
     }
 
-    public void onListScroll(int dy) {
+    public void onListScroll(int i) {
         if (!this.mPendingRemovals.isEmpty()) {
-            int N = this.mPendingRemovals.size();
-            for (int a = 0; a < N; a++) {
-                RecyclerView.ViewHolder holder = this.mPendingRemovals.get(a);
-                holder.itemView.setTranslationY(holder.itemView.getTranslationY() + ((float) dy));
+            int size = this.mPendingRemovals.size();
+            for (int i2 = 0; i2 < size; i2++) {
+                View view = this.mPendingRemovals.get(i2).itemView;
+                view.setTranslationY(view.getTranslationY() + ((float) i));
             }
         }
         if (!this.mRemoveAnimations.isEmpty()) {
-            int N2 = this.mRemoveAnimations.size();
-            for (int a2 = 0; a2 < N2; a2++) {
-                RecyclerView.ViewHolder holder2 = this.mRemoveAnimations.get(a2);
-                holder2.itemView.setTranslationY(holder2.itemView.getTranslationY() + ((float) dy));
+            int size2 = this.mRemoveAnimations.size();
+            for (int i3 = 0; i3 < size2; i3++) {
+                View view2 = this.mRemoveAnimations.get(i3).itemView;
+                view2.setTranslationY(view2.getTranslationY() + ((float) i));
             }
         }
     }
 
     /* access modifiers changed from: package-private */
-    public void animateMoveImpl(RecyclerView.ViewHolder holder, RecyclerView.ItemAnimator.ItemHolderInfo info, int fromX, int fromY, int toX, int toY) {
-        RecyclerView.ViewHolder viewHolder = holder;
-        int i = fromY;
-        int i2 = toY;
-        View view = viewHolder.itemView;
-        int deltaX = toX - fromX;
-        int deltaY = i2 - i;
-        if (deltaX != 0) {
+    public void animateMoveImpl(RecyclerView.ViewHolder viewHolder, RecyclerView.ItemAnimator.ItemHolderInfo itemHolderInfo, int i, int i2, int i3, int i4) {
+        final View view = viewHolder.itemView;
+        final int i5 = i3 - i;
+        final int i6 = i4 - i2;
+        if (i5 != 0) {
             view.animate().translationX(0.0f);
         }
-        if (deltaY != 0) {
+        if (i6 != 0) {
             view.animate().translationY(0.0f);
         }
-        if (i > i2) {
-            this.bottomClip = i - i2;
+        if (i2 > i4) {
+            this.bottomClip = i2 - i4;
         } else {
-            this.topClip = i2 - i;
+            this.topClip = i6;
         }
         DialogCell dialogCell = this.removingDialog;
         if (dialogCell != null) {
             if (this.topClip != Integer.MAX_VALUE) {
                 int measuredHeight = dialogCell.getMeasuredHeight();
-                int i3 = this.topClip;
-                this.bottomClip = measuredHeight - i3;
-                this.removingDialog.setTopClip(i3);
+                int i7 = this.topClip;
+                this.bottomClip = measuredHeight - i7;
+                this.removingDialog.setTopClip(i7);
                 this.removingDialog.setBottomClip(this.bottomClip);
             } else if (this.bottomClip != Integer.MAX_VALUE) {
                 int measuredHeight2 = dialogCell.getMeasuredHeight() - this.bottomClip;
@@ -396,74 +375,67 @@ public class DialogsItemAnimator extends SimpleItemAnimator {
                 this.removingDialog.setBottomClip(this.bottomClip);
             }
         }
-        ViewPropertyAnimator animation = view.animate();
+        final ViewPropertyAnimator animate = view.animate();
         this.mMoveAnimations.add(viewHolder);
-        ViewPropertyAnimator duration = animation.setDuration(180);
-        final RecyclerView.ViewHolder viewHolder2 = holder;
-        final int i4 = deltaX;
-        final View view2 = view;
-        final int i5 = deltaY;
-        AnonymousClass5 r7 = r0;
-        final ViewPropertyAnimator viewPropertyAnimator = animation;
-        AnonymousClass5 r0 = new AnimatorListenerAdapter() {
+        final RecyclerView.ViewHolder viewHolder2 = viewHolder;
+        animate.setDuration(180).setListener(new AnimatorListenerAdapter() {
             public void onAnimationStart(Animator animator) {
                 DialogsItemAnimator.this.dispatchMoveStarting(viewHolder2);
             }
 
             public void onAnimationCancel(Animator animator) {
-                if (i4 != 0) {
-                    view2.setTranslationX(0.0f);
-                }
                 if (i5 != 0) {
-                    view2.setTranslationY(0.0f);
+                    view.setTranslationX(0.0f);
                 }
-                if (viewHolder2.itemView instanceof DialogCell) {
-                    ((DialogCell) viewHolder2.itemView).setMoving(false);
-                } else if (viewHolder2.itemView instanceof DialogsAdapter.LastEmptyView) {
-                    ((DialogsAdapter.LastEmptyView) viewHolder2.itemView).moving = false;
+                if (i6 != 0) {
+                    view.setTranslationY(0.0f);
+                }
+                View view = viewHolder2.itemView;
+                if (view instanceof DialogCell) {
+                    ((DialogCell) view).setMoving(false);
+                } else if (view instanceof DialogsAdapter.LastEmptyView) {
+                    ((DialogsAdapter.LastEmptyView) view).moving = false;
                 }
             }
 
             public void onAnimationEnd(Animator animator) {
-                viewPropertyAnimator.setListener((Animator.AnimatorListener) null);
+                animate.setListener((Animator.AnimatorListener) null);
                 DialogsItemAnimator.this.dispatchMoveFinished(viewHolder2);
                 DialogsItemAnimator.this.mMoveAnimations.remove(viewHolder2);
                 DialogsItemAnimator.this.dispatchFinishedWhenDone();
-                if (viewHolder2.itemView instanceof DialogCell) {
-                    ((DialogCell) viewHolder2.itemView).setMoving(false);
-                } else if (viewHolder2.itemView instanceof DialogsAdapter.LastEmptyView) {
-                    ((DialogsAdapter.LastEmptyView) viewHolder2.itemView).moving = false;
+                View view = viewHolder2.itemView;
+                if (view instanceof DialogCell) {
+                    ((DialogCell) view).setMoving(false);
+                } else if (view instanceof DialogsAdapter.LastEmptyView) {
+                    ((DialogsAdapter.LastEmptyView) view).moving = false;
                 }
-                view2.setTranslationX(0.0f);
-                view2.setTranslationY(0.0f);
+                view.setTranslationX(0.0f);
+                view.setTranslationY(0.0f);
             }
-        };
-        duration.setListener(r7).start();
+        }).start();
     }
 
-    public boolean animateChange(RecyclerView.ViewHolder oldHolder, RecyclerView.ViewHolder newHolder, RecyclerView.ItemAnimator.ItemHolderInfo info, int fromX, int fromY, int toX, int toY) {
-        RecyclerView.ViewHolder viewHolder = oldHolder;
-        RecyclerView.ViewHolder viewHolder2 = newHolder;
+    public boolean animateChange(RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder viewHolder2, RecyclerView.ItemAnimator.ItemHolderInfo itemHolderInfo, int i, int i2, int i3, int i4) {
         if (!(viewHolder.itemView instanceof DialogCell)) {
             return false;
         }
-        resetAnimation(oldHolder);
-        resetAnimation(newHolder);
+        resetAnimation(viewHolder);
+        resetAnimation(viewHolder2);
         viewHolder.itemView.setAlpha(1.0f);
         viewHolder2.itemView.setAlpha(0.0f);
         viewHolder2.itemView.setTranslationX(0.0f);
-        this.mPendingChanges.add(new ChangeInfo(oldHolder, newHolder, fromX, fromY, toX, toY));
+        this.mPendingChanges.add(new ChangeInfo(viewHolder, viewHolder2, i, i2, i3, i4));
         return true;
     }
 
     /* access modifiers changed from: package-private */
     public void animateChangeImpl(final ChangeInfo changeInfo) {
-        final RecyclerView.ViewHolder holder = changeInfo.oldHolder;
-        RecyclerView.ViewHolder newHolder = changeInfo.newHolder;
-        if (holder != null && newHolder != null) {
+        final RecyclerView.ViewHolder viewHolder = changeInfo.oldHolder;
+        RecyclerView.ViewHolder viewHolder2 = changeInfo.newHolder;
+        if (viewHolder != null && viewHolder2 != null) {
             final AnimatorSet animatorSet = new AnimatorSet();
             animatorSet.setDuration(180);
-            animatorSet.playTogether(new Animator[]{ObjectAnimator.ofFloat(holder.itemView, View.ALPHA, new float[]{0.0f}), ObjectAnimator.ofFloat(newHolder.itemView, View.ALPHA, new float[]{1.0f})});
+            animatorSet.playTogether(new Animator[]{ObjectAnimator.ofFloat(viewHolder.itemView, View.ALPHA, new float[]{0.0f}), ObjectAnimator.ofFloat(viewHolder2.itemView, View.ALPHA, new float[]{1.0f})});
             this.mChangeAnimations.add(changeInfo.oldHolder);
             this.mChangeAnimations.add(changeInfo.newHolder);
             animatorSet.addListener(new AnimatorListenerAdapter() {
@@ -473,7 +445,7 @@ public class DialogsItemAnimator extends SimpleItemAnimator {
                 }
 
                 public void onAnimationEnd(Animator animator) {
-                    holder.itemView.setAlpha(1.0f);
+                    viewHolder.itemView.setAlpha(1.0f);
                     animatorSet.removeAllListeners();
                     DialogsItemAnimator.this.dispatchChangeFinished(changeInfo.oldHolder, true);
                     DialogsItemAnimator.this.mChangeAnimations.remove(changeInfo.oldHolder);
@@ -487,123 +459,125 @@ public class DialogsItemAnimator extends SimpleItemAnimator {
         }
     }
 
-    private void endChangeAnimation(List<ChangeInfo> infoList, RecyclerView.ViewHolder item) {
-        for (int i = infoList.size() - 1; i >= 0; i--) {
-            ChangeInfo changeInfo = infoList.get(i);
-            if (endChangeAnimationIfNecessary(changeInfo, item) && changeInfo.oldHolder == null && changeInfo.newHolder == null) {
-                infoList.remove(changeInfo);
+    private void endChangeAnimation(List<ChangeInfo> list, RecyclerView.ViewHolder viewHolder) {
+        for (int size = list.size() - 1; size >= 0; size--) {
+            ChangeInfo changeInfo = list.get(size);
+            if (endChangeAnimationIfNecessary(changeInfo, viewHolder) && changeInfo.oldHolder == null && changeInfo.newHolder == null) {
+                list.remove(changeInfo);
             }
         }
     }
 
     private void endChangeAnimationIfNecessary(ChangeInfo changeInfo) {
-        if (changeInfo.oldHolder != null) {
-            endChangeAnimationIfNecessary(changeInfo, changeInfo.oldHolder);
+        RecyclerView.ViewHolder viewHolder = changeInfo.oldHolder;
+        if (viewHolder != null) {
+            endChangeAnimationIfNecessary(changeInfo, viewHolder);
         }
-        if (changeInfo.newHolder != null) {
-            endChangeAnimationIfNecessary(changeInfo, changeInfo.newHolder);
+        RecyclerView.ViewHolder viewHolder2 = changeInfo.newHolder;
+        if (viewHolder2 != null) {
+            endChangeAnimationIfNecessary(changeInfo, viewHolder2);
         }
     }
 
-    private boolean endChangeAnimationIfNecessary(ChangeInfo changeInfo, RecyclerView.ViewHolder item) {
-        boolean oldItem = false;
-        if (changeInfo.newHolder == item) {
+    private boolean endChangeAnimationIfNecessary(ChangeInfo changeInfo, RecyclerView.ViewHolder viewHolder) {
+        boolean z = false;
+        if (changeInfo.newHolder == viewHolder) {
             changeInfo.newHolder = null;
-        } else if (changeInfo.oldHolder != item) {
+        } else if (changeInfo.oldHolder != viewHolder) {
             return false;
         } else {
             changeInfo.oldHolder = null;
-            oldItem = true;
+            z = true;
         }
-        item.itemView.setAlpha(1.0f);
-        item.itemView.setTranslationX(0.0f);
-        item.itemView.setTranslationY(0.0f);
-        dispatchChangeFinished(item, oldItem);
+        viewHolder.itemView.setAlpha(1.0f);
+        viewHolder.itemView.setTranslationX(0.0f);
+        viewHolder.itemView.setTranslationY(0.0f);
+        dispatchChangeFinished(viewHolder, z);
         return true;
     }
 
-    public void endAnimation(RecyclerView.ViewHolder item) {
-        View view = item.itemView;
+    public void endAnimation(RecyclerView.ViewHolder viewHolder) {
+        View view = viewHolder.itemView;
         view.animate().cancel();
-        int i = this.mPendingMoves.size();
+        int size = this.mPendingMoves.size();
         while (true) {
-            i--;
-            if (i < 0) {
+            size--;
+            if (size < 0) {
                 break;
-            } else if (this.mPendingMoves.get(i).holder == item) {
+            } else if (this.mPendingMoves.get(size).holder == viewHolder) {
                 view.setTranslationY(0.0f);
                 view.setTranslationX(0.0f);
-                dispatchMoveFinished(item);
-                this.mPendingMoves.remove(i);
+                dispatchMoveFinished(viewHolder);
+                this.mPendingMoves.remove(size);
             }
         }
-        endChangeAnimation(this.mPendingChanges, item);
-        if (this.mPendingRemovals.remove(item)) {
+        endChangeAnimation(this.mPendingChanges, viewHolder);
+        if (this.mPendingRemovals.remove(viewHolder)) {
             if (view instanceof DialogCell) {
                 ((DialogCell) view).setClipProgress(0.0f);
             } else {
                 view.setAlpha(1.0f);
             }
-            dispatchRemoveFinished(item);
+            dispatchRemoveFinished(viewHolder);
         }
-        if (this.mPendingAdditions.remove(item)) {
+        if (this.mPendingAdditions.remove(viewHolder)) {
             if (view instanceof DialogCell) {
                 ((DialogCell) view).setClipProgress(0.0f);
             } else {
                 view.setAlpha(1.0f);
             }
-            dispatchAddFinished(item);
+            dispatchAddFinished(viewHolder);
         }
-        for (int i2 = this.mChangesList.size() - 1; i2 >= 0; i2--) {
-            ArrayList<ChangeInfo> changes = this.mChangesList.get(i2);
-            endChangeAnimation(changes, item);
-            if (changes.isEmpty()) {
-                this.mChangesList.remove(i2);
+        for (int size2 = this.mChangesList.size() - 1; size2 >= 0; size2--) {
+            ArrayList arrayList = this.mChangesList.get(size2);
+            endChangeAnimation(arrayList, viewHolder);
+            if (arrayList.isEmpty()) {
+                this.mChangesList.remove(size2);
             }
         }
-        for (int i3 = this.mMovesList.size() - 1; i3 >= 0; i3--) {
-            ArrayList<MoveInfo> moves = this.mMovesList.get(i3);
-            int j = moves.size() - 1;
+        for (int size3 = this.mMovesList.size() - 1; size3 >= 0; size3--) {
+            ArrayList arrayList2 = this.mMovesList.get(size3);
+            int size4 = arrayList2.size() - 1;
             while (true) {
-                if (j < 0) {
+                if (size4 < 0) {
                     break;
-                } else if (moves.get(j).holder == item) {
+                } else if (((MoveInfo) arrayList2.get(size4)).holder == viewHolder) {
                     view.setTranslationY(0.0f);
                     view.setTranslationX(0.0f);
-                    dispatchMoveFinished(item);
-                    moves.remove(j);
-                    if (moves.isEmpty()) {
-                        this.mMovesList.remove(i3);
+                    dispatchMoveFinished(viewHolder);
+                    arrayList2.remove(size4);
+                    if (arrayList2.isEmpty()) {
+                        this.mMovesList.remove(size3);
                     }
                 } else {
-                    j--;
+                    size4--;
                 }
             }
         }
-        for (int i4 = this.mAdditionsList.size() - 1; i4 >= 0; i4--) {
-            ArrayList<RecyclerView.ViewHolder> additions = this.mAdditionsList.get(i4);
-            if (additions.remove(item)) {
+        for (int size5 = this.mAdditionsList.size() - 1; size5 >= 0; size5--) {
+            ArrayList arrayList3 = this.mAdditionsList.get(size5);
+            if (arrayList3.remove(viewHolder)) {
                 if (view instanceof DialogCell) {
                     ((DialogCell) view).setClipProgress(1.0f);
                 } else {
                     view.setAlpha(1.0f);
                 }
-                dispatchAddFinished(item);
-                if (additions.isEmpty()) {
-                    this.mAdditionsList.remove(i4);
+                dispatchAddFinished(viewHolder);
+                if (arrayList3.isEmpty()) {
+                    this.mAdditionsList.remove(size5);
                 }
             }
         }
-        this.mRemoveAnimations.remove(item);
-        this.mAddAnimations.remove(item);
-        this.mChangeAnimations.remove(item);
-        this.mMoveAnimations.remove(item);
+        this.mRemoveAnimations.remove(viewHolder);
+        this.mAddAnimations.remove(viewHolder);
+        this.mChangeAnimations.remove(viewHolder);
+        this.mMoveAnimations.remove(viewHolder);
         dispatchFinishedWhenDone();
     }
 
-    private void resetAnimation(RecyclerView.ViewHolder holder) {
-        holder.itemView.animate().setInterpolator(sDefaultInterpolator);
-        endAnimation(holder);
+    private void resetAnimation(RecyclerView.ViewHolder viewHolder) {
+        viewHolder.itemView.animate().setInterpolator(sDefaultInterpolator);
+        endAnimation(viewHolder);
     }
 
     public boolean isRunning() {
@@ -618,79 +592,86 @@ public class DialogsItemAnimator extends SimpleItemAnimator {
         }
     }
 
-    /* access modifiers changed from: protected */
-    public void onAllAnimationsDone() {
-    }
-
     public void endAnimations() {
-        for (int i = this.mPendingMoves.size() - 1; i >= 0; i--) {
-            MoveInfo item = this.mPendingMoves.get(i);
-            View view = item.holder.itemView;
+        int size = this.mPendingMoves.size();
+        while (true) {
+            size--;
+            if (size < 0) {
+                break;
+            }
+            MoveInfo moveInfo = this.mPendingMoves.get(size);
+            View view = moveInfo.holder.itemView;
             view.setTranslationY(0.0f);
             view.setTranslationX(0.0f);
-            dispatchMoveFinished(item.holder);
-            this.mPendingMoves.remove(i);
+            dispatchMoveFinished(moveInfo.holder);
+            this.mPendingMoves.remove(size);
         }
-        for (int i2 = this.mPendingRemovals.size() - 1; i2 >= 0; i2--) {
-            RecyclerView.ViewHolder item2 = this.mPendingRemovals.get(i2);
-            View view2 = item2.itemView;
+        for (int size2 = this.mPendingRemovals.size() - 1; size2 >= 0; size2--) {
+            RecyclerView.ViewHolder viewHolder = this.mPendingRemovals.get(size2);
+            View view2 = viewHolder.itemView;
             view2.setTranslationY(0.0f);
             view2.setTranslationX(0.0f);
-            dispatchRemoveFinished(item2);
-            this.mPendingRemovals.remove(i2);
+            dispatchRemoveFinished(viewHolder);
+            this.mPendingRemovals.remove(size2);
         }
-        for (int i3 = this.mPendingAdditions.size() - 1; i3 >= 0; i3--) {
-            RecyclerView.ViewHolder item3 = this.mPendingAdditions.get(i3);
-            if (item3.itemView instanceof DialogCell) {
-                ((DialogCell) item3.itemView).setClipProgress(0.0f);
-            } else {
-                item3.itemView.setAlpha(1.0f);
+        int size3 = this.mPendingAdditions.size();
+        while (true) {
+            size3--;
+            if (size3 < 0) {
+                break;
             }
-            dispatchAddFinished(item3);
-            this.mPendingAdditions.remove(i3);
+            RecyclerView.ViewHolder viewHolder2 = this.mPendingAdditions.get(size3);
+            View view3 = viewHolder2.itemView;
+            if (view3 instanceof DialogCell) {
+                ((DialogCell) view3).setClipProgress(0.0f);
+            } else {
+                view3.setAlpha(1.0f);
+            }
+            dispatchAddFinished(viewHolder2);
+            this.mPendingAdditions.remove(size3);
         }
-        for (int i4 = this.mPendingChanges.size() - 1; i4 >= 0; i4--) {
-            endChangeAnimationIfNecessary(this.mPendingChanges.get(i4));
+        for (int size4 = this.mPendingChanges.size() - 1; size4 >= 0; size4--) {
+            endChangeAnimationIfNecessary(this.mPendingChanges.get(size4));
         }
         this.mPendingChanges.clear();
         if (isRunning()) {
-            for (int i5 = this.mMovesList.size() - 1; i5 >= 0; i5--) {
-                ArrayList<MoveInfo> moves = this.mMovesList.get(i5);
-                for (int j = moves.size() - 1; j >= 0; j--) {
-                    MoveInfo moveInfo = moves.get(j);
-                    View view3 = moveInfo.holder.itemView;
-                    view3.setTranslationY(0.0f);
-                    view3.setTranslationX(0.0f);
-                    dispatchMoveFinished(moveInfo.holder);
-                    moves.remove(j);
-                    if (moves.isEmpty()) {
-                        this.mMovesList.remove(moves);
+            for (int size5 = this.mMovesList.size() - 1; size5 >= 0; size5--) {
+                ArrayList arrayList = this.mMovesList.get(size5);
+                for (int size6 = arrayList.size() - 1; size6 >= 0; size6--) {
+                    MoveInfo moveInfo2 = (MoveInfo) arrayList.get(size6);
+                    View view4 = moveInfo2.holder.itemView;
+                    view4.setTranslationY(0.0f);
+                    view4.setTranslationX(0.0f);
+                    dispatchMoveFinished(moveInfo2.holder);
+                    arrayList.remove(size6);
+                    if (arrayList.isEmpty()) {
+                        this.mMovesList.remove(arrayList);
                     }
                 }
             }
-            for (int i6 = this.mAdditionsList.size() - 1; i6 >= 0; i6--) {
-                ArrayList<RecyclerView.ViewHolder> additions = this.mAdditionsList.get(i6);
-                for (int j2 = additions.size() - 1; j2 >= 0; j2--) {
-                    RecyclerView.ViewHolder item4 = additions.get(j2);
-                    View view4 = item4.itemView;
-                    if (view4 instanceof DialogCell) {
-                        ((DialogCell) view4).setClipProgress(0.0f);
+            for (int size7 = this.mAdditionsList.size() - 1; size7 >= 0; size7--) {
+                ArrayList arrayList2 = this.mAdditionsList.get(size7);
+                for (int size8 = arrayList2.size() - 1; size8 >= 0; size8--) {
+                    RecyclerView.ViewHolder viewHolder3 = (RecyclerView.ViewHolder) arrayList2.get(size8);
+                    View view5 = viewHolder3.itemView;
+                    if (view5 instanceof DialogCell) {
+                        ((DialogCell) view5).setClipProgress(0.0f);
                     } else {
-                        view4.setAlpha(1.0f);
+                        view5.setAlpha(1.0f);
                     }
-                    dispatchAddFinished(item4);
-                    additions.remove(j2);
-                    if (additions.isEmpty()) {
-                        this.mAdditionsList.remove(additions);
+                    dispatchAddFinished(viewHolder3);
+                    arrayList2.remove(size8);
+                    if (arrayList2.isEmpty()) {
+                        this.mAdditionsList.remove(arrayList2);
                     }
                 }
             }
-            for (int i7 = this.mChangesList.size() - 1; i7 >= 0; i7--) {
-                ArrayList<ChangeInfo> changes = this.mChangesList.get(i7);
-                for (int j3 = changes.size() - 1; j3 >= 0; j3--) {
-                    endChangeAnimationIfNecessary(changes.get(j3));
-                    if (changes.isEmpty()) {
-                        this.mChangesList.remove(changes);
+            for (int size9 = this.mChangesList.size() - 1; size9 >= 0; size9--) {
+                ArrayList arrayList3 = this.mChangesList.get(size9);
+                for (int size10 = arrayList3.size() - 1; size10 >= 0; size10--) {
+                    endChangeAnimationIfNecessary((ChangeInfo) arrayList3.get(size10));
+                    if (arrayList3.isEmpty()) {
+                        this.mChangesList.remove(arrayList3);
                     }
                 }
             }
@@ -703,9 +684,9 @@ public class DialogsItemAnimator extends SimpleItemAnimator {
     }
 
     /* access modifiers changed from: package-private */
-    public void cancelAll(List<RecyclerView.ViewHolder> viewHolders) {
-        for (int i = viewHolders.size() - 1; i >= 0; i--) {
-            viewHolders.get(i).itemView.animate().cancel();
+    public void cancelAll(List<RecyclerView.ViewHolder> list) {
+        for (int size = list.size() - 1; size >= 0; size--) {
+            list.get(size).itemView.animate().cancel();
         }
     }
 

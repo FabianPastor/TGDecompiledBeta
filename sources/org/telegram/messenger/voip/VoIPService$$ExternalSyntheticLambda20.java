@@ -8,6 +8,6 @@ public final /* synthetic */ class VoIPService$$ExternalSyntheticLambda20 implem
     }
 
     public final void run() {
-        this.f$0.m1202xbfa2c4eb();
+        this.f$0.lambda$startConnectingSound$59();
     }
 }

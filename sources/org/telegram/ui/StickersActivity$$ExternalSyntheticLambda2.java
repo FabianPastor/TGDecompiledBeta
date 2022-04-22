@@ -8,6 +8,6 @@ public final /* synthetic */ class StickersActivity$$ExternalSyntheticLambda2 im
     }
 
     public final void run() {
-        this.f$0.m3279lambda$sendReorder$4$orgtelegramuiStickersActivity();
+        this.f$0.lambda$sendReorder$4();
     }
 }

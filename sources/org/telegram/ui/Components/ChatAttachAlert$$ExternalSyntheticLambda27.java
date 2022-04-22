@@ -1,16 +1,15 @@
 package org.telegram.ui.Components;
 
-import android.view.View;
-import org.telegram.ui.Components.RecyclerListView;
+import org.telegram.ui.Components.AlertsCreator;
 
-public final /* synthetic */ class ChatAttachAlert$$ExternalSyntheticLambda27 implements RecyclerListView.OnItemLongClickListener {
+public final /* synthetic */ class ChatAttachAlert$$ExternalSyntheticLambda27 implements AlertsCreator.ScheduleDatePickerDelegate {
     public final /* synthetic */ ChatAttachAlert f$0;
 
     public /* synthetic */ ChatAttachAlert$$ExternalSyntheticLambda27(ChatAttachAlert chatAttachAlert) {
         this.f$0 = chatAttachAlert;
     }
 
-    public final boolean onItemClick(View view, int i) {
-        return this.f$0.m3776lambda$new$8$orgtelegramuiComponentsChatAttachAlert(view, i);
+    public final void didSelectDate(boolean z, int i) {
+        this.f$0.lambda$new$11(z, i);
     }
 }

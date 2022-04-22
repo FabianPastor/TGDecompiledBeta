@@ -10,6 +10,6 @@ public final /* synthetic */ class GroupCreateUserCell$$ExternalSyntheticLambda0
     }
 
     public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-        this.f$0.m1506lambda$setChecked$0$orgtelegramuiCellsGroupCreateUserCell(valueAnimator);
+        this.f$0.lambda$setChecked$0(valueAnimator);
     }
 }

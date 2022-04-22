@@ -1,14 +1,17 @@
 package org.telegram.ui;
 
-import org.telegram.ui.Components.NumberPicker;
+import android.view.View;
 
-public final /* synthetic */ class PhotoViewer$$ExternalSyntheticLambda62 implements NumberPicker.Formatter {
-    public static final /* synthetic */ PhotoViewer$$ExternalSyntheticLambda62 INSTANCE = new PhotoViewer$$ExternalSyntheticLambda62();
+public final /* synthetic */ class PhotoViewer$$ExternalSyntheticLambda62 implements Runnable {
+    public final /* synthetic */ boolean f$0;
+    public final /* synthetic */ View f$1;
 
-    private /* synthetic */ PhotoViewer$$ExternalSyntheticLambda62() {
+    public /* synthetic */ PhotoViewer$$ExternalSyntheticLambda62(boolean z, View view) {
+        this.f$0 = z;
+        this.f$1 = view;
     }
 
-    public final String format(int i) {
-        return PhotoViewer.lambda$setParentActivity$26(i);
+    public final void run() {
+        PhotoViewer.lambda$setItemVisible$60(this.f$0, this.f$1);
     }
 }

@@ -8,6 +8,6 @@ public final /* synthetic */ class VideoPlayerRewinder$$ExternalSyntheticLambda0
     }
 
     public final void run() {
-        this.f$0.m1138xfe904fcb();
+        this.f$0.lambda$incrementRewindCount$0();
     }
 }

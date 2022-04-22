@@ -2,7 +2,7 @@ package org.telegram.ui;
 
 import android.util.Pair;
 import org.telegram.tgnet.ResultCallback;
-import org.telegram.tgnet.TLRPC;
+import org.telegram.tgnet.TLRPC$TL_error;
 import org.telegram.ui.ActionBar.EmojiThemes;
 import org.telegram.ui.ChatActivity;
 import org.telegram.ui.Components.MotionBackgroundDrawable;
@@ -23,14 +23,10 @@ public final /* synthetic */ class ChatActivity$ThemeDelegate$$ExternalSynthetic
     }
 
     public final void onComplete(Object obj) {
-        this.f$0.m1886x18503b1e(this.f$1, this.f$2, this.f$3, this.f$4, (Pair) obj);
+        this.f$0.lambda$getBackgroundDrawableFromTheme$7(this.f$1, this.f$2, this.f$3, this.f$4, (Pair) obj);
     }
 
-    public /* synthetic */ void onError(Throwable th) {
-        ResultCallback.CC.$default$onError((ResultCallback) this, th);
-    }
-
-    public /* synthetic */ void onError(TLRPC.TL_error tL_error) {
-        ResultCallback.CC.$default$onError((ResultCallback) this, tL_error);
+    public /* synthetic */ void onError(TLRPC$TL_error tLRPC$TL_error) {
+        ResultCallback.CC.$default$onError((ResultCallback) this, tLRPC$TL_error);
     }
 }

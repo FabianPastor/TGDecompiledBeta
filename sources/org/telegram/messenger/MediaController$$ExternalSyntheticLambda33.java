@@ -1,17 +1,32 @@
 package org.telegram.messenger;
 
-import org.telegram.ui.ActionBar.AlertDialog;
+import java.io.File;
+import org.telegram.messenger.MediaController;
 
 public final /* synthetic */ class MediaController$$ExternalSyntheticLambda33 implements Runnable {
-    public final /* synthetic */ boolean[] f$0;
-    public final /* synthetic */ AlertDialog f$1;
+    public final /* synthetic */ MediaController f$0;
+    public final /* synthetic */ boolean f$1;
+    public final /* synthetic */ boolean f$2;
+    public final /* synthetic */ MediaController.VideoConvertMessage f$3;
+    public final /* synthetic */ File f$4;
+    public final /* synthetic */ float f$5;
+    public final /* synthetic */ long f$6;
+    public final /* synthetic */ boolean f$7;
+    public final /* synthetic */ long f$8;
 
-    public /* synthetic */ MediaController$$ExternalSyntheticLambda33(boolean[] zArr, AlertDialog alertDialog) {
-        this.f$0 = zArr;
-        this.f$1 = alertDialog;
+    public /* synthetic */ MediaController$$ExternalSyntheticLambda33(MediaController mediaController, boolean z, boolean z2, MediaController.VideoConvertMessage videoConvertMessage, File file, float f, long j, boolean z3, long j2) {
+        this.f$0 = mediaController;
+        this.f$1 = z;
+        this.f$2 = z2;
+        this.f$3 = videoConvertMessage;
+        this.f$4 = file;
+        this.f$5 = f;
+        this.f$6 = j;
+        this.f$7 = z3;
+        this.f$8 = j2;
     }
 
     public final void run() {
-        MediaController.lambda$saveFile$34(this.f$0, this.f$1);
+        this.f$0.lambda$didWriteData$42(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6, this.f$7, this.f$8);
     }
 }

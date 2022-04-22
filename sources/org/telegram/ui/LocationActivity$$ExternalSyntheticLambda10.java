@@ -1,15 +1,15 @@
 package org.telegram.ui;
 
-public final /* synthetic */ class LocationActivity$$ExternalSyntheticLambda10 implements Runnable {
-    public final /* synthetic */ LocationActivity f$0;
-    public final /* synthetic */ int f$1;
+import com.google.android.gms.maps.GoogleMap;
 
-    public /* synthetic */ LocationActivity$$ExternalSyntheticLambda10(LocationActivity locationActivity, int i) {
+public final /* synthetic */ class LocationActivity$$ExternalSyntheticLambda10 implements GoogleMap.OnCameraMoveStartedListener {
+    public final /* synthetic */ LocationActivity f$0;
+
+    public /* synthetic */ LocationActivity$$ExternalSyntheticLambda10(LocationActivity locationActivity) {
         this.f$0 = locationActivity;
-        this.f$1 = i;
     }
 
-    public final void run() {
-        this.f$0.m2425lambda$fixLayoutInternal$33$orgtelegramuiLocationActivity(this.f$1);
+    public final void onCameraMoveStarted(int i) {
+        this.f$0.lambda$onMapInit$27(i);
     }
 }

@@ -1,15 +1,17 @@
 package org.telegram.ui.Components;
 
-import android.animation.ValueAnimator;
+import org.telegram.tgnet.TLObject;
 
-public final /* synthetic */ class BotWebViewMenuContainer$$ExternalSyntheticLambda14 implements ValueAnimator.AnimatorUpdateListener {
+public final /* synthetic */ class BotWebViewMenuContainer$$ExternalSyntheticLambda14 implements Runnable {
     public final /* synthetic */ BotWebViewMenuContainer f$0;
+    public final /* synthetic */ TLObject f$1;
 
-    public /* synthetic */ BotWebViewMenuContainer$$ExternalSyntheticLambda14(BotWebViewMenuContainer botWebViewMenuContainer) {
+    public /* synthetic */ BotWebViewMenuContainer$$ExternalSyntheticLambda14(BotWebViewMenuContainer botWebViewMenuContainer, TLObject tLObject) {
         this.f$0 = botWebViewMenuContainer;
+        this.f$1 = tLObject;
     }
 
-    public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-        this.f$0.m3664x8CLASSNAMEa07a(valueAnimator);
+    public final void run() {
+        this.f$0.lambda$loadWebView$13(this.f$1);
     }
 }

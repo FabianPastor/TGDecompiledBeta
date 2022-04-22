@@ -12,6 +12,6 @@ public final /* synthetic */ class PhotoViewer$12$$ExternalSyntheticLambda4 impl
     }
 
     public final void run() {
-        this.f$0.m2959lambda$onItemClick$0$orgtelegramuiPhotoViewer$12(this.f$1);
+        this.f$0.lambda$onItemClick$0(this.f$1);
     }
 }

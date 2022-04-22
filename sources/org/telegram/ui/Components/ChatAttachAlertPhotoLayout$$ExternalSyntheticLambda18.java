@@ -1,17 +1,15 @@
 package org.telegram.ui.Components;
 
-import android.widget.FrameLayout;
+import org.telegram.ui.Components.ZoomControlView;
 
-public final /* synthetic */ class ChatAttachAlertPhotoLayout$$ExternalSyntheticLambda18 implements Runnable {
+public final /* synthetic */ class ChatAttachAlertPhotoLayout$$ExternalSyntheticLambda18 implements ZoomControlView.ZoomControlViewDelegate {
     public final /* synthetic */ ChatAttachAlertPhotoLayout f$0;
-    public final /* synthetic */ FrameLayout.LayoutParams f$1;
 
-    public /* synthetic */ ChatAttachAlertPhotoLayout$$ExternalSyntheticLambda18(ChatAttachAlertPhotoLayout chatAttachAlertPhotoLayout, FrameLayout.LayoutParams layoutParams) {
+    public /* synthetic */ ChatAttachAlertPhotoLayout$$ExternalSyntheticLambda18(ChatAttachAlertPhotoLayout chatAttachAlertPhotoLayout) {
         this.f$0 = chatAttachAlertPhotoLayout;
-        this.f$1 = layoutParams;
     }
 
-    public final void run() {
-        this.f$0.m3865x2e05399b(this.f$1);
+    public final void didSetZoom(float f) {
+        this.f$0.lambda$new$4(f);
     }
 }

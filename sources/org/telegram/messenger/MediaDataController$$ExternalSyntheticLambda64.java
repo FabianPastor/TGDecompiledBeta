@@ -1,19 +1,23 @@
 package org.telegram.messenger;
 
-import org.telegram.tgnet.RequestDelegate;
-import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC;
+import java.util.ArrayList;
 
-public final /* synthetic */ class MediaDataController$$ExternalSyntheticLambda64 implements RequestDelegate {
+public final /* synthetic */ class MediaDataController$$ExternalSyntheticLambda64 implements Runnable {
     public final /* synthetic */ MediaDataController f$0;
-    public final /* synthetic */ TLRPC.TL_messages_getFeaturedStickers f$1;
+    public final /* synthetic */ ArrayList f$1;
+    public final /* synthetic */ int f$2;
+    public final /* synthetic */ int f$3;
+    public final /* synthetic */ long f$4;
 
-    public /* synthetic */ MediaDataController$$ExternalSyntheticLambda64(MediaDataController mediaDataController, TLRPC.TL_messages_getFeaturedStickers tL_messages_getFeaturedStickers) {
+    public /* synthetic */ MediaDataController$$ExternalSyntheticLambda64(MediaDataController mediaDataController, ArrayList arrayList, int i, int i2, long j) {
         this.f$0 = mediaDataController;
-        this.f$1 = tL_messages_getFeaturedStickers;
+        this.f$1 = arrayList;
+        this.f$2 = i;
+        this.f$3 = i2;
+        this.f$4 = j;
     }
 
-    public final void run(TLObject tLObject, TLRPC.TL_error tL_error) {
-        this.f$0.m740x9f1d25b5(this.f$1, tLObject, tL_error);
+    public final void run() {
+        this.f$0.lambda$putStickersToCache$62(this.f$1, this.f$2, this.f$3, this.f$4);
     }
 }

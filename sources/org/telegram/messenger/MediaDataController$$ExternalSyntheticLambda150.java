@@ -1,19 +1,22 @@
 package org.telegram.messenger;
 
-import org.telegram.tgnet.TLRPC;
+import org.telegram.tgnet.RequestDelegate;
+import org.telegram.tgnet.TLObject;
+import org.telegram.tgnet.TLRPC$TL_error;
+import org.telegram.tgnet.TLRPC$TL_messages_saveRecentSticker;
 
-public final /* synthetic */ class MediaDataController$$ExternalSyntheticLambda150 implements Runnable {
+public final /* synthetic */ class MediaDataController$$ExternalSyntheticLambda150 implements RequestDelegate {
     public final /* synthetic */ MediaDataController f$0;
-    public final /* synthetic */ TLRPC.Message f$1;
-    public final /* synthetic */ String f$2;
+    public final /* synthetic */ Object f$1;
+    public final /* synthetic */ TLRPC$TL_messages_saveRecentSticker f$2;
 
-    public /* synthetic */ MediaDataController$$ExternalSyntheticLambda150(MediaDataController mediaDataController, TLRPC.Message message, String str) {
+    public /* synthetic */ MediaDataController$$ExternalSyntheticLambda150(MediaDataController mediaDataController, Object obj, TLRPC$TL_messages_saveRecentSticker tLRPC$TL_messages_saveRecentSticker) {
         this.f$0 = mediaDataController;
-        this.f$1 = message;
-        this.f$2 = str;
+        this.f$1 = obj;
+        this.f$2 = tLRPC$TL_messages_saveRecentSticker;
     }
 
-    public final void run() {
-        this.f$0.m840x387edCLASSNAME(this.f$1, this.f$2);
+    public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+        this.f$0.lambda$addRecentSticker$12(this.f$1, this.f$2, tLObject, tLRPC$TL_error);
     }
 }

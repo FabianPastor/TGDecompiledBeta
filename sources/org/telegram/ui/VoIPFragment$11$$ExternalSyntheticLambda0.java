@@ -10,6 +10,6 @@ public final /* synthetic */ class VoIPFragment$11$$ExternalSyntheticLambda0 imp
     }
 
     public final void run() {
-        this.f$0.m3469lambda$onFirstFrameRendered$0$orgtelegramuiVoIPFragment$11();
+        this.f$0.lambda$onFirstFrameRendered$0();
     }
 }

@@ -1,21 +1,22 @@
 package org.telegram.messenger;
 
-import org.telegram.tgnet.TLRPC;
+import org.telegram.tgnet.RequestDelegate;
+import org.telegram.tgnet.TLObject;
+import org.telegram.tgnet.TLRPC$StickerSet;
+import org.telegram.tgnet.TLRPC$TL_error;
 
-public final /* synthetic */ class MediaDataController$$ExternalSyntheticLambda156 implements Runnable {
+public final /* synthetic */ class MediaDataController$$ExternalSyntheticLambda156 implements RequestDelegate {
     public final /* synthetic */ MediaDataController f$0;
-    public final /* synthetic */ TLRPC.TL_attachMenuBots f$1;
-    public final /* synthetic */ long f$2;
-    public final /* synthetic */ int f$3;
+    public final /* synthetic */ TLRPC$StickerSet f$1;
+    public final /* synthetic */ int f$2;
 
-    public /* synthetic */ MediaDataController$$ExternalSyntheticLambda156(MediaDataController mediaDataController, TLRPC.TL_attachMenuBots tL_attachMenuBots, long j, int i) {
+    public /* synthetic */ MediaDataController$$ExternalSyntheticLambda156(MediaDataController mediaDataController, TLRPC$StickerSet tLRPC$StickerSet, int i) {
         this.f$0 = mediaDataController;
-        this.f$1 = tL_attachMenuBots;
-        this.f$2 = j;
-        this.f$3 = i;
+        this.f$1 = tLRPC$StickerSet;
+        this.f$2 = i;
     }
 
-    public final void run() {
-        this.f$0.m811x7981acd6(this.f$1, this.f$2, this.f$3);
+    public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+        this.f$0.lambda$toggleStickerSetInternal$73(this.f$1, this.f$2, tLObject, tLRPC$TL_error);
     }
 }

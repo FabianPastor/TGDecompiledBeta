@@ -1,18 +1,17 @@
 package org.telegram.ui;
 
-import java.util.ArrayList;
 import org.telegram.ui.ProfileActivity;
 
 public final /* synthetic */ class ProfileActivity$SearchAdapter$$ExternalSyntheticLambda83 implements Runnable {
     public final /* synthetic */ ProfileActivity.SearchAdapter f$0;
-    public final /* synthetic */ ArrayList f$1;
+    public final /* synthetic */ String f$1;
 
-    public /* synthetic */ ProfileActivity$SearchAdapter$$ExternalSyntheticLambda83(ProfileActivity.SearchAdapter searchAdapter, ArrayList arrayList) {
+    public /* synthetic */ ProfileActivity$SearchAdapter$$ExternalSyntheticLambda83(ProfileActivity.SearchAdapter searchAdapter, String str) {
         this.f$0 = searchAdapter;
-        this.f$1 = arrayList;
+        this.f$1 = str;
     }
 
     public final void run() {
-        this.f$0.m3090x5bd8b111(this.f$1);
+        this.f$0.lambda$search$87(this.f$1);
     }
 }

@@ -16,6 +16,6 @@ public final /* synthetic */ class BotWebViewContainer$4$$ExternalSyntheticLambd
     }
 
     public final void accept(Object obj) {
-        this.f$0.m3641x61eeCLASSNAMEb(this.f$1, this.f$2, (Boolean) obj);
+        this.f$0.lambda$onGeolocationPermissionsShowPrompt$0(this.f$1, this.f$2, (Boolean) obj);
     }
 }

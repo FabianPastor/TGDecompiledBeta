@@ -10,6 +10,6 @@ public final /* synthetic */ class SenderSelectView$$ExternalSyntheticLambda0 im
     }
 
     public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-        this.f$0.m4332lambda$setProgress$4$orgtelegramuiComponentsSenderSelectView(valueAnimator);
+        this.f$0.lambda$setProgress$4(valueAnimator);
     }
 }

@@ -12,6 +12,6 @@ public final /* synthetic */ class GroupCallMiniTextureView$$ExternalSyntheticLa
     }
 
     public final void run() {
-        this.f$0.m4551x7CLASSNAMEa8(this.f$1);
+        this.f$0.lambda$updateAttachState$2(this.f$1);
     }
 }

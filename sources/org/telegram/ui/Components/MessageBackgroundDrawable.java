@@ -1,6 +1,5 @@
 package org.telegram.ui.Components;
 
-import android.graphics.Canvas;
 import android.graphics.ColorFilter;
 import android.graphics.Paint;
 import android.graphics.Rect;
@@ -24,35 +23,39 @@ public class MessageBackgroundDrawable extends Drawable {
     private float touchX = -1.0f;
     private float touchY = -1.0f;
 
-    public MessageBackgroundDrawable(View parent) {
-        this.parentView = parent;
+    public int getOpacity() {
+        return -2;
     }
 
-    public void setColor(int color) {
-        this.paint.setColor(color);
+    public MessageBackgroundDrawable(View view) {
+        this.parentView = view;
+    }
+
+    public void setColor(int i) {
+        this.paint.setColor(i);
     }
 
     public void setCustomPaint(Paint paint2) {
         this.customPaint = paint2;
     }
 
-    public void setSelected(boolean selected, boolean animated) {
+    public void setSelected(boolean z, boolean z2) {
         float f = 1.0f;
-        if (this.isSelected != selected) {
-            this.isSelected = selected;
-            this.animationInProgress = animated;
-            if (animated) {
+        if (this.isSelected != z) {
+            this.isSelected = z;
+            this.animationInProgress = z2;
+            if (z2) {
                 this.lastAnimationTime = SystemClock.elapsedRealtime();
             } else {
-                if (!selected) {
+                if (!z) {
                     f = 0.0f;
                 }
                 this.currentAnimationProgress = f;
             }
             calcRadius();
             invalidate();
-        } else if (this.animationInProgress != animated && !animated) {
-            if (!selected) {
+        } else if (this.animationInProgress != z2 && !z2) {
+            if (!z) {
                 f = 0.0f;
             }
             this.currentAnimationProgress = f;
@@ -72,20 +75,22 @@ public class MessageBackgroundDrawable extends Drawable {
 
     private void calcRadius() {
         Rect bounds = getBounds();
-        float x1 = (float) bounds.centerX();
-        float y1 = (float) bounds.centerY();
-        this.finalRadius = (float) Math.ceil(Math.sqrt((double) (((((float) bounds.left) - x1) * (((float) bounds.left) - x1)) + ((((float) bounds.top) - y1) * (((float) bounds.top) - y1)))));
+        float centerX = (float) bounds.centerX();
+        float centerY = (float) bounds.centerY();
+        int i = bounds.left;
+        int i2 = bounds.top;
+        this.finalRadius = (float) Math.ceil(Math.sqrt((double) (((((float) i) - centerX) * (((float) i) - centerX)) + ((((float) i2) - centerY) * (((float) i2) - centerY)))));
     }
 
-    public void setTouchCoords(float x, float y) {
-        this.touchX = x;
-        this.touchY = y;
+    public void setTouchCoords(float f, float f2) {
+        this.touchX = f;
+        this.touchY = f2;
         this.lastTouchTime = SystemClock.elapsedRealtime();
     }
 
-    public void setTouchCoordsOverride(float x, float y) {
-        this.touchOverrideX = x;
-        this.touchOverrideY = y;
+    public void setTouchCoordsOverride(float f, float f2) {
+        this.touchOverrideX = f;
+        this.touchOverrideY = f2;
     }
 
     public float getTouchX() {
@@ -104,13 +109,13 @@ public class MessageBackgroundDrawable extends Drawable {
         return this.animationInProgress;
     }
 
-    public void setBounds(int left, int top, int right, int bottom) {
-        super.setBounds(left, top, right, bottom);
+    public void setBounds(int i, int i2, int i3, int i4) {
+        super.setBounds(i, i2, i3, i4);
         calcRadius();
     }
 
-    public void setBounds(Rect bounds) {
-        super.setBounds(bounds);
+    public void setBounds(Rect rect) {
+        super.setBounds(rect);
         calcRadius();
     }
 
@@ -118,85 +123,140 @@ public class MessageBackgroundDrawable extends Drawable {
         this.paint.setColorFilter(colorFilter);
     }
 
-    public int getOpacity() {
-        return -2;
+    public void setAlpha(int i) {
+        this.paint.setAlpha(i);
     }
 
-    public void setAlpha(int alpha) {
-        this.paint.setAlpha(alpha);
-    }
-
-    public void draw(Canvas canvas) {
-        float interpolatedProgress;
-        float y1;
-        float x1;
-        float f = this.currentAnimationProgress;
-        if (f == 1.0f) {
-            Rect bounds = getBounds();
-            Paint paint2 = this.customPaint;
-            if (paint2 == null) {
-                paint2 = this.paint;
-            }
-            canvas.drawRect(bounds, paint2);
-        } else if (f != 0.0f) {
-            if (this.isSelected) {
-                interpolatedProgress = CubicBezierInterpolator.EASE_OUT_QUINT.getInterpolation(this.currentAnimationProgress);
-            } else {
-                interpolatedProgress = 1.0f - CubicBezierInterpolator.EASE_OUT_QUINT.getInterpolation(1.0f - this.currentAnimationProgress);
-            }
-            Rect bounds2 = getBounds();
-            float centerX = (float) bounds2.centerX();
-            float centerY = (float) bounds2.centerY();
-            if (this.touchOverrideX >= 0.0f && this.touchOverrideY >= 0.0f) {
-                x1 = this.touchOverrideX;
-                y1 = this.touchOverrideY;
-            } else if (this.touchX < 0.0f || this.touchY < 0.0f) {
-                x1 = centerX;
-                y1 = centerY;
-            } else {
-                x1 = this.touchX;
-                y1 = this.touchY;
-            }
-            float x12 = ((1.0f - interpolatedProgress) * (x1 - centerX)) + centerX;
-            float y12 = ((1.0f - interpolatedProgress) * (y1 - centerY)) + centerY;
-            float f2 = this.finalRadius * interpolatedProgress;
-            Paint paint3 = this.customPaint;
-            if (paint3 == null) {
-                paint3 = this.paint;
-            }
-            canvas.drawCircle(x12, y12, f2, paint3);
-        }
-        if (this.animationInProgress) {
-            long newTime = SystemClock.elapsedRealtime();
-            long dt = newTime - this.lastAnimationTime;
-            if (dt > 20) {
-                dt = 17;
-            }
-            this.lastAnimationTime = newTime;
-            boolean finished = false;
-            if (this.isSelected) {
-                float f3 = this.currentAnimationProgress + (((float) dt) / 240.0f);
-                this.currentAnimationProgress = f3;
-                if (f3 >= 1.0f) {
-                    this.currentAnimationProgress = 1.0f;
-                    finished = true;
-                }
-            } else {
-                float f4 = this.currentAnimationProgress - (((float) dt) / 240.0f);
-                this.currentAnimationProgress = f4;
-                if (f4 <= 0.0f) {
-                    this.currentAnimationProgress = 0.0f;
-                    finished = true;
-                }
-            }
-            if (finished) {
-                this.touchX = -1.0f;
-                this.touchY = -1.0f;
-                this.touchOverrideX = -1.0f;
-                this.touchOverrideY = -1.0f;
-                this.animationInProgress = false;
-            }
-            invalidate();
-        }
+    /* JADX WARNING: Code restructure failed: missing block: B:15:0x0049, code lost:
+        if (r6 >= 0.0f) goto L_0x005b;
+     */
+    /* JADX WARNING: Code restructure failed: missing block: B:19:0x0056, code lost:
+        if (r6 >= 0.0f) goto L_0x005b;
+     */
+    /* JADX WARNING: Removed duplicated region for block: B:40:0x00b0  */
+    /* Code decompiled incorrectly, please refer to instructions dump. */
+    public void draw(android.graphics.Canvas r10) {
+        /*
+            r9 = this;
+            float r0 = r9.currentAnimationProgress
+            r1 = 1065353216(0x3var_, float:1.0)
+            r2 = 0
+            int r3 = (r0 > r1 ? 1 : (r0 == r1 ? 0 : -1))
+            if (r3 != 0) goto L_0x0018
+            android.graphics.Rect r0 = r9.getBounds()
+            android.graphics.Paint r3 = r9.customPaint
+            if (r3 == 0) goto L_0x0012
+            goto L_0x0014
+        L_0x0012:
+            android.graphics.Paint r3 = r9.paint
+        L_0x0014:
+            r10.drawRect(r0, r3)
+            goto L_0x0073
+        L_0x0018:
+            int r3 = (r0 > r2 ? 1 : (r0 == r2 ? 0 : -1))
+            if (r3 == 0) goto L_0x0073
+            boolean r3 = r9.isSelected
+            if (r3 == 0) goto L_0x0027
+            org.telegram.ui.Components.CubicBezierInterpolator r3 = org.telegram.ui.Components.CubicBezierInterpolator.EASE_OUT_QUINT
+            float r0 = r3.getInterpolation(r0)
+            goto L_0x0031
+        L_0x0027:
+            org.telegram.ui.Components.CubicBezierInterpolator r3 = org.telegram.ui.Components.CubicBezierInterpolator.EASE_OUT_QUINT
+            float r0 = r1 - r0
+            float r0 = r3.getInterpolation(r0)
+            float r0 = r1 - r0
+        L_0x0031:
+            android.graphics.Rect r3 = r9.getBounds()
+            int r4 = r3.centerX()
+            float r4 = (float) r4
+            int r3 = r3.centerY()
+            float r3 = (float) r3
+            float r5 = r9.touchOverrideX
+            int r6 = (r5 > r2 ? 1 : (r5 == r2 ? 0 : -1))
+            if (r6 < 0) goto L_0x004c
+            float r6 = r9.touchOverrideY
+            int r7 = (r6 > r2 ? 1 : (r6 == r2 ? 0 : -1))
+            if (r7 < 0) goto L_0x004c
+            goto L_0x005b
+        L_0x004c:
+            float r5 = r9.touchX
+            int r6 = (r5 > r2 ? 1 : (r5 == r2 ? 0 : -1))
+            if (r6 < 0) goto L_0x0059
+            float r6 = r9.touchY
+            int r7 = (r6 > r2 ? 1 : (r6 == r2 ? 0 : -1))
+            if (r7 < 0) goto L_0x0059
+            goto L_0x005b
+        L_0x0059:
+            r6 = r3
+            r5 = r4
+        L_0x005b:
+            float r7 = r1 - r0
+            float r5 = r5 - r4
+            float r5 = r5 * r7
+            float r4 = r4 + r5
+            float r6 = r6 - r3
+            float r7 = r7 * r6
+            float r3 = r3 + r7
+            float r5 = r9.finalRadius
+            float r5 = r5 * r0
+            android.graphics.Paint r0 = r9.customPaint
+            if (r0 == 0) goto L_0x006e
+            goto L_0x0070
+        L_0x006e:
+            android.graphics.Paint r0 = r9.paint
+        L_0x0070:
+            r10.drawCircle(r4, r3, r5, r0)
+        L_0x0073:
+            boolean r10 = r9.animationInProgress
+            if (r10 == 0) goto L_0x00bf
+            long r3 = android.os.SystemClock.elapsedRealtime()
+            long r5 = r9.lastAnimationTime
+            long r5 = r3 - r5
+            r7 = 20
+            int r10 = (r5 > r7 ? 1 : (r5 == r7 ? 0 : -1))
+            if (r10 <= 0) goto L_0x0087
+            r5 = 17
+        L_0x0087:
+            r9.lastAnimationTime = r3
+            boolean r10 = r9.isSelected
+            r0 = 1
+            r3 = 1131413504(0x43700000, float:240.0)
+            r4 = 0
+            if (r10 == 0) goto L_0x009f
+            float r10 = r9.currentAnimationProgress
+            float r2 = (float) r5
+            float r2 = r2 / r3
+            float r10 = r10 + r2
+            r9.currentAnimationProgress = r10
+            int r10 = (r10 > r1 ? 1 : (r10 == r1 ? 0 : -1))
+            if (r10 < 0) goto L_0x00ad
+            r9.currentAnimationProgress = r1
+            goto L_0x00ae
+        L_0x009f:
+            float r10 = r9.currentAnimationProgress
+            float r1 = (float) r5
+            float r1 = r1 / r3
+            float r10 = r10 - r1
+            r9.currentAnimationProgress = r10
+            int r10 = (r10 > r2 ? 1 : (r10 == r2 ? 0 : -1))
+            if (r10 > 0) goto L_0x00ad
+            r9.currentAnimationProgress = r2
+            goto L_0x00ae
+        L_0x00ad:
+            r0 = 0
+        L_0x00ae:
+            if (r0 == 0) goto L_0x00bc
+            r10 = -1082130432(0xffffffffbvar_, float:-1.0)
+            r9.touchX = r10
+            r9.touchY = r10
+            r9.touchOverrideX = r10
+            r9.touchOverrideY = r10
+            r9.animationInProgress = r4
+        L_0x00bc:
+            r9.invalidate()
+        L_0x00bf:
+            return
+        */
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.MessageBackgroundDrawable.draw(android.graphics.Canvas):void");
     }
 }

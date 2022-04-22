@@ -1,16 +1,16 @@
 package org.telegram.ui.Components;
 
-import org.telegram.tgnet.TLRPC;
-import org.telegram.ui.Components.BotKeyboardView;
+import android.view.KeyEvent;
+import org.telegram.ui.ActionBar.ActionBarPopupWindow;
 
-public final /* synthetic */ class ChatActivityEnterView$$ExternalSyntheticLambda51 implements BotKeyboardView.BotKeyboardViewDelegate {
+public final /* synthetic */ class ChatActivityEnterView$$ExternalSyntheticLambda51 implements ActionBarPopupWindow.OnDispatchKeyEventListener {
     public final /* synthetic */ ChatActivityEnterView f$0;
 
     public /* synthetic */ ChatActivityEnterView$$ExternalSyntheticLambda51(ChatActivityEnterView chatActivityEnterView) {
         this.f$0 = chatActivityEnterView;
     }
 
-    public final void didPressedButton(TLRPC.KeyboardButton keyboardButton) {
-        this.f$0.m3736x3efvar_d0(keyboardButton);
+    public final void onDispatchKeyEvent(KeyEvent keyEvent) {
+        this.f$0.lambda$onSendLongClick$33(keyEvent);
     }
 }

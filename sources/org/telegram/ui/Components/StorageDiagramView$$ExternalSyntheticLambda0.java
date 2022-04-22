@@ -13,6 +13,6 @@ public final /* synthetic */ class StorageDiagramView$$ExternalSyntheticLambda0 
     }
 
     public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-        this.f$0.m4446lambda$update$0$orgtelegramuiComponentsStorageDiagramView(this.f$1, valueAnimator);
+        this.f$0.lambda$update$0(this.f$1, valueAnimator);
     }
 }

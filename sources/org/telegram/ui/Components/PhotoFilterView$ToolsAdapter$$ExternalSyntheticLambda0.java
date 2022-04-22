@@ -11,6 +11,6 @@ public final /* synthetic */ class PhotoFilterView$ToolsAdapter$$ExternalSynthet
     }
 
     public final void onClick(View view) {
-        this.f$0.m4193x736e54fc(view);
+        this.f$0.lambda$onCreateViewHolder$1(view);
     }
 }

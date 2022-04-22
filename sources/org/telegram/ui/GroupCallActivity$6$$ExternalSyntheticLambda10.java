@@ -1,17 +1,17 @@
 package org.telegram.ui;
 
-import org.telegram.tgnet.RequestDelegate;
-import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC;
+import org.telegram.tgnet.TLRPC$InputPeer;
+import org.telegram.ui.Components.JoinCallAlert;
 import org.telegram.ui.GroupCallActivity;
 
-public final /* synthetic */ class GroupCallActivity$6$$ExternalSyntheticLambda10 implements RequestDelegate {
-    public static final /* synthetic */ GroupCallActivity$6$$ExternalSyntheticLambda10 INSTANCE = new GroupCallActivity$6$$ExternalSyntheticLambda10();
+public final /* synthetic */ class GroupCallActivity$6$$ExternalSyntheticLambda10 implements JoinCallAlert.JoinCallAlertDelegate {
+    public final /* synthetic */ GroupCallActivity.AnonymousClass6 f$0;
 
-    private /* synthetic */ GroupCallActivity$6$$ExternalSyntheticLambda10() {
+    public /* synthetic */ GroupCallActivity$6$$ExternalSyntheticLambda10(GroupCallActivity.AnonymousClass6 r1) {
+        this.f$0 = r1;
     }
 
-    public final void run(TLObject tLObject, TLRPC.TL_error tL_error) {
-        GroupCallActivity.AnonymousClass6.lambda$onItemClick$8(tLObject, tL_error);
+    public final void didSelectChat(TLRPC$InputPeer tLRPC$InputPeer, boolean z, boolean z2) {
+        this.f$0.lambda$onItemClick$9(tLRPC$InputPeer, z, z2);
     }
 }

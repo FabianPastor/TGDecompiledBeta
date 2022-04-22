@@ -1,21 +1,25 @@
 package org.telegram.messenger;
 
-public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda313 implements Runnable {
-    public final /* synthetic */ MessagesController f$0;
-    public final /* synthetic */ long f$1;
-    public final /* synthetic */ int f$2;
-    public final /* synthetic */ int f$3;
-    public final /* synthetic */ boolean f$4;
+import org.telegram.tgnet.RequestDelegate;
+import org.telegram.tgnet.TLObject;
+import org.telegram.tgnet.TLRPC$Chat;
+import org.telegram.tgnet.TLRPC$TL_error;
+import org.telegram.tgnet.TLRPC$User;
 
-    public /* synthetic */ MessagesController$$ExternalSyntheticLambda313(MessagesController messagesController, long j, int i, int i2, boolean z) {
+public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda313 implements RequestDelegate {
+    public final /* synthetic */ MessagesController f$0;
+    public final /* synthetic */ TLRPC$Chat f$1;
+    public final /* synthetic */ TLRPC$User f$2;
+    public final /* synthetic */ TLRPC$Chat f$3;
+
+    public /* synthetic */ MessagesController$$ExternalSyntheticLambda313(MessagesController messagesController, TLRPC$Chat tLRPC$Chat, TLRPC$User tLRPC$User, TLRPC$Chat tLRPC$Chat2) {
         this.f$0 = messagesController;
-        this.f$1 = j;
-        this.f$2 = i;
-        this.f$3 = i2;
-        this.f$4 = z;
+        this.f$1 = tLRPC$Chat;
+        this.f$2 = tLRPC$User;
+        this.f$3 = tLRPC$Chat2;
     }
 
-    public final void run() {
-        this.f$0.m282xd5bd3a48(this.f$1, this.f$2, this.f$3, this.f$4);
+    public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+        this.f$0.lambda$deleteUserChannelHistory$103(this.f$1, this.f$2, this.f$3, tLObject, tLRPC$TL_error);
     }
 }

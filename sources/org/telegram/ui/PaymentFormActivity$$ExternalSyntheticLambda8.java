@@ -10,6 +10,6 @@ public final /* synthetic */ class PaymentFormActivity$$ExternalSyntheticLambda8
     }
 
     public final void onClick(View view) {
-        this.f$0.m2839lambda$createView$8$orgtelegramuiPaymentFormActivity(view);
+        this.f$0.lambda$createView$19(view);
     }
 }

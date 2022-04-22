@@ -1,26 +1,29 @@
 package org.telegram.ui;
 
-import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC;
+import android.os.Bundle;
+import org.telegram.ui.ActionBar.AlertDialog;
+import org.telegram.ui.ActionBar.BaseFragment;
 
 public final /* synthetic */ class LaunchActivity$$ExternalSyntheticLambda34 implements Runnable {
     public final /* synthetic */ LaunchActivity f$0;
-    public final /* synthetic */ TLObject f$1;
-    public final /* synthetic */ int f$2;
-    public final /* synthetic */ TLRPC.User f$3;
-    public final /* synthetic */ String f$4;
-    public final /* synthetic */ TLRPC.TL_contacts_resolvedPeer f$5;
+    public final /* synthetic */ Bundle f$1;
+    public final /* synthetic */ Long f$2;
+    public final /* synthetic */ int[] f$3;
+    public final /* synthetic */ AlertDialog f$4;
+    public final /* synthetic */ BaseFragment f$5;
+    public final /* synthetic */ int f$6;
 
-    public /* synthetic */ LaunchActivity$$ExternalSyntheticLambda34(LaunchActivity launchActivity, TLObject tLObject, int i, TLRPC.User user, String str, TLRPC.TL_contacts_resolvedPeer tL_contacts_resolvedPeer) {
+    public /* synthetic */ LaunchActivity$$ExternalSyntheticLambda34(LaunchActivity launchActivity, Bundle bundle, Long l, int[] iArr, AlertDialog alertDialog, BaseFragment baseFragment, int i) {
         this.f$0 = launchActivity;
-        this.f$1 = tLObject;
-        this.f$2 = i;
-        this.f$3 = user;
-        this.f$4 = str;
-        this.f$5 = tL_contacts_resolvedPeer;
+        this.f$1 = bundle;
+        this.f$2 = l;
+        this.f$3 = iArr;
+        this.f$4 = alertDialog;
+        this.f$5 = baseFragment;
+        this.f$6 = i;
     }
 
     public final void run() {
-        this.f$0.m2345lambda$runLinkRequest$31$orgtelegramuiLaunchActivity(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5);
+        this.f$0.lambda$runLinkRequest$64(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6);
     }
 }

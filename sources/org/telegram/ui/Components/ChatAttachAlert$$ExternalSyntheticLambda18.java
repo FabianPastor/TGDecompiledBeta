@@ -1,16 +1,17 @@
 package org.telegram.ui.Components;
 
-import android.view.KeyEvent;
-import org.telegram.ui.ActionBar.ActionBarPopupWindow;
+import org.telegram.tgnet.TLRPC$TL_attachMenuBot;
 
-public final /* synthetic */ class ChatAttachAlert$$ExternalSyntheticLambda18 implements ActionBarPopupWindow.OnDispatchKeyEventListener {
+public final /* synthetic */ class ChatAttachAlert$$ExternalSyntheticLambda18 implements Runnable {
     public final /* synthetic */ ChatAttachAlert f$0;
+    public final /* synthetic */ TLRPC$TL_attachMenuBot f$1;
 
-    public /* synthetic */ ChatAttachAlert$$ExternalSyntheticLambda18(ChatAttachAlert chatAttachAlert) {
+    public /* synthetic */ ChatAttachAlert$$ExternalSyntheticLambda18(ChatAttachAlert chatAttachAlert, TLRPC$TL_attachMenuBot tLRPC$TL_attachMenuBot) {
         this.f$0 = chatAttachAlert;
+        this.f$1 = tLRPC$TL_attachMenuBot;
     }
 
-    public final void onDispatchKeyEvent(KeyEvent keyEvent) {
-        this.f$0.m3766lambda$new$13$orgtelegramuiComponentsChatAttachAlert(keyEvent);
+    public final void run() {
+        this.f$0.lambda$onLongClickBotButton$17(this.f$1);
     }
 }

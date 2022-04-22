@@ -1,19 +1,17 @@
 package org.telegram.messenger;
 
-import org.telegram.tgnet.TLRPC;
-
 public final /* synthetic */ class FileLoader$$ExternalSyntheticLambda10 implements Runnable {
     public final /* synthetic */ FileLoader f$0;
-    public final /* synthetic */ TLRPC.Document f$1;
-    public final /* synthetic */ boolean f$2;
+    public final /* synthetic */ boolean f$1;
+    public final /* synthetic */ String f$2;
 
-    public /* synthetic */ FileLoader$$ExternalSyntheticLambda10(FileLoader fileLoader, TLRPC.Document document, boolean z) {
+    public /* synthetic */ FileLoader$$ExternalSyntheticLambda10(FileLoader fileLoader, boolean z, String str) {
         this.f$0 = fileLoader;
-        this.f$1 = document;
-        this.f$2 = z;
+        this.f$1 = z;
+        this.f$2 = str;
     }
 
     public final void run() {
-        this.f$0.m561lambda$removeLoadingVideo$1$orgtelegrammessengerFileLoader(this.f$1, this.f$2);
+        this.f$0.lambda$cancelFileUpload$2(this.f$1, this.f$2);
     }
 }

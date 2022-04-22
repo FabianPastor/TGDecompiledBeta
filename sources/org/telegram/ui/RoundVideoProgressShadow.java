@@ -17,15 +17,15 @@ public class RoundVideoProgressShadow {
         this.shaderPaint.setShader(this.radialGradient);
     }
 
-    public void draw(Canvas canvas, float cx, float cy, float radius, float alpha) {
-        if (((int) cx) + (((int) cy) << 12) + (((int) radius) << 24) != this.lastSizesHash) {
+    public void draw(Canvas canvas, float f, float f2, float f3, float f4) {
+        if (((int) f) + (((int) f2) << 12) + (((int) f3) << 24) != this.lastSizesHash) {
             this.matrix.reset();
-            float s = radius / 100.0f;
-            this.matrix.setTranslate(cx, cy);
-            this.matrix.preScale(s, s);
+            float f5 = f3 / 100.0f;
+            this.matrix.setTranslate(f, f2);
+            this.matrix.preScale(f5, f5);
             this.radialGradient.setLocalMatrix(this.matrix);
         }
-        this.shaderPaint.setAlpha((int) (255.0f * alpha));
-        canvas.drawCircle(cx, cy, radius, this.shaderPaint);
+        this.shaderPaint.setAlpha((int) (f4 * 255.0f));
+        canvas.drawCircle(f, f2, f3, this.shaderPaint);
     }
 }

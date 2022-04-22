@@ -1,15 +1,19 @@
 package org.telegram.ui;
 
-import org.telegram.ui.CountrySelectActivity;
+import org.telegram.tgnet.RequestDelegate;
+import org.telegram.tgnet.TLObject;
+import org.telegram.tgnet.TLRPC$TL_error;
 
-public final /* synthetic */ class PaymentFormActivity$$ExternalSyntheticLambda53 implements CountrySelectActivity.CountrySelectActivityDelegate {
+public final /* synthetic */ class PaymentFormActivity$$ExternalSyntheticLambda53 implements RequestDelegate {
     public final /* synthetic */ PaymentFormActivity f$0;
+    public final /* synthetic */ boolean f$1;
 
-    public /* synthetic */ PaymentFormActivity$$ExternalSyntheticLambda53(PaymentFormActivity paymentFormActivity) {
+    public /* synthetic */ PaymentFormActivity$$ExternalSyntheticLambda53(PaymentFormActivity paymentFormActivity, boolean z) {
         this.f$0 = paymentFormActivity;
+        this.f$1 = z;
     }
 
-    public final void didSelectCountry(CountrySelectActivity.Country country) {
-        this.f$0.m2836lambda$createView$5$orgtelegramuiPaymentFormActivity(country);
+    public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+        this.f$0.lambda$sendSavePassword$41(this.f$1, tLObject, tLRPC$TL_error);
     }
 }

@@ -8,6 +8,6 @@ public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda22
     }
 
     public final void run() {
-        this.f$0.m154lambda$cleanup$34$orgtelegrammessengerMessagesController();
+        this.f$0.lambda$toogleChannelInvitesHistory$227();
     }
 }

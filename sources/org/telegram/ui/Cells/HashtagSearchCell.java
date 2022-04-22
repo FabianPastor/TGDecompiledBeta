@@ -18,13 +18,13 @@ public class HashtagSearchCell extends TextView {
         setTextColor(Theme.getColor("windowBackgroundWhiteBlackText"));
     }
 
-    public void setNeedDivider(boolean value) {
-        this.needDivider = value;
+    public void setNeedDivider(boolean z) {
+        this.needDivider = z;
     }
 
     /* access modifiers changed from: protected */
-    public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        setMeasuredDimension(View.MeasureSpec.getSize(widthMeasureSpec), AndroidUtilities.dp(48.0f) + 1);
+    public void onMeasure(int i, int i2) {
+        setMeasuredDimension(View.MeasureSpec.getSize(i), AndroidUtilities.dp(48.0f) + 1);
     }
 
     /* access modifiers changed from: protected */

@@ -1,17 +1,18 @@
 package org.telegram.ui;
 
-import org.telegram.tgnet.RequestDelegate;
-import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC;
+import android.content.DialogInterface;
+import java.util.ArrayList;
 
-public final /* synthetic */ class ChannelAdminLogActivity$$ExternalSyntheticLambda1 implements RequestDelegate {
+public final /* synthetic */ class ChannelAdminLogActivity$$ExternalSyntheticLambda1 implements DialogInterface.OnClickListener {
     public final /* synthetic */ ChannelAdminLogActivity f$0;
+    public final /* synthetic */ ArrayList f$1;
 
-    public /* synthetic */ ChannelAdminLogActivity$$ExternalSyntheticLambda1(ChannelAdminLogActivity channelAdminLogActivity) {
+    public /* synthetic */ ChannelAdminLogActivity$$ExternalSyntheticLambda1(ChannelAdminLogActivity channelAdminLogActivity, ArrayList arrayList) {
         this.f$0 = channelAdminLogActivity;
+        this.f$1 = arrayList;
     }
 
-    public final void run(TLObject tLObject, TLRPC.TL_error tL_error) {
-        this.f$0.m1590lambda$loadMessages$1$orgtelegramuiChannelAdminLogActivity(tLObject, tL_error);
+    public final void onClick(DialogInterface dialogInterface, int i) {
+        this.f$0.lambda$createMenu$9(this.f$1, dialogInterface, i);
     }
 }

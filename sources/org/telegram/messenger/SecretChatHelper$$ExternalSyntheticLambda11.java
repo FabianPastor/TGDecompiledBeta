@@ -1,18 +1,17 @@
 package org.telegram.messenger;
 
-import android.content.Context;
-import org.telegram.ui.ActionBar.AlertDialog;
+import java.util.ArrayList;
 
 public final /* synthetic */ class SecretChatHelper$$ExternalSyntheticLambda11 implements Runnable {
-    public final /* synthetic */ Context f$0;
-    public final /* synthetic */ AlertDialog f$1;
+    public final /* synthetic */ SecretChatHelper f$0;
+    public final /* synthetic */ ArrayList f$1;
 
-    public /* synthetic */ SecretChatHelper$$ExternalSyntheticLambda11(Context context, AlertDialog alertDialog) {
-        this.f$0 = context;
-        this.f$1 = alertDialog;
+    public /* synthetic */ SecretChatHelper$$ExternalSyntheticLambda11(SecretChatHelper secretChatHelper, ArrayList arrayList) {
+        this.f$0 = secretChatHelper;
+        this.f$1 = arrayList;
     }
 
     public final void run() {
-        SecretChatHelper.lambda$startSecretChat$24(this.f$0, this.f$1);
+        this.f$0.lambda$resendMessages$14(this.f$1);
     }
 }

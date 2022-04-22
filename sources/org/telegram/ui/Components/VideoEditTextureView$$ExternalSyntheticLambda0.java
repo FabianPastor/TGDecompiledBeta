@@ -8,6 +8,6 @@ public final /* synthetic */ class VideoEditTextureView$$ExternalSyntheticLambda
     }
 
     public final void run() {
-        this.f$0.m4516x2235fa0e();
+        this.f$0.lambda$onSurfaceTextureSizeChanged$1();
     }
 }

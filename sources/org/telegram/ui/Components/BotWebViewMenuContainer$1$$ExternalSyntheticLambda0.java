@@ -11,6 +11,6 @@ public final /* synthetic */ class BotWebViewMenuContainer$1$$ExternalSyntheticL
     }
 
     public final void onClick(View view) {
-        this.f$0.m3665xa42evar_(view);
+        this.f$0.lambda$onSetupMainButton$0(view);
     }
 }

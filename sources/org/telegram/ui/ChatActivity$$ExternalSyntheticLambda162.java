@@ -1,15 +1,17 @@
 package org.telegram.ui;
 
-import android.content.DialogInterface;
+import org.telegram.messenger.MessageObject;
 
-public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda162 implements DialogInterface.OnClickListener {
+public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda162 implements Runnable {
     public final /* synthetic */ ChatActivity f$0;
+    public final /* synthetic */ MessageObject f$1;
 
-    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda162(ChatActivity chatActivity) {
+    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda162(ChatActivity chatActivity, MessageObject messageObject) {
         this.f$0 = chatActivity;
+        this.f$1 = messageObject;
     }
 
-    public final void onClick(DialogInterface dialogInterface, int i) {
-        this.f$0.m1744lambda$onFragmentCreate$11$orgtelegramuiChatActivity(dialogInterface, i);
+    public final void run() {
+        this.f$0.lambda$unpinMessage$176(this.f$1);
     }
 }

@@ -14,6 +14,6 @@ public final /* synthetic */ class SearchDownloadsContainer$$ExternalSyntheticLa
     }
 
     public final void run() {
-        this.f$0.m4308xd9db1cd4(this.f$1, this.f$2);
+        this.f$0.lambda$checkFilesExist$2(this.f$1, this.f$2);
     }
 }

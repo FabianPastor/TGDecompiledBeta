@@ -1,15 +1,16 @@
 package org.telegram.ui;
 
-public final /* synthetic */ class ThemeActivity$$ExternalSyntheticLambda8 implements Runnable {
-    public final /* synthetic */ ThemeActivity f$0;
-    public final /* synthetic */ String f$1;
+import com.google.android.gms.internal.mlkit_language_id.zzdp$$ExternalSyntheticBackport0;
+import java.util.Comparator;
+import org.telegram.ui.ActionBar.Theme;
 
-    public /* synthetic */ ThemeActivity$$ExternalSyntheticLambda8(ThemeActivity themeActivity, String str) {
-        this.f$0 = themeActivity;
-        this.f$1 = str;
+public final /* synthetic */ class ThemeActivity$$ExternalSyntheticLambda8 implements Comparator {
+    public static final /* synthetic */ ThemeActivity$$ExternalSyntheticLambda8 INSTANCE = new ThemeActivity$$ExternalSyntheticLambda8();
+
+    private /* synthetic */ ThemeActivity$$ExternalSyntheticLambda8() {
     }
 
-    public final void run() {
-        this.f$0.m3295lambda$updateSunTime$8$orgtelegramuiThemeActivity(this.f$1);
+    public final int compare(Object obj, Object obj2) {
+        return zzdp$$ExternalSyntheticBackport0.m(((Theme.ThemeInfo) obj).sortIndex, ((Theme.ThemeInfo) obj2).sortIndex);
     }
 }

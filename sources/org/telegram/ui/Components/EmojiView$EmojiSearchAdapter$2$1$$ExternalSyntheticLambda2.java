@@ -19,6 +19,6 @@ public final /* synthetic */ class EmojiView$EmojiSearchAdapter$2$1$$ExternalSyn
     }
 
     public final void run() {
-        this.f$0.m3972xb3036a4a(this.f$1, this.f$2, this.f$3);
+        this.f$0.lambda$onClick$0(this.f$1, this.f$2, this.f$3);
     }
 }

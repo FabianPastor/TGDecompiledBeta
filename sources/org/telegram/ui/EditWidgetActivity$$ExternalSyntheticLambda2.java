@@ -14,6 +14,6 @@ public final /* synthetic */ class EditWidgetActivity$$ExternalSyntheticLambda2 
     }
 
     public final void onItemClick(View view, int i) {
-        this.f$0.m2130lambda$createView$1$orgtelegramuiEditWidgetActivity(this.f$1, view, i);
+        this.f$0.lambda$createView$1(this.f$1, view, i);
     }
 }

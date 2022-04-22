@@ -1,18 +1,15 @@
 package org.telegram.ui;
 
-import android.os.Bundle;
 import org.telegram.ui.LoginActivity;
 
 public final /* synthetic */ class LoginActivity$LoginActivitySmsView$$ExternalSyntheticLambda14 implements Runnable {
     public final /* synthetic */ LoginActivity.LoginActivitySmsView f$0;
-    public final /* synthetic */ Bundle f$1;
 
-    public /* synthetic */ LoginActivity$LoginActivitySmsView$$ExternalSyntheticLambda14(LoginActivity.LoginActivitySmsView loginActivitySmsView, Bundle bundle) {
+    public /* synthetic */ LoginActivity$LoginActivitySmsView$$ExternalSyntheticLambda14(LoginActivity.LoginActivitySmsView loginActivitySmsView) {
         this.f$0 = loginActivitySmsView;
-        this.f$1 = bundle;
     }
 
     public final void run() {
-        this.f$0.m2539x8fa37ab9(this.f$1);
+        this.f$0.lambda$shakeWrongCode$31();
     }
 }

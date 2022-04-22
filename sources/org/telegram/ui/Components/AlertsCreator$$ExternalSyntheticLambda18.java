@@ -1,15 +1,18 @@
 package org.telegram.ui.Components;
 
-import org.telegram.messenger.LocaleController;
-import org.telegram.ui.Components.NumberPicker;
+import android.content.DialogInterface;
+import org.telegram.messenger.MessagesStorage;
 
-public final /* synthetic */ class AlertsCreator$$ExternalSyntheticLambda18 implements NumberPicker.Formatter {
-    public static final /* synthetic */ AlertsCreator$$ExternalSyntheticLambda18 INSTANCE = new AlertsCreator$$ExternalSyntheticLambda18();
+public final /* synthetic */ class AlertsCreator$$ExternalSyntheticLambda18 implements DialogInterface.OnClickListener {
+    public final /* synthetic */ MessagesStorage.BooleanCallback f$0;
+    public final /* synthetic */ boolean[] f$1;
 
-    private /* synthetic */ AlertsCreator$$ExternalSyntheticLambda18() {
+    public /* synthetic */ AlertsCreator$$ExternalSyntheticLambda18(MessagesStorage.BooleanCallback booleanCallback, boolean[] zArr) {
+        this.f$0 = booleanCallback;
+        this.f$1 = zArr;
     }
 
-    public final String format(int i) {
-        return LocaleController.getString("NotificationsFrequencyDivider", NUM);
+    public final void onClick(DialogInterface dialogInterface, int i) {
+        this.f$0.run(this.f$1[0]);
     }
 }

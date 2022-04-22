@@ -1,28 +1,15 @@
 package org.telegram.ui;
 
-import java.util.ArrayList;
-import org.telegram.tgnet.TLRPC;
+import android.view.View;
 
-public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda93 implements Runnable {
+public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda93 implements View.OnLongClickListener {
     public final /* synthetic */ ChatActivity f$0;
-    public final /* synthetic */ TLRPC.messages_Messages f$1;
-    public final /* synthetic */ long f$2;
-    public final /* synthetic */ int f$3;
-    public final /* synthetic */ ChatActivity f$4;
-    public final /* synthetic */ int f$5;
-    public final /* synthetic */ ArrayList f$6;
 
-    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda93(ChatActivity chatActivity, TLRPC.messages_Messages messages_messages, long j, int i, ChatActivity chatActivity2, int i2, ArrayList arrayList) {
+    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda93(ChatActivity chatActivity) {
         this.f$0 = chatActivity;
-        this.f$1 = messages_messages;
-        this.f$2 = j;
-        this.f$3 = i;
-        this.f$4 = chatActivity2;
-        this.f$5 = i2;
-        this.f$6 = arrayList;
     }
 
-    public final void run() {
-        this.f$0.m1772xb2cf5cc3(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6);
+    public final boolean onLongClick(View view) {
+        return this.f$0.lambda$createView$53(view);
     }
 }

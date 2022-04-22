@@ -10,6 +10,6 @@ public final /* synthetic */ class FilterUsersActivity$$ExternalSyntheticLambda0
     }
 
     public final void onClick(View view) {
-        this.f$0.m2160lambda$createView$0$orgtelegramuiFilterUsersActivity(view);
+        this.f$0.lambda$createView$2(view);
     }
 }

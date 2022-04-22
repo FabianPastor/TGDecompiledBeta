@@ -10,6 +10,6 @@ public final /* synthetic */ class QrActivity$$ExternalSyntheticLambda2 implemen
     }
 
     public final void onClick(View view) {
-        this.f$0.m3196lambda$createView$1$orgtelegramuiQrActivity(view);
+        this.f$0.lambda$createView$1(view);
     }
 }

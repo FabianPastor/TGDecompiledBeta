@@ -13,7 +13,7 @@ public final /* synthetic */ class AudioPlayerAlert$CoverContainer$$ExternalSynt
     }
 
     public final void didSetImage(ImageReceiver imageReceiver, boolean z, boolean z2, boolean z3) {
-        this.f$0.m3610x457889fd(this.f$1, imageReceiver, z, z2, z3);
+        this.f$0.lambda$new$0(this.f$1, imageReceiver, z, z2, z3);
     }
 
     public /* synthetic */ void onAnimationReady(ImageReceiver imageReceiver) {

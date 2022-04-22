@@ -13,6 +13,6 @@ public final /* synthetic */ class MediaController$2$$ExternalSyntheticLambda1 i
     }
 
     public final void run() {
-        this.f$0.m677lambda$run$0$orgtelegrammessengerMediaController$2(this.f$1);
+        this.f$0.lambda$run$0(this.f$1);
     }
 }

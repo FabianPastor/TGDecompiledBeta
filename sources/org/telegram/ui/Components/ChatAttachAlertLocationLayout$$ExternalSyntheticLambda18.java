@@ -1,22 +1,15 @@
 package org.telegram.ui.Components;
 
-import android.view.View;
-import org.telegram.ui.ActionBar.Theme;
-import org.telegram.ui.ChatActivity;
-import org.telegram.ui.Components.RecyclerListView;
+import org.telegram.messenger.MessagesStorage;
 
-public final /* synthetic */ class ChatAttachAlertLocationLayout$$ExternalSyntheticLambda18 implements RecyclerListView.OnItemClickListener {
+public final /* synthetic */ class ChatAttachAlertLocationLayout$$ExternalSyntheticLambda18 implements MessagesStorage.IntCallback {
     public final /* synthetic */ ChatAttachAlertLocationLayout f$0;
-    public final /* synthetic */ ChatActivity f$1;
-    public final /* synthetic */ Theme.ResourcesProvider f$2;
 
-    public /* synthetic */ ChatAttachAlertLocationLayout$$ExternalSyntheticLambda18(ChatAttachAlertLocationLayout chatAttachAlertLocationLayout, ChatActivity chatActivity, Theme.ResourcesProvider resourcesProvider) {
+    public /* synthetic */ ChatAttachAlertLocationLayout$$ExternalSyntheticLambda18(ChatAttachAlertLocationLayout chatAttachAlertLocationLayout) {
         this.f$0 = chatAttachAlertLocationLayout;
-        this.f$1 = chatActivity;
-        this.f$2 = resourcesProvider;
     }
 
-    public final void onItemClick(View view, int i) {
-        this.f$0.m3847x6f6db47c(this.f$1, this.f$2, view, i);
+    public final void run(int i) {
+        this.f$0.lambda$openShareLiveLocation$16(i);
     }
 }

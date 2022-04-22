@@ -10,6 +10,6 @@ public final /* synthetic */ class StickerEmptyView$$ExternalSyntheticLambda0 im
     }
 
     public final void onClick(View view) {
-        this.f$0.m4407lambda$new$0$orgtelegramuiComponentsStickerEmptyView(view);
+        this.f$0.lambda$new$0(view);
     }
 }

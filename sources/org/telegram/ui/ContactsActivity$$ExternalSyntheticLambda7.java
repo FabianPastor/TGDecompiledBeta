@@ -10,6 +10,6 @@ public final /* synthetic */ class ContactsActivity$$ExternalSyntheticLambda7 im
     }
 
     public final void run(int i) {
-        this.f$0.m2039lambda$onResume$5$orgtelegramuiContactsActivity(i);
+        this.f$0.lambda$onResume$5(i);
     }
 }

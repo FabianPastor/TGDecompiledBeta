@@ -12,6 +12,6 @@ public final /* synthetic */ class PrivateVideoPreviewDialog$$ExternalSyntheticL
     }
 
     public final void onClick(View view) {
-        this.f$0.m4569x1aab5758(this.f$1, view);
+        this.f$0.lambda$new$1(this.f$1, view);
     }
 }

@@ -1,22 +1,17 @@
 package org.telegram.ui;
 
-import android.content.DialogInterface;
-import org.telegram.messenger.MessagesController;
+import org.telegram.tgnet.TLObject;
 
-public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda174 implements DialogInterface.OnClickListener {
+public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda174 implements Runnable {
     public final /* synthetic */ ChatActivity f$0;
-    public final /* synthetic */ MessagesController f$1;
-    public final /* synthetic */ CharSequence f$2;
-    public final /* synthetic */ boolean f$3;
+    public final /* synthetic */ TLObject f$1;
 
-    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda174(ChatActivity chatActivity, MessagesController messagesController, CharSequence charSequence, boolean z) {
+    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda174(ChatActivity chatActivity, TLObject tLObject) {
         this.f$0 = chatActivity;
-        this.f$1 = messagesController;
-        this.f$2 = charSequence;
-        this.f$3 = z;
+        this.f$1 = tLObject;
     }
 
-    public final void onClick(DialogInterface dialogInterface, int i) {
-        this.f$0.m1803lambda$searchLinks$94$orgtelegramuiChatActivity(this.f$1, this.f$2, this.f$3, dialogInterface, i);
+    public final void run() {
+        this.f$0.lambda$createMenu$147(this.f$1);
     }
 }

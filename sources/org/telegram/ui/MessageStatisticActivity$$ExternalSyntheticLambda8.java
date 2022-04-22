@@ -10,7 +10,7 @@ public final /* synthetic */ class MessageStatisticActivity$$ExternalSyntheticLa
     }
 
     public final void didSetColor() {
-        this.f$0.m2624x8921fvar_();
+        this.f$0.lambda$getThemeDescriptions$9();
     }
 
     public /* synthetic */ void onAnimationProgress(float f) {

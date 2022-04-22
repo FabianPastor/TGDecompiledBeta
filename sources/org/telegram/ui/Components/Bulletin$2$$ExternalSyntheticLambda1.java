@@ -10,6 +10,6 @@ public final /* synthetic */ class Bulletin$2$$ExternalSyntheticLambda1 implemen
     }
 
     public final void run() {
-        this.f$0.m3686lambda$onLayoutChange$0$orgtelegramuiComponentsBulletin$2();
+        this.f$0.lambda$onLayoutChange$0();
     }
 }

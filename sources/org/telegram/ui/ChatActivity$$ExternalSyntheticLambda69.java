@@ -1,17 +1,15 @@
 package org.telegram.ui;
 
-import org.telegram.messenger.MessageObject;
+import android.view.View;
 
-public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda69 implements Runnable {
+public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda69 implements View.OnClickListener {
     public final /* synthetic */ ChatActivity f$0;
-    public final /* synthetic */ MessageObject f$1;
 
-    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda69(ChatActivity chatActivity, MessageObject messageObject) {
+    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda69(ChatActivity chatActivity) {
         this.f$0 = chatActivity;
-        this.f$1 = messageObject;
     }
 
-    public final void run() {
-        this.f$0.m1808lambda$sendSecretMessageRead$101$orgtelegramuiChatActivity(this.f$1);
+    public final void onClick(View view) {
+        this.f$0.lambda$createView$72(view);
     }
 }

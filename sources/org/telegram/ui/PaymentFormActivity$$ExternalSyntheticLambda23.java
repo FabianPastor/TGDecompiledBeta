@@ -1,16 +1,15 @@
 package org.telegram.ui;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
+import android.view.MotionEvent;
+import android.view.View;
 
-public final /* synthetic */ class PaymentFormActivity$$ExternalSyntheticLambda23 implements OnCompleteListener {
-    public final /* synthetic */ PaymentFormActivity f$0;
+public final /* synthetic */ class PaymentFormActivity$$ExternalSyntheticLambda23 implements View.OnTouchListener {
+    public static final /* synthetic */ PaymentFormActivity$$ExternalSyntheticLambda23 INSTANCE = new PaymentFormActivity$$ExternalSyntheticLambda23();
 
-    public /* synthetic */ PaymentFormActivity$$ExternalSyntheticLambda23(PaymentFormActivity paymentFormActivity) {
-        this.f$0 = paymentFormActivity;
+    private /* synthetic */ PaymentFormActivity$$ExternalSyntheticLambda23() {
     }
 
-    public final void onComplete(Task task) {
-        this.f$0.m2841lambda$initGooglePay$35$orgtelegramuiPaymentFormActivity(task);
+    public final boolean onTouch(View view, MotionEvent motionEvent) {
+        return PaymentFormActivity.lambda$createView$10(view, motionEvent);
     }
 }

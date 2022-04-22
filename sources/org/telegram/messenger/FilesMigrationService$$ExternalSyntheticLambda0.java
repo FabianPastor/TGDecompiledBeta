@@ -10,6 +10,6 @@ public final /* synthetic */ class FilesMigrationService$$ExternalSyntheticLambd
     }
 
     public final void run() {
-        this.f$0.m605x13efee05(this.f$1);
+        this.f$0.lambda$updateProgress$1(this.f$1);
     }
 }

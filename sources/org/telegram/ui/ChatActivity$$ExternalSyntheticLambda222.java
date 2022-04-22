@@ -1,15 +1,17 @@
 package org.telegram.ui;
 
-import android.animation.ValueAnimator;
+import org.telegram.ui.Components.AlertsCreator;
 
-public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda222 implements ValueAnimator.AnimatorUpdateListener {
+public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda222 implements AlertsCreator.ScheduleDatePickerDelegate {
     public final /* synthetic */ ChatActivity f$0;
+    public final /* synthetic */ Object f$1;
 
-    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda222(ChatActivity chatActivity) {
+    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda222(ChatActivity chatActivity, Object obj) {
         this.f$0 = chatActivity;
+        this.f$1 = obj;
     }
 
-    public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-        this.f$0.m1840xe77135d2(valueAnimator);
+    public final void didSelectDate(boolean z, int i) {
+        this.f$0.lambda$createView$44(this.f$1, z, i);
     }
 }

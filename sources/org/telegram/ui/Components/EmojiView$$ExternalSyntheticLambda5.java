@@ -1,14 +1,13 @@
 package org.telegram.ui.Components;
 
-import android.view.ViewTreeObserver;
+public final /* synthetic */ class EmojiView$$ExternalSyntheticLambda5 implements Runnable {
+    public final /* synthetic */ EmojiView f$0;
 
-public final /* synthetic */ class EmojiView$$ExternalSyntheticLambda5 implements ViewTreeObserver.OnScrollChangedListener {
-    public static final /* synthetic */ EmojiView$$ExternalSyntheticLambda5 INSTANCE = new EmojiView$$ExternalSyntheticLambda5();
-
-    private /* synthetic */ EmojiView$$ExternalSyntheticLambda5() {
+    public /* synthetic */ EmojiView$$ExternalSyntheticLambda5(EmojiView emojiView) {
+        this.f$0 = emojiView;
     }
 
-    public final void onScrollChanged() {
-        EmojiView.lambda$static$0();
+    public final void run() {
+        this.f$0.lambda$onAttachedToWindow$10();
     }
 }

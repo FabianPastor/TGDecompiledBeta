@@ -16,6 +16,6 @@ public final /* synthetic */ class ChatActivityEnterView$12$$ExternalSyntheticLa
     }
 
     public final void run() {
-        this.f$0.m3745x2199cCLASSNAME(this.f$1, this.f$2);
+        this.f$0.lambda$editPhoto$3(this.f$1, this.f$2);
     }
 }

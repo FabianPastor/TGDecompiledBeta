@@ -1,19 +1,17 @@
 package org.telegram.ui.Components;
 
-import org.telegram.ui.Components.NumberPicker;
+import android.content.DialogInterface;
+import org.telegram.ui.LanguageSelectActivity;
+import org.telegram.ui.LaunchActivity;
 
-public final /* synthetic */ class AlertsCreator$$ExternalSyntheticLambda31 implements NumberPicker.OnValueChangeListener {
-    public final /* synthetic */ NumberPicker f$0;
-    public final /* synthetic */ NumberPicker f$1;
-    public final /* synthetic */ NumberPicker f$2;
+public final /* synthetic */ class AlertsCreator$$ExternalSyntheticLambda31 implements DialogInterface.OnClickListener {
+    public final /* synthetic */ LaunchActivity f$0;
 
-    public /* synthetic */ AlertsCreator$$ExternalSyntheticLambda31(NumberPicker numberPicker, NumberPicker numberPicker2, NumberPicker numberPicker3) {
-        this.f$0 = numberPicker;
-        this.f$1 = numberPicker2;
-        this.f$2 = numberPicker3;
+    public /* synthetic */ AlertsCreator$$ExternalSyntheticLambda31(LaunchActivity launchActivity) {
+        this.f$0 = launchActivity;
     }
 
-    public final void onValueChange(NumberPicker numberPicker, int i, int i2) {
-        AlertsCreator.updateDayPicker(this.f$0, this.f$1, this.f$2);
+    public final void onClick(DialogInterface dialogInterface, int i) {
+        this.f$0.lambda$runLinkRequest$54(new LanguageSelectActivity());
     }
 }

@@ -8,6 +8,6 @@ public final /* synthetic */ class ChatActivityEnterView$$ExternalSyntheticLambd
     }
 
     public final void run() {
-        this.f$0.openWebViewMenu();
+        this.f$0.lambda$doneEditingMessage$40();
     }
 }

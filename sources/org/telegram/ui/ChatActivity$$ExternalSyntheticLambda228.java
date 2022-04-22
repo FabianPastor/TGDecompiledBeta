@@ -1,18 +1,16 @@
 package org.telegram.ui;
 
-import android.content.Context;
-import android.view.View;
+import org.telegram.ui.Components.PopupSwipeBackLayout;
+import org.telegram.ui.Components.ReactionsContainerLayout;
 
-public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda228 implements View.OnClickListener {
-    public final /* synthetic */ ChatActivity f$0;
-    public final /* synthetic */ Context f$1;
+public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda228 implements PopupSwipeBackLayout.OnSwipeBackProgressListener {
+    public final /* synthetic */ ReactionsContainerLayout f$0;
 
-    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda228(ChatActivity chatActivity, Context context) {
-        this.f$0 = chatActivity;
-        this.f$1 = context;
+    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda228(ReactionsContainerLayout reactionsContainerLayout) {
+        this.f$0 = reactionsContainerLayout;
     }
 
-    public final void onClick(View view) {
-        this.f$0.m1677lambda$createView$36$orgtelegramuiChatActivity(this.f$1, view);
+    public final void onSwipeBackProgress(PopupSwipeBackLayout popupSwipeBackLayout, float f, float f2) {
+        ChatActivity.lambda$createMenu$169(this.f$0, popupSwipeBackLayout, f, f2);
     }
 }

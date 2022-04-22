@@ -10,6 +10,6 @@ public final /* synthetic */ class PhotoFilterView$1$$ExternalSyntheticLambda0 i
     }
 
     public final void run() {
-        this.f$0.m4191x9475d40a();
+        this.f$0.lambda$onSurfaceTextureSizeChanged$0();
     }
 }

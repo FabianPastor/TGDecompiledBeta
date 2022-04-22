@@ -1,15 +1,15 @@
 package org.telegram.ui.Components;
 
-public final /* synthetic */ class BotWebViewMenuContainer$$ExternalSyntheticLambda4 implements Runnable {
-    public final /* synthetic */ BotWebViewMenuContainer f$0;
-    public final /* synthetic */ Runnable f$1;
+import androidx.core.util.Consumer;
 
-    public /* synthetic */ BotWebViewMenuContainer$$ExternalSyntheticLambda4(BotWebViewMenuContainer botWebViewMenuContainer, Runnable runnable) {
+public final /* synthetic */ class BotWebViewMenuContainer$$ExternalSyntheticLambda4 implements Consumer {
+    public final /* synthetic */ BotWebViewMenuContainer f$0;
+
+    public /* synthetic */ BotWebViewMenuContainer$$ExternalSyntheticLambda4(BotWebViewMenuContainer botWebViewMenuContainer) {
         this.f$0 = botWebViewMenuContainer;
-        this.f$1 = runnable;
     }
 
-    public final void run() {
-        this.f$0.m3650x32500d8(this.f$1);
+    public final void accept(Object obj) {
+        this.f$0.lambda$onDismiss$17((Float) obj);
     }
 }

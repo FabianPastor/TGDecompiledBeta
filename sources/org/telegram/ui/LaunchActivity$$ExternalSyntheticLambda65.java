@@ -1,22 +1,21 @@
 package org.telegram.ui;
 
+import org.telegram.messenger.AndroidUtilities;
 import org.telegram.tgnet.RequestDelegate;
 import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC;
+import org.telegram.tgnet.TLRPC$TL_error;
 import org.telegram.ui.ActionBar.AlertDialog;
 
 public final /* synthetic */ class LaunchActivity$$ExternalSyntheticLambda65 implements RequestDelegate {
-    public final /* synthetic */ LaunchActivity f$0;
-    public final /* synthetic */ int f$1;
-    public final /* synthetic */ AlertDialog f$2;
+    public final /* synthetic */ AlertDialog f$0;
+    public final /* synthetic */ ActionIntroActivity f$1;
 
-    public /* synthetic */ LaunchActivity$$ExternalSyntheticLambda65(LaunchActivity launchActivity, int i, AlertDialog alertDialog) {
-        this.f$0 = launchActivity;
-        this.f$1 = i;
-        this.f$2 = alertDialog;
+    public /* synthetic */ LaunchActivity$$ExternalSyntheticLambda65(AlertDialog alertDialog, ActionIntroActivity actionIntroActivity) {
+        this.f$0 = alertDialog;
+        this.f$1 = actionIntroActivity;
     }
 
-    public final void run(TLObject tLObject, TLRPC.TL_error tL_error) {
-        this.f$0.m2357lambda$runLinkRequest$44$orgtelegramuiLaunchActivity(this.f$1, this.f$2, tLObject, tL_error);
+    public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+        AndroidUtilities.runOnUIThread(new LaunchActivity$$ExternalSyntheticLambda23(this.f$0, tLObject, this.f$1, tLRPC$TL_error));
     }
 }

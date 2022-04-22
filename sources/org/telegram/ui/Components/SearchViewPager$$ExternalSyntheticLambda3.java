@@ -11,6 +11,6 @@ public final /* synthetic */ class SearchViewPager$$ExternalSyntheticLambda3 imp
     }
 
     public final void didSelectDialogs(DialogsActivity dialogsActivity, ArrayList arrayList, CharSequence charSequence, boolean z) {
-        this.f$0.m4319xe499fab6(dialogsActivity, arrayList, charSequence, z);
+        this.f$0.lambda$onActionBarItemClick$3(dialogsActivity, arrayList, charSequence, z);
     }
 }

@@ -1,22 +1,21 @@
 package org.telegram.messenger;
 
-import android.util.SparseIntArray;
-import org.telegram.messenger.support.LongSparseIntArray;
+import java.util.ArrayList;
 
 public final /* synthetic */ class MessagesStorage$$ExternalSyntheticLambda57 implements Runnable {
     public final /* synthetic */ MessagesStorage f$0;
-    public final /* synthetic */ LongSparseIntArray f$1;
-    public final /* synthetic */ LongSparseIntArray f$2;
-    public final /* synthetic */ SparseIntArray f$3;
+    public final /* synthetic */ int f$1;
+    public final /* synthetic */ ArrayList f$2;
+    public final /* synthetic */ long f$3;
 
-    public /* synthetic */ MessagesStorage$$ExternalSyntheticLambda57(MessagesStorage messagesStorage, LongSparseIntArray longSparseIntArray, LongSparseIntArray longSparseIntArray2, SparseIntArray sparseIntArray) {
+    public /* synthetic */ MessagesStorage$$ExternalSyntheticLambda57(MessagesStorage messagesStorage, int i, ArrayList arrayList, long j) {
         this.f$0 = messagesStorage;
-        this.f$1 = longSparseIntArray;
-        this.f$2 = longSparseIntArray2;
-        this.f$3 = sparseIntArray;
+        this.f$1 = i;
+        this.f$2 = arrayList;
+        this.f$3 = j;
     }
 
     public final void run() {
-        this.f$0.m948x834d6a50(this.f$1, this.f$2, this.f$3);
+        this.f$0.lambda$loadPendingTasks$25(this.f$1, this.f$2, this.f$3);
     }
 }
