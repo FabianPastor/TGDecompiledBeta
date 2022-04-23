@@ -56,7 +56,7 @@ public class PhoneRule {
             }
         }
         if (str2 != null && !z) {
-            sb.insert(0, String.format("%s ", new Object[]{str2}));
+            sb.insert(0, str2 + " ");
         } else if (str3 != null && !z2) {
             sb.insert(0, str3);
         }

@@ -10,6 +10,6 @@ public final /* synthetic */ class MessagesStorage$$ExternalSyntheticLambda31 im
     }
 
     public final void run() {
-        this.f$0.lambda$clearWidgetDialogs$134(this.f$1);
+        this.f$0.lambda$clearWidgetDialogs$126(this.f$1);
     }
 }

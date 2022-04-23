@@ -1,23 +1,15 @@
 package org.telegram.ui.Components;
 
-import androidx.recyclerview.widget.RecyclerView;
-import org.telegram.messenger.MessagesController;
-import org.telegram.tgnet.TLRPC$ChatFull;
-import org.telegram.tgnet.TLRPC$Peer;
-import org.telegram.ui.Components.SenderSelectPopup;
+import org.telegram.ui.Components.AlertsCreator;
 
-public final /* synthetic */ class ChatActivityEnterView$$ExternalSyntheticLambda52 implements SenderSelectPopup.OnSelectCallback {
+public final /* synthetic */ class ChatActivityEnterView$$ExternalSyntheticLambda52 implements AlertsCreator.ScheduleDatePickerDelegate {
     public final /* synthetic */ ChatActivityEnterView f$0;
-    public final /* synthetic */ TLRPC$ChatFull f$1;
-    public final /* synthetic */ MessagesController f$2;
 
-    public /* synthetic */ ChatActivityEnterView$$ExternalSyntheticLambda52(ChatActivityEnterView chatActivityEnterView, TLRPC$ChatFull tLRPC$ChatFull, MessagesController messagesController) {
+    public /* synthetic */ ChatActivityEnterView$$ExternalSyntheticLambda52(ChatActivityEnterView chatActivityEnterView) {
         this.f$0 = chatActivityEnterView;
-        this.f$1 = tLRPC$ChatFull;
-        this.f$2 = messagesController;
     }
 
-    public final void onPeerSelected(RecyclerView recyclerView, SenderSelectPopup.SenderView senderView, TLRPC$Peer tLRPC$Peer) {
-        this.f$0.lambda$new$12(this.f$1, this.f$2, recyclerView, senderView, tLRPC$Peer);
+    public final void didSelectDate(boolean z, int i) {
+        this.f$0.sendMessageInternal(z, i);
     }
 }

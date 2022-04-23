@@ -172,17 +172,19 @@ public class ReactionsLayoutInBubble {
         this.isEmpty = this.reactionButtons.isEmpty();
     }
 
-    public void measure(int i) {
+    public void measure(int i, int i2) {
+        int i3 = i;
+        int i4 = i2;
         this.height = 0;
         this.width = 0;
         this.positionOffsetY = 0;
         this.totalHeight = 0;
         if (!this.isEmpty) {
-            int i2 = 0;
-            int i3 = 0;
-            int i4 = 0;
-            for (int i5 = 0; i5 < this.reactionButtons.size(); i5++) {
-                ReactionButton reactionButton = this.reactionButtons.get(i5);
+            int i5 = 0;
+            int i6 = 0;
+            int i7 = 0;
+            for (int i8 = 0; i8 < this.reactionButtons.size(); i8++) {
+                ReactionButton reactionButton = this.reactionButtons.get(i8);
                 if (this.isSmall) {
                     reactionButton.width = AndroidUtilities.dp(14.0f);
                     reactionButton.height = AndroidUtilities.dp(14.0f);
@@ -197,20 +199,47 @@ public class ReactionsLayoutInBubble {
                     }
                     reactionButton.height = AndroidUtilities.dp(26.0f);
                 }
-                if (reactionButton.width + i2 > i) {
-                    i4 += reactionButton.height + AndroidUtilities.dp(4.0f);
-                    i2 = 0;
+                if (reactionButton.width + i5 > i3) {
+                    i6 += reactionButton.height + AndroidUtilities.dp(4.0f);
+                    i5 = 0;
                 }
-                reactionButton.x = i2;
-                reactionButton.y = i4;
-                i2 += reactionButton.width + AndroidUtilities.dp(4.0f);
-                if (i2 > i3) {
-                    i3 = i2;
+                reactionButton.x = i5;
+                reactionButton.y = i6;
+                i5 += reactionButton.width + AndroidUtilities.dp(4.0f);
+                if (i5 > i7) {
+                    i7 = i5;
                 }
             }
-            this.lastLineX = i2;
-            this.width = i3;
-            this.height = i4 + (this.reactionButtons.size() == 0 ? 0 : AndroidUtilities.dp(26.0f));
+            if (i4 == 5 && !this.reactionButtons.isEmpty()) {
+                int i9 = this.reactionButtons.get(0).y;
+                int i10 = 0;
+                for (int i11 = 0; i11 < this.reactionButtons.size(); i11++) {
+                    if (this.reactionButtons.get(i11).y != i9) {
+                        int i12 = i11 - 1;
+                        int i13 = (i3 - this.reactionButtons.get(i12).x) + this.reactionButtons.get(i12).width;
+                        while (i10 < i11) {
+                            this.reactionButtons.get(i10).x += i13;
+                            i10++;
+                        }
+                        i10 = i11;
+                    }
+                }
+                int size = this.reactionButtons.size() - 1;
+                if (i10 != size) {
+                    int i14 = i3 - (this.reactionButtons.get(size).x + this.reactionButtons.get(size).width);
+                    while (i10 <= size) {
+                        this.reactionButtons.get(i10).x += i14;
+                        i10++;
+                    }
+                }
+            }
+            this.lastLineX = i5;
+            if (i4 == 5) {
+                this.width = i3;
+            } else {
+                this.width = i7;
+            }
+            this.height = i6 + (this.reactionButtons.size() == 0 ? 0 : AndroidUtilities.dp(26.0f));
             this.drawServiceShaderBackground = false;
         }
     }
@@ -326,7 +355,7 @@ public class ReactionsLayoutInBubble {
                         if (remove.avatarsDarawable == null) {
                             remove.setUsers(new ArrayList());
                         }
-                        reactionButton.avatarsDarawable.animateFromState(remove.avatarsDarawable, this.currentAccount);
+                        reactionButton.avatarsDarawable.animateFromState(remove.avatarsDarawable, this.currentAccount, false);
                     }
                 }
             } else {
@@ -464,7 +493,7 @@ public class ReactionsLayoutInBubble {
                 this.serviceBackgroundColor = 0;
             }
             if (!(this.reaction == null || (tLRPC$TL_availableReaction = MediaDataController.getInstance(ReactionsLayoutInBubble.this.currentAccount).getReactionsMap().get(this.reaction)) == null)) {
-                this.imageReceiver.setImage(ImageLocation.getForDocument(tLRPC$TL_availableReaction.static_icon), "40_40", DocumentObject.getSvgThumb(tLRPC$TL_availableReaction.static_icon, "windowBackgroundGray", 1.0f), "webp", tLRPC$TL_availableReaction, 1);
+                this.imageReceiver.setImage(ImageLocation.getForDocument(tLRPC$TL_availableReaction.center_icon), "40_40_lastframe", DocumentObject.getSvgThumb(tLRPC$TL_availableReaction.static_icon, "windowBackgroundGray", 1.0f), "webp", tLRPC$TL_availableReaction, 1);
             }
             this.counterDrawable.setSize(AndroidUtilities.dp(26.0f), AndroidUtilities.dp(100.0f));
             this.counterDrawable.textPaint = ReactionsLayoutInBubble.textPaint;
@@ -528,6 +557,7 @@ public class ReactionsLayoutInBubble {
                 canvas.save();
                 canvas.translate((float) (AndroidUtilities.dp(10.0f) + AndroidUtilities.dp(20.0f) + AndroidUtilities.dp(2.0f)), 0.0f);
                 this.avatarsDarawable.setAlpha(f2);
+                this.avatarsDarawable.setTransitionProgress(f);
                 this.avatarsDarawable.onDraw(canvas);
                 canvas.restore();
             }

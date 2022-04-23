@@ -10,6 +10,6 @@ public final /* synthetic */ class ActionBarMenuItem$$ExternalSyntheticLambda1 i
     }
 
     public final void onClick(View view) {
-        this.f$0.lambda$addSubItem$4(view);
+        this.f$0.lambda$createPopupLayout$3(view);
     }
 }

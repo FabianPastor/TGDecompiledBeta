@@ -197,7 +197,12 @@ public class IntroActivity extends BaseFragment implements NotificationCenter.No
                 Intro.setPage(IntroActivity.this.currentViewPagerPage);
                 Intro.setDate(((float) (System.currentTimeMillis() - IntroActivity.this.currentDate)) / 1000.0f);
                 Intro.onDrawFrame(0);
-                IntroActivity.this.eglThread.egl10.eglSwapBuffers(IntroActivity.this.eglThread.eglDisplay, IntroActivity.this.eglThread.eglSurface);
+                if (IntroActivity.this.eglThread != null && IntroActivity.this.eglThread.isAlive() && IntroActivity.this.eglThread.eglDisplay != null && IntroActivity.this.eglThread.eglSurface != null) {
+                    try {
+                        IntroActivity.this.eglThread.egl10.eglSwapBuffers(IntroActivity.this.eglThread.eglDisplay, IntroActivity.this.eglThread.eglSurface);
+                    } catch (Exception unused) {
+                    }
+                }
             }
 
             public void onSurfaceTextureSizeChanged(SurfaceTexture surfaceTexture, int i, int i2) {

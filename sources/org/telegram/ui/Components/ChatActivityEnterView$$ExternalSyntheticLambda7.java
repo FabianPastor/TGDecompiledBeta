@@ -12,6 +12,6 @@ public final /* synthetic */ class ChatActivityEnterView$$ExternalSyntheticLambd
     }
 
     public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-        this.f$0.lambda$setStickersExpanded$50(this.f$1, valueAnimator);
+        this.f$0.lambda$setStickersExpanded$54(this.f$1, valueAnimator);
     }
 }

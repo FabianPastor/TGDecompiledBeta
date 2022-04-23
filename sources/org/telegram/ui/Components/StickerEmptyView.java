@@ -212,6 +212,7 @@ public class StickerEmptyView extends FrameLayout implements NotificationCenter.
         TLRPC$TL_messages_stickerSet tLRPC$TL_messages_stickerSet;
         String str;
         TLRPC$Document tLRPC$Document;
+        int i;
         TLRPC$Document tLRPC$Document2 = null;
         if (this.stickerType == 2) {
             tLRPC$Document = MediaDataController.getInstance(this.currentAccount).getEmojiAnimatedSticker("👍");
@@ -222,7 +223,7 @@ public class StickerEmptyView extends FrameLayout implements NotificationCenter.
             if (stickerSetByName == null) {
                 stickerSetByName = MediaDataController.getInstance(this.currentAccount).getStickerSetByEmojiOrName("tg_placeholders_android");
             }
-            if (stickerSetByName != null && stickerSetByName.documents.size() >= 2) {
+            if (stickerSetByName != null && (i = this.stickerType) >= 0 && i < stickerSetByName.documents.size()) {
                 tLRPC$Document2 = stickerSetByName.documents.get(this.stickerType);
             }
             tLRPC$TL_messages_stickerSet = stickerSetByName;

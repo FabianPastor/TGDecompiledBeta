@@ -10,6 +10,6 @@ public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda25 imple
     }
 
     public final void onClick(DialogInterface dialogInterface, int i) {
-        this.f$0.lambda$onRequestPermissionsResultFragment$109(dialogInterface, i);
+        this.f$0.lambda$onFragmentCreate$11(dialogInterface, i);
     }
 }

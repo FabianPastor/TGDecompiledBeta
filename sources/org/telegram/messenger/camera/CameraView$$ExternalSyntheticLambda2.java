@@ -8,6 +8,6 @@ public final /* synthetic */ class CameraView$$ExternalSyntheticLambda2 implemen
     }
 
     public final void run() {
-        this.f$0.lambda$checkPreviewMatrix$0();
+        this.f$0.lambda$onSurfaceTextureDestroyed$0();
     }
 }

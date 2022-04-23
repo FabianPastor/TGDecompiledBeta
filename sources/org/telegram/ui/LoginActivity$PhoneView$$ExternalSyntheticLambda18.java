@@ -1,23 +1,18 @@
 package org.telegram.ui;
 
-import j$.util.function.Function;
-import org.telegram.ui.CountrySelectActivity;
+import org.telegram.tgnet.RequestDelegate;
+import org.telegram.tgnet.TLObject;
+import org.telegram.tgnet.TLRPC$TL_error;
+import org.telegram.ui.LoginActivity;
 
-public final /* synthetic */ class LoginActivity$PhoneView$$ExternalSyntheticLambda18 implements Function {
-    public static final /* synthetic */ LoginActivity$PhoneView$$ExternalSyntheticLambda18 INSTANCE = new LoginActivity$PhoneView$$ExternalSyntheticLambda18();
+public final /* synthetic */ class LoginActivity$PhoneView$$ExternalSyntheticLambda18 implements RequestDelegate {
+    public final /* synthetic */ LoginActivity.PhoneView f$0;
 
-    private /* synthetic */ LoginActivity$PhoneView$$ExternalSyntheticLambda18() {
+    public /* synthetic */ LoginActivity$PhoneView$$ExternalSyntheticLambda18(LoginActivity.PhoneView phoneView) {
+        this.f$0 = phoneView;
     }
 
-    public /* synthetic */ Function andThen(Function function) {
-        return Function.CC.$default$andThen(this, function);
-    }
-
-    public final Object apply(Object obj) {
-        return ((CountrySelectActivity.Country) obj).name;
-    }
-
-    public /* synthetic */ Function compose(Function function) {
-        return Function.CC.$default$compose(this, function);
+    public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+        this.f$0.lambda$new$13(tLObject, tLRPC$TL_error);
     }
 }

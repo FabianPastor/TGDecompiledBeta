@@ -787,7 +787,6 @@ public abstract class BaseFragment {
         return getAccountInstance().getSecretChatHelper();
     }
 
-    /* access modifiers changed from: protected */
     public DownloadController getDownloadController() {
         return getAccountInstance().getDownloadController();
     }
@@ -909,10 +908,12 @@ public abstract class BaseFragment {
             return true;
         }
         Theme.ResourcesProvider resourceProvider = getResourceProvider();
+        ActionBar actionBar2 = this.actionBar;
+        String str = (actionBar2 == null || !actionBar2.isActionModeShowed()) ? "actionBarDefault" : "actionBarActionModeDefault";
         if (resourceProvider != null) {
-            i = resourceProvider.getColorOrDefault("actionBarDefault");
+            i = resourceProvider.getColorOrDefault(str);
         } else {
-            i = Theme.getColor("actionBarDefault", (boolean[]) null, true);
+            i = Theme.getColor(str, (boolean[]) null, true);
         }
         if (ColorUtils.calculateLuminance(i) > 0.699999988079071d) {
             return true;

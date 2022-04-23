@@ -54,7 +54,9 @@ public class FileLoader extends BaseController {
     public static final int MEDIA_DIR_CACHE = 4;
     public static final int MEDIA_DIR_DOCUMENT = 3;
     public static final int MEDIA_DIR_IMAGE = 0;
+    public static final int MEDIA_DIR_IMAGE_PUBLIC = 100;
     public static final int MEDIA_DIR_VIDEO = 2;
+    public static final int MEDIA_DIR_VIDEO_PUBLIC = 101;
     public static final int QUEUE_TYPE_AUDIO = 2;
     public static final int QUEUE_TYPE_FILE = 0;
     public static final int QUEUE_TYPE_IMAGE = 1;
@@ -96,7 +98,7 @@ public class FileLoader extends BaseController {
 
         void fileDidFailedUpload(String str, boolean z);
 
-        void fileDidLoaded(String str, File file, int i);
+        void fileDidLoaded(String str, File file, Object obj, int i);
 
         void fileDidUploaded(String str, TLRPC$InputFile tLRPC$InputFile, TLRPC$InputEncryptedFile tLRPC$InputEncryptedFile, byte[] bArr, byte[] bArr2, long j);
 
@@ -733,7 +735,7 @@ public class FileLoader extends BaseController {
             org.telegram.messenger.MessageObject r13 = (org.telegram.messenger.MessageObject) r13
             boolean r15 = r13.putInDownloadsStore
             if (r15 == 0) goto L_0x006f
-            org.telegram.messenger.MessagesStorage r15 = r24.getMessagesStorage()
+            org.telegram.messenger.DownloadController r15 = r24.getDownloadController()
             r15.startDownloadFile(r2, r13)
         L_0x006f:
             j$.util.concurrent.ConcurrentHashMap<java.lang.String, org.telegram.messenger.FileLoadOperation> r13 = r7.loadOperationPaths
@@ -1462,20 +1464,23 @@ public class FileLoader extends BaseController {
     }
 
     public static String getDocumentFileName(TLRPC$Document tLRPC$Document) {
-        String str = tLRPC$Document.file_name_fixed;
-        if (str != null) {
-            return str;
+        String str = null;
+        if (tLRPC$Document == null) {
+            return null;
         }
-        String str2 = null;
+        String str2 = tLRPC$Document.file_name_fixed;
+        if (str2 != null) {
+            return str2;
+        }
         String str3 = tLRPC$Document.file_name;
         if (str3 == null) {
             for (int i = 0; i < tLRPC$Document.attributes.size(); i++) {
                 TLRPC$DocumentAttribute tLRPC$DocumentAttribute = tLRPC$Document.attributes.get(i);
                 if (tLRPC$DocumentAttribute instanceof TLRPC$TL_documentAttributeFilename) {
-                    str2 = tLRPC$DocumentAttribute.file_name;
+                    str = tLRPC$DocumentAttribute.file_name;
                 }
             }
-            str3 = str2;
+            str3 = str;
         }
         String fixFileName = fixFileName(str3);
         return fixFileName != null ? fixFileName : "";
@@ -1798,7 +1803,7 @@ public class FileLoader extends BaseController {
 
     public void getCurrentLoadingFiles(ArrayList<MessageObject> arrayList) {
         arrayList.clear();
-        arrayList.addAll(getMessagesStorage().downloadingFiles);
+        arrayList.addAll(getDownloadController().downloadingFiles);
         for (int i = 0; i < arrayList.size(); i++) {
             arrayList.get(i).isDownloadingFile = true;
         }
@@ -1806,7 +1811,7 @@ public class FileLoader extends BaseController {
 
     public void getRecentLoadingFiles(ArrayList<MessageObject> arrayList) {
         arrayList.clear();
-        arrayList.addAll(getMessagesStorage().recentDownloadingFiles);
+        arrayList.addAll(getDownloadController().recentDownloadingFiles);
         for (int i = 0; i < arrayList.size(); i++) {
             arrayList.get(i).isDownloadingFile = true;
         }
@@ -1814,7 +1819,7 @@ public class FileLoader extends BaseController {
 
     public void checkCurrentDownloadsFiles() {
         ArrayList arrayList = new ArrayList();
-        ArrayList arrayList2 = new ArrayList(getMessagesStorage().recentDownloadingFiles);
+        ArrayList arrayList2 = new ArrayList(getDownloadController().recentDownloadingFiles);
         for (int i = 0; i < arrayList2.size(); i++) {
             ((MessageObject) arrayList2.get(i)).checkMediaExistance();
             if (((MessageObject) arrayList2.get(i)).mediaExists) {
@@ -1828,11 +1833,11 @@ public class FileLoader extends BaseController {
 
     /* access modifiers changed from: private */
     public /* synthetic */ void lambda$checkCurrentDownloadsFiles$13(ArrayList arrayList) {
-        getMessagesStorage().recentDownloadingFiles.removeAll(arrayList);
+        getDownloadController().recentDownloadingFiles.removeAll(arrayList);
         getNotificationCenter().postNotificationName(NotificationCenter.onDownloadingFilesChanged, new Object[0]);
     }
 
     public void clearRecentDownloadedFiles() {
-        getMessagesStorage().clearRecentDownloadedFiles();
+        getDownloadController().clearRecentDownloadedFiles();
     }
 }

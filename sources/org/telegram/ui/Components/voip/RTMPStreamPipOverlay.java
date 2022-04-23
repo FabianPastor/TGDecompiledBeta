@@ -121,11 +121,7 @@ public class RTMPStreamPipOverlay implements NotificationCenter.NotificationCent
     /* access modifiers changed from: private */
     public ScaleGestureDetector scaleGestureDetector;
     /* access modifiers changed from: private */
-    public int textureHeight;
-    /* access modifiers changed from: private */
     public VoIPTextureView textureView;
-    /* access modifiers changed from: private */
-    public int textureWidth;
     /* access modifiers changed from: private */
     public WindowManager.LayoutParams windowLayoutParams;
     /* access modifiers changed from: private */
@@ -555,13 +551,9 @@ public class RTMPStreamPipOverlay implements NotificationCenter.NotificationCent
 
                 public void onFrameResolutionChanged(int i, int i2, int i3) {
                     if ((i3 / 90) % 2 == 0) {
-                        int unused = RTMPStreamPipOverlay.this.textureWidth = i;
-                        int unused2 = RTMPStreamPipOverlay.this.textureHeight = i2;
-                        Float unused3 = RTMPStreamPipOverlay.this.aspectRatio = Float.valueOf(((float) i2) / ((float) i));
+                        Float unused = RTMPStreamPipOverlay.this.aspectRatio = Float.valueOf(((float) i2) / ((float) i));
                     } else {
-                        int unused4 = RTMPStreamPipOverlay.this.textureWidth = i2;
-                        int unused5 = RTMPStreamPipOverlay.this.textureHeight = i;
-                        Float unused6 = RTMPStreamPipOverlay.this.aspectRatio = Float.valueOf(((float) i) / ((float) i2));
+                        Float unused2 = RTMPStreamPipOverlay.this.aspectRatio = Float.valueOf(((float) i) / ((float) i2));
                     }
                     AndroidUtilities.runOnUIThread(new RTMPStreamPipOverlay$8$$ExternalSyntheticLambda0(this));
                 }

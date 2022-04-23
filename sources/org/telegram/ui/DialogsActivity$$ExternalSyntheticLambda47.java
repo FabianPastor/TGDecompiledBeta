@@ -10,7 +10,7 @@ public final /* synthetic */ class DialogsActivity$$ExternalSyntheticLambda47 im
     }
 
     public final void didSetColor() {
-        this.f$0.lambda$getThemeDescriptions$51();
+        this.f$0.lambda$getThemeDescriptions$52();
     }
 
     public /* synthetic */ void onAnimationProgress(float f) {

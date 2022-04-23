@@ -8,6 +8,6 @@ public final /* synthetic */ class ArticleViewer$$ExternalSyntheticLambda21 impl
     }
 
     public final void run() {
-        this.f$0.lambda$close$35();
+        this.f$0.lambda$showSearch$25();
     }
 }

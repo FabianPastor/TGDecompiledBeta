@@ -121,9 +121,13 @@ public class CacheControlActivity extends BaseFragment implements NotificationCe
         int i = 0;
         this.cacheSize = getDirectorySize(FileLoader.checkDirectory(4), 0);
         if (!this.canceled) {
-            this.photoSize = getDirectorySize(FileLoader.checkDirectory(0), 0);
+            long directorySize = getDirectorySize(FileLoader.checkDirectory(0), 0);
+            this.photoSize = directorySize;
+            this.photoSize = directorySize + getDirectorySize(FileLoader.checkDirectory(100), 0);
             if (!this.canceled) {
-                this.videoSize = getDirectorySize(FileLoader.checkDirectory(2), 0);
+                long directorySize2 = getDirectorySize(FileLoader.checkDirectory(2), 0);
+                this.videoSize = directorySize2;
+                this.videoSize = directorySize2 + getDirectorySize(FileLoader.checkDirectory(101), 0);
                 if (!this.canceled) {
                     this.documentsSize = getDirectorySize(FileLoader.checkDirectory(3), 1);
                     if (!this.canceled) {
@@ -131,9 +135,9 @@ public class CacheControlActivity extends BaseFragment implements NotificationCe
                         if (!this.canceled) {
                             this.stickersSize = getDirectorySize(new File(FileLoader.checkDirectory(4), "acache"), 0);
                             if (!this.canceled) {
-                                long directorySize = getDirectorySize(FileLoader.checkDirectory(1), 0);
-                                this.audioSize = directorySize;
-                                this.totalSize = this.cacheSize + this.videoSize + directorySize + this.photoSize + this.documentsSize + this.musicSize + this.stickersSize;
+                                long directorySize3 = getDirectorySize(FileLoader.checkDirectory(1), 0);
+                                this.audioSize = directorySize3;
+                                this.totalSize = this.cacheSize + this.videoSize + directorySize3 + this.photoSize + this.documentsSize + this.musicSize + this.stickersSize;
                                 if (Build.VERSION.SDK_INT >= 19) {
                                     ArrayList<File> rootDirs = AndroidUtilities.getRootDirs();
                                     file = rootDirs.get(0);
@@ -283,12 +287,12 @@ public class CacheControlActivity extends BaseFragment implements NotificationCe
 
     /* access modifiers changed from: private */
     /* JADX WARNING: Removed duplicated region for block: B:27:0x005d  */
-    /* JADX WARNING: Removed duplicated region for block: B:72:0x00e1 A[SYNTHETIC] */
+    /* JADX WARNING: Removed duplicated region for block: B:82:0x0114 A[SYNTHETIC] */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    public /* synthetic */ void lambda$cleanupFolders$3(org.telegram.ui.ActionBar.AlertDialog r17) {
+    public /* synthetic */ void lambda$cleanupFolders$3(org.telegram.ui.ActionBar.AlertDialog r18) {
         /*
-            r16 = this;
-            r6 = r16
+            r17 = this;
+            r6 = r17
             r0 = 0
             r1 = 0
             r4 = r1
@@ -296,21 +300,21 @@ public class CacheControlActivity extends BaseFragment implements NotificationCe
             r2 = 0
         L_0x0008:
             r3 = 7
-            if (r1 >= r3) goto L_0x00e5
+            if (r1 >= r3) goto L_0x0118
             org.telegram.ui.Components.StorageDiagramView$ClearViewData[] r3 = r6.clearViewData
             r7 = r3[r1]
             r8 = 1
-            if (r7 == 0) goto L_0x00e1
+            if (r7 == 0) goto L_0x0114
             r3 = r3[r1]
             boolean r3 = r3.clear
             if (r3 != 0) goto L_0x001a
-            goto L_0x00e1
+            goto L_0x0114
         L_0x001a:
             r3 = -1
             r7 = 100
-            r9 = 2
-            r10 = 4
-            r11 = 3
+            r9 = 4
+            r10 = 3
+            r11 = 2
             if (r1 != 0) goto L_0x0028
             long r12 = r6.photoSize
             long r4 = r4 + r12
@@ -325,21 +329,21 @@ public class CacheControlActivity extends BaseFragment implements NotificationCe
             r12 = 2
             goto L_0x0026
         L_0x002f:
-            if (r1 != r9) goto L_0x0037
+            if (r1 != r11) goto L_0x0037
             long r12 = r6.documentsSize
             long r4 = r4 + r12
             r12 = 3
             r13 = 1
             goto L_0x0059
         L_0x0037:
-            if (r1 != r11) goto L_0x003f
+            if (r1 != r10) goto L_0x003f
             long r12 = r6.musicSize
             long r4 = r4 + r12
             r12 = 3
             r13 = 2
             goto L_0x0059
         L_0x003f:
-            if (r1 != r10) goto L_0x0046
+            if (r1 != r9) goto L_0x0046
             long r12 = r6.audioSize
             long r4 = r4 + r12
             r12 = 1
@@ -363,73 +367,97 @@ public class CacheControlActivity extends BaseFragment implements NotificationCe
             goto L_0x0026
         L_0x0059:
             if (r12 != r3) goto L_0x005d
-            goto L_0x00e1
+            goto L_0x0114
         L_0x005d:
             java.lang.String r3 = "acache"
             if (r12 != r7) goto L_0x006b
             java.io.File r14 = new java.io.File
-            java.io.File r15 = org.telegram.messenger.FileLoader.checkDirectory(r10)
+            java.io.File r15 = org.telegram.messenger.FileLoader.checkDirectory(r9)
             r14.<init>(r15, r3)
             goto L_0x006f
         L_0x006b:
             java.io.File r14 = org.telegram.messenger.FileLoader.checkDirectory(r12)
         L_0x006f:
+            r7 = 9223372036854775807(0x7fffffffffffffff, double:NaN)
             if (r14 == 0) goto L_0x007d
             java.lang.String r14 = r14.getAbsolutePath()
-            r7 = 9223372036854775807(0x7fffffffffffffff, double:NaN)
             org.telegram.messenger.Utilities.clearDir(r14, r13, r7, r0)
         L_0x007d:
-            if (r12 != r10) goto L_0x008b
-            java.io.File r2 = org.telegram.messenger.FileLoader.checkDirectory(r10)
+            r14 = 101(0x65, float:1.42E-43)
+            if (r12 == 0) goto L_0x0083
+            if (r12 != r11) goto L_0x0097
+        L_0x0083:
+            if (r12 != 0) goto L_0x0088
+            r16 = 100
+            goto L_0x008a
+        L_0x0088:
+            r16 = 101(0x65, float:1.42E-43)
+        L_0x008a:
+            java.io.File r16 = org.telegram.messenger.FileLoader.checkDirectory(r16)
+            if (r16 == 0) goto L_0x0097
+            java.lang.String r15 = r16.getAbsolutePath()
+            org.telegram.messenger.Utilities.clearDir(r15, r13, r7, r0)
+        L_0x0097:
+            if (r12 != r9) goto L_0x00a6
+            java.io.File r2 = org.telegram.messenger.FileLoader.checkDirectory(r9)
             long r2 = r6.getDirectorySize(r2, r13)
             r6.cacheSize = r2
-        L_0x0089:
+        L_0x00a3:
             r2 = 1
-            goto L_0x00e1
-        L_0x008b:
+            goto L_0x0114
+        L_0x00a6:
             r7 = 1
-            if (r12 != r7) goto L_0x0099
+            if (r12 != r7) goto L_0x00b4
             java.io.File r3 = org.telegram.messenger.FileLoader.checkDirectory(r7)
             long r7 = r6.getDirectorySize(r3, r13)
             r6.audioSize = r7
-            goto L_0x00e1
-        L_0x0099:
-            if (r12 != r11) goto L_0x00b3
-            if (r13 != r7) goto L_0x00a8
-            java.io.File r3 = org.telegram.messenger.FileLoader.checkDirectory(r11)
+            goto L_0x0114
+        L_0x00b4:
+            if (r12 != r10) goto L_0x00ce
+            if (r13 != r7) goto L_0x00c3
+            java.io.File r3 = org.telegram.messenger.FileLoader.checkDirectory(r10)
             long r7 = r6.getDirectorySize(r3, r13)
             r6.documentsSize = r7
-            goto L_0x00e1
-        L_0x00a8:
-            java.io.File r3 = org.telegram.messenger.FileLoader.checkDirectory(r11)
+            goto L_0x0114
+        L_0x00c3:
+            java.io.File r3 = org.telegram.messenger.FileLoader.checkDirectory(r10)
             long r7 = r6.getDirectorySize(r3, r13)
             r6.musicSize = r7
-            goto L_0x00e1
-        L_0x00b3:
-            if (r12 != 0) goto L_0x00c0
+            goto L_0x0114
+        L_0x00ce:
+            if (r12 != 0) goto L_0x00e8
             java.io.File r2 = org.telegram.messenger.FileLoader.checkDirectory(r0)
             long r2 = r6.getDirectorySize(r2, r13)
             r6.photoSize = r2
-            goto L_0x0089
-        L_0x00c0:
-            if (r12 != r9) goto L_0x00cd
-            java.io.File r3 = org.telegram.messenger.FileLoader.checkDirectory(r9)
+            r8 = 100
+            java.io.File r8 = org.telegram.messenger.FileLoader.checkDirectory(r8)
+            long r8 = r6.getDirectorySize(r8, r13)
+            long r2 = r2 + r8
+            r6.photoSize = r2
+            goto L_0x00a3
+        L_0x00e8:
+            if (r12 != r11) goto L_0x0100
+            java.io.File r3 = org.telegram.messenger.FileLoader.checkDirectory(r11)
             long r7 = r6.getDirectorySize(r3, r13)
             r6.videoSize = r7
-            goto L_0x00e1
-        L_0x00cd:
+            java.io.File r3 = org.telegram.messenger.FileLoader.checkDirectory(r14)
+            long r9 = r6.getDirectorySize(r3, r13)
+            long r7 = r7 + r9
+            r6.videoSize = r7
+            goto L_0x0114
+        L_0x0100:
             r8 = 100
-            if (r12 != r8) goto L_0x00e1
+            if (r12 != r8) goto L_0x0114
             java.io.File r2 = new java.io.File
-            java.io.File r8 = org.telegram.messenger.FileLoader.checkDirectory(r10)
+            java.io.File r8 = org.telegram.messenger.FileLoader.checkDirectory(r9)
             r2.<init>(r8, r3)
             long r2 = r6.getDirectorySize(r2, r13)
             r6.stickersSize = r2
-            goto L_0x0089
-        L_0x00e1:
+            goto L_0x00a3
+        L_0x0114:
             int r1 = r1 + 1
             goto L_0x0008
-        L_0x00e5:
+        L_0x0118:
             long r0 = r6.cacheSize
             long r7 = r6.videoSize
             long r0 = r0 + r7
@@ -450,27 +478,27 @@ public class CacheControlActivity extends BaseFragment implements NotificationCe
             r1.<init>(r0)
             int r0 = android.os.Build.VERSION.SDK_INT
             r3 = 18
-            if (r0 < r3) goto L_0x0113
+            if (r0 < r3) goto L_0x0146
             long r7 = r1.getBlockSizeLong()
-            goto L_0x0118
-        L_0x0113:
+            goto L_0x014b
+        L_0x0146:
             int r7 = r1.getBlockSize()
             long r7 = (long) r7
-        L_0x0118:
-            if (r0 < r3) goto L_0x011f
+        L_0x014b:
+            if (r0 < r3) goto L_0x0152
             long r9 = r1.getAvailableBlocksLong()
-            goto L_0x0124
-        L_0x011f:
+            goto L_0x0157
+        L_0x0152:
             int r9 = r1.getAvailableBlocks()
             long r9 = (long) r9
-        L_0x0124:
-            if (r0 < r3) goto L_0x012b
+        L_0x0157:
+            if (r0 < r3) goto L_0x015e
             long r0 = r1.getBlockCountLong()
-            goto L_0x0130
-        L_0x012b:
+            goto L_0x0163
+        L_0x015e:
             int r0 = r1.getBlockCount()
             long r0 = (long) r0
-        L_0x0130:
+        L_0x0163:
             long r0 = r0 * r7
             r6.totalDeviceSize = r0
             long r9 = r9 * r7
@@ -480,8 +508,8 @@ public class CacheControlActivity extends BaseFragment implements NotificationCe
             r0.checkCurrentDownloadsFiles()
             org.telegram.ui.CacheControlActivity$$ExternalSyntheticLambda6 r7 = new org.telegram.ui.CacheControlActivity$$ExternalSyntheticLambda6
             r0 = r7
-            r1 = r16
-            r3 = r17
+            r1 = r17
+            r3 = r18
             r0.<init>(r1, r2, r3, r4)
             org.telegram.messenger.AndroidUtilities.runOnUIThread(r7)
             return
@@ -502,8 +530,10 @@ public class CacheControlActivity extends BaseFragment implements NotificationCe
         } catch (Exception e) {
             FileLog.e((Throwable) e);
         }
+        getMediaDataController().ringtoneDataStore.checkRingtoneSoundsLoaded();
         this.cacheRemovedTooltip.setInfoText(LocaleController.formatString("CacheWasCleared", NUM, AndroidUtilities.formatFileSize(j)));
         this.cacheRemovedTooltip.showWithAction(0, 19, (Runnable) null, (Runnable) null);
+        getMediaDataController().loadAttachMenuBots(false, true);
     }
 
     public View createView(Context context) {

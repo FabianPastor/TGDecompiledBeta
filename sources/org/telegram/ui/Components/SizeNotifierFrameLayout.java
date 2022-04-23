@@ -80,6 +80,8 @@ public class SizeNotifierFrameLayout extends FrameLayout {
     private boolean paused;
     BlurBitmap prevBitmap;
     private Rect rect;
+    private Paint selectedBlurPaint;
+    private Paint selectedBlurPaint2;
     /* access modifiers changed from: private */
     public boolean skipBackgroundDrawing;
     SnowflakesEffect snowflakesEffect;
@@ -715,15 +717,59 @@ public class SizeNotifierFrameLayout extends FrameLayout {
         this.blurIsRunning = false;
     }
 
-    public void drawBlur(Canvas canvas, float f, Rect rect2, Paint paint, boolean z) {
+    public void drawBlurRect(Canvas canvas, float f, Rect rect2, Paint paint, boolean z) {
         int alpha = Color.alpha(Theme.getColor("chat_BlurAlpha"));
         if (this.currentBitmap == null || !SharedConfig.chatBlurEnabled()) {
             canvas.drawRect(rect2, paint);
             return;
         }
-        Paint paint2 = z ? this.blurPaintTop : this.blurPaintBottom;
-        Paint paint3 = z ? this.blurPaintTop2 : this.blurPaintBottom2;
-        if (paint2.getShader() != null) {
+        updateBlurShaderPosition(f, z);
+        paint.setAlpha(255);
+        if (this.blurCrossfadeProgress == 1.0f || this.selectedBlurPaint2.getShader() == null) {
+            canvas.drawRect(rect2, paint);
+            canvas.drawRect(rect2, this.selectedBlurPaint);
+        } else {
+            canvas.drawRect(rect2, paint);
+            canvas.drawRect(rect2, this.selectedBlurPaint2);
+            canvas.saveLayerAlpha((float) rect2.left, (float) rect2.top, (float) rect2.right, (float) rect2.bottom, (int) (this.blurCrossfadeProgress * 255.0f), 31);
+            canvas.drawRect(rect2, paint);
+            canvas.drawRect(rect2, this.selectedBlurPaint);
+            canvas.restore();
+        }
+        paint.setAlpha(alpha);
+        canvas.drawRect(rect2, paint);
+    }
+
+    public void drawBlurCircle(Canvas canvas, float f, float f2, float f3, float f4, Paint paint, boolean z) {
+        int alpha = Color.alpha(Theme.getColor("chat_BlurAlpha"));
+        if (this.currentBitmap == null || !SharedConfig.chatBlurEnabled()) {
+            canvas.drawCircle(f2, f3, f4, paint);
+            return;
+        }
+        updateBlurShaderPosition(f, z);
+        paint.setAlpha(255);
+        if (this.blurCrossfadeProgress == 1.0f || this.selectedBlurPaint2.getShader() == null) {
+            canvas.drawCircle(f2, f3, f4, paint);
+            canvas.drawCircle(f2, f3, f4, this.selectedBlurPaint);
+        } else {
+            canvas.drawCircle(f2, f3, f4, paint);
+            canvas.drawCircle(f2, f3, f4, this.selectedBlurPaint2);
+            canvas.saveLayerAlpha(f2 - f4, f3 - f4, f2 + f4, f3 + f4, (int) (this.blurCrossfadeProgress * 255.0f), 31);
+            canvas.drawCircle(f2, f3, f4, paint);
+            canvas.drawCircle(f2, f3, f4, this.selectedBlurPaint);
+            canvas.restore();
+        }
+        paint.setAlpha(alpha);
+        canvas.drawCircle(f2, f3, f4, paint);
+    }
+
+    private void updateBlurShaderPosition(float f, boolean z) {
+        this.selectedBlurPaint = z ? this.blurPaintTop : this.blurPaintBottom;
+        this.selectedBlurPaint2 = z ? this.blurPaintTop2 : this.blurPaintBottom2;
+        if (z) {
+            f += getTranslationY();
+        }
+        if (this.selectedBlurPaint.getShader() != null) {
             this.matrix.reset();
             this.matrix2.reset();
             if (!z) {
@@ -754,25 +800,11 @@ public class SizeNotifierFrameLayout extends FrameLayout {
                     matrix6.preScale(blurBitmap7.topScaleX, blurBitmap7.topScaleY);
                 }
             }
-            paint2.getShader().setLocalMatrix(this.matrix);
-            if (paint3.getShader() != null) {
-                paint3.getShader().setLocalMatrix(this.matrix);
+            this.selectedBlurPaint.getShader().setLocalMatrix(this.matrix);
+            if (this.selectedBlurPaint2.getShader() != null) {
+                this.selectedBlurPaint2.getShader().setLocalMatrix(this.matrix);
             }
         }
-        paint.setAlpha(255);
-        if (this.blurCrossfadeProgress == 1.0f || paint3.getShader() == null) {
-            canvas.drawRect(rect2, paint);
-            canvas.drawRect(rect2, paint2);
-        } else {
-            canvas.drawRect(rect2, paint);
-            canvas.drawRect(rect2, paint3);
-            canvas.saveLayerAlpha((float) rect2.left, (float) rect2.top, (float) rect2.right, (float) rect2.bottom, (int) (this.blurCrossfadeProgress * 255.0f), 31);
-            canvas.drawRect(rect2, paint);
-            canvas.drawRect(rect2, paint2);
-            canvas.restore();
-        }
-        paint.setAlpha(alpha);
-        canvas.drawRect(rect2, paint);
     }
 
     private static class BlurBitmap {

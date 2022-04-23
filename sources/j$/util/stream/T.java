@@ -5,7 +5,7 @@ import j$.util.CLASSNAMEj;
 import j$.util.CLASSNAMEn;
 import j$.util.N;
 import j$.util.function.BiConsumer;
-import j$.util.function.CLASSNAMEb;
+import j$.util.function.b;
 import j$.util.function.d;
 import j$.util.function.f;
 import j$.util.function.g;
@@ -91,7 +91,7 @@ abstract class T extends CLASSNAMEc implements U {
         C c = new C(biConsumer, 0);
         yVar.getClass();
         uVar.getClass();
-        return x0(new A2(CLASSNAMEf4.DOUBLE_VALUE, (CLASSNAMEb) c, uVar, yVar));
+        return x0(new A2(CLASSNAMEf4.DOUBLE_VALUE, (b) c, uVar, yVar));
     }
 
     public final double K(double d, d dVar) {
@@ -161,7 +161,7 @@ abstract class T extends CLASSNAMEc implements U {
     }
 
     /* renamed from: iterator  reason: collision with other method in class */
-    public Iterator m550iterator() {
+    public Iterator m564iterator() {
         return N.f(spliterator());
     }
 

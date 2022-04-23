@@ -14,6 +14,6 @@ public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda27
     }
 
     public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        this.f$0.lambda$loadChannelAdmins$43(this.f$1, tLObject, tLRPC$TL_error);
+        this.f$0.lambda$markMessageAsRead2$193(this.f$1, tLObject, tLRPC$TL_error);
     }
 }

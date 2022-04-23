@@ -1,21 +1,19 @@
 package org.telegram.ui;
 
-import java.util.ArrayList;
-
 public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda153 implements Runnable {
     public final /* synthetic */ ChatActivity f$0;
-    public final /* synthetic */ ArrayList f$1;
-    public final /* synthetic */ ArrayList f$2;
-    public final /* synthetic */ int f$3;
+    public final /* synthetic */ int f$1;
+    public final /* synthetic */ int f$2;
+    public final /* synthetic */ boolean f$3;
 
-    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda153(ChatActivity chatActivity, ArrayList arrayList, ArrayList arrayList2, int i) {
+    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda153(ChatActivity chatActivity, int i, int i2, boolean z) {
         this.f$0 = chatActivity;
-        this.f$1 = arrayList;
-        this.f$2 = arrayList2;
-        this.f$3 = i;
+        this.f$1 = i;
+        this.f$2 = i2;
+        this.f$3 = z;
     }
 
     public final void run() {
-        this.f$0.lambda$unpinMessage$164(this.f$1, this.f$2, this.f$3);
+        this.f$0.lambda$deleteHistory$3(this.f$1, this.f$2, this.f$3);
     }
 }

@@ -1,15 +1,13 @@
 package org.telegram.ui.Components;
 
-import org.telegram.ui.Components.AlertsCreator;
-
-public final /* synthetic */ class ChatAttachAlert$$ExternalSyntheticLambda17 implements AlertsCreator.ScheduleDatePickerDelegate {
+public final /* synthetic */ class ChatAttachAlert$$ExternalSyntheticLambda17 implements Runnable {
     public final /* synthetic */ ChatAttachAlert f$0;
 
     public /* synthetic */ ChatAttachAlert$$ExternalSyntheticLambda17(ChatAttachAlert chatAttachAlert) {
         this.f$0 = chatAttachAlert;
     }
 
-    public final void didSelectDate(boolean z, int i) {
-        this.f$0.lambda$new$11(z, i);
+    public final void run() {
+        this.f$0.lambda$showLayout$21();
     }
 }

@@ -1,20 +1,17 @@
 package org.telegram.ui.Components;
 
-import android.content.DialogInterface;
 import android.view.KeyEvent;
-import android.widget.TextView;
-import org.telegram.ui.ActionBar.AlertDialog;
+import android.view.View;
+import org.telegram.ui.ActionBar.ActionBarPopupWindow;
 
-public final /* synthetic */ class AlertsCreator$$ExternalSyntheticLambda74 implements TextView.OnEditorActionListener {
-    public final /* synthetic */ AlertDialog f$0;
-    public final /* synthetic */ DialogInterface.OnClickListener f$1;
+public final /* synthetic */ class AlertsCreator$$ExternalSyntheticLambda74 implements View.OnKeyListener {
+    public final /* synthetic */ ActionBarPopupWindow f$0;
 
-    public /* synthetic */ AlertsCreator$$ExternalSyntheticLambda74(AlertDialog alertDialog, DialogInterface.OnClickListener onClickListener) {
-        this.f$0 = alertDialog;
-        this.f$1 = onClickListener;
+    public /* synthetic */ AlertsCreator$$ExternalSyntheticLambda74(ActionBarPopupWindow actionBarPopupWindow) {
+        this.f$0 = actionBarPopupWindow;
     }
 
-    public final boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
-        return AlertsCreator.lambda$createChangeNameAlert$33(this.f$0, this.f$1, textView, i, keyEvent);
+    public final boolean onKey(View view, int i, KeyEvent keyEvent) {
+        return AlertsCreator.lambda$showPopupMenu$127(this.f$0, view, i, keyEvent);
     }
 }

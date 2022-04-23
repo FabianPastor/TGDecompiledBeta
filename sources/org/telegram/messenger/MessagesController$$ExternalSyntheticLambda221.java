@@ -1,22 +1,15 @@
 package org.telegram.messenger;
 
-import org.telegram.messenger.MessagesStorage;
-import org.telegram.tgnet.TLRPC$Dialog;
+import java.util.Comparator;
+import org.telegram.tgnet.TLRPC$Updates;
 
-public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda221 implements MessagesStorage.IntCallback {
-    public final /* synthetic */ MessagesController f$0;
-    public final /* synthetic */ TLRPC$Dialog f$1;
-    public final /* synthetic */ int f$2;
-    public final /* synthetic */ long f$3;
+public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda221 implements Comparator {
+    public static final /* synthetic */ MessagesController$$ExternalSyntheticLambda221 INSTANCE = new MessagesController$$ExternalSyntheticLambda221();
 
-    public /* synthetic */ MessagesController$$ExternalSyntheticLambda221(MessagesController messagesController, TLRPC$Dialog tLRPC$Dialog, int i, long j) {
-        this.f$0 = messagesController;
-        this.f$1 = tLRPC$Dialog;
-        this.f$2 = i;
-        this.f$3 = j;
+    private /* synthetic */ MessagesController$$ExternalSyntheticLambda221() {
     }
 
-    public final void run(int i) {
-        this.f$0.lambda$updateInterfaceWithMessages$333(this.f$1, this.f$2, this.f$3, i);
+    public final int compare(Object obj, Object obj2) {
+        return AndroidUtilities.compare(((TLRPC$Updates) obj).pts, ((TLRPC$Updates) obj2).pts);
     }
 }

@@ -10,6 +10,6 @@ public final /* synthetic */ class LoginActivity$$ExternalSyntheticLambda21 impl
     }
 
     public final void onSizeChanged(int i, boolean z) {
-        this.f$0.lambda$createView$2(i, z);
+        this.f$0.lambda$createView$0(i, z);
     }
 }

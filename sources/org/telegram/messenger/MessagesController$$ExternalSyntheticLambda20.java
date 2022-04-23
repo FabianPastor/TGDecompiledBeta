@@ -8,6 +8,6 @@ public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda20
     }
 
     public final void run() {
-        this.f$0.lambda$updateTimerProc$127();
+        this.f$0.lambda$toggleChatNoForwards$223();
     }
 }

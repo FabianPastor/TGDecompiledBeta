@@ -1,16 +1,13 @@
 package org.telegram.ui.ActionBar;
 
-import android.view.KeyEvent;
-import org.telegram.ui.ActionBar.ActionBarPopupWindow;
-
-public final /* synthetic */ class ActionBarMenuItem$$ExternalSyntheticLambda11 implements ActionBarPopupWindow.OnDispatchKeyEventListener {
+public final /* synthetic */ class ActionBarMenuItem$$ExternalSyntheticLambda11 implements Runnable {
     public final /* synthetic */ ActionBarMenuItem f$0;
 
     public /* synthetic */ ActionBarMenuItem$$ExternalSyntheticLambda11(ActionBarMenuItem actionBarMenuItem) {
         this.f$0 = actionBarMenuItem;
     }
 
-    public final void onDispatchKeyEvent(KeyEvent keyEvent) {
-        this.f$0.lambda$createPopupLayout$2(keyEvent);
+    public final void run() {
+        this.f$0.lambda$onTouchEvent$0();
     }
 }

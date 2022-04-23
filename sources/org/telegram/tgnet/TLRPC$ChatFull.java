@@ -12,6 +12,7 @@ public abstract class TLRPC$ChatFull extends TLObject {
     public ArrayList<TLRPC$BotInfo> bot_info = new ArrayList<>();
     public TLRPC$TL_inputGroupCall call;
     public int call_msg_id;
+    public boolean can_delete_channel;
     public boolean can_set_location;
     public boolean can_set_stickers;
     public boolean can_set_username;
@@ -21,6 +22,7 @@ public abstract class TLRPC$ChatFull extends TLObject {
     public TLRPC$Peer default_send_as;
     public TLRPC$TL_chatInviteExported exported_invite;
     public int flags;
+    public int flags2;
     public int folder_id;
     public TLRPC$Peer groupcall_default_join_as;
     public boolean has_scheduled;
@@ -81,10 +83,13 @@ public abstract class TLRPC$ChatFull extends TLObject {
                 tLRPC$ChatFull = new TLRPC$TL_chatFull();
                 break;
             case -516145888:
-                tLRPC$ChatFull = new TLRPC$TL_channelFull();
+                tLRPC$ChatFull = new TLRPC$TL_channelFull_layer139();
                 break;
             case -374179305:
                 tLRPC$ChatFull = new TLRPC$TL_channelFull_layer133();
+                break;
+            case -362240487:
+                tLRPC$ChatFull = new TLRPC$TL_channelFull();
                 break;
             case -304961647:
                 tLRPC$ChatFull = new TLRPC$TL_chatFull_layer92();

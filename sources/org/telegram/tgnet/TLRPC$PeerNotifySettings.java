@@ -1,9 +1,12 @@
 package org.telegram.tgnet;
 
 public abstract class TLRPC$PeerNotifySettings extends TLObject {
+    public TLRPC$NotificationSound android_sound;
     public int events_mask;
     public int flags;
+    public TLRPC$NotificationSound ios_sound;
     public int mute_until;
+    public TLRPC$NotificationSound other_sound;
     public boolean show_previews;
     public boolean silent;
     public String sound;
@@ -17,8 +20,11 @@ public abstract class TLRPC$PeerNotifySettings extends TLObject {
             case -1697798976:
                 tLRPC$PeerNotifySettings = new TLRPC$TL_peerNotifySettings_layer77();
                 break;
-            case -1353671392:
+            case -1472527322:
                 tLRPC$PeerNotifySettings = new TLRPC$TL_peerNotifySettings();
+                break;
+            case -1353671392:
+                tLRPC$PeerNotifySettings = new TLRPC$TL_peerNotifySettings_layer139();
                 break;
             case 1889961234:
                 tLRPC$PeerNotifySettings = new TLRPC$TL_peerNotifySettingsEmpty_layer77();

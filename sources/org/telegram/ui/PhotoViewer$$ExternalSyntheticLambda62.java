@@ -1,15 +1,17 @@
 package org.telegram.ui;
 
-import org.telegram.ui.ActionBar.ActionBarMenuItem;
+import android.view.View;
 
-public final /* synthetic */ class PhotoViewer$$ExternalSyntheticLambda62 implements ActionBarMenuItem.ActionBarMenuItemDelegate {
-    public final /* synthetic */ PhotoViewer f$0;
+public final /* synthetic */ class PhotoViewer$$ExternalSyntheticLambda62 implements Runnable {
+    public final /* synthetic */ boolean f$0;
+    public final /* synthetic */ View f$1;
 
-    public /* synthetic */ PhotoViewer$$ExternalSyntheticLambda62(PhotoViewer photoViewer) {
-        this.f$0 = photoViewer;
+    public /* synthetic */ PhotoViewer$$ExternalSyntheticLambda62(boolean z, View view) {
+        this.f$0 = z;
+        this.f$1 = view;
     }
 
-    public final void onItemClick(int i) {
-        this.f$0.lambda$setParentActivity$3(i);
+    public final void run() {
+        PhotoViewer.lambda$setItemVisible$60(this.f$0, this.f$1);
     }
 }

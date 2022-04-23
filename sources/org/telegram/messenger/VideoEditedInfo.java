@@ -9,6 +9,7 @@ import org.telegram.tgnet.SerializedData;
 import org.telegram.tgnet.TLRPC$Document;
 import org.telegram.tgnet.TLRPC$InputEncryptedFile;
 import org.telegram.tgnet.TLRPC$InputFile;
+import org.telegram.ui.Components.AnimatedFileDrawable;
 import org.telegram.ui.Components.PhotoFilterView;
 import org.telegram.ui.Components.Point;
 
@@ -46,6 +47,7 @@ public class VideoEditedInfo {
     public boolean videoConvertFirstWrite;
 
     public static class MediaEntity {
+        public AnimatedFileDrawable animatedFileDrawable;
         public Bitmap bitmap;
         public int color;
         public float currentFrame;

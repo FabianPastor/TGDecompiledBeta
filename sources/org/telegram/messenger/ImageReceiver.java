@@ -2041,11 +2041,11 @@ public class ImageReceiver implements NotificationCenter.NotificationCenterDeleg
     }
 
     public Bitmap getBitmap() {
-        AnimatedFileDrawable animation = getAnimation();
         RLottieDrawable lottieAnimation = getLottieAnimation();
         if (lottieAnimation != null && lottieAnimation.hasBitmap()) {
             return lottieAnimation.getAnimatedBitmap();
         }
+        AnimatedFileDrawable animation = getAnimation();
         if (animation != null && animation.hasBitmap()) {
             return animation.getAnimatedBitmap();
         }

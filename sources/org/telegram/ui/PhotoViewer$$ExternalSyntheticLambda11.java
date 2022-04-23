@@ -1,15 +1,16 @@
 package org.telegram.ui;
 
 import android.view.View;
+import org.telegram.ui.ActionBar.BottomSheet;
 
 public final /* synthetic */ class PhotoViewer$$ExternalSyntheticLambda11 implements View.OnClickListener {
-    public final /* synthetic */ PhotoViewer f$0;
+    public final /* synthetic */ BottomSheet f$0;
 
-    public /* synthetic */ PhotoViewer$$ExternalSyntheticLambda11(PhotoViewer photoViewer) {
-        this.f$0 = photoViewer;
+    public /* synthetic */ PhotoViewer$$ExternalSyntheticLambda11(BottomSheet bottomSheet) {
+        this.f$0 = bottomSheet;
     }
 
     public final void onClick(View view) {
-        this.f$0.lambda$setParentActivity$31(view);
+        this.f$0.dismiss();
     }
 }

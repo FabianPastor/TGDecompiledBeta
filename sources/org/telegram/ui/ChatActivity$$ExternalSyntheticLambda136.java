@@ -8,6 +8,6 @@ public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda136 impl
     }
 
     public final void run() {
-        this.f$0.lambda$removeKeyboardPositionBeforeTransition$125();
+        this.f$0.lambda$createDeleteMessagesAlert$145();
     }
 }

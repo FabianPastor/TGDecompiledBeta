@@ -77,7 +77,7 @@ public class GigagroupConvertAlert extends BottomSheet {
             org.telegram.ui.Components.RLottieImageView r5 = new org.telegram.ui.Components.RLottieImageView
             r5.<init>(r1)
             r5.setAutoRepeat(r2)
-            r6 = 2131558543(0x7f0d008f, float:1.8742405E38)
+            r6 = 2131558551(0x7f0d0097, float:1.874242E38)
             r7 = 120(0x78, float:1.68E-43)
             r5.setAnimation(r6, r7, r7)
             r5.playAnimation()
@@ -101,7 +101,7 @@ public class GigagroupConvertAlert extends BottomSheet {
             int r6 = org.telegram.ui.ActionBar.Theme.getColor(r6)
             r5.setTextColor(r6)
             java.lang.String r6 = "GigagroupConvertTitle"
-            r7 = 2131625895(0x7f0e07a7, float:1.887901E38)
+            r7 = 2131625970(0x7f0e07f2, float:1.8879163E38)
             java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r6, r7)
             r5.setText(r6)
             r7 = -2
@@ -155,7 +155,7 @@ public class GigagroupConvertAlert extends BottomSheet {
             android.graphics.PorterDuff$Mode r13 = android.graphics.PorterDuff.Mode.MULTIPLY
             r10.<init>(r12, r13)
             r9.setColorFilter(r10)
-            r10 = 2131165604(0x7var_a4, float:1.794543E38)
+            r10 = 2131165616(0x7var_b0, float:1.7945454E38)
             r9.setImageResource(r10)
             android.widget.TextView r10 = new android.widget.TextView
             r10.<init>(r1)
@@ -178,19 +178,19 @@ public class GigagroupConvertAlert extends BottomSheet {
             if (r6 == r7) goto L_0x00fb
             goto L_0x0121
         L_0x00fb:
-            r7 = 2131625893(0x7f0e07a5, float:1.8879007E38)
+            r7 = 2131625968(0x7f0e07f0, float:1.8879159E38)
             java.lang.String r11 = "GigagroupConvertInfo3"
             java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r11, r7)
             r10.setText(r7)
             goto L_0x0121
         L_0x0108:
-            r7 = 2131625892(0x7f0e07a4, float:1.8879005E38)
+            r7 = 2131625967(0x7f0e07ef, float:1.8879157E38)
             java.lang.String r11 = "GigagroupConvertInfo2"
             java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r11, r7)
             r10.setText(r7)
             goto L_0x0121
         L_0x0115:
-            r7 = 2131625891(0x7f0e07a3, float:1.8879003E38)
+            r7 = 2131625966(0x7f0e07ee, float:1.8879155E38)
             java.lang.String r11 = "GigagroupConvertInfo1"
             java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r11, r7)
             r10.setText(r7)
@@ -228,7 +228,7 @@ public class GigagroupConvertAlert extends BottomSheet {
             r3.<init>(r1)
             r5 = 0
             r3.setBackground(r5)
-            r5 = 2131625894(0x7f0e07a6, float:1.8879009E38)
+            r5 = 2131625969(0x7f0e07f1, float:1.887916E38)
             java.lang.String r6 = "GigagroupConvertProcessButton"
             java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r6, r5)
             r3.setText(r5)
@@ -253,7 +253,7 @@ public class GigagroupConvertAlert extends BottomSheet {
             java.lang.String r1 = "dialogTextBlue2"
             int r1 = org.telegram.ui.ActionBar.Theme.getColor(r1)
             r3.setTextColor(r1)
-            r1 = 2131625889(0x7f0e07a1, float:1.8878999E38)
+            r1 = 2131625964(0x7f0e07ec, float:1.887915E38)
             java.lang.String r2 = "GigagroupConvertCancelButton"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             r3.setText(r1)

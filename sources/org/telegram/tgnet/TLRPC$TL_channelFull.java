@@ -14,6 +14,9 @@ public class TLRPC$TL_channelFull extends TLRPC$ChatFull {
         this.has_scheduled = (524288 & readInt32) != 0;
         this.can_view_stats = (1048576 & readInt32) != 0;
         this.blocked = (readInt32 & 4194304) != 0;
+        int readInt322 = abstractSerializedData.readInt32(z);
+        this.flags2 = readInt322;
+        this.can_delete_channel = (readInt322 & 1) != 0;
         this.id = abstractSerializedData.readInt64(z);
         this.about = abstractSerializedData.readString(z);
         if ((this.flags & 1) != 0) {
@@ -39,11 +42,11 @@ public class TLRPC$TL_channelFull extends TLRPC$ChatFull {
         if ((this.flags & 8388608) != 0) {
             this.exported_invite = TLRPC$ExportedChatInvite.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
         }
-        int readInt322 = abstractSerializedData.readInt32(z);
-        if (readInt322 == NUM) {
-            int readInt323 = abstractSerializedData.readInt32(z);
+        int readInt323 = abstractSerializedData.readInt32(z);
+        if (readInt323 == NUM) {
+            int readInt324 = abstractSerializedData.readInt32(z);
             int i = 0;
-            while (i < readInt323) {
+            while (i < readInt324) {
                 TLRPC$BotInfo TLdeserialize = TLRPC$BotInfo.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
                 if (TLdeserialize != null) {
                     this.bot_info.add(TLdeserialize);
@@ -93,14 +96,14 @@ public class TLRPC$TL_channelFull extends TLRPC$ChatFull {
                 this.ttl_period = abstractSerializedData.readInt32(z);
             }
             if ((this.flags & 33554432) != 0) {
-                int readInt324 = abstractSerializedData.readInt32(z);
-                if (readInt324 == NUM) {
-                    int readInt325 = abstractSerializedData.readInt32(z);
-                    for (int i2 = 0; i2 < readInt325; i2++) {
+                int readInt325 = abstractSerializedData.readInt32(z);
+                if (readInt325 == NUM) {
+                    int readInt326 = abstractSerializedData.readInt32(z);
+                    for (int i2 = 0; i2 < readInt326; i2++) {
                         this.pending_suggestions.add(abstractSerializedData.readString(z));
                     }
                 } else if (z) {
-                    throw new RuntimeException(String.format("wrong Vector magic, got %x", new Object[]{Integer.valueOf(readInt324)}));
+                    throw new RuntimeException(String.format("wrong Vector magic, got %x", new Object[]{Integer.valueOf(readInt325)}));
                 } else {
                     return;
                 }
@@ -115,14 +118,14 @@ public class TLRPC$TL_channelFull extends TLRPC$ChatFull {
                 this.requests_pending = abstractSerializedData.readInt32(z);
             }
             if ((this.flags & NUM) != 0) {
-                int readInt326 = abstractSerializedData.readInt32(z);
-                if (readInt326 == NUM) {
-                    int readInt327 = abstractSerializedData.readInt32(z);
-                    for (int i3 = 0; i3 < readInt327; i3++) {
+                int readInt327 = abstractSerializedData.readInt32(z);
+                if (readInt327 == NUM) {
+                    int readInt328 = abstractSerializedData.readInt32(z);
+                    for (int i3 = 0; i3 < readInt328; i3++) {
                         this.recent_requesters.add(Long.valueOf(abstractSerializedData.readInt64(z)));
                     }
                 } else if (z) {
-                    throw new RuntimeException(String.format("wrong Vector magic, got %x", new Object[]{Integer.valueOf(readInt326)}));
+                    throw new RuntimeException(String.format("wrong Vector magic, got %x", new Object[]{Integer.valueOf(readInt327)}));
                 } else {
                     return;
                 }
@@ -131,18 +134,18 @@ public class TLRPC$TL_channelFull extends TLRPC$ChatFull {
                 this.default_send_as = TLRPC$Peer.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
             }
             if ((this.flags & NUM) != 0) {
-                int readInt328 = abstractSerializedData.readInt32(z);
-                if (readInt328 == NUM) {
-                    int readInt329 = abstractSerializedData.readInt32(z);
-                    for (int i4 = 0; i4 < readInt329; i4++) {
+                int readInt329 = abstractSerializedData.readInt32(z);
+                if (readInt329 == NUM) {
+                    int readInt3210 = abstractSerializedData.readInt32(z);
+                    for (int i4 = 0; i4 < readInt3210; i4++) {
                         this.available_reactions.add(abstractSerializedData.readString(z));
                     }
                 } else if (z) {
-                    throw new RuntimeException(String.format("wrong Vector magic, got %x", new Object[]{Integer.valueOf(readInt328)}));
+                    throw new RuntimeException(String.format("wrong Vector magic, got %x", new Object[]{Integer.valueOf(readInt329)}));
                 }
             }
         } else if (z) {
-            throw new RuntimeException(String.format("wrong Vector magic, got %x", new Object[]{Integer.valueOf(readInt322)}));
+            throw new RuntimeException(String.format("wrong Vector magic, got %x", new Object[]{Integer.valueOf(readInt323)}));
         }
     }
 
@@ -165,6 +168,9 @@ public class TLRPC$TL_channelFull extends TLRPC$ChatFull {
         int i8 = this.blocked ? i7 | 4194304 : i7 & -4194305;
         this.flags = i8;
         abstractSerializedData.writeInt32(i8);
+        int i9 = this.can_delete_channel ? this.flags2 | 1 : this.flags2 & -2;
+        this.flags2 = i9;
+        abstractSerializedData.writeInt32(i9);
         abstractSerializedData.writeInt64(this.id);
         abstractSerializedData.writeString(this.about);
         if ((this.flags & 1) != 0) {
@@ -193,8 +199,8 @@ public class TLRPC$TL_channelFull extends TLRPC$ChatFull {
         abstractSerializedData.writeInt32(NUM);
         int size = this.bot_info.size();
         abstractSerializedData.writeInt32(size);
-        for (int i9 = 0; i9 < size; i9++) {
-            this.bot_info.get(i9).serializeToStream(abstractSerializedData);
+        for (int i10 = 0; i10 < size; i10++) {
+            this.bot_info.get(i10).serializeToStream(abstractSerializedData);
         }
         if ((this.flags & 16) != 0) {
             abstractSerializedData.writeInt64(this.migrated_from_chat_id);
@@ -240,8 +246,8 @@ public class TLRPC$TL_channelFull extends TLRPC$ChatFull {
             abstractSerializedData.writeInt32(NUM);
             int size2 = this.pending_suggestions.size();
             abstractSerializedData.writeInt32(size2);
-            for (int i10 = 0; i10 < size2; i10++) {
-                abstractSerializedData.writeString(this.pending_suggestions.get(i10));
+            for (int i11 = 0; i11 < size2; i11++) {
+                abstractSerializedData.writeString(this.pending_suggestions.get(i11));
             }
         }
         if ((this.flags & 67108864) != 0) {
@@ -257,8 +263,8 @@ public class TLRPC$TL_channelFull extends TLRPC$ChatFull {
             abstractSerializedData.writeInt32(NUM);
             int size3 = this.recent_requesters.size();
             abstractSerializedData.writeInt32(size3);
-            for (int i11 = 0; i11 < size3; i11++) {
-                abstractSerializedData.writeInt64(this.recent_requesters.get(i11).longValue());
+            for (int i12 = 0; i12 < size3; i12++) {
+                abstractSerializedData.writeInt64(this.recent_requesters.get(i12).longValue());
             }
         }
         if ((this.flags & NUM) != 0) {
@@ -268,8 +274,8 @@ public class TLRPC$TL_channelFull extends TLRPC$ChatFull {
             abstractSerializedData.writeInt32(NUM);
             int size4 = this.available_reactions.size();
             abstractSerializedData.writeInt32(size4);
-            for (int i12 = 0; i12 < size4; i12++) {
-                abstractSerializedData.writeString(this.available_reactions.get(i12));
+            for (int i13 = 0; i13 < size4; i13++) {
+                abstractSerializedData.writeString(this.available_reactions.get(i13));
             }
         }
     }

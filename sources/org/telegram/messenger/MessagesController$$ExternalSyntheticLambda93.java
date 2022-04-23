@@ -14,6 +14,6 @@ public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda93
     }
 
     public final void run() {
-        this.f$0.lambda$checkDeletingTask$63(this.f$1, this.f$2);
+        this.f$0.lambda$updatePrintingStrings$137(this.f$1, this.f$2);
     }
 }

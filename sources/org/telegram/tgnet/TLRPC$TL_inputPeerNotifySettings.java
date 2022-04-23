@@ -6,7 +6,7 @@ public class TLRPC$TL_inputPeerNotifySettings extends TLObject {
     public int mute_until;
     public boolean show_previews;
     public boolean silent;
-    public String sound;
+    public TLRPC$NotificationSound sound;
 
     public void readParams(AbstractSerializedData abstractSerializedData, boolean z) {
         int readInt32 = abstractSerializedData.readInt32(z);
@@ -21,7 +21,7 @@ public class TLRPC$TL_inputPeerNotifySettings extends TLObject {
             this.mute_until = abstractSerializedData.readInt32(z);
         }
         if ((this.flags & 8) != 0) {
-            this.sound = abstractSerializedData.readString(z);
+            this.sound = TLRPC$NotificationSound.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
         }
     }
 
@@ -38,7 +38,7 @@ public class TLRPC$TL_inputPeerNotifySettings extends TLObject {
             abstractSerializedData.writeInt32(this.mute_until);
         }
         if ((this.flags & 8) != 0) {
-            abstractSerializedData.writeString(this.sound);
+            this.sound.serializeToStream(abstractSerializedData);
         }
     }
 }

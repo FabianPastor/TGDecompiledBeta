@@ -8,6 +8,6 @@ public final /* synthetic */ class ProfileActivity$$ExternalSyntheticLambda19 im
     }
 
     public final void run() {
-        this.f$0.lambda$onWriteButtonClick$16();
+        this.f$0.lambda$onWriteButtonClick$15();
     }
 }

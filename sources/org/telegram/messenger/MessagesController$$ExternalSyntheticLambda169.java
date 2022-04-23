@@ -1,17 +1,24 @@
 package org.telegram.messenger;
 
-import org.telegram.tgnet.TLRPC$TL_updateChannel;
+import androidx.collection.LongSparseArray;
+import org.telegram.tgnet.TLRPC$TL_messages_messageViews;
 
 public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda169 implements Runnable {
     public final /* synthetic */ MessagesController f$0;
-    public final /* synthetic */ TLRPC$TL_updateChannel f$1;
+    public final /* synthetic */ TLRPC$TL_messages_messageViews f$1;
+    public final /* synthetic */ LongSparseArray f$2;
+    public final /* synthetic */ LongSparseArray f$3;
+    public final /* synthetic */ LongSparseArray f$4;
 
-    public /* synthetic */ MessagesController$$ExternalSyntheticLambda169(MessagesController messagesController, TLRPC$TL_updateChannel tLRPC$TL_updateChannel) {
+    public /* synthetic */ MessagesController$$ExternalSyntheticLambda169(MessagesController messagesController, TLRPC$TL_messages_messageViews tLRPC$TL_messages_messageViews, LongSparseArray longSparseArray, LongSparseArray longSparseArray2, LongSparseArray longSparseArray3) {
         this.f$0 = messagesController;
-        this.f$1 = tLRPC$TL_updateChannel;
+        this.f$1 = tLRPC$TL_messages_messageViews;
+        this.f$2 = longSparseArray;
+        this.f$3 = longSparseArray2;
+        this.f$4 = longSparseArray3;
     }
 
     public final void run() {
-        this.f$0.lambda$processUpdateArray$314(this.f$1);
+        this.f$0.lambda$updateTimerProc$121(this.f$1, this.f$2, this.f$3, this.f$4);
     }
 }

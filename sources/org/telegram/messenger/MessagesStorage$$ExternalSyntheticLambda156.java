@@ -1,19 +1,17 @@
 package org.telegram.messenger;
 
-import java.util.ArrayList;
+import org.telegram.tgnet.TLRPC$ChatFull;
 
 public final /* synthetic */ class MessagesStorage$$ExternalSyntheticLambda156 implements Runnable {
     public final /* synthetic */ MessagesStorage f$0;
-    public final /* synthetic */ MessageObject f$1;
-    public final /* synthetic */ ArrayList f$2;
+    public final /* synthetic */ TLRPC$ChatFull f$1;
 
-    public /* synthetic */ MessagesStorage$$ExternalSyntheticLambda156(MessagesStorage messagesStorage, MessageObject messageObject, ArrayList arrayList) {
+    public /* synthetic */ MessagesStorage$$ExternalSyntheticLambda156(MessagesStorage messagesStorage, TLRPC$ChatFull tLRPC$ChatFull) {
         this.f$0 = messagesStorage;
-        this.f$1 = messageObject;
-        this.f$2 = arrayList;
+        this.f$1 = tLRPC$ChatFull;
     }
 
     public final void run() {
-        this.f$0.lambda$replaceMessageIfExists$178(this.f$1, this.f$2);
+        this.f$0.lambda$updateChatInfo$101(this.f$1);
     }
 }

@@ -188,7 +188,8 @@ public class VoIPHelper {
                 }
             } else if (Build.VERSION.SDK_INT >= 23) {
                 ArrayList arrayList = new ArrayList();
-                if (activity2.checkSelfPermission("android.permission.RECORD_AUDIO") != 0) {
+                ChatObject.Call groupCall = accountInstance.getMessagesController().getGroupCall(tLRPC$Chat.id, false);
+                if (activity2.checkSelfPermission("android.permission.RECORD_AUDIO") != 0 && (groupCall == null || !groupCall.call.rtmp_stream)) {
                     arrayList.add("android.permission.RECORD_AUDIO");
                 }
                 if (arrayList.isEmpty()) {
@@ -197,6 +198,7 @@ public class VoIPHelper {
                     activity2.requestPermissions((String[]) arrayList.toArray(new String[0]), 103);
                 }
             } else {
+                TLRPC$Chat tLRPC$Chat2 = tLRPC$Chat;
                 initiateCall((TLRPC$User) null, tLRPC$Chat, str, false, false, z, bool, activity, baseFragment, accountInstance);
             }
         }
@@ -903,6 +905,9 @@ public class VoIPHelper {
                 file.delete();
                 arrayList.remove(file);
             }
+        }
+        if (z) {
+            return new File(logsDir, j + "_stats.log").getAbsolutePath();
         }
         return new File(logsDir, j + ".log").getAbsolutePath();
     }

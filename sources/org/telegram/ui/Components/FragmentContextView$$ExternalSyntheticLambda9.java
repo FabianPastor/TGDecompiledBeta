@@ -8,6 +8,6 @@ public final /* synthetic */ class FragmentContextView$$ExternalSyntheticLambda9
     }
 
     public final void run() {
-        this.f$0.lambda$new$5();
+        this.f$0.lambda$startJoinFlickerAnimation$12();
     }
 }

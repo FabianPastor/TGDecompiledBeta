@@ -1,16 +1,22 @@
 package org.telegram.ui.Components;
 
-import org.telegram.tgnet.RequestDelegate;
-import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC$TL_error;
+import org.telegram.ui.ActionBar.AlertDialog;
+import org.telegram.ui.ActionBar.BaseFragment;
 
-public final /* synthetic */ class AlertsCreator$$ExternalSyntheticLambda90 implements RequestDelegate {
-    public static final /* synthetic */ AlertsCreator$$ExternalSyntheticLambda90 INSTANCE = new AlertsCreator$$ExternalSyntheticLambda90();
+public final /* synthetic */ class AlertsCreator$$ExternalSyntheticLambda90 implements Runnable {
+    public final /* synthetic */ AlertDialog[] f$0;
+    public final /* synthetic */ int f$1;
+    public final /* synthetic */ int f$2;
+    public final /* synthetic */ BaseFragment f$3;
 
-    private /* synthetic */ AlertsCreator$$ExternalSyntheticLambda90() {
+    public /* synthetic */ AlertsCreator$$ExternalSyntheticLambda90(AlertDialog[] alertDialogArr, int i, int i2, BaseFragment baseFragment) {
+        this.f$0 = alertDialogArr;
+        this.f$1 = i;
+        this.f$2 = i2;
+        this.f$3 = baseFragment;
     }
 
-    public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        AlertsCreator.lambda$createChangeBioAlert$26(tLObject, tLRPC$TL_error);
+    public final void run() {
+        AlertsCreator.lambda$createDeleteMessagesAlert$113(this.f$0, this.f$1, this.f$2, this.f$3);
     }
 }

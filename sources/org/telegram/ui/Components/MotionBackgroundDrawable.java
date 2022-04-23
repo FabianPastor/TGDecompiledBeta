@@ -338,21 +338,27 @@ public class MotionBackgroundDrawable extends Drawable {
     }
 
     public void setColors(int i, int i2, int i3, int i4, int i5, boolean z) {
-        if (this.isPreview && i3 == 0 && i4 == 0) {
-            this.gradientDrawable = new GradientDrawable(BackgroundGradientDrawable.getGradientOrientation(i5), new int[]{i, i2});
+        int i6 = i;
+        int i7 = i2;
+        int i8 = i3;
+        int i9 = i4;
+        if (this.isPreview && i8 == 0 && i9 == 0) {
+            this.gradientDrawable = new GradientDrawable(BackgroundGradientDrawable.getGradientOrientation(i5), new int[]{i6, i7});
         } else {
             this.gradientDrawable = null;
         }
         int[] iArr = this.colors;
-        iArr[0] = i;
-        iArr[1] = i2;
-        iArr[2] = i3;
-        iArr[3] = i4;
-        Bitmap bitmap = this.currentBitmap;
-        if (bitmap != null) {
-            Utilities.generateGradient(bitmap, true, this.phase, this.interpolator.getInterpolation(this.posAnimationProgress), this.currentBitmap.getWidth(), this.currentBitmap.getHeight(), this.currentBitmap.getRowBytes(), this.colors);
-            if (z) {
-                invalidateParent();
+        if (iArr[0] != i6 || iArr[1] != i7 || iArr[2] != i8 || iArr[3] != i9) {
+            iArr[0] = i6;
+            iArr[1] = i7;
+            iArr[2] = i8;
+            iArr[3] = i9;
+            Bitmap bitmap = this.currentBitmap;
+            if (bitmap != null) {
+                Utilities.generateGradient(bitmap, true, this.phase, this.interpolator.getInterpolation(this.posAnimationProgress), this.currentBitmap.getWidth(), this.currentBitmap.getHeight(), this.currentBitmap.getRowBytes(), this.colors);
+                if (z) {
+                    invalidateParent();
+                }
             }
         }
     }

@@ -1,15 +1,15 @@
 package org.telegram.ui.Components;
 
-import android.view.MotionEvent;
 import android.view.View;
 
-public final /* synthetic */ class AlertsCreator$$ExternalSyntheticLambda71 implements View.OnTouchListener {
-    public static final /* synthetic */ AlertsCreator$$ExternalSyntheticLambda71 INSTANCE = new AlertsCreator$$ExternalSyntheticLambda71();
+public final /* synthetic */ class AlertsCreator$$ExternalSyntheticLambda71 implements View.OnClickListener {
+    public final /* synthetic */ boolean[] f$0;
 
-    private /* synthetic */ AlertsCreator$$ExternalSyntheticLambda71() {
+    public /* synthetic */ AlertsCreator$$ExternalSyntheticLambda71(boolean[] zArr) {
+        this.f$0 = zArr;
     }
 
-    public final boolean onTouch(View view, MotionEvent motionEvent) {
-        return AlertsCreator.lambda$createCalendarPickerDialog$59(view, motionEvent);
+    public final void onClick(View view) {
+        AlertsCreator.lambda$createDeleteMessagesAlert$116(this.f$0, view);
     }
 }

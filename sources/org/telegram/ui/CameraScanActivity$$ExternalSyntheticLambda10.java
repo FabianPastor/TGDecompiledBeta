@@ -8,6 +8,6 @@ public final /* synthetic */ class CameraScanActivity$$ExternalSyntheticLambda10
     }
 
     public final void run() {
-        this.f$0.lambda$processShot$15();
+        this.f$0.lambda$onNoQrFound$10();
     }
 }

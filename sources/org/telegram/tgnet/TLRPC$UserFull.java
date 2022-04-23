@@ -3,6 +3,8 @@ package org.telegram.tgnet;
 public abstract class TLRPC$UserFull extends TLObject {
     public String about;
     public boolean blocked;
+    public TLRPC$TL_chatAdminRights bot_broadcast_admin_rights;
+    public TLRPC$TL_chatAdminRights bot_group_admin_rights;
     public TLRPC$BotInfo bot_info;
     public boolean can_pin_message;
     public int common_chats_count;
@@ -26,11 +28,14 @@ public abstract class TLRPC$UserFull extends TLObject {
     public static TLRPC$UserFull TLdeserialize(AbstractSerializedData abstractSerializedData, int i, boolean z) {
         TLRPC$UserFull tLRPC$UserFull;
         switch (i) {
+            case -1938625919:
+                tLRPC$UserFull = new TLRPC$TL_userFull();
+                break;
             case -1901811583:
                 tLRPC$UserFull = new TLRPC$TL_userFull_layer98();
                 break;
             case -818518751:
-                tLRPC$UserFull = new TLRPC$TL_userFull();
+                tLRPC$UserFull = new TLRPC$TL_userFull_layer139();
                 break;
             case -694681851:
                 tLRPC$UserFull = new TLRPC$TL_userFull_layer134();

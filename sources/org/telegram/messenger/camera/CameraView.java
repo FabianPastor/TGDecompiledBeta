@@ -99,6 +99,8 @@ public class CameraView extends FrameLayout implements TextureView.SurfaceTextur
     private DecelerateInterpolator interpolator = new DecelerateInterpolator();
     private boolean isFrontface;
     private long lastDrawTime;
+    private int lastHeight = -1;
+    private int lastWidth = -1;
     /* access modifiers changed from: private */
     public final Object layoutLock = new Object();
     /* access modifiers changed from: private */
@@ -106,6 +108,7 @@ public class CameraView extends FrameLayout implements TextureView.SurfaceTextur
     /* access modifiers changed from: private */
     public float[] mSTMatrix = new float[16];
     private Matrix matrix = new Matrix();
+    private int measurementsCount = 0;
     private boolean mirror;
     /* access modifiers changed from: private */
     public float[] moldSTMatrix = new float[16];
@@ -129,6 +132,7 @@ public class CameraView extends FrameLayout implements TextureView.SurfaceTextur
     /* access modifiers changed from: private */
     public TextureView textureView;
     private Matrix txform = new Matrix();
+    private final Runnable updateRotationMatrix = new CameraView$$ExternalSyntheticLambda1(this);
     private boolean useMaxPreview;
     /* access modifiers changed from: private */
     public FloatBuffer vertexBuffer;
@@ -255,12 +259,23 @@ public class CameraView extends FrameLayout implements TextureView.SurfaceTextur
     }
 
     /* access modifiers changed from: protected */
+    public void onAttachedToWindow() {
+        super.onAttachedToWindow();
+        this.measurementsCount = 0;
+    }
+
+    /* access modifiers changed from: protected */
     public void onMeasure(int i, int i2) {
         CameraSession cameraSession2;
         int i3;
         int i4;
+        int size = View.MeasureSpec.getSize(i);
+        int size2 = View.MeasureSpec.getSize(i2);
         if (!(this.previewSize == null || (cameraSession2 = this.cameraSession) == null)) {
-            cameraSession2.updateRotation();
+            if (!(this.lastWidth == size && this.lastHeight == size2) && this.measurementsCount > 1) {
+                cameraSession2.updateRotation();
+            }
+            this.measurementsCount++;
             if (this.cameraSession.getWorldAngle() == 90 || this.cameraSession.getWorldAngle() == 270) {
                 i4 = this.previewSize.getWidth();
                 i3 = this.previewSize.getHeight();
@@ -282,6 +297,8 @@ public class CameraView extends FrameLayout implements TextureView.SurfaceTextur
         }
         super.onMeasure(i, i2);
         checkPreviewMatrix();
+        this.lastWidth = size;
+        this.lastHeight = size2;
     }
 
     public float getTextureHeight(float f, float f2) {
@@ -429,12 +446,17 @@ public class CameraView extends FrameLayout implements TextureView.SurfaceTextur
         CameraGLThread cameraGLThread = this.cameraThread;
         if (cameraGLThread != null) {
             cameraGLThread.shutdown(0);
-            this.cameraThread = null;
+            this.cameraThread.postRunnable(new CameraView$$ExternalSyntheticLambda2(this));
         }
         if (this.cameraSession != null) {
             CameraController.getInstance().close(this.cameraSession, (CountDownLatch) null, (Runnable) null);
         }
         return false;
+    }
+
+    /* access modifiers changed from: private */
+    public /* synthetic */ void lambda$onSurfaceTextureDestroyed$0() {
+        this.cameraThread = null;
     }
 
     public void onSurfaceTextureUpdated(SurfaceTexture surfaceTexture) {
@@ -456,6 +478,18 @@ public class CameraView extends FrameLayout implements TextureView.SurfaceTextur
         this.clipBottom = i;
     }
 
+    /* access modifiers changed from: private */
+    public /* synthetic */ void lambda$new$1() {
+        CameraGLThread cameraGLThread = this.cameraThread;
+        if (cameraGLThread != null && cameraGLThread.currentSession != null) {
+            int worldAngle = cameraGLThread.currentSession.getWorldAngle();
+            android.opengl.Matrix.setIdentityM(this.mMVPMatrix, 0);
+            if (worldAngle != 0) {
+                android.opengl.Matrix.rotateM(this.mMVPMatrix, 0, (float) worldAngle, 0.0f, 0.0f, 1.0f);
+            }
+        }
+    }
+
     private void checkPreviewMatrix() {
         if (this.previewSize != null) {
             int width = this.textureView.getWidth();
@@ -471,20 +505,13 @@ public class CameraView extends FrameLayout implements TextureView.SurfaceTextur
             matrix2.postTranslate(f / 2.0f, f2 / 2.0f);
             matrix2.invert(this.matrix);
             CameraGLThread cameraGLThread = this.cameraThread;
-            if (cameraGLThread != null) {
-                cameraGLThread.postRunnable(new CameraView$$ExternalSyntheticLambda2(this));
+            if (cameraGLThread == null) {
+                return;
             }
-        }
-    }
-
-    /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$checkPreviewMatrix$0() {
-        CameraGLThread cameraGLThread = this.cameraThread;
-        if (cameraGLThread != null && cameraGLThread.currentSession != null) {
-            int worldAngle = cameraGLThread.currentSession.getWorldAngle();
-            android.opengl.Matrix.setIdentityM(this.mMVPMatrix, 0);
-            if (worldAngle != 0) {
-                android.opengl.Matrix.rotateM(this.mMVPMatrix, 0, (float) worldAngle, 0.0f, 0.0f, 1.0f);
+            if (!cameraGLThread.isReady()) {
+                this.updateRotationMatrix.run();
+            } else {
+                this.cameraThread.postRunnable(this.updateRotationMatrix);
             }
         }
     }
@@ -958,7 +985,7 @@ public class CameraView extends FrameLayout implements TextureView.SurfaceTextur
                 }
             } else if (i == 3) {
                 if (BuildVars.LOGS_ENABLED) {
-                    FileLog.d("CameraView set gl rednderer session");
+                    FileLog.d("CameraView set gl renderer session");
                 }
                 CameraSession cameraSession = (CameraSession) message.obj;
                 if (this.currentSession != cameraSession) {
@@ -1055,11 +1082,11 @@ public class CameraView extends FrameLayout implements TextureView.SurfaceTextur
 
     /* access modifiers changed from: private */
     public void createCamera(SurfaceTexture surfaceTexture) {
-        AndroidUtilities.runOnUIThread(new CameraView$$ExternalSyntheticLambda3(this, surfaceTexture));
+        AndroidUtilities.runOnUIThread(new CameraView$$ExternalSyntheticLambda4(this, surfaceTexture));
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$createCamera$3(SurfaceTexture surfaceTexture) {
+    public /* synthetic */ void lambda$createCamera$4(SurfaceTexture surfaceTexture) {
         if (this.cameraThread != null) {
             if (BuildVars.LOGS_ENABLED) {
                 FileLog.d("CameraView create camera session");
@@ -1074,13 +1101,13 @@ public class CameraView extends FrameLayout implements TextureView.SurfaceTextur
                 this.cameraSession = cameraSession2;
                 this.cameraThread.setCurrentSession(cameraSession2);
                 requestLayout();
-                CameraController.getInstance().open(this.cameraSession, surfaceTexture, new CameraView$$ExternalSyntheticLambda1(this), new CameraView$$ExternalSyntheticLambda0(this));
+                CameraController.getInstance().open(this.cameraSession, surfaceTexture, new CameraView$$ExternalSyntheticLambda3(this), new CameraView$$ExternalSyntheticLambda0(this));
             }
         }
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$createCamera$1() {
+    public /* synthetic */ void lambda$createCamera$2() {
         if (this.cameraSession != null) {
             if (BuildVars.LOGS_ENABLED) {
                 FileLog.d("CameraView camera initied");
@@ -1091,7 +1118,7 @@ public class CameraView extends FrameLayout implements TextureView.SurfaceTextur
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$createCamera$2() {
+    public /* synthetic */ void lambda$createCamera$3() {
         this.cameraThread.setCurrentSession(this.cameraSession);
     }
 

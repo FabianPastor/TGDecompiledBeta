@@ -270,7 +270,7 @@ public class QrActivity extends BaseFragment {
             r0.logoImageView = r6
             r6.setAutoRepeat(r10)
             org.telegram.ui.Components.RLottieImageView r6 = r0.logoImageView
-            r7 = 2131558499(0x7f0d0063, float:1.8742316E38)
+            r7 = 2131558503(0x7f0d0067, float:1.8742324E38)
             r8 = 60
             r6.setAnimation(r7, r8, r8)
             org.telegram.ui.Components.RLottieImageView r6 = r0.logoImageView
@@ -291,7 +291,7 @@ public class QrActivity extends BaseFragment {
             org.telegram.ui.Components.BackupImageView r6 = r0.avatarImageView
             r7 = 51
             r8 = 84
-            android.widget.FrameLayout$LayoutParams r7 = org.telegram.ui.Components.LayoutHelper.createFrame(r8, r8, r7)
+            android.widget.FrameLayout$LayoutParams r7 = org.telegram.ui.Components.LayoutHelper.createFrame((int) r8, (int) r8, (int) r7)
             r2.addView(r6, r7)
             org.telegram.ui.Components.BackupImageView r11 = r0.avatarImageView
             r17 = 0
@@ -311,7 +311,7 @@ public class QrActivity extends BaseFragment {
             android.graphics.drawable.Drawable r7 = org.telegram.ui.ActionBar.Theme.createSimpleSelectorCircleDrawable(r7, r8, r9)
             r6.setBackground(r7)
             android.widget.ImageView r6 = r0.closeImageView
-            r7 = 2131165491(0x7var_, float:1.79452E38)
+            r7 = 2131165503(0x7var_f, float:1.7945225E38)
             r6.setImageResource(r7)
             android.widget.ImageView r6 = r0.closeImageView
             android.widget.ImageView$ScaleType r7 = android.widget.ImageView.ScaleType.CENTER
@@ -357,7 +357,7 @@ public class QrActivity extends BaseFragment {
             r7.setXfermode(r6)
             android.content.Context r6 = org.telegram.messenger.ApplicationLoader.applicationContext
             android.content.res.Resources r6 = r6.getResources()
-            r8 = 2131165837(0x7var_d, float:1.7945902E38)
+            r8 = 2131165863(0x7var_a7, float:1.7945955E38)
             android.graphics.Bitmap r6 = android.graphics.BitmapFactory.decodeResource(r6, r8)
             android.graphics.Bitmap r8 = r0.emojiThemeIcon
             int r8 = r8.getWidth()
@@ -388,7 +388,7 @@ public class QrActivity extends BaseFragment {
             r1.setItemSelectedListener(r4)
             org.telegram.ui.QrActivity$ThemeListViewController r1 = r0.themesViewController
             android.widget.TextView r1 = r1.titleView
-            r4 = 2131627530(0x7f0e0e0a, float:1.8882327E38)
+            r4 = 2131627621(0x7f0e0e65, float:1.8882512E38)
             java.lang.String r6 = "QrCode"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r6, r4)
             r1.setText(r4)
@@ -404,7 +404,7 @@ public class QrActivity extends BaseFragment {
             android.widget.FrameLayout r1 = r0.themeLayout
             r4 = -2
             r6 = 80
-            android.widget.FrameLayout$LayoutParams r4 = org.telegram.ui.Components.LayoutHelper.createFrame(r5, r4, r6)
+            android.widget.FrameLayout$LayoutParams r4 = org.telegram.ui.Components.LayoutHelper.createFrame((int) r5, (int) r4, (int) r6)
             r2.addView(r1, r4)
             org.telegram.ui.Components.MotionBackgroundDrawable r1 = r0.currMotionDrawable
             r1.setIndeterminateAnimation(r10)
@@ -1054,7 +1054,7 @@ public class QrActivity extends BaseFragment {
                 if (r6 > r14) goto L_0x016a
                 if (r6 != 0) goto L_0x0077
                 android.content.Context r7 = r33.getContext()
-                r8 = 2131166050(0x7var_, float:1.7946334E38)
+                r8 = 2131166083(0x7var_, float:1.7946401E38)
                 android.graphics.drawable.Drawable r7 = androidx.core.content.ContextCompat.getDrawable(r7, r8)
                 int r8 = org.telegram.messenger.AndroidUtilities.dp(r18)
                 float r8 = (float) r8
@@ -1063,7 +1063,7 @@ public class QrActivity extends BaseFragment {
             L_0x0077:
                 if (r6 != r11) goto L_0x008f
                 android.content.Context r7 = r33.getContext()
-                r8 = 2131166051(0x7var_, float:1.7946336E38)
+                r8 = 2131166084(0x7var_, float:1.7946403E38)
                 android.graphics.drawable.Drawable r7 = androidx.core.content.ContextCompat.getDrawable(r7, r8)
                 r8 = 1103626240(0x41CLASSNAME, float:25.0)
                 int r8 = org.telegram.messenger.AndroidUtilities.dp(r8)
@@ -1072,7 +1072,7 @@ public class QrActivity extends BaseFragment {
                 goto L_0x00a4
             L_0x008f:
                 android.content.Context r7 = r33.getContext()
-                r8 = 2131166052(0x7var_, float:1.7946338E38)
+                r8 = 2131166085(0x7var_, float:1.7946405E38)
                 android.graphics.drawable.Drawable r7 = androidx.core.content.ContextCompat.getDrawable(r7, r8)
                 r8 = 1100480512(0x41980000, float:19.0)
                 int r8 = org.telegram.messenger.AndroidUtilities.dp(r8)
@@ -1348,7 +1348,8 @@ public class QrActivity extends BaseFragment {
         public ValueAnimator changeDayNightViewAnimator;
         /* access modifiers changed from: private */
         public float changeDayNightViewProgress;
-        private final RLottieDrawable darkThemeDrawable;
+        /* access modifiers changed from: private */
+        public final RLottieDrawable darkThemeDrawable;
         /* access modifiers changed from: private */
         public final RLottieImageView darkThemeView;
         private boolean forceDark;
@@ -1477,12 +1478,12 @@ public class QrActivity extends BaseFragment {
             r5.addView(textView, LayoutHelper.createFrame(-1, -2.0f, 8388659, 0.0f, 0.0f, 62.0f, 0.0f));
             int themedColor = baseFragment2.getThemedColor("featuredStickers_addButton");
             int dp = AndroidUtilities.dp(28.0f);
-            RLottieDrawable rLottieDrawable = new RLottieDrawable(NUM, "NUM", dp, dp, true, (int[]) null);
+            RLottieDrawable rLottieDrawable = new RLottieDrawable(NUM, "NUM", dp, dp, false, (int[]) null);
             this.darkThemeDrawable = rLottieDrawable;
+            this.forceDark = !Theme.getActiveTheme().isDark();
+            setForceDark(Theme.getActiveTheme().isDark(), false);
             rLottieDrawable.setPlayInDirectionOfCustomEndFrame(true);
-            rLottieDrawable.beginApplyLayerColors();
-            setDarkButtonColor(themedColor);
-            rLottieDrawable.commitApplyLayerColors();
+            rLottieDrawable.setColorFilter(new PorterDuffColorFilter(themedColor, PorterDuff.Mode.MULTIPLY));
             RLottieImageView rLottieImageView = new RLottieImageView(parentActivity);
             this.darkThemeView = rLottieImageView;
             rLottieImageView.setAnimation(rLottieDrawable);
@@ -1491,8 +1492,6 @@ public class QrActivity extends BaseFragment {
             rLottieImageView.setAlpha(0.0f);
             rLottieImageView.setVisibility(4);
             r5.addView(rLottieImageView, LayoutHelper.createFrame(44, 44.0f, 8388661, 0.0f, -2.0f, 7.0f, 0.0f));
-            this.forceDark = !Theme.getActiveTheme().isDark();
-            setForceDark(Theme.getActiveTheme().isDark(), false);
             FlickerLoadingView flickerLoadingView = new FlickerLoadingView(parentActivity, baseFragment.getResourceProvider());
             this.progressView = flickerLoadingView;
             flickerLoadingView.setVisibility(0);
@@ -1736,27 +1735,23 @@ public class QrActivity extends BaseFragment {
         public void setForceDark(boolean z, boolean z2) {
             if (this.forceDark != z) {
                 this.forceDark = z;
-                int i = 0;
+                int framesCount = z ? this.darkThemeDrawable.getFramesCount() - 1 : 0;
                 if (z2) {
-                    RLottieDrawable rLottieDrawable = this.darkThemeDrawable;
-                    if (z) {
-                        i = rLottieDrawable.getFramesCount();
+                    this.darkThemeDrawable.setCustomEndFrame(framesCount);
+                    RLottieImageView rLottieImageView = this.darkThemeView;
+                    if (rLottieImageView != null) {
+                        rLottieImageView.playAnimation();
+                        return;
                     }
-                    rLottieDrawable.setCustomEndFrame(i);
-                    this.darkThemeView.playAnimation();
                     return;
                 }
-                RLottieDrawable rLottieDrawable2 = this.darkThemeDrawable;
-                rLottieDrawable2.setCurrentFrame(z ? rLottieDrawable2.getFramesCount() - 1 : 0, false, true);
-                this.darkThemeView.invalidate();
+                this.darkThemeDrawable.setCustomEndFrame(framesCount);
+                this.darkThemeDrawable.setCurrentFrame(framesCount, false, true);
+                RLottieImageView rLottieImageView2 = this.darkThemeView;
+                if (rLottieImageView2 != null) {
+                    rLottieImageView2.invalidate();
+                }
             }
-        }
-
-        public void setDarkButtonColor(int i) {
-            this.darkThemeDrawable.setLayerColor("Sunny.**", i);
-            this.darkThemeDrawable.setLayerColor("Path.**", i);
-            this.darkThemeDrawable.setLayerColor("Path 10.**", i);
-            this.darkThemeDrawable.setLayerColor("Path 11.**", i);
         }
 
         /* access modifiers changed from: private */
@@ -1805,16 +1800,15 @@ public class QrActivity extends BaseFragment {
                         ThemeListViewController.this.onAnimationStart();
                         this.isAnimationStarted = true;
                     }
+                    ThemeListViewController.this.darkThemeDrawable.setColorFilter(new PorterDuffColorFilter(ThemeListViewController.this.fragment.getThemedColor("featuredStickers_addButton"), PorterDuff.Mode.MULTIPLY));
                     ThemeListViewController themeListViewController = ThemeListViewController.this;
-                    themeListViewController.setDarkButtonColor(themeListViewController.fragment.getThemedColor("featuredStickers_addButton"));
-                    ThemeListViewController themeListViewController2 = ThemeListViewController.this;
-                    if (themeListViewController2.isLightDarkChangeAnimation) {
-                        themeListViewController2.setItemsAnimationProgress(f);
+                    if (themeListViewController.isLightDarkChangeAnimation) {
+                        themeListViewController.setItemsAnimationProgress(f);
                     }
                     if (f == 1.0f && this.isAnimationStarted) {
-                        ThemeListViewController themeListViewController3 = ThemeListViewController.this;
-                        themeListViewController3.isLightDarkChangeAnimation = false;
-                        themeListViewController3.onAnimationEnd();
+                        ThemeListViewController themeListViewController2 = ThemeListViewController.this;
+                        themeListViewController2.isLightDarkChangeAnimation = false;
+                        themeListViewController2.onAnimationEnd();
                         this.isAnimationStarted = false;
                     }
                 }

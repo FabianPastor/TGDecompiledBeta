@@ -11,6 +11,6 @@ public final /* synthetic */ class LanguageDetector$$ExternalSyntheticLambda0 im
     }
 
     public final void onFailure(Exception exc) {
-        this.f$0.run(exc);
+        LanguageDetector.lambda$detectLanguage$1(this.f$0, exc);
     }
 }

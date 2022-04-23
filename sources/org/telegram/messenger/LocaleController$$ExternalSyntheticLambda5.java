@@ -17,6 +17,6 @@ public final /* synthetic */ class LocaleController$$ExternalSyntheticLambda5 im
     }
 
     public final void run() {
-        this.f$0.lambda$applyRemoteLanguage$9(this.f$1, this.f$2, this.f$3);
+        this.f$0.lambda$applyRemoteLanguage$8(this.f$1, this.f$2, this.f$3);
     }
 }

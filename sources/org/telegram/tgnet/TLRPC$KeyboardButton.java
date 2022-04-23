@@ -19,6 +19,9 @@ public abstract class TLRPC$KeyboardButton extends TLObject {
     public static TLRPC$KeyboardButton TLdeserialize(AbstractSerializedData abstractSerializedData, int i, boolean z) {
         TLRPC$KeyboardButton tLRPC$KeyboardButton;
         switch (i) {
+            case -1598009252:
+                tLRPC$KeyboardButton = new TLRPC$TL_keyboardButtonSimpleWebView();
+                break;
             case -1560655744:
                 tLRPC$KeyboardButton = new TLRPC$TL_keyboardButton();
                 break;
@@ -45,6 +48,9 @@ public abstract class TLRPC$KeyboardButton extends TLObject {
                 break;
             case 280464681:
                 tLRPC$KeyboardButton = new TLRPC$TL_keyboardButtonUrlAuth();
+                break;
+            case 326529584:
+                tLRPC$KeyboardButton = new TLRPC$TL_keyboardButtonWebView();
                 break;
             case 629866245:
                 tLRPC$KeyboardButton = new TLRPC$TL_keyboardButtonUrl();

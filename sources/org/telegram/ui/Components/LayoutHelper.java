@@ -43,6 +43,10 @@ public class LayoutHelper {
         return new FrameLayout.LayoutParams(getSize((float) i), getSize(f));
     }
 
+    public static FrameLayout.LayoutParams createFrame(float f, float f2, int i) {
+        return new FrameLayout.LayoutParams(getSize(f), getSize(f2), i);
+    }
+
     public static FrameLayout.LayoutParams createFrameRelatively(float f, float f2, int i, float f3, float f4, float f5, float f6) {
         FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(getSize(f), getSize(f2), getAbsoluteGravity(i));
         layoutParams.leftMargin = AndroidUtilities.dp(LocaleController.isRTL ? f5 : f3);

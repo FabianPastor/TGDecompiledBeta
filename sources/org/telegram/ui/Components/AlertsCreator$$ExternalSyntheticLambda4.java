@@ -16,6 +16,6 @@ public final /* synthetic */ class AlertsCreator$$ExternalSyntheticLambda4 imple
     }
 
     public final void onClick(DialogInterface dialogInterface, int i) {
-        AlertsCreator.lambda$createMuteAlert$65(this.f$0, this.f$1, this.f$2, dialogInterface, i);
+        AlertsCreator.lambda$createMuteAlert$82(this.f$0, this.f$1, this.f$2, dialogInterface, i);
     }
 }

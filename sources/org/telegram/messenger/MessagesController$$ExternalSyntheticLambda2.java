@@ -12,6 +12,6 @@ public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda2 
     }
 
     public final void onCancel(DialogInterface dialogInterface) {
-        this.f$0.lambda$convertToMegaGroup$213(this.f$1, dialogInterface);
+        this.f$0.lambda$openByUserName$341(this.f$1, dialogInterface);
     }
 }

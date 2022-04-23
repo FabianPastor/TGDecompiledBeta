@@ -1,20 +1,21 @@
 package org.telegram.messenger;
 
 import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC$TL_messages_getFeaturedStickers;
 
 public final /* synthetic */ class MediaDataController$$ExternalSyntheticLambda77 implements Runnable {
     public final /* synthetic */ MediaDataController f$0;
     public final /* synthetic */ TLObject f$1;
-    public final /* synthetic */ TLRPC$TL_messages_getFeaturedStickers f$2;
+    public final /* synthetic */ int f$2;
+    public final /* synthetic */ long f$3;
 
-    public /* synthetic */ MediaDataController$$ExternalSyntheticLambda77(MediaDataController mediaDataController, TLObject tLObject, TLRPC$TL_messages_getFeaturedStickers tLRPC$TL_messages_getFeaturedStickers) {
+    public /* synthetic */ MediaDataController$$ExternalSyntheticLambda77(MediaDataController mediaDataController, TLObject tLObject, int i, long j) {
         this.f$0 = mediaDataController;
         this.f$1 = tLObject;
-        this.f$2 = tLRPC$TL_messages_getFeaturedStickers;
+        this.f$2 = i;
+        this.f$3 = j;
     }
 
     public final void run() {
-        this.f$0.lambda$loadFeaturedStickers$27(this.f$1, this.f$2);
+        this.f$0.lambda$loadStickers$60(this.f$1, this.f$2, this.f$3);
     }
 }

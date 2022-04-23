@@ -48,6 +48,6 @@ public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda43
     public final void run() {
         MessagesController messagesController = this.f$0;
         MessagesController messagesController2 = messagesController;
-        messagesController2.lambda$processUpdateArray$317(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6, this.f$7, this.f$8, this.f$9, this.f$10, this.f$11, this.f$12, this.f$13, this.f$14, this.f$15, this.f$16, this.f$17);
+        messagesController2.lambda$processUpdateArray$319(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6, this.f$7, this.f$8, this.f$9, this.f$10, this.f$11, this.f$12, this.f$13, this.f$14, this.f$15, this.f$16, this.f$17);
     }
 }

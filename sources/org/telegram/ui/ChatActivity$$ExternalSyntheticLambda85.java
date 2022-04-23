@@ -1,15 +1,18 @@
 package org.telegram.ui;
 
+import android.content.Context;
 import android.view.View;
 
-public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda85 implements View.OnLongClickListener {
+public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda85 implements View.OnClickListener {
     public final /* synthetic */ ChatActivity f$0;
+    public final /* synthetic */ Context f$1;
 
-    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda85(ChatActivity chatActivity) {
+    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda85(ChatActivity chatActivity, Context context) {
         this.f$0 = chatActivity;
+        this.f$1 = context;
     }
 
-    public final boolean onLongClick(View view) {
-        return this.f$0.lambda$createView$39(view);
+    public final void onClick(View view) {
+        this.f$0.lambda$createView$36(this.f$1, view);
     }
 }

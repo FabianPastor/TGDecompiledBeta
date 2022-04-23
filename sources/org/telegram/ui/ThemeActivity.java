@@ -63,6 +63,7 @@ import org.telegram.ui.Cells.ChatListCell;
 import org.telegram.ui.Cells.ChatMessageCell;
 import org.telegram.ui.Cells.HeaderCell;
 import org.telegram.ui.Cells.NotificationsCheckCell;
+import org.telegram.ui.Cells.RadioButtonCell;
 import org.telegram.ui.Cells.ShadowSectionCell;
 import org.telegram.ui.Cells.TextCell;
 import org.telegram.ui.Cells.TextCheckCell;
@@ -161,7 +162,13 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
     /* access modifiers changed from: private */
     public int rowCount;
     /* access modifiers changed from: private */
+    public int saveToGalleryOption1Row;
+    /* access modifiers changed from: private */
+    public int saveToGalleryOption2Row;
+    /* access modifiers changed from: private */
     public int saveToGalleryRow;
+    /* access modifiers changed from: private */
+    public int saveToGallerySectionRow;
     /* access modifiers changed from: private */
     public int scheduleFromRow;
     /* access modifiers changed from: private */
@@ -516,6 +523,9 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
         this.raiseToSpeakRow = -1;
         this.sendByEnterRow = -1;
         this.saveToGalleryRow = -1;
+        this.saveToGalleryOption1Row = -1;
+        this.saveToGalleryOption2Row = -1;
+        this.saveToGallerySectionRow = -1;
         this.distanceRow = -1;
         this.settings2Row = -1;
         this.stickersRow = -1;
@@ -1100,21 +1110,21 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
                     org.telegram.ui.ThemeActivity r1 = org.telegram.ui.ThemeActivity.this
                     android.app.Activity r1 = r1.getParentActivity()
                     r13.<init>((android.content.Context) r1)
-                    r1 = 2131628322(0x7f0e1122, float:1.8883933E38)
+                    r1 = 2131628423(0x7f0e1187, float:1.8884138E38)
                     java.lang.String r2 = "ThemeResetToDefaultsTitle"
                     java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
                     r13.setTitle(r1)
-                    r1 = 2131628321(0x7f0e1121, float:1.8883931E38)
+                    r1 = 2131628422(0x7f0e1186, float:1.8884136E38)
                     java.lang.String r2 = "ThemeResetToDefaultsText"
                     java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
                     r13.setMessage(r1)
-                    r1 = 2131627694(0x7f0e0eae, float:1.888266E38)
+                    r1 = 2131627785(0x7f0e0var_, float:1.8882844E38)
                     java.lang.String r2 = "Reset"
                     java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
                     org.telegram.ui.ThemeActivity$1$$ExternalSyntheticLambda0 r2 = new org.telegram.ui.ThemeActivity$1$$ExternalSyntheticLambda0
                     r2.<init>(r12)
                     r13.setPositiveButton(r1, r2)
-                    r1 = 2131624705(0x7f0e0301, float:1.8876597E38)
+                    r1 = 2131624753(0x7f0e0331, float:1.8876695E38)
                     java.lang.String r2 = "Cancel"
                     java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
                     r2 = 0
@@ -2145,7 +2155,7 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
             L_0x0160:
                 org.telegram.ui.ThemeActivity r9 = org.telegram.ui.ThemeActivity.this     // Catch:{ Exception -> 0x0176 }
                 java.lang.String r10 = "ShareFile"
-                r0 = 2131627969(0x7f0e0fc1, float:1.8883217E38)
+                r0 = 2131628061(0x7f0e101d, float:1.8883404E38)
                 java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r10, r0)     // Catch:{ Exception -> 0x0176 }
                 android.content.Intent r8 = android.content.Intent.createChooser(r8, r10)     // Catch:{ Exception -> 0x0176 }
                 r10 = 500(0x1f4, float:7.0E-43)
@@ -2188,21 +2198,21 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
                 org.telegram.ui.ThemeActivity r10 = org.telegram.ui.ThemeActivity.this
                 android.app.Activity r10 = r10.getParentActivity()
                 r9.<init>((android.content.Context) r10)
-                r10 = 2131625283(0x7f0e0543, float:1.887777E38)
+                r10 = 2131625341(0x7f0e057d, float:1.8877887E38)
                 java.lang.String r0 = "DeleteThemeTitle"
                 java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r0, r10)
                 r9.setTitle(r10)
-                r10 = 2131625282(0x7f0e0542, float:1.8877768E38)
+                r10 = 2131625340(0x7f0e057c, float:1.8877885E38)
                 java.lang.String r0 = "DeleteThemeAlert"
                 java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r0, r10)
                 r9.setMessage(r10)
-                r10 = 2131625217(0x7f0e0501, float:1.8877636E38)
+                r10 = 2131625273(0x7f0e0539, float:1.887775E38)
                 java.lang.String r0 = "Delete"
                 java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r0, r10)
                 org.telegram.ui.ThemeActivity$ListAdapter$$ExternalSyntheticLambda1 r0 = new org.telegram.ui.ThemeActivity$ListAdapter$$ExternalSyntheticLambda1
                 r0.<init>(r7, r8)
                 r9.setPositiveButton(r10, r0)
-                r8 = 2131624705(0x7f0e0301, float:1.8876597E38)
+                r8 = 2131624753(0x7f0e0331, float:1.8876695E38)
                 java.lang.String r10 = "Cancel"
                 java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r10, r8)
                 r9.setNegativeButton(r8, r1)
@@ -2358,22 +2368,23 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
         }
 
         /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v13, resolved type: org.telegram.ui.Cells.ThemesHorizontalListCell} */
-        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v19, resolved type: org.telegram.ui.Cells.TextSettingsCell} */
-        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v20, resolved type: org.telegram.ui.Cells.TextInfoPrivacyCell} */
-        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v21, resolved type: org.telegram.ui.Cells.ShadowSectionCell} */
-        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v22, resolved type: org.telegram.ui.Cells.ThemeTypeCell} */
-        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v23, resolved type: org.telegram.ui.Cells.HeaderCell} */
-        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v24, resolved type: org.telegram.ui.ThemeActivity$ListAdapter$1} */
-        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v25, resolved type: org.telegram.ui.Cells.TextCheckCell} */
-        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v26, resolved type: org.telegram.ui.ThemeActivity$TextSizeCell} */
-        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v27, resolved type: org.telegram.ui.ThemeActivity$ListAdapter$2} */
-        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v28, resolved type: org.telegram.ui.Cells.NotificationsCheckCell} */
-        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v29, resolved type: org.telegram.ui.ThemeActivity$BubbleRadiusCell} */
-        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v30, resolved type: org.telegram.ui.Components.SwipeGestureSettingsView} */
-        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v31, resolved type: org.telegram.ui.Cells.ThemePreviewMessagesCell} */
+        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v20, resolved type: org.telegram.ui.Cells.TextSettingsCell} */
+        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v21, resolved type: org.telegram.ui.Cells.TextInfoPrivacyCell} */
+        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v22, resolved type: org.telegram.ui.Cells.ShadowSectionCell} */
+        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v23, resolved type: org.telegram.ui.Cells.ThemeTypeCell} */
+        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v24, resolved type: org.telegram.ui.Cells.HeaderCell} */
+        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v25, resolved type: org.telegram.ui.ThemeActivity$ListAdapter$1} */
+        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v26, resolved type: org.telegram.ui.Cells.TextCheckCell} */
+        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v27, resolved type: org.telegram.ui.ThemeActivity$TextSizeCell} */
+        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v28, resolved type: org.telegram.ui.ThemeActivity$ListAdapter$2} */
+        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v29, resolved type: org.telegram.ui.Cells.NotificationsCheckCell} */
+        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v30, resolved type: org.telegram.ui.ThemeActivity$BubbleRadiusCell} */
+        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v31, resolved type: org.telegram.ui.Components.SwipeGestureSettingsView} */
         /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v32, resolved type: org.telegram.ui.Cells.ThemePreviewMessagesCell} */
-        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v33, resolved type: org.telegram.ui.Cells.TextSettingsCell} */
-        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v34, resolved type: org.telegram.ui.Cells.TextCell} */
+        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v33, resolved type: org.telegram.ui.Cells.ThemePreviewMessagesCell} */
+        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v34, resolved type: org.telegram.ui.Cells.TextSettingsCell} */
+        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v35, resolved type: org.telegram.ui.Cells.RadioButtonCell} */
+        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v36, resolved type: org.telegram.ui.Cells.TextCell} */
         /* JADX WARNING: type inference failed for: r10v31, types: [android.view.View, androidx.recyclerview.widget.RecyclerView, android.view.ViewGroup, org.telegram.ui.Components.RecyclerListView, org.telegram.ui.ThemeActivity$ListAdapter$4] */
         /* JADX WARNING: type inference failed for: r10v38, types: [android.widget.LinearLayout, org.telegram.ui.DefaultThemesPreviewCell, android.view.View] */
         /* JADX WARNING: Multi-variable type inference failed */
@@ -2386,24 +2397,25 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
                 r0 = 0
                 java.lang.String r1 = "windowBackgroundWhite"
                 switch(r10) {
-                    case 1: goto L_0x01b4;
-                    case 2: goto L_0x019e;
-                    case 3: goto L_0x0196;
-                    case 4: goto L_0x0187;
-                    case 5: goto L_0x0178;
-                    case 6: goto L_0x0169;
-                    case 7: goto L_0x015a;
-                    case 8: goto L_0x0149;
-                    case 9: goto L_0x0139;
-                    case 10: goto L_0x0125;
-                    case 11: goto L_0x00d5;
-                    case 12: goto L_0x0075;
-                    case 13: goto L_0x0063;
+                    case 1: goto L_0x01bd;
+                    case 2: goto L_0x01a7;
+                    case 3: goto L_0x019f;
+                    case 4: goto L_0x0190;
+                    case 5: goto L_0x0181;
+                    case 6: goto L_0x0172;
+                    case 7: goto L_0x0163;
+                    case 8: goto L_0x0152;
+                    case 9: goto L_0x0142;
+                    case 10: goto L_0x012e;
+                    case 11: goto L_0x00de;
+                    case 12: goto L_0x007e;
+                    case 13: goto L_0x006c;
                     case 14: goto L_0x0007;
-                    case 15: goto L_0x0054;
-                    case 16: goto L_0x003b;
-                    case 17: goto L_0x0020;
-                    case 18: goto L_0x0017;
+                    case 15: goto L_0x005d;
+                    case 16: goto L_0x0044;
+                    case 17: goto L_0x0029;
+                    case 18: goto L_0x0020;
+                    case 19: goto L_0x0017;
                     default: goto L_0x0007;
                 }
             L_0x0007:
@@ -2412,13 +2424,18 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
                 r9.<init>(r10)
                 int r10 = org.telegram.ui.ActionBar.Theme.getColor(r1)
                 r9.setBackgroundColor(r10)
-                goto L_0x01c2
+                goto L_0x01cb
             L_0x0017:
+                org.telegram.ui.Cells.RadioButtonCell r9 = new org.telegram.ui.Cells.RadioButtonCell
+                android.content.Context r10 = r8.mContext
+                r9.<init>(r10)
+                goto L_0x01cb
+            L_0x0020:
                 org.telegram.ui.Cells.TextSettingsCell r9 = new org.telegram.ui.Cells.TextSettingsCell
                 android.content.Context r10 = r8.mContext
                 r9.<init>(r10)
-                goto L_0x01c2
-            L_0x0020:
+                goto L_0x01cb
+            L_0x0029:
                 org.telegram.ui.DefaultThemesPreviewCell r10 = new org.telegram.ui.DefaultThemesPreviewCell
                 android.content.Context r1 = r8.mContext
                 org.telegram.ui.ThemeActivity r2 = org.telegram.ui.ThemeActivity.this
@@ -2429,8 +2446,8 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
                 r1 = -2
                 r0.<init>((int) r9, (int) r1)
                 r10.setLayoutParams(r0)
-                goto L_0x0122
-            L_0x003b:
+                goto L_0x012b
+            L_0x0044:
                 org.telegram.ui.Cells.ThemePreviewMessagesCell r9 = new org.telegram.ui.Cells.ThemePreviewMessagesCell
                 android.content.Context r10 = r8.mContext
                 org.telegram.ui.ThemeActivity r1 = org.telegram.ui.ThemeActivity.this
@@ -2438,26 +2455,26 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
                 r9.<init>(r10, r1, r0)
                 int r10 = android.os.Build.VERSION.SDK_INT
                 r0 = 19
-                if (r10 < r0) goto L_0x01c2
+                if (r10 < r0) goto L_0x01cb
                 r10 = 4
                 r9.setImportantForAccessibility(r10)
-                goto L_0x01c2
-            L_0x0054:
+                goto L_0x01cb
+            L_0x005d:
                 org.telegram.ui.Components.SwipeGestureSettingsView r9 = new org.telegram.ui.Components.SwipeGestureSettingsView
                 android.content.Context r10 = r8.mContext
                 org.telegram.ui.ThemeActivity r0 = org.telegram.ui.ThemeActivity.this
                 int r0 = r0.currentAccount
                 r9.<init>(r10, r0)
-                goto L_0x01c2
-            L_0x0063:
+                goto L_0x01cb
+            L_0x006c:
                 org.telegram.ui.ThemeActivity$BubbleRadiusCell r9 = new org.telegram.ui.ThemeActivity$BubbleRadiusCell
                 org.telegram.ui.ThemeActivity r10 = org.telegram.ui.ThemeActivity.this
                 android.content.Context r0 = r8.mContext
                 r9.<init>(r0)
                 int r10 = org.telegram.ui.ActionBar.Theme.getColor(r1)
                 r9.setBackgroundColor(r10)
-                goto L_0x01c2
-            L_0x0075:
+                goto L_0x01cb
+            L_0x007e:
                 org.telegram.ui.ThemeActivity$ListAdapter$4 r10 = new org.telegram.ui.ThemeActivity$ListAdapter$4
                 android.content.Context r2 = r8.mContext
                 r10.<init>(r8, r2)
@@ -2493,8 +2510,8 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
                 int r1 = org.telegram.messenger.AndroidUtilities.dp(r1)
                 r0.<init>((int) r9, (int) r1)
                 r10.setLayoutParams(r0)
-                goto L_0x0122
-            L_0x00d5:
+                goto L_0x012b
+            L_0x00de:
                 r10 = 1
                 r8.first = r10
                 org.telegram.ui.ThemeActivity r10 = org.telegram.ui.ThemeActivity.this
@@ -2525,10 +2542,10 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
                 int r1 = org.telegram.messenger.AndroidUtilities.dp(r1)
                 r0.<init>((int) r9, (int) r1)
                 r10.setLayoutParams(r0)
-            L_0x0122:
+            L_0x012b:
                 r9 = r10
-                goto L_0x01c2
-            L_0x0125:
+                goto L_0x01cb
+            L_0x012e:
                 org.telegram.ui.Cells.NotificationsCheckCell r9 = new org.telegram.ui.Cells.NotificationsCheckCell
                 android.content.Context r10 = r8.mContext
                 r2 = 21
@@ -2536,72 +2553,72 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
                 r9.<init>(r10, r2, r3, r0)
                 int r10 = org.telegram.ui.ActionBar.Theme.getColor(r1)
                 r9.setBackgroundColor(r10)
-                goto L_0x01c2
-            L_0x0139:
+                goto L_0x01cb
+            L_0x0142:
                 org.telegram.ui.ThemeActivity$ListAdapter$2 r9 = new org.telegram.ui.ThemeActivity$ListAdapter$2
                 android.content.Context r10 = r8.mContext
                 r9.<init>(r8, r10)
                 int r10 = org.telegram.ui.ActionBar.Theme.getColor(r1)
                 r9.setBackgroundColor(r10)
-                goto L_0x01c2
-            L_0x0149:
+                goto L_0x01cb
+            L_0x0152:
                 org.telegram.ui.ThemeActivity$TextSizeCell r9 = new org.telegram.ui.ThemeActivity$TextSizeCell
                 org.telegram.ui.ThemeActivity r10 = org.telegram.ui.ThemeActivity.this
                 android.content.Context r0 = r8.mContext
                 r9.<init>(r0)
                 int r10 = org.telegram.ui.ActionBar.Theme.getColor(r1)
                 r9.setBackgroundColor(r10)
-                goto L_0x01c2
-            L_0x015a:
+                goto L_0x01cb
+            L_0x0163:
                 org.telegram.ui.Cells.TextCheckCell r9 = new org.telegram.ui.Cells.TextCheckCell
                 android.content.Context r10 = r8.mContext
                 r9.<init>(r10)
                 int r10 = org.telegram.ui.ActionBar.Theme.getColor(r1)
                 r9.setBackgroundColor(r10)
-                goto L_0x01c2
-            L_0x0169:
+                goto L_0x01cb
+            L_0x0172:
                 org.telegram.ui.ThemeActivity$ListAdapter$1 r9 = new org.telegram.ui.ThemeActivity$ListAdapter$1
                 android.content.Context r10 = r8.mContext
                 r9.<init>(r10)
                 int r10 = org.telegram.ui.ActionBar.Theme.getColor(r1)
                 r9.setBackgroundColor(r10)
-                goto L_0x01c2
-            L_0x0178:
+                goto L_0x01cb
+            L_0x0181:
                 org.telegram.ui.Cells.HeaderCell r9 = new org.telegram.ui.Cells.HeaderCell
                 android.content.Context r10 = r8.mContext
                 r9.<init>(r10)
                 int r10 = org.telegram.ui.ActionBar.Theme.getColor(r1)
                 r9.setBackgroundColor(r10)
-                goto L_0x01c2
-            L_0x0187:
+                goto L_0x01cb
+            L_0x0190:
                 org.telegram.ui.Cells.ThemeTypeCell r9 = new org.telegram.ui.Cells.ThemeTypeCell
                 android.content.Context r10 = r8.mContext
                 r9.<init>(r10)
                 int r10 = org.telegram.ui.ActionBar.Theme.getColor(r1)
                 r9.setBackgroundColor(r10)
-                goto L_0x01c2
-            L_0x0196:
+                goto L_0x01cb
+            L_0x019f:
                 org.telegram.ui.Cells.ShadowSectionCell r9 = new org.telegram.ui.Cells.ShadowSectionCell
                 android.content.Context r10 = r8.mContext
                 r9.<init>(r10)
-                goto L_0x01c2
-            L_0x019e:
+                goto L_0x01cb
+            L_0x01a7:
                 org.telegram.ui.Cells.TextInfoPrivacyCell r9 = new org.telegram.ui.Cells.TextInfoPrivacyCell
                 android.content.Context r10 = r8.mContext
                 r9.<init>(r10)
                 android.content.Context r10 = r8.mContext
-                r0 = 2131165471(0x7var_f, float:1.794516E38)
+                r0 = 2131165483(0x7var_b, float:1.7945184E38)
                 java.lang.String r1 = "windowBackgroundGrayShadow"
                 android.graphics.drawable.Drawable r10 = org.telegram.ui.ActionBar.Theme.getThemedDrawable((android.content.Context) r10, (int) r0, (java.lang.String) r1)
                 r9.setBackgroundDrawable(r10)
-                goto L_0x01c2
-            L_0x01b4:
+                goto L_0x01cb
+            L_0x01bd:
                 org.telegram.ui.Cells.TextSettingsCell r9 = new org.telegram.ui.Cells.TextSettingsCell
                 android.content.Context r10 = r8.mContext
                 r9.<init>(r10)
                 int r10 = org.telegram.ui.ActionBar.Theme.getColor(r1)
                 r9.setBackgroundColor(r10)
-            L_0x01c2:
+            L_0x01cb:
                 org.telegram.ui.Components.RecyclerListView$Holder r10 = new org.telegram.ui.Components.RecyclerListView$Holder
                 r10.<init>(r9)
                 return r10
@@ -2685,7 +2702,7 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
                         return;
                     }
                 case 3:
-                    if (i2 == ThemeActivity.this.stickersSection2Row || ((i2 == ThemeActivity.this.nightTypeInfoRow && ThemeActivity.this.themeInfoRow == -1) || (i2 == ThemeActivity.this.themeInfoRow && ThemeActivity.this.nightTypeInfoRow != -1))) {
+                    if (i2 == ThemeActivity.this.stickersSection2Row || ((i2 == ThemeActivity.this.nightTypeInfoRow && ThemeActivity.this.themeInfoRow == -1) || ((i2 == ThemeActivity.this.themeInfoRow && ThemeActivity.this.nightTypeInfoRow != -1) || i2 == ThemeActivity.this.saveToGallerySectionRow))) {
                         viewHolder2.itemView.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, NUM, "windowBackgroundGrayShadow"));
                         return;
                     } else {
@@ -2834,12 +2851,12 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
                     RecyclerListView recyclerListView = (RecyclerListView) viewHolder2.itemView;
                     ThemeAccentsListAdapter themeAccentsListAdapter = (ThemeAccentsListAdapter) recyclerListView.getAdapter();
                     themeAccentsListAdapter.notifyDataSetChanged();
-                    int access$6800 = themeAccentsListAdapter.findCurrentAccent();
-                    if (access$6800 == -1) {
-                        access$6800 = themeAccentsListAdapter.getItemCount() - 1;
+                    int access$6900 = themeAccentsListAdapter.findCurrentAccent();
+                    if (access$6900 == -1) {
+                        access$6900 = themeAccentsListAdapter.getItemCount() - 1;
                     }
-                    if (access$6800 != -1) {
-                        ((LinearLayoutManager) recyclerListView.getLayoutManager()).scrollToPositionWithOffset(access$6800, (ThemeActivity.this.listView.getMeasuredWidth() / 2) - AndroidUtilities.dp(42.0f));
+                    if (access$6900 != -1) {
+                        ((LinearLayoutManager) recyclerListView.getLayoutManager()).scrollToPositionWithOffset(access$6900, (ThemeActivity.this.listView.getMeasuredWidth() / 2) - AndroidUtilities.dp(42.0f));
                         return;
                     }
                     return;
@@ -2870,6 +2887,15 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
                         return;
                     }
                     return;
+                case 19:
+                    RadioButtonCell radioButtonCell = (RadioButtonCell) viewHolder2.itemView;
+                    if (i2 == ThemeActivity.this.saveToGalleryOption1Row) {
+                        radioButtonCell.setTextAndValue("save media only from peer chats", "", true, false);
+                        return;
+                    } else {
+                        radioButtonCell.setTextAndValue("save media from all chats", "", true, false);
+                        return;
+                    }
                 default:
                     return;
             }
@@ -2892,7 +2918,7 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
             if (i == ThemeActivity.this.automaticBrightnessInfoRow || i == ThemeActivity.this.scheduleLocationInfoRow) {
                 return 2;
             }
-            if (i == ThemeActivity.this.themeInfoRow || i == ThemeActivity.this.nightTypeInfoRow || i == ThemeActivity.this.scheduleFromToInfoRow || i == ThemeActivity.this.stickersSection2Row || i == ThemeActivity.this.settings2Row || i == ThemeActivity.this.newThemeInfoRow || i == ThemeActivity.this.chatListInfoRow || i == ThemeActivity.this.bubbleRadiusInfoRow || i == ThemeActivity.this.swipeGestureInfoRow) {
+            if (i == ThemeActivity.this.themeInfoRow || i == ThemeActivity.this.nightTypeInfoRow || i == ThemeActivity.this.scheduleFromToInfoRow || i == ThemeActivity.this.stickersSection2Row || i == ThemeActivity.this.settings2Row || i == ThemeActivity.this.newThemeInfoRow || i == ThemeActivity.this.chatListInfoRow || i == ThemeActivity.this.bubbleRadiusInfoRow || i == ThemeActivity.this.swipeGestureInfoRow || i == ThemeActivity.this.saveToGallerySectionRow) {
                 return 3;
             }
             if (i == ThemeActivity.this.nightDisabledRow || i == ThemeActivity.this.nightScheduledRow || i == ThemeActivity.this.nightAutomaticRow || i == ThemeActivity.this.nightSystemDefaultRow) {
@@ -2939,6 +2965,9 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
             }
             if (i == ThemeActivity.this.reactionsDoubleTapRow) {
                 return 18;
+            }
+            if (i == ThemeActivity.this.saveToGalleryOption1Row || i == ThemeActivity.this.saveToGalleryOption2Row) {
+                return 19;
             }
             return 1;
         }

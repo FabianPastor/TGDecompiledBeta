@@ -6,7 +6,7 @@ import j$.util.CLASSNAMEk;
 import j$.util.CLASSNAMEp;
 import j$.util.N;
 import j$.util.function.BiConsumer;
-import j$.util.function.CLASSNAMEb;
+import j$.util.function.b;
 import j$.util.function.j;
 import j$.util.function.l;
 import j$.util.function.m;
@@ -189,7 +189,7 @@ abstract class L0 extends CLASSNAMEc implements M0 {
     }
 
     /* renamed from: iterator  reason: collision with other method in class */
-    public Iterator m546iterator() {
+    public Iterator m560iterator() {
         return N.g(spliterator());
     }
 
@@ -197,7 +197,7 @@ abstract class L0 extends CLASSNAMEc implements M0 {
         C c = new C(biConsumer, 1);
         yVar.getClass();
         vVar.getClass();
-        return x0(new A2(CLASSNAMEf4.INT_VALUE, (CLASSNAMEb) c, vVar, yVar));
+        return x0(new A2(CLASSNAMEf4.INT_VALUE, (b) c, vVar, yVar));
     }
 
     public final M0 limit(long j) {

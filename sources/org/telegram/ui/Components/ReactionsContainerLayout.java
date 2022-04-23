@@ -42,6 +42,7 @@ import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.SharedConfig;
 import org.telegram.messenger.SvgHelper;
+import org.telegram.messenger.Utilities;
 import org.telegram.tgnet.TLRPC$ChatFull;
 import org.telegram.tgnet.TLRPC$TL_availableReaction;
 import org.telegram.ui.ActionBar.Theme;
@@ -70,6 +71,7 @@ public class ReactionsContainerLayout extends FrameLayout implements Notificatio
     private int currentAccount;
     /* access modifiers changed from: private */
     public ReactionsContainerDelegate delegate;
+    long lastReactionSentTime;
     HashSet<View> lastVisibleViews;
     HashSet<View> lastVisibleViewsTmp;
     /* access modifiers changed from: private */
@@ -316,7 +318,7 @@ public class ReactionsContainerLayout extends FrameLayout implements Notificatio
             float var_ = var_ / 0.75f;
             canvas2.scale(var_, var_, var_, ((float) getHeight()) / 2.0f);
         }
-        if (this.transitionProgress != 0.0f) {
+        if (this.transitionProgress != 0.0f && getAlpha() == 1.0f) {
             int i = 0;
             for (int i2 = 0; i2 < this.recyclerListView.getChildCount(); i2++) {
                 ReactionHolderView reactionHolderView = (ReactionHolderView) this.recyclerListView.getChildAt(i2);
@@ -337,14 +339,12 @@ public class ReactionsContainerLayout extends FrameLayout implements Notificatio
         canvas2.clipPath(this.mPath);
         canvas2.translate(((float) ((LocaleController.isRTL ? -1 : 1) * getWidth())) * (1.0f - this.transitionProgress), 0.0f);
         super.dispatchDraw(canvas);
-        Paint paint = this.leftShadowPaint;
-        if (paint != null) {
-            paint.setAlpha((int) (this.leftAlpha * this.transitionProgress * 255.0f));
+        if (this.leftShadowPaint != null) {
+            this.leftShadowPaint.setAlpha((int) (Utilities.clamp(this.leftAlpha * this.transitionProgress, 1.0f, 0.0f) * 255.0f));
             canvas2.drawRect(this.rect, this.leftShadowPaint);
         }
-        Paint paint2 = this.rightShadowPaint;
-        if (paint2 != null) {
-            paint2.setAlpha((int) (this.rightAlpha * this.transitionProgress * 255.0f));
+        if (this.rightShadowPaint != null) {
+            this.rightShadowPaint.setAlpha((int) (Utilities.clamp(this.rightAlpha * this.transitionProgress, 1.0f, 0.0f) * 255.0f));
             canvas2.drawRect(this.rect, this.rightShadowPaint);
         }
         canvas2.restoreToCount(save3);
@@ -385,19 +385,22 @@ public class ReactionsContainerLayout extends FrameLayout implements Notificatio
                 }
                 if (this.pressedProgress == 1.0f) {
                     this.clicked = true;
-                    this.delegate.onReactionClicked(reactionHolderView, reactionHolderView.currentReaction, true);
+                    if (System.currentTimeMillis() - this.lastReactionSentTime > 300) {
+                        this.lastReactionSentTime = System.currentTimeMillis();
+                        this.delegate.onReactionClicked(reactionHolderView, reactionHolderView.currentReaction, true);
+                    }
                 }
             }
             canvas.save();
             float x = this.recyclerListView.getX() + reactionHolderView.getX();
             float measuredWidth = ((((float) reactionHolderView.getMeasuredWidth()) * reactionHolderView.getScaleX()) - ((float) reactionHolderView.getMeasuredWidth())) / 2.0f;
             float f = x - measuredWidth;
-            if (f < 0.0f) {
+            if (f < 0.0f && reactionHolderView.getTranslationX() >= 0.0f) {
                 reactionHolderView.setTranslationX(-f);
-            } else if (((float) reactionHolderView.getMeasuredWidth()) + x + measuredWidth > ((float) getMeasuredWidth())) {
-                reactionHolderView.setTranslationX(((((float) getMeasuredWidth()) - x) - ((float) reactionHolderView.getMeasuredWidth())) - measuredWidth);
-            } else {
+            } else if (((float) reactionHolderView.getMeasuredWidth()) + x + measuredWidth <= ((float) getMeasuredWidth()) || reactionHolderView.getTranslationX() > 0.0f) {
                 reactionHolderView.setTranslationX(0.0f);
+            } else {
+                reactionHolderView.setTranslationX(((((float) getMeasuredWidth()) - x) - ((float) reactionHolderView.getMeasuredWidth())) - measuredWidth);
             }
             canvas.translate(this.recyclerListView.getX() + reactionHolderView.getX(), this.recyclerListView.getY() + reactionHolderView.getY());
             canvas.scale(reactionHolderView.getScaleX(), reactionHolderView.getScaleY(), reactionHolderView.getPivotX(), reactionHolderView.getPivotY());
@@ -689,7 +692,12 @@ public class ReactionsContainerLayout extends FrameLayout implements Notificatio
             if ((motionEvent.getAction() == 2 && (Math.abs(this.pressedX - motionEvent.getX()) > scaledTouchSlop || Math.abs(this.pressedY - motionEvent.getY()) > scaledTouchSlop)) || motionEvent.getAction() == 1 || motionEvent.getAction() == 3) {
                 if (motionEvent.getAction() == 1 && this.pressed && ((ReactionsContainerLayout.this.pressedReaction == null || ReactionsContainerLayout.this.pressedProgress > 0.8f) && ReactionsContainerLayout.this.delegate != null)) {
                     boolean unused = ReactionsContainerLayout.this.clicked = true;
-                    ReactionsContainerLayout.this.delegate.onReactionClicked(this, this.currentReaction, ReactionsContainerLayout.this.pressedProgress > 0.8f);
+                    long currentTimeMillis = System.currentTimeMillis();
+                    ReactionsContainerLayout reactionsContainerLayout = ReactionsContainerLayout.this;
+                    if (currentTimeMillis - reactionsContainerLayout.lastReactionSentTime > 300) {
+                        reactionsContainerLayout.lastReactionSentTime = System.currentTimeMillis();
+                        ReactionsContainerLayout.this.delegate.onReactionClicked(this, this.currentReaction, ReactionsContainerLayout.this.pressedProgress > 0.8f);
+                    }
                 }
                 if (!ReactionsContainerLayout.this.clicked) {
                     ReactionsContainerLayout.this.cancelPressed();
@@ -753,5 +761,15 @@ public class ReactionsContainerLayout extends FrameLayout implements Notificatio
                 startEnterAnimation();
             }
         }
+    }
+
+    public void setAlpha(float f) {
+        if (getAlpha() != f && f == 0.0f) {
+            this.lastVisibleViews.clear();
+            for (int i = 0; i < this.recyclerListView.getChildCount(); i++) {
+                ((ReactionHolderView) this.recyclerListView.getChildAt(i)).resetAnimation();
+            }
+        }
+        super.setAlpha(f);
     }
 }

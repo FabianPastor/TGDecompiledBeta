@@ -285,6 +285,14 @@ public class DrawerLayoutContainer extends FrameLayout {
         this.parentActionBarLayout = actionBarLayout;
     }
 
+    public void presentFragment(BaseFragment baseFragment) {
+        ActionBarLayout actionBarLayout = this.parentActionBarLayout;
+        if (actionBarLayout != null) {
+            actionBarLayout.presentFragment(baseFragment);
+        }
+        closeDrawer(false);
+    }
+
     public void closeDrawer() {
         if (this.drawerPosition != 0.0f) {
             setDrawerPosition(0.0f);

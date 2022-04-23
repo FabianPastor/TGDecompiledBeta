@@ -3,14 +3,18 @@ package org.telegram.messenger;
 import org.telegram.tgnet.RequestDelegate;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC$TL_error;
+import org.telegram.tgnet.TLRPC$TL_messages_getFeaturedStickers;
 
 public final /* synthetic */ class MediaDataController$$ExternalSyntheticLambda158 implements RequestDelegate {
-    public static final /* synthetic */ MediaDataController$$ExternalSyntheticLambda158 INSTANCE = new MediaDataController$$ExternalSyntheticLambda158();
+    public final /* synthetic */ MediaDataController f$0;
+    public final /* synthetic */ TLRPC$TL_messages_getFeaturedStickers f$1;
 
-    private /* synthetic */ MediaDataController$$ExternalSyntheticLambda158() {
+    public /* synthetic */ MediaDataController$$ExternalSyntheticLambda158(MediaDataController mediaDataController, TLRPC$TL_messages_getFeaturedStickers tLRPC$TL_messages_getFeaturedStickers) {
+        this.f$0 = mediaDataController;
+        this.f$1 = tLRPC$TL_messages_getFeaturedStickers;
     }
 
     public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        MediaDataController.lambda$saveDraft$133(tLObject, tLRPC$TL_error);
+        this.f$0.lambda$loadFeaturedStickers$32(this.f$1, tLObject, tLRPC$TL_error);
     }
 }

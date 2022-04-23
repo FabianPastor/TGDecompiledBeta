@@ -43,7 +43,7 @@ public class BlurredLinearLayout extends LinearLayout {
                 f += view.getY();
                 view = (View) view.getParent();
             }
-            sizeNotifierFrameLayout2.drawBlur(canvas, f, AndroidUtilities.rectTmp2, this.backgroundPaint, this.isTopView);
+            sizeNotifierFrameLayout2.drawBlurRect(canvas, f, AndroidUtilities.rectTmp2, this.backgroundPaint, this.isTopView);
         }
         super.dispatchDraw(canvas);
     }

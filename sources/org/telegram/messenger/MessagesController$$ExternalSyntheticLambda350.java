@@ -11,6 +11,6 @@ public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda35
     }
 
     public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        MessagesController.lambda$markReactionsAsRead$326(tLObject, tLRPC$TL_error);
+        MessagesController.lambda$reportSpam$55(tLObject, tLRPC$TL_error);
     }
 }

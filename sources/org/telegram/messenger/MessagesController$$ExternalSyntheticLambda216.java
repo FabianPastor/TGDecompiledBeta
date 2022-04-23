@@ -1,15 +1,16 @@
 package org.telegram.messenger;
 
 import java.util.Comparator;
-import org.telegram.messenger.MessagesController;
+import org.telegram.tgnet.TLRPC$Update;
 
 public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda216 implements Comparator {
-    public static final /* synthetic */ MessagesController$$ExternalSyntheticLambda216 INSTANCE = new MessagesController$$ExternalSyntheticLambda216();
+    public final /* synthetic */ MessagesController f$0;
 
-    private /* synthetic */ MessagesController$$ExternalSyntheticLambda216() {
+    public /* synthetic */ MessagesController$$ExternalSyntheticLambda216(MessagesController messagesController) {
+        this.f$0 = messagesController;
     }
 
     public final int compare(Object obj, Object obj2) {
-        return MessagesController.lambda$processLoadedDialogFilters$12((MessagesController.DialogFilter) obj, (MessagesController.DialogFilter) obj2);
+        return this.f$0.lambda$new$8((TLRPC$Update) obj, (TLRPC$Update) obj2);
     }
 }

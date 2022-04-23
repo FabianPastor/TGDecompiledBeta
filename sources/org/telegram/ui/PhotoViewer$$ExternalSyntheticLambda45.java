@@ -8,6 +8,6 @@ public final /* synthetic */ class PhotoViewer$$ExternalSyntheticLambda45 implem
     }
 
     public final void run() {
-        this.f$0.lambda$onDraw$67();
+        this.f$0.onLongPress();
     }
 }

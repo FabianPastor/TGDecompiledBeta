@@ -10,6 +10,6 @@ public final /* synthetic */ class LoginActivity$$ExternalSyntheticLambda9 imple
     }
 
     public final void onClick(View view) {
-        this.f$0.lambda$createView$5(view);
+        this.f$0.lambda$createView$1(view);
     }
 }

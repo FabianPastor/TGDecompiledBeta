@@ -1,7 +1,7 @@
 package org.telegram.tgnet;
 
 public class TLRPC$TL_botInfo extends TLRPC$BotInfo {
-    public static int constructor = NUM;
+    public static int constructor = -NUM;
 
     public void readParams(AbstractSerializedData abstractSerializedData, boolean z) {
         this.user_id = abstractSerializedData.readInt64(z);
@@ -19,6 +19,7 @@ public class TLRPC$TL_botInfo extends TLRPC$BotInfo {
                     return;
                 }
             }
+            this.menu_button = TLRPC$BotMenuButton.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
         } else if (z) {
             throw new RuntimeException(String.format("wrong Vector magic, got %x", new Object[]{Integer.valueOf(readInt32)}));
         }
@@ -34,5 +35,6 @@ public class TLRPC$TL_botInfo extends TLRPC$BotInfo {
         for (int i = 0; i < size; i++) {
             this.commands.get(i).serializeToStream(abstractSerializedData);
         }
+        this.menu_button.serializeToStream(abstractSerializedData);
     }
 }

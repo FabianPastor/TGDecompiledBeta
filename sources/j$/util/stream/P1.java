@@ -34,7 +34,7 @@ final class P1 extends S1 implements CLASSNAMEv1 {
     }
 
     /* renamed from: spliterator  reason: collision with other method in class */
-    public y m547spliterator() {
+    public y m561spliterator() {
         return new CLASSNAMEg2(this);
     }
 }

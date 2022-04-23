@@ -8,6 +8,6 @@ public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda27
     }
 
     public final void run() {
-        this.f$0.lambda$processLoadedDeleteTask$64();
+        this.f$0.lambda$putUsers$37();
     }
 }

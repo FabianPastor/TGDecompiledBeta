@@ -1,18 +1,15 @@
 package org.telegram.ui;
 
-import android.view.View;
-import org.telegram.ui.ActionBar.ActionBarPopupWindow;
+import android.content.DialogInterface;
 
-public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda51 implements View.OnClickListener {
-    public final /* synthetic */ ActionBarPopupWindow.ActionBarPopupWindowLayout f$0;
-    public final /* synthetic */ int[] f$1;
+public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda51 implements DialogInterface.OnDismissListener {
+    public final /* synthetic */ ChatActivity f$0;
 
-    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda51(ActionBarPopupWindow.ActionBarPopupWindowLayout actionBarPopupWindowLayout, int[] iArr) {
-        this.f$0 = actionBarPopupWindowLayout;
-        this.f$1 = iArr;
+    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda51(ChatActivity chatActivity) {
+        this.f$0 = chatActivity;
     }
 
-    public final void onClick(View view) {
-        this.f$0.getSwipeBack().openForeground(this.f$1[0]);
+    public final void onDismiss(DialogInterface dialogInterface) {
+        this.f$0.lambda$processSelectedOption$205(dialogInterface);
     }
 }

@@ -12,6 +12,6 @@ public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda39
     }
 
     public final void run() {
-        this.f$0.lambda$markDialogAsReadNow$196(this.f$1, this.f$2);
+        this.f$0.lambda$markDialogAsReadNow$197(this.f$1, this.f$2);
     }
 }

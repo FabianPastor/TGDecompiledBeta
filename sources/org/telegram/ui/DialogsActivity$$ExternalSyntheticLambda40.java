@@ -16,6 +16,6 @@ public final /* synthetic */ class DialogsActivity$$ExternalSyntheticLambda40 im
     }
 
     public final void run() {
-        this.f$0.lambda$onResume$15(this.f$1, this.f$2, this.f$3);
+        this.f$0.lambda$onResume$16(this.f$1, this.f$2, this.f$3);
     }
 }

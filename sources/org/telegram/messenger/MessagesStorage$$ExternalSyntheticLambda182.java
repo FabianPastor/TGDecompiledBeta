@@ -1,19 +1,19 @@
 package org.telegram.messenger;
 
-import org.telegram.tgnet.TLRPC$messages_Dialogs;
-
 public final /* synthetic */ class MessagesStorage$$ExternalSyntheticLambda182 implements Runnable {
     public final /* synthetic */ MessagesStorage f$0;
-    public final /* synthetic */ TLRPC$messages_Dialogs f$1;
-    public final /* synthetic */ int f$2;
+    public final /* synthetic */ boolean f$1;
+    public final /* synthetic */ long f$2;
+    public final /* synthetic */ int f$3;
 
-    public /* synthetic */ MessagesStorage$$ExternalSyntheticLambda182(MessagesStorage messagesStorage, TLRPC$messages_Dialogs tLRPC$messages_Dialogs, int i) {
+    public /* synthetic */ MessagesStorage$$ExternalSyntheticLambda182(MessagesStorage messagesStorage, boolean z, long j, int i) {
         this.f$0 = messagesStorage;
-        this.f$1 = tLRPC$messages_Dialogs;
-        this.f$2 = i;
+        this.f$1 = z;
+        this.f$2 = j;
+        this.f$3 = i;
     }
 
     public final void run() {
-        this.f$0.lambda$putDialogs$194(this.f$1, this.f$2);
+        this.f$0.lambda$updateDialogUnreadReactions$196(this.f$1, this.f$2, this.f$3);
     }
 }

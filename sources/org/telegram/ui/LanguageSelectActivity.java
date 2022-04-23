@@ -624,7 +624,7 @@ public class LanguageSelectActivity extends BaseFragment implements Notification
                 r3.<init>(r0)
                 int r2 = org.telegram.ui.ActionBar.Theme.getColor(r2)
                 r3.setBackgroundColor(r2)
-                r2 = 2131626152(0x7f0e08a8, float:1.8879532E38)
+                r2 = 2131626228(0x7f0e08f4, float:1.8879686E38)
                 java.lang.String r0 = "Language"
                 java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r0, r2)
                 r3.setText(r2)
@@ -709,13 +709,13 @@ public class LanguageSelectActivity extends BaseFragment implements Notification
                 int r0 = r0.size()
                 if (r12 != r0) goto L_0x0057
                 android.content.Context r12 = r10.mContext
-                r0 = 2131165471(0x7var_f, float:1.794516E38)
+                r0 = 2131165483(0x7var_b, float:1.7945184E38)
                 android.graphics.drawable.Drawable r12 = org.telegram.ui.ActionBar.Theme.getThemedDrawable((android.content.Context) r12, (int) r0, (java.lang.String) r1)
                 r11.setBackgroundDrawable(r12)
                 goto L_0x0136
             L_0x0057:
                 android.content.Context r12 = r10.mContext
-                r0 = 2131165472(0x7var_, float:1.7945162E38)
+                r0 = 2131165484(0x7var_c, float:1.7945186E38)
                 android.graphics.drawable.Drawable r12 = org.telegram.ui.ActionBar.Theme.getThemedDrawable((android.content.Context) r12, (int) r0, (java.lang.String) r1)
                 r11.setBackgroundDrawable(r12)
                 goto L_0x0136
@@ -789,7 +789,7 @@ public class LanguageSelectActivity extends BaseFragment implements Notification
                 java.lang.Object[] r1 = new java.lang.Object[r1]
                 java.lang.String r4 = r0.name
                 r1[r2] = r4
-                r4 = 2131626155(0x7f0e08ab, float:1.8879538E38)
+                r4 = 2131626231(0x7f0e08f7, float:1.8879692E38)
                 java.lang.String r5 = "LanguageCustom"
                 java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r5, r4)
                 r1[r3] = r4

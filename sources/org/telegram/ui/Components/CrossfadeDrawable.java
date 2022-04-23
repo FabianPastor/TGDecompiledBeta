@@ -7,7 +7,8 @@ import android.graphics.drawable.Drawable;
 
 public class CrossfadeDrawable extends Drawable {
     private final Drawable bottomDrawable;
-    private float progress;
+    /* access modifiers changed from: private */
+    public float progress;
     private final Drawable topDrawable;
 
     public int getOpacity() {
@@ -17,12 +18,39 @@ public class CrossfadeDrawable extends Drawable {
     public void setAlpha(int i) {
     }
 
-    public void setColorFilter(ColorFilter colorFilter) {
-    }
-
     public CrossfadeDrawable(Drawable drawable, Drawable drawable2) {
         this.topDrawable = drawable;
         this.bottomDrawable = drawable2;
+        if (drawable != null) {
+            drawable.setCallback(new Drawable.Callback() {
+                public void scheduleDrawable(Drawable drawable, Runnable runnable, long j) {
+                }
+
+                public void unscheduleDrawable(Drawable drawable, Runnable runnable) {
+                }
+
+                public void invalidateDrawable(Drawable drawable) {
+                    if (CrossfadeDrawable.this.progress < 1.0f) {
+                        CrossfadeDrawable.this.invalidateSelf();
+                    }
+                }
+            });
+        }
+        if (drawable2 != null) {
+            drawable2.setCallback(new Drawable.Callback() {
+                public void scheduleDrawable(Drawable drawable, Runnable runnable, long j) {
+                }
+
+                public void unscheduleDrawable(Drawable drawable, Runnable runnable) {
+                }
+
+                public void invalidateDrawable(Drawable drawable) {
+                    if (CrossfadeDrawable.this.progress > 0.0f) {
+                        CrossfadeDrawable.this.invalidateSelf();
+                    }
+                }
+            });
+        }
     }
 
     /* access modifiers changed from: protected */
@@ -44,12 +72,20 @@ public class CrossfadeDrawable extends Drawable {
         }
     }
 
+    public void setColorFilter(ColorFilter colorFilter) {
+        this.topDrawable.setColorFilter(colorFilter);
+    }
+
     public int getIntrinsicWidth() {
         return this.topDrawable.getIntrinsicWidth();
     }
 
     public int getIntrinsicHeight() {
         return this.topDrawable.getIntrinsicHeight();
+    }
+
+    public float getProgress() {
+        return this.progress;
     }
 
     public void setProgress(float f) {

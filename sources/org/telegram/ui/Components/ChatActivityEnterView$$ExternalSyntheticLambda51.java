@@ -1,15 +1,16 @@
 package org.telegram.ui.Components;
 
-import org.telegram.ui.Components.EditTextCaption;
+import android.view.KeyEvent;
+import org.telegram.ui.ActionBar.ActionBarPopupWindow;
 
-public final /* synthetic */ class ChatActivityEnterView$$ExternalSyntheticLambda51 implements EditTextCaption.EditTextCaptionDelegate {
+public final /* synthetic */ class ChatActivityEnterView$$ExternalSyntheticLambda51 implements ActionBarPopupWindow.OnDispatchKeyEventListener {
     public final /* synthetic */ ChatActivityEnterView f$0;
 
     public /* synthetic */ ChatActivityEnterView$$ExternalSyntheticLambda51(ChatActivityEnterView chatActivityEnterView) {
         this.f$0 = chatActivityEnterView;
     }
 
-    public final void onSpansChanged() {
-        this.f$0.lambda$new$2();
+    public final void onDispatchKeyEvent(KeyEvent keyEvent) {
+        this.f$0.lambda$onSendLongClick$33(keyEvent);
     }
 }

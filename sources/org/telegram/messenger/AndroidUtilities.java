@@ -4,6 +4,7 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
+import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.KeyguardManager;
@@ -49,6 +50,7 @@ import android.text.StaticLayout;
 import android.text.TextPaint;
 import android.text.TextUtils;
 import android.text.method.LinkMovementMethod;
+import android.text.style.ClickableSpan;
 import android.text.style.URLSpan;
 import android.text.util.Linkify;
 import android.util.DisplayMetrics;
@@ -122,6 +124,7 @@ import org.telegram.ui.ActionBar.BottomSheet;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Cells.TextDetailSettingsCell;
 import org.telegram.ui.Components.BackgroundGradientDrawable;
+import org.telegram.ui.Components.CubicBezierInterpolator;
 import org.telegram.ui.Components.ForegroundColorSpanThemable;
 import org.telegram.ui.Components.ForegroundDetector;
 import org.telegram.ui.Components.HideViewAfterAnimation;
@@ -164,6 +167,7 @@ public class AndroidUtilities {
     public static boolean firstConfigurationWas;
     private static WeakReference<BaseFragment> flagSecureFragment;
     private static final HashMap<Window, ArrayList<Long>> flagSecureReasons = new HashMap<>();
+    private static SimpleDateFormat generatingVideoPathFormat;
     private static boolean hasCallPermissions = (Build.VERSION.SDK_INT >= 23);
     public static boolean incorrectDisplaySizeFix;
     public static boolean isInMultiwindow;
@@ -173,6 +177,8 @@ public class AndroidUtilities {
     public static int leftBaseline = (isTablet() ? 80 : 72);
     private static Field mAttachInfoField;
     private static Field mStableInsetsField;
+    /* access modifiers changed from: private */
+    public static HashMap<Window, ValueAnimator> navigationBarColorAnimators;
     public static int navigationBarHeight = 0;
     public static final String[] numbersSignatureArray = {"", "K", "M", "G", "T", "P"};
     public static OvershootInterpolator overshootInterpolator = new OvershootInterpolator();
@@ -184,8 +190,9 @@ public class AndroidUtilities {
     public static int roundMessageSize;
     private static Paint roundPaint;
     public static int roundPlayingMessageSize;
-    public static final Linkify.MatchFilter sUrlMatchFilter = AndroidUtilities$$ExternalSyntheticLambda1.INSTANCE;
+    public static final Linkify.MatchFilter sUrlMatchFilter = AndroidUtilities$$ExternalSyntheticLambda2.INSTANCE;
     public static float screenRefreshRate = 60.0f;
+    private static Pattern singleTagPatter = null;
     private static final Object smsLock = new Object();
     public static int statusBarHeight = 0;
     private static final Hashtable<String, Typeface> typefaceCache = new Hashtable<>();
@@ -193,6 +200,10 @@ public class AndroidUtilities {
     public static boolean usingHardwareInput;
     private static boolean waitingForCall = false;
     private static boolean waitingForSms = false;
+
+    public interface IntColorCallback {
+        void run(int i);
+    }
 
     public static void appCenterLog(Throwable th) {
     }
@@ -411,6 +422,34 @@ public class AndroidUtilities {
         return null;
     }
 
+    public static CharSequence replaceSingleTag(String str, final Runnable runnable) {
+        int i;
+        int i2;
+        int indexOf = str.indexOf("**");
+        int indexOf2 = str.indexOf("**", indexOf + 1);
+        String replace = str.replace("**", "");
+        if (indexOf < 0 || indexOf2 < 0 || (i2 = indexOf2 - indexOf) <= 2) {
+            indexOf = -1;
+            i = 0;
+        } else {
+            i = i2 - 2;
+        }
+        SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(replace);
+        if (indexOf >= 0) {
+            spannableStringBuilder.setSpan(new ClickableSpan() {
+                public void updateDrawState(TextPaint textPaint) {
+                    super.updateDrawState(textPaint);
+                    textPaint.setUnderlineText(false);
+                }
+
+                public void onClick(View view) {
+                    runnable.run();
+                }
+            }, indexOf, i + indexOf, 0);
+        }
+        return spannableStringBuilder;
+    }
+
     private static class LinkSpec {
         int end;
         int start;
@@ -508,7 +547,7 @@ public class AndroidUtilities {
 
     private static void pruneOverlaps(ArrayList<LinkSpec> arrayList) {
         int i;
-        Collections.sort(arrayList, AndroidUtilities$$ExternalSyntheticLambda7.INSTANCE);
+        Collections.sort(arrayList, AndroidUtilities$$ExternalSyntheticLambda8.INSTANCE);
         int size = arrayList.size();
         int i2 = 0;
         while (i2 < size - 1) {
@@ -858,7 +897,7 @@ public class AndroidUtilities {
             }
             AlertDialog.Builder builder = new AlertDialog.Builder((Context) baseFragment.getParentActivity());
             builder.setMessage(LocaleController.getString("InstallGoogleMaps", NUM));
-            builder.setPositiveButton(LocaleController.getString("OK", NUM), new AndroidUtilities$$ExternalSyntheticLambda0(baseFragment));
+            builder.setPositiveButton(LocaleController.getString("OK", NUM), new AndroidUtilities$$ExternalSyntheticLambda1(baseFragment));
             builder.setNegativeButton(LocaleController.getString("Cancel", NUM), (DialogInterface.OnClickListener) null);
             baseFragment.showDialog(builder.create());
             return false;
@@ -1159,7 +1198,7 @@ public class AndroidUtilities {
                 int r0 = r9.type
                 r1 = 5
                 if (r0 != r1) goto L_0x000f
-                r0 = 2131625085(0x7f0e047d, float:1.8877368E38)
+                r0 = 2131625137(0x7f0e04b1, float:1.8877473E38)
                 java.lang.String r1 = "ContactBirthday"
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
                 return r0
@@ -1171,12 +1210,12 @@ public class AndroidUtilities {
                 java.lang.String r1 = "ORG"
                 boolean r0 = r1.equalsIgnoreCase(r0)
                 if (r0 == 0) goto L_0x0029
-                r0 = 2131625086(0x7f0e047e, float:1.887737E38)
+                r0 = 2131625138(0x7f0e04b2, float:1.8877475E38)
                 java.lang.String r1 = "ContactJob"
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
                 return r0
             L_0x0029:
-                r0 = 2131625087(0x7f0e047f, float:1.8877372E38)
+                r0 = 2131625139(0x7f0e04b3, float:1.8877478E38)
                 java.lang.String r1 = "ContactJobTitle"
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
                 return r0
@@ -1294,27 +1333,27 @@ public class AndroidUtilities {
             L_0x00cf:
                 goto L_0x0101
             L_0x00d0:
-                r0 = 2131627249(0x7f0e0cf1, float:1.8881757E38)
+                r0 = 2131627340(0x7f0e0d4c, float:1.8881942E38)
                 java.lang.String r1 = "PhoneOther"
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
                 goto L_0x0101
             L_0x00da:
-                r0 = 2131627250(0x7f0e0cf2, float:1.888176E38)
+                r0 = 2131627341(0x7f0e0d4d, float:1.8881944E38)
                 java.lang.String r1 = "PhoneWork"
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
                 goto L_0x0101
             L_0x00e4:
-                r0 = 2131627240(0x7f0e0ce8, float:1.8881739E38)
+                r0 = 2131627330(0x7f0e0d42, float:1.8881921E38)
                 java.lang.String r1 = "PhoneMain"
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
                 goto L_0x0101
             L_0x00ee:
-                r0 = 2131627239(0x7f0e0ce7, float:1.8881737E38)
+                r0 = 2131627329(0x7f0e0d41, float:1.888192E38)
                 java.lang.String r1 = "PhoneHome"
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
                 goto L_0x0101
             L_0x00f8:
-                r0 = 2131627241(0x7f0e0ce9, float:1.888174E38)
+                r0 = 2131627331(0x7f0e0d43, float:1.8881923E38)
                 java.lang.String r1 = "PhoneMobile"
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             L_0x0101:
@@ -1864,7 +1903,7 @@ public class AndroidUtilities {
             waitingForSms = z;
             if (z) {
                 try {
-                    SmsRetriever.getClient(ApplicationLoader.applicationContext).startSmsRetriever().addOnSuccessListener(AndroidUtilities$$ExternalSyntheticLambda5.INSTANCE);
+                    SmsRetriever.getClient(ApplicationLoader.applicationContext).startSmsRetriever().addOnSuccessListener(AndroidUtilities$$ExternalSyntheticLambda6.INSTANCE);
                 } catch (Throwable th) {
                     FileLog.e(th);
                 }
@@ -2831,7 +2870,7 @@ public class AndroidUtilities {
     }
 
     public static void shakeViewSpring(View view, float f, Runnable runnable) {
-        ((SpringAnimation) ((SpringAnimation) new SpringAnimation(view, DynamicAnimation.TRANSLATION_X, 0.0f).setSpring(new SpringForce(0.0f).setStiffness(600.0f)).setStartVelocity((float) ((-dp(f)) * 100))).addEndListener(new AndroidUtilities$$ExternalSyntheticLambda4(runnable))).start();
+        ((SpringAnimation) ((SpringAnimation) new SpringAnimation(view, DynamicAnimation.TRANSLATION_X, 0.0f).setSpring(new SpringForce(0.0f).setStiffness(600.0f)).setStartVelocity((float) ((-dp(f)) * 100))).addEndListener(new AndroidUtilities$$ExternalSyntheticLambda5(runnable))).start();
     }
 
     /* access modifiers changed from: private */
@@ -2842,7 +2881,7 @@ public class AndroidUtilities {
     }
 
     public static boolean shouldShowClipboardToast() {
-        return Build.VERSION.SDK_INT < 31 || !OneUIUtilities.isOneUI();
+        return Build.VERSION.SDK_INT < 31 || !OneUIUtilities.hasBuiltInClipboardToasts();
     }
 
     public static void addToClipboard(CharSequence charSequence) {
@@ -3124,7 +3163,10 @@ public class AndroidUtilities {
             File albumDir = getAlbumDir(z);
             Date date = new Date();
             date.setTime(System.currentTimeMillis() + ((long) Utilities.random.nextInt(1000)) + 1);
-            String format = new SimpleDateFormat("yyyyMMdd_HHmmss_SSS", Locale.US).format(date);
+            if (generatingVideoPathFormat == null) {
+                generatingVideoPathFormat = new SimpleDateFormat("yyyyMMdd_HHmmss_SSS", Locale.US);
+            }
+            String format = generatingVideoPathFormat.format(date);
             return new File(albumDir, "VID_" + format + ".mp4");
         } catch (Exception e) {
             FileLog.e((Throwable) e);
@@ -3465,9 +3507,9 @@ public class AndroidUtilities {
             if (r5 == 0) goto L_0x0157
             boolean r7 = r5.exists()
             if (r7 == 0) goto L_0x0157
-            r7 = 2131626828(0x7f0e0b4c, float:1.8880903E38)
+            r7 = 2131626918(0x7f0e0ba6, float:1.8881086E38)
             java.lang.String r8 = "OK"
-            r9 = 2131624304(0x7f0e0170, float:1.8875784E38)
+            r9 = 2131624316(0x7f0e017c, float:1.8875808E38)
             java.lang.String r10 = "AppName"
             r11 = 1
             if (r2 == 0) goto L_0x00a4
@@ -3488,7 +3530,7 @@ public class AndroidUtilities {
             r0.<init>((android.content.Context) r1)
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r10, r9)
             r0.setTitle(r1)
-            r1 = 2131626049(0x7f0e0841, float:1.8879323E38)
+            r1 = 2131626124(0x7f0e088c, float:1.8879475E38)
             java.lang.String r3 = "IncorrectTheme"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r3, r1)
             r0.setMessage(r1)
@@ -3572,7 +3614,7 @@ public class AndroidUtilities {
             r3.setTitle(r1)
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r8, r7)
             r3.setPositiveButton(r1, r6)
-            r1 = 2131626591(0x7f0e0a5f, float:1.8880423E38)
+            r1 = 2131626675(0x7f0e0ab3, float:1.8880593E38)
             r4 = 1
             java.lang.Object[] r4 = new java.lang.Object[r4]
             r5 = 0
@@ -3717,14 +3759,14 @@ public class AndroidUtilities {
     }
 
     public static SpannableStringBuilder formatSpannableSimple(String str, CharSequence... charSequenceArr) {
-        return formatSpannable(str, AndroidUtilities$$ExternalSyntheticLambda9.INSTANCE, charSequenceArr);
+        return formatSpannable(str, AndroidUtilities$$ExternalSyntheticLambda10.INSTANCE, charSequenceArr);
     }
 
     public static SpannableStringBuilder formatSpannable(String str, CharSequence... charSequenceArr) {
         if (str.contains("%s")) {
             return formatSpannableSimple(str, charSequenceArr);
         }
-        return formatSpannable(str, AndroidUtilities$$ExternalSyntheticLambda8.INSTANCE, charSequenceArr);
+        return formatSpannable(str, AndroidUtilities$$ExternalSyntheticLambda9.INSTANCE, charSequenceArr);
     }
 
     /* access modifiers changed from: private */
@@ -4216,12 +4258,12 @@ public class AndroidUtilities {
         pickerBottomLayout.cancelButton.setPadding(dp(18.0f), 0, dp(18.0f), 0);
         pickerBottomLayout.cancelButton.setTextColor(Theme.getColor("dialogTextBlue2"));
         pickerBottomLayout.cancelButton.setText(LocaleController.getString("Cancel", NUM).toUpperCase());
-        pickerBottomLayout.cancelButton.setOnClickListener(new AndroidUtilities$$ExternalSyntheticLambda2(dismissRunnable));
+        pickerBottomLayout.cancelButton.setOnClickListener(new AndroidUtilities$$ExternalSyntheticLambda3(dismissRunnable));
         pickerBottomLayout.doneButtonTextView.setTextColor(Theme.getColor("dialogTextBlue2"));
         pickerBottomLayout.doneButton.setPadding(dp(18.0f), 0, dp(18.0f), 0);
         pickerBottomLayout.doneButtonBadgeTextView.setVisibility(8);
         pickerBottomLayout.doneButtonTextView.setText(LocaleController.getString("ConnectingConnectProxy", NUM).toUpperCase());
-        pickerBottomLayout.doneButton.setOnClickListener(new AndroidUtilities$$ExternalSyntheticLambda3(str, str2, str5, str4, str3, dismissRunnable));
+        pickerBottomLayout.doneButton.setOnClickListener(new AndroidUtilities$$ExternalSyntheticLambda4(str, str2, str5, str4, str3, dismissRunnable));
         builder.show();
     }
 
@@ -4560,7 +4602,7 @@ public class AndroidUtilities {
         }
         arrayList.add(Long.valueOf(random));
         updateFlagSecure(window);
-        return new AndroidUtilities$$ExternalSyntheticLambda6(arrayList, random, window);
+        return new AndroidUtilities$$ExternalSyntheticLambda7(arrayList, random, window);
     }
 
     /* access modifiers changed from: private */
@@ -4574,7 +4616,7 @@ public class AndroidUtilities {
             HashMap<Window, ArrayList<Long>> hashMap = flagSecureReasons;
             if (hashMap.containsKey(window) && hashMap.get(window).size() > 0) {
                 try {
-                    window.setFlags(8192, 8192);
+                    window.addFlags(8192);
                 } catch (Exception unused) {
                 }
             } else {
@@ -4674,11 +4716,73 @@ public class AndroidUtilities {
         return true;
     }
 
+    public static void setLightNavigationBar(View view, boolean z) {
+        if (view != null && Build.VERSION.SDK_INT >= 26) {
+            int systemUiVisibility = view.getSystemUiVisibility();
+            view.setSystemUiVisibility(z ? systemUiVisibility | 16 : systemUiVisibility & -17);
+        }
+    }
+
     public static void setLightNavigationBar(Window window, boolean z) {
-        if (Build.VERSION.SDK_INT >= 26) {
-            View decorView = window.getDecorView();
-            int systemUiVisibility = decorView.getSystemUiVisibility();
-            decorView.setSystemUiVisibility(z ? systemUiVisibility | 16 : systemUiVisibility & -17);
+        if (window != null) {
+            setLightNavigationBar(window.getDecorView(), z);
+        }
+    }
+
+    public static void setNavigationBarColor(Window window, int i) {
+        setNavigationBarColor(window, i, true);
+    }
+
+    public static void setNavigationBarColor(Window window, int i, boolean z) {
+        setNavigationBarColor(window, i, z, (IntColorCallback) null);
+    }
+
+    public static void setNavigationBarColor(final Window window, int i, boolean z, IntColorCallback intColorCallback) {
+        ValueAnimator valueAnimator;
+        if (Build.VERSION.SDK_INT >= 21) {
+            HashMap<Window, ValueAnimator> hashMap = navigationBarColorAnimators;
+            if (!(hashMap == null || (valueAnimator = hashMap.get(window)) == null)) {
+                valueAnimator.cancel();
+                navigationBarColorAnimators.remove(window);
+            }
+            if (!z) {
+                if (intColorCallback != null) {
+                    intColorCallback.run(i);
+                }
+                try {
+                    window.setNavigationBarColor(i);
+                } catch (Exception unused) {
+                }
+            } else {
+                ValueAnimator ofArgb = ValueAnimator.ofArgb(new int[]{window.getNavigationBarColor(), i});
+                ofArgb.addUpdateListener(new AndroidUtilities$$ExternalSyntheticLambda0(intColorCallback, window));
+                ofArgb.addListener(new AnimatorListenerAdapter() {
+                    public void onAnimationEnd(Animator animator) {
+                        if (AndroidUtilities.navigationBarColorAnimators != null) {
+                            AndroidUtilities.navigationBarColorAnimators.remove(window);
+                        }
+                    }
+                });
+                ofArgb.setDuration(200);
+                ofArgb.setInterpolator(CubicBezierInterpolator.DEFAULT);
+                ofArgb.start();
+                if (navigationBarColorAnimators == null) {
+                    navigationBarColorAnimators = new HashMap<>();
+                }
+                navigationBarColorAnimators.put(window, ofArgb);
+            }
+        }
+    }
+
+    /* access modifiers changed from: private */
+    public static /* synthetic */ void lambda$setNavigationBarColor$10(IntColorCallback intColorCallback, Window window, ValueAnimator valueAnimator) {
+        int intValue = ((Integer) valueAnimator.getAnimatedValue()).intValue();
+        if (intColorCallback != null) {
+            intColorCallback.run(intValue);
+        }
+        try {
+            window.setNavigationBarColor(intValue);
+        } catch (Exception unused) {
         }
     }
 
@@ -4770,7 +4874,7 @@ public class AndroidUtilities {
                 Field declaredField = baseFragment.getClass().getDeclaredField("listView");
                 declaredField.setAccessible(true);
                 RecyclerListView recyclerListView = (RecyclerListView) declaredField.get(baseFragment);
-                recyclerListView.highlightRow(new AndroidUtilities$$ExternalSyntheticLambda10(baseFragment, str, recyclerListView));
+                recyclerListView.highlightRow(new AndroidUtilities$$ExternalSyntheticLambda11(baseFragment, str, recyclerListView));
                 declaredField.setAccessible(false);
             } catch (Throwable unused) {
             }
@@ -4778,7 +4882,7 @@ public class AndroidUtilities {
     }
 
     /* access modifiers changed from: private */
-    public static /* synthetic */ int lambda$scrollToFragmentRow$10(BaseFragment baseFragment, String str, RecyclerListView recyclerListView) {
+    public static /* synthetic */ int lambda$scrollToFragmentRow$11(BaseFragment baseFragment, String str, RecyclerListView recyclerListView) {
         int i = -1;
         try {
             Field declaredField = baseFragment.getClass().getDeclaredField(str);
@@ -4981,21 +5085,21 @@ public class AndroidUtilities {
         L_0x0014:
             java.io.File r1 = new java.io.File
             r1.<init>(r0, r4)
-            java.io.FileOutputStream r4 = new java.io.FileOutputStream     // Catch:{ IOException -> 0x0037 }
-            r4.<init>(r1)     // Catch:{ IOException -> 0x0037 }
+            java.io.FileOutputStream r4 = new java.io.FileOutputStream     // Catch:{ Exception -> 0x0037 }
+            r4.<init>(r1)     // Catch:{ Exception -> 0x0037 }
             r0 = 100
             r3.compress(r5, r0, r4)     // Catch:{ all -> 0x0032 }
             r4.close()     // Catch:{ all -> 0x0032 }
             android.content.Context r3 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ all -> 0x0032 }
             java.lang.String r5 = "org.telegram.messenger.web.provider"
             android.net.Uri r3 = androidx.core.content.FileProvider.getUriForFile(r3, r5, r1)     // Catch:{ all -> 0x0032 }
-            r4.close()     // Catch:{ IOException -> 0x0037 }
+            r4.close()     // Catch:{ Exception -> 0x0037 }
             return r3
         L_0x0032:
             r3 = move-exception
             r4.close()     // Catch:{ all -> 0x0036 }
         L_0x0036:
-            throw r3     // Catch:{ IOException -> 0x0037 }
+            throw r3     // Catch:{ Exception -> 0x0037 }
         L_0x0037:
             r3 = move-exception
             org.telegram.messenger.FileLog.e((java.lang.Throwable) r3)

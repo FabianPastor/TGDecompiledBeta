@@ -1,19 +1,17 @@
 package org.telegram.ui;
 
-import org.telegram.messenger.ImageReceiver;
+import org.telegram.ui.PhotoViewer;
 
-public final /* synthetic */ class PhotoViewer$$ExternalSyntheticLambda61 implements ImageReceiver.ImageReceiverDelegate {
+public final /* synthetic */ class PhotoViewer$$ExternalSyntheticLambda61 implements Runnable {
     public final /* synthetic */ PhotoViewer f$0;
+    public final /* synthetic */ PhotoViewer.PlaceProviderObject f$1;
 
-    public /* synthetic */ PhotoViewer$$ExternalSyntheticLambda61(PhotoViewer photoViewer) {
+    public /* synthetic */ PhotoViewer$$ExternalSyntheticLambda61(PhotoViewer photoViewer, PhotoViewer.PlaceProviderObject placeProviderObject) {
         this.f$0 = photoViewer;
+        this.f$1 = placeProviderObject;
     }
 
-    public final void didSetImage(ImageReceiver imageReceiver, boolean z, boolean z2, boolean z3) {
-        this.f$0.lambda$setParentActivity$32(imageReceiver, z, z2, z3);
-    }
-
-    public /* synthetic */ void onAnimationReady(ImageReceiver imageReceiver) {
-        ImageReceiver.ImageReceiverDelegate.CC.$default$onAnimationReady(this, imageReceiver);
+    public final void run() {
+        this.f$0.lambda$onPhotoClosed$66(this.f$1);
     }
 }

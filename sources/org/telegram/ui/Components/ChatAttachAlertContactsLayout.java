@@ -11,12 +11,12 @@ import android.graphics.Point;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
+import android.text.TextUtils;
 import android.util.Property;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.LinearSmoothScroller;
 import androidx.recyclerview.widget.RecyclerView;
 import java.io.File;
@@ -45,7 +45,7 @@ public class ChatAttachAlertContactsLayout extends ChatAttachAlert.AttachAlertLa
     private FrameLayout frameLayout;
     private boolean ignoreLayout;
     /* access modifiers changed from: private */
-    public LinearLayoutManager layoutManager;
+    public FillLastLinearLayoutManager layoutManager;
     /* access modifiers changed from: private */
     public ShareAdapter listAdapter;
     /* access modifiers changed from: private */
@@ -69,6 +69,8 @@ public class ChatAttachAlertContactsLayout extends ChatAttachAlert.AttachAlertLa
         private CharSequence currentName;
         private CharSequence currentStatus;
         private TLRPC$User currentUser;
+        private CharSequence formattedPhoneNumber;
+        private TLRPC$User formattedPhoneNumberUser;
         private TLRPC$FileLocation lastAvatar;
         private String lastName;
         private int lastStatus;
@@ -76,6 +78,10 @@ public class ChatAttachAlertContactsLayout extends ChatAttachAlert.AttachAlertLa
         private boolean needDivider;
         private final Theme.ResourcesProvider resourcesProvider;
         private SimpleTextView statusTextView;
+
+        public interface CharSequenceCallback {
+            CharSequence run();
+        }
 
         public boolean hasOverlappingRendering() {
             return false;
@@ -131,6 +137,51 @@ public class ChatAttachAlertContactsLayout extends ChatAttachAlert.AttachAlertLa
             this.needDivider = z;
             setWillNotDraw(!z);
             update(0);
+        }
+
+        public void setData(TLRPC$User tLRPC$User, CharSequence charSequence, CharSequenceCallback charSequenceCallback, boolean z) {
+            setData(tLRPC$User, charSequence, (CharSequence) null, z);
+            Utilities.globalQueue.postRunnable(new ChatAttachAlertContactsLayout$UserCell$$ExternalSyntheticLambda3(this, charSequenceCallback));
+        }
+
+        /* access modifiers changed from: private */
+        public /* synthetic */ void lambda$setData$1(CharSequenceCallback charSequenceCallback) {
+            AndroidUtilities.runOnUIThread(new ChatAttachAlertContactsLayout$UserCell$$ExternalSyntheticLambda2(this, charSequenceCallback.run()));
+        }
+
+        /* renamed from: setStatus */
+        public void lambda$setData$0(CharSequence charSequence) {
+            CharSequence charSequence2;
+            this.currentStatus = charSequence;
+            if (charSequence != null) {
+                this.statusTextView.setText(charSequence);
+                return;
+            }
+            TLRPC$User tLRPC$User = this.currentUser;
+            if (tLRPC$User == null) {
+                return;
+            }
+            if (TextUtils.isEmpty(tLRPC$User.phone)) {
+                this.statusTextView.setText(LocaleController.getString("NumberUnknown", NUM));
+            } else if (this.formattedPhoneNumberUser == this.currentUser || (charSequence2 = this.formattedPhoneNumber) == null) {
+                this.statusTextView.setText("");
+                Utilities.globalQueue.postRunnable(new ChatAttachAlertContactsLayout$UserCell$$ExternalSyntheticLambda0(this));
+            } else {
+                this.statusTextView.setText(charSequence2);
+            }
+        }
+
+        /* access modifiers changed from: private */
+        public /* synthetic */ void lambda$setStatus$3() {
+            PhoneFormat instance = PhoneFormat.getInstance();
+            this.formattedPhoneNumber = instance.format("+" + this.currentUser.phone);
+            this.formattedPhoneNumberUser = this.currentUser;
+            AndroidUtilities.runOnUIThread(new ChatAttachAlertContactsLayout$UserCell$$ExternalSyntheticLambda1(this));
+        }
+
+        /* access modifiers changed from: private */
+        public /* synthetic */ void lambda$setStatus$2() {
+            this.statusTextView.setText(this.formattedPhoneNumber);
         }
 
         /* access modifiers changed from: protected */
@@ -282,48 +333,19 @@ public class ChatAttachAlertContactsLayout extends ChatAttachAlert.AttachAlertLa
                 r12.setText(r0)
             L_0x00c7:
                 java.lang.CharSequence r12 = r11.currentStatus
-                if (r12 == 0) goto L_0x00d1
-                org.telegram.ui.ActionBar.SimpleTextView r0 = r11.statusTextView
-                r0.setText(r12)
-                goto L_0x010e
-            L_0x00d1:
-                org.telegram.tgnet.TLRPC$User r12 = r11.currentUser
-                if (r12 == 0) goto L_0x010e
-                java.lang.String r12 = r12.phone
-                boolean r12 = android.text.TextUtils.isEmpty(r12)
-                if (r12 == 0) goto L_0x00ec
-                org.telegram.ui.ActionBar.SimpleTextView r12 = r11.statusTextView
-                r0 = 2131626827(0x7f0e0b4b, float:1.8880901E38)
-                java.lang.String r1 = "NumberUnknown"
-                java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
-                r12.setText(r0)
-                goto L_0x010e
-            L_0x00ec:
-                org.telegram.ui.ActionBar.SimpleTextView r12 = r11.statusTextView
-                org.telegram.PhoneFormat.PhoneFormat r0 = org.telegram.PhoneFormat.PhoneFormat.getInstance()
-                java.lang.StringBuilder r1 = new java.lang.StringBuilder
-                r1.<init>()
-                java.lang.String r3 = "+"
-                r1.append(r3)
-                org.telegram.tgnet.TLRPC$User r3 = r11.currentUser
-                java.lang.String r3 = r3.phone
-                r1.append(r3)
-                java.lang.String r1 = r1.toString()
-                java.lang.String r0 = r0.format(r1)
-                r12.setText(r0)
-            L_0x010e:
+                r11.lambda$setData$0(r12)
                 r11.lastAvatar = r2
                 org.telegram.tgnet.TLRPC$User r12 = r11.currentUser
-                if (r12 == 0) goto L_0x011c
+                if (r12 == 0) goto L_0x00da
                 org.telegram.ui.Components.BackupImageView r0 = r11.avatarImageView
                 org.telegram.ui.Components.AvatarDrawable r1 = r11.avatarDrawable
                 r0.setForUserOrChat(r12, r1)
-                goto L_0x0123
-            L_0x011c:
+                goto L_0x00e1
+            L_0x00da:
                 org.telegram.ui.Components.BackupImageView r12 = r11.avatarImageView
                 org.telegram.ui.Components.AvatarDrawable r0 = r11.avatarDrawable
                 r12.setImageDrawable(r0)
-            L_0x0123:
+            L_0x00e1:
                 return
             */
             throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.ChatAttachAlertContactsLayout.UserCell.update(int):void");
@@ -422,6 +444,7 @@ public class ChatAttachAlertContactsLayout extends ChatAttachAlert.AttachAlertLa
         };
         this.layoutManager = r4;
         recyclerListView.setLayoutManager(r4);
+        this.layoutManager.setBind(false);
         this.listView.setHorizontalScrollBarEnabled(false);
         this.listView.setVerticalScrollBarEnabled(false);
         addView(this.listView, LayoutHelper.createFrame(-1, -1.0f, 51, 0.0f, 0.0f, 0.0f, 0.0f));
@@ -508,7 +531,7 @@ public class ChatAttachAlertContactsLayout extends ChatAttachAlert.AttachAlertLa
 
     /* access modifiers changed from: private */
     public /* synthetic */ void lambda$new$0(TLRPC$User tLRPC$User, boolean z, int i) {
-        this.parentAlert.dismiss();
+        this.parentAlert.dismiss(true);
         this.delegate.didSelectContact(tLRPC$User, z, i);
     }
 
@@ -773,16 +796,21 @@ public class ChatAttachAlertContactsLayout extends ChatAttachAlert.AttachAlertLa
                     tLRPC$User = contact.user;
                     if (tLRPC$User == null) {
                         userCell.setCurrentId(contact.contact_id);
-                        userCell.setData((TLRPC$User) null, ContactsController.formatName(contact.first_name, contact.last_name), contact.phones.isEmpty() ? "" : PhoneFormat.getInstance().format(contact.phones.get(0)), z);
+                        userCell.setData((TLRPC$User) null, (CharSequence) ContactsController.formatName(contact.first_name, contact.last_name), (UserCell.CharSequenceCallback) new ChatAttachAlertContactsLayout$ShareAdapter$$ExternalSyntheticLambda0(contact), z);
                         tLRPC$User = null;
                     }
                 } else {
                     tLRPC$User = (TLRPC$User) item;
                 }
                 if (tLRPC$User != null) {
-                    userCell.setData(tLRPC$User, (CharSequence) null, PhoneFormat.getInstance().format("+" + tLRPC$User.phone), z);
+                    userCell.setData(tLRPC$User, (CharSequence) null, (UserCell.CharSequenceCallback) new ChatAttachAlertContactsLayout$ShareAdapter$$ExternalSyntheticLambda1(tLRPC$User), z);
                 }
             }
+        }
+
+        /* access modifiers changed from: private */
+        public static /* synthetic */ CharSequence lambda$onBindViewHolder$0(ContactsController.Contact contact) {
+            return contact.phones.isEmpty() ? "" : PhoneFormat.getInstance().format(contact.phones.get(0));
         }
 
         public int getItemViewType(int i, int i2) {
@@ -1233,16 +1261,21 @@ public class ChatAttachAlertContactsLayout extends ChatAttachAlert.AttachAlertLa
                     tLRPC$User = contact.user;
                     if (tLRPC$User == null) {
                         userCell.setCurrentId(contact.contact_id);
-                        userCell.setData((TLRPC$User) null, this.searchResultNames.get(i - 1), contact.phones.isEmpty() ? "" : PhoneFormat.getInstance().format(contact.phones.get(0)), z);
+                        userCell.setData((TLRPC$User) null, this.searchResultNames.get(i - 1), (UserCell.CharSequenceCallback) new ChatAttachAlertContactsLayout$ShareSearchAdapter$$ExternalSyntheticLambda4(contact), z);
                         tLRPC$User = null;
                     }
                 } else {
                     tLRPC$User = (TLRPC$User) item;
                 }
                 if (tLRPC$User != null) {
-                    userCell.setData(tLRPC$User, this.searchResultNames.get(i - 1), PhoneFormat.getInstance().format("+" + tLRPC$User.phone), z);
+                    userCell.setData(tLRPC$User, this.searchResultNames.get(i - 1), (UserCell.CharSequenceCallback) new ChatAttachAlertContactsLayout$ShareSearchAdapter$$ExternalSyntheticLambda5(tLRPC$User), z);
                 }
             }
+        }
+
+        /* access modifiers changed from: private */
+        public static /* synthetic */ CharSequence lambda$onBindViewHolder$4(ContactsController.Contact contact) {
+            return contact.phones.isEmpty() ? "" : PhoneFormat.getInstance().format(contact.phones.get(0));
         }
 
         public boolean isEnabled(RecyclerView.ViewHolder viewHolder) {

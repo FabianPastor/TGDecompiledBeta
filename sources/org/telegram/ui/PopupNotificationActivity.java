@@ -1143,7 +1143,7 @@ public class PopupNotificationActivity extends Activity implements NotificationC
             java.lang.Integer r8 = java.lang.Integer.valueOf(r16)
             r9.setTag(r8)
             r8 = -2
-            android.widget.FrameLayout$LayoutParams r8 = org.telegram.ui.Components.LayoutHelper.createFrame(r2, r8, r12)
+            android.widget.FrameLayout$LayoutParams r8 = org.telegram.ui.Components.LayoutHelper.createFrame((int) r2, (int) r8, (int) r12)
             r3.addView(r9, r8)
             r3 = 2
             java.lang.Integer r8 = java.lang.Integer.valueOf(r3)

@@ -1,15 +1,15 @@
 package org.telegram.ui;
 
 import android.view.View;
+import android.view.WindowInsets;
 
-public final /* synthetic */ class ArticleViewer$$ExternalSyntheticLambda4 implements View.OnClickListener {
-    public final /* synthetic */ ArticleViewer f$0;
+public final /* synthetic */ class ArticleViewer$$ExternalSyntheticLambda4 implements View.OnApplyWindowInsetsListener {
+    public static final /* synthetic */ ArticleViewer$$ExternalSyntheticLambda4 INSTANCE = new ArticleViewer$$ExternalSyntheticLambda4();
 
-    public /* synthetic */ ArticleViewer$$ExternalSyntheticLambda4(ArticleViewer articleViewer) {
-        this.f$0 = articleViewer;
+    private /* synthetic */ ArticleViewer$$ExternalSyntheticLambda4() {
     }
 
-    public final void onClick(View view) {
-        this.f$0.lambda$showPopup$3(view);
+    public final WindowInsets onApplyWindowInsets(View view, WindowInsets windowInsets) {
+        return ArticleViewer.lambda$setParentActivity$8(view, windowInsets);
     }
 }

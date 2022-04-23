@@ -2,9 +2,9 @@ package j$.util.stream;
 
 import j$.lang.a;
 import j$.util.function.A;
-import j$.util.function.B;
 import j$.util.function.Consumer;
 import j$.util.function.Predicate;
+import j$.util.function.ToIntFunction;
 import j$.util.function.z;
 
 class Z2 extends CLASSNAMEj3 {
@@ -33,10 +33,10 @@ class Z2 extends CLASSNAMEj3 {
                 this.a.accept(((CLASSNAMEb3) this.c).m.apply(obj));
                 return;
             case 3:
-                this.a.accept(((A) ((M) this.c).m).applyAsInt(obj));
+                this.a.accept(((ToIntFunction) ((M) this.c).m).applyAsInt(obj));
                 return;
             case 4:
-                this.a.accept(((B) ((N) this.c).m).applyAsLong(obj));
+                this.a.accept(((A) ((N) this.c).m).applyAsLong(obj));
                 return;
             case 5:
                 this.a.accept(((z) ((K) this.c).m).applyAsDouble(obj));

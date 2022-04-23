@@ -338,13 +338,13 @@ public class ChatAttachAlertLocationLayout extends ChatAttachAlert.AttachAlertLa
                 return;
             }
             ChatAttachAlertLocationLayout.this.delegate.didSelectLocation(venueLocation.venue, ChatAttachAlertLocationLayout.this.locationType, true, 0);
-            ChatAttachAlertLocationLayout.this.parentAlert.dismiss();
+            ChatAttachAlertLocationLayout.this.parentAlert.dismiss(true);
         }
 
         /* access modifiers changed from: private */
         public /* synthetic */ void lambda$addInfoView$0(VenueLocation venueLocation, boolean z, int i) {
             ChatAttachAlertLocationLayout.this.delegate.didSelectLocation(venueLocation.venue, ChatAttachAlertLocationLayout.this.locationType, z, i);
-            ChatAttachAlertLocationLayout.this.parentAlert.dismiss();
+            ChatAttachAlertLocationLayout.this.parentAlert.dismiss(true);
         }
 
         public void removeInfoView(Marker marker) {
@@ -867,7 +867,7 @@ public class ChatAttachAlertLocationLayout extends ChatAttachAlert.AttachAlertLa
                     return;
                 }
                 this.delegate.didSelectLocation(tLRPC$TL_messageMediaGeo, this.locationType, true, 0);
-                this.parentAlert.dismiss();
+                this.parentAlert.dismiss(true);
             } else if (this.locationDenied) {
                 AlertsCreator.createLocationRequiredDialog(getParentActivity(), true).show();
             }
@@ -879,13 +879,13 @@ public class ChatAttachAlertLocationLayout extends ChatAttachAlert.AttachAlertLa
                     return;
                 }
                 this.delegate.didSelectLocation((TLRPC$TL_messageMediaVenue) item, this.locationType, true, 0);
-                this.parentAlert.dismiss();
+                this.parentAlert.dismiss(true);
             } else if (item instanceof LiveLocation) {
                 this.googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(((LiveLocation) item).marker.getPosition(), this.googleMap.getMaxZoomLevel() - 4.0f));
             }
         } else if (getLocationController().isSharingLocation(this.dialogId)) {
             getLocationController().removeSharingLocation(this.dialogId);
-            this.parentAlert.dismiss();
+            this.parentAlert.dismiss(true);
         } else if (this.myLocation != null || !this.locationDenied) {
             openShareLiveLocation();
         } else {
@@ -896,13 +896,13 @@ public class ChatAttachAlertLocationLayout extends ChatAttachAlert.AttachAlertLa
     /* access modifiers changed from: private */
     public /* synthetic */ void lambda$new$5(TLRPC$TL_messageMediaGeo tLRPC$TL_messageMediaGeo, boolean z, int i) {
         this.delegate.didSelectLocation(tLRPC$TL_messageMediaGeo, this.locationType, z, i);
-        this.parentAlert.dismiss();
+        this.parentAlert.dismiss(true);
     }
 
     /* access modifiers changed from: private */
     public /* synthetic */ void lambda$new$6(Object obj, boolean z, int i) {
         this.delegate.didSelectLocation((TLRPC$TL_messageMediaVenue) obj, this.locationType, z, i);
-        this.parentAlert.dismiss();
+        this.parentAlert.dismiss(true);
     }
 
     /* access modifiers changed from: private */
@@ -968,14 +968,14 @@ public class ChatAttachAlertLocationLayout extends ChatAttachAlert.AttachAlertLa
                 return;
             }
             this.delegate.didSelectLocation(item, this.locationType, true, 0);
-            this.parentAlert.dismiss();
+            this.parentAlert.dismiss(true);
         }
     }
 
     /* access modifiers changed from: private */
     public /* synthetic */ void lambda$new$14(TLRPC$TL_messageMediaVenue tLRPC$TL_messageMediaVenue, boolean z, int i) {
         this.delegate.didSelectLocation(tLRPC$TL_messageMediaVenue, this.locationType, z, i);
-        this.parentAlert.dismiss();
+        this.parentAlert.dismiss(true);
     }
 
     /* access modifiers changed from: package-private */
@@ -1273,7 +1273,7 @@ public class ChatAttachAlertLocationLayout extends ChatAttachAlert.AttachAlertLa
         tLRPC$TL_messageMediaGeoLive.geo._long = AndroidUtilities.fixLocationCoord(this.myLocation.getLongitude());
         tLRPC$TL_messageMediaGeoLive.period = i;
         this.delegate.didSelectLocation(tLRPC$TL_messageMediaGeoLive, this.locationType, true, 0);
-        this.parentAlert.dismiss();
+        this.parentAlert.dismiss(true);
     }
 
     private Bitmap createPlaceBitmap(int i) {

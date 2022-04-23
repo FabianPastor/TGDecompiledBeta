@@ -1,21 +1,18 @@
 package org.telegram.messenger;
 
-import androidx.core.util.Consumer;
-import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC$TL_error;
+import org.telegram.messenger.MessagesStorage;
+import org.telegram.tgnet.TLRPC$Updates;
 
 public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda210 implements Runnable {
-    public final /* synthetic */ TLObject f$0;
-    public final /* synthetic */ TLRPC$TL_error f$1;
-    public final /* synthetic */ Consumer f$2;
+    public final /* synthetic */ MessagesStorage.LongCallback f$0;
+    public final /* synthetic */ TLRPC$Updates f$1;
 
-    public /* synthetic */ MessagesController$$ExternalSyntheticLambda210(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error, Consumer consumer) {
-        this.f$0 = tLObject;
-        this.f$1 = tLRPC$TL_error;
-        this.f$2 = consumer;
+    public /* synthetic */ MessagesController$$ExternalSyntheticLambda210(MessagesStorage.LongCallback longCallback, TLRPC$Updates tLRPC$Updates) {
+        this.f$0 = longCallback;
+        this.f$1 = tLRPC$Updates;
     }
 
     public final void run() {
-        MessagesController.lambda$getNextReactionMention$3(this.f$0, this.f$1, this.f$2);
+        MessagesController.lambda$convertToMegaGroup$211(this.f$0, this.f$1);
     }
 }

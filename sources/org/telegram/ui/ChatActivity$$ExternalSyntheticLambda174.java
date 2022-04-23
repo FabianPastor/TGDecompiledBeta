@@ -1,23 +1,17 @@
 package org.telegram.ui;
 
-import org.telegram.messenger.MessageObject;
-import org.telegram.ui.ActionBar.ActionBarLayout;
-import org.telegram.ui.ActionBar.BaseFragment;
+import org.telegram.tgnet.TLObject;
 
 public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda174 implements Runnable {
     public final /* synthetic */ ChatActivity f$0;
-    public final /* synthetic */ BaseFragment f$1;
-    public final /* synthetic */ MessageObject f$2;
-    public final /* synthetic */ ActionBarLayout f$3;
+    public final /* synthetic */ TLObject f$1;
 
-    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda174(ChatActivity chatActivity, BaseFragment baseFragment, MessageObject messageObject, ActionBarLayout actionBarLayout) {
+    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda174(ChatActivity chatActivity, TLObject tLObject) {
         this.f$0 = chatActivity;
-        this.f$1 = baseFragment;
-        this.f$2 = messageObject;
-        this.f$3 = actionBarLayout;
+        this.f$1 = tLObject;
     }
 
     public final void run() {
-        this.f$0.lambda$migrateToNewChat$122(this.f$1, this.f$2, this.f$3);
+        this.f$0.lambda$createMenu$147(this.f$1);
     }
 }

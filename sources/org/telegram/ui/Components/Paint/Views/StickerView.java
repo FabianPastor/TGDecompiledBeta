@@ -15,6 +15,7 @@ import org.telegram.tgnet.TLRPC$Document;
 import org.telegram.tgnet.TLRPC$DocumentAttribute;
 import org.telegram.tgnet.TLRPC$TL_documentAttributeSticker;
 import org.telegram.tgnet.TLRPC$TL_maskCoords;
+import org.telegram.ui.Components.AnimatedFileDrawable;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.Paint.Views.EntityView;
 import org.telegram.ui.Components.Point;
@@ -149,10 +150,14 @@ public class StickerView extends EntityView {
 
     public long getDuration() {
         RLottieDrawable lottieAnimation = this.centerImage.getLottieAnimation();
-        if (lottieAnimation == null) {
-            return 0;
+        if (lottieAnimation != null) {
+            return lottieAnimation.getDuration();
         }
-        return lottieAnimation.getDuration();
+        AnimatedFileDrawable animation = this.centerImage.getAnimation();
+        if (animation != null) {
+            return (long) animation.getDurationMs();
+        }
+        return 0;
     }
 
     /* access modifiers changed from: protected */

@@ -1,17 +1,18 @@
 package org.telegram.ui.Components;
 
 import android.content.DialogInterface;
-import org.telegram.ui.LanguageSelectActivity;
-import org.telegram.ui.LaunchActivity;
+import org.telegram.ui.Components.AlertsCreator;
 
 public final /* synthetic */ class AlertsCreator$$ExternalSyntheticLambda29 implements DialogInterface.OnClickListener {
-    public final /* synthetic */ LaunchActivity f$0;
+    public final /* synthetic */ AlertsCreator.BlockDialogCallback f$0;
+    public final /* synthetic */ boolean[] f$1;
 
-    public /* synthetic */ AlertsCreator$$ExternalSyntheticLambda29(LaunchActivity launchActivity) {
-        this.f$0 = launchActivity;
+    public /* synthetic */ AlertsCreator$$ExternalSyntheticLambda29(AlertsCreator.BlockDialogCallback blockDialogCallback, boolean[] zArr) {
+        this.f$0 = blockDialogCallback;
+        this.f$1 = zArr;
     }
 
     public final void onClick(DialogInterface dialogInterface, int i) {
-        this.f$0.lambda$runLinkRequest$47(new LanguageSelectActivity());
+        this.f$0.run(this.f$1[0], this.f$1[1]);
     }
 }

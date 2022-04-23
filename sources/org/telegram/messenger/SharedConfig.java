@@ -409,7 +409,7 @@ public class SharedConfig {
             if (r1 < 0) goto L_0x0183
         L_0x0177:
             pendingAppUpdate = r5     // Catch:{ Exception -> 0x017f }
-            org.telegram.messenger.SharedConfig$$ExternalSyntheticLambda3 r1 = org.telegram.messenger.SharedConfig$$ExternalSyntheticLambda3.INSTANCE     // Catch:{ Exception -> 0x017f }
+            org.telegram.messenger.SharedConfig$$ExternalSyntheticLambda4 r1 = org.telegram.messenger.SharedConfig$$ExternalSyntheticLambda4.INSTANCE     // Catch:{ Exception -> 0x017f }
             org.telegram.messenger.AndroidUtilities.runOnUIThread(r1)     // Catch:{ Exception -> 0x017f }
             goto L_0x0183
         L_0x017f:
@@ -1024,7 +1024,8 @@ public class SharedConfig {
         SharedPreferences.Editor edit = MessagesController.getGlobalMainSettings().edit();
         edit.putBoolean("save_gallery", saveToGallery);
         edit.commit();
-        checkSaveToGalleryFiles();
+        ImageLoader.getInstance().checkMediaPaths();
+        ImageLoader.getInstance().getCacheOutQueue().postRunnable(SharedConfig$$ExternalSyntheticLambda2.INSTANCE);
     }
 
     public static void toggleAutoplayGifs() {
@@ -1286,11 +1287,11 @@ public class SharedConfig {
     }
 
     public static void checkSaveToGalleryFiles() {
-        Utilities.globalQueue.postRunnable(SharedConfig$$ExternalSyntheticLambda2.INSTANCE);
+        Utilities.globalQueue.postRunnable(SharedConfig$$ExternalSyntheticLambda3.INSTANCE);
     }
 
     /* access modifiers changed from: private */
-    public static /* synthetic */ void lambda$checkSaveToGalleryFiles$2() {
+    public static /* synthetic */ void lambda$checkSaveToGalleryFiles$3() {
         try {
             File file = new File(Environment.getExternalStorageDirectory(), "Telegram");
             File file2 = new File(file, "Telegram Images");

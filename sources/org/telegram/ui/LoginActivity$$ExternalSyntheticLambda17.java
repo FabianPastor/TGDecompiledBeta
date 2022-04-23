@@ -18,6 +18,6 @@ public final /* synthetic */ class LoginActivity$$ExternalSyntheticLambda17 impl
     }
 
     public final void run() {
-        this.f$0.lambda$tryResetAccount$20(this.f$1, this.f$2, this.f$3, this.f$4);
+        this.f$0.lambda$tryResetAccount$18(this.f$1, this.f$2, this.f$3, this.f$4);
     }
 }

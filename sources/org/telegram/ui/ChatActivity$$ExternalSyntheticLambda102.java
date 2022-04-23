@@ -1,15 +1,15 @@
 package org.telegram.ui;
 
-import java.util.concurrent.atomic.AtomicReference;
+import android.view.MotionEvent;
+import android.view.View;
 
-public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda102 implements Runnable {
-    public final /* synthetic */ AtomicReference f$0;
+public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda102 implements View.OnTouchListener {
+    public static final /* synthetic */ ChatActivity$$ExternalSyntheticLambda102 INSTANCE = new ChatActivity$$ExternalSyntheticLambda102();
 
-    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda102(AtomicReference atomicReference) {
-        this.f$0 = atomicReference;
+    private /* synthetic */ ChatActivity$$ExternalSyntheticLambda102() {
     }
 
-    public final void run() {
-        ChatActivity.lambda$createMenu$154(this.f$0);
+    public final boolean onTouch(View view, MotionEvent motionEvent) {
+        return ChatActivity.lambda$createView$56(view, motionEvent);
     }
 }

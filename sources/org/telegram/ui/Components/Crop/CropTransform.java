@@ -15,6 +15,10 @@ public class CropTransform {
     private float minScale;
     private float trueCropScale;
 
+    public void setViewTransform(boolean z) {
+        this.hasTransform = z;
+    }
+
     public void setViewTransform(boolean z, float f, float f2, float f3, int i, float f4, float f5, float f6, float f7, float f8, float f9, float var_, boolean z2) {
         this.hasTransform = z;
         this.cropPx = f;
@@ -96,5 +100,23 @@ public class CropTransform {
 
     public boolean isMirrored() {
         return this.isMirrored;
+    }
+
+    public CropTransform clone() {
+        CropTransform cropTransform = new CropTransform();
+        cropTransform.hasTransform = this.hasTransform;
+        cropTransform.cropPx = this.cropPx;
+        cropTransform.cropPy = this.cropPy;
+        cropTransform.cropAreaX = this.cropAreaX;
+        cropTransform.cropAreaY = this.cropAreaY;
+        cropTransform.cropScale = this.cropScale;
+        cropTransform.cropRotation = this.cropRotation;
+        cropTransform.isMirrored = this.isMirrored;
+        cropTransform.cropOrientation = this.cropOrientation;
+        cropTransform.cropPw = this.cropPw;
+        cropTransform.cropPh = this.cropPh;
+        cropTransform.trueCropScale = this.trueCropScale;
+        cropTransform.minScale = this.minScale;
+        return cropTransform;
     }
 }

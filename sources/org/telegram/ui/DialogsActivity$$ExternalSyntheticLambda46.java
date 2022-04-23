@@ -11,6 +11,6 @@ public final /* synthetic */ class DialogsActivity$$ExternalSyntheticLambda46 im
     }
 
     public final void onDispatchKeyEvent(KeyEvent keyEvent) {
-        this.f$0.lambda$onSendLongClick$49(keyEvent);
+        this.f$0.lambda$onSendLongClick$50(keyEvent);
     }
 }

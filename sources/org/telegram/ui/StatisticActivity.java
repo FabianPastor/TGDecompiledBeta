@@ -3186,22 +3186,22 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
                 r4 = 0
                 r12 = 0
             L_0x0072:
-                r5 = 2131628120(0x7f0e1058, float:1.8883524E38)
+                r5 = 2131628219(0x7f0e10bb, float:1.8883724E38)
                 java.lang.String r6 = "StatisticOpenProfile"
                 java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r6, r5)
                 r1.add(r5)
-                r5 = 2131165703(0x7var_, float:1.794563E38)
+                r5 = 2131165715(0x7var_, float:1.7945655E38)
                 java.lang.Integer r5 = java.lang.Integer.valueOf(r5)
                 r6 = r16
                 r6.add(r5)
                 r5 = 2
                 java.lang.Integer r5 = java.lang.Integer.valueOf(r5)
                 r2.add(r5)
-                r5 = 2131628122(0x7f0e105a, float:1.8883528E38)
+                r5 = 2131628221(0x7f0e10bd, float:1.8883729E38)
                 java.lang.String r9 = "StatisticSearchUserHistory"
                 java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r9, r5)
                 r1.add(r5)
-                r5 = 2131165664(0x7var_e0, float:1.7945551E38)
+                r5 = 2131165676(0x7var_ec, float:1.7945576E38)
                 java.lang.Integer r5 = java.lang.Integer.valueOf(r5)
                 r6.add(r5)
                 r5 = 1
@@ -3316,20 +3316,20 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
                 r5 = 0
             L_0x018c:
                 if (r5 == 0) goto L_0x0194
-                r0 = 2131627934(0x7f0e0f9e, float:1.8883146E38)
+                r0 = 2131628026(0x7f0e0ffa, float:1.8883333E38)
                 java.lang.String r9 = "SetAsAdmin"
                 goto L_0x0199
             L_0x0194:
-                r0 = 2131625389(0x7f0e05ad, float:1.8877985E38)
+                r0 = 2131625461(0x7f0e05f5, float:1.887813E38)
                 java.lang.String r9 = "EditAdminRights"
             L_0x0199:
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r9, r0)
                 r1.add(r0)
                 if (r5 == 0) goto L_0x01a6
-                r0 = 2131165247(0x7var_f, float:1.7944706E38)
+                r0 = 2131165256(0x7var_, float:1.7944724E38)
                 goto L_0x01a9
             L_0x01a6:
-                r0 = 2131165253(0x7var_, float:1.7944718E38)
+                r0 = 2131165262(0x7var_e, float:1.7944736E38)
             L_0x01a9:
                 java.lang.Integer r0 = java.lang.Integer.valueOf(r0)
                 r6.add(r0)
@@ -3415,16 +3415,15 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
                 long j = this.user.id;
                 long j2 = tLRPC$ChatFull2.id;
                 TLRPC$ChannelParticipant tLRPC$ChannelParticipant = tLRPC$TL_chatChannelParticipant2.channelParticipant;
-                AnonymousClass1 r17 = r0;
+                AnonymousClass1 r18 = r0;
                 boolean[] zArr = new boolean[1];
                 final boolean[] zArr2 = zArr;
-                TLRPC$TL_chatChannelParticipant tLRPC$TL_chatChannelParticipant3 = tLRPC$TL_chatChannelParticipant2;
                 final StatisticActivity statisticActivity3 = statisticActivity;
-                AnonymousClass1 r0 = new ChatRightsEditActivity(this, j, j2, tLRPC$ChannelParticipant.admin_rights, (TLRPC$TL_chatBannedRights) null, tLRPC$ChannelParticipant.banned_rights, tLRPC$ChannelParticipant.rank, 0, true, z) {
+                AnonymousClass1 r0 = new ChatRightsEditActivity(this, j, j2, tLRPC$ChannelParticipant.admin_rights, (TLRPC$TL_chatBannedRights) null, tLRPC$ChannelParticipant.banned_rights, tLRPC$ChannelParticipant.rank, 0, true, z, (String) null) {
                     final /* synthetic */ MemberData this$0;
 
                     {
-                        this.this$0 = r14;
+                        this.this$0 = r15;
                     }
 
                     /* access modifiers changed from: protected */
@@ -3435,20 +3434,20 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
                     }
                 };
                 final boolean[] zArr3 = zArr;
+                final TLRPC$TL_chatChannelParticipant tLRPC$TL_chatChannelParticipant3 = tLRPC$TL_chatChannelParticipant;
                 final boolean z2 = z;
-                final TLRPC$TL_chatChannelParticipant tLRPC$TL_chatChannelParticipant4 = tLRPC$TL_chatChannelParticipant3;
                 AnonymousClass2 r02 = new ChatRightsEditActivity.ChatRightsEditActivityDelegate(this) {
                     public void didChangeOwner(TLRPC$User tLRPC$User) {
                     }
 
                     public void didSetRights(int i, TLRPC$TL_chatAdminRights tLRPC$TL_chatAdminRights, TLRPC$TL_chatBannedRights tLRPC$TL_chatBannedRights, String str) {
                         if (i == 0) {
-                            TLRPC$ChannelParticipant tLRPC$ChannelParticipant = tLRPC$TL_chatChannelParticipant4.channelParticipant;
+                            TLRPC$ChannelParticipant tLRPC$ChannelParticipant = tLRPC$TL_chatChannelParticipant3.channelParticipant;
                             tLRPC$ChannelParticipant.admin_rights = null;
                             tLRPC$ChannelParticipant.rank = "";
                             return;
                         }
-                        TLRPC$ChannelParticipant tLRPC$ChannelParticipant2 = tLRPC$TL_chatChannelParticipant4.channelParticipant;
+                        TLRPC$ChannelParticipant tLRPC$ChannelParticipant2 = tLRPC$TL_chatChannelParticipant3.channelParticipant;
                         tLRPC$ChannelParticipant2.admin_rights = tLRPC$TL_chatAdminRights;
                         tLRPC$ChannelParticipant2.rank = str;
                         if (z2) {
@@ -3456,7 +3455,7 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
                         }
                     }
                 };
-                AnonymousClass1 r1 = r17;
+                AnonymousClass1 r1 = r18;
                 r1.setDelegate(r02);
                 statisticActivity.presentFragment(r1);
                 return;
@@ -3471,5 +3470,9 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
             bundle.putLong("search_from_user_id", this.user.id);
             statisticActivity4.presentFragment(new ChatActivity(bundle));
         }
+    }
+
+    public boolean isLightStatusBar() {
+        return ColorUtils.calculateLuminance(Theme.getColor("windowBackgroundWhite")) > 0.699999988079071d;
     }
 }

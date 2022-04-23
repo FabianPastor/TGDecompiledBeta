@@ -333,7 +333,7 @@ public class TableLayout extends View {
             }
         }
 
-        public void draw(Canvas canvas) {
+        public void draw(Canvas canvas, View view) {
             float f;
             float f2;
             float f3;
@@ -417,7 +417,7 @@ public class TableLayout extends View {
                     if (this.selectionIndex >= 0) {
                         TableLayout.this.textSelectionHelper.draw(canvas, (TextSelectionHelper.ArticleSelectableView) TableLayout.this.getParent().getParent(), this.selectionIndex);
                     }
-                    this.textLayout.draw(canvas);
+                    this.textLayout.draw(canvas, view);
                     canvas.restore();
                 }
                 if (TableLayout.this.drawLines) {
@@ -857,7 +857,7 @@ public class TableLayout extends View {
     public void onDraw(Canvas canvas) {
         int childCount = getChildCount();
         for (int i = 0; i < childCount; i++) {
-            getChildAt(i).draw(canvas);
+            getChildAt(i).draw(canvas, this);
         }
     }
 

@@ -1,18 +1,14 @@
 package org.telegram.ui;
 
-import android.view.View;
-import org.telegram.ui.ActionBar.BottomSheet;
+import android.content.DialogInterface;
 
-public final /* synthetic */ class ChatRightsEditActivity$$ExternalSyntheticLambda9 implements View.OnClickListener {
-    public final /* synthetic */ ChatRightsEditActivity f$0;
-    public final /* synthetic */ BottomSheet.Builder f$1;
+public final /* synthetic */ class ChatRightsEditActivity$$ExternalSyntheticLambda9 implements DialogInterface.OnClickListener {
+    public static final /* synthetic */ ChatRightsEditActivity$$ExternalSyntheticLambda9 INSTANCE = new ChatRightsEditActivity$$ExternalSyntheticLambda9();
 
-    public /* synthetic */ ChatRightsEditActivity$$ExternalSyntheticLambda9(ChatRightsEditActivity chatRightsEditActivity, BottomSheet.Builder builder) {
-        this.f$0 = chatRightsEditActivity;
-        this.f$1 = builder;
+    private /* synthetic */ ChatRightsEditActivity$$ExternalSyntheticLambda9() {
     }
 
-    public final void onClick(View view) {
-        this.f$0.lambda$createView$5(this.f$1, view);
+    public final void onClick(DialogInterface dialogInterface, int i) {
+        ChatRightsEditActivity.lambda$createView$1(dialogInterface, i);
     }
 }

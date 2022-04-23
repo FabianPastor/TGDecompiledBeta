@@ -1,15 +1,15 @@
 package org.telegram.ui;
 
-import android.widget.PopupWindow;
+import android.view.MotionEvent;
+import android.view.View;
 
-public final /* synthetic */ class ArticleViewer$$ExternalSyntheticLambda14 implements PopupWindow.OnDismissListener {
-    public final /* synthetic */ ArticleViewer f$0;
+public final /* synthetic */ class ArticleViewer$$ExternalSyntheticLambda14 implements View.OnTouchListener {
+    public static final /* synthetic */ ArticleViewer$$ExternalSyntheticLambda14 INSTANCE = new ArticleViewer$$ExternalSyntheticLambda14();
 
-    public /* synthetic */ ArticleViewer$$ExternalSyntheticLambda14(ArticleViewer articleViewer) {
-        this.f$0 = articleViewer;
+    private /* synthetic */ ArticleViewer$$ExternalSyntheticLambda14() {
     }
 
-    public final void onDismiss() {
-        this.f$0.lambda$showPopup$4();
+    public final boolean onTouch(View view, MotionEvent motionEvent) {
+        return ArticleViewer.lambda$setParentActivity$21(view, motionEvent);
     }
 }

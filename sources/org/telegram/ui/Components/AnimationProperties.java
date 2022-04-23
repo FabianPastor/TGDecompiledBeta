@@ -65,6 +65,18 @@ public class AnimationProperties {
     };
     public static OvershootInterpolator overshootInterpolator = new OvershootInterpolator(1.9f);
 
+    static {
+        new IntProperty<Paint>("color") {
+            public void setValue(Paint paint, int i) {
+                paint.setColor(i);
+            }
+
+            public Integer get(Paint paint) {
+                return Integer.valueOf(paint.getColor());
+            }
+        };
+    }
+
     public static abstract class FloatProperty<T> extends Property<T, Float> {
         public abstract void setValue(T t, float f);
 

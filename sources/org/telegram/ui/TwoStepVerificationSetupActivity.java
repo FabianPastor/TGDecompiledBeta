@@ -40,6 +40,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import androidx.core.graphics.ColorUtils;
 import java.util.ArrayList;
 import java.util.Iterator;
 import org.telegram.messenger.AndroidUtilities;
@@ -282,9 +283,6 @@ public class TwoStepVerificationSetupActivity extends BaseFragment {
         this.actionBar.setItemsBackgroundColor(Theme.getColor("actionBarWhiteSelector"), false);
         this.actionBar.setCastShadows(false);
         this.actionBar.setAddToContainer(false);
-        if (!AndroidUtilities.isTablet()) {
-            this.actionBar.showActionModeTop();
-        }
         this.actionBar.setActionBarMenuOnItemClick(new ActionBar.ActionBarMenuOnItemClick() {
             public void onItemClick(int i) {
                 String str;
@@ -480,7 +478,7 @@ public class TwoStepVerificationSetupActivity extends BaseFragment {
                     }
                 };
                 r13.addView(r3);
-                AnonymousClass6 r6 = new ViewGroup(context2) {
+                AnonymousClass6 r7 = new ViewGroup(context2) {
                     /* access modifiers changed from: protected */
                     public void onMeasure(int i, int i2) {
                         int size = View.MeasureSpec.getSize(i);
@@ -602,7 +600,7 @@ public class TwoStepVerificationSetupActivity extends BaseFragment {
                 r3.addView(this.scrollView, LayoutHelper.createFrame(-1, -1.0f));
                 r3.addView(this.bottomSkipButton, LayoutHelper.createFrame(-1, i >= 21 ? 56.0f : 60.0f, 80, 0.0f, 0.0f, 0.0f, 16.0f));
                 r3.addView(this.floatingButtonContainer, LayoutHelper.createFrame(i >= 21 ? 56 : 60, i >= 21 ? 56.0f : 60.0f, 85, 0.0f, 0.0f, 24.0f, 16.0f));
-                r6.addView(r13, LayoutHelper.createFrame(-1, -1.0f));
+                r7.addView(r13, LayoutHelper.createFrame(-1, -1.0f));
                 AnonymousClass8 r92 = new LinearLayout(context2) {
                     /* access modifiers changed from: protected */
                     public void onMeasure(int i, int i2) {
@@ -754,7 +752,7 @@ public class TwoStepVerificationSetupActivity extends BaseFragment {
                     r92.addView(this.descriptionText3, LayoutHelper.createLinear(-2, -2, 49, 0, 0, 0, 25));
                     this.descriptionText3.setOnClickListener(new TwoStepVerificationSetupActivity$$ExternalSyntheticLambda12(this));
                 }
-                this.fragmentView = r6;
+                this.fragmentView = r7;
                 AnonymousClass13 r22 = new View(context2) {
                     private Paint paint = new Paint();
 
@@ -768,8 +766,8 @@ public class TwoStepVerificationSetupActivity extends BaseFragment {
                 };
                 this.actionBarBackground = r22;
                 r22.setAlpha(0.0f);
-                r6.addView(this.actionBarBackground);
-                r6.addView(this.actionBar);
+                r7.addView(this.actionBarBackground);
+                r7.addView(this.actionBar);
                 RadialProgressView radialProgressView3 = new RadialProgressView(context2);
                 this.radialProgressView = radialProgressView3;
                 radialProgressView3.setSize(AndroidUtilities.dp(20.0f));
@@ -1528,7 +1526,7 @@ public class TwoStepVerificationSetupActivity extends BaseFragment {
             if (r0 == 0) goto L_0x013c
             android.app.Activity r0 = r9.getParentActivity()     // Catch:{ Exception -> 0x0130 }
             java.lang.String r1 = "PasswordAsHintError"
-            r2 = 2131627105(0x7f0e0CLASSNAME, float:1.8881465E38)
+            r2 = 2131627195(0x7f0e0cbb, float:1.8881648E38)
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r1, r2)     // Catch:{ Exception -> 0x0130 }
             android.widget.Toast r0 = android.widget.Toast.makeText(r0, r1, r3)     // Catch:{ Exception -> 0x0130 }
             r0.show()     // Catch:{ Exception -> 0x0130 }
@@ -1571,7 +1569,7 @@ public class TwoStepVerificationSetupActivity extends BaseFragment {
         L_0x0175:
             android.app.Activity r0 = r9.getParentActivity()     // Catch:{ Exception -> 0x018a }
             java.lang.String r1 = "PasswordDoNotMatch"
-            r2 = 2131627107(0x7f0e0CLASSNAME, float:1.888147E38)
+            r2 = 2131627197(0x7f0e0cbd, float:1.8881652E38)
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r1, r2)     // Catch:{ Exception -> 0x018a }
             android.widget.Toast r0 = android.widget.Toast.makeText(r0, r1, r3)     // Catch:{ Exception -> 0x018a }
             r0.show()     // Catch:{ Exception -> 0x018a }
@@ -2430,7 +2428,7 @@ public class TwoStepVerificationSetupActivity extends BaseFragment {
             org.telegram.ui.ActionBar.AlertDialog$Builder r1 = new org.telegram.ui.ActionBar.AlertDialog$Builder
             android.app.Activity r2 = r11.getParentActivity()
             r1.<init>((android.content.Context) r2)
-            r2 = 2131626828(0x7f0e0b4c, float:1.8880903E38)
+            r2 = 2131626918(0x7f0e0ba6, float:1.8881086E38)
             java.lang.String r3 = "OK"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             org.telegram.ui.TwoStepVerificationSetupActivity$$ExternalSyntheticLambda5 r3 = new org.telegram.ui.TwoStepVerificationSetupActivity$$ExternalSyntheticLambda5
@@ -2441,18 +2439,18 @@ public class TwoStepVerificationSetupActivity extends BaseFragment {
             if (r2 == 0) goto L_0x00b8
             boolean r2 = r2.has_password
             if (r2 == 0) goto L_0x00b8
-            r2 = 2131628942(0x7f0e138e, float:1.888519E38)
+            r2 = 2131629054(0x7f0e13fe, float:1.8885418E38)
             java.lang.String r3 = "YourEmailSuccessText"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             r1.setMessage(r2)
             goto L_0x00c4
         L_0x00b8:
-            r2 = 2131628948(0x7f0e1394, float:1.8885203E38)
+            r2 = 2131629060(0x7f0e1404, float:1.888543E38)
             java.lang.String r3 = "YourPasswordChangedSuccessText"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             r1.setMessage(r2)
         L_0x00c4:
-            r2 = 2131628954(0x7f0e139a, float:1.8885215E38)
+            r2 = 2131629066(0x7f0e140a, float:1.8885442E38)
             java.lang.String r3 = "YourPasswordSuccess"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             r1.setTitle(r2)
@@ -2540,11 +2538,11 @@ public class TwoStepVerificationSetupActivity extends BaseFragment {
             java.lang.String r2 = r1.text
             java.lang.String r3 = "EMAIL_INVALID"
             boolean r2 = r3.equals(r2)
-            r3 = 2131624304(0x7f0e0170, float:1.8875784E38)
+            r3 = 2131624316(0x7f0e017c, float:1.8875808E38)
             java.lang.String r4 = "AppName"
             if (r2 == 0) goto L_0x0193
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r4, r3)
-            r2 = 2131627108(0x7f0e0CLASSNAME, float:1.8881471E38)
+            r2 = 2131627198(0x7f0e0cbe, float:1.8881654E38)
             java.lang.String r3 = "PasswordEmailInvalid"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             r11.showAlertWithText(r1, r2)
@@ -2568,7 +2566,7 @@ public class TwoStepVerificationSetupActivity extends BaseFragment {
             java.lang.String r1 = org.telegram.messenger.LocaleController.formatPluralString(r2, r1)
         L_0x01b9:
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r4, r3)
-            r3 = 2131625735(0x7f0e0707, float:1.8878686E38)
+            r3 = 2131625810(0x7f0e0752, float:1.8878838E38)
             java.lang.Object[] r4 = new java.lang.Object[r7]
             r4[r8] = r1
             java.lang.String r1 = "FloodWaitTime"
@@ -2788,5 +2786,12 @@ public class TwoStepVerificationSetupActivity extends BaseFragment {
         Bundle bundle = new Bundle();
         bundle.putBoolean("afterSignup", true);
         presentFragment(new DialogsActivity(bundle), true);
+    }
+
+    public boolean isLightStatusBar() {
+        if (ColorUtils.calculateLuminance(Theme.getColor("windowBackgroundWhite", (boolean[]) null, true)) > 0.699999988079071d) {
+            return true;
+        }
+        return false;
     }
 }

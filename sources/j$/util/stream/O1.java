@@ -1,6 +1,6 @@
 package j$.util.stream;
 
-import j$.util.function.CLASSNAMEb;
+import j$.util.function.b;
 import j$.util.function.r;
 import j$.util.y;
 import java.util.concurrent.CountedCompleter;
@@ -8,7 +8,7 @@ import java.util.concurrent.CountedCompleter;
 class O1 extends CLASSNAMEf {
     protected final CLASSNAMEz2 h;
     protected final r i;
-    protected final CLASSNAMEb j;
+    protected final b j;
 
     O1(O1 o1, y yVar) {
         super((CLASSNAMEf) o1, yVar);
@@ -17,7 +17,7 @@ class O1 extends CLASSNAMEf {
         this.j = o1.j;
     }
 
-    O1(CLASSNAMEz2 z2Var, y yVar, r rVar, CLASSNAMEb bVar) {
+    O1(CLASSNAMEz2 z2Var, y yVar, r rVar, b bVar) {
         super(z2Var, yVar);
         this.h = z2Var;
         this.i = rVar;

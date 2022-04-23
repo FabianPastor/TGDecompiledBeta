@@ -26,6 +26,10 @@ public class SimpleFloatPropertyCompat<T> extends FloatPropertyCompat<T> {
         return this;
     }
 
+    public float getMultiplier() {
+        return this.multiplier;
+    }
+
     public float getValue(T t) {
         return this.getter.get(t) * this.multiplier;
     }

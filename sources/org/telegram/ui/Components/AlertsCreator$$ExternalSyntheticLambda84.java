@@ -1,26 +1,16 @@
 package org.telegram.ui.Components;
 
-import android.content.SharedPreferences;
-import org.telegram.tgnet.RequestDelegate;
-import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC$TL_error;
-import org.telegram.ui.ActionBar.AlertDialog;
-import org.telegram.ui.ActionBar.BaseFragment;
+import android.view.KeyEvent;
+import android.widget.TextView;
+import org.telegram.messenger.AndroidUtilities;
 
-public final /* synthetic */ class AlertsCreator$$ExternalSyntheticLambda84 implements RequestDelegate {
-    public final /* synthetic */ SharedPreferences f$0;
-    public final /* synthetic */ AlertDialog f$1;
-    public final /* synthetic */ int f$2;
-    public final /* synthetic */ BaseFragment f$3;
+public final /* synthetic */ class AlertsCreator$$ExternalSyntheticLambda84 implements TextView.OnEditorActionListener {
+    public static final /* synthetic */ AlertsCreator$$ExternalSyntheticLambda84 INSTANCE = new AlertsCreator$$ExternalSyntheticLambda84();
 
-    public /* synthetic */ AlertsCreator$$ExternalSyntheticLambda84(SharedPreferences sharedPreferences, AlertDialog alertDialog, int i, BaseFragment baseFragment) {
-        this.f$0 = sharedPreferences;
-        this.f$1 = alertDialog;
-        this.f$2 = i;
-        this.f$3 = baseFragment;
+    private /* synthetic */ AlertsCreator$$ExternalSyntheticLambda84() {
     }
 
-    public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        AlertsCreator.lambda$performAskAQuestion$18(this.f$0, this.f$1, this.f$2, this.f$3, tLObject, tLRPC$TL_error);
+    public final boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
+        return AndroidUtilities.hideKeyboard(textView);
     }
 }

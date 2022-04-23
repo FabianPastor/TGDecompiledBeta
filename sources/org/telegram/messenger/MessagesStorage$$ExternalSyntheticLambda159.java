@@ -1,22 +1,22 @@
 package org.telegram.messenger;
 
-import android.util.SparseIntArray;
-import org.telegram.messenger.support.LongSparseIntArray;
+import org.telegram.tgnet.TLRPC$Dialog;
+import org.telegram.tgnet.TLRPC$InputPeer;
 
 public final /* synthetic */ class MessagesStorage$$ExternalSyntheticLambda159 implements Runnable {
     public final /* synthetic */ MessagesStorage f$0;
-    public final /* synthetic */ LongSparseIntArray f$1;
-    public final /* synthetic */ LongSparseIntArray f$2;
-    public final /* synthetic */ SparseIntArray f$3;
+    public final /* synthetic */ TLRPC$Dialog f$1;
+    public final /* synthetic */ TLRPC$InputPeer f$2;
+    public final /* synthetic */ long f$3;
 
-    public /* synthetic */ MessagesStorage$$ExternalSyntheticLambda159(MessagesStorage messagesStorage, LongSparseIntArray longSparseIntArray, LongSparseIntArray longSparseIntArray2, SparseIntArray sparseIntArray) {
+    public /* synthetic */ MessagesStorage$$ExternalSyntheticLambda159(MessagesStorage messagesStorage, TLRPC$Dialog tLRPC$Dialog, TLRPC$InputPeer tLRPC$InputPeer, long j) {
         this.f$0 = messagesStorage;
-        this.f$1 = longSparseIntArray;
-        this.f$2 = longSparseIntArray2;
-        this.f$3 = sparseIntArray;
+        this.f$1 = tLRPC$Dialog;
+        this.f$2 = tLRPC$InputPeer;
+        this.f$3 = j;
     }
 
     public final void run() {
-        this.f$0.lambda$markMessagesAsRead$169(this.f$1, this.f$2, this.f$3);
+        this.f$0.lambda$loadPendingTasks$13(this.f$1, this.f$2, this.f$3);
     }
 }

@@ -16,6 +16,6 @@ public final /* synthetic */ class DialogsActivity$$ExternalSyntheticLambda41 im
     }
 
     public final void run() {
-        this.f$0.lambda$checkListLoad$20(this.f$1, this.f$2, this.f$3, this.f$4);
+        this.f$0.lambda$checkListLoad$21(this.f$1, this.f$2, this.f$3, this.f$4);
     }
 }

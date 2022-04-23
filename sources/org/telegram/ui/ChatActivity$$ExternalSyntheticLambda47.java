@@ -10,6 +10,6 @@ public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda47 imple
     }
 
     public final void onDismiss(DialogInterface dialogInterface) {
-        this.f$0.lambda$onResume$132(dialogInterface);
+        this.f$0.lambda$onResume$142(dialogInterface);
     }
 }

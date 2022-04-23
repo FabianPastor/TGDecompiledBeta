@@ -1,16 +1,17 @@
 package org.telegram.ui.Components;
 
-import java.util.ArrayList;
-import org.telegram.ui.Components.ChatAttachAlertAudioLayout;
+import org.telegram.ui.ActionBar.BottomSheet;
 
-public final /* synthetic */ class ChatAttachAlert$$ExternalSyntheticLambda19 implements ChatAttachAlertAudioLayout.AudioSelectDelegate {
+public final /* synthetic */ class ChatAttachAlert$$ExternalSyntheticLambda19 implements Runnable {
     public final /* synthetic */ ChatAttachAlert f$0;
+    public final /* synthetic */ BottomSheet.BottomSheetDelegateInterface f$1;
 
-    public /* synthetic */ ChatAttachAlert$$ExternalSyntheticLambda19(ChatAttachAlert chatAttachAlert) {
+    public /* synthetic */ ChatAttachAlert$$ExternalSyntheticLambda19(ChatAttachAlert chatAttachAlert, BottomSheet.BottomSheetDelegateInterface bottomSheetDelegateInterface) {
         this.f$0 = chatAttachAlert;
+        this.f$1 = bottomSheetDelegateInterface;
     }
 
-    public final void didSelectAudio(ArrayList arrayList, CharSequence charSequence, boolean z, int i) {
-        this.f$0.lambda$openAudioLayout$19(arrayList, charSequence, z, i);
+    public final void run() {
+        this.f$0.lambda$onCustomOpenAnimation$26(this.f$1);
     }
 }

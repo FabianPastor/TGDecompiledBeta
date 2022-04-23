@@ -1,16 +1,20 @@
 package org.telegram.ui.Components;
 
-import android.view.KeyEvent;
-import android.widget.TextView;
-import org.telegram.messenger.AndroidUtilities;
+import android.graphics.Rect;
+import android.view.MotionEvent;
+import android.view.View;
+import org.telegram.ui.ActionBar.ActionBarPopupWindow;
 
-public final /* synthetic */ class AlertsCreator$$ExternalSyntheticLambda75 implements TextView.OnEditorActionListener {
-    public static final /* synthetic */ AlertsCreator$$ExternalSyntheticLambda75 INSTANCE = new AlertsCreator$$ExternalSyntheticLambda75();
+public final /* synthetic */ class AlertsCreator$$ExternalSyntheticLambda75 implements View.OnTouchListener {
+    public final /* synthetic */ ActionBarPopupWindow f$0;
+    public final /* synthetic */ Rect f$1;
 
-    private /* synthetic */ AlertsCreator$$ExternalSyntheticLambda75() {
+    public /* synthetic */ AlertsCreator$$ExternalSyntheticLambda75(ActionBarPopupWindow actionBarPopupWindow, Rect rect) {
+        this.f$0 = actionBarPopupWindow;
+        this.f$1 = rect;
     }
 
-    public final boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
-        return AndroidUtilities.hideKeyboard(textView);
+    public final boolean onTouch(View view, MotionEvent motionEvent) {
+        return AlertsCreator.lambda$showPopupMenu$128(this.f$0, this.f$1, view, motionEvent);
     }
 }

@@ -1,15 +1,15 @@
 package j$.util.stream;
 
 import j$.util.function.BiFunction;
-import j$.util.function.CLASSNAMEb;
 import j$.util.function.Consumer;
+import j$.util.function.b;
 
 class H2 extends U2 implements T2 {
     final /* synthetic */ Object b;
     final /* synthetic */ BiFunction c;
-    final /* synthetic */ CLASSNAMEb d;
+    final /* synthetic */ b d;
 
-    H2(Object obj, BiFunction biFunction, CLASSNAMEb bVar) {
+    H2(Object obj, BiFunction biFunction, b bVar) {
         this.b = obj;
         this.c = biFunction;
         this.d = bVar;

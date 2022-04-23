@@ -182,7 +182,6 @@ public class MentionsAdapter extends RecyclerListView.SelectionAdapter implement
     }
 
     public MentionsAdapter(Context context, boolean z, long j, int i, MentionsAdapterDelegate mentionsAdapterDelegate, Theme.ResourcesProvider resourcesProvider2) {
-        setHasStableIds(true);
         this.resourcesProvider = resourcesProvider2;
         this.mContext = context;
         this.delegate = mentionsAdapterDelegate;

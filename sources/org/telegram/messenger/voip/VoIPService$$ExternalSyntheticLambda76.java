@@ -1,18 +1,17 @@
 package org.telegram.messenger.voip;
 
-import android.content.SharedPreferences;
-import org.telegram.tgnet.RequestDelegate;
-import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC$TL_error;
+import org.telegram.messenger.voip.NativeInstance;
 
-public final /* synthetic */ class VoIPService$$ExternalSyntheticLambda76 implements RequestDelegate {
-    public final /* synthetic */ SharedPreferences f$0;
+public final /* synthetic */ class VoIPService$$ExternalSyntheticLambda76 implements NativeInstance.VideoSourcesCallback {
+    public final /* synthetic */ VoIPService f$0;
+    public final /* synthetic */ int f$1;
 
-    public /* synthetic */ VoIPService$$ExternalSyntheticLambda76(SharedPreferences sharedPreferences) {
-        this.f$0 = sharedPreferences;
+    public /* synthetic */ VoIPService$$ExternalSyntheticLambda76(VoIPService voIPService, int i) {
+        this.f$0 = voIPService;
+        this.f$1 = i;
     }
 
-    public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        VoIPService.lambda$updateServerConfig$74(this.f$0, tLObject, tLRPC$TL_error);
+    public final void run(long j, int[] iArr) {
+        this.f$0.lambda$createGroupInstance$40(this.f$1, j, iArr);
     }
 }

@@ -1,17 +1,15 @@
 package org.telegram.ui.Components;
 
-import org.telegram.ui.ActionBar.BottomSheet;
+import android.view.MotionEvent;
+import android.view.View;
 
-public final /* synthetic */ class ChatAttachAlert$$ExternalSyntheticLambda12 implements Runnable {
-    public final /* synthetic */ ChatAttachAlert f$0;
-    public final /* synthetic */ BottomSheet.BottomSheetDelegateInterface f$1;
+public final /* synthetic */ class ChatAttachAlert$$ExternalSyntheticLambda12 implements View.OnTouchListener {
+    public static final /* synthetic */ ChatAttachAlert$$ExternalSyntheticLambda12 INSTANCE = new ChatAttachAlert$$ExternalSyntheticLambda12();
 
-    public /* synthetic */ ChatAttachAlert$$ExternalSyntheticLambda12(ChatAttachAlert chatAttachAlert, BottomSheet.BottomSheetDelegateInterface bottomSheetDelegateInterface) {
-        this.f$0 = chatAttachAlert;
-        this.f$1 = bottomSheetDelegateInterface;
+    private /* synthetic */ ChatAttachAlert$$ExternalSyntheticLambda12() {
     }
 
-    public final void run() {
-        this.f$0.lambda$onCustomOpenAnimation$20(this.f$1);
+    public final boolean onTouch(View view, MotionEvent motionEvent) {
+        return ChatAttachAlert.lambda$new$10(view, motionEvent);
     }
 }

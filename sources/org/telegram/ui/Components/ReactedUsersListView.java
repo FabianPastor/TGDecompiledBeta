@@ -16,7 +16,7 @@ import android.widget.FrameLayout;
 import android.widget.TextView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import com.google.android.gms.internal.mlkit_language_id.zzdp$$ExternalSyntheticBackport0;
+import j$.util.Comparator$CC;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
@@ -62,11 +62,10 @@ public class ReactedUsersListView extends FrameLayout {
     private OnHeightChangedListener onHeightChangedListener;
     private OnProfileSelectedListener onProfileSelectedListener;
     private boolean onlySeenNow;
+    private LongSparseArray<TLRPC$TL_messagePeerReaction> peerReactionMap = new LongSparseArray<>();
     private int predictiveCount;
     /* access modifiers changed from: private */
     public List<TLRPC$TL_messagePeerReaction> userReactions = new ArrayList();
-    /* access modifiers changed from: private */
-    public LongSparseArray<TLRPC$User> users = new LongSparseArray<>();
 
     public interface OnHeightChangedListener {
         void onHeightChanged(ReactedUsersListView reactedUsersListView, int i);
@@ -158,13 +157,13 @@ public class ReactedUsersListView extends FrameLayout {
     public ReactedUsersListView setSeenUsers(List<TLRPC$User> list) {
         ArrayList arrayList = new ArrayList(list.size());
         for (TLRPC$User next : list) {
-            if (this.users.get(next.id) == null) {
-                this.users.put(next.id, next);
+            if (this.peerReactionMap.get(next.id) == null) {
                 TLRPC$TL_messagePeerReaction tLRPC$TL_messagePeerReaction = new TLRPC$TL_messagePeerReaction();
                 tLRPC$TL_messagePeerReaction.reaction = null;
                 TLRPC$TL_peerUser tLRPC$TL_peerUser = new TLRPC$TL_peerUser();
                 tLRPC$TL_messagePeerReaction.peer_id = tLRPC$TL_peerUser;
                 tLRPC$TL_peerUser.user_id = next.id;
+                this.peerReactionMap.put(MessageObject.getPeerId(tLRPC$TL_peerUser), tLRPC$TL_messagePeerReaction);
                 arrayList.add(tLRPC$TL_messagePeerReaction);
             }
         }
@@ -208,71 +207,66 @@ public class ReactedUsersListView extends FrameLayout {
     }
 
     /* access modifiers changed from: private */
+    public /* synthetic */ void lambda$load$4(TLObject tLObject) {
+        NotificationCenter.getInstance(this.currentAccount).doOnIdle(new ReactedUsersListView$$ExternalSyntheticLambda1(this, tLObject));
+    }
+
+    /* access modifiers changed from: private */
     public /* synthetic */ void lambda$load$5(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+        AndroidUtilities.runOnUIThread(new ReactedUsersListView$$ExternalSyntheticLambda2(this, tLObject));
+    }
+
+    /* access modifiers changed from: private */
+    public /* synthetic */ void lambda$load$3(TLObject tLObject) {
         if (tLObject instanceof TLRPC$TL_messages_messageReactionsList) {
             TLRPC$TL_messages_messageReactionsList tLRPC$TL_messages_messageReactionsList = (TLRPC$TL_messages_messageReactionsList) tLObject;
             Iterator<TLRPC$User> it = tLRPC$TL_messages_messageReactionsList.users.iterator();
             while (it.hasNext()) {
-                TLRPC$User next = it.next();
-                MessagesController.getInstance(this.currentAccount).putUser(next, false);
-                this.users.put(next.id, next);
+                MessagesController.getInstance(this.currentAccount).putUser(it.next(), false);
             }
-            int size = this.userReactions.size();
-            ArrayList arrayList = new ArrayList(this.userReactions.size() + tLRPC$TL_messages_messageReactionsList.reactions.size());
-            arrayList.addAll(this.userReactions);
-            arrayList.addAll(tLRPC$TL_messages_messageReactionsList.reactions);
+            for (int i = 0; i < tLRPC$TL_messages_messageReactionsList.reactions.size(); i++) {
+                this.userReactions.add(tLRPC$TL_messages_messageReactionsList.reactions.get(i));
+                long peerId = MessageObject.getPeerId(tLRPC$TL_messages_messageReactionsList.reactions.get(i).peer_id);
+                TLRPC$TL_messagePeerReaction tLRPC$TL_messagePeerReaction = this.peerReactionMap.get(peerId);
+                if (tLRPC$TL_messagePeerReaction != null) {
+                    this.userReactions.remove(tLRPC$TL_messagePeerReaction);
+                }
+                this.peerReactionMap.put(peerId, tLRPC$TL_messages_messageReactionsList.reactions.get(i));
+            }
             if (this.onlySeenNow) {
-                Collections.sort(arrayList, ReactedUsersListView$$ExternalSyntheticLambda3.INSTANCE);
+                Collections.sort(this.userReactions, Comparator$CC.comparingInt(ReactedUsersListView$$ExternalSyntheticLambda3.INSTANCE));
             }
-            AndroidUtilities.runOnUIThread(new ReactedUsersListView$$ExternalSyntheticLambda2(this, arrayList, size, tLRPC$TL_messages_messageReactionsList));
+            if (this.onlySeenNow) {
+                this.onlySeenNow = false;
+            }
+            this.adapter.notifyDataSetChanged();
+            if (!this.isLoaded) {
+                ValueAnimator duration = ValueAnimator.ofFloat(new float[]{0.0f, 1.0f}).setDuration(150);
+                duration.setInterpolator(CubicBezierInterpolator.DEFAULT);
+                duration.addUpdateListener(new ReactedUsersListView$$ExternalSyntheticLambda0(this));
+                duration.addListener(new AnimatorListenerAdapter() {
+                    public void onAnimationEnd(Animator animator) {
+                        ReactedUsersListView.this.loadingView.setVisibility(8);
+                    }
+                });
+                duration.start();
+                updateHeight();
+                this.isLoaded = true;
+            }
+            String str = tLRPC$TL_messages_messageReactionsList.next_offset;
+            this.offset = str;
+            if (str == null) {
+                this.canLoadMore = false;
+            }
+            this.isLoading = false;
             return;
         }
         this.isLoading = false;
     }
 
     /* access modifiers changed from: private */
-    public static /* synthetic */ int lambda$load$1(TLRPC$TL_messagePeerReaction tLRPC$TL_messagePeerReaction, TLRPC$TL_messagePeerReaction tLRPC$TL_messagePeerReaction2) {
-        int i = 1;
-        int i2 = tLRPC$TL_messagePeerReaction.reaction != null ? 1 : 0;
-        if (tLRPC$TL_messagePeerReaction2.reaction == null) {
-            i = 0;
-        }
-        return zzdp$$ExternalSyntheticBackport0.m(i2, i);
-    }
-
-    /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$load$4(List list, int i, TLRPC$TL_messages_messageReactionsList tLRPC$TL_messages_messageReactionsList) {
-        NotificationCenter.getInstance(this.currentAccount).doOnIdle(new ReactedUsersListView$$ExternalSyntheticLambda1(this, list, i, tLRPC$TL_messages_messageReactionsList));
-    }
-
-    /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$load$3(List list, int i, TLRPC$TL_messages_messageReactionsList tLRPC$TL_messages_messageReactionsList) {
-        this.userReactions = list;
-        if (this.onlySeenNow) {
-            this.onlySeenNow = false;
-            this.adapter.notifyDataSetChanged();
-        } else {
-            this.adapter.notifyItemRangeInserted(i, tLRPC$TL_messages_messageReactionsList.reactions.size());
-        }
-        if (!this.isLoaded) {
-            ValueAnimator duration = ValueAnimator.ofFloat(new float[]{0.0f, 1.0f}).setDuration(150);
-            duration.setInterpolator(CubicBezierInterpolator.DEFAULT);
-            duration.addUpdateListener(new ReactedUsersListView$$ExternalSyntheticLambda0(this));
-            duration.addListener(new AnimatorListenerAdapter() {
-                public void onAnimationEnd(Animator animator) {
-                    ReactedUsersListView.this.loadingView.setVisibility(8);
-                }
-            });
-            duration.start();
-            updateHeight();
-            this.isLoaded = true;
-        }
-        String str = tLRPC$TL_messages_messageReactionsList.next_offset;
-        this.offset = str;
-        if (str == null) {
-            this.canLoadMore = false;
-        }
-        this.isLoading = false;
+    public static /* synthetic */ int lambda$load$1(TLRPC$TL_messagePeerReaction tLRPC$TL_messagePeerReaction) {
+        return tLRPC$TL_messagePeerReaction.reaction != null ? 0 : 1;
     }
 
     /* access modifiers changed from: private */
@@ -336,20 +330,22 @@ public class ReactedUsersListView extends FrameLayout {
 
         /* access modifiers changed from: package-private */
         public void setUserReaction(TLRPC$TL_messagePeerReaction tLRPC$TL_messagePeerReaction) {
-            TLRPC$User tLRPC$User = (TLRPC$User) ReactedUsersListView.this.users.get(MessageObject.getPeerId(tLRPC$TL_messagePeerReaction.peer_id));
-            this.avatarDrawable.setInfo(tLRPC$User);
-            this.titleView.setText(UserObject.getUserName(tLRPC$User));
-            this.avatarView.setImage(ImageLocation.getForUser(tLRPC$User, 1), "50_50", (Drawable) this.avatarDrawable, (Object) tLRPC$User);
-            if (tLRPC$TL_messagePeerReaction.reaction != null) {
-                TLRPC$TL_availableReaction tLRPC$TL_availableReaction = MediaDataController.getInstance(ReactedUsersListView.this.currentAccount).getReactionsMap().get(tLRPC$TL_messagePeerReaction.reaction);
-                if (tLRPC$TL_availableReaction != null) {
-                    this.reactView.setImage(ImageLocation.getForDocument(tLRPC$TL_availableReaction.static_icon), "50_50", "webp", (Drawable) DocumentObject.getSvgThumb(tLRPC$TL_availableReaction.static_icon.thumbs, "windowBackgroundGray", 1.0f), (Object) tLRPC$TL_availableReaction);
+            TLRPC$User user = MessagesController.getInstance(ReactedUsersListView.this.currentAccount).getUser(Long.valueOf(MessageObject.getPeerId(tLRPC$TL_messagePeerReaction.peer_id)));
+            if (user != null) {
+                this.avatarDrawable.setInfo(user);
+                this.titleView.setText(UserObject.getUserName(user));
+                this.avatarView.setImage(ImageLocation.getForUser(user, 1), "50_50", (Drawable) this.avatarDrawable, (Object) user);
+                if (tLRPC$TL_messagePeerReaction.reaction != null) {
+                    TLRPC$TL_availableReaction tLRPC$TL_availableReaction = MediaDataController.getInstance(ReactedUsersListView.this.currentAccount).getReactionsMap().get(tLRPC$TL_messagePeerReaction.reaction);
+                    if (tLRPC$TL_availableReaction != null) {
+                        this.reactView.setImage(ImageLocation.getForDocument(tLRPC$TL_availableReaction.static_icon), "50_50", "webp", (Drawable) DocumentObject.getSvgThumb(tLRPC$TL_availableReaction.static_icon.thumbs, "windowBackgroundGray", 1.0f), (Object) tLRPC$TL_availableReaction);
+                        return;
+                    }
+                    this.reactView.setImageDrawable((Drawable) null);
                     return;
                 }
                 this.reactView.setImageDrawable((Drawable) null);
-                return;
             }
-            this.reactView.setImageDrawable((Drawable) null);
         }
 
         /* access modifiers changed from: protected */

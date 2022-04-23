@@ -1,8 +1,8 @@
 package j$.wrappers;
 
 import j$.util.function.BiConsumer;
-import j$.util.function.CLASSNAMEb;
 import j$.util.function.Function;
+import j$.util.function.b;
 import j$.util.function.y;
 import java.util.Set;
 import java.util.stream.Collector;
@@ -29,7 +29,7 @@ public final /* synthetic */ class J0 {
         return this.a.characteristics();
     }
 
-    public CLASSNAMEb c() {
+    public b c() {
         return CLASSNAMEu.a(this.a.combiner());
     }
 

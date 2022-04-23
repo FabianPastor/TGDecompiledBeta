@@ -550,7 +550,7 @@ public class ActionBar extends FrameLayout {
                     ActionBar actionBar2 = ActionBar.this;
                     actionBar2.blurScrimPaint.setColor(actionBar2.actionModeColor);
                     ActionBar actionBar3 = ActionBar.this;
-                    actionBar3.contentView.drawBlur(canvas, 0.0f, actionBar3.rectTmp, actionBar3.blurScrimPaint, true);
+                    actionBar3.contentView.drawBlurRect(canvas, 0.0f, actionBar3.rectTmp, actionBar3.blurScrimPaint, true);
                 }
                 super.dispatchDraw(canvas);
             }
@@ -2058,7 +2058,7 @@ public class ActionBar extends FrameLayout {
         if (this.blurredBackground && this.actionBarColor != 0) {
             this.rectTmp.set(0, 0, getMeasuredWidth(), getMeasuredHeight());
             this.blurScrimPaint.setColor(this.actionBarColor);
-            this.contentView.drawBlur(canvas, 0.0f, this.rectTmp, this.blurScrimPaint, true);
+            this.contentView.drawBlurRect(canvas, getY(), this.rectTmp, this.blurScrimPaint, true);
         }
         super.dispatchDraw(canvas);
     }

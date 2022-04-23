@@ -10,6 +10,6 @@ public final /* synthetic */ class ActionBarMenuItem$$ExternalSyntheticLambda2 i
     }
 
     public final void onClick(View view) {
-        this.f$0.lambda$addSubItem$3(view);
+        this.f$0.lambda$setIsSearchField$13(view);
     }
 }

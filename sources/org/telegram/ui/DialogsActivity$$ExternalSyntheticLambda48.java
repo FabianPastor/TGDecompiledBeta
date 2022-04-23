@@ -13,6 +13,6 @@ public final /* synthetic */ class DialogsActivity$$ExternalSyntheticLambda48 im
     }
 
     public final void run(boolean z, boolean z2) {
-        this.f$0.lambda$performSelectedDialogsAction$29(this.f$1, z, z2);
+        this.f$0.lambda$performSelectedDialogsAction$30(this.f$1, z, z2);
     }
 }

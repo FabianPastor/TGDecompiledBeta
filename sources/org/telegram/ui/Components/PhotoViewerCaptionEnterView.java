@@ -108,6 +108,8 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
 
         void onEmojiViewCloseStart();
 
+        void onEmojiViewOpen();
+
         void onTextChanged(CharSequence charSequence);
 
         void onWindowSizeChanged(int i);
@@ -867,6 +869,7 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
                 createEmojiView();
             }
             this.emojiView.setVisibility(0);
+            this.delegate.onEmojiViewOpen();
             if (this.keyboardHeight <= 0) {
                 this.keyboardHeight = MessagesController.getGlobalEmojiSettings().getInt("kbd_height", AndroidUtilities.dp(200.0f));
             }
@@ -969,7 +972,7 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
         return emojiView2 != null && emojiView2.getVisibility() == 0;
     }
 
-    public boolean isPopupAnimatig() {
+    public boolean isPopupAnimating() {
         return this.popupAnimating;
     }
 

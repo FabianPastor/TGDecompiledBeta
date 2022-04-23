@@ -10,6 +10,7 @@ import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.UserConfig;
+import org.telegram.ui.ActionBar.DrawerLayoutContainer;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Cells.DividerCell;
 import org.telegram.ui.Cells.DrawerActionCell;
@@ -27,10 +28,12 @@ public class DrawerLayoutAdapter extends RecyclerListView.SelectionAdapter {
     private SideMenultItemAnimator itemAnimator;
     private ArrayList<Item> items = new ArrayList<>(11);
     private Context mContext;
+    private DrawerLayoutContainer mDrawerLayoutContainer;
     private DrawerProfileCell profileCell;
 
-    public DrawerLayoutAdapter(Context context, SideMenultItemAnimator sideMenultItemAnimator) {
+    public DrawerLayoutAdapter(Context context, SideMenultItemAnimator sideMenultItemAnimator, DrawerLayoutContainer drawerLayoutContainer) {
         this.mContext = context;
+        this.mDrawerLayoutContainer = drawerLayoutContainer;
         this.itemAnimator = sideMenultItemAnimator;
         boolean z = true;
         this.accountsShown = (UserConfig.getActivatedAccountsCount() <= 1 || !MessagesController.getGlobalMainSettings().getBoolean("accountsShown", true)) ? false : z;
@@ -91,7 +94,7 @@ public class DrawerLayoutAdapter extends RecyclerListView.SelectionAdapter {
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
         EmptyCell emptyCell;
         if (i == 0) {
-            DrawerProfileCell drawerProfileCell = new DrawerProfileCell(this.mContext);
+            DrawerProfileCell drawerProfileCell = new DrawerProfileCell(this.mContext, this.mDrawerLayoutContainer);
             this.profileCell = drawerProfileCell;
             emptyCell = drawerProfileCell;
         } else if (i == 2) {

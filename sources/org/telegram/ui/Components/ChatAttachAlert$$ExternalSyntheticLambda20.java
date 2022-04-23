@@ -1,16 +1,17 @@
 package org.telegram.ui.Components;
 
-import org.telegram.tgnet.TLRPC$User;
-import org.telegram.ui.Components.ChatAttachAlertContactsLayout;
-
-public final /* synthetic */ class ChatAttachAlert$$ExternalSyntheticLambda20 implements ChatAttachAlertContactsLayout.PhonebookShareAlertDelegate {
+public final /* synthetic */ class ChatAttachAlert$$ExternalSyntheticLambda20 implements Runnable {
     public final /* synthetic */ ChatAttachAlert f$0;
+    public final /* synthetic */ EditTextBoldCursor f$1;
+    public final /* synthetic */ boolean f$2;
 
-    public /* synthetic */ ChatAttachAlert$$ExternalSyntheticLambda20(ChatAttachAlert chatAttachAlert) {
+    public /* synthetic */ ChatAttachAlert$$ExternalSyntheticLambda20(ChatAttachAlert chatAttachAlert, EditTextBoldCursor editTextBoldCursor, boolean z) {
         this.f$0 = chatAttachAlert;
+        this.f$1 = editTextBoldCursor;
+        this.f$2 = z;
     }
 
-    public final void didSelectContact(TLRPC$User tLRPC$User, boolean z, int i) {
-        this.f$0.lambda$openContactsLayout$18(tLRPC$User, z, i);
+    public final void run() {
+        this.f$0.lambda$makeFocusable$29(this.f$1, this.f$2);
     }
 }

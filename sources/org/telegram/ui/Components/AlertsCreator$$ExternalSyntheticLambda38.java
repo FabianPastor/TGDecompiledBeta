@@ -1,18 +1,14 @@
 package org.telegram.ui.Components;
 
 import android.content.DialogInterface;
-import android.widget.EditText;
 
-public final /* synthetic */ class AlertsCreator$$ExternalSyntheticLambda38 implements DialogInterface.OnDismissListener {
-    public final /* synthetic */ EditText f$0;
-    public final /* synthetic */ EditText f$1;
+public final /* synthetic */ class AlertsCreator$$ExternalSyntheticLambda38 implements DialogInterface.OnClickListener {
+    public static final /* synthetic */ AlertsCreator$$ExternalSyntheticLambda38 INSTANCE = new AlertsCreator$$ExternalSyntheticLambda38();
 
-    public /* synthetic */ AlertsCreator$$ExternalSyntheticLambda38(EditText editText, EditText editText2) {
-        this.f$0 = editText;
-        this.f$1 = editText2;
+    private /* synthetic */ AlertsCreator$$ExternalSyntheticLambda38() {
     }
 
-    public final void onDismiss(DialogInterface dialogInterface) {
-        AlertsCreator.lambda$createChangeNameAlert$32(this.f$0, this.f$1, dialogInterface);
+    public final void onClick(DialogInterface dialogInterface, int i) {
+        AlertsCreator.lambda$createThemeCreateDialog$120(dialogInterface, i);
     }
 }

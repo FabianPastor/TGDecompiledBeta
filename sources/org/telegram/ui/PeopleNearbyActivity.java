@@ -20,6 +20,7 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
+import androidx.core.graphics.ColorUtils;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -351,9 +352,6 @@ public class PeopleNearbyActivity extends BaseFragment implements NotificationCe
         this.actionBar.setOccupyStatusBar(Build.VERSION.SDK_INT >= 21 && !AndroidUtilities.isTablet());
         this.actionBar.setTitle(LocaleController.getString("PeopleNearby", NUM));
         this.actionBar.getTitleTextView().setAlpha(0.0f);
-        if (!AndroidUtilities.isTablet()) {
-            this.actionBar.showActionModeTop();
-        }
         this.actionBar.setActionBarMenuOnItemClick(new ActionBar.ActionBarMenuOnItemClick() {
             public void onItemClick(int i) {
                 if (i == -1) {
@@ -1331,6 +1329,13 @@ public class PeopleNearbyActivity extends BaseFragment implements NotificationCe
             }
             return (i == PeopleNearbyActivity.this.usersSectionRow || i == PeopleNearbyActivity.this.chatsSectionRow || i == PeopleNearbyActivity.this.helpSectionRow) ? 1 : 0;
         }
+    }
+
+    public boolean isLightStatusBar() {
+        if (ColorUtils.calculateLuminance(Theme.getColor("windowBackgroundWhite", (boolean[]) null, true)) > 0.699999988079071d) {
+            return true;
+        }
+        return false;
     }
 
     public ArrayList<ThemeDescription> getThemeDescriptions() {

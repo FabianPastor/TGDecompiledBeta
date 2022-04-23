@@ -1,20 +1,20 @@
 package org.telegram.ui;
 
-import java.io.File;
-import org.telegram.ui.ActionBar.Theme;
+import org.telegram.tgnet.TLRPC$TL_error;
+import org.telegram.ui.ActionBar.AlertDialog;
 
 public final /* synthetic */ class LaunchActivity$$ExternalSyntheticLambda53 implements Runnable {
     public final /* synthetic */ LaunchActivity f$0;
-    public final /* synthetic */ Theme.ThemeInfo f$1;
-    public final /* synthetic */ File f$2;
+    public final /* synthetic */ AlertDialog f$1;
+    public final /* synthetic */ TLRPC$TL_error f$2;
 
-    public /* synthetic */ LaunchActivity$$ExternalSyntheticLambda53(LaunchActivity launchActivity, Theme.ThemeInfo themeInfo, File file) {
+    public /* synthetic */ LaunchActivity$$ExternalSyntheticLambda53(LaunchActivity launchActivity, AlertDialog alertDialog, TLRPC$TL_error tLRPC$TL_error) {
         this.f$0 = launchActivity;
-        this.f$1 = themeInfo;
-        this.f$2 = file;
+        this.f$1 = alertDialog;
+        this.f$2 = tLRPC$TL_error;
     }
 
     public final void run() {
-        this.f$0.lambda$didReceivedNotification$80(this.f$1, this.f$2);
+        this.f$0.lambda$runLinkRequest$48(this.f$1, this.f$2);
     }
 }

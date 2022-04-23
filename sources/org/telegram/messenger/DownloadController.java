@@ -12,11 +12,17 @@ import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Locale;
 import java.util.Map;
+import org.telegram.SQLite.SQLiteCursor;
+import org.telegram.SQLite.SQLiteDatabase;
+import org.telegram.SQLite.SQLitePreparedStatement;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.SendMessagesHelper;
+import org.telegram.tgnet.NativeByteBuffer;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC$Document;
+import org.telegram.tgnet.TLRPC$Message;
 import org.telegram.tgnet.TLRPC$Photo;
 import org.telegram.tgnet.TLRPC$PhotoSize;
 import org.telegram.tgnet.TLRPC$TL_account_autoDownloadSettings;
@@ -41,6 +47,12 @@ public class DownloadController extends BaseController implements NotificationCe
     public static final int PRESET_SIZE_NUM_VIDEO = 1;
     private HashMap<String, FileDownloadProgressListener> addLaterArray = new HashMap<>();
     private ArrayList<DownloadObject> audioDownloadQueue = new ArrayList<>();
+    Runnable clearUnviewedDownloadsRunnale = new Runnable() {
+        public void run() {
+            DownloadController.this.clearUnviewedDownloads();
+            DownloadController.this.getNotificationCenter().postNotificationName(NotificationCenter.onDownloadingFilesChanged, new Object[0]);
+        }
+    };
     public int currentMobilePreset;
     public int currentRoamingPreset;
     public int currentWifiPreset;
@@ -48,6 +60,7 @@ public class DownloadController extends BaseController implements NotificationCe
     private ArrayList<DownloadObject> documentDownloadQueue = new ArrayList<>();
     private HashMap<String, DownloadObject> downloadQueueKeys = new HashMap<>();
     private HashMap<Pair<Long, Integer>, DownloadObject> downloadQueuePairs = new HashMap<>();
+    public final ArrayList<MessageObject> downloadingFiles = new ArrayList<>();
     public Preset highPreset;
     private int lastCheckMask = 0;
     private int lastTag = 0;
@@ -60,8 +73,10 @@ public class DownloadController extends BaseController implements NotificationCe
     public Preset mobilePreset;
     private SparseArray<String> observersByTag = new SparseArray<>();
     private ArrayList<DownloadObject> photoDownloadQueue = new ArrayList<>();
+    public final ArrayList<MessageObject> recentDownloadingFiles = new ArrayList<>();
     public Preset roamingPreset;
     private LongSparseArray<Long> typingTimes = new LongSparseArray<>();
+    public final SparseArray<MessageObject> unviewedDownloads = new SparseArray<>();
     private ArrayList<DownloadObject> videoDownloadQueue = new ArrayList<>();
     public Preset wifiPreset;
 
@@ -359,13 +374,13 @@ public class DownloadController extends BaseController implements NotificationCe
         }
         if (z || Math.abs(System.currentTimeMillis() - getUserConfig().autoDownloadConfigLoadTime) >= 86400000) {
             this.loadingAutoDownloadConfig = true;
-            getConnectionsManager().sendRequest(new TLRPC$TL_account_getAutoDownloadSettings(), new DownloadController$$ExternalSyntheticLambda2(this));
+            getConnectionsManager().sendRequest(new TLRPC$TL_account_getAutoDownloadSettings(), new DownloadController$$ExternalSyntheticLambda12(this));
         }
     }
 
     /* access modifiers changed from: private */
     public /* synthetic */ void lambda$loadAutoDownloadConfig$2(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        AndroidUtilities.runOnUIThread(new DownloadController$$ExternalSyntheticLambda1(this, tLObject));
+        AndroidUtilities.runOnUIThread(new DownloadController$$ExternalSyntheticLambda11(this, tLObject));
     }
 
     /* access modifiers changed from: private */
@@ -930,7 +945,7 @@ public class DownloadController extends BaseController implements NotificationCe
             i2 = preset.sizes[2];
         }
         tLRPC$TL_autoDownloadSettings2.file_size_max = i2;
-        getConnectionsManager().sendRequest(tLRPC$TL_account_saveAutoDownloadSettings, DownloadController$$ExternalSyntheticLambda3.INSTANCE);
+        getConnectionsManager().sendRequest(tLRPC$TL_account_saveAutoDownloadSettings, DownloadController$$ExternalSyntheticLambda13.INSTANCE);
     }
 
     /* access modifiers changed from: protected */
@@ -1343,5 +1358,375 @@ public class DownloadController extends BaseController implements NotificationCe
             return 0.0f;
         }
         return Math.min(1.0f, ((float) jArr[0]) / ((float) jArr[1]));
+    }
+
+    public void startDownloadFile(TLRPC$Document tLRPC$Document, MessageObject messageObject) {
+        if (messageObject.getDocument() != null) {
+            AndroidUtilities.runOnUIThread(new DownloadController$$ExternalSyntheticLambda9(this, messageObject));
+        }
+    }
+
+    /* access modifiers changed from: private */
+    /* JADX WARNING: Removed duplicated region for block: B:17:0x0053  */
+    /* Code decompiled incorrectly, please refer to instructions dump. */
+    public /* synthetic */ void lambda$startDownloadFile$5(org.telegram.messenger.MessageObject r10) {
+        /*
+            r9 = this;
+            r0 = 0
+            r1 = 0
+        L_0x0002:
+            java.util.ArrayList<org.telegram.messenger.MessageObject> r2 = r9.recentDownloadingFiles
+            int r2 = r2.size()
+            r3 = 1
+            if (r1 >= r2) goto L_0x0028
+            java.util.ArrayList<org.telegram.messenger.MessageObject> r2 = r9.recentDownloadingFiles
+            java.lang.Object r2 = r2.get(r1)
+            org.telegram.messenger.MessageObject r2 = (org.telegram.messenger.MessageObject) r2
+            org.telegram.tgnet.TLRPC$Document r2 = r2.getDocument()
+            long r4 = r2.id
+            org.telegram.tgnet.TLRPC$Document r2 = r10.getDocument()
+            long r6 = r2.id
+            int r2 = (r4 > r6 ? 1 : (r4 == r6 ? 0 : -1))
+            if (r2 != 0) goto L_0x0025
+            r1 = 1
+            goto L_0x0029
+        L_0x0025:
+            int r1 = r1 + 1
+            goto L_0x0002
+        L_0x0028:
+            r1 = 0
+        L_0x0029:
+            if (r1 != 0) goto L_0x0050
+            r2 = 0
+        L_0x002c:
+            java.util.ArrayList<org.telegram.messenger.MessageObject> r4 = r9.downloadingFiles
+            int r4 = r4.size()
+            if (r2 >= r4) goto L_0x0050
+            java.util.ArrayList<org.telegram.messenger.MessageObject> r4 = r9.downloadingFiles
+            java.lang.Object r4 = r4.get(r2)
+            org.telegram.messenger.MessageObject r4 = (org.telegram.messenger.MessageObject) r4
+            org.telegram.tgnet.TLRPC$Document r4 = r4.getDocument()
+            long r4 = r4.id
+            org.telegram.tgnet.TLRPC$Document r6 = r10.getDocument()
+            long r6 = r6.id
+            int r8 = (r4 > r6 ? 1 : (r4 == r6 ? 0 : -1))
+            if (r8 != 0) goto L_0x004d
+            goto L_0x0051
+        L_0x004d:
+            int r2 = r2 + 1
+            goto L_0x002c
+        L_0x0050:
+            r3 = r1
+        L_0x0051:
+            if (r3 != 0) goto L_0x0068
+            java.util.ArrayList<org.telegram.messenger.MessageObject> r1 = r9.downloadingFiles
+            r1.add(r10)
+            org.telegram.messenger.MessagesStorage r1 = r9.getMessagesStorage()
+            org.telegram.messenger.DispatchQueue r1 = r1.getStorageQueue()
+            org.telegram.messenger.DownloadController$$ExternalSyntheticLambda7 r2 = new org.telegram.messenger.DownloadController$$ExternalSyntheticLambda7
+            r2.<init>(r9, r10)
+            r1.postRunnable(r2)
+        L_0x0068:
+            org.telegram.messenger.NotificationCenter r10 = r9.getNotificationCenter()
+            int r1 = org.telegram.messenger.NotificationCenter.onDownloadingFilesChanged
+            java.lang.Object[] r0 = new java.lang.Object[r0]
+            r10.postNotificationName(r1, r0)
+            return
+        */
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.DownloadController.lambda$startDownloadFile$5(org.telegram.messenger.MessageObject):void");
+    }
+
+    /* access modifiers changed from: private */
+    public /* synthetic */ void lambda$startDownloadFile$4(MessageObject messageObject) {
+        try {
+            NativeByteBuffer nativeByteBuffer = new NativeByteBuffer(messageObject.messageOwner.getObjectSize());
+            messageObject.messageOwner.serializeToStream(nativeByteBuffer);
+            SQLitePreparedStatement executeFast = getMessagesStorage().getDatabase().executeFast("REPLACE INTO downloading_documents VALUES(?, ?, ?, ?, ?)");
+            executeFast.bindByteBuffer(1, nativeByteBuffer);
+            executeFast.bindInteger(2, messageObject.getDocument().dc_id);
+            executeFast.bindLong(3, messageObject.getDocument().id);
+            executeFast.bindLong(4, System.currentTimeMillis());
+            executeFast.bindInteger(4, 0);
+            executeFast.step();
+            executeFast.dispose();
+            nativeByteBuffer.reuse();
+        } catch (Exception e) {
+            FileLog.e((Throwable) e);
+        }
+    }
+
+    public void onDownloadComplete(MessageObject messageObject) {
+        if (messageObject != null) {
+            AndroidUtilities.runOnUIThread(new DownloadController$$ExternalSyntheticLambda5(this, messageObject));
+        }
+    }
+
+    /* access modifiers changed from: private */
+    public /* synthetic */ void lambda$onDownloadComplete$7(MessageObject messageObject) {
+        boolean z;
+        boolean z2;
+        int i = 0;
+        while (true) {
+            z = true;
+            if (i >= this.downloadingFiles.size()) {
+                z2 = false;
+                break;
+            } else if (this.downloadingFiles.get(i).getDocument().id == messageObject.getDocument().id) {
+                this.downloadingFiles.remove(i);
+                z2 = true;
+                break;
+            } else {
+                i++;
+            }
+        }
+        if (z2) {
+            int i2 = 0;
+            while (true) {
+                if (i2 >= this.recentDownloadingFiles.size()) {
+                    z = false;
+                    break;
+                } else if (this.recentDownloadingFiles.get(i2).getDocument().id == messageObject.getDocument().id) {
+                    break;
+                } else {
+                    i2++;
+                }
+            }
+            if (!z) {
+                this.recentDownloadingFiles.add(0, messageObject);
+                putToUnviewedDownloads(messageObject);
+            }
+            getNotificationCenter().postNotificationName(NotificationCenter.onDownloadingFilesChanged, new Object[0]);
+            getMessagesStorage().getStorageQueue().postRunnable(new DownloadController$$ExternalSyntheticLambda6(this, messageObject));
+        }
+    }
+
+    /* access modifiers changed from: private */
+    public /* synthetic */ void lambda$onDownloadComplete$6(MessageObject messageObject) {
+        try {
+            getMessagesStorage().getDatabase().executeFast(String.format(Locale.ENGLISH, "UPDATE downloading_documents SET state = 1, date = %d WHERE hash = %d AND id = %d", new Object[]{Long.valueOf(System.currentTimeMillis()), Integer.valueOf(messageObject.getDocument().dc_id), Long.valueOf(messageObject.getDocument().id)})).stepThis().dispose();
+            SQLiteCursor queryFinalized = getMessagesStorage().getDatabase().queryFinalized("SELECT COUNT(*) FROM downloading_documents WHERE state = 1", new Object[0]);
+            int intValue = queryFinalized.next() ? queryFinalized.intValue(0) : 0;
+            queryFinalized.dispose();
+            SQLiteCursor queryFinalized2 = getMessagesStorage().getDatabase().queryFinalized("SELECT state FROM downloading_documents WHERE state = 1", new Object[0]);
+            if (queryFinalized2.next()) {
+                queryFinalized2.intValue(0);
+            }
+            queryFinalized2.dispose();
+            if (intValue > 100) {
+                SQLiteDatabase database = getMessagesStorage().getDatabase();
+                SQLiteCursor queryFinalized3 = database.queryFinalized("SELECT hash, id FROM downloading_documents WHERE state = 1 ORDER BY date ASC LIMIT " + (100 - intValue), new Object[0]);
+                ArrayList arrayList = new ArrayList();
+                while (queryFinalized3.next()) {
+                    DownloadingDocumentEntry downloadingDocumentEntry = new DownloadingDocumentEntry();
+                    downloadingDocumentEntry.hash = queryFinalized3.intValue(0);
+                    downloadingDocumentEntry.id = queryFinalized3.longValue(1);
+                    arrayList.add(downloadingDocumentEntry);
+                }
+                queryFinalized3.dispose();
+                SQLitePreparedStatement executeFast = getMessagesStorage().getDatabase().executeFast("DELETE FROM downloading_documents WHERE hash = ? AND id = ?");
+                for (int i = 0; i < arrayList.size(); i++) {
+                    executeFast.requery();
+                    executeFast.bindInteger(1, ((DownloadingDocumentEntry) arrayList.get(i)).hash);
+                    executeFast.bindLong(2, ((DownloadingDocumentEntry) arrayList.get(i)).id);
+                    executeFast.step();
+                }
+                executeFast.dispose();
+            }
+        } catch (Exception e) {
+            FileLog.e((Throwable) e);
+        }
+    }
+
+    public void onDownloadFail(MessageObject messageObject, int i) {
+        if (messageObject != null) {
+            AndroidUtilities.runOnUIThread(new DownloadController$$ExternalSyntheticLambda10(this, messageObject, i));
+            getMessagesStorage().getStorageQueue().postRunnable(new DownloadController$$ExternalSyntheticLambda8(this, messageObject));
+        }
+    }
+
+    /* access modifiers changed from: private */
+    public /* synthetic */ void lambda$onDownloadFail$8(MessageObject messageObject, int i) {
+        boolean z;
+        int i2 = 0;
+        while (true) {
+            if (i2 >= this.downloadingFiles.size()) {
+                z = false;
+                break;
+            } else if (this.downloadingFiles.get(i2).getDocument().id == messageObject.getDocument().id) {
+                this.downloadingFiles.remove(i2);
+                z = true;
+                break;
+            } else {
+                i2++;
+            }
+        }
+        if (z) {
+            getNotificationCenter().postNotificationName(NotificationCenter.onDownloadingFilesChanged, new Object[0]);
+            if (i == 0) {
+                NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.showBulletin, 1, LocaleController.formatString("MessageNotFound", NUM, new Object[0]));
+            }
+        }
+    }
+
+    /* access modifiers changed from: private */
+    public /* synthetic */ void lambda$onDownloadFail$9(MessageObject messageObject) {
+        try {
+            SQLitePreparedStatement executeFast = getMessagesStorage().getDatabase().executeFast("DELETE FROM downloading_documents WHERE hash = ? AND id = ?");
+            executeFast.bindInteger(1, messageObject.getDocument().dc_id);
+            executeFast.bindLong(2, messageObject.getDocument().id);
+            executeFast.step();
+            executeFast.dispose();
+        } catch (Exception e) {
+            FileLog.e((Throwable) e);
+        }
+    }
+
+    private void putToUnviewedDownloads(MessageObject messageObject) {
+        this.unviewedDownloads.put(messageObject.getId(), messageObject);
+        AndroidUtilities.cancelRunOnUIThread(this.clearUnviewedDownloadsRunnale);
+        AndroidUtilities.runOnUIThread(this.clearUnviewedDownloadsRunnale, 60000);
+    }
+
+    public void clearUnviewedDownloads() {
+        this.unviewedDownloads.clear();
+    }
+
+    public void checkUnviewedDownloads(int i, long j) {
+        MessageObject messageObject = this.unviewedDownloads.get(i);
+        if (messageObject != null && messageObject.getDialogId() == j) {
+            this.unviewedDownloads.remove(i);
+            if (this.unviewedDownloads.size() == 0) {
+                getNotificationCenter().postNotificationName(NotificationCenter.onDownloadingFilesChanged, new Object[0]);
+            }
+        }
+    }
+
+    public boolean hasUnviewedDownloads() {
+        return this.unviewedDownloads.size() > 0;
+    }
+
+    private class DownloadingDocumentEntry {
+        int hash;
+        long id;
+
+        private DownloadingDocumentEntry() {
+        }
+    }
+
+    public void loadDownloadingFiles() {
+        getMessagesStorage().getStorageQueue().postRunnable(new DownloadController$$ExternalSyntheticLambda1(this));
+    }
+
+    /* access modifiers changed from: private */
+    public /* synthetic */ void lambda$loadDownloadingFiles$11() {
+        ArrayList arrayList = new ArrayList();
+        ArrayList arrayList2 = new ArrayList();
+        try {
+            SQLiteCursor queryFinalized = getMessagesStorage().getDatabase().queryFinalized("SELECT data, state FROM downloading_documents ORDER BY date DESC", new Object[0]);
+            while (queryFinalized.next()) {
+                NativeByteBuffer byteBufferValue = queryFinalized.byteBufferValue(0);
+                int intValue = queryFinalized.intValue(1);
+                if (byteBufferValue != null) {
+                    TLRPC$Message TLdeserialize = TLRPC$Message.TLdeserialize(byteBufferValue, byteBufferValue.readInt32(false), false);
+                    if (TLdeserialize != null) {
+                        TLdeserialize.readAttachPath(byteBufferValue, UserConfig.getInstance(this.currentAccount).clientUserId);
+                        MessageObject messageObject = new MessageObject(this.currentAccount, TLdeserialize, false, true);
+                        if (intValue == 0) {
+                            arrayList.add(messageObject);
+                        } else if (messageObject.mediaExists) {
+                            arrayList2.add(messageObject);
+                        }
+                    }
+                    byteBufferValue.reuse();
+                }
+            }
+            queryFinalized.dispose();
+        } catch (Exception e) {
+            FileLog.e((Throwable) e);
+        }
+        AndroidUtilities.runOnUIThread(new DownloadController$$ExternalSyntheticLambda4(this, arrayList, arrayList2));
+    }
+
+    /* access modifiers changed from: private */
+    public /* synthetic */ void lambda$loadDownloadingFiles$10(ArrayList arrayList, ArrayList arrayList2) {
+        this.downloadingFiles.clear();
+        this.downloadingFiles.addAll(arrayList);
+        this.recentDownloadingFiles.clear();
+        this.recentDownloadingFiles.addAll(arrayList2);
+    }
+
+    public void clearRecentDownloadedFiles() {
+        this.recentDownloadingFiles.clear();
+        getNotificationCenter().postNotificationName(NotificationCenter.onDownloadingFilesChanged, new Object[0]);
+        getMessagesStorage().getStorageQueue().postRunnable(new DownloadController$$ExternalSyntheticLambda2(this));
+    }
+
+    /* access modifiers changed from: private */
+    public /* synthetic */ void lambda$clearRecentDownloadedFiles$12() {
+        try {
+            getMessagesStorage().getDatabase().executeFast("DELETE FROM downloading_documents WHERE state = 1").stepThis().dispose();
+        } catch (Exception e) {
+            FileLog.e((Throwable) e);
+        }
+    }
+
+    public void deleteRecentFiles(ArrayList<MessageObject> arrayList) {
+        boolean z;
+        for (int i = 0; i < arrayList.size(); i++) {
+            int i2 = 0;
+            while (true) {
+                if (i2 < this.recentDownloadingFiles.size()) {
+                    if (arrayList.get(i).getId() == this.recentDownloadingFiles.get(i2).getId() && this.recentDownloadingFiles.get(i2).getDialogId() == arrayList.get(i).getDialogId()) {
+                        this.recentDownloadingFiles.remove(i2);
+                        z = true;
+                        break;
+                    }
+                    i2++;
+                } else {
+                    z = false;
+                    break;
+                }
+            }
+            if (!z) {
+                int i3 = 0;
+                while (true) {
+                    if (i3 < this.downloadingFiles.size()) {
+                        if (arrayList.get(i).getId() == this.downloadingFiles.get(i3).getId() && this.downloadingFiles.get(i3).getDialogId() == arrayList.get(i).getDialogId()) {
+                            this.downloadingFiles.remove(i3);
+                            break;
+                        }
+                        i3++;
+                    } else {
+                        break;
+                    }
+                }
+            }
+            arrayList.get(i).putInDownloadsStore = false;
+            FileLoader.getInstance(this.currentAccount).loadFile(arrayList.get(i).getDocument(), arrayList.get(i), 0, 0);
+            FileLoader.getInstance(this.currentAccount).cancelLoadFile(arrayList.get(i).getDocument(), true);
+        }
+        getNotificationCenter().postNotificationName(NotificationCenter.onDownloadingFilesChanged, new Object[0]);
+        getMessagesStorage().getStorageQueue().postRunnable(new DownloadController$$ExternalSyntheticLambda3(this, arrayList));
+    }
+
+    /* access modifiers changed from: private */
+    public /* synthetic */ void lambda$deleteRecentFiles$13(ArrayList arrayList) {
+        try {
+            SQLitePreparedStatement executeFast = getMessagesStorage().getDatabase().executeFast("DELETE FROM downloading_documents WHERE hash = ? AND id = ?");
+            for (int i = 0; i < arrayList.size(); i++) {
+                executeFast.requery();
+                executeFast.bindInteger(1, ((MessageObject) arrayList.get(i)).getDocument().dc_id);
+                executeFast.bindLong(2, ((MessageObject) arrayList.get(i)).getDocument().id);
+                executeFast.step();
+                try {
+                    FileLoader.getPathToMessage(((MessageObject) arrayList.get(i)).messageOwner).delete();
+                } catch (Exception e) {
+                    FileLog.e((Throwable) e);
+                }
+            }
+            executeFast.dispose();
+        } catch (Exception e2) {
+            FileLog.e((Throwable) e2);
+        }
     }
 }

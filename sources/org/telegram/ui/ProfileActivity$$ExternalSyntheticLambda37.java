@@ -1,16 +1,21 @@
 package org.telegram.ui;
 
-import android.view.View;
-import org.telegram.ui.Components.RecyclerListView;
+import java.util.ArrayList;
+import org.telegram.tgnet.TLRPC$User;
+import org.telegram.ui.GroupCreateActivity;
 
-public final /* synthetic */ class ProfileActivity$$ExternalSyntheticLambda37 implements RecyclerListView.OnItemLongClickListener {
+public final /* synthetic */ class ProfileActivity$$ExternalSyntheticLambda37 implements GroupCreateActivity.ContactsAddActivityDelegate {
     public final /* synthetic */ ProfileActivity f$0;
 
     public /* synthetic */ ProfileActivity$$ExternalSyntheticLambda37(ProfileActivity profileActivity) {
         this.f$0 = profileActivity;
     }
 
-    public final boolean onItemClick(View view, int i) {
-        return this.f$0.lambda$createView$8(view, i);
+    public final void didSelectUsers(ArrayList arrayList, int i) {
+        this.f$0.lambda$openAddMember$25(arrayList, i);
+    }
+
+    public /* synthetic */ void needAddBot(TLRPC$User tLRPC$User) {
+        GroupCreateActivity.ContactsAddActivityDelegate.CC.$default$needAddBot(this, tLRPC$User);
     }
 }

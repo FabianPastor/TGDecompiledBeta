@@ -1,16 +1,18 @@
 package org.telegram.ui;
 
-import android.view.View;
-import org.telegram.ui.Components.RecyclerListView;
+import android.net.Uri;
+import org.telegram.ui.Components.AlertsCreator;
 
-public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda221 implements RecyclerListView.OnItemClickListener {
+public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda221 implements AlertsCreator.ScheduleDatePickerDelegate {
     public final /* synthetic */ ChatActivity f$0;
+    public final /* synthetic */ Uri f$1;
 
-    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda221(ChatActivity chatActivity) {
+    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda221(ChatActivity chatActivity, Uri uri) {
         this.f$0 = chatActivity;
+        this.f$1 = uri;
     }
 
-    public final void onItemClick(View view, int i) {
-        this.f$0.lambda$createView$44(view, i);
+    public final void didSelectDate(boolean z, int i) {
+        this.f$0.lambda$onActivityResultFragment$112(this.f$1, z, i);
     }
 }

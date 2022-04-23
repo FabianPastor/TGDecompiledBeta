@@ -8,6 +8,6 @@ public final /* synthetic */ class MessagesStorage$$ExternalSyntheticLambda16 im
     }
 
     public final void run() {
-        this.f$0.lambda$saveDialogFilter$55();
+        this.f$0.lambda$openDatabase$1();
     }
 }
