@@ -6,14 +6,12 @@ import org.telegram.tgnet.TLRPC$TL_error;
 
 public final /* synthetic */ class VoIPService$$ExternalSyntheticLambda86 implements RequestDelegate {
     public final /* synthetic */ VoIPService f$0;
-    public final /* synthetic */ int f$1;
 
-    public /* synthetic */ VoIPService$$ExternalSyntheticLambda86(VoIPService voIPService, int i) {
+    public /* synthetic */ VoIPService$$ExternalSyntheticLambda86(VoIPService voIPService) {
         this.f$0 = voIPService;
-        this.f$1 = i;
     }
 
     public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        this.f$0.lambda$startScreenCapture$32(this.f$1, tLObject, tLRPC$TL_error);
+        this.f$0.lambda$processAcceptedCall$19(tLObject, tLRPC$TL_error);
     }
 }

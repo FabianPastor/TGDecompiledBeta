@@ -36,7 +36,7 @@ final class CLASSNAMEo2 extends Z3 implements CLASSNAMEz1, CLASSNAMEs1 {
     }
 
     /* renamed from: a  reason: collision with other method in class */
-    public CLASSNAMEz1 m576a() {
+    public CLASSNAMEz1 m577a() {
         return this;
     }
 
@@ -99,7 +99,7 @@ final class CLASSNAMEo2 extends Z3 implements CLASSNAMEz1, CLASSNAMEs1 {
     }
 
     /* renamed from: spliterator  reason: collision with other method in class */
-    public y m577spliterator() {
+    public y m578spliterator() {
         return super.spliterator();
     }
 }

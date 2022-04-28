@@ -161,7 +161,7 @@ abstract class T extends CLASSNAMEc implements U {
     }
 
     /* renamed from: iterator  reason: collision with other method in class */
-    public Iterator m564iterator() {
+    public Iterator m565iterator() {
         return N.f(spliterator());
     }
 

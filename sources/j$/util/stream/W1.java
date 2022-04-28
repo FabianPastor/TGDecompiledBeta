@@ -35,7 +35,7 @@ final class W1 extends V3 implements CLASSNAMEv1, CLASSNAMEq1 {
     }
 
     /* renamed from: a  reason: collision with other method in class */
-    public CLASSNAMEv1 m566a() {
+    public CLASSNAMEv1 m567a() {
         return this;
     }
 
@@ -98,7 +98,7 @@ final class W1 extends V3 implements CLASSNAMEv1, CLASSNAMEq1 {
     }
 
     /* renamed from: spliterator  reason: collision with other method in class */
-    public y m567spliterator() {
+    public y m568spliterator() {
         return super.spliterator();
     }
 }

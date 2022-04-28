@@ -17,6 +17,6 @@ public final /* synthetic */ class ChatAttachAlertBotWebViewLayout$WebViewSwipeC
     }
 
     public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-        this.f$0.lambda$setOffsetY$0(this.f$1, this.f$2, this.f$3, valueAnimator);
+        this.f$0.lambda$setOffsetY$1(this.f$1, this.f$2, this.f$3, valueAnimator);
     }
 }

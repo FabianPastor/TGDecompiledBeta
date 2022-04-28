@@ -1,14 +1,17 @@
 package org.telegram.ui.Components;
 
-import org.telegram.ui.Components.SimpleFloatPropertyCompat;
+import org.telegram.tgnet.RequestDelegate;
+import org.telegram.tgnet.TLObject;
+import org.telegram.tgnet.TLRPC$TL_error;
 
-public final /* synthetic */ class BotWebViewSheet$$ExternalSyntheticLambda16 implements SimpleFloatPropertyCompat.Setter {
-    public static final /* synthetic */ BotWebViewSheet$$ExternalSyntheticLambda16 INSTANCE = new BotWebViewSheet$$ExternalSyntheticLambda16();
+public final /* synthetic */ class BotWebViewSheet$$ExternalSyntheticLambda16 implements RequestDelegate {
+    public final /* synthetic */ BotWebViewSheet f$0;
 
-    private /* synthetic */ BotWebViewSheet$$ExternalSyntheticLambda16() {
+    public /* synthetic */ BotWebViewSheet$$ExternalSyntheticLambda16(BotWebViewSheet botWebViewSheet) {
+        this.f$0 = botWebViewSheet;
     }
 
-    public final void set(Object obj, float f) {
-        BotWebViewSheet.lambda$static$1((BotWebViewSheet) obj, f);
+    public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+        this.f$0.lambda$requestWebView$14(tLObject, tLRPC$TL_error);
     }
 }

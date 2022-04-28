@@ -4788,6 +4788,16 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
     /* access modifiers changed from: private */
     public /* synthetic */ void lambda$openWebViewMenu$30() {
         AndroidUtilities.hideKeyboard(this);
+        if (AndroidUtilities.isTablet()) {
+            BotWebViewSheet botWebViewSheet = new BotWebViewSheet(getContext(), this.parentFragment.getResourceProvider());
+            botWebViewSheet.setParentActivity(this.parentActivity);
+            int i = this.currentAccount;
+            long j = this.dialog_id;
+            botWebViewSheet.requestWebView(i, j, j, this.botMenuWebViewTitle, this.botMenuWebViewUrl, 2, 0, false);
+            botWebViewSheet.show();
+            this.botCommandsMenuButton.setOpened(false);
+            return;
+        }
         this.botWebViewMenuContainer.show(this.currentAccount, this.dialog_id, this.botMenuWebViewUrl);
     }
 
@@ -10178,7 +10188,7 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
                         String str2 = tLRPC$KeyboardButton.url;
                         boolean z = tLRPC$KeyboardButton instanceof TLRPC$TL_keyboardButtonSimpleWebView;
                         MessageObject messageObject = messageObject5;
-                        botWebViewSheet.requestWebView(access$2800, j, j2, str, str2, z, messageObject != null ? messageObject.messageOwner.id : 0, false);
+                        botWebViewSheet.requestWebView(access$2800, j, j2, str, str2, z ? 1 : 0, messageObject != null ? messageObject.messageOwner.id : 0, false);
                         botWebViewSheet.show();
                     }
                 };

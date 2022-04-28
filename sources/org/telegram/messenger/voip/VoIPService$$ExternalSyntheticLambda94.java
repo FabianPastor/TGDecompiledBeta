@@ -5,12 +5,15 @@ import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC$TL_error;
 
 public final /* synthetic */ class VoIPService$$ExternalSyntheticLambda94 implements RequestDelegate {
-    public static final /* synthetic */ VoIPService$$ExternalSyntheticLambda94 INSTANCE = new VoIPService$$ExternalSyntheticLambda94();
+    public final /* synthetic */ VoIPService f$0;
+    public final /* synthetic */ boolean f$1;
 
-    private /* synthetic */ VoIPService$$ExternalSyntheticLambda94() {
+    public /* synthetic */ VoIPService$$ExternalSyntheticLambda94(VoIPService voIPService, boolean z) {
+        this.f$0 = voIPService;
+        this.f$1 = z;
     }
 
     public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        VoIPService.lambda$callFailed$81(tLObject, tLRPC$TL_error);
+        this.f$0.lambda$acknowledgeCall$12(this.f$1, tLObject, tLRPC$TL_error);
     }
 }

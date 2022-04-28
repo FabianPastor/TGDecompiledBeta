@@ -779,18 +779,18 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
             setFocusableInTouchMode(true);
             AnonymousClass1 r1 = new BackupImageView(context, ChatAttachAlert.this) {
                 {
-                    this.imageReceiver = new ImageReceiver(this, this) {
-                        /* access modifiers changed from: protected */
-                        public boolean setImageBitmapByKey(Drawable drawable, String str, int i, boolean z, int i2) {
-                            if (drawable instanceof RLottieDrawable) {
-                                RLottieDrawable rLottieDrawable = (RLottieDrawable) drawable;
-                                rLottieDrawable.setCustomEndFrame(0);
-                                rLottieDrawable.stop();
-                                rLottieDrawable.setProgress(0.0f, false);
-                            }
-                            return super.setImageBitmapByKey(drawable, str, i, z, i2);
-                        }
-                    };
+                    this.imageReceiver.setDelegate(ChatAttachAlert$AttachBotButton$1$$ExternalSyntheticLambda0.INSTANCE);
+                }
+
+                /* access modifiers changed from: private */
+                public static /* synthetic */ void lambda$new$0(ImageReceiver imageReceiver, boolean z, boolean z2, boolean z3) {
+                    Drawable drawable = imageReceiver.getDrawable();
+                    if (drawable instanceof RLottieDrawable) {
+                        RLottieDrawable rLottieDrawable = (RLottieDrawable) drawable;
+                        rLottieDrawable.setCustomEndFrame(0);
+                        rLottieDrawable.stop();
+                        rLottieDrawable.setProgress(0.0f, false);
+                    }
                 }
 
                 public void setScaleX(float f) {

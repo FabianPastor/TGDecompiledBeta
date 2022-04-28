@@ -11,6 +11,6 @@ public final /* synthetic */ class VoIPService$$ExternalSyntheticLambda97 implem
     }
 
     public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        VoIPService.lambda$createGroupInstance$37(tLObject, tLRPC$TL_error);
+        VoIPService.lambda$onSignalingData$60(tLObject, tLRPC$TL_error);
     }
 }

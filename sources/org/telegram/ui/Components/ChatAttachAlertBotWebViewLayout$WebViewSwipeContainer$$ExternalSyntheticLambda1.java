@@ -13,6 +13,6 @@ public final /* synthetic */ class ChatAttachAlertBotWebViewLayout$WebViewSwipeC
     }
 
     public final void onAnimationEnd(DynamicAnimation dynamicAnimation, boolean z, float f, float f2) {
-        this.f$0.lambda$stickTo$1(this.f$1, dynamicAnimation, z, f, f2);
+        this.f$0.lambda$stickTo$2(this.f$1, dynamicAnimation, z, f, f2);
     }
 }

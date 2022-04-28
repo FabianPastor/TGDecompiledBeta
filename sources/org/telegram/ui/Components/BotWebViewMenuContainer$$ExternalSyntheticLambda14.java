@@ -12,6 +12,6 @@ public final /* synthetic */ class BotWebViewMenuContainer$$ExternalSyntheticLam
     }
 
     public final void run() {
-        this.f$0.lambda$loadWebView$13(this.f$1);
+        this.f$0.lambda$loadWebView$14(this.f$1);
     }
 }

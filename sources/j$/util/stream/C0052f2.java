@@ -36,7 +36,7 @@ final class CLASSNAMEf2 extends X3 implements CLASSNAMEx1, CLASSNAMEr1 {
     }
 
     /* renamed from: a  reason: collision with other method in class */
-    public CLASSNAMEx1 m573a() {
+    public CLASSNAMEx1 m574a() {
         return this;
     }
 
@@ -99,7 +99,7 @@ final class CLASSNAMEf2 extends X3 implements CLASSNAMEx1, CLASSNAMEr1 {
     }
 
     /* renamed from: spliterator  reason: collision with other method in class */
-    public y m574spliterator() {
+    public y m575spliterator() {
         return super.spliterator();
     }
 }
