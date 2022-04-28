@@ -12,6 +12,6 @@ public final /* synthetic */ class ChatAttachAlertBotWebViewLayout$$ExternalSynt
     }
 
     public final void run() {
-        this.f$0.lambda$requestWebView$11(this.f$1);
+        this.f$0.lambda$requestWebView$10(this.f$1);
     }
 }

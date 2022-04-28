@@ -8,6 +8,6 @@ public final /* synthetic */ class BotWebViewMenuContainer$$ExternalSyntheticLam
     }
 
     public final void run() {
-        this.f$0.invalidateActionBar();
+        this.f$0.lambda$onDismiss$18();
     }
 }

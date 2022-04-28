@@ -10,6 +10,6 @@ public final /* synthetic */ class BotWebViewMenuContainer$$ExternalSyntheticLam
     }
 
     public final void onAnimationEnd(DynamicAnimation dynamicAnimation, boolean z, float f, float f2) {
-        this.f$0.lambda$onAttachedToWindow$12(dynamicAnimation, z, f, f2);
+        this.f$0.lambda$onAttachedToWindow$11(dynamicAnimation, z, f, f2);
     }
 }
