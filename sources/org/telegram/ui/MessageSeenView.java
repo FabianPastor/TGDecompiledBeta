@@ -8,6 +8,7 @@ import android.graphics.drawable.Drawable;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.accessibility.AccessibilityNodeInfo;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -243,7 +244,7 @@ public class MessageSeenView extends FrameLayout {
         } else if (this.peerIds.size() == 0) {
             this.titleView.setText(LocaleController.getString("NobodyViewed", NUM));
         } else {
-            this.titleView.setText(LocaleController.formatPluralString(this.isVoice ? "MessagePlayed" : "MessageSeen", this.peerIds.size()));
+            this.titleView.setText(LocaleController.formatPluralString(this.isVoice ? "MessagePlayed" : "MessageSeen", this.peerIds.size(), new Object[0]));
         }
         this.titleView.animate().alpha(1.0f).setDuration(220).start();
         this.avatarsImageView.animate().alpha(1.0f).setDuration(220).start();
@@ -251,9 +252,19 @@ public class MessageSeenView extends FrameLayout {
     }
 
     public RecyclerListView createListView() {
-        RecyclerListView recyclerListView = new RecyclerListView(getContext());
-        recyclerListView.setLayoutManager(new LinearLayoutManager(getContext()));
-        recyclerListView.addItemDecoration(new RecyclerView.ItemDecoration() {
+        AnonymousClass2 r0 = new RecyclerListView(this, getContext()) {
+            /* access modifiers changed from: protected */
+            public void onMeasure(int i, int i2) {
+                int size = View.MeasureSpec.getSize(i2);
+                int dp = AndroidUtilities.dp(8.0f) + (AndroidUtilities.dp(44.0f) * getAdapter().getItemCount());
+                if (dp <= size) {
+                    size = dp;
+                }
+                super.onMeasure(i, View.MeasureSpec.makeMeasureSpec(size, NUM));
+            }
+        };
+        r0.setLayoutManager(new LinearLayoutManager(getContext()));
+        r0.addItemDecoration(new RecyclerView.ItemDecoration() {
             public void getItemOffsets(Rect rect, View view, RecyclerView recyclerView, RecyclerView.State state) {
                 int childAdapterPosition = recyclerView.getChildAdapterPosition(view);
                 if (childAdapterPosition == 0) {
@@ -264,7 +275,7 @@ public class MessageSeenView extends FrameLayout {
                 }
             }
         });
-        recyclerListView.setAdapter(new RecyclerListView.SelectionAdapter() {
+        r0.setAdapter(new RecyclerListView.SelectionAdapter() {
             public boolean isEnabled(RecyclerView.ViewHolder viewHolder) {
                 return true;
             }
@@ -283,7 +294,7 @@ public class MessageSeenView extends FrameLayout {
                 return MessageSeenView.this.users.size();
             }
         });
-        return recyclerListView;
+        return r0;
     }
 
     private static class UserCell extends FrameLayout {
@@ -302,6 +313,7 @@ public class MessageSeenView extends FrameLayout {
             textView.setTextSize(1, 16.0f);
             this.nameView.setLines(1);
             this.nameView.setEllipsize(TextUtils.TruncateAt.END);
+            this.nameView.setImportantForAccessibility(2);
             addView(this.nameView, LayoutHelper.createFrame(-2, -2.0f, 19, 59.0f, 0.0f, 13.0f, 0.0f));
             this.nameView.setTextColor(Theme.getColor("actionBarDefaultSubmenuItem"));
         }
@@ -317,6 +329,11 @@ public class MessageSeenView extends FrameLayout {
                 this.avatarImageView.setImage(ImageLocation.getForUser(tLRPC$User, 1), "50_50", (Drawable) this.avatarDrawable, (Object) tLRPC$User);
                 this.nameView.setText(ContactsController.formatName(tLRPC$User.first_name, tLRPC$User.last_name));
             }
+        }
+
+        public void onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo accessibilityNodeInfo) {
+            super.onInitializeAccessibilityNodeInfo(accessibilityNodeInfo);
+            accessibilityNodeInfo.setText(LocaleController.formatString("AccDescrPersonHasSeen", NUM, this.nameView.getText()));
         }
     }
 }

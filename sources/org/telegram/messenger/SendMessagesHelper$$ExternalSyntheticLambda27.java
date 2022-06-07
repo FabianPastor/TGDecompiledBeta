@@ -10,6 +10,6 @@ public final /* synthetic */ class SendMessagesHelper$$ExternalSyntheticLambda27
     }
 
     public final void run() {
-        this.f$0.lambda$stopVideoService$36(this.f$1);
+        this.f$0.lambda$sendNotificationCallback$17(this.f$1);
     }
 }

@@ -12,6 +12,6 @@ public final /* synthetic */ class PaymentFormActivity$$ExternalSyntheticLambda4
     }
 
     public final void onClick(DialogInterface dialogInterface, int i) {
-        this.f$0.lambda$sendSavePassword$42(this.f$1, dialogInterface, i);
+        this.f$0.lambda$sendSavePassword$44(this.f$1, dialogInterface, i);
     }
 }

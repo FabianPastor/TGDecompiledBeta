@@ -1,24 +1,17 @@
 package org.telegram.ui;
 
-import android.view.View;
-import org.telegram.ui.Components.RecyclerListView;
+import org.telegram.ui.ActionIntroActivity;
 
-public final /* synthetic */ class LaunchActivity$$ExternalSyntheticLambda89 implements RecyclerListView.OnItemClickListenerExtended {
+public final /* synthetic */ class LaunchActivity$$ExternalSyntheticLambda89 implements ActionIntroActivity.ActionIntroQRLoginDelegate {
     public final /* synthetic */ LaunchActivity f$0;
+    public final /* synthetic */ ActionIntroActivity f$1;
 
-    public /* synthetic */ LaunchActivity$$ExternalSyntheticLambda89(LaunchActivity launchActivity) {
+    public /* synthetic */ LaunchActivity$$ExternalSyntheticLambda89(LaunchActivity launchActivity, ActionIntroActivity actionIntroActivity) {
         this.f$0 = launchActivity;
+        this.f$1 = actionIntroActivity;
     }
 
-    public /* synthetic */ boolean hasDoubleTap(View view, int i) {
-        return RecyclerListView.OnItemClickListenerExtended.CC.$default$hasDoubleTap(this, view, i);
-    }
-
-    public /* synthetic */ void onDoubleTap(View view, int i, float f, float f2) {
-        RecyclerListView.OnItemClickListenerExtended.CC.$default$onDoubleTap(this, view, i, f, f2);
-    }
-
-    public final void onItemClick(View view, int i, float f, float f2) {
-        this.f$0.lambda$onCreate$2(view, i, f, f2);
+    public final void didFindQRCode(String str) {
+        this.f$0.lambda$handleIntent$21(this.f$1, str);
     }
 }

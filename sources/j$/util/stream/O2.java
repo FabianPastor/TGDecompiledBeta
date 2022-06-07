@@ -1,36 +1,34 @@
 package j$.util.stream;
 
-import j$.util.CLASSNAMEk;
 import j$.util.function.Consumer;
-import j$.util.function.j;
+import j$.util.function.b;
 import j$.util.function.k;
 import j$.util.function.l;
+import j$.util.function.v;
+import j$.util.function.y;
 
-class O2 implements T2, CLASSNAMEl3 {
-    private boolean a;
-    private int b;
-    final /* synthetic */ j c;
+class O2 extends T2 implements S2, CLASSNAMEk3 {
+    final /* synthetic */ y b;
+    final /* synthetic */ v c;
+    final /* synthetic */ b d;
 
-    O2(j jVar) {
-        this.c = jVar;
+    O2(y yVar, v vVar, b bVar) {
+        this.b = yVar;
+        this.c = vVar;
+        this.d = bVar;
     }
 
-    public /* synthetic */ void accept(double d) {
-        CLASSNAMEp1.f(this);
+    public /* synthetic */ void accept(double d2) {
+        CLASSNAMEo1.f(this);
         throw null;
     }
 
     public void accept(int i) {
-        if (this.a) {
-            this.a = false;
-        } else {
-            i = this.c.applyAsInt(this.b, i);
-        }
-        this.b = i;
+        this.c.accept(this.a, i);
     }
 
     public /* synthetic */ void accept(long j) {
-        CLASSNAMEp1.e(this);
+        CLASSNAMEo1.e(this);
         throw null;
     }
 
@@ -40,18 +38,11 @@ class O2 implements T2, CLASSNAMEl3 {
 
     /* renamed from: b */
     public /* synthetic */ void accept(Integer num) {
-        CLASSNAMEp1.b(this, num);
+        CLASSNAMEo1.b(this, num);
     }
 
-    public Object get() {
-        return this.a ? CLASSNAMEk.a() : CLASSNAMEk.d(this.b);
-    }
-
-    public void h(T2 t2) {
-        O2 o2 = (O2) t2;
-        if (!o2.a) {
-            accept(o2.b);
-        }
+    public void h(S2 s2) {
+        this.a = this.d.apply(this.a, ((O2) s2).a);
     }
 
     public l l(l lVar) {
@@ -63,8 +54,7 @@ class O2 implements T2, CLASSNAMEl3 {
     }
 
     public void n(long j) {
-        this.a = true;
-        this.b = 0;
+        this.a = this.b.get();
     }
 
     public /* synthetic */ boolean o() {

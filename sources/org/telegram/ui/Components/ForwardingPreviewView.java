@@ -441,7 +441,7 @@ public class ForwardingPreviewView extends FrameLayout {
                             forwardingMessagesParams3.selectedIds.put(id, z);
                         }
                         ((ChatMessageCell) view).setChecked(z, z, true);
-                        ForwardingPreviewView.this.actionBar.setTitle(LocaleController.formatPluralString("PreviewForwardMessagesCount", forwardingMessagesParams3.selectedIds.size()));
+                        ForwardingPreviewView.this.actionBar.setTitle(LocaleController.formatPluralString("PreviewForwardMessagesCount", forwardingMessagesParams3.selectedIds.size(), new Object[0]));
                     }
                 }
             }
@@ -735,7 +735,7 @@ public class ForwardingPreviewView extends FrameLayout {
         this.changeRecipientView.setOnClickListener(new ForwardingPreviewView$$ExternalSyntheticLambda2(this));
         updateMessages();
         updateSubtitle();
-        this.actionBar.setTitle(LocaleController.formatPluralString("PreviewForwardMessagesCount", forwardingMessagesParams3.selectedIds.size()));
+        this.actionBar.setTitle(LocaleController.formatPluralString("PreviewForwardMessagesCount", forwardingMessagesParams3.selectedIds.size(), new Object[0]));
         this.menuScrollView.setOnTouchListener(new ForwardingPreviewView$$ExternalSyntheticLambda8(this));
         setOnTouchListener(new ForwardingPreviewView$$ExternalSyntheticLambda7(this));
         this.showing = true;
@@ -1122,6 +1122,10 @@ public class ForwardingPreviewView extends FrameLayout {
                     ChatMessageCell.ChatMessageCellDelegate.CC.$default$didLongPress(this, chatMessageCell, f, f2);
                 }
 
+                public /* synthetic */ void didLongPressBotButton(ChatMessageCell chatMessageCell, TLRPC$KeyboardButton tLRPC$KeyboardButton) {
+                    ChatMessageCell.ChatMessageCellDelegate.CC.$default$didLongPressBotButton(this, chatMessageCell, tLRPC$KeyboardButton);
+                }
+
                 public /* synthetic */ boolean didLongPressChannelAvatar(ChatMessageCell chatMessageCell, TLRPC$Chat tLRPC$Chat, int i, float f, float f2) {
                     return ChatMessageCell.ChatMessageCellDelegate.CC.$default$didLongPressChannelAvatar(this, chatMessageCell, tLRPC$Chat, i, f, f2);
                 }
@@ -1244,6 +1248,10 @@ public class ForwardingPreviewView extends FrameLayout {
 
                 public /* synthetic */ void needReloadPolls() {
                     ChatMessageCell.ChatMessageCellDelegate.CC.$default$needReloadPolls(this);
+                }
+
+                public /* synthetic */ void needShowPremiumFeatures() {
+                    ChatMessageCell.ChatMessageCellDelegate.CC.$default$needShowPremiumFeatures(this);
                 }
 
                 public /* synthetic */ void onDiceFinished() {

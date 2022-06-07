@@ -37,13 +37,13 @@ public class AutoDeletePopupWrapper {
         ActionBarMenuItem.addItem(this.windowLayout, NUM, LocaleController.getString("AutoDelete1Day", NUM), false, resourcesProvider).setOnClickListener(new AutoDeletePopupWrapper$$ExternalSyntheticLambda4(this, callback2));
         ActionBarMenuItem.addItem(this.windowLayout, NUM, LocaleController.getString("AutoDelete7Days", NUM), false, resourcesProvider).setOnClickListener(new AutoDeletePopupWrapper$$ExternalSyntheticLambda2(this, callback2));
         ActionBarMenuItem.addItem(this.windowLayout, NUM, LocaleController.getString("AutoDelete1Month", NUM), false, resourcesProvider).setOnClickListener(new AutoDeletePopupWrapper$$ExternalSyntheticLambda1(this, callback2));
-        ActionBarMenuItem.addItem(this.windowLayout, NUM, LocaleController.getString("AutoDeleteCustom", NUM), false, resourcesProvider).setOnClickListener(new AutoDeletePopupWrapper$$ExternalSyntheticLambda0(this, context, callback2));
+        ActionBarMenuItem.addItem(this.windowLayout, NUM, LocaleController.getString("AutoDeleteCustom", NUM), false, resourcesProvider).setOnClickListener(new AutoDeletePopupWrapper$$ExternalSyntheticLambda0(this, context, resourcesProvider, callback2));
         ActionBarMenuSubItem addItem2 = ActionBarMenuItem.addItem(this.windowLayout, NUM, LocaleController.getString("AutoDeleteDisable", NUM), false, resourcesProvider);
         this.disableItem = addItem2;
         addItem2.setOnClickListener(new AutoDeletePopupWrapper$$ExternalSyntheticLambda3(this, callback2));
         addItem2.setColors(Theme.getColor("dialogTextRed2"), Theme.getColor("dialogTextRed2"));
         FrameLayout frameLayout = new FrameLayout(context);
-        frameLayout.setBackgroundColor(Theme.getColor("graySection"));
+        frameLayout.setBackgroundColor(Theme.getColor("actionBarDefaultSubmenuSeparator", resourcesProvider));
         frameLayout.setTag(NUM, 1);
         this.windowLayout.addView(frameLayout, LayoutHelper.createLinear(-1, 8));
         TextView textView = new TextView(context);
@@ -74,9 +74,9 @@ public class AutoDeletePopupWrapper {
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$new$5(Context context, Callback callback2, View view) {
+    public /* synthetic */ void lambda$new$5(Context context, Theme.ResourcesProvider resourcesProvider, Callback callback2, View view) {
         dismiss();
-        AlertsCreator.createAutoDeleteDatePickerDialog(context, new AutoDeletePopupWrapper$$ExternalSyntheticLambda7(callback2));
+        AlertsCreator.createAutoDeleteDatePickerDialog(context, resourcesProvider, new AutoDeletePopupWrapper$$ExternalSyntheticLambda7(callback2));
     }
 
     /* access modifiers changed from: private */

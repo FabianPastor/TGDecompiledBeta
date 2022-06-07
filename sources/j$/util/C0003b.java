@@ -11,7 +11,7 @@ public interface CLASSNAMEb extends e {
 
     boolean k(Predicate predicate);
 
-    y spliterator();
+    u spliterator();
 
     Stream stream();
 }

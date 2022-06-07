@@ -1,25 +1,23 @@
 package org.telegram.ui;
 
-import org.telegram.tgnet.TLObject;
-import org.telegram.ui.ActionBar.AlertDialog;
-import org.telegram.ui.Cells.ChatMessageCell;
+import org.telegram.messenger.MessageObject;
+import org.telegram.ui.ActionBar.ActionBarLayout;
+import org.telegram.ui.ActionBar.BaseFragment;
 
 public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda192 implements Runnable {
     public final /* synthetic */ ChatActivity f$0;
-    public final /* synthetic */ AlertDialog[] f$1;
-    public final /* synthetic */ TLObject f$2;
-    public final /* synthetic */ String f$3;
-    public final /* synthetic */ ChatMessageCell f$4;
+    public final /* synthetic */ BaseFragment f$1;
+    public final /* synthetic */ MessageObject f$2;
+    public final /* synthetic */ ActionBarLayout f$3;
 
-    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda192(ChatActivity chatActivity, AlertDialog[] alertDialogArr, TLObject tLObject, String str, ChatMessageCell chatMessageCell) {
+    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda192(ChatActivity chatActivity, BaseFragment baseFragment, MessageObject messageObject, ActionBarLayout actionBarLayout) {
         this.f$0 = chatActivity;
-        this.f$1 = alertDialogArr;
-        this.f$2 = tLObject;
-        this.f$3 = str;
-        this.f$4 = chatMessageCell;
+        this.f$1 = baseFragment;
+        this.f$2 = messageObject;
+        this.f$3 = actionBarLayout;
     }
 
     public final void run() {
-        this.f$0.lambda$didPressMessageUrl$224(this.f$1, this.f$2, this.f$3, this.f$4);
+        this.f$0.lambda$migrateToNewChat$126(this.f$1, this.f$2, this.f$3);
     }
 }

@@ -14,6 +14,6 @@ public final /* synthetic */ class MessagesStorage$$ExternalSyntheticLambda102 i
     }
 
     public final void run() {
-        this.f$0.lambda$getMessagesCount$119(this.f$1, this.f$2);
+        this.f$0.lambda$getUnreadMention$121(this.f$1, this.f$2);
     }
 }

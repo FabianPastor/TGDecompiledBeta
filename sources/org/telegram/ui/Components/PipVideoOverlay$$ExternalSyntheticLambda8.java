@@ -8,6 +8,6 @@ public final /* synthetic */ class PipVideoOverlay$$ExternalSyntheticLambda8 imp
     }
 
     public final void run() {
-        this.f$0.lambda$new$5();
+        this.f$0.lambda$new$4();
     }
 }

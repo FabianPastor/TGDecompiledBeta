@@ -1,23 +1,23 @@
 package j$.util;
 
 import j$.util.function.Consumer;
-import j$.util.function.f;
+import j$.util.function.q;
 import java.util.Comparator;
 
-final class F extends J implements u {
+final class F extends H implements v {
     F() {
     }
 
     public /* synthetic */ boolean b(Consumer consumer) {
-        return CLASSNAMEa.j(this, consumer);
+        return CLASSNAMEa.l(this, consumer);
     }
 
-    public void e(f fVar) {
-        fVar.getClass();
+    public void d(q qVar) {
+        qVar.getClass();
     }
 
     public /* synthetic */ void forEachRemaining(Consumer consumer) {
-        CLASSNAMEa.b(this, consumer);
+        CLASSNAMEa.d(this, consumer);
     }
 
     public Comparator getComparator() {
@@ -32,8 +32,8 @@ final class F extends J implements u {
         return CLASSNAMEa.f(this, i);
     }
 
-    public boolean k(f fVar) {
-        fVar.getClass();
+    public boolean i(q qVar) {
+        qVar.getClass();
         return false;
     }
 }

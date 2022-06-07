@@ -1,17 +1,21 @@
 package org.telegram.ui;
 
+import android.os.Bundle;
+import org.telegram.tgnet.TLObject;
 import org.telegram.ui.LoginActivity;
 
 public final /* synthetic */ class LoginActivity$LoginActivitySmsView$$ExternalSyntheticLambda23 implements Runnable {
     public final /* synthetic */ LoginActivity.LoginActivitySmsView f$0;
-    public final /* synthetic */ Runnable f$1;
+    public final /* synthetic */ Bundle f$1;
+    public final /* synthetic */ TLObject f$2;
 
-    public /* synthetic */ LoginActivity$LoginActivitySmsView$$ExternalSyntheticLambda23(LoginActivity.LoginActivitySmsView loginActivitySmsView, Runnable runnable) {
+    public /* synthetic */ LoginActivity$LoginActivitySmsView$$ExternalSyntheticLambda23(LoginActivity.LoginActivitySmsView loginActivitySmsView, Bundle bundle, TLObject tLObject) {
         this.f$0 = loginActivitySmsView;
-        this.f$1 = runnable;
+        this.f$1 = bundle;
+        this.f$2 = tLObject;
     }
 
     public final void run() {
-        this.f$0.lambda$animateSuccess$30(this.f$1);
+        this.f$0.lambda$new$1(this.f$1, this.f$2);
     }
 }

@@ -14,7 +14,7 @@ public final /* synthetic */ class B0 implements l {
     public final void accept(int i) {
         switch (this.a) {
             case 0:
-                ((CLASSNAMEn3) this.b).accept(i);
+                ((CLASSNAMEm3) this.b).accept(i);
                 return;
             default:
                 ((F0) this.b).a.accept(i);
@@ -33,7 +33,7 @@ public final /* synthetic */ class B0 implements l {
         }
     }
 
-    public /* synthetic */ B0(CLASSNAMEn3 n3Var) {
-        this.b = n3Var;
+    public /* synthetic */ B0(CLASSNAMEm3 m3Var) {
+        this.b = m3Var;
     }
 }

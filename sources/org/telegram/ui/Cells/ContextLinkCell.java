@@ -58,34 +58,46 @@ public class ContextLinkCell extends FrameLayout implements DownloadController.F
     private Paint backgroundPaint;
     private boolean buttonPressed;
     private int buttonState;
+    File cacheFile;
     private boolean canPreviewGif;
     private CheckBox2 checkBox;
-    private int currentAccount;
+    /* access modifiers changed from: private */
+    public int currentAccount;
     private int currentDate;
     private MessageObject currentMessageObject;
-    private TLRPC$PhotoSize currentPhotoObject;
+    /* access modifiers changed from: private */
+    public TLRPC$PhotoSize currentPhotoObject;
     private ContextLinkCellDelegate delegate;
     private StaticLayout descriptionLayout;
     private int descriptionY;
-    private TLRPC$Document documentAttach;
-    private int documentAttachType;
+    /* access modifiers changed from: private */
+    public TLRPC$Document documentAttach;
+    /* access modifiers changed from: private */
+    public int documentAttachType;
     private boolean drawLinkImageView;
+    boolean fileExist;
+    String fileName;
     /* access modifiers changed from: private */
     public float imageScale;
     private TLRPC$User inlineBot;
-    private TLRPC$BotInlineResult inlineResult;
+    /* access modifiers changed from: private */
+    public TLRPC$BotInlineResult inlineResult;
     private boolean isForceGif;
     private long lastUpdateTime;
     private LetterDrawable letterDrawable;
     private ImageReceiver linkImageView;
     private StaticLayout linkLayout;
     private int linkY;
-    private boolean mediaWebpage;
+    /* access modifiers changed from: private */
+    public boolean mediaWebpage;
     private boolean needDivider;
     private boolean needShadow;
     private Object parentObject;
     private TLRPC$Photo photoAttach;
     private RadialProgress2 radialProgress;
+    int resolveFileNameId;
+    boolean resolvingFileName;
+    private Theme.ResourcesProvider resourcesProvider;
     private float scale;
     private boolean scaled;
     private StaticLayout titleLayout;
@@ -103,10 +115,10 @@ public class ContextLinkCell extends FrameLayout implements DownloadController.F
     }
 
     public ContextLinkCell(Context context) {
-        this(context, false);
+        this(context, false, (Theme.ResourcesProvider) null);
     }
 
-    public ContextLinkCell(Context context, boolean z) {
+    public ContextLinkCell(Context context, boolean z, Theme.ResourcesProvider resourcesProvider2) {
         super(context);
         this.currentAccount = UserConfig.selectedAccount;
         this.titleY = AndroidUtilities.dp(7.0f);
@@ -122,19 +134,20 @@ public class ContextLinkCell extends FrameLayout implements DownloadController.F
                 return Float.valueOf(ContextLinkCell.this.imageScale);
             }
         };
+        this.resourcesProvider = resourcesProvider2;
         ImageReceiver imageReceiver = new ImageReceiver(this);
         this.linkImageView = imageReceiver;
         imageReceiver.setLayerNum(1);
         this.linkImageView.setUseSharedAnimationQueue(true);
-        this.letterDrawable = new LetterDrawable();
+        this.letterDrawable = new LetterDrawable(resourcesProvider2);
         this.radialProgress = new RadialProgress2(this);
         this.TAG = DownloadController.getInstance(this.currentAccount).generateObserverTag();
         setFocusable(true);
         if (z) {
             Paint paint = new Paint();
             this.backgroundPaint = paint;
-            paint.setColor(Theme.getColor("sharedMedia_photoPlaceholder"));
-            CheckBox2 checkBox2 = new CheckBox2(context, 21);
+            paint.setColor(Theme.getColor("sharedMedia_photoPlaceholder", resourcesProvider2));
+            CheckBox2 checkBox2 = new CheckBox2(context, 21, resourcesProvider2);
             this.checkBox = checkBox2;
             checkBox2.setVisibility(4);
             this.checkBox.setColor((String) null, "sharedMedia_photoPlaceholder", "checkboxCheck");
@@ -145,9 +158,9 @@ public class ContextLinkCell extends FrameLayout implements DownloadController.F
         setWillNotDraw(false);
     }
 
-    /* JADX WARNING: type inference failed for: r3v1, types: [int, boolean] */
-    /* JADX WARNING: type inference failed for: r11v29, types: [org.telegram.tgnet.TLRPC$WebDocument] */
-    /* JADX WARNING: type inference failed for: r11v32, types: [org.telegram.tgnet.TLRPC$WebDocument] */
+    /* JADX WARNING: type inference failed for: r3v1, types: [boolean, int] */
+    /* JADX WARNING: type inference failed for: r11v34, types: [org.telegram.tgnet.TLRPC$WebDocument] */
+    /* JADX WARNING: type inference failed for: r11v37, types: [org.telegram.tgnet.TLRPC$WebDocument] */
     /* JADX WARNING: type inference failed for: r3v24 */
     /* JADX WARNING: type inference failed for: r3v26 */
     /* JADX WARNING: type inference failed for: r3v27 */
@@ -171,10 +184,10 @@ public class ContextLinkCell extends FrameLayout implements DownloadController.F
     /* JADX WARNING: Removed duplicated region for block: B:165:0x0388  */
     /* JADX WARNING: Removed duplicated region for block: B:168:0x0390  */
     /* JADX WARNING: Removed duplicated region for block: B:180:0x0430  */
-    /* JADX WARNING: Removed duplicated region for block: B:199:0x0538  */
-    /* JADX WARNING: Removed duplicated region for block: B:203:0x0577  */
+    /* JADX WARNING: Removed duplicated region for block: B:199:0x053d  */
+    /* JADX WARNING: Removed duplicated region for block: B:203:0x057c  */
     /* JADX WARNING: Removed duplicated region for block: B:20:0x0072  */
-    /* JADX WARNING: Removed duplicated region for block: B:228:0x0644  */
+    /* JADX WARNING: Removed duplicated region for block: B:228:0x0649  */
     /* JADX WARNING: Removed duplicated region for block: B:233:? A[RETURN, SYNTHETIC] */
     /* JADX WARNING: Removed duplicated region for block: B:43:0x0130 A[SYNTHETIC, Splitter:B:43:0x0130] */
     /* JADX WARNING: Removed duplicated region for block: B:52:0x0172  */
@@ -185,10 +198,10 @@ public class ContextLinkCell extends FrameLayout implements DownloadController.F
     /* JADX WARNING: Unknown variable types count: 2 */
     @android.annotation.SuppressLint({"DrawAllocation"})
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    public void onMeasure(int r40, int r41) {
+    public void onMeasure(int r41, int r42) {
         /*
-            r39 = this;
-            r7 = r39
+            r40 = this;
+            r7 = r40
             r1 = 0
             r7.drawLinkImageView = r1
             r2 = 0
@@ -209,7 +222,7 @@ public class ContextLinkCell extends FrameLayout implements DownloadController.F
             r7.setMeasuredDimension(r0, r1)
             return
         L_0x002c:
-            int r4 = android.view.View.MeasureSpec.getSize(r40)
+            int r4 = android.view.View.MeasureSpec.getSize(r41)
             int r0 = org.telegram.messenger.AndroidUtilities.leftBaseline
             float r0 = (float) r0
             int r0 = org.telegram.messenger.AndroidUtilities.dp(r0)
@@ -422,7 +435,7 @@ public class ContextLinkCell extends FrameLayout implements DownloadController.F
             org.telegram.tgnet.TLRPC$PhotoSize r0 = org.telegram.messenger.FileLoader.getClosestPhotoSizeWithSize(r0, r10)
             r7.currentPhotoObject = r0
             java.lang.String r0 = "webp"
-            r27 = r0
+            r28 = r0
             r0 = 0
             goto L_0x01e7
         L_0x01bf:
@@ -445,7 +458,7 @@ public class ContextLinkCell extends FrameLayout implements DownloadController.F
         L_0x01e4:
             r0 = 0
         L_0x01e5:
-            r27 = 0
+            r28 = 0
         L_0x01e7:
             org.telegram.tgnet.TLRPC$BotInlineResult r2 = r7.inlineResult
             r10 = 2
@@ -539,15 +552,15 @@ public class ContextLinkCell extends FrameLayout implements DownloadController.F
             goto L_0x02a7
         L_0x028d:
             int r11 = r7.currentAccount
-            r33 = 72
             r34 = 72
-            r35 = 1
-            r36 = 15
-            r37 = -1
-            r28 = r11
-            r29 = r12
-            r31 = r14
-            java.lang.String r11 = org.telegram.messenger.AndroidUtilities.formapMapUrl(r28, r29, r31, r33, r34, r35, r36, r37)
+            r35 = 72
+            r36 = 1
+            r37 = 15
+            r38 = -1
+            r29 = r11
+            r30 = r12
+            r32 = r14
+            java.lang.String r11 = org.telegram.messenger.AndroidUtilities.formapMapUrl(r29, r30, r32, r34, r35, r36, r37, r38)
             goto L_0x02a5
         L_0x02a4:
             r11 = 0
@@ -610,9 +623,9 @@ public class ContextLinkCell extends FrameLayout implements DownloadController.F
             int[] r12 = org.telegram.messenger.MessageObject.getInlineResultWidthAndHeight(r14)
             r13 = r12[r1]
             r12 = r12[r3]
-            r38 = r13
+            r39 = r13
             r13 = r12
-            r12 = r38
+            r12 = r39
         L_0x0302:
             r14 = 1117782016(0x42a00000, float:80.0)
             if (r12 == 0) goto L_0x0308
@@ -626,7 +639,7 @@ public class ContextLinkCell extends FrameLayout implements DownloadController.F
             org.telegram.tgnet.TLRPC$PhotoSize r15 = r7.currentPhotoObject
             if (r15 != 0) goto L_0x0319
             if (r2 != 0) goto L_0x0319
-            if (r11 == 0) goto L_0x0530
+            if (r11 == 0) goto L_0x0535
         L_0x0319:
             boolean r15 = r7.mediaWebpage
             if (r15 == 0) goto L_0x0378
@@ -704,13 +717,13 @@ public class ContextLinkCell extends FrameLayout implements DownloadController.F
             org.telegram.messenger.ImageLocation r24 = org.telegram.messenger.ImageLocation.getForDocument((org.telegram.tgnet.TLRPC$PhotoSize) r0, (org.telegram.tgnet.TLRPC$Document) r6)
             r26 = -1
             java.lang.Object r0 = r7.parentObject
-            r29 = 1
+            r30 = 1
             java.lang.String r23 = "100_100"
             r21 = r2
             r25 = r9
-            r28 = r0
-            r21.setImage(r22, r23, r24, r25, r26, r27, r28, r29)
-            goto L_0x052e
+            r29 = r0
+            r21.setImage(r22, r23, r24, r25, r26, r28, r29, r30)
+            goto L_0x0533
         L_0x03bd:
             org.telegram.tgnet.TLRPC$Document r0 = r7.documentAttach
             org.telegram.messenger.ImageLocation r0 = org.telegram.messenger.ImageLocation.getForDocument(r0)
@@ -723,17 +736,17 @@ public class ContextLinkCell extends FrameLayout implements DownloadController.F
             org.telegram.tgnet.TLRPC$Document r11 = r7.documentAttach
             org.telegram.messenger.ImageLocation r24 = org.telegram.messenger.ImageLocation.getForDocument((org.telegram.tgnet.TLRPC$PhotoSize) r6, (org.telegram.tgnet.TLRPC$Document) r11)
             org.telegram.tgnet.TLRPC$Document r6 = r7.documentAttach
-            int r6 = r6.size
-            java.lang.Object r11 = r7.parentObject
-            r29 = 0
+            long r11 = r6.size
+            java.lang.Object r6 = r7.parentObject
+            r30 = 0
             java.lang.String r23 = "100_100"
             r21 = r2
             r22 = r0
             r25 = r9
-            r26 = r6
-            r28 = r11
-            r21.setImage(r22, r23, r24, r25, r26, r27, r28, r29)
-            goto L_0x052e
+            r26 = r11
+            r29 = r6
+            r21.setImage(r22, r23, r24, r25, r26, r28, r29, r30)
+            goto L_0x0533
         L_0x03ec:
             if (r2 == 0) goto L_0x040f
             org.telegram.messenger.ImageReceiver r0 = r7.linkImageView
@@ -743,13 +756,13 @@ public class ContextLinkCell extends FrameLayout implements DownloadController.F
             org.telegram.messenger.ImageLocation r24 = org.telegram.messenger.ImageLocation.getForPhoto((org.telegram.tgnet.TLRPC$PhotoSize) r2, (org.telegram.tgnet.TLRPC$Photo) r6)
             r26 = -1
             java.lang.Object r2 = r7.parentObject
-            r29 = 1
+            r30 = 1
             java.lang.String r23 = "100_100"
             r21 = r0
             r25 = r9
-            r28 = r2
-            r21.setImage(r22, r23, r24, r25, r26, r27, r28, r29)
-            goto L_0x052e
+            r29 = r2
+            r21.setImage(r22, r23, r24, r25, r26, r28, r29, r30)
+            goto L_0x0533
         L_0x040f:
             org.telegram.messenger.ImageReceiver r0 = r7.linkImageView
             org.telegram.messenger.ImageLocation r22 = org.telegram.messenger.ImageLocation.getForPath(r11)
@@ -758,38 +771,39 @@ public class ContextLinkCell extends FrameLayout implements DownloadController.F
             org.telegram.messenger.ImageLocation r24 = org.telegram.messenger.ImageLocation.getForPhoto((org.telegram.tgnet.TLRPC$PhotoSize) r2, (org.telegram.tgnet.TLRPC$Photo) r6)
             r26 = -1
             java.lang.Object r2 = r7.parentObject
-            r29 = 1
+            r30 = 1
             java.lang.String r23 = "100_100"
             r21 = r0
             r25 = r9
-            r28 = r2
-            r21.setImage(r22, r23, r24, r25, r26, r27, r28, r29)
-            goto L_0x052e
+            r29 = r2
+            r21.setImage(r22, r23, r24, r25, r26, r28, r29, r30)
+            goto L_0x0533
         L_0x0430:
             org.telegram.tgnet.TLRPC$PhotoSize r12 = r7.currentPhotoObject
-            if (r12 == 0) goto L_0x04f5
+            if (r12 == 0) goto L_0x04fa
             org.telegram.tgnet.TLRPC$Document r2 = r7.documentAttach
             java.lang.String r11 = "windowBackgroundGray"
             org.telegram.messenger.SvgHelper$SvgDrawable r24 = org.telegram.messenger.DocumentObject.getSvgThumb((org.telegram.tgnet.TLRPC$Document) r2, (java.lang.String) r11, (float) r6)
             org.telegram.tgnet.TLRPC$Document r2 = r7.documentAttach
             boolean r2 = org.telegram.messenger.MessageObject.canAutoplayAnimatedSticker(r2)
-            if (r2 == 0) goto L_0x048a
-            if (r24 == 0) goto L_0x0465
+            if (r2 == 0) goto L_0x048c
+            if (r24 == 0) goto L_0x0466
             org.telegram.messenger.ImageReceiver r0 = r7.linkImageView
             org.telegram.tgnet.TLRPC$Document r2 = r7.documentAttach
             org.telegram.messenger.ImageLocation r22 = org.telegram.messenger.ImageLocation.getForDocument(r2)
             org.telegram.tgnet.TLRPC$PhotoSize r2 = r7.currentPhotoObject
             int r2 = r2.size
-            java.lang.Object r6 = r7.parentObject
-            r28 = 0
+            long r11 = (long) r2
+            java.lang.Object r2 = r7.parentObject
+            r29 = 0
             java.lang.String r23 = "80_80"
             r21 = r0
-            r25 = r2
-            r26 = r27
-            r27 = r6
-            r21.setImage((org.telegram.messenger.ImageLocation) r22, (java.lang.String) r23, (android.graphics.drawable.Drawable) r24, (int) r25, (java.lang.String) r26, (java.lang.Object) r27, (int) r28)
-            goto L_0x052e
-        L_0x0465:
+            r25 = r11
+            r27 = r28
+            r28 = r2
+            r21.setImage((org.telegram.messenger.ImageLocation) r22, (java.lang.String) r23, (android.graphics.drawable.Drawable) r24, (long) r25, (java.lang.String) r27, (java.lang.Object) r28, (int) r29)
+            goto L_0x0533
+        L_0x0466:
             org.telegram.messenger.ImageReceiver r0 = r7.linkImageView
             org.telegram.tgnet.TLRPC$Document r2 = r7.documentAttach
             org.telegram.messenger.ImageLocation r22 = org.telegram.messenger.ImageLocation.getForDocument(r2)
@@ -798,33 +812,35 @@ public class ContextLinkCell extends FrameLayout implements DownloadController.F
             org.telegram.messenger.ImageLocation r24 = org.telegram.messenger.ImageLocation.getForDocument((org.telegram.tgnet.TLRPC$PhotoSize) r2, (org.telegram.tgnet.TLRPC$Document) r6)
             org.telegram.tgnet.TLRPC$PhotoSize r2 = r7.currentPhotoObject
             int r2 = r2.size
-            java.lang.Object r6 = r7.parentObject
-            r29 = 0
+            long r11 = (long) r2
+            java.lang.Object r2 = r7.parentObject
+            r30 = 0
             java.lang.String r23 = "80_80"
             r21 = r0
-            r26 = r2
-            r28 = r6
-            r21.setImage(r22, r23, r24, r25, r26, r27, r28, r29)
-            goto L_0x052e
-        L_0x048a:
+            r26 = r11
+            r29 = r2
+            r21.setImage(r22, r23, r24, r25, r26, r28, r29, r30)
+            goto L_0x0533
+        L_0x048c:
             org.telegram.tgnet.TLRPC$Document r2 = r7.documentAttach
-            if (r2 == 0) goto L_0x04d1
-            if (r24 == 0) goto L_0x04af
+            if (r2 == 0) goto L_0x04d5
+            if (r24 == 0) goto L_0x04b2
             org.telegram.messenger.ImageReceiver r0 = r7.linkImageView
             org.telegram.tgnet.TLRPC$PhotoSize r6 = r7.currentPhotoObject
             org.telegram.messenger.ImageLocation r22 = org.telegram.messenger.ImageLocation.getForDocument((org.telegram.tgnet.TLRPC$PhotoSize) r6, (org.telegram.tgnet.TLRPC$Document) r2)
             org.telegram.tgnet.TLRPC$PhotoSize r2 = r7.currentPhotoObject
             int r2 = r2.size
-            java.lang.Object r6 = r7.parentObject
-            r28 = 0
+            long r11 = (long) r2
+            java.lang.Object r2 = r7.parentObject
+            r29 = 0
             r21 = r0
             r23 = r9
-            r25 = r2
-            r26 = r27
-            r27 = r6
-            r21.setImage((org.telegram.messenger.ImageLocation) r22, (java.lang.String) r23, (android.graphics.drawable.Drawable) r24, (int) r25, (java.lang.String) r26, (java.lang.Object) r27, (int) r28)
-            goto L_0x052e
-        L_0x04af:
+            r25 = r11
+            r27 = r28
+            r28 = r2
+            r21.setImage((org.telegram.messenger.ImageLocation) r22, (java.lang.String) r23, (android.graphics.drawable.Drawable) r24, (long) r25, (java.lang.String) r27, (java.lang.Object) r28, (int) r29)
+            goto L_0x0533
+        L_0x04b2:
             org.telegram.messenger.ImageReceiver r6 = r7.linkImageView
             org.telegram.tgnet.TLRPC$PhotoSize r11 = r7.currentPhotoObject
             org.telegram.messenger.ImageLocation r22 = org.telegram.messenger.ImageLocation.getForDocument((org.telegram.tgnet.TLRPC$PhotoSize) r11, (org.telegram.tgnet.TLRPC$Document) r2)
@@ -832,15 +848,16 @@ public class ContextLinkCell extends FrameLayout implements DownloadController.F
             org.telegram.messenger.ImageLocation r24 = org.telegram.messenger.ImageLocation.getForPhoto((org.telegram.tgnet.TLRPC$PhotoSize) r0, (org.telegram.tgnet.TLRPC$Photo) r2)
             org.telegram.tgnet.TLRPC$PhotoSize r0 = r7.currentPhotoObject
             int r0 = r0.size
-            java.lang.Object r2 = r7.parentObject
-            r29 = 0
+            long r11 = (long) r0
+            java.lang.Object r0 = r7.parentObject
+            r30 = 0
             r21 = r6
             r23 = r9
-            r26 = r0
-            r28 = r2
-            r21.setImage(r22, r23, r24, r25, r26, r27, r28, r29)
-            goto L_0x052e
-        L_0x04d1:
+            r26 = r11
+            r29 = r0
+            r21.setImage(r22, r23, r24, r25, r26, r28, r29, r30)
+            goto L_0x0533
+        L_0x04d5:
             org.telegram.messenger.ImageReceiver r2 = r7.linkImageView
             org.telegram.tgnet.TLRPC$PhotoSize r6 = r7.currentPhotoObject
             org.telegram.tgnet.TLRPC$Photo r11 = r7.photoAttach
@@ -849,52 +866,53 @@ public class ContextLinkCell extends FrameLayout implements DownloadController.F
             org.telegram.messenger.ImageLocation r24 = org.telegram.messenger.ImageLocation.getForPhoto((org.telegram.tgnet.TLRPC$PhotoSize) r0, (org.telegram.tgnet.TLRPC$Photo) r6)
             org.telegram.tgnet.TLRPC$PhotoSize r0 = r7.currentPhotoObject
             int r0 = r0.size
-            java.lang.Object r6 = r7.parentObject
-            r29 = 0
+            long r11 = (long) r0
+            java.lang.Object r0 = r7.parentObject
+            r30 = 0
             r21 = r2
             r23 = r9
-            r26 = r0
-            r28 = r6
-            r21.setImage(r22, r23, r24, r25, r26, r27, r28, r29)
-            goto L_0x052e
-        L_0x04f5:
-            if (r2 == 0) goto L_0x0513
+            r26 = r11
+            r29 = r0
+            r21.setImage(r22, r23, r24, r25, r26, r28, r29, r30)
+            goto L_0x0533
+        L_0x04fa:
+            if (r2 == 0) goto L_0x0518
             org.telegram.messenger.ImageReceiver r6 = r7.linkImageView
             org.telegram.messenger.ImageLocation r22 = org.telegram.messenger.ImageLocation.getForWebFile(r2)
             org.telegram.tgnet.TLRPC$Photo r2 = r7.photoAttach
             org.telegram.messenger.ImageLocation r24 = org.telegram.messenger.ImageLocation.getForPhoto((org.telegram.tgnet.TLRPC$PhotoSize) r0, (org.telegram.tgnet.TLRPC$Photo) r2)
             r26 = -1
             java.lang.Object r0 = r7.parentObject
-            r29 = 1
+            r30 = 1
             r21 = r6
             r23 = r9
-            r28 = r0
-            r21.setImage(r22, r23, r24, r25, r26, r27, r28, r29)
-            goto L_0x052e
-        L_0x0513:
+            r29 = r0
+            r21.setImage(r22, r23, r24, r25, r26, r28, r29, r30)
+            goto L_0x0533
+        L_0x0518:
             org.telegram.messenger.ImageReceiver r2 = r7.linkImageView
             org.telegram.messenger.ImageLocation r22 = org.telegram.messenger.ImageLocation.getForPath(r11)
             org.telegram.tgnet.TLRPC$Photo r6 = r7.photoAttach
             org.telegram.messenger.ImageLocation r24 = org.telegram.messenger.ImageLocation.getForPhoto((org.telegram.tgnet.TLRPC$PhotoSize) r0, (org.telegram.tgnet.TLRPC$Photo) r6)
             r26 = -1
             java.lang.Object r0 = r7.parentObject
-            r29 = 1
+            r30 = 1
             r21 = r2
             r23 = r9
-            r28 = r0
-            r21.setImage(r22, r23, r24, r25, r26, r27, r28, r29)
-        L_0x052e:
+            r29 = r0
+            r21.setImage(r22, r23, r24, r25, r26, r28, r29, r30)
+        L_0x0533:
             r7.drawLinkImageView = r3
-        L_0x0530:
+        L_0x0535:
             boolean r0 = r7.mediaWebpage
             r2 = 1094713344(0x41400000, float:12.0)
             r6 = 1103101952(0x41CLASSNAME, float:24.0)
-            if (r0 == 0) goto L_0x0577
-            int r0 = android.view.View.MeasureSpec.getSize(r41)
-            if (r0 != 0) goto L_0x0544
+            if (r0 == 0) goto L_0x057c
+            int r0 = android.view.View.MeasureSpec.getSize(r42)
+            if (r0 != 0) goto L_0x0549
             r1 = 1120403456(0x42CLASSNAME, float:100.0)
             int r0 = org.telegram.messenger.AndroidUtilities.dp(r1)
-        L_0x0544:
+        L_0x0549:
             r7.setMeasuredDimension(r4, r0)
             int r1 = org.telegram.messenger.AndroidUtilities.dp(r6)
             int r1 = r4 - r1
@@ -916,42 +934,42 @@ public class ContextLinkCell extends FrameLayout implements DownloadController.F
             float r0 = (float) r0
             r3 = 0
             r1.setImageCoords(r3, r3, r2, r0)
-            goto L_0x0640
-        L_0x0577:
+            goto L_0x0645
+        L_0x057c:
             android.text.StaticLayout r0 = r7.titleLayout
-            if (r0 == 0) goto L_0x058d
+            if (r0 == 0) goto L_0x0592
             int r0 = r0.getLineCount()
-            if (r0 == 0) goto L_0x058d
+            if (r0 == 0) goto L_0x0592
             android.text.StaticLayout r0 = r7.titleLayout
             int r4 = r0.getLineCount()
             int r4 = r4 - r3
             int r0 = r0.getLineBottom(r4)
             int r1 = r1 + r0
-        L_0x058d:
+        L_0x0592:
             android.text.StaticLayout r0 = r7.descriptionLayout
-            if (r0 == 0) goto L_0x05a3
+            if (r0 == 0) goto L_0x05a8
             int r0 = r0.getLineCount()
-            if (r0 == 0) goto L_0x05a3
+            if (r0 == 0) goto L_0x05a8
             android.text.StaticLayout r0 = r7.descriptionLayout
             int r4 = r0.getLineCount()
             int r4 = r4 - r3
             int r0 = r0.getLineBottom(r4)
             int r1 = r1 + r0
-        L_0x05a3:
+        L_0x05a8:
             android.text.StaticLayout r0 = r7.linkLayout
-            if (r0 == 0) goto L_0x05b9
+            if (r0 == 0) goto L_0x05be
             int r0 = r0.getLineCount()
-            if (r0 <= 0) goto L_0x05b9
+            if (r0 <= 0) goto L_0x05be
             android.text.StaticLayout r0 = r7.linkLayout
             int r4 = r0.getLineCount()
             int r4 = r4 - r3
             int r0 = r0.getLineBottom(r4)
             int r1 = r1 + r0
-        L_0x05b9:
+        L_0x05be:
             r0 = 1112539136(0x42500000, float:52.0)
             int r3 = org.telegram.messenger.AndroidUtilities.dp(r0)
             int r1 = java.lang.Math.max(r3, r1)
-            int r3 = android.view.View.MeasureSpec.getSize(r40)
+            int r3 = android.view.View.MeasureSpec.getSize(r41)
             r4 = 1116209152(0x42880000, float:68.0)
             int r4 = org.telegram.messenger.AndroidUtilities.dp(r4)
             r9 = 1098907648(0x41800000, float:16.0)
@@ -963,17 +981,17 @@ public class ContextLinkCell extends FrameLayout implements DownloadController.F
             r7.setMeasuredDimension(r3, r1)
             int r0 = org.telegram.messenger.AndroidUtilities.dp(r0)
             boolean r1 = org.telegram.messenger.LocaleController.isRTL
-            if (r1 == 0) goto L_0x05f3
-            int r1 = android.view.View.MeasureSpec.getSize(r40)
+            if (r1 == 0) goto L_0x05f8
+            int r1 = android.view.View.MeasureSpec.getSize(r41)
             r3 = 1090519040(0x41000000, float:8.0)
             int r4 = org.telegram.messenger.AndroidUtilities.dp(r3)
             int r1 = r1 - r4
             int r1 = r1 - r0
-            goto L_0x05f9
-        L_0x05f3:
+            goto L_0x05fe
+        L_0x05f8:
             r3 = 1090519040(0x41000000, float:8.0)
             int r1 = org.telegram.messenger.AndroidUtilities.dp(r3)
-        L_0x05f9:
+        L_0x05fe:
             org.telegram.ui.Components.LetterDrawable r4 = r7.letterDrawable
             int r9 = org.telegram.messenger.AndroidUtilities.dp(r3)
             int r10 = r1 + r0
@@ -987,9 +1005,9 @@ public class ContextLinkCell extends FrameLayout implements DownloadController.F
             float r0 = (float) r0
             r4.setImageCoords(r9, r3, r0, r0)
             int r0 = r7.documentAttachType
-            if (r0 == r5) goto L_0x061c
-            if (r0 != r8) goto L_0x0640
-        L_0x061c:
+            if (r0 == r5) goto L_0x0621
+            if (r0 != r8) goto L_0x0645
+        L_0x0621:
             org.telegram.ui.Components.RadialProgress2 r0 = r7.radialProgress
             int r3 = org.telegram.messenger.AndroidUtilities.dp(r6)
             r0.setCircleRadius(r3)
@@ -1003,16 +1021,16 @@ public class ContextLinkCell extends FrameLayout implements DownloadController.F
             r4 = 1113587712(0x42600000, float:56.0)
             int r4 = org.telegram.messenger.AndroidUtilities.dp(r4)
             r0.setProgressRect(r3, r2, r1, r4)
-        L_0x0640:
+        L_0x0645:
             org.telegram.ui.Components.CheckBox2 r2 = r7.checkBox
-            if (r2 == 0) goto L_0x064f
+            if (r2 == 0) goto L_0x0654
             r4 = 0
             r6 = 0
-            r1 = r39
-            r3 = r40
-            r5 = r41
+            r1 = r40
+            r3 = r41
+            r5 = r42
             r1.measureChildWithMargins(r2, r3, r4, r5, r6)
-        L_0x064f:
+        L_0x0654:
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Cells.ContextLinkCell.onMeasure(int, int):void");
@@ -1146,6 +1164,9 @@ public class ContextLinkCell extends FrameLayout implements DownloadController.F
             this.documentAttachType = 2;
         }
         requestLayout();
+        this.fileName = null;
+        this.fileExist = false;
+        this.resolvingFileName = false;
         updateButtonState(false, false);
     }
 
@@ -1174,6 +1195,9 @@ public class ContextLinkCell extends FrameLayout implements DownloadController.F
         setAttachType();
         this.documentAttachType = 2;
         requestLayout();
+        this.fileName = null;
+        this.fileExist = false;
+        this.resolvingFileName = false;
         updateButtonState(false, false);
     }
 
@@ -1412,14 +1436,14 @@ public class ContextLinkCell extends FrameLayout implements DownloadController.F
             canvas.restore();
         }
         if (this.descriptionLayout != null) {
-            Theme.chat_contextResult_descriptionTextPaint.setColor(Theme.getColor("windowBackgroundWhiteGrayText2"));
+            Theme.chat_contextResult_descriptionTextPaint.setColor(Theme.getColor("windowBackgroundWhiteGrayText2", this.resourcesProvider));
             canvas.save();
             canvas.translate((float) AndroidUtilities.dp(LocaleController.isRTL ? 8.0f : (float) AndroidUtilities.leftBaseline), (float) this.descriptionY);
             this.descriptionLayout.draw(canvas);
             canvas.restore();
         }
         if (this.linkLayout != null) {
-            Theme.chat_contextResult_descriptionTextPaint.setColor(Theme.getColor("windowBackgroundWhiteLinkText"));
+            Theme.chat_contextResult_descriptionTextPaint.setColor(Theme.getColor("windowBackgroundWhiteLinkText", this.resourcesProvider));
             canvas.save();
             if (!LocaleController.isRTL) {
                 f = (float) AndroidUtilities.leftBaseline;
@@ -1436,7 +1460,7 @@ public class ContextLinkCell extends FrameLayout implements DownloadController.F
             }
             int i2 = this.documentAttachType;
             if (i2 == 3 || i2 == 5) {
-                this.radialProgress.setProgressColor(Theme.getColor(this.buttonPressed ? "chat_inAudioSelectedProgress" : "chat_inAudioProgress"));
+                this.radialProgress.setProgressColor(Theme.getColor(this.buttonPressed ? "chat_inAudioSelectedProgress" : "chat_inAudioProgress", this.resourcesProvider));
                 this.radialProgress.draw(canvas);
             } else {
                 TLRPC$BotInlineResult tLRPC$BotInlineResult = this.inlineResult;
@@ -1563,264 +1587,343 @@ public class ContextLinkCell extends FrameLayout implements DownloadController.F
         return 4;
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:50:0x0155  */
-    /* JADX WARNING: Removed duplicated region for block: B:52:0x015d  */
-    /* Code decompiled incorrectly, please refer to instructions dump. */
-    public void updateButtonState(boolean r11, boolean r12) {
-        /*
-            r10 = this;
-            int r0 = r10.documentAttachType
-            r1 = 1
-            r2 = 2
-            java.lang.String r3 = "."
-            r4 = 3
-            r5 = 5
-            r6 = 0
-            r7 = 4
-            if (r0 == r5) goto L_0x00fc
-            if (r0 != r4) goto L_0x0010
-            goto L_0x00fc
-        L_0x0010:
-            boolean r0 = r10.mediaWebpage
-            if (r0 == 0) goto L_0x014c
-            org.telegram.tgnet.TLRPC$BotInlineResult r0 = r10.inlineResult
-            if (r0 == 0) goto L_0x00d9
-            org.telegram.tgnet.TLRPC$Document r8 = r0.document
-            boolean r9 = r8 instanceof org.telegram.tgnet.TLRPC$TL_document
-            if (r9 == 0) goto L_0x002c
-            java.lang.String r0 = org.telegram.messenger.FileLoader.getAttachFileName(r8)
-            org.telegram.tgnet.TLRPC$BotInlineResult r3 = r10.inlineResult
-            org.telegram.tgnet.TLRPC$Document r3 = r3.document
-            java.io.File r3 = org.telegram.messenger.FileLoader.getPathToAttach(r3)
-            goto L_0x00ea
-        L_0x002c:
-            org.telegram.tgnet.TLRPC$Photo r8 = r0.photo
-            boolean r9 = r8 instanceof org.telegram.tgnet.TLRPC$TL_photo
-            if (r9 == 0) goto L_0x004a
-            java.util.ArrayList<org.telegram.tgnet.TLRPC$PhotoSize> r0 = r8.sizes
-            int r3 = org.telegram.messenger.AndroidUtilities.getPhotoSize()
-            org.telegram.tgnet.TLRPC$PhotoSize r0 = org.telegram.messenger.FileLoader.getClosestPhotoSizeWithSize(r0, r3, r1)
-            r10.currentPhotoObject = r0
-            java.lang.String r0 = org.telegram.messenger.FileLoader.getAttachFileName(r0)
-            org.telegram.tgnet.TLRPC$PhotoSize r3 = r10.currentPhotoObject
-            java.io.File r3 = org.telegram.messenger.FileLoader.getPathToAttach(r3)
-            goto L_0x00ea
-        L_0x004a:
-            org.telegram.tgnet.TLRPC$WebDocument r8 = r0.content
-            boolean r8 = r8 instanceof org.telegram.tgnet.TLRPC$TL_webDocument
-            if (r8 == 0) goto L_0x009d
-            java.lang.StringBuilder r0 = new java.lang.StringBuilder
-            r0.<init>()
-            org.telegram.tgnet.TLRPC$BotInlineResult r8 = r10.inlineResult
-            org.telegram.tgnet.TLRPC$WebDocument r8 = r8.content
-            java.lang.String r8 = r8.url
-            java.lang.String r8 = org.telegram.messenger.Utilities.MD5(r8)
-            r0.append(r8)
-            r0.append(r3)
-            org.telegram.tgnet.TLRPC$BotInlineResult r3 = r10.inlineResult
-            org.telegram.tgnet.TLRPC$WebDocument r3 = r3.content
-            java.lang.String r8 = r3.url
-            java.lang.String r3 = r3.mime_type
-            java.lang.String r3 = org.telegram.messenger.FileLoader.getMimeTypePart(r3)
-            java.lang.String r3 = org.telegram.messenger.ImageLoader.getHttpUrlExtension(r8, r3)
-            r0.append(r3)
-            java.lang.String r0 = r0.toString()
-            java.io.File r3 = new java.io.File
-            java.io.File r8 = org.telegram.messenger.FileLoader.getDirectory(r7)
-            r3.<init>(r8, r0)
-            int r8 = r10.documentAttachType
-            if (r8 != r2) goto L_0x00ea
-            org.telegram.tgnet.TLRPC$BotInlineResult r8 = r10.inlineResult
-            org.telegram.tgnet.TLRPC$WebDocument r8 = r8.thumb
-            boolean r9 = r8 instanceof org.telegram.tgnet.TLRPC$TL_webDocument
-            if (r9 == 0) goto L_0x00ea
-            java.lang.String r8 = r8.mime_type
-            java.lang.String r9 = "video/mp4"
-            boolean r8 = r9.equals(r8)
-            if (r8 == 0) goto L_0x00ea
-            r0 = r6
-            goto L_0x00ea
-        L_0x009d:
-            org.telegram.tgnet.TLRPC$WebDocument r0 = r0.thumb
-            boolean r0 = r0 instanceof org.telegram.tgnet.TLRPC$TL_webDocument
-            if (r0 == 0) goto L_0x00e8
-            java.lang.StringBuilder r0 = new java.lang.StringBuilder
-            r0.<init>()
-            org.telegram.tgnet.TLRPC$BotInlineResult r8 = r10.inlineResult
-            org.telegram.tgnet.TLRPC$WebDocument r8 = r8.thumb
-            java.lang.String r8 = r8.url
-            java.lang.String r8 = org.telegram.messenger.Utilities.MD5(r8)
-            r0.append(r8)
-            r0.append(r3)
-            org.telegram.tgnet.TLRPC$BotInlineResult r3 = r10.inlineResult
-            org.telegram.tgnet.TLRPC$WebDocument r3 = r3.thumb
-            java.lang.String r8 = r3.url
-            java.lang.String r3 = r3.mime_type
-            java.lang.String r3 = org.telegram.messenger.FileLoader.getMimeTypePart(r3)
-            java.lang.String r3 = org.telegram.messenger.ImageLoader.getHttpUrlExtension(r8, r3)
-            r0.append(r3)
-            java.lang.String r0 = r0.toString()
-            java.io.File r3 = new java.io.File
-            java.io.File r8 = org.telegram.messenger.FileLoader.getDirectory(r7)
-            r3.<init>(r8, r0)
-            goto L_0x00ea
-        L_0x00d9:
-            org.telegram.tgnet.TLRPC$Document r0 = r10.documentAttach
-            if (r0 == 0) goto L_0x00e8
-            java.lang.String r0 = org.telegram.messenger.FileLoader.getAttachFileName(r0)
-            org.telegram.tgnet.TLRPC$Document r3 = r10.documentAttach
-            java.io.File r3 = org.telegram.messenger.FileLoader.getPathToAttach(r3)
-            goto L_0x00ea
-        L_0x00e8:
-            r0 = r6
-            r3 = r0
-        L_0x00ea:
-            org.telegram.tgnet.TLRPC$Document r8 = r10.documentAttach
-            if (r8 == 0) goto L_0x00f9
-            int r9 = r10.documentAttachType
-            if (r9 != r2) goto L_0x00f9
-            org.telegram.tgnet.TLRPC$VideoSize r8 = org.telegram.messenger.MessageObject.getDocumentVideoThumb(r8)
-            if (r8 == 0) goto L_0x00f9
-            goto L_0x00fa
-        L_0x00f9:
-            r6 = r0
-        L_0x00fa:
-            r0 = r3
-            goto L_0x014d
-        L_0x00fc:
-            org.telegram.tgnet.TLRPC$Document r0 = r10.documentAttach
-            if (r0 == 0) goto L_0x010b
-            java.lang.String r6 = org.telegram.messenger.FileLoader.getAttachFileName(r0)
-            org.telegram.tgnet.TLRPC$Document r0 = r10.documentAttach
-            java.io.File r0 = org.telegram.messenger.FileLoader.getPathToAttach(r0)
-            goto L_0x014d
-        L_0x010b:
-            org.telegram.tgnet.TLRPC$BotInlineResult r0 = r10.inlineResult
-            org.telegram.tgnet.TLRPC$WebDocument r0 = r0.content
-            boolean r0 = r0 instanceof org.telegram.tgnet.TLRPC$TL_webDocument
-            if (r0 == 0) goto L_0x014c
-            java.lang.StringBuilder r0 = new java.lang.StringBuilder
-            r0.<init>()
-            org.telegram.tgnet.TLRPC$BotInlineResult r6 = r10.inlineResult
-            org.telegram.tgnet.TLRPC$WebDocument r6 = r6.content
-            java.lang.String r6 = r6.url
-            java.lang.String r6 = org.telegram.messenger.Utilities.MD5(r6)
-            r0.append(r6)
-            r0.append(r3)
-            org.telegram.tgnet.TLRPC$BotInlineResult r3 = r10.inlineResult
-            org.telegram.tgnet.TLRPC$WebDocument r3 = r3.content
-            java.lang.String r3 = r3.url
-            int r6 = r10.documentAttachType
-            if (r6 != r5) goto L_0x0135
-            java.lang.String r6 = "mp3"
-            goto L_0x0137
-        L_0x0135:
-            java.lang.String r6 = "ogg"
-        L_0x0137:
-            java.lang.String r3 = org.telegram.messenger.ImageLoader.getHttpUrlExtension(r3, r6)
-            r0.append(r3)
-            java.lang.String r6 = r0.toString()
-            java.io.File r0 = new java.io.File
-            java.io.File r3 = org.telegram.messenger.FileLoader.getDirectory(r7)
-            r0.<init>(r3, r6)
-            goto L_0x014d
-        L_0x014c:
-            r0 = r6
-        L_0x014d:
-            boolean r3 = android.text.TextUtils.isEmpty(r6)
-            r8 = -1
-            r9 = 0
-            if (r3 == 0) goto L_0x015d
-            r10.buttonState = r8
-            org.telegram.ui.Components.RadialProgress2 r12 = r10.radialProgress
-            r12.setIcon(r7, r11, r9)
-            return
-        L_0x015d:
-            boolean r0 = r0.exists()
-            if (r0 != 0) goto L_0x01c3
-            int r0 = r10.currentAccount
-            org.telegram.messenger.DownloadController r0 = org.telegram.messenger.DownloadController.getInstance(r0)
-            r0.addLoadingFileObserver(r6, r10)
-            int r0 = r10.documentAttachType
-            r3 = 0
-            if (r0 == r5) goto L_0x018b
-            if (r0 != r4) goto L_0x0174
-            goto L_0x018b
-        L_0x0174:
-            r10.buttonState = r1
-            org.telegram.messenger.ImageLoader r0 = org.telegram.messenger.ImageLoader.getInstance()
-            java.lang.Float r0 = r0.getFileProgress(r6)
-            if (r0 == 0) goto L_0x0184
-            float r3 = r0.floatValue()
-        L_0x0184:
-            org.telegram.ui.Components.RadialProgress2 r0 = r10.radialProgress
-            r0.setProgress(r3, r9)
-            goto L_0x01fb
-        L_0x018b:
-            org.telegram.tgnet.TLRPC$Document r0 = r10.documentAttach
-            if (r0 == 0) goto L_0x019a
-            int r0 = r10.currentAccount
-            org.telegram.messenger.FileLoader r0 = org.telegram.messenger.FileLoader.getInstance(r0)
-            boolean r0 = r0.isLoadingFile(r6)
-            goto L_0x01a2
-        L_0x019a:
-            org.telegram.messenger.ImageLoader r0 = org.telegram.messenger.ImageLoader.getInstance()
-            boolean r0 = r0.isLoadingHttpFile(r6)
-        L_0x01a2:
-            if (r0 != 0) goto L_0x01a7
-            r10.buttonState = r2
-            goto L_0x01fb
-        L_0x01a7:
-            r10.buttonState = r7
-            org.telegram.messenger.ImageLoader r0 = org.telegram.messenger.ImageLoader.getInstance()
-            java.lang.Float r0 = r0.getFileProgress(r6)
-            if (r0 == 0) goto L_0x01bd
-            org.telegram.ui.Components.RadialProgress2 r1 = r10.radialProgress
-            float r0 = r0.floatValue()
-            r1.setProgress(r0, r12)
-            goto L_0x01fb
-        L_0x01bd:
-            org.telegram.ui.Components.RadialProgress2 r0 = r10.radialProgress
-            r0.setProgress(r3, r12)
-            goto L_0x01fb
-        L_0x01c3:
-            int r0 = r10.currentAccount
-            org.telegram.messenger.DownloadController r0 = org.telegram.messenger.DownloadController.getInstance(r0)
-            r0.removeLoadingFileObserver(r10)
-            int r0 = r10.documentAttachType
-            if (r0 == r5) goto L_0x01d6
-            if (r0 != r4) goto L_0x01d3
-            goto L_0x01d6
-        L_0x01d3:
-            r10.buttonState = r8
-            goto L_0x01fb
-        L_0x01d6:
-            org.telegram.messenger.MediaController r0 = org.telegram.messenger.MediaController.getInstance()
-            org.telegram.messenger.MessageObject r2 = r10.currentMessageObject
-            boolean r0 = r0.isPlayingMessage(r2)
-            if (r0 == 0) goto L_0x01f2
-            if (r0 == 0) goto L_0x01ef
-            org.telegram.messenger.MediaController r0 = org.telegram.messenger.MediaController.getInstance()
-            boolean r0 = r0.isMessagePaused()
-            if (r0 == 0) goto L_0x01ef
-            goto L_0x01f2
-        L_0x01ef:
-            r10.buttonState = r1
-            goto L_0x01f4
-        L_0x01f2:
-            r10.buttonState = r9
-        L_0x01f4:
-            org.telegram.ui.Components.RadialProgress2 r0 = r10.radialProgress
-            r1 = 1065353216(0x3var_, float:1.0)
-            r0.setProgress(r1, r12)
-        L_0x01fb:
-            org.telegram.ui.Components.RadialProgress2 r0 = r10.radialProgress
-            int r1 = r10.getIconForCurrentState()
-            r0.setIcon(r1, r11, r12)
-            r10.invalidate()
-            return
-        */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Cells.ContextLinkCell.updateButtonState(boolean, boolean):void");
+    public void updateButtonState(final boolean z, boolean z2) {
+        boolean z3;
+        String str = this.fileName;
+        if (str == null && !this.resolvingFileName) {
+            this.resolvingFileName = true;
+            final int i = this.resolveFileNameId;
+            this.resolveFileNameId = i + 1;
+            this.resolveFileNameId = i;
+            Utilities.searchQueue.postRunnable(new Runnable() {
+                /* JADX WARNING: Removed duplicated region for block: B:37:0x01b0  */
+                /* JADX WARNING: Removed duplicated region for block: B:38:0x01b2  */
+                /* JADX WARNING: Removed duplicated region for block: B:56:0x023e  */
+                /* JADX WARNING: Removed duplicated region for block: B:57:0x0240  */
+                /* Code decompiled incorrectly, please refer to instructions dump. */
+                public void run() {
+                    /*
+                        r13 = this;
+                        org.telegram.ui.Cells.ContextLinkCell r0 = org.telegram.ui.Cells.ContextLinkCell.this
+                        int r0 = r0.documentAttachType
+                        r1 = 1
+                        r2 = 5
+                        r3 = 4
+                        java.lang.String r4 = "."
+                        r5 = 0
+                        if (r0 == r2) goto L_0x01b6
+                        org.telegram.ui.Cells.ContextLinkCell r0 = org.telegram.ui.Cells.ContextLinkCell.this
+                        int r0 = r0.documentAttachType
+                        r6 = 3
+                        if (r0 != r6) goto L_0x0019
+                        goto L_0x01b6
+                    L_0x0019:
+                        org.telegram.ui.Cells.ContextLinkCell r0 = org.telegram.ui.Cells.ContextLinkCell.this
+                        boolean r0 = r0.mediaWebpage
+                        if (r0 == 0) goto L_0x0230
+                        org.telegram.ui.Cells.ContextLinkCell r0 = org.telegram.ui.Cells.ContextLinkCell.this
+                        org.telegram.tgnet.TLRPC$BotInlineResult r0 = r0.inlineResult
+                        r2 = 2
+                        if (r0 == 0) goto L_0x016b
+                        org.telegram.ui.Cells.ContextLinkCell r0 = org.telegram.ui.Cells.ContextLinkCell.this
+                        org.telegram.tgnet.TLRPC$BotInlineResult r0 = r0.inlineResult
+                        org.telegram.tgnet.TLRPC$Document r0 = r0.document
+                        boolean r0 = r0 instanceof org.telegram.tgnet.TLRPC$TL_document
+                        if (r0 == 0) goto L_0x005a
+                        org.telegram.ui.Cells.ContextLinkCell r0 = org.telegram.ui.Cells.ContextLinkCell.this
+                        org.telegram.tgnet.TLRPC$BotInlineResult r0 = r0.inlineResult
+                        org.telegram.tgnet.TLRPC$Document r0 = r0.document
+                        java.lang.String r0 = org.telegram.messenger.FileLoader.getAttachFileName(r0)
+                        org.telegram.ui.Cells.ContextLinkCell r3 = org.telegram.ui.Cells.ContextLinkCell.this
+                        int r3 = r3.currentAccount
+                        org.telegram.messenger.FileLoader r3 = org.telegram.messenger.FileLoader.getInstance(r3)
+                        org.telegram.ui.Cells.ContextLinkCell r4 = org.telegram.ui.Cells.ContextLinkCell.this
+                        org.telegram.tgnet.TLRPC$BotInlineResult r4 = r4.inlineResult
+                        org.telegram.tgnet.TLRPC$Document r4 = r4.document
+                        java.io.File r3 = r3.getPathToAttach(r4)
+                        goto L_0x0194
+                    L_0x005a:
+                        org.telegram.ui.Cells.ContextLinkCell r0 = org.telegram.ui.Cells.ContextLinkCell.this
+                        org.telegram.tgnet.TLRPC$BotInlineResult r0 = r0.inlineResult
+                        org.telegram.tgnet.TLRPC$Photo r0 = r0.photo
+                        boolean r0 = r0 instanceof org.telegram.tgnet.TLRPC$TL_photo
+                        if (r0 == 0) goto L_0x009b
+                        org.telegram.ui.Cells.ContextLinkCell r0 = org.telegram.ui.Cells.ContextLinkCell.this
+                        org.telegram.tgnet.TLRPC$BotInlineResult r3 = r0.inlineResult
+                        org.telegram.tgnet.TLRPC$Photo r3 = r3.photo
+                        java.util.ArrayList<org.telegram.tgnet.TLRPC$PhotoSize> r3 = r3.sizes
+                        int r4 = org.telegram.messenger.AndroidUtilities.getPhotoSize()
+                        org.telegram.tgnet.TLRPC$PhotoSize r3 = org.telegram.messenger.FileLoader.getClosestPhotoSizeWithSize(r3, r4, r1)
+                        org.telegram.tgnet.TLRPC$PhotoSize unused = r0.currentPhotoObject = r3
+                        org.telegram.ui.Cells.ContextLinkCell r0 = org.telegram.ui.Cells.ContextLinkCell.this
+                        org.telegram.tgnet.TLRPC$PhotoSize r0 = r0.currentPhotoObject
+                        java.lang.String r0 = org.telegram.messenger.FileLoader.getAttachFileName(r0)
+                        org.telegram.ui.Cells.ContextLinkCell r3 = org.telegram.ui.Cells.ContextLinkCell.this
+                        int r3 = r3.currentAccount
+                        org.telegram.messenger.FileLoader r3 = org.telegram.messenger.FileLoader.getInstance(r3)
+                        org.telegram.ui.Cells.ContextLinkCell r4 = org.telegram.ui.Cells.ContextLinkCell.this
+                        org.telegram.tgnet.TLRPC$PhotoSize r4 = r4.currentPhotoObject
+                        java.io.File r3 = r3.getPathToAttach(r4)
+                        goto L_0x0194
+                    L_0x009b:
+                        org.telegram.ui.Cells.ContextLinkCell r0 = org.telegram.ui.Cells.ContextLinkCell.this
+                        org.telegram.tgnet.TLRPC$BotInlineResult r0 = r0.inlineResult
+                        org.telegram.tgnet.TLRPC$WebDocument r0 = r0.content
+                        boolean r0 = r0 instanceof org.telegram.tgnet.TLRPC$TL_webDocument
+                        if (r0 == 0) goto L_0x0119
+                        java.lang.StringBuilder r0 = new java.lang.StringBuilder
+                        r0.<init>()
+                        org.telegram.ui.Cells.ContextLinkCell r6 = org.telegram.ui.Cells.ContextLinkCell.this
+                        org.telegram.tgnet.TLRPC$BotInlineResult r6 = r6.inlineResult
+                        org.telegram.tgnet.TLRPC$WebDocument r6 = r6.content
+                        java.lang.String r6 = r6.url
+                        java.lang.String r6 = org.telegram.messenger.Utilities.MD5(r6)
+                        r0.append(r6)
+                        r0.append(r4)
+                        org.telegram.ui.Cells.ContextLinkCell r4 = org.telegram.ui.Cells.ContextLinkCell.this
+                        org.telegram.tgnet.TLRPC$BotInlineResult r4 = r4.inlineResult
+                        org.telegram.tgnet.TLRPC$WebDocument r4 = r4.content
+                        java.lang.String r4 = r4.url
+                        org.telegram.ui.Cells.ContextLinkCell r6 = org.telegram.ui.Cells.ContextLinkCell.this
+                        org.telegram.tgnet.TLRPC$BotInlineResult r6 = r6.inlineResult
+                        org.telegram.tgnet.TLRPC$WebDocument r6 = r6.content
+                        java.lang.String r6 = r6.mime_type
+                        java.lang.String r6 = org.telegram.messenger.FileLoader.getMimeTypePart(r6)
+                        java.lang.String r4 = org.telegram.messenger.ImageLoader.getHttpUrlExtension(r4, r6)
+                        r0.append(r4)
+                        java.lang.String r0 = r0.toString()
+                        java.io.File r4 = new java.io.File
+                        java.io.File r3 = org.telegram.messenger.FileLoader.getDirectory(r3)
+                        r4.<init>(r3, r0)
+                        org.telegram.ui.Cells.ContextLinkCell r3 = org.telegram.ui.Cells.ContextLinkCell.this
+                        int r3 = r3.documentAttachType
+                        if (r3 != r2) goto L_0x0116
+                        org.telegram.ui.Cells.ContextLinkCell r3 = org.telegram.ui.Cells.ContextLinkCell.this
+                        org.telegram.tgnet.TLRPC$BotInlineResult r3 = r3.inlineResult
+                        org.telegram.tgnet.TLRPC$WebDocument r3 = r3.thumb
+                        boolean r3 = r3 instanceof org.telegram.tgnet.TLRPC$TL_webDocument
+                        if (r3 == 0) goto L_0x0116
+                        org.telegram.ui.Cells.ContextLinkCell r3 = org.telegram.ui.Cells.ContextLinkCell.this
+                        org.telegram.tgnet.TLRPC$BotInlineResult r3 = r3.inlineResult
+                        org.telegram.tgnet.TLRPC$WebDocument r3 = r3.thumb
+                        java.lang.String r3 = r3.mime_type
+                        java.lang.String r6 = "video/mp4"
+                        boolean r3 = r6.equals(r3)
+                        if (r3 == 0) goto L_0x0116
+                        r3 = r4
+                        r0 = r5
+                        goto L_0x0194
+                    L_0x0116:
+                        r3 = r4
+                        goto L_0x0194
+                    L_0x0119:
+                        org.telegram.ui.Cells.ContextLinkCell r0 = org.telegram.ui.Cells.ContextLinkCell.this
+                        org.telegram.tgnet.TLRPC$BotInlineResult r0 = r0.inlineResult
+                        org.telegram.tgnet.TLRPC$WebDocument r0 = r0.thumb
+                        boolean r0 = r0 instanceof org.telegram.tgnet.TLRPC$TL_webDocument
+                        if (r0 == 0) goto L_0x0192
+                        java.lang.StringBuilder r0 = new java.lang.StringBuilder
+                        r0.<init>()
+                        org.telegram.ui.Cells.ContextLinkCell r6 = org.telegram.ui.Cells.ContextLinkCell.this
+                        org.telegram.tgnet.TLRPC$BotInlineResult r6 = r6.inlineResult
+                        org.telegram.tgnet.TLRPC$WebDocument r6 = r6.thumb
+                        java.lang.String r6 = r6.url
+                        java.lang.String r6 = org.telegram.messenger.Utilities.MD5(r6)
+                        r0.append(r6)
+                        r0.append(r4)
+                        org.telegram.ui.Cells.ContextLinkCell r4 = org.telegram.ui.Cells.ContextLinkCell.this
+                        org.telegram.tgnet.TLRPC$BotInlineResult r4 = r4.inlineResult
+                        org.telegram.tgnet.TLRPC$WebDocument r4 = r4.thumb
+                        java.lang.String r4 = r4.url
+                        org.telegram.ui.Cells.ContextLinkCell r6 = org.telegram.ui.Cells.ContextLinkCell.this
+                        org.telegram.tgnet.TLRPC$BotInlineResult r6 = r6.inlineResult
+                        org.telegram.tgnet.TLRPC$WebDocument r6 = r6.thumb
+                        java.lang.String r6 = r6.mime_type
+                        java.lang.String r6 = org.telegram.messenger.FileLoader.getMimeTypePart(r6)
+                        java.lang.String r4 = org.telegram.messenger.ImageLoader.getHttpUrlExtension(r4, r6)
+                        r0.append(r4)
+                        java.lang.String r0 = r0.toString()
+                        java.io.File r4 = new java.io.File
+                        java.io.File r3 = org.telegram.messenger.FileLoader.getDirectory(r3)
+                        r4.<init>(r3, r0)
+                        goto L_0x0116
+                    L_0x016b:
+                        org.telegram.ui.Cells.ContextLinkCell r0 = org.telegram.ui.Cells.ContextLinkCell.this
+                        org.telegram.tgnet.TLRPC$Document r0 = r0.documentAttach
+                        if (r0 == 0) goto L_0x0192
+                        org.telegram.ui.Cells.ContextLinkCell r0 = org.telegram.ui.Cells.ContextLinkCell.this
+                        org.telegram.tgnet.TLRPC$Document r0 = r0.documentAttach
+                        java.lang.String r0 = org.telegram.messenger.FileLoader.getAttachFileName(r0)
+                        org.telegram.ui.Cells.ContextLinkCell r3 = org.telegram.ui.Cells.ContextLinkCell.this
+                        int r3 = r3.currentAccount
+                        org.telegram.messenger.FileLoader r3 = org.telegram.messenger.FileLoader.getInstance(r3)
+                        org.telegram.ui.Cells.ContextLinkCell r4 = org.telegram.ui.Cells.ContextLinkCell.this
+                        org.telegram.tgnet.TLRPC$Document r4 = r4.documentAttach
+                        java.io.File r3 = r3.getPathToAttach(r4)
+                        goto L_0x0194
+                    L_0x0192:
+                        r0 = r5
+                        r3 = r0
+                    L_0x0194:
+                        org.telegram.ui.Cells.ContextLinkCell r4 = org.telegram.ui.Cells.ContextLinkCell.this
+                        org.telegram.tgnet.TLRPC$Document r4 = r4.documentAttach
+                        if (r4 == 0) goto L_0x01b2
+                        org.telegram.ui.Cells.ContextLinkCell r4 = org.telegram.ui.Cells.ContextLinkCell.this
+                        int r4 = r4.documentAttachType
+                        if (r4 != r2) goto L_0x01b2
+                        org.telegram.ui.Cells.ContextLinkCell r2 = org.telegram.ui.Cells.ContextLinkCell.this
+                        org.telegram.tgnet.TLRPC$Document r2 = r2.documentAttach
+                        org.telegram.tgnet.TLRPC$VideoSize r2 = org.telegram.messenger.MessageObject.getDocumentVideoThumb(r2)
+                        if (r2 == 0) goto L_0x01b2
+                        r10 = r3
+                        goto L_0x01dd
+                    L_0x01b2:
+                        r9 = r0
+                        r10 = r3
+                        goto L_0x0232
+                    L_0x01b6:
+                        org.telegram.ui.Cells.ContextLinkCell r0 = org.telegram.ui.Cells.ContextLinkCell.this
+                        org.telegram.tgnet.TLRPC$Document r0 = r0.documentAttach
+                        if (r0 == 0) goto L_0x01df
+                        org.telegram.ui.Cells.ContextLinkCell r0 = org.telegram.ui.Cells.ContextLinkCell.this
+                        org.telegram.tgnet.TLRPC$Document r0 = r0.documentAttach
+                        java.lang.String r5 = org.telegram.messenger.FileLoader.getAttachFileName(r0)
+                        org.telegram.ui.Cells.ContextLinkCell r0 = org.telegram.ui.Cells.ContextLinkCell.this
+                        int r0 = r0.currentAccount
+                        org.telegram.messenger.FileLoader r0 = org.telegram.messenger.FileLoader.getInstance(r0)
+                        org.telegram.ui.Cells.ContextLinkCell r2 = org.telegram.ui.Cells.ContextLinkCell.this
+                        org.telegram.tgnet.TLRPC$Document r2 = r2.documentAttach
+                        java.io.File r0 = r0.getPathToAttach(r2)
+                    L_0x01dc:
+                        r10 = r0
+                    L_0x01dd:
+                        r9 = r5
+                        goto L_0x0232
+                    L_0x01df:
+                        org.telegram.ui.Cells.ContextLinkCell r0 = org.telegram.ui.Cells.ContextLinkCell.this
+                        org.telegram.tgnet.TLRPC$BotInlineResult r0 = r0.inlineResult
+                        org.telegram.tgnet.TLRPC$WebDocument r0 = r0.content
+                        boolean r0 = r0 instanceof org.telegram.tgnet.TLRPC$TL_webDocument
+                        if (r0 == 0) goto L_0x0230
+                        java.lang.StringBuilder r0 = new java.lang.StringBuilder
+                        r0.<init>()
+                        org.telegram.ui.Cells.ContextLinkCell r5 = org.telegram.ui.Cells.ContextLinkCell.this
+                        org.telegram.tgnet.TLRPC$BotInlineResult r5 = r5.inlineResult
+                        org.telegram.tgnet.TLRPC$WebDocument r5 = r5.content
+                        java.lang.String r5 = r5.url
+                        java.lang.String r5 = org.telegram.messenger.Utilities.MD5(r5)
+                        r0.append(r5)
+                        r0.append(r4)
+                        org.telegram.ui.Cells.ContextLinkCell r4 = org.telegram.ui.Cells.ContextLinkCell.this
+                        org.telegram.tgnet.TLRPC$BotInlineResult r4 = r4.inlineResult
+                        org.telegram.tgnet.TLRPC$WebDocument r4 = r4.content
+                        java.lang.String r4 = r4.url
+                        org.telegram.ui.Cells.ContextLinkCell r5 = org.telegram.ui.Cells.ContextLinkCell.this
+                        int r5 = r5.documentAttachType
+                        if (r5 != r2) goto L_0x0219
+                        java.lang.String r2 = "mp3"
+                        goto L_0x021b
+                    L_0x0219:
+                        java.lang.String r2 = "ogg"
+                    L_0x021b:
+                        java.lang.String r2 = org.telegram.messenger.ImageLoader.getHttpUrlExtension(r4, r2)
+                        r0.append(r2)
+                        java.lang.String r5 = r0.toString()
+                        java.io.File r0 = new java.io.File
+                        java.io.File r2 = org.telegram.messenger.FileLoader.getDirectory(r3)
+                        r0.<init>(r2, r5)
+                        goto L_0x01dc
+                    L_0x0230:
+                        r9 = r5
+                        r10 = r9
+                    L_0x0232:
+                        boolean r0 = android.text.TextUtils.isEmpty(r9)
+                        if (r0 != 0) goto L_0x0240
+                        boolean r0 = r10.exists()
+                        if (r0 == 0) goto L_0x0240
+                        r11 = 1
+                        goto L_0x0242
+                    L_0x0240:
+                        r1 = 0
+                        r11 = 0
+                    L_0x0242:
+                        int r8 = r10
+                        boolean r12 = r9
+                        org.telegram.ui.Cells.ContextLinkCell$1$$ExternalSyntheticLambda0 r0 = new org.telegram.ui.Cells.ContextLinkCell$1$$ExternalSyntheticLambda0
+                        r6 = r0
+                        r7 = r13
+                        r6.<init>(r7, r8, r9, r10, r11, r12)
+                        org.telegram.messenger.AndroidUtilities.runOnUIThread(r0)
+                        return
+                    */
+                    throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Cells.ContextLinkCell.AnonymousClass1.run():void");
+                }
+
+                /* access modifiers changed from: private */
+                public /* synthetic */ void lambda$run$0(int i, String str, File file, boolean z, boolean z2) {
+                    ContextLinkCell contextLinkCell = ContextLinkCell.this;
+                    contextLinkCell.resolvingFileName = false;
+                    if (contextLinkCell.resolveFileNameId == i) {
+                        contextLinkCell.fileName = str;
+                        if (str == null) {
+                            contextLinkCell.fileName = "";
+                        }
+                        contextLinkCell.cacheFile = file;
+                        contextLinkCell.fileExist = z;
+                    }
+                    contextLinkCell.updateButtonState(z2, true);
+                }
+            });
+            this.radialProgress.setIcon(4, z, false);
+        } else if (TextUtils.isEmpty(str)) {
+            this.buttonState = -1;
+            this.radialProgress.setIcon(4, z, false);
+        } else {
+            if (this.documentAttach != null) {
+                z3 = FileLoader.getInstance(this.currentAccount).isLoadingFile(this.fileName);
+            } else {
+                z3 = ImageLoader.getInstance().isLoadingHttpFile(this.fileName);
+            }
+            if (z3 || !this.fileExist) {
+                DownloadController.getInstance(this.currentAccount).addLoadingFileObserver(this.fileName, this);
+                int i2 = this.documentAttachType;
+                float f = 0.0f;
+                if (i2 != 5 && i2 != 3) {
+                    this.buttonState = 1;
+                    Float fileProgress = ImageLoader.getInstance().getFileProgress(this.fileName);
+                    if (fileProgress != null) {
+                        f = fileProgress.floatValue();
+                    }
+                    this.radialProgress.setProgress(f, false);
+                } else if (!z3) {
+                    this.buttonState = 2;
+                } else {
+                    this.buttonState = 4;
+                    Float fileProgress2 = ImageLoader.getInstance().getFileProgress(this.fileName);
+                    if (fileProgress2 != null) {
+                        this.radialProgress.setProgress(fileProgress2.floatValue(), z2);
+                    } else {
+                        this.radialProgress.setProgress(0.0f, z2);
+                    }
+                }
+            } else {
+                DownloadController.getInstance(this.currentAccount).removeLoadingFileObserver(this);
+                int i3 = this.documentAttachType;
+                if (i3 == 5 || i3 == 3) {
+                    boolean isPlayingMessage = MediaController.getInstance().isPlayingMessage(this.currentMessageObject);
+                    if (!isPlayingMessage || (isPlayingMessage && MediaController.getInstance().isMessagePaused())) {
+                        this.buttonState = 0;
+                    } else {
+                        this.buttonState = 1;
+                    }
+                    this.radialProgress.setProgress(1.0f, z2);
+                } else {
+                    this.buttonState = -1;
+                }
+            }
+            this.radialProgress.setIcon(getIconForCurrentState(), z, z2);
+            invalidate();
+        }
     }
 
     public void setDelegate(ContextLinkCellDelegate contextLinkCellDelegate) {
@@ -1836,6 +1939,7 @@ public class ContextLinkCell extends FrameLayout implements DownloadController.F
     }
 
     public void onSuccessDownload(String str) {
+        this.fileExist = true;
         this.radialProgress.setProgress(1.0f, true);
         updateButtonState(false, true);
     }

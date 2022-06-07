@@ -37,6 +37,7 @@ public abstract class TLRPC$Message extends TLObject {
     public boolean pinned;
     public boolean post;
     public String post_author;
+    public boolean premiumEffectWasPlayed;
     public long random_id;
     public TLRPC$TL_messageReactions reactions;
     public int realId;
@@ -57,6 +58,11 @@ public abstract class TLRPC$Message extends TLObject {
     public long via_bot_id;
     public String via_bot_name;
     public int views;
+    public String voiceTranscription;
+    public boolean voiceTranscriptionFinal;
+    public long voiceTranscriptionId;
+    public boolean voiceTranscriptionOpen;
+    public boolean voiceTranscriptionRated;
     public boolean with_my_score;
 
     public static TLRPC$Message TLdeserialize(AbstractSerializedData abstractSerializedData, int i, boolean z) {
@@ -339,7 +345,7 @@ public abstract class TLRPC$Message extends TLObject {
             java.lang.String r14 = "legacy_layer"
             java.lang.Object r13 = r13.get(r14)
             java.lang.CharSequence r13 = (java.lang.CharSequence) r13
-            java.lang.Integer r13 = org.telegram.messenger.Utilities.parseInt(r13)
+            java.lang.Integer r13 = org.telegram.messenger.Utilities.parseInt((java.lang.CharSequence) r13)
             int r13 = r13.intValue()
             r11.layer = r13
             goto L_0x0122
@@ -384,8 +390,8 @@ public abstract class TLRPC$Message extends TLObject {
             if (this.params == null) {
                 this.params = new HashMap<>();
             }
-            this.layer = 140;
-            this.params.put("legacy_layer", "140");
+            this.layer = 143;
+            this.params.put("legacy_layer", "143");
         }
         if ((this.id < 0 || this.send_state == 3 || this.legacy) && (hashMap2 = this.params) != null && hashMap2.size() > 0) {
             for (Map.Entry next2 : this.params.entrySet()) {

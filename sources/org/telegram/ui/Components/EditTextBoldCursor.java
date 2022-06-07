@@ -9,6 +9,7 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.PorterDuff;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
@@ -39,6 +40,7 @@ import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.BuildVars;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
+import org.telegram.messenger.XiaomiUtilities;
 import org.telegram.ui.ActionBar.FloatingActionMode;
 import org.telegram.ui.ActionBar.FloatingToolbar;
 import org.telegram.ui.ActionBar.Theme;
@@ -352,7 +354,7 @@ public class EditTextBoldCursor extends EditTextEffects {
         L_0x00da:
             java.lang.reflect.Field r0 = mCursorDrawableResField     // Catch:{ all -> 0x00e8 }
             if (r0 == 0) goto L_0x00e8
-            r1 = 2131165433(0x7var_f9, float:1.7945083E38)
+            r1 = 2131165398(0x7var_d6, float:1.7945012E38)
             java.lang.Integer r1 = java.lang.Integer.valueOf(r1)     // Catch:{ all -> 0x00e8 }
             r0.set(r8, r1)     // Catch:{ all -> 0x00e8 }
         L_0x00e8:
@@ -1150,8 +1152,30 @@ public class EditTextBoldCursor extends EditTextEffects {
     public void onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo accessibilityNodeInfo) {
         super.onInitializeAccessibilityNodeInfo(accessibilityNodeInfo);
         accessibilityNodeInfo.setClassName("android.widget.EditText");
-        if (this.hintLayout != null) {
+        if (this.hintLayout == null) {
+            return;
+        }
+        if (getText().length() <= 0) {
+            accessibilityNodeInfo.setText(this.hintLayout.getText());
+        } else {
             AccessibilityNodeInfoCompat.wrap(accessibilityNodeInfo).setHintText(this.hintLayout.getText());
+        }
+    }
+
+    public void setHandlesColor(int i) {
+        if (Build.VERSION.SDK_INT >= 29 && !XiaomiUtilities.isMIUI()) {
+            try {
+                Drawable textSelectHandleLeft = getTextSelectHandleLeft();
+                textSelectHandleLeft.setColorFilter(i, PorterDuff.Mode.SRC_IN);
+                setTextSelectHandleLeft(textSelectHandleLeft);
+                Drawable textSelectHandle = getTextSelectHandle();
+                textSelectHandle.setColorFilter(i, PorterDuff.Mode.SRC_IN);
+                setTextSelectHandle(textSelectHandle);
+                Drawable textSelectHandleRight = getTextSelectHandleRight();
+                textSelectHandleRight.setColorFilter(i, PorterDuff.Mode.SRC_IN);
+                setTextSelectHandleRight(textSelectHandleRight);
+            } catch (Exception unused) {
+            }
         }
     }
 }

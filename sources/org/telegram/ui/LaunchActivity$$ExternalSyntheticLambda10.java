@@ -19,6 +19,6 @@ public final /* synthetic */ class LaunchActivity$$ExternalSyntheticLambda10 imp
     }
 
     public final void onClick(DialogInterface dialogInterface, int i) {
-        this.f$0.lambda$runLinkRequest$36(this.f$1, this.f$2, this.f$3, this.f$4, dialogInterface, i);
+        this.f$0.lambda$runLinkRequest$41(this.f$1, this.f$2, this.f$3, this.f$4, dialogInterface, i);
     }
 }

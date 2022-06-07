@@ -22,7 +22,7 @@ public abstract class TLRPC$DecryptedMessageMedia extends TLObject {
     public String mime_type;
     public String phone_number;
     public String provider;
-    public int size;
+    public long size;
     public int thumb_h;
     public int thumb_w;
     public String title;

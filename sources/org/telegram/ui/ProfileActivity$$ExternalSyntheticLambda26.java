@@ -14,6 +14,6 @@ public final /* synthetic */ class ProfileActivity$$ExternalSyntheticLambda26 im
     }
 
     public final void run() {
-        this.f$0.lambda$sendLogs$34(this.f$1, this.f$2);
+        this.f$0.lambda$sendLogs$38(this.f$1, this.f$2);
     }
 }

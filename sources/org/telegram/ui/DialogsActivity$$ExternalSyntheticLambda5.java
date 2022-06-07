@@ -10,6 +10,6 @@ public final /* synthetic */ class DialogsActivity$$ExternalSyntheticLambda5 imp
     }
 
     public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-        this.f$0.lambda$animateContactsAlpha$45(valueAnimator);
+        this.f$0.lambda$hideFloatingButton$50(valueAnimator);
     }
 }

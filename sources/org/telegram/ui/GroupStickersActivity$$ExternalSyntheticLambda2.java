@@ -1,15 +1,16 @@
 package org.telegram.ui;
 
-public final /* synthetic */ class GroupStickersActivity$$ExternalSyntheticLambda2 implements Runnable {
-    public final /* synthetic */ GroupStickersActivity f$0;
-    public final /* synthetic */ String f$1;
+import android.view.View;
+import org.telegram.ui.Components.RecyclerListView;
 
-    public /* synthetic */ GroupStickersActivity$$ExternalSyntheticLambda2(GroupStickersActivity groupStickersActivity, String str) {
+public final /* synthetic */ class GroupStickersActivity$$ExternalSyntheticLambda2 implements RecyclerListView.OnItemClickListener {
+    public final /* synthetic */ GroupStickersActivity f$0;
+
+    public /* synthetic */ GroupStickersActivity$$ExternalSyntheticLambda2(GroupStickersActivity groupStickersActivity) {
         this.f$0 = groupStickersActivity;
-        this.f$1 = str;
     }
 
-    public final void run() {
-        this.f$0.lambda$resolveStickerSet$4(this.f$1);
+    public final void onItemClick(View view, int i) {
+        this.f$0.lambda$createView$0(view, i);
     }
 }

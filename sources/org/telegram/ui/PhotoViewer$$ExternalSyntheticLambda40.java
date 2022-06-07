@@ -3,7 +3,7 @@ package org.telegram.ui;
 import android.view.View;
 import org.telegram.ui.ActionBar.Theme;
 
-public final /* synthetic */ class PhotoViewer$$ExternalSyntheticLambda40 implements View.OnLongClickListener {
+public final /* synthetic */ class PhotoViewer$$ExternalSyntheticLambda40 implements View.OnClickListener {
     public final /* synthetic */ PhotoViewer f$0;
     public final /* synthetic */ Theme.ResourcesProvider f$1;
 
@@ -12,7 +12,7 @@ public final /* synthetic */ class PhotoViewer$$ExternalSyntheticLambda40 implem
         this.f$1 = resourcesProvider;
     }
 
-    public final boolean onLongClick(View view) {
-        return this.f$0.lambda$setParentActivity$15(this.f$1, view);
+    public final void onClick(View view) {
+        this.f$0.lambda$setParentActivity$29(this.f$1, view);
     }
 }

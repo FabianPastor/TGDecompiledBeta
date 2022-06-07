@@ -6,6 +6,7 @@ import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 import android.text.TextUtils;
 import android.view.View;
+import android.view.accessibility.AccessibilityNodeInfo;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -23,21 +24,28 @@ public class NotificationsCheckCell extends FrameLayout {
     private boolean isMultiline;
     private ImageView moveImageView;
     private boolean needDivider;
+    private Theme.ResourcesProvider resourcesProvider;
     private TextView textView;
     private TextView valueTextView;
 
     public NotificationsCheckCell(Context context) {
-        this(context, 21, 70, false);
+        this(context, 21, 70, false, (Theme.ResourcesProvider) null);
+    }
+
+    public NotificationsCheckCell(Context context, int i, int i2, boolean z) {
+        this(context, i, i2, z, (Theme.ResourcesProvider) null);
     }
 
     /* JADX INFO: super call moved to the top of the method (can break code semantics) */
-    public NotificationsCheckCell(Context context, int i, int i2, boolean z) {
+    public NotificationsCheckCell(Context context, int i, int i2, boolean z, Theme.ResourcesProvider resourcesProvider2) {
         super(context);
         float f;
         float f2;
         float f3;
         Context context2 = context;
+        Theme.ResourcesProvider resourcesProvider3 = resourcesProvider2;
         this.drawLine = true;
+        this.resourcesProvider = resourcesProvider3;
         setWillNotDraw(false);
         this.currentHeight = i2;
         int i3 = 5;
@@ -47,12 +55,12 @@ public class NotificationsCheckCell extends FrameLayout {
             imageView.setFocusable(false);
             this.moveImageView.setScaleType(ImageView.ScaleType.CENTER);
             this.moveImageView.setImageResource(NUM);
-            this.moveImageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor("windowBackgroundWhiteGrayIcon"), PorterDuff.Mode.MULTIPLY));
+            this.moveImageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor("windowBackgroundWhiteGrayIcon", resourcesProvider3), PorterDuff.Mode.MULTIPLY));
             addView(this.moveImageView, LayoutHelper.createFrame(48, 48.0f, (LocaleController.isRTL ? 5 : 3) | 16, 6.0f, 0.0f, 6.0f, 0.0f));
         }
         TextView textView2 = new TextView(context2);
         this.textView = textView2;
-        textView2.setTextColor(Theme.getColor("windowBackgroundWhiteBlackText"));
+        textView2.setTextColor(Theme.getColor("windowBackgroundWhiteBlackText", resourcesProvider3));
         this.textView.setTextSize(1, 16.0f);
         this.textView.setLines(1);
         this.textView.setMaxLines(1);
@@ -78,7 +86,7 @@ public class NotificationsCheckCell extends FrameLayout {
         addView(textView3, LayoutHelper.createFrame(-1, -2.0f, i4, f, f5, f2, 0.0f));
         TextView textView4 = new TextView(context2);
         this.valueTextView = textView4;
-        textView4.setTextColor(Theme.getColor("windowBackgroundWhiteGrayText2"));
+        textView4.setTextColor(Theme.getColor("windowBackgroundWhiteGrayText2", resourcesProvider3));
         this.valueTextView.setTextSize(1, 13.0f);
         this.valueTextView.setGravity(LocaleController.isRTL ? 5 : 3);
         this.valueTextView.setLines(1);
@@ -99,11 +107,11 @@ public class NotificationsCheckCell extends FrameLayout {
             f4 = (float) (!z ? i : i5);
         }
         addView(textView5, LayoutHelper.createFrame(-2, -2.0f, i6, f3, f6, f4, 0.0f));
-        Switch switchR = new Switch(context2);
+        Switch switchR = new Switch(context2, resourcesProvider3);
         this.checkBox = switchR;
         switchR.setColors("switchTrack", "switchTrackChecked", "windowBackgroundWhite", "windowBackgroundWhite");
         addView(this.checkBox, LayoutHelper.createFrame(37, 40.0f, (LocaleController.isRTL ? 3 : i3) | 16, 21.0f, 0.0f, 21.0f, 0.0f));
-        this.checkBox.setFocusable(true);
+        this.checkBox.setFocusable(false);
     }
 
     /* access modifiers changed from: protected */
@@ -176,5 +184,20 @@ public class NotificationsCheckCell extends FrameLayout {
 
     public void setAnimationsEnabled(boolean z) {
         this.animationsEnabled = z;
+    }
+
+    public void onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo accessibilityNodeInfo) {
+        super.onInitializeAccessibilityNodeInfo(accessibilityNodeInfo);
+        accessibilityNodeInfo.setClassName("android.widget.Switch");
+        StringBuilder sb = new StringBuilder();
+        sb.append(this.textView.getText());
+        TextView textView2 = this.valueTextView;
+        if (textView2 != null && !TextUtils.isEmpty(textView2.getText())) {
+            sb.append("\n");
+            sb.append(this.valueTextView.getText());
+        }
+        accessibilityNodeInfo.setContentDescription(sb);
+        accessibilityNodeInfo.setCheckable(true);
+        accessibilityNodeInfo.setChecked(this.checkBox.isChecked());
     }
 }

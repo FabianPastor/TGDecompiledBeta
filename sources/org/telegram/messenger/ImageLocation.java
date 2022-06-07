@@ -28,7 +28,7 @@ public class ImageLocation {
     public static final int TYPE_SMALL = 1;
     public static final int TYPE_STRIPPED = 2;
     public long access_hash;
-    public int currentSize;
+    public long currentSize;
     public int dc_id;
     public TLRPC$Document document;
     public long documentId;
@@ -86,7 +86,7 @@ public class ImageLocation {
         }
         ImageLocation imageLocation = new ImageLocation();
         imageLocation.webFile = webFile2;
-        imageLocation.currentSize = webFile2.size;
+        imageLocation.currentSize = (long) webFile2.size;
         return imageLocation;
     }
 
@@ -222,7 +222,11 @@ public class ImageLocation {
             return null;
         }
         ImageLocation forPhoto = getForPhoto(tLRPC$VideoSize.location, tLRPC$VideoSize.size, (TLRPC$Photo) null, tLRPC$Document, (TLRPC$InputPeer) null, 1, tLRPC$Document.dc_id, (TLRPC$InputStickerSet) null, tLRPC$VideoSize.type);
-        forPhoto.imageType = 2;
+        if ("f".equals(tLRPC$VideoSize.type)) {
+            forPhoto.imageType = 1;
+        } else {
+            forPhoto.imageType = 2;
+        }
         return forPhoto;
     }
 
@@ -274,7 +278,7 @@ public class ImageLocation {
         ImageLocation imageLocation = new ImageLocation();
         imageLocation.dc_id = i3;
         imageLocation.photo = tLRPC$Photo;
-        imageLocation.currentSize = i;
+        imageLocation.currentSize = (long) i;
         imageLocation.photoPeer = tLRPC$InputPeer;
         imageLocation.photoPeerType = i2;
         imageLocation.stickerSet = tLRPC$InputStickerSet;
@@ -395,27 +399,30 @@ public class ImageLocation {
         return this.key != null;
     }
 
-    public int getSize() {
+    public long getSize() {
+        int i;
         TLRPC$PhotoSize tLRPC$PhotoSize = this.photoSize;
         if (tLRPC$PhotoSize != null) {
-            return tLRPC$PhotoSize.size;
-        }
-        SecureDocument secureDocument2 = this.secureDocument;
-        if (secureDocument2 != null) {
-            TLRPC$TL_secureFile tLRPC$TL_secureFile = secureDocument2.secureFile;
-            if (tLRPC$TL_secureFile != null) {
-                return tLRPC$TL_secureFile.size;
-            }
+            i = tLRPC$PhotoSize.size;
         } else {
-            TLRPC$Document tLRPC$Document = this.document;
-            if (tLRPC$Document != null) {
-                return tLRPC$Document.size;
+            SecureDocument secureDocument2 = this.secureDocument;
+            if (secureDocument2 != null) {
+                TLRPC$TL_secureFile tLRPC$TL_secureFile = secureDocument2.secureFile;
+                if (tLRPC$TL_secureFile != null) {
+                    return tLRPC$TL_secureFile.size;
+                }
+            } else {
+                TLRPC$Document tLRPC$Document = this.document;
+                if (tLRPC$Document != null) {
+                    return tLRPC$Document.size;
+                }
+                WebFile webFile2 = this.webFile;
+                if (webFile2 != null) {
+                    i = webFile2.size;
+                }
             }
-            WebFile webFile2 = this.webFile;
-            if (webFile2 != null) {
-                return webFile2.size;
-            }
+            return this.currentSize;
         }
-        return this.currentSize;
+        return (long) i;
     }
 }

@@ -22,11 +22,11 @@ import org.telegram.ui.Components.CheckBoxSquare;
 import org.telegram.ui.Components.LayoutHelper;
 
 public class UserCell2 extends FrameLayout {
-    private AvatarDrawable avatarDrawable = new AvatarDrawable();
+    private AvatarDrawable avatarDrawable;
     private BackupImageView avatarImageView;
     private CheckBox checkBox;
     private CheckBoxSquare checkBoxBig;
-    private int currentAccount = UserConfig.selectedAccount;
+    private int currentAccount;
     private int currentDrawable;
     private int currentId;
     private CharSequence currentName;
@@ -37,37 +37,47 @@ public class UserCell2 extends FrameLayout {
     private String lastName;
     private int lastStatus;
     private SimpleTextView nameTextView;
-    private int statusColor = Theme.getColor("windowBackgroundWhiteGrayText");
-    private int statusOnlineColor = Theme.getColor("windowBackgroundWhiteBlueText");
+    private Theme.ResourcesProvider resourcesProvider;
+    private int statusColor;
+    private int statusOnlineColor;
     private SimpleTextView statusTextView;
 
     public boolean hasOverlappingRendering() {
         return false;
     }
 
-    /* JADX INFO: super call moved to the top of the method (can break code semantics) */
     public UserCell2(Context context, int i, int i2) {
+        this(context, i, i2, (Theme.ResourcesProvider) null);
+    }
+
+    /* JADX INFO: super call moved to the top of the method (can break code semantics) */
+    public UserCell2(Context context, int i, int i2, Theme.ResourcesProvider resourcesProvider2) {
         super(context);
         int i3;
         float f;
         Context context2 = context;
         int i4 = i2;
+        Theme.ResourcesProvider resourcesProvider3 = resourcesProvider2;
+        this.currentAccount = UserConfig.selectedAccount;
+        this.resourcesProvider = resourcesProvider3;
+        this.statusColor = Theme.getColor("windowBackgroundWhiteGrayText", resourcesProvider3);
+        this.statusOnlineColor = Theme.getColor("windowBackgroundWhiteBlueText", resourcesProvider3);
+        this.avatarDrawable = new AvatarDrawable();
         BackupImageView backupImageView = new BackupImageView(context2);
         this.avatarImageView = backupImageView;
         backupImageView.setRoundRadius(AndroidUtilities.dp(24.0f));
         BackupImageView backupImageView2 = this.avatarImageView;
         boolean z = LocaleController.isRTL;
-        int i5 = 5;
         addView(backupImageView2, LayoutHelper.createFrame(48, 48.0f, (z ? 5 : 3) | 48, z ? 0.0f : (float) (i + 7), 11.0f, z ? (float) (i + 7) : 0.0f, 0.0f));
         SimpleTextView simpleTextView = new SimpleTextView(context2);
         this.nameTextView = simpleTextView;
-        simpleTextView.setTextColor(Theme.getColor("windowBackgroundWhiteBlackText"));
+        simpleTextView.setTextColor(Theme.getColor("windowBackgroundWhiteBlackText", resourcesProvider3));
         this.nameTextView.setTextSize(17);
         this.nameTextView.setGravity((LocaleController.isRTL ? 5 : 3) | 48);
         SimpleTextView simpleTextView2 = this.nameTextView;
         boolean z2 = LocaleController.isRTL;
-        int i6 = (z2 ? 5 : 3) | 48;
-        int i7 = 18;
+        int i5 = (z2 ? 5 : 3) | 48;
+        int i6 = 18;
         if (z2) {
             i3 = (i4 == 2 ? 18 : 0) + 28;
         } else {
@@ -77,9 +87,9 @@ public class UserCell2 extends FrameLayout {
         if (z2) {
             f = (float) (i + 68);
         } else {
-            f = (float) ((i4 != 2 ? 0 : i7) + 28);
+            f = (float) ((i4 != 2 ? 0 : i6) + 28);
         }
-        addView(simpleTextView2, LayoutHelper.createFrame(-1, 20.0f, i6, f2, 14.5f, f, 0.0f));
+        addView(simpleTextView2, LayoutHelper.createFrame(-1, 20.0f, i5, f2, 14.5f, f, 0.0f));
         SimpleTextView simpleTextView3 = new SimpleTextView(context2);
         this.statusTextView = simpleTextView3;
         simpleTextView3.setTextSize(14);
@@ -90,24 +100,24 @@ public class UserCell2 extends FrameLayout {
         ImageView imageView2 = new ImageView(context2);
         this.imageView = imageView2;
         imageView2.setScaleType(ImageView.ScaleType.CENTER);
-        this.imageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor("windowBackgroundWhiteGrayIcon"), PorterDuff.Mode.MULTIPLY));
+        this.imageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor("windowBackgroundWhiteGrayIcon", resourcesProvider3), PorterDuff.Mode.MULTIPLY));
         this.imageView.setVisibility(8);
         ImageView imageView3 = this.imageView;
         boolean z4 = LocaleController.isRTL;
         addView(imageView3, LayoutHelper.createFrame(-2, -2.0f, (z4 ? 5 : 3) | 16, z4 ? 0.0f : 16.0f, 0.0f, z4 ? 16.0f : 0.0f, 0.0f));
         if (i4 == 2) {
-            CheckBoxSquare checkBoxSquare = new CheckBoxSquare(context2, false);
+            CheckBoxSquare checkBoxSquare = new CheckBoxSquare(context2, false, resourcesProvider3);
             this.checkBoxBig = checkBoxSquare;
             boolean z5 = LocaleController.isRTL;
-            addView(checkBoxSquare, LayoutHelper.createFrame(18, 18.0f, (z5 ? 3 : i5) | 16, z5 ? 19.0f : 0.0f, 0.0f, z5 ? 0.0f : 19.0f, 0.0f));
+            addView(checkBoxSquare, LayoutHelper.createFrame(18, 18.0f, (z5 ? 3 : 5) | 16, z5 ? 19.0f : 0.0f, 0.0f, z5 ? 0.0f : 19.0f, 0.0f));
         } else if (i4 == 1) {
             CheckBox checkBox2 = new CheckBox(context2, NUM);
             this.checkBox = checkBox2;
             checkBox2.setVisibility(4);
-            this.checkBox.setColor(Theme.getColor("checkbox"), Theme.getColor("checkboxCheck"));
+            this.checkBox.setColor(Theme.getColor("checkbox", resourcesProvider3), Theme.getColor("checkboxCheck", resourcesProvider3));
             CheckBox checkBox3 = this.checkBox;
             boolean z6 = LocaleController.isRTL;
-            addView(checkBox3, LayoutHelper.createFrame(22, 22.0f, (!z6 ? 3 : i5) | 48, z6 ? 0.0f : (float) (i + 37), 41.0f, z6 ? (float) (i + 37) : 0.0f, 0.0f));
+            addView(checkBox3, LayoutHelper.createFrame(22, 22.0f, (z6 ? 5 : 3) | 48, z6 ? 0.0f : (float) (i + 37), 41.0f, z6 ? (float) (i + 37) : 0.0f, 0.0f));
         }
     }
 
@@ -168,7 +178,7 @@ public class UserCell2 extends FrameLayout {
         if (r13.equals(r12.lastName) == false) goto L_0x008c;
      */
     /* JADX WARNING: Multi-variable type inference failed */
-    /* JADX WARNING: Removed duplicated region for block: B:137:0x025a  */
+    /* JADX WARNING: Removed duplicated region for block: B:137:0x025f  */
     /* JADX WARNING: Removed duplicated region for block: B:143:? A[RETURN, SYNTHETIC] */
     /* JADX WARNING: Removed duplicated region for block: B:16:0x002e  */
     /* JADX WARNING: Removed duplicated region for block: B:58:0x008f  */
@@ -355,10 +365,10 @@ public class UserCell2 extends FrameLayout {
             java.lang.CharSequence r1 = r12.currentStatus
             r13.setText(r1)
             org.telegram.ui.Components.BackupImageView r13 = r12.avatarImageView
-            if (r13 == 0) goto L_0x0240
+            if (r13 == 0) goto L_0x0245
             org.telegram.ui.Components.AvatarDrawable r1 = r12.avatarDrawable
             r13.setForUserOrChat(r0, r1)
-            goto L_0x0240
+            goto L_0x0245
         L_0x0109:
             if (r0 == 0) goto L_0x01a0
             boolean r13 = r0.bot
@@ -369,14 +379,14 @@ public class UserCell2 extends FrameLayout {
             boolean r13 = r0.bot_chat_history
             if (r13 == 0) goto L_0x0129
             org.telegram.ui.ActionBar.SimpleTextView r13 = r12.statusTextView
-            r1 = 2131624672(0x7f0e02e0, float:1.887653E38)
+            r1 = 2131624731(0x7f0e031b, float:1.887665E38)
             java.lang.String r2 = "BotStatusRead"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             r13.setText(r1)
             goto L_0x0197
         L_0x0129:
             org.telegram.ui.ActionBar.SimpleTextView r13 = r12.statusTextView
-            r1 = 2131624671(0x7f0e02df, float:1.8876528E38)
+            r1 = 2131624730(0x7f0e031a, float:1.8876648E38)
             java.lang.String r2 = "BotStatusCantRead"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             r13.setText(r1)
@@ -418,7 +428,7 @@ public class UserCell2 extends FrameLayout {
             int r1 = r12.statusOnlineColor
             r13.setTextColor(r1)
             org.telegram.ui.ActionBar.SimpleTextView r13 = r12.statusTextView
-            r1 = 2131626923(0x7f0e0bab, float:1.8881096E38)
+            r1 = 2131627069(0x7f0e0c3d, float:1.8881392E38)
             java.lang.String r2 = "Online"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             r13.setText(r1)
@@ -426,106 +436,108 @@ public class UserCell2 extends FrameLayout {
             org.telegram.ui.Components.BackupImageView r13 = r12.avatarImageView
             org.telegram.ui.Components.AvatarDrawable r1 = r12.avatarDrawable
             r13.setForUserOrChat(r0, r1)
-            goto L_0x0240
+            goto L_0x0245
         L_0x01a0:
-            if (r1 == 0) goto L_0x0239
+            if (r1 == 0) goto L_0x023e
             org.telegram.ui.ActionBar.SimpleTextView r13 = r12.statusTextView
             int r0 = r12.statusColor
             r13.setTextColor(r0)
             boolean r13 = org.telegram.messenger.ChatObject.isChannel(r1)
-            if (r13 == 0) goto L_0x01e9
+            if (r13 == 0) goto L_0x01ec
             boolean r13 = r1.megagroup
-            if (r13 != 0) goto L_0x01e9
+            if (r13 != 0) goto L_0x01ec
             int r13 = r1.participants_count
-            if (r13 == 0) goto L_0x01c3
+            if (r13 == 0) goto L_0x01c6
             org.telegram.ui.ActionBar.SimpleTextView r0 = r12.statusTextView
-            java.lang.String r2 = "Subscribers"
-            java.lang.String r13 = org.telegram.messenger.LocaleController.formatPluralString(r2, r13)
+            java.lang.Object[] r2 = new java.lang.Object[r4]
+            java.lang.String r3 = "Subscribers"
+            java.lang.String r13 = org.telegram.messenger.LocaleController.formatPluralString(r3, r13, r2)
             r0.setText(r13)
-            goto L_0x0231
-        L_0x01c3:
+            goto L_0x0236
+        L_0x01c6:
             java.lang.String r13 = r1.username
             boolean r13 = android.text.TextUtils.isEmpty(r13)
-            if (r13 == 0) goto L_0x01da
+            if (r13 == 0) goto L_0x01dd
             org.telegram.ui.ActionBar.SimpleTextView r13 = r12.statusTextView
-            r0 = 2131624874(0x7f0e03aa, float:1.887694E38)
+            r0 = 2131624939(0x7f0e03eb, float:1.8877072E38)
             java.lang.String r2 = "ChannelPrivate"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r2, r0)
             r13.setText(r0)
-            goto L_0x0231
-        L_0x01da:
+            goto L_0x0236
+        L_0x01dd:
             org.telegram.ui.ActionBar.SimpleTextView r13 = r12.statusTextView
-            r0 = 2131624877(0x7f0e03ad, float:1.8876946E38)
+            r0 = 2131624942(0x7f0e03ee, float:1.8877078E38)
             java.lang.String r2 = "ChannelPublic"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r2, r0)
             r13.setText(r0)
-            goto L_0x0231
-        L_0x01e9:
+            goto L_0x0236
+        L_0x01ec:
             int r13 = r1.participants_count
-            if (r13 == 0) goto L_0x01f9
+            if (r13 == 0) goto L_0x01fe
             org.telegram.ui.ActionBar.SimpleTextView r0 = r12.statusTextView
-            java.lang.String r2 = "Members"
-            java.lang.String r13 = org.telegram.messenger.LocaleController.formatPluralString(r2, r13)
+            java.lang.Object[] r2 = new java.lang.Object[r4]
+            java.lang.String r3 = "Members"
+            java.lang.String r13 = org.telegram.messenger.LocaleController.formatPluralString(r3, r13, r2)
             r0.setText(r13)
-            goto L_0x0231
-        L_0x01f9:
+            goto L_0x0236
+        L_0x01fe:
             boolean r13 = r1.has_geo
-            if (r13 == 0) goto L_0x020c
+            if (r13 == 0) goto L_0x0211
             org.telegram.ui.ActionBar.SimpleTextView r13 = r12.statusTextView
-            r0 = 2131626432(0x7f0e09c0, float:1.88801E38)
+            r0 = 2131626575(0x7f0e0a4f, float:1.888039E38)
             java.lang.String r2 = "MegaLocation"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r2, r0)
             r13.setText(r0)
-            goto L_0x0231
-        L_0x020c:
+            goto L_0x0236
+        L_0x0211:
             java.lang.String r13 = r1.username
             boolean r13 = android.text.TextUtils.isEmpty(r13)
-            if (r13 == 0) goto L_0x0223
+            if (r13 == 0) goto L_0x0228
             org.telegram.ui.ActionBar.SimpleTextView r13 = r12.statusTextView
-            r0 = 2131626433(0x7f0e09c1, float:1.8880102E38)
+            r0 = 2131626576(0x7f0e0a50, float:1.8880392E38)
             java.lang.String r2 = "MegaPrivate"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r2, r0)
             r13.setText(r0)
-            goto L_0x0231
-        L_0x0223:
+            goto L_0x0236
+        L_0x0228:
             org.telegram.ui.ActionBar.SimpleTextView r13 = r12.statusTextView
-            r0 = 2131626436(0x7f0e09c4, float:1.8880108E38)
+            r0 = 2131626579(0x7f0e0a53, float:1.8880398E38)
             java.lang.String r2 = "MegaPublic"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r2, r0)
             r13.setText(r0)
-        L_0x0231:
+        L_0x0236:
             org.telegram.ui.Components.BackupImageView r13 = r12.avatarImageView
             org.telegram.ui.Components.AvatarDrawable r0 = r12.avatarDrawable
             r13.setForUserOrChat(r1, r0)
-            goto L_0x0240
-        L_0x0239:
+            goto L_0x0245
+        L_0x023e:
             org.telegram.ui.Components.BackupImageView r13 = r12.avatarImageView
             org.telegram.ui.Components.AvatarDrawable r0 = r12.avatarDrawable
             r13.setImageDrawable(r0)
-        L_0x0240:
+        L_0x0245:
             android.widget.ImageView r13 = r12.imageView
             int r13 = r13.getVisibility()
             r0 = 8
-            if (r13 != 0) goto L_0x024e
+            if (r13 != 0) goto L_0x0253
             int r13 = r12.currentDrawable
-            if (r13 == 0) goto L_0x025a
-        L_0x024e:
+            if (r13 == 0) goto L_0x025f
+        L_0x0253:
             android.widget.ImageView r13 = r12.imageView
             int r13 = r13.getVisibility()
-            if (r13 != r0) goto L_0x026c
+            if (r13 != r0) goto L_0x0271
             int r13 = r12.currentDrawable
-            if (r13 == 0) goto L_0x026c
-        L_0x025a:
+            if (r13 == 0) goto L_0x0271
+        L_0x025f:
             android.widget.ImageView r13 = r12.imageView
             int r1 = r12.currentDrawable
-            if (r1 != 0) goto L_0x0262
+            if (r1 != 0) goto L_0x0267
             r4 = 8
-        L_0x0262:
+        L_0x0267:
             r13.setVisibility(r4)
             android.widget.ImageView r13 = r12.imageView
             int r0 = r12.currentDrawable
             r13.setImageResource(r0)
-        L_0x026c:
+        L_0x0271:
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Cells.UserCell2.update(int):void");

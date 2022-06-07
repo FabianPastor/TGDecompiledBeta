@@ -87,10 +87,13 @@ public class MentionsAdapter extends RecyclerListView.SelectionAdapter implement
     private TLRPC$ChatFull info;
     private boolean inlineMediaEnabled = true;
     private boolean isDarkTheme;
+    private boolean isReversed = false;
     /* access modifiers changed from: private */
     public boolean isSearchingMentions;
+    private Object[] lastData;
     /* access modifiers changed from: private */
     public boolean lastForSearch;
+    private int lastItemCount = -1;
     /* access modifiers changed from: private */
     public Location lastKnownLocation;
     /* access modifiers changed from: private */
@@ -163,6 +166,8 @@ public class MentionsAdapter extends RecyclerListView.SelectionAdapter implement
         void onContextClick(TLRPC$BotInlineResult tLRPC$BotInlineResult);
 
         void onContextSearch(boolean z);
+
+        void onItemCountUpdate(int i, int i2);
     }
 
     static /* synthetic */ int access$1704(MentionsAdapter mentionsAdapter) {
@@ -227,8 +232,7 @@ public class MentionsAdapter extends RecyclerListView.SelectionAdapter implement
             this.stickersToLoad.remove(objArr[0]);
             if (this.stickersToLoad.isEmpty()) {
                 MentionsAdapterDelegate mentionsAdapterDelegate = this.delegate;
-                ArrayList<StickerResult> arrayList2 = this.stickers;
-                if (arrayList2 != null && !arrayList2.isEmpty()) {
+                if (getItemCountInternal() > 0) {
                     z = true;
                 }
                 mentionsAdapterDelegate.needChangePanelVisibility(z);
@@ -240,7 +244,10 @@ public class MentionsAdapter extends RecyclerListView.SelectionAdapter implement
         if (tLRPC$Document != null) {
             String str = tLRPC$Document.dc_id + "_" + tLRPC$Document.id;
             HashMap<String, TLRPC$Document> hashMap = this.stickersMap;
-            if (hashMap == null || !hashMap.containsKey(str)) {
+            if (hashMap != null && hashMap.containsKey(str)) {
+                return;
+            }
+            if (UserConfig.getInstance(this.currentAccount).isPremium() || !MessageObject.isPremiumSticker(tLRPC$Document)) {
                 if (this.stickers == null) {
                     this.stickers = new ArrayList<>();
                     this.stickersMap = new HashMap<>();
@@ -262,11 +269,7 @@ public class MentionsAdapter extends RecyclerListView.SelectionAdapter implement
                 TLRPC$Document tLRPC$Document = arrayList.get(i);
                 String str = tLRPC$Document.dc_id + "_" + tLRPC$Document.id;
                 HashMap<String, TLRPC$Document> hashMap = this.stickersMap;
-                if (hashMap == null || !hashMap.containsKey(str)) {
-                    if (this.stickers == null) {
-                        this.stickers = new ArrayList<>();
-                        this.stickersMap = new HashMap<>();
-                    }
+                if ((hashMap == null || !hashMap.containsKey(str)) && (UserConfig.getInstance(this.currentAccount).isPremium() || !MessageObject.isPremiumSticker(tLRPC$Document))) {
                     int size2 = tLRPC$Document.attributes.size();
                     int i2 = 0;
                     while (true) {
@@ -279,6 +282,10 @@ public class MentionsAdapter extends RecyclerListView.SelectionAdapter implement
                             break;
                         }
                         i2++;
+                    }
+                    if (this.stickers == null) {
+                        this.stickers = new ArrayList<>();
+                        this.stickersMap = new HashMap<>();
                     }
                     this.stickers.add(new StickerResult(tLRPC$Document, obj));
                     this.stickersMap.put(str, tLRPC$Document);
@@ -296,7 +303,7 @@ public class MentionsAdapter extends RecyclerListView.SelectionAdapter implement
         for (int i = 0; i < min; i++) {
             StickerResult stickerResult = this.stickers.get(i);
             TLRPC$PhotoSize closestPhotoSizeWithSize = FileLoader.getClosestPhotoSizeWithSize(stickerResult.sticker.thumbs, 90);
-            if (((closestPhotoSizeWithSize instanceof TLRPC$TL_photoSize) || (closestPhotoSizeWithSize instanceof TLRPC$TL_photoSizeProgressive)) && !FileLoader.getPathToAttach(closestPhotoSizeWithSize, "webp", true).exists()) {
+            if (((closestPhotoSizeWithSize instanceof TLRPC$TL_photoSize) || (closestPhotoSizeWithSize instanceof TLRPC$TL_photoSizeProgressive)) && !FileLoader.getInstance(this.currentAccount).getPathToAttach(closestPhotoSizeWithSize, "webp", true).exists()) {
                 this.stickersToLoad.add(FileLoader.getAttachFileName(closestPhotoSizeWithSize, "webp"));
                 FileLoader.getInstance(this.currentAccount).loadFile(ImageLocation.getForDocument(closestPhotoSizeWithSize, stickerResult.sticker), stickerResult.parent, "webp", 1, 1);
             }
@@ -339,7 +346,7 @@ public class MentionsAdapter extends RecyclerListView.SelectionAdapter implement
     /* access modifiers changed from: private */
     public /* synthetic */ void lambda$searchServerStickers$0(String str, TLObject tLObject) {
         ArrayList<StickerResult> arrayList;
-        int i = 0;
+        boolean z = false;
         this.lastReqId = 0;
         if (str.equals(this.lastSticker) && (tLObject instanceof TLRPC$TL_messages_stickers)) {
             TLRPC$TL_messages_stickers tLRPC$TL_messages_stickers = (TLRPC$TL_messages_stickers) tLObject;
@@ -348,18 +355,152 @@ public class MentionsAdapter extends RecyclerListView.SelectionAdapter implement
             ArrayList<TLRPC$Document> arrayList3 = tLRPC$TL_messages_stickers.stickers;
             addStickersToResult(arrayList3, "sticker_search_" + str);
             ArrayList<StickerResult> arrayList4 = this.stickers;
-            if (arrayList4 != null) {
-                i = arrayList4.size();
-            }
+            int size2 = arrayList4 != null ? arrayList4.size() : 0;
             if (!this.visibleByStickersSearch && (arrayList = this.stickers) != null && !arrayList.isEmpty()) {
                 checkStickerFilesExistAndDownload();
-                this.delegate.needChangePanelVisibility(this.stickersToLoad.isEmpty());
+                MentionsAdapterDelegate mentionsAdapterDelegate = this.delegate;
+                if (getItemCountInternal() > 0) {
+                    z = true;
+                }
+                mentionsAdapterDelegate.needChangePanelVisibility(z);
                 this.visibleByStickersSearch = true;
             }
-            if (size != i) {
+            if (size != size2) {
                 notifyDataSetChanged();
             }
         }
+    }
+
+    public void notifyDataSetChanged() {
+        MentionsAdapterDelegate mentionsAdapterDelegate;
+        int i = this.lastItemCount;
+        int i2 = 0;
+        if (i == -1 || this.lastData == null) {
+            MentionsAdapterDelegate mentionsAdapterDelegate2 = this.delegate;
+            if (mentionsAdapterDelegate2 != null) {
+                mentionsAdapterDelegate2.onItemCountUpdate(0, getItemCount());
+            }
+            super.notifyDataSetChanged();
+            this.lastData = new Object[getItemCount()];
+            while (true) {
+                Object[] objArr = this.lastData;
+                if (i2 < objArr.length) {
+                    objArr[i2] = getItem(i2);
+                    i2++;
+                } else {
+                    return;
+                }
+            }
+        } else {
+            int itemCount = getItemCount();
+            boolean z = i != itemCount;
+            int min = Math.min(i, itemCount);
+            Object[] objArr2 = new Object[itemCount];
+            for (int i3 = 0; i3 < itemCount; i3++) {
+                objArr2[i3] = getItem(i3);
+            }
+            while (i2 < min) {
+                if (i2 >= 0) {
+                    Object[] objArr3 = this.lastData;
+                    if (i2 < objArr3.length && i2 < itemCount && itemsEqual(objArr3[i2], objArr2[i2])) {
+                        i2++;
+                    }
+                }
+                notifyItemChanged(i2);
+                z = true;
+                i2++;
+            }
+            notifyItemRangeRemoved(min, i - min);
+            notifyItemRangeInserted(min, itemCount - min);
+            if (z && (mentionsAdapterDelegate = this.delegate) != null) {
+                mentionsAdapterDelegate.onItemCountUpdate(i, itemCount);
+            }
+            this.lastData = objArr2;
+        }
+    }
+
+    /* JADX WARNING: Code restructure failed: missing block: B:35:0x005e, code lost:
+        r7 = (org.telegram.messenger.MediaDataController.KeywordResult) r7;
+     */
+    /* Code decompiled incorrectly, please refer to instructions dump. */
+    private boolean itemsEqual(java.lang.Object r7, java.lang.Object r8) {
+        /*
+            r6 = this;
+            r0 = 1
+            if (r7 != r8) goto L_0x0004
+            return r0
+        L_0x0004:
+            boolean r1 = r7 instanceof org.telegram.ui.Adapters.MentionsAdapter.StickerResult
+            if (r1 == 0) goto L_0x0019
+            boolean r1 = r8 instanceof org.telegram.ui.Adapters.MentionsAdapter.StickerResult
+            if (r1 == 0) goto L_0x0019
+            r1 = r7
+            org.telegram.ui.Adapters.MentionsAdapter$StickerResult r1 = (org.telegram.ui.Adapters.MentionsAdapter.StickerResult) r1
+            org.telegram.tgnet.TLRPC$Document r1 = r1.sticker
+            r2 = r8
+            org.telegram.ui.Adapters.MentionsAdapter$StickerResult r2 = (org.telegram.ui.Adapters.MentionsAdapter.StickerResult) r2
+            org.telegram.tgnet.TLRPC$Document r2 = r2.sticker
+            if (r1 != r2) goto L_0x0019
+            return r0
+        L_0x0019:
+            boolean r1 = r7 instanceof org.telegram.tgnet.TLRPC$User
+            if (r1 == 0) goto L_0x0030
+            boolean r1 = r8 instanceof org.telegram.tgnet.TLRPC$User
+            if (r1 == 0) goto L_0x0030
+            r1 = r7
+            org.telegram.tgnet.TLRPC$User r1 = (org.telegram.tgnet.TLRPC$User) r1
+            long r1 = r1.id
+            r3 = r8
+            org.telegram.tgnet.TLRPC$User r3 = (org.telegram.tgnet.TLRPC$User) r3
+            long r3 = r3.id
+            int r5 = (r1 > r3 ? 1 : (r1 == r3 ? 0 : -1))
+            if (r5 != 0) goto L_0x0030
+            return r0
+        L_0x0030:
+            boolean r1 = r7 instanceof org.telegram.tgnet.TLRPC$Chat
+            if (r1 == 0) goto L_0x0047
+            boolean r1 = r8 instanceof org.telegram.tgnet.TLRPC$Chat
+            if (r1 == 0) goto L_0x0047
+            r1 = r7
+            org.telegram.tgnet.TLRPC$Chat r1 = (org.telegram.tgnet.TLRPC$Chat) r1
+            long r1 = r1.id
+            r3 = r8
+            org.telegram.tgnet.TLRPC$Chat r3 = (org.telegram.tgnet.TLRPC$Chat) r3
+            long r3 = r3.id
+            int r5 = (r1 > r3 ? 1 : (r1 == r3 ? 0 : -1))
+            if (r5 != 0) goto L_0x0047
+            return r0
+        L_0x0047:
+            boolean r1 = r7 instanceof java.lang.String
+            if (r1 == 0) goto L_0x0056
+            boolean r1 = r8 instanceof java.lang.String
+            if (r1 == 0) goto L_0x0056
+            boolean r1 = r7.equals(r8)
+            if (r1 == 0) goto L_0x0056
+            return r0
+        L_0x0056:
+            boolean r1 = r7 instanceof org.telegram.messenger.MediaDataController.KeywordResult
+            if (r1 == 0) goto L_0x007b
+            boolean r1 = r8 instanceof org.telegram.messenger.MediaDataController.KeywordResult
+            if (r1 == 0) goto L_0x007b
+            org.telegram.messenger.MediaDataController$KeywordResult r7 = (org.telegram.messenger.MediaDataController.KeywordResult) r7
+            java.lang.String r1 = r7.keyword
+            if (r1 == 0) goto L_0x007b
+            org.telegram.messenger.MediaDataController$KeywordResult r8 = (org.telegram.messenger.MediaDataController.KeywordResult) r8
+            java.lang.String r2 = r8.keyword
+            boolean r1 = r1.equals(r2)
+            if (r1 == 0) goto L_0x007b
+            java.lang.String r7 = r7.emoji
+            if (r7 == 0) goto L_0x007b
+            java.lang.String r8 = r8.emoji
+            boolean r7 = r7.equals(r8)
+            if (r7 == 0) goto L_0x007b
+            return r0
+        L_0x007b:
+            r7 = 0
+            return r7
+        */
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Adapters.MentionsAdapter.itemsEqual(java.lang.Object, java.lang.Object):boolean");
     }
 
     private void clearStickers() {
@@ -555,9 +696,6 @@ public class MentionsAdapter extends RecyclerListView.SelectionAdapter implement
         String str5;
         TLRPC$User tLRPC$User = this.foundContextBot;
         if (tLRPC$User == null || (str4 = tLRPC$User.username) == null || !str4.equals(str) || (str5 = this.searchingContextQuery) == null || !str5.equals(str2)) {
-            this.searchResultBotContext = null;
-            this.searchResultBotContextSwitch = null;
-            notifyDataSetChanged();
             if (this.foundContextBot != null) {
                 if (this.inlineMediaEnabled || str == null || str2 == null) {
                     this.delegate.needChangePanelVisibility(false);
@@ -661,6 +799,7 @@ public class MentionsAdapter extends RecyclerListView.SelectionAdapter implement
                             }
                         }
                         MentionsAdapter.this.processFoundUser(tLRPC$User);
+                        int unused = MentionsAdapter.this.contextUsernameReqid = 0;
                     }
                 }
             };
@@ -863,8 +1002,8 @@ public class MentionsAdapter extends RecyclerListView.SelectionAdapter implement
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r12v21, resolved type: org.telegram.tgnet.TLRPC$Chat} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r12v40, resolved type: org.telegram.tgnet.TLRPC$Chat} */
     /* JADX WARNING: Multi-variable type inference failed */
-    /* JADX WARNING: Removed duplicated region for block: B:226:0x03dc  */
-    /* JADX WARNING: Removed duplicated region for block: B:228:0x03e2  */
+    /* JADX WARNING: Removed duplicated region for block: B:226:0x03d6  */
+    /* JADX WARNING: Removed duplicated region for block: B:228:0x03dc  */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public void searchUsernameOrHashtag(java.lang.String r21, int r22, java.util.ArrayList<org.telegram.messenger.MessageObject> r23, boolean r24, boolean r25) {
         /*
@@ -897,13 +1036,13 @@ public class MentionsAdapter extends RecyclerListView.SelectionAdapter implement
             r8.searchGlobalRunnable = r6
         L_0x0032:
             boolean r5 = android.text.TextUtils.isEmpty(r21)
-            if (r5 != 0) goto L_0x0722
+            if (r5 != 0) goto L_0x071e
             int r5 = r21.length()
             int r10 = r8.currentAccount
             org.telegram.messenger.MessagesController r10 = org.telegram.messenger.MessagesController.getInstance(r10)
             int r10 = r10.maxMessageLength
             if (r5 <= r10) goto L_0x0048
-            goto L_0x0722
+            goto L_0x071e
         L_0x0048:
             int r5 = r21.length()
             if (r5 <= 0) goto L_0x0051
@@ -1281,14 +1420,14 @@ public class MentionsAdapter extends RecyclerListView.SelectionAdapter implement
             r6 = 0
         L_0x02f7:
             r11 = 0
-            goto L_0x03da
+            goto L_0x03d4
         L_0x02fa:
-            if (r5 < 0) goto L_0x03d7
+            if (r5 < 0) goto L_0x03d1
             int r9 = r21.length()
             if (r5 < r9) goto L_0x0307
             r11 = 0
             r12 = 64
-            goto L_0x03d3
+            goto L_0x03cd
         L_0x0307:
             char r9 = r0.charAt(r5)
             r11 = 58
@@ -1305,7 +1444,7 @@ public class MentionsAdapter extends RecyclerListView.SelectionAdapter implement
         L_0x0324:
             r11 = 0
             r12 = 64
-            goto L_0x03d0
+            goto L_0x03ca
         L_0x0329:
             r12 = 64
             if (r9 != r12) goto L_0x035a
@@ -1317,7 +1456,7 @@ public class MentionsAdapter extends RecyclerListView.SelectionAdapter implement
             goto L_0x033b
         L_0x0338:
             r11 = 0
-            goto L_0x03d0
+            goto L_0x03ca
         L_0x033b:
             org.telegram.tgnet.TLRPC$ChatFull r6 = r8.info
             if (r6 != 0) goto L_0x034e
@@ -1340,7 +1479,7 @@ public class MentionsAdapter extends RecyclerListView.SelectionAdapter implement
         L_0x035a:
             r13 = 1
             r14 = 35
-            if (r9 != r14) goto L_0x0386
+            if (r9 != r14) goto L_0x0380
             org.telegram.ui.Adapters.SearchAdapterHelper r6 = r8.searchAdapterHelper
             boolean r6 = r6.loadRecentHashtags()
             if (r6 == 0) goto L_0x0379
@@ -1348,26 +1487,23 @@ public class MentionsAdapter extends RecyclerListView.SelectionAdapter implement
             int r0 = r10.length()
             int r0 = r0 + r13
             r8.resultLength = r0
-            r5 = 0
-            r10.insert(r5, r9)
+            r0 = 0
+            r10.insert(r0, r9)
             r0 = -1
             r5 = -1
             r6 = 1
             goto L_0x02f7
         L_0x0379:
-            r5 = 0
             r8.lastText = r0
             r8.lastPosition = r1
             r8.messages = r2
-            org.telegram.ui.Adapters.MentionsAdapter$MentionsAdapterDelegate r0 = r8.delegate
-            r0.needChangePanelVisibility(r5)
             return
-        L_0x0386:
-            if (r5 != 0) goto L_0x039f
+        L_0x0380:
+            if (r5 != 0) goto L_0x0399
             androidx.collection.LongSparseArray<org.telegram.tgnet.TLRPC$BotInfo> r13 = r8.botInfo
-            if (r13 == 0) goto L_0x039f
+            if (r13 == 0) goto L_0x0399
             r13 = 47
-            if (r9 != r13) goto L_0x039f
+            if (r9 != r13) goto L_0x0399
             r8.resultStartPosition = r5
             int r0 = r10.length()
             r1 = 1
@@ -1377,7 +1513,7 @@ public class MentionsAdapter extends RecyclerListView.SelectionAdapter implement
             r5 = -1
             r6 = 2
             goto L_0x02f7
-        L_0x039f:
+        L_0x0399:
             if (r9 != r11) goto L_0x0338
             int r11 = r10.length()
             if (r11 <= 0) goto L_0x0338
@@ -1385,20 +1521,20 @@ public class MentionsAdapter extends RecyclerListView.SelectionAdapter implement
             char r13 = r10.charAt(r11)
             java.lang.String r11 = " !\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~\n"
             int r11 = r11.indexOf(r13)
-            if (r11 < 0) goto L_0x03b6
+            if (r11 < 0) goto L_0x03b0
             r11 = 1
-            goto L_0x03b7
-        L_0x03b6:
+            goto L_0x03b1
+        L_0x03b0:
             r11 = 0
-        L_0x03b7:
-            if (r11 == 0) goto L_0x03c1
+        L_0x03b1:
+            if (r11 == 0) goto L_0x03bb
             int r11 = r10.length()
             r13 = 1
             if (r11 <= r13) goto L_0x0338
-            goto L_0x03c2
-        L_0x03c1:
+            goto L_0x03bc
+        L_0x03bb:
             r13 = 1
-        L_0x03c2:
+        L_0x03bc:
             r8.resultStartPosition = r5
             int r0 = r10.length()
             int r0 = r0 + r13
@@ -1407,55 +1543,55 @@ public class MentionsAdapter extends RecyclerListView.SelectionAdapter implement
             r5 = -1
             r6 = 3
             goto L_0x02f7
-        L_0x03d0:
+        L_0x03ca:
             r10.insert(r11, r9)
-        L_0x03d3:
+        L_0x03cd:
             int r5 = r5 + -1
             goto L_0x02fa
-        L_0x03d7:
+        L_0x03d1:
             r11 = 0
             r0 = -1
             r5 = -1
-        L_0x03da:
-            if (r6 != r0) goto L_0x03e2
+        L_0x03d4:
+            if (r6 != r0) goto L_0x03dc
             org.telegram.ui.Adapters.MentionsAdapter$MentionsAdapterDelegate r0 = r8.delegate
             r0.needChangePanelVisibility(r11)
             return
-        L_0x03e2:
-            if (r6 != 0) goto L_0x05f1
+        L_0x03dc:
+            if (r6 != 0) goto L_0x05eb
             java.util.ArrayList r0 = new java.util.ArrayList
             r0.<init>()
             r1 = 0
-        L_0x03ea:
+        L_0x03e4:
             r6 = 100
             int r9 = r23.size()
             int r6 = java.lang.Math.min(r6, r9)
-            if (r1 >= r6) goto L_0x041a
+            if (r1 >= r6) goto L_0x0414
             java.lang.Object r6 = r2.get(r1)
             org.telegram.messenger.MessageObject r6 = (org.telegram.messenger.MessageObject) r6
             long r11 = r6.getFromChatId()
             r13 = 0
             int r6 = (r11 > r13 ? 1 : (r11 == r13 ? 0 : -1))
-            if (r6 <= 0) goto L_0x0417
+            if (r6 <= 0) goto L_0x0411
             java.lang.Long r6 = java.lang.Long.valueOf(r11)
             boolean r6 = r0.contains(r6)
-            if (r6 != 0) goto L_0x0417
+            if (r6 != 0) goto L_0x0411
             java.lang.Long r6 = java.lang.Long.valueOf(r11)
             r0.add(r6)
-        L_0x0417:
+        L_0x0411:
             int r1 = r1 + 1
-            goto L_0x03ea
-        L_0x041a:
+            goto L_0x03e4
+        L_0x0414:
             java.lang.String r1 = r10.toString()
             java.lang.String r6 = r1.toLowerCase()
             r1 = 32
             int r1 = r6.indexOf(r1)
-            if (r1 < 0) goto L_0x042c
+            if (r1 < 0) goto L_0x0426
             r1 = 1
-            goto L_0x042d
-        L_0x042c:
+            goto L_0x0427
+        L_0x0426:
             r1 = 0
-        L_0x042d:
+        L_0x0427:
             java.util.ArrayList r9 = new java.util.ArrayList
             r9.<init>()
             androidx.collection.LongSparseArray r2 = new androidx.collection.LongSparseArray
@@ -1465,98 +1601,98 @@ public class MentionsAdapter extends RecyclerListView.SelectionAdapter implement
             int r11 = r8.currentAccount
             org.telegram.messenger.MediaDataController r11 = org.telegram.messenger.MediaDataController.getInstance(r11)
             java.util.ArrayList<org.telegram.tgnet.TLRPC$TL_topPeer> r11 = r11.inlineBots
-            if (r3 != 0) goto L_0x049f
+            if (r3 != 0) goto L_0x0499
             boolean r12 = r8.needBotContext
-            if (r12 == 0) goto L_0x049f
-            if (r5 != 0) goto L_0x049f
+            if (r12 == 0) goto L_0x0499
+            if (r5 != 0) goto L_0x0499
             boolean r5 = r11.isEmpty()
-            if (r5 != 0) goto L_0x049f
+            if (r5 != 0) goto L_0x0499
             r5 = 0
             r12 = 0
-        L_0x0454:
+        L_0x044e:
             int r13 = r11.size()
-            if (r5 >= r13) goto L_0x049f
+            if (r5 >= r13) goto L_0x0499
             java.lang.Object r13 = r11.get(r5)
             org.telegram.tgnet.TLRPC$TL_topPeer r13 = (org.telegram.tgnet.TLRPC$TL_topPeer) r13
             org.telegram.tgnet.TLRPC$Peer r13 = r13.peer
             long r13 = r13.user_id
             java.lang.Long r13 = java.lang.Long.valueOf(r13)
             org.telegram.tgnet.TLRPC$User r13 = r7.getUser(r13)
-            if (r13 != 0) goto L_0x046f
-            goto L_0x049c
-        L_0x046f:
+            if (r13 != 0) goto L_0x0469
+            goto L_0x0496
+        L_0x0469:
             java.lang.String r14 = r13.username
             boolean r14 = android.text.TextUtils.isEmpty(r14)
-            if (r14 != 0) goto L_0x0498
+            if (r14 != 0) goto L_0x0492
             int r14 = r6.length()
-            if (r14 == 0) goto L_0x0489
+            if (r14 == 0) goto L_0x0483
             java.lang.String r14 = r13.username
             java.lang.String r14 = r14.toLowerCase()
             boolean r14 = r14.startsWith(r6)
-            if (r14 == 0) goto L_0x0498
-        L_0x0489:
+            if (r14 == 0) goto L_0x0492
+        L_0x0483:
             r9.add(r13)
             long r14 = r13.id
             r2.put(r14, r13)
             long r14 = r13.id
             r10.put(r14, r13)
             int r12 = r12 + 1
-        L_0x0498:
+        L_0x0492:
             r13 = 5
-            if (r12 != r13) goto L_0x049c
-            goto L_0x049f
-        L_0x049c:
+            if (r12 != r13) goto L_0x0496
+            goto L_0x0499
+        L_0x0496:
             int r5 = r5 + 1
-            goto L_0x0454
-        L_0x049f:
+            goto L_0x044e
+        L_0x0499:
             org.telegram.ui.ChatActivity r5 = r8.parentFragment
-            if (r5 == 0) goto L_0x04ae
+            if (r5 == 0) goto L_0x04a8
             org.telegram.tgnet.TLRPC$Chat r5 = r5.getCurrentChat()
             org.telegram.ui.ChatActivity r11 = r8.parentFragment
             int r11 = r11.getThreadId()
-            goto L_0x04bf
-        L_0x04ae:
+            goto L_0x04b9
+        L_0x04a8:
             org.telegram.tgnet.TLRPC$ChatFull r5 = r8.info
-            if (r5 == 0) goto L_0x04bd
+            if (r5 == 0) goto L_0x04b7
             long r11 = r5.id
             java.lang.Long r5 = java.lang.Long.valueOf(r11)
             org.telegram.tgnet.TLRPC$Chat r5 = r7.getChat(r5)
-            goto L_0x04be
-        L_0x04bd:
+            goto L_0x04b8
+        L_0x04b7:
             r5 = 0
-        L_0x04be:
+        L_0x04b8:
             r11 = 0
-        L_0x04bf:
-            if (r5 == 0) goto L_0x059c
+        L_0x04b9:
+            if (r5 == 0) goto L_0x0596
             org.telegram.tgnet.TLRPC$ChatFull r12 = r8.info
-            if (r12 == 0) goto L_0x059c
+            if (r12 == 0) goto L_0x0596
             org.telegram.tgnet.TLRPC$ChatParticipants r12 = r12.participants
-            if (r12 == 0) goto L_0x059c
+            if (r12 == 0) goto L_0x0596
             boolean r12 = org.telegram.messenger.ChatObject.isChannel(r5)
-            if (r12 == 0) goto L_0x04d3
+            if (r12 == 0) goto L_0x04cd
             boolean r12 = r5.megagroup
-            if (r12 == 0) goto L_0x059c
-        L_0x04d3:
-            if (r4 == 0) goto L_0x04d8
+            if (r12 == 0) goto L_0x0596
+        L_0x04cd:
+            if (r4 == 0) goto L_0x04d2
             r16 = -1
-            goto L_0x04da
-        L_0x04d8:
+            goto L_0x04d4
+        L_0x04d2:
             r16 = 0
-        L_0x04da:
+        L_0x04d4:
             r4 = r16
-        L_0x04dc:
+        L_0x04d6:
             org.telegram.tgnet.TLRPC$ChatFull r12 = r8.info
             org.telegram.tgnet.TLRPC$ChatParticipants r12 = r12.participants
             java.util.ArrayList<org.telegram.tgnet.TLRPC$ChatParticipant> r12 = r12.participants
             int r12 = r12.size()
-            if (r4 >= r12) goto L_0x059c
+            if (r4 >= r12) goto L_0x0596
             r12 = -1
-            if (r4 != r12) goto L_0x0505
+            if (r4 != r12) goto L_0x04ff
             int r13 = r6.length()
-            if (r13 != 0) goto L_0x04f6
+            if (r13 != 0) goto L_0x04f0
             r9.add(r5)
-            goto L_0x0592
-        L_0x04f6:
+            goto L_0x058c
+        L_0x04f0:
             java.lang.String r13 = r5.title
             java.lang.String r14 = r5.username
             r15 = r13
@@ -1567,8 +1703,8 @@ public class MentionsAdapter extends RecyclerListView.SelectionAdapter implement
             r13 = r15
             r15 = 0
             r12 = r5
-            goto L_0x054b
-        L_0x0505:
+            goto L_0x0545
+        L_0x04ff:
             org.telegram.tgnet.TLRPC$ChatFull r12 = r8.info
             org.telegram.tgnet.TLRPC$ChatParticipants r12 = r12.participants
             java.util.ArrayList<org.telegram.tgnet.TLRPC$ChatParticipant> r12 = r12.participants
@@ -1577,23 +1713,23 @@ public class MentionsAdapter extends RecyclerListView.SelectionAdapter implement
             long r12 = r12.user_id
             java.lang.Long r12 = java.lang.Long.valueOf(r12)
             org.telegram.tgnet.TLRPC$User r12 = r7.getUser(r12)
-            if (r12 == 0) goto L_0x0592
-            if (r3 != 0) goto L_0x0525
+            if (r12 == 0) goto L_0x058c
+            if (r3 != 0) goto L_0x051f
             boolean r13 = org.telegram.messenger.UserObject.isUserSelf(r12)
-            if (r13 != 0) goto L_0x0592
-        L_0x0525:
+            if (r13 != 0) goto L_0x058c
+        L_0x051f:
             long r13 = r12.id
             int r13 = r2.indexOfKey(r13)
-            if (r13 < 0) goto L_0x052e
-            goto L_0x0592
-        L_0x052e:
+            if (r13 < 0) goto L_0x0528
+            goto L_0x058c
+        L_0x0528:
             int r13 = r6.length()
-            if (r13 != 0) goto L_0x053c
+            if (r13 != 0) goto L_0x0536
             boolean r13 = r12.deleted
-            if (r13 != 0) goto L_0x053c
+            if (r13 != 0) goto L_0x0536
             r9.add(r12)
-            goto L_0x0592
-        L_0x053c:
+            goto L_0x058c
+        L_0x0536:
             java.lang.String r13 = r12.first_name
             java.lang.String r14 = r12.last_name
             java.lang.String r15 = r12.username
@@ -1602,42 +1738,42 @@ public class MentionsAdapter extends RecyclerListView.SelectionAdapter implement
             r19 = r15
             r15 = r14
             r14 = r19
-        L_0x054b:
+        L_0x0545:
             boolean r16 = android.text.TextUtils.isEmpty(r14)
-            if (r16 != 0) goto L_0x055b
+            if (r16 != 0) goto L_0x0555
             java.lang.String r14 = r14.toLowerCase()
             boolean r14 = r14.startsWith(r6)
-            if (r14 != 0) goto L_0x058b
-        L_0x055b:
+            if (r14 != 0) goto L_0x0585
+        L_0x0555:
             boolean r14 = android.text.TextUtils.isEmpty(r13)
-            if (r14 != 0) goto L_0x056b
+            if (r14 != 0) goto L_0x0565
             java.lang.String r14 = r13.toLowerCase()
             boolean r14 = r14.startsWith(r6)
-            if (r14 != 0) goto L_0x058b
-        L_0x056b:
+            if (r14 != 0) goto L_0x0585
+        L_0x0565:
             boolean r14 = android.text.TextUtils.isEmpty(r15)
-            if (r14 != 0) goto L_0x057b
+            if (r14 != 0) goto L_0x0575
             java.lang.String r14 = r15.toLowerCase()
             boolean r14 = r14.startsWith(r6)
-            if (r14 != 0) goto L_0x058b
-        L_0x057b:
-            if (r1 == 0) goto L_0x0594
+            if (r14 != 0) goto L_0x0585
+        L_0x0575:
+            if (r1 == 0) goto L_0x058e
             java.lang.String r13 = org.telegram.messenger.ContactsController.formatName(r13, r15)
             java.lang.String r13 = r13.toLowerCase()
             boolean r13 = r13.startsWith(r6)
-            if (r13 == 0) goto L_0x0594
-        L_0x058b:
+            if (r13 == 0) goto L_0x058e
+        L_0x0585:
             r9.add(r12)
             r10.put(r2, r12)
-            goto L_0x0594
-        L_0x0592:
+            goto L_0x058e
+        L_0x058c:
             r21 = r2
-        L_0x0594:
+        L_0x058e:
             int r4 = r4 + 1
             r2 = r21
             r3 = r24
-            goto L_0x04dc
-        L_0x059c:
+            goto L_0x04d6
+        L_0x0596:
             org.telegram.ui.Adapters.MentionsAdapter$6 r1 = new org.telegram.ui.Adapters.MentionsAdapter$6
             r1.<init>(r8, r10, r0)
             java.util.Collections.sort(r9, r1)
@@ -1648,24 +1784,24 @@ public class MentionsAdapter extends RecyclerListView.SelectionAdapter implement
             r8.searchResultCommandsHelp = r0
             r8.searchResultCommandsUsers = r0
             r8.searchResultSuggestions = r0
-            if (r5 == 0) goto L_0x05eb
+            if (r5 == 0) goto L_0x05e5
             boolean r0 = r5.megagroup
-            if (r0 == 0) goto L_0x05eb
+            if (r0 == 0) goto L_0x05e5
             int r0 = r6.length()
-            if (r0 <= 0) goto L_0x05eb
+            if (r0 <= 0) goto L_0x05e5
             int r0 = r9.size()
             r1 = 5
-            if (r0 >= r1) goto L_0x05d1
+            if (r0 >= r1) goto L_0x05cb
             org.telegram.ui.Adapters.MentionsAdapter$$ExternalSyntheticLambda5 r0 = new org.telegram.ui.Adapters.MentionsAdapter$$ExternalSyntheticLambda5
             r0.<init>(r8, r9, r10)
             r8.cancelDelayRunnable = r0
             r1 = 1000(0x3e8, double:4.94E-321)
             org.telegram.messenger.AndroidUtilities.runOnUIThread(r0, r1)
-            goto L_0x05d5
-        L_0x05d1:
+            goto L_0x05cf
+        L_0x05cb:
             r0 = 1
             r8.showUsersResult(r9, r10, r0)
-        L_0x05d5:
+        L_0x05cf:
             org.telegram.ui.Adapters.MentionsAdapter$7 r12 = new org.telegram.ui.Adapters.MentionsAdapter$7
             r0 = r12
             r1 = r20
@@ -1678,14 +1814,14 @@ public class MentionsAdapter extends RecyclerListView.SelectionAdapter implement
             r8.searchGlobalRunnable = r12
             r0 = 200(0xc8, double:9.9E-322)
             org.telegram.messenger.AndroidUtilities.runOnUIThread(r12, r0)
-            goto L_0x0721
-        L_0x05eb:
+            goto L_0x071d
+        L_0x05e5:
             r0 = 1
             r8.showUsersResult(r9, r10, r0)
-            goto L_0x0721
-        L_0x05f1:
+            goto L_0x071d
+        L_0x05eb:
             r0 = 1
-            if (r6 != r0) goto L_0x0649
+            if (r6 != r0) goto L_0x0645
             java.util.ArrayList r0 = new java.util.ArrayList
             r0.<init>()
             java.lang.String r1 = r10.toString()
@@ -1693,41 +1829,42 @@ public class MentionsAdapter extends RecyclerListView.SelectionAdapter implement
             org.telegram.ui.Adapters.SearchAdapterHelper r2 = r8.searchAdapterHelper
             java.util.ArrayList r2 = r2.getHashtags()
             r7 = 0
-        L_0x0608:
+        L_0x0602:
             int r3 = r2.size()
-            if (r7 >= r3) goto L_0x0628
+            if (r7 >= r3) goto L_0x0622
             java.lang.Object r3 = r2.get(r7)
             org.telegram.ui.Adapters.SearchAdapterHelper$HashtagObject r3 = (org.telegram.ui.Adapters.SearchAdapterHelper.HashtagObject) r3
-            if (r3 == 0) goto L_0x0625
+            if (r3 == 0) goto L_0x061f
             java.lang.String r4 = r3.hashtag
-            if (r4 == 0) goto L_0x0625
+            if (r4 == 0) goto L_0x061f
             boolean r4 = r4.startsWith(r1)
-            if (r4 == 0) goto L_0x0625
+            if (r4 == 0) goto L_0x061f
             java.lang.String r3 = r3.hashtag
             r0.add(r3)
-        L_0x0625:
+        L_0x061f:
             int r7 = r7 + 1
-            goto L_0x0608
-        L_0x0628:
+            goto L_0x0602
+        L_0x0622:
             r8.searchResultHashtags = r0
-            r1 = 0
-            r8.stickers = r1
-            r8.searchResultUsernames = r1
-            r8.searchResultUsernamesMap = r1
-            r8.searchResultCommands = r1
-            r8.searchResultCommandsHelp = r1
-            r8.searchResultCommandsUsers = r1
-            r8.searchResultSuggestions = r1
+            r0 = 0
+            r8.stickers = r0
+            r8.searchResultUsernames = r0
+            r8.searchResultUsernamesMap = r0
+            r8.searchResultCommands = r0
+            r8.searchResultCommandsHelp = r0
+            r8.searchResultCommandsUsers = r0
+            r8.searchResultSuggestions = r0
             r20.notifyDataSetChanged()
-            org.telegram.ui.Adapters.MentionsAdapter$MentionsAdapterDelegate r1 = r8.delegate
-            boolean r0 = r0.isEmpty()
+            org.telegram.ui.Adapters.MentionsAdapter$MentionsAdapterDelegate r0 = r8.delegate
+            java.util.ArrayList<java.lang.String> r1 = r8.searchResultHashtags
+            boolean r1 = r1.isEmpty()
             r2 = 1
-            r0 = r0 ^ r2
-            r1.needChangePanelVisibility(r0)
-            goto L_0x0721
-        L_0x0649:
+            r1 = r1 ^ r2
+            r0.needChangePanelVisibility(r1)
+            goto L_0x071d
+        L_0x0645:
             r0 = 2
-            if (r6 != r0) goto L_0x06df
+            if (r6 != r0) goto L_0x06db
             java.util.ArrayList r0 = new java.util.ArrayList
             r0.<init>()
             java.util.ArrayList r1 = new java.util.ArrayList
@@ -1737,26 +1874,26 @@ public class MentionsAdapter extends RecyclerListView.SelectionAdapter implement
             java.lang.String r3 = r10.toString()
             java.lang.String r3 = r3.toLowerCase()
             r4 = 0
-        L_0x0664:
+        L_0x0660:
             androidx.collection.LongSparseArray<org.telegram.tgnet.TLRPC$BotInfo> r5 = r8.botInfo
             int r5 = r5.size()
-            if (r4 >= r5) goto L_0x06bf
+            if (r4 >= r5) goto L_0x06bb
             androidx.collection.LongSparseArray<org.telegram.tgnet.TLRPC$BotInfo> r5 = r8.botInfo
             java.lang.Object r5 = r5.valueAt(r4)
             org.telegram.tgnet.TLRPC$BotInfo r5 = (org.telegram.tgnet.TLRPC$BotInfo) r5
             r6 = 0
-        L_0x0675:
+        L_0x0671:
             java.util.ArrayList<org.telegram.tgnet.TLRPC$TL_botCommand> r9 = r5.commands
             int r9 = r9.size()
-            if (r6 >= r9) goto L_0x06bc
+            if (r6 >= r9) goto L_0x06b8
             java.util.ArrayList<org.telegram.tgnet.TLRPC$TL_botCommand> r9 = r5.commands
             java.lang.Object r9 = r9.get(r6)
             org.telegram.tgnet.TLRPC$TL_botCommand r9 = (org.telegram.tgnet.TLRPC$TL_botCommand) r9
-            if (r9 == 0) goto L_0x06b9
+            if (r9 == 0) goto L_0x06b5
             java.lang.String r10 = r9.command
-            if (r10 == 0) goto L_0x06b9
+            if (r10 == 0) goto L_0x06b5
             boolean r10 = r10.startsWith(r3)
-            if (r10 == 0) goto L_0x06b9
+            if (r10 == 0) goto L_0x06b5
             java.lang.StringBuilder r10 = new java.lang.StringBuilder
             r10.<init>()
             java.lang.String r11 = "/"
@@ -1771,13 +1908,13 @@ public class MentionsAdapter extends RecyclerListView.SelectionAdapter implement
             java.lang.Long r9 = java.lang.Long.valueOf(r9)
             org.telegram.tgnet.TLRPC$User r9 = r7.getUser(r9)
             r2.add(r9)
-        L_0x06b9:
+        L_0x06b5:
             int r6 = r6 + 1
-            goto L_0x0675
-        L_0x06bc:
+            goto L_0x0671
+        L_0x06b8:
             int r4 = r4 + 1
-            goto L_0x0664
-        L_0x06bf:
+            goto L_0x0660
+        L_0x06bb:
             r4 = 0
             r8.searchResultHashtags = r4
             r8.stickers = r4
@@ -1793,18 +1930,18 @@ public class MentionsAdapter extends RecyclerListView.SelectionAdapter implement
             r2 = 1
             r0 = r0 ^ r2
             r1.needChangePanelVisibility(r0)
-            goto L_0x0721
-        L_0x06df:
+            goto L_0x071d
+        L_0x06db:
             r0 = 3
-            if (r6 != r0) goto L_0x070f
+            if (r6 != r0) goto L_0x070b
             java.lang.String[] r0 = org.telegram.messenger.AndroidUtilities.getCurrentKeyboardLanguage()
             java.lang.String[] r1 = r8.lastSearchKeyboardLanguage
             boolean r1 = java.util.Arrays.equals(r0, r1)
-            if (r1 != 0) goto L_0x06f7
+            if (r1 != 0) goto L_0x06f3
             int r1 = r8.currentAccount
             org.telegram.messenger.MediaDataController r1 = org.telegram.messenger.MediaDataController.getInstance(r1)
             r1.fetchNewEmojiKeywords(r0)
-        L_0x06f7:
+        L_0x06f3:
             r8.lastSearchKeyboardLanguage = r0
             int r0 = r8.currentAccount
             org.telegram.messenger.MediaDataController r0 = org.telegram.messenger.MediaDataController.getInstance(r0)
@@ -1814,10 +1951,10 @@ public class MentionsAdapter extends RecyclerListView.SelectionAdapter implement
             r3.<init>(r8)
             r4 = 0
             r0.getEmojiSuggestions(r1, r2, r4, r3)
-            goto L_0x0721
-        L_0x070f:
+            goto L_0x071d
+        L_0x070b:
             r0 = 4
-            if (r6 != r0) goto L_0x0721
+            if (r6 != r0) goto L_0x071d
             r0 = 0
             r8.searchResultHashtags = r0
             r8.searchResultUsernames = r0
@@ -1826,9 +1963,9 @@ public class MentionsAdapter extends RecyclerListView.SelectionAdapter implement
             r8.searchResultCommands = r0
             r8.searchResultCommandsHelp = r0
             r8.searchResultCommandsUsers = r0
-        L_0x0721:
+        L_0x071d:
             return
-        L_0x0722:
+        L_0x071e:
             r0 = r6
             r8.searchForContextBot(r0, r0)
             org.telegram.ui.Adapters.MentionsAdapter$MentionsAdapterDelegate r1 = r8.delegate
@@ -1863,6 +2000,19 @@ public class MentionsAdapter extends RecyclerListView.SelectionAdapter implement
         mentionsAdapterDelegate.needChangePanelVisibility(arrayList2 != null && !arrayList2.isEmpty());
     }
 
+    public void setIsReversed(boolean z) {
+        if (this.isReversed != z) {
+            this.isReversed = z;
+            int lastItemCount2 = getLastItemCount();
+            if (lastItemCount2 > 0) {
+                notifyItemChanged(0);
+            }
+            if (lastItemCount2 > 1) {
+                notifyItemChanged(lastItemCount2 - 1);
+            }
+        }
+    }
+
     /* access modifiers changed from: private */
     public void showUsersResult(ArrayList<TLObject> arrayList, LongSparseArray<TLObject> longSparseArray, boolean z) {
         this.searchResultUsernames = arrayList;
@@ -1872,6 +2022,8 @@ public class MentionsAdapter extends RecyclerListView.SelectionAdapter implement
             AndroidUtilities.cancelRunOnUIThread(runnable);
             this.cancelDelayRunnable = null;
         }
+        this.searchResultBotContext = null;
+        this.stickers = null;
         if (z) {
             notifyDataSetChanged();
             this.delegate.needChangePanelVisibility(!this.searchResultUsernames.isEmpty());
@@ -1891,6 +2043,16 @@ public class MentionsAdapter extends RecyclerListView.SelectionAdapter implement
     }
 
     public int getItemCount() {
+        int itemCountInternal = getItemCountInternal();
+        this.lastItemCount = itemCountInternal;
+        return itemCountInternal;
+    }
+
+    public int getLastItemCount() {
+        return this.lastItemCount;
+    }
+
+    public int getItemCountInternal() {
         int i = 1;
         if (this.foundContextBot != null && !this.inlineMediaEnabled) {
             return 1;
@@ -2071,7 +2233,7 @@ public class MentionsAdapter extends RecyclerListView.SelectionAdapter implement
             org.telegram.ui.Cells.StickerCell r5 = new org.telegram.ui.Cells.StickerCell
             android.content.Context r6 = r4.mContext
             r5.<init>(r6)
-            goto L_0x0063
+            goto L_0x0065
         L_0x0013:
             android.widget.TextView r6 = new android.widget.TextView
             android.content.Context r0 = r4.mContext
@@ -2088,12 +2250,12 @@ public class MentionsAdapter extends RecyclerListView.SelectionAdapter implement
             int r5 = r4.getThemedColor(r5)
             r6.setTextColor(r5)
             r5 = r6
-            goto L_0x0063
+            goto L_0x0065
         L_0x003f:
             org.telegram.ui.Cells.BotSwitchCell r5 = new org.telegram.ui.Cells.BotSwitchCell
             android.content.Context r6 = r4.mContext
             r5.<init>(r6)
-            goto L_0x0063
+            goto L_0x0065
         L_0x0047:
             org.telegram.ui.Cells.ContextLinkCell r5 = new org.telegram.ui.Cells.ContextLinkCell
             android.content.Context r6 = r4.mContext
@@ -2101,14 +2263,15 @@ public class MentionsAdapter extends RecyclerListView.SelectionAdapter implement
             org.telegram.ui.Adapters.MentionsAdapter$$ExternalSyntheticLambda9 r6 = new org.telegram.ui.Adapters.MentionsAdapter$$ExternalSyntheticLambda9
             r6.<init>(r4)
             r5.setDelegate(r6)
-            goto L_0x0063
+            goto L_0x0065
         L_0x0057:
             org.telegram.ui.Cells.MentionCell r5 = new org.telegram.ui.Cells.MentionCell
             android.content.Context r6 = r4.mContext
-            r5.<init>(r6)
+            org.telegram.ui.ActionBar.Theme$ResourcesProvider r0 = r4.resourcesProvider
+            r5.<init>(r6, r0)
             boolean r6 = r4.isDarkTheme
             r5.setIsDarkTheme(r6)
-        L_0x0063:
+        L_0x0065:
             org.telegram.ui.Components.RecyclerListView$Holder r6 = new org.telegram.ui.Components.RecyclerListView$Holder
             r6.<init>(r5)
             return r6
@@ -2160,22 +2323,23 @@ public class MentionsAdapter extends RecyclerListView.SelectionAdapter implement
                 ArrayList<String> arrayList2 = this.searchResultHashtags;
                 if (arrayList2 != null) {
                     ((MentionCell) viewHolder.itemView).setText(arrayList2.get(i));
-                    return;
-                }
-                ArrayList<MediaDataController.KeywordResult> arrayList3 = this.searchResultSuggestions;
-                if (arrayList3 != null) {
-                    ((MentionCell) viewHolder.itemView).setEmojiSuggestion(arrayList3.get(i));
-                    return;
-                }
-                ArrayList<String> arrayList4 = this.searchResultCommands;
-                if (arrayList4 != null) {
-                    MentionCell mentionCell = (MentionCell) viewHolder.itemView;
-                    String str = arrayList4.get(i);
-                    String str2 = this.searchResultCommandsHelp.get(i);
-                    ArrayList<TLRPC$User> arrayList5 = this.searchResultCommandsUsers;
-                    mentionCell.setBotCommand(str, str2, arrayList5 != null ? arrayList5.get(i) : null);
+                } else {
+                    ArrayList<MediaDataController.KeywordResult> arrayList3 = this.searchResultSuggestions;
+                    if (arrayList3 != null) {
+                        ((MentionCell) viewHolder.itemView).setEmojiSuggestion(arrayList3.get(i));
+                    } else {
+                        ArrayList<String> arrayList4 = this.searchResultCommands;
+                        if (arrayList4 != null) {
+                            MentionCell mentionCell = (MentionCell) viewHolder.itemView;
+                            String str = arrayList4.get(i);
+                            String str2 = this.searchResultCommandsHelp.get(i);
+                            ArrayList<TLRPC$User> arrayList5 = this.searchResultCommandsUsers;
+                            mentionCell.setBotCommand(str, str2, arrayList5 != null ? arrayList5.get(i) : null);
+                        }
+                    }
                 }
             }
+            ((MentionCell) viewHolder.itemView).setDivider(false);
         }
     }
 

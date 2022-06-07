@@ -41,7 +41,7 @@ public class Texture {
         GLES20.glBindTexture(3553, i2);
         GLES20.glTexParameteri(3553, 10242, 33071);
         GLES20.glTexParameteri(3553, 10243, 33071);
-        GLES20.glTexParameteri(3553, 10240, 9728);
+        GLES20.glTexParameteri(3553, 10240, 9729);
         GLES20.glTexParameteri(3553, 10241, 9729);
         int width = this.bitmap.getWidth();
         int height = this.bitmap.getHeight();
@@ -68,7 +68,7 @@ public class Texture {
         GLES20.glBindTexture(3553, i);
         GLES20.glTexParameteri(3553, 10242, 33071);
         GLES20.glTexParameteri(3553, 10243, 33071);
-        GLES20.glTexParameteri(3553, 10240, 9728);
+        GLES20.glTexParameteri(3553, 10240, 9729);
         GLES20.glTexParameteri(3553, 10241, 9729);
         GLES20.glTexImage2D(3553, 0, 6408, (int) size.width, (int) size.height, 0, 6408, 5121, (Buffer) null);
         return i;

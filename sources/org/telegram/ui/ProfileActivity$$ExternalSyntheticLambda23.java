@@ -17,6 +17,6 @@ public final /* synthetic */ class ProfileActivity$$ExternalSyntheticLambda23 im
     }
 
     public final void run() {
-        this.f$0.lambda$didUploadPhoto$30(this.f$1, this.f$2, this.f$3);
+        this.f$0.lambda$didUploadPhoto$34(this.f$1, this.f$2, this.f$3);
     }
 }

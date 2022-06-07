@@ -1,69 +1,52 @@
 package j$.util.stream;
 
-import j$.util.y;
+import j$.util.CLASSNAMEa;
+import j$.util.function.Consumer;
+import j$.util.function.e;
+import j$.util.function.f;
+import j$.util.t;
+import j$.util.u;
 
-abstract class E4 {
-    final long a;
-    final long b;
-    y c;
-    long d;
-    long e;
+final class E4 extends H4 implements t, f {
+    double e;
 
-    E4(y yVar, long j, long j2, long j3, long j4) {
-        this.c = yVar;
-        this.a = j;
-        this.b = j2;
-        this.d = j3;
-        this.e = j4;
+    E4(t tVar, long j, long j2) {
+        super(tVar, j, j2);
+    }
+
+    E4(t tVar, E4 e4) {
+        super(tVar, e4);
+    }
+
+    public void accept(double d) {
+        this.e = d;
+    }
+
+    public /* synthetic */ boolean b(Consumer consumer) {
+        return CLASSNAMEa.j(this, consumer);
+    }
+
+    public /* synthetic */ void forEachRemaining(Consumer consumer) {
+        CLASSNAMEa.b(this, consumer);
+    }
+
+    public f j(f fVar) {
+        fVar.getClass();
+        return new e(this, fVar);
     }
 
     /* access modifiers changed from: protected */
-    public abstract y a(y yVar, long j, long j2, long j3, long j4);
-
-    public int characteristics() {
-        return this.c.characteristics();
+    public u q(u uVar) {
+        return new E4((t) uVar, this);
     }
 
-    public long estimateSize() {
-        long j = this.a;
-        long j2 = this.e;
-        if (j < j2) {
-            return j2 - Math.max(j, this.d);
-        }
-        return 0;
+    /* access modifiers changed from: protected */
+    public void s(Object obj) {
+        ((f) obj).accept(this.e);
     }
 
-    public y trySplit() {
-        long j = this.a;
-        long j2 = this.e;
-        if (j >= j2 || this.d >= j2) {
-            return null;
-        }
-        while (true) {
-            y trySplit = this.c.trySplit();
-            if (trySplit == null) {
-                return null;
-            }
-            long estimateSize = trySplit.estimateSize() + this.d;
-            long min = Math.min(estimateSize, this.b);
-            long j3 = this.a;
-            if (j3 >= min) {
-                this.d = min;
-            } else {
-                long j4 = this.b;
-                if (min >= j4) {
-                    this.c = trySplit;
-                    this.e = min;
-                } else {
-                    long j5 = this.d;
-                    if (j5 < j3 || estimateSize > j4) {
-                        this.d = min;
-                        return a(trySplit, j3, j4, j5, min);
-                    }
-                    this.d = min;
-                    return trySplit;
-                }
-            }
-        }
+    /* access modifiers changed from: protected */
+    public CLASSNAMEj4 t(int i) {
+        return new CLASSNAMEg4(i);
     }
 }

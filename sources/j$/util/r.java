@@ -3,7 +3,7 @@ package j$.util;
 import j$.util.function.Consumer;
 import j$.util.function.q;
 
-public interface r extends s {
+public interface r extends p {
     void d(q qVar);
 
     void forEachRemaining(Consumer consumer);

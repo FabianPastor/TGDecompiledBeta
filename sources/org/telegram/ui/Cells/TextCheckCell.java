@@ -48,6 +48,7 @@ public class TextCheckCell extends FrameLayout {
     private boolean isMultiline;
     private float lastTouchX;
     private boolean needDivider;
+    private Theme.ResourcesProvider resourcesProvider;
     private TextView textView;
     private TextView valueTextView;
 
@@ -56,28 +57,41 @@ public class TextCheckCell extends FrameLayout {
     }
 
     public TextCheckCell(Context context, int i) {
-        this(context, i, false);
+        this(context, i, false, (Theme.ResourcesProvider) null);
+    }
+
+    public TextCheckCell(Context context, Theme.ResourcesProvider resourcesProvider2) {
+        this(context, 21, false, resourcesProvider2);
     }
 
     public TextCheckCell(Context context, int i, boolean z) {
+        this(context, i, z, (Theme.ResourcesProvider) null);
+    }
+
+    /* JADX INFO: super call moved to the top of the method (can break code semantics) */
+    public TextCheckCell(Context context, int i, boolean z, Theme.ResourcesProvider resourcesProvider2) {
         super(context);
+        Context context2 = context;
+        int i2 = i;
+        Theme.ResourcesProvider resourcesProvider3 = resourcesProvider2;
         this.height = 50;
-        TextView textView2 = new TextView(context);
+        this.resourcesProvider = resourcesProvider3;
+        TextView textView2 = new TextView(context2);
         this.textView = textView2;
-        textView2.setTextColor(Theme.getColor(z ? "dialogTextBlack" : "windowBackgroundWhiteBlackText"));
+        textView2.setTextColor(Theme.getColor(z ? "dialogTextBlack" : "windowBackgroundWhiteBlackText", resourcesProvider3));
         this.textView.setTextSize(1, 16.0f);
         this.textView.setLines(1);
         this.textView.setMaxLines(1);
         this.textView.setSingleLine(true);
-        int i2 = 5;
+        int i3 = 5;
         this.textView.setGravity((LocaleController.isRTL ? 5 : 3) | 16);
         this.textView.setEllipsize(TextUtils.TruncateAt.END);
         TextView textView3 = this.textView;
         boolean z2 = LocaleController.isRTL;
-        addView(textView3, LayoutHelper.createFrame(-1, -1.0f, (z2 ? 5 : 3) | 48, z2 ? 70.0f : (float) i, 0.0f, z2 ? (float) i : 70.0f, 0.0f));
-        TextView textView4 = new TextView(context);
+        addView(textView3, LayoutHelper.createFrame(-1, -1.0f, (z2 ? 5 : 3) | 48, z2 ? 70.0f : (float) i2, 0.0f, z2 ? (float) i2 : 70.0f, 0.0f));
+        TextView textView4 = new TextView(context2);
         this.valueTextView = textView4;
-        textView4.setTextColor(Theme.getColor(z ? "dialogIcon" : "windowBackgroundWhiteGrayText2"));
+        textView4.setTextColor(Theme.getColor(z ? "dialogIcon" : "windowBackgroundWhiteGrayText2", resourcesProvider3));
         this.valueTextView.setTextSize(1, 13.0f);
         this.valueTextView.setGravity(LocaleController.isRTL ? 5 : 3);
         this.valueTextView.setLines(1);
@@ -87,12 +101,17 @@ public class TextCheckCell extends FrameLayout {
         this.valueTextView.setEllipsize(TextUtils.TruncateAt.END);
         TextView textView5 = this.valueTextView;
         boolean z3 = LocaleController.isRTL;
-        addView(textView5, LayoutHelper.createFrame(-2, -2.0f, (z3 ? 5 : 3) | 48, z3 ? 64.0f : (float) i, 36.0f, z3 ? (float) i : 64.0f, 0.0f));
-        Switch switchR = new Switch(context);
+        addView(textView5, LayoutHelper.createFrame(-2, -2.0f, (z3 ? 5 : 3) | 48, z3 ? 64.0f : (float) i2, 36.0f, z3 ? (float) i2 : 64.0f, 0.0f));
+        Switch switchR = new Switch(context2, resourcesProvider3);
         this.checkBox = switchR;
         switchR.setColors("switchTrack", "switchTrackChecked", "windowBackgroundWhite", "windowBackgroundWhite");
-        addView(this.checkBox, LayoutHelper.createFrame(37, 20.0f, (LocaleController.isRTL ? 3 : i2) | 16, 22.0f, 0.0f, 22.0f, 0.0f));
+        addView(this.checkBox, LayoutHelper.createFrame(37, 20.0f, (LocaleController.isRTL ? 3 : i3) | 16, 22.0f, 0.0f, 22.0f, 0.0f));
         setClipChildren(false);
+    }
+
+    public void setEnabled(boolean z) {
+        super.setEnabled(z);
+        this.checkBox.setEnabled(z);
     }
 
     /* access modifiers changed from: protected */
@@ -128,7 +147,7 @@ public class TextCheckCell extends FrameLayout {
     }
 
     public void setColors(String str, String str2, String str3, String str4, String str5) {
-        this.textView.setTextColor(Theme.getColor(str));
+        this.textView.setTextColor(Theme.getColor(str, this.resourcesProvider));
         this.checkBox.setColors(str2, str3, str4, str5);
         this.textView.setTag(str);
     }
@@ -184,21 +203,24 @@ public class TextCheckCell extends FrameLayout {
         float f = 1.0f;
         if (arrayList != null) {
             TextView textView2 = this.textView;
+            Property property = View.ALPHA;
             float[] fArr = new float[1];
             fArr[0] = z ? 1.0f : 0.5f;
-            arrayList.add(ObjectAnimator.ofFloat(textView2, "alpha", fArr));
+            arrayList.add(ObjectAnimator.ofFloat(textView2, property, fArr));
             Switch switchR = this.checkBox;
+            Property property2 = View.ALPHA;
             float[] fArr2 = new float[1];
             fArr2[0] = z ? 1.0f : 0.5f;
-            arrayList.add(ObjectAnimator.ofFloat(switchR, "alpha", fArr2));
+            arrayList.add(ObjectAnimator.ofFloat(switchR, property2, fArr2));
             if (this.valueTextView.getVisibility() == 0) {
                 TextView textView3 = this.valueTextView;
+                Property property3 = View.ALPHA;
                 float[] fArr3 = new float[1];
                 if (!z) {
                     f = 0.5f;
                 }
                 fArr3[0] = f;
-                arrayList.add(ObjectAnimator.ofFloat(textView3, "alpha", fArr3));
+                arrayList.add(ObjectAnimator.ofFloat(textView3, property3, fArr3));
                 return;
             }
             return;
@@ -324,19 +346,16 @@ public class TextCheckCell extends FrameLayout {
     }
 
     public void onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo accessibilityNodeInfo) {
-        String str;
-        int i;
         super.onInitializeAccessibilityNodeInfo(accessibilityNodeInfo);
         accessibilityNodeInfo.setClassName("android.widget.Switch");
         accessibilityNodeInfo.setCheckable(true);
         accessibilityNodeInfo.setChecked(this.checkBox.isChecked());
-        if (this.checkBox.isChecked()) {
-            i = NUM;
-            str = "NotificationsOn";
-        } else {
-            i = NUM;
-            str = "NotificationsOff";
+        StringBuilder sb = new StringBuilder();
+        sb.append(this.textView.getText());
+        if (!TextUtils.isEmpty(this.valueTextView.getText())) {
+            sb.append(10);
+            sb.append(this.valueTextView.getText());
         }
-        accessibilityNodeInfo.setContentDescription(LocaleController.getString(str, i));
+        accessibilityNodeInfo.setContentDescription(sb);
     }
 }

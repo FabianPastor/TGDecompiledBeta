@@ -13,6 +13,6 @@ public final /* synthetic */ class PhotoViewer$12$$ExternalSyntheticLambda0 impl
     }
 
     public final void onClick(DialogInterface dialogInterface, int i) {
-        this.f$0.lambda$onItemClick$3(this.f$1, dialogInterface, i);
+        this.f$0.lambda$onItemClick$4(this.f$1, dialogInterface, i);
     }
 }

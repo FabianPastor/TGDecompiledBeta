@@ -258,11 +258,11 @@ public class MusicBrowserService extends MediaBrowserService implements Notifica
             boolean r1 = r1.equals(r8)
             java.lang.String r2 = "__CHAT_"
             r3 = 0
-            if (r1 == 0) goto L_0x00d3
+            if (r1 == 0) goto L_0x00d9
         L_0x0010:
             java.util.ArrayList<java.lang.Long> r8 = r7.dialogs
             int r8 = r8.size()
-            if (r3 >= r8) goto L_0x013d
+            if (r3 >= r8) goto L_0x0143
             java.util.ArrayList<java.lang.Long> r8 = r7.dialogs
             java.lang.Object r8 = r8.get(r3)
             java.lang.Long r8 = (java.lang.Long) r8
@@ -317,15 +317,17 @@ public class MusicBrowserService extends MediaBrowserService implements Notifica
             r1 = r6
         L_0x008a:
             r4 = 1
-            if (r1 == 0) goto L_0x009a
-            java.io.File r5 = org.telegram.messenger.FileLoader.getPathToAttach(r1, r4)
+            if (r1 == 0) goto L_0x00a0
+            int r5 = r7.currentAccount
+            org.telegram.messenger.FileLoader r5 = org.telegram.messenger.FileLoader.getInstance(r5)
+            java.io.File r5 = r5.getPathToAttach(r1, r4)
             android.graphics.Bitmap r6 = r7.createRoundBitmap(r5)
-            if (r6 == 0) goto L_0x009a
+            if (r6 == 0) goto L_0x00a0
             r8.setIconBitmap(r6)
-        L_0x009a:
-            if (r1 == 0) goto L_0x009e
-            if (r6 != 0) goto L_0x00c3
-        L_0x009e:
+        L_0x00a0:
+            if (r1 == 0) goto L_0x00a4
+            if (r6 != 0) goto L_0x00c9
+        L_0x00a4:
             java.lang.StringBuilder r1 = new java.lang.StringBuilder
             r1.<init>()
             java.lang.String r5 = "android.resource://"
@@ -338,34 +340,34 @@ public class MusicBrowserService extends MediaBrowserService implements Notifica
             java.lang.String r1 = r1.toString()
             android.net.Uri r1 = android.net.Uri.parse(r1)
             r8.setIconUri(r1)
-        L_0x00c3:
+        L_0x00c9:
             android.media.browse.MediaBrowser$MediaItem r1 = new android.media.browse.MediaBrowser$MediaItem
             android.media.MediaDescription r8 = r8.build()
             r1.<init>(r8, r4)
             r0.add(r1)
             int r3 = r3 + 1
             goto L_0x0010
-        L_0x00d3:
-            if (r8 == 0) goto L_0x013d
+        L_0x00d9:
+            if (r8 == 0) goto L_0x0143
             boolean r1 = r8.startsWith(r2)
-            if (r1 == 0) goto L_0x013d
+            if (r1 == 0) goto L_0x0143
             java.lang.String r1 = ""
-            java.lang.String r8 = r8.replace(r2, r1)     // Catch:{ Exception -> 0x00e6 }
-            int r8 = java.lang.Integer.parseInt(r8)     // Catch:{ Exception -> 0x00e6 }
-            goto L_0x00eb
-        L_0x00e6:
+            java.lang.String r8 = r8.replace(r2, r1)     // Catch:{ Exception -> 0x00ec }
+            int r8 = java.lang.Integer.parseInt(r8)     // Catch:{ Exception -> 0x00ec }
+            goto L_0x00f1
+        L_0x00ec:
             r8 = move-exception
             org.telegram.messenger.FileLog.e((java.lang.Throwable) r8)
             r8 = 0
-        L_0x00eb:
+        L_0x00f1:
             androidx.collection.LongSparseArray<java.util.ArrayList<org.telegram.messenger.MessageObject>> r1 = r7.musicObjects
             long r4 = (long) r8
             java.lang.Object r1 = r1.get(r4)
             java.util.ArrayList r1 = (java.util.ArrayList) r1
-            if (r1 == 0) goto L_0x013d
-        L_0x00f6:
+            if (r1 == 0) goto L_0x0143
+        L_0x00fc:
             int r2 = r1.size()
-            if (r3 >= r2) goto L_0x013d
+            if (r3 >= r2) goto L_0x0143
             java.lang.Object r2 = r1.get(r3)
             org.telegram.messenger.MessageObject r2 = (org.telegram.messenger.MessageObject) r2
             android.media.MediaDescription$Builder r4 = new android.media.MediaDescription$Builder
@@ -388,8 +390,8 @@ public class MusicBrowserService extends MediaBrowserService implements Notifica
             r2.<init>(r4, r5)
             r0.add(r2)
             int r3 = r3 + 1
-            goto L_0x00f6
-        L_0x013d:
+            goto L_0x00fc
+        L_0x0143:
             r9.sendResult(r0)
             return
         */

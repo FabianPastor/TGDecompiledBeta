@@ -1,5 +1,7 @@
 package org.telegram.ui;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.animation.ValueAnimator;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -379,11 +381,13 @@ public class LanguageSelectActivity extends BaseFragment implements Notification
     }
 
     private class TranslateSettings extends LinearLayout {
-        private TextSettingsCell doNotTranslateCell;
+        /* access modifiers changed from: private */
+        public TextSettingsCell doNotTranslateCell;
         private ValueAnimator doNotTranslateCellAnimation = null;
         private HeaderCell header;
         private TextInfoPrivacyCell info;
-        private TextInfoPrivacyCell info2;
+        /* access modifiers changed from: private */
+        public TextInfoPrivacyCell info2;
         private SharedPreferences.OnSharedPreferenceChangeListener listener;
         /* access modifiers changed from: private */
         public SharedPreferences preferences;
@@ -391,26 +395,28 @@ public class LanguageSelectActivity extends BaseFragment implements Notification
 
         public TranslateSettings(Context context) {
             super(context);
-            boolean z = true;
+            setFocusable(false);
             setOrientation(1);
             this.preferences = MessagesController.getGlobalMainSettings();
             HeaderCell headerCell = new HeaderCell(context);
             this.header = headerCell;
-            headerCell.setBackgroundColor(Theme.getColor("windowBackgroundWhite"));
+            headerCell.setFocusable(true);
+            this.header.setBackgroundColor(Theme.getColor("windowBackgroundWhite"));
             this.header.setText(LocaleController.getString("TranslateMessages", NUM));
+            this.header.setContentDescription(LocaleController.getString("TranslateMessages", NUM));
             addView(this.header, LayoutHelper.createLinear(-1, -2));
             boolean value = getValue();
             TextCheckCell textCheckCell = new TextCheckCell(context);
             this.showButtonCheck = textCheckCell;
-            textCheckCell.setBackground(Theme.createSelectorWithBackgroundDrawable(Theme.getColor("windowBackgroundWhite"), Theme.getColor("listSelectorSDK21")));
+            textCheckCell.setBackground(Theme.AdaptiveRipple.filledRect(Theme.getColor("windowBackgroundWhite")));
             this.showButtonCheck.setTextAndCheck(LocaleController.getString("ShowTranslateButton", NUM), value, value);
             this.showButtonCheck.setOnClickListener(new LanguageSelectActivity$TranslateSettings$$ExternalSyntheticLambda1(this));
             addView(this.showButtonCheck, LayoutHelper.createLinear(-1, -2));
             TextSettingsCell textSettingsCell = new TextSettingsCell(context);
             this.doNotTranslateCell = textSettingsCell;
-            textSettingsCell.setBackground(Theme.createSelectorWithBackgroundDrawable(Theme.getColor("windowBackgroundWhite"), Theme.getColor("listSelectorSDK21")));
+            textSettingsCell.setBackground(Theme.AdaptiveRipple.filledRect(Theme.getColor("windowBackgroundWhite")));
             this.doNotTranslateCell.setOnClickListener(new LanguageSelectActivity$TranslateSettings$$ExternalSyntheticLambda2(this));
-            this.doNotTranslateCell.setClickable((!value || !LanguageDetector.hasSupport()) ? false : z);
+            this.doNotTranslateCell.setClickable(value && LanguageDetector.hasSupport());
             float f = 1.0f;
             this.doNotTranslateCell.setAlpha((!value || !LanguageDetector.hasSupport()) ? 0.0f : 1.0f);
             addView(this.doNotTranslateCell, LayoutHelper.createLinear(-1, -2));
@@ -418,13 +424,17 @@ public class LanguageSelectActivity extends BaseFragment implements Notification
             this.info = textInfoPrivacyCell;
             textInfoPrivacyCell.setTopPadding(11);
             this.info.setBottomPadding(16);
+            this.info.setFocusable(true);
             this.info.setText(LocaleController.getString("TranslateMessagesInfo1", NUM));
+            this.info.setContentDescription(LocaleController.getString("TranslateMessagesInfo1", NUM));
             addView(this.info, LayoutHelper.createLinear(-1, -2));
             TextInfoPrivacyCell textInfoPrivacyCell2 = new TextInfoPrivacyCell(context);
             this.info2 = textInfoPrivacyCell2;
             textInfoPrivacyCell2.setTopPadding(0);
             this.info2.setBottomPadding(16);
+            this.info2.setFocusable(true);
             this.info2.setText(LocaleController.getString("TranslateMessagesInfo2", NUM));
+            this.info2.setContentDescription(LocaleController.getString("TranslateMessagesInfo2", NUM));
             this.info2.setAlpha(value ? 0.0f : f);
             addView(this.info2, LayoutHelper.createLinear(-1, -2));
             updateHeight();
@@ -476,6 +486,7 @@ public class LanguageSelectActivity extends BaseFragment implements Notification
             }
             this.doNotTranslateCell.setTextAndValue(LocaleController.getString("DoNotTranslate", NUM), str, false);
             this.doNotTranslateCell.setClickable(z);
+            this.info2.setVisibility(0);
             float[] fArr = new float[2];
             fArr[0] = this.doNotTranslateCell.getAlpha();
             float f = 1.0f;
@@ -484,6 +495,16 @@ public class LanguageSelectActivity extends BaseFragment implements Notification
             this.doNotTranslateCellAnimation = ofFloat;
             ofFloat.setInterpolator(CubicBezierInterpolator.DEFAULT);
             this.doNotTranslateCellAnimation.addUpdateListener(new LanguageSelectActivity$TranslateSettings$$ExternalSyntheticLambda0(this));
+            this.doNotTranslateCellAnimation.addListener(new AnimatorListenerAdapter() {
+                public void onAnimationEnd(Animator animator) {
+                    super.onAnimationEnd(animator);
+                    if (((double) TranslateSettings.this.doNotTranslateCell.getAlpha()) > 0.5d) {
+                        TranslateSettings.this.info2.setVisibility(8);
+                    } else {
+                        TranslateSettings.this.info2.setVisibility(0);
+                    }
+                }
+            });
             ValueAnimator valueAnimator2 = this.doNotTranslateCellAnimation;
             float alpha = this.doNotTranslateCell.getAlpha();
             if (!z) {
@@ -552,7 +573,7 @@ public class LanguageSelectActivity extends BaseFragment implements Notification
             super.onAttachedToWindow();
             update();
             SharedPreferences sharedPreferences = this.preferences;
-            AnonymousClass1 r1 = new SharedPreferences.OnSharedPreferenceChangeListener() {
+            AnonymousClass2 r1 = new SharedPreferences.OnSharedPreferenceChangeListener() {
                 public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String str) {
                     SharedPreferences unused = TranslateSettings.this.preferences = sharedPreferences;
                     TranslateSettings.this.update();
@@ -624,7 +645,7 @@ public class LanguageSelectActivity extends BaseFragment implements Notification
                 r3.<init>(r0)
                 int r2 = org.telegram.ui.ActionBar.Theme.getColor(r2)
                 r3.setBackgroundColor(r2)
-                r2 = 2131626228(0x7f0e08f4, float:1.8879686E38)
+                r2 = 2131626337(0x7f0e0961, float:1.8879907E38)
                 java.lang.String r0 = "Language"
                 java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r0, r2)
                 r3.setText(r2)
@@ -657,16 +678,16 @@ public class LanguageSelectActivity extends BaseFragment implements Notification
         /* JADX WARNING: type inference failed for: r2v2 */
         /* JADX WARNING: type inference failed for: r2v4 */
         /* JADX WARNING: Code restructure failed: missing block: B:23:0x0088, code lost:
-            if (r12 == (org.telegram.ui.LanguageSelectActivity.access$700(r10.this$0).size() - 1)) goto L_0x008a;
+            if (r12 == (org.telegram.ui.LanguageSelectActivity.access$900(r10.this$0).size() - 1)) goto L_0x008a;
          */
         /* JADX WARNING: Code restructure failed: missing block: B:25:0x008c, code lost:
             r12 = false;
          */
         /* JADX WARNING: Code restructure failed: missing block: B:32:0x00bf, code lost:
-            if (r12 == (org.telegram.ui.LanguageSelectActivity.access$900(r10.this$0).size() - 1)) goto L_0x008a;
+            if (r12 == (org.telegram.ui.LanguageSelectActivity.access$1100(r10.this$0).size() - 1)) goto L_0x008a;
          */
         /* JADX WARNING: Code restructure failed: missing block: B:37:0x00f1, code lost:
-            if (r12 == (org.telegram.ui.LanguageSelectActivity.access$800(r10.this$0).size() - 1)) goto L_0x008a;
+            if (r12 == (org.telegram.ui.LanguageSelectActivity.access$1000(r10.this$0).size() - 1)) goto L_0x008a;
          */
         /* JADX WARNING: Multi-variable type inference failed */
         /* Code decompiled incorrectly, please refer to instructions dump. */
@@ -709,13 +730,13 @@ public class LanguageSelectActivity extends BaseFragment implements Notification
                 int r0 = r0.size()
                 if (r12 != r0) goto L_0x0057
                 android.content.Context r12 = r10.mContext
-                r0 = 2131165483(0x7var_b, float:1.7945184E38)
+                r0 = 2131165435(0x7var_fb, float:1.7945087E38)
                 android.graphics.drawable.Drawable r12 = org.telegram.ui.ActionBar.Theme.getThemedDrawable((android.content.Context) r12, (int) r0, (java.lang.String) r1)
                 r11.setBackgroundDrawable(r12)
                 goto L_0x0136
             L_0x0057:
                 android.content.Context r12 = r10.mContext
-                r0 = 2131165484(0x7var_c, float:1.7945186E38)
+                r0 = 2131165436(0x7var_fc, float:1.794509E38)
                 android.graphics.drawable.Drawable r12 = org.telegram.ui.ActionBar.Theme.getThemedDrawable((android.content.Context) r12, (int) r0, (java.lang.String) r1)
                 r11.setBackgroundDrawable(r12)
                 goto L_0x0136
@@ -789,7 +810,7 @@ public class LanguageSelectActivity extends BaseFragment implements Notification
                 java.lang.Object[] r1 = new java.lang.Object[r1]
                 java.lang.String r4 = r0.name
                 r1[r2] = r4
-                r4 = 2131626231(0x7f0e08f7, float:1.8879692E38)
+                r4 = 2131626340(0x7f0e0964, float:1.8879913E38)
                 java.lang.String r5 = "LanguageCustom"
                 java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r5, r4)
                 r1[r3] = r4

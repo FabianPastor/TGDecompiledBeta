@@ -175,19 +175,16 @@ public class TextCheckbox2Cell extends FrameLayout {
     }
 
     public void onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo accessibilityNodeInfo) {
-        String str;
-        int i;
         super.onInitializeAccessibilityNodeInfo(accessibilityNodeInfo);
         accessibilityNodeInfo.setClassName("android.widget.checkbox");
         accessibilityNodeInfo.setCheckable(true);
         accessibilityNodeInfo.setChecked(this.checkbox.isChecked());
-        if (this.checkbox.isChecked()) {
-            i = NUM;
-            str = "NotificationsOn";
-        } else {
-            i = NUM;
-            str = "NotificationsOff";
+        StringBuilder sb = new StringBuilder();
+        sb.append(this.textView.getText());
+        if (this.valueTextView != null) {
+            sb.append("\n");
+            sb.append(this.valueTextView.getText());
         }
-        accessibilityNodeInfo.setContentDescription(LocaleController.getString(str, i));
+        accessibilityNodeInfo.setText(sb);
     }
 }

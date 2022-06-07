@@ -11,6 +11,6 @@ public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda35
     }
 
     public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        MessagesController.lambda$hidePromoDialog$105(tLObject, tLRPC$TL_error);
+        MessagesController.lambda$markMentionMessageAsRead$193(tLObject, tLRPC$TL_error);
     }
 }

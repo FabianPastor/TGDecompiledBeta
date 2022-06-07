@@ -12,6 +12,6 @@ public final /* synthetic */ class MessagesStorage$$ExternalSyntheticLambda44 im
     }
 
     public final void run() {
-        this.f$0.lambda$updateUnreadReactionsCount$194(this.f$1, this.f$2);
+        this.f$0.lambda$setDialogPinned$188(this.f$1, this.f$2);
     }
 }

@@ -1,18 +1,20 @@
 package org.telegram.ui.Components;
 
-import org.telegram.tgnet.RequestDelegate;
-import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC$TL_error;
+import android.animation.ValueAnimator;
 import org.telegram.ui.Components.BotWebViewSheet;
 
-public final /* synthetic */ class BotWebViewSheet$2$$ExternalSyntheticLambda1 implements RequestDelegate {
+public final /* synthetic */ class BotWebViewSheet$2$$ExternalSyntheticLambda1 implements ValueAnimator.AnimatorUpdateListener {
     public final /* synthetic */ BotWebViewSheet.AnonymousClass2 f$0;
+    public final /* synthetic */ int f$1;
+    public final /* synthetic */ int f$2;
 
-    public /* synthetic */ BotWebViewSheet$2$$ExternalSyntheticLambda1(BotWebViewSheet.AnonymousClass2 r1) {
+    public /* synthetic */ BotWebViewSheet$2$$ExternalSyntheticLambda1(BotWebViewSheet.AnonymousClass2 r1, int i, int i2) {
         this.f$0 = r1;
+        this.f$1 = i;
+        this.f$2 = i2;
     }
 
-    public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        this.f$0.lambda$onSendWebViewData$1(tLObject, tLRPC$TL_error);
+    public final void onAnimationUpdate(ValueAnimator valueAnimator) {
+        this.f$0.lambda$onWebAppSetBackgroundColor$2(this.f$1, this.f$2, valueAnimator);
     }
 }

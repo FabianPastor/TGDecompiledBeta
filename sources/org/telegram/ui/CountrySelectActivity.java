@@ -288,9 +288,9 @@ public class CountrySelectActivity extends BaseFragment {
                     FileLog.e((Throwable) e);
                 }
             }
-            Collections.sort(this.sortedCountries, ChangePhoneActivity$PhoneView$$ExternalSyntheticLambda6.INSTANCE);
+            Collections.sort(this.sortedCountries, CountrySelectActivity$CountryAdapter$$ExternalSyntheticLambda0.INSTANCE);
             for (ArrayList<Country> sort : this.countries.values()) {
-                Collections.sort(sort, CountrySelectActivity$CountryAdapter$$ExternalSyntheticLambda0.INSTANCE);
+                Collections.sort(sort, CountrySelectActivity$CountryAdapter$$ExternalSyntheticLambda1.INSTANCE);
             }
         }
 

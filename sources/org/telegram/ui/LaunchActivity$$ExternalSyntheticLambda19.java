@@ -11,6 +11,6 @@ public final /* synthetic */ class LaunchActivity$$ExternalSyntheticLambda19 imp
     }
 
     public final void onGlobalLayout() {
-        LaunchActivity.lambda$onCreate$5(this.f$0);
+        LaunchActivity.lambda$onCreate$6(this.f$0);
     }
 }

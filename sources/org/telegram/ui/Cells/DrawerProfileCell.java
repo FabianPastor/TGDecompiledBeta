@@ -21,8 +21,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import org.telegram.PhoneFormat.PhoneFormat;
 import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.Emoji;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
+import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.UserObject;
 import org.telegram.tgnet.TLRPC$User;
 import org.telegram.ui.ActionBar.DrawerLayoutContainer;
@@ -36,7 +38,7 @@ import org.telegram.ui.Components.RLottieImageView;
 import org.telegram.ui.Components.SnowflakesEffect;
 import org.telegram.ui.ThemeActivity;
 
-public class DrawerProfileCell extends FrameLayout {
+public class DrawerProfileCell extends FrameLayout implements NotificationCenter.NotificationCenterDelegate {
     public static boolean switchingTheme;
     private boolean accountsShown;
     private ImageView arrowView;
@@ -53,8 +55,7 @@ public class DrawerProfileCell extends FrameLayout {
     private ImageView shadowView;
     private SnowflakesEffect snowflakesEffect;
     private Rect srcRect = new Rect();
-    /* access modifiers changed from: private */
-    public RLottieDrawable sunDrawable;
+    private RLottieDrawable sunDrawable;
 
     public DrawerProfileCell(Context context, DrawerLayoutContainer drawerLayoutContainer) {
         super(context);
@@ -100,18 +101,19 @@ public class DrawerProfileCell extends FrameLayout {
             this.sunDrawable.setCurrentFrame(36);
         }
         this.sunDrawable.setPlayInDirectionOfCustomEndFrame(true);
-        AnonymousClass1 r2 = new RLottieImageView(context) {
+        AnonymousClass1 r2 = new RLottieImageView(this, context) {
             public void onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo accessibilityNodeInfo) {
                 super.onInitializeAccessibilityNodeInfo(accessibilityNodeInfo);
-                if (DrawerProfileCell.this.sunDrawable.getCustomEndFrame() != 0) {
-                    accessibilityNodeInfo.setText(LocaleController.getString("AccDescrSwitchToNightTheme", NUM));
-                } else {
+                if (Theme.isCurrentThemeDark()) {
                     accessibilityNodeInfo.setText(LocaleController.getString("AccDescrSwitchToDayTheme", NUM));
+                } else {
+                    accessibilityNodeInfo.setText(LocaleController.getString("AccDescrSwitchToNightTheme", NUM));
                 }
             }
         };
         this.darkThemeView = r2;
-        r2.setBackground(Theme.createCircleSelectorDrawable(Theme.getColor("dialogButtonSelector"), 0, 0));
+        r2.setFocusable(true);
+        this.darkThemeView.setBackground(Theme.createCircleSelectorDrawable(Theme.getColor("dialogButtonSelector"), 0, 0));
         this.sunDrawable.beginApplyLayerColors();
         int color = Theme.getColor("chats_menuName");
         this.sunDrawable.setLayerColor("Sunny.**", color);
@@ -214,7 +216,7 @@ public class DrawerProfileCell extends FrameLayout {
             int r2 = org.telegram.ui.ActionBar.Theme.selectedAutoNightType
             if (r2 == 0) goto L_0x00a9
             android.content.Context r2 = r6.getContext()
-            r3 = 2131624551(0x7f0e0267, float:1.8876285E38)
+            r3 = 2131624604(0x7f0e029c, float:1.8876392E38)
             java.lang.String r4 = "AutoNightModeOff"
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r4, r3)
             android.widget.Toast r2 = android.widget.Toast.makeText(r2, r3, r1)
@@ -290,6 +292,13 @@ public class DrawerProfileCell extends FrameLayout {
     public void onAttachedToWindow() {
         super.onAttachedToWindow();
         updateColors();
+        NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.emojiLoaded);
+    }
+
+    /* access modifiers changed from: protected */
+    public void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
+        NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.emojiLoaded);
     }
 
     /* access modifiers changed from: protected */
@@ -417,7 +426,12 @@ public class DrawerProfileCell extends FrameLayout {
         if (tLRPC$User != null) {
             this.accountsShown = z;
             setArrowState(false);
-            this.nameTextView.setText(UserObject.getUserName(tLRPC$User));
+            CharSequence userName = UserObject.getUserName(tLRPC$User);
+            try {
+                userName = Emoji.replaceEmoji(userName, this.nameTextView.getPaint().getFontMetricsInt(), AndroidUtilities.dp(22.0f), false);
+            } catch (Exception unused) {
+            }
+            this.nameTextView.setText(userName);
             TextView textView = this.phoneTextView;
             PhoneFormat instance = PhoneFormat.getInstance();
             textView.setText(instance.format("+" + tLRPC$User.phone));
@@ -467,5 +481,11 @@ public class DrawerProfileCell extends FrameLayout {
             str = "AccDescrShowAccounts";
         }
         imageView.setContentDescription(LocaleController.getString(str, i));
+    }
+
+    public void didReceivedNotification(int i, int i2, Object... objArr) {
+        if (i == NotificationCenter.emojiLoaded) {
+            this.nameTextView.invalidate();
+        }
     }
 }

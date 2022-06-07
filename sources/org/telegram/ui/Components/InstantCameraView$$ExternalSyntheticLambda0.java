@@ -10,6 +10,6 @@ public final /* synthetic */ class InstantCameraView$$ExternalSyntheticLambda0 i
     }
 
     public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-        this.f$0.lambda$finishZoom$5(valueAnimator);
+        this.f$0.lambda$finishZoom$6(valueAnimator);
     }
 }

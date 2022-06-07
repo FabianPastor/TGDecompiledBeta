@@ -1255,7 +1255,7 @@ public class PeopleNearbyActivity extends BaseFragment implements NotificationCe
                         String formatDistance2 = formatDistance(tLRPC$TL_peerLocated2);
                         int i2 = chat.participants_count;
                         if (i2 != 0) {
-                            formatDistance2 = String.format("%1$s, %2$s", new Object[]{formatDistance2, LocaleController.formatPluralString("Members", i2)});
+                            formatDistance2 = String.format("%1$s, %2$s", new Object[]{formatDistance2, LocaleController.formatPluralString("Members", i2, new Object[0])});
                         }
                         if (access$600 != PeopleNearbyActivity.this.chats.size() - 1) {
                             z = true;
@@ -1298,7 +1298,7 @@ public class PeopleNearbyActivity extends BaseFragment implements NotificationCe
                     }
                     manageChatTextCell.setText(string3, (String) null, NUM, z);
                 } else if (i == PeopleNearbyActivity.this.showMoreRow) {
-                    manageChatTextCell.setText(LocaleController.formatPluralString("ShowVotes", PeopleNearbyActivity.this.users.size() - 5), (String) null, NUM, false);
+                    manageChatTextCell.setText(LocaleController.formatPluralString("ShowVotes", PeopleNearbyActivity.this.users.size() - 5, new Object[0]), (String) null, NUM, false);
                 }
             } else if (itemViewType == 3) {
                 HeaderCellProgress headerCellProgress = (HeaderCellProgress) viewHolder.itemView;

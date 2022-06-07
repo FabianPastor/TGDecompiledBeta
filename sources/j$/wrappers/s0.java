@@ -14,7 +14,7 @@ public final /* synthetic */ class s0 implements ObjDoubleConsumer {
         if (uVar == null) {
             return null;
         }
-        return uVar instanceof CLASSNAMEr0 ? ((CLASSNAMEr0) uVar).a : new s0(uVar);
+        return uVar instanceof r0 ? ((r0) uVar).a : new s0(uVar);
     }
 
     public /* synthetic */ void accept(Object obj, double d) {

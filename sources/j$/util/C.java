@@ -1,77 +1,92 @@
 package j$.util;
 
-import j$.util.Iterator;
 import j$.util.function.Consumer;
-import j$.util.function.e;
 import j$.util.function.f;
-import java.util.NoSuchElementException;
+import java.util.Comparator;
 
-class C implements CLASSNAMEn, f, Iterator {
-    boolean a = false;
-    double b;
-    final /* synthetic */ u c;
+final class C implements t {
+    private final double[] a;
+    private int b;
+    private final int c;
+    private final int d;
 
-    C(u uVar) {
-        this.c = uVar;
+    public C(double[] dArr, int i, int i2, int i3) {
+        this.a = dArr;
+        this.b = i;
+        this.c = i2;
+        this.d = i3 | 64 | 16384;
     }
 
-    public void accept(double d) {
-        this.a = true;
-        this.b = d;
+    public /* synthetic */ boolean b(Consumer consumer) {
+        return CLASSNAMEa.j(this, consumer);
+    }
+
+    public int characteristics() {
+        return this.d;
     }
 
     /* renamed from: e */
     public void forEachRemaining(f fVar) {
+        int i;
         fVar.getClass();
-        while (hasNext()) {
-            fVar.accept(nextDouble());
+        double[] dArr = this.a;
+        int length = dArr.length;
+        int i2 = this.c;
+        if (length >= i2 && (i = this.b) >= 0) {
+            this.b = i2;
+            if (i < i2) {
+                do {
+                    fVar.accept(dArr[i]);
+                    i++;
+                } while (i < i2);
+            }
         }
     }
 
-    public void forEachRemaining(Consumer consumer) {
-        if (consumer instanceof f) {
-            forEachRemaining((f) consumer);
-            return;
-        }
-        consumer.getClass();
-        if (!P.a) {
-            forEachRemaining(new CLASSNAMEm(consumer));
-        } else {
-            P.a(C.class, "{0} calling PrimitiveIterator.OfDouble.forEachRemainingDouble(action::accept)");
-            throw null;
-        }
+    public long estimateSize() {
+        return (long) (this.c - this.b);
     }
 
-    public boolean hasNext() {
-        if (!this.a) {
-            this.c.k(this);
-        }
-        return this.a;
+    public /* synthetic */ void forEachRemaining(Consumer consumer) {
+        CLASSNAMEa.b(this, consumer);
     }
 
-    public f j(f fVar) {
+    public Comparator getComparator() {
+        if (CLASSNAMEa.f(this, 4)) {
+            return null;
+        }
+        throw new IllegalStateException();
+    }
+
+    public /* synthetic */ long getExactSizeIfKnown() {
+        return CLASSNAMEa.e(this);
+    }
+
+    public /* synthetic */ boolean hasCharacteristics(int i) {
+        return CLASSNAMEa.f(this, i);
+    }
+
+    /* renamed from: k */
+    public boolean tryAdvance(f fVar) {
         fVar.getClass();
-        return new e(this, fVar);
-    }
-
-    public Double next() {
-        if (!P.a) {
-            return Double.valueOf(nextDouble());
+        int i = this.b;
+        if (i < 0 || i >= this.c) {
+            return false;
         }
-        P.a(C.class, "{0} calling PrimitiveIterator.OfDouble.nextLong()");
-        throw null;
+        double[] dArr = this.a;
+        this.b = i + 1;
+        fVar.accept(dArr[i]);
+        return true;
     }
 
-    public double nextDouble() {
-        if (this.a || hasNext()) {
-            this.a = false;
-            return this.b;
+    public t trySplit() {
+        int i = this.b;
+        int i2 = (this.c + i) >>> 1;
+        if (i >= i2) {
+            return null;
         }
-        throw new NoSuchElementException();
-    }
-
-    public /* synthetic */ void remove() {
-        Iterator.CC.a(this);
-        throw null;
+        double[] dArr = this.a;
+        this.b = i2;
+        return new C(dArr, i, i2, this.d);
     }
 }

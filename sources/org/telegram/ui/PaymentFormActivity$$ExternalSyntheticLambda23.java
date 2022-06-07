@@ -4,12 +4,13 @@ import android.view.MotionEvent;
 import android.view.View;
 
 public final /* synthetic */ class PaymentFormActivity$$ExternalSyntheticLambda23 implements View.OnTouchListener {
-    public static final /* synthetic */ PaymentFormActivity$$ExternalSyntheticLambda23 INSTANCE = new PaymentFormActivity$$ExternalSyntheticLambda23();
+    public final /* synthetic */ PaymentFormActivity f$0;
 
-    private /* synthetic */ PaymentFormActivity$$ExternalSyntheticLambda23() {
+    public /* synthetic */ PaymentFormActivity$$ExternalSyntheticLambda23(PaymentFormActivity paymentFormActivity) {
+        this.f$0 = paymentFormActivity;
     }
 
     public final boolean onTouch(View view, MotionEvent motionEvent) {
-        return PaymentFormActivity.lambda$createView$10(view, motionEvent);
+        return this.f$0.lambda$createView$6(view, motionEvent);
     }
 }

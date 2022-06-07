@@ -4,12 +4,13 @@ import android.view.MotionEvent;
 import android.view.View;
 
 public final /* synthetic */ class PhotoViewer$$ExternalSyntheticLambda43 implements View.OnTouchListener {
-    public static final /* synthetic */ PhotoViewer$$ExternalSyntheticLambda43 INSTANCE = new PhotoViewer$$ExternalSyntheticLambda43();
+    public final /* synthetic */ PhotoViewer f$0;
 
-    private /* synthetic */ PhotoViewer$$ExternalSyntheticLambda43() {
+    public /* synthetic */ PhotoViewer$$ExternalSyntheticLambda43(PhotoViewer photoViewer) {
+        this.f$0 = photoViewer;
     }
 
     public final boolean onTouch(View view, MotionEvent motionEvent) {
-        return PhotoViewer.lambda$setParentActivity$24(view, motionEvent);
+        return this.f$0.lambda$setParentActivity$12(view, motionEvent);
     }
 }

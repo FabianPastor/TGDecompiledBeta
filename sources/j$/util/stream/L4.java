@@ -1,79 +1,74 @@
 package j$.util.stream;
 
 import j$.util.function.Consumer;
+import j$.util.function.y;
+import j$.util.u;
 
-public final /* synthetic */ class L4 implements CLASSNAMEn3 {
-    public final /* synthetic */ int a = 0;
-    public final /* synthetic */ Object b;
-
-    public /* synthetic */ L4(Consumer consumer) {
-        this.b = consumer;
+final class L4 extends CLASSNAMEf4 {
+    L4(CLASSNAMEy2 y2Var, y yVar, boolean z) {
+        super(y2Var, yVar, z);
     }
 
-    public /* synthetic */ void accept(double d) {
-        switch (this.a) {
-            case 0:
-                CLASSNAMEp1.f(this);
-                throw null;
-            default:
-                CLASSNAMEp1.f(this);
-                throw null;
+    L4(CLASSNAMEy2 y2Var, u uVar, boolean z) {
+        super(y2Var, uVar, z);
+    }
+
+    public boolean b(Consumer consumer) {
+        Object obj;
+        consumer.getClass();
+        boolean a = a();
+        if (a) {
+            CLASSNAMEa4 a4Var = (CLASSNAMEa4) this.h;
+            long j = this.g;
+            if (a4Var.c == 0) {
+                if (j < ((long) a4Var.b)) {
+                    obj = a4Var.e[(int) j];
+                } else {
+                    throw new IndexOutOfBoundsException(Long.toString(j));
+                }
+            } else if (j < a4Var.count()) {
+                int i = 0;
+                while (i <= a4Var.c) {
+                    long[] jArr = a4Var.d;
+                    long j2 = jArr[i];
+                    Object[][] objArr = a4Var.f;
+                    if (j < j2 + ((long) objArr[i].length)) {
+                        obj = objArr[i][(int) (j - jArr[i])];
+                    } else {
+                        i++;
+                    }
+                }
+                throw new IndexOutOfBoundsException(Long.toString(j));
+            } else {
+                throw new IndexOutOfBoundsException(Long.toString(j));
+            }
+            consumer.accept(obj);
         }
+        return a;
     }
 
-    public /* synthetic */ Consumer andThen(Consumer consumer) {
-        switch (this.a) {
-            case 0:
-                return Consumer.CC.$default$andThen(this, consumer);
-            default:
-                return Consumer.CC.$default$andThen(this, consumer);
+    public void forEachRemaining(Consumer consumer) {
+        if (this.h != null || this.i) {
+            do {
+            } while (b(consumer));
+            return;
         }
+        consumer.getClass();
+        h();
+        this.b.u0(new K4(consumer), this.d);
+        this.i = true;
     }
 
-    public /* synthetic */ void m() {
+    /* access modifiers changed from: package-private */
+    public void j() {
+        CLASSNAMEa4 a4Var = new CLASSNAMEa4();
+        this.h = a4Var;
+        this.e = this.b.v0(new K4(a4Var));
+        this.f = new CLASSNAMEb(this);
     }
 
-    public /* synthetic */ void n(long j) {
-    }
-
-    public /* synthetic */ boolean o() {
-        return false;
-    }
-
-    public /* synthetic */ L4(CLASSNAMEb4 b4Var) {
-        this.b = b4Var;
-    }
-
-    public /* synthetic */ void accept(int i) {
-        switch (this.a) {
-            case 0:
-                CLASSNAMEp1.d(this);
-                throw null;
-            default:
-                CLASSNAMEp1.d(this);
-                throw null;
-        }
-    }
-
-    public /* synthetic */ void accept(long j) {
-        switch (this.a) {
-            case 0:
-                CLASSNAMEp1.e(this);
-                throw null;
-            default:
-                CLASSNAMEp1.e(this);
-                throw null;
-        }
-    }
-
-    public final void accept(Object obj) {
-        switch (this.a) {
-            case 0:
-                ((Consumer) this.b).accept(obj);
-                return;
-            default:
-                ((CLASSNAMEb4) this.b).accept(obj);
-                return;
-        }
+    /* access modifiers changed from: package-private */
+    public CLASSNAMEf4 l(u uVar) {
+        return new L4(this.b, uVar, this.a);
     }
 }

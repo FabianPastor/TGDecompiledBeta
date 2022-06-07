@@ -1,40 +1,40 @@
 package j$.util.stream;
 
-import j$.util.function.Consumer;
 import j$.util.function.m;
-import j$.util.x;
-import j$.util.y;
 
-final class R1 extends S1 implements CLASSNAMEz1 {
+abstract class R1 extends C1 implements CLASSNAMEz1 {
     R1(CLASSNAMEz1 z1Var, CLASSNAMEz1 z1Var2) {
         super(z1Var, z1Var2);
     }
 
-    /* renamed from: a */
-    public /* synthetic */ void i(Long[] lArr, int i) {
-        CLASSNAMEp1.j(this, lArr, i);
+    public void d(Object obj, int i) {
+        ((CLASSNAMEz1) this.a).d(obj, i);
+        ((CLASSNAMEz1) this.b).d(obj, i + ((int) ((CLASSNAMEz1) this.a).count()));
     }
 
-    /* renamed from: f */
-    public long[] c(int i) {
-        return new long[i];
+    public Object e() {
+        long count = count();
+        if (count < NUM) {
+            Object c = c((int) count);
+            d(c, 0);
+            return c;
+        }
+        throw new IllegalArgumentException("Stream size exceeds max array size");
     }
 
-    public /* synthetic */ void forEach(Consumer consumer) {
-        CLASSNAMEp1.m(this, consumer);
+    public void g(Object obj) {
+        ((CLASSNAMEz1) this.a).g(obj);
+        ((CLASSNAMEz1) this.b).g(obj);
     }
 
-    /* renamed from: h */
-    public /* synthetic */ CLASSNAMEz1 r(long j, long j2, m mVar) {
-        return CLASSNAMEp1.p(this, j, j2, mVar);
+    public /* synthetic */ Object[] q(m mVar) {
+        return CLASSNAMEo1.g(this, mVar);
     }
 
-    public x spliterator() {
-        return new CLASSNAMEi2(this);
-    }
-
-    /* renamed from: spliterator  reason: collision with other method in class */
-    public y m3spliterator() {
-        return new CLASSNAMEi2(this);
+    public String toString() {
+        if (count() < 32) {
+            return String.format("%s[%s.%s]", new Object[]{getClass().getName(), this.a, this.b});
+        }
+        return String.format("%s[size=%d]", new Object[]{getClass().getName(), Long.valueOf(count())});
     }
 }

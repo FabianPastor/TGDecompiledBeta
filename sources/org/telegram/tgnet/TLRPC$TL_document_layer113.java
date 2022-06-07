@@ -11,7 +11,7 @@ public class TLRPC$TL_document_layer113 extends TLRPC$TL_document {
         this.file_reference = abstractSerializedData.readByteArray(z);
         this.date = abstractSerializedData.readInt32(z);
         this.mime_type = abstractSerializedData.readString(z);
-        this.size = abstractSerializedData.readInt32(z);
+        this.size = (long) abstractSerializedData.readInt32(z);
         int i = 0;
         if ((this.flags & 1) != 0) {
             int readInt32 = abstractSerializedData.readInt32(z);
@@ -60,7 +60,7 @@ public class TLRPC$TL_document_layer113 extends TLRPC$TL_document {
         abstractSerializedData.writeByteArray(this.file_reference);
         abstractSerializedData.writeInt32(this.date);
         abstractSerializedData.writeString(this.mime_type);
-        abstractSerializedData.writeInt32(this.size);
+        abstractSerializedData.writeInt32((int) this.size);
         if ((this.flags & 1) != 0) {
             abstractSerializedData.writeInt32(NUM);
             int size = this.thumbs.size();

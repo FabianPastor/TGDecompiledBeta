@@ -87,10 +87,11 @@ public final class EncryptedFileDataSource extends BaseDataSource {
         }
         try {
             int read = this.file.read(bArr, i, (int) Math.min(j, (long) i2));
-            Utilities.aesCtrDecryptionByteArray(bArr, this.key, this.iv, i, read, this.fileOffset);
+            long j2 = (long) read;
+            Utilities.aesCtrDecryptionByteArray(bArr, this.key, this.iv, i, j2, this.fileOffset);
             this.fileOffset += read;
             if (read > 0) {
-                this.bytesRemaining -= (long) read;
+                this.bytesRemaining -= j2;
                 bytesTransferred(read);
             }
             return read;

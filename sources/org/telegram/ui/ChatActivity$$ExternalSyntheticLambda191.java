@@ -1,22 +1,28 @@
 package org.telegram.ui;
 
-import org.telegram.ui.ActionBar.AlertDialog;
-import org.telegram.ui.Cells.ChatMessageCell;
+import java.util.ArrayList;
+import org.telegram.tgnet.TLRPC$messages_Messages;
 
 public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda191 implements Runnable {
     public final /* synthetic */ ChatActivity f$0;
-    public final /* synthetic */ AlertDialog[] f$1;
-    public final /* synthetic */ int f$2;
-    public final /* synthetic */ ChatMessageCell f$3;
+    public final /* synthetic */ TLRPC$messages_Messages f$1;
+    public final /* synthetic */ long f$2;
+    public final /* synthetic */ int f$3;
+    public final /* synthetic */ int f$4;
+    public final /* synthetic */ int f$5;
+    public final /* synthetic */ ArrayList f$6;
 
-    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda191(ChatActivity chatActivity, AlertDialog[] alertDialogArr, int i, ChatMessageCell chatMessageCell) {
+    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda191(ChatActivity chatActivity, TLRPC$messages_Messages tLRPC$messages_Messages, long j, int i, int i2, int i3, ArrayList arrayList) {
         this.f$0 = chatActivity;
-        this.f$1 = alertDialogArr;
-        this.f$2 = i;
-        this.f$3 = chatMessageCell;
+        this.f$1 = tLRPC$messages_Messages;
+        this.f$2 = j;
+        this.f$3 = i;
+        this.f$4 = i2;
+        this.f$5 = i3;
+        this.f$6 = arrayList;
     }
 
     public final void run() {
-        this.f$0.lambda$didPressMessageUrl$227(this.f$1, this.f$2, this.f$3);
+        this.f$0.lambda$processLoadedDiscussionMessage$220(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6);
     }
 }

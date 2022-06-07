@@ -1,13 +1,15 @@
 package org.telegram.ui.ActionBar;
 
-public final /* synthetic */ class BottomSheet$$ExternalSyntheticLambda4 implements Runnable {
+import android.view.View;
+
+public final /* synthetic */ class BottomSheet$$ExternalSyntheticLambda4 implements View.OnClickListener {
     public final /* synthetic */ BottomSheet f$0;
 
     public /* synthetic */ BottomSheet$$ExternalSyntheticLambda4(BottomSheet bottomSheet) {
         this.f$0 = bottomSheet;
     }
 
-    public final void run() {
-        this.f$0.dismiss();
+    public final void onClick(View view) {
+        this.f$0.lambda$onCreate$3(view);
     }
 }

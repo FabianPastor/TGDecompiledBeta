@@ -1,17 +1,17 @@
 package org.telegram.ui.Components;
 
-import org.telegram.tgnet.RequestDelegate;
-import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC$TL_error;
+import android.net.Uri;
 
-public final /* synthetic */ class BotWebViewContainer$$ExternalSyntheticLambda3 implements RequestDelegate {
+public final /* synthetic */ class BotWebViewContainer$$ExternalSyntheticLambda3 implements Runnable {
     public final /* synthetic */ BotWebViewContainer f$0;
+    public final /* synthetic */ Uri f$1;
 
-    public /* synthetic */ BotWebViewContainer$$ExternalSyntheticLambda3(BotWebViewContainer botWebViewContainer) {
+    public /* synthetic */ BotWebViewContainer$$ExternalSyntheticLambda3(BotWebViewContainer botWebViewContainer, Uri uri) {
         this.f$0 = botWebViewContainer;
+        this.f$1 = uri;
     }
 
-    public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        this.f$0.lambda$loadFlicker$2(tLObject, tLRPC$TL_error);
+    public final void run() {
+        this.f$0.lambda$onOpenUri$0(this.f$1);
     }
 }

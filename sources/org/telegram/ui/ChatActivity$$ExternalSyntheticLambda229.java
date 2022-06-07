@@ -1,19 +1,16 @@
 package org.telegram.ui;
 
-import org.telegram.messenger.AndroidUtilities;
-import org.telegram.ui.ActionBar.ActionBarPopupWindow;
-import org.telegram.ui.Components.ReactedUsersListView;
+import org.telegram.tgnet.RequestDelegate;
+import org.telegram.tgnet.TLObject;
+import org.telegram.tgnet.TLRPC$TL_error;
 
-public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda229 implements ReactedUsersListView.OnHeightChangedListener {
-    public final /* synthetic */ ActionBarPopupWindow.ActionBarPopupWindowLayout f$0;
-    public final /* synthetic */ int[] f$1;
+public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda229 implements RequestDelegate {
+    public static final /* synthetic */ ChatActivity$$ExternalSyntheticLambda229 INSTANCE = new ChatActivity$$ExternalSyntheticLambda229();
 
-    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda229(ActionBarPopupWindow.ActionBarPopupWindowLayout actionBarPopupWindowLayout, int[] iArr) {
-        this.f$0 = actionBarPopupWindowLayout;
-        this.f$1 = iArr;
+    private /* synthetic */ ChatActivity$$ExternalSyntheticLambda229() {
     }
 
-    public final void onHeightChanged(ReactedUsersListView reactedUsersListView, int i) {
-        this.f$0.getSwipeBack().setNewForegroundHeight(this.f$1[0], AndroidUtilities.dp(52.0f) + i);
+    public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+        ChatActivity.lambda$markSponsoredAsRead$243(tLObject, tLRPC$TL_error);
     }
 }

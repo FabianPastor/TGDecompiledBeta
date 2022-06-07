@@ -1,9 +1,15 @@
 package org.telegram.ui.Components;
 
+import android.animation.TimeInterpolator;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.graphics.Path;
+import android.graphics.RectF;
+import android.os.SystemClock;
 import android.view.View;
+import androidx.core.math.MathUtils;
+import java.util.ArrayList;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.MessageObject;
 import org.telegram.ui.Components.SeekBar;
@@ -11,22 +17,38 @@ import org.telegram.ui.Components.SeekBar;
 public class SeekBarWaveform {
     private static Paint paintInner;
     private static Paint paintOuter;
-    private int clearFromX;
+    private Path alphaPath;
+    private ArrayList<Float> animatedValues;
+    private AnimatedFloat appearFloat = new AnimatedFloat(125, 450, (TimeInterpolator) CubicBezierInterpolator.EASE_OUT_QUINT);
     private float clearProgress = 1.0f;
     private SeekBar.SeekBarDelegate delegate;
+    private float[] fromHeights;
+    private int fromWidth;
     private int height;
+    private float[] heights;
     private int innerColor;
     private boolean isUnread;
+    private boolean loading;
+    private AnimatedFloat loadingFloat = new AnimatedFloat(150, CubicBezierInterpolator.DEFAULT);
+    private Paint loadingPaint;
+    private int loadingPaintColor1;
+    private int loadingPaintColor2;
+    private float loadingPaintWidth;
+    private long loadingStart;
     private MessageObject messageObject;
     private int outerColor;
     private View parentView;
+    private Path path;
     private boolean pressed = false;
+    private float progress;
     private boolean selected;
     private int selectedColor;
     private boolean startDraging = false;
     private float startX;
     private int thumbDX = 0;
     private int thumbX = 0;
+    private float[] toHeights;
+    private int toWidth;
     private float waveScaling = 1.0f;
     private byte[] waveformBytes;
     private int width;
@@ -35,12 +57,8 @@ public class SeekBarWaveform {
         if (paintInner == null) {
             paintInner = new Paint(1);
             paintOuter = new Paint(1);
-            paintInner.setStyle(Paint.Style.STROKE);
-            paintOuter.setStyle(Paint.Style.STROKE);
-            paintInner.setStrokeWidth(AndroidUtilities.dpf2(2.0f));
-            paintOuter.setStrokeWidth(AndroidUtilities.dpf2(2.0f));
-            paintInner.setStrokeCap(Paint.Cap.ROUND);
-            paintOuter.setStrokeCap(Paint.Cap.ROUND);
+            paintInner.setStyle(Paint.Style.FILL);
+            paintOuter.setStyle(Paint.Style.FILL);
         }
     }
 
@@ -63,11 +81,17 @@ public class SeekBarWaveform {
     }
 
     public void setMessageObject(MessageObject messageObject2) {
+        MessageObject messageObject3;
+        if (!(this.animatedValues == null || (messageObject3 = this.messageObject) == null || messageObject2 == null || messageObject3.getId() == messageObject2.getId())) {
+            this.animatedValues.clear();
+        }
         this.messageObject = messageObject2;
     }
 
     public void setParentView(View view) {
         this.parentView = view;
+        this.loadingFloat.setParent(view);
+        this.appearFloat.setParent(view);
     }
 
     public boolean isStartDraging() {
@@ -104,6 +128,7 @@ public class SeekBarWaveform {
                         this.thumbX = i3;
                     }
                 }
+                this.progress = ((float) this.thumbX) / ((float) this.width);
             }
             float f3 = this.startX;
             if (f3 != -1.0f && Math.abs(f - f3) > AndroidUtilities.getPixelsInCM(0.2f, true)) {
@@ -128,9 +153,10 @@ public class SeekBarWaveform {
     }
 
     public void setProgress(float f, boolean z) {
-        int i = this.isUnread ? this.width : this.thumbX;
+        boolean z2 = this.isUnread;
+        this.progress = z2 ? 1.0f : f;
+        int i = z2 ? this.width : this.thumbX;
         if (z && i != 0 && f == 0.0f) {
-            this.clearFromX = i;
             this.clearProgress = 0.0f;
         } else if (!z) {
             this.clearProgress = 1.0f;
@@ -152,346 +178,411 @@ public class SeekBarWaveform {
     }
 
     public void setSize(int i, int i2) {
+        setSize(i, i2, i, i);
+    }
+
+    public void setSize(int i, int i2, int i3, int i4) {
         this.width = i;
         this.height = i2;
+        float[] fArr = this.heights;
+        if (fArr == null || fArr.length != ((int) (((float) i) / AndroidUtilities.dpf2(3.0f)))) {
+            this.heights = calculateHeights((int) (((float) this.width) / AndroidUtilities.dpf2(3.0f)));
+        }
+        if (i3 != i4 && (this.fromWidth != i3 || this.toWidth != i4)) {
+            this.fromWidth = i3;
+            this.toWidth = i4;
+            this.fromHeights = calculateHeights((int) (((float) i3) / AndroidUtilities.dpf2(3.0f)));
+            this.toHeights = calculateHeights((int) (((float) this.toWidth) / AndroidUtilities.dpf2(3.0f)));
+        } else if (i3 == i4) {
+            this.toHeights = null;
+            this.fromHeights = null;
+        }
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:55:0x0185  */
-    /* JADX WARNING: Removed duplicated region for block: B:65:0x01fa  */
+    public void setSent() {
+        this.appearFloat.set(0.0f, true);
+        View view = this.parentView;
+        if (view != null) {
+            view.invalidate();
+        }
+    }
+
+    private float[] calculateHeights(int i) {
+        int i2 = i;
+        byte[] bArr = this.waveformBytes;
+        if (bArr == null || i2 <= 0) {
+            return null;
+        }
+        float[] fArr = new float[i2];
+        int i3 = 5;
+        int length = (bArr.length * 8) / 5;
+        float f = ((float) length) / ((float) i2);
+        int i4 = 0;
+        int i5 = 0;
+        float f2 = 0.0f;
+        int i6 = 0;
+        while (i4 < length) {
+            if (i4 == i5) {
+                int i7 = i5;
+                int i8 = 0;
+                while (i5 == i7) {
+                    f2 += f;
+                    i7 = (int) f2;
+                    i8++;
+                }
+                int i9 = i4 * 5;
+                int i10 = i9 / 8;
+                int i11 = i9 - (i10 * 8);
+                int i12 = 8 - i11;
+                int i13 = 5 - i12;
+                byte min = (byte) ((this.waveformBytes[i10] >> i11) & ((2 << (Math.min(i3, i12) - 1)) - 1));
+                if (i13 > 0) {
+                    int i14 = i10 + 1;
+                    byte[] bArr2 = this.waveformBytes;
+                    if (i14 < bArr2.length) {
+                        min = (byte) (((byte) (min << i13)) | (bArr2[i14] & ((2 << (i13 - 1)) - 1)));
+                    }
+                }
+                int i15 = 0;
+                while (i15 < i8) {
+                    if (i6 >= i2) {
+                        return fArr;
+                    }
+                    fArr[i6] = Math.max(0.0f, ((float) (min * 7)) / 31.0f);
+                    i15++;
+                    i6++;
+                }
+                i5 = i7;
+            }
+            i4++;
+            i3 = 5;
+        }
+        return fArr;
+    }
+
+    public void draw(Canvas canvas, View view) {
+        int i;
+        float f;
+        float[] fArr;
+        Canvas canvas2 = canvas;
+        if (this.waveformBytes != null && (i = this.width) != 0) {
+            float dpf2 = ((float) i) / AndroidUtilities.dpf2(3.0f);
+            if (dpf2 > 0.1f) {
+                float f2 = this.clearProgress;
+                if (f2 != 1.0f) {
+                    float f3 = f2 + 0.10666667f;
+                    this.clearProgress = f3;
+                    if (f3 > 1.0f) {
+                        this.clearProgress = 1.0f;
+                    } else {
+                        view.invalidate();
+                    }
+                }
+                float f4 = this.appearFloat.set(1.0f);
+                Path path2 = this.path;
+                if (path2 == null) {
+                    this.path = new Path();
+                } else {
+                    path2.reset();
+                }
+                Path path3 = this.alphaPath;
+                if (path3 == null) {
+                    this.alphaPath = new Path();
+                } else {
+                    path3.reset();
+                }
+                float[] fArr2 = this.fromHeights;
+                int i2 = 0;
+                if (fArr2 == null || (fArr = this.toHeights) == null) {
+                    if (this.heights != null) {
+                        while (true) {
+                            float f5 = (float) i2;
+                            if (f5 >= dpf2 || i2 >= this.heights.length) {
+                                break;
+                            }
+                            addBar(this.path, AndroidUtilities.dpf2(3.0f) * f5, AndroidUtilities.dpf2(this.heights[i2]) * MathUtils.clamp((f4 * dpf2) - f5, 0.0f, 1.0f));
+                            i2++;
+                        }
+                    }
+                    f = 0.0f;
+                } else {
+                    int i3 = this.width;
+                    int i4 = this.fromWidth;
+                    float f6 = ((float) (i3 - i4)) / ((float) (this.toWidth - i4));
+                    int max = Math.max(fArr2.length, fArr.length);
+                    int min = Math.min(this.fromHeights.length, this.toHeights.length);
+                    float[] fArr3 = this.fromHeights;
+                    int length = fArr3.length;
+                    float[] fArr4 = this.toHeights;
+                    float[] fArr5 = length < fArr4.length ? fArr3 : fArr4;
+                    float[] fArr6 = fArr3.length < fArr4.length ? fArr4 : fArr3;
+                    if (fArr3.length >= fArr4.length) {
+                        f6 = 1.0f - f6;
+                    }
+                    int i5 = -1;
+                    int i6 = 0;
+                    f = 0.0f;
+                    while (i6 < max) {
+                        float f7 = (float) i6;
+                        int i7 = max;
+                        int clamp = MathUtils.clamp((int) Math.floor((double) ((f7 / ((float) max)) * ((float) min))), 0, min - 1);
+                        if (i5 < clamp) {
+                            addBar(this.path, AndroidUtilities.lerp((float) clamp, f7, f6) * AndroidUtilities.dpf2(3.0f), AndroidUtilities.dpf2(AndroidUtilities.lerp(fArr5[clamp], fArr6[i6], f6)));
+                            i5 = clamp;
+                        } else {
+                            addBar(this.alphaPath, AndroidUtilities.lerp((float) clamp, f7, f6) * AndroidUtilities.dpf2(3.0f), AndroidUtilities.dpf2(AndroidUtilities.lerp(fArr5[clamp], fArr6[i6], f6)));
+                            f = f6;
+                        }
+                        i6++;
+                        max = i7;
+                    }
+                }
+                if (f > 0.0f) {
+                    canvas.save();
+                    canvas2.clipPath(this.alphaPath);
+                    drawFill(canvas2, f);
+                    canvas.restore();
+                }
+                canvas.save();
+                canvas2.clipPath(this.path);
+                drawFill(canvas2, 1.0f);
+                canvas.restore();
+            }
+        }
+    }
+
+    /* JADX WARNING: Code restructure failed: missing block: B:34:0x00e8, code lost:
+        if (r0.loadingPaintColor2 == r0.outerColor) goto L_0x0125;
+     */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    public void draw(android.graphics.Canvas r29, android.view.View r30) {
+    private void drawFill(android.graphics.Canvas r17, float r18) {
         /*
-            r28 = this;
-            r6 = r28
-            r7 = r29
-            byte[] r0 = r6.waveformBytes
-            if (r0 == 0) goto L_0x0229
-            int r0 = r6.width
-            if (r0 != 0) goto L_0x000e
-            goto L_0x0229
-        L_0x000e:
-            r8 = 1077936128(0x40400000, float:3.0)
-            int r1 = org.telegram.messenger.AndroidUtilities.dp(r8)
-            int r0 = r0 / r1
-            float r0 = (float) r0
-            r1 = 1036831949(0x3dcccccd, float:0.1)
-            int r1 = (r0 > r1 ? 1 : (r0 == r1 ? 0 : -1))
-            if (r1 > 0) goto L_0x001e
-            return
-        L_0x001e:
-            byte[] r1 = r6.waveformBytes
-            int r1 = r1.length
-            int r1 = r1 * 8
-            r9 = 5
-            int r10 = r1 / 5
-            float r1 = (float) r10
-            float r11 = r1 / r0
-            org.telegram.messenger.MessageObject r0 = r6.messageObject
-            r13 = 1
-            if (r0 == 0) goto L_0x0042
-            boolean r0 = r0.isOutOwner()
-            if (r0 != 0) goto L_0x0042
-            org.telegram.messenger.MessageObject r0 = r6.messageObject
-            boolean r0 = r0.isContentUnread()
-            if (r0 == 0) goto L_0x0042
-            int r0 = r6.thumbX
-            if (r0 != 0) goto L_0x0042
-            r0 = 1
-            goto L_0x0043
-        L_0x0042:
-            r0 = 0
-        L_0x0043:
-            r6.isUnread = r0
-            android.graphics.Paint r1 = paintInner
-            if (r0 == 0) goto L_0x004c
-            int r0 = r6.outerColor
-            goto L_0x0055
-        L_0x004c:
-            boolean r0 = r6.selected
-            if (r0 == 0) goto L_0x0053
-            int r0 = r6.selectedColor
-            goto L_0x0055
-        L_0x0053:
-            int r0 = r6.innerColor
-        L_0x0055:
-            r1.setColor(r0)
-            android.graphics.Paint r0 = paintOuter
-            int r1 = r6.outerColor
-            r0.setColor(r1)
-            int r0 = r6.height
-            r14 = 1096810496(0x41600000, float:14.0)
-            int r1 = org.telegram.messenger.AndroidUtilities.dp(r14)
-            int r0 = r0 - r1
-            r15 = 2
-            int r5 = r0 / 2
-            float r0 = r6.clearProgress
-            r4 = 1065353216(0x3var_, float:1.0)
-            int r1 = (r0 > r4 ? 1 : (r0 == r4 ? 0 : -1))
-            if (r1 == 0) goto L_0x0083
-            r1 = 1037726734(0x3dda740e, float:0.10666667)
-            float r0 = r0 + r1
-            r6.clearProgress = r0
-            int r0 = (r0 > r4 ? 1 : (r0 == r4 ? 0 : -1))
-            if (r0 <= 0) goto L_0x0080
-            r6.clearProgress = r4
-            goto L_0x0083
-        L_0x0080:
-            r30.invalidate()
-        L_0x0083:
-            r0 = 0
-            r1 = 0
-            r2 = 0
-            r16 = 0
-        L_0x0088:
-            if (r2 >= r10) goto L_0x0229
-            if (r2 == r0) goto L_0x0097
-            r24 = r2
-            r8 = r5
-            r19 = 1096810496(0x41600000, float:14.0)
-            r26 = 0
-            r27 = 1065353216(0x3var_, float:1.0)
-            goto L_0x021d
-        L_0x0097:
-            r17 = r1
-            r12 = 0
-            r1 = r0
-        L_0x009b:
-            if (r0 != r1) goto L_0x00a8
-            float r1 = r17 + r11
-            int r4 = (int) r1
-            int r12 = r12 + 1
-            r17 = r1
-            r1 = r4
-            r4 = 1065353216(0x3var_, float:1.0)
-            goto L_0x009b
-        L_0x00a8:
-            int r0 = r2 * 5
-            int r4 = r0 / 8
-            int r19 = r4 * 8
-            int r0 = r0 - r19
-            int r14 = 8 - r0
-            int r20 = 5 - r14
-            byte[] r3 = r6.waveformBytes
-            byte r3 = r3[r4]
-            int r0 = r3 >> r0
-            int r3 = java.lang.Math.min(r9, r14)
-            int r3 = r3 - r13
-            int r3 = r15 << r3
-            int r3 = r3 - r13
-            r0 = r0 & r3
-            byte r0 = (byte) r0
-            if (r20 <= 0) goto L_0x00da
-            int r4 = r4 + 1
-            byte[] r3 = r6.waveformBytes
-            int r14 = r3.length
-            if (r4 >= r14) goto L_0x00da
-            int r0 = r0 << r20
-            byte r0 = (byte) r0
-            byte r3 = r3[r4]
-            int r20 = r20 + -1
-            int r4 = r15 << r20
-            int r4 = r4 - r13
-            r3 = r3 & r4
-            r0 = r0 | r3
-            byte r0 = (byte) r0
-        L_0x00da:
-            r14 = r0
-            r4 = r16
+            r16 = this;
+            r0 = r16
+            r1 = 1073741824(0x40000000, float:2.0)
+            float r1 = org.telegram.messenger.AndroidUtilities.dpf2(r1)
+            org.telegram.messenger.MessageObject r2 = r0.messageObject
             r3 = 0
-        L_0x00de:
-            if (r3 >= r12) goto L_0x020a
-            float r0 = (float) r4
-            float r16 = org.telegram.messenger.AndroidUtilities.dpf2(r8)
-            float r16 = r16 * r0
-            int r0 = r14 * 7
-            float r0 = (float) r0
-            r20 = 1106771968(0x41var_, float:31.0)
-            float r0 = r0 / r20
+            r4 = 1
+            r5 = 0
+            if (r2 == 0) goto L_0x0025
+            boolean r2 = r2.isContentUnread()
+            if (r2 == 0) goto L_0x0025
+            org.telegram.messenger.MessageObject r2 = r0.messageObject
+            boolean r2 = r2.isOut()
+            if (r2 != 0) goto L_0x0025
+            float r2 = r0.progress
+            int r2 = (r2 > r5 ? 1 : (r2 == r5 ? 0 : -1))
+            if (r2 > 0) goto L_0x0025
+            r2 = 1
+            goto L_0x0026
+        L_0x0025:
+            r2 = 0
+        L_0x0026:
+            r0.isUnread = r2
+            android.graphics.Paint r6 = paintInner
+            if (r2 == 0) goto L_0x002f
+            int r2 = r0.outerColor
+            goto L_0x0038
+        L_0x002f:
+            boolean r2 = r0.selected
+            if (r2 == 0) goto L_0x0036
+            int r2 = r0.selectedColor
+            goto L_0x0038
+        L_0x0036:
+            int r2 = r0.innerColor
+        L_0x0038:
+            r6.setColor(r2)
+            android.graphics.Paint r2 = paintOuter
+            int r6 = r0.outerColor
+            r2.setColor(r6)
+            org.telegram.ui.Components.AnimatedFloat r2 = r0.loadingFloat
+            android.view.View r6 = r0.parentView
+            r2.setParent(r6)
+            org.telegram.messenger.MediaController r2 = org.telegram.messenger.MediaController.getInstance()
+            org.telegram.messenger.MessageObject r6 = r0.messageObject
+            boolean r2 = r2.isPlayingMessage(r6)
+            org.telegram.ui.Components.AnimatedFloat r6 = r0.loadingFloat
+            boolean r7 = r0.loading
+            r8 = 1065353216(0x3var_, float:1.0)
+            if (r7 == 0) goto L_0x0060
+            if (r2 != 0) goto L_0x0060
+            r2 = 1065353216(0x3var_, float:1.0)
+            goto L_0x0061
+        L_0x0060:
+            r2 = 0
+        L_0x0061:
+            float r2 = r6.set(r2)
+            android.graphics.Paint r6 = paintInner
+            int r7 = r6.getColor()
+            int r9 = r0.innerColor
+            int r7 = androidx.core.graphics.ColorUtils.blendARGB(r7, r9, r2)
+            r6.setColor(r7)
+            android.graphics.Paint r6 = paintOuter
+            int r7 = r6.getAlpha()
+            float r7 = (float) r7
+            float r9 = r8 - r2
+            float r7 = r7 * r9
+            float r7 = r7 * r18
+            int r7 = (int) r7
+            r6.setAlpha(r7)
+            android.graphics.Paint r6 = paintInner
+            int r7 = r6.getAlpha()
+            float r7 = (float) r7
+            float r7 = r7 * r18
+            int r7 = (int) r7
+            r6.setAlpha(r7)
+            r11 = 0
+            r12 = 0
+            int r6 = r0.width
+            float r6 = (float) r6
+            float r13 = r6 + r1
+            int r6 = r0.height
+            float r14 = (float) r6
+            android.graphics.Paint r15 = paintInner
+            r10 = r17
+            r10.drawRect(r11, r12, r13, r14, r15)
+            int r6 = (r2 > r8 ? 1 : (r2 == r8 ? 0 : -1))
+            if (r6 >= 0) goto L_0x00bd
+            r11 = 0
+            r12 = 0
+            float r6 = r0.progress
+            int r7 = r0.width
+            float r7 = (float) r7
+            float r7 = r7 + r1
+            float r6 = r6 * r7
+            float r13 = r6 * r9
+            int r1 = r0.height
+            float r14 = (float) r1
+            android.graphics.Paint r15 = paintOuter
+            r10 = r17
+            r10.drawRect(r11, r12, r13, r14, r15)
+        L_0x00bd:
+            int r1 = (r2 > r5 ? 1 : (r2 == r5 ? 0 : -1))
+            if (r1 <= 0) goto L_0x0175
+            android.graphics.Paint r1 = r0.loadingPaint
+            if (r1 == 0) goto L_0x00ea
+            float r1 = r0.loadingPaintWidth
+            int r6 = r0.width
+            float r6 = (float) r6
+            float r1 = r1 - r6
+            float r1 = java.lang.Math.abs(r1)
+            double r6 = (double) r1
+            int r1 = r0.width
+            double r8 = (double) r1
+            r10 = 4602678819172646912(0x3feNUM, double:0.5)
+            java.lang.Double.isNaN(r8)
+            double r8 = r8 * r10
+            int r1 = (r6 > r8 ? 1 : (r6 == r8 ? 0 : -1))
+            if (r1 > 0) goto L_0x00ea
+            int r1 = r0.loadingPaintColor1
+            int r6 = r0.innerColor
+            if (r1 != r6) goto L_0x00ea
+            int r1 = r0.loadingPaintColor2
+            int r6 = r0.outerColor
+            if (r1 == r6) goto L_0x0125
+        L_0x00ea:
+            android.graphics.Paint r1 = r0.loadingPaint
+            if (r1 != 0) goto L_0x00f5
+            android.graphics.Paint r1 = new android.graphics.Paint
+            r1.<init>(r4)
+            r0.loadingPaint = r1
+        L_0x00f5:
+            int r1 = r0.innerColor
+            r0.loadingPaintColor1 = r1
+            int r1 = r0.outerColor
+            r0.loadingPaintColor2 = r1
+            android.graphics.Paint r1 = r0.loadingPaint
+            android.graphics.LinearGradient r14 = new android.graphics.LinearGradient
+            r7 = 0
             r8 = 0
-            float r0 = java.lang.Math.max(r8, r0)
-            float r21 = org.telegram.messenger.AndroidUtilities.dpf2(r0)
-            int r0 = r6.thumbX
-            float r0 = (float) r0
-            r22 = 1073741824(0x40000000, float:2.0)
-            int r0 = (r16 > r0 ? 1 : (r16 == r0 ? 0 : -1))
-            if (r0 >= 0) goto L_0x012c
-            int r0 = org.telegram.messenger.AndroidUtilities.dp(r22)
-            float r0 = (float) r0
-            float r0 = r16 + r0
-            int r8 = r6.thumbX
-            float r8 = (float) r8
-            int r0 = (r0 > r8 ? 1 : (r0 == r8 ? 0 : -1))
-            if (r0 >= 0) goto L_0x012c
-            android.graphics.Paint r8 = paintOuter
-            r0 = r28
-            r23 = r1
-            r1 = r29
-            r24 = r2
-            r2 = r16
-            r25 = r3
-            r26 = 0
-            r3 = r5
-            r18 = r4
-            r27 = 1065353216(0x3var_, float:1.0)
-            r4 = r21
-            r30 = r5
-            r5 = r8
-            r0.drawLine(r1, r2, r3, r4, r5)
-            goto L_0x017d
-        L_0x012c:
-            r23 = r1
-            r24 = r2
-            r25 = r3
-            r18 = r4
-            r30 = r5
-            r26 = 0
-            r27 = 1065353216(0x3var_, float:1.0)
-            android.graphics.Paint r5 = paintInner
-            r0 = r28
-            r1 = r29
-            r2 = r16
-            r3 = r30
-            r4 = r21
-            r0.drawLine(r1, r2, r3, r4, r5)
-            int r0 = r6.thumbX
-            float r0 = (float) r0
-            int r0 = (r16 > r0 ? 1 : (r16 == r0 ? 0 : -1))
-            if (r0 >= 0) goto L_0x017d
-            r29.save()
-            float r0 = org.telegram.messenger.AndroidUtilities.dpf2(r27)
-            float r0 = r16 - r0
-            r8 = r30
-            float r1 = (float) r8
-            int r2 = r6.thumbX
-            float r2 = (float) r2
-            r3 = 1096810496(0x41600000, float:14.0)
-            int r4 = org.telegram.messenger.AndroidUtilities.dp(r3)
-            int r5 = r8 + r4
-            float r3 = (float) r5
-            r7.clipRect(r0, r1, r2, r3)
-            android.graphics.Paint r5 = paintOuter
-            r0 = r28
-            r1 = r29
-            r2 = r16
-            r3 = r8
-            r4 = r21
-            r0.drawLine(r1, r2, r3, r4, r5)
-            r29.restore()
-            goto L_0x017f
-        L_0x017d:
-            r8 = r30
-        L_0x017f:
-            float r0 = r6.clearProgress
-            int r0 = (r0 > r27 ? 1 : (r0 == r27 ? 0 : -1))
-            if (r0 == 0) goto L_0x01fa
-            android.graphics.Paint r0 = paintOuter
-            int r5 = r0.getAlpha()
-            android.graphics.Paint r0 = paintOuter
-            float r1 = (float) r5
-            float r2 = r6.clearProgress
-            float r4 = r27 - r2
-            float r1 = r1 * r4
-            int r1 = (int) r1
-            r0.setAlpha(r1)
-            int r0 = r6.clearFromX
-            float r0 = (float) r0
-            int r0 = (r16 > r0 ? 1 : (r16 == r0 ? 0 : -1))
-            if (r0 >= 0) goto L_0x01bf
-            int r0 = org.telegram.messenger.AndroidUtilities.dp(r22)
-            float r0 = (float) r0
-            float r0 = r16 + r0
-            int r1 = r6.clearFromX
+            int r6 = r0.width
+            float r9 = (float) r6
+            r0.loadingPaintWidth = r9
+            r10 = 0
+            r6 = 3
+            int[] r11 = new int[r6]
+            int r12 = r0.loadingPaintColor1
+            r11[r3] = r12
+            int r3 = r0.loadingPaintColor2
+            r11[r4] = r3
+            r3 = 2
+            r11[r3] = r12
+            float[] r12 = new float[r6]
+            r12 = {0, NUM, NUM} // fill-array
+            android.graphics.Shader$TileMode r13 = android.graphics.Shader.TileMode.CLAMP
+            r6 = r14
+            r6.<init>(r7, r8, r9, r10, r11, r12, r13)
+            r1.setShader(r14)
+        L_0x0125:
+            android.graphics.Paint r1 = r0.loadingPaint
+            r3 = 1132396544(0x437var_, float:255.0)
+            float r2 = r2 * r3
+            float r2 = r2 * r18
+            int r2 = (int) r2
+            r1.setAlpha(r2)
+            r17.save()
+            long r1 = android.os.SystemClock.elapsedRealtime()
+            long r3 = r0.loadingStart
+            long r1 = r1 - r3
             float r1 = (float) r1
-            int r0 = (r0 > r1 ? 1 : (r0 == r1 ? 0 : -1))
-            if (r0 >= 0) goto L_0x01bf
-            android.graphics.Paint r22 = paintOuter
-            r0 = r28
-            r1 = r29
-            r2 = r16
-            r3 = r8
-            r4 = r21
-            r9 = r5
-            r5 = r22
-            r0.drawLine(r1, r2, r3, r4, r5)
-            goto L_0x01f2
-        L_0x01bf:
-            r9 = r5
-            int r0 = r6.clearFromX
-            float r0 = (float) r0
-            int r0 = (r16 > r0 ? 1 : (r16 == r0 ? 0 : -1))
-            if (r0 >= 0) goto L_0x01f2
-            r29.save()
-            float r0 = org.telegram.messenger.AndroidUtilities.dpf2(r27)
-            float r0 = r16 - r0
-            float r1 = (float) r8
-            int r2 = r6.clearFromX
-            float r2 = (float) r2
-            r19 = 1096810496(0x41600000, float:14.0)
-            int r3 = org.telegram.messenger.AndroidUtilities.dp(r19)
-            int r5 = r8 + r3
-            float r3 = (float) r5
-            r7.clipRect(r0, r1, r2, r3)
-            android.graphics.Paint r5 = paintOuter
-            r0 = r28
-            r1 = r29
-            r2 = r16
-            r3 = r8
-            r4 = r21
-            r0.drawLine(r1, r2, r3, r4, r5)
-            r29.restore()
-            goto L_0x01f4
-        L_0x01f2:
-            r19 = 1096810496(0x41600000, float:14.0)
-        L_0x01f4:
-            android.graphics.Paint r0 = paintOuter
-            r0.setAlpha(r9)
-            goto L_0x01fc
-        L_0x01fa:
-            r19 = 1096810496(0x41600000, float:14.0)
-        L_0x01fc:
-            int r4 = r18 + 1
-            int r3 = r25 + 1
-            r5 = r8
-            r1 = r23
-            r2 = r24
-            r8 = 1077936128(0x40400000, float:3.0)
-            r9 = 5
-            goto L_0x00de
-        L_0x020a:
-            r23 = r1
-            r24 = r2
-            r18 = r4
-            r8 = r5
-            r19 = 1096810496(0x41600000, float:14.0)
-            r26 = 0
-            r27 = 1065353216(0x3var_, float:1.0)
-            r1 = r17
-            r16 = r18
-            r0 = r23
-        L_0x021d:
-            int r2 = r24 + 1
-            r5 = r8
-            r4 = 1065353216(0x3var_, float:1.0)
-            r8 = 1077936128(0x40400000, float:3.0)
-            r9 = 5
-            r14 = 1096810496(0x41600000, float:14.0)
-            goto L_0x0088
-        L_0x0229:
+            r2 = 1132920832(0x43870000, float:270.0)
+            float r1 = r1 / r2
+            double r1 = (double) r1
+            r3 = 4604930618986332160(0x3feNUM, double:0.75)
+            double r1 = java.lang.Math.pow(r1, r3)
+            float r1 = (float) r1
+            r2 = 1070386381(0x3fcccccd, float:1.6)
+            float r1 = r1 % r2
+            r2 = 1058642330(0x3var_a, float:0.6)
+            float r1 = r1 - r2
+            float r2 = r0.loadingPaintWidth
+            float r1 = r1 * r2
+            r2 = r17
+            r2.translate(r1, r5)
+            float r7 = -r1
+            r8 = 0
+            int r3 = r0.width
+            int r3 = r3 + 5
+            float r3 = (float) r3
+            float r9 = r3 - r1
+            int r1 = r0.height
+            float r10 = (float) r1
+            android.graphics.Paint r11 = r0.loadingPaint
+            r6 = r17
+            r6.drawRect(r7, r8, r9, r10, r11)
+            r17.restore()
+            android.view.View r1 = r0.parentView
+            if (r1 == 0) goto L_0x0175
+            r1.invalidate()
+        L_0x0175:
             return
         */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.SeekBarWaveform.draw(android.graphics.Canvas, android.view.View):void");
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.SeekBarWaveform.drawFill(android.graphics.Canvas, float):void");
     }
 
-    private void drawLine(Canvas canvas, float f, int i, float f2, Paint paint) {
+    private void addBar(Path path2, float f, float f2) {
+        float dpf2 = AndroidUtilities.dpf2(2.0f);
+        int dp = (this.height - AndroidUtilities.dp(14.0f)) / 2;
         float f3 = f2 * this.waveScaling;
-        if (f3 == 0.0f) {
-            canvas.drawPoint(f + AndroidUtilities.dpf2(1.0f), (float) (i + AndroidUtilities.dp(7.0f)), paint);
-            return;
-        }
-        canvas.drawLine(f + AndroidUtilities.dpf2(1.0f), ((float) (AndroidUtilities.dp(7.0f) + i)) - f3, f + AndroidUtilities.dpf2(1.0f), ((float) (i + AndroidUtilities.dp(7.0f))) + f3, paint);
+        RectF rectF = AndroidUtilities.rectTmp;
+        float f4 = dpf2 / 2.0f;
+        rectF.set((AndroidUtilities.dpf2(1.0f) + f) - f4, ((float) (AndroidUtilities.dp(7.0f) + dp)) + ((-f3) - f4), f + AndroidUtilities.dpf2(1.0f) + f4, ((float) (dp + AndroidUtilities.dp(7.0f))) + f3 + f4);
+        path2.addRoundRect(rectF, dpf2, dpf2, Path.Direction.CW);
     }
 
     public void setWaveScaling(float f) {
         this.waveScaling = f;
+    }
+
+    public void setLoading(boolean z) {
+        if (!this.loading && z && this.loadingFloat.get() <= 0.0f) {
+            this.loadingStart = SystemClock.elapsedRealtime();
+        }
+        this.loading = z;
+        View view = this.parentView;
+        if (view != null) {
+            view.invalidate();
+        }
     }
 }

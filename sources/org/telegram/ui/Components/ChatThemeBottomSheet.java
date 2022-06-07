@@ -74,7 +74,8 @@ public class ChatThemeBottomSheet extends BottomSheet implements NotificationCen
     public final RLottieDrawable darkThemeDrawable;
     /* access modifiers changed from: private */
     public final RLottieImageView darkThemeView;
-    private boolean forceDark;
+    /* access modifiers changed from: private */
+    public boolean forceDark;
     HintView hintView;
     private boolean isApplyClicked;
     /* access modifiers changed from: private */
@@ -139,7 +140,7 @@ public class ChatThemeBottomSheet extends BottomSheet implements NotificationCen
             r4.setLines(r3)
             r4.setSingleLine(r3)
             java.lang.String r6 = "SelectTheme"
-            r7 = 2131627959(0x7f0e0fb7, float:1.8883197E38)
+            r7 = 2131628159(0x7f0e107f, float:1.8883603E38)
             java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r6, r7)
             r4.setText(r6)
             java.lang.String r6 = "dialogTextBlack"
@@ -194,7 +195,7 @@ public class ChatThemeBottomSheet extends BottomSheet implements NotificationCen
             android.graphics.PorterDuff$Mode r11 = android.graphics.PorterDuff.Mode.MULTIPLY
             r10.<init>(r7, r11)
             r8.setColorFilter(r10)
-            org.telegram.ui.Components.RLottieImageView r7 = new org.telegram.ui.Components.RLottieImageView
+            org.telegram.ui.Components.ChatThemeBottomSheet$1 r7 = new org.telegram.ui.Components.ChatThemeBottomSheet$1
             android.content.Context r10 = r17.getContext()
             r7.<init>(r10)
             r0.darkThemeView = r7
@@ -214,7 +215,7 @@ public class ChatThemeBottomSheet extends BottomSheet implements NotificationCen
             r16 = 0
             android.widget.FrameLayout$LayoutParams r10 = org.telegram.ui.Components.LayoutHelper.createFrame(r10, r11, r12, r13, r14, r15, r16)
             r8.addView(r7, r10)
-            org.telegram.ui.Components.ChatThemeBottomSheet$1 r7 = new org.telegram.ui.Components.ChatThemeBottomSheet$1
+            org.telegram.ui.Components.ChatThemeBottomSheet$2 r7 = new org.telegram.ui.Components.ChatThemeBottomSheet$2
             android.content.Context r8 = r17.getContext()
             r7.<init>(r0, r8)
             r0.scroller = r7
@@ -304,11 +305,11 @@ public class ChatThemeBottomSheet extends BottomSheet implements NotificationCen
             android.widget.TextView r2 = r0.resetTextView
             org.telegram.ui.ActionBar.EmojiThemes r1 = r19.getCurrentTheme()
             if (r1 != 0) goto L_0x0218
-            r1 = 2131625427(0x7f0e05d3, float:1.8878062E38)
+            r1 = 2131625515(0x7f0e062b, float:1.887824E38)
             java.lang.String r5 = "DoNoSetTheme"
             goto L_0x021d
         L_0x0218:
-            r1 = 2131624947(0x7f0e03f3, float:1.8877088E38)
+            r1 = 2131625019(0x7f0e043b, float:1.8877234E38)
             java.lang.String r5 = "ChatResetTheme"
         L_0x021d:
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r5, r1)
@@ -350,7 +351,7 @@ public class ChatThemeBottomSheet extends BottomSheet implements NotificationCen
             android.widget.TextView r1 = r0.applyTextView
             r1.setSingleLine(r3)
             android.widget.TextView r1 = r0.applyTextView
-            r4 = 2131624922(0x7f0e03da, float:1.8877037E38)
+            r4 = 2131624992(0x7f0e0420, float:1.887718E38)
             java.lang.String r8 = "ChatApplyTheme"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r8, r4)
             r1.setText(r4)
@@ -535,7 +536,7 @@ public class ChatThemeBottomSheet extends BottomSheet implements NotificationCen
     }
 
     public ArrayList<ThemeDescription> getThemeDescriptions() {
-        AnonymousClass4 r7 = new ThemeDescription.ThemeDescriptionDelegate() {
+        AnonymousClass5 r7 = new ThemeDescription.ThemeDescriptionDelegate() {
             private boolean isAnimationStarted = false;
 
             public void didSetColor() {
@@ -601,7 +602,7 @@ public class ChatThemeBottomSheet extends BottomSheet implements NotificationCen
         Shader.TileMode tileMode = Shader.TileMode.CLAMP;
         paint2.setShader(new BitmapShader(createBitmap, tileMode, tileMode));
         FrameLayout frameLayout2 = frameLayout;
-        AnonymousClass5 r15 = r0;
+        AnonymousClass6 r15 = r0;
         final boolean z3 = z;
         float f3 = f2;
         final float f4 = measuredHeight;
@@ -609,7 +610,7 @@ public class ChatThemeBottomSheet extends BottomSheet implements NotificationCen
         final float f6 = max;
         final float f7 = f5;
         final float f8 = f3;
-        AnonymousClass5 r0 = new View(getContext()) {
+        AnonymousClass6 r0 = new View(getContext()) {
             /* access modifiers changed from: protected */
             public void onDraw(Canvas canvas) {
                 super.onDraw(canvas);
@@ -910,6 +911,9 @@ public class ChatThemeBottomSheet extends BottomSheet implements NotificationCen
             ChatThemeItem chatThemeItem2 = themeSmallPreviewView.chatThemeItem;
             boolean z = false;
             boolean z2 = chatThemeItem2 != null && chatThemeItem2.chatTheme.getEmoticon().equals(chatThemeItem.chatTheme.getEmoticon()) && !DrawerProfileCell.switchingTheme && themeSmallPreviewView.lastThemeIndex == chatThemeItem.themeIndex;
+            themeSmallPreviewView.setFocusable(true);
+            themeSmallPreviewView.setEnabled(true);
+            themeSmallPreviewView.setBackgroundColor(Theme.getColor("dialogBackgroundGray"));
             themeSmallPreviewView.setItem(chatThemeItem, z2);
             if (i == this.selectedItemPosition) {
                 z = true;
@@ -966,7 +970,7 @@ public class ChatThemeBottomSheet extends BottomSheet implements NotificationCen
             if (r13.equals("key_chat_wallpaper_gradient_to3") == false) goto L_0x0250;
          */
         /* JADX WARNING: Code restructure failed: missing block: B:93:?, code lost:
-            r3 = org.telegram.messenger.Utilities.parseInt(r3).intValue();
+            r3 = org.telegram.messenger.Utilities.parseInt((java.lang.CharSequence) r3).intValue();
          */
         /* JADX WARNING: Missing exception handler attribute for start block: B:152:0x028e */
         /* JADX WARNING: Missing exception handler attribute for start block: B:92:0x01d9 */
@@ -1115,7 +1119,7 @@ public class ChatThemeBottomSheet extends BottomSheet implements NotificationCen
                 java.lang.String r3 = r9.getQueryParameter(r3)     // Catch:{ Exception -> 0x014d }
                 boolean r5 = android.text.TextUtils.isEmpty(r3)     // Catch:{ Exception -> 0x014d }
                 if (r5 != 0) goto L_0x014d
-                java.lang.Integer r3 = org.telegram.messenger.Utilities.parseInt(r3)     // Catch:{ Exception -> 0x014d }
+                java.lang.Integer r3 = org.telegram.messenger.Utilities.parseInt((java.lang.CharSequence) r3)     // Catch:{ Exception -> 0x014d }
                 int r3 = r3.intValue()     // Catch:{ Exception -> 0x014d }
                 r2.patternBgGradientRotation = r3     // Catch:{ Exception -> 0x014d }
             L_0x014d:
@@ -1123,7 +1127,7 @@ public class ChatThemeBottomSheet extends BottomSheet implements NotificationCen
                 java.lang.String r3 = r9.getQueryParameter(r3)     // Catch:{ all -> 0x0288 }
                 boolean r5 = android.text.TextUtils.isEmpty(r3)     // Catch:{ all -> 0x0288 }
                 if (r5 != 0) goto L_0x0163
-                java.lang.Integer r3 = org.telegram.messenger.Utilities.parseInt(r3)     // Catch:{ all -> 0x0288 }
+                java.lang.Integer r3 = org.telegram.messenger.Utilities.parseInt((java.lang.CharSequence) r3)     // Catch:{ all -> 0x0288 }
                 int r3 = r3.intValue()     // Catch:{ all -> 0x0288 }
                 r2.patternIntensity = r3     // Catch:{ all -> 0x0288 }
             L_0x0163:
@@ -1180,11 +1184,11 @@ public class ChatThemeBottomSheet extends BottomSheet implements NotificationCen
                 int r3 = android.graphics.Color.parseColor(r3)     // Catch:{ Exception -> 0x01d9 }
                 goto L_0x01ea
             L_0x01d9:
-                java.lang.Integer r3 = org.telegram.messenger.Utilities.parseInt(r3)     // Catch:{ all -> 0x0280 }
+                java.lang.Integer r3 = org.telegram.messenger.Utilities.parseInt((java.lang.CharSequence) r3)     // Catch:{ all -> 0x0280 }
                 int r3 = r3.intValue()     // Catch:{ all -> 0x0280 }
                 goto L_0x01ea
             L_0x01e2:
-                java.lang.Integer r3 = org.telegram.messenger.Utilities.parseInt(r3)     // Catch:{ all -> 0x0280 }
+                java.lang.Integer r3 = org.telegram.messenger.Utilities.parseInt((java.lang.CharSequence) r3)     // Catch:{ all -> 0x0280 }
                 int r3 = r3.intValue()     // Catch:{ all -> 0x0280 }
             L_0x01ea:
                 int r5 = r13.hashCode()     // Catch:{ all -> 0x0280 }

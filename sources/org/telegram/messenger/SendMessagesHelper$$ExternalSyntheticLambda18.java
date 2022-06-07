@@ -10,6 +10,6 @@ public final /* synthetic */ class SendMessagesHelper$$ExternalSyntheticLambda18
     }
 
     public final void run() {
-        SendMessagesHelper.lambda$prepareImportHistory$67(this.f$0);
+        this.f$0.run(0);
     }
 }

@@ -2,39 +2,39 @@ package j$.util.stream;
 
 import j$.util.function.Consumer;
 import j$.util.function.m;
-import j$.util.x;
-import j$.util.y;
+import j$.util.u;
+import j$.util.w;
 
-final class P1 extends S1 implements CLASSNAMEv1 {
-    P1(CLASSNAMEv1 v1Var, CLASSNAMEv1 v1Var2) {
-        super(v1Var, v1Var2);
+final class P1 extends R1 implements CLASSNAMEw1 {
+    P1(CLASSNAMEw1 w1Var, CLASSNAMEw1 w1Var2) {
+        super(w1Var, w1Var2);
     }
 
     /* renamed from: a */
-    public /* synthetic */ void i(Double[] dArr, int i) {
-        CLASSNAMEp1.h(this, dArr, i);
+    public /* synthetic */ void i(Integer[] numArr, int i) {
+        CLASSNAMEo1.i(this, numArr, i);
     }
 
     /* renamed from: f */
-    public double[] c(int i) {
-        return new double[i];
+    public int[] c(int i) {
+        return new int[i];
     }
 
     public /* synthetic */ void forEach(Consumer consumer) {
-        CLASSNAMEp1.k(this, consumer);
+        CLASSNAMEo1.l(this, consumer);
     }
 
     /* renamed from: h */
-    public /* synthetic */ CLASSNAMEv1 r(long j, long j2, m mVar) {
-        return CLASSNAMEp1.n(this, j, j2, mVar);
-    }
-
-    public x spliterator() {
-        return new CLASSNAMEg2(this);
+    public /* synthetic */ CLASSNAMEw1 r(long j, long j2, m mVar) {
+        return CLASSNAMEo1.o(this, j, j2, mVar);
     }
 
     /* renamed from: spliterator  reason: collision with other method in class */
-    public y m1spliterator() {
+    public w m2spliterator() {
+        return new CLASSNAMEg2(this);
+    }
+
+    public u spliterator() {
         return new CLASSNAMEg2(this);
     }
 }

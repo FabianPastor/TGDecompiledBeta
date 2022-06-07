@@ -4,12 +4,13 @@ import android.view.KeyEvent;
 import android.widget.TextView;
 
 public final /* synthetic */ class PaymentFormActivity$$ExternalSyntheticLambda29 implements TextView.OnEditorActionListener {
-    public static final /* synthetic */ PaymentFormActivity$$ExternalSyntheticLambda29 INSTANCE = new PaymentFormActivity$$ExternalSyntheticLambda29();
+    public final /* synthetic */ PaymentFormActivity f$0;
 
-    private /* synthetic */ PaymentFormActivity$$ExternalSyntheticLambda29() {
+    public /* synthetic */ PaymentFormActivity$$ExternalSyntheticLambda29(PaymentFormActivity paymentFormActivity) {
+        this.f$0 = paymentFormActivity;
     }
 
     public final boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
-        return PaymentFormActivity.lambda$createView$14(textView, i, keyEvent);
+        return this.f$0.lambda$createView$7(textView, i, keyEvent);
     }
 }

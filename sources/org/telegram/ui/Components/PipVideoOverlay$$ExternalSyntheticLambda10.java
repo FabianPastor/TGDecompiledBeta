@@ -9,6 +9,6 @@ public final /* synthetic */ class PipVideoOverlay$$ExternalSyntheticLambda10 im
     }
 
     public final float get(Object obj) {
-        return ((PipVideoOverlay) obj).pipX;
+        return ((PipVideoOverlay) obj).pipY;
     }
 }

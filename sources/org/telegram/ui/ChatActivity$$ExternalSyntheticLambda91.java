@@ -10,6 +10,6 @@ public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda91 imple
     }
 
     public final void onClick(View view) {
-        ChatActivity.lambda$processSelectedOption$184(this.f$0, view);
+        ChatActivity.lambda$processSelectedOption$194(this.f$0, view);
     }
 }

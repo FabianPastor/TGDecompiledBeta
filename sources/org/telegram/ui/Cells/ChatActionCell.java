@@ -7,18 +7,24 @@ import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.text.Layout;
 import android.text.Spannable;
+import android.text.SpannableStringBuilder;
 import android.text.StaticLayout;
 import android.text.TextPaint;
 import android.text.TextUtils;
+import android.text.style.CharacterStyle;
+import android.text.style.ClickableSpan;
 import android.text.style.URLSpan;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.accessibility.AccessibilityNodeInfo;
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
+import java.util.concurrent.atomic.AtomicReference;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.DownloadController;
 import org.telegram.messenger.FileLoader;
@@ -30,6 +36,8 @@ import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.SharedConfig;
 import org.telegram.messenger.UserConfig;
+import org.telegram.messenger.browser.Browser;
+import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC$Message;
 import org.telegram.tgnet.TLRPC$MessageMedia;
 import org.telegram.tgnet.TLRPC$Photo;
@@ -42,11 +50,13 @@ import org.telegram.tgnet.TLRPC$TL_photoStrippedSize;
 import org.telegram.tgnet.TLRPC$VideoSize;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.AvatarDrawable;
+import org.telegram.ui.Components.URLSpanNoUnderline;
 import org.telegram.ui.Components.spoilers.SpoilerEffect;
 import org.telegram.ui.PhotoViewer;
 
 public class ChatActionCell extends BaseCell implements DownloadController.FileDownloadProgressListener, NotificationCenter.NotificationCenterDelegate {
     private int TAG;
+    private SpannableStringBuilder accessibilityText;
     private AvatarDrawable avatarDrawable;
     private int backgroundHeight;
     private Path backgroundPath;
@@ -56,7 +66,8 @@ public class ChatActionCell extends BaseCell implements DownloadController.FileD
     private ImageLocation currentVideoLocation;
     private int customDate;
     private CharSequence customText;
-    private ChatActionCellDelegate delegate;
+    /* access modifiers changed from: private */
+    public ChatActionCellDelegate delegate;
     private boolean hasReplyMessage;
     private boolean imagePressed;
     private ImageReceiver imageReceiver;
@@ -192,6 +203,7 @@ public class ChatActionCell extends BaseCell implements DownloadController.FileD
             CharSequence charSequence = this.customText;
             if (charSequence == null || !TextUtils.equals(str, charSequence)) {
                 this.customText = str;
+                this.accessibilityText = null;
                 updateTextInternal(z2);
             }
         }
@@ -225,14 +237,19 @@ public class ChatActionCell extends BaseCell implements DownloadController.FileD
 
     public void setMessageObject(MessageObject messageObject) {
         TLRPC$PhotoSize tLRPC$PhotoSize;
+        AtomicReference<WeakReference<View>> atomicReference;
         StaticLayout staticLayout;
         MessageObject messageObject2 = messageObject;
         if (this.currentMessageObject != messageObject2 || (((staticLayout = this.textLayout) != null && !TextUtils.equals(staticLayout.getText(), messageObject2.messageText)) || (!this.hasReplyMessage && messageObject2.replyMessageObject != null))) {
+            TLRPC$VideoSize tLRPC$VideoSize = null;
+            this.accessibilityText = null;
             this.currentMessageObject = messageObject2;
+            if (!(messageObject2 == null || (atomicReference = messageObject2.viewRef) == null || (atomicReference.get() != null && this.currentMessageObject.viewRef.get().get() == this))) {
+                this.currentMessageObject.viewRef.set(new WeakReference(this));
+            }
             this.hasReplyMessage = messageObject2.replyMessageObject != null;
             DownloadController.getInstance(this.currentAccount).removeLoadingFileObserver(this);
             this.previousWidth = 0;
-            TLRPC$VideoSize tLRPC$VideoSize = null;
             if (this.currentMessageObject.type == 11) {
                 this.avatarDrawable.setInfo(messageObject.getDialogId(), (String) null, (String) null);
                 MessageObject messageObject3 = this.currentMessageObject;
@@ -257,7 +274,7 @@ public class ChatActionCell extends BaseCell implements DownloadController.FileD
                         TLRPC$Photo tLRPC$Photo = messageObject2.messageOwner.action.photo;
                         if (!tLRPC$Photo.video_sizes.isEmpty() && SharedConfig.autoplayGifs) {
                             TLRPC$VideoSize tLRPC$VideoSize2 = tLRPC$Photo.video_sizes.get(0);
-                            if (messageObject2.mediaExists || DownloadController.getInstance(this.currentAccount).canDownloadMedia(4, tLRPC$VideoSize2.size)) {
+                            if (messageObject2.mediaExists || DownloadController.getInstance(this.currentAccount).canDownloadMedia(4, (long) tLRPC$VideoSize2.size)) {
                                 tLRPC$VideoSize = tLRPC$VideoSize2;
                             } else {
                                 this.currentVideoLocation = ImageLocation.getForPhoto(tLRPC$VideoSize2, tLRPC$Photo);
@@ -319,8 +336,8 @@ public class ChatActionCell extends BaseCell implements DownloadController.FileD
     }
 
     /* JADX WARNING: Removed duplicated region for block: B:44:0x0092  */
-    /* JADX WARNING: Removed duplicated region for block: B:85:0x015b  */
-    /* JADX WARNING: Removed duplicated region for block: B:87:? A[RETURN, SYNTHETIC] */
+    /* JADX WARNING: Removed duplicated region for block: B:70:0x0107  */
+    /* JADX WARNING: Removed duplicated region for block: B:72:? A[RETURN, SYNTHETIC] */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public boolean onTouchEvent(android.view.MotionEvent r10) {
         /*
@@ -388,33 +405,33 @@ public class ChatActionCell extends BaseCell implements DownloadController.FileD
         L_0x0077:
             r2 = 0
         L_0x0078:
-            if (r2 != 0) goto L_0x0159
+            if (r2 != 0) goto L_0x0105
             int r5 = r10.getAction()
             if (r5 == 0) goto L_0x008a
             android.text.style.URLSpan r5 = r9.pressedLink
-            if (r5 == 0) goto L_0x0159
+            if (r5 == 0) goto L_0x0105
             int r5 = r10.getAction()
-            if (r5 != r3) goto L_0x0159
+            if (r5 != r3) goto L_0x0105
         L_0x008a:
             int r5 = r9.textX
             float r6 = (float) r5
             r7 = 0
             int r6 = (r0 > r6 ? 1 : (r0 == r6 ? 0 : -1))
-            if (r6 < 0) goto L_0x0157
+            if (r6 < 0) goto L_0x0103
             int r6 = r9.textY
             float r8 = (float) r6
             int r8 = (r1 > r8 ? 1 : (r1 == r8 ? 0 : -1))
-            if (r8 < 0) goto L_0x0157
+            if (r8 < 0) goto L_0x0103
             int r8 = r9.textWidth
             int r5 = r5 + r8
             float r5 = (float) r5
             int r5 = (r0 > r5 ? 1 : (r0 == r5 ? 0 : -1))
-            if (r5 > 0) goto L_0x0157
+            if (r5 > 0) goto L_0x0103
             int r5 = r9.textHeight
             int r5 = r5 + r6
             float r5 = (float) r5
             int r5 = (r1 > r5 ? 1 : (r1 == r5 ? 0 : -1))
-            if (r5 > 0) goto L_0x0157
+            if (r5 > 0) goto L_0x0103
             float r5 = (float) r6
             float r1 = r1 - r5
             int r5 = r9.textXLeft
@@ -428,89 +445,77 @@ public class ChatActionCell extends BaseCell implements DownloadController.FileD
             android.text.StaticLayout r6 = r9.textLayout
             float r6 = r6.getLineLeft(r1)
             int r8 = (r6 > r0 ? 1 : (r6 == r0 ? 0 : -1))
-            if (r8 > 0) goto L_0x0154
+            if (r8 > 0) goto L_0x0100
             android.text.StaticLayout r8 = r9.textLayout
             float r1 = r8.getLineWidth(r1)
             float r6 = r6 + r1
             int r0 = (r6 > r0 ? 1 : (r6 == r0 ? 0 : -1))
-            if (r0 < 0) goto L_0x0154
+            if (r0 < 0) goto L_0x0100
             org.telegram.messenger.MessageObject r0 = r9.currentMessageObject
             java.lang.CharSequence r0 = r0.messageText
             boolean r1 = r0 instanceof android.text.Spannable
-            if (r1 == 0) goto L_0x0154
+            if (r1 == 0) goto L_0x0100
             android.text.Spannable r0 = (android.text.Spannable) r0
             java.lang.Class<android.text.style.URLSpan> r1 = android.text.style.URLSpan.class
             java.lang.Object[] r0 = r0.getSpans(r5, r5, r1)
             android.text.style.URLSpan[] r0 = (android.text.style.URLSpan[]) r0
             int r1 = r0.length
-            if (r1 == 0) goto L_0x014f
+            if (r1 == 0) goto L_0x00fb
             int r1 = r10.getAction()
             if (r1 != 0) goto L_0x00f1
             r0 = r0[r4]
             r9.pressedLink = r0
-            goto L_0x0152
+            goto L_0x00fe
         L_0x00f1:
-            r1 = r0[r4]
-            android.text.style.URLSpan r5 = r9.pressedLink
-            if (r1 != r5) goto L_0x0151
-            org.telegram.ui.Cells.ChatActionCell$ChatActionCellDelegate r1 = r9.delegate
-            if (r1 == 0) goto L_0x0152
             r0 = r0[r4]
-            java.lang.String r0 = r0.getURL()
-            java.lang.String r1 = "invite"
-            boolean r1 = r0.startsWith(r1)
-            if (r1 == 0) goto L_0x0121
             android.text.style.URLSpan r1 = r9.pressedLink
-            boolean r2 = r1 instanceof org.telegram.ui.Components.URLSpanNoUnderline
-            if (r2 == 0) goto L_0x0121
-            org.telegram.ui.Components.URLSpanNoUnderline r1 = (org.telegram.ui.Components.URLSpanNoUnderline) r1
-            org.telegram.tgnet.TLObject r0 = r1.getObject()
-            boolean r1 = r0 instanceof org.telegram.tgnet.TLRPC$TL_chatInviteExported
-            if (r1 == 0) goto L_0x0152
-            org.telegram.tgnet.TLRPC$TL_chatInviteExported r0 = (org.telegram.tgnet.TLRPC$TL_chatInviteExported) r0
-            org.telegram.ui.Cells.ChatActionCell$ChatActionCellDelegate r1 = r9.delegate
-            r1.needOpenInviteLink(r0)
-            goto L_0x0152
-        L_0x0121:
-            java.lang.String r1 = "game"
-            boolean r1 = r0.startsWith(r1)
-            if (r1 == 0) goto L_0x0135
-            org.telegram.ui.Cells.ChatActionCell$ChatActionCellDelegate r0 = r9.delegate
-            org.telegram.messenger.MessageObject r1 = r9.currentMessageObject
-            int r1 = r1.getReplyMsgId()
-            r0.didPressReplyMessage(r9, r1)
-            goto L_0x0152
-        L_0x0135:
-            java.lang.String r1 = "http"
-            boolean r1 = r0.startsWith(r1)
-            if (r1 == 0) goto L_0x0145
-            android.content.Context r1 = r9.getContext()
-            org.telegram.messenger.browser.Browser.openUrl((android.content.Context) r1, (java.lang.String) r0)
-            goto L_0x0152
-        L_0x0145:
-            org.telegram.ui.Cells.ChatActionCell$ChatActionCellDelegate r1 = r9.delegate
-            long r4 = java.lang.Long.parseLong(r0)
-            r1.needOpenUserProfile(r4)
-            goto L_0x0152
-        L_0x014f:
+            if (r0 != r1) goto L_0x00fd
+            r9.openLink(r1)
+            goto L_0x00fe
+        L_0x00fb:
             r9.pressedLink = r7
-        L_0x0151:
+        L_0x00fd:
             r3 = r2
-        L_0x0152:
+        L_0x00fe:
             r2 = r3
-            goto L_0x0159
-        L_0x0154:
+            goto L_0x0105
+        L_0x0100:
             r9.pressedLink = r7
-            goto L_0x0159
-        L_0x0157:
+            goto L_0x0105
+        L_0x0103:
             r9.pressedLink = r7
-        L_0x0159:
-            if (r2 != 0) goto L_0x015f
+        L_0x0105:
+            if (r2 != 0) goto L_0x010b
             boolean r2 = super.onTouchEvent(r10)
-        L_0x015f:
+        L_0x010b:
             return r2
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Cells.ChatActionCell.onTouchEvent(android.view.MotionEvent):boolean");
+    }
+
+    /* access modifiers changed from: private */
+    public void openLink(CharacterStyle characterStyle) {
+        if (this.delegate != null && (characterStyle instanceof URLSpan)) {
+            String url = ((URLSpan) characterStyle).getURL();
+            if (url.startsWith("invite")) {
+                URLSpan uRLSpan = this.pressedLink;
+                if (uRLSpan instanceof URLSpanNoUnderline) {
+                    TLObject object = ((URLSpanNoUnderline) uRLSpan).getObject();
+                    if (object instanceof TLRPC$TL_chatInviteExported) {
+                        this.delegate.needOpenInviteLink((TLRPC$TL_chatInviteExported) object);
+                        return;
+                    }
+                    return;
+                }
+            }
+            if (url.startsWith("game")) {
+                this.delegate.didPressReplyMessage(this, this.currentMessageObject.getReplyMsgId());
+            } else if (url.startsWith("http")) {
+                Browser.openUrl(getContext(), url);
+            } else {
+                this.delegate.needOpenUserProfile(Long.parseLong(url));
+            }
+        }
     }
 
     private void createLayout(CharSequence charSequence, int i) {
@@ -908,7 +913,27 @@ public class ChatActionCell extends BaseCell implements DownloadController.FileD
     public void onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo accessibilityNodeInfo) {
         super.onInitializeAccessibilityNodeInfo(accessibilityNodeInfo);
         if (!TextUtils.isEmpty(this.customText) || this.currentMessageObject != null) {
-            accessibilityNodeInfo.setText(!TextUtils.isEmpty(this.customText) ? this.customText : this.currentMessageObject.messageText);
+            if (this.accessibilityText == null) {
+                SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(!TextUtils.isEmpty(this.customText) ? this.customText : this.currentMessageObject.messageText);
+                for (final CharacterStyle characterStyle : (CharacterStyle[]) spannableStringBuilder.getSpans(0, spannableStringBuilder.length(), ClickableSpan.class)) {
+                    int spanStart = spannableStringBuilder.getSpanStart(characterStyle);
+                    int spanEnd = spannableStringBuilder.getSpanEnd(characterStyle);
+                    spannableStringBuilder.removeSpan(characterStyle);
+                    spannableStringBuilder.setSpan(new ClickableSpan() {
+                        public void onClick(View view) {
+                            if (ChatActionCell.this.delegate != null) {
+                                ChatActionCell.this.openLink(characterStyle);
+                            }
+                        }
+                    }, spanStart, spanEnd, 33);
+                }
+                this.accessibilityText = spannableStringBuilder;
+            }
+            if (Build.VERSION.SDK_INT < 24) {
+                accessibilityNodeInfo.setContentDescription(this.accessibilityText.toString());
+            } else {
+                accessibilityNodeInfo.setText(this.accessibilityText);
+            }
             accessibilityNodeInfo.setEnabled(true);
         }
     }

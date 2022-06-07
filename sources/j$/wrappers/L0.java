@@ -10,9 +10,9 @@ import j$.util.function.g;
 import j$.util.function.h;
 import j$.util.function.u;
 import j$.util.function.y;
-import j$.util.stream.CLASSNAMEf1;
+import j$.util.stream.CLASSNAMEe1;
 import j$.util.stream.CLASSNAMEg;
-import j$.util.stream.M0;
+import j$.util.stream.IntStream;
 import j$.util.stream.Stream;
 import j$.util.stream.U;
 import java.util.stream.DoubleStream;
@@ -47,8 +47,8 @@ public final /* synthetic */ class L0 implements U {
         return C$r8$wrapper$java$util$stream$Stream$VWRP.convert(this.a.mapToObj(D.a(gVar)));
     }
 
-    public /* synthetic */ M0 R(G g) {
-        return N0.n0(this.a.mapToInt(g == null ? null : g.a));
+    public /* synthetic */ IntStream R(G g) {
+        return C$r8$wrapper$java$util$stream$IntStream$VWRP.convert(this.a.mapToInt(g == null ? null : g.a));
     }
 
     public /* synthetic */ boolean Y(E e) {
@@ -156,8 +156,8 @@ public final /* synthetic */ class L0 implements U {
         return n0(this.a.flatMap(D.a(gVar)));
     }
 
-    public /* synthetic */ CLASSNAMEf1 x(h hVar) {
-        return P0.n0(this.a.mapToLong(J.a(hVar)));
+    public /* synthetic */ CLASSNAMEe1 x(h hVar) {
+        return N0.n0(this.a.mapToLong(J.a(hVar)));
     }
 
     public /* synthetic */ U y(K k) {

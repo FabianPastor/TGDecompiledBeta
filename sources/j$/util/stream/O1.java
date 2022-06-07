@@ -1,47 +1,40 @@
 package j$.util.stream;
 
-import j$.util.function.b;
-import j$.util.function.r;
-import j$.util.y;
-import java.util.concurrent.CountedCompleter;
+import j$.util.function.Consumer;
+import j$.util.function.m;
+import j$.util.u;
+import j$.util.w;
 
-class O1 extends CLASSNAMEf {
-    protected final CLASSNAMEz2 h;
-    protected final r i;
-    protected final b j;
-
-    O1(O1 o1, y yVar) {
-        super((CLASSNAMEf) o1, yVar);
-        this.h = o1.h;
-        this.i = o1.i;
-        this.j = o1.j;
+final class O1 extends R1 implements CLASSNAMEu1 {
+    O1(CLASSNAMEu1 u1Var, CLASSNAMEu1 u1Var2) {
+        super(u1Var, u1Var2);
     }
 
-    O1(CLASSNAMEz2 z2Var, y yVar, r rVar, b bVar) {
-        super(z2Var, yVar);
-        this.h = z2Var;
-        this.i = rVar;
-        this.j = bVar;
+    /* renamed from: a */
+    public /* synthetic */ void i(Double[] dArr, int i) {
+        CLASSNAMEo1.h(this, dArr, i);
     }
 
-    /* access modifiers changed from: protected */
-    public Object a() {
-        CLASSNAMEt1 t1Var = (CLASSNAMEt1) this.i.apply(this.h.q0(this.b));
-        this.h.u0(t1Var, this.b);
-        return t1Var.a();
+    /* renamed from: f */
+    public double[] c(int i) {
+        return new double[i];
     }
 
-    /* access modifiers changed from: protected */
-    public CLASSNAMEf f(y yVar) {
-        return new O1(this, yVar);
+    public /* synthetic */ void forEach(Consumer consumer) {
+        CLASSNAMEo1.k(this, consumer);
     }
 
-    public void onCompletion(CountedCompleter countedCompleter) {
-        if (!d()) {
-            g((B1) this.j.apply((B1) ((O1) this.d).b(), (B1) ((O1) this.e).b()));
-        }
-        this.b = null;
-        this.e = null;
-        this.d = null;
+    /* renamed from: h */
+    public /* synthetic */ CLASSNAMEu1 r(long j, long j2, m mVar) {
+        return CLASSNAMEo1.n(this, j, j2, mVar);
+    }
+
+    /* renamed from: spliterator  reason: collision with other method in class */
+    public w m1spliterator() {
+        return new CLASSNAMEf2(this);
+    }
+
+    public u spliterator() {
+        return new CLASSNAMEf2(this);
     }
 }

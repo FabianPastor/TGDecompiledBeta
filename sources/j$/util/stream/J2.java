@@ -1,33 +1,56 @@
 package j$.util.stream;
 
 import j$.util.function.BiConsumer;
+import j$.util.function.Consumer;
 import j$.util.function.b;
 import j$.util.function.y;
-import j$.wrappers.J0;
 
-class J2 extends V2 {
-    final /* synthetic */ b b;
+class J2 extends T2 implements S2 {
+    final /* synthetic */ y b;
     final /* synthetic */ BiConsumer c;
-    final /* synthetic */ y d;
-    final /* synthetic */ J0 e;
+    final /* synthetic */ b d;
 
-    /* JADX INFO: super call moved to the top of the method (can break code semantics) */
-    J2(CLASSNAMEf4 f4Var, b bVar, BiConsumer biConsumer, y yVar, J0 j0) {
-        super(f4Var);
-        this.b = bVar;
+    J2(y yVar, BiConsumer biConsumer, b bVar) {
+        this.b = yVar;
         this.c = biConsumer;
-        this.d = yVar;
-        this.e = j0;
+        this.d = bVar;
     }
 
-    public T2 a() {
-        return new K2(this.d, this.c, this.b);
+    public /* synthetic */ void accept(double d2) {
+        CLASSNAMEo1.f(this);
+        throw null;
     }
 
-    public int b() {
-        if (this.e.b().contains(CLASSNAMEh.UNORDERED)) {
-            return CLASSNAMEe4.r;
-        }
-        return 0;
+    public /* synthetic */ void accept(int i) {
+        CLASSNAMEo1.d(this);
+        throw null;
+    }
+
+    public /* synthetic */ void accept(long j) {
+        CLASSNAMEo1.e(this);
+        throw null;
+    }
+
+    public void accept(Object obj) {
+        this.c.accept(this.a, obj);
+    }
+
+    public /* synthetic */ Consumer andThen(Consumer consumer) {
+        return Consumer.CC.$default$andThen(this, consumer);
+    }
+
+    public void h(S2 s2) {
+        this.a = this.d.apply(this.a, ((J2) s2).a);
+    }
+
+    public /* synthetic */ void m() {
+    }
+
+    public void n(long j) {
+        this.a = this.b.get();
+    }
+
+    public /* synthetic */ boolean o() {
+        return false;
     }
 }

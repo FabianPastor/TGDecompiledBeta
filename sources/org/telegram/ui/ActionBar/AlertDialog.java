@@ -1160,7 +1160,7 @@ public class AlertDialog extends Dialog implements Drawable.Callback {
                 r14.setEllipsize(TextUtils.TruncateAt.END);
                 r14.setSingleLine(true);
                 r14.setText(this.neutralButtonText.toString().toUpperCase());
-                r14.setBackgroundDrawable(Theme.getRoundRectSelectorDrawable(getThemedColor(this.dialogButtonColorKey)));
+                r14.setBackground(Theme.getRoundRectSelectorDrawable(getThemedColor(this.dialogButtonColorKey)));
                 r14.setPadding(AndroidUtilities.dp(10.0f), 0, AndroidUtilities.dp(10.0f), 0);
                 if (this.verticalButtons) {
                     ViewGroup viewGroup = this.buttonsLayout;

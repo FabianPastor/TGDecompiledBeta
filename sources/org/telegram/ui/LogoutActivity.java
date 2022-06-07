@@ -14,7 +14,6 @@ import java.util.ArrayList;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.DownloadController;
 import org.telegram.messenger.LocaleController;
-import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.SharedConfig;
 import org.telegram.messenger.UserConfig;
 import org.telegram.ui.ActionBar.ActionBar;
@@ -60,7 +59,7 @@ public class LogoutActivity extends BaseFragment {
         this.rowCount = 0;
         this.rowCount = 0 + 1;
         this.alternativeHeaderRow = 0;
-        if (UserConfig.getActivatedAccountsCount() < 3) {
+        if (UserConfig.getActivatedAccountsCount() < 4) {
             int i = this.rowCount;
             this.rowCount = i + 1;
             this.addAccountRow = i;
@@ -124,12 +123,12 @@ public class LogoutActivity extends BaseFragment {
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$createView$1(View view, int i, float f, float f2) {
-        int i2 = -1;
+    public /* synthetic */ void lambda$createView$0(View view, int i, float f, float f2) {
         if (i == this.addAccountRow) {
+            int i2 = -1;
             int i3 = 0;
             while (true) {
-                if (i3 >= 3) {
+                if (i3 >= 4) {
                     break;
                 } else if (!UserConfig.getInstance(i3).isClientActivated()) {
                     i2 = i3;
@@ -148,26 +147,24 @@ public class LogoutActivity extends BaseFragment {
         } else if (i == this.phoneRow) {
             presentFragment(new ActionIntroActivity(3));
         } else if (i == this.supportRow) {
-            showDialog(AlertsCreator.createSupportAlert(this));
+            showDialog(AlertsCreator.createSupportAlert(this, (Theme.ResourcesProvider) null));
         } else if (i == this.logoutRow && getParentActivity() != null) {
-            AlertDialog.Builder builder = new AlertDialog.Builder((Context) getParentActivity());
-            getUserConfig();
-            builder.setMessage(LocaleController.getString("AreYouSureLogout", NUM));
-            builder.setTitle(LocaleController.getString("LogOut", NUM));
-            builder.setPositiveButton(LocaleController.getString("LogOut", NUM), new LogoutActivity$$ExternalSyntheticLambda0(this));
-            builder.setNegativeButton(LocaleController.getString("Cancel", NUM), (DialogInterface.OnClickListener) null);
-            AlertDialog create = builder.create();
-            showDialog(create);
-            TextView textView = (TextView) create.getButton(-1);
-            if (textView != null) {
-                textView.setTextColor(Theme.getColor("dialogTextRed2"));
-            }
+            showDialog(makeLogOutDialog(getParentActivity(), this.currentAccount));
         }
     }
 
-    /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$createView$0(DialogInterface dialogInterface, int i) {
-        MessagesController.getInstance(this.currentAccount).performLogout(1);
+    public static AlertDialog makeLogOutDialog(Context context, int i) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setMessage(LocaleController.getString("AreYouSureLogout", NUM));
+        builder.setTitle(LocaleController.getString("LogOut", NUM));
+        builder.setPositiveButton(LocaleController.getString("LogOut", NUM), new LogoutActivity$$ExternalSyntheticLambda0(i));
+        builder.setNegativeButton(LocaleController.getString("Cancel", NUM), (DialogInterface.OnClickListener) null);
+        AlertDialog create = builder.create();
+        TextView textView = (TextView) create.getButton(-1);
+        if (textView != null) {
+            textView.setTextColor(Theme.getColor("dialogTextRed2"));
+        }
+        return create;
     }
 
     /* access modifiers changed from: protected */
@@ -254,7 +251,7 @@ public class LogoutActivity extends BaseFragment {
                 android.content.Context r4 = r2.mContext
                 r3.<init>(r4)
                 android.content.Context r4 = r2.mContext
-                r0 = 2131165483(0x7var_b, float:1.7945184E38)
+                r0 = 2131165435(0x7var_fb, float:1.7945087E38)
                 java.lang.String r1 = "windowBackgroundGrayShadow"
                 android.graphics.drawable.Drawable r4 = org.telegram.ui.ActionBar.Theme.getThemedDrawable((android.content.Context) r4, (int) r0, (java.lang.String) r1)
                 r3.setBackgroundDrawable(r4)

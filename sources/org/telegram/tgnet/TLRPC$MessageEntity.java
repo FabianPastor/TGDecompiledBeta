@@ -51,6 +51,9 @@ public abstract class TLRPC$MessageEntity extends TLObject {
             case 1280209983:
                 tLRPC$MessageEntity = new TLRPC$TL_messageEntityCashtag();
                 break;
+            case 1592721940:
+                tLRPC$MessageEntity = new TLRPC$TL_messageEntityAnimatedEmoji();
+                break;
             case 1692693954:
                 tLRPC$MessageEntity = new TLRPC$TL_messageEntityEmail();
                 break;

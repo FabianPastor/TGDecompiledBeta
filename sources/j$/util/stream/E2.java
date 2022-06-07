@@ -1,48 +1,73 @@
 package j$.util.stream;
 
-import j$.util.function.b;
+import j$.util.CLASSNAMEj;
+import j$.util.function.Consumer;
 import j$.util.function.d;
-import j$.util.function.j;
-import j$.util.function.o;
+import j$.util.function.e;
+import j$.util.function.f;
 
-class E2 extends V2 {
-    public final /* synthetic */ int b = 1;
-    final /* synthetic */ Object c;
+class E2 implements S2, CLASSNAMEj3 {
+    private boolean a;
+    private double b;
+    final /* synthetic */ d c;
 
-    /* JADX INFO: super call moved to the top of the method (can break code semantics) */
-    public E2(CLASSNAMEf4 f4Var, b bVar) {
-        super(f4Var);
-        this.c = bVar;
-    }
-
-    public T2 a() {
-        switch (this.b) {
-            case 0:
-                return new F2((d) this.c);
-            case 1:
-                return new I2((b) this.c);
-            case 2:
-                return new O2((j) this.c);
-            default:
-                return new S2((o) this.c);
-        }
-    }
-
-    /* JADX INFO: super call moved to the top of the method (can break code semantics) */
-    public E2(CLASSNAMEf4 f4Var, d dVar) {
-        super(f4Var);
+    E2(d dVar) {
         this.c = dVar;
     }
 
-    /* JADX INFO: super call moved to the top of the method (can break code semantics) */
-    public E2(CLASSNAMEf4 f4Var, j jVar) {
-        super(f4Var);
-        this.c = jVar;
+    public void accept(double d) {
+        if (this.a) {
+            this.a = false;
+        } else {
+            d = this.c.applyAsDouble(this.b, d);
+        }
+        this.b = d;
     }
 
-    /* JADX INFO: super call moved to the top of the method (can break code semantics) */
-    public E2(CLASSNAMEf4 f4Var, o oVar) {
-        super(f4Var);
-        this.c = oVar;
+    public /* synthetic */ void accept(int i) {
+        CLASSNAMEo1.d(this);
+        throw null;
+    }
+
+    public /* synthetic */ void accept(long j) {
+        CLASSNAMEo1.e(this);
+        throw null;
+    }
+
+    public /* synthetic */ Consumer andThen(Consumer consumer) {
+        return Consumer.CC.$default$andThen(this, consumer);
+    }
+
+    /* renamed from: b */
+    public /* synthetic */ void accept(Double d) {
+        CLASSNAMEo1.a(this, d);
+    }
+
+    public Object get() {
+        return this.a ? CLASSNAMEj.a() : CLASSNAMEj.d(this.b);
+    }
+
+    public void h(S2 s2) {
+        E2 e2 = (E2) s2;
+        if (!e2.a) {
+            accept(e2.b);
+        }
+    }
+
+    public f j(f fVar) {
+        fVar.getClass();
+        return new e(this, fVar);
+    }
+
+    public /* synthetic */ void m() {
+    }
+
+    public void n(long j) {
+        this.a = true;
+        this.b = 0.0d;
+    }
+
+    public /* synthetic */ boolean o() {
+        return false;
     }
 }

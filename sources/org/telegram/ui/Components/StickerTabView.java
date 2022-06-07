@@ -43,7 +43,7 @@ public class StickerTabView extends FrameLayout {
             this.imageView = backupImageView;
             backupImageView.setLayerNum(1);
             this.imageView.setAspectFit(false);
-            addView(this.imageView, LayoutHelper.createFrame(36, 36, 17));
+            addView(this.imageView, LayoutHelper.createFrame(26, 26, 17));
             this.visibleView = this.imageView;
         } else if (i == 1) {
             ImageView imageView2 = new ImageView(context);
@@ -56,7 +56,7 @@ public class StickerTabView extends FrameLayout {
             this.imageView = backupImageView2;
             backupImageView2.setLayerNum(1);
             this.imageView.setAspectFit(true);
-            addView(this.imageView, LayoutHelper.createFrame(30, 30, 17));
+            addView(this.imageView, LayoutHelper.createFrame(26, 26, 17));
             this.visibleView = this.imageView;
         }
         TextView textView2 = new TextView(context);
@@ -74,7 +74,7 @@ public class StickerTabView extends FrameLayout {
         int i = this.type;
         if (i != 2) {
             this.expanded = z;
-            float f = i == 1 ? 24.0f : 30.0f;
+            float f = i == 1 ? 24.0f : 26.0f;
             float f2 = i == 1 ? 38.0f : 56.0f;
             this.visibleView.getLayoutParams().width = AndroidUtilities.dp(z ? f2 : f);
             ViewGroup.LayoutParams layoutParams = this.visibleView.getLayoutParams();
@@ -93,19 +93,20 @@ public class StickerTabView extends FrameLayout {
         int i = this.type;
         if (i != 2) {
             if (this.expanded) {
-                float f2 = i == 1 ? 24.0f : 30.0f;
+                float f2 = i == 1 ? 24.0f : 26.0f;
                 float f3 = i == 1 ? 38.0f : 56.0f;
-                float f4 = 1.0f - f;
-                this.visibleView.setTranslationY((((((float) AndroidUtilities.dp(48.0f - f2)) / 2.0f) - (((float) AndroidUtilities.dp(98.0f - f3)) / 2.0f)) * f4) - (((float) AndroidUtilities.dp(8.0f)) * f));
-                this.visibleView.setTranslationX(((((float) AndroidUtilities.dp(52.0f - f2)) / 2.0f) - (((float) AndroidUtilities.dp(86.0f - f3)) / 2.0f)) * f4);
+                float f4 = 86.0f - f3;
+                float f5 = 1.0f - f;
+                this.visibleView.setTranslationY((((((float) AndroidUtilities.dp(36.0f - f2)) / 2.0f) - (((float) AndroidUtilities.dp(f4)) / 2.0f)) * f5) - (((float) AndroidUtilities.dp(8.0f)) * f));
+                this.visibleView.setTranslationX(((((float) AndroidUtilities.dp(38.0f - f2)) / 2.0f) - (((float) AndroidUtilities.dp(f4)) / 2.0f)) * f5);
                 this.textView.setAlpha(Math.max(0.0f, (f - 0.5f) / 0.5f));
-                this.textView.setTranslationY(((float) (-AndroidUtilities.dp(40.0f))) * f4);
-                this.textView.setTranslationX(((float) (-AndroidUtilities.dp(12.0f))) * f4);
+                this.textView.setTranslationY(((float) (-AndroidUtilities.dp(40.0f))) * f5);
+                this.textView.setTranslationX(((float) (-AndroidUtilities.dp(12.0f))) * f5);
                 this.visibleView.setPivotX(0.0f);
                 this.visibleView.setPivotY(0.0f);
-                float f5 = ((f2 / f3) * f4) + f;
-                this.visibleView.setScaleX(f5);
-                this.visibleView.setScaleY(f5);
+                float f6 = ((f2 / f3) * f5) + f;
+                this.visibleView.setScaleX(f6);
+                this.visibleView.setScaleY(f6);
                 return;
             }
             this.visibleView.setTranslationX(0.0f);

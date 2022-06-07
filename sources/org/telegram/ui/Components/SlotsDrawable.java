@@ -8,6 +8,7 @@ import org.telegram.messenger.DownloadController;
 import org.telegram.messenger.FileLoader;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.MessageObject;
+import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.Utilities;
 import org.telegram.tgnet.TLRPC$Document;
 import org.telegram.tgnet.TLRPC$TL_messages_stickerSet;
@@ -229,7 +230,7 @@ public class SlotsDrawable extends RLottieDrawable {
                     i3 = 20;
                 }
                 TLRPC$Document tLRPC$Document = tLRPC$TL_messages_stickerSet.documents.get(i3);
-                String readRes = RLottieDrawable.readRes(FileLoader.getPathToAttach(tLRPC$Document, true), 0);
+                String readRes = RLottieDrawable.readRes(FileLoader.getInstance(UserConfig.selectedAccount).getPathToAttach(tLRPC$Document, true), 0);
                 if (TextUtils.isEmpty(readRes)) {
                     AndroidUtilities.runOnUIThread(new SlotsDrawable$$ExternalSyntheticLambda0(tLRPC$Document, i, messageObject, chatMessageCell, tLRPC$TL_messages_stickerSet));
                     z = true;
@@ -292,8 +293,8 @@ public class SlotsDrawable extends RLottieDrawable {
     }
 
     /* access modifiers changed from: private */
-    /* JADX WARNING: Removed duplicated region for block: B:61:0x00be  */
-    /* JADX WARNING: Removed duplicated region for block: B:62:0x00d1  */
+    /* JADX WARNING: Removed duplicated region for block: B:61:0x00c5  */
+    /* JADX WARNING: Removed duplicated region for block: B:62:0x00d8  */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public /* synthetic */ void lambda$setDiceNumber$10(org.telegram.tgnet.TLRPC$TL_messages_stickerSet r18, int r19, org.telegram.messenger.MessageObject r20, org.telegram.ui.Cells.ChatMessageCell r21, boolean r22) {
         /*
@@ -314,7 +315,7 @@ public class SlotsDrawable extends RLottieDrawable {
             int r5 = r4.length
             r6 = 2
             int r5 = r5 + r6
-            if (r2 >= r5) goto L_0x0107
+            if (r2 >= r5) goto L_0x010e
             r7 = 0
             r5 = 4
             r9 = 3
@@ -332,7 +333,7 @@ public class SlotsDrawable extends RLottieDrawable {
             r4 = 5
         L_0x0031:
             r7 = r18
-            goto L_0x00a7
+            goto L_0x00a8
         L_0x0035:
             org.telegram.ui.Components.SlotsDrawable$ReelValue r7 = org.telegram.ui.Components.SlotsDrawable.ReelValue.berries
             if (r4 != r7) goto L_0x003b
@@ -348,11 +349,11 @@ public class SlotsDrawable extends RLottieDrawable {
             if (r4 != r7) goto L_0x004a
             r7 = r18
             r4 = 4
-            goto L_0x00a7
+            goto L_0x00a8
         L_0x004a:
             r7 = r18
             r4 = 3
-            goto L_0x00a7
+            goto L_0x00a8
         L_0x004f:
             if (r2 != r10) goto L_0x0072
             org.telegram.ui.Components.SlotsDrawable$ReelValue r4 = r0.center
@@ -406,27 +407,29 @@ public class SlotsDrawable extends RLottieDrawable {
             long[] r4 = r0.nativePtrs
             r11 = r4[r2]
             int r4 = (r11 > r7 ? 1 : (r11 == r7 ? 0 : -1))
-            if (r4 == 0) goto L_0x009e
+            if (r4 == 0) goto L_0x009f
         L_0x009b:
             r7 = r18
-            goto L_0x0103
-        L_0x009e:
-            if (r2 != r9) goto L_0x00a4
+            goto L_0x010a
+        L_0x009f:
+            if (r2 != r9) goto L_0x00a5
             r7 = r18
             r4 = 1
-            goto L_0x00a7
-        L_0x00a4:
+            goto L_0x00a8
+        L_0x00a5:
             r7 = r18
             r4 = 2
-        L_0x00a7:
+        L_0x00a8:
             java.util.ArrayList<org.telegram.tgnet.TLRPC$Document> r8 = r7.documents
             java.lang.Object r4 = r8.get(r4)
             r12 = r4
             org.telegram.tgnet.TLRPC$Document r12 = (org.telegram.tgnet.TLRPC$Document) r12
-            java.io.File r4 = org.telegram.messenger.FileLoader.getPathToAttach(r12, r10)
+            int r4 = org.telegram.messenger.UserConfig.selectedAccount
+            org.telegram.messenger.FileLoader r4 = org.telegram.messenger.FileLoader.getInstance(r4)
+            java.io.File r4 = r4.getPathToAttach(r12, r10)
             java.lang.String r4 = org.telegram.ui.Components.RLottieDrawable.readRes(r4, r1)
             boolean r8 = android.text.TextUtils.isEmpty(r4)
-            if (r8 == 0) goto L_0x00d1
+            if (r8 == 0) goto L_0x00d8
             org.telegram.ui.Components.SlotsDrawable$$ExternalSyntheticLambda1 r3 = new org.telegram.ui.Components.SlotsDrawable$$ExternalSyntheticLambda1
             r11 = r3
             r13 = r19
@@ -436,11 +439,11 @@ public class SlotsDrawable extends RLottieDrawable {
             r11.<init>(r12, r13, r14, r15, r16)
             org.telegram.messenger.AndroidUtilities.runOnUIThread(r3)
             r3 = 1
-            goto L_0x0103
-        L_0x00d1:
+            goto L_0x010a
+        L_0x00d8:
             r8 = 0
             java.lang.String r10 = "dice"
-            if (r2 > r6) goto L_0x00e9
+            if (r2 > r6) goto L_0x00f0
             long[] r5 = r0.secondNativePtrs
             int[] r6 = r0.metaData
             long r8 = org.telegram.ui.Components.RLottieDrawable.createWithJson(r4, r10, r6, r8)
@@ -449,35 +452,35 @@ public class SlotsDrawable extends RLottieDrawable {
             int[] r5 = r0.metaData
             r5 = r5[r1]
             r4[r2] = r5
-            goto L_0x0103
-        L_0x00e9:
-            long[] r6 = r0.nativePtrs
-            if (r2 != r9) goto L_0x00ef
-            r11 = 0
-            goto L_0x00f0
-        L_0x00ef:
-            r11 = 4
+            goto L_0x010a
         L_0x00f0:
+            long[] r6 = r0.nativePtrs
+            if (r2 != r9) goto L_0x00f6
+            r11 = 0
+            goto L_0x00f7
+        L_0x00f6:
+            r11 = 4
+        L_0x00f7:
             int[] r12 = r0.metaData
             long r12 = org.telegram.ui.Components.RLottieDrawable.createWithJson(r4, r10, r12, r8)
             r6[r11] = r12
             int[] r4 = r0.frameCounts
-            if (r2 != r9) goto L_0x00fd
+            if (r2 != r9) goto L_0x0104
             r5 = 0
-        L_0x00fd:
+        L_0x0104:
             int[] r6 = r0.metaData
             r6 = r6[r1]
             r4[r5] = r6
-        L_0x0103:
+        L_0x010a:
             int r2 = r2 + 1
             goto L_0x0012
-        L_0x0107:
-            if (r3 == 0) goto L_0x0112
+        L_0x010e:
+            if (r3 == 0) goto L_0x0119
             org.telegram.ui.Components.SlotsDrawable$$ExternalSyntheticLambda4 r1 = new org.telegram.ui.Components.SlotsDrawable$$ExternalSyntheticLambda4
             r1.<init>(r0)
             org.telegram.messenger.AndroidUtilities.runOnUIThread(r1)
             return
-        L_0x0112:
+        L_0x0119:
             org.telegram.ui.Components.SlotsDrawable$$ExternalSyntheticLambda10 r1 = new org.telegram.ui.Components.SlotsDrawable$$ExternalSyntheticLambda10
             r2 = r19
             r3 = r21

@@ -71,6 +71,7 @@ public class CameraView extends FrameLayout implements TextureView.SurfaceTextur
     private static final int MSG_STOP_RECORDING = 1;
     private static final int MSG_VIDEOFRAME_AVAILABLE = 2;
     private static final String VERTEX_SHADER = "uniform mat4 uMVPMatrix;\nuniform mat4 uSTMatrix;\nattribute vec4 aPosition;\nattribute vec4 aTextureCoord;\nvarying vec2 vTextureCoord;\nvoid main() {\n   gl_Position = uMVPMatrix * aPosition;\n   vTextureCoord = (uSTMatrix * aTextureCoord).xy;\n}\n";
+    private static final int audioSampleRate = 44100;
     /* access modifiers changed from: private */
     public ImageView blurredStubView;
     private File cameraFile;
@@ -381,20 +382,19 @@ public class CameraView extends FrameLayout implements TextureView.SurfaceTextur
     }
 
     private void updateCameraInfoSize() {
-        int i;
         Size size;
         CameraInfo cameraInfo;
         ArrayList<CameraInfo> cameras = CameraController.getInstance().getCameras();
         if (cameras != null) {
-            int i2 = 0;
+            int i = 0;
             while (true) {
-                if (i2 >= cameras.size()) {
+                if (i >= cameras.size()) {
                     break;
                 }
-                cameraInfo = cameras.get(i2);
+                cameraInfo = cameras.get(i);
                 boolean z = this.isFrontface;
                 if ((!z || cameraInfo.frontCamera == 0) && (z || cameraInfo.frontCamera != 0)) {
-                    i2++;
+                    i++;
                 }
             }
             this.info = cameraInfo;
@@ -402,35 +402,32 @@ public class CameraView extends FrameLayout implements TextureView.SurfaceTextur
                 Point point = AndroidUtilities.displaySize;
                 Point point2 = AndroidUtilities.displaySize;
                 float max = ((float) Math.max(point.x, point.y)) / ((float) Math.min(point2.x, point2.y));
-                int i3 = 1920;
+                int i2 = 1920;
+                int i3 = 720;
                 int i4 = 960;
-                int i5 = 1280;
                 if (this.initialFrontface) {
                     size = new Size(16, 9);
-                    i3 = 480;
-                    i4 = 270;
-                    i = 270;
-                    i5 = 480;
+                    i2 = 1280;
+                    i4 = 720;
                 } else if (Math.abs(max - 1.3333334f) < 0.1f) {
                     size = new Size(4, 3);
                     if (SharedConfig.getDevicePerformanceClass() == 0) {
-                        i = 960;
-                        i3 = 1280;
+                        i2 = 1280;
+                        i3 = 960;
                     } else {
-                        i = 1440;
+                        i3 = 960;
+                        i4 = 1440;
                     }
                 } else {
                     size = new Size(16, 9);
                     if (SharedConfig.getDevicePerformanceClass() == 0) {
-                        i = 960;
-                        i3 = 1280;
+                        i2 = 1280;
                     } else {
-                        i = 1080;
+                        i4 = 1080;
                     }
-                    i4 = 720;
                 }
-                this.previewSize = CameraController.chooseOptimalSize(this.info.getPreviewSizes(), i5, i4, size);
-                this.pictureSize = CameraController.chooseOptimalSize(this.info.getPictureSizes(), i3, i, size);
+                this.previewSize = CameraController.chooseOptimalSize(this.info.getPreviewSizes(), 1280, i3, size);
+                this.pictureSize = CameraController.chooseOptimalSize(this.info.getPictureSizes(), i2, i4, size);
                 requestLayout();
             }
         }
@@ -826,7 +823,7 @@ public class CameraView extends FrameLayout implements TextureView.SurfaceTextur
         }
 
         public void reinitForNewCamera() {
-            Handler handler = CameraView.this.getHandler();
+            Handler handler = getHandler();
             if (handler != null) {
                 sendMessage(handler.obtainMessage(2, Integer.valueOf(CameraView.this.info.cameraId)), 0);
             }
@@ -854,7 +851,7 @@ public class CameraView extends FrameLayout implements TextureView.SurfaceTextur
         }
 
         public void setCurrentSession(CameraSession cameraSession) {
-            Handler handler = CameraView.this.getHandler();
+            Handler handler = getHandler();
             if (handler != null) {
                 sendMessage(handler.obtainMessage(3, cameraSession), 0);
             }
@@ -1021,21 +1018,21 @@ public class CameraView extends FrameLayout implements TextureView.SurfaceTextur
         }
 
         public void shutdown(int i) {
-            Handler handler = CameraView.this.getHandler();
+            Handler handler = getHandler();
             if (handler != null) {
                 sendMessage(handler.obtainMessage(1, i, 0), 0);
             }
         }
 
         public void requestRender() {
-            Handler handler = CameraView.this.getHandler();
+            Handler handler = getHandler();
             if (handler != null) {
                 sendMessage(handler.obtainMessage(0, this.cameraId), 0);
             }
         }
 
         public boolean startRecording(File file) {
-            Handler handler = CameraView.this.getHandler();
+            Handler handler = getHandler();
             if (handler == null) {
                 return true;
             }
@@ -1044,7 +1041,7 @@ public class CameraView extends FrameLayout implements TextureView.SurfaceTextur
         }
 
         public void stopRecording() {
-            Handler handler = CameraView.this.getHandler();
+            Handler handler = getHandler();
             if (handler != null) {
                 sendMessage(handler.obtainMessage(5), 0);
             }

@@ -77,7 +77,7 @@ public class ScrollSlidingTabStrip extends HorizontalScrollView {
     private final Theme.ResourcesProvider resourcesProvider;
     /* access modifiers changed from: private */
     public int scrollByOnNextMeasure;
-    private int scrollOffset = AndroidUtilities.dp(52.0f);
+    private int scrollOffset = AndroidUtilities.dp(38.0f);
     boolean scrollRight;
     Runnable scrollRunnable;
     long scrollStartTime;
@@ -154,7 +154,7 @@ public class ScrollSlidingTabStrip extends HorizontalScrollView {
         };
         this.expanded = false;
         this.stickerTabExpandedWidth = (float) AndroidUtilities.dp(86.0f);
-        this.stickerTabWidth = (float) AndroidUtilities.dp(52.0f);
+        this.stickerTabWidth = (float) AndroidUtilities.dp(38.0f);
         this.scrollByOnNextMeasure = -1;
         this.scrollRunnable = new Runnable() {
             /* JADX WARNING: Code restructure failed: missing block: B:11:0x004a, code lost:
@@ -240,13 +240,14 @@ public class ScrollSlidingTabStrip extends HorizontalScrollView {
         };
         this.tabsContainer = r3;
         r3.setOrientation(0);
+        this.tabsContainer.setPadding(AndroidUtilities.dp(4.0f), 0, AndroidUtilities.dp(4.0f), 0);
         this.tabsContainer.setLayoutParams(new FrameLayout.LayoutParams(-1, -1));
         addView(this.tabsContainer);
         Paint paint = new Paint();
         this.rectPaint = paint;
         paint.setAntiAlias(true);
         this.rectPaint.setStyle(Paint.Style.FILL);
-        this.defaultTabLayoutParams = new LinearLayout.LayoutParams(AndroidUtilities.dp(52.0f), -1);
+        this.defaultTabLayoutParams = new LinearLayout.LayoutParams(AndroidUtilities.dp(38.0f), -1);
         this.defaultExpandLayoutParams = new LinearLayout.LayoutParams(0, -1, 1.0f);
     }
 
@@ -601,11 +602,11 @@ public class ScrollSlidingTabStrip extends HorizontalScrollView {
                             if (childAt instanceof StickerTabView) {
                                 ((StickerTabView) childAt).setExpanded(false);
                             }
-                            childAt.getLayoutParams().width = AndroidUtilities.dp(52.0f);
+                            childAt.getLayoutParams().width = AndroidUtilities.dp(38.0f);
                         }
                         ScrollSlidingTabStrip scrollSlidingTabStrip3 = ScrollSlidingTabStrip.this;
                         scrollSlidingTabStrip3.animateToExpanded = false;
-                        scrollSlidingTabStrip3.getLayoutParams().height = AndroidUtilities.dp(48.0f);
+                        scrollSlidingTabStrip3.getLayoutParams().height = AndroidUtilities.dp(36.0f);
                         ScrollSlidingTabStrip.this.tabsContainer.requestLayout();
                     }
                 }
@@ -621,7 +622,7 @@ public class ScrollSlidingTabStrip extends HorizontalScrollView {
                     childAt.getLayoutParams().width = AndroidUtilities.dp(86.0f);
                 }
                 this.tabsContainer.requestLayout();
-                getLayoutParams().height = AndroidUtilities.dp(98.0f);
+                getLayoutParams().height = AndroidUtilities.dp(86.0f);
             }
             if (z) {
                 float childCount = this.stickerTabExpandedWidth * ((float) this.tabsContainer.getChildCount()) * ((((float) getScrollX()) + f) / (this.stickerTabWidth * ((float) this.tabsContainer.getChildCount())));
@@ -708,8 +709,8 @@ public class ScrollSlidingTabStrip extends HorizontalScrollView {
     public void setImages() {
         ImageLocation imageLocation;
         float f = this.expandProgress;
-        float dp = ((float) AndroidUtilities.dp(52.0f)) + (((float) AndroidUtilities.dp(34.0f)) * f);
-        int scrollX = (int) ((((float) getScrollX()) - (this.animateToExpanded ? this.expandOffset * (1.0f - f) : 0.0f)) / dp);
+        float dp = ((float) AndroidUtilities.dp(38.0f)) + (((float) AndroidUtilities.dp(48.0f)) * f);
+        int scrollX = (int) (((((float) getScrollX()) - (this.animateToExpanded ? this.expandOffset * (1.0f - f) : 0.0f)) - ((float) this.tabsContainer.getPaddingLeft())) / dp);
         int min = Math.min(this.tabsContainer.getChildCount(), ((int) Math.ceil((double) (((float) getMeasuredWidth()) / dp))) + scrollX + 1);
         if (this.animateToExpanded) {
             scrollX -= 2;
@@ -739,7 +740,7 @@ public class ScrollSlidingTabStrip extends HorizontalScrollView {
                     Object tag2 = stickerTabView.getTag(NUM);
                     Drawable drawable = tag instanceof Drawable ? (Drawable) tag : null;
                     if (tag2 instanceof TLRPC$Document) {
-                        stickerTabView.imageView.setImage(ImageLocation.getForDocument((TLRPC$Document) tag2), "36_36_nolimit", drawable, (Object) null);
+                        stickerTabView.imageView.setImage(ImageLocation.getForDocument((TLRPC$Document) tag2), "36_36_nolimit", (Drawable) null, (Object) null);
                     } else {
                         stickerTabView.imageView.setImageDrawable(drawable);
                     }
@@ -798,7 +799,7 @@ public class ScrollSlidingTabStrip extends HorizontalScrollView {
 
     /* access modifiers changed from: private */
     public int getTabSize() {
-        return AndroidUtilities.dp(this.animateToExpanded ? 86.0f : 52.0f);
+        return AndroidUtilities.dp(this.animateToExpanded ? 86.0f : 38.0f);
     }
 
     /* access modifiers changed from: protected */

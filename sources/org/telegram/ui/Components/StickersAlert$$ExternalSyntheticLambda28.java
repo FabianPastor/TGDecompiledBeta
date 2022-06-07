@@ -1,22 +1,24 @@
 package org.telegram.ui.Components;
 
-import android.widget.TextView;
 import org.telegram.tgnet.RequestDelegate;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC$TL_error;
+import org.telegram.tgnet.TLRPC$TL_messages_getAttachedStickers;
 
 public final /* synthetic */ class StickersAlert$$ExternalSyntheticLambda28 implements RequestDelegate {
     public final /* synthetic */ StickersAlert f$0;
-    public final /* synthetic */ String f$1;
-    public final /* synthetic */ TextView f$2;
+    public final /* synthetic */ Object f$1;
+    public final /* synthetic */ TLRPC$TL_messages_getAttachedStickers f$2;
+    public final /* synthetic */ RequestDelegate f$3;
 
-    public /* synthetic */ StickersAlert$$ExternalSyntheticLambda28(StickersAlert stickersAlert, String str, TextView textView) {
+    public /* synthetic */ StickersAlert$$ExternalSyntheticLambda28(StickersAlert stickersAlert, Object obj, TLRPC$TL_messages_getAttachedStickers tLRPC$TL_messages_getAttachedStickers, RequestDelegate requestDelegate) {
         this.f$0 = stickersAlert;
-        this.f$1 = str;
-        this.f$2 = textView;
+        this.f$1 = obj;
+        this.f$2 = tLRPC$TL_messages_getAttachedStickers;
+        this.f$3 = requestDelegate;
     }
 
     public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        this.f$0.lambda$checkUrlAvailable$30(this.f$1, this.f$2, tLObject, tLRPC$TL_error);
+        this.f$0.lambda$new$2(this.f$1, this.f$2, this.f$3, tLObject, tLRPC$TL_error);
     }
 }

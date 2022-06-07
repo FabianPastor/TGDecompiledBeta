@@ -31,6 +31,7 @@ import org.telegram.tgnet.TLRPC$Chat;
 import org.telegram.tgnet.TLRPC$ChatFull;
 import org.telegram.tgnet.TLRPC$TL_channels_getGroupsForDiscussion;
 import org.telegram.tgnet.TLRPC$TL_channels_setDiscussionGroup;
+import org.telegram.tgnet.TLRPC$TL_chatAdminRights;
 import org.telegram.tgnet.TLRPC$TL_error;
 import org.telegram.tgnet.TLRPC$TL_inputChannelEmpty;
 import org.telegram.tgnet.TLRPC$TL_messages_stickerSet;
@@ -47,6 +48,7 @@ import org.telegram.ui.Cells.TextInfoPrivacyCell;
 import org.telegram.ui.Components.AvatarDrawable;
 import org.telegram.ui.Components.BackupImageView;
 import org.telegram.ui.Components.EmptyTextProgressView;
+import org.telegram.ui.Components.JoinToSendSettingsView;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.LoadingStickerDrawable;
 import org.telegram.ui.Components.RecyclerListView;
@@ -63,8 +65,10 @@ public class ChatLinkActivity extends BaseFragment implements NotificationCenter
     public boolean chatsLoaded;
     /* access modifiers changed from: private */
     public int createChatRow;
-    private TLRPC$Chat currentChat;
-    private long currentChatId;
+    /* access modifiers changed from: private */
+    public TLRPC$Chat currentChat;
+    /* access modifiers changed from: private */
+    public long currentChatId;
     /* access modifiers changed from: private */
     public int detailRow;
     /* access modifiers changed from: private */
@@ -75,6 +79,14 @@ public class ChatLinkActivity extends BaseFragment implements NotificationCenter
     public TLRPC$ChatFull info;
     /* access modifiers changed from: private */
     public boolean isChannel;
+    /* access modifiers changed from: private */
+    public boolean joinRequestProgress;
+    /* access modifiers changed from: private */
+    public boolean joinToSendProgress;
+    /* access modifiers changed from: private */
+    public int joinToSendRow;
+    /* access modifiers changed from: private */
+    public JoinToSendSettingsView joinToSendSettings;
     /* access modifiers changed from: private */
     public RecyclerListView listView;
     /* access modifiers changed from: private */
@@ -146,13 +158,20 @@ public class ChatLinkActivity extends BaseFragment implements NotificationCenter
     }
 
     public ChatLinkActivity(long j) {
+        boolean z = false;
+        this.joinToSendProgress = false;
+        this.joinRequestProgress = false;
         this.currentChatId = j;
         TLRPC$Chat chat = getMessagesController().getChat(Long.valueOf(j));
         this.currentChat = chat;
-        this.isChannel = ChatObject.isChannel(chat) && !this.currentChat.megagroup;
+        if (ChatObject.isChannel(chat) && !this.currentChat.megagroup) {
+            z = true;
+        }
+        this.isChannel = z;
     }
 
     private void updateRows() {
+        TLRPC$TL_chatAdminRights tLRPC$TL_chatAdminRights;
         TLRPC$Chat chat = getMessagesController().getChat(Long.valueOf(this.currentChatId));
         this.currentChat = chat;
         if (chat != null) {
@@ -164,6 +183,7 @@ public class ChatLinkActivity extends BaseFragment implements NotificationCenter
             this.chatEndRow = -1;
             this.removeChatRow = -1;
             this.detailRow = -1;
+            this.joinToSendRow = -1;
             int i2 = 0 + 1;
             this.rowCount = i2;
             this.helpRow = 0;
@@ -192,6 +212,14 @@ public class ChatLinkActivity extends BaseFragment implements NotificationCenter
             int i4 = this.rowCount;
             this.rowCount = i4 + 1;
             this.detailRow = i4;
+            if (!this.isChannel || (this.chats.size() > 0 && this.info.linked_chat_id != 0)) {
+                TLRPC$Chat tLRPC$Chat = this.isChannel ? this.chats.get(0) : this.currentChat;
+                if (tLRPC$Chat != null && ((TextUtils.isEmpty(tLRPC$Chat.username) || this.isChannel) && (tLRPC$Chat.creator || ((tLRPC$TL_chatAdminRights = tLRPC$Chat.admin_rights) != null && tLRPC$TL_chatAdminRights.ban_users)))) {
+                    int i5 = this.rowCount;
+                    this.rowCount = i5 + 1;
+                    this.joinToSendRow = i5;
+                }
+            }
             ListAdapter listAdapter = this.listViewAdapter;
             if (listAdapter != null) {
                 listAdapter.notifyDataSetChanged();
@@ -209,6 +237,7 @@ public class ChatLinkActivity extends BaseFragment implements NotificationCenter
     public boolean onFragmentCreate() {
         super.onFragmentCreate();
         getNotificationCenter().addObserver(this, NotificationCenter.chatInfoDidLoad);
+        getNotificationCenter().addObserver(this, NotificationCenter.updateInterfaces);
         loadChats();
         return true;
     }
@@ -216,9 +245,12 @@ public class ChatLinkActivity extends BaseFragment implements NotificationCenter
     public void onFragmentDestroy() {
         super.onFragmentDestroy();
         getNotificationCenter().removeObserver(this, NotificationCenter.chatInfoDidLoad);
+        getNotificationCenter().removeObserver(this, NotificationCenter.updateInterfaces);
     }
 
     public void didReceivedNotification(int i, int i2, Object... objArr) {
+        JoinToSendSettingsView joinToSendSettingsView;
+        TLRPC$Chat chat;
         if (i == NotificationCenter.chatInfoDidLoad) {
             TLRPC$ChatFull tLRPC$ChatFull = objArr[0];
             long j = tLRPC$ChatFull.id;
@@ -237,6 +269,23 @@ public class ChatLinkActivity extends BaseFragment implements NotificationCenter
                 this.waitingForFullChatProgressAlert = null;
                 showLinkAlert(this.waitingForFullChat, false);
                 this.waitingForFullChat = null;
+            }
+        } else if (i == NotificationCenter.updateInterfaces && (objArr[0].intValue() & MessagesController.UPDATE_MASK_CHAT) != 0 && this.currentChat != null) {
+            TLRPC$Chat chat2 = getMessagesController().getChat(Long.valueOf(this.currentChat.id));
+            if (chat2 != null) {
+                this.currentChat = chat2;
+            }
+            if (this.chats.size() > 0 && (chat = getMessagesController().getChat(Long.valueOf(this.chats.get(0).id))) != null) {
+                this.chats.set(0, chat);
+            }
+            TLRPC$Chat tLRPC$Chat2 = this.isChannel ? this.chats.get(0) : this.currentChat;
+            if (tLRPC$Chat2 != null && (joinToSendSettingsView = this.joinToSendSettings) != null) {
+                if (!this.joinRequestProgress) {
+                    joinToSendSettingsView.lambda$new$3(tLRPC$Chat2.join_request);
+                }
+                if (!this.joinToSendProgress) {
+                    this.joinToSendSettings.setJoinToSend(tLRPC$Chat2.join_to_send);
+                }
             }
         }
     }
@@ -526,7 +575,7 @@ public class ChatLinkActivity extends BaseFragment implements NotificationCenter
     /* access modifiers changed from: private */
     public /* synthetic */ void lambda$showLinkAlert$9(TLRPC$ChatFull tLRPC$ChatFull, TLRPC$Chat tLRPC$Chat, DialogInterface dialogInterface, int i) {
         if (tLRPC$ChatFull.hidden_prehistory) {
-            getMessagesController().toogleChannelInvitesHistory(tLRPC$Chat.id, false);
+            getMessagesController().toggleChannelInvitesHistory(tLRPC$Chat.id, false);
         }
         linkChat(tLRPC$Chat, (BaseFragment) null);
     }
@@ -556,7 +605,7 @@ public class ChatLinkActivity extends BaseFragment implements NotificationCenter
     /* access modifiers changed from: private */
     public /* synthetic */ void lambda$linkChat$10(BaseFragment baseFragment, long j) {
         if (j != 0) {
-            getMessagesController().toogleChannelInvitesHistory(j, false);
+            getMessagesController().toggleChannelInvitesHistory(j, false);
             linkChat(getMessagesController().getChat(Long.valueOf(j)), baseFragment);
         }
     }
@@ -966,11 +1015,116 @@ public class ChatLinkActivity extends BaseFragment implements NotificationCenter
                 if (i == 1) {
                     view = new TextInfoPrivacyCell(this.mContext);
                     view.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, NUM, "windowBackgroundGrayShadow"));
-                } else if (i != 2) {
-                    view = new HintInnerCell(ChatLinkActivity.this, this.mContext);
-                } else {
+                } else if (i == 2) {
                     view2 = new ManageChatTextCell(this.mContext);
                     view2.setBackgroundColor(Theme.getColor("windowBackgroundWhite"));
+                } else if (i != 4) {
+                    view = new HintInnerCell(ChatLinkActivity.this, this.mContext);
+                } else {
+                    final TLRPC$Chat access$1600 = ChatLinkActivity.this.isChannel ? (TLRPC$Chat) ChatLinkActivity.this.chats.get(0) : ChatLinkActivity.this.currentChat;
+                    view = ChatLinkActivity.this.joinToSendSettings = new JoinToSendSettingsView(this.mContext, access$1600) {
+                        private void migrateIfNeeded(Runnable runnable, Runnable runnable2) {
+                            if (!ChatObject.isChannel(ChatLinkActivity.this.currentChat)) {
+                                ChatLinkActivity.this.getMessagesController().convertToMegaGroup(ChatLinkActivity.this.getParentActivity(), access$1600.id, ChatLinkActivity.this, new ChatLinkActivity$ListAdapter$1$$ExternalSyntheticLambda9(this, runnable2), runnable);
+                            } else {
+                                runnable2.run();
+                            }
+                        }
+
+                        /* access modifiers changed from: private */
+                        public /* synthetic */ void lambda$migrateIfNeeded$0(Runnable runnable, long j) {
+                            if (j != 0) {
+                                if (ChatLinkActivity.this.isChannel) {
+                                    ChatLinkActivity.this.chats.set(0, ChatLinkActivity.this.getMessagesController().getChat(Long.valueOf(j)));
+                                } else {
+                                    long unused = ChatLinkActivity.this.currentChatId = j;
+                                    ChatLinkActivity chatLinkActivity = ChatLinkActivity.this;
+                                    TLRPC$Chat unused2 = chatLinkActivity.currentChat = chatLinkActivity.getMessagesController().getChat(Long.valueOf(j));
+                                }
+                                runnable.run();
+                            }
+                        }
+
+                        public boolean onJoinRequestToggle(boolean z, Runnable runnable) {
+                            if (ChatLinkActivity.this.joinRequestProgress) {
+                                return false;
+                            }
+                            boolean unused = ChatLinkActivity.this.joinRequestProgress = true;
+                            migrateIfNeeded(overrideCancel(runnable), new ChatLinkActivity$ListAdapter$1$$ExternalSyntheticLambda6(this, access$1600, z, runnable));
+                            return true;
+                        }
+
+                        /* access modifiers changed from: private */
+                        public /* synthetic */ void lambda$onJoinRequestToggle$3(TLRPC$Chat tLRPC$Chat, boolean z, Runnable runnable) {
+                            tLRPC$Chat.join_request = z;
+                            ChatLinkActivity.this.getMessagesController().toggleChatJoinRequest(tLRPC$Chat.id, z, new ChatLinkActivity$ListAdapter$1$$ExternalSyntheticLambda0(this), new ChatLinkActivity$ListAdapter$1$$ExternalSyntheticLambda2(this, runnable));
+                        }
+
+                        /* access modifiers changed from: private */
+                        public /* synthetic */ void lambda$onJoinRequestToggle$1() {
+                            boolean unused = ChatLinkActivity.this.joinRequestProgress = false;
+                        }
+
+                        /* access modifiers changed from: private */
+                        public /* synthetic */ void lambda$onJoinRequestToggle$2(Runnable runnable) {
+                            boolean unused = ChatLinkActivity.this.joinRequestProgress = false;
+                            runnable.run();
+                        }
+
+                        private Runnable overrideCancel(Runnable runnable) {
+                            return new ChatLinkActivity$ListAdapter$1$$ExternalSyntheticLambda3(this, runnable);
+                        }
+
+                        /* access modifiers changed from: private */
+                        public /* synthetic */ void lambda$overrideCancel$4(Runnable runnable) {
+                            boolean unused = ChatLinkActivity.this.joinToSendProgress = false;
+                            boolean unused2 = ChatLinkActivity.this.joinRequestProgress = false;
+                            runnable.run();
+                        }
+
+                        public boolean onJoinToSendToggle(boolean z, Runnable runnable) {
+                            if (ChatLinkActivity.this.joinToSendProgress) {
+                                return false;
+                            }
+                            boolean unused = ChatLinkActivity.this.joinToSendProgress = true;
+                            migrateIfNeeded(overrideCancel(runnable), new ChatLinkActivity$ListAdapter$1$$ExternalSyntheticLambda7(this, access$1600, z, runnable));
+                            return true;
+                        }
+
+                        /* access modifiers changed from: private */
+                        public /* synthetic */ void lambda$onJoinToSendToggle$9(TLRPC$Chat tLRPC$Chat, boolean z, Runnable runnable) {
+                            tLRPC$Chat.join_to_send = z;
+                            ChatLinkActivity.this.getMessagesController().toggleChatJoinToSend(tLRPC$Chat.id, z, new ChatLinkActivity$ListAdapter$1$$ExternalSyntheticLambda8(this, z, tLRPC$Chat), new ChatLinkActivity$ListAdapter$1$$ExternalSyntheticLambda4(this, runnable));
+                        }
+
+                        /* access modifiers changed from: private */
+                        public /* synthetic */ void lambda$onJoinToSendToggle$7(boolean z, TLRPC$Chat tLRPC$Chat) {
+                            boolean unused = ChatLinkActivity.this.joinToSendProgress = false;
+                            if (!z && tLRPC$Chat.join_request) {
+                                tLRPC$Chat.join_request = false;
+                                boolean unused2 = ChatLinkActivity.this.joinRequestProgress = true;
+                                ChatLinkActivity.this.getMessagesController().toggleChatJoinRequest(tLRPC$Chat.id, false, new ChatLinkActivity$ListAdapter$1$$ExternalSyntheticLambda1(this), new ChatLinkActivity$ListAdapter$1$$ExternalSyntheticLambda5(this, tLRPC$Chat));
+                            }
+                        }
+
+                        /* access modifiers changed from: private */
+                        public /* synthetic */ void lambda$onJoinToSendToggle$5() {
+                            boolean unused = ChatLinkActivity.this.joinRequestProgress = false;
+                        }
+
+                        /* access modifiers changed from: private */
+                        public /* synthetic */ void lambda$onJoinToSendToggle$6(TLRPC$Chat tLRPC$Chat) {
+                            tLRPC$Chat.join_request = true;
+                            this.isJoinRequest = true;
+                            this.joinRequestCell.setChecked(true);
+                        }
+
+                        /* access modifiers changed from: private */
+                        public /* synthetic */ void lambda$onJoinToSendToggle$8(Runnable runnable) {
+                            boolean unused = ChatLinkActivity.this.joinToSendProgress = false;
+                            runnable.run();
+                        }
+                    };
                 }
                 return new RecyclerListView.Holder(view);
             }
@@ -1036,7 +1190,10 @@ public class ChatLinkActivity extends BaseFragment implements NotificationCenter
             if (i == ChatLinkActivity.this.createChatRow || i == ChatLinkActivity.this.removeChatRow) {
                 return 2;
             }
-            return (i < ChatLinkActivity.this.chatStartRow || i >= ChatLinkActivity.this.chatEndRow) ? 1 : 0;
+            if (i < ChatLinkActivity.this.chatStartRow || i >= ChatLinkActivity.this.chatEndRow) {
+                return i == ChatLinkActivity.this.joinToSendRow ? 4 : 1;
+            }
+            return 0;
         }
     }
 

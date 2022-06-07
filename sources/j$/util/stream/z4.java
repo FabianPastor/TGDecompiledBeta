@@ -1,34 +1,92 @@
 package j$.util.stream;
 
 import j$.util.CLASSNAMEa;
-import j$.util.function.Consumer;
 import j$.util.w;
-import j$.util.y;
+import java.util.Comparator;
 
-final class z4 extends A4 implements w {
-    z4(w wVar, long j, long j2) {
-        super(wVar, j, j2);
-    }
-
-    z4(w wVar, long j, long j2, long j3, long j4) {
-        super(wVar, j, j2, j3, j4, (CLASSNAMEp1) null);
+abstract class z4 extends D4 implements w {
+    /* JADX WARNING: Illegal instructions before constructor call */
+    /* Code decompiled incorrectly, please refer to instructions dump. */
+    z4(j$.util.w r13, long r14, long r16) {
+        /*
+            r12 = this;
+            long r0 = r13.estimateSize()
+            r6 = r16
+            long r10 = java.lang.Math.min(r0, r6)
+            r8 = 0
+            r2 = r12
+            r3 = r13
+            r4 = r14
+            r2.<init>(r3, r4, r6, r8, r10)
+            return
+        */
+        throw new UnsupportedOperationException("Method not decompiled: j$.util.stream.z4.<init>(j$.util.w, long, long):void");
     }
 
     /* access modifiers changed from: protected */
-    public y a(y yVar, long j, long j2, long j3, long j4) {
-        return new z4((w) yVar, j, j2, j3, j4);
+    public abstract Object f();
+
+    /* renamed from: forEachRemaining */
+    public void e(Object obj) {
+        obj.getClass();
+        long j = this.a;
+        long j2 = this.e;
+        if (j < j2) {
+            long j3 = this.d;
+            if (j3 < j2) {
+                if (j3 < j || ((w) this.c).estimateSize() + j3 > this.b) {
+                    while (this.a > this.d) {
+                        ((w) this.c).tryAdvance(f());
+                        this.d++;
+                    }
+                    while (this.d < this.e) {
+                        ((w) this.c).tryAdvance(obj);
+                        this.d++;
+                    }
+                    return;
+                }
+                ((w) this.c).forEachRemaining(obj);
+                this.d = this.e;
+            }
+        }
     }
 
-    public /* synthetic */ boolean b(Consumer consumer) {
-        return CLASSNAMEa.l(this, consumer);
+    public Comparator getComparator() {
+        throw new IllegalStateException();
     }
 
-    /* access modifiers changed from: protected */
-    public /* bridge */ /* synthetic */ Object f() {
-        return y4.a;
+    public /* synthetic */ long getExactSizeIfKnown() {
+        return CLASSNAMEa.e(this);
     }
 
-    public /* synthetic */ void forEachRemaining(Consumer consumer) {
-        CLASSNAMEa.d(this, consumer);
+    public /* synthetic */ boolean hasCharacteristics(int i) {
+        return CLASSNAMEa.f(this, i);
+    }
+
+    /* renamed from: tryAdvance */
+    public boolean k(Object obj) {
+        long j;
+        obj.getClass();
+        if (this.a >= this.e) {
+            return false;
+        }
+        while (true) {
+            long j2 = this.a;
+            j = this.d;
+            if (j2 <= j) {
+                break;
+            }
+            ((w) this.c).tryAdvance(f());
+            this.d++;
+        }
+        if (j >= this.e) {
+            return false;
+        }
+        this.d = j + 1;
+        return ((w) this.c).tryAdvance(obj);
+    }
+
+    z4(w wVar, long j, long j2, long j3, long j4, CLASSNAMEo1 o1Var) {
+        super(wVar, j, j2, j3, j4);
     }
 }

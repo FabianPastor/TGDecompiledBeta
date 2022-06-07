@@ -1,43 +1,43 @@
 package j$.util.stream;
 
-import j$.util.N;
+import j$.util.L;
 import j$.util.function.Consumer;
 import j$.util.function.m;
-import j$.util.x;
-import j$.util.y;
+import j$.util.u;
+import j$.util.w;
 
-final class X1 extends CLASSNAMEb2 implements CLASSNAMEv1 {
+final class X1 extends CLASSNAMEa2 implements CLASSNAMEw1 {
     X1() {
     }
 
     /* renamed from: a */
-    public /* synthetic */ void i(Double[] dArr, int i) {
-        CLASSNAMEp1.h(this, dArr, i);
+    public /* synthetic */ void i(Integer[] numArr, int i) {
+        CLASSNAMEo1.i(this, numArr, i);
     }
 
-    public A1 b(int i) {
+    public CLASSNAMEz1 b(int i) {
         throw new IndexOutOfBoundsException();
     }
 
     public Object e() {
-        return CLASSNAMEy2.g;
+        return CLASSNAMEx2.e;
     }
 
     /* renamed from: f */
-    public /* synthetic */ CLASSNAMEv1 r(long j, long j2, m mVar) {
-        return CLASSNAMEp1.n(this, j, j2, mVar);
+    public /* synthetic */ CLASSNAMEw1 r(long j, long j2, m mVar) {
+        return CLASSNAMEo1.o(this, j, j2, mVar);
     }
 
     public /* synthetic */ void forEach(Consumer consumer) {
-        CLASSNAMEp1.k(this, consumer);
-    }
-
-    public x spliterator() {
-        return N.b();
+        CLASSNAMEo1.l(this, consumer);
     }
 
     /* renamed from: spliterator  reason: collision with other method in class */
-    public y m8spliterator() {
-        return N.b();
+    public w m9spliterator() {
+        return L.c();
+    }
+
+    public u spliterator() {
+        return L.c();
     }
 }

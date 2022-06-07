@@ -1,28 +1,19 @@
 package j$.util;
 
 import j$.util.function.Consumer;
-import j$.util.function.l;
 import java.util.Comparator;
 
-final class G extends J implements v {
+final class G extends H implements u {
     G() {
     }
 
-    public /* synthetic */ boolean b(Consumer consumer) {
-        return CLASSNAMEa.k(this, consumer);
-    }
-
-    public void c(l lVar) {
-        lVar.getClass();
-    }
-
-    public /* synthetic */ void forEachRemaining(Consumer consumer) {
-        CLASSNAMEa.c(this, consumer);
-    }
-
-    public boolean g(l lVar) {
-        lVar.getClass();
+    public boolean b(Consumer consumer) {
+        consumer.getClass();
         return false;
+    }
+
+    public void forEachRemaining(Consumer consumer) {
+        consumer.getClass();
     }
 
     public Comparator getComparator() {

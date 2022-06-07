@@ -161,7 +161,7 @@ public class ClearHistoryAlert extends BottomSheet {
             r0.newTimer = r8
         L_0x0060:
             android.content.res.Resources r7 = r28.getResources()
-            r10 = 2131166129(0x7var_b1, float:1.7946495E38)
+            r10 = 2131166137(0x7var_b9, float:1.794651E38)
             android.graphics.drawable.Drawable r7 = r7.getDrawable(r10)
             android.graphics.drawable.Drawable r7 = r7.mutate()
             r0.shadowDrawable = r7
@@ -247,7 +247,7 @@ public class ClearHistoryAlert extends BottomSheet {
             r15.setTextSize(r9, r14)
             int r5 = r0.getThemedColor(r13)
             r15.setTextColor(r5)
-            r5 = 2131625057(0x7f0e0461, float:1.8877311E38)
+            r5 = 2131625133(0x7f0e04ad, float:1.8877465E38)
             java.lang.String r14 = "ClearHistory"
             java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r14, r5)
             r15.setText(r5)
@@ -297,7 +297,7 @@ public class ClearHistoryAlert extends BottomSheet {
             android.widget.LinearLayout$LayoutParams r15 = org.telegram.ui.Components.LayoutHelper.createLinear((int) r20, (int) r21, (int) r22, (int) r23, (int) r24, (int) r25, (int) r26)
             r14.addView(r5, r15)
             if (r2 == 0) goto L_0x01af
-            r3 = 2131624375(0x7f0e01b7, float:1.8875928E38)
+            r3 = 2131624428(0x7f0e01ec, float:1.8876035E38)
             java.lang.Object[] r14 = new java.lang.Object[r9]
             java.lang.String r15 = org.telegram.messenger.UserObject.getUserName(r29)
             r18 = 0
@@ -319,19 +319,19 @@ public class ClearHistoryAlert extends BottomSheet {
         L_0x01c2:
             boolean r3 = r3.megagroup
             if (r3 == 0) goto L_0x01d3
-            r3 = 2131624370(0x7f0e01b2, float:1.8875918E38)
+            r3 = 2131624423(0x7f0e01e7, float:1.8876025E38)
             java.lang.String r14 = "AreYouSureClearHistoryGroup"
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r14, r3)
             r5.setText(r3)
             goto L_0x01f8
         L_0x01d3:
-            r3 = 2131624368(0x7f0e01b0, float:1.8875914E38)
+            r3 = 2131624421(0x7f0e01e5, float:1.8876021E38)
             java.lang.String r14 = "AreYouSureClearHistoryChannel"
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r14, r3)
             r5.setText(r3)
             goto L_0x01f8
         L_0x01e0:
-            r14 = 2131624373(0x7f0e01b5, float:1.8875924E38)
+            r14 = 2131624426(0x7f0e01ea, float:1.8876031E38)
             java.lang.Object[] r15 = new java.lang.Object[r9]
             java.lang.String r3 = r3.title
             r18 = 0
@@ -351,7 +351,7 @@ public class ClearHistoryAlert extends BottomSheet {
             android.graphics.drawable.Drawable r6 = org.telegram.ui.ActionBar.Theme.getSelectorDrawable(r5)
             r3.setBackgroundDrawable(r6)
             org.telegram.ui.Cells.CheckBoxCell r3 = r0.cell
-            r6 = 2131625061(0x7f0e0465, float:1.887732E38)
+            r6 = 2131625137(0x7f0e04b1, float:1.8877473E38)
             java.lang.Object[] r14 = new java.lang.Object[r9]
             java.lang.String r2 = org.telegram.messenger.UserObject.getFirstName(r29)
             r14[r5] = r2
@@ -397,7 +397,7 @@ public class ClearHistoryAlert extends BottomSheet {
             r2.<init>(r1, r4)
             r3 = 0
             r2.setBackground(r3)
-            r3 = 2131624266(0x7f0e014a, float:1.8875707E38)
+            r3 = 2131624306(0x7f0e0172, float:1.8875788E38)
             java.lang.String r5 = "AlertClearHistory"
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r5, r3)
             r2.setText(r3)
@@ -417,7 +417,7 @@ public class ClearHistoryAlert extends BottomSheet {
             r3.addView(r2, r5)
             org.telegram.ui.Cells.ShadowSectionCell r2 = new org.telegram.ui.Cells.ShadowSectionCell
             r2.<init>(r1)
-            r3 = 2131165483(0x7var_b, float:1.7945184E38)
+            r3 = 2131165435(0x7var_fb, float:1.7945087E38)
             android.graphics.drawable.Drawable r3 = org.telegram.ui.ActionBar.Theme.getThemedDrawable((android.content.Context) r1, (int) r3, (java.lang.String) r8)
             org.telegram.ui.Components.CombinedDrawable r5 = new org.telegram.ui.Components.CombinedDrawable
             android.graphics.drawable.ColorDrawable r6 = new android.graphics.drawable.ColorDrawable
@@ -433,7 +433,7 @@ public class ClearHistoryAlert extends BottomSheet {
             r3.addView(r2, r7)
             org.telegram.ui.Cells.HeaderCell r2 = new org.telegram.ui.Cells.HeaderCell
             r2.<init>((android.content.Context) r1, (org.telegram.ui.ActionBar.Theme.ResourcesProvider) r4)
-            r3 = 2131624492(0x7f0e022c, float:1.8876165E38)
+            r3 = 2131624545(0x7f0e0261, float:1.8876273E38)
             java.lang.String r5 = "AutoDeleteHeader"
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r5, r3)
             r2.setText(r3)
@@ -458,7 +458,7 @@ public class ClearHistoryAlert extends BottomSheet {
             r5.<init>(r1)
             r6 = 0
             r5.setAutoRepeat(r6)
-            r7 = 2131558554(0x7f0d009a, float:1.8742427E38)
+            r7 = 2131558556(0x7f0d009c, float:1.8742431E38)
             r14 = 120(0x78, float:1.68E-43)
             r5.setAnimation(r7, r14, r14)
             r7 = 1101004800(0x41a00000, float:20.0)
@@ -483,7 +483,7 @@ public class ClearHistoryAlert extends BottomSheet {
             r5.setTextSize(r9, r6)
             int r6 = r0.getThemedColor(r13)
             r5.setTextColor(r6)
-            r6 = 2131624487(0x7f0e0227, float:1.8876155E38)
+            r6 = 2131624540(0x7f0e025c, float:1.8876263E38)
             java.lang.String r7 = "AutoDeleteAlertTitle"
             java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r7, r6)
             r5.setText(r6)
@@ -502,7 +502,7 @@ public class ClearHistoryAlert extends BottomSheet {
             r5.setTextColor(r6)
             r5.setGravity(r9)
             if (r2 == 0) goto L_0x0392
-            r3 = 2131624488(0x7f0e0228, float:1.8876157E38)
+            r3 = 2131624541(0x7f0e025d, float:1.8876265E38)
             java.lang.Object[] r6 = new java.lang.Object[r9]
             java.lang.String r2 = org.telegram.messenger.UserObject.getFirstName(r29)
             r7 = 0
@@ -516,13 +516,13 @@ public class ClearHistoryAlert extends BottomSheet {
             if (r2 == 0) goto L_0x03a9
             boolean r2 = r3.megagroup
             if (r2 != 0) goto L_0x03a9
-            r2 = 2131624485(0x7f0e0225, float:1.8876151E38)
+            r2 = 2131624538(0x7f0e025a, float:1.8876259E38)
             java.lang.String r3 = "AutoDeleteAlertChannelInfo"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             r5.setText(r2)
             goto L_0x03b5
         L_0x03a9:
-            r2 = 2131624486(0x7f0e0226, float:1.8876153E38)
+            r2 = 2131624539(0x7f0e025b, float:1.887626E38)
             java.lang.String r3 = "AutoDeleteAlertGroupInfo"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             r5.setText(r2)
@@ -546,21 +546,21 @@ public class ClearHistoryAlert extends BottomSheet {
             r2.setCallback(r3)
             r3 = 4
             java.lang.String[] r3 = new java.lang.String[r3]
-            r5 = 2131624497(0x7f0e0231, float:1.8876175E38)
+            r5 = 2131624550(0x7f0e0266, float:1.8876283E38)
             java.lang.String r6 = "AutoDeleteNever"
             java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r6, r5)
             r6 = 0
             r3[r6] = r5
-            r5 = 2131624481(0x7f0e0221, float:1.8876143E38)
+            r5 = 2131624534(0x7f0e0256, float:1.887625E38)
             java.lang.String r6 = "AutoDelete24Hours"
             java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r6, r5)
             r3[r9] = r5
-            r5 = 2131624482(0x7f0e0222, float:1.8876145E38)
+            r5 = 2131624535(0x7f0e0257, float:1.8876252E38)
             java.lang.String r6 = "AutoDelete7Days"
             java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r6, r5)
             r6 = 2
             r3[r6] = r5
-            r5 = 2131624480(0x7f0e0220, float:1.887614E38)
+            r5 = 2131624533(0x7f0e0255, float:1.8876248E38)
             java.lang.String r6 = "AutoDelete1Month"
             java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r6, r5)
             r6 = 3
@@ -578,7 +578,7 @@ public class ClearHistoryAlert extends BottomSheet {
             r3.addView(r2, r5)
             android.widget.FrameLayout r2 = new android.widget.FrameLayout
             r2.<init>(r1)
-            r3 = 2131165484(0x7var_c, float:1.7945186E38)
+            r3 = 2131165436(0x7var_fc, float:1.794509E38)
             android.graphics.drawable.Drawable r3 = org.telegram.ui.ActionBar.Theme.getThemedDrawable((android.content.Context) r1, (int) r3, (java.lang.String) r8)
             org.telegram.ui.Components.CombinedDrawable r5 = new org.telegram.ui.Components.CombinedDrawable
             android.graphics.drawable.ColorDrawable r6 = new android.graphics.drawable.ColorDrawable
@@ -593,8 +593,8 @@ public class ClearHistoryAlert extends BottomSheet {
             android.widget.LinearLayout$LayoutParams r5 = org.telegram.ui.Components.LayoutHelper.createLinear(r6, r5)
             r3.addView(r2, r5)
             org.telegram.ui.Cells.TextInfoPrivacyCell r3 = new org.telegram.ui.Cells.TextInfoPrivacyCell
-            r3.<init>((android.content.Context) r1, (org.telegram.ui.ActionBar.Theme.ResourcesProvider) r4)
-            r5 = 2131624496(0x7f0e0230, float:1.8876173E38)
+            r3.<init>(r1, r4)
+            r5 = 2131624549(0x7f0e0265, float:1.887628E38)
             java.lang.String r6 = "AutoDeleteInfo"
             java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r6, r5)
             r3.setText(r5)
@@ -607,7 +607,7 @@ public class ClearHistoryAlert extends BottomSheet {
             boolean r1 = r0.autoDeleteOnly
             if (r1 == 0) goto L_0x0483
             org.telegram.ui.Components.ClearHistoryAlert$BottomSheetCell r1 = r0.setTimerButton
-            r3 = 2131624500(0x7f0e0234, float:1.8876181E38)
+            r3 = 2131624553(0x7f0e0269, float:1.8876289E38)
             java.lang.String r4 = "AutoDeleteSet"
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r4, r3)
             r1.setText(r3)
@@ -617,14 +617,14 @@ public class ClearHistoryAlert extends BottomSheet {
             int r1 = r0.currentTimer
             if (r1 != 0) goto L_0x0498
             org.telegram.ui.Components.ClearHistoryAlert$BottomSheetCell r1 = r0.setTimerButton
-            r3 = 2131625523(0x7f0e0633, float:1.8878256E38)
+            r3 = 2131625612(0x7f0e068c, float:1.8878437E38)
             java.lang.String r4 = "EnableAutoDelete"
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r4, r3)
             r1.setText(r3)
             goto L_0x04a6
         L_0x0498:
             org.telegram.ui.Components.ClearHistoryAlert$BottomSheetCell r1 = r0.setTimerButton
-            r3 = 2131624489(0x7f0e0229, float:1.887616E38)
+            r3 = 2131624542(0x7f0e025e, float:1.8876267E38)
             java.lang.String r4 = "AutoDeleteConfirm"
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r4, r3)
             r1.setText(r3)

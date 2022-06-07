@@ -157,11 +157,11 @@ public class ChatPullingDownDrawable implements NotificationCenter.NotificationC
             int measureText2 = (int) this.textPaint2.measureText(str3);
             this.layout1Width = measureText2;
             this.layout1Width = Math.min(measureText2, this.lastWidth - AndroidUtilities.dp(60.0f));
-            this.layout1 = new StaticLayout(str3, this.textPaint2, this.layout1Width, Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+            this.layout1 = new StaticLayout(str3, this.textPaint2, this.layout1Width, Layout.Alignment.ALIGN_CENTER, 1.0f, 0.0f, false);
             int measureText3 = (int) this.textPaint2.measureText(str4);
             this.layout2Width = measureText3;
             this.layout2Width = Math.min(measureText3, this.lastWidth - AndroidUtilities.dp(60.0f));
-            this.layout2 = new StaticLayout(str4, this.textPaint2, this.layout2Width, Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+            this.layout2 = new StaticLayout(str4, this.textPaint2, this.layout2Width, Layout.Alignment.ALIGN_CENTER, 1.0f, 0.0f, false);
             this.imageReceiver.setImageCoords((((float) this.lastWidth) / 2.0f) - (((float) AndroidUtilities.dp(40.0f)) / 2.0f), (((float) AndroidUtilities.dp(12.0f)) + this.circleRadius) - (((float) AndroidUtilities.dp(40.0f)) / 2.0f), (float) AndroidUtilities.dp(40.0f), (float) AndroidUtilities.dp(40.0f));
             this.imageReceiver.setRoundRadius((int) (((float) AndroidUtilities.dp(40.0f)) / 2.0f));
             this.counterDrawable.setSize(AndroidUtilities.dp(28.0f), AndroidUtilities.dp(100.0f));
@@ -587,132 +587,145 @@ public class ChatPullingDownDrawable implements NotificationCenter.NotificationC
         return this.nextChat.id;
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:17:0x0063  */
-    /* JADX WARNING: Removed duplicated region for block: B:22:0x00a1  */
+    /* JADX WARNING: Removed duplicated region for block: B:17:0x006d  */
+    /* JADX WARNING: Removed duplicated region for block: B:22:0x00b1  */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    public void drawBottomPanel(android.graphics.Canvas r12, int r13, int r14, int r15) {
+    public void drawBottomPanel(android.graphics.Canvas r17, int r18, int r19, int r20) {
         /*
-            r11 = this;
-            boolean r0 = r11.showBottomPanel
-            r1 = 1037726734(0x3dda740e, float:0.10666667)
+            r16 = this;
+            r0 = r16
+            r7 = r17
+            r8 = r18
+            r9 = r19
+            boolean r1 = r0.showBottomPanel
+            r2 = 1037726734(0x3dda740e, float:0.10666667)
+            r10 = 0
+            r11 = 1065353216(0x3var_, float:1.0)
+            if (r1 == 0) goto L_0x0028
+            float r3 = r0.progressToBottomPannel
+            int r4 = (r3 > r11 ? 1 : (r3 == r11 ? 0 : -1))
+            if (r4 == 0) goto L_0x0028
+            float r3 = r3 + r2
+            r0.progressToBottomPannel = r3
+            int r1 = (r3 > r11 ? 1 : (r3 == r11 ? 0 : -1))
+            if (r1 <= 0) goto L_0x0022
+            r0.progressToBottomPannel = r11
+            goto L_0x003f
+        L_0x0022:
+            android.view.View r1 = r0.fragmentView
+            r1.invalidate()
+            goto L_0x003f
+        L_0x0028:
+            if (r1 != 0) goto L_0x003f
+            float r1 = r0.progressToBottomPannel
+            int r3 = (r1 > r10 ? 1 : (r1 == r10 ? 0 : -1))
+            if (r3 == 0) goto L_0x003f
+            float r1 = r1 - r2
+            r0.progressToBottomPannel = r1
+            int r1 = (r1 > r10 ? 1 : (r1 == r10 ? 0 : -1))
+            if (r1 >= 0) goto L_0x003a
+            r0.progressToBottomPannel = r10
+            goto L_0x003f
+        L_0x003a:
+            android.view.View r1 = r0.fragmentView
+            r1.invalidate()
+        L_0x003f:
+            java.lang.String r1 = "paintChatComposeBackground"
+            android.graphics.Paint r12 = r0.getThemedPaint(r1)
+            int r13 = r12.getAlpha()
+            android.text.TextPaint r1 = r0.textPaint2
+            int r14 = r1.getAlpha()
+            float r1 = (float) r13
+            float r2 = r0.progressToBottomPannel
+            float r1 = r1 * r2
+            int r1 = (int) r1
+            r12.setAlpha(r1)
             r2 = 0
-            r3 = 1065353216(0x3var_, float:1.0)
-            if (r0 == 0) goto L_0x0020
-            float r4 = r11.progressToBottomPannel
-            int r5 = (r4 > r3 ? 1 : (r4 == r3 ? 0 : -1))
-            if (r5 == 0) goto L_0x0020
-            float r4 = r4 + r1
-            r11.progressToBottomPannel = r4
-            int r0 = (r4 > r3 ? 1 : (r4 == r3 ? 0 : -1))
-            if (r0 <= 0) goto L_0x001a
-            r11.progressToBottomPannel = r3
-            goto L_0x0037
-        L_0x001a:
-            android.view.View r0 = r11.fragmentView
-            r0.invalidate()
-            goto L_0x0037
-        L_0x0020:
-            if (r0 != 0) goto L_0x0037
-            float r0 = r11.progressToBottomPannel
-            int r4 = (r0 > r2 ? 1 : (r0 == r2 ? 0 : -1))
-            if (r4 == 0) goto L_0x0037
-            float r0 = r0 - r1
-            r11.progressToBottomPannel = r0
-            int r0 = (r0 > r2 ? 1 : (r0 == r2 ? 0 : -1))
-            if (r0 >= 0) goto L_0x0032
-            r11.progressToBottomPannel = r2
-            goto L_0x0037
-        L_0x0032:
-            android.view.View r0 = r11.fragmentView
-            r0.invalidate()
-        L_0x0037:
-            java.lang.String r0 = "paintChatComposeBackground"
-            android.graphics.Paint r0 = r11.getThemedPaint(r0)
-            int r1 = r0.getAlpha()
-            android.text.TextPaint r4 = r11.textPaint2
-            int r10 = r4.getAlpha()
+            float r15 = (float) r8
+            r1 = r20
             float r4 = (float) r1
-            float r5 = r11.progressToBottomPannel
+            float r5 = (float) r9
+            r1 = r17
+            r3 = r15
+            r6 = r12
+            r1.drawRect(r2, r3, r4, r5, r6)
+            android.text.StaticLayout r1 = r0.layout1
+            r2 = 1092616192(0x41200000, float:10.0)
+            r3 = 1073741824(0x40000000, float:2.0)
+            if (r1 == 0) goto L_0x00ad
+            float r1 = r0.swipeToReleaseProgress
+            int r4 = (r1 > r11 ? 1 : (r1 == r11 ? 0 : -1))
+            if (r4 >= 0) goto L_0x00ad
+            android.text.TextPaint r4 = r0.textPaint2
+            float r5 = (float) r14
+            float r1 = r11 - r1
+            float r5 = r5 * r1
+            float r1 = r0.progressToBottomPannel
+            float r5 = r5 * r1
+            int r1 = (int) r5
+            r4.setAlpha(r1)
+            int r1 = r9 - r8
+            android.text.StaticLayout r4 = r0.layout1
+            int r4 = r4.getHeight()
+            int r1 = r1 - r4
+            float r1 = (float) r1
+            float r1 = r1 / r3
+            float r1 = r1 + r15
+            int r4 = org.telegram.messenger.AndroidUtilities.dp(r2)
+            float r4 = (float) r4
+            float r5 = r0.swipeToReleaseProgress
             float r4 = r4 * r5
-            int r4 = (int) r4
-            r0.setAlpha(r4)
-            r5 = 0
-            float r6 = (float) r13
-            float r7 = (float) r15
-            float r8 = (float) r14
-            r4 = r12
-            r9 = r0
-            r4.drawRect(r5, r6, r7, r8, r9)
-            android.text.StaticLayout r14 = r11.layout1
-            r15 = 1073741824(0x40000000, float:2.0)
-            r4 = 1092616192(0x41200000, float:10.0)
-            r5 = 1099956224(0x41900000, float:18.0)
-            if (r14 == 0) goto L_0x009d
-            float r14 = r11.swipeToReleaseProgress
-            int r6 = (r14 > r3 ? 1 : (r14 == r3 ? 0 : -1))
-            if (r6 >= 0) goto L_0x009d
-            android.text.TextPaint r6 = r11.textPaint2
-            float r7 = (float) r10
-            float r14 = r3 - r14
-            float r7 = r7 * r14
-            float r14 = r11.progressToBottomPannel
-            float r7 = r7 * r14
-            int r14 = (int) r7
-            r6.setAlpha(r14)
-            int r14 = org.telegram.messenger.AndroidUtilities.dp(r5)
-            int r14 = r14 + r13
-            float r14 = (float) r14
-            int r6 = org.telegram.messenger.AndroidUtilities.dp(r4)
-            float r6 = (float) r6
-            float r7 = r11.swipeToReleaseProgress
-            float r6 = r6 * r7
-            float r14 = r14 - r6
-            r12.save()
-            int r6 = r11.lastWidth
-            int r7 = r11.layout1Width
-            int r6 = r6 - r7
-            float r6 = (float) r6
-            float r6 = r6 / r15
-            r12.translate(r6, r14)
-            android.text.StaticLayout r14 = r11.layout1
-            r14.draw(r12)
-            r12.restore()
-        L_0x009d:
-            android.text.StaticLayout r14 = r11.layout2
-            if (r14 == 0) goto L_0x00da
-            float r14 = r11.swipeToReleaseProgress
-            int r2 = (r14 > r2 ? 1 : (r14 == r2 ? 0 : -1))
-            if (r2 <= 0) goto L_0x00da
-            android.text.TextPaint r2 = r11.textPaint2
-            float r6 = (float) r10
-            float r6 = r6 * r14
-            float r14 = r11.progressToBottomPannel
-            float r6 = r6 * r14
-            int r14 = (int) r6
-            r2.setAlpha(r14)
-            int r14 = org.telegram.messenger.AndroidUtilities.dp(r5)
-            int r13 = r13 + r14
-            float r13 = (float) r13
-            int r14 = org.telegram.messenger.AndroidUtilities.dp(r4)
-            float r14 = (float) r14
-            float r2 = r11.swipeToReleaseProgress
-            float r3 = r3 - r2
-            float r14 = r14 * r3
-            float r13 = r13 + r14
-            r12.save()
-            int r14 = r11.lastWidth
-            int r2 = r11.layout2Width
-            int r14 = r14 - r2
-            float r14 = (float) r14
-            float r14 = r14 / r15
-            r12.translate(r14, r13)
-            android.text.StaticLayout r13 = r11.layout2
-            r13.draw(r12)
-            r12.restore()
-        L_0x00da:
-            android.text.TextPaint r12 = r11.textPaint2
-            r12.setAlpha(r10)
-            r0.setAlpha(r1)
+            float r1 = r1 - r4
+            r17.save()
+            int r4 = r0.lastWidth
+            int r5 = r0.layout1Width
+            int r4 = r4 - r5
+            float r4 = (float) r4
+            float r4 = r4 / r3
+            r7.translate(r4, r1)
+            android.text.StaticLayout r1 = r0.layout1
+            r1.draw(r7)
+            r17.restore()
+        L_0x00ad:
+            android.text.StaticLayout r1 = r0.layout2
+            if (r1 == 0) goto L_0x00f0
+            float r1 = r0.swipeToReleaseProgress
+            int r4 = (r1 > r10 ? 1 : (r1 == r10 ? 0 : -1))
+            if (r4 <= 0) goto L_0x00f0
+            android.text.TextPaint r4 = r0.textPaint2
+            float r5 = (float) r14
+            float r5 = r5 * r1
+            float r1 = r0.progressToBottomPannel
+            float r5 = r5 * r1
+            int r1 = (int) r5
+            r4.setAlpha(r1)
+            int r1 = r9 - r8
+            android.text.StaticLayout r4 = r0.layout2
+            int r4 = r4.getHeight()
+            int r1 = r1 - r4
+            float r1 = (float) r1
+            float r1 = r1 / r3
+            float r15 = r15 + r1
+            int r1 = org.telegram.messenger.AndroidUtilities.dp(r2)
+            float r1 = (float) r1
+            float r2 = r0.swipeToReleaseProgress
+            float r11 = r11 - r2
+            float r1 = r1 * r11
+            float r15 = r15 + r1
+            r17.save()
+            int r1 = r0.lastWidth
+            int r2 = r0.layout2Width
+            int r1 = r1 - r2
+            float r1 = (float) r1
+            float r1 = r1 / r3
+            r7.translate(r1, r15)
+            android.text.StaticLayout r1 = r0.layout2
+            r1.draw(r7)
+            r17.restore()
+        L_0x00f0:
+            android.text.TextPaint r1 = r0.textPaint2
+            r1.setAlpha(r14)
+            r12.setAlpha(r13)
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ChatPullingDownDrawable.drawBottomPanel(android.graphics.Canvas, int, int, int):void");

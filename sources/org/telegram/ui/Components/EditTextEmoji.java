@@ -269,6 +269,10 @@ public class EditTextEmoji extends FrameLayout implements NotificationCenter.Not
         this.emojiPadding = 0;
     }
 
+    public EmojiView getEmojiView() {
+        return this.emojiView;
+    }
+
     public void setDelegate(EditTextEmojiDelegate editTextEmojiDelegate) {
         this.delegate = editTextEmojiDelegate;
     }
@@ -415,7 +419,7 @@ public class EditTextEmoji extends FrameLayout implements NotificationCenter.Not
         }
     }
 
-    /* access modifiers changed from: private */
+    /* access modifiers changed from: protected */
     public void showPopup(int i) {
         if (i == 1) {
             EmojiView emojiView2 = this.emojiView;
@@ -513,7 +517,8 @@ public class EditTextEmoji extends FrameLayout implements NotificationCenter.Not
         }
     }
 
-    private void createEmojiView() {
+    /* access modifiers changed from: protected */
+    public void createEmojiView() {
         if (this.emojiView == null) {
             EmojiView emojiView2 = new EmojiView(false, false, getContext(), false, (TLRPC$ChatFull) null, (ViewGroup) null, this.resourcesProvider);
             this.emojiView = emojiView2;

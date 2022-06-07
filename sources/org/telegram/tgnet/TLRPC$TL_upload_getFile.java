@@ -6,7 +6,7 @@ public class TLRPC$TL_upload_getFile extends TLObject {
     public int flags;
     public int limit;
     public TLRPC$InputFileLocation location;
-    public int offset;
+    public long offset;
     public boolean precise;
 
     public TLObject deserializeResponse(AbstractSerializedData abstractSerializedData, int i, boolean z) {
@@ -21,7 +21,7 @@ public class TLRPC$TL_upload_getFile extends TLObject {
         this.flags = i2;
         abstractSerializedData.writeInt32(i2);
         this.location.serializeToStream(abstractSerializedData);
-        abstractSerializedData.writeInt32(this.offset);
+        abstractSerializedData.writeInt64(this.offset);
         abstractSerializedData.writeInt32(this.limit);
     }
 }

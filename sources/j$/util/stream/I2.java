@@ -1,66 +1,33 @@
 package j$.util.stream;
 
-import j$.util.Optional;
-import j$.util.function.Consumer;
+import j$.util.function.BiConsumer;
 import j$.util.function.b;
+import j$.util.function.y;
+import j$.wrappers.J0;
 
-class I2 implements T2 {
-    private boolean a;
-    private Object b;
-    final /* synthetic */ b c;
+class I2 extends U2 {
+    final /* synthetic */ b b;
+    final /* synthetic */ BiConsumer c;
+    final /* synthetic */ y d;
+    final /* synthetic */ J0 e;
 
-    I2(b bVar) {
-        this.c = bVar;
+    /* JADX INFO: super call moved to the top of the method (can break code semantics) */
+    I2(CLASSNAMEe4 e4Var, b bVar, BiConsumer biConsumer, y yVar, J0 j0) {
+        super(e4Var);
+        this.b = bVar;
+        this.c = biConsumer;
+        this.d = yVar;
+        this.e = j0;
     }
 
-    public /* synthetic */ void accept(double d) {
-        CLASSNAMEp1.f(this);
-        throw null;
+    public S2 a() {
+        return new J2(this.d, this.c, this.b);
     }
 
-    public /* synthetic */ void accept(int i) {
-        CLASSNAMEp1.d(this);
-        throw null;
-    }
-
-    public /* synthetic */ void accept(long j) {
-        CLASSNAMEp1.e(this);
-        throw null;
-    }
-
-    public void accept(Object obj) {
-        if (this.a) {
-            this.a = false;
-        } else {
-            obj = this.c.apply(this.b, obj);
+    public int b() {
+        if (this.e.b().contains(CLASSNAMEh.UNORDERED)) {
+            return CLASSNAMEd4.r;
         }
-        this.b = obj;
-    }
-
-    public /* synthetic */ Consumer andThen(Consumer consumer) {
-        return Consumer.CC.$default$andThen(this, consumer);
-    }
-
-    public Object get() {
-        return this.a ? Optional.empty() : Optional.of(this.b);
-    }
-
-    public void h(T2 t2) {
-        I2 i2 = (I2) t2;
-        if (!i2.a) {
-            accept(i2.b);
-        }
-    }
-
-    public /* synthetic */ void m() {
-    }
-
-    public void n(long j) {
-        this.a = true;
-        this.b = null;
-    }
-
-    public /* synthetic */ boolean o() {
-        return false;
+        return 0;
     }
 }

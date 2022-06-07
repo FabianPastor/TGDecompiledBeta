@@ -1,36 +1,7 @@
 package org.telegram.tgnet;
 
-import java.util.ArrayList;
-
-public class TLRPC$TL_dialogFilter extends TLObject {
+public class TLRPC$TL_dialogFilter extends TLRPC$DialogFilter {
     public static int constructor = NUM;
-    public boolean bots;
-    public boolean broadcasts;
-    public boolean contacts;
-    public String emoticon;
-    public boolean exclude_archived;
-    public boolean exclude_muted;
-    public ArrayList<TLRPC$InputPeer> exclude_peers = new ArrayList<>();
-    public boolean exclude_read;
-    public int flags;
-    public boolean groups;
-    public int id;
-    public ArrayList<TLRPC$InputPeer> include_peers = new ArrayList<>();
-    public boolean non_contacts;
-    public ArrayList<TLRPC$InputPeer> pinned_peers = new ArrayList<>();
-    public String title;
-
-    public static TLRPC$TL_dialogFilter TLdeserialize(AbstractSerializedData abstractSerializedData, int i, boolean z) {
-        if (constructor == i) {
-            TLRPC$TL_dialogFilter tLRPC$TL_dialogFilter = new TLRPC$TL_dialogFilter();
-            tLRPC$TL_dialogFilter.readParams(abstractSerializedData, z);
-            return tLRPC$TL_dialogFilter;
-        } else if (!z) {
-            return null;
-        } else {
-            throw new RuntimeException(String.format("can't parse magic %x in TL_dialogFilter", new Object[]{Integer.valueOf(i)}));
-        }
-    }
 
     public void readParams(AbstractSerializedData abstractSerializedData, boolean z) {
         int readInt32 = abstractSerializedData.readInt32(z);

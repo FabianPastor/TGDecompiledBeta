@@ -1,15 +1,15 @@
 package org.telegram.ui.Cells;
 
-import java.util.Comparator;
-import org.telegram.ui.Cells.ChatMessageCell;
+public final /* synthetic */ class ChatMessageCell$$ExternalSyntheticLambda5 implements Runnable {
+    public final /* synthetic */ ChatMessageCell f$0;
+    public final /* synthetic */ ChatMessageCell f$1;
 
-public final /* synthetic */ class ChatMessageCell$$ExternalSyntheticLambda5 implements Comparator {
-    public static final /* synthetic */ ChatMessageCell$$ExternalSyntheticLambda5 INSTANCE = new ChatMessageCell$$ExternalSyntheticLambda5();
-
-    private /* synthetic */ ChatMessageCell$$ExternalSyntheticLambda5() {
+    public /* synthetic */ ChatMessageCell$$ExternalSyntheticLambda5(ChatMessageCell chatMessageCell, ChatMessageCell chatMessageCell2) {
+        this.f$0 = chatMessageCell;
+        this.f$1 = chatMessageCell2;
     }
 
-    public final int compare(Object obj, Object obj2) {
-        return ChatMessageCell.lambda$setMessageContent$4((ChatMessageCell.PollButton) obj, (ChatMessageCell.PollButton) obj2);
+    public final void run() {
+        this.f$0.lambda$checkSpoilersMotionEvent$3(this.f$1);
     }
 }

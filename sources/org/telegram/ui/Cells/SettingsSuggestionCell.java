@@ -22,6 +22,7 @@ public class SettingsSuggestionCell extends LinearLayout {
     private int currentType;
     private TextView detailTextView;
     private TextView noButton;
+    private Theme.ResourcesProvider resourcesProvider;
     private TextView textView;
     private TextView yesButton;
 
@@ -33,39 +34,43 @@ public class SettingsSuggestionCell extends LinearLayout {
     public void onYesClick(int i) {
     }
 
-    public SettingsSuggestionCell(Context context) {
+    /* JADX INFO: super call moved to the top of the method (can break code semantics) */
+    public SettingsSuggestionCell(Context context, Theme.ResourcesProvider resourcesProvider2) {
         super(context);
+        Context context2 = context;
+        Theme.ResourcesProvider resourcesProvider3 = resourcesProvider2;
+        this.resourcesProvider = resourcesProvider3;
         setOrientation(1);
-        TextView textView2 = new TextView(context);
+        TextView textView2 = new TextView(context2);
         this.textView = textView2;
         textView2.setTextSize(1, 15.0f);
         this.textView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         this.textView.setEllipsize(TextUtils.TruncateAt.END);
         this.textView.setGravity((LocaleController.isRTL ? 5 : 3) | 16);
-        this.textView.setTextColor(Theme.getColor("windowBackgroundWhiteBlueHeader"));
+        this.textView.setTextColor(Theme.getColor("windowBackgroundWhiteBlueHeader", resourcesProvider3));
         addView(this.textView, LayoutHelper.createLinear(-1, -2, (LocaleController.isRTL ? 5 : 3) | 48, 21, 15, 21, 0));
-        TextView textView3 = new TextView(context);
+        TextView textView3 = new TextView(context2);
         this.detailTextView = textView3;
-        textView3.setTextColor(Theme.getColor("windowBackgroundWhiteGrayText2"));
+        textView3.setTextColor(Theme.getColor("windowBackgroundWhiteGrayText2", resourcesProvider3));
         this.detailTextView.setTextSize(1, 13.0f);
-        this.detailTextView.setLinkTextColor(Theme.getColor("windowBackgroundWhiteLinkText"));
-        this.detailTextView.setHighlightColor(Theme.getColor("windowBackgroundWhiteLinkSelection"));
+        this.detailTextView.setLinkTextColor(Theme.getColor("windowBackgroundWhiteLinkText", resourcesProvider3));
+        this.detailTextView.setHighlightColor(Theme.getColor("windowBackgroundWhiteLinkSelection", resourcesProvider3));
         this.detailTextView.setMovementMethod(new AndroidUtilities.LinkMovementMethodMy());
         this.detailTextView.setGravity(LocaleController.isRTL ? 5 : 3);
         addView(this.detailTextView, LayoutHelper.createLinear(-2, -2, LocaleController.isRTL ? 5 : 3, 21, 8, 21, 0));
-        LinearLayout linearLayout = new LinearLayout(context);
+        LinearLayout linearLayout = new LinearLayout(context2);
         linearLayout.setOrientation(0);
         addView(linearLayout, LayoutHelper.createLinear(-1, 40, 21.0f, 17.0f, 21.0f, 20.0f));
         int i = 0;
         while (i < 2) {
-            TextView textView4 = new TextView(context);
-            textView4.setBackground(Theme.createSimpleSelectorRoundRectDrawable(AndroidUtilities.dp(4.0f), Theme.getColor("featuredStickers_addButton"), Theme.getColor("featuredStickers_addButtonPressed")));
+            TextView textView4 = new TextView(context2);
+            textView4.setBackground(Theme.AdaptiveRipple.filledRect("featuredStickers_addButton", 4.0f));
             textView4.setLines(1);
             textView4.setSingleLine(true);
             textView4.setGravity(1);
             textView4.setEllipsize(TextUtils.TruncateAt.END);
             textView4.setGravity(17);
-            textView4.setTextColor(Theme.getColor("featuredStickers_buttonText"));
+            textView4.setTextColor(Theme.getColor("featuredStickers_buttonText", resourcesProvider3));
             textView4.setTextSize(1, 14.0f);
             textView4.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
             linearLayout.addView(textView4, LayoutHelper.createLinear(0, 40, 0.5f, i == 0 ? 0 : 4, 0, i == 0 ? 4 : 0, 0));

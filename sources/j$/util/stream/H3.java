@@ -3,35 +3,35 @@ package j$.util.stream;
 import java.util.Arrays;
 
 final class H3 extends D3 {
-    private V3 c;
+    private W3 c;
 
-    H3(CLASSNAMEn3 n3Var) {
-        super(n3Var);
+    H3(CLASSNAMEm3 m3Var) {
+        super(m3Var);
     }
 
-    public void accept(double d) {
-        this.c.accept(d);
+    public void accept(int i) {
+        this.c.accept(i);
     }
 
     public void m() {
-        double[] dArr = (double[]) this.c.e();
-        Arrays.sort(dArr);
-        this.a.n((long) dArr.length);
+        int[] iArr = (int[]) this.c.e();
+        Arrays.sort(iArr);
+        this.a.n((long) iArr.length);
         int i = 0;
         if (!this.b) {
-            int length = dArr.length;
+            int length = iArr.length;
             while (i < length) {
-                this.a.accept(dArr[i]);
+                this.a.accept(iArr[i]);
                 i++;
             }
         } else {
-            int length2 = dArr.length;
+            int length2 = iArr.length;
             while (i < length2) {
-                double d = dArr[i];
+                int i2 = iArr[i];
                 if (this.a.o()) {
                     break;
                 }
-                this.a.accept(d);
+                this.a.accept(i2);
                 i++;
             }
         }
@@ -39,14 +39,14 @@ final class H3 extends D3 {
     }
 
     public void n(long j) {
-        V3 v3;
+        W3 w3;
         if (j < NUM) {
             if (j > 0) {
                 int i = (int) j;
             } else {
-                v3 = new V3();
+                w3 = new W3();
             }
-            this.c = v3;
+            this.c = w3;
             return;
         }
         throw new IllegalArgumentException("Stream size exceeds max array size");

@@ -11,6 +11,6 @@ public final /* synthetic */ class StickersAlert$$ExternalSyntheticLambda2 imple
     }
 
     public final void onShow(DialogInterface dialogInterface) {
-        AndroidUtilities.runOnUIThread(new StickersAlert$$ExternalSyntheticLambda15(this.f$0));
+        AndroidUtilities.runOnUIThread(new StickersAlert$$ExternalSyntheticLambda16(this.f$0));
     }
 }

@@ -1,17 +1,17 @@
 package org.telegram.messenger;
 
-import org.telegram.tgnet.TLRPC$EncryptedChat;
+import org.telegram.tgnet.TLRPC$ChatParticipants;
 
 public final /* synthetic */ class MessagesStorage$$ExternalSyntheticLambda161 implements Runnable {
     public final /* synthetic */ MessagesStorage f$0;
-    public final /* synthetic */ TLRPC$EncryptedChat f$1;
+    public final /* synthetic */ TLRPC$ChatParticipants f$1;
 
-    public /* synthetic */ MessagesStorage$$ExternalSyntheticLambda161(MessagesStorage messagesStorage, TLRPC$EncryptedChat tLRPC$EncryptedChat) {
+    public /* synthetic */ MessagesStorage$$ExternalSyntheticLambda161(MessagesStorage messagesStorage, TLRPC$ChatParticipants tLRPC$ChatParticipants) {
         this.f$0 = messagesStorage;
-        this.f$1 = tLRPC$EncryptedChat;
+        this.f$1 = tLRPC$ChatParticipants;
     }
 
     public final void run() {
-        this.f$0.lambda$updateEncryptedChatTTL$131(this.f$1);
+        this.f$0.lambda$updateChatParticipants$90(this.f$1);
     }
 }

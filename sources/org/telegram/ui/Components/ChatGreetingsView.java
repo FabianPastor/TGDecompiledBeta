@@ -61,6 +61,7 @@ public class ChatGreetingsView extends LinearLayout {
             this.titleView.setText(LocaleController.formatString("NearbyPeopleGreetingsMessage", NUM, tLRPC$User.first_name, LocaleController.formatDistance((float) i, 1)));
             this.descriptionView.setText(LocaleController.getString("NearbyPeopleGreetingsDescription", NUM));
         }
+        this.stickerToSendView.setContentDescription(this.descriptionView.getText());
         this.preloadedGreetingsSticker = tLRPC$Document;
         if (tLRPC$Document == null) {
             this.preloadedGreetingsSticker = MediaDataController.getInstance(i2).getGreetingsSticker();

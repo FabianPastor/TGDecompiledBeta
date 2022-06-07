@@ -232,7 +232,7 @@ public class PinchToZoomHelper {
             int[] iArr = new int[1];
             ImageLocation imageLocation = getImageLocation(messageObject2, iArr);
             if (imageLocation != null) {
-                this.fullImage.setImage(imageLocation, (String) null, (ImageLocation) null, (String) null, (Drawable) null, iArr[0], (String) null, messageObject2, messageObject2.isWebpage() ? 1 : 0);
+                this.fullImage.setImage(imageLocation, (String) null, (ImageLocation) null, (String) null, (Drawable) null, (long) iArr[0], (String) null, messageObject2, messageObject2.isWebpage() ? 1 : 0);
                 this.fullImage.setCrossfadeAlpha((byte) 2);
             }
             updateViewsLocation();

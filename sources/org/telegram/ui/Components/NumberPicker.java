@@ -3,6 +3,7 @@ package org.telegram.ui.Components;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.os.Build;
 import android.text.TextUtils;
 import android.util.SparseArray;
 import android.util.TypedValue;
@@ -102,15 +103,15 @@ public class NumberPicker extends LinearLayout {
         return 0.9f;
     }
 
-    /* JADX WARNING: type inference failed for: r2v2, types: [byte, boolean] */
-    static /* synthetic */ boolean access$380(NumberPicker numberPicker, int i) {
+    /* JADX WARNING: type inference failed for: r2v2, types: [boolean, byte] */
+    static /* synthetic */ boolean access$280(NumberPicker numberPicker, int i) {
         ? r2 = (byte) (i ^ numberPicker.mIncrementVirtualButtonPressed);
         numberPicker.mIncrementVirtualButtonPressed = r2;
         return r2;
     }
 
-    /* JADX WARNING: type inference failed for: r2v2, types: [byte, boolean] */
-    static /* synthetic */ boolean access$580(NumberPicker numberPicker, int i) {
+    /* JADX WARNING: type inference failed for: r2v2, types: [boolean, byte] */
+    static /* synthetic */ boolean access$480(NumberPicker numberPicker, int i) {
         ? r2 = (byte) (i ^ numberPicker.mDecrementVirtualButtonPressed);
         numberPicker.mDecrementVirtualButtonPressed = r2;
         return r2;
@@ -818,6 +819,12 @@ public class NumberPicker extends LinearLayout {
             int i3 = this.mValue;
             this.mValue = i2;
             updateInputTextView();
+            if (((float) Math.abs(i3 - i2)) > 0.9f && Build.VERSION.SDK_INT >= 27) {
+                try {
+                    performHapticFeedback(9, 1);
+                } catch (Exception unused) {
+                }
+            }
             if (z) {
                 notifyChange(i3, i2);
             }
@@ -826,7 +833,7 @@ public class NumberPicker extends LinearLayout {
         }
     }
 
-    /* access modifiers changed from: private */
+    /* access modifiers changed from: protected */
     public void changeValueByOne(boolean z) {
         this.mInputText.setVisibility(4);
         if (!moveToFinalScrollerPosition(this.mFlingScroller)) {
@@ -1071,14 +1078,14 @@ public class NumberPicker extends LinearLayout {
                     if (!NumberPicker.this.mIncrementVirtualButtonPressed) {
                         NumberPicker.this.postDelayed(this, (long) ViewConfiguration.getPressedStateDuration());
                     }
-                    NumberPicker.access$380(NumberPicker.this, 1);
+                    NumberPicker.access$280(NumberPicker.this, 1);
                     NumberPicker numberPicker3 = NumberPicker.this;
                     numberPicker3.invalidate(0, numberPicker3.mBottomSelectionDividerBottom, NumberPicker.this.getRight(), NumberPicker.this.getBottom());
                 } else if (i3 == 2) {
                     if (!NumberPicker.this.mDecrementVirtualButtonPressed) {
                         NumberPicker.this.postDelayed(this, (long) ViewConfiguration.getPressedStateDuration());
                     }
-                    NumberPicker.access$580(NumberPicker.this, 1);
+                    NumberPicker.access$480(NumberPicker.this, 1);
                     NumberPicker numberPicker4 = NumberPicker.this;
                     numberPicker4.invalidate(0, 0, numberPicker4.getRight(), NumberPicker.this.mTopSelectionDividerTop);
                 }

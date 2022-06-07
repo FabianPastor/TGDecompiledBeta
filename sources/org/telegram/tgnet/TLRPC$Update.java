@@ -13,6 +13,9 @@ public abstract class TLRPC$Update extends TLObject {
             case -2027964103:
                 tLRPC$Update = new TLRPC$TL_updateGeoLiveViewed();
                 break;
+            case -2006880112:
+                tLRPC$Update = new TLRPC$TL_updateTranscribeAudio();
+                break;
             case -1937192669:
                 tLRPC$Update = new TLRPC$TL_updateChannelUserTyping();
                 break;
@@ -129,6 +132,9 @@ public abstract class TLRPC$Update extends TLObject {
                 break;
             case -99664734:
                 tLRPC$Update = new TLRPC$TL_updatePinnedDialogs();
+                break;
+            case 8703322:
+                tLRPC$Update = new TLRPC$TL_updateTranscribedAudio();
                 break;
             case 88680979:
                 tLRPC$Update = new TLRPC$TL_updateUserPhone();

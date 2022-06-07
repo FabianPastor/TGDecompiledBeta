@@ -34,12 +34,15 @@ public class DownloadProgressIcon extends View implements NotificationCenter.Not
     float progressDt;
     boolean showCompletedIcon;
 
-    /* JADX INFO: super call moved to the top of the method (can break code semantics) */
     public DownloadProgressIcon(int i, Context context) {
         super(context);
         this.currentAccount = i;
-        this.downloadDrawable = new RLottieDrawable(NUM, "download_progress", AndroidUtilities.dp(28.0f), AndroidUtilities.dp(28.0f), true, (int[]) null);
-        this.downloadCompleteDrawable = new RLottieDrawable(NUM, "download_finish", AndroidUtilities.dp(28.0f), AndroidUtilities.dp(28.0f), true, (int[]) null);
+        RLottieDrawable rLottieDrawable = new RLottieDrawable(NUM, "download_progress", AndroidUtilities.dp(28.0f), AndroidUtilities.dp(28.0f), true, (int[]) null);
+        this.downloadDrawable = rLottieDrawable;
+        rLottieDrawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor("actionBarDefaultIcon"), PorterDuff.Mode.MULTIPLY));
+        RLottieDrawable rLottieDrawable2 = new RLottieDrawable(NUM, "download_finish", AndroidUtilities.dp(28.0f), AndroidUtilities.dp(28.0f), true, (int[]) null);
+        this.downloadCompleteDrawable = rLottieDrawable2;
+        rLottieDrawable2.setColorFilter(new PorterDuffColorFilter(Theme.getColor("actionBarDefaultIcon"), PorterDuff.Mode.MULTIPLY));
         this.downloadImageReceiver.setImageBitmap((Drawable) this.downloadDrawable);
         this.downloadCompleteImageReceiver.setImageBitmap((Drawable) this.downloadCompleteDrawable);
         this.downloadImageReceiver.setAutoRepeat(1);

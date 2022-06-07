@@ -1,14 +1,14 @@
 package j$.util.stream;
 
-import j$.util.function.m;
+import j$.util.function.A;
 
-public final /* synthetic */ class X2 implements m {
+public final /* synthetic */ class X2 implements A {
     public static final /* synthetic */ X2 a = new X2();
 
     private /* synthetic */ X2() {
     }
 
-    public final Object apply(int i) {
-        return new Object[i];
+    public final long applyAsLong(Object obj) {
+        return 1;
     }
 }

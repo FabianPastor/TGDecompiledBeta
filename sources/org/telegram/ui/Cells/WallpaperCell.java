@@ -127,6 +127,7 @@ public class WallpaperCell extends FrameLayout {
             int i2;
             Object obj3 = obj;
             this.currentWallpaper = obj3;
+            int i3 = 0;
             this.imageView.setVisibility(0);
             this.imageView2.setVisibility(4);
             TLRPC$PhotoSize tLRPC$PhotoSize = null;
@@ -136,14 +137,16 @@ public class WallpaperCell extends FrameLayout {
             this.imageView.getImageReceiver().setBlendMode((Object) null);
             this.imageView.getImageReceiver().setGradientBitmap((Bitmap) null);
             this.isSelected = obj3 == obj2;
+            String str = 180 + "_" + 180;
+            String str2 = 100 + "_" + 100 + "_b";
             if (obj3 instanceof TLRPC$TL_wallPaper) {
                 TLRPC$TL_wallPaper tLRPC$TL_wallPaper = (TLRPC$TL_wallPaper) obj3;
-                TLRPC$PhotoSize closestPhotoSizeWithSize = FileLoader.getClosestPhotoSizeWithSize(tLRPC$TL_wallPaper.document.thumbs, 100);
-                TLRPC$PhotoSize closestPhotoSizeWithSize2 = FileLoader.getClosestPhotoSizeWithSize(tLRPC$TL_wallPaper.document.thumbs, 320);
+                TLRPC$PhotoSize closestPhotoSizeWithSize = FileLoader.getClosestPhotoSizeWithSize(tLRPC$TL_wallPaper.document.thumbs, AndroidUtilities.dp((float) 100));
+                TLRPC$PhotoSize closestPhotoSizeWithSize2 = FileLoader.getClosestPhotoSizeWithSize(tLRPC$TL_wallPaper.document.thumbs, AndroidUtilities.dp((float) 180));
                 if (closestPhotoSizeWithSize2 != closestPhotoSizeWithSize) {
                     tLRPC$PhotoSize = closestPhotoSizeWithSize2;
                 }
-                int i3 = tLRPC$PhotoSize != null ? tLRPC$PhotoSize.size : tLRPC$TL_wallPaper.document.size;
+                long j = tLRPC$PhotoSize != null ? (long) tLRPC$PhotoSize.size : tLRPC$TL_wallPaper.document.size;
                 if (tLRPC$TL_wallPaper.pattern) {
                     TLRPC$WallPaperSettings tLRPC$WallPaperSettings = tLRPC$TL_wallPaper.settings;
                     if (tLRPC$WallPaperSettings.third_background_color != 0) {
@@ -167,15 +170,15 @@ public class WallpaperCell extends FrameLayout {
                         this.imageView.getImageReceiver().setColorFilter(new PorterDuffColorFilter(AndroidUtilities.getPatternColor(i2), PorterDuff.Mode.SRC_IN));
                     }
                     if (tLRPC$PhotoSize != null) {
-                        this.imageView.setImage(ImageLocation.getForDocument(tLRPC$PhotoSize, tLRPC$TL_wallPaper.document), "100_100", ImageLocation.getForDocument(closestPhotoSizeWithSize, tLRPC$TL_wallPaper.document), (String) null, "jpg", i3, 1, tLRPC$TL_wallPaper);
+                        this.imageView.setImage(ImageLocation.getForDocument(tLRPC$PhotoSize, tLRPC$TL_wallPaper.document), str, ImageLocation.getForDocument(closestPhotoSizeWithSize, tLRPC$TL_wallPaper.document), (String) null, "jpg", j, 1, tLRPC$TL_wallPaper);
                     } else {
-                        this.imageView.setImage(ImageLocation.getForDocument(closestPhotoSizeWithSize, tLRPC$TL_wallPaper.document), "100_100", (ImageLocation) null, (String) null, "jpg", i3, 1, tLRPC$TL_wallPaper);
+                        this.imageView.setImage(ImageLocation.getForDocument(closestPhotoSizeWithSize, tLRPC$TL_wallPaper.document), str, (ImageLocation) null, (String) null, "jpg", j, 1, tLRPC$TL_wallPaper);
                     }
                     this.imageView.getImageReceiver().setAlpha(((float) Math.abs(tLRPC$TL_wallPaper.settings.intensity)) / 100.0f);
                 } else if (tLRPC$PhotoSize != null) {
-                    this.imageView.setImage(ImageLocation.getForDocument(tLRPC$PhotoSize, tLRPC$TL_wallPaper.document), "100_100", ImageLocation.getForDocument(closestPhotoSizeWithSize, tLRPC$TL_wallPaper.document), "100_100_b", "jpg", i3, 1, tLRPC$TL_wallPaper);
+                    this.imageView.setImage(ImageLocation.getForDocument(tLRPC$PhotoSize, tLRPC$TL_wallPaper.document), str, ImageLocation.getForDocument(closestPhotoSizeWithSize, tLRPC$TL_wallPaper.document), str2, "jpg", j, 1, tLRPC$TL_wallPaper);
                 } else {
-                    this.imageView.setImage(ImageLocation.getForDocument(tLRPC$TL_wallPaper.document), "100_100", ImageLocation.getForDocument(closestPhotoSizeWithSize, tLRPC$TL_wallPaper.document), "100_100_b", "jpg", i3, 1, tLRPC$TL_wallPaper);
+                    this.imageView.setImage(ImageLocation.getForDocument(tLRPC$TL_wallPaper.document), str, ImageLocation.getForDocument(closestPhotoSizeWithSize, tLRPC$TL_wallPaper.document), str2, "jpg", j, 1, tLRPC$TL_wallPaper);
                 }
             } else if (obj3 instanceof WallpapersListActivity.ColorWallpaper) {
                 WallpapersListActivity.ColorWallpaper colorWallpaper = (WallpapersListActivity.ColorWallpaper) obj3;
@@ -213,11 +216,11 @@ public class WallpaperCell extends FrameLayout {
                     }
                     File file = colorWallpaper.path;
                     if (file != null) {
-                        this.imageView.setImage(file.getAbsolutePath(), "100_100", (Drawable) null);
+                        this.imageView.setImage(file.getAbsolutePath(), str, (Drawable) null);
                         return;
                     }
                     TLRPC$PhotoSize closestPhotoSizeWithSize3 = FileLoader.getClosestPhotoSizeWithSize(colorWallpaper.pattern.document.thumbs, 100);
-                    this.imageView.setImage(ImageLocation.getForDocument(closestPhotoSizeWithSize3, colorWallpaper.pattern.document), "100_100", (ImageLocation) null, (String) null, "jpg", closestPhotoSizeWithSize3 != null ? closestPhotoSizeWithSize3.size : colorWallpaper.pattern.document.size, 1, colorWallpaper.pattern);
+                    this.imageView.setImage(ImageLocation.getForDocument(closestPhotoSizeWithSize3, colorWallpaper.pattern.document), str, (ImageLocation) null, (String) null, "jpg", closestPhotoSizeWithSize3 != null ? (long) closestPhotoSizeWithSize3.size : colorWallpaper.pattern.document.size, 1, colorWallpaper.pattern);
                     this.imageView.getImageReceiver().setAlpha(Math.abs(colorWallpaper.intensity));
                     if (Build.VERSION.SDK_INT < 29 || colorWallpaper.gradientColor2 == 0) {
                         this.imageView.getImageReceiver().setColorFilter(new PorterDuffColorFilter(AndroidUtilities.getPatternColor(i), PorterDuff.Mode.SRC_IN));
@@ -227,12 +230,12 @@ public class WallpaperCell extends FrameLayout {
                 WallpapersListActivity.FileWallpaper fileWallpaper = (WallpapersListActivity.FileWallpaper) obj3;
                 File file2 = fileWallpaper.originalPath;
                 if (file2 != null) {
-                    this.imageView.setImage(file2.getAbsolutePath(), "100_100", (Drawable) null);
+                    this.imageView.setImage(file2.getAbsolutePath(), str, (Drawable) null);
                     return;
                 }
                 File file3 = fileWallpaper.path;
                 if (file3 != null) {
-                    this.imageView.setImage(file3.getAbsolutePath(), "100_100", (Drawable) null);
+                    this.imageView.setImage(file3.getAbsolutePath(), str, (Drawable) null);
                 } else if ("t".equals(fileWallpaper.slug)) {
                     BackupImageView backupImageView = this.imageView;
                     backupImageView.setImageDrawable(Theme.getThemedWallpaper(true, backupImageView));
@@ -243,15 +246,18 @@ public class WallpaperCell extends FrameLayout {
                 MediaController.SearchImage searchImage = (MediaController.SearchImage) obj3;
                 TLRPC$Photo tLRPC$Photo = searchImage.photo;
                 if (tLRPC$Photo != null) {
-                    TLRPC$PhotoSize closestPhotoSizeWithSize4 = FileLoader.getClosestPhotoSizeWithSize(tLRPC$Photo.sizes, 100);
-                    TLRPC$PhotoSize closestPhotoSizeWithSize5 = FileLoader.getClosestPhotoSizeWithSize(searchImage.photo.sizes, 320);
+                    TLRPC$PhotoSize closestPhotoSizeWithSize4 = FileLoader.getClosestPhotoSizeWithSize(tLRPC$Photo.sizes, AndroidUtilities.dp((float) 100));
+                    TLRPC$PhotoSize closestPhotoSizeWithSize5 = FileLoader.getClosestPhotoSizeWithSize(searchImage.photo.sizes, AndroidUtilities.dp((float) 180));
                     if (closestPhotoSizeWithSize5 != closestPhotoSizeWithSize4) {
                         tLRPC$PhotoSize = closestPhotoSizeWithSize5;
                     }
-                    this.imageView.setImage(ImageLocation.getForPhoto(tLRPC$PhotoSize, searchImage.photo), "100_100", ImageLocation.getForPhoto(closestPhotoSizeWithSize4, searchImage.photo), "100_100_b", "jpg", tLRPC$PhotoSize != null ? tLRPC$PhotoSize.size : 0, 1, searchImage);
+                    if (tLRPC$PhotoSize != null) {
+                        i3 = tLRPC$PhotoSize.size;
+                    }
+                    this.imageView.setImage(ImageLocation.getForPhoto(tLRPC$PhotoSize, searchImage.photo), str, ImageLocation.getForPhoto(closestPhotoSizeWithSize4, searchImage.photo), str2, "jpg", (long) i3, 1, searchImage);
                     return;
                 }
-                this.imageView.setImage(searchImage.thumbUrl, "100_100", (Drawable) null);
+                this.imageView.setImage(searchImage.thumbUrl, str, (Drawable) null);
             } else {
                 this.isSelected = false;
             }

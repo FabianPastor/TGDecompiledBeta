@@ -1,16 +1,23 @@
 package org.telegram.ui;
 
-import org.telegram.ui.Components.PopupSwipeBackLayout;
-import org.telegram.ui.Components.ReactionsContainerLayout;
+import org.telegram.tgnet.RequestDelegate;
+import org.telegram.tgnet.TLObject;
+import org.telegram.tgnet.TLRPC$TL_error;
+import org.telegram.tgnet.TLRPC$TL_messages_editMessage;
+import org.telegram.ui.ActionBar.AlertDialog;
 
-public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda228 implements PopupSwipeBackLayout.OnSwipeBackProgressListener {
-    public final /* synthetic */ ReactionsContainerLayout f$0;
+public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda228 implements RequestDelegate {
+    public final /* synthetic */ ChatActivity f$0;
+    public final /* synthetic */ AlertDialog[] f$1;
+    public final /* synthetic */ TLRPC$TL_messages_editMessage f$2;
 
-    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda228(ReactionsContainerLayout reactionsContainerLayout) {
-        this.f$0 = reactionsContainerLayout;
+    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda228(ChatActivity chatActivity, AlertDialog[] alertDialogArr, TLRPC$TL_messages_editMessage tLRPC$TL_messages_editMessage) {
+        this.f$0 = chatActivity;
+        this.f$1 = alertDialogArr;
+        this.f$2 = tLRPC$TL_messages_editMessage;
     }
 
-    public final void onSwipeBackProgress(PopupSwipeBackLayout popupSwipeBackLayout, float f, float f2) {
-        ChatActivity.lambda$createMenu$169(this.f$0, popupSwipeBackLayout, f, f2);
+    public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+        this.f$0.lambda$processSelectedOption$207(this.f$1, this.f$2, tLObject, tLRPC$TL_error);
     }
 }

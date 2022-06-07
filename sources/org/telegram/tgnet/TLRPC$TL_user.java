@@ -23,7 +23,7 @@ public class TLRPC$TL_user extends TLRPC$User {
         this.apply_min_photo = (33554432 & readInt32) != 0;
         this.fake = (67108864 & readInt32) != 0;
         this.bot_attach_menu = (NUM & readInt32) != 0;
-        this.bot_menu_webview = (readInt32 & NUM) != 0;
+        this.premium = (readInt32 & NUM) != 0;
         this.id = abstractSerializedData.readInt64(z);
         if ((this.flags & 1) != 0) {
             this.access_hash = abstractSerializedData.readInt64(z);
@@ -110,7 +110,7 @@ public class TLRPC$TL_user extends TLRPC$User {
         this.flags = i15;
         int i16 = this.bot_attach_menu ? i15 | NUM : i15 & -NUM;
         this.flags = i16;
-        int i17 = this.bot_menu_webview ? i16 | NUM : i16 & -NUM;
+        int i17 = this.premium ? i16 | NUM : i16 & -NUM;
         this.flags = i17;
         abstractSerializedData.writeInt32(i17);
         abstractSerializedData.writeInt64(this.id);

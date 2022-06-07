@@ -11,6 +11,6 @@ public final /* synthetic */ class LoginActivity$LoginActivitySmsView$$ExternalS
     }
 
     public final void onFocusChange(View view, boolean z) {
-        this.f$0.lambda$setParams$17(view, z);
+        this.f$0.lambda$setParams$18(view, z);
     }
 }

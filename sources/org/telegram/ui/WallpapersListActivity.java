@@ -395,7 +395,7 @@ public class WallpapersListActivity extends BaseFragment implements Notification
                 } else if (i == 4) {
                     if (WallpapersListActivity.this.getParentActivity() != null) {
                         AlertDialog.Builder builder = new AlertDialog.Builder((Context) WallpapersListActivity.this.getParentActivity());
-                        builder.setTitle(LocaleController.formatPluralString("DeleteBackground", WallpapersListActivity.this.selectedWallPapers.size()));
+                        builder.setTitle(LocaleController.formatPluralString("DeleteBackground", WallpapersListActivity.this.selectedWallPapers.size(), new Object[0]));
                         builder.setMessage(LocaleController.formatString("DeleteChatBackgroundsAlert", NUM, new Object[0]));
                         builder.setPositiveButton(LocaleController.getString("Delete", NUM), new WallpapersListActivity$2$$ExternalSyntheticLambda0(this));
                         builder.setNegativeButton(LocaleController.getString("Cancel", NUM), (DialogInterface.OnClickListener) null);
@@ -576,8 +576,8 @@ public class WallpapersListActivity extends BaseFragment implements Notification
             this.selectedMessagesCountTextView.setTextColor(Theme.getColor("actionBarDefaultIcon"));
             this.selectedMessagesCountTextView.setOnTouchListener(WallpapersListActivity$$ExternalSyntheticLambda1.INSTANCE);
             createActionMode.addView(this.selectedMessagesCountTextView, LayoutHelper.createLinear(0, -1, 1.0f, 65, 0, 0, 0));
-            this.actionModeViews.add(createActionMode.addItemWithWidth(3, NUM, AndroidUtilities.dp(54.0f), LocaleController.getString("Forward", NUM)));
-            this.actionModeViews.add(createActionMode.addItemWithWidth(4, NUM, AndroidUtilities.dp(54.0f), LocaleController.getString("Delete", NUM)));
+            this.actionModeViews.add(createActionMode.addItemWithWidth(3, NUM, AndroidUtilities.dp(54.0f), (CharSequence) LocaleController.getString("Forward", NUM)));
+            this.actionModeViews.add(createActionMode.addItemWithWidth(4, NUM, AndroidUtilities.dp(54.0f), (CharSequence) LocaleController.getString("Delete", NUM)));
             this.selectedWallPapers.clear();
         }
         FrameLayout frameLayout = new FrameLayout(context);
@@ -2180,7 +2180,7 @@ public class WallpapersListActivity extends BaseFragment implements Notification
                 org.telegram.ui.WallpapersListActivity r0 = org.telegram.ui.WallpapersListActivity.this
                 int r0 = r0.resetInfoRow
                 if (r14 != r0) goto L_0x027e
-                r14 = 2131627798(0x7f0e0var_, float:1.888287E38)
+                r14 = 2131627979(0x7f0e0fcb, float:1.8883238E38)
                 java.lang.String r0 = "ResetChatBackgroundsInfo"
                 java.lang.String r14 = org.telegram.messenger.LocaleController.getString(r0, r14)
                 r13.setText(r14)
@@ -2438,27 +2438,27 @@ public class WallpapersListActivity extends BaseFragment implements Notification
                 org.telegram.ui.WallpapersListActivity r0 = org.telegram.ui.WallpapersListActivity.this
                 int r0 = r0.uploadImageRow
                 if (r14 != r0) goto L_0x0252
-                r14 = 2131627956(0x7f0e0fb4, float:1.8883191E38)
+                r14 = 2131628156(0x7f0e107c, float:1.8883597E38)
                 java.lang.String r0 = "SelectFromGallery"
                 java.lang.String r14 = org.telegram.messenger.LocaleController.getString(r0, r14)
-                r0 = 2131166077(0x7var_d, float:1.794639E38)
+                r0 = 2131165857(0x7var_a1, float:1.7945943E38)
                 r13.setTextAndIcon((java.lang.String) r14, (int) r0, (boolean) r2)
                 goto L_0x027e
             L_0x0252:
                 org.telegram.ui.WallpapersListActivity r0 = org.telegram.ui.WallpapersListActivity.this
                 int r0 = r0.setColorRow
                 if (r14 != r0) goto L_0x026a
-                r14 = 2131628029(0x7f0e0ffd, float:1.888334E38)
+                r14 = 2131628230(0x7f0e10c6, float:1.8883747E38)
                 java.lang.String r0 = "SetColor"
                 java.lang.String r14 = org.telegram.messenger.LocaleController.getString(r0, r14)
-                r0 = 2131165711(0x7var_f, float:1.7945647E38)
+                r0 = 2131165832(0x7var_, float:1.7945892E38)
                 r13.setTextAndIcon((java.lang.String) r14, (int) r0, (boolean) r2)
                 goto L_0x027e
             L_0x026a:
                 org.telegram.ui.WallpapersListActivity r0 = org.telegram.ui.WallpapersListActivity.this
                 int r0 = r0.resetRow
                 if (r14 != r0) goto L_0x027e
-                r14 = 2131627795(0x7f0e0var_, float:1.8882865E38)
+                r14 = 2131627976(0x7f0e0fc8, float:1.8883232E38)
                 java.lang.String r0 = "ResetChatBackgrounds"
                 java.lang.String r14 = org.telegram.messenger.LocaleController.getString(r0, r14)
                 r13.setText(r14, r1)

@@ -30,6 +30,7 @@ import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.SharedConfig;
+import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.browser.Browser;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLObject;
@@ -131,7 +132,7 @@ public class BlockingUpdateView extends FrameLayout implements NotificationCente
         };
         this.acceptButton = r3;
         r3.setPadding(AndroidUtilities.dp(34.0f), 0, AndroidUtilities.dp(34.0f), 0);
-        this.acceptButton.setBackgroundDrawable(Theme.createSimpleSelectorRoundRectDrawable(AndroidUtilities.dp(4.0f), Theme.getColor("featuredStickers_addButton"), Theme.getColor("featuredStickers_addButtonPressed")));
+        this.acceptButton.setBackgroundDrawable(Theme.AdaptiveRipple.filledRect("featuredStickers_addButton", 4.0f));
         this.acceptButton.setPadding(AndroidUtilities.dp(34.0f), 0, AndroidUtilities.dp(34.0f), 0);
         addView(this.acceptButton, LayoutHelper.createFrame(-2, 46.0f, 81, 0.0f, 0.0f, 0.0f, 45.0f));
         this.acceptButton.setOnClickListener(new BlockingUpdateView$$ExternalSyntheticLambda1(this));
@@ -240,7 +241,7 @@ public class BlockingUpdateView extends FrameLayout implements NotificationCente
         boolean z = false;
         try {
             FileLoader.getAttachFileName(tLRPC$Document);
-            File pathToAttach = FileLoader.getPathToAttach(tLRPC$Document, true);
+            File pathToAttach = FileLoader.getInstance(UserConfig.selectedAccount).getPathToAttach(tLRPC$Document, true);
             z = pathToAttach.exists();
             if (z) {
                 Intent intent = new Intent("android.intent.action.VIEW");
@@ -314,7 +315,7 @@ public class BlockingUpdateView extends FrameLayout implements NotificationCente
         this.textView.setText(spannableStringBuilder);
         if (tLRPC$TL_help_appUpdate.document instanceof TLRPC$TL_document) {
             TextView textView2 = this.acceptTextView;
-            textView2.setText(LocaleController.getString("Update", NUM) + String.format(Locale.US, " (%1$s)", new Object[]{AndroidUtilities.formatFileSize((long) tLRPC$TL_help_appUpdate.document.size)}));
+            textView2.setText(LocaleController.getString("Update", NUM) + String.format(Locale.US, " (%1$s)", new Object[]{AndroidUtilities.formatFileSize(tLRPC$TL_help_appUpdate.document.size)}));
         } else {
             this.acceptTextView.setText(LocaleController.getString("Update", NUM));
         }

@@ -165,10 +165,11 @@ public class InviteMembersBottomSheet extends UsersAlertBase implements Notifica
             r4 = r22
             r7.parentFragment = r4
             r7.chatId = r9
+            r16.fixNavigationBar()
             org.telegram.ui.Components.UsersAlertBase$SearchField r1 = r7.searchView
             org.telegram.ui.Components.EditTextBoldCursor r1 = r1.searchEditText
             java.lang.String r2 = "SearchForChats"
-            r3 = 2131627895(0x7f0e0var_, float:1.8883067E38)
+            r3 = 2131628094(0x7f0e103e, float:1.888347E38)
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r2, r3)
             r1.setHint(r2)
             android.view.ViewConfiguration r1 = android.view.ViewConfiguration.get(r17)
@@ -188,9 +189,9 @@ public class InviteMembersBottomSheet extends UsersAlertBase implements Notifica
             org.telegram.messenger.ContactsController r0 = org.telegram.messenger.ContactsController.getInstance(r18)
             java.util.ArrayList<org.telegram.tgnet.TLRPC$TL_contact> r0 = r0.contacts
             r1 = 0
-        L_0x006a:
+        L_0x006d:
             int r2 = r0.size()
-            if (r1 >= r2) goto L_0x0099
+            if (r1 >= r2) goto L_0x009c
             int r2 = r7.currentAccount
             org.telegram.messenger.MessagesController r2 = org.telegram.messenger.MessagesController.getInstance(r2)
             java.lang.Object r3 = r0.get(r1)
@@ -198,19 +199,19 @@ public class InviteMembersBottomSheet extends UsersAlertBase implements Notifica
             long r13 = r3.user_id
             java.lang.Long r3 = java.lang.Long.valueOf(r13)
             org.telegram.tgnet.TLRPC$User r2 = r2.getUser(r3)
-            if (r2 == 0) goto L_0x0096
+            if (r2 == 0) goto L_0x0099
             boolean r3 = r2.self
-            if (r3 != 0) goto L_0x0096
+            if (r3 != 0) goto L_0x0099
             boolean r3 = r2.deleted
-            if (r3 == 0) goto L_0x0091
-            goto L_0x0096
-        L_0x0091:
+            if (r3 == 0) goto L_0x0094
+            goto L_0x0099
+        L_0x0094:
             java.util.ArrayList<org.telegram.tgnet.TLObject> r3 = r7.contacts
             r3.add(r2)
-        L_0x0096:
-            int r1 = r1 + 1
-            goto L_0x006a
         L_0x0099:
+            int r1 = r1 + 1
+            goto L_0x006d
+        L_0x009c:
             org.telegram.ui.Components.InviteMembersBottomSheet$SpansContainer r13 = new org.telegram.ui.Components.InviteMembersBottomSheet$SpansContainer
             r13.<init>(r8)
             r7.spansContainer = r13
@@ -252,9 +253,9 @@ public class InviteMembersBottomSheet extends UsersAlertBase implements Notifica
             android.graphics.drawable.Drawable r2 = org.telegram.ui.ActionBar.Theme.createSimpleSelectorCircleDrawable(r2, r3, r4)
             int r3 = android.os.Build.VERSION.SDK_INT
             r4 = 21
-            if (r3 >= r4) goto L_0x012d
+            if (r3 >= r4) goto L_0x0130
             android.content.res.Resources r5 = r17.getResources()
-            r6 = 2131165451(0x7var_b, float:1.794512E38)
+            r6 = 2131165414(0x7var_e6, float:1.7945044E38)
             android.graphics.drawable.Drawable r5 = r5.getDrawable(r6)
             android.graphics.drawable.Drawable r5 = r5.mutate()
             android.graphics.PorterDuffColorFilter r6 = new android.graphics.PorterDuffColorFilter
@@ -268,7 +269,7 @@ public class InviteMembersBottomSheet extends UsersAlertBase implements Notifica
             int r1 = org.telegram.messenger.AndroidUtilities.dp(r1)
             r6.setIconSize(r2, r1)
             r2 = r6
-        L_0x012d:
+        L_0x0130:
             r0.setBackgroundDrawable(r2)
             android.graphics.PorterDuffColorFilter r1 = new android.graphics.PorterDuffColorFilter
             java.lang.String r2 = "chats_actionIcon"
@@ -276,10 +277,10 @@ public class InviteMembersBottomSheet extends UsersAlertBase implements Notifica
             android.graphics.PorterDuff$Mode r5 = android.graphics.PorterDuff.Mode.MULTIPLY
             r1.<init>(r2, r5)
             r0.setColorFilter(r1)
-            r1 = 2131165448(0x7var_, float:1.7945113E38)
+            r1 = 2131165412(0x7var_e4, float:1.794504E38)
             r0.setImageResource(r1)
             r1 = 1082130432(0x40800000, float:4.0)
-            if (r3 < r4) goto L_0x01a4
+            if (r3 < r4) goto L_0x01a7
             android.animation.StateListAnimator r2 = new android.animation.StateListAnimator
             r2.<init>()
             r5 = 1
@@ -317,7 +318,7 @@ public class InviteMembersBottomSheet extends UsersAlertBase implements Notifica
             org.telegram.ui.Components.InviteMembersBottomSheet$3 r2 = new org.telegram.ui.Components.InviteMembersBottomSheet$3
             r2.<init>(r7)
             r0.setOutlineProvider(r2)
-        L_0x01a4:
+        L_0x01a7:
             org.telegram.ui.Components.InviteMembersBottomSheet$$ExternalSyntheticLambda2 r2 = new org.telegram.ui.Components.InviteMembersBottomSheet$$ExternalSyntheticLambda2
             r2.<init>(r7, r8, r9)
             r0.setOnClickListener(r2)
@@ -327,7 +328,7 @@ public class InviteMembersBottomSheet extends UsersAlertBase implements Notifica
             r0.setScaleX(r2)
             r0.setScaleY(r2)
             r0.setAlpha(r2)
-            r2 = 2131626648(0x7f0e0a98, float:1.8880538E38)
+            r2 = 2131626791(0x7f0e0b27, float:1.8880828E38)
             java.lang.String r4 = "Next"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r4, r2)
             r0.setContentDescription(r2)
@@ -335,17 +336,17 @@ public class InviteMembersBottomSheet extends UsersAlertBase implements Notifica
             r4 = 56
             r5 = 60
             r6 = 21
-            if (r3 < r6) goto L_0x01d3
+            if (r3 < r6) goto L_0x01d6
             r8 = 56
-            goto L_0x01d5
-        L_0x01d3:
+            goto L_0x01d8
+        L_0x01d6:
             r8 = 60
-        L_0x01d5:
-            if (r3 < r6) goto L_0x01d8
-            goto L_0x01da
         L_0x01d8:
+            if (r3 < r6) goto L_0x01db
+            goto L_0x01dd
+        L_0x01db:
             r4 = 60
-        L_0x01da:
+        L_0x01dd:
             float r3 = (float) r4
             r4 = 85
             r5 = 1096810496(0x41600000, float:14.0)
@@ -576,7 +577,7 @@ public class InviteMembersBottomSheet extends UsersAlertBase implements Notifica
             if (this.selectedContacts.size() == 1) {
                 builder.setTitle(LocaleController.getString("AddOneMemberAlertTitle", NUM));
             } else {
-                builder.setTitle(LocaleController.formatString("AddMembersAlertTitle", NUM, LocaleController.formatPluralString("Members", this.selectedContacts.size())));
+                builder.setTitle(LocaleController.formatString("AddMembersAlertTitle", NUM, LocaleController.formatPluralString("Members", this.selectedContacts.size(), new Object[0])));
             }
             StringBuilder sb = new StringBuilder();
             for (int i2 = 0; i2 < this.selectedContacts.size(); i2++) {
@@ -592,7 +593,7 @@ public class InviteMembersBottomSheet extends UsersAlertBase implements Notifica
             }
             TLRPC$Chat chat = MessagesController.getInstance(this.currentAccount).getChat(Long.valueOf(j));
             if (this.selectedContacts.size() > 5) {
-                SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(AndroidUtilities.replaceTags(LocaleController.formatString("AddMembersAlertNamesText", NUM, LocaleController.formatPluralString("Members", this.selectedContacts.size()), chat.title)));
+                SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(AndroidUtilities.replaceTags(LocaleController.formatString("AddMembersAlertNamesText", NUM, LocaleController.formatPluralString("Members", this.selectedContacts.size(), new Object[0]), chat.title)));
                 String format = String.format("%d", new Object[]{Integer.valueOf(this.selectedContacts.size())});
                 int indexOf = TextUtils.indexOf(spannableStringBuilder, format);
                 if (indexOf >= 0) {
@@ -1327,7 +1328,7 @@ public class InviteMembersBottomSheet extends UsersAlertBase implements Notifica
             L_0x0172:
                 android.view.View r12 = r12.itemView
                 org.telegram.ui.Cells.GroupCreateSectionCell r12 = (org.telegram.ui.Cells.GroupCreateSectionCell) r12
-                r13 = 2131625975(0x7f0e07f7, float:1.8879173E38)
+                r13 = 2131626070(0x7f0e0856, float:1.8879366E38)
                 java.lang.String r0 = "GlobalSearch"
                 java.lang.String r13 = org.telegram.messenger.LocaleController.getString(r0, r13)
                 r12.setText(r13)
@@ -1929,7 +1930,7 @@ public class InviteMembersBottomSheet extends UsersAlertBase implements Notifica
                 LaunchActivity launchActivity = (LaunchActivity) findActivity;
                 BaseFragment baseFragment = launchActivity.getActionBarLayout().fragmentsStack.get(launchActivity.getActionBarLayout().fragmentsStack.size() - 1);
                 if (baseFragment instanceof ChatActivity) {
-                    ((ChatActivity) baseFragment).onEditTextDialogClose(true);
+                    ((ChatActivity) baseFragment).onEditTextDialogClose(true, true);
                 }
             }
         }

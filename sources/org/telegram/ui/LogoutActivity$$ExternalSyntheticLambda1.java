@@ -19,6 +19,6 @@ public final /* synthetic */ class LogoutActivity$$ExternalSyntheticLambda1 impl
     }
 
     public final void onItemClick(View view, int i, float f, float f2) {
-        this.f$0.lambda$createView$1(view, i, f, f2);
+        this.f$0.lambda$createView$0(view, i, f, f2);
     }
 }

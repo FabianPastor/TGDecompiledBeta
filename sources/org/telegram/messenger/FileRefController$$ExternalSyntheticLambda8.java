@@ -10,6 +10,6 @@ public final /* synthetic */ class FileRefController$$ExternalSyntheticLambda8 i
     }
 
     public final void run() {
-        this.f$0.lambda$sendErrorToObject$28(this.f$1);
+        this.f$0.lambda$sendErrorToObject$31(this.f$1);
     }
 }

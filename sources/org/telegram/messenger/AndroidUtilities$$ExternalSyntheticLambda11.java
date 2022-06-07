@@ -1,20 +1,15 @@
 package org.telegram.messenger;
 
-import org.telegram.ui.ActionBar.BaseFragment;
-import org.telegram.ui.Components.RecyclerListView;
+import java.util.Comparator;
+import org.telegram.messenger.AndroidUtilities;
 
-public final /* synthetic */ class AndroidUtilities$$ExternalSyntheticLambda11 implements RecyclerListView.IntReturnCallback {
-    public final /* synthetic */ BaseFragment f$0;
-    public final /* synthetic */ String f$1;
-    public final /* synthetic */ RecyclerListView f$2;
+public final /* synthetic */ class AndroidUtilities$$ExternalSyntheticLambda11 implements Comparator {
+    public static final /* synthetic */ AndroidUtilities$$ExternalSyntheticLambda11 INSTANCE = new AndroidUtilities$$ExternalSyntheticLambda11();
 
-    public /* synthetic */ AndroidUtilities$$ExternalSyntheticLambda11(BaseFragment baseFragment, String str, RecyclerListView recyclerListView) {
-        this.f$0 = baseFragment;
-        this.f$1 = str;
-        this.f$2 = recyclerListView;
+    private /* synthetic */ AndroidUtilities$$ExternalSyntheticLambda11() {
     }
 
-    public final int run() {
-        return AndroidUtilities.lambda$scrollToFragmentRow$11(this.f$0, this.f$1, this.f$2);
+    public final int compare(Object obj, Object obj2) {
+        return AndroidUtilities.lambda$pruneOverlaps$3((AndroidUtilities.LinkSpec) obj, (AndroidUtilities.LinkSpec) obj2);
     }
 }

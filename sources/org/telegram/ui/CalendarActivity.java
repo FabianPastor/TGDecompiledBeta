@@ -623,7 +623,7 @@ public class CalendarActivity extends BaseFragment {
                             }
                         } else {
                             PeriodDay dayAtCoord3 = getDayAtCoord(motionEvent.getX(), motionEvent.getY());
-                            if (CalendarActivity.this.parentLayout.fragmentsStack.size() >= 2) {
+                            if (dayAtCoord3 != null && CalendarActivity.this.parentLayout.fragmentsStack.size() >= 2) {
                                 BaseFragment baseFragment = CalendarActivity.this.parentLayout.fragmentsStack.get(CalendarActivity.this.parentLayout.fragmentsStack.size() - 2);
                                 if (baseFragment instanceof ChatActivity) {
                                     CalendarActivity.this.finishFragment();
@@ -916,11 +916,12 @@ public class CalendarActivity extends BaseFragment {
             int i3 = i;
             int i4 = i2;
             SparseArray<PeriodDay> sparseArray2 = sparseArray;
-            boolean z2 = (i3 == this.currentYear && i4 == this.currentMonthInYear) ? false : true;
+            boolean z2 = false;
+            boolean z3 = (i3 == this.currentYear && i4 == this.currentMonthInYear) ? false : true;
             this.currentYear = i3;
             this.currentMonthInYear = i4;
             this.messagesByDays = sparseArray2;
-            if (z2 && this.imagesByDays != null) {
+            if (z3 && this.imagesByDays != null) {
                 for (int i5 = 0; i5 < this.imagesByDays.size(); i5++) {
                     this.imagesByDays.valueAt(i5).onDetachedFromWindow();
                     this.imagesByDays.valueAt(i5).setParentView((View) null);
@@ -931,7 +932,8 @@ public class CalendarActivity extends BaseFragment {
                 if (this.imagesByDays == null) {
                     this.imagesByDays = new SparseArray<>();
                 }
-                for (int i6 = 0; i6 < sparseArray.size(); i6++) {
+                int i6 = 0;
+                while (i6 < sparseArray.size()) {
                     int keyAt = sparseArray2.keyAt(i6);
                     if (this.imagesByDays.get(keyAt, (Object) null) == null && sparseArray2.get(keyAt).hasImage) {
                         ImageReceiver imageReceiver = new ImageReceiver();
@@ -956,21 +958,28 @@ public class CalendarActivity extends BaseFragment {
                                 TLRPC$MessageMedia tLRPC$MessageMedia = messageObject.messageOwner.media;
                                 if ((tLRPC$MessageMedia instanceof TLRPC$TL_messageMediaPhoto) && tLRPC$MessageMedia.photo != null && !messageObject.photoThumbs.isEmpty()) {
                                     TLRPC$PhotoSize closestPhotoSizeWithSize3 = FileLoader.getClosestPhotoSizeWithSize(messageObject.photoThumbs, 50);
-                                    TLRPC$PhotoSize closestPhotoSizeWithSize4 = FileLoader.getClosestPhotoSizeWithSize(messageObject.photoThumbs, 320, false, closestPhotoSizeWithSize3, false);
+                                    TLRPC$PhotoSize closestPhotoSizeWithSize4 = FileLoader.getClosestPhotoSizeWithSize(messageObject.photoThumbs, 320, z2, closestPhotoSizeWithSize3, z2);
                                     if (messageObject.mediaExists || DownloadController.getInstance(CalendarActivity.this.currentAccount).canDownloadMedia(messageObject)) {
                                         MessageObject messageObject2 = messageObject;
                                         if (closestPhotoSizeWithSize4 == closestPhotoSizeWithSize3) {
                                             closestPhotoSizeWithSize3 = null;
                                         }
+                                        long j = 0;
                                         if (messageObject2.strippedThumb != null) {
-                                            imageReceiver.setImage(ImageLocation.getForObject(closestPhotoSizeWithSize4, messageObject2.photoThumbsObject), "44_44", (ImageLocation) null, (String) null, messageObject2.strippedThumb, closestPhotoSizeWithSize4 != null ? closestPhotoSizeWithSize4.size : 0, (String) null, messageObject2, messageObject2.shouldEncryptPhotoOrVideo() ? 2 : 1);
+                                            ImageLocation forObject = ImageLocation.getForObject(closestPhotoSizeWithSize4, messageObject2.photoThumbsObject);
+                                            BitmapDrawable bitmapDrawable = messageObject2.strippedThumb;
+                                            if (closestPhotoSizeWithSize4 != null) {
+                                                j = (long) closestPhotoSizeWithSize4.size;
+                                            }
+                                            imageReceiver.setImage(forObject, "44_44", (ImageLocation) null, (String) null, bitmapDrawable, j, (String) null, messageObject2, messageObject2.shouldEncryptPhotoOrVideo() ? 2 : 1);
                                         } else {
-                                            imageReceiver.setImage(ImageLocation.getForObject(closestPhotoSizeWithSize4, messageObject2.photoThumbsObject), "44_44", ImageLocation.getForObject(closestPhotoSizeWithSize3, messageObject2.photoThumbsObject), "b", closestPhotoSizeWithSize4 != null ? closestPhotoSizeWithSize4.size : 0, (String) null, messageObject2, messageObject2.shouldEncryptPhotoOrVideo() ? 2 : 1);
+                                            MessageObject messageObject3 = messageObject2;
+                                            imageReceiver.setImage(ImageLocation.getForObject(closestPhotoSizeWithSize4, messageObject3.photoThumbsObject), "44_44", ImageLocation.getForObject(closestPhotoSizeWithSize3, messageObject3.photoThumbsObject), "b", closestPhotoSizeWithSize4 != null ? (long) closestPhotoSizeWithSize4.size : 0, (String) null, messageObject3, messageObject3.shouldEncryptPhotoOrVideo() ? 2 : 1);
                                         }
                                     } else {
-                                        BitmapDrawable bitmapDrawable = messageObject.strippedThumb;
-                                        if (bitmapDrawable != null) {
-                                            imageReceiver.setImage((ImageLocation) null, (String) null, bitmapDrawable, (String) null, messageObject, 0);
+                                        BitmapDrawable bitmapDrawable2 = messageObject.strippedThumb;
+                                        if (bitmapDrawable2 != null) {
+                                            imageReceiver.setImage((ImageLocation) null, (String) null, bitmapDrawable2, (String) null, messageObject, 0);
                                         } else {
                                             imageReceiver.setImage((ImageLocation) null, (String) null, ImageLocation.getForObject(closestPhotoSizeWithSize3, messageObject.photoThumbsObject), "b", (String) null, (Object) messageObject, 0);
                                         }
@@ -981,6 +990,8 @@ public class CalendarActivity extends BaseFragment {
                             this.imagesByDays.put(keyAt, imageReceiver);
                         }
                     }
+                    i6++;
+                    z2 = false;
                 }
             }
             int i7 = i4 + 1;
@@ -1246,7 +1257,7 @@ public class CalendarActivity extends BaseFragment {
             this.lastInSelectionMode = z3;
             float f = 1.0f;
             if (i > 0) {
-                str = LocaleController.formatPluralString("Days", i);
+                str = LocaleController.formatPluralString("Days", i, new Object[0]);
                 this.backDrawable.setRotation(1.0f, true);
             } else if (z3) {
                 str = LocaleController.getString("SelectDays", NUM);

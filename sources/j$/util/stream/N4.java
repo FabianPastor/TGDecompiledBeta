@@ -1,21 +1,11 @@
 package j$.util.stream;
 
-class N4 implements Runnable {
-    final /* synthetic */ Runnable a;
-    final /* synthetic */ Runnable b;
+import j$.util.u;
 
-    N4(Runnable runnable, Runnable runnable2) {
-        this.a = runnable;
-        this.b = runnable2;
-    }
+interface N4 {
+    int b();
 
-    public void run() {
-        try {
-            this.a.run();
-            this.b.run();
-            return;
-        } catch (Throwable unused) {
-        }
-        throw th;
-    }
+    Object c(CLASSNAMEy2 y2Var, u uVar);
+
+    Object d(CLASSNAMEy2 y2Var, u uVar);
 }

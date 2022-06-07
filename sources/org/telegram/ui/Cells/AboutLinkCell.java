@@ -122,6 +122,7 @@ public class AboutLinkCell extends FrameLayout {
     public BaseFragment parentFragment;
     /* access modifiers changed from: private */
     public LinkSpanDrawable pressedLink;
+    private Theme.ResourcesProvider resourcesProvider;
     /* access modifiers changed from: private */
     public Drawable rippleBackground;
     /* access modifiers changed from: private */
@@ -161,13 +162,15 @@ public class AboutLinkCell extends FrameLayout {
     }
 
     /* JADX INFO: super call moved to the top of the method (can break code semantics) */
-    public AboutLinkCell(Context context, BaseFragment baseFragment) {
+    public AboutLinkCell(Context context, BaseFragment baseFragment, Theme.ResourcesProvider resourcesProvider2) {
         super(context);
         Context context2 = context;
+        Theme.ResourcesProvider resourcesProvider3 = resourcesProvider2;
         new Point();
         new LinkPath(true);
+        this.resourcesProvider = resourcesProvider3;
         this.parentFragment = baseFragment;
-        AnonymousClass1 r6 = new FrameLayout(context2) {
+        AnonymousClass1 r7 = new FrameLayout(context2) {
             /* JADX WARNING: Code restructure failed: missing block: B:48:0x011b, code lost:
                 if (org.telegram.ui.Cells.AboutLinkCell.access$900(r1, org.telegram.ui.Cells.AboutLinkCell.access$000(r1), org.telegram.ui.Cells.AboutLinkCell.access$700(r11.this$0), org.telegram.ui.Cells.AboutLinkCell.access$800(r11.this$0), r0, r7) != false) goto L_0x011d;
              */
@@ -342,14 +345,15 @@ public class AboutLinkCell extends FrameLayout {
                 throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Cells.AboutLinkCell.AnonymousClass1.onTouchEvent(android.view.MotionEvent):boolean");
             }
         };
-        this.container = r6;
-        this.links = new LinkSpanDrawable.LinkCollector(r6);
+        this.container = r7;
+        r7.setImportantForAccessibility(2);
+        this.links = new LinkSpanDrawable.LinkCollector(this.container);
         this.container.setClickable(true);
-        this.rippleBackground = Theme.createRadSelectorDrawable(Theme.getColor("listSelectorSDK21"), 0, 0);
+        this.rippleBackground = Theme.createRadSelectorDrawable(Theme.getColor("listSelectorSDK21", resourcesProvider3), 0, 0);
         TextView textView = new TextView(context2);
         this.valueTextView = textView;
         textView.setVisibility(8);
-        this.valueTextView.setTextColor(Theme.getColor("windowBackgroundWhiteGrayText2"));
+        this.valueTextView.setTextColor(Theme.getColor("windowBackgroundWhiteGrayText2", resourcesProvider3));
         this.valueTextView.setTextSize(1, 13.0f);
         this.valueTextView.setLines(1);
         this.valueTextView.setMaxLines(1);
@@ -357,14 +361,15 @@ public class AboutLinkCell extends FrameLayout {
         int i = 5;
         this.valueTextView.setGravity(LocaleController.isRTL ? 5 : 3);
         this.valueTextView.setImportantForAccessibility(2);
+        this.valueTextView.setFocusable(false);
         this.container.addView(this.valueTextView, LayoutHelper.createFrame(-2, -2.0f, (!LocaleController.isRTL ? 3 : i) | 80, 23.0f, 0.0f, 23.0f, 10.0f));
         this.bottomShadow = new FrameLayout(context2);
         Drawable mutate = context.getResources().getDrawable(NUM).mutate();
-        mutate.setColorFilter(new PorterDuffColorFilter(Theme.getColor("windowBackgroundWhite"), PorterDuff.Mode.SRC_ATOP));
+        mutate.setColorFilter(new PorterDuffColorFilter(Theme.getColor("windowBackgroundWhite", resourcesProvider3), PorterDuff.Mode.SRC_ATOP));
         this.bottomShadow.setBackground(mutate);
         addView(this.bottomShadow, LayoutHelper.createFrame(-1, 12.0f, 87, 0.0f, 0.0f, 0.0f, 0.0f));
         addView(this.container, LayoutHelper.createFrame(-1, -1, 55));
-        AnonymousClass2 r5 = new TextView(this, context2) {
+        AnonymousClass2 r6 = new TextView(this, context2) {
             private boolean pressed = false;
 
             public boolean onTouchEvent(MotionEvent motionEvent) {
@@ -390,8 +395,8 @@ public class AboutLinkCell extends FrameLayout {
                 super.onDraw(canvas);
             }
         };
-        this.showMoreTextView = r5;
-        r5.setTextColor(Theme.getColor("windowBackgroundWhiteBlueText"));
+        this.showMoreTextView = r6;
+        r6.setTextColor(Theme.getColor("windowBackgroundWhiteBlueText", resourcesProvider3));
         this.showMoreTextView.setTextSize(1, 16.0f);
         this.showMoreTextView.setLines(1);
         this.showMoreTextView.setMaxLines(1);
@@ -402,14 +407,14 @@ public class AboutLinkCell extends FrameLayout {
         this.showMoreTextBackgroundView = new FrameLayout(context2);
         Drawable mutate2 = context.getResources().getDrawable(NUM).mutate();
         this.showMoreBackgroundDrawable = mutate2;
-        mutate2.setColorFilter(new PorterDuffColorFilter(Theme.getColor("windowBackgroundWhite"), PorterDuff.Mode.MULTIPLY));
+        mutate2.setColorFilter(new PorterDuffColorFilter(Theme.getColor("windowBackgroundWhite", resourcesProvider3), PorterDuff.Mode.MULTIPLY));
         this.showMoreTextBackgroundView.setBackground(this.showMoreBackgroundDrawable);
         FrameLayout frameLayout = this.showMoreTextBackgroundView;
         frameLayout.setPadding(frameLayout.getPaddingLeft() + AndroidUtilities.dp(4.0f), AndroidUtilities.dp(1.0f), 0, AndroidUtilities.dp(3.0f));
         this.showMoreTextBackgroundView.addView(this.showMoreTextView, LayoutHelper.createFrame(-2, -2.0f));
         FrameLayout frameLayout2 = this.showMoreTextBackgroundView;
         addView(frameLayout2, LayoutHelper.createFrame(-2, -2.0f, 85, 22.0f - (((float) frameLayout2.getPaddingLeft()) / AndroidUtilities.density), 0.0f, 22.0f - (((float) this.showMoreTextBackgroundView.getPaddingRight()) / AndroidUtilities.density), 6.0f));
-        this.backgroundPaint.setColor(Theme.getColor("windowBackgroundWhite"));
+        this.backgroundPaint.setColor(Theme.getColor("windowBackgroundWhite", resourcesProvider3));
         setWillNotDraw(false);
     }
 
@@ -595,7 +600,7 @@ public class AboutLinkCell extends FrameLayout {
             if (lineLeft <= f && lineLeft + staticLayout.getLineWidth(lineForVertical) >= f && i6 >= 0 && i6 <= staticLayout.getHeight()) {
                 Spannable spannable = (Spannable) staticLayout.getText();
                 ClickableSpan[] clickableSpanArr = (ClickableSpan[]) spannable.getSpans(offsetForHorizontal, offsetForHorizontal, ClickableSpan.class);
-                if (clickableSpanArr.length != 0) {
+                if (clickableSpanArr.length != 0 && !AndroidUtilities.isAccessibilityScreenReaderEnabled()) {
                     resetPressedLink();
                     LinkSpanDrawable linkSpanDrawable = new LinkSpanDrawable(clickableSpanArr[0], this.parentFragment.getResourceProvider(), (float) i3, (float) i4);
                     this.pressedLink = linkSpanDrawable;
@@ -635,7 +640,7 @@ public class AboutLinkCell extends FrameLayout {
         }
     }
 
-    private class SpringInterpolator {
+    public class SpringInterpolator {
         public float friction;
         private float position = 0.0f;
         public float tension;
@@ -852,15 +857,15 @@ public class AboutLinkCell extends FrameLayout {
 
     public void onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo accessibilityNodeInfo) {
         super.onInitializeAccessibilityNodeInfo(accessibilityNodeInfo);
-        StaticLayout staticLayout = this.textLayout;
-        if (staticLayout != null) {
-            CharSequence text = staticLayout.getText();
-            CharSequence text2 = this.valueTextView.getText();
-            if (TextUtils.isEmpty(text2)) {
-                accessibilityNodeInfo.setText(text);
+        if (this.textLayout != null) {
+            SpannableStringBuilder spannableStringBuilder = this.stringBuilder;
+            CharSequence text = this.valueTextView.getText();
+            accessibilityNodeInfo.setClassName("android.widget.TextView");
+            if (TextUtils.isEmpty(text)) {
+                accessibilityNodeInfo.setText(spannableStringBuilder);
                 return;
             }
-            accessibilityNodeInfo.setText(text2 + ": " + text);
+            accessibilityNodeInfo.setText(text + ": " + spannableStringBuilder);
         }
     }
 }

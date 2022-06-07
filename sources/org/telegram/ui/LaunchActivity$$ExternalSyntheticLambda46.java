@@ -1,27 +1,20 @@
 package org.telegram.ui;
 
 import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC$TL_error;
-import org.telegram.ui.ActionBar.AlertDialog;
+import org.telegram.ui.ActionBar.Theme;
 
 public final /* synthetic */ class LaunchActivity$$ExternalSyntheticLambda46 implements Runnable {
     public final /* synthetic */ LaunchActivity f$0;
-    public final /* synthetic */ TLRPC$TL_error f$1;
-    public final /* synthetic */ TLObject f$2;
-    public final /* synthetic */ int f$3;
-    public final /* synthetic */ AlertDialog f$4;
-    public final /* synthetic */ String f$5;
+    public final /* synthetic */ TLObject f$1;
+    public final /* synthetic */ Theme.ThemeInfo f$2;
 
-    public /* synthetic */ LaunchActivity$$ExternalSyntheticLambda46(LaunchActivity launchActivity, TLRPC$TL_error tLRPC$TL_error, TLObject tLObject, int i, AlertDialog alertDialog, String str) {
+    public /* synthetic */ LaunchActivity$$ExternalSyntheticLambda46(LaunchActivity launchActivity, TLObject tLObject, Theme.ThemeInfo themeInfo) {
         this.f$0 = launchActivity;
-        this.f$1 = tLRPC$TL_error;
-        this.f$2 = tLObject;
-        this.f$3 = i;
-        this.f$4 = alertDialog;
-        this.f$5 = str;
+        this.f$1 = tLObject;
+        this.f$2 = themeInfo;
     }
 
     public final void run() {
-        this.f$0.lambda$runLinkRequest$41(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5);
+        this.f$0.lambda$didReceivedNotification$89(this.f$1, this.f$2);
     }
 }

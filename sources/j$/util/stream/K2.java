@@ -2,32 +2,31 @@ package j$.util.stream;
 
 import j$.util.function.BiConsumer;
 import j$.util.function.Consumer;
-import j$.util.function.b;
 import j$.util.function.y;
 
-class K2 extends U2 implements T2 {
+class K2 extends T2 implements S2 {
     final /* synthetic */ y b;
     final /* synthetic */ BiConsumer c;
-    final /* synthetic */ b d;
+    final /* synthetic */ BiConsumer d;
 
-    K2(y yVar, BiConsumer biConsumer, b bVar) {
+    K2(y yVar, BiConsumer biConsumer, BiConsumer biConsumer2) {
         this.b = yVar;
         this.c = biConsumer;
-        this.d = bVar;
+        this.d = biConsumer2;
     }
 
     public /* synthetic */ void accept(double d2) {
-        CLASSNAMEp1.f(this);
+        CLASSNAMEo1.f(this);
         throw null;
     }
 
     public /* synthetic */ void accept(int i) {
-        CLASSNAMEp1.d(this);
+        CLASSNAMEo1.d(this);
         throw null;
     }
 
     public /* synthetic */ void accept(long j) {
-        CLASSNAMEp1.e(this);
+        CLASSNAMEo1.e(this);
         throw null;
     }
 
@@ -39,8 +38,8 @@ class K2 extends U2 implements T2 {
         return Consumer.CC.$default$andThen(this, consumer);
     }
 
-    public void h(T2 t2) {
-        this.a = this.d.apply(this.a, ((K2) t2).a);
+    public void h(S2 s2) {
+        this.d.accept(this.a, ((K2) s2).a);
     }
 
     public /* synthetic */ void m() {

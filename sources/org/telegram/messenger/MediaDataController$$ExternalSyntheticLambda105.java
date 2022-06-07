@@ -1,21 +1,17 @@
 package org.telegram.messenger;
 
-import java.util.ArrayList;
+import org.telegram.tgnet.TLRPC$TL_messages_stickerSet;
 
 public final /* synthetic */ class MediaDataController$$ExternalSyntheticLambda105 implements Runnable {
     public final /* synthetic */ MediaDataController f$0;
-    public final /* synthetic */ boolean f$1;
-    public final /* synthetic */ int f$2;
-    public final /* synthetic */ ArrayList f$3;
+    public final /* synthetic */ TLRPC$TL_messages_stickerSet f$1;
 
-    public /* synthetic */ MediaDataController$$ExternalSyntheticLambda105(MediaDataController mediaDataController, boolean z, int i, ArrayList arrayList) {
+    public /* synthetic */ MediaDataController$$ExternalSyntheticLambda105(MediaDataController mediaDataController, TLRPC$TL_messages_stickerSet tLRPC$TL_messages_stickerSet) {
         this.f$0 = mediaDataController;
-        this.f$1 = z;
-        this.f$2 = i;
-        this.f$3 = arrayList;
+        this.f$1 = tLRPC$TL_messages_stickerSet;
     }
 
     public final void run() {
-        this.f$0.lambda$processLoadedRecentDocuments$28(this.f$1, this.f$2, this.f$3);
+        this.f$0.lambda$putSetToCache$30(this.f$1);
     }
 }

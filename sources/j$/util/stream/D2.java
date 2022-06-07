@@ -1,64 +1,48 @@
 package j$.util.stream;
 
-import j$.util.function.Consumer;
+import j$.util.function.b;
 import j$.util.function.d;
-import j$.util.function.e;
-import j$.util.function.f;
+import j$.util.function.j;
+import j$.util.function.o;
 
-class D2 implements T2, CLASSNAMEk3 {
-    private double a;
-    final /* synthetic */ double b;
-    final /* synthetic */ d c;
+class D2 extends U2 {
+    public final /* synthetic */ int b = 1;
+    final /* synthetic */ Object c;
 
-    D2(double d, d dVar) {
-        this.b = d;
+    /* JADX INFO: super call moved to the top of the method (can break code semantics) */
+    public D2(CLASSNAMEe4 e4Var, b bVar) {
+        super(e4Var);
+        this.c = bVar;
+    }
+
+    public S2 a() {
+        switch (this.b) {
+            case 0:
+                return new E2((d) this.c);
+            case 1:
+                return new H2((b) this.c);
+            case 2:
+                return new N2((j) this.c);
+            default:
+                return new R2((o) this.c);
+        }
+    }
+
+    /* JADX INFO: super call moved to the top of the method (can break code semantics) */
+    public D2(CLASSNAMEe4 e4Var, d dVar) {
+        super(e4Var);
         this.c = dVar;
     }
 
-    public void accept(double d) {
-        this.a = this.c.applyAsDouble(this.a, d);
+    /* JADX INFO: super call moved to the top of the method (can break code semantics) */
+    public D2(CLASSNAMEe4 e4Var, j jVar) {
+        super(e4Var);
+        this.c = jVar;
     }
 
-    public /* synthetic */ void accept(int i) {
-        CLASSNAMEp1.d(this);
-        throw null;
-    }
-
-    public /* synthetic */ void accept(long j) {
-        CLASSNAMEp1.e(this);
-        throw null;
-    }
-
-    public /* synthetic */ Consumer andThen(Consumer consumer) {
-        return Consumer.CC.$default$andThen(this, consumer);
-    }
-
-    /* renamed from: b */
-    public /* synthetic */ void accept(Double d) {
-        CLASSNAMEp1.a(this, d);
-    }
-
-    public Object get() {
-        return Double.valueOf(this.a);
-    }
-
-    public void h(T2 t2) {
-        accept(((D2) t2).a);
-    }
-
-    public f j(f fVar) {
-        fVar.getClass();
-        return new e(this, fVar);
-    }
-
-    public /* synthetic */ void m() {
-    }
-
-    public void n(long j) {
-        this.a = this.b;
-    }
-
-    public /* synthetic */ boolean o() {
-        return false;
+    /* JADX INFO: super call moved to the top of the method (can break code semantics) */
+    public D2(CLASSNAMEe4 e4Var, o oVar) {
+        super(e4Var);
+        this.c = oVar;
     }
 }

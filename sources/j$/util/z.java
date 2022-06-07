@@ -1,39 +1,77 @@
 package j$.util;
 
+import j$.util.Iterator;
 import j$.util.function.Consumer;
-import java.util.Iterator;
+import j$.util.function.p;
+import j$.util.function.q;
 import java.util.NoSuchElementException;
 
-class z implements Iterator, Consumer {
+class z implements r, q, Iterator {
     boolean a = false;
-    Object b;
-    final /* synthetic */ y c;
+    long b;
+    final /* synthetic */ v c;
 
-    z(y yVar) {
-        this.c = yVar;
+    z(v vVar) {
+        this.c = vVar;
     }
 
-    public void accept(Object obj) {
+    public void accept(long j) {
         this.a = true;
-        this.b = obj;
+        this.b = j;
     }
 
-    public /* synthetic */ Consumer andThen(Consumer consumer) {
-        return Consumer.CC.$default$andThen(this, consumer);
+    /* renamed from: d */
+    public void forEachRemaining(q qVar) {
+        qVar.getClass();
+        while (hasNext()) {
+            qVar.accept(nextLong());
+        }
+    }
+
+    public q f(q qVar) {
+        qVar.getClass();
+        return new p(this, qVar);
+    }
+
+    public void forEachRemaining(Consumer consumer) {
+        if (consumer instanceof q) {
+            forEachRemaining((q) consumer);
+            return;
+        }
+        consumer.getClass();
+        if (!N.a) {
+            forEachRemaining(new q(consumer));
+        } else {
+            N.a(z.class, "{0} calling PrimitiveIterator.OfLong.forEachRemainingLong(action::accept)");
+            throw null;
+        }
     }
 
     public boolean hasNext() {
         if (!this.a) {
-            this.c.b(this);
+            this.c.i(this);
         }
         return this.a;
     }
 
-    public Object next() {
+    public Long next() {
+        if (!N.a) {
+            return Long.valueOf(nextLong());
+        }
+        N.a(z.class, "{0} calling PrimitiveIterator.OfLong.nextLong()");
+        throw null;
+    }
+
+    public long nextLong() {
         if (this.a || hasNext()) {
             this.a = false;
             return this.b;
         }
         throw new NoSuchElementException();
+    }
+
+    public /* synthetic */ void remove() {
+        Iterator.CC.a(this);
+        throw null;
     }
 }

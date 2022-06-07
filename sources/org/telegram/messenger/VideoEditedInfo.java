@@ -42,6 +42,7 @@ public class VideoEditedInfo {
     public int resultWidth;
     public int rotationValue;
     public boolean roundVideo;
+    public boolean shouldLimitFps = true;
     public float start;
     public long startTime;
     public boolean videoConvertFirstWrite;

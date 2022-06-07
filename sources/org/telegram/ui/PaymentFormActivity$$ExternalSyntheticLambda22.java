@@ -11,6 +11,6 @@ public final /* synthetic */ class PaymentFormActivity$$ExternalSyntheticLambda2
     }
 
     public final boolean onTouch(View view, MotionEvent motionEvent) {
-        return this.f$0.lambda$createView$6(view, motionEvent);
+        return this.f$0.lambda$createView$1(view, motionEvent);
     }
 }

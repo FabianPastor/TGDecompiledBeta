@@ -4,12 +4,13 @@ import android.view.MotionEvent;
 import android.view.View;
 
 public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda101 implements View.OnTouchListener {
-    public static final /* synthetic */ ChatActivity$$ExternalSyntheticLambda101 INSTANCE = new ChatActivity$$ExternalSyntheticLambda101();
+    public final /* synthetic */ ChatActivity f$0;
 
-    private /* synthetic */ ChatActivity$$ExternalSyntheticLambda101() {
+    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda101(ChatActivity chatActivity) {
+        this.f$0 = chatActivity;
     }
 
     public final boolean onTouch(View view, MotionEvent motionEvent) {
-        return ChatActivity.lambda$createView$23(view, motionEvent);
+        return this.f$0.lambda$createView$62(view, motionEvent);
     }
 }

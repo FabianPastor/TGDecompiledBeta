@@ -1,12 +1,17 @@
 package org.telegram.messenger;
 
-public final /* synthetic */ class MediaDataController$$ExternalSyntheticLambda124 implements GenericProvider {
-    public static final /* synthetic */ MediaDataController$$ExternalSyntheticLambda124 INSTANCE = new MediaDataController$$ExternalSyntheticLambda124();
+import java.util.ArrayList;
+import java.util.Comparator;
+import org.telegram.tgnet.TLRPC$TL_messages_stickerSet;
 
-    private /* synthetic */ MediaDataController$$ExternalSyntheticLambda124() {
+public final /* synthetic */ class MediaDataController$$ExternalSyntheticLambda124 implements Comparator {
+    public final /* synthetic */ ArrayList f$0;
+
+    public /* synthetic */ MediaDataController$$ExternalSyntheticLambda124(ArrayList arrayList) {
+        this.f$0 = arrayList;
     }
 
-    public final Object provide(Object obj) {
-        return MediaDataController.lambda$getEntities$134((Void) obj);
+    public final int compare(Object obj, Object obj2) {
+        return MediaDataController.lambda$reorderStickers$37(this.f$0, (TLRPC$TL_messages_stickerSet) obj, (TLRPC$TL_messages_stickerSet) obj2);
     }
 }

@@ -1,18 +1,27 @@
 package org.telegram.ui;
 
-import org.telegram.messenger.LocationController;
-import org.telegram.ui.Components.SharingLocationsAlert;
+import java.util.ArrayList;
+import org.telegram.tgnet.TLRPC$User;
+import org.telegram.ui.Components.ChatAttachAlertContactsLayout;
 
-public final /* synthetic */ class LaunchActivity$$ExternalSyntheticLambda91 implements SharingLocationsAlert.SharingLocationsAlertDelegate {
+public final /* synthetic */ class LaunchActivity$$ExternalSyntheticLambda91 implements ChatAttachAlertContactsLayout.PhonebookShareAlertDelegate {
     public final /* synthetic */ LaunchActivity f$0;
-    public final /* synthetic */ int[] f$1;
+    public final /* synthetic */ ChatActivity f$1;
+    public final /* synthetic */ ArrayList f$2;
+    public final /* synthetic */ int f$3;
+    public final /* synthetic */ CharSequence f$4;
+    public final /* synthetic */ boolean f$5;
 
-    public /* synthetic */ LaunchActivity$$ExternalSyntheticLambda91(LaunchActivity launchActivity, int[] iArr) {
+    public /* synthetic */ LaunchActivity$$ExternalSyntheticLambda91(LaunchActivity launchActivity, ChatActivity chatActivity, ArrayList arrayList, int i, CharSequence charSequence, boolean z) {
         this.f$0 = launchActivity;
-        this.f$1 = iArr;
+        this.f$1 = chatActivity;
+        this.f$2 = arrayList;
+        this.f$3 = i;
+        this.f$4 = charSequence;
+        this.f$5 = z;
     }
 
-    public final void didSelectLocation(LocationController.SharingLocationInfo sharingLocationInfo) {
-        this.f$0.lambda$handleIntent$13(this.f$1, sharingLocationInfo);
+    public final void didSelectContact(TLRPC$User tLRPC$User, boolean z, int i) {
+        this.f$0.lambda$didSelectDialogs$77(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, tLRPC$User, z, i);
     }
 }

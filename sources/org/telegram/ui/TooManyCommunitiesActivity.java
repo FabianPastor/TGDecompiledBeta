@@ -241,7 +241,7 @@ public class TooManyCommunitiesActivity extends BaseFragment {
         this.buttonTextView.setGravity(17);
         this.buttonTextView.setTextSize(1, 14.0f);
         this.buttonTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
-        this.buttonTextView.setBackground(Theme.createSimpleSelectorRoundRectDrawable(AndroidUtilities.dp(4.0f), Theme.getColor("featuredStickers_addButton"), Theme.getColor("featuredStickers_addButtonPressed")));
+        this.buttonTextView.setBackground(Theme.AdaptiveRipple.filledRect("featuredStickers_addButton", 4.0f));
         frameLayout.addView(this.buttonLayout, LayoutHelper.createFrame(-1, 64, 80));
         this.buttonLayout.setBackgroundColor(Theme.getColor("windowBackgroundWhite"));
         this.buttonLayout.addView(this.buttonTextView, LayoutHelper.createFrame(-1, -1.0f, 0, 16.0f, 12.0f, 16.0f, 12.0f));
@@ -310,7 +310,7 @@ public class TooManyCommunitiesActivity extends BaseFragment {
             this.searchListView.setPadding(0, 0, 0, this.buttonHeight);
         }
         if (!this.selectedIds.isEmpty()) {
-            this.buttonTextView.setText(LocaleController.formatString("LeaveChats", NUM, LocaleController.formatPluralString("Chats", this.selectedIds.size())));
+            this.buttonTextView.setText(LocaleController.formatString("LeaveChats", NUM, LocaleController.formatPluralString("Chats", this.selectedIds.size(), new Object[0])));
         }
     }
 
@@ -331,18 +331,18 @@ public class TooManyCommunitiesActivity extends BaseFragment {
                 TLRPC$Chat tLRPC$Chat = tLRPC$TL_messages_inactiveChats.chats.get(i);
                 int currentTime = (getConnectionsManager().getCurrentTime() - tLRPC$TL_messages_inactiveChats.dates.get(i).intValue()) / 86400;
                 if (currentTime < 30) {
-                    str = LocaleController.formatPluralString("Days", currentTime);
+                    str = LocaleController.formatPluralString("Days", currentTime, new Object[0]);
                 } else if (currentTime < 365) {
-                    str = LocaleController.formatPluralString("Months", currentTime / 30);
+                    str = LocaleController.formatPluralString("Months", currentTime / 30, new Object[0]);
                 } else {
-                    str = LocaleController.formatPluralString("Years", currentTime / 365);
+                    str = LocaleController.formatPluralString("Years", currentTime / 365, new Object[0]);
                 }
                 if (ChatObject.isMegagroup(tLRPC$Chat)) {
-                    arrayList.add(LocaleController.formatString("InactiveChatSignature", NUM, LocaleController.formatPluralString("Members", tLRPC$Chat.participants_count), str));
+                    arrayList.add(LocaleController.formatString("InactiveChatSignature", NUM, LocaleController.formatPluralString("Members", tLRPC$Chat.participants_count, new Object[0]), str));
                 } else if (ChatObject.isChannel(tLRPC$Chat)) {
                     arrayList.add(LocaleController.formatString("InactiveChannelSignature", NUM, str));
                 } else {
-                    arrayList.add(LocaleController.formatString("InactiveChatSignature", NUM, LocaleController.formatPluralString("Members", tLRPC$Chat.participants_count), str));
+                    arrayList.add(LocaleController.formatString("InactiveChatSignature", NUM, LocaleController.formatPluralString("Members", tLRPC$Chat.participants_count, new Object[0]), str));
                 }
             }
             AndroidUtilities.runOnUIThread(new TooManyCommunitiesActivity$$ExternalSyntheticLambda2(this, arrayList, tLRPC$TL_messages_inactiveChats));
@@ -483,7 +483,7 @@ public class TooManyCommunitiesActivity extends BaseFragment {
                 r1.<init>(r2, r3, r4, r5, r6)
                 r8 = 54
                 r9.setHeight(r8)
-                r8 = 2131626121(0x7f0e0889, float:1.887947E38)
+                r8 = 2131626219(0x7f0e08eb, float:1.8879668E38)
                 java.lang.String r0 = "InactiveChats"
                 java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r0, r8)
                 r9.setText(r8)
@@ -493,7 +493,7 @@ public class TooManyCommunitiesActivity extends BaseFragment {
                 android.content.Context r1 = r8.getContext()
                 r9.<init>(r1)
                 android.content.Context r8 = r8.getContext()
-                r1 = 2131165483(0x7var_b, float:1.7945184E38)
+                r1 = 2131165435(0x7var_fb, float:1.7945087E38)
                 java.lang.String r2 = "windowBackgroundGrayShadow"
                 android.graphics.drawable.Drawable r8 = org.telegram.ui.ActionBar.Theme.getThemedDrawable((android.content.Context) r8, (int) r1, (java.lang.String) r2)
                 org.telegram.ui.Components.CombinedDrawable r1 = new org.telegram.ui.Components.CombinedDrawable
@@ -516,18 +516,18 @@ public class TooManyCommunitiesActivity extends BaseFragment {
                 org.telegram.ui.TooManyCommunitiesActivity r8 = org.telegram.ui.TooManyCommunitiesActivity.this
                 int r8 = r8.type
                 if (r8 != 0) goto L_0x009e
-                r8 = 2131628448(0x7f0e11a0, float:1.8884189E38)
+                r8 = 2131628663(0x7f0e1277, float:1.8884625E38)
                 java.lang.String r0 = "TooManyCommunitiesHintJoin"
                 java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r0, r8)
                 goto L_0x00b3
             L_0x009e:
                 if (r8 != r0) goto L_0x00aa
-                r8 = 2131628447(0x7f0e119f, float:1.8884187E38)
+                r8 = 2131628662(0x7f0e1276, float:1.8884623E38)
                 java.lang.String r0 = "TooManyCommunitiesHintEdit"
                 java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r0, r8)
                 goto L_0x00b3
             L_0x00aa:
-                r8 = 2131628446(0x7f0e119e, float:1.8884185E38)
+                r8 = 2131628661(0x7f0e1275, float:1.888462E38)
                 java.lang.String r0 = "TooManyCommunitiesHintCreate"
                 java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r0, r8)
             L_0x00b3:
@@ -809,7 +809,7 @@ public class TooManyCommunitiesActivity extends BaseFragment {
                 }
             }
         }
-        this.buttonTextView.setBackground(Theme.createSimpleSelectorRoundRectDrawable(AndroidUtilities.dp(4.0f), Theme.getColor("featuredStickers_addButton"), Theme.getColor("featuredStickers_addButtonPressed")));
+        this.buttonTextView.setBackground(Theme.AdaptiveRipple.filledRect("featuredStickers_addButton", 4.0f));
         this.progressBar.setProgressColor(Theme.getColor("progressCircle"));
     }
 }

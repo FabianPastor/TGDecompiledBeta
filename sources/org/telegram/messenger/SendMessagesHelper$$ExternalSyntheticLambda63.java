@@ -12,6 +12,6 @@ public final /* synthetic */ class SendMessagesHelper$$ExternalSyntheticLambda63
     }
 
     public final void run() {
-        this.f$0.lambda$performSendMessageRequest$53(this.f$1);
+        this.f$0.lambda$performSendMessageRequestMulti$41(this.f$1);
     }
 }

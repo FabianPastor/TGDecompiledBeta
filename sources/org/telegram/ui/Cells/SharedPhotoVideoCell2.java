@@ -51,46 +51,46 @@ public class SharedPhotoVideoCell2 extends View {
         this.imageReceiver.setParentView(this);
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:87:0x022d  */
+    /* JADX WARNING: Removed duplicated region for block: B:85:0x0230  */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    public void setMessageObject(org.telegram.messenger.MessageObject r16, int r17) {
+    public void setMessageObject(org.telegram.messenger.MessageObject r17, int r18) {
         /*
-            r15 = this;
-            r0 = r15
-            r9 = r16
-            r1 = r17
+            r16 = this;
+            r0 = r16
+            r10 = r17
+            r1 = r18
             int r2 = r0.currentParentColumnsCount
             r0.currentParentColumnsCount = r1
             org.telegram.messenger.MessageObject r3 = r0.currentMessageObject
-            if (r3 != 0) goto L_0x0010
-            if (r9 != 0) goto L_0x0010
+            if (r3 != 0) goto L_0x0011
+            if (r10 != 0) goto L_0x0011
             return
-        L_0x0010:
-            if (r3 == 0) goto L_0x0021
-            if (r9 == 0) goto L_0x0021
+        L_0x0011:
+            if (r3 == 0) goto L_0x0022
+            if (r10 == 0) goto L_0x0022
             int r3 = r3.getId()
-            int r4 = r16.getId()
-            if (r3 != r4) goto L_0x0021
-            if (r2 != r1) goto L_0x0021
+            int r4 = r17.getId()
+            if (r3 != r4) goto L_0x0022
+            if (r2 != r1) goto L_0x0022
             return
-        L_0x0021:
-            r0.currentMessageObject = r9
+        L_0x0022:
+            r0.currentMessageObject = r10
+            r12 = 0
             r2 = 0
-            r11 = 0
-            if (r9 != 0) goto L_0x0033
+            if (r10 != 0) goto L_0x0034
             org.telegram.messenger.ImageReceiver r1 = r0.imageReceiver
             r1.onDetachedFromWindow()
             r0.videoText = r2
             r0.videoInfoLayot = r2
-            r0.showVideoLayout = r11
+            r0.showVideoLayout = r12
             return
-        L_0x0033:
+        L_0x0034:
             boolean r3 = r0.attached
-            if (r3 == 0) goto L_0x003c
+            if (r3 == 0) goto L_0x003d
             org.telegram.messenger.ImageReceiver r3 = r0.imageReceiver
             r3.onAttachedToWindow()
-        L_0x003c:
-            org.telegram.tgnet.TLRPC$Message r3 = r9.messageOwner
+        L_0x003d:
+            org.telegram.tgnet.TLRPC$Message r3 = r10.messageOwner
             java.util.ArrayList<org.telegram.tgnet.TLRPC$TL_restrictionReason> r3 = r3.restriction_reason
             java.lang.String r3 = org.telegram.messenger.MessagesController.getRestrictionReason(r3)
             android.graphics.Point r4 = org.telegram.messenger.AndroidUtilities.displaySize
@@ -104,37 +104,37 @@ public class SharedPhotoVideoCell2 extends View {
             java.lang.String r4 = r5.getFilterString(r4)
             r5 = 320(0x140, float:4.48E-43)
             r6 = 2
-            if (r1 > r6) goto L_0x005e
+            if (r1 > r6) goto L_0x005f
             int r5 = org.telegram.messenger.AndroidUtilities.getPhotoSize()
-            goto L_0x005f
-        L_0x005e:
-            r7 = 3
+            goto L_0x0060
         L_0x005f:
+            r7 = 3
+        L_0x0060:
             r0.videoText = r2
             r0.videoInfoLayot = r2
-            r0.showVideoLayout = r11
+            r0.showVideoLayout = r12
             boolean r3 = android.text.TextUtils.isEmpty(r3)
             r7 = 1
-            if (r3 != 0) goto L_0x006f
-        L_0x006c:
-            r11 = 1
-            goto L_0x022b
-        L_0x006f:
-            boolean r3 = r16.isVideo()
+            if (r3 != 0) goto L_0x0070
+        L_0x006d:
+            r12 = 1
+            goto L_0x022e
+        L_0x0070:
+            boolean r3 = r17.isVideo()
             r8 = 50
-            java.lang.String r10 = "_b"
-            if (r3 == 0) goto L_0x0121
+            java.lang.String r9 = "_b"
+            if (r3 == 0) goto L_0x0122
             r0.showVideoLayout = r7
             r3 = 9
-            if (r1 == r3) goto L_0x0089
-            int r1 = r16.getDuration()
+            if (r1 == r3) goto L_0x008a
+            int r1 = r17.getDuration()
             java.lang.String r1 = org.telegram.messenger.AndroidUtilities.formatShortDuration(r1)
             r0.videoText = r1
-        L_0x0089:
-            org.telegram.messenger.ImageLocation r3 = r9.mediaThumb
-            if (r3 == 0) goto L_0x00c6
-            android.graphics.drawable.BitmapDrawable r5 = r9.strippedThumb
-            if (r5 == 0) goto L_0x00a0
+        L_0x008a:
+            org.telegram.messenger.ImageLocation r3 = r10.mediaThumb
+            if (r3 == 0) goto L_0x00c8
+            android.graphics.drawable.BitmapDrawable r5 = r10.strippedThumb
+            if (r5 == 0) goto L_0x00a1
             org.telegram.messenger.ImageReceiver r1 = r0.imageReceiver
             r6 = 0
             r7 = 0
@@ -142,137 +142,135 @@ public class SharedPhotoVideoCell2 extends View {
             r3 = r4
             r4 = r5
             r5 = r6
-            r6 = r16
+            r6 = r17
             r1.setImage(r2, r3, r4, r5, r6, r7)
-            goto L_0x022b
-        L_0x00a0:
+            goto L_0x022e
+        L_0x00a1:
             org.telegram.messenger.ImageReceiver r1 = r0.imageReceiver
-            org.telegram.messenger.ImageLocation r5 = r9.mediaSmallThumb
+            org.telegram.messenger.ImageLocation r5 = r10.mediaSmallThumb
             java.lang.StringBuilder r2 = new java.lang.StringBuilder
             r2.<init>()
             r2.append(r4)
-            r2.append(r10)
+            r2.append(r9)
             java.lang.String r6 = r2.toString()
             r7 = 0
             r8 = 0
-            r10 = 0
-            r12 = 0
+            r11 = 0
+            r13 = 0
             r2 = r3
             r3 = r4
             r4 = r5
             r5 = r6
             r6 = r7
             r7 = r8
-            r8 = r10
-            r9 = r16
-            r10 = r12
-            r1.setImage(r2, r3, r4, r5, r6, r7, r8, r9, r10)
-            goto L_0x022b
-        L_0x00c6:
-            org.telegram.tgnet.TLRPC$Document r1 = r16.getDocument()
+            r9 = r11
+            r10 = r17
+            r11 = r13
+            r1.setImage(r2, r3, r4, r5, r6, r7, r9, r10, r11)
+            goto L_0x022e
+        L_0x00c8:
+            org.telegram.tgnet.TLRPC$Document r1 = r17.getDocument()
             java.util.ArrayList<org.telegram.tgnet.TLRPC$PhotoSize> r3 = r1.thumbs
             org.telegram.tgnet.TLRPC$PhotoSize r3 = org.telegram.messenger.FileLoader.getClosestPhotoSizeWithSize(r3, r8)
             java.util.ArrayList<org.telegram.tgnet.TLRPC$PhotoSize> r6 = r1.thumbs
             org.telegram.tgnet.TLRPC$PhotoSize r5 = org.telegram.messenger.FileLoader.getClosestPhotoSizeWithSize(r6, r5)
-            if (r3 != r5) goto L_0x00d9
-            goto L_0x00da
-        L_0x00d9:
+            if (r3 != r5) goto L_0x00db
+            goto L_0x00dc
+        L_0x00db:
             r2 = r5
-        L_0x00da:
-            if (r3 == 0) goto L_0x006c
-            android.graphics.drawable.BitmapDrawable r5 = r9.strippedThumb
-            if (r5 == 0) goto L_0x00f5
+        L_0x00dc:
+            if (r3 == 0) goto L_0x006d
+            android.graphics.drawable.BitmapDrawable r5 = r10.strippedThumb
+            if (r5 == 0) goto L_0x00f7
             org.telegram.messenger.ImageReceiver r3 = r0.imageReceiver
             org.telegram.messenger.ImageLocation r2 = org.telegram.messenger.ImageLocation.getForDocument((org.telegram.tgnet.TLRPC$PhotoSize) r2, (org.telegram.tgnet.TLRPC$Document) r1)
-            android.graphics.drawable.BitmapDrawable r5 = r9.strippedThumb
+            android.graphics.drawable.BitmapDrawable r5 = r10.strippedThumb
             r6 = 0
             r7 = 0
             r1 = r3
             r3 = r4
             r4 = r5
             r5 = r6
-            r6 = r16
+            r6 = r17
             r1.setImage(r2, r3, r4, r5, r6, r7)
-            goto L_0x022b
-        L_0x00f5:
+            goto L_0x022e
+        L_0x00f7:
             org.telegram.messenger.ImageReceiver r5 = r0.imageReceiver
             org.telegram.messenger.ImageLocation r2 = org.telegram.messenger.ImageLocation.getForDocument((org.telegram.tgnet.TLRPC$PhotoSize) r2, (org.telegram.tgnet.TLRPC$Document) r1)
             org.telegram.messenger.ImageLocation r6 = org.telegram.messenger.ImageLocation.getForDocument((org.telegram.tgnet.TLRPC$PhotoSize) r3, (org.telegram.tgnet.TLRPC$Document) r1)
             java.lang.StringBuilder r1 = new java.lang.StringBuilder
             r1.<init>()
             r1.append(r4)
-            r1.append(r10)
+            r1.append(r9)
             java.lang.String r7 = r1.toString()
             r8 = 0
-            r10 = 0
-            r12 = 0
             r13 = 0
+            r9 = 0
+            r11 = 0
             r1 = r5
             r3 = r4
             r4 = r6
             r5 = r7
             r6 = r8
-            r7 = r10
-            r8 = r12
-            r9 = r16
-            r10 = r13
-            r1.setImage(r2, r3, r4, r5, r6, r7, r8, r9, r10)
-            goto L_0x022b
-        L_0x0121:
-            org.telegram.tgnet.TLRPC$Message r1 = r9.messageOwner
+            r7 = r13
+            r10 = r17
+            r1.setImage(r2, r3, r4, r5, r6, r7, r9, r10, r11)
+            goto L_0x022e
+        L_0x0122:
+            org.telegram.tgnet.TLRPC$Message r1 = r10.messageOwner
             org.telegram.tgnet.TLRPC$MessageMedia r1 = r1.media
             boolean r3 = r1 instanceof org.telegram.tgnet.TLRPC$TL_messageMediaPhoto
-            if (r3 == 0) goto L_0x006c
+            if (r3 == 0) goto L_0x006d
             org.telegram.tgnet.TLRPC$Photo r1 = r1.photo
-            if (r1 == 0) goto L_0x006c
-            java.util.ArrayList<org.telegram.tgnet.TLRPC$PhotoSize> r1 = r9.photoThumbs
+            if (r1 == 0) goto L_0x006d
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$PhotoSize> r1 = r10.photoThumbs
             boolean r1 = r1.isEmpty()
-            if (r1 != 0) goto L_0x006c
-            boolean r1 = r9.mediaExists
-            if (r1 != 0) goto L_0x0176
-            boolean r1 = r15.canAutoDownload(r16)
-            if (r1 == 0) goto L_0x0140
-            goto L_0x0176
-        L_0x0140:
-            android.graphics.drawable.BitmapDrawable r6 = r9.strippedThumb
-            if (r6 == 0) goto L_0x0154
+            if (r1 != 0) goto L_0x006d
+            boolean r1 = r10.mediaExists
+            if (r1 != 0) goto L_0x0179
+            boolean r1 = r16.canAutoDownload(r17)
+            if (r1 == 0) goto L_0x0141
+            goto L_0x0179
+        L_0x0141:
+            android.graphics.drawable.BitmapDrawable r6 = r10.strippedThumb
+            if (r6 == 0) goto L_0x0156
             org.telegram.messenger.ImageReceiver r1 = r0.imageReceiver
             r2 = 0
             r3 = 0
             r4 = 0
             r5 = 0
             r7 = 0
-            r8 = 0
-            r10 = 0
-            r9 = r16
-            r1.setImage(r2, r3, r4, r5, r6, r7, r8, r9, r10)
-            goto L_0x022b
-        L_0x0154:
-            java.util.ArrayList<org.telegram.tgnet.TLRPC$PhotoSize> r1 = r9.photoThumbs
+            r9 = 0
+            r11 = 0
+            r10 = r17
+            r1.setImage(r2, r3, r4, r5, r6, r7, r9, r10, r11)
+            goto L_0x022e
+        L_0x0156:
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$PhotoSize> r1 = r10.photoThumbs
             org.telegram.tgnet.TLRPC$PhotoSize r1 = org.telegram.messenger.FileLoader.getClosestPhotoSizeWithSize(r1, r8)
             org.telegram.messenger.ImageReceiver r2 = r0.imageReceiver
             r3 = 0
             r4 = 0
-            org.telegram.tgnet.TLObject r5 = r9.photoThumbsObject
+            org.telegram.tgnet.TLObject r5 = r10.photoThumbsObject
             org.telegram.messenger.ImageLocation r5 = org.telegram.messenger.ImageLocation.getForObject(r1, r5)
             r6 = 0
             r7 = 0
-            r8 = 0
-            r10 = 0
-            java.lang.String r12 = "b"
+            r9 = 0
+            r11 = 0
+            java.lang.String r13 = "b"
             r1 = r2
             r2 = r3
             r3 = r4
             r4 = r5
-            r5 = r12
-            r9 = r16
-            r1.setImage(r2, r3, r4, r5, r6, r7, r8, r9, r10)
-            goto L_0x022b
-        L_0x0176:
-            org.telegram.messenger.ImageLocation r3 = r9.mediaThumb
-            if (r3 == 0) goto L_0x01b3
-            android.graphics.drawable.BitmapDrawable r5 = r9.strippedThumb
-            if (r5 == 0) goto L_0x018d
+            r5 = r13
+            r10 = r17
+            r1.setImage(r2, r3, r4, r5, r6, r7, r9, r10, r11)
+            goto L_0x022e
+        L_0x0179:
+            org.telegram.messenger.ImageLocation r3 = r10.mediaThumb
+            if (r3 == 0) goto L_0x01b7
+            android.graphics.drawable.BitmapDrawable r5 = r10.strippedThumb
+            if (r5 == 0) goto L_0x0190
             org.telegram.messenger.ImageReceiver r1 = r0.imageReceiver
             r6 = 0
             r7 = 0
@@ -280,119 +278,115 @@ public class SharedPhotoVideoCell2 extends View {
             r3 = r4
             r4 = r5
             r5 = r6
-            r6 = r16
+            r6 = r17
             r1.setImage(r2, r3, r4, r5, r6, r7)
-            goto L_0x022b
-        L_0x018d:
+            goto L_0x022e
+        L_0x0190:
             org.telegram.messenger.ImageReceiver r1 = r0.imageReceiver
-            org.telegram.messenger.ImageLocation r5 = r9.mediaSmallThumb
+            org.telegram.messenger.ImageLocation r5 = r10.mediaSmallThumb
             java.lang.StringBuilder r2 = new java.lang.StringBuilder
             r2.<init>()
             r2.append(r4)
-            r2.append(r10)
+            r2.append(r9)
             java.lang.String r6 = r2.toString()
             r7 = 0
             r8 = 0
-            r10 = 0
-            r12 = 0
+            r11 = 0
+            r13 = 0
             r2 = r3
             r3 = r4
             r4 = r5
             r5 = r6
             r6 = r7
             r7 = r8
-            r8 = r10
-            r9 = r16
-            r10 = r12
-            r1.setImage(r2, r3, r4, r5, r6, r7, r8, r9, r10)
-            goto L_0x022b
-        L_0x01b3:
-            java.util.ArrayList<org.telegram.tgnet.TLRPC$PhotoSize> r1 = r9.photoThumbs
+            r9 = r11
+            r10 = r17
+            r11 = r13
+            r1.setImage(r2, r3, r4, r5, r6, r7, r9, r10, r11)
+            goto L_0x022e
+        L_0x01b7:
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$PhotoSize> r1 = r10.photoThumbs
             org.telegram.tgnet.TLRPC$PhotoSize r1 = org.telegram.messenger.FileLoader.getClosestPhotoSizeWithSize(r1, r8)
-            java.util.ArrayList<org.telegram.tgnet.TLRPC$PhotoSize> r3 = r9.photoThumbs
-            org.telegram.tgnet.TLRPC$PhotoSize r3 = org.telegram.messenger.FileLoader.getClosestPhotoSizeWithSize(r3, r5, r11, r1, r11)
-            if (r3 != r1) goto L_0x01c2
-            goto L_0x01c3
-        L_0x01c2:
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$PhotoSize> r3 = r10.photoThumbs
+            org.telegram.tgnet.TLRPC$PhotoSize r3 = org.telegram.messenger.FileLoader.getClosestPhotoSizeWithSize(r3, r5, r12, r1, r12)
+            if (r3 != r1) goto L_0x01c6
+            goto L_0x01c7
+        L_0x01c6:
             r2 = r1
-        L_0x01c3:
-            android.graphics.drawable.BitmapDrawable r1 = r9.strippedThumb
-            if (r1 == 0) goto L_0x01f1
+        L_0x01c7:
+            android.graphics.drawable.BitmapDrawable r1 = r10.strippedThumb
+            r13 = 0
+            if (r1 == 0) goto L_0x01f5
             org.telegram.messenger.ImageReceiver r1 = r0.imageReceiver
-            org.telegram.tgnet.TLObject r2 = r9.photoThumbsObject
+            org.telegram.tgnet.TLObject r2 = r10.photoThumbsObject
             org.telegram.messenger.ImageLocation r2 = org.telegram.messenger.ImageLocation.getForObject(r3, r2)
             r5 = 0
             r8 = 0
-            android.graphics.drawable.BitmapDrawable r10 = r9.strippedThumb
-            if (r3 == 0) goto L_0x01d9
+            android.graphics.drawable.BitmapDrawable r9 = r10.strippedThumb
+            if (r3 == 0) goto L_0x01de
             int r3 = r3.size
-            r12 = r3
-            goto L_0x01da
-        L_0x01d9:
-            r12 = 0
-        L_0x01da:
-            r13 = 0
-            boolean r3 = r16.shouldEncryptPhotoOrVideo()
-            if (r3 == 0) goto L_0x01e3
-            r14 = 2
-            goto L_0x01e4
-        L_0x01e3:
-            r14 = 1
-        L_0x01e4:
+            long r13 = (long) r3
+        L_0x01de:
+            r11 = 0
+            boolean r3 = r17.shouldEncryptPhotoOrVideo()
+            if (r3 == 0) goto L_0x01e7
+            r15 = 2
+            goto L_0x01e8
+        L_0x01e7:
+            r15 = 1
+        L_0x01e8:
             r3 = r4
             r4 = r5
             r5 = r8
-            r6 = r10
-            r7 = r12
-            r8 = r13
-            r9 = r16
-            r10 = r14
-            r1.setImage(r2, r3, r4, r5, r6, r7, r8, r9, r10)
-            goto L_0x022b
-        L_0x01f1:
+            r6 = r9
+            r7 = r13
+            r9 = r11
+            r10 = r17
+            r11 = r15
+            r1.setImage(r2, r3, r4, r5, r6, r7, r9, r10, r11)
+            goto L_0x022e
+        L_0x01f5:
             org.telegram.messenger.ImageReceiver r1 = r0.imageReceiver
-            org.telegram.tgnet.TLObject r5 = r9.photoThumbsObject
+            org.telegram.tgnet.TLObject r5 = r10.photoThumbsObject
             org.telegram.messenger.ImageLocation r5 = org.telegram.messenger.ImageLocation.getForObject(r3, r5)
-            org.telegram.tgnet.TLObject r8 = r9.photoThumbsObject
+            org.telegram.tgnet.TLObject r8 = r10.photoThumbsObject
             org.telegram.messenger.ImageLocation r8 = org.telegram.messenger.ImageLocation.getForObject(r2, r8)
             java.lang.StringBuilder r2 = new java.lang.StringBuilder
             r2.<init>()
             r2.append(r4)
-            r2.append(r10)
-            java.lang.String r10 = r2.toString()
-            if (r3 == 0) goto L_0x0214
+            r2.append(r9)
+            java.lang.String r9 = r2.toString()
+            if (r3 == 0) goto L_0x0218
             int r2 = r3.size
-            r12 = r2
-            goto L_0x0215
-        L_0x0214:
-            r12 = 0
-        L_0x0215:
-            r13 = 0
-            boolean r2 = r16.shouldEncryptPhotoOrVideo()
-            if (r2 == 0) goto L_0x021e
-            r14 = 2
-            goto L_0x021f
-        L_0x021e:
-            r14 = 1
-        L_0x021f:
+            long r2 = (long) r2
+            r13 = r2
+        L_0x0218:
+            r11 = 0
+            boolean r2 = r17.shouldEncryptPhotoOrVideo()
+            if (r2 == 0) goto L_0x0221
+            r15 = 2
+            goto L_0x0222
+        L_0x0221:
+            r15 = 1
+        L_0x0222:
             r2 = r5
             r3 = r4
             r4 = r8
-            r5 = r10
-            r6 = r12
-            r7 = r13
-            r8 = r16
-            r9 = r14
-            r1.setImage(r2, r3, r4, r5, r6, r7, r8, r9)
-        L_0x022b:
-            if (r11 == 0) goto L_0x023d
+            r5 = r9
+            r6 = r13
+            r8 = r11
+            r9 = r17
+            r10 = r15
+            r1.setImage(r2, r3, r4, r5, r6, r8, r9, r10)
+        L_0x022e:
+            if (r12 == 0) goto L_0x0240
             org.telegram.messenger.ImageReceiver r1 = r0.imageReceiver
-            android.content.Context r2 = r15.getContext()
-            r3 = 2131166012(0x7var_c, float:1.7946257E38)
+            android.content.Context r2 = r16.getContext()
+            r3 = 2131166042(0x7var_a, float:1.7946318E38)
             android.graphics.drawable.Drawable r2 = androidx.core.content.ContextCompat.getDrawable(r2, r3)
             r1.setImageBitmap((android.graphics.drawable.Drawable) r2)
-        L_0x023d:
-            r15.invalidate()
+        L_0x0240:
+            r16.invalidate()
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Cells.SharedPhotoVideoCell2.setMessageObject(org.telegram.messenger.MessageObject, int):void");
@@ -946,14 +940,14 @@ public class SharedPhotoVideoCell2 extends View {
         Drawable playDrawable;
         TextPaint textPaint = new TextPaint(1);
 
-        public SharedResources(Context context) {
+        public SharedResources(Context context, Theme.ResourcesProvider resourcesProvider) {
             this.textPaint.setTextSize((float) AndroidUtilities.dp(12.0f));
             this.textPaint.setColor(-1);
             this.textPaint.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
             Drawable drawable = ContextCompat.getDrawable(context, NUM);
             this.playDrawable = drawable;
             drawable.setBounds(0, 0, drawable.getIntrinsicWidth(), this.playDrawable.getIntrinsicHeight());
-            this.backgroundPaint.setColor(Theme.getColor("sharedMedia_photoPlaceholder"));
+            this.backgroundPaint.setColor(Theme.getColor("sharedMedia_photoPlaceholder", resourcesProvider));
         }
 
         public String getFilterString(int i) {

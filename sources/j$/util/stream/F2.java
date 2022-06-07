@@ -1,36 +1,34 @@
 package j$.util.stream;
 
-import j$.util.CLASSNAMEj;
 import j$.util.function.Consumer;
-import j$.util.function.d;
+import j$.util.function.b;
 import j$.util.function.e;
 import j$.util.function.f;
+import j$.util.function.u;
+import j$.util.function.y;
 
-class F2 implements T2, CLASSNAMEk3 {
-    private boolean a;
-    private double b;
-    final /* synthetic */ d c;
+class F2 extends T2 implements S2, CLASSNAMEj3 {
+    final /* synthetic */ y b;
+    final /* synthetic */ u c;
+    final /* synthetic */ b d;
 
-    F2(d dVar) {
-        this.c = dVar;
+    F2(y yVar, u uVar, b bVar) {
+        this.b = yVar;
+        this.c = uVar;
+        this.d = bVar;
     }
 
-    public void accept(double d) {
-        if (this.a) {
-            this.a = false;
-        } else {
-            d = this.c.applyAsDouble(this.b, d);
-        }
-        this.b = d;
+    public void accept(double d2) {
+        this.c.accept(this.a, d2);
     }
 
     public /* synthetic */ void accept(int i) {
-        CLASSNAMEp1.d(this);
+        CLASSNAMEo1.d(this);
         throw null;
     }
 
     public /* synthetic */ void accept(long j) {
-        CLASSNAMEp1.e(this);
+        CLASSNAMEo1.e(this);
         throw null;
     }
 
@@ -39,19 +37,12 @@ class F2 implements T2, CLASSNAMEk3 {
     }
 
     /* renamed from: b */
-    public /* synthetic */ void accept(Double d) {
-        CLASSNAMEp1.a(this, d);
+    public /* synthetic */ void accept(Double d2) {
+        CLASSNAMEo1.a(this, d2);
     }
 
-    public Object get() {
-        return this.a ? CLASSNAMEj.a() : CLASSNAMEj.d(this.b);
-    }
-
-    public void h(T2 t2) {
-        F2 f2 = (F2) t2;
-        if (!f2.a) {
-            accept(f2.b);
-        }
+    public void h(S2 s2) {
+        this.a = this.d.apply(this.a, ((F2) s2).a);
     }
 
     public f j(f fVar) {
@@ -63,8 +54,7 @@ class F2 implements T2, CLASSNAMEk3 {
     }
 
     public void n(long j) {
-        this.a = true;
-        this.b = 0.0d;
+        this.a = this.b.get();
     }
 
     public /* synthetic */ boolean o() {

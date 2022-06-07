@@ -1617,8 +1617,8 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
         return this.videoTextureView;
     }
 
-    /* JADX WARNING: Code restructure failed: missing block: B:89:0x023a, code lost:
-        if (r0.exists() != false) goto L_0x023e;
+    /* JADX WARNING: Code restructure failed: missing block: B:89:0x0246, code lost:
+        if (r0.exists() != false) goto L_0x024a;
      */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     private void processSelectedOption(int r11) {
@@ -1638,13 +1638,13 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
             r8 = 1
             r9 = 0
             switch(r11) {
-                case 3: goto L_0x0399;
-                case 4: goto L_0x0334;
-                case 5: goto L_0x021f;
-                case 6: goto L_0x0194;
-                case 7: goto L_0x013d;
+                case 3: goto L_0x03ae;
+                case 4: goto L_0x0345;
+                case 5: goto L_0x022b;
+                case 6: goto L_0x019c;
+                case 7: goto L_0x0141;
                 case 8: goto L_0x0015;
-                case 9: goto L_0x0125;
+                case 9: goto L_0x0129;
                 case 10: goto L_0x0099;
                 case 11: goto L_0x0088;
                 case 12: goto L_0x0015;
@@ -1656,7 +1656,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
                 default: goto L_0x0015;
             }
         L_0x0015:
-            goto L_0x03a0
+            goto L_0x03b5
         L_0x0017:
             android.content.Intent r0 = new android.content.Intent     // Catch:{ Exception -> 0x0049 }
             java.lang.String r2 = "android.intent.action.DIAL"
@@ -1676,17 +1676,17 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
             r0.addFlags(r2)     // Catch:{ Exception -> 0x0049 }
             android.app.Activity r2 = r10.getParentActivity()     // Catch:{ Exception -> 0x0049 }
             r2.startActivityForResult(r0, r1)     // Catch:{ Exception -> 0x0049 }
-            goto L_0x03a0
+            goto L_0x03b5
         L_0x0049:
             r0 = move-exception
             org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)
-            goto L_0x03a0
+            goto L_0x03b5
         L_0x004f:
             org.telegram.tgnet.TLRPC$Message r0 = r0.messageOwner
             org.telegram.tgnet.TLRPC$MessageMedia r0 = r0.media
             java.lang.String r0 = r0.phone_number
             org.telegram.messenger.AndroidUtilities.addToClipboard(r0)
-            goto L_0x03a0
+            goto L_0x03b5
         L_0x005a:
             android.os.Bundle r0 = new android.os.Bundle
             r0.<init>()
@@ -1707,14 +1707,14 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
             org.telegram.ui.ContactAddActivity r1 = new org.telegram.ui.ContactAddActivity
             r1.<init>(r0)
             r10.presentFragment(r1)
-            goto L_0x03a0
+            goto L_0x03b5
         L_0x0088:
             org.telegram.tgnet.TLRPC$Document r0 = r0.getDocument()
             int r1 = r10.currentAccount
             org.telegram.messenger.MessagesController r1 = org.telegram.messenger.MessagesController.getInstance(r1)
             org.telegram.messenger.MessageObject r2 = r10.selectedObject
             r1.saveGif(r2, r0)
-            goto L_0x03a0
+            goto L_0x03b5
         L_0x0099:
             int r0 = android.os.Build.VERSION.SDK_INT
             if (r0 < r5) goto L_0x00bb
@@ -1754,34 +1754,35 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
         L_0x00eb:
             if (r1 == 0) goto L_0x00f3
             int r2 = r1.length()
-            if (r2 != 0) goto L_0x00ff
+            if (r2 != 0) goto L_0x0103
         L_0x00f3:
-            org.telegram.messenger.MessageObject r1 = r10.selectedObject
-            org.telegram.tgnet.TLRPC$Message r1 = r1.messageOwner
-            java.io.File r1 = org.telegram.messenger.FileLoader.getPathToMessage(r1)
+            org.telegram.messenger.FileLoader r1 = r10.getFileLoader()
+            org.telegram.messenger.MessageObject r2 = r10.selectedObject
+            org.telegram.tgnet.TLRPC$Message r2 = r2.messageOwner
+            java.io.File r1 = r1.getPathToMessage(r2)
             java.lang.String r1 = r1.toString()
-        L_0x00ff:
+        L_0x0103:
             android.app.Activity r2 = r10.getParentActivity()
             org.telegram.messenger.MessageObject r4 = r10.selectedObject
             boolean r4 = r4.isMusic()
-            if (r4 == 0) goto L_0x010c
-            goto L_0x010d
-        L_0x010c:
+            if (r4 == 0) goto L_0x0110
+            goto L_0x0111
+        L_0x0110:
             r3 = 2
-        L_0x010d:
+        L_0x0111:
             org.telegram.messenger.MessageObject r4 = r10.selectedObject
             org.telegram.tgnet.TLRPC$Document r4 = r4.getDocument()
-            if (r4 == 0) goto L_0x011e
+            if (r4 == 0) goto L_0x0122
             org.telegram.messenger.MessageObject r4 = r10.selectedObject
             org.telegram.tgnet.TLRPC$Document r4 = r4.getDocument()
             java.lang.String r4 = r4.mime_type
-            goto L_0x0120
-        L_0x011e:
+            goto L_0x0124
+        L_0x0122:
             java.lang.String r4 = ""
-        L_0x0120:
+        L_0x0124:
             org.telegram.messenger.MediaController.saveFile(r1, r2, r3, r0, r4)
-            goto L_0x03a0
-        L_0x0125:
+            goto L_0x03b5
+        L_0x0129:
             org.telegram.ui.Components.StickersAlert r0 = new org.telegram.ui.Components.StickersAlert
             android.app.Activity r2 = r10.getParentActivity()
             org.telegram.messenger.MessageObject r1 = r10.selectedObject
@@ -1792,68 +1793,70 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
             r3 = r10
             r1.<init>((android.content.Context) r2, (org.telegram.ui.ActionBar.BaseFragment) r3, (org.telegram.tgnet.TLRPC$InputStickerSet) r4, (org.telegram.tgnet.TLRPC$TL_messages_stickerSet) r5, (org.telegram.ui.Components.StickersAlert.StickersAlertDelegate) r6)
             r10.showDialog(r0)
-            goto L_0x03a0
-        L_0x013d:
+            goto L_0x03b5
+        L_0x0141:
             org.telegram.tgnet.TLRPC$Message r0 = r0.messageOwner
             java.lang.String r0 = r0.attachPath
-            if (r0 == 0) goto L_0x0155
+            if (r0 == 0) goto L_0x0159
             int r1 = r0.length()
-            if (r1 <= 0) goto L_0x0155
+            if (r1 <= 0) goto L_0x0159
             java.io.File r1 = new java.io.File
             r1.<init>(r0)
             boolean r1 = r1.exists()
-            if (r1 != 0) goto L_0x0155
+            if (r1 != 0) goto L_0x0159
             r0 = r9
-        L_0x0155:
-            if (r0 == 0) goto L_0x015d
+        L_0x0159:
+            if (r0 == 0) goto L_0x0161
             int r1 = r0.length()
-            if (r1 != 0) goto L_0x0169
-        L_0x015d:
-            org.telegram.messenger.MessageObject r0 = r10.selectedObject
-            org.telegram.tgnet.TLRPC$Message r0 = r0.messageOwner
-            java.io.File r0 = org.telegram.messenger.FileLoader.getPathToMessage(r0)
+            if (r1 != 0) goto L_0x0171
+        L_0x0161:
+            org.telegram.messenger.FileLoader r0 = r10.getFileLoader()
+            org.telegram.messenger.MessageObject r1 = r10.selectedObject
+            org.telegram.tgnet.TLRPC$Message r1 = r1.messageOwner
+            java.io.File r0 = r0.getPathToMessage(r1)
             java.lang.String r0 = r0.toString()
-        L_0x0169:
+        L_0x0171:
             int r1 = android.os.Build.VERSION.SDK_INT
-            if (r1 < r5) goto L_0x018b
-            if (r1 <= r4) goto L_0x0173
+            if (r1 < r5) goto L_0x0193
+            if (r1 <= r4) goto L_0x017b
             boolean r1 = org.telegram.messenger.BuildVars.NO_SCOPED_STORAGE
-            if (r1 == 0) goto L_0x018b
-        L_0x0173:
+            if (r1 == 0) goto L_0x0193
+        L_0x017b:
             android.app.Activity r1 = r10.getParentActivity()
             int r1 = r1.checkSelfPermission(r6)
-            if (r1 == 0) goto L_0x018b
+            if (r1 == 0) goto L_0x0193
             android.app.Activity r0 = r10.getParentActivity()
             java.lang.String[] r1 = new java.lang.String[r8]
             r1[r7] = r6
             r0.requestPermissions(r1, r2)
             r10.selectedObject = r9
             return
-        L_0x018b:
+        L_0x0193:
             android.app.Activity r1 = r10.getParentActivity()
             org.telegram.messenger.MediaController.saveFile(r0, r1, r7, r9, r9)
-            goto L_0x03a0
-        L_0x0194:
+            goto L_0x03b5
+        L_0x019c:
             org.telegram.tgnet.TLRPC$Message r0 = r0.messageOwner
             java.lang.String r0 = r0.attachPath
-            if (r0 == 0) goto L_0x01ac
+            if (r0 == 0) goto L_0x01b4
             int r2 = r0.length()
-            if (r2 <= 0) goto L_0x01ac
+            if (r2 <= 0) goto L_0x01b4
             java.io.File r2 = new java.io.File
             r2.<init>(r0)
             boolean r2 = r2.exists()
-            if (r2 != 0) goto L_0x01ac
+            if (r2 != 0) goto L_0x01b4
             r0 = r9
-        L_0x01ac:
-            if (r0 == 0) goto L_0x01b4
-            int r2 = r0.length()
-            if (r2 != 0) goto L_0x01c0
         L_0x01b4:
-            org.telegram.messenger.MessageObject r0 = r10.selectedObject
-            org.telegram.tgnet.TLRPC$Message r0 = r0.messageOwner
-            java.io.File r0 = org.telegram.messenger.FileLoader.getPathToMessage(r0)
+            if (r0 == 0) goto L_0x01bc
+            int r2 = r0.length()
+            if (r2 != 0) goto L_0x01cc
+        L_0x01bc:
+            org.telegram.messenger.FileLoader r0 = r10.getFileLoader()
+            org.telegram.messenger.MessageObject r2 = r10.selectedObject
+            org.telegram.tgnet.TLRPC$Message r2 = r2.messageOwner
+            java.io.File r0 = r0.getPathToMessage(r2)
             java.lang.String r0 = r0.toString()
-        L_0x01c0:
+        L_0x01cc:
             android.content.Intent r2 = new android.content.Intent
             java.lang.String r3 = "android.intent.action.SEND"
             r2.<init>(r3)
@@ -1864,115 +1867,116 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
             int r3 = android.os.Build.VERSION.SDK_INT
             r4 = 24
             java.lang.String r5 = "android.intent.extra.STREAM"
-            if (r3 < r4) goto L_0x01fd
-            android.app.Activity r3 = r10.getParentActivity()     // Catch:{ Exception -> 0x01f0 }
+            if (r3 < r4) goto L_0x0209
+            android.app.Activity r3 = r10.getParentActivity()     // Catch:{ Exception -> 0x01fc }
             java.lang.String r4 = "org.telegram.messenger.beta.provider"
-            java.io.File r6 = new java.io.File     // Catch:{ Exception -> 0x01f0 }
-            r6.<init>(r0)     // Catch:{ Exception -> 0x01f0 }
-            android.net.Uri r3 = androidx.core.content.FileProvider.getUriForFile(r3, r4, r6)     // Catch:{ Exception -> 0x01f0 }
-            r2.putExtra(r5, r3)     // Catch:{ Exception -> 0x01f0 }
-            r2.setFlags(r8)     // Catch:{ Exception -> 0x01f0 }
-            goto L_0x0209
-        L_0x01f0:
+            java.io.File r6 = new java.io.File     // Catch:{ Exception -> 0x01fc }
+            r6.<init>(r0)     // Catch:{ Exception -> 0x01fc }
+            android.net.Uri r3 = androidx.core.content.FileProvider.getUriForFile(r3, r4, r6)     // Catch:{ Exception -> 0x01fc }
+            r2.putExtra(r5, r3)     // Catch:{ Exception -> 0x01fc }
+            r2.setFlags(r8)     // Catch:{ Exception -> 0x01fc }
+            goto L_0x0215
+        L_0x01fc:
             java.io.File r3 = new java.io.File
             r3.<init>(r0)
             android.net.Uri r0 = android.net.Uri.fromFile(r3)
             r2.putExtra(r5, r0)
-            goto L_0x0209
-        L_0x01fd:
-            java.io.File r3 = new java.io.File
-            r3.<init>(r0)
-            android.net.Uri r0 = android.net.Uri.fromFile(r3)
-            r2.putExtra(r5, r0)
+            goto L_0x0215
         L_0x0209:
+            java.io.File r3 = new java.io.File
+            r3.<init>(r0)
+            android.net.Uri r0 = android.net.Uri.fromFile(r3)
+            r2.putExtra(r5, r0)
+        L_0x0215:
             android.app.Activity r0 = r10.getParentActivity()
-            r3 = 2131628061(0x7f0e101d, float:1.8883404E38)
+            r3 = 2131628262(0x7f0e10e6, float:1.8883812E38)
             java.lang.String r4 = "ShareFile"
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r4, r3)
             android.content.Intent r2 = android.content.Intent.createChooser(r2, r3)
             r0.startActivityForResult(r2, r1)
-            goto L_0x03a0
-        L_0x021f:
+            goto L_0x03b5
+        L_0x022b:
             org.telegram.tgnet.TLRPC$Message r0 = r0.messageOwner
             java.lang.String r0 = r0.attachPath
-            if (r0 == 0) goto L_0x023d
+            if (r0 == 0) goto L_0x0249
             int r0 = r0.length()
-            if (r0 == 0) goto L_0x023d
+            if (r0 == 0) goto L_0x0249
             java.io.File r0 = new java.io.File
             org.telegram.messenger.MessageObject r1 = r10.selectedObject
             org.telegram.tgnet.TLRPC$Message r1 = r1.messageOwner
             java.lang.String r1 = r1.attachPath
             r0.<init>(r1)
             boolean r1 = r0.exists()
-            if (r1 == 0) goto L_0x023d
-            goto L_0x023e
-        L_0x023d:
+            if (r1 == 0) goto L_0x0249
+            goto L_0x024a
+        L_0x0249:
             r0 = r9
-        L_0x023e:
-            if (r0 != 0) goto L_0x024f
-            org.telegram.messenger.MessageObject r1 = r10.selectedObject
-            org.telegram.tgnet.TLRPC$Message r1 = r1.messageOwner
-            java.io.File r1 = org.telegram.messenger.FileLoader.getPathToMessage(r1)
+        L_0x024a:
+            if (r0 != 0) goto L_0x025f
+            org.telegram.messenger.FileLoader r1 = r10.getFileLoader()
+            org.telegram.messenger.MessageObject r2 = r10.selectedObject
+            org.telegram.tgnet.TLRPC$Message r2 = r2.messageOwner
+            java.io.File r1 = r1.getPathToMessage(r2)
             boolean r2 = r1.exists()
-            if (r2 == 0) goto L_0x024f
+            if (r2 == 0) goto L_0x025f
             r0 = r1
-        L_0x024f:
-            if (r0 == 0) goto L_0x03a0
+        L_0x025f:
+            if (r0 == 0) goto L_0x03b5
             java.lang.String r1 = r0.getName()
             java.lang.String r1 = r1.toLowerCase()
             java.lang.String r2 = "attheme"
             boolean r1 = r1.endsWith(r2)
-            r2 = 2131626918(0x7f0e0ba6, float:1.8881086E38)
+            r2 = 2131627064(0x7f0e0CLASSNAME, float:1.8881382E38)
             java.lang.String r3 = "OK"
-            r4 = 2131624316(0x7f0e017c, float:1.8875808E38)
+            r4 = 2131624369(0x7f0e01b1, float:1.8875916E38)
             java.lang.String r5 = "AppName"
-            if (r1 == 0) goto L_0x02ea
+            if (r1 == 0) goto L_0x02fa
             androidx.recyclerview.widget.LinearLayoutManager r1 = r10.chatLayoutManager
             r6 = -1
-            if (r1 == 0) goto L_0x029d
+            if (r1 == 0) goto L_0x02ad
             int r1 = r1.findLastVisibleItemPosition()
             androidx.recyclerview.widget.LinearLayoutManager r7 = r10.chatLayoutManager
             int r7 = r7.getItemCount()
             int r7 = r7 - r8
-            if (r1 >= r7) goto L_0x029b
+            if (r1 >= r7) goto L_0x02ab
             androidx.recyclerview.widget.LinearLayoutManager r1 = r10.chatLayoutManager
             int r1 = r1.findFirstVisibleItemPosition()
             r10.scrollToPositionOnRecreate = r1
             org.telegram.ui.Components.RecyclerListView r7 = r10.chatListView
             androidx.recyclerview.widget.RecyclerView$ViewHolder r1 = r7.findViewHolderForAdapterPosition(r1)
             org.telegram.ui.Components.RecyclerListView$Holder r1 = (org.telegram.ui.Components.RecyclerListView.Holder) r1
-            if (r1 == 0) goto L_0x0298
+            if (r1 == 0) goto L_0x02a8
             android.view.View r1 = r1.itemView
             int r1 = r1.getTop()
             r10.scrollToOffsetOnRecreate = r1
-            goto L_0x029d
-        L_0x0298:
+            goto L_0x02ad
+        L_0x02a8:
             r10.scrollToPositionOnRecreate = r6
-            goto L_0x029d
-        L_0x029b:
+            goto L_0x02ad
+        L_0x02ab:
             r10.scrollToPositionOnRecreate = r6
-        L_0x029d:
+        L_0x02ad:
             org.telegram.messenger.MessageObject r1 = r10.selectedObject
             java.lang.String r1 = r1.getDocumentName()
             org.telegram.ui.ActionBar.Theme$ThemeInfo r0 = org.telegram.ui.ActionBar.Theme.applyThemeFile(r0, r1, r9, r8)
-            if (r0 == 0) goto L_0x02b3
+            if (r0 == 0) goto L_0x02c3
             org.telegram.ui.ThemePreviewActivity r1 = new org.telegram.ui.ThemePreviewActivity
             r1.<init>(r0)
             r10.presentFragment(r1)
-            goto L_0x03a0
-        L_0x02b3:
+            goto L_0x03b5
+        L_0x02c3:
             r10.scrollToPositionOnRecreate = r6
             android.app.Activity r0 = r10.getParentActivity()
-            if (r0 != 0) goto L_0x02be
+            if (r0 != 0) goto L_0x02ce
             r10.selectedObject = r9
             return
-        L_0x02be:
+        L_0x02ce:
             org.telegram.ui.ActionBar.AlertDialog$Builder r0 = new org.telegram.ui.ActionBar.AlertDialog$Builder
             android.app.Activity r1 = r10.getParentActivity()
             r0.<init>((android.content.Context) r1)
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r5, r4)
             r0.setTitle(r1)
-            r1 = 2131626124(0x7f0e088c, float:1.8879475E38)
+            r1 = 2131626222(0x7f0e08ee, float:1.8879674E38)
             java.lang.String r4 = "IncorrectTheme"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r4, r1)
             r0.setMessage(r1)
@@ -1980,28 +1984,28 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
             r0.setPositiveButton(r1, r9)
             org.telegram.ui.ActionBar.AlertDialog r0 = r0.create()
             r10.showDialog(r0)
-            goto L_0x03a0
-        L_0x02ea:
+            goto L_0x03b5
+        L_0x02fa:
             org.telegram.messenger.LocaleController r1 = org.telegram.messenger.LocaleController.getInstance()
             int r6 = r10.currentAccount
             boolean r0 = r1.applyLanguageFile(r0, r6)
-            if (r0 == 0) goto L_0x0300
+            if (r0 == 0) goto L_0x0310
             org.telegram.ui.LanguageSelectActivity r0 = new org.telegram.ui.LanguageSelectActivity
             r0.<init>()
             r10.presentFragment(r0)
-            goto L_0x03a0
-        L_0x0300:
+            goto L_0x03b5
+        L_0x0310:
             android.app.Activity r0 = r10.getParentActivity()
-            if (r0 != 0) goto L_0x0309
+            if (r0 != 0) goto L_0x0319
             r10.selectedObject = r9
             return
-        L_0x0309:
+        L_0x0319:
             org.telegram.ui.ActionBar.AlertDialog$Builder r0 = new org.telegram.ui.ActionBar.AlertDialog$Builder
             android.app.Activity r1 = r10.getParentActivity()
             r0.<init>((android.content.Context) r1)
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r5, r4)
             r0.setTitle(r1)
-            r1 = 2131626123(0x7f0e088b, float:1.8879473E38)
+            r1 = 2131626221(0x7f0e08ed, float:1.8879672E38)
             java.lang.String r4 = "IncorrectLocalization"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r4, r1)
             r0.setMessage(r1)
@@ -2009,61 +2013,62 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
             r0.setPositiveButton(r1, r9)
             org.telegram.ui.ActionBar.AlertDialog r0 = r0.create()
             r10.showDialog(r0)
-            goto L_0x03a0
-        L_0x0334:
+            goto L_0x03b5
+        L_0x0345:
             org.telegram.tgnet.TLRPC$Message r0 = r0.messageOwner
             java.lang.String r0 = r0.attachPath
-            if (r0 == 0) goto L_0x034c
+            if (r0 == 0) goto L_0x035d
             int r1 = r0.length()
-            if (r1 <= 0) goto L_0x034c
+            if (r1 <= 0) goto L_0x035d
             java.io.File r1 = new java.io.File
             r1.<init>(r0)
             boolean r1 = r1.exists()
-            if (r1 != 0) goto L_0x034c
+            if (r1 != 0) goto L_0x035d
             r0 = r9
-        L_0x034c:
-            if (r0 == 0) goto L_0x0354
+        L_0x035d:
+            if (r0 == 0) goto L_0x0365
             int r1 = r0.length()
-            if (r1 != 0) goto L_0x0360
-        L_0x0354:
-            org.telegram.messenger.MessageObject r0 = r10.selectedObject
-            org.telegram.tgnet.TLRPC$Message r0 = r0.messageOwner
-            java.io.File r0 = org.telegram.messenger.FileLoader.getPathToMessage(r0)
+            if (r1 != 0) goto L_0x0375
+        L_0x0365:
+            org.telegram.messenger.FileLoader r0 = r10.getFileLoader()
+            org.telegram.messenger.MessageObject r1 = r10.selectedObject
+            org.telegram.tgnet.TLRPC$Message r1 = r1.messageOwner
+            java.io.File r0 = r0.getPathToMessage(r1)
             java.lang.String r0 = r0.toString()
-        L_0x0360:
+        L_0x0375:
             org.telegram.messenger.MessageObject r1 = r10.selectedObject
             int r1 = r1.type
-            if (r1 == r3) goto L_0x0368
-            if (r1 != r8) goto L_0x03a0
-        L_0x0368:
+            if (r1 == r3) goto L_0x037d
+            if (r1 != r8) goto L_0x03b5
+        L_0x037d:
             int r1 = android.os.Build.VERSION.SDK_INT
-            if (r1 < r5) goto L_0x038a
-            if (r1 <= r4) goto L_0x0372
+            if (r1 < r5) goto L_0x039f
+            if (r1 <= r4) goto L_0x0387
             boolean r1 = org.telegram.messenger.BuildVars.NO_SCOPED_STORAGE
-            if (r1 == 0) goto L_0x038a
-        L_0x0372:
+            if (r1 == 0) goto L_0x039f
+        L_0x0387:
             android.app.Activity r1 = r10.getParentActivity()
             int r1 = r1.checkSelfPermission(r6)
-            if (r1 == 0) goto L_0x038a
+            if (r1 == 0) goto L_0x039f
             android.app.Activity r0 = r10.getParentActivity()
             java.lang.String[] r1 = new java.lang.String[r8]
             r1[r7] = r6
             r0.requestPermissions(r1, r2)
             r10.selectedObject = r9
             return
-        L_0x038a:
+        L_0x039f:
             android.app.Activity r1 = r10.getParentActivity()
             org.telegram.messenger.MessageObject r2 = r10.selectedObject
             int r2 = r2.type
-            if (r2 != r3) goto L_0x0395
+            if (r2 != r3) goto L_0x03aa
             r7 = 1
-        L_0x0395:
+        L_0x03aa:
             org.telegram.messenger.MediaController.saveFile(r0, r1, r7, r9, r9)
-            goto L_0x03a0
-        L_0x0399:
+            goto L_0x03b5
+        L_0x03ae:
             java.lang.String r0 = r10.getMessageContent(r0, r7, r8)
             org.telegram.messenger.AndroidUtilities.addToClipboard(r0)
-        L_0x03a0:
+        L_0x03b5:
             r10.selectedObject = r9
             return
         */
@@ -2100,7 +2105,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
             if (!(str2 == null || str2.length() == 0 || !new File(messageObject.messageOwner.attachPath).exists())) {
                 z2 = true;
             }
-            if (z2 || !FileLoader.getPathToMessage(messageObject.messageOwner).exists()) {
+            if (z2 || !getFileLoader().getPathToMessage(messageObject.messageOwner).exists()) {
                 z = z2;
             }
             if (z) {
@@ -2576,6 +2581,10 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
                         return true;
                     }
 
+                    public /* synthetic */ void didLongPressBotButton(ChatMessageCell chatMessageCell, TLRPC$KeyboardButton tLRPC$KeyboardButton) {
+                        ChatMessageCell.ChatMessageCellDelegate.CC.$default$didLongPressBotButton(this, chatMessageCell, tLRPC$KeyboardButton);
+                    }
+
                     public /* synthetic */ boolean didLongPressChannelAvatar(ChatMessageCell chatMessageCell, TLRPC$Chat tLRPC$Chat, int i, float f, float f2) {
                         return ChatMessageCell.ChatMessageCellDelegate.CC.$default$didLongPressChannelAvatar(this, chatMessageCell, tLRPC$Chat, i, f, f2);
                     }
@@ -2655,6 +2664,10 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
 
                     public /* synthetic */ void needReloadPolls() {
                         ChatMessageCell.ChatMessageCellDelegate.CC.$default$needReloadPolls(this);
+                    }
+
+                    public /* synthetic */ void needShowPremiumFeatures() {
+                        ChatMessageCell.ChatMessageCellDelegate.CC.$default$needShowPremiumFeatures(this);
                     }
 
                     public /* synthetic */ void onDiceFinished() {
@@ -2846,8 +2859,8 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
                         EmbedBottomSheet.show(ChannelAdminLogActivity.this.getParentActivity(), messageObject, ChannelAdminLogActivity.this.provider, str2, str3, str4, str, i, i2, false);
                     }
 
-                    /* JADX WARNING: Code restructure failed: missing block: B:49:0x0101, code lost:
-                        if (r9.exists() != false) goto L_0x0105;
+                    /* JADX WARNING: Code restructure failed: missing block: B:49:0x0109, code lost:
+                        if (r9.exists() != false) goto L_0x010d;
                      */
                     /* Code decompiled incorrectly, please refer to instructions dump. */
                     public void didPressImage(org.telegram.ui.Cells.ChatMessageCell r9, float r10, float r11) {
@@ -2870,81 +2883,84 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
                             r2 = r10
                             r2.<init>((android.content.Context) r3, (org.telegram.ui.ActionBar.BaseFragment) r4, (org.telegram.tgnet.TLRPC$InputStickerSet) r5, (org.telegram.tgnet.TLRPC$TL_messages_stickerSet) r6, (org.telegram.ui.Components.StickersAlert.StickersAlertDelegate) r7)
                             r9.showDialog(r10)
-                            goto L_0x01d3
+                            goto L_0x01e3
                         L_0x002b:
                             boolean r9 = r1.isVideo()
-                            if (r9 != 0) goto L_0x01b0
+                            if (r9 != 0) goto L_0x01c0
                             int r9 = r1.type
                             r10 = 1
-                            if (r9 == r10) goto L_0x01b0
+                            if (r9 == r10) goto L_0x01c0
                             if (r9 != 0) goto L_0x003e
                             boolean r9 = r1.isWebpageDocument()
-                            if (r9 == 0) goto L_0x01b0
+                            if (r9 == 0) goto L_0x01c0
                         L_0x003e:
                             boolean r9 = r1.isGif()
                             if (r9 == 0) goto L_0x0046
-                            goto L_0x01b0
+                            goto L_0x01c0
                         L_0x0046:
                             int r9 = r1.type
                             r11 = 3
                             r0 = 0
-                            if (r9 != r11) goto L_0x00b2
-                            org.telegram.tgnet.TLRPC$Message r9 = r1.messageOwner     // Catch:{ Exception -> 0x00a9 }
-                            java.lang.String r9 = r9.attachPath     // Catch:{ Exception -> 0x00a9 }
+                            if (r9 != r11) goto L_0x00ba
+                            org.telegram.tgnet.TLRPC$Message r9 = r1.messageOwner     // Catch:{ Exception -> 0x00b1 }
+                            java.lang.String r9 = r9.attachPath     // Catch:{ Exception -> 0x00b1 }
                             if (r9 == 0) goto L_0x0061
-                            int r9 = r9.length()     // Catch:{ Exception -> 0x00a9 }
+                            int r9 = r9.length()     // Catch:{ Exception -> 0x00b1 }
                             if (r9 == 0) goto L_0x0061
-                            java.io.File r0 = new java.io.File     // Catch:{ Exception -> 0x00a9 }
-                            org.telegram.tgnet.TLRPC$Message r9 = r1.messageOwner     // Catch:{ Exception -> 0x00a9 }
-                            java.lang.String r9 = r9.attachPath     // Catch:{ Exception -> 0x00a9 }
-                            r0.<init>(r9)     // Catch:{ Exception -> 0x00a9 }
+                            java.io.File r0 = new java.io.File     // Catch:{ Exception -> 0x00b1 }
+                            org.telegram.tgnet.TLRPC$Message r9 = r1.messageOwner     // Catch:{ Exception -> 0x00b1 }
+                            java.lang.String r9 = r9.attachPath     // Catch:{ Exception -> 0x00b1 }
+                            r0.<init>(r9)     // Catch:{ Exception -> 0x00b1 }
                         L_0x0061:
                             if (r0 == 0) goto L_0x0069
-                            boolean r9 = r0.exists()     // Catch:{ Exception -> 0x00a9 }
-                            if (r9 != 0) goto L_0x006f
+                            boolean r9 = r0.exists()     // Catch:{ Exception -> 0x00b1 }
+                            if (r9 != 0) goto L_0x0077
                         L_0x0069:
-                            org.telegram.tgnet.TLRPC$Message r9 = r1.messageOwner     // Catch:{ Exception -> 0x00a9 }
-                            java.io.File r0 = org.telegram.messenger.FileLoader.getPathToMessage(r9)     // Catch:{ Exception -> 0x00a9 }
-                        L_0x006f:
-                            android.content.Intent r9 = new android.content.Intent     // Catch:{ Exception -> 0x00a9 }
+                            org.telegram.ui.ChannelAdminLogActivity$ChatActivityAdapter r9 = org.telegram.ui.ChannelAdminLogActivity.ChatActivityAdapter.this     // Catch:{ Exception -> 0x00b1 }
+                            org.telegram.ui.ChannelAdminLogActivity r9 = org.telegram.ui.ChannelAdminLogActivity.this     // Catch:{ Exception -> 0x00b1 }
+                            org.telegram.messenger.FileLoader r9 = r9.getFileLoader()     // Catch:{ Exception -> 0x00b1 }
+                            org.telegram.tgnet.TLRPC$Message r11 = r1.messageOwner     // Catch:{ Exception -> 0x00b1 }
+                            java.io.File r0 = r9.getPathToMessage(r11)     // Catch:{ Exception -> 0x00b1 }
+                        L_0x0077:
+                            android.content.Intent r9 = new android.content.Intent     // Catch:{ Exception -> 0x00b1 }
                             java.lang.String r11 = "android.intent.action.VIEW"
-                            r9.<init>(r11)     // Catch:{ Exception -> 0x00a9 }
-                            int r11 = android.os.Build.VERSION.SDK_INT     // Catch:{ Exception -> 0x00a9 }
+                            r9.<init>(r11)     // Catch:{ Exception -> 0x00b1 }
+                            int r11 = android.os.Build.VERSION.SDK_INT     // Catch:{ Exception -> 0x00b1 }
                             r2 = 24
                             java.lang.String r3 = "video/mp4"
-                            if (r11 < r2) goto L_0x0093
-                            r9.setFlags(r10)     // Catch:{ Exception -> 0x00a9 }
-                            org.telegram.ui.ChannelAdminLogActivity$ChatActivityAdapter r10 = org.telegram.ui.ChannelAdminLogActivity.ChatActivityAdapter.this     // Catch:{ Exception -> 0x00a9 }
-                            org.telegram.ui.ChannelAdminLogActivity r10 = org.telegram.ui.ChannelAdminLogActivity.this     // Catch:{ Exception -> 0x00a9 }
-                            android.app.Activity r10 = r10.getParentActivity()     // Catch:{ Exception -> 0x00a9 }
+                            if (r11 < r2) goto L_0x009b
+                            r9.setFlags(r10)     // Catch:{ Exception -> 0x00b1 }
+                            org.telegram.ui.ChannelAdminLogActivity$ChatActivityAdapter r10 = org.telegram.ui.ChannelAdminLogActivity.ChatActivityAdapter.this     // Catch:{ Exception -> 0x00b1 }
+                            org.telegram.ui.ChannelAdminLogActivity r10 = org.telegram.ui.ChannelAdminLogActivity.this     // Catch:{ Exception -> 0x00b1 }
+                            android.app.Activity r10 = r10.getParentActivity()     // Catch:{ Exception -> 0x00b1 }
                             java.lang.String r11 = "org.telegram.messenger.beta.provider"
-                            android.net.Uri r10 = androidx.core.content.FileProvider.getUriForFile(r10, r11, r0)     // Catch:{ Exception -> 0x00a9 }
-                            r9.setDataAndType(r10, r3)     // Catch:{ Exception -> 0x00a9 }
-                            goto L_0x009a
-                        L_0x0093:
-                            android.net.Uri r10 = android.net.Uri.fromFile(r0)     // Catch:{ Exception -> 0x00a9 }
-                            r9.setDataAndType(r10, r3)     // Catch:{ Exception -> 0x00a9 }
-                        L_0x009a:
-                            org.telegram.ui.ChannelAdminLogActivity$ChatActivityAdapter r10 = org.telegram.ui.ChannelAdminLogActivity.ChatActivityAdapter.this     // Catch:{ Exception -> 0x00a9 }
-                            org.telegram.ui.ChannelAdminLogActivity r10 = org.telegram.ui.ChannelAdminLogActivity.this     // Catch:{ Exception -> 0x00a9 }
-                            android.app.Activity r10 = r10.getParentActivity()     // Catch:{ Exception -> 0x00a9 }
+                            android.net.Uri r10 = androidx.core.content.FileProvider.getUriForFile(r10, r11, r0)     // Catch:{ Exception -> 0x00b1 }
+                            r9.setDataAndType(r10, r3)     // Catch:{ Exception -> 0x00b1 }
+                            goto L_0x00a2
+                        L_0x009b:
+                            android.net.Uri r10 = android.net.Uri.fromFile(r0)     // Catch:{ Exception -> 0x00b1 }
+                            r9.setDataAndType(r10, r3)     // Catch:{ Exception -> 0x00b1 }
+                        L_0x00a2:
+                            org.telegram.ui.ChannelAdminLogActivity$ChatActivityAdapter r10 = org.telegram.ui.ChannelAdminLogActivity.ChatActivityAdapter.this     // Catch:{ Exception -> 0x00b1 }
+                            org.telegram.ui.ChannelAdminLogActivity r10 = org.telegram.ui.ChannelAdminLogActivity.this     // Catch:{ Exception -> 0x00b1 }
+                            android.app.Activity r10 = r10.getParentActivity()     // Catch:{ Exception -> 0x00b1 }
                             r11 = 500(0x1f4, float:7.0E-43)
-                            r10.startActivityForResult(r9, r11)     // Catch:{ Exception -> 0x00a9 }
-                            goto L_0x01d3
-                        L_0x00a9:
+                            r10.startActivityForResult(r9, r11)     // Catch:{ Exception -> 0x00b1 }
+                            goto L_0x01e3
+                        L_0x00b1:
                             org.telegram.ui.ChannelAdminLogActivity$ChatActivityAdapter r9 = org.telegram.ui.ChannelAdminLogActivity.ChatActivityAdapter.this
                             org.telegram.ui.ChannelAdminLogActivity r9 = org.telegram.ui.ChannelAdminLogActivity.this
                             r9.alertUserOpenError(r1)
-                            goto L_0x01d3
-                        L_0x00b2:
+                            goto L_0x01e3
+                        L_0x00ba:
                             r11 = 4
-                            if (r9 != r11) goto L_0x00d2
+                            if (r9 != r11) goto L_0x00da
                             org.telegram.ui.ChannelAdminLogActivity$ChatActivityAdapter r9 = org.telegram.ui.ChannelAdminLogActivity.ChatActivityAdapter.this
                             org.telegram.ui.ChannelAdminLogActivity r9 = org.telegram.ui.ChannelAdminLogActivity.this
                             boolean r9 = org.telegram.messenger.AndroidUtilities.isGoogleMapsInstalled(r9)
-                            if (r9 != 0) goto L_0x00c0
+                            if (r9 != 0) goto L_0x00c8
                             return
-                        L_0x00c0:
+                        L_0x00c8:
                             org.telegram.ui.LocationActivity r9 = new org.telegram.ui.LocationActivity
                             r10 = 0
                             r9.<init>(r10)
@@ -2952,44 +2968,47 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
                             org.telegram.ui.ChannelAdminLogActivity$ChatActivityAdapter r10 = org.telegram.ui.ChannelAdminLogActivity.ChatActivityAdapter.this
                             org.telegram.ui.ChannelAdminLogActivity r10 = org.telegram.ui.ChannelAdminLogActivity.this
                             r10.presentFragment(r9)
-                            goto L_0x01d3
-                        L_0x00d2:
+                            goto L_0x01e3
+                        L_0x00da:
                             r11 = 9
-                            if (r9 == r11) goto L_0x00d8
-                            if (r9 != 0) goto L_0x01d3
-                        L_0x00d8:
+                            if (r9 == r11) goto L_0x00e0
+                            if (r9 != 0) goto L_0x01e3
+                        L_0x00e0:
                             java.lang.String r9 = r1.getDocumentName()
                             java.lang.String r9 = r9.toLowerCase()
                             java.lang.String r11 = "attheme"
                             boolean r9 = r9.endsWith(r11)
-                            if (r9 == 0) goto L_0x019c
+                            if (r9 == 0) goto L_0x01ac
                             org.telegram.tgnet.TLRPC$Message r9 = r1.messageOwner
                             java.lang.String r9 = r9.attachPath
-                            if (r9 == 0) goto L_0x0104
+                            if (r9 == 0) goto L_0x010c
                             int r9 = r9.length()
-                            if (r9 == 0) goto L_0x0104
+                            if (r9 == 0) goto L_0x010c
                             java.io.File r9 = new java.io.File
                             org.telegram.tgnet.TLRPC$Message r11 = r1.messageOwner
                             java.lang.String r11 = r11.attachPath
                             r9.<init>(r11)
                             boolean r11 = r9.exists()
-                            if (r11 == 0) goto L_0x0104
-                            goto L_0x0105
-                        L_0x0104:
+                            if (r11 == 0) goto L_0x010c
+                            goto L_0x010d
+                        L_0x010c:
                             r9 = r0
-                        L_0x0105:
-                            if (r9 != 0) goto L_0x0114
-                            org.telegram.tgnet.TLRPC$Message r11 = r1.messageOwner
-                            java.io.File r11 = org.telegram.messenger.FileLoader.getPathToMessage(r11)
+                        L_0x010d:
+                            if (r9 != 0) goto L_0x0124
+                            org.telegram.ui.ChannelAdminLogActivity$ChatActivityAdapter r11 = org.telegram.ui.ChannelAdminLogActivity.ChatActivityAdapter.this
+                            org.telegram.ui.ChannelAdminLogActivity r11 = org.telegram.ui.ChannelAdminLogActivity.this
+                            org.telegram.messenger.FileLoader r11 = r11.getFileLoader()
+                            org.telegram.tgnet.TLRPC$Message r2 = r1.messageOwner
+                            java.io.File r11 = r11.getPathToMessage(r2)
                             boolean r2 = r11.exists()
-                            if (r2 == 0) goto L_0x0114
+                            if (r2 == 0) goto L_0x0124
                             r9 = r11
-                        L_0x0114:
+                        L_0x0124:
                             org.telegram.ui.ChannelAdminLogActivity$ChatActivityAdapter r11 = org.telegram.ui.ChannelAdminLogActivity.ChatActivityAdapter.this
                             org.telegram.ui.ChannelAdminLogActivity r11 = org.telegram.ui.ChannelAdminLogActivity.this
                             androidx.recyclerview.widget.LinearLayoutManager r11 = r11.chatLayoutManager
                             r2 = -1
-                            if (r11 == 0) goto L_0x017e
+                            if (r11 == 0) goto L_0x018e
                             org.telegram.ui.ChannelAdminLogActivity$ChatActivityAdapter r11 = org.telegram.ui.ChannelAdminLogActivity.ChatActivityAdapter.this
                             org.telegram.ui.ChannelAdminLogActivity r11 = org.telegram.ui.ChannelAdminLogActivity.this
                             androidx.recyclerview.widget.LinearLayoutManager r11 = r11.chatLayoutManager
@@ -2999,7 +3018,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
                             androidx.recyclerview.widget.LinearLayoutManager r3 = r3.chatLayoutManager
                             int r3 = r3.getItemCount()
                             int r3 = r3 - r10
-                            if (r11 >= r3) goto L_0x0177
+                            if (r11 >= r3) goto L_0x0187
                             org.telegram.ui.ChannelAdminLogActivity$ChatActivityAdapter r11 = org.telegram.ui.ChannelAdminLogActivity.ChatActivityAdapter.this
                             org.telegram.ui.ChannelAdminLogActivity r11 = org.telegram.ui.ChannelAdminLogActivity.this
                             androidx.recyclerview.widget.LinearLayoutManager r3 = r11.chatLayoutManager
@@ -3013,48 +3032,48 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
                             int r3 = r3.scrollToPositionOnRecreate
                             androidx.recyclerview.widget.RecyclerView$ViewHolder r11 = r11.findViewHolderForAdapterPosition(r3)
                             org.telegram.ui.Components.RecyclerListView$Holder r11 = (org.telegram.ui.Components.RecyclerListView.Holder) r11
-                            if (r11 == 0) goto L_0x016f
+                            if (r11 == 0) goto L_0x017f
                             org.telegram.ui.ChannelAdminLogActivity$ChatActivityAdapter r3 = org.telegram.ui.ChannelAdminLogActivity.ChatActivityAdapter.this
                             org.telegram.ui.ChannelAdminLogActivity r3 = org.telegram.ui.ChannelAdminLogActivity.this
                             android.view.View r11 = r11.itemView
                             int r11 = r11.getTop()
                             int unused = r3.scrollToOffsetOnRecreate = r11
-                            goto L_0x017e
-                        L_0x016f:
+                            goto L_0x018e
+                        L_0x017f:
                             org.telegram.ui.ChannelAdminLogActivity$ChatActivityAdapter r11 = org.telegram.ui.ChannelAdminLogActivity.ChatActivityAdapter.this
                             org.telegram.ui.ChannelAdminLogActivity r11 = org.telegram.ui.ChannelAdminLogActivity.this
                             int unused = r11.scrollToPositionOnRecreate = r2
-                            goto L_0x017e
-                        L_0x0177:
+                            goto L_0x018e
+                        L_0x0187:
                             org.telegram.ui.ChannelAdminLogActivity$ChatActivityAdapter r11 = org.telegram.ui.ChannelAdminLogActivity.ChatActivityAdapter.this
                             org.telegram.ui.ChannelAdminLogActivity r11 = org.telegram.ui.ChannelAdminLogActivity.this
                             int unused = r11.scrollToPositionOnRecreate = r2
-                        L_0x017e:
+                        L_0x018e:
                             java.lang.String r11 = r1.getDocumentName()
                             org.telegram.ui.ActionBar.Theme$ThemeInfo r9 = org.telegram.ui.ActionBar.Theme.applyThemeFile(r9, r11, r0, r10)
-                            if (r9 == 0) goto L_0x0195
+                            if (r9 == 0) goto L_0x01a5
                             org.telegram.ui.ChannelAdminLogActivity$ChatActivityAdapter r10 = org.telegram.ui.ChannelAdminLogActivity.ChatActivityAdapter.this
                             org.telegram.ui.ChannelAdminLogActivity r10 = org.telegram.ui.ChannelAdminLogActivity.this
                             org.telegram.ui.ThemePreviewActivity r11 = new org.telegram.ui.ThemePreviewActivity
                             r11.<init>(r9)
                             r10.presentFragment(r11)
                             return
-                        L_0x0195:
+                        L_0x01a5:
                             org.telegram.ui.ChannelAdminLogActivity$ChatActivityAdapter r9 = org.telegram.ui.ChannelAdminLogActivity.ChatActivityAdapter.this
                             org.telegram.ui.ChannelAdminLogActivity r9 = org.telegram.ui.ChannelAdminLogActivity.this
                             int unused = r9.scrollToPositionOnRecreate = r2
-                        L_0x019c:
-                            org.telegram.ui.ChannelAdminLogActivity$ChatActivityAdapter r9 = org.telegram.ui.ChannelAdminLogActivity.ChatActivityAdapter.this     // Catch:{ Exception -> 0x01a8 }
-                            org.telegram.ui.ChannelAdminLogActivity r9 = org.telegram.ui.ChannelAdminLogActivity.this     // Catch:{ Exception -> 0x01a8 }
-                            android.app.Activity r9 = r9.getParentActivity()     // Catch:{ Exception -> 0x01a8 }
-                            org.telegram.messenger.AndroidUtilities.openForView((org.telegram.messenger.MessageObject) r1, (android.app.Activity) r9, (org.telegram.ui.ActionBar.Theme.ResourcesProvider) r0)     // Catch:{ Exception -> 0x01a8 }
-                            goto L_0x01d3
-                        L_0x01a8:
+                        L_0x01ac:
+                            org.telegram.ui.ChannelAdminLogActivity$ChatActivityAdapter r9 = org.telegram.ui.ChannelAdminLogActivity.ChatActivityAdapter.this     // Catch:{ Exception -> 0x01b8 }
+                            org.telegram.ui.ChannelAdminLogActivity r9 = org.telegram.ui.ChannelAdminLogActivity.this     // Catch:{ Exception -> 0x01b8 }
+                            android.app.Activity r9 = r9.getParentActivity()     // Catch:{ Exception -> 0x01b8 }
+                            org.telegram.messenger.AndroidUtilities.openForView((org.telegram.messenger.MessageObject) r1, (android.app.Activity) r9, (org.telegram.ui.ActionBar.Theme.ResourcesProvider) r0)     // Catch:{ Exception -> 0x01b8 }
+                            goto L_0x01e3
+                        L_0x01b8:
                             org.telegram.ui.ChannelAdminLogActivity$ChatActivityAdapter r9 = org.telegram.ui.ChannelAdminLogActivity.ChatActivityAdapter.this
                             org.telegram.ui.ChannelAdminLogActivity r9 = org.telegram.ui.ChannelAdminLogActivity.this
                             r9.alertUserOpenError(r1)
-                            goto L_0x01d3
-                        L_0x01b0:
+                            goto L_0x01e3
+                        L_0x01c0:
                             org.telegram.ui.PhotoViewer r9 = org.telegram.ui.PhotoViewer.getInstance()
                             org.telegram.ui.ChannelAdminLogActivity$ChatActivityAdapter r10 = org.telegram.ui.ChannelAdminLogActivity.ChatActivityAdapter.this
                             org.telegram.ui.ChannelAdminLogActivity r10 = org.telegram.ui.ChannelAdminLogActivity.this
@@ -3068,7 +3087,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
                             org.telegram.ui.ChannelAdminLogActivity r9 = org.telegram.ui.ChannelAdminLogActivity.this
                             org.telegram.ui.PhotoViewer$PhotoViewerProvider r7 = r9.provider
                             r0.openPhoto((org.telegram.messenger.MessageObject) r1, (org.telegram.ui.ChatActivity) r2, (long) r3, (long) r5, (org.telegram.ui.PhotoViewer.PhotoViewerProvider) r7)
-                        L_0x01d3:
+                        L_0x01e3:
                             return
                         */
                         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ChannelAdminLogActivity.ChatActivityAdapter.AnonymousClass1.didPressImage(org.telegram.ui.Cells.ChatMessageCell, float, float):void");
@@ -3762,10 +3781,6 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
         arrayList.add(new ThemeDescription(this.chatListView, ThemeDescription.FLAG_BACKGROUNDFILTER, new Class[]{ChatMessageCell.class}, (Paint) null, new Drawable[]{drawableArr11[10][1], drawableArr11[11][1]}, (ThemeDescription.ThemeDescriptionDelegate) null, "chat_inLoaderPhotoSelected"));
         Drawable[][] drawableArr12 = Theme.chat_photoStatesDrawables;
         arrayList.add(new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, (Paint) null, new Drawable[]{drawableArr12[10][1], drawableArr12[11][1]}, (ThemeDescription.ThemeDescriptionDelegate) null, "chat_inLoaderPhotoIconSelected"));
-        arrayList.add(new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, (Paint) null, new Drawable[]{Theme.chat_photoStatesDrawables[9][0]}, (ThemeDescription.ThemeDescriptionDelegate) null, "chat_outFileIcon"));
-        arrayList.add(new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, (Paint) null, new Drawable[]{Theme.chat_photoStatesDrawables[9][1]}, (ThemeDescription.ThemeDescriptionDelegate) null, "chat_outFileSelectedIcon"));
-        arrayList.add(new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, (Paint) null, new Drawable[]{Theme.chat_photoStatesDrawables[12][0]}, (ThemeDescription.ThemeDescriptionDelegate) null, "chat_inFileIcon"));
-        arrayList.add(new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, (Paint) null, new Drawable[]{Theme.chat_photoStatesDrawables[12][1]}, (ThemeDescription.ThemeDescriptionDelegate) null, "chat_inFileSelectedIcon"));
         arrayList.add(new ThemeDescription(this.chatListView, ThemeDescription.FLAG_BACKGROUNDFILTER, new Class[]{ChatMessageCell.class}, (Paint) null, new Drawable[]{Theme.chat_contactDrawable[0]}, (ThemeDescription.ThemeDescriptionDelegate) null, "chat_inContactBackground"));
         arrayList.add(new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, (Paint) null, new Drawable[]{Theme.chat_contactDrawable[0]}, (ThemeDescription.ThemeDescriptionDelegate) null, "chat_inContactIcon"));
         arrayList.add(new ThemeDescription(this.chatListView, ThemeDescription.FLAG_BACKGROUNDFILTER, new Class[]{ChatMessageCell.class}, (Paint) null, new Drawable[]{Theme.chat_contactDrawable[1]}, (ThemeDescription.ThemeDescriptionDelegate) null, "chat_outContactBackground"));
@@ -3784,8 +3799,6 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
         arrayList.add(new ThemeDescription((View) this.chatListView, ThemeDescription.FLAG_TEXTCOLOR, new Class[]{ChatUnreadCell.class}, new String[]{"textView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "chat_unreadMessagesStartText"));
         arrayList.add(new ThemeDescription(this.progressView2, ThemeDescription.FLAG_SERVICEBACKGROUND, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "chat_serviceBackground"));
         arrayList.add(new ThemeDescription(this.emptyView, ThemeDescription.FLAG_SERVICEBACKGROUND, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "chat_serviceBackground"));
-        arrayList.add(new ThemeDescription((View) this.chatListView, ThemeDescription.FLAG_SERVICEBACKGROUND, new Class[]{ChatLoadingCell.class}, new String[]{"textView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "chat_serviceBackground"));
-        arrayList.add(new ThemeDescription((View) this.chatListView, ThemeDescription.FLAG_PROGRESSBAR, new Class[]{ChatLoadingCell.class}, new String[]{"textView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "chat_serviceText"));
         ChatAvatarContainer chatAvatarContainer = this.avatarContainer;
         ImageView imageView = null;
         arrayList.add(new ThemeDescription(chatAvatarContainer != null ? chatAvatarContainer.getTimeItem() : null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "chat_secretTimerBackground"));

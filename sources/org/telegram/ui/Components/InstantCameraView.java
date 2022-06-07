@@ -53,6 +53,7 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.ArrayBlockingQueue;
@@ -214,7 +215,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
         super(context);
         Context context2 = context;
         Theme.ResourcesProvider resourcesProvider3 = resourcesProvider2;
-        this.aspectRatio = SharedConfig.roundCamera16to9 ? new Size(16, 9) : new Size(4, 3);
+        this.aspectRatio = SharedConfig.roundCamera16to9 ? new Size(1, 1) : new Size(4, 3);
         this.mMVPMatrix = new float[16];
         this.mSTMatrix = new float[16];
         this.moldSTMatrix = new float[16];
@@ -975,8 +976,8 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
         }
         ArrayList<Size> previewSizes = cameraInfo3.getPreviewSizes();
         ArrayList<Size> pictureSizes = this.selectedCamera.getPictureSizes();
-        this.previewSize = CameraController.chooseOptimalSize(previewSizes, 480, 270, this.aspectRatio);
-        Size chooseOptimalSize = CameraController.chooseOptimalSize(pictureSizes, 480, 270, this.aspectRatio);
+        this.previewSize = chooseOptimalSize(previewSizes);
+        Size chooseOptimalSize = chooseOptimalSize(pictureSizes);
         this.pictureSize = chooseOptimalSize;
         if (this.previewSize.mWidth != chooseOptimalSize.mWidth) {
             for (int size2 = previewSizes.size() - 1; size2 >= 0; size2--) {
@@ -1031,13 +1032,37 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
         return true;
     }
 
+    private Size chooseOptimalSize(ArrayList<Size> arrayList) {
+        ArrayList arrayList2 = new ArrayList();
+        for (int i = 0; i < arrayList.size(); i++) {
+            if (Math.max(arrayList.get(i).mHeight, arrayList.get(i).mHeight) <= 1200 && Math.min(arrayList.get(i).mHeight, arrayList.get(i).mHeight) >= 320) {
+                arrayList2.add(arrayList.get(i));
+            }
+        }
+        if (arrayList2.isEmpty() || SharedConfig.getDevicePerformanceClass() == 0) {
+            return CameraController.chooseOptimalSize(arrayList, 480, 270, this.aspectRatio);
+        }
+        Collections.sort(arrayList2, InstantCameraView$$ExternalSyntheticLambda6.INSTANCE);
+        return (Size) arrayList2.get(0);
+    }
+
+    /* access modifiers changed from: private */
+    public static /* synthetic */ int lambda$chooseOptimalSize$2(Size size2, Size size3) {
+        float min = ((float) Math.min(size2.mHeight, size2.mWidth)) / ((float) Math.max(size2.mHeight, size2.mWidth));
+        float min2 = ((float) Math.min(size3.mHeight, size3.mWidth)) / ((float) Math.max(size3.mHeight, size3.mWidth));
+        if (min < min2) {
+            return 1;
+        }
+        return min > min2 ? -1 : 0;
+    }
+
     /* access modifiers changed from: private */
     public void createCamera(SurfaceTexture surfaceTexture) {
         AndroidUtilities.runOnUIThread(new InstantCameraView$$ExternalSyntheticLambda5(this, surfaceTexture));
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$createCamera$4(SurfaceTexture surfaceTexture) {
+    public /* synthetic */ void lambda$createCamera$5(SurfaceTexture surfaceTexture) {
         if (this.cameraThread != null) {
             if (BuildVars.LOGS_ENABLED) {
                 FileLog.d("create camera session");
@@ -1046,12 +1071,12 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
             CameraSession cameraSession2 = new CameraSession(this.selectedCamera, this.previewSize, this.pictureSize, 256, true);
             this.cameraSession = cameraSession2;
             this.cameraThread.setCurrentSession(cameraSession2);
-            CameraController.getInstance().openRound(this.cameraSession, surfaceTexture, new InstantCameraView$$ExternalSyntheticLambda3(this), new InstantCameraView$$ExternalSyntheticLambda4(this));
+            CameraController.getInstance().openRound(this.cameraSession, surfaceTexture, new InstantCameraView$$ExternalSyntheticLambda4(this), new InstantCameraView$$ExternalSyntheticLambda3(this));
         }
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$createCamera$2() {
+    public /* synthetic */ void lambda$createCamera$3() {
         if (this.cameraSession != null) {
             if (BuildVars.LOGS_ENABLED) {
                 FileLog.d("camera initied");
@@ -1061,7 +1086,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$createCamera$3() {
+    public /* synthetic */ void lambda$createCamera$4() {
         this.cameraThread.setCurrentSession(this.cameraSession);
     }
 
@@ -1333,7 +1358,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
         }
 
         public void reinitForNewCamera() {
-            Handler handler = InstantCameraView.this.getHandler();
+            Handler handler = getHandler();
             if (handler != null) {
                 sendMessage(handler.obtainMessage(2), 0);
             }
@@ -1361,7 +1386,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
         }
 
         public void setCurrentSession(CameraSession cameraSession) {
-            Handler handler = InstantCameraView.this.getHandler();
+            Handler handler = getHandler();
             if (handler != null) {
                 sendMessage(handler.obtainMessage(3, cameraSession), 0);
             }
@@ -1449,8 +1474,8 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
                     boolean unused2 = InstantCameraView.this.cameraReady = false;
                     GLES20.glGenTextures(1, InstantCameraView.this.cameraTexture, 0);
                     GLES20.glBindTexture(36197, InstantCameraView.this.cameraTexture[0]);
-                    GLES20.glTexParameteri(36197, 10241, 9729);
-                    GLES20.glTexParameteri(36197, 10240, 9729);
+                    GLES20.glTexParameteri(36197, 10241, 9728);
+                    GLES20.glTexParameteri(36197, 10240, 9728);
                     GLES20.glTexParameteri(36197, 10242, 33071);
                     GLES20.glTexParameteri(36197, 10243, 33071);
                     SurfaceTexture surfaceTexture3 = new SurfaceTexture(InstantCameraView.this.cameraTexture[0]);
@@ -1485,14 +1510,14 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
         }
 
         public void shutdown(int i) {
-            Handler handler = InstantCameraView.this.getHandler();
+            Handler handler = getHandler();
             if (handler != null) {
                 sendMessage(handler.obtainMessage(1, i, 0), 0);
             }
         }
 
         public void requestRender() {
-            Handler handler = InstantCameraView.this.getHandler();
+            Handler handler = getHandler();
             if (handler != null) {
                 sendMessage(handler.obtainMessage(0, this.cameraId), 0);
             }
@@ -1744,7 +1769,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
                         r2[r10] = r12
                         r2 = 1000000(0xvar_, float:1.401298E-39)
                         int r12 = r12 * r2
-                        r2 = 44100(0xaCLASSNAME, float:6.1797E-41)
+                        r2 = 48000(0xbb80, float:6.7262E-41)
                         int r12 = r12 / r2
                         int r12 = r12 / 2
                         long r2 = (long) r12
@@ -2750,7 +2775,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
         /* access modifiers changed from: private */
         public void prepareEncoder() {
             try {
-                int minBufferSize = AudioRecord.getMinBufferSize(44100, 16, 2);
+                int minBufferSize = AudioRecord.getMinBufferSize(48000, 16, 2);
                 if (minBufferSize <= 0) {
                     minBufferSize = 3584;
                 }
@@ -2762,7 +2787,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
                     this.buffers.add(new AudioBufferInfo());
                 }
                 AudioRecord audioRecord = r9;
-                AudioRecord audioRecord2 = new AudioRecord(0, 44100, 16, 2, i);
+                AudioRecord audioRecord2 = new AudioRecord(0, 48000, 16, 2, i);
                 this.audioRecorder = audioRecord;
                 audioRecord.startRecording();
                 if (BuildVars.LOGS_ENABLED) {
@@ -2775,7 +2800,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
                 this.videoBufferInfo = new MediaCodec.BufferInfo();
                 MediaFormat mediaFormat = new MediaFormat();
                 mediaFormat.setString("mime", "audio/mp4a-latm");
-                mediaFormat.setInteger("sample-rate", 44100);
+                mediaFormat.setInteger("sample-rate", 48000);
                 mediaFormat.setInteger("channel-count", 1);
                 mediaFormat.setInteger("bitrate", MessagesController.getInstance(InstantCameraView.this.currentAccount).roundAudioBitrate * 1024);
                 mediaFormat.setInteger("max-input-size", 20480);
@@ -2828,7 +2853,8 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
                                 } else {
                                     GLES20.glBlendFunc(770, 771);
                                     int access$1500 = InstantCameraView.this.loadShader(35633, "uniform mat4 uMVPMatrix;\nuniform mat4 uSTMatrix;\nattribute vec4 aPosition;\nattribute vec4 aTextureCoord;\nvarying vec2 vTextureCoord;\nvoid main() {\n   gl_Position = uMVPMatrix * aPosition;\n   vTextureCoord = (uSTMatrix * aTextureCoord).xy;\n}\n");
-                                    int access$15002 = InstantCameraView.this.loadShader(35632, "#extension GL_OES_EGL_image_external : require\nprecision highp float;\nvarying vec2 vTextureCoord;\nuniform float scaleX;\nuniform float scaleY;\nuniform float alpha;\nuniform samplerExternalOES sTexture;\nvoid main() {\n   vec2 coord = vec2((vTextureCoord.x - 0.5) * scaleX, (vTextureCoord.y - 0.5) * scaleY);\n   float coef = ceil(clamp(0.2601 - dot(coord, coord), 0.0, 1.0));\n   vec3 color = texture2D(sTexture, vTextureCoord).rgb * coef + (1.0 - step(0.001, coef));\n   gl_FragColor = vec4(color * alpha, alpha);\n}\n");
+                                    InstantCameraView instantCameraView = InstantCameraView.this;
+                                    int access$15002 = instantCameraView.loadShader(35632, instantCameraView.createFragmentShader(instantCameraView.previewSize));
                                     if (access$1500 != 0 && access$15002 != 0) {
                                         int glCreateProgram = GLES20.glCreateProgram();
                                         this.drawProgram = glCreateProgram;
@@ -3095,6 +3121,14 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
         }
     }
 
+    /* access modifiers changed from: private */
+    public String createFragmentShader(Size size2) {
+        if (SharedConfig.getDevicePerformanceClass() == 0 || ((float) Math.max(size2.getHeight(), size2.getWidth())) * 0.7f < ((float) MessagesController.getInstance(this.currentAccount).roundVideoSize)) {
+            return "#extension GL_OES_EGL_image_external : require\nprecision highp float;\nvarying vec2 vTextureCoord;\nuniform float scaleX;\nuniform float scaleY;\nuniform float alpha;\nuniform samplerExternalOES sTexture;\nvoid main() {\n   vec2 coord = vec2((vTextureCoord.x - 0.5) * scaleX, (vTextureCoord.y - 0.5) * scaleY);\n   float coef = ceil(clamp(0.2601 - dot(coord, coord), 0.0, 1.0));\n   vec3 color = texture2D(sTexture, vTextureCoord).rgb * coef + (1.0 - step(0.001, coef));\n   gl_FragColor = vec4(color * alpha, alpha);\n}\n";
+        }
+        return "#extension GL_OES_EGL_image_external : require\nprecision highp float;\nvarying vec2 vTextureCoord;\nuniform float scaleX;\nuniform float scaleY;\nuniform float alpha;\nconst float kernel = 1.0;\nconst float pixelSizeX = 1.0 / " + size2.getWidth() + ".0;\nconst float pixelSizeY = 1.0 / " + size2.getHeight() + ".0;\nuniform samplerExternalOES sTexture;\nvoid main() {\n   vec3 accumulation = vec3(0);\n   vec3 weightsum = vec3(0);\n   for (float x = -kernel; x <= kernel; x++){\n       for (float y = -kernel; y <= kernel; y++){\n           accumulation += texture2D(sTexture, vTextureCoord + vec2(x * pixelSizeX, y * pixelSizeY)).xyz;\n           weightsum += 1.0;\n       }\n   }\n   vec4 textColor = vec4(accumulation / weightsum, 1.0);\n   vec2 coord = vec2((vTextureCoord.x - 0.5) * scaleX, (vTextureCoord.y - 0.5) * scaleY);\n   float coef = ceil(clamp(0.2601 - dot(coord, coord), 0.0, 1.0));\n   vec3 color = textColor.rgb * coef + (1.0 - step(0.001, coef));\n   gl_FragColor = vec4(color * alpha, alpha);\n}\n";
+    }
+
     public class InstantViewCameraContainer extends FrameLayout {
         float imageProgress;
         ImageReceiver imageReceiver;
@@ -3247,7 +3281,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$finishZoom$5(ValueAnimator valueAnimator) {
+    public /* synthetic */ void lambda$finishZoom$6(ValueAnimator valueAnimator) {
         CameraSession cameraSession2 = this.cameraSession;
         if (cameraSession2 != null) {
             cameraSession2.setZoom(((Float) valueAnimator.getAnimatedValue()).floatValue());

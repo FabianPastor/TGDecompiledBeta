@@ -59,6 +59,7 @@ import org.telegram.ui.Components.EditTextBoldCursor;
 import org.telegram.ui.Components.EmptyTextProgressView;
 import org.telegram.ui.Components.GroupCreateSpan;
 import org.telegram.ui.Components.LayoutHelper;
+import org.telegram.ui.Components.Premium.LimitReachedBottomSheet;
 import org.telegram.ui.Components.RecyclerListView;
 
 public class FilterUsersActivity extends BaseFragment implements NotificationCenter.NotificationCenterDelegate, View.OnClickListener {
@@ -621,7 +622,7 @@ public class FilterUsersActivity extends BaseFragment implements NotificationCen
         this.listView.setVerticalScrollbarPosition(LocaleController.isRTL ? 1 : 2);
         this.listView.addItemDecoration(new ItemDecoration());
         viewGroup.addView(this.listView);
-        this.listView.setOnItemClickListener((RecyclerListView.OnItemClickListener) new FilterUsersActivity$$ExternalSyntheticLambda3(this));
+        this.listView.setOnItemClickListener((RecyclerListView.OnItemClickListener) new FilterUsersActivity$$ExternalSyntheticLambda3(this, context));
         this.listView.setOnScrollListener(new RecyclerView.OnScrollListener() {
             public void onScrollStateChanged(RecyclerView recyclerView, int i) {
                 if (i == 1) {
@@ -727,7 +728,7 @@ public class FilterUsersActivity extends BaseFragment implements NotificationCen
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$createView$1(View view, int i) {
+    public /* synthetic */ void lambda$createView$1(Context context, View view, int i) {
         long j;
         int i2;
         if (view instanceof GroupCreateUserCell) {
@@ -777,7 +778,7 @@ public class FilterUsersActivity extends BaseFragment implements NotificationCen
             boolean z2 = this.selectedContacts.indexOfKey(j) >= 0;
             if (z2) {
                 this.spansContainer.removeSpan(this.selectedContacts.get(j));
-            } else if (z || this.selectedCount < 100) {
+            } else if ((z || getUserConfig().isPremium() || this.selectedCount < MessagesController.getInstance(this.currentAccount).dialogFiltersChatsLimitDefault) && this.selectedCount < MessagesController.getInstance(this.currentAccount).dialogFiltersChatsLimitPremium) {
                 if (object instanceof TLRPC$User) {
                     MessagesController.getInstance(this.currentAccount).putUser((TLRPC$User) object, !this.searching);
                 } else if (object instanceof TLRPC$Chat) {
@@ -787,6 +788,9 @@ public class FilterUsersActivity extends BaseFragment implements NotificationCen
                 this.spansContainer.addSpan(groupCreateSpan, true);
                 groupCreateSpan.setOnClickListener(this);
             } else {
+                LimitReachedBottomSheet limitReachedBottomSheet = new LimitReachedBottomSheet(this, context, 4, this.currentAccount);
+                limitReachedBottomSheet.setCurrentValue(this.selectedCount);
+                showDialog(limitReachedBottomSheet);
                 return;
             }
             updateHint();
@@ -985,12 +989,13 @@ public class FilterUsersActivity extends BaseFragment implements NotificationCen
 
     /* access modifiers changed from: private */
     public void updateHint() {
-        int i = this.selectedCount;
-        if (i == 0) {
-            this.actionBar.setSubtitle(LocaleController.formatString("MembersCountZero", NUM, LocaleController.formatPluralString("Chats", 100)));
-            return;
+        int i = getUserConfig().isPremium() ? getMessagesController().dialogFiltersChatsLimitPremium : getMessagesController().dialogFiltersChatsLimitDefault;
+        int i2 = this.selectedCount;
+        if (i2 == 0) {
+            this.actionBar.setSubtitle(LocaleController.formatString("MembersCountZero", NUM, LocaleController.formatPluralString("Chats", i, new Object[0])));
+        } else {
+            this.actionBar.setSubtitle(String.format(LocaleController.getPluralString("MembersCountSelected", i2), new Object[]{Integer.valueOf(this.selectedCount), Integer.valueOf(i)}));
         }
-        this.actionBar.setSubtitle(String.format(LocaleController.getPluralString("MembersCountSelected", i), new Object[]{Integer.valueOf(this.selectedCount), 100}));
     }
 
     public void setDelegate(FilterUsersActivityDelegate filterUsersActivityDelegate) {
@@ -1119,13 +1124,13 @@ public class FilterUsersActivity extends BaseFragment implements NotificationCen
                 android.view.View r1 = r1.itemView
                 org.telegram.ui.Cells.GraySectionCell r1 = (org.telegram.ui.Cells.GraySectionCell) r1
                 if (r2 != 0) goto L_0x0026
-                r2 = 2131625739(0x7f0e070b, float:1.8878694E38)
+                r2 = 2131625831(0x7f0e0767, float:1.8878881E38)
                 java.lang.String r3 = "FilterChatTypes"
                 java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
                 r1.setText(r2)
                 goto L_0x0239
             L_0x0026:
-                r2 = 2131625740(0x7f0e070c, float:1.8878696E38)
+                r2 = 2131625832(0x7f0e0768, float:1.8878883E38)
                 java.lang.String r3 = "FilterChats"
                 java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
                 r1.setText(r2)
@@ -1252,7 +1257,7 @@ public class FilterUsersActivity extends BaseFragment implements NotificationCen
                 boolean r3 = r3.isInclude
                 if (r3 == 0) goto L_0x017d
                 if (r2 != r5) goto L_0x013d
-                r2 = 2131625745(0x7f0e0711, float:1.8878707E38)
+                r2 = 2131625837(0x7f0e076d, float:1.8878893E38)
                 java.lang.String r3 = "FilterContacts"
                 java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
                 int r3 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_CONTACTS
@@ -1260,7 +1265,7 @@ public class FilterUsersActivity extends BaseFragment implements NotificationCen
                 goto L_0x01aa
             L_0x013d:
                 if (r2 != r4) goto L_0x014d
-                r2 = 2131625775(0x7f0e072f, float:1.8878767E38)
+                r2 = 2131625867(0x7f0e078b, float:1.8878954E38)
                 java.lang.String r3 = "FilterNonContacts"
                 java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
                 int r3 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_NON_CONTACTS
@@ -1269,7 +1274,7 @@ public class FilterUsersActivity extends BaseFragment implements NotificationCen
             L_0x014d:
                 r3 = 3
                 if (r2 != r3) goto L_0x015e
-                r2 = 2131625762(0x7f0e0722, float:1.8878741E38)
+                r2 = 2131625854(0x7f0e077e, float:1.8878928E38)
                 java.lang.String r3 = "FilterGroups"
                 java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
                 int r3 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_GROUPS
@@ -1278,14 +1283,14 @@ public class FilterUsersActivity extends BaseFragment implements NotificationCen
             L_0x015e:
                 r3 = 4
                 if (r2 != r3) goto L_0x016f
-                r2 = 2131625736(0x7f0e0708, float:1.8878688E38)
+                r2 = 2131625828(0x7f0e0764, float:1.8878875E38)
                 java.lang.String r3 = "FilterChannels"
                 java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
                 int r3 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_CHANNELS
                 java.lang.String r4 = "channels"
                 goto L_0x01aa
             L_0x016f:
-                r2 = 2131625735(0x7f0e0707, float:1.8878686E38)
+                r2 = 2131625827(0x7f0e0763, float:1.8878873E38)
                 java.lang.String r3 = "FilterBots"
                 java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
                 int r3 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_BOTS
@@ -1293,7 +1298,7 @@ public class FilterUsersActivity extends BaseFragment implements NotificationCen
                 goto L_0x01aa
             L_0x017d:
                 if (r2 != r5) goto L_0x018d
-                r2 = 2131625765(0x7f0e0725, float:1.8878747E38)
+                r2 = 2131625857(0x7f0e0781, float:1.8878934E38)
                 java.lang.String r3 = "FilterMuted"
                 java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
                 int r3 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_MUTED
@@ -1301,14 +1306,14 @@ public class FilterUsersActivity extends BaseFragment implements NotificationCen
                 goto L_0x01aa
             L_0x018d:
                 if (r2 != r4) goto L_0x019d
-                r2 = 2131625776(0x7f0e0730, float:1.887877E38)
+                r2 = 2131625868(0x7f0e078c, float:1.8878956E38)
                 java.lang.String r3 = "FilterRead"
                 java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
                 int r3 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_READ
                 java.lang.String r4 = "read"
                 goto L_0x01aa
             L_0x019d:
-                r2 = 2131625732(0x7f0e0704, float:1.887868E38)
+                r2 = 2131625824(0x7f0e0760, float:1.8878867E38)
                 java.lang.String r3 = "FilterArchived"
                 java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
                 int r3 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_ARCHIVED

@@ -3,18 +3,18 @@ package j$.util.stream;
 import java.util.Arrays;
 
 final class P3 extends D3 {
-    private double[] c;
+    private int[] c;
     private int d;
 
-    P3(CLASSNAMEn3 n3Var) {
-        super(n3Var);
+    P3(CLASSNAMEm3 m3Var) {
+        super(m3Var);
     }
 
-    public void accept(double d2) {
-        double[] dArr = this.c;
-        int i = this.d;
-        this.d = i + 1;
-        dArr[i] = d2;
+    public void accept(int i) {
+        int[] iArr = this.c;
+        int i2 = this.d;
+        this.d = i2 + 1;
+        iArr[i2] = i;
     }
 
     public void m() {
@@ -38,7 +38,7 @@ final class P3 extends D3 {
 
     public void n(long j) {
         if (j < NUM) {
-            this.c = new double[((int) j)];
+            this.c = new int[((int) j)];
             return;
         }
         throw new IllegalArgumentException("Stream size exceeds max array size");

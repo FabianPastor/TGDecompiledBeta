@@ -1,15 +1,10 @@
 package j$.util.stream;
 
 import j$.util.CLASSNAMEa;
-import j$.util.function.Consumer;
-import j$.util.function.p;
-import j$.util.function.q;
 import j$.util.w;
-import j$.util.y;
+import java.util.Comparator;
 
-final class H4 extends I4 implements w, q {
-    long e;
-
+abstract class H4 extends J4 implements w {
     H4(w wVar, long j, long j2) {
         super(wVar, j, j2);
     }
@@ -18,35 +13,67 @@ final class H4 extends I4 implements w, q {
         super(wVar, h4);
     }
 
-    public void accept(long j) {
-        this.e = j;
+    /* renamed from: forEachRemaining */
+    public void e(Object obj) {
+        obj.getClass();
+        CLASSNAMEj4 j4Var = null;
+        while (true) {
+            int r = r();
+            if (r == 1) {
+                return;
+            }
+            if (r == 2) {
+                if (j4Var == null) {
+                    j4Var = t(128);
+                } else {
+                    j4Var.b = 0;
+                }
+                long j = 0;
+                while (((w) this.a).tryAdvance(j4Var)) {
+                    j++;
+                    if (j >= 128) {
+                        break;
+                    }
+                }
+                if (j != 0) {
+                    j4Var.b(obj, p(j));
+                } else {
+                    return;
+                }
+            } else {
+                ((w) this.a).forEachRemaining(obj);
+                return;
+            }
+        }
     }
 
-    public /* synthetic */ boolean b(Consumer consumer) {
-        return CLASSNAMEa.l(this, consumer);
+    public Comparator getComparator() {
+        throw new IllegalStateException();
     }
 
-    public q f(q qVar) {
-        qVar.getClass();
-        return new p(this, qVar);
+    public /* synthetic */ long getExactSizeIfKnown() {
+        return CLASSNAMEa.e(this);
     }
 
-    public /* synthetic */ void forEachRemaining(Consumer consumer) {
-        CLASSNAMEa.d(this, consumer);
+    public /* synthetic */ boolean hasCharacteristics(int i) {
+        return CLASSNAMEa.f(this, i);
     }
 
     /* access modifiers changed from: protected */
-    public y q(y yVar) {
-        return new H4((w) yVar, this);
-    }
+    public abstract void s(Object obj);
 
     /* access modifiers changed from: protected */
-    public void s(Object obj) {
-        ((q) obj).accept(this.e);
-    }
+    public abstract CLASSNAMEj4 t(int i);
 
-    /* access modifiers changed from: protected */
-    public CLASSNAMEk4 t(int i) {
-        return new CLASSNAMEj4(i);
+    /* renamed from: tryAdvance */
+    public boolean k(Object obj) {
+        obj.getClass();
+        while (r() != 1 && ((w) this.a).tryAdvance(this)) {
+            if (p(1) == 1) {
+                s(obj);
+                return true;
+            }
+        }
+        return false;
     }
 }

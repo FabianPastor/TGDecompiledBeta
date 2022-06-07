@@ -1,19 +1,16 @@
 package j$.util;
 
-import java.util.Collection;
-import java.util.Comparator;
-import java.util.SortedSet;
+import j$.util.function.Consumer;
+import j$.util.function.f;
 
-class t extends L {
-    final /* synthetic */ SortedSet f;
+public interface t extends w {
+    boolean b(Consumer consumer);
 
-    /* JADX INFO: super call moved to the top of the method (can break code semantics) */
-    t(SortedSet sortedSet, Collection collection, int i) {
-        super(collection, i);
-        this.f = sortedSet;
-    }
+    void e(f fVar);
 
-    public Comparator getComparator() {
-        return this.f.comparator();
-    }
+    void forEachRemaining(Consumer consumer);
+
+    boolean k(f fVar);
+
+    t trySplit();
 }

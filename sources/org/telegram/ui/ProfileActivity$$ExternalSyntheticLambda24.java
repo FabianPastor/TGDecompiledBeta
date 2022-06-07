@@ -18,6 +18,6 @@ public final /* synthetic */ class ProfileActivity$$ExternalSyntheticLambda24 im
     }
 
     public final void run() {
-        this.f$0.lambda$getChannelParticipants$23(this.f$1, this.f$2, this.f$3);
+        this.f$0.lambda$getChannelParticipants$26(this.f$1, this.f$2, this.f$3);
     }
 }

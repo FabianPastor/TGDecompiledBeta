@@ -1,17 +1,15 @@
 package org.telegram.messenger;
 
-import java.util.ArrayList;
-
 public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda102 implements Runnable {
     public final /* synthetic */ MessagesController f$0;
-    public final /* synthetic */ ArrayList f$1;
+    public final /* synthetic */ Runnable f$1;
 
-    public /* synthetic */ MessagesController$$ExternalSyntheticLambda102(MessagesController messagesController, ArrayList arrayList) {
+    public /* synthetic */ MessagesController$$ExternalSyntheticLambda102(MessagesController messagesController, Runnable runnable) {
         this.f$0 = messagesController;
-        this.f$1 = arrayList;
+        this.f$1 = runnable;
     }
 
     public final void run() {
-        this.f$0.lambda$checkChatInviter$290(this.f$1);
+        this.f$0.lambda$changeChatAvatar$250(this.f$1);
     }
 }

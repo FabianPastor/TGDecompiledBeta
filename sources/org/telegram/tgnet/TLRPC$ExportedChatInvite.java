@@ -7,6 +7,9 @@ public abstract class TLRPC$ExportedChatInvite extends TLObject {
             case -1316944408:
                 tLRPC$TL_chatInviteExported = new TLRPC$TL_chatInviteExported_layer133();
                 break;
+            case -317687113:
+                tLRPC$TL_chatInviteExported = new TLRPC$TL_chatInvitePublicJoinRequests();
+                break;
             case -64092740:
                 tLRPC$TL_chatInviteExported = new TLRPC$TL_chatInviteExported_layer122();
                 break;

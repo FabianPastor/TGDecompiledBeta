@@ -249,7 +249,7 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
                 int i = groupCall.call.schedule_date;
                 int i2 = i - currentTime;
                 if (i2 >= 86400) {
-                    str = LocaleController.formatPluralString("Days", Math.round(((float) i2) / 86400.0f));
+                    str = LocaleController.formatPluralString("Days", Math.round(((float) i2) / 86400.0f), new Object[0]);
                 } else {
                     str = AndroidUtilities.formatFullDuration(i - currentTime);
                 }
@@ -287,9 +287,9 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
             }
 
             /* access modifiers changed from: protected */
-            public void onDraw(Canvas canvas) {
+            public void dispatchDraw(Canvas canvas) {
                 float f;
-                super.onDraw(canvas);
+                super.dispatchDraw(canvas);
                 if (FragmentContextView.this.currentStyle == 4 && FragmentContextView.this.timeLayout != null) {
                     int ceil = ((int) Math.ceil((double) FragmentContextView.this.timeLayout.getLineWidth(0))) + AndroidUtilities.dp(24.0f);
                     if (ceil != FragmentContextView.this.gradientWidth) {
@@ -313,12 +313,13 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
                     FragmentContextView.this.matrix.reset();
                     FragmentContextView.this.matrix.postTranslate(((float) (-FragmentContextView.this.gradientWidth)) * 0.7f * f, 0.0f);
                     FragmentContextView.this.linearGradient.setLocalMatrix(FragmentContextView.this.matrix);
-                    int dp = AndroidUtilities.dp(12.0f);
-                    FragmentContextView.this.rect.set(0.0f, 0.0f, (float) ceil, (float) AndroidUtilities.dp(24.0f));
+                    int measuredWidth = (getMeasuredWidth() - ceil) - AndroidUtilities.dp(10.0f);
+                    int dp = AndroidUtilities.dp(10.0f);
+                    FragmentContextView.this.rect.set(0.0f, 0.0f, (float) ceil, (float) AndroidUtilities.dp(28.0f));
                     canvas.save();
-                    canvas.translate((float) ((getMeasuredWidth() - ceil) - AndroidUtilities.dp(10.0f)), (float) dp);
-                    canvas.drawRoundRect(FragmentContextView.this.rect, (float) AndroidUtilities.dp(12.0f), (float) AndroidUtilities.dp(12.0f), FragmentContextView.this.gradientPaint);
-                    canvas.translate((float) AndroidUtilities.dp(12.0f), (float) AndroidUtilities.dp(4.0f));
+                    canvas.translate((float) measuredWidth, (float) dp);
+                    canvas.drawRoundRect(FragmentContextView.this.rect, (float) AndroidUtilities.dp(16.0f), (float) AndroidUtilities.dp(16.0f), FragmentContextView.this.gradientPaint);
+                    canvas.translate((float) AndroidUtilities.dp(12.0f), (float) AndroidUtilities.dp(6.0f));
                     FragmentContextView.this.timeLayout.draw(canvas);
                     canvas.restore();
                 }
@@ -710,7 +711,7 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
     public /* synthetic */ void lambda$new$7(DialogInterface dialogInterface, int i) {
         BaseFragment baseFragment = this.fragment;
         if (baseFragment instanceof DialogsActivity) {
-            for (int i2 = 0; i2 < 3; i2++) {
+            for (int i2 = 0; i2 < 4; i2++) {
                 LocationController.getInstance(i2).removeAllLocationSharings();
             }
             return;
@@ -767,7 +768,7 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
                     if (LocationController.getLocationsCount() == 1) {
                         int i3 = 0;
                         while (true) {
-                            if (i3 >= 3) {
+                            if (i3 >= 4) {
                                 break;
                             } else if (!LocationController.getInstance(i3).sharingLocationsUI.isEmpty()) {
                                 LocationController.SharingLocationInfo sharingLocationInfo = LocationController.getInstance(i3).sharingLocationsUI.get(0);
@@ -868,7 +869,7 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
             LocationActivity locationActivity = new LocationActivity(2);
             locationActivity.setMessageObject(sharingLocationInfo.messageObject);
             locationActivity.setDelegate(new FragmentContextView$$ExternalSyntheticLambda13(sharingLocationInfo, sharingLocationInfo.messageObject.getDialogId()));
-            launchActivity.lambda$runLinkRequest$54(locationActivity);
+            launchActivity.lambda$runLinkRequest$59(locationActivity);
         }
     }
 
@@ -1073,7 +1074,7 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
             r0.setTopPadding(r7)
         L_0x009b:
             r7 = 5
-            r10 = 2131623967(0x7f0e001f, float:1.88751E38)
+            r10 = 2131623972(0x7f0e0024, float:1.887511E38)
             java.lang.String r11 = "AccDescrClosePlayer"
             r12 = 1097859072(0x41700000, float:15.0)
             r13 = 19
@@ -1478,7 +1479,7 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
             android.widget.FrameLayout$LayoutParams r2 = org.telegram.ui.Components.LayoutHelper.createFrame(r2, r3, r4, r5, r6, r7, r8)
             r1.setLayoutParams(r2)
             android.widget.ImageView r1 = r0.closeButton
-            r2 = 2131624056(0x7f0e0078, float:1.887528E38)
+            r2 = 2131624090(0x7f0e009a, float:1.887535E38)
             java.lang.String r3 = "AccDescrStopLiveLocation"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             r1.setContentDescription(r2)
@@ -1507,7 +1508,7 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
             NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.liveLocationsChanged);
             NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.liveLocationsCacheChanged);
         } else {
-            for (int i = 0; i < 3; i++) {
+            for (int i = 0; i < 4; i++) {
                 NotificationCenter.getInstance(i).removeObserver(this, NotificationCenter.messagePlayingDidReset);
                 NotificationCenter.getInstance(i).removeObserver(this, NotificationCenter.messagePlayingPlayStateChanged);
                 NotificationCenter.getInstance(i).removeObserver(this, NotificationCenter.messagePlayingDidStart);
@@ -1545,7 +1546,7 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
             }
             checkLiveLocation(true);
         } else {
-            for (int i2 = 0; i2 < 3; i2++) {
+            for (int i2 = 0; i2 < 4; i2++) {
                 NotificationCenter.getInstance(i2).addObserver(this, NotificationCenter.messagePlayingDidReset);
                 NotificationCenter.getInstance(i2).addObserver(this, NotificationCenter.messagePlayingPlayStateChanged);
                 NotificationCenter.getInstance(i2).addObserver(this, NotificationCenter.messagePlayingDidStart);
@@ -1660,7 +1661,7 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
                             if (i5 == 0) {
                                 this.subtitleTextView.setText(LocaleController.getString(tLRPC$GroupCall.rtmp_stream ? NUM : NUM), false);
                             } else {
-                                this.subtitleTextView.setText(LocaleController.formatPluralString(tLRPC$GroupCall.rtmp_stream ? "ViewersWatching" : "Participants", i5), false);
+                                this.subtitleTextView.setText(LocaleController.formatPluralString(tLRPC$GroupCall.rtmp_stream ? "ViewersWatching" : "Participants", i5, new Object[0]), false);
                             }
                         }
                     }
@@ -1784,7 +1785,7 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
         if (this.fragment instanceof DialogsActivity) {
             String string = LocaleController.getString("LiveLocationContext", NUM);
             ArrayList arrayList = new ArrayList();
-            for (int i = 0; i < 3; i++) {
+            for (int i = 0; i < 4; i++) {
                 arrayList.addAll(LocationController.getInstance(i).sharingLocationsUI);
             }
             if (arrayList.size() == 1) {
@@ -1799,7 +1800,7 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
                     str = LocaleController.getString("AttachLiveLocationIsSharingChat", NUM);
                 }
             } else {
-                str2 = LocaleController.formatPluralString("Chats", arrayList.size());
+                str2 = LocaleController.formatPluralString("Chats", arrayList.size(), new Object[0]);
                 str = LocaleController.getString("AttachLiveLocationIsSharingChats", NUM);
             }
             String format = String.format(str, new Object[]{string, str2});
@@ -1866,12 +1867,12 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
                         if (i3 == 0) {
                             str = String.format("%1$s - %2$s", new Object[]{string, LocaleController.getString("ChatYourSelfName", NUM)});
                         } else if (i3 != 1 || tLRPC$User == null) {
-                            str = String.format("%1$s - %2$s %3$s", new Object[]{string, LocaleController.getString("ChatYourSelfName", NUM), LocaleController.formatPluralString("AndOther", i3)});
+                            str = String.format("%1$s - %2$s %3$s", new Object[]{string, LocaleController.getString("ChatYourSelfName", NUM), LocaleController.formatPluralString("AndOther", i3, new Object[0])});
                         } else {
                             str = String.format("%1$s - %2$s", new Object[]{string, LocaleController.formatString("SharingYouAndOtherName", NUM, UserObject.getFirstName(tLRPC$User))});
                         }
                     } else if (i3 != 0) {
-                        str = String.format("%1$s - %2$s %3$s", new Object[]{string, UserObject.getFirstName(tLRPC$User), LocaleController.formatPluralString("AndOther", i3)});
+                        str = String.format("%1$s - %2$s %3$s", new Object[]{string, UserObject.getFirstName(tLRPC$User), LocaleController.formatPluralString("AndOther", i3, new Object[0])});
                     } else {
                         str = String.format("%1$s - %2$s", new Object[]{string, UserObject.getFirstName(tLRPC$User)});
                     }
@@ -2402,24 +2403,24 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
             r0.visible = r5
             r0.setVisibility(r11)
         L_0x0113:
-            if (r2 == 0) goto L_0x03a9
+            if (r2 == 0) goto L_0x03ac
             org.telegram.ui.ActionBar.BaseFragment r1 = r0.fragment
             boolean r2 = r1 instanceof org.telegram.ui.ChatActivity
-            if (r2 == 0) goto L_0x03a9
+            if (r2 == 0) goto L_0x03ac
             org.telegram.ui.ChatActivity r1 = (org.telegram.ui.ChatActivity) r1
             boolean r1 = r1.openedWithLivestream()
-            if (r1 == 0) goto L_0x03a9
+            if (r1 == 0) goto L_0x03ac
             boolean r1 = org.telegram.ui.Components.GroupCallPip.isShowing()
-            if (r1 != 0) goto L_0x03a9
+            if (r1 != 0) goto L_0x03ac
             org.telegram.ui.ActionBar.BaseFragment r1 = r0.fragment
             org.telegram.ui.Components.BulletinFactory r1 = org.telegram.ui.Components.BulletinFactory.of(r1)
             r2 = 2131558477(0x7f0d004d, float:1.874227E38)
-            r3 = 2131626151(0x7f0e08a7, float:1.887953E38)
+            r3 = 2131626251(0x7f0e090b, float:1.8879733E38)
             java.lang.String r4 = "InviteExpired"
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r4, r3)
             org.telegram.ui.Components.Bulletin r1 = r1.createSimpleBulletin(r2, r3)
             r1.show()
-            goto L_0x03a9
+            goto L_0x03ac
         L_0x0144:
             if (r6 == 0) goto L_0x0148
             r4 = 4
@@ -2476,7 +2477,7 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
             r1.start()
             return
         L_0x01ad:
-            if (r6 == 0) goto L_0x02dc
+            if (r6 == 0) goto L_0x02df
             if (r13 != r15) goto L_0x01b7
             boolean r1 = r0.visible
             if (r1 == 0) goto L_0x01b7
@@ -2493,7 +2494,7 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
             org.telegram.ui.ChatActivity r6 = (org.telegram.ui.ChatActivity) r6
             org.telegram.tgnet.TLRPC$Chat r6 = r6.getCurrentChat()
             boolean r9 = r4.isScheduled()
-            if (r9 == 0) goto L_0x025f
+            if (r9 == 0) goto L_0x0260
             android.graphics.Paint r9 = r0.gradientPaint
             if (r9 != 0) goto L_0x0207
             android.text.TextPaint r9 = new android.text.TextPaint
@@ -2533,14 +2534,14 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
             boolean r6 = org.telegram.messenger.ChatObject.isChannelOrGiga(r6)
             if (r6 == 0) goto L_0x0237
             org.telegram.ui.Components.AudioPlayerAlert$ClippingTextViewSwitcher r6 = r0.titleTextView
-            r9 = 2131628752(0x7f0e12d0, float:1.8884806E38)
+            r9 = 2131628973(0x7f0e13ad, float:1.8885254E38)
             java.lang.String r11 = "VoipChannelScheduledVoiceChat"
             java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r11, r9)
             r6.setText(r9, r5)
             goto L_0x0245
         L_0x0237:
             org.telegram.ui.Components.AudioPlayerAlert$ClippingTextViewSwitcher r6 = r0.titleTextView
-            r9 = 2131628862(0x7f0e133e, float:1.8885029E38)
+            r9 = 2131629083(0x7f0e141b, float:1.8885477E38)
             java.lang.String r11 = "VoipGroupScheduledVoiceChat"
             java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r11, r9)
             r6.setText(r9, r5)
@@ -2552,118 +2553,119 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
             java.lang.String r4 = org.telegram.messenger.LocaleController.formatStartsTime(r11, r15)
             r6.setText(r4, r5)
             boolean r4 = r0.scheduleRunnableScheduled
-            if (r4 != 0) goto L_0x02cb
+            if (r4 != 0) goto L_0x02ce
             r0.scheduleRunnableScheduled = r3
             java.lang.Runnable r4 = r0.updateScheduleTimeRunnable
             r4.run()
-            goto L_0x02cb
-        L_0x025f:
+            goto L_0x02ce
+        L_0x0260:
             r0.timeLayout = r14
             android.widget.TextView r9 = r0.joinButton
             r9.setVisibility(r5)
             org.telegram.tgnet.TLRPC$GroupCall r9 = r4.call
             boolean r9 = r9.rtmp_stream
-            r11 = 2131628766(0x7f0e12de, float:1.8884834E38)
-            if (r9 == 0) goto L_0x0279
+            r11 = 2131628987(0x7f0e13bb, float:1.8885282E38)
+            if (r9 == 0) goto L_0x027a
             org.telegram.ui.Components.AudioPlayerAlert$ClippingTextViewSwitcher r6 = r0.titleTextView
             java.lang.String r9 = org.telegram.messenger.LocaleController.getString((int) r11)
             r6.setText(r9, r5)
-            goto L_0x0299
-        L_0x0279:
+            goto L_0x029a
+        L_0x027a:
             boolean r6 = org.telegram.messenger.ChatObject.isChannelOrGiga(r6)
-            if (r6 == 0) goto L_0x028b
+            if (r6 == 0) goto L_0x028c
             org.telegram.ui.Components.AudioPlayerAlert$ClippingTextViewSwitcher r6 = r0.titleTextView
             java.lang.String r9 = "VoipChannelVoiceChat"
             java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r9, r11)
             r6.setText(r9, r5)
-            goto L_0x0299
-        L_0x028b:
+            goto L_0x029a
+        L_0x028c:
             org.telegram.ui.Components.AudioPlayerAlert$ClippingTextViewSwitcher r6 = r0.titleTextView
-            r9 = 2131628896(0x7f0e1360, float:1.8885098E38)
+            r9 = 2131629117(0x7f0e143d, float:1.8885546E38)
             java.lang.String r11 = "VoipGroupVoiceChat"
             java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r11, r9)
             r6.setText(r9, r5)
-        L_0x0299:
+        L_0x029a:
             org.telegram.tgnet.TLRPC$GroupCall r4 = r4.call
             int r6 = r4.participants_count
-            if (r6 != 0) goto L_0x02b4
+            if (r6 != 0) goto L_0x02b5
             org.telegram.ui.Components.AudioPlayerAlert$ClippingTextViewSwitcher r6 = r0.subtitleTextView
             boolean r4 = r4.rtmp_stream
-            if (r4 == 0) goto L_0x02a9
-            r4 = 2131628694(0x7f0e1296, float:1.8884688E38)
-            goto L_0x02ac
-        L_0x02a9:
-            r4 = 2131626455(0x7f0e09d7, float:1.8880147E38)
-        L_0x02ac:
+            if (r4 == 0) goto L_0x02aa
+            r4 = 2131628915(0x7f0e1373, float:1.8885136E38)
+            goto L_0x02ad
+        L_0x02aa:
+            r4 = 2131626598(0x7f0e0a66, float:1.8880437E38)
+        L_0x02ad:
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString((int) r4)
             r6.setText(r4, r5)
-            goto L_0x02c6
-        L_0x02b4:
+            goto L_0x02c9
+        L_0x02b5:
             org.telegram.ui.Components.AudioPlayerAlert$ClippingTextViewSwitcher r9 = r0.subtitleTextView
             boolean r4 = r4.rtmp_stream
-            if (r4 == 0) goto L_0x02bd
+            if (r4 == 0) goto L_0x02be
             java.lang.String r4 = "ViewersWatching"
-            goto L_0x02bf
-        L_0x02bd:
+            goto L_0x02c0
+        L_0x02be:
             java.lang.String r4 = "Participants"
-        L_0x02bf:
-            java.lang.String r4 = org.telegram.messenger.LocaleController.formatPluralString(r4, r6)
+        L_0x02c0:
+            java.lang.Object[] r11 = new java.lang.Object[r5]
+            java.lang.String r4 = org.telegram.messenger.LocaleController.formatPluralString(r4, r6, r11)
             r9.setText(r4, r5)
-        L_0x02c6:
+        L_0x02c9:
             android.widget.FrameLayout r4 = r0.frameLayout
             r4.invalidate()
-        L_0x02cb:
+        L_0x02ce:
             org.telegram.ui.Components.AvatarsImageView r4 = r0.avatars
             org.telegram.ui.Components.AvatarsDarawable r4 = r4.avatarsDarawable
             boolean r4 = r4.wasDraw
-            if (r4 == 0) goto L_0x02d7
-            if (r1 == 0) goto L_0x02d7
+            if (r4 == 0) goto L_0x02da
+            if (r1 == 0) goto L_0x02da
             r1 = 1
-            goto L_0x02d8
-        L_0x02d7:
+            goto L_0x02db
+        L_0x02da:
             r1 = 0
-        L_0x02d8:
+        L_0x02db:
             r0.updateAvatars(r1)
-            goto L_0x02fa
-        L_0x02dc:
-            if (r1 == 0) goto L_0x02ef
+            goto L_0x02fd
+        L_0x02df:
+            if (r1 == 0) goto L_0x02f2
             org.telegram.messenger.ChatObject$Call r1 = r1.groupCall
-            if (r1 == 0) goto L_0x02ef
+            if (r1 == 0) goto L_0x02f2
             r1 = 3
-            if (r13 != r1) goto L_0x02e7
+            if (r13 != r1) goto L_0x02ea
             r4 = 1
-            goto L_0x02e8
-        L_0x02e7:
+            goto L_0x02eb
+        L_0x02ea:
             r4 = 0
-        L_0x02e8:
+        L_0x02eb:
             r0.updateAvatars(r4)
             r0.updateStyle(r1)
-            goto L_0x02fa
-        L_0x02ef:
-            if (r13 != r3) goto L_0x02f3
+            goto L_0x02fd
+        L_0x02f2:
+            if (r13 != r3) goto L_0x02f6
             r1 = 1
-            goto L_0x02f4
-        L_0x02f3:
+            goto L_0x02f7
+        L_0x02f6:
             r1 = 0
-        L_0x02f4:
+        L_0x02f7:
             r0.updateAvatars(r1)
             r0.updateStyle(r3)
-        L_0x02fa:
+        L_0x02fd:
             boolean r1 = r0.visible
-            if (r1 != 0) goto L_0x03a9
-            if (r2 != 0) goto L_0x0391
+            if (r1 != 0) goto L_0x03ac
+            if (r2 != 0) goto L_0x0394
             android.animation.AnimatorSet r1 = r0.animatorSet
-            if (r1 == 0) goto L_0x0309
+            if (r1 == 0) goto L_0x030c
             r1.cancel()
             r0.animatorSet = r14
-        L_0x0309:
+        L_0x030c:
             android.animation.AnimatorSet r1 = new android.animation.AnimatorSet
             r1.<init>()
             r0.animatorSet = r1
             org.telegram.ui.Components.FragmentContextView r1 = r0.additionalContextView
-            if (r1 == 0) goto L_0x0334
+            if (r1 == 0) goto L_0x0337
             int r1 = r1.getVisibility()
-            if (r1 != 0) goto L_0x0334
+            if (r1 != 0) goto L_0x0337
             android.view.ViewGroup$LayoutParams r1 = r16.getLayoutParams()
             android.widget.FrameLayout$LayoutParams r1 = (android.widget.FrameLayout.LayoutParams) r1
             int r2 = r16.getStyleHeight()
@@ -2674,8 +2676,8 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
             int r2 = org.telegram.messenger.AndroidUtilities.dp(r2)
             int r2 = -r2
             r1.topMargin = r2
-            goto L_0x0346
-        L_0x0334:
+            goto L_0x0349
+        L_0x0337:
             android.view.ViewGroup$LayoutParams r1 = r16.getLayoutParams()
             android.widget.FrameLayout$LayoutParams r1 = (android.widget.FrameLayout.LayoutParams) r1
             int r2 = r16.getStyleHeight()
@@ -2683,7 +2685,7 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
             int r2 = org.telegram.messenger.AndroidUtilities.dp(r2)
             int r2 = -r2
             r1.topMargin = r2
-        L_0x0346:
+        L_0x0349:
             int r1 = r0.account
             org.telegram.messenger.NotificationCenter r2 = org.telegram.messenger.NotificationCenter.getInstance(r1)
             int r4 = r0.animationIndex
@@ -2714,8 +2716,8 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
             r2.addListener(r4)
             android.animation.AnimatorSet r1 = r0.animatorSet
             r1.start()
-            goto L_0x03a4
-        L_0x0391:
+            goto L_0x03a7
+        L_0x0394:
             r16.updatePaddings()
             int r1 = r16.getStyleHeight()
             float r1 = (float) r1
@@ -2723,10 +2725,10 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
             float r1 = (float) r1
             r0.setTopPadding(r1)
             r16.startJoinFlickerAnimation()
-        L_0x03a4:
+        L_0x03a7:
             r0.visible = r3
             r0.setVisibility(r5)
-        L_0x03a9:
+        L_0x03ac:
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.FragmentContextView.checkCall(boolean):void");
@@ -2846,7 +2848,7 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
         if (!this.drawOverlay || getVisibility() == 0) {
             boolean z = false;
             int i = this.currentStyle;
-            if ((i == 3 || i == 1) && this.drawOverlay) {
+            if (i == 3 || i == 1) {
                 if (GroupCallActivity.groupCallInstance == null) {
                     int state = Theme.getFragmentContextViewWavesDrawable().getState();
                 }

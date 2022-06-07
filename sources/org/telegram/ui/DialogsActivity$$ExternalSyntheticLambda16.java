@@ -10,6 +10,6 @@ public final /* synthetic */ class DialogsActivity$$ExternalSyntheticLambda16 im
     }
 
     public final void onDismiss(DialogInterface dialogInterface) {
-        this.f$0.lambda$showSuggestion$41(dialogInterface);
+        this.f$0.lambda$showSuggestion$47(dialogInterface);
     }
 }

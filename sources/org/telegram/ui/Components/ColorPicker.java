@@ -90,6 +90,20 @@ public class ColorPicker extends FrameLayout {
     private Paint valueSliderPaint;
 
     public interface ColorPickerDelegate {
+
+        /* renamed from: org.telegram.ui.Components.ColorPicker$ColorPickerDelegate$-CC  reason: invalid class name */
+        public final /* synthetic */ class CC {
+            public static void $default$deleteTheme(ColorPickerDelegate colorPickerDelegate) {
+            }
+
+            public static int $default$getDefaultColor(ColorPickerDelegate colorPickerDelegate, int i) {
+                return 0;
+            }
+
+            public static void $default$openThemeCreate(ColorPickerDelegate colorPickerDelegate, boolean z) {
+            }
+        }
+
         void deleteTheme();
 
         int getDefaultColor(int i);

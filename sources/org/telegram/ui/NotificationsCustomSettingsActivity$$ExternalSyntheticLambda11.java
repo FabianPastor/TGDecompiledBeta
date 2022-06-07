@@ -1,16 +1,20 @@
 package org.telegram.ui;
 
-import java.util.ArrayList;
-import org.telegram.ui.DialogsActivity;
+import org.telegram.ui.NotificationsSettingsActivity;
+import org.telegram.ui.ProfileNotificationsActivity;
 
-public final /* synthetic */ class NotificationsCustomSettingsActivity$$ExternalSyntheticLambda11 implements DialogsActivity.DialogsActivityDelegate {
+public final /* synthetic */ class NotificationsCustomSettingsActivity$$ExternalSyntheticLambda11 implements ProfileNotificationsActivity.ProfileNotificationsActivityDelegate {
     public final /* synthetic */ NotificationsCustomSettingsActivity f$0;
 
     public /* synthetic */ NotificationsCustomSettingsActivity$$ExternalSyntheticLambda11(NotificationsCustomSettingsActivity notificationsCustomSettingsActivity) {
         this.f$0 = notificationsCustomSettingsActivity;
     }
 
-    public final void didSelectDialogs(DialogsActivity dialogsActivity, ArrayList arrayList, CharSequence charSequence, boolean z) {
-        this.f$0.lambda$createView$2(dialogsActivity, arrayList, charSequence, z);
+    public final void didCreateNewException(NotificationsSettingsActivity.NotificationException notificationException) {
+        this.f$0.lambda$createView$0(notificationException);
+    }
+
+    public /* synthetic */ void didRemoveException(long j) {
+        ProfileNotificationsActivity.ProfileNotificationsActivityDelegate.CC.$default$didRemoveException(this, j);
     }
 }

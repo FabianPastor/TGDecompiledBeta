@@ -1,39 +1,27 @@
 package j$.util;
 
-import j$.util.function.Consumer;
-import j$.util.function.q;
-import java.util.Comparator;
-
-final class H extends J implements w {
+abstract class H {
     H() {
     }
 
-    public /* synthetic */ boolean b(Consumer consumer) {
-        return CLASSNAMEa.l(this, consumer);
+    public int characteristics() {
+        return 16448;
     }
 
-    public void d(q qVar) {
-        qVar.getClass();
+    public long estimateSize() {
+        return 0;
     }
 
-    public /* synthetic */ void forEachRemaining(Consumer consumer) {
-        CLASSNAMEa.d(this, consumer);
+    public void forEachRemaining(Object obj) {
+        obj.getClass();
     }
 
-    public Comparator getComparator() {
-        throw new IllegalStateException();
-    }
-
-    public /* synthetic */ long getExactSizeIfKnown() {
-        return CLASSNAMEa.e(this);
-    }
-
-    public /* synthetic */ boolean hasCharacteristics(int i) {
-        return CLASSNAMEa.f(this, i);
-    }
-
-    public boolean i(q qVar) {
-        qVar.getClass();
+    public boolean tryAdvance(Object obj) {
+        obj.getClass();
         return false;
+    }
+
+    public u trySplit() {
+        return null;
     }
 }

@@ -1,13 +1,17 @@
 package org.telegram.ui;
 
-public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda111 implements Runnable {
-    public final /* synthetic */ ChatActivity f$0;
+import androidx.core.util.Consumer;
+import java.util.List;
+import org.telegram.ui.Components.ReactedUsersListView;
 
-    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda111(ChatActivity chatActivity) {
-        this.f$0 = chatActivity;
+public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda111 implements Consumer {
+    public final /* synthetic */ ReactedUsersListView f$0;
+
+    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda111(ReactedUsersListView reactedUsersListView) {
+        this.f$0 = reactedUsersListView;
     }
 
-    public final void run() {
-        this.f$0.lambda$removeKeyboardPositionBeforeTransition$127();
+    public final void accept(Object obj) {
+        this.f$0.setSeenUsers((List) obj);
     }
 }

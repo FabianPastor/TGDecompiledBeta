@@ -1,15 +1,18 @@
 package org.telegram.ui;
 
-import android.view.MotionEvent;
 import android.view.View;
+import org.telegram.ui.ActionBar.Theme;
 
-public final /* synthetic */ class PhotoViewer$$ExternalSyntheticLambda42 implements View.OnTouchListener {
-    public static final /* synthetic */ PhotoViewer$$ExternalSyntheticLambda42 INSTANCE = new PhotoViewer$$ExternalSyntheticLambda42();
+public final /* synthetic */ class PhotoViewer$$ExternalSyntheticLambda42 implements View.OnLongClickListener {
+    public final /* synthetic */ PhotoViewer f$0;
+    public final /* synthetic */ Theme.ResourcesProvider f$1;
 
-    private /* synthetic */ PhotoViewer$$ExternalSyntheticLambda42() {
+    public /* synthetic */ PhotoViewer$$ExternalSyntheticLambda42(PhotoViewer photoViewer, Theme.ResourcesProvider resourcesProvider) {
+        this.f$0 = photoViewer;
+        this.f$1 = resourcesProvider;
     }
 
-    public final boolean onTouch(View view, MotionEvent motionEvent) {
-        return PhotoViewer.lambda$setParentActivity$25(view, motionEvent);
+    public final boolean onLongClick(View view) {
+        return this.f$0.lambda$setParentActivity$15(this.f$1, view);
     }
 }

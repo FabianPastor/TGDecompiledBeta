@@ -157,23 +157,16 @@ public class RLottieDrawable extends BitmapDrawable implements Animatable {
 
     /* access modifiers changed from: protected */
     public void recycleResources() {
-        try {
-            if (this.renderingBitmap != null) {
-                this.renderingBitmap.recycle();
-                this.renderingBitmap = null;
-            }
-            if (this.backgroundBitmap != null) {
-                this.backgroundBitmap.recycle();
-                this.backgroundBitmap = null;
-            }
-        } catch (Exception e) {
-            FileLog.e((Throwable) e);
-            this.renderingBitmap = null;
-            this.backgroundBitmap = null;
-        }
+        ArrayList arrayList = new ArrayList();
+        arrayList.add(this.renderingBitmap);
+        arrayList.add(this.nextRenderingBitmap);
+        this.renderingBitmap = null;
+        this.backgroundBitmap = null;
+        AndroidUtilities.recycleBitmaps(arrayList);
         if (this.onAnimationEndListener != null) {
             this.onAnimationEndListener = null;
         }
+        invalidateInternal();
     }
 
     public void setOnFinishCallback(Runnable runnable, int i) {
@@ -1677,29 +1670,6 @@ public class RLottieDrawable extends BitmapDrawable implements Animatable {
         this.currentParentView = view;
     }
 
-    private boolean isCurrentParentViewMaster() {
-        if (getCallback() != null || this.parentViews.size() <= 1) {
-            return true;
-        }
-        int size = this.parentViews.size();
-        int i = 0;
-        while (i < size) {
-            View view = (View) this.parentViews.get(i).get();
-            if (view == null) {
-                this.parentViews.remove(i);
-                size--;
-                i--;
-            } else if (view.isShown()) {
-                if (view == this.currentParentView) {
-                    return true;
-                }
-                return false;
-            }
-            i++;
-        }
-        return true;
-    }
-
     public boolean isRunning() {
         return this.isRunning;
     }
@@ -1807,7 +1777,7 @@ public class RLottieDrawable extends BitmapDrawable implements Animatable {
                 scheduleNextGetFrame();
             } else if (this.nextRenderingBitmap == null) {
             } else {
-                if ((this.renderingBitmap == null || abs >= ((long) i)) && isCurrentParentViewMaster()) {
+                if (this.renderingBitmap == null || abs >= ((long) i)) {
                     HashMap<Integer, Integer> hashMap = this.vibrationPattern;
                     if (!(hashMap == null || this.currentParentView == null || (num = hashMap.get(Integer.valueOf(this.currentFrame - 1))) == null)) {
                         this.currentParentView.performHapticFeedback(num.intValue() == 1 ? 0 : 3, 2);
@@ -1860,5 +1830,9 @@ public class RLottieDrawable extends BitmapDrawable implements Animatable {
 
     public void setOnFrameReadyRunnable(Runnable runnable) {
         this.onFrameReadyRunnable = runnable;
+    }
+
+    public boolean isLastFrame() {
+        return this.currentFrame == getFramesCount() - 1;
     }
 }

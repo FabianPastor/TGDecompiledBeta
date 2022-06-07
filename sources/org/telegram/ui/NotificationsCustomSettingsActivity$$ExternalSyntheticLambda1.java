@@ -8,6 +8,6 @@ public final /* synthetic */ class NotificationsCustomSettingsActivity$$External
     }
 
     public final void run() {
-        this.f$0.lambda$loadExceptions$11();
+        this.f$0.lambda$loadExceptions$10();
     }
 }

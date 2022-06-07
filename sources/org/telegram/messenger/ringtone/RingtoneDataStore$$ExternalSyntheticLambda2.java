@@ -1,17 +1,17 @@
 package org.telegram.messenger.ringtone;
 
-import org.telegram.tgnet.TLObject;
+import java.util.ArrayList;
 
 public final /* synthetic */ class RingtoneDataStore$$ExternalSyntheticLambda2 implements Runnable {
     public final /* synthetic */ RingtoneDataStore f$0;
-    public final /* synthetic */ TLObject f$1;
+    public final /* synthetic */ ArrayList f$1;
 
-    public /* synthetic */ RingtoneDataStore$$ExternalSyntheticLambda2(RingtoneDataStore ringtoneDataStore, TLObject tLObject) {
+    public /* synthetic */ RingtoneDataStore$$ExternalSyntheticLambda2(RingtoneDataStore ringtoneDataStore, ArrayList arrayList) {
         this.f$0 = ringtoneDataStore;
-        this.f$1 = tLObject;
+        this.f$1 = arrayList;
     }
 
     public final void run() {
-        this.f$0.lambda$loadUserRingtones$1(this.f$1);
+        this.f$0.lambda$checkRingtoneSoundsLoaded$5(this.f$1);
     }
 }

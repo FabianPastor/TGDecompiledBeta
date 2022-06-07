@@ -1,34 +1,19 @@
 package j$.util.stream;
 
-import j$.util.CLASSNAMEa;
-import j$.util.function.Consumer;
-import j$.util.v;
-import j$.util.y;
+import j$.util.function.p;
+import j$.util.function.q;
 
-final class x4 extends A4 implements v {
-    x4(v vVar, long j, long j2) {
-        super(vVar, j, j2);
+public final /* synthetic */ class x4 implements q {
+    public static final /* synthetic */ x4 a = new x4();
+
+    private /* synthetic */ x4() {
     }
 
-    x4(v vVar, long j, long j2, long j3, long j4) {
-        super(vVar, j, j2, j3, j4, (CLASSNAMEp1) null);
+    public final void accept(long j) {
     }
 
-    /* access modifiers changed from: protected */
-    public y a(y yVar, long j, long j2, long j3, long j4) {
-        return new x4((v) yVar, j, j2, j3, j4);
-    }
-
-    public /* synthetic */ boolean b(Consumer consumer) {
-        return CLASSNAMEa.k(this, consumer);
-    }
-
-    /* access modifiers changed from: protected */
-    public /* bridge */ /* synthetic */ Object f() {
-        return w4.a;
-    }
-
-    public /* synthetic */ void forEachRemaining(Consumer consumer) {
-        CLASSNAMEa.c(this, consumer);
+    public q f(q qVar) {
+        qVar.getClass();
+        return new p(this, qVar);
     }
 }

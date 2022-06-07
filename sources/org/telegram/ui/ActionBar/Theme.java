@@ -44,6 +44,7 @@ import android.os.SystemClock;
 import android.text.TextPaint;
 import android.text.TextUtils;
 import android.util.Base64;
+import android.util.Log;
 import android.util.LongSparseArray;
 import android.util.SparseArray;
 import android.util.StateSet;
@@ -69,13 +70,13 @@ import org.json.JSONObject;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.BuildVars;
-import org.telegram.messenger.ChatThemeController;
 import org.telegram.messenger.DispatchQueue;
 import org.telegram.messenger.FileLoader;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.ImageLocation;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MediaController;
+import org.telegram.messenger.MediaDataController;
 import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
@@ -111,7 +112,6 @@ import org.telegram.tgnet.TLRPC$WallPaper;
 import org.telegram.tgnet.TLRPC$WallPaperSettings;
 import org.telegram.ui.Components.AudioVisualizerDrawable;
 import org.telegram.ui.Components.BackgroundGradientDrawable;
-import org.telegram.ui.Components.ChatThemeBottomSheet;
 import org.telegram.ui.Components.ChoosingStickerStatusDrawable;
 import org.telegram.ui.Components.CombinedDrawable;
 import org.telegram.ui.Components.FragmentContextViewWavesDrawable;
@@ -120,6 +120,7 @@ import org.telegram.ui.Components.MotionBackgroundDrawable;
 import org.telegram.ui.Components.MsgClockDrawable;
 import org.telegram.ui.Components.PathAnimator;
 import org.telegram.ui.Components.PlayingGameDrawable;
+import org.telegram.ui.Components.Premium.PremiumGradient;
 import org.telegram.ui.Components.RLottieDrawable;
 import org.telegram.ui.Components.RecordStatusDrawable;
 import org.telegram.ui.Components.RoundStatusDrawable;
@@ -224,7 +225,6 @@ public class Theme {
     public static Paint chat_docBackPaint = null;
     public static TextPaint chat_docNamePaint = null;
     public static TextPaint chat_durationPaint = null;
-    public static CombinedDrawable[][] chat_fileMiniStatesDrawable = ((CombinedDrawable[][]) Array.newInstance(CombinedDrawable.class, new int[]{6, 2}));
     public static Path[] chat_filePath = new Path[2];
     public static Drawable[][] chat_fileStatesDrawable = ((Drawable[][]) Array.newInstance(Drawable.class, new int[]{10, 2}));
     public static Drawable chat_flameIcon = null;
@@ -247,8 +247,6 @@ public class Theme {
     private static AudioVisualizerDrawable chat_msgAudioVisualizeDrawable = null;
     public static Drawable chat_msgAvatarLiveLocationDrawable = null;
     public static TextPaint chat_msgBotButtonPaint = null;
-    public static Drawable chat_msgBroadcastDrawable = null;
-    public static Drawable chat_msgBroadcastMediaDrawable = null;
     public static Drawable chat_msgCallDownGreenDrawable = null;
     public static Drawable chat_msgCallDownRedDrawable = null;
     public static Drawable chat_msgCallUpGreenDrawable = null;
@@ -354,7 +352,6 @@ public class Theme {
     private static final HashMap<String, Paint> defaultChatPaints = new HashMap<>();
     /* access modifiers changed from: private */
     public static HashMap<String, Integer> defaultColors = new HashMap<>();
-    public static final ArrayList<ChatThemeBottomSheet.ChatThemeItem> defaultEmojiThemes = new ArrayList<>();
     private static ThemeInfo defaultTheme = null;
     public static Paint dialogs_actionMessagePaint = null;
     public static RLottieDrawable dialogs_archiveAvatarDrawable = null;
@@ -363,8 +360,6 @@ public class Theme {
     public static boolean dialogs_archiveDrawableRecolored = false;
     public static TextPaint dialogs_archiveTextPaint = null;
     public static TextPaint dialogs_archiveTextPaintSmall = null;
-    public static Drawable dialogs_botDrawable = null;
-    public static Drawable dialogs_broadcastDrawable = null;
     public static Drawable dialogs_checkDrawable = null;
     public static Drawable dialogs_checkReadDrawable = null;
     public static Drawable dialogs_clockDrawable = null;
@@ -374,7 +369,6 @@ public class Theme {
     public static Drawable dialogs_errorDrawable = null;
     public static Paint dialogs_errorPaint = null;
     public static ScamDrawable dialogs_fakeDrawable = null;
-    public static Drawable dialogs_groupDrawable = null;
     public static Drawable dialogs_halfCheckDrawable = null;
     public static RLottieDrawable dialogs_hidePsaDrawable = null;
     public static boolean dialogs_hidePsaDrawableRecolored = false;
@@ -438,13 +432,13 @@ public class Theme {
     private static long lastDelayUpdateTime;
     private static long lastHolidayCheckTime;
     private static int lastLoadingCurrentThemeTime;
-    private static int[] lastLoadingThemesTime = new int[3];
+    private static int[] lastLoadingThemesTime = new int[4];
     private static long lastThemeSwitchTime;
     private static Sensor lightSensor;
     private static boolean lightSensorRegistered;
     public static Paint linkSelectionPaint;
     private static int loadingCurrentTheme;
-    private static boolean[] loadingRemoteThemes = new boolean[3];
+    private static boolean[] loadingRemoteThemes = new boolean[4];
     /* access modifiers changed from: private */
     public static Paint maskPaint = new Paint(1);
     public static Drawable moveUpDrawable;
@@ -460,7 +454,7 @@ public class Theme {
     public static TextPaint profile_aboutTextPaint;
     public static Drawable profile_verifiedCheckDrawable;
     public static Drawable profile_verifiedDrawable;
-    private static long[] remoteThemesHash = new long[3];
+    private static long[] remoteThemesHash = new long[4];
     private static RoundVideoProgressShadow roundPlayDrawable;
     public static int selectedAutoNightType;
     private static SensorManager sensorManager;
@@ -504,15 +498,20 @@ public class Theme {
     public static ArrayList<ThemeInfo> themes = new ArrayList<>();
     /* access modifiers changed from: private */
     public static HashMap<String, ThemeInfo> themesDict = new HashMap<>();
+    private static float[] tmpHSV5;
     private static int[] viewPos = new int[2];
     private static Drawable wallpaper;
-    private static Runnable wallpaperLoadTask;
+    public static Runnable wallpaperLoadTask;
 
     public static class BackgroundDrawableSettings {
         public Boolean isCustomTheme;
         public Boolean isPatternWallpaper;
         public Boolean isWallpaperMotion;
         public Drawable wallpaper;
+    }
+
+    private static float abs(float f) {
+        return f > 0.0f ? f : -f;
     }
 
     public static void destroyResources() {
@@ -2436,7 +2435,7 @@ public class Theme {
                 r0 = r16
                 r1 = r18
                 boolean r2 = r1 instanceof org.telegram.tgnet.TLRPC$Vector
-                if (r2 == 0) goto L_0x00bb
+                if (r2 == 0) goto L_0x00c1
                 org.telegram.tgnet.TLRPC$Vector r1 = (org.telegram.tgnet.TLRPC$Vector) r1
                 java.util.ArrayList<java.lang.Object> r2 = r1.objects
                 int r2 = r2.size()
@@ -2445,93 +2444,95 @@ public class Theme {
                 r5 = 0
             L_0x0013:
                 r7 = 1
-                if (r5 >= r2) goto L_0x00b8
+                if (r5 >= r2) goto L_0x00be
                 java.util.ArrayList<java.lang.Object> r8 = r1.objects
                 java.lang.Object r8 = r8.get(r5)
                 org.telegram.tgnet.TLRPC$WallPaper r8 = (org.telegram.tgnet.TLRPC$WallPaper) r8
                 boolean r9 = r8 instanceof org.telegram.tgnet.TLRPC$TL_wallPaper
                 if (r9 != 0) goto L_0x0024
-                goto L_0x00b1
+                goto L_0x00b7
             L_0x0024:
                 org.telegram.tgnet.TLRPC$TL_wallPaper r8 = (org.telegram.tgnet.TLRPC$TL_wallPaper) r8
                 boolean r9 = r8.pattern
-                if (r9 == 0) goto L_0x00b1
-                org.telegram.tgnet.TLRPC$Document r9 = r8.document
-                java.io.File r7 = org.telegram.messenger.FileLoader.getPathToAttach(r9, r7)
+                if (r9 == 0) goto L_0x00b7
+                int r9 = org.telegram.messenger.UserConfig.selectedAccount
+                org.telegram.messenger.FileLoader r9 = org.telegram.messenger.FileLoader.getInstance(r9)
+                org.telegram.tgnet.TLRPC$Document r10 = r8.document
+                java.io.File r7 = r9.getPathToAttach(r10, r7)
                 int r9 = r17.size()
                 r11 = r4
                 r12 = r11
                 r10 = 0
-            L_0x0037:
-                if (r10 >= r9) goto L_0x00a9
+            L_0x003d:
+                if (r10 >= r9) goto L_0x00af
                 r13 = r17
                 java.lang.Object r14 = r13.get(r10)
                 org.telegram.ui.ActionBar.Theme$ThemeAccent r14 = (org.telegram.ui.ActionBar.Theme.ThemeAccent) r14
                 java.lang.String r15 = r14.patternSlug
                 java.lang.String r3 = r8.slug
                 boolean r3 = r15.equals(r3)
-                if (r3 == 0) goto L_0x00a5
-                if (r12 != 0) goto L_0x0056
+                if (r3 == 0) goto L_0x00ab
+                if (r12 != 0) goto L_0x005c
                 boolean r3 = r7.exists()
                 java.lang.Boolean r3 = java.lang.Boolean.valueOf(r3)
                 r12 = r3
-            L_0x0056:
-                if (r11 != 0) goto L_0x008c
+            L_0x005c:
+                if (r11 != 0) goto L_0x0092
                 boolean r3 = r12.booleanValue()
-                if (r3 == 0) goto L_0x005f
-                goto L_0x008c
-            L_0x005f:
+                if (r3 == 0) goto L_0x0065
+                goto L_0x0092
+            L_0x0065:
                 org.telegram.tgnet.TLRPC$Document r3 = r8.document
                 java.lang.String r3 = org.telegram.messenger.FileLoader.getAttachFileName(r3)
                 java.util.HashMap<java.lang.String, org.telegram.ui.ActionBar.Theme$PatternsLoader$LoadingPattern> r15 = r0.watingForLoad
-                if (r15 != 0) goto L_0x0070
+                if (r15 != 0) goto L_0x0076
                 java.util.HashMap r15 = new java.util.HashMap
                 r15.<init>()
                 r0.watingForLoad = r15
-            L_0x0070:
+            L_0x0076:
                 java.util.HashMap<java.lang.String, org.telegram.ui.ActionBar.Theme$PatternsLoader$LoadingPattern> r15 = r0.watingForLoad
                 java.lang.Object r15 = r15.get(r3)
                 org.telegram.ui.ActionBar.Theme$PatternsLoader$LoadingPattern r15 = (org.telegram.ui.ActionBar.Theme.PatternsLoader.LoadingPattern) r15
-                if (r15 != 0) goto L_0x0086
+                if (r15 != 0) goto L_0x008c
                 org.telegram.ui.ActionBar.Theme$PatternsLoader$LoadingPattern r15 = new org.telegram.ui.ActionBar.Theme$PatternsLoader$LoadingPattern
                 r15.<init>()
                 r15.pattern = r8
                 java.util.HashMap<java.lang.String, org.telegram.ui.ActionBar.Theme$PatternsLoader$LoadingPattern> r4 = r0.watingForLoad
                 r4.put(r3, r15)
-            L_0x0086:
+            L_0x008c:
                 java.util.ArrayList<org.telegram.ui.ActionBar.Theme$ThemeAccent> r3 = r15.accents
                 r3.add(r14)
-                goto L_0x00a5
-            L_0x008c:
+                goto L_0x00ab
+            L_0x0092:
                 org.telegram.tgnet.TLRPC$Document r3 = r8.document
                 java.lang.String r3 = r3.mime_type
                 java.lang.String r4 = "application/x-tgwallpattern"
                 boolean r3 = r4.equals(r3)
                 android.graphics.Bitmap r11 = r0.createWallpaperForAccent(r11, r3, r7, r14)
-                if (r6 != 0) goto L_0x00a2
+                if (r6 != 0) goto L_0x00a8
                 java.util.ArrayList r3 = new java.util.ArrayList
                 r3.<init>()
                 r6 = r3
-            L_0x00a2:
+            L_0x00a8:
                 r6.add(r14)
-            L_0x00a5:
+            L_0x00ab:
                 int r10 = r10 + 1
                 r4 = 0
-                goto L_0x0037
-            L_0x00a9:
+                goto L_0x003d
+            L_0x00af:
                 r13 = r17
-                if (r11 == 0) goto L_0x00b3
+                if (r11 == 0) goto L_0x00b9
                 r11.recycle()
-                goto L_0x00b3
-            L_0x00b1:
+                goto L_0x00b9
+            L_0x00b7:
                 r13 = r17
-            L_0x00b3:
+            L_0x00b9:
                 int r5 = r5 + 1
                 r4 = 0
                 goto L_0x0013
-            L_0x00b8:
+            L_0x00be:
                 r0.checkCurrentWallpaper(r6, r7)
-            L_0x00bb:
+            L_0x00c1:
                 return
             */
             throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ActionBar.Theme.PatternsLoader.lambda$new$0(java.util.ArrayList, org.telegram.tgnet.TLObject, org.telegram.tgnet.TLRPC$TL_error):void");
@@ -2565,7 +2566,7 @@ public class Theme {
         private Bitmap createWallpaperForAccent(Bitmap bitmap, boolean z, File file, ThemeAccent themeAccent) {
             Bitmap bitmap2;
             int i;
-            Bitmap bitmap3;
+            Bitmap access$500;
             Integer num;
             Integer num2;
             Integer num3;
@@ -2619,12 +2620,16 @@ public class Theme {
                     i = AndroidUtilities.getPatternColor(i3);
                 }
                 if (bitmap == null) {
+                    Point point = AndroidUtilities.displaySize;
+                    int min = Math.min(point.x, point.y);
+                    Point point2 = AndroidUtilities.displaySize;
+                    int max = Math.max(point2.x, point2.y);
                     if (z) {
-                        bitmap3 = SvgHelper.getBitmap(file2, AndroidUtilities.dp(360.0f), AndroidUtilities.dp(640.0f), false);
+                        access$500 = SvgHelper.getBitmap(file2, min, max, false);
                     } else {
-                        bitmap3 = Theme.loadScreenSizedBitmap(new FileInputStream(file2), 0);
+                        access$500 = Theme.loadScreenSizedBitmap(new FileInputStream(file2), 0);
                     }
-                    bitmap2 = bitmap3;
+                    bitmap2 = access$500;
                 } else {
                     bitmap2 = bitmap;
                 }
@@ -2675,7 +2680,7 @@ public class Theme {
         /* access modifiers changed from: private */
         public /* synthetic */ void lambda$didReceivedNotification$3(LoadingPattern loadingPattern) {
             TLRPC$TL_wallPaper tLRPC$TL_wallPaper = loadingPattern.pattern;
-            File pathToAttach = FileLoader.getPathToAttach(tLRPC$TL_wallPaper.document, true);
+            File pathToAttach = FileLoader.getInstance(UserConfig.selectedAccount).getPathToAttach(tLRPC$TL_wallPaper.document, true);
             int size = loadingPattern.accents.size();
             Bitmap bitmap = null;
             ArrayList arrayList = null;
@@ -2728,7 +2733,7 @@ public class Theme {
         ThemeAccent() {
         }
 
-        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v15, resolved type: java.lang.Object} */
+        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v24, resolved type: java.lang.Object} */
         /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r15v5, resolved type: java.lang.Integer} */
         /* JADX WARNING: Multi-variable type inference failed */
         /* Code decompiled incorrectly, please refer to instructions dump. */
@@ -2754,251 +2759,255 @@ public class Theme {
                 int r9 = r9.accentBaseColor
                 if (r8 != r9) goto L_0x002e
                 int r8 = r0.accentColor2
-                if (r8 == 0) goto L_0x0096
+                if (r8 == 0) goto L_0x00a2
             L_0x002e:
-                java.util.HashSet r8 = new java.util.HashSet
-                java.util.Set r9 = r17.keySet()
-                r8.<init>(r9)
+                java.util.Set r8 = r17.keySet()
                 java.util.HashMap r9 = org.telegram.ui.ActionBar.Theme.defaultColors
                 java.util.Set r9 = r9.keySet()
-                r8.addAll(r9)
-                java.util.HashSet r9 = org.telegram.ui.ActionBar.Theme.themeAccentExclusionKeys
-                r8.removeAll(r9)
-                java.util.Iterator r8 = r8.iterator()
-            L_0x004d:
+                java.util.HashSet r10 = new java.util.HashSet
+                int r11 = r8.size()
+                int r12 = r9.size()
+                int r11 = r11 + r12
+                r10.<init>(r11)
+                r10.addAll(r8)
+                r10.addAll(r9)
+                java.util.HashSet r8 = org.telegram.ui.ActionBar.Theme.themeAccentExclusionKeys
+                r10.removeAll(r8)
+                java.util.Iterator r8 = r10.iterator()
+            L_0x0059:
                 boolean r9 = r8.hasNext()
-                if (r9 == 0) goto L_0x0096
+                if (r9 == 0) goto L_0x00a2
                 java.lang.Object r9 = r8.next()
                 java.lang.String r9 = (java.lang.String) r9
                 java.lang.Object r10 = r1.get(r9)
                 java.lang.Integer r10 = (java.lang.Integer) r10
-                if (r10 != 0) goto L_0x0074
+                if (r10 != 0) goto L_0x0080
                 java.util.HashMap r11 = org.telegram.ui.ActionBar.Theme.fallbackKeys
                 java.lang.Object r11 = r11.get(r9)
                 java.lang.String r11 = (java.lang.String) r11
-                if (r11 == 0) goto L_0x0074
+                if (r11 == 0) goto L_0x0080
                 java.lang.Object r11 = r1.get(r11)
-                if (r11 == 0) goto L_0x0074
-                goto L_0x004d
-            L_0x0074:
-                if (r10 != 0) goto L_0x0080
+                if (r11 == 0) goto L_0x0080
+                goto L_0x0059
+            L_0x0080:
+                if (r10 != 0) goto L_0x008c
                 java.util.HashMap r10 = org.telegram.ui.ActionBar.Theme.defaultColors
                 java.lang.Object r10 = r10.get(r9)
                 java.lang.Integer r10 = (java.lang.Integer) r10
-            L_0x0080:
+            L_0x008c:
                 int r11 = r10.intValue()
                 int r11 = org.telegram.ui.ActionBar.Theme.changeColorAccent(r4, r6, r11, r7)
                 int r10 = r10.intValue()
-                if (r11 == r10) goto L_0x004d
+                if (r11 == r10) goto L_0x0059
                 java.lang.Integer r10 = java.lang.Integer.valueOf(r11)
                 r2.put(r9, r10)
-                goto L_0x004d
-            L_0x0096:
+                goto L_0x0059
+            L_0x00a2:
                 int r8 = r0.myMessagesAccentColor
                 r9 = 1060403937(0x3var_ae1, float:0.705)
                 java.lang.String r10 = "chat_outBubble"
                 r11 = 0
-                if (r8 != 0) goto L_0x00a4
+                if (r8 != 0) goto L_0x00b0
                 int r12 = r0.accentColor
-                if (r12 == 0) goto L_0x0114
-            L_0x00a4:
+                if (r12 == 0) goto L_0x0120
+            L_0x00b0:
                 int r12 = r0.myMessagesGradientAccentColor1
-                if (r12 == 0) goto L_0x0114
-                if (r8 == 0) goto L_0x00ab
-                goto L_0x00ad
-            L_0x00ab:
+                if (r12 == 0) goto L_0x0120
+                if (r8 == 0) goto L_0x00b7
+                goto L_0x00b9
+            L_0x00b7:
                 int r8 = r0.accentColor
-            L_0x00ad:
+            L_0x00b9:
                 java.lang.Object r12 = r1.get(r10)
                 java.lang.Integer r12 = (java.lang.Integer) r12
-                if (r12 != 0) goto L_0x00bf
+                if (r12 != 0) goto L_0x00cb
                 java.util.HashMap r12 = org.telegram.ui.ActionBar.Theme.defaultColors
                 java.lang.Object r12 = r12.get(r10)
                 java.lang.Integer r12 = (java.lang.Integer) r12
-            L_0x00bf:
+            L_0x00cb:
                 int r13 = r12.intValue()
                 int r13 = org.telegram.ui.ActionBar.Theme.changeColorAccent(r4, r6, r13, r7)
                 int r13 = org.telegram.messenger.AndroidUtilities.getColorDistance(r8, r13)
                 int r14 = r0.myMessagesGradientAccentColor1
                 int r14 = org.telegram.messenger.AndroidUtilities.getColorDistance(r8, r14)
                 int r15 = r0.myMessagesGradientAccentColor2
-                if (r15 == 0) goto L_0x00f7
+                if (r15 == 0) goto L_0x0103
                 int r15 = r0.myMessagesAccentColor
                 int r5 = r0.myMessagesGradientAccentColor1
                 int r5 = org.telegram.messenger.AndroidUtilities.getAverageColor(r15, r5)
                 int r15 = r0.myMessagesGradientAccentColor2
                 int r5 = org.telegram.messenger.AndroidUtilities.getAverageColor(r5, r15)
                 int r15 = r0.myMessagesGradientAccentColor3
-                if (r15 == 0) goto L_0x00eb
+                if (r15 == 0) goto L_0x00f7
                 int r5 = org.telegram.messenger.AndroidUtilities.getAverageColor(r5, r15)
-            L_0x00eb:
+            L_0x00f7:
                 float r5 = org.telegram.messenger.AndroidUtilities.computePerceivedBrightness(r5)
                 int r5 = (r5 > r9 ? 1 : (r5 == r9 ? 0 : -1))
-                if (r5 <= 0) goto L_0x00f5
+                if (r5 <= 0) goto L_0x0101
                 r5 = 1
-                goto L_0x00ff
-            L_0x00f5:
+                goto L_0x010b
+            L_0x0101:
                 r5 = 0
-                goto L_0x00ff
-            L_0x00f7:
+                goto L_0x010b
+            L_0x0103:
                 int r5 = r0.myMessagesAccentColor
                 int r15 = r0.myMessagesGradientAccentColor1
                 boolean r5 = org.telegram.ui.ActionBar.Theme.useBlackText(r5, r15)
-            L_0x00ff:
-                if (r5 == 0) goto L_0x010a
-                r5 = 35000(0x88b8, float:4.9045E-41)
-                if (r13 > r5) goto L_0x010a
-                if (r14 > r5) goto L_0x010a
-                r5 = 1
-                goto L_0x010b
-            L_0x010a:
-                r5 = 0
             L_0x010b:
+                if (r5 == 0) goto L_0x0116
+                r5 = 35000(0x88b8, float:4.9045E-41)
+                if (r13 > r5) goto L_0x0116
+                if (r14 > r5) goto L_0x0116
+                r5 = 1
+                goto L_0x0117
+            L_0x0116:
+                r5 = 0
+            L_0x0117:
                 int r12 = r12.intValue()
                 int r8 = org.telegram.ui.ActionBar.Theme.getAccentColor(r4, r12, r8)
-                goto L_0x0115
-            L_0x0114:
+                goto L_0x0121
+            L_0x0120:
                 r5 = 0
-            L_0x0115:
-                if (r8 == 0) goto L_0x0127
+            L_0x0121:
+                if (r8 == 0) goto L_0x0133
                 org.telegram.ui.ActionBar.Theme$ThemeInfo r12 = r0.parentTheme
                 int r12 = r12.accentBaseColor
-                if (r12 == 0) goto L_0x011f
-                if (r8 != r12) goto L_0x0125
-            L_0x011f:
+                if (r12 == 0) goto L_0x012b
+                if (r8 != r12) goto L_0x0131
+            L_0x012b:
                 int r12 = r0.accentColor
-                if (r12 == 0) goto L_0x0127
-                if (r12 == r8) goto L_0x0127
-            L_0x0125:
+                if (r12 == 0) goto L_0x0133
+                if (r12 == r8) goto L_0x0133
+            L_0x0131:
                 r12 = 1
-                goto L_0x0128
-            L_0x0127:
+                goto L_0x0134
+            L_0x0133:
                 r12 = 0
-            L_0x0128:
-                if (r12 != 0) goto L_0x012e
+            L_0x0134:
+                if (r12 != 0) goto L_0x013a
                 int r13 = r0.accentColor2
-                if (r13 == 0) goto L_0x01e8
-            L_0x012e:
+                if (r13 == 0) goto L_0x01f4
+            L_0x013a:
                 int r13 = r0.accentColor2
-                if (r13 == 0) goto L_0x0136
+                if (r13 == 0) goto L_0x0142
                 android.graphics.Color.colorToHSV(r13, r6)
-                goto L_0x0139
-            L_0x0136:
+                goto L_0x0145
+            L_0x0142:
                 android.graphics.Color.colorToHSV(r8, r6)
-            L_0x0139:
+            L_0x0145:
                 java.util.HashSet r13 = org.telegram.ui.ActionBar.Theme.myMessagesColorKeys
                 java.util.Iterator r13 = r13.iterator()
-            L_0x0141:
+            L_0x014d:
                 boolean r14 = r13.hasNext()
-                if (r14 == 0) goto L_0x018f
+                if (r14 == 0) goto L_0x019b
                 java.lang.Object r14 = r13.next()
                 java.lang.String r14 = (java.lang.String) r14
                 java.lang.Object r15 = r1.get(r14)
                 java.lang.Integer r15 = (java.lang.Integer) r15
-                if (r15 != 0) goto L_0x0168
+                if (r15 != 0) goto L_0x0174
                 java.util.HashMap r3 = org.telegram.ui.ActionBar.Theme.fallbackKeys
                 java.lang.Object r3 = r3.get(r14)
                 java.lang.String r3 = (java.lang.String) r3
-                if (r3 == 0) goto L_0x0168
+                if (r3 == 0) goto L_0x0174
                 java.lang.Object r3 = r1.get(r3)
-                if (r3 == 0) goto L_0x0168
-                goto L_0x0177
-            L_0x0168:
-                if (r15 != 0) goto L_0x0175
+                if (r3 == 0) goto L_0x0174
+                goto L_0x0183
+            L_0x0174:
+                if (r15 != 0) goto L_0x0181
                 java.util.HashMap r3 = org.telegram.ui.ActionBar.Theme.defaultColors
                 java.lang.Object r3 = r3.get(r14)
                 r15 = r3
                 java.lang.Integer r15 = (java.lang.Integer) r15
-            L_0x0175:
-                if (r15 != 0) goto L_0x0179
-            L_0x0177:
+            L_0x0181:
+                if (r15 != 0) goto L_0x0185
+            L_0x0183:
                 r3 = 1
-                goto L_0x0141
-            L_0x0179:
+                goto L_0x014d
+            L_0x0185:
                 int r3 = r15.intValue()
                 int r3 = org.telegram.ui.ActionBar.Theme.changeColorAccent(r4, r6, r3, r7)
                 int r15 = r15.intValue()
-                if (r3 == r15) goto L_0x0177
+                if (r3 == r15) goto L_0x0183
                 java.lang.Integer r3 = java.lang.Integer.valueOf(r3)
                 r2.put(r14, r3)
-                goto L_0x0177
-            L_0x018f:
-                if (r12 == 0) goto L_0x01e8
+                goto L_0x0183
+            L_0x019b:
+                if (r12 == 0) goto L_0x01f4
                 android.graphics.Color.colorToHSV(r8, r6)
                 java.util.HashSet r3 = org.telegram.ui.ActionBar.Theme.myMessagesBubblesColorKeys
                 java.util.Iterator r3 = r3.iterator()
-            L_0x019c:
+            L_0x01a8:
                 boolean r8 = r3.hasNext()
-                if (r8 == 0) goto L_0x01e8
+                if (r8 == 0) goto L_0x01f4
                 java.lang.Object r8 = r3.next()
                 java.lang.String r8 = (java.lang.String) r8
                 java.lang.Object r12 = r1.get(r8)
                 java.lang.Integer r12 = (java.lang.Integer) r12
-                if (r12 != 0) goto L_0x01c3
+                if (r12 != 0) goto L_0x01cf
                 java.util.HashMap r13 = org.telegram.ui.ActionBar.Theme.fallbackKeys
                 java.lang.Object r13 = r13.get(r8)
                 java.lang.String r13 = (java.lang.String) r13
-                if (r13 == 0) goto L_0x01c3
+                if (r13 == 0) goto L_0x01cf
                 java.lang.Object r13 = r1.get(r13)
-                if (r13 == 0) goto L_0x01c3
-                goto L_0x019c
-            L_0x01c3:
-                if (r12 != 0) goto L_0x01cf
+                if (r13 == 0) goto L_0x01cf
+                goto L_0x01a8
+            L_0x01cf:
+                if (r12 != 0) goto L_0x01db
                 java.util.HashMap r12 = org.telegram.ui.ActionBar.Theme.defaultColors
                 java.lang.Object r12 = r12.get(r8)
                 java.lang.Integer r12 = (java.lang.Integer) r12
-            L_0x01cf:
-                if (r12 != 0) goto L_0x01d2
-                goto L_0x019c
-            L_0x01d2:
+            L_0x01db:
+                if (r12 != 0) goto L_0x01de
+                goto L_0x01a8
+            L_0x01de:
                 int r13 = r12.intValue()
                 int r13 = org.telegram.ui.ActionBar.Theme.changeColorAccent(r4, r6, r13, r7)
                 int r12 = r12.intValue()
-                if (r13 == r12) goto L_0x019c
+                if (r13 == r12) goto L_0x01a8
                 java.lang.Integer r12 = java.lang.Integer.valueOf(r13)
                 r2.put(r8, r12)
-                goto L_0x019c
-            L_0x01e8:
+                goto L_0x01a8
+            L_0x01f4:
                 r1 = -1
                 java.lang.String r3 = "chat_messageLinkOut"
                 java.lang.String r4 = "chat_outLoader"
-                if (r5 != 0) goto L_0x0426
+                if (r5 != 0) goto L_0x0432
                 int r6 = r0.myMessagesGradientAccentColor1
-                if (r6 == 0) goto L_0x0426
+                if (r6 == 0) goto L_0x0432
                 int r8 = r0.myMessagesGradientAccentColor2
-                if (r8 == 0) goto L_0x0217
+                if (r8 == 0) goto L_0x0223
                 int r8 = r0.myMessagesAccentColor
                 int r6 = org.telegram.messenger.AndroidUtilities.getAverageColor(r8, r6)
                 int r8 = r0.myMessagesGradientAccentColor2
                 int r6 = org.telegram.messenger.AndroidUtilities.getAverageColor(r6, r8)
                 int r8 = r0.myMessagesGradientAccentColor3
-                if (r8 == 0) goto L_0x020b
+                if (r8 == 0) goto L_0x0217
                 int r6 = org.telegram.messenger.AndroidUtilities.getAverageColor(r6, r8)
-            L_0x020b:
+            L_0x0217:
                 float r6 = org.telegram.messenger.AndroidUtilities.computePerceivedBrightness(r6)
                 int r6 = (r6 > r9 ? 1 : (r6 == r9 ? 0 : -1))
-                if (r6 <= 0) goto L_0x0215
+                if (r6 <= 0) goto L_0x0221
                 r6 = 1
-                goto L_0x021d
-            L_0x0215:
+                goto L_0x0229
+            L_0x0221:
                 r6 = 0
-                goto L_0x021d
-            L_0x0217:
+                goto L_0x0229
+            L_0x0223:
                 int r8 = r0.myMessagesAccentColor
                 boolean r6 = org.telegram.ui.ActionBar.Theme.useBlackText(r8, r6)
-            L_0x021d:
-                if (r6 == 0) goto L_0x0228
+            L_0x0229:
+                if (r6 == 0) goto L_0x0234
                 r6 = -14606047(0xfffffffffvar_, float:-2.1417772E38)
                 r8 = -11184811(0xfffffffffvar_, float:-2.8356863E38)
                 r9 = 1291845632(0x4d000000, float:1.34217728E8)
-                goto L_0x022f
-            L_0x0228:
+                goto L_0x023b
+            L_0x0234:
                 r8 = -1118482(0xffffffffffeeeeee, float:NaN)
                 r9 = 1308622847(0x4dffffff, float:5.3687088E8)
                 r6 = -1
-            L_0x022f:
+            L_0x023b:
                 int r12 = r0.accentColor2
-                if (r12 != 0) goto L_0x0402
+                if (r12 != 0) goto L_0x040e
                 java.lang.Integer r12 = java.lang.Integer.valueOf(r9)
                 java.lang.String r13 = "chat_outAudioProgress"
                 r2.put(r13, r12)
@@ -3154,7 +3163,7 @@ public class Theme {
                 java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
                 java.lang.String r9 = "chat_outMediaIconSelected"
                 r2.put(r9, r8)
-            L_0x0402:
+            L_0x040e:
                 java.lang.Integer r8 = java.lang.Integer.valueOf(r6)
                 java.lang.String r9 = "chat_outReplyMessageText"
                 r2.put(r9, r8)
@@ -3167,26 +3176,26 @@ public class Theme {
                 java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
                 java.lang.String r8 = "chat_messageTextOut"
                 r2.put(r8, r6)
-            L_0x0426:
-                if (r5 == 0) goto L_0x0443
+            L_0x0432:
+                if (r5 == 0) goto L_0x044f
                 boolean r6 = r2.containsKey(r4)
-                if (r6 == 0) goto L_0x0439
+                if (r6 == 0) goto L_0x0445
                 java.lang.Object r4 = r2.get(r4)
                 java.lang.Integer r4 = (java.lang.Integer) r4
                 int r4 = r4.intValue()
-                goto L_0x043a
-            L_0x0439:
+                goto L_0x0446
+            L_0x0445:
                 r4 = 0
-            L_0x043a:
+            L_0x0446:
                 int r1 = org.telegram.messenger.AndroidUtilities.getColorDistance(r1, r4)
                 r4 = 5000(0x1388, float:7.006E-42)
-                if (r1 >= r4) goto L_0x0443
+                if (r1 >= r4) goto L_0x044f
                 r5 = 0
-            L_0x0443:
+            L_0x044f:
                 int r1 = r0.myMessagesAccentColor
-                if (r1 == 0) goto L_0x0482
+                if (r1 == 0) goto L_0x048e
                 int r4 = r0.myMessagesGradientAccentColor1
-                if (r4 == 0) goto L_0x0482
+                if (r4 == 0) goto L_0x048e
                 java.lang.Integer r1 = java.lang.Integer.valueOf(r1)
                 r2.put(r10, r1)
                 int r1 = r0.myMessagesGradientAccentColor1
@@ -3194,95 +3203,96 @@ public class Theme {
                 java.lang.String r4 = "chat_outBubbleGradient"
                 r2.put(r4, r1)
                 int r1 = r0.myMessagesGradientAccentColor2
-                if (r1 == 0) goto L_0x0477
+                if (r1 == 0) goto L_0x0483
                 java.lang.Integer r1 = java.lang.Integer.valueOf(r1)
                 java.lang.String r4 = "chat_outBubbleGradient2"
                 r2.put(r4, r1)
                 int r1 = r0.myMessagesGradientAccentColor3
-                if (r1 == 0) goto L_0x0477
+                if (r1 == 0) goto L_0x0483
                 java.lang.Integer r1 = java.lang.Integer.valueOf(r1)
                 java.lang.String r4 = "chat_outBubbleGradient3"
                 r2.put(r4, r1)
-            L_0x0477:
+            L_0x0483:
                 boolean r1 = r0.myMessagesAnimated
                 java.lang.Integer r1 = java.lang.Integer.valueOf(r1)
                 java.lang.String r4 = "chat_outBubbleGradientAnimated"
                 r2.put(r4, r1)
-            L_0x0482:
+            L_0x048e:
                 long r8 = r0.backgroundOverrideColor
                 int r1 = (int) r8
                 java.lang.String r4 = "chat_wallpaper"
                 r12 = 0
-                if (r1 == 0) goto L_0x0493
+                if (r1 == 0) goto L_0x049f
                 java.lang.Integer r1 = java.lang.Integer.valueOf(r1)
                 r2.put(r4, r1)
-                goto L_0x049a
-            L_0x0493:
+                goto L_0x04a6
+            L_0x049f:
                 int r1 = (r8 > r12 ? 1 : (r8 == r12 ? 0 : -1))
-                if (r1 == 0) goto L_0x049a
+                if (r1 == 0) goto L_0x04a6
                 r2.remove(r4)
-            L_0x049a:
+            L_0x04a6:
                 long r8 = r0.backgroundGradientOverrideColor1
                 int r1 = (int) r8
                 java.lang.String r6 = "chat_wallpaper_gradient_to"
-                if (r1 == 0) goto L_0x04a9
+                if (r1 == 0) goto L_0x04b5
                 java.lang.Integer r1 = java.lang.Integer.valueOf(r1)
                 r2.put(r6, r1)
-                goto L_0x04b0
-            L_0x04a9:
+                goto L_0x04bc
+            L_0x04b5:
                 int r1 = (r8 > r12 ? 1 : (r8 == r12 ? 0 : -1))
-                if (r1 == 0) goto L_0x04b0
+                if (r1 == 0) goto L_0x04bc
                 r2.remove(r6)
-            L_0x04b0:
+            L_0x04bc:
                 long r8 = r0.backgroundGradientOverrideColor2
                 int r1 = (int) r8
                 java.lang.String r14 = "key_chat_wallpaper_gradient_to2"
-                if (r1 == 0) goto L_0x04bf
+                if (r1 == 0) goto L_0x04cb
                 java.lang.Integer r1 = java.lang.Integer.valueOf(r1)
                 r2.put(r14, r1)
-                goto L_0x04c6
-            L_0x04bf:
+                goto L_0x04d2
+            L_0x04cb:
                 int r1 = (r8 > r12 ? 1 : (r8 == r12 ? 0 : -1))
-                if (r1 == 0) goto L_0x04c6
+                if (r1 == 0) goto L_0x04d2
                 r2.remove(r14)
-            L_0x04c6:
+            L_0x04d2:
                 long r8 = r0.backgroundGradientOverrideColor3
                 int r1 = (int) r8
                 java.lang.String r15 = "key_chat_wallpaper_gradient_to3"
-                if (r1 == 0) goto L_0x04d5
+                if (r1 == 0) goto L_0x04e1
                 java.lang.Integer r1 = java.lang.Integer.valueOf(r1)
                 r2.put(r15, r1)
-                goto L_0x04dc
-            L_0x04d5:
+                goto L_0x04e8
+            L_0x04e1:
                 int r1 = (r8 > r12 ? 1 : (r8 == r12 ? 0 : -1))
-                if (r1 == 0) goto L_0x04dc
+                if (r1 == 0) goto L_0x04e8
                 r2.remove(r15)
-            L_0x04dc:
+            L_0x04e8:
                 int r1 = r0.backgroundRotation
                 r8 = 45
-                if (r1 == r8) goto L_0x04eb
+                if (r1 == r8) goto L_0x04f7
                 java.lang.Integer r1 = java.lang.Integer.valueOf(r1)
                 java.lang.String r8 = "chat_wallpaper_gradient_rotation"
                 r2.put(r8, r1)
-            L_0x04eb:
+            L_0x04f7:
                 java.lang.Object r1 = r2.get(r10)
                 java.lang.Integer r1 = (java.lang.Integer) r1
-                if (r1 != 0) goto L_0x04fb
+                if (r1 != 0) goto L_0x0507
                 int r1 = org.telegram.ui.ActionBar.Theme.getColor(r10)
                 java.lang.Integer r1 = java.lang.Integer.valueOf(r1)
-            L_0x04fb:
+            L_0x0507:
                 java.lang.String r8 = "chat_inBubble"
                 java.lang.Object r9 = r2.get(r8)
                 java.lang.Integer r9 = (java.lang.Integer) r9
-                if (r9 != 0) goto L_0x050d
+                if (r9 != 0) goto L_0x0519
                 int r8 = org.telegram.ui.ActionBar.Theme.getColor(r8)
                 java.lang.Integer r9 = java.lang.Integer.valueOf(r8)
-            L_0x050d:
+            L_0x0519:
+                r1.intValue()
                 org.telegram.tgnet.TLRPC$TL_theme r8 = r0.info
-                if (r8 == 0) goto L_0x0588
+                if (r8 == 0) goto L_0x0597
                 java.lang.String r8 = r8.emoticon
-                if (r8 == 0) goto L_0x0588
-                if (r7 != 0) goto L_0x0588
+                if (r8 == 0) goto L_0x0597
+                if (r7 != 0) goto L_0x0597
                 java.lang.String r8 = "chat_selectedBackground"
                 r2.remove(r8)
                 r8 = 3
@@ -3293,14 +3303,14 @@ public class Theme {
                 r10 = 2
                 r8[r10] = r15
                 int r8 = r0.averageColor(r2, r8)
-                if (r8 != 0) goto L_0x0535
+                if (r8 != 0) goto L_0x0544
                 java.lang.String[] r8 = new java.lang.String[r6]
                 r8[r11] = r4
                 int r8 = r0.averageColor(r2, r8)
-            L_0x0535:
-                if (r8 != 0) goto L_0x0539
+            L_0x0544:
+                if (r8 != 0) goto L_0x0548
                 int r8 = r0.accentColor
-            L_0x0539:
+            L_0x0548:
                 int r4 = r1.intValue()
                 int r4 = r0.bubbleSelectedOverlay(r4, r8)
                 java.lang.Integer r6 = java.lang.Integer.valueOf(r4)
@@ -3325,20 +3335,41 @@ public class Theme {
                 java.lang.Integer r4 = java.lang.Integer.valueOf(r4)
                 java.lang.String r6 = "chat_inBubbleSelected"
                 r2.put(r6, r4)
-            L_0x0588:
+            L_0x0597:
+                if (r7 != 0) goto L_0x05d3
+                int r4 = r9.intValue()
+                int r6 = r0.accentColor
+                int r4 = r0.textSelectionBackground(r11, r4, r6)
+                java.lang.Integer r4 = java.lang.Integer.valueOf(r4)
+                java.lang.String r6 = "chat_inTextSelectionHighlight"
+                r2.put(r6, r4)
+                int r4 = r1.intValue()
+                int r6 = r0.accentColor
+                r8 = 1
+                int r4 = r0.textSelectionBackground(r8, r4, r6)
+                java.lang.Integer r4 = java.lang.Integer.valueOf(r4)
+                java.lang.String r6 = "chat_outTextSelectionHighlight"
+                r2.put(r6, r4)
+                int r4 = r1.intValue()
+                int r6 = r0.accentColor
+                int r4 = r0.textSelectionHandle(r4, r6)
+                java.lang.Integer r4 = java.lang.Integer.valueOf(r4)
+                java.lang.String r6 = "chat_outTextSelectionCursor"
+                r2.put(r6, r4)
+            L_0x05d3:
                 java.lang.String r4 = "chat_messageLinkIn"
                 java.lang.Object r6 = r2.get(r4)
                 java.lang.Integer r6 = (java.lang.Integer) r6
-                if (r6 != 0) goto L_0x059a
+                if (r6 != 0) goto L_0x05e5
                 int r4 = org.telegram.ui.ActionBar.Theme.getColor(r4)
                 java.lang.Integer r6 = java.lang.Integer.valueOf(r4)
-            L_0x059a:
+            L_0x05e5:
                 java.lang.Object r4 = r2.get(r3)
                 java.lang.Integer r4 = (java.lang.Integer) r4
-                if (r4 != 0) goto L_0x05aa
+                if (r4 != 0) goto L_0x05f5
                 int r3 = org.telegram.ui.ActionBar.Theme.getColor(r3)
                 java.lang.Integer r4 = java.lang.Integer.valueOf(r3)
-            L_0x05aa:
+            L_0x05f5:
                 int r3 = r6.intValue()
                 int r6 = r9.intValue()
                 int r3 = r0.linkSelectionBackground(r3, r6, r7)
@@ -3350,6 +3381,31 @@ public class Theme {
                 int r1 = r0.linkSelectionBackground(r3, r1, r7)
                 java.lang.Integer r1 = java.lang.Integer.valueOf(r1)
                 java.lang.String r3 = "chat_outLinkSelectBackground"
+                r2.put(r3, r1)
+                java.lang.String r1 = "actionBarDefaultSubmenuBackground"
+                java.lang.Object r3 = r2.get(r1)
+                java.lang.Integer r3 = (java.lang.Integer) r3
+                if (r3 != 0) goto L_0x0631
+                int r1 = org.telegram.ui.ActionBar.Theme.getColor(r1)
+                java.lang.Integer r3 = java.lang.Integer.valueOf(r1)
+            L_0x0631:
+                int r1 = r3.intValue()
+                int r1 = android.graphics.Color.alpha(r1)
+                int r4 = r3.intValue()
+                int r4 = android.graphics.Color.red(r4)
+                int r4 = r4 + -10
+                int r4 = java.lang.Math.max(r11, r4)
+                int r6 = r3.intValue()
+                int r6 = android.graphics.Color.green(r6)
+                int r6 = r6 + -10
+                int r6 = java.lang.Math.max(r11, r6)
+                int r3 = r3.intValue()
+                int r3 = android.graphics.Color.blue(r3)
+                int r3 = r3 + -10
+                int r3 = java.lang.Math.max(r11, r3)
+                int r1 = android.graphics.Color.argb(r1, r4, r6, r3)
+                java.lang.Integer r1 = java.lang.Integer.valueOf(r1)
+                java.lang.String r3 = "actionBarDefaultSubmenuSeparator"
                 r2.put(r3, r1)
                 r1 = 1
                 r1 = r1 ^ r5
@@ -3371,6 +3427,36 @@ public class Theme {
             float[] fArr3 = this.tempHSV;
             fArr3[2] = Math.max(0.0f, Math.min(1.0f, fArr3[2] - 0.05f));
             return Color.HSVToColor(30, this.tempHSV);
+        }
+
+        private int textSelectionBackground(boolean z, int i, int i2) {
+            Color.colorToHSV(i2, this.tempHSV);
+            float[] fArr = this.tempHSV;
+            float f = fArr[0];
+            Color.colorToHSV(i, fArr);
+            float[] fArr2 = this.tempHSV;
+            if (fArr2[1] <= 0.0f || (fArr2[0] > 45.0f && fArr2[0] < 85.0f)) {
+                fArr2[0] = f;
+            }
+            fArr2[1] = Math.max(0.0f, Math.min(1.0f, fArr2[1] + (fArr2[2] > 0.85f ? 0.25f : 0.45f)));
+            float[] fArr3 = this.tempHSV;
+            fArr3[2] = Math.max(0.0f, Math.min(1.0f, fArr3[2] - 0.15f));
+            return Color.HSVToColor(80, this.tempHSV);
+        }
+
+        private int textSelectionHandle(int i, int i2) {
+            Color.colorToHSV(i2, this.tempHSV);
+            float[] fArr = this.tempHSV;
+            float f = fArr[0];
+            Color.colorToHSV(i, fArr);
+            float[] fArr2 = this.tempHSV;
+            if (fArr2[1] <= 0.0f || (fArr2[0] > 45.0f && fArr2[0] < 85.0f)) {
+                fArr2[0] = f;
+            }
+            fArr2[1] = Math.max(0.0f, Math.min(1.0f, fArr2[1] + 0.6f));
+            float[] fArr3 = this.tempHSV;
+            fArr3[2] = Math.max(0.0f, Math.min(1.0f, fArr3[2] - (fArr3[2] > 0.7f ? 0.25f : 0.125f)));
+            return Theme.blendOver(i, Color.HSVToColor(255, this.tempHSV));
         }
 
         private int linkSelectionBackground(int i, int i2, boolean z) {
@@ -4830,14 +4916,14 @@ public class Theme {
         }
     }
 
-    /* JADX WARNING: type inference failed for: r1v77, types: [boolean] */
-    /* JADX WARNING: type inference failed for: r1v83 */
-    /* JADX WARNING: type inference failed for: r1v87 */
-    /* JADX WARNING: Removed duplicated region for block: B:154:0x369a A[Catch:{ Exception -> 0x38db }] */
-    /* JADX WARNING: Removed duplicated region for block: B:161:0x36b3 A[Catch:{ Exception -> 0x38db }] */
-    /* JADX WARNING: Removed duplicated region for block: B:162:0x36b6 A[Catch:{ Exception -> 0x38db }] */
-    /* JADX WARNING: Removed duplicated region for block: B:166:0x36c3 A[Catch:{ Exception -> 0x38db }] */
-    /* JADX WARNING: Removed duplicated region for block: B:248:0x36d0 A[SYNTHETIC] */
+    /* JADX WARNING: type inference failed for: r1v74, types: [boolean] */
+    /* JADX WARNING: type inference failed for: r1v80 */
+    /* JADX WARNING: type inference failed for: r1v84 */
+    /* JADX WARNING: Removed duplicated region for block: B:154:0x378c A[Catch:{ Exception -> 0x395d }] */
+    /* JADX WARNING: Removed duplicated region for block: B:161:0x37a5 A[Catch:{ Exception -> 0x395d }] */
+    /* JADX WARNING: Removed duplicated region for block: B:162:0x37a8 A[Catch:{ Exception -> 0x395d }] */
+    /* JADX WARNING: Removed duplicated region for block: B:166:0x37b5 A[Catch:{ Exception -> 0x395d }] */
+    /* JADX WARNING: Removed duplicated region for block: B:233:0x37c3 A[SYNTHETIC] */
     static {
         /*
             java.lang.Object r0 = new java.lang.Object
@@ -4875,16 +4961,13 @@ public class Theme {
             r5 = 1
             r4.<init>(r5)
             maskPaint = r4
-            r4 = 3
+            r4 = 4
             boolean[] r6 = new boolean[r4]
             loadingRemoteThemes = r6
             int[] r6 = new int[r4]
             lastLoadingThemesTime = r6
             long[] r6 = new long[r4]
             remoteThemesHash = r6
-            java.util.ArrayList r6 = new java.util.ArrayList
-            r6.<init>()
-            defaultEmojiThemes = r6
             r6 = 12
             android.graphics.drawable.Drawable[] r6 = new android.graphics.drawable.Drawable[r6]
             avatarDrawables = r6
@@ -4921,12 +5004,6 @@ public class Theme {
             android.graphics.drawable.Drawable[][] r8 = (android.graphics.drawable.Drawable[][]) r8
             chat_fileStatesDrawable = r8
             int[] r8 = new int[r7]
-            r8 = {6, 2} // fill-array
-            java.lang.Class<org.telegram.ui.Components.CombinedDrawable> r9 = org.telegram.ui.Components.CombinedDrawable.class
-            java.lang.Object r8 = java.lang.reflect.Array.newInstance(r9, r8)
-            org.telegram.ui.Components.CombinedDrawable[][] r8 = (org.telegram.ui.Components.CombinedDrawable[][]) r8
-            chat_fileMiniStatesDrawable = r8
-            int[] r8 = new int[r7]
             r8 = {13, 2} // fill-array
             java.lang.Class<android.graphics.drawable.Drawable> r9 = android.graphics.drawable.Drawable.class
             java.lang.Object r8 = java.lang.reflect.Array.newInstance(r9, r8)
@@ -4934,682 +5011,682 @@ public class Theme {
             chat_photoStatesDrawables = r8
             android.graphics.Path[] r8 = new android.graphics.Path[r7]
             chat_filePath = r8
-            android.graphics.Path[] r8 = new android.graphics.Path[r4]
-            chat_updatePath = r8
-            r8 = 7
-            java.lang.String[] r9 = new java.lang.String[r8]
-            java.lang.String r10 = "avatar_backgroundRed"
-            r9[r1] = r10
-            java.lang.String r10 = "avatar_backgroundOrange"
-            r9[r5] = r10
-            java.lang.String r10 = "avatar_backgroundViolet"
-            r9[r7] = r10
-            java.lang.String r10 = "avatar_backgroundGreen"
-            r9[r4] = r10
-            java.lang.String r10 = "avatar_backgroundCyan"
-            r11 = 4
-            r9[r11] = r10
-            java.lang.String r10 = "avatar_backgroundBlue"
+            r8 = 3
+            android.graphics.Path[] r9 = new android.graphics.Path[r8]
+            chat_updatePath = r9
+            r9 = 7
+            java.lang.String[] r10 = new java.lang.String[r9]
+            java.lang.String r11 = "avatar_backgroundRed"
+            r10[r1] = r11
+            java.lang.String r11 = "avatar_backgroundOrange"
+            r10[r5] = r11
+            java.lang.String r11 = "avatar_backgroundViolet"
+            r10[r7] = r11
+            java.lang.String r11 = "avatar_backgroundGreen"
+            r10[r8] = r11
+            java.lang.String r11 = "avatar_backgroundCyan"
+            r10[r4] = r11
+            java.lang.String r11 = "avatar_backgroundBlue"
             r12 = 5
-            r9[r12] = r10
-            java.lang.String r10 = "avatar_backgroundPink"
-            r9[r6] = r10
-            keys_avatar_background = r9
-            java.lang.String[] r9 = new java.lang.String[r8]
-            java.lang.String r10 = "avatar_nameInMessageRed"
-            r9[r1] = r10
-            java.lang.String r10 = "avatar_nameInMessageOrange"
-            r9[r5] = r10
-            java.lang.String r10 = "avatar_nameInMessageViolet"
-            r9[r7] = r10
-            java.lang.String r10 = "avatar_nameInMessageGreen"
-            r9[r4] = r10
-            java.lang.String r10 = "avatar_nameInMessageCyan"
-            r9[r11] = r10
-            java.lang.String r10 = "avatar_nameInMessageBlue"
-            r9[r12] = r10
-            java.lang.String r10 = "avatar_nameInMessagePink"
-            r9[r6] = r10
-            keys_avatar_nameInMessage = r9
-            java.util.HashMap r9 = new java.util.HashMap
-            r9.<init>()
-            defaultChatDrawables = r9
-            java.util.HashMap r9 = new java.util.HashMap
-            r9.<init>()
-            defaultChatDrawableColorKeys = r9
-            java.util.HashMap r9 = new java.util.HashMap
-            r9.<init>()
-            defaultChatPaints = r9
-            java.util.HashMap r9 = new java.util.HashMap
-            r9.<init>()
-            defaultChatPaintColors = r9
-            java.util.HashSet r9 = new java.util.HashSet
-            r9.<init>()
-            myMessagesColorKeys = r9
-            java.util.HashSet r9 = new java.util.HashSet
-            r9.<init>()
-            myMessagesBubblesColorKeys = r9
-            java.util.HashSet r9 = new java.util.HashSet
-            r9.<init>()
-            java.util.HashMap r9 = new java.util.HashMap
-            r9.<init>()
-            defaultColors = r9
-            java.util.HashMap r9 = new java.util.HashMap
-            r9.<init>()
-            fallbackKeys = r9
-            java.util.HashSet r9 = new java.util.HashSet
-            r9.<init>()
-            themeAccentExclusionKeys = r9
-            java.lang.ThreadLocal r9 = new java.lang.ThreadLocal
-            r9.<init>()
-            hsvTemp1Local = r9
-            java.lang.ThreadLocal r9 = new java.lang.ThreadLocal
-            r9.<init>()
-            hsvTemp2Local = r9
-            java.lang.ThreadLocal r9 = new java.lang.ThreadLocal
-            r9.<init>()
-            hsvTemp3Local = r9
-            java.lang.ThreadLocal r9 = new java.lang.ThreadLocal
-            r9.<init>()
-            hsvTemp4Local = r9
-            java.lang.ThreadLocal r9 = new java.lang.ThreadLocal
-            r9.<init>()
-            hsvTemp5Local = r9
-            java.util.HashMap<java.lang.String, java.lang.Integer> r9 = defaultColors
-            java.lang.String r10 = "dialogBackground"
-            r9.put(r10, r0)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r9 = defaultColors
-            r10 = -986896(0xfffffffffff0f0f0, float:NaN)
-            java.lang.Integer r10 = java.lang.Integer.valueOf(r10)
+            r10[r12] = r11
+            java.lang.String r11 = "avatar_backgroundPink"
+            r10[r6] = r11
+            keys_avatar_background = r10
+            java.lang.String[] r10 = new java.lang.String[r9]
+            java.lang.String r11 = "avatar_nameInMessageRed"
+            r10[r1] = r11
+            java.lang.String r11 = "avatar_nameInMessageOrange"
+            r10[r5] = r11
+            java.lang.String r11 = "avatar_nameInMessageViolet"
+            r10[r7] = r11
+            java.lang.String r11 = "avatar_nameInMessageGreen"
+            r10[r8] = r11
+            java.lang.String r11 = "avatar_nameInMessageCyan"
+            r10[r4] = r11
+            java.lang.String r11 = "avatar_nameInMessageBlue"
+            r10[r12] = r11
+            java.lang.String r11 = "avatar_nameInMessagePink"
+            r10[r6] = r11
+            keys_avatar_nameInMessage = r10
+            java.util.HashMap r10 = new java.util.HashMap
+            r10.<init>()
+            defaultChatDrawables = r10
+            java.util.HashMap r10 = new java.util.HashMap
+            r10.<init>()
+            defaultChatDrawableColorKeys = r10
+            java.util.HashMap r10 = new java.util.HashMap
+            r10.<init>()
+            defaultChatPaints = r10
+            java.util.HashMap r10 = new java.util.HashMap
+            r10.<init>()
+            defaultChatPaintColors = r10
+            java.util.HashSet r10 = new java.util.HashSet
+            r10.<init>()
+            myMessagesColorKeys = r10
+            java.util.HashSet r10 = new java.util.HashSet
+            r10.<init>()
+            myMessagesBubblesColorKeys = r10
+            java.util.HashSet r10 = new java.util.HashSet
+            r10.<init>()
+            java.util.HashMap r10 = new java.util.HashMap
+            r10.<init>()
+            defaultColors = r10
+            java.util.HashMap r10 = new java.util.HashMap
+            r10.<init>()
+            fallbackKeys = r10
+            java.util.HashSet r10 = new java.util.HashSet
+            r10.<init>()
+            themeAccentExclusionKeys = r10
+            java.lang.ThreadLocal r10 = new java.lang.ThreadLocal
+            r10.<init>()
+            hsvTemp1Local = r10
+            java.lang.ThreadLocal r10 = new java.lang.ThreadLocal
+            r10.<init>()
+            hsvTemp2Local = r10
+            java.lang.ThreadLocal r10 = new java.lang.ThreadLocal
+            r10.<init>()
+            hsvTemp3Local = r10
+            java.lang.ThreadLocal r10 = new java.lang.ThreadLocal
+            r10.<init>()
+            hsvTemp4Local = r10
+            java.lang.ThreadLocal r10 = new java.lang.ThreadLocal
+            r10.<init>()
+            hsvTemp5Local = r10
+            java.util.HashMap<java.lang.String, java.lang.Integer> r10 = defaultColors
+            java.lang.String r11 = "dialogBackground"
+            r10.put(r11, r0)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r10 = defaultColors
+            r11 = -986896(0xfffffffffff0f0f0, float:NaN)
+            java.lang.Integer r11 = java.lang.Integer.valueOf(r11)
             java.lang.String r13 = "dialogBackgroundGray"
-            r9.put(r13, r10)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r9 = defaultColors
-            r10 = -14540254(0xfffffffffvar_, float:-2.1551216E38)
-            java.lang.Integer r10 = java.lang.Integer.valueOf(r10)
+            r10.put(r13, r11)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r10 = defaultColors
+            r11 = -14540254(0xfffffffffvar_, float:-2.1551216E38)
+            java.lang.Integer r11 = java.lang.Integer.valueOf(r11)
             java.lang.String r13 = "dialogTextBlack"
-            r9.put(r13, r10)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r9 = defaultColors
+            r10.put(r13, r11)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r10 = defaultColors
             r13 = -14255946(0xfffffffffvar_b6, float:-2.2127861E38)
             java.lang.Integer r13 = java.lang.Integer.valueOf(r13)
             java.lang.String r14 = "dialogTextLink"
-            r9.put(r14, r13)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r9 = defaultColors
+            r10.put(r14, r13)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r10 = defaultColors
             r13 = 862104035(0x3362a9e3, float:5.2774237E-8)
             java.lang.Integer r13 = java.lang.Integer.valueOf(r13)
             java.lang.String r14 = "dialogLinkSelection"
-            r9.put(r14, r13)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r9 = defaultColors
+            r10.put(r14, r13)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r10 = defaultColors
             r13 = -3319206(0xffffffffffcd5a5a, float:NaN)
             java.lang.Integer r13 = java.lang.Integer.valueOf(r13)
             java.lang.String r14 = "dialogTextRed"
-            r9.put(r14, r13)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r9 = defaultColors
+            r10.put(r14, r13)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r10 = defaultColors
             r13 = -2213318(0xffffffffffde3a3a, float:NaN)
             java.lang.Integer r13 = java.lang.Integer.valueOf(r13)
             java.lang.String r14 = "dialogTextRed2"
-            r9.put(r14, r13)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r9 = defaultColors
+            r10.put(r14, r13)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r10 = defaultColors
             r13 = -13660983(0xffffffffff2f8cc9, float:-2.333459E38)
             java.lang.Integer r13 = java.lang.Integer.valueOf(r13)
             java.lang.String r14 = "dialogTextBlue"
-            r9.put(r14, r13)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r9 = defaultColors
+            r10.put(r14, r13)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r10 = defaultColors
             r13 = -12937771(0xffffffffff3a95d5, float:-2.4801438E38)
             java.lang.Integer r13 = java.lang.Integer.valueOf(r13)
             java.lang.String r14 = "dialogTextBlue2"
-            r9.put(r14, r13)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r9 = defaultColors
+            r10.put(r14, r13)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r10 = defaultColors
             r13 = -12664327(0xffffffffff3ec1f9, float:-2.5356048E38)
             java.lang.Integer r13 = java.lang.Integer.valueOf(r13)
             java.lang.String r14 = "dialogTextBlue3"
-            r9.put(r14, r13)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r9 = defaultColors
+            r10.put(r14, r13)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r10 = defaultColors
             r13 = -15095832(0xfffffffffvar_a7e8, float:-2.042437E38)
             java.lang.Integer r13 = java.lang.Integer.valueOf(r13)
             java.lang.String r14 = "dialogTextBlue4"
-            r9.put(r14, r13)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r9 = defaultColors
+            r10.put(r14, r13)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r10 = defaultColors
             r13 = -13333567(0xfffffffffvar_bc1, float:-2.3998668E38)
             java.lang.Integer r13 = java.lang.Integer.valueOf(r13)
             java.lang.String r14 = "dialogTextGray"
-            r9.put(r14, r13)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r9 = defaultColors
+            r10.put(r14, r13)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r10 = defaultColors
             r13 = -9079435(0xfffffffffvar_, float:-3.2627073E38)
             java.lang.Integer r13 = java.lang.Integer.valueOf(r13)
             java.lang.String r14 = "dialogTextGray2"
-            r9.put(r14, r13)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r9 = defaultColors
+            r10.put(r14, r13)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r10 = defaultColors
             r13 = -6710887(0xfffffffffvar_, float:NaN)
             java.lang.Integer r13 = java.lang.Integer.valueOf(r13)
             java.lang.String r14 = "dialogTextGray3"
-            r9.put(r14, r13)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r9 = defaultColors
+            r10.put(r14, r13)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r10 = defaultColors
             r13 = -5000269(0xffffffffffb3b3b3, float:NaN)
             java.lang.Integer r13 = java.lang.Integer.valueOf(r13)
             java.lang.String r14 = "dialogTextGray4"
-            r9.put(r14, r13)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r9 = defaultColors
+            r10.put(r14, r13)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r10 = defaultColors
             r13 = -6842473(0xfffffffffvar_, float:NaN)
             java.lang.Integer r13 = java.lang.Integer.valueOf(r13)
             java.lang.String r14 = "dialogTextHint"
-            r9.put(r14, r13)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r9 = defaultColors
+            r10.put(r14, r13)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r10 = defaultColors
             r13 = -9999504(0xfffffffffvar_b70, float:-3.0760951E38)
             java.lang.Integer r13 = java.lang.Integer.valueOf(r13)
             java.lang.String r14 = "dialogIcon"
-            r9.put(r14, r13)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r9 = defaultColors
+            r10.put(r14, r13)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r10 = defaultColors
             r13 = -2011827(0xffffffffffe14d4d, float:NaN)
             java.lang.Integer r13 = java.lang.Integer.valueOf(r13)
             java.lang.String r14 = "dialogRedIcon"
-            r9.put(r14, r13)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r9 = defaultColors
+            r10.put(r14, r13)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r10 = defaultColors
             r13 = -2960686(0xffffffffffd2d2d2, float:NaN)
             java.lang.Integer r13 = java.lang.Integer.valueOf(r13)
             java.lang.String r14 = "dialogGrayLine"
-            r9.put(r14, r13)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r9 = defaultColors
+            r10.put(r14, r13)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r10 = defaultColors
             r13 = -9456923(0xffffffffff6fb2e5, float:-3.1861436E38)
             java.lang.Integer r13 = java.lang.Integer.valueOf(r13)
             java.lang.String r14 = "dialogTopBackground"
-            r9.put(r14, r13)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r9 = defaultColors
+            r10.put(r14, r13)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r10 = defaultColors
             r13 = -2368549(0xffffffffffdbdbdb, float:NaN)
             java.lang.Integer r13 = java.lang.Integer.valueOf(r13)
             java.lang.String r14 = "dialogInputField"
-            r9.put(r14, r13)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r9 = defaultColors
+            r10.put(r14, r13)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r10 = defaultColors
             r13 = -13129232(0xfffffffffvar_a9f0, float:-2.4413109E38)
             java.lang.Integer r13 = java.lang.Integer.valueOf(r13)
             java.lang.String r14 = "dialogInputFieldActivated"
-            r9.put(r14, r13)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r9 = defaultColors
+            r10.put(r14, r13)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r10 = defaultColors
             r13 = -12345121(0xfffffffffvar_a0df, float:-2.6003475E38)
             java.lang.Integer r13 = java.lang.Integer.valueOf(r13)
             java.lang.String r14 = "dialogCheckboxSquareBackground"
-            r9.put(r14, r13)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r9 = defaultColors
+            r10.put(r14, r13)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r10 = defaultColors
             java.lang.String r13 = "dialogCheckboxSquareCheck"
-            r9.put(r13, r0)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r9 = defaultColors
+            r10.put(r13, r0)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r10 = defaultColors
             r13 = -9211021(0xfffffffffvar_, float:-3.2360185E38)
             java.lang.Integer r13 = java.lang.Integer.valueOf(r13)
             java.lang.String r14 = "dialogCheckboxSquareUnchecked"
-            r9.put(r14, r13)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r9 = defaultColors
+            r10.put(r14, r13)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r10 = defaultColors
             r13 = -5197648(0xffffffffffb0b0b0, float:NaN)
             java.lang.Integer r13 = java.lang.Integer.valueOf(r13)
             java.lang.String r14 = "dialogCheckboxSquareDisabled"
-            r9.put(r14, r13)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r9 = defaultColors
+            r10.put(r14, r13)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r10 = defaultColors
             r13 = -5000269(0xffffffffffb3b3b3, float:NaN)
             java.lang.Integer r13 = java.lang.Integer.valueOf(r13)
             java.lang.String r14 = "dialogRadioBackground"
-            r9.put(r14, r13)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r9 = defaultColors
+            r10.put(r14, r13)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r10 = defaultColors
             r13 = -13129232(0xfffffffffvar_a9f0, float:-2.4413109E38)
             java.lang.Integer r13 = java.lang.Integer.valueOf(r13)
             java.lang.String r14 = "dialogRadioBackgroundChecked"
-            r9.put(r14, r13)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r9 = defaultColors
+            r10.put(r14, r13)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r10 = defaultColors
             r13 = -14115349(0xfffffffffvar_deb, float:-2.2413026E38)
             java.lang.Integer r13 = java.lang.Integer.valueOf(r13)
             java.lang.String r14 = "dialogProgressCircle"
-            r9.put(r14, r13)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r9 = defaultColors
+            r10.put(r14, r13)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r10 = defaultColors
             r13 = -11371101(0xfffffffffvar_da3, float:-2.7979022E38)
             java.lang.Integer r13 = java.lang.Integer.valueOf(r13)
             java.lang.String r14 = "dialogLineProgress"
-            r9.put(r14, r13)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r9 = defaultColors
+            r10.put(r14, r13)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r10 = defaultColors
             r13 = -2368549(0xffffffffffdbdbdb, float:NaN)
             java.lang.Integer r13 = java.lang.Integer.valueOf(r13)
             java.lang.String r14 = "dialogLineProgressBackground"
-            r9.put(r14, r13)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r9 = defaultColors
+            r10.put(r14, r13)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r10 = defaultColors
             r13 = -11955764(0xfffffffffvar_cc, float:-2.6793185E38)
             java.lang.Integer r13 = java.lang.Integer.valueOf(r13)
             java.lang.String r14 = "dialogButton"
-            r9.put(r14, r13)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r9 = defaultColors
+            r10.put(r14, r13)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r10 = defaultColors
             r13 = 251658240(0xvar_, float:6.3108872E-30)
             java.lang.Integer r13 = java.lang.Integer.valueOf(r13)
             java.lang.String r14 = "dialogButtonSelector"
-            r9.put(r14, r13)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r9 = defaultColors
+            r10.put(r14, r13)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r10 = defaultColors
             r13 = -657673(0xfffffffffff5f6f7, float:NaN)
             java.lang.Integer r13 = java.lang.Integer.valueOf(r13)
             java.lang.String r14 = "dialogScrollGlow"
-            r9.put(r14, r13)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r9 = defaultColors
+            r10.put(r14, r13)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r10 = defaultColors
             r13 = -11750155(0xffffffffff4cb4f5, float:-2.721021E38)
             java.lang.Integer r13 = java.lang.Integer.valueOf(r13)
             java.lang.String r14 = "dialogRoundCheckBox"
-            r9.put(r14, r13)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r9 = defaultColors
+            r10.put(r14, r13)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r10 = defaultColors
             java.lang.String r13 = "dialogRoundCheckBoxCheck"
-            r9.put(r13, r0)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r9 = defaultColors
+            r10.put(r13, r0)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r10 = defaultColors
             r13 = -12664327(0xffffffffff3ec1f9, float:-2.5356048E38)
             java.lang.Integer r13 = java.lang.Integer.valueOf(r13)
             java.lang.String r14 = "dialogBadgeBackground"
-            r9.put(r14, r13)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r9 = defaultColors
+            r10.put(r14, r13)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r10 = defaultColors
             java.lang.String r13 = "dialogBadgeText"
-            r9.put(r13, r0)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r9 = defaultColors
+            r10.put(r13, r0)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r10 = defaultColors
             java.lang.String r13 = "dialogCameraIcon"
-            r9.put(r13, r0)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r9 = defaultColors
+            r10.put(r13, r0)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r10 = defaultColors
             r13 = -151981323(0xfffffffff6f0f2f5, float:-2.4435137E33)
             java.lang.Integer r13 = java.lang.Integer.valueOf(r13)
             java.lang.String r14 = "dialog_inlineProgressBackground"
-            r9.put(r14, r13)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r9 = defaultColors
+            r10.put(r14, r13)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r10 = defaultColors
             r13 = -9735304(0xffffffffff6b7378, float:-3.1296813E38)
             java.lang.Integer r13 = java.lang.Integer.valueOf(r13)
             java.lang.String r14 = "dialog_inlineProgress"
-            r9.put(r14, r13)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r9 = defaultColors
+            r10.put(r14, r13)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r10 = defaultColors
             r13 = -854795(0xfffffffffff2f4f5, float:NaN)
             java.lang.Integer r13 = java.lang.Integer.valueOf(r13)
             java.lang.String r14 = "dialogSearchBackground"
-            r9.put(r14, r13)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r9 = defaultColors
+            r10.put(r14, r13)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r10 = defaultColors
             r13 = -6774617(0xfffffffffvar_a0a7, float:NaN)
             java.lang.Integer r13 = java.lang.Integer.valueOf(r13)
             java.lang.String r14 = "dialogSearchHint"
-            r9.put(r14, r13)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r9 = defaultColors
+            r10.put(r14, r13)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r10 = defaultColors
             r13 = -6182737(0xffffffffffa1a8af, float:NaN)
             java.lang.Integer r13 = java.lang.Integer.valueOf(r13)
             java.lang.String r14 = "dialogSearchIcon"
-            r9.put(r14, r13)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r9 = defaultColors
+            r10.put(r14, r13)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r10 = defaultColors
             java.lang.String r13 = "dialogSearchText"
-            r9.put(r13, r10)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r9 = defaultColors
+            r10.put(r13, r11)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r10 = defaultColors
             r13 = -11750155(0xffffffffff4cb4f5, float:-2.721021E38)
             java.lang.Integer r13 = java.lang.Integer.valueOf(r13)
             java.lang.String r14 = "dialogFloatingButton"
-            r9.put(r14, r13)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r9 = defaultColors
+            r10.put(r14, r13)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r10 = defaultColors
             r13 = 251658240(0xvar_, float:6.3108872E-30)
             java.lang.Integer r13 = java.lang.Integer.valueOf(r13)
             java.lang.String r14 = "dialogFloatingButtonPressed"
-            r9.put(r14, r13)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r9 = defaultColors
+            r10.put(r14, r13)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r10 = defaultColors
             java.lang.String r13 = "dialogFloatingIcon"
-            r9.put(r13, r0)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r9 = defaultColors
+            r10.put(r13, r0)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r10 = defaultColors
             r13 = 301989888(0x12000000, float:4.0389678E-28)
             java.lang.Integer r13 = java.lang.Integer.valueOf(r13)
             java.lang.String r14 = "dialogShadowLine"
-            r9.put(r14, r13)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r9 = defaultColors
+            r10.put(r14, r13)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r10 = defaultColors
             r13 = -6314840(0xffffffffff9fa4a8, float:NaN)
             java.lang.Integer r13 = java.lang.Integer.valueOf(r13)
             java.lang.String r14 = "dialogEmptyImage"
-            r9.put(r14, r13)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r9 = defaultColors
+            r10.put(r14, r13)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r10 = defaultColors
             r13 = -7565164(0xffffffffff8CLASSNAME, float:NaN)
             java.lang.Integer r13 = java.lang.Integer.valueOf(r13)
             java.lang.String r14 = "dialogEmptyText"
-            r9.put(r14, r13)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r9 = defaultColors
+            r10.put(r14, r13)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r10 = defaultColors
             r13 = -1743531(0xffffffffffe56555, float:NaN)
             java.lang.Integer r13 = java.lang.Integer.valueOf(r13)
             java.lang.String r14 = "dialogSwipeRemove"
-            r9.put(r14, r13)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r9 = defaultColors
+            r10.put(r14, r13)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r10 = defaultColors
             r13 = -1743531(0xffffffffffe56555, float:NaN)
             java.lang.Integer r13 = java.lang.Integer.valueOf(r13)
             java.lang.String r14 = "dialogSwipeRemove"
-            r9.put(r14, r13)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r9 = defaultColors
+            r10.put(r14, r13)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r10 = defaultColors
             r13 = -1026983(0xffffffffffvar_, float:NaN)
             java.lang.Integer r13 = java.lang.Integer.valueOf(r13)
             java.lang.String r14 = "dialogReactionMentionBackground"
-            r9.put(r14, r13)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r9 = defaultColors
+            r10.put(r14, r13)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r10 = defaultColors
             java.lang.String r13 = "windowBackgroundWhite"
-            r9.put(r13, r0)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r9 = defaultColors
+            r10.put(r13, r0)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r10 = defaultColors
             r14 = -6445135(0xffffffffff9da7b1, float:NaN)
             java.lang.Integer r14 = java.lang.Integer.valueOf(r14)
             java.lang.String r15 = "windowBackgroundUnchecked"
-            r9.put(r15, r14)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r9 = defaultColors
+            r10.put(r15, r14)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r10 = defaultColors
             r14 = -11034919(0xfffffffffvar_ed9, float:-2.866088E38)
             java.lang.Integer r14 = java.lang.Integer.valueOf(r14)
             java.lang.String r15 = "windowBackgroundChecked"
-            r9.put(r15, r14)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r9 = defaultColors
+            r10.put(r15, r14)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r10 = defaultColors
             java.lang.String r14 = "windowBackgroundCheckText"
-            r9.put(r14, r0)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r9 = defaultColors
+            r10.put(r14, r0)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r10 = defaultColors
             r14 = -14904349(0xffffffffff1CLASSNAMEe3, float:-2.0812744E38)
             java.lang.Integer r14 = java.lang.Integer.valueOf(r14)
             java.lang.String r15 = "progressCircle"
-            r9.put(r15, r14)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r9 = defaultColors
+            r10.put(r15, r14)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r10 = defaultColors
             r14 = -8288629(0xfffffffffvar_b, float:NaN)
             java.lang.Integer r14 = java.lang.Integer.valueOf(r14)
             java.lang.String r15 = "windowBackgroundWhiteGrayIcon"
-            r9.put(r15, r14)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r9 = defaultColors
+            r10.put(r15, r14)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r10 = defaultColors
             r14 = -12545331(0xfffffffffvar_cd, float:-2.55974E38)
             java.lang.Integer r14 = java.lang.Integer.valueOf(r14)
             java.lang.String r15 = "windowBackgroundWhiteBlueText"
-            r9.put(r15, r14)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r9 = defaultColors
+            r10.put(r15, r14)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r10 = defaultColors
             r14 = -12937771(0xffffffffff3a95d5, float:-2.4801438E38)
             java.lang.Integer r14 = java.lang.Integer.valueOf(r14)
             java.lang.String r15 = "windowBackgroundWhiteBlueText2"
-            r9.put(r15, r14)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r9 = defaultColors
+            r10.put(r15, r14)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r10 = defaultColors
             r14 = -14255946(0xfffffffffvar_b6, float:-2.2127861E38)
             java.lang.Integer r14 = java.lang.Integer.valueOf(r14)
             java.lang.String r15 = "windowBackgroundWhiteBlueText3"
-            r9.put(r15, r14)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r9 = defaultColors
+            r10.put(r15, r14)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r10 = defaultColors
             r14 = -14904349(0xffffffffff1CLASSNAMEe3, float:-2.0812744E38)
             java.lang.Integer r14 = java.lang.Integer.valueOf(r14)
             java.lang.String r15 = "windowBackgroundWhiteBlueText4"
-            r9.put(r15, r14)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r9 = defaultColors
+            r10.put(r15, r14)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r10 = defaultColors
             r14 = -11759926(0xffffffffff4c8eca, float:-2.7190391E38)
             java.lang.Integer r14 = java.lang.Integer.valueOf(r14)
             java.lang.String r15 = "windowBackgroundWhiteBlueText5"
-            r9.put(r15, r14)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r9 = defaultColors
+            r10.put(r15, r14)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r10 = defaultColors
             r14 = -12940081(0xffffffffff3a8ccf, float:-2.4796753E38)
             java.lang.Integer r14 = java.lang.Integer.valueOf(r14)
             java.lang.String r15 = "windowBackgroundWhiteBlueText6"
-            r9.put(r15, r14)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r9 = defaultColors
+            r10.put(r15, r14)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r10 = defaultColors
             r15 = -13141330(0xfffffffffvar_aae, float:-2.4388571E38)
             java.lang.Integer r15 = java.lang.Integer.valueOf(r15)
-            java.lang.String r8 = "windowBackgroundWhiteBlueText7"
-            r9.put(r8, r15)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r8 = defaultColors
-            r9 = -14776109(0xffffffffff1e88d3, float:-2.1072846E38)
-            java.lang.Integer r9 = java.lang.Integer.valueOf(r9)
+            java.lang.String r9 = "windowBackgroundWhiteBlueText7"
+            r10.put(r9, r15)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r9 = defaultColors
+            r10 = -14776109(0xffffffffff1e88d3, float:-2.1072846E38)
+            java.lang.Integer r10 = java.lang.Integer.valueOf(r10)
             java.lang.String r15 = "windowBackgroundWhiteBlueButton"
-            r8.put(r15, r9)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r8 = defaultColors
-            r9 = -13132315(0xfffffffffvar_de5, float:-2.4406856E38)
-            java.lang.Integer r9 = java.lang.Integer.valueOf(r9)
+            r9.put(r15, r10)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r9 = defaultColors
+            r10 = -13132315(0xfffffffffvar_de5, float:-2.4406856E38)
+            java.lang.Integer r10 = java.lang.Integer.valueOf(r10)
             java.lang.String r15 = "windowBackgroundWhiteBlueIcon"
-            r8.put(r15, r9)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r8 = defaultColors
-            r9 = -14248148(0xfffffffffvar_c, float:-2.2143678E38)
-            java.lang.Integer r9 = java.lang.Integer.valueOf(r9)
+            r9.put(r15, r10)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r9 = defaultColors
+            r10 = -14248148(0xfffffffffvar_c, float:-2.2143678E38)
+            java.lang.Integer r10 = java.lang.Integer.valueOf(r10)
             java.lang.String r15 = "windowBackgroundWhiteGreenText"
-            r8.put(r15, r9)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r8 = defaultColors
-            r9 = -13129704(0xfffffffffvar_a818, float:-2.4412152E38)
-            java.lang.Integer r9 = java.lang.Integer.valueOf(r9)
+            r9.put(r15, r10)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r9 = defaultColors
+            r10 = -13129704(0xfffffffffvar_a818, float:-2.4412152E38)
+            java.lang.Integer r10 = java.lang.Integer.valueOf(r10)
             java.lang.String r15 = "windowBackgroundWhiteGreenText2"
-            r8.put(r15, r9)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r8 = defaultColors
-            r9 = -3319206(0xffffffffffcd5a5a, float:NaN)
-            java.lang.Integer r9 = java.lang.Integer.valueOf(r9)
+            r9.put(r15, r10)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r9 = defaultColors
+            r10 = -3319206(0xffffffffffcd5a5a, float:NaN)
+            java.lang.Integer r10 = java.lang.Integer.valueOf(r10)
             java.lang.String r15 = "windowBackgroundWhiteRedText"
-            r8.put(r15, r9)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r8 = defaultColors
-            r9 = -2404015(0xffffffffffdb5151, float:NaN)
-            java.lang.Integer r9 = java.lang.Integer.valueOf(r9)
+            r9.put(r15, r10)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r9 = defaultColors
+            r10 = -2404015(0xffffffffffdb5151, float:NaN)
+            java.lang.Integer r10 = java.lang.Integer.valueOf(r10)
             java.lang.String r15 = "windowBackgroundWhiteRedText2"
-            r8.put(r15, r9)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r8 = defaultColors
-            r9 = -2995895(0xffffffffffd24949, float:NaN)
-            java.lang.Integer r9 = java.lang.Integer.valueOf(r9)
+            r9.put(r15, r10)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r9 = defaultColors
+            r10 = -2995895(0xffffffffffd24949, float:NaN)
+            java.lang.Integer r10 = java.lang.Integer.valueOf(r10)
             java.lang.String r15 = "windowBackgroundWhiteRedText3"
-            r8.put(r15, r9)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r8 = defaultColors
-            r9 = -3198928(0xffffffffffcvar_, float:NaN)
-            java.lang.Integer r9 = java.lang.Integer.valueOf(r9)
+            r9.put(r15, r10)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r9 = defaultColors
+            r10 = -3198928(0xffffffffffcvar_, float:NaN)
+            java.lang.Integer r10 = java.lang.Integer.valueOf(r10)
             java.lang.String r15 = "windowBackgroundWhiteRedText4"
-            r8.put(r15, r9)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r8 = defaultColors
-            r9 = -1230535(0xffffffffffed3939, float:NaN)
-            java.lang.Integer r9 = java.lang.Integer.valueOf(r9)
+            r9.put(r15, r10)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r9 = defaultColors
+            r10 = -1230535(0xffffffffffed3939, float:NaN)
+            java.lang.Integer r10 = java.lang.Integer.valueOf(r10)
             java.lang.String r15 = "windowBackgroundWhiteRedText5"
-            r8.put(r15, r9)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r8 = defaultColors
-            r9 = -39322(0xfffffffffffvar_, float:NaN)
-            java.lang.Integer r9 = java.lang.Integer.valueOf(r9)
+            r9.put(r15, r10)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r9 = defaultColors
+            r10 = -39322(0xfffffffffffvar_, float:NaN)
+            java.lang.Integer r10 = java.lang.Integer.valueOf(r10)
             java.lang.String r15 = "windowBackgroundWhiteRedText6"
-            r8.put(r15, r9)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r8 = defaultColors
-            r9 = -8156010(0xfffffffffvar_CLASSNAME, float:NaN)
-            java.lang.Integer r9 = java.lang.Integer.valueOf(r9)
+            r9.put(r15, r10)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r9 = defaultColors
+            r10 = -8156010(0xfffffffffvar_CLASSNAME, float:NaN)
+            java.lang.Integer r10 = java.lang.Integer.valueOf(r10)
             java.lang.String r15 = "windowBackgroundWhiteGrayText"
-            r8.put(r15, r9)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r8 = defaultColors
-            r9 = -8223094(0xfffffffffvar_a, float:NaN)
-            java.lang.Integer r9 = java.lang.Integer.valueOf(r9)
+            r9.put(r15, r10)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r9 = defaultColors
+            r10 = -8223094(0xfffffffffvar_a, float:NaN)
+            java.lang.Integer r10 = java.lang.Integer.valueOf(r10)
             java.lang.String r15 = "windowBackgroundWhiteGrayText2"
-            r8.put(r15, r9)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r8 = defaultColors
-            r9 = -6710887(0xfffffffffvar_, float:NaN)
-            java.lang.Integer r9 = java.lang.Integer.valueOf(r9)
+            r9.put(r15, r10)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r9 = defaultColors
+            r10 = -6710887(0xfffffffffvar_, float:NaN)
+            java.lang.Integer r10 = java.lang.Integer.valueOf(r10)
             java.lang.String r15 = "windowBackgroundWhiteGrayText3"
-            r8.put(r15, r9)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r8 = defaultColors
-            r9 = -8355712(0xfffffffffvar_, float:NaN)
-            java.lang.Integer r9 = java.lang.Integer.valueOf(r9)
+            r9.put(r15, r10)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r9 = defaultColors
+            r10 = -8355712(0xfffffffffvar_, float:NaN)
+            java.lang.Integer r10 = java.lang.Integer.valueOf(r10)
             java.lang.String r15 = "windowBackgroundWhiteGrayText4"
-            r8.put(r15, r9)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r8 = defaultColors
-            r9 = -6052957(0xffffffffffa3a3a3, float:NaN)
-            java.lang.Integer r9 = java.lang.Integer.valueOf(r9)
+            r9.put(r15, r10)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r9 = defaultColors
+            r10 = -6052957(0xffffffffffa3a3a3, float:NaN)
+            java.lang.Integer r10 = java.lang.Integer.valueOf(r10)
             java.lang.String r15 = "windowBackgroundWhiteGrayText5"
-            r8.put(r15, r9)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r8 = defaultColors
-            r9 = -9079435(0xfffffffffvar_, float:-3.2627073E38)
-            java.lang.Integer r9 = java.lang.Integer.valueOf(r9)
+            r9.put(r15, r10)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r9 = defaultColors
+            r10 = -9079435(0xfffffffffvar_, float:-3.2627073E38)
+            java.lang.Integer r10 = java.lang.Integer.valueOf(r10)
             java.lang.String r15 = "windowBackgroundWhiteGrayText6"
-            r8.put(r15, r9)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r8 = defaultColors
-            r9 = -3750202(0xffffffffffc6c6c6, float:NaN)
-            java.lang.Integer r9 = java.lang.Integer.valueOf(r9)
+            r9.put(r15, r10)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r9 = defaultColors
+            r10 = -3750202(0xffffffffffc6c6c6, float:NaN)
+            java.lang.Integer r10 = java.lang.Integer.valueOf(r10)
             java.lang.String r15 = "windowBackgroundWhiteGrayText7"
-            r8.put(r15, r9)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r8 = defaultColors
-            r9 = -9605774(0xffffffffff6d6d72, float:-3.155953E38)
-            java.lang.Integer r9 = java.lang.Integer.valueOf(r9)
+            r9.put(r15, r10)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r9 = defaultColors
+            r10 = -9605774(0xffffffffff6d6d72, float:-3.155953E38)
+            java.lang.Integer r10 = java.lang.Integer.valueOf(r10)
             java.lang.String r15 = "windowBackgroundWhiteGrayText8"
-            r8.put(r15, r9)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r8 = defaultColors
-            r9 = -2368549(0xffffffffffdbdbdb, float:NaN)
-            java.lang.Integer r9 = java.lang.Integer.valueOf(r9)
+            r9.put(r15, r10)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r9 = defaultColors
+            r10 = -2368549(0xffffffffffdbdbdb, float:NaN)
+            java.lang.Integer r10 = java.lang.Integer.valueOf(r10)
             java.lang.String r15 = "windowBackgroundWhiteGrayLine"
-            r8.put(r15, r9)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r8 = defaultColors
-            java.lang.String r9 = "windowBackgroundWhiteBlackText"
-            r8.put(r9, r10)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r8 = defaultColors
-            r9 = -5723992(0xffffffffffa8a8a8, float:NaN)
-            java.lang.Integer r9 = java.lang.Integer.valueOf(r9)
+            r9.put(r15, r10)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r9 = defaultColors
+            java.lang.String r10 = "windowBackgroundWhiteBlackText"
+            r9.put(r10, r11)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r9 = defaultColors
+            r10 = -5723992(0xffffffffffa8a8a8, float:NaN)
+            java.lang.Integer r10 = java.lang.Integer.valueOf(r10)
             java.lang.String r15 = "windowBackgroundWhiteHintText"
-            r8.put(r15, r9)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r8 = defaultColors
-            r9 = -12937771(0xffffffffff3a95d5, float:-2.4801438E38)
-            java.lang.Integer r9 = java.lang.Integer.valueOf(r9)
+            r9.put(r15, r10)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r9 = defaultColors
+            r10 = -12937771(0xffffffffff3a95d5, float:-2.4801438E38)
+            java.lang.Integer r10 = java.lang.Integer.valueOf(r10)
             java.lang.String r15 = "windowBackgroundWhiteValueText"
-            r8.put(r15, r9)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r8 = defaultColors
-            r9 = -14255946(0xfffffffffvar_b6, float:-2.2127861E38)
-            java.lang.Integer r9 = java.lang.Integer.valueOf(r9)
+            r9.put(r15, r10)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r9 = defaultColors
+            r10 = -14255946(0xfffffffffvar_b6, float:-2.2127861E38)
+            java.lang.Integer r10 = java.lang.Integer.valueOf(r10)
             java.lang.String r15 = "windowBackgroundWhiteLinkText"
-            r8.put(r15, r9)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r8 = defaultColors
-            r9 = 862104035(0x3362a9e3, float:5.2774237E-8)
-            java.lang.Integer r9 = java.lang.Integer.valueOf(r9)
+            r9.put(r15, r10)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r9 = defaultColors
+            r10 = 862104035(0x3362a9e3, float:5.2774237E-8)
+            java.lang.Integer r10 = java.lang.Integer.valueOf(r10)
             java.lang.String r15 = "windowBackgroundWhiteLinkSelection"
-            r8.put(r15, r9)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r8 = defaultColors
-            r9 = -12937771(0xffffffffff3a95d5, float:-2.4801438E38)
-            java.lang.Integer r9 = java.lang.Integer.valueOf(r9)
+            r9.put(r15, r10)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r9 = defaultColors
+            r10 = -12937771(0xffffffffff3a95d5, float:-2.4801438E38)
+            java.lang.Integer r10 = java.lang.Integer.valueOf(r10)
             java.lang.String r15 = "windowBackgroundWhiteBlueHeader"
-            r8.put(r15, r9)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r8 = defaultColors
-            r9 = -2368549(0xffffffffffdbdbdb, float:NaN)
-            java.lang.Integer r9 = java.lang.Integer.valueOf(r9)
+            r9.put(r15, r10)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r9 = defaultColors
+            r10 = -2368549(0xffffffffffdbdbdb, float:NaN)
+            java.lang.Integer r10 = java.lang.Integer.valueOf(r10)
             java.lang.String r15 = "windowBackgroundWhiteInputField"
-            r8.put(r15, r9)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r8 = defaultColors
-            r9 = -13129232(0xfffffffffvar_a9f0, float:-2.4413109E38)
-            java.lang.Integer r9 = java.lang.Integer.valueOf(r9)
+            r9.put(r15, r10)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r9 = defaultColors
+            r10 = -13129232(0xfffffffffvar_a9f0, float:-2.4413109E38)
+            java.lang.Integer r10 = java.lang.Integer.valueOf(r10)
             java.lang.String r15 = "windowBackgroundWhiteInputFieldActivated"
-            r8.put(r15, r9)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r8 = defaultColors
-            r9 = -5196358(0xffffffffffb0b5ba, float:NaN)
-            java.lang.Integer r9 = java.lang.Integer.valueOf(r9)
+            r9.put(r15, r10)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r9 = defaultColors
+            r10 = -5196358(0xffffffffffb0b5ba, float:NaN)
+            java.lang.Integer r10 = java.lang.Integer.valueOf(r10)
             java.lang.String r15 = "switchTrack"
-            r8.put(r15, r9)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r8 = defaultColors
-            r9 = -11358743(0xfffffffffvar_ade9, float:-2.8004087E38)
-            java.lang.Integer r9 = java.lang.Integer.valueOf(r9)
+            r9.put(r15, r10)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r9 = defaultColors
+            r10 = -11358743(0xfffffffffvar_ade9, float:-2.8004087E38)
+            java.lang.Integer r10 = java.lang.Integer.valueOf(r10)
             java.lang.String r15 = "switchTrackChecked"
-            r8.put(r15, r9)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r8 = defaultColors
-            r9 = -8221031(0xfffffffffvar_e99, float:NaN)
-            java.lang.Integer r9 = java.lang.Integer.valueOf(r9)
+            r9.put(r15, r10)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r9 = defaultColors
+            r10 = -8221031(0xfffffffffvar_e99, float:NaN)
+            java.lang.Integer r10 = java.lang.Integer.valueOf(r10)
             java.lang.String r15 = "switchTrackBlue"
-            r8.put(r15, r9)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r8 = defaultColors
-            r9 = -12810041(0xffffffffff3CLASSNAMEc7, float:-2.5060505E38)
-            java.lang.Integer r9 = java.lang.Integer.valueOf(r9)
+            r9.put(r15, r10)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r9 = defaultColors
+            r10 = -12810041(0xffffffffff3CLASSNAMEc7, float:-2.5060505E38)
+            java.lang.Integer r10 = java.lang.Integer.valueOf(r10)
             java.lang.String r15 = "switchTrackBlueChecked"
-            r8.put(r15, r9)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r8 = defaultColors
-            java.lang.String r9 = "switchTrackBlueThumb"
-            r8.put(r9, r0)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r8 = defaultColors
-            java.lang.String r9 = "switchTrackBlueThumbChecked"
-            r8.put(r9, r0)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r8 = defaultColors
-            r9 = 390089299(0x17404a53, float:6.2132356E-25)
-            java.lang.Integer r9 = java.lang.Integer.valueOf(r9)
+            r9.put(r15, r10)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r9 = defaultColors
+            java.lang.String r10 = "switchTrackBlueThumb"
+            r9.put(r10, r0)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r9 = defaultColors
+            java.lang.String r10 = "switchTrackBlueThumbChecked"
+            r9.put(r10, r0)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r9 = defaultColors
+            r10 = 390089299(0x17404a53, float:6.2132356E-25)
+            java.lang.Integer r10 = java.lang.Integer.valueOf(r10)
             java.lang.String r15 = "switchTrackBlueSelector"
-            r8.put(r15, r9)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r8 = defaultColors
-            r9 = 553797505(0x21024781, float:4.414035E-19)
-            java.lang.Integer r9 = java.lang.Integer.valueOf(r9)
+            r9.put(r15, r10)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r9 = defaultColors
+            r10 = 553797505(0x21024781, float:4.414035E-19)
+            java.lang.Integer r10 = java.lang.Integer.valueOf(r10)
             java.lang.String r15 = "switchTrackBlueSelectorChecked"
-            r8.put(r15, r9)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r8 = defaultColors
-            r9 = -688514(0xffffffffffvar_e7e, float:NaN)
-            java.lang.Integer r9 = java.lang.Integer.valueOf(r9)
+            r9.put(r15, r10)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r9 = defaultColors
+            r10 = -688514(0xffffffffffvar_e7e, float:NaN)
+            java.lang.Integer r10 = java.lang.Integer.valueOf(r10)
             java.lang.String r15 = "switch2Track"
-            r8.put(r15, r9)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r8 = defaultColors
-            r9 = -11358743(0xfffffffffvar_ade9, float:-2.8004087E38)
-            java.lang.Integer r9 = java.lang.Integer.valueOf(r9)
+            r9.put(r15, r10)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r9 = defaultColors
+            r10 = -11358743(0xfffffffffvar_ade9, float:-2.8004087E38)
+            java.lang.Integer r10 = java.lang.Integer.valueOf(r10)
             java.lang.String r15 = "switch2TrackChecked"
-            r8.put(r15, r9)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r8 = defaultColors
-            r9 = -12345121(0xfffffffffvar_a0df, float:-2.6003475E38)
-            java.lang.Integer r9 = java.lang.Integer.valueOf(r9)
+            r9.put(r15, r10)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r9 = defaultColors
+            r10 = -12345121(0xfffffffffvar_a0df, float:-2.6003475E38)
+            java.lang.Integer r10 = java.lang.Integer.valueOf(r10)
             java.lang.String r15 = "checkboxSquareBackground"
-            r8.put(r15, r9)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r8 = defaultColors
-            java.lang.String r9 = "checkboxSquareCheck"
-            r8.put(r9, r0)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r8 = defaultColors
-            r9 = -9211021(0xfffffffffvar_, float:-3.2360185E38)
-            java.lang.Integer r9 = java.lang.Integer.valueOf(r9)
+            r9.put(r15, r10)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r9 = defaultColors
+            java.lang.String r10 = "checkboxSquareCheck"
+            r9.put(r10, r0)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r9 = defaultColors
+            r10 = -9211021(0xfffffffffvar_, float:-3.2360185E38)
+            java.lang.Integer r10 = java.lang.Integer.valueOf(r10)
             java.lang.String r15 = "checkboxSquareUnchecked"
-            r8.put(r15, r9)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r8 = defaultColors
-            r9 = -5197648(0xffffffffffb0b0b0, float:NaN)
-            java.lang.Integer r9 = java.lang.Integer.valueOf(r9)
+            r9.put(r15, r10)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r9 = defaultColors
+            r10 = -5197648(0xffffffffffb0b0b0, float:NaN)
+            java.lang.Integer r10 = java.lang.Integer.valueOf(r10)
             java.lang.String r15 = "checkboxSquareDisabled"
-            r8.put(r15, r9)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r8 = defaultColors
-            r9 = 251658240(0xvar_, float:6.3108872E-30)
-            java.lang.Integer r9 = java.lang.Integer.valueOf(r9)
+            r9.put(r15, r10)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r9 = defaultColors
+            r10 = 251658240(0xvar_, float:6.3108872E-30)
+            java.lang.Integer r10 = java.lang.Integer.valueOf(r10)
             java.lang.String r15 = "listSelectorSDK21"
-            r8.put(r15, r9)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r8 = defaultColors
-            r9 = -5000269(0xffffffffffb3b3b3, float:NaN)
-            java.lang.Integer r9 = java.lang.Integer.valueOf(r9)
+            r9.put(r15, r10)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r9 = defaultColors
+            r10 = -5000269(0xffffffffffb3b3b3, float:NaN)
+            java.lang.Integer r10 = java.lang.Integer.valueOf(r10)
             java.lang.String r15 = "radioBackground"
-            r8.put(r15, r9)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r8 = defaultColors
-            r9 = -13129232(0xfffffffffvar_a9f0, float:-2.4413109E38)
-            java.lang.Integer r9 = java.lang.Integer.valueOf(r9)
+            r9.put(r15, r10)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r9 = defaultColors
+            r10 = -13129232(0xfffffffffvar_a9f0, float:-2.4413109E38)
+            java.lang.Integer r10 = java.lang.Integer.valueOf(r10)
             java.lang.String r15 = "radioBackgroundChecked"
-            r8.put(r15, r9)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r8 = defaultColors
-            r9 = -986896(0xfffffffffff0f0f0, float:NaN)
-            java.lang.Integer r9 = java.lang.Integer.valueOf(r9)
+            r9.put(r15, r10)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r9 = defaultColors
+            r10 = -986896(0xfffffffffff0f0f0, float:NaN)
+            java.lang.Integer r10 = java.lang.Integer.valueOf(r10)
             java.lang.String r15 = "windowBackgroundGray"
-            r8.put(r15, r9)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r8 = defaultColors
-            r9 = -16777216(0xfffffffffvar_, float:-1.7014118E38)
-            java.lang.Integer r9 = java.lang.Integer.valueOf(r9)
+            r9.put(r15, r10)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r9 = defaultColors
+            r10 = -16777216(0xfffffffffvar_, float:-1.7014118E38)
+            java.lang.Integer r10 = java.lang.Integer.valueOf(r10)
             java.lang.String r15 = "windowBackgroundGrayShadow"
-            r8.put(r15, r9)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r8 = defaultColors
+            r9.put(r15, r10)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r9 = defaultColors
             r15 = -6974059(0xfffffffffvar_, float:NaN)
             java.lang.Integer r15 = java.lang.Integer.valueOf(r15)
             java.lang.String r6 = "emptyListPlaceholder"
-            r8.put(r6, r15)
+            r9.put(r6, r15)
             java.util.HashMap<java.lang.String, java.lang.Integer> r6 = defaultColors
-            r8 = -2500135(0xffffffffffd9d9d9, float:NaN)
-            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            r9 = -2500135(0xffffffffffd9d9d9, float:NaN)
+            java.lang.Integer r9 = java.lang.Integer.valueOf(r9)
             java.lang.String r15 = "divider"
-            r6.put(r15, r8)
+            r6.put(r15, r9)
             java.util.HashMap<java.lang.String, java.lang.Integer> r6 = defaultColors
-            r8 = -657931(0xfffffffffff5f5f5, float:NaN)
-            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            r9 = -657931(0xfffffffffff5f5f5, float:NaN)
+            java.lang.Integer r9 = java.lang.Integer.valueOf(r9)
             java.lang.String r15 = "graySection"
-            r6.put(r15, r8)
+            r6.put(r15, r9)
             java.util.HashMap<java.lang.String, java.lang.Integer> r6 = defaultColors
-            r8 = -8222838(0xfffffffffvar_a, float:NaN)
-            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            r9 = -8222838(0xfffffffffvar_a, float:NaN)
+            java.lang.Integer r9 = java.lang.Integer.valueOf(r9)
             java.lang.String r15 = "key_graySectionText"
-            r6.put(r15, r8)
+            r6.put(r15, r9)
             java.util.HashMap<java.lang.String, java.lang.Integer> r6 = defaultColors
-            r8 = -4202506(0xffffffffffbfdff6, float:NaN)
-            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            r9 = -4202506(0xffffffffffbfdff6, float:NaN)
+            java.lang.Integer r9 = java.lang.Integer.valueOf(r9)
             java.lang.String r15 = "contextProgressInner1"
-            r6.put(r15, r8)
+            r6.put(r15, r9)
             java.util.HashMap<java.lang.String, java.lang.Integer> r6 = defaultColors
-            r8 = -13920542(0xffffffffff2b96e2, float:-2.2808142E38)
-            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            r9 = -13920542(0xffffffffff2b96e2, float:-2.2808142E38)
+            java.lang.Integer r9 = java.lang.Integer.valueOf(r9)
             java.lang.String r15 = "contextProgressOuter1"
-            r6.put(r15, r8)
+            r6.put(r15, r9)
             java.util.HashMap<java.lang.String, java.lang.Integer> r6 = defaultColors
-            r8 = -4202506(0xffffffffffbfdff6, float:NaN)
-            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            r9 = -4202506(0xffffffffffbfdff6, float:NaN)
+            java.lang.Integer r9 = java.lang.Integer.valueOf(r9)
             java.lang.String r15 = "contextProgressInner2"
-            r6.put(r15, r8)
+            r6.put(r15, r9)
             java.util.HashMap<java.lang.String, java.lang.Integer> r6 = defaultColors
-            java.lang.String r8 = "contextProgressOuter2"
-            r6.put(r8, r0)
+            java.lang.String r9 = "contextProgressOuter2"
+            r6.put(r9, r0)
             java.util.HashMap<java.lang.String, java.lang.Integer> r6 = defaultColors
-            r8 = -5000269(0xffffffffffb3b3b3, float:NaN)
-            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            r9 = -5000269(0xffffffffffb3b3b3, float:NaN)
+            java.lang.Integer r9 = java.lang.Integer.valueOf(r9)
             java.lang.String r15 = "contextProgressInner3"
-            r6.put(r15, r8)
+            r6.put(r15, r9)
             java.util.HashMap<java.lang.String, java.lang.Integer> r6 = defaultColors
-            java.lang.String r8 = "contextProgressOuter3"
-            r6.put(r8, r0)
+            java.lang.String r9 = "contextProgressOuter3"
+            r6.put(r9, r0)
             java.util.HashMap<java.lang.String, java.lang.Integer> r6 = defaultColors
-            r8 = -3486256(0xffffffffffcacdd0, float:NaN)
-            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            r9 = -3486256(0xffffffffffcacdd0, float:NaN)
+            java.lang.Integer r9 = java.lang.Integer.valueOf(r9)
             java.lang.String r15 = "contextProgressInner4"
-            r6.put(r15, r8)
+            r6.put(r15, r9)
             java.util.HashMap<java.lang.String, java.lang.Integer> r6 = defaultColors
-            r8 = -13683656(0xffffffffff2var_, float:-2.3288603E38)
-            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            r9 = -13683656(0xffffffffff2var_, float:-2.3288603E38)
+            java.lang.Integer r9 = java.lang.Integer.valueOf(r9)
             java.lang.String r15 = "contextProgressOuter4"
-            r6.put(r15, r8)
+            r6.put(r15, r9)
             java.util.HashMap<java.lang.String, java.lang.Integer> r6 = defaultColors
             r15 = -11361317(0xfffffffffvar_a3db, float:-2.7998867E38)
             java.lang.Integer r15 = java.lang.Integer.valueOf(r15)
@@ -5783,7 +5860,7 @@ public class Theme {
             r6.put(r15, r12)
             java.util.HashMap<java.lang.String, java.lang.Integer> r6 = defaultColors
             java.lang.String r12 = "actionBarDefaultSubmenuItem"
-            r6.put(r12, r10)
+            r6.put(r12, r11)
             java.util.HashMap<java.lang.String, java.lang.Integer> r6 = defaultColors
             r12 = -9999504(0xfffffffffvar_b70, float:-3.0760951E38)
             java.lang.Integer r12 = java.lang.Integer.valueOf(r12)
@@ -5792,6 +5869,11 @@ public class Theme {
             java.util.HashMap<java.lang.String, java.lang.Integer> r6 = defaultColors
             java.lang.String r12 = "actionBarDefaultSubmenuBackground"
             r6.put(r12, r0)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r6 = defaultColors
+            r12 = -657931(0xfffffffffff5f5f5, float:NaN)
+            java.lang.Integer r12 = java.lang.Integer.valueOf(r12)
+            java.lang.String r15 = "actionBarDefaultSubmenuSeparator"
+            r6.put(r15, r12)
             java.util.HashMap<java.lang.String, java.lang.Integer> r6 = defaultColors
             r12 = -1907998(0xffffffffffe2e2e2, float:NaN)
             java.lang.Integer r12 = java.lang.Integer.valueOf(r12)
@@ -5876,7 +5958,7 @@ public class Theme {
             r6.put(r12, r0)
             java.util.HashMap<java.lang.String, java.lang.Integer> r6 = defaultColors
             java.lang.String r12 = "chats_name"
-            r6.put(r12, r10)
+            r6.put(r12, r11)
             java.util.HashMap<java.lang.String, java.lang.Integer> r6 = defaultColors
             r12 = -11382190(0xfffffffffvar_, float:-2.7956531E38)
             java.lang.Integer r12 = java.lang.Integer.valueOf(r12)
@@ -6314,10 +6396,10 @@ public class Theme {
             r6.put(r15, r12)
             java.util.HashMap<java.lang.String, java.lang.Integer> r6 = defaultColors
             java.lang.String r12 = "chat_messageTextIn"
-            r6.put(r12, r9)
+            r6.put(r12, r10)
             java.util.HashMap<java.lang.String, java.lang.Integer> r6 = defaultColors
             java.lang.String r12 = "chat_messageTextOut"
-            r6.put(r12, r9)
+            r6.put(r12, r10)
             java.util.HashMap<java.lang.String, java.lang.Integer> r6 = defaultColors
             r12 = -14255946(0xfffffffffvar_b6, float:-2.2127861E38)
             java.lang.Integer r12 = java.lang.Integer.valueOf(r12)
@@ -6380,2001 +6462,2078 @@ public class Theme {
             java.util.HashMap<java.lang.String, java.lang.Integer> r6 = defaultColors
             r15 = -7094838(0xfffffffffvar_bdca, float:NaN)
             java.lang.Integer r15 = java.lang.Integer.valueOf(r15)
-            java.lang.String r11 = "chat_inSentClockSelected"
-            r6.put(r11, r15)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r6 = defaultColors
-            java.lang.String r11 = "chat_mediaSentCheck"
-            r6.put(r11, r0)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r6 = defaultColors
-            java.lang.String r11 = "chat_mediaSentClock"
-            r6.put(r11, r0)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r6 = defaultColors
-            java.lang.String r11 = "chat_inViews"
-            r6.put(r11, r12)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r6 = defaultColors
-            r11 = -7094838(0xfffffffffvar_bdca, float:NaN)
-            java.lang.Integer r11 = java.lang.Integer.valueOf(r11)
-            java.lang.String r15 = "chat_inViewsSelected"
-            r6.put(r15, r11)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r6 = defaultColors
-            r11 = -9522601(0xffffffffff6eb257, float:-3.1728226E38)
-            java.lang.Integer r11 = java.lang.Integer.valueOf(r11)
-            java.lang.String r15 = "chat_outViews"
-            r6.put(r15, r11)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r6 = defaultColors
-            r11 = -9522601(0xffffffffff6eb257, float:-3.1728226E38)
-            java.lang.Integer r11 = java.lang.Integer.valueOf(r11)
-            java.lang.String r15 = "chat_outViewsSelected"
-            r6.put(r15, r11)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r6 = defaultColors
-            java.lang.String r11 = "chat_mediaViews"
-            r6.put(r11, r0)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r6 = defaultColors
-            r11 = -4801083(0xffffffffffb6bdc5, float:NaN)
-            java.lang.Integer r11 = java.lang.Integer.valueOf(r11)
-            java.lang.String r15 = "chat_inMenu"
-            r6.put(r15, r11)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r6 = defaultColors
-            r11 = -6766130(0xfffffffffvar_c1ce, float:NaN)
-            java.lang.Integer r11 = java.lang.Integer.valueOf(r11)
-            java.lang.String r15 = "chat_inMenuSelected"
-            r6.put(r15, r11)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r6 = defaultColors
-            r11 = -7221634(0xfffffffffvar_ce7e, float:NaN)
-            java.lang.Integer r11 = java.lang.Integer.valueOf(r11)
-            java.lang.String r15 = "chat_outMenu"
-            r6.put(r15, r11)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r6 = defaultColors
-            r11 = -7221634(0xfffffffffvar_ce7e, float:NaN)
-            java.lang.Integer r11 = java.lang.Integer.valueOf(r11)
-            java.lang.String r15 = "chat_outMenuSelected"
-            r6.put(r15, r11)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r6 = defaultColors
-            java.lang.String r11 = "chat_mediaMenu"
-            r6.put(r11, r0)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r6 = defaultColors
-            r11 = -11162801(0xfffffffffvar_ab4f, float:-2.8401505E38)
-            java.lang.Integer r11 = java.lang.Integer.valueOf(r11)
-            java.lang.String r15 = "chat_outInstant"
-            r6.put(r15, r11)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r6 = defaultColors
-            r15 = -12019389(0xfffffffffvar_, float:-2.6664138E38)
-            java.lang.Integer r15 = java.lang.Integer.valueOf(r15)
-            java.lang.String r4 = "chat_outInstantSelected"
+            java.lang.String r4 = "chat_inSentClockSelected"
             r6.put(r4, r15)
             java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            java.lang.String r6 = "chat_inInstant"
-            r4.put(r6, r14)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -13600331(0xfffffffffvar_b5, float:-2.3457607E38)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r15 = "chat_inInstantSelected"
-            r4.put(r15, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -2411211(0xffffffffffdb3535, float:NaN)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r15 = "chat_sentError"
-            r4.put(r15, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            java.lang.String r6 = "chat_sentErrorIcon"
+            java.lang.String r6 = "chat_mediaSentCheck"
             r4.put(r6, r0)
             java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = 671781104(0x280a90f0, float:7.691967E-15)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r15 = "chat_selectedBackground"
-            r4.put(r15, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            java.lang.String r6 = "chat_previewDurationText"
+            java.lang.String r6 = "chat_mediaSentClock"
             r4.put(r6, r0)
             java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            java.lang.String r6 = "chat_previewGameText"
-            r4.put(r6, r0)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            java.lang.String r6 = "chat_inPreviewInstantText"
-            r4.put(r6, r14)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            java.lang.String r6 = "chat_outPreviewInstantText"
-            r4.put(r6, r11)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -13600331(0xfffffffffvar_b5, float:-2.3457607E38)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r15 = "chat_inPreviewInstantSelectedText"
-            r4.put(r15, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -12019389(0xfffffffffvar_, float:-2.6664138E38)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r15 = "chat_outPreviewInstantSelectedText"
-            r4.put(r15, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -1776928(0xffffffffffe4e2e0, float:NaN)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r15 = "chat_secretTimeText"
-            r4.put(r15, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            java.lang.String r6 = "chat_stickerNameText"
-            r4.put(r6, r0)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            java.lang.String r6 = "chat_botButtonText"
-            r4.put(r6, r0)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            java.lang.String r6 = "chat_botProgress"
-            r4.put(r6, r0)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -13072697(0xfffffffffvar_c7, float:-2.4527776E38)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r15 = "chat_inForwardedNameText"
-            r4.put(r15, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            java.lang.String r6 = "chat_outForwardedNameText"
-            r4.put(r6, r11)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -10838983(0xffffffffff5a9CLASSNAME, float:-2.9058286E38)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r15 = "chat_inPsaNameText"
-            r4.put(r15, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -10838983(0xffffffffff5a9CLASSNAME, float:-2.9058286E38)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r15 = "chat_outPsaNameText"
-            r4.put(r15, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            java.lang.String r6 = "chat_inViaBotNameText"
-            r4.put(r6, r14)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            java.lang.String r6 = "chat_outViaBotNameText"
-            r4.put(r6, r11)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            java.lang.String r6 = "chat_stickerViaBotNameText"
-            r4.put(r6, r0)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -10903592(0xfffffffffvar_fd8, float:-2.8927243E38)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r15 = "chat_inReplyLine"
-            r4.put(r15, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -9520791(0xffffffffff6eb969, float:-3.1731897E38)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r15 = "chat_outReplyLine"
-            r4.put(r15, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            java.lang.String r6 = "chat_stickerReplyLine"
-            r4.put(r6, r0)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            java.lang.String r6 = "chat_inReplyNameText"
-            r4.put(r6, r14)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            java.lang.String r6 = "chat_outReplyNameText"
-            r4.put(r6, r11)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            java.lang.String r6 = "chat_stickerReplyNameText"
-            r4.put(r6, r0)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            java.lang.String r6 = "chat_inReplyMessageText"
-            r4.put(r6, r9)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            java.lang.String r6 = "chat_outReplyMessageText"
-            r4.put(r6, r9)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            java.lang.String r6 = "chat_inReplyMediaMessageText"
+            java.lang.String r6 = "chat_inViews"
             r4.put(r6, r12)
             java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -10112933(0xfffffffffvar_b05b, float:-3.053089E38)
+            r6 = -7094838(0xfffffffffvar_bdca, float:NaN)
             java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r15 = "chat_outReplyMediaMessageText"
+            java.lang.String r15 = "chat_inViewsSelected"
             r4.put(r15, r6)
             java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -7752511(0xfffffffffvar_b4c1, float:NaN)
+            r6 = -9522601(0xffffffffff6eb257, float:-3.1728226E38)
             java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r15 = "chat_inReplyMediaMessageSelectedText"
+            java.lang.String r15 = "chat_outViews"
             r4.put(r15, r6)
             java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -10112933(0xfffffffffvar_b05b, float:-3.053089E38)
+            r6 = -9522601(0xffffffffff6eb257, float:-3.1728226E38)
             java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r15 = "chat_outReplyMediaMessageSelectedText"
+            java.lang.String r15 = "chat_outViewsSelected"
             r4.put(r15, r6)
             java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            java.lang.String r6 = "chat_stickerReplyMessageText"
+            java.lang.String r6 = "chat_mediaViews"
             r4.put(r6, r0)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -9390872(0xfffffffffvar_b4e8, float:-3.1995404E38)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r15 = "chat_inPreviewLine"
-            r4.put(r15, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -7812741(0xfffffffffvar_CLASSNAMEb, float:NaN)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r15 = "chat_outPreviewLine"
-            r4.put(r15, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            java.lang.String r6 = "chat_inSiteNameText"
-            r4.put(r6, r14)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            java.lang.String r6 = "chat_outSiteNameText"
-            r4.put(r6, r11)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -11625772(0xffffffffff4e9ad4, float:-2.7462488E38)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r15 = "chat_inContactNameText"
-            r4.put(r15, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            java.lang.String r6 = "chat_outContactNameText"
-            r4.put(r6, r11)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            java.lang.String r6 = "chat_inContactPhoneText"
-            r4.put(r6, r8)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            java.lang.String r6 = "chat_inContactPhoneSelectedText"
-            r4.put(r6, r8)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -13286860(0xfffffffffvar_, float:-2.4093401E38)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r15 = "chat_outContactPhoneText"
-            r4.put(r15, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -13286860(0xfffffffffvar_, float:-2.4093401E38)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r15 = "chat_outContactPhoneSelectedText"
-            r4.put(r15, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            java.lang.String r6 = "chat_mediaProgress"
-            r4.put(r6, r0)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            java.lang.String r6 = "chat_inAudioProgress"
-            r4.put(r6, r0)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -1048610(0xffffffffffefffde, float:NaN)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r15 = "chat_outAudioProgress"
-            r4.put(r15, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -1050370(0xffffffffffeff8fe, float:NaN)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r15 = "chat_inAudioSelectedProgress"
-            r4.put(r15, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -1967921(0xffffffffffe1f8cf, float:NaN)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r15 = "chat_outAudioSelectedProgress"
-            r4.put(r15, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            java.lang.String r6 = "chat_mediaTimeText"
-            r4.put(r6, r0)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -4143413(0xffffffffffc0c6cb, float:NaN)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r15 = "chat_adminText"
-            r4.put(r15, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -7752511(0xfffffffffvar_b4c1, float:NaN)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r15 = "chat_adminSelectedText"
-            r4.put(r15, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -9391780(0xfffffffffvar_b15c, float:-3.1993562E38)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r15 = "chat_outAdminText"
-            r4.put(r15, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -9391780(0xfffffffffvar_b15c, float:-3.1993562E38)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r15 = "chat_outAdminSelectedText"
-            r4.put(r15, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            java.lang.String r6 = "chat_inTimeText"
-            r4.put(r6, r12)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -7752511(0xfffffffffvar_b4c1, float:NaN)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r15 = "chat_inTimeSelectedText"
-            r4.put(r15, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -9391780(0xfffffffffvar_b15c, float:-3.1993562E38)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r15 = "chat_outTimeText"
-            r4.put(r15, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -9391780(0xfffffffffvar_b15c, float:-3.1993562E38)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r15 = "chat_outTimeSelectedText"
-            r4.put(r15, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            java.lang.String r6 = "chat_inAudioPerfomerText"
-            r4.put(r6, r8)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            java.lang.String r6 = "chat_inAudioPerfomerSelectedText"
-            r4.put(r6, r8)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -13286860(0xfffffffffvar_, float:-2.4093401E38)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r15 = "chat_outAudioPerfomerText"
-            r4.put(r15, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -13286860(0xfffffffffvar_, float:-2.4093401E38)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r15 = "chat_outAudioPerfomerSelectedText"
-            r4.put(r15, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -11625772(0xffffffffff4e9ad4, float:-2.7462488E38)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r15 = "chat_inAudioTitleText"
-            r4.put(r15, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            java.lang.String r6 = "chat_outAudioTitleText"
-            r4.put(r6, r11)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            java.lang.String r6 = "chat_inAudioDurationText"
-            r4.put(r6, r12)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -10112933(0xfffffffffvar_b05b, float:-3.053089E38)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r15 = "chat_outAudioDurationText"
-            r4.put(r15, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -7752511(0xfffffffffvar_b4c1, float:NaN)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r15 = "chat_inAudioDurationSelectedText"
-            r4.put(r15, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -10112933(0xfffffffffvar_b05b, float:-3.053089E38)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r15 = "chat_outAudioDurationSelectedText"
-            r4.put(r15, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -1774864(0xffffffffffe4eaf0, float:NaN)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r15 = "chat_inAudioSeekbar"
-            r4.put(r15, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = 1071966960(0x3fe4eaf0, float:1.7884197)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r15 = "chat_inAudioCacheSeekbar"
-            r4.put(r15, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -4463700(0xffffffffffbbe3ac, float:NaN)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r15 = "chat_outAudioSeekbar"
-            r4.put(r15, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = 1069278124(0x3fbbe3ac, float:1.4678855)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r15 = "chat_outAudioCacheSeekbar"
-            r4.put(r15, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -4399384(0xffffffffffbcdee8, float:NaN)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r15 = "chat_inAudioSeekbarSelected"
-            r4.put(r15, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -5644906(0xffffffffffa9dd96, float:NaN)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r15 = "chat_outAudioSeekbarSelected"
-            r4.put(r15, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -9259544(0xfffffffffvar_b5e8, float:-3.2261769E38)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r15 = "chat_inAudioSeekbarFill"
-            r4.put(r15, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -8863118(0xfffffffffvar_CLASSNAME, float:-3.3065816E38)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r15 = "chat_outAudioSeekbarFill"
-            r4.put(r15, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -2169365(0xffffffffffdee5eb, float:NaN)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r15 = "chat_inVoiceSeekbar"
-            r4.put(r15, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -4463700(0xffffffffffbbe3ac, float:NaN)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r15 = "chat_outVoiceSeekbar"
-            r4.put(r15, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -4399384(0xffffffffffbcdee8, float:NaN)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r15 = "chat_inVoiceSeekbarSelected"
-            r4.put(r15, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -5644906(0xffffffffffa9dd96, float:NaN)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r15 = "chat_outVoiceSeekbarSelected"
-            r4.put(r15, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -9259544(0xfffffffffvar_b5e8, float:-3.2261769E38)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r15 = "chat_inVoiceSeekbarFill"
-            r4.put(r15, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -8863118(0xfffffffffvar_CLASSNAME, float:-3.3065816E38)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r15 = "chat_outVoiceSeekbarFill"
-            r4.put(r15, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -1314571(0xffffffffffebf0f5, float:NaN)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r15 = "chat_inFileProgress"
-            r4.put(r15, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -2427453(0xffffffffffdaf5c3, float:NaN)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r15 = "chat_outFileProgress"
-            r4.put(r15, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -3413258(0xffffffffffcbeaf6, float:NaN)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r15 = "chat_inFileProgressSelected"
-            r4.put(r15, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -3806041(0xffffffffffc5eca7, float:NaN)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r15 = "chat_outFileProgressSelected"
-            r4.put(r15, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -11625772(0xffffffffff4e9ad4, float:-2.7462488E38)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r15 = "chat_inFileNameText"
-            r4.put(r15, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            java.lang.String r6 = "chat_outFileNameText"
-            r4.put(r6, r11)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            java.lang.String r6 = "chat_inFileInfoText"
-            r4.put(r6, r12)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -10112933(0xfffffffffvar_b05b, float:-3.053089E38)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r15 = "chat_outFileInfoText"
-            r4.put(r15, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -7752511(0xfffffffffvar_b4c1, float:NaN)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r15 = "chat_inFileInfoSelectedText"
-            r4.put(r15, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -10112933(0xfffffffffvar_b05b, float:-3.053089E38)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r15 = "chat_outFileInfoSelectedText"
-            r4.put(r15, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -1314571(0xffffffffffebf0f5, float:NaN)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r15 = "chat_inFileBackground"
-            r4.put(r15, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -2427453(0xffffffffffdaf5c3, float:NaN)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r15 = "chat_outFileBackground"
-            r4.put(r15, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -3413258(0xffffffffffcbeaf6, float:NaN)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r15 = "chat_inFileBackgroundSelected"
-            r4.put(r15, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -3806041(0xffffffffffc5eca7, float:NaN)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r15 = "chat_outFileBackgroundSelected"
-            r4.put(r15, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            java.lang.String r6 = "chat_inVenueInfoText"
-            r4.put(r6, r12)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -10112933(0xfffffffffvar_b05b, float:-3.053089E38)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r15 = "chat_outVenueInfoText"
-            r4.put(r15, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -7752511(0xfffffffffvar_b4c1, float:NaN)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r15 = "chat_inVenueInfoSelectedText"
-            r4.put(r15, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -10112933(0xfffffffffvar_b05b, float:-3.053089E38)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r15 = "chat_outVenueInfoSelectedText"
-            r4.put(r15, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            java.lang.String r6 = "chat_mediaInfoText"
-            r4.put(r6, r0)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = 862104035(0x3362a9e3, float:5.2774237E-8)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r15 = "chat_linkSelectBackground"
-            r4.put(r15, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = 862104035(0x3362a9e3, float:5.2774237E-8)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r15 = "chat_outLinkSelectBackground"
-            r4.put(r15, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = 1717742051(0x6662a9e3, float:2.6759717E23)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r15 = "chat_textSelectBackground"
-            r4.put(r15, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -986379(0xfffffffffff0f2f5, float:NaN)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r15 = "chat_emojiPanelBackground"
-            r4.put(r15, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -11688214(0xffffffffff4da6ea, float:-2.733584E38)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r15 = "chat_emojiPanelBadgeBackground"
-            r4.put(r15, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            java.lang.String r6 = "chat_emojiPanelBadgeText"
-            r4.put(r6, r0)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -1709586(0xffffffffffe5e9ee, float:NaN)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r15 = "chat_emojiSearchBackground"
-            r4.put(r15, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -7036497(0xfffffffffvar_a1af, float:NaN)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r15 = "chat_emojiSearchIcon"
-            r4.put(r15, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = 301989888(0x12000000, float:4.0389678E-28)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r15 = "chat_emojiPanelShadowLine"
-            r4.put(r15, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -7038047(0xfffffffffvar_ba1, float:NaN)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r15 = "chat_emojiPanelEmptyText"
-            r4.put(r15, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -6445909(0xffffffffff9da4ab, float:NaN)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r15 = "chat_emojiPanelIcon"
-            r4.put(r15, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -7564905(0xffffffffff8CLASSNAME, float:NaN)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r15 = "chat_emojiBottomPanelIcon"
-            r4.put(r15, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -13920286(0xffffffffff2b97e2, float:-2.280866E38)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r15 = "chat_emojiPanelIconSelected"
-            r4.put(r15, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -1907225(0xffffffffffe2e5e7, float:NaN)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r15 = "chat_emojiPanelStickerPackSelector"
-            r4.put(r15, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -11097104(0xfffffffffvar_abf0, float:-2.8534754E38)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r15 = "chat_emojiPanelStickerPackSelectorLine"
-            r4.put(r15, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -7564905(0xffffffffff8CLASSNAME, float:NaN)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r15 = "chat_emojiPanelBackspace"
-            r4.put(r15, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            java.lang.String r6 = "chat_emojiPanelMasksIcon"
-            r4.put(r6, r0)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -10305560(0xfffffffffvar_bfe8, float:-3.0140196E38)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r15 = "chat_emojiPanelMasksIconSelected"
-            r4.put(r15, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            java.lang.String r6 = "chat_emojiPanelTrendingTitle"
-            r4.put(r6, r10)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -8221804(0xfffffffffvar_b94, float:NaN)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r15 = "chat_emojiPanelStickerSetName"
-            r4.put(r15, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -14184997(0xfffffffffvar_ddb, float:-2.2271763E38)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r15 = "chat_emojiPanelStickerSetNameHighlight"
-            r4.put(r15, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -5130564(0xffffffffffb1b6bc, float:NaN)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r15 = "chat_emojiPanelStickerSetNameIcon"
-            r4.put(r15, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -7697782(0xffffffffff8a8a8a, float:NaN)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r15 = "chat_emojiPanelTrendingDescription"
-            r4.put(r15, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -13220017(0xfffffffffvar_f, float:-2.4228975E38)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r15 = "chat_botKeyboardButtonText"
-            r4.put(r15, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -1775639(0xffffffffffe4e7e9, float:NaN)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r15 = "chat_botKeyboardButtonBackground"
-            r4.put(r15, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -3354156(0xffffffffffccd1d4, float:NaN)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r15 = "chat_botKeyboardButtonBackgroundPressed"
-            r4.put(r15, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -6113849(0xffffffffffa2b5c7, float:NaN)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r15 = "chat_unreadMessagesStartArrowIcon"
-            r4.put(r15, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -11102772(0xfffffffffvar_cc, float:-2.8523258E38)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r15 = "chat_unreadMessagesStartText"
-            r4.put(r15, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            java.lang.String r6 = "chat_unreadMessagesStartBackground"
-            r4.put(r6, r0)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -6113849(0xffffffffffa2b5c7, float:NaN)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r15 = "chat_inFileIcon"
-            r4.put(r15, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -7883067(0xfffffffffvar_b6c5, float:NaN)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r15 = "chat_inFileSelectedIcon"
-            r4.put(r15, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -8011912(0xfffffffffvar_bvar_, float:NaN)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r15 = "chat_outFileIcon"
-            r4.put(r15, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -8011912(0xfffffffffvar_bvar_, float:NaN)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r15 = "chat_outFileSelectedIcon"
-            r4.put(r15, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -1314571(0xffffffffffebf0f5, float:NaN)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r15 = "chat_inLocationBackground"
-            r4.put(r15, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -6113849(0xffffffffffa2b5c7, float:NaN)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r15 = "chat_inLocationIcon"
-            r4.put(r15, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -2427453(0xffffffffffdaf5c3, float:NaN)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r15 = "chat_outLocationBackground"
-            r4.put(r15, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -7880840(0xfffffffffvar_bvar_, float:NaN)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r15 = "chat_outLocationIcon"
-            r4.put(r15, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -9259544(0xfffffffffvar_b5e8, float:-3.2261769E38)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r15 = "chat_inContactBackground"
-            r4.put(r15, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            java.lang.String r6 = "chat_inContactIcon"
-            r4.put(r6, r0)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -8863118(0xfffffffffvar_CLASSNAME, float:-3.3065816E38)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r15 = "chat_outContactBackground"
-            r4.put(r15, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -1048610(0xffffffffffefffde, float:NaN)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r15 = "chat_outContactIcon"
-            r4.put(r15, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -12146122(0xfffffffffvar_aa36, float:-2.6407093E38)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r15 = "chat_outBroadcast"
-            r4.put(r15, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            java.lang.String r6 = "chat_mediaBroadcast"
-            r4.put(r6, r0)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -9999761(0xfffffffffvar_a6f, float:-3.076043E38)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r15 = "chat_searchPanelIcons"
-            r4.put(r15, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -9999761(0xfffffffffvar_a6f, float:-3.076043E38)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r15 = "chat_searchPanelText"
-            r4.put(r15, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -8421505(0xffffffffff7f7f7f, float:-3.3961514E38)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r15 = "chat_secretChatStatusText"
-            r4.put(r15, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            java.lang.String r6 = "chat_fieldOverlayText"
-            r4.put(r6, r14)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            java.lang.String r6 = "chat_stickersHintPanel"
-            r4.put(r6, r0)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -11032346(0xfffffffffvar_a8e6, float:-2.86661E38)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r15 = "chat_replyPanelIcons"
-            r4.put(r15, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -7432805(0xffffffffff8e959b, float:NaN)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r15 = "chat_replyPanelClose"
-            r4.put(r15, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            java.lang.String r6 = "chat_replyPanelName"
-            r4.put(r6, r14)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            java.lang.String r6 = "chat_replyPanelMessage"
-            r4.put(r6, r10)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -1513240(0xffffffffffe8e8e8, float:NaN)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r15 = "chat_replyPanelLine"
-            r4.put(r15, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            java.lang.String r6 = "chat_messagePanelBackground"
-            r4.put(r6, r0)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            java.lang.String r6 = "chat_messagePanelText"
-            r4.put(r6, r9)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -5985101(0xffffffffffa4acb3, float:NaN)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r15 = "chat_messagePanelHint"
-            r4.put(r15, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -11230757(0xfffffffffvar_a1db, float:-2.8263674E38)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r15 = "chat_messagePanelCursor"
-            r4.put(r15, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            java.lang.String r6 = "chat_messagePanelShadow"
-            r4.put(r6, r9)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -7432805(0xffffffffff8e959b, float:NaN)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r15 = "chat_messagePanelIcons"
-            r4.put(r15, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            java.lang.String r6 = "chat_recordedVoicePlayPause"
-            r4.put(r6, r0)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -2468275(0xffffffffffda564d, float:NaN)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r15 = "chat_recordedVoiceDot"
-            r4.put(r15, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -10637848(0xffffffffff5dade8, float:-2.9466236E38)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r15 = "chat_recordedVoiceBackground"
-            r4.put(r15, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -5120257(0xffffffffffb1deff, float:NaN)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r15 = "chat_recordedVoiceProgress"
-            r4.put(r15, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            java.lang.String r6 = "chat_recordedVoiceProgressInner"
-            r4.put(r6, r0)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -12937772(0xffffffffff3a95d4, float:-2.4801436E38)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r15 = "chat_recordVoiceCancel"
-            r4.put(r15, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = 1694498815(0x64ffffff, float:3.777893E22)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r15 = "key_chat_recordedVoiceHighlight"
-            r4.put(r15, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -10309397(0xfffffffffvar_b0eb, float:-3.0132414E38)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r15 = "chat_messagePanelSend"
-            r4.put(r15, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -5987164(0xffffffffffa4a4a4, float:NaN)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r15 = "key_chat_messagePanelVoiceLock"
-            r4.put(r15, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            java.lang.String r6 = "key_chat_messagePanelVoiceLockBackground"
-            r4.put(r6, r0)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            java.lang.String r6 = "key_chat_messagePanelVoiceLockShadow"
-            r4.put(r6, r9)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -7432805(0xffffffffff8e959b, float:NaN)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r15 = "chat_recordTime"
-            r4.put(r15, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -11688214(0xffffffffff4da6ea, float:-2.733584E38)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r15 = "chat_emojiPanelNewTrending"
-            r4.put(r15, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            java.lang.String r6 = "chat_gifSaveHintText"
-            r4.put(r6, r0)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -871296751(0xffffffffcCLASSNAME, float:-3.8028356E7)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r15 = "chat_gifSaveHintBackground"
-            r4.put(r15, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            java.lang.String r6 = "chat_goDownButton"
-            r4.put(r6, r0)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            java.lang.String r6 = "chat_goDownButtonShadow"
-            r4.put(r6, r9)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -7432805(0xffffffffff8e959b, float:NaN)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r15 = "chat_goDownButtonIcon"
-            r4.put(r15, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            java.lang.String r6 = "chat_goDownButtonCounter"
-            r4.put(r6, r0)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -11689240(0xffffffffff4da2e8, float:-2.733376E38)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r15 = "chat_goDownButtonCounterBackground"
-            r4.put(r15, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -5395027(0xffffffffffadadad, float:NaN)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r15 = "chat_messagePanelCancelInlineBot"
-            r4.put(r15, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            java.lang.String r6 = "chat_messagePanelVoicePressed"
-            r4.put(r6, r0)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -10639650(0xffffffffff5da6de, float:-2.9462581E38)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r15 = "chat_messagePanelVoiceBackground"
-            r4.put(r15, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -9211021(0xfffffffffvar_, float:-3.2360185E38)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r15 = "chat_messagePanelVoiceDelete"
-            r4.put(r15, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            java.lang.String r6 = "chat_messagePanelVoiceDuration"
-            r4.put(r6, r0)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -11037236(0xfffffffffvar_cc, float:-2.865618E38)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r15 = "chat_inlineResultIcon"
-            r4.put(r15, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            java.lang.String r6 = "chat_topPanelBackground"
-            r4.put(r6, r0)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -7629157(0xffffffffff8b969b, float:NaN)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r15 = "chat_topPanelClose"
-            r4.put(r15, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -9658414(0xffffffffff6c9fd2, float:-3.1452764E38)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r15 = "chat_topPanelLine"
-            r4.put(r15, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            java.lang.String r6 = "chat_topPanelTitle"
-            r4.put(r6, r14)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -7893359(0xfffffffffvar_e91, float:NaN)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r15 = "chat_topPanelMessage"
-            r4.put(r15, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -3188393(0xffffffffffcvar_, float:NaN)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r15 = "chat_reportSpam"
-            r4.put(r15, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -11894091(0xffffffffff4a82b5, float:-2.6918272E38)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r15 = "chat_addContact"
-            r4.put(r15, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -9259544(0xfffffffffvar_b5e8, float:-3.2261769E38)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r15 = "chat_inLoader"
-            r4.put(r15, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -10114080(0xfffffffffvar_abe0, float:-3.0528564E38)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r15 = "chat_inLoaderSelected"
-            r4.put(r15, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -8863118(0xfffffffffvar_CLASSNAME, float:-3.3065816E38)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r15 = "chat_outLoader"
-            r4.put(r15, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -9783964(0xffffffffff6ab564, float:-3.1198118E38)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r15 = "chat_outLoaderSelected"
-            r4.put(r15, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -6113080(0xffffffffffa2b8c8, float:NaN)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r15 = "chat_inLoaderPhoto"
-            r4.put(r15, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -6113849(0xffffffffffa2b5c7, float:NaN)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r15 = "chat_inLoaderPhotoSelected"
-            r4.put(r15, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -197380(0xfffffffffffcfcfc, float:NaN)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r15 = "chat_inLoaderPhotoIcon"
-            r4.put(r15, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -1314571(0xffffffffffebf0f5, float:NaN)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r15 = "chat_inLoaderPhotoIconSelected"
-            r4.put(r15, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -8011912(0xfffffffffvar_bvar_, float:NaN)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r15 = "chat_outLoaderPhoto"
-            r4.put(r15, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -8538000(0xffffffffff7db870, float:-3.3725234E38)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r15 = "chat_outLoaderPhotoSelected"
-            r4.put(r15, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -2427453(0xffffffffffdaf5c3, float:NaN)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r15 = "chat_outLoaderPhotoIcon"
-            r4.put(r15, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -4134748(0xffffffffffc0e8a4, float:NaN)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r15 = "chat_outLoaderPhotoIconSelected"
-            r4.put(r15, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = 1711276032(0x66000000, float:1.5111573E23)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r15 = "chat_mediaLoaderPhoto"
-            r4.put(r15, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = 2130706432(0x7var_, float:1.7014118E38)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r15 = "chat_mediaLoaderPhotoSelected"
-            r4.put(r15, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            java.lang.String r6 = "chat_mediaLoaderPhotoIcon"
-            r4.put(r6, r0)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -2500135(0xffffffffffd9d9d9, float:NaN)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r15 = "chat_mediaLoaderPhotoIconSelected"
-            r4.put(r15, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -868326258(0xffffffffcc3e648e, float:-4.9910328E7)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r15 = "chat_secretTimerBackground"
-            r4.put(r15, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            java.lang.String r6 = "chat_secretTimerText"
-            r4.put(r6, r0)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -12937771(0xffffffffff3a95d5, float:-2.4801438E38)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r15 = "profile_creatorIcon"
-            r4.put(r15, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -8288630(0xfffffffffvar_a, float:NaN)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r15 = "profile_actionIcon"
-            r4.put(r15, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            java.lang.String r6 = "profile_actionBackground"
-            r4.put(r6, r0)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -855310(0xfffffffffff2f2f2, float:NaN)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r15 = "profile_actionPressedBackground"
-            r4.put(r15, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -5056776(0xffffffffffb2d6f8, float:NaN)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r15 = "profile_verifiedBackground"
-            r4.put(r15, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -11959368(0xfffffffffvar_b8, float:-2.6785875E38)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r15 = "profile_verifiedCheck"
-            r4.put(r15, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            java.lang.String r6 = "profile_title"
-            r4.put(r6, r0)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -2626822(0xffffffffffd7eafa, float:NaN)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r15 = "profile_status"
-            r4.put(r15, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -7893872(0xfffffffffvar_CLASSNAME, float:NaN)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r15 = "profile_tabText"
-            r4.put(r15, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -12937771(0xffffffffff3a95d5, float:-2.4801438E38)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r15 = "profile_tabSelectedText"
-            r4.put(r15, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -11557143(0xffffffffff4fa6e9, float:-2.7601684E38)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r15 = "profile_tabSelectedLine"
-            r4.put(r15, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = 251658240(0xvar_, float:6.3108872E-30)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r15 = "profile_tabSelector"
-            r4.put(r15, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            java.lang.String r6 = "player_actionBar"
-            r4.put(r6, r0)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = 251658240(0xvar_, float:6.3108872E-30)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r15 = "player_actionBarSelector"
-            r4.put(r15, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            java.lang.String r6 = "player_actionBarTitle"
-            r4.put(r6, r8)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -1728053248(0xfffffffvar_, float:-6.617445E-24)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r15 = "player_actionBarTop"
-            r4.put(r15, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -7697782(0xffffffffff8a8a8a, float:NaN)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r15 = "player_actionBarSubtitle"
-            r4.put(r15, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -7697782(0xffffffffff8a8a8a, float:NaN)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r15 = "player_actionBarItems"
-            r4.put(r15, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            java.lang.String r6 = "player_background"
-            r4.put(r6, r0)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -7564650(0xffffffffff8CLASSNAME, float:NaN)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r15 = "player_time"
-            r4.put(r15, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -1315344(0xffffffffffebedf0, float:NaN)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r15 = "player_progressBackground"
-            r4.put(r15, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -3353637(0xffffffffffccd3db, float:NaN)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r15 = "player_progressBackground2"
-            r4.put(r15, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -3810064(0xffffffffffc5dcf0, float:NaN)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r15 = "key_player_progressCachedBackground"
-            r4.put(r15, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -11228437(0xfffffffffvar_aaeb, float:-2.826838E38)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r15 = "player_progress"
-            r4.put(r15, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -13421773(0xfffffffffvar_, float:-2.3819765E38)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r15 = "player_button"
-            r4.put(r15, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -11753238(0xffffffffff4ca8ea, float:-2.7203956E38)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r15 = "player_buttonActive"
-            r4.put(r15, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -1973016(0xffffffffffe1e4e8, float:NaN)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r15 = "key_sheet_scrollUp"
-            r4.put(r15, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -3551789(0xffffffffffc9cdd3, float:NaN)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r15 = "key_sheet_other"
-            r4.put(r15, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            java.lang.String r6 = "files_folderIcon"
-            r4.put(r6, r0)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -10637333(0xffffffffff5dafeb, float:-2.946728E38)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r15 = "files_folderIconBackground"
-            r4.put(r15, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            java.lang.String r6 = "files_iconText"
-            r4.put(r6, r0)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -6908266(0xfffffffffvar_, float:NaN)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r15 = "sessions_devicesImage"
-            r4.put(r15, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -12211217(0xfffffffffvar_abef, float:-2.6275065E38)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r15 = "passport_authorizeBackground"
-            r4.put(r15, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -12542501(0xfffffffffvar_ddb, float:-2.560314E38)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r15 = "passport_authorizeBackgroundSelected"
-            r4.put(r15, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            java.lang.String r6 = "passport_authorizeText"
-            r4.put(r6, r0)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -12149258(0xfffffffffvar_df6, float:-2.6400732E38)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r15 = "location_sendLocationBackground"
-            r4.put(r15, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            java.lang.String r6 = "location_sendLocationIcon"
-            r4.put(r6, r0)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -14906664(0xffffffffff1c8ad8, float:-2.0808049E38)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r15 = "location_sendLocationText"
-            r4.put(r15, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -11550140(0xffffffffff4fCLASSNAME, float:-2.7615888E38)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r15 = "location_sendLiveLocationBackground"
-            r4.put(r15, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            java.lang.String r6 = "location_sendLiveLocationIcon"
-            r4.put(r6, r0)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -13194460(0xfffffffffvar_ab24, float:-2.428081E38)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r15 = "location_sendLiveLocationText"
-            r4.put(r15, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -13262875(0xfffffffffvar_fe5, float:-2.4142049E38)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r15 = "location_liveLocationProgress"
-            r4.put(r15, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -11753238(0xffffffffff4ca8ea, float:-2.7203956E38)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r15 = "location_placeLocationBackground"
-            r4.put(r15, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -12959675(0xffffffffff3a4045, float:-2.4757011E38)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r15 = "location_actionIcon"
-            r4.put(r15, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -12414746(0xfffffffffvar_e6, float:-2.5862259E38)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r15 = "location_actionActiveIcon"
-            r4.put(r15, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            java.lang.String r6 = "location_actionBackground"
-            r4.put(r6, r0)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -855310(0xfffffffffff2f2f2, float:NaN)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r15 = "location_actionPressedBackground"
-            r4.put(r15, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -13262875(0xfffffffffvar_fe5, float:-2.4142049E38)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r15 = "dialog_liveLocationProgress"
-            r4.put(r15, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -16725933(0xfffffffffvar_CLASSNAME, float:-1.7118133E38)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r15 = "calls_callReceivedGreenIcon"
-            r4.put(r15, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -47032(0xfffffffffffvar_, float:NaN)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r15 = "calls_callReceivedRedIcon"
-            r4.put(r15, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -11491093(0xfffffffffvar_a8eb, float:-2.773565E38)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r15 = "featuredStickers_addedIcon"
-            r4.put(r15, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            java.lang.String r6 = "featuredStickers_buttonProgress"
-            r4.put(r6, r0)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -11491093(0xfffffffffvar_a8eb, float:-2.773565E38)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r15 = "featuredStickers_addButton"
-            r4.put(r15, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -12346402(0xfffffffffvar_bde, float:-2.6000877E38)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r15 = "featuredStickers_addButtonPressed"
-            r4.put(r15, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -11496493(0xfffffffffvar_d3, float:-2.7724697E38)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r15 = "featuredStickers_removeButtonText"
-            r4.put(r15, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            java.lang.String r6 = "featuredStickers_buttonText"
-            r4.put(r6, r0)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -11688214(0xffffffffff4da6ea, float:-2.733584E38)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r15 = "featuredStickers_unread"
-            r4.put(r15, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            java.lang.String r6 = "inappPlayerPerformer"
-            r4.put(r6, r8)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            java.lang.String r6 = "inappPlayerTitle"
-            r4.put(r6, r8)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            java.lang.String r6 = "inappPlayerBackground"
-            r4.put(r6, r0)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -10309397(0xfffffffffvar_b0eb, float:-3.0132414E38)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r8 = "inappPlayerPlayPause"
-            r4.put(r8, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -7629157(0xffffffffff8b969b, float:NaN)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r8 = "inappPlayerClose"
-            r4.put(r8, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -12279325(0xfffffffffvar_a1e3, float:-2.6136925E38)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r8 = "returnToCallBackground"
-            r4.put(r8, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -6445135(0xffffffffff9da7b1, float:NaN)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r8 = "returnToCallMutedBackground"
-            r4.put(r8, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            java.lang.String r6 = "returnToCallText"
-            r4.put(r6, r0)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -13196562(0xfffffffffvar_a2ee, float:-2.4276547E38)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r8 = "sharedMedia_startStopLoadIcon"
-            r4.put(r8, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -986123(0xfffffffffff0f3f5, float:NaN)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r8 = "sharedMedia_linkPlaceholder"
-            r4.put(r8, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -4735293(0xffffffffffb7bec3, float:NaN)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r8 = "sharedMedia_linkPlaceholderText"
-            r4.put(r8, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -1182729(0xffffffffffedf3f7, float:NaN)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r8 = "sharedMedia_photoPlaceholder"
-            r4.put(r8, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -12154957(0xfffffffffvar_b3, float:-2.6389173E38)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r8 = "sharedMedia_actionMode"
-            r4.put(r8, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -10567099(0xffffffffff5eCLASSNAME, float:-2.9609732E38)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r8 = "checkbox"
-            r4.put(r8, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            java.lang.String r6 = "checkboxCheck"
-            r4.put(r6, r0)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -5195326(0xffffffffffb0b9c2, float:NaN)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r8 = "checkboxDisabled"
-            r4.put(r8, r6)
             java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
             r6 = -4801083(0xffffffffffb6bdc5, float:NaN)
             java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r8 = "stickers_menu"
-            r4.put(r8, r6)
+            java.lang.String r15 = "chat_inMenu"
+            r4.put(r15, r6)
             java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = 251658240(0xvar_, float:6.3108872E-30)
+            r6 = -6766130(0xfffffffffvar_c1ce, float:NaN)
             java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r8 = "stickers_menuSelector"
-            r4.put(r8, r6)
+            java.lang.String r15 = "chat_inMenuSelected"
+            r4.put(r15, r6)
             java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -4669499(0xffffffffffb8bfc5, float:NaN)
+            r6 = -7221634(0xfffffffffvar_ce7e, float:NaN)
             java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r8 = "changephoneinfo_image"
-            r4.put(r8, r6)
+            java.lang.String r15 = "chat_outMenu"
+            r4.put(r15, r6)
             java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -11491350(0xfffffffffvar_a7ea, float:-2.7735128E38)
+            r6 = -7221634(0xfffffffffvar_ce7e, float:NaN)
             java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r8 = "changephoneinfo_image2"
-            r4.put(r8, r6)
+            java.lang.String r15 = "chat_outMenuSelected"
+            r4.put(r15, r6)
             java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            java.lang.String r6 = "groupcreate_hintText"
-            r4.put(r6, r12)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -11361317(0xfffffffffvar_a3db, float:-2.7998867E38)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r8 = "groupcreate_cursor"
-            r4.put(r8, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            java.lang.String r6 = "groupcreate_sectionShadow"
-            r4.put(r6, r9)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -8617336(0xffffffffff7CLASSNAME, float:-3.3564321E38)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r8 = "groupcreate_sectionText"
-            r4.put(r8, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            java.lang.String r6 = "groupcreate_spanText"
-            r4.put(r6, r10)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -855310(0xfffffffffff2f2f2, float:NaN)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r8 = "groupcreate_spanBackground"
-            r4.put(r8, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            java.lang.String r6 = "groupcreate_spanDelete"
+            java.lang.String r6 = "chat_mediaMenu"
             r4.put(r6, r0)
             java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -11157919(0xfffffffffvar_be61, float:-2.8411407E38)
+            r6 = -11162801(0xfffffffffvar_ab4f, float:-2.8401505E38)
             java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r8 = "contacts_inviteBackground"
-            r4.put(r8, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            java.lang.String r6 = "contacts_inviteText"
-            r4.put(r6, r0)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -1971470(0xffffffffffe1eaf2, float:NaN)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r8 = "login_progressInner"
-            r4.put(r8, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -10313520(0xfffffffffvar_a0d0, float:-3.0124051E38)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r8 = "login_progressOuter"
-            r4.put(r8, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -14043401(0xfffffffffvar_b6f7, float:-2.2558954E38)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r8 = "musicPicker_checkbox"
-            r4.put(r8, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            java.lang.String r6 = "musicPicker_checkboxCheck"
-            r4.put(r6, r0)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -10702870(0xffffffffff5cafea, float:-2.9334356E38)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r8 = "musicPicker_buttonBackground"
-            r4.put(r8, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            java.lang.String r6 = "musicPicker_buttonIcon"
-            r4.put(r6, r0)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -15095832(0xfffffffffvar_a7e8, float:-2.042437E38)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r8 = "picker_enabledButton"
-            r4.put(r8, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -6710887(0xfffffffffvar_, float:NaN)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r8 = "picker_disabledButton"
-            r4.put(r8, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -14043401(0xfffffffffvar_b6f7, float:-2.2558954E38)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r8 = "picker_badge"
-            r4.put(r8, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            java.lang.String r6 = "picker_badgeText"
-            r4.put(r6, r0)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -12348980(0xfffffffffvar_cc, float:-2.5995648E38)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r8 = "chat_botSwitchToInlineText"
-            r4.put(r8, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -366530760(0xffffffffea272var_, float:-5.05284E25)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r8 = "undo_background"
-            r4.put(r8, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -8008961(0xfffffffffvar_caff, float:NaN)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r8 = "undo_cancelColor"
-            r4.put(r8, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            java.lang.String r6 = "undo_infoColor"
-            r4.put(r6, r0)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            java.lang.String r6 = "wallet_blackBackground"
-            r4.put(r6, r9)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -986896(0xfffffffffff0f0f0, float:NaN)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r8 = "wallet_graySettingsBackground"
-            r4.put(r8, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -14079703(0xfffffffffvar_, float:-2.2485325E38)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r8 = "wallet_grayBackground"
-            r4.put(r8, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            java.lang.String r6 = "wallet_whiteBackground"
-            r4.put(r6, r0)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = 1090519039(0x40ffffff, float:7.9999995)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r8 = "wallet_blackBackgroundSelector"
-            r4.put(r8, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            java.lang.String r6 = "wallet_whiteText"
-            r4.put(r6, r0)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            java.lang.String r6 = "wallet_blackText"
-            r4.put(r6, r10)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -8355712(0xfffffffffvar_, float:NaN)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r8 = "wallet_statusText"
-            r4.put(r8, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -8947849(0xfffffffffvar_, float:-3.2893961E38)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r8 = "wallet_grayText"
-            r4.put(r8, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -10066330(0xfffffffffvar_, float:-3.0625412E38)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r8 = "wallet_grayText2"
-            r4.put(r8, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -13129704(0xfffffffffvar_a818, float:-2.4412152E38)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r8 = "wallet_greenText"
-            r4.put(r8, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -2408384(0xffffffffffdb4040, float:NaN)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r8 = "wallet_redText"
-            r4.put(r8, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -6710887(0xfffffffffvar_, float:NaN)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r8 = "wallet_dateText"
-            r4.put(r8, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -6710887(0xfffffffffvar_, float:NaN)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r8 = "wallet_commentText"
-            r4.put(r8, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -13599557(0xfffffffffvar_cbb, float:-2.3459176E38)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r8 = "wallet_releaseBackground"
-            r4.put(r8, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -14606047(0xfffffffffvar_, float:-2.1417772E38)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r8 = "wallet_pullBackground"
-            r4.put(r8, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -12082714(0xfffffffffvar_a1e6, float:-2.65357E38)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r8 = "wallet_buttonBackground"
-            r4.put(r8, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -13923114(0xffffffffff2b8cd6, float:-2.2802925E38)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r8 = "wallet_buttonPressedBackground"
-            r4.put(r8, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            java.lang.String r6 = "wallet_buttonText"
-            r4.put(r6, r0)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = 218103808(0xd000000, float:3.9443045E-31)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r8 = "wallet_addressConfirmBackground"
-            r4.put(r8, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = 775919907(0x2e3var_, float:4.3564385E-11)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r8 = "chat_outTextSelectionHighlight"
-            r4.put(r8, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = 1348643299(0x5062a9e3, float:1.5211138E10)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r8 = "chat_inTextSelectionHighlight"
-            r4.put(r8, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -12476440(0xfffffffffvar_fe8, float:-2.5737128E38)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r8 = "chat_TextSelectionCursor"
-            r4.put(r8, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            java.lang.String r6 = "chat_BlurAlpha"
-            r4.put(r6, r9)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = 2133140777(0x7var_, float:2.1951557E38)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r8 = "statisticChartSignature"
-            r4.put(r8, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = 2133140777(0x7var_, float:2.1951557E38)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r8 = "statisticChartSignatureAlpha"
-            r4.put(r8, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = 437792059(0x1a182d3b, float:3.14694E-23)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r8 = "statisticChartHintLine"
-            r4.put(r8, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = 855638016(0x33000000, float:2.9802322E-8)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r8 = "statisticChartActiveLine"
-            r4.put(r8, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -1713180935(0xfffffffvar_e2eef9, float:-2.3464373E-23)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r8 = "statisticChartInactivePickerChart"
-            r4.put(r8, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -658846503(0xffffffffd8baccd9, float:-1.64311181E15)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r8 = "statisticChartActivePickerChart"
-            r4.put(r8, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = 746495415(0x2c7e9db7, float:3.618312E-12)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r8 = "statisticChartRipple"
-            r4.put(r8, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -15692829(0xfffffffffvar_be3, float:-1.9213516E38)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r8 = "statisticChartBackZoomColor"
-            r4.put(r8, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -4342339(0xffffffffffbdbdbd, float:NaN)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r8 = "statisticChartCheckboxInactive"
-            r4.put(r8, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -7434605(0xffffffffff8e8e93, float:NaN)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r8 = "statisticChartNightIconColor"
-            r4.put(r8, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -2959913(0xffffffffffd2d5d7, float:NaN)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r8 = "statisticChartChevronColor"
-            r4.put(r8, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = 552398060(0x20ececec, float:4.0136737E-19)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r8 = "statisticChartHighlightColor"
-            r4.put(r8, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            java.lang.String r6 = "statisticChartPopupBackground"
-            r4.put(r6, r0)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -13467675(0xfffffffffvar_fe5, float:-2.3726665E38)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r8 = "statisticChartLine_blue"
-            r4.put(r8, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -10369198(0xfffffffffvar_CLASSNAME, float:-3.0011123E38)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r8 = "statisticChartLine_green"
-            r4.put(r8, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -2075818(0xffffffffffe05356, float:NaN)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r8 = "statisticChartLine_red"
-            r4.put(r8, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -2180600(0xffffffffffdeba08, float:NaN)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r8 = "statisticChartLine_golden"
-            r4.put(r8, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -10966803(0xfffffffffvar_a8ed, float:-2.8799036E38)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r8 = "statisticChartLine_lightblue"
-            r4.put(r8, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -7352519(0xffffffffff8fcvar_, float:NaN)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r8 = "statisticChartLine_lightgreen"
-            r4.put(r8, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -1853657(0xffffffffffe3b727, float:NaN)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r8 = "statisticChartLine_orange"
-            r4.put(r8, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -8422925(0xffffffffff7var_f3, float:-3.3958634E38)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r8 = "statisticChartLine_indigo"
-            r4.put(r8, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -1118482(0xffffffffffeeeeee, float:NaN)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r8 = "statisticChartLineEmpty"
-            r4.put(r8, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -12292204(0xfffffffffvar_var_, float:-2.6110803E38)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r8 = "actionBarTipBackground"
-            r4.put(r8, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -9718023(0xffffffffff6bb6f9, float:-3.1331863E38)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r8 = "voipgroup_checkMenu"
-            r4.put(r8, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -8919716(0xfffffffffvar_e55c, float:-3.2951022E38)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r8 = "voipgroup_muteButton"
-            r4.put(r8, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -8528726(0xffffffffff7ddcaa, float:-3.3744044E38)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r8 = "voipgroup_muteButton2"
-            r4.put(r8, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -11089922(0xfffffffffvar_c7fe, float:-2.854932E38)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r8 = "voipgroup_muteButton3"
-            r4.put(r8, r6)
+            java.lang.String r15 = "chat_outInstant"
+            r4.put(r15, r6)
             java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            java.lang.String r6 = "voipgroup_searchText"
-            r4.put(r6, r0)
+            r15 = -12019389(0xfffffffffvar_, float:-2.6664138E38)
+            java.lang.Integer r15 = java.lang.Integer.valueOf(r15)
+            java.lang.String r8 = "chat_outInstantSelected"
+            r4.put(r8, r15)
             java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -8024684(0xfffffffffvar_d94, float:NaN)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r8 = "voipgroup_searchPlaceholder"
-            r4.put(r8, r6)
+            java.lang.String r8 = "chat_inInstant"
+            r4.put(r8, r14)
             java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -13616313(0xfffffffffvar_b47, float:-2.3425191E38)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r8 = "voipgroup_searchBackground"
-            r4.put(r8, r6)
+            r8 = -13600331(0xfffffffffvar_b5, float:-2.3457607E38)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r15 = "chat_inInstantSelected"
+            r4.put(r15, r8)
             java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -35467(0xfffffffffffvar_, float:NaN)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r8 = "voipgroup_leaveCallMenu"
-            r4.put(r8, r6)
+            r8 = -2411211(0xffffffffffdb3535, float:NaN)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r15 = "chat_sentError"
+            r4.put(r15, r8)
             java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -13023660(0xfffffffffvar_, float:-2.4627234E38)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r8 = "voipgroup_scrollUp"
-            r4.put(r8, r6)
+            java.lang.String r8 = "chat_sentErrorIcon"
+            r4.put(r8, r0)
             java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = 2100052301(0x7d2CLASSNAMEd, float:1.4310392E37)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r8 = "voipgroup_soundButton"
-            r4.put(r8, r6)
+            r8 = 671781104(0x280a90f0, float:7.691967E-15)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r15 = "chat_selectedBackground"
+            r4.put(r15, r8)
             java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = 2099422443(0x7d22a4eb, float:1.3511952E37)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r8 = "voipgroup_soundButtonActive"
-            r4.put(r8, r6)
+            java.lang.String r8 = "chat_previewDurationText"
+            r4.put(r8, r0)
             java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -2110540545(0xfffffffvar_b4ff, float:-1.3202786E-37)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r8 = "voipgroup_soundButtonActiveScrolled"
-            r4.put(r8, r6)
+            java.lang.String r8 = "chat_previewGameText"
+            r4.put(r8, r0)
             java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = 2099796282(0x7d28593a, float:1.398585E37)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r8 = "voipgroup_soundButton2"
-            r4.put(r8, r6)
+            java.lang.String r8 = "chat_inPreviewInstantText"
+            r4.put(r8, r14)
             java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = 2098771793(0x7d18b751, float:1.2687156E37)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r8 = "voipgroup_soundButtonActive2"
+            java.lang.String r8 = "chat_outPreviewInstantText"
             r4.put(r8, r6)
             java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -2111520954(0xfffffffvar_bvar_, float:-1.210371E-37)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r8 = "voipgroup_soundButtonActive2Scrolled"
-            r4.put(r8, r6)
+            r8 = -13600331(0xfffffffffvar_b5, float:-2.3457607E38)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r15 = "chat_inPreviewInstantSelectedText"
+            r4.put(r15, r8)
             java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = 2113363036(0x7dvar_c5c, float:4.109986E37)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r8 = "voipgroup_leaveButton"
-            r4.put(r8, r6)
+            r8 = -12019389(0xfffffffffvar_, float:-2.6664138E38)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r15 = "chat_outPreviewInstantSelectedText"
+            r4.put(r15, r8)
             java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -2100212396(0xfffffffvar_d14d54, float:-3.0754174E-37)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r8 = "voipgroup_leaveButtonScrolled"
-            r4.put(r8, r6)
+            r8 = -1776928(0xffffffffffe4e2e0, float:NaN)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r15 = "chat_secretTimeText"
+            r4.put(r15, r8)
             java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -14107905(0xfffffffffvar_baff, float:-2.2428124E38)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r8 = "voipgroup_connectingProgress"
-            r4.put(r8, r6)
+            java.lang.String r8 = "chat_stickerNameText"
+            r4.put(r8, r0)
             java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -14933463(0xffffffffff1CLASSNAME, float:-2.0753694E38)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r8 = "voipgroup_disabledButton"
-            r4.put(r8, r6)
+            java.lang.String r8 = "chat_botButtonText"
+            r4.put(r8, r0)
             java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -13878715(0xffffffffff2c3a45, float:-2.2892977E38)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r8 = "voipgroup_disabledButtonActive"
-            r4.put(r8, r6)
+            java.lang.String r8 = "chat_botProgress"
+            r4.put(r8, r0)
             java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -2106088964(0xfffffffvar_a1fc, float:-1.8193181E-37)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r8 = "voipgroup_disabledButtonActiveScrolled"
-            r4.put(r8, r6)
+            r8 = -13072697(0xfffffffffvar_c7, float:-2.4527776E38)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r15 = "chat_inForwardedNameText"
+            r4.put(r15, r8)
             java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -11297032(0xfffffffffvar_ef8, float:-2.8129252E38)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r8 = "voipgroup_unmuteButton"
+            java.lang.String r8 = "chat_outForwardedNameText"
             r4.put(r8, r6)
             java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -10038021(0xfffffffffvar_d4fb, float:-3.068283E38)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r8 = "voipgroup_unmuteButton2"
-            r4.put(r8, r6)
+            r8 = -10838983(0xffffffffff5a9CLASSNAME, float:-2.9058286E38)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r15 = "chat_inPsaNameText"
+            r4.put(r15, r8)
             java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -15130842(0xfffffffffvar_var_, float:-2.0353362E38)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r8 = "voipgroup_actionBarUnscrolled"
-            r4.put(r8, r6)
+            r8 = -10838983(0xffffffffff5a9CLASSNAME, float:-2.9058286E38)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r15 = "chat_outPsaNameText"
+            r4.put(r15, r8)
             java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -14538189(0xfffffffffvar_a33, float:-2.1555405E38)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r8 = "voipgroup_listViewBackgroundUnscrolled"
-            r4.put(r8, r6)
+            java.lang.String r8 = "chat_inViaBotNameText"
+            r4.put(r8, r14)
             java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -8024684(0xfffffffffvar_d94, float:NaN)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r8 = "voipgroup_lastSeenTextUnscrolled"
+            java.lang.String r8 = "chat_outViaBotNameText"
             r4.put(r8, r6)
             java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -8485236(0xffffffffff7e868c, float:-3.3832252E38)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r8 = "voipgroup_mutedIconUnscrolled"
-            r4.put(r8, r6)
+            java.lang.String r8 = "chat_stickerViaBotNameText"
+            r4.put(r8, r0)
             java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -15789289(0xffffffffff0var_, float:-1.9017872E38)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r8 = "voipgroup_actionBar"
-            r4.put(r8, r6)
+            r8 = -10903592(0xfffffffffvar_fd8, float:-2.8927243E38)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r15 = "chat_inReplyLine"
+            r4.put(r15, r8)
             java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -15065823(0xffffffffff1a1d21, float:-2.0485236E38)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r8 = "voipgroup_emptyView"
-            r4.put(r8, r6)
+            r8 = -9520791(0xffffffffff6eb969, float:-3.1731897E38)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r15 = "chat_outReplyLine"
+            r4.put(r15, r8)
             java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            java.lang.String r6 = "voipgroup_actionBarItems"
-            r4.put(r6, r0)
+            java.lang.String r8 = "chat_stickerReplyLine"
+            r4.put(r8, r0)
             java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -7697782(0xffffffffff8a8a8a, float:NaN)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r8 = "voipgroup_actionBarSubtitle"
-            r4.put(r8, r6)
+            java.lang.String r8 = "chat_inReplyNameText"
+            r4.put(r8, r14)
             java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = 515562495(0x1ebadbff, float:1.9784504E-20)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r8 = "voipgroup_actionBarItemsSelector"
+            java.lang.String r8 = "chat_outReplyNameText"
             r4.put(r8, r6)
             java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -36752(0xfffffffffffvar_, float:NaN)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r8 = "voipgroup_mutedByAdminIcon"
-            r4.put(r8, r6)
+            java.lang.String r8 = "chat_stickerReplyNameText"
+            r4.put(r8, r0)
             java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -9471616(0xffffffffff6var_, float:-3.1831636E38)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r8 = "voipgroup_mutedIcon"
-            r4.put(r8, r6)
+            java.lang.String r8 = "chat_inReplyMessageText"
+            r4.put(r8, r10)
             java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -8813686(0xfffffffffvar_a, float:-3.3166076E38)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r8 = "voipgroup_lastSeenText"
-            r4.put(r8, r6)
+            java.lang.String r8 = "chat_outReplyMessageText"
+            r4.put(r8, r10)
             java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            java.lang.String r6 = "voipgroup_nameText"
-            r4.put(r6, r0)
+            java.lang.String r8 = "chat_inReplyMediaMessageText"
+            r4.put(r8, r12)
             java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -14933463(0xffffffffff1CLASSNAME, float:-2.0753694E38)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r8 = "voipgroup_listViewBackground"
-            r4.put(r8, r6)
+            r8 = -10112933(0xfffffffffvar_b05b, float:-3.053089E38)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r15 = "chat_outReplyMediaMessageText"
+            r4.put(r15, r8)
             java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -14933463(0xffffffffff1CLASSNAME, float:-2.0753694E38)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r8 = "voipgroup_dialogBackground"
-            r4.put(r8, r6)
+            r8 = -7752511(0xfffffffffvar_b4c1, float:NaN)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r15 = "chat_inReplyMediaMessageSelectedText"
+            r4.put(r15, r8)
             java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -11683585(0xffffffffff4db8ff, float:-2.734523E38)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r8 = "voipgroup_listeningText"
-            r4.put(r8, r6)
+            r8 = -10112933(0xfffffffffvar_b05b, float:-3.053089E38)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r15 = "chat_outReplyMediaMessageSelectedText"
+            r4.put(r15, r8)
             java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -8917379(0xfffffffffvar_ee7d, float:-3.2955762E38)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r8 = "voipgroup_speakingText"
-            r4.put(r8, r6)
+            java.lang.String r8 = "chat_stickerReplyMessageText"
+            r4.put(r8, r0)
             java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = 251658239(0xeffffff, float:6.310887E-30)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r8 = "voipgroup_listSelector"
-            r4.put(r8, r6)
+            r8 = -9390872(0xfffffffffvar_b4e8, float:-3.1995404E38)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r15 = "chat_inPreviewLine"
+            r4.put(r15, r8)
             java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -14538189(0xfffffffffvar_a33, float:-2.1555405E38)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r8 = "voipgroup_inviteMembersBackground"
-            r4.put(r8, r6)
+            r8 = -7812741(0xfffffffffvar_CLASSNAMEb, float:NaN)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r15 = "chat_outPreviewLine"
+            r4.put(r15, r8)
             java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -13906177(0xffffffffff2bceff, float:-2.2837277E38)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r8 = "voipgroup_overlayBlue1"
-            r4.put(r8, r6)
+            java.lang.String r8 = "chat_inSiteNameText"
+            r4.put(r8, r14)
             java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -16156957(0xfffffffffvar_e3, float:-1.8272153E38)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r8 = "voipgroup_overlayBlue2"
+            java.lang.String r8 = "chat_outSiteNameText"
             r4.put(r8, r6)
             java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -15551198(0xfffffffffvar_b522, float:-1.9500778E38)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r8 = "voipgroup_overlayGreen1"
-            r4.put(r8, r6)
+            r8 = -11625772(0xffffffffff4e9ad4, float:-2.7462488E38)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r15 = "chat_inContactNameText"
+            r4.put(r15, r8)
             java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -16722239(0xfffffffffvar_d6c1, float:-1.7125625E38)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r8 = "voipgroup_overlayGreen2"
+            java.lang.String r8 = "chat_outContactNameText"
             r4.put(r8, r6)
             java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -10434565(0xfffffffffvar_c7fb, float:-2.9878543E38)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r8 = "voipgroup_topPanelBlue1"
-            r4.put(r8, r6)
+            java.lang.String r8 = "chat_inContactPhoneText"
+            r4.put(r8, r9)
             java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -11427847(0xfffffffffvar_ff9, float:-2.7863928E38)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r8 = "voipgroup_topPanelBlue2"
-            r4.put(r8, r6)
+            java.lang.String r8 = "chat_inContactPhoneSelectedText"
+            r4.put(r8, r9)
             java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -11350435(0xfffffffffvar_ce5d, float:-2.8020938E38)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r8 = "voipgroup_topPanelGreen1"
-            r4.put(r8, r6)
+            r8 = -13286860(0xfffffffffvar_, float:-2.4093401E38)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r15 = "chat_outContactPhoneText"
+            r4.put(r15, r8)
             java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -16731712(0xfffffffffvar_b1c0, float:-1.7106411E38)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r8 = "voipgroup_topPanelGreen2"
-            r4.put(r8, r6)
+            r8 = -13286860(0xfffffffffvar_, float:-2.4093401E38)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r15 = "chat_outContactPhoneSelectedText"
+            r4.put(r15, r8)
             java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -8021590(0xfffffffffvar_aa, float:NaN)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r8 = "voipgroup_topPanelGray"
-            r4.put(r8, r6)
+            java.lang.String r8 = "chat_mediaProgress"
+            r4.put(r8, r0)
             java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -14455406(0xfffffffffvar_d92, float:-2.1723308E38)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r8 = "voipgroup_overlayAlertGradientMuted"
-            r4.put(r8, r6)
+            java.lang.String r8 = "chat_inAudioProgress"
+            r4.put(r8, r0)
             java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -13873813(0xffffffffff2c4d6b, float:-2.290292E38)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r8 = "voipgroup_overlayAlertGradientMuted2"
-            r4.put(r8, r6)
+            r8 = -1048610(0xffffffffffefffde, float:NaN)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r15 = "chat_outAudioProgress"
+            r4.put(r15, r8)
             java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -15955316(0xffffffffff0c8a8c, float:-1.868113E38)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r8 = "voipgroup_overlayAlertGradientUnmuted"
-            r4.put(r8, r6)
+            r8 = -1050370(0xffffffffffeff8fe, float:NaN)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r15 = "chat_inAudioSelectedProgress"
+            r4.put(r15, r8)
             java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -14136203(0xfffffffffvar_CLASSNAME, float:-2.237073E38)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r8 = "voipgroup_overlayAlertGradientUnmuted2"
-            r4.put(r8, r6)
+            r8 = -1967921(0xffffffffffe1f8cf, float:NaN)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r15 = "chat_outAudioSelectedProgress"
+            r4.put(r15, r8)
             java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -11033346(0xfffffffffvar_a4fe, float:-2.866407E38)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r8 = "voipgroup_mutedByAdminGradient"
-            r4.put(r8, r6)
+            java.lang.String r8 = "chat_mediaTimeText"
+            r4.put(r8, r0)
             java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -1026983(0xffffffffffvar_, float:NaN)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r8 = "voipgroup_mutedByAdminGradient2"
-            r4.put(r8, r6)
+            r8 = -4143413(0xffffffffffc0c6cb, float:NaN)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r15 = "chat_adminText"
+            r4.put(r15, r8)
             java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -9015575(0xfffffffffvar_ee9, float:-3.2756597E38)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r8 = "voipgroup_mutedByAdminGradient3"
-            r4.put(r8, r6)
+            r8 = -7752511(0xfffffffffvar_b4c1, float:NaN)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r15 = "chat_adminSelectedText"
+            r4.put(r15, r8)
             java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -9998178(0xfffffffffvar_e, float:-3.076364E38)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r8 = "voipgroup_overlayAlertMutedByAdmin"
-            r4.put(r8, r6)
+            r8 = -9391780(0xfffffffffvar_b15c, float:-3.1993562E38)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r15 = "chat_outAdminText"
+            r4.put(r15, r8)
             java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -13676424(0xffffffffff2var_, float:-2.3303272E38)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r8 = "kvoipgroup_overlayAlertMutedByAdmin2"
-            r4.put(r8, r6)
+            r8 = -9391780(0xfffffffffvar_b15c, float:-3.1993562E38)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r15 = "chat_outAdminSelectedText"
+            r4.put(r15, r8)
             java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = 2138612735(0x7var_a3ff, float:3.3050006E38)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r8 = "voipgroup_mutedByAdminMuteButton"
-            r4.put(r8, r6)
+            java.lang.String r8 = "chat_inTimeText"
+            r4.put(r8, r12)
             java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = 863544319(0x3378a3ff, float:5.7891153E-8)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r8 = "voipgroup_mutedByAdminMuteButtonDisabled"
-            r4.put(r8, r6)
+            r8 = -7752511(0xfffffffffvar_b4c1, float:NaN)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r15 = "chat_inTimeSelectedText"
+            r4.put(r15, r8)
             java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -2368549(0xffffffffffdbdbdb, float:NaN)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r8 = "voipgroup_windowBackgroundWhiteInputField"
-            r4.put(r8, r6)
+            r8 = -9391780(0xfffffffffvar_b15c, float:-3.1993562E38)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r15 = "chat_outTimeText"
+            r4.put(r15, r8)
             java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -13129232(0xfffffffffvar_a9f0, float:-2.4413109E38)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r8 = "voipgroup_windowBackgroundWhiteInputFieldActivated"
-            r4.put(r8, r6)
+            r8 = -9391780(0xfffffffffvar_b15c, float:-3.1993562E38)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r15 = "chat_outTimeSelectedText"
+            r4.put(r15, r8)
             java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -8863118(0xfffffffffvar_CLASSNAME, float:-3.3065816E38)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r8 = "chat_outReactionButtonBackground"
-            r4.put(r8, r6)
+            java.lang.String r8 = "chat_inAudioPerfomerText"
+            r4.put(r8, r9)
             java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r6 = -9259544(0xfffffffffvar_b5e8, float:-3.2261769E38)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            java.lang.String r8 = "chat_inReactionButtonBackground"
+            java.lang.String r8 = "chat_inAudioPerfomerSelectedText"
+            r4.put(r8, r9)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -13286860(0xfffffffffvar_, float:-2.4093401E38)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r15 = "chat_outAudioPerfomerText"
+            r4.put(r15, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -13286860(0xfffffffffvar_, float:-2.4093401E38)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r15 = "chat_outAudioPerfomerSelectedText"
+            r4.put(r15, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -11625772(0xffffffffff4e9ad4, float:-2.7462488E38)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r15 = "chat_inAudioTitleText"
+            r4.put(r15, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            java.lang.String r8 = "chat_outAudioTitleText"
+            r4.put(r8, r6)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            java.lang.String r8 = "chat_inAudioDurationText"
+            r4.put(r8, r12)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -10112933(0xfffffffffvar_b05b, float:-3.053089E38)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r15 = "chat_outAudioDurationText"
+            r4.put(r15, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -7752511(0xfffffffffvar_b4c1, float:NaN)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r15 = "chat_inAudioDurationSelectedText"
+            r4.put(r15, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -10112933(0xfffffffffvar_b05b, float:-3.053089E38)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r15 = "chat_outAudioDurationSelectedText"
+            r4.put(r15, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -1774864(0xffffffffffe4eaf0, float:NaN)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r15 = "chat_inAudioSeekbar"
+            r4.put(r15, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = 1071966960(0x3fe4eaf0, float:1.7884197)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r15 = "chat_inAudioCacheSeekbar"
+            r4.put(r15, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -4463700(0xffffffffffbbe3ac, float:NaN)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r15 = "chat_outAudioSeekbar"
+            r4.put(r15, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = 1069278124(0x3fbbe3ac, float:1.4678855)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r15 = "chat_outAudioCacheSeekbar"
+            r4.put(r15, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -4399384(0xffffffffffbcdee8, float:NaN)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r15 = "chat_inAudioSeekbarSelected"
+            r4.put(r15, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -5644906(0xffffffffffa9dd96, float:NaN)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r15 = "chat_outAudioSeekbarSelected"
+            r4.put(r15, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -9259544(0xfffffffffvar_b5e8, float:-3.2261769E38)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r15 = "chat_inAudioSeekbarFill"
+            r4.put(r15, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -8863118(0xfffffffffvar_CLASSNAME, float:-3.3065816E38)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r15 = "chat_outAudioSeekbarFill"
+            r4.put(r15, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -2169365(0xffffffffffdee5eb, float:NaN)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r15 = "chat_inVoiceSeekbar"
+            r4.put(r15, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -4463700(0xffffffffffbbe3ac, float:NaN)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r15 = "chat_outVoiceSeekbar"
+            r4.put(r15, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -4399384(0xffffffffffbcdee8, float:NaN)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r15 = "chat_inVoiceSeekbarSelected"
+            r4.put(r15, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -5644906(0xffffffffffa9dd96, float:NaN)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r15 = "chat_outVoiceSeekbarSelected"
+            r4.put(r15, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -9259544(0xfffffffffvar_b5e8, float:-3.2261769E38)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r15 = "chat_inVoiceSeekbarFill"
+            r4.put(r15, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -8863118(0xfffffffffvar_CLASSNAME, float:-3.3065816E38)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r15 = "chat_outVoiceSeekbarFill"
+            r4.put(r15, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -1314571(0xffffffffffebf0f5, float:NaN)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r15 = "chat_inFileProgress"
+            r4.put(r15, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -2427453(0xffffffffffdaf5c3, float:NaN)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r15 = "chat_outFileProgress"
+            r4.put(r15, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -3413258(0xffffffffffcbeaf6, float:NaN)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r15 = "chat_inFileProgressSelected"
+            r4.put(r15, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -3806041(0xffffffffffc5eca7, float:NaN)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r15 = "chat_outFileProgressSelected"
+            r4.put(r15, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -11625772(0xffffffffff4e9ad4, float:-2.7462488E38)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r15 = "chat_inFileNameText"
+            r4.put(r15, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            java.lang.String r8 = "chat_outFileNameText"
+            r4.put(r8, r6)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            java.lang.String r8 = "chat_inFileInfoText"
+            r4.put(r8, r12)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -10112933(0xfffffffffvar_b05b, float:-3.053089E38)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r15 = "chat_outFileInfoText"
+            r4.put(r15, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -7752511(0xfffffffffvar_b4c1, float:NaN)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r15 = "chat_inFileInfoSelectedText"
+            r4.put(r15, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -10112933(0xfffffffffvar_b05b, float:-3.053089E38)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r15 = "chat_outFileInfoSelectedText"
+            r4.put(r15, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -1314571(0xffffffffffebf0f5, float:NaN)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r15 = "chat_inFileBackground"
+            r4.put(r15, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -2427453(0xffffffffffdaf5c3, float:NaN)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r15 = "chat_outFileBackground"
+            r4.put(r15, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -3413258(0xffffffffffcbeaf6, float:NaN)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r15 = "chat_inFileBackgroundSelected"
+            r4.put(r15, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -3806041(0xffffffffffc5eca7, float:NaN)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r15 = "chat_outFileBackgroundSelected"
+            r4.put(r15, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            java.lang.String r8 = "chat_inVenueInfoText"
+            r4.put(r8, r12)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -10112933(0xfffffffffvar_b05b, float:-3.053089E38)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r15 = "chat_outVenueInfoText"
+            r4.put(r15, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -7752511(0xfffffffffvar_b4c1, float:NaN)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r15 = "chat_inVenueInfoSelectedText"
+            r4.put(r15, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -10112933(0xfffffffffvar_b05b, float:-3.053089E38)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r15 = "chat_outVenueInfoSelectedText"
+            r4.put(r15, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            java.lang.String r8 = "chat_mediaInfoText"
+            r4.put(r8, r0)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = 862104035(0x3362a9e3, float:5.2774237E-8)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r15 = "chat_linkSelectBackground"
+            r4.put(r15, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = 862104035(0x3362a9e3, float:5.2774237E-8)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r15 = "chat_outLinkSelectBackground"
+            r4.put(r15, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = 1717742051(0x6662a9e3, float:2.6759717E23)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r15 = "chat_textSelectBackground"
+            r4.put(r15, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -986379(0xfffffffffff0f2f5, float:NaN)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r15 = "chat_emojiPanelBackground"
+            r4.put(r15, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -11688214(0xffffffffff4da6ea, float:-2.733584E38)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r15 = "chat_emojiPanelBadgeBackground"
+            r4.put(r15, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            java.lang.String r8 = "chat_emojiPanelBadgeText"
+            r4.put(r8, r0)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -1709586(0xffffffffffe5e9ee, float:NaN)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r15 = "chat_emojiSearchBackground"
+            r4.put(r15, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -7036497(0xfffffffffvar_a1af, float:NaN)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r15 = "chat_emojiSearchIcon"
+            r4.put(r15, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = 301989888(0x12000000, float:4.0389678E-28)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r15 = "chat_emojiPanelShadowLine"
+            r4.put(r15, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -7038047(0xfffffffffvar_ba1, float:NaN)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r15 = "chat_emojiPanelEmptyText"
+            r4.put(r15, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -6445909(0xffffffffff9da4ab, float:NaN)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r15 = "chat_emojiPanelIcon"
+            r4.put(r15, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -7564905(0xffffffffff8CLASSNAME, float:NaN)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r15 = "chat_emojiBottomPanelIcon"
+            r4.put(r15, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -13920286(0xffffffffff2b97e2, float:-2.280866E38)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r15 = "chat_emojiPanelIconSelected"
+            r4.put(r15, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -1907225(0xffffffffffe2e5e7, float:NaN)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r15 = "chat_emojiPanelStickerPackSelector"
+            r4.put(r15, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -11097104(0xfffffffffvar_abf0, float:-2.8534754E38)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r15 = "chat_emojiPanelStickerPackSelectorLine"
+            r4.put(r15, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -7564905(0xffffffffff8CLASSNAME, float:NaN)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r15 = "chat_emojiPanelBackspace"
+            r4.put(r15, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            java.lang.String r8 = "chat_emojiPanelMasksIcon"
+            r4.put(r8, r0)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -10305560(0xfffffffffvar_bfe8, float:-3.0140196E38)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r15 = "chat_emojiPanelMasksIconSelected"
+            r4.put(r15, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            java.lang.String r8 = "chat_emojiPanelTrendingTitle"
+            r4.put(r8, r11)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -8221804(0xfffffffffvar_b94, float:NaN)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r15 = "chat_emojiPanelStickerSetName"
+            r4.put(r15, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -14184997(0xfffffffffvar_ddb, float:-2.2271763E38)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r15 = "chat_emojiPanelStickerSetNameHighlight"
+            r4.put(r15, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -5130564(0xffffffffffb1b6bc, float:NaN)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r15 = "chat_emojiPanelStickerSetNameIcon"
+            r4.put(r15, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -7697782(0xffffffffff8a8a8a, float:NaN)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r15 = "chat_emojiPanelTrendingDescription"
+            r4.put(r15, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -13220017(0xfffffffffvar_f, float:-2.4228975E38)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r15 = "chat_botKeyboardButtonText"
+            r4.put(r15, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -1775639(0xffffffffffe4e7e9, float:NaN)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r15 = "chat_botKeyboardButtonBackground"
+            r4.put(r15, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -3354156(0xffffffffffccd1d4, float:NaN)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r15 = "chat_botKeyboardButtonBackgroundPressed"
+            r4.put(r15, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -6113849(0xffffffffffa2b5c7, float:NaN)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r15 = "chat_unreadMessagesStartArrowIcon"
+            r4.put(r15, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -11102772(0xfffffffffvar_cc, float:-2.8523258E38)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r15 = "chat_unreadMessagesStartText"
+            r4.put(r15, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            java.lang.String r8 = "chat_unreadMessagesStartBackground"
+            r4.put(r8, r0)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -6113849(0xffffffffffa2b5c7, float:NaN)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r15 = "chat_inFileIcon"
+            r4.put(r15, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -7883067(0xfffffffffvar_b6c5, float:NaN)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r15 = "chat_inFileSelectedIcon"
+            r4.put(r15, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -8011912(0xfffffffffvar_bvar_, float:NaN)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r15 = "chat_outFileIcon"
+            r4.put(r15, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -8011912(0xfffffffffvar_bvar_, float:NaN)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r15 = "chat_outFileSelectedIcon"
+            r4.put(r15, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -1314571(0xffffffffffebf0f5, float:NaN)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r15 = "chat_inLocationBackground"
+            r4.put(r15, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -6113849(0xffffffffffa2b5c7, float:NaN)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r15 = "chat_inLocationIcon"
+            r4.put(r15, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -2427453(0xffffffffffdaf5c3, float:NaN)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r15 = "chat_outLocationBackground"
+            r4.put(r15, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -7880840(0xfffffffffvar_bvar_, float:NaN)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r15 = "chat_outLocationIcon"
+            r4.put(r15, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -9259544(0xfffffffffvar_b5e8, float:-3.2261769E38)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r15 = "chat_inContactBackground"
+            r4.put(r15, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            java.lang.String r8 = "chat_inContactIcon"
+            r4.put(r8, r0)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -8863118(0xfffffffffvar_CLASSNAME, float:-3.3065816E38)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r15 = "chat_outContactBackground"
+            r4.put(r15, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -1048610(0xffffffffffefffde, float:NaN)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r15 = "chat_outContactIcon"
+            r4.put(r15, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -12146122(0xfffffffffvar_aa36, float:-2.6407093E38)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r15 = "chat_outBroadcast"
+            r4.put(r15, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            java.lang.String r8 = "chat_mediaBroadcast"
+            r4.put(r8, r0)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -9999761(0xfffffffffvar_a6f, float:-3.076043E38)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r15 = "chat_searchPanelIcons"
+            r4.put(r15, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -9999761(0xfffffffffvar_a6f, float:-3.076043E38)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r15 = "chat_searchPanelText"
+            r4.put(r15, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -8421505(0xffffffffff7f7f7f, float:-3.3961514E38)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r15 = "chat_secretChatStatusText"
+            r4.put(r15, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            java.lang.String r8 = "chat_fieldOverlayText"
+            r4.put(r8, r14)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            java.lang.String r8 = "chat_stickersHintPanel"
+            r4.put(r8, r0)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -11032346(0xfffffffffvar_a8e6, float:-2.86661E38)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r15 = "chat_replyPanelIcons"
+            r4.put(r15, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -7432805(0xffffffffff8e959b, float:NaN)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r15 = "chat_replyPanelClose"
+            r4.put(r15, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            java.lang.String r8 = "chat_replyPanelName"
+            r4.put(r8, r14)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            java.lang.String r8 = "chat_replyPanelMessage"
+            r4.put(r8, r11)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -1513240(0xffffffffffe8e8e8, float:NaN)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r15 = "chat_replyPanelLine"
+            r4.put(r15, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            java.lang.String r8 = "chat_messagePanelBackground"
+            r4.put(r8, r0)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            java.lang.String r8 = "chat_messagePanelText"
+            r4.put(r8, r10)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -5985101(0xffffffffffa4acb3, float:NaN)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r15 = "chat_messagePanelHint"
+            r4.put(r15, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -11230757(0xfffffffffvar_a1db, float:-2.8263674E38)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r15 = "chat_messagePanelCursor"
+            r4.put(r15, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            java.lang.String r8 = "chat_messagePanelShadow"
+            r4.put(r8, r10)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -7432805(0xffffffffff8e959b, float:NaN)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r15 = "chat_messagePanelIcons"
+            r4.put(r15, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            java.lang.String r8 = "chat_recordedVoicePlayPause"
+            r4.put(r8, r0)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -2468275(0xffffffffffda564d, float:NaN)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r15 = "chat_recordedVoiceDot"
+            r4.put(r15, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -10637848(0xffffffffff5dade8, float:-2.9466236E38)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r15 = "chat_recordedVoiceBackground"
+            r4.put(r15, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -5120257(0xffffffffffb1deff, float:NaN)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r15 = "chat_recordedVoiceProgress"
+            r4.put(r15, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            java.lang.String r8 = "chat_recordedVoiceProgressInner"
+            r4.put(r8, r0)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -12937772(0xffffffffff3a95d4, float:-2.4801436E38)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r15 = "chat_recordVoiceCancel"
+            r4.put(r15, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = 1694498815(0x64ffffff, float:3.777893E22)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r15 = "key_chat_recordedVoiceHighlight"
+            r4.put(r15, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -10309397(0xfffffffffvar_b0eb, float:-3.0132414E38)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r15 = "chat_messagePanelSend"
+            r4.put(r15, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -5987164(0xffffffffffa4a4a4, float:NaN)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r15 = "key_chat_messagePanelVoiceLock"
+            r4.put(r15, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            java.lang.String r8 = "key_chat_messagePanelVoiceLockBackground"
+            r4.put(r8, r0)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            java.lang.String r8 = "key_chat_messagePanelVoiceLockShadow"
+            r4.put(r8, r10)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -7432805(0xffffffffff8e959b, float:NaN)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r15 = "chat_recordTime"
+            r4.put(r15, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -11688214(0xffffffffff4da6ea, float:-2.733584E38)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r15 = "chat_emojiPanelNewTrending"
+            r4.put(r15, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            java.lang.String r8 = "chat_gifSaveHintText"
+            r4.put(r8, r0)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -871296751(0xffffffffcCLASSNAME, float:-3.8028356E7)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r15 = "chat_gifSaveHintBackground"
+            r4.put(r15, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            java.lang.String r8 = "chat_goDownButton"
+            r4.put(r8, r0)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            java.lang.String r8 = "chat_goDownButtonShadow"
+            r4.put(r8, r10)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -7432805(0xffffffffff8e959b, float:NaN)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r15 = "chat_goDownButtonIcon"
+            r4.put(r15, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            java.lang.String r8 = "chat_goDownButtonCounter"
+            r4.put(r8, r0)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -11689240(0xffffffffff4da2e8, float:-2.733376E38)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r15 = "chat_goDownButtonCounterBackground"
+            r4.put(r15, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -5395027(0xffffffffffadadad, float:NaN)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r15 = "chat_messagePanelCancelInlineBot"
+            r4.put(r15, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            java.lang.String r8 = "chat_messagePanelVoicePressed"
+            r4.put(r8, r0)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -10639650(0xffffffffff5da6de, float:-2.9462581E38)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r15 = "chat_messagePanelVoiceBackground"
+            r4.put(r15, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -9211021(0xfffffffffvar_, float:-3.2360185E38)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r15 = "chat_messagePanelVoiceDelete"
+            r4.put(r15, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            java.lang.String r8 = "chat_messagePanelVoiceDuration"
+            r4.put(r8, r0)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -11037236(0xfffffffffvar_cc, float:-2.865618E38)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r15 = "chat_inlineResultIcon"
+            r4.put(r15, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            java.lang.String r8 = "chat_topPanelBackground"
+            r4.put(r8, r0)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -7629157(0xffffffffff8b969b, float:NaN)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r15 = "chat_topPanelClose"
+            r4.put(r15, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -9658414(0xffffffffff6c9fd2, float:-3.1452764E38)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r15 = "chat_topPanelLine"
+            r4.put(r15, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            java.lang.String r8 = "chat_topPanelTitle"
+            r4.put(r8, r14)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -7893359(0xfffffffffvar_e91, float:NaN)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r15 = "chat_topPanelMessage"
+            r4.put(r15, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -3188393(0xffffffffffcvar_, float:NaN)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r15 = "chat_reportSpam"
+            r4.put(r15, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -11894091(0xffffffffff4a82b5, float:-2.6918272E38)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r15 = "chat_addContact"
+            r4.put(r15, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -9259544(0xfffffffffvar_b5e8, float:-3.2261769E38)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r15 = "chat_inLoader"
+            r4.put(r15, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -10114080(0xfffffffffvar_abe0, float:-3.0528564E38)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r15 = "chat_inLoaderSelected"
+            r4.put(r15, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -8863118(0xfffffffffvar_CLASSNAME, float:-3.3065816E38)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r15 = "chat_outLoader"
+            r4.put(r15, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -9783964(0xffffffffff6ab564, float:-3.1198118E38)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r15 = "chat_outLoaderSelected"
+            r4.put(r15, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -6113080(0xffffffffffa2b8c8, float:NaN)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r15 = "chat_inLoaderPhoto"
+            r4.put(r15, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -6113849(0xffffffffffa2b5c7, float:NaN)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r15 = "chat_inLoaderPhotoSelected"
+            r4.put(r15, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -197380(0xfffffffffffcfcfc, float:NaN)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r15 = "chat_inLoaderPhotoIcon"
+            r4.put(r15, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -1314571(0xffffffffffebf0f5, float:NaN)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r15 = "chat_inLoaderPhotoIconSelected"
+            r4.put(r15, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -8011912(0xfffffffffvar_bvar_, float:NaN)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r15 = "chat_outLoaderPhoto"
+            r4.put(r15, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -8538000(0xffffffffff7db870, float:-3.3725234E38)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r15 = "chat_outLoaderPhotoSelected"
+            r4.put(r15, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -2427453(0xffffffffffdaf5c3, float:NaN)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r15 = "chat_outLoaderPhotoIcon"
+            r4.put(r15, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -4134748(0xffffffffffc0e8a4, float:NaN)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r15 = "chat_outLoaderPhotoIconSelected"
+            r4.put(r15, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = 1711276032(0x66000000, float:1.5111573E23)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r15 = "chat_mediaLoaderPhoto"
+            r4.put(r15, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = 2130706432(0x7var_, float:1.7014118E38)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r15 = "chat_mediaLoaderPhotoSelected"
+            r4.put(r15, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            java.lang.String r8 = "chat_mediaLoaderPhotoIcon"
+            r4.put(r8, r0)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -2500135(0xffffffffffd9d9d9, float:NaN)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r15 = "chat_mediaLoaderPhotoIconSelected"
+            r4.put(r15, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -868326258(0xffffffffcc3e648e, float:-4.9910328E7)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r15 = "chat_secretTimerBackground"
+            r4.put(r15, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            java.lang.String r8 = "chat_secretTimerText"
+            r4.put(r8, r0)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -12937771(0xffffffffff3a95d5, float:-2.4801438E38)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r15 = "profile_creatorIcon"
+            r4.put(r15, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -8288630(0xfffffffffvar_a, float:NaN)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r15 = "profile_actionIcon"
+            r4.put(r15, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            java.lang.String r8 = "profile_actionBackground"
+            r4.put(r8, r0)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -855310(0xfffffffffff2f2f2, float:NaN)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r15 = "profile_actionPressedBackground"
+            r4.put(r15, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -5056776(0xffffffffffb2d6f8, float:NaN)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r15 = "profile_verifiedBackground"
+            r4.put(r15, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -11959368(0xfffffffffvar_b8, float:-2.6785875E38)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r15 = "profile_verifiedCheck"
+            r4.put(r15, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            java.lang.String r8 = "profile_title"
+            r4.put(r8, r0)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -2626822(0xffffffffffd7eafa, float:NaN)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r15 = "profile_status"
+            r4.put(r15, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -7893872(0xfffffffffvar_CLASSNAME, float:NaN)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r15 = "profile_tabText"
+            r4.put(r15, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -12937771(0xffffffffff3a95d5, float:-2.4801438E38)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r15 = "profile_tabSelectedText"
+            r4.put(r15, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -11557143(0xffffffffff4fa6e9, float:-2.7601684E38)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r15 = "profile_tabSelectedLine"
+            r4.put(r15, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = 251658240(0xvar_, float:6.3108872E-30)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r15 = "profile_tabSelector"
+            r4.put(r15, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            java.lang.String r8 = "player_actionBar"
+            r4.put(r8, r0)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = 251658240(0xvar_, float:6.3108872E-30)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r15 = "player_actionBarSelector"
+            r4.put(r15, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            java.lang.String r8 = "player_actionBarTitle"
+            r4.put(r8, r9)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -1728053248(0xfffffffvar_, float:-6.617445E-24)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r15 = "player_actionBarTop"
+            r4.put(r15, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -7697782(0xffffffffff8a8a8a, float:NaN)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r15 = "player_actionBarSubtitle"
+            r4.put(r15, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -7697782(0xffffffffff8a8a8a, float:NaN)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r15 = "player_actionBarItems"
+            r4.put(r15, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            java.lang.String r8 = "player_background"
+            r4.put(r8, r0)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -7564650(0xffffffffff8CLASSNAME, float:NaN)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r15 = "player_time"
+            r4.put(r15, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -1315344(0xffffffffffebedf0, float:NaN)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r15 = "player_progressBackground"
+            r4.put(r15, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -3353637(0xffffffffffccd3db, float:NaN)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r15 = "player_progressBackground2"
+            r4.put(r15, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -3810064(0xffffffffffc5dcf0, float:NaN)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r15 = "key_player_progressCachedBackground"
+            r4.put(r15, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -11228437(0xfffffffffvar_aaeb, float:-2.826838E38)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r15 = "player_progress"
+            r4.put(r15, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -13421773(0xfffffffffvar_, float:-2.3819765E38)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r15 = "player_button"
+            r4.put(r15, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -11753238(0xffffffffff4ca8ea, float:-2.7203956E38)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r15 = "player_buttonActive"
+            r4.put(r15, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -1973016(0xffffffffffe1e4e8, float:NaN)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r15 = "key_sheet_scrollUp"
+            r4.put(r15, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -3551789(0xffffffffffc9cdd3, float:NaN)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r15 = "key_sheet_other"
+            r4.put(r15, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            java.lang.String r8 = "files_folderIcon"
+            r4.put(r8, r0)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -10637333(0xffffffffff5dafeb, float:-2.946728E38)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r15 = "files_folderIconBackground"
+            r4.put(r15, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            java.lang.String r8 = "files_iconText"
+            r4.put(r8, r0)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -6908266(0xfffffffffvar_, float:NaN)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r15 = "sessions_devicesImage"
+            r4.put(r15, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -12211217(0xfffffffffvar_abef, float:-2.6275065E38)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r15 = "passport_authorizeBackground"
+            r4.put(r15, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -12542501(0xfffffffffvar_ddb, float:-2.560314E38)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r15 = "passport_authorizeBackgroundSelected"
+            r4.put(r15, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            java.lang.String r8 = "passport_authorizeText"
+            r4.put(r8, r0)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -12149258(0xfffffffffvar_df6, float:-2.6400732E38)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r15 = "location_sendLocationBackground"
+            r4.put(r15, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            java.lang.String r8 = "location_sendLocationIcon"
+            r4.put(r8, r0)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -14906664(0xffffffffff1c8ad8, float:-2.0808049E38)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r15 = "location_sendLocationText"
+            r4.put(r15, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -11550140(0xffffffffff4fCLASSNAME, float:-2.7615888E38)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r15 = "location_sendLiveLocationBackground"
+            r4.put(r15, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            java.lang.String r8 = "location_sendLiveLocationIcon"
+            r4.put(r8, r0)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -13194460(0xfffffffffvar_ab24, float:-2.428081E38)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r15 = "location_sendLiveLocationText"
+            r4.put(r15, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -13262875(0xfffffffffvar_fe5, float:-2.4142049E38)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r15 = "location_liveLocationProgress"
+            r4.put(r15, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -11753238(0xffffffffff4ca8ea, float:-2.7203956E38)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r15 = "location_placeLocationBackground"
+            r4.put(r15, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -12959675(0xffffffffff3a4045, float:-2.4757011E38)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r15 = "location_actionIcon"
+            r4.put(r15, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -12414746(0xfffffffffvar_e6, float:-2.5862259E38)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r15 = "location_actionActiveIcon"
+            r4.put(r15, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            java.lang.String r8 = "location_actionBackground"
+            r4.put(r8, r0)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -855310(0xfffffffffff2f2f2, float:NaN)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r15 = "location_actionPressedBackground"
+            r4.put(r15, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -13262875(0xfffffffffvar_fe5, float:-2.4142049E38)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r15 = "dialog_liveLocationProgress"
+            r4.put(r15, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -16725933(0xfffffffffvar_CLASSNAME, float:-1.7118133E38)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r15 = "calls_callReceivedGreenIcon"
+            r4.put(r15, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -47032(0xfffffffffffvar_, float:NaN)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r15 = "calls_callReceivedRedIcon"
+            r4.put(r15, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -11491093(0xfffffffffvar_a8eb, float:-2.773565E38)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r15 = "featuredStickers_addedIcon"
+            r4.put(r15, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            java.lang.String r8 = "featuredStickers_buttonProgress"
+            r4.put(r8, r0)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -11491093(0xfffffffffvar_a8eb, float:-2.773565E38)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r15 = "featuredStickers_addButton"
+            r4.put(r15, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -12346402(0xfffffffffvar_bde, float:-2.6000877E38)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r15 = "featuredStickers_addButtonPressed"
+            r4.put(r15, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -11496493(0xfffffffffvar_d3, float:-2.7724697E38)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r15 = "featuredStickers_removeButtonText"
+            r4.put(r15, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            java.lang.String r8 = "featuredStickers_buttonText"
+            r4.put(r8, r0)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -11688214(0xffffffffff4da6ea, float:-2.733584E38)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r15 = "featuredStickers_unread"
+            r4.put(r15, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            java.lang.String r8 = "inappPlayerPerformer"
+            r4.put(r8, r9)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            java.lang.String r8 = "inappPlayerTitle"
+            r4.put(r8, r9)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            java.lang.String r8 = "inappPlayerBackground"
+            r4.put(r8, r0)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -10309397(0xfffffffffvar_b0eb, float:-3.0132414E38)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r9 = "inappPlayerPlayPause"
+            r4.put(r9, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -7629157(0xffffffffff8b969b, float:NaN)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r9 = "inappPlayerClose"
+            r4.put(r9, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -12279325(0xfffffffffvar_a1e3, float:-2.6136925E38)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r9 = "returnToCallBackground"
+            r4.put(r9, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -6445135(0xffffffffff9da7b1, float:NaN)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r9 = "returnToCallMutedBackground"
+            r4.put(r9, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            java.lang.String r8 = "returnToCallText"
+            r4.put(r8, r0)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -13196562(0xfffffffffvar_a2ee, float:-2.4276547E38)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r9 = "sharedMedia_startStopLoadIcon"
+            r4.put(r9, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -986123(0xfffffffffff0f3f5, float:NaN)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r9 = "sharedMedia_linkPlaceholder"
+            r4.put(r9, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -4735293(0xffffffffffb7bec3, float:NaN)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r9 = "sharedMedia_linkPlaceholderText"
+            r4.put(r9, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -1182729(0xffffffffffedf3f7, float:NaN)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r9 = "sharedMedia_photoPlaceholder"
+            r4.put(r9, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -12154957(0xfffffffffvar_b3, float:-2.6389173E38)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r9 = "sharedMedia_actionMode"
+            r4.put(r9, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -10567099(0xffffffffff5eCLASSNAME, float:-2.9609732E38)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r9 = "checkbox"
+            r4.put(r9, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            java.lang.String r8 = "checkboxCheck"
+            r4.put(r8, r0)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -5195326(0xffffffffffb0b9c2, float:NaN)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r9 = "checkboxDisabled"
+            r4.put(r9, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -4801083(0xffffffffffb6bdc5, float:NaN)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r9 = "stickers_menu"
+            r4.put(r9, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = 251658240(0xvar_, float:6.3108872E-30)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r9 = "stickers_menuSelector"
+            r4.put(r9, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -4669499(0xffffffffffb8bfc5, float:NaN)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r9 = "changephoneinfo_image"
+            r4.put(r9, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -11491350(0xfffffffffvar_a7ea, float:-2.7735128E38)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r9 = "changephoneinfo_image2"
+            r4.put(r9, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            java.lang.String r8 = "groupcreate_hintText"
+            r4.put(r8, r12)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -11361317(0xfffffffffvar_a3db, float:-2.7998867E38)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r9 = "groupcreate_cursor"
+            r4.put(r9, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            java.lang.String r8 = "groupcreate_sectionShadow"
+            r4.put(r8, r10)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -8617336(0xffffffffff7CLASSNAME, float:-3.3564321E38)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r9 = "groupcreate_sectionText"
+            r4.put(r9, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            java.lang.String r8 = "groupcreate_spanText"
+            r4.put(r8, r11)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -855310(0xfffffffffff2f2f2, float:NaN)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r9 = "groupcreate_spanBackground"
+            r4.put(r9, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            java.lang.String r8 = "groupcreate_spanDelete"
+            r4.put(r8, r0)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -11157919(0xfffffffffvar_be61, float:-2.8411407E38)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r9 = "contacts_inviteBackground"
+            r4.put(r9, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            java.lang.String r8 = "contacts_inviteText"
+            r4.put(r8, r0)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -1971470(0xffffffffffe1eaf2, float:NaN)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r9 = "login_progressInner"
+            r4.put(r9, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -10313520(0xfffffffffvar_a0d0, float:-3.0124051E38)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r9 = "login_progressOuter"
+            r4.put(r9, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -14043401(0xfffffffffvar_b6f7, float:-2.2558954E38)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r9 = "musicPicker_checkbox"
+            r4.put(r9, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            java.lang.String r8 = "musicPicker_checkboxCheck"
+            r4.put(r8, r0)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -10702870(0xffffffffff5cafea, float:-2.9334356E38)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r9 = "musicPicker_buttonBackground"
+            r4.put(r9, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            java.lang.String r8 = "musicPicker_buttonIcon"
+            r4.put(r8, r0)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -15095832(0xfffffffffvar_a7e8, float:-2.042437E38)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r9 = "picker_enabledButton"
+            r4.put(r9, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -6710887(0xfffffffffvar_, float:NaN)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r9 = "picker_disabledButton"
+            r4.put(r9, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -14043401(0xfffffffffvar_b6f7, float:-2.2558954E38)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r9 = "picker_badge"
+            r4.put(r9, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            java.lang.String r8 = "picker_badgeText"
+            r4.put(r8, r0)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -12348980(0xfffffffffvar_cc, float:-2.5995648E38)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r9 = "chat_botSwitchToInlineText"
+            r4.put(r9, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -366530760(0xffffffffea272var_, float:-5.05284E25)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r9 = "undo_background"
+            r4.put(r9, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -8008961(0xfffffffffvar_caff, float:NaN)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r9 = "undo_cancelColor"
+            r4.put(r9, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            java.lang.String r8 = "undo_infoColor"
+            r4.put(r8, r0)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            java.lang.String r8 = "wallet_blackBackground"
+            r4.put(r8, r10)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -986896(0xfffffffffff0f0f0, float:NaN)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r9 = "wallet_graySettingsBackground"
+            r4.put(r9, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -14079703(0xfffffffffvar_, float:-2.2485325E38)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r9 = "wallet_grayBackground"
+            r4.put(r9, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            java.lang.String r8 = "wallet_whiteBackground"
+            r4.put(r8, r0)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = 1090519039(0x40ffffff, float:7.9999995)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r9 = "wallet_blackBackgroundSelector"
+            r4.put(r9, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            java.lang.String r8 = "wallet_whiteText"
+            r4.put(r8, r0)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            java.lang.String r8 = "wallet_blackText"
+            r4.put(r8, r11)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -8355712(0xfffffffffvar_, float:NaN)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r9 = "wallet_statusText"
+            r4.put(r9, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -8947849(0xfffffffffvar_, float:-3.2893961E38)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r9 = "wallet_grayText"
+            r4.put(r9, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -10066330(0xfffffffffvar_, float:-3.0625412E38)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r9 = "wallet_grayText2"
+            r4.put(r9, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -13129704(0xfffffffffvar_a818, float:-2.4412152E38)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r9 = "wallet_greenText"
+            r4.put(r9, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -2408384(0xffffffffffdb4040, float:NaN)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r9 = "wallet_redText"
+            r4.put(r9, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -6710887(0xfffffffffvar_, float:NaN)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r9 = "wallet_dateText"
+            r4.put(r9, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -6710887(0xfffffffffvar_, float:NaN)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r9 = "wallet_commentText"
+            r4.put(r9, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -13599557(0xfffffffffvar_cbb, float:-2.3459176E38)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r9 = "wallet_releaseBackground"
+            r4.put(r9, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -14606047(0xfffffffffvar_, float:-2.1417772E38)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r9 = "wallet_pullBackground"
+            r4.put(r9, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -12082714(0xfffffffffvar_a1e6, float:-2.65357E38)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r9 = "wallet_buttonBackground"
+            r4.put(r9, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -13923114(0xffffffffff2b8cd6, float:-2.2802925E38)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r9 = "wallet_buttonPressedBackground"
+            r4.put(r9, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            java.lang.String r8 = "wallet_buttonText"
+            r4.put(r8, r0)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = 218103808(0xd000000, float:3.9443045E-31)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r9 = "wallet_addressConfirmBackground"
+            r4.put(r9, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = 775919907(0x2e3var_, float:4.3564385E-11)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r9 = "chat_outTextSelectionHighlight"
+            r4.put(r9, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = 1348643299(0x5062a9e3, float:1.5211138E10)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r9 = "chat_inTextSelectionHighlight"
+            r4.put(r9, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -12476440(0xfffffffffvar_fe8, float:-2.5737128E38)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r9 = "chat_TextSelectionCursor"
+            r4.put(r9, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -12476440(0xfffffffffvar_fe8, float:-2.5737128E38)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r9 = "chat_outTextSelectionCursor"
+            r4.put(r9, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            java.lang.String r8 = "chat_BlurAlpha"
+            r4.put(r8, r10)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = 2133140777(0x7var_, float:2.1951557E38)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r9 = "statisticChartSignature"
+            r4.put(r9, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = 2133140777(0x7var_, float:2.1951557E38)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r9 = "statisticChartSignatureAlpha"
+            r4.put(r9, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = 437792059(0x1a182d3b, float:3.14694E-23)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r9 = "statisticChartHintLine"
+            r4.put(r9, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = 855638016(0x33000000, float:2.9802322E-8)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r9 = "statisticChartActiveLine"
+            r4.put(r9, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -1713180935(0xfffffffvar_e2eef9, float:-2.3464373E-23)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r9 = "statisticChartInactivePickerChart"
+            r4.put(r9, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -658846503(0xffffffffd8baccd9, float:-1.64311181E15)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r9 = "statisticChartActivePickerChart"
+            r4.put(r9, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = 746495415(0x2c7e9db7, float:3.618312E-12)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r9 = "statisticChartRipple"
+            r4.put(r9, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -15692829(0xfffffffffvar_be3, float:-1.9213516E38)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r9 = "statisticChartBackZoomColor"
+            r4.put(r9, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -4342339(0xffffffffffbdbdbd, float:NaN)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r9 = "statisticChartCheckboxInactive"
+            r4.put(r9, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -7434605(0xffffffffff8e8e93, float:NaN)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r9 = "statisticChartNightIconColor"
+            r4.put(r9, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -2959913(0xffffffffffd2d5d7, float:NaN)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r9 = "statisticChartChevronColor"
+            r4.put(r9, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = 552398060(0x20ececec, float:4.0136737E-19)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r9 = "statisticChartHighlightColor"
+            r4.put(r9, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            java.lang.String r8 = "statisticChartPopupBackground"
+            r4.put(r8, r0)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -13467675(0xfffffffffvar_fe5, float:-2.3726665E38)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r9 = "statisticChartLine_blue"
+            r4.put(r9, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -10369198(0xfffffffffvar_CLASSNAME, float:-3.0011123E38)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r9 = "statisticChartLine_green"
+            r4.put(r9, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -2075818(0xffffffffffe05356, float:NaN)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r9 = "statisticChartLine_red"
+            r4.put(r9, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -2180600(0xffffffffffdeba08, float:NaN)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r9 = "statisticChartLine_golden"
+            r4.put(r9, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -10966803(0xfffffffffvar_a8ed, float:-2.8799036E38)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r9 = "statisticChartLine_lightblue"
+            r4.put(r9, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -7352519(0xffffffffff8fcvar_, float:NaN)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r9 = "statisticChartLine_lightgreen"
+            r4.put(r9, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -1853657(0xffffffffffe3b727, float:NaN)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r9 = "statisticChartLine_orange"
+            r4.put(r9, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -8422925(0xffffffffff7var_f3, float:-3.3958634E38)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r9 = "statisticChartLine_indigo"
+            r4.put(r9, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -1118482(0xffffffffffeeeeee, float:NaN)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r9 = "statisticChartLineEmpty"
+            r4.put(r9, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -12292204(0xfffffffffvar_var_, float:-2.6110803E38)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r9 = "actionBarTipBackground"
+            r4.put(r9, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -9718023(0xffffffffff6bb6f9, float:-3.1331863E38)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r9 = "voipgroup_checkMenu"
+            r4.put(r9, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -8919716(0xfffffffffvar_e55c, float:-3.2951022E38)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r9 = "voipgroup_muteButton"
+            r4.put(r9, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -8528726(0xffffffffff7ddcaa, float:-3.3744044E38)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r9 = "voipgroup_muteButton2"
+            r4.put(r9, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -11089922(0xfffffffffvar_c7fe, float:-2.854932E38)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r9 = "voipgroup_muteButton3"
+            r4.put(r9, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            java.lang.String r8 = "voipgroup_searchText"
+            r4.put(r8, r0)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -8024684(0xfffffffffvar_d94, float:NaN)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r9 = "voipgroup_searchPlaceholder"
+            r4.put(r9, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -13616313(0xfffffffffvar_b47, float:-2.3425191E38)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r9 = "voipgroup_searchBackground"
+            r4.put(r9, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -35467(0xfffffffffffvar_, float:NaN)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r9 = "voipgroup_leaveCallMenu"
+            r4.put(r9, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -13023660(0xfffffffffvar_, float:-2.4627234E38)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r9 = "voipgroup_scrollUp"
+            r4.put(r9, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = 2100052301(0x7d2CLASSNAMEd, float:1.4310392E37)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r9 = "voipgroup_soundButton"
+            r4.put(r9, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = 2099422443(0x7d22a4eb, float:1.3511952E37)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r9 = "voipgroup_soundButtonActive"
+            r4.put(r9, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -2110540545(0xfffffffvar_b4ff, float:-1.3202786E-37)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r9 = "voipgroup_soundButtonActiveScrolled"
+            r4.put(r9, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = 2099796282(0x7d28593a, float:1.398585E37)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r9 = "voipgroup_soundButton2"
+            r4.put(r9, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = 2098771793(0x7d18b751, float:1.2687156E37)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r9 = "voipgroup_soundButtonActive2"
+            r4.put(r9, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -2111520954(0xfffffffvar_bvar_, float:-1.210371E-37)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r9 = "voipgroup_soundButtonActive2Scrolled"
+            r4.put(r9, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = 2113363036(0x7dvar_c5c, float:4.109986E37)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r9 = "voipgroup_leaveButton"
+            r4.put(r9, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -2100212396(0xfffffffvar_d14d54, float:-3.0754174E-37)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r9 = "voipgroup_leaveButtonScrolled"
+            r4.put(r9, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -14107905(0xfffffffffvar_baff, float:-2.2428124E38)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r9 = "voipgroup_connectingProgress"
+            r4.put(r9, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -14933463(0xffffffffff1CLASSNAME, float:-2.0753694E38)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r9 = "voipgroup_disabledButton"
+            r4.put(r9, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -13878715(0xffffffffff2c3a45, float:-2.2892977E38)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r9 = "voipgroup_disabledButtonActive"
+            r4.put(r9, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -2106088964(0xfffffffvar_a1fc, float:-1.8193181E-37)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r9 = "voipgroup_disabledButtonActiveScrolled"
+            r4.put(r9, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -11297032(0xfffffffffvar_ef8, float:-2.8129252E38)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r9 = "voipgroup_unmuteButton"
+            r4.put(r9, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -10038021(0xfffffffffvar_d4fb, float:-3.068283E38)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r9 = "voipgroup_unmuteButton2"
+            r4.put(r9, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -15130842(0xfffffffffvar_var_, float:-2.0353362E38)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r9 = "voipgroup_actionBarUnscrolled"
+            r4.put(r9, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -14538189(0xfffffffffvar_a33, float:-2.1555405E38)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r9 = "voipgroup_listViewBackgroundUnscrolled"
+            r4.put(r9, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -8024684(0xfffffffffvar_d94, float:NaN)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r9 = "voipgroup_lastSeenTextUnscrolled"
+            r4.put(r9, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -8485236(0xffffffffff7e868c, float:-3.3832252E38)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r9 = "voipgroup_mutedIconUnscrolled"
+            r4.put(r9, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -15789289(0xffffffffff0var_, float:-1.9017872E38)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r9 = "voipgroup_actionBar"
+            r4.put(r9, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -15065823(0xffffffffff1a1d21, float:-2.0485236E38)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r9 = "voipgroup_emptyView"
+            r4.put(r9, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            java.lang.String r8 = "voipgroup_actionBarItems"
+            r4.put(r8, r0)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -7697782(0xffffffffff8a8a8a, float:NaN)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r9 = "voipgroup_actionBarSubtitle"
+            r4.put(r9, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = 515562495(0x1ebadbff, float:1.9784504E-20)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r9 = "voipgroup_actionBarItemsSelector"
+            r4.put(r9, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -36752(0xfffffffffffvar_, float:NaN)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r9 = "voipgroup_mutedByAdminIcon"
+            r4.put(r9, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -9471616(0xffffffffff6var_, float:-3.1831636E38)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r9 = "voipgroup_mutedIcon"
+            r4.put(r9, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -8813686(0xfffffffffvar_a, float:-3.3166076E38)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r9 = "voipgroup_lastSeenText"
+            r4.put(r9, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            java.lang.String r8 = "voipgroup_nameText"
+            r4.put(r8, r0)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -14933463(0xffffffffff1CLASSNAME, float:-2.0753694E38)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r9 = "voipgroup_listViewBackground"
+            r4.put(r9, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -14933463(0xffffffffff1CLASSNAME, float:-2.0753694E38)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r9 = "voipgroup_dialogBackground"
+            r4.put(r9, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -11683585(0xffffffffff4db8ff, float:-2.734523E38)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r9 = "voipgroup_listeningText"
+            r4.put(r9, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -8917379(0xfffffffffvar_ee7d, float:-3.2955762E38)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r9 = "voipgroup_speakingText"
+            r4.put(r9, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = 251658239(0xeffffff, float:6.310887E-30)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r9 = "voipgroup_listSelector"
+            r4.put(r9, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -14538189(0xfffffffffvar_a33, float:-2.1555405E38)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r9 = "voipgroup_inviteMembersBackground"
+            r4.put(r9, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -13906177(0xffffffffff2bceff, float:-2.2837277E38)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r9 = "voipgroup_overlayBlue1"
+            r4.put(r9, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -16156957(0xfffffffffvar_e3, float:-1.8272153E38)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r9 = "voipgroup_overlayBlue2"
+            r4.put(r9, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -15551198(0xfffffffffvar_b522, float:-1.9500778E38)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r9 = "voipgroup_overlayGreen1"
+            r4.put(r9, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -16722239(0xfffffffffvar_d6c1, float:-1.7125625E38)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r9 = "voipgroup_overlayGreen2"
+            r4.put(r9, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -10434565(0xfffffffffvar_c7fb, float:-2.9878543E38)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r9 = "voipgroup_topPanelBlue1"
+            r4.put(r9, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -11427847(0xfffffffffvar_ff9, float:-2.7863928E38)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r9 = "voipgroup_topPanelBlue2"
+            r4.put(r9, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -11350435(0xfffffffffvar_ce5d, float:-2.8020938E38)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r9 = "voipgroup_topPanelGreen1"
+            r4.put(r9, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -16731712(0xfffffffffvar_b1c0, float:-1.7106411E38)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r9 = "voipgroup_topPanelGreen2"
+            r4.put(r9, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -8021590(0xfffffffffvar_aa, float:NaN)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r9 = "voipgroup_topPanelGray"
+            r4.put(r9, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -14455406(0xfffffffffvar_d92, float:-2.1723308E38)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r9 = "voipgroup_overlayAlertGradientMuted"
+            r4.put(r9, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -13873813(0xffffffffff2c4d6b, float:-2.290292E38)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r9 = "voipgroup_overlayAlertGradientMuted2"
+            r4.put(r9, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -15955316(0xffffffffff0c8a8c, float:-1.868113E38)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r9 = "voipgroup_overlayAlertGradientUnmuted"
+            r4.put(r9, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -14136203(0xfffffffffvar_CLASSNAME, float:-2.237073E38)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r9 = "voipgroup_overlayAlertGradientUnmuted2"
+            r4.put(r9, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -11033346(0xfffffffffvar_a4fe, float:-2.866407E38)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r9 = "voipgroup_mutedByAdminGradient"
+            r4.put(r9, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -1026983(0xffffffffffvar_, float:NaN)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r9 = "voipgroup_mutedByAdminGradient2"
+            r4.put(r9, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -9015575(0xfffffffffvar_ee9, float:-3.2756597E38)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r9 = "voipgroup_mutedByAdminGradient3"
+            r4.put(r9, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -9998178(0xfffffffffvar_e, float:-3.076364E38)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r9 = "voipgroup_overlayAlertMutedByAdmin"
+            r4.put(r9, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -13676424(0xffffffffff2var_, float:-2.3303272E38)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r9 = "kvoipgroup_overlayAlertMutedByAdmin2"
+            r4.put(r9, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = 2138612735(0x7var_a3ff, float:3.3050006E38)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r9 = "voipgroup_mutedByAdminMuteButton"
+            r4.put(r9, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = 863544319(0x3378a3ff, float:5.7891153E-8)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r9 = "voipgroup_mutedByAdminMuteButtonDisabled"
+            r4.put(r9, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -2368549(0xffffffffffdbdbdb, float:NaN)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r9 = "voipgroup_windowBackgroundWhiteInputField"
+            r4.put(r9, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -13129232(0xfffffffffvar_a9f0, float:-2.4413109E38)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r9 = "voipgroup_windowBackgroundWhiteInputFieldActivated"
+            r4.put(r9, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -8863118(0xfffffffffvar_CLASSNAME, float:-3.3065816E38)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r9 = "chat_outReactionButtonBackground"
+            r4.put(r9, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r8 = -9259544(0xfffffffffvar_b5e8, float:-3.2261769E38)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.String r9 = "chat_inReactionButtonBackground"
+            r4.put(r9, r8)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            java.lang.String r8 = "chat_inReactionButtonText"
+            r4.put(r8, r14)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            java.lang.String r8 = "chat_outReactionButtonText"
             r4.put(r8, r6)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            java.lang.String r6 = "chat_inReactionButtonText"
-            r4.put(r6, r14)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            java.lang.String r6 = "chat_outReactionButtonText"
-            r4.put(r6, r11)
             java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
             java.lang.String r6 = "chat_inReactionButtonTextSelected"
             r4.put(r6, r0)
             java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
             java.lang.String r6 = "chat_outReactionButtonTextSelected"
             r4.put(r6, r0)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r6 = -11164161(0xfffffffffvar_a5ff, float:-2.8398746E38)
+            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
+            java.lang.String r8 = "premiumGradient1"
+            r4.put(r8, r6)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r6 = -5806081(0xffffffffffa767ff, float:NaN)
+            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
+            java.lang.String r8 = "premiumGradient2"
+            r4.put(r8, r6)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r6 = -2401123(0xffffffffffdb5c9d, float:NaN)
+            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
+            java.lang.String r8 = "premiumGradient3"
+            r4.put(r8, r6)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r6 = -816858(0xffffffffffvar_, float:NaN)
+            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
+            java.lang.String r8 = "premiumGradient4"
+            r4.put(r8, r6)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r6 = -11164161(0xfffffffffvar_a5ff, float:-2.8398746E38)
+            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
+            java.lang.String r8 = "premiumGradientBackground1"
+            r4.put(r8, r6)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r6 = -5806081(0xffffffffffa767ff, float:NaN)
+            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
+            java.lang.String r8 = "premiumGradientBackground2"
+            r4.put(r8, r6)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r6 = -2401123(0xffffffffffdb5c9d, float:NaN)
+            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
+            java.lang.String r8 = "premiumGradientBackground3"
+            r4.put(r8, r6)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r6 = -816858(0xffffffffffvar_, float:NaN)
+            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
+            java.lang.String r8 = "premiumGradientBackground4"
+            r4.put(r8, r6)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            java.lang.String r6 = "premiumGradientBackgroundOverlay"
+            r4.put(r6, r0)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            java.lang.String r6 = "premiumStarGradient1"
+            r4.put(r6, r0)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r0 = defaultColors
+            r4 = -1839878(0xffffffffffe3ecfa, float:NaN)
+            java.lang.Integer r4 = java.lang.Integer.valueOf(r4)
+            java.lang.String r6 = "premiumStarGradient2"
+            r0.put(r6, r4)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r0 = defaultColors
+            r4 = 90
+            int r4 = androidx.core.graphics.ColorUtils.setAlphaComponent(r2, r4)
+            java.lang.Integer r4 = java.lang.Integer.valueOf(r4)
+            java.lang.String r6 = "premiumStartSmallStarsColor"
+            r0.put(r6, r4)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r0 = defaultColors
+            r4 = -10773017(0xffffffffff5b9de7, float:-2.919208E38)
+            java.lang.Integer r4 = java.lang.Integer.valueOf(r4)
+            java.lang.String r6 = "premiumGradientBottomSheet1"
+            r0.put(r6, r4)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r0 = defaultColors
+            r4 = -5535779(0xffffffffffab87dd, float:NaN)
+            java.lang.Integer r4 = java.lang.Integer.valueOf(r4)
+            java.lang.String r6 = "premiumGradientBottomSheet2"
+            r0.put(r6, r4)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r0 = defaultColors
+            r4 = -1600322(0xffffffffffe794be, float:NaN)
+            java.lang.Integer r4 = java.lang.Integer.valueOf(r4)
+            java.lang.String r6 = "premiumGradientBottomSheet3"
+            r0.put(r6, r4)
             java.util.HashMap<java.lang.String, java.lang.String> r0 = fallbackKeys
             java.lang.String r4 = "chat_adminText"
             java.lang.String r6 = "chat_inTimeText"
@@ -8509,8 +8668,7 @@ public class Theme {
             r0.put(r4, r13)
             java.util.HashMap<java.lang.String, java.lang.String> r0 = fallbackKeys
             java.lang.String r4 = "windowBackgroundCheckText"
-            java.lang.String r6 = "windowBackgroundWhiteBlackText"
-            r0.put(r4, r6)
+            r0.put(r4, r13)
             java.util.HashMap<java.lang.String, java.lang.String> r0 = fallbackKeys
             java.lang.String r4 = "contextProgressInner4"
             java.lang.String r6 = "contextProgressInner1"
@@ -8798,6 +8956,10 @@ public class Theme {
             java.util.HashMap<java.lang.String, java.lang.String> r0 = fallbackKeys
             java.lang.String r4 = "chat_TextSelectionCursor"
             java.lang.String r6 = "chat_messagePanelCursor"
+            r0.put(r4, r6)
+            java.util.HashMap<java.lang.String, java.lang.String> r0 = fallbackKeys
+            java.lang.String r4 = "chat_outTextSelectionCursor"
+            java.lang.String r6 = "chat_TextSelectionCursor"
             r0.put(r4, r6)
             java.util.HashMap<java.lang.String, java.lang.String> r0 = fallbackKeys
             java.lang.String r4 = "chat_inPollCorrectAnswer"
@@ -9146,6 +9308,18 @@ public class Theme {
             r0.add(r4)
             java.util.HashSet<java.lang.String> r0 = themeAccentExclusionKeys
             java.lang.String r4 = "voipgroup_windowBackgroundWhiteInputFieldActivated"
+            r0.add(r4)
+            java.util.HashSet<java.lang.String> r0 = themeAccentExclusionKeys
+            java.lang.String r4 = "premiumGradient1"
+            r0.add(r4)
+            java.util.HashSet<java.lang.String> r0 = themeAccentExclusionKeys
+            java.lang.String r4 = "premiumGradient2"
+            r0.add(r4)
+            java.util.HashSet<java.lang.String> r0 = themeAccentExclusionKeys
+            java.lang.String r4 = "premiumGradient3"
+            r0.add(r4)
+            java.util.HashSet<java.lang.String> r0 = themeAccentExclusionKeys
+            java.lang.String r4 = "premiumGradient4"
             r0.add(r4)
             java.util.HashSet<java.lang.String> r0 = myMessagesBubblesColorKeys
             java.lang.String r4 = "chat_outBubble"
@@ -9877,22 +10051,22 @@ public class Theme {
             java.lang.String r2 = "remote_version"
             int r2 = r4.getInt(r2, r1)
             r5 = 1
-            if (r2 != r5) goto L_0x32b2
+            if (r2 != r5) goto L_0x33a2
             r2 = 0
-        L_0x3268:
-            r5 = 3
-            if (r2 >= r5) goto L_0x32b2
+        L_0x3358:
+            r5 = 4
+            if (r2 >= r5) goto L_0x33a2
             long[] r5 = remoteThemesHash
             java.lang.StringBuilder r6 = new java.lang.StringBuilder
             r6.<init>()
             java.lang.String r7 = "2remoteThemesHash"
             r6.append(r7)
-            if (r2 == 0) goto L_0x327e
+            if (r2 == 0) goto L_0x336e
             java.lang.Integer r7 = java.lang.Integer.valueOf(r2)
-            goto L_0x327f
-        L_0x327e:
+            goto L_0x336f
+        L_0x336e:
             r7 = r3
-        L_0x327f:
+        L_0x336f:
             r6.append(r7)
             java.lang.String r6 = r6.toString()
             r7 = 0
@@ -9903,65 +10077,65 @@ public class Theme {
             r6.<init>()
             java.lang.String r7 = "lastLoadingThemesTime"
             r6.append(r7)
-            if (r2 == 0) goto L_0x32a1
+            if (r2 == 0) goto L_0x3391
             java.lang.Integer r7 = java.lang.Integer.valueOf(r2)
-            goto L_0x32a2
-        L_0x32a1:
+            goto L_0x3392
+        L_0x3391:
             r7 = r3
-        L_0x32a2:
+        L_0x3392:
             r6.append(r7)
             java.lang.String r6 = r6.toString()
             int r6 = r4.getInt(r6, r1)
             r5[r2] = r6
             int r2 = r2 + 1
-            goto L_0x3268
-        L_0x32b2:
+            goto L_0x3358
+        L_0x33a2:
             android.content.SharedPreferences$Editor r2 = r4.edit()
             java.lang.String r5 = "remote_version"
             r6 = 1
             android.content.SharedPreferences$Editor r2 = r2.putInt(r5, r6)
             r2.apply()
             boolean r2 = android.text.TextUtils.isEmpty(r0)
-            if (r2 != 0) goto L_0x32fa
-            org.json.JSONArray r2 = new org.json.JSONArray     // Catch:{ Exception -> 0x32f5 }
-            r2.<init>(r0)     // Catch:{ Exception -> 0x32f5 }
+            if (r2 != 0) goto L_0x33ea
+            org.json.JSONArray r2 = new org.json.JSONArray     // Catch:{ Exception -> 0x33e5 }
+            r2.<init>(r0)     // Catch:{ Exception -> 0x33e5 }
             r0 = 0
-        L_0x32cc:
-            int r5 = r2.length()     // Catch:{ Exception -> 0x32f5 }
-            if (r0 >= r5) goto L_0x3340
-            org.json.JSONObject r5 = r2.getJSONObject(r0)     // Catch:{ Exception -> 0x32f5 }
-            org.telegram.ui.ActionBar.Theme$ThemeInfo r5 = org.telegram.ui.ActionBar.Theme.ThemeInfo.createWithJson(r5)     // Catch:{ Exception -> 0x32f5 }
-            if (r5 == 0) goto L_0x32f2
-            java.util.ArrayList<org.telegram.ui.ActionBar.Theme$ThemeInfo> r6 = otherThemes     // Catch:{ Exception -> 0x32f5 }
-            r6.add(r5)     // Catch:{ Exception -> 0x32f5 }
-            java.util.ArrayList<org.telegram.ui.ActionBar.Theme$ThemeInfo> r6 = themes     // Catch:{ Exception -> 0x32f5 }
-            r6.add(r5)     // Catch:{ Exception -> 0x32f5 }
-            java.util.HashMap<java.lang.String, org.telegram.ui.ActionBar.Theme$ThemeInfo> r6 = themesDict     // Catch:{ Exception -> 0x32f5 }
-            java.lang.String r7 = r5.getKey()     // Catch:{ Exception -> 0x32f5 }
-            r6.put(r7, r5)     // Catch:{ Exception -> 0x32f5 }
-            r5.loadWallpapers(r4)     // Catch:{ Exception -> 0x32f5 }
-        L_0x32f2:
+        L_0x33bc:
+            int r5 = r2.length()     // Catch:{ Exception -> 0x33e5 }
+            if (r0 >= r5) goto L_0x3430
+            org.json.JSONObject r5 = r2.getJSONObject(r0)     // Catch:{ Exception -> 0x33e5 }
+            org.telegram.ui.ActionBar.Theme$ThemeInfo r5 = org.telegram.ui.ActionBar.Theme.ThemeInfo.createWithJson(r5)     // Catch:{ Exception -> 0x33e5 }
+            if (r5 == 0) goto L_0x33e2
+            java.util.ArrayList<org.telegram.ui.ActionBar.Theme$ThemeInfo> r6 = otherThemes     // Catch:{ Exception -> 0x33e5 }
+            r6.add(r5)     // Catch:{ Exception -> 0x33e5 }
+            java.util.ArrayList<org.telegram.ui.ActionBar.Theme$ThemeInfo> r6 = themes     // Catch:{ Exception -> 0x33e5 }
+            r6.add(r5)     // Catch:{ Exception -> 0x33e5 }
+            java.util.HashMap<java.lang.String, org.telegram.ui.ActionBar.Theme$ThemeInfo> r6 = themesDict     // Catch:{ Exception -> 0x33e5 }
+            java.lang.String r7 = r5.getKey()     // Catch:{ Exception -> 0x33e5 }
+            r6.put(r7, r5)     // Catch:{ Exception -> 0x33e5 }
+            r5.loadWallpapers(r4)     // Catch:{ Exception -> 0x33e5 }
+        L_0x33e2:
             int r0 = r0 + 1
-            goto L_0x32cc
-        L_0x32f5:
+            goto L_0x33bc
+        L_0x33e5:
             r0 = move-exception
             org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)
-            goto L_0x3340
-        L_0x32fa:
+            goto L_0x3430
+        L_0x33ea:
             r0 = 0
             java.lang.String r2 = "themes"
             java.lang.String r0 = r4.getString(r2, r0)
             boolean r2 = android.text.TextUtils.isEmpty(r0)
-            if (r2 != 0) goto L_0x3340
+            if (r2 != 0) goto L_0x3430
             java.lang.String r2 = "&"
             java.lang.String[] r0 = r0.split(r2)
             r2 = 0
-        L_0x330e:
+        L_0x33fe:
             int r5 = r0.length
-            if (r2 >= r5) goto L_0x332f
+            if (r2 >= r5) goto L_0x341f
             r5 = r0[r2]
             org.telegram.ui.ActionBar.Theme$ThemeInfo r5 = org.telegram.ui.ActionBar.Theme.ThemeInfo.createWithString(r5)
-            if (r5 == 0) goto L_0x332c
+            if (r5 == 0) goto L_0x341c
             java.util.ArrayList<org.telegram.ui.ActionBar.Theme$ThemeInfo> r6 = otherThemes
             r6.add(r5)
             java.util.ArrayList<org.telegram.ui.ActionBar.Theme$ThemeInfo> r6 = themes
@@ -9969,550 +10143,554 @@ public class Theme {
             java.util.HashMap<java.lang.String, org.telegram.ui.ActionBar.Theme$ThemeInfo> r6 = themesDict
             java.lang.String r7 = r5.getKey()
             r6.put(r7, r5)
-        L_0x332c:
+        L_0x341c:
             int r2 = r2 + 1
-            goto L_0x330e
-        L_0x332f:
+            goto L_0x33fe
+        L_0x341f:
             r2 = 1
             saveOtherThemes(r2, r2)
             android.content.SharedPreferences$Editor r0 = r4.edit()
             java.lang.String r2 = "themes"
             android.content.SharedPreferences$Editor r0 = r0.remove(r2)
             r0.commit()
-        L_0x3340:
+        L_0x3430:
             sortThemes()
             r0 = 0
             android.content.SharedPreferences r2 = org.telegram.messenger.MessagesController.getGlobalMainSettings()
-            java.util.HashMap<java.lang.String, org.telegram.ui.ActionBar.Theme$ThemeInfo> r5 = themesDict     // Catch:{ Exception -> 0x38db }
+            java.util.HashMap<java.lang.String, org.telegram.ui.ActionBar.Theme$ThemeInfo> r5 = themesDict     // Catch:{ Exception -> 0x395d }
             java.lang.String r6 = "Dark Blue"
-            java.lang.Object r5 = r5.get(r6)     // Catch:{ Exception -> 0x38db }
-            org.telegram.ui.ActionBar.Theme$ThemeInfo r5 = (org.telegram.ui.ActionBar.Theme.ThemeInfo) r5     // Catch:{ Exception -> 0x38db }
+            java.lang.Object r5 = r5.get(r6)     // Catch:{ Exception -> 0x395d }
+            org.telegram.ui.ActionBar.Theme$ThemeInfo r5 = (org.telegram.ui.ActionBar.Theme.ThemeInfo) r5     // Catch:{ Exception -> 0x395d }
             java.lang.String r6 = "theme"
             r7 = 0
-            java.lang.String r6 = r2.getString(r6, r7)     // Catch:{ Exception -> 0x38db }
+            java.lang.String r6 = r2.getString(r6, r7)     // Catch:{ Exception -> 0x395d }
             java.lang.String r7 = "Default"
-            boolean r7 = r7.equals(r6)     // Catch:{ Exception -> 0x38db }
-            if (r7 == 0) goto L_0x3370
-            java.util.HashMap<java.lang.String, org.telegram.ui.ActionBar.Theme$ThemeInfo> r0 = themesDict     // Catch:{ Exception -> 0x38db }
+            boolean r7 = r7.equals(r6)     // Catch:{ Exception -> 0x395d }
+            if (r7 == 0) goto L_0x3460
+            java.util.HashMap<java.lang.String, org.telegram.ui.ActionBar.Theme$ThemeInfo> r0 = themesDict     // Catch:{ Exception -> 0x395d }
             java.lang.String r6 = "Blue"
-            java.lang.Object r0 = r0.get(r6)     // Catch:{ Exception -> 0x38db }
-            org.telegram.ui.ActionBar.Theme$ThemeInfo r0 = (org.telegram.ui.ActionBar.Theme.ThemeInfo) r0     // Catch:{ Exception -> 0x38db }
-            int r6 = DEFALT_THEME_ACCENT_ID     // Catch:{ Exception -> 0x38db }
-            r0.currentAccentId = r6     // Catch:{ Exception -> 0x38db }
-            goto L_0x33a2
-        L_0x3370:
+            java.lang.Object r0 = r0.get(r6)     // Catch:{ Exception -> 0x395d }
+            org.telegram.ui.ActionBar.Theme$ThemeInfo r0 = (org.telegram.ui.ActionBar.Theme.ThemeInfo) r0     // Catch:{ Exception -> 0x395d }
+            int r6 = DEFALT_THEME_ACCENT_ID     // Catch:{ Exception -> 0x395d }
+            r0.currentAccentId = r6     // Catch:{ Exception -> 0x395d }
+            goto L_0x3492
+        L_0x3460:
             java.lang.String r7 = "Dark"
-            boolean r7 = r7.equals(r6)     // Catch:{ Exception -> 0x38db }
-            if (r7 == 0) goto L_0x337e
+            boolean r7 = r7.equals(r6)     // Catch:{ Exception -> 0x395d }
+            if (r7 == 0) goto L_0x346e
             r7 = 9
-            r5.currentAccentId = r7     // Catch:{ Exception -> 0x38db }
+            r5.currentAccentId = r7     // Catch:{ Exception -> 0x395d }
             r0 = r5
-            goto L_0x33a2
-        L_0x337e:
-            if (r6 == 0) goto L_0x33a2
-            java.util.HashMap<java.lang.String, org.telegram.ui.ActionBar.Theme$ThemeInfo> r0 = themesDict     // Catch:{ Exception -> 0x38db }
-            java.lang.Object r0 = r0.get(r6)     // Catch:{ Exception -> 0x38db }
-            org.telegram.ui.ActionBar.Theme$ThemeInfo r0 = (org.telegram.ui.ActionBar.Theme.ThemeInfo) r0     // Catch:{ Exception -> 0x38db }
-            if (r0 == 0) goto L_0x33a2
+            goto L_0x3492
+        L_0x346e:
+            if (r6 == 0) goto L_0x3492
+            java.util.HashMap<java.lang.String, org.telegram.ui.ActionBar.Theme$ThemeInfo> r0 = themesDict     // Catch:{ Exception -> 0x395d }
+            java.lang.Object r0 = r0.get(r6)     // Catch:{ Exception -> 0x395d }
+            org.telegram.ui.ActionBar.Theme$ThemeInfo r0 = (org.telegram.ui.ActionBar.Theme.ThemeInfo) r0     // Catch:{ Exception -> 0x395d }
+            if (r0 == 0) goto L_0x3492
             java.lang.String r6 = "lastDayTheme"
-            boolean r6 = r4.contains(r6)     // Catch:{ Exception -> 0x38db }
-            if (r6 != 0) goto L_0x33a2
-            android.content.SharedPreferences$Editor r6 = r4.edit()     // Catch:{ Exception -> 0x38db }
+            boolean r6 = r4.contains(r6)     // Catch:{ Exception -> 0x395d }
+            if (r6 != 0) goto L_0x3492
+            android.content.SharedPreferences$Editor r6 = r4.edit()     // Catch:{ Exception -> 0x395d }
             java.lang.String r7 = "lastDayTheme"
-            java.lang.String r8 = r0.getKey()     // Catch:{ Exception -> 0x38db }
-            r6.putString(r7, r8)     // Catch:{ Exception -> 0x38db }
-            r6.commit()     // Catch:{ Exception -> 0x38db }
-        L_0x33a2:
+            java.lang.String r8 = r0.getKey()     // Catch:{ Exception -> 0x395d }
+            r6.putString(r7, r8)     // Catch:{ Exception -> 0x395d }
+            r6.commit()     // Catch:{ Exception -> 0x395d }
+        L_0x3492:
             java.lang.String r6 = "nighttheme"
             r7 = 0
-            java.lang.String r6 = r2.getString(r6, r7)     // Catch:{ Exception -> 0x38db }
+            java.lang.String r6 = r2.getString(r6, r7)     // Catch:{ Exception -> 0x395d }
             java.lang.String r7 = "Default"
-            boolean r7 = r7.equals(r6)     // Catch:{ Exception -> 0x38db }
-            if (r7 == 0) goto L_0x33c0
-            java.util.HashMap<java.lang.String, org.telegram.ui.ActionBar.Theme$ThemeInfo> r0 = themesDict     // Catch:{ Exception -> 0x38db }
+            boolean r7 = r7.equals(r6)     // Catch:{ Exception -> 0x395d }
+            if (r7 == 0) goto L_0x34b0
+            java.util.HashMap<java.lang.String, org.telegram.ui.ActionBar.Theme$ThemeInfo> r0 = themesDict     // Catch:{ Exception -> 0x395d }
             java.lang.String r5 = "Blue"
-            java.lang.Object r0 = r0.get(r5)     // Catch:{ Exception -> 0x38db }
-            org.telegram.ui.ActionBar.Theme$ThemeInfo r0 = (org.telegram.ui.ActionBar.Theme.ThemeInfo) r0     // Catch:{ Exception -> 0x38db }
-            int r5 = DEFALT_THEME_ACCENT_ID     // Catch:{ Exception -> 0x38db }
-            r0.currentAccentId = r5     // Catch:{ Exception -> 0x38db }
-            goto L_0x33dd
-        L_0x33c0:
+            java.lang.Object r0 = r0.get(r5)     // Catch:{ Exception -> 0x395d }
+            org.telegram.ui.ActionBar.Theme$ThemeInfo r0 = (org.telegram.ui.ActionBar.Theme.ThemeInfo) r0     // Catch:{ Exception -> 0x395d }
+            int r5 = DEFALT_THEME_ACCENT_ID     // Catch:{ Exception -> 0x395d }
+            r0.currentAccentId = r5     // Catch:{ Exception -> 0x395d }
+            goto L_0x34cd
+        L_0x34b0:
             java.lang.String r7 = "Dark"
-            boolean r7 = r7.equals(r6)     // Catch:{ Exception -> 0x38db }
-            if (r7 == 0) goto L_0x33cf
-            currentNightTheme = r5     // Catch:{ Exception -> 0x38db }
+            boolean r7 = r7.equals(r6)     // Catch:{ Exception -> 0x395d }
+            if (r7 == 0) goto L_0x34bf
+            currentNightTheme = r5     // Catch:{ Exception -> 0x395d }
             r6 = 9
-            r5.currentAccentId = r6     // Catch:{ Exception -> 0x38db }
-            goto L_0x33dd
-        L_0x33cf:
-            if (r6 == 0) goto L_0x33dd
-            java.util.HashMap<java.lang.String, org.telegram.ui.ActionBar.Theme$ThemeInfo> r5 = themesDict     // Catch:{ Exception -> 0x38db }
-            java.lang.Object r5 = r5.get(r6)     // Catch:{ Exception -> 0x38db }
-            org.telegram.ui.ActionBar.Theme$ThemeInfo r5 = (org.telegram.ui.ActionBar.Theme.ThemeInfo) r5     // Catch:{ Exception -> 0x38db }
-            if (r5 == 0) goto L_0x33dd
-            currentNightTheme = r5     // Catch:{ Exception -> 0x38db }
-        L_0x33dd:
-            org.telegram.ui.ActionBar.Theme$ThemeInfo r5 = currentNightTheme     // Catch:{ Exception -> 0x38db }
-            if (r5 == 0) goto L_0x33fb
+            r5.currentAccentId = r6     // Catch:{ Exception -> 0x395d }
+            goto L_0x34cd
+        L_0x34bf:
+            if (r6 == 0) goto L_0x34cd
+            java.util.HashMap<java.lang.String, org.telegram.ui.ActionBar.Theme$ThemeInfo> r5 = themesDict     // Catch:{ Exception -> 0x395d }
+            java.lang.Object r5 = r5.get(r6)     // Catch:{ Exception -> 0x395d }
+            org.telegram.ui.ActionBar.Theme$ThemeInfo r5 = (org.telegram.ui.ActionBar.Theme.ThemeInfo) r5     // Catch:{ Exception -> 0x395d }
+            if (r5 == 0) goto L_0x34cd
+            currentNightTheme = r5     // Catch:{ Exception -> 0x395d }
+        L_0x34cd:
+            org.telegram.ui.ActionBar.Theme$ThemeInfo r5 = currentNightTheme     // Catch:{ Exception -> 0x395d }
+            if (r5 == 0) goto L_0x34eb
             java.lang.String r5 = "lastDarkTheme"
-            boolean r5 = r4.contains(r5)     // Catch:{ Exception -> 0x38db }
-            if (r5 != 0) goto L_0x33fb
-            android.content.SharedPreferences$Editor r5 = r4.edit()     // Catch:{ Exception -> 0x38db }
+            boolean r5 = r4.contains(r5)     // Catch:{ Exception -> 0x395d }
+            if (r5 != 0) goto L_0x34eb
+            android.content.SharedPreferences$Editor r5 = r4.edit()     // Catch:{ Exception -> 0x395d }
             java.lang.String r6 = "lastDarkTheme"
-            org.telegram.ui.ActionBar.Theme$ThemeInfo r7 = currentNightTheme     // Catch:{ Exception -> 0x38db }
-            java.lang.String r7 = r7.getKey()     // Catch:{ Exception -> 0x38db }
-            r5.putString(r6, r7)     // Catch:{ Exception -> 0x38db }
-            r5.commit()     // Catch:{ Exception -> 0x38db }
-        L_0x33fb:
+            org.telegram.ui.ActionBar.Theme$ThemeInfo r7 = currentNightTheme     // Catch:{ Exception -> 0x395d }
+            java.lang.String r7 = r7.getKey()     // Catch:{ Exception -> 0x395d }
+            r5.putString(r6, r7)     // Catch:{ Exception -> 0x395d }
+            r5.commit()     // Catch:{ Exception -> 0x395d }
+        L_0x34eb:
             r5 = 0
             r6 = 0
-            java.util.HashMap<java.lang.String, org.telegram.ui.ActionBar.Theme$ThemeInfo> r7 = themesDict     // Catch:{ Exception -> 0x38db }
-            java.util.Collection r7 = r7.values()     // Catch:{ Exception -> 0x38db }
-            java.util.Iterator r7 = r7.iterator()     // Catch:{ Exception -> 0x38db }
-        L_0x3407:
-            boolean r8 = r7.hasNext()     // Catch:{ Exception -> 0x38db }
-            if (r8 == 0) goto L_0x36d4
-            java.lang.Object r8 = r7.next()     // Catch:{ Exception -> 0x38db }
-            org.telegram.ui.ActionBar.Theme$ThemeInfo r8 = (org.telegram.ui.ActionBar.Theme.ThemeInfo) r8     // Catch:{ Exception -> 0x38db }
-            java.lang.String r9 = r8.assetName     // Catch:{ Exception -> 0x38db }
-            if (r9 == 0) goto L_0x36c8
-            int r9 = r8.accentBaseColor     // Catch:{ Exception -> 0x38db }
-            if (r9 == 0) goto L_0x36c8
-            java.lang.StringBuilder r9 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x38db }
-            r9.<init>()     // Catch:{ Exception -> 0x38db }
+            java.util.HashMap<java.lang.String, org.telegram.ui.ActionBar.Theme$ThemeInfo> r7 = themesDict     // Catch:{ Exception -> 0x395d }
+            java.util.Collection r7 = r7.values()     // Catch:{ Exception -> 0x395d }
+            java.util.Iterator r7 = r7.iterator()     // Catch:{ Exception -> 0x395d }
+        L_0x34f7:
+            boolean r8 = r7.hasNext()     // Catch:{ Exception -> 0x395d }
+            if (r8 == 0) goto L_0x37c7
+            java.lang.Object r8 = r7.next()     // Catch:{ Exception -> 0x395d }
+            org.telegram.ui.ActionBar.Theme$ThemeInfo r8 = (org.telegram.ui.ActionBar.Theme.ThemeInfo) r8     // Catch:{ Exception -> 0x395d }
+            java.lang.String r9 = r8.assetName     // Catch:{ Exception -> 0x395d }
+            if (r9 == 0) goto L_0x37ba
+            int r9 = r8.accentBaseColor     // Catch:{ Exception -> 0x395d }
+            if (r9 == 0) goto L_0x37ba
+            java.lang.StringBuilder r9 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x395d }
+            r9.<init>()     // Catch:{ Exception -> 0x395d }
             java.lang.String r10 = "accents_"
-            r9.append(r10)     // Catch:{ Exception -> 0x38db }
-            java.lang.String r10 = r8.assetName     // Catch:{ Exception -> 0x38db }
-            r9.append(r10)     // Catch:{ Exception -> 0x38db }
-            java.lang.String r9 = r9.toString()     // Catch:{ Exception -> 0x38db }
+            r9.append(r10)     // Catch:{ Exception -> 0x395d }
+            java.lang.String r10 = r8.assetName     // Catch:{ Exception -> 0x395d }
+            r9.append(r10)     // Catch:{ Exception -> 0x395d }
+            java.lang.String r9 = r9.toString()     // Catch:{ Exception -> 0x395d }
             r10 = 0
-            java.lang.String r9 = r4.getString(r9, r10)     // Catch:{ Exception -> 0x38db }
-            java.lang.StringBuilder r10 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x38db }
-            r10.<init>()     // Catch:{ Exception -> 0x38db }
+            java.lang.String r9 = r4.getString(r9, r10)     // Catch:{ Exception -> 0x395d }
+            java.lang.StringBuilder r10 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x395d }
+            r10.<init>()     // Catch:{ Exception -> 0x395d }
             java.lang.String r11 = "accent_current_"
-            r10.append(r11)     // Catch:{ Exception -> 0x38db }
-            java.lang.String r11 = r8.assetName     // Catch:{ Exception -> 0x38db }
-            r10.append(r11)     // Catch:{ Exception -> 0x38db }
-            java.lang.String r10 = r10.toString()     // Catch:{ Exception -> 0x38db }
-            boolean r11 = r8.firstAccentIsDefault     // Catch:{ Exception -> 0x38db }
-            if (r11 == 0) goto L_0x344d
-            int r11 = DEFALT_THEME_ACCENT_ID     // Catch:{ Exception -> 0x38db }
-            goto L_0x344e
-        L_0x344d:
+            r10.append(r11)     // Catch:{ Exception -> 0x395d }
+            java.lang.String r11 = r8.assetName     // Catch:{ Exception -> 0x395d }
+            r10.append(r11)     // Catch:{ Exception -> 0x395d }
+            java.lang.String r10 = r10.toString()     // Catch:{ Exception -> 0x395d }
+            boolean r11 = r8.firstAccentIsDefault     // Catch:{ Exception -> 0x395d }
+            if (r11 == 0) goto L_0x353d
+            int r11 = DEFALT_THEME_ACCENT_ID     // Catch:{ Exception -> 0x395d }
+            goto L_0x353e
+        L_0x353d:
             r11 = 0
-        L_0x344e:
-            int r10 = r4.getInt(r10, r11)     // Catch:{ Exception -> 0x38db }
-            r8.currentAccentId = r10     // Catch:{ Exception -> 0x38db }
-            java.util.ArrayList r10 = new java.util.ArrayList     // Catch:{ Exception -> 0x38db }
-            r10.<init>()     // Catch:{ Exception -> 0x38db }
-            boolean r11 = android.text.TextUtils.isEmpty(r9)     // Catch:{ Exception -> 0x38db }
-            if (r11 != 0) goto L_0x3581
-            org.telegram.tgnet.SerializedData r11 = new org.telegram.tgnet.SerializedData     // Catch:{ all -> 0x3577 }
+        L_0x353e:
+            int r10 = r4.getInt(r10, r11)     // Catch:{ Exception -> 0x395d }
+            r8.currentAccentId = r10     // Catch:{ Exception -> 0x395d }
+            java.util.ArrayList r10 = new java.util.ArrayList     // Catch:{ Exception -> 0x395d }
+            r10.<init>()     // Catch:{ Exception -> 0x395d }
+            boolean r11 = android.text.TextUtils.isEmpty(r9)     // Catch:{ Exception -> 0x395d }
+            if (r11 != 0) goto L_0x3672
+            org.telegram.tgnet.SerializedData r11 = new org.telegram.tgnet.SerializedData     // Catch:{ all -> 0x3668 }
             r12 = 3
-            byte[] r9 = android.util.Base64.decode(r9, r12)     // Catch:{ all -> 0x3577 }
-            r11.<init>((byte[]) r9)     // Catch:{ all -> 0x3577 }
+            byte[] r9 = android.util.Base64.decode(r9, r12)     // Catch:{ all -> 0x3668 }
+            r11.<init>((byte[]) r9)     // Catch:{ all -> 0x3668 }
             r9 = 1
-            int r12 = r11.readInt32(r9)     // Catch:{ all -> 0x3577 }
-            int r13 = r11.readInt32(r9)     // Catch:{ all -> 0x3577 }
+            int r12 = r11.readInt32(r9)     // Catch:{ all -> 0x3668 }
+            int r13 = r11.readInt32(r9)     // Catch:{ all -> 0x3668 }
             r14 = 0
-        L_0x3473:
-            if (r14 >= r13) goto L_0x356f
-            org.telegram.ui.ActionBar.Theme$ThemeAccent r15 = new org.telegram.ui.ActionBar.Theme$ThemeAccent     // Catch:{ all -> 0x3568 }
-            r15.<init>()     // Catch:{ all -> 0x3568 }
-            int r1 = r11.readInt32(r9)     // Catch:{ all -> 0x3568 }
-            r15.id = r1     // Catch:{ all -> 0x3568 }
-            int r1 = r11.readInt32(r9)     // Catch:{ all -> 0x3568 }
-            r15.accentColor = r1     // Catch:{ all -> 0x3568 }
+        L_0x3563:
+            if (r14 >= r13) goto L_0x365f
+            org.telegram.ui.ActionBar.Theme$ThemeAccent r15 = new org.telegram.ui.ActionBar.Theme$ThemeAccent     // Catch:{ all -> 0x3658 }
+            r15.<init>()     // Catch:{ all -> 0x3658 }
+            int r1 = r11.readInt32(r9)     // Catch:{ all -> 0x3658 }
+            r15.id = r1     // Catch:{ all -> 0x3658 }
+            int r1 = r11.readInt32(r9)     // Catch:{ all -> 0x3658 }
+            r15.accentColor = r1     // Catch:{ all -> 0x3658 }
             r1 = 9
-            if (r12 < r1) goto L_0x3490
-            int r1 = r11.readInt32(r9)     // Catch:{ all -> 0x3568 }
-            r15.accentColor2 = r1     // Catch:{ all -> 0x3568 }
-        L_0x3490:
-            r15.parentTheme = r8     // Catch:{ all -> 0x3568 }
+            if (r12 < r1) goto L_0x3580
+            int r1 = r11.readInt32(r9)     // Catch:{ all -> 0x3658 }
+            r15.accentColor2 = r1     // Catch:{ all -> 0x3658 }
+        L_0x3580:
+            r15.parentTheme = r8     // Catch:{ all -> 0x3658 }
             r1 = 1
-            int r9 = r11.readInt32(r1)     // Catch:{ all -> 0x3568 }
-            r15.myMessagesAccentColor = r9     // Catch:{ all -> 0x3568 }
-            int r9 = r11.readInt32(r1)     // Catch:{ all -> 0x3568 }
-            r15.myMessagesGradientAccentColor1 = r9     // Catch:{ all -> 0x3568 }
+            int r9 = r11.readInt32(r1)     // Catch:{ all -> 0x3658 }
+            r15.myMessagesAccentColor = r9     // Catch:{ all -> 0x3658 }
+            int r9 = r11.readInt32(r1)     // Catch:{ all -> 0x3658 }
+            r15.myMessagesGradientAccentColor1 = r9     // Catch:{ all -> 0x3658 }
             r9 = 7
-            if (r12 < r9) goto L_0x34ae
-            int r9 = r11.readInt32(r1)     // Catch:{ all -> 0x3568 }
-            r15.myMessagesGradientAccentColor2 = r9     // Catch:{ all -> 0x3568 }
-            int r9 = r11.readInt32(r1)     // Catch:{ all -> 0x3568 }
-            r15.myMessagesGradientAccentColor3 = r9     // Catch:{ all -> 0x3568 }
-        L_0x34ae:
+            if (r12 < r9) goto L_0x359e
+            int r9 = r11.readInt32(r1)     // Catch:{ all -> 0x3658 }
+            r15.myMessagesGradientAccentColor2 = r9     // Catch:{ all -> 0x3658 }
+            int r9 = r11.readInt32(r1)     // Catch:{ all -> 0x3658 }
+            r15.myMessagesGradientAccentColor3 = r9     // Catch:{ all -> 0x3658 }
+        L_0x359e:
             r1 = 8
-            if (r12 < r1) goto L_0x34ba
+            if (r12 < r1) goto L_0x35aa
             r1 = 1
-            boolean r9 = r11.readBool(r1)     // Catch:{ all -> 0x3568 }
-            r15.myMessagesAnimated = r9     // Catch:{ all -> 0x3568 }
-            goto L_0x34bb
-        L_0x34ba:
+            boolean r9 = r11.readBool(r1)     // Catch:{ all -> 0x3658 }
+            r15.myMessagesAnimated = r9     // Catch:{ all -> 0x3658 }
+            goto L_0x35ab
+        L_0x35aa:
             r1 = 1
-        L_0x34bb:
+        L_0x35ab:
             r9 = 3
-            if (r12 < r9) goto L_0x34c8
+            if (r12 < r9) goto L_0x35b8
             r22 = r6
             r9 = r7
-            long r6 = r11.readInt64(r1)     // Catch:{ all -> 0x3568 }
-            r15.backgroundOverrideColor = r6     // Catch:{ all -> 0x3568 }
-            goto L_0x34d2
-        L_0x34c8:
+            long r6 = r11.readInt64(r1)     // Catch:{ all -> 0x3658 }
+            r15.backgroundOverrideColor = r6     // Catch:{ all -> 0x3658 }
+            goto L_0x35c2
+        L_0x35b8:
             r22 = r6
             r9 = r7
-            int r6 = r11.readInt32(r1)     // Catch:{ all -> 0x3568 }
-            long r6 = (long) r6     // Catch:{ all -> 0x3568 }
-            r15.backgroundOverrideColor = r6     // Catch:{ all -> 0x3568 }
-        L_0x34d2:
+            int r6 = r11.readInt32(r1)     // Catch:{ all -> 0x3658 }
+            long r6 = (long) r6     // Catch:{ all -> 0x3658 }
+            r15.backgroundOverrideColor = r6     // Catch:{ all -> 0x3658 }
+        L_0x35c2:
             r6 = 2
-            if (r12 < r6) goto L_0x34dc
-            long r6 = r11.readInt64(r1)     // Catch:{ all -> 0x3568 }
-            r15.backgroundGradientOverrideColor1 = r6     // Catch:{ all -> 0x3568 }
-            goto L_0x34e3
-        L_0x34dc:
-            int r6 = r11.readInt32(r1)     // Catch:{ all -> 0x3568 }
-            long r6 = (long) r6     // Catch:{ all -> 0x3568 }
-            r15.backgroundGradientOverrideColor1 = r6     // Catch:{ all -> 0x3568 }
-        L_0x34e3:
+            if (r12 < r6) goto L_0x35cc
+            long r6 = r11.readInt64(r1)     // Catch:{ all -> 0x3658 }
+            r15.backgroundGradientOverrideColor1 = r6     // Catch:{ all -> 0x3658 }
+            goto L_0x35d3
+        L_0x35cc:
+            int r6 = r11.readInt32(r1)     // Catch:{ all -> 0x3658 }
+            long r6 = (long) r6     // Catch:{ all -> 0x3658 }
+            r15.backgroundGradientOverrideColor1 = r6     // Catch:{ all -> 0x3658 }
+        L_0x35d3:
             r6 = 6
-            if (r12 < r6) goto L_0x34f3
-            long r6 = r11.readInt64(r1)     // Catch:{ all -> 0x3568 }
-            r15.backgroundGradientOverrideColor2 = r6     // Catch:{ all -> 0x3568 }
-            long r6 = r11.readInt64(r1)     // Catch:{ all -> 0x3568 }
-            r15.backgroundGradientOverrideColor3 = r6     // Catch:{ all -> 0x3568 }
+            if (r12 < r6) goto L_0x35e3
+            long r6 = r11.readInt64(r1)     // Catch:{ all -> 0x3658 }
+            r15.backgroundGradientOverrideColor2 = r6     // Catch:{ all -> 0x3658 }
+            long r6 = r11.readInt64(r1)     // Catch:{ all -> 0x3658 }
+            r15.backgroundGradientOverrideColor3 = r6     // Catch:{ all -> 0x3658 }
             r1 = 1
-        L_0x34f3:
-            if (r12 < r1) goto L_0x34fb
-            int r6 = r11.readInt32(r1)     // Catch:{ all -> 0x3568 }
-            r15.backgroundRotation = r6     // Catch:{ all -> 0x3568 }
-        L_0x34fb:
+        L_0x35e3:
+            if (r12 < r1) goto L_0x35eb
+            int r6 = r11.readInt32(r1)     // Catch:{ all -> 0x3658 }
+            r15.backgroundRotation = r6     // Catch:{ all -> 0x3658 }
+        L_0x35eb:
             r6 = 4
-            if (r12 < r6) goto L_0x3517
-            r11.readInt64(r1)     // Catch:{ all -> 0x3568 }
-            double r6 = r11.readDouble(r1)     // Catch:{ all -> 0x3568 }
-            float r6 = (float) r6     // Catch:{ all -> 0x3568 }
-            r15.patternIntensity = r6     // Catch:{ all -> 0x3568 }
-            boolean r6 = r11.readBool(r1)     // Catch:{ all -> 0x3568 }
-            r15.patternMotion = r6     // Catch:{ all -> 0x3568 }
+            if (r12 < r6) goto L_0x3607
+            r11.readInt64(r1)     // Catch:{ all -> 0x3658 }
+            double r6 = r11.readDouble(r1)     // Catch:{ all -> 0x3658 }
+            float r6 = (float) r6     // Catch:{ all -> 0x3658 }
+            r15.patternIntensity = r6     // Catch:{ all -> 0x3658 }
+            boolean r6 = r11.readBool(r1)     // Catch:{ all -> 0x3658 }
+            r15.patternMotion = r6     // Catch:{ all -> 0x3658 }
             r6 = 5
-            if (r12 < r6) goto L_0x3517
-            java.lang.String r6 = r11.readString(r1)     // Catch:{ all -> 0x3568 }
-            r15.patternSlug = r6     // Catch:{ all -> 0x3568 }
-        L_0x3517:
+            if (r12 < r6) goto L_0x3607
+            java.lang.String r6 = r11.readString(r1)     // Catch:{ all -> 0x3658 }
+            r15.patternSlug = r6     // Catch:{ all -> 0x3658 }
+        L_0x3607:
             r1 = 5
-            if (r12 < r1) goto L_0x3531
+            if (r12 < r1) goto L_0x3621
             r6 = 1
-            boolean r7 = r11.readBool(r6)     // Catch:{ all -> 0x3568 }
-            if (r7 == 0) goto L_0x3531
-            int r7 = r11.readInt32(r6)     // Catch:{ all -> 0x3568 }
-            r15.account = r7     // Catch:{ all -> 0x3568 }
-            int r7 = r11.readInt32(r6)     // Catch:{ all -> 0x3568 }
-            org.telegram.tgnet.TLRPC$TL_theme r7 = org.telegram.tgnet.TLRPC$Theme.TLdeserialize(r11, r7, r6)     // Catch:{ all -> 0x3568 }
-            r15.info = r7     // Catch:{ all -> 0x3568 }
-        L_0x3531:
-            org.telegram.tgnet.TLRPC$TL_theme r6 = r15.info     // Catch:{ all -> 0x3568 }
-            if (r6 == 0) goto L_0x3539
-            boolean r6 = r6.isDefault     // Catch:{ all -> 0x3568 }
-            r15.isDefault = r6     // Catch:{ all -> 0x3568 }
-        L_0x3539:
-            android.util.SparseArray<org.telegram.ui.ActionBar.Theme$ThemeAccent> r6 = r8.themeAccentsMap     // Catch:{ all -> 0x3568 }
-            int r7 = r15.id     // Catch:{ all -> 0x3568 }
-            r6.put(r7, r15)     // Catch:{ all -> 0x3568 }
-            org.telegram.tgnet.TLRPC$TL_theme r6 = r15.info     // Catch:{ all -> 0x3568 }
-            if (r6 == 0) goto L_0x354e
-            android.util.LongSparseArray<org.telegram.ui.ActionBar.Theme$ThemeAccent> r7 = r8.accentsByThemeId     // Catch:{ all -> 0x3568 }
+            boolean r7 = r11.readBool(r6)     // Catch:{ all -> 0x3658 }
+            if (r7 == 0) goto L_0x3621
+            int r7 = r11.readInt32(r6)     // Catch:{ all -> 0x3658 }
+            r15.account = r7     // Catch:{ all -> 0x3658 }
+            int r7 = r11.readInt32(r6)     // Catch:{ all -> 0x3658 }
+            org.telegram.tgnet.TLRPC$TL_theme r7 = org.telegram.tgnet.TLRPC$Theme.TLdeserialize(r11, r7, r6)     // Catch:{ all -> 0x3658 }
+            r15.info = r7     // Catch:{ all -> 0x3658 }
+        L_0x3621:
+            org.telegram.tgnet.TLRPC$TL_theme r6 = r15.info     // Catch:{ all -> 0x3658 }
+            if (r6 == 0) goto L_0x3629
+            boolean r6 = r6.isDefault     // Catch:{ all -> 0x3658 }
+            r15.isDefault = r6     // Catch:{ all -> 0x3658 }
+        L_0x3629:
+            android.util.SparseArray<org.telegram.ui.ActionBar.Theme$ThemeAccent> r6 = r8.themeAccentsMap     // Catch:{ all -> 0x3658 }
+            int r7 = r15.id     // Catch:{ all -> 0x3658 }
+            r6.put(r7, r15)     // Catch:{ all -> 0x3658 }
+            org.telegram.tgnet.TLRPC$TL_theme r6 = r15.info     // Catch:{ all -> 0x3658 }
+            if (r6 == 0) goto L_0x363e
+            android.util.LongSparseArray<org.telegram.ui.ActionBar.Theme$ThemeAccent> r7 = r8.accentsByThemeId     // Catch:{ all -> 0x3658 }
             r18 = r2
-            long r1 = r6.id     // Catch:{ all -> 0x3568 }
-            r7.put(r1, r15)     // Catch:{ all -> 0x3568 }
-            goto L_0x3550
-        L_0x354e:
+            long r1 = r6.id     // Catch:{ all -> 0x3658 }
+            r7.put(r1, r15)     // Catch:{ all -> 0x3658 }
+            goto L_0x3640
+        L_0x363e:
             r18 = r2
-        L_0x3550:
-            r10.add(r15)     // Catch:{ all -> 0x3568 }
-            int r1 = r8.lastAccentId     // Catch:{ all -> 0x3568 }
-            int r2 = r15.id     // Catch:{ all -> 0x3568 }
-            int r1 = java.lang.Math.max(r1, r2)     // Catch:{ all -> 0x3568 }
-            r8.lastAccentId = r1     // Catch:{ all -> 0x3568 }
+        L_0x3640:
+            r10.add(r15)     // Catch:{ all -> 0x3658 }
+            int r1 = r8.lastAccentId     // Catch:{ all -> 0x3658 }
+            int r2 = r15.id     // Catch:{ all -> 0x3658 }
+            int r1 = java.lang.Math.max(r1, r2)     // Catch:{ all -> 0x3658 }
+            r8.lastAccentId = r1     // Catch:{ all -> 0x3658 }
             int r14 = r14 + 1
             r7 = r9
             r2 = r18
             r6 = r22
             r1 = 0
             r9 = 1
-            goto L_0x3473
-        L_0x3568:
+            goto L_0x3563
+        L_0x3658:
             r0 = move-exception
-            java.lang.RuntimeException r1 = new java.lang.RuntimeException     // Catch:{ all -> 0x3577 }
-            r1.<init>(r0)     // Catch:{ all -> 0x3577 }
-            throw r1     // Catch:{ all -> 0x3577 }
-        L_0x356f:
+            java.lang.RuntimeException r1 = new java.lang.RuntimeException     // Catch:{ all -> 0x3668 }
+            r1.<init>(r0)     // Catch:{ all -> 0x3668 }
+            throw r1     // Catch:{ all -> 0x3668 }
+        L_0x365f:
             r22 = r6
             r9 = r7
-        L_0x3572:
+        L_0x3662:
             r11 = 9
-            r12 = 3
-            goto L_0x3692
-        L_0x3577:
+            r12 = 1
+            r13 = 3
+            goto L_0x3784
+        L_0x3668:
             r0 = move-exception
-            org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)     // Catch:{ Exception -> 0x38db }
-            java.lang.RuntimeException r1 = new java.lang.RuntimeException     // Catch:{ Exception -> 0x38db }
-            r1.<init>(r0)     // Catch:{ Exception -> 0x38db }
-            throw r1     // Catch:{ Exception -> 0x38db }
-        L_0x3581:
+            org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)     // Catch:{ Exception -> 0x395d }
+            java.lang.RuntimeException r1 = new java.lang.RuntimeException     // Catch:{ Exception -> 0x395d }
+            r1.<init>(r0)     // Catch:{ Exception -> 0x395d }
+            throw r1     // Catch:{ Exception -> 0x395d }
+        L_0x3672:
             r18 = r2
             r22 = r6
             r9 = r7
-            java.lang.StringBuilder r1 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x38db }
-            r1.<init>()     // Catch:{ Exception -> 0x38db }
+            java.lang.StringBuilder r1 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x395d }
+            r1.<init>()     // Catch:{ Exception -> 0x395d }
             java.lang.String r2 = "accent_for_"
-            r1.append(r2)     // Catch:{ Exception -> 0x38db }
-            java.lang.String r2 = r8.assetName     // Catch:{ Exception -> 0x38db }
-            r1.append(r2)     // Catch:{ Exception -> 0x38db }
-            java.lang.String r1 = r1.toString()     // Catch:{ Exception -> 0x38db }
+            r1.append(r2)     // Catch:{ Exception -> 0x395d }
+            java.lang.String r2 = r8.assetName     // Catch:{ Exception -> 0x395d }
+            r1.append(r2)     // Catch:{ Exception -> 0x395d }
+            java.lang.String r1 = r1.toString()     // Catch:{ Exception -> 0x395d }
             r2 = r18
             r6 = 0
-            int r7 = r2.getInt(r1, r6)     // Catch:{ Exception -> 0x38db }
-            if (r7 == 0) goto L_0x3572
-            if (r5 != 0) goto L_0x35ad
-            android.content.SharedPreferences$Editor r5 = r2.edit()     // Catch:{ Exception -> 0x38db }
-            android.content.SharedPreferences$Editor r6 = r4.edit()     // Catch:{ Exception -> 0x38db }
-            goto L_0x35af
-        L_0x35ad:
+            int r7 = r2.getInt(r1, r6)     // Catch:{ Exception -> 0x395d }
+            if (r7 == 0) goto L_0x3662
+            if (r5 != 0) goto L_0x369e
+            android.content.SharedPreferences$Editor r5 = r2.edit()     // Catch:{ Exception -> 0x395d }
+            android.content.SharedPreferences$Editor r6 = r4.edit()     // Catch:{ Exception -> 0x395d }
+            goto L_0x36a0
+        L_0x369e:
             r6 = r22
-        L_0x35af:
-            r5.remove(r1)     // Catch:{ Exception -> 0x38db }
-            java.util.ArrayList<org.telegram.ui.ActionBar.Theme$ThemeAccent> r1 = r8.themeAccents     // Catch:{ Exception -> 0x38db }
-            int r1 = r1.size()     // Catch:{ Exception -> 0x38db }
+        L_0x36a0:
+            r5.remove(r1)     // Catch:{ Exception -> 0x395d }
+            java.util.ArrayList<org.telegram.ui.ActionBar.Theme$ThemeAccent> r1 = r8.themeAccents     // Catch:{ Exception -> 0x395d }
+            int r1 = r1.size()     // Catch:{ Exception -> 0x395d }
             r11 = 0
-        L_0x35b9:
-            if (r11 >= r1) goto L_0x35d0
-            java.util.ArrayList<org.telegram.ui.ActionBar.Theme$ThemeAccent> r12 = r8.themeAccents     // Catch:{ Exception -> 0x38db }
-            java.lang.Object r12 = r12.get(r11)     // Catch:{ Exception -> 0x38db }
-            org.telegram.ui.ActionBar.Theme$ThemeAccent r12 = (org.telegram.ui.ActionBar.Theme.ThemeAccent) r12     // Catch:{ Exception -> 0x38db }
-            int r13 = r12.accentColor     // Catch:{ Exception -> 0x38db }
-            if (r13 != r7) goto L_0x35cd
-            int r1 = r12.id     // Catch:{ Exception -> 0x38db }
-            r8.currentAccentId = r1     // Catch:{ Exception -> 0x38db }
+        L_0x36aa:
+            if (r11 >= r1) goto L_0x36c1
+            java.util.ArrayList<org.telegram.ui.ActionBar.Theme$ThemeAccent> r12 = r8.themeAccents     // Catch:{ Exception -> 0x395d }
+            java.lang.Object r12 = r12.get(r11)     // Catch:{ Exception -> 0x395d }
+            org.telegram.ui.ActionBar.Theme$ThemeAccent r12 = (org.telegram.ui.ActionBar.Theme.ThemeAccent) r12     // Catch:{ Exception -> 0x395d }
+            int r13 = r12.accentColor     // Catch:{ Exception -> 0x395d }
+            if (r13 != r7) goto L_0x36be
+            int r1 = r12.id     // Catch:{ Exception -> 0x395d }
+            r8.currentAccentId = r1     // Catch:{ Exception -> 0x395d }
             r1 = 1
-            goto L_0x35d1
-        L_0x35cd:
+            goto L_0x36c2
+        L_0x36be:
             int r11 = r11 + 1
-            goto L_0x35b9
-        L_0x35d0:
+            goto L_0x36aa
+        L_0x36c1:
             r1 = 0
-        L_0x35d1:
-            if (r1 != 0) goto L_0x3676
-            org.telegram.ui.ActionBar.Theme$ThemeAccent r1 = new org.telegram.ui.ActionBar.Theme$ThemeAccent     // Catch:{ Exception -> 0x38db }
-            r1.<init>()     // Catch:{ Exception -> 0x38db }
+        L_0x36c2:
+            if (r1 != 0) goto L_0x3767
+            org.telegram.ui.ActionBar.Theme$ThemeAccent r1 = new org.telegram.ui.ActionBar.Theme$ThemeAccent     // Catch:{ Exception -> 0x395d }
+            r1.<init>()     // Catch:{ Exception -> 0x395d }
             r11 = 100
-            r1.id = r11     // Catch:{ Exception -> 0x38db }
-            r1.accentColor = r7     // Catch:{ Exception -> 0x38db }
-            r1.parentTheme = r8     // Catch:{ Exception -> 0x38db }
-            android.util.SparseArray<org.telegram.ui.ActionBar.Theme$ThemeAccent> r7 = r8.themeAccentsMap     // Catch:{ Exception -> 0x38db }
-            r7.put(r11, r1)     // Catch:{ Exception -> 0x38db }
+            r1.id = r11     // Catch:{ Exception -> 0x395d }
+            r1.accentColor = r7     // Catch:{ Exception -> 0x395d }
+            r1.parentTheme = r8     // Catch:{ Exception -> 0x395d }
+            android.util.SparseArray<org.telegram.ui.ActionBar.Theme$ThemeAccent> r7 = r8.themeAccentsMap     // Catch:{ Exception -> 0x395d }
+            r7.put(r11, r1)     // Catch:{ Exception -> 0x395d }
             r7 = 0
-            r10.add(r7, r1)     // Catch:{ Exception -> 0x38db }
+            r10.add(r7, r1)     // Catch:{ Exception -> 0x395d }
             r7 = 100
-            r8.currentAccentId = r7     // Catch:{ Exception -> 0x38db }
+            r8.currentAccentId = r7     // Catch:{ Exception -> 0x395d }
             r7 = 101(0x65, float:1.42E-43)
-            r8.lastAccentId = r7     // Catch:{ Exception -> 0x38db }
-            org.telegram.tgnet.SerializedData r7 = new org.telegram.tgnet.SerializedData     // Catch:{ Exception -> 0x38db }
+            r8.lastAccentId = r7     // Catch:{ Exception -> 0x395d }
+            org.telegram.tgnet.SerializedData r7 = new org.telegram.tgnet.SerializedData     // Catch:{ Exception -> 0x395d }
             r11 = 72
-            r7.<init>((int) r11)     // Catch:{ Exception -> 0x38db }
+            r7.<init>((int) r11)     // Catch:{ Exception -> 0x395d }
             r11 = 9
-            r7.writeInt32(r11)     // Catch:{ Exception -> 0x38db }
+            r7.writeInt32(r11)     // Catch:{ Exception -> 0x395d }
             r12 = 1
-            r7.writeInt32(r12)     // Catch:{ Exception -> 0x38db }
-            int r12 = r1.id     // Catch:{ Exception -> 0x38db }
-            r7.writeInt32(r12)     // Catch:{ Exception -> 0x38db }
-            int r12 = r1.accentColor     // Catch:{ Exception -> 0x38db }
-            r7.writeInt32(r12)     // Catch:{ Exception -> 0x38db }
-            int r12 = r1.myMessagesAccentColor     // Catch:{ Exception -> 0x38db }
-            r7.writeInt32(r12)     // Catch:{ Exception -> 0x38db }
-            int r12 = r1.myMessagesGradientAccentColor1     // Catch:{ Exception -> 0x38db }
-            r7.writeInt32(r12)     // Catch:{ Exception -> 0x38db }
-            int r12 = r1.myMessagesGradientAccentColor2     // Catch:{ Exception -> 0x38db }
-            r7.writeInt32(r12)     // Catch:{ Exception -> 0x38db }
-            int r12 = r1.myMessagesGradientAccentColor3     // Catch:{ Exception -> 0x38db }
-            r7.writeInt32(r12)     // Catch:{ Exception -> 0x38db }
-            boolean r12 = r1.myMessagesAnimated     // Catch:{ Exception -> 0x38db }
-            r7.writeBool(r12)     // Catch:{ Exception -> 0x38db }
-            long r12 = r1.backgroundOverrideColor     // Catch:{ Exception -> 0x38db }
-            r7.writeInt64(r12)     // Catch:{ Exception -> 0x38db }
-            long r12 = r1.backgroundGradientOverrideColor1     // Catch:{ Exception -> 0x38db }
-            r7.writeInt64(r12)     // Catch:{ Exception -> 0x38db }
-            long r12 = r1.backgroundGradientOverrideColor2     // Catch:{ Exception -> 0x38db }
-            r7.writeInt64(r12)     // Catch:{ Exception -> 0x38db }
-            long r12 = r1.backgroundGradientOverrideColor3     // Catch:{ Exception -> 0x38db }
-            r7.writeInt64(r12)     // Catch:{ Exception -> 0x38db }
-            int r12 = r1.backgroundRotation     // Catch:{ Exception -> 0x38db }
-            r7.writeInt32(r12)     // Catch:{ Exception -> 0x38db }
-            r12 = 0
-            r7.writeInt64(r12)     // Catch:{ Exception -> 0x38db }
-            float r12 = r1.patternIntensity     // Catch:{ Exception -> 0x38db }
-            double r12 = (double) r12     // Catch:{ Exception -> 0x38db }
-            r7.writeDouble(r12)     // Catch:{ Exception -> 0x38db }
-            boolean r12 = r1.patternMotion     // Catch:{ Exception -> 0x38db }
-            r7.writeBool(r12)     // Catch:{ Exception -> 0x38db }
-            java.lang.String r1 = r1.patternSlug     // Catch:{ Exception -> 0x38db }
-            r7.writeString(r1)     // Catch:{ Exception -> 0x38db }
+            r7.writeInt32(r12)     // Catch:{ Exception -> 0x395d }
+            int r13 = r1.id     // Catch:{ Exception -> 0x395d }
+            r7.writeInt32(r13)     // Catch:{ Exception -> 0x395d }
+            int r13 = r1.accentColor     // Catch:{ Exception -> 0x395d }
+            r7.writeInt32(r13)     // Catch:{ Exception -> 0x395d }
+            int r13 = r1.myMessagesAccentColor     // Catch:{ Exception -> 0x395d }
+            r7.writeInt32(r13)     // Catch:{ Exception -> 0x395d }
+            int r13 = r1.myMessagesGradientAccentColor1     // Catch:{ Exception -> 0x395d }
+            r7.writeInt32(r13)     // Catch:{ Exception -> 0x395d }
+            int r13 = r1.myMessagesGradientAccentColor2     // Catch:{ Exception -> 0x395d }
+            r7.writeInt32(r13)     // Catch:{ Exception -> 0x395d }
+            int r13 = r1.myMessagesGradientAccentColor3     // Catch:{ Exception -> 0x395d }
+            r7.writeInt32(r13)     // Catch:{ Exception -> 0x395d }
+            boolean r13 = r1.myMessagesAnimated     // Catch:{ Exception -> 0x395d }
+            r7.writeBool(r13)     // Catch:{ Exception -> 0x395d }
+            long r13 = r1.backgroundOverrideColor     // Catch:{ Exception -> 0x395d }
+            r7.writeInt64(r13)     // Catch:{ Exception -> 0x395d }
+            long r13 = r1.backgroundGradientOverrideColor1     // Catch:{ Exception -> 0x395d }
+            r7.writeInt64(r13)     // Catch:{ Exception -> 0x395d }
+            long r13 = r1.backgroundGradientOverrideColor2     // Catch:{ Exception -> 0x395d }
+            r7.writeInt64(r13)     // Catch:{ Exception -> 0x395d }
+            long r13 = r1.backgroundGradientOverrideColor3     // Catch:{ Exception -> 0x395d }
+            r7.writeInt64(r13)     // Catch:{ Exception -> 0x395d }
+            int r13 = r1.backgroundRotation     // Catch:{ Exception -> 0x395d }
+            r7.writeInt32(r13)     // Catch:{ Exception -> 0x395d }
+            r13 = 0
+            r7.writeInt64(r13)     // Catch:{ Exception -> 0x395d }
+            float r13 = r1.patternIntensity     // Catch:{ Exception -> 0x395d }
+            double r13 = (double) r13     // Catch:{ Exception -> 0x395d }
+            r7.writeDouble(r13)     // Catch:{ Exception -> 0x395d }
+            boolean r13 = r1.patternMotion     // Catch:{ Exception -> 0x395d }
+            r7.writeBool(r13)     // Catch:{ Exception -> 0x395d }
+            java.lang.String r1 = r1.patternSlug     // Catch:{ Exception -> 0x395d }
+            r7.writeString(r1)     // Catch:{ Exception -> 0x395d }
             r1 = 0
-            r7.writeBool(r1)     // Catch:{ Exception -> 0x38db }
-            java.lang.StringBuilder r1 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x38db }
-            r1.<init>()     // Catch:{ Exception -> 0x38db }
-            java.lang.String r12 = "accents_"
-            r1.append(r12)     // Catch:{ Exception -> 0x38db }
-            java.lang.String r12 = r8.assetName     // Catch:{ Exception -> 0x38db }
-            r1.append(r12)     // Catch:{ Exception -> 0x38db }
-            java.lang.String r1 = r1.toString()     // Catch:{ Exception -> 0x38db }
-            byte[] r7 = r7.toByteArray()     // Catch:{ Exception -> 0x38db }
-            r12 = 3
-            java.lang.String r7 = android.util.Base64.encodeToString(r7, r12)     // Catch:{ Exception -> 0x38db }
-            r6.putString(r1, r7)     // Catch:{ Exception -> 0x38db }
-            goto L_0x3679
-        L_0x3676:
+            r7.writeBool(r1)     // Catch:{ Exception -> 0x395d }
+            java.lang.StringBuilder r1 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x395d }
+            r1.<init>()     // Catch:{ Exception -> 0x395d }
+            java.lang.String r13 = "accents_"
+            r1.append(r13)     // Catch:{ Exception -> 0x395d }
+            java.lang.String r13 = r8.assetName     // Catch:{ Exception -> 0x395d }
+            r1.append(r13)     // Catch:{ Exception -> 0x395d }
+            java.lang.String r1 = r1.toString()     // Catch:{ Exception -> 0x395d }
+            byte[] r7 = r7.toByteArray()     // Catch:{ Exception -> 0x395d }
+            r13 = 3
+            java.lang.String r7 = android.util.Base64.encodeToString(r7, r13)     // Catch:{ Exception -> 0x395d }
+            r6.putString(r1, r7)     // Catch:{ Exception -> 0x395d }
+            goto L_0x376b
+        L_0x3767:
             r11 = 9
-            r12 = 3
-        L_0x3679:
-            java.lang.StringBuilder r1 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x38db }
-            r1.<init>()     // Catch:{ Exception -> 0x38db }
+            r12 = 1
+            r13 = 3
+        L_0x376b:
+            java.lang.StringBuilder r1 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x395d }
+            r1.<init>()     // Catch:{ Exception -> 0x395d }
             java.lang.String r7 = "accent_current_"
-            r1.append(r7)     // Catch:{ Exception -> 0x38db }
-            java.lang.String r7 = r8.assetName     // Catch:{ Exception -> 0x38db }
-            r1.append(r7)     // Catch:{ Exception -> 0x38db }
-            java.lang.String r1 = r1.toString()     // Catch:{ Exception -> 0x38db }
-            int r7 = r8.currentAccentId     // Catch:{ Exception -> 0x38db }
-            r6.putInt(r1, r7)     // Catch:{ Exception -> 0x38db }
-            goto L_0x3694
-        L_0x3692:
+            r1.append(r7)     // Catch:{ Exception -> 0x395d }
+            java.lang.String r7 = r8.assetName     // Catch:{ Exception -> 0x395d }
+            r1.append(r7)     // Catch:{ Exception -> 0x395d }
+            java.lang.String r1 = r1.toString()     // Catch:{ Exception -> 0x395d }
+            int r7 = r8.currentAccentId     // Catch:{ Exception -> 0x395d }
+            r6.putInt(r1, r7)     // Catch:{ Exception -> 0x395d }
+            goto L_0x3786
+        L_0x3784:
             r6 = r22
-        L_0x3694:
-            boolean r1 = r10.isEmpty()     // Catch:{ Exception -> 0x38db }
-            if (r1 != 0) goto L_0x36a3
-            java.util.ArrayList<org.telegram.ui.ActionBar.Theme$ThemeAccent> r1 = r8.themeAccents     // Catch:{ Exception -> 0x38db }
+        L_0x3786:
+            boolean r1 = r10.isEmpty()     // Catch:{ Exception -> 0x395d }
+            if (r1 != 0) goto L_0x3795
+            java.util.ArrayList<org.telegram.ui.ActionBar.Theme$ThemeAccent> r1 = r8.themeAccents     // Catch:{ Exception -> 0x395d }
             r7 = 0
-            r1.addAll(r7, r10)     // Catch:{ Exception -> 0x38db }
-            sortAccents(r8)     // Catch:{ Exception -> 0x38db }
-        L_0x36a3:
-            android.util.SparseArray<org.telegram.ui.ActionBar.Theme$ThemeAccent> r1 = r8.themeAccentsMap     // Catch:{ Exception -> 0x38db }
-            if (r1 == 0) goto L_0x36b9
-            int r7 = r8.currentAccentId     // Catch:{ Exception -> 0x38db }
-            java.lang.Object r1 = r1.get(r7)     // Catch:{ Exception -> 0x38db }
-            if (r1 != 0) goto L_0x36b9
-            boolean r1 = r8.firstAccentIsDefault     // Catch:{ Exception -> 0x38db }
-            if (r1 == 0) goto L_0x36b6
-            int r1 = DEFALT_THEME_ACCENT_ID     // Catch:{ Exception -> 0x38db }
-            goto L_0x36b7
-        L_0x36b6:
+            r1.addAll(r7, r10)     // Catch:{ Exception -> 0x395d }
+            sortAccents(r8)     // Catch:{ Exception -> 0x395d }
+        L_0x3795:
+            android.util.SparseArray<org.telegram.ui.ActionBar.Theme$ThemeAccent> r1 = r8.themeAccentsMap     // Catch:{ Exception -> 0x395d }
+            if (r1 == 0) goto L_0x37ab
+            int r7 = r8.currentAccentId     // Catch:{ Exception -> 0x395d }
+            java.lang.Object r1 = r1.get(r7)     // Catch:{ Exception -> 0x395d }
+            if (r1 != 0) goto L_0x37ab
+            boolean r1 = r8.firstAccentIsDefault     // Catch:{ Exception -> 0x395d }
+            if (r1 == 0) goto L_0x37a8
+            int r1 = DEFALT_THEME_ACCENT_ID     // Catch:{ Exception -> 0x395d }
+            goto L_0x37a9
+        L_0x37a8:
             r1 = 0
-        L_0x36b7:
-            r8.currentAccentId = r1     // Catch:{ Exception -> 0x38db }
-        L_0x36b9:
-            r8.loadWallpapers(r4)     // Catch:{ Exception -> 0x38db }
+        L_0x37a9:
+            r8.currentAccentId = r1     // Catch:{ Exception -> 0x395d }
+        L_0x37ab:
+            r8.loadWallpapers(r4)     // Catch:{ Exception -> 0x395d }
             r1 = 0
-            org.telegram.ui.ActionBar.Theme$ThemeAccent r7 = r8.getAccent(r1)     // Catch:{ Exception -> 0x38db }
-            if (r7 == 0) goto L_0x36d0
-            org.telegram.ui.ActionBar.Theme$OverrideWallpaperInfo r1 = r7.overrideWallpaper     // Catch:{ Exception -> 0x38db }
-            r8.overrideWallpaper = r1     // Catch:{ Exception -> 0x38db }
-            goto L_0x36d0
-        L_0x36c8:
+            org.telegram.ui.ActionBar.Theme$ThemeAccent r7 = r8.getAccent(r1)     // Catch:{ Exception -> 0x395d }
+            if (r7 == 0) goto L_0x37c3
+            org.telegram.ui.ActionBar.Theme$OverrideWallpaperInfo r1 = r7.overrideWallpaper     // Catch:{ Exception -> 0x395d }
+            r8.overrideWallpaper = r1     // Catch:{ Exception -> 0x395d }
+            goto L_0x37c3
+        L_0x37ba:
             r22 = r6
             r9 = r7
             r11 = 9
-            r12 = 3
+            r12 = 1
+            r13 = 3
             r6 = r22
-        L_0x36d0:
+        L_0x37c3:
             r7 = r9
             r1 = 0
-            goto L_0x3407
-        L_0x36d4:
+            goto L_0x34f7
+        L_0x37c7:
             r22 = r6
-            r12 = 3
-            if (r5 == 0) goto L_0x36df
-            r5.commit()     // Catch:{ Exception -> 0x38db }
-            r22.commit()     // Catch:{ Exception -> 0x38db }
-        L_0x36df:
+            r12 = 1
+            r13 = 3
+            if (r5 == 0) goto L_0x37d3
+            r5.commit()     // Catch:{ Exception -> 0x395d }
+            r22.commit()     // Catch:{ Exception -> 0x395d }
+        L_0x37d3:
             java.lang.String r1 = "selectedAutoNightType"
-            int r4 = android.os.Build.VERSION.SDK_INT     // Catch:{ Exception -> 0x38db }
+            int r4 = android.os.Build.VERSION.SDK_INT     // Catch:{ Exception -> 0x395d }
             r5 = 29
-            if (r4 < r5) goto L_0x36e9
-            r4 = 3
-            goto L_0x36ea
-        L_0x36e9:
-            r4 = 0
-        L_0x36ea:
-            int r1 = r2.getInt(r1, r4)     // Catch:{ Exception -> 0x38db }
-            selectedAutoNightType = r1     // Catch:{ Exception -> 0x38db }
+            if (r4 < r5) goto L_0x37dd
+            r8 = 3
+            goto L_0x37de
+        L_0x37dd:
+            r8 = 0
+        L_0x37de:
+            int r1 = r2.getInt(r1, r8)     // Catch:{ Exception -> 0x395d }
+            selectedAutoNightType = r1     // Catch:{ Exception -> 0x395d }
             java.lang.String r1 = "autoNightScheduleByLocation"
             r4 = 0
-            boolean r1 = r2.getBoolean(r1, r4)     // Catch:{ Exception -> 0x38db }
-            autoNightScheduleByLocation = r1     // Catch:{ Exception -> 0x38db }
+            boolean r1 = r2.getBoolean(r1, r4)     // Catch:{ Exception -> 0x395d }
+            autoNightScheduleByLocation = r1     // Catch:{ Exception -> 0x395d }
             java.lang.String r1 = "autoNightBrighnessThreshold"
             r4 = 1048576000(0x3e800000, float:0.25)
-            float r1 = r2.getFloat(r1, r4)     // Catch:{ Exception -> 0x38db }
-            autoNightBrighnessThreshold = r1     // Catch:{ Exception -> 0x38db }
+            float r1 = r2.getFloat(r1, r4)     // Catch:{ Exception -> 0x395d }
+            autoNightBrighnessThreshold = r1     // Catch:{ Exception -> 0x395d }
             java.lang.String r1 = "autoNightDayStartTime"
             r4 = 1320(0x528, float:1.85E-42)
-            int r1 = r2.getInt(r1, r4)     // Catch:{ Exception -> 0x38db }
-            autoNightDayStartTime = r1     // Catch:{ Exception -> 0x38db }
+            int r1 = r2.getInt(r1, r4)     // Catch:{ Exception -> 0x395d }
+            autoNightDayStartTime = r1     // Catch:{ Exception -> 0x395d }
             java.lang.String r1 = "autoNightDayEndTime"
             r4 = 480(0x1e0, float:6.73E-43)
-            int r1 = r2.getInt(r1, r4)     // Catch:{ Exception -> 0x38db }
-            autoNightDayEndTime = r1     // Catch:{ Exception -> 0x38db }
+            int r1 = r2.getInt(r1, r4)     // Catch:{ Exception -> 0x395d }
+            autoNightDayEndTime = r1     // Catch:{ Exception -> 0x395d }
             java.lang.String r1 = "autoNightSunsetTime"
             r4 = 1320(0x528, float:1.85E-42)
-            int r1 = r2.getInt(r1, r4)     // Catch:{ Exception -> 0x38db }
-            autoNightSunsetTime = r1     // Catch:{ Exception -> 0x38db }
+            int r1 = r2.getInt(r1, r4)     // Catch:{ Exception -> 0x395d }
+            autoNightSunsetTime = r1     // Catch:{ Exception -> 0x395d }
             java.lang.String r1 = "autoNightSunriseTime"
             r4 = 480(0x1e0, float:6.73E-43)
-            int r1 = r2.getInt(r1, r4)     // Catch:{ Exception -> 0x38db }
-            autoNightSunriseTime = r1     // Catch:{ Exception -> 0x38db }
+            int r1 = r2.getInt(r1, r4)     // Catch:{ Exception -> 0x395d }
+            autoNightSunriseTime = r1     // Catch:{ Exception -> 0x395d }
             java.lang.String r1 = "autoNightCityName"
-            java.lang.String r1 = r2.getString(r1, r3)     // Catch:{ Exception -> 0x38db }
-            autoNightCityName = r1     // Catch:{ Exception -> 0x38db }
+            java.lang.String r1 = r2.getString(r1, r3)     // Catch:{ Exception -> 0x395d }
+            autoNightCityName = r1     // Catch:{ Exception -> 0x395d }
             java.lang.String r1 = "autoNightLocationLatitude3"
             r4 = 10000(0x2710, double:4.9407E-320)
-            long r4 = r2.getLong(r1, r4)     // Catch:{ Exception -> 0x38db }
+            long r4 = r2.getLong(r1, r4)     // Catch:{ Exception -> 0x395d }
             r6 = 10000(0x2710, double:4.9407E-320)
             int r1 = (r4 > r6 ? 1 : (r4 == r6 ? 0 : -1))
-            if (r1 == 0) goto L_0x3748
-            double r4 = java.lang.Double.longBitsToDouble(r4)     // Catch:{ Exception -> 0x38db }
-            autoNightLocationLatitude = r4     // Catch:{ Exception -> 0x38db }
-            goto L_0x374f
-        L_0x3748:
+            if (r1 == 0) goto L_0x383c
+            double r4 = java.lang.Double.longBitsToDouble(r4)     // Catch:{ Exception -> 0x395d }
+            autoNightLocationLatitude = r4     // Catch:{ Exception -> 0x395d }
+            goto L_0x3843
+        L_0x383c:
             r4 = 4666723172467343360(0x40cNUM, double:10000.0)
-            autoNightLocationLatitude = r4     // Catch:{ Exception -> 0x38db }
-        L_0x374f:
+            autoNightLocationLatitude = r4     // Catch:{ Exception -> 0x395d }
+        L_0x3843:
             java.lang.String r1 = "autoNightLocationLongitude3"
             r4 = 10000(0x2710, double:4.9407E-320)
-            long r4 = r2.getLong(r1, r4)     // Catch:{ Exception -> 0x38db }
+            long r4 = r2.getLong(r1, r4)     // Catch:{ Exception -> 0x395d }
             r6 = 10000(0x2710, double:4.9407E-320)
             int r1 = (r4 > r6 ? 1 : (r4 == r6 ? 0 : -1))
-            if (r1 == 0) goto L_0x3764
-            double r4 = java.lang.Double.longBitsToDouble(r4)     // Catch:{ Exception -> 0x38db }
-            autoNightLocationLongitude = r4     // Catch:{ Exception -> 0x38db }
-            goto L_0x376b
-        L_0x3764:
+            if (r1 == 0) goto L_0x3858
+            double r4 = java.lang.Double.longBitsToDouble(r4)     // Catch:{ Exception -> 0x395d }
+            autoNightLocationLongitude = r4     // Catch:{ Exception -> 0x395d }
+            goto L_0x385f
+        L_0x3858:
             r4 = 4666723172467343360(0x40cNUM, double:10000.0)
-            autoNightLocationLongitude = r4     // Catch:{ Exception -> 0x38db }
-        L_0x376b:
+            autoNightLocationLongitude = r4     // Catch:{ Exception -> 0x395d }
+        L_0x385f:
             java.lang.String r1 = "autoNightLastSunCheckDay"
             r4 = -1
-            int r1 = r2.getInt(r1, r4)     // Catch:{ Exception -> 0x38db }
-            autoNightLastSunCheckDay = r1     // Catch:{ Exception -> 0x38db }
-            if (r0 != 0) goto L_0x3779
+            int r1 = r2.getInt(r1, r4)     // Catch:{ Exception -> 0x395d }
+            autoNightLastSunCheckDay = r1     // Catch:{ Exception -> 0x395d }
+            if (r0 != 0) goto L_0x386d
             org.telegram.ui.ActionBar.Theme$ThemeInfo r0 = defaultTheme
-            goto L_0x377b
-        L_0x3779:
+            goto L_0x386f
+        L_0x386d:
             currentDayTheme = r0
-        L_0x377b:
+        L_0x386f:
             java.lang.String r1 = "overrideThemeWallpaper"
             boolean r1 = r2.contains(r1)
-            if (r1 != 0) goto L_0x378b
+            if (r1 != 0) goto L_0x387f
             java.lang.String r1 = "selectedBackground2"
             boolean r1 = r2.contains(r1)
-            if (r1 == 0) goto L_0x3845
-        L_0x378b:
+            if (r1 == 0) goto L_0x3939
+        L_0x387f:
             java.lang.String r1 = "overrideThemeWallpaper"
             r4 = 0
             boolean r1 = r2.getBoolean(r1, r4)
@@ -10521,15 +10699,15 @@ public class Theme {
             long r4 = r2.getLong(r6, r4)
             r6 = -1
             int r8 = (r4 > r6 ? 1 : (r4 == r6 ? 0 : -1))
-            if (r8 == 0) goto L_0x37b0
-            if (r1 == 0) goto L_0x3832
+            if (r8 == 0) goto L_0x38a4
+            if (r1 == 0) goto L_0x3926
             r6 = -2
             int r1 = (r4 > r6 ? 1 : (r4 == r6 ? 0 : -1))
-            if (r1 == 0) goto L_0x3832
+            if (r1 == 0) goto L_0x3926
             r6 = 1000001(0xvar_, double:4.94066E-318)
             int r1 = (r4 > r6 ? 1 : (r4 == r6 ? 0 : -1))
-            if (r1 == 0) goto L_0x3832
-        L_0x37b0:
+            if (r1 == 0) goto L_0x3926
+        L_0x38a4:
             org.telegram.ui.ActionBar.Theme$OverrideWallpaperInfo r1 = new org.telegram.ui.ActionBar.Theme$OverrideWallpaperInfo
             r1.<init>()
             java.lang.String r6 = "selectedColor"
@@ -10541,145 +10719,93 @@ public class Theme {
             r1.slug = r6
             r6 = -100
             int r8 = (r4 > r6 ? 1 : (r4 == r6 ? 0 : -1))
-            if (r8 < 0) goto L_0x37df
+            if (r8 < 0) goto L_0x38d3
             r6 = -1
             int r8 = (r4 > r6 ? 1 : (r4 == r6 ? 0 : -1))
-            if (r8 > 0) goto L_0x37df
+            if (r8 > 0) goto L_0x38d3
             int r4 = r1.color
-            if (r4 == 0) goto L_0x37df
+            if (r4 == 0) goto L_0x38d3
             java.lang.String r4 = "c"
             r1.slug = r4
             r1.fileName = r3
             r1.originalFileName = r3
-            goto L_0x37e7
-        L_0x37df:
-            java.lang.String r4 = "wallpaper.jpg"
-            r1.fileName = r4
-            java.lang.String r4 = "wallpaper_original.jpg"
-            r1.originalFileName = r4
-        L_0x37e7:
-            java.lang.String r4 = "selectedGradientColor"
-            r5 = 0
-            int r4 = r2.getInt(r4, r5)
-            r1.gradientColor1 = r4
-            java.lang.String r4 = "selectedGradientColor2"
-            int r4 = r2.getInt(r4, r5)
-            r1.gradientColor2 = r4
-            java.lang.String r4 = "selectedGradientColor3"
-            int r4 = r2.getInt(r4, r5)
-            r1.gradientColor3 = r4
-            r4 = 45
-            java.lang.String r6 = "selectedGradientRotation"
-            int r4 = r2.getInt(r6, r4)
-            r1.rotation = r4
-            java.lang.String r4 = "selectedBackgroundBlurred"
-            boolean r4 = r2.getBoolean(r4, r5)
-            r1.isBlurred = r4
-            java.lang.String r4 = "selectedBackgroundMotion"
-            boolean r4 = r2.getBoolean(r4, r5)
-            r1.isMotion = r4
-            r4 = 1056964608(0x3var_, float:0.5)
-            java.lang.String r5 = "selectedIntensity"
-            float r4 = r2.getFloat(r5, r4)
-            r1.intensity = r4
-            org.telegram.ui.ActionBar.Theme$ThemeInfo r4 = currentDayTheme
-            r4.setOverrideWallpaper(r1)
-            int r4 = selectedAutoNightType
-            if (r4 == 0) goto L_0x3832
-            org.telegram.ui.ActionBar.Theme$ThemeInfo r4 = currentNightTheme
-            r4.setOverrideWallpaper(r1)
-        L_0x3832:
+            goto L_0x38db
+        L_0x38d3:
+            java.lang.String r3 = "wallpaper.jpg"
+            r1.fileName = r3
+            java.lang.String r3 = "wallpaper_original.jpg"
+            r1.originalFileName = r3
+        L_0x38db:
+            java.lang.String r3 = "selectedGradientColor"
+            r4 = 0
+            int r3 = r2.getInt(r3, r4)
+            r1.gradientColor1 = r3
+            java.lang.String r3 = "selectedGradientColor2"
+            int r3 = r2.getInt(r3, r4)
+            r1.gradientColor2 = r3
+            java.lang.String r3 = "selectedGradientColor3"
+            int r3 = r2.getInt(r3, r4)
+            r1.gradientColor3 = r3
+            r3 = 45
+            java.lang.String r5 = "selectedGradientRotation"
+            int r3 = r2.getInt(r5, r3)
+            r1.rotation = r3
+            java.lang.String r3 = "selectedBackgroundBlurred"
+            boolean r3 = r2.getBoolean(r3, r4)
+            r1.isBlurred = r3
+            java.lang.String r3 = "selectedBackgroundMotion"
+            boolean r3 = r2.getBoolean(r3, r4)
+            r1.isMotion = r3
+            r3 = 1056964608(0x3var_, float:0.5)
+            java.lang.String r4 = "selectedIntensity"
+            float r3 = r2.getFloat(r4, r3)
+            r1.intensity = r3
+            org.telegram.ui.ActionBar.Theme$ThemeInfo r3 = currentDayTheme
+            r3.setOverrideWallpaper(r1)
+            int r3 = selectedAutoNightType
+            if (r3 == 0) goto L_0x3926
+            org.telegram.ui.ActionBar.Theme$ThemeInfo r3 = currentNightTheme
+            r3.setOverrideWallpaper(r1)
+        L_0x3926:
             android.content.SharedPreferences$Editor r1 = r2.edit()
             java.lang.String r2 = "overrideThemeWallpaper"
             android.content.SharedPreferences$Editor r1 = r1.remove(r2)
             java.lang.String r2 = "selectedBackground2"
             android.content.SharedPreferences$Editor r1 = r1.remove(r2)
             r1.commit()
-        L_0x3845:
+        L_0x3939:
             int r1 = needSwitchToTheme()
             r2 = 2
-            if (r1 != r2) goto L_0x384e
+            if (r1 != r2) goto L_0x3942
             org.telegram.ui.ActionBar.Theme$ThemeInfo r0 = currentNightTheme
-        L_0x384e:
-            if (r1 != r2) goto L_0x3852
-            r1 = 1
-            goto L_0x3853
-        L_0x3852:
+        L_0x3942:
+            if (r1 != r2) goto L_0x3947
             r1 = 0
-        L_0x3853:
-            r2 = 0
-            applyTheme(r0, r2, r2, r1)
-            org.telegram.messenger.MessagesController$$ExternalSyntheticLambda213 r0 = org.telegram.messenger.MessagesController$$ExternalSyntheticLambda213.INSTANCE
+            r5 = 1
+            goto L_0x3949
+        L_0x3947:
+            r1 = 0
+            r5 = 0
+        L_0x3949:
+            applyTheme(r0, r1, r1, r5)
+            org.telegram.messenger.MessagesController$$ExternalSyntheticLambda219 r0 = org.telegram.messenger.MessagesController$$ExternalSyntheticLambda219.INSTANCE
             org.telegram.messenger.AndroidUtilities.runOnUIThread(r0)
-            android.content.Context r0 = org.telegram.messenger.ApplicationLoader.applicationContext
-            java.lang.String r1 = "emojithemes_config"
-            android.content.SharedPreferences r1 = r0.getSharedPreferences(r1, r2)
-            java.lang.String r0 = "count"
-            int r4 = r1.getInt(r0, r2)
-            java.util.ArrayList r5 = new java.util.ArrayList
-            r5.<init>()
-            org.telegram.ui.Components.ChatThemeBottomSheet$ChatThemeItem r0 = new org.telegram.ui.Components.ChatThemeBottomSheet$ChatThemeItem
-            org.telegram.ui.ActionBar.EmojiThemes r6 = org.telegram.ui.ActionBar.EmojiThemes.createHomePreviewTheme()
-            r0.<init>(r6)
-            r5.add(r0)
-        L_0x387b:
-            if (r2 >= r4) goto L_0x38ce
-            java.lang.StringBuilder r0 = new java.lang.StringBuilder
-            r0.<init>()
-            java.lang.String r6 = "theme_"
-            r0.append(r6)
-            r0.append(r2)
-            java.lang.String r0 = r0.toString()
-            java.lang.String r0 = r1.getString(r0, r3)
-            org.telegram.tgnet.SerializedData r6 = new org.telegram.tgnet.SerializedData
-            byte[] r0 = org.telegram.messenger.Utilities.hexToBytes(r0)
-            r6.<init>((byte[]) r0)
-            r7 = 1
-            int r0 = r6.readInt32(r7)     // Catch:{ all -> 0x38c6 }
-            org.telegram.tgnet.TLRPC$TL_theme r0 = org.telegram.tgnet.TLRPC$Theme.TLdeserialize(r6, r0, r7)     // Catch:{ all -> 0x38c6 }
-            org.telegram.ui.ActionBar.EmojiThemes r0 = org.telegram.ui.ActionBar.EmojiThemes.createPreviewFullTheme(r0)     // Catch:{ all -> 0x38c6 }
-            java.util.ArrayList<org.telegram.ui.ActionBar.EmojiThemes$ThemeItem> r6 = r0.items     // Catch:{ all -> 0x38c6 }
-            int r6 = r6.size()     // Catch:{ all -> 0x38c6 }
-            r8 = 4
-            if (r6 < r8) goto L_0x38b9
-            org.telegram.ui.Components.ChatThemeBottomSheet$ChatThemeItem r6 = new org.telegram.ui.Components.ChatThemeBottomSheet$ChatThemeItem     // Catch:{ all -> 0x38c4 }
-            r6.<init>(r0)     // Catch:{ all -> 0x38c4 }
-            r5.add(r6)     // Catch:{ all -> 0x38c4 }
-        L_0x38b9:
-            org.telegram.messenger.DispatchQueue r0 = org.telegram.messenger.ChatThemeController.chatThemeQueue     // Catch:{ all -> 0x38c4 }
-            org.telegram.ui.ActionBar.Theme$3 r6 = new org.telegram.ui.ActionBar.Theme$3     // Catch:{ all -> 0x38c4 }
-            r6.<init>(r5)     // Catch:{ all -> 0x38c4 }
-            r0.postRunnable(r6)     // Catch:{ all -> 0x38c4 }
-            goto L_0x38cb
-        L_0x38c4:
-            r0 = move-exception
-            goto L_0x38c8
-        L_0x38c6:
-            r0 = move-exception
-            r8 = 4
-        L_0x38c8:
-            org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)
-        L_0x38cb:
-            int r2 = r2 + 1
-            goto L_0x387b
-        L_0x38ce:
-            org.telegram.ui.ActionBar.Theme$10 r0 = new org.telegram.ui.ActionBar.Theme$10
+            org.telegram.ui.ActionBar.Theme$9 r0 = new org.telegram.ui.ActionBar.Theme$9
             r0.<init>()
             ambientSensorListener = r0
-            r1 = 2
-            int[] r0 = new int[r1]
+            int[] r0 = new int[r2]
             viewPos = r0
             return
-        L_0x38db:
+        L_0x395d:
             r0 = move-exception
             org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)
             java.lang.RuntimeException r1 = new java.lang.RuntimeException
             r1.<init>(r0)
-            goto L_0x38e6
-        L_0x38e5:
+            goto L_0x3968
+        L_0x3967:
             throw r1
-        L_0x38e6:
-            goto L_0x38e5
+        L_0x3968:
+            goto L_0x3967
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ActionBar.Theme.<clinit>():void");
     }
@@ -10783,7 +10909,7 @@ public class Theme {
         if (i3 != 0) {
             mutate2.setColorFilter(new PorterDuffColorFilter(i3, PorterDuff.Mode.MULTIPLY));
         }
-        AnonymousClass4 r4 = new StateListDrawable() {
+        AnonymousClass3 r4 = new StateListDrawable() {
             public boolean selectDrawable(int i) {
                 if (Build.VERSION.SDK_INT >= 21) {
                     return super.selectDrawable(i);
@@ -10819,7 +10945,7 @@ public class Theme {
         mutate.setColorFilter(new PorterDuffColorFilter(i, PorterDuff.Mode.MULTIPLY));
         Drawable mutate2 = resources.getDrawable(NUM).mutate();
         mutate2.setColorFilter(new PorterDuffColorFilter(i2, PorterDuff.Mode.MULTIPLY));
-        AnonymousClass5 r4 = new StateListDrawable() {
+        AnonymousClass4 r4 = new StateListDrawable() {
             public boolean selectDrawable(int i) {
                 if (Build.VERSION.SDK_INT >= 21) {
                     return super.selectDrawable(i);
@@ -10933,7 +11059,7 @@ public class Theme {
         L_0x005c:
             android.content.Context r0 = org.telegram.messenger.ApplicationLoader.applicationContext
             android.content.res.Resources r0 = r0.getResources()
-            r1 = 2131165953(0x7var_, float:1.7946138E38)
+            r1 = 2131165997(0x7var_d, float:1.7946227E38)
             android.graphics.drawable.Drawable r0 = r0.getDrawable(r1)
             dialogs_holidayDrawable = r0
             r0 = 1077936128(0x40400000, float:3.0)
@@ -11129,17 +11255,6 @@ public class Theme {
         return stateListDrawable;
     }
 
-    public static Drawable getRoundRectSelectorWithBackgroundDrawable(int i, int i2, int i3) {
-        if (Build.VERSION.SDK_INT >= 21) {
-            return new RippleDrawable(new ColorStateList(new int[][]{StateSet.WILD_CARD}, new int[]{i3}), createRoundRectDrawable(i, i2), createRoundRectDrawable(i, -1));
-        }
-        StateListDrawable stateListDrawable = new StateListDrawable();
-        stateListDrawable.addState(new int[]{16842919}, createRoundRectDrawable(i, i3));
-        stateListDrawable.addState(new int[]{16842913}, createRoundRectDrawable(i, i3));
-        stateListDrawable.addState(StateSet.WILD_CARD, new ColorDrawable(i2));
-        return stateListDrawable;
-    }
-
     public static Drawable createSelectorWithBackgroundDrawable(int i, int i2) {
         if (Build.VERSION.SDK_INT >= 21) {
             return new RippleDrawable(new ColorStateList(new int[][]{StateSet.WILD_CARD}, new int[]{i2}), new ColorDrawable(i), new ColorDrawable(i));
@@ -11225,7 +11340,7 @@ public class Theme {
         L_0x002f:
             android.graphics.Paint r7 = maskPaint
             r7.setColor(r4)
-            org.telegram.ui.ActionBar.Theme$8 r7 = new org.telegram.ui.ActionBar.Theme$8
+            org.telegram.ui.ActionBar.Theme$7 r7 = new org.telegram.ui.ActionBar.Theme$7
             r7.<init>(r12)
         L_0x0039:
             android.content.res.ColorStateList r8 = new android.content.res.ColorStateList
@@ -11299,6 +11414,181 @@ public class Theme {
         stateListDrawable.addState(new int[]{16842913}, new ColorDrawable(i));
         stateListDrawable.addState(StateSet.WILD_CARD, new ColorDrawable(0));
         return stateListDrawable;
+    }
+
+    public static class AdaptiveRipple {
+        private static float[] tempHSV;
+
+        public static Drawable rect() {
+            return rect(Theme.getColor("windowBackgroundWhite"));
+        }
+
+        public static Drawable rect(int i) {
+            return rect(i, 0.0f);
+        }
+
+        public static Drawable rect(int i, float... fArr) {
+            return createRect(0, calcRippleColor(i), fArr);
+        }
+
+        public static Drawable filledRect(String str, float... fArr) {
+            return filledRect(Theme.getColor(str), fArr);
+        }
+
+        public static Drawable filledRect(int i) {
+            return createRect(i, calcRippleColor(i), new float[0]);
+        }
+
+        public static Drawable filledRect(int i, float... fArr) {
+            return createRect(i, calcRippleColor(i), fArr);
+        }
+
+        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v0, resolved type: android.graphics.drawable.ColorDrawable} */
+        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v1, resolved type: android.graphics.drawable.ColorDrawable} */
+        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v2, resolved type: android.graphics.drawable.ColorDrawable} */
+        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r1v1, resolved type: android.graphics.drawable.ShapeDrawable} */
+        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v4, resolved type: android.graphics.drawable.ColorDrawable} */
+        /* JADX WARNING: Multi-variable type inference failed */
+        /* Code decompiled incorrectly, please refer to instructions dump. */
+        private static android.graphics.drawable.Drawable createRect(int r4, int r5, float... r6) {
+            /*
+                r0 = 0
+                if (r4 == 0) goto L_0x0025
+                boolean r1 = hasNonzeroRadii(r6)
+                if (r1 == 0) goto L_0x0020
+                android.graphics.drawable.ShapeDrawable r1 = new android.graphics.drawable.ShapeDrawable
+                android.graphics.drawable.shapes.RoundRectShape r2 = new android.graphics.drawable.shapes.RoundRectShape
+                float[] r3 = calcRadii(r6)
+                r2.<init>(r3, r0, r0)
+                r1.<init>(r2)
+                android.graphics.Paint r0 = r1.getPaint()
+                r0.setColor(r4)
+                r0 = r1
+                goto L_0x0025
+            L_0x0020:
+                android.graphics.drawable.ColorDrawable r0 = new android.graphics.drawable.ColorDrawable
+                r0.<init>(r4)
+            L_0x0025:
+                android.graphics.drawable.Drawable r4 = createRect((android.graphics.drawable.Drawable) r0, (int) r5, (float[]) r6)
+                return r4
+            */
+            throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ActionBar.Theme.AdaptiveRipple.createRect(int, int, float[]):android.graphics.drawable.Drawable");
+        }
+
+        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v2, resolved type: android.graphics.drawable.ColorDrawable} */
+        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v7, resolved type: android.graphics.drawable.ColorDrawable} */
+        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v8, resolved type: android.graphics.drawable.ColorDrawable} */
+        /* JADX WARNING: Multi-variable type inference failed */
+        /* Code decompiled incorrectly, please refer to instructions dump. */
+        private static android.graphics.drawable.Drawable createRect(android.graphics.drawable.Drawable r6, int r7, float... r8) {
+            /*
+                int r0 = android.os.Build.VERSION.SDK_INT
+                r1 = 0
+                r2 = 1
+                r3 = 0
+                r4 = 21
+                if (r0 < r4) goto L_0x003b
+                boolean r0 = hasNonzeroRadii(r8)
+                if (r0 == 0) goto L_0x0026
+                android.graphics.drawable.ShapeDrawable r0 = new android.graphics.drawable.ShapeDrawable
+                android.graphics.drawable.shapes.RoundRectShape r4 = new android.graphics.drawable.shapes.RoundRectShape
+                float[] r8 = calcRadii(r8)
+                r4.<init>(r8, r3, r3)
+                r0.<init>(r4)
+                android.graphics.Paint r8 = r0.getPaint()
+                r3 = -1
+                r8.setColor(r3)
+                r3 = r0
+            L_0x0026:
+                android.graphics.drawable.RippleDrawable r8 = new android.graphics.drawable.RippleDrawable
+                android.content.res.ColorStateList r0 = new android.content.res.ColorStateList
+                int[][] r4 = new int[r2][]
+                int[] r5 = android.util.StateSet.WILD_CARD
+                r4[r1] = r5
+                int[] r2 = new int[r2]
+                r2[r1] = r7
+                r0.<init>(r4, r2)
+                r8.<init>(r0, r6, r3)
+                return r8
+            L_0x003b:
+                android.graphics.drawable.StateListDrawable r0 = new android.graphics.drawable.StateListDrawable
+                r0.<init>()
+                boolean r4 = hasNonzeroRadii(r8)
+                if (r4 == 0) goto L_0x005c
+                android.graphics.drawable.ShapeDrawable r4 = new android.graphics.drawable.ShapeDrawable
+                android.graphics.drawable.shapes.RoundRectShape r5 = new android.graphics.drawable.shapes.RoundRectShape
+                float[] r8 = calcRadii(r8)
+                r5.<init>(r8, r3, r3)
+                r4.<init>(r5)
+                android.graphics.Paint r8 = r4.getPaint()
+                r8.setColor(r7)
+                goto L_0x0061
+            L_0x005c:
+                android.graphics.drawable.ColorDrawable r4 = new android.graphics.drawable.ColorDrawable
+                r4.<init>(r7)
+            L_0x0061:
+                android.graphics.drawable.LayerDrawable r7 = new android.graphics.drawable.LayerDrawable
+                r8 = 2
+                android.graphics.drawable.Drawable[] r8 = new android.graphics.drawable.Drawable[r8]
+                r8[r1] = r6
+                r8[r2] = r4
+                r7.<init>(r8)
+                int[] r8 = new int[r2]
+                r3 = 16842919(0x10100a7, float:2.3694026E-38)
+                r8[r1] = r3
+                r0.addState(r8, r7)
+                int[] r8 = new int[r2]
+                r2 = 16842913(0x10100a1, float:2.369401E-38)
+                r8[r1] = r2
+                r0.addState(r8, r7)
+                int[] r7 = android.util.StateSet.WILD_CARD
+                r0.addState(r7, r6)
+                return r0
+            */
+            throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ActionBar.Theme.AdaptiveRipple.createRect(android.graphics.drawable.Drawable, int, float[]):android.graphics.drawable.Drawable");
+        }
+
+        private static float[] calcRadii(float... fArr) {
+            if (fArr.length == 0) {
+                return new float[]{0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f};
+            }
+            if (fArr.length == 1) {
+                return new float[]{(float) AndroidUtilities.dp(fArr[0]), (float) AndroidUtilities.dp(fArr[0]), (float) AndroidUtilities.dp(fArr[0]), (float) AndroidUtilities.dp(fArr[0]), (float) AndroidUtilities.dp(fArr[0]), (float) AndroidUtilities.dp(fArr[0]), (float) AndroidUtilities.dp(fArr[0]), (float) AndroidUtilities.dp(fArr[0])};
+            } else if (fArr.length == 2) {
+                return new float[]{(float) AndroidUtilities.dp(fArr[0]), (float) AndroidUtilities.dp(fArr[0]), (float) AndroidUtilities.dp(fArr[0]), (float) AndroidUtilities.dp(fArr[0]), (float) AndroidUtilities.dp(fArr[1]), (float) AndroidUtilities.dp(fArr[1]), (float) AndroidUtilities.dp(fArr[1]), (float) AndroidUtilities.dp(fArr[1])};
+            } else if (fArr.length == 3) {
+                return new float[]{(float) AndroidUtilities.dp(fArr[0]), (float) AndroidUtilities.dp(fArr[0]), (float) AndroidUtilities.dp(fArr[1]), (float) AndroidUtilities.dp(fArr[1]), (float) AndroidUtilities.dp(fArr[2]), (float) AndroidUtilities.dp(fArr[2]), (float) AndroidUtilities.dp(fArr[2]), (float) AndroidUtilities.dp(fArr[2])};
+            } else if (fArr.length < 8) {
+                return new float[]{(float) AndroidUtilities.dp(fArr[0]), (float) AndroidUtilities.dp(fArr[0]), (float) AndroidUtilities.dp(fArr[1]), (float) AndroidUtilities.dp(fArr[1]), (float) AndroidUtilities.dp(fArr[2]), (float) AndroidUtilities.dp(fArr[2]), (float) AndroidUtilities.dp(fArr[3]), (float) AndroidUtilities.dp(fArr[3])};
+            } else {
+                return new float[]{(float) AndroidUtilities.dp(fArr[0]), (float) AndroidUtilities.dp(fArr[1]), (float) AndroidUtilities.dp(fArr[2]), (float) AndroidUtilities.dp(fArr[3]), (float) AndroidUtilities.dp(fArr[4]), (float) AndroidUtilities.dp(fArr[5]), (float) AndroidUtilities.dp(fArr[6]), (float) AndroidUtilities.dp(fArr[7])};
+            }
+        }
+
+        private static boolean hasNonzeroRadii(float... fArr) {
+            for (int i = 0; i < Math.min(8, fArr.length); i++) {
+                if (fArr[i] > 0.0f) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        private static int calcRippleColor(int i) {
+            if (tempHSV == null) {
+                tempHSV = new float[3];
+            }
+            Color.colorToHSV(i, tempHSV);
+            float[] fArr = tempHSV;
+            if (fArr[1] > 0.01f) {
+                fArr[1] = Math.min(1.0f, Math.max(0.0f, fArr[1] + (Theme.isCurrentThemeDark() ? -0.25f : 0.25f)));
+                float[] fArr2 = tempHSV;
+                fArr2[2] = Math.min(1.0f, Math.max(0.0f, fArr2[2] + (Theme.isCurrentThemeDark() ? 0.05f : -0.05f)));
+            } else {
+                fArr[2] = Math.min(1.0f, Math.max(0.0f, fArr[2] + (Theme.isCurrentThemeDark() ? 0.1f : -0.1f)));
+            }
+            return Color.HSVToColor(127, tempHSV);
+        }
     }
 
     public static class RippleRadMaskDrawable extends Drawable {
@@ -11599,13 +11889,13 @@ public class Theme {
             java.lang.String r8 = r8.getQueryParameter(r9)     // Catch:{ Exception -> 0x0131 }
             boolean r9 = android.text.TextUtils.isEmpty(r8)     // Catch:{ Exception -> 0x0131 }
             if (r9 != 0) goto L_0x0131
-            java.lang.Integer r8 = org.telegram.messenger.Utilities.parseInt(r8)     // Catch:{ Exception -> 0x0131 }
+            java.lang.Integer r8 = org.telegram.messenger.Utilities.parseInt((java.lang.CharSequence) r8)     // Catch:{ Exception -> 0x0131 }
             int r8 = r8.intValue()     // Catch:{ Exception -> 0x0131 }
             r1.patternBgGradientRotation = r8     // Catch:{ Exception -> 0x0131 }
         L_0x0131:
             boolean r8 = android.text.TextUtils.isEmpty(r7)     // Catch:{ all -> 0x014a }
             if (r8 != 0) goto L_0x0141
-            java.lang.Integer r7 = org.telegram.messenger.Utilities.parseInt(r7)     // Catch:{ all -> 0x014a }
+            java.lang.Integer r7 = org.telegram.messenger.Utilities.parseInt((java.lang.CharSequence) r7)     // Catch:{ all -> 0x014a }
             int r7 = r7.intValue()     // Catch:{ all -> 0x014a }
             r1.patternIntensity = r7     // Catch:{ all -> 0x014a }
         L_0x0141:
@@ -11735,7 +12025,7 @@ public class Theme {
             android.content.SharedPreferences r0 = org.telegram.messenger.MessagesController.getGlobalMainSettings()     // Catch:{ Exception -> 0x01e8 }
             android.content.SharedPreferences$Editor r0 = r0.edit()     // Catch:{ Exception -> 0x01e8 }
             r0.remove(r1)     // Catch:{ Exception -> 0x01e8 }
-            r0.commit()     // Catch:{ Exception -> 0x01e8 }
+            r0.apply()     // Catch:{ Exception -> 0x01e8 }
         L_0x002b:
             java.util.HashMap<java.lang.String, java.lang.Integer> r0 = currentColorsNoAccent     // Catch:{ Exception -> 0x01e8 }
             r0.clear()     // Catch:{ Exception -> 0x01e8 }
@@ -11751,7 +12041,7 @@ public class Theme {
             android.content.SharedPreferences$Editor r0 = r0.edit()     // Catch:{ Exception -> 0x01e8 }
             java.lang.String r3 = r7.getKey()     // Catch:{ Exception -> 0x01e8 }
             r0.putString(r1, r3)     // Catch:{ Exception -> 0x01e8 }
-            r0.commit()     // Catch:{ Exception -> 0x01e8 }
+            r0.apply()     // Catch:{ Exception -> 0x01e8 }
         L_0x0050:
             r0 = 1
             java.lang.String[] r1 = new java.lang.String[r0]     // Catch:{ Exception -> 0x01e8 }
@@ -11841,7 +12131,7 @@ public class Theme {
         L_0x010a:
             java.lang.String r0 = "intensity"
             java.lang.String r0 = r1.getQueryParameter(r0)     // Catch:{ all -> 0x01ac }
-            java.lang.Integer r0 = org.telegram.messenger.Utilities.parseInt(r0)     // Catch:{ all -> 0x01ac }
+            java.lang.Integer r0 = org.telegram.messenger.Utilities.parseInt((java.lang.CharSequence) r0)     // Catch:{ all -> 0x01ac }
             r0.intValue()     // Catch:{ all -> 0x01ac }
             r0 = 45
             r7.patternBgGradientRotation = r0     // Catch:{ all -> 0x01ac }
@@ -11896,7 +12186,7 @@ public class Theme {
             java.lang.String r0 = r1.getQueryParameter(r0)     // Catch:{ Exception -> 0x01aa }
             boolean r1 = android.text.TextUtils.isEmpty(r0)     // Catch:{ Exception -> 0x01aa }
             if (r1 != 0) goto L_0x01c3
-            java.lang.Integer r0 = org.telegram.messenger.Utilities.parseInt(r0)     // Catch:{ Exception -> 0x01aa }
+            java.lang.Integer r0 = org.telegram.messenger.Utilities.parseInt((java.lang.CharSequence) r0)     // Catch:{ Exception -> 0x01aa }
             int r0 = r0.intValue()     // Catch:{ Exception -> 0x01aa }
             r7.patternBgGradientRotation = r0     // Catch:{ Exception -> 0x01aa }
             goto L_0x01c3
@@ -11927,7 +12217,7 @@ public class Theme {
             switchNightThemeDelay = r0     // Catch:{ Exception -> 0x01e8 }
             long r0 = android.os.SystemClock.elapsedRealtime()     // Catch:{ Exception -> 0x01e8 }
             lastDelayUpdateTime = r0     // Catch:{ Exception -> 0x01e8 }
-            org.telegram.messenger.MessagesController$$ExternalSyntheticLambda213 r0 = org.telegram.messenger.MessagesController$$ExternalSyntheticLambda213.INSTANCE     // Catch:{ Exception -> 0x01e8 }
+            org.telegram.messenger.MessagesController$$ExternalSyntheticLambda219 r0 = org.telegram.messenger.MessagesController$$ExternalSyntheticLambda219.INSTANCE     // Catch:{ Exception -> 0x01e8 }
             r1 = 2100(0x834, double:1.0375E-320)
             org.telegram.messenger.AndroidUtilities.runOnUIThread(r0, r1)     // Catch:{ Exception -> 0x01e8 }
         L_0x01e2:
@@ -12045,17 +12335,20 @@ public class Theme {
     }
 
     public static int changeColorAccent(float[] fArr, float[] fArr2, int i, boolean z) {
-        float[] tempHsv = getTempHsv(5);
-        Color.colorToHSV(i, tempHsv);
+        if (tmpHSV5 == null) {
+            tmpHSV5 = new float[3];
+        }
+        float[] fArr3 = tmpHSV5;
+        Color.colorToHSV(i, fArr3);
         boolean z2 = false;
-        if (Math.min(Math.abs(tempHsv[0] - fArr[0]), Math.abs((tempHsv[0] - fArr[0]) - 360.0f)) > 30.0f) {
+        if (Math.min(abs(fArr3[0] - fArr[0]), abs((fArr3[0] - fArr[0]) - 360.0f)) > 30.0f) {
             return i;
         }
-        float min = Math.min((tempHsv[1] * 1.5f) / fArr[1], 1.0f);
-        tempHsv[0] = (tempHsv[0] + fArr2[0]) - fArr[0];
-        tempHsv[1] = (tempHsv[1] * fArr2[1]) / fArr[1];
-        tempHsv[2] = tempHsv[2] * ((1.0f - min) + ((min * fArr2[2]) / fArr[2]));
-        int HSVToColor = Color.HSVToColor(Color.alpha(i), tempHsv);
+        float min = Math.min((fArr3[1] * 1.5f) / fArr[1], 1.0f);
+        fArr3[0] = (fArr3[0] + fArr2[0]) - fArr[0];
+        fArr3[1] = (fArr3[1] * fArr2[1]) / fArr[1];
+        fArr3[2] = fArr3[2] * ((1.0f - min) + ((min * fArr2[2]) / fArr[2]));
+        int HSVToColor = Color.HSVToColor(Color.alpha(i), fArr3);
         float computePerceivedBrightness = AndroidUtilities.computePerceivedBrightness(i);
         float computePerceivedBrightness2 = AndroidUtilities.computePerceivedBrightness(HSVToColor);
         if (!z ? computePerceivedBrightness < computePerceivedBrightness2 : computePerceivedBrightness > computePerceivedBrightness2) {
@@ -12220,7 +12513,7 @@ public class Theme {
             edit.putString("themes2", jSONArray.toString());
         }
         int i3 = 0;
-        while (i3 < 3) {
+        while (i3 < 4) {
             StringBuilder sb = new StringBuilder();
             sb.append("2remoteThemesHash");
             Object obj = "";
@@ -13004,7 +13297,12 @@ public class Theme {
             loadingRemoteThemes[i] = true;
             TLRPC$TL_account_getThemes tLRPC$TL_account_getThemes = new TLRPC$TL_account_getThemes();
             tLRPC$TL_account_getThemes.format = "android";
-            tLRPC$TL_account_getThemes.hash = remoteThemesHash[i];
+            if (!MediaDataController.getInstance(i).defaultEmojiThemes.isEmpty()) {
+                tLRPC$TL_account_getThemes.hash = remoteThemesHash[i];
+            }
+            if (BuildVars.LOGS_ENABLED) {
+                Log.i("theme", "loading remote themes, hash " + tLRPC$TL_account_getThemes.hash);
+            }
             ConnectionsManager.getInstance(i).sendRequest(tLRPC$TL_account_getThemes, new Theme$$ExternalSyntheticLambda9(i));
         }
     }
@@ -13021,7 +13319,7 @@ public class Theme {
             r3 = 0
             r2[r0] = r3
             boolean r2 = r1 instanceof org.telegram.tgnet.TLRPC$TL_account_themes
-            if (r2 == 0) goto L_0x0282
+            if (r2 == 0) goto L_0x0286
             org.telegram.tgnet.TLRPC$TL_account_themes r1 = (org.telegram.tgnet.TLRPC$TL_account_themes) r1
             long[] r2 = remoteThemesHash
             long r4 = r1.hash
@@ -13356,53 +13654,12 @@ public class Theme {
             if (r7 == 0) goto L_0x027f
             org.telegram.ui.ActionBar.Theme.PatternsLoader.createLoader(r14)
         L_0x027f:
-            generateEmojiPreviewThemes(r2, r0)
-        L_0x0282:
+            org.telegram.messenger.MediaDataController r1 = org.telegram.messenger.MediaDataController.getInstance(r18)
+            r1.generateEmojiPreviewThemes(r2, r0)
+        L_0x0286:
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ActionBar.Theme.lambda$loadRemoteThemes$5(int, org.telegram.tgnet.TLObject):void");
-    }
-
-    private static void generateEmojiPreviewThemes(ArrayList<TLRPC$TL_theme> arrayList, final int i) {
-        SharedPreferences.Editor edit = ApplicationLoader.applicationContext.getSharedPreferences("emojithemes_config", 0).edit();
-        edit.putInt("count", arrayList.size());
-        for (int i2 = 0; i2 < arrayList.size(); i2++) {
-            TLRPC$TL_theme tLRPC$TL_theme = arrayList.get(i2);
-            SerializedData serializedData = new SerializedData(tLRPC$TL_theme.getObjectSize());
-            tLRPC$TL_theme.serializeToStream(serializedData);
-            edit.putString("theme_" + i2, Utilities.bytesToHex(serializedData.toByteArray()));
-        }
-        edit.apply();
-        if (!arrayList.isEmpty()) {
-            final ArrayList arrayList2 = new ArrayList();
-            arrayList2.add(new ChatThemeBottomSheet.ChatThemeItem(EmojiThemes.createHomePreviewTheme()));
-            for (int i3 = 0; i3 < arrayList.size(); i3++) {
-                EmojiThemes createPreviewFullTheme = EmojiThemes.createPreviewFullTheme(arrayList.get(i3));
-                ChatThemeBottomSheet.ChatThemeItem chatThemeItem = new ChatThemeBottomSheet.ChatThemeItem(createPreviewFullTheme);
-                if (createPreviewFullTheme.items.size() >= 4) {
-                    arrayList2.add(chatThemeItem);
-                }
-            }
-            ChatThemeController.chatThemeQueue.postRunnable(new Runnable() {
-                public void run() {
-                    for (int i = 0; i < arrayList2.size(); i++) {
-                        ((ChatThemeBottomSheet.ChatThemeItem) arrayList2.get(i)).chatTheme.loadPreviewColors(i);
-                    }
-                    AndroidUtilities.runOnUIThread(new Theme$11$$ExternalSyntheticLambda0(arrayList2));
-                }
-
-                /* access modifiers changed from: private */
-                public static /* synthetic */ void lambda$run$0(ArrayList arrayList) {
-                    ArrayList<ChatThemeBottomSheet.ChatThemeItem> arrayList2 = Theme.defaultEmojiThemes;
-                    arrayList2.clear();
-                    arrayList2.addAll(arrayList);
-                    NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.emojiPreviewThemesChanged, new Object[0]);
-                }
-            });
-            return;
-        }
-        defaultEmojiThemes.clear();
-        NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.emojiPreviewThemesChanged, new Object[0]);
     }
 
     public static String getBaseThemeKey(TLRPC$ThemeSettings tLRPC$ThemeSettings) {
@@ -13946,26 +14203,26 @@ public class Theme {
             r33 = r25
             android.content.Context r0 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ all -> 0x0680 }
             android.content.res.Resources r0 = r0.getResources()     // Catch:{ all -> 0x0680 }
-            r4 = 2131166062(0x7var_e, float:1.7946359E38)
+            r4 = 2131166088(0x7var_, float:1.7946411E38)
             android.graphics.drawable.Drawable r0 = r0.getDrawable(r4)     // Catch:{ all -> 0x0680 }
             android.graphics.drawable.Drawable r4 = r0.mutate()     // Catch:{ all -> 0x0680 }
             r10 = r20
             setDrawableColor(r4, r10)     // Catch:{ all -> 0x0680 }
             android.content.Context r0 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ all -> 0x0680 }
             android.content.res.Resources r0 = r0.getResources()     // Catch:{ all -> 0x0680 }
-            r11 = 2131166064(0x7var_, float:1.7946363E38)
+            r11 = 2131166090(0x7var_a, float:1.7946416E38)
             android.graphics.drawable.Drawable r0 = r0.getDrawable(r11)     // Catch:{ all -> 0x0680 }
             android.graphics.drawable.Drawable r15 = r0.mutate()     // Catch:{ all -> 0x0680 }
             setDrawableColor(r15, r10)     // Catch:{ all -> 0x0680 }
             android.content.Context r0 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ all -> 0x0680 }
             android.content.res.Resources r0 = r0.getResources()     // Catch:{ all -> 0x0680 }
-            r10 = 2131166067(0x7var_, float:1.7946369E38)
+            r10 = 2131166092(0x7var_c, float:1.794642E38)
             android.graphics.drawable.Drawable r0 = r0.getDrawable(r10)     // Catch:{ all -> 0x0680 }
             android.graphics.drawable.Drawable r14 = r0.mutate()     // Catch:{ all -> 0x0680 }
             setDrawableColor(r14, r12)     // Catch:{ all -> 0x0680 }
             android.content.Context r0 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ all -> 0x0680 }
             android.content.res.Resources r0 = r0.getResources()     // Catch:{ all -> 0x0680 }
-            r10 = 2131166065(0x7var_, float:1.7946365E38)
+            r10 = 2131166091(0x7var_b, float:1.7946418E38)
             android.graphics.drawable.Drawable r0 = r0.getDrawable(r10)     // Catch:{ all -> 0x0680 }
             android.graphics.drawable.Drawable r13 = r0.mutate()     // Catch:{ all -> 0x0680 }
             setDrawableColor(r13, r12)     // Catch:{ all -> 0x0680 }
@@ -13974,7 +14231,7 @@ public class Theme {
             r0 = 0
         L_0x0249:
             if (r0 >= r12) goto L_0x0272
-            org.telegram.ui.ActionBar.Theme$12 r10 = new org.telegram.ui.ActionBar.Theme$12     // Catch:{ all -> 0x0680 }
+            org.telegram.ui.ActionBar.Theme$10 r10 = new org.telegram.ui.ActionBar.Theme$10     // Catch:{ all -> 0x0680 }
             r12 = 1
             r24 = r13
             r25 = r14
@@ -14558,154 +14815,155 @@ public class Theme {
         }
     }
 
-    /* JADX WARNING: Can't wrap try/catch for region: R(2:34|35) */
     /* JADX WARNING: Code restructure failed: missing block: B:35:?, code lost:
-        r4 = org.telegram.messenger.Utilities.parseInt(r13).intValue();
+        r4 = org.telegram.messenger.Utilities.parseInt((java.lang.CharSequence) r13).intValue();
      */
-    /* JADX WARNING: Missing exception handler attribute for start block: B:34:0x0081 */
-    /* JADX WARNING: Removed duplicated region for block: B:55:0x00c9 A[SYNTHETIC, Splitter:B:55:0x00c9] */
+    /* JADX WARNING: Exception block dominator not found, dom blocks: [] */
+    /* JADX WARNING: Missing exception handler attribute for start block: B:34:0x0083 */
+    /* JADX WARNING: Removed duplicated region for block: B:55:0x00cb A[SYNTHETIC, Splitter:B:55:0x00cb] */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public static java.util.HashMap<java.lang.String, java.lang.Integer> getThemeFileValues(java.io.File r16, java.lang.String r17, java.lang.String[] r18) {
         /*
             r0 = r18
             java.util.HashMap r1 = new java.util.HashMap
-            r1.<init>()
+            r2 = 500(0x1f4, float:7.0E-43)
+            r1.<init>(r2)
             r2 = 1024(0x400, float:1.435E-42)
             r3 = 0
-            byte[] r2 = new byte[r2]     // Catch:{ all -> 0x00c3 }
-            if (r17 == 0) goto L_0x0013
-            java.io.File r4 = getAssetFile(r17)     // Catch:{ all -> 0x00c3 }
-            goto L_0x0015
-        L_0x0013:
-            r4 = r16
+            byte[] r2 = new byte[r2]     // Catch:{ all -> 0x00c5 }
+            if (r17 == 0) goto L_0x0015
+            java.io.File r4 = getAssetFile(r17)     // Catch:{ all -> 0x00c5 }
+            goto L_0x0017
         L_0x0015:
-            java.io.FileInputStream r5 = new java.io.FileInputStream     // Catch:{ all -> 0x00c3 }
-            r5.<init>(r4)     // Catch:{ all -> 0x00c3 }
+            r4 = r16
+        L_0x0017:
+            java.io.FileInputStream r5 = new java.io.FileInputStream     // Catch:{ all -> 0x00c5 }
+            r5.<init>(r4)     // Catch:{ all -> 0x00c5 }
             r3 = -1
             r4 = 0
             r6 = 0
             r7 = -1
             r8 = 0
-        L_0x001f:
-            int r9 = r5.read(r2)     // Catch:{ all -> 0x00c0 }
-            if (r9 == r3) goto L_0x00b3
+        L_0x0021:
+            int r9 = r5.read(r2)     // Catch:{ all -> 0x00c2 }
+            if (r9 == r3) goto L_0x00b5
             r12 = r6
             r10 = 0
             r11 = 0
-        L_0x0028:
+        L_0x002a:
             r13 = 1
-            if (r10 >= r9) goto L_0x00a0
-            byte r14 = r2[r10]     // Catch:{ all -> 0x00c0 }
+            if (r10 >= r9) goto L_0x00a2
+            byte r14 = r2[r10]     // Catch:{ all -> 0x00c2 }
             r15 = 10
-            if (r14 != r15) goto L_0x009b
+            if (r14 != r15) goto L_0x009d
             int r14 = r10 - r11
             int r14 = r14 + r13
-            java.lang.String r15 = new java.lang.String     // Catch:{ all -> 0x00c0 }
+            java.lang.String r15 = new java.lang.String     // Catch:{ all -> 0x00c2 }
             int r13 = r14 + -1
-            r15.<init>(r2, r11, r13)     // Catch:{ all -> 0x00c0 }
+            r15.<init>(r2, r11, r13)     // Catch:{ all -> 0x00c2 }
             java.lang.String r13 = "WLS="
-            boolean r13 = r15.startsWith(r13)     // Catch:{ all -> 0x00c0 }
-            if (r13 == 0) goto L_0x0050
-            if (r0 == 0) goto L_0x0099
-            int r13 = r0.length     // Catch:{ all -> 0x00c0 }
-            if (r13 <= 0) goto L_0x0099
+            boolean r13 = r15.startsWith(r13)     // Catch:{ all -> 0x00c2 }
+            if (r13 == 0) goto L_0x0052
+            if (r0 == 0) goto L_0x009b
+            int r13 = r0.length     // Catch:{ all -> 0x00c2 }
+            if (r13 <= 0) goto L_0x009b
             r13 = 4
-            java.lang.String r13 = r15.substring(r13)     // Catch:{ all -> 0x00c0 }
-            r0[r4] = r13     // Catch:{ all -> 0x00c0 }
-            goto L_0x0099
-        L_0x0050:
+            java.lang.String r13 = r15.substring(r13)     // Catch:{ all -> 0x00c2 }
+            r0[r4] = r13     // Catch:{ all -> 0x00c2 }
+            goto L_0x009b
+        L_0x0052:
             java.lang.String r13 = "WPS"
-            boolean r13 = r15.startsWith(r13)     // Catch:{ all -> 0x00c0 }
-            if (r13 == 0) goto L_0x005c
+            boolean r13 = r15.startsWith(r13)     // Catch:{ all -> 0x00c2 }
+            if (r13 == 0) goto L_0x005e
             int r14 = r14 + r12
             r7 = r14
             r8 = 1
-            goto L_0x00a0
-        L_0x005c:
+            goto L_0x00a2
+        L_0x005e:
             r13 = 61
-            int r13 = r15.indexOf(r13)     // Catch:{ all -> 0x00c0 }
-            if (r13 == r3) goto L_0x0099
-            java.lang.String r3 = r15.substring(r4, r13)     // Catch:{ all -> 0x00c0 }
+            int r13 = r15.indexOf(r13)     // Catch:{ all -> 0x00c2 }
+            if (r13 == r3) goto L_0x009b
+            java.lang.String r3 = r15.substring(r4, r13)     // Catch:{ all -> 0x00c2 }
             int r13 = r13 + 1
-            java.lang.String r13 = r15.substring(r13)     // Catch:{ all -> 0x00c0 }
-            int r15 = r13.length()     // Catch:{ all -> 0x00c0 }
-            if (r15 <= 0) goto L_0x008a
-            char r15 = r13.charAt(r4)     // Catch:{ all -> 0x00c0 }
+            java.lang.String r13 = r15.substring(r13)     // Catch:{ all -> 0x00c2 }
+            int r15 = r13.length()     // Catch:{ all -> 0x00c2 }
+            if (r15 <= 0) goto L_0x008c
+            char r15 = r13.charAt(r4)     // Catch:{ all -> 0x00c2 }
             r4 = 35
-            if (r15 != r4) goto L_0x008a
-            int r4 = android.graphics.Color.parseColor(r13)     // Catch:{ Exception -> 0x0081 }
-            goto L_0x0092
-        L_0x0081:
-            java.lang.Integer r4 = org.telegram.messenger.Utilities.parseInt(r13)     // Catch:{ all -> 0x00c0 }
-            int r4 = r4.intValue()     // Catch:{ all -> 0x00c0 }
-            goto L_0x0092
-        L_0x008a:
-            java.lang.Integer r4 = org.telegram.messenger.Utilities.parseInt(r13)     // Catch:{ all -> 0x00c0 }
-            int r4 = r4.intValue()     // Catch:{ all -> 0x00c0 }
-        L_0x0092:
-            java.lang.Integer r4 = java.lang.Integer.valueOf(r4)     // Catch:{ all -> 0x00c0 }
-            r1.put(r3, r4)     // Catch:{ all -> 0x00c0 }
-        L_0x0099:
+            if (r15 != r4) goto L_0x008c
+            int r4 = android.graphics.Color.parseColor(r13)     // Catch:{ Exception -> 0x0083 }
+            goto L_0x0094
+        L_0x0083:
+            java.lang.Integer r4 = org.telegram.messenger.Utilities.parseInt((java.lang.CharSequence) r13)     // Catch:{ all -> 0x00c2 }
+            int r4 = r4.intValue()     // Catch:{ all -> 0x00c2 }
+            goto L_0x0094
+        L_0x008c:
+            java.lang.Integer r4 = org.telegram.messenger.Utilities.parseInt((java.lang.CharSequence) r13)     // Catch:{ all -> 0x00c2 }
+            int r4 = r4.intValue()     // Catch:{ all -> 0x00c2 }
+        L_0x0094:
+            java.lang.Integer r4 = java.lang.Integer.valueOf(r4)     // Catch:{ all -> 0x00c2 }
+            r1.put(r3, r4)     // Catch:{ all -> 0x00c2 }
+        L_0x009b:
             int r11 = r11 + r14
             int r12 = r12 + r14
-        L_0x009b:
+        L_0x009d:
             int r10 = r10 + 1
             r3 = -1
             r4 = 0
-            goto L_0x0028
-        L_0x00a0:
-            if (r6 != r12) goto L_0x00a3
-            goto L_0x00b3
-        L_0x00a3:
-            java.nio.channels.FileChannel r3 = r5.getChannel()     // Catch:{ all -> 0x00c0 }
-            long r9 = (long) r12     // Catch:{ all -> 0x00c0 }
-            r3.position(r9)     // Catch:{ all -> 0x00c0 }
-            if (r8 == 0) goto L_0x00ae
-            goto L_0x00b3
-        L_0x00ae:
+            goto L_0x002a
+        L_0x00a2:
+            if (r6 != r12) goto L_0x00a5
+            goto L_0x00b5
+        L_0x00a5:
+            java.nio.channels.FileChannel r3 = r5.getChannel()     // Catch:{ all -> 0x00c2 }
+            long r9 = (long) r12     // Catch:{ all -> 0x00c2 }
+            r3.position(r9)     // Catch:{ all -> 0x00c2 }
+            if (r8 == 0) goto L_0x00b0
+            goto L_0x00b5
+        L_0x00b0:
             r6 = r12
             r3 = -1
             r4 = 0
-            goto L_0x001f
-        L_0x00b3:
+            goto L_0x0021
+        L_0x00b5:
             java.lang.String r0 = "wallpaperFileOffset"
-            java.lang.Integer r2 = java.lang.Integer.valueOf(r7)     // Catch:{ all -> 0x00c0 }
-            r1.put(r0, r2)     // Catch:{ all -> 0x00c0 }
-            r5.close()     // Catch:{ Exception -> 0x00cd }
-            goto L_0x00d2
-        L_0x00c0:
+            java.lang.Integer r2 = java.lang.Integer.valueOf(r7)     // Catch:{ all -> 0x00c2 }
+            r1.put(r0, r2)     // Catch:{ all -> 0x00c2 }
+            r5.close()     // Catch:{ Exception -> 0x00cf }
+            goto L_0x00d4
+        L_0x00c2:
             r0 = move-exception
             r3 = r5
-            goto L_0x00c4
-        L_0x00c3:
+            goto L_0x00c6
+        L_0x00c5:
             r0 = move-exception
-        L_0x00c4:
-            org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)     // Catch:{ all -> 0x00d3 }
-            if (r3 == 0) goto L_0x00d2
-            r3.close()     // Catch:{ Exception -> 0x00cd }
-            goto L_0x00d2
-        L_0x00cd:
+        L_0x00c6:
+            org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)     // Catch:{ all -> 0x00d5 }
+            if (r3 == 0) goto L_0x00d4
+            r3.close()     // Catch:{ Exception -> 0x00cf }
+            goto L_0x00d4
+        L_0x00cf:
             r0 = move-exception
             r2 = r0
             org.telegram.messenger.FileLog.e((java.lang.Throwable) r2)
-        L_0x00d2:
+        L_0x00d4:
             return r1
-        L_0x00d3:
+        L_0x00d5:
             r0 = move-exception
             r1 = r0
-            if (r3 == 0) goto L_0x00e0
-            r3.close()     // Catch:{ Exception -> 0x00db }
-            goto L_0x00e0
-        L_0x00db:
+            if (r3 == 0) goto L_0x00e2
+            r3.close()     // Catch:{ Exception -> 0x00dd }
+            goto L_0x00e2
+        L_0x00dd:
             r0 = move-exception
             r2 = r0
             org.telegram.messenger.FileLog.e((java.lang.Throwable) r2)
-        L_0x00e0:
-            goto L_0x00e2
-        L_0x00e1:
-            throw r1
         L_0x00e2:
-            goto L_0x00e1
+            goto L_0x00e4
+        L_0x00e3:
+            throw r1
+        L_0x00e4:
+            goto L_0x00e3
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ActionBar.Theme.getThemeFileValues(java.io.File, java.lang.String, java.lang.String[]):java.util.HashMap");
     }
@@ -14835,6 +15093,7 @@ public class Theme {
                     dialogs_unarchiveDrawable.setLayerColor("Box2.**", getNonAnimatedColor("chats_archiveIcon"));
                     dialogs_unarchiveDrawable.setLayerColor("Box1.**", getNonAnimatedColor("chats_archiveIcon"));
                     dialogs_unarchiveDrawable.commitApplyLayerColors();
+                    PremiumGradient.getInstance().checkIconColors();
                     return;
                 }
             }
@@ -14901,8 +15160,6 @@ public class Theme {
             dialogs_clockDrawable = new MsgClockDrawable();
             dialogs_errorDrawable = resources.getDrawable(NUM);
             dialogs_reorderDrawable = resources.getDrawable(NUM).mutate();
-            dialogs_groupDrawable = resources.getDrawable(NUM);
-            dialogs_broadcastDrawable = resources.getDrawable(NUM);
             dialogs_muteDrawable = resources.getDrawable(NUM).mutate();
             dialogs_verifiedDrawable = resources.getDrawable(NUM).mutate();
             dialogs_scamDrawable = new ScamDrawable(11, 0);
@@ -14910,7 +15167,6 @@ public class Theme {
             dialogs_verifiedCheckDrawable = resources.getDrawable(NUM).mutate();
             dialogs_mentionDrawable = resources.getDrawable(NUM);
             dialogs_reactionsMentionDrawable = resources.getDrawable(NUM);
-            dialogs_botDrawable = resources.getDrawable(NUM);
             dialogs_pinnedDrawable = resources.getDrawable(NUM);
             moveUpDrawable = resources.getDrawable(NUM);
             RectF rectF = new RectF();
@@ -14979,9 +15235,6 @@ public class Theme {
             setDrawableColorByKey(dialogs_halfCheckDrawable, "chats_sentReadCheck");
             setDrawableColorByKey(dialogs_clockDrawable, "chats_sentClock");
             setDrawableColorByKey(dialogs_errorDrawable, "chats_sentErrorIcon");
-            setDrawableColorByKey(dialogs_groupDrawable, "chats_nameIcon");
-            setDrawableColorByKey(dialogs_broadcastDrawable, "chats_nameIcon");
-            setDrawableColorByKey(dialogs_botDrawable, "chats_nameIcon");
             setDrawableColorByKey(dialogs_pinnedDrawable, "chats_pinnedIcon");
             setDrawableColorByKey(dialogs_reorderDrawable, "chats_pinnedIcon");
             setDrawableColorByKey(dialogs_muteDrawable, "chats_muteIcon");
@@ -15147,1312 +15400,1203 @@ public class Theme {
         }
     }
 
-    /* JADX WARNING: Can't wrap try/catch for region: R(7:8|9|(4:11|(1:13)(1:14)|15|16)|17|18|19|20) */
-    /* JADX WARNING: Missing exception handler attribute for start block: B:19:0x0a74 */
+    /* JADX WARNING: Can't wrap try/catch for region: R(12:4|(1:6)|27|7|8|9|(4:11|(1:13)(1:14)|15|16)|17|18|19|20|21) */
+    /* JADX WARNING: Missing exception handler attribute for start block: B:19:0x0941 */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public static void createChatResources(android.content.Context r17, boolean r18) {
         /*
             r0 = r18
             createCommonChatResources()
-            r1 = 1096810496(0x41600000, float:14.0)
-            r2 = 2
-            if (r0 != 0) goto L_0x0c0b
-            org.telegram.ui.ActionBar.Theme$MessageDrawable r3 = chat_msgInDrawable
-            if (r3 != 0) goto L_0x0c0b
-            android.content.res.Resources r3 = r17.getResources()
-            r4 = 2131166221(0x7var_d, float:1.7946681E38)
-            android.graphics.drawable.Drawable r4 = r3.getDrawable(r4)
-            chat_msgNoSoundDrawable = r4
-            org.telegram.ui.ActionBar.Theme$MessageDrawable r4 = new org.telegram.ui.ActionBar.Theme$MessageDrawable
+            r1 = 1077936128(0x40400000, float:3.0)
+            r2 = 1096810496(0x41600000, float:14.0)
+            r3 = 2
+            if (r0 != 0) goto L_0x0ad8
+            org.telegram.ui.ActionBar.Theme$MessageDrawable r4 = chat_msgInDrawable
+            if (r4 != 0) goto L_0x0ad8
+            android.content.res.Resources r4 = r17.getResources()
+            r5 = 2131166196(0x7var_f4, float:1.794663E38)
+            android.graphics.drawable.Drawable r5 = r4.getDrawable(r5)
+            chat_msgNoSoundDrawable = r5
+            org.telegram.ui.ActionBar.Theme$MessageDrawable r5 = new org.telegram.ui.ActionBar.Theme$MessageDrawable
+            r6 = 0
+            r5.<init>(r6, r6, r6)
+            chat_msgInDrawable = r5
+            org.telegram.ui.ActionBar.Theme$MessageDrawable r5 = new org.telegram.ui.ActionBar.Theme$MessageDrawable
+            r7 = 1
+            r5.<init>(r6, r6, r7)
+            chat_msgInSelectedDrawable = r5
+            org.telegram.ui.ActionBar.Theme$MessageDrawable r5 = new org.telegram.ui.ActionBar.Theme$MessageDrawable
+            r5.<init>(r6, r7, r6)
+            chat_msgOutDrawable = r5
+            org.telegram.ui.ActionBar.Theme$MessageDrawable r5 = new org.telegram.ui.ActionBar.Theme$MessageDrawable
+            r5.<init>(r6, r7, r7)
+            chat_msgOutSelectedDrawable = r5
+            org.telegram.ui.ActionBar.Theme$MessageDrawable r5 = new org.telegram.ui.ActionBar.Theme$MessageDrawable
+            r5.<init>(r7, r6, r6)
+            chat_msgInMediaDrawable = r5
+            org.telegram.ui.ActionBar.Theme$MessageDrawable r5 = new org.telegram.ui.ActionBar.Theme$MessageDrawable
+            r5.<init>(r7, r6, r7)
+            chat_msgInMediaSelectedDrawable = r5
+            org.telegram.ui.ActionBar.Theme$MessageDrawable r5 = new org.telegram.ui.ActionBar.Theme$MessageDrawable
+            r5.<init>(r7, r7, r6)
+            chat_msgOutMediaDrawable = r5
+            org.telegram.ui.ActionBar.Theme$MessageDrawable r5 = new org.telegram.ui.ActionBar.Theme$MessageDrawable
+            r5.<init>(r7, r7, r7)
+            chat_msgOutMediaSelectedDrawable = r5
+            org.telegram.ui.Components.PathAnimator r5 = new org.telegram.ui.Components.PathAnimator
+            r8 = 1050018841(0x3e960419, float:0.293)
+            r9 = -1043333120(0xffffffffc1d00000, float:-26.0)
+            r10 = -1042284544(0xffffffffc1e00000, float:-28.0)
+            r11 = 1065353216(0x3var_, float:1.0)
+            r5.<init>(r8, r9, r10, r11)
+            playPauseAnimator = r5
+            r8 = 1126563840(0x43260000, float:166.0)
+            java.lang.String r9 = "M 34.141 16.042 C 37.384 17.921 40.886 20.001 44.211 21.965 C 46.139 23.104 49.285 24.729 49.586 25.917 C 50.289 28.687 48.484 30 46.274 30 L 6 30.021 C 3.79 30.021 2.075 30.023 2 26.021 L 2.009 3.417 C 2.009 0.417 5.326 -0.58 7.068 0.417 C 10.545 2.406 25.024 10.761 34.141 16.042 Z"
+            r5.addSvgKeyFrame(r9, r8)
+            org.telegram.ui.Components.PathAnimator r5 = playPauseAnimator
+            r8 = 1128792064(0x43480000, float:200.0)
+            java.lang.String r9 = "M 37.843 17.769 C 41.143 19.508 44.131 21.164 47.429 23.117 C 48.542 23.775 49.623 24.561 49.761 25.993 C 50.074 28.708 48.557 30 46.347 30 L 6 30.012 C 3.79 30.012 2 28.222 2 26.012 L 2.009 4.609 C 2.009 1.626 5.276 0.664 7.074 1.541 C 10.608 3.309 28.488 12.842 37.843 17.769 Z"
+            r5.addSvgKeyFrame(r9, r8)
+            org.telegram.ui.Components.PathAnimator r5 = playPauseAnimator
+            r8 = 1129906176(0x43590000, float:217.0)
+            java.lang.String r9 = "M 40.644 18.756 C 43.986 20.389 49.867 23.108 49.884 25.534 C 49.897 27.154 49.88 24.441 49.894 26.059 C 49.911 28.733 48.6 30 46.39 30 L 6 30.013 C 3.79 30.013 2 28.223 2 26.013 L 2.008 5.52 C 2.008 2.55 5.237 1.614 7.079 2.401 C 10.656 4 31.106 14.097 40.644 18.756 Z"
+            r5.addSvgKeyFrame(r9, r8)
+            org.telegram.ui.Components.PathAnimator r5 = playPauseAnimator
+            r8 = 1131020288(0x436a0000, float:234.0)
+            java.lang.String r9 = "M 43.782 19.218 C 47.117 20.675 50.075 21.538 50.041 24.796 C 50.022 26.606 50.038 24.309 50.039 26.104 C 50.038 28.736 48.663 30 46.453 30 L 6 29.986 C 3.79 29.986 2 28.196 2 25.986 L 2.008 6.491 C 2.008 3.535 5.196 2.627 7.085 3.316 C 10.708 4.731 33.992 14.944 43.782 19.218 Z"
+            r5.addSvgKeyFrame(r9, r8)
+            org.telegram.ui.Components.PathAnimator r5 = playPauseAnimator
+            r8 = 1132822528(0x43858000, float:267.0)
+            java.lang.String r9 = "M 47.421 16.941 C 50.544 18.191 50.783 19.91 50.769 22.706 C 50.761 24.484 50.76 23.953 50.79 26.073 C 50.814 27.835 49.334 30 47.124 30 L 5 30.01 C 2.79 30.01 1 28.22 1 26.01 L 1.001 10.823 C 1.001 8.218 3.532 6.895 5.572 7.26 C 7.493 8.01 47.421 16.941 47.421 16.941 Z"
+            r5.addSvgKeyFrame(r9, r8)
+            org.telegram.ui.Components.PathAnimator r5 = playPauseAnimator
+            r8 = 1133903872(0x43960000, float:300.0)
+            java.lang.String r9 = "M 47.641 17.125 C 50.641 18.207 51.09 19.935 51.078 22.653 C 51.07 24.191 51.062 21.23 51.088 23.063 C 51.109 24.886 49.587 27 47.377 27 L 5 27.009 C 2.79 27.009 1 25.219 1 23.009 L 0.983 11.459 C 0.983 8.908 3.414 7.522 5.476 7.838 C 7.138 8.486 47.641 17.125 47.641 17.125 Z"
+            r5.addSvgKeyFrame(r9, r8)
+            org.telegram.ui.Components.PathAnimator r5 = playPauseAnimator
+            r8 = 1136623616(0x43bvar_, float:383.0)
+            java.lang.String r9 = "M 48 7 C 50.21 7 52 8.79 52 11 C 52 19 52 19 52 19 C 52 21.21 50.21 23 48 23 L 4 23 C 1.79 23 0 21.21 0 19 L 0 11 C 0 8.79 1.79 7 4 7 C 48 7 48 7 48 7 Z"
+            r5.addSvgKeyFrame(r9, r8)
+            r5 = 2131165680(0x7var_f0, float:1.7945584E38)
+            android.graphics.drawable.Drawable r8 = r4.getDrawable(r5)
+            android.graphics.drawable.Drawable r8 = r8.mutate()
+            chat_msgOutCheckDrawable = r8
+            android.graphics.drawable.Drawable r8 = r4.getDrawable(r5)
+            android.graphics.drawable.Drawable r8 = r8.mutate()
+            chat_msgOutCheckSelectedDrawable = r8
+            android.graphics.drawable.Drawable r8 = r4.getDrawable(r5)
+            android.graphics.drawable.Drawable r8 = r8.mutate()
+            chat_msgOutCheckReadDrawable = r8
+            android.graphics.drawable.Drawable r8 = r4.getDrawable(r5)
+            android.graphics.drawable.Drawable r8 = r8.mutate()
+            chat_msgOutCheckReadSelectedDrawable = r8
+            android.graphics.drawable.Drawable r8 = r4.getDrawable(r5)
+            android.graphics.drawable.Drawable r8 = r8.mutate()
+            chat_msgMediaCheckDrawable = r8
+            android.graphics.drawable.Drawable r5 = r4.getDrawable(r5)
+            android.graphics.drawable.Drawable r5 = r5.mutate()
+            chat_msgStickerCheckDrawable = r5
+            r5 = 2131165754(0x7var_a, float:1.7945734E38)
+            android.graphics.drawable.Drawable r5 = r4.getDrawable(r5)
+            android.graphics.drawable.Drawable r5 = r5.mutate()
+            chat_msgOutHalfCheckDrawable = r5
+            r5 = 2131165754(0x7var_a, float:1.7945734E38)
+            android.graphics.drawable.Drawable r5 = r4.getDrawable(r5)
+            android.graphics.drawable.Drawable r5 = r5.mutate()
+            chat_msgOutHalfCheckSelectedDrawable = r5
+            r5 = 2131165755(0x7var_b, float:1.7945736E38)
+            android.graphics.drawable.Drawable r5 = r4.getDrawable(r5)
+            android.graphics.drawable.Drawable r5 = r5.mutate()
+            chat_msgMediaHalfCheckDrawable = r5
+            r5 = 2131165755(0x7var_b, float:1.7945736E38)
+            android.graphics.drawable.Drawable r5 = r4.getDrawable(r5)
+            android.graphics.drawable.Drawable r5 = r5.mutate()
+            chat_msgStickerHalfCheckDrawable = r5
+            org.telegram.ui.Components.MsgClockDrawable r5 = new org.telegram.ui.Components.MsgClockDrawable
+            r5.<init>()
+            chat_msgClockDrawable = r5
+            r5 = 2131165975(0x7var_, float:1.7946182E38)
+            android.graphics.drawable.Drawable r8 = r4.getDrawable(r5)
+            android.graphics.drawable.Drawable r8 = r8.mutate()
+            chat_msgInViewsDrawable = r8
+            android.graphics.drawable.Drawable r8 = r4.getDrawable(r5)
+            android.graphics.drawable.Drawable r8 = r8.mutate()
+            chat_msgInViewsSelectedDrawable = r8
+            android.graphics.drawable.Drawable r8 = r4.getDrawable(r5)
+            android.graphics.drawable.Drawable r8 = r8.mutate()
+            chat_msgOutViewsDrawable = r8
+            android.graphics.drawable.Drawable r8 = r4.getDrawable(r5)
+            android.graphics.drawable.Drawable r8 = r8.mutate()
+            chat_msgOutViewsSelectedDrawable = r8
+            r8 = 2131165896(0x7var_c8, float:1.7946022E38)
+            android.graphics.drawable.Drawable r9 = r4.getDrawable(r8)
+            android.graphics.drawable.Drawable r9 = r9.mutate()
+            chat_msgInRepliesDrawable = r9
+            android.graphics.drawable.Drawable r9 = r4.getDrawable(r8)
+            android.graphics.drawable.Drawable r9 = r9.mutate()
+            chat_msgInRepliesSelectedDrawable = r9
+            android.graphics.drawable.Drawable r9 = r4.getDrawable(r8)
+            android.graphics.drawable.Drawable r9 = r9.mutate()
+            chat_msgOutRepliesDrawable = r9
+            android.graphics.drawable.Drawable r9 = r4.getDrawable(r8)
+            android.graphics.drawable.Drawable r9 = r9.mutate()
+            chat_msgOutRepliesSelectedDrawable = r9
+            r9 = 2131165861(0x7var_a5, float:1.7945951E38)
+            android.graphics.drawable.Drawable r10 = r4.getDrawable(r9)
+            android.graphics.drawable.Drawable r10 = r10.mutate()
+            chat_msgInPinnedDrawable = r10
+            android.graphics.drawable.Drawable r10 = r4.getDrawable(r9)
+            android.graphics.drawable.Drawable r10 = r10.mutate()
+            chat_msgInPinnedSelectedDrawable = r10
+            android.graphics.drawable.Drawable r10 = r4.getDrawable(r9)
+            android.graphics.drawable.Drawable r10 = r10.mutate()
+            chat_msgOutPinnedDrawable = r10
+            android.graphics.drawable.Drawable r10 = r4.getDrawable(r9)
+            android.graphics.drawable.Drawable r10 = r10.mutate()
+            chat_msgOutPinnedSelectedDrawable = r10
+            android.graphics.drawable.Drawable r10 = r4.getDrawable(r9)
+            android.graphics.drawable.Drawable r10 = r10.mutate()
+            chat_msgMediaPinnedDrawable = r10
+            android.graphics.drawable.Drawable r9 = r4.getDrawable(r9)
+            android.graphics.drawable.Drawable r9 = r9.mutate()
+            chat_msgStickerPinnedDrawable = r9
+            android.graphics.drawable.Drawable r9 = r4.getDrawable(r5)
+            android.graphics.drawable.Drawable r9 = r9.mutate()
+            chat_msgMediaViewsDrawable = r9
+            android.graphics.drawable.Drawable r9 = r4.getDrawable(r8)
+            android.graphics.drawable.Drawable r9 = r9.mutate()
+            chat_msgMediaRepliesDrawable = r9
+            android.graphics.drawable.Drawable r5 = r4.getDrawable(r5)
+            android.graphics.drawable.Drawable r5 = r5.mutate()
+            chat_msgStickerViewsDrawable = r5
+            android.graphics.drawable.Drawable r5 = r4.getDrawable(r8)
+            android.graphics.drawable.Drawable r5 = r5.mutate()
+            chat_msgStickerRepliesDrawable = r5
+            r5 = 2131165624(0x7var_b8, float:1.794547E38)
+            android.graphics.drawable.Drawable r5 = r4.getDrawable(r5)
+            android.graphics.drawable.Drawable r5 = r5.mutate()
+            chat_msgInMenuDrawable = r5
+            r5 = 2131165624(0x7var_b8, float:1.794547E38)
+            android.graphics.drawable.Drawable r5 = r4.getDrawable(r5)
+            android.graphics.drawable.Drawable r5 = r5.mutate()
+            chat_msgInMenuSelectedDrawable = r5
+            r5 = 2131165624(0x7var_b8, float:1.794547E38)
+            android.graphics.drawable.Drawable r5 = r4.getDrawable(r5)
+            android.graphics.drawable.Drawable r5 = r5.mutate()
+            chat_msgOutMenuDrawable = r5
+            r5 = 2131165624(0x7var_b8, float:1.794547E38)
+            android.graphics.drawable.Drawable r5 = r4.getDrawable(r5)
+            android.graphics.drawable.Drawable r5 = r5.mutate()
+            chat_msgOutMenuSelectedDrawable = r5
+            r5 = 2131166192(0x7var_f0, float:1.7946622E38)
+            android.graphics.drawable.Drawable r5 = r4.getDrawable(r5)
+            chat_msgMediaMenuDrawable = r5
+            r5 = 2131165765(0x7var_, float:1.7945756E38)
+            android.graphics.drawable.Drawable r5 = r4.getDrawable(r5)
+            android.graphics.drawable.Drawable r5 = r5.mutate()
+            chat_msgInInstantDrawable = r5
+            r5 = 2131165765(0x7var_, float:1.7945756E38)
+            android.graphics.drawable.Drawable r5 = r4.getDrawable(r5)
+            android.graphics.drawable.Drawable r5 = r5.mutate()
+            chat_msgOutInstantDrawable = r5
+            r5 = 2131165987(0x7var_, float:1.7946207E38)
+            android.graphics.drawable.Drawable r5 = r4.getDrawable(r5)
+            chat_msgErrorDrawable = r5
+            r5 = 2131165575(0x7var_, float:1.794537E38)
+            android.graphics.drawable.Drawable r5 = r4.getDrawable(r5)
+            android.graphics.drawable.Drawable r5 = r5.mutate()
+            chat_muteIconDrawable = r5
+            r5 = 2131165481(0x7var_, float:1.794518E38)
+            android.graphics.drawable.Drawable r5 = r4.getDrawable(r5)
+            chat_lockIconDrawable = r5
+            android.graphics.drawable.Drawable[] r5 = chat_msgInCallDrawable
+            r8 = 2131165330(0x7var_, float:1.7944874E38)
+            android.graphics.drawable.Drawable r8 = r4.getDrawable(r8)
+            android.graphics.drawable.Drawable r8 = r8.mutate()
+            r5[r6] = r8
+            android.graphics.drawable.Drawable[] r5 = chat_msgInCallSelectedDrawable
+            r8 = 2131165330(0x7var_, float:1.7944874E38)
+            android.graphics.drawable.Drawable r8 = r4.getDrawable(r8)
+            android.graphics.drawable.Drawable r8 = r8.mutate()
+            r5[r6] = r8
+            android.graphics.drawable.Drawable[] r5 = chat_msgOutCallDrawable
+            r8 = 2131165330(0x7var_, float:1.7944874E38)
+            android.graphics.drawable.Drawable r8 = r4.getDrawable(r8)
+            android.graphics.drawable.Drawable r8 = r8.mutate()
+            r5[r6] = r8
+            android.graphics.drawable.Drawable[] r5 = chat_msgOutCallSelectedDrawable
+            r8 = 2131165330(0x7var_, float:1.7944874E38)
+            android.graphics.drawable.Drawable r8 = r4.getDrawable(r8)
+            android.graphics.drawable.Drawable r8 = r8.mutate()
+            r5[r6] = r8
+            android.graphics.drawable.Drawable[] r5 = chat_msgInCallDrawable
+            r8 = 2131165329(0x7var_, float:1.7944872E38)
+            android.graphics.drawable.Drawable r8 = r4.getDrawable(r8)
+            android.graphics.drawable.Drawable r8 = r8.mutate()
+            r5[r7] = r8
+            android.graphics.drawable.Drawable[] r5 = chat_msgInCallSelectedDrawable
+            r8 = 2131165329(0x7var_, float:1.7944872E38)
+            android.graphics.drawable.Drawable r8 = r4.getDrawable(r8)
+            android.graphics.drawable.Drawable r8 = r8.mutate()
+            r5[r7] = r8
+            android.graphics.drawable.Drawable[] r5 = chat_msgOutCallDrawable
+            r8 = 2131165329(0x7var_, float:1.7944872E38)
+            android.graphics.drawable.Drawable r8 = r4.getDrawable(r8)
+            android.graphics.drawable.Drawable r8 = r8.mutate()
+            r5[r7] = r8
+            android.graphics.drawable.Drawable[] r5 = chat_msgOutCallSelectedDrawable
+            r8 = 2131165329(0x7var_, float:1.7944872E38)
+            android.graphics.drawable.Drawable r8 = r4.getDrawable(r8)
+            android.graphics.drawable.Drawable r8 = r8.mutate()
+            r5[r7] = r8
+            r5 = 2131165328(0x7var_, float:1.794487E38)
+            android.graphics.drawable.Drawable r5 = r4.getDrawable(r5)
+            android.graphics.drawable.Drawable r5 = r5.mutate()
+            chat_msgCallUpGreenDrawable = r5
+            r5 = 2131165327(0x7var_f, float:1.7944868E38)
+            android.graphics.drawable.Drawable r5 = r4.getDrawable(r5)
+            android.graphics.drawable.Drawable r5 = r5.mutate()
+            chat_msgCallDownRedDrawable = r5
+            r5 = 2131165327(0x7var_f, float:1.7944868E38)
+            android.graphics.drawable.Drawable r5 = r4.getDrawable(r5)
+            android.graphics.drawable.Drawable r5 = r5.mutate()
+            chat_msgCallDownGreenDrawable = r5
             r5 = 0
-            r4.<init>(r5, r5, r5)
-            chat_msgInDrawable = r4
-            org.telegram.ui.ActionBar.Theme$MessageDrawable r4 = new org.telegram.ui.ActionBar.Theme$MessageDrawable
-            r6 = 1
-            r4.<init>(r5, r5, r6)
-            chat_msgInSelectedDrawable = r4
-            org.telegram.ui.ActionBar.Theme$MessageDrawable r4 = new org.telegram.ui.ActionBar.Theme$MessageDrawable
-            r4.<init>(r5, r6, r5)
-            chat_msgOutDrawable = r4
-            org.telegram.ui.ActionBar.Theme$MessageDrawable r4 = new org.telegram.ui.ActionBar.Theme$MessageDrawable
-            r4.<init>(r5, r6, r6)
-            chat_msgOutSelectedDrawable = r4
-            org.telegram.ui.ActionBar.Theme$MessageDrawable r4 = new org.telegram.ui.ActionBar.Theme$MessageDrawable
-            r4.<init>(r6, r5, r5)
-            chat_msgInMediaDrawable = r4
-            org.telegram.ui.ActionBar.Theme$MessageDrawable r4 = new org.telegram.ui.ActionBar.Theme$MessageDrawable
-            r4.<init>(r6, r5, r6)
-            chat_msgInMediaSelectedDrawable = r4
-            org.telegram.ui.ActionBar.Theme$MessageDrawable r4 = new org.telegram.ui.ActionBar.Theme$MessageDrawable
-            r4.<init>(r6, r6, r5)
-            chat_msgOutMediaDrawable = r4
-            org.telegram.ui.ActionBar.Theme$MessageDrawable r4 = new org.telegram.ui.ActionBar.Theme$MessageDrawable
-            r4.<init>(r6, r6, r6)
-            chat_msgOutMediaSelectedDrawable = r4
-            org.telegram.ui.Components.PathAnimator r4 = new org.telegram.ui.Components.PathAnimator
-            r7 = 1050018841(0x3e960419, float:0.293)
-            r8 = -1043333120(0xffffffffc1d00000, float:-26.0)
-            r9 = -1042284544(0xffffffffc1e00000, float:-28.0)
-            r10 = 1065353216(0x3var_, float:1.0)
-            r4.<init>(r7, r8, r9, r10)
-            playPauseAnimator = r4
-            r7 = 1126563840(0x43260000, float:166.0)
-            java.lang.String r8 = "M 34.141 16.042 C 37.384 17.921 40.886 20.001 44.211 21.965 C 46.139 23.104 49.285 24.729 49.586 25.917 C 50.289 28.687 48.484 30 46.274 30 L 6 30.021 C 3.79 30.021 2.075 30.023 2 26.021 L 2.009 3.417 C 2.009 0.417 5.326 -0.58 7.068 0.417 C 10.545 2.406 25.024 10.761 34.141 16.042 Z"
-            r4.addSvgKeyFrame(r8, r7)
-            org.telegram.ui.Components.PathAnimator r4 = playPauseAnimator
-            r7 = 1128792064(0x43480000, float:200.0)
-            java.lang.String r8 = "M 37.843 17.769 C 41.143 19.508 44.131 21.164 47.429 23.117 C 48.542 23.775 49.623 24.561 49.761 25.993 C 50.074 28.708 48.557 30 46.347 30 L 6 30.012 C 3.79 30.012 2 28.222 2 26.012 L 2.009 4.609 C 2.009 1.626 5.276 0.664 7.074 1.541 C 10.608 3.309 28.488 12.842 37.843 17.769 Z"
-            r4.addSvgKeyFrame(r8, r7)
-            org.telegram.ui.Components.PathAnimator r4 = playPauseAnimator
-            r7 = 1129906176(0x43590000, float:217.0)
-            java.lang.String r8 = "M 40.644 18.756 C 43.986 20.389 49.867 23.108 49.884 25.534 C 49.897 27.154 49.88 24.441 49.894 26.059 C 49.911 28.733 48.6 30 46.39 30 L 6 30.013 C 3.79 30.013 2 28.223 2 26.013 L 2.008 5.52 C 2.008 2.55 5.237 1.614 7.079 2.401 C 10.656 4 31.106 14.097 40.644 18.756 Z"
-            r4.addSvgKeyFrame(r8, r7)
-            org.telegram.ui.Components.PathAnimator r4 = playPauseAnimator
-            r7 = 1131020288(0x436a0000, float:234.0)
-            java.lang.String r8 = "M 43.782 19.218 C 47.117 20.675 50.075 21.538 50.041 24.796 C 50.022 26.606 50.038 24.309 50.039 26.104 C 50.038 28.736 48.663 30 46.453 30 L 6 29.986 C 3.79 29.986 2 28.196 2 25.986 L 2.008 6.491 C 2.008 3.535 5.196 2.627 7.085 3.316 C 10.708 4.731 33.992 14.944 43.782 19.218 Z"
-            r4.addSvgKeyFrame(r8, r7)
-            org.telegram.ui.Components.PathAnimator r4 = playPauseAnimator
-            r7 = 1132822528(0x43858000, float:267.0)
-            java.lang.String r8 = "M 47.421 16.941 C 50.544 18.191 50.783 19.91 50.769 22.706 C 50.761 24.484 50.76 23.953 50.79 26.073 C 50.814 27.835 49.334 30 47.124 30 L 5 30.01 C 2.79 30.01 1 28.22 1 26.01 L 1.001 10.823 C 1.001 8.218 3.532 6.895 5.572 7.26 C 7.493 8.01 47.421 16.941 47.421 16.941 Z"
-            r4.addSvgKeyFrame(r8, r7)
-            org.telegram.ui.Components.PathAnimator r4 = playPauseAnimator
-            r7 = 1133903872(0x43960000, float:300.0)
-            java.lang.String r8 = "M 47.641 17.125 C 50.641 18.207 51.09 19.935 51.078 22.653 C 51.07 24.191 51.062 21.23 51.088 23.063 C 51.109 24.886 49.587 27 47.377 27 L 5 27.009 C 2.79 27.009 1 25.219 1 23.009 L 0.983 11.459 C 0.983 8.908 3.414 7.522 5.476 7.838 C 7.138 8.486 47.641 17.125 47.641 17.125 Z"
-            r4.addSvgKeyFrame(r8, r7)
-            org.telegram.ui.Components.PathAnimator r4 = playPauseAnimator
-            r7 = 1136623616(0x43bvar_, float:383.0)
-            java.lang.String r8 = "M 48 7 C 50.21 7 52 8.79 52 11 C 52 19 52 19 52 19 C 52 21.21 50.21 23 48 23 L 4 23 C 1.79 23 0 21.21 0 19 L 0 11 C 0 8.79 1.79 7 4 7 C 48 7 48 7 48 7 Z"
-            r4.addSvgKeyFrame(r8, r7)
-            r4 = 2131165774(0x7var_e, float:1.7945775E38)
-            android.graphics.drawable.Drawable r4 = r3.getDrawable(r4)
-            android.graphics.drawable.Drawable r4 = r4.mutate()
-            chat_msgOutCheckDrawable = r4
-            r4 = 2131165774(0x7var_e, float:1.7945775E38)
-            android.graphics.drawable.Drawable r4 = r3.getDrawable(r4)
-            android.graphics.drawable.Drawable r4 = r4.mutate()
-            chat_msgOutCheckSelectedDrawable = r4
-            r4 = 2131165774(0x7var_e, float:1.7945775E38)
-            android.graphics.drawable.Drawable r4 = r3.getDrawable(r4)
-            android.graphics.drawable.Drawable r4 = r4.mutate()
-            chat_msgOutCheckReadDrawable = r4
-            r4 = 2131165774(0x7var_e, float:1.7945775E38)
-            android.graphics.drawable.Drawable r4 = r3.getDrawable(r4)
-            android.graphics.drawable.Drawable r4 = r4.mutate()
-            chat_msgOutCheckReadSelectedDrawable = r4
-            r4 = 2131165775(0x7var_f, float:1.7945777E38)
-            android.graphics.drawable.Drawable r4 = r3.getDrawable(r4)
-            android.graphics.drawable.Drawable r4 = r4.mutate()
-            chat_msgMediaCheckDrawable = r4
-            r4 = 2131165775(0x7var_f, float:1.7945777E38)
-            android.graphics.drawable.Drawable r4 = r3.getDrawable(r4)
-            android.graphics.drawable.Drawable r4 = r4.mutate()
-            chat_msgStickerCheckDrawable = r4
-            r4 = 2131165804(0x7var_c, float:1.7945835E38)
-            android.graphics.drawable.Drawable r4 = r3.getDrawable(r4)
-            android.graphics.drawable.Drawable r4 = r4.mutate()
-            chat_msgOutHalfCheckDrawable = r4
-            r4 = 2131165804(0x7var_c, float:1.7945835E38)
-            android.graphics.drawable.Drawable r4 = r3.getDrawable(r4)
-            android.graphics.drawable.Drawable r4 = r4.mutate()
-            chat_msgOutHalfCheckSelectedDrawable = r4
-            r4 = 2131165805(0x7var_d, float:1.7945837E38)
-            android.graphics.drawable.Drawable r4 = r3.getDrawable(r4)
-            android.graphics.drawable.Drawable r4 = r4.mutate()
-            chat_msgMediaHalfCheckDrawable = r4
-            r4 = 2131165805(0x7var_d, float:1.7945837E38)
-            android.graphics.drawable.Drawable r4 = r3.getDrawable(r4)
-            android.graphics.drawable.Drawable r4 = r4.mutate()
-            chat_msgStickerHalfCheckDrawable = r4
-            org.telegram.ui.Components.MsgClockDrawable r4 = new org.telegram.ui.Components.MsgClockDrawable
-            r4.<init>()
-            chat_msgClockDrawable = r4
-            r4 = 2131165933(0x7var_ed, float:1.7946097E38)
-            android.graphics.drawable.Drawable r7 = r3.getDrawable(r4)
-            android.graphics.drawable.Drawable r7 = r7.mutate()
-            chat_msgInViewsDrawable = r7
-            android.graphics.drawable.Drawable r7 = r3.getDrawable(r4)
-            android.graphics.drawable.Drawable r7 = r7.mutate()
-            chat_msgInViewsSelectedDrawable = r7
-            android.graphics.drawable.Drawable r7 = r3.getDrawable(r4)
-            android.graphics.drawable.Drawable r7 = r7.mutate()
-            chat_msgOutViewsDrawable = r7
-            android.graphics.drawable.Drawable r7 = r3.getDrawable(r4)
-            android.graphics.drawable.Drawable r7 = r7.mutate()
-            chat_msgOutViewsSelectedDrawable = r7
-            r7 = 2131165871(0x7var_af, float:1.7945971E38)
-            android.graphics.drawable.Drawable r8 = r3.getDrawable(r7)
-            android.graphics.drawable.Drawable r8 = r8.mutate()
-            chat_msgInRepliesDrawable = r8
-            android.graphics.drawable.Drawable r8 = r3.getDrawable(r7)
-            android.graphics.drawable.Drawable r8 = r8.mutate()
-            chat_msgInRepliesSelectedDrawable = r8
-            android.graphics.drawable.Drawable r8 = r3.getDrawable(r7)
-            android.graphics.drawable.Drawable r8 = r8.mutate()
-            chat_msgOutRepliesDrawable = r8
-            android.graphics.drawable.Drawable r8 = r3.getDrawable(r7)
-            android.graphics.drawable.Drawable r8 = r8.mutate()
-            chat_msgOutRepliesSelectedDrawable = r8
-            r8 = 2131165859(0x7var_a3, float:1.7945947E38)
-            android.graphics.drawable.Drawable r9 = r3.getDrawable(r8)
+        L_0x02f3:
+            if (r5 >= r3) goto L_0x0334
+            android.graphics.drawable.Drawable[] r8 = chat_pollCheckDrawable
+            r9 = 2131166081(0x7var_, float:1.7946397E38)
+            android.graphics.drawable.Drawable r9 = r4.getDrawable(r9)
             android.graphics.drawable.Drawable r9 = r9.mutate()
-            chat_msgInPinnedDrawable = r9
-            android.graphics.drawable.Drawable r9 = r3.getDrawable(r8)
+            r8[r5] = r9
+            android.graphics.drawable.Drawable[] r8 = chat_pollCrossDrawable
+            r9 = 2131166082(0x7var_, float:1.79464E38)
+            android.graphics.drawable.Drawable r9 = r4.getDrawable(r9)
             android.graphics.drawable.Drawable r9 = r9.mutate()
-            chat_msgInPinnedSelectedDrawable = r9
-            android.graphics.drawable.Drawable r9 = r3.getDrawable(r8)
+            r8[r5] = r9
+            android.graphics.drawable.Drawable[] r8 = chat_pollHintDrawable
+            r9 = 2131165719(0x7var_, float:1.7945663E38)
+            android.graphics.drawable.Drawable r9 = r4.getDrawable(r9)
             android.graphics.drawable.Drawable r9 = r9.mutate()
-            chat_msgOutPinnedDrawable = r9
-            android.graphics.drawable.Drawable r9 = r3.getDrawable(r8)
+            r8[r5] = r9
+            android.graphics.drawable.Drawable[] r8 = chat_psaHelpDrawable
+            r9 = 2131165882(0x7var_ba, float:1.7945994E38)
+            android.graphics.drawable.Drawable r9 = r4.getDrawable(r9)
             android.graphics.drawable.Drawable r9 = r9.mutate()
-            chat_msgOutPinnedSelectedDrawable = r9
-            android.graphics.drawable.Drawable r9 = r3.getDrawable(r8)
-            android.graphics.drawable.Drawable r9 = r9.mutate()
-            chat_msgMediaPinnedDrawable = r9
-            android.graphics.drawable.Drawable r8 = r3.getDrawable(r8)
-            android.graphics.drawable.Drawable r8 = r8.mutate()
-            chat_msgStickerPinnedDrawable = r8
-            android.graphics.drawable.Drawable r8 = r3.getDrawable(r4)
-            android.graphics.drawable.Drawable r8 = r8.mutate()
-            chat_msgMediaViewsDrawable = r8
-            android.graphics.drawable.Drawable r8 = r3.getDrawable(r7)
-            android.graphics.drawable.Drawable r8 = r8.mutate()
-            chat_msgMediaRepliesDrawable = r8
-            android.graphics.drawable.Drawable r4 = r3.getDrawable(r4)
-            android.graphics.drawable.Drawable r4 = r4.mutate()
-            chat_msgStickerViewsDrawable = r4
-            android.graphics.drawable.Drawable r4 = r3.getDrawable(r7)
-            android.graphics.drawable.Drawable r4 = r4.mutate()
-            chat_msgStickerRepliesDrawable = r4
-            r4 = 2131165746(0x7var_, float:1.7945718E38)
-            android.graphics.drawable.Drawable r4 = r3.getDrawable(r4)
-            android.graphics.drawable.Drawable r4 = r4.mutate()
-            chat_msgInMenuDrawable = r4
-            r4 = 2131165746(0x7var_, float:1.7945718E38)
-            android.graphics.drawable.Drawable r4 = r3.getDrawable(r4)
-            android.graphics.drawable.Drawable r4 = r4.mutate()
-            chat_msgInMenuSelectedDrawable = r4
-            r4 = 2131165746(0x7var_, float:1.7945718E38)
-            android.graphics.drawable.Drawable r4 = r3.getDrawable(r4)
-            android.graphics.drawable.Drawable r4 = r4.mutate()
-            chat_msgOutMenuDrawable = r4
-            r4 = 2131165746(0x7var_, float:1.7945718E38)
-            android.graphics.drawable.Drawable r4 = r3.getDrawable(r4)
-            android.graphics.drawable.Drawable r4 = r4.mutate()
-            chat_msgOutMenuSelectedDrawable = r4
-            r4 = 2131166214(0x7var_, float:1.7946667E38)
-            android.graphics.drawable.Drawable r4 = r3.getDrawable(r4)
-            chat_msgMediaMenuDrawable = r4
-            r4 = 2131165810(0x7var_, float:1.7945848E38)
-            android.graphics.drawable.Drawable r4 = r3.getDrawable(r4)
-            android.graphics.drawable.Drawable r4 = r4.mutate()
-            chat_msgInInstantDrawable = r4
-            r4 = 2131165810(0x7var_, float:1.7945848E38)
-            android.graphics.drawable.Drawable r4 = r3.getDrawable(r4)
-            android.graphics.drawable.Drawable r4 = r4.mutate()
-            chat_msgOutInstantDrawable = r4
-            r4 = 2131165945(0x7var_f9, float:1.7946121E38)
-            android.graphics.drawable.Drawable r4 = r3.getDrawable(r4)
-            chat_msgErrorDrawable = r4
-            r4 = 2131165619(0x7var_b3, float:1.794546E38)
-            android.graphics.drawable.Drawable r4 = r3.getDrawable(r4)
-            android.graphics.drawable.Drawable r4 = r4.mutate()
-            chat_muteIconDrawable = r4
-            r4 = 2131165541(0x7var_, float:1.7945302E38)
-            android.graphics.drawable.Drawable r4 = r3.getDrawable(r4)
-            chat_lockIconDrawable = r4
-            r4 = 2131165319(0x7var_, float:1.7944852E38)
-            android.graphics.drawable.Drawable r4 = r3.getDrawable(r4)
-            android.graphics.drawable.Drawable r4 = r4.mutate()
-            chat_msgBroadcastDrawable = r4
-            r4 = 2131165319(0x7var_, float:1.7944852E38)
-            android.graphics.drawable.Drawable r4 = r3.getDrawable(r4)
-            android.graphics.drawable.Drawable r4 = r4.mutate()
-            chat_msgBroadcastMediaDrawable = r4
-            android.graphics.drawable.Drawable[] r4 = chat_msgInCallDrawable
-            r7 = 2131165359(0x7var_af, float:1.7944933E38)
-            android.graphics.drawable.Drawable r7 = r3.getDrawable(r7)
-            android.graphics.drawable.Drawable r7 = r7.mutate()
-            r4[r5] = r7
-            android.graphics.drawable.Drawable[] r4 = chat_msgInCallSelectedDrawable
-            r7 = 2131165359(0x7var_af, float:1.7944933E38)
-            android.graphics.drawable.Drawable r7 = r3.getDrawable(r7)
-            android.graphics.drawable.Drawable r7 = r7.mutate()
-            r4[r5] = r7
-            android.graphics.drawable.Drawable[] r4 = chat_msgOutCallDrawable
-            r7 = 2131165359(0x7var_af, float:1.7944933E38)
-            android.graphics.drawable.Drawable r7 = r3.getDrawable(r7)
-            android.graphics.drawable.Drawable r7 = r7.mutate()
-            r4[r5] = r7
-            android.graphics.drawable.Drawable[] r4 = chat_msgOutCallSelectedDrawable
-            r7 = 2131165359(0x7var_af, float:1.7944933E38)
-            android.graphics.drawable.Drawable r7 = r3.getDrawable(r7)
-            android.graphics.drawable.Drawable r7 = r7.mutate()
-            r4[r5] = r7
-            android.graphics.drawable.Drawable[] r4 = chat_msgInCallDrawable
-            r7 = 2131165358(0x7var_ae, float:1.794493E38)
-            android.graphics.drawable.Drawable r7 = r3.getDrawable(r7)
-            android.graphics.drawable.Drawable r7 = r7.mutate()
-            r4[r6] = r7
-            android.graphics.drawable.Drawable[] r4 = chat_msgInCallSelectedDrawable
-            r7 = 2131165358(0x7var_ae, float:1.794493E38)
-            android.graphics.drawable.Drawable r7 = r3.getDrawable(r7)
-            android.graphics.drawable.Drawable r7 = r7.mutate()
-            r4[r6] = r7
-            android.graphics.drawable.Drawable[] r4 = chat_msgOutCallDrawable
-            r7 = 2131165358(0x7var_ae, float:1.794493E38)
-            android.graphics.drawable.Drawable r7 = r3.getDrawable(r7)
-            android.graphics.drawable.Drawable r7 = r7.mutate()
-            r4[r6] = r7
-            android.graphics.drawable.Drawable[] r4 = chat_msgOutCallSelectedDrawable
-            r7 = 2131165358(0x7var_ae, float:1.794493E38)
-            android.graphics.drawable.Drawable r7 = r3.getDrawable(r7)
-            android.graphics.drawable.Drawable r7 = r7.mutate()
-            r4[r6] = r7
-            r4 = 2131165357(0x7var_ad, float:1.7944929E38)
-            android.graphics.drawable.Drawable r4 = r3.getDrawable(r4)
-            android.graphics.drawable.Drawable r4 = r4.mutate()
-            chat_msgCallUpGreenDrawable = r4
-            r4 = 2131165356(0x7var_ac, float:1.7944927E38)
-            android.graphics.drawable.Drawable r4 = r3.getDrawable(r4)
-            android.graphics.drawable.Drawable r4 = r4.mutate()
-            chat_msgCallDownRedDrawable = r4
-            r4 = 2131165356(0x7var_ac, float:1.7944927E38)
-            android.graphics.drawable.Drawable r4 = r3.getDrawable(r4)
-            android.graphics.drawable.Drawable r4 = r4.mutate()
-            chat_msgCallDownGreenDrawable = r4
-            r4 = 0
-        L_0x031a:
-            if (r4 >= r2) goto L_0x035b
-            android.graphics.drawable.Drawable[] r7 = chat_pollCheckDrawable
-            r8 = 2131166055(0x7var_, float:1.7946345E38)
-            android.graphics.drawable.Drawable r8 = r3.getDrawable(r8)
-            android.graphics.drawable.Drawable r8 = r8.mutate()
-            r7[r4] = r8
-            android.graphics.drawable.Drawable[] r7 = chat_pollCrossDrawable
-            r8 = 2131166056(0x7var_, float:1.7946347E38)
-            android.graphics.drawable.Drawable r8 = r3.getDrawable(r8)
-            android.graphics.drawable.Drawable r8 = r8.mutate()
-            r7[r4] = r8
-            android.graphics.drawable.Drawable[] r7 = chat_pollHintDrawable
-            r8 = 2131166146(0x7var_c2, float:1.794653E38)
-            android.graphics.drawable.Drawable r8 = r3.getDrawable(r8)
-            android.graphics.drawable.Drawable r8 = r8.mutate()
-            r7[r4] = r8
-            android.graphics.drawable.Drawable[] r7 = chat_psaHelpDrawable
-            r8 = 2131165862(0x7var_a6, float:1.7945953E38)
-            android.graphics.drawable.Drawable r8 = r3.getDrawable(r8)
-            android.graphics.drawable.Drawable r8 = r8.mutate()
-            r7[r4] = r8
-            int r4 = r4 + 1
-            goto L_0x031a
-        L_0x035b:
-            r4 = 2131165526(0x7var_, float:1.7945272E38)
-            android.graphics.drawable.Drawable r4 = r3.getDrawable(r4)
-            android.graphics.drawable.Drawable r4 = r4.mutate()
-            calllog_msgCallUpRedDrawable = r4
-            r4 = 2131165526(0x7var_, float:1.7945272E38)
-            android.graphics.drawable.Drawable r4 = r3.getDrawable(r4)
-            android.graphics.drawable.Drawable r4 = r4.mutate()
-            calllog_msgCallUpGreenDrawable = r4
-            r4 = 2131165529(0x7var_, float:1.7945278E38)
-            android.graphics.drawable.Drawable r4 = r3.getDrawable(r4)
-            android.graphics.drawable.Drawable r4 = r4.mutate()
-            calllog_msgCallDownRedDrawable = r4
-            r4 = 2131165529(0x7var_, float:1.7945278E38)
-            android.graphics.drawable.Drawable r4 = r3.getDrawable(r4)
-            android.graphics.drawable.Drawable r4 = r4.mutate()
-            calllog_msgCallDownGreenDrawable = r4
-            r4 = 2131165626(0x7var_ba, float:1.7945474E38)
-            android.graphics.drawable.Drawable r4 = r3.getDrawable(r4)
-            android.graphics.drawable.Drawable r4 = r4.mutate()
-            chat_msgAvatarLiveLocationDrawable = r4
-            r4 = 2131165308(0x7var_c, float:1.794483E38)
-            android.graphics.drawable.Drawable r4 = r3.getDrawable(r4)
-            chat_inlineResultFile = r4
-            r4 = 2131165313(0x7var_, float:1.794484E38)
-            android.graphics.drawable.Drawable r4 = r3.getDrawable(r4)
-            chat_inlineResultAudio = r4
-            r4 = 2131165312(0x7var_, float:1.7944838E38)
-            android.graphics.drawable.Drawable r4 = r3.getDrawable(r4)
-            chat_inlineResultLocation = r4
-            r4 = 2131165642(0x7var_ca, float:1.7945507E38)
-            android.graphics.drawable.Drawable r4 = r3.getDrawable(r4)
-            android.graphics.drawable.Drawable r4 = r4.mutate()
-            chat_redLocationIcon = r4
-            r4 = 2131165311(0x7var_f, float:1.7944836E38)
-            android.graphics.drawable.Drawable r4 = r3.getDrawable(r4)
-            chat_botLinkDrawable = r4
-            r4 = 2131165310(0x7var_e, float:1.7944834E38)
-            android.graphics.drawable.Drawable r4 = r3.getDrawable(r4)
-            chat_botInlineDrawable = r4
-            r4 = 2131165307(0x7var_b, float:1.7944827E38)
-            android.graphics.drawable.Drawable r4 = r3.getDrawable(r4)
-            chat_botCardDrawable = r4
-            r4 = 2131165314(0x7var_, float:1.7944842E38)
-            android.graphics.drawable.Drawable r4 = r3.getDrawable(r4)
-            chat_botWebViewDrawable = r4
-            r4 = 2131165309(0x7var_d, float:1.7944831E38)
-            android.graphics.drawable.Drawable r4 = r3.getDrawable(r4)
-            chat_botInviteDrawable = r4
-            r4 = 2131165838(0x7var_e, float:1.7945904E38)
-            android.graphics.drawable.Drawable r4 = r3.getDrawable(r4)
-            chat_commentDrawable = r4
-            r4 = 2131165839(0x7var_f, float:1.7945906E38)
-            android.graphics.drawable.Drawable r4 = r3.getDrawable(r4)
-            chat_commentStickerDrawable = r4
-            r4 = 2131165755(0x7var_b, float:1.7945736E38)
-            android.graphics.drawable.Drawable r4 = r3.getDrawable(r4)
-            chat_commentArrowDrawable = r4
-            r4 = 2131165500(0x7var_c, float:1.7945219E38)
-            android.graphics.drawable.Drawable r4 = r3.getDrawable(r4)
-            android.graphics.drawable.Drawable r4 = r4.mutate()
-            chat_contextResult_shadowUnderSwitchDrawable = r4
-            org.telegram.ui.Components.RLottieDrawable[] r4 = chat_attachButtonDrawables
-            org.telegram.ui.Components.RLottieDrawable r7 = new org.telegram.ui.Components.RLottieDrawable
-            r8 = 2131558403(0x7f0d0003, float:1.874212E38)
-            r9 = 1104150528(0x41d00000, float:26.0)
-            int r10 = org.telegram.messenger.AndroidUtilities.dp(r9)
-            int r11 = org.telegram.messenger.AndroidUtilities.dp(r9)
-            java.lang.String r12 = "attach_gallery"
-            r7.<init>(r8, r12, r10, r11)
-            r4[r5] = r7
-            org.telegram.ui.Components.RLottieDrawable[] r4 = chat_attachButtonDrawables
-            org.telegram.ui.Components.RLottieDrawable r7 = new org.telegram.ui.Components.RLottieDrawable
-            r8 = 2131558405(0x7f0d0005, float:1.8742125E38)
-            int r10 = org.telegram.messenger.AndroidUtilities.dp(r9)
-            int r11 = org.telegram.messenger.AndroidUtilities.dp(r9)
-            java.lang.String r12 = "attach_music"
-            r7.<init>(r8, r12, r10, r11)
-            r4[r6] = r7
-            org.telegram.ui.Components.RLottieDrawable[] r4 = chat_attachButtonDrawables
-            org.telegram.ui.Components.RLottieDrawable r7 = new org.telegram.ui.Components.RLottieDrawable
-            r8 = 2131558402(0x7f0d0002, float:1.8742119E38)
-            int r10 = org.telegram.messenger.AndroidUtilities.dp(r9)
-            int r11 = org.telegram.messenger.AndroidUtilities.dp(r9)
-            java.lang.String r12 = "attach_file"
-            r7.<init>(r8, r12, r10, r11)
-            r4[r2] = r7
-            org.telegram.ui.Components.RLottieDrawable[] r4 = chat_attachButtonDrawables
-            org.telegram.ui.Components.RLottieDrawable r7 = new org.telegram.ui.Components.RLottieDrawable
-            r8 = 2131558401(0x7f0d0001, float:1.8742117E38)
-            int r10 = org.telegram.messenger.AndroidUtilities.dp(r9)
-            int r11 = org.telegram.messenger.AndroidUtilities.dp(r9)
-            java.lang.String r12 = "attach_contact"
-            r7.<init>(r8, r12, r10, r11)
-            r8 = 3
-            r4[r8] = r7
-            org.telegram.ui.Components.RLottieDrawable[] r4 = chat_attachButtonDrawables
-            org.telegram.ui.Components.RLottieDrawable r7 = new org.telegram.ui.Components.RLottieDrawable
-            r10 = 2131558404(0x7f0d0004, float:1.8742123E38)
-            int r11 = org.telegram.messenger.AndroidUtilities.dp(r9)
-            int r12 = org.telegram.messenger.AndroidUtilities.dp(r9)
-            java.lang.String r13 = "attach_location"
-            r7.<init>(r10, r13, r11, r12)
-            r10 = 4
-            r4[r10] = r7
-            org.telegram.ui.Components.RLottieDrawable[] r4 = chat_attachButtonDrawables
-            org.telegram.ui.Components.RLottieDrawable r7 = new org.telegram.ui.Components.RLottieDrawable
-            r11 = 2131558406(0x7f0d0006, float:1.8742127E38)
-            int r12 = org.telegram.messenger.AndroidUtilities.dp(r9)
-            int r9 = org.telegram.messenger.AndroidUtilities.dp(r9)
-            java.lang.String r13 = "attach_poll"
-            r7.<init>(r11, r13, r12, r9)
-            r9 = 5
-            r4[r9] = r7
-            r4 = 2131165960(0x7var_, float:1.7946152E38)
-            android.graphics.drawable.Drawable r4 = r3.getDrawable(r4)
-            chat_attachEmptyDrawable = r4
-            r4 = 2131166127(0x7var_af, float:1.794649E38)
-            android.graphics.drawable.Drawable r4 = r3.getDrawable(r4)
-            android.graphics.drawable.Drawable r4 = r4.mutate()
-            chat_shareIconDrawable = r4
-            r4 = 2131165431(0x7var_f7, float:1.7945079E38)
-            android.graphics.drawable.Drawable r4 = r3.getDrawable(r4)
-            chat_replyIconDrawable = r4
-            r4 = 2131165738(0x7var_a, float:1.7945702E38)
-            android.graphics.drawable.Drawable r4 = r3.getDrawable(r4)
-            chat_goIconDrawable = r4
-            org.telegram.ui.Components.CombinedDrawable[][] r4 = chat_fileMiniStatesDrawable
-            r4 = r4[r5]
-            r7 = 1102053376(0x41b00000, float:22.0)
-            int r11 = org.telegram.messenger.AndroidUtilities.dp(r7)
-            r12 = 2131165284(0x7var_, float:1.794478E38)
-            org.telegram.ui.Components.CombinedDrawable r11 = createCircleDrawableWithIcon(r11, r12)
-            r4[r5] = r11
-            org.telegram.ui.Components.CombinedDrawable[][] r4 = chat_fileMiniStatesDrawable
-            r4 = r4[r5]
-            int r11 = org.telegram.messenger.AndroidUtilities.dp(r7)
-            org.telegram.ui.Components.CombinedDrawable r11 = createCircleDrawableWithIcon(r11, r12)
-            r4[r6] = r11
-            org.telegram.ui.Components.CombinedDrawable[][] r4 = chat_fileMiniStatesDrawable
-            r4 = r4[r6]
-            int r11 = org.telegram.messenger.AndroidUtilities.dp(r7)
-            r12 = 2131165285(0x7var_, float:1.7944783E38)
-            org.telegram.ui.Components.CombinedDrawable r11 = createCircleDrawableWithIcon(r11, r12)
-            r4[r5] = r11
-            org.telegram.ui.Components.CombinedDrawable[][] r4 = chat_fileMiniStatesDrawable
-            r4 = r4[r6]
-            int r11 = org.telegram.messenger.AndroidUtilities.dp(r7)
-            org.telegram.ui.Components.CombinedDrawable r11 = createCircleDrawableWithIcon(r11, r12)
-            r4[r6] = r11
-            org.telegram.ui.Components.CombinedDrawable[][] r4 = chat_fileMiniStatesDrawable
-            r4 = r4[r2]
-            int r11 = org.telegram.messenger.AndroidUtilities.dp(r7)
-            r12 = 2131165284(0x7var_, float:1.794478E38)
-            org.telegram.ui.Components.CombinedDrawable r11 = createCircleDrawableWithIcon(r11, r12)
-            r4[r5] = r11
-            org.telegram.ui.Components.CombinedDrawable[][] r4 = chat_fileMiniStatesDrawable
-            r4 = r4[r2]
-            int r11 = org.telegram.messenger.AndroidUtilities.dp(r7)
-            org.telegram.ui.Components.CombinedDrawable r11 = createCircleDrawableWithIcon(r11, r12)
-            r4[r6] = r11
-            org.telegram.ui.Components.CombinedDrawable[][] r4 = chat_fileMiniStatesDrawable
-            r4 = r4[r8]
-            int r11 = org.telegram.messenger.AndroidUtilities.dp(r7)
-            r12 = 2131165285(0x7var_, float:1.7944783E38)
-            org.telegram.ui.Components.CombinedDrawable r11 = createCircleDrawableWithIcon(r11, r12)
-            r4[r5] = r11
-            org.telegram.ui.Components.CombinedDrawable[][] r4 = chat_fileMiniStatesDrawable
-            r4 = r4[r8]
-            int r11 = org.telegram.messenger.AndroidUtilities.dp(r7)
-            org.telegram.ui.Components.CombinedDrawable r11 = createCircleDrawableWithIcon(r11, r12)
-            r4[r6] = r11
-            org.telegram.ui.Components.CombinedDrawable[][] r4 = chat_fileMiniStatesDrawable
-            r4 = r4[r10]
-            int r11 = org.telegram.messenger.AndroidUtilities.dp(r7)
-            r12 = 2131166218(0x7var_a, float:1.7946675E38)
-            org.telegram.ui.Components.CombinedDrawable r11 = createCircleDrawableWithIcon(r11, r12)
-            r4[r5] = r11
-            org.telegram.ui.Components.CombinedDrawable[][] r4 = chat_fileMiniStatesDrawable
-            r4 = r4[r10]
-            int r11 = org.telegram.messenger.AndroidUtilities.dp(r7)
-            org.telegram.ui.Components.CombinedDrawable r11 = createCircleDrawableWithIcon(r11, r12)
-            r4[r6] = r11
-            org.telegram.ui.Components.CombinedDrawable[][] r4 = chat_fileMiniStatesDrawable
-            r4 = r4[r9]
-            int r11 = org.telegram.messenger.AndroidUtilities.dp(r7)
-            r12 = 2131166219(0x7var_b, float:1.7946677E38)
-            org.telegram.ui.Components.CombinedDrawable r11 = createCircleDrawableWithIcon(r11, r12)
-            r4[r5] = r11
-            org.telegram.ui.Components.CombinedDrawable[][] r4 = chat_fileMiniStatesDrawable
-            r4 = r4[r9]
-            int r7 = org.telegram.messenger.AndroidUtilities.dp(r7)
-            r11 = 2131166219(0x7var_b, float:1.7946677E38)
-            org.telegram.ui.Components.CombinedDrawable r7 = createCircleDrawableWithIcon(r7, r11)
-            r4[r6] = r7
-            r4 = 1073741824(0x40000000, float:2.0)
-            int r4 = org.telegram.messenger.AndroidUtilities.dp(r4)
-            android.graphics.RectF r7 = new android.graphics.RectF
-            r7.<init>()
-            android.graphics.Path[] r11 = chat_filePath
-            android.graphics.Path r12 = new android.graphics.Path
-            r12.<init>()
-            r11[r5] = r12
-            android.graphics.Path[] r11 = chat_filePath
-            r11 = r11[r5]
-            r12 = 1088421888(0x40e00000, float:7.0)
-            int r12 = org.telegram.messenger.AndroidUtilities.dp(r12)
-            float r12 = (float) r12
-            r13 = 1077936128(0x40400000, float:3.0)
-            int r13 = org.telegram.messenger.AndroidUtilities.dp(r13)
-            float r13 = (float) r13
-            r11.moveTo(r12, r13)
-            android.graphics.Path[] r11 = chat_filePath
-            r11 = r11[r5]
+            r8[r5] = r9
+            int r5 = r5 + 1
+            goto L_0x02f3
+        L_0x0334:
+            r5 = 2131165467(0x7var_b, float:1.7945152E38)
+            android.graphics.drawable.Drawable r5 = r4.getDrawable(r5)
+            android.graphics.drawable.Drawable r5 = r5.mutate()
+            calllog_msgCallUpRedDrawable = r5
+            r5 = 2131165467(0x7var_b, float:1.7945152E38)
+            android.graphics.drawable.Drawable r5 = r4.getDrawable(r5)
+            android.graphics.drawable.Drawable r5 = r5.mutate()
+            calllog_msgCallUpGreenDrawable = r5
+            r5 = 2131165470(0x7var_e, float:1.7945158E38)
+            android.graphics.drawable.Drawable r5 = r4.getDrawable(r5)
+            android.graphics.drawable.Drawable r5 = r5.mutate()
+            calllog_msgCallDownRedDrawable = r5
+            r5 = 2131165470(0x7var_e, float:1.7945158E38)
+            android.graphics.drawable.Drawable r5 = r4.getDrawable(r5)
+            android.graphics.drawable.Drawable r5 = r5.mutate()
+            calllog_msgCallDownGreenDrawable = r5
+            r5 = 2131165582(0x7var_e, float:1.7945385E38)
+            android.graphics.drawable.Drawable r5 = r4.getDrawable(r5)
+            android.graphics.drawable.Drawable r5 = r5.mutate()
+            chat_msgAvatarLiveLocationDrawable = r5
+            r5 = 2131165283(0x7var_, float:1.7944779E38)
+            android.graphics.drawable.Drawable r5 = r4.getDrawable(r5)
+            chat_inlineResultFile = r5
+            r5 = 2131165288(0x7var_, float:1.7944789E38)
+            android.graphics.drawable.Drawable r5 = r4.getDrawable(r5)
+            chat_inlineResultAudio = r5
+            r5 = 2131165287(0x7var_, float:1.7944787E38)
+            android.graphics.drawable.Drawable r5 = r4.getDrawable(r5)
+            chat_inlineResultLocation = r5
+            r5 = 2131165594(0x7var_a, float:1.794541E38)
+            android.graphics.drawable.Drawable r5 = r4.getDrawable(r5)
+            android.graphics.drawable.Drawable r5 = r5.mutate()
+            chat_redLocationIcon = r5
+            r5 = 2131165286(0x7var_, float:1.7944785E38)
+            android.graphics.drawable.Drawable r5 = r4.getDrawable(r5)
+            chat_botLinkDrawable = r5
+            r5 = 2131165285(0x7var_, float:1.7944783E38)
+            android.graphics.drawable.Drawable r5 = r4.getDrawable(r5)
+            chat_botInlineDrawable = r5
+            r5 = 2131165282(0x7var_, float:1.7944777E38)
+            android.graphics.drawable.Drawable r5 = r4.getDrawable(r5)
+            chat_botCardDrawable = r5
+            r5 = 2131165289(0x7var_, float:1.794479E38)
+            android.graphics.drawable.Drawable r5 = r4.getDrawable(r5)
+            chat_botWebViewDrawable = r5
+            r5 = 2131165284(0x7var_, float:1.794478E38)
+            android.graphics.drawable.Drawable r5 = r4.getDrawable(r5)
+            chat_botInviteDrawable = r5
+            r5 = 2131165812(0x7var_, float:1.7945852E38)
+            android.graphics.drawable.Drawable r5 = r4.getDrawable(r5)
+            chat_commentDrawable = r5
+            r5 = 2131165813(0x7var_, float:1.7945854E38)
+            android.graphics.drawable.Drawable r5 = r4.getDrawable(r5)
+            chat_commentStickerDrawable = r5
+            r5 = 2131165641(0x7var_c9, float:1.7945505E38)
+            android.graphics.drawable.Drawable r5 = r4.getDrawable(r5)
+            chat_commentArrowDrawable = r5
+            r5 = 2131165446(0x7var_, float:1.794511E38)
+            android.graphics.drawable.Drawable r5 = r4.getDrawable(r5)
+            android.graphics.drawable.Drawable r5 = r5.mutate()
+            chat_contextResult_shadowUnderSwitchDrawable = r5
+            org.telegram.ui.Components.RLottieDrawable[] r5 = chat_attachButtonDrawables
+            org.telegram.ui.Components.RLottieDrawable r8 = new org.telegram.ui.Components.RLottieDrawable
+            r9 = 2131558403(0x7f0d0003, float:1.874212E38)
+            r10 = 1104150528(0x41d00000, float:26.0)
+            int r11 = org.telegram.messenger.AndroidUtilities.dp(r10)
+            int r12 = org.telegram.messenger.AndroidUtilities.dp(r10)
+            java.lang.String r13 = "attach_gallery"
+            r8.<init>(r9, r13, r11, r12)
+            r5[r6] = r8
+            org.telegram.ui.Components.RLottieDrawable[] r5 = chat_attachButtonDrawables
+            org.telegram.ui.Components.RLottieDrawable r8 = new org.telegram.ui.Components.RLottieDrawable
+            r9 = 2131558405(0x7f0d0005, float:1.8742125E38)
+            int r11 = org.telegram.messenger.AndroidUtilities.dp(r10)
+            int r12 = org.telegram.messenger.AndroidUtilities.dp(r10)
+            java.lang.String r13 = "attach_music"
+            r8.<init>(r9, r13, r11, r12)
+            r5[r7] = r8
+            org.telegram.ui.Components.RLottieDrawable[] r5 = chat_attachButtonDrawables
+            org.telegram.ui.Components.RLottieDrawable r8 = new org.telegram.ui.Components.RLottieDrawable
+            r9 = 2131558402(0x7f0d0002, float:1.8742119E38)
+            int r11 = org.telegram.messenger.AndroidUtilities.dp(r10)
+            int r12 = org.telegram.messenger.AndroidUtilities.dp(r10)
+            java.lang.String r13 = "attach_file"
+            r8.<init>(r9, r13, r11, r12)
+            r5[r3] = r8
+            org.telegram.ui.Components.RLottieDrawable[] r5 = chat_attachButtonDrawables
+            org.telegram.ui.Components.RLottieDrawable r8 = new org.telegram.ui.Components.RLottieDrawable
+            r9 = 2131558401(0x7f0d0001, float:1.8742117E38)
+            int r11 = org.telegram.messenger.AndroidUtilities.dp(r10)
+            int r12 = org.telegram.messenger.AndroidUtilities.dp(r10)
+            java.lang.String r13 = "attach_contact"
+            r8.<init>(r9, r13, r11, r12)
+            r9 = 3
+            r5[r9] = r8
+            org.telegram.ui.Components.RLottieDrawable[] r5 = chat_attachButtonDrawables
+            r8 = 4
+            org.telegram.ui.Components.RLottieDrawable r11 = new org.telegram.ui.Components.RLottieDrawable
+            r12 = 2131558404(0x7f0d0004, float:1.8742123E38)
+            int r13 = org.telegram.messenger.AndroidUtilities.dp(r10)
+            int r14 = org.telegram.messenger.AndroidUtilities.dp(r10)
+            java.lang.String r15 = "attach_location"
+            r11.<init>(r12, r15, r13, r14)
+            r5[r8] = r11
+            org.telegram.ui.Components.RLottieDrawable[] r5 = chat_attachButtonDrawables
+            r8 = 5
+            org.telegram.ui.Components.RLottieDrawable r11 = new org.telegram.ui.Components.RLottieDrawable
+            r12 = 2131558406(0x7f0d0006, float:1.8742127E38)
+            int r13 = org.telegram.messenger.AndroidUtilities.dp(r10)
+            int r10 = org.telegram.messenger.AndroidUtilities.dp(r10)
+            java.lang.String r14 = "attach_poll"
+            r11.<init>(r12, r14, r13, r10)
+            r5[r8] = r11
+            r5 = 2131166003(0x7var_, float:1.794624E38)
+            android.graphics.drawable.Drawable r5 = r4.getDrawable(r5)
+            chat_attachEmptyDrawable = r5
+            r5 = 2131166135(0x7var_b7, float:1.7946507E38)
+            android.graphics.drawable.Drawable r5 = r4.getDrawable(r5)
+            android.graphics.drawable.Drawable r5 = r5.mutate()
+            chat_shareIconDrawable = r5
+            r5 = 2131165396(0x7var_d4, float:1.7945008E38)
+            android.graphics.drawable.Drawable r5 = r4.getDrawable(r5)
+            chat_replyIconDrawable = r5
+            r5 = 2131165616(0x7var_b0, float:1.7945454E38)
+            android.graphics.drawable.Drawable r5 = r4.getDrawable(r5)
+            chat_goIconDrawable = r5
+            r5 = 1073741824(0x40000000, float:2.0)
+            int r5 = org.telegram.messenger.AndroidUtilities.dp(r5)
+            android.graphics.RectF r8 = new android.graphics.RectF
+            r8.<init>()
+            android.graphics.Path[] r10 = chat_filePath
+            android.graphics.Path r11 = new android.graphics.Path
+            r11.<init>()
+            r10[r6] = r11
+            android.graphics.Path[] r10 = chat_filePath
+            r10 = r10[r6]
+            r11 = 1088421888(0x40e00000, float:7.0)
+            int r11 = org.telegram.messenger.AndroidUtilities.dp(r11)
+            float r11 = (float) r11
             int r12 = org.telegram.messenger.AndroidUtilities.dp(r1)
             float r12 = (float) r12
-            r13 = 1077936128(0x40400000, float:3.0)
-            int r13 = org.telegram.messenger.AndroidUtilities.dp(r13)
-            float r13 = (float) r13
-            r11.lineTo(r12, r13)
-            android.graphics.Path[] r11 = chat_filePath
-            r11 = r11[r5]
-            r12 = 1101529088(0x41a80000, float:21.0)
-            int r12 = org.telegram.messenger.AndroidUtilities.dp(r12)
+            r10.moveTo(r11, r12)
+            android.graphics.Path[] r10 = chat_filePath
+            r10 = r10[r6]
+            int r11 = org.telegram.messenger.AndroidUtilities.dp(r2)
+            float r11 = (float) r11
+            int r12 = org.telegram.messenger.AndroidUtilities.dp(r1)
             float r12 = (float) r12
-            r13 = 1092616192(0x41200000, float:10.0)
-            int r13 = org.telegram.messenger.AndroidUtilities.dp(r13)
-            float r13 = (float) r13
-            r11.lineTo(r12, r13)
-            android.graphics.Path[] r11 = chat_filePath
-            r11 = r11[r5]
-            r12 = 1101529088(0x41a80000, float:21.0)
-            int r12 = org.telegram.messenger.AndroidUtilities.dp(r12)
-            float r12 = (float) r12
-            r13 = 1101004800(0x41a00000, float:20.0)
-            int r13 = org.telegram.messenger.AndroidUtilities.dp(r13)
-            float r13 = (float) r13
-            r11.lineTo(r12, r13)
+            r10.lineTo(r11, r12)
+            android.graphics.Path[] r10 = chat_filePath
+            r10 = r10[r6]
             r11 = 1101529088(0x41a80000, float:21.0)
             int r11 = org.telegram.messenger.AndroidUtilities.dp(r11)
-            int r12 = r4 * 2
-            int r11 = r11 - r12
             float r11 = (float) r11
-            r13 = 1100480512(0x41980000, float:19.0)
+            r12 = 1092616192(0x41200000, float:10.0)
+            int r12 = org.telegram.messenger.AndroidUtilities.dp(r12)
+            float r12 = (float) r12
+            r10.lineTo(r11, r12)
+            android.graphics.Path[] r10 = chat_filePath
+            r10 = r10[r6]
+            r11 = 1101529088(0x41a80000, float:21.0)
+            int r11 = org.telegram.messenger.AndroidUtilities.dp(r11)
+            float r11 = (float) r11
+            r12 = 1101004800(0x41a00000, float:20.0)
+            int r12 = org.telegram.messenger.AndroidUtilities.dp(r12)
+            float r12 = (float) r12
+            r10.lineTo(r11, r12)
+            r10 = 1101529088(0x41a80000, float:21.0)
+            int r10 = org.telegram.messenger.AndroidUtilities.dp(r10)
+            int r11 = r5 * 2
+            int r10 = r10 - r11
+            float r10 = (float) r10
+            r12 = 1100480512(0x41980000, float:19.0)
+            int r12 = org.telegram.messenger.AndroidUtilities.dp(r12)
+            int r12 = r12 - r5
+            float r12 = (float) r12
+            r13 = 1101529088(0x41a80000, float:21.0)
             int r13 = org.telegram.messenger.AndroidUtilities.dp(r13)
-            int r13 = r13 - r4
-            float r13 = (float) r13
-            r14 = 1101529088(0x41a80000, float:21.0)
-            int r14 = org.telegram.messenger.AndroidUtilities.dp(r14)
-            float r14 = (float) r14
-            r15 = 1100480512(0x41980000, float:19.0)
-            int r15 = org.telegram.messenger.AndroidUtilities.dp(r15)
-            int r15 = r15 + r4
-            float r15 = (float) r15
-            r7.set(r11, r13, r14, r15)
-            android.graphics.Path[] r11 = chat_filePath
-            r11 = r11[r5]
-            r13 = 0
-            r14 = 1119092736(0x42b40000, float:90.0)
-            r11.arcTo(r7, r13, r14, r5)
-            android.graphics.Path[] r11 = chat_filePath
-            r11 = r11[r5]
-            r13 = 1086324736(0x40CLASSNAME, float:6.0)
-            int r13 = org.telegram.messenger.AndroidUtilities.dp(r13)
-            float r13 = (float) r13
-            r14 = 1101529088(0x41a80000, float:21.0)
-            int r14 = org.telegram.messenger.AndroidUtilities.dp(r14)
-            float r14 = (float) r14
-            r11.lineTo(r13, r14)
-            r11 = 1084227584(0x40a00000, float:5.0)
-            int r13 = org.telegram.messenger.AndroidUtilities.dp(r11)
             float r13 = (float) r13
             r14 = 1100480512(0x41980000, float:19.0)
             int r14 = org.telegram.messenger.AndroidUtilities.dp(r14)
-            int r14 = r14 - r4
+            int r14 = r14 + r5
             float r14 = (float) r14
-            int r15 = org.telegram.messenger.AndroidUtilities.dp(r11)
-            int r15 = r15 + r12
-            float r15 = (float) r15
-            r16 = 1100480512(0x41980000, float:19.0)
-            int r16 = org.telegram.messenger.AndroidUtilities.dp(r16)
-            int r4 = r16 + r4
-            float r4 = (float) r4
-            r7.set(r13, r14, r15, r4)
-            android.graphics.Path[] r4 = chat_filePath
-            r4 = r4[r5]
+            r8.set(r10, r12, r13, r14)
+            android.graphics.Path[] r10 = chat_filePath
+            r10 = r10[r6]
+            r12 = 0
             r13 = 1119092736(0x42b40000, float:90.0)
-            r14 = 1119092736(0x42b40000, float:90.0)
-            r4.arcTo(r7, r13, r14, r5)
-            android.graphics.Path[] r4 = chat_filePath
-            r4 = r4[r5]
-            int r13 = org.telegram.messenger.AndroidUtilities.dp(r11)
-            float r13 = (float) r13
-            r14 = 1082130432(0x40800000, float:4.0)
-            int r14 = org.telegram.messenger.AndroidUtilities.dp(r14)
-            float r14 = (float) r14
-            r4.lineTo(r13, r14)
-            int r4 = org.telegram.messenger.AndroidUtilities.dp(r11)
-            float r4 = (float) r4
-            r13 = 1077936128(0x40400000, float:3.0)
+            r10.arcTo(r8, r12, r13, r6)
+            android.graphics.Path[] r10 = chat_filePath
+            r10 = r10[r6]
+            r12 = 1086324736(0x40CLASSNAME, float:6.0)
+            int r12 = org.telegram.messenger.AndroidUtilities.dp(r12)
+            float r12 = (float) r12
+            r13 = 1101529088(0x41a80000, float:21.0)
             int r13 = org.telegram.messenger.AndroidUtilities.dp(r13)
             float r13 = (float) r13
-            int r14 = org.telegram.messenger.AndroidUtilities.dp(r11)
-            int r14 = r14 + r12
+            r10.lineTo(r12, r13)
+            r10 = 1084227584(0x40a00000, float:5.0)
+            int r12 = org.telegram.messenger.AndroidUtilities.dp(r10)
+            float r12 = (float) r12
+            r13 = 1100480512(0x41980000, float:19.0)
+            int r13 = org.telegram.messenger.AndroidUtilities.dp(r13)
+            int r13 = r13 - r5
+            float r13 = (float) r13
+            int r14 = org.telegram.messenger.AndroidUtilities.dp(r10)
+            int r14 = r14 + r11
             float r14 = (float) r14
-            r15 = 1077936128(0x40400000, float:3.0)
+            r15 = 1100480512(0x41980000, float:19.0)
             int r15 = org.telegram.messenger.AndroidUtilities.dp(r15)
-            int r15 = r15 + r12
-            float r12 = (float) r15
-            r7.set(r4, r13, r14, r12)
-            android.graphics.Path[] r4 = chat_filePath
-            r4 = r4[r5]
-            r12 = 1127481344(0x43340000, float:180.0)
+            int r15 = r15 + r5
+            float r5 = (float) r15
+            r8.set(r12, r13, r14, r5)
+            android.graphics.Path[] r5 = chat_filePath
+            r5 = r5[r6]
+            r12 = 1119092736(0x42b40000, float:90.0)
             r13 = 1119092736(0x42b40000, float:90.0)
-            r4.arcTo(r7, r12, r13, r5)
-            android.graphics.Path[] r4 = chat_filePath
-            r4 = r4[r5]
-            r4.close()
-            android.graphics.Path[] r4 = chat_filePath
-            android.graphics.Path r7 = new android.graphics.Path
-            r7.<init>()
-            r4[r6] = r7
-            android.graphics.Path[] r4 = chat_filePath
-            r4 = r4[r6]
-            int r7 = org.telegram.messenger.AndroidUtilities.dp(r1)
-            float r7 = (float) r7
-            int r11 = org.telegram.messenger.AndroidUtilities.dp(r11)
-            float r11 = (float) r11
-            r4.moveTo(r7, r11)
-            android.graphics.Path[] r4 = chat_filePath
-            r4 = r4[r6]
-            r7 = 1100480512(0x41980000, float:19.0)
-            int r7 = org.telegram.messenger.AndroidUtilities.dp(r7)
-            float r7 = (float) r7
-            r11 = 1092616192(0x41200000, float:10.0)
-            int r11 = org.telegram.messenger.AndroidUtilities.dp(r11)
-            float r11 = (float) r11
-            r4.lineTo(r7, r11)
-            android.graphics.Path[] r4 = chat_filePath
-            r4 = r4[r6]
-            int r7 = org.telegram.messenger.AndroidUtilities.dp(r1)
-            float r7 = (float) r7
-            r11 = 1092616192(0x41200000, float:10.0)
-            int r11 = org.telegram.messenger.AndroidUtilities.dp(r11)
-            float r11 = (float) r11
-            r4.lineTo(r7, r11)
-            android.graphics.Path[] r4 = chat_filePath
-            r4 = r4[r6]
-            r4.close()
-            r4 = 2131165322(0x7var_a, float:1.7944858E38)
-            android.graphics.drawable.Drawable r4 = r3.getDrawable(r4)
-            android.graphics.drawable.Drawable r4 = r4.mutate()
-            chat_flameIcon = r4
-            r4 = 2131165885(0x7var_bd, float:1.7946E38)
-            android.graphics.drawable.Drawable r4 = r3.getDrawable(r4)
-            android.graphics.drawable.Drawable r4 = r4.mutate()
-            chat_gifIcon = r4
-            android.graphics.drawable.Drawable[][] r4 = chat_fileStatesDrawable
-            r4 = r4[r5]
-            r7 = 1110441984(0x42300000, float:44.0)
-            int r11 = org.telegram.messenger.AndroidUtilities.dp(r7)
-            r12 = 2131165888(0x7var_c0, float:1.7946006E38)
-            org.telegram.ui.Components.CombinedDrawable r11 = createCircleDrawableWithIcon(r11, r12)
-            r4[r5] = r11
-            android.graphics.drawable.Drawable[][] r4 = chat_fileStatesDrawable
-            r4 = r4[r5]
-            int r11 = org.telegram.messenger.AndroidUtilities.dp(r7)
-            org.telegram.ui.Components.CombinedDrawable r11 = createCircleDrawableWithIcon(r11, r12)
-            r4[r6] = r11
-            android.graphics.drawable.Drawable[][] r4 = chat_fileStatesDrawable
-            r4 = r4[r6]
-            int r11 = org.telegram.messenger.AndroidUtilities.dp(r7)
-            r13 = 2131165887(0x7var_bf, float:1.7946004E38)
-            org.telegram.ui.Components.CombinedDrawable r11 = createCircleDrawableWithIcon(r11, r13)
-            r4[r5] = r11
-            android.graphics.drawable.Drawable[][] r4 = chat_fileStatesDrawable
-            r4 = r4[r6]
-            int r11 = org.telegram.messenger.AndroidUtilities.dp(r7)
-            org.telegram.ui.Components.CombinedDrawable r11 = createCircleDrawableWithIcon(r11, r13)
-            r4[r6] = r11
-            android.graphics.drawable.Drawable[][] r4 = chat_fileStatesDrawable
-            r4 = r4[r2]
-            int r11 = org.telegram.messenger.AndroidUtilities.dp(r7)
-            r13 = 2131165886(0x7var_be, float:1.7946002E38)
-            org.telegram.ui.Components.CombinedDrawable r11 = createCircleDrawableWithIcon(r11, r13)
-            r4[r5] = r11
-            android.graphics.drawable.Drawable[][] r4 = chat_fileStatesDrawable
-            r4 = r4[r2]
-            int r11 = org.telegram.messenger.AndroidUtilities.dp(r7)
-            org.telegram.ui.Components.CombinedDrawable r11 = createCircleDrawableWithIcon(r11, r13)
-            r4[r6] = r11
-            android.graphics.drawable.Drawable[][] r4 = chat_fileStatesDrawable
-            r4 = r4[r8]
-            int r11 = org.telegram.messenger.AndroidUtilities.dp(r7)
-            r14 = 2131165884(0x7var_bc, float:1.7945998E38)
-            org.telegram.ui.Components.CombinedDrawable r11 = createCircleDrawableWithIcon(r11, r14)
-            r4[r5] = r11
-            android.graphics.drawable.Drawable[][] r4 = chat_fileStatesDrawable
-            r4 = r4[r8]
-            int r11 = org.telegram.messenger.AndroidUtilities.dp(r7)
-            org.telegram.ui.Components.CombinedDrawable r11 = createCircleDrawableWithIcon(r11, r14)
-            r4[r6] = r11
-            android.graphics.drawable.Drawable[][] r4 = chat_fileStatesDrawable
-            r4 = r4[r10]
-            int r11 = org.telegram.messenger.AndroidUtilities.dp(r7)
-            r14 = 2131165883(0x7var_bb, float:1.7945996E38)
-            org.telegram.ui.Components.CombinedDrawable r11 = createCircleDrawableWithIcon(r11, r14)
-            r4[r5] = r11
-            android.graphics.drawable.Drawable[][] r4 = chat_fileStatesDrawable
-            r4 = r4[r10]
-            int r11 = org.telegram.messenger.AndroidUtilities.dp(r7)
-            org.telegram.ui.Components.CombinedDrawable r11 = createCircleDrawableWithIcon(r11, r14)
-            r4[r6] = r11
-            android.graphics.drawable.Drawable[][] r4 = chat_fileStatesDrawable
-            r4 = r4[r9]
-            int r11 = org.telegram.messenger.AndroidUtilities.dp(r7)
-            org.telegram.ui.Components.CombinedDrawable r11 = createCircleDrawableWithIcon(r11, r12)
-            r4[r5] = r11
-            android.graphics.drawable.Drawable[][] r4 = chat_fileStatesDrawable
-            r4 = r4[r9]
-            int r11 = org.telegram.messenger.AndroidUtilities.dp(r7)
-            org.telegram.ui.Components.CombinedDrawable r11 = createCircleDrawableWithIcon(r11, r12)
-            r4[r6] = r11
-            android.graphics.drawable.Drawable[][] r4 = chat_fileStatesDrawable
+            r5.arcTo(r8, r12, r13, r6)
+            android.graphics.Path[] r5 = chat_filePath
+            r5 = r5[r6]
+            int r12 = org.telegram.messenger.AndroidUtilities.dp(r10)
+            float r12 = (float) r12
+            r13 = 1082130432(0x40800000, float:4.0)
+            int r13 = org.telegram.messenger.AndroidUtilities.dp(r13)
+            float r13 = (float) r13
+            r5.lineTo(r12, r13)
+            int r5 = org.telegram.messenger.AndroidUtilities.dp(r10)
+            float r5 = (float) r5
+            int r12 = org.telegram.messenger.AndroidUtilities.dp(r1)
+            float r12 = (float) r12
+            int r13 = org.telegram.messenger.AndroidUtilities.dp(r10)
+            int r13 = r13 + r11
+            float r13 = (float) r13
+            int r14 = org.telegram.messenger.AndroidUtilities.dp(r1)
+            int r14 = r14 + r11
+            float r11 = (float) r14
+            r8.set(r5, r12, r13, r11)
+            android.graphics.Path[] r5 = chat_filePath
+            r5 = r5[r6]
+            r11 = 1127481344(0x43340000, float:180.0)
+            r12 = 1119092736(0x42b40000, float:90.0)
+            r5.arcTo(r8, r11, r12, r6)
+            android.graphics.Path[] r5 = chat_filePath
+            r5 = r5[r6]
+            r5.close()
+            android.graphics.Path[] r5 = chat_filePath
+            android.graphics.Path r8 = new android.graphics.Path
+            r8.<init>()
+            r5[r7] = r8
+            android.graphics.Path[] r5 = chat_filePath
+            r5 = r5[r7]
+            int r8 = org.telegram.messenger.AndroidUtilities.dp(r2)
+            float r8 = (float) r8
+            int r10 = org.telegram.messenger.AndroidUtilities.dp(r10)
+            float r10 = (float) r10
+            r5.moveTo(r8, r10)
+            android.graphics.Path[] r5 = chat_filePath
+            r5 = r5[r7]
+            r8 = 1100480512(0x41980000, float:19.0)
+            int r8 = org.telegram.messenger.AndroidUtilities.dp(r8)
+            float r8 = (float) r8
+            r10 = 1092616192(0x41200000, float:10.0)
+            int r10 = org.telegram.messenger.AndroidUtilities.dp(r10)
+            float r10 = (float) r10
+            r5.lineTo(r8, r10)
+            android.graphics.Path[] r5 = chat_filePath
+            r5 = r5[r7]
+            int r8 = org.telegram.messenger.AndroidUtilities.dp(r2)
+            float r8 = (float) r8
+            r10 = 1092616192(0x41200000, float:10.0)
+            int r10 = org.telegram.messenger.AndroidUtilities.dp(r10)
+            float r10 = (float) r10
+            r5.lineTo(r8, r10)
+            android.graphics.Path[] r5 = chat_filePath
+            r5 = r5[r7]
+            r5.close()
+            r5 = 2131165293(0x7var_d, float:1.79448E38)
+            android.graphics.drawable.Drawable r5 = r4.getDrawable(r5)
+            android.graphics.drawable.Drawable r5 = r5.mutate()
+            chat_flameIcon = r5
+            r5 = 2131165909(0x7var_d5, float:1.7946048E38)
+            android.graphics.drawable.Drawable r5 = r4.getDrawable(r5)
+            android.graphics.drawable.Drawable r5 = r5.mutate()
+            chat_gifIcon = r5
+            android.graphics.drawable.Drawable[][] r5 = chat_fileStatesDrawable
+            r5 = r5[r6]
+            r8 = 1110441984(0x42300000, float:44.0)
+            int r10 = org.telegram.messenger.AndroidUtilities.dp(r8)
+            r11 = 2131165912(0x7var_d8, float:1.7946055E38)
+            org.telegram.ui.Components.CombinedDrawable r10 = createCircleDrawableWithIcon(r10, r11)
+            r5[r6] = r10
+            android.graphics.drawable.Drawable[][] r5 = chat_fileStatesDrawable
+            r5 = r5[r6]
+            int r10 = org.telegram.messenger.AndroidUtilities.dp(r8)
+            org.telegram.ui.Components.CombinedDrawable r10 = createCircleDrawableWithIcon(r10, r11)
+            r5[r7] = r10
+            android.graphics.drawable.Drawable[][] r5 = chat_fileStatesDrawable
+            r5 = r5[r7]
+            int r10 = org.telegram.messenger.AndroidUtilities.dp(r8)
+            r12 = 2131165911(0x7var_d7, float:1.7946052E38)
+            org.telegram.ui.Components.CombinedDrawable r10 = createCircleDrawableWithIcon(r10, r12)
+            r5[r6] = r10
+            android.graphics.drawable.Drawable[][] r5 = chat_fileStatesDrawable
+            r5 = r5[r7]
+            int r10 = org.telegram.messenger.AndroidUtilities.dp(r8)
+            org.telegram.ui.Components.CombinedDrawable r10 = createCircleDrawableWithIcon(r10, r12)
+            r5[r7] = r10
+            android.graphics.drawable.Drawable[][] r5 = chat_fileStatesDrawable
+            r5 = r5[r3]
+            int r10 = org.telegram.messenger.AndroidUtilities.dp(r8)
+            r12 = 2131165910(0x7var_d6, float:1.794605E38)
+            org.telegram.ui.Components.CombinedDrawable r10 = createCircleDrawableWithIcon(r10, r12)
+            r5[r6] = r10
+            android.graphics.drawable.Drawable[][] r5 = chat_fileStatesDrawable
+            r5 = r5[r3]
+            int r10 = org.telegram.messenger.AndroidUtilities.dp(r8)
+            org.telegram.ui.Components.CombinedDrawable r10 = createCircleDrawableWithIcon(r10, r12)
+            r5[r7] = r10
+            android.graphics.drawable.Drawable[][] r5 = chat_fileStatesDrawable
+            r5 = r5[r9]
+            int r10 = org.telegram.messenger.AndroidUtilities.dp(r8)
+            r13 = 2131165908(0x7var_d4, float:1.7946046E38)
+            org.telegram.ui.Components.CombinedDrawable r10 = createCircleDrawableWithIcon(r10, r13)
+            r5[r6] = r10
+            android.graphics.drawable.Drawable[][] r5 = chat_fileStatesDrawable
+            r5 = r5[r9]
+            int r10 = org.telegram.messenger.AndroidUtilities.dp(r8)
+            org.telegram.ui.Components.CombinedDrawable r10 = createCircleDrawableWithIcon(r10, r13)
+            r5[r7] = r10
+            android.graphics.drawable.Drawable[][] r5 = chat_fileStatesDrawable
+            r10 = 4
+            r5 = r5[r10]
+            int r10 = org.telegram.messenger.AndroidUtilities.dp(r8)
+            r13 = 2131165907(0x7var_d3, float:1.7946044E38)
+            org.telegram.ui.Components.CombinedDrawable r10 = createCircleDrawableWithIcon(r10, r13)
+            r5[r6] = r10
+            android.graphics.drawable.Drawable[][] r5 = chat_fileStatesDrawable
+            r10 = 4
+            r5 = r5[r10]
+            int r10 = org.telegram.messenger.AndroidUtilities.dp(r8)
+            org.telegram.ui.Components.CombinedDrawable r10 = createCircleDrawableWithIcon(r10, r13)
+            r5[r7] = r10
+            android.graphics.drawable.Drawable[][] r5 = chat_fileStatesDrawable
+            r10 = 5
+            r5 = r5[r10]
+            int r10 = org.telegram.messenger.AndroidUtilities.dp(r8)
+            org.telegram.ui.Components.CombinedDrawable r10 = createCircleDrawableWithIcon(r10, r11)
+            r5[r6] = r10
+            android.graphics.drawable.Drawable[][] r5 = chat_fileStatesDrawable
+            r10 = 5
+            r5 = r5[r10]
+            int r10 = org.telegram.messenger.AndroidUtilities.dp(r8)
+            org.telegram.ui.Components.CombinedDrawable r10 = createCircleDrawableWithIcon(r10, r11)
+            r5[r7] = r10
+            android.graphics.drawable.Drawable[][] r5 = chat_fileStatesDrawable
+            r10 = 6
+            r5 = r5[r10]
+            int r10 = org.telegram.messenger.AndroidUtilities.dp(r8)
+            r14 = 2131165911(0x7var_d7, float:1.7946052E38)
+            org.telegram.ui.Components.CombinedDrawable r10 = createCircleDrawableWithIcon(r10, r14)
+            r5[r6] = r10
+            android.graphics.drawable.Drawable[][] r5 = chat_fileStatesDrawable
+            r10 = 6
+            r5 = r5[r10]
+            int r10 = org.telegram.messenger.AndroidUtilities.dp(r8)
+            org.telegram.ui.Components.CombinedDrawable r10 = createCircleDrawableWithIcon(r10, r14)
+            r5[r7] = r10
+            android.graphics.drawable.Drawable[][] r5 = chat_fileStatesDrawable
+            r10 = 7
+            r5 = r5[r10]
+            int r10 = org.telegram.messenger.AndroidUtilities.dp(r8)
+            org.telegram.ui.Components.CombinedDrawable r10 = createCircleDrawableWithIcon(r10, r12)
+            r5[r6] = r10
+            android.graphics.drawable.Drawable[][] r5 = chat_fileStatesDrawable
+            r10 = 7
+            r5 = r5[r10]
+            int r10 = org.telegram.messenger.AndroidUtilities.dp(r8)
+            org.telegram.ui.Components.CombinedDrawable r10 = createCircleDrawableWithIcon(r10, r12)
+            r5[r7] = r10
+            android.graphics.drawable.Drawable[][] r5 = chat_fileStatesDrawable
+            r10 = 8
+            r5 = r5[r10]
+            int r10 = org.telegram.messenger.AndroidUtilities.dp(r8)
+            r14 = 2131165908(0x7var_d4, float:1.7946046E38)
+            org.telegram.ui.Components.CombinedDrawable r10 = createCircleDrawableWithIcon(r10, r14)
+            r5[r6] = r10
+            android.graphics.drawable.Drawable[][] r5 = chat_fileStatesDrawable
+            r10 = 8
+            r5 = r5[r10]
+            int r10 = org.telegram.messenger.AndroidUtilities.dp(r8)
+            org.telegram.ui.Components.CombinedDrawable r10 = createCircleDrawableWithIcon(r10, r14)
+            r5[r7] = r10
+            android.graphics.drawable.Drawable[][] r5 = chat_fileStatesDrawable
+            r10 = 9
+            r5 = r5[r10]
+            int r10 = org.telegram.messenger.AndroidUtilities.dp(r8)
+            org.telegram.ui.Components.CombinedDrawable r10 = createCircleDrawableWithIcon(r10, r13)
+            r5[r6] = r10
+            android.graphics.drawable.Drawable[][] r5 = chat_fileStatesDrawable
+            r10 = 9
+            r5 = r5[r10]
+            int r10 = org.telegram.messenger.AndroidUtilities.dp(r8)
+            org.telegram.ui.Components.CombinedDrawable r10 = createCircleDrawableWithIcon(r10, r13)
+            r5[r7] = r10
+            android.graphics.drawable.Drawable[][] r5 = chat_photoStatesDrawables
+            r5 = r5[r6]
+            r10 = 1111490560(0x42400000, float:48.0)
+            int r14 = org.telegram.messenger.AndroidUtilities.dp(r10)
+            org.telegram.ui.Components.CombinedDrawable r14 = createCircleDrawableWithIcon(r14, r12)
+            r5[r6] = r14
+            android.graphics.drawable.Drawable[][] r5 = chat_photoStatesDrawables
+            r5 = r5[r6]
+            int r14 = org.telegram.messenger.AndroidUtilities.dp(r10)
+            org.telegram.ui.Components.CombinedDrawable r14 = createCircleDrawableWithIcon(r14, r12)
+            r5[r7] = r14
+            android.graphics.drawable.Drawable[][] r5 = chat_photoStatesDrawables
+            r5 = r5[r7]
+            int r14 = org.telegram.messenger.AndroidUtilities.dp(r10)
+            org.telegram.ui.Components.CombinedDrawable r14 = createCircleDrawableWithIcon(r14, r13)
+            r5[r6] = r14
+            android.graphics.drawable.Drawable[][] r5 = chat_photoStatesDrawables
+            r5 = r5[r7]
+            int r14 = org.telegram.messenger.AndroidUtilities.dp(r10)
+            org.telegram.ui.Components.CombinedDrawable r14 = createCircleDrawableWithIcon(r14, r13)
+            r5[r7] = r14
+            android.graphics.drawable.Drawable[][] r5 = chat_photoStatesDrawables
+            r5 = r5[r3]
+            int r14 = org.telegram.messenger.AndroidUtilities.dp(r10)
+            r15 = 2131165909(0x7var_d5, float:1.7946048E38)
+            org.telegram.ui.Components.CombinedDrawable r14 = createCircleDrawableWithIcon(r14, r15)
+            r5[r6] = r14
+            android.graphics.drawable.Drawable[][] r5 = chat_photoStatesDrawables
+            r5 = r5[r3]
+            int r14 = org.telegram.messenger.AndroidUtilities.dp(r10)
+            org.telegram.ui.Components.CombinedDrawable r14 = createCircleDrawableWithIcon(r14, r15)
+            r5[r7] = r14
+            android.graphics.drawable.Drawable[][] r5 = chat_photoStatesDrawables
+            r5 = r5[r9]
+            int r14 = org.telegram.messenger.AndroidUtilities.dp(r10)
+            org.telegram.ui.Components.CombinedDrawable r14 = createCircleDrawableWithIcon(r14, r11)
+            r5[r6] = r14
+            android.graphics.drawable.Drawable[][] r5 = chat_photoStatesDrawables
+            r5 = r5[r9]
+            int r9 = org.telegram.messenger.AndroidUtilities.dp(r10)
+            org.telegram.ui.Components.CombinedDrawable r9 = createCircleDrawableWithIcon(r9, r11)
+            r5[r7] = r9
+            android.graphics.drawable.Drawable[][] r5 = chat_photoStatesDrawables
+            r9 = 4
+            r9 = r5[r9]
+            r11 = 4
+            r5 = r5[r11]
+            r11 = 2131165293(0x7var_d, float:1.79448E38)
+            android.graphics.drawable.Drawable r11 = r4.getDrawable(r11)
+            r5[r7] = r11
+            r9[r6] = r11
+            android.graphics.drawable.Drawable[][] r5 = chat_photoStatesDrawables
+            r9 = 5
+            r9 = r5[r9]
+            r11 = 5
+            r5 = r5[r11]
+            r11 = 2131165346(0x7var_a2, float:1.7944907E38)
+            android.graphics.drawable.Drawable r11 = r4.getDrawable(r11)
+            r5[r7] = r11
+            r9[r6] = r11
+            android.graphics.drawable.Drawable[][] r5 = chat_photoStatesDrawables
+            r9 = 6
+            r9 = r5[r9]
             r11 = 6
-            r4 = r4[r11]
-            int r11 = org.telegram.messenger.AndroidUtilities.dp(r7)
-            r15 = 2131165887(0x7var_bf, float:1.7946004E38)
-            org.telegram.ui.Components.CombinedDrawable r11 = createCircleDrawableWithIcon(r11, r15)
-            r4[r5] = r11
-            android.graphics.drawable.Drawable[][] r4 = chat_fileStatesDrawable
-            r11 = 6
-            r4 = r4[r11]
-            int r11 = org.telegram.messenger.AndroidUtilities.dp(r7)
-            org.telegram.ui.Components.CombinedDrawable r11 = createCircleDrawableWithIcon(r11, r15)
-            r4[r6] = r11
-            android.graphics.drawable.Drawable[][] r4 = chat_fileStatesDrawable
-            r11 = 7
-            r4 = r4[r11]
-            int r11 = org.telegram.messenger.AndroidUtilities.dp(r7)
-            org.telegram.ui.Components.CombinedDrawable r11 = createCircleDrawableWithIcon(r11, r13)
-            r4[r5] = r11
-            android.graphics.drawable.Drawable[][] r4 = chat_fileStatesDrawable
-            r11 = 7
-            r4 = r4[r11]
-            int r11 = org.telegram.messenger.AndroidUtilities.dp(r7)
-            org.telegram.ui.Components.CombinedDrawable r11 = createCircleDrawableWithIcon(r11, r13)
-            r4[r6] = r11
-            android.graphics.drawable.Drawable[][] r4 = chat_fileStatesDrawable
-            r11 = 8
-            r4 = r4[r11]
-            int r11 = org.telegram.messenger.AndroidUtilities.dp(r7)
-            r15 = 2131165884(0x7var_bc, float:1.7945998E38)
-            org.telegram.ui.Components.CombinedDrawable r11 = createCircleDrawableWithIcon(r11, r15)
-            r4[r5] = r11
-            android.graphics.drawable.Drawable[][] r4 = chat_fileStatesDrawable
-            r11 = 8
-            r4 = r4[r11]
-            int r11 = org.telegram.messenger.AndroidUtilities.dp(r7)
-            org.telegram.ui.Components.CombinedDrawable r11 = createCircleDrawableWithIcon(r11, r15)
-            r4[r6] = r11
-            android.graphics.drawable.Drawable[][] r4 = chat_fileStatesDrawable
-            r11 = 9
-            r4 = r4[r11]
-            int r11 = org.telegram.messenger.AndroidUtilities.dp(r7)
-            org.telegram.ui.Components.CombinedDrawable r11 = createCircleDrawableWithIcon(r11, r14)
-            r4[r5] = r11
-            android.graphics.drawable.Drawable[][] r4 = chat_fileStatesDrawable
-            r11 = 9
-            r4 = r4[r11]
-            int r11 = org.telegram.messenger.AndroidUtilities.dp(r7)
-            org.telegram.ui.Components.CombinedDrawable r11 = createCircleDrawableWithIcon(r11, r14)
-            r4[r6] = r11
-            android.graphics.drawable.Drawable[][] r4 = chat_photoStatesDrawables
-            r4 = r4[r5]
-            r11 = 1111490560(0x42400000, float:48.0)
-            int r15 = org.telegram.messenger.AndroidUtilities.dp(r11)
-            org.telegram.ui.Components.CombinedDrawable r15 = createCircleDrawableWithIcon(r15, r13)
-            r4[r5] = r15
-            android.graphics.drawable.Drawable[][] r4 = chat_photoStatesDrawables
-            r4 = r4[r5]
-            int r15 = org.telegram.messenger.AndroidUtilities.dp(r11)
-            org.telegram.ui.Components.CombinedDrawable r15 = createCircleDrawableWithIcon(r15, r13)
-            r4[r6] = r15
-            android.graphics.drawable.Drawable[][] r4 = chat_photoStatesDrawables
-            r4 = r4[r6]
-            int r15 = org.telegram.messenger.AndroidUtilities.dp(r11)
-            org.telegram.ui.Components.CombinedDrawable r15 = createCircleDrawableWithIcon(r15, r14)
-            r4[r5] = r15
-            android.graphics.drawable.Drawable[][] r4 = chat_photoStatesDrawables
-            r4 = r4[r6]
-            int r15 = org.telegram.messenger.AndroidUtilities.dp(r11)
-            org.telegram.ui.Components.CombinedDrawable r15 = createCircleDrawableWithIcon(r15, r14)
-            r4[r6] = r15
-            android.graphics.drawable.Drawable[][] r4 = chat_photoStatesDrawables
-            r4 = r4[r2]
-            int r15 = org.telegram.messenger.AndroidUtilities.dp(r11)
-            r1 = 2131165885(0x7var_bd, float:1.7946E38)
-            org.telegram.ui.Components.CombinedDrawable r1 = createCircleDrawableWithIcon(r15, r1)
-            r4[r5] = r1
-            android.graphics.drawable.Drawable[][] r1 = chat_photoStatesDrawables
-            r1 = r1[r2]
-            int r4 = org.telegram.messenger.AndroidUtilities.dp(r11)
-            r15 = 2131165885(0x7var_bd, float:1.7946E38)
-            org.telegram.ui.Components.CombinedDrawable r4 = createCircleDrawableWithIcon(r4, r15)
-            r1[r6] = r4
-            android.graphics.drawable.Drawable[][] r1 = chat_photoStatesDrawables
-            r1 = r1[r8]
-            int r4 = org.telegram.messenger.AndroidUtilities.dp(r11)
-            org.telegram.ui.Components.CombinedDrawable r4 = createCircleDrawableWithIcon(r4, r12)
-            r1[r5] = r4
-            android.graphics.drawable.Drawable[][] r1 = chat_photoStatesDrawables
-            r1 = r1[r8]
-            int r4 = org.telegram.messenger.AndroidUtilities.dp(r11)
-            org.telegram.ui.Components.CombinedDrawable r4 = createCircleDrawableWithIcon(r4, r12)
-            r1[r6] = r4
-            android.graphics.drawable.Drawable[][] r1 = chat_photoStatesDrawables
-            r4 = r1[r10]
-            r1 = r1[r10]
-            r8 = 2131165322(0x7var_a, float:1.7944858E38)
-            android.graphics.drawable.Drawable r8 = r3.getDrawable(r8)
-            r1[r6] = r8
-            r4[r5] = r8
-            android.graphics.drawable.Drawable[][] r1 = chat_photoStatesDrawables
-            r4 = r1[r9]
-            r1 = r1[r9]
-            r8 = 2131165377(0x7var_c1, float:1.794497E38)
-            android.graphics.drawable.Drawable r8 = r3.getDrawable(r8)
-            r1[r6] = r8
-            r4[r5] = r8
-            android.graphics.drawable.Drawable[][] r1 = chat_photoStatesDrawables
-            r4 = 6
-            r4 = r1[r4]
-            r8 = 6
-            r1 = r1[r8]
-            r8 = 2131166020(0x7var_, float:1.7946274E38)
-            android.graphics.drawable.Drawable r8 = r3.getDrawable(r8)
-            r1[r6] = r8
-            r4[r5] = r8
-            android.graphics.drawable.Drawable[][] r1 = chat_photoStatesDrawables
-            r4 = 7
-            r1 = r1[r4]
-            int r4 = org.telegram.messenger.AndroidUtilities.dp(r11)
-            org.telegram.ui.Components.CombinedDrawable r4 = createCircleDrawableWithIcon(r4, r13)
-            r1[r5] = r4
-            android.graphics.drawable.Drawable[][] r1 = chat_photoStatesDrawables
-            r4 = 7
-            r1 = r1[r4]
-            int r4 = org.telegram.messenger.AndroidUtilities.dp(r11)
-            org.telegram.ui.Components.CombinedDrawable r4 = createCircleDrawableWithIcon(r4, r13)
-            r1[r6] = r4
-            android.graphics.drawable.Drawable[][] r1 = chat_photoStatesDrawables
-            r4 = 8
-            r1 = r1[r4]
-            int r4 = org.telegram.messenger.AndroidUtilities.dp(r11)
-            org.telegram.ui.Components.CombinedDrawable r4 = createCircleDrawableWithIcon(r4, r14)
-            r1[r5] = r4
-            android.graphics.drawable.Drawable[][] r1 = chat_photoStatesDrawables
-            r4 = 8
-            r1 = r1[r4]
-            int r4 = org.telegram.messenger.AndroidUtilities.dp(r11)
-            org.telegram.ui.Components.CombinedDrawable r4 = createCircleDrawableWithIcon(r4, r14)
-            r1[r6] = r4
-            android.graphics.drawable.Drawable[][] r1 = chat_photoStatesDrawables
-            r4 = 9
-            r1 = r1[r4]
-            r4 = 2131165422(0x7var_ee, float:1.794506E38)
-            android.graphics.drawable.Drawable r4 = r3.getDrawable(r4)
+            r5 = r5[r11]
+            r11 = 2131166047(0x7var_f, float:1.7946328E38)
+            android.graphics.drawable.Drawable r11 = r4.getDrawable(r11)
+            r5[r7] = r11
+            r9[r6] = r11
+            android.graphics.drawable.Drawable[][] r5 = chat_photoStatesDrawables
+            r9 = 7
+            r5 = r5[r9]
+            int r9 = org.telegram.messenger.AndroidUtilities.dp(r10)
+            org.telegram.ui.Components.CombinedDrawable r9 = createCircleDrawableWithIcon(r9, r12)
+            r5[r6] = r9
+            android.graphics.drawable.Drawable[][] r5 = chat_photoStatesDrawables
+            r9 = 7
+            r5 = r5[r9]
+            int r9 = org.telegram.messenger.AndroidUtilities.dp(r10)
+            org.telegram.ui.Components.CombinedDrawable r9 = createCircleDrawableWithIcon(r9, r12)
+            r5[r7] = r9
+            android.graphics.drawable.Drawable[][] r5 = chat_photoStatesDrawables
+            r9 = 8
+            r5 = r5[r9]
+            int r9 = org.telegram.messenger.AndroidUtilities.dp(r10)
+            org.telegram.ui.Components.CombinedDrawable r9 = createCircleDrawableWithIcon(r9, r13)
+            r5[r6] = r9
+            android.graphics.drawable.Drawable[][] r5 = chat_photoStatesDrawables
+            r9 = 8
+            r5 = r5[r9]
+            int r9 = org.telegram.messenger.AndroidUtilities.dp(r10)
+            org.telegram.ui.Components.CombinedDrawable r9 = createCircleDrawableWithIcon(r9, r13)
+            r5[r7] = r9
+            android.graphics.drawable.Drawable[][] r5 = chat_photoStatesDrawables
+            r9 = 10
+            r5 = r5[r9]
+            int r9 = org.telegram.messenger.AndroidUtilities.dp(r10)
+            org.telegram.ui.Components.CombinedDrawable r9 = createCircleDrawableWithIcon(r9, r12)
+            r5[r6] = r9
+            android.graphics.drawable.Drawable[][] r5 = chat_photoStatesDrawables
+            r9 = 10
+            r5 = r5[r9]
+            int r9 = org.telegram.messenger.AndroidUtilities.dp(r10)
+            org.telegram.ui.Components.CombinedDrawable r9 = createCircleDrawableWithIcon(r9, r12)
+            r5[r7] = r9
+            android.graphics.drawable.Drawable[][] r5 = chat_photoStatesDrawables
+            r9 = 11
+            r5 = r5[r9]
+            int r9 = org.telegram.messenger.AndroidUtilities.dp(r10)
+            org.telegram.ui.Components.CombinedDrawable r9 = createCircleDrawableWithIcon(r9, r13)
+            r5[r6] = r9
+            android.graphics.drawable.Drawable[][] r5 = chat_photoStatesDrawables
+            r9 = 11
+            r5 = r5[r9]
+            int r9 = org.telegram.messenger.AndroidUtilities.dp(r10)
+            org.telegram.ui.Components.CombinedDrawable r9 = createCircleDrawableWithIcon(r9, r13)
+            r5[r7] = r9
+            android.graphics.drawable.Drawable[] r5 = chat_contactDrawable
+            int r9 = org.telegram.messenger.AndroidUtilities.dp(r8)
+            r10 = 2131165689(0x7var_f9, float:1.7945602E38)
+            org.telegram.ui.Components.CombinedDrawable r9 = createCircleDrawableWithIcon(r9, r10)
+            r5[r6] = r9
+            android.graphics.drawable.Drawable[] r5 = chat_contactDrawable
+            int r8 = org.telegram.messenger.AndroidUtilities.dp(r8)
+            r9 = 2131165689(0x7var_f9, float:1.7945602E38)
+            org.telegram.ui.Components.CombinedDrawable r8 = createCircleDrawableWithIcon(r8, r9)
+            r5[r7] = r8
+            android.graphics.drawable.Drawable[] r5 = chat_locationDrawable
+            r8 = 2131165788(0x7var_c, float:1.7945803E38)
+            android.graphics.drawable.Drawable r8 = r4.getDrawable(r8)
+            android.graphics.drawable.Drawable r8 = r8.mutate()
+            r5[r6] = r8
+            android.graphics.drawable.Drawable[] r5 = chat_locationDrawable
+            r8 = 2131165788(0x7var_c, float:1.7945803E38)
+            android.graphics.drawable.Drawable r4 = r4.getDrawable(r8)
             android.graphics.drawable.Drawable r4 = r4.mutate()
-            r1[r5] = r4
-            android.graphics.drawable.Drawable[][] r1 = chat_photoStatesDrawables
-            r4 = 9
-            r1 = r1[r4]
-            r4 = 2131165422(0x7var_ee, float:1.794506E38)
-            android.graphics.drawable.Drawable r4 = r3.getDrawable(r4)
+            r5[r7] = r4
+            android.content.res.Resources r4 = r17.getResources()
+            r5 = 2131165369(0x7var_b9, float:1.7944953E38)
+            android.graphics.drawable.Drawable r4 = r4.getDrawable(r5)
             android.graphics.drawable.Drawable r4 = r4.mutate()
-            r1[r6] = r4
-            android.graphics.drawable.Drawable[][] r1 = chat_photoStatesDrawables
-            r4 = 10
-            r1 = r1[r4]
-            int r4 = org.telegram.messenger.AndroidUtilities.dp(r11)
-            org.telegram.ui.Components.CombinedDrawable r4 = createCircleDrawableWithIcon(r4, r13)
-            r1[r5] = r4
-            android.graphics.drawable.Drawable[][] r1 = chat_photoStatesDrawables
-            r4 = 10
-            r1 = r1[r4]
-            int r4 = org.telegram.messenger.AndroidUtilities.dp(r11)
-            org.telegram.ui.Components.CombinedDrawable r4 = createCircleDrawableWithIcon(r4, r13)
-            r1[r6] = r4
-            android.graphics.drawable.Drawable[][] r1 = chat_photoStatesDrawables
-            r4 = 11
-            r1 = r1[r4]
-            int r4 = org.telegram.messenger.AndroidUtilities.dp(r11)
-            org.telegram.ui.Components.CombinedDrawable r4 = createCircleDrawableWithIcon(r4, r14)
-            r1[r5] = r4
-            android.graphics.drawable.Drawable[][] r1 = chat_photoStatesDrawables
-            r4 = 11
-            r1 = r1[r4]
-            int r4 = org.telegram.messenger.AndroidUtilities.dp(r11)
-            org.telegram.ui.Components.CombinedDrawable r4 = createCircleDrawableWithIcon(r4, r14)
-            r1[r6] = r4
-            android.graphics.drawable.Drawable[][] r1 = chat_photoStatesDrawables
-            r4 = 12
-            r1 = r1[r4]
-            r4 = 2131165422(0x7var_ee, float:1.794506E38)
-            android.graphics.drawable.Drawable r4 = r3.getDrawable(r4)
+            chat_composeShadowDrawable = r4
+            android.content.res.Resources r4 = r17.getResources()
+            r5 = 2131166137(0x7var_b9, float:1.794651E38)
+            android.graphics.drawable.Drawable r4 = r4.getDrawable(r5)
             android.graphics.drawable.Drawable r4 = r4.mutate()
-            r1[r5] = r4
-            android.graphics.drawable.Drawable[][] r1 = chat_photoStatesDrawables
-            r4 = 12
-            r1 = r1[r4]
-            r4 = 2131165422(0x7var_ee, float:1.794506E38)
-            android.graphics.drawable.Drawable r4 = r3.getDrawable(r4)
-            android.graphics.drawable.Drawable r4 = r4.mutate()
-            r1[r6] = r4
-            android.graphics.drawable.Drawable[] r1 = chat_contactDrawable
-            int r4 = org.telegram.messenger.AndroidUtilities.dp(r7)
-            r8 = 2131165779(0x7var_, float:1.7945785E38)
-            org.telegram.ui.Components.CombinedDrawable r4 = createCircleDrawableWithIcon(r4, r8)
-            r1[r5] = r4
-            android.graphics.drawable.Drawable[] r1 = chat_contactDrawable
-            int r4 = org.telegram.messenger.AndroidUtilities.dp(r7)
-            r7 = 2131165779(0x7var_, float:1.7945785E38)
-            org.telegram.ui.Components.CombinedDrawable r4 = createCircleDrawableWithIcon(r4, r7)
-            r1[r6] = r4
-            android.graphics.drawable.Drawable[] r1 = chat_locationDrawable
-            r4 = 2131165818(0x7var_a, float:1.7945864E38)
-            android.graphics.drawable.Drawable r4 = r3.getDrawable(r4)
-            android.graphics.drawable.Drawable r4 = r4.mutate()
-            r1[r5] = r4
-            android.graphics.drawable.Drawable[] r1 = chat_locationDrawable
-            r4 = 2131165818(0x7var_a, float:1.7945864E38)
-            android.graphics.drawable.Drawable r3 = r3.getDrawable(r4)
-            android.graphics.drawable.Drawable r3 = r3.mutate()
-            r1[r6] = r3
-            android.content.res.Resources r1 = r17.getResources()
-            r3 = 2131165400(0x7var_d8, float:1.7945016E38)
-            android.graphics.drawable.Drawable r1 = r1.getDrawable(r3)
-            android.graphics.drawable.Drawable r1 = r1.mutate()
-            chat_composeShadowDrawable = r1
-            android.content.res.Resources r1 = r17.getResources()
-            r3 = 2131166129(0x7var_b1, float:1.7946495E38)
-            android.graphics.drawable.Drawable r1 = r1.getDrawable(r3)
-            android.graphics.drawable.Drawable r1 = r1.mutate()
-            chat_composeShadowRoundDrawable = r1
-            r1 = 0
-            int r3 = org.telegram.messenger.AndroidUtilities.roundMessageSize     // Catch:{ all -> 0x0a7b }
-            r4 = 1086324736(0x40CLASSNAME, float:6.0)
-            int r4 = org.telegram.messenger.AndroidUtilities.dp(r4)     // Catch:{ all -> 0x0a7b }
-            int r3 = r3 + r4
-            android.graphics.Bitmap$Config r4 = android.graphics.Bitmap.Config.ARGB_8888     // Catch:{ all -> 0x0a7b }
-            android.graphics.Bitmap r4 = android.graphics.Bitmap.createBitmap(r3, r3, r4)     // Catch:{ all -> 0x0a7b }
-            android.graphics.Canvas r7 = new android.graphics.Canvas     // Catch:{ all -> 0x0a7b }
-            r7.<init>(r4)     // Catch:{ all -> 0x0a7b }
-            android.graphics.Paint r8 = new android.graphics.Paint     // Catch:{ all -> 0x0a7b }
-            r8.<init>(r6)     // Catch:{ all -> 0x0a7b }
-            r8.setColor(r5)     // Catch:{ all -> 0x0a7b }
-            android.graphics.Paint$Style r9 = android.graphics.Paint.Style.FILL     // Catch:{ all -> 0x0a7b }
-            r8.setStyle(r9)     // Catch:{ all -> 0x0a7b }
-            android.graphics.PorterDuffXfermode r9 = new android.graphics.PorterDuffXfermode     // Catch:{ all -> 0x0a7b }
-            android.graphics.PorterDuff$Mode r10 = android.graphics.PorterDuff.Mode.CLEAR     // Catch:{ all -> 0x0a7b }
-            r9.<init>(r10)     // Catch:{ all -> 0x0a7b }
-            r8.setXfermode(r9)     // Catch:{ all -> 0x0a7b }
-            android.graphics.Paint r9 = new android.graphics.Paint     // Catch:{ all -> 0x0a7b }
-            r9.<init>(r6)     // Catch:{ all -> 0x0a7b }
-            r10 = 1082130432(0x40800000, float:4.0)
-            int r10 = org.telegram.messenger.AndroidUtilities.dp(r10)     // Catch:{ all -> 0x0a7b }
-            float r10 = (float) r10     // Catch:{ all -> 0x0a7b }
-            r11 = 0
+            chat_composeShadowRoundDrawable = r4
+            r4 = 0
+            int r5 = org.telegram.messenger.AndroidUtilities.roundMessageSize     // Catch:{ all -> 0x0948 }
+            r8 = 1086324736(0x40CLASSNAME, float:6.0)
+            int r8 = org.telegram.messenger.AndroidUtilities.dp(r8)     // Catch:{ all -> 0x0948 }
+            int r5 = r5 + r8
+            android.graphics.Bitmap$Config r8 = android.graphics.Bitmap.Config.ARGB_8888     // Catch:{ all -> 0x0948 }
+            android.graphics.Bitmap r8 = android.graphics.Bitmap.createBitmap(r5, r5, r8)     // Catch:{ all -> 0x0948 }
+            android.graphics.Canvas r9 = new android.graphics.Canvas     // Catch:{ all -> 0x0948 }
+            r9.<init>(r8)     // Catch:{ all -> 0x0948 }
+            android.graphics.Paint r10 = new android.graphics.Paint     // Catch:{ all -> 0x0948 }
+            r10.<init>(r7)     // Catch:{ all -> 0x0948 }
+            r10.setColor(r6)     // Catch:{ all -> 0x0948 }
+            android.graphics.Paint$Style r11 = android.graphics.Paint.Style.FILL     // Catch:{ all -> 0x0948 }
+            r10.setStyle(r11)     // Catch:{ all -> 0x0948 }
+            android.graphics.PorterDuffXfermode r11 = new android.graphics.PorterDuffXfermode     // Catch:{ all -> 0x0948 }
+            android.graphics.PorterDuff$Mode r12 = android.graphics.PorterDuff.Mode.CLEAR     // Catch:{ all -> 0x0948 }
+            r11.<init>(r12)     // Catch:{ all -> 0x0948 }
+            r10.setXfermode(r11)     // Catch:{ all -> 0x0948 }
+            android.graphics.Paint r11 = new android.graphics.Paint     // Catch:{ all -> 0x0948 }
+            r11.<init>(r7)     // Catch:{ all -> 0x0948 }
+            r12 = 1082130432(0x40800000, float:4.0)
+            int r12 = org.telegram.messenger.AndroidUtilities.dp(r12)     // Catch:{ all -> 0x0948 }
+            float r12 = (float) r12     // Catch:{ all -> 0x0948 }
+            r13 = 0
+            r14 = 0
+            r15 = 1593835520(0x5var_, float:9.223372E18)
+            r11.setShadowLayer(r12, r13, r14, r15)     // Catch:{ all -> 0x0948 }
             r12 = 0
-            r13 = 1593835520(0x5var_, float:9.223372E18)
-            r9.setShadowLayer(r10, r11, r12, r13)     // Catch:{ all -> 0x0a7b }
-            r10 = 0
-        L_0x0a53:
-            if (r10 >= r2) goto L_0x0a71
-            int r11 = r3 / 2
-            float r11 = (float) r11     // Catch:{ all -> 0x0a7b }
-            int r12 = r3 / 2
-            float r12 = (float) r12     // Catch:{ all -> 0x0a7b }
-            int r13 = org.telegram.messenger.AndroidUtilities.roundMessageSize     // Catch:{ all -> 0x0a7b }
-            int r13 = r13 / r2
-            r14 = 1065353216(0x3var_, float:1.0)
-            int r14 = org.telegram.messenger.AndroidUtilities.dp(r14)     // Catch:{ all -> 0x0a7b }
-            int r13 = r13 - r14
-            float r13 = (float) r13     // Catch:{ all -> 0x0a7b }
-            if (r10 != 0) goto L_0x0a6a
-            r14 = r9
-            goto L_0x0a6b
-        L_0x0a6a:
-            r14 = r8
-        L_0x0a6b:
-            r7.drawCircle(r11, r12, r13, r14)     // Catch:{ all -> 0x0a7b }
-            int r10 = r10 + 1
-            goto L_0x0a53
-        L_0x0a71:
-            r7.setBitmap(r1)     // Catch:{ Exception -> 0x0a74 }
-        L_0x0a74:
-            android.graphics.drawable.BitmapDrawable r3 = new android.graphics.drawable.BitmapDrawable     // Catch:{ all -> 0x0a7b }
-            r3.<init>(r4)     // Catch:{ all -> 0x0a7b }
-            chat_roundVideoShadow = r3     // Catch:{ all -> 0x0a7b }
-        L_0x0a7b:
-            java.util.HashMap<java.lang.String, android.graphics.drawable.Drawable> r3 = defaultChatDrawables
-            r3.clear()
-            java.util.HashMap<java.lang.String, java.lang.String> r3 = defaultChatDrawableColorKeys
-            r3.clear()
-            android.graphics.drawable.Drawable r3 = chat_botInlineDrawable
-            java.lang.String r4 = "drawableBotInline"
-            java.lang.String r7 = "chat_serviceIcon"
-            addChatDrawable(r4, r3, r7)
-            android.graphics.drawable.Drawable r3 = chat_botWebViewDrawable
-            java.lang.String r4 = "drawableBotWebView"
-            addChatDrawable(r4, r3, r7)
-            android.graphics.drawable.Drawable r3 = chat_botLinkDrawable
-            java.lang.String r4 = "drawableBotLink"
-            addChatDrawable(r4, r3, r7)
-            android.graphics.drawable.Drawable r3 = chat_botInviteDrawable
-            java.lang.String r4 = "drawable_botInvite"
-            addChatDrawable(r4, r3, r7)
-            android.graphics.drawable.Drawable r3 = chat_goIconDrawable
-            java.lang.String r4 = "drawableGoIcon"
-            addChatDrawable(r4, r3, r7)
-            android.graphics.drawable.Drawable r3 = chat_commentStickerDrawable
-            java.lang.String r4 = "drawableCommentSticker"
-            addChatDrawable(r4, r3, r7)
-            android.graphics.drawable.Drawable r3 = chat_msgErrorDrawable
-            java.lang.String r4 = "drawableMsgError"
-            java.lang.String r8 = "chat_sentErrorIcon"
-            addChatDrawable(r4, r3, r8)
-            org.telegram.ui.ActionBar.Theme$MessageDrawable r3 = chat_msgInDrawable
-            java.lang.String r4 = "drawableMsgIn"
-            addChatDrawable(r4, r3, r1)
-            org.telegram.ui.ActionBar.Theme$MessageDrawable r3 = chat_msgInSelectedDrawable
-            java.lang.String r4 = "drawableMsgInSelected"
-            addChatDrawable(r4, r3, r1)
-            org.telegram.ui.ActionBar.Theme$MessageDrawable r3 = chat_msgInMediaDrawable
-            java.lang.String r4 = "drawableMsgInMedia"
-            addChatDrawable(r4, r3, r1)
-            org.telegram.ui.ActionBar.Theme$MessageDrawable r3 = chat_msgInMediaSelectedDrawable
-            java.lang.String r4 = "drawableMsgInMediaSelected"
-            addChatDrawable(r4, r3, r1)
-            org.telegram.ui.ActionBar.Theme$MessageDrawable r3 = chat_msgOutDrawable
-            java.lang.String r4 = "drawableMsgOut"
-            addChatDrawable(r4, r3, r1)
-            org.telegram.ui.ActionBar.Theme$MessageDrawable r3 = chat_msgOutSelectedDrawable
-            java.lang.String r4 = "drawableMsgOutSelected"
-            addChatDrawable(r4, r3, r1)
-            org.telegram.ui.ActionBar.Theme$MessageDrawable r3 = chat_msgOutMediaDrawable
-            java.lang.String r4 = "drawableMsgOutMedia"
-            addChatDrawable(r4, r3, r1)
-            org.telegram.ui.ActionBar.Theme$MessageDrawable r3 = chat_msgOutMediaSelectedDrawable
-            java.lang.String r4 = "drawableMsgOutMediaSelected"
-            addChatDrawable(r4, r3, r1)
-            android.graphics.drawable.Drawable[] r1 = chat_msgOutCallDrawable
-            r1 = r1[r5]
-            java.lang.String r3 = "drawableMsgOutCallAudio"
-            java.lang.String r4 = "chat_outInstant"
-            addChatDrawable(r3, r1, r4)
-            android.graphics.drawable.Drawable[] r1 = chat_msgOutCallSelectedDrawable
-            r1 = r1[r5]
-            java.lang.String r3 = "drawableMsgOutCallAudioSelected"
-            java.lang.String r4 = "chat_outInstantSelected"
-            addChatDrawable(r3, r1, r4)
+        L_0x091d:
+            if (r12 >= r3) goto L_0x093e
+            int r13 = r5 / 2
+            float r13 = (float) r13     // Catch:{ all -> 0x0948 }
+            int r14 = r5 / 2
+            float r14 = (float) r14     // Catch:{ all -> 0x0948 }
+            int r15 = org.telegram.messenger.AndroidUtilities.roundMessageSize     // Catch:{ all -> 0x0948 }
+            int r15 = r15 / r3
+            r16 = 1065353216(0x3var_, float:1.0)
+            int r16 = org.telegram.messenger.AndroidUtilities.dp(r16)     // Catch:{ all -> 0x0948 }
+            int r15 = r15 - r16
+            float r15 = (float) r15     // Catch:{ all -> 0x0948 }
+            if (r12 != 0) goto L_0x0935
+            r1 = r11
+            goto L_0x0936
+        L_0x0935:
+            r1 = r10
+        L_0x0936:
+            r9.drawCircle(r13, r14, r15, r1)     // Catch:{ all -> 0x0948 }
+            int r12 = r12 + 1
+            r1 = 1077936128(0x40400000, float:3.0)
+            goto L_0x091d
+        L_0x093e:
+            r9.setBitmap(r4)     // Catch:{ Exception -> 0x0941 }
+        L_0x0941:
+            android.graphics.drawable.BitmapDrawable r1 = new android.graphics.drawable.BitmapDrawable     // Catch:{ all -> 0x0948 }
+            r1.<init>(r8)     // Catch:{ all -> 0x0948 }
+            chat_roundVideoShadow = r1     // Catch:{ all -> 0x0948 }
+        L_0x0948:
+            java.util.HashMap<java.lang.String, android.graphics.drawable.Drawable> r1 = defaultChatDrawables
+            r1.clear()
+            java.util.HashMap<java.lang.String, java.lang.String> r1 = defaultChatDrawableColorKeys
+            r1.clear()
+            android.graphics.drawable.Drawable r1 = chat_botInlineDrawable
+            java.lang.String r5 = "drawableBotInline"
+            java.lang.String r8 = "chat_serviceIcon"
+            addChatDrawable(r5, r1, r8)
+            android.graphics.drawable.Drawable r1 = chat_botWebViewDrawable
+            java.lang.String r5 = "drawableBotWebView"
+            addChatDrawable(r5, r1, r8)
+            android.graphics.drawable.Drawable r1 = chat_botLinkDrawable
+            java.lang.String r5 = "drawableBotLink"
+            addChatDrawable(r5, r1, r8)
+            android.graphics.drawable.Drawable r1 = chat_botInviteDrawable
+            java.lang.String r5 = "drawable_botInvite"
+            addChatDrawable(r5, r1, r8)
+            android.graphics.drawable.Drawable r1 = chat_goIconDrawable
+            java.lang.String r5 = "drawableGoIcon"
+            addChatDrawable(r5, r1, r8)
+            android.graphics.drawable.Drawable r1 = chat_commentStickerDrawable
+            java.lang.String r5 = "drawableCommentSticker"
+            addChatDrawable(r5, r1, r8)
+            android.graphics.drawable.Drawable r1 = chat_msgErrorDrawable
+            java.lang.String r5 = "drawableMsgError"
+            java.lang.String r9 = "chat_sentErrorIcon"
+            addChatDrawable(r5, r1, r9)
+            org.telegram.ui.ActionBar.Theme$MessageDrawable r1 = chat_msgInDrawable
+            java.lang.String r5 = "drawableMsgIn"
+            addChatDrawable(r5, r1, r4)
+            org.telegram.ui.ActionBar.Theme$MessageDrawable r1 = chat_msgInSelectedDrawable
+            java.lang.String r5 = "drawableMsgInSelected"
+            addChatDrawable(r5, r1, r4)
+            org.telegram.ui.ActionBar.Theme$MessageDrawable r1 = chat_msgInMediaDrawable
+            java.lang.String r5 = "drawableMsgInMedia"
+            addChatDrawable(r5, r1, r4)
+            org.telegram.ui.ActionBar.Theme$MessageDrawable r1 = chat_msgInMediaSelectedDrawable
+            java.lang.String r5 = "drawableMsgInMediaSelected"
+            addChatDrawable(r5, r1, r4)
+            org.telegram.ui.ActionBar.Theme$MessageDrawable r1 = chat_msgOutDrawable
+            java.lang.String r5 = "drawableMsgOut"
+            addChatDrawable(r5, r1, r4)
+            org.telegram.ui.ActionBar.Theme$MessageDrawable r1 = chat_msgOutSelectedDrawable
+            java.lang.String r5 = "drawableMsgOutSelected"
+            addChatDrawable(r5, r1, r4)
+            org.telegram.ui.ActionBar.Theme$MessageDrawable r1 = chat_msgOutMediaDrawable
+            java.lang.String r5 = "drawableMsgOutMedia"
+            addChatDrawable(r5, r1, r4)
+            org.telegram.ui.ActionBar.Theme$MessageDrawable r1 = chat_msgOutMediaSelectedDrawable
+            java.lang.String r5 = "drawableMsgOutMediaSelected"
+            addChatDrawable(r5, r1, r4)
             android.graphics.drawable.Drawable[] r1 = chat_msgOutCallDrawable
             r1 = r1[r6]
-            java.lang.String r3 = "drawableMsgOutCallVideo"
-            java.lang.String r4 = "chat_outInstant"
-            addChatDrawable(r3, r1, r4)
+            java.lang.String r4 = "drawableMsgOutCallAudio"
+            java.lang.String r5 = "chat_outInstant"
+            addChatDrawable(r4, r1, r5)
             android.graphics.drawable.Drawable[] r1 = chat_msgOutCallSelectedDrawable
             r1 = r1[r6]
-            java.lang.String r3 = "drawableMsgOutCallVideo"
-            java.lang.String r4 = "chat_outInstantSelected"
-            addChatDrawable(r3, r1, r4)
+            java.lang.String r4 = "drawableMsgOutCallAudioSelected"
+            java.lang.String r5 = "chat_outInstantSelected"
+            addChatDrawable(r4, r1, r5)
+            android.graphics.drawable.Drawable[] r1 = chat_msgOutCallDrawable
+            r1 = r1[r7]
+            java.lang.String r4 = "drawableMsgOutCallVideo"
+            java.lang.String r5 = "chat_outInstant"
+            addChatDrawable(r4, r1, r5)
+            android.graphics.drawable.Drawable[] r1 = chat_msgOutCallSelectedDrawable
+            r1 = r1[r7]
+            java.lang.String r4 = "drawableMsgOutCallVideo"
+            java.lang.String r5 = "chat_outInstantSelected"
+            addChatDrawable(r4, r1, r5)
             android.graphics.drawable.Drawable r1 = chat_msgOutCheckDrawable
-            java.lang.String r3 = "drawableMsgOutCheck"
-            java.lang.String r4 = "chat_outSentCheck"
-            addChatDrawable(r3, r1, r4)
+            java.lang.String r4 = "drawableMsgOutCheck"
+            java.lang.String r5 = "chat_outSentCheck"
+            addChatDrawable(r4, r1, r5)
             android.graphics.drawable.Drawable r1 = chat_msgOutCheckSelectedDrawable
-            java.lang.String r3 = "drawableMsgOutCheckSelected"
-            java.lang.String r4 = "chat_outSentCheckSelected"
-            addChatDrawable(r3, r1, r4)
+            java.lang.String r4 = "drawableMsgOutCheckSelected"
+            java.lang.String r5 = "chat_outSentCheckSelected"
+            addChatDrawable(r4, r1, r5)
             android.graphics.drawable.Drawable r1 = chat_msgOutCheckReadDrawable
-            java.lang.String r3 = "drawableMsgOutCheckRead"
-            java.lang.String r4 = "chat_outSentCheckRead"
-            addChatDrawable(r3, r1, r4)
+            java.lang.String r4 = "drawableMsgOutCheckRead"
+            java.lang.String r5 = "chat_outSentCheckRead"
+            addChatDrawable(r4, r1, r5)
             android.graphics.drawable.Drawable r1 = chat_msgOutCheckReadSelectedDrawable
-            java.lang.String r3 = "drawableMsgOutCheckReadSelected"
-            java.lang.String r4 = "chat_outSentCheckReadSelected"
-            addChatDrawable(r3, r1, r4)
+            java.lang.String r4 = "drawableMsgOutCheckReadSelected"
+            java.lang.String r5 = "chat_outSentCheckReadSelected"
+            addChatDrawable(r4, r1, r5)
             android.graphics.drawable.Drawable r1 = chat_msgOutHalfCheckDrawable
-            java.lang.String r3 = "drawableMsgOutHalfCheck"
-            java.lang.String r4 = "chat_outSentCheckRead"
-            addChatDrawable(r3, r1, r4)
+            java.lang.String r4 = "drawableMsgOutHalfCheck"
+            java.lang.String r5 = "chat_outSentCheckRead"
+            addChatDrawable(r4, r1, r5)
             android.graphics.drawable.Drawable r1 = chat_msgOutHalfCheckSelectedDrawable
-            java.lang.String r3 = "drawableMsgOutHalfCheckSelected"
-            java.lang.String r4 = "chat_outSentCheckReadSelected"
-            addChatDrawable(r3, r1, r4)
+            java.lang.String r4 = "drawableMsgOutHalfCheckSelected"
+            java.lang.String r5 = "chat_outSentCheckReadSelected"
+            addChatDrawable(r4, r1, r5)
             android.graphics.drawable.Drawable r1 = chat_msgOutInstantDrawable
-            java.lang.String r3 = "drawableMsgOutInstant"
-            java.lang.String r4 = "chat_outInstant"
-            addChatDrawable(r3, r1, r4)
+            java.lang.String r4 = "drawableMsgOutInstant"
+            java.lang.String r5 = "chat_outInstant"
+            addChatDrawable(r4, r1, r5)
             android.graphics.drawable.Drawable r1 = chat_msgOutMenuDrawable
-            java.lang.String r3 = "drawableMsgOutMenu"
-            java.lang.String r4 = "chat_outMenu"
-            addChatDrawable(r3, r1, r4)
+            java.lang.String r4 = "drawableMsgOutMenu"
+            java.lang.String r5 = "chat_outMenu"
+            addChatDrawable(r4, r1, r5)
             android.graphics.drawable.Drawable r1 = chat_msgOutMenuSelectedDrawable
-            java.lang.String r3 = "drawableMsgOutMenuSelected"
-            java.lang.String r4 = "chat_outMenuSelected"
-            addChatDrawable(r3, r1, r4)
+            java.lang.String r4 = "drawableMsgOutMenuSelected"
+            java.lang.String r5 = "chat_outMenuSelected"
+            addChatDrawable(r4, r1, r5)
             android.graphics.drawable.Drawable r1 = chat_msgOutPinnedDrawable
-            java.lang.String r3 = "drawableMsgOutPinned"
-            java.lang.String r4 = "chat_outViews"
-            addChatDrawable(r3, r1, r4)
+            java.lang.String r4 = "drawableMsgOutPinned"
+            java.lang.String r5 = "chat_outViews"
+            addChatDrawable(r4, r1, r5)
             android.graphics.drawable.Drawable r1 = chat_msgOutPinnedSelectedDrawable
-            java.lang.String r3 = "drawableMsgOutPinnedSelected"
-            java.lang.String r4 = "chat_outViewsSelected"
-            addChatDrawable(r3, r1, r4)
+            java.lang.String r4 = "drawableMsgOutPinnedSelected"
+            java.lang.String r5 = "chat_outViewsSelected"
+            addChatDrawable(r4, r1, r5)
             android.graphics.drawable.Drawable r1 = chat_msgOutRepliesDrawable
-            java.lang.String r3 = "drawableMsgOutReplies"
-            java.lang.String r4 = "chat_outViews"
-            addChatDrawable(r3, r1, r4)
+            java.lang.String r4 = "drawableMsgOutReplies"
+            java.lang.String r5 = "chat_outViews"
+            addChatDrawable(r4, r1, r5)
             android.graphics.drawable.Drawable r1 = chat_msgOutRepliesSelectedDrawable
-            java.lang.String r3 = "drawableMsgOutReplies"
-            java.lang.String r4 = "chat_outViewsSelected"
-            addChatDrawable(r3, r1, r4)
+            java.lang.String r4 = "drawableMsgOutReplies"
+            java.lang.String r5 = "chat_outViewsSelected"
+            addChatDrawable(r4, r1, r5)
             android.graphics.drawable.Drawable r1 = chat_msgOutViewsDrawable
-            java.lang.String r3 = "drawableMsgOutViews"
-            java.lang.String r4 = "chat_outViews"
-            addChatDrawable(r3, r1, r4)
+            java.lang.String r4 = "drawableMsgOutViews"
+            java.lang.String r5 = "chat_outViews"
+            addChatDrawable(r4, r1, r5)
             android.graphics.drawable.Drawable r1 = chat_msgOutViewsSelectedDrawable
-            java.lang.String r3 = "drawableMsgOutViewsSelected"
-            java.lang.String r4 = "chat_outViewsSelected"
-            addChatDrawable(r3, r1, r4)
+            java.lang.String r4 = "drawableMsgOutViewsSelected"
+            java.lang.String r5 = "chat_outViewsSelected"
+            addChatDrawable(r4, r1, r5)
             android.graphics.drawable.Drawable r1 = chat_msgStickerCheckDrawable
-            java.lang.String r3 = "drawableMsgStickerCheck"
-            java.lang.String r4 = "chat_serviceText"
-            addChatDrawable(r3, r1, r4)
+            java.lang.String r4 = "drawableMsgStickerCheck"
+            java.lang.String r5 = "chat_serviceText"
+            addChatDrawable(r4, r1, r5)
             android.graphics.drawable.Drawable r1 = chat_msgStickerHalfCheckDrawable
-            java.lang.String r3 = "drawableMsgStickerHalfCheck"
-            java.lang.String r4 = "chat_serviceText"
-            addChatDrawable(r3, r1, r4)
+            java.lang.String r4 = "drawableMsgStickerHalfCheck"
+            java.lang.String r5 = "chat_serviceText"
+            addChatDrawable(r4, r1, r5)
             android.graphics.drawable.Drawable r1 = chat_msgStickerPinnedDrawable
-            java.lang.String r3 = "drawableMsgStickerPinned"
-            java.lang.String r4 = "chat_serviceText"
-            addChatDrawable(r3, r1, r4)
+            java.lang.String r4 = "drawableMsgStickerPinned"
+            java.lang.String r5 = "chat_serviceText"
+            addChatDrawable(r4, r1, r5)
             android.graphics.drawable.Drawable r1 = chat_msgStickerRepliesDrawable
-            java.lang.String r3 = "drawableMsgStickerReplies"
-            java.lang.String r4 = "chat_serviceText"
-            addChatDrawable(r3, r1, r4)
+            java.lang.String r4 = "drawableMsgStickerReplies"
+            java.lang.String r5 = "chat_serviceText"
+            addChatDrawable(r4, r1, r5)
             android.graphics.drawable.Drawable r1 = chat_msgStickerViewsDrawable
-            java.lang.String r3 = "drawableMsgStickerViews"
-            java.lang.String r4 = "chat_serviceText"
-            addChatDrawable(r3, r1, r4)
+            java.lang.String r4 = "drawableMsgStickerViews"
+            java.lang.String r5 = "chat_serviceText"
+            addChatDrawable(r4, r1, r5)
             android.graphics.drawable.Drawable r1 = chat_replyIconDrawable
-            java.lang.String r3 = "drawableReplyIcon"
-            addChatDrawable(r3, r1, r7)
+            java.lang.String r4 = "drawableReplyIcon"
+            addChatDrawable(r4, r1, r8)
             android.graphics.drawable.Drawable r1 = chat_shareIconDrawable
-            java.lang.String r3 = "drawableShareIcon"
-            addChatDrawable(r3, r1, r7)
+            java.lang.String r4 = "drawableShareIcon"
+            addChatDrawable(r4, r1, r8)
             android.graphics.drawable.Drawable r1 = chat_muteIconDrawable
-            java.lang.String r3 = "drawableMuteIcon"
-            java.lang.String r4 = "chat_muteIcon"
-            addChatDrawable(r3, r1, r4)
+            java.lang.String r4 = "drawableMuteIcon"
+            java.lang.String r5 = "chat_muteIcon"
+            addChatDrawable(r4, r1, r5)
             android.graphics.drawable.Drawable r1 = chat_lockIconDrawable
-            java.lang.String r3 = "drawableLockIcon"
-            java.lang.String r4 = "chat_lockIcon"
-            addChatDrawable(r3, r1, r4)
+            java.lang.String r4 = "drawableLockIcon"
+            java.lang.String r5 = "chat_lockIcon"
+            addChatDrawable(r4, r1, r5)
+            android.graphics.drawable.Drawable[] r1 = chat_pollHintDrawable
+            r1 = r1[r7]
+            java.lang.String r4 = "drawable_chat_pollHintDrawableOut"
+            java.lang.String r5 = "chat_outPreviewInstantText"
+            addChatDrawable(r4, r1, r5)
             android.graphics.drawable.Drawable[] r1 = chat_pollHintDrawable
             r1 = r1[r6]
-            java.lang.String r3 = "drawable_chat_pollHintDrawableOut"
-            java.lang.String r4 = "chat_outPreviewInstantText"
-            addChatDrawable(r3, r1, r4)
-            android.graphics.drawable.Drawable[] r1 = chat_pollHintDrawable
-            r1 = r1[r5]
-            java.lang.String r3 = "drawable_chat_pollHintDrawableIn"
-            java.lang.String r4 = "chat_inPreviewInstantText"
-            addChatDrawable(r3, r1, r4)
-            applyChatTheme(r0, r5)
-        L_0x0c0b:
-            if (r0 != 0) goto L_0x0d64
+            java.lang.String r4 = "drawable_chat_pollHintDrawableIn"
+            java.lang.String r5 = "chat_inPreviewInstantText"
+            addChatDrawable(r4, r1, r5)
+            applyChatTheme(r0, r6)
+        L_0x0ad8:
+            if (r0 != 0) goto L_0x0CLASSNAME
             android.graphics.Paint r0 = chat_botProgressPaint
-            if (r0 == 0) goto L_0x0d64
+            if (r0 == 0) goto L_0x0CLASSNAME
             r1 = 1073741824(0x40000000, float:2.0)
             int r1 = org.telegram.messenger.AndroidUtilities.dp(r1)
             float r1 = (float) r1
             r0.setStrokeWidth(r1)
             android.text.TextPaint r0 = chat_infoPaint
             r1 = 1094713344(0x41400000, float:12.0)
-            int r1 = org.telegram.messenger.AndroidUtilities.dp(r1)
-            float r1 = (float) r1
-            r0.setTextSize(r1)
+            int r4 = org.telegram.messenger.AndroidUtilities.dp(r1)
+            float r4 = (float) r4
+            r0.setTextSize(r4)
             android.text.TextPaint r0 = chat_stickerCommentCountPaint
-            r1 = 1093664768(0x41300000, float:11.0)
+            r4 = 1093664768(0x41300000, float:11.0)
+            int r4 = org.telegram.messenger.AndroidUtilities.dp(r4)
+            float r4 = (float) r4
+            r0.setTextSize(r4)
+            android.text.TextPaint r0 = chat_docNamePaint
+            r4 = 1097859072(0x41700000, float:15.0)
+            int r5 = org.telegram.messenger.AndroidUtilities.dp(r4)
+            float r5 = (float) r5
+            r0.setTextSize(r5)
+            android.text.TextPaint r0 = chat_locationTitlePaint
+            int r5 = org.telegram.messenger.AndroidUtilities.dp(r4)
+            float r5 = (float) r5
+            r0.setTextSize(r5)
+            android.text.TextPaint r0 = chat_locationAddressPaint
+            r5 = 1095761920(0x41500000, float:13.0)
+            int r6 = org.telegram.messenger.AndroidUtilities.dp(r5)
+            float r6 = (float) r6
+            r0.setTextSize(r6)
+            android.text.TextPaint r0 = chat_audioTimePaint
+            int r6 = org.telegram.messenger.AndroidUtilities.dp(r1)
+            float r6 = (float) r6
+            r0.setTextSize(r6)
+            android.text.TextPaint r0 = chat_livePaint
+            int r6 = org.telegram.messenger.AndroidUtilities.dp(r1)
+            float r6 = (float) r6
+            r0.setTextSize(r6)
+            android.text.TextPaint r0 = chat_audioTitlePaint
+            r6 = 1098907648(0x41800000, float:16.0)
+            int r6 = org.telegram.messenger.AndroidUtilities.dp(r6)
+            float r6 = (float) r6
+            r0.setTextSize(r6)
+            android.text.TextPaint r0 = chat_audioPerformerPaint
+            int r6 = org.telegram.messenger.AndroidUtilities.dp(r4)
+            float r6 = (float) r6
+            r0.setTextSize(r6)
+            android.text.TextPaint r0 = chat_botButtonPaint
+            int r6 = org.telegram.messenger.AndroidUtilities.dp(r4)
+            float r6 = (float) r6
+            r0.setTextSize(r6)
+            android.text.TextPaint r0 = chat_contactNamePaint
+            int r6 = org.telegram.messenger.AndroidUtilities.dp(r4)
+            float r6 = (float) r6
+            r0.setTextSize(r6)
+            android.text.TextPaint r0 = chat_contactPhonePaint
+            int r6 = org.telegram.messenger.AndroidUtilities.dp(r5)
+            float r6 = (float) r6
+            r0.setTextSize(r6)
+            android.text.TextPaint r0 = chat_durationPaint
+            int r6 = org.telegram.messenger.AndroidUtilities.dp(r1)
+            float r6 = (float) r6
+            r0.setTextSize(r6)
+            android.text.TextPaint r0 = chat_timePaint
             int r1 = org.telegram.messenger.AndroidUtilities.dp(r1)
             float r1 = (float) r1
             r0.setTextSize(r1)
-            android.text.TextPaint r0 = chat_docNamePaint
-            r1 = 1097859072(0x41700000, float:15.0)
-            int r3 = org.telegram.messenger.AndroidUtilities.dp(r1)
-            float r3 = (float) r3
-            r0.setTextSize(r3)
-            android.text.TextPaint r0 = chat_locationTitlePaint
-            int r3 = org.telegram.messenger.AndroidUtilities.dp(r1)
-            float r3 = (float) r3
-            r0.setTextSize(r3)
-            android.text.TextPaint r0 = chat_locationAddressPaint
-            r3 = 1095761920(0x41500000, float:13.0)
-            int r4 = org.telegram.messenger.AndroidUtilities.dp(r3)
-            float r4 = (float) r4
-            r0.setTextSize(r4)
-            android.text.TextPaint r0 = chat_audioTimePaint
-            r4 = 1094713344(0x41400000, float:12.0)
-            int r4 = org.telegram.messenger.AndroidUtilities.dp(r4)
-            float r4 = (float) r4
-            r0.setTextSize(r4)
-            android.text.TextPaint r0 = chat_livePaint
-            r4 = 1094713344(0x41400000, float:12.0)
-            int r4 = org.telegram.messenger.AndroidUtilities.dp(r4)
-            float r4 = (float) r4
-            r0.setTextSize(r4)
-            android.text.TextPaint r0 = chat_audioTitlePaint
-            r4 = 1098907648(0x41800000, float:16.0)
-            int r4 = org.telegram.messenger.AndroidUtilities.dp(r4)
-            float r4 = (float) r4
-            r0.setTextSize(r4)
-            android.text.TextPaint r0 = chat_audioPerformerPaint
-            int r4 = org.telegram.messenger.AndroidUtilities.dp(r1)
-            float r4 = (float) r4
-            r0.setTextSize(r4)
-            android.text.TextPaint r0 = chat_botButtonPaint
-            int r4 = org.telegram.messenger.AndroidUtilities.dp(r1)
-            float r4 = (float) r4
-            r0.setTextSize(r4)
-            android.text.TextPaint r0 = chat_contactNamePaint
-            int r4 = org.telegram.messenger.AndroidUtilities.dp(r1)
-            float r4 = (float) r4
-            r0.setTextSize(r4)
-            android.text.TextPaint r0 = chat_contactPhonePaint
-            int r4 = org.telegram.messenger.AndroidUtilities.dp(r3)
-            float r4 = (float) r4
-            r0.setTextSize(r4)
-            android.text.TextPaint r0 = chat_durationPaint
-            r4 = 1094713344(0x41400000, float:12.0)
-            int r4 = org.telegram.messenger.AndroidUtilities.dp(r4)
-            float r4 = (float) r4
-            r0.setTextSize(r4)
-            android.text.TextPaint r0 = chat_timePaint
-            r4 = 1094713344(0x41400000, float:12.0)
-            int r4 = org.telegram.messenger.AndroidUtilities.dp(r4)
-            float r4 = (float) r4
-            r0.setTextSize(r4)
             android.text.TextPaint r0 = chat_adminPaint
-            int r4 = org.telegram.messenger.AndroidUtilities.dp(r3)
-            float r4 = (float) r4
-            r0.setTextSize(r4)
+            int r1 = org.telegram.messenger.AndroidUtilities.dp(r5)
+            float r1 = (float) r1
+            r0.setTextSize(r1)
             android.text.TextPaint r0 = chat_namePaint
-            r4 = 1096810496(0x41600000, float:14.0)
-            int r5 = org.telegram.messenger.AndroidUtilities.dp(r4)
-            float r5 = (float) r5
-            r0.setTextSize(r5)
+            int r1 = org.telegram.messenger.AndroidUtilities.dp(r2)
+            float r1 = (float) r1
+            r0.setTextSize(r1)
             android.text.TextPaint r0 = chat_forwardNamePaint
-            int r5 = org.telegram.messenger.AndroidUtilities.dp(r4)
-            float r5 = (float) r5
-            r0.setTextSize(r5)
+            int r1 = org.telegram.messenger.AndroidUtilities.dp(r2)
+            float r1 = (float) r1
+            r0.setTextSize(r1)
             android.text.TextPaint r0 = chat_replyNamePaint
-            int r5 = org.telegram.messenger.AndroidUtilities.dp(r4)
-            float r5 = (float) r5
-            r0.setTextSize(r5)
+            int r1 = org.telegram.messenger.AndroidUtilities.dp(r2)
+            float r1 = (float) r1
+            r0.setTextSize(r1)
             android.text.TextPaint r0 = chat_replyTextPaint
-            int r4 = org.telegram.messenger.AndroidUtilities.dp(r4)
-            float r4 = (float) r4
-            r0.setTextSize(r4)
+            int r1 = org.telegram.messenger.AndroidUtilities.dp(r2)
+            float r1 = (float) r1
+            r0.setTextSize(r1)
             android.text.TextPaint r0 = chat_gamePaint
-            int r4 = org.telegram.messenger.AndroidUtilities.dp(r3)
-            float r4 = (float) r4
-            r0.setTextSize(r4)
+            int r1 = org.telegram.messenger.AndroidUtilities.dp(r5)
+            float r1 = (float) r1
+            r0.setTextSize(r1)
             android.text.TextPaint r0 = chat_shipmentPaint
-            int r4 = org.telegram.messenger.AndroidUtilities.dp(r3)
-            float r4 = (float) r4
-            r0.setTextSize(r4)
+            int r1 = org.telegram.messenger.AndroidUtilities.dp(r5)
+            float r1 = (float) r1
+            r0.setTextSize(r1)
             android.text.TextPaint r0 = chat_instantViewPaint
-            int r4 = org.telegram.messenger.AndroidUtilities.dp(r3)
-            float r4 = (float) r4
-            r0.setTextSize(r4)
+            int r1 = org.telegram.messenger.AndroidUtilities.dp(r5)
+            float r1 = (float) r1
+            r0.setTextSize(r1)
             android.graphics.Paint r0 = chat_instantViewRectPaint
-            r4 = 1065353216(0x3var_, float:1.0)
-            int r4 = org.telegram.messenger.AndroidUtilities.dp(r4)
-            float r4 = (float) r4
-            r0.setStrokeWidth(r4)
-            android.graphics.Paint r0 = chat_pollTimerPaint
-            r4 = 1066192077(0x3f8ccccd, float:1.1)
-            int r4 = org.telegram.messenger.AndroidUtilities.dp(r4)
-            float r4 = (float) r4
-            r0.setStrokeWidth(r4)
-            android.text.TextPaint r0 = chat_actionTextPaint
-            r4 = 16
-            int r5 = org.telegram.messenger.SharedConfig.fontSize
-            int r4 = java.lang.Math.max(r4, r5)
-            int r4 = r4 - r2
-            float r2 = (float) r4
-            int r2 = org.telegram.messenger.AndroidUtilities.dp(r2)
-            float r2 = (float) r2
-            r0.setTextSize(r2)
-            android.text.TextPaint r0 = chat_contextResult_titleTextPaint
+            r1 = 1065353216(0x3var_, float:1.0)
             int r1 = org.telegram.messenger.AndroidUtilities.dp(r1)
+            float r1 = (float) r1
+            r0.setStrokeWidth(r1)
+            android.graphics.Paint r0 = chat_pollTimerPaint
+            r1 = 1066192077(0x3f8ccccd, float:1.1)
+            int r1 = org.telegram.messenger.AndroidUtilities.dp(r1)
+            float r1 = (float) r1
+            r0.setStrokeWidth(r1)
+            android.text.TextPaint r0 = chat_actionTextPaint
+            r1 = 16
+            int r2 = org.telegram.messenger.SharedConfig.fontSize
+            int r1 = java.lang.Math.max(r1, r2)
+            int r1 = r1 - r3
+            float r1 = (float) r1
+            int r1 = org.telegram.messenger.AndroidUtilities.dp(r1)
+            float r1 = (float) r1
+            r0.setTextSize(r1)
+            android.text.TextPaint r0 = chat_contextResult_titleTextPaint
+            int r1 = org.telegram.messenger.AndroidUtilities.dp(r4)
             float r1 = (float) r1
             r0.setTextSize(r1)
             android.text.TextPaint r0 = chat_contextResult_descriptionTextPaint
-            int r1 = org.telegram.messenger.AndroidUtilities.dp(r3)
+            int r1 = org.telegram.messenger.AndroidUtilities.dp(r5)
             float r1 = (float) r1
             r0.setTextSize(r1)
             android.graphics.Paint r0 = chat_radialProgressPaint
@@ -16465,7 +16609,7 @@ public class Theme {
             int r1 = org.telegram.messenger.AndroidUtilities.dp(r1)
             float r1 = (float) r1
             r0.setStrokeWidth(r1)
-        L_0x0d64:
+        L_0x0CLASSNAME:
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ActionBar.Theme.createChatResources(android.content.Context, boolean):void");
@@ -16577,8 +16721,6 @@ public class Theme {
             setDrawableColorByKey(chat_msgErrorDrawable, "chat_sentErrorIcon");
             setDrawableColorByKey(chat_muteIconDrawable, "chat_muteIcon");
             setDrawableColorByKey(chat_lockIconDrawable, "chat_lockIcon");
-            setDrawableColorByKey(chat_msgBroadcastDrawable, "chat_outBroadcast");
-            setDrawableColorByKey(chat_msgBroadcastMediaDrawable, "chat_mediaBroadcast");
             setDrawableColorByKey(chat_inlineResultFile, "chat_inlineResultIcon");
             setDrawableColorByKey(chat_inlineResultAudio, "chat_inlineResultIcon");
             setDrawableColorByKey(chat_inlineResultLocation, "chat_inlineResultIcon");
@@ -16607,55 +16749,35 @@ public class Theme {
                 setDrawableColorByKey(statusDrawableArr[i2], "chats_actionMessage");
                 i2++;
             }
-            for (int i3 = 0; i3 < 2; i3++) {
-                setCombinedDrawableColor(chat_fileMiniStatesDrawable[i3][0], getColor("chat_outLoader"), false);
-                setCombinedDrawableColor(chat_fileMiniStatesDrawable[i3][0], getColor("chat_outMediaIcon"), true);
-                setCombinedDrawableColor(chat_fileMiniStatesDrawable[i3][1], getColor("chat_outLoaderSelected"), false);
-                setCombinedDrawableColor(chat_fileMiniStatesDrawable[i3][1], getColor("chat_outMediaIconSelected"), true);
-                int i4 = i3 + 2;
-                setCombinedDrawableColor(chat_fileMiniStatesDrawable[i4][0], getColor("chat_inLoader"), false);
-                setCombinedDrawableColor(chat_fileMiniStatesDrawable[i4][0], getColor("chat_inMediaIcon"), true);
-                setCombinedDrawableColor(chat_fileMiniStatesDrawable[i4][1], getColor("chat_inLoaderSelected"), false);
-                setCombinedDrawableColor(chat_fileMiniStatesDrawable[i4][1], getColor("chat_inMediaIconSelected"), true);
-                int i5 = i3 + 4;
-                setCombinedDrawableColor(chat_fileMiniStatesDrawable[i5][0], getColor("chat_mediaLoaderPhoto"), false);
-                setCombinedDrawableColor(chat_fileMiniStatesDrawable[i5][0], getColor("chat_mediaLoaderPhotoIcon"), true);
-                setCombinedDrawableColor(chat_fileMiniStatesDrawable[i5][1], getColor("chat_mediaLoaderPhotoSelected"), false);
-                setCombinedDrawableColor(chat_fileMiniStatesDrawable[i5][1], getColor("chat_mediaLoaderPhotoIconSelected"), true);
+            for (int i3 = 0; i3 < 5; i3++) {
+                setCombinedDrawableColor(chat_fileStatesDrawable[i3][0], getColor("chat_outLoader"), false);
+                setCombinedDrawableColor(chat_fileStatesDrawable[i3][0], getColor("chat_outMediaIcon"), true);
+                setCombinedDrawableColor(chat_fileStatesDrawable[i3][1], getColor("chat_outLoaderSelected"), false);
+                setCombinedDrawableColor(chat_fileStatesDrawable[i3][1], getColor("chat_outMediaIconSelected"), true);
+                int i4 = i3 + 5;
+                setCombinedDrawableColor(chat_fileStatesDrawable[i4][0], getColor("chat_inLoader"), false);
+                setCombinedDrawableColor(chat_fileStatesDrawable[i4][0], getColor("chat_inMediaIcon"), true);
+                setCombinedDrawableColor(chat_fileStatesDrawable[i4][1], getColor("chat_inLoaderSelected"), false);
+                setCombinedDrawableColor(chat_fileStatesDrawable[i4][1], getColor("chat_inMediaIconSelected"), true);
             }
-            for (int i6 = 0; i6 < 5; i6++) {
-                setCombinedDrawableColor(chat_fileStatesDrawable[i6][0], getColor("chat_outLoader"), false);
-                setCombinedDrawableColor(chat_fileStatesDrawable[i6][0], getColor("chat_outMediaIcon"), true);
-                setCombinedDrawableColor(chat_fileStatesDrawable[i6][1], getColor("chat_outLoaderSelected"), false);
-                setCombinedDrawableColor(chat_fileStatesDrawable[i6][1], getColor("chat_outMediaIconSelected"), true);
-                int i7 = i6 + 5;
-                setCombinedDrawableColor(chat_fileStatesDrawable[i7][0], getColor("chat_inLoader"), false);
-                setCombinedDrawableColor(chat_fileStatesDrawable[i7][0], getColor("chat_inMediaIcon"), true);
-                setCombinedDrawableColor(chat_fileStatesDrawable[i7][1], getColor("chat_inLoaderSelected"), false);
-                setCombinedDrawableColor(chat_fileStatesDrawable[i7][1], getColor("chat_inMediaIconSelected"), true);
+            for (int i5 = 0; i5 < 4; i5++) {
+                setCombinedDrawableColor(chat_photoStatesDrawables[i5][0], getColor("chat_mediaLoaderPhoto"), false);
+                setCombinedDrawableColor(chat_photoStatesDrawables[i5][0], getColor("chat_mediaLoaderPhotoIcon"), true);
+                setCombinedDrawableColor(chat_photoStatesDrawables[i5][1], getColor("chat_mediaLoaderPhotoSelected"), false);
+                setCombinedDrawableColor(chat_photoStatesDrawables[i5][1], getColor("chat_mediaLoaderPhotoIconSelected"), true);
             }
-            for (int i8 = 0; i8 < 4; i8++) {
-                setCombinedDrawableColor(chat_photoStatesDrawables[i8][0], getColor("chat_mediaLoaderPhoto"), false);
-                setCombinedDrawableColor(chat_photoStatesDrawables[i8][0], getColor("chat_mediaLoaderPhotoIcon"), true);
-                setCombinedDrawableColor(chat_photoStatesDrawables[i8][1], getColor("chat_mediaLoaderPhotoSelected"), false);
-                setCombinedDrawableColor(chat_photoStatesDrawables[i8][1], getColor("chat_mediaLoaderPhotoIconSelected"), true);
+            for (int i6 = 0; i6 < 2; i6++) {
+                int i7 = i6 + 7;
+                setCombinedDrawableColor(chat_photoStatesDrawables[i7][0], getColor("chat_outLoaderPhoto"), false);
+                setCombinedDrawableColor(chat_photoStatesDrawables[i7][0], getColor("chat_outLoaderPhotoIcon"), true);
+                setCombinedDrawableColor(chat_photoStatesDrawables[i7][1], getColor("chat_outLoaderPhotoSelected"), false);
+                setCombinedDrawableColor(chat_photoStatesDrawables[i7][1], getColor("chat_outLoaderPhotoIconSelected"), true);
+                int i8 = i6 + 10;
+                setCombinedDrawableColor(chat_photoStatesDrawables[i8][0], getColor("chat_inLoaderPhoto"), false);
+                setCombinedDrawableColor(chat_photoStatesDrawables[i8][0], getColor("chat_inLoaderPhotoIcon"), true);
+                setCombinedDrawableColor(chat_photoStatesDrawables[i8][1], getColor("chat_inLoaderPhotoSelected"), false);
+                setCombinedDrawableColor(chat_photoStatesDrawables[i8][1], getColor("chat_inLoaderPhotoIconSelected"), true);
             }
-            for (int i9 = 0; i9 < 2; i9++) {
-                int i10 = i9 + 7;
-                setCombinedDrawableColor(chat_photoStatesDrawables[i10][0], getColor("chat_outLoaderPhoto"), false);
-                setCombinedDrawableColor(chat_photoStatesDrawables[i10][0], getColor("chat_outLoaderPhotoIcon"), true);
-                setCombinedDrawableColor(chat_photoStatesDrawables[i10][1], getColor("chat_outLoaderPhotoSelected"), false);
-                setCombinedDrawableColor(chat_photoStatesDrawables[i10][1], getColor("chat_outLoaderPhotoIconSelected"), true);
-                int i11 = i9 + 10;
-                setCombinedDrawableColor(chat_photoStatesDrawables[i11][0], getColor("chat_inLoaderPhoto"), false);
-                setCombinedDrawableColor(chat_photoStatesDrawables[i11][0], getColor("chat_inLoaderPhotoIcon"), true);
-                setCombinedDrawableColor(chat_photoStatesDrawables[i11][1], getColor("chat_inLoaderPhotoSelected"), false);
-                setCombinedDrawableColor(chat_photoStatesDrawables[i11][1], getColor("chat_inLoaderPhotoIconSelected"), true);
-            }
-            setDrawableColorByKey(chat_photoStatesDrawables[9][0], "chat_outFileIcon");
-            setDrawableColorByKey(chat_photoStatesDrawables[9][1], "chat_outFileSelectedIcon");
-            setDrawableColorByKey(chat_photoStatesDrawables[12][0], "chat_inFileIcon");
-            setDrawableColorByKey(chat_photoStatesDrawables[12][1], "chat_inFileSelectedIcon");
             setCombinedDrawableColor(chat_contactDrawable[0], getColor("chat_inContactBackground"), false);
             setCombinedDrawableColor(chat_contactDrawable[0], getColor("chat_inContactIcon"), true);
             setCombinedDrawableColor(chat_contactDrawable[1], getColor("chat_outContactBackground"), false);
@@ -17453,7 +17575,7 @@ public class Theme {
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ActionBar.Theme.createBackgroundDrawable(org.telegram.ui.ActionBar.Theme$ThemeInfo, java.util.HashMap, java.lang.String, int):org.telegram.ui.ActionBar.Theme$BackgroundDrawableSettings");
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:131:0x0307  */
+    /* JADX WARNING: Removed duplicated region for block: B:131:0x0313  */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public static org.telegram.ui.ActionBar.Theme.BackgroundDrawableSettings createBackgroundDrawable(org.telegram.ui.ActionBar.Theme.ThemeInfo r23, org.telegram.ui.ActionBar.Theme.OverrideWallpaperInfo r24, java.util.HashMap<java.lang.String, java.lang.Integer> r25, java.io.File r26, java.lang.String r27, int r28, int r29, int r30, boolean r31, boolean r32, boolean r33, boolean r34, org.telegram.tgnet.TLRPC$Document r35) {
         /*
@@ -17513,7 +17635,7 @@ public class Theme {
             r8.isPatternWallpaper = r12
         L_0x005d:
             r14 = 2
-            if (r11 != 0) goto L_0x0212
+            if (r11 != 0) goto L_0x021b
             if (r31 == 0) goto L_0x0064
             r15 = 0
             goto L_0x006c
@@ -17567,13 +17689,13 @@ public class Theme {
             java.lang.Boolean r0 = java.lang.Boolean.TRUE     // Catch:{ all -> 0x00e4 }
             r8.isPatternWallpaper = r0     // Catch:{ all -> 0x00e4 }
             r8.isCustomTheme = r0     // Catch:{ all -> 0x00e4 }
-            goto L_0x0212
+            goto L_0x021b
         L_0x00e4:
             r0 = move-exception
             org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)
-            goto L_0x0212
+            goto L_0x021b
         L_0x00ea:
-            if (r15 == 0) goto L_0x019e
+            if (r15 == 0) goto L_0x01a4
             java.lang.String r0 = "chat_wallpaper_gradient_rotation"
             java.lang.Object r0 = r2.get(r0)
             java.lang.Integer r0 = (java.lang.Integer) r0
@@ -17581,8 +17703,8 @@ public class Theme {
             r0 = 45
             java.lang.Integer r0 = java.lang.Integer.valueOf(r0)
         L_0x00fc:
-            if (r13 == 0) goto L_0x0155
-            if (r12 == 0) goto L_0x0155
+            if (r13 == 0) goto L_0x015b
+            if (r12 == 0) goto L_0x015b
             org.telegram.ui.Components.MotionBackgroundDrawable r2 = new org.telegram.ui.Components.MotionBackgroundDrawable
             int r17 = r15.intValue()
             int r18 = r13.intValue()
@@ -17591,40 +17713,42 @@ public class Theme {
             r21 = 0
             r16 = r2
             r16.<init>(r17, r18, r19, r20, r21)
-            if (r3 == 0) goto L_0x014b
-            if (r7 == 0) goto L_0x014b
-            java.io.File r0 = org.telegram.messenger.FileLoader.getPathToAttach(r7, r9)
+            if (r3 == 0) goto L_0x0151
+            if (r7 == 0) goto L_0x0151
+            int r0 = org.telegram.messenger.UserConfig.selectedAccount
+            org.telegram.messenger.FileLoader r0 = org.telegram.messenger.FileLoader.getInstance(r0)
+            java.io.File r0 = r0.getPathToAttach(r7, r9)
             r4 = 1135869952(0x43b40000, float:360.0)
             int r4 = org.telegram.messenger.AndroidUtilities.dp(r4)
             r7 = 1142947840(0x44200000, float:640.0)
             int r7 = org.telegram.messenger.AndroidUtilities.dp(r7)
             android.graphics.Bitmap r11 = org.telegram.messenger.SvgHelper.getBitmap((java.io.File) r0, (int) r4, (int) r7, (boolean) r10)
-            if (r11 == 0) goto L_0x014c
-            java.io.FileOutputStream r0 = new java.io.FileOutputStream     // Catch:{ Exception -> 0x0143 }
-            r0.<init>(r3)     // Catch:{ Exception -> 0x0143 }
-            android.graphics.Bitmap$CompressFormat r3 = android.graphics.Bitmap.CompressFormat.PNG     // Catch:{ Exception -> 0x0143 }
-            r4 = 87
-            r11.compress(r3, r4, r0)     // Catch:{ Exception -> 0x0143 }
-            r0.close()     // Catch:{ Exception -> 0x0143 }
-            goto L_0x014c
-        L_0x0143:
+            if (r11 == 0) goto L_0x0152
+            java.io.FileOutputStream r0 = new java.io.FileOutputStream     // Catch:{ Exception -> 0x0149 }
+            r0.<init>(r3)     // Catch:{ Exception -> 0x0149 }
+            android.graphics.Bitmap$CompressFormat r3 = android.graphics.Bitmap.CompressFormat.PNG     // Catch:{ Exception -> 0x0149 }
+            r4 = 90
+            r11.compress(r3, r4, r0)     // Catch:{ Exception -> 0x0149 }
+            r0.close()     // Catch:{ Exception -> 0x0149 }
+            goto L_0x0152
+        L_0x0149:
             r0 = move-exception
             org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)
             r0.printStackTrace()
-            goto L_0x014c
-        L_0x014b:
+            goto L_0x0152
+        L_0x0151:
             r11 = 0
-        L_0x014c:
+        L_0x0152:
             r2.setPatternBitmap(r5, r11)
             r2.setPhase(r6)
             r8.wallpaper = r2
-            goto L_0x0198
-        L_0x0155:
-            if (r13 == 0) goto L_0x018d
+            goto L_0x019e
+        L_0x015b:
+            if (r13 == 0) goto L_0x0193
             boolean r2 = r13.equals(r15)
-            if (r2 == 0) goto L_0x015e
-            goto L_0x018d
-        L_0x015e:
+            if (r2 == 0) goto L_0x0164
+            goto L_0x0193
+        L_0x0164:
             int[] r2 = new int[r14]
             int r3 = r15.intValue()
             r2[r10] = r3
@@ -17634,207 +17758,209 @@ public class Theme {
             android.graphics.drawable.GradientDrawable$Orientation r0 = org.telegram.ui.Components.BackgroundGradientDrawable.getGradientOrientation(r0)
             org.telegram.ui.Components.BackgroundGradientDrawable r3 = new org.telegram.ui.Components.BackgroundGradientDrawable
             r3.<init>(r0, r2)
-            org.telegram.ui.ActionBar.Theme$13 r0 = new org.telegram.ui.ActionBar.Theme$13
+            org.telegram.ui.ActionBar.Theme$11 r0 = new org.telegram.ui.ActionBar.Theme$11
             r0.<init>()
             org.telegram.ui.Components.BackgroundGradientDrawable$Sizes r2 = org.telegram.ui.Components.BackgroundGradientDrawable.Sizes.ofDeviceScreen()
             r4 = 100
             org.telegram.ui.Components.BackgroundGradientDrawable$Disposable r0 = r3.startDithering(r2, r0, r4)
             backgroundGradientDisposable = r0
             r8.wallpaper = r3
-            goto L_0x0198
-        L_0x018d:
+            goto L_0x019e
+        L_0x0193:
             android.graphics.drawable.ColorDrawable r0 = new android.graphics.drawable.ColorDrawable
             int r2 = r15.intValue()
             r0.<init>(r2)
             r8.wallpaper = r0
-        L_0x0198:
+        L_0x019e:
             java.lang.Boolean r0 = java.lang.Boolean.TRUE
             r8.isCustomTheme = r0
-            goto L_0x0212
-        L_0x019e:
-            if (r27 == 0) goto L_0x01da
-            java.io.File r0 = new java.io.File     // Catch:{ Exception -> 0x01d5 }
-            java.io.File r2 = org.telegram.messenger.ApplicationLoader.getFilesDirFixed()     // Catch:{ Exception -> 0x01d5 }
-            java.lang.StringBuilder r3 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x01d5 }
-            r3.<init>()     // Catch:{ Exception -> 0x01d5 }
-            java.lang.String r4 = org.telegram.messenger.Utilities.MD5(r27)     // Catch:{ Exception -> 0x01d5 }
-            r3.append(r4)     // Catch:{ Exception -> 0x01d5 }
+            goto L_0x021b
+        L_0x01a4:
+            if (r27 == 0) goto L_0x01e0
+            java.io.File r0 = new java.io.File     // Catch:{ Exception -> 0x01db }
+            java.io.File r2 = org.telegram.messenger.ApplicationLoader.getFilesDirFixed()     // Catch:{ Exception -> 0x01db }
+            java.lang.StringBuilder r3 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x01db }
+            r3.<init>()     // Catch:{ Exception -> 0x01db }
+            java.lang.String r4 = org.telegram.messenger.Utilities.MD5(r27)     // Catch:{ Exception -> 0x01db }
+            r3.append(r4)     // Catch:{ Exception -> 0x01db }
             java.lang.String r4 = ".wp"
-            r3.append(r4)     // Catch:{ Exception -> 0x01d5 }
-            java.lang.String r3 = r3.toString()     // Catch:{ Exception -> 0x01d5 }
-            r0.<init>(r2, r3)     // Catch:{ Exception -> 0x01d5 }
-            java.io.FileInputStream r2 = new java.io.FileInputStream     // Catch:{ Exception -> 0x01d5 }
-            r2.<init>(r0)     // Catch:{ Exception -> 0x01d5 }
-            android.graphics.Bitmap r0 = loadScreenSizedBitmap(r2, r10)     // Catch:{ Exception -> 0x01d5 }
-            if (r0 == 0) goto L_0x0212
-            android.graphics.drawable.BitmapDrawable r2 = new android.graphics.drawable.BitmapDrawable     // Catch:{ Exception -> 0x01d5 }
-            r2.<init>(r0)     // Catch:{ Exception -> 0x01d5 }
-            r8.wallpaper = r2     // Catch:{ Exception -> 0x01d5 }
-            java.lang.Boolean r0 = java.lang.Boolean.TRUE     // Catch:{ Exception -> 0x01d5 }
-            r8.isCustomTheme = r0     // Catch:{ Exception -> 0x01d5 }
-            goto L_0x0212
-        L_0x01d5:
+            r3.append(r4)     // Catch:{ Exception -> 0x01db }
+            java.lang.String r3 = r3.toString()     // Catch:{ Exception -> 0x01db }
+            r0.<init>(r2, r3)     // Catch:{ Exception -> 0x01db }
+            java.io.FileInputStream r2 = new java.io.FileInputStream     // Catch:{ Exception -> 0x01db }
+            r2.<init>(r0)     // Catch:{ Exception -> 0x01db }
+            android.graphics.Bitmap r0 = loadScreenSizedBitmap(r2, r10)     // Catch:{ Exception -> 0x01db }
+            if (r0 == 0) goto L_0x021b
+            android.graphics.drawable.BitmapDrawable r2 = new android.graphics.drawable.BitmapDrawable     // Catch:{ Exception -> 0x01db }
+            r2.<init>(r0)     // Catch:{ Exception -> 0x01db }
+            r8.wallpaper = r2     // Catch:{ Exception -> 0x01db }
+            java.lang.Boolean r0 = java.lang.Boolean.TRUE     // Catch:{ Exception -> 0x01db }
+            r8.isCustomTheme = r0     // Catch:{ Exception -> 0x01db }
+            goto L_0x021b
+        L_0x01db:
             r0 = move-exception
             org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)
-            goto L_0x0212
-        L_0x01da:
-            if (r4 <= 0) goto L_0x0212
+            goto L_0x021b
+        L_0x01e0:
+            if (r4 <= 0) goto L_0x021b
             java.lang.String r2 = r0.pathToFile
-            if (r2 != 0) goto L_0x01e4
+            if (r2 != 0) goto L_0x01ea
             java.lang.String r2 = r0.assetName
-            if (r2 == 0) goto L_0x0212
-        L_0x01e4:
-            java.lang.String r2 = r0.assetName     // Catch:{ all -> 0x020e }
-            if (r2 == 0) goto L_0x01ed
-            java.io.File r0 = getAssetFile(r2)     // Catch:{ all -> 0x020e }
-            goto L_0x01f5
-        L_0x01ed:
-            java.io.File r2 = new java.io.File     // Catch:{ all -> 0x020e }
-            java.lang.String r0 = r0.pathToFile     // Catch:{ all -> 0x020e }
-            r2.<init>(r0)     // Catch:{ all -> 0x020e }
+            if (r2 == 0) goto L_0x021b
+        L_0x01ea:
+            java.lang.String r2 = r0.assetName     // Catch:{ all -> 0x0217 }
+            if (r2 == 0) goto L_0x01f3
+            java.io.File r0 = getAssetFile(r2)     // Catch:{ all -> 0x0217 }
+            goto L_0x01fb
+        L_0x01f3:
+            java.io.File r2 = new java.io.File     // Catch:{ all -> 0x0217 }
+            java.lang.String r0 = r0.pathToFile     // Catch:{ all -> 0x0217 }
+            r2.<init>(r0)     // Catch:{ all -> 0x0217 }
             r0 = r2
-        L_0x01f5:
-            java.io.FileInputStream r2 = new java.io.FileInputStream     // Catch:{ all -> 0x020e }
-            r2.<init>(r0)     // Catch:{ all -> 0x020e }
-            android.graphics.Bitmap r0 = loadScreenSizedBitmap(r2, r4)     // Catch:{ all -> 0x020e }
-            if (r0 == 0) goto L_0x0212
-            android.graphics.drawable.BitmapDrawable r2 = new android.graphics.drawable.BitmapDrawable     // Catch:{ all -> 0x020e }
-            r2.<init>(r0)     // Catch:{ all -> 0x020e }
-            wallpaper = r2     // Catch:{ all -> 0x020e }
-            r8.wallpaper = r2     // Catch:{ all -> 0x020e }
-            java.lang.Boolean r0 = java.lang.Boolean.TRUE     // Catch:{ all -> 0x020e }
-            r8.isCustomTheme = r0     // Catch:{ all -> 0x020e }
-            goto L_0x0212
-        L_0x020e:
+        L_0x01fb:
+            java.io.FileInputStream r2 = new java.io.FileInputStream     // Catch:{ all -> 0x0217 }
+            r2.<init>(r0)     // Catch:{ all -> 0x0217 }
+            android.graphics.Bitmap r0 = loadScreenSizedBitmap(r2, r4)     // Catch:{ all -> 0x0217 }
+            if (r0 == 0) goto L_0x021b
+            android.graphics.drawable.BitmapDrawable r2 = new android.graphics.drawable.BitmapDrawable     // Catch:{ all -> 0x0217 }
+            r2.<init>(r0)     // Catch:{ all -> 0x0217 }
+            wallpaper = r2     // Catch:{ all -> 0x0217 }
+            r8.wallpaper = r2     // Catch:{ all -> 0x0217 }
+            r2.setFilterBitmap(r9)     // Catch:{ all -> 0x0217 }
+            java.lang.Boolean r0 = java.lang.Boolean.TRUE     // Catch:{ all -> 0x0217 }
+            r8.isCustomTheme = r0     // Catch:{ all -> 0x0217 }
+            goto L_0x021b
+        L_0x0217:
             r0 = move-exception
             org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)
-        L_0x0212:
-            android.graphics.drawable.Drawable r0 = r8.wallpaper
-            if (r0 != 0) goto L_0x0313
-            if (r1 == 0) goto L_0x021b
-            int r0 = r1.color
-            goto L_0x021c
         L_0x021b:
+            android.graphics.drawable.Drawable r0 = r8.wallpaper
+            if (r0 != 0) goto L_0x031f
+            if (r1 == 0) goto L_0x0224
+            int r0 = r1.color
+            goto L_0x0225
+        L_0x0224:
             r0 = 0
-        L_0x021c:
-            if (r1 == 0) goto L_0x02f7
-            boolean r2 = r24.isDefault()     // Catch:{ all -> 0x0302 }
-            if (r2 == 0) goto L_0x0226
-            goto L_0x02f7
-        L_0x0226:
-            boolean r2 = r24.isColor()     // Catch:{ all -> 0x0302 }
-            if (r2 == 0) goto L_0x0230
-            int r2 = r1.gradientColor1     // Catch:{ all -> 0x0302 }
-            if (r2 == 0) goto L_0x0303
-        L_0x0230:
-            if (r0 == 0) goto L_0x02c1
-            boolean r2 = isPatternWallpaper     // Catch:{ all -> 0x0302 }
-            if (r2 == 0) goto L_0x023a
-            int r2 = r1.gradientColor2     // Catch:{ all -> 0x0302 }
-            if (r2 == 0) goto L_0x02c1
-        L_0x023a:
-            int r2 = r1.gradientColor1     // Catch:{ all -> 0x0302 }
-            if (r2 == 0) goto L_0x0292
-            int r3 = r1.gradientColor2     // Catch:{ all -> 0x0302 }
-            if (r3 == 0) goto L_0x0292
-            org.telegram.ui.Components.MotionBackgroundDrawable r2 = new org.telegram.ui.Components.MotionBackgroundDrawable     // Catch:{ all -> 0x0302 }
-            int r3 = r1.color     // Catch:{ all -> 0x0302 }
-            int r4 = r1.gradientColor1     // Catch:{ all -> 0x0302 }
-            int r5 = r1.gradientColor2     // Catch:{ all -> 0x0302 }
-            int r7 = r1.gradientColor3     // Catch:{ all -> 0x0302 }
+        L_0x0225:
+            if (r1 == 0) goto L_0x0303
+            boolean r2 = r24.isDefault()     // Catch:{ all -> 0x030e }
+            if (r2 == 0) goto L_0x022f
+            goto L_0x0303
+        L_0x022f:
+            boolean r2 = r24.isColor()     // Catch:{ all -> 0x030e }
+            if (r2 == 0) goto L_0x0239
+            int r2 = r1.gradientColor1     // Catch:{ all -> 0x030e }
+            if (r2 == 0) goto L_0x030f
+        L_0x0239:
+            if (r0 == 0) goto L_0x02ca
+            boolean r2 = isPatternWallpaper     // Catch:{ all -> 0x030e }
+            if (r2 == 0) goto L_0x0243
+            int r2 = r1.gradientColor2     // Catch:{ all -> 0x030e }
+            if (r2 == 0) goto L_0x02ca
+        L_0x0243:
+            int r2 = r1.gradientColor1     // Catch:{ all -> 0x030e }
+            if (r2 == 0) goto L_0x029b
+            int r3 = r1.gradientColor2     // Catch:{ all -> 0x030e }
+            if (r3 == 0) goto L_0x029b
+            org.telegram.ui.Components.MotionBackgroundDrawable r2 = new org.telegram.ui.Components.MotionBackgroundDrawable     // Catch:{ all -> 0x030e }
+            int r3 = r1.color     // Catch:{ all -> 0x030e }
+            int r4 = r1.gradientColor1     // Catch:{ all -> 0x030e }
+            int r5 = r1.gradientColor2     // Catch:{ all -> 0x030e }
+            int r7 = r1.gradientColor3     // Catch:{ all -> 0x030e }
             r21 = 0
             r16 = r2
             r17 = r3
             r18 = r4
             r19 = r5
             r20 = r7
-            r16.<init>(r17, r18, r19, r20, r21)     // Catch:{ all -> 0x0302 }
-            r2.setPhase(r6)     // Catch:{ all -> 0x0302 }
-            java.lang.Boolean r3 = r8.isPatternWallpaper     // Catch:{ all -> 0x0302 }
-            boolean r3 = r3.booleanValue()     // Catch:{ all -> 0x0302 }
-            if (r3 == 0) goto L_0x028e
-            java.io.File r3 = new java.io.File     // Catch:{ all -> 0x0302 }
-            java.io.File r4 = org.telegram.messenger.ApplicationLoader.getFilesDirFixed()     // Catch:{ all -> 0x0302 }
-            java.lang.String r5 = r1.fileName     // Catch:{ all -> 0x0302 }
-            r3.<init>(r4, r5)     // Catch:{ all -> 0x0302 }
-            boolean r4 = r3.exists()     // Catch:{ all -> 0x0302 }
-            if (r4 == 0) goto L_0x028e
-            float r1 = r1.intensity     // Catch:{ all -> 0x0302 }
+            r16.<init>(r17, r18, r19, r20, r21)     // Catch:{ all -> 0x030e }
+            r2.setPhase(r6)     // Catch:{ all -> 0x030e }
+            java.lang.Boolean r3 = r8.isPatternWallpaper     // Catch:{ all -> 0x030e }
+            boolean r3 = r3.booleanValue()     // Catch:{ all -> 0x030e }
+            if (r3 == 0) goto L_0x0297
+            java.io.File r3 = new java.io.File     // Catch:{ all -> 0x030e }
+            java.io.File r4 = org.telegram.messenger.ApplicationLoader.getFilesDirFixed()     // Catch:{ all -> 0x030e }
+            java.lang.String r5 = r1.fileName     // Catch:{ all -> 0x030e }
+            r3.<init>(r4, r5)     // Catch:{ all -> 0x030e }
+            boolean r4 = r3.exists()     // Catch:{ all -> 0x030e }
+            if (r4 == 0) goto L_0x0297
+            float r1 = r1.intensity     // Catch:{ all -> 0x030e }
             r4 = 1120403456(0x42CLASSNAME, float:100.0)
             float r1 = r1 * r4
-            int r1 = (int) r1     // Catch:{ all -> 0x0302 }
-            java.io.FileInputStream r4 = new java.io.FileInputStream     // Catch:{ all -> 0x0302 }
-            r4.<init>(r3)     // Catch:{ all -> 0x0302 }
-            android.graphics.Bitmap r3 = loadScreenSizedBitmap(r4, r10)     // Catch:{ all -> 0x0302 }
-            r2.setPatternBitmap(r1, r3)     // Catch:{ all -> 0x0302 }
-            java.lang.Boolean r1 = java.lang.Boolean.TRUE     // Catch:{ all -> 0x0302 }
-            r8.isCustomTheme = r1     // Catch:{ all -> 0x0302 }
-        L_0x028e:
-            r8.wallpaper = r2     // Catch:{ all -> 0x0302 }
-            goto L_0x0303
-        L_0x0292:
-            if (r2 == 0) goto L_0x02b9
-            int[] r3 = new int[r14]     // Catch:{ all -> 0x0302 }
-            r3[r10] = r0     // Catch:{ all -> 0x0302 }
-            r3[r9] = r2     // Catch:{ all -> 0x0302 }
-            int r1 = r1.rotation     // Catch:{ all -> 0x0302 }
-            android.graphics.drawable.GradientDrawable$Orientation r1 = org.telegram.ui.Components.BackgroundGradientDrawable.getGradientOrientation(r1)     // Catch:{ all -> 0x0302 }
-            org.telegram.ui.Components.BackgroundGradientDrawable r2 = new org.telegram.ui.Components.BackgroundGradientDrawable     // Catch:{ all -> 0x0302 }
-            r2.<init>(r1, r3)     // Catch:{ all -> 0x0302 }
-            org.telegram.ui.ActionBar.Theme$14 r1 = new org.telegram.ui.ActionBar.Theme$14     // Catch:{ all -> 0x0302 }
-            r1.<init>()     // Catch:{ all -> 0x0302 }
-            org.telegram.ui.Components.BackgroundGradientDrawable$Sizes r3 = org.telegram.ui.Components.BackgroundGradientDrawable.Sizes.ofDeviceScreen()     // Catch:{ all -> 0x0302 }
+            int r1 = (int) r1     // Catch:{ all -> 0x030e }
+            java.io.FileInputStream r4 = new java.io.FileInputStream     // Catch:{ all -> 0x030e }
+            r4.<init>(r3)     // Catch:{ all -> 0x030e }
+            android.graphics.Bitmap r3 = loadScreenSizedBitmap(r4, r10)     // Catch:{ all -> 0x030e }
+            r2.setPatternBitmap(r1, r3)     // Catch:{ all -> 0x030e }
+            java.lang.Boolean r1 = java.lang.Boolean.TRUE     // Catch:{ all -> 0x030e }
+            r8.isCustomTheme = r1     // Catch:{ all -> 0x030e }
+        L_0x0297:
+            r8.wallpaper = r2     // Catch:{ all -> 0x030e }
+            goto L_0x030f
+        L_0x029b:
+            if (r2 == 0) goto L_0x02c2
+            int[] r3 = new int[r14]     // Catch:{ all -> 0x030e }
+            r3[r10] = r0     // Catch:{ all -> 0x030e }
+            r3[r9] = r2     // Catch:{ all -> 0x030e }
+            int r1 = r1.rotation     // Catch:{ all -> 0x030e }
+            android.graphics.drawable.GradientDrawable$Orientation r1 = org.telegram.ui.Components.BackgroundGradientDrawable.getGradientOrientation(r1)     // Catch:{ all -> 0x030e }
+            org.telegram.ui.Components.BackgroundGradientDrawable r2 = new org.telegram.ui.Components.BackgroundGradientDrawable     // Catch:{ all -> 0x030e }
+            r2.<init>(r1, r3)     // Catch:{ all -> 0x030e }
+            org.telegram.ui.ActionBar.Theme$12 r1 = new org.telegram.ui.ActionBar.Theme$12     // Catch:{ all -> 0x030e }
+            r1.<init>()     // Catch:{ all -> 0x030e }
+            org.telegram.ui.Components.BackgroundGradientDrawable$Sizes r3 = org.telegram.ui.Components.BackgroundGradientDrawable.Sizes.ofDeviceScreen()     // Catch:{ all -> 0x030e }
             r4 = 100
-            org.telegram.ui.Components.BackgroundGradientDrawable$Disposable r1 = r2.startDithering(r3, r1, r4)     // Catch:{ all -> 0x0302 }
-            backgroundGradientDisposable = r1     // Catch:{ all -> 0x0302 }
-            r8.wallpaper = r2     // Catch:{ all -> 0x0302 }
-            goto L_0x0303
-        L_0x02b9:
-            android.graphics.drawable.ColorDrawable r1 = new android.graphics.drawable.ColorDrawable     // Catch:{ all -> 0x0302 }
-            r1.<init>(r0)     // Catch:{ all -> 0x0302 }
-            r8.wallpaper = r1     // Catch:{ all -> 0x0302 }
-            goto L_0x0303
-        L_0x02c1:
-            java.io.File r2 = new java.io.File     // Catch:{ all -> 0x0302 }
-            java.io.File r3 = org.telegram.messenger.ApplicationLoader.getFilesDirFixed()     // Catch:{ all -> 0x0302 }
-            java.lang.String r1 = r1.fileName     // Catch:{ all -> 0x0302 }
-            r2.<init>(r3, r1)     // Catch:{ all -> 0x0302 }
-            boolean r1 = r2.exists()     // Catch:{ all -> 0x0302 }
-            if (r1 == 0) goto L_0x02e8
-            java.io.FileInputStream r1 = new java.io.FileInputStream     // Catch:{ all -> 0x0302 }
-            r1.<init>(r2)     // Catch:{ all -> 0x0302 }
-            android.graphics.Bitmap r1 = loadScreenSizedBitmap(r1, r10)     // Catch:{ all -> 0x0302 }
-            if (r1 == 0) goto L_0x02e8
-            android.graphics.drawable.BitmapDrawable r2 = new android.graphics.drawable.BitmapDrawable     // Catch:{ all -> 0x0302 }
-            r2.<init>(r1)     // Catch:{ all -> 0x0302 }
-            r8.wallpaper = r2     // Catch:{ all -> 0x0302 }
-            java.lang.Boolean r1 = java.lang.Boolean.TRUE     // Catch:{ all -> 0x0302 }
-            r8.isCustomTheme = r1     // Catch:{ all -> 0x0302 }
-        L_0x02e8:
-            android.graphics.drawable.Drawable r1 = r8.wallpaper     // Catch:{ all -> 0x0302 }
-            if (r1 != 0) goto L_0x0303
-            android.graphics.drawable.Drawable r1 = createDefaultWallpaper()     // Catch:{ all -> 0x0302 }
-            r8.wallpaper = r1     // Catch:{ all -> 0x0302 }
-            java.lang.Boolean r1 = java.lang.Boolean.FALSE     // Catch:{ all -> 0x0302 }
-            r8.isCustomTheme = r1     // Catch:{ all -> 0x0302 }
-            goto L_0x0303
-        L_0x02f7:
-            android.graphics.drawable.Drawable r1 = createDefaultWallpaper()     // Catch:{ all -> 0x0302 }
-            r8.wallpaper = r1     // Catch:{ all -> 0x0302 }
-            java.lang.Boolean r1 = java.lang.Boolean.FALSE     // Catch:{ all -> 0x0302 }
-            r8.isCustomTheme = r1     // Catch:{ all -> 0x0302 }
-            goto L_0x0303
-        L_0x0302:
+            org.telegram.ui.Components.BackgroundGradientDrawable$Disposable r1 = r2.startDithering(r3, r1, r4)     // Catch:{ all -> 0x030e }
+            backgroundGradientDisposable = r1     // Catch:{ all -> 0x030e }
+            r8.wallpaper = r2     // Catch:{ all -> 0x030e }
+            goto L_0x030f
+        L_0x02c2:
+            android.graphics.drawable.ColorDrawable r1 = new android.graphics.drawable.ColorDrawable     // Catch:{ all -> 0x030e }
+            r1.<init>(r0)     // Catch:{ all -> 0x030e }
+            r8.wallpaper = r1     // Catch:{ all -> 0x030e }
+            goto L_0x030f
+        L_0x02ca:
+            java.io.File r2 = new java.io.File     // Catch:{ all -> 0x030e }
+            java.io.File r3 = org.telegram.messenger.ApplicationLoader.getFilesDirFixed()     // Catch:{ all -> 0x030e }
+            java.lang.String r1 = r1.fileName     // Catch:{ all -> 0x030e }
+            r2.<init>(r3, r1)     // Catch:{ all -> 0x030e }
+            boolean r1 = r2.exists()     // Catch:{ all -> 0x030e }
+            if (r1 == 0) goto L_0x02f4
+            java.io.FileInputStream r1 = new java.io.FileInputStream     // Catch:{ all -> 0x030e }
+            r1.<init>(r2)     // Catch:{ all -> 0x030e }
+            android.graphics.Bitmap r1 = loadScreenSizedBitmap(r1, r10)     // Catch:{ all -> 0x030e }
+            if (r1 == 0) goto L_0x02f4
+            android.graphics.drawable.BitmapDrawable r2 = new android.graphics.drawable.BitmapDrawable     // Catch:{ all -> 0x030e }
+            r2.<init>(r1)     // Catch:{ all -> 0x030e }
+            r8.wallpaper = r2     // Catch:{ all -> 0x030e }
+            r2.setFilterBitmap(r9)     // Catch:{ all -> 0x030e }
+            java.lang.Boolean r1 = java.lang.Boolean.TRUE     // Catch:{ all -> 0x030e }
+            r8.isCustomTheme = r1     // Catch:{ all -> 0x030e }
+        L_0x02f4:
+            android.graphics.drawable.Drawable r1 = r8.wallpaper     // Catch:{ all -> 0x030e }
+            if (r1 != 0) goto L_0x030f
+            android.graphics.drawable.Drawable r1 = createDefaultWallpaper()     // Catch:{ all -> 0x030e }
+            r8.wallpaper = r1     // Catch:{ all -> 0x030e }
+            java.lang.Boolean r1 = java.lang.Boolean.FALSE     // Catch:{ all -> 0x030e }
+            r8.isCustomTheme = r1     // Catch:{ all -> 0x030e }
+            goto L_0x030f
         L_0x0303:
+            android.graphics.drawable.Drawable r1 = createDefaultWallpaper()     // Catch:{ all -> 0x030e }
+            r8.wallpaper = r1     // Catch:{ all -> 0x030e }
+            java.lang.Boolean r1 = java.lang.Boolean.FALSE     // Catch:{ all -> 0x030e }
+            r8.isCustomTheme = r1     // Catch:{ all -> 0x030e }
+            goto L_0x030f
+        L_0x030e:
+        L_0x030f:
             android.graphics.drawable.Drawable r1 = r8.wallpaper
-            if (r1 != 0) goto L_0x0313
-            if (r0 != 0) goto L_0x030c
+            if (r1 != 0) goto L_0x031f
+            if (r0 != 0) goto L_0x0318
             r0 = -2693905(0xffffffffffd6e4ef, float:NaN)
-        L_0x030c:
+        L_0x0318:
             android.graphics.drawable.ColorDrawable r1 = new android.graphics.drawable.ColorDrawable
             r1.<init>(r0)
             r8.wallpaper = r1
-        L_0x0313:
+        L_0x031f:
             return r8
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ActionBar.Theme.createBackgroundDrawable(org.telegram.ui.ActionBar.Theme$ThemeInfo, org.telegram.ui.ActionBar.Theme$OverrideWallpaperInfo, java.util.HashMap, java.io.File, java.lang.String, int, int, int, boolean, boolean, boolean, boolean, org.telegram.tgnet.TLRPC$Document):org.telegram.ui.ActionBar.Theme$BackgroundDrawableSettings");
@@ -17862,7 +17988,6 @@ public class Theme {
         float f;
         try {
             BitmapFactory.Options options = new BitmapFactory.Options();
-            int i2 = 1;
             options.inSampleSize = 1;
             options.inJustDecodeBounds = true;
             long j = (long) i;
@@ -17870,20 +17995,23 @@ public class Theme {
             BitmapFactory.decodeStream(fileInputStream, (Rect) null, options);
             float f2 = (float) options.outWidth;
             float f3 = (float) options.outHeight;
-            int dp = AndroidUtilities.dp(360.0f);
-            int dp2 = AndroidUtilities.dp(640.0f);
-            if (dp < dp2 || f2 <= f3) {
-                f = Math.min(f2 / ((float) dp), f3 / ((float) dp2));
+            Point point = AndroidUtilities.displaySize;
+            int min = Math.min(point.x, point.y);
+            Point point2 = AndroidUtilities.displaySize;
+            int max = Math.max(point2.x, point2.y);
+            if (min < max || f2 <= f3) {
+                f = Math.min(f2 / ((float) min), f3 / ((float) max));
             } else {
-                f = Math.max(f2 / ((float) dp), f3 / ((float) dp2));
+                f = Math.max(f2 / ((float) min), f3 / ((float) max));
             }
             if (f < 1.2f) {
                 f = 1.0f;
             }
             options.inJustDecodeBounds = false;
-            if (f <= 1.0f || (f2 <= ((float) dp) && f3 <= ((float) dp2))) {
+            if (f <= 1.0f || (f2 <= ((float) min) && f3 <= ((float) max))) {
                 options.inSampleSize = (int) f;
             } else {
+                int i2 = 1;
                 do {
                     i2 *= 2;
                 } while (((float) (i2 * 2)) < f);
@@ -17891,9 +18019,18 @@ public class Theme {
             }
             fileInputStream.getChannel().position(j);
             Bitmap decodeStream = BitmapFactory.decodeStream(fileInputStream, (Rect) null, options);
+            if ((decodeStream.getWidth() < min || decodeStream.getHeight() < max) && Math.max(((float) min) / ((float) decodeStream.getWidth()), ((float) max) / ((float) decodeStream.getHeight())) >= 1.02f) {
+                Bitmap createScaledBitmap = Bitmap.createScaledBitmap(decodeStream, min, max, true);
+                decodeStream.recycle();
+                try {
+                    fileInputStream.close();
+                } catch (Exception unused) {
+                }
+                return createScaledBitmap;
+            }
             try {
                 fileInputStream.close();
-            } catch (Exception unused) {
+            } catch (Exception unused2) {
             }
             return decodeStream;
         } catch (Exception e) {
@@ -17901,7 +18038,7 @@ public class Theme {
             if (fileInputStream != null) {
                 try {
                     fileInputStream.close();
-                } catch (Exception unused2) {
+                } catch (Exception unused3) {
                 }
             }
             return null;
@@ -17909,7 +18046,7 @@ public class Theme {
             if (fileInputStream != null) {
                 try {
                     fileInputStream.close();
-                } catch (Exception unused3) {
+                } catch (Exception unused4) {
                 }
             }
             throw th;
@@ -18011,7 +18148,7 @@ public class Theme {
             org.telegram.ui.Components.BackgroundGradientDrawable$Sizes r2 = org.telegram.ui.Components.BackgroundGradientDrawable.Sizes.ofDeviceScreen(r2, r4)
         L_0x00c0:
             if (r1 == 0) goto L_0x00c7
-            org.telegram.ui.ActionBar.Theme$15 r5 = new org.telegram.ui.ActionBar.Theme$15
+            org.telegram.ui.ActionBar.Theme$13 r5 = new org.telegram.ui.ActionBar.Theme$13
             r5.<init>(r0, r1)
         L_0x00c7:
             r3.startDithering(r2, r5)
@@ -18162,12 +18299,9 @@ public class Theme {
     }
 
     public static Drawable getCachedWallpaper() {
-        Drawable drawable = themedWallpaper;
-        if (drawable == null) {
-            drawable = wallpaper;
-        }
-        if (drawable != null || wallpaperLoadTask == null) {
-            return drawable;
+        Drawable cachedWallpaperNonBlocking = getCachedWallpaperNonBlocking();
+        if (cachedWallpaperNonBlocking != null || wallpaperLoadTask == null) {
+            return cachedWallpaperNonBlocking;
         }
         CountDownLatch countDownLatch = new CountDownLatch(1);
         Utilities.themeQueue.postRunnable(new Theme$$ExternalSyntheticLambda2(countDownLatch));
@@ -18176,8 +18310,7 @@ public class Theme {
         } catch (Exception e) {
             FileLog.e((Throwable) e);
         }
-        Drawable drawable2 = themedWallpaper;
-        return drawable2 != null ? drawable2 : wallpaper;
+        return getCachedWallpaperNonBlocking();
     }
 
     public static Drawable getCachedWallpaperNonBlocking() {

@@ -5,12 +5,13 @@ import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC$TL_error;
 
 public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda217 implements RequestDelegate {
-    public static final /* synthetic */ ChatActivity$$ExternalSyntheticLambda217 INSTANCE = new ChatActivity$$ExternalSyntheticLambda217();
+    public final /* synthetic */ ChatActivity f$0;
 
-    private /* synthetic */ ChatActivity$$ExternalSyntheticLambda217() {
+    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda217(ChatActivity chatActivity) {
+        this.f$0 = chatActivity;
     }
 
     public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        ChatActivity.lambda$markSponsoredAsRead$232(tLObject, tLRPC$TL_error);
+        this.f$0.lambda$startEditingMessageObject$184(tLObject, tLRPC$TL_error);
     }
 }

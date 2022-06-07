@@ -22,6 +22,6 @@ public final /* synthetic */ class NotificationsCustomSettingsActivity$$External
     }
 
     public final void run() {
-        this.f$0.lambda$loadExceptions$10(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6);
+        this.f$0.lambda$loadExceptions$9(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6);
     }
 }

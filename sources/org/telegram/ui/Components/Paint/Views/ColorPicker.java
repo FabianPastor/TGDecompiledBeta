@@ -18,6 +18,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import androidx.annotation.Keep;
 import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.LocaleController;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.Paint.Swatch;
 
@@ -34,7 +35,7 @@ public class ColorPicker extends FrameLayout {
     private OvershootInterpolator interpolator = new OvershootInterpolator(1.02f);
     private float location;
     private RectF rectF = new RectF();
-    private ImageView settingsButton;
+    public ImageView settingsButton;
     private Drawable shadowDrawable;
     private Paint swatchPaint = new Paint(1);
     private Paint swatchStrokePaint = new Paint(1);
@@ -63,13 +64,15 @@ public class ColorPicker extends FrameLayout {
         this.swatchStrokePaint.setStrokeWidth((float) AndroidUtilities.dp(1.0f));
         ImageView imageView = new ImageView(context);
         this.settingsButton = imageView;
-        imageView.setScaleType(ImageView.ScaleType.CENTER);
+        imageView.setContentDescription(LocaleController.getString("AccDescrBrushType", NUM));
+        this.settingsButton.setScaleType(ImageView.ScaleType.CENTER);
         this.settingsButton.setImageResource(NUM);
         addView(this.settingsButton, LayoutHelper.createFrame(46, 52.0f));
         this.settingsButton.setOnClickListener(new ColorPicker$$ExternalSyntheticLambda0(this));
         ImageView imageView2 = new ImageView(context);
         this.undoButton = imageView2;
-        imageView2.setScaleType(ImageView.ScaleType.CENTER);
+        imageView2.setContentDescription(LocaleController.getString("Undo", NUM));
+        this.undoButton.setScaleType(ImageView.ScaleType.CENTER);
         this.undoButton.setImageResource(NUM);
         addView(this.undoButton, LayoutHelper.createFrame(46, 52.0f));
         this.undoButton.setOnClickListener(new ColorPicker$$ExternalSyntheticLambda1(this));

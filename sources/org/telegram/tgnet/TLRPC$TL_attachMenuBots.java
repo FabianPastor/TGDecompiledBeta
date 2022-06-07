@@ -16,7 +16,7 @@ public class TLRPC$TL_attachMenuBots extends TLRPC$AttachMenuBots {
             int readInt322 = abstractSerializedData.readInt32(z);
             int i2 = 0;
             while (i2 < readInt322) {
-                TLRPC$TL_attachMenuBot TLdeserialize = TLRPC$TL_attachMenuBot.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
+                TLRPC$TL_attachMenuBot TLdeserialize = TLRPC$AttachMenuBot.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
                 if (TLdeserialize != null) {
                     this.bots.add(TLdeserialize);
                     i2++;

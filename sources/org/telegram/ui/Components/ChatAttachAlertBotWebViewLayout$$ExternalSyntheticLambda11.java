@@ -12,6 +12,6 @@ public final /* synthetic */ class ChatAttachAlertBotWebViewLayout$$ExternalSynt
     }
 
     public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        this.f$0.lambda$requestWebView$11(tLObject, tLRPC$TL_error);
+        this.f$0.lambda$new$1(tLObject, tLRPC$TL_error);
     }
 }

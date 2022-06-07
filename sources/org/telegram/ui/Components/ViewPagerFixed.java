@@ -979,7 +979,8 @@ public class ViewPagerFixed extends FrameLayout {
             };
             this.listView = r3;
             ((DefaultItemAnimator) r3.getItemAnimator()).setDelayAnimations(false);
-            this.listView.setSelectorType(7);
+            this.listView.setSelectorType(8);
+            this.listView.setSelectorRadius(6);
             this.listView.setSelectorDrawableColor(Theme.getColor(this.selectorColorKey));
             RecyclerListView recyclerListView = this.listView;
             AnonymousClass3 r32 = new LinearLayoutManager(context, 0, false) {

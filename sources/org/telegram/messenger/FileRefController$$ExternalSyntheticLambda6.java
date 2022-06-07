@@ -12,6 +12,6 @@ public final /* synthetic */ class FileRefController$$ExternalSyntheticLambda6 i
     }
 
     public final void run() {
-        this.f$0.lambda$onRequestComplete$33(this.f$1);
+        this.f$0.lambda$onRequestComplete$36(this.f$1);
     }
 }

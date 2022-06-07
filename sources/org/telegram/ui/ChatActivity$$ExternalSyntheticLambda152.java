@@ -2,14 +2,12 @@ package org.telegram.ui;
 
 public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda152 implements Runnable {
     public final /* synthetic */ ChatActivity f$0;
-    public final /* synthetic */ int f$1;
 
-    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda152(ChatActivity chatActivity, int i) {
+    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda152(ChatActivity chatActivity) {
         this.f$0 = chatActivity;
-        this.f$1 = i;
     }
 
     public final void run() {
-        this.f$0.lambda$didReceivedNotification$118(this.f$1);
+        this.f$0.lambda$scrollToMessageId$106();
     }
 }

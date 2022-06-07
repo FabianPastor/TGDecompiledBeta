@@ -2,51 +2,50 @@ package j$.util.stream;
 
 import j$.util.CLASSNAMEa;
 import j$.util.function.Consumer;
-import j$.util.function.e;
-import j$.util.function.f;
+import j$.util.function.k;
+import j$.util.function.l;
 import j$.util.u;
-import j$.util.y;
 
-final class F4 extends I4 implements u, f {
-    double e;
+final class F4 extends H4 implements u.a, l {
+    int e;
 
-    F4(u uVar, long j, long j2) {
-        super(uVar, j, j2);
+    F4(u.a aVar, long j, long j2) {
+        super(aVar, j, j2);
     }
 
-    F4(u uVar, F4 f4) {
-        super(uVar, f4);
+    F4(u.a aVar, F4 f4) {
+        super(aVar, f4);
     }
 
-    public void accept(double d) {
-        this.e = d;
+    public void accept(int i) {
+        this.e = i;
     }
 
     public /* synthetic */ boolean b(Consumer consumer) {
-        return CLASSNAMEa.j(this, consumer);
+        return CLASSNAMEa.k(this, consumer);
     }
 
     public /* synthetic */ void forEachRemaining(Consumer consumer) {
-        CLASSNAMEa.b(this, consumer);
+        CLASSNAMEa.c(this, consumer);
     }
 
-    public f j(f fVar) {
-        fVar.getClass();
-        return new e(this, fVar);
+    public l l(l lVar) {
+        lVar.getClass();
+        return new k(this, lVar);
     }
 
     /* access modifiers changed from: protected */
-    public y q(y yVar) {
-        return new F4((u) yVar, this);
+    public u q(u uVar) {
+        return new F4((u.a) uVar, this);
     }
 
     /* access modifiers changed from: protected */
     public void s(Object obj) {
-        ((f) obj).accept(this.e);
+        ((l) obj).accept(this.e);
     }
 
     /* access modifiers changed from: protected */
-    public CLASSNAMEk4 t(int i) {
+    public CLASSNAMEj4 t(int i) {
         return new CLASSNAMEh4(i);
     }
 }

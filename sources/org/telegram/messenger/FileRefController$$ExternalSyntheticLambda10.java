@@ -12,6 +12,6 @@ public final /* synthetic */ class FileRefController$$ExternalSyntheticLambda10 
     }
 
     public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        this.f$0.lambda$requestReferenceFromServer$9(tLObject, tLRPC$TL_error);
+        this.f$0.lambda$requestReferenceFromServer$15(tLObject, tLRPC$TL_error);
     }
 }

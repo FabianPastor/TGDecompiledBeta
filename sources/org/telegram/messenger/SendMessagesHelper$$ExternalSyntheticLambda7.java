@@ -16,6 +16,6 @@ public final /* synthetic */ class SendMessagesHelper$$ExternalSyntheticLambda7 
     }
 
     public final void run() {
-        AndroidUtilities.runOnUIThread(new SendMessagesHelper$$ExternalSyntheticLambda8(this.f$0, this.f$1, this.f$2, this.f$3, this.f$4));
+        Utilities.stageQueue.postRunnable(new SendMessagesHelper$$ExternalSyntheticLambda8(this.f$0, this.f$1, this.f$2, this.f$3, this.f$4));
     }
 }

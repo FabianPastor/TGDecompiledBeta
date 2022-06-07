@@ -14,7 +14,6 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
-import androidx.core.graphics.ColorUtils;
 import java.io.File;
 import java.nio.file.CopyOption;
 import java.nio.file.Files;
@@ -260,7 +259,7 @@ public class FilesMigrationService extends Service {
             textView3.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
             textView3.setText(LocaleController.getString("MigrateOldFolderButton", NUM));
             textView3.setTextColor(Theme.getColor("featuredStickers_buttonText"));
-            textView3.setBackgroundDrawable(Theme.createSimpleSelectorRoundRectDrawable(AndroidUtilities.dp(6.0f), Theme.getColor("featuredStickers_addButton"), ColorUtils.setAlphaComponent(Theme.getColor("windowBackgroundWhite"), 120)));
+            textView3.setBackground(Theme.AdaptiveRipple.filledRect("featuredStickers_addButton", 6.0f));
             linearLayout.addView(textView3, LayoutHelper.createFrame(-1, 48.0f, 0, 16.0f, 15.0f, 16.0f, 16.0f));
             textView3.setOnClickListener(new FilesMigrationService$FilesMigrationBottomSheet$$ExternalSyntheticLambda0(this));
             ScrollView scrollView = new ScrollView(parentActivity);

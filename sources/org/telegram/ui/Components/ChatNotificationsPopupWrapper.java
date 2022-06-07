@@ -27,6 +27,13 @@ public class ChatNotificationsPopupWrapper {
     public ActionBarPopupWindow.ActionBarPopupWindowLayout windowLayout;
 
     public interface Callback {
+
+        /* renamed from: org.telegram.ui.Components.ChatNotificationsPopupWrapper$Callback$-CC  reason: invalid class name */
+        public final /* synthetic */ class CC {
+            public static void $default$dismiss(Callback callback) {
+            }
+        }
+
         void dismiss();
 
         void muteFor(int i);
@@ -58,7 +65,7 @@ public class ChatNotificationsPopupWrapper {
         ActionBarMenuSubItem addItem4 = ActionBarMenuItem.addItem(this.windowLayout, NUM, LocaleController.getString("MuteFor1h", NUM), false, resourcesProvider);
         this.muteForLastSelected2 = addItem4;
         addItem4.setOnClickListener(new ChatNotificationsPopupWrapper$$ExternalSyntheticLambda3(this, callback2));
-        ActionBarMenuItem.addItem(this.windowLayout, NUM, LocaleController.getString("MuteForPopup", NUM), false, resourcesProvider).setOnClickListener(new ChatNotificationsPopupWrapper$$ExternalSyntheticLambda0(this, context, i, callback2));
+        ActionBarMenuItem.addItem(this.windowLayout, NUM, LocaleController.getString("MuteForPopup", NUM), false, resourcesProvider).setOnClickListener(new ChatNotificationsPopupWrapper$$ExternalSyntheticLambda0(this, context, resourcesProvider, i, callback2));
         ActionBarMenuItem.addItem(this.windowLayout, NUM, LocaleController.getString("NotificationsCustomize", NUM), false, resourcesProvider).setOnClickListener(new ChatNotificationsPopupWrapper$$ExternalSyntheticLambda2(this, callback2));
         ActionBarMenuSubItem addItem5 = ActionBarMenuItem.addItem(this.windowLayout, 0, "", false, resourcesProvider);
         this.muteUnmuteButton = addItem5;
@@ -84,9 +91,9 @@ public class ChatNotificationsPopupWrapper {
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$new$6(Context context, int i, Callback callback2, View view) {
+    public /* synthetic */ void lambda$new$6(Context context, Theme.ResourcesProvider resourcesProvider, int i, Callback callback2, View view) {
         dismiss();
-        AlertsCreator.createMuteForPickerDialog(context, new ChatNotificationsPopupWrapper$$ExternalSyntheticLambda10(i, callback2));
+        AlertsCreator.createMuteForPickerDialog(context, resourcesProvider, new ChatNotificationsPopupWrapper$$ExternalSyntheticLambda10(i, callback2));
     }
 
     /* access modifiers changed from: private */

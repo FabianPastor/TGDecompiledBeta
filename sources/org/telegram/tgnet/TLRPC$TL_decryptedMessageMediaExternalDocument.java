@@ -9,7 +9,7 @@ public class TLRPC$TL_decryptedMessageMediaExternalDocument extends TLRPC$Decryp
         this.access_hash = abstractSerializedData.readInt64(z);
         this.date = abstractSerializedData.readInt32(z);
         this.mime_type = abstractSerializedData.readString(z);
-        this.size = abstractSerializedData.readInt32(z);
+        this.size = (long) abstractSerializedData.readInt32(z);
         this.thumb = TLRPC$PhotoSize.TLdeserialize(0, this.id, 0, abstractSerializedData, abstractSerializedData.readInt32(z), z);
         this.dc_id = abstractSerializedData.readInt32(z);
         int readInt32 = abstractSerializedData.readInt32(z);
@@ -36,7 +36,7 @@ public class TLRPC$TL_decryptedMessageMediaExternalDocument extends TLRPC$Decryp
         abstractSerializedData.writeInt64(this.access_hash);
         abstractSerializedData.writeInt32(this.date);
         abstractSerializedData.writeString(this.mime_type);
-        abstractSerializedData.writeInt32(this.size);
+        abstractSerializedData.writeInt32((int) this.size);
         this.thumb.serializeToStream(abstractSerializedData);
         abstractSerializedData.writeInt32(this.dc_id);
         abstractSerializedData.writeInt32(NUM);

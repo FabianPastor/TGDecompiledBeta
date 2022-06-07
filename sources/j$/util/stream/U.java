@@ -10,6 +10,7 @@ import j$.util.function.g;
 import j$.util.function.h;
 import j$.util.function.u;
 import j$.util.function.y;
+import j$.util.t;
 import j$.wrappers.E;
 import j$.wrappers.G;
 import j$.wrappers.K;
@@ -23,7 +24,7 @@ public interface U extends CLASSNAMEg {
 
     Stream M(g gVar);
 
-    M0 R(G g);
+    IntStream R(G g);
 
     boolean Y(E e);
 
@@ -67,7 +68,7 @@ public interface U extends CLASSNAMEg {
 
     U sorted();
 
-    j$.util.u spliterator();
+    t spliterator();
 
     double sum();
 
@@ -77,7 +78,7 @@ public interface U extends CLASSNAMEg {
 
     U w(g gVar);
 
-    CLASSNAMEf1 x(h hVar);
+    CLASSNAMEe1 x(h hVar);
 
     U y(K k);
 }

@@ -1,15 +1,18 @@
 package org.telegram.ui;
 
-import org.telegram.messenger.AccountInstance;
+import android.view.View;
+import android.widget.FrameLayout;
 
-public final /* synthetic */ class DialogsActivity$$ExternalSyntheticLambda27 implements Runnable {
-    public final /* synthetic */ AccountInstance f$0;
+public final /* synthetic */ class DialogsActivity$$ExternalSyntheticLambda27 implements View.OnLongClickListener {
+    public final /* synthetic */ DialogsActivity f$0;
+    public final /* synthetic */ FrameLayout f$1;
 
-    public /* synthetic */ DialogsActivity$$ExternalSyntheticLambda27(AccountInstance accountInstance) {
-        this.f$0 = accountInstance;
+    public /* synthetic */ DialogsActivity$$ExternalSyntheticLambda27(DialogsActivity dialogsActivity, FrameLayout frameLayout) {
+        this.f$0 = dialogsActivity;
+        this.f$1 = frameLayout;
     }
 
-    public final void run() {
-        this.f$0.getDownloadController().loadDownloadingFiles();
+    public final boolean onLongClick(View view) {
+        return this.f$0.lambda$createView$11(this.f$1, view);
     }
 }

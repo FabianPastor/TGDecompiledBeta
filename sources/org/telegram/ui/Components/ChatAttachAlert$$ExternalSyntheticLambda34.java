@@ -1,16 +1,17 @@
 package org.telegram.ui.Components;
 
-import android.view.View;
-import org.telegram.ui.Components.RecyclerListView;
+import java.util.HashMap;
+import org.telegram.tgnet.TLRPC$TL_messageMediaPoll;
+import org.telegram.ui.Components.ChatAttachAlertPollLayout;
 
-public final /* synthetic */ class ChatAttachAlert$$ExternalSyntheticLambda34 implements RecyclerListView.OnItemLongClickListener {
+public final /* synthetic */ class ChatAttachAlert$$ExternalSyntheticLambda34 implements ChatAttachAlertPollLayout.PollCreateActivityDelegate {
     public final /* synthetic */ ChatAttachAlert f$0;
 
     public /* synthetic */ ChatAttachAlert$$ExternalSyntheticLambda34(ChatAttachAlert chatAttachAlert) {
         this.f$0 = chatAttachAlert;
     }
 
-    public final boolean onItemClick(View view, int i) {
-        return this.f$0.lambda$new$8(view, i);
+    public final void sendPoll(TLRPC$TL_messageMediaPoll tLRPC$TL_messageMediaPoll, HashMap hashMap, boolean z, int i) {
+        this.f$0.lambda$new$6(tLRPC$TL_messageMediaPoll, hashMap, z, i);
     }
 }

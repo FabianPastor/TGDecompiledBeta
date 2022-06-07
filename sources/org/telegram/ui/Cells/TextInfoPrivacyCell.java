@@ -8,6 +8,7 @@ import android.text.SpannableString;
 import android.text.TextUtils;
 import android.text.method.LinkMovementMethod;
 import android.text.style.AbsoluteSizeSpan;
+import android.util.Property;
 import android.view.View;
 import android.view.accessibility.AccessibilityNodeInfo;
 import android.widget.FrameLayout;
@@ -17,11 +18,13 @@ import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.LayoutHelper;
+import org.telegram.ui.Components.LinkSpanDrawable;
 
 public class TextInfoPrivacyCell extends FrameLayout {
     private int bottomPadding;
     private int fixedSize;
     private String linkTextColorKey;
+    private LinkSpanDrawable.LinkCollector links;
     private final Theme.ResourcesProvider resourcesProvider;
     private CharSequence text;
     private TextView textView;
@@ -43,17 +46,15 @@ public class TextInfoPrivacyCell extends FrameLayout {
         this(context, 21, resourcesProvider2);
     }
 
-    public TextInfoPrivacyCell(Context context, int i) {
-        this(context, i, (Theme.ResourcesProvider) null);
-    }
-
     public TextInfoPrivacyCell(Context context, int i, Theme.ResourcesProvider resourcesProvider2) {
         super(context);
         this.linkTextColorKey = "windowBackgroundWhiteLinkText";
         this.topPadding = 10;
         this.bottomPadding = 17;
         this.resourcesProvider = resourcesProvider2;
-        AnonymousClass1 r12 = new TextView(context) {
+        LinkSpanDrawable.LinkCollector linkCollector = new LinkSpanDrawable.LinkCollector(this);
+        this.links = linkCollector;
+        AnonymousClass1 r0 = new LinkSpanDrawable.LinksTextView(context, linkCollector, resourcesProvider2) {
             /* access modifiers changed from: protected */
             public void onDraw(Canvas canvas) {
                 TextInfoPrivacyCell.this.onTextDraw();
@@ -61,8 +62,8 @@ public class TextInfoPrivacyCell extends FrameLayout {
                 TextInfoPrivacyCell.this.afterTextDraw();
             }
         };
-        this.textView = r12;
-        r12.setTextSize(1, 14.0f);
+        this.textView = r0;
+        r0.setTextSize(1, 14.0f);
         int i2 = 5;
         this.textView.setGravity(LocaleController.isRTL ? 5 : 3);
         this.textView.setPadding(0, AndroidUtilities.dp(10.0f), 0, AndroidUtilities.dp(17.0f));
@@ -72,6 +73,19 @@ public class TextInfoPrivacyCell extends FrameLayout {
         this.textView.setImportantForAccessibility(2);
         float f = (float) i;
         addView(this.textView, LayoutHelper.createFrame(-1, -2.0f, (!LocaleController.isRTL ? 3 : i2) | 48, f, 0.0f, f, 0.0f));
+    }
+
+    /* access modifiers changed from: protected */
+    public void onDraw(Canvas canvas) {
+        if (this.links != null) {
+            canvas.save();
+            canvas.translate((float) this.textView.getLeft(), (float) this.textView.getTop());
+            if (this.links.draw(canvas)) {
+                invalidate();
+            }
+            canvas.restore();
+        }
+        super.onDraw(canvas);
     }
 
     public void setLinkTextColorKey(String str) {
@@ -151,12 +165,13 @@ public class TextInfoPrivacyCell extends FrameLayout {
         float f = 1.0f;
         if (arrayList != null) {
             TextView textView2 = this.textView;
+            Property property = View.ALPHA;
             float[] fArr = new float[1];
             if (!z) {
                 f = 0.5f;
             }
             fArr[0] = f;
-            arrayList.add(ObjectAnimator.ofFloat(textView2, "alpha", fArr));
+            arrayList.add(ObjectAnimator.ofFloat(textView2, property, fArr));
             return;
         }
         TextView textView3 = this.textView;

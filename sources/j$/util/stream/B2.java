@@ -1,63 +1,19 @@
 package j$.util.stream;
 
-import j$.util.function.Consumer;
-import j$.util.function.b;
-import j$.util.function.p;
-import j$.util.function.q;
-import j$.util.function.w;
-import j$.util.function.y;
+import j$.util.function.d;
 
-class B2 extends U2 implements T2, CLASSNAMEm3 {
-    final /* synthetic */ y b;
-    final /* synthetic */ w c;
-    final /* synthetic */ b d;
+class B2 extends U2 {
+    final /* synthetic */ d b;
+    final /* synthetic */ double c;
 
-    B2(y yVar, w wVar, b bVar) {
-        this.b = yVar;
-        this.c = wVar;
-        this.d = bVar;
+    /* JADX INFO: super call moved to the top of the method (can break code semantics) */
+    B2(CLASSNAMEe4 e4Var, d dVar, double d) {
+        super(e4Var);
+        this.b = dVar;
+        this.c = d;
     }
 
-    public /* synthetic */ void accept(double d2) {
-        CLASSNAMEp1.f(this);
-        throw null;
-    }
-
-    public /* synthetic */ void accept(int i) {
-        CLASSNAMEp1.d(this);
-        throw null;
-    }
-
-    public void accept(long j) {
-        this.c.accept(this.a, j);
-    }
-
-    public /* synthetic */ Consumer andThen(Consumer consumer) {
-        return Consumer.CC.$default$andThen(this, consumer);
-    }
-
-    /* renamed from: b */
-    public /* synthetic */ void accept(Long l) {
-        CLASSNAMEp1.c(this, l);
-    }
-
-    public q f(q qVar) {
-        qVar.getClass();
-        return new p(this, qVar);
-    }
-
-    public void h(T2 t2) {
-        this.a = this.d.apply(this.a, ((B2) t2).a);
-    }
-
-    public /* synthetic */ void m() {
-    }
-
-    public void n(long j) {
-        this.a = this.b.get();
-    }
-
-    public /* synthetic */ boolean o() {
-        return false;
+    public S2 a() {
+        return new C2(this.c, this.b);
     }
 }

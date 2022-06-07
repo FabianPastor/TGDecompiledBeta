@@ -4,17 +4,14 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
-import android.graphics.Typeface;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
-import android.os.Build;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.FrameLayout;
 import java.util.ArrayList;
+import java.util.HashMap;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.FileLoader;
-import org.telegram.messenger.ImageLocation;
 import org.telegram.messenger.ImageReceiver;
 import org.telegram.messenger.VideoEditedInfo;
 import org.telegram.ui.Components.Paint.Views.EditTextOutline;
@@ -22,7 +19,7 @@ import org.telegram.ui.Components.Paint.Views.EditTextOutline;
 public class PaintingOverlay extends FrameLayout {
     private Drawable backgroundDrawable;
     private boolean ignoreLayout;
-    private ArrayList<VideoEditedInfo.MediaEntity> mediaEntities;
+    private HashMap<View, VideoEditedInfo.MediaEntity> mediaEntityViews;
     private Bitmap paintBitmap;
 
     public boolean dispatchTouchEvent(MotionEvent motionEvent) {
@@ -42,38 +39,38 @@ public class PaintingOverlay extends FrameLayout {
     }
 
     public void setData(String str, ArrayList<VideoEditedInfo.MediaEntity> arrayList, boolean z, boolean z2) {
+        setEntities(arrayList, z, z2);
         if (str != null) {
             this.paintBitmap = BitmapFactory.decodeFile(str);
             BitmapDrawable bitmapDrawable = new BitmapDrawable(this.paintBitmap);
             this.backgroundDrawable = bitmapDrawable;
             setBackground(bitmapDrawable);
-        } else {
-            this.paintBitmap = null;
-            this.backgroundDrawable = null;
-            setBackground((Drawable) null);
+            return;
         }
-        setEntities(arrayList, z, z2);
+        this.paintBitmap = null;
+        this.backgroundDrawable = null;
+        setBackground((Drawable) null);
     }
 
     /* access modifiers changed from: protected */
     public void onMeasure(int i, int i2) {
         this.ignoreLayout = true;
         setMeasuredDimension(View.MeasureSpec.getSize(i), View.MeasureSpec.getSize(i2));
-        if (this.mediaEntities != null) {
+        if (this.mediaEntityViews != null) {
             int measuredWidth = getMeasuredWidth();
             int measuredHeight = getMeasuredHeight();
-            int size = this.mediaEntities.size();
-            for (int i3 = 0; i3 < size; i3++) {
-                VideoEditedInfo.MediaEntity mediaEntity = this.mediaEntities.get(i3);
-                View view = mediaEntity.view;
-                if (view != null) {
-                    if (view instanceof EditTextOutline) {
-                        view.measure(View.MeasureSpec.makeMeasureSpec(mediaEntity.viewWidth, NUM), View.MeasureSpec.makeMeasureSpec(0, 0));
+            int childCount = getChildCount();
+            for (int i3 = 0; i3 < childCount; i3++) {
+                View childAt = getChildAt(i3);
+                VideoEditedInfo.MediaEntity mediaEntity = this.mediaEntityViews.get(childAt);
+                if (mediaEntity != null) {
+                    if (childAt instanceof EditTextOutline) {
+                        childAt.measure(View.MeasureSpec.makeMeasureSpec(mediaEntity.viewWidth, NUM), View.MeasureSpec.makeMeasureSpec(0, 0));
                         float f = (mediaEntity.textViewWidth * ((float) measuredWidth)) / ((float) mediaEntity.viewWidth);
-                        mediaEntity.view.setScaleX(mediaEntity.scale * f);
-                        mediaEntity.view.setScaleY(mediaEntity.scale * f);
+                        childAt.setScaleX(mediaEntity.scale * f);
+                        childAt.setScaleY(mediaEntity.scale * f);
                     } else {
-                        view.measure(View.MeasureSpec.makeMeasureSpec((int) (((float) measuredWidth) * mediaEntity.width), NUM), View.MeasureSpec.makeMeasureSpec((int) (((float) measuredHeight) * mediaEntity.height), NUM));
+                        childAt.measure(View.MeasureSpec.makeMeasureSpec((int) (((float) measuredWidth) * mediaEntity.width), NUM), View.MeasureSpec.makeMeasureSpec((int) (((float) measuredHeight) * mediaEntity.height), NUM));
                     }
                 }
             }
@@ -91,26 +88,36 @@ public class PaintingOverlay extends FrameLayout {
     public void onLayout(boolean z, int i, int i2, int i3, int i4) {
         int i5;
         int i6;
-        if (this.mediaEntities != null) {
+        if (this.mediaEntityViews != null) {
             int measuredWidth = getMeasuredWidth();
             int measuredHeight = getMeasuredHeight();
-            int size = this.mediaEntities.size();
-            for (int i7 = 0; i7 < size; i7++) {
-                VideoEditedInfo.MediaEntity mediaEntity = this.mediaEntities.get(i7);
-                View view = mediaEntity.view;
-                if (view != null) {
-                    if (view instanceof EditTextOutline) {
-                        i5 = ((int) (((float) measuredWidth) * mediaEntity.textViewX)) - (view.getMeasuredWidth() / 2);
-                        i6 = ((int) (((float) measuredHeight) * mediaEntity.textViewY)) - (mediaEntity.view.getMeasuredHeight() / 2);
+            int childCount = getChildCount();
+            for (int i7 = 0; i7 < childCount; i7++) {
+                View childAt = getChildAt(i7);
+                VideoEditedInfo.MediaEntity mediaEntity = this.mediaEntityViews.get(childAt);
+                if (mediaEntity != null) {
+                    if (childAt instanceof EditTextOutline) {
+                        i5 = ((int) (((float) measuredWidth) * mediaEntity.textViewX)) - (childAt.getMeasuredWidth() / 2);
+                        i6 = ((int) (((float) measuredHeight) * mediaEntity.textViewY)) - (childAt.getMeasuredHeight() / 2);
                     } else {
                         i5 = (int) (((float) measuredWidth) * mediaEntity.x);
                         i6 = (int) (((float) measuredHeight) * mediaEntity.y);
                     }
-                    View view2 = mediaEntity.view;
-                    view2.layout(i5, i6, view2.getMeasuredWidth() + i5, mediaEntity.view.getMeasuredHeight() + i6);
+                    childAt.layout(i5, i6, childAt.getMeasuredWidth() + i5, childAt.getMeasuredHeight() + i6);
                 }
             }
         }
+    }
+
+    public void reset() {
+        this.paintBitmap = null;
+        this.backgroundDrawable = null;
+        setBackground((Drawable) null);
+        HashMap<View, VideoEditedInfo.MediaEntity> hashMap = this.mediaEntityViews;
+        if (hashMap != null) {
+            hashMap.clear();
+        }
+        removeAllViews();
     }
 
     public void showAll() {
@@ -132,81 +139,155 @@ public class PaintingOverlay extends FrameLayout {
         setBackground((Drawable) null);
     }
 
-    public void setEntities(ArrayList<VideoEditedInfo.MediaEntity> arrayList, boolean z, boolean z2) {
-        ArrayList<VideoEditedInfo.MediaEntity> arrayList2 = arrayList;
-        this.mediaEntities = arrayList2;
-        removeAllViews();
-        if (arrayList2 != null && !arrayList.isEmpty()) {
-            int size = this.mediaEntities.size();
-            for (int i = 0; i < size; i++) {
-                VideoEditedInfo.MediaEntity mediaEntity = this.mediaEntities.get(i);
-                byte b = mediaEntity.type;
-                if (b == 0) {
-                    BackupImageView backupImageView = new BackupImageView(getContext());
-                    backupImageView.setAspectFit(true);
-                    ImageReceiver imageReceiver = backupImageView.getImageReceiver();
-                    if (z) {
-                        imageReceiver.setAllowDecodeSingleFrame(true);
-                        imageReceiver.setAllowStartLottieAnimation(false);
-                        if (z2) {
-                            imageReceiver.setDelegate(PaintingOverlay$$ExternalSyntheticLambda0.INSTANCE);
-                        }
-                    }
-                    imageReceiver.setImage(ImageLocation.getForDocument(mediaEntity.document), (String) null, ImageLocation.getForDocument(FileLoader.getClosestPhotoSizeWithSize(mediaEntity.document.thumbs, 90), mediaEntity.document), (String) null, "webp", mediaEntity.parentObject, 1);
-                    if ((mediaEntity.subType & 2) != 0) {
-                        backupImageView.setScaleX(-1.0f);
-                    }
-                    mediaEntity.view = backupImageView;
-                } else if (b == 1) {
-                    AnonymousClass1 r5 = new EditTextOutline(this, getContext()) {
-                        public boolean dispatchTouchEvent(MotionEvent motionEvent) {
-                            return false;
-                        }
-
-                        public boolean onTouchEvent(MotionEvent motionEvent) {
-                            return false;
-                        }
-                    };
-                    r5.setBackgroundColor(0);
-                    r5.setPadding(AndroidUtilities.dp(7.0f), AndroidUtilities.dp(7.0f), AndroidUtilities.dp(7.0f), AndroidUtilities.dp(7.0f));
-                    r5.setTextSize(0, (float) mediaEntity.fontSize);
-                    r5.setText(mediaEntity.text);
-                    r5.setTypeface((Typeface) null, 1);
-                    r5.setGravity(17);
-                    r5.setHorizontallyScrolling(false);
-                    r5.setImeOptions(NUM);
-                    r5.setFocusableInTouchMode(true);
-                    r5.setEnabled(false);
-                    r5.setInputType(r5.getInputType() | 16384);
-                    if (Build.VERSION.SDK_INT >= 23) {
-                        r5.setBreakStrategy(0);
-                    }
-                    byte b2 = mediaEntity.subType;
-                    if ((b2 & 1) != 0) {
-                        r5.setTextColor(-1);
-                        r5.setStrokeColor(mediaEntity.color);
-                        r5.setFrameColor(0);
-                        r5.setShadowLayer(0.0f, 0.0f, 0.0f, 0);
-                    } else if ((b2 & 4) != 0) {
-                        r5.setTextColor(-16777216);
-                        r5.setStrokeColor(0);
-                        r5.setFrameColor(mediaEntity.color);
-                        r5.setShadowLayer(0.0f, 0.0f, 0.0f, 0);
-                    } else {
-                        r5.setTextColor(mediaEntity.color);
-                        r5.setStrokeColor(0);
-                        r5.setFrameColor(0);
-                        r5.setShadowLayer(5.0f, 0.0f, 1.0f, NUM);
-                    }
-                    mediaEntity.view = r5;
-                }
-                addView(mediaEntity.view);
-                View view = mediaEntity.view;
-                double d = (double) (-mediaEntity.rotation);
-                Double.isNaN(d);
-                view.setRotation((float) ((d / 3.141592653589793d) * 180.0d));
-            }
-        }
+    /* JADX WARNING: type inference failed for: r6v5, types: [org.telegram.ui.Components.PaintingOverlay$1, android.view.View, android.widget.EditText, org.telegram.ui.Components.Paint.Views.EditTextOutline] */
+    /* JADX WARNING: Multi-variable type inference failed */
+    /* JADX WARNING: Unknown variable types count: 1 */
+    /* Code decompiled incorrectly, please refer to instructions dump. */
+    public void setEntities(java.util.ArrayList<org.telegram.messenger.VideoEditedInfo.MediaEntity> r18, boolean r19, boolean r20) {
+        /*
+            r17 = this;
+            r0 = r17
+            r1 = r18
+            r17.reset()
+            java.util.HashMap r2 = new java.util.HashMap
+            r2.<init>()
+            r0.mediaEntityViews = r2
+            if (r1 == 0) goto L_0x0138
+            boolean r2 = r18.isEmpty()
+            if (r2 != 0) goto L_0x0138
+            int r2 = r18.size()
+            r3 = 0
+            r4 = 0
+        L_0x001c:
+            if (r4 >= r2) goto L_0x0138
+            java.lang.Object r5 = r1.get(r4)
+            org.telegram.messenger.VideoEditedInfo$MediaEntity r5 = (org.telegram.messenger.VideoEditedInfo.MediaEntity) r5
+            byte r6 = r5.type
+            r7 = 0
+            r8 = 1
+            if (r6 != 0) goto L_0x0079
+            org.telegram.ui.Components.BackupImageView r7 = new org.telegram.ui.Components.BackupImageView
+            android.content.Context r6 = r17.getContext()
+            r7.<init>(r6)
+            r7.setAspectFit(r8)
+            org.telegram.messenger.ImageReceiver r9 = r7.getImageReceiver()
+            if (r19 == 0) goto L_0x0049
+            r9.setAllowDecodeSingleFrame(r8)
+            r9.setAllowStartLottieAnimation(r3)
+            if (r20 == 0) goto L_0x0049
+            org.telegram.ui.Components.PaintingOverlay$$ExternalSyntheticLambda0 r6 = org.telegram.ui.Components.PaintingOverlay$$ExternalSyntheticLambda0.INSTANCE
+            r9.setDelegate(r6)
+        L_0x0049:
+            org.telegram.tgnet.TLRPC$Document r6 = r5.document
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$PhotoSize> r6 = r6.thumbs
+            r8 = 90
+            org.telegram.tgnet.TLRPC$PhotoSize r6 = org.telegram.messenger.FileLoader.getClosestPhotoSizeWithSize(r6, r8)
+            org.telegram.tgnet.TLRPC$Document r8 = r5.document
+            org.telegram.messenger.ImageLocation r10 = org.telegram.messenger.ImageLocation.getForDocument(r8)
+            r11 = 0
+            org.telegram.tgnet.TLRPC$Document r8 = r5.document
+            org.telegram.messenger.ImageLocation r12 = org.telegram.messenger.ImageLocation.getForDocument((org.telegram.tgnet.TLRPC$PhotoSize) r6, (org.telegram.tgnet.TLRPC$Document) r8)
+            r13 = 0
+            java.lang.Object r15 = r5.parentObject
+            r16 = 1
+            java.lang.String r14 = "webp"
+            r9.setImage((org.telegram.messenger.ImageLocation) r10, (java.lang.String) r11, (org.telegram.messenger.ImageLocation) r12, (java.lang.String) r13, (java.lang.String) r14, (java.lang.Object) r15, (int) r16)
+            byte r6 = r5.subType
+            r6 = r6 & 2
+            if (r6 == 0) goto L_0x0075
+            r6 = -1082130432(0xffffffffbvar_, float:-1.0)
+            r7.setScaleX(r6)
+        L_0x0075:
+            r5.view = r7
+            goto L_0x0112
+        L_0x0079:
+            if (r6 != r8) goto L_0x0112
+            org.telegram.ui.Components.PaintingOverlay$1 r6 = new org.telegram.ui.Components.PaintingOverlay$1
+            android.content.Context r9 = r17.getContext()
+            r6.<init>(r0, r9)
+            r6.setBackgroundColor(r3)
+            r9 = 1088421888(0x40e00000, float:7.0)
+            int r10 = org.telegram.messenger.AndroidUtilities.dp(r9)
+            int r11 = org.telegram.messenger.AndroidUtilities.dp(r9)
+            int r12 = org.telegram.messenger.AndroidUtilities.dp(r9)
+            int r9 = org.telegram.messenger.AndroidUtilities.dp(r9)
+            r6.setPadding(r10, r11, r12, r9)
+            int r9 = r5.fontSize
+            float r9 = (float) r9
+            r6.setTextSize(r3, r9)
+            java.lang.String r9 = r5.text
+            r6.setText(r9)
+            r6.setTypeface(r7, r8)
+            r7 = 17
+            r6.setGravity(r7)
+            r6.setHorizontallyScrolling(r3)
+            r7 = 268435456(0x10000000, float:2.5243549E-29)
+            r6.setImeOptions(r7)
+            r6.setFocusableInTouchMode(r8)
+            r6.setEnabled(r3)
+            int r7 = r6.getInputType()
+            r7 = r7 | 16384(0x4000, float:2.2959E-41)
+            r6.setInputType(r7)
+            int r7 = android.os.Build.VERSION.SDK_INT
+            r8 = 23
+            if (r7 < r8) goto L_0x00cf
+            r6.setBreakStrategy(r3)
+        L_0x00cf:
+            byte r7 = r5.subType
+            r8 = r7 & 1
+            r9 = 0
+            if (r8 == 0) goto L_0x00e6
+            r7 = -1
+            r6.setTextColor(r7)
+            int r7 = r5.color
+            r6.setStrokeColor(r7)
+            r6.setFrameColor(r3)
+            r6.setShadowLayer(r9, r9, r9, r3)
+            goto L_0x010f
+        L_0x00e6:
+            r7 = r7 & 4
+            if (r7 == 0) goto L_0x00fb
+            r7 = -16777216(0xfffffffffvar_, float:-1.7014118E38)
+            r6.setTextColor(r7)
+            r6.setStrokeColor(r3)
+            int r7 = r5.color
+            r6.setFrameColor(r7)
+            r6.setShadowLayer(r9, r9, r9, r3)
+            goto L_0x010f
+        L_0x00fb:
+            int r7 = r5.color
+            r6.setTextColor(r7)
+            r6.setStrokeColor(r3)
+            r6.setFrameColor(r3)
+            r7 = 1084227584(0x40a00000, float:5.0)
+            r8 = 1065353216(0x3var_, float:1.0)
+            r10 = 1711276032(0x66000000, float:1.5111573E23)
+            r6.setShadowLayer(r7, r9, r8, r10)
+        L_0x010f:
+            r5.view = r6
+            r7 = r6
+        L_0x0112:
+            if (r7 == 0) goto L_0x0134
+            r0.addView(r7)
+            float r6 = r5.rotation
+            float r6 = -r6
+            double r8 = (double) r6
+            r10 = 4614256656552045848(0x400921fb54442d18, double:3.NUM)
+            java.lang.Double.isNaN(r8)
+            double r8 = r8 / r10
+            r10 = 4640537203540230144(0xNUM, double:180.0)
+            double r8 = r8 * r10
+            float r6 = (float) r8
+            r7.setRotation(r6)
+            java.util.HashMap<android.view.View, org.telegram.messenger.VideoEditedInfo$MediaEntity> r6 = r0.mediaEntityViews
+            r6.put(r7, r5)
+        L_0x0134:
+            int r4 = r4 + 1
+            goto L_0x001c
+        L_0x0138:
+            return
+        */
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.PaintingOverlay.setEntities(java.util.ArrayList, boolean, boolean):void");
     }
 
     /* access modifiers changed from: private */
@@ -232,7 +313,14 @@ public class PaintingOverlay extends FrameLayout {
         super.setAlpha(f);
         Drawable drawable = this.backgroundDrawable;
         if (drawable != null) {
-            drawable.setAlpha((int) (f * 255.0f));
+            drawable.setAlpha((int) (255.0f * f));
+        }
+        int childCount = getChildCount();
+        for (int i = 0; i < childCount; i++) {
+            View childAt = getChildAt(i);
+            if (childAt != null && childAt.getParent() == this) {
+                childAt.setAlpha(f);
+            }
         }
     }
 

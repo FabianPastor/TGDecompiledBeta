@@ -32,7 +32,7 @@ public class JoinCallByUrlAlert extends BottomSheet {
             super(context);
             View view = new View(context);
             this.background = view;
-            view.setBackground(Theme.createSimpleSelectorRoundRectDrawable(AndroidUtilities.dp(4.0f), Theme.getColor("featuredStickers_addButton"), Theme.getColor("featuredStickers_addButtonPressed")));
+            view.setBackground(Theme.AdaptiveRipple.filledRect("featuredStickers_addButton", 4.0f));
             addView(this.background, LayoutHelper.createFrame(-1, -1.0f, 0, 16.0f, 16.0f, 16.0f, 16.0f));
             TextView textView2 = new TextView(context);
             this.textView = textView2;
@@ -90,7 +90,7 @@ public class JoinCallByUrlAlert extends BottomSheet {
             if (i == 0) {
                 textView2.setText(LocaleController.getString("NoOneJoinedYet", NUM));
             } else {
-                textView2.setText(LocaleController.formatPluralString("Participants", i));
+                textView2.setText(LocaleController.formatPluralString("Participants", i, new Object[0]));
             }
         } else {
             textView.setText(tLRPC$Chat.title);

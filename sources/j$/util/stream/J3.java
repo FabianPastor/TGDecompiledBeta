@@ -1,54 +1,25 @@
 package j$.util.stream;
 
+import j$.util.function.m;
+import j$.util.u;
 import java.util.Arrays;
 
-final class J3 extends F3 {
-    private Z3 c;
-
-    J3(CLASSNAMEn3 n3Var) {
-        super(n3Var);
+final class J3 extends Q {
+    J3(CLASSNAMEc cVar) {
+        super(cVar, CLASSNAMEe4.DOUBLE_VALUE, CLASSNAMEd4.q | CLASSNAMEd4.o);
     }
 
-    public void accept(long j) {
-        this.c.accept(j);
-    }
-
-    public void m() {
-        long[] jArr = (long[]) this.c.e();
-        Arrays.sort(jArr);
-        this.a.n((long) jArr.length);
-        int i = 0;
-        if (!this.b) {
-            int length = jArr.length;
-            while (i < length) {
-                this.a.accept(jArr[i]);
-                i++;
-            }
-        } else {
-            int length2 = jArr.length;
-            while (i < length2) {
-                long j = jArr[i];
-                if (this.a.o()) {
-                    break;
-                }
-                this.a.accept(j);
-                i++;
-            }
+    public A1 E0(CLASSNAMEy2 y2Var, u uVar, m mVar) {
+        if (CLASSNAMEd4.SORTED.d(y2Var.s0())) {
+            return y2Var.p0(uVar, false, mVar);
         }
-        this.a.m();
+        double[] dArr = (double[]) ((CLASSNAMEu1) y2Var.p0(uVar, true, mVar)).e();
+        Arrays.sort(dArr);
+        return new T1(dArr);
     }
 
-    public void n(long j) {
-        Z3 z3;
-        if (j < NUM) {
-            if (j > 0) {
-                int i = (int) j;
-            } else {
-                z3 = new Z3();
-            }
-            this.c = z3;
-            return;
-        }
-        throw new IllegalArgumentException("Stream size exceeds max array size");
+    public CLASSNAMEm3 H0(int i, CLASSNAMEm3 m3Var) {
+        m3Var.getClass();
+        return CLASSNAMEd4.SORTED.d(i) ? m3Var : CLASSNAMEd4.SIZED.d(i) ? new O3(m3Var) : new G3(m3Var);
     }
 }

@@ -53,16 +53,19 @@ public abstract class BaseFragment {
     /* access modifiers changed from: protected */
     public int currentAccount;
     protected boolean finishing;
-    protected boolean fragmentBeginToShow;
+    /* access modifiers changed from: protected */
+    public boolean fragmentBeginToShow;
     /* access modifiers changed from: protected */
     public View fragmentView;
     protected boolean hasOwnBackground;
-    protected boolean inBubbleMode;
+    /* access modifiers changed from: protected */
+    public boolean inBubbleMode;
     protected boolean inMenuMode;
     /* access modifiers changed from: protected */
     public boolean inPreviewMode;
     private boolean isFinished;
-    protected boolean isPaused;
+    /* access modifiers changed from: protected */
+    public boolean isPaused;
     protected Dialog parentDialog;
     /* access modifiers changed from: protected */
     public ActionBarLayout parentLayout;
@@ -172,6 +175,9 @@ public abstract class BaseFragment {
 
     /* access modifiers changed from: protected */
     public void onTransitionAnimationProgress(boolean z, float f) {
+    }
+
+    public void onUserLeaveHint() {
     }
 
     /* access modifiers changed from: protected */
@@ -347,14 +353,16 @@ public abstract class BaseFragment {
             if (actionBarLayout4 != null && this.actionBar == null) {
                 ActionBar createActionBar = createActionBar(actionBarLayout4.getContext());
                 this.actionBar = createActionBar;
-                createActionBar.parentFragment = this;
+                if (createActionBar != null) {
+                    createActionBar.parentFragment = this;
+                }
             }
         }
     }
 
     /* access modifiers changed from: protected */
     public ActionBar createActionBar(Context context) {
-        ActionBar actionBar2 = new ActionBar(context);
+        ActionBar actionBar2 = new ActionBar(context, getResourceProvider());
         actionBar2.setBackgroundColor(getThemedColor("actionBarDefault"));
         actionBar2.setItemsBackgroundColor(getThemedColor("actionBarDefaultSelector"), false);
         actionBar2.setItemsBackgroundColor(getThemedColor("actionBarActionModeDefaultSelector"), true);
@@ -518,7 +526,7 @@ public abstract class BaseFragment {
         r0 = r1.parentLayout;
      */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    public boolean presentFragmentAsPreviewWithMenu(org.telegram.ui.ActionBar.BaseFragment r2, android.view.View r3) {
+    public boolean presentFragmentAsPreviewWithMenu(org.telegram.ui.ActionBar.BaseFragment r2, org.telegram.ui.ActionBar.ActionBarPopupWindow.ActionBarPopupWindowLayout r3) {
         /*
             r1 = this;
             boolean r0 = r1.allowPresentFragment()
@@ -534,7 +542,7 @@ public abstract class BaseFragment {
         L_0x0013:
             return r2
         */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ActionBar.BaseFragment.presentFragmentAsPreviewWithMenu(org.telegram.ui.ActionBar.BaseFragment, android.view.View):boolean");
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ActionBar.BaseFragment.presentFragmentAsPreviewWithMenu(org.telegram.ui.ActionBar.BaseFragment, org.telegram.ui.ActionBar.ActionBarPopupWindow$ActionBarPopupWindowLayout):boolean");
     }
 
     /* JADX WARNING: Code restructure failed: missing block: B:2:0x0006, code lost:

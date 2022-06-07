@@ -10,6 +10,6 @@ public final /* synthetic */ class AlertsCreator$$ExternalSyntheticLambda107 imp
     }
 
     public final String format(int i) {
-        return LocaleController.formatPluralString("Minutes", i + 1);
+        return LocaleController.formatPluralString("Minutes", i + 1, new Object[0]);
     }
 }

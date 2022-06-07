@@ -36,7 +36,7 @@ public class DownloadController extends BaseController implements NotificationCe
     public static final int AUTODOWNLOAD_TYPE_DOCUMENT = 8;
     public static final int AUTODOWNLOAD_TYPE_PHOTO = 1;
     public static final int AUTODOWNLOAD_TYPE_VIDEO = 4;
-    private static volatile DownloadController[] Instance = new DownloadController[3];
+    private static volatile DownloadController[] Instance = new DownloadController[4];
     public static final int PRESET_NUM_CHANNEL = 3;
     public static final int PRESET_NUM_CONTACT = 0;
     public static final int PRESET_NUM_GROUP = 2;
@@ -116,54 +116,54 @@ public class DownloadController extends BaseController implements NotificationCe
         public int maxVideoBitrate;
         public boolean preloadMusic;
         public boolean preloadVideo;
-        public int[] sizes;
+        public long[] sizes;
 
-        public Preset(int[] iArr, int i, int i2, int i3, boolean z, boolean z2, boolean z3, boolean z4, int i4) {
+        public Preset(int[] iArr, long j, long j2, long j3, boolean z, boolean z2, boolean z3, boolean z4, int i) {
             int[] iArr2 = new int[4];
             this.mask = iArr2;
-            this.sizes = new int[4];
+            this.sizes = new long[4];
             System.arraycopy(iArr, 0, iArr2, 0, iArr2.length);
-            int[] iArr3 = this.sizes;
-            iArr3[0] = i;
-            iArr3[1] = i2;
-            iArr3[2] = i3;
-            iArr3[3] = 524288;
+            long[] jArr = this.sizes;
+            jArr[0] = j;
+            jArr[1] = j2;
+            jArr[2] = j3;
+            jArr[3] = 524288;
             this.preloadVideo = z;
             this.preloadMusic = z2;
             this.lessCallData = z4;
-            this.maxVideoBitrate = i4;
+            this.maxVideoBitrate = i;
             this.enabled = z3;
         }
 
         public Preset(String str, String str2) {
             String[] strArr;
             this.mask = new int[4];
-            this.sizes = new int[4];
+            this.sizes = new long[4];
             String[] split = str.split("_");
             if (split.length >= 11) {
                 boolean z = false;
-                this.mask[0] = Utilities.parseInt(split[0]).intValue();
-                this.mask[1] = Utilities.parseInt(split[1]).intValue();
-                this.mask[2] = Utilities.parseInt(split[2]).intValue();
-                this.mask[3] = Utilities.parseInt(split[3]).intValue();
-                this.sizes[0] = Utilities.parseInt(split[4]).intValue();
-                this.sizes[1] = Utilities.parseInt(split[5]).intValue();
-                this.sizes[2] = Utilities.parseInt(split[6]).intValue();
-                this.sizes[3] = Utilities.parseInt(split[7]).intValue();
-                this.preloadVideo = Utilities.parseInt(split[8]).intValue() == 1;
-                this.preloadMusic = Utilities.parseInt(split[9]).intValue() == 1;
-                this.enabled = Utilities.parseInt(split[10]).intValue() == 1;
+                this.mask[0] = Utilities.parseInt((CharSequence) split[0]).intValue();
+                this.mask[1] = Utilities.parseInt((CharSequence) split[1]).intValue();
+                this.mask[2] = Utilities.parseInt((CharSequence) split[2]).intValue();
+                this.mask[3] = Utilities.parseInt((CharSequence) split[3]).intValue();
+                this.sizes[0] = (long) Utilities.parseInt((CharSequence) split[4]).intValue();
+                this.sizes[1] = (long) Utilities.parseInt((CharSequence) split[5]).intValue();
+                this.sizes[2] = (long) Utilities.parseInt((CharSequence) split[6]).intValue();
+                this.sizes[3] = (long) Utilities.parseInt((CharSequence) split[7]).intValue();
+                this.preloadVideo = Utilities.parseInt((CharSequence) split[8]).intValue() == 1;
+                this.preloadMusic = Utilities.parseInt((CharSequence) split[9]).intValue() == 1;
+                this.enabled = Utilities.parseInt((CharSequence) split[10]).intValue() == 1;
                 if (split.length >= 12) {
-                    this.lessCallData = Utilities.parseInt(split[11]).intValue() == 1 ? true : z;
+                    this.lessCallData = Utilities.parseInt((CharSequence) split[11]).intValue() == 1 ? true : z;
                     strArr = null;
                 } else {
                     strArr = str2.split("_");
-                    this.lessCallData = Utilities.parseInt(strArr[11]).intValue() == 1 ? true : z;
+                    this.lessCallData = Utilities.parseInt((CharSequence) strArr[11]).intValue() == 1 ? true : z;
                 }
                 if (split.length >= 13) {
-                    this.maxVideoBitrate = Utilities.parseInt(split[12]).intValue();
+                    this.maxVideoBitrate = Utilities.parseInt((CharSequence) split[12]).intValue();
                 } else {
-                    this.maxVideoBitrate = Utilities.parseInt((strArr == null ? str2.split("_") : strArr)[12]).intValue();
+                    this.maxVideoBitrate = Utilities.parseInt((CharSequence) (strArr == null ? str2.split("_") : strArr)[12]).intValue();
                 }
             }
         }
@@ -172,9 +172,9 @@ public class DownloadController extends BaseController implements NotificationCe
             int[] iArr = preset.mask;
             int[] iArr2 = this.mask;
             System.arraycopy(iArr, 0, iArr2, 0, iArr2.length);
-            int[] iArr3 = preset.sizes;
-            int[] iArr4 = this.sizes;
-            System.arraycopy(iArr3, 0, iArr4, 0, iArr4.length);
+            long[] jArr = preset.sizes;
+            long[] jArr2 = this.sizes;
+            System.arraycopy(jArr, 0, jArr2, 0, jArr2.length);
             this.preloadVideo = preset.preloadVideo;
             this.preloadMusic = preset.preloadMusic;
             this.lessCallData = preset.lessCallData;
@@ -187,7 +187,7 @@ public class DownloadController extends BaseController implements NotificationCe
             this.lessCallData = tLRPC$TL_autoDownloadSettings.phonecalls_less_data;
             this.maxVideoBitrate = tLRPC$TL_autoDownloadSettings.video_upload_maxbitrate;
             int i = 0;
-            this.sizes[0] = Math.max(512000, tLRPC$TL_autoDownloadSettings.photo_size_max);
+            this.sizes[0] = (long) Math.max(512000, tLRPC$TL_autoDownloadSettings.photo_size_max);
             this.sizes[1] = Math.max(512000, tLRPC$TL_autoDownloadSettings.video_size_max);
             this.sizes[2] = Math.max(512000, tLRPC$TL_autoDownloadSettings.file_size_max);
             while (true) {
@@ -226,10 +226,10 @@ public class DownloadController extends BaseController implements NotificationCe
             if (i != iArr2[0] || iArr[1] != iArr2[1] || iArr[2] != iArr2[2] || iArr[3] != iArr2[3]) {
                 return false;
             }
-            int[] iArr3 = this.sizes;
-            int i2 = iArr3[0];
-            int[] iArr4 = preset.sizes;
-            return i2 == iArr4[0] && iArr3[1] == iArr4[1] && iArr3[2] == iArr4[2] && iArr3[3] == iArr4[3] && this.preloadVideo == preset.preloadVideo && this.preloadMusic == preset.preloadMusic && this.maxVideoBitrate == preset.maxVideoBitrate;
+            long[] jArr = this.sizes;
+            long j = jArr[0];
+            long[] jArr2 = preset.sizes;
+            return j == jArr2[0] && jArr[1] == jArr2[1] && jArr[2] == jArr2[2] && jArr[3] == jArr2[3] && this.preloadVideo == preset.preloadVideo && this.preloadMusic == preset.preloadMusic && this.maxVideoBitrate == preset.maxVideoBitrate;
         }
 
         public boolean isEnabled() {
@@ -287,9 +287,9 @@ public class DownloadController extends BaseController implements NotificationCe
             int[] iArr = new int[4];
             int[] iArr2 = new int[4];
             int[] iArr3 = new int[4];
-            int[] iArr4 = new int[7];
-            int[] iArr5 = new int[7];
-            int[] iArr6 = new int[7];
+            long[] jArr = new long[7];
+            long[] jArr2 = new long[7];
+            long[] jArr3 = new long[7];
             String str2 = "currentRoamingPreset";
             int i2 = 0;
             for (int i3 = 4; i2 < i3; i3 = 4) {
@@ -323,16 +323,16 @@ public class DownloadController extends BaseController implements NotificationCe
                 i2++;
                 str = str3;
             }
-            iArr4[2] = mainSettings.getInt("mobileMaxDownloadSize2", this.mediumPreset.sizes[1]);
-            iArr4[3] = mainSettings.getInt("mobileMaxDownloadSize3", this.mediumPreset.sizes[2]);
-            iArr5[2] = mainSettings.getInt("wifiMaxDownloadSize2", this.highPreset.sizes[1]);
-            iArr5[3] = mainSettings.getInt("wifiMaxDownloadSize3", this.highPreset.sizes[2]);
-            iArr6[2] = mainSettings.getInt("roamingMaxDownloadSize2", this.lowPreset.sizes[1]);
-            iArr6[3] = mainSettings.getInt("roamingMaxDownloadSize3", this.lowPreset.sizes[2]);
+            jArr[2] = mainSettings.getLong("mobileMaxDownloadSize2", this.mediumPreset.sizes[1]);
+            jArr[3] = mainSettings.getLong("mobileMaxDownloadSize3", this.mediumPreset.sizes[2]);
+            jArr2[2] = mainSettings.getLong("wifiMaxDownloadSize2", this.highPreset.sizes[1]);
+            jArr2[3] = mainSettings.getLong("wifiMaxDownloadSize3", this.highPreset.sizes[2]);
+            jArr3[2] = mainSettings.getLong("roamingMaxDownloadSize2", this.lowPreset.sizes[1]);
+            jArr3[3] = mainSettings.getLong("roamingMaxDownloadSize3", this.lowPreset.sizes[2]);
             boolean z = mainSettings.getBoolean("globalAutodownloadEnabled", true);
-            this.mobilePreset = new Preset(iArr, this.mediumPreset.sizes[0], iArr4[2], iArr4[3], true, true, z, false, 100);
-            this.wifiPreset = new Preset(iArr2, this.highPreset.sizes[0], iArr5[2], iArr5[3], true, true, z, false, 100);
-            this.roamingPreset = new Preset(iArr3, this.lowPreset.sizes[0], iArr6[2], iArr6[3], false, false, z, true, 50);
+            this.mobilePreset = new Preset(iArr, this.mediumPreset.sizes[0], jArr[2], jArr[3], true, true, z, false, 100);
+            this.wifiPreset = new Preset(iArr2, this.highPreset.sizes[0], jArr2[2], jArr2[3], true, true, z, false, 100);
+            this.roamingPreset = new Preset(iArr3, this.lowPreset.sizes[0], jArr3[2], jArr3[3], false, false, z, true, 50);
             SharedPreferences.Editor edit = mainSettings.edit();
             edit.putBoolean("newConfig", true);
             edit.putString("mobilePreset", this.mobilePreset.toString());
@@ -612,7 +612,7 @@ public class DownloadController extends BaseController implements NotificationCe
         return canDownloadMedia(messageObject.messageOwner) == 1;
     }
 
-    public boolean canDownloadMedia(int i, int i2) {
+    public boolean canDownloadMedia(int i, long j) {
         Preset preset;
         int autodownloadNetworkType = ApplicationLoader.getAutodownloadNetworkType();
         if (autodownloadNetworkType == 1) {
@@ -630,209 +630,215 @@ public class DownloadController extends BaseController implements NotificationCe
         } else {
             preset = getCurrentMobilePreset();
         }
-        int i3 = preset.mask[1];
-        int i4 = preset.sizes[typeToIndex(i)];
-        if (i != 1 && (i2 == 0 || i2 > i4)) {
+        int i2 = preset.mask[1];
+        long j2 = preset.sizes[typeToIndex(i)];
+        if (i != 1 && (j == 0 || j > j2)) {
             return false;
         }
-        if (i == 2 || (i & i3) != 0) {
+        if (i == 2 || (i & i2) != 0) {
             return true;
         }
         return false;
     }
 
-    /* JADX WARNING: Code restructure failed: missing block: B:31:0x0063, code lost:
-        if (getContactsController().contactsDict.containsKey(java.lang.Long.valueOf(r5.user_id)) != false) goto L_0x0065;
+    /* JADX WARNING: Code restructure failed: missing block: B:31:0x0067, code lost:
+        if (getContactsController().contactsDict.containsKey(java.lang.Long.valueOf(r7.user_id)) != false) goto L_0x0069;
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:38:0x0085, code lost:
-        if (getContactsController().contactsDict.containsKey(java.lang.Long.valueOf(r12.from_id.user_id)) != false) goto L_0x0065;
+    /* JADX WARNING: Code restructure failed: missing block: B:38:0x0089, code lost:
+        if (getContactsController().contactsDict.containsKey(java.lang.Long.valueOf(r1.from_id.user_id)) != false) goto L_0x0069;
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:51:0x00c4, code lost:
-        if (getContactsController().contactsDict.containsKey(java.lang.Long.valueOf(r12.from_id.user_id)) != false) goto L_0x0065;
+    /* JADX WARNING: Code restructure failed: missing block: B:51:0x00c8, code lost:
+        if (getContactsController().contactsDict.containsKey(java.lang.Long.valueOf(r1.from_id.user_id)) != false) goto L_0x0069;
      */
-    /* JADX WARNING: Removed duplicated region for block: B:56:0x00d0  */
-    /* JADX WARNING: Removed duplicated region for block: B:60:0x00dc  */
-    /* JADX WARNING: Removed duplicated region for block: B:71:0x00fb  */
-    /* JADX WARNING: Removed duplicated region for block: B:72:0x010a  */
-    /* JADX WARNING: Removed duplicated region for block: B:84:0x012a A[ADDED_TO_REGION] */
-    /* JADX WARNING: Removed duplicated region for block: B:89:0x0134 A[ORIG_RETURN, RETURN, SYNTHETIC] */
-    /* JADX WARNING: Removed duplicated region for block: B:93:? A[RETURN, SYNTHETIC] */
+    /* JADX WARNING: Removed duplicated region for block: B:56:0x00d4  */
+    /* JADX WARNING: Removed duplicated region for block: B:60:0x00e0  */
+    /* JADX WARNING: Removed duplicated region for block: B:71:0x00ff  */
+    /* JADX WARNING: Removed duplicated region for block: B:72:0x010f  */
+    /* JADX WARNING: Removed duplicated region for block: B:81:0x012d  */
+    /* JADX WARNING: Removed duplicated region for block: B:84:0x0133  */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    public int canDownloadMedia(org.telegram.tgnet.TLRPC$Message r12) {
+    public int canDownloadMedia(org.telegram.tgnet.TLRPC$Message r18) {
         /*
-            r11 = this;
-            r0 = 0
-            if (r12 != 0) goto L_0x0004
-            return r0
-        L_0x0004:
-            boolean r1 = org.telegram.messenger.MessageObject.isVideoMessage(r12)
-            r2 = 1
-            r3 = 2
-            if (r1 != 0) goto L_0x0046
-            boolean r4 = org.telegram.messenger.MessageObject.isGifMessage(r12)
-            if (r4 != 0) goto L_0x0046
-            boolean r4 = org.telegram.messenger.MessageObject.isRoundVideoMessage(r12)
-            if (r4 != 0) goto L_0x0046
-            boolean r4 = org.telegram.messenger.MessageObject.isGameMessage(r12)
-            if (r4 == 0) goto L_0x001f
-            goto L_0x0046
-        L_0x001f:
-            boolean r4 = org.telegram.messenger.MessageObject.isVoiceMessage(r12)
-            if (r4 == 0) goto L_0x0027
-            r4 = 2
-            goto L_0x0047
-        L_0x0027:
-            boolean r4 = org.telegram.messenger.MessageObject.isPhoto(r12)
-            if (r4 != 0) goto L_0x0044
-            boolean r4 = org.telegram.messenger.MessageObject.isStickerMessage(r12)
-            if (r4 != 0) goto L_0x0044
-            boolean r4 = org.telegram.messenger.MessageObject.isAnimatedStickerMessage(r12)
-            if (r4 == 0) goto L_0x003a
-            goto L_0x0044
-        L_0x003a:
-            org.telegram.tgnet.TLRPC$Document r4 = org.telegram.messenger.MessageObject.getDocument(r12)
-            if (r4 == 0) goto L_0x0043
-            r4 = 8
-            goto L_0x0047
-        L_0x0043:
-            return r0
-        L_0x0044:
+            r17 = this;
+            r0 = r17
+            r1 = r18
+            r2 = 0
+            if (r1 != 0) goto L_0x0008
+            return r2
+        L_0x0008:
+            boolean r3 = org.telegram.messenger.MessageObject.isVideoMessage(r18)
             r4 = 1
-            goto L_0x0047
-        L_0x0046:
-            r4 = 4
-        L_0x0047:
-            org.telegram.tgnet.TLRPC$Peer r5 = r12.peer_id
-            if (r5 == 0) goto L_0x00c9
-            long r6 = r5.user_id
-            r8 = 0
-            int r10 = (r6 > r8 ? 1 : (r6 == r8 ? 0 : -1))
-            if (r10 == 0) goto L_0x0067
-            org.telegram.messenger.ContactsController r6 = r11.getContactsController()
-            j$.util.concurrent.ConcurrentHashMap<java.lang.Long, org.telegram.tgnet.TLRPC$TL_contact> r6 = r6.contactsDict
-            long r7 = r5.user_id
-            java.lang.Long r5 = java.lang.Long.valueOf(r7)
-            boolean r5 = r6.containsKey(r5)
-            if (r5 == 0) goto L_0x00c9
-        L_0x0065:
-            r5 = 0
-            goto L_0x00ca
-        L_0x0067:
-            long r6 = r5.chat_id
-            int r10 = (r6 > r8 ? 1 : (r6 == r8 ? 0 : -1))
-            if (r10 == 0) goto L_0x008a
-            org.telegram.tgnet.TLRPC$Peer r5 = r12.from_id
-            boolean r5 = r5 instanceof org.telegram.tgnet.TLRPC$TL_peerUser
-            if (r5 == 0) goto L_0x0088
-            org.telegram.messenger.ContactsController r5 = r11.getContactsController()
-            j$.util.concurrent.ConcurrentHashMap<java.lang.Long, org.telegram.tgnet.TLRPC$TL_contact> r5 = r5.contactsDict
-            org.telegram.tgnet.TLRPC$Peer r6 = r12.from_id
-            long r6 = r6.user_id
-            java.lang.Long r6 = java.lang.Long.valueOf(r6)
-            boolean r5 = r5.containsKey(r6)
-            if (r5 == 0) goto L_0x0088
-            goto L_0x0065
-        L_0x0088:
             r5 = 2
-            goto L_0x00ca
-        L_0x008a:
-            long r5 = r5.channel_id
-            int r7 = (r5 > r8 ? 1 : (r5 == r8 ? 0 : -1))
-            if (r7 == 0) goto L_0x00a1
-            org.telegram.messenger.MessagesController r5 = r11.getMessagesController()
-            org.telegram.tgnet.TLRPC$Peer r6 = r12.peer_id
-            long r6 = r6.channel_id
-            java.lang.Long r6 = java.lang.Long.valueOf(r6)
-            org.telegram.tgnet.TLRPC$Chat r5 = r5.getChat(r6)
-            goto L_0x00a2
-        L_0x00a1:
-            r5 = 0
-        L_0x00a2:
-            boolean r6 = org.telegram.messenger.ChatObject.isChannel(r5)
-            if (r6 == 0) goto L_0x00c7
-            boolean r5 = r5.megagroup
-            if (r5 == 0) goto L_0x00c7
-            org.telegram.tgnet.TLRPC$Peer r5 = r12.from_id
-            boolean r5 = r5 instanceof org.telegram.tgnet.TLRPC$TL_peerUser
-            if (r5 == 0) goto L_0x0088
-            org.telegram.messenger.ContactsController r5 = r11.getContactsController()
-            j$.util.concurrent.ConcurrentHashMap<java.lang.Long, org.telegram.tgnet.TLRPC$TL_contact> r5 = r5.contactsDict
-            org.telegram.tgnet.TLRPC$Peer r6 = r12.from_id
-            long r6 = r6.user_id
-            java.lang.Long r6 = java.lang.Long.valueOf(r6)
-            boolean r5 = r5.containsKey(r6)
-            if (r5 == 0) goto L_0x0088
-            goto L_0x0065
-        L_0x00c7:
-            r5 = 3
-            goto L_0x00ca
-        L_0x00c9:
-            r5 = 1
-        L_0x00ca:
-            int r6 = org.telegram.messenger.ApplicationLoader.getAutodownloadNetworkType()
-            if (r6 != r2) goto L_0x00dc
-            org.telegram.messenger.DownloadController$Preset r6 = r11.wifiPreset
-            boolean r6 = r6.enabled
-            if (r6 != 0) goto L_0x00d7
-            return r0
-        L_0x00d7:
-            org.telegram.messenger.DownloadController$Preset r6 = r11.getCurrentWiFiPreset()
-            goto L_0x00f5
-        L_0x00dc:
-            if (r6 != r3) goto L_0x00ea
-            org.telegram.messenger.DownloadController$Preset r6 = r11.roamingPreset
-            boolean r6 = r6.enabled
-            if (r6 != 0) goto L_0x00e5
-            return r0
-        L_0x00e5:
-            org.telegram.messenger.DownloadController$Preset r6 = r11.getCurrentRoamingPreset()
-            goto L_0x00f5
-        L_0x00ea:
-            org.telegram.messenger.DownloadController$Preset r6 = r11.mobilePreset
-            boolean r6 = r6.enabled
-            if (r6 != 0) goto L_0x00f1
-            return r0
-        L_0x00f1:
-            org.telegram.messenger.DownloadController$Preset r6 = r11.getCurrentMobilePreset()
+            if (r3 != 0) goto L_0x004a
+            boolean r6 = org.telegram.messenger.MessageObject.isGifMessage(r18)
+            if (r6 != 0) goto L_0x004a
+            boolean r6 = org.telegram.messenger.MessageObject.isRoundVideoMessage(r18)
+            if (r6 != 0) goto L_0x004a
+            boolean r6 = org.telegram.messenger.MessageObject.isGameMessage(r18)
+            if (r6 == 0) goto L_0x0023
+            goto L_0x004a
+        L_0x0023:
+            boolean r6 = org.telegram.messenger.MessageObject.isVoiceMessage(r18)
+            if (r6 == 0) goto L_0x002b
+            r6 = 2
+            goto L_0x004b
+        L_0x002b:
+            boolean r6 = org.telegram.messenger.MessageObject.isPhoto(r18)
+            if (r6 != 0) goto L_0x0048
+            boolean r6 = org.telegram.messenger.MessageObject.isStickerMessage(r18)
+            if (r6 != 0) goto L_0x0048
+            boolean r6 = org.telegram.messenger.MessageObject.isAnimatedStickerMessage(r18)
+            if (r6 == 0) goto L_0x003e
+            goto L_0x0048
+        L_0x003e:
+            org.telegram.tgnet.TLRPC$Document r6 = org.telegram.messenger.MessageObject.getDocument(r18)
+            if (r6 == 0) goto L_0x0047
+            r6 = 8
+            goto L_0x004b
+        L_0x0047:
+            return r2
+        L_0x0048:
+            r6 = 1
+            goto L_0x004b
+        L_0x004a:
+            r6 = 4
+        L_0x004b:
+            org.telegram.tgnet.TLRPC$Peer r7 = r1.peer_id
+            r8 = 0
+            if (r7 == 0) goto L_0x00cd
+            long r10 = r7.user_id
+            int r12 = (r10 > r8 ? 1 : (r10 == r8 ? 0 : -1))
+            if (r12 == 0) goto L_0x006b
+            org.telegram.messenger.ContactsController r10 = r17.getContactsController()
+            j$.util.concurrent.ConcurrentHashMap<java.lang.Long, org.telegram.tgnet.TLRPC$TL_contact> r10 = r10.contactsDict
+            long r11 = r7.user_id
+            java.lang.Long r7 = java.lang.Long.valueOf(r11)
+            boolean r7 = r10.containsKey(r7)
+            if (r7 == 0) goto L_0x00cd
+        L_0x0069:
+            r7 = 0
+            goto L_0x00ce
+        L_0x006b:
+            long r10 = r7.chat_id
+            int r12 = (r10 > r8 ? 1 : (r10 == r8 ? 0 : -1))
+            if (r12 == 0) goto L_0x008e
+            org.telegram.tgnet.TLRPC$Peer r7 = r1.from_id
+            boolean r7 = r7 instanceof org.telegram.tgnet.TLRPC$TL_peerUser
+            if (r7 == 0) goto L_0x008c
+            org.telegram.messenger.ContactsController r7 = r17.getContactsController()
+            j$.util.concurrent.ConcurrentHashMap<java.lang.Long, org.telegram.tgnet.TLRPC$TL_contact> r7 = r7.contactsDict
+            org.telegram.tgnet.TLRPC$Peer r10 = r1.from_id
+            long r10 = r10.user_id
+            java.lang.Long r10 = java.lang.Long.valueOf(r10)
+            boolean r7 = r7.containsKey(r10)
+            if (r7 == 0) goto L_0x008c
+            goto L_0x0069
+        L_0x008c:
+            r7 = 2
+            goto L_0x00ce
+        L_0x008e:
+            long r10 = r7.channel_id
+            int r7 = (r10 > r8 ? 1 : (r10 == r8 ? 0 : -1))
+            if (r7 == 0) goto L_0x00a5
+            org.telegram.messenger.MessagesController r7 = r17.getMessagesController()
+            org.telegram.tgnet.TLRPC$Peer r10 = r1.peer_id
+            long r10 = r10.channel_id
+            java.lang.Long r10 = java.lang.Long.valueOf(r10)
+            org.telegram.tgnet.TLRPC$Chat r7 = r7.getChat(r10)
+            goto L_0x00a6
+        L_0x00a5:
+            r7 = 0
+        L_0x00a6:
+            boolean r10 = org.telegram.messenger.ChatObject.isChannel(r7)
+            if (r10 == 0) goto L_0x00cb
+            boolean r7 = r7.megagroup
+            if (r7 == 0) goto L_0x00cb
+            org.telegram.tgnet.TLRPC$Peer r7 = r1.from_id
+            boolean r7 = r7 instanceof org.telegram.tgnet.TLRPC$TL_peerUser
+            if (r7 == 0) goto L_0x008c
+            org.telegram.messenger.ContactsController r7 = r17.getContactsController()
+            j$.util.concurrent.ConcurrentHashMap<java.lang.Long, org.telegram.tgnet.TLRPC$TL_contact> r7 = r7.contactsDict
+            org.telegram.tgnet.TLRPC$Peer r10 = r1.from_id
+            long r10 = r10.user_id
+            java.lang.Long r10 = java.lang.Long.valueOf(r10)
+            boolean r7 = r7.containsKey(r10)
+            if (r7 == 0) goto L_0x008c
+            goto L_0x0069
+        L_0x00cb:
+            r7 = 3
+            goto L_0x00ce
+        L_0x00cd:
+            r7 = 1
+        L_0x00ce:
+            int r10 = org.telegram.messenger.ApplicationLoader.getAutodownloadNetworkType()
+            if (r10 != r4) goto L_0x00e0
+            org.telegram.messenger.DownloadController$Preset r10 = r0.wifiPreset
+            boolean r10 = r10.enabled
+            if (r10 != 0) goto L_0x00db
+            return r2
+        L_0x00db:
+            org.telegram.messenger.DownloadController$Preset r10 = r17.getCurrentWiFiPreset()
+            goto L_0x00f9
+        L_0x00e0:
+            if (r10 != r5) goto L_0x00ee
+            org.telegram.messenger.DownloadController$Preset r10 = r0.roamingPreset
+            boolean r10 = r10.enabled
+            if (r10 != 0) goto L_0x00e9
+            return r2
+        L_0x00e9:
+            org.telegram.messenger.DownloadController$Preset r10 = r17.getCurrentRoamingPreset()
+            goto L_0x00f9
+        L_0x00ee:
+            org.telegram.messenger.DownloadController$Preset r10 = r0.mobilePreset
+            boolean r10 = r10.enabled
+            if (r10 != 0) goto L_0x00f5
+            return r2
         L_0x00f5:
-            int[] r7 = r6.mask
-            r5 = r7[r5]
-            if (r4 != r3) goto L_0x010a
-            r7 = 524288(0x80000, float:7.34684E-40)
-            int[] r8 = r6.sizes
-            int r9 = typeToIndex(r4)
-            r8 = r8[r9]
-            int r7 = java.lang.Math.max(r7, r8)
-            goto L_0x0112
-        L_0x010a:
-            int[] r7 = r6.sizes
-            int r8 = typeToIndex(r4)
-            r7 = r7[r8]
-        L_0x0112:
-            int r12 = org.telegram.messenger.MessageObject.getMessageSize(r12)
-            if (r1 == 0) goto L_0x0128
-            boolean r1 = r6.preloadVideo
-            if (r1 == 0) goto L_0x0128
-            if (r12 <= r7) goto L_0x0128
-            r1 = 2097152(0x200000, float:2.938736E-39)
-            if (r7 <= r1) goto L_0x0128
-            r12 = r5 & r4
-            if (r12 == 0) goto L_0x0127
-            r0 = 2
-        L_0x0127:
-            return r0
-        L_0x0128:
-            if (r4 == r2) goto L_0x012e
-            if (r12 == 0) goto L_0x0135
-            if (r12 > r7) goto L_0x0135
-        L_0x012e:
-            if (r4 == r3) goto L_0x0134
-            r12 = r5 & r4
-            if (r12 == 0) goto L_0x0135
-        L_0x0134:
-            r0 = 1
-        L_0x0135:
-            return r0
+            org.telegram.messenger.DownloadController$Preset r10 = r17.getCurrentMobilePreset()
+        L_0x00f9:
+            int[] r11 = r10.mask
+            r7 = r11[r7]
+            if (r6 != r5) goto L_0x010f
+            r11 = 524288(0x80000, double:2.590327E-318)
+            long[] r13 = r10.sizes
+            int r14 = typeToIndex(r6)
+            r14 = r13[r14]
+            long r11 = java.lang.Math.max(r11, r14)
+            goto L_0x0118
+        L_0x010f:
+            long[] r11 = r10.sizes
+            int r12 = typeToIndex(r6)
+            r12 = r11[r12]
+            r11 = r12
+        L_0x0118:
+            long r13 = org.telegram.messenger.MessageObject.getMessageSize(r18)
+            if (r3 == 0) goto L_0x0133
+            boolean r1 = r10.preloadVideo
+            if (r1 == 0) goto L_0x0133
+            int r1 = (r13 > r11 ? 1 : (r13 == r11 ? 0 : -1))
+            if (r1 <= 0) goto L_0x0133
+            r15 = 2097152(0x200000, double:1.0361308E-317)
+            int r1 = (r11 > r15 ? 1 : (r11 == r15 ? 0 : -1))
+            if (r1 <= 0) goto L_0x0133
+            r1 = r7 & r6
+            if (r1 == 0) goto L_0x0132
+            r2 = 2
+        L_0x0132:
+            return r2
+        L_0x0133:
+            if (r6 == r4) goto L_0x013d
+            int r1 = (r13 > r8 ? 1 : (r13 == r8 ? 0 : -1))
+            if (r1 == 0) goto L_0x0144
+            int r1 = (r13 > r11 ? 1 : (r13 == r11 ? 0 : -1))
+            if (r1 > 0) goto L_0x0144
+        L_0x013d:
+            if (r6 == r5) goto L_0x0143
+            r1 = r7 & r6
+            if (r1 == 0) goto L_0x0144
+        L_0x0143:
+            r2 = 1
+        L_0x0144:
+            return r2
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.DownloadController.canDownloadMedia(org.telegram.tgnet.TLRPC$Message):int");
     }
@@ -939,12 +945,16 @@ public class DownloadController extends BaseController implements NotificationCe
             }
         }
         TLRPC$TL_autoDownloadSettings tLRPC$TL_autoDownloadSettings2 = tLRPC$TL_account_saveAutoDownloadSettings.settings;
-        tLRPC$TL_autoDownloadSettings2.photo_size_max = z2 ? preset.sizes[0] : 0;
+        if (z2) {
+            i2 = (int) preset.sizes[0];
+        }
+        tLRPC$TL_autoDownloadSettings2.photo_size_max = i2;
+        long j = 0;
         tLRPC$TL_autoDownloadSettings2.video_size_max = z3 ? preset.sizes[1] : 0;
         if (z4) {
-            i2 = preset.sizes[2];
+            j = preset.sizes[2];
         }
-        tLRPC$TL_autoDownloadSettings2.file_size_max = i2;
+        tLRPC$TL_autoDownloadSettings2.file_size_max = j;
         getConnectionsManager().sendRequest(tLRPC$TL_account_saveAutoDownloadSettings, DownloadController$$ExternalSyntheticLambda13.INSTANCE);
     }
 
@@ -1621,6 +1631,7 @@ public class DownloadController extends BaseController implements NotificationCe
     public /* synthetic */ void lambda$loadDownloadingFiles$11() {
         ArrayList arrayList = new ArrayList();
         ArrayList arrayList2 = new ArrayList();
+        ArrayList arrayList3 = new ArrayList();
         try {
             SQLiteCursor queryFinalized = getMessagesStorage().getDatabase().queryFinalized("SELECT data, state FROM downloading_documents ORDER BY date DESC", new Object[0]);
             while (queryFinalized.next()) {
@@ -1630,10 +1641,11 @@ public class DownloadController extends BaseController implements NotificationCe
                     TLRPC$Message TLdeserialize = TLRPC$Message.TLdeserialize(byteBufferValue, byteBufferValue.readInt32(false), false);
                     if (TLdeserialize != null) {
                         TLdeserialize.readAttachPath(byteBufferValue, UserConfig.getInstance(this.currentAccount).clientUserId);
-                        MessageObject messageObject = new MessageObject(this.currentAccount, TLdeserialize, false, true);
+                        MessageObject messageObject = new MessageObject(this.currentAccount, TLdeserialize, false, false);
+                        arrayList3.add(messageObject);
                         if (intValue == 0) {
                             arrayList.add(messageObject);
-                        } else if (messageObject.mediaExists) {
+                        } else {
                             arrayList2.add(messageObject);
                         }
                     }
@@ -1644,6 +1656,8 @@ public class DownloadController extends BaseController implements NotificationCe
         } catch (Exception e) {
             FileLog.e((Throwable) e);
         }
+        getFileLoader().checkMediaExistance(arrayList);
+        getFileLoader().checkMediaExistance(arrayList2);
         AndroidUtilities.runOnUIThread(new DownloadController$$ExternalSyntheticLambda4(this, arrayList, arrayList2));
     }
 
@@ -1719,7 +1733,7 @@ public class DownloadController extends BaseController implements NotificationCe
                 executeFast.bindLong(2, ((MessageObject) arrayList.get(i)).getDocument().id);
                 executeFast.step();
                 try {
-                    FileLoader.getPathToMessage(((MessageObject) arrayList.get(i)).messageOwner).delete();
+                    FileLoader.getInstance(this.currentAccount).getPathToMessage(((MessageObject) arrayList.get(i)).messageOwner).delete();
                 } catch (Exception e) {
                     FileLog.e((Throwable) e);
                 }

@@ -11,6 +11,6 @@ public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda35
     }
 
     public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        MessagesController.lambda$deleteParticipantFromChat$238(tLObject, tLRPC$TL_error);
+        MessagesController.lambda$installTheme$97(tLObject, tLRPC$TL_error);
     }
 }

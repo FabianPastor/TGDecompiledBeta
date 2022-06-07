@@ -624,7 +624,7 @@ public class ActionIntroActivity extends BaseFragment implements LocationControl
         this.buttonTextView.setTextSize(1, 14.0f);
         this.buttonTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         int i11 = this.currentType;
-        this.buttonTextView.setBackground(Theme.createSimpleSelectorRoundRectDrawable(AndroidUtilities.dp((float) ((i11 == 6 || i11 == 3) ? 6 : 4)), Theme.getColor("featuredStickers_addButton"), Theme.getColor("featuredStickers_addButtonPressed")));
+        this.buttonTextView.setBackground(Theme.AdaptiveRipple.filledRect("featuredStickers_addButton", (float) ((i11 == 6 || i11 == 3) ? 6 : 4)));
         viewGroup.addView(this.buttonTextView);
         this.buttonTextView.setOnClickListener(new ActionIntroActivity$$ExternalSyntheticLambda3(this));
         switch (this.currentType) {
@@ -703,6 +703,7 @@ public class ActionIntroActivity extends BaseFragment implements LocationControl
             case 6:
                 this.imageView.setScaleType(ImageView.ScaleType.FIT_CENTER);
                 this.imageView.setAnimation(NUM, 200, 200);
+                this.imageView.setFocusable(false);
                 this.imageView.setOnClickListener(new ActionIntroActivity$$ExternalSyntheticLambda5(this));
                 this.titleTextView.setText(LocaleController.getString("Passcode", NUM));
                 this.descriptionText.setText(LocaleController.getString("ChangePasscodeInfoShort", NUM));
@@ -778,7 +779,7 @@ public class ActionIntroActivity extends BaseFragment implements LocationControl
 
     /* access modifiers changed from: private */
     public /* synthetic */ void lambda$createView$1(DialogInterface dialogInterface, int i) {
-        presentFragment(new ChangePhoneActivity(), true);
+        presentFragment(new LoginActivity().changePhoneNumber(), true);
     }
 
     /* access modifiers changed from: private */

@@ -248,21 +248,21 @@ public class LocaleController {
                     localeInfo.shortName = split[2].toLowerCase();
                     localeInfo.pathToFile = split[3];
                     if (split.length >= 5) {
-                        localeInfo.version = Utilities.parseInt(split[4]).intValue();
+                        localeInfo.version = Utilities.parseInt((CharSequence) split[4]).intValue();
                     }
                     localeInfo.baseLangCode = split.length >= 6 ? split[5] : "";
                     localeInfo.pluralLangCode = split.length >= 7 ? split[6] : localeInfo.shortName;
                     if (split.length >= 8) {
-                        if (Utilities.parseInt(split[7]).intValue() == 1) {
+                        if (Utilities.parseInt((CharSequence) split[7]).intValue() == 1) {
                             z = true;
                         }
                         localeInfo.isRtl = z;
                     }
                     if (split.length >= 9) {
-                        localeInfo.baseVersion = Utilities.parseInt(split[8]).intValue();
+                        localeInfo.baseVersion = Utilities.parseInt((CharSequence) split[8]).intValue();
                     }
                     if (split.length >= 10) {
-                        localeInfo.serverIndex = Utilities.parseInt(split[9]).intValue();
+                        localeInfo.serverIndex = Utilities.parseInt((CharSequence) split[9]).intValue();
                     } else {
                         localeInfo.serverIndex = Integer.MAX_VALUE;
                     }
@@ -1322,12 +1322,16 @@ public class LocaleController {
         return getString(str2, str + "_other", ApplicationLoader.applicationContext.getResources().getIdentifier(str2, "string", ApplicationLoader.applicationContext.getPackageName()));
     }
 
-    public static String formatPluralString(String str, int i) {
+    public static String formatPluralString(String str, int i, Object... objArr) {
         if (str == null || str.length() == 0 || getInstance().currentPluralRules == null) {
             return "LOC_ERR:" + str;
         }
         String str2 = str + "_" + getInstance().stringForQuantity(getInstance().currentPluralRules.quantityForNumber(i));
-        return formatString(str2, str + "_other", ApplicationLoader.applicationContext.getResources().getIdentifier(str2, "string", ApplicationLoader.applicationContext.getPackageName()), Integer.valueOf(i));
+        int identifier = ApplicationLoader.applicationContext.getResources().getIdentifier(str2, "string", ApplicationLoader.applicationContext.getPackageName());
+        Object[] objArr2 = new Object[(objArr.length + 1)];
+        objArr2[0] = Integer.valueOf(i);
+        System.arraycopy(objArr, 0, objArr2, 1, objArr.length);
+        return formatString(str2, str + "_other", identifier, objArr2);
     }
 
     public static String formatPluralStringComma(String str, int i) {
@@ -1405,25 +1409,25 @@ public class LocaleController {
 
     public static String formatTTLString(int i) {
         if (i < 60) {
-            return formatPluralString("Seconds", i);
+            return formatPluralString("Seconds", i, new Object[0]);
         }
         if (i < 3600) {
-            return formatPluralString("Minutes", i / 60);
+            return formatPluralString("Minutes", i / 60, new Object[0]);
         }
         if (i < 86400) {
-            return formatPluralString("Hours", (i / 60) / 60);
+            return formatPluralString("Hours", (i / 60) / 60, new Object[0]);
         }
         if (i < 604800) {
-            return formatPluralString("Days", ((i / 60) / 60) / 24);
+            return formatPluralString("Days", ((i / 60) / 60) / 24, new Object[0]);
         }
         if (i >= 2678400) {
-            return formatPluralString("Months", (((i / 60) / 60) / 24) / 30);
+            return formatPluralString("Months", (((i / 60) / 60) / 24) / 30, new Object[0]);
         }
         int i2 = ((i / 60) / 60) / 24;
         if (i % 7 == 0) {
-            return formatPluralString("Weeks", i2 / 7);
+            return formatPluralString("Weeks", i2 / 7, new Object[0]);
         }
-        return String.format("%s %s", new Object[]{formatPluralString("Weeks", i2 / 7), formatPluralString("Days", i2 % 7)});
+        return String.format("%s %s", new Object[]{formatPluralString("Weeks", i2 / 7, new Object[0]), formatPluralString("Days", i2 % 7, new Object[0])});
     }
 
     public static String fixNumbers(CharSequence charSequence) {
@@ -2241,42 +2245,42 @@ public class LocaleController {
 
     public static String formatDuration(int i) {
         if (i <= 0) {
-            return formatPluralString("Seconds", 0);
+            return formatPluralString("Seconds", 0, new Object[0]);
         }
         int i2 = i / 3600;
         int i3 = (i / 60) % 60;
         int i4 = i % 60;
         StringBuilder sb = new StringBuilder();
         if (i2 > 0) {
-            sb.append(formatPluralString("Hours", i2));
+            sb.append(formatPluralString("Hours", i2, new Object[0]));
         }
         if (i3 > 0) {
             if (sb.length() > 0) {
                 sb.append(' ');
             }
-            sb.append(formatPluralString("Minutes", i3));
+            sb.append(formatPluralString("Minutes", i3, new Object[0]));
         }
         if (i4 > 0) {
             if (sb.length() > 0) {
                 sb.append(' ');
             }
-            sb.append(formatPluralString("Seconds", i4));
+            sb.append(formatPluralString("Seconds", i4, new Object[0]));
         }
         return sb.toString();
     }
 
     public static String formatCallDuration(int i) {
         if (i > 3600) {
-            String formatPluralString = formatPluralString("Hours", i / 3600);
+            String formatPluralString = formatPluralString("Hours", i / 3600, new Object[0]);
             int i2 = (i % 3600) / 60;
             if (i2 <= 0) {
                 return formatPluralString;
             }
-            return formatPluralString + ", " + formatPluralString("Minutes", i2);
+            return formatPluralString + ", " + formatPluralString("Minutes", i2, new Object[0]);
         } else if (i > 60) {
-            return formatPluralString("Minutes", i / 60);
+            return formatPluralString("Minutes", i / 60, new Object[0]);
         } else {
-            return formatPluralString("Seconds", i);
+            return formatPluralString("Seconds", i, new Object[0]);
         }
     }
 
@@ -2454,7 +2458,7 @@ public class LocaleController {
                     return getString("LocationUpdatedJustNow", NUM);
                 }
                 if (currentTime < 60) {
-                    return formatPluralString("UpdatedMinutes", currentTime);
+                    return formatPluralString("UpdatedMinutes", currentTime, new Object[0]);
                 }
                 return formatString("LocationUpdatedFormatted", NUM, formatString("TodayAtFormatted", NUM, getInstance().formatterDay.format(new Date(j2))));
             } else if (i3 + 1 == i && i2 == i4) {
@@ -2495,18 +2499,27 @@ public class LocaleController {
         }
     }
 
-    public static String formatDateOnline(long j) {
+    public static String formatDateOnline(long j, boolean[] zArr) {
         long j2 = j * 1000;
         try {
             Calendar instance = Calendar.getInstance();
             int i = instance.get(6);
             int i2 = instance.get(1);
+            int i3 = instance.get(11);
             instance.setTimeInMillis(j2);
-            int i3 = instance.get(6);
-            int i4 = instance.get(1);
-            if (i3 == i && i2 == i4) {
+            int i4 = instance.get(6);
+            int i5 = instance.get(1);
+            int i6 = instance.get(11);
+            if (i4 == i && i2 == i5) {
                 return formatString("LastSeenFormatted", NUM, formatString("TodayAtFormatted", NUM, getInstance().formatterDay.format(new Date(j2))));
-            } else if (i3 + 1 == i && i2 == i4) {
+            } else if (i4 + 1 == i && i2 == i5) {
+                if (zArr != null) {
+                    zArr[0] = true;
+                    if (i3 > 6 || i6 <= 18 || !is24HourFormat) {
+                        return formatString("YesterdayAtFormatted", NUM, getInstance().formatterDay.format(new Date(j2)));
+                    }
+                    return formatString("LastSeenFormatted", NUM, getInstance().formatterDay.format(new Date(j2)));
+                }
                 return formatString("LastSeenFormatted", NUM, formatString("YesterdayAtFormatted", NUM, getInstance().formatterDay.format(new Date(j2))));
             } else if (Math.abs(System.currentTimeMillis() - j2) < 31536000000L) {
                 return formatString("LastSeenDateFormatted", NUM, formatString("formatDateAtTime", NUM, getInstance().formatterDayMonth.format(new Date(j2)), getInstance().formatterDay.format(new Date(j2))));
@@ -2597,61 +2610,61 @@ public class LocaleController {
             r7 = 1
         L_0x0076:
             nameDisplayOrder = r7
-            r7 = 2131629125(0x7f0e1445, float:1.8885562E38)
+            r7 = 2131629347(0x7f0e1523, float:1.8886012E38)
             java.lang.String r8 = "formatterMonthYear"
             java.lang.String r7 = r9.getStringInternal(r8, r7)
             java.lang.String r8 = "MMM yyyy"
             org.telegram.messenger.time.FastDateFormat r7 = r9.createFormatter(r0, r7, r8)
             r9.formatterMonthYear = r7
-            r7 = 2131629123(0x7f0e1443, float:1.8885558E38)
+            r7 = 2131629345(0x7f0e1521, float:1.8886008E38)
             java.lang.String r8 = "formatterMonth"
             java.lang.String r7 = r9.getStringInternal(r8, r7)
             java.lang.String r8 = "dd MMM"
             org.telegram.messenger.time.FastDateFormat r7 = r9.createFormatter(r0, r7, r8)
             r9.formatterDayMonth = r7
-            r7 = 2131629131(0x7f0e144b, float:1.8885574E38)
+            r7 = 2131629353(0x7f0e1529, float:1.8886025E38)
             java.lang.String r8 = "formatterYear"
             java.lang.String r7 = r9.getStringInternal(r8, r7)
             java.lang.String r8 = "dd.MM.yy"
             org.telegram.messenger.time.FastDateFormat r7 = r9.createFormatter(r0, r7, r8)
             r9.formatterYear = r7
-            r7 = 2131629132(0x7f0e144c, float:1.8885576E38)
+            r7 = 2131629354(0x7f0e152a, float:1.8886027E38)
             java.lang.String r8 = "formatterYearMax"
             java.lang.String r7 = r9.getStringInternal(r8, r7)
             java.lang.String r8 = "dd.MM.yyyy"
             org.telegram.messenger.time.FastDateFormat r7 = r9.createFormatter(r0, r7, r8)
             r9.formatterYearMax = r7
-            r7 = 2131629091(0x7f0e1423, float:1.8885493E38)
+            r7 = 2131629313(0x7f0e1501, float:1.8885943E38)
             java.lang.String r8 = "chatDate"
             java.lang.String r7 = r9.getStringInternal(r8, r7)
             java.lang.String r8 = "d MMMM"
             org.telegram.messenger.time.FastDateFormat r7 = r9.createFormatter(r0, r7, r8)
             r9.chatDate = r7
-            r7 = 2131629092(0x7f0e1424, float:1.8885495E38)
+            r7 = 2131629314(0x7f0e1502, float:1.8885945E38)
             java.lang.String r8 = "chatFullDate"
             java.lang.String r7 = r9.getStringInternal(r8, r7)
             java.lang.String r8 = "d MMMM yyyy"
             org.telegram.messenger.time.FastDateFormat r7 = r9.createFormatter(r0, r7, r8)
             r9.chatFullDate = r7
-            r7 = 2131629129(0x7f0e1449, float:1.888557E38)
+            r7 = 2131629351(0x7f0e1527, float:1.888602E38)
             java.lang.String r8 = "formatterWeek"
             java.lang.String r7 = r9.getStringInternal(r8, r7)
             java.lang.String r8 = "EEE"
             org.telegram.messenger.time.FastDateFormat r7 = r9.createFormatter(r0, r7, r8)
             r9.formatterWeek = r7
-            r7 = 2131629130(0x7f0e144a, float:1.8885572E38)
+            r7 = 2131629352(0x7f0e1528, float:1.8886022E38)
             java.lang.String r8 = "formatterWeekLong"
             java.lang.String r7 = r9.getStringInternal(r8, r7)
             java.lang.String r8 = "EEEE"
             org.telegram.messenger.time.FastDateFormat r7 = r9.createFormatter(r0, r7, r8)
             r9.formatterWeekLong = r7
-            r7 = 2131629115(0x7f0e143b, float:1.8885542E38)
+            r7 = 2131629337(0x7f0e1519, float:1.8885992E38)
             java.lang.String r8 = "formatDateSchedule"
             java.lang.String r7 = r9.getStringInternal(r8, r7)
             java.lang.String r8 = "MMM d"
             org.telegram.messenger.time.FastDateFormat r7 = r9.createFormatter(r0, r7, r8)
             r9.formatterScheduleDay = r7
-            r7 = 2131629116(0x7f0e143c, float:1.8885544E38)
+            r7 = 2131629338(0x7f0e151a, float:1.8885994E38)
             java.lang.String r8 = "formatDateScheduleYear"
             java.lang.String r7 = r9.getStringInternal(r8, r7)
             java.lang.String r8 = "MMM d yyyy"
@@ -2672,11 +2685,11 @@ public class LocaleController {
         L_0x013b:
             boolean r2 = is24HourFormat
             if (r2 == 0) goto L_0x0145
-            r2 = 2131629122(0x7f0e1442, float:1.8885556E38)
+            r2 = 2131629344(0x7f0e1520, float:1.8886006E38)
             java.lang.String r4 = "formatterDay24H"
             goto L_0x014a
         L_0x0145:
-            r2 = 2131629121(0x7f0e1441, float:1.8885554E38)
+            r2 = 2131629343(0x7f0e151f, float:1.8886004E38)
             java.lang.String r4 = "formatterDay12H"
         L_0x014a:
             java.lang.String r2 = r9.getStringInternal(r4, r2)
@@ -2691,11 +2704,11 @@ public class LocaleController {
             r9.formatterDay = r1
             boolean r1 = is24HourFormat
             if (r1 == 0) goto L_0x0167
-            r1 = 2131629128(0x7f0e1448, float:1.8885568E38)
+            r1 = 2131629350(0x7f0e1526, float:1.8886018E38)
             java.lang.String r2 = "formatterStats24H"
             goto L_0x016c
         L_0x0167:
-            r1 = 2131629127(0x7f0e1447, float:1.8885566E38)
+            r1 = 2131629349(0x7f0e1525, float:1.8886016E38)
             java.lang.String r2 = "formatterStats12H"
         L_0x016c:
             java.lang.String r1 = r9.getStringInternal(r2, r1)
@@ -2712,11 +2725,11 @@ public class LocaleController {
             r9.formatterStats = r1
             boolean r1 = is24HourFormat
             if (r1 == 0) goto L_0x018b
-            r1 = 2131629118(0x7f0e143e, float:1.8885548E38)
+            r1 = 2131629340(0x7f0e151c, float:1.8885998E38)
             java.lang.String r2 = "formatterBannedUntil24H"
             goto L_0x0190
         L_0x018b:
-            r1 = 2131629117(0x7f0e143d, float:1.8885546E38)
+            r1 = 2131629339(0x7f0e151b, float:1.8885996E38)
             java.lang.String r2 = "formatterBannedUntil12H"
         L_0x0190:
             java.lang.String r1 = r9.getStringInternal(r2, r1)
@@ -2730,11 +2743,11 @@ public class LocaleController {
             r9.formatterBannedUntil = r1
             boolean r1 = is24HourFormat
             if (r1 == 0) goto L_0x01aa
-            r1 = 2131629120(0x7f0e1440, float:1.8885552E38)
+            r1 = 2131629342(0x7f0e151e, float:1.8886002E38)
             java.lang.String r2 = "formatterBannedUntilThisYear24H"
             goto L_0x01af
         L_0x01aa:
-            r1 = 2131629119(0x7f0e143f, float:1.888555E38)
+            r1 = 2131629341(0x7f0e151d, float:1.8886E38)
             java.lang.String r2 = "formatterBannedUntilThisYear12H"
         L_0x01af:
             java.lang.String r1 = r9.getStringInternal(r2, r1)
@@ -2748,21 +2761,21 @@ public class LocaleController {
             org.telegram.messenger.time.FastDateFormat r1 = r9.createFormatter(r0, r1, r2)
             r9.formatterBannedUntilThisYear = r1
             org.telegram.messenger.time.FastDateFormat[] r1 = r9.formatterScheduleSend
-            r2 = 2131627997(0x7f0e0fdd, float:1.8883274E38)
+            r2 = 2131628197(0x7f0e10a5, float:1.888368E38)
             java.lang.String r4 = "SendTodayAt"
             java.lang.String r2 = r9.getStringInternal(r4, r2)
             java.lang.String r4 = "'Send today at' HH:mm"
             org.telegram.messenger.time.FastDateFormat r2 = r9.createFormatter(r0, r2, r4)
             r1[r3] = r2
             org.telegram.messenger.time.FastDateFormat[] r1 = r9.formatterScheduleSend
-            r2 = 2131627971(0x7f0e0fc3, float:1.8883221E38)
+            r2 = 2131628171(0x7f0e108b, float:1.8883627E38)
             java.lang.String r3 = "SendDayAt"
             java.lang.String r2 = r9.getStringInternal(r3, r2)
             java.lang.String r3 = "'Send on' MMM d 'at' HH:mm"
             org.telegram.messenger.time.FastDateFormat r2 = r9.createFormatter(r0, r2, r3)
             r1[r5] = r2
             org.telegram.messenger.time.FastDateFormat[] r1 = r9.formatterScheduleSend
-            r2 = 2131627972(0x7f0e0fc4, float:1.8883224E38)
+            r2 = 2131628172(0x7f0e108c, float:1.888363E38)
             java.lang.String r3 = "SendDayYearAt"
             java.lang.String r2 = r9.getStringInternal(r3, r2)
             java.lang.String r3 = "'Send on' MMM d yyyy 'at' HH:mm"
@@ -2770,7 +2783,7 @@ public class LocaleController {
             r1[r6] = r2
             org.telegram.messenger.time.FastDateFormat[] r1 = r9.formatterScheduleSend
             r2 = 3
-            r3 = 2131627693(0x7f0e0ead, float:1.8882658E38)
+            r3 = 2131627873(0x7f0e0var_, float:1.8883023E38)
             java.lang.String r4 = "RemindTodayAt"
             java.lang.String r3 = r9.getStringInternal(r4, r3)
             java.lang.String r4 = "'Remind today at' HH:mm"
@@ -2778,7 +2791,7 @@ public class LocaleController {
             r1[r2] = r3
             org.telegram.messenger.time.FastDateFormat[] r1 = r9.formatterScheduleSend
             r2 = 4
-            r3 = 2131627691(0x7f0e0eab, float:1.8882654E38)
+            r3 = 2131627871(0x7f0e0f5f, float:1.8883019E38)
             java.lang.String r4 = "RemindDayAt"
             java.lang.String r3 = r9.getStringInternal(r4, r3)
             java.lang.String r4 = "'Remind on' MMM d 'at' HH:mm"
@@ -2786,7 +2799,7 @@ public class LocaleController {
             r1[r2] = r3
             org.telegram.messenger.time.FastDateFormat[] r1 = r9.formatterScheduleSend
             r2 = 5
-            r3 = 2131627692(0x7f0e0eac, float:1.8882656E38)
+            r3 = 2131627872(0x7f0e0var_, float:1.888302E38)
             java.lang.String r4 = "RemindDayYearAt"
             java.lang.String r3 = r9.getStringInternal(r4, r3)
             java.lang.String r4 = "'Remind on' MMM d yyyy 'at' HH:mm"
@@ -2794,7 +2807,7 @@ public class LocaleController {
             r1[r2] = r3
             org.telegram.messenger.time.FastDateFormat[] r1 = r9.formatterScheduleSend
             r2 = 6
-            r3 = 2131628208(0x7f0e10b0, float:1.8883702E38)
+            r3 = 2131628410(0x7f0e117a, float:1.8884112E38)
             java.lang.String r4 = "StartTodayAt"
             java.lang.String r3 = r9.getStringInternal(r4, r3)
             java.lang.String r4 = "'Start today at' HH:mm"
@@ -2802,7 +2815,7 @@ public class LocaleController {
             r1[r2] = r3
             org.telegram.messenger.time.FastDateFormat[] r1 = r9.formatterScheduleSend
             r2 = 7
-            r3 = 2131628200(0x7f0e10a8, float:1.8883686E38)
+            r3 = 2131628402(0x7f0e1172, float:1.8884096E38)
             java.lang.String r4 = "StartDayAt"
             java.lang.String r3 = r9.getStringInternal(r4, r3)
             java.lang.String r4 = "'Start on' MMM d 'at' HH:mm"
@@ -2810,7 +2823,7 @@ public class LocaleController {
             r1[r2] = r3
             org.telegram.messenger.time.FastDateFormat[] r1 = r9.formatterScheduleSend
             r2 = 8
-            r3 = 2131628201(0x7f0e10a9, float:1.8883688E38)
+            r3 = 2131628403(0x7f0e1173, float:1.8884098E38)
             java.lang.String r4 = "StartDayYearAt"
             java.lang.String r3 = r9.getStringInternal(r4, r3)
             java.lang.String r4 = "'Start on' MMM d yyyy 'at' HH:mm"
@@ -2818,7 +2831,7 @@ public class LocaleController {
             r1[r2] = r3
             org.telegram.messenger.time.FastDateFormat[] r1 = r9.formatterScheduleSend
             r2 = 9
-            r3 = 2131628206(0x7f0e10ae, float:1.8883698E38)
+            r3 = 2131628408(0x7f0e1178, float:1.8884108E38)
             java.lang.String r4 = "StartShortTodayAt"
             java.lang.String r3 = r9.getStringInternal(r4, r3)
             java.lang.String r4 = "'Today,' HH:mm"
@@ -2826,7 +2839,7 @@ public class LocaleController {
             r1[r2] = r3
             org.telegram.messenger.time.FastDateFormat[] r1 = r9.formatterScheduleSend
             r2 = 10
-            r3 = 2131628204(0x7f0e10ac, float:1.8883694E38)
+            r3 = 2131628406(0x7f0e1176, float:1.8884104E38)
             java.lang.String r4 = "StartShortDayAt"
             java.lang.String r3 = r9.getStringInternal(r4, r3)
             java.lang.String r4 = "MMM d',' HH:mm"
@@ -2834,7 +2847,7 @@ public class LocaleController {
             r1[r2] = r3
             org.telegram.messenger.time.FastDateFormat[] r1 = r9.formatterScheduleSend
             r2 = 11
-            r3 = 2131628205(0x7f0e10ad, float:1.8883696E38)
+            r3 = 2131628407(0x7f0e1177, float:1.8884106E38)
             java.lang.String r4 = "StartShortDayYearAt"
             java.lang.String r3 = r9.getStringInternal(r4, r3)
             java.lang.String r4 = "MMM d yyyy, HH:mm"
@@ -2842,7 +2855,7 @@ public class LocaleController {
             r1[r2] = r3
             org.telegram.messenger.time.FastDateFormat[] r1 = r9.formatterScheduleSend
             r2 = 12
-            r3 = 2131628218(0x7f0e10ba, float:1.8883722E38)
+            r3 = 2131628420(0x7f0e1184, float:1.8884132E38)
             java.lang.String r4 = "StartsTodayAt"
             java.lang.String r3 = r9.getStringInternal(r4, r3)
             java.lang.String r4 = "'Starts today at' HH:mm"
@@ -2850,7 +2863,7 @@ public class LocaleController {
             r1[r2] = r3
             org.telegram.messenger.time.FastDateFormat[] r1 = r9.formatterScheduleSend
             r2 = 13
-            r3 = 2131628216(0x7f0e10b8, float:1.8883718E38)
+            r3 = 2131628418(0x7f0e1182, float:1.8884128E38)
             java.lang.String r4 = "StartsDayAt"
             java.lang.String r3 = r9.getStringInternal(r4, r3)
             java.lang.String r4 = "'Starts on' MMM d 'at' HH:mm"
@@ -2858,7 +2871,7 @@ public class LocaleController {
             r1[r2] = r3
             org.telegram.messenger.time.FastDateFormat[] r1 = r9.formatterScheduleSend
             r2 = 14
-            r3 = 2131628217(0x7f0e10b9, float:1.888372E38)
+            r3 = 2131628419(0x7f0e1183, float:1.888413E38)
             java.lang.String r4 = "StartsDayYearAt"
             java.lang.String r3 = r9.getStringInternal(r4, r3)
             java.lang.String r4 = "'Starts on' MMM d yyyy 'at' HH:mm"
@@ -3027,6 +3040,10 @@ public class LocaleController {
     }
 
     public static String formatUserStatus(int i, TLRPC$User tLRPC$User, boolean[] zArr) {
+        return formatUserStatus(i, tLRPC$User, zArr, (boolean[]) null);
+    }
+
+    public static String formatUserStatus(int i, TLRPC$User tLRPC$User, boolean[] zArr, boolean[] zArr2) {
         TLRPC$UserStatus tLRPC$UserStatus;
         TLRPC$UserStatus tLRPC$UserStatus2;
         TLRPC$UserStatus tLRPC$UserStatus3;
@@ -3066,7 +3083,7 @@ public class LocaleController {
                 if (i2 == -102) {
                     return getString("WithinAMonth", NUM);
                 }
-                return formatDateOnline((long) i2);
+                return formatDateOnline((long) i2, zArr2);
             }
         }
     }
@@ -3323,7 +3340,7 @@ public class LocaleController {
                 return;
             }
             if (localeInfo.version == 0 || z) {
-                for (int i2 = 0; i2 < 3; i2++) {
+                for (int i2 = 0; i2 < 4; i2++) {
                     ConnectionsManager.setLangCode(localeInfo.getLangCode());
                 }
                 TLRPC$TL_langpack_getLangPack tLRPC$TL_langpack_getLangPack2 = new TLRPC$TL_langpack_getLangPack();

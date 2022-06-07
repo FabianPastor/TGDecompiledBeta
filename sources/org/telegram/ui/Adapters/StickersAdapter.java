@@ -150,7 +150,7 @@ public class StickersAdapter extends RecyclerListView.SelectionAdapter implement
         boolean z2 = z && (Emoji.isValidEmoji(str) || Emoji.isValidEmoji(this.lastSearch));
         if (z2 && (emojiAnimatedSticker = MediaDataController.getInstance(this.currentAccount).getEmojiAnimatedSticker(charSequence)) != null) {
             ArrayList<TLRPC$TL_messages_stickerSet> stickerSets = MediaDataController.getInstance(this.currentAccount).getStickerSets(4);
-            if (!FileLoader.getPathToAttach(emojiAnimatedSticker, true).exists()) {
+            if (!FileLoader.getInstance(this.currentAccount).getPathToAttach(emojiAnimatedSticker, true).exists()) {
                 FileLoader.getInstance(this.currentAccount).loadFile(ImageLocation.getForDocument(emojiAnimatedSticker), stickerSets.get(0), (String) null, 1, 1);
             }
         }

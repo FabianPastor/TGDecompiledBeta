@@ -26,13 +26,13 @@ public interface Stream<T> extends CLASSNAMEg {
 
     boolean W(Predicate predicate);
 
-    CLASSNAMEf1 X(Function function);
+    CLASSNAMEe1 X(Function function);
 
     boolean a(Predicate predicate);
 
     Object b0(J0 j0);
 
-    M0 c(Function function);
+    IntStream c(Function function);
 
     /* synthetic */ void close();
 
@@ -50,7 +50,7 @@ public interface Stream<T> extends CLASSNAMEg {
 
     void forEach(Consumer<? super T> consumer);
 
-    CLASSNAMEf1 g0(A a);
+    CLASSNAMEe1 g0(A a);
 
     Object i(y yVar, BiConsumer biConsumer, BiConsumer biConsumer2);
 
@@ -60,7 +60,7 @@ public interface Stream<T> extends CLASSNAMEg {
 
     Stream limit(long j);
 
-    M0 m(ToIntFunction toIntFunction);
+    IntStream m(ToIntFunction toIntFunction);
 
     Object m0(Object obj, b bVar);
 

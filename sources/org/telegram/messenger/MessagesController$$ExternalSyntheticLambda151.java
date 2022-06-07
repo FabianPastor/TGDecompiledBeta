@@ -1,20 +1,21 @@
 package org.telegram.messenger;
 
-import org.telegram.tgnet.RequestDelegate;
-import org.telegram.tgnet.TLRPC$TL_channels_editAdmin;
+import org.telegram.tgnet.TLRPC$Chat;
 
 public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda151 implements Runnable {
     public final /* synthetic */ MessagesController f$0;
-    public final /* synthetic */ TLRPC$TL_channels_editAdmin f$1;
-    public final /* synthetic */ RequestDelegate f$2;
+    public final /* synthetic */ TLRPC$Chat f$1;
+    public final /* synthetic */ boolean f$2;
+    public final /* synthetic */ int f$3;
 
-    public /* synthetic */ MessagesController$$ExternalSyntheticLambda151(MessagesController messagesController, TLRPC$TL_channels_editAdmin tLRPC$TL_channels_editAdmin, RequestDelegate requestDelegate) {
+    public /* synthetic */ MessagesController$$ExternalSyntheticLambda151(MessagesController messagesController, TLRPC$Chat tLRPC$Chat, boolean z, int i) {
         this.f$0 = messagesController;
-        this.f$1 = tLRPC$TL_channels_editAdmin;
-        this.f$2 = requestDelegate;
+        this.f$1 = tLRPC$Chat;
+        this.f$2 = z;
+        this.f$3 = i;
     }
 
     public final void run() {
-        this.f$0.lambda$setUserAdminRole$80(this.f$1, this.f$2);
+        this.f$0.lambda$startShortPoll$264(this.f$1, this.f$2, this.f$3);
     }
 }

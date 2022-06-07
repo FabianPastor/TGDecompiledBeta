@@ -83,7 +83,7 @@ public class PatternCell extends BackupImageView implements DownloadController.F
         RadialProgress2 radialProgress2 = new RadialProgress2(this);
         this.radialProgress = radialProgress2;
         radialProgress2.setProgressRect(AndroidUtilities.dp(30.0f), AndroidUtilities.dp(30.0f), AndroidUtilities.dp(70.0f), AndroidUtilities.dp(70.0f));
-        this.backgroundPaint = new Paint(1);
+        this.backgroundPaint = new Paint(3);
         this.TAG = DownloadController.getInstance(this.currentAccount).generateObserverTag();
         if (Build.VERSION.SDK_INT >= 21) {
             setOutlineProvider(new ViewOutlineProvider(this) {
@@ -98,7 +98,7 @@ public class PatternCell extends BackupImageView implements DownloadController.F
     public void setPattern(TLRPC$TL_wallPaper tLRPC$TL_wallPaper) {
         this.currentPattern = tLRPC$TL_wallPaper;
         if (tLRPC$TL_wallPaper != null) {
-            setImage(ImageLocation.getForDocument(FileLoader.getClosestPhotoSizeWithSize(tLRPC$TL_wallPaper.document.thumbs, 100), tLRPC$TL_wallPaper.document), "100_100", (ImageLocation) null, (String) null, "jpg", 0, 1, tLRPC$TL_wallPaper);
+            setImage(ImageLocation.getForDocument(FileLoader.getClosestPhotoSizeWithSize(tLRPC$TL_wallPaper.document.thumbs, AndroidUtilities.dp(100.0f)), tLRPC$TL_wallPaper.document), "100_100", (ImageLocation) null, (String) null, "png", 0, 1, tLRPC$TL_wallPaper);
         } else {
             setImageDrawable((Drawable) null);
         }
@@ -135,7 +135,7 @@ public class PatternCell extends BackupImageView implements DownloadController.F
                 TLRPC$TL_wallPaper tLRPC$TL_wallPaper = (TLRPC$TL_wallPaper) obj;
                 str = FileLoader.getAttachFileName(tLRPC$TL_wallPaper.document);
                 if (!TextUtils.isEmpty(str)) {
-                    file = FileLoader.getPathToAttach(tLRPC$TL_wallPaper.document, true);
+                    file = FileLoader.getInstance(this.currentAccount).getPathToAttach(tLRPC$TL_wallPaper.document, true);
                 } else {
                     return;
                 }
@@ -144,7 +144,7 @@ public class PatternCell extends BackupImageView implements DownloadController.F
                 TLRPC$Photo tLRPC$Photo = searchImage.photo;
                 if (tLRPC$Photo != null) {
                     TLRPC$PhotoSize closestPhotoSizeWithSize = FileLoader.getClosestPhotoSizeWithSize(tLRPC$Photo.sizes, this.maxWallpaperSize, true);
-                    File pathToAttach = FileLoader.getPathToAttach(closestPhotoSizeWithSize, true);
+                    File pathToAttach = FileLoader.getInstance(this.currentAccount).getPathToAttach(closestPhotoSizeWithSize, true);
                     str = FileLoader.getAttachFileName(closestPhotoSizeWithSize);
                     file = pathToAttach;
                 } else {

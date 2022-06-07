@@ -1,12 +1,19 @@
 package org.telegram.ui;
 
-public final /* synthetic */ class LaunchActivity$$ExternalSyntheticLambda59 implements Runnable {
-    public static final /* synthetic */ LaunchActivity$$ExternalSyntheticLambda59 INSTANCE = new LaunchActivity$$ExternalSyntheticLambda59();
+import org.telegram.ui.ActionBar.BaseFragment;
 
-    private /* synthetic */ LaunchActivity$$ExternalSyntheticLambda59() {
+public final /* synthetic */ class LaunchActivity$$ExternalSyntheticLambda59 implements Runnable {
+    public final /* synthetic */ LaunchActivity f$0;
+    public final /* synthetic */ BaseFragment f$1;
+    public final /* synthetic */ boolean f$2;
+
+    public /* synthetic */ LaunchActivity$$ExternalSyntheticLambda59(LaunchActivity launchActivity, BaseFragment baseFragment, boolean z) {
+        this.f$0 = launchActivity;
+        this.f$1 = baseFragment;
+        this.f$2 = z;
     }
 
     public final void run() {
-        LaunchActivity.lambda$onResume$75();
+        this.f$0.lambda$handleIntent$16(this.f$1, this.f$2);
     }
 }

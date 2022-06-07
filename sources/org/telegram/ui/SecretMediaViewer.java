@@ -678,6 +678,7 @@ public class SecretMediaViewer implements NotificationCenter.NotificationCenterD
 
     public void openMedia(MessageObject messageObject, PhotoViewer.PhotoViewerProvider photoViewerProvider, Runnable runnable) {
         PhotoViewer.PlaceProviderObject placeForPhoto;
+        char c;
         int i;
         MessageObject messageObject2 = messageObject;
         PhotoViewer.PhotoViewerProvider photoViewerProvider2 = photoViewerProvider;
@@ -783,7 +784,8 @@ public class SecretMediaViewer implements NotificationCenter.NotificationCenterD
             }
             this.currentThumb = placeForPhoto.imageReceiver.getThumbBitmapSafe();
             if (document == null) {
-                i = 2;
+                i = 21;
+                c = 4;
                 this.actionBar.setTitle(LocaleController.getString("DisappearingPhoto", NUM));
                 this.centerImage.setImage(ImageLocation.getForObject(FileLoader.getClosestPhotoSizeWithSize(messageObject2.photoThumbs, AndroidUtilities.getPhotoSize()), messageObject2.photoThumbsObject), (String) null, (Drawable) this.currentThumb != null ? new BitmapDrawable(this.currentThumb.bitmap) : null, -1, (String) null, (Object) messageObject, 2);
                 SecretDeleteTimer secretDeleteTimer2 = this.secretDeleteTimer;
@@ -791,20 +793,22 @@ public class SecretMediaViewer implements NotificationCenter.NotificationCenterD
                 secretDeleteTimer2.setDestroyTime(((long) tLRPC$Message.destroyTime) * 1000, (long) tLRPC$Message.ttl, false);
             } else if (MessageObject.isGifDocument(document)) {
                 this.actionBar.setTitle(LocaleController.getString("DisappearingGif", NUM));
-                i = 2;
+                i = 21;
+                c = 4;
                 this.centerImage.setImage(ImageLocation.getForDocument(document), (String) null, (Drawable) this.currentThumb != null ? new BitmapDrawable(this.currentThumb.bitmap) : null, -1, (String) null, (Object) messageObject, 1);
                 SecretDeleteTimer secretDeleteTimer3 = this.secretDeleteTimer;
                 TLRPC$Message tLRPC$Message2 = messageObject2.messageOwner;
                 secretDeleteTimer3.setDestroyTime(((long) tLRPC$Message2.destroyTime) * 1000, (long) tLRPC$Message2.ttl, false);
             } else {
-                i = 2;
+                i = 21;
+                c = 4;
                 this.playerRetryPlayCount = 1;
                 this.actionBar.setTitle(LocaleController.getString("DisappearingVideo", NUM));
                 File file = new File(messageObject2.messageOwner.attachPath);
                 if (file.exists()) {
                     preparePlayer(file);
                 } else {
-                    File pathToMessage = FileLoader.getPathToMessage(messageObject2.messageOwner);
+                    File pathToMessage = FileLoader.getInstance(this.currentAccount).getPathToMessage(messageObject2.messageOwner);
                     File file2 = new File(pathToMessage.getAbsolutePath() + ".enc");
                     if (file2.exists()) {
                         pathToMessage = file2;
@@ -833,7 +837,7 @@ public class SecretMediaViewer implements NotificationCenter.NotificationCenterD
             this.isVisible = true;
             Window window = this.parentActivity.getWindow();
             int i7 = Build.VERSION.SDK_INT;
-            if (i7 >= 21) {
+            if (i7 >= i) {
                 this.wasNavigationBarColor = window.getNavigationBarColor();
                 this.wasLightNavigationBar = AndroidUtilities.getLightNavigationBar(window);
                 AndroidUtilities.setLightNavigationBar(window, false);
@@ -842,31 +846,11 @@ public class SecretMediaViewer implements NotificationCenter.NotificationCenterD
             AnimatorSet animatorSet = new AnimatorSet();
             this.imageMoveAnimation = animatorSet;
             Animator[] animatorArr = new Animator[5];
-            float[] fArr = new float[i];
-            // fill-array-data instruction
-            fArr[0] = 0;
-            fArr[1] = NUM;
-            animatorArr[0] = ObjectAnimator.ofFloat(this.actionBar, View.ALPHA, fArr);
-            float[] fArr2 = new float[i];
-            // fill-array-data instruction
-            fArr2[0] = 0;
-            fArr2[1] = NUM;
-            animatorArr[1] = ObjectAnimator.ofFloat(this.secretDeleteTimer, View.ALPHA, fArr2);
-            int[] iArr4 = new int[i];
-            // fill-array-data instruction
-            iArr4[0] = 0;
-            iArr4[1] = 255;
-            animatorArr[i] = ObjectAnimator.ofInt(this.photoBackgroundDrawable, AnimationProperties.COLOR_DRAWABLE_ALPHA, iArr4);
-            float[] fArr3 = new float[i];
-            // fill-array-data instruction
-            fArr3[0] = 0;
-            fArr3[1] = NUM;
-            animatorArr[3] = ObjectAnimator.ofFloat(this.secretDeleteTimer, View.ALPHA, fArr3);
-            float[] fArr4 = new float[i];
-            // fill-array-data instruction
-            fArr4[0] = 0;
-            fArr4[1] = NUM;
-            animatorArr[4] = ObjectAnimator.ofFloat(this, "animationValue", fArr4);
+            animatorArr[0] = ObjectAnimator.ofFloat(this.actionBar, View.ALPHA, new float[]{0.0f, 1.0f});
+            animatorArr[1] = ObjectAnimator.ofFloat(this.secretDeleteTimer, View.ALPHA, new float[]{0.0f, 1.0f});
+            animatorArr[2] = ObjectAnimator.ofInt(this.photoBackgroundDrawable, AnimationProperties.COLOR_DRAWABLE_ALPHA, new int[]{0, 255});
+            animatorArr[3] = ObjectAnimator.ofFloat(this.secretDeleteTimer, View.ALPHA, new float[]{0.0f, 1.0f});
+            animatorArr[c] = ObjectAnimator.ofFloat(this, "animationValue", new float[]{0.0f, 1.0f});
             animatorSet.playTogether(animatorArr);
             this.photoAnimationInProgress = 3;
             this.photoAnimationEndRunnable = new SecretMediaViewer$$ExternalSyntheticLambda2(this, runnable);
@@ -881,7 +865,7 @@ public class SecretMediaViewer implements NotificationCenter.NotificationCenterD
             });
             this.photoTransitionAnimationStartTime = System.currentTimeMillis();
             if (i7 >= 18) {
-                this.containerView.setLayerType(i, (Paint) null);
+                this.containerView.setLayerType(2, (Paint) null);
             }
             this.imageMoveAnimation.setInterpolator(new DecelerateInterpolator());
             int unused = this.photoBackgroundDrawable.frame = 0;

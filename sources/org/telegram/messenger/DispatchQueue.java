@@ -49,7 +49,7 @@ public class DispatchQueue extends Thread {
             this.syncLatch.await();
             this.handler.removeCallbacks(runnable);
         } catch (Exception e) {
-            FileLog.e((Throwable) e);
+            FileLog.e((Throwable) e, false);
         }
     }
 
@@ -60,7 +60,7 @@ public class DispatchQueue extends Thread {
                 this.handler.removeCallbacks(removeCallbacks);
             }
         } catch (Exception e) {
-            FileLog.e((Throwable) e);
+            FileLog.e((Throwable) e, false);
         }
     }
 
@@ -73,7 +73,7 @@ public class DispatchQueue extends Thread {
         try {
             this.syncLatch.await();
         } catch (Exception e) {
-            FileLog.e((Throwable) e);
+            FileLog.e((Throwable) e, false);
         }
         if (j <= 0) {
             return this.handler.post(runnable);
@@ -86,7 +86,7 @@ public class DispatchQueue extends Thread {
             this.syncLatch.await();
             this.handler.removeCallbacksAndMessages((Object) null);
         } catch (Exception e) {
-            FileLog.e((Throwable) e);
+            FileLog.e((Throwable) e, false);
         }
     }
 
@@ -100,16 +100,22 @@ public class DispatchQueue extends Thread {
 
     public void run() {
         Looper.prepare();
-        this.handler = new Handler() {
-            public void handleMessage(Message message) {
-                DispatchQueue.this.handleMessage(message);
-            }
-        };
+        this.handler = new Handler(Looper.myLooper(), new DispatchQueue$$ExternalSyntheticLambda0(this));
         this.syncLatch.countDown();
         Looper.loop();
     }
 
+    /* access modifiers changed from: private */
+    public /* synthetic */ boolean lambda$run$0(Message message) {
+        handleMessage(message);
+        return true;
+    }
+
     public boolean isReady() {
         return this.syncLatch.getCount() == 0;
+    }
+
+    public Handler getHandler() {
+        return this.handler;
     }
 }

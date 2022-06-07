@@ -17,7 +17,6 @@ import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.text.TextUtils;
-import android.util.Log;
 import android.util.Property;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
@@ -135,7 +134,6 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
     private int currentSelectedCount;
     private boolean deviceHasGoodCamera;
     private boolean dragging;
-    /* access modifiers changed from: private */
     public TextView dropDown;
     private ArrayList<MediaController.AlbumEntry> dropDownAlbums;
     private ActionBarMenuItem dropDownContainer;
@@ -213,13 +211,13 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
         return 1;
     }
 
-    static /* synthetic */ int access$2308(ChatAttachAlertPhotoLayout chatAttachAlertPhotoLayout) {
+    static /* synthetic */ int access$2408(ChatAttachAlertPhotoLayout chatAttachAlertPhotoLayout) {
         int i = chatAttachAlertPhotoLayout.videoRecordTime;
         chatAttachAlertPhotoLayout.videoRecordTime = i + 1;
         return i;
     }
 
-    static /* synthetic */ int access$2910() {
+    static /* synthetic */ int access$3010() {
         int i = lastImageId;
         lastImageId = i - 1;
         return i;
@@ -426,7 +424,7 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
             r1.addObserver(r7, r2)
             android.widget.FrameLayout r15 = r24.getContainer()
             android.content.res.Resources r0 = r25.getResources()
-            r1 = 2131165587(0x7var_, float:1.7945395E38)
+            r1 = 2131165547(0x7var_b, float:1.7945314E38)
             android.graphics.drawable.Drawable r0 = r0.getDrawable(r1)
             android.graphics.drawable.Drawable r0 = r0.mutate()
             r7.cameraDrawable = r0
@@ -489,7 +487,7 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
             int r2 = r7.getThemedColor(r1)
             r0.setTextColor(r2)
             android.widget.TextView r0 = r7.dropDown
-            r2 = 2131624930(0x7f0e03e2, float:1.8877054E38)
+            r2 = 2131625000(0x7f0e0428, float:1.8877196E38)
             java.lang.String r4 = "ChatGallery"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r4, r2)
             r0.setText(r2)
@@ -498,7 +496,7 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
             android.graphics.Typeface r4 = org.telegram.messenger.AndroidUtilities.getTypeface(r2)
             r0.setTypeface(r4)
             android.content.res.Resources r0 = r25.getResources()
-            r4 = 2131165521(0x7var_, float:1.7945261E38)
+            r4 = 2131165463(0x7var_, float:1.7945144E38)
             android.graphics.drawable.Drawable r0 = r0.getDrawable(r4)
             android.graphics.drawable.Drawable r0 = r0.mutate()
             r7.dropDownDrawable = r0
@@ -526,26 +524,26 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
             r7.checkCamera(r3)
             org.telegram.ui.Components.ChatAttachAlert r0 = r7.parentAlert
             org.telegram.ui.ActionBar.ActionBarMenuItem r0 = r0.selectedMenuItem
-            r5 = 2131627999(0x7f0e0fdf, float:1.8883278E38)
+            r5 = 2131628199(0x7f0e10a7, float:1.8883684E38)
             java.lang.String r6 = "SendWithoutGrouping"
             java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r6, r5)
             r0.addSubItem(r3, r5)
             org.telegram.ui.Components.ChatAttachAlert r0 = r7.parentAlert
             org.telegram.ui.ActionBar.ActionBarMenuItem r0 = r0.selectedMenuItem
-            r5 = 2131627998(0x7f0e0fde, float:1.8883276E38)
+            r5 = 2131628198(0x7f0e10a6, float:1.8883682E38)
             java.lang.String r6 = "SendWithoutCompression"
             java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r6, r5)
             r0.addSubItem(r13, r5)
             org.telegram.ui.Components.ChatAttachAlert r0 = r7.parentAlert
             org.telegram.ui.ActionBar.ActionBarMenuItem r0 = r0.selectedMenuItem
-            r5 = 2131165847(0x7var_, float:1.7945923E38)
-            r6 = 2131626944(0x7f0e0bc0, float:1.8881138E38)
+            r5 = 2131165830(0x7var_, float:1.7945888E38)
+            r6 = 2131627090(0x7f0e0CLASSNAME, float:1.8881435E38)
             java.lang.String r11 = "OpenInExternalApp"
             java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r11, r6)
             r0.addSubItem(r10, r5, r6)
             org.telegram.ui.Components.ChatAttachAlert r0 = r7.parentAlert
             org.telegram.ui.ActionBar.ActionBarMenuItem r0 = r0.selectedMenuItem
-            r5 = 2131624437(0x7f0e01f5, float:1.8876054E38)
+            r5 = 2131624490(0x7f0e022a, float:1.8876161E38)
             java.lang.String r6 = "AttachMediaPreviewButton"
             java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r6, r5)
             r0.addSubItem(r12, r5)
@@ -607,7 +605,7 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
             org.telegram.ui.Components.EmptyTextProgressView r0 = new org.telegram.ui.Components.EmptyTextProgressView
             r0.<init>(r8, r5, r9)
             r7.progressView = r0
-            r6 = 2131626693(0x7f0e0ac5, float:1.888063E38)
+            r6 = 2131626837(0x7f0e0b55, float:1.8880921E38)
             java.lang.String r11 = "NoPhotos"
             java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r11, r6)
             r0.setText(r6)
@@ -639,7 +637,7 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
             r0 = 1065353216(0x3var_, float:1.0)
             org.telegram.messenger.AndroidUtilities.updateViewVisibilityAnimated(r6, r3, r0, r3)
             android.widget.TextView r0 = r7.recordTime
-            r6 = 2131166184(0x7var_e8, float:1.7946606E38)
+            r6 = 2131166176(0x7var_e0, float:1.794659E38)
             r0.setBackgroundResource(r6)
             android.widget.TextView r0 = r7.recordTime
             android.graphics.drawable.Drawable r0 = r0.getBackground()
@@ -692,7 +690,7 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
             android.widget.TextView r0 = new android.widget.TextView
             r0.<init>(r8)
             r7.counterTextView = r0
-            r5 = 2131166023(0x7var_, float:1.794628E38)
+            r5 = 2131166050(0x7var_, float:1.7946334E38)
             r0.setBackgroundResource(r5)
             android.widget.TextView r0 = r7.counterTextView
             r0.setVisibility(r4)
@@ -709,7 +707,7 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
             android.graphics.Typeface r2 = org.telegram.messenger.AndroidUtilities.getTypeface(r2)
             r0.setTypeface(r2)
             android.widget.TextView r0 = r7.counterTextView
-            r2 = 2131166021(0x7var_, float:1.7946276E38)
+            r2 = 2131166048(0x7var_, float:1.794633E38)
             r0.setCompoundDrawablesWithIntrinsicBounds(r3, r3, r2, r3)
             android.widget.TextView r0 = r7.counterTextView
             int r1 = org.telegram.messenger.AndroidUtilities.dp(r1)
@@ -758,7 +756,7 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
             org.telegram.ui.Components.ShutterButton r0 = r7.shutterButton
             r0.setFocusable(r13)
             org.telegram.ui.Components.ShutterButton r0 = r7.shutterButton
-            r1 = 2131624053(0x7f0e0075, float:1.8875275E38)
+            r1 = 2131624087(0x7f0e0097, float:1.8875344E38)
             java.lang.String r2 = "AccDescrShutter"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             r0.setContentDescription(r1)
@@ -778,7 +776,7 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
             r1.<init>(r7)
             r0.setOnClickListener(r1)
             android.widget.ImageView r0 = r7.switchCameraButton
-            r1 = 2131624057(0x7f0e0079, float:1.8875283E38)
+            r1 = 2131624091(0x7f0e009b, float:1.8875352E38)
             java.lang.String r2 = "AccDescrSwitchCamera"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             r0.setContentDescription(r1)
@@ -828,7 +826,7 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
             android.widget.TextView r0 = r7.tooltipTextView
             r0.setTextColor(r14)
             android.widget.TextView r0 = r7.tooltipTextView
-            r2 = 2131628318(0x7f0e111e, float:1.8883925E38)
+            r2 = 2131628525(0x7f0e11ed, float:1.8884345E38)
             java.lang.String r4 = "TapForVideo"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r4, r2)
             r0.setText(r2)
@@ -1033,9 +1031,9 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
             ObjectAnimator duration = ObjectAnimator.ofFloat(this.switchCameraButton, View.SCALE_X, new float[]{0.0f}).setDuration(100);
             duration.addListener(new AnimatorListenerAdapter() {
                 public void onAnimationEnd(Animator animator) {
-                    ImageView access$1800 = ChatAttachAlertPhotoLayout.this.switchCameraButton;
+                    ImageView access$1900 = ChatAttachAlertPhotoLayout.this.switchCameraButton;
                     CameraView cameraView = ChatAttachAlertPhotoLayout.this.cameraView;
-                    access$1800.setImageResource((cameraView == null || !cameraView.isFrontface()) ? NUM : NUM);
+                    access$1900.setImageResource((cameraView == null || !cameraView.isFrontface()) ? NUM : NUM);
                     ObjectAnimator.ofFloat(ChatAttachAlertPhotoLayout.this.switchCameraButton, View.SCALE_X, new float[]{1.0f}).setDuration(100).start();
                 }
             });
@@ -1478,19 +1476,19 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
             }
             int max = Math.max(1, selectedPhotos.size());
             if (z3 && z4) {
-                this.counterTextView.setText(LocaleController.formatPluralString("Media", selectedPhotos.size()).toUpperCase());
+                this.counterTextView.setText(LocaleController.formatPluralString("Media", selectedPhotos.size(), new Object[0]).toUpperCase());
                 if (max != this.currentSelectedCount || z) {
-                    this.parentAlert.selectedTextView.setText(LocaleController.formatPluralString("MediaSelected", max));
+                    this.parentAlert.selectedTextView.setText(LocaleController.formatPluralString("MediaSelected", max, new Object[0]));
                 }
             } else if (z3) {
-                this.counterTextView.setText(LocaleController.formatPluralString("Videos", selectedPhotos.size()).toUpperCase());
+                this.counterTextView.setText(LocaleController.formatPluralString("Videos", selectedPhotos.size(), new Object[0]).toUpperCase());
                 if (max != this.currentSelectedCount || z) {
-                    this.parentAlert.selectedTextView.setText(LocaleController.formatPluralString("VideosSelected", max));
+                    this.parentAlert.selectedTextView.setText(LocaleController.formatPluralString("VideosSelected", max, new Object[0]));
                 }
             } else {
-                this.counterTextView.setText(LocaleController.formatPluralString("Photos", selectedPhotos.size()).toUpperCase());
+                this.counterTextView.setText(LocaleController.formatPluralString("Photos", selectedPhotos.size(), new Object[0]).toUpperCase());
                 if (max != this.currentSelectedCount || z) {
-                    this.parentAlert.selectedTextView.setText(LocaleController.formatPluralString("PhotosSelected", max));
+                    this.parentAlert.selectedTextView.setText(LocaleController.formatPluralString("PhotosSelected", max, new Object[0]));
                 }
             }
             ChatAttachAlert chatAttachAlert = this.parentAlert;
@@ -1740,11 +1738,11 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
                         if (ChatAttachAlertPhotoLayout.this.cameraAnimationInProgress) {
                             RectF rectF = AndroidUtilities.rectTmp;
                             ChatAttachAlertPhotoLayout chatAttachAlertPhotoLayout = ChatAttachAlertPhotoLayout.this;
-                            float access$4100 = chatAttachAlertPhotoLayout.animationClipLeft + (chatAttachAlertPhotoLayout.cameraViewOffsetX * (1.0f - ChatAttachAlertPhotoLayout.this.cameraOpenProgress));
+                            float access$4200 = chatAttachAlertPhotoLayout.animationClipLeft + (chatAttachAlertPhotoLayout.cameraViewOffsetX * (1.0f - ChatAttachAlertPhotoLayout.this.cameraOpenProgress));
                             ChatAttachAlertPhotoLayout chatAttachAlertPhotoLayout2 = ChatAttachAlertPhotoLayout.this;
-                            float access$4300 = chatAttachAlertPhotoLayout2.animationClipTop + (chatAttachAlertPhotoLayout2.cameraViewOffsetY * (1.0f - ChatAttachAlertPhotoLayout.this.cameraOpenProgress));
+                            float access$4400 = chatAttachAlertPhotoLayout2.animationClipTop + (chatAttachAlertPhotoLayout2.cameraViewOffsetY * (1.0f - ChatAttachAlertPhotoLayout.this.cameraOpenProgress));
                             ChatAttachAlertPhotoLayout chatAttachAlertPhotoLayout3 = ChatAttachAlertPhotoLayout.this;
-                            rectF.set(access$4100, access$4300, chatAttachAlertPhotoLayout3.animationClipRight, chatAttachAlertPhotoLayout3.animationClipBottom);
+                            rectF.set(access$4200, access$4400, chatAttachAlertPhotoLayout3.animationClipRight, chatAttachAlertPhotoLayout3.animationClipBottom);
                         } else if (ChatAttachAlertPhotoLayout.this.cameraAnimationInProgress || ChatAttachAlertPhotoLayout.this.cameraOpened) {
                             AndroidUtilities.rectTmp.set(0.0f, 0.0f, (float) getMeasuredWidth(), (float) getMeasuredHeight());
                         } else {
@@ -1767,11 +1765,11 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
                             if (ChatAttachAlertPhotoLayout.this.cameraAnimationInProgress) {
                                 RectF rectF = AndroidUtilities.rectTmp;
                                 ChatAttachAlertPhotoLayout chatAttachAlertPhotoLayout = ChatAttachAlertPhotoLayout.this;
-                                float access$4100 = chatAttachAlertPhotoLayout.animationClipLeft + (chatAttachAlertPhotoLayout.cameraViewOffsetX * (1.0f - ChatAttachAlertPhotoLayout.this.cameraOpenProgress));
+                                float access$4200 = chatAttachAlertPhotoLayout.animationClipLeft + (chatAttachAlertPhotoLayout.cameraViewOffsetX * (1.0f - ChatAttachAlertPhotoLayout.this.cameraOpenProgress));
                                 ChatAttachAlertPhotoLayout chatAttachAlertPhotoLayout2 = ChatAttachAlertPhotoLayout.this;
-                                float access$4300 = chatAttachAlertPhotoLayout2.animationClipTop + (chatAttachAlertPhotoLayout2.cameraViewOffsetY * (1.0f - ChatAttachAlertPhotoLayout.this.cameraOpenProgress));
+                                float access$4400 = chatAttachAlertPhotoLayout2.animationClipTop + (chatAttachAlertPhotoLayout2.cameraViewOffsetY * (1.0f - ChatAttachAlertPhotoLayout.this.cameraOpenProgress));
                                 ChatAttachAlertPhotoLayout chatAttachAlertPhotoLayout3 = ChatAttachAlertPhotoLayout.this;
-                                rectF.set(access$4100, access$4300, chatAttachAlertPhotoLayout3.animationClipRight, chatAttachAlertPhotoLayout3.animationClipBottom);
+                                rectF.set(access$4200, access$4400, chatAttachAlertPhotoLayout3.animationClipRight, chatAttachAlertPhotoLayout3.animationClipBottom);
                                 outline.setRect((int) rectF.left, (int) rectF.top, (int) rectF.right, (int) rectF.bottom);
                             } else if (ChatAttachAlertPhotoLayout.this.cameraAnimationInProgress || ChatAttachAlertPhotoLayout.this.cameraOpened) {
                                 outline.setRect(0, 0, view.getMeasuredWidth(), view.getMeasuredHeight());
@@ -1809,11 +1807,11 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
                             }
                         }
                         ChatAttachAlertPhotoLayout.this.switchCameraButton.setImageResource(ChatAttachAlertPhotoLayout.this.cameraView.isFrontface() ? NUM : NUM);
-                        ImageView access$1800 = ChatAttachAlertPhotoLayout.this.switchCameraButton;
+                        ImageView access$1900 = ChatAttachAlertPhotoLayout.this.switchCameraButton;
                         if (ChatAttachAlertPhotoLayout.this.cameraView.hasFrontFaceCamera()) {
                             i = 0;
                         }
-                        access$1800.setVisibility(i);
+                        access$1900.setVisibility(i);
                         if (!ChatAttachAlertPhotoLayout.this.cameraOpened) {
                             AnimatorSet unused = ChatAttachAlertPhotoLayout.this.cameraInitAnimation = new AnimatorSet();
                             ChatAttachAlertPhotoLayout.this.cameraInitAnimation.playTogether(new Animator[]{ObjectAnimator.ofFloat(ChatAttachAlertPhotoLayout.this.cameraView, View.ALPHA, new float[]{0.0f, 1.0f}), ObjectAnimator.ofFloat(ChatAttachAlertPhotoLayout.this.cameraIcon, View.ALPHA, new float[]{0.0f, 1.0f})});
@@ -1850,12 +1848,12 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
                         public void onDraw(Canvas canvas) {
                             int intrinsicWidth = ChatAttachAlertPhotoLayout.this.cameraDrawable.getIntrinsicWidth();
                             int intrinsicHeight = ChatAttachAlertPhotoLayout.this.cameraDrawable.getIntrinsicHeight();
-                            int access$1100 = (ChatAttachAlertPhotoLayout.this.itemSize - intrinsicWidth) / 2;
-                            int access$11002 = (ChatAttachAlertPhotoLayout.this.itemSize - intrinsicHeight) / 2;
+                            int access$1200 = (ChatAttachAlertPhotoLayout.this.itemSize - intrinsicWidth) / 2;
+                            int access$12002 = (ChatAttachAlertPhotoLayout.this.itemSize - intrinsicHeight) / 2;
                             if (ChatAttachAlertPhotoLayout.this.cameraViewOffsetY != 0.0f) {
-                                access$11002 = (int) (((float) access$11002) - ChatAttachAlertPhotoLayout.this.cameraViewOffsetY);
+                                access$12002 = (int) (((float) access$12002) - ChatAttachAlertPhotoLayout.this.cameraViewOffsetY);
                             }
-                            ChatAttachAlertPhotoLayout.this.cameraDrawable.setBounds(access$1100, access$11002, intrinsicWidth + access$1100, intrinsicHeight + access$11002);
+                            ChatAttachAlertPhotoLayout.this.cameraDrawable.setBounds(access$1200, access$12002, intrinsicWidth + access$1200, intrinsicHeight + access$12002);
                             ChatAttachAlertPhotoLayout.this.cameraDrawable.draw(canvas);
                         }
                     };
@@ -1953,11 +1951,11 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
         }
     }
 
-    /* JADX WARNING: Code restructure failed: missing block: B:46:0x00fa, code lost:
-        if (new java.io.File(r0).exists() != false) goto L_0x00fd;
+    /* JADX WARNING: Code restructure failed: missing block: B:55:0x0115, code lost:
+        if (new java.io.File(r0).exists() != false) goto L_0x0118;
      */
-    /* JADX WARNING: Removed duplicated region for block: B:82:0x0160 A[SYNTHETIC, Splitter:B:82:0x0160] */
-    /* JADX WARNING: Removed duplicated region for block: B:91:0x01cb A[SYNTHETIC, Splitter:B:91:0x01cb] */
+    /* JADX WARNING: Removed duplicated region for block: B:100:0x01ea A[SYNTHETIC, Splitter:B:100:0x01ea] */
+    /* JADX WARNING: Removed duplicated region for block: B:91:0x017b A[SYNTHETIC, Splitter:B:91:0x017b] */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public void onActivityResultFragment(int r29, android.content.Intent r30, java.lang.String r31) {
         /*
@@ -1967,15 +1965,15 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
             r7 = r31
             org.telegram.ui.Components.ChatAttachAlert r2 = r1.parentAlert
             org.telegram.ui.ActionBar.BaseFragment r2 = r2.baseFragment
-            if (r2 == 0) goto L_0x01d5
+            if (r2 == 0) goto L_0x01f4
             android.app.Activity r2 = r2.getParentActivity()
             if (r2 != 0) goto L_0x0014
-            goto L_0x01d5
+            goto L_0x01f4
         L_0x0014:
             r14 = 1
             mediaFromExternalCamera = r14
             r15 = 0
-            if (r0 != 0) goto L_0x0080
+            if (r0 != 0) goto L_0x009b
             org.telegram.ui.PhotoViewer r0 = org.telegram.ui.PhotoViewer.getInstance()
             org.telegram.ui.Components.ChatAttachAlert r2 = r1.parentAlert
             org.telegram.ui.ActionBar.BaseFragment r2 = r2.baseFragment
@@ -2017,6 +2015,24 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
             org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)
             r8 = 0
         L_0x0063:
+            android.graphics.BitmapFactory$Options r0 = new android.graphics.BitmapFactory$Options     // Catch:{ Exception -> 0x007d }
+            r0.<init>()     // Catch:{ Exception -> 0x007d }
+            r0.inJustDecodeBounds = r14     // Catch:{ Exception -> 0x007d }
+            java.io.File r2 = new java.io.File     // Catch:{ Exception -> 0x007d }
+            r2.<init>(r7)     // Catch:{ Exception -> 0x007d }
+            java.lang.String r2 = r2.getAbsolutePath()     // Catch:{ Exception -> 0x007d }
+            android.graphics.BitmapFactory.decodeFile(r2, r0)     // Catch:{ Exception -> 0x007d }
+            int r2 = r0.outWidth     // Catch:{ Exception -> 0x007d }
+            int r0 = r0.outHeight     // Catch:{ Exception -> 0x007e }
+            r11 = r0
+            r10 = r2
+            goto L_0x0080
+        L_0x007d:
+            r2 = 0
+        L_0x007e:
+            r10 = r2
+            r11 = 0
+        L_0x0080:
             org.telegram.messenger.MediaController$PhotoEntry r0 = new org.telegram.messenger.MediaController$PhotoEntry
             r3 = 0
             int r4 = lastImageId
@@ -2024,20 +2040,18 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
             lastImageId = r2
             r5 = 0
             r9 = 0
-            r10 = 0
-            r11 = 0
             r12 = 0
             r2 = r0
             r7 = r31
             r2.<init>(r3, r4, r5, r7, r8, r9, r10, r11, r12)
             r0.canDeleteAfter = r14
             r1.openPhotoViewer(r0, r15, r14)
-            goto L_0x01d5
-        L_0x0080:
+            goto L_0x01f4
+        L_0x009b:
             r2 = 2
-            if (r0 != r2) goto L_0x01d5
+            if (r0 != r2) goto L_0x01f4
             boolean r0 = org.telegram.messenger.BuildVars.LOGS_ENABLED
-            if (r0 == 0) goto L_0x009b
+            if (r0 == 0) goto L_0x00b6
             java.lang.StringBuilder r0 = new java.lang.StringBuilder
             r0.<init>()
             java.lang.String r2 = "pic path "
@@ -2045,24 +2059,24 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
             r0.append(r7)
             java.lang.String r0 = r0.toString()
             org.telegram.messenger.FileLog.d(r0)
-        L_0x009b:
+        L_0x00b6:
             r2 = 0
-            if (r30 == 0) goto L_0x00ad
-            if (r7 == 0) goto L_0x00ad
+            if (r30 == 0) goto L_0x00c8
+            if (r7 == 0) goto L_0x00c8
             java.io.File r0 = new java.io.File
             r0.<init>(r7)
             boolean r0 = r0.exists()
-            if (r0 == 0) goto L_0x00ad
+            if (r0 == 0) goto L_0x00c8
             r0 = r2
-            goto L_0x00af
-        L_0x00ad:
+            goto L_0x00ca
+        L_0x00c8:
             r0 = r30
-        L_0x00af:
-            if (r0 == 0) goto L_0x0112
+        L_0x00ca:
+            if (r0 == 0) goto L_0x012d
             android.net.Uri r0 = r0.getData()
-            if (r0 == 0) goto L_0x00fc
+            if (r0 == 0) goto L_0x0117
             boolean r3 = org.telegram.messenger.BuildVars.LOGS_ENABLED
-            if (r3 == 0) goto L_0x00d3
+            if (r3 == 0) goto L_0x00ee
             java.lang.StringBuilder r3 = new java.lang.StringBuilder
             r3.<init>()
             java.lang.String r4 = "video record uri "
@@ -2071,10 +2085,10 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
             r3.append(r4)
             java.lang.String r3 = r3.toString()
             org.telegram.messenger.FileLog.d(r3)
-        L_0x00d3:
+        L_0x00ee:
             java.lang.String r0 = org.telegram.messenger.AndroidUtilities.getPath(r0)
             boolean r3 = org.telegram.messenger.BuildVars.LOGS_ENABLED
-            if (r3 == 0) goto L_0x00ef
+            if (r3 == 0) goto L_0x010a
             java.lang.StringBuilder r3 = new java.lang.StringBuilder
             r3.<init>()
             java.lang.String r4 = "resolved path = "
@@ -2082,118 +2096,118 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
             r3.append(r0)
             java.lang.String r3 = r3.toString()
             org.telegram.messenger.FileLog.d(r3)
-        L_0x00ef:
-            if (r0 == 0) goto L_0x00fc
+        L_0x010a:
+            if (r0 == 0) goto L_0x0117
             java.io.File r3 = new java.io.File
             r3.<init>(r0)
             boolean r3 = r3.exists()
-            if (r3 != 0) goto L_0x00fd
-        L_0x00fc:
+            if (r3 != 0) goto L_0x0118
+        L_0x0117:
             r0 = r7
-        L_0x00fd:
+        L_0x0118:
             org.telegram.ui.Components.ChatAttachAlert r3 = r1.parentAlert
             org.telegram.ui.ActionBar.BaseFragment r3 = r3.baseFragment
             boolean r4 = r3 instanceof org.telegram.ui.ChatActivity
-            if (r4 == 0) goto L_0x010d
+            if (r4 == 0) goto L_0x0128
             org.telegram.ui.ChatActivity r3 = (org.telegram.ui.ChatActivity) r3
             boolean r3 = r3.isSecretChat()
-            if (r3 != 0) goto L_0x0110
-        L_0x010d:
+            if (r3 != 0) goto L_0x012b
+        L_0x0128:
             org.telegram.messenger.AndroidUtilities.addMediaToGallery((java.lang.String) r31)
-        L_0x0110:
+        L_0x012b:
             r7 = r2
-            goto L_0x0113
-        L_0x0112:
+            goto L_0x012e
+        L_0x012d:
             r0 = r2
-        L_0x0113:
-            if (r0 != 0) goto L_0x0123
-            if (r7 == 0) goto L_0x0123
+        L_0x012e:
+            if (r0 != 0) goto L_0x013e
+            if (r7 == 0) goto L_0x013e
             java.io.File r3 = new java.io.File
             r3.<init>(r7)
             boolean r3 = r3.exists()
-            if (r3 == 0) goto L_0x0123
-            goto L_0x0124
-        L_0x0123:
+            if (r3 == 0) goto L_0x013e
+            goto L_0x013f
+        L_0x013e:
             r7 = r0
-        L_0x0124:
+        L_0x013f:
             r3 = 0
-            android.media.MediaMetadataRetriever r5 = new android.media.MediaMetadataRetriever     // Catch:{ Exception -> 0x015a }
-            r5.<init>()     // Catch:{ Exception -> 0x015a }
-            r5.setDataSource(r7)     // Catch:{ Exception -> 0x0154, all -> 0x014f }
+            android.media.MediaMetadataRetriever r5 = new android.media.MediaMetadataRetriever     // Catch:{ Exception -> 0x0175 }
+            r5.<init>()     // Catch:{ Exception -> 0x0175 }
+            r5.setDataSource(r7)     // Catch:{ Exception -> 0x016f, all -> 0x016a }
             r0 = 9
-            java.lang.String r0 = r5.extractMetadata(r0)     // Catch:{ Exception -> 0x0154, all -> 0x014f }
-            if (r0 == 0) goto L_0x0145
-            long r8 = java.lang.Long.parseLong(r0)     // Catch:{ Exception -> 0x0154, all -> 0x014f }
-            float r0 = (float) r8     // Catch:{ Exception -> 0x0154, all -> 0x014f }
+            java.lang.String r0 = r5.extractMetadata(r0)     // Catch:{ Exception -> 0x016f, all -> 0x016a }
+            if (r0 == 0) goto L_0x0160
+            long r8 = java.lang.Long.parseLong(r0)     // Catch:{ Exception -> 0x016f, all -> 0x016a }
+            float r0 = (float) r8     // Catch:{ Exception -> 0x016f, all -> 0x016a }
             r2 = 1148846080(0x447a0000, float:1000.0)
             float r0 = r0 / r2
-            double r8 = (double) r0     // Catch:{ Exception -> 0x0154, all -> 0x014f }
-            double r2 = java.lang.Math.ceil(r8)     // Catch:{ Exception -> 0x0154, all -> 0x014f }
+            double r8 = (double) r0     // Catch:{ Exception -> 0x016f, all -> 0x016a }
+            double r2 = java.lang.Math.ceil(r8)     // Catch:{ Exception -> 0x016f, all -> 0x016a }
             int r0 = (int) r2
             long r3 = (long) r0
-        L_0x0145:
-            r5.release()     // Catch:{ Exception -> 0x0149 }
-            goto L_0x0163
-        L_0x0149:
+        L_0x0160:
+            r5.release()     // Catch:{ Exception -> 0x0164 }
+            goto L_0x017e
+        L_0x0164:
             r0 = move-exception
             r2 = r0
             org.telegram.messenger.FileLog.e((java.lang.Throwable) r2)
-            goto L_0x0163
-        L_0x014f:
+            goto L_0x017e
+        L_0x016a:
             r0 = move-exception
             r3 = r0
             r2 = r5
-            goto L_0x01c9
-        L_0x0154:
+            goto L_0x01e8
+        L_0x016f:
             r0 = move-exception
             r2 = r5
-            goto L_0x015b
-        L_0x0157:
+            goto L_0x0176
+        L_0x0172:
             r0 = move-exception
             r3 = r0
-            goto L_0x01c9
-        L_0x015a:
+            goto L_0x01e8
+        L_0x0175:
             r0 = move-exception
-        L_0x015b:
-            org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)     // Catch:{ all -> 0x0157 }
-            if (r2 == 0) goto L_0x0163
-            r2.release()     // Catch:{ Exception -> 0x0149 }
-        L_0x0163:
-            android.graphics.Bitmap r0 = org.telegram.messenger.SendMessagesHelper.createVideoThumbnail(r7, r14)
-            java.lang.StringBuilder r2 = new java.lang.StringBuilder
-            r2.<init>()
+        L_0x0176:
+            org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)     // Catch:{ all -> 0x0172 }
+            if (r2 == 0) goto L_0x017e
+            r2.release()     // Catch:{ Exception -> 0x0164 }
+        L_0x017e:
+            android.graphics.Bitmap r2 = org.telegram.messenger.SendMessagesHelper.createVideoThumbnail(r7, r14)
+            java.lang.StringBuilder r0 = new java.lang.StringBuilder
+            r0.<init>()
             java.lang.String r5 = "-2147483648_"
-            r2.append(r5)
+            r0.append(r5)
             int r5 = org.telegram.messenger.SharedConfig.getLastLocalId()
-            r2.append(r5)
+            r0.append(r5)
             java.lang.String r5 = ".jpg"
-            r2.append(r5)
-            java.lang.String r2 = r2.toString()
+            r0.append(r5)
+            java.lang.String r0 = r0.toString()
             java.io.File r5 = new java.io.File
             r6 = 4
             java.io.File r6 = org.telegram.messenger.FileLoader.getDirectory(r6)
-            r5.<init>(r6, r2)
-            java.io.FileOutputStream r2 = new java.io.FileOutputStream     // Catch:{ all -> 0x0198 }
-            r2.<init>(r5)     // Catch:{ all -> 0x0198 }
-            android.graphics.Bitmap$CompressFormat r6 = android.graphics.Bitmap.CompressFormat.JPEG     // Catch:{ all -> 0x0198 }
+            r5.<init>(r6, r0)
+            java.io.FileOutputStream r0 = new java.io.FileOutputStream     // Catch:{ all -> 0x01b3 }
+            r0.<init>(r5)     // Catch:{ all -> 0x01b3 }
+            android.graphics.Bitmap$CompressFormat r6 = android.graphics.Bitmap.CompressFormat.JPEG     // Catch:{ all -> 0x01b3 }
             r8 = 55
-            r0.compress(r6, r8, r2)     // Catch:{ all -> 0x0198 }
-            goto L_0x019c
-        L_0x0198:
+            r2.compress(r6, r8, r0)     // Catch:{ all -> 0x01b3 }
+            goto L_0x01b7
+        L_0x01b3:
             r0 = move-exception
             org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)
-        L_0x019c:
+        L_0x01b7:
             org.telegram.messenger.SharedConfig.saveConfig()
             org.telegram.messenger.MediaController$PhotoEntry r0 = new org.telegram.messenger.MediaController$PhotoEntry
             r17 = 0
             int r18 = lastImageId
-            int r2 = r18 + -1
-            lastImageId = r2
+            int r6 = r18 + -1
+            lastImageId = r6
             r19 = 0
             r22 = 0
             r23 = 1
-            r24 = 0
-            r25 = 0
+            int r24 = r2.getWidth()
+            int r25 = r2.getHeight()
             r26 = 0
             r16 = r0
             r21 = r7
@@ -2203,18 +2217,18 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
             java.lang.String r2 = r5.getAbsolutePath()
             r0.thumbPath = r2
             r1.openPhotoViewer(r0, r15, r14)
-            goto L_0x01d5
-        L_0x01c9:
-            if (r2 == 0) goto L_0x01d4
-            r2.release()     // Catch:{ Exception -> 0x01cf }
-            goto L_0x01d4
-        L_0x01cf:
+            goto L_0x01f4
+        L_0x01e8:
+            if (r2 == 0) goto L_0x01f3
+            r2.release()     // Catch:{ Exception -> 0x01ee }
+            goto L_0x01f3
+        L_0x01ee:
             r0 = move-exception
             r2 = r0
             org.telegram.messenger.FileLog.e((java.lang.Throwable) r2)
-        L_0x01d4:
+        L_0x01f3:
             throw r3
-        L_0x01d5:
+        L_0x01f4:
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.ChatAttachAlertPhotoLayout.onActivityResultFragment(int, android.content.Intent, java.lang.String):void");
@@ -2391,7 +2405,6 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
             } else {
                 this.cameraIcon.setAlpha(0.0f);
             }
-            Log.i("caapl", "cameraViewH=" + i2 + " (endHeight=" + height + ") value=" + f2);
             if (!(layoutParams.width == i && layoutParams.height == i2)) {
                 layoutParams.width = i;
                 layoutParams.height = i2;
@@ -2797,7 +2810,7 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
         }
     }
 
-    private boolean captionForAllMedia() {
+    public boolean captionForAllMedia() {
         int i = 0;
         for (int i2 = 0; i2 < selectedPhotosOrder.size(); i2++) {
             Object obj = selectedPhotos.get(selectedPhotosOrder.get(i2));
@@ -3041,7 +3054,6 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
 
     /* access modifiers changed from: package-private */
     public void onShow(ChatAttachAlert.AttachAlertLayout attachAlertLayout) {
-        CameraSession cameraSession;
         ViewPropertyAnimator viewPropertyAnimator = this.headerAnimator;
         if (viewPropertyAnimator != null) {
             viewPropertyAnimator.cancel();
@@ -3062,14 +3074,7 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
             this.gridView.post(new ChatAttachAlertPhotoLayout$$ExternalSyntheticLambda11(this, attachAlertLayout));
         }
         checkCameraViewPosition();
-        try {
-            CameraView cameraView2 = this.cameraView;
-            if (cameraView2 != null && (cameraSession = cameraView2.getCameraSession()) != null) {
-                CameraController.getInstance().startPreview(cameraSession);
-            }
-        } catch (Exception e) {
-            FileLog.e((Throwable) e);
-        }
+        resumeCameraPreview();
     }
 
     /* access modifiers changed from: private */
@@ -3136,7 +3141,6 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
     }
 
     public void onHide() {
-        CameraSession cameraSession;
         this.isHidden = true;
         int childCount = this.gridView.getChildCount();
         int i = 0;
@@ -3160,6 +3164,17 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
         ViewPropertyAnimator withEndAction = this.dropDown.animate().alpha(0.0f).setDuration(150).setInterpolator(CubicBezierInterpolator.EASE_BOTH).withEndAction(new ChatAttachAlertPhotoLayout$$ExternalSyntheticLambda7(this));
         this.headerAnimator = withEndAction;
         withEndAction.start();
+        pauseCameraPreview();
+    }
+
+    /* access modifiers changed from: private */
+    public /* synthetic */ void lambda$onHide$17() {
+        this.dropDownContainer.setVisibility(8);
+    }
+
+    /* access modifiers changed from: private */
+    public void pauseCameraPreview() {
+        CameraSession cameraSession;
         try {
             CameraView cameraView2 = this.cameraView;
             if (cameraView2 != null && (cameraSession = cameraView2.getCameraSession()) != null) {
@@ -3171,8 +3186,16 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$onHide$17() {
-        this.dropDownContainer.setVisibility(8);
+    public void resumeCameraPreview() {
+        CameraSession cameraSession;
+        try {
+            CameraView cameraView2 = this.cameraView;
+            if (cameraView2 != null && (cameraSession = cameraView2.getCameraSession()) != null) {
+                CameraController.getInstance().startPreview(cameraSession);
+            }
+        } catch (Exception e) {
+            FileLog.e((Throwable) e);
+        }
     }
 
     /* access modifiers changed from: package-private */

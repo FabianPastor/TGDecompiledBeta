@@ -19,7 +19,7 @@ public class LocationDirectionCell extends FrameLayout {
         this.resourcesProvider = resourcesProvider2;
         FrameLayout frameLayout2 = new FrameLayout(context);
         this.frameLayout = frameLayout2;
-        frameLayout2.setBackgroundDrawable(Theme.createSimpleSelectorRoundRectDrawable(AndroidUtilities.dp(4.0f), getThemedColor("featuredStickers_addButton"), getThemedColor("featuredStickers_addButtonPressed")));
+        frameLayout2.setBackground(Theme.AdaptiveRipple.filledRect(getThemedColor("featuredStickers_addButton"), 4.0f));
         addView(this.frameLayout, LayoutHelper.createFrame(-1, 48.0f, 51, 16.0f, 10.0f, 16.0f, 0.0f));
         SimpleTextView simpleTextView = new SimpleTextView(context);
         this.buttonTextView = simpleTextView;

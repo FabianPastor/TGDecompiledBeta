@@ -14,6 +14,6 @@ public final /* synthetic */ class FileRefController$$ExternalSyntheticLambda5 i
     }
 
     public final void run() {
-        this.f$0.lambda$onUpdateObjectReference$21(this.f$1, this.f$2);
+        this.f$0.lambda$sendErrorToObject$30(this.f$1, this.f$2);
     }
 }

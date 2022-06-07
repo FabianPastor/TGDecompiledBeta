@@ -10,6 +10,6 @@ public final /* synthetic */ class BotWebViewMenuContainer$$ExternalSyntheticLam
     }
 
     public final void accept(Object obj) {
-        this.f$0.lambda$new$8((Float) obj);
+        this.f$0.lambda$new$9((Float) obj);
     }
 }

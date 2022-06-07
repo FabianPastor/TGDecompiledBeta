@@ -1,15 +1,22 @@
 package org.telegram.messenger;
 
-import java.util.Comparator;
-import org.telegram.tgnet.TLRPC$MessageEntity;
+import java.util.ArrayList;
+import org.telegram.messenger.MediaDataController;
 
-public final /* synthetic */ class MediaDataController$$ExternalSyntheticLambda119 implements Comparator {
-    public static final /* synthetic */ MediaDataController$$ExternalSyntheticLambda119 INSTANCE = new MediaDataController$$ExternalSyntheticLambda119();
+public final /* synthetic */ class MediaDataController$$ExternalSyntheticLambda119 implements Runnable {
+    public final /* synthetic */ MediaDataController f$0;
+    public final /* synthetic */ String[] f$1;
+    public final /* synthetic */ MediaDataController.KeywordResultCallback f$2;
+    public final /* synthetic */ ArrayList f$3;
 
-    private /* synthetic */ MediaDataController$$ExternalSyntheticLambda119() {
+    public /* synthetic */ MediaDataController$$ExternalSyntheticLambda119(MediaDataController mediaDataController, String[] strArr, MediaDataController.KeywordResultCallback keywordResultCallback, ArrayList arrayList) {
+        this.f$0 = mediaDataController;
+        this.f$1 = strArr;
+        this.f$2 = keywordResultCallback;
+        this.f$3 = arrayList;
     }
 
-    public final int compare(Object obj, Object obj2) {
-        return MediaDataController.lambda$getTextStyleRuns$130((TLRPC$MessageEntity) obj, (TLRPC$MessageEntity) obj2);
+    public final void run() {
+        this.f$0.lambda$getEmojiSuggestions$171(this.f$1, this.f$2, this.f$3);
     }
 }

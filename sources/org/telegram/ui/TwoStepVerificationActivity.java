@@ -218,7 +218,7 @@ public class TwoStepVerificationActivity extends BaseFragment implements Notific
             r0 = r32
             r1 = r33
             org.telegram.ui.ActionBar.ActionBar r2 = r0.actionBar
-            r3 = 2131165503(0x7var_f, float:1.7945225E38)
+            r3 = 2131165449(0x7var_, float:1.7945115E38)
             r2.setBackButtonImage(r3)
             org.telegram.ui.ActionBar.ActionBar r2 = r0.actionBar
             r3 = 0
@@ -275,7 +275,7 @@ public class TwoStepVerificationActivity extends BaseFragment implements Notific
             org.telegram.ui.Components.RLottieImageView r10 = new org.telegram.ui.Components.RLottieImageView
             r10.<init>(r1)
             r0.lockImageView = r10
-            r11 = 2131558540(0x7f0d008c, float:1.8742399E38)
+            r11 = 2131558542(0x7f0d008e, float:1.8742403E38)
             r12 = 120(0x78, float:1.68E-43)
             r10.setAnimation(r11, r12, r12)
             org.telegram.ui.Components.RLottieImageView r10 = r0.lockImageView
@@ -348,7 +348,7 @@ public class TwoStepVerificationActivity extends BaseFragment implements Notific
             org.telegram.ui.Components.OutlineTextContainerView r10 = new org.telegram.ui.Components.OutlineTextContainerView
             r10.<init>(r1)
             r0.passwordOutlineView = r10
-            r15 = 2131625555(0x7f0e0653, float:1.8878321E38)
+            r15 = 2131625644(0x7f0e06ac, float:1.8878502E38)
             java.lang.String r9 = org.telegram.messenger.LocaleController.getString((int) r15)
             r10.setText(r9)
             org.telegram.ui.Components.OutlineTextContainerView r9 = r0.passwordOutlineView
@@ -442,7 +442,7 @@ public class TwoStepVerificationActivity extends BaseFragment implements Notific
             r13 = r13 | 48
             r4.setGravity(r13)
             android.widget.TextView r4 = r0.bottomTextView
-            r13 = 2131629049(0x7f0e13f9, float:1.8885408E38)
+            r13 = 2131629270(0x7f0e14d6, float:1.8885856E38)
             java.lang.String r15 = "YourEmailInfo"
             java.lang.String r13 = org.telegram.messenger.LocaleController.getString(r15, r13)
             r4.setText(r13)
@@ -545,7 +545,7 @@ public class TwoStepVerificationActivity extends BaseFragment implements Notific
             int r6 = org.telegram.messenger.AndroidUtilities.dp(r6)
             r4.setPadding(r12, r3, r6, r3)
             android.widget.TextView r4 = r0.cancelResetButton
-            r6 = 2131624773(0x7f0e0345, float:1.8876735E38)
+            r6 = 2131624833(0x7f0e0381, float:1.8876857E38)
             java.lang.String r12 = "CancelReset"
             java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r12, r6)
             r4.setText(r6)
@@ -646,7 +646,7 @@ public class TwoStepVerificationActivity extends BaseFragment implements Notific
             org.telegram.ui.Components.TransformableLoginButtonView r4 = r0.floatingButtonIcon
             r4.setDrawBackground(r3)
             android.widget.FrameLayout r4 = r0.floatingButtonContainer
-            r6 = 2131626648(0x7f0e0a98, float:1.8880538E38)
+            r6 = 2131626791(0x7f0e0b27, float:1.8880828E38)
             java.lang.String r6 = org.telegram.messenger.LocaleController.getString((int) r6)
             r4.setContentDescription(r6)
             android.widget.FrameLayout r4 = r0.floatingButtonContainer
@@ -674,7 +674,7 @@ public class TwoStepVerificationActivity extends BaseFragment implements Notific
             android.graphics.drawable.Drawable r4 = org.telegram.ui.ActionBar.Theme.createSimpleSelectorCircleDrawable(r6, r4, r9)
             if (r10 >= r15) goto L_0x045e
             android.content.res.Resources r6 = r33.getResources()
-            r9 = 2131165451(0x7var_b, float:1.794512E38)
+            r9 = 2131165414(0x7var_e6, float:1.7945044E38)
             android.graphics.drawable.Drawable r6 = r6.getDrawable(r9)
             android.graphics.drawable.Drawable r6 = r6.mutate()
             android.graphics.PorterDuffColorFilter r9 = new android.graphics.PorterDuffColorFilter
@@ -781,7 +781,7 @@ public class TwoStepVerificationActivity extends BaseFragment implements Notific
             boolean r1 = r0.passwordEntered
             if (r1 == 0) goto L_0x0533
             org.telegram.ui.ActionBar.ActionBar r1 = r0.actionBar
-            r2 = 2131628480(0x7f0e11c0, float:1.8884254E38)
+            r2 = 2131628696(0x7f0e1298, float:1.8884692E38)
             java.lang.String r4 = "TwoStepVerificationTitle"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r4, r2)
             r1.setTitle(r2)
@@ -794,20 +794,20 @@ public class TwoStepVerificationActivity extends BaseFragment implements Notific
             org.telegram.ui.TwoStepVerificationActivity$TwoStepVerificationActivityDelegate r1 = r0.delegate
             if (r1 == 0) goto L_0x054c
             android.widget.TextView r1 = r0.titleTextView
-            r2 = 2131627398(0x7f0e0d86, float:1.888206E38)
+            r2 = 2131627550(0x7f0e0e1e, float:1.8882368E38)
             java.lang.String r3 = "PleaseEnterCurrentPasswordTransfer"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             r1.setText(r2)
             goto L_0x0569
         L_0x054c:
             android.widget.TextView r1 = r0.titleTextView
-            r2 = 2131629059(0x7f0e1403, float:1.8885428E38)
+            r2 = 2131629280(0x7f0e14e0, float:1.8885876E38)
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString((int) r2)
             r1.setText(r2)
             android.widget.TextView r1 = r0.subtitleTextView
             r1.setVisibility(r3)
             android.widget.TextView r1 = r0.subtitleTextView
-            r2 = 2131626353(0x7f0e0971, float:1.887994E38)
+            r2 = 2131626496(0x7f0e0a00, float:1.888023E38)
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString((int) r2)
             r1.setText(r2)
         L_0x0569:
@@ -975,13 +975,13 @@ public class TwoStepVerificationActivity extends BaseFragment implements Notific
         } else if (tLObject instanceof TLRPC$TL_account_resetPasswordFailedWait) {
             int currentTime = ((TLRPC$TL_account_resetPasswordFailedWait) tLObject).retry_date - getConnectionsManager().getCurrentTime();
             if (currentTime > 86400) {
-                str = LocaleController.formatPluralString("Days", currentTime / 86400);
+                str = LocaleController.formatPluralString("Days", currentTime / 86400, new Object[0]);
             } else if (currentTime > 3600) {
-                str = LocaleController.formatPluralString("Hours", currentTime / 86400);
+                str = LocaleController.formatPluralString("Hours", currentTime / 86400, new Object[0]);
             } else if (currentTime > 60) {
-                str = LocaleController.formatPluralString("Minutes", currentTime / 60);
+                str = LocaleController.formatPluralString("Minutes", currentTime / 60, new Object[0]);
             } else {
-                str = LocaleController.formatPluralString("Seconds", Math.max(1, currentTime));
+                str = LocaleController.formatPluralString("Seconds", Math.max(1, currentTime), new Object[0]);
             }
             showAlertWithText(LocaleController.getString("ResetPassword", NUM), LocaleController.formatString("ResetPasswordWait", NUM, str));
         }
@@ -1016,9 +1016,9 @@ public class TwoStepVerificationActivity extends BaseFragment implements Notific
             } else {
                 int max = Math.max(1, i - getConnectionsManager().getCurrentTime());
                 if (max > 86400) {
-                    str = LocaleController.formatPluralString("Days", max / 86400);
+                    str = LocaleController.formatPluralString("Days", max / 86400, new Object[0]);
                 } else if (max >= 3600) {
-                    str = LocaleController.formatPluralString("Hours", max / 3600);
+                    str = LocaleController.formatPluralString("Hours", max / 3600, new Object[0]);
                 } else {
                     str = String.format(Locale.US, "%02d:%02d", new Object[]{Integer.valueOf(max / 60), Integer.valueOf(max % 60)});
                 }
@@ -1097,11 +1097,11 @@ public class TwoStepVerificationActivity extends BaseFragment implements Notific
             r8.setCurrentPasswordParams(this.currentPasswordHash, this.currentSecretId, this.currentSecret, false);
             presentFragment(r8);
         } else if (tLRPC$TL_error.text.startsWith("FLOOD_WAIT")) {
-            int intValue = Utilities.parseInt(tLRPC$TL_error.text).intValue();
+            int intValue = Utilities.parseInt((CharSequence) tLRPC$TL_error.text).intValue();
             if (intValue < 60) {
-                str = LocaleController.formatPluralString("Seconds", intValue);
+                str = LocaleController.formatPluralString("Seconds", intValue, new Object[0]);
             } else {
-                str = LocaleController.formatPluralString("Minutes", intValue / 60);
+                str = LocaleController.formatPluralString("Minutes", intValue / 60, new Object[0]);
             }
             showAlertWithText(LocaleController.getString("AppName", NUM), LocaleController.formatString("FloodWaitTime", NUM, str));
         } else {
@@ -1466,11 +1466,11 @@ public class TwoStepVerificationActivity extends BaseFragment implements Notific
             } else if (tLRPC$TL_error == null) {
             } else {
                 if (tLRPC$TL_error.text.startsWith("FLOOD_WAIT")) {
-                    int intValue = Utilities.parseInt(tLRPC$TL_error.text).intValue();
+                    int intValue = Utilities.parseInt((CharSequence) tLRPC$TL_error.text).intValue();
                     if (intValue < 60) {
-                        str = LocaleController.formatPluralString("Seconds", intValue);
+                        str = LocaleController.formatPluralString("Seconds", intValue, new Object[0]);
                     } else {
-                        str = LocaleController.formatPluralString("Minutes", intValue / 60);
+                        str = LocaleController.formatPluralString("Minutes", intValue / 60, new Object[0]);
                     }
                     showAlertWithText(LocaleController.getString("AppName", NUM), LocaleController.formatString("FloodWaitTime", NUM, str));
                     return;
@@ -1646,11 +1646,11 @@ public class TwoStepVerificationActivity extends BaseFragment implements Notific
         if ("PASSWORD_HASH_INVALID".equals(tLRPC$TL_error.text)) {
             onFieldError(this.passwordOutlineView, this.passwordEditText, true);
         } else if (tLRPC$TL_error.text.startsWith("FLOOD_WAIT")) {
-            int intValue = Utilities.parseInt(tLRPC$TL_error.text).intValue();
+            int intValue = Utilities.parseInt((CharSequence) tLRPC$TL_error.text).intValue();
             if (intValue < 60) {
-                str = LocaleController.formatPluralString("Seconds", intValue);
+                str = LocaleController.formatPluralString("Seconds", intValue, new Object[0]);
             } else {
-                str = LocaleController.formatPluralString("Minutes", intValue / 60);
+                str = LocaleController.formatPluralString("Minutes", intValue / 60, new Object[0]);
             }
             showAlertWithText(LocaleController.getString("AppName", NUM), LocaleController.formatString("FloodWaitTime", NUM, str));
         } else {
@@ -1799,7 +1799,7 @@ public class TwoStepVerificationActivity extends BaseFragment implements Notific
     public void showSetForcePasswordAlert() {
         AlertDialog.Builder builder = new AlertDialog.Builder((Context) getParentActivity());
         builder.setTitle(LocaleController.getString("Warning", NUM));
-        builder.setMessage(LocaleController.formatPluralString("ForceSetPasswordAlertMessageShort", this.otherwiseReloginDays));
+        builder.setMessage(LocaleController.formatPluralString("ForceSetPasswordAlertMessageShort", this.otherwiseReloginDays, new Object[0]));
         builder.setPositiveButton(LocaleController.getString("TwoStepVerificationSetPassword", NUM), (DialogInterface.OnClickListener) null);
         builder.setNegativeButton(LocaleController.getString("ForceSetPasswordCancel", NUM), new TwoStepVerificationActivity$$ExternalSyntheticLambda1(this));
         ((TextView) builder.show().getButton(-2)).setTextColor(Theme.getColor("dialogTextRed2"));

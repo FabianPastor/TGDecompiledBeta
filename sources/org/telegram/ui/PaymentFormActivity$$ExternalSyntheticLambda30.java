@@ -1,16 +1,15 @@
 package org.telegram.ui;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
+import android.view.KeyEvent;
+import android.widget.TextView;
 
-public final /* synthetic */ class PaymentFormActivity$$ExternalSyntheticLambda30 implements OnCompleteListener {
-    public final /* synthetic */ PaymentFormActivity f$0;
+public final /* synthetic */ class PaymentFormActivity$$ExternalSyntheticLambda30 implements TextView.OnEditorActionListener {
+    public static final /* synthetic */ PaymentFormActivity$$ExternalSyntheticLambda30 INSTANCE = new PaymentFormActivity$$ExternalSyntheticLambda30();
 
-    public /* synthetic */ PaymentFormActivity$$ExternalSyntheticLambda30(PaymentFormActivity paymentFormActivity) {
-        this.f$0 = paymentFormActivity;
+    private /* synthetic */ PaymentFormActivity$$ExternalSyntheticLambda30() {
     }
 
-    public final void onComplete(Task task) {
-        this.f$0.lambda$initGooglePay$35(task);
+    public final boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
+        return PaymentFormActivity.lambda$createView$14(textView, i, keyEvent);
     }
 }

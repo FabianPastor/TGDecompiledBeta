@@ -14,7 +14,12 @@ import androidx.dynamicanimation.animation.SpringAnimation;
 import androidx.dynamicanimation.animation.SpringForce;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ImageReceiver;
+import org.telegram.messenger.LocaleController;
+import org.telegram.messenger.UserObject;
 import org.telegram.tgnet.TLObject;
+import org.telegram.tgnet.TLRPC$Chat;
+import org.telegram.tgnet.TLRPC$ChatInvite;
+import org.telegram.tgnet.TLRPC$User;
 import org.telegram.ui.ActionBar.Theme;
 
 public class SenderSelectView extends View {
@@ -45,6 +50,7 @@ public class SenderSelectView extends View {
         this.menuPaint.setStrokeCap(Paint.Cap.ROUND);
         this.menuPaint.setStyle(Paint.Style.STROKE);
         updateColors();
+        setContentDescription(LocaleController.formatString("AccDescrSendAsPeer", NUM, ""));
     }
 
     private void updateColors() {
@@ -102,6 +108,15 @@ public class SenderSelectView extends View {
     }
 
     public void setAvatar(TLObject tLObject) {
+        String str;
+        if (tLObject instanceof TLRPC$User) {
+            str = UserObject.getFirstName((TLRPC$User) tLObject);
+        } else if (tLObject instanceof TLRPC$Chat) {
+            str = ((TLRPC$Chat) tLObject).title;
+        } else {
+            str = tLObject instanceof TLRPC$ChatInvite ? ((TLRPC$ChatInvite) tLObject).title : "";
+        }
+        setContentDescription(LocaleController.formatString("AccDescrSendAsPeer", NUM, str));
         this.avatarDrawable.setInfo(tLObject);
         this.avatarImage.setForUserOrChat(tLObject, this.avatarDrawable);
     }

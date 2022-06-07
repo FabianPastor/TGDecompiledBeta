@@ -447,7 +447,7 @@ public class PhotoAlbumPickerActivity extends BaseFragment implements Notificati
         AnonymousClass3 r22 = new FrameLayout(context2) {
             public void onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo accessibilityNodeInfo) {
                 super.onInitializeAccessibilityNodeInfo(accessibilityNodeInfo);
-                accessibilityNodeInfo.setText(LocaleController.formatPluralString("AccDescrSendPhotos", PhotoAlbumPickerActivity.this.selectedPhotos.size()));
+                accessibilityNodeInfo.setText(LocaleController.formatPluralString("AccDescrSendPhotos", PhotoAlbumPickerActivity.this.selectedPhotos.size(), new Object[0]));
                 accessibilityNodeInfo.setClassName(Button.class.getName());
                 accessibilityNodeInfo.setLongClickable(true);
                 accessibilityNodeInfo.setClickable(true);
@@ -577,7 +577,7 @@ public class PhotoAlbumPickerActivity extends BaseFragment implements Notificati
                     }
                 });
                 this.sendPopupLayout.setDispatchKeyEventListener(new PhotoAlbumPickerActivity$$ExternalSyntheticLambda5(this));
-                this.sendPopupLayout.setShownFromBotton(false);
+                this.sendPopupLayout.setShownFromBottom(false);
                 this.itemCells = new ActionBarMenuSubItem[2];
                 int i = 0;
                 while (i < 2) {

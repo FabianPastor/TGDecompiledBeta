@@ -1,53 +1,44 @@
 package j$.util.stream;
 
-import j$.util.CLASSNAMEa;
-import j$.util.Collection$EL;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.Iterator;
+import java.util.Arrays;
 
-final class O3 extends G3 {
-    private ArrayList d;
+final class O3 extends C3 {
+    private double[] c;
+    private int d;
 
-    O3(CLASSNAMEn3 n3Var, Comparator comparator) {
-        super(n3Var, comparator);
+    O3(CLASSNAMEm3 m3Var) {
+        super(m3Var);
     }
 
-    public void accept(Object obj) {
-        this.d.add(obj);
+    public void accept(double d2) {
+        double[] dArr = this.c;
+        int i = this.d;
+        this.d = i + 1;
+        dArr[i] = d2;
     }
 
     public void m() {
-        CLASSNAMEa.G(this.d, this.b);
-        this.a.n((long) this.d.size());
-        if (!this.c) {
-            ArrayList arrayList = this.d;
-            CLASSNAMEn3 n3Var = this.a;
-            n3Var.getClass();
-            Collection$EL.a(arrayList, new CLASSNAMEb(n3Var));
+        int i = 0;
+        Arrays.sort(this.c, 0, this.d);
+        this.a.n((long) this.d);
+        if (!this.b) {
+            while (i < this.d) {
+                this.a.accept(this.c[i]);
+                i++;
+            }
         } else {
-            Iterator it = this.d.iterator();
-            while (it.hasNext()) {
-                Object next = it.next();
-                if (this.a.o()) {
-                    break;
-                }
-                this.a.accept(next);
+            while (i < this.d && !this.a.o()) {
+                this.a.accept(this.c[i]);
+                i++;
             }
         }
         this.a.m();
-        this.d = null;
+        this.c = null;
     }
 
     public void n(long j) {
-        ArrayList arrayList;
         if (j < NUM) {
-            if (j >= 0) {
-                int i = (int) j;
-            } else {
-                arrayList = new ArrayList();
-            }
-            this.d = arrayList;
+            this.c = new double[((int) j)];
             return;
         }
         throw new IllegalArgumentException("Stream size exceeds max array size");

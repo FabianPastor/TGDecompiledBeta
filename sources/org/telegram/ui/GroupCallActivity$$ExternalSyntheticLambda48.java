@@ -1,17 +1,12 @@
 package org.telegram.ui;
 
-import org.telegram.tgnet.RequestDelegate;
-import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC$TL_error;
+public final /* synthetic */ class GroupCallActivity$$ExternalSyntheticLambda48 implements Runnable {
+    public static final /* synthetic */ GroupCallActivity$$ExternalSyntheticLambda48 INSTANCE = new GroupCallActivity$$ExternalSyntheticLambda48();
 
-public final /* synthetic */ class GroupCallActivity$$ExternalSyntheticLambda48 implements RequestDelegate {
-    public final /* synthetic */ GroupCallActivity f$0;
-
-    public /* synthetic */ GroupCallActivity$$ExternalSyntheticLambda48(GroupCallActivity groupCallActivity) {
-        this.f$0 = groupCallActivity;
+    private /* synthetic */ GroupCallActivity$$ExternalSyntheticLambda48() {
     }
 
-    public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        this.f$0.lambda$toggleAdminSpeak$62(tLObject, tLRPC$TL_error);
+    public final void run() {
+        GroupCallActivity.lambda$new$0();
     }
 }

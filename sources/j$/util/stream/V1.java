@@ -1,40 +1,55 @@
 package j$.util.stream;
 
 import j$.util.function.Consumer;
-import j$.util.function.e;
 import j$.util.function.f;
-import java.util.Arrays;
+import j$.util.function.m;
+import j$.util.t;
+import j$.util.u;
+import j$.util.w;
 
-final class V1 extends U1 implements CLASSNAMEq1 {
-    V1(long j) {
-        super(j);
+final class V1 extends U3 implements CLASSNAMEu1, CLASSNAMEp1 {
+    V1() {
     }
 
-    public CLASSNAMEv1 a() {
-        if (this.b >= this.a.length) {
-            return this;
-        }
-        throw new IllegalStateException(String.format("Current size %d is less than fixed size %d", new Object[]{Integer.valueOf(this.b), Integer.valueOf(this.a.length)}));
+    public t B() {
+        return super.spliterator();
+    }
+
+    /* renamed from: C */
+    public /* synthetic */ void accept(Double d) {
+        CLASSNAMEo1.a(this, d);
+    }
+
+    /* renamed from: D */
+    public /* synthetic */ void i(Double[] dArr, int i) {
+        CLASSNAMEo1.h(this, dArr, i);
+    }
+
+    /* renamed from: E */
+    public /* synthetic */ CLASSNAMEu1 r(long j, long j2, m mVar) {
+        return CLASSNAMEo1.n(this, j, j2, mVar);
+    }
+
+    public A1 a() {
+        return this;
+    }
+
+    /* renamed from: a  reason: collision with other method in class */
+    public CLASSNAMEu1 m6a() {
+        return this;
     }
 
     public void accept(double d) {
-        int i = this.b;
-        double[] dArr = this.a;
-        if (i < dArr.length) {
-            this.b = i + 1;
-            dArr[i] = d;
-            return;
-        }
-        throw new IllegalStateException(String.format("Accept exceeded fixed size of %d", new Object[]{Integer.valueOf(this.a.length)}));
+        super.accept(d);
     }
 
     public /* synthetic */ void accept(int i) {
-        CLASSNAMEp1.d(this);
+        CLASSNAMEo1.d(this);
         throw null;
     }
 
     public /* synthetic */ void accept(long j) {
-        CLASSNAMEp1.e(this);
+        CLASSNAMEo1.e(this);
         throw null;
     }
 
@@ -42,35 +57,48 @@ final class V1 extends U1 implements CLASSNAMEq1 {
         return Consumer.CC.$default$andThen(this, consumer);
     }
 
-    public f j(f fVar) {
-        fVar.getClass();
-        return new e(this, fVar);
+    public CLASSNAMEz1 b(int i) {
+        throw new IndexOutOfBoundsException();
     }
 
-    /* renamed from: l */
-    public /* synthetic */ void accept(Double d) {
-        CLASSNAMEp1.a(this, d);
+    public void d(Object obj, int i) {
+        super.d((double[]) obj, i);
+    }
+
+    public Object e() {
+        return (double[]) super.e();
+    }
+
+    public void g(Object obj) {
+        super.g((f) obj);
     }
 
     public void m() {
-        if (this.b < this.a.length) {
-            throw new IllegalStateException(String.format("End size %d is less than fixed size %d", new Object[]{Integer.valueOf(this.b), Integer.valueOf(this.a.length)}));
-        }
     }
 
     public void n(long j) {
-        if (j == ((long) this.a.length)) {
-            this.b = 0;
-        } else {
-            throw new IllegalStateException(String.format("Begin size %d is not equal to fixed size %d", new Object[]{Long.valueOf(j), Integer.valueOf(this.a.length)}));
-        }
+        clear();
+        x(j);
     }
 
     public /* synthetic */ boolean o() {
         return false;
     }
 
-    public String toString() {
-        return String.format("DoubleFixedNodeBuilder[%d][%s]", new Object[]{Integer.valueOf(this.a.length - this.b), Arrays.toString(this.a)});
+    public /* synthetic */ int p() {
+        return 0;
+    }
+
+    public /* synthetic */ Object[] q(m mVar) {
+        return CLASSNAMEo1.g(this, mVar);
+    }
+
+    /* renamed from: spliterator  reason: collision with other method in class */
+    public w m7spliterator() {
+        return super.spliterator();
+    }
+
+    public u spliterator() {
+        return super.spliterator();
     }
 }

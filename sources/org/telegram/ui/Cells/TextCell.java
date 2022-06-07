@@ -15,6 +15,7 @@ import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
 import org.telegram.ui.ActionBar.SimpleTextView;
 import org.telegram.ui.ActionBar.Theme;
+import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.RLottieDrawable;
 import org.telegram.ui.Components.RLottieImageView;
 
@@ -25,30 +26,41 @@ public class TextCell extends FrameLayout {
     private int leftPadding;
     private boolean needDivider;
     private int offsetFromImage;
+    private boolean prioritizeTitleOverValue;
+    private Theme.ResourcesProvider resourcesProvider;
     public final SimpleTextView textView;
     private ImageView valueImageView;
     public final SimpleTextView valueTextView;
 
     public TextCell(Context context) {
-        this(context, 23, false);
+        this(context, 23, false, (Theme.ResourcesProvider) null);
+    }
+
+    public TextCell(Context context, Theme.ResourcesProvider resourcesProvider2) {
+        this(context, 23, false, resourcesProvider2);
     }
 
     public TextCell(Context context, int i, boolean z) {
+        this(context, i, z, (Theme.ResourcesProvider) null);
+    }
+
+    public TextCell(Context context, int i, boolean z, Theme.ResourcesProvider resourcesProvider2) {
         super(context);
         this.offsetFromImage = 71;
         this.imageLeft = 21;
+        this.resourcesProvider = resourcesProvider2;
         this.leftPadding = i;
         SimpleTextView simpleTextView = new SimpleTextView(context);
         this.textView = simpleTextView;
-        simpleTextView.setTextColor(Theme.getColor(z ? "dialogTextBlack" : "windowBackgroundWhiteBlackText"));
+        simpleTextView.setTextColor(Theme.getColor(z ? "dialogTextBlack" : "windowBackgroundWhiteBlackText", resourcesProvider2));
         simpleTextView.setTextSize(16);
         int i2 = 5;
         simpleTextView.setGravity(LocaleController.isRTL ? 5 : 3);
         simpleTextView.setImportantForAccessibility(2);
-        addView(simpleTextView);
+        addView(simpleTextView, LayoutHelper.createFrame(-2, -1.0f));
         SimpleTextView simpleTextView2 = new SimpleTextView(context);
         this.valueTextView = simpleTextView2;
-        simpleTextView2.setTextColor(Theme.getColor(z ? "dialogTextBlue2" : "windowBackgroundWhiteValueText"));
+        simpleTextView2.setTextColor(Theme.getColor(z ? "dialogTextBlue2" : "windowBackgroundWhiteValueText", resourcesProvider2));
         simpleTextView2.setTextSize(16);
         simpleTextView2.setGravity(LocaleController.isRTL ? 3 : i2);
         simpleTextView2.setImportantForAccessibility(2);
@@ -56,7 +68,7 @@ public class TextCell extends FrameLayout {
         RLottieImageView rLottieImageView = new RLottieImageView(context);
         this.imageView = rLottieImageView;
         rLottieImageView.setScaleType(ImageView.ScaleType.CENTER);
-        rLottieImageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor(z ? "dialogIcon" : "windowBackgroundWhiteGrayIcon"), PorterDuff.Mode.MULTIPLY));
+        rLottieImageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor(z ? "dialogIcon" : "windowBackgroundWhiteGrayIcon", resourcesProvider2), PorterDuff.Mode.MULTIPLY));
         addView(rLottieImageView);
         ImageView imageView2 = new ImageView(context);
         this.valueImageView = imageView2;
@@ -85,12 +97,22 @@ public class TextCell extends FrameLayout {
         return this.valueImageView;
     }
 
+    public void setPrioritizeTitleOverValue(boolean z) {
+        this.prioritizeTitleOverValue = z;
+        requestLayout();
+    }
+
     /* access modifiers changed from: protected */
     public void onMeasure(int i, int i2) {
         int size = View.MeasureSpec.getSize(i);
         int dp = AndroidUtilities.dp(48.0f);
-        this.valueTextView.measure(View.MeasureSpec.makeMeasureSpec(size - AndroidUtilities.dp((float) this.leftPadding), Integer.MIN_VALUE), View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(20.0f), NUM));
-        this.textView.measure(View.MeasureSpec.makeMeasureSpec((size - AndroidUtilities.dp((float) (this.leftPadding + 71))) - this.valueTextView.getTextWidth(), Integer.MIN_VALUE), View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(20.0f), NUM));
+        if (this.prioritizeTitleOverValue) {
+            this.textView.measure(View.MeasureSpec.makeMeasureSpec(size - AndroidUtilities.dp((float) (this.leftPadding + 71)), Integer.MIN_VALUE), View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(20.0f), NUM));
+            this.valueTextView.measure(View.MeasureSpec.makeMeasureSpec((size - AndroidUtilities.dp((float) (this.leftPadding + 103))) - this.textView.getTextWidth(), Integer.MIN_VALUE), View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(20.0f), NUM));
+        } else {
+            this.valueTextView.measure(View.MeasureSpec.makeMeasureSpec(size - AndroidUtilities.dp((float) this.leftPadding), Integer.MIN_VALUE), View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(20.0f), NUM));
+            this.textView.measure(View.MeasureSpec.makeMeasureSpec((size - AndroidUtilities.dp((float) (this.leftPadding + 71))) - this.valueTextView.getTextWidth(), Integer.MIN_VALUE), View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(20.0f), NUM));
+        }
         if (this.imageView.getVisibility() == 0) {
             this.imageView.measure(View.MeasureSpec.makeMeasureSpec(size, Integer.MIN_VALUE), View.MeasureSpec.makeMeasureSpec(dp, Integer.MIN_VALUE));
         }
@@ -107,6 +129,9 @@ public class TextCell extends FrameLayout {
         int i7 = i3 - i;
         int textHeight = (i6 - this.valueTextView.getTextHeight()) / 2;
         int dp = LocaleController.isRTL ? AndroidUtilities.dp((float) this.leftPadding) : 0;
+        if (this.prioritizeTitleOverValue && !LocaleController.isRTL) {
+            dp = (i7 - this.valueTextView.getMeasuredWidth()) - AndroidUtilities.dp((float) this.leftPadding);
+        }
         SimpleTextView simpleTextView = this.valueTextView;
         simpleTextView.layout(dp, textHeight, simpleTextView.getMeasuredWidth() + dp, this.valueTextView.getMeasuredHeight() + textHeight);
         int textHeight2 = (i6 - this.textView.getTextHeight()) / 2;
@@ -136,10 +161,10 @@ public class TextCell extends FrameLayout {
     }
 
     public void setColors(String str, String str2) {
-        this.textView.setTextColor(Theme.getColor(str2));
+        this.textView.setTextColor(Theme.getColor(str2, this.resourcesProvider));
         this.textView.setTag(str2);
         if (str != null) {
-            this.imageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor(str), PorterDuff.Mode.MULTIPLY));
+            this.imageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor(str, this.resourcesProvider), PorterDuff.Mode.MULTIPLY));
             this.imageView.setTag(str);
         }
     }

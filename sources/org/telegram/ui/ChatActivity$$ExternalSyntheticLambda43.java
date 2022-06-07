@@ -11,6 +11,6 @@ public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda43 imple
     }
 
     public final void onDismiss(DialogInterface dialogInterface) {
-        this.f$0.resetPressedLink(-1);
+        ChatActivity.lambda$didPressMessageUrl$236(this.f$0, dialogInterface);
     }
 }

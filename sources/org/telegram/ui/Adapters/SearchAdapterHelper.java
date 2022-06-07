@@ -39,7 +39,7 @@ import org.telegram.tgnet.TLRPC$TL_contacts_search;
 import org.telegram.tgnet.TLRPC$TL_error;
 import org.telegram.tgnet.TLRPC$TL_groupCallParticipant;
 import org.telegram.tgnet.TLRPC$User;
-import org.telegram.ui.Components.ShareAlert;
+import org.telegram.ui.Adapters.DialogsSearchAdapter;
 
 public class SearchAdapterHelper {
     private boolean allResultsAreGlobal;
@@ -55,6 +55,7 @@ public class SearchAdapterHelper {
     private boolean hashtagsLoadedFromDb = false;
     private String lastFoundChannel;
     private String lastFoundUsername = null;
+    private ArrayList<DialogsSearchAdapter.RecentSearchObject> localRecentResults;
     private ArrayList<Object> localSearchResults;
     private ArrayList<TLObject> localServerSearch = new ArrayList<>();
     private ArrayList<Integer> pendingRequestIds = new ArrayList<>();
@@ -363,7 +364,7 @@ public class SearchAdapterHelper {
                 removeGroupSearchFromGlobal();
                 ArrayList<Object> arrayList3 = this.localSearchResults;
                 if (arrayList3 != null) {
-                    mergeResults(arrayList3);
+                    mergeResults(arrayList3, this.localRecentResults);
                 }
                 mergeExcludeResults();
                 this.delegate.onDataSetChanged(i2);
@@ -453,40 +454,119 @@ public class SearchAdapterHelper {
     }
 
     public void mergeResults(ArrayList<Object> arrayList) {
-        TLRPC$Chat tLRPC$Chat;
-        this.localSearchResults = arrayList;
-        if (this.globalSearchMap.size() != 0 && arrayList != null) {
-            int size = arrayList.size();
-            for (int i = 0; i < size; i++) {
-                Object obj = arrayList.get(i);
-                if (obj instanceof ShareAlert.DialogSearchResult) {
-                    obj = ((ShareAlert.DialogSearchResult) obj).object;
-                }
-                if (obj instanceof TLRPC$User) {
-                    TLRPC$User tLRPC$User = (TLRPC$User) obj;
-                    TLRPC$User tLRPC$User2 = (TLRPC$User) this.globalSearchMap.get(tLRPC$User.id);
-                    if (tLRPC$User2 != null) {
-                        this.globalSearch.remove(tLRPC$User2);
-                        this.localServerSearch.remove(tLRPC$User2);
-                        this.globalSearchMap.remove(tLRPC$User2.id);
-                    }
-                    TLObject tLObject = this.groupSearchMap.get(tLRPC$User.id);
-                    if (tLObject != null) {
-                        this.groupSearch.remove(tLObject);
-                        this.groupSearchMap.remove(tLRPC$User.id);
-                    }
-                    TLObject tLObject2 = this.phoneSearchMap.get(tLRPC$User.id);
-                    if (tLObject2 != null) {
-                        this.phonesSearch.remove(tLObject2);
-                        this.phoneSearchMap.remove(tLRPC$User.id);
-                    }
-                } else if ((obj instanceof TLRPC$Chat) && (tLRPC$Chat = (TLRPC$Chat) this.globalSearchMap.get(-((TLRPC$Chat) obj).id)) != null) {
-                    this.globalSearch.remove(tLRPC$Chat);
-                    this.localServerSearch.remove(tLRPC$Chat);
-                    this.globalSearchMap.remove(-tLRPC$Chat.id);
-                }
-            }
-        }
+        mergeResults(arrayList, (ArrayList<DialogsSearchAdapter.RecentSearchObject>) null);
+    }
+
+    /* JADX WARNING: type inference failed for: r10v0, types: [java.util.ArrayList<org.telegram.ui.Adapters.DialogsSearchAdapter$RecentSearchObject>, java.util.ArrayList] */
+    /* JADX WARNING: Unknown variable types count: 1 */
+    /* Code decompiled incorrectly, please refer to instructions dump. */
+    public void mergeResults(java.util.ArrayList<java.lang.Object> r9, java.util.ArrayList<org.telegram.ui.Adapters.DialogsSearchAdapter.RecentSearchObject> r10) {
+        /*
+            r8 = this;
+            r8.localSearchResults = r9
+            r8.localRecentResults = r10
+            androidx.collection.LongSparseArray<org.telegram.tgnet.TLObject> r0 = r8.globalSearchMap
+            int r0 = r0.size()
+            if (r0 == 0) goto L_0x00be
+            if (r9 != 0) goto L_0x0012
+            if (r10 != 0) goto L_0x0012
+            goto L_0x00be
+        L_0x0012:
+            r0 = 0
+            if (r9 != 0) goto L_0x0017
+            r1 = 0
+            goto L_0x001b
+        L_0x0017:
+            int r1 = r9.size()
+        L_0x001b:
+            if (r10 != 0) goto L_0x001f
+            r2 = 0
+            goto L_0x0023
+        L_0x001f:
+            int r2 = r10.size()
+        L_0x0023:
+            int r2 = r2 + r1
+        L_0x0024:
+            if (r0 >= r2) goto L_0x00be
+            if (r0 >= r1) goto L_0x002d
+            java.lang.Object r3 = r9.get(r0)
+            goto L_0x0033
+        L_0x002d:
+            int r3 = r0 - r1
+            java.lang.Object r3 = r10.get(r3)
+        L_0x0033:
+            boolean r4 = r3 instanceof org.telegram.ui.Adapters.DialogsSearchAdapter.RecentSearchObject
+            if (r4 == 0) goto L_0x003b
+            org.telegram.ui.Adapters.DialogsSearchAdapter$RecentSearchObject r3 = (org.telegram.ui.Adapters.DialogsSearchAdapter.RecentSearchObject) r3
+            org.telegram.tgnet.TLObject r3 = r3.object
+        L_0x003b:
+            boolean r4 = r3 instanceof org.telegram.ui.Components.ShareAlert.DialogSearchResult
+            if (r4 == 0) goto L_0x0043
+            org.telegram.ui.Components.ShareAlert$DialogSearchResult r3 = (org.telegram.ui.Components.ShareAlert.DialogSearchResult) r3
+            org.telegram.tgnet.TLObject r3 = r3.object
+        L_0x0043:
+            boolean r4 = r3 instanceof org.telegram.tgnet.TLRPC$User
+            if (r4 == 0) goto L_0x0095
+            org.telegram.tgnet.TLRPC$User r3 = (org.telegram.tgnet.TLRPC$User) r3
+            androidx.collection.LongSparseArray<org.telegram.tgnet.TLObject> r4 = r8.globalSearchMap
+            long r5 = r3.id
+            java.lang.Object r4 = r4.get(r5)
+            org.telegram.tgnet.TLRPC$User r4 = (org.telegram.tgnet.TLRPC$User) r4
+            if (r4 == 0) goto L_0x0066
+            java.util.ArrayList<org.telegram.tgnet.TLObject> r5 = r8.globalSearch
+            r5.remove(r4)
+            java.util.ArrayList<org.telegram.tgnet.TLObject> r5 = r8.localServerSearch
+            r5.remove(r4)
+            androidx.collection.LongSparseArray<org.telegram.tgnet.TLObject> r5 = r8.globalSearchMap
+            long r6 = r4.id
+            r5.remove(r6)
+        L_0x0066:
+            androidx.collection.LongSparseArray<org.telegram.tgnet.TLObject> r4 = r8.groupSearchMap
+            long r5 = r3.id
+            java.lang.Object r4 = r4.get(r5)
+            org.telegram.tgnet.TLObject r4 = (org.telegram.tgnet.TLObject) r4
+            if (r4 == 0) goto L_0x007e
+            java.util.ArrayList<org.telegram.tgnet.TLObject> r5 = r8.groupSearch
+            r5.remove(r4)
+            androidx.collection.LongSparseArray<org.telegram.tgnet.TLObject> r4 = r8.groupSearchMap
+            long r5 = r3.id
+            r4.remove(r5)
+        L_0x007e:
+            androidx.collection.LongSparseArray<org.telegram.tgnet.TLObject> r4 = r8.phoneSearchMap
+            long r5 = r3.id
+            java.lang.Object r4 = r4.get(r5)
+            if (r4 == 0) goto L_0x00ba
+            java.util.ArrayList<java.lang.Object> r5 = r8.phonesSearch
+            r5.remove(r4)
+            androidx.collection.LongSparseArray<org.telegram.tgnet.TLObject> r4 = r8.phoneSearchMap
+            long r5 = r3.id
+            r4.remove(r5)
+            goto L_0x00ba
+        L_0x0095:
+            boolean r4 = r3 instanceof org.telegram.tgnet.TLRPC$Chat
+            if (r4 == 0) goto L_0x00ba
+            org.telegram.tgnet.TLRPC$Chat r3 = (org.telegram.tgnet.TLRPC$Chat) r3
+            androidx.collection.LongSparseArray<org.telegram.tgnet.TLObject> r4 = r8.globalSearchMap
+            long r5 = r3.id
+            long r5 = -r5
+            java.lang.Object r3 = r4.get(r5)
+            org.telegram.tgnet.TLRPC$Chat r3 = (org.telegram.tgnet.TLRPC$Chat) r3
+            if (r3 == 0) goto L_0x00ba
+            java.util.ArrayList<org.telegram.tgnet.TLObject> r4 = r8.globalSearch
+            r4.remove(r3)
+            java.util.ArrayList<org.telegram.tgnet.TLObject> r4 = r8.localServerSearch
+            r4.remove(r3)
+            androidx.collection.LongSparseArray<org.telegram.tgnet.TLObject> r4 = r8.globalSearchMap
+            long r5 = r3.id
+            long r5 = -r5
+            r4.remove(r5)
+        L_0x00ba:
+            int r0 = r0 + 1
+            goto L_0x0024
+        L_0x00be:
+            return
+        */
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Adapters.SearchAdapterHelper.mergeResults(java.util.ArrayList, java.util.ArrayList):void");
     }
 
     public void mergeExcludeResults() {

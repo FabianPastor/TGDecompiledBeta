@@ -172,7 +172,7 @@ public class TermsOfServiceView extends FrameLayout {
             builder.setTitle(LocaleController.getString("TosAgeTitle", NUM));
             builder.setPositiveButton(LocaleController.getString("Agree", NUM), new TermsOfServiceView$$ExternalSyntheticLambda1(this));
             builder.setNegativeButton(LocaleController.getString("Cancel", NUM), (DialogInterface.OnClickListener) null);
-            builder.setMessage(LocaleController.formatString("TosAgeText", NUM, LocaleController.formatPluralString("Years", this.currentTos.min_age_confirm)));
+            builder.setMessage(LocaleController.formatString("TosAgeText", NUM, LocaleController.formatPluralString("Years", this.currentTos.min_age_confirm, new Object[0])));
             builder.show();
             return;
         }

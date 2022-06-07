@@ -1,25 +1,25 @@
 package j$.util.stream;
 
 import j$.util.function.m;
-import j$.util.y;
+import j$.util.u;
 import java.util.Arrays;
 
-final class K3 extends Q {
+final class K3 extends J0 {
     K3(CLASSNAMEc cVar) {
-        super(cVar, CLASSNAMEf4.DOUBLE_VALUE, CLASSNAMEe4.q | CLASSNAMEe4.o);
+        super(cVar, CLASSNAMEe4.INT_VALUE, CLASSNAMEd4.q | CLASSNAMEd4.o);
     }
 
-    public B1 E0(CLASSNAMEz2 z2Var, y yVar, m mVar) {
-        if (CLASSNAMEe4.SORTED.d(z2Var.s0())) {
-            return z2Var.p0(yVar, false, mVar);
+    public A1 E0(CLASSNAMEy2 y2Var, u uVar, m mVar) {
+        if (CLASSNAMEd4.SORTED.d(y2Var.s0())) {
+            return y2Var.p0(uVar, false, mVar);
         }
-        double[] dArr = (double[]) ((CLASSNAMEv1) z2Var.p0(yVar, true, mVar)).e();
-        Arrays.sort(dArr);
-        return new U1(dArr);
+        int[] iArr = (int[]) ((CLASSNAMEw1) y2Var.p0(uVar, true, mVar)).e();
+        Arrays.sort(iArr);
+        return new CLASSNAMEc2(iArr);
     }
 
-    public CLASSNAMEn3 H0(int i, CLASSNAMEn3 n3Var) {
-        n3Var.getClass();
-        return CLASSNAMEe4.SORTED.d(i) ? n3Var : CLASSNAMEe4.SIZED.d(i) ? new P3(n3Var) : new H3(n3Var);
+    public CLASSNAMEm3 H0(int i, CLASSNAMEm3 m3Var) {
+        m3Var.getClass();
+        return CLASSNAMEd4.SORTED.d(i) ? m3Var : CLASSNAMEd4.SIZED.d(i) ? new P3(m3Var) : new H3(m3Var);
     }
 }

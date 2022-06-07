@@ -17,6 +17,7 @@ import org.telegram.messenger.FileLoader;
 import org.telegram.messenger.ImageLoader;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessageObject;
+import org.telegram.messenger.UserConfig;
 import org.telegram.tgnet.TLRPC$Document;
 import org.telegram.tgnet.TLRPC$Message;
 
@@ -99,7 +100,7 @@ public class OtherDocumentPlaceholderDrawable extends RecyclableDrawable impleme
                 this.ext = TextUtils.ellipsize(this.ext, docPaint, (float) AndroidUtilities.dp(40.0f), TextUtils.TruncateAt.END).toString();
             }
             this.thumbDrawable = context.getResources().getDrawable(AndroidUtilities.getThumbForNameOrMime(this.fileName, messageObject.getDocument().mime_type, true)).mutate();
-            this.fileSize = AndroidUtilities.formatFileSize((long) document.size);
+            this.fileSize = AndroidUtilities.formatFileSize(document.size);
             if (((int) Math.ceil((double) namePaint.measureText(this.fileName))) > AndroidUtilities.dp(320.0f)) {
                 this.fileName = TextUtils.ellipsize(this.fileName, namePaint, (float) AndroidUtilities.dp(320.0f), TextUtils.TruncateAt.END).toString();
             }
@@ -221,7 +222,7 @@ public class OtherDocumentPlaceholderDrawable extends RecyclableDrawable impleme
             TLRPC$Message tLRPC$Message = messageObject.messageOwner;
             if (tLRPC$Message.media != null) {
                 String str = null;
-                if ((TextUtils.isEmpty(tLRPC$Message.attachPath) || !new File(this.parentMessageObject.messageOwner.attachPath).exists()) && !FileLoader.getPathToMessage(this.parentMessageObject.messageOwner).exists()) {
+                if ((TextUtils.isEmpty(tLRPC$Message.attachPath) || !new File(this.parentMessageObject.messageOwner.attachPath).exists()) && !FileLoader.getInstance(UserConfig.selectedAccount).getPathToMessage(this.parentMessageObject.messageOwner).exists()) {
                     str = FileLoader.getAttachFileName(this.parentMessageObject.getDocument());
                 }
                 this.loaded = false;

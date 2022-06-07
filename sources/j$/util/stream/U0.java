@@ -9,6 +9,6 @@ public final /* synthetic */ class U0 implements o {
     }
 
     public final long applyAsLong(long j, long j2) {
-        return j + j2;
+        return Math.max(j, j2);
     }
 }

@@ -12,6 +12,6 @@ public final /* synthetic */ class ChatActivityEnterView$$ExternalSyntheticLambd
     }
 
     public final void onClick(DialogInterface dialogInterface, int i) {
-        this.f$0.lambda$openWebViewMenu$31(this.f$1, dialogInterface, i);
+        this.f$0.lambda$openWebViewMenu$32(this.f$1, dialogInterface, i);
     }
 }

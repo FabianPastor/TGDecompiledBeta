@@ -20,41 +20,55 @@ import org.telegram.ui.Components.RadioButton;
 public class RadioCell extends FrameLayout {
     private boolean needDivider;
     private RadioButton radioButton;
+    private Theme.ResourcesProvider resourcesProvider;
     private TextView textView;
 
     public RadioCell(Context context) {
         this(context, false, 21);
     }
 
+    public RadioCell(Context context, Theme.ResourcesProvider resourcesProvider2) {
+        this(context, false, 21, resourcesProvider2);
+    }
+
     public RadioCell(Context context, boolean z, int i) {
+        this(context, z, i, (Theme.ResourcesProvider) null);
+    }
+
+    /* JADX INFO: super call moved to the top of the method (can break code semantics) */
+    public RadioCell(Context context, boolean z, int i, Theme.ResourcesProvider resourcesProvider2) {
         super(context);
-        TextView textView2 = new TextView(context);
+        Context context2 = context;
+        int i2 = i;
+        Theme.ResourcesProvider resourcesProvider3 = resourcesProvider2;
+        this.resourcesProvider = resourcesProvider3;
+        TextView textView2 = new TextView(context2);
         this.textView = textView2;
         if (z) {
-            textView2.setTextColor(Theme.getColor("dialogTextBlack"));
+            textView2.setTextColor(Theme.getColor("dialogTextBlack", resourcesProvider3));
         } else {
-            textView2.setTextColor(Theme.getColor("windowBackgroundWhiteBlackText"));
+            textView2.setTextColor(Theme.getColor("windowBackgroundWhiteBlackText", resourcesProvider3));
         }
         this.textView.setTextSize(1, 16.0f);
         this.textView.setLines(1);
         this.textView.setMaxLines(1);
         this.textView.setSingleLine(true);
         this.textView.setEllipsize(TextUtils.TruncateAt.END);
-        int i2 = 5;
+        int i3 = 5;
         this.textView.setGravity((LocaleController.isRTL ? 5 : 3) | 16);
-        float f = (float) i;
+        float f = (float) i2;
         addView(this.textView, LayoutHelper.createFrame(-1, -1.0f, (LocaleController.isRTL ? 5 : 3) | 48, f, 0.0f, f, 0.0f));
-        RadioButton radioButton2 = new RadioButton(context);
+        RadioButton radioButton2 = new RadioButton(context2);
         this.radioButton = radioButton2;
         radioButton2.setSize(AndroidUtilities.dp(20.0f));
         if (z) {
-            this.radioButton.setColor(Theme.getColor("dialogRadioBackground"), Theme.getColor("dialogRadioBackgroundChecked"));
+            this.radioButton.setColor(Theme.getColor("dialogRadioBackground", resourcesProvider3), Theme.getColor("dialogRadioBackgroundChecked", resourcesProvider3));
         } else {
-            this.radioButton.setColor(Theme.getColor("radioBackground"), Theme.getColor("radioBackgroundChecked"));
+            this.radioButton.setColor(Theme.getColor("radioBackground", resourcesProvider3), Theme.getColor("radioBackgroundChecked", resourcesProvider3));
         }
         RadioButton radioButton3 = this.radioButton;
         boolean z2 = LocaleController.isRTL;
-        addView(radioButton3, LayoutHelper.createFrame(22, 22.0f, (z2 ? 3 : i2) | 48, (float) (z2 ? i + 1 : 0), 14.0f, (float) (!z2 ? i + 1 : 0), 0.0f));
+        addView(radioButton3, LayoutHelper.createFrame(22, 22.0f, (z2 ? 3 : i3) | 48, (float) (z2 ? i2 + 1 : 0), 14.0f, (float) (!z2 ? i2 + 1 : 0), 0.0f));
     }
 
     /* access modifiers changed from: protected */

@@ -1,23 +1,25 @@
 package org.telegram.ui;
 
+import android.net.Uri;
 import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC$TL_error;
 import org.telegram.ui.ActionBar.AlertDialog;
 
 public final /* synthetic */ class LaunchActivity$$ExternalSyntheticLambda43 implements Runnable {
     public final /* synthetic */ LaunchActivity f$0;
     public final /* synthetic */ TLObject f$1;
-    public final /* synthetic */ AlertDialog f$2;
-    public final /* synthetic */ TLRPC$TL_error f$3;
+    public final /* synthetic */ Uri f$2;
+    public final /* synthetic */ int f$3;
+    public final /* synthetic */ AlertDialog f$4;
 
-    public /* synthetic */ LaunchActivity$$ExternalSyntheticLambda43(LaunchActivity launchActivity, TLObject tLObject, AlertDialog alertDialog, TLRPC$TL_error tLRPC$TL_error) {
+    public /* synthetic */ LaunchActivity$$ExternalSyntheticLambda43(LaunchActivity launchActivity, TLObject tLObject, Uri uri, int i, AlertDialog alertDialog) {
         this.f$0 = launchActivity;
         this.f$1 = tLObject;
-        this.f$2 = alertDialog;
-        this.f$3 = tLRPC$TL_error;
+        this.f$2 = uri;
+        this.f$3 = i;
+        this.f$4 = alertDialog;
     }
 
     public final void run() {
-        this.f$0.lambda$runLinkRequest$58(this.f$1, this.f$2, this.f$3);
+        this.f$0.lambda$runImportRequest$25(this.f$1, this.f$2, this.f$3, this.f$4);
     }
 }

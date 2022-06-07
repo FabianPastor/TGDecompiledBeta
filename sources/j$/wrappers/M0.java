@@ -47,7 +47,7 @@ public final /* synthetic */ class M0 implements DoubleStream {
     }
 
     public /* synthetic */ Stream boxed() {
-        return R0.n0(this.a.boxed());
+        return P0.n0(this.a.boxed());
     }
 
     public /* synthetic */ void close() {
@@ -55,7 +55,7 @@ public final /* synthetic */ class M0 implements DoubleStream {
     }
 
     public /* synthetic */ Object collect(Supplier supplier, ObjDoubleConsumer objDoubleConsumer, BiConsumer biConsumer) {
-        return this.a.H(z0.a(supplier), CLASSNAMEr0.a(objDoubleConsumer), CLASSNAMEq.a(biConsumer));
+        return this.a.H(z0.a(supplier), r0.a(objDoubleConsumer), CLASSNAMEq.a(biConsumer));
     }
 
     public /* synthetic */ long count() {
@@ -103,15 +103,15 @@ public final /* synthetic */ class M0 implements DoubleStream {
     }
 
     public /* synthetic */ IntStream mapToInt(DoubleToIntFunction doubleToIntFunction) {
-        return O0.n0(this.a.R(G.b(doubleToIntFunction)));
+        return C$r8$wrapper$java$util$stream$IntStream$WRP.convert(this.a.R(G.b(doubleToIntFunction)));
     }
 
     public /* synthetic */ LongStream mapToLong(DoubleToLongFunction doubleToLongFunction) {
-        return Q0.n0(this.a.x(I.a(doubleToLongFunction)));
+        return O0.n0(this.a.x(I.a(doubleToLongFunction)));
     }
 
     public /* synthetic */ Stream mapToObj(DoubleFunction doubleFunction) {
-        return R0.n0(this.a.M(C.a(doubleFunction)));
+        return P0.n0(this.a.M(C.a(doubleFunction)));
     }
 
     public /* synthetic */ OptionalDouble max() {

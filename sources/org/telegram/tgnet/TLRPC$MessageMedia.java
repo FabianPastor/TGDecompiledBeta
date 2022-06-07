@@ -14,6 +14,7 @@ public abstract class TLRPC$MessageMedia extends TLObject {
     public TLRPC$GeoPoint geo;
     public int heading;
     public String last_name;
+    public boolean nopremium;
     public int period;
     public String phone_number;
     public TLRPC$Photo photo;
@@ -155,7 +156,7 @@ public abstract class TLRPC$MessageMedia extends TLObject {
                 } else {
                     tLRPC$Document.mime_type = "video/mp4";
                 }
-                tLRPC$Document.size = tLRPC$Video2.size;
+                tLRPC$Document.size = (long) tLRPC$Video2.size;
                 tLRPC$Document.thumbs.add(tLRPC$Video2.thumb);
                 tLRPC$TL_messageMediaDocument.document.dc_id = tLRPC$MessageMedia.video_unused.dc_id;
                 tLRPC$TL_messageMediaDocument.captionLegacy = tLRPC$MessageMedia.captionLegacy;
@@ -194,7 +195,7 @@ public abstract class TLRPC$MessageMedia extends TLObject {
                 } else {
                     tLRPC$Document2.mime_type = "audio/ogg";
                 }
-                tLRPC$Document2.size = tLRPC$Audio2.size;
+                tLRPC$Document2.size = (long) tLRPC$Audio2.size;
                 TLRPC$TL_photoSizeEmpty tLRPC$TL_photoSizeEmpty = new TLRPC$TL_photoSizeEmpty();
                 tLRPC$TL_photoSizeEmpty.type = "s";
                 tLRPC$TL_messageMediaDocument.document.thumbs.add(tLRPC$TL_photoSizeEmpty);

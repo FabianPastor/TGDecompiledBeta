@@ -1,12 +1,12 @@
 package j$.util.stream;
 
 class H0 extends K0 {
-    H0(L0 l0, CLASSNAMEc cVar, CLASSNAMEf4 f4Var, int i) {
-        super(cVar, f4Var, i);
+    H0(L0 l0, CLASSNAMEc cVar, CLASSNAMEe4 e4Var, int i) {
+        super(cVar, e4Var, i);
     }
 
     /* access modifiers changed from: package-private */
-    public CLASSNAMEn3 H0(int i, CLASSNAMEn3 n3Var) {
-        return n3Var;
+    public CLASSNAMEm3 H0(int i, CLASSNAMEm3 m3Var) {
+        return m3Var;
     }
 }

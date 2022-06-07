@@ -10,6 +10,6 @@ public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda56
     }
 
     public final void run() {
-        this.f$0.lambda$setChatReactions$349(this.f$1);
+        this.f$0.lambda$setChannelSlowMode$73(this.f$1);
     }
 }

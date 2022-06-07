@@ -8,6 +8,6 @@ public final /* synthetic */ class DialogsActivity$$ExternalSyntheticLambda33 im
     }
 
     public final void run() {
-        this.f$0.lambda$onDialogAnimationFinished$24();
+        this.f$0.lambda$pinDialog$40();
     }
 }

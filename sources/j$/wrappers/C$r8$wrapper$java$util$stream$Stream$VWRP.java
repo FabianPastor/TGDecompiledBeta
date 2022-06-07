@@ -13,11 +13,12 @@ import j$.util.function.b;
 import j$.util.function.m;
 import j$.util.function.y;
 import j$.util.function.z;
-import j$.util.stream.CLASSNAMEf1;
+import j$.util.stream.CLASSNAMEe1;
 import j$.util.stream.CLASSNAMEg;
-import j$.util.stream.M0;
+import j$.util.stream.IntStream;
 import j$.util.stream.Stream;
 import j$.util.stream.U;
+import j$.util.u;
 import java.util.Comparator;
 import java.util.Iterator;
 
@@ -33,7 +34,7 @@ public final /* synthetic */ class C$r8$wrapper$java$util$stream$Stream$VWRP imp
         if (stream == null) {
             return null;
         }
-        return stream instanceof R0 ? ((R0) stream).a : new C$r8$wrapper$java$util$stream$Stream$VWRP(stream);
+        return stream instanceof P0 ? ((P0) stream).a : new C$r8$wrapper$java$util$stream$Stream$VWRP(stream);
     }
 
     public /* synthetic */ Object B(Object obj, BiFunction biFunction, b bVar) {
@@ -56,8 +57,8 @@ public final /* synthetic */ class C$r8$wrapper$java$util$stream$Stream$VWRP imp
         return this.a.allMatch(y0.a(predicate));
     }
 
-    public /* synthetic */ CLASSNAMEf1 X(Function function) {
-        return P0.n0(this.a.flatMapToLong(N.a(function)));
+    public /* synthetic */ CLASSNAMEe1 X(Function function) {
+        return N0.n0(this.a.flatMapToLong(N.a(function)));
     }
 
     public /* synthetic */ boolean a(Predicate predicate) {
@@ -68,8 +69,8 @@ public final /* synthetic */ class C$r8$wrapper$java$util$stream$Stream$VWRP imp
         return this.a.collect(j0 == null ? null : j0.a);
     }
 
-    public /* synthetic */ M0 c(Function function) {
-        return N0.n0(this.a.flatMapToInt(N.a(function)));
+    public /* synthetic */ IntStream c(Function function) {
+        return C$r8$wrapper$java$util$stream$IntStream$VWRP.convert(this.a.flatMapToInt(N.a(function)));
     }
 
     public /* synthetic */ void close() {
@@ -104,8 +105,8 @@ public final /* synthetic */ class C$r8$wrapper$java$util$stream$Stream$VWRP imp
         this.a.forEach(CLASSNAMEx.a(consumer));
     }
 
-    public /* synthetic */ CLASSNAMEf1 g0(A a2) {
-        return P0.n0(this.a.mapToLong(G0.a(a2)));
+    public /* synthetic */ CLASSNAMEe1 g0(A a2) {
+        return N0.n0(this.a.mapToLong(G0.a(a2)));
     }
 
     public /* synthetic */ Object i(y yVar, BiConsumer biConsumer, BiConsumer biConsumer2) {
@@ -132,8 +133,8 @@ public final /* synthetic */ class C$r8$wrapper$java$util$stream$Stream$VWRP imp
         return convert(this.a.limit(j));
     }
 
-    public /* synthetic */ M0 m(ToIntFunction toIntFunction) {
-        return N0.n0(this.a.mapToInt(E0.a(toIntFunction)));
+    public /* synthetic */ IntStream m(ToIntFunction toIntFunction) {
+        return C$r8$wrapper$java$util$stream$IntStream$VWRP.convert(this.a.mapToInt(E0.a(toIntFunction)));
     }
 
     public /* synthetic */ Object m0(Object obj, b bVar) {
@@ -180,7 +181,7 @@ public final /* synthetic */ class C$r8$wrapper$java$util$stream$Stream$VWRP imp
         return convert(this.a.sorted(comparator));
     }
 
-    public /* synthetic */ j$.util.y spliterator() {
+    public /* synthetic */ u spliterator() {
         return CLASSNAMEg.a(this.a.spliterator());
     }
 

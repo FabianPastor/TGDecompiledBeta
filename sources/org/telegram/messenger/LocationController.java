@@ -57,7 +57,7 @@ public class LocationController extends BaseController implements NotificationCe
     private static final int BACKGROUD_UPDATE_TIME = 30000;
     private static final long FASTEST_INTERVAL = 1000;
     private static final int FOREGROUND_UPDATE_TIME = 20000;
-    private static volatile LocationController[] Instance = new LocationController[3];
+    private static volatile LocationController[] Instance = new LocationController[4];
     private static final int LOCATION_ACQUIRE_TIME = 10000;
     private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
     private static final int SEND_NEW_LOCATION_TIME = 2000;
@@ -1168,7 +1168,7 @@ public class LocationController extends BaseController implements NotificationCe
 
     public static int getLocationsCount() {
         int i = 0;
-        for (int i2 = 0; i2 < 3; i2++) {
+        for (int i2 = 0; i2 < 4; i2++) {
             i += getInstance(i2).sharingLocationsUI.size();
         }
         return i;

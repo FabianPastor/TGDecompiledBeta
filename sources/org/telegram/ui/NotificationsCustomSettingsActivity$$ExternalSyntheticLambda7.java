@@ -18,6 +18,6 @@ public final /* synthetic */ class NotificationsCustomSettingsActivity$$External
     }
 
     public final void run(int i) {
-        this.f$0.lambda$createView$4(this.f$1, this.f$2, this.f$3, i);
+        this.f$0.lambda$createView$3(this.f$1, this.f$2, this.f$3, i);
     }
 }

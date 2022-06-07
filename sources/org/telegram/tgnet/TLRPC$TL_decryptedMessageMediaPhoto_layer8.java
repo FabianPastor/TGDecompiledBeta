@@ -10,7 +10,7 @@ public class TLRPC$TL_decryptedMessageMediaPhoto_layer8 extends TLRPC$TL_decrypt
         this.thumb_h = abstractSerializedData.readInt32(z);
         this.w = abstractSerializedData.readInt32(z);
         this.h = abstractSerializedData.readInt32(z);
-        this.size = abstractSerializedData.readInt32(z);
+        this.size = (long) abstractSerializedData.readInt32(z);
         this.key = abstractSerializedData.readByteArray(z);
         this.iv = abstractSerializedData.readByteArray(z);
     }
@@ -22,7 +22,7 @@ public class TLRPC$TL_decryptedMessageMediaPhoto_layer8 extends TLRPC$TL_decrypt
         abstractSerializedData.writeInt32(this.thumb_h);
         abstractSerializedData.writeInt32(this.w);
         abstractSerializedData.writeInt32(this.h);
-        abstractSerializedData.writeInt32(this.size);
+        abstractSerializedData.writeInt32((int) this.size);
         abstractSerializedData.writeByteArray(this.key);
         abstractSerializedData.writeByteArray(this.iv);
     }

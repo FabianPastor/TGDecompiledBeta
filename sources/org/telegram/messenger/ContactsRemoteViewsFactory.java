@@ -153,7 +153,7 @@ class ContactsRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactor
                     remoteViews3.setTextViewText(i4 == 0 ? NUM : NUM, str);
                     if (tLRPC$FileLocation != null) {
                         try {
-                            bitmap = BitmapFactory.decodeFile(FileLoader.getPathToAttach(tLRPC$FileLocation, true).toString());
+                            bitmap = BitmapFactory.decodeFile(FileLoader.getInstance(UserConfig.selectedAccount).getPathToAttach(tLRPC$FileLocation, true).toString());
                         } catch (Throwable th) {
                             FileLog.e(th);
                         }

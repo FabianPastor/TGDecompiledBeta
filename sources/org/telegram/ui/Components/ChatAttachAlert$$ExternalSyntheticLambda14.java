@@ -1,17 +1,15 @@
 package org.telegram.ui.Components;
 
-import androidx.dynamicanimation.animation.DynamicAnimation;
+import android.view.MotionEvent;
+import android.view.View;
 
-public final /* synthetic */ class ChatAttachAlert$$ExternalSyntheticLambda14 implements DynamicAnimation.OnAnimationEndListener {
-    public final /* synthetic */ ChatAttachAlert f$0;
-    public final /* synthetic */ Runnable f$1;
+public final /* synthetic */ class ChatAttachAlert$$ExternalSyntheticLambda14 implements View.OnTouchListener {
+    public static final /* synthetic */ ChatAttachAlert$$ExternalSyntheticLambda14 INSTANCE = new ChatAttachAlert$$ExternalSyntheticLambda14();
 
-    public /* synthetic */ ChatAttachAlert$$ExternalSyntheticLambda14(ChatAttachAlert chatAttachAlert, Runnable runnable) {
-        this.f$0 = chatAttachAlert;
-        this.f$1 = runnable;
+    private /* synthetic */ ChatAttachAlert$$ExternalSyntheticLambda14() {
     }
 
-    public final void onAnimationEnd(DynamicAnimation dynamicAnimation, boolean z, float f, float f2) {
-        this.f$0.lambda$showLayout$23(this.f$1, dynamicAnimation, z, f, f2);
+    public final boolean onTouch(View view, MotionEvent motionEvent) {
+        return ChatAttachAlert.lambda$new$10(view, motionEvent);
     }
 }

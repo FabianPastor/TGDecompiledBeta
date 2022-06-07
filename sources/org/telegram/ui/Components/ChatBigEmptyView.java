@@ -47,9 +47,11 @@ public class ChatBigEmptyView extends LinearLayout {
             this.textViews.add(this.statusTextView);
             addView(this.statusTextView, LayoutHelper.createLinear(-2, -2, 49));
         } else {
-            ImageView imageView = new ImageView(context2);
-            imageView.setImageResource(NUM);
-            addView(imageView, LayoutHelper.createLinear(-2, -2, 49, 0, 2, 0, 0));
+            RLottieImageView rLottieImageView = new RLottieImageView(context2);
+            rLottieImageView.setAutoRepeat(true);
+            rLottieImageView.setAnimation(NUM, 120, 120);
+            rLottieImageView.playAnimation();
+            addView(rLottieImageView, LayoutHelper.createLinear(-2, -2, 49, 0, 2, 0, 0));
         }
         TextView textView3 = new TextView(context2);
         if (i2 == 0) {
@@ -72,16 +74,16 @@ public class ChatBigEmptyView extends LinearLayout {
             LinearLayout linearLayout = new LinearLayout(context2);
             linearLayout.setOrientation(0);
             addView(linearLayout, LayoutHelper.createLinear(-2, -2, LocaleController.isRTL ? 5 : 3, 0, 8, 0, 0));
-            ImageView imageView2 = new ImageView(context2);
-            imageView2.setColorFilter(new PorterDuffColorFilter(getThemedColor("chat_serviceText"), PorterDuff.Mode.MULTIPLY));
+            ImageView imageView = new ImageView(context2);
+            imageView.setColorFilter(new PorterDuffColorFilter(getThemedColor("chat_serviceText"), PorterDuff.Mode.MULTIPLY));
             if (i2 == 0) {
-                imageView2.setImageResource(NUM);
+                imageView.setImageResource(NUM);
             } else if (i2 == 2) {
-                imageView2.setImageResource(NUM);
+                imageView.setImageResource(NUM);
             } else {
-                imageView2.setImageResource(NUM);
+                imageView.setImageResource(NUM);
             }
-            this.imageViews.add(imageView2);
+            this.imageViews.add(imageView);
             TextView textView4 = new TextView(context2);
             textView4.setTextSize(1, 15.0f);
             textView4.setTextColor(getThemedColor("chat_serviceText"));
@@ -124,19 +126,19 @@ public class ChatBigEmptyView extends LinearLayout {
             if (LocaleController.isRTL) {
                 linearLayout.addView(textView4, LayoutHelper.createLinear(-2, -2));
                 if (i2 == 0) {
-                    linearLayout.addView(imageView2, LayoutHelper.createLinear(-2, -2, 8.0f, 3.0f, 0.0f, 0.0f));
+                    linearLayout.addView(imageView, LayoutHelper.createLinear(-2, -2, 8.0f, 3.0f, 0.0f, 0.0f));
                 } else if (i2 == 2) {
-                    linearLayout.addView(imageView2, LayoutHelper.createLinear(-2, -2, 8.0f, 7.0f, 0.0f, 0.0f));
+                    linearLayout.addView(imageView, LayoutHelper.createLinear(-2, -2, 8.0f, 7.0f, 0.0f, 0.0f));
                 } else {
-                    linearLayout.addView(imageView2, LayoutHelper.createLinear(-2, -2, 8.0f, 3.0f, 0.0f, 0.0f));
+                    linearLayout.addView(imageView, LayoutHelper.createLinear(-2, -2, 8.0f, 3.0f, 0.0f, 0.0f));
                 }
             } else {
                 if (i2 == 0) {
-                    linearLayout.addView(imageView2, LayoutHelper.createLinear(-2, -2, 0.0f, 4.0f, 8.0f, 0.0f));
+                    linearLayout.addView(imageView, LayoutHelper.createLinear(-2, -2, 0.0f, 4.0f, 8.0f, 0.0f));
                 } else if (i2 == 2) {
-                    linearLayout.addView(imageView2, LayoutHelper.createLinear(-2, -2, 0.0f, 8.0f, 8.0f, 0.0f));
+                    linearLayout.addView(imageView, LayoutHelper.createLinear(-2, -2, 0.0f, 8.0f, 8.0f, 0.0f));
                 } else {
-                    linearLayout.addView(imageView2, LayoutHelper.createLinear(-2, -2, 0.0f, 4.0f, 8.0f, 0.0f));
+                    linearLayout.addView(imageView, LayoutHelper.createLinear(-2, -2, 0.0f, 4.0f, 8.0f, 0.0f));
                 }
                 linearLayout.addView(textView4, LayoutHelper.createLinear(-2, -2));
             }

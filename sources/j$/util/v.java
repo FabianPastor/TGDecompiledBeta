@@ -1,16 +1,16 @@
 package j$.util;
 
 import j$.util.function.Consumer;
-import j$.util.function.l;
+import j$.util.function.q;
 
-public interface v extends x {
+public interface v extends w {
     boolean b(Consumer consumer);
 
-    void c(l lVar);
+    void d(q qVar);
 
     void forEachRemaining(Consumer consumer);
 
-    boolean g(l lVar);
+    boolean i(q qVar);
 
     v trySplit();
 }

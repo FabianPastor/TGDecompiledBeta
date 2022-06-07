@@ -10,6 +10,7 @@ import android.graphics.PorterDuffColorFilter;
 import android.graphics.RectF;
 import android.text.TextUtils;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.accessibility.AccessibilityNodeInfo;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -18,14 +19,18 @@ import java.util.ArrayList;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
 import org.telegram.ui.ActionBar.Theme;
+import org.telegram.ui.Components.AnimatedTextView;
 import org.telegram.ui.Components.BackupImageView;
+import org.telegram.ui.Components.CubicBezierInterpolator;
 import org.telegram.ui.Components.LayoutHelper;
+import org.telegram.ui.Components.RLottieImageView;
 
 public class TextSettingsCell extends FrameLayout {
     private boolean canDisable;
     private int changeProgressStartDelay;
     private boolean drawLoading;
     private float drawLoadingProgress;
+    private ImageView imageView;
     private boolean incrementLoadingProgress;
     private float loadingProgress;
     private int loadingSize;
@@ -33,20 +38,31 @@ public class TextSettingsCell extends FrameLayout {
     private boolean needDivider;
     private int padding;
     Paint paint;
+    private Theme.ResourcesProvider resourcesProvider;
     private TextView textView;
     private BackupImageView valueBackupImageView;
     private ImageView valueImageView;
-    private TextView valueTextView;
+    private AnimatedTextView valueTextView;
 
     public TextSettingsCell(Context context) {
         this(context, 21);
     }
 
-    /* JADX INFO: super call moved to the top of the method (can break code semantics) */
+    public TextSettingsCell(Context context, Theme.ResourcesProvider resourcesProvider2) {
+        this(context, 21, resourcesProvider2);
+    }
+
     public TextSettingsCell(Context context, int i) {
+        this(context, i, (Theme.ResourcesProvider) null);
+    }
+
+    /* JADX INFO: super call moved to the top of the method (can break code semantics) */
+    public TextSettingsCell(Context context, int i, Theme.ResourcesProvider resourcesProvider2) {
         super(context);
         Context context2 = context;
         int i2 = i;
+        Theme.ResourcesProvider resourcesProvider3 = resourcesProvider2;
+        this.resourcesProvider = resourcesProvider3;
         this.padding = i2;
         TextView textView2 = new TextView(context2);
         this.textView = textView2;
@@ -57,22 +73,25 @@ public class TextSettingsCell extends FrameLayout {
         this.textView.setEllipsize(TextUtils.TruncateAt.END);
         int i3 = 5;
         this.textView.setGravity((LocaleController.isRTL ? 5 : 3) | 16);
-        this.textView.setTextColor(Theme.getColor("windowBackgroundWhiteBlackText"));
+        this.textView.setTextColor(Theme.getColor("windowBackgroundWhiteBlackText", resourcesProvider3));
         float f = (float) i2;
         addView(this.textView, LayoutHelper.createFrame(-1, -1.0f, (LocaleController.isRTL ? 5 : 3) | 48, f, 0.0f, f, 0.0f));
-        TextView textView3 = new TextView(context2);
-        this.valueTextView = textView3;
-        textView3.setTextSize(1, 16.0f);
-        this.valueTextView.setLines(1);
-        this.valueTextView.setMaxLines(1);
-        this.valueTextView.setSingleLine(true);
-        this.valueTextView.setEllipsize(TextUtils.TruncateAt.END);
+        AnimatedTextView animatedTextView = new AnimatedTextView(context2, true, true, !LocaleController.isRTL);
+        this.valueTextView = animatedTextView;
+        animatedTextView.setAnimationProperties(0.55f, 0, 320, CubicBezierInterpolator.EASE_OUT_QUINT);
+        this.valueTextView.setTextSize((float) AndroidUtilities.dp(16.0f));
         this.valueTextView.setGravity((LocaleController.isRTL ? 3 : 5) | 16);
-        this.valueTextView.setTextColor(Theme.getColor("windowBackgroundWhiteValueText"));
+        this.valueTextView.setTextColor(Theme.getColor("windowBackgroundWhiteValueText", resourcesProvider3));
         addView(this.valueTextView, LayoutHelper.createFrame(-2, -1.0f, (LocaleController.isRTL ? 3 : 5) | 48, f, 0.0f, f, 0.0f));
-        ImageView imageView = new ImageView(context2);
-        this.valueImageView = imageView;
-        imageView.setScaleType(ImageView.ScaleType.CENTER);
+        RLottieImageView rLottieImageView = new RLottieImageView(context2);
+        this.imageView = rLottieImageView;
+        rLottieImageView.setScaleType(ImageView.ScaleType.CENTER);
+        this.imageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor("windowBackgroundWhiteGrayIcon"), PorterDuff.Mode.MULTIPLY));
+        this.imageView.setVisibility(8);
+        addView(this.imageView, LayoutHelper.createFrame(-2, -2.0f, (LocaleController.isRTL ? 5 : 3) | 16, 21.0f, 0.0f, 21.0f, 0.0f));
+        ImageView imageView2 = new ImageView(context2);
+        this.valueImageView = imageView2;
+        imageView2.setScaleType(ImageView.ScaleType.CENTER);
         this.valueImageView.setVisibility(4);
         this.valueImageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor("windowBackgroundWhiteGrayIcon"), PorterDuff.Mode.MULTIPLY));
         addView(this.valueImageView, LayoutHelper.createFrame(-2, -2.0f, (LocaleController.isRTL ? 3 : i3) | 16, f, 0.0f, f, 0.0f));
@@ -85,6 +104,9 @@ public class TextSettingsCell extends FrameLayout {
         int i3 = measuredWidth / 2;
         if (this.valueImageView.getVisibility() == 0) {
             this.valueImageView.measure(View.MeasureSpec.makeMeasureSpec(i3, Integer.MIN_VALUE), View.MeasureSpec.makeMeasureSpec(getMeasuredHeight(), NUM));
+        }
+        if (this.imageView.getVisibility() == 0) {
+            this.imageView.measure(View.MeasureSpec.makeMeasureSpec(i3, Integer.MIN_VALUE), View.MeasureSpec.makeMeasureSpec(getMeasuredHeight(), Integer.MIN_VALUE));
         }
         BackupImageView backupImageView = this.valueBackupImageView;
         if (backupImageView != null) {
@@ -113,7 +135,7 @@ public class TextSettingsCell extends FrameLayout {
         this.canDisable = z;
     }
 
-    public TextView getValueTextView() {
+    public AnimatedTextView getValueTextView() {
         return this.valueTextView;
     }
 
@@ -134,17 +156,33 @@ public class TextSettingsCell extends FrameLayout {
     }
 
     public void setTextAndValue(CharSequence charSequence, CharSequence charSequence2, boolean z) {
+        setTextAndValue(charSequence, charSequence2, false, z);
+    }
+
+    public void setTextAndValue(CharSequence charSequence, CharSequence charSequence2, boolean z, boolean z2) {
         this.textView.setText(charSequence);
         this.valueImageView.setVisibility(4);
         if (charSequence2 != null) {
-            this.valueTextView.setText(charSequence2);
+            this.valueTextView.setText(charSequence2, z);
             this.valueTextView.setVisibility(0);
         } else {
             this.valueTextView.setVisibility(4);
         }
-        this.needDivider = z;
-        setWillNotDraw(!z);
+        this.needDivider = z2;
+        setWillNotDraw(!z2);
         requestLayout();
+    }
+
+    public void setIcon(int i) {
+        ViewGroup.MarginLayoutParams marginLayoutParams = (ViewGroup.MarginLayoutParams) this.textView.getLayoutParams();
+        if (i == 0) {
+            this.imageView.setVisibility(8);
+            marginLayoutParams.leftMargin = 0;
+            return;
+        }
+        this.imageView.setImageResource(i);
+        this.imageView.setVisibility(0);
+        marginLayoutParams.leftMargin = AndroidUtilities.dp(71.0f);
     }
 
     public void setEnabled(boolean z, ArrayList<Animator> arrayList) {
@@ -156,19 +194,19 @@ public class TextSettingsCell extends FrameLayout {
             fArr[0] = z ? 1.0f : 0.5f;
             arrayList.add(ObjectAnimator.ofFloat(textView2, "alpha", fArr));
             if (this.valueTextView.getVisibility() == 0) {
-                TextView textView3 = this.valueTextView;
+                AnimatedTextView animatedTextView = this.valueTextView;
                 float[] fArr2 = new float[1];
                 fArr2[0] = z ? 1.0f : 0.5f;
-                arrayList.add(ObjectAnimator.ofFloat(textView3, "alpha", fArr2));
+                arrayList.add(ObjectAnimator.ofFloat(animatedTextView, "alpha", fArr2));
             }
             if (this.valueImageView.getVisibility() == 0) {
-                ImageView imageView = this.valueImageView;
+                ImageView imageView2 = this.valueImageView;
                 float[] fArr3 = new float[1];
                 if (!z) {
                     f = 0.5f;
                 }
                 fArr3[0] = f;
-                arrayList.add(ObjectAnimator.ofFloat(imageView, "alpha", fArr3));
+                arrayList.add(ObjectAnimator.ofFloat(imageView2, "alpha", fArr3));
                 return;
             }
             return;
@@ -178,11 +216,11 @@ public class TextSettingsCell extends FrameLayout {
             this.valueTextView.setAlpha(z ? 1.0f : 0.5f);
         }
         if (this.valueImageView.getVisibility() == 0) {
-            ImageView imageView2 = this.valueImageView;
+            ImageView imageView3 = this.valueImageView;
             if (!z) {
                 f = 0.5f;
             }
-            imageView2.setAlpha(f);
+            imageView3.setAlpha(f);
         }
     }
 
@@ -194,11 +232,11 @@ public class TextSettingsCell extends FrameLayout {
             this.valueTextView.setAlpha((z || !this.canDisable) ? 1.0f : 0.5f);
         }
         if (this.valueImageView.getVisibility() == 0) {
-            ImageView imageView = this.valueImageView;
+            ImageView imageView2 = this.valueImageView;
             if (z || !this.canDisable) {
                 f = 1.0f;
             }
-            imageView.setAlpha(f);
+            imageView2.setAlpha(f);
         }
     }
 
@@ -209,7 +247,7 @@ public class TextSettingsCell extends FrameLayout {
             if (this.paint == null) {
                 Paint paint2 = new Paint(1);
                 this.paint = paint2;
-                paint2.setColor(Theme.getColor("dialogSearchBackground"));
+                paint2.setColor(Theme.getColor("dialogSearchBackground", this.resourcesProvider));
             }
             if (this.incrementLoadingProgress) {
                 float f = this.loadingProgress + 0.016f;
@@ -277,7 +315,18 @@ public class TextSettingsCell extends FrameLayout {
     }
 
     public void onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo accessibilityNodeInfo) {
+        String str;
         super.onInitializeAccessibilityNodeInfo(accessibilityNodeInfo);
+        StringBuilder sb = new StringBuilder();
+        sb.append(this.textView.getText());
+        AnimatedTextView animatedTextView = this.valueTextView;
+        if (animatedTextView == null || animatedTextView.getVisibility() != 0) {
+            str = "";
+        } else {
+            str = "\n" + this.valueTextView.getText();
+        }
+        sb.append(str);
+        accessibilityNodeInfo.setText(sb.toString());
         accessibilityNodeInfo.setEnabled(isEnabled());
     }
 

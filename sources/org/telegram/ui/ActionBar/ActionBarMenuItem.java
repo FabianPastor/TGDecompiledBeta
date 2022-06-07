@@ -411,7 +411,7 @@ public class ActionBarMenuItem extends FrameLayout {
     public void setShowedFromBottom(boolean z) {
         ActionBarPopupWindow.ActionBarPopupWindowLayout actionBarPopupWindowLayout = this.popupLayout;
         if (actionBarPopupWindowLayout != null) {
-            actionBarPopupWindowLayout.setShownFromBotton(z);
+            actionBarPopupWindowLayout.setShownFromBottom(z);
         }
     }
 
@@ -750,7 +750,7 @@ public class ActionBarMenuItem extends FrameLayout {
             android.view.ViewPropertyAnimator r3 = r3.setDuration(r4)
             r3.start()
             android.content.Context r3 = r10.getContext()
-            r4 = 2131166059(0x7var_b, float:1.7946353E38)
+            r4 = 2131166085(0x7var_, float:1.7946405E38)
             android.graphics.drawable.Drawable r3 = androidx.core.content.ContextCompat.getDrawable(r3, r4)
             android.graphics.drawable.Drawable r3 = r3.mutate()
             android.graphics.PorterDuffColorFilter r4 = new android.graphics.PorterDuffColorFilter
@@ -1458,6 +1458,8 @@ public class ActionBarMenuItem extends FrameLayout {
             });
             this.searchField.setImeOptions(33554435);
             this.searchField.setTextIsSelectable(false);
+            this.searchField.setHighlightColor(getThemedColor("chat_inTextSelectionHighlight"));
+            this.searchField.setHandlesColor(getThemedColor("chat_TextSelectionCursor"));
             LinearLayout linearLayout = new LinearLayout(getContext());
             this.searchFilterLayout = linearLayout;
             linearLayout.setOrientation(0);
@@ -1819,9 +1821,15 @@ public class ActionBarMenuItem extends FrameLayout {
     }
 
     public void showSubItem(int i) {
+        showSubItem(i, false);
+    }
+
+    public void showSubItem(int i, boolean z) {
         View findViewWithTag;
         ActionBarPopupWindow.ActionBarPopupWindowLayout actionBarPopupWindowLayout = this.popupLayout;
         if (actionBarPopupWindowLayout != null && (findViewWithTag = actionBarPopupWindowLayout.findViewWithTag(Integer.valueOf(i))) != null && findViewWithTag.getVisibility() != 0) {
+            findViewWithTag.setAlpha(0.0f);
+            findViewWithTag.animate().alpha(1.0f).setInterpolator(CubicBezierInterpolator.DEFAULT).setDuration(150).start();
             findViewWithTag.setVisibility(0);
         }
     }
@@ -1869,6 +1877,14 @@ public class ActionBarMenuItem extends FrameLayout {
                 }
             }
         }
+        EditTextBoldCursor editTextBoldCursor = this.searchField;
+        if (editTextBoldCursor != null) {
+            editTextBoldCursor.setCursorColor(getThemedColor("actionBarDefaultSearch"));
+            this.searchField.setHintTextColor(getThemedColor("actionBarDefaultSearchPlaceholder"));
+            this.searchField.setTextColor(getThemedColor("actionBarDefaultSearch"));
+            this.searchField.setHighlightColor(getThemedColor("chat_inTextSelectionHighlight"));
+            this.searchField.setHandlesColor(getThemedColor("chat_TextSelectionCursor"));
+        }
     }
 
     public void collapseSearchFilters() {
@@ -1876,8 +1892,8 @@ public class ActionBarMenuItem extends FrameLayout {
         onFiltersChanged();
     }
 
-    public void setTransitionOffset(int i) {
-        this.transitionOffset = (float) i;
+    public void setTransitionOffset(float f) {
+        this.transitionOffset = f;
         setTranslationX(0.0f);
     }
 
@@ -2046,15 +2062,15 @@ public class ActionBarMenuItem extends FrameLayout {
 
     public ActionBarPopupWindow.GapView addColoredGap() {
         createPopupLayout();
-        ActionBarPopupWindow.GapView gapView = new ActionBarPopupWindow.GapView(getContext(), "graySection");
+        ActionBarPopupWindow.GapView gapView = new ActionBarPopupWindow.GapView(getContext(), this.resourcesProvider, "actionBarDefaultSubmenuSeparator");
         gapView.setTag(NUM, 1);
         this.popupLayout.addView(gapView, LayoutHelper.createLinear(-1, 8));
         return gapView;
     }
 
-    public static ActionBarMenuSubItem addItem(ActionBarPopupWindow.ActionBarPopupWindowLayout actionBarPopupWindowLayout, int i, String str, boolean z, Theme.ResourcesProvider resourcesProvider2) {
+    public static ActionBarMenuSubItem addItem(ActionBarPopupWindow.ActionBarPopupWindowLayout actionBarPopupWindowLayout, int i, CharSequence charSequence, boolean z, Theme.ResourcesProvider resourcesProvider2) {
         ActionBarMenuSubItem actionBarMenuSubItem = new ActionBarMenuSubItem(actionBarPopupWindowLayout.getContext(), z, false, false, resourcesProvider2);
-        actionBarMenuSubItem.setTextAndIcon(str, i);
+        actionBarMenuSubItem.setTextAndIcon(charSequence, i);
         actionBarMenuSubItem.setMinimumWidth(AndroidUtilities.dp(196.0f));
         actionBarPopupWindowLayout.addView(actionBarMenuSubItem);
         LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) actionBarMenuSubItem.getLayoutParams();

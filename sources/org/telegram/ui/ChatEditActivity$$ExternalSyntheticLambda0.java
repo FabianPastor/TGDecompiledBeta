@@ -10,6 +10,6 @@ public final /* synthetic */ class ChatEditActivity$$ExternalSyntheticLambda0 im
     }
 
     public final void onCancel(DialogInterface dialogInterface) {
-        this.f$0.lambda$processDone$29(dialogInterface);
+        this.f$0.lambda$processDone$30(dialogInterface);
     }
 }

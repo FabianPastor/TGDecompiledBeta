@@ -1,17 +1,15 @@
 package org.telegram.ui;
 
-import java.util.HashMap;
-import org.telegram.tgnet.TLRPC$TL_messageMediaPoll;
-import org.telegram.ui.PollCreateActivity;
+import android.view.MotionEvent;
+import org.telegram.ui.Components.RecyclerListView;
 
-public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda244 implements PollCreateActivity.PollCreateActivityDelegate {
-    public final /* synthetic */ ChatActivity f$0;
+public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda244 implements RecyclerListView.OnInterceptTouchListener {
+    public static final /* synthetic */ ChatActivity$$ExternalSyntheticLambda244 INSTANCE = new ChatActivity$$ExternalSyntheticLambda244();
 
-    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda244(ChatActivity chatActivity) {
-        this.f$0 = chatActivity;
+    private /* synthetic */ ChatActivity$$ExternalSyntheticLambda244() {
     }
 
-    public final void sendPoll(TLRPC$TL_messageMediaPoll tLRPC$TL_messageMediaPoll, HashMap hashMap, boolean z, int i) {
-        this.f$0.lambda$openPollCreate$91(tLRPC$TL_messageMediaPoll, hashMap, z, i);
+    public final boolean onInterceptTouchEvent(MotionEvent motionEvent) {
+        return ChatActivity.lambda$showChatThemeBottomSheet$246(motionEvent);
     }
 }

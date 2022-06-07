@@ -273,6 +273,10 @@ public class ThemePreviewMessagesCell extends LinearLayout {
                         ChatMessageCell.ChatMessageCellDelegate.CC.$default$didLongPress(this, chatMessageCell, f, f2);
                     }
 
+                    public /* synthetic */ void didLongPressBotButton(ChatMessageCell chatMessageCell, TLRPC$KeyboardButton tLRPC$KeyboardButton) {
+                        ChatMessageCell.ChatMessageCellDelegate.CC.$default$didLongPressBotButton(this, chatMessageCell, tLRPC$KeyboardButton);
+                    }
+
                     public /* synthetic */ boolean didLongPressChannelAvatar(ChatMessageCell chatMessageCell, TLRPC$Chat tLRPC$Chat, int i, float f, float f2) {
                         return ChatMessageCell.ChatMessageCellDelegate.CC.$default$didLongPressChannelAvatar(this, chatMessageCell, tLRPC$Chat, i, f, f2);
                     }
@@ -397,6 +401,10 @@ public class ThemePreviewMessagesCell extends LinearLayout {
                         ChatMessageCell.ChatMessageCellDelegate.CC.$default$needReloadPolls(this);
                     }
 
+                    public /* synthetic */ void needShowPremiumFeatures() {
+                        ChatMessageCell.ChatMessageCellDelegate.CC.$default$needShowPremiumFeatures(this);
+                    }
+
                     public /* synthetic */ void onDiceFinished() {
                         ChatMessageCell.ChatMessageCellDelegate.CC.$default$onDiceFinished(this);
                     }
@@ -453,6 +461,9 @@ public class ThemePreviewMessagesCell extends LinearLayout {
     /* access modifiers changed from: protected */
     public void onDraw(Canvas canvas) {
         Drawable cachedWallpaperNonBlocking = Theme.getCachedWallpaperNonBlocking();
+        if (Theme.wallpaperLoadTask != null) {
+            invalidate();
+        }
         if (!(cachedWallpaperNonBlocking == this.backgroundDrawable || cachedWallpaperNonBlocking == null)) {
             if (Theme.isAnimatingColor()) {
                 this.oldBackgroundDrawable = this.backgroundDrawable;
@@ -471,46 +482,47 @@ public class ThemePreviewMessagesCell extends LinearLayout {
         while (i < 2) {
             Drawable drawable = i == 0 ? this.oldBackgroundDrawable : this.backgroundDrawable;
             if (drawable != null) {
-                if (i != 1 || this.oldBackgroundDrawable == null || this.parentLayout == null) {
-                    drawable.setAlpha(255);
-                } else {
-                    drawable.setAlpha((int) (255.0f * themeAnimationValue));
-                }
-                if ((drawable instanceof ColorDrawable) || (drawable instanceof GradientDrawable) || (drawable instanceof MotionBackgroundDrawable)) {
-                    drawable.setBounds(0, 0, getMeasuredWidth(), getMeasuredHeight());
-                    if (drawable instanceof BackgroundGradientDrawable) {
-                        this.backgroundGradientDisposable = ((BackgroundGradientDrawable) drawable).drawExactBoundsSize(canvas, this);
-                    } else {
+                int i2 = (i != 1 || this.oldBackgroundDrawable == null || this.parentLayout == null) ? 255 : (int) (255.0f * themeAnimationValue);
+                if (i2 > 0) {
+                    drawable.setAlpha(i2);
+                    if ((drawable instanceof ColorDrawable) || (drawable instanceof GradientDrawable) || (drawable instanceof MotionBackgroundDrawable)) {
+                        drawable.setBounds(0, 0, getMeasuredWidth(), getMeasuredHeight());
+                        if (drawable instanceof BackgroundGradientDrawable) {
+                            this.backgroundGradientDisposable = ((BackgroundGradientDrawable) drawable).drawExactBoundsSize(canvas, this);
+                        } else {
+                            drawable.draw(canvas);
+                        }
+                    } else if (drawable instanceof BitmapDrawable) {
+                        BitmapDrawable bitmapDrawable = (BitmapDrawable) drawable;
+                        bitmapDrawable.setFilterBitmap(true);
+                        if (bitmapDrawable.getTileModeX() == Shader.TileMode.REPEAT) {
+                            canvas.save();
+                            float f = 2.0f / AndroidUtilities.density;
+                            canvas.scale(f, f);
+                            drawable.setBounds(0, 0, (int) Math.ceil((double) (((float) getMeasuredWidth()) / f)), (int) Math.ceil((double) (((float) getMeasuredHeight()) / f)));
+                        } else {
+                            int measuredHeight = getMeasuredHeight();
+                            float max = Math.max(((float) getMeasuredWidth()) / ((float) drawable.getIntrinsicWidth()), ((float) measuredHeight) / ((float) drawable.getIntrinsicHeight()));
+                            int ceil = (int) Math.ceil((double) (((float) drawable.getIntrinsicWidth()) * max));
+                            int ceil2 = (int) Math.ceil((double) (((float) drawable.getIntrinsicHeight()) * max));
+                            int measuredWidth = (getMeasuredWidth() - ceil) / 2;
+                            int i3 = (measuredHeight - ceil2) / 2;
+                            canvas.save();
+                            canvas.clipRect(0, 0, ceil, getMeasuredHeight());
+                            drawable.setBounds(measuredWidth, i3, ceil + measuredWidth, ceil2 + i3);
+                        }
                         drawable.draw(canvas);
+                        canvas.restore();
                     }
-                } else if (drawable instanceof BitmapDrawable) {
-                    if (((BitmapDrawable) drawable).getTileModeX() == Shader.TileMode.REPEAT) {
-                        canvas.save();
-                        float f = 2.0f / AndroidUtilities.density;
-                        canvas.scale(f, f);
-                        drawable.setBounds(0, 0, (int) Math.ceil((double) (((float) getMeasuredWidth()) / f)), (int) Math.ceil((double) (((float) getMeasuredHeight()) / f)));
-                    } else {
-                        int measuredHeight = getMeasuredHeight();
-                        float max = Math.max(((float) getMeasuredWidth()) / ((float) drawable.getIntrinsicWidth()), ((float) measuredHeight) / ((float) drawable.getIntrinsicHeight()));
-                        int ceil = (int) Math.ceil((double) (((float) drawable.getIntrinsicWidth()) * max));
-                        int ceil2 = (int) Math.ceil((double) (((float) drawable.getIntrinsicHeight()) * max));
-                        int measuredWidth = (getMeasuredWidth() - ceil) / 2;
-                        int i2 = (measuredHeight - ceil2) / 2;
-                        canvas.save();
-                        canvas.clipRect(0, 0, ceil, getMeasuredHeight());
-                        drawable.setBounds(measuredWidth, i2, ceil + measuredWidth, ceil2 + i2);
+                    if (i == 0 && this.oldBackgroundDrawable != null && themeAnimationValue >= 1.0f) {
+                        BackgroundGradientDrawable.Disposable disposable2 = this.oldBackgroundGradientDisposable;
+                        if (disposable2 != null) {
+                            disposable2.dispose();
+                            this.oldBackgroundGradientDisposable = null;
+                        }
+                        this.oldBackgroundDrawable = null;
+                        invalidate();
                     }
-                    drawable.draw(canvas);
-                    canvas.restore();
-                }
-                if (i == 0 && this.oldBackgroundDrawable != null && themeAnimationValue >= 1.0f) {
-                    BackgroundGradientDrawable.Disposable disposable2 = this.oldBackgroundGradientDisposable;
-                    if (disposable2 != null) {
-                        disposable2.dispose();
-                        this.oldBackgroundGradientDisposable = null;
-                    }
-                    this.oldBackgroundDrawable = null;
-                    invalidate();
                 }
             }
             i++;

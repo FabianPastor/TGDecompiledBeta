@@ -20,7 +20,7 @@ public class TLRPC$TL_attachMenuBotsBot extends TLObject {
     }
 
     public void readParams(AbstractSerializedData abstractSerializedData, boolean z) {
-        this.bot = TLRPC$TL_attachMenuBot.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
+        this.bot = TLRPC$AttachMenuBot.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
         int readInt32 = abstractSerializedData.readInt32(z);
         int i = 0;
         if (readInt32 == NUM) {

@@ -7,10 +7,14 @@ import java.util.ArrayList;
 import org.telegram.ui.ActionBar.ThemeDescription;
 
 public class SimpleThemeDescription {
+    public static ThemeDescription createThemeDescription(ThemeDescription.ThemeDescriptionDelegate themeDescriptionDelegate, String str) {
+        return new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, themeDescriptionDelegate, str);
+    }
+
     public static ArrayList<ThemeDescription> createThemeDescriptions(ThemeDescription.ThemeDescriptionDelegate themeDescriptionDelegate, String... strArr) {
         ArrayList<ThemeDescription> arrayList = new ArrayList<>(strArr.length);
-        for (String themeDescription : strArr) {
-            arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, themeDescriptionDelegate, themeDescription));
+        for (String createThemeDescription : strArr) {
+            arrayList.add(createThemeDescription(themeDescriptionDelegate, createThemeDescription));
         }
         return arrayList;
     }

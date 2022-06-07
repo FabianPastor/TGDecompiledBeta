@@ -1,5 +1,6 @@
 package org.telegram.ui.Components;
 
+import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.CornerPathEffect;
 import android.graphics.Paint;
@@ -8,9 +9,11 @@ import android.graphics.Rect;
 import android.graphics.RectF;
 import android.os.SystemClock;
 import android.text.style.CharacterStyle;
+import android.text.style.ClickableSpan;
 import android.util.Pair;
 import android.view.View;
 import android.view.ViewConfiguration;
+import android.widget.TextView;
 import java.util.ArrayList;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.ui.ActionBar.Theme;
@@ -355,6 +358,188 @@ public class LinkSpanDrawable<S extends CharacterStyle> {
             } else if (z && (view = this.mParent) != null) {
                 view.invalidate();
             }
+        }
+    }
+
+    public static class LinksTextView extends TextView {
+        private boolean isCustomLinkCollector;
+        private LinkCollector links;
+        private OnLinkPress onLongPressListener;
+        private OnLinkPress onPressListener;
+        private LinkSpanDrawable<ClickableSpan> pressedLink;
+        private Theme.ResourcesProvider resourcesProvider;
+
+        public interface OnLinkPress {
+            void run(ClickableSpan clickableSpan);
+        }
+
+        public LinksTextView(Context context) {
+            this(context, (Theme.ResourcesProvider) null);
+        }
+
+        public LinksTextView(Context context, Theme.ResourcesProvider resourcesProvider2) {
+            super(context);
+            this.isCustomLinkCollector = false;
+            this.links = new LinkCollector(this);
+            this.resourcesProvider = resourcesProvider2;
+        }
+
+        public LinksTextView(Context context, LinkCollector linkCollector, Theme.ResourcesProvider resourcesProvider2) {
+            super(context);
+            this.isCustomLinkCollector = true;
+            this.links = linkCollector;
+            this.resourcesProvider = resourcesProvider2;
+        }
+
+        public void setOnLinkPressListener(OnLinkPress onLinkPress) {
+            this.onPressListener = onLinkPress;
+        }
+
+        public void setOnLinkLongPressListener(OnLinkPress onLinkPress) {
+            this.onLongPressListener = onLinkPress;
+        }
+
+        /* JADX WARNING: Removed duplicated region for block: B:20:0x00b9  */
+        /* JADX WARNING: Removed duplicated region for block: B:32:0x00ee  */
+        /* Code decompiled incorrectly, please refer to instructions dump. */
+        public boolean onTouchEvent(android.view.MotionEvent r11) {
+            /*
+                r10 = this;
+                org.telegram.ui.Components.LinkSpanDrawable$LinkCollector r0 = r10.links
+                r1 = 0
+                r2 = 1
+                if (r0 == 0) goto L_0x00fd
+                android.text.Layout r0 = r10.getLayout()
+                float r3 = r11.getX()
+                int r4 = r10.getPaddingLeft()
+                float r4 = (float) r4
+                float r3 = r3 - r4
+                int r3 = (int) r3
+                float r4 = r11.getY()
+                int r5 = r10.getPaddingTop()
+                float r5 = (float) r5
+                float r4 = r4 - r5
+                int r4 = (int) r4
+                int r5 = r0.getLineForVertical(r4)
+                float r3 = (float) r3
+                int r6 = r0.getOffsetForHorizontal(r5, r3)
+                android.text.Layout r7 = r10.getLayout()
+                float r7 = r7.getLineLeft(r5)
+                r8 = 0
+                int r9 = (r7 > r3 ? 1 : (r7 == r3 ? 0 : -1))
+                if (r9 > 0) goto L_0x00b2
+                float r5 = r0.getLineWidth(r5)
+                float r7 = r7 + r5
+                int r3 = (r7 > r3 ? 1 : (r7 == r3 ? 0 : -1))
+                if (r3 < 0) goto L_0x00b2
+                if (r4 < 0) goto L_0x00b2
+                int r3 = r0.getHeight()
+                if (r4 > r3) goto L_0x00b2
+                android.text.SpannableString r3 = new android.text.SpannableString
+                java.lang.CharSequence r4 = r0.getText()
+                r3.<init>(r4)
+                java.lang.Class<android.text.style.ClickableSpan> r4 = android.text.style.ClickableSpan.class
+                java.lang.Object[] r4 = r3.getSpans(r6, r6, r4)
+                android.text.style.ClickableSpan[] r4 = (android.text.style.ClickableSpan[]) r4
+                int r5 = r4.length
+                if (r5 == 0) goto L_0x00b2
+                boolean r5 = org.telegram.messenger.AndroidUtilities.isAccessibilityScreenReaderEnabled()
+                if (r5 != 0) goto L_0x00b2
+                r5 = r4[r1]
+                int r6 = r11.getAction()
+                if (r6 != 0) goto L_0x00b3
+                org.telegram.ui.Components.LinkSpanDrawable r1 = new org.telegram.ui.Components.LinkSpanDrawable
+                org.telegram.ui.ActionBar.Theme$ResourcesProvider r6 = r10.resourcesProvider
+                float r7 = r11.getX()
+                float r11 = r11.getY()
+                r1.<init>(r5, r6, r7, r11)
+                r10.pressedLink = r1
+                org.telegram.ui.Components.LinkSpanDrawable$LinkCollector r11 = r10.links
+                r11.addLink(r1)
+                org.telegram.ui.Components.LinkSpanDrawable<android.text.style.ClickableSpan> r11 = r10.pressedLink
+                android.text.style.CharacterStyle r11 = r11.getSpan()
+                int r11 = r3.getSpanStart(r11)
+                org.telegram.ui.Components.LinkSpanDrawable<android.text.style.ClickableSpan> r1 = r10.pressedLink
+                android.text.style.CharacterStyle r1 = r1.getSpan()
+                int r1 = r3.getSpanEnd(r1)
+                org.telegram.ui.Components.LinkSpanDrawable<android.text.style.ClickableSpan> r3 = r10.pressedLink
+                org.telegram.ui.Components.LinkPath r3 = r3.obtainNewPath()
+                int r5 = r10.getPaddingTop()
+                float r5 = (float) r5
+                r3.setCurrentLayout(r0, r11, r5)
+                r0.getSelectionPath(r11, r1, r3)
+                org.telegram.ui.Components.LinkSpanDrawable$LinksTextView$$ExternalSyntheticLambda0 r11 = new org.telegram.ui.Components.LinkSpanDrawable$LinksTextView$$ExternalSyntheticLambda0
+                r11.<init>(r10, r4)
+                int r0 = android.view.ViewConfiguration.getLongPressTimeout()
+                long r0 = (long) r0
+                org.telegram.messenger.AndroidUtilities.runOnUIThread(r11, r0)
+                return r2
+            L_0x00b2:
+                r5 = r8
+            L_0x00b3:
+                int r0 = r11.getAction()
+                if (r0 != r2) goto L_0x00ee
+                org.telegram.ui.Components.LinkSpanDrawable$LinkCollector r11 = r10.links
+                r11.clear()
+                org.telegram.ui.Components.LinkSpanDrawable<android.text.style.ClickableSpan> r11 = r10.pressedLink
+                if (r11 == 0) goto L_0x00eb
+                android.text.style.CharacterStyle r11 = r11.getSpan()
+                if (r11 != r5) goto L_0x00eb
+                org.telegram.ui.Components.LinkSpanDrawable$LinksTextView$OnLinkPress r11 = r10.onPressListener
+                if (r11 == 0) goto L_0x00d8
+                org.telegram.ui.Components.LinkSpanDrawable<android.text.style.ClickableSpan> r0 = r10.pressedLink
+                android.text.style.CharacterStyle r0 = r0.getSpan()
+                android.text.style.ClickableSpan r0 = (android.text.style.ClickableSpan) r0
+                r11.run(r0)
+                goto L_0x00eb
+            L_0x00d8:
+                org.telegram.ui.Components.LinkSpanDrawable<android.text.style.ClickableSpan> r11 = r10.pressedLink
+                android.text.style.CharacterStyle r11 = r11.getSpan()
+                if (r11 == 0) goto L_0x00eb
+                org.telegram.ui.Components.LinkSpanDrawable<android.text.style.ClickableSpan> r11 = r10.pressedLink
+                android.text.style.CharacterStyle r11 = r11.getSpan()
+                android.text.style.ClickableSpan r11 = (android.text.style.ClickableSpan) r11
+                r11.onClick(r10)
+            L_0x00eb:
+                r10.pressedLink = r8
+                return r2
+            L_0x00ee:
+                int r0 = r11.getAction()
+                r3 = 3
+                if (r0 != r3) goto L_0x00fd
+                org.telegram.ui.Components.LinkSpanDrawable$LinkCollector r11 = r10.links
+                r11.clear()
+                r10.pressedLink = r8
+                return r2
+            L_0x00fd:
+                org.telegram.ui.Components.LinkSpanDrawable<android.text.style.ClickableSpan> r0 = r10.pressedLink
+                if (r0 != 0) goto L_0x0107
+                boolean r11 = super.onTouchEvent(r11)
+                if (r11 == 0) goto L_0x0108
+            L_0x0107:
+                r1 = 1
+            L_0x0108:
+                return r1
+            */
+            throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.LinkSpanDrawable.LinksTextView.onTouchEvent(android.view.MotionEvent):boolean");
+        }
+
+        /* access modifiers changed from: private */
+        public /* synthetic */ void lambda$onTouchEvent$0(ClickableSpan[] clickableSpanArr) {
+            OnLinkPress onLinkPress = this.onLongPressListener;
+            if (onLinkPress != null) {
+                onLinkPress.run(clickableSpanArr[0]);
+                this.pressedLink = null;
+                this.links.clear();
+            }
+        }
+
+        /* access modifiers changed from: protected */
+        public void onDraw(Canvas canvas) {
+            if (!this.isCustomLinkCollector && this.links.draw(canvas)) {
+                invalidate();
+            }
+            super.onDraw(canvas);
         }
     }
 }

@@ -1,23 +1,19 @@
 package org.telegram.messenger;
 
-import org.telegram.ui.ActionBar.Theme;
+import androidx.collection.LongSparseArray;
 
 public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda99 implements Runnable {
     public final /* synthetic */ MessagesController f$0;
-    public final /* synthetic */ String f$1;
-    public final /* synthetic */ String f$2;
-    public final /* synthetic */ Theme.ThemeAccent f$3;
-    public final /* synthetic */ Theme.ThemeInfo f$4;
+    public final /* synthetic */ LongSparseArray f$1;
+    public final /* synthetic */ LongSparseArray f$2;
 
-    public /* synthetic */ MessagesController$$ExternalSyntheticLambda99(MessagesController messagesController, String str, String str2, Theme.ThemeAccent themeAccent, Theme.ThemeInfo themeInfo) {
+    public /* synthetic */ MessagesController$$ExternalSyntheticLambda99(MessagesController messagesController, LongSparseArray longSparseArray, LongSparseArray longSparseArray2) {
         this.f$0 = messagesController;
-        this.f$1 = str;
-        this.f$2 = str2;
-        this.f$3 = themeAccent;
-        this.f$4 = themeInfo;
+        this.f$1 = longSparseArray;
+        this.f$2 = longSparseArray2;
     }
 
     public final void run() {
-        this.f$0.lambda$saveThemeToServer$95(this.f$1, this.f$2, this.f$3, this.f$4);
+        this.f$0.lambda$checkDeletingTask$64(this.f$1, this.f$2);
     }
 }

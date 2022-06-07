@@ -8,6 +8,6 @@ public final /* synthetic */ class EmojiAnimationsOverlay$$ExternalSyntheticLamb
     }
 
     public final void run() {
-        this.f$0.lambda$showAnimationForCell$0();
+        this.f$0.lambda$showAnimationForCell$2();
     }
 }

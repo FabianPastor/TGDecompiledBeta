@@ -5,12 +5,15 @@ import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC$TL_error;
 
 public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda336 implements RequestDelegate {
-    public static final /* synthetic */ MessagesController$$ExternalSyntheticLambda336 INSTANCE = new MessagesController$$ExternalSyntheticLambda336();
+    public final /* synthetic */ MessagesController f$0;
+    public final /* synthetic */ boolean f$1;
 
-    private /* synthetic */ MessagesController$$ExternalSyntheticLambda336() {
+    public /* synthetic */ MessagesController$$ExternalSyntheticLambda336(MessagesController messagesController, boolean z) {
+        this.f$0 = messagesController;
+        this.f$1 = z;
     }
 
     public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        MessagesController.lambda$reportSpam$56(tLObject, tLRPC$TL_error);
+        this.f$0.lambda$updateTimerProc$126(this.f$1, tLObject, tLRPC$TL_error);
     }
 }

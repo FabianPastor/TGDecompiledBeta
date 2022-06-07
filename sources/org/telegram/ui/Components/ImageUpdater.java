@@ -451,10 +451,10 @@ public class ImageUpdater implements NotificationCenter.NotificationCenterDelega
                         if (tLRPC$Photo != null) {
                             TLRPC$PhotoSize closestPhotoSizeWithSize = FileLoader.getClosestPhotoSizeWithSize(tLRPC$Photo.sizes, AndroidUtilities.getPhotoSize());
                             if (closestPhotoSizeWithSize != null) {
-                                File pathToAttach = FileLoader.getPathToAttach(closestPhotoSizeWithSize, true);
+                                File pathToAttach = FileLoader.getInstance(this.currentAccount).getPathToAttach(closestPhotoSizeWithSize, true);
                                 this.finalPath = pathToAttach.getAbsolutePath();
                                 if (!pathToAttach.exists()) {
-                                    pathToAttach = FileLoader.getPathToAttach(closestPhotoSizeWithSize, false);
+                                    pathToAttach = FileLoader.getInstance(this.currentAccount).getPathToAttach(closestPhotoSizeWithSize, false);
                                     if (!pathToAttach.exists()) {
                                         pathToAttach = null;
                                     }
@@ -609,7 +609,7 @@ public class ImageUpdater implements NotificationCenter.NotificationCenterDelega
                 }
                 PhotoCropActivity photoCropActivity = new PhotoCropActivity(bundle);
                 photoCropActivity.setDelegate(this);
-                launchActivity.lambda$runLinkRequest$54(photoCropActivity);
+                launchActivity.lambda$runLinkRequest$59(photoCropActivity);
             }
         } catch (Exception e) {
             FileLog.e((Throwable) e);
@@ -718,7 +718,7 @@ public class ImageUpdater implements NotificationCenter.NotificationCenterDelega
             this.smallPhoto = scaleAndSaveImage;
             if (scaleAndSaveImage != null) {
                 try {
-                    ImageLoader.getInstance().putImageToCache(new BitmapDrawable(BitmapFactory.decodeFile(FileLoader.getPathToAttach(scaleAndSaveImage, true).getAbsolutePath())), this.smallPhoto.location.volume_id + "_" + this.smallPhoto.location.local_id + "@50_50", true);
+                    ImageLoader.getInstance().putImageToCache(new BitmapDrawable(BitmapFactory.decodeFile(FileLoader.getInstance(this.currentAccount).getPathToAttach(this.smallPhoto, true).getAbsolutePath())), this.smallPhoto.location.volume_id + "_" + this.smallPhoto.location.local_id + "@50_50", true);
                 } catch (Throwable unused) {
                 }
             }
@@ -741,6 +741,7 @@ public class ImageUpdater implements NotificationCenter.NotificationCenterDelega
                         double d = (double) (videoEditedInfo.avatarStartTime - j);
                         Double.isNaN(d);
                         this.videoTimestamp = d / 1000000.0d;
+                        videoEditedInfo.shouldLimitFps = false;
                         NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.filePreparingStarted);
                         NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.filePreparingFailed);
                         NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.fileNewChunkAvailable);
@@ -847,11 +848,11 @@ public class ImageUpdater implements NotificationCenter.NotificationCenterDelega
                             }
                             Bitmap createVideoThumbnailAtTime = SendMessagesHelper.createVideoThumbnailAtTime(str4, (long) (this.videoTimestamp * 1000.0d), (int[]) null, true);
                             if (createVideoThumbnailAtTime != null) {
-                                File pathToAttach = FileLoader.getPathToAttach(this.smallPhoto, true);
+                                File pathToAttach = FileLoader.getInstance(this.currentAccount).getPathToAttach(this.smallPhoto, true);
                                 if (pathToAttach != null) {
                                     pathToAttach.delete();
                                 }
-                                File pathToAttach2 = FileLoader.getPathToAttach(this.bigPhoto, true);
+                                File pathToAttach2 = FileLoader.getInstance(this.currentAccount).getPathToAttach(this.bigPhoto, true);
                                 if (pathToAttach2 != null) {
                                     pathToAttach2.delete();
                                 }
@@ -861,7 +862,7 @@ public class ImageUpdater implements NotificationCenter.NotificationCenterDelega
                                 this.smallPhoto = scaleAndSaveImage;
                                 if (scaleAndSaveImage != null) {
                                     try {
-                                        Bitmap decodeFile = BitmapFactory.decodeFile(FileLoader.getPathToAttach(scaleAndSaveImage, true).getAbsolutePath());
+                                        Bitmap decodeFile = BitmapFactory.decodeFile(FileLoader.getInstance(this.currentAccount).getPathToAttach(this.smallPhoto, true).getAbsolutePath());
                                         ImageLoader.getInstance().putImageToCache(new BitmapDrawable(decodeFile), this.smallPhoto.location.volume_id + "_" + this.smallPhoto.location.local_id + "@50_50", true);
                                     } catch (Throwable unused) {
                                     }
@@ -878,7 +879,7 @@ public class ImageUpdater implements NotificationCenter.NotificationCenterDelega
                     }
                 } else if (i3 == NotificationCenter.filePreparingStarted && objArr[0] == this.convertingVideo && (baseFragment = this.parentFragment) != null) {
                     this.uploadingVideo = objArr[1];
-                    baseFragment.getFileLoader().uploadFile(this.uploadingVideo, false, false, (int) this.convertingVideo.videoEditedInfo.estimatedSize, 33554432, false);
+                    baseFragment.getFileLoader().uploadFile(this.uploadingVideo, false, false, (long) ((int) this.convertingVideo.videoEditedInfo.estimatedSize), 33554432, false);
                 }
             } else if (objArr[0].equals(this.uploadingImage)) {
                 NotificationCenter.getInstance(this.currentAccount).removeObserver(this, i5);

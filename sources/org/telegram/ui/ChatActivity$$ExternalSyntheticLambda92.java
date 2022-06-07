@@ -2,14 +2,14 @@ package org.telegram.ui;
 
 import android.view.View;
 
-public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda92 implements View.OnLongClickListener {
-    public final /* synthetic */ ChatActivity f$0;
+public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda92 implements View.OnClickListener {
+    public final /* synthetic */ boolean[] f$0;
 
-    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda92(ChatActivity chatActivity) {
-        this.f$0 = chatActivity;
+    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda92(boolean[] zArr) {
+        this.f$0 = zArr;
     }
 
-    public final boolean onLongClick(View view) {
-        return this.f$0.lambda$createView$41(view);
+    public final void onClick(View view) {
+        ChatActivity.lambda$processSelectedOption$193(this.f$0, view);
     }
 }

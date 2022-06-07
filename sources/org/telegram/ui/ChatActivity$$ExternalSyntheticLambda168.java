@@ -1,21 +1,15 @@
 package org.telegram.ui;
 
-import org.telegram.messenger.MessagesController;
-
 public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda168 implements Runnable {
     public final /* synthetic */ ChatActivity f$0;
-    public final /* synthetic */ MessagesController f$1;
-    public final /* synthetic */ CharSequence f$2;
-    public final /* synthetic */ boolean f$3;
+    public final /* synthetic */ Runnable f$1;
 
-    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda168(ChatActivity chatActivity, MessagesController messagesController, CharSequence charSequence, boolean z) {
+    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda168(ChatActivity chatActivity, Runnable runnable) {
         this.f$0 = chatActivity;
-        this.f$1 = messagesController;
-        this.f$2 = charSequence;
-        this.f$3 = z;
+        this.f$1 = runnable;
     }
 
     public final void run() {
-        this.f$0.lambda$searchLinks$95(this.f$1, this.f$2, this.f$3);
+        this.f$0.lambda$openDiscussionMessageChat$225(this.f$1);
     }
 }

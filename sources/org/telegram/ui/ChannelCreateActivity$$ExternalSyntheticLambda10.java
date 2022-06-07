@@ -1,13 +1,16 @@
 package org.telegram.ui;
 
-public final /* synthetic */ class ChannelCreateActivity$$ExternalSyntheticLambda10 implements Runnable {
+import android.view.KeyEvent;
+import android.widget.TextView;
+
+public final /* synthetic */ class ChannelCreateActivity$$ExternalSyntheticLambda10 implements TextView.OnEditorActionListener {
     public final /* synthetic */ ChannelCreateActivity f$0;
 
     public /* synthetic */ ChannelCreateActivity$$ExternalSyntheticLambda10(ChannelCreateActivity channelCreateActivity) {
         this.f$0 = channelCreateActivity;
     }
 
-    public final void run() {
-        this.f$0.lambda$loadAdminedChannels$13();
+    public final boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
+        return this.f$0.lambda$createView$9(textView, i, keyEvent);
     }
 }

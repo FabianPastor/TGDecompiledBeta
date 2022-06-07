@@ -2,9 +2,11 @@ package org.telegram.ui.Components;
 
 import android.app.Activity;
 import android.content.Context;
+import android.os.Build;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.accessibility.AccessibilityNodeInfo;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -187,12 +189,12 @@ public class SearchDownloadsContainer extends FrameLayout implements Notificatio
         FileLoader.getInstance(this.currentAccount).getCurrentLoadingFiles(arrayList);
         FileLoader.getInstance(this.currentAccount).getRecentLoadingFiles(arrayList2);
         for (int i = 0; i < arrayList.size(); i++) {
-            if (FileLoader.getPathToMessage(((MessageObject) arrayList.get(i)).messageOwner).exists()) {
+            if (FileLoader.getInstance(this.currentAccount).getPathToMessage(((MessageObject) arrayList.get(i)).messageOwner).exists()) {
                 arrayList3.add((MessageObject) arrayList.get(i));
             }
         }
         for (int i2 = 0; i2 < arrayList2.size(); i2++) {
-            if (!FileLoader.getPathToMessage(((MessageObject) arrayList2.get(i2)).messageOwner).exists()) {
+            if (!FileLoader.getInstance(this.currentAccount).getPathToMessage(((MessageObject) arrayList2.get(i2)).messageOwner).exists()) {
                 arrayList4.add((MessageObject) arrayList2.get(i2));
             }
         }
@@ -455,34 +457,29 @@ public class SearchDownloadsContainer extends FrameLayout implements Notificatio
         }
 
         public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int i) {
-            String str;
-            int i2;
             int itemViewType = viewHolder.getItemViewType();
             if (itemViewType == 0) {
                 GraySectionCell graySectionCell = (GraySectionCell) viewHolder.itemView;
                 SearchDownloadsContainer searchDownloadsContainer = SearchDownloadsContainer.this;
                 if (i == searchDownloadsContainer.downloadingFilesHeader) {
                     String string = LocaleController.getString("Downloading", NUM);
-                    if (SearchDownloadsContainer.this.hasCurrentDownload) {
-                        i2 = NUM;
-                        str = "PauseAll";
+                    if (graySectionCell.getText().equals(string)) {
+                        graySectionCell.setRightText(SearchDownloadsContainer.this.hasCurrentDownload ? LocaleController.getString("PauseAll", NUM) : LocaleController.getString("ResumeAll", NUM), SearchDownloadsContainer.this.hasCurrentDownload);
                     } else {
-                        i2 = NUM;
-                        str = "ResumeAll";
-                    }
-                    graySectionCell.setText(string, LocaleController.getString(str, i2), new View.OnClickListener() {
-                        public void onClick(View view) {
-                            for (int i = 0; i < SearchDownloadsContainer.this.currentLoadingFiles.size(); i++) {
-                                MessageObject messageObject = SearchDownloadsContainer.this.currentLoadingFiles.get(i);
-                                if (SearchDownloadsContainer.this.hasCurrentDownload) {
-                                    AccountInstance.getInstance(UserConfig.selectedAccount).getFileLoader().cancelLoadFile(messageObject.getDocument());
-                                } else {
-                                    AccountInstance.getInstance(UserConfig.selectedAccount).getFileLoader().loadFile(messageObject.getDocument(), messageObject, 0, 0);
+                        graySectionCell.setText(string, SearchDownloadsContainer.this.hasCurrentDownload ? LocaleController.getString("PauseAll", NUM) : LocaleController.getString("ResumeAll", NUM), new View.OnClickListener() {
+                            public void onClick(View view) {
+                                for (int i = 0; i < SearchDownloadsContainer.this.currentLoadingFiles.size(); i++) {
+                                    MessageObject messageObject = SearchDownloadsContainer.this.currentLoadingFiles.get(i);
+                                    if (SearchDownloadsContainer.this.hasCurrentDownload) {
+                                        AccountInstance.getInstance(UserConfig.selectedAccount).getFileLoader().cancelLoadFile(messageObject.getDocument());
+                                    } else {
+                                        AccountInstance.getInstance(UserConfig.selectedAccount).getFileLoader().loadFile(messageObject.getDocument(), messageObject, 0, 0);
+                                    }
                                 }
+                                SearchDownloadsContainer.this.update(true);
                             }
-                            SearchDownloadsContainer.this.update(true);
-                        }
-                    });
+                        });
+                    }
                 } else if (i == searchDownloadsContainer.recentFilesHeader) {
                     graySectionCell.setText(LocaleController.getString("RecentlyDownloaded", NUM), LocaleController.getString("Settings", NUM), new View.OnClickListener() {
                         public void onClick(View view) {
@@ -602,6 +599,9 @@ public class SearchDownloadsContainer extends FrameLayout implements Notificatio
             nestedScrollView.addView(linearLayout);
             bottomSheet.setCustomView(nestedScrollView);
             bottomSheet.show();
+            if (Build.VERSION.SDK_INT >= 23) {
+                AndroidUtilities.setLightStatusBar(bottomSheet.getWindow(), !Theme.isCurrentThemeDark());
+            }
             textView3.setOnClickListener(new SearchDownloadsContainer$$ExternalSyntheticLambda0(this, bottomSheet));
             textView4.setOnClickListener(new SearchDownloadsContainer$$ExternalSyntheticLambda1(this, bottomSheet));
         }
@@ -657,6 +657,11 @@ public class SearchDownloadsContainer extends FrameLayout implements Notificatio
             this.sharedDocumentCell = sharedDocumentCell2;
             sharedDocumentCell2.rightDateTextView.setVisibility(8);
             addView(this.sharedDocumentCell);
+        }
+
+        public void onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo accessibilityNodeInfo) {
+            super.onInitializeAccessibilityNodeInfo(accessibilityNodeInfo);
+            this.sharedDocumentCell.onInitializeAccessibilityNodeInfo(accessibilityNodeInfo);
         }
     }
 

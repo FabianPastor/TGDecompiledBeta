@@ -3,8 +3,8 @@ package j$.util.stream;
 abstract class E3 extends CLASSNAMEh3 {
     protected boolean b;
 
-    E3(CLASSNAMEn3 n3Var) {
-        super(n3Var);
+    E3(CLASSNAMEm3 m3Var) {
+        super(m3Var);
     }
 
     public final boolean o() {

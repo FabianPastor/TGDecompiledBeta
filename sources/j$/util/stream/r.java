@@ -7,14 +7,14 @@ import j$.util.function.q;
 import java.util.HashSet;
 import java.util.Set;
 
-class r extends CLASSNAMEj3 {
+class r extends CLASSNAMEi3 {
     public final /* synthetic */ int b = 3;
     Object c;
     final /* synthetic */ Object d;
 
     /* JADX INFO: super call moved to the top of the method (can break code semantics) */
-    public r(CLASSNAMEs sVar, CLASSNAMEn3 n3Var) {
-        super(n3Var);
+    public r(CLASSNAMEs sVar, CLASSNAMEm3 m3Var) {
+        super(m3Var);
         this.d = sVar;
     }
 
@@ -28,30 +28,30 @@ class r extends CLASSNAMEj3 {
                 }
                 return;
             case 1:
-                CLASSNAMEf1 f1Var = (CLASSNAMEf1) ((Function) ((N) this.d).m).apply(obj);
-                if (f1Var != null) {
+                CLASSNAMEe1 e1Var = (CLASSNAMEe1) ((Function) ((N) this.d).m).apply(obj);
+                if (e1Var != null) {
                     try {
-                        f1Var.sequential().d((q) this.c);
+                        e1Var.sequential().d((q) this.c);
                     } catch (Throwable unused) {
                         break;
                     }
                 }
-                if (f1Var != null) {
-                    f1Var.close();
+                if (e1Var != null) {
+                    e1Var.close();
                     return;
                 }
                 return;
             case 2:
-                M0 m0 = (M0) ((Function) ((M) this.d).m).apply(obj);
-                if (m0 != null) {
+                IntStream intStream = (IntStream) ((Function) ((M) this.d).m).apply(obj);
+                if (intStream != null) {
                     try {
-                        m0.sequential().U((l) this.c);
+                        intStream.sequential().U((l) this.c);
                     } catch (Throwable unused2) {
                         break;
                     }
                 }
-                if (m0 != null) {
-                    m0.close();
+                if (intStream != null) {
+                    intStream.close();
                     return;
                 }
                 return;
@@ -106,23 +106,23 @@ class r extends CLASSNAMEj3 {
     }
 
     /* JADX INFO: super call moved to the top of the method (can break code semantics) */
-    public r(K k, CLASSNAMEn3 n3Var) {
-        super(n3Var);
+    public r(K k, CLASSNAMEm3 m3Var) {
+        super(m3Var);
         this.d = k;
-        this.c = new F(n3Var);
+        this.c = new F(m3Var);
     }
 
     /* JADX INFO: super call moved to the top of the method (can break code semantics) */
-    public r(M m, CLASSNAMEn3 n3Var) {
-        super(n3Var);
+    public r(M m, CLASSNAMEm3 m3Var) {
+        super(m3Var);
         this.d = m;
-        this.c = new B0(n3Var);
+        this.c = new B0(m3Var);
     }
 
     /* JADX INFO: super call moved to the top of the method (can break code semantics) */
-    public r(N n, CLASSNAMEn3 n3Var) {
-        super(n3Var);
+    public r(N n, CLASSNAMEm3 m3Var) {
+        super(m3Var);
         this.d = n;
-        this.c = new X0(n3Var);
+        this.c = new W0(m3Var);
     }
 }

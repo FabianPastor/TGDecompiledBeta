@@ -21,34 +21,32 @@ import org.telegram.tgnet.TLRPC$TL_attachMenuBotIcon;
 public class AttachBotIntroTopView extends View {
     private Drawable attachDrawable;
     private Paint backgroundPaint = new Paint(1);
-    /* access modifiers changed from: private */
-    public ImageReceiver imageReceiver;
+    private ImageReceiver imageReceiver;
     private Paint paint = new Paint(1);
 
     public AttachBotIntroTopView(Context context) {
         super(context);
-        AnonymousClass1 r0 = new ImageReceiver(this) {
-            /* access modifiers changed from: protected */
-            public boolean setImageBitmapByKey(Drawable drawable, String str, int i, boolean z, int i2) {
-                boolean imageBitmapByKey = super.setImageBitmapByKey(drawable, str, i, z, i2);
-                ValueAnimator duration = ValueAnimator.ofFloat(new float[]{0.0f, 1.0f}).setDuration(150);
-                duration.addUpdateListener(new AttachBotIntroTopView$1$$ExternalSyntheticLambda0(this));
-                duration.start();
-                return imageBitmapByKey;
-            }
-
-            /* access modifiers changed from: private */
-            public /* synthetic */ void lambda$setImageBitmapByKey$0(ValueAnimator valueAnimator) {
-                AttachBotIntroTopView.this.imageReceiver.setAlpha(((Float) valueAnimator.getAnimatedValue()).floatValue());
-                invalidate();
-            }
-        };
-        this.imageReceiver = r0;
-        r0.setAlpha(0.0f);
+        ImageReceiver imageReceiver2 = new ImageReceiver(this);
+        this.imageReceiver = imageReceiver2;
+        imageReceiver2.setAlpha(0.0f);
+        this.imageReceiver.setDelegate(new AttachBotIntroTopView$$ExternalSyntheticLambda1(this));
         this.attachDrawable = ContextCompat.getDrawable(context, NUM).mutate().getConstantState().newDrawable();
         this.paint.setStyle(Paint.Style.STROKE);
         this.paint.setStrokeWidth((float) AndroidUtilities.dp(3.0f));
         this.paint.setStrokeCap(Paint.Cap.ROUND);
+    }
+
+    /* access modifiers changed from: private */
+    public /* synthetic */ void lambda$new$1(ImageReceiver imageReceiver2, boolean z, boolean z2, boolean z3) {
+        ValueAnimator duration = ValueAnimator.ofFloat(new float[]{0.0f, 1.0f}).setDuration(150);
+        duration.addUpdateListener(new AttachBotIntroTopView$$ExternalSyntheticLambda0(this));
+        duration.start();
+    }
+
+    /* access modifiers changed from: private */
+    public /* synthetic */ void lambda$new$0(ValueAnimator valueAnimator) {
+        this.imageReceiver.setAlpha(((Float) valueAnimator.getAnimatedValue()).floatValue());
+        invalidate();
     }
 
     public void setAttachBot(TLRPC$TL_attachMenuBot tLRPC$TL_attachMenuBot) {

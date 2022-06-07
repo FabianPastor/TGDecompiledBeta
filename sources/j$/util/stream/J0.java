@@ -1,7 +1,7 @@
 package j$.util.stream;
 
 abstract class J0 extends L0 {
-    J0(CLASSNAMEc cVar, CLASSNAMEf4 f4Var, int i) {
+    J0(CLASSNAMEc cVar, CLASSNAMEe4 e4Var, int i) {
         super(cVar, i);
     }
 
@@ -10,12 +10,12 @@ abstract class J0 extends L0 {
         return true;
     }
 
-    public /* bridge */ /* synthetic */ M0 parallel() {
+    public /* bridge */ /* synthetic */ IntStream parallel() {
         parallel();
         return this;
     }
 
-    public /* bridge */ /* synthetic */ M0 sequential() {
+    public /* bridge */ /* synthetic */ IntStream sequential() {
         sequential();
         return this;
     }

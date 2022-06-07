@@ -1,13 +1,16 @@
 package org.telegram.ui;
 
-public final /* synthetic */ class PaymentFormActivity$$ExternalSyntheticLambda31 implements Runnable {
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+
+public final /* synthetic */ class PaymentFormActivity$$ExternalSyntheticLambda31 implements OnCompleteListener {
     public final /* synthetic */ PaymentFormActivity f$0;
 
     public /* synthetic */ PaymentFormActivity$$ExternalSyntheticLambda31(PaymentFormActivity paymentFormActivity) {
         this.f$0 = paymentFormActivity;
     }
 
-    public final void run() {
-        this.f$0.lambda$loadPasswordInfo$31();
+    public final void onComplete(Task task) {
+        this.f$0.lambda$initGooglePay$37(task);
     }
 }

@@ -84,10 +84,6 @@ public class SharedDocumentCell extends FrameLayout implements DownloadControlle
     public void onProgressUpload(String str, long j, long j2, boolean z) {
     }
 
-    public SharedDocumentCell(Context context) {
-        this(context, 0);
-    }
-
     public SharedDocumentCell(Context context, int i) {
         this(context, i, (Theme.ResourcesProvider) null);
     }
@@ -442,7 +438,11 @@ public class SharedDocumentCell extends FrameLayout implements DownloadControlle
                         documentFileName = LocaleController.getString("AttachVideo", NUM);
                     }
                 } else if (document.mime_type.startsWith("image")) {
-                    documentFileName = LocaleController.getString("AttachPhoto", NUM);
+                    if (MessageObject.isGifDocument(document)) {
+                        documentFileName = LocaleController.getString("AttachGif", NUM);
+                    } else {
+                        documentFileName = LocaleController.getString("AttachPhoto", NUM);
+                    }
                 } else if (document.mime_type.startsWith("audio")) {
                     documentFileName = LocaleController.getString("AttachAudio", NUM);
                 } else {
@@ -533,9 +533,9 @@ public class SharedDocumentCell extends FrameLayout implements DownloadControlle
             long j = ((long) messageObject2.messageOwner.date) * 1000;
             long j2 = this.downloadedSize;
             if (j2 == 0) {
-                str = AndroidUtilities.formatFileSize((long) messageObject2.getDocument().size);
+                str = AndroidUtilities.formatFileSize(messageObject2.getDocument().size);
             } else {
-                str = String.format(Locale.ENGLISH, "%s / %s", new Object[]{AndroidUtilities.formatFileSize(j2), AndroidUtilities.formatFileSize((long) this.message.getDocument().size)});
+                str = String.format(Locale.ENGLISH, "%s / %s", new Object[]{AndroidUtilities.formatFileSize(j2), AndroidUtilities.formatFileSize(this.message.getDocument().size)});
             }
             if (this.viewType == 2) {
                 this.dateTextView.setText(new SpannableStringBuilder().append(str).append(' ').append(this.dotSpan).append(' ').append(FilteredSearchView.createFromInfoString(this.message)));
@@ -727,7 +727,7 @@ public class SharedDocumentCell extends FrameLayout implements DownloadControlle
         super.onInitializeAccessibilityNodeInfo(accessibilityNodeInfo);
         if (this.checkBox.isChecked()) {
             accessibilityNodeInfo.setCheckable(true);
-            accessibilityNodeInfo.setChecked(true);
+            accessibilityNodeInfo.setChecked(this.checkBox.isChecked());
         }
     }
 

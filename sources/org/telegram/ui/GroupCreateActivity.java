@@ -1063,7 +1063,7 @@ public class GroupCreateActivity extends BaseFragment implements NotificationCen
             if (this.selectedContacts.size() == 1) {
                 builder.setTitle(LocaleController.getString("AddOneMemberAlertTitle", NUM));
             } else {
-                builder.setTitle(LocaleController.formatString("AddMembersAlertTitle", NUM, LocaleController.formatPluralString("Members", this.selectedContacts.size())));
+                builder.setTitle(LocaleController.formatString("AddMembersAlertTitle", NUM, LocaleController.formatPluralString("Members", this.selectedContacts.size(), new Object[0])));
             }
             StringBuilder sb = new StringBuilder();
             for (int i4 = 0; i4 < this.selectedContacts.size(); i4++) {
@@ -1085,7 +1085,7 @@ public class GroupCreateActivity extends BaseFragment implements NotificationCen
             TLRPC$Chat chat = messagesController.getChat(Long.valueOf(j));
             if (this.selectedContacts.size() > 5) {
                 Object[] objArr = new Object[2];
-                objArr[0] = LocaleController.formatPluralString("Members", this.selectedContacts.size());
+                objArr[0] = LocaleController.formatPluralString("Members", this.selectedContacts.size(), new Object[0]);
                 if (chat == null) {
                     str2 = "";
                 } else {
@@ -1160,9 +1160,9 @@ public class GroupCreateActivity extends BaseFragment implements NotificationCen
     public void updateHint() {
         if (!this.isAlwaysShare && !this.isNeverShare && !this.addToGroup) {
             if (this.chatType == 2) {
-                this.actionBar.setSubtitle(LocaleController.formatPluralString("Members", this.selectedContacts.size()));
+                this.actionBar.setSubtitle(LocaleController.formatPluralString("Members", this.selectedContacts.size(), new Object[0]));
             } else if (this.selectedContacts.size() == 0) {
-                this.actionBar.setSubtitle(LocaleController.formatString("MembersCountZero", NUM, LocaleController.formatPluralString("Members", this.maxCount)));
+                this.actionBar.setSubtitle(LocaleController.formatString("MembersCountZero", NUM, LocaleController.formatPluralString("Members", this.maxCount, new Object[0])));
             } else {
                 String pluralString = LocaleController.getPluralString("MembersCountSelected", this.selectedContacts.size());
                 this.actionBar.setSubtitle(String.format(pluralString, new Object[]{Integer.valueOf(this.selectedContacts.size()), Integer.valueOf(this.maxCount)}));
@@ -1387,7 +1387,7 @@ public class GroupCreateActivity extends BaseFragment implements NotificationCen
                 r1 = 8
                 r4.setVisibility(r1)
                 android.widget.TextView r4 = r5.title
-                r1 = 2131626662(0x7f0e0aa6, float:1.8880567E38)
+                r1 = 2131626805(0x7f0e0b35, float:1.8880857E38)
                 java.lang.String r2 = "NoContacts"
                 java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
                 r4.setText(r1)

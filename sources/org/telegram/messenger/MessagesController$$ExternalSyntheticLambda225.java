@@ -1,18 +1,15 @@
 package org.telegram.messenger;
 
-import org.telegram.messenger.MessagesController;
-import org.telegram.tgnet.RequestDelegate;
-import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC$TL_error;
+import java.util.Comparator;
+import org.telegram.tgnet.TLRPC$Updates;
 
-public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda225 implements RequestDelegate {
-    public final /* synthetic */ MessagesController.IsInChatCheckedCallback f$0;
+public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda225 implements Comparator {
+    public static final /* synthetic */ MessagesController$$ExternalSyntheticLambda225 INSTANCE = new MessagesController$$ExternalSyntheticLambda225();
 
-    public /* synthetic */ MessagesController$$ExternalSyntheticLambda225(MessagesController.IsInChatCheckedCallback isInChatCheckedCallback) {
-        this.f$0 = isInChatCheckedCallback;
+    private /* synthetic */ MessagesController$$ExternalSyntheticLambda225() {
     }
 
-    public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        MessagesController.lambda$checkIsInChat$351(this.f$0, tLObject, tLRPC$TL_error);
+    public final int compare(Object obj, Object obj2) {
+        return AndroidUtilities.compare(((TLRPC$Updates) obj).pts, ((TLRPC$Updates) obj2).pts);
     }
 }

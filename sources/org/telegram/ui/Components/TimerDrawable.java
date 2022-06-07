@@ -85,10 +85,15 @@ public class TimerDrawable extends Drawable {
                 } else if (str.length() > 2) {
                     str = "c";
                 }
-            } else {
+            } else if (i2 < 31449600) {
                 str = "" + ((((i / 60) / 60) / 24) / 30);
                 if (str.length() < 2) {
                     str = str + LocaleController.getString("SecretChatTimerMonths", NUM);
+                }
+            } else {
+                str = "" + ((((i / 60) / 60) / 24) / 364);
+                if (str.length() < 2) {
+                    str = str + LocaleController.getString("SecretChatTimerYears", NUM);
                 }
             }
             String str2 = str;

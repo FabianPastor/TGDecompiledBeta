@@ -1,17 +1,15 @@
 package org.telegram.ui;
 
-import org.telegram.ui.Components.RecyclerListView;
+import android.view.View;
 
-public final /* synthetic */ class ContentPreviewViewer$$ExternalSyntheticLambda2 implements Runnable {
-    public final /* synthetic */ RecyclerListView f$0;
-    public final /* synthetic */ Object f$1;
+public final /* synthetic */ class ContentPreviewViewer$$ExternalSyntheticLambda2 implements View.OnClickListener {
+    public final /* synthetic */ ContentPreviewViewer f$0;
 
-    public /* synthetic */ ContentPreviewViewer$$ExternalSyntheticLambda2(RecyclerListView recyclerListView, Object obj) {
-        this.f$0 = recyclerListView;
-        this.f$1 = obj;
+    public /* synthetic */ ContentPreviewViewer$$ExternalSyntheticLambda2(ContentPreviewViewer contentPreviewViewer) {
+        this.f$0 = contentPreviewViewer;
     }
 
-    public final void run() {
-        ContentPreviewViewer.lambda$onTouch$0(this.f$0, this.f$1);
+    public final void onClick(View view) {
+        this.f$0.lambda$showUnlockPremiumView$1(view);
     }
 }

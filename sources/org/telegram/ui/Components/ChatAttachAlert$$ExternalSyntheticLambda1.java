@@ -1,15 +1,15 @@
 package org.telegram.ui.Components;
 
-import android.content.DialogInterface;
+import android.animation.ValueAnimator;
 
-public final /* synthetic */ class ChatAttachAlert$$ExternalSyntheticLambda1 implements DialogInterface.OnClickListener {
+public final /* synthetic */ class ChatAttachAlert$$ExternalSyntheticLambda1 implements ValueAnimator.AnimatorUpdateListener {
     public final /* synthetic */ ChatAttachAlert f$0;
 
     public /* synthetic */ ChatAttachAlert$$ExternalSyntheticLambda1(ChatAttachAlert chatAttachAlert) {
         this.f$0 = chatAttachAlert;
     }
 
-    public final void onClick(DialogInterface dialogInterface, int i) {
-        this.f$0.lambda$dismiss$30(dialogInterface, i);
+    public final void onAnimationUpdate(ValueAnimator valueAnimator) {
+        this.f$0.lambda$onCustomOpenAnimation$29(valueAnimator);
     }
 }

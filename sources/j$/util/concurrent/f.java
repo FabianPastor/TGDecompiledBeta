@@ -2,10 +2,10 @@ package j$.util.concurrent;
 
 import j$.util.CLASSNAMEa;
 import j$.util.function.Consumer;
-import j$.util.u;
+import j$.util.t;
 import java.util.Comparator;
 
-final class f implements u {
+final class f implements t {
     long a;
     final long b;
     final double c;

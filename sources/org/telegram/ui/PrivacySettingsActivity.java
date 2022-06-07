@@ -285,7 +285,7 @@ public class PrivacySettingsActivity extends BaseFragment implements Notificatio
                         int i4 = deleteAccountTTL <= 31 ? 0 : deleteAccountTTL <= 93 ? 1 : deleteAccountTTL <= 182 ? 2 : 3;
                         AlertDialog.Builder builder = new AlertDialog.Builder((Context) getParentActivity());
                         builder.setTitle(LocaleController.getString("DeleteAccountTitle", NUM));
-                        String[] strArr = {LocaleController.formatPluralString("Months", 1), LocaleController.formatPluralString("Months", 3), LocaleController.formatPluralString("Months", 6), LocaleController.formatPluralString("Years", 1)};
+                        String[] strArr = {LocaleController.formatPluralString("Months", 1, new Object[0]), LocaleController.formatPluralString("Months", 3, new Object[0]), LocaleController.formatPluralString("Months", 6, new Object[0]), LocaleController.formatPluralString("Years", 1, new Object[0])};
                         LinearLayout linearLayout = new LinearLayout(getParentActivity());
                         linearLayout.setOrientation(1);
                         builder.setView(linearLayout);
@@ -653,7 +653,7 @@ public class PrivacySettingsActivity extends BaseFragment implements Notificatio
         this.sessionsRow = i12;
         this.rowCount = i13 + 1;
         this.sessionsDetailRow = i13;
-        if (getMessagesController().autoarchiveAvailable) {
+        if (getMessagesController().autoarchiveAvailable || getUserConfig().isPremium()) {
             int i14 = this.rowCount;
             int i15 = i14 + 1;
             this.rowCount = i15;
@@ -986,11 +986,11 @@ public class PrivacySettingsActivity extends BaseFragment implements Notificatio
                         if (!PrivacySettingsActivity.this.getContactsController().getLoadingDeleteInfo()) {
                             int deleteAccountTTL = PrivacySettingsActivity.this.getContactsController().getDeleteAccountTTL();
                             if (deleteAccountTTL <= 182) {
-                                str2 = LocaleController.formatPluralString("Months", deleteAccountTTL / 30);
+                                str2 = LocaleController.formatPluralString("Months", deleteAccountTTL / 30, new Object[0]);
                             } else if (deleteAccountTTL == 365) {
-                                str2 = LocaleController.formatPluralString("Years", deleteAccountTTL / 365);
+                                str2 = LocaleController.formatPluralString("Years", deleteAccountTTL / 365, new Object[0]);
                             } else {
-                                str2 = LocaleController.formatPluralString("Days", deleteAccountTTL);
+                                str2 = LocaleController.formatPluralString("Days", deleteAccountTTL, new Object[0]);
                             }
                             z2 = false;
                         }

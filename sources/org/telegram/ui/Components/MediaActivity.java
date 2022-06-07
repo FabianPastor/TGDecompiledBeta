@@ -41,16 +41,16 @@ public class MediaActivity extends BaseFragment implements SharedMediaLayout.Sha
         return super.onFragmentCreate();
     }
 
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v22, resolved type: org.telegram.tgnet.TLRPC$Chat} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v35, resolved type: org.telegram.tgnet.TLRPC$Chat} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v36, resolved type: org.telegram.tgnet.TLRPC$Chat} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v37, resolved type: org.telegram.tgnet.TLRPC$Chat} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v21, resolved type: org.telegram.tgnet.TLRPC$Chat} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v34, resolved type: org.telegram.tgnet.TLRPC$Chat} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v35, resolved type: org.telegram.tgnet.TLRPC$Chat} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v36, resolved type: org.telegram.tgnet.TLRPC$Chat} */
     /* JADX WARNING: Multi-variable type inference failed */
-    /* JADX WARNING: Removed duplicated region for block: B:22:0x01ff  */
-    /* JADX WARNING: Removed duplicated region for block: B:25:0x0215  */
-    /* JADX WARNING: Removed duplicated region for block: B:26:0x0220  */
-    /* JADX WARNING: Removed duplicated region for block: B:29:0x0229  */
-    /* JADX WARNING: Removed duplicated region for block: B:30:0x0231  */
+    /* JADX WARNING: Removed duplicated region for block: B:22:0x0209  */
+    /* JADX WARNING: Removed duplicated region for block: B:25:0x021f  */
+    /* JADX WARNING: Removed duplicated region for block: B:26:0x022a  */
+    /* JADX WARNING: Removed duplicated region for block: B:29:0x0233  */
+    /* JADX WARNING: Removed duplicated region for block: B:30:0x023b  */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public android.view.View createView(android.content.Context r26) {
         /*
@@ -153,163 +153,167 @@ public class MediaActivity extends BaseFragment implements SharedMediaLayout.Sha
             org.telegram.tgnet.TLRPC$ChatFull r7 = r15.currentChatInfo
             org.telegram.ui.Components.MediaActivity$5 r6 = new org.telegram.ui.Components.MediaActivity$5
             r6.<init>()
-            r16 = 0
+            org.telegram.ui.ActionBar.Theme$ResourcesProvider r16 = r25.getResourceProvider()
             r17 = 0
             r18 = 0
             r19 = 0
+            r20 = 0
             r0 = r8
             r1 = r25
-            r20 = r6
-            r6 = r16
-            r16 = r7
-            r7 = r17
+            r21 = r6
+            r6 = r17
+            r17 = r7
+            r7 = r18
             r23 = r8
-            r8 = r16
+            r8 = r17
             r24 = r9
-            r9 = r18
+            r9 = r19
             r10 = r25
-            r11 = r20
+            r11 = r21
             r26 = r12
-            r12 = r19
-            r16 = r13
-            r14 = r26
-            r0.<init>(r1, r2, r3, r5, r6, r7, r8, r9, r10, r11, r12, r13, r14)
-            r0 = r23
-            r15.sharedMediaLayout = r0
-            r1 = 1
-            r0.setPinnedToTop(r1)
-            org.telegram.ui.Components.SharedMediaLayout r0 = r15.sharedMediaLayout
-            org.telegram.ui.ActionBar.ActionBarMenuItem r0 = r0.getSearchItem()
-            r2 = 0
-            r0.setTranslationY(r2)
-            org.telegram.ui.Components.SharedMediaLayout r0 = r15.sharedMediaLayout
-            android.widget.ImageView r0 = r0.photoVideoOptionsItem
-            r0.setTranslationY(r2)
-            org.telegram.ui.Components.SharedMediaLayout r0 = r15.sharedMediaLayout
-            r2 = r26
-            r2.addView(r0)
-            org.telegram.ui.ActionBar.ActionBar r0 = r15.actionBar
-            r2.addView(r0)
-            r0 = r16
-            r2.addView(r0)
-            java.util.ArrayList<android.view.View> r3 = r2.blurBehindViews
-            org.telegram.ui.Components.SharedMediaLayout r4 = r15.sharedMediaLayout
-            r3.add(r4)
-            long r3 = r15.dialogId
-            boolean r3 = org.telegram.messenger.DialogObject.isEncryptedDialog(r3)
-            r4 = 0
-            if (r3 == 0) goto L_0x0184
-            org.telegram.messenger.MessagesController r3 = r25.getMessagesController()
-            long r5 = r15.dialogId
-            int r5 = org.telegram.messenger.DialogObject.getEncryptedChatId(r5)
-            java.lang.Integer r5 = java.lang.Integer.valueOf(r5)
-            org.telegram.tgnet.TLRPC$EncryptedChat r3 = r3.getEncryptedChat(r5)
-            if (r3 == 0) goto L_0x0181
-            org.telegram.messenger.MessagesController r5 = r25.getMessagesController()
-            long r6 = r3.user_id
-            java.lang.Long r3 = java.lang.Long.valueOf(r6)
-            org.telegram.tgnet.TLRPC$User r3 = r5.getUser(r3)
-            if (r3 == 0) goto L_0x0181
-            org.telegram.ui.ActionBar.SimpleTextView r4 = r15.nameTextView
-            java.lang.String r5 = r3.first_name
-            java.lang.String r6 = r3.last_name
-            java.lang.String r5 = org.telegram.messenger.ContactsController.formatName(r5, r6)
-            r4.setText(r5)
-            r5 = r24
-            r5.setInfo((org.telegram.tgnet.TLRPC$User) r3)
-            goto L_0x01e7
-        L_0x0181:
-            r5 = r24
-            goto L_0x01e8
-        L_0x0184:
-            r5 = r24
-            long r6 = r15.dialogId
-            boolean r3 = org.telegram.messenger.DialogObject.isUserDialog(r6)
-            if (r3 == 0) goto L_0x01ca
-            int r3 = r15.currentAccount
-            org.telegram.messenger.MessagesController r3 = org.telegram.messenger.MessagesController.getInstance(r3)
-            long r6 = r15.dialogId
-            java.lang.Long r6 = java.lang.Long.valueOf(r6)
-            org.telegram.tgnet.TLRPC$User r3 = r3.getUser(r6)
-            if (r3 == 0) goto L_0x01e8
-            boolean r6 = r3.self
-            if (r6 == 0) goto L_0x01b9
-            org.telegram.ui.ActionBar.SimpleTextView r3 = r15.nameTextView
-            r6 = 2131627866(0x7f0e0f5a, float:1.8883009E38)
-            java.lang.String r7 = "SavedMessages"
-            java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r7, r6)
-            r3.setText(r6)
-            r5.setAvatarType(r1)
-            r5.setSmallSize(r1)
-            goto L_0x01e8
-        L_0x01b9:
-            org.telegram.ui.ActionBar.SimpleTextView r4 = r15.nameTextView
-            java.lang.String r6 = r3.first_name
-            java.lang.String r7 = r3.last_name
+            r12 = r20
+            r17 = r13
+            r13 = r16
+            r14 = r17
+            r15 = r26
+            r0.<init>(r1, r2, r3, r5, r6, r7, r8, r9, r10, r11, r12, r13, r14, r15)
+            r0 = r25
+            r1 = r23
+            r0.sharedMediaLayout = r1
+            r2 = 1
+            r1.setPinnedToTop(r2)
+            org.telegram.ui.Components.SharedMediaLayout r1 = r0.sharedMediaLayout
+            org.telegram.ui.ActionBar.ActionBarMenuItem r1 = r1.getSearchItem()
+            r3 = 0
+            r1.setTranslationY(r3)
+            org.telegram.ui.Components.SharedMediaLayout r1 = r0.sharedMediaLayout
+            android.widget.ImageView r1 = r1.photoVideoOptionsItem
+            r1.setTranslationY(r3)
+            org.telegram.ui.Components.SharedMediaLayout r1 = r0.sharedMediaLayout
+            r3 = r26
+            r3.addView(r1)
+            org.telegram.ui.ActionBar.ActionBar r1 = r0.actionBar
+            r3.addView(r1)
+            r1 = r17
+            r3.addView(r1)
+            java.util.ArrayList<android.view.View> r4 = r3.blurBehindViews
+            org.telegram.ui.Components.SharedMediaLayout r5 = r0.sharedMediaLayout
+            r4.add(r5)
+            long r4 = r0.dialogId
+            boolean r4 = org.telegram.messenger.DialogObject.isEncryptedDialog(r4)
+            r5 = 0
+            if (r4 == 0) goto L_0x018e
+            org.telegram.messenger.MessagesController r4 = r25.getMessagesController()
+            long r6 = r0.dialogId
+            int r6 = org.telegram.messenger.DialogObject.getEncryptedChatId(r6)
+            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
+            org.telegram.tgnet.TLRPC$EncryptedChat r4 = r4.getEncryptedChat(r6)
+            if (r4 == 0) goto L_0x018b
+            org.telegram.messenger.MessagesController r6 = r25.getMessagesController()
+            long r7 = r4.user_id
+            java.lang.Long r4 = java.lang.Long.valueOf(r7)
+            org.telegram.tgnet.TLRPC$User r4 = r6.getUser(r4)
+            if (r4 == 0) goto L_0x018b
+            org.telegram.ui.ActionBar.SimpleTextView r5 = r0.nameTextView
+            java.lang.String r6 = r4.first_name
+            java.lang.String r7 = r4.last_name
             java.lang.String r6 = org.telegram.messenger.ContactsController.formatName(r6, r7)
-            r4.setText(r6)
-            r5.setInfo((org.telegram.tgnet.TLRPC$User) r3)
-            goto L_0x01e7
-        L_0x01ca:
-            int r3 = r15.currentAccount
-            org.telegram.messenger.MessagesController r3 = org.telegram.messenger.MessagesController.getInstance(r3)
-            long r6 = r15.dialogId
-            long r6 = -r6
-            java.lang.Long r6 = java.lang.Long.valueOf(r6)
-            org.telegram.tgnet.TLRPC$Chat r3 = r3.getChat(r6)
-            if (r3 == 0) goto L_0x01e8
-            org.telegram.ui.ActionBar.SimpleTextView r4 = r15.nameTextView
-            java.lang.String r6 = r3.title
-            r4.setText(r6)
-            r5.setInfo((org.telegram.tgnet.TLRPC$Chat) r3)
-        L_0x01e7:
-            r4 = r3
-        L_0x01e8:
-            org.telegram.messenger.ImageLocation r3 = org.telegram.messenger.ImageLocation.getForUserOrChat(r4, r1)
-            org.telegram.ui.ProfileActivity$AvatarImageView r6 = r15.avatarImageView
-            java.lang.String r7 = "50_50"
-            r6.setImage((org.telegram.messenger.ImageLocation) r3, (java.lang.String) r7, (android.graphics.drawable.Drawable) r5, (java.lang.Object) r4)
-            org.telegram.ui.ActionBar.SimpleTextView r3 = r15.nameTextView
-            java.lang.CharSequence r3 = r3.getText()
-            boolean r3 = android.text.TextUtils.isEmpty(r3)
-            if (r3 == 0) goto L_0x020d
-            org.telegram.ui.ActionBar.SimpleTextView r3 = r15.nameTextView
-            r4 = 2131628083(0x7f0e1033, float:1.8883449E38)
-            java.lang.String r5 = "SharedContentTitle"
-            java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r5, r4)
-            r3.setText(r4)
-        L_0x020d:
-            org.telegram.ui.Components.SharedMediaLayout r3 = r15.sharedMediaLayout
-            boolean r3 = r3.isSearchItemVisible()
-            if (r3 == 0) goto L_0x0220
-            org.telegram.ui.Components.SharedMediaLayout r3 = r15.sharedMediaLayout
-            org.telegram.ui.ActionBar.ActionBarMenuItem r3 = r3.getSearchItem()
-            r4 = 0
-            r3.setVisibility(r4)
-            goto L_0x0221
-        L_0x0220:
-            r4 = 0
-        L_0x0221:
-            org.telegram.ui.Components.SharedMediaLayout r3 = r15.sharedMediaLayout
-            boolean r3 = r3.isCalendarItemVisible()
-            if (r3 == 0) goto L_0x0231
-            org.telegram.ui.Components.SharedMediaLayout r3 = r15.sharedMediaLayout
-            android.widget.ImageView r3 = r3.photoVideoOptionsItem
-            r3.setVisibility(r4)
-            goto L_0x0239
-        L_0x0231:
-            org.telegram.ui.Components.SharedMediaLayout r3 = r15.sharedMediaLayout
-            android.widget.ImageView r3 = r3.photoVideoOptionsItem
-            r5 = 4
-            r3.setVisibility(r5)
-        L_0x0239:
-            org.telegram.ui.ActionBar.ActionBar r3 = r15.actionBar
-            r3.setDrawBlurBackground(r2)
-            r3 = 1065353216(0x3var_, float:1.0)
-            org.telegram.messenger.AndroidUtilities.updateViewVisibilityAnimated(r0, r1, r3, r4)
+            r5.setText(r6)
+            r6 = r24
+            r6.setInfo((org.telegram.tgnet.TLRPC$User) r4)
+            goto L_0x01f1
+        L_0x018b:
+            r6 = r24
+            goto L_0x01f2
+        L_0x018e:
+            r6 = r24
+            long r7 = r0.dialogId
+            boolean r4 = org.telegram.messenger.DialogObject.isUserDialog(r7)
+            if (r4 == 0) goto L_0x01d4
+            int r4 = r0.currentAccount
+            org.telegram.messenger.MessagesController r4 = org.telegram.messenger.MessagesController.getInstance(r4)
+            long r7 = r0.dialogId
+            java.lang.Long r7 = java.lang.Long.valueOf(r7)
+            org.telegram.tgnet.TLRPC$User r4 = r4.getUser(r7)
+            if (r4 == 0) goto L_0x01f2
+            boolean r7 = r4.self
+            if (r7 == 0) goto L_0x01c3
+            org.telegram.ui.ActionBar.SimpleTextView r4 = r0.nameTextView
+            r7 = 2131628065(0x7f0e1021, float:1.8883412E38)
+            java.lang.String r8 = "SavedMessages"
+            java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r8, r7)
+            r4.setText(r7)
+            r6.setAvatarType(r2)
+            r6.setSmallSize(r2)
+            goto L_0x01f2
+        L_0x01c3:
+            org.telegram.ui.ActionBar.SimpleTextView r5 = r0.nameTextView
+            java.lang.String r7 = r4.first_name
+            java.lang.String r8 = r4.last_name
+            java.lang.String r7 = org.telegram.messenger.ContactsController.formatName(r7, r8)
+            r5.setText(r7)
+            r6.setInfo((org.telegram.tgnet.TLRPC$User) r4)
+            goto L_0x01f1
+        L_0x01d4:
+            int r4 = r0.currentAccount
+            org.telegram.messenger.MessagesController r4 = org.telegram.messenger.MessagesController.getInstance(r4)
+            long r7 = r0.dialogId
+            long r7 = -r7
+            java.lang.Long r7 = java.lang.Long.valueOf(r7)
+            org.telegram.tgnet.TLRPC$Chat r4 = r4.getChat(r7)
+            if (r4 == 0) goto L_0x01f2
+            org.telegram.ui.ActionBar.SimpleTextView r5 = r0.nameTextView
+            java.lang.String r7 = r4.title
+            r5.setText(r7)
+            r6.setInfo((org.telegram.tgnet.TLRPC$Chat) r4)
+        L_0x01f1:
+            r5 = r4
+        L_0x01f2:
+            org.telegram.messenger.ImageLocation r4 = org.telegram.messenger.ImageLocation.getForUserOrChat(r5, r2)
+            org.telegram.ui.ProfileActivity$AvatarImageView r7 = r0.avatarImageView
+            java.lang.String r8 = "50_50"
+            r7.setImage((org.telegram.messenger.ImageLocation) r4, (java.lang.String) r8, (android.graphics.drawable.Drawable) r6, (java.lang.Object) r5)
+            org.telegram.ui.ActionBar.SimpleTextView r4 = r0.nameTextView
+            java.lang.CharSequence r4 = r4.getText()
+            boolean r4 = android.text.TextUtils.isEmpty(r4)
+            if (r4 == 0) goto L_0x0217
+            org.telegram.ui.ActionBar.SimpleTextView r4 = r0.nameTextView
+            r5 = 2131628284(0x7f0e10fc, float:1.8883856E38)
+            java.lang.String r6 = "SharedContentTitle"
+            java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r6, r5)
+            r4.setText(r5)
+        L_0x0217:
+            org.telegram.ui.Components.SharedMediaLayout r4 = r0.sharedMediaLayout
+            boolean r4 = r4.isSearchItemVisible()
+            if (r4 == 0) goto L_0x022a
+            org.telegram.ui.Components.SharedMediaLayout r4 = r0.sharedMediaLayout
+            org.telegram.ui.ActionBar.ActionBarMenuItem r4 = r4.getSearchItem()
+            r5 = 0
+            r4.setVisibility(r5)
+            goto L_0x022b
+        L_0x022a:
+            r5 = 0
+        L_0x022b:
+            org.telegram.ui.Components.SharedMediaLayout r4 = r0.sharedMediaLayout
+            boolean r4 = r4.isCalendarItemVisible()
+            if (r4 == 0) goto L_0x023b
+            org.telegram.ui.Components.SharedMediaLayout r4 = r0.sharedMediaLayout
+            android.widget.ImageView r4 = r4.photoVideoOptionsItem
+            r4.setVisibility(r5)
+            goto L_0x0243
+        L_0x023b:
+            org.telegram.ui.Components.SharedMediaLayout r4 = r0.sharedMediaLayout
+            android.widget.ImageView r4 = r4.photoVideoOptionsItem
+            r6 = 4
+            r4.setVisibility(r6)
+        L_0x0243:
+            org.telegram.ui.ActionBar.ActionBar r4 = r0.actionBar
+            r4.setDrawBlurBackground(r3)
+            r4 = 1065353216(0x3var_, float:1.0)
+            org.telegram.messenger.AndroidUtilities.updateViewVisibilityAnimated(r1, r2, r4, r5)
             r25.updateMediaCount()
             r25.lambda$getThemeDescriptions$0()
-            return r2
+            return r3
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.MediaActivity.createView(android.content.Context):android.view.View");
     }
@@ -321,22 +325,22 @@ public class MediaActivity extends BaseFragment implements SharedMediaLayout.Sha
         if (closestTab >= 0 && lastMediaCount[closestTab] >= 0) {
             if (closestTab == 0) {
                 if (this.sharedMediaLayout.getPhotosVideosTypeFilter() == 1) {
-                    this.mediaCounterTextView.setText(LocaleController.formatPluralString("Photos", lastMediaCount[6]));
+                    this.mediaCounterTextView.setText(LocaleController.formatPluralString("Photos", lastMediaCount[6], new Object[0]));
                 } else if (this.sharedMediaLayout.getPhotosVideosTypeFilter() == 2) {
-                    this.mediaCounterTextView.setText(LocaleController.formatPluralString("Videos", lastMediaCount[7]));
+                    this.mediaCounterTextView.setText(LocaleController.formatPluralString("Videos", lastMediaCount[7], new Object[0]));
                 } else {
-                    this.mediaCounterTextView.setText(LocaleController.formatPluralString("Media", lastMediaCount[0]));
+                    this.mediaCounterTextView.setText(LocaleController.formatPluralString("Media", lastMediaCount[0], new Object[0]));
                 }
             } else if (closestTab == 1) {
-                this.mediaCounterTextView.setText(LocaleController.formatPluralString("Files", lastMediaCount[1]));
+                this.mediaCounterTextView.setText(LocaleController.formatPluralString("Files", lastMediaCount[1], new Object[0]));
             } else if (closestTab == 2) {
-                this.mediaCounterTextView.setText(LocaleController.formatPluralString("Voice", lastMediaCount[2]));
+                this.mediaCounterTextView.setText(LocaleController.formatPluralString("Voice", lastMediaCount[2], new Object[0]));
             } else if (closestTab == 3) {
-                this.mediaCounterTextView.setText(LocaleController.formatPluralString("Links", lastMediaCount[3]));
+                this.mediaCounterTextView.setText(LocaleController.formatPluralString("Links", lastMediaCount[3], new Object[0]));
             } else if (closestTab == 4) {
-                this.mediaCounterTextView.setText(LocaleController.formatPluralString("MusicFiles", lastMediaCount[4]));
+                this.mediaCounterTextView.setText(LocaleController.formatPluralString("MusicFiles", lastMediaCount[4], new Object[0]));
             } else if (closestTab == 5) {
-                this.mediaCounterTextView.setText(LocaleController.formatPluralString("GIFs", lastMediaCount[5]));
+                this.mediaCounterTextView.setText(LocaleController.formatPluralString("GIFs", lastMediaCount[5], new Object[0]));
             }
         }
     }

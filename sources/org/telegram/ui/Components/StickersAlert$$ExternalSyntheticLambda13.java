@@ -4,12 +4,13 @@ import android.view.MotionEvent;
 import android.view.View;
 
 public final /* synthetic */ class StickersAlert$$ExternalSyntheticLambda13 implements View.OnTouchListener {
-    public static final /* synthetic */ StickersAlert$$ExternalSyntheticLambda13 INSTANCE = new StickersAlert$$ExternalSyntheticLambda13();
+    public final /* synthetic */ StickersAlert f$0;
 
-    private /* synthetic */ StickersAlert$$ExternalSyntheticLambda13() {
+    public /* synthetic */ StickersAlert$$ExternalSyntheticLambda13(StickersAlert stickersAlert) {
+        this.f$0 = stickersAlert;
     }
 
     public final boolean onTouch(View view, MotionEvent motionEvent) {
-        return StickersAlert.lambda$init$9(view, motionEvent);
+        return this.f$0.lambda$init$7(view, motionEvent);
     }
 }

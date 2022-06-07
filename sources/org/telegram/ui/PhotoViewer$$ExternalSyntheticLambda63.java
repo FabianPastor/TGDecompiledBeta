@@ -2,18 +2,18 @@ package org.telegram.ui;
 
 import org.telegram.messenger.ImageReceiver;
 
-public final /* synthetic */ class PhotoViewer$$ExternalSyntheticLambda63 implements ImageReceiver.ImageReceiverDelegate {
+public final /* synthetic */ class PhotoViewer$$ExternalSyntheticLambda63 implements Runnable {
     public final /* synthetic */ PhotoViewer f$0;
+    public final /* synthetic */ ImageReceiver.BitmapHolder f$1;
+    public final /* synthetic */ String f$2;
 
-    public /* synthetic */ PhotoViewer$$ExternalSyntheticLambda63(PhotoViewer photoViewer) {
+    public /* synthetic */ PhotoViewer$$ExternalSyntheticLambda63(PhotoViewer photoViewer, ImageReceiver.BitmapHolder bitmapHolder, String str) {
         this.f$0 = photoViewer;
+        this.f$1 = bitmapHolder;
+        this.f$2 = str;
     }
 
-    public final void didSetImage(ImageReceiver imageReceiver, boolean z, boolean z2, boolean z3) {
-        this.f$0.lambda$setParentActivity$33(imageReceiver, z, z2, z3);
-    }
-
-    public /* synthetic */ void onAnimationReady(ImageReceiver imageReceiver) {
-        ImageReceiver.ImageReceiverDelegate.CC.$default$onAnimationReady(this, imageReceiver);
+    public final void run() {
+        this.f$0.lambda$detectFaces$54(this.f$1, this.f$2);
     }
 }

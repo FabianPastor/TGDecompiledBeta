@@ -10,6 +10,7 @@ import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 import android.graphics.drawable.Drawable;
 import android.view.View;
+import android.view.accessibility.AccessibilityNodeInfo;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -57,6 +58,7 @@ public class SessionBottomSheet extends BottomSheet {
         Activity parentActivity = baseFragment.getParentActivity();
         this.session = tLRPC$TL_authorization2;
         this.parentFragment = baseFragment2;
+        fixNavigationBar();
         LinearLayout linearLayout = new LinearLayout(parentActivity);
         linearLayout.setOrientation(1);
         RLottieImageView rLottieImageView = new RLottieImageView(parentActivity);
@@ -209,7 +211,7 @@ public class SessionBottomSheet extends BottomSheet {
             textView3.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
             textView3.setText(LocaleController.getString("TerminateSession", NUM));
             textView3.setTextColor(Theme.getColor("featuredStickers_buttonText"));
-            textView3.setBackgroundDrawable(Theme.createSimpleSelectorRoundRectDrawable(AndroidUtilities.dp(6.0f), Theme.getColor("chat_attachAudioBackground"), ColorUtils.setAlphaComponent(Theme.getColor("windowBackgroundWhite"), 120)));
+            textView3.setBackground(Theme.createSimpleSelectorRoundRectDrawable(AndroidUtilities.dp(6.0f), Theme.getColor("chat_attachAudioBackground"), ColorUtils.setAlphaComponent(Theme.getColor("windowBackgroundWhite"), 120)));
             linearLayout.addView(textView3, LayoutHelper.createFrame(-1, 48.0f, 0, 16.0f, 15.0f, 16.0f, 16.0f));
             final Callback callback2 = callback;
             textView3.setOnClickListener(new View.OnClickListener() {
@@ -288,7 +290,7 @@ public class SessionBottomSheet extends BottomSheet {
             java.lang.String r1 = r1.toLowerCase()
             java.lang.String r2 = "safari"
             boolean r2 = r1.contains(r2)
-            r3 = 2131558582(0x7f0d00b6, float:1.8742484E38)
+            r3 = 2131558585(0x7f0d00b9, float:1.874249E38)
             java.lang.String r4 = "avatar_backgroundBlue"
             r5 = 2131558427(0x7f0d001b, float:1.874217E38)
             r6 = 1
@@ -332,7 +334,7 @@ public class SessionBottomSheet extends BottomSheet {
             java.lang.String r2 = "ubuntu"
             boolean r2 = r0.contains(r2)
             if (r2 == 0) goto L_0x0075
-            r3 = 2131558548(0x7f0d0094, float:1.8742415E38)
+            r3 = 2131558550(0x7f0d0096, float:1.8742419E38)
             goto L_0x0032
         L_0x0075:
             java.lang.String r2 = "ios"
@@ -378,18 +380,18 @@ public class SessionBottomSheet extends BottomSheet {
         L_0x00c6:
             boolean r13 = r1.contains(r2)
             if (r13 == 0) goto L_0x00d3
-            r13 = 2131165416(0x7var_e8, float:1.7945048E38)
-            r3 = 2131165416(0x7var_e8, float:1.7945048E38)
+            r13 = 2131165383(0x7var_c7, float:1.7944982E38)
+            r3 = 2131165383(0x7var_c7, float:1.7944982E38)
             goto L_0x00e6
         L_0x00d3:
             boolean r13 = r1.contains(r11)
             if (r13 == 0) goto L_0x00e0
-            r13 = 2131165415(0x7var_e7, float:1.7945046E38)
-            r3 = 2131165415(0x7var_e7, float:1.7945046E38)
+            r13 = 2131165382(0x7var_c6, float:1.794498E38)
+            r3 = 2131165382(0x7var_c6, float:1.794498E38)
             goto L_0x00e6
         L_0x00e0:
-            r13 = 2131165417(0x7var_e9, float:1.794505E38)
-            r3 = 2131165417(0x7var_e9, float:1.794505E38)
+            r13 = 2131165384(0x7var_c8, float:1.7944984E38)
+            r3 = 2131165384(0x7var_c8, float:1.7944984E38)
         L_0x00e6:
             r4 = r9
             r13 = 0
@@ -461,6 +463,31 @@ public class SessionBottomSheet extends BottomSheet {
             super.dispatchDraw(canvas);
             if (this.needDivider) {
                 canvas.drawRect((float) AndroidUtilities.dp(64.0f), (float) (getMeasuredHeight() - 1), (float) getMeasuredWidth(), (float) getMeasuredHeight(), Theme.dividerPaint);
+            }
+        }
+
+        public void onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo accessibilityNodeInfo) {
+            String str;
+            int i;
+            super.onInitializeAccessibilityNodeInfo(accessibilityNodeInfo);
+            if (this.switchView != null) {
+                accessibilityNodeInfo.setClassName("android.widget.Switch");
+                accessibilityNodeInfo.setCheckable(true);
+                accessibilityNodeInfo.setChecked(this.switchView.isChecked());
+                StringBuilder sb = new StringBuilder();
+                sb.append(this.valueText.getText());
+                sb.append("\n");
+                sb.append(this.descriptionText.getText());
+                sb.append("\n");
+                if (this.switchView.isChecked()) {
+                    i = NUM;
+                    str = "NotificationsOn";
+                } else {
+                    i = NUM;
+                    str = "NotificationsOff";
+                }
+                sb.append(LocaleController.getString(str, i));
+                accessibilityNodeInfo.setText(sb.toString());
             }
         }
     }

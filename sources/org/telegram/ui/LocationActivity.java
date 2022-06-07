@@ -1455,123 +1455,124 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
         /*
             r10 = this;
             r0 = 0
-            org.telegram.tgnet.TLRPC$User r1 = r11.user     // Catch:{ all -> 0x00ff }
+            org.telegram.tgnet.TLRPC$User r1 = r11.user     // Catch:{ all -> 0x0103 }
             if (r1 == 0) goto L_0x000c
-            org.telegram.tgnet.TLRPC$UserProfilePhoto r1 = r1.photo     // Catch:{ all -> 0x00ff }
+            org.telegram.tgnet.TLRPC$UserProfilePhoto r1 = r1.photo     // Catch:{ all -> 0x0103 }
             if (r1 == 0) goto L_0x000c
-            org.telegram.tgnet.TLRPC$FileLocation r1 = r1.photo_small     // Catch:{ all -> 0x00ff }
+            org.telegram.tgnet.TLRPC$FileLocation r1 = r1.photo_small     // Catch:{ all -> 0x0103 }
             goto L_0x0018
         L_0x000c:
-            org.telegram.tgnet.TLRPC$Chat r1 = r11.chat     // Catch:{ all -> 0x00ff }
+            org.telegram.tgnet.TLRPC$Chat r1 = r11.chat     // Catch:{ all -> 0x0103 }
             if (r1 == 0) goto L_0x0017
-            org.telegram.tgnet.TLRPC$ChatPhoto r1 = r1.photo     // Catch:{ all -> 0x00ff }
+            org.telegram.tgnet.TLRPC$ChatPhoto r1 = r1.photo     // Catch:{ all -> 0x0103 }
             if (r1 == 0) goto L_0x0017
-            org.telegram.tgnet.TLRPC$FileLocation r1 = r1.photo_small     // Catch:{ all -> 0x00ff }
+            org.telegram.tgnet.TLRPC$FileLocation r1 = r1.photo_small     // Catch:{ all -> 0x0103 }
             goto L_0x0018
         L_0x0017:
             r1 = r0
         L_0x0018:
             r2 = 1115160576(0x42780000, float:62.0)
-            int r3 = org.telegram.messenger.AndroidUtilities.dp(r2)     // Catch:{ all -> 0x00ff }
+            int r3 = org.telegram.messenger.AndroidUtilities.dp(r2)     // Catch:{ all -> 0x0103 }
             r4 = 1118437376(0x42aa0000, float:85.0)
-            int r5 = org.telegram.messenger.AndroidUtilities.dp(r4)     // Catch:{ all -> 0x00ff }
-            android.graphics.Bitmap$Config r6 = android.graphics.Bitmap.Config.ARGB_8888     // Catch:{ all -> 0x00ff }
-            android.graphics.Bitmap r3 = android.graphics.Bitmap.createBitmap(r3, r5, r6)     // Catch:{ all -> 0x00ff }
+            int r5 = org.telegram.messenger.AndroidUtilities.dp(r4)     // Catch:{ all -> 0x0103 }
+            android.graphics.Bitmap$Config r6 = android.graphics.Bitmap.Config.ARGB_8888     // Catch:{ all -> 0x0103 }
+            android.graphics.Bitmap r3 = android.graphics.Bitmap.createBitmap(r3, r5, r6)     // Catch:{ all -> 0x0103 }
             r5 = 0
-            r3.eraseColor(r5)     // Catch:{ all -> 0x00fc }
-            android.graphics.Canvas r6 = new android.graphics.Canvas     // Catch:{ all -> 0x00fc }
-            r6.<init>(r3)     // Catch:{ all -> 0x00fc }
-            android.content.Context r7 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ all -> 0x00fc }
-            android.content.res.Resources r7 = r7.getResources()     // Catch:{ all -> 0x00fc }
-            r8 = 2131165647(0x7var_cf, float:1.7945517E38)
-            android.graphics.drawable.Drawable r7 = r7.getDrawable(r8)     // Catch:{ all -> 0x00fc }
-            int r2 = org.telegram.messenger.AndroidUtilities.dp(r2)     // Catch:{ all -> 0x00fc }
-            int r4 = org.telegram.messenger.AndroidUtilities.dp(r4)     // Catch:{ all -> 0x00fc }
-            r7.setBounds(r5, r5, r2, r4)     // Catch:{ all -> 0x00fc }
-            r7.draw(r6)     // Catch:{ all -> 0x00fc }
-            android.graphics.Paint r2 = new android.graphics.Paint     // Catch:{ all -> 0x00fc }
+            r3.eraseColor(r5)     // Catch:{ all -> 0x0100 }
+            android.graphics.Canvas r6 = new android.graphics.Canvas     // Catch:{ all -> 0x0100 }
+            r6.<init>(r3)     // Catch:{ all -> 0x0100 }
+            android.content.Context r7 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ all -> 0x0100 }
+            android.content.res.Resources r7 = r7.getResources()     // Catch:{ all -> 0x0100 }
+            r8 = 2131165599(0x7var_f, float:1.794542E38)
+            android.graphics.drawable.Drawable r7 = r7.getDrawable(r8)     // Catch:{ all -> 0x0100 }
+            int r2 = org.telegram.messenger.AndroidUtilities.dp(r2)     // Catch:{ all -> 0x0100 }
+            int r4 = org.telegram.messenger.AndroidUtilities.dp(r4)     // Catch:{ all -> 0x0100 }
+            r7.setBounds(r5, r5, r2, r4)     // Catch:{ all -> 0x0100 }
+            r7.draw(r6)     // Catch:{ all -> 0x0100 }
+            android.graphics.Paint r2 = new android.graphics.Paint     // Catch:{ all -> 0x0100 }
             r4 = 1
-            r2.<init>(r4)     // Catch:{ all -> 0x00fc }
-            android.graphics.RectF r7 = new android.graphics.RectF     // Catch:{ all -> 0x00fc }
-            r7.<init>()     // Catch:{ all -> 0x00fc }
-            r6.save()     // Catch:{ all -> 0x00fc }
+            r2.<init>(r4)     // Catch:{ all -> 0x0100 }
+            android.graphics.RectF r7 = new android.graphics.RectF     // Catch:{ all -> 0x0100 }
+            r7.<init>()     // Catch:{ all -> 0x0100 }
+            r6.save()     // Catch:{ all -> 0x0100 }
             r8 = 1112014848(0x42480000, float:50.0)
             r9 = 1086324736(0x40CLASSNAME, float:6.0)
-            if (r1 == 0) goto L_0x00c6
-            java.io.File r11 = org.telegram.messenger.FileLoader.getPathToAttach(r1, r4)     // Catch:{ all -> 0x00fc }
-            java.lang.String r11 = r11.toString()     // Catch:{ all -> 0x00fc }
-            android.graphics.Bitmap r11 = android.graphics.BitmapFactory.decodeFile(r11)     // Catch:{ all -> 0x00fc }
-            if (r11 == 0) goto L_0x00f5
-            android.graphics.BitmapShader r1 = new android.graphics.BitmapShader     // Catch:{ all -> 0x00fc }
-            android.graphics.Shader$TileMode r4 = android.graphics.Shader.TileMode.CLAMP     // Catch:{ all -> 0x00fc }
-            r1.<init>(r11, r4, r4)     // Catch:{ all -> 0x00fc }
-            android.graphics.Matrix r4 = new android.graphics.Matrix     // Catch:{ all -> 0x00fc }
-            r4.<init>()     // Catch:{ all -> 0x00fc }
-            int r5 = org.telegram.messenger.AndroidUtilities.dp(r8)     // Catch:{ all -> 0x00fc }
-            float r5 = (float) r5     // Catch:{ all -> 0x00fc }
-            int r11 = r11.getWidth()     // Catch:{ all -> 0x00fc }
-            float r11 = (float) r11     // Catch:{ all -> 0x00fc }
+            if (r1 == 0) goto L_0x00ca
+            org.telegram.messenger.FileLoader r11 = r10.getFileLoader()     // Catch:{ all -> 0x0100 }
+            java.io.File r11 = r11.getPathToAttach(r1, r4)     // Catch:{ all -> 0x0100 }
+            java.lang.String r11 = r11.toString()     // Catch:{ all -> 0x0100 }
+            android.graphics.Bitmap r11 = android.graphics.BitmapFactory.decodeFile(r11)     // Catch:{ all -> 0x0100 }
+            if (r11 == 0) goto L_0x00f9
+            android.graphics.BitmapShader r1 = new android.graphics.BitmapShader     // Catch:{ all -> 0x0100 }
+            android.graphics.Shader$TileMode r4 = android.graphics.Shader.TileMode.CLAMP     // Catch:{ all -> 0x0100 }
+            r1.<init>(r11, r4, r4)     // Catch:{ all -> 0x0100 }
+            android.graphics.Matrix r4 = new android.graphics.Matrix     // Catch:{ all -> 0x0100 }
+            r4.<init>()     // Catch:{ all -> 0x0100 }
+            int r5 = org.telegram.messenger.AndroidUtilities.dp(r8)     // Catch:{ all -> 0x0100 }
+            float r5 = (float) r5     // Catch:{ all -> 0x0100 }
+            int r11 = r11.getWidth()     // Catch:{ all -> 0x0100 }
+            float r11 = (float) r11     // Catch:{ all -> 0x0100 }
             float r5 = r5 / r11
-            int r11 = org.telegram.messenger.AndroidUtilities.dp(r9)     // Catch:{ all -> 0x00fc }
-            float r11 = (float) r11     // Catch:{ all -> 0x00fc }
-            int r8 = org.telegram.messenger.AndroidUtilities.dp(r9)     // Catch:{ all -> 0x00fc }
-            float r8 = (float) r8     // Catch:{ all -> 0x00fc }
-            r4.postTranslate(r11, r8)     // Catch:{ all -> 0x00fc }
-            r4.postScale(r5, r5)     // Catch:{ all -> 0x00fc }
-            r2.setShader(r1)     // Catch:{ all -> 0x00fc }
-            r1.setLocalMatrix(r4)     // Catch:{ all -> 0x00fc }
-            int r11 = org.telegram.messenger.AndroidUtilities.dp(r9)     // Catch:{ all -> 0x00fc }
-            float r11 = (float) r11     // Catch:{ all -> 0x00fc }
-            int r1 = org.telegram.messenger.AndroidUtilities.dp(r9)     // Catch:{ all -> 0x00fc }
-            float r1 = (float) r1     // Catch:{ all -> 0x00fc }
+            int r11 = org.telegram.messenger.AndroidUtilities.dp(r9)     // Catch:{ all -> 0x0100 }
+            float r11 = (float) r11     // Catch:{ all -> 0x0100 }
+            int r8 = org.telegram.messenger.AndroidUtilities.dp(r9)     // Catch:{ all -> 0x0100 }
+            float r8 = (float) r8     // Catch:{ all -> 0x0100 }
+            r4.postTranslate(r11, r8)     // Catch:{ all -> 0x0100 }
+            r4.postScale(r5, r5)     // Catch:{ all -> 0x0100 }
+            r2.setShader(r1)     // Catch:{ all -> 0x0100 }
+            r1.setLocalMatrix(r4)     // Catch:{ all -> 0x0100 }
+            int r11 = org.telegram.messenger.AndroidUtilities.dp(r9)     // Catch:{ all -> 0x0100 }
+            float r11 = (float) r11     // Catch:{ all -> 0x0100 }
+            int r1 = org.telegram.messenger.AndroidUtilities.dp(r9)     // Catch:{ all -> 0x0100 }
+            float r1 = (float) r1     // Catch:{ all -> 0x0100 }
             r4 = 1113587712(0x42600000, float:56.0)
-            int r5 = org.telegram.messenger.AndroidUtilities.dp(r4)     // Catch:{ all -> 0x00fc }
-            float r5 = (float) r5     // Catch:{ all -> 0x00fc }
-            int r4 = org.telegram.messenger.AndroidUtilities.dp(r4)     // Catch:{ all -> 0x00fc }
-            float r4 = (float) r4     // Catch:{ all -> 0x00fc }
-            r7.set(r11, r1, r5, r4)     // Catch:{ all -> 0x00fc }
+            int r5 = org.telegram.messenger.AndroidUtilities.dp(r4)     // Catch:{ all -> 0x0100 }
+            float r5 = (float) r5     // Catch:{ all -> 0x0100 }
+            int r4 = org.telegram.messenger.AndroidUtilities.dp(r4)     // Catch:{ all -> 0x0100 }
+            float r4 = (float) r4     // Catch:{ all -> 0x0100 }
+            r7.set(r11, r1, r5, r4)     // Catch:{ all -> 0x0100 }
             r11 = 1103626240(0x41CLASSNAME, float:25.0)
-            int r1 = org.telegram.messenger.AndroidUtilities.dp(r11)     // Catch:{ all -> 0x00fc }
-            float r1 = (float) r1     // Catch:{ all -> 0x00fc }
-            int r11 = org.telegram.messenger.AndroidUtilities.dp(r11)     // Catch:{ all -> 0x00fc }
-            float r11 = (float) r11     // Catch:{ all -> 0x00fc }
-            r6.drawRoundRect(r7, r1, r11, r2)     // Catch:{ all -> 0x00fc }
-            goto L_0x00f5
-        L_0x00c6:
-            org.telegram.ui.Components.AvatarDrawable r1 = new org.telegram.ui.Components.AvatarDrawable     // Catch:{ all -> 0x00fc }
-            r1.<init>()     // Catch:{ all -> 0x00fc }
-            org.telegram.tgnet.TLRPC$User r2 = r11.user     // Catch:{ all -> 0x00fc }
-            if (r2 == 0) goto L_0x00d3
-            r1.setInfo((org.telegram.tgnet.TLRPC$User) r2)     // Catch:{ all -> 0x00fc }
-            goto L_0x00da
-        L_0x00d3:
-            org.telegram.tgnet.TLRPC$Chat r11 = r11.chat     // Catch:{ all -> 0x00fc }
-            if (r11 == 0) goto L_0x00da
-            r1.setInfo((org.telegram.tgnet.TLRPC$Chat) r11)     // Catch:{ all -> 0x00fc }
-        L_0x00da:
-            int r11 = org.telegram.messenger.AndroidUtilities.dp(r9)     // Catch:{ all -> 0x00fc }
-            float r11 = (float) r11     // Catch:{ all -> 0x00fc }
-            int r2 = org.telegram.messenger.AndroidUtilities.dp(r9)     // Catch:{ all -> 0x00fc }
-            float r2 = (float) r2     // Catch:{ all -> 0x00fc }
-            r6.translate(r11, r2)     // Catch:{ all -> 0x00fc }
-            int r11 = org.telegram.messenger.AndroidUtilities.dp(r8)     // Catch:{ all -> 0x00fc }
-            int r2 = org.telegram.messenger.AndroidUtilities.dp(r8)     // Catch:{ all -> 0x00fc }
-            r1.setBounds(r5, r5, r11, r2)     // Catch:{ all -> 0x00fc }
-            r1.draw(r6)     // Catch:{ all -> 0x00fc }
-        L_0x00f5:
-            r6.restore()     // Catch:{ all -> 0x00fc }
-            r6.setBitmap(r0)     // Catch:{ Exception -> 0x0104 }
-            goto L_0x0104
-        L_0x00fc:
+            int r1 = org.telegram.messenger.AndroidUtilities.dp(r11)     // Catch:{ all -> 0x0100 }
+            float r1 = (float) r1     // Catch:{ all -> 0x0100 }
+            int r11 = org.telegram.messenger.AndroidUtilities.dp(r11)     // Catch:{ all -> 0x0100 }
+            float r11 = (float) r11     // Catch:{ all -> 0x0100 }
+            r6.drawRoundRect(r7, r1, r11, r2)     // Catch:{ all -> 0x0100 }
+            goto L_0x00f9
+        L_0x00ca:
+            org.telegram.ui.Components.AvatarDrawable r1 = new org.telegram.ui.Components.AvatarDrawable     // Catch:{ all -> 0x0100 }
+            r1.<init>()     // Catch:{ all -> 0x0100 }
+            org.telegram.tgnet.TLRPC$User r2 = r11.user     // Catch:{ all -> 0x0100 }
+            if (r2 == 0) goto L_0x00d7
+            r1.setInfo((org.telegram.tgnet.TLRPC$User) r2)     // Catch:{ all -> 0x0100 }
+            goto L_0x00de
+        L_0x00d7:
+            org.telegram.tgnet.TLRPC$Chat r11 = r11.chat     // Catch:{ all -> 0x0100 }
+            if (r11 == 0) goto L_0x00de
+            r1.setInfo((org.telegram.tgnet.TLRPC$Chat) r11)     // Catch:{ all -> 0x0100 }
+        L_0x00de:
+            int r11 = org.telegram.messenger.AndroidUtilities.dp(r9)     // Catch:{ all -> 0x0100 }
+            float r11 = (float) r11     // Catch:{ all -> 0x0100 }
+            int r2 = org.telegram.messenger.AndroidUtilities.dp(r9)     // Catch:{ all -> 0x0100 }
+            float r2 = (float) r2     // Catch:{ all -> 0x0100 }
+            r6.translate(r11, r2)     // Catch:{ all -> 0x0100 }
+            int r11 = org.telegram.messenger.AndroidUtilities.dp(r8)     // Catch:{ all -> 0x0100 }
+            int r2 = org.telegram.messenger.AndroidUtilities.dp(r8)     // Catch:{ all -> 0x0100 }
+            r1.setBounds(r5, r5, r11, r2)     // Catch:{ all -> 0x0100 }
+            r1.draw(r6)     // Catch:{ all -> 0x0100 }
+        L_0x00f9:
+            r6.restore()     // Catch:{ all -> 0x0100 }
+            r6.setBitmap(r0)     // Catch:{ Exception -> 0x0108 }
+            goto L_0x0108
+        L_0x0100:
             r11 = move-exception
             r0 = r3
-            goto L_0x0100
-        L_0x00ff:
+            goto L_0x0104
+        L_0x0103:
             r11 = move-exception
-        L_0x0100:
+        L_0x0104:
             org.telegram.messenger.FileLog.e((java.lang.Throwable) r11)
             r3 = r0
-        L_0x0104:
+        L_0x0108:
             return r3
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.LocationActivity.createUserBitmap(org.telegram.ui.LocationActivity$LiveLocation):android.graphics.Bitmap");
@@ -2147,7 +2148,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
             java.lang.Long r1 = java.lang.Long.valueOf(r5)
             org.telegram.tgnet.TLRPC$User r0 = r0.getUser(r1)
             org.telegram.ui.Components.HintView r1 = r7.hintView
-            r3 = 2131627557(0x7f0e0e25, float:1.8882382E38)
+            r3 = 2131627734(0x7f0e0ed6, float:1.888274E38)
             java.lang.Object[] r5 = new java.lang.Object[r4]
             java.lang.String r0 = org.telegram.messenger.UserObject.getFirstName(r0)
             r5[r2] = r0
@@ -2157,7 +2158,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
             goto L_0x0065
         L_0x0057:
             org.telegram.ui.Components.HintView r0 = r7.hintView
-            r1 = 2131627556(0x7f0e0e24, float:1.888238E38)
+            r1 = 2131627733(0x7f0e0ed5, float:1.8882739E38)
             java.lang.String r2 = "ProximityTooltioGroup"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             r0.setOverrideText(r1)

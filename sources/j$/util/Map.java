@@ -78,6 +78,40 @@ public interface Map<K, V> {
             return obj2;
         }
 
+        public static Object $default$putIfAbsent(java.util.Map map, Object obj, Object obj2) {
+            Object obj3 = map.get(obj);
+            return obj3 == null ? map.put(obj, obj2) : obj3;
+        }
+
+        public static boolean $default$remove(java.util.Map map, Object obj, Object obj2) {
+            Object obj3 = map.get(obj);
+            if (!CLASSNAMEa.x(obj3, obj2)) {
+                return false;
+            }
+            if (obj3 == null && !map.containsKey(obj)) {
+                return false;
+            }
+            map.remove(obj);
+            return true;
+        }
+
+        public static Object $default$replace(java.util.Map map, Object obj, Object obj2) {
+            Object obj3 = map.get(obj);
+            return (obj3 != null || map.containsKey(obj)) ? map.put(obj, obj2) : obj3;
+        }
+
+        public static boolean $default$replace(java.util.Map map, Object obj, Object obj2, Object obj3) {
+            Object obj4 = map.get(obj);
+            if (!CLASSNAMEa.x(obj4, obj2)) {
+                return false;
+            }
+            if (obj4 == null && !map.containsKey(obj)) {
+                return false;
+            }
+            map.put(obj, obj3);
+            return true;
+        }
+
         public static void $default$replaceAll(java.util.Map map, BiFunction biFunction) {
             biFunction.getClass();
             for (Map.Entry entry : map.entrySet()) {

@@ -1,16 +1,16 @@
 package org.telegram.ui;
 
-import java.util.ArrayList;
-import org.telegram.ui.FilteredSearchView;
+import android.view.KeyEvent;
+import org.telegram.ui.ActionBar.ActionBarPopupWindow;
 
-public final /* synthetic */ class DialogsActivity$$ExternalSyntheticLambda52 implements FilteredSearchView.Delegate {
+public final /* synthetic */ class DialogsActivity$$ExternalSyntheticLambda52 implements ActionBarPopupWindow.OnDispatchKeyEventListener {
     public final /* synthetic */ DialogsActivity f$0;
 
     public /* synthetic */ DialogsActivity$$ExternalSyntheticLambda52(DialogsActivity dialogsActivity) {
         this.f$0 = dialogsActivity;
     }
 
-    public final void updateFiltersView(boolean z, ArrayList arrayList, ArrayList arrayList2, boolean z2) {
-        this.f$0.lambda$createView$7(z, arrayList, arrayList2, z2);
+    public final void onDispatchKeyEvent(KeyEvent keyEvent) {
+        this.f$0.lambda$onSendLongClick$56(keyEvent);
     }
 }

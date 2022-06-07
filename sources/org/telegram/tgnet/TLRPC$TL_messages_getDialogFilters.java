@@ -7,7 +7,7 @@ public class TLRPC$TL_messages_getDialogFilters extends TLObject {
         TLRPC$Vector tLRPC$Vector = new TLRPC$Vector();
         int readInt32 = abstractSerializedData.readInt32(z);
         for (int i2 = 0; i2 < readInt32; i2++) {
-            TLRPC$TL_dialogFilter TLdeserialize = TLRPC$TL_dialogFilter.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
+            TLRPC$DialogFilter TLdeserialize = TLRPC$DialogFilter.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
             if (TLdeserialize == null) {
                 return tLRPC$Vector;
             }

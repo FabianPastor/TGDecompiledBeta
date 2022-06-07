@@ -1,26 +1,19 @@
 package org.telegram.ui.Components;
 
-import android.widget.TextView;
-import org.telegram.tgnet.TLObject;
+import java.util.ArrayList;
 
 public final /* synthetic */ class StickersAlert$$ExternalSyntheticLambda21 implements Runnable {
     public final /* synthetic */ StickersAlert f$0;
-    public final /* synthetic */ TLObject f$1;
-    public final /* synthetic */ EditTextBoldCursor f$2;
-    public final /* synthetic */ TextView f$3;
-    public final /* synthetic */ TextView f$4;
-    public final /* synthetic */ int[] f$5;
+    public final /* synthetic */ ArrayList f$1;
+    public final /* synthetic */ ArrayList f$2;
 
-    public /* synthetic */ StickersAlert$$ExternalSyntheticLambda21(StickersAlert stickersAlert, TLObject tLObject, EditTextBoldCursor editTextBoldCursor, TextView textView, TextView textView2, int[] iArr) {
+    public /* synthetic */ StickersAlert$$ExternalSyntheticLambda21(StickersAlert stickersAlert, ArrayList arrayList, ArrayList arrayList2) {
         this.f$0 = stickersAlert;
-        this.f$1 = tLObject;
-        this.f$2 = editTextBoldCursor;
-        this.f$3 = textView;
-        this.f$4 = textView2;
-        this.f$5 = iArr;
+        this.f$1 = arrayList;
+        this.f$2 = arrayList2;
     }
 
     public final void run() {
-        this.f$0.lambda$showNameEnterAlert$25(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5);
+        this.f$0.lambda$new$4(this.f$1, this.f$2);
     }
 }

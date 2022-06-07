@@ -12,6 +12,6 @@ public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda23
     }
 
     public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        this.f$0.lambda$toogleChannelInvitesHistory$228(tLObject, tLRPC$TL_error);
+        this.f$0.lambda$changeChatTitle$249(tLObject, tLRPC$TL_error);
     }
 }

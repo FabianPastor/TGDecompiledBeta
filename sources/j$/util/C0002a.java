@@ -11,8 +11,9 @@ import j$.util.function.Predicate;
 import j$.util.function.f;
 import j$.util.function.l;
 import j$.util.function.q;
-import j$.util.stream.CLASSNAMEp1;
+import j$.util.stream.CLASSNAMEo1;
 import j$.util.stream.Stream;
+import j$.util.u;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Comparator;
@@ -57,44 +58,20 @@ public abstract /* synthetic */ class CLASSNAMEa {
         }
     }
 
-    public static Object B(java.util.Map map, Object obj, Object obj2) {
-        if (map instanceof Map) {
-            return ((Map) map).putIfAbsent(obj, obj2);
-        }
-        Object obj3 = map.get(obj);
-        return obj3 == null ? map.put(obj, obj2) : obj3;
+    public static /* synthetic */ Object B(java.util.Map map, Object obj, Object obj2) {
+        return map instanceof Map ? ((Map) map).putIfAbsent(obj, obj2) : Map.CC.$default$putIfAbsent(map, obj, obj2);
     }
 
-    public static boolean C(java.util.Map map, Object obj, Object obj2) {
-        if (map instanceof Map) {
-            return ((Map) map).remove(obj, obj2);
-        }
-        Object obj3 = map.get(obj);
-        if (!x(obj3, obj2) || (obj3 == null && !map.containsKey(obj))) {
-            return false;
-        }
-        map.remove(obj);
-        return true;
+    public static /* synthetic */ boolean C(java.util.Map map, Object obj, Object obj2) {
+        return map instanceof Map ? ((Map) map).remove(obj, obj2) : Map.CC.$default$remove(map, obj, obj2);
     }
 
-    public static Object D(java.util.Map map, Object obj, Object obj2) {
-        if (map instanceof Map) {
-            return ((Map) map).replace(obj, obj2);
-        }
-        Object obj3 = map.get(obj);
-        return (obj3 != null || map.containsKey(obj)) ? map.put(obj, obj2) : obj3;
+    public static /* synthetic */ Object D(java.util.Map map, Object obj, Object obj2) {
+        return map instanceof Map ? ((Map) map).replace(obj, obj2) : Map.CC.$default$replace(map, obj, obj2);
     }
 
-    public static boolean E(java.util.Map map, Object obj, Object obj2, Object obj3) {
-        if (map instanceof Map) {
-            return ((Map) map).replace(obj, obj2, obj3);
-        }
-        Object obj4 = map.get(obj);
-        if (!x(obj4, obj2) || (obj4 == null && !map.containsKey(obj))) {
-            return false;
-        }
-        map.put(obj, obj3);
-        return true;
+    public static /* synthetic */ boolean E(java.util.Map map, Object obj, Object obj2, Object obj3) {
+        return map instanceof Map ? ((Map) map).replace(obj, obj2, obj3) : Map.CC.$default$replace(map, obj, obj2, obj3);
     }
 
     public static void F(java.util.Map map, BiFunction biFunction) {
@@ -143,55 +120,55 @@ public abstract /* synthetic */ class CLASSNAMEa {
         }
     }
 
-    public static void b(u uVar, Consumer consumer) {
+    public static void b(t tVar, Consumer consumer) {
         if (consumer instanceof f) {
-            uVar.e((f) consumer);
-        } else if (!P.a) {
+            tVar.e((f) consumer);
+        } else if (!N.a) {
             consumer.getClass();
-            uVar.e(new CLASSNAMEm(consumer));
+            tVar.e(new CLASSNAMEm(consumer));
         } else {
-            P.a(uVar.getClass(), "{0} calling Spliterator.OfDouble.forEachRemaining((DoubleConsumer) action::accept)");
+            N.a(tVar.getClass(), "{0} calling Spliterator.OfDouble.forEachRemaining((DoubleConsumer) action::accept)");
             throw null;
         }
     }
 
-    public static void c(v vVar, Consumer consumer) {
+    public static void c(u.a aVar, Consumer consumer) {
         if (consumer instanceof l) {
-            vVar.c((l) consumer);
-        } else if (!P.a) {
+            aVar.c((l) consumer);
+        } else if (!N.a) {
             consumer.getClass();
-            vVar.c(new CLASSNAMEo(consumer));
+            aVar.c(new o(consumer));
         } else {
-            P.a(vVar.getClass(), "{0} calling Spliterator.OfInt.forEachRemaining((IntConsumer) action::accept)");
+            N.a(aVar.getClass(), "{0} calling Spliterator.OfInt.forEachRemaining((IntConsumer) action::accept)");
             throw null;
         }
     }
 
-    public static void d(w wVar, Consumer consumer) {
+    public static void d(v vVar, Consumer consumer) {
         if (consumer instanceof q) {
-            wVar.d((q) consumer);
-        } else if (!P.a) {
+            vVar.d((q) consumer);
+        } else if (!N.a) {
             consumer.getClass();
-            wVar.d(new q(consumer));
+            vVar.d(new q(consumer));
         } else {
-            P.a(wVar.getClass(), "{0} calling Spliterator.OfLong.forEachRemaining((LongConsumer) action::accept)");
+            N.a(vVar.getClass(), "{0} calling Spliterator.OfLong.forEachRemaining((LongConsumer) action::accept)");
             throw null;
         }
     }
 
-    public static long e(y yVar) {
-        if ((yVar.characteristics() & 64) == 0) {
+    public static long e(u uVar) {
+        if ((uVar.characteristics() & 64) == 0) {
             return -1;
         }
-        return yVar.estimateSize();
+        return uVar.estimateSize();
     }
 
-    public static boolean f(y yVar, int i) {
-        return (yVar.characteristics() & i) == i;
+    public static boolean f(u uVar, int i) {
+        return (uVar.characteristics() & i) == i;
     }
 
     public static Stream g(Collection collection) {
-        return CLASSNAMEp1.y(Collection$EL.b(collection), true);
+        return CLASSNAMEo1.y(Collection$EL.b(collection), true);
     }
 
     public static boolean h(Collection collection, Predicate predicate) {
@@ -211,42 +188,42 @@ public abstract /* synthetic */ class CLASSNAMEa {
     }
 
     public static Stream i(Collection collection) {
-        return CLASSNAMEp1.y(Collection$EL.b(collection), false);
+        return CLASSNAMEo1.y(Collection$EL.b(collection), false);
     }
 
-    public static boolean j(u uVar, Consumer consumer) {
+    public static boolean j(t tVar, Consumer consumer) {
         if (consumer instanceof f) {
-            return uVar.k((f) consumer);
+            return tVar.k((f) consumer);
         }
-        if (!P.a) {
+        if (!N.a) {
             consumer.getClass();
-            return uVar.k(new CLASSNAMEm(consumer));
+            return tVar.k(new CLASSNAMEm(consumer));
         }
-        P.a(uVar.getClass(), "{0} calling Spliterator.OfDouble.tryAdvance((DoubleConsumer) action::accept)");
+        N.a(tVar.getClass(), "{0} calling Spliterator.OfDouble.tryAdvance((DoubleConsumer) action::accept)");
         throw null;
     }
 
-    public static boolean k(v vVar, Consumer consumer) {
+    public static boolean k(u.a aVar, Consumer consumer) {
         if (consumer instanceof l) {
-            return vVar.g((l) consumer);
+            return aVar.g((l) consumer);
         }
-        if (!P.a) {
+        if (!N.a) {
             consumer.getClass();
-            return vVar.g(new CLASSNAMEo(consumer));
+            return aVar.g(new o(consumer));
         }
-        P.a(vVar.getClass(), "{0} calling Spliterator.OfInt.tryAdvance((IntConsumer) action::accept)");
+        N.a(aVar.getClass(), "{0} calling Spliterator.OfInt.tryAdvance((IntConsumer) action::accept)");
         throw null;
     }
 
-    public static boolean l(w wVar, Consumer consumer) {
+    public static boolean l(v vVar, Consumer consumer) {
         if (consumer instanceof q) {
-            return wVar.i((q) consumer);
+            return vVar.i((q) consumer);
         }
-        if (!P.a) {
+        if (!N.a) {
             consumer.getClass();
-            return wVar.i(new q(consumer));
+            return vVar.i(new q(consumer));
         }
-        P.a(wVar.getClass(), "{0} calling Spliterator.OfLong.tryAdvance((LongConsumer) action::accept)");
+        N.a(vVar.getClass(), "{0} calling Spliterator.OfLong.tryAdvance((LongConsumer) action::accept)");
         throw null;
     }
 

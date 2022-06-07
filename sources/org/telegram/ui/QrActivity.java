@@ -2,8 +2,6 @@ package org.telegram.ui;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
-import android.animation.AnimatorSet;
-import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -11,6 +9,7 @@ import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.BitmapShader;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
@@ -28,14 +27,15 @@ import android.os.Bundle;
 import android.os.SystemClock;
 import android.text.TextUtils;
 import android.util.Pair;
-import android.util.Property;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
-import android.view.animation.DecelerateInterpolator;
+import android.view.accessibility.AccessibilityNodeInfo;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 import androidx.collection.ArrayMap;
 import androidx.core.content.ContextCompat;
 import androidx.core.graphics.ColorUtils;
@@ -48,19 +48,27 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.ChatThemeController;
+import org.telegram.messenger.ImageLocation;
 import org.telegram.messenger.LocaleController;
+import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.SvgHelper;
+import org.telegram.messenger.UserObject;
+import org.telegram.tgnet.ResultCallback;
+import org.telegram.tgnet.TLRPC$Chat;
+import org.telegram.tgnet.TLRPC$TL_error;
+import org.telegram.tgnet.TLRPC$User;
 import org.telegram.tgnet.TLRPC$WallPaper;
 import org.telegram.ui.ActionBar.ActionBarLayout;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.EmojiThemes;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.ActionBar.ThemeDescription;
+import org.telegram.ui.Components.AvatarDrawable;
 import org.telegram.ui.Components.BackupImageView;
 import org.telegram.ui.Components.ChatThemeBottomSheet;
-import org.telegram.ui.Components.CubicBezierInterpolator;
 import org.telegram.ui.Components.Easings;
 import org.telegram.ui.Components.FlickerLoadingView;
 import org.telegram.ui.Components.HideViewAfterAnimation;
@@ -161,280 +169,237 @@ public class QrActivity extends BaseFragment {
         return super.onFragmentCreate();
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:17:0x025d  */
-    /* JADX WARNING: Removed duplicated region for block: B:18:0x0263  */
-    /* Code decompiled incorrectly, please refer to instructions dump. */
-    public android.view.View createView(android.content.Context r22) {
-        /*
-            r21 = this;
-            r0 = r21
-            r1 = r22
-            org.telegram.ui.ActionBar.EmojiThemes r2 = r0.homeTheme
-            int r3 = r0.currentAccount
-            r2.loadPreviewColors(r3)
-            org.telegram.ui.ActionBar.Theme$ThemeInfo r2 = org.telegram.ui.ActionBar.Theme.getActiveTheme()
-            boolean r2 = r2.isDark()
-            r0.isCurrentThemeDark = r2
-            org.telegram.ui.ActionBar.ActionBar r2 = r0.actionBar
-            r3 = 0
-            r2.setAddToContainer(r3)
-            org.telegram.ui.ActionBar.ActionBar r2 = r0.actionBar
-            r4 = 0
-            r2.setBackground(r4)
-            org.telegram.ui.ActionBar.ActionBar r2 = r0.actionBar
-            r5 = -1
-            r2.setItemsColor(r5, r3)
-            org.telegram.ui.QrActivity$1 r2 = new org.telegram.ui.QrActivity$1
-            r2.<init>(r1)
-            org.telegram.ui.QrActivity$2 r6 = new org.telegram.ui.QrActivity$2
-            r6.<init>(r1)
-            r0.backgroundView = r6
-            r2.addView(r6)
-            long r6 = r0.userId
-            r8 = 0
-            r10 = 1
-            int r11 = (r6 > r8 ? 1 : (r6 == r8 ? 0 : -1))
-            if (r11 == 0) goto L_0x0068
-            org.telegram.messenger.MessagesController r6 = r21.getMessagesController()
-            long r7 = r0.userId
-            java.lang.Long r7 = java.lang.Long.valueOf(r7)
-            org.telegram.tgnet.TLRPC$User r6 = r6.getUser(r7)
-            if (r6 == 0) goto L_0x005f
-            java.lang.String r7 = r6.username
-            org.telegram.ui.Components.AvatarDrawable r8 = new org.telegram.ui.Components.AvatarDrawable
-            r8.<init>((org.telegram.tgnet.TLRPC$User) r6)
-            org.telegram.messenger.ImageLocation r9 = org.telegram.messenger.ImageLocation.getForUser(r6, r10)
-            org.telegram.messenger.ImageLocation r6 = org.telegram.messenger.ImageLocation.getForUser(r6, r3)
-            goto L_0x0063
-        L_0x005f:
-            r6 = r4
-            r7 = r6
-            r8 = r7
-            r9 = r8
-        L_0x0063:
-            r12 = r6
-            r16 = r8
-            r14 = r9
-            goto L_0x0093
-        L_0x0068:
-            long r6 = r0.chatId
-            int r11 = (r6 > r8 ? 1 : (r6 == r8 ? 0 : -1))
-            if (r11 == 0) goto L_0x008e
-            org.telegram.messenger.MessagesController r6 = r21.getMessagesController()
-            long r7 = r0.chatId
-            java.lang.Long r7 = java.lang.Long.valueOf(r7)
-            org.telegram.tgnet.TLRPC$Chat r6 = r6.getChat(r7)
-            if (r6 == 0) goto L_0x008e
-            java.lang.String r7 = r6.username
-            org.telegram.ui.Components.AvatarDrawable r8 = new org.telegram.ui.Components.AvatarDrawable
-            r8.<init>((org.telegram.tgnet.TLRPC$Chat) r6)
-            org.telegram.messenger.ImageLocation r9 = org.telegram.messenger.ImageLocation.getForChat(r6, r10)
-            org.telegram.messenger.ImageLocation r6 = org.telegram.messenger.ImageLocation.getForChat(r6, r3)
-            goto L_0x0063
-        L_0x008e:
-            r7 = r4
-            r12 = r7
-            r14 = r12
-            r16 = r14
-        L_0x0093:
-            java.lang.StringBuilder r6 = new java.lang.StringBuilder
-            r6.<init>()
-            java.lang.String r8 = "https://"
-            r6.append(r8)
-            int r8 = r0.currentAccount
-            org.telegram.messenger.MessagesController r8 = org.telegram.messenger.MessagesController.getInstance(r8)
-            java.lang.String r8 = r8.linkPrefix
-            r6.append(r8)
-            java.lang.String r8 = "/"
-            r6.append(r8)
-            r6.append(r7)
-            java.lang.String r6 = r6.toString()
-            org.telegram.ui.QrActivity$QrView r8 = new org.telegram.ui.QrActivity$QrView
-            r8.<init>(r1)
-            r0.qrView = r8
-            r9 = -9324972(0xfffffffffvar_b654, float:-3.2129065E38)
-            r11 = -13856649(0xffffffffff2CLASSNAME, float:-2.2937732E38)
-            r13 = -6636738(0xffffffffff9abb3e, float:NaN)
-            r15 = -9915042(0xfffffffffvar_b55e, float:-3.093226E38)
-            r8.setColors(r9, r11, r13, r15)
-            org.telegram.ui.QrActivity$QrView r8 = r0.qrView
-            r8.setData(r6, r7)
-            org.telegram.ui.QrActivity$QrView r6 = r0.qrView
-            org.telegram.ui.QrActivity$$ExternalSyntheticLambda9 r7 = new org.telegram.ui.QrActivity$$ExternalSyntheticLambda9
-            r7.<init>(r0)
-            r6.setCenterChangedListener(r7)
-            org.telegram.ui.QrActivity$QrView r6 = r0.qrView
-            r2.addView(r6)
-            org.telegram.ui.Components.RLottieImageView r6 = new org.telegram.ui.Components.RLottieImageView
-            r6.<init>(r1)
-            r0.logoImageView = r6
-            r6.setAutoRepeat(r10)
-            org.telegram.ui.Components.RLottieImageView r6 = r0.logoImageView
-            r7 = 2131558503(0x7f0d0067, float:1.8742324E38)
-            r8 = 60
-            r6.setAnimation(r7, r8, r8)
-            org.telegram.ui.Components.RLottieImageView r6 = r0.logoImageView
-            r6.playAnimation()
-            org.telegram.ui.Components.RLottieImageView r6 = r0.logoImageView
-            r2.addView(r6)
-            org.telegram.ui.Components.BackupImageView r6 = new org.telegram.ui.Components.BackupImageView
-            r6.<init>(r1)
-            r0.avatarImageView = r6
-            r7 = 1109917696(0x42280000, float:42.0)
-            int r7 = org.telegram.messenger.AndroidUtilities.dp(r7)
-            r6.setRoundRadius(r7)
-            org.telegram.ui.Components.BackupImageView r6 = r0.avatarImageView
-            r7 = 1118306304(0x42a80000, float:84.0)
-            int r8 = org.telegram.messenger.AndroidUtilities.dp(r7)
-            int r7 = org.telegram.messenger.AndroidUtilities.dp(r7)
-            r6.setSize(r8, r7)
-            org.telegram.ui.Components.BackupImageView r6 = r0.avatarImageView
-            r7 = 51
-            r8 = 84
-            android.widget.FrameLayout$LayoutParams r7 = org.telegram.ui.Components.LayoutHelper.createFrame((int) r8, (int) r8, (int) r7)
-            r2.addView(r6, r7)
-            org.telegram.ui.Components.BackupImageView r11 = r0.avatarImageView
-            r17 = 0
-            r18 = 0
-            r19 = 0
-            r20 = 0
-            java.lang.String r13 = "84_84"
-            java.lang.String r15 = "50_50"
-            r11.setImage(r12, r13, r14, r15, r16, r17, r18, r19, r20)
-            android.widget.ImageView r6 = new android.widget.ImageView
-            r6.<init>(r1)
-            r0.closeImageView = r6
-            r1 = 1107820544(0x42080000, float:34.0)
-            int r7 = org.telegram.messenger.AndroidUtilities.dp(r1)
-            r8 = 671088640(0x28000000, float:7.1054274E-15)
-            r9 = 687865855(0x28ffffff, float:2.8421708E-14)
-            android.graphics.drawable.Drawable r7 = org.telegram.ui.ActionBar.Theme.createSimpleSelectorCircleDrawable(r7, r8, r9)
-            r6.setBackground(r7)
-            android.widget.ImageView r6 = r0.closeImageView
-            r7 = 2131165503(0x7var_f, float:1.7945225E38)
-            r6.setImageResource(r7)
-            android.widget.ImageView r6 = r0.closeImageView
-            android.widget.ImageView$ScaleType r7 = android.widget.ImageView.ScaleType.CENTER
-            r6.setScaleType(r7)
-            android.widget.ImageView r6 = r0.closeImageView
-            org.telegram.ui.QrActivity$$ExternalSyntheticLambda2 r7 = new org.telegram.ui.QrActivity$$ExternalSyntheticLambda2
-            r7.<init>(r0)
-            r6.setOnClickListener(r7)
-            android.widget.ImageView r6 = r0.closeImageView
-            r7 = 34
-            android.widget.FrameLayout$LayoutParams r1 = org.telegram.ui.Components.LayoutHelper.createFrame(r7, r1)
-            r2.addView(r6, r1)
-            r1 = 1107296256(0x42000000, float:32.0)
-            int r6 = org.telegram.messenger.AndroidUtilities.dp(r1)
-            int r1 = org.telegram.messenger.AndroidUtilities.dp(r1)
-            android.graphics.Bitmap$Config r7 = android.graphics.Bitmap.Config.ARGB_8888
-            android.graphics.Bitmap r1 = android.graphics.Bitmap.createBitmap(r6, r1, r7)
-            r0.emojiThemeIcon = r1
-            android.graphics.Canvas r1 = new android.graphics.Canvas
-            android.graphics.Bitmap r6 = r0.emojiThemeIcon
-            r1.<init>(r6)
-            android.graphics.RectF r6 = org.telegram.messenger.AndroidUtilities.rectTmp
-            android.graphics.Bitmap r7 = r0.emojiThemeIcon
-            int r7 = r7.getWidth()
-            float r7 = (float) r7
-            android.graphics.Bitmap r8 = r0.emojiThemeIcon
-            int r8 = r8.getHeight()
-            float r8 = (float) r8
-            r9 = 0
-            r6.set(r9, r9, r7, r8)
-            android.graphics.Paint r7 = new android.graphics.Paint
-            r7.<init>(r10)
-            r7.setColor(r5)
-            r8 = 1084227584(0x40a00000, float:5.0)
-            int r9 = org.telegram.messenger.AndroidUtilities.dp(r8)
-            float r9 = (float) r9
-            int r8 = org.telegram.messenger.AndroidUtilities.dp(r8)
-            float r8 = (float) r8
-            r1.drawRoundRect(r6, r9, r8, r7)
-            android.graphics.PorterDuffXfermode r6 = new android.graphics.PorterDuffXfermode
-            android.graphics.PorterDuff$Mode r8 = android.graphics.PorterDuff.Mode.DST_OUT
-            r6.<init>(r8)
-            r7.setXfermode(r6)
-            android.content.Context r6 = org.telegram.messenger.ApplicationLoader.applicationContext
-            android.content.res.Resources r6 = r6.getResources()
-            r8 = 2131165863(0x7var_a7, float:1.7945955E38)
-            android.graphics.Bitmap r6 = android.graphics.BitmapFactory.decodeResource(r6, r8)
-            android.graphics.Bitmap r8 = r0.emojiThemeIcon
-            int r8 = r8.getWidth()
-            int r9 = r6.getWidth()
-            int r8 = r8 - r9
-            float r8 = (float) r8
-            r9 = 1056964608(0x3var_, float:0.5)
-            float r8 = r8 * r9
-            android.graphics.Bitmap r11 = r0.emojiThemeIcon
-            int r11 = r11.getHeight()
-            int r12 = r6.getHeight()
-            int r11 = r11 - r12
-            float r11 = (float) r11
-            float r11 = r11 * r9
-            r1.drawBitmap(r6, r8, r11, r7)
-            r1.setBitmap(r4)
-            org.telegram.ui.QrActivity$3 r1 = new org.telegram.ui.QrActivity$3
-            android.app.Activity r4 = r21.getParentActivity()
-            android.view.Window r4 = r4.getWindow()
-            r1.<init>(r0, r4)
-            r0.themesViewController = r1
-            android.widget.FrameLayout r4 = r1.rootLayout
-            r0.themeLayout = r4
-            r1.onCreate()
-            org.telegram.ui.QrActivity$ThemeListViewController r1 = r0.themesViewController
-            org.telegram.ui.QrActivity$$ExternalSyntheticLambda8 r4 = new org.telegram.ui.QrActivity$$ExternalSyntheticLambda8
-            r4.<init>(r0)
-            r1.setItemSelectedListener(r4)
-            org.telegram.ui.QrActivity$ThemeListViewController r1 = r0.themesViewController
-            android.widget.TextView r1 = r1.titleView
-            r4 = 2131627621(0x7f0e0e65, float:1.8882512E38)
-            java.lang.String r6 = "QrCode"
-            java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r6, r4)
-            r1.setText(r4)
-            org.telegram.ui.QrActivity$ThemeListViewController r1 = r0.themesViewController
-            org.telegram.ui.Components.FlickerLoadingView r1 = r1.progressView
-            r4 = 17
-            r1.setViewType(r4)
-            org.telegram.ui.QrActivity$ThemeListViewController r1 = r0.themesViewController
-            android.widget.TextView r1 = r1.shareButton
-            org.telegram.ui.QrActivity$$ExternalSyntheticLambda3 r4 = new org.telegram.ui.QrActivity$$ExternalSyntheticLambda3
-            r4.<init>(r0)
-            r1.setOnClickListener(r4)
-            android.widget.FrameLayout r1 = r0.themeLayout
-            r4 = -2
-            r6 = 80
-            android.widget.FrameLayout$LayoutParams r4 = org.telegram.ui.Components.LayoutHelper.createFrame((int) r5, (int) r4, (int) r6)
-            r2.addView(r1, r4)
-            org.telegram.ui.Components.MotionBackgroundDrawable r1 = r0.currMotionDrawable
-            r1.setIndeterminateAnimation(r10)
-            r0.fragmentView = r2
-            org.telegram.ui.ActionBar.EmojiThemes r1 = r0.currentTheme
-            r0.onItemSelected(r1, r3, r3)
-            java.util.List<org.telegram.ui.ActionBar.EmojiThemes> r1 = cachedThemes
-            if (r1 == 0) goto L_0x0263
-            boolean r1 = r1.isEmpty()
-            if (r1 == 0) goto L_0x025d
-            goto L_0x0263
-        L_0x025d:
-            java.util.List<org.telegram.ui.ActionBar.EmojiThemes> r1 = cachedThemes
-            r0.onDataLoaded(r1)
-            goto L_0x026b
-        L_0x0263:
-            org.telegram.ui.QrActivity$4 r1 = new org.telegram.ui.QrActivity$4
-            r1.<init>()
-            org.telegram.messenger.ChatThemeController.requestAllChatThemes(r1, r10)
-        L_0x026b:
-            android.app.Activity r1 = r21.getParentActivity()
-            android.view.Window r1 = r1.getWindow()
-            android.view.View r1 = r1.getDecorView()
-            int r1 = r1.getSystemUiVisibility()
-            r0.prevSystemUiVisibility = r1
-            r21.applyScreenSettings()
-            android.view.View r1 = r0.fragmentView
-            return r1
-        */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.QrActivity.createView(android.content.Context):android.view.View");
+    public View createView(Context context) {
+        AvatarDrawable avatarDrawable;
+        ImageLocation imageLocation;
+        ImageLocation imageLocation2;
+        boolean z;
+        String str;
+        String str2;
+        String str3;
+        String str4;
+        TLRPC$Chat chat;
+        ImageLocation imageLocation3;
+        AvatarDrawable avatarDrawable2;
+        ImageLocation imageLocation4;
+        Context context2 = context;
+        this.homeTheme.loadPreviewColors(this.currentAccount);
+        this.isCurrentThemeDark = Theme.getActiveTheme().isDark();
+        this.actionBar.setAddToContainer(false);
+        this.actionBar.setBackground((Drawable) null);
+        this.actionBar.setItemsColor(-1, false);
+        AnonymousClass1 r2 = new FrameLayout(context2) {
+            private boolean prevIsPortrait;
+
+            public boolean dispatchTouchEvent(MotionEvent motionEvent) {
+                super.dispatchTouchEvent(motionEvent);
+                return true;
+            }
+
+            /* access modifiers changed from: protected */
+            public void onMeasure(int i, int i2) {
+                int size = View.MeasureSpec.getSize(i);
+                int size2 = View.MeasureSpec.getSize(i2);
+                boolean z = size < size2;
+                QrActivity.this.avatarImageView.setVisibility(z ? 0 : 8);
+                super.onMeasure(i, i2);
+                if (z) {
+                    QrActivity.this.themeLayout.measure(View.MeasureSpec.makeMeasureSpec(size, Integer.MIN_VALUE), View.MeasureSpec.makeMeasureSpec(size2, Integer.MIN_VALUE));
+                    QrActivity.this.qrView.measure(View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(260.0f), NUM), View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(330.0f), NUM));
+                } else {
+                    QrActivity.this.themeLayout.measure(View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(256.0f), NUM), i2);
+                    QrActivity.this.qrView.measure(View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(260.0f), NUM), View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(310.0f), NUM));
+                }
+                if (this.prevIsPortrait != z) {
+                    QrActivity.this.qrView.onSizeChanged(QrActivity.this.qrView.getMeasuredWidth(), QrActivity.this.qrView.getMeasuredHeight(), 0, 0);
+                }
+                this.prevIsPortrait = z;
+            }
+
+            /* access modifiers changed from: protected */
+            public void onLayout(boolean z, int i, int i2, int i3, int i4) {
+                int i5;
+                int i6;
+                int i7 = 0;
+                boolean z2 = getWidth() < getHeight();
+                QrActivity.this.backgroundView.layout(0, 0, getWidth(), getHeight());
+                if (QrActivity.this.themeLayout.getVisibility() == 0) {
+                    i7 = QrActivity.this.themeLayout.getMeasuredHeight();
+                }
+                if (z2) {
+                    i5 = (getWidth() - QrActivity.this.qrView.getMeasuredWidth()) / 2;
+                } else {
+                    i5 = ((getWidth() - QrActivity.this.themeLayout.getMeasuredWidth()) - QrActivity.this.qrView.getMeasuredWidth()) / 2;
+                }
+                if (z2) {
+                    i6 = ((((getHeight() - i7) - QrActivity.this.qrView.getMeasuredHeight()) - AndroidUtilities.dp(48.0f)) / 2) + AndroidUtilities.dp(52.0f);
+                } else {
+                    i6 = (getHeight() - QrActivity.this.qrView.getMeasuredHeight()) / 2;
+                }
+                QrActivity.this.qrView.layout(i5, i6, QrActivity.this.qrView.getMeasuredWidth() + i5, QrActivity.this.qrView.getMeasuredHeight() + i6);
+                if (z2) {
+                    int width = (getWidth() - QrActivity.this.avatarImageView.getMeasuredWidth()) / 2;
+                    int dp = i6 - AndroidUtilities.dp(48.0f);
+                    QrActivity.this.avatarImageView.layout(width, dp, QrActivity.this.avatarImageView.getMeasuredWidth() + width, QrActivity.this.avatarImageView.getMeasuredHeight() + dp);
+                }
+                if (QrActivity.this.themeLayout.getVisibility() == 0) {
+                    if (z2) {
+                        int width2 = (getWidth() - QrActivity.this.themeLayout.getMeasuredWidth()) / 2;
+                        QrActivity.this.themeLayout.layout(width2, i4 - i7, QrActivity.this.themeLayout.getMeasuredWidth() + width2, i4);
+                    } else {
+                        int height = (getHeight() - QrActivity.this.themeLayout.getMeasuredHeight()) / 2;
+                        QrActivity.this.themeLayout.layout(i3 - QrActivity.this.themeLayout.getMeasuredWidth(), height, i3, QrActivity.this.themeLayout.getMeasuredHeight() + height);
+                    }
+                }
+                QrActivity.this.logoImageView.layout(QrActivity.this.logoRect.left + i5, QrActivity.this.logoRect.top + i6, i5 + QrActivity.this.logoRect.right, i6 + QrActivity.this.logoRect.bottom);
+                int dp2 = AndroidUtilities.dp(z2 ? 14.0f : 17.0f);
+                int dp3 = AndroidUtilities.statusBarHeight + AndroidUtilities.dp(z2 ? 10.0f : 5.0f);
+                QrActivity.this.closeImageView.layout(dp2, dp3, QrActivity.this.closeImageView.getMeasuredWidth() + dp2, QrActivity.this.closeImageView.getMeasuredHeight() + dp3);
+            }
+        };
+        AnonymousClass2 r6 = new View(context2) {
+            /* access modifiers changed from: protected */
+            public void onDraw(Canvas canvas) {
+                if (QrActivity.this.prevMotionDrawable != null) {
+                    QrActivity.this.prevMotionDrawable.setBounds(0, 0, getWidth(), getHeight());
+                }
+                QrActivity.this.currMotionDrawable.setBounds(0, 0, getWidth(), getHeight());
+                if (QrActivity.this.prevMotionDrawable != null) {
+                    QrActivity.this.prevMotionDrawable.drawBackground(canvas);
+                }
+                QrActivity.this.currMotionDrawable.drawBackground(canvas);
+                if (QrActivity.this.prevMotionDrawable != null) {
+                    QrActivity.this.prevMotionDrawable.drawPattern(canvas);
+                }
+                QrActivity.this.currMotionDrawable.drawPattern(canvas);
+                super.onDraw(canvas);
+            }
+        };
+        this.backgroundView = r6;
+        r2.addView(r6);
+        if (this.userId != 0) {
+            TLRPC$User user = getMessagesController().getUser(Long.valueOf(this.userId));
+            if (user != null) {
+                str2 = user.username;
+                if (str2 == null) {
+                    z = true;
+                    str = UserObject.getUserName(user);
+                    str2 = user.phone;
+                } else {
+                    str = null;
+                    z = false;
+                }
+                avatarDrawable2 = new AvatarDrawable(user);
+                imageLocation3 = ImageLocation.getForUser(user, 1);
+                imageLocation4 = ImageLocation.getForUser(user, 0);
+            } else {
+                imageLocation4 = null;
+                str2 = null;
+                str = null;
+                avatarDrawable2 = null;
+                imageLocation3 = null;
+                z = false;
+            }
+            imageLocation2 = imageLocation4;
+            avatarDrawable = avatarDrawable2;
+            imageLocation = imageLocation3;
+        } else {
+            if (this.chatId == 0 || (chat = getMessagesController().getChat(Long.valueOf(this.chatId))) == null) {
+                str3 = null;
+                str4 = null;
+                imageLocation2 = null;
+                imageLocation = null;
+                avatarDrawable = null;
+            } else {
+                str3 = chat.username;
+                AvatarDrawable avatarDrawable3 = new AvatarDrawable(chat);
+                ImageLocation forChat = ImageLocation.getForChat(chat, 1);
+                str4 = null;
+                imageLocation2 = ImageLocation.getForChat(chat, 0);
+                avatarDrawable = avatarDrawable3;
+                imageLocation = forChat;
+            }
+            z = false;
+        }
+        String str5 = "https://" + MessagesController.getInstance(this.currentAccount).linkPrefix + "/" + str2;
+        QrView qrView2 = new QrView(context2);
+        this.qrView = qrView2;
+        qrView2.setColors(-9324972, -13856649, -6636738, -9915042);
+        QrView qrView3 = this.qrView;
+        if (str != null) {
+            str2 = str;
+        }
+        qrView3.setData(str5, str2, z);
+        this.qrView.setCenterChangedListener(new QrActivity$$ExternalSyntheticLambda11(this));
+        r2.addView(this.qrView);
+        RLottieImageView rLottieImageView = new RLottieImageView(context2);
+        this.logoImageView = rLottieImageView;
+        rLottieImageView.setAutoRepeat(true);
+        this.logoImageView.setAnimation(NUM, 60, 60);
+        this.logoImageView.playAnimation();
+        r2.addView(this.logoImageView);
+        BackupImageView backupImageView = new BackupImageView(context2);
+        this.avatarImageView = backupImageView;
+        backupImageView.setRoundRadius(AndroidUtilities.dp(42.0f));
+        this.avatarImageView.setSize(AndroidUtilities.dp(84.0f), AndroidUtilities.dp(84.0f));
+        r2.addView(this.avatarImageView, LayoutHelper.createFrame(84, 84, 51));
+        this.avatarImageView.setImage(imageLocation2, "84_84", imageLocation, "50_50", avatarDrawable, (Bitmap) null, (String) null, 0, (Object) null);
+        ImageView imageView = new ImageView(context2);
+        this.closeImageView = imageView;
+        imageView.setBackground(Theme.createSimpleSelectorCircleDrawable(AndroidUtilities.dp(34.0f), NUM, NUM));
+        this.closeImageView.setImageResource(NUM);
+        this.closeImageView.setScaleType(ImageView.ScaleType.CENTER);
+        this.closeImageView.setOnClickListener(new QrActivity$$ExternalSyntheticLambda2(this));
+        r2.addView(this.closeImageView, LayoutHelper.createFrame(34, 34.0f));
+        this.emojiThemeIcon = Bitmap.createBitmap(AndroidUtilities.dp(32.0f), AndroidUtilities.dp(32.0f), Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(this.emojiThemeIcon);
+        RectF rectF = AndroidUtilities.rectTmp;
+        rectF.set(0.0f, 0.0f, (float) this.emojiThemeIcon.getWidth(), (float) this.emojiThemeIcon.getHeight());
+        Paint paint = new Paint(1);
+        paint.setColor(-1);
+        canvas.drawRoundRect(rectF, (float) AndroidUtilities.dp(5.0f), (float) AndroidUtilities.dp(5.0f), paint);
+        paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.DST_OUT));
+        Bitmap decodeResource = BitmapFactory.decodeResource(ApplicationLoader.applicationContext.getResources(), NUM);
+        canvas.drawBitmap(decodeResource, ((float) (this.emojiThemeIcon.getWidth() - decodeResource.getWidth())) * 0.5f, ((float) (this.emojiThemeIcon.getHeight() - decodeResource.getHeight())) * 0.5f, paint);
+        canvas.setBitmap((Bitmap) null);
+        AnonymousClass3 r1 = new ThemeListViewController(this, getParentActivity().getWindow()) {
+            /* access modifiers changed from: protected */
+            public void setDarkTheme(boolean z) {
+                super.setDarkTheme(z);
+                boolean unused = QrActivity.this.isCurrentThemeDark = z;
+                QrActivity qrActivity = QrActivity.this;
+                qrActivity.onItemSelected(qrActivity.currentTheme, QrActivity.this.selectedPosition, false);
+            }
+        };
+        this.themesViewController = r1;
+        this.themeLayout = r1.rootLayout;
+        r1.onCreate();
+        this.themesViewController.setItemSelectedListener(new QrActivity$$ExternalSyntheticLambda10(this));
+        this.themesViewController.titleView.setText(LocaleController.getString("QrCode", NUM));
+        this.themesViewController.progressView.setViewType(17);
+        this.themesViewController.shareButton.setOnClickListener(new QrActivity$$ExternalSyntheticLambda3(this));
+        r2.addView(this.themeLayout, LayoutHelper.createFrame(-1, -2, 80));
+        this.currMotionDrawable.setIndeterminateAnimation(true);
+        this.fragmentView = r2;
+        onItemSelected(this.currentTheme, 0, false);
+        List<EmojiThemes> list = cachedThemes;
+        if (list == null || list.isEmpty()) {
+            ChatThemeController.requestAllChatThemes(new ResultCallback<List<EmojiThemes>>() {
+                public void onComplete(List<EmojiThemes> list) {
+                    QrActivity.this.onDataLoaded(list);
+                    List unused = QrActivity.cachedThemes = list;
+                }
+
+                public void onError(TLRPC$TL_error tLRPC$TL_error) {
+                    Toast.makeText(QrActivity.this.getParentActivity(), tLRPC$TL_error.text, 0).show();
+                }
+            }, true);
+        } else {
+            onDataLoaded(cachedThemes);
+        }
+        this.prevSystemUiVisibility = getParentActivity().getWindow().getDecorView().getSystemUiVisibility();
+        applyScreenSettings();
+        return this.fragmentView;
     }
 
     /* access modifiers changed from: private */
@@ -568,7 +533,7 @@ public class QrActivity extends BaseFragment {
 
     private void onPatternLoaded(Bitmap bitmap, int i, boolean z) {
         if (bitmap != null) {
-            this.currMotionDrawable.setPatternBitmap(i, bitmap);
+            this.currMotionDrawable.setPatternBitmap(i, bitmap, true);
             ValueAnimator valueAnimator = this.patternIntensityAnimator;
             if (valueAnimator != null) {
                 valueAnimator.cancel();
@@ -588,53 +553,6 @@ public class QrActivity extends BaseFragment {
     /* access modifiers changed from: private */
     public /* synthetic */ void lambda$onPatternLoaded$4(ValueAnimator valueAnimator) {
         this.currMotionDrawable.setPatternAlpha(((Float) valueAnimator.getAnimatedValue()).floatValue());
-    }
-
-    /* access modifiers changed from: protected */
-    public AnimatorSet onCustomTransitionAnimation(boolean z, final Runnable runnable) {
-        float f;
-        float f2 = 0.0f;
-        if (z) {
-            this.fragmentView.setAlpha(0.0f);
-            this.fragmentView.setTranslationX((float) AndroidUtilities.dp(48.0f));
-        }
-        AnimatorSet animatorSet = new AnimatorSet();
-        Animator[] animatorArr = new Animator[2];
-        View view = this.fragmentView;
-        Property property = View.TRANSLATION_X;
-        float[] fArr = new float[1];
-        if (z) {
-            f = 0.0f;
-        } else {
-            f = (float) AndroidUtilities.dp(48.0f);
-        }
-        fArr[0] = f;
-        animatorArr[0] = ObjectAnimator.ofFloat(view, property, fArr);
-        View view2 = this.fragmentView;
-        Property property2 = View.ALPHA;
-        float[] fArr2 = new float[1];
-        if (z) {
-            f2 = 1.0f;
-        }
-        fArr2[0] = f2;
-        animatorArr[1] = ObjectAnimator.ofFloat(view2, property2, fArr2);
-        animatorSet.playTogether(animatorArr);
-        if (!z) {
-            animatorSet.setInterpolator(new DecelerateInterpolator(1.5f));
-        } else {
-            animatorSet.setInterpolator(CubicBezierInterpolator.EASE_IN);
-        }
-        animatorSet.setDuration(z ? 200 : 150);
-        animatorSet.addListener(new AnimatorListenerAdapter(this) {
-            public void onAnimationEnd(Animator animator) {
-                Runnable runnable = runnable;
-                if (runnable != null) {
-                    runnable.run();
-                }
-            }
-        });
-        animatorSet.start();
-        return animatorSet;
     }
 
     /* access modifiers changed from: private */
@@ -671,9 +589,9 @@ public class QrActivity extends BaseFragment {
         TLRPC$WallPaper wallpaper = this.currentTheme.getWallpaper(z2);
         if (wallpaper != null) {
             this.currMotionDrawable.setPatternBitmap(wallpaper.settings.intensity);
-            this.currentTheme.loadWallpaper(z2, new QrActivity$$ExternalSyntheticLambda6(this, z2, SystemClock.elapsedRealtime()));
+            this.currentTheme.loadWallpaper(z2, new QrActivity$$ExternalSyntheticLambda8(this, z2, SystemClock.elapsedRealtime()));
         } else {
-            this.currMotionDrawable.setPatternBitmap(34, SvgHelper.getBitmap(NUM, this.backgroundView.getWidth(), this.backgroundView.getHeight(), -16777216));
+            ChatThemeController.chatThemeQueue.postRunnable(new QrActivity$$ExternalSyntheticLambda4(this));
         }
         MotionBackgroundDrawable motionBackgroundDrawable4 = this.currMotionDrawable;
         motionBackgroundDrawable4.setPatternColorFilter(motionBackgroundDrawable4.getPatternColor());
@@ -729,7 +647,7 @@ public class QrActivity extends BaseFragment {
         } else {
             this.resourcesProvider.initColors(this.currentTheme, this.isCurrentThemeDark);
         }
-        themeAnimationSettings.afterStartDescriptionsAddedRunnable = new QrActivity$$ExternalSyntheticLambda4(this);
+        themeAnimationSettings.afterStartDescriptionsAddedRunnable = new QrActivity$$ExternalSyntheticLambda6(this);
         this.parentLayout.animateThemedValues(themeAnimationSettings);
     }
 
@@ -745,7 +663,17 @@ public class QrActivity extends BaseFragment {
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$onItemSelected$6(int[] iArr, ValueAnimator valueAnimator) {
+    public /* synthetic */ void lambda$onItemSelected$7() {
+        AndroidUtilities.runOnUIThread(new QrActivity$$ExternalSyntheticLambda7(this, SvgHelper.getBitmap(NUM, this.backgroundView.getWidth(), this.backgroundView.getHeight(), -16777216)));
+    }
+
+    /* access modifiers changed from: private */
+    public /* synthetic */ void lambda$onItemSelected$6(Bitmap bitmap) {
+        onPatternLoaded(bitmap, 34, true);
+    }
+
+    /* access modifiers changed from: private */
+    public /* synthetic */ void lambda$onItemSelected$8(int[] iArr, ValueAnimator valueAnimator) {
         float floatValue = ((Float) valueAnimator.getAnimatedValue()).floatValue();
         MotionBackgroundDrawable motionBackgroundDrawable = this.prevMotionDrawable;
         if (motionBackgroundDrawable != null) {
@@ -761,7 +689,7 @@ public class QrActivity extends BaseFragment {
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$onItemSelected$7() {
+    public /* synthetic */ void lambda$onItemSelected$9() {
         this.resourcesProvider.initColors(this.currentTheme, this.isCurrentThemeDark);
     }
 
@@ -804,14 +732,14 @@ public class QrActivity extends BaseFragment {
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$performShare$8() {
+    public /* synthetic */ void lambda$performShare$10() {
         this.themesViewController.shareButton.setClickable(true);
     }
 
     public ArrayList<ThemeDescription> getThemeDescriptions() {
         ArrayList<ThemeDescription> themeDescriptions = super.getThemeDescriptions();
         themeDescriptions.addAll(this.themesViewController.getThemeDescriptions());
-        themeDescriptions.add(new ThemeDescription(this.themesViewController.shareButton, ThemeDescription.FLAG_BACKGROUNDFILTER, (Class[]) null, (Paint) null, (Drawable[]) null, new QrActivity$$ExternalSyntheticLambda7(this), "featuredStickers_addButton"));
+        themeDescriptions.add(new ThemeDescription(this.themesViewController.shareButton, ThemeDescription.FLAG_BACKGROUNDFILTER, (Class[]) null, (Paint) null, (Drawable[]) null, new QrActivity$$ExternalSyntheticLambda9(this), "featuredStickers_addButton"));
         themeDescriptions.add(new ThemeDescription(this.themesViewController.shareButton, ThemeDescription.FLAG_BACKGROUNDFILTER | ThemeDescription.FLAG_DRAWABLESELECTEDSTATE, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "featuredStickers_addButtonPressed"));
         Iterator<ThemeDescription> it = themeDescriptions.iterator();
         while (it.hasNext()) {
@@ -821,7 +749,7 @@ public class QrActivity extends BaseFragment {
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$getThemeDescriptions$9() {
+    public /* synthetic */ void lambda$getThemeDescriptions$11() {
         setNavigationBarColor(getThemedColor("windowBackgroundGray"));
     }
 
@@ -882,6 +810,7 @@ public class QrActivity extends BaseFragment {
         private Bitmap contentBitmap;
         private final MotionBackgroundDrawable gradientDrawable;
         private final BitmapShader gradientShader;
+        private boolean isPhone;
         private String link;
         private String username;
 
@@ -950,8 +879,9 @@ public class QrActivity extends BaseFragment {
         }
 
         /* access modifiers changed from: package-private */
-        public void setData(String str, String str2) {
+        public void setData(String str, String str2, boolean z) {
             this.username = str2;
+            this.isPhone = z;
             this.link = str;
             prepareContent(getWidth(), getHeight());
             invalidate();
@@ -968,36 +898,36 @@ public class QrActivity extends BaseFragment {
             this.gradientDrawable.posAnimationProgress = f;
         }
 
-        /* JADX WARNING: Code restructure failed: missing block: B:25:0x0101, code lost:
-            if (r9 <= ((float) r5)) goto L_0x0105;
+        /* JADX WARNING: Code restructure failed: missing block: B:32:0x010c, code lost:
+            if (r9 <= ((float) r5)) goto L_0x0110;
          */
-        /* JADX WARNING: Code restructure failed: missing block: B:26:0x0103, code lost:
+        /* JADX WARNING: Code restructure failed: missing block: B:33:0x010e, code lost:
             r6 = 2;
          */
-        /* JADX WARNING: Code restructure failed: missing block: B:27:0x0105, code lost:
+        /* JADX WARNING: Code restructure failed: missing block: B:34:0x0110, code lost:
             r6 = 1;
          */
-        /* JADX WARNING: Code restructure failed: missing block: B:28:0x0106, code lost:
-            if (r6 <= 1) goto L_0x011b;
+        /* JADX WARNING: Code restructure failed: missing block: B:35:0x0111, code lost:
+            if (r6 <= 1) goto L_0x0126;
          */
-        /* JADX WARNING: Code restructure failed: missing block: B:29:0x0108, code lost:
+        /* JADX WARNING: Code restructure failed: missing block: B:36:0x0113, code lost:
             r10 = (((int) (((float) r7.getBounds().width()) + r9)) / 2) + org.telegram.messenger.AndroidUtilities.dp(2.0f);
          */
-        /* JADX WARNING: Code restructure failed: missing block: B:30:0x011b, code lost:
+        /* JADX WARNING: Code restructure failed: missing block: B:37:0x0126, code lost:
             r10 = r5;
          */
-        /* JADX WARNING: Code restructure failed: missing block: B:31:0x011c, code lost:
-            if (r10 <= r5) goto L_0x0133;
+        /* JADX WARNING: Code restructure failed: missing block: B:38:0x0127, code lost:
+            if (r10 <= r5) goto L_0x013e;
          */
-        /* JADX WARNING: Code restructure failed: missing block: B:32:0x011e, code lost:
+        /* JADX WARNING: Code restructure failed: missing block: B:39:0x0129, code lost:
             r7 = (((int) (r9 + ((float) r7.getBounds().width()))) / 3) + org.telegram.messenger.AndroidUtilities.dp(4.0f);
             r20 = 3;
          */
-        /* JADX WARNING: Code restructure failed: missing block: B:33:0x0133, code lost:
+        /* JADX WARNING: Code restructure failed: missing block: B:40:0x013e, code lost:
             r20 = r6;
             r7 = r10;
          */
-        /* JADX WARNING: Code restructure failed: missing block: B:34:0x0136, code lost:
+        /* JADX WARNING: Code restructure failed: missing block: B:41:0x0141, code lost:
             r3 = 3;
             r23 = 0;
             r5 = org.telegram.ui.Components.StaticLayoutEx.createStaticLayout(r8, r15, r7, android.text.Layout.Alignment.ALIGN_CENTER, 1.0f, 0.0f, false, (android.text.TextUtils.TruncateAt) null, java.lang.Math.min(org.telegram.messenger.AndroidUtilities.dp(10.0f) + r7, r0.contentBitmap.getWidth()), r20);
@@ -1011,13 +941,13 @@ public class QrActivity extends BaseFragment {
                 r2 = r35
                 java.lang.String r3 = r0.username
                 boolean r3 = android.text.TextUtils.isEmpty(r3)
-                if (r3 != 0) goto L_0x029c
+                if (r3 != 0) goto L_0x02a7
                 java.lang.String r3 = r0.link
                 boolean r3 = android.text.TextUtils.isEmpty(r3)
-                if (r3 != 0) goto L_0x029c
-                if (r1 == 0) goto L_0x029c
+                if (r3 != 0) goto L_0x02a7
+                if (r1 == 0) goto L_0x02a7
                 if (r2 != 0) goto L_0x001c
-                goto L_0x029c
+                goto L_0x02a7
             L_0x001c:
                 android.graphics.Bitmap r3 = r0.contentBitmap
                 if (r3 == 0) goto L_0x0023
@@ -1051,10 +981,10 @@ public class QrActivity extends BaseFragment {
                 r19 = 0
                 r12 = 3
                 r11 = 1
-                if (r6 > r14) goto L_0x016a
+                if (r6 > r14) goto L_0x0175
                 if (r6 != 0) goto L_0x0077
                 android.content.Context r7 = r33.getContext()
-                r8 = 2131166083(0x7var_, float:1.7946401E38)
+                r8 = 2131166100(0x7var_, float:1.7946436E38)
                 android.graphics.drawable.Drawable r7 = androidx.core.content.ContextCompat.getDrawable(r7, r8)
                 int r8 = org.telegram.messenger.AndroidUtilities.dp(r18)
                 float r8 = (float) r8
@@ -1063,7 +993,7 @@ public class QrActivity extends BaseFragment {
             L_0x0077:
                 if (r6 != r11) goto L_0x008f
                 android.content.Context r7 = r33.getContext()
-                r8 = 2131166084(0x7var_, float:1.7946403E38)
+                r8 = 2131166101(0x7var_, float:1.7946438E38)
                 android.graphics.drawable.Drawable r7 = androidx.core.content.ContextCompat.getDrawable(r7, r8)
                 r8 = 1103626240(0x41CLASSNAME, float:25.0)
                 int r8 = org.telegram.messenger.AndroidUtilities.dp(r8)
@@ -1072,7 +1002,7 @@ public class QrActivity extends BaseFragment {
                 goto L_0x00a4
             L_0x008f:
                 android.content.Context r7 = r33.getContext()
-                r8 = 2131166085(0x7var_, float:1.7946405E38)
+                r8 = 2131166102(0x7var_, float:1.794644E38)
                 android.graphics.drawable.Drawable r7 = androidx.core.content.ContextCompat.getDrawable(r7, r8)
                 r8 = 1100480512(0x41980000, float:19.0)
                 int r8 = org.telegram.messenger.AndroidUtilities.dp(r8)
@@ -1093,37 +1023,46 @@ public class QrActivity extends BaseFragment {
                 r9.<init>()
                 java.lang.String r10 = " "
                 r9.append(r10)
+                boolean r10 = r0.isPhone
+                if (r10 == 0) goto L_0x00ce
+                java.lang.String r10 = r0.username
+                goto L_0x00d4
+            L_0x00ce:
                 java.lang.String r10 = r0.username
                 java.lang.String r10 = r10.toUpperCase()
+            L_0x00d4:
                 r9.append(r10)
                 java.lang.String r9 = r9.toString()
                 r8.<init>(r9)
+                boolean r9 = r0.isPhone
+                if (r9 != 0) goto L_0x00ec
                 org.telegram.ui.Cells.SettingsSearchCell$VerticalImageSpan r9 = new org.telegram.ui.Cells.SettingsSearchCell$VerticalImageSpan
                 r9.<init>(r7)
                 r10 = 33
                 r8.setSpan(r9, r13, r11, r10)
+            L_0x00ec:
                 int r9 = r8.length()
                 float r9 = r15.measureText(r8, r11, r9)
                 android.graphics.Rect r10 = r7.getBounds()
                 int r10 = r10.width()
                 float r10 = (float) r10
                 float r9 = r9 + r10
-                if (r6 > r11) goto L_0x00fe
+                if (r6 > r11) goto L_0x0109
                 float r10 = (float) r5
                 int r10 = (r9 > r10 ? 1 : (r9 == r10 ? 0 : -1))
-                if (r10 <= 0) goto L_0x00fe
+                if (r10 <= 0) goto L_0x0109
                 int r6 = r6 + 1
                 goto L_0x0055
-            L_0x00fe:
+            L_0x0109:
                 float r6 = (float) r5
                 int r6 = (r9 > r6 ? 1 : (r9 == r6 ? 0 : -1))
-                if (r6 <= 0) goto L_0x0105
+                if (r6 <= 0) goto L_0x0110
                 r6 = 2
-                goto L_0x0106
-            L_0x0105:
+                goto L_0x0111
+            L_0x0110:
                 r6 = 1
-            L_0x0106:
-                if (r6 <= r11) goto L_0x011b
+            L_0x0111:
+                if (r6 <= r11) goto L_0x0126
                 android.graphics.Rect r10 = r7.getBounds()
                 int r10 = r10.width()
                 float r10 = (float) r10
@@ -1132,11 +1071,11 @@ public class QrActivity extends BaseFragment {
                 int r10 = r10 / r14
                 int r20 = org.telegram.messenger.AndroidUtilities.dp(r17)
                 int r10 = r10 + r20
-                goto L_0x011c
-            L_0x011b:
+                goto L_0x0127
+            L_0x0126:
                 r10 = r5
-            L_0x011c:
-                if (r10 <= r5) goto L_0x0133
+            L_0x0127:
+                if (r10 <= r5) goto L_0x013e
                 android.graphics.Rect r5 = r7.getBounds()
                 int r5 = r5.width()
                 float r5 = (float) r5
@@ -1147,11 +1086,11 @@ public class QrActivity extends BaseFragment {
                 int r5 = r5 + r6
                 r7 = r5
                 r20 = 3
-                goto L_0x0136
-            L_0x0133:
+                goto L_0x0141
+            L_0x013e:
                 r20 = r6
                 r7 = r10
-            L_0x0136:
+            L_0x0141:
                 android.text.Layout$Alignment r9 = android.text.Layout.Alignment.ALIGN_CENTER
                 r10 = 1065353216(0x3var_, float:1.0)
                 r21 = 0
@@ -1177,13 +1116,13 @@ public class QrActivity extends BaseFragment {
                 r24 = 2
                 r14 = r20
                 android.text.StaticLayout r5 = org.telegram.ui.Components.StaticLayoutEx.createStaticLayout(r5, r6, r7, r8, r9, r10, r11, r12, r13, r14)
-                goto L_0x0171
-            L_0x016a:
+                goto L_0x017c
+            L_0x0175:
                 r3 = 3
                 r23 = 0
                 r24 = 2
                 r5 = r19
-            L_0x0171:
+            L_0x017c:
                 float r6 = r15.descent()
                 float r7 = r15.ascent()
                 float r6 = r6 - r7
@@ -1205,13 +1144,13 @@ public class QrActivity extends BaseFragment {
                 r9.<init>()
                 r12 = 3
                 r13 = 0
-            L_0x01a5:
+            L_0x01b0:
                 r10 = 5
-                if (r12 >= r10) goto L_0x01d7
-                com.google.zxing.EncodeHintType r10 = com.google.zxing.EncodeHintType.QR_VERSION     // Catch:{ Exception -> 0x01d0 }
-                java.lang.Integer r11 = java.lang.Integer.valueOf(r12)     // Catch:{ Exception -> 0x01d0 }
-                r8.put(r10, r11)     // Catch:{ Exception -> 0x01d0 }
-                java.lang.String r10 = r0.link     // Catch:{ Exception -> 0x01d0 }
+                if (r12 >= r10) goto L_0x01e2
+                com.google.zxing.EncodeHintType r10 = com.google.zxing.EncodeHintType.QR_VERSION     // Catch:{ Exception -> 0x01db }
+                java.lang.Integer r11 = java.lang.Integer.valueOf(r12)     // Catch:{ Exception -> 0x01db }
+                r8.put(r10, r11)     // Catch:{ Exception -> 0x01db }
+                java.lang.String r10 = r0.link     // Catch:{ Exception -> 0x01db }
                 r29 = 0
                 r30 = 1061158912(0x3var_, float:0.75)
                 r31 = 16777215(0xffffff, float:2.3509886E-38)
@@ -1221,22 +1160,22 @@ public class QrActivity extends BaseFragment {
                 r26 = r7
                 r27 = r7
                 r28 = r8
-                android.graphics.Bitmap r19 = r24.encode(r25, r26, r27, r28, r29, r30, r31, r32)     // Catch:{ Exception -> 0x01d0 }
-                int r10 = r9.getImageSize()     // Catch:{ Exception -> 0x01d0 }
+                android.graphics.Bitmap r19 = r24.encode(r25, r26, r27, r28, r29, r30, r31, r32)     // Catch:{ Exception -> 0x01db }
+                int r10 = r9.getImageSize()     // Catch:{ Exception -> 0x01db }
                 r13 = r10
-                goto L_0x01d1
-            L_0x01d0:
-            L_0x01d1:
-                if (r19 == 0) goto L_0x01d4
-                goto L_0x01d7
-            L_0x01d4:
-                int r12 = r12 + 1
-                goto L_0x01a5
-            L_0x01d7:
-                r7 = r19
-                if (r7 != 0) goto L_0x01dc
-                return
+                goto L_0x01dc
+            L_0x01db:
             L_0x01dc:
+                if (r19 == 0) goto L_0x01df
+                goto L_0x01e2
+            L_0x01df:
+                int r12 = r12 + 1
+                goto L_0x01b0
+            L_0x01e2:
+                r7 = r19
+                if (r7 != 0) goto L_0x01e7
+                return
+            L_0x01e7:
                 android.graphics.Canvas r8 = new android.graphics.Canvas
                 android.graphics.Bitmap r9 = r0.contentBitmap
                 r8.<init>(r9)
@@ -1249,23 +1188,23 @@ public class QrActivity extends BaseFragment {
                 r4 = 1041865114(0x3e19999a, float:0.15)
                 float r4 = r4 * r2
                 int r9 = r5.getLineCount()
-                if (r9 != r3) goto L_0x01ff
+                if (r9 != r3) goto L_0x020a
                 r4 = 1040522936(0x3e051eb8, float:0.13)
                 float r4 = r4 * r2
-            L_0x01ff:
+            L_0x020a:
                 android.view.ViewParent r9 = r33.getParent()
                 android.view.ViewGroup r9 = (android.view.ViewGroup) r9
                 int r9 = r9.getMeasuredWidth()
                 android.view.ViewParent r10 = r33.getParent()
                 android.view.ViewGroup r10 = (android.view.ViewGroup) r10
                 int r10 = r10.getMeasuredHeight()
-                if (r9 >= r10) goto L_0x0217
+                if (r9 >= r10) goto L_0x0222
                 r23 = 1
-            L_0x0217:
-                if (r23 != 0) goto L_0x021e
+            L_0x0222:
+                if (r23 != 0) goto L_0x0229
                 r4 = 1035489772(0x3db851ec, float:0.09)
                 float r4 = r4 * r2
-            L_0x021e:
+            L_0x0229:
                 android.graphics.Paint r2 = new android.graphics.Paint
                 r2.<init>(r3)
                 r8.drawBitmap(r7, r1, r4, r2)
@@ -1287,7 +1226,7 @@ public class QrActivity extends BaseFragment {
                 float r10 = r10 * r9
                 r8.drawCircle(r1, r3, r10, r2)
                 org.telegram.ui.QrActivity$QrView$QrCenterChangedListener r2 = r0.centerChangedListener
-                if (r2 == 0) goto L_0x025a
+                if (r2 == 0) goto L_0x0265
                 float r11 = r1 - r10
                 int r11 = (int) r11
                 float r12 = r3 - r10
@@ -1297,7 +1236,7 @@ public class QrActivity extends BaseFragment {
                 float r3 = r3 + r10
                 int r3 = (int) r3
                 r2.onCenterChanged(r11, r12, r1, r3)
-            L_0x025a:
+            L_0x0265:
                 int r1 = r8.getWidth()
                 int r2 = r5.getWidth()
                 int r1 = r1 - r2
@@ -1327,7 +1266,7 @@ public class QrActivity extends BaseFragment {
                 android.graphics.Bitmap r2 = r1.extractAlpha()
                 r0.contentBitmap = r2
                 r1.recycle()
-            L_0x029c:
+            L_0x02a7:
                 return
             */
             throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.QrActivity.QrView.prepareContent(int, int):void");
@@ -1484,14 +1423,23 @@ public class QrActivity extends BaseFragment {
             setForceDark(Theme.getActiveTheme().isDark(), false);
             rLottieDrawable.setPlayInDirectionOfCustomEndFrame(true);
             rLottieDrawable.setColorFilter(new PorterDuffColorFilter(themedColor, PorterDuff.Mode.MULTIPLY));
-            RLottieImageView rLottieImageView = new RLottieImageView(parentActivity);
-            this.darkThemeView = rLottieImageView;
-            rLottieImageView.setAnimation(rLottieDrawable);
-            rLottieImageView.setScaleType(ImageView.ScaleType.CENTER);
-            rLottieImageView.setOnClickListener(new QrActivity$ThemeListViewController$$ExternalSyntheticLambda1(this));
-            rLottieImageView.setAlpha(0.0f);
-            rLottieImageView.setVisibility(4);
-            r5.addView(rLottieImageView, LayoutHelper.createFrame(44, 44.0f, 8388661, 0.0f, -2.0f, 7.0f, 0.0f));
+            AnonymousClass3 r8 = new RLottieImageView(parentActivity, qrActivity2) {
+                public void onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo accessibilityNodeInfo) {
+                    super.onInitializeAccessibilityNodeInfo(accessibilityNodeInfo);
+                    if (ThemeListViewController.this.this$0.isCurrentThemeDark) {
+                        accessibilityNodeInfo.setText(LocaleController.getString("AccDescrSwitchToDayTheme", NUM));
+                    } else {
+                        accessibilityNodeInfo.setText(LocaleController.getString("AccDescrSwitchToNightTheme", NUM));
+                    }
+                }
+            };
+            this.darkThemeView = r8;
+            r8.setAnimation(rLottieDrawable);
+            r8.setScaleType(ImageView.ScaleType.CENTER);
+            r8.setOnClickListener(new QrActivity$ThemeListViewController$$ExternalSyntheticLambda1(this));
+            r8.setAlpha(0.0f);
+            r8.setVisibility(4);
+            r5.addView(r8, LayoutHelper.createFrame(44, 44.0f, 8388661, 0.0f, -2.0f, 7.0f, 0.0f));
             FlickerLoadingView flickerLoadingView = new FlickerLoadingView(parentActivity, baseFragment.getResourceProvider());
             this.progressView = flickerLoadingView;
             flickerLoadingView.setVisibility(0);
@@ -1533,7 +1481,7 @@ public class QrActivity extends BaseFragment {
             r5.addView(view2);
             TextView textView2 = new TextView(parentActivity);
             this.shareButton = textView2;
-            textView2.setBackground(Theme.createSimpleSelectorRoundRectDrawable(AndroidUtilities.dp(6.0f), baseFragment2.getThemedColor("featuredStickers_addButton"), baseFragment2.getThemedColor("featuredStickers_addButtonPressed")));
+            textView2.setBackground(Theme.AdaptiveRipple.filledRect(baseFragment2.getThemedColor("featuredStickers_addButton"), 6.0f));
             textView2.setEllipsize(TextUtils.TruncateAt.END);
             textView2.setGravity(17);
             textView2.setLines(1);
@@ -1659,12 +1607,12 @@ public class QrActivity extends BaseFragment {
             float max = ((float) Math.max(createBitmap.getHeight(), createBitmap.getWidth())) * 0.9f;
             Shader.TileMode tileMode = Shader.TileMode.CLAMP;
             paint2.setShader(new BitmapShader(createBitmap, tileMode, tileMode));
-            AnonymousClass4 r15 = r0;
+            AnonymousClass5 r15 = r0;
             final boolean z2 = z;
             float f3 = f2;
             final float f4 = max;
             final float f5 = f3;
-            AnonymousClass4 r0 = new View(this.fragment.getParentActivity()) {
+            AnonymousClass5 r0 = new View(this.fragment.getParentActivity()) {
                 /* access modifiers changed from: protected */
                 public void onDraw(Canvas canvas) {
                     super.onDraw(canvas);
@@ -1789,7 +1737,7 @@ public class QrActivity extends BaseFragment {
         }
 
         public ArrayList<ThemeDescription> getThemeDescriptions() {
-            AnonymousClass6 r7 = new ThemeDescription.ThemeDescriptionDelegate() {
+            AnonymousClass7 r7 = new ThemeDescription.ThemeDescriptionDelegate() {
                 private boolean isAnimationStarted = false;
 
                 public void didSetColor() {

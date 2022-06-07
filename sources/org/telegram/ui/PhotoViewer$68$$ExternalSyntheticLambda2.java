@@ -1,0 +1,25 @@
+package org.telegram.ui;
+
+import java.util.ArrayList;
+import org.telegram.ui.Components.ClippingImageView;
+import org.telegram.ui.PhotoViewer;
+
+public final /* synthetic */ class PhotoViewer$68$$ExternalSyntheticLambda2 implements Runnable {
+    public final /* synthetic */ PhotoViewer.AnonymousClass68 f$0;
+    public final /* synthetic */ ClippingImageView[] f$1;
+    public final /* synthetic */ ArrayList f$2;
+    public final /* synthetic */ Integer f$3;
+    public final /* synthetic */ PhotoViewer.PhotoViewerProvider f$4;
+
+    public /* synthetic */ PhotoViewer$68$$ExternalSyntheticLambda2(PhotoViewer.AnonymousClass68 r1, ClippingImageView[] clippingImageViewArr, ArrayList arrayList, Integer num, PhotoViewer.PhotoViewerProvider photoViewerProvider) {
+        this.f$0 = r1;
+        this.f$1 = clippingImageViewArr;
+        this.f$2 = arrayList;
+        this.f$3 = num;
+        this.f$4 = photoViewerProvider;
+    }
+
+    public final void run() {
+        this.f$0.lambda$onPreDraw$0(this.f$1, this.f$2, this.f$3, this.f$4);
+    }
+}

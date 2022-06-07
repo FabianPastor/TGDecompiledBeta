@@ -760,7 +760,7 @@ public class PollCreateActivity extends BaseFragment {
                     } else if (10 - PollCreateActivity.this.answersCount <= 0) {
                         textInfoPrivacyCell.setText(LocaleController.getString("AddAnOptionInfoMax", NUM));
                     } else {
-                        textInfoPrivacyCell.setText(LocaleController.formatString("AddAnOptionInfo", NUM, LocaleController.formatPluralString("Option", 10 - PollCreateActivity.this.answersCount)));
+                        textInfoPrivacyCell.setText(LocaleController.formatString("AddAnOptionInfo", NUM, LocaleController.formatPluralString("Option", 10 - PollCreateActivity.this.answersCount, new Object[0])));
                     }
                 } else if (itemViewType == 3) {
                     TextCell textCell = (TextCell) viewHolder.itemView;

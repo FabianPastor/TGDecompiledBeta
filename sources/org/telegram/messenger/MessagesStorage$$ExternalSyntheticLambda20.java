@@ -8,6 +8,6 @@ public final /* synthetic */ class MessagesStorage$$ExternalSyntheticLambda20 im
     }
 
     public final void run() {
-        this.f$0.lambda$getWallpapers$54();
+        this.f$0.lambda$loadDialogFilters$41();
     }
 }

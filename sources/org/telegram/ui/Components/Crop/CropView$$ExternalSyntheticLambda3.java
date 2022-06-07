@@ -2,16 +2,14 @@ package org.telegram.ui.Components.Crop;
 
 import android.content.DialogInterface;
 
-public final /* synthetic */ class CropView$$ExternalSyntheticLambda3 implements DialogInterface.OnClickListener {
+public final /* synthetic */ class CropView$$ExternalSyntheticLambda3 implements DialogInterface.OnCancelListener {
     public final /* synthetic */ CropView f$0;
-    public final /* synthetic */ Integer[][] f$1;
 
-    public /* synthetic */ CropView$$ExternalSyntheticLambda3(CropView cropView, Integer[][] numArr) {
+    public /* synthetic */ CropView$$ExternalSyntheticLambda3(CropView cropView) {
         this.f$0 = cropView;
-        this.f$1 = numArr;
     }
 
-    public final void onClick(DialogInterface dialogInterface, int i) {
-        this.f$0.lambda$showAspectRatioDialog$2(this.f$1, dialogInterface, i);
+    public final void onCancel(DialogInterface dialogInterface) {
+        this.f$0.lambda$showAspectRatioDialog$4(dialogInterface);
     }
 }

@@ -1,20 +1,22 @@
 package org.telegram.ui;
 
-import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC$User;
+import java.util.concurrent.CountDownLatch;
+import org.telegram.messenger.MessagesStorage;
 
 public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda178 implements Runnable {
     public final /* synthetic */ ChatActivity f$0;
-    public final /* synthetic */ TLObject f$1;
-    public final /* synthetic */ TLRPC$User f$2;
+    public final /* synthetic */ MessagesStorage f$1;
+    public final /* synthetic */ long f$2;
+    public final /* synthetic */ CountDownLatch f$3;
 
-    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda178(ChatActivity chatActivity, TLObject tLObject, TLRPC$User tLRPC$User) {
+    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda178(ChatActivity chatActivity, MessagesStorage messagesStorage, long j, CountDownLatch countDownLatch) {
         this.f$0 = chatActivity;
-        this.f$1 = tLObject;
-        this.f$2 = tLRPC$User;
+        this.f$1 = messagesStorage;
+        this.f$2 = j;
+        this.f$3 = countDownLatch;
     }
 
     public final void run() {
-        this.f$0.lambda$onTransitionAnimationEnd$131(this.f$1, this.f$2);
+        this.f$0.lambda$onFragmentCreate$6(this.f$1, this.f$2, this.f$3);
     }
 }

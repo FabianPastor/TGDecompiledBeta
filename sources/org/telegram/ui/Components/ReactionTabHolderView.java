@@ -9,6 +9,7 @@ import android.graphics.PorterDuffColorFilter;
 import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
 import android.view.View;
+import android.view.accessibility.AccessibilityNodeInfo;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -19,12 +20,14 @@ import org.telegram.messenger.DocumentObject;
 import org.telegram.messenger.ImageLocation;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MediaDataController;
+import org.telegram.messenger.SvgHelper;
 import org.telegram.tgnet.TLRPC$TL_availableReaction;
 import org.telegram.tgnet.TLRPC$TL_reactionCount;
 import org.telegram.ui.ActionBar.Theme;
 
 public class ReactionTabHolderView extends FrameLayout {
     private Paint bgPaint = new Paint(1);
+    private int count;
     private TextView counterView;
     Drawable drawable;
     private ImageView iconView;
@@ -33,6 +36,7 @@ public class ReactionTabHolderView extends FrameLayout {
     View overlaySelectorView;
     private float radius;
     private BackupImageView reactView;
+    private String reaction;
     private RectF rect;
 
     public ReactionTabHolderView(Context context) {
@@ -53,7 +57,8 @@ public class ReactionTabHolderView extends FrameLayout {
         addView(backupImageView, LayoutHelper.createFrameRelatively(24.0f, 24.0f, 8388627, 8.0f, 0.0f, 8.0f, 0.0f));
         TextView textView = new TextView(context);
         this.counterView = textView;
-        textView.setTextColor(Theme.getColor("avatar_nameInMessageBlue"));
+        textView.setImportantForAccessibility(2);
+        this.counterView.setTextColor(Theme.getColor("avatar_nameInMessageBlue"));
         this.counterView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         addView(this.counterView, LayoutHelper.createFrameRelatively(-1.0f, -2.0f, 8388627, 40.0f, 0.0f, 8.0f, 0.0f));
         this.outlinePaint.setStyle(Paint.Style.STROKE);
@@ -79,17 +84,23 @@ public class ReactionTabHolderView extends FrameLayout {
     }
 
     public void setCounter(int i) {
+        this.count = i;
         this.counterView.setText(String.format("%s", new Object[]{LocaleController.formatShortNumber(i, (int[]) null)}));
         this.iconView.setVisibility(0);
         this.reactView.setVisibility(8);
     }
 
     public void setCounter(int i, TLRPC$TL_reactionCount tLRPC$TL_reactionCount) {
-        this.counterView.setText(String.format("%s", new Object[]{LocaleController.formatShortNumber(tLRPC$TL_reactionCount.count, (int[]) null)}));
+        int i2 = tLRPC$TL_reactionCount.count;
+        this.count = i2;
+        this.counterView.setText(String.format("%s", new Object[]{LocaleController.formatShortNumber(i2, (int[]) null)}));
         String str = tLRPC$TL_reactionCount.reaction;
+        this.reaction = null;
         for (TLRPC$TL_availableReaction next : MediaDataController.getInstance(i).getReactionsList()) {
             if (next.reaction.equals(str)) {
-                this.reactView.setImage(ImageLocation.getForDocument(next.static_icon), "50_50", "webp", (Drawable) DocumentObject.getSvgThumb(next.static_icon, "windowBackgroundGray", 1.0f), (Object) next);
+                SvgHelper.SvgDrawable svgThumb = DocumentObject.getSvgThumb(next.static_icon, "windowBackgroundGray", 1.0f);
+                this.reaction = next.reaction;
+                this.reactView.setImage(ImageLocation.getForDocument(next.static_icon), "50_50", "webp", (Drawable) svgThumb, (Object) next);
                 this.reactView.setVisibility(0);
                 this.iconView.setVisibility(8);
                 return;
@@ -104,5 +115,20 @@ public class ReactionTabHolderView extends FrameLayout {
         float f = this.radius;
         canvas.drawRoundRect(rectF, f, f, this.bgPaint);
         super.dispatchDraw(canvas);
+    }
+
+    public void onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo accessibilityNodeInfo) {
+        super.onInitializeAccessibilityNodeInfo(accessibilityNodeInfo);
+        accessibilityNodeInfo.setClassName("android.widget.Button");
+        accessibilityNodeInfo.setClickable(true);
+        if (((double) this.outlineProgress) > 0.5d) {
+            accessibilityNodeInfo.setSelected(true);
+        }
+        String str = this.reaction;
+        if (str != null) {
+            accessibilityNodeInfo.setText(LocaleController.formatPluralString("AccDescrNumberOfPeopleReactions", this.count, str));
+            return;
+        }
+        accessibilityNodeInfo.setText(LocaleController.formatPluralString("AccDescrNumberOfReactions", this.count, new Object[0]));
     }
 }

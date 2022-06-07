@@ -8,6 +8,6 @@ public final /* synthetic */ class ChatEditTypeActivity$$ExternalSyntheticLambda
     }
 
     public final void run() {
-        this.f$0.lambda$loadAdminedChannels$7();
+        this.f$0.lambda$showPremiumIncreaseLimitDialog$6();
     }
 }

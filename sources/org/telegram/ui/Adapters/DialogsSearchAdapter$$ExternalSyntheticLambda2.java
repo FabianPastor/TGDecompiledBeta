@@ -10,6 +10,6 @@ public final /* synthetic */ class DialogsSearchAdapter$$ExternalSyntheticLambda
     }
 
     public final void onClick(View view) {
-        this.f$0.lambda$onBindViewHolder$17(view);
+        this.f$0.lambda$onBindViewHolder$18(view);
     }
 }

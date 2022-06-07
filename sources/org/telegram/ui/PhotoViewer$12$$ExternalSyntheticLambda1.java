@@ -11,6 +11,6 @@ public final /* synthetic */ class PhotoViewer$12$$ExternalSyntheticLambda1 impl
     }
 
     public final void onClick(View view) {
-        PhotoViewer.AnonymousClass12.lambda$onItemClick$2(this.f$0, view);
+        PhotoViewer.AnonymousClass12.lambda$onItemClick$3(this.f$0, view);
     }
 }

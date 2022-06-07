@@ -9,7 +9,7 @@ public class TLRPC$TL_decryptedMessageMediaDocument extends TLRPC$DecryptedMessa
         this.thumb_w = abstractSerializedData.readInt32(z);
         this.thumb_h = abstractSerializedData.readInt32(z);
         this.mime_type = abstractSerializedData.readString(z);
-        this.size = abstractSerializedData.readInt32(z);
+        this.size = (long) abstractSerializedData.readInt32(z);
         this.key = abstractSerializedData.readByteArray(z);
         this.iv = abstractSerializedData.readByteArray(z);
         int readInt32 = abstractSerializedData.readInt32(z);
@@ -37,7 +37,7 @@ public class TLRPC$TL_decryptedMessageMediaDocument extends TLRPC$DecryptedMessa
         abstractSerializedData.writeInt32(this.thumb_w);
         abstractSerializedData.writeInt32(this.thumb_h);
         abstractSerializedData.writeString(this.mime_type);
-        abstractSerializedData.writeInt32(this.size);
+        abstractSerializedData.writeInt32((int) this.size);
         abstractSerializedData.writeByteArray(this.key);
         abstractSerializedData.writeByteArray(this.iv);
         abstractSerializedData.writeInt32(NUM);

@@ -142,19 +142,9 @@ public class TextCheckCell2 extends FrameLayout {
     }
 
     public void onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo accessibilityNodeInfo) {
-        String str;
-        int i;
         super.onInitializeAccessibilityNodeInfo(accessibilityNodeInfo);
         accessibilityNodeInfo.setClassName("android.widget.Switch");
         accessibilityNodeInfo.setCheckable(true);
         accessibilityNodeInfo.setChecked(this.checkBox.isChecked());
-        if (this.checkBox.isChecked()) {
-            i = NUM;
-            str = "NotificationsOn";
-        } else {
-            i = NUM;
-            str = "NotificationsOff";
-        }
-        accessibilityNodeInfo.setContentDescription(LocaleController.getString(str, i));
     }
 }

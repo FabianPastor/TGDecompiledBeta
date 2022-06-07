@@ -1,5 +1,12 @@
 package j$.util.stream;
 
-interface T2 extends P4 {
-    void h(T2 t2);
+abstract class T2 {
+    Object a;
+
+    T2() {
+    }
+
+    public Object get() {
+        return this.a;
+    }
 }

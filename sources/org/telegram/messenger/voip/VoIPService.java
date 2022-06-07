@@ -1094,7 +1094,7 @@ public class VoIPService extends Service implements SensorEventListener, AudioMa
             tLRPC$TL_phoneCallProtocol.max_layer = Instance.getConnectionMaxLayer();
             tLRPC$TL_phone_requestCall.protocol.library_versions.addAll(Instance.AVAILABLE_VERSIONS);
             this.g_a = byteArray;
-            tLRPC$TL_phone_requestCall.g_a_hash = Utilities.computeSHA256(byteArray, 0, byteArray.length);
+            tLRPC$TL_phone_requestCall.g_a_hash = Utilities.computeSHA256(byteArray, 0, (long) byteArray.length);
             tLRPC$TL_phone_requestCall.random_id = Utilities.random.nextInt();
             ConnectionsManager.getInstance(this.currentAccount).sendRequest(tLRPC$TL_phone_requestCall, new VoIPService$$ExternalSyntheticLambda93(this, bArr), 2);
         } else {
@@ -1884,8 +1884,8 @@ public class VoIPService extends Service implements SensorEventListener, AudioMa
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.voip.VoIPService.onGroupCallUpdated(org.telegram.tgnet.TLRPC$GroupCall):void");
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:66:0x015d  */
-    /* JADX WARNING: Removed duplicated region for block: B:71:0x016a  */
+    /* JADX WARNING: Removed duplicated region for block: B:66:0x015e  */
+    /* JADX WARNING: Removed duplicated region for block: B:71:0x016b  */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public void onCallUpdated(org.telegram.tgnet.TLRPC$PhoneCall r7) {
         /*
@@ -1972,15 +1972,15 @@ public class VoIPService extends Service implements SensorEventListener, AudioMa
             org.telegram.messenger.AndroidUtilities.runOnUIThread(r7, r0)
             r6.endConnectionServiceCall(r0)
             r6.stopSelf()
-            goto L_0x01c2
+            goto L_0x01c3
         L_0x00a8:
             r6.callEnded()
-            goto L_0x01c2
+            goto L_0x01c3
         L_0x00ad:
             boolean r0 = r7 instanceof org.telegram.tgnet.TLRPC$TL_phoneCall
-            if (r0 == 0) goto L_0x016e
+            if (r0 == 0) goto L_0x016f
             byte[] r0 = r6.authKey
-            if (r0 != 0) goto L_0x016e
+            if (r0 != 0) goto L_0x016f
             byte[] r0 = r7.g_a_or_b
             if (r0 != 0) goto L_0x00c6
             boolean r7 = org.telegram.messenger.BuildVars.LOGS_ENABLED
@@ -1993,18 +1993,19 @@ public class VoIPService extends Service implements SensorEventListener, AudioMa
         L_0x00c6:
             byte[] r2 = r6.g_a_hash
             int r3 = r0.length
-            r4 = 0
-            byte[] r0 = org.telegram.messenger.Utilities.computeSHA256(r0, r4, r3)
+            long r3 = (long) r3
+            r5 = 0
+            byte[] r0 = org.telegram.messenger.Utilities.computeSHA256(r0, r5, r3)
             boolean r0 = java.util.Arrays.equals(r2, r0)
-            if (r0 != 0) goto L_0x00e1
+            if (r0 != 0) goto L_0x00e2
             boolean r7 = org.telegram.messenger.BuildVars.LOGS_ENABLED
-            if (r7 == 0) goto L_0x00dd
+            if (r7 == 0) goto L_0x00de
             java.lang.String r7 = "stopping VoIP service, Ga hash doesn't match"
             org.telegram.messenger.FileLog.w(r7)
-        L_0x00dd:
+        L_0x00de:
             r6.callFailed()
             return
-        L_0x00e1:
+        L_0x00e2:
             byte[] r0 = r7.g_a_or_b
             r6.g_a = r0
             java.math.BigInteger r0 = new java.math.BigInteger
@@ -2016,104 +2017,104 @@ public class VoIPService extends Service implements SensorEventListener, AudioMa
             byte[] r3 = r3.getSecretPBytes()
             r2.<init>(r1, r3)
             boolean r3 = org.telegram.messenger.Utilities.isGoodGaAndGb(r0, r2)
-            if (r3 != 0) goto L_0x010e
+            if (r3 != 0) goto L_0x010f
             boolean r7 = org.telegram.messenger.BuildVars.LOGS_ENABLED
-            if (r7 == 0) goto L_0x010a
+            if (r7 == 0) goto L_0x010b
             java.lang.String r7 = "stopping VoIP service, bad Ga and Gb (accepting)"
             org.telegram.messenger.FileLog.w(r7)
-        L_0x010a:
+        L_0x010b:
             r6.callFailed()
             return
-        L_0x010e:
+        L_0x010f:
             java.math.BigInteger r3 = new java.math.BigInteger
-            byte[] r5 = r6.a_or_b
-            r3.<init>(r1, r5)
+            byte[] r4 = r6.a_or_b
+            r3.<init>(r1, r4)
             java.math.BigInteger r0 = r0.modPow(r3, r2)
             byte[] r0 = r0.toByteArray()
             int r1 = r0.length
             r2 = 256(0x100, float:3.59E-43)
-            if (r1 <= r2) goto L_0x012b
+            if (r1 <= r2) goto L_0x012c
             byte[] r1 = new byte[r2]
             int r3 = r0.length
             int r3 = r3 - r2
-            java.lang.System.arraycopy(r0, r3, r1, r4, r2)
-        L_0x0129:
+            java.lang.System.arraycopy(r0, r3, r1, r5, r2)
+        L_0x012a:
             r0 = r1
-            goto L_0x0142
-        L_0x012b:
+            goto L_0x0143
+        L_0x012c:
             int r1 = r0.length
-            if (r1 >= r2) goto L_0x0142
+            if (r1 >= r2) goto L_0x0143
             byte[] r1 = new byte[r2]
             int r3 = r0.length
             int r3 = 256 - r3
-            int r5 = r0.length
-            java.lang.System.arraycopy(r0, r4, r1, r3, r5)
+            int r4 = r0.length
+            java.lang.System.arraycopy(r0, r5, r1, r3, r4)
             r3 = 0
-        L_0x0138:
-            int r5 = r0.length
-            int r5 = 256 - r5
-            if (r3 >= r5) goto L_0x0129
-            r1[r3] = r4
+        L_0x0139:
+            int r4 = r0.length
+            int r4 = 256 - r4
+            if (r3 >= r4) goto L_0x012a
+            r1[r3] = r5
             int r3 = r3 + 1
-            goto L_0x0138
-        L_0x0142:
+            goto L_0x0139
+        L_0x0143:
             byte[] r1 = org.telegram.messenger.Utilities.computeSHA1((byte[]) r0)
             r2 = 8
             byte[] r3 = new byte[r2]
-            int r5 = r1.length
-            int r5 = r5 - r2
-            java.lang.System.arraycopy(r1, r5, r3, r4, r2)
+            int r4 = r1.length
+            int r4 = r4 - r2
+            java.lang.System.arraycopy(r1, r4, r3, r5, r2)
             r6.authKey = r0
             long r0 = org.telegram.messenger.Utilities.bytesToLong(r3)
             r6.keyFingerprint = r0
             long r2 = r7.key_fingerprint
             int r7 = (r0 > r2 ? 1 : (r0 == r2 ? 0 : -1))
-            if (r7 == 0) goto L_0x016a
+            if (r7 == 0) goto L_0x016b
             boolean r7 = org.telegram.messenger.BuildVars.LOGS_ENABLED
-            if (r7 == 0) goto L_0x0166
+            if (r7 == 0) goto L_0x0167
             java.lang.String r7 = "key fingerprints don't match"
             org.telegram.messenger.FileLog.w(r7)
-        L_0x0166:
+        L_0x0167:
             r6.callFailed()
             return
-        L_0x016a:
+        L_0x016b:
             r6.initiateActualEncryptedCall()
-            goto L_0x01c2
-        L_0x016e:
+            goto L_0x01c3
+        L_0x016f:
             boolean r0 = r7 instanceof org.telegram.tgnet.TLRPC$TL_phoneCallAccepted
-            if (r0 == 0) goto L_0x017a
+            if (r0 == 0) goto L_0x017b
             byte[] r0 = r6.authKey
-            if (r0 != 0) goto L_0x017a
+            if (r0 != 0) goto L_0x017b
             r6.processAcceptedCall()
-            goto L_0x01c2
-        L_0x017a:
+            goto L_0x01c3
+        L_0x017b:
             int r0 = r6.currentState
             r1 = 13
-            if (r0 != r1) goto L_0x01c2
+            if (r0 != r1) goto L_0x01c3
             int r7 = r7.receive_date
-            if (r7 == 0) goto L_0x01c2
+            if (r7 == 0) goto L_0x01c3
             r7 = 16
             r6.dispatchStateChanged(r7)
             boolean r7 = org.telegram.messenger.BuildVars.LOGS_ENABLED
-            if (r7 == 0) goto L_0x0192
+            if (r7 == 0) goto L_0x0193
             java.lang.String r7 = "!!!!!! CALL RECEIVED"
             org.telegram.messenger.FileLog.d(r7)
-        L_0x0192:
+        L_0x0193:
             java.lang.Runnable r7 = r6.connectingSoundRunnable
             r0 = 0
-            if (r7 == 0) goto L_0x019c
+            if (r7 == 0) goto L_0x019d
             org.telegram.messenger.AndroidUtilities.cancelRunOnUIThread(r7)
             r6.connectingSoundRunnable = r0
-        L_0x019c:
+        L_0x019d:
             org.telegram.messenger.DispatchQueue r7 = org.telegram.messenger.Utilities.globalQueue
             org.telegram.messenger.voip.VoIPService$$ExternalSyntheticLambda17 r1 = new org.telegram.messenger.voip.VoIPService$$ExternalSyntheticLambda17
             r1.<init>(r6)
             r7.postRunnable(r1)
             java.lang.Runnable r7 = r6.timeoutRunnable
-            if (r7 == 0) goto L_0x01af
+            if (r7 == 0) goto L_0x01b0
             org.telegram.messenger.AndroidUtilities.cancelRunOnUIThread(r7)
             r6.timeoutRunnable = r0
-        L_0x01af:
+        L_0x01b0:
             org.telegram.messenger.voip.VoIPService$$ExternalSyntheticLambda33 r7 = new org.telegram.messenger.voip.VoIPService$$ExternalSyntheticLambda33
             r7.<init>(r6)
             r6.timeoutRunnable = r7
@@ -2122,7 +2123,7 @@ public class VoIPService extends Service implements SensorEventListener, AudioMa
             int r0 = r0.callRingTimeout
             long r0 = (long) r0
             org.telegram.messenger.AndroidUtilities.runOnUIThread(r7, r0)
-        L_0x01c2:
+        L_0x01c3:
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.voip.VoIPService.onCallUpdated(org.telegram.tgnet.TLRPC$PhoneCall):void");
@@ -3639,7 +3640,7 @@ public class VoIPService extends Service implements SensorEventListener, AudioMa
             byteArrayOutputStream.write(this.g_a);
         } catch (IOException unused) {
         }
-        return EncryptionKeyEmojifier.emojifyForCall(Utilities.computeSHA256(byteArrayOutputStream.toByteArray(), 0, byteArrayOutputStream.size()));
+        return EncryptionKeyEmojifier.emojifyForCall(Utilities.computeSHA256(byteArrayOutputStream.toByteArray(), 0, (long) byteArrayOutputStream.size()));
     }
 
     public boolean hasEarpiece() {
@@ -5075,92 +5076,96 @@ public class VoIPService extends Service implements SensorEventListener, AudioMa
         callFailed(nativeInstanceArr[0] != null ? nativeInstanceArr[0].getLastError() : "ERROR_UNKNOWN");
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:34:0x0090  */
+    /* JADX WARNING: Removed duplicated region for block: B:34:0x009c  */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     private android.graphics.Bitmap getRoundAvatarBitmap(org.telegram.tgnet.TLObject r8) {
         /*
             r7 = this;
             r0 = 0
             r1 = 1
-            boolean r2 = r8 instanceof org.telegram.tgnet.TLRPC$User     // Catch:{ all -> 0x008a }
+            boolean r2 = r8 instanceof org.telegram.tgnet.TLRPC$User     // Catch:{ all -> 0x0096 }
             java.lang.String r3 = "50_50"
-            if (r2 == 0) goto L_0x0049
+            if (r2 == 0) goto L_0x004f
             r2 = r8
-            org.telegram.tgnet.TLRPC$User r2 = (org.telegram.tgnet.TLRPC$User) r2     // Catch:{ all -> 0x008a }
-            org.telegram.tgnet.TLRPC$UserProfilePhoto r4 = r2.photo     // Catch:{ all -> 0x008a }
-            if (r4 == 0) goto L_0x008e
-            org.telegram.tgnet.TLRPC$FileLocation r4 = r4.photo_small     // Catch:{ all -> 0x008a }
-            if (r4 == 0) goto L_0x008e
-            org.telegram.messenger.ImageLoader r4 = org.telegram.messenger.ImageLoader.getInstance()     // Catch:{ all -> 0x008a }
-            org.telegram.tgnet.TLRPC$UserProfilePhoto r5 = r2.photo     // Catch:{ all -> 0x008a }
-            org.telegram.tgnet.TLRPC$FileLocation r5 = r5.photo_small     // Catch:{ all -> 0x008a }
-            android.graphics.drawable.BitmapDrawable r3 = r4.getImageFromMemory(r5, r0, r3)     // Catch:{ all -> 0x008a }
+            org.telegram.tgnet.TLRPC$User r2 = (org.telegram.tgnet.TLRPC$User) r2     // Catch:{ all -> 0x0096 }
+            org.telegram.tgnet.TLRPC$UserProfilePhoto r4 = r2.photo     // Catch:{ all -> 0x0096 }
+            if (r4 == 0) goto L_0x009a
+            org.telegram.tgnet.TLRPC$FileLocation r4 = r4.photo_small     // Catch:{ all -> 0x0096 }
+            if (r4 == 0) goto L_0x009a
+            org.telegram.messenger.ImageLoader r4 = org.telegram.messenger.ImageLoader.getInstance()     // Catch:{ all -> 0x0096 }
+            org.telegram.tgnet.TLRPC$UserProfilePhoto r5 = r2.photo     // Catch:{ all -> 0x0096 }
+            org.telegram.tgnet.TLRPC$FileLocation r5 = r5.photo_small     // Catch:{ all -> 0x0096 }
+            android.graphics.drawable.BitmapDrawable r3 = r4.getImageFromMemory(r5, r0, r3)     // Catch:{ all -> 0x0096 }
             if (r3 == 0) goto L_0x002c
-            android.graphics.Bitmap r2 = r3.getBitmap()     // Catch:{ all -> 0x008a }
-            android.graphics.Bitmap$Config r3 = android.graphics.Bitmap.Config.ARGB_8888     // Catch:{ all -> 0x008a }
-            android.graphics.Bitmap r0 = r2.copy(r3, r1)     // Catch:{ all -> 0x008a }
-            goto L_0x008e
+            android.graphics.Bitmap r2 = r3.getBitmap()     // Catch:{ all -> 0x0096 }
+            android.graphics.Bitmap$Config r3 = android.graphics.Bitmap.Config.ARGB_8888     // Catch:{ all -> 0x0096 }
+            android.graphics.Bitmap r0 = r2.copy(r3, r1)     // Catch:{ all -> 0x0096 }
+            goto L_0x009a
         L_0x002c:
-            android.graphics.BitmapFactory$Options r3 = new android.graphics.BitmapFactory$Options     // Catch:{ all -> 0x0044 }
-            r3.<init>()     // Catch:{ all -> 0x0044 }
-            r3.inMutable = r1     // Catch:{ all -> 0x0044 }
-            org.telegram.tgnet.TLRPC$UserProfilePhoto r2 = r2.photo     // Catch:{ all -> 0x0044 }
-            org.telegram.tgnet.TLRPC$FileLocation r2 = r2.photo_small     // Catch:{ all -> 0x0044 }
-            java.io.File r2 = org.telegram.messenger.FileLoader.getPathToAttach(r2, r1)     // Catch:{ all -> 0x0044 }
-            java.lang.String r2 = r2.toString()     // Catch:{ all -> 0x0044 }
-            android.graphics.Bitmap r0 = android.graphics.BitmapFactory.decodeFile(r2, r3)     // Catch:{ all -> 0x0044 }
-            goto L_0x008e
-        L_0x0044:
+            android.graphics.BitmapFactory$Options r3 = new android.graphics.BitmapFactory$Options     // Catch:{ all -> 0x004a }
+            r3.<init>()     // Catch:{ all -> 0x004a }
+            r3.inMutable = r1     // Catch:{ all -> 0x004a }
+            int r4 = r7.currentAccount     // Catch:{ all -> 0x004a }
+            org.telegram.messenger.FileLoader r4 = org.telegram.messenger.FileLoader.getInstance(r4)     // Catch:{ all -> 0x004a }
+            org.telegram.tgnet.TLRPC$UserProfilePhoto r2 = r2.photo     // Catch:{ all -> 0x004a }
+            org.telegram.tgnet.TLRPC$FileLocation r2 = r2.photo_small     // Catch:{ all -> 0x004a }
+            java.io.File r2 = r4.getPathToAttach(r2, r1)     // Catch:{ all -> 0x004a }
+            java.lang.String r2 = r2.toString()     // Catch:{ all -> 0x004a }
+            android.graphics.Bitmap r0 = android.graphics.BitmapFactory.decodeFile(r2, r3)     // Catch:{ all -> 0x004a }
+            goto L_0x009a
+        L_0x004a:
             r2 = move-exception
-            org.telegram.messenger.FileLog.e((java.lang.Throwable) r2)     // Catch:{ all -> 0x008a }
-            goto L_0x008e
-        L_0x0049:
+            org.telegram.messenger.FileLog.e((java.lang.Throwable) r2)     // Catch:{ all -> 0x0096 }
+            goto L_0x009a
+        L_0x004f:
             r2 = r8
-            org.telegram.tgnet.TLRPC$Chat r2 = (org.telegram.tgnet.TLRPC$Chat) r2     // Catch:{ all -> 0x008a }
-            org.telegram.tgnet.TLRPC$ChatPhoto r4 = r2.photo     // Catch:{ all -> 0x008a }
-            if (r4 == 0) goto L_0x008e
-            org.telegram.tgnet.TLRPC$FileLocation r4 = r4.photo_small     // Catch:{ all -> 0x008a }
-            if (r4 == 0) goto L_0x008e
-            org.telegram.messenger.ImageLoader r4 = org.telegram.messenger.ImageLoader.getInstance()     // Catch:{ all -> 0x008a }
-            org.telegram.tgnet.TLRPC$ChatPhoto r5 = r2.photo     // Catch:{ all -> 0x008a }
-            org.telegram.tgnet.TLRPC$FileLocation r5 = r5.photo_small     // Catch:{ all -> 0x008a }
-            android.graphics.drawable.BitmapDrawable r3 = r4.getImageFromMemory(r5, r0, r3)     // Catch:{ all -> 0x008a }
-            if (r3 == 0) goto L_0x006d
-            android.graphics.Bitmap r2 = r3.getBitmap()     // Catch:{ all -> 0x008a }
-            android.graphics.Bitmap$Config r3 = android.graphics.Bitmap.Config.ARGB_8888     // Catch:{ all -> 0x008a }
-            android.graphics.Bitmap r0 = r2.copy(r3, r1)     // Catch:{ all -> 0x008a }
-            goto L_0x008e
-        L_0x006d:
-            android.graphics.BitmapFactory$Options r3 = new android.graphics.BitmapFactory$Options     // Catch:{ all -> 0x0085 }
-            r3.<init>()     // Catch:{ all -> 0x0085 }
-            r3.inMutable = r1     // Catch:{ all -> 0x0085 }
-            org.telegram.tgnet.TLRPC$ChatPhoto r2 = r2.photo     // Catch:{ all -> 0x0085 }
-            org.telegram.tgnet.TLRPC$FileLocation r2 = r2.photo_small     // Catch:{ all -> 0x0085 }
-            java.io.File r2 = org.telegram.messenger.FileLoader.getPathToAttach(r2, r1)     // Catch:{ all -> 0x0085 }
-            java.lang.String r2 = r2.toString()     // Catch:{ all -> 0x0085 }
-            android.graphics.Bitmap r0 = android.graphics.BitmapFactory.decodeFile(r2, r3)     // Catch:{ all -> 0x0085 }
-            goto L_0x008e
-        L_0x0085:
+            org.telegram.tgnet.TLRPC$Chat r2 = (org.telegram.tgnet.TLRPC$Chat) r2     // Catch:{ all -> 0x0096 }
+            org.telegram.tgnet.TLRPC$ChatPhoto r4 = r2.photo     // Catch:{ all -> 0x0096 }
+            if (r4 == 0) goto L_0x009a
+            org.telegram.tgnet.TLRPC$FileLocation r4 = r4.photo_small     // Catch:{ all -> 0x0096 }
+            if (r4 == 0) goto L_0x009a
+            org.telegram.messenger.ImageLoader r4 = org.telegram.messenger.ImageLoader.getInstance()     // Catch:{ all -> 0x0096 }
+            org.telegram.tgnet.TLRPC$ChatPhoto r5 = r2.photo     // Catch:{ all -> 0x0096 }
+            org.telegram.tgnet.TLRPC$FileLocation r5 = r5.photo_small     // Catch:{ all -> 0x0096 }
+            android.graphics.drawable.BitmapDrawable r3 = r4.getImageFromMemory(r5, r0, r3)     // Catch:{ all -> 0x0096 }
+            if (r3 == 0) goto L_0x0073
+            android.graphics.Bitmap r2 = r3.getBitmap()     // Catch:{ all -> 0x0096 }
+            android.graphics.Bitmap$Config r3 = android.graphics.Bitmap.Config.ARGB_8888     // Catch:{ all -> 0x0096 }
+            android.graphics.Bitmap r0 = r2.copy(r3, r1)     // Catch:{ all -> 0x0096 }
+            goto L_0x009a
+        L_0x0073:
+            android.graphics.BitmapFactory$Options r3 = new android.graphics.BitmapFactory$Options     // Catch:{ all -> 0x0091 }
+            r3.<init>()     // Catch:{ all -> 0x0091 }
+            r3.inMutable = r1     // Catch:{ all -> 0x0091 }
+            int r4 = r7.currentAccount     // Catch:{ all -> 0x0091 }
+            org.telegram.messenger.FileLoader r4 = org.telegram.messenger.FileLoader.getInstance(r4)     // Catch:{ all -> 0x0091 }
+            org.telegram.tgnet.TLRPC$ChatPhoto r2 = r2.photo     // Catch:{ all -> 0x0091 }
+            org.telegram.tgnet.TLRPC$FileLocation r2 = r2.photo_small     // Catch:{ all -> 0x0091 }
+            java.io.File r2 = r4.getPathToAttach(r2, r1)     // Catch:{ all -> 0x0091 }
+            java.lang.String r2 = r2.toString()     // Catch:{ all -> 0x0091 }
+            android.graphics.Bitmap r0 = android.graphics.BitmapFactory.decodeFile(r2, r3)     // Catch:{ all -> 0x0091 }
+            goto L_0x009a
+        L_0x0091:
             r2 = move-exception
-            org.telegram.messenger.FileLog.e((java.lang.Throwable) r2)     // Catch:{ all -> 0x008a }
-            goto L_0x008e
-        L_0x008a:
+            org.telegram.messenger.FileLog.e((java.lang.Throwable) r2)     // Catch:{ all -> 0x0096 }
+            goto L_0x009a
+        L_0x0096:
             r2 = move-exception
             org.telegram.messenger.FileLog.e((java.lang.Throwable) r2)
-        L_0x008e:
-            if (r0 != 0) goto L_0x00cb
+        L_0x009a:
+            if (r0 != 0) goto L_0x00d7
             org.telegram.ui.ActionBar.Theme.createDialogsResources(r7)
             boolean r0 = r8 instanceof org.telegram.tgnet.TLRPC$User
-            if (r0 == 0) goto L_0x009f
+            if (r0 == 0) goto L_0x00ab
             org.telegram.ui.Components.AvatarDrawable r0 = new org.telegram.ui.Components.AvatarDrawable
             org.telegram.tgnet.TLRPC$User r8 = (org.telegram.tgnet.TLRPC$User) r8
             r0.<init>((org.telegram.tgnet.TLRPC$User) r8)
-            goto L_0x00a6
-        L_0x009f:
+            goto L_0x00b2
+        L_0x00ab:
             org.telegram.ui.Components.AvatarDrawable r0 = new org.telegram.ui.Components.AvatarDrawable
             org.telegram.tgnet.TLRPC$Chat r8 = (org.telegram.tgnet.TLRPC$Chat) r8
             r0.<init>((org.telegram.tgnet.TLRPC$Chat) r8)
-        L_0x00a6:
+        L_0x00b2:
             r8 = 1109917696(0x42280000, float:42.0)
             int r2 = org.telegram.messenger.AndroidUtilities.dp(r8)
             int r8 = org.telegram.messenger.AndroidUtilities.dp(r8)
@@ -5174,7 +5179,7 @@ public class VoIPService extends Service implements SensorEventListener, AudioMa
             r2.<init>(r8)
             r0.draw(r2)
             r0 = r8
-        L_0x00cb:
+        L_0x00d7:
             android.graphics.Canvas r8 = new android.graphics.Canvas
             r8.<init>(r0)
             android.graphics.Path r2 = new android.graphics.Path
@@ -5213,7 +5218,7 @@ public class VoIPService extends Service implements SensorEventListener, AudioMa
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v6, resolved type: java.lang.String} */
     /* JADX WARNING: type inference failed for: r7v11 */
     /* JADX WARNING: type inference failed for: r7v12 */
-    /* JADX WARNING: Incorrect type for immutable var: ssa=int, code=?, for r7v4, types: [int, boolean] */
+    /* JADX WARNING: Incorrect type for immutable var: ssa=int, code=?, for r7v4, types: [boolean, int] */
     /* JADX WARNING: Multi-variable type inference failed */
     /* JADX WARNING: Removed duplicated region for block: B:26:0x00ea  */
     /* JADX WARNING: Removed duplicated region for block: B:32:0x013a  */
@@ -5232,9 +5237,9 @@ public class VoIPService extends Service implements SensorEventListener, AudioMa
             r4.setAction(r5)
             android.app.Notification$Builder r5 = new android.app.Notification$Builder
             r5.<init>(r1)
-            r6 = 2131628904(0x7f0e1368, float:1.8885114E38)
+            r6 = 2131629125(0x7f0e1445, float:1.8885562E38)
             java.lang.String r7 = "VoipInVideoCallBranding"
-            r8 = 2131628902(0x7f0e1366, float:1.888511E38)
+            r8 = 2131629123(0x7f0e1443, float:1.8885558E38)
             java.lang.String r9 = "VoipInCallBranding"
             if (r22 == 0) goto L_0x002a
             java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r7, r6)
@@ -5244,7 +5249,7 @@ public class VoIPService extends Service implements SensorEventListener, AudioMa
         L_0x002e:
             android.app.Notification$Builder r5 = r5.setContentTitle(r10)
             android.app.Notification$Builder r5 = r5.setContentText(r0)
-            r10 = 2131165961(0x7var_, float:1.7946154E38)
+            r10 = 2131166004(0x7var_, float:1.7946241E38)
             android.app.Notification$Builder r5 = r5.setSmallIcon(r10)
             android.app.Notification$Builder r5 = r5.setSubText(r2)
             r10 = 0
@@ -5328,7 +5333,7 @@ public class VoIPService extends Service implements SensorEventListener, AudioMa
             r10.append(r15)
             r10.append(r14)
             java.lang.String r10 = r10.toString()
-            r13 = 2131626122(0x7f0e088a, float:1.8879471E38)
+            r13 = 2131626220(0x7f0e08ec, float:1.887967E38)
             r17 = r7
             java.lang.String r7 = "IncomingCalls"
             java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r7, r13)
@@ -5380,7 +5385,7 @@ public class VoIPService extends Service implements SensorEventListener, AudioMa
             java.lang.String r8 = "call_id"
             r2.putExtra(r8, r6)
             java.lang.String r6 = "VoipDeclineCall"
-            r7 = 2131628780(0x7f0e12ec, float:1.8884862E38)
+            r7 = 2131629001(0x7f0e13c9, float:1.888531E38)
             java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r6, r7)
             r10 = 24
             if (r12 < r10) goto L_0x01a7
@@ -5399,7 +5404,7 @@ public class VoIPService extends Service implements SensorEventListener, AudioMa
         L_0x01a8:
             r11 = 268435456(0x10000000, float:2.5243549E-29)
             android.app.PendingIntent r2 = android.app.PendingIntent.getBroadcast(r1, r14, r2, r11)
-            r13 = 2131165524(0x7var_, float:1.7945268E38)
+            r13 = 2131165465(0x7var_, float:1.7945148E38)
             r5.addAction(r13, r9, r2)
             android.content.Intent r9 = new android.content.Intent
             java.lang.Class<org.telegram.messenger.voip.VoIPActionsReceiver> r13 = org.telegram.messenger.voip.VoIPActionsReceiver.class
@@ -5415,7 +5420,7 @@ public class VoIPService extends Service implements SensorEventListener, AudioMa
             long r13 = r18.getCallID()
             r9.putExtra(r8, r13)
             java.lang.String r8 = "VoipAnswerCall"
-            r13 = 2131628720(0x7f0e12b0, float:1.888474E38)
+            r13 = 2131628941(0x7f0e138d, float:1.8885189E38)
             java.lang.String r14 = org.telegram.messenger.LocaleController.getString(r8, r13)
             if (r12 < r10) goto L_0x01fc
             android.text.SpannableString r10 = new android.text.SpannableString
@@ -5432,7 +5437,7 @@ public class VoIPService extends Service implements SensorEventListener, AudioMa
             r7 = 0
         L_0x01fd:
             android.app.PendingIntent r9 = android.app.PendingIntent.getBroadcast(r1, r7, r9, r11)
-            r10 = 2131165523(0x7var_, float:1.7945266E38)
+            r10 = 2131165464(0x7var_, float:1.7945146E38)
             r5.addAction(r10, r14, r9)
             r10 = 2
             r5.setPriority(r10)
@@ -5480,12 +5485,12 @@ public class VoIPService extends Service implements SensorEventListener, AudioMa
             r11 = 2131427328(0x7f0b0000, float:1.847627E38)
         L_0x026b:
             r7.<init>(r10, r11)
-            r10 = 2131230866(0x7var_, float:1.8077797E38)
+            r10 = 2131230867(0x7var_, float:1.8077799E38)
             r7.setTextViewText(r10, r0)
             boolean r0 = android.text.TextUtils.isEmpty(r20)
             r10 = 8
-            r11 = 2131230944(0x7var_e0, float:1.8077955E38)
-            r12 = 2131230920(0x7var_c8, float:1.8077906E38)
+            r11 = 2131230945(0x7var_e1, float:1.8077957E38)
+            r12 = 2131230921(0x7var_c9, float:1.8077908E38)
             if (r0 == 0) goto L_0x02de
             r7.setViewVisibility(r12, r10)
             int r0 = org.telegram.messenger.UserConfig.getActivatedAccountsCount()
@@ -5495,7 +5500,7 @@ public class VoIPService extends Service implements SensorEventListener, AudioMa
             org.telegram.messenger.UserConfig r0 = org.telegram.messenger.UserConfig.getInstance(r0)
             org.telegram.tgnet.TLRPC$User r0 = r0.getCurrentUser()
             if (r22 == 0) goto L_0x02af
-            r12 = 2131628905(0x7f0e1369, float:1.8885116E38)
+            r12 = 2131629126(0x7f0e1446, float:1.8885564E38)
             java.lang.Object[] r10 = new java.lang.Object[r10]
             java.lang.String r14 = r0.first_name
             java.lang.String r0 = r0.last_name
@@ -5507,7 +5512,7 @@ public class VoIPService extends Service implements SensorEventListener, AudioMa
             goto L_0x02c5
         L_0x02af:
             r14 = 0
-            r12 = 2131628903(0x7f0e1367, float:1.8885112E38)
+            r12 = 2131629124(0x7f0e1444, float:1.888556E38)
             java.lang.Object[] r10 = new java.lang.Object[r10]
             java.lang.String r15 = r0.first_name
             java.lang.String r0 = r0.last_name
@@ -5521,11 +5526,11 @@ public class VoIPService extends Service implements SensorEventListener, AudioMa
         L_0x02c9:
             if (r22 == 0) goto L_0x02d1
             r10 = r17
-            r0 = 2131628904(0x7f0e1368, float:1.8885114E38)
+            r0 = 2131629125(0x7f0e1445, float:1.8885562E38)
             goto L_0x02d6
         L_0x02d1:
             r10 = r16
-            r0 = 2131628902(0x7f0e1366, float:1.888511E38)
+            r0 = 2131629123(0x7f0e1443, float:1.8885558E38)
         L_0x02d6:
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r10, r0)
             r7.setTextViewText(r11, r0)
@@ -5537,7 +5542,7 @@ public class VoIPService extends Service implements SensorEventListener, AudioMa
             int r0 = r1.currentAccount
             org.telegram.messenger.UserConfig r0 = org.telegram.messenger.UserConfig.getInstance(r0)
             org.telegram.tgnet.TLRPC$User r0 = r0.getCurrentUser()
-            r10 = 2131628721(0x7f0e12b1, float:1.8884743E38)
+            r10 = 2131628942(0x7f0e138e, float:1.888519E38)
             java.lang.Object[] r14 = new java.lang.Object[r14]
             java.lang.String r15 = r0.first_name
             java.lang.String r0 = r0.last_name
@@ -5559,10 +5564,10 @@ public class VoIPService extends Service implements SensorEventListener, AudioMa
             java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r8, r13)
             r7.setTextViewText(r3, r8)
             r3 = 2131230804(0x7var_, float:1.8077671E38)
-            r8 = 2131628780(0x7f0e12ec, float:1.8884862E38)
+            r8 = 2131629001(0x7f0e13c9, float:1.888531E38)
             java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r6, r8)
             r7.setTextViewText(r3, r6)
-            r3 = 2131230889(0x7var_a9, float:1.8077844E38)
+            r3 = 2131230890(0x7var_aa, float:1.8077846E38)
             r7.setImageViewBitmap(r3, r0)
             r3 = 2131230768(0x7var_, float:1.8077598E38)
             r7.setOnClickPendingIntent(r3, r9)

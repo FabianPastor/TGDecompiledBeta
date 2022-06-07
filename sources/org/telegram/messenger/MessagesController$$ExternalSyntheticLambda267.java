@@ -6,14 +6,18 @@ import org.telegram.tgnet.TLRPC$TL_error;
 
 public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda267 implements RequestDelegate {
     public final /* synthetic */ MessagesController f$0;
-    public final /* synthetic */ long f$1;
+    public final /* synthetic */ int f$1;
+    public final /* synthetic */ long f$2;
+    public final /* synthetic */ int f$3;
 
-    public /* synthetic */ MessagesController$$ExternalSyntheticLambda267(MessagesController messagesController, long j) {
+    public /* synthetic */ MessagesController$$ExternalSyntheticLambda267(MessagesController messagesController, int i, long j, int i2) {
         this.f$0 = messagesController;
-        this.f$1 = j;
+        this.f$1 = i;
+        this.f$2 = j;
+        this.f$3 = i2;
     }
 
     public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        this.f$0.lambda$markDialogAsUnread$276(this.f$1, tLObject, tLRPC$TL_error);
+        this.f$0.lambda$sendTyping$142(this.f$1, this.f$2, this.f$3, tLObject, tLRPC$TL_error);
     }
 }

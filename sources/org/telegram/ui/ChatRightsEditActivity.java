@@ -25,6 +25,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 import java.util.Calendar;
+import org.telegram.messenger.AccountInstance;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ChatObject;
 import org.telegram.messenger.FileLog;
@@ -45,6 +46,7 @@ import org.telegram.tgnet.TLRPC$TL_inputChannel;
 import org.telegram.tgnet.TLRPC$TL_inputChannelEmpty;
 import org.telegram.tgnet.TLRPC$TL_inputCheckPasswordEmpty;
 import org.telegram.tgnet.TLRPC$User;
+import org.telegram.tgnet.TLRPC$UserFull;
 import org.telegram.ui.ActionBar.ActionBar;
 import org.telegram.ui.ActionBar.ActionBarMenu;
 import org.telegram.ui.ActionBar.AlertDialog;
@@ -63,10 +65,12 @@ import org.telegram.ui.Cells.TextInfoPrivacyCell;
 import org.telegram.ui.Cells.TextSettingsCell;
 import org.telegram.ui.Cells.UserCell2;
 import org.telegram.ui.Components.AlertsCreator;
+import org.telegram.ui.Components.AnimatedTextView;
 import org.telegram.ui.Components.BulletinFactory;
 import org.telegram.ui.Components.CircularProgressDrawable;
 import org.telegram.ui.Components.CrossfadeDrawable;
 import org.telegram.ui.Components.LayoutHelper;
+import org.telegram.ui.Components.Premium.LimitReachedBottomSheet;
 import org.telegram.ui.Components.RecyclerListView;
 
 public class ChatRightsEditActivity extends BaseFragment {
@@ -78,6 +82,8 @@ public class ChatRightsEditActivity extends BaseFragment {
     public FrameLayout addBotButtonContainer;
     /* access modifiers changed from: private */
     public int addBotButtonRow;
+    /* access modifiers changed from: private */
+    public AnimatedTextView addBotButtonText;
     /* access modifiers changed from: private */
     public int addUsersRow;
     /* access modifiers changed from: private */
@@ -191,6 +197,8 @@ public class ChatRightsEditActivity extends BaseFragment {
     }
 
     public ChatRightsEditActivity(long j, long j2, TLRPC$TL_chatAdminRights tLRPC$TL_chatAdminRights, TLRPC$TL_chatBannedRights tLRPC$TL_chatBannedRights, TLRPC$TL_chatBannedRights tLRPC$TL_chatBannedRights2, String str, int i, boolean z, boolean z2, String str2) {
+        boolean z3;
+        TLRPC$UserFull userFull;
         TLRPC$Chat tLRPC$Chat;
         TLRPC$TL_chatAdminRights tLRPC$TL_chatAdminRights2 = tLRPC$TL_chatAdminRights;
         TLRPC$TL_chatBannedRights tLRPC$TL_chatBannedRights3 = tLRPC$TL_chatBannedRights;
@@ -213,7 +221,7 @@ public class ChatRightsEditActivity extends BaseFragment {
         str3 = str != null ? str : str3;
         this.currentRank = str3;
         this.initialRank = str3;
-        boolean z3 = true;
+        boolean z4 = true;
         if (chat != null) {
             this.isChannel = ChatObject.isChannel(chat) && !this.currentChat.megagroup;
             this.myAdminRights = this.currentChat.admin_rights;
@@ -222,58 +230,80 @@ public class ChatRightsEditActivity extends BaseFragment {
             this.myAdminRights = emptyAdminRights(this.currentType != 2 || ((tLRPC$Chat = this.currentChat) != null && tLRPC$Chat.creator));
         }
         if (i2 == 0 || i2 == 2) {
+            if (i2 == 2 && (userFull = getMessagesController().getUserFull(j)) != null) {
+                TLRPC$TL_chatAdminRights tLRPC$TL_chatAdminRights3 = this.isChannel ? userFull.bot_broadcast_admin_rights : userFull.bot_group_admin_rights;
+                if (tLRPC$TL_chatAdminRights3 != null) {
+                    if (tLRPC$TL_chatAdminRights2 == null) {
+                        tLRPC$TL_chatAdminRights2 = tLRPC$TL_chatAdminRights3;
+                    } else {
+                        tLRPC$TL_chatAdminRights2.ban_users = tLRPC$TL_chatAdminRights2.ban_users || tLRPC$TL_chatAdminRights3.ban_users;
+                        tLRPC$TL_chatAdminRights2.add_admins = tLRPC$TL_chatAdminRights2.add_admins || tLRPC$TL_chatAdminRights3.add_admins;
+                        tLRPC$TL_chatAdminRights2.post_messages = tLRPC$TL_chatAdminRights2.post_messages || tLRPC$TL_chatAdminRights3.post_messages;
+                        tLRPC$TL_chatAdminRights2.pin_messages = tLRPC$TL_chatAdminRights2.pin_messages || tLRPC$TL_chatAdminRights3.pin_messages;
+                        tLRPC$TL_chatAdminRights2.delete_messages = tLRPC$TL_chatAdminRights2.delete_messages || tLRPC$TL_chatAdminRights3.delete_messages;
+                        tLRPC$TL_chatAdminRights2.change_info = tLRPC$TL_chatAdminRights2.change_info || tLRPC$TL_chatAdminRights3.change_info;
+                        tLRPC$TL_chatAdminRights2.anonymous = tLRPC$TL_chatAdminRights2.anonymous || tLRPC$TL_chatAdminRights3.anonymous;
+                        tLRPC$TL_chatAdminRights2.edit_messages = tLRPC$TL_chatAdminRights2.edit_messages || tLRPC$TL_chatAdminRights3.edit_messages;
+                        tLRPC$TL_chatAdminRights2.manage_call = tLRPC$TL_chatAdminRights2.manage_call || tLRPC$TL_chatAdminRights3.manage_call;
+                        tLRPC$TL_chatAdminRights2.other = tLRPC$TL_chatAdminRights2.other || tLRPC$TL_chatAdminRights3.other;
+                    }
+                }
+            }
             if (tLRPC$TL_chatAdminRights2 == null) {
                 this.initialAsAdmin = false;
                 if (i2 == 2) {
                     this.adminRights = emptyAdminRights(false);
-                    boolean z4 = this.isChannel;
-                    this.asAdmin = z4;
-                    this.asAdminT = z4 ? 1.0f : f;
+                    boolean z5 = this.isChannel;
+                    this.asAdmin = z5;
+                    this.asAdminT = z5 ? 1.0f : f;
                     this.initialIsSet = false;
                 } else {
-                    TLRPC$TL_chatAdminRights tLRPC$TL_chatAdminRights3 = new TLRPC$TL_chatAdminRights();
-                    this.adminRights = tLRPC$TL_chatAdminRights3;
-                    TLRPC$TL_chatAdminRights tLRPC$TL_chatAdminRights4 = this.myAdminRights;
-                    tLRPC$TL_chatAdminRights3.change_info = tLRPC$TL_chatAdminRights4.change_info;
-                    tLRPC$TL_chatAdminRights3.post_messages = tLRPC$TL_chatAdminRights4.post_messages;
-                    tLRPC$TL_chatAdminRights3.edit_messages = tLRPC$TL_chatAdminRights4.edit_messages;
-                    tLRPC$TL_chatAdminRights3.delete_messages = tLRPC$TL_chatAdminRights4.delete_messages;
-                    tLRPC$TL_chatAdminRights3.manage_call = tLRPC$TL_chatAdminRights4.manage_call;
-                    tLRPC$TL_chatAdminRights3.ban_users = tLRPC$TL_chatAdminRights4.ban_users;
-                    tLRPC$TL_chatAdminRights3.invite_users = tLRPC$TL_chatAdminRights4.invite_users;
-                    tLRPC$TL_chatAdminRights3.pin_messages = tLRPC$TL_chatAdminRights4.pin_messages;
+                    TLRPC$TL_chatAdminRights tLRPC$TL_chatAdminRights4 = new TLRPC$TL_chatAdminRights();
+                    this.adminRights = tLRPC$TL_chatAdminRights4;
+                    TLRPC$TL_chatAdminRights tLRPC$TL_chatAdminRights5 = this.myAdminRights;
+                    tLRPC$TL_chatAdminRights4.change_info = tLRPC$TL_chatAdminRights5.change_info;
+                    tLRPC$TL_chatAdminRights4.post_messages = tLRPC$TL_chatAdminRights5.post_messages;
+                    tLRPC$TL_chatAdminRights4.edit_messages = tLRPC$TL_chatAdminRights5.edit_messages;
+                    tLRPC$TL_chatAdminRights4.delete_messages = tLRPC$TL_chatAdminRights5.delete_messages;
+                    tLRPC$TL_chatAdminRights4.manage_call = tLRPC$TL_chatAdminRights5.manage_call;
+                    tLRPC$TL_chatAdminRights4.ban_users = tLRPC$TL_chatAdminRights5.ban_users;
+                    tLRPC$TL_chatAdminRights4.invite_users = tLRPC$TL_chatAdminRights5.invite_users;
+                    tLRPC$TL_chatAdminRights4.pin_messages = tLRPC$TL_chatAdminRights5.pin_messages;
+                    tLRPC$TL_chatAdminRights4.other = tLRPC$TL_chatAdminRights5.other;
                     this.initialIsSet = false;
                 }
             } else {
                 this.initialAsAdmin = true;
-                TLRPC$TL_chatAdminRights tLRPC$TL_chatAdminRights5 = new TLRPC$TL_chatAdminRights();
-                this.adminRights = tLRPC$TL_chatAdminRights5;
-                boolean z5 = tLRPC$TL_chatAdminRights2.change_info;
-                tLRPC$TL_chatAdminRights5.change_info = z5;
-                boolean z6 = tLRPC$TL_chatAdminRights2.post_messages;
-                tLRPC$TL_chatAdminRights5.post_messages = z6;
-                boolean z7 = tLRPC$TL_chatAdminRights2.edit_messages;
-                tLRPC$TL_chatAdminRights5.edit_messages = z7;
-                boolean z8 = tLRPC$TL_chatAdminRights2.delete_messages;
-                tLRPC$TL_chatAdminRights5.delete_messages = z8;
-                boolean z9 = tLRPC$TL_chatAdminRights2.manage_call;
-                tLRPC$TL_chatAdminRights5.manage_call = z9;
-                boolean z10 = tLRPC$TL_chatAdminRights2.ban_users;
-                tLRPC$TL_chatAdminRights5.ban_users = z10;
-                boolean z11 = tLRPC$TL_chatAdminRights2.invite_users;
-                tLRPC$TL_chatAdminRights5.invite_users = z11;
-                boolean z12 = tLRPC$TL_chatAdminRights2.pin_messages;
-                tLRPC$TL_chatAdminRights5.pin_messages = z12;
-                boolean z13 = tLRPC$TL_chatAdminRights2.add_admins;
-                tLRPC$TL_chatAdminRights5.add_admins = z13;
-                boolean z14 = tLRPC$TL_chatAdminRights2.anonymous;
-                tLRPC$TL_chatAdminRights5.anonymous = z14;
-                boolean z15 = z5 || z6 || z7 || z8 || z10 || z11 || z12 || z13 || z9 || z14;
-                this.initialIsSet = z15;
+                TLRPC$TL_chatAdminRights tLRPC$TL_chatAdminRights6 = new TLRPC$TL_chatAdminRights();
+                this.adminRights = tLRPC$TL_chatAdminRights6;
+                boolean z6 = tLRPC$TL_chatAdminRights2.change_info;
+                tLRPC$TL_chatAdminRights6.change_info = z6;
+                boolean z7 = tLRPC$TL_chatAdminRights2.post_messages;
+                tLRPC$TL_chatAdminRights6.post_messages = z7;
+                boolean z8 = tLRPC$TL_chatAdminRights2.edit_messages;
+                tLRPC$TL_chatAdminRights6.edit_messages = z8;
+                boolean z9 = tLRPC$TL_chatAdminRights2.delete_messages;
+                tLRPC$TL_chatAdminRights6.delete_messages = z9;
+                boolean z10 = tLRPC$TL_chatAdminRights2.manage_call;
+                tLRPC$TL_chatAdminRights6.manage_call = z10;
+                boolean z11 = tLRPC$TL_chatAdminRights2.ban_users;
+                tLRPC$TL_chatAdminRights6.ban_users = z11;
+                boolean z12 = tLRPC$TL_chatAdminRights2.invite_users;
+                tLRPC$TL_chatAdminRights6.invite_users = z12;
+                boolean z13 = tLRPC$TL_chatAdminRights2.pin_messages;
+                tLRPC$TL_chatAdminRights6.pin_messages = z13;
+                boolean z14 = tLRPC$TL_chatAdminRights2.add_admins;
+                tLRPC$TL_chatAdminRights6.add_admins = z14;
+                boolean z15 = tLRPC$TL_chatAdminRights2.anonymous;
+                tLRPC$TL_chatAdminRights6.anonymous = z15;
+                boolean z16 = tLRPC$TL_chatAdminRights2.other;
+                tLRPC$TL_chatAdminRights6.other = z16;
+                boolean z17 = z6 || z7 || z8 || z9 || z11 || z12 || z13 || z14 || z10 || z15 || z16;
+                this.initialIsSet = z17;
                 if (i2 == 2) {
-                    boolean z16 = this.isChannel || z15;
-                    this.asAdmin = z16;
-                    this.asAdminT = z16 ? 1.0f : 0.0f;
+                    boolean z18 = this.isChannel || z17;
+                    this.asAdmin = z18;
+                    this.asAdminT = z18 ? 1.0f : 0.0f;
                     this.initialIsSet = false;
                 }
             }
@@ -284,6 +314,7 @@ public class ChatRightsEditActivity extends BaseFragment {
             if (this.defaultBannedRights == null) {
                 TLRPC$TL_chatBannedRights tLRPC$TL_chatBannedRights5 = new TLRPC$TL_chatBannedRights();
                 this.defaultBannedRights = tLRPC$TL_chatBannedRights5;
+                z3 = true;
                 tLRPC$TL_chatBannedRights5.pin_messages = true;
                 tLRPC$TL_chatBannedRights5.change_info = true;
                 tLRPC$TL_chatBannedRights5.invite_users = true;
@@ -296,13 +327,15 @@ public class ChatRightsEditActivity extends BaseFragment {
                 tLRPC$TL_chatBannedRights5.send_messages = true;
                 tLRPC$TL_chatBannedRights5.send_media = true;
                 tLRPC$TL_chatBannedRights5.view_messages = true;
+            } else {
+                z3 = true;
             }
             TLRPC$TL_chatBannedRights tLRPC$TL_chatBannedRights6 = this.defaultBannedRights;
             if (!tLRPC$TL_chatBannedRights6.change_info) {
-                this.adminRights.change_info = true;
+                this.adminRights.change_info = z3;
             }
             if (!tLRPC$TL_chatBannedRights6.pin_messages) {
-                this.adminRights.pin_messages = true;
+                this.adminRights.pin_messages = z3;
             }
         } else if (i2 == 1) {
             this.defaultBannedRights = tLRPC$TL_chatBannedRights3;
@@ -391,9 +424,9 @@ public class ChatRightsEditActivity extends BaseFragment {
             }
             this.currentBannedRights = ChatObject.getBannedRightsString(tLRPC$TL_chatBannedRights8);
             if (tLRPC$TL_chatBannedRights4 != null && tLRPC$TL_chatBannedRights4.view_messages) {
-                z3 = false;
+                z4 = false;
             }
-            this.initialIsSet = z3;
+            this.initialIsSet = z4;
         }
         updateRows(false);
     }
@@ -437,8 +470,10 @@ public class ChatRightsEditActivity extends BaseFragment {
         });
         if (this.canEdit || (!this.isChannel && this.currentChat.creator && UserObject.isUserSelf(this.currentUser))) {
             ActionBarMenu createMenu = this.actionBar.createMenu();
-            this.doneDrawable = new CrossfadeDrawable(context.getResources().getDrawable(NUM), new CircularProgressDrawable(Theme.getColor("actionBarDefaultIcon")));
-            createMenu.addItemWithWidth(1, 0, AndroidUtilities.dp(56.0f), LocaleController.getString("Done", NUM));
+            Drawable mutate = context.getResources().getDrawable(NUM).mutate();
+            mutate.setColorFilter(new PorterDuffColorFilter(Theme.getColor("actionBarDefaultIcon"), PorterDuff.Mode.MULTIPLY));
+            this.doneDrawable = new CrossfadeDrawable(mutate, new CircularProgressDrawable(Theme.getColor("actionBarDefaultIcon")));
+            createMenu.addItemWithWidth(1, 0, AndroidUtilities.dp(56.0f), (CharSequence) LocaleController.getString("Done", NUM));
             createMenu.getItem(1).setIcon((Drawable) this.doneDrawable);
         }
         AnonymousClass2 r0 = new FrameLayout(context) {
@@ -582,13 +617,13 @@ public class ChatRightsEditActivity extends BaseFragment {
                     if (i4 == 0) {
                         str = LocaleController.getString("UserRestrictionsUntilForever", NUM);
                     } else if (i4 == 1) {
-                        str = LocaleController.formatPluralString("Days", 1);
+                        str = LocaleController.formatPluralString("Days", 1, new Object[0]);
                     } else if (i4 == 2) {
-                        str = LocaleController.formatPluralString("Weeks", 1);
+                        str = LocaleController.formatPluralString("Weeks", 1, new Object[0]);
                     } else if (i4 != 3) {
                         str = LocaleController.getString("UserRestrictionsCustom", NUM);
                     } else {
-                        str = LocaleController.formatPluralString("Months", 1);
+                        str = LocaleController.formatPluralString("Months", 1, new Object[0]);
                     }
                     bottomSheetCellArr[i4].setTextAndIcon((CharSequence) str, 0);
                     linearLayout2.addView(bottomSheetCellArr[i4], LayoutHelper.createLinear(-1, -2));
@@ -927,12 +962,11 @@ public class ChatRightsEditActivity extends BaseFragment {
 
     /* access modifiers changed from: private */
     public /* synthetic */ void lambda$initTransfer$14(TLRPC$InputCheckPasswordSRP tLRPC$InputCheckPasswordSRP, TwoStepVerificationActivity twoStepVerificationActivity, TLRPC$TL_channels_editCreator tLRPC$TL_channels_editCreator, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        AndroidUtilities.runOnUIThread(new ChatRightsEditActivity$$ExternalSyntheticLambda19(this, tLRPC$TL_error, tLRPC$InputCheckPasswordSRP, twoStepVerificationActivity, tLRPC$TL_channels_editCreator));
+        AndroidUtilities.runOnUIThread(new ChatRightsEditActivity$$ExternalSyntheticLambda16(this, tLRPC$TL_error, tLRPC$InputCheckPasswordSRP, twoStepVerificationActivity, tLRPC$TL_channels_editCreator));
     }
 
     /* access modifiers changed from: private */
     public /* synthetic */ void lambda$initTransfer$13(TLRPC$TL_error tLRPC$TL_error, TLRPC$InputCheckPasswordSRP tLRPC$InputCheckPasswordSRP, TwoStepVerificationActivity twoStepVerificationActivity, TLRPC$TL_channels_editCreator tLRPC$TL_channels_editCreator) {
-        int i;
         TLRPC$TL_error tLRPC$TL_error2 = tLRPC$TL_error;
         TwoStepVerificationActivity twoStepVerificationActivity2 = twoStepVerificationActivity;
         if (tLRPC$TL_error2 != null) {
@@ -1003,10 +1037,8 @@ public class ChatRightsEditActivity extends BaseFragment {
                     textView3.setText(AndroidUtilities.replaceTags(LocaleController.getString("EditAdminTransferAlertText2", NUM)));
                     if (LocaleController.isRTL) {
                         linearLayout3.addView(textView3, LayoutHelper.createLinear(-1, -2));
-                        i = 5;
                         linearLayout3.addView(imageView2, LayoutHelper.createLinear(-2, -2, 5));
                     } else {
-                        i = 5;
                         linearLayout3.addView(imageView2, LayoutHelper.createLinear(-2, -2));
                         linearLayout3.addView(textView3, LayoutHelper.createLinear(-1, -2));
                     }
@@ -1017,10 +1049,7 @@ public class ChatRightsEditActivity extends BaseFragment {
                         TextView textView4 = new TextView(getParentActivity());
                         textView4.setTextColor(Theme.getColor("dialogTextBlack"));
                         textView4.setTextSize(1, 16.0f);
-                        if (!LocaleController.isRTL) {
-                            i = 3;
-                        }
-                        textView4.setGravity(i | 48);
+                        textView4.setGravity((LocaleController.isRTL ? 5 : 3) | 48);
                         textView4.setText(LocaleController.getString("EditAdminTransferAlertText3", NUM));
                         linearLayout.addView(textView4, LayoutHelper.createLinear(-1, -2, 0.0f, 11.0f, 0.0f, 0.0f));
                         builder2.setNegativeButton(LocaleController.getString("OK", NUM), (DialogInterface.OnClickListener) null);
@@ -1028,14 +1057,16 @@ public class ChatRightsEditActivity extends BaseFragment {
                     showDialog(builder2.create());
                 } else if ("SRP_ID_INVALID".equals(tLRPC$TL_error2.text)) {
                     ConnectionsManager.getInstance(this.currentAccount).sendRequest(new TLRPC$TL_account_getPassword(), new ChatRightsEditActivity$$ExternalSyntheticLambda23(this, twoStepVerificationActivity2), 8);
-                } else if (tLRPC$TL_error2.text.equals("CHANNELS_TOO_MUCH")) {
-                    presentFragment(new TooManyCommunitiesActivity(1));
-                } else {
+                } else if (!tLRPC$TL_error2.text.equals("CHANNELS_TOO_MUCH")) {
                     if (twoStepVerificationActivity2 != null) {
                         twoStepVerificationActivity.needHideProgress();
                         twoStepVerificationActivity.finishFragment();
                     }
                     AlertsCreator.showAddUserAlert(tLRPC$TL_error2.text, this, this.isChannel, tLRPC$TL_channels_editCreator);
+                } else if (getParentActivity() == null || AccountInstance.getInstance(this.currentAccount).getUserConfig().isPremium()) {
+                    presentFragment(new TooManyCommunitiesActivity(1));
+                } else {
+                    showDialog(new LimitReachedBottomSheet(this, getParentActivity(), 5, this.currentAccount));
                 }
             }
         } else if (tLRPC$InputCheckPasswordSRP != null) {
@@ -1060,7 +1091,7 @@ public class ChatRightsEditActivity extends BaseFragment {
 
     /* access modifiers changed from: private */
     public /* synthetic */ void lambda$initTransfer$12(TwoStepVerificationActivity twoStepVerificationActivity, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        AndroidUtilities.runOnUIThread(new ChatRightsEditActivity$$ExternalSyntheticLambda18(this, tLRPC$TL_error, tLObject, twoStepVerificationActivity));
+        AndroidUtilities.runOnUIThread(new ChatRightsEditActivity$$ExternalSyntheticLambda15(this, tLRPC$TL_error, tLObject, twoStepVerificationActivity));
     }
 
     /* access modifiers changed from: private */
@@ -1417,9 +1448,9 @@ public class ChatRightsEditActivity extends BaseFragment {
             boolean r8 = r13.isAddingNew
             r9 = 0
             r10 = 0
-            org.telegram.ui.ChatRightsEditActivity$$ExternalSyntheticLambda15 r11 = new org.telegram.ui.ChatRightsEditActivity$$ExternalSyntheticLambda15
+            org.telegram.ui.ChatRightsEditActivity$$ExternalSyntheticLambda13 r11 = new org.telegram.ui.ChatRightsEditActivity$$ExternalSyntheticLambda13
             r11.<init>(r13)
-            org.telegram.ui.ChatRightsEditActivity$$ExternalSyntheticLambda14 r12 = new org.telegram.ui.ChatRightsEditActivity$$ExternalSyntheticLambda14
+            org.telegram.ui.ChatRightsEditActivity$$ExternalSyntheticLambda17 r12 = new org.telegram.ui.ChatRightsEditActivity$$ExternalSyntheticLambda17
             r12.<init>(r13)
             r7 = r22
             r0.setUserAdminRole(r1, r3, r4, r5, r6, r7, r8, r9, r10, r11, r12)
@@ -1474,10 +1505,10 @@ public class ChatRightsEditActivity extends BaseFragment {
             android.app.Activity r1 = r22.getParentActivity()
             r0.<init>((android.content.Context) r1)
             boolean r1 = r13.asAdmin
-            r2 = 2131624209(0x7f0e0111, float:1.8875591E38)
+            r2 = 2131624249(0x7f0e0139, float:1.8875672E38)
             java.lang.String r6 = "AddBot"
             if (r1 == 0) goto L_0x017a
-            r1 = 2131624210(0x7f0e0112, float:1.8875593E38)
+            r1 = 2131624250(0x7f0e013a, float:1.8875674E38)
             java.lang.String r7 = "AddBotAdmin"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r7, r1)
             goto L_0x017e
@@ -1506,21 +1537,21 @@ public class ChatRightsEditActivity extends BaseFragment {
             boolean r8 = r13.asAdmin
             if (r8 == 0) goto L_0x01bd
             if (r1 == 0) goto L_0x01af
-            r1 = 2131624215(0x7f0e0117, float:1.8875603E38)
+            r1 = 2131624255(0x7f0e013f, float:1.8875685E38)
             java.lang.Object[] r3 = new java.lang.Object[r4]
             r3[r5] = r7
             java.lang.String r4 = "AddBotMessageAdminChannel"
             java.lang.String r1 = org.telegram.messenger.LocaleController.formatString(r4, r1, r3)
             goto L_0x01d2
         L_0x01af:
-            r1 = 2131624216(0x7f0e0118, float:1.8875605E38)
+            r1 = 2131624256(0x7f0e0140, float:1.8875687E38)
             java.lang.Object[] r3 = new java.lang.Object[r4]
             r3[r5] = r7
             java.lang.String r4 = "AddBotMessageAdminGroup"
             java.lang.String r1 = org.telegram.messenger.LocaleController.formatString(r4, r1, r3)
             goto L_0x01d2
         L_0x01bd:
-            r1 = 2131624230(0x7f0e0126, float:1.8875634E38)
+            r1 = 2131624270(0x7f0e014e, float:1.8875715E38)
             java.lang.Object[] r3 = new java.lang.Object[r3]
             org.telegram.tgnet.TLRPC$User r8 = r13.currentUser
             java.lang.String r8 = org.telegram.messenger.UserObject.getUserName(r8)
@@ -1531,14 +1562,14 @@ public class ChatRightsEditActivity extends BaseFragment {
         L_0x01d2:
             android.text.SpannableStringBuilder r1 = org.telegram.messenger.AndroidUtilities.replaceTags(r1)
             r0.setMessage(r1)
-            r1 = 2131624753(0x7f0e0331, float:1.8876695E38)
+            r1 = 2131624813(0x7f0e036d, float:1.8876816E38)
             java.lang.String r3 = "Cancel"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r3, r1)
             r3 = 0
             r0.setNegativeButton(r1, r3)
             boolean r1 = r13.asAdmin
             if (r1 == 0) goto L_0x01f4
-            r1 = 2131624207(0x7f0e010f, float:1.8875587E38)
+            r1 = 2131624247(0x7f0e0137, float:1.8875668E38)
             java.lang.String r2 = "AddAsAdmin"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             goto L_0x01f8
@@ -1580,18 +1611,19 @@ public class ChatRightsEditActivity extends BaseFragment {
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$onDonePressed$17() {
+    public /* synthetic */ boolean lambda$onDonePressed$17(TLRPC$TL_error tLRPC$TL_error) {
         setLoading(false);
+        return true;
     }
 
     /* access modifiers changed from: private */
     public /* synthetic */ void lambda$onDonePressed$21(DialogInterface dialogInterface, int i) {
         setLoading(true);
-        ChatRightsEditActivity$$ExternalSyntheticLambda16 chatRightsEditActivity$$ExternalSyntheticLambda16 = new ChatRightsEditActivity$$ExternalSyntheticLambda16(this);
+        ChatRightsEditActivity$$ExternalSyntheticLambda14 chatRightsEditActivity$$ExternalSyntheticLambda14 = new ChatRightsEditActivity$$ExternalSyntheticLambda14(this);
         if (this.asAdmin || this.initialAsAdmin) {
-            getMessagesController().setUserAdminRole(this.currentChat.id, this.currentUser, this.asAdmin ? this.adminRights : emptyAdminRights(false), this.currentRank, false, this, this.isAddingNew, this.asAdmin, this.botHash, chatRightsEditActivity$$ExternalSyntheticLambda16, new ChatRightsEditActivity$$ExternalSyntheticLambda13(this));
+            getMessagesController().setUserAdminRole(this.currentChat.id, this.currentUser, this.asAdmin ? this.adminRights : emptyAdminRights(false), this.currentRank, false, this, this.isAddingNew, this.asAdmin, this.botHash, chatRightsEditActivity$$ExternalSyntheticLambda14, new ChatRightsEditActivity$$ExternalSyntheticLambda19(this));
         } else {
-            getMessagesController().addUserToChat(this.currentChat.id, this.currentUser, 0, this.botHash, this, true, chatRightsEditActivity$$ExternalSyntheticLambda16, new ChatRightsEditActivity$$ExternalSyntheticLambda17(this));
+            getMessagesController().addUserToChat(this.currentChat.id, this.currentUser, 0, this.botHash, this, true, chatRightsEditActivity$$ExternalSyntheticLambda14, new ChatRightsEditActivity$$ExternalSyntheticLambda18(this));
         }
     }
 
@@ -1621,13 +1653,15 @@ public class ChatRightsEditActivity extends BaseFragment {
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$onDonePressed$19() {
+    public /* synthetic */ boolean lambda$onDonePressed$19(TLRPC$TL_error tLRPC$TL_error) {
         setLoading(false);
+        return true;
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$onDonePressed$20() {
+    public /* synthetic */ boolean lambda$onDonePressed$20(TLRPC$TL_error tLRPC$TL_error) {
         setLoading(false);
+        return true;
     }
 
     public void setLoading(boolean z) {
@@ -1885,113 +1919,160 @@ public class ChatRightsEditActivity extends BaseFragment {
             return ChatRightsEditActivity.this.rowCount;
         }
 
-        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r11v2, resolved type: org.telegram.ui.Cells.UserCell2} */
-        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r10v4, resolved type: org.telegram.ui.Cells.HeaderCell} */
-        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r10v5, resolved type: org.telegram.ui.Cells.TextInfoPrivacyCell} */
-        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r10v7, resolved type: org.telegram.ui.Cells.TextCheckCell2} */
-        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r10v8, resolved type: org.telegram.ui.Cells.ShadowSectionCell} */
-        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r10v9, resolved type: org.telegram.ui.Cells.TextDetailCell} */
-        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r10v11, resolved type: org.telegram.ui.Cells.PollEditTextCell} */
-        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r10v15, resolved type: android.widget.FrameLayout} */
-        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r10v16, resolved type: org.telegram.ui.Cells.TextSettingsCell} */
-        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r10v17, resolved type: org.telegram.ui.Cells.HeaderCell} */
-        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r1v15, resolved type: org.telegram.ui.Cells.HeaderCell} */
-        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r10v18, resolved type: org.telegram.ui.Cells.HeaderCell} */
-        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r10v19, resolved type: org.telegram.ui.Cells.HeaderCell} */
-        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r10v20, resolved type: org.telegram.ui.Cells.HeaderCell} */
-        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r10v21, resolved type: org.telegram.ui.Cells.HeaderCell} */
-        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r10v22, resolved type: org.telegram.ui.Cells.HeaderCell} */
-        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r10v23, resolved type: org.telegram.ui.Cells.HeaderCell} */
-        /* JADX WARNING: type inference failed for: r10v2, types: [android.view.View] */
+        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r15v3, resolved type: org.telegram.ui.Cells.UserCell2} */
+        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r15v8, resolved type: org.telegram.ui.Cells.TextCheckCell2} */
+        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r15v10, resolved type: org.telegram.ui.Cells.TextDetailCell} */
+        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r15v12, resolved type: org.telegram.ui.Cells.PollEditTextCell} */
+        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r15v22, resolved type: org.telegram.ui.Cells.TextSettingsCell} */
+        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r15v23, resolved type: org.telegram.ui.Cells.HeaderCell} */
+        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v9, resolved type: org.telegram.ui.Cells.HeaderCell} */
+        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r15v24, resolved type: org.telegram.ui.Cells.HeaderCell} */
+        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r15v25, resolved type: org.telegram.ui.Cells.HeaderCell} */
+        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r15v26, resolved type: org.telegram.ui.Cells.HeaderCell} */
+        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r15v27, resolved type: org.telegram.ui.Cells.HeaderCell} */
+        /* JADX WARNING: type inference failed for: r15v2 */
         /* JADX WARNING: Multi-variable type inference failed */
         /* Code decompiled incorrectly, please refer to instructions dump. */
-        public androidx.recyclerview.widget.RecyclerView.ViewHolder onCreateViewHolder(android.view.ViewGroup r10, int r11) {
+        public androidx.recyclerview.widget.RecyclerView.ViewHolder onCreateViewHolder(android.view.ViewGroup r14, int r15) {
             /*
-                r9 = this;
-                r10 = 0
-                java.lang.String r0 = "windowBackgroundWhite"
-                switch(r11) {
-                    case 0: goto L_0x0147;
-                    case 1: goto L_0x0131;
+                r13 = this;
+                java.lang.String r14 = "windowBackgroundWhite"
+                r0 = 0
+                switch(r15) {
+                    case 0: goto L_0x01d0;
+                    case 1: goto L_0x01ba;
                     case 2: goto L_0x0006;
-                    case 3: goto L_0x011a;
-                    case 4: goto L_0x010b;
-                    case 5: goto L_0x0103;
-                    case 6: goto L_0x00f4;
-                    case 7: goto L_0x00d6;
+                    case 3: goto L_0x01a3;
+                    case 4: goto L_0x0194;
+                    case 5: goto L_0x018c;
+                    case 6: goto L_0x017d;
+                    case 7: goto L_0x015f;
                     case 8: goto L_0x0016;
                     default: goto L_0x0006;
                 }
             L_0x0006:
-                org.telegram.ui.Cells.TextSettingsCell r10 = new org.telegram.ui.Cells.TextSettingsCell
-                android.content.Context r11 = r9.mContext
-                r10.<init>(r11)
-                int r11 = org.telegram.ui.ActionBar.Theme.getColor(r0)
-                r10.setBackgroundColor(r11)
-                goto L_0x0157
+                org.telegram.ui.Cells.TextSettingsCell r15 = new org.telegram.ui.Cells.TextSettingsCell
+                android.content.Context r0 = r13.mContext
+                r15.<init>(r0)
+                int r14 = org.telegram.ui.ActionBar.Theme.getColor(r14)
+                r15.setBackgroundColor(r14)
+                goto L_0x01df
             L_0x0016:
-                org.telegram.ui.ChatRightsEditActivity r11 = org.telegram.ui.ChatRightsEditActivity.this
-                android.widget.FrameLayout r0 = new android.widget.FrameLayout
-                android.content.Context r1 = r9.mContext
-                r0.<init>(r1)
-                android.widget.FrameLayout unused = r11.addBotButtonContainer = r0
-                org.telegram.ui.ChatRightsEditActivity r11 = org.telegram.ui.ChatRightsEditActivity.this
-                android.widget.FrameLayout r11 = r11.addBotButtonContainer
-                java.lang.String r0 = "windowBackgroundGray"
-                int r1 = org.telegram.ui.ActionBar.Theme.getColor(r0)
-                r11.setBackgroundColor(r1)
-                org.telegram.ui.ChatRightsEditActivity r11 = org.telegram.ui.ChatRightsEditActivity.this
-                org.telegram.ui.ChatRightsEditActivity$ListAdapter$1 r1 = new org.telegram.ui.ChatRightsEditActivity$ListAdapter$1
-                android.content.Context r2 = r9.mContext
-                r1.<init>(r9, r2)
-                android.widget.FrameLayout unused = r11.addBotButton = r1
-                org.telegram.ui.ChatRightsEditActivity r11 = org.telegram.ui.ChatRightsEditActivity.this
-                android.widget.FrameLayout r11 = r11.addBotButton
-                r1 = 1082130432(0x40800000, float:4.0)
-                int r1 = org.telegram.messenger.AndroidUtilities.dp(r1)
-                java.lang.String r2 = "featuredStickers_addButton"
-                int r2 = org.telegram.ui.ActionBar.Theme.getColor(r2)
-                r3 = 1090519039(0x40ffffff, float:7.9999995)
-                android.graphics.drawable.Drawable r1 = org.telegram.ui.ActionBar.Theme.createSimpleSelectorRoundRectDrawable(r1, r2, r3)
-                r11.setBackground(r1)
-                org.telegram.ui.ChatRightsEditActivity r11 = org.telegram.ui.ChatRightsEditActivity.this
-                android.widget.FrameLayout r11 = r11.addBotButton
-                org.telegram.ui.ChatRightsEditActivity$ListAdapter$$ExternalSyntheticLambda0 r1 = new org.telegram.ui.ChatRightsEditActivity$ListAdapter$$ExternalSyntheticLambda0
-                r1.<init>(r9)
-                r11.setOnClickListener(r1)
-                org.telegram.ui.ChatRightsEditActivity r11 = org.telegram.ui.ChatRightsEditActivity.this
-                android.widget.FrameLayout r11 = r11.addBotButtonContainer
-                org.telegram.ui.ChatRightsEditActivity r1 = org.telegram.ui.ChatRightsEditActivity.this
-                android.widget.FrameLayout r1 = r1.addBotButton
-                r2 = -1
-                r3 = 1111490560(0x42400000, float:48.0)
-                r4 = 119(0x77, float:1.67E-43)
-                r5 = 1096810496(0x41600000, float:14.0)
-                r6 = 1105199104(0x41e00000, float:28.0)
-                r7 = 1096810496(0x41600000, float:14.0)
-                r8 = 1096810496(0x41600000, float:14.0)
-                android.widget.FrameLayout$LayoutParams r2 = org.telegram.ui.Components.LayoutHelper.createFrame(r2, r3, r4, r5, r6, r7, r8)
-                r11.addView(r1, r2)
-                org.telegram.ui.ChatRightsEditActivity r11 = org.telegram.ui.ChatRightsEditActivity.this
-                android.widget.FrameLayout r11 = r11.addBotButtonContainer
-                androidx.recyclerview.widget.RecyclerView$LayoutParams r1 = new androidx.recyclerview.widget.RecyclerView$LayoutParams
-                r2 = -1
-                r3 = -2
-                r1.<init>((int) r2, (int) r3)
-                r11.setLayoutParams(r1)
-                android.view.View r11 = new android.view.View
-                android.content.Context r1 = r9.mContext
-                r11.<init>(r1)
-                int r0 = org.telegram.ui.ActionBar.Theme.getColor(r0)
-                r11.setBackgroundColor(r0)
-                org.telegram.ui.ChatRightsEditActivity r0 = org.telegram.ui.ChatRightsEditActivity.this
-                android.widget.FrameLayout r0 = r0.addBotButtonContainer
-                r0.setClipChildren(r10)
-                org.telegram.ui.ChatRightsEditActivity r0 = org.telegram.ui.ChatRightsEditActivity.this
-                android.widget.FrameLayout r0 = r0.addBotButtonContainer
-                r0.setClipToPadding(r10)
-                org.telegram.ui.ChatRightsEditActivity r10 = org.telegram.ui.ChatRightsEditActivity.this
-                android.widget.FrameLayout r10 = r10.addBotButtonContainer
+                org.telegram.ui.ChatRightsEditActivity r14 = org.telegram.ui.ChatRightsEditActivity.this
+                android.widget.FrameLayout r15 = new android.widget.FrameLayout
+                android.content.Context r1 = r13.mContext
+                r15.<init>(r1)
+                android.widget.FrameLayout unused = r14.addBotButtonContainer = r15
+                org.telegram.ui.ChatRightsEditActivity r14 = org.telegram.ui.ChatRightsEditActivity.this
+                android.widget.FrameLayout r14 = r14.addBotButtonContainer
+                java.lang.String r15 = "windowBackgroundGray"
+                int r1 = org.telegram.ui.ActionBar.Theme.getColor(r15)
+                r14.setBackgroundColor(r1)
+                org.telegram.ui.ChatRightsEditActivity r14 = org.telegram.ui.ChatRightsEditActivity.this
+                android.widget.FrameLayout r1 = new android.widget.FrameLayout
+                android.content.Context r2 = r13.mContext
+                r1.<init>(r2)
+                android.widget.FrameLayout unused = r14.addBotButton = r1
+                org.telegram.ui.ChatRightsEditActivity r14 = org.telegram.ui.ChatRightsEditActivity.this
+                org.telegram.ui.Components.AnimatedTextView r1 = new org.telegram.ui.Components.AnimatedTextView
+                android.content.Context r2 = r13.mContext
+                r3 = 1
+                r1.<init>(r2, r3, r0, r0)
+                org.telegram.ui.Components.AnimatedTextView unused = r14.addBotButtonText = r1
+                org.telegram.ui.ChatRightsEditActivity r14 = org.telegram.ui.ChatRightsEditActivity.this
+                org.telegram.ui.Components.AnimatedTextView r14 = r14.addBotButtonText
+                java.lang.String r1 = "fonts/rmedium.ttf"
+                android.graphics.Typeface r1 = org.telegram.messenger.AndroidUtilities.getTypeface(r1)
+                r14.setTypeface(r1)
+                org.telegram.ui.ChatRightsEditActivity r14 = org.telegram.ui.ChatRightsEditActivity.this
+                org.telegram.ui.Components.AnimatedTextView r14 = r14.addBotButtonText
+                r1 = -1
+                r14.setTextColor(r1)
+                org.telegram.ui.ChatRightsEditActivity r14 = org.telegram.ui.ChatRightsEditActivity.this
+                org.telegram.ui.Components.AnimatedTextView r14 = r14.addBotButtonText
+                r2 = 1096810496(0x41600000, float:14.0)
+                int r2 = org.telegram.messenger.AndroidUtilities.dp(r2)
+                float r2 = (float) r2
+                r14.setTextSize(r2)
+                org.telegram.ui.ChatRightsEditActivity r14 = org.telegram.ui.ChatRightsEditActivity.this
+                org.telegram.ui.Components.AnimatedTextView r14 = r14.addBotButtonText
+                r2 = 17
+                r14.setGravity(r2)
+                org.telegram.ui.ChatRightsEditActivity r14 = org.telegram.ui.ChatRightsEditActivity.this
+                org.telegram.ui.Components.AnimatedTextView r14 = r14.addBotButtonText
+                java.lang.StringBuilder r4 = new java.lang.StringBuilder
+                r4.<init>()
+                r5 = 2131624252(0x7f0e013c, float:1.8875678E38)
+                java.lang.String r6 = "AddBotButton"
+                java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r6, r5)
+                r4.append(r5)
+                java.lang.String r5 = " "
+                r4.append(r5)
+                org.telegram.ui.ChatRightsEditActivity r5 = org.telegram.ui.ChatRightsEditActivity.this
+                boolean r5 = r5.asAdmin
+                if (r5 == 0) goto L_0x00a8
+                r5 = 2131624253(0x7f0e013d, float:1.887568E38)
+                java.lang.String r6 = "AddBotButtonAsAdmin"
+                goto L_0x00ad
+            L_0x00a8:
+                r5 = 2131624254(0x7f0e013e, float:1.8875683E38)
+                java.lang.String r6 = "AddBotButtonAsMember"
+            L_0x00ad:
+                java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r6, r5)
+                r4.append(r5)
+                java.lang.String r4 = r4.toString()
+                r14.setText(r4)
+                org.telegram.ui.ChatRightsEditActivity r14 = org.telegram.ui.ChatRightsEditActivity.this
+                android.widget.FrameLayout r14 = r14.addBotButton
+                org.telegram.ui.ChatRightsEditActivity r4 = org.telegram.ui.ChatRightsEditActivity.this
+                org.telegram.ui.Components.AnimatedTextView r4 = r4.addBotButtonText
+                r5 = -2
+                android.widget.FrameLayout$LayoutParams r2 = org.telegram.ui.Components.LayoutHelper.createFrame((int) r5, (int) r5, (int) r2)
+                r14.addView(r4, r2)
+                org.telegram.ui.ChatRightsEditActivity r14 = org.telegram.ui.ChatRightsEditActivity.this
+                android.widget.FrameLayout r14 = r14.addBotButton
+                float[] r2 = new float[r3]
+                r3 = 1082130432(0x40800000, float:4.0)
+                r2[r0] = r3
+                java.lang.String r3 = "featuredStickers_addButton"
+                android.graphics.drawable.Drawable r2 = org.telegram.ui.ActionBar.Theme.AdaptiveRipple.filledRect((java.lang.String) r3, (float[]) r2)
+                r14.setBackground(r2)
+                org.telegram.ui.ChatRightsEditActivity r14 = org.telegram.ui.ChatRightsEditActivity.this
+                android.widget.FrameLayout r14 = r14.addBotButton
+                org.telegram.ui.ChatRightsEditActivity$ListAdapter$$ExternalSyntheticLambda0 r2 = new org.telegram.ui.ChatRightsEditActivity$ListAdapter$$ExternalSyntheticLambda0
+                r2.<init>(r13)
+                r14.setOnClickListener(r2)
+                org.telegram.ui.ChatRightsEditActivity r14 = org.telegram.ui.ChatRightsEditActivity.this
+                android.widget.FrameLayout r14 = r14.addBotButtonContainer
+                org.telegram.ui.ChatRightsEditActivity r2 = org.telegram.ui.ChatRightsEditActivity.this
+                android.widget.FrameLayout r2 = r2.addBotButton
+                r6 = -1
+                r7 = 1111490560(0x42400000, float:48.0)
+                r8 = 119(0x77, float:1.67E-43)
+                r9 = 1096810496(0x41600000, float:14.0)
+                r10 = 1105199104(0x41e00000, float:28.0)
+                r11 = 1096810496(0x41600000, float:14.0)
+                r12 = 1096810496(0x41600000, float:14.0)
+                android.widget.FrameLayout$LayoutParams r3 = org.telegram.ui.Components.LayoutHelper.createFrame(r6, r7, r8, r9, r10, r11, r12)
+                r14.addView(r2, r3)
+                org.telegram.ui.ChatRightsEditActivity r14 = org.telegram.ui.ChatRightsEditActivity.this
+                android.widget.FrameLayout r14 = r14.addBotButtonContainer
+                androidx.recyclerview.widget.RecyclerView$LayoutParams r2 = new androidx.recyclerview.widget.RecyclerView$LayoutParams
+                r2.<init>((int) r1, (int) r5)
+                r14.setLayoutParams(r2)
+                android.view.View r14 = new android.view.View
+                android.content.Context r1 = r13.mContext
+                r14.<init>(r1)
+                int r15 = org.telegram.ui.ActionBar.Theme.getColor(r15)
+                r14.setBackgroundColor(r15)
+                org.telegram.ui.ChatRightsEditActivity r15 = org.telegram.ui.ChatRightsEditActivity.this
+                android.widget.FrameLayout r15 = r15.addBotButtonContainer
+                r15.setClipChildren(r0)
+                org.telegram.ui.ChatRightsEditActivity r15 = org.telegram.ui.ChatRightsEditActivity.this
+                android.widget.FrameLayout r15 = r15.addBotButtonContainer
+                r15.setClipToPadding(r0)
+                org.telegram.ui.ChatRightsEditActivity r15 = org.telegram.ui.ChatRightsEditActivity.this
+                android.widget.FrameLayout r15 = r15.addBotButtonContainer
                 r0 = -1
                 r1 = 1145569280(0x44480000, float:800.0)
                 r2 = 87
@@ -2000,76 +2081,77 @@ public class ChatRightsEditActivity extends BaseFragment {
                 r5 = 0
                 r6 = -1001914368(0xffffffffCLASSNAME, float:-800.0)
                 android.widget.FrameLayout$LayoutParams r0 = org.telegram.ui.Components.LayoutHelper.createFrame(r0, r1, r2, r3, r4, r5, r6)
-                r10.addView(r11, r0)
-                org.telegram.ui.ChatRightsEditActivity r10 = org.telegram.ui.ChatRightsEditActivity.this
-                android.widget.FrameLayout r10 = r10.addBotButtonContainer
-                goto L_0x0157
-            L_0x00d6:
-                org.telegram.ui.ChatRightsEditActivity r10 = org.telegram.ui.ChatRightsEditActivity.this
-                org.telegram.ui.Cells.PollEditTextCell r11 = new org.telegram.ui.Cells.PollEditTextCell
-                android.content.Context r1 = r9.mContext
+                r15.addView(r14, r0)
+                org.telegram.ui.ChatRightsEditActivity r14 = org.telegram.ui.ChatRightsEditActivity.this
+                android.widget.FrameLayout r14 = r14.addBotButtonContainer
+                goto L_0x01e0
+            L_0x015f:
+                org.telegram.ui.ChatRightsEditActivity r15 = org.telegram.ui.ChatRightsEditActivity.this
+                org.telegram.ui.Cells.PollEditTextCell r0 = new org.telegram.ui.Cells.PollEditTextCell
+                android.content.Context r1 = r13.mContext
                 r2 = 0
-                r11.<init>(r1, r2)
-                org.telegram.ui.Cells.PollEditTextCell r10 = r10.rankEditTextCell = r11
-                int r11 = org.telegram.ui.ActionBar.Theme.getColor(r0)
-                r10.setBackgroundColor(r11)
-                org.telegram.ui.ChatRightsEditActivity$ListAdapter$2 r11 = new org.telegram.ui.ChatRightsEditActivity$ListAdapter$2
-                r11.<init>()
-                r10.addTextWatcher(r11)
-                goto L_0x0157
-            L_0x00f4:
-                org.telegram.ui.Cells.TextDetailCell r10 = new org.telegram.ui.Cells.TextDetailCell
-                android.content.Context r11 = r9.mContext
-                r10.<init>(r11)
-                int r11 = org.telegram.ui.ActionBar.Theme.getColor(r0)
-                r10.setBackgroundColor(r11)
-                goto L_0x0157
-            L_0x0103:
-                org.telegram.ui.Cells.ShadowSectionCell r10 = new org.telegram.ui.Cells.ShadowSectionCell
-                android.content.Context r11 = r9.mContext
-                r10.<init>(r11)
-                goto L_0x0157
-            L_0x010b:
-                org.telegram.ui.Cells.TextCheckCell2 r10 = new org.telegram.ui.Cells.TextCheckCell2
-                android.content.Context r11 = r9.mContext
-                r10.<init>(r11)
-                int r11 = org.telegram.ui.ActionBar.Theme.getColor(r0)
-                r10.setBackgroundColor(r11)
-                goto L_0x0157
-            L_0x011a:
-                org.telegram.ui.Cells.HeaderCell r10 = new org.telegram.ui.Cells.HeaderCell
-                android.content.Context r2 = r9.mContext
-                r4 = 21
-                r5 = 15
-                r6 = 1
-                java.lang.String r3 = "windowBackgroundWhiteBlueHeader"
-                r1 = r10
-                r1.<init>(r2, r3, r4, r5, r6)
-                int r11 = org.telegram.ui.ActionBar.Theme.getColor(r0)
-                r10.setBackgroundColor(r11)
-                goto L_0x0157
-            L_0x0131:
-                org.telegram.ui.Cells.TextInfoPrivacyCell r10 = new org.telegram.ui.Cells.TextInfoPrivacyCell
-                android.content.Context r11 = r9.mContext
-                r10.<init>(r11)
-                android.content.Context r11 = r9.mContext
-                r0 = 2131165484(0x7var_c, float:1.7945186E38)
+                r0.<init>(r1, r2)
+                org.telegram.ui.Cells.PollEditTextCell r15 = r15.rankEditTextCell = r0
+                int r14 = org.telegram.ui.ActionBar.Theme.getColor(r14)
+                r15.setBackgroundColor(r14)
+                org.telegram.ui.ChatRightsEditActivity$ListAdapter$1 r14 = new org.telegram.ui.ChatRightsEditActivity$ListAdapter$1
+                r14.<init>()
+                r15.addTextWatcher(r14)
+                goto L_0x01df
+            L_0x017d:
+                org.telegram.ui.Cells.TextDetailCell r15 = new org.telegram.ui.Cells.TextDetailCell
+                android.content.Context r0 = r13.mContext
+                r15.<init>(r0)
+                int r14 = org.telegram.ui.ActionBar.Theme.getColor(r14)
+                r15.setBackgroundColor(r14)
+                goto L_0x01df
+            L_0x018c:
+                org.telegram.ui.Cells.ShadowSectionCell r14 = new org.telegram.ui.Cells.ShadowSectionCell
+                android.content.Context r15 = r13.mContext
+                r14.<init>(r15)
+                goto L_0x01e0
+            L_0x0194:
+                org.telegram.ui.Cells.TextCheckCell2 r15 = new org.telegram.ui.Cells.TextCheckCell2
+                android.content.Context r0 = r13.mContext
+                r15.<init>(r0)
+                int r14 = org.telegram.ui.ActionBar.Theme.getColor(r14)
+                r15.setBackgroundColor(r14)
+                goto L_0x01df
+            L_0x01a3:
+                org.telegram.ui.Cells.HeaderCell r15 = new org.telegram.ui.Cells.HeaderCell
+                android.content.Context r1 = r13.mContext
+                r3 = 21
+                r4 = 15
+                r5 = 1
+                java.lang.String r2 = "windowBackgroundWhiteBlueHeader"
+                r0 = r15
+                r0.<init>(r1, r2, r3, r4, r5)
+                int r14 = org.telegram.ui.ActionBar.Theme.getColor(r14)
+                r15.setBackgroundColor(r14)
+                goto L_0x01df
+            L_0x01ba:
+                org.telegram.ui.Cells.TextInfoPrivacyCell r14 = new org.telegram.ui.Cells.TextInfoPrivacyCell
+                android.content.Context r15 = r13.mContext
+                r14.<init>(r15)
+                android.content.Context r15 = r13.mContext
+                r0 = 2131165436(0x7var_fc, float:1.794509E38)
                 java.lang.String r1 = "windowBackgroundGrayShadow"
-                android.graphics.drawable.Drawable r11 = org.telegram.ui.ActionBar.Theme.getThemedDrawable((android.content.Context) r11, (int) r0, (java.lang.String) r1)
-                r10.setBackgroundDrawable(r11)
-                goto L_0x0157
-            L_0x0147:
-                org.telegram.ui.Cells.UserCell2 r11 = new org.telegram.ui.Cells.UserCell2
-                android.content.Context r1 = r9.mContext
+                android.graphics.drawable.Drawable r15 = org.telegram.ui.ActionBar.Theme.getThemedDrawable((android.content.Context) r15, (int) r0, (java.lang.String) r1)
+                r14.setBackgroundDrawable(r15)
+                goto L_0x01e0
+            L_0x01d0:
+                org.telegram.ui.Cells.UserCell2 r15 = new org.telegram.ui.Cells.UserCell2
+                android.content.Context r1 = r13.mContext
                 r2 = 4
-                r11.<init>(r1, r2, r10)
-                int r10 = org.telegram.ui.ActionBar.Theme.getColor(r0)
-                r11.setBackgroundColor(r10)
-                r10 = r11
-            L_0x0157:
-                org.telegram.ui.Components.RecyclerListView$Holder r11 = new org.telegram.ui.Components.RecyclerListView$Holder
-                r11.<init>(r10)
-                return r11
+                r15.<init>(r1, r2, r0)
+                int r14 = org.telegram.ui.ActionBar.Theme.getColor(r14)
+                r15.setBackgroundColor(r14)
+            L_0x01df:
+                r14 = r15
+            L_0x01e0:
+                org.telegram.ui.Components.RecyclerListView$Holder r15 = new org.telegram.ui.Components.RecyclerListView$Holder
+                r15.<init>(r14)
+                return r15
             */
             throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ChatRightsEditActivity.ListAdapter.onCreateViewHolder(android.view.ViewGroup, int):androidx.recyclerview.widget.RecyclerView$ViewHolder");
         }
@@ -2612,26 +2694,51 @@ public class ChatRightsEditActivity extends BaseFragment {
         L_0x0118:
             org.telegram.ui.ChatRightsEditActivity$ListAdapter r0 = r8.listViewAdapter
             r0.notifyDataSetChanged()
+            org.telegram.ui.Components.AnimatedTextView r0 = r8.addBotButtonText
+            if (r0 == 0) goto L_0x0156
+            java.lang.StringBuilder r2 = new java.lang.StringBuilder
+            r2.<init>()
+            r4 = 2131624252(0x7f0e013c, float:1.8875678E38)
+            java.lang.String r5 = "AddBotButton"
+            java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r5, r4)
+            r2.append(r4)
+            java.lang.String r4 = " "
+            r2.append(r4)
+            boolean r4 = r8.asAdmin
+            if (r4 == 0) goto L_0x0141
+            r4 = 2131624253(0x7f0e013d, float:1.887568E38)
+            java.lang.String r5 = "AddBotButtonAsAdmin"
+            goto L_0x0146
+        L_0x0141:
+            r4 = 2131624254(0x7f0e013e, float:1.8875683E38)
+            java.lang.String r5 = "AddBotButtonAsMember"
+        L_0x0146:
+            java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r5, r4)
+            r2.append(r4)
+            java.lang.String r2 = r2.toString()
+            boolean r4 = r8.asAdmin
+            r0.setText(r2, r9, r4)
+        L_0x0156:
             android.animation.ValueAnimator r0 = r8.asAdminAnimator
-            if (r0 == 0) goto L_0x0127
+            if (r0 == 0) goto L_0x0160
             r0.cancel()
             r0 = 0
             r8.asAdminAnimator = r0
-        L_0x0127:
+        L_0x0160:
             r0 = 1065353216(0x3var_, float:1.0)
             r2 = 0
-            if (r9 == 0) goto L_0x0168
+            if (r9 == 0) goto L_0x01a1
             r9 = 2
             float[] r9 = new float[r9]
             float r4 = r8.asAdminT
             r9[r1] = r4
             boolean r1 = r8.asAdmin
-            if (r1 == 0) goto L_0x013a
+            if (r1 == 0) goto L_0x0173
             r1 = 1065353216(0x3var_, float:1.0)
-            goto L_0x013b
-        L_0x013a:
+            goto L_0x0174
+        L_0x0173:
             r1 = 0
-        L_0x013b:
+        L_0x0174:
             r9[r3] = r1
             android.animation.ValueAnimator r9 = android.animation.ValueAnimator.ofFloat(r9)
             r8.asAdminAnimator = r9
@@ -2641,11 +2748,11 @@ public class ChatRightsEditActivity extends BaseFragment {
             android.animation.ValueAnimator r9 = r8.asAdminAnimator
             float r1 = r8.asAdminT
             boolean r3 = r8.asAdmin
-            if (r3 == 0) goto L_0x0154
-            goto L_0x0155
-        L_0x0154:
+            if (r3 == 0) goto L_0x018d
+            goto L_0x018e
+        L_0x018d:
             r0 = 0
-        L_0x0155:
+        L_0x018e:
             float r1 = r1 - r0
             float r0 = java.lang.Math.abs(r1)
             r1 = 1128792064(0x43480000, float:200.0)
@@ -2654,19 +2761,19 @@ public class ChatRightsEditActivity extends BaseFragment {
             r9.setDuration(r0)
             android.animation.ValueAnimator r9 = r8.asAdminAnimator
             r9.start()
-            goto L_0x0177
-        L_0x0168:
+            goto L_0x01b0
+        L_0x01a1:
             boolean r9 = r8.asAdmin
-            if (r9 == 0) goto L_0x016d
-            goto L_0x016e
-        L_0x016d:
+            if (r9 == 0) goto L_0x01a6
+            goto L_0x01a7
+        L_0x01a6:
             r0 = 0
-        L_0x016e:
+        L_0x01a7:
             r8.asAdminT = r0
             android.widget.FrameLayout r9 = r8.addBotButton
-            if (r9 == 0) goto L_0x0177
+            if (r9 == 0) goto L_0x01b0
             r9.invalidate()
-        L_0x0177:
+        L_0x01b0:
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ChatRightsEditActivity.updateAsAdmin(boolean):void");

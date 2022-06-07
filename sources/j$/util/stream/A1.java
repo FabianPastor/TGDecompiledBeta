@@ -1,17 +1,23 @@
 package j$.util.stream;
 
-import j$.util.x;
+import j$.util.function.Consumer;
+import j$.util.function.m;
+import j$.util.u;
 
-public interface A1 extends B1 {
+interface A1 {
     A1 b(int i);
 
-    Object c(int i);
+    long count();
 
-    void d(Object obj, int i);
+    void forEach(Consumer consumer);
 
-    Object e();
+    void i(Object[] objArr, int i);
 
-    void g(Object obj);
+    int p();
 
-    x spliterator();
+    Object[] q(m mVar);
+
+    A1 r(long j, long j2, m mVar);
+
+    u spliterator();
 }

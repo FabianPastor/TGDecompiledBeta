@@ -8,6 +8,6 @@ public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda140 impl
     }
 
     public final void run() {
-        this.f$0.lambda$applyDraftMaybe$144();
+        this.f$0.lambda$showPinnedProgress$108();
     }
 }

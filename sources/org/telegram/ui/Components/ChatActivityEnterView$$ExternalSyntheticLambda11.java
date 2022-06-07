@@ -10,6 +10,6 @@ public final /* synthetic */ class ChatActivityEnterView$$ExternalSyntheticLambd
     }
 
     public final void onDismiss(DialogInterface dialogInterface) {
-        this.f$0.lambda$openWebViewMenu$32(dialogInterface);
+        this.f$0.lambda$openWebViewMenu$33(dialogInterface);
     }
 }

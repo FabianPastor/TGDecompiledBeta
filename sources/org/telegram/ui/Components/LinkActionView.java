@@ -117,6 +117,7 @@ public class LinkActionView extends LinearLayout {
         ImageView imageView = new ImageView(context2);
         this.optionsView = imageView;
         imageView.setImageDrawable(ContextCompat.getDrawable(context2, NUM));
+        this.optionsView.setContentDescription(LocaleController.getString("AccDescrMoreOptions", NUM));
         this.optionsView.setScaleType(ImageView.ScaleType.CENTER);
         frameLayout2.addView(this.optionsView, LayoutHelper.createFrame(40, 48, 21));
         addView(frameLayout2, LayoutHelper.createLinear(-1, -2, 0, 4, 0, 4, 0));
@@ -129,8 +130,10 @@ public class LinkActionView extends LinearLayout {
         spannableStringBuilder.append("..").setSpan(new ColoredImageSpan(ContextCompat.getDrawable(context2, NUM)), 0, 1, 0);
         spannableStringBuilder.setSpan(new DialogCell.FixedWidthSpan(AndroidUtilities.dp(8.0f)), 1, 2, 0);
         spannableStringBuilder.append(LocaleController.getString("LinkActionCopy", NUM));
+        FrameLayout frameLayout3 = frameLayout2;
         spannableStringBuilder.append(".").setSpan(new DialogCell.FixedWidthSpan(AndroidUtilities.dp(5.0f)), spannableStringBuilder.length() - 1, spannableStringBuilder.length(), 0);
         textView2.setText(spannableStringBuilder);
+        textView2.setContentDescription(LocaleController.getString("LinkActionCopy", NUM));
         textView2.setPadding(AndroidUtilities.dp(10.0f), AndroidUtilities.dp(10.0f), AndroidUtilities.dp(10.0f), AndroidUtilities.dp(10.0f));
         textView2.setTextSize(1, 14.0f);
         textView2.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
@@ -140,12 +143,12 @@ public class LinkActionView extends LinearLayout {
         this.shareView = textView3;
         textView3.setGravity(1);
         SpannableStringBuilder spannableStringBuilder2 = new SpannableStringBuilder();
-        FrameLayout frameLayout3 = frameLayout2;
         spannableStringBuilder2.append("..").setSpan(new ColoredImageSpan(ContextCompat.getDrawable(context2, NUM)), 0, 1, 0);
         spannableStringBuilder2.setSpan(new DialogCell.FixedWidthSpan(AndroidUtilities.dp(8.0f)), 1, 2, 0);
         spannableStringBuilder2.append(LocaleController.getString("LinkActionShare", NUM));
         spannableStringBuilder2.append(".").setSpan(new DialogCell.FixedWidthSpan(AndroidUtilities.dp(5.0f)), spannableStringBuilder2.length() - 1, spannableStringBuilder2.length(), 0);
         textView3.setText(spannableStringBuilder2);
+        textView3.setContentDescription(LocaleController.getString("LinkActionShare", NUM));
         textView3.setPadding(AndroidUtilities.dp(10.0f), AndroidUtilities.dp(10.0f), AndroidUtilities.dp(10.0f), AndroidUtilities.dp(10.0f));
         textView3.setTextSize(1, 14.0f);
         textView3.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
@@ -518,7 +521,7 @@ public class LinkActionView extends LinearLayout {
         } else {
             this.avatarsContainer.setVisibility(0);
             setPadding(AndroidUtilities.dp(19.0f), AndroidUtilities.dp(18.0f), AndroidUtilities.dp(19.0f), AndroidUtilities.dp(10.0f));
-            this.avatarsContainer.countTextView.setText(LocaleController.formatPluralString("PeopleJoined", i));
+            this.avatarsContainer.countTextView.setText(LocaleController.formatPluralString("PeopleJoined", i, new Object[0]));
             this.avatarsContainer.requestLayout();
         }
         if (arrayList != null) {

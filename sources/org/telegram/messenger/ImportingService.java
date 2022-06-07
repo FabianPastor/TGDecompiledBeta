@@ -15,7 +15,7 @@ public class ImportingService extends Service implements NotificationCenter.Noti
     }
 
     public ImportingService() {
-        for (int i = 0; i < 3; i++) {
+        for (int i = 0; i < 4; i++) {
             NotificationCenter.getInstance(i).addObserver(this, NotificationCenter.historyImportProgressChanged);
             NotificationCenter.getInstance(i).addObserver(this, NotificationCenter.stickersImportProgressChanged);
         }
@@ -28,7 +28,7 @@ public class ImportingService extends Service implements NotificationCenter.Noti
         } catch (Throwable unused) {
         }
         NotificationManagerCompat.from(ApplicationLoader.applicationContext).cancel(5);
-        for (int i = 0; i < 3; i++) {
+        for (int i = 0; i < 4; i++) {
             NotificationCenter.getInstance(i).removeObserver(this, NotificationCenter.historyImportProgressChanged);
             NotificationCenter.getInstance(i).removeObserver(this, NotificationCenter.stickersImportProgressChanged);
         }
@@ -44,7 +44,7 @@ public class ImportingService extends Service implements NotificationCenter.Noti
     }
 
     private boolean hasImportingHistory() {
-        for (int i = 0; i < 3; i++) {
+        for (int i = 0; i < 4; i++) {
             if (SendMessagesHelper.getInstance(i).isImportingHistory()) {
                 return true;
             }
@@ -53,7 +53,7 @@ public class ImportingService extends Service implements NotificationCenter.Noti
     }
 
     private boolean hasImportingStickers() {
-        for (int i = 0; i < 3; i++) {
+        for (int i = 0; i < 4; i++) {
             if (SendMessagesHelper.getInstance(i).isImportingStickers()) {
                 return true;
             }

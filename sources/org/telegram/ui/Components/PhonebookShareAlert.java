@@ -776,7 +776,7 @@ public class PhonebookShareAlert extends BottomSheet {
             int r7 = r0.getThemedColor(r7)
             r4.setBackgroundColor(r7)
             org.telegram.ui.ActionBar.ActionBar r4 = r0.actionBar
-            r7 = 2131165503(0x7var_f, float:1.7945225E38)
+            r7 = 2131165449(0x7var_, float:1.7945115E38)
             r4.setBackButtonImage(r7)
             org.telegram.ui.ActionBar.ActionBar r4 = r0.actionBar
             java.lang.String r7 = "dialogTextBlack"
@@ -795,9 +795,9 @@ public class PhonebookShareAlert extends BottomSheet {
             r7 = 0
             r4.setAlpha(r7)
             boolean r4 = r0.isImport
-            r8 = 2131624222(0x7f0e011e, float:1.8875618E38)
+            r8 = 2131624262(0x7f0e0146, float:1.8875699E38)
             java.lang.String r10 = "AddContactPhonebookTitle"
-            r11 = 2131628060(0x7f0e101c, float:1.8883402E38)
+            r11 = 2131628261(0x7f0e10e5, float:1.888381E38)
             java.lang.String r12 = "ShareContactTitle"
             if (r4 == 0) goto L_0x023b
             org.telegram.ui.ActionBar.ActionBar r4 = r0.actionBar
@@ -1525,14 +1525,26 @@ public class PhonebookShareAlert extends BottomSheet {
 
         public void onBindViewHolder(View view, int i, int i2) {
             AndroidUtilities.VcardItem vcardItem;
-            int i3;
             boolean z = true;
             if (i2 == 1) {
                 TextCheckBoxCell textCheckBoxCell = (TextCheckBoxCell) view;
+                int i3 = NUM;
                 if (i < PhonebookShareAlert.this.phoneStartRow || i >= PhonebookShareAlert.this.phoneEndRow) {
                     vcardItem = (AndroidUtilities.VcardItem) PhonebookShareAlert.this.other.get(i - PhonebookShareAlert.this.vcardStartRow);
                     int i4 = vcardItem.type;
-                    i3 = i4 == 1 ? NUM : i4 == 2 ? NUM : i4 == 3 ? NUM : i4 == 4 ? NUM : i4 == 5 ? NUM : i4 == 6 ? "ORG".equalsIgnoreCase(vcardItem.getRawType(true)) ? NUM : NUM : NUM;
+                    if (i4 == 1) {
+                        i3 = NUM;
+                    } else if (i4 == 2) {
+                        i3 = NUM;
+                    } else if (i4 == 3) {
+                        i3 = NUM;
+                    } else if (i4 != 4) {
+                        if (i4 == 5) {
+                            i3 = NUM;
+                        } else if (i4 == 6) {
+                            i3 = "ORG".equalsIgnoreCase(vcardItem.getRawType(true)) ? NUM : NUM;
+                        }
+                    }
                 } else {
                     vcardItem = (AndroidUtilities.VcardItem) PhonebookShareAlert.this.phones.get(i - PhonebookShareAlert.this.phoneStartRow);
                     i3 = NUM;

@@ -1,6 +1,5 @@
 package j$.util.stream;
 
-import j$.util.CLASSNAMEi;
 import j$.util.function.w;
 
 public final /* synthetic */ class O0 implements w {
@@ -10,6 +9,8 @@ public final /* synthetic */ class O0 implements w {
     }
 
     public final void accept(Object obj, long j) {
-        ((CLASSNAMEi) obj).accept(j);
+        long[] jArr = (long[]) obj;
+        jArr[0] = jArr[0] + 1;
+        jArr[1] = jArr[1] + j;
     }
 }

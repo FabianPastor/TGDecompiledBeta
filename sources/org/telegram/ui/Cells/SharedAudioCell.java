@@ -2,12 +2,14 @@ package org.telegram.ui.Cells;
 
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.Rect;
 import android.text.SpannableStringBuilder;
 import android.text.StaticLayout;
 import android.text.TextPaint;
 import android.text.TextUtils;
 import android.view.MotionEvent;
 import android.view.accessibility.AccessibilityNodeInfo;
+import android.view.accessibility.AccessibilityNodeProvider;
 import android.widget.FrameLayout;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.DownloadController;
@@ -34,8 +36,10 @@ public class SharedAudioCell extends FrameLayout implements DownloadController.F
     private int TAG;
     private boolean buttonPressed;
     private int buttonState;
-    private int buttonX;
-    private int buttonY;
+    /* access modifiers changed from: private */
+    public int buttonX;
+    /* access modifiers changed from: private */
+    public int buttonY;
     private StaticLayout captionLayout;
     private TextPaint captionTextPaint;
     private int captionY;
@@ -766,6 +770,7 @@ public class SharedAudioCell extends FrameLayout implements DownloadController.F
 
     public void onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo accessibilityNodeInfo) {
         super.onInitializeAccessibilityNodeInfo(accessibilityNodeInfo);
+        accessibilityNodeInfo.setEnabled(true);
         if (this.currentMessageObject.isMusic()) {
             accessibilityNodeInfo.setText(LocaleController.formatString("AccDescrMusicInfo", NUM, this.currentMessageObject.getMusicAuthor(), this.currentMessageObject.getMusicTitle()));
         } else if (!(this.titleLayout == null || this.descriptionLayout == null)) {
@@ -775,6 +780,40 @@ public class SharedAudioCell extends FrameLayout implements DownloadController.F
             accessibilityNodeInfo.setCheckable(true);
             accessibilityNodeInfo.setChecked(true);
         }
+    }
+
+    public AccessibilityNodeProvider getAccessibilityNodeProvider() {
+        return new AccessibilityNodeProvider() {
+            public AccessibilityNodeInfo createAccessibilityNodeInfo(int i) {
+                if (i == -1) {
+                    AccessibilityNodeInfo obtain = AccessibilityNodeInfo.obtain(SharedAudioCell.this);
+                    SharedAudioCell.this.onInitializeAccessibilityNodeInfo(obtain);
+                    return obtain;
+                } else if (i != 1) {
+                    return super.createAccessibilityNodeInfo(i);
+                } else {
+                    AccessibilityNodeInfo obtain2 = AccessibilityNodeInfo.obtain();
+                    obtain2.setSource(SharedAudioCell.this, i);
+                    obtain2.setParent(SharedAudioCell.this);
+                    obtain2.setPackageName(SharedAudioCell.this.getContext().getPackageName());
+                    obtain2.setText(LocaleController.getString("AccActionPlay", NUM));
+                    Rect rect = new Rect();
+                    rect.set(SharedAudioCell.this.buttonX, SharedAudioCell.this.buttonY, SharedAudioCell.this.buttonX + AndroidUtilities.dp(46.0f), SharedAudioCell.this.buttonY + AndroidUtilities.dp(46.0f));
+                    obtain2.setBoundsInParent(rect);
+                    int[] iArr = {0, 0};
+                    SharedAudioCell.this.getLocationOnScreen(iArr);
+                    rect.offset(iArr[0], iArr[1]);
+                    obtain2.setBoundsInScreen(rect);
+                    obtain2.setClassName("android.widget.Button");
+                    obtain2.setEnabled(true);
+                    obtain2.setClickable(true);
+                    obtain2.setLongClickable(true);
+                    obtain2.addAction(16);
+                    obtain2.addAction(32);
+                    return obtain2;
+                }
+            }
+        };
     }
 
     public void didReceivedNotification(int i, int i2, Object... objArr) {

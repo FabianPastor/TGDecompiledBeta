@@ -19,6 +19,6 @@ public final /* synthetic */ class PhotoViewer$12$$ExternalSyntheticLambda3 impl
     }
 
     public final void run() {
-        this.f$0.lambda$onItemClick$4(this.f$1, this.f$2, this.f$3);
+        this.f$0.lambda$onItemClick$5(this.f$1, this.f$2, this.f$3);
     }
 }

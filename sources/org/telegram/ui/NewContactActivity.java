@@ -93,14 +93,14 @@ public class NewContactActivity extends BaseFragment implements AdapterView.OnIt
             r1 = r30
             r0 = r31
             org.telegram.ui.ActionBar.ActionBar r2 = r1.actionBar
-            r3 = 2131165503(0x7var_f, float:1.7945225E38)
+            r3 = 2131165449(0x7var_, float:1.7945115E38)
             r2.setBackButtonImage(r3)
             org.telegram.ui.ActionBar.ActionBar r2 = r1.actionBar
             r3 = 1
             r2.setAllowOverlayTitle(r3)
             org.telegram.ui.ActionBar.ActionBar r2 = r1.actionBar
             java.lang.String r4 = "AddContactTitle"
-            r5 = 2131624223(0x7f0e011f, float:1.887562E38)
+            r5 = 2131624263(0x7f0e0147, float:1.88757E38)
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r4, r5)
             r2.setTitle(r4)
             org.telegram.ui.ActionBar.ActionBar r2 = r1.actionBar
@@ -117,11 +117,11 @@ public class NewContactActivity extends BaseFragment implements AdapterView.OnIt
             org.telegram.ui.ActionBar.ActionBarMenu r2 = r2.createMenu()
             r4 = 1113587712(0x42600000, float:56.0)
             int r4 = org.telegram.messenger.AndroidUtilities.dp(r4)
-            r5 = 2131165533(0x7var_d, float:1.7945286E38)
+            r5 = 2131165450(0x7var_a, float:1.7945117E38)
             org.telegram.ui.ActionBar.ActionBarMenuItem r2 = r2.addItemWithWidth(r3, r5, r4)
             r1.editDoneItem = r2
             java.lang.String r4 = "Done"
-            r5 = 2131625430(0x7f0e05d6, float:1.8878068E38)
+            r5 = 2131625518(0x7f0e062e, float:1.8878246E38)
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r4, r5)
             r2.setContentDescription(r4)
             org.telegram.ui.Components.ContextProgressView r2 = new org.telegram.ui.Components.ContextProgressView
@@ -224,7 +224,7 @@ public class NewContactActivity extends BaseFragment implements AdapterView.OnIt
             r4.setImeOptions(r14)
             org.telegram.ui.Components.EditTextBoldCursor r4 = r1.firstNameField
             java.lang.String r8 = "FirstName"
-            r14 = 2131625807(0x7f0e074f, float:1.8878832E38)
+            r14 = 2131625898(0x7f0e07aa, float:1.8879017E38)
             java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r8, r14)
             r4.setHint(r8)
             org.telegram.ui.Components.EditTextBoldCursor r4 = r1.firstNameField
@@ -296,7 +296,7 @@ public class NewContactActivity extends BaseFragment implements AdapterView.OnIt
             r8 = 5
             r7.setImeOptions(r8)
             org.telegram.ui.Components.EditTextBoldCursor r7 = r1.lastNameField
-            r8 = 2131626249(0x7f0e0909, float:1.8879729E38)
+            r8 = 2131626359(0x7f0e0977, float:1.8879952E38)
             java.lang.String r9 = "LastName"
             java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r9, r8)
             r7.setHint(r8)
@@ -588,7 +588,7 @@ public class NewContactActivity extends BaseFragment implements AdapterView.OnIt
             org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)
         L_0x04bd:
             java.util.ArrayList<java.lang.String> r0 = r1.countriesArray
-            org.telegram.ui.ChangePhoneActivity$PhoneView$$ExternalSyntheticLambda6 r4 = org.telegram.ui.ChangePhoneActivity$PhoneView$$ExternalSyntheticLambda6.INSTANCE
+            org.telegram.ui.CountrySelectActivity$CountryAdapter$$ExternalSyntheticLambda0 r4 = org.telegram.ui.CountrySelectActivity$CountryAdapter$$ExternalSyntheticLambda0.INSTANCE
             java.util.Collections.sort(r0, r4)
             java.lang.String r0 = r1.initialPhoneNumber
             boolean r0 = android.text.TextUtils.isEmpty(r0)
@@ -678,7 +678,7 @@ public class NewContactActivity extends BaseFragment implements AdapterView.OnIt
             int r0 = r0.length()
             if (r0 != 0) goto L_0x0581
             android.widget.TextView r0 = r1.countryButton
-            r2 = 2131625024(0x7f0e0440, float:1.8877244E38)
+            r2 = 2131625097(0x7f0e0489, float:1.8877392E38)
             java.lang.String r3 = "ChooseCountry"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             r0.setText(r2)

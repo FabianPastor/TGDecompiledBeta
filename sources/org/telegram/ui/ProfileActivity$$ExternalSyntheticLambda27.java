@@ -10,6 +10,6 @@ public final /* synthetic */ class ProfileActivity$$ExternalSyntheticLambda27 im
     }
 
     public final void run() {
-        this.f$0.lambda$didReceivedNotification$26(this.f$1);
+        this.f$0.lambda$didReceivedNotification$29(this.f$1);
     }
 }

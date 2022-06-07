@@ -46,7 +46,7 @@ public class RingtoneDataStore {
         } catch (Exception e) {
             FileLog.e((Throwable) e);
         }
-        AndroidUtilities.runOnUIThread(new RingtoneDataStore$$ExternalSyntheticLambda0(this));
+        AndroidUtilities.runOnUIThread(new RingtoneDataStore$$ExternalSyntheticLambda1(this));
     }
 
     /* renamed from: loadUserRingtones */
@@ -55,7 +55,7 @@ public class RingtoneDataStore {
         TLRPC$TL_account_getSavedRingtones tLRPC$TL_account_getSavedRingtones = new TLRPC$TL_account_getSavedRingtones();
         tLRPC$TL_account_getSavedRingtones.hash = queryHash;
         if (z) {
-            ConnectionsManager.getInstance(this.currentAccount).sendRequest(tLRPC$TL_account_getSavedRingtones, new RingtoneDataStore$$ExternalSyntheticLambda4(this));
+            ConnectionsManager.getInstance(this.currentAccount).sendRequest(tLRPC$TL_account_getSavedRingtones, new RingtoneDataStore$$ExternalSyntheticLambda5(this));
             return;
         }
         if (!this.loaded) {
@@ -67,7 +67,7 @@ public class RingtoneDataStore {
 
     /* access modifiers changed from: private */
     public /* synthetic */ void lambda$loadUserRingtones$2(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        AndroidUtilities.runOnUIThread(new RingtoneDataStore$$ExternalSyntheticLambda2(this, tLObject));
+        AndroidUtilities.runOnUIThread(new RingtoneDataStore$$ExternalSyntheticLambda3(this, tLObject));
     }
 
     /* access modifiers changed from: private */
@@ -116,8 +116,13 @@ public class RingtoneDataStore {
             }
         }
         if (z) {
-            NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.onUserRingtonesUpdated, new Object[0]);
+            AndroidUtilities.runOnUIThread(new RingtoneDataStore$$ExternalSyntheticLambda0(this));
         }
+    }
+
+    /* access modifiers changed from: private */
+    public /* synthetic */ void lambda$loadFromPrefs$3() {
+        NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.onUserRingtonesUpdated, new Object[0]);
     }
 
     private void saveTones(ArrayList<TLRPC$Document> arrayList) {
@@ -252,7 +257,7 @@ public class RingtoneDataStore {
             } else if (!TextUtils.isEmpty(this.userRingtones.get(i).localUri)) {
                 return this.userRingtones.get(i).localUri;
             } else {
-                return FileLoader.getPathToAttach(this.userRingtones.get(i).document).toString();
+                return FileLoader.getInstance(this.currentAccount).getPathToAttach(this.userRingtones.get(i).document).toString();
             }
         }
         return "NoSound";
@@ -263,23 +268,23 @@ public class RingtoneDataStore {
             loadFromPrefs(true);
             this.loaded = true;
         }
-        Utilities.globalQueue.postRunnable(new RingtoneDataStore$$ExternalSyntheticLambda1(this, new ArrayList(this.userRingtones)));
+        Utilities.globalQueue.postRunnable(new RingtoneDataStore$$ExternalSyntheticLambda2(this, new ArrayList(this.userRingtones)));
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$checkRingtoneSoundsLoaded$4(ArrayList arrayList) {
+    public /* synthetic */ void lambda$checkRingtoneSoundsLoaded$5(ArrayList arrayList) {
         TLRPC$Document tLRPC$Document;
         File pathToAttach;
         for (int i = 0; i < arrayList.size(); i++) {
             CachedTone cachedTone = (CachedTone) arrayList.get(i);
-            if ((TextUtils.isEmpty(cachedTone.localUri) || !new File(cachedTone.localUri).exists()) && (tLRPC$Document = cachedTone.document) != null && ((pathToAttach = FileLoader.getPathToAttach(tLRPC$Document)) == null || !pathToAttach.exists())) {
-                AndroidUtilities.runOnUIThread(new RingtoneDataStore$$ExternalSyntheticLambda3(this, tLRPC$Document));
+            if ((TextUtils.isEmpty(cachedTone.localUri) || !new File(cachedTone.localUri).exists()) && (tLRPC$Document = cachedTone.document) != null && ((pathToAttach = FileLoader.getInstance(this.currentAccount).getPathToAttach(tLRPC$Document)) == null || !pathToAttach.exists())) {
+                AndroidUtilities.runOnUIThread(new RingtoneDataStore$$ExternalSyntheticLambda4(this, tLRPC$Document));
             }
         }
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$checkRingtoneSoundsLoaded$3(TLRPC$Document tLRPC$Document) {
+    public /* synthetic */ void lambda$checkRingtoneSoundsLoaded$4(TLRPC$Document tLRPC$Document) {
         FileLoader.getInstance(this.currentAccount).loadFile(tLRPC$Document, tLRPC$Document, 0, 0);
     }
 

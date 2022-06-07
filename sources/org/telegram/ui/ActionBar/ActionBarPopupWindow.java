@@ -7,7 +7,6 @@ import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.content.Context;
 import android.graphics.Canvas;
-import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 import android.graphics.Rect;
@@ -58,6 +57,7 @@ public class ActionBarPopupWindow extends PopupWindow {
     public boolean pauseNotifications;
     /* access modifiers changed from: private */
     public int popupAnimationIndex = -1;
+    private boolean scaleOut;
     /* access modifiers changed from: private */
     public AnimatorSet windowAnimatorSet;
 
@@ -81,6 +81,10 @@ public class ActionBarPopupWindow extends PopupWindow {
         } catch (NoSuchFieldException unused) {
         }
         superListenerField = field;
+    }
+
+    public void setScaleOut(boolean z) {
+        this.scaleOut = z;
     }
 
     public static class ActionBarPopupWindowLayout extends FrameLayout {
@@ -110,7 +114,10 @@ public class ActionBarPopupWindow extends PopupWindow {
         private final Theme.ResourcesProvider resourcesProvider;
         private ScrollView scrollView;
         /* access modifiers changed from: private */
-        public boolean shownFromBotton;
+        public boolean shownFromBottom;
+        /* access modifiers changed from: private */
+        public boolean startAnimationPending;
+        public int subtractBackgroundHeight;
         public boolean swipeBackGravityRight;
         private PopupSwipeBackLayout swipeBackLayout;
         private View topView;
@@ -132,6 +139,7 @@ public class ActionBarPopupWindow extends PopupWindow {
             super(context);
             this.backScaleX = 1.0f;
             this.backScaleY = 1.0f;
+            this.startAnimationPending = false;
             this.backAlpha = 255;
             this.lastStartedChild = 0;
             this.animationEnabled = ActionBarPopupWindow.allowAnimation;
@@ -151,25 +159,29 @@ public class ActionBarPopupWindow extends PopupWindow {
                 setBackgroundColor(getThemedColor("actionBarDefaultSubmenuBackground"));
             }
             setWillNotDraw(false);
+            if ((i2 & 2) > 0) {
+                this.shownFromBottom = true;
+            }
             if ((i2 & 1) > 0) {
                 PopupSwipeBackLayout popupSwipeBackLayout = new PopupSwipeBackLayout(context, resourcesProvider2);
                 this.swipeBackLayout = popupSwipeBackLayout;
                 addView(popupSwipeBackLayout, LayoutHelper.createFrame(-2, -2.0f));
             }
+            int i3 = 80;
             try {
                 ScrollView scrollView2 = new ScrollView(context);
                 this.scrollView = scrollView2;
                 scrollView2.setVerticalScrollBarEnabled(false);
                 PopupSwipeBackLayout popupSwipeBackLayout2 = this.swipeBackLayout;
                 if (popupSwipeBackLayout2 != null) {
-                    popupSwipeBackLayout2.addView(this.scrollView, LayoutHelper.createFrame(-2, -2.0f));
+                    popupSwipeBackLayout2.addView(this.scrollView, LayoutHelper.createFrame(-2, -2, this.shownFromBottom ? 80 : 48));
                 } else {
                     addView(this.scrollView, LayoutHelper.createFrame(-2, -2.0f));
                 }
             } catch (Throwable th) {
                 FileLog.e(th);
             }
-            AnonymousClass1 r7 = new LinearLayout(context) {
+            AnonymousClass1 r0 = new LinearLayout(context) {
                 /* access modifiers changed from: protected */
                 public void onMeasure(int i, int i2) {
                     if (ActionBarPopupWindowLayout.this.fitItems) {
@@ -216,9 +228,17 @@ public class ActionBarPopupWindow extends PopupWindow {
                     }
                     super.onMeasure(i, i2);
                 }
+
+                /* access modifiers changed from: protected */
+                public boolean drawChild(Canvas canvas, View view, long j) {
+                    if (view instanceof GapView) {
+                        return false;
+                    }
+                    return super.drawChild(canvas, view, j);
+                }
             };
-            this.linearLayout = r7;
-            r7.setOrientation(1);
+            this.linearLayout = r0;
+            r0.setOrientation(1);
             ScrollView scrollView3 = this.scrollView;
             if (scrollView3 != null) {
                 scrollView3.addView(this.linearLayout, new FrameLayout.LayoutParams(-2, -2));
@@ -226,7 +246,7 @@ public class ActionBarPopupWindow extends PopupWindow {
             }
             PopupSwipeBackLayout popupSwipeBackLayout3 = this.swipeBackLayout;
             if (popupSwipeBackLayout3 != null) {
-                popupSwipeBackLayout3.addView(this.linearLayout, LayoutHelper.createFrame(-2, -2.0f));
+                popupSwipeBackLayout3.addView(this.linearLayout, LayoutHelper.createFrame(-2, -2, !this.shownFromBottom ? 48 : i3));
             } else {
                 addView(this.linearLayout, LayoutHelper.createFrame(-2, -2.0f));
             }
@@ -237,7 +257,7 @@ public class ActionBarPopupWindow extends PopupWindow {
         }
 
         public int addViewToSwipeBack(View view) {
-            this.swipeBackLayout.addView(view, LayoutHelper.createFrame(-2, -2.0f));
+            this.swipeBackLayout.addView(view, LayoutHelper.createFrame(-2, -2, this.shownFromBottom ? 80 : 48));
             return this.swipeBackLayout.getChildCount() - 1;
         }
 
@@ -245,8 +265,8 @@ public class ActionBarPopupWindow extends PopupWindow {
             this.fitItems = z;
         }
 
-        public void setShownFromBotton(boolean z) {
-            this.shownFromBotton = z;
+        public void setShownFromBottom(boolean z) {
+            this.shownFromBottom = z;
         }
 
         public void setDispatchKeyEventListener(OnDispatchKeyEventListener onDispatchKeyEventListener) {
@@ -277,8 +297,7 @@ public class ActionBarPopupWindow extends PopupWindow {
 
         @Keep
         public void setBackScaleX(float f) {
-            if (this.backScaleY != f) {
-                this.backScaleY = f;
+            if (this.backScaleX != f) {
                 this.backScaleX = f;
                 invalidate();
                 onSizeChangedListener onsizechangedlistener = this.onSizeChangedListener;
@@ -294,7 +313,7 @@ public class ActionBarPopupWindow extends PopupWindow {
                 this.backScaleY = f;
                 if (this.animationEnabled && this.updateAnimation) {
                     int measuredHeight = getMeasuredHeight() - AndroidUtilities.dp(16.0f);
-                    if (this.shownFromBotton) {
+                    if (this.shownFromBottom) {
                         for (int i = this.lastStartedChild; i >= 0; i--) {
                             View itemAt = getItemAt(i);
                             if (itemAt.getVisibility() == 0 && !(itemAt instanceof GapView)) {
@@ -353,7 +372,7 @@ public class ActionBarPopupWindow extends PopupWindow {
                 animatorArr[0] = ObjectAnimator.ofFloat(view, property, fArr);
                 Property property2 = View.TRANSLATION_Y;
                 float[] fArr2 = new float[2];
-                fArr2[0] = (float) AndroidUtilities.dp(this.shownFromBotton ? 6.0f : -6.0f);
+                fArr2[0] = (float) AndroidUtilities.dp(this.shownFromBottom ? 6.0f : -6.0f);
                 fArr2[1] = 0.0f;
                 animatorArr[1] = ObjectAnimator.ofFloat(view, property2, fArr2);
                 animatorSet.playTogether(animatorArr);
@@ -382,6 +401,10 @@ public class ActionBarPopupWindow extends PopupWindow {
 
         public void addView(View view, LinearLayout.LayoutParams layoutParams) {
             this.linearLayout.addView(view, layoutParams);
+        }
+
+        public int getViewsCount() {
+            return this.linearLayout.getChildCount();
         }
 
         public void removeInnerViews() {
@@ -425,9 +448,9 @@ public class ActionBarPopupWindow extends PopupWindow {
         /* JADX WARNING: Removed duplicated region for block: B:30:0x00a0  */
         /* JADX WARNING: Removed duplicated region for block: B:33:0x00ab  */
         /* JADX WARNING: Removed duplicated region for block: B:34:0x00c7  */
-        /* JADX WARNING: Removed duplicated region for block: B:58:0x014f  */
-        /* JADX WARNING: Removed duplicated region for block: B:72:0x01b7  */
-        /* JADX WARNING: Removed duplicated region for block: B:82:0x01ba A[SYNTHETIC] */
+        /* JADX WARNING: Removed duplicated region for block: B:58:0x0158  */
+        /* JADX WARNING: Removed duplicated region for block: B:71:0x01c4  */
+        /* JADX WARNING: Removed duplicated region for block: B:80:0x01c7 A[SYNTHETIC] */
         /* Code decompiled incorrectly, please refer to instructions dump. */
         public void onDraw(android.graphics.Canvas r19) {
             /*
@@ -435,7 +458,7 @@ public class ActionBarPopupWindow extends PopupWindow {
                 r0 = r18
                 r8 = r19
                 android.graphics.drawable.Drawable r1 = r0.backgroundDrawable
-                if (r1 == 0) goto L_0x01bf
+                if (r1 == 0) goto L_0x01cc
                 int r1 = r0.gapStartY
                 android.widget.ScrollView r2 = r0.scrollView
                 int r2 = r2.getScrollY()
@@ -466,13 +489,13 @@ public class ActionBarPopupWindow extends PopupWindow {
                 r14 = 0
             L_0x0038:
                 r1 = 2
-                if (r14 >= r1) goto L_0x01bf
+                if (r14 >= r1) goto L_0x01cc
                 r15 = 1098907648(0x41800000, float:16.0)
                 if (r14 != r12) goto L_0x0048
                 int r1 = org.telegram.messenger.AndroidUtilities.dp(r15)
                 int r1 = -r1
                 if (r9 >= r1) goto L_0x0048
-                goto L_0x01bf
+                goto L_0x01cc
             L_0x0048:
                 r7 = 255(0xff, float:3.57E-43)
                 r6 = -1000000(0xfffffffffff0bdc0, float:NaN)
@@ -525,7 +548,7 @@ public class ActionBarPopupWindow extends PopupWindow {
                 r7 = 255(0xff, float:3.57E-43)
             L_0x00a2:
                 r3.setAlpha(r7)
-                boolean r1 = r0.shownFromBotton
+                boolean r1 = r0.shownFromBottom
                 r3 = 1065353216(0x3var_, float:1.0)
                 if (r1 == 0) goto L_0x00c7
                 int r1 = r18.getMeasuredHeight()
@@ -541,17 +564,17 @@ public class ActionBarPopupWindow extends PopupWindow {
                 float r5 = r5 * r6
                 int r5 = (int) r5
                 r4.setBounds(r11, r3, r5, r1)
-                goto L_0x0148
+                goto L_0x0151
             L_0x00c7:
                 int r1 = org.telegram.messenger.AndroidUtilities.dp(r15)
                 int r1 = -r1
-                if (r9 <= r1) goto L_0x0124
+                if (r9 <= r1) goto L_0x012a
                 int r1 = r18.getMeasuredHeight()
                 float r1 = (float) r1
                 float r4 = r0.backScaleY
                 float r1 = r1 * r4
                 int r1 = (int) r1
-                if (r14 != 0) goto L_0x0109
+                if (r14 != 0) goto L_0x010c
                 android.graphics.drawable.Drawable r4 = r0.backgroundDrawable
                 android.widget.ScrollView r5 = r0.scrollView
                 int r5 = r5.getScrollY()
@@ -575,33 +598,37 @@ public class ActionBarPopupWindow extends PopupWindow {
                 int r6 = r6 + r9
                 int r1 = java.lang.Math.min(r1, r6)
             L_0x0105:
+                int r6 = r0.subtractBackgroundHeight
+                int r1 = r1 - r6
                 r4.setBounds(r11, r5, r3, r1)
-                goto L_0x0148
-            L_0x0109:
-                if (r1 >= r10) goto L_0x0114
+                goto L_0x0151
+            L_0x010c:
+                if (r1 >= r10) goto L_0x0117
                 int r1 = r0.gapStartY
-                if (r1 == r12) goto L_0x01ba
+                if (r1 == r12) goto L_0x01c7
                 r19.restore()
-                goto L_0x01ba
-            L_0x0114:
+                goto L_0x01c7
+            L_0x0117:
                 android.graphics.drawable.Drawable r3 = r0.backgroundDrawable
                 int r4 = r18.getMeasuredWidth()
                 float r4 = (float) r4
                 float r5 = r0.backScaleX
                 float r4 = r4 * r5
                 int r4 = (int) r4
+                int r5 = r0.subtractBackgroundHeight
+                int r1 = r1 - r5
                 r3.setBounds(r11, r10, r4, r1)
-                goto L_0x0148
-            L_0x0124:
+                goto L_0x0151
+            L_0x012a:
                 android.graphics.drawable.Drawable r1 = r0.backgroundDrawable
                 int r3 = r0.gapStartY
-                if (r3 >= 0) goto L_0x012c
+                if (r3 >= 0) goto L_0x0132
                 r3 = 0
-                goto L_0x0131
-            L_0x012c:
+                goto L_0x0137
+            L_0x0132:
                 int r3 = org.telegram.messenger.AndroidUtilities.dp(r15)
                 int r3 = -r3
-            L_0x0131:
+            L_0x0137:
                 int r4 = r18.getMeasuredWidth()
                 float r4 = (float) r4
                 float r5 = r0.backScaleX
@@ -612,11 +639,13 @@ public class ActionBarPopupWindow extends PopupWindow {
                 float r6 = r0.backScaleY
                 float r5 = r5 * r6
                 int r5 = (int) r5
+                int r6 = r0.subtractBackgroundHeight
+                int r5 = r5 - r6
                 r1.setBounds(r11, r3, r4, r5)
-            L_0x0148:
+            L_0x0151:
                 android.graphics.drawable.Drawable r1 = r0.backgroundDrawable
                 r1.draw(r8)
-                if (r13 == 0) goto L_0x01b5
+                if (r13 == 0) goto L_0x01c2
                 r19.save()
                 android.graphics.Rect r1 = org.telegram.messenger.AndroidUtilities.rectTmp2
                 android.graphics.drawable.Drawable r3 = r0.backgroundDrawable
@@ -628,48 +657,50 @@ public class ActionBarPopupWindow extends PopupWindow {
                 r1.inset(r4, r3)
                 r8.clipRect(r1)
                 r1 = 0
-            L_0x016e:
+            L_0x0177:
                 android.widget.LinearLayout r3 = r0.linearLayout
                 int r3 = r3.getChildCount()
-                if (r1 >= r3) goto L_0x01b2
+                if (r1 >= r3) goto L_0x01bf
                 android.widget.LinearLayout r3 = r0.linearLayout
                 android.view.View r3 = r3.getChildAt(r1)
                 boolean r3 = r3 instanceof org.telegram.ui.ActionBar.ActionBarPopupWindow.GapView
-                if (r3 == 0) goto L_0x01af
+                if (r3 == 0) goto L_0x01bc
                 r19.save()
                 android.widget.LinearLayout r3 = r0.linearLayout
                 android.view.View r3 = r3.getChildAt(r1)
+                org.telegram.ui.ActionBar.ActionBarPopupWindow$GapView r3 = (org.telegram.ui.ActionBar.ActionBarPopupWindow.GapView) r3
                 r4 = 0
+                r6 = r3
                 r5 = 0
-            L_0x018b:
-                if (r3 == r0) goto L_0x01a0
-                float r6 = r3.getX()
-                float r4 = r4 + r6
-                float r6 = r3.getY()
-                float r5 = r5 + r6
-                android.view.ViewParent r3 = r3.getParent()
-                android.view.View r3 = (android.view.View) r3
-                if (r3 != 0) goto L_0x018b
-                return
-            L_0x01a0:
+            L_0x0197:
+                if (r6 == r0) goto L_0x01ab
+                float r7 = r6.getX()
+                float r4 = r4 + r7
+                float r7 = r6.getY()
+                float r5 = r5 + r7
+                android.view.ViewParent r6 = r6.getParent()
+                android.view.View r6 = (android.view.View) r6
+                if (r6 != 0) goto L_0x0197
+            L_0x01ab:
+                android.widget.ScrollView r6 = r0.scrollView
+                float r6 = r6.getScaleY()
+                float r5 = r5 * r6
                 r8.translate(r4, r5)
-                android.widget.LinearLayout r3 = r0.linearLayout
-                android.view.View r3 = r3.getChildAt(r1)
                 r3.draw(r8)
                 r19.restore()
-            L_0x01af:
+            L_0x01bc:
                 int r1 = r1 + 1
-                goto L_0x016e
-            L_0x01b2:
+                goto L_0x0177
+            L_0x01bf:
                 r19.restore()
-            L_0x01b5:
-                if (r2 == 0) goto L_0x01ba
+            L_0x01c2:
+                if (r2 == 0) goto L_0x01c7
                 r19.restore()
-            L_0x01ba:
+            L_0x01c7:
                 int r14 = r14 + 1
                 r12 = 1
                 goto L_0x0038
-            L_0x01bf:
+            L_0x01cc:
                 return
             */
             throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ActionBar.ActionBarPopupWindow.ActionBarPopupWindowLayout.onDraw(android.graphics.Canvas):void");
@@ -755,6 +786,15 @@ public class ActionBarPopupWindow extends PopupWindow {
 
         public void setSwipeBackForegroundColor(int i) {
             getSwipeBack().setForegroundColor(i);
+        }
+
+        /* access modifiers changed from: protected */
+        public void onMeasure(int i, int i2) {
+            super.onMeasure(i, i2);
+            PopupSwipeBackLayout popupSwipeBackLayout = this.swipeBackLayout;
+            if (popupSwipeBackLayout != null) {
+                popupSwipeBackLayout.invalidateTransforms(!this.startAnimationPending);
+            }
         }
     }
 
@@ -873,10 +913,12 @@ public class ActionBarPopupWindow extends PopupWindow {
             ActionBarPopupWindowLayout actionBarPopupWindowLayout2 = null;
             if (viewGroup instanceof ActionBarPopupWindowLayout) {
                 actionBarPopupWindowLayout = (ActionBarPopupWindowLayout) viewGroup;
+                boolean unused = actionBarPopupWindowLayout.startAnimationPending = true;
             } else {
                 for (int i = 0; i < viewGroup.getChildCount(); i++) {
                     if (viewGroup.getChildAt(i) instanceof ActionBarPopupWindowLayout) {
                         actionBarPopupWindowLayout2 = (ActionBarPopupWindowLayout) viewGroup.getChildAt(i);
+                        boolean unused2 = actionBarPopupWindowLayout2.startAnimationPending = true;
                     }
                 }
                 actionBarPopupWindowLayout = actionBarPopupWindowLayout2;
@@ -897,10 +939,10 @@ public class ActionBarPopupWindow extends PopupWindow {
                     i2++;
                 }
             }
-            if (actionBarPopupWindowLayout.shownFromBotton) {
-                int unused = actionBarPopupWindowLayout.lastStartedChild = itemsCount - 1;
+            if (actionBarPopupWindowLayout.shownFromBottom) {
+                int unused3 = actionBarPopupWindowLayout.lastStartedChild = itemsCount - 1;
             } else {
-                int unused2 = actionBarPopupWindowLayout.lastStartedChild = 0;
+                int unused4 = actionBarPopupWindowLayout.lastStartedChild = 0;
             }
             if (actionBarPopupWindowLayout.getSwipeBack() != null) {
                 actionBarPopupWindowLayout.getSwipeBack().invalidateTransforms();
@@ -918,10 +960,12 @@ public class ActionBarPopupWindow extends PopupWindow {
                     ViewGroup viewGroup = (ViewGroup) ActionBarPopupWindow.this.getContentView();
                     if (viewGroup instanceof ActionBarPopupWindowLayout) {
                         actionBarPopupWindowLayout = (ActionBarPopupWindowLayout) viewGroup;
+                        boolean unused2 = actionBarPopupWindowLayout.startAnimationPending = false;
                     } else {
                         for (int i = 0; i < viewGroup.getChildCount(); i++) {
                             if (viewGroup.getChildAt(i) instanceof ActionBarPopupWindowLayout) {
                                 actionBarPopupWindowLayout2 = (ActionBarPopupWindowLayout) viewGroup.getChildAt(i);
+                                boolean unused3 = actionBarPopupWindowLayout2.startAnimationPending = false;
                             }
                         }
                         actionBarPopupWindowLayout = actionBarPopupWindowLayout2;
@@ -1005,11 +1049,14 @@ public class ActionBarPopupWindow extends PopupWindow {
         if (this.outEmptyTime > 0) {
             animatorSet3.playTogether(new Animator[]{ValueAnimator.ofFloat(new float[]{0.0f, 1.0f})});
             this.windowAnimatorSet.setDuration(this.outEmptyTime);
+        } else if (this.scaleOut) {
+            animatorSet3.playTogether(new Animator[]{ObjectAnimator.ofFloat(viewGroup, View.SCALE_Y, new float[]{0.8f}), ObjectAnimator.ofFloat(viewGroup, View.SCALE_X, new float[]{0.8f}), ObjectAnimator.ofFloat(viewGroup, View.ALPHA, new float[]{0.0f})});
+            this.windowAnimatorSet.setDuration((long) this.dismissAnimationDuration);
         } else {
             Animator[] animatorArr = new Animator[2];
             Property property = View.TRANSLATION_Y;
             float[] fArr = new float[1];
-            fArr[0] = (float) AndroidUtilities.dp((actionBarPopupWindowLayout == null || !actionBarPopupWindowLayout.shownFromBotton) ? -5.0f : 5.0f);
+            fArr[0] = (float) AndroidUtilities.dp((actionBarPopupWindowLayout == null || !actionBarPopupWindowLayout.shownFromBottom) ? -5.0f : 5.0f);
             animatorArr[0] = ObjectAnimator.ofFloat(viewGroup, property, fArr);
             animatorArr[1] = ObjectAnimator.ofFloat(viewGroup, View.ALPHA, new float[]{0.0f});
             animatorSet3.playTogether(animatorArr);
@@ -1037,28 +1084,22 @@ public class ActionBarPopupWindow extends PopupWindow {
     }
 
     public static class GapView extends FrameLayout {
-        int color = 0;
-        String colorKey;
-        Paint paint = new Paint();
+        Theme.ResourcesProvider resourcesProvider;
 
-        public GapView(Context context, String str) {
+        public GapView(Context context, Theme.ResourcesProvider resourcesProvider2, String str) {
             super(context);
-            this.colorKey = str;
+            this.resourcesProvider = resourcesProvider2;
+            setBackgroundColor(getThemedColor(str));
         }
 
-        /* access modifiers changed from: protected */
-        public void onDraw(Canvas canvas) {
-            int i = this.color;
-            if (i == 0) {
-                this.paint.setColor(Theme.getColor(this.colorKey));
-            } else {
-                this.paint.setColor(i);
-            }
-            canvas.drawRect(0.0f, 0.0f, (float) getMeasuredWidth(), (float) getMeasuredHeight(), this.paint);
+        private int getThemedColor(String str) {
+            Theme.ResourcesProvider resourcesProvider2 = this.resourcesProvider;
+            Integer color = resourcesProvider2 != null ? resourcesProvider2.getColor(str) : null;
+            return color != null ? color.intValue() : Theme.getColor(str);
         }
 
         public void setColor(int i) {
-            this.color = i;
+            setBackgroundColor(i);
         }
     }
 }

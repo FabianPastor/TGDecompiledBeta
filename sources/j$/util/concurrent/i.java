@@ -1,9 +1,9 @@
 package j$.util.concurrent;
 
-import j$.util.stream.CLASSNAMEp1;
+import j$.util.stream.CLASSNAMEo1;
+import j$.wrappers.C$r8$wrapper$java$util$stream$IntStream$WRP;
 import j$.wrappers.M0;
 import j$.wrappers.O0;
-import j$.wrappers.Q0;
 import java.io.ObjectStreamField;
 import java.security.AccessController;
 import java.security.SecureRandom;
@@ -97,7 +97,7 @@ public class i extends Random {
     }
 
     public DoubleStream doubles() {
-        return M0.n0(CLASSNAMEp1.r(new f(0, Long.MAX_VALUE, Double.MAX_VALUE, 0.0d), false));
+        return M0.n0(CLASSNAMEo1.r(new f(0, Long.MAX_VALUE, Double.MAX_VALUE, 0.0d), false));
     }
 
     /* access modifiers changed from: package-private */
@@ -164,7 +164,7 @@ public class i extends Random {
     }
 
     public IntStream ints() {
-        return O0.n0(CLASSNAMEp1.s(new g(0, Long.MAX_VALUE, Integer.MAX_VALUE, 0), false));
+        return C$r8$wrapper$java$util$stream$IntStream$WRP.convert(CLASSNAMEo1.s(new g(0, Long.MAX_VALUE, Integer.MAX_VALUE, 0), false));
     }
 
     /* access modifiers changed from: package-private */
@@ -175,7 +175,7 @@ public class i extends Random {
     }
 
     public LongStream longs() {
-        return Q0.n0(CLASSNAMEp1.t(new h(0, Long.MAX_VALUE, Long.MAX_VALUE, 0), false));
+        return O0.n0(CLASSNAMEo1.t(new h(0, Long.MAX_VALUE, Long.MAX_VALUE, 0), false));
     }
 
     /* access modifiers changed from: protected */
@@ -253,42 +253,42 @@ public class i extends Random {
 
     public DoubleStream doubles(double d2, double d3) {
         if (d2 < d3) {
-            return M0.n0(CLASSNAMEp1.r(new f(0, Long.MAX_VALUE, d2, d3), false));
+            return M0.n0(CLASSNAMEo1.r(new f(0, Long.MAX_VALUE, d2, d3), false));
         }
         throw new IllegalArgumentException("bound must be greater than origin");
     }
 
     public IntStream ints(int i, int i2) {
         if (i < i2) {
-            return O0.n0(CLASSNAMEp1.s(new g(0, Long.MAX_VALUE, i, i2), false));
+            return C$r8$wrapper$java$util$stream$IntStream$WRP.convert(CLASSNAMEo1.s(new g(0, Long.MAX_VALUE, i, i2), false));
         }
         throw new IllegalArgumentException("bound must be greater than origin");
     }
 
     public LongStream longs(long j) {
         if (j >= 0) {
-            return Q0.n0(CLASSNAMEp1.t(new h(0, j, Long.MAX_VALUE, 0), false));
+            return O0.n0(CLASSNAMEo1.t(new h(0, j, Long.MAX_VALUE, 0), false));
         }
         throw new IllegalArgumentException("size must be non-negative");
     }
 
     public DoubleStream doubles(long j) {
         if (j >= 0) {
-            return M0.n0(CLASSNAMEp1.r(new f(0, j, Double.MAX_VALUE, 0.0d), false));
+            return M0.n0(CLASSNAMEo1.r(new f(0, j, Double.MAX_VALUE, 0.0d), false));
         }
         throw new IllegalArgumentException("size must be non-negative");
     }
 
     public IntStream ints(long j) {
         if (j >= 0) {
-            return O0.n0(CLASSNAMEp1.s(new g(0, j, Integer.MAX_VALUE, 0), false));
+            return C$r8$wrapper$java$util$stream$IntStream$WRP.convert(CLASSNAMEo1.s(new g(0, j, Integer.MAX_VALUE, 0), false));
         }
         throw new IllegalArgumentException("size must be non-negative");
     }
 
     public LongStream longs(long j, long j2) {
         if (j < j2) {
-            return Q0.n0(CLASSNAMEp1.t(new h(0, Long.MAX_VALUE, j, j2), false));
+            return O0.n0(CLASSNAMEo1.t(new h(0, Long.MAX_VALUE, j, j2), false));
         }
         throw new IllegalArgumentException("bound must be greater than origin");
     }
@@ -297,7 +297,7 @@ public class i extends Random {
         if (j < 0) {
             throw new IllegalArgumentException("size must be non-negative");
         } else if (d2 < d3) {
-            return M0.n0(CLASSNAMEp1.r(new f(0, j, d2, d3), false));
+            return M0.n0(CLASSNAMEo1.r(new f(0, j, d2, d3), false));
         } else {
             throw new IllegalArgumentException("bound must be greater than origin");
         }
@@ -307,7 +307,7 @@ public class i extends Random {
         if (j < 0) {
             throw new IllegalArgumentException("size must be non-negative");
         } else if (i < i2) {
-            return O0.n0(CLASSNAMEp1.s(new g(0, j, i, i2), false));
+            return C$r8$wrapper$java$util$stream$IntStream$WRP.convert(CLASSNAMEo1.s(new g(0, j, i, i2), false));
         } else {
             throw new IllegalArgumentException("bound must be greater than origin");
         }
@@ -317,7 +317,7 @@ public class i extends Random {
         if (j < 0) {
             throw new IllegalArgumentException("size must be non-negative");
         } else if (j2 < j3) {
-            return Q0.n0(CLASSNAMEp1.t(new h(0, j, j2, j3), false));
+            return O0.n0(CLASSNAMEo1.t(new h(0, j, j2, j3), false));
         } else {
             throw new IllegalArgumentException("bound must be greater than origin");
         }

@@ -163,7 +163,7 @@ public class ThemePreviewDrawable extends BitmapDrawable {
                             paint4.setColorFilter(new PorterDuffColorFilter(i, PorterDuff.Mode.SRC_IN));
                         }
                         paint4.setAlpha(255);
-                        float max = Math.max(560.0f / ((float) bitmap.getWidth()), 678.0f / ((float) bitmap.getHeight()));
+                        float max = Math.max(((float) 560) / ((float) bitmap.getWidth()), ((float) 678) / ((float) bitmap.getHeight()));
                         canvas.save();
                         canvas.translate((float) ((560 - ((int) (((float) bitmap.getWidth()) * max))) / 2), (float) ((678 - ((int) (((float) bitmap.getHeight()) * max))) / 2));
                         canvas.scale(max, max);

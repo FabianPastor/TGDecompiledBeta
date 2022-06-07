@@ -5,8 +5,6 @@ import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.ColorFilter;
-import android.graphics.PorterDuff;
-import android.graphics.PorterDuffColorFilter;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.view.View;
@@ -68,7 +66,7 @@ public class BackupImageView extends View {
             backupImageView = this;
             bitmapDrawable = null;
         }
-        backupImageView.imageReceiver.setImage(imageLocation, str, imageLocation2, str2, (ImageLocation) null, (String) null, bitmapDrawable, i, (String) null, obj, i2);
+        backupImageView.imageReceiver.setImage(imageLocation, str, imageLocation2, str2, (ImageLocation) null, (String) null, bitmapDrawable, (long) i, (String) null, obj, i2);
     }
 
     public void setImage(ImageLocation imageLocation, String str, ImageLocation imageLocation2, String str2, int i, Object obj) {
@@ -95,15 +93,15 @@ public class BackupImageView extends View {
             backupImageView = this;
             bitmapDrawable = drawable;
         }
-        backupImageView.imageReceiver.setImage(imageLocation, str, imageLocation2, str2, bitmapDrawable, i, str3, obj, 0);
+        backupImageView.imageReceiver.setImage(imageLocation, str, imageLocation2, str2, bitmapDrawable, (long) i, str3, obj, 0);
     }
 
-    public void setImage(ImageLocation imageLocation, String str, ImageLocation imageLocation2, String str2, String str3, int i, int i2, Object obj) {
-        this.imageReceiver.setImage(imageLocation, str, imageLocation2, str2, (Drawable) null, i, str3, obj, i2);
+    public void setImage(ImageLocation imageLocation, String str, ImageLocation imageLocation2, String str2, String str3, long j, int i, Object obj) {
+        this.imageReceiver.setImage(imageLocation, str, imageLocation2, str2, (Drawable) null, j, str3, obj, i);
     }
 
     public void setImageMedia(ImageLocation imageLocation, String str, ImageLocation imageLocation2, String str2, ImageLocation imageLocation3, String str3, String str4, int i, int i2, Object obj) {
-        this.imageReceiver.setImage(imageLocation, str, imageLocation2, str2, imageLocation3, str3, (Drawable) null, i, str4, obj, i2);
+        this.imageReceiver.setImage(imageLocation, str, imageLocation2, str2, imageLocation3, str3, (Drawable) null, (long) i, str4, obj, i2);
     }
 
     public void setImageBitmap(Bitmap bitmap) {
@@ -112,15 +110,6 @@ public class BackupImageView extends View {
 
     public void setImageResource(int i) {
         this.imageReceiver.setImageBitmap(getResources().getDrawable(i));
-        invalidate();
-    }
-
-    public void setImageResource(int i, int i2) {
-        Drawable drawable = getResources().getDrawable(i);
-        if (drawable != null) {
-            drawable.setColorFilter(new PorterDuffColorFilter(i2, PorterDuff.Mode.MULTIPLY));
-        }
-        this.imageReceiver.setImageBitmap(drawable);
         invalidate();
     }
 

@@ -10,6 +10,6 @@ public final /* synthetic */ class PaymentFormActivity$$ExternalSyntheticLambda5
     }
 
     public final void onClick(View view) {
-        this.f$0.lambda$createView$12(view);
+        this.f$0.lambda$createGooglePayButton$32(view);
     }
 }

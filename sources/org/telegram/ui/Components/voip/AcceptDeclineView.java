@@ -608,11 +608,11 @@ public class AcceptDeclineView extends View {
         this.screenWasWakeup = z;
     }
 
-    private static abstract class AcceptDeclineAccessibilityNodeProvider extends AccessibilityNodeProvider {
+    public static abstract class AcceptDeclineAccessibilityNodeProvider extends AccessibilityNodeProvider {
         private final AccessibilityManager accessibilityManager;
-        private int currentFocusedVirtualViewId;
+        private int currentFocusedVirtualViewId = -1;
         private final View hostView;
-        private final Rect rect;
+        private final Rect rect = new Rect();
         private final int virtualViewsCount;
 
         /* access modifiers changed from: protected */
@@ -627,9 +627,7 @@ public class AcceptDeclineView extends View {
         /* access modifiers changed from: protected */
         public abstract void onVirtualViewClick(int i);
 
-        private AcceptDeclineAccessibilityNodeProvider(View view, int i) {
-            this.rect = new Rect();
-            this.currentFocusedVirtualViewId = -1;
+        protected AcceptDeclineAccessibilityNodeProvider(View view, int i) {
             this.hostView = view;
             this.virtualViewsCount = i;
             this.accessibilityManager = (AccessibilityManager) ContextCompat.getSystemService(view.getContext(), AccessibilityManager.class);

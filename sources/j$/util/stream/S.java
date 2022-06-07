@@ -1,7 +1,7 @@
 package j$.util.stream;
 
 abstract class S extends T {
-    S(CLASSNAMEc cVar, CLASSNAMEf4 f4Var, int i) {
+    S(CLASSNAMEc cVar, CLASSNAMEe4 e4Var, int i) {
         super(cVar, i);
     }
 

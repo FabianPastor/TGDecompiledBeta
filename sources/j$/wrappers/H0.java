@@ -1,7 +1,7 @@
 package j$.wrappers;
 
 import j$.util.stream.CLASSNAMEg;
-import j$.util.y;
+import j$.util.u;
 import java.util.Iterator;
 import java.util.stream.BaseStream;
 
@@ -43,7 +43,7 @@ public final /* synthetic */ class H0 implements CLASSNAMEg {
         return n0(this.a.sequential());
     }
 
-    public /* synthetic */ y spliterator() {
+    public /* synthetic */ u spliterator() {
         return CLASSNAMEg.a(this.a.spliterator());
     }
 

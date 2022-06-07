@@ -314,7 +314,7 @@ public class FilteredSearchView extends FrameLayout implements NotificationCente
                     if (!FilteredSearchView.this.uiCallback.actionModeShowing()) {
                         DialogCell dialogCell = (DialogCell) view;
                         if (dialogCell.isPointInsideAvatar(f, f2)) {
-                            FilteredSearchView.this.chatPreviewDelegate.startChatPreview(dialogCell);
+                            FilteredSearchView.this.chatPreviewDelegate.startChatPreview(FilteredSearchView.this.recyclerListView, dialogCell);
                             return true;
                         }
                     }
@@ -361,11 +361,10 @@ public class FilteredSearchView extends FrameLayout implements NotificationCente
                         int abs = Math.abs(findLastVisibleItemPosition - findFirstVisibleItemPosition) + 1;
                         int itemCount = recyclerView.getAdapter().getItemCount();
                         if (!FilteredSearchView.this.isLoading && abs > 0 && findLastVisibleItemPosition >= itemCount - 10 && !FilteredSearchView.this.endReached) {
-                            FilteredSearchView filteredSearchView2 = FilteredSearchView.this;
-                            filteredSearchView2.search(filteredSearchView2.currentSearchDialogId, filteredSearchView2.currentSearchMinDate, filteredSearchView2.currentSearchMaxDate, filteredSearchView2.currentSearchFilter, filteredSearchView2.currentIncludeFolder, filteredSearchView2.lastMessagesSearchString, false);
+                            AndroidUtilities.runOnUIThread(new FilteredSearchView$6$$ExternalSyntheticLambda0(this));
                         }
-                        FilteredSearchView filteredSearchView3 = FilteredSearchView.this;
-                        if (filteredSearchView3.adapter == filteredSearchView3.sharedPhotoVideoAdapter) {
+                        FilteredSearchView filteredSearchView2 = FilteredSearchView.this;
+                        if (filteredSearchView2.adapter == filteredSearchView2.sharedPhotoVideoAdapter) {
                             if (i2 != 0 && !FilteredSearchView.this.messages.isEmpty() && TextUtils.isEmpty(FilteredSearchView.this.currentDataQuery)) {
                                 FilteredSearchView.this.showFloatingDateView();
                             }
@@ -379,6 +378,12 @@ public class FilteredSearchView extends FrameLayout implements NotificationCente
                         }
                     }
                 }
+            }
+
+            /* access modifiers changed from: private */
+            public /* synthetic */ void lambda$onScrolled$0() {
+                FilteredSearchView filteredSearchView = FilteredSearchView.this;
+                filteredSearchView.search(filteredSearchView.currentSearchDialogId, filteredSearchView.currentSearchMinDate, filteredSearchView.currentSearchMaxDate, filteredSearchView.currentSearchFilter, filteredSearchView.currentIncludeFolder, filteredSearchView.lastMessagesSearchString, false);
             }
         });
         ChatActionCell chatActionCell = new ChatActionCell(parentActivity2);
@@ -434,10 +439,10 @@ public class FilteredSearchView extends FrameLayout implements NotificationCente
             arrowSpan = r0
             org.telegram.ui.Components.ColoredImageSpan r1 = new org.telegram.ui.Components.ColoredImageSpan
             android.content.Context r2 = org.telegram.messenger.ApplicationLoader.applicationContext
-            r3 = 2131166102(0x7var_, float:1.794644E38)
+            r3 = 2131166119(0x7var_a7, float:1.7946474E38)
             android.graphics.drawable.Drawable r2 = androidx.core.content.ContextCompat.getDrawable(r2, r3)
             android.graphics.drawable.Drawable r2 = r2.mutate()
-            r1.<init>(r2)
+            r1.<init>((android.graphics.drawable.Drawable) r2)
             r2 = 1
             r3 = 0
             r0.setSpan(r1, r3, r2, r3)
@@ -1829,7 +1834,7 @@ public class FilteredSearchView extends FrameLayout implements NotificationCente
                 org.telegram.ui.Cells.GraySectionCell r5 = new org.telegram.ui.Cells.GraySectionCell
                 android.content.Context r4 = r4.getContext()
                 r5.<init>(r4)
-                r4 = 2131627908(0x7f0e0var_, float:1.8883094E38)
+                r4 = 2131628107(0x7f0e104b, float:1.8883497E38)
                 java.lang.String r0 = "SearchMessages"
                 java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r0, r4)
                 r5.setText(r4)
@@ -2023,7 +2028,6 @@ public class FilteredSearchView extends FrameLayout implements NotificationCente
         arrayList.add(new ThemeDescription(this.recyclerListView, 0, new Class[]{DialogCell.class}, Theme.dialogs_countGrayPaint, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "chats_unreadCounterMuted"));
         arrayList.add(new ThemeDescription(this.recyclerListView, 0, new Class[]{DialogCell.class}, Theme.dialogs_countTextPaint, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "chats_unreadCounterText"));
         arrayList.add(new ThemeDescription(this.recyclerListView, 0, new Class[]{DialogCell.class, ProfileSearchCell.class}, (Paint) null, new Drawable[]{Theme.dialogs_lockDrawable}, (ThemeDescription.ThemeDescriptionDelegate) null, "chats_secretIcon"));
-        arrayList.add(new ThemeDescription(this.recyclerListView, 0, new Class[]{DialogCell.class, ProfileSearchCell.class}, (Paint) null, new Drawable[]{Theme.dialogs_groupDrawable, Theme.dialogs_broadcastDrawable, Theme.dialogs_botDrawable}, (ThemeDescription.ThemeDescriptionDelegate) null, "chats_nameIcon"));
         arrayList.add(new ThemeDescription(this.recyclerListView, 0, new Class[]{DialogCell.class, ProfileSearchCell.class}, (Paint) null, new Drawable[]{Theme.dialogs_scamDrawable, Theme.dialogs_fakeDrawable}, (ThemeDescription.ThemeDescriptionDelegate) null, "chats_draft"));
         arrayList.add(new ThemeDescription(this.recyclerListView, 0, new Class[]{DialogCell.class}, (Paint) null, new Drawable[]{Theme.dialogs_pinnedDrawable, Theme.dialogs_reorderDrawable}, (ThemeDescription.ThemeDescriptionDelegate) null, "chats_pinnedIcon"));
         TextPaint[] textPaintArr = Theme.dialogs_namePaint;

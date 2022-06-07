@@ -2,67 +2,67 @@ package j$.util;
 
 import j$.util.Iterator;
 import j$.util.function.Consumer;
-import j$.util.function.k;
-import j$.util.function.l;
+import j$.util.function.e;
+import j$.util.function.f;
 import java.util.NoSuchElementException;
 
-class A implements CLASSNAMEp, l, Iterator {
+class A implements CLASSNAMEn, f, Iterator {
     boolean a = false;
-    int b;
-    final /* synthetic */ v c;
+    double b;
+    final /* synthetic */ t c;
 
-    A(v vVar) {
-        this.c = vVar;
+    A(t tVar) {
+        this.c = tVar;
     }
 
-    public void accept(int i) {
+    public void accept(double d) {
         this.a = true;
-        this.b = i;
+        this.b = d;
     }
 
-    /* renamed from: c */
-    public void forEachRemaining(l lVar) {
-        lVar.getClass();
+    /* renamed from: e */
+    public void forEachRemaining(f fVar) {
+        fVar.getClass();
         while (hasNext()) {
-            lVar.accept(nextInt());
+            fVar.accept(nextDouble());
         }
     }
 
     public void forEachRemaining(Consumer consumer) {
-        if (consumer instanceof l) {
-            forEachRemaining((l) consumer);
+        if (consumer instanceof f) {
+            forEachRemaining((f) consumer);
             return;
         }
         consumer.getClass();
-        if (!P.a) {
-            forEachRemaining(new CLASSNAMEo(consumer));
+        if (!N.a) {
+            forEachRemaining(new CLASSNAMEm(consumer));
         } else {
-            P.a(A.class, "{0} calling PrimitiveIterator.OfInt.forEachRemainingInt(action::accept)");
+            N.a(A.class, "{0} calling PrimitiveIterator.OfDouble.forEachRemainingDouble(action::accept)");
             throw null;
         }
     }
 
     public boolean hasNext() {
         if (!this.a) {
-            this.c.g(this);
+            this.c.k(this);
         }
         return this.a;
     }
 
-    public l l(l lVar) {
-        lVar.getClass();
-        return new k(this, lVar);
+    public f j(f fVar) {
+        fVar.getClass();
+        return new e(this, fVar);
     }
 
-    public Integer next() {
-        if (!P.a) {
-            return Integer.valueOf(nextInt());
+    public Double next() {
+        if (!N.a) {
+            return Double.valueOf(nextDouble());
         }
-        P.a(A.class, "{0} calling PrimitiveIterator.OfInt.nextInt()");
+        N.a(A.class, "{0} calling PrimitiveIterator.OfDouble.nextLong()");
         throw null;
     }
 
-    public int nextInt() {
+    public double nextDouble() {
         if (this.a || hasNext()) {
             this.a = false;
             return this.b;

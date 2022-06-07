@@ -1,13 +1,19 @@
 package org.telegram.ui.Components;
 
-public final /* synthetic */ class TranslateAlert$$ExternalSyntheticLambda6 implements Runnable {
-    public final /* synthetic */ TranslateAlert f$0;
+import org.telegram.ui.Components.TranslateAlert;
 
-    public /* synthetic */ TranslateAlert$$ExternalSyntheticLambda6(TranslateAlert translateAlert) {
-        this.f$0 = translateAlert;
+public final /* synthetic */ class TranslateAlert$$ExternalSyntheticLambda6 implements Runnable {
+    public final /* synthetic */ TranslateAlert.OnTranslationSuccess f$0;
+    public final /* synthetic */ String f$1;
+    public final /* synthetic */ String f$2;
+
+    public /* synthetic */ TranslateAlert$$ExternalSyntheticLambda6(TranslateAlert.OnTranslationSuccess onTranslationSuccess, String str, String str2) {
+        this.f$0 = onTranslationSuccess;
+        this.f$1 = str;
+        this.f$2 = str2;
     }
 
     public final void run() {
-        this.f$0.lambda$fetchNext$6();
+        TranslateAlert.lambda$fetchTranslation$9(this.f$0, this.f$1, this.f$2);
     }
 }

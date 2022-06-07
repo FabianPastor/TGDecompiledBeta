@@ -1,46 +1,46 @@
 package j$.util;
 
 import j$.util.function.Consumer;
-import j$.util.function.l;
+import j$.util.function.q;
 import java.util.Comparator;
 
 final class K implements v {
-    private final int[] a;
+    private final long[] a;
     private int b;
     private final int c;
     private final int d;
 
-    public K(int[] iArr, int i, int i2, int i3) {
-        this.a = iArr;
+    public K(long[] jArr, int i, int i2, int i3) {
+        this.a = jArr;
         this.b = i;
         this.c = i2;
         this.d = i3 | 64 | 16384;
     }
 
     public /* synthetic */ boolean b(Consumer consumer) {
-        return CLASSNAMEa.k(this, consumer);
+        return CLASSNAMEa.l(this, consumer);
     }
 
-    /* renamed from: c */
-    public void forEachRemaining(l lVar) {
+    public int characteristics() {
+        return this.d;
+    }
+
+    /* renamed from: d */
+    public void forEachRemaining(q qVar) {
         int i;
-        lVar.getClass();
-        int[] iArr = this.a;
-        int length = iArr.length;
+        qVar.getClass();
+        long[] jArr = this.a;
+        int length = jArr.length;
         int i2 = this.c;
         if (length >= i2 && (i = this.b) >= 0) {
             this.b = i2;
             if (i < i2) {
                 do {
-                    lVar.accept(iArr[i]);
+                    qVar.accept(jArr[i]);
                     i++;
                 } while (i < i2);
             }
         }
-    }
-
-    public int characteristics() {
-        return this.d;
     }
 
     public long estimateSize() {
@@ -48,20 +48,7 @@ final class K implements v {
     }
 
     public /* synthetic */ void forEachRemaining(Consumer consumer) {
-        CLASSNAMEa.c(this, consumer);
-    }
-
-    /* renamed from: g */
-    public boolean tryAdvance(l lVar) {
-        lVar.getClass();
-        int i = this.b;
-        if (i < 0 || i >= this.c) {
-            return false;
-        }
-        int[] iArr = this.a;
-        this.b = i + 1;
-        lVar.accept(iArr[i]);
-        return true;
+        CLASSNAMEa.d(this, consumer);
     }
 
     public Comparator getComparator() {
@@ -79,14 +66,27 @@ final class K implements v {
         return CLASSNAMEa.f(this, i);
     }
 
+    /* renamed from: i */
+    public boolean tryAdvance(q qVar) {
+        qVar.getClass();
+        int i = this.b;
+        if (i < 0 || i >= this.c) {
+            return false;
+        }
+        long[] jArr = this.a;
+        this.b = i + 1;
+        qVar.accept(jArr[i]);
+        return true;
+    }
+
     public v trySplit() {
         int i = this.b;
         int i2 = (this.c + i) >>> 1;
         if (i >= i2) {
             return null;
         }
-        int[] iArr = this.a;
+        long[] jArr = this.a;
         this.b = i2;
-        return new K(iArr, i, i2, this.d);
+        return new K(jArr, i, i2, this.d);
     }
 }

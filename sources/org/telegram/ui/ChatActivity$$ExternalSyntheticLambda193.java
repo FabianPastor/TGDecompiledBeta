@@ -1,15 +1,15 @@
 package org.telegram.ui;
 
-import org.telegram.ui.ActionBar.AlertDialog;
-
 public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda193 implements Runnable {
-    public final /* synthetic */ AlertDialog[] f$0;
+    public final /* synthetic */ ChatActivity f$0;
+    public final /* synthetic */ boolean f$1;
 
-    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda193(AlertDialog[] alertDialogArr) {
-        this.f$0 = alertDialogArr;
+    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda193(ChatActivity chatActivity, boolean z) {
+        this.f$0 = chatActivity;
+        this.f$1 = z;
     }
 
     public final void run() {
-        ChatActivity.lambda$processSelectedOption$195(this.f$0);
+        this.f$0.lambda$performHistoryClear$87(this.f$1);
     }
 }

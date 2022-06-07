@@ -1,11 +1,11 @@
 package j$.util.stream;
 
 import j$.util.function.l;
-import j$.util.y;
+import j$.util.u;
 
 class I0 extends L0 {
-    I0(y yVar, int i, boolean z) {
-        super(yVar, i, z);
+    I0(u uVar, int i, boolean z) {
+        super(uVar, i, z);
     }
 
     /* access modifiers changed from: package-private */
@@ -14,7 +14,7 @@ class I0 extends L0 {
     }
 
     /* access modifiers changed from: package-private */
-    public final CLASSNAMEn3 H0(int i, CLASSNAMEn3 n3Var) {
+    public final CLASSNAMEm3 H0(int i, CLASSNAMEm3 m3Var) {
         throw new UnsupportedOperationException();
     }
 
@@ -35,12 +35,12 @@ class I0 extends L0 {
         }
     }
 
-    public /* bridge */ /* synthetic */ M0 parallel() {
+    public /* bridge */ /* synthetic */ IntStream parallel() {
         parallel();
         return this;
     }
 
-    public /* bridge */ /* synthetic */ M0 sequential() {
+    public /* bridge */ /* synthetic */ IntStream sequential() {
         sequential();
         return this;
     }

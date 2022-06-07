@@ -1,15 +1,16 @@
 package org.telegram.ui.ActionBar;
 
-import android.view.MotionEvent;
 import android.view.View;
+import android.view.WindowInsets;
 
-public final /* synthetic */ class BottomSheet$$ExternalSyntheticLambda3 implements View.OnTouchListener {
-    public static final /* synthetic */ BottomSheet$$ExternalSyntheticLambda3 INSTANCE = new BottomSheet$$ExternalSyntheticLambda3();
+public final /* synthetic */ class BottomSheet$$ExternalSyntheticLambda3 implements View.OnApplyWindowInsetsListener {
+    public final /* synthetic */ BottomSheet f$0;
 
-    private /* synthetic */ BottomSheet$$ExternalSyntheticLambda3() {
+    public /* synthetic */ BottomSheet$$ExternalSyntheticLambda3(BottomSheet bottomSheet) {
+        this.f$0 = bottomSheet;
     }
 
-    public final boolean onTouch(View view, MotionEvent motionEvent) {
-        return BottomSheet.lambda$onCreate$2(view, motionEvent);
+    public final WindowInsets onApplyWindowInsets(View view, WindowInsets windowInsets) {
+        return this.f$0.lambda$new$1(view, windowInsets);
     }
 }

@@ -16,12 +16,14 @@ import org.telegram.ui.ActionBar.SimpleTextView;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.AvatarDrawable;
 import org.telegram.ui.Components.BackupImageView;
+import org.telegram.ui.Components.CheckBox2;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.URLSpanNoUnderline;
 
 public class AdminedChannelCell extends FrameLayout {
     private AvatarDrawable avatarDrawable = new AvatarDrawable();
     private BackupImageView avatarImageView;
+    CheckBox2 checkBox;
     private int currentAccount = UserConfig.selectedAccount;
     private TLRPC$Chat currentChannel;
     private ImageView deleteButton;
@@ -34,25 +36,36 @@ public class AdminedChannelCell extends FrameLayout {
     }
 
     /* JADX INFO: super call moved to the top of the method (can break code semantics) */
-    public AdminedChannelCell(Context context, View.OnClickListener onClickListener) {
+    public AdminedChannelCell(Context context, View.OnClickListener onClickListener, boolean z, int i) {
         super(context);
         Context context2 = context;
+        View.OnClickListener onClickListener2 = onClickListener;
         BackupImageView backupImageView = new BackupImageView(context2);
         this.avatarImageView = backupImageView;
         backupImageView.setRoundRadius(AndroidUtilities.dp(24.0f));
         BackupImageView backupImageView2 = this.avatarImageView;
-        boolean z = LocaleController.isRTL;
-        int i = 5;
-        addView(backupImageView2, LayoutHelper.createFrame(48, 48.0f, (z ? 5 : 3) | 48, z ? 0.0f : 12.0f, 12.0f, z ? 12.0f : 0.0f, 0.0f));
+        boolean z2 = LocaleController.isRTL;
+        int i2 = 5;
+        addView(backupImageView2, LayoutHelper.createFrame(48, 48.0f, (z2 ? 5 : 3) | 48, z2 ? 0.0f : (float) (i + 12), 6.0f, z2 ? (float) (i + 12) : 0.0f, 6.0f));
+        if (z) {
+            CheckBox2 checkBox2 = new CheckBox2(context2, 21);
+            this.checkBox = checkBox2;
+            checkBox2.setColor((String) null, "windowBackgroundWhite", "checkboxCheck");
+            this.checkBox.setDrawUnchecked(false);
+            this.checkBox.setDrawBackgroundAsArc(3);
+            CheckBox2 checkBox22 = this.checkBox;
+            boolean z3 = LocaleController.isRTL;
+            addView(checkBox22, LayoutHelper.createFrame(24, 24.0f, (z3 ? 5 : 3) | 48, z3 ? 0.0f : (float) (i + 42), 32.0f, z3 ? (float) (i + 42) : 0.0f, 0.0f));
+        }
+        int i3 = onClickListener2 == null ? 24 : 62;
         SimpleTextView simpleTextView = new SimpleTextView(context2);
         this.nameTextView = simpleTextView;
         simpleTextView.setTextColor(Theme.getColor("windowBackgroundWhiteBlackText"));
         this.nameTextView.setTextSize(17);
         this.nameTextView.setGravity((LocaleController.isRTL ? 5 : 3) | 48);
         SimpleTextView simpleTextView2 = this.nameTextView;
-        boolean z2 = LocaleController.isRTL;
-        float f = 62.0f;
-        addView(simpleTextView2, LayoutHelper.createFrame(-1, 20.0f, (z2 ? 5 : 3) | 48, z2 ? 62.0f : 73.0f, 15.5f, z2 ? 73.0f : 62.0f, 0.0f));
+        boolean z4 = LocaleController.isRTL;
+        addView(simpleTextView2, LayoutHelper.createFrame(-1, 20.0f, (z4 ? 5 : 3) | 48, z4 ? (float) i3 : (float) (i + 73), 9.5f, z4 ? (float) (i + 73) : (float) i3, 0.0f));
         SimpleTextView simpleTextView3 = new SimpleTextView(context2);
         this.statusTextView = simpleTextView3;
         simpleTextView3.setTextSize(14);
@@ -60,17 +73,20 @@ public class AdminedChannelCell extends FrameLayout {
         this.statusTextView.setLinkTextColor(Theme.getColor("windowBackgroundWhiteLinkText"));
         this.statusTextView.setGravity((LocaleController.isRTL ? 5 : 3) | 48);
         SimpleTextView simpleTextView4 = this.statusTextView;
-        boolean z3 = LocaleController.isRTL;
-        addView(simpleTextView4, LayoutHelper.createFrame(-1, 20.0f, (z3 ? 5 : 3) | 48, z3 ? 62.0f : 73.0f, 38.5f, z3 ? 73.0f : f, 0.0f));
-        ImageView imageView = new ImageView(context2);
-        this.deleteButton = imageView;
-        imageView.setScaleType(ImageView.ScaleType.CENTER);
-        this.deleteButton.setImageResource(NUM);
-        this.deleteButton.setOnClickListener(onClickListener);
-        this.deleteButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor("windowBackgroundWhiteGrayText"), PorterDuff.Mode.MULTIPLY));
-        ImageView imageView2 = this.deleteButton;
-        boolean z4 = LocaleController.isRTL;
-        addView(imageView2, LayoutHelper.createFrame(48, 48.0f, (z4 ? 3 : i) | 48, z4 ? 7.0f : 0.0f, 12.0f, z4 ? 0.0f : 7.0f, 0.0f));
+        boolean z5 = LocaleController.isRTL;
+        addView(simpleTextView4, LayoutHelper.createFrame(-1, 20.0f, (z5 ? 5 : 3) | 48, z5 ? (float) i3 : (float) (i + 73), 32.5f, (float) (z5 ? i + 73 : i3), 6.0f));
+        if (onClickListener2 != null) {
+            ImageView imageView = new ImageView(context2);
+            this.deleteButton = imageView;
+            imageView.setScaleType(ImageView.ScaleType.CENTER);
+            this.deleteButton.setImageResource(NUM);
+            this.deleteButton.setOnClickListener(onClickListener2);
+            this.deleteButton.setBackground(Theme.createSelectorDrawable(Theme.getColor("listSelectorSDK21")));
+            this.deleteButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor("windowBackgroundWhiteGrayText"), PorterDuff.Mode.MULTIPLY));
+            ImageView imageView2 = this.deleteButton;
+            boolean z6 = LocaleController.isRTL;
+            addView(imageView2, LayoutHelper.createFrame(48, 48.0f, (z6 ? 3 : i2) | 48, z6 ? 7.0f : 0.0f, 6.0f, z6 ? 0.0f : 7.0f, 0.0f));
+        }
     }
 
     public void setChannel(TLRPC$Chat tLRPC$Chat, boolean z) {
@@ -109,5 +125,9 @@ public class AdminedChannelCell extends FrameLayout {
 
     public ImageView getDeleteButton() {
         return this.deleteButton;
+    }
+
+    public void setChecked(boolean z, boolean z2) {
+        this.checkBox.setChecked(z, z2);
     }
 }

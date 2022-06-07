@@ -8,6 +8,6 @@ public final /* synthetic */ class BotWebViewMenuContainer$$ExternalSyntheticLam
     }
 
     public final void run() {
-        this.f$0.lambda$new$4();
+        this.f$0.lambda$onDismiss$19();
     }
 }

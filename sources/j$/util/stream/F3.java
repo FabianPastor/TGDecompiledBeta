@@ -1,14 +1,18 @@
 package j$.util.stream;
 
-abstract class F3 extends CLASSNAMEi3 {
-    protected boolean b;
+import java.util.Comparator;
 
-    F3(CLASSNAMEn3 n3Var) {
-        super(n3Var);
+abstract class F3 extends CLASSNAMEi3 {
+    protected final Comparator b;
+    protected boolean c;
+
+    F3(CLASSNAMEm3 m3Var, Comparator comparator) {
+        super(m3Var);
+        this.b = comparator;
     }
 
     public final boolean o() {
-        this.b = true;
+        this.c = true;
         return false;
     }
 }

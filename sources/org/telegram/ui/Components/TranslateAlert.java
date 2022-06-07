@@ -37,6 +37,7 @@ import android.widget.Toast;
 import androidx.core.widget.NestedScrollView;
 import java.util.ArrayList;
 import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.DispatchQueue;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
 import org.telegram.tgnet.ConnectionsManager;
@@ -51,6 +52,7 @@ import org.telegram.ui.Components.LinkSpanDrawable;
 public class TranslateAlert extends Dialog {
     /* access modifiers changed from: private */
     public static final int MOST_SPEC = View.MeasureSpec.makeMeasureSpec(999999, Integer.MIN_VALUE);
+    public static volatile DispatchQueue translateQueue = new DispatchQueue("translateQueue", false);
     private Spannable allTexts;
     /* access modifiers changed from: private */
     public TextView allTextsView;
@@ -72,15 +74,13 @@ public class TranslateAlert extends Dialog {
     public float containerOpenAnimationT;
     private Rect containerRect;
     private FrameLayout contentView;
-    /* access modifiers changed from: private */
-    public boolean dismissed;
+    private boolean dismissed;
     /* access modifiers changed from: private */
     public boolean fastHide;
     private int firstMinHeight;
     /* access modifiers changed from: private */
     public BaseFragment fragment;
-    /* access modifiers changed from: private */
-    public String fromLanguage;
+    private String fromLanguage;
     private boolean fromScrollRect;
     private float fromScrollViewY;
     private float fromScrollY;
@@ -129,11 +129,10 @@ public class TranslateAlert extends Dialog {
     public TextBlocksLayout textsView;
     private FrameLayout.LayoutParams titleLayout;
     private TextView titleView;
-    /* access modifiers changed from: private */
-    public String toLanguage;
+    private String toLanguage;
 
     public interface OnLinkPress {
-        void run(URLSpan uRLSpan);
+        boolean run(URLSpan uRLSpan);
     }
 
     public interface OnTranslationFail {
@@ -145,7 +144,7 @@ public class TranslateAlert extends Dialog {
     }
 
     /* access modifiers changed from: private */
-    public static /* synthetic */ void lambda$translateText$9(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+    public static /* synthetic */ void lambda$translateText$13(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
     }
 
     /* access modifiers changed from: private */
@@ -298,8 +297,6 @@ public class TranslateAlert extends Dialog {
             r6.firstMinHeight = r12
             r13 = 1
             r6.allowScroll = r13
-            r6.onLinkPress = r2
-            r6.onDismiss = r2
             r6.fromScrollY = r11
             android.graphics.Rect r3 = new android.graphics.Rect
             r3.<init>()
@@ -338,33 +335,33 @@ public class TranslateAlert extends Dialog {
             r6.loading = r10
             r6.loaded = r10
             java.lang.String r3 = "und"
-            if (r0 == 0) goto L_0x0092
-            if (r1 == 0) goto L_0x008a
+            if (r0 == 0) goto L_0x008e
+            if (r1 == 0) goto L_0x0086
             boolean r4 = r1.equals(r3)
-            if (r4 == 0) goto L_0x008a
+            if (r4 == 0) goto L_0x0086
             r4 = r35
             r5 = r37
-            goto L_0x008f
-        L_0x008a:
+            goto L_0x008b
+        L_0x0086:
             r4 = r35
             r5 = r37
             r2 = r1
-        L_0x008f:
+        L_0x008b:
             translateText(r4, r0, r5, r2, r8)
-        L_0x0092:
+        L_0x008e:
             r0 = r42
             r6.onLinkPress = r0
             r6.noforwards = r9
             r0 = r33
             r6.fragment = r0
-            if (r1 == 0) goto L_0x00a7
+            if (r1 == 0) goto L_0x00a3
             boolean r0 = r1.equals(r3)
-            if (r0 == 0) goto L_0x00a7
+            if (r0 == 0) goto L_0x00a3
             java.lang.String r0 = "auto"
-            goto L_0x00a8
-        L_0x00a7:
+            goto L_0x00a4
+        L_0x00a3:
             r0 = r1
-        L_0x00a8:
+        L_0x00a4:
             r6.fromLanguage = r0
             r6.toLanguage = r8
             r0 = 1024(0x400, float:1.435E-42)
@@ -376,22 +373,22 @@ public class TranslateAlert extends Dialog {
             int r14 = android.os.Build.VERSION.SDK_INT
             r0 = 21
             r2 = 30
-            if (r14 < r2) goto L_0x00cd
+            if (r14 < r2) goto L_0x00c9
             android.view.Window r3 = r32.getWindow()
             r4 = -2147483392(0xfffffffvar_, float:-3.59E-43)
             r3.addFlags(r4)
-            goto L_0x00d9
-        L_0x00cd:
-            if (r14 < r0) goto L_0x00d9
+            goto L_0x00d5
+        L_0x00c9:
+            if (r14 < r0) goto L_0x00d5
             android.view.Window r3 = r32.getWindow()
             r4 = -2147417856(0xfffffffvar_, float:-9.2194E-41)
             r3.addFlags(r4)
-        L_0x00d9:
-            if (r9 == 0) goto L_0x00e4
+        L_0x00d5:
+            if (r9 == 0) goto L_0x00e0
             android.view.Window r3 = r32.getWindow()
             r4 = 8192(0x2000, float:1.14794E-41)
             r3.addFlags(r4)
-        L_0x00e4:
+        L_0x00e0:
             android.widget.FrameLayout r3 = new android.widget.FrameLayout
             r3.<init>(r7)
             r6.contentView = r3
@@ -401,19 +398,19 @@ public class TranslateAlert extends Dialog {
             r3.setClipChildren(r10)
             android.widget.FrameLayout r3 = r6.contentView
             r3.setClipToPadding(r10)
-            if (r14 < r0) goto L_0x0112
+            if (r14 < r0) goto L_0x010e
             android.widget.FrameLayout r0 = r6.contentView
             r0.setFitsSystemWindows(r13)
-            if (r14 < r2) goto L_0x010b
+            if (r14 < r2) goto L_0x0107
             android.widget.FrameLayout r0 = r6.contentView
             r2 = 1792(0x700, float:2.511E-42)
             r0.setSystemUiVisibility(r2)
-            goto L_0x0112
-        L_0x010b:
+            goto L_0x010e
+        L_0x0107:
             android.widget.FrameLayout r0 = r6.contentView
             r2 = 1280(0x500, float:1.794E-42)
             r0.setSystemUiVisibility(r2)
-        L_0x0112:
+        L_0x010e:
             android.graphics.Paint r0 = new android.graphics.Paint
             r0.<init>()
             java.lang.String r2 = "dialogBackground"
@@ -438,32 +435,32 @@ public class TranslateAlert extends Dialog {
             r0.<init>(r7)
             r6.titleView = r0
             boolean r2 = org.telegram.messenger.LocaleController.isRTL
-            if (r2 == 0) goto L_0x0156
+            if (r2 == 0) goto L_0x0152
             int r2 = r0.getWidth()
             float r2 = (float) r2
-            goto L_0x0157
-        L_0x0156:
+            goto L_0x0153
+        L_0x0152:
             r2 = 0
-        L_0x0157:
+        L_0x0153:
             r0.setPivotX(r2)
             android.widget.TextView r0 = r6.titleView
             r0.setPivotY(r11)
             android.widget.TextView r0 = r6.titleView
             r0.setLines(r13)
             android.widget.TextView r0 = r6.titleView
-            r2 = 2131624568(0x7f0e0278, float:1.887632E38)
+            r2 = 2131624621(0x7f0e02ad, float:1.8876427E38)
             java.lang.String r3 = "AutomaticTranslation"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             r0.setText(r2)
             android.widget.TextView r0 = r6.titleView
             boolean r2 = org.telegram.messenger.LocaleController.isRTL
             r5 = 3
-            if (r2 == 0) goto L_0x017b
+            if (r2 == 0) goto L_0x0177
             r2 = 5
-            goto L_0x017c
-        L_0x017b:
+            goto L_0x0178
+        L_0x0177:
             r2 = 3
-        L_0x017c:
+        L_0x0178:
             r0.setGravity(r2)
             android.widget.TextView r0 = r6.titleView
             java.lang.String r16 = "fonts/rmedium.ttf"
@@ -491,7 +488,7 @@ public class TranslateAlert extends Dialog {
             r6.titleLayout = r3
             r0.addView(r2, r3)
             android.widget.TextView r0 = r6.titleView
-            org.telegram.ui.Components.TranslateAlert$$ExternalSyntheticLambda5 r2 = new org.telegram.ui.Components.TranslateAlert$$ExternalSyntheticLambda5
+            org.telegram.ui.Components.TranslateAlert$$ExternalSyntheticLambda8 r2 = new org.telegram.ui.Components.TranslateAlert$$ExternalSyntheticLambda8
             r2.<init>(r6)
             r0.post(r2)
             android.widget.LinearLayout r0 = new android.widget.LinearLayout
@@ -499,29 +496,29 @@ public class TranslateAlert extends Dialog {
             r6.subtitleView = r0
             r0.setOrientation(r10)
             r4 = 17
-            if (r14 < r4) goto L_0x01db
+            if (r14 < r4) goto L_0x01d7
             android.widget.LinearLayout r0 = r6.subtitleView
             boolean r2 = org.telegram.messenger.LocaleController.isRTL
             r0.setLayoutDirection(r2)
-        L_0x01db:
+        L_0x01d7:
             android.widget.LinearLayout r0 = r6.subtitleView
             boolean r2 = org.telegram.messenger.LocaleController.isRTL
-            if (r2 == 0) goto L_0x01e3
+            if (r2 == 0) goto L_0x01df
             r2 = 5
-            goto L_0x01e4
-        L_0x01e3:
+            goto L_0x01e0
+        L_0x01df:
             r2 = 3
-        L_0x01e4:
+        L_0x01e0:
             r0.setGravity(r2)
             java.lang.String r3 = r6.languageName(r1)
             org.telegram.ui.Components.TranslateAlert$3 r2 = new org.telegram.ui.Components.TranslateAlert$3
-            if (r3 != 0) goto L_0x01f6
+            if (r3 != 0) goto L_0x01f2
             java.lang.String r0 = r6.languageName(r8)
             r18 = r0
-            goto L_0x01f8
-        L_0x01f6:
+            goto L_0x01f4
+        L_0x01f2:
             r18 = r3
-        L_0x01f8:
+        L_0x01f4:
             r1 = 1096810496(0x41600000, float:14.0)
             int r19 = org.telegram.messenger.AndroidUtilities.dp(r1)
             java.lang.String r20 = "player_actionBarSubtitle"
@@ -541,7 +538,7 @@ public class TranslateAlert extends Dialog {
             android.widget.ImageView r0 = new android.widget.ImageView
             r0.<init>(r7)
             r6.subtitleArrowView = r0
-            r1 = 2131166102(0x7var_, float:1.794644E38)
+            r1 = 2131166119(0x7var_a7, float:1.7946474E38)
             r0.setImageResource(r1)
             android.widget.ImageView r0 = r6.subtitleArrowView
             android.graphics.PorterDuffColorFilter r1 = new android.graphics.PorterDuffColorFilter
@@ -550,11 +547,11 @@ public class TranslateAlert extends Dialog {
             r1.<init>(r2, r3)
             r0.setColorFilter(r1)
             boolean r0 = org.telegram.messenger.LocaleController.isRTL
-            if (r0 == 0) goto L_0x0242
+            if (r0 == 0) goto L_0x023e
             android.widget.ImageView r0 = r6.subtitleArrowView
             r1 = -1082130432(0xffffffffbvar_, float:-1.0)
             r0.setScaleX(r1)
-        L_0x0242:
+        L_0x023e:
             android.widget.TextView r0 = new android.widget.TextView
             r0.<init>(r7)
             r6.subtitleToView = r0
@@ -572,7 +569,7 @@ public class TranslateAlert extends Dialog {
             boolean r0 = org.telegram.messenger.LocaleController.isRTL
             r1 = 16
             r2 = -2
-            if (r0 == 0) goto L_0x02aa
+            if (r0 == 0) goto L_0x02a6
             android.widget.LinearLayout r0 = r6.subtitleView
             int r3 = org.telegram.ui.Components.TranslateAlert.InlineLoadingTextView.paddingHorizontal
             r0.setPadding(r3, r10, r10, r10)
@@ -597,8 +594,8 @@ public class TranslateAlert extends Dialog {
             r29 = 0
             android.widget.LinearLayout$LayoutParams r3 = org.telegram.ui.Components.LayoutHelper.createLinear((int) r25, (int) r26, (int) r27, (int) r28, (int) r29, (int) r30, (int) r31)
             r0.addView(r1, r3)
-            goto L_0x02e4
-        L_0x02aa:
+            goto L_0x02e0
+        L_0x02a6:
             android.widget.LinearLayout r0 = r6.subtitleView
             int r3 = org.telegram.ui.Components.TranslateAlert.InlineLoadingTextView.paddingHorizontal
             r0.setPadding(r10, r10, r3, r10)
@@ -623,22 +620,22 @@ public class TranslateAlert extends Dialog {
             android.widget.TextView r3 = r6.subtitleToView
             android.widget.LinearLayout$LayoutParams r1 = org.telegram.ui.Components.LayoutHelper.createLinear((int) r2, (int) r2, (int) r1)
             r0.addView(r3, r1)
-        L_0x02e4:
-            if (r12 == 0) goto L_0x02eb
+        L_0x02e0:
+            if (r12 == 0) goto L_0x02e7
             org.telegram.ui.Components.TranslateAlert$InlineLoadingTextView r0 = r6.subtitleFromView
             r0.set(r12)
-        L_0x02eb:
+        L_0x02e7:
             android.widget.FrameLayout r0 = r6.header
             android.widget.LinearLayout r1 = r6.subtitleView
             r25 = -1
             r26 = -1073741824(0xffffffffCLASSNAME, float:-2.0)
             boolean r3 = org.telegram.messenger.LocaleController.isRTL
-            if (r3 == 0) goto L_0x02f9
+            if (r3 == 0) goto L_0x02f5
             r15 = 5
-            goto L_0x02fa
-        L_0x02f9:
+            goto L_0x02f6
+        L_0x02f5:
             r15 = 3
-        L_0x02fa:
+        L_0x02f6:
             r27 = r15 | 48
             int r3 = org.telegram.ui.Components.TranslateAlert.LoadingTextView2.paddingHorizontal
             float r4 = (float) r3
@@ -662,7 +659,7 @@ public class TranslateAlert extends Dialog {
             android.widget.ImageView r0 = new android.widget.ImageView
             r0.<init>(r7)
             r6.backButton = r0
-            r1 = 2131165503(0x7var_f, float:1.7945225E38)
+            r1 = 2131165449(0x7var_, float:1.7945115E38)
             r0.setImageResource(r1)
             android.widget.ImageView r0 = r6.backButton
             android.graphics.PorterDuffColorFilter r1 = new android.graphics.PorterDuffColorFilter
@@ -744,20 +741,24 @@ public class TranslateAlert extends Dialog {
             java.lang.String r0 = "chat_TextSelectionCursor"
             int r0 = org.telegram.ui.ActionBar.Theme.getColor(r0)
             r4 = 29
-            if (r14 < r4) goto L_0x041a
-            android.widget.TextView r4 = r6.allTextsView     // Catch:{ Exception -> 0x041a }
-            android.graphics.drawable.Drawable r4 = r4.getTextSelectHandleLeft()     // Catch:{ Exception -> 0x041a }
-            android.graphics.PorterDuff$Mode r8 = android.graphics.PorterDuff.Mode.SRC_IN     // Catch:{ Exception -> 0x041a }
-            r4.setColorFilter(r0, r8)     // Catch:{ Exception -> 0x041a }
-            android.widget.TextView r8 = r6.allTextsView     // Catch:{ Exception -> 0x041a }
-            r8.setTextSelectHandleLeft(r4)     // Catch:{ Exception -> 0x041a }
-            android.widget.TextView r4 = r6.allTextsView     // Catch:{ Exception -> 0x041a }
-            android.graphics.drawable.Drawable r4 = r4.getTextSelectHandleRight()     // Catch:{ Exception -> 0x041a }
-            android.graphics.PorterDuff$Mode r8 = android.graphics.PorterDuff.Mode.SRC_IN     // Catch:{ Exception -> 0x041a }
-            r4.setColorFilter(r0, r8)     // Catch:{ Exception -> 0x041a }
-            android.widget.TextView r0 = r6.allTextsView     // Catch:{ Exception -> 0x041a }
-            r0.setTextSelectHandleRight(r4)     // Catch:{ Exception -> 0x041a }
-        L_0x041a:
+            if (r14 < r4) goto L_0x041c
+            boolean r4 = org.telegram.messenger.XiaomiUtilities.isMIUI()     // Catch:{ Exception -> 0x041c }
+            if (r4 != 0) goto L_0x041c
+            android.widget.TextView r4 = r6.allTextsView     // Catch:{ Exception -> 0x041c }
+            android.graphics.drawable.Drawable r4 = r4.getTextSelectHandleLeft()     // Catch:{ Exception -> 0x041c }
+            android.graphics.PorterDuff$Mode r8 = android.graphics.PorterDuff.Mode.SRC_IN     // Catch:{ Exception -> 0x041c }
+            r4.setColorFilter(r0, r8)     // Catch:{ Exception -> 0x041c }
+            android.widget.TextView r8 = r6.allTextsView     // Catch:{ Exception -> 0x041c }
+            r8.setTextSelectHandleLeft(r4)     // Catch:{ Exception -> 0x041c }
+            android.widget.TextView r4 = r6.allTextsView     // Catch:{ Exception -> 0x041c }
+            android.graphics.drawable.Drawable r4 = r4.getTextSelectHandleRight()     // Catch:{ Exception -> 0x041c }
+            android.graphics.PorterDuff$Mode r8 = android.graphics.PorterDuff.Mode.SRC_IN     // Catch:{ Exception -> 0x041c }
+            r4.setColorFilter(r0, r8)     // Catch:{ Exception -> 0x041c }
+            android.widget.TextView r0 = r6.allTextsView     // Catch:{ Exception -> 0x041c }
+            r0.setTextSelectHandleRight(r4)     // Catch:{ Exception -> 0x041c }
+        L_0x041c:
+            android.widget.TextView r0 = r6.allTextsView
+            r0.setFocusable(r13)
             android.widget.TextView r0 = r6.allTextsView
             android.text.method.LinkMovementMethod r4 = new android.text.method.LinkMovementMethod
             r4.<init>()
@@ -773,24 +774,24 @@ public class TranslateAlert extends Dialog {
             int r1 = r1 - r4
             r8 = 1094713344(0x41400000, float:12.0)
             int r9 = org.telegram.messenger.AndroidUtilities.dp(r8)
-            int r10 = org.telegram.ui.Components.TranslateAlert.LoadingTextView2.paddingVertical
-            int r9 = r9 - r10
+            int r11 = org.telegram.ui.Components.TranslateAlert.LoadingTextView2.paddingVertical
+            int r9 = r9 - r11
             int r5 = org.telegram.messenger.AndroidUtilities.dp(r5)
             int r5 = r5 - r4
             int r4 = org.telegram.messenger.AndroidUtilities.dp(r8)
-            int r4 = r4 - r10
+            int r4 = r4 - r11
             r0.setPadding(r1, r9, r5, r4)
             java.util.ArrayList<java.lang.CharSequence> r0 = r6.textBlocks
             java.util.Iterator r0 = r0.iterator()
-        L_0x0458:
+        L_0x045f:
             boolean r1 = r0.hasNext()
-            if (r1 == 0) goto L_0x046a
+            if (r1 == 0) goto L_0x0471
             java.lang.Object r1 = r0.next()
             java.lang.CharSequence r1 = (java.lang.CharSequence) r1
             org.telegram.ui.Components.TranslateAlert$TextBlocksLayout r4 = r6.textsView
             r4.addBlock(r1)
-            goto L_0x0458
-        L_0x046a:
+            goto L_0x045f
+        L_0x0471:
             android.widget.FrameLayout r0 = new android.widget.FrameLayout
             r0.<init>(r7)
             r6.textsContainerView = r0
@@ -810,16 +811,16 @@ public class TranslateAlert extends Dialog {
             r5 = -1073741824(0xffffffffCLASSNAME, float:-2.0)
             r8 = 119(0x77, float:1.67E-43)
             r9 = 0
-            r10 = 1116471296(0x428CLASSNAME, float:70.0)
-            r11 = 0
-            r12 = 1117913088(0x42a20000, float:81.0)
+            r11 = 1116471296(0x428CLASSNAME, float:70.0)
+            r12 = 0
+            r14 = 1117913088(0x42a20000, float:81.0)
             r35 = r4
             r36 = r5
             r37 = r8
             r38 = r9
-            r39 = r10
-            r40 = r11
-            r41 = r12
+            r39 = r11
+            r40 = r12
+            r41 = r14
             android.widget.FrameLayout$LayoutParams r4 = org.telegram.ui.Components.LayoutHelper.createFrame(r35, r36, r37, r38, r39, r40, r41)
             r6.scrollViewLayout = r4
             r0.addView(r1, r4)
@@ -835,15 +836,15 @@ public class TranslateAlert extends Dialog {
             r4 = 1065353216(0x3var_, float:1.0)
             r5 = 87
             r8 = 0
-            r10 = 0
-            r11 = 1117782016(0x42a00000, float:80.0)
+            r11 = 0
+            r12 = 1117782016(0x42a00000, float:80.0)
             r35 = r3
             r36 = r4
             r37 = r5
             r38 = r8
             r39 = r9
-            r40 = r10
-            r41 = r11
+            r40 = r11
+            r41 = r12
             android.widget.FrameLayout$LayoutParams r3 = org.telegram.ui.Components.LayoutHelper.createFrame(r35, r36, r37, r38, r39, r40, r41)
             r0.addView(r1, r3)
             android.widget.TextView r0 = new android.widget.TextView
@@ -871,20 +872,19 @@ public class TranslateAlert extends Dialog {
             r1 = 1096810496(0x41600000, float:14.0)
             r0.setTextSize(r13, r1)
             android.widget.TextView r0 = r6.buttonTextView
-            r1 = 2131625078(0x7f0e0476, float:1.8877354E38)
+            r1 = 2131625162(0x7f0e04ca, float:1.8877524E38)
             java.lang.String r3 = "CloseTranslation"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r3, r1)
             r0.setText(r1)
             android.widget.FrameLayout r0 = new android.widget.FrameLayout
             r0.<init>(r7)
             r6.buttonView = r0
-            r1 = 1082130432(0x40800000, float:4.0)
-            int r1 = org.telegram.messenger.AndroidUtilities.dp(r1)
-            java.lang.String r3 = "featuredStickers_addButton"
-            int r3 = org.telegram.ui.ActionBar.Theme.getColor(r3)
-            java.lang.String r4 = "featuredStickers_addButtonPressed"
-            int r4 = org.telegram.ui.ActionBar.Theme.getColor(r4)
-            android.graphics.drawable.Drawable r1 = org.telegram.ui.ActionBar.Theme.createSimpleSelectorRoundRectDrawable(r1, r3, r4)
+            java.lang.String r1 = "featuredStickers_addButton"
+            int r1 = org.telegram.ui.ActionBar.Theme.getColor(r1)
+            float[] r3 = new float[r13]
+            r4 = 1082130432(0x40800000, float:4.0)
+            r3[r10] = r4
+            android.graphics.drawable.Drawable r1 = org.telegram.ui.ActionBar.Theme.AdaptiveRipple.filledRect((int) r1, (float[]) r3)
             r0.setBackground(r1)
             android.widget.FrameLayout r0 = r6.buttonView
             android.widget.TextView r1 = r6.buttonTextView
@@ -1123,7 +1123,7 @@ public class TranslateAlert extends Dialog {
                             } else {
                                 f = (float) Math.round(this.fromScrollY);
                             }
-                            scrollYTo(f, new TranslateAlert$$ExternalSyntheticLambda4(this));
+                            scrollYTo(f, new TranslateAlert$$ExternalSyntheticLambda7(this));
                         }
                         return true;
                     }
@@ -1145,12 +1145,13 @@ public class TranslateAlert extends Dialog {
 
     /* access modifiers changed from: private */
     public /* synthetic */ void lambda$dispatchTouchEvent$4() {
-        this.contentView.post(new TranslateAlert$$ExternalSyntheticLambda7(this));
+        this.contentView.post(new TranslateAlert$$ExternalSyntheticLambda10(this));
     }
 
     /* access modifiers changed from: protected */
     public void onCreate(Bundle bundle) {
         super.onCreate(bundle);
+        boolean z = false;
         this.contentView.setPadding(0, 0, 0, 0);
         setContentView(this.contentView, new ViewGroup.LayoutParams(-1, -1));
         Window window = getWindow();
@@ -1169,6 +1170,12 @@ public class TranslateAlert extends Dialog {
         attributes.flags |= 256;
         attributes.height = -1;
         window.setAttributes(attributes);
+        int color = Theme.getColor("windowBackgroundWhite");
+        AndroidUtilities.setNavigationBarColor(window, color);
+        if (((double) AndroidUtilities.computePerceivedBrightness(color)) > 0.721d) {
+            z = true;
+        }
+        AndroidUtilities.setLightNavigationBar(window, z);
         this.container.forceLayout();
     }
 
@@ -1302,11 +1309,11 @@ public class TranslateAlert extends Dialog {
         if (this.blockIndex >= this.textBlocks.size()) {
             return false;
         }
-        fetchTranslation(this.textBlocks.get(this.blockIndex), (long) Math.min((this.blockIndex + 1) * 1000, 3500), new TranslateAlert$$ExternalSyntheticLambda10(this), new TranslateAlert$$ExternalSyntheticLambda9(this));
+        fetchTranslation(this.textBlocks.get(this.blockIndex), (long) Math.min((this.blockIndex + 1) * 1000, 3500), new TranslateAlert$$ExternalSyntheticLambda14(this), new TranslateAlert$$ExternalSyntheticLambda13(this));
         return true;
     }
 
-    /* JADX WARNING: type inference failed for: r1v17, types: [android.text.Spannable] */
+    /* JADX WARNING: type inference failed for: r1v15, types: [android.text.Spannable] */
     /* access modifiers changed from: private */
     /* JADX WARNING: Multi-variable type inference failed */
     /* Code decompiled incorrectly, please refer to instructions dump. */
@@ -1389,34 +1396,39 @@ public class TranslateAlert extends Dialog {
         L_0x008e:
             android.text.SpannableStringBuilder r1 = new android.text.SpannableStringBuilder
             android.text.Spannable r2 = r10.allTexts
-            java.lang.String r3 = ""
-            if (r2 != 0) goto L_0x0097
-            r2 = r3
-        L_0x0097:
+            if (r2 != 0) goto L_0x0096
+            java.lang.String r2 = ""
+        L_0x0096:
             r1.<init>(r2)
             int r2 = r10.blockIndex
-            if (r2 != 0) goto L_0x009f
-            goto L_0x00a1
-        L_0x009f:
-            java.lang.String r3 = "\n"
-        L_0x00a1:
-            android.text.SpannableStringBuilder r1 = r1.append(r3)
-            android.text.SpannableStringBuilder r1 = r1.append(r7)
+            if (r2 == 0) goto L_0x00a2
+            java.lang.String r2 = "\n"
+            r1.append(r2)
+        L_0x00a2:
+            r1.append(r7)
             r10.allTexts = r1
             org.telegram.ui.Components.TranslateAlert$TextBlocksLayout r2 = r10.textsView
             r2.setWholeText(r1)
             org.telegram.ui.Components.TranslateAlert$TextBlocksLayout r1 = r10.textsView
             int r2 = r10.blockIndex
             org.telegram.ui.Components.TranslateAlert$LoadingTextView2 r1 = r1.getBlockAt(r2)
-            if (r1 == 0) goto L_0x00c2
-            org.telegram.ui.Components.TranslateAlert$$ExternalSyntheticLambda6 r2 = new org.telegram.ui.Components.TranslateAlert$$ExternalSyntheticLambda6
+            if (r1 == 0) goto L_0x00be
+            org.telegram.ui.Components.TranslateAlert$$ExternalSyntheticLambda9 r2 = new org.telegram.ui.Components.TranslateAlert$$ExternalSyntheticLambda9
             r2.<init>(r10)
             r1.loaded(r7, r2)
-        L_0x00c2:
-            if (r12 == 0) goto L_0x00c9
+        L_0x00be:
+            if (r12 == 0) goto L_0x00c5
             r10.fromLanguage = r12
             r10.updateSourceLanguage()
-        L_0x00c9:
+        L_0x00c5:
+            int r12 = r10.blockIndex
+            if (r12 != 0) goto L_0x00d6
+            boolean r12 = org.telegram.messenger.AndroidUtilities.isAccessibilityScreenReaderEnabled()
+            if (r12 == 0) goto L_0x00d6
+            android.widget.TextView r12 = r10.allTextsView
+            if (r12 == 0) goto L_0x00d6
+            r12.requestFocus()
+        L_0x00d6:
             int r12 = r10.blockIndex
             int r12 = r12 + r0
             r10.blockIndex = r12
@@ -1428,7 +1440,7 @@ public class TranslateAlert extends Dialog {
 
     /* access modifiers changed from: private */
     public /* synthetic */ void lambda$fetchNext$6() {
-        this.contentView.post(new TranslateAlert$$ExternalSyntheticLambda7(this));
+        this.contentView.post(new TranslateAlert$$ExternalSyntheticLambda10(this));
     }
 
     /* access modifiers changed from: private */
@@ -1453,226 +1465,213 @@ public class TranslateAlert extends Dialog {
     }
 
     private void fetchTranslation(CharSequence charSequence, long j, OnTranslationSuccess onTranslationSuccess, OnTranslationFail onTranslationFail) {
-        final CharSequence charSequence2 = charSequence;
-        final long j2 = j;
-        final OnTranslationSuccess onTranslationSuccess2 = onTranslationSuccess;
-        final OnTranslationFail onTranslationFail2 = onTranslationFail;
-        new Thread() {
-            /* JADX WARNING: Missing exception handler attribute for start block: B:43:0x0159 */
-            /* Code decompiled incorrectly, please refer to instructions dump. */
-            public void run() {
-                /*
-                    r11 = this;
-                    java.lang.String r0 = "-"
-                    long r1 = android.os.SystemClock.elapsedRealtime()
-                    r3 = 0
-                    r4 = 0
-                    java.lang.String r5 = "https://translate.googleapis.com/translate_a/single?client=gtx&sl="
-                    java.lang.StringBuilder r6 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x015c }
-                    r6.<init>()     // Catch:{ Exception -> 0x015c }
-                    r6.append(r5)     // Catch:{ Exception -> 0x015c }
-                    org.telegram.ui.Components.TranslateAlert r5 = org.telegram.ui.Components.TranslateAlert.this     // Catch:{ Exception -> 0x015c }
-                    java.lang.String r5 = r5.fromLanguage     // Catch:{ Exception -> 0x015c }
-                    java.lang.String r5 = android.net.Uri.encode(r5)     // Catch:{ Exception -> 0x015c }
-                    r6.append(r5)     // Catch:{ Exception -> 0x015c }
-                    java.lang.String r5 = r6.toString()     // Catch:{ Exception -> 0x015c }
-                    java.lang.StringBuilder r6 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x015c }
-                    r6.<init>()     // Catch:{ Exception -> 0x015c }
-                    r6.append(r5)     // Catch:{ Exception -> 0x015c }
-                    java.lang.String r5 = "&tl="
-                    r6.append(r5)     // Catch:{ Exception -> 0x015c }
-                    java.lang.String r5 = r6.toString()     // Catch:{ Exception -> 0x015c }
-                    java.lang.StringBuilder r6 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x015c }
-                    r6.<init>()     // Catch:{ Exception -> 0x015c }
-                    r6.append(r5)     // Catch:{ Exception -> 0x015c }
-                    org.telegram.ui.Components.TranslateAlert r5 = org.telegram.ui.Components.TranslateAlert.this     // Catch:{ Exception -> 0x015c }
-                    java.lang.String r5 = r5.toLanguage     // Catch:{ Exception -> 0x015c }
-                    java.lang.String r5 = android.net.Uri.encode(r5)     // Catch:{ Exception -> 0x015c }
-                    r6.append(r5)     // Catch:{ Exception -> 0x015c }
-                    java.lang.String r5 = r6.toString()     // Catch:{ Exception -> 0x015c }
-                    java.lang.StringBuilder r6 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x015c }
-                    r6.<init>()     // Catch:{ Exception -> 0x015c }
-                    r6.append(r5)     // Catch:{ Exception -> 0x015c }
-                    java.lang.String r5 = "&dt=t&ie=UTF-8&oe=UTF-8&otf=1&ssel=0&tsel=0&kc=7&dt=at&dt=bd&dt=ex&dt=ld&dt=md&dt=qca&dt=rw&dt=rm&dt=ss&q="
-                    r6.append(r5)     // Catch:{ Exception -> 0x015c }
-                    java.lang.String r5 = r6.toString()     // Catch:{ Exception -> 0x015c }
-                    java.lang.StringBuilder r6 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x015c }
-                    r6.<init>()     // Catch:{ Exception -> 0x015c }
-                    r6.append(r5)     // Catch:{ Exception -> 0x015c }
-                    java.lang.CharSequence r5 = r2     // Catch:{ Exception -> 0x015c }
-                    java.lang.String r5 = r5.toString()     // Catch:{ Exception -> 0x015c }
-                    java.lang.String r5 = android.net.Uri.encode(r5)     // Catch:{ Exception -> 0x015c }
-                    r6.append(r5)     // Catch:{ Exception -> 0x015c }
-                    java.lang.String r5 = r6.toString()     // Catch:{ Exception -> 0x015c }
-                    java.net.URI r6 = new java.net.URI     // Catch:{ Exception -> 0x015c }
-                    r6.<init>(r5)     // Catch:{ Exception -> 0x015c }
-                    java.net.URL r5 = r6.toURL()     // Catch:{ Exception -> 0x015c }
-                    java.net.URLConnection r5 = r5.openConnection()     // Catch:{ Exception -> 0x015c }
-                    java.net.HttpURLConnection r5 = (java.net.HttpURLConnection) r5     // Catch:{ Exception -> 0x015c }
-                    java.lang.String r6 = "GET"
-                    r5.setRequestMethod(r6)     // Catch:{ Exception -> 0x015a }
-                    java.lang.String r6 = "User-Agent"
-                    java.lang.String r7 = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.45 Safari/537.36"
-                    r5.setRequestProperty(r6, r7)     // Catch:{ Exception -> 0x015a }
-                    java.lang.String r6 = "Content-Type"
-                    java.lang.String r7 = "application/json"
-                    r5.setRequestProperty(r6, r7)     // Catch:{ Exception -> 0x015a }
-                    java.lang.StringBuilder r6 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x015a }
-                    r6.<init>()     // Catch:{ Exception -> 0x015a }
-                    java.io.BufferedReader r7 = new java.io.BufferedReader     // Catch:{ Exception -> 0x015a }
-                    java.io.InputStreamReader r8 = new java.io.InputStreamReader     // Catch:{ Exception -> 0x015a }
-                    java.io.InputStream r9 = r5.getInputStream()     // Catch:{ Exception -> 0x015a }
-                    java.lang.String r10 = "UTF-8"
-                    java.nio.charset.Charset r10 = java.nio.charset.Charset.forName(r10)     // Catch:{ Exception -> 0x015a }
-                    r8.<init>(r9, r10)     // Catch:{ Exception -> 0x015a }
-                    r7.<init>(r8)     // Catch:{ Exception -> 0x015a }
-                L_0x00b2:
-                    int r8 = r7.read()     // Catch:{ all -> 0x0155 }
-                    r9 = -1
-                    if (r8 == r9) goto L_0x00be
-                    char r8 = (char) r8     // Catch:{ all -> 0x0155 }
-                    r6.append(r8)     // Catch:{ all -> 0x0155 }
-                    goto L_0x00b2
-                L_0x00be:
-                    r7.close()     // Catch:{ Exception -> 0x015a }
-                    java.lang.String r6 = r6.toString()     // Catch:{ Exception -> 0x015a }
-                    org.json.JSONTokener r7 = new org.json.JSONTokener     // Catch:{ Exception -> 0x015a }
-                    r7.<init>(r6)     // Catch:{ Exception -> 0x015a }
-                    org.json.JSONArray r6 = new org.json.JSONArray     // Catch:{ Exception -> 0x015a }
-                    r6.<init>(r7)     // Catch:{ Exception -> 0x015a }
-                    org.json.JSONArray r7 = r6.getJSONArray(r4)     // Catch:{ Exception -> 0x015a }
-                    r8 = 2
-                    java.lang.String r6 = r6.getString(r8)     // Catch:{ Exception -> 0x00d9 }
-                    goto L_0x00da
-                L_0x00d9:
-                    r6 = r3
-                L_0x00da:
-                    if (r6 == 0) goto L_0x00ea
-                    boolean r8 = r6.contains(r0)     // Catch:{ Exception -> 0x015a }
-                    if (r8 == 0) goto L_0x00ea
-                    int r0 = r6.indexOf(r0)     // Catch:{ Exception -> 0x015a }
-                    java.lang.String r6 = r6.substring(r4, r0)     // Catch:{ Exception -> 0x015a }
-                L_0x00ea:
-                    java.lang.String r0 = ""
-                    r8 = 0
-                L_0x00ed:
-                    int r9 = r7.length()     // Catch:{ Exception -> 0x015a }
-                    if (r8 >= r9) goto L_0x0117
-                    org.json.JSONArray r9 = r7.getJSONArray(r8)     // Catch:{ Exception -> 0x015a }
-                    java.lang.String r9 = r9.getString(r4)     // Catch:{ Exception -> 0x015a }
-                    if (r9 == 0) goto L_0x0114
-                    java.lang.String r10 = "null"
-                    boolean r10 = r9.equals(r10)     // Catch:{ Exception -> 0x015a }
-                    if (r10 != 0) goto L_0x0114
-                    java.lang.StringBuilder r10 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x015a }
-                    r10.<init>()     // Catch:{ Exception -> 0x015a }
-                    r10.append(r0)     // Catch:{ Exception -> 0x015a }
-                    r10.append(r9)     // Catch:{ Exception -> 0x015a }
-                    java.lang.String r0 = r10.toString()     // Catch:{ Exception -> 0x015a }
-                L_0x0114:
-                    int r8 = r8 + 1
-                    goto L_0x00ed
-                L_0x0117:
-                    java.lang.CharSequence r7 = r2     // Catch:{ Exception -> 0x015a }
-                    int r7 = r7.length()     // Catch:{ Exception -> 0x015a }
-                    if (r7 <= 0) goto L_0x013a
-                    java.lang.CharSequence r7 = r2     // Catch:{ Exception -> 0x015a }
-                    char r7 = r7.charAt(r4)     // Catch:{ Exception -> 0x015a }
-                    r8 = 10
-                    if (r7 != r8) goto L_0x013a
-                    java.lang.StringBuilder r7 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x015a }
-                    r7.<init>()     // Catch:{ Exception -> 0x015a }
-                    java.lang.String r8 = "\n"
-                    r7.append(r8)     // Catch:{ Exception -> 0x015a }
-                    r7.append(r0)     // Catch:{ Exception -> 0x015a }
-                    java.lang.String r0 = r7.toString()     // Catch:{ Exception -> 0x015a }
-                L_0x013a:
-                    long r7 = android.os.SystemClock.elapsedRealtime()     // Catch:{ Exception -> 0x015a }
-                    long r7 = r7 - r1
-                    long r1 = r3     // Catch:{ Exception -> 0x015a }
-                    int r9 = (r7 > r1 ? 1 : (r7 == r1 ? 0 : -1))
-                    if (r9 >= 0) goto L_0x0149
-                    long r1 = r1 - r7
-                    java.lang.Thread.sleep(r1)     // Catch:{ Exception -> 0x015a }
-                L_0x0149:
-                    org.telegram.ui.Components.TranslateAlert$OnTranslationSuccess r1 = r5     // Catch:{ Exception -> 0x015a }
-                    org.telegram.ui.Components.TranslateAlert$10$$ExternalSyntheticLambda2 r2 = new org.telegram.ui.Components.TranslateAlert$10$$ExternalSyntheticLambda2     // Catch:{ Exception -> 0x015a }
-                    r2.<init>(r1, r0, r6)     // Catch:{ Exception -> 0x015a }
-                    org.telegram.messenger.AndroidUtilities.runOnUIThread(r2)     // Catch:{ Exception -> 0x015a }
-                    goto L_0x01c2
-                L_0x0155:
-                    r0 = move-exception
-                    r7.close()     // Catch:{ all -> 0x0159 }
-                L_0x0159:
-                    throw r0     // Catch:{ Exception -> 0x015a }
-                L_0x015a:
-                    r0 = move-exception
-                    goto L_0x015e
-                L_0x015c:
-                    r0 = move-exception
-                    r5 = r3
-                L_0x015e:
-                    java.lang.String r1 = "translate"
-                    java.lang.StringBuilder r2 = new java.lang.StringBuilder     // Catch:{ IOException -> 0x018f }
-                    r2.<init>()     // Catch:{ IOException -> 0x018f }
-                    java.lang.String r6 = "failed to translate a text "
-                    r2.append(r6)     // Catch:{ IOException -> 0x018f }
-                    if (r5 == 0) goto L_0x0175
-                    int r6 = r5.getResponseCode()     // Catch:{ IOException -> 0x018f }
-                    java.lang.Integer r6 = java.lang.Integer.valueOf(r6)     // Catch:{ IOException -> 0x018f }
-                    goto L_0x0176
-                L_0x0175:
-                    r6 = r3
-                L_0x0176:
-                    r2.append(r6)     // Catch:{ IOException -> 0x018f }
-                    java.lang.String r6 = " "
-                    r2.append(r6)     // Catch:{ IOException -> 0x018f }
-                    if (r5 == 0) goto L_0x0184
-                    java.lang.String r3 = r5.getResponseMessage()     // Catch:{ IOException -> 0x018f }
-                L_0x0184:
-                    r2.append(r3)     // Catch:{ IOException -> 0x018f }
-                    java.lang.String r2 = r2.toString()     // Catch:{ IOException -> 0x018f }
-                    android.util.Log.e(r1, r2)     // Catch:{ IOException -> 0x018f }
-                    goto L_0x0193
-                L_0x018f:
-                    r1 = move-exception
-                    r1.printStackTrace()
-                L_0x0193:
-                    r0.printStackTrace()
-                    org.telegram.ui.Components.TranslateAlert$OnTranslationFail r0 = r6
-                    if (r0 == 0) goto L_0x01c2
-                    org.telegram.ui.Components.TranslateAlert r0 = org.telegram.ui.Components.TranslateAlert.this
-                    boolean r0 = r0.dismissed
-                    if (r0 != 0) goto L_0x01c2
-                    if (r5 == 0) goto L_0x01ad
-                    int r0 = r5.getResponseCode()     // Catch:{ Exception -> 0x01b8 }
-                    r1 = 429(0x1ad, float:6.01E-43)
-                    if (r0 != r1) goto L_0x01ad
-                    r4 = 1
-                L_0x01ad:
-                    org.telegram.ui.Components.TranslateAlert$OnTranslationFail r0 = r6     // Catch:{ Exception -> 0x01b8 }
-                    org.telegram.ui.Components.TranslateAlert$10$$ExternalSyntheticLambda1 r1 = new org.telegram.ui.Components.TranslateAlert$10$$ExternalSyntheticLambda1     // Catch:{ Exception -> 0x01b8 }
-                    r1.<init>(r0, r4)     // Catch:{ Exception -> 0x01b8 }
-                    org.telegram.messenger.AndroidUtilities.runOnUIThread(r1)     // Catch:{ Exception -> 0x01b8 }
-                    goto L_0x01c2
-                L_0x01b8:
-                    org.telegram.ui.Components.TranslateAlert$OnTranslationFail r0 = r6
-                    org.telegram.ui.Components.TranslateAlert$10$$ExternalSyntheticLambda0 r1 = new org.telegram.ui.Components.TranslateAlert$10$$ExternalSyntheticLambda0
-                    r1.<init>(r0)
-                    org.telegram.messenger.AndroidUtilities.runOnUIThread(r1)
-                L_0x01c2:
-                    return
-                */
-                throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.TranslateAlert.AnonymousClass10.run():void");
-            }
+        if (!translateQueue.isAlive()) {
+            translateQueue.start();
+        }
+        translateQueue.postRunnable(new TranslateAlert$$ExternalSyntheticLambda11(this, charSequence, onTranslationSuccess, j, onTranslationFail));
+    }
 
-            /* access modifiers changed from: private */
-            public static /* synthetic */ void lambda$run$0(OnTranslationSuccess onTranslationSuccess, String str, String str2) {
-                if (onTranslationSuccess != null) {
-                    onTranslationSuccess.run(str, str2);
-                }
-            }
-        }.start();
+    /* access modifiers changed from: private */
+    /* JADX WARNING: Missing exception handler attribute for start block: B:40:0x013a */
+    /* Code decompiled incorrectly, please refer to instructions dump. */
+    public /* synthetic */ void lambda$fetchTranslation$12(java.lang.CharSequence r14, org.telegram.ui.Components.TranslateAlert.OnTranslationSuccess r15, long r16, org.telegram.ui.Components.TranslateAlert.OnTranslationFail r18) {
+        /*
+            r13 = this;
+            r1 = r13
+            r2 = r18
+            java.lang.String r0 = "-"
+            long r3 = android.os.SystemClock.elapsedRealtime()
+            r5 = 0
+            r6 = 0
+            java.lang.String r7 = "https://translate.googleapis.com/translate_a/single?client=gtx&sl="
+            java.lang.StringBuilder r8 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x013e }
+            r8.<init>()     // Catch:{ Exception -> 0x013e }
+            r8.append(r7)     // Catch:{ Exception -> 0x013e }
+            java.lang.String r7 = r1.fromLanguage     // Catch:{ Exception -> 0x013e }
+            java.lang.String r7 = android.net.Uri.encode(r7)     // Catch:{ Exception -> 0x013e }
+            r8.append(r7)     // Catch:{ Exception -> 0x013e }
+            java.lang.String r7 = r8.toString()     // Catch:{ Exception -> 0x013e }
+            java.lang.StringBuilder r8 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x013e }
+            r8.<init>()     // Catch:{ Exception -> 0x013e }
+            r8.append(r7)     // Catch:{ Exception -> 0x013e }
+            java.lang.String r7 = "&tl="
+            r8.append(r7)     // Catch:{ Exception -> 0x013e }
+            java.lang.String r7 = r8.toString()     // Catch:{ Exception -> 0x013e }
+            java.lang.StringBuilder r8 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x013e }
+            r8.<init>()     // Catch:{ Exception -> 0x013e }
+            r8.append(r7)     // Catch:{ Exception -> 0x013e }
+            java.lang.String r7 = r1.toLanguage     // Catch:{ Exception -> 0x013e }
+            java.lang.String r7 = android.net.Uri.encode(r7)     // Catch:{ Exception -> 0x013e }
+            r8.append(r7)     // Catch:{ Exception -> 0x013e }
+            java.lang.String r7 = r8.toString()     // Catch:{ Exception -> 0x013e }
+            java.lang.StringBuilder r8 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x013e }
+            r8.<init>()     // Catch:{ Exception -> 0x013e }
+            r8.append(r7)     // Catch:{ Exception -> 0x013e }
+            java.lang.String r7 = "&dt=t&ie=UTF-8&oe=UTF-8&otf=1&ssel=0&tsel=0&kc=7&dt=at&dt=bd&dt=ex&dt=ld&dt=md&dt=qca&dt=rw&dt=rm&dt=ss&q="
+            r8.append(r7)     // Catch:{ Exception -> 0x013e }
+            java.lang.String r7 = r8.toString()     // Catch:{ Exception -> 0x013e }
+            java.lang.StringBuilder r8 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x013e }
+            r8.<init>()     // Catch:{ Exception -> 0x013e }
+            r8.append(r7)     // Catch:{ Exception -> 0x013e }
+            java.lang.String r7 = r14.toString()     // Catch:{ Exception -> 0x013e }
+            java.lang.String r7 = android.net.Uri.encode(r7)     // Catch:{ Exception -> 0x013e }
+            r8.append(r7)     // Catch:{ Exception -> 0x013e }
+            java.lang.String r7 = r8.toString()     // Catch:{ Exception -> 0x013e }
+            java.net.URI r8 = new java.net.URI     // Catch:{ Exception -> 0x013e }
+            r8.<init>(r7)     // Catch:{ Exception -> 0x013e }
+            java.net.URL r7 = r8.toURL()     // Catch:{ Exception -> 0x013e }
+            java.net.URLConnection r7 = r7.openConnection()     // Catch:{ Exception -> 0x013e }
+            java.net.HttpURLConnection r7 = (java.net.HttpURLConnection) r7     // Catch:{ Exception -> 0x013e }
+            java.lang.String r8 = "GET"
+            r7.setRequestMethod(r8)     // Catch:{ Exception -> 0x013b }
+            java.lang.String r8 = "User-Agent"
+            java.lang.String r9 = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.45 Safari/537.36"
+            r7.setRequestProperty(r8, r9)     // Catch:{ Exception -> 0x013b }
+            java.lang.String r8 = "Content-Type"
+            java.lang.String r9 = "application/json"
+            r7.setRequestProperty(r8, r9)     // Catch:{ Exception -> 0x013b }
+            java.lang.StringBuilder r8 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x013b }
+            r8.<init>()     // Catch:{ Exception -> 0x013b }
+            java.io.BufferedReader r9 = new java.io.BufferedReader     // Catch:{ Exception -> 0x013b }
+            java.io.InputStreamReader r10 = new java.io.InputStreamReader     // Catch:{ Exception -> 0x013b }
+            java.io.InputStream r11 = r7.getInputStream()     // Catch:{ Exception -> 0x013b }
+            java.lang.String r12 = "UTF-8"
+            java.nio.charset.Charset r12 = java.nio.charset.Charset.forName(r12)     // Catch:{ Exception -> 0x013b }
+            r10.<init>(r11, r12)     // Catch:{ Exception -> 0x013b }
+            r9.<init>(r10)     // Catch:{ Exception -> 0x013b }
+        L_0x00ab:
+            int r10 = r9.read()     // Catch:{ all -> 0x0136 }
+            r11 = -1
+            if (r10 == r11) goto L_0x00b7
+            char r10 = (char) r10     // Catch:{ all -> 0x0136 }
+            r8.append(r10)     // Catch:{ all -> 0x0136 }
+            goto L_0x00ab
+        L_0x00b7:
+            r9.close()     // Catch:{ Exception -> 0x013b }
+            java.lang.String r8 = r8.toString()     // Catch:{ Exception -> 0x013b }
+            org.json.JSONTokener r9 = new org.json.JSONTokener     // Catch:{ Exception -> 0x013b }
+            r9.<init>(r8)     // Catch:{ Exception -> 0x013b }
+            org.json.JSONArray r8 = new org.json.JSONArray     // Catch:{ Exception -> 0x013b }
+            r8.<init>(r9)     // Catch:{ Exception -> 0x013b }
+            org.json.JSONArray r9 = r8.getJSONArray(r6)     // Catch:{ Exception -> 0x013b }
+            r10 = 2
+            java.lang.String r8 = r8.getString(r10)     // Catch:{ Exception -> 0x00d2 }
+            goto L_0x00d3
+        L_0x00d2:
+            r8 = r5
+        L_0x00d3:
+            if (r8 == 0) goto L_0x00e3
+            boolean r10 = r8.contains(r0)     // Catch:{ Exception -> 0x013b }
+            if (r10 == 0) goto L_0x00e3
+            int r0 = r8.indexOf(r0)     // Catch:{ Exception -> 0x013b }
+            java.lang.String r8 = r8.substring(r6, r0)     // Catch:{ Exception -> 0x013b }
+        L_0x00e3:
+            java.lang.StringBuilder r0 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x013b }
+            r0.<init>()     // Catch:{ Exception -> 0x013b }
+            r10 = 0
+        L_0x00e9:
+            int r11 = r9.length()     // Catch:{ Exception -> 0x013b }
+            if (r10 >= r11) goto L_0x0107
+            org.json.JSONArray r11 = r9.getJSONArray(r10)     // Catch:{ Exception -> 0x013b }
+            java.lang.String r11 = r11.getString(r6)     // Catch:{ Exception -> 0x013b }
+            if (r11 == 0) goto L_0x0104
+            java.lang.String r12 = "null"
+            boolean r12 = r11.equals(r12)     // Catch:{ Exception -> 0x013b }
+            if (r12 != 0) goto L_0x0104
+            r0.append(r11)     // Catch:{ Exception -> 0x013b }
+        L_0x0104:
+            int r10 = r10 + 1
+            goto L_0x00e9
+        L_0x0107:
+            int r9 = r14.length()     // Catch:{ Exception -> 0x013b }
+            if (r9 <= 0) goto L_0x011b
+            r9 = r14
+            char r9 = r14.charAt(r6)     // Catch:{ Exception -> 0x013b }
+            r10 = 10
+            if (r9 != r10) goto L_0x011b
+            java.lang.String r9 = "\n"
+            r0.insert(r6, r9)     // Catch:{ Exception -> 0x013b }
+        L_0x011b:
+            java.lang.String r0 = r0.toString()     // Catch:{ Exception -> 0x013b }
+            long r9 = android.os.SystemClock.elapsedRealtime()     // Catch:{ Exception -> 0x013b }
+            long r9 = r9 - r3
+            org.telegram.ui.Components.TranslateAlert$$ExternalSyntheticLambda6 r3 = new org.telegram.ui.Components.TranslateAlert$$ExternalSyntheticLambda6     // Catch:{ Exception -> 0x013b }
+            r4 = r15
+            r3.<init>(r15, r0, r8)     // Catch:{ Exception -> 0x013b }
+            r11 = 0
+            long r9 = r16 - r9
+            long r8 = java.lang.Math.max(r11, r9)     // Catch:{ Exception -> 0x013b }
+            org.telegram.messenger.AndroidUtilities.runOnUIThread(r3, r8)     // Catch:{ Exception -> 0x013b }
+            goto L_0x019b
+        L_0x0136:
+            r0 = move-exception
+            r9.close()     // Catch:{ all -> 0x013a }
+        L_0x013a:
+            throw r0     // Catch:{ Exception -> 0x013b }
+        L_0x013b:
+            r0 = move-exception
+            r3 = r0
+            goto L_0x0141
+        L_0x013e:
+            r0 = move-exception
+            r3 = r0
+            r7 = r5
+        L_0x0141:
+            java.lang.String r0 = "translate"
+            java.lang.StringBuilder r4 = new java.lang.StringBuilder     // Catch:{ IOException -> 0x0172 }
+            r4.<init>()     // Catch:{ IOException -> 0x0172 }
+            java.lang.String r8 = "failed to translate a text "
+            r4.append(r8)     // Catch:{ IOException -> 0x0172 }
+            if (r7 == 0) goto L_0x0158
+            int r8 = r7.getResponseCode()     // Catch:{ IOException -> 0x0172 }
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)     // Catch:{ IOException -> 0x0172 }
+            goto L_0x0159
+        L_0x0158:
+            r8 = r5
+        L_0x0159:
+            r4.append(r8)     // Catch:{ IOException -> 0x0172 }
+            java.lang.String r8 = " "
+            r4.append(r8)     // Catch:{ IOException -> 0x0172 }
+            if (r7 == 0) goto L_0x0167
+            java.lang.String r5 = r7.getResponseMessage()     // Catch:{ IOException -> 0x0172 }
+        L_0x0167:
+            r4.append(r5)     // Catch:{ IOException -> 0x0172 }
+            java.lang.String r4 = r4.toString()     // Catch:{ IOException -> 0x0172 }
+            android.util.Log.e(r0, r4)     // Catch:{ IOException -> 0x0172 }
+            goto L_0x0176
+        L_0x0172:
+            r0 = move-exception
+            r0.printStackTrace()
+        L_0x0176:
+            r3.printStackTrace()
+            if (r2 == 0) goto L_0x019b
+            boolean r0 = r1.dismissed
+            if (r0 != 0) goto L_0x019b
+            if (r7 == 0) goto L_0x018a
+            int r0 = r7.getResponseCode()     // Catch:{ Exception -> 0x0193 }
+            r3 = 429(0x1ad, float:6.01E-43)
+            if (r0 != r3) goto L_0x018a
+            r6 = 1
+        L_0x018a:
+            org.telegram.ui.Components.TranslateAlert$$ExternalSyntheticLambda5 r0 = new org.telegram.ui.Components.TranslateAlert$$ExternalSyntheticLambda5     // Catch:{ Exception -> 0x0193 }
+            r0.<init>(r2, r6)     // Catch:{ Exception -> 0x0193 }
+            org.telegram.messenger.AndroidUtilities.runOnUIThread(r0)     // Catch:{ Exception -> 0x0193 }
+            goto L_0x019b
+        L_0x0193:
+            org.telegram.ui.Components.TranslateAlert$$ExternalSyntheticLambda4 r0 = new org.telegram.ui.Components.TranslateAlert$$ExternalSyntheticLambda4
+            r0.<init>(r2)
+            org.telegram.messenger.AndroidUtilities.runOnUIThread(r0)
+        L_0x019b:
+            return
+        */
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.TranslateAlert.lambda$fetchTranslation$12(java.lang.CharSequence, org.telegram.ui.Components.TranslateAlert$OnTranslationSuccess, long, org.telegram.ui.Components.TranslateAlert$OnTranslationFail):void");
+    }
+
+    /* access modifiers changed from: private */
+    public static /* synthetic */ void lambda$fetchTranslation$9(OnTranslationSuccess onTranslationSuccess, String str, String str2) {
+        if (onTranslationSuccess != null) {
+            onTranslationSuccess.run(str, str2);
+        }
     }
 
     private static void translateText(int i, TLRPC$InputPeer tLRPC$InputPeer, int i2, String str, String str2) {
@@ -1687,7 +1686,7 @@ public class TranslateAlert extends Dialog {
         }
         tLRPC$TL_messages_translateText.to_lang = str2;
         try {
-            ConnectionsManager.getInstance(i).sendRequest(tLRPC$TL_messages_translateText, TranslateAlert$$ExternalSyntheticLambda8.INSTANCE);
+            ConnectionsManager.getInstance(i).sendRequest(tLRPC$TL_messages_translateText, TranslateAlert$$ExternalSyntheticLambda12.INSTANCE);
         } catch (Exception e) {
             FileLog.e((Throwable) e);
         }
@@ -1745,6 +1744,7 @@ public class TranslateAlert extends Dialog {
 
         public LoadingTextView2 addBlock(CharSequence charSequence) {
             LoadingTextView2 loadingTextView2 = new LoadingTextView2(getContext(), charSequence, getBlocksCount() > 0, this.fontSize, this.textColor);
+            loadingTextView2.setFocusable(false);
             addView(loadingTextView2);
             TextView textView = this.wholeTextView;
             if (textView != null) {
@@ -1890,6 +1890,8 @@ public class TranslateAlert extends Dialog {
             r7.setMaxLines(1);
             r7.setSingleLine(true);
             r7.setEllipsize((TextUtils.TruncateAt) null);
+            r7.setFocusable(false);
+            r7.setImportantForAccessibility(2);
             addView(r7);
             AnonymousClass2 r72 = new TextView(this, context2) {
                 /* access modifiers changed from: protected */
@@ -1904,6 +1906,7 @@ public class TranslateAlert extends Dialog {
             r72.setMaxLines(1);
             r72.setSingleLine(true);
             r72.setEllipsize((TextUtils.TruncateAt) null);
+            r72.setFocusable(true);
             addView(r72);
             int color = Theme.getColor("dialogBackground");
             paint.setShader(new LinearGradient(0.0f, 0.0f, dp, 0.0f, new int[]{color, Theme.getColor("dialogBackgroundGray"), color}, new float[]{0.0f, 0.67f, 1.0f}, Shader.TileMode.REPEAT));
@@ -2065,24 +2068,23 @@ public class TranslateAlert extends Dialog {
     public static class LoadingTextView2 extends ViewGroup {
         public static final int paddingHorizontal = AndroidUtilities.dp(6.0f);
         public static final int paddingVertical = AndroidUtilities.dp(1.5f);
-        /* access modifiers changed from: private */
-        public RectF fetchedPathRect = new RectF();
+        private RectF fetchedPathRect = new RectF();
         private final TextView fromTextView;
         private final float gradientWidth;
-        private final Path inPath;
+        private final Path inPath = new Path();
         int lastWidth = 0;
         public boolean loaded = false;
         private ValueAnimator loadedAnimator = null;
         private final ValueAnimator loadingAnimator;
         private final Paint loadingPaint;
-        private final Path loadingPath;
+        private final Path loadingPath = new Path();
         private float loadingT = 0.0f;
-        private final RectF rect;
+        private final RectF rect = new RectF();
         private float scaleT = 1.0f;
-        private final Path shadePath;
+        private final Path shadePath = new Path();
         public boolean showLoadingText = true;
         private final long start = SystemClock.elapsedRealtime();
-        private final Path tempPath;
+        private final Path tempPath = new Path();
         private final TextView toTextView;
 
         /* access modifiers changed from: protected */
@@ -2096,29 +2098,6 @@ public class TranslateAlert extends Dialog {
             Context context2 = context;
             boolean z2 = z;
             int i3 = i2;
-            new Path() {
-                private boolean got = false;
-
-                public void reset() {
-                    super.reset();
-                    this.got = false;
-                }
-
-                public void addRect(float f, float f2, float f3, float f4, Path.Direction direction) {
-                    if (!this.got) {
-                        RectF access$2500 = LoadingTextView2.this.fetchedPathRect;
-                        int i = LoadingTextView2.paddingHorizontal;
-                        int i2 = LoadingTextView2.paddingVertical;
-                        access$2500.set(f - ((float) i), f2 - ((float) i2), f3 + ((float) i), f4 + ((float) i2));
-                        this.got = true;
-                    }
-                }
-            };
-            this.rect = new RectF();
-            this.inPath = new Path();
-            this.tempPath = new Path();
-            this.loadingPath = new Path();
-            this.shadePath = new Path();
             Paint paint = new Paint();
             this.loadingPaint = paint;
             float dp = (float) AndroidUtilities.dp(350.0f);
@@ -2128,6 +2107,7 @@ public class TranslateAlert extends Dialog {
             setPadding(i4, i5, i4, i5);
             setClipChildren(false);
             setWillNotDraw(false);
+            setFocusable(false);
             AnonymousClass1 r9 = new TextView(this, context2) {
                 /* access modifiers changed from: protected */
                 public void onMeasure(int i, int i2) {
@@ -2143,6 +2123,8 @@ public class TranslateAlert extends Dialog {
             r9.setMaxLines(0);
             r9.setSingleLine(false);
             r9.setEllipsize((TextUtils.TruncateAt) null);
+            r9.setFocusable(false);
+            r9.setImportantForAccessibility(2);
             addView(r9);
             AnonymousClass2 r92 = new TextView(this, context2) {
                 /* access modifiers changed from: protected */
@@ -2157,6 +2139,8 @@ public class TranslateAlert extends Dialog {
             r92.setMaxLines(0);
             r92.setSingleLine(false);
             r92.setEllipsize((TextUtils.TruncateAt) null);
+            r92.setFocusable(false);
+            r92.setImportantForAccessibility(2);
             addView(r92);
             int color = Theme.getColor("dialogBackground");
             paint.setShader(new LinearGradient(0.0f, 0.0f, dp, 0.0f, new int[]{color, Theme.getColor("dialogBackgroundGray"), color}, new float[]{0.0f, 0.67f, 1.0f}, Shader.TileMode.REPEAT));

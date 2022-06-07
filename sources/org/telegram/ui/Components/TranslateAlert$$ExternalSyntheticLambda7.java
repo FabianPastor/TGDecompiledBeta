@@ -8,6 +8,6 @@ public final /* synthetic */ class TranslateAlert$$ExternalSyntheticLambda7 impl
     }
 
     public final void run() {
-        boolean unused = this.f$0.checkForNextLoading();
+        this.f$0.lambda$dispatchTouchEvent$4();
     }
 }

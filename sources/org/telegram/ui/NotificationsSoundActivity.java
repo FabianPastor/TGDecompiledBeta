@@ -75,6 +75,7 @@ public class NotificationsSoundActivity extends BaseFragment implements ChatAtta
     int dividerRow2;
     Ringtone lastPlayedRingtone;
     RecyclerListView listView;
+    Theme.ResourcesProvider resourcesProvider;
     int rowCount;
     Tone selectedTone;
     boolean selectedToneChanged;
@@ -107,8 +108,9 @@ public class NotificationsSoundActivity extends BaseFragment implements ChatAtta
         ChatAttachAlertDocumentLayout.DocumentSelectActivityDelegate.CC.$default$startMusicSelectActivity(this);
     }
 
-    public NotificationsSoundActivity(Bundle bundle) {
+    public NotificationsSoundActivity(Bundle bundle, Theme.ResourcesProvider resourcesProvider2) {
         super(bundle);
+        this.resourcesProvider = resourcesProvider2;
     }
 
     public boolean onFragmentCreate() {
@@ -150,8 +152,14 @@ public class NotificationsSoundActivity extends BaseFragment implements ChatAtta
         return super.onFragmentCreate();
     }
 
+    public Theme.ResourcesProvider getResourceProvider() {
+        return this.resourcesProvider;
+    }
+
     public View createView(Context context) {
         final Context context2 = context;
+        this.actionBar.setItemsBackgroundColor(Theme.getColor("avatar_actionBarSelectorBlue", this.resourcesProvider), false);
+        this.actionBar.setItemsColor(Theme.getColor("actionBarDefaultIcon", this.resourcesProvider), false);
         this.actionBar.setBackButtonDrawable(new BackDrawable(false));
         this.actionBar.setAllowOverlayTitle(false);
         this.actionBar.setActionBarMenuOnItemClick(new ActionBar.ActionBarMenuOnItemClick() {
@@ -161,49 +169,49 @@ public class NotificationsSoundActivity extends BaseFragment implements ChatAtta
 
             public void onItemClick(int i) {
                 Class<LaunchActivity> cls = LaunchActivity.class;
-                if (i == -1) {
-                    if (NotificationsSoundActivity.this.actionBar.isActionModeShowed()) {
-                        NotificationsSoundActivity.this.hideActionMode();
-                    } else {
-                        NotificationsSoundActivity.this.finishFragment();
-                    }
-                } else if (i == 1) {
-                    AlertDialog.Builder builder = new AlertDialog.Builder((Context) NotificationsSoundActivity.this.getParentActivity());
-                    builder.setTitle(LocaleController.formatPluralString("DeleteTones", NotificationsSoundActivity.this.selectedTones.size()));
-                    builder.setMessage(AndroidUtilities.replaceTags(LocaleController.formatPluralString("DeleteTonesMessage", NotificationsSoundActivity.this.selectedTones.size())));
-                    builder.setNegativeButton(LocaleController.getString("Cancel", NUM), NotificationsSoundActivity$1$$ExternalSyntheticLambda1.INSTANCE);
-                    builder.setPositiveButton(LocaleController.getString("Delete", NUM), new NotificationsSoundActivity$1$$ExternalSyntheticLambda0(this));
-                    TextView textView = (TextView) builder.show().getButton(-1);
-                    if (textView != null) {
-                        textView.setTextColor(Theme.getColor("dialogTextRed2"));
-                    }
-                } else if (i == 2) {
-                    if (NotificationsSoundActivity.this.selectedTones.size() == 1) {
-                        Intent intent = new Intent(context2, cls);
-                        intent.setAction("android.intent.action.SEND");
-                        Uri uriForShare = NotificationsSoundActivity.this.selectedTones.valueAt(0).getUriForShare(NotificationsSoundActivity.this.currentAccount);
-                        if (uriForShare != null) {
-                            intent.putExtra("android.intent.extra.STREAM", uriForShare);
-                            context2.startActivity(intent);
+                if (i != -1) {
+                    if (i == 1) {
+                        AlertDialog.Builder builder = new AlertDialog.Builder(NotificationsSoundActivity.this.getParentActivity(), NotificationsSoundActivity.this.resourcesProvider);
+                        builder.setTitle(LocaleController.formatPluralString("DeleteTones", NotificationsSoundActivity.this.selectedTones.size(), new Object[0]));
+                        builder.setMessage(AndroidUtilities.replaceTags(LocaleController.formatPluralString("DeleteTonesMessage", NotificationsSoundActivity.this.selectedTones.size(), new Object[0])));
+                        builder.setNegativeButton(LocaleController.getString("Cancel", NUM), NotificationsSoundActivity$1$$ExternalSyntheticLambda1.INSTANCE);
+                        builder.setPositiveButton(LocaleController.getString("Delete", NUM), new NotificationsSoundActivity$1$$ExternalSyntheticLambda0(this));
+                        TextView textView = (TextView) builder.show().getButton(-1);
+                        if (textView != null) {
+                            textView.setTextColor(Theme.getColor("dialogTextRed2", NotificationsSoundActivity.this.resourcesProvider));
                         }
-                    } else {
-                        Intent intent2 = new Intent(context2, cls);
-                        intent2.setAction("android.intent.action.SEND_MULTIPLE");
-                        ArrayList arrayList = new ArrayList();
-                        for (int i2 = 0; i2 < NotificationsSoundActivity.this.selectedTones.size(); i2++) {
-                            Uri uriForShare2 = NotificationsSoundActivity.this.selectedTones.valueAt(i2).getUriForShare(NotificationsSoundActivity.this.currentAccount);
-                            if (uriForShare2 != null) {
-                                arrayList.add(uriForShare2);
+                    } else if (i == 2) {
+                        if (NotificationsSoundActivity.this.selectedTones.size() == 1) {
+                            Intent intent = new Intent(context2, cls);
+                            intent.setAction("android.intent.action.SEND");
+                            Uri uriForShare = NotificationsSoundActivity.this.selectedTones.valueAt(0).getUriForShare(NotificationsSoundActivity.this.currentAccount);
+                            if (uriForShare != null) {
+                                intent.putExtra("android.intent.extra.STREAM", uriForShare);
+                                context2.startActivity(intent);
+                            }
+                        } else {
+                            Intent intent2 = new Intent(context2, cls);
+                            intent2.setAction("android.intent.action.SEND_MULTIPLE");
+                            ArrayList arrayList = new ArrayList();
+                            for (int i2 = 0; i2 < NotificationsSoundActivity.this.selectedTones.size(); i2++) {
+                                Uri uriForShare2 = NotificationsSoundActivity.this.selectedTones.valueAt(i2).getUriForShare(NotificationsSoundActivity.this.currentAccount);
+                                if (uriForShare2 != null) {
+                                    arrayList.add(uriForShare2);
+                                }
+                            }
+                            if (!arrayList.isEmpty()) {
+                                intent2.putParcelableArrayListExtra("android.intent.extra.STREAM", arrayList);
+                                context2.startActivity(intent2);
                             }
                         }
-                        if (!arrayList.isEmpty()) {
-                            intent2.putParcelableArrayListExtra("android.intent.extra.STREAM", arrayList);
-                            context2.startActivity(intent2);
-                        }
+                        NotificationsSoundActivity.this.hideActionMode();
+                        NotificationsSoundActivity.this.updateRows();
+                        NotificationsSoundActivity.this.adapter.notifyDataSetChanged();
                     }
+                } else if (NotificationsSoundActivity.this.actionBar.isActionModeShowed()) {
                     NotificationsSoundActivity.this.hideActionMode();
-                    NotificationsSoundActivity.this.updateRows();
-                    NotificationsSoundActivity.this.adapter.notifyDataSetChanged();
+                } else {
+                    NotificationsSoundActivity.this.finishFragment();
                 }
             }
 
@@ -267,7 +275,7 @@ public class NotificationsSoundActivity extends BaseFragment implements ChatAtta
                 this.actionBar.setTitle(LocaleController.getString("NotificationsSoundChannels", NUM));
             }
         } else {
-            ChatAvatarContainer chatAvatarContainer = new ChatAvatarContainer(context2, (ChatActivity) null, false);
+            ChatAvatarContainer chatAvatarContainer = new ChatAvatarContainer(context2, (ChatActivity) null, false, this.resourcesProvider);
             this.avatarContainer = chatAvatarContainer;
             chatAvatarContainer.setOccupyStatusBar(!AndroidUtilities.isTablet());
             this.actionBar.addView(this.avatarContainer, 0, LayoutHelper.createFrame(-2, -1.0f, 51, !this.inPreviewMode ? 56.0f : 0.0f, 0.0f, 40.0f, 0.0f));
@@ -289,15 +297,15 @@ public class NotificationsSoundActivity extends BaseFragment implements ChatAtta
         this.selectedTonesCountTextView = numberTextView;
         numberTextView.setTextSize(18);
         this.selectedTonesCountTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
-        this.selectedTonesCountTextView.setTextColor(Theme.getColor("actionBarActionModeDefaultIcon"));
+        this.selectedTonesCountTextView.setTextColor(Theme.getColor("actionBarActionModeDefaultIcon", this.resourcesProvider));
         createActionMode.addView(this.selectedTonesCountTextView, LayoutHelper.createLinear(0, -1, 1.0f, 72, 0, 0, 0));
         this.selectedTonesCountTextView.setOnTouchListener(NotificationsSoundActivity$$ExternalSyntheticLambda0.INSTANCE);
-        createActionMode.addItemWithWidth(2, NUM, AndroidUtilities.dp(54.0f), LocaleController.getString("ShareFile", NUM));
-        createActionMode.addItemWithWidth(1, NUM, AndroidUtilities.dp(54.0f), LocaleController.getString("Delete", NUM));
+        createActionMode.addItemWithWidth(2, NUM, AndroidUtilities.dp(54.0f), (CharSequence) LocaleController.getString("ShareFile", NUM));
+        createActionMode.addItemWithWidth(1, NUM, AndroidUtilities.dp(54.0f), (CharSequence) LocaleController.getString("Delete", NUM));
         FrameLayout frameLayout = new FrameLayout(context2);
         this.fragmentView = frameLayout;
         FrameLayout frameLayout2 = frameLayout;
-        frameLayout2.setBackgroundColor(Theme.getColor("windowBackgroundGray"));
+        frameLayout2.setBackgroundColor(Theme.getColor("windowBackgroundGray", this.resourcesProvider));
         RecyclerListView recyclerListView = new RecyclerListView(context2);
         this.listView = recyclerListView;
         frameLayout2.addView(recyclerListView, LayoutHelper.createFrame(-1, -1.0f));
@@ -316,116 +324,127 @@ public class NotificationsSoundActivity extends BaseFragment implements ChatAtta
     }
 
     /* access modifiers changed from: private */
-    /* JADX WARNING: Code restructure failed: missing block: B:25:0x008b, code lost:
-        if (r9.exists() != false) goto L_0x008f;
-     */
+    /* JADX WARNING: Removed duplicated region for block: B:31:0x0098 A[Catch:{ Exception -> 0x00d1 }] */
+    /* JADX WARNING: Removed duplicated region for block: B:35:0x00ac A[Catch:{ Exception -> 0x00d1 }] */
+    /* JADX WARNING: Removed duplicated region for block: B:36:0x00c5 A[Catch:{ Exception -> 0x00d1 }] */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    public /* synthetic */ void lambda$createView$1(android.content.Context r7, android.view.View r8, int r9) {
+    public /* synthetic */ void lambda$createView$1(android.content.Context r8, android.view.View r9, int r10) {
         /*
-            r6 = this;
-            int r0 = r6.uploadRow
-            r1 = 0
-            if (r9 != r0) goto L_0x0019
-            org.telegram.ui.Components.ChatAttachAlert r9 = new org.telegram.ui.Components.ChatAttachAlert
-            r9.<init>(r7, r6, r1, r1)
-            r6.chatAttachAlert = r9
-            r9.setSoundPicker()
-            org.telegram.ui.Components.ChatAttachAlert r9 = r6.chatAttachAlert
-            r9.init()
-            org.telegram.ui.Components.ChatAttachAlert r9 = r6.chatAttachAlert
-            r9.show()
-        L_0x0019:
-            boolean r9 = r8 instanceof org.telegram.ui.NotificationsSoundActivity.ToneCell
-            if (r9 == 0) goto L_0x00dd
-            org.telegram.ui.NotificationsSoundActivity$ToneCell r8 = (org.telegram.ui.NotificationsSoundActivity.ToneCell) r8
-            org.telegram.ui.ActionBar.ActionBar r9 = r6.actionBar
-            boolean r9 = r9.isActionModeShowed()
-            if (r9 != 0) goto L_0x00d8
-            org.telegram.ui.NotificationsSoundActivity$Tone r9 = r8.tone
-            if (r9 != 0) goto L_0x002d
-            goto L_0x00d8
-        L_0x002d:
-            android.media.Ringtone r9 = r6.lastPlayedRingtone
-            if (r9 == 0) goto L_0x0034
-            r9.stop()
-        L_0x0034:
-            org.telegram.ui.NotificationsSoundActivity$Tone r9 = r8.tone
-            boolean r0 = r9.isSystemDefault
-            r2 = 0
+            r7 = this;
+            int r0 = r7.uploadRow
+            if (r10 != r0) goto L_0x001f
+            org.telegram.ui.Components.ChatAttachAlert r10 = new org.telegram.ui.Components.ChatAttachAlert
+            r4 = 0
+            r5 = 0
+            org.telegram.ui.ActionBar.Theme$ResourcesProvider r6 = r7.resourcesProvider
+            r1 = r10
+            r2 = r8
+            r3 = r7
+            r1.<init>(r2, r3, r4, r5, r6)
+            r7.chatAttachAlert = r10
+            r10.setSoundPicker()
+            org.telegram.ui.Components.ChatAttachAlert r10 = r7.chatAttachAlert
+            r10.init()
+            org.telegram.ui.Components.ChatAttachAlert r10 = r7.chatAttachAlert
+            r10.show()
+        L_0x001f:
+            boolean r10 = r9 instanceof org.telegram.ui.NotificationsSoundActivity.ToneCell
+            if (r10 == 0) goto L_0x00ed
+            org.telegram.ui.NotificationsSoundActivity$ToneCell r9 = (org.telegram.ui.NotificationsSoundActivity.ToneCell) r9
+            org.telegram.ui.ActionBar.ActionBar r10 = r7.actionBar
+            boolean r10 = r10.isActionModeShowed()
+            if (r10 != 0) goto L_0x00e8
+            org.telegram.ui.NotificationsSoundActivity$Tone r10 = r9.tone
+            if (r10 != 0) goto L_0x0033
+            goto L_0x00e8
+        L_0x0033:
+            android.media.Ringtone r10 = r7.lastPlayedRingtone
+            if (r10 == 0) goto L_0x003a
+            r10.stop()
+        L_0x003a:
+            r10 = 0
+            r0 = 0
+            org.telegram.ui.NotificationsSoundActivity$Tone r1 = r9.tone     // Catch:{ Exception -> 0x00d1 }
+            boolean r2 = r1.isSystemDefault     // Catch:{ Exception -> 0x00d1 }
             r3 = 2
             r4 = 4
-            if (r0 == 0) goto L_0x0053
-            android.content.Context r7 = r7.getApplicationContext()
-            android.net.Uri r9 = android.media.RingtoneManager.getDefaultUri(r3)
-            android.media.Ringtone r7 = android.media.RingtoneManager.getRingtone(r7, r9)
-            r7.setStreamType(r4)
-            r6.lastPlayedRingtone = r7
-            r7.play()
-            goto L_0x00c5
-        L_0x0053:
-            java.lang.String r0 = r9.uri
-            if (r0 == 0) goto L_0x0074
-            boolean r5 = r9.fromServer
-            if (r5 != 0) goto L_0x0074
-            android.content.Context r7 = r7.getApplicationContext()
-            org.telegram.ui.NotificationsSoundActivity$Tone r9 = r8.tone
-            java.lang.String r9 = r9.uri
-            android.net.Uri r9 = android.net.Uri.parse(r9)
-            android.media.Ringtone r7 = android.media.RingtoneManager.getRingtone(r7, r9)
-            r7.setStreamType(r4)
-            r6.lastPlayedRingtone = r7
-            r7.play()
-            goto L_0x00c5
-        L_0x0074:
-            boolean r9 = r9.fromServer
-            if (r9 == 0) goto L_0x00c5
-            boolean r9 = android.text.TextUtils.isEmpty(r0)
-            if (r9 != 0) goto L_0x008e
-            java.io.File r9 = new java.io.File
-            org.telegram.ui.NotificationsSoundActivity$Tone r0 = r8.tone
-            java.lang.String r0 = r0.uri
-            r9.<init>(r0)
-            boolean r0 = r9.exists()
-            if (r0 == 0) goto L_0x008e
-            goto L_0x008f
-        L_0x008e:
-            r9 = r2
-        L_0x008f:
-            if (r9 != 0) goto L_0x0099
-            org.telegram.ui.NotificationsSoundActivity$Tone r9 = r8.tone
-            org.telegram.tgnet.TLRPC$Document r9 = r9.document
-            java.io.File r9 = org.telegram.messenger.FileLoader.getPathToAttach(r9)
-        L_0x0099:
-            if (r9 == 0) goto L_0x00ba
-            boolean r0 = r9.exists()
-            if (r0 == 0) goto L_0x00ba
-            android.content.Context r7 = r7.getApplicationContext()
-            java.lang.String r9 = r9.toString()
-            android.net.Uri r9 = android.net.Uri.parse(r9)
-            android.media.Ringtone r7 = android.media.RingtoneManager.getRingtone(r7, r9)
-            r7.setStreamType(r4)
-            r6.lastPlayedRingtone = r7
-            r7.play()
-            goto L_0x00c5
-        L_0x00ba:
-            org.telegram.messenger.FileLoader r7 = r6.getFileLoader()
-            org.telegram.ui.NotificationsSoundActivity$Tone r9 = r8.tone
-            org.telegram.tgnet.TLRPC$Document r9 = r9.document
-            r7.loadFile(r9, r9, r3, r1)
+            if (r2 == 0) goto L_0x005a
+            android.content.Context r8 = r8.getApplicationContext()     // Catch:{ Exception -> 0x00d1 }
+            android.net.Uri r1 = android.media.RingtoneManager.getDefaultUri(r3)     // Catch:{ Exception -> 0x00d1 }
+            android.media.Ringtone r8 = android.media.RingtoneManager.getRingtone(r8, r1)     // Catch:{ Exception -> 0x00d1 }
+            r8.setStreamType(r4)     // Catch:{ Exception -> 0x00d1 }
+            r7.lastPlayedRingtone = r8     // Catch:{ Exception -> 0x00d1 }
+            r8.play()     // Catch:{ Exception -> 0x00d1 }
+            goto L_0x00d5
+        L_0x005a:
+            java.lang.String r2 = r1.uri     // Catch:{ Exception -> 0x00d1 }
+            if (r2 == 0) goto L_0x007b
+            boolean r5 = r1.fromServer     // Catch:{ Exception -> 0x00d1 }
+            if (r5 != 0) goto L_0x007b
+            android.content.Context r8 = r8.getApplicationContext()     // Catch:{ Exception -> 0x00d1 }
+            org.telegram.ui.NotificationsSoundActivity$Tone r1 = r9.tone     // Catch:{ Exception -> 0x00d1 }
+            java.lang.String r1 = r1.uri     // Catch:{ Exception -> 0x00d1 }
+            android.net.Uri r1 = android.net.Uri.parse(r1)     // Catch:{ Exception -> 0x00d1 }
+            android.media.Ringtone r8 = android.media.RingtoneManager.getRingtone(r8, r1)     // Catch:{ Exception -> 0x00d1 }
+            r8.setStreamType(r4)     // Catch:{ Exception -> 0x00d1 }
+            r7.lastPlayedRingtone = r8     // Catch:{ Exception -> 0x00d1 }
+            r8.play()     // Catch:{ Exception -> 0x00d1 }
+            goto L_0x00d5
+        L_0x007b:
+            boolean r1 = r1.fromServer     // Catch:{ Exception -> 0x00d1 }
+            if (r1 == 0) goto L_0x00d5
+            boolean r1 = android.text.TextUtils.isEmpty(r2)     // Catch:{ Exception -> 0x00d1 }
+            if (r1 != 0) goto L_0x0095
+            java.io.File r1 = new java.io.File     // Catch:{ Exception -> 0x00d1 }
+            org.telegram.ui.NotificationsSoundActivity$Tone r2 = r9.tone     // Catch:{ Exception -> 0x00d1 }
+            java.lang.String r2 = r2.uri     // Catch:{ Exception -> 0x00d1 }
+            r1.<init>(r2)     // Catch:{ Exception -> 0x00d1 }
+            boolean r2 = r1.exists()     // Catch:{ Exception -> 0x00d1 }
+            if (r2 == 0) goto L_0x0095
+            goto L_0x0096
+        L_0x0095:
+            r1 = r0
+        L_0x0096:
+            if (r1 != 0) goto L_0x00a4
+            org.telegram.messenger.FileLoader r1 = r7.getFileLoader()     // Catch:{ Exception -> 0x00d1 }
+            org.telegram.ui.NotificationsSoundActivity$Tone r2 = r9.tone     // Catch:{ Exception -> 0x00d1 }
+            org.telegram.tgnet.TLRPC$Document r2 = r2.document     // Catch:{ Exception -> 0x00d1 }
+            java.io.File r1 = r1.getPathToAttach(r2)     // Catch:{ Exception -> 0x00d1 }
+        L_0x00a4:
+            if (r1 == 0) goto L_0x00c5
+            boolean r2 = r1.exists()     // Catch:{ Exception -> 0x00d1 }
+            if (r2 == 0) goto L_0x00c5
+            android.content.Context r8 = r8.getApplicationContext()     // Catch:{ Exception -> 0x00d1 }
+            java.lang.String r1 = r1.toString()     // Catch:{ Exception -> 0x00d1 }
+            android.net.Uri r1 = android.net.Uri.parse(r1)     // Catch:{ Exception -> 0x00d1 }
+            android.media.Ringtone r8 = android.media.RingtoneManager.getRingtone(r8, r1)     // Catch:{ Exception -> 0x00d1 }
+            r8.setStreamType(r4)     // Catch:{ Exception -> 0x00d1 }
+            r7.lastPlayedRingtone = r8     // Catch:{ Exception -> 0x00d1 }
+            r8.play()     // Catch:{ Exception -> 0x00d1 }
+            goto L_0x00d5
         L_0x00c5:
-            r6.startSelectedTone = r2
-            org.telegram.ui.NotificationsSoundActivity$Tone r7 = r8.tone
-            r6.selectedTone = r7
-            r7 = 1
-            r6.selectedToneChanged = r7
-            org.telegram.ui.NotificationsSoundActivity$Adapter r7 = r6.adapter
-            int r8 = r7.getItemCount()
-            r7.notifyItemRangeChanged(r1, r8)
-            goto L_0x00dd
-        L_0x00d8:
-            org.telegram.ui.NotificationsSoundActivity$Tone r7 = r8.tone
-            r6.checkSelection(r7)
-        L_0x00dd:
+            org.telegram.messenger.FileLoader r8 = r7.getFileLoader()     // Catch:{ Exception -> 0x00d1 }
+            org.telegram.ui.NotificationsSoundActivity$Tone r1 = r9.tone     // Catch:{ Exception -> 0x00d1 }
+            org.telegram.tgnet.TLRPC$Document r1 = r1.document     // Catch:{ Exception -> 0x00d1 }
+            r8.loadFile(r1, r1, r3, r10)     // Catch:{ Exception -> 0x00d1 }
+            goto L_0x00d5
+        L_0x00d1:
+            r8 = move-exception
+            org.telegram.messenger.FileLog.e((java.lang.Throwable) r8)
+        L_0x00d5:
+            r7.startSelectedTone = r0
+            org.telegram.ui.NotificationsSoundActivity$Tone r8 = r9.tone
+            r7.selectedTone = r8
+            r8 = 1
+            r7.selectedToneChanged = r8
+            org.telegram.ui.NotificationsSoundActivity$Adapter r8 = r7.adapter
+            int r9 = r8.getItemCount()
+            r8.notifyItemRangeChanged(r10, r9)
+            goto L_0x00ed
+        L_0x00e8:
+            org.telegram.ui.NotificationsSoundActivity$Tone r8 = r9.tone
+            r7.checkSelection(r8)
+        L_0x00ed:
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.NotificationsSoundActivity.lambda$createView$1(android.content.Context, android.view.View, int):void");
@@ -651,34 +670,48 @@ public class NotificationsSoundActivity extends BaseFragment implements ChatAtta
                 r2 = this;
                 android.content.Context r3 = r3.getContext()
                 java.lang.String r0 = "windowBackgroundWhite"
-                if (r4 == 0) goto L_0x0032
+                if (r4 == 0) goto L_0x0046
                 r1 = 2
-                if (r4 == r1) goto L_0x0021
+                if (r4 == r1) goto L_0x002d
                 r1 = 3
-                if (r4 == r1) goto L_0x001b
+                if (r4 == r1) goto L_0x0023
                 org.telegram.ui.Cells.HeaderCell r4 = new org.telegram.ui.Cells.HeaderCell
-                r4.<init>(r3)
-                int r3 = org.telegram.ui.ActionBar.Theme.getColor(r0)
+                org.telegram.ui.NotificationsSoundActivity r1 = org.telegram.ui.NotificationsSoundActivity.this
+                org.telegram.ui.ActionBar.Theme$ResourcesProvider r1 = r1.resourcesProvider
+                r4.<init>((android.content.Context) r3, (org.telegram.ui.ActionBar.Theme.ResourcesProvider) r1)
+                org.telegram.ui.NotificationsSoundActivity r3 = org.telegram.ui.NotificationsSoundActivity.this
+                org.telegram.ui.ActionBar.Theme$ResourcesProvider r3 = r3.resourcesProvider
+                int r3 = org.telegram.ui.ActionBar.Theme.getColor((java.lang.String) r0, (org.telegram.ui.ActionBar.Theme.ResourcesProvider) r3)
                 r4.setBackgroundColor(r3)
-                goto L_0x003e
-            L_0x001b:
+                goto L_0x005a
+            L_0x0023:
                 org.telegram.ui.Cells.ShadowSectionCell r4 = new org.telegram.ui.Cells.ShadowSectionCell
-                r4.<init>(r3)
-                goto L_0x003e
-            L_0x0021:
+                org.telegram.ui.NotificationsSoundActivity r0 = org.telegram.ui.NotificationsSoundActivity.this
+                org.telegram.ui.ActionBar.Theme$ResourcesProvider r0 = r0.resourcesProvider
+                r4.<init>((android.content.Context) r3, (org.telegram.ui.ActionBar.Theme.ResourcesProvider) r0)
+                goto L_0x005a
+            L_0x002d:
                 org.telegram.ui.Cells.CreationTextCell r4 = new org.telegram.ui.Cells.CreationTextCell
-                r4.<init>(r3)
+                org.telegram.ui.NotificationsSoundActivity r1 = org.telegram.ui.NotificationsSoundActivity.this
+                org.telegram.ui.ActionBar.Theme$ResourcesProvider r1 = r1.resourcesProvider
+                r4.<init>(r3, r1)
                 r3 = 61
                 r4.startPadding = r3
-                int r3 = org.telegram.ui.ActionBar.Theme.getColor(r0)
+                org.telegram.ui.NotificationsSoundActivity r3 = org.telegram.ui.NotificationsSoundActivity.this
+                org.telegram.ui.ActionBar.Theme$ResourcesProvider r3 = r3.resourcesProvider
+                int r3 = org.telegram.ui.ActionBar.Theme.getColor((java.lang.String) r0, (org.telegram.ui.ActionBar.Theme.ResourcesProvider) r3)
                 r4.setBackgroundColor(r3)
-                goto L_0x003e
-            L_0x0032:
+                goto L_0x005a
+            L_0x0046:
                 org.telegram.ui.NotificationsSoundActivity$ToneCell r4 = new org.telegram.ui.NotificationsSoundActivity$ToneCell
-                r4.<init>(r3)
-                int r3 = org.telegram.ui.ActionBar.Theme.getColor(r0)
+                org.telegram.ui.NotificationsSoundActivity r1 = org.telegram.ui.NotificationsSoundActivity.this
+                org.telegram.ui.ActionBar.Theme$ResourcesProvider r1 = r1.resourcesProvider
+                r4.<init>(r3, r1)
+                org.telegram.ui.NotificationsSoundActivity r3 = org.telegram.ui.NotificationsSoundActivity.this
+                org.telegram.ui.ActionBar.Theme$ResourcesProvider r3 = r3.resourcesProvider
+                int r3 = org.telegram.ui.ActionBar.Theme.getColor((java.lang.String) r0, (org.telegram.ui.ActionBar.Theme.ResourcesProvider) r3)
                 r4.setBackgroundColor(r3)
-            L_0x003e:
+            L_0x005a:
                 androidx.recyclerview.widget.RecyclerView$LayoutParams r3 = new androidx.recyclerview.widget.RecyclerView$LayoutParams
                 r0 = -1
                 r1 = -2
@@ -733,8 +766,8 @@ public class NotificationsSoundActivity extends BaseFragment implements ChatAtta
                 CreationTextCell creationTextCell = (CreationTextCell) viewHolder.itemView;
                 Drawable drawable = creationTextCell.getContext().getResources().getDrawable(NUM);
                 Drawable drawable2 = creationTextCell.getContext().getResources().getDrawable(NUM);
-                drawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor("switchTrackChecked"), PorterDuff.Mode.MULTIPLY));
-                drawable2.setColorFilter(new PorterDuffColorFilter(Theme.getColor("checkboxCheck"), PorterDuff.Mode.MULTIPLY));
+                drawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor("switchTrackChecked", NotificationsSoundActivity.this.resourcesProvider), PorterDuff.Mode.MULTIPLY));
+                drawable2.setColorFilter(new PorterDuffColorFilter(Theme.getColor("checkboxCheck", NotificationsSoundActivity.this.resourcesProvider), PorterDuff.Mode.MULTIPLY));
                 creationTextCell.setTextAndIcon(LocaleController.getString("UploadSound", NUM), new CombinedDrawable(drawable, drawable2), false);
             }
         }
@@ -776,17 +809,17 @@ public class NotificationsSoundActivity extends BaseFragment implements ChatAtta
         public TextView textView;
         Tone tone;
 
-        public ToneCell(Context context) {
+        public ToneCell(Context context, Theme.ResourcesProvider resourcesProvider) {
             super(context);
             RadioButton radioButton2 = new RadioButton(context);
             this.radioButton = radioButton2;
             radioButton2.setSize(AndroidUtilities.dp(20.0f));
-            this.radioButton.setColor(Theme.getColor("radioBackground"), Theme.getColor("radioBackgroundChecked"));
+            this.radioButton.setColor(Theme.getColor("radioBackground", resourcesProvider), Theme.getColor("radioBackgroundChecked", resourcesProvider));
             RadioButton radioButton3 = this.radioButton;
             boolean z = LocaleController.isRTL;
             int i = 5;
             addView(radioButton3, LayoutHelper.createFrame(22, 22.0f, (z ? 5 : 3) | 16, (float) (z ? 0 : 20), 0.0f, (float) (!z ? 0 : 20), 0.0f));
-            CheckBox2 checkBox2 = new CheckBox2(context, 24);
+            CheckBox2 checkBox2 = new CheckBox2(context, 24, resourcesProvider);
             this.checkBox = checkBox2;
             checkBox2.setColor((String) null, "windowBackgroundWhite", "checkboxCheck");
             this.checkBox.setDrawUnchecked(false);
@@ -797,7 +830,7 @@ public class NotificationsSoundActivity extends BaseFragment implements ChatAtta
             this.checkBox.setChecked(true, false);
             TextView textView2 = new TextView(context);
             this.textView = textView2;
-            textView2.setTextColor(Theme.getColor("windowBackgroundWhiteBlackText"));
+            textView2.setTextColor(Theme.getColor("windowBackgroundWhiteBlackText", resourcesProvider));
             this.textView.setTextSize(1, 16.0f);
             this.textView.setLines(1);
             this.textView.setMaxLines(1);
@@ -844,6 +877,10 @@ public class NotificationsSoundActivity extends BaseFragment implements ChatAtta
     public void onPause() {
         super.onPause();
         getNotificationCenter().removeObserver(this, NotificationCenter.onUserRingtonesUpdated);
+    }
+
+    public int getNavigationBarColor() {
+        return getThemedColor("windowBackgroundGray");
     }
 
     public void didReceivedNotification(int i, int i2, Object... objArr) {
@@ -1049,7 +1086,7 @@ public class NotificationsSoundActivity extends BaseFragment implements ChatAtta
             File file = new File(AndroidUtilities.getCacheDir(), str);
             if (!file.exists()) {
                 try {
-                    AndroidUtilities.copyFile(FileLoader.getPathToAttach(this.document), file);
+                    AndroidUtilities.copyFile(FileLoader.getInstance(i).getPathToAttach(this.document), file);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

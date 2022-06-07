@@ -1,103 +1,69 @@
 package j$.util.stream;
 
+import j$.util.CLASSNAMEa;
 import j$.util.function.Consumer;
-import j$.util.function.p;
 import j$.util.function.q;
+import j$.util.function.y;
+import j$.util.u;
+import j$.util.v;
 
-public final /* synthetic */ class s4 implements CLASSNAMEm3 {
-    public final /* synthetic */ int a = 0;
-    public final /* synthetic */ Object b;
-
-    public /* synthetic */ s4(q qVar) {
-        this.b = qVar;
+final class s4 extends CLASSNAMEf4 implements v {
+    s4(CLASSNAMEy2 y2Var, y yVar, boolean z) {
+        super(y2Var, yVar, z);
     }
 
-    public /* synthetic */ void accept(double d) {
-        switch (this.a) {
-            case 0:
-                CLASSNAMEp1.f(this);
-                throw null;
-            default:
-                CLASSNAMEp1.f(this);
-                throw null;
+    s4(CLASSNAMEy2 y2Var, u uVar, boolean z) {
+        super(y2Var, uVar, z);
+    }
+
+    public /* synthetic */ boolean b(Consumer consumer) {
+        return CLASSNAMEa.l(this, consumer);
+    }
+
+    /* renamed from: d */
+    public void forEachRemaining(q qVar) {
+        if (this.h != null || this.i) {
+            do {
+            } while (tryAdvance(qVar));
+            return;
         }
+        qVar.getClass();
+        h();
+        this.b.u0(new r4(qVar), this.d);
+        this.i = true;
     }
 
-    public /* synthetic */ Consumer andThen(Consumer consumer) {
-        switch (this.a) {
-            case 0:
-                return Consumer.CC.$default$andThen(this, consumer);
-            default:
-                return Consumer.CC.$default$andThen(this, consumer);
+    public /* synthetic */ void forEachRemaining(Consumer consumer) {
+        CLASSNAMEa.d(this, consumer);
+    }
+
+    /* renamed from: i */
+    public boolean tryAdvance(q qVar) {
+        qVar.getClass();
+        boolean a = a();
+        if (a) {
+            Y3 y3 = (Y3) this.h;
+            long j = this.g;
+            int w = y3.w(j);
+            qVar.accept((y3.c == 0 && w == 0) ? ((long[]) y3.e)[(int) j] : ((long[][]) y3.f)[w][(int) (j - y3.d[w])]);
         }
+        return a;
     }
 
-    public /* synthetic */ void b(Long l) {
-        switch (this.a) {
-            case 0:
-                CLASSNAMEp1.c(this, l);
-                return;
-            default:
-                CLASSNAMEp1.c(this, l);
-                return;
-        }
+    /* access modifiers changed from: package-private */
+    public void j() {
+        Y3 y3 = new Y3();
+        this.h = y3;
+        this.e = this.b.v0(new r4(y3));
+        this.f = new CLASSNAMEb(this);
     }
 
-    public q f(q qVar) {
-        switch (this.a) {
-            case 0:
-                qVar.getClass();
-                return new p(this, qVar);
-            default:
-                qVar.getClass();
-                return new p(this, qVar);
-        }
+    /* access modifiers changed from: package-private */
+    public CLASSNAMEf4 l(u uVar) {
+        return new s4(this.b, uVar, this.a);
     }
 
-    public /* synthetic */ void m() {
-    }
-
-    public /* synthetic */ void n(long j) {
-    }
-
-    public /* synthetic */ boolean o() {
-        return false;
-    }
-
-    public /* synthetic */ s4(Z3 z3) {
-        this.b = z3;
-    }
-
-    public /* synthetic */ void accept(int i) {
-        switch (this.a) {
-            case 0:
-                CLASSNAMEp1.d(this);
-                throw null;
-            default:
-                CLASSNAMEp1.d(this);
-                throw null;
-        }
-    }
-
-    public final void accept(long j) {
-        switch (this.a) {
-            case 0:
-                ((q) this.b).accept(j);
-                return;
-            default:
-                ((Z3) this.b).accept(j);
-                return;
-        }
-    }
-
-    public /* bridge */ /* synthetic */ void accept(Object obj) {
-        switch (this.a) {
-            case 0:
-                b((Long) obj);
-                return;
-            default:
-                b((Long) obj);
-                return;
-        }
+    public v trySplit() {
+        return (v) super.trySplit();
     }
 }

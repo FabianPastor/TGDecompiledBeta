@@ -22,7 +22,6 @@ import android.text.TextUtils;
 import android.text.style.ImageSpan;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.ViewOutlineProvider;
 import android.view.ViewTreeObserver;
 import android.view.animation.AccelerateDecelerateInterpolator;
@@ -134,8 +133,6 @@ public class CallLogActivity extends BaseFragment implements NotificationCenter.
     private ArrayList<Integer> selectedIds = new ArrayList<>();
     /* access modifiers changed from: private */
     public Long waitingForCallChatId;
-    /* access modifiers changed from: private */
-    public ProgressButton waitingForLoadButton;
 
     /* access modifiers changed from: private */
     public static /* synthetic */ boolean lambda$createActionMode$7(View view, MotionEvent motionEvent) {
@@ -294,18 +291,10 @@ public class CallLogActivity extends BaseFragment implements NotificationCenter.
         } else if (i == NotificationCenter.chatInfoDidLoad) {
             Long l2 = this.waitingForCallChatId;
             if (l2 != null && objArr[0].id == l2.longValue() && getMessagesController().getGroupCall(this.waitingForCallChatId.longValue(), true) != null) {
-                ProgressButton progressButton = this.waitingForLoadButton;
-                if (progressButton != null) {
-                    progressButton.setDrawProgress(false, false);
-                }
                 VoIPHelper.startCall(this.lastCallChat, (TLRPC$InputPeer) null, (String) null, false, getParentActivity(), this, getAccountInstance());
                 this.waitingForCallChatId = null;
             }
         } else if (i == NotificationCenter.groupCallUpdated && (l = this.waitingForCallChatId) != null && l.equals(objArr[0])) {
-            ProgressButton progressButton2 = this.waitingForLoadButton;
-            if (progressButton2 != null) {
-                progressButton2.setDrawProgress(false, false);
-            }
             VoIPHelper.startCall(this.lastCallChat, (TLRPC$InputPeer) null, (String) null, false, getParentActivity(), this, getAccountInstance());
             this.waitingForCallChatId = null;
         }
@@ -382,33 +371,30 @@ public class CallLogActivity extends BaseFragment implements NotificationCenter.
             this.profileSearchCell.setSublabelOffset(0, -AndroidUtilities.dp(1.0f));
             addView(this.profileSearchCell, LayoutHelper.createFrame(-1, -1.0f));
             this.button.setText(string);
+            this.button.setTextSize(1, 14.0f);
             this.button.setTextColor(Theme.getColor("featuredStickers_buttonText"));
             this.button.setProgressColor(Theme.getColor("featuredStickers_buttonProgress"));
-            this.button.setBackgroundRoundRect(Theme.getColor("featuredStickers_addButton"), Theme.getColor("featuredStickers_addButtonPressed"));
-            addView(this.button, LayoutHelper.createFrameRelatively(-2.0f, 28.0f, 8388661, 0.0f, 18.0f, 14.0f, 0.0f));
+            this.button.setBackgroundRoundRect(Theme.getColor("featuredStickers_addButton"), Theme.getColor("featuredStickers_addButtonPressed"), 16.0f);
+            this.button.setPadding(AndroidUtilities.dp(14.0f), 0, AndroidUtilities.dp(14.0f), 0);
+            addView(this.button, LayoutHelper.createFrameRelatively(-2.0f, 28.0f, 8388661, 0.0f, 16.0f, 14.0f, 0.0f));
             this.button.setOnClickListener(new CallLogActivity$GroupCallCell$$ExternalSyntheticLambda0(this));
         }
 
         /* access modifiers changed from: private */
         public /* synthetic */ void lambda$new$0(View view) {
-            if (CallLogActivity.this.waitingForLoadButton != null) {
-                CallLogActivity.this.waitingForLoadButton.setDrawProgress(false, true);
-            }
             Long l = (Long) view.getTag();
             ChatObject.Call groupCall = CallLogActivity.this.getMessagesController().getGroupCall(l.longValue(), false);
             CallLogActivity callLogActivity = CallLogActivity.this;
             TLRPC$Chat unused = callLogActivity.lastCallChat = callLogActivity.getMessagesController().getChat(l);
             if (groupCall != null) {
-                TLRPC$Chat access$300 = CallLogActivity.this.lastCallChat;
+                TLRPC$Chat access$200 = CallLogActivity.this.lastCallChat;
                 Activity parentActivity = CallLogActivity.this.getParentActivity();
                 CallLogActivity callLogActivity2 = CallLogActivity.this;
-                VoIPHelper.startCall(access$300, (TLRPC$InputPeer) null, (String) null, false, parentActivity, callLogActivity2, callLogActivity2.getAccountInstance());
+                VoIPHelper.startCall(access$200, (TLRPC$InputPeer) null, (String) null, false, parentActivity, callLogActivity2, callLogActivity2.getAccountInstance());
                 return;
             }
             Long unused2 = CallLogActivity.this.waitingForCallChatId = l;
             CallLogActivity.this.getMessagesController().loadFullChat(l.longValue(), 0, true);
-            this.button.setDrawProgress(true, true);
-            ProgressButton unused3 = CallLogActivity.this.waitingForLoadButton = this.button;
         }
 
         public void setChat(TLRPC$Chat tLRPC$Chat) {
@@ -821,7 +807,7 @@ public class CallLogActivity extends BaseFragment implements NotificationCenter.
             this.selectedDialogsCountTextView.setTextColor(Theme.getColor("actionBarActionModeDefaultIcon"));
             createActionMode.addView(this.selectedDialogsCountTextView, LayoutHelper.createLinear(0, -1, 1.0f, 72, 0, 0, 0));
             this.selectedDialogsCountTextView.setOnTouchListener(CallLogActivity$$ExternalSyntheticLambda3.INSTANCE);
-            this.actionModeViews.add(createActionMode.addItemWithWidth(2, NUM, AndroidUtilities.dp(54.0f), LocaleController.getString("Delete", NUM)));
+            this.actionModeViews.add(createActionMode.addItemWithWidth(2, NUM, AndroidUtilities.dp(54.0f), (CharSequence) LocaleController.getString("Delete", NUM)));
         }
     }
 
@@ -1140,49 +1126,90 @@ public class CallLogActivity extends BaseFragment implements NotificationCenter.
             return this.rowsCount;
         }
 
-        public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
-            View view;
-            HeaderCell headerCell;
-            if (i != 0) {
-                if (i == 1) {
-                    FlickerLoadingView flickerLoadingView = new FlickerLoadingView(this.mContext);
-                    flickerLoadingView.setIsSingleCell(true);
-                    flickerLoadingView.setViewType(8);
-                    flickerLoadingView.setBackgroundColor(Theme.getColor("windowBackgroundWhite"));
-                    flickerLoadingView.showDate(false);
-                    headerCell = flickerLoadingView;
-                } else if (i == 2) {
-                    view = new TextInfoPrivacyCell(this.mContext);
-                    view.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, NUM, "windowBackgroundGrayShadow"));
-                } else if (i == 3) {
-                    HeaderCell headerCell2 = new HeaderCell(this.mContext);
-                    headerCell2.setBackgroundColor(Theme.getColor("windowBackgroundWhite"));
-                    headerCell = headerCell2;
-                } else if (i != 4) {
-                    view = new ShadowSectionCell(this.mContext);
-                } else {
-                    view = new GroupCallCell(this.mContext);
-                }
-                view = headerCell;
-            } else {
-                view = new CallCell(this.mContext);
-            }
-            return new RecyclerListView.Holder(view);
+        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r11v4, resolved type: org.telegram.ui.Components.FlickerLoadingView} */
+        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r11v11, resolved type: org.telegram.ui.Cells.HeaderCell} */
+        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r1v3, resolved type: org.telegram.ui.Cells.HeaderCell} */
+        /* JADX WARNING: type inference failed for: r11v3 */
+        /* JADX WARNING: Multi-variable type inference failed */
+        /* Code decompiled incorrectly, please refer to instructions dump. */
+        public androidx.recyclerview.widget.RecyclerView.ViewHolder onCreateViewHolder(android.view.ViewGroup r10, int r11) {
+            /*
+                r9 = this;
+                if (r11 == 0) goto L_0x0072
+                java.lang.String r10 = "windowBackgroundWhite"
+                r0 = 1
+                if (r11 == r0) goto L_0x0056
+                r0 = 2
+                if (r11 == r0) goto L_0x0040
+                r0 = 3
+                if (r11 == r0) goto L_0x0022
+                r10 = 4
+                if (r11 == r10) goto L_0x0018
+                org.telegram.ui.Cells.ShadowSectionCell r10 = new org.telegram.ui.Cells.ShadowSectionCell
+                android.content.Context r11 = r9.mContext
+                r10.<init>(r11)
+                goto L_0x007b
+            L_0x0018:
+                org.telegram.ui.CallLogActivity$GroupCallCell r10 = new org.telegram.ui.CallLogActivity$GroupCallCell
+                org.telegram.ui.CallLogActivity r11 = org.telegram.ui.CallLogActivity.this
+                android.content.Context r0 = r9.mContext
+                r10.<init>(r0)
+                goto L_0x007b
+            L_0x0022:
+                org.telegram.ui.Cells.HeaderCell r11 = new org.telegram.ui.Cells.HeaderCell
+                android.content.Context r2 = r9.mContext
+                r4 = 21
+                r5 = 15
+                r6 = 2
+                r7 = 0
+                org.telegram.ui.CallLogActivity r0 = org.telegram.ui.CallLogActivity.this
+                org.telegram.ui.ActionBar.Theme$ResourcesProvider r8 = r0.getResourceProvider()
+                java.lang.String r3 = "windowBackgroundWhiteBlueHeader"
+                r1 = r11
+                r1.<init>(r2, r3, r4, r5, r6, r7, r8)
+                int r10 = org.telegram.ui.ActionBar.Theme.getColor(r10)
+                r11.setBackgroundColor(r10)
+                goto L_0x0070
+            L_0x0040:
+                org.telegram.ui.Cells.TextInfoPrivacyCell r10 = new org.telegram.ui.Cells.TextInfoPrivacyCell
+                android.content.Context r11 = r9.mContext
+                r10.<init>(r11)
+                android.content.Context r11 = r9.mContext
+                r0 = 2131165436(0x7var_fc, float:1.794509E38)
+                java.lang.String r1 = "windowBackgroundGrayShadow"
+                android.graphics.drawable.Drawable r11 = org.telegram.ui.ActionBar.Theme.getThemedDrawable((android.content.Context) r11, (int) r0, (java.lang.String) r1)
+                r10.setBackgroundDrawable(r11)
+                goto L_0x007b
+            L_0x0056:
+                org.telegram.ui.Components.FlickerLoadingView r11 = new org.telegram.ui.Components.FlickerLoadingView
+                android.content.Context r1 = r9.mContext
+                r11.<init>(r1)
+                r11.setIsSingleCell(r0)
+                r0 = 8
+                r11.setViewType(r0)
+                int r10 = org.telegram.ui.ActionBar.Theme.getColor(r10)
+                r11.setBackgroundColor(r10)
+                r10 = 0
+                r11.showDate(r10)
+            L_0x0070:
+                r10 = r11
+                goto L_0x007b
+            L_0x0072:
+                org.telegram.ui.CallLogActivity$CallCell r10 = new org.telegram.ui.CallLogActivity$CallCell
+                org.telegram.ui.CallLogActivity r11 = org.telegram.ui.CallLogActivity.this
+                android.content.Context r0 = r9.mContext
+                r10.<init>(r0)
+            L_0x007b:
+                org.telegram.ui.Components.RecyclerListView$Holder r11 = new org.telegram.ui.Components.RecyclerListView$Holder
+                r11.<init>(r10)
+                return r11
+            */
+            throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.CallLogActivity.ListAdapter.onCreateViewHolder(android.view.ViewGroup, int):androidx.recyclerview.widget.RecyclerView$ViewHolder");
         }
 
         public void onViewAttachedToWindow(RecyclerView.ViewHolder viewHolder) {
-            View view = viewHolder.itemView;
-            if (view instanceof CallCell) {
+            if (viewHolder.itemView instanceof CallCell) {
                 ((CallCell) viewHolder.itemView).setChecked(CallLogActivity.this.isSelected(((CallLogRow) CallLogActivity.this.calls.get(viewHolder.getAdapterPosition() - this.callsStartRow)).calls), false);
-            } else if (view instanceof GroupCallCell) {
-                GroupCallCell groupCallCell = (GroupCallCell) view;
-                TLRPC$Chat chat = groupCallCell.profileSearchCell.getChat();
-                if (CallLogActivity.this.waitingForCallChatId == null || chat.id != CallLogActivity.this.waitingForCallChatId.longValue()) {
-                    groupCallCell.button.setDrawProgress(false, false);
-                    return;
-                }
-                ProgressButton unused = CallLogActivity.this.waitingForLoadButton = groupCallCell.button;
-                groupCallCell.button.setDrawProgress(true, false);
             }
         }
 
@@ -1215,11 +1242,11 @@ public class CallLogActivity extends BaseFragment implements NotificationCenter.
                     spannableString2.setSpan(CallLogActivity.this.iconMissed, str2.length(), str2.length() + 1, 0);
                 }
                 callCell.profileSearchCell.setData(callLogRow.user, (TLRPC$EncryptedChat) null, (CharSequence) null, spannableString2, false, false);
-                ProfileSearchCell access$2700 = callCell.profileSearchCell;
+                ProfileSearchCell access$2400 = callCell.profileSearchCell;
                 if (i3 != CallLogActivity.this.calls.size() - 1 || !CallLogActivity.this.endReached) {
                     z = true;
                 }
-                access$2700.useSeparator = z;
+                access$2400.useSeparator = z;
                 callCell.imageView.setTag(callLogRow);
             } else if (itemViewType == 3) {
                 HeaderCell headerCell = (HeaderCell) viewHolder2.itemView;
@@ -1247,12 +1274,13 @@ public class CallLogActivity extends BaseFragment implements NotificationCenter.
                 } else {
                     str = LocaleController.getString("ChannelPublic", NUM).toLowerCase();
                 }
-                groupCallCell.profileSearchCell.setData(chat, (TLRPC$EncryptedChat) null, (CharSequence) null, str, false, false);
-                ProfileSearchCell access$2100 = groupCallCell.profileSearchCell;
-                if (i5 != CallLogActivity.this.activeGroupCalls.size() - 1 || !CallLogActivity.this.endReached) {
+                String str3 = str;
+                ProfileSearchCell access$2600 = groupCallCell.profileSearchCell;
+                if (i5 != CallLogActivity.this.activeGroupCalls.size() - 1 && !CallLogActivity.this.endReached) {
                     z = true;
                 }
-                access$2100.useSeparator = z;
+                access$2600.useSeparator = z;
+                groupCallCell.profileSearchCell.setData(chat, (TLRPC$EncryptedChat) null, (CharSequence) null, str3, false, false);
             }
         }
 

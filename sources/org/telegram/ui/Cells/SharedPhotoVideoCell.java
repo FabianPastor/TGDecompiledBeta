@@ -25,6 +25,7 @@ import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.DownloadController;
 import org.telegram.messenger.FileLoader;
 import org.telegram.messenger.ImageLocation;
+import org.telegram.messenger.ImageReceiver;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.MessagesController;
@@ -223,18 +224,31 @@ public class SharedPhotoVideoCell extends FrameLayout {
                     if (closestPhotoSizeWithSize4 != closestPhotoSizeWithSize3) {
                         tLRPC$PhotoSize = closestPhotoSizeWithSize3;
                     }
+                    long j = 0;
                     if (messageObject.strippedThumb != null) {
-                        this.imageView.getImageReceiver().setImage(ImageLocation.getForObject(closestPhotoSizeWithSize4, messageObject.photoThumbsObject), "100_100", (ImageLocation) null, (String) null, messageObject.strippedThumb, closestPhotoSizeWithSize4 != null ? closestPhotoSizeWithSize4.size : 0, (String) null, messageObject, messageObject.shouldEncryptPhotoOrVideo() ? 2 : 1);
-                    } else {
-                        this.imageView.getImageReceiver().setImage(ImageLocation.getForObject(closestPhotoSizeWithSize4, messageObject.photoThumbsObject), "100_100", ImageLocation.getForObject(tLRPC$PhotoSize, messageObject.photoThumbsObject), "b", closestPhotoSizeWithSize4 != null ? closestPhotoSizeWithSize4.size : 0, (String) null, messageObject, messageObject.shouldEncryptPhotoOrVideo() ? 2 : 1);
+                        ImageReceiver imageReceiver = this.imageView.getImageReceiver();
+                        ImageLocation forObject = ImageLocation.getForObject(closestPhotoSizeWithSize4, messageObject.photoThumbsObject);
+                        BitmapDrawable bitmapDrawable = messageObject.strippedThumb;
+                        if (closestPhotoSizeWithSize4 != null) {
+                            j = (long) closestPhotoSizeWithSize4.size;
+                        }
+                        imageReceiver.setImage(forObject, "100_100", (ImageLocation) null, (String) null, bitmapDrawable, j, (String) null, messageObject, messageObject.shouldEncryptPhotoOrVideo() ? 2 : 1);
+                        return;
                     }
+                    ImageReceiver imageReceiver2 = this.imageView.getImageReceiver();
+                    ImageLocation forObject2 = ImageLocation.getForObject(closestPhotoSizeWithSize4, messageObject.photoThumbsObject);
+                    ImageLocation forObject3 = ImageLocation.getForObject(tLRPC$PhotoSize, messageObject.photoThumbsObject);
+                    if (closestPhotoSizeWithSize4 != null) {
+                        j = (long) closestPhotoSizeWithSize4.size;
+                    }
+                    imageReceiver2.setImage(forObject2, "100_100", forObject3, "b", j, (String) null, messageObject, messageObject.shouldEncryptPhotoOrVideo() ? 2 : 1);
+                    return;
+                }
+                BitmapDrawable bitmapDrawable2 = messageObject.strippedThumb;
+                if (bitmapDrawable2 != null) {
+                    this.imageView.setImage((ImageLocation) null, (String) null, (ImageLocation) null, (String) null, bitmapDrawable2, (Bitmap) null, (String) null, 0, messageObject);
                 } else {
-                    BitmapDrawable bitmapDrawable = messageObject.strippedThumb;
-                    if (bitmapDrawable != null) {
-                        this.imageView.setImage((ImageLocation) null, (String) null, (ImageLocation) null, (String) null, bitmapDrawable, (Bitmap) null, (String) null, 0, messageObject);
-                    } else {
-                        this.imageView.setImage((ImageLocation) null, (String) null, ImageLocation.getForObject(closestPhotoSizeWithSize3, messageObject.photoThumbsObject), "b", ApplicationLoader.applicationContext.getResources().getDrawable(NUM), (Bitmap) null, (String) null, 0, messageObject);
-                    }
+                    this.imageView.setImage((ImageLocation) null, (String) null, ImageLocation.getForObject(closestPhotoSizeWithSize3, messageObject.photoThumbsObject), "b", ApplicationLoader.applicationContext.getResources().getDrawable(NUM), (Bitmap) null, (String) null, 0, messageObject);
                 }
             }
         }

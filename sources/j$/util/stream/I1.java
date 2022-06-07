@@ -1,23 +1,22 @@
 package j$.util.stream;
 
-import j$.util.function.m;
-import j$.util.y;
+import j$.util.concurrent.a;
+import j$.util.function.BiFunction;
+import j$.util.function.Function;
+import j$.util.function.b;
 
-final class I1 extends O1 {
-    public static final /* synthetic */ int k = 0;
+public final /* synthetic */ class I1 implements b {
+    public static final /* synthetic */ I1 a = new I1();
 
-    /* JADX INFO: super call moved to the top of the method (can break code semantics) */
-    public I1(CLASSNAMEz2 z2Var, y yVar, int i) {
-        super(z2Var, yVar, H1.a, G1.a);
-        if (i == 1) {
-            super(z2Var, yVar, K1.a, J1.a);
-        } else if (i != 2) {
-        } else {
-            super(z2Var, yVar, M1.a, L1.a);
-        }
+    private /* synthetic */ I1() {
     }
 
-    public I1(CLASSNAMEz2 z2Var, m mVar, y yVar) {
-        super(z2Var, yVar, new CLASSNAMEb(mVar), N1.a);
+    public BiFunction andThen(Function function) {
+        function.getClass();
+        return new a((BiFunction) this, function);
+    }
+
+    public final Object apply(Object obj, Object obj2) {
+        return new P1((CLASSNAMEw1) obj, (CLASSNAMEw1) obj2);
     }
 }

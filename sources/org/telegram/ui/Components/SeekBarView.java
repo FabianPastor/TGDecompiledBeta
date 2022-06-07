@@ -1,5 +1,6 @@
 package org.telegram.ui.Components;
 
+import android.animation.TimeInterpolator;
 import android.content.Context;
 import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
@@ -14,6 +15,7 @@ import org.telegram.messenger.AndroidUtilities;
 import org.telegram.ui.ActionBar.Theme;
 
 public class SeekBarView extends FrameLayout {
+    private AnimatedFloat animatedThumbX;
     private float bufferedProgress;
     boolean captured;
     private float currentRadius;
@@ -30,6 +32,7 @@ public class SeekBarView extends FrameLayout {
     private final Theme.ResourcesProvider resourcesProvider;
     private final SeekBarAccessibilityDelegate seekBarAccessibilityDelegate;
     private int selectorWidth;
+    private int separatorsCount;
     float sx;
     float sy;
     private int thumbDX;
@@ -71,6 +74,7 @@ public class SeekBarView extends FrameLayout {
 
     public SeekBarView(Context context, boolean z, Theme.ResourcesProvider resourcesProvider2) {
         super(context);
+        this.animatedThumbX = new AnimatedFloat((View) this, 150, (TimeInterpolator) CubicBezierInterpolator.DEFAULT);
         this.progressToSet = -100.0f;
         this.pressedState = new int[]{16842910, 16842919};
         this.transitionProgress = 1.0f;
@@ -124,6 +128,10 @@ public class SeekBarView extends FrameLayout {
         };
         this.seekBarAccessibilityDelegate = r4;
         setAccessibilityDelegate(r4);
+    }
+
+    public void setSeparatorsCount(int i) {
+        this.separatorsCount = i;
     }
 
     public void setTwoSided(boolean z) {
@@ -340,324 +348,411 @@ public class SeekBarView extends FrameLayout {
     }
 
     /* access modifiers changed from: protected */
-    /* JADX WARNING: Removed duplicated region for block: B:38:0x01f3  */
-    /* JADX WARNING: Removed duplicated region for block: B:42:0x023d  */
-    /* JADX WARNING: Removed duplicated region for block: B:44:0x0254  */
-    /* JADX WARNING: Removed duplicated region for block: B:46:? A[RETURN, SYNTHETIC] */
+    /* JADX WARNING: Removed duplicated region for block: B:58:0x029a  */
+    /* JADX WARNING: Removed duplicated region for block: B:62:0x02e2  */
+    /* JADX WARNING: Removed duplicated region for block: B:64:0x02f7  */
+    /* JADX WARNING: Removed duplicated region for block: B:69:? A[RETURN, SYNTHETIC] */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    public void onDraw(android.graphics.Canvas r12) {
+    public void onDraw(android.graphics.Canvas r16) {
         /*
-            r11 = this;
-            int r0 = r11.getMeasuredHeight()
-            int r1 = r11.thumbSize
-            int r0 = r0 - r1
-            int r6 = r0 / 2
-            android.graphics.Paint r0 = r11.innerPaint1
-            java.lang.String r1 = "player_progressBackground"
-            int r1 = r11.getThemedColor(r1)
-            r0.setColor(r1)
-            int r0 = r11.selectorWidth
-            int r0 = r0 / 2
-            float r1 = (float) r0
-            int r0 = r11.getMeasuredHeight()
-            int r0 = r0 / 2
-            r7 = 1065353216(0x3var_, float:1.0)
-            int r2 = org.telegram.messenger.AndroidUtilities.dp(r7)
-            int r0 = r0 - r2
-            float r2 = (float) r0
-            int r0 = r11.getMeasuredWidth()
-            int r3 = r11.selectorWidth
+            r15 = this;
+            r0 = r15
+            r7 = r16
+            int r1 = r0.thumbX
+            boolean r2 = r0.twoSided
+            r8 = 1
+            r9 = 1065353216(0x3var_, float:1.0)
+            if (r2 != 0) goto L_0x002d
+            int r2 = r0.separatorsCount
+            if (r2 <= r8) goto L_0x002d
+            int r2 = r15.getMeasuredWidth()
+            int r3 = r0.selectorWidth
+            int r2 = r2 - r3
+            float r2 = (float) r2
+            int r3 = r0.separatorsCount
+            float r3 = (float) r3
+            float r3 = r3 - r9
+            float r2 = r2 / r3
+            org.telegram.ui.Components.AnimatedFloat r3 = r0.animatedThumbX
+            float r1 = (float) r1
+            float r1 = r1 / r2
+            int r1 = java.lang.Math.round(r1)
+            float r1 = (float) r1
+            float r1 = r1 * r2
+            float r1 = r3.set(r1)
+            int r1 = (int) r1
+        L_0x002d:
+            r10 = r1
+            int r1 = r15.getMeasuredHeight()
+            int r2 = r0.thumbSize
+            int r1 = r1 - r2
+            int r11 = r1 / 2
+            android.graphics.Paint r1 = r0.innerPaint1
+            java.lang.String r2 = "player_progressBackground"
+            int r2 = r15.getThemedColor(r2)
+            r1.setColor(r2)
+            int r1 = r0.selectorWidth
+            int r1 = r1 / 2
+            float r2 = (float) r1
+            int r1 = r15.getMeasuredHeight()
+            int r1 = r1 / 2
+            int r3 = org.telegram.messenger.AndroidUtilities.dp(r9)
+            int r1 = r1 - r3
+            float r3 = (float) r1
+            int r1 = r15.getMeasuredWidth()
+            int r4 = r0.selectorWidth
+            int r4 = r4 / 2
+            int r1 = r1 - r4
+            float r4 = (float) r1
+            int r1 = r15.getMeasuredHeight()
+            int r1 = r1 / 2
+            int r5 = org.telegram.messenger.AndroidUtilities.dp(r9)
+            int r1 = r1 + r5
+            float r5 = (float) r1
+            android.graphics.Paint r6 = r0.innerPaint1
+            r1 = r16
+            r1.drawRect(r2, r3, r4, r5, r6)
+            boolean r1 = r0.twoSided
+            r12 = 0
+            if (r1 != 0) goto L_0x00ad
+            int r1 = r0.separatorsCount
+            if (r1 <= r8) goto L_0x00ad
+            r1 = 0
+        L_0x007a:
+            int r2 = r0.separatorsCount
+            if (r1 >= r2) goto L_0x00ad
+            int r2 = r0.selectorWidth
+            int r2 = r2 / 2
+            int r3 = r15.getMeasuredWidth()
+            int r4 = r0.selectorWidth
+            int r4 = r4 / 2
+            int r3 = r3 - r4
+            float r4 = (float) r1
+            int r5 = r0.separatorsCount
+            float r5 = (float) r5
+            float r5 = r5 - r9
+            float r4 = r4 / r5
+            int r2 = org.telegram.messenger.AndroidUtilities.lerp((int) r2, (int) r3, (float) r4)
+            float r2 = (float) r2
+            int r3 = r15.getMeasuredHeight()
             int r3 = r3 / 2
-            int r0 = r0 - r3
-            float r3 = (float) r0
-            int r0 = r11.getMeasuredHeight()
-            int r0 = r0 / 2
-            int r4 = org.telegram.messenger.AndroidUtilities.dp(r7)
-            int r0 = r0 + r4
-            float r4 = (float) r0
-            android.graphics.Paint r5 = r11.innerPaint1
-            r0 = r12
-            r0.drawRect(r1, r2, r3, r4, r5)
-            float r0 = r11.bufferedProgress
-            r8 = 0
-            int r0 = (r0 > r8 ? 1 : (r0 == r8 ? 0 : -1))
-            if (r0 <= 0) goto L_0x008a
-            android.graphics.Paint r0 = r11.innerPaint1
-            java.lang.String r1 = "key_player_progressCachedBackground"
-            int r1 = r11.getThemedColor(r1)
-            r0.setColor(r1)
-            int r0 = r11.selectorWidth
-            int r0 = r0 / 2
-            float r1 = (float) r0
-            int r0 = r11.getMeasuredHeight()
-            int r0 = r0 / 2
-            int r2 = org.telegram.messenger.AndroidUtilities.dp(r7)
-            int r0 = r0 - r2
-            float r2 = (float) r0
-            int r0 = r11.selectorWidth
-            int r0 = r0 / 2
-            float r0 = (float) r0
-            float r3 = r11.bufferedProgress
-            int r4 = r11.getMeasuredWidth()
-            int r5 = r11.selectorWidth
-            int r4 = r4 - r5
+            float r3 = (float) r3
+            r4 = 1070386381(0x3fcccccd, float:1.6)
+            int r4 = org.telegram.messenger.AndroidUtilities.dp(r4)
             float r4 = (float) r4
-            float r3 = r3 * r4
-            float r3 = r3 + r0
-            int r0 = r11.getMeasuredHeight()
-            int r0 = r0 / 2
-            int r4 = org.telegram.messenger.AndroidUtilities.dp(r7)
-            int r0 = r0 + r4
-            float r4 = (float) r0
-            android.graphics.Paint r5 = r11.innerPaint1
-            r0 = r12
-            r0.drawRect(r1, r2, r3, r4, r5)
-        L_0x008a:
-            boolean r0 = r11.twoSided
-            r9 = 1086324736(0x40CLASSNAME, float:6.0)
-            if (r0 == 0) goto L_0x012d
-            int r0 = r11.getMeasuredWidth()
-            int r0 = r0 / 2
-            int r1 = org.telegram.messenger.AndroidUtilities.dp(r7)
-            int r0 = r0 - r1
-            float r1 = (float) r0
-            int r0 = r11.getMeasuredHeight()
-            int r0 = r0 / 2
+            android.graphics.Paint r5 = r0.innerPaint1
+            r7.drawCircle(r2, r3, r4, r5)
+            int r1 = r1 + 1
+            goto L_0x007a
+        L_0x00ad:
+            float r1 = r0.bufferedProgress
+            r13 = 0
+            int r1 = (r1 > r13 ? 1 : (r1 == r13 ? 0 : -1))
+            if (r1 <= 0) goto L_0x00f5
+            android.graphics.Paint r1 = r0.innerPaint1
+            java.lang.String r2 = "key_player_progressCachedBackground"
+            int r2 = r15.getThemedColor(r2)
+            r1.setColor(r2)
+            int r1 = r0.selectorWidth
+            int r1 = r1 / 2
+            float r2 = (float) r1
+            int r1 = r15.getMeasuredHeight()
+            int r1 = r1 / 2
+            int r3 = org.telegram.messenger.AndroidUtilities.dp(r9)
+            int r1 = r1 - r3
+            float r3 = (float) r1
+            int r1 = r0.selectorWidth
+            int r1 = r1 / 2
+            float r1 = (float) r1
+            float r4 = r0.bufferedProgress
+            int r5 = r15.getMeasuredWidth()
+            int r6 = r0.selectorWidth
+            int r5 = r5 - r6
+            float r5 = (float) r5
+            float r4 = r4 * r5
+            float r4 = r4 + r1
+            int r1 = r15.getMeasuredHeight()
+            int r1 = r1 / 2
+            int r5 = org.telegram.messenger.AndroidUtilities.dp(r9)
+            int r1 = r1 + r5
+            float r5 = (float) r1
+            android.graphics.Paint r6 = r0.innerPaint1
+            r1 = r16
+            r1.drawRect(r2, r3, r4, r5, r6)
+        L_0x00f5:
+            boolean r1 = r0.twoSided
+            r14 = 1086324736(0x40CLASSNAME, float:6.0)
+            if (r1 == 0) goto L_0x0196
+            int r1 = r15.getMeasuredWidth()
+            int r1 = r1 / 2
             int r2 = org.telegram.messenger.AndroidUtilities.dp(r9)
-            int r0 = r0 - r2
-            float r2 = (float) r0
-            int r0 = r11.getMeasuredWidth()
-            int r0 = r0 / 2
-            int r3 = org.telegram.messenger.AndroidUtilities.dp(r7)
-            int r0 = r0 + r3
-            float r3 = (float) r0
-            int r0 = r11.getMeasuredHeight()
-            int r0 = r0 / 2
+            int r1 = r1 - r2
+            float r2 = (float) r1
+            int r1 = r15.getMeasuredHeight()
+            int r1 = r1 / 2
+            int r3 = org.telegram.messenger.AndroidUtilities.dp(r14)
+            int r1 = r1 - r3
+            float r3 = (float) r1
+            int r1 = r15.getMeasuredWidth()
+            int r1 = r1 / 2
             int r4 = org.telegram.messenger.AndroidUtilities.dp(r9)
-            int r0 = r0 + r4
-            float r4 = (float) r0
-            android.graphics.Paint r5 = r11.outerPaint1
-            r0 = r12
-            r0.drawRect(r1, r2, r3, r4, r5)
-            int r0 = r11.thumbX
-            int r1 = r11.getMeasuredWidth()
-            int r2 = r11.selectorWidth
+            int r1 = r1 + r4
+            float r4 = (float) r1
+            int r1 = r15.getMeasuredHeight()
+            int r1 = r1 / 2
+            int r5 = org.telegram.messenger.AndroidUtilities.dp(r14)
+            int r1 = r1 + r5
+            float r5 = (float) r1
+            android.graphics.Paint r6 = r0.outerPaint1
+            r1 = r16
+            r1.drawRect(r2, r3, r4, r5, r6)
+            int r1 = r15.getMeasuredWidth()
+            int r2 = r0.selectorWidth
             int r1 = r1 - r2
             int r1 = r1 / 2
-            if (r0 <= r1) goto L_0x0101
-            int r0 = r11.getMeasuredWidth()
-            int r0 = r0 / 2
-            float r1 = (float) r0
-            int r0 = r11.getMeasuredHeight()
-            int r0 = r0 / 2
-            int r2 = org.telegram.messenger.AndroidUtilities.dp(r7)
-            int r0 = r0 - r2
-            float r2 = (float) r0
-            int r0 = r11.selectorWidth
-            int r0 = r0 / 2
-            int r3 = r11.thumbX
-            int r0 = r0 + r3
-            float r3 = (float) r0
-            int r0 = r11.getMeasuredHeight()
-            int r0 = r0 / 2
-            int r4 = org.telegram.messenger.AndroidUtilities.dp(r7)
-            int r0 = r0 + r4
-            float r4 = (float) r0
-            android.graphics.Paint r5 = r11.outerPaint1
-            r0 = r12
-            r0.drawRect(r1, r2, r3, r4, r5)
-            goto L_0x0158
-        L_0x0101:
-            int r0 = r11.thumbX
-            int r2 = r2 / 2
-            int r0 = r0 + r2
-            float r1 = (float) r0
-            int r0 = r11.getMeasuredHeight()
-            int r0 = r0 / 2
-            int r2 = org.telegram.messenger.AndroidUtilities.dp(r7)
-            int r0 = r0 - r2
-            float r2 = (float) r0
-            int r0 = r11.getMeasuredWidth()
-            int r0 = r0 / 2
-            float r3 = (float) r0
-            int r0 = r11.getMeasuredHeight()
-            int r0 = r0 / 2
-            int r4 = org.telegram.messenger.AndroidUtilities.dp(r7)
-            int r0 = r0 + r4
-            float r4 = (float) r0
-            android.graphics.Paint r5 = r11.outerPaint1
-            r0 = r12
-            r0.drawRect(r1, r2, r3, r4, r5)
-            goto L_0x0158
-        L_0x012d:
-            int r0 = r11.selectorWidth
-            int r0 = r0 / 2
-            float r1 = (float) r0
-            int r0 = r11.getMeasuredHeight()
-            int r0 = r0 / 2
-            int r2 = org.telegram.messenger.AndroidUtilities.dp(r7)
-            int r0 = r0 - r2
-            float r2 = (float) r0
-            int r0 = r11.selectorWidth
-            int r0 = r0 / 2
-            int r3 = r11.thumbX
-            int r0 = r0 + r3
-            float r3 = (float) r0
-            int r0 = r11.getMeasuredHeight()
-            int r0 = r0 / 2
-            int r4 = org.telegram.messenger.AndroidUtilities.dp(r7)
-            int r0 = r0 + r4
-            float r4 = (float) r0
-            android.graphics.Paint r5 = r11.outerPaint1
-            r0 = r12
-            r0.drawRect(r1, r2, r3, r4, r5)
-        L_0x0158:
-            android.graphics.drawable.Drawable r0 = r11.hoverDrawable
-            if (r0 == 0) goto L_0x018a
-            int r0 = r11.thumbX
-            int r1 = r11.selectorWidth
+            if (r10 <= r1) goto L_0x016b
+            int r1 = r15.getMeasuredWidth()
             int r1 = r1 / 2
-            int r0 = r0 + r1
-            r1 = 1098907648(0x41800000, float:16.0)
-            int r2 = org.telegram.messenger.AndroidUtilities.dp(r1)
-            int r0 = r0 - r2
-            int r2 = r11.thumbSize
+            float r2 = (float) r1
+            int r1 = r15.getMeasuredHeight()
+            int r1 = r1 / 2
+            int r3 = org.telegram.messenger.AndroidUtilities.dp(r9)
+            int r1 = r1 - r3
+            float r3 = (float) r1
+            int r1 = r0.selectorWidth
+            int r1 = r1 / 2
+            int r1 = r1 + r10
+            float r4 = (float) r1
+            int r1 = r15.getMeasuredHeight()
+            int r1 = r1 / 2
+            int r5 = org.telegram.messenger.AndroidUtilities.dp(r9)
+            int r1 = r1 + r5
+            float r5 = (float) r1
+            android.graphics.Paint r6 = r0.outerPaint1
+            r1 = r16
+            r1.drawRect(r2, r3, r4, r5, r6)
+            goto L_0x0203
+        L_0x016b:
             int r2 = r2 / 2
-            int r2 = r2 + r6
-            int r1 = org.telegram.messenger.AndroidUtilities.dp(r1)
-            int r2 = r2 - r1
-            android.graphics.drawable.Drawable r1 = r11.hoverDrawable
-            r3 = 1107296256(0x42000000, float:32.0)
-            int r4 = org.telegram.messenger.AndroidUtilities.dp(r3)
-            int r4 = r4 + r0
-            int r3 = org.telegram.messenger.AndroidUtilities.dp(r3)
-            int r3 = r3 + r2
-            r1.setBounds(r0, r2, r4, r3)
-            android.graphics.drawable.Drawable r0 = r11.hoverDrawable
-            r0.draw(r12)
-        L_0x018a:
-            r0 = 0
-            boolean r1 = r11.pressed
-            if (r1 == 0) goto L_0x0191
-            r9 = 1090519040(0x41000000, float:8.0)
-        L_0x0191:
-            int r1 = org.telegram.messenger.AndroidUtilities.dp(r9)
+            int r2 = r2 + r10
+            float r2 = (float) r2
+            int r1 = r15.getMeasuredHeight()
+            int r1 = r1 / 2
+            int r3 = org.telegram.messenger.AndroidUtilities.dp(r9)
+            int r1 = r1 - r3
+            float r3 = (float) r1
+            int r1 = r15.getMeasuredWidth()
+            int r1 = r1 / 2
+            float r4 = (float) r1
+            int r1 = r15.getMeasuredHeight()
+            int r1 = r1 / 2
+            int r5 = org.telegram.messenger.AndroidUtilities.dp(r9)
+            int r1 = r1 + r5
+            float r5 = (float) r1
+            android.graphics.Paint r6 = r0.outerPaint1
+            r1 = r16
+            r1.drawRect(r2, r3, r4, r5, r6)
+            goto L_0x0203
+        L_0x0196:
+            int r1 = r0.selectorWidth
+            int r1 = r1 / 2
+            float r2 = (float) r1
+            int r1 = r15.getMeasuredHeight()
+            int r1 = r1 / 2
+            int r3 = org.telegram.messenger.AndroidUtilities.dp(r9)
+            int r1 = r1 - r3
+            float r3 = (float) r1
+            int r1 = r0.selectorWidth
+            int r1 = r1 / 2
+            int r1 = r1 + r10
+            float r4 = (float) r1
+            int r1 = r15.getMeasuredHeight()
+            int r1 = r1 / 2
+            int r5 = org.telegram.messenger.AndroidUtilities.dp(r9)
+            int r1 = r1 + r5
+            float r5 = (float) r1
+            android.graphics.Paint r6 = r0.outerPaint1
+            r1 = r16
+            r1.drawRect(r2, r3, r4, r5, r6)
+            int r1 = r0.separatorsCount
+            if (r1 <= r8) goto L_0x0203
+            r1 = 0
+        L_0x01c5:
+            int r2 = r0.separatorsCount
+            if (r1 >= r2) goto L_0x0203
+            int r2 = r0.selectorWidth
+            int r2 = r2 / 2
+            int r3 = r15.getMeasuredWidth()
+            int r4 = r0.selectorWidth
+            int r4 = r4 / 2
+            int r3 = r3 - r4
+            float r4 = (float) r1
+            int r5 = r0.separatorsCount
+            float r5 = (float) r5
+            float r5 = r5 - r9
+            float r4 = r4 / r5
+            int r2 = org.telegram.messenger.AndroidUtilities.lerp((int) r2, (int) r3, (float) r4)
+            float r2 = (float) r2
+            int r3 = r0.selectorWidth
+            int r3 = r3 / 2
+            int r3 = r3 + r10
+            float r3 = (float) r3
+            int r3 = (r2 > r3 ? 1 : (r2 == r3 ? 0 : -1))
+            if (r3 <= 0) goto L_0x01ec
+            goto L_0x0203
+        L_0x01ec:
+            int r3 = r15.getMeasuredHeight()
+            int r3 = r3 / 2
+            float r3 = (float) r3
+            r4 = 1068708659(0x3fb33333, float:1.4)
+            int r4 = org.telegram.messenger.AndroidUtilities.dp(r4)
+            float r4 = (float) r4
+            android.graphics.Paint r5 = r0.outerPaint1
+            r7.drawCircle(r2, r3, r4, r5)
+            int r1 = r1 + 1
+            goto L_0x01c5
+        L_0x0203:
+            android.graphics.drawable.Drawable r1 = r0.hoverDrawable
+            if (r1 == 0) goto L_0x0233
+            int r1 = r0.selectorWidth
+            int r1 = r1 / 2
+            int r1 = r1 + r10
+            r2 = 1098907648(0x41800000, float:16.0)
+            int r3 = org.telegram.messenger.AndroidUtilities.dp(r2)
+            int r1 = r1 - r3
+            int r3 = r0.thumbSize
+            int r3 = r3 / 2
+            int r3 = r3 + r11
+            int r2 = org.telegram.messenger.AndroidUtilities.dp(r2)
+            int r3 = r3 - r2
+            android.graphics.drawable.Drawable r2 = r0.hoverDrawable
+            r4 = 1107296256(0x42000000, float:32.0)
+            int r5 = org.telegram.messenger.AndroidUtilities.dp(r4)
+            int r5 = r5 + r1
+            int r4 = org.telegram.messenger.AndroidUtilities.dp(r4)
+            int r4 = r4 + r3
+            r2.setBounds(r1, r3, r5, r4)
+            android.graphics.drawable.Drawable r1 = r0.hoverDrawable
+            r1.draw(r7)
+        L_0x0233:
+            boolean r1 = r0.pressed
+            if (r1 == 0) goto L_0x0239
+            r14 = 1090519040(0x41000000, float:8.0)
+        L_0x0239:
+            int r1 = org.telegram.messenger.AndroidUtilities.dp(r14)
             long r2 = android.os.SystemClock.elapsedRealtime()
-            long r4 = r11.lastUpdateTime
+            long r4 = r0.lastUpdateTime
             long r2 = r2 - r4
             r4 = 18
-            int r9 = (r2 > r4 ? 1 : (r2 == r4 ? 0 : -1))
-            if (r9 <= 0) goto L_0x01a4
+            int r6 = (r2 > r4 ? 1 : (r2 == r4 ? 0 : -1))
+            if (r6 <= 0) goto L_0x024c
             r2 = 16
-        L_0x01a4:
-            float r4 = r11.currentRadius
+        L_0x024c:
+            float r4 = r0.currentRadius
             float r1 = (float) r1
-            r5 = 1
-            int r9 = (r4 > r1 ? 1 : (r4 == r1 ? 0 : -1))
-            if (r9 == 0) goto L_0x01d8
-            r0 = 1114636288(0x42700000, float:60.0)
-            int r9 = (r4 > r1 ? 1 : (r4 == r1 ? 0 : -1))
-            if (r9 >= 0) goto L_0x01c5
-            int r9 = org.telegram.messenger.AndroidUtilities.dp(r7)
-            float r9 = (float) r9
-            float r10 = (float) r2
-            float r10 = r10 / r0
-            float r9 = r9 * r10
-            float r4 = r4 + r9
-            r11.currentRadius = r4
-            int r0 = (r4 > r1 ? 1 : (r4 == r1 ? 0 : -1))
-            if (r0 <= 0) goto L_0x01d7
-            r11.currentRadius = r1
-            goto L_0x01d7
-        L_0x01c5:
-            int r9 = org.telegram.messenger.AndroidUtilities.dp(r7)
-            float r9 = (float) r9
-            float r10 = (float) r2
-            float r10 = r10 / r0
-            float r9 = r9 * r10
-            float r4 = r4 - r9
-            r11.currentRadius = r4
-            int r0 = (r4 > r1 ? 1 : (r4 == r1 ? 0 : -1))
-            if (r0 >= 0) goto L_0x01d7
-            r11.currentRadius = r1
-        L_0x01d7:
-            r0 = 1
-        L_0x01d8:
-            float r1 = r11.transitionProgress
-            int r4 = (r1 > r7 ? 1 : (r1 == r7 ? 0 : -1))
-            if (r4 >= 0) goto L_0x01ec
+            int r5 = (r4 > r1 ? 1 : (r4 == r1 ? 0 : -1))
+            if (r5 == 0) goto L_0x027f
+            r5 = 1114636288(0x42700000, float:60.0)
+            int r6 = (r4 > r1 ? 1 : (r4 == r1 ? 0 : -1))
+            if (r6 >= 0) goto L_0x026c
+            int r6 = org.telegram.messenger.AndroidUtilities.dp(r9)
+            float r6 = (float) r6
+            float r12 = (float) r2
+            float r12 = r12 / r5
+            float r6 = r6 * r12
+            float r4 = r4 + r6
+            r0.currentRadius = r4
+            int r4 = (r4 > r1 ? 1 : (r4 == r1 ? 0 : -1))
+            if (r4 <= 0) goto L_0x027e
+            r0.currentRadius = r1
+            goto L_0x027e
+        L_0x026c:
+            int r6 = org.telegram.messenger.AndroidUtilities.dp(r9)
+            float r6 = (float) r6
+            float r12 = (float) r2
+            float r12 = r12 / r5
+            float r6 = r6 * r12
+            float r4 = r4 - r6
+            r0.currentRadius = r4
+            int r4 = (r4 > r1 ? 1 : (r4 == r1 ? 0 : -1))
+            if (r4 >= 0) goto L_0x027e
+            r0.currentRadius = r1
+        L_0x027e:
+            r12 = 1
+        L_0x027f:
+            float r1 = r0.transitionProgress
+            int r4 = (r1 > r9 ? 1 : (r1 == r9 ? 0 : -1))
+            if (r4 >= 0) goto L_0x0293
             float r2 = (float) r2
             r3 = 1130430464(0x43610000, float:225.0)
             float r2 = r2 / r3
             float r1 = r1 + r2
-            r11.transitionProgress = r1
-            int r1 = (r1 > r7 ? 1 : (r1 == r7 ? 0 : -1))
-            if (r1 >= 0) goto L_0x01ea
-            goto L_0x01ed
-        L_0x01ea:
-            r11.transitionProgress = r7
-        L_0x01ec:
-            r5 = r0
-        L_0x01ed:
-            float r0 = r11.transitionProgress
-            int r1 = (r0 > r7 ? 1 : (r0 == r7 ? 0 : -1))
-            if (r1 >= 0) goto L_0x023d
-            android.view.animation.Interpolator r1 = org.telegram.ui.Components.Easings.easeInQuad
-            r2 = 1077936128(0x40400000, float:3.0)
-            float r0 = r0 * r2
-            float r0 = java.lang.Math.min(r7, r0)
-            float r0 = r1.getInterpolation(r0)
-            float r7 = r7 - r0
-            android.view.animation.Interpolator r0 = org.telegram.ui.Components.Easings.easeOutQuad
-            float r1 = r11.transitionProgress
-            float r0 = r0.getInterpolation(r1)
-            int r1 = (r7 > r8 ? 1 : (r7 == r8 ? 0 : -1))
-            if (r1 <= 0) goto L_0x0225
-            int r1 = r11.transitionThumbX
-            int r2 = r11.selectorWidth
-            int r2 = r2 / 2
-            int r1 = r1 + r2
-            float r1 = (float) r1
-            int r2 = r11.thumbSize
-            int r2 = r2 / 2
-            int r2 = r2 + r6
+            r0.transitionProgress = r1
+            int r1 = (r1 > r9 ? 1 : (r1 == r9 ? 0 : -1))
+            if (r1 >= 0) goto L_0x0291
+            goto L_0x0294
+        L_0x0291:
+            r0.transitionProgress = r9
+        L_0x0293:
+            r8 = r12
+        L_0x0294:
+            float r1 = r0.transitionProgress
+            int r2 = (r1 > r9 ? 1 : (r1 == r9 ? 0 : -1))
+            if (r2 >= 0) goto L_0x02e2
+            android.view.animation.Interpolator r2 = org.telegram.ui.Components.Easings.easeInQuad
+            r3 = 1077936128(0x40400000, float:3.0)
+            float r1 = r1 * r3
+            float r1 = java.lang.Math.min(r9, r1)
+            float r1 = r2.getInterpolation(r1)
+            float r9 = r9 - r1
+            android.view.animation.Interpolator r1 = org.telegram.ui.Components.Easings.easeOutQuad
+            float r2 = r0.transitionProgress
+            float r1 = r1.getInterpolation(r2)
+            int r2 = (r9 > r13 ? 1 : (r9 == r13 ? 0 : -1))
+            if (r2 <= 0) goto L_0x02cc
+            int r2 = r0.transitionThumbX
+            int r3 = r0.selectorWidth
+            int r3 = r3 / 2
+            int r2 = r2 + r3
             float r2 = (float) r2
-            float r3 = r11.currentRadius
-            float r3 = r3 * r7
-            android.graphics.Paint r4 = r11.outerPaint1
-            r12.drawCircle(r1, r2, r3, r4)
-        L_0x0225:
-            int r1 = r11.thumbX
-            int r2 = r11.selectorWidth
+            int r3 = r0.thumbSize
+            int r3 = r3 / 2
+            int r3 = r3 + r11
+            float r3 = (float) r3
+            float r4 = r0.currentRadius
+            float r4 = r4 * r9
+            android.graphics.Paint r5 = r0.outerPaint1
+            r7.drawCircle(r2, r3, r4, r5)
+        L_0x02cc:
+            int r2 = r0.selectorWidth
             int r2 = r2 / 2
-            int r1 = r1 + r2
-            float r1 = (float) r1
-            int r2 = r11.thumbSize
+            int r10 = r10 + r2
+            float r2 = (float) r10
+            int r3 = r0.thumbSize
+            int r3 = r3 / 2
+            int r11 = r11 + r3
+            float r3 = (float) r11
+            float r4 = r0.currentRadius
+            float r4 = r4 * r1
+            android.graphics.Paint r1 = r0.outerPaint1
+            r7.drawCircle(r2, r3, r4, r1)
+            goto L_0x02f5
+        L_0x02e2:
+            int r1 = r0.selectorWidth
+            int r1 = r1 / 2
+            int r10 = r10 + r1
+            float r1 = (float) r10
+            int r2 = r0.thumbSize
             int r2 = r2 / 2
-            int r6 = r6 + r2
-            float r2 = (float) r6
-            float r3 = r11.currentRadius
-            float r3 = r3 * r0
-            android.graphics.Paint r0 = r11.outerPaint1
-            r12.drawCircle(r1, r2, r3, r0)
-            goto L_0x0252
-        L_0x023d:
-            int r0 = r11.thumbX
-            int r1 = r11.selectorWidth
-            int r1 = r1 / 2
-            int r0 = r0 + r1
-            float r0 = (float) r0
-            int r1 = r11.thumbSize
-            int r1 = r1 / 2
-            int r6 = r6 + r1
-            float r1 = (float) r6
-            float r2 = r11.currentRadius
-            android.graphics.Paint r3 = r11.outerPaint1
-            r12.drawCircle(r0, r1, r2, r3)
-        L_0x0252:
-            if (r5 == 0) goto L_0x0257
-            r11.postInvalidateOnAnimation()
-        L_0x0257:
+            int r11 = r11 + r2
+            float r2 = (float) r11
+            float r3 = r0.currentRadius
+            android.graphics.Paint r4 = r0.outerPaint1
+            r7.drawCircle(r1, r2, r3, r4)
+        L_0x02f5:
+            if (r8 == 0) goto L_0x02fa
+            r15.postInvalidateOnAnimation()
+        L_0x02fa:
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.SeekBarView.onDraw(android.graphics.Canvas):void");

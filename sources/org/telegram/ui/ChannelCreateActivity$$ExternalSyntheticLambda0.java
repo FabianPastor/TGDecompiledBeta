@@ -1,18 +1,15 @@
 package org.telegram.ui;
 
-import android.content.DialogInterface;
-import org.telegram.tgnet.TLRPC$Chat;
+import android.animation.ValueAnimator;
 
-public final /* synthetic */ class ChannelCreateActivity$$ExternalSyntheticLambda0 implements DialogInterface.OnClickListener {
+public final /* synthetic */ class ChannelCreateActivity$$ExternalSyntheticLambda0 implements ValueAnimator.AnimatorUpdateListener {
     public final /* synthetic */ ChannelCreateActivity f$0;
-    public final /* synthetic */ TLRPC$Chat f$1;
 
-    public /* synthetic */ ChannelCreateActivity$$ExternalSyntheticLambda0(ChannelCreateActivity channelCreateActivity, TLRPC$Chat tLRPC$Chat) {
+    public /* synthetic */ ChannelCreateActivity$$ExternalSyntheticLambda0(ChannelCreateActivity channelCreateActivity) {
         this.f$0 = channelCreateActivity;
-        this.f$1 = tLRPC$Chat;
     }
 
-    public final void onClick(DialogInterface dialogInterface, int i) {
-        this.f$0.lambda$loadAdminedChannels$15(this.f$1, dialogInterface, i);
+    public final void onAnimationUpdate(ValueAnimator valueAnimator) {
+        this.f$0.lambda$updateDoneProgress$3(valueAnimator);
     }
 }

@@ -24,6 +24,7 @@ import org.telegram.ui.Components.LayoutHelper;
 
 public class HintDialogCell extends FrameLayout {
     private AvatarDrawable avatarDrawable = new AvatarDrawable();
+    private String backgroundColorKey;
     CheckBox2 checkBox;
     CounterView counterView;
     private int currentAccount;
@@ -40,6 +41,7 @@ public class HintDialogCell extends FrameLayout {
         super(context);
         new RectF();
         this.currentAccount = UserConfig.selectedAccount;
+        this.backgroundColorKey = "windowBackgroundWhite";
         this.drawCheckbox = z;
         BackupImageView backupImageView = new BackupImageView(context);
         this.imageView = backupImageView;
@@ -67,7 +69,7 @@ public class HintDialogCell extends FrameLayout {
             this.checkBox.setDrawBackgroundAsArc(4);
             this.checkBox.setProgressDelegate(new HintDialogCell$$ExternalSyntheticLambda0(this));
             addView(this.checkBox, LayoutHelper.createFrame(24, 24.0f, 49, 19.0f, 42.0f, 0.0f, 0.0f));
-            this.checkBox.setChecked(true, false);
+            this.checkBox.setChecked(false, false);
             setWillNotDraw(false);
         }
     }
@@ -114,6 +116,12 @@ public class HintDialogCell extends FrameLayout {
         }
         this.avatarDrawable.setInfo(MessagesController.getInstance(this.currentAccount).getChat(Long.valueOf(-this.dialogId)));
         this.currentUser = null;
+    }
+
+    public void setColors(String str, String str2) {
+        this.nameTextView.setTextColor(Theme.getColor(str));
+        this.backgroundColorKey = str2;
+        this.checkBox.setColor("dialogRoundCheckBox", str2, "dialogRoundCheckBoxCheck");
     }
 
     public void setDialog(long j, boolean z, CharSequence charSequence) {
@@ -242,7 +250,7 @@ public class HintDialogCell extends FrameLayout {
             float r7 = (float) r7
             r6.scale(r1, r1, r0, r7)
             android.graphics.Paint r1 = org.telegram.ui.ActionBar.Theme.dialogs_onlineCirclePaint
-            java.lang.String r2 = "windowBackgroundWhite"
+            java.lang.String r2 = r5.backgroundColorKey
             int r2 = org.telegram.ui.ActionBar.Theme.getColor(r2)
             r1.setColor(r2)
             r1 = 1088421888(0x40e00000, float:7.0)

@@ -3,10 +3,10 @@ package j$.util.concurrent;
 import j$.util.CLASSNAMEa;
 import j$.util.function.Consumer;
 import j$.util.function.q;
-import j$.util.w;
+import j$.util.v;
 import java.util.Comparator;
 
-final class h implements w {
+final class h implements v {
     long a;
     final long b;
     final long c;

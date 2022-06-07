@@ -73,7 +73,7 @@ public class MusicPlayerService extends Service implements NotificationCenter.No
 
     public void onCreate() {
         this.audioManager = (AudioManager) getSystemService("audio");
-        for (int i = 0; i < 3; i++) {
+        for (int i = 0; i < 4; i++) {
             NotificationCenter.getInstance(i).addObserver(this, NotificationCenter.messagePlayingDidSeek);
             NotificationCenter.getInstance(i).addObserver(this, NotificationCenter.messagePlayingPlayStateChanged);
             NotificationCenter.getInstance(i).addObserver(this, NotificationCenter.httpFileDidLoad);
@@ -219,7 +219,7 @@ public class MusicPlayerService extends Service implements NotificationCenter.No
         this.loadingFilePath = null;
         this.imageReceiver.setImageBitmap((Drawable) null);
         if (smallCover != null || TextUtils.isEmpty(artworkUrl)) {
-            this.loadingFilePath = FileLoader.getPathToAttach(messageObject.getDocument()).getAbsolutePath();
+            this.loadingFilePath = FileLoader.getInstance(UserConfig.selectedAccount).getPathToAttach(messageObject.getDocument()).getAbsolutePath();
         } else {
             cover = loadArtworkFromUrl(artworkUrl2, true, !z);
             if (cover == null) {
@@ -470,7 +470,7 @@ public class MusicPlayerService extends Service implements NotificationCenter.No
         if (Build.VERSION.SDK_INT >= 21) {
             this.mediaSession.release();
         }
-        for (int i = 0; i < 3; i++) {
+        for (int i = 0; i < 4; i++) {
             NotificationCenter.getInstance(i).removeObserver(this, NotificationCenter.messagePlayingDidSeek);
             NotificationCenter.getInstance(i).removeObserver(this, NotificationCenter.messagePlayingPlayStateChanged);
             NotificationCenter.getInstance(i).removeObserver(this, NotificationCenter.httpFileDidLoad);

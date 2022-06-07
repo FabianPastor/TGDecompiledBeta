@@ -36,7 +36,7 @@ public class Utilities {
 
     public static native void aesCtrDecryption(ByteBuffer byteBuffer, byte[] bArr, byte[] bArr2, int i, int i2);
 
-    public static native void aesCtrDecryptionByteArray(byte[] bArr, byte[] bArr2, byte[] bArr3, int i, int i2, int i3);
+    public static native void aesCtrDecryptionByteArray(byte[] bArr, byte[] bArr2, byte[] bArr3, int i, long j, int i2);
 
     private static native void aesIgeEncryption(ByteBuffer byteBuffer, byte[] bArr, byte[] bArr2, boolean z, int i, int i2);
 
@@ -125,18 +125,62 @@ public class Utilities {
     }
 
     public static Integer parseInt(CharSequence charSequence) {
+        boolean z;
         int i = 0;
         if (charSequence == null) {
             return 0;
         }
-        try {
-            Matcher matcher = pattern.matcher(charSequence);
-            if (matcher.find()) {
-                i = Integer.parseInt(matcher.group(0));
+        int i2 = -1;
+        int i3 = 0;
+        while (true) {
+            try {
+                if (i3 < charSequence.length()) {
+                    char charAt = charSequence.charAt(i3);
+                    if (charAt != '-') {
+                        if (charAt < '0' || charAt > '9') {
+                            z = false;
+                            if (z || i2 >= 0) {
+                                if (!z && i2 >= 0) {
+                                    i3++;
+                                    break;
+                                }
+                            } else {
+                                i2 = i3;
+                            }
+                            i3++;
+                        }
+                    }
+                    z = true;
+                    if (z) {
+                    }
+                    i3++;
+                    break;
+                }
+                break;
+            } catch (Exception unused) {
             }
-        } catch (Exception unused) {
+        }
+        if (i2 >= 0) {
+            i = Integer.parseInt(charSequence.subSequence(i2, i3).toString());
         }
         return Integer.valueOf(i);
+    }
+
+    private static int parseInt(String str) {
+        boolean z;
+        int length = str.length();
+        int i = 0;
+        char charAt = str.charAt(0);
+        if (charAt == '-') {
+            z = false;
+        } else {
+            i = '0' - charAt;
+            z = true;
+        }
+        for (int i2 = 1; i2 < length; i2++) {
+            i = ((i * 10) + 48) - str.charAt(i2);
+        }
+        return z ? -i : i;
     }
 
     public static Long parseLong(String str) {
@@ -288,13 +332,13 @@ public class Utilities {
     }
 
     public static byte[] computeSHA256(byte[] bArr) {
-        return computeSHA256(bArr, 0, bArr.length);
+        return computeSHA256(bArr, 0, (long) bArr.length);
     }
 
-    public static byte[] computeSHA256(byte[] bArr, int i, int i2) {
+    public static byte[] computeSHA256(byte[] bArr, int i, long j) {
         try {
             MessageDigest instance = MessageDigest.getInstance("SHA-256");
-            instance.update(bArr, i, i2);
+            instance.update(bArr, i, (int) j);
             return instance.digest();
         } catch (Exception e) {
             FileLog.e((Throwable) e);
@@ -409,6 +453,12 @@ public class Utilities {
     }
 
     public static float clamp(float f, float f2, float f3) {
+        if (Float.isNaN(f)) {
+            return f3;
+        }
+        if (Float.isInfinite(f)) {
+            return f2;
+        }
         return Math.max(Math.min(f, f2), f3);
     }
 

@@ -1,19 +1,19 @@
 package org.telegram.messenger;
 
-import org.telegram.tgnet.TLObject;
+import java.util.ArrayList;
 
 public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda82 implements Runnable {
     public final /* synthetic */ MessagesController f$0;
     public final /* synthetic */ long f$1;
-    public final /* synthetic */ TLObject f$2;
+    public final /* synthetic */ ArrayList f$2;
 
-    public /* synthetic */ MessagesController$$ExternalSyntheticLambda82(MessagesController messagesController, long j, TLObject tLObject) {
+    public /* synthetic */ MessagesController$$ExternalSyntheticLambda82(MessagesController messagesController, long j, ArrayList arrayList) {
         this.f$0 = messagesController;
         this.f$1 = j;
-        this.f$2 = tLObject;
+        this.f$2 = arrayList;
     }
 
     public final void run() {
-        this.f$0.lambda$loadPeerSettings$57(this.f$1, this.f$2);
+        this.f$0.lambda$processUpdateArray$330(this.f$1, this.f$2);
     }
 }

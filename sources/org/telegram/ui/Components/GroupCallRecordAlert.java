@@ -3,6 +3,7 @@ package org.telegram.ui.Components;
 import android.os.Parcelable;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.accessibility.AccessibilityEvent;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -10,6 +11,7 @@ import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 import java.io.File;
 import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.SvgHelper;
 import org.telegram.ui.ActionBar.BottomSheet;
 
@@ -64,13 +66,13 @@ public class GroupCallRecordAlert extends BottomSheet {
             r4.<init>(r5)
             boolean r5 = org.telegram.messenger.ChatObject.isChannelOrGiga(r21)
             if (r5 == 0) goto L_0x0053
-            r5 = 2131628747(0x7f0e12cb, float:1.8884795E38)
+            r5 = 2131628968(0x7f0e13a8, float:1.8885244E38)
             java.lang.String r6 = "VoipChannelRecordVoiceChat"
             java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r6, r5)
             r4.setText(r5)
             goto L_0x005f
         L_0x0053:
-            r5 = 2131628950(0x7f0e1396, float:1.8885207E38)
+            r5 = 2131629171(0x7f0e1473, float:1.8885655E38)
             java.lang.String r6 = "VoipRecordVoiceChat"
             java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r6, r5)
             r4.setText(r5)
@@ -114,7 +116,7 @@ public class GroupCallRecordAlert extends BottomSheet {
             android.widget.TextView r4 = new android.widget.TextView
             android.content.Context r8 = r19.getContext()
             r4.<init>(r8)
-            r8 = 2131628951(0x7f0e1397, float:1.888521E38)
+            r8 = 2131629172(0x7f0e1474, float:1.8885657E38)
             java.lang.String r11 = "VoipRecordVoiceChatInfo"
             java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r11, r8)
             r4.setText(r8)
@@ -245,7 +247,7 @@ public class GroupCallRecordAlert extends BottomSheet {
             android.graphics.Typeface r8 = org.telegram.messenger.AndroidUtilities.getTypeface(r6)
             r3.setTypeface(r8)
             android.widget.TextView r3 = r0.positiveButton
-            r8 = 2131628949(0x7f0e1395, float:1.8885205E38)
+            r8 = 2131629170(0x7f0e1472, float:1.8885653E38)
             java.lang.String r9 = "VoipRecordStart"
             java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r9, r8)
             r3.setText(r8)
@@ -329,7 +331,7 @@ public class GroupCallRecordAlert extends BottomSheet {
             if (r3 != 0) goto L_0x02a2
             android.widget.TextView[] r8 = r0.titles
             r8 = r8[r3]
-            r9 = 2131628946(0x7f0e1392, float:1.88852E38)
+            r9 = 2131629167(0x7f0e146f, float:1.8885647E38)
             java.lang.String r10 = "VoipRecordAudio"
             java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r10, r9)
             r8.setText(r9)
@@ -338,7 +340,7 @@ public class GroupCallRecordAlert extends BottomSheet {
             if (r3 != r7) goto L_0x02b5
             android.widget.TextView[] r8 = r0.titles
             r8 = r8[r3]
-            r9 = 2131628948(0x7f0e1394, float:1.8885203E38)
+            r9 = 2131629169(0x7f0e1471, float:1.8885651E38)
             java.lang.String r10 = "VoipRecordPortrait"
             java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r10, r9)
             r8.setText(r9)
@@ -346,7 +348,7 @@ public class GroupCallRecordAlert extends BottomSheet {
         L_0x02b5:
             android.widget.TextView[] r8 = r0.titles
             r8 = r8[r3]
-            r9 = 2131628947(0x7f0e1393, float:1.8885201E38)
+            r9 = 2131629168(0x7f0e1470, float:1.888565E38)
             java.lang.String r10 = "VoipRecordLandscape"
             java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r10, r9)
             r8.setText(r9)
@@ -436,20 +438,42 @@ public class GroupCallRecordAlert extends BottomSheet {
             return GroupCallRecordAlert.this.titles.length;
         }
 
-        public Object instantiateItem(ViewGroup viewGroup, int i) {
-            ImageView imageView = new ImageView(GroupCallRecordAlert.this.getContext());
-            imageView.setTag(Integer.valueOf(i));
-            imageView.setPadding(AndroidUtilities.dp(18.0f), 0, AndroidUtilities.dp(18.0f), 0);
-            imageView.setScaleType(ImageView.ScaleType.FIT_XY);
-            imageView.setLayoutParams(new ViewGroup.LayoutParams(AndroidUtilities.dp(200.0f), -1));
+        public Object instantiateItem(ViewGroup viewGroup, final int i) {
+            AnonymousClass1 r0 = new ImageView(GroupCallRecordAlert.this.getContext()) {
+                public void onInitializeAccessibilityEvent(AccessibilityEvent accessibilityEvent) {
+                    super.onInitializeAccessibilityEvent(accessibilityEvent);
+                    if (accessibilityEvent.getEventType() == 32768) {
+                        GroupCallRecordAlert.this.viewPager.setCurrentItem(i, true);
+                    }
+                }
+            };
+            r0.setOnClickListener(new GroupCallRecordAlert$Adapter$$ExternalSyntheticLambda0(this, i));
+            r0.setFocusable(true);
+            r0.setTag(Integer.valueOf(i));
+            r0.setPadding(AndroidUtilities.dp(18.0f), 0, AndroidUtilities.dp(18.0f), 0);
+            r0.setScaleType(ImageView.ScaleType.FIT_XY);
+            r0.setLayoutParams(new ViewGroup.LayoutParams(AndroidUtilities.dp(200.0f), -1));
+            if (i == 0) {
+                r0.setContentDescription(LocaleController.getString("VoipRecordAudio", NUM));
+            } else if (i == 1) {
+                r0.setContentDescription(LocaleController.getString("VoipRecordPortrait", NUM));
+            } else {
+                r0.setContentDescription(LocaleController.getString("VoipRecordLandscape", NUM));
+            }
             SvgHelper.SvgDrawable drawable = SvgHelper.getDrawable(RLottieDrawable.readRes((File) null, i == 0 ? NUM : i == 1 ? NUM : NUM));
             drawable.setAspectFill(false);
-            imageView.setImageDrawable(drawable);
-            if (imageView.getParent() != null) {
-                ((ViewGroup) imageView.getParent()).removeView(imageView);
+            r0.setImageDrawable(drawable);
+            if (r0.getParent() != null) {
+                ((ViewGroup) r0.getParent()).removeView(r0);
             }
-            viewGroup.addView(imageView, 0);
-            return imageView;
+            viewGroup.addView(r0, 0);
+            return r0;
+        }
+
+        /* access modifiers changed from: private */
+        public /* synthetic */ void lambda$instantiateItem$0(int i, View view) {
+            GroupCallRecordAlert.this.onStartRecord(i);
+            GroupCallRecordAlert.this.dismiss();
         }
 
         public void destroyItem(ViewGroup viewGroup, int i, Object obj) {

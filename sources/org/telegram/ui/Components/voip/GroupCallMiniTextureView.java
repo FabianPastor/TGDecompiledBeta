@@ -213,16 +213,17 @@ public class GroupCallMiniTextureView extends FrameLayout implements GroupCallSt
         final StaticLayout staticLayout = r19;
         TextPaint textPaint5 = textPaint2;
         StaticLayout staticLayout2 = new StaticLayout(LocaleController.getString("VoipVideoScreenSharingTwoLines", NUM), textPaint5, AndroidUtilities.dp(400.0f), Layout.Alignment.ALIGN_CENTER, 1.0f, 0.0f, false);
+        TLRPC$Chat chat = MessagesController.getInstance(this.currentAccount).getChat(Long.valueOf(call3.chatId));
         String str2 = string;
         final StaticLayout staticLayout3 = r19;
-        TLRPC$Chat chat = MessagesController.getInstance(this.currentAccount).getChat(Long.valueOf(call3.chatId));
-        StaticLayout staticLayout4 = new StaticLayout(LocaleController.formatString("VoipVideoNotAvailable", NUM, LocaleController.formatPluralString("Participants", MessagesController.getInstance(this.currentAccount).groupCallVideoMaxParticipants)), textPaint5, AndroidUtilities.dp(400.0f), Layout.Alignment.ALIGN_CENTER, 1.0f, 0.0f, false);
+        TLRPC$Chat tLRPC$Chat = chat;
+        StaticLayout staticLayout4 = new StaticLayout(LocaleController.formatString("VoipVideoNotAvailable", NUM, LocaleController.formatPluralString("Participants", MessagesController.getInstance(this.currentAccount).groupCallVideoMaxParticipants, new Object[0])), textPaint5, AndroidUtilities.dp(400.0f), Layout.Alignment.ALIGN_CENTER, 1.0f, 0.0f, false);
         String string2 = LocaleController.getString("VoipVideoScreenSharing", NUM);
         String str3 = str2;
         final String str4 = string2;
         final float measureText = textPaint2.measureText(str3);
         final float measureText2 = textPaint4.measureText(string2);
-        TLRPC$Chat tLRPC$Chat = chat;
+        TLRPC$Chat tLRPC$Chat2 = tLRPC$Chat;
         AnonymousClass1 r29 = r0;
         AnonymousClass1 r0 = new VoIPTextureView(this, groupCallRenderersContainer.getContext(), false, false, true, true) {
             float overlayIconAlphaFrom;
@@ -620,10 +621,10 @@ public class GroupCallMiniTextureView extends FrameLayout implements GroupCallSt
         this.noRtmpStreamTextView.setBackground(createSimpleSelectorRoundRectDrawable);
         this.noRtmpStreamTextView.setGravity(17);
         this.noRtmpStreamTextView.setAlpha(0.0f);
-        if (ChatObject.canManageCalls(tLRPC$Chat)) {
+        if (ChatObject.canManageCalls(tLRPC$Chat2)) {
             this.noRtmpStreamTextView.setText(AndroidUtilities.replaceTags(LocaleController.getString(NUM)));
         } else {
-            this.noRtmpStreamTextView.setText(AndroidUtilities.replaceTags(LocaleController.formatString("NoRtmpStreamFromAppViewer", NUM, tLRPC$Chat.title)));
+            this.noRtmpStreamTextView.setText(AndroidUtilities.replaceTags(LocaleController.formatString("NoRtmpStreamFromAppViewer", NUM, tLRPC$Chat2.title)));
         }
         addView(this.noRtmpStreamTextView, LayoutHelper.createFrame(-2, -2, 51));
     }

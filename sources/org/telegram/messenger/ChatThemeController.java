@@ -27,7 +27,7 @@ import org.telegram.ui.ActionBar.EmojiThemes;
 public class ChatThemeController extends BaseController {
     private static List<EmojiThemes> allChatThemes = null;
     public static volatile DispatchQueue chatThemeQueue = new DispatchQueue("chatThemeQueue");
-    private static final ChatThemeController[] instances = new ChatThemeController[3];
+    private static final ChatThemeController[] instances = new ChatThemeController[4];
     private static volatile long lastReloadTimeMs = 0;
     private static final long reloadTimeoutMs = 7200000;
     private static final HashMap<Long, Bitmap> themeIdWallpaperThumbMap = new HashMap<>();

@@ -1,11 +1,11 @@
 package j$.util.stream;
 
 import j$.util.function.f;
-import j$.util.y;
+import j$.util.u;
 
 class P extends T {
-    P(y yVar, int i, boolean z) {
-        super(yVar, i, z);
+    P(u uVar, int i, boolean z) {
+        super(uVar, i, z);
     }
 
     /* access modifiers changed from: package-private */
@@ -14,7 +14,7 @@ class P extends T {
     }
 
     /* access modifiers changed from: package-private */
-    public final CLASSNAMEn3 H0(int i, CLASSNAMEn3 n3Var) {
+    public final CLASSNAMEm3 H0(int i, CLASSNAMEm3 m3Var) {
         throw new UnsupportedOperationException();
     }
 

@@ -1,20 +1,20 @@
 package org.telegram.ui;
 
-import android.net.Uri;
+import android.graphics.Bitmap;
 import org.telegram.ui.PhotoViewer;
 
 public final /* synthetic */ class PhotoViewer$FirstFrameView$$ExternalSyntheticLambda2 implements Runnable {
     public final /* synthetic */ PhotoViewer.FirstFrameView f$0;
-    public final /* synthetic */ Uri f$1;
-    public final /* synthetic */ int f$2;
+    public final /* synthetic */ int f$1;
+    public final /* synthetic */ Bitmap f$2;
 
-    public /* synthetic */ PhotoViewer$FirstFrameView$$ExternalSyntheticLambda2(PhotoViewer.FirstFrameView firstFrameView, Uri uri, int i) {
+    public /* synthetic */ PhotoViewer$FirstFrameView$$ExternalSyntheticLambda2(PhotoViewer.FirstFrameView firstFrameView, int i, Bitmap bitmap) {
         this.f$0 = firstFrameView;
-        this.f$1 = uri;
-        this.f$2 = i;
+        this.f$1 = i;
+        this.f$2 = bitmap;
     }
 
     public final void run() {
-        this.f$0.lambda$checkFromPlayer$2(this.f$1, this.f$2);
+        this.f$0.lambda$checkFromPlayer$0(this.f$1, this.f$2);
     }
 }

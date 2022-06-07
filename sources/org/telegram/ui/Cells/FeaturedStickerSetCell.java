@@ -168,7 +168,7 @@ public class FeaturedStickerSetCell extends FrameLayout {
         } else {
             this.textView.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
         }
-        this.valueTextView.setText(LocaleController.formatPluralString("Stickers", tLRPC$StickerSetCovered2.set.count));
+        this.valueTextView.setText(LocaleController.formatPluralString("Stickers", tLRPC$StickerSetCovered2.set.count, new Object[0]));
         TLRPC$Document tLRPC$Document2 = tLRPC$StickerSetCovered2.cover;
         if (tLRPC$Document2 != null) {
             tLRPC$Document = tLRPC$Document2;

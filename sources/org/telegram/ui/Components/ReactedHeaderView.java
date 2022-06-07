@@ -230,8 +230,8 @@ public class ReactedHeaderView extends FrameLayout {
     }
 
     /* access modifiers changed from: private */
-    /* JADX WARNING: Removed duplicated region for block: B:24:0x00cf  */
-    /* JADX WARNING: Removed duplicated region for block: B:28:0x00f2  */
+    /* JADX WARNING: Removed duplicated region for block: B:24:0x00d1  */
+    /* JADX WARNING: Removed duplicated region for block: B:28:0x00f4  */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public /* synthetic */ void lambda$loadReactions$6(int r12, org.telegram.tgnet.TLRPC$TL_messages_messageReactionsList r13) {
         /*
@@ -267,11 +267,12 @@ public class ReactedHeaderView extends FrameLayout {
             java.lang.Object[] r3 = new java.lang.Object[r1]
             r3[r2] = r0
             java.lang.String r12 = java.lang.String.format(r12, r3)
-            goto L_0x004f
+            goto L_0x0051
         L_0x0049:
-            java.lang.String r0 = "ReactionsCount"
-            java.lang.String r12 = org.telegram.messenger.LocaleController.formatPluralString(r0, r12)
-        L_0x004f:
+            java.lang.Object[] r0 = new java.lang.Object[r2]
+            java.lang.String r3 = "ReactionsCount"
+            java.lang.String r12 = org.telegram.messenger.LocaleController.formatPluralString(r3, r12, r0)
+        L_0x0051:
             android.widget.TextView r0 = r11.titleView
             r0.setText(r12)
             org.telegram.messenger.MessageObject r12 = r11.message
@@ -279,20 +280,20 @@ public class ReactedHeaderView extends FrameLayout {
             org.telegram.tgnet.TLRPC$TL_messageReactions r12 = r12.reactions
             r0 = 1065353216(0x3var_, float:1.0)
             r3 = 0
-            if (r12 == 0) goto L_0x00cc
+            if (r12 == 0) goto L_0x00ce
             java.util.ArrayList<org.telegram.tgnet.TLRPC$TL_reactionCount> r12 = r12.results
             int r12 = r12.size()
-            if (r12 != r1) goto L_0x00cc
+            if (r12 != r1) goto L_0x00ce
             java.util.ArrayList<org.telegram.tgnet.TLRPC$TL_messagePeerReaction> r12 = r13.reactions
             boolean r12 = r12.isEmpty()
-            if (r12 != 0) goto L_0x00cc
+            if (r12 != 0) goto L_0x00ce
             int r12 = r11.currentAccount
             org.telegram.messenger.MediaDataController r12 = org.telegram.messenger.MediaDataController.getInstance(r12)
             java.util.List r12 = r12.getReactionsList()
             java.util.Iterator r12 = r12.iterator()
-        L_0x007d:
+        L_0x007f:
             boolean r4 = r12.hasNext()
-            if (r4 == 0) goto L_0x00cc
+            if (r4 == 0) goto L_0x00ce
             java.lang.Object r4 = r12.next()
             r10 = r4
             org.telegram.tgnet.TLRPC$TL_availableReaction r10 = (org.telegram.tgnet.TLRPC$TL_availableReaction) r10
@@ -302,7 +303,7 @@ public class ReactedHeaderView extends FrameLayout {
             org.telegram.tgnet.TLRPC$TL_messagePeerReaction r5 = (org.telegram.tgnet.TLRPC$TL_messagePeerReaction) r5
             java.lang.String r5 = r5.reaction
             boolean r4 = r4.equals(r5)
-            if (r4 == 0) goto L_0x007d
+            if (r4 == 0) goto L_0x007f
             org.telegram.ui.Components.BackupImageView r5 = r11.reactView
             org.telegram.tgnet.TLRPC$Document r12 = r10.static_icon
             org.telegram.messenger.ImageLocation r6 = org.telegram.messenger.ImageLocation.getForDocument(r12)
@@ -322,11 +323,11 @@ public class ReactedHeaderView extends FrameLayout {
             r4 = 8
             r12.setVisibility(r4)
             r12 = 0
-            goto L_0x00cd
-        L_0x00cc:
+            goto L_0x00cf
+        L_0x00ce:
             r12 = 1
-        L_0x00cd:
-            if (r12 == 0) goto L_0x00e6
+        L_0x00cf:
+            if (r12 == 0) goto L_0x00e8
             android.widget.ImageView r12 = r11.iconView
             r12.setVisibility(r2)
             android.widget.ImageView r12 = r11.iconView
@@ -335,47 +336,47 @@ public class ReactedHeaderView extends FrameLayout {
             android.view.ViewPropertyAnimator r12 = r12.animate()
             android.view.ViewPropertyAnimator r12 = r12.alpha(r0)
             r12.start()
-        L_0x00e6:
+        L_0x00e8:
             java.util.ArrayList<org.telegram.tgnet.TLRPC$User> r12 = r13.users
             java.util.Iterator r12 = r12.iterator()
-        L_0x00ec:
+        L_0x00ee:
             boolean r13 = r12.hasNext()
-            if (r13 == 0) goto L_0x012f
+            if (r13 == 0) goto L_0x0131
             java.lang.Object r13 = r12.next()
             org.telegram.tgnet.TLRPC$User r13 = (org.telegram.tgnet.TLRPC$User) r13
             org.telegram.messenger.MessageObject r0 = r11.message
             org.telegram.tgnet.TLRPC$Message r0 = r0.messageOwner
             org.telegram.tgnet.TLRPC$Peer r0 = r0.from_id
-            if (r0 == 0) goto L_0x00ec
+            if (r0 == 0) goto L_0x00ee
             long r3 = r13.id
             long r5 = r0.user_id
             int r0 = (r3 > r5 ? 1 : (r3 == r5 ? 0 : -1))
-            if (r0 == 0) goto L_0x00ec
+            if (r0 == 0) goto L_0x00ee
             r0 = 0
-        L_0x0109:
+        L_0x010b:
             java.util.List<org.telegram.tgnet.TLRPC$User> r3 = r11.users
             int r3 = r3.size()
-            if (r0 >= r3) goto L_0x0126
+            if (r0 >= r3) goto L_0x0128
             java.util.List<org.telegram.tgnet.TLRPC$User> r3 = r11.users
             java.lang.Object r3 = r3.get(r0)
             org.telegram.tgnet.TLRPC$User r3 = (org.telegram.tgnet.TLRPC$User) r3
             long r3 = r3.id
             long r5 = r13.id
             int r7 = (r3 > r5 ? 1 : (r3 == r5 ? 0 : -1))
-            if (r7 != 0) goto L_0x0123
+            if (r7 != 0) goto L_0x0125
             r0 = 1
-            goto L_0x0127
-        L_0x0123:
+            goto L_0x0129
+        L_0x0125:
             int r0 = r0 + 1
-            goto L_0x0109
-        L_0x0126:
+            goto L_0x010b
+        L_0x0128:
             r0 = 0
-        L_0x0127:
-            if (r0 != 0) goto L_0x00ec
+        L_0x0129:
+            if (r0 != 0) goto L_0x00ee
             java.util.List<org.telegram.tgnet.TLRPC$User> r0 = r11.users
             r0.add(r13)
-            goto L_0x00ec
-        L_0x012f:
+            goto L_0x00ee
+        L_0x0131:
             r11.updateView()
             return
         */

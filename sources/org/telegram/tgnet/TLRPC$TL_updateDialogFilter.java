@@ -2,7 +2,7 @@ package org.telegram.tgnet;
 
 public class TLRPC$TL_updateDialogFilter extends TLRPC$Update {
     public static int constructor = NUM;
-    public TLRPC$TL_dialogFilter filter;
+    public TLRPC$DialogFilter filter;
     public int flags;
     public int id;
 
@@ -10,7 +10,7 @@ public class TLRPC$TL_updateDialogFilter extends TLRPC$Update {
         this.flags = abstractSerializedData.readInt32(z);
         this.id = abstractSerializedData.readInt32(z);
         if ((this.flags & 1) != 0) {
-            this.filter = TLRPC$TL_dialogFilter.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
+            this.filter = TLRPC$DialogFilter.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
         }
     }
 

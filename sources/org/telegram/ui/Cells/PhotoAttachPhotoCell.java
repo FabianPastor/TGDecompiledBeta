@@ -220,37 +220,38 @@ public class PhotoAttachPhotoCell extends FrameLayout {
     }
 
     public void setPhotoEntry(MediaController.SearchImage searchImage, boolean z, boolean z2) {
+        MediaController.SearchImage searchImage2 = searchImage;
         boolean z3 = false;
         this.pressed = false;
-        this.searchEntry = searchImage;
+        this.searchEntry = searchImage2;
         this.isLast = z2;
         Drawable drawable = this.zoomOnSelect ? Theme.chat_attachEmptyDrawable : getResources().getDrawable(NUM);
-        TLRPC$PhotoSize tLRPC$PhotoSize = searchImage.thumbPhotoSize;
+        TLRPC$PhotoSize tLRPC$PhotoSize = searchImage2.thumbPhotoSize;
         if (tLRPC$PhotoSize != null) {
-            this.imageView.setImage(ImageLocation.getForPhoto(tLRPC$PhotoSize, searchImage.photo), (String) null, drawable, (Object) searchImage);
+            this.imageView.setImage(ImageLocation.getForPhoto(tLRPC$PhotoSize, searchImage2.photo), (String) null, drawable, (Object) searchImage);
         } else {
-            TLRPC$PhotoSize tLRPC$PhotoSize2 = searchImage.photoSize;
+            TLRPC$PhotoSize tLRPC$PhotoSize2 = searchImage2.photoSize;
             if (tLRPC$PhotoSize2 != null) {
-                this.imageView.setImage(ImageLocation.getForPhoto(tLRPC$PhotoSize2, searchImage.photo), "80_80", drawable, (Object) searchImage);
+                this.imageView.setImage(ImageLocation.getForPhoto(tLRPC$PhotoSize2, searchImage2.photo), "80_80", drawable, (Object) searchImage);
             } else {
-                String str = searchImage.thumbPath;
+                String str = searchImage2.thumbPath;
                 if (str != null) {
                     this.imageView.setImage(str, (String) null, drawable);
-                } else if (!TextUtils.isEmpty(searchImage.thumbUrl)) {
-                    ImageLocation forPath = ImageLocation.getForPath(searchImage.thumbUrl);
-                    if (searchImage.type == 1 && searchImage.thumbUrl.endsWith("mp4")) {
+                } else if (!TextUtils.isEmpty(searchImage2.thumbUrl)) {
+                    ImageLocation forPath = ImageLocation.getForPath(searchImage2.thumbUrl);
+                    if (searchImage2.type == 1 && searchImage2.thumbUrl.endsWith("mp4")) {
                         forPath.imageType = 2;
                     }
                     this.imageView.setImage(forPath, (String) null, drawable, (Object) searchImage);
                 } else {
-                    TLRPC$Document tLRPC$Document = searchImage.document;
+                    TLRPC$Document tLRPC$Document = searchImage2.document;
                     if (tLRPC$Document != null) {
                         MessageObject.getDocumentVideoThumb(tLRPC$Document);
-                        TLRPC$VideoSize documentVideoThumb = MessageObject.getDocumentVideoThumb(searchImage.document);
+                        TLRPC$VideoSize documentVideoThumb = MessageObject.getDocumentVideoThumb(searchImage2.document);
                         if (documentVideoThumb != null) {
-                            this.imageView.setImage(ImageLocation.getForDocument(documentVideoThumb, searchImage.document), (String) null, ImageLocation.getForDocument(FileLoader.getClosestPhotoSizeWithSize(searchImage.document.thumbs, 90), searchImage.document), "52_52", (String) null, -1, 1, searchImage);
+                            this.imageView.setImage(ImageLocation.getForDocument(documentVideoThumb, searchImage2.document), (String) null, ImageLocation.getForDocument(FileLoader.getClosestPhotoSizeWithSize(searchImage2.document.thumbs, 90), searchImage2.document), "52_52", (String) null, -1, 1, searchImage);
                         } else {
-                            this.imageView.setImage(ImageLocation.getForDocument(FileLoader.getClosestPhotoSizeWithSize(searchImage.document.thumbs, 320), searchImage.document), (String) null, drawable, (Object) searchImage);
+                            this.imageView.setImage(ImageLocation.getForDocument(FileLoader.getClosestPhotoSizeWithSize(searchImage2.document.thumbs, 320), searchImage2.document), (String) null, drawable, (Object) searchImage);
                         }
                     } else {
                         this.imageView.setImageDrawable(drawable);

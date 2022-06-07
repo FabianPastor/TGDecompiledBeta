@@ -410,7 +410,7 @@ public class TwoStepVerificationSetupActivity extends BaseFragment {
         this.buttonTextView.setTextColor(Theme.getColor("featuredStickers_buttonText"));
         this.buttonTextView.setTextSize(1, 15.0f);
         this.buttonTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
-        this.buttonTextView.setBackground(Theme.createSimpleSelectorRoundRectDrawable(AndroidUtilities.dp(6.0f), Theme.getColor("featuredStickers_addButton"), Theme.getColor("featuredStickers_addButtonPressed")));
+        this.buttonTextView.setBackground(Theme.AdaptiveRipple.filledRect("featuredStickers_addButton", 6.0f));
         this.buttonTextView.setOnClickListener(new TwoStepVerificationSetupActivity$$ExternalSyntheticLambda7(this));
         int i2 = this.currentType;
         if (i2 == 6 || i2 == 7 || i2 == 9) {
@@ -435,7 +435,7 @@ public class TwoStepVerificationSetupActivity extends BaseFragment {
                         ((ViewGroup.MarginLayoutParams) TwoStepVerificationSetupActivity.this.radialProgressView.getLayoutParams()).topMargin = AndroidUtilities.statusBarHeight + AndroidUtilities.dp(16.0f);
                     }
                 };
-                final AnonymousClass5 r13 = new SizeNotifierFrameLayout(context2) {
+                final AnonymousClass5 r12 = new SizeNotifierFrameLayout(context2) {
                     /* access modifiers changed from: protected */
                     public void onLayout(boolean z, int i, int i2, int i3, int i4) {
                         int i5;
@@ -477,7 +477,7 @@ public class TwoStepVerificationSetupActivity extends BaseFragment {
                         TwoStepVerificationSetupActivity.this.keyboardView.measure(View.MeasureSpec.makeMeasureSpec(size, NUM), View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(230.0f), NUM));
                     }
                 };
-                r13.addView(r3);
+                r12.addView(r3);
                 AnonymousClass6 r7 = new ViewGroup(context2) {
                     /* access modifiers changed from: protected */
                     public void onMeasure(int i, int i2) {
@@ -485,7 +485,7 @@ public class TwoStepVerificationSetupActivity extends BaseFragment {
                         int size2 = View.MeasureSpec.getSize(i2);
                         TwoStepVerificationSetupActivity.this.actionBar.measure(View.MeasureSpec.makeMeasureSpec(size, NUM), i2);
                         TwoStepVerificationSetupActivity.this.actionBarBackground.measure(View.MeasureSpec.makeMeasureSpec(size, NUM), View.MeasureSpec.makeMeasureSpec(TwoStepVerificationSetupActivity.this.actionBar.getMeasuredHeight() + AndroidUtilities.dp(3.0f), NUM));
-                        r13.measure(View.MeasureSpec.makeMeasureSpec(size, NUM), i2);
+                        r12.measure(View.MeasureSpec.makeMeasureSpec(size, NUM), i2);
                         setMeasuredDimension(size, size2);
                     }
 
@@ -493,8 +493,8 @@ public class TwoStepVerificationSetupActivity extends BaseFragment {
                     public void onLayout(boolean z, int i, int i2, int i3, int i4) {
                         TwoStepVerificationSetupActivity.this.actionBar.layout(0, 0, TwoStepVerificationSetupActivity.this.actionBar.getMeasuredWidth(), TwoStepVerificationSetupActivity.this.actionBar.getMeasuredHeight());
                         TwoStepVerificationSetupActivity.this.actionBarBackground.layout(0, 0, TwoStepVerificationSetupActivity.this.actionBarBackground.getMeasuredWidth(), TwoStepVerificationSetupActivity.this.actionBarBackground.getMeasuredHeight());
-                        SizeNotifierFrameLayout sizeNotifierFrameLayout = r13;
-                        sizeNotifierFrameLayout.layout(0, 0, sizeNotifierFrameLayout.getMeasuredWidth(), r13.getMeasuredHeight());
+                        SizeNotifierFrameLayout sizeNotifierFrameLayout = r12;
+                        sizeNotifierFrameLayout.layout(0, 0, sizeNotifierFrameLayout.getMeasuredWidth(), r12.getMeasuredHeight());
                     }
                 };
                 AnonymousClass7 r9 = new ScrollView(context2) {
@@ -600,7 +600,7 @@ public class TwoStepVerificationSetupActivity extends BaseFragment {
                 r3.addView(this.scrollView, LayoutHelper.createFrame(-1, -1.0f));
                 r3.addView(this.bottomSkipButton, LayoutHelper.createFrame(-1, i >= 21 ? 56.0f : 60.0f, 80, 0.0f, 0.0f, 0.0f, 16.0f));
                 r3.addView(this.floatingButtonContainer, LayoutHelper.createFrame(i >= 21 ? 56 : 60, i >= 21 ? 56.0f : 60.0f, 85, 0.0f, 0.0f, 24.0f, 16.0f));
-                r7.addView(r13, LayoutHelper.createFrame(-1, -1.0f));
+                r7.addView(r12, LayoutHelper.createFrame(-1, -1.0f));
                 AnonymousClass8 r92 = new LinearLayout(context2) {
                     /* access modifiers changed from: protected */
                     public void onMeasure(int i, int i2) {
@@ -708,7 +708,7 @@ public class TwoStepVerificationSetupActivity extends BaseFragment {
                 CustomPhoneKeyboardView customPhoneKeyboardView = new CustomPhoneKeyboardView(context2);
                 this.keyboardView = customPhoneKeyboardView;
                 customPhoneKeyboardView.setVisibility(8);
-                r13.addView(this.keyboardView);
+                r12.addView(this.keyboardView);
                 AnonymousClass11 r2 = new CodeFieldContainer(context2) {
                     /* access modifiers changed from: protected */
                     public void processNextPressed() {
@@ -1134,11 +1134,11 @@ public class TwoStepVerificationSetupActivity extends BaseFragment {
                 showDialog.setCancelable(false);
             }
         } else if (tLRPC$TL_error.text.startsWith("FLOOD_WAIT")) {
-            int intValue = Utilities.parseInt(tLRPC$TL_error.text).intValue();
+            int intValue = Utilities.parseInt((CharSequence) tLRPC$TL_error.text).intValue();
             if (intValue < 60) {
-                str = LocaleController.formatPluralString("Seconds", intValue);
+                str = LocaleController.formatPluralString("Seconds", intValue, new Object[0]);
             } else {
-                str = LocaleController.formatPluralString("Minutes", intValue / 60);
+                str = LocaleController.formatPluralString("Minutes", intValue / 60, new Object[0]);
             }
             showAlertWithText(LocaleController.getString("TwoStepVerificationTitle", NUM), LocaleController.formatString("FloodWaitTime", NUM, str));
         } else {
@@ -1526,7 +1526,7 @@ public class TwoStepVerificationSetupActivity extends BaseFragment {
             if (r0 == 0) goto L_0x013c
             android.app.Activity r0 = r9.getParentActivity()     // Catch:{ Exception -> 0x0130 }
             java.lang.String r1 = "PasswordAsHintError"
-            r2 = 2131627195(0x7f0e0cbb, float:1.8881648E38)
+            r2 = 2131627341(0x7f0e0d4d, float:1.8881944E38)
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r1, r2)     // Catch:{ Exception -> 0x0130 }
             android.widget.Toast r0 = android.widget.Toast.makeText(r0, r1, r3)     // Catch:{ Exception -> 0x0130 }
             r0.show()     // Catch:{ Exception -> 0x0130 }
@@ -1569,7 +1569,7 @@ public class TwoStepVerificationSetupActivity extends BaseFragment {
         L_0x0175:
             android.app.Activity r0 = r9.getParentActivity()     // Catch:{ Exception -> 0x018a }
             java.lang.String r1 = "PasswordDoNotMatch"
-            r2 = 2131627197(0x7f0e0cbd, float:1.8881652E38)
+            r2 = 2131627343(0x7f0e0d4f, float:1.8881948E38)
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r1, r2)     // Catch:{ Exception -> 0x018a }
             android.widget.Toast r0 = android.widget.Toast.makeText(r0, r1, r3)     // Catch:{ Exception -> 0x018a }
             r0.show()     // Catch:{ Exception -> 0x018a }
@@ -1679,11 +1679,11 @@ public class TwoStepVerificationSetupActivity extends BaseFragment {
             onFieldError(this.outlineTextFirstRow, this.editTextFirstRow, true);
             showDoneButton(false);
         } else if (tLRPC$TL_error.text.startsWith("FLOOD_WAIT")) {
-            int intValue = Utilities.parseInt(tLRPC$TL_error.text).intValue();
+            int intValue = Utilities.parseInt((CharSequence) tLRPC$TL_error.text).intValue();
             if (intValue < 60) {
-                str = LocaleController.formatPluralString("Seconds", intValue);
+                str = LocaleController.formatPluralString("Seconds", intValue, new Object[0]);
             } else {
-                str = LocaleController.formatPluralString("Minutes", intValue / 60);
+                str = LocaleController.formatPluralString("Minutes", intValue / 60, new Object[0]);
             }
             showAlertWithText(LocaleController.getString("AppName", NUM), LocaleController.formatString("FloodWaitTime", NUM, str));
         } else {
@@ -1720,11 +1720,11 @@ public class TwoStepVerificationSetupActivity extends BaseFragment {
         } else if (tLRPC$TL_error == null || tLRPC$TL_error.text.startsWith("CODE_INVALID")) {
             onCodeFieldError(true);
         } else if (tLRPC$TL_error.text.startsWith("FLOOD_WAIT")) {
-            int intValue = Utilities.parseInt(tLRPC$TL_error.text).intValue();
+            int intValue = Utilities.parseInt((CharSequence) tLRPC$TL_error.text).intValue();
             if (intValue < 60) {
-                str2 = LocaleController.formatPluralString("Seconds", intValue);
+                str2 = LocaleController.formatPluralString("Seconds", intValue, new Object[0]);
             } else {
-                str2 = LocaleController.formatPluralString("Minutes", intValue / 60);
+                str2 = LocaleController.formatPluralString("Minutes", intValue / 60, new Object[0]);
             }
             showAlertWithText(LocaleController.getString("TwoStepVerificationTitle", NUM), LocaleController.formatString("FloodWaitTime", NUM, str2));
         } else {
@@ -1759,11 +1759,11 @@ public class TwoStepVerificationSetupActivity extends BaseFragment {
         } else if (tLRPC$TL_error.text.startsWith("CODE_INVALID")) {
             onCodeFieldError(true);
         } else if (tLRPC$TL_error.text.startsWith("FLOOD_WAIT")) {
-            int intValue = Utilities.parseInt(tLRPC$TL_error.text).intValue();
+            int intValue = Utilities.parseInt((CharSequence) tLRPC$TL_error.text).intValue();
             if (intValue < 60) {
-                str = LocaleController.formatPluralString("Seconds", intValue);
+                str = LocaleController.formatPluralString("Seconds", intValue, new Object[0]);
             } else {
-                str = LocaleController.formatPluralString("Minutes", intValue / 60);
+                str = LocaleController.formatPluralString("Minutes", intValue / 60, new Object[0]);
             }
             showAlertWithText(LocaleController.getString("AppName", NUM), LocaleController.formatString("FloodWaitTime", NUM, str));
         } else {
@@ -2416,7 +2416,7 @@ public class TwoStepVerificationSetupActivity extends BaseFragment {
             java.lang.Object[] r3 = new java.lang.Object[r8]
             r1.postNotificationName(r2, r3)
             r11.finishFragment()
-            goto L_0x0261
+            goto L_0x0265
         L_0x007a:
             android.app.Activity r1 = r11.getParentActivity()
             if (r1 != 0) goto L_0x0081
@@ -2428,7 +2428,7 @@ public class TwoStepVerificationSetupActivity extends BaseFragment {
             org.telegram.ui.ActionBar.AlertDialog$Builder r1 = new org.telegram.ui.ActionBar.AlertDialog$Builder
             android.app.Activity r2 = r11.getParentActivity()
             r1.<init>((android.content.Context) r2)
-            r2 = 2131626918(0x7f0e0ba6, float:1.8881086E38)
+            r2 = 2131627064(0x7f0e0CLASSNAME, float:1.8881382E38)
             java.lang.String r3 = "OK"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             org.telegram.ui.TwoStepVerificationSetupActivity$$ExternalSyntheticLambda5 r3 = new org.telegram.ui.TwoStepVerificationSetupActivity$$ExternalSyntheticLambda5
@@ -2439,27 +2439,27 @@ public class TwoStepVerificationSetupActivity extends BaseFragment {
             if (r2 == 0) goto L_0x00b8
             boolean r2 = r2.has_password
             if (r2 == 0) goto L_0x00b8
-            r2 = 2131629054(0x7f0e13fe, float:1.8885418E38)
+            r2 = 2131629275(0x7f0e14db, float:1.8885866E38)
             java.lang.String r3 = "YourEmailSuccessText"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             r1.setMessage(r2)
             goto L_0x00c4
         L_0x00b8:
-            r2 = 2131629060(0x7f0e1404, float:1.888543E38)
+            r2 = 2131629281(0x7f0e14e1, float:1.8885878E38)
             java.lang.String r3 = "YourPasswordChangedSuccessText"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             r1.setMessage(r2)
         L_0x00c4:
-            r2 = 2131629066(0x7f0e140a, float:1.8885442E38)
+            r2 = 2131629287(0x7f0e14e7, float:1.888589E38)
             java.lang.String r3 = "YourPasswordSuccess"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             r1.setTitle(r2)
             org.telegram.ui.ActionBar.AlertDialog r1 = r1.create()
             android.app.Dialog r1 = r11.showDialog(r1)
-            if (r1 == 0) goto L_0x0261
+            if (r1 == 0) goto L_0x0265
             r1.setCanceledOnTouchOutside(r8)
             r1.setCancelable(r8)
-            goto L_0x0261
+            goto L_0x0265
         L_0x00e2:
             java.util.ArrayList<org.telegram.ui.ActionBar.BaseFragment> r1 = r0.fragmentsToClose
             int r1 = r1.size()
@@ -2522,63 +2522,65 @@ public class TwoStepVerificationSetupActivity extends BaseFragment {
             org.telegram.tgnet.TLRPC$TL_account_password r4 = r0.currentPassword
             r3[r8] = r4
             r1.postNotificationName(r2, r3)
-            goto L_0x0261
+            goto L_0x0265
         L_0x015b:
-            if (r1 == 0) goto L_0x0261
+            if (r1 == 0) goto L_0x0265
             java.lang.String r2 = r1.text
             java.lang.String r3 = "EMAIL_UNCONFIRMED"
             boolean r2 = r3.equals(r2)
-            if (r2 != 0) goto L_0x01da
+            if (r2 != 0) goto L_0x01de
             java.lang.String r2 = r1.text
             java.lang.String r3 = "EMAIL_UNCONFIRMED_"
             boolean r2 = r2.startsWith(r3)
             if (r2 == 0) goto L_0x0172
-            goto L_0x01da
+            goto L_0x01de
         L_0x0172:
             java.lang.String r2 = r1.text
             java.lang.String r3 = "EMAIL_INVALID"
             boolean r2 = r3.equals(r2)
-            r3 = 2131624316(0x7f0e017c, float:1.8875808E38)
+            r3 = 2131624369(0x7f0e01b1, float:1.8875916E38)
             java.lang.String r4 = "AppName"
             if (r2 == 0) goto L_0x0193
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r4, r3)
-            r2 = 2131627198(0x7f0e0cbe, float:1.8881654E38)
+            r2 = 2131627344(0x7f0e0d50, float:1.888195E38)
             java.lang.String r3 = "PasswordEmailInvalid"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             r11.showAlertWithText(r1, r2)
-            goto L_0x0261
+            goto L_0x0265
         L_0x0193:
             java.lang.String r2 = r1.text
             java.lang.String r5 = "FLOOD_WAIT"
             boolean r2 = r2.startsWith(r5)
-            if (r2 == 0) goto L_0x01cf
+            if (r2 == 0) goto L_0x01d3
             java.lang.String r1 = r1.text
-            java.lang.Integer r1 = org.telegram.messenger.Utilities.parseInt(r1)
+            java.lang.Integer r1 = org.telegram.messenger.Utilities.parseInt((java.lang.CharSequence) r1)
             int r1 = r1.intValue()
             r2 = 60
-            if (r1 >= r2) goto L_0x01b2
-            java.lang.String r2 = "Seconds"
-            java.lang.String r1 = org.telegram.messenger.LocaleController.formatPluralString(r2, r1)
-            goto L_0x01b9
-        L_0x01b2:
+            if (r1 >= r2) goto L_0x01b4
+            java.lang.Object[] r2 = new java.lang.Object[r8]
+            java.lang.String r5 = "Seconds"
+            java.lang.String r1 = org.telegram.messenger.LocaleController.formatPluralString(r5, r1, r2)
+            goto L_0x01bd
+        L_0x01b4:
             int r1 = r1 / r2
-            java.lang.String r2 = "Minutes"
-            java.lang.String r1 = org.telegram.messenger.LocaleController.formatPluralString(r2, r1)
-        L_0x01b9:
+            java.lang.Object[] r2 = new java.lang.Object[r8]
+            java.lang.String r5 = "Minutes"
+            java.lang.String r1 = org.telegram.messenger.LocaleController.formatPluralString(r5, r1, r2)
+        L_0x01bd:
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r4, r3)
-            r3 = 2131625810(0x7f0e0752, float:1.8878838E38)
+            r3 = 2131625901(0x7f0e07ad, float:1.8879023E38)
             java.lang.Object[] r4 = new java.lang.Object[r7]
             r4[r8] = r1
             java.lang.String r1 = "FloodWaitTime"
             java.lang.String r1 = org.telegram.messenger.LocaleController.formatString(r1, r3, r4)
             r11.showAlertWithText(r2, r1)
-            goto L_0x0261
-        L_0x01cf:
+            goto L_0x0265
+        L_0x01d3:
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r4, r3)
             java.lang.String r1 = r1.text
             r11.showAlertWithText(r2, r1)
-            goto L_0x0261
-        L_0x01da:
+            goto L_0x0265
+        L_0x01de:
             int r1 = r0.currentAccount
             org.telegram.messenger.NotificationCenter r1 = org.telegram.messenger.NotificationCenter.getInstance(r1)
             int r2 = org.telegram.messenger.NotificationCenter.twoStepPasswordChanged
@@ -2587,15 +2589,15 @@ public class TwoStepVerificationSetupActivity extends BaseFragment {
             java.util.ArrayList<org.telegram.ui.ActionBar.BaseFragment> r1 = r0.fragmentsToClose
             int r1 = r1.size()
             r2 = 0
-        L_0x01ee:
-            if (r2 >= r1) goto L_0x01fe
+        L_0x01f2:
+            if (r2 >= r1) goto L_0x0202
             java.util.ArrayList<org.telegram.ui.ActionBar.BaseFragment> r3 = r0.fragmentsToClose
             java.lang.Object r3 = r3.get(r2)
             org.telegram.ui.ActionBar.BaseFragment r3 = (org.telegram.ui.ActionBar.BaseFragment) r3
             r3.removeSelfFromStack()
             int r2 = r2 + 1
-            goto L_0x01ee
-        L_0x01fe:
+            goto L_0x01f2
+        L_0x0202:
             int r1 = r0.currentAccount
             org.telegram.messenger.NotificationCenter r1 = org.telegram.messenger.NotificationCenter.getInstance(r1)
             int r2 = org.telegram.messenger.NotificationCenter.twoStepPasswordChanged
@@ -2629,12 +2631,12 @@ public class TwoStepVerificationSetupActivity extends BaseFragment {
             r2.<init>(r9, r1)
             boolean r1 = r0.fromRegistration
             r2.fromRegistration = r1
-            if (r4 == 0) goto L_0x0243
+            if (r4 == 0) goto L_0x0247
             r1 = r4
-            goto L_0x0245
-        L_0x0243:
+            goto L_0x0249
+        L_0x0247:
             byte[] r1 = r0.currentPasswordHash
-        L_0x0245:
+        L_0x0249:
             long r3 = r0.currentSecretId
             byte[] r5 = r0.currentSecret
             boolean r6 = r0.emailOnly
@@ -2649,7 +2651,7 @@ public class TwoStepVerificationSetupActivity extends BaseFragment {
             int r1 = r0.otherwiseReloginDays
             r2.setBlockingAlert(r1)
             r11.presentFragment(r2, r7)
-        L_0x0261:
+        L_0x0265:
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.TwoStepVerificationSetupActivity.lambda$setNewPassword$48(org.telegram.tgnet.TLRPC$TL_error, boolean, org.telegram.tgnet.TLObject, byte[], java.lang.String, org.telegram.tgnet.TLRPC$TL_account_passwordInputSettings):void");
@@ -2763,7 +2765,7 @@ public class TwoStepVerificationSetupActivity extends BaseFragment {
     public void showSetForcePasswordAlert() {
         AlertDialog.Builder builder = new AlertDialog.Builder((Context) getParentActivity());
         builder.setTitle(LocaleController.getString("Warning", NUM));
-        builder.setMessage(LocaleController.formatPluralString("ForceSetPasswordAlertMessageShort", this.otherwiseReloginDays));
+        builder.setMessage(LocaleController.formatPluralString("ForceSetPasswordAlertMessageShort", this.otherwiseReloginDays, new Object[0]));
         builder.setPositiveButton(LocaleController.getString("TwoStepVerificationSetPassword", NUM), (DialogInterface.OnClickListener) null);
         builder.setNegativeButton(LocaleController.getString("ForceSetPasswordCancel", NUM), new TwoStepVerificationSetupActivity$$ExternalSyntheticLambda0(this));
         ((TextView) builder.show().getButton(-2)).setTextColor(Theme.getColor("dialogTextRed2"));

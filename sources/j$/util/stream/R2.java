@@ -1,32 +1,37 @@
 package j$.util.stream;
 
+import j$.util.CLASSNAMEl;
 import j$.util.function.Consumer;
 import j$.util.function.o;
 import j$.util.function.p;
 import j$.util.function.q;
 
-class R2 implements T2, CLASSNAMEm3 {
-    private long a;
-    final /* synthetic */ long b;
+class R2 implements S2, CLASSNAMEl3 {
+    private boolean a;
+    private long b;
     final /* synthetic */ o c;
 
-    R2(long j, o oVar) {
-        this.b = j;
+    R2(o oVar) {
         this.c = oVar;
     }
 
     public /* synthetic */ void accept(double d) {
-        CLASSNAMEp1.f(this);
+        CLASSNAMEo1.f(this);
         throw null;
     }
 
     public /* synthetic */ void accept(int i) {
-        CLASSNAMEp1.d(this);
+        CLASSNAMEo1.d(this);
         throw null;
     }
 
     public void accept(long j) {
-        this.a = this.c.applyAsLong(this.a, j);
+        if (this.a) {
+            this.a = false;
+        } else {
+            j = this.c.applyAsLong(this.b, j);
+        }
+        this.b = j;
     }
 
     public /* synthetic */ Consumer andThen(Consumer consumer) {
@@ -35,7 +40,7 @@ class R2 implements T2, CLASSNAMEm3 {
 
     /* renamed from: b */
     public /* synthetic */ void accept(Long l) {
-        CLASSNAMEp1.c(this, l);
+        CLASSNAMEo1.c(this, l);
     }
 
     public q f(q qVar) {
@@ -44,18 +49,22 @@ class R2 implements T2, CLASSNAMEm3 {
     }
 
     public Object get() {
-        return Long.valueOf(this.a);
+        return this.a ? CLASSNAMEl.a() : CLASSNAMEl.d(this.b);
     }
 
-    public void h(T2 t2) {
-        accept(((R2) t2).a);
+    public void h(S2 s2) {
+        R2 r2 = (R2) s2;
+        if (!r2.a) {
+            accept(r2.b);
+        }
     }
 
     public /* synthetic */ void m() {
     }
 
     public void n(long j) {
-        this.a = this.b;
+        this.a = true;
+        this.b = 0;
     }
 
     public /* synthetic */ boolean o() {

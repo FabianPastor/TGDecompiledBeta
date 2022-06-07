@@ -13,6 +13,7 @@ import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.accessibility.AccessibilityNodeInfo;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -79,26 +80,33 @@ public class ChangeBioActivity extends BaseFragment {
         this.fragmentView.setOnTouchListener(ChangeBioActivity$$ExternalSyntheticLambda1.INSTANCE);
         FrameLayout frameLayout = new FrameLayout(context2);
         linearLayout2.addView(frameLayout, LayoutHelper.createLinear(-1, -2, 24.0f, 24.0f, 20.0f, 0.0f));
-        EditTextBoldCursor editTextBoldCursor = new EditTextBoldCursor(context2);
-        this.firstNameField = editTextBoldCursor;
-        editTextBoldCursor.setTextSize(1, 18.0f);
+        AnonymousClass2 r7 = new EditTextBoldCursor(context2) {
+            public void onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo accessibilityNodeInfo) {
+                super.onInitializeAccessibilityNodeInfo(accessibilityNodeInfo);
+                Editable editableText = getEditableText();
+                int aboutLimit = ChangeBioActivity.this.getMessagesController().getAboutLimit() - Character.codePointCount(editableText, 0, editableText.length());
+                accessibilityNodeInfo.setText(getText() + ", " + LocaleController.formatPluralString("PeopleJoinedRemaining", aboutLimit, new Object[0]));
+            }
+        };
+        this.firstNameField = r7;
+        r7.setTextSize(1, 18.0f);
         this.firstNameField.setHintTextColor(Theme.getColor("windowBackgroundWhiteHintText"));
         this.firstNameField.setTextColor(Theme.getColor("windowBackgroundWhiteBlackText"));
         this.firstNameField.setBackgroundDrawable((Drawable) null);
         this.firstNameField.setLineColors(getThemedColor("windowBackgroundWhiteInputField"), getThemedColor("windowBackgroundWhiteInputFieldActivated"), getThemedColor("windowBackgroundWhiteRedText3"));
         this.firstNameField.setMaxLines(4);
-        EditTextBoldCursor editTextBoldCursor2 = this.firstNameField;
+        EditTextBoldCursor editTextBoldCursor = this.firstNameField;
         float f = 24.0f;
         int dp = AndroidUtilities.dp(LocaleController.isRTL ? 24.0f : 0.0f);
         if (LocaleController.isRTL) {
             f = 0.0f;
         }
-        editTextBoldCursor2.setPadding(dp, 0, AndroidUtilities.dp(f), AndroidUtilities.dp(6.0f));
+        editTextBoldCursor.setPadding(dp, 0, AndroidUtilities.dp(f), AndroidUtilities.dp(6.0f));
         this.firstNameField.setGravity(LocaleController.isRTL ? 5 : 3);
         this.firstNameField.setImeOptions(NUM);
         this.firstNameField.setInputType(147457);
         this.firstNameField.setImeOptions(6);
-        this.firstNameField.setFilters(new InputFilter[]{new CodepointsLengthInputFilter(70) {
+        this.firstNameField.setFilters(new InputFilter[]{new CodepointsLengthInputFilter(getMessagesController().getAboutLimit()) {
             public CharSequence filter(CharSequence charSequence, int i, int i2, Spanned spanned, int i3, int i4) {
                 if (charSequence == null || charSequence.length() <= 0 || TextUtils.indexOf(charSequence, 10) != charSequence.length() - 1) {
                     CharSequence filter = super.filter(charSequence, i, i2, spanned, i3, i4);
@@ -129,7 +137,7 @@ public class ChangeBioActivity extends BaseFragment {
             }
 
             public void afterTextChanged(Editable editable) {
-                ChangeBioActivity.this.checkTextView.setNumber(70 - Character.codePointCount(editable, 0, editable.length()), true);
+                ChangeBioActivity.this.checkTextView.setNumber(ChangeBioActivity.this.getMessagesController().getAboutLimit() - Character.codePointCount(editable, 0, editable.length()), true);
             }
         });
         frameLayout.addView(this.firstNameField, LayoutHelper.createFrame(-1, -2.0f, 51, 0.0f, 0.0f, 4.0f, 0.0f));
@@ -137,10 +145,10 @@ public class ChangeBioActivity extends BaseFragment {
         this.checkTextView = numberTextView;
         numberTextView.setCenterAlign(true);
         this.checkTextView.setTextSize(15);
-        this.checkTextView.setNumber(70, false);
+        this.checkTextView.setNumber(getMessagesController().getAboutLimit(), false);
         this.checkTextView.setTextColor(Theme.getColor("windowBackgroundWhiteGrayText4"));
         this.checkTextView.setImportantForAccessibility(2);
-        frameLayout.addView(this.checkTextView, LayoutHelper.createFrame(20, 20.0f, LocaleController.isRTL ? 3 : 5, 0.0f, 4.0f, 4.0f, 0.0f));
+        frameLayout.addView(this.checkTextView, LayoutHelper.createFrame(26, 20.0f, LocaleController.isRTL ? 3 : 5, 0.0f, 4.0f, 4.0f, 0.0f));
         TextView textView = new TextView(context2);
         this.helpTextView = textView;
         textView.setFocusable(true);
@@ -152,8 +160,8 @@ public class ChangeBioActivity extends BaseFragment {
         TLRPC$UserFull userFull = MessagesController.getInstance(this.currentAccount).getUserFull(UserConfig.getInstance(this.currentAccount).getClientUserId());
         if (!(userFull == null || (str = userFull.about) == null)) {
             this.firstNameField.setText(str);
-            EditTextBoldCursor editTextBoldCursor3 = this.firstNameField;
-            editTextBoldCursor3.setSelection(editTextBoldCursor3.length());
+            EditTextBoldCursor editTextBoldCursor2 = this.firstNameField;
+            editTextBoldCursor2.setSelection(editTextBoldCursor2.length());
         }
         return this.fragmentView;
     }

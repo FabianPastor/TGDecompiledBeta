@@ -39,6 +39,7 @@ public class MotionBackgroundDrawable extends Drawable {
     private BitmapShader bitmapShader;
     private int[] colors;
     private Bitmap currentBitmap;
+    private boolean disableGradientShaderScaling;
     private boolean fastAnimation;
     private Canvas gradientCanvas;
     private GradientDrawable gradientDrawable;
@@ -402,11 +403,15 @@ public class MotionBackgroundDrawable extends Drawable {
     }
 
     public void setPatternBitmap(int i) {
-        setPatternBitmap(i, this.patternBitmap);
+        setPatternBitmap(i, this.patternBitmap, true);
+    }
+
+    public void setPatternBitmap(int i, Bitmap bitmap) {
+        setPatternBitmap(i, bitmap, true);
     }
 
     @SuppressLint({"NewApi"})
-    public void setPatternBitmap(int i, Bitmap bitmap) {
+    public void setPatternBitmap(int i, Bitmap bitmap, boolean z) {
         this.intensity = i;
         this.patternBitmap = bitmap;
         this.invalidateLegacy = true;
@@ -424,9 +429,11 @@ public class MotionBackgroundDrawable extends Drawable {
                     Shader.TileMode tileMode = Shader.TileMode.CLAMP;
                     this.bitmapShader = new BitmapShader(bitmap2, tileMode, tileMode);
                     Bitmap bitmap3 = this.patternBitmap;
-                    Shader.TileMode tileMode2 = Shader.TileMode.CLAMP;
+                    Shader.TileMode tileMode2 = Shader.TileMode.REPEAT;
                     this.gradientShader = new BitmapShader(bitmap3, tileMode2, tileMode2);
+                    this.disableGradientShaderScaling = z;
                     this.paint2.setShader(new ComposeShader(this.bitmapShader, this.gradientShader, PorterDuff.Mode.DST_IN));
+                    this.paint2.setFilterBitmap(true);
                     this.matrix = new Matrix();
                     return;
                 }
@@ -594,8 +601,10 @@ public class MotionBackgroundDrawable extends Drawable {
                     float width3 = (float) this.patternBitmap.getWidth();
                     float height3 = (float) this.patternBitmap.getHeight();
                     float max2 = Math.max(width2 / width3, height2 / height3);
-                    this.matrix.setTranslate((width2 - (width3 * max2)) / 2.0f, ((height2 - (height3 * max2)) / 2.0f) + f);
-                    this.matrix.preScale(max2, max2);
+                    this.matrix.setTranslate((float) ((int) ((width2 - (width3 * max2)) / 2.0f)), (float) ((int) (((height2 - (height3 * max2)) / 2.0f) + f)));
+                    if (!this.disableGradientShaderScaling || max2 > 1.4f || max2 < 0.8f) {
+                        this.matrix.preScale(max2, max2);
+                    }
                     this.gradientShader.setLocalMatrix(this.matrix);
                     this.paint2.setColorFilter((ColorFilter) null);
                     this.paint2.setAlpha((int) ((((float) Math.abs(this.intensity)) / 100.0f) * ((float) this.alpha) * this.patternAlpha));
@@ -728,8 +737,10 @@ public class MotionBackgroundDrawable extends Drawable {
                     float width3 = (float) this.patternBitmap.getWidth();
                     float height3 = (float) this.patternBitmap.getHeight();
                     float max2 = Math.max(width2 / width3, height2 / height3);
-                    this.matrix.setTranslate((width2 - (width3 * max2)) / 2.0f, ((height2 - (height3 * max2)) / 2.0f) + f);
-                    this.matrix.preScale(max2, max2);
+                    this.matrix.setTranslate((float) ((int) ((width2 - (width3 * max2)) / 2.0f)), (float) ((int) (((height2 - (height3 * max2)) / 2.0f) + f)));
+                    if (!this.disableGradientShaderScaling || max2 > 1.4f || max2 < 0.8f) {
+                        this.matrix.preScale(max2, max2);
+                    }
                     this.gradientShader.setLocalMatrix(this.matrix);
                     this.paint2.setColorFilter((ColorFilter) null);
                     this.paint2.setAlpha((int) ((((float) Math.abs(this.intensity)) / 100.0f) * ((float) this.alpha) * this.patternAlpha));

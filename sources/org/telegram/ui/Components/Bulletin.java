@@ -15,6 +15,7 @@ import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.text.TextUtils;
+import android.text.method.LinkMovementMethod;
 import android.util.Property;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
@@ -54,6 +55,7 @@ public class Bulletin {
     /* access modifiers changed from: private */
     public Delegate currentDelegate;
     private int duration;
+    public int hash;
     private final Runnable hideRunnable;
     /* access modifiers changed from: private */
     public final Layout layout;
@@ -1024,6 +1026,8 @@ public class Bulletin {
             this.subtitleTextView = textView2;
             textView2.setMaxLines(2);
             textView2.setTextColor(themedColor);
+            textView2.setLinkTextColor(getThemedColor("undo_cancelColor"));
+            textView2.setMovementMethod(new LinkMovementMethod());
             textView2.setTypeface(Typeface.SANS_SERIF);
             textView2.setTextSize(1, 13.0f);
             linearLayout.addView(textView2);
@@ -1172,27 +1176,28 @@ public class Bulletin {
         private boolean isUndone;
         private final Theme.ResourcesProvider resourcesProvider;
         private Runnable undoAction;
+        private TextView undoTextView;
 
         public UndoButton(Context context, boolean z) {
             this(context, z, (Theme.ResourcesProvider) null);
         }
 
-        /* JADX INFO: super call moved to the top of the method (can break code semantics) */
         public UndoButton(Context context, boolean z, Theme.ResourcesProvider resourcesProvider2) {
             super(context);
             this.resourcesProvider = resourcesProvider2;
             int themedColor = getThemedColor("undo_cancelColor");
             if (z) {
                 TextView textView = new TextView(context);
+                this.undoTextView = textView;
                 textView.setOnClickListener(new Bulletin$UndoButton$$ExternalSyntheticLambda0(this));
-                textView.setBackground(Theme.createCircleSelectorDrawable(NUM | (16777215 & themedColor), LocaleController.isRTL ? AndroidUtilities.dp(16.0f) : 0, !LocaleController.isRTL ? AndroidUtilities.dp(16.0f) : 0));
-                textView.setTextSize(1, 14.0f);
-                textView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
-                textView.setTextColor(themedColor);
-                textView.setText(LocaleController.getString("Undo", NUM));
-                textView.setGravity(16);
-                ViewHelper.setPaddingRelative(textView, 16.0f, 0.0f, 16.0f, 0.0f);
-                addView(textView, LayoutHelper.createFrameRelatively(-2.0f, 48.0f, 16, 8.0f, 0.0f, 0.0f, 0.0f));
+                this.undoTextView.setBackground(Theme.createCircleSelectorDrawable(NUM | (16777215 & themedColor), LocaleController.isRTL ? AndroidUtilities.dp(16.0f) : 0, !LocaleController.isRTL ? AndroidUtilities.dp(16.0f) : 0));
+                this.undoTextView.setTextSize(1, 14.0f);
+                this.undoTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
+                this.undoTextView.setTextColor(themedColor);
+                this.undoTextView.setText(LocaleController.getString("Undo", NUM));
+                this.undoTextView.setGravity(16);
+                ViewHelper.setPaddingRelative(this.undoTextView, 16.0f, 0.0f, 16.0f, 0.0f);
+                addView(this.undoTextView, LayoutHelper.createFrameRelatively(-2.0f, 48.0f, 16, 8.0f, 0.0f, 0.0f, 0.0f));
                 return;
             }
             ImageView imageView = new ImageView(getContext());
@@ -1212,6 +1217,14 @@ public class Bulletin {
         /* access modifiers changed from: private */
         public /* synthetic */ void lambda$new$1(View view) {
             undo();
+        }
+
+        public UndoButton setText(CharSequence charSequence) {
+            TextView textView = this.undoTextView;
+            if (textView != null) {
+                textView.setText(charSequence);
+            }
+            return this;
         }
 
         public void undo() {

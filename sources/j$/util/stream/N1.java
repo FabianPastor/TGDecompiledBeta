@@ -1,22 +1,47 @@
 package j$.util.stream;
 
-import j$.util.concurrent.a;
-import j$.util.function.BiFunction;
-import j$.util.function.Function;
 import j$.util.function.b;
+import j$.util.function.r;
+import j$.util.u;
+import java.util.concurrent.CountedCompleter;
 
-public final /* synthetic */ class N1 implements b {
-    public static final /* synthetic */ N1 a = new N1();
+class N1 extends CLASSNAMEf {
+    protected final CLASSNAMEy2 h;
+    protected final r i;
+    protected final b j;
 
-    private /* synthetic */ N1() {
+    N1(N1 n1, u uVar) {
+        super((CLASSNAMEf) n1, uVar);
+        this.h = n1.h;
+        this.i = n1.i;
+        this.j = n1.j;
     }
 
-    public BiFunction andThen(Function function) {
-        function.getClass();
-        return new a((BiFunction) this, function);
+    N1(CLASSNAMEy2 y2Var, u uVar, r rVar, b bVar) {
+        super(y2Var, uVar);
+        this.h = y2Var;
+        this.i = rVar;
+        this.j = bVar;
     }
 
-    public final Object apply(Object obj, Object obj2) {
-        return new T1((B1) obj, (B1) obj2);
+    /* access modifiers changed from: protected */
+    public Object a() {
+        CLASSNAMEs1 s1Var = (CLASSNAMEs1) this.i.apply(this.h.q0(this.b));
+        this.h.u0(s1Var, this.b);
+        return s1Var.a();
+    }
+
+    /* access modifiers changed from: protected */
+    public CLASSNAMEf f(u uVar) {
+        return new N1(this, uVar);
+    }
+
+    public void onCompletion(CountedCompleter countedCompleter) {
+        if (!d()) {
+            g((A1) this.j.apply((A1) ((N1) this.d).b(), (A1) ((N1) this.e).b()));
+        }
+        this.b = null;
+        this.e = null;
+        this.d = null;
     }
 }

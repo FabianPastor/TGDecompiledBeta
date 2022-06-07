@@ -1,19 +1,23 @@
 package org.telegram.ui.Adapters;
 
+import java.util.ArrayList;
+
 public final /* synthetic */ class DialogsSearchAdapter$$ExternalSyntheticLambda10 implements Runnable {
     public final /* synthetic */ DialogsSearchAdapter f$0;
     public final /* synthetic */ int f$1;
-    public final /* synthetic */ String f$2;
-    public final /* synthetic */ String f$3;
+    public final /* synthetic */ ArrayList f$2;
+    public final /* synthetic */ ArrayList f$3;
+    public final /* synthetic */ ArrayList f$4;
 
-    public /* synthetic */ DialogsSearchAdapter$$ExternalSyntheticLambda10(DialogsSearchAdapter dialogsSearchAdapter, int i, String str, String str2) {
+    public /* synthetic */ DialogsSearchAdapter$$ExternalSyntheticLambda10(DialogsSearchAdapter dialogsSearchAdapter, int i, ArrayList arrayList, ArrayList arrayList2, ArrayList arrayList3) {
         this.f$0 = dialogsSearchAdapter;
         this.f$1 = i;
-        this.f$2 = str;
-        this.f$3 = str2;
+        this.f$2 = arrayList;
+        this.f$3 = arrayList2;
+        this.f$4 = arrayList3;
     }
 
     public final void run() {
-        this.f$0.lambda$searchDialogs$13(this.f$1, this.f$2, this.f$3);
+        this.f$0.lambda$updateSearchResults$12(this.f$1, this.f$2, this.f$3, this.f$4);
     }
 }

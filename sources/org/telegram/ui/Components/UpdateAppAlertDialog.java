@@ -56,7 +56,7 @@ public class UpdateAppAlertDialog extends BottomSheet {
             View view = new View(context);
             this.background = view;
             if (this.hasBackground) {
-                view.setBackground(Theme.createSimpleSelectorRoundRectDrawable(AndroidUtilities.dp(4.0f), Theme.getColor("featuredStickers_addButton"), Theme.getColor("featuredStickers_addButtonPressed")));
+                view.setBackground(Theme.AdaptiveRipple.filledRect("featuredStickers_addButton", 4.0f));
             }
             addView(this.background, LayoutHelper.createFrame(-1, -1.0f, 0, 16.0f, z ? 0.0f : 16.0f, 16.0f, 16.0f));
             for (int i = 0; i < 2; i++) {
@@ -129,7 +129,7 @@ public class UpdateAppAlertDialog extends BottomSheet {
             r0.setApplyTopPadding(r3)
             r0.setApplyBottomPadding(r3)
             android.content.res.Resources r5 = r21.getResources()
-            r6 = 2131166129(0x7var_b1, float:1.7946495E38)
+            r6 = 2131166137(0x7var_b9, float:1.794651E38)
             android.graphics.drawable.Drawable r5 = r5.getDrawable(r6)
             android.graphics.drawable.Drawable r5 = r5.mutate()
             r0.shadowDrawable = r5
@@ -240,7 +240,7 @@ public class UpdateAppAlertDialog extends BottomSheet {
             r6.setSingleLine(r7)
             android.text.TextUtils$TruncateAt r10 = android.text.TextUtils.TruncateAt.END
             r6.setEllipsize(r10)
-            r10 = 2131624318(0x7f0e017e, float:1.8875812E38)
+            r10 = 2131624371(0x7f0e01b3, float:1.887592E38)
             java.lang.String r12 = "AppUpdate"
             java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r12, r10)
             r6.setText(r10)
@@ -268,14 +268,13 @@ public class UpdateAppAlertDialog extends BottomSheet {
             java.lang.String r12 = "dialogTextLink"
             int r13 = org.telegram.ui.ActionBar.Theme.getColor(r12)
             r6.setLinkTextColor(r13)
-            r13 = 2131624324(0x7f0e0184, float:1.8875824E38)
+            r13 = 2131624377(0x7f0e01b9, float:1.8875932E38)
             java.lang.Object[] r4 = new java.lang.Object[r4]
             org.telegram.tgnet.TLRPC$TL_help_appUpdate r14 = r0.appUpdate
             java.lang.String r15 = r14.version
             r4[r3] = r15
             org.telegram.tgnet.TLRPC$Document r14 = r14.document
-            int r14 = r14.size
-            long r14 = (long) r14
+            long r14 = r14.size
             java.lang.String r14 = org.telegram.messenger.AndroidUtilities.formatFileSize(r14)
             r4[r7] = r14
             java.lang.String r14 = "AppUpdateVersionAndSize"
@@ -307,14 +306,14 @@ public class UpdateAppAlertDialog extends BottomSheet {
             org.telegram.tgnet.TLRPC$TL_help_appUpdate r6 = r0.appUpdate
             java.lang.String r6 = r6.text
             boolean r6 = android.text.TextUtils.isEmpty(r6)
-            if (r6 == 0) goto L_0x01e0
-            r2 = 2131624319(0x7f0e017f, float:1.8875814E38)
+            if (r6 == 0) goto L_0x01df
+            r2 = 2131624372(0x7f0e01b4, float:1.8875922E38)
             java.lang.String r6 = "AppUpdateChangelogEmpty"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r6, r2)
             android.text.SpannableStringBuilder r2 = org.telegram.messenger.AndroidUtilities.replaceTags(r2)
             r4.setText(r2)
-            goto L_0x01f8
-        L_0x01e0:
+            goto L_0x01f7
+        L_0x01df:
             android.text.SpannableStringBuilder r6 = new android.text.SpannableStringBuilder
             org.telegram.tgnet.TLRPC$TL_help_appUpdate r8 = r0.appUpdate
             java.lang.String r8 = r8.text
@@ -327,7 +326,7 @@ public class UpdateAppAlertDialog extends BottomSheet {
             r12 = r6
             org.telegram.messenger.MessageObject.addEntitiesToText(r12, r13, r14, r15, r16, r17)
             r4.setText(r6)
-        L_0x01f8:
+        L_0x01f7:
             r4.setGravity(r11)
             android.widget.LinearLayout r2 = r0.linearLayout
             r10 = -2
@@ -362,7 +361,7 @@ public class UpdateAppAlertDialog extends BottomSheet {
             r5.addView(r4, r2)
             org.telegram.ui.Components.UpdateAppAlertDialog$BottomSheetCell r2 = new org.telegram.ui.Components.UpdateAppAlertDialog$BottomSheetCell
             r2.<init>(r1, r3)
-            r4 = 2131624320(0x7f0e0180, float:1.8875816E38)
+            r4 = 2131624373(0x7f0e01b5, float:1.8875924E38)
             java.lang.Object[] r6 = new java.lang.Object[r3]
             java.lang.String r8 = "AppUpdateDownloadNow"
             java.lang.String r4 = org.telegram.messenger.LocaleController.formatString(r8, r4, r6)
@@ -382,7 +381,7 @@ public class UpdateAppAlertDialog extends BottomSheet {
             r5.addView(r2, r4)
             org.telegram.ui.Components.UpdateAppAlertDialog$BottomSheetCell r2 = new org.telegram.ui.Components.UpdateAppAlertDialog$BottomSheetCell
             r2.<init>(r1, r7)
-            r1 = 2131624323(0x7f0e0183, float:1.8875822E38)
+            r1 = 2131624376(0x7f0e01b8, float:1.887593E38)
             java.lang.String r4 = "AppUpdateRemindMeLater"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r4, r1)
             r2.setText(r1, r3)

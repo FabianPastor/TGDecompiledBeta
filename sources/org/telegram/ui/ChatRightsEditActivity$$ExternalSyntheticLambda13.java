@@ -8,6 +8,6 @@ public final /* synthetic */ class ChatRightsEditActivity$$ExternalSyntheticLamb
     }
 
     public final void run() {
-        this.f$0.lambda$onDonePressed$19();
+        this.f$0.lambda$onDonePressed$16();
     }
 }

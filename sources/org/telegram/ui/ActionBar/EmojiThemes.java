@@ -20,7 +20,6 @@ import org.telegram.messenger.FileLog;
 import org.telegram.messenger.ImageLoader;
 import org.telegram.messenger.ImageLocation;
 import org.telegram.messenger.ImageReceiver;
-import org.telegram.messenger.SharedConfig;
 import org.telegram.messenger.Utilities;
 import org.telegram.tgnet.ResultCallback;
 import org.telegram.tgnet.TLRPC$Document;
@@ -31,7 +30,7 @@ import org.telegram.ui.ActionBar.Theme;
 public class EmojiThemes {
     private static final String[] previewColorKeys = {"chat_inBubble", "chat_outBubble", "featuredStickers_addButton", "chat_wallpaper", "chat_wallpaper_gradient_to", "key_chat_wallpaper_gradient_to2", "key_chat_wallpaper_gradient_to3", "chat_wallpaper_gradient_rotation"};
     public String emoji;
-    ArrayList<ThemeItem> items = new ArrayList<>();
+    public ArrayList<ThemeItem> items = new ArrayList<>();
     public boolean showAsDefaultStub;
 
     public static class ThemeItem {
@@ -335,20 +334,14 @@ public class EmojiThemes {
 
     /* access modifiers changed from: private */
     public static /* synthetic */ void lambda$loadWallpaper$1(ResultCallback resultCallback, long j, TLRPC$WallPaper tLRPC$WallPaper, Bitmap bitmap) {
-        String str;
         if (bitmap == null || resultCallback == null) {
             ImageLocation forDocument = ImageLocation.getForDocument(tLRPC$WallPaper.document);
             ImageReceiver imageReceiver = new ImageReceiver();
-            if (SharedConfig.getDevicePerformanceClass() == 0) {
-                Point point = AndroidUtilities.displaySize;
-                int min = Math.min(point.x, point.y);
-                Point point2 = AndroidUtilities.displaySize;
-                int max = Math.max(point2.x, point2.y);
-                str = ((int) (((float) min) / AndroidUtilities.density)) + "_" + ((int) (((float) max) / AndroidUtilities.density)) + "_f";
-            } else {
-                str = ((int) (1080.0f / AndroidUtilities.density)) + "_" + ((int) (1920.0f / AndroidUtilities.density)) + "_f";
-            }
-            imageReceiver.setImage(forDocument, str, (Drawable) null, ".jpg", tLRPC$WallPaper, 1);
+            Point point = AndroidUtilities.displaySize;
+            int min = Math.min(point.x, point.y);
+            Point point2 = AndroidUtilities.displaySize;
+            int max = Math.max(point2.x, point2.y);
+            imageReceiver.setImage(forDocument, ((int) (((float) min) / AndroidUtilities.density)) + "_" + ((int) (((float) max) / AndroidUtilities.density)) + "_f", (Drawable) null, ".jpg", tLRPC$WallPaper, 1);
             imageReceiver.setDelegate(new EmojiThemes$$ExternalSyntheticLambda1(resultCallback, j));
             ImageLoader.getInstance().loadImageForImageReceiver(imageReceiver);
             return;
@@ -390,9 +383,9 @@ public class EmojiThemes {
             if (wallpaperThumbBitmap == null) {
                 TLRPC$Document tLRPC$Document = wallpaper.document;
                 if (tLRPC$Document != null) {
-                    ImageLocation forDocument = ImageLocation.getForDocument(FileLoader.getClosestPhotoSizeWithSize(tLRPC$Document.thumbs, 120), wallpaper.document);
+                    ImageLocation forDocument = ImageLocation.getForDocument(FileLoader.getClosestPhotoSizeWithSize(tLRPC$Document.thumbs, 140), wallpaper.document);
                     ImageReceiver imageReceiver = new ImageReceiver();
-                    imageReceiver.setImage(forDocument, "120_80", (Drawable) null, (String) null, (Object) null, 1);
+                    imageReceiver.setImage(forDocument, "120_140", (Drawable) null, (String) null, (Object) null, 1);
                     imageReceiver.setDelegate(new EmojiThemes$$ExternalSyntheticLambda2(resultCallback, j, wallpaperThumbFile));
                     ImageLoader.getInstance().loadImageForImageReceiver(imageReceiver);
                 } else if (resultCallback != null) {
@@ -409,7 +402,7 @@ public class EmojiThemes {
     /* access modifiers changed from: private */
     public static /* synthetic */ void lambda$loadWallpaperThumb$3(ResultCallback resultCallback, long j, File file, ImageReceiver imageReceiver, boolean z, boolean z2, boolean z3) {
         ImageReceiver.BitmapHolder bitmapSafe = imageReceiver.getBitmapSafe();
-        if (z && bitmapSafe != null) {
+        if (z && bitmapSafe != null && !bitmapSafe.bitmap.isRecycled()) {
             Bitmap bitmap = bitmapSafe.bitmap;
             if (bitmap == null) {
                 Drawable drawable = bitmapSafe.drawable;

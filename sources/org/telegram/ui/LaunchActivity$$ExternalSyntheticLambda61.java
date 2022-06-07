@@ -1,14 +1,15 @@
 package org.telegram.ui;
 
-import org.telegram.messenger.GenericProvider;
+public final /* synthetic */ class LaunchActivity$$ExternalSyntheticLambda61 implements Runnable {
+    public final /* synthetic */ LaunchActivity f$0;
+    public final /* synthetic */ ThemePreviewActivity f$1;
 
-public final /* synthetic */ class LaunchActivity$$ExternalSyntheticLambda61 implements GenericProvider {
-    public static final /* synthetic */ LaunchActivity$$ExternalSyntheticLambda61 INSTANCE = new LaunchActivity$$ExternalSyntheticLambda61();
-
-    private /* synthetic */ LaunchActivity$$ExternalSyntheticLambda61() {
+    public /* synthetic */ LaunchActivity$$ExternalSyntheticLambda61(LaunchActivity launchActivity, ThemePreviewActivity themePreviewActivity) {
+        this.f$0 = launchActivity;
+        this.f$1 = themePreviewActivity;
     }
 
-    public final Object provide(Object obj) {
-        return LaunchActivity.lambda$switchToAccount$6((Void) obj);
+    public final void run() {
+        this.f$0.lambda$runLinkRequest$59(this.f$1);
     }
 }

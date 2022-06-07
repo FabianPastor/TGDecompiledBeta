@@ -1,19 +1,16 @@
 package org.telegram.ui.Components;
 
-import android.view.View;
-import org.telegram.ui.ActionBar.Theme;
-import org.telegram.ui.Components.RecyclerListView;
+import org.telegram.tgnet.TLRPC$MessageMedia;
+import org.telegram.ui.Components.ChatAttachAlertLocationLayout;
 
-public final /* synthetic */ class ChatAttachAlert$$ExternalSyntheticLambda33 implements RecyclerListView.OnItemClickListener {
+public final /* synthetic */ class ChatAttachAlert$$ExternalSyntheticLambda33 implements ChatAttachAlertLocationLayout.LocationActivityDelegate {
     public final /* synthetic */ ChatAttachAlert f$0;
-    public final /* synthetic */ Theme.ResourcesProvider f$1;
 
-    public /* synthetic */ ChatAttachAlert$$ExternalSyntheticLambda33(ChatAttachAlert chatAttachAlert, Theme.ResourcesProvider resourcesProvider) {
+    public /* synthetic */ ChatAttachAlert$$ExternalSyntheticLambda33(ChatAttachAlert chatAttachAlert) {
         this.f$0 = chatAttachAlert;
-        this.f$1 = resourcesProvider;
     }
 
-    public final void onItemClick(View view, int i) {
-        this.f$0.lambda$new$7(this.f$1, view, i);
+    public final void didSelectLocation(TLRPC$MessageMedia tLRPC$MessageMedia, int i, boolean z, int i2) {
+        this.f$0.lambda$new$5(tLRPC$MessageMedia, i, z, i2);
     }
 }

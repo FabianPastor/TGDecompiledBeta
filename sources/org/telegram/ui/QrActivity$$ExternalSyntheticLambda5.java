@@ -8,6 +8,6 @@ public final /* synthetic */ class QrActivity$$ExternalSyntheticLambda5 implemen
     }
 
     public final void run() {
-        this.f$0.lambda$performShare$8();
+        this.f$0.lambda$performShare$10();
     }
 }

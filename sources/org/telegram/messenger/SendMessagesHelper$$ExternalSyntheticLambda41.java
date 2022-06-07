@@ -1,22 +1,25 @@
 package org.telegram.messenger;
 
+import java.util.HashMap;
+import org.telegram.messenger.MessagesStorage;
 import org.telegram.messenger.SendMessagesHelper;
-import org.telegram.tgnet.TLObject;
 
 public final /* synthetic */ class SendMessagesHelper$$ExternalSyntheticLambda41 implements Runnable {
     public final /* synthetic */ SendMessagesHelper f$0;
-    public final /* synthetic */ TLObject f$1;
-    public final /* synthetic */ SendMessagesHelper.DelayedMessage f$2;
+    public final /* synthetic */ SendMessagesHelper.ImportingStickers f$1;
+    public final /* synthetic */ HashMap f$2;
     public final /* synthetic */ String f$3;
+    public final /* synthetic */ MessagesStorage.StringCallback f$4;
 
-    public /* synthetic */ SendMessagesHelper$$ExternalSyntheticLambda41(SendMessagesHelper sendMessagesHelper, TLObject tLObject, SendMessagesHelper.DelayedMessage delayedMessage, String str) {
+    public /* synthetic */ SendMessagesHelper$$ExternalSyntheticLambda41(SendMessagesHelper sendMessagesHelper, SendMessagesHelper.ImportingStickers importingStickers, HashMap hashMap, String str, MessagesStorage.StringCallback stringCallback) {
         this.f$0 = sendMessagesHelper;
-        this.f$1 = tLObject;
-        this.f$2 = delayedMessage;
+        this.f$1 = importingStickers;
+        this.f$2 = hashMap;
         this.f$3 = str;
+        this.f$4 = stringCallback;
     }
 
     public final void run() {
-        this.f$0.lambda$performSendDelayedMessage$32(this.f$1, this.f$2, this.f$3);
+        this.f$0.lambda$prepareImportStickers$71(this.f$1, this.f$2, this.f$3, this.f$4);
     }
 }

@@ -12,6 +12,6 @@ public final /* synthetic */ class LoginActivity$LoginActivitySmsView$$ExternalS
     }
 
     public final void run() {
-        this.f$0.lambda$animateSuccess$29(this.f$1);
+        this.f$0.lambda$animateSuccess$32(this.f$1);
     }
 }

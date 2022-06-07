@@ -6,14 +6,12 @@ import org.telegram.tgnet.TLRPC$TL_error;
 
 public final /* synthetic */ class ChatEditTypeActivity$$ExternalSyntheticLambda17 implements RequestDelegate {
     public final /* synthetic */ ChatEditTypeActivity f$0;
-    public final /* synthetic */ boolean f$1;
 
-    public /* synthetic */ ChatEditTypeActivity$$ExternalSyntheticLambda17(ChatEditTypeActivity chatEditTypeActivity, boolean z) {
+    public /* synthetic */ ChatEditTypeActivity$$ExternalSyntheticLambda17(ChatEditTypeActivity chatEditTypeActivity) {
         this.f$0 = chatEditTypeActivity;
-        this.f$1 = z;
     }
 
     public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        this.f$0.lambda$generateLink$17(this.f$1, tLObject, tLRPC$TL_error);
+        this.f$0.lambda$loadAdminedChannels$14(tLObject, tLRPC$TL_error);
     }
 }

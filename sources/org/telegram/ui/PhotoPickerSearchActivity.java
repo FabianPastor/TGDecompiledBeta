@@ -9,6 +9,7 @@ import android.content.res.Configuration;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.view.MotionEvent;
 import android.view.VelocityTracker;
 import android.view.View;
@@ -412,9 +413,8 @@ public class PhotoPickerSearchActivity extends BaseFragment {
             /* access modifiers changed from: protected */
             public void dispatchDraw(Canvas canvas) {
                 super.dispatchDraw(canvas);
-                if (PhotoPickerSearchActivity.this.parentLayout != null) {
-                    PhotoPickerSearchActivity.this.parentLayout.drawHeaderShadow(canvas, PhotoPickerSearchActivity.this.actionBar.getMeasuredHeight() + ((int) PhotoPickerSearchActivity.this.actionBar.getTranslationY()));
-                }
+                float measuredHeight = (float) (PhotoPickerSearchActivity.this.actionBar.getMeasuredHeight() + ((int) PhotoPickerSearchActivity.this.actionBar.getTranslationY()));
+                canvas.drawLine(0.0f, measuredHeight, (float) getWidth(), measuredHeight, Theme.dividerPaint);
             }
 
             public void requestLayout() {
@@ -753,7 +753,6 @@ public class PhotoPickerSearchActivity extends BaseFragment {
             i2++;
         }
         r0.addView(this.actionBar, LayoutHelper.createFrame(-1, -2.0f));
-        r0.addView(this.imagesSearch.shadow, LayoutHelper.createFrame(-1, 3.0f, 83, 0.0f, 0.0f, 0.0f, 48.0f));
         r0.addView(this.imagesSearch.frameLayout2, LayoutHelper.createFrame(-1, 48, 83));
         r0.addView(this.imagesSearch.writeButtonContainer, LayoutHelper.createFrame(60, 60.0f, 85, 0.0f, 0.0f, 12.0f, 10.0f));
         r0.addView(this.imagesSearch.selectedCountView, LayoutHelper.createFrame(42, 24.0f, 85, 0.0f, 0.0f, -2.0f, 9.0f));
@@ -763,6 +762,11 @@ public class PhotoPickerSearchActivity extends BaseFragment {
             z = true;
         }
         this.swipeBackEnabled = z;
+        int color = Theme.getColor("dialogBackground");
+        if (Build.VERSION.SDK_INT >= 23 && AndroidUtilities.computePerceivedBrightness(color) >= 0.721f) {
+            View view2 = this.fragmentView;
+            view2.setSystemUiVisibility(view2.getSystemUiVisibility() | 8192);
+        }
         return this.fragmentView;
     }
 

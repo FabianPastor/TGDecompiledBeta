@@ -14,6 +14,6 @@ public final /* synthetic */ class LaunchActivity$$ExternalSyntheticLambda16 imp
     }
 
     public final void onClick(View view) {
-        LaunchActivity.lambda$showLanguageAlertInternal$90(this.f$0, this.f$1, view);
+        LaunchActivity.lambda$showLanguageAlertInternal$95(this.f$0, this.f$1, view);
     }
 }

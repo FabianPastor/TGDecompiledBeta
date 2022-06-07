@@ -14,6 +14,6 @@ public final /* synthetic */ class DialogsActivity$$ExternalSyntheticLambda6 imp
     }
 
     public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-        this.f$0.lambda$updateFilterTabsVisibility$20(this.f$1, this.f$2, valueAnimator);
+        this.f$0.lambda$updateFilterTabsVisibility$21(this.f$1, this.f$2, valueAnimator);
     }
 }

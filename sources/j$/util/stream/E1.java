@@ -1,45 +1,37 @@
 package j$.util.stream;
 
-import j$.util.N;
+import j$.util.CLASSNAMEa;
+import j$.util.CLASSNAMEb;
+import j$.util.Collection$EL;
 import j$.util.function.Consumer;
 import j$.util.function.m;
-import j$.util.y;
-import java.util.Arrays;
+import j$.util.u;
+import java.util.Collection;
 
-class E1 implements B1 {
-    final Object[] a;
-    int b;
+final class E1 implements A1 {
+    private final Collection a;
 
-    E1(long j, m mVar) {
-        if (j < NUM) {
-            this.a = (Object[]) mVar.apply((int) j);
-            this.b = 0;
-            return;
-        }
-        throw new IllegalArgumentException("Stream size exceeds max array size");
+    E1(Collection collection) {
+        this.a = collection;
     }
 
-    E1(Object[] objArr) {
-        this.a = objArr;
-        this.b = objArr.length;
-    }
-
-    public B1 b(int i) {
+    public A1 b(int i) {
         throw new IndexOutOfBoundsException();
     }
 
     public long count() {
-        return (long) this.b;
+        return (long) this.a.size();
     }
 
     public void forEach(Consumer consumer) {
-        for (int i = 0; i < this.b; i++) {
-            consumer.accept(this.a[i]);
-        }
+        Collection$EL.a(this.a, consumer);
     }
 
     public void i(Object[] objArr, int i) {
-        System.arraycopy(this.a, 0, objArr, i, this.b);
+        for (Object obj : this.a) {
+            objArr[i] = obj;
+            i++;
+        }
     }
 
     public /* synthetic */ int p() {
@@ -47,22 +39,20 @@ class E1 implements B1 {
     }
 
     public Object[] q(m mVar) {
-        Object[] objArr = this.a;
-        if (objArr.length == this.b) {
-            return objArr;
-        }
-        throw new IllegalStateException();
+        Collection collection = this.a;
+        return collection.toArray((Object[]) mVar.apply(collection.size()));
     }
 
-    public /* synthetic */ B1 r(long j, long j2, m mVar) {
-        return CLASSNAMEp1.q(this, j, j2, mVar);
+    public /* synthetic */ A1 r(long j, long j2, m mVar) {
+        return CLASSNAMEo1.q(this, j, j2, mVar);
     }
 
-    public y spliterator() {
-        return N.m(this.a, 0, this.b, 1040);
+    public u spliterator() {
+        Collection collection = this.a;
+        return (collection instanceof CLASSNAMEb ? ((CLASSNAMEb) collection).stream() : CLASSNAMEa.i(collection)).spliterator();
     }
 
     public String toString() {
-        return String.format("ArrayNode[%d][%s]", new Object[]{Integer.valueOf(this.a.length - this.b), Arrays.toString(this.a)});
+        return String.format("CollectionNode[%d][%s]", new Object[]{Integer.valueOf(this.a.size()), this.a});
     }
 }

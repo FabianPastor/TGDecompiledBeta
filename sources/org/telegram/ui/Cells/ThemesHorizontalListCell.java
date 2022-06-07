@@ -255,7 +255,7 @@ public class ThemesHorizontalListCell extends RecyclerListView implements Notifi
             if (r15.equals("key_chat_wallpaper_gradient_to3") == false) goto L_0x026e;
          */
         /* JADX WARNING: Code restructure failed: missing block: B:93:?, code lost:
-            r3 = org.telegram.messenger.Utilities.parseInt(r3).intValue();
+            r3 = org.telegram.messenger.Utilities.parseInt((java.lang.CharSequence) r3).intValue();
          */
         /* JADX WARNING: Missing exception handler attribute for start block: B:152:0x02a8 */
         /* JADX WARNING: Missing exception handler attribute for start block: B:92:0x01eb */
@@ -410,7 +410,7 @@ public class ThemesHorizontalListCell extends RecyclerListView implements Notifi
                 boolean r4 = android.text.TextUtils.isEmpty(r3)     // Catch:{ Exception -> 0x0159 }
                 if (r4 != 0) goto L_0x0159
                 org.telegram.ui.ActionBar.Theme$ThemeInfo r4 = r1.themeInfo     // Catch:{ Exception -> 0x0159 }
-                java.lang.Integer r3 = org.telegram.messenger.Utilities.parseInt(r3)     // Catch:{ Exception -> 0x0159 }
+                java.lang.Integer r3 = org.telegram.messenger.Utilities.parseInt((java.lang.CharSequence) r3)     // Catch:{ Exception -> 0x0159 }
                 int r3 = r3.intValue()     // Catch:{ Exception -> 0x0159 }
                 r4.patternBgGradientRotation = r3     // Catch:{ Exception -> 0x0159 }
             L_0x0159:
@@ -419,7 +419,7 @@ public class ThemesHorizontalListCell extends RecyclerListView implements Notifi
                 boolean r4 = android.text.TextUtils.isEmpty(r3)     // Catch:{ all -> 0x02a2 }
                 if (r4 != 0) goto L_0x0171
                 org.telegram.ui.ActionBar.Theme$ThemeInfo r4 = r1.themeInfo     // Catch:{ all -> 0x02a2 }
-                java.lang.Integer r3 = org.telegram.messenger.Utilities.parseInt(r3)     // Catch:{ all -> 0x02a2 }
+                java.lang.Integer r3 = org.telegram.messenger.Utilities.parseInt((java.lang.CharSequence) r3)     // Catch:{ all -> 0x02a2 }
                 int r3 = r3.intValue()     // Catch:{ all -> 0x02a2 }
                 r4.patternIntensity = r3     // Catch:{ all -> 0x02a2 }
             L_0x0171:
@@ -478,11 +478,11 @@ public class ThemesHorizontalListCell extends RecyclerListView implements Notifi
                 int r3 = android.graphics.Color.parseColor(r3)     // Catch:{ Exception -> 0x01eb }
                 goto L_0x01fc
             L_0x01eb:
-                java.lang.Integer r3 = org.telegram.messenger.Utilities.parseInt(r3)     // Catch:{ all -> 0x029a }
+                java.lang.Integer r3 = org.telegram.messenger.Utilities.parseInt((java.lang.CharSequence) r3)     // Catch:{ all -> 0x029a }
                 int r3 = r3.intValue()     // Catch:{ all -> 0x029a }
                 goto L_0x01fc
             L_0x01f4:
-                java.lang.Integer r3 = org.telegram.messenger.Utilities.parseInt(r3)     // Catch:{ all -> 0x029a }
+                java.lang.Integer r3 = org.telegram.messenger.Utilities.parseInt((java.lang.CharSequence) r3)     // Catch:{ all -> 0x029a }
                 int r3 = r3.intValue()     // Catch:{ all -> 0x029a }
             L_0x01fc:
                 int r8 = r15.hashCode()     // Catch:{ all -> 0x029a }
@@ -1152,7 +1152,7 @@ public class ThemesHorizontalListCell extends RecyclerListView implements Notifi
     /* access modifiers changed from: protected */
     public void onAttachedToWindow() {
         super.onAttachedToWindow();
-        for (int i = 0; i < 3; i++) {
+        for (int i = 0; i < 4; i++) {
             NotificationCenter.getInstance(i).addObserver(this, NotificationCenter.fileLoaded);
             NotificationCenter.getInstance(i).addObserver(this, NotificationCenter.fileLoadFailed);
         }
@@ -1161,7 +1161,7 @@ public class ThemesHorizontalListCell extends RecyclerListView implements Notifi
     /* access modifiers changed from: protected */
     public void onDetachedFromWindow() {
         super.onDetachedFromWindow();
-        for (int i = 0; i < 3; i++) {
+        for (int i = 0; i < 4; i++) {
             NotificationCenter.getInstance(i).removeObserver(this, NotificationCenter.fileLoaded);
             NotificationCenter.getInstance(i).removeObserver(this, NotificationCenter.fileLoadFailed);
         }

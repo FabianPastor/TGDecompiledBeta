@@ -1,77 +1,81 @@
 package j$.util;
 
-import j$.util.Iterator;
 import j$.util.function.Consumer;
-import j$.util.function.p;
-import j$.util.function.q;
-import java.util.NoSuchElementException;
+import java.util.Comparator;
 
-class B implements r, q, Iterator {
-    boolean a = false;
-    long b;
-    final /* synthetic */ w c;
+final class B implements u {
+    private final Object[] a;
+    private int b;
+    private final int c;
+    private final int d;
 
-    B(w wVar) {
-        this.c = wVar;
+    public B(Object[] objArr, int i, int i2, int i3) {
+        this.a = objArr;
+        this.b = i;
+        this.c = i2;
+        this.d = i3 | 64 | 16384;
     }
 
-    public void accept(long j) {
-        this.a = true;
-        this.b = j;
-    }
-
-    /* renamed from: d */
-    public void forEachRemaining(q qVar) {
-        qVar.getClass();
-        while (hasNext()) {
-            qVar.accept(nextLong());
+    public boolean b(Consumer consumer) {
+        consumer.getClass();
+        int i = this.b;
+        if (i < 0 || i >= this.c) {
+            return false;
         }
+        Object[] objArr = this.a;
+        this.b = i + 1;
+        consumer.accept(objArr[i]);
+        return true;
     }
 
-    public q f(q qVar) {
-        qVar.getClass();
-        return new p(this, qVar);
+    public int characteristics() {
+        return this.d;
+    }
+
+    public long estimateSize() {
+        return (long) (this.c - this.b);
     }
 
     public void forEachRemaining(Consumer consumer) {
-        if (consumer instanceof q) {
-            forEachRemaining((q) consumer);
-            return;
-        }
+        int i;
         consumer.getClass();
-        if (!P.a) {
-            forEachRemaining(new q(consumer));
-        } else {
-            P.a(B.class, "{0} calling PrimitiveIterator.OfLong.forEachRemainingLong(action::accept)");
-            throw null;
+        Object[] objArr = this.a;
+        int length = objArr.length;
+        int i2 = this.c;
+        if (length >= i2 && (i = this.b) >= 0) {
+            this.b = i2;
+            if (i < i2) {
+                do {
+                    consumer.accept(objArr[i]);
+                    i++;
+                } while (i < i2);
+            }
         }
     }
 
-    public boolean hasNext() {
-        if (!this.a) {
-            this.c.i(this);
+    public Comparator getComparator() {
+        if (CLASSNAMEa.f(this, 4)) {
+            return null;
         }
-        return this.a;
+        throw new IllegalStateException();
     }
 
-    public Long next() {
-        if (!P.a) {
-            return Long.valueOf(nextLong());
-        }
-        P.a(B.class, "{0} calling PrimitiveIterator.OfLong.nextLong()");
-        throw null;
+    public /* synthetic */ long getExactSizeIfKnown() {
+        return CLASSNAMEa.e(this);
     }
 
-    public long nextLong() {
-        if (this.a || hasNext()) {
-            this.a = false;
-            return this.b;
-        }
-        throw new NoSuchElementException();
+    public /* synthetic */ boolean hasCharacteristics(int i) {
+        return CLASSNAMEa.f(this, i);
     }
 
-    public /* synthetic */ void remove() {
-        Iterator.CC.a(this);
-        throw null;
+    public u trySplit() {
+        int i = this.b;
+        int i2 = (this.c + i) >>> 1;
+        if (i >= i2) {
+            return null;
+        }
+        Object[] objArr = this.a;
+        this.b = i2;
+        return new B(objArr, i, i2, this.d);
     }
 }

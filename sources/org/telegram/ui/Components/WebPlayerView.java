@@ -2841,15 +2841,15 @@ public class WebPlayerView extends ViewGroup implements VideoPlayer.VideoPlayerD
     /* JADX WARNING: Removed duplicated region for block: B:94:0x014a  */
     /* JADX WARNING: Removed duplicated region for block: B:97:0x015d  */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    public boolean loadVideo(java.lang.String r26, org.telegram.tgnet.TLRPC$Photo r27, java.lang.Object r28, java.lang.String r29, boolean r30) {
+    public boolean loadVideo(java.lang.String r27, org.telegram.tgnet.TLRPC$Photo r28, java.lang.Object r29, java.lang.String r30, boolean r31) {
         /*
-            r25 = this;
-            r1 = r25
-            r2 = r26
-            r3 = r27
-            r0 = r29
+            r26 = this;
+            r1 = r26
+            r2 = r27
+            r3 = r28
+            r0 = r30
             java.lang.String r4 = "m"
-            java.lang.String r5 = r25.getCoubId(r26)
+            java.lang.String r5 = r26.getCoubId(r27)
             if (r5 != 0) goto L_0x0014
             java.lang.String r5 = r1.getCoubId(r0)
         L_0x0014:
@@ -2869,7 +2869,7 @@ public class WebPlayerView extends ViewGroup implements VideoPlayer.VideoPlayerD
             goto L_0x012d
         L_0x002b:
             if (r0 == 0) goto L_0x0074
-            android.net.Uri r0 = android.net.Uri.parse(r29)     // Catch:{ Exception -> 0x0070 }
+            android.net.Uri r0 = android.net.Uri.parse(r30)     // Catch:{ Exception -> 0x0070 }
             java.lang.String r10 = "t"
             java.lang.String r10 = r0.getQueryParameter(r10)     // Catch:{ Exception -> 0x0070 }
             if (r10 != 0) goto L_0x003f
@@ -2881,17 +2881,17 @@ public class WebPlayerView extends ViewGroup implements VideoPlayer.VideoPlayerD
             if (r0 == 0) goto L_0x0065
             java.lang.String[] r0 = r10.split(r4)     // Catch:{ Exception -> 0x0070 }
             r4 = r0[r7]     // Catch:{ Exception -> 0x0070 }
-            java.lang.Integer r4 = org.telegram.messenger.Utilities.parseInt(r4)     // Catch:{ Exception -> 0x0070 }
+            java.lang.Integer r4 = org.telegram.messenger.Utilities.parseInt((java.lang.CharSequence) r4)     // Catch:{ Exception -> 0x0070 }
             int r4 = r4.intValue()     // Catch:{ Exception -> 0x0070 }
             int r4 = r4 * 60
             r0 = r0[r8]     // Catch:{ Exception -> 0x0070 }
-            java.lang.Integer r0 = org.telegram.messenger.Utilities.parseInt(r0)     // Catch:{ Exception -> 0x0070 }
+            java.lang.Integer r0 = org.telegram.messenger.Utilities.parseInt((java.lang.CharSequence) r0)     // Catch:{ Exception -> 0x0070 }
             int r0 = r0.intValue()     // Catch:{ Exception -> 0x0070 }
             int r4 = r4 + r0
             r1.seekToTime = r4     // Catch:{ Exception -> 0x0070 }
             goto L_0x0074
         L_0x0065:
-            java.lang.Integer r0 = org.telegram.messenger.Utilities.parseInt(r10)     // Catch:{ Exception -> 0x0070 }
+            java.lang.Integer r0 = org.telegram.messenger.Utilities.parseInt((java.lang.CharSequence) r10)     // Catch:{ Exception -> 0x0070 }
             int r0 = r0.intValue()     // Catch:{ Exception -> 0x0070 }
             r1.seekToTime = r0     // Catch:{ Exception -> 0x0070 }
             goto L_0x0074
@@ -3042,11 +3042,11 @@ public class WebPlayerView extends ViewGroup implements VideoPlayer.VideoPlayerD
         L_0x0131:
             r1.initied = r7
             r1.isCompleted = r7
-            r14 = r30
+            r14 = r31
             r1.isAutoplay = r14
             r1.playVideoUrl = r9
             r1.playAudioUrl = r9
-            r25.destroy()
+            r26.destroy()
             r1.firstFrameRendered = r7
             r14 = 1065353216(0x3var_, float:1.0)
             r1.currentAlpha = r14
@@ -3055,10 +3055,10 @@ public class WebPlayerView extends ViewGroup implements VideoPlayer.VideoPlayerD
             r14.cancel(r8)
             r1.currentTask = r9
         L_0x014f:
-            r25.updateFullscreenButton()
-            r25.updateShareButton()
-            r25.updateInlineButton()
-            r25.updatePlayButton()
+            r26.updateFullscreenButton()
+            r26.updateShareButton()
+            r26.updateInlineButton()
+            r26.updatePlayButton()
             if (r3 == 0) goto L_0x0185
             java.util.ArrayList<org.telegram.tgnet.TLRPC$PhotoSize> r14 = r3.sizes
             r15 = 80
@@ -3070,11 +3070,11 @@ public class WebPlayerView extends ViewGroup implements VideoPlayer.VideoPlayerD
             r18 = 0
             org.telegram.messenger.ImageLocation r19 = org.telegram.messenger.ImageLocation.getForPhoto((org.telegram.tgnet.TLRPC$PhotoSize) r14, (org.telegram.tgnet.TLRPC$Photo) r3)
             r21 = 0
-            r22 = 0
-            r24 = 1
+            r23 = 0
+            r25 = 1
             java.lang.String r20 = "80_80_b"
-            r23 = r28
-            r16.setImage(r17, r18, r19, r20, r21, r22, r23, r24)
+            r24 = r29
+            r16.setImage(r17, r18, r19, r20, r21, r23, r24, r25)
             r1.drawImage = r8
             goto L_0x0187
         L_0x0185:
@@ -3098,7 +3098,7 @@ public class WebPlayerView extends ViewGroup implements VideoPlayer.VideoPlayerD
             r1.playVideoType = r2
             boolean r2 = r1.isAutoplay
             if (r2 == 0) goto L_0x01ab
-            r25.preparePlayer()
+            r26.preparePlayer()
         L_0x01ab:
             r1.showProgress(r7, r7)
             org.telegram.ui.Components.WebPlayerView$ControlsView r2 = r1.controlsView

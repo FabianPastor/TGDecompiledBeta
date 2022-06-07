@@ -900,7 +900,7 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
                 android.content.Context r5 = r5.getContext()
                 java.lang.String r0 = "windowBackgroundGray"
                 int r0 = org.telegram.ui.ActionBar.Theme.getColor(r0)
-                r6.<init>(r5, r1, r0)
+                r6.<init>((android.content.Context) r5, (int) r1, (int) r0)
                 r1 = r6
             L_0x00be:
                 androidx.recyclerview.widget.RecyclerView$LayoutParams r5 = new androidx.recyclerview.widget.RecyclerView$LayoutParams
@@ -993,7 +993,7 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
                     overviewCell2.setData(StatisticActivity.this.overviewChannelData);
                 }
             } else if (itemViewType == 15) {
-                ((ManageChatTextCell) viewHolder.itemView).setText(LocaleController.formatPluralString("ShowVotes", StatisticActivity.this.topMembersAll.size() - StatisticActivity.this.topMembersVisible.size()), (String) null, NUM, false);
+                ((ManageChatTextCell) viewHolder.itemView).setText(LocaleController.formatPluralString("ShowVotes", StatisticActivity.this.topMembersAll.size() - StatisticActivity.this.topMembersVisible.size(), new Object[0]), (String) null, NUM, false);
             }
         }
 
@@ -3041,13 +3041,13 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
             StringBuilder sb = new StringBuilder();
             int i = tLRPC$TL_statsGroupTopPoster.messages;
             if (i > 0) {
-                sb.append(LocaleController.formatPluralString("messages", i));
+                sb.append(LocaleController.formatPluralString("messages", i, new Object[0]));
             }
             if (tLRPC$TL_statsGroupTopPoster.avg_chars > 0) {
                 if (sb.length() > 0) {
                     sb.append(", ");
                 }
-                sb.append(LocaleController.formatString("CharactersPerMessage", NUM, LocaleController.formatPluralString("Characters", tLRPC$TL_statsGroupTopPoster.avg_chars)));
+                sb.append(LocaleController.formatString("CharactersPerMessage", NUM, LocaleController.formatPluralString("Characters", tLRPC$TL_statsGroupTopPoster.avg_chars, new Object[0])));
             }
             memberData.description = sb.toString();
             return memberData;
@@ -3061,19 +3061,19 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
             StringBuilder sb = new StringBuilder();
             int i = tLRPC$TL_statsGroupTopAdmin.deleted;
             if (i > 0) {
-                sb.append(LocaleController.formatPluralString("Deletions", i));
+                sb.append(LocaleController.formatPluralString("Deletions", i, new Object[0]));
             }
             if (tLRPC$TL_statsGroupTopAdmin.banned > 0) {
                 if (sb.length() > 0) {
                     sb.append(", ");
                 }
-                sb.append(LocaleController.formatPluralString("Bans", tLRPC$TL_statsGroupTopAdmin.banned));
+                sb.append(LocaleController.formatPluralString("Bans", tLRPC$TL_statsGroupTopAdmin.banned, new Object[0]));
             }
             if (tLRPC$TL_statsGroupTopAdmin.kicked > 0) {
                 if (sb.length() > 0) {
                     sb.append(", ");
                 }
-                sb.append(LocaleController.formatPluralString("Restrictions", tLRPC$TL_statsGroupTopAdmin.kicked));
+                sb.append(LocaleController.formatPluralString("Restrictions", tLRPC$TL_statsGroupTopAdmin.kicked, new Object[0]));
             }
             memberData.description = sb.toString();
             return memberData;
@@ -3086,7 +3086,7 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
             memberData.user = find(j, arrayList);
             int i = tLRPC$TL_statsGroupTopInviter.invitations;
             if (i > 0) {
-                memberData.description = LocaleController.formatPluralString("Invitations", i);
+                memberData.description = LocaleController.formatPluralString("Invitations", i, new Object[0]);
             } else {
                 memberData.description = "";
             }
@@ -3186,22 +3186,22 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
                 r4 = 0
                 r12 = 0
             L_0x0072:
-                r5 = 2131628219(0x7f0e10bb, float:1.8883724E38)
+                r5 = 2131628421(0x7f0e1185, float:1.8884134E38)
                 java.lang.String r6 = "StatisticOpenProfile"
                 java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r6, r5)
                 r1.add(r5)
-                r5 = 2131165715(0x7var_, float:1.7945655E38)
+                r5 = 2131165831(0x7var_, float:1.794589E38)
                 java.lang.Integer r5 = java.lang.Integer.valueOf(r5)
                 r6 = r16
                 r6.add(r5)
                 r5 = 2
                 java.lang.Integer r5 = java.lang.Integer.valueOf(r5)
                 r2.add(r5)
-                r5 = 2131628221(0x7f0e10bd, float:1.8883729E38)
+                r5 = 2131628423(0x7f0e1187, float:1.8884138E38)
                 java.lang.String r9 = "StatisticSearchUserHistory"
                 java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r9, r5)
                 r1.add(r5)
-                r5 = 2131165676(0x7var_ec, float:1.7945576E38)
+                r5 = 2131165814(0x7var_, float:1.7945856E38)
                 java.lang.Integer r5 = java.lang.Integer.valueOf(r5)
                 r6.add(r5)
                 r5 = 1
@@ -3316,20 +3316,20 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
                 r5 = 0
             L_0x018c:
                 if (r5 == 0) goto L_0x0194
-                r0 = 2131628026(0x7f0e0ffa, float:1.8883333E38)
+                r0 = 2131628226(0x7f0e10c2, float:1.8883739E38)
                 java.lang.String r9 = "SetAsAdmin"
                 goto L_0x0199
             L_0x0194:
-                r0 = 2131625461(0x7f0e05f5, float:1.887813E38)
+                r0 = 2131625550(0x7f0e064e, float:1.8878311E38)
                 java.lang.String r9 = "EditAdminRights"
             L_0x0199:
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r9, r0)
                 r1.add(r0)
                 if (r5 == 0) goto L_0x01a6
-                r0 = 2131165256(0x7var_, float:1.7944724E38)
+                r0 = 2131165635(0x7var_c3, float:1.7945493E38)
                 goto L_0x01a9
             L_0x01a6:
-                r0 = 2131165262(0x7var_e, float:1.7944736E38)
+                r0 = 2131165840(0x7var_, float:1.7945908E38)
             L_0x01a9:
                 java.lang.Integer r0 = java.lang.Integer.valueOf(r0)
                 r6.add(r0)

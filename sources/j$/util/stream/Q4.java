@@ -1,15 +1,11 @@
 package j$.util.stream;
 
-import java.security.PrivilegedAction;
+import java.security.AccessController;
 
-public final /* synthetic */ class Q4 implements PrivilegedAction {
-    public static final /* synthetic */ Q4 a = new Q4();
+abstract class Q4 {
+    static final boolean a = ((Boolean) AccessController.doPrivileged(P4.a)).booleanValue();
 
-    private /* synthetic */ Q4() {
-    }
-
-    public final Object run() {
-        boolean z = R4.a;
-        return Boolean.valueOf(Boolean.getBoolean("org.openjdk.java.util.stream.tripwire"));
+    static void a(Class cls, String str) {
+        throw new UnsupportedOperationException(cls + " tripwire tripped but logging not supported: " + str);
     }
 }

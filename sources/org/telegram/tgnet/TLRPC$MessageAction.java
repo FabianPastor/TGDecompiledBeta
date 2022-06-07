@@ -14,10 +14,13 @@ public abstract class TLRPC$MessageAction extends TLObject {
     public int flags;
     public long game_id;
     public long inviter_id;
+    public String invoice_slug;
     public String message;
     public TLRPC$UserProfilePhoto newUserPhoto;
     public TLRPC$Photo photo;
     public TLRPC$PhoneCallDiscardReason reason;
+    public boolean recurring_init;
+    public boolean recurring_used;
     public int score;
     public String title;
     public long total_amount;
@@ -32,6 +35,9 @@ public abstract class TLRPC$MessageAction extends TLObject {
             case -2132731265:
                 tLRPC$MessageAction = new TLRPC$TL_messageActionPhoneCall();
                 break;
+            case -1892568281:
+                tLRPC$MessageAction = new TLRPC$TL_messageActionPaymentSentMe();
+                break;
             case -1834538890:
                 tLRPC$MessageAction = new TLRPC$TL_messageActionGameScore();
                 break;
@@ -43,6 +49,9 @@ public abstract class TLRPC$MessageAction extends TLObject {
                 break;
             case -1780220945:
                 tLRPC$MessageAction = new TLRPC$TL_messageActionChatDeletePhoto();
+                break;
+            case -1776926890:
+                tLRPC$MessageAction = new TLRPC$TL_messageActionPaymentSent();
                 break;
             case -1730095465:
                 tLRPC$MessageAction = new TLRPC$TL_messageActionGeoProximityReached();
@@ -117,7 +126,7 @@ public abstract class TLRPC$MessageAction extends TLObject {
                 tLRPC$MessageAction = new TLRPC$TL_messageActionChatAddUser();
                 break;
             case 1080663248:
-                tLRPC$MessageAction = new TLRPC$TL_messageActionPaymentSent();
+                tLRPC$MessageAction = new TLRPC$TL_messageActionPaymentSent_layer140();
                 break;
             case 1200788123:
                 tLRPC$MessageAction = new TLRPC$TL_messageActionScreenshotTaken();

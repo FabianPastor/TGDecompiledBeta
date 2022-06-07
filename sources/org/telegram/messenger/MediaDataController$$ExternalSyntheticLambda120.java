@@ -1,15 +1,15 @@
 package org.telegram.messenger;
 
-import java.util.Comparator;
-import org.telegram.tgnet.TLRPC$TL_topPeer;
+import org.telegram.tgnet.TLRPC$Document;
 
-public final /* synthetic */ class MediaDataController$$ExternalSyntheticLambda120 implements Comparator {
-    public static final /* synthetic */ MediaDataController$$ExternalSyntheticLambda120 INSTANCE = new MediaDataController$$ExternalSyntheticLambda120();
+public final /* synthetic */ class MediaDataController$$ExternalSyntheticLambda120 implements Runnable {
+    public final /* synthetic */ TLRPC$Document f$0;
 
-    private /* synthetic */ MediaDataController$$ExternalSyntheticLambda120() {
+    public /* synthetic */ MediaDataController$$ExternalSyntheticLambda120(TLRPC$Document tLRPC$Document) {
+        this.f$0 = tLRPC$Document;
     }
 
-    public final int compare(Object obj, Object obj2) {
-        return MediaDataController.lambda$increasePeerRaiting$107((TLRPC$TL_topPeer) obj, (TLRPC$TL_topPeer) obj2);
+    public final void run() {
+        NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.showBulletin, 0, this.f$0, 7);
     }
 }

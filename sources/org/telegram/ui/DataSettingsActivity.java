@@ -11,8 +11,6 @@ import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import java.io.File;
@@ -34,12 +32,10 @@ import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.ActionBar.ThemeDescription;
 import org.telegram.ui.Cells.HeaderCell;
 import org.telegram.ui.Cells.NotificationsCheckCell;
-import org.telegram.ui.Cells.RadioColorCell;
 import org.telegram.ui.Cells.ShadowSectionCell;
 import org.telegram.ui.Cells.TextCheckCell;
 import org.telegram.ui.Cells.TextInfoPrivacyCell;
 import org.telegram.ui.Cells.TextSettingsCell;
-import org.telegram.ui.Components.AlertsCreator;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.RecyclerListView;
 import org.telegram.ui.Components.voip.VoIPHelper;
@@ -95,6 +91,16 @@ public class DataSettingsActivity extends BaseFragment {
     public int roamingRow;
     /* access modifiers changed from: private */
     public int rowCount;
+    /* access modifiers changed from: private */
+    public int saveToGalleryChannelsRow;
+    /* access modifiers changed from: private */
+    public int saveToGalleryDividerRow;
+    /* access modifiers changed from: private */
+    public int saveToGalleryGroupsRow;
+    /* access modifiers changed from: private */
+    public int saveToGalleryPeerRow;
+    /* access modifiers changed from: private */
+    public int saveToGallerySectionRow;
     /* access modifiers changed from: private */
     public ArrayList<File> storageDirs;
     /* access modifiers changed from: private */
@@ -158,63 +164,78 @@ public class DataSettingsActivity extends BaseFragment {
         this.mediaDownloadSection2Row = i10;
         int i12 = i11 + 1;
         this.rowCount = i12;
-        this.autoplayHeaderRow = i11;
+        this.saveToGallerySectionRow = i11;
         int i13 = i12 + 1;
         this.rowCount = i13;
-        this.autoplayGifsRow = i12;
+        this.saveToGalleryPeerRow = i12;
         int i14 = i13 + 1;
         this.rowCount = i14;
-        this.autoplayVideoRow = i13;
+        this.saveToGalleryGroupsRow = i13;
         int i15 = i14 + 1;
         this.rowCount = i15;
-        this.autoplaySectionRow = i14;
+        this.saveToGalleryChannelsRow = i14;
         int i16 = i15 + 1;
         this.rowCount = i16;
-        this.streamSectionRow = i15;
+        this.saveToGalleryDividerRow = i15;
         int i17 = i16 + 1;
         this.rowCount = i17;
-        this.enableStreamRow = i16;
+        this.autoplayHeaderRow = i16;
+        int i18 = i17 + 1;
+        this.rowCount = i18;
+        this.autoplayGifsRow = i17;
+        int i19 = i18 + 1;
+        this.rowCount = i19;
+        this.autoplayVideoRow = i18;
+        int i20 = i19 + 1;
+        this.rowCount = i20;
+        this.autoplaySectionRow = i19;
+        int i21 = i20 + 1;
+        this.rowCount = i21;
+        this.streamSectionRow = i20;
+        int i22 = i21 + 1;
+        this.rowCount = i22;
+        this.enableStreamRow = i21;
         if (BuildVars.DEBUG_VERSION) {
-            int i18 = i17 + 1;
-            this.rowCount = i18;
-            this.enableMkvRow = i17;
-            this.rowCount = i18 + 1;
-            this.enableAllStreamRow = i18;
+            int i23 = i22 + 1;
+            this.rowCount = i23;
+            this.enableMkvRow = i22;
+            this.rowCount = i23 + 1;
+            this.enableAllStreamRow = i23;
         } else {
             this.enableAllStreamRow = -1;
             this.enableMkvRow = -1;
         }
-        int i19 = this.rowCount;
-        int i20 = i19 + 1;
-        this.rowCount = i20;
-        this.enableAllStreamInfoRow = i19;
-        this.enableCacheStreamRow = -1;
-        int i21 = i20 + 1;
-        this.rowCount = i21;
-        this.callsSectionRow = i20;
-        int i22 = i21 + 1;
-        this.rowCount = i22;
-        this.useLessDataForCallsRow = i21;
-        int i23 = i22 + 1;
-        this.rowCount = i23;
-        this.quickRepliesRow = i22;
-        int i24 = i23 + 1;
-        this.rowCount = i24;
-        this.callsSection2Row = i23;
+        int i24 = this.rowCount;
         int i25 = i24 + 1;
         this.rowCount = i25;
-        this.proxySectionRow = i24;
+        this.enableAllStreamInfoRow = i24;
+        this.enableCacheStreamRow = -1;
         int i26 = i25 + 1;
         this.rowCount = i26;
-        this.proxyRow = i25;
+        this.callsSectionRow = i25;
         int i27 = i26 + 1;
         this.rowCount = i27;
-        this.proxySection2Row = i26;
+        this.useLessDataForCallsRow = i26;
         int i28 = i27 + 1;
         this.rowCount = i28;
-        this.clearDraftsRow = i27;
-        this.rowCount = i28 + 1;
-        this.clearDraftsSectionRow = i28;
+        this.quickRepliesRow = i27;
+        int i29 = i28 + 1;
+        this.rowCount = i29;
+        this.callsSection2Row = i28;
+        int i30 = i29 + 1;
+        this.rowCount = i30;
+        this.proxySectionRow = i29;
+        int i31 = i30 + 1;
+        this.rowCount = i31;
+        this.proxyRow = i30;
+        int i32 = i31 + 1;
+        this.rowCount = i32;
+        this.proxySection2Row = i31;
+        int i33 = i32 + 1;
+        this.rowCount = i33;
+        this.clearDraftsRow = i32;
+        this.rowCount = i33 + 1;
+        this.clearDraftsSectionRow = i33;
         return true;
     }
 
@@ -246,177 +267,453 @@ public class DataSettingsActivity extends BaseFragment {
         return this.fragmentView;
     }
 
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v1, resolved type: boolean} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v3, resolved type: int} */
+    /* JADX WARNING: type inference failed for: r2v0 */
+    /* JADX WARNING: type inference failed for: r2v2 */
+    /* JADX WARNING: type inference failed for: r2v7 */
+    /* JADX WARNING: type inference failed for: r2v8 */
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$createView$6(Context context, View view, int i, float f, float f2) {
-        String str;
-        String str2;
-        DownloadController.Preset preset;
-        DownloadController.Preset preset2;
-        int i2;
-        int i3 = 2;
-        int i4 = 0;
-        if (i == this.mobileRow || i == this.roamingRow || i == this.wifiRow) {
-            if ((!LocaleController.isRTL || f > ((float) AndroidUtilities.dp(76.0f))) && (LocaleController.isRTL || f < ((float) (view.getMeasuredWidth() - AndroidUtilities.dp(76.0f))))) {
-                if (i == this.mobileRow) {
-                    i3 = 0;
-                } else if (i == this.wifiRow) {
-                    i3 = 1;
-                }
-                presentFragment(new DataAutoDownloadActivity(i3));
-                return;
-            }
-            boolean isRowEnabled = this.listAdapter.isRowEnabled(this.resetDownloadRow);
-            NotificationsCheckCell notificationsCheckCell = (NotificationsCheckCell) view;
-            boolean isChecked = notificationsCheckCell.isChecked();
-            if (i == this.mobileRow) {
-                preset2 = DownloadController.getInstance(this.currentAccount).mobilePreset;
-                preset = DownloadController.getInstance(this.currentAccount).mediumPreset;
-                str2 = "mobilePreset";
-                str = "currentMobilePreset";
-            } else if (i == this.wifiRow) {
-                preset2 = DownloadController.getInstance(this.currentAccount).wifiPreset;
-                preset = DownloadController.getInstance(this.currentAccount).highPreset;
-                str2 = "wifiPreset";
-                str = "currentWifiPreset";
-                i4 = 1;
-            } else {
-                DownloadController.Preset preset3 = DownloadController.getInstance(this.currentAccount).roamingPreset;
-                preset = DownloadController.getInstance(this.currentAccount).lowPreset;
-                str2 = "roamingPreset";
-                str = "currentRoamingPreset";
-                preset2 = preset3;
-                i4 = 2;
-            }
-            if (isChecked || !preset2.enabled) {
-                preset2.enabled = !preset2.enabled;
-            } else {
-                preset2.set(preset);
-            }
-            SharedPreferences.Editor edit = MessagesController.getMainSettings(this.currentAccount).edit();
-            edit.putString(str2, preset2.toString());
-            edit.putInt(str, 3);
-            edit.commit();
-            notificationsCheckCell.setChecked(!isChecked);
-            RecyclerView.ViewHolder findContainingViewHolder = this.listView.findContainingViewHolder(view);
-            if (findContainingViewHolder != null) {
-                this.listAdapter.onBindViewHolder(findContainingViewHolder, i);
-            }
-            DownloadController.getInstance(this.currentAccount).checkAutodownloadSettings();
-            DownloadController.getInstance(this.currentAccount).savePresetToServer(i4);
-            if (isRowEnabled != this.listAdapter.isRowEnabled(this.resetDownloadRow)) {
-                this.listAdapter.notifyItemChanged(this.resetDownloadRow);
-            }
-        } else if (i == this.resetDownloadRow) {
-            if (getParentActivity() != null && view.isEnabled()) {
-                AlertDialog.Builder builder = new AlertDialog.Builder((Context) getParentActivity());
-                builder.setTitle(LocaleController.getString("ResetAutomaticMediaDownloadAlertTitle", NUM));
-                builder.setMessage(LocaleController.getString("ResetAutomaticMediaDownloadAlert", NUM));
-                builder.setPositiveButton(LocaleController.getString("Reset", NUM), new DataSettingsActivity$$ExternalSyntheticLambda0(this));
-                builder.setNegativeButton(LocaleController.getString("Cancel", NUM), (DialogInterface.OnClickListener) null);
-                AlertDialog create = builder.create();
-                showDialog(create);
-                TextView textView = (TextView) create.getButton(-1);
-                if (textView != null) {
-                    textView.setTextColor(Theme.getColor("dialogTextRed2"));
-                }
-            }
-        } else if (i == this.storageUsageRow) {
-            presentFragment(new CacheControlActivity());
-        } else if (i == this.useLessDataForCallsRow) {
-            SharedPreferences globalMainSettings = MessagesController.getGlobalMainSettings();
-            int i5 = globalMainSettings.getInt("VoipDataSaving", VoIPHelper.getDataSavingDefault());
-            if (i5 != 0) {
-                if (i5 == 1) {
-                    i2 = 2;
-                } else if (i5 == 2) {
-                    i2 = 3;
-                } else if (i5 == 3) {
-                    i2 = 1;
-                }
-                Dialog createSingleChoiceDialog = AlertsCreator.createSingleChoiceDialog(getParentActivity(), new String[]{LocaleController.getString("UseLessDataNever", NUM), LocaleController.getString("UseLessDataOnRoaming", NUM), LocaleController.getString("UseLessDataOnMobile", NUM), LocaleController.getString("UseLessDataAlways", NUM)}, LocaleController.getString("VoipUseLessData", NUM), i2, new DataSettingsActivity$$ExternalSyntheticLambda2(this, globalMainSettings, i));
-                setVisibleDialog(createSingleChoiceDialog);
-                createSingleChoiceDialog.show();
-            }
-            i2 = 0;
-            Dialog createSingleChoiceDialog2 = AlertsCreator.createSingleChoiceDialog(getParentActivity(), new String[]{LocaleController.getString("UseLessDataNever", NUM), LocaleController.getString("UseLessDataOnRoaming", NUM), LocaleController.getString("UseLessDataOnMobile", NUM), LocaleController.getString("UseLessDataAlways", NUM)}, LocaleController.getString("VoipUseLessData", NUM), i2, new DataSettingsActivity$$ExternalSyntheticLambda2(this, globalMainSettings, i));
-            setVisibleDialog(createSingleChoiceDialog2);
-            createSingleChoiceDialog2.show();
-        } else if (i == this.dataUsageRow) {
-            presentFragment(new DataUsageActivity());
-        } else if (i == this.storageNumRow) {
-            AlertDialog.Builder builder2 = new AlertDialog.Builder((Context) getParentActivity());
-            builder2.setTitle(LocaleController.getString("StoragePath", NUM));
-            LinearLayout linearLayout = new LinearLayout(getParentActivity());
-            linearLayout.setOrientation(1);
-            builder2.setView(linearLayout);
-            String absolutePath = this.storageDirs.get(0).getAbsolutePath();
-            if (!TextUtils.isEmpty(SharedConfig.storageCacheDir)) {
-                int size = this.storageDirs.size();
-                int i6 = 0;
-                while (true) {
-                    if (i6 >= size) {
-                        break;
-                    }
-                    String absolutePath2 = this.storageDirs.get(i6).getAbsolutePath();
-                    if (absolutePath2.startsWith(SharedConfig.storageCacheDir)) {
-                        absolutePath = absolutePath2;
-                        break;
-                    }
-                    i6++;
-                }
-            }
-            int size2 = this.storageDirs.size();
-            for (int i7 = 0; i7 < size2; i7++) {
-                String absolutePath3 = this.storageDirs.get(i7).getAbsolutePath();
-                RadioColorCell radioColorCell = new RadioColorCell(context);
-                radioColorCell.setPadding(AndroidUtilities.dp(4.0f), 0, AndroidUtilities.dp(4.0f), 0);
-                radioColorCell.setTag(Integer.valueOf(i7));
-                radioColorCell.setCheckColor(Theme.getColor("radioBackground"), Theme.getColor("dialogRadioBackgroundChecked"));
-                radioColorCell.setTextAndValue(absolutePath3, absolutePath3.startsWith(absolutePath));
-                linearLayout.addView(radioColorCell);
-                radioColorCell.setOnClickListener(new DataSettingsActivity$$ExternalSyntheticLambda3(this, absolutePath3, builder2));
-            }
-            builder2.setNegativeButton(LocaleController.getString("Cancel", NUM), (DialogInterface.OnClickListener) null);
-            showDialog(builder2.create());
-        } else if (i == this.proxyRow) {
-            presentFragment(new ProxyListActivity());
-        } else if (i == this.enableStreamRow) {
-            SharedConfig.toggleStreamMedia();
-            ((TextCheckCell) view).setChecked(SharedConfig.streamMedia);
-        } else if (i == this.enableAllStreamRow) {
-            SharedConfig.toggleStreamAllVideo();
-            ((TextCheckCell) view).setChecked(SharedConfig.streamAllVideo);
-        } else if (i == this.enableMkvRow) {
-            SharedConfig.toggleStreamMkv();
-            ((TextCheckCell) view).setChecked(SharedConfig.streamMkv);
-        } else if (i == this.enableCacheStreamRow) {
-            SharedConfig.toggleSaveStreamMedia();
-            ((TextCheckCell) view).setChecked(SharedConfig.saveStreamMedia);
-        } else if (i == this.quickRepliesRow) {
-            presentFragment(new QuickRepliesSettingsActivity());
-        } else if (i == this.autoplayGifsRow) {
-            SharedConfig.toggleAutoplayGifs();
-            if (view instanceof TextCheckCell) {
-                ((TextCheckCell) view).setChecked(SharedConfig.autoplayGifs);
-            }
-        } else if (i == this.autoplayVideoRow) {
-            SharedConfig.toggleAutoplayVideo();
-            if (view instanceof TextCheckCell) {
-                ((TextCheckCell) view).setChecked(SharedConfig.autoplayVideo);
-            }
-        } else if (i == this.clearDraftsRow) {
-            AlertDialog.Builder builder3 = new AlertDialog.Builder((Context) getParentActivity());
-            builder3.setTitle(LocaleController.getString("AreYouSureClearDraftsTitle", NUM));
-            builder3.setMessage(LocaleController.getString("AreYouSureClearDrafts", NUM));
-            builder3.setPositiveButton(LocaleController.getString("Delete", NUM), new DataSettingsActivity$$ExternalSyntheticLambda1(this));
-            builder3.setNegativeButton(LocaleController.getString("Cancel", NUM), (DialogInterface.OnClickListener) null);
-            AlertDialog create2 = builder3.create();
-            showDialog(create2);
-            TextView textView2 = (TextView) create2.getButton(-1);
-            if (textView2 != null) {
-                textView2.setTextColor(Theme.getColor("dialogTextRed2"));
-            }
-        }
+    /* JADX WARNING: Multi-variable type inference failed */
+    /* Code decompiled incorrectly, please refer to instructions dump. */
+    public /* synthetic */ void lambda$createView$6(android.content.Context r10, android.view.View r11, int r12, float r13, float r14) {
+        /*
+            r9 = this;
+            int r14 = r9.saveToGalleryGroupsRow
+            r0 = 4
+            r1 = 2
+            r2 = 0
+            r3 = 1
+            if (r12 == r14) goto L_0x0397
+            int r4 = r9.saveToGalleryChannelsRow
+            if (r12 == r4) goto L_0x0397
+            int r4 = r9.saveToGalleryPeerRow
+            if (r12 != r4) goto L_0x0012
+            goto L_0x0397
+        L_0x0012:
+            int r14 = r9.mobileRow
+            r4 = 3
+            if (r12 == r14) goto L_0x02af
+            int r14 = r9.roamingRow
+            if (r12 == r14) goto L_0x02af
+            int r14 = r9.wifiRow
+            if (r12 != r14) goto L_0x0021
+            goto L_0x02af
+        L_0x0021:
+            int r13 = r9.resetDownloadRow
+            java.lang.String r14 = "dialogTextRed2"
+            r5 = -1
+            r6 = 0
+            r7 = 2131624813(0x7f0e036d, float:1.8876816E38)
+            java.lang.String r8 = "Cancel"
+            if (r12 != r13) goto L_0x008d
+            android.app.Activity r10 = r9.getParentActivity()
+            if (r10 == 0) goto L_0x008c
+            boolean r10 = r11.isEnabled()
+            if (r10 != 0) goto L_0x003b
+            goto L_0x008c
+        L_0x003b:
+            org.telegram.ui.ActionBar.AlertDialog$Builder r10 = new org.telegram.ui.ActionBar.AlertDialog$Builder
+            android.app.Activity r11 = r9.getParentActivity()
+            r10.<init>((android.content.Context) r11)
+            r11 = 2131627975(0x7f0e0fc7, float:1.888323E38)
+            java.lang.String r12 = "ResetAutomaticMediaDownloadAlertTitle"
+            java.lang.String r11 = org.telegram.messenger.LocaleController.getString(r12, r11)
+            r10.setTitle(r11)
+            r11 = 2131627974(0x7f0e0fc6, float:1.8883228E38)
+            java.lang.String r12 = "ResetAutomaticMediaDownloadAlert"
+            java.lang.String r11 = org.telegram.messenger.LocaleController.getString(r12, r11)
+            r10.setMessage(r11)
+            r11 = 2131627966(0x7f0e0fbe, float:1.8883211E38)
+            java.lang.String r12 = "Reset"
+            java.lang.String r11 = org.telegram.messenger.LocaleController.getString(r12, r11)
+            org.telegram.ui.DataSettingsActivity$$ExternalSyntheticLambda0 r12 = new org.telegram.ui.DataSettingsActivity$$ExternalSyntheticLambda0
+            r12.<init>(r9)
+            r10.setPositiveButton(r11, r12)
+            java.lang.String r11 = org.telegram.messenger.LocaleController.getString(r8, r7)
+            r10.setNegativeButton(r11, r6)
+            org.telegram.ui.ActionBar.AlertDialog r10 = r10.create()
+            r9.showDialog(r10)
+            android.view.View r10 = r10.getButton(r5)
+            android.widget.TextView r10 = (android.widget.TextView) r10
+            if (r10 == 0) goto L_0x03af
+            int r11 = org.telegram.ui.ActionBar.Theme.getColor(r14)
+            r10.setTextColor(r11)
+            goto L_0x03af
+        L_0x008c:
+            return
+        L_0x008d:
+            int r13 = r9.storageUsageRow
+            if (r12 != r13) goto L_0x009b
+            org.telegram.ui.CacheControlActivity r10 = new org.telegram.ui.CacheControlActivity
+            r10.<init>()
+            r9.presentFragment(r10)
+            goto L_0x03af
+        L_0x009b:
+            int r13 = r9.useLessDataForCallsRow
+            if (r12 != r13) goto L_0x0108
+            android.content.SharedPreferences r10 = org.telegram.messenger.MessagesController.getGlobalMainSettings()
+            int r11 = org.telegram.ui.Components.voip.VoIPHelper.getDataSavingDefault()
+            java.lang.String r13 = "VoipDataSaving"
+            int r11 = r10.getInt(r13, r11)
+            if (r11 == 0) goto L_0x00b5
+            if (r11 == r3) goto L_0x00bb
+            if (r11 == r1) goto L_0x00b9
+            if (r11 == r4) goto L_0x00b7
+        L_0x00b5:
+            r11 = 0
+            goto L_0x00bc
+        L_0x00b7:
+            r11 = 1
+            goto L_0x00bc
+        L_0x00b9:
+            r11 = 3
+            goto L_0x00bc
+        L_0x00bb:
+            r11 = 2
+        L_0x00bc:
+            android.app.Activity r13 = r9.getParentActivity()
+            java.lang.String[] r14 = new java.lang.String[r0]
+            r0 = 2131628766(0x7f0e12de, float:1.8884834E38)
+            java.lang.String r5 = "UseLessDataNever"
+            java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r5, r0)
+            r14[r2] = r0
+            r0 = 2131628768(0x7f0e12e0, float:1.8884838E38)
+            java.lang.String r2 = "UseLessDataOnRoaming"
+            java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r2, r0)
+            r14[r3] = r0
+            r0 = 2131628767(0x7f0e12df, float:1.8884836E38)
+            java.lang.String r2 = "UseLessDataOnMobile"
+            java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r2, r0)
+            r14[r1] = r0
+            r0 = 2131628765(0x7f0e12dd, float:1.8884832E38)
+            java.lang.String r1 = "UseLessDataAlways"
+            java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
+            r14[r4] = r0
+            r0 = 2131629188(0x7f0e1484, float:1.888569E38)
+            java.lang.String r1 = "VoipUseLessData"
+            java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
+            org.telegram.ui.DataSettingsActivity$$ExternalSyntheticLambda2 r1 = new org.telegram.ui.DataSettingsActivity$$ExternalSyntheticLambda2
+            r1.<init>(r9, r10, r12)
+            android.app.Dialog r10 = org.telegram.ui.Components.AlertsCreator.createSingleChoiceDialog(r13, r14, r0, r11, r1)
+            r9.setVisibleDialog(r10)
+            r10.show()
+            goto L_0x03af
+        L_0x0108:
+            int r13 = r9.dataUsageRow
+            if (r12 != r13) goto L_0x0116
+            org.telegram.ui.DataUsageActivity r10 = new org.telegram.ui.DataUsageActivity
+            r10.<init>()
+            r9.presentFragment(r10)
+            goto L_0x03af
+        L_0x0116:
+            int r13 = r9.storageNumRow
+            if (r12 != r13) goto L_0x01d6
+            org.telegram.ui.ActionBar.AlertDialog$Builder r11 = new org.telegram.ui.ActionBar.AlertDialog$Builder
+            android.app.Activity r12 = r9.getParentActivity()
+            r11.<init>((android.content.Context) r12)
+            r12 = 2131628468(0x7f0e11b4, float:1.888423E38)
+            java.lang.String r13 = "StoragePath"
+            java.lang.String r12 = org.telegram.messenger.LocaleController.getString(r13, r12)
+            r11.setTitle(r12)
+            android.widget.LinearLayout r12 = new android.widget.LinearLayout
+            android.app.Activity r13 = r9.getParentActivity()
+            r12.<init>(r13)
+            r12.setOrientation(r3)
+            r11.setView(r12)
+            java.util.ArrayList<java.io.File> r13 = r9.storageDirs
+            java.lang.Object r13 = r13.get(r2)
+            java.io.File r13 = (java.io.File) r13
+            java.lang.String r13 = r13.getAbsolutePath()
+            java.lang.String r14 = org.telegram.messenger.SharedConfig.storageCacheDir
+            boolean r14 = android.text.TextUtils.isEmpty(r14)
+            if (r14 != 0) goto L_0x0174
+            java.util.ArrayList<java.io.File> r14 = r9.storageDirs
+            int r14 = r14.size()
+            r0 = 0
+        L_0x0159:
+            if (r0 >= r14) goto L_0x0174
+            java.util.ArrayList<java.io.File> r1 = r9.storageDirs
+            java.lang.Object r1 = r1.get(r0)
+            java.io.File r1 = (java.io.File) r1
+            java.lang.String r1 = r1.getAbsolutePath()
+            java.lang.String r3 = org.telegram.messenger.SharedConfig.storageCacheDir
+            boolean r3 = r1.startsWith(r3)
+            if (r3 == 0) goto L_0x0171
+            r13 = r1
+            goto L_0x0174
+        L_0x0171:
+            int r0 = r0 + 1
+            goto L_0x0159
+        L_0x0174:
+            java.util.ArrayList<java.io.File> r14 = r9.storageDirs
+            int r14 = r14.size()
+            r0 = 0
+        L_0x017b:
+            if (r0 >= r14) goto L_0x01c6
+            java.util.ArrayList<java.io.File> r1 = r9.storageDirs
+            java.lang.Object r1 = r1.get(r0)
+            java.io.File r1 = (java.io.File) r1
+            java.lang.String r1 = r1.getAbsolutePath()
+            org.telegram.ui.Cells.RadioColorCell r3 = new org.telegram.ui.Cells.RadioColorCell
+            r3.<init>(r10)
+            r4 = 1082130432(0x40800000, float:4.0)
+            int r5 = org.telegram.messenger.AndroidUtilities.dp(r4)
+            int r4 = org.telegram.messenger.AndroidUtilities.dp(r4)
+            r3.setPadding(r5, r2, r4, r2)
+            java.lang.Integer r4 = java.lang.Integer.valueOf(r0)
+            r3.setTag(r4)
+            java.lang.String r4 = "radioBackground"
+            int r4 = org.telegram.ui.ActionBar.Theme.getColor(r4)
+            java.lang.String r5 = "dialogRadioBackgroundChecked"
+            int r5 = org.telegram.ui.ActionBar.Theme.getColor(r5)
+            r3.setCheckColor(r4, r5)
+            boolean r4 = r1.startsWith(r13)
+            r3.setTextAndValue(r1, r4)
+            r12.addView(r3)
+            org.telegram.ui.DataSettingsActivity$$ExternalSyntheticLambda3 r4 = new org.telegram.ui.DataSettingsActivity$$ExternalSyntheticLambda3
+            r4.<init>(r9, r1, r11)
+            r3.setOnClickListener(r4)
+            int r0 = r0 + 1
+            goto L_0x017b
+        L_0x01c6:
+            java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r8, r7)
+            r11.setNegativeButton(r10, r6)
+            org.telegram.ui.ActionBar.AlertDialog r10 = r11.create()
+            r9.showDialog(r10)
+            goto L_0x03af
+        L_0x01d6:
+            int r10 = r9.proxyRow
+            if (r12 != r10) goto L_0x01e4
+            org.telegram.ui.ProxyListActivity r10 = new org.telegram.ui.ProxyListActivity
+            r10.<init>()
+            r9.presentFragment(r10)
+            goto L_0x03af
+        L_0x01e4:
+            int r10 = r9.enableStreamRow
+            if (r12 != r10) goto L_0x01f4
+            org.telegram.messenger.SharedConfig.toggleStreamMedia()
+            org.telegram.ui.Cells.TextCheckCell r11 = (org.telegram.ui.Cells.TextCheckCell) r11
+            boolean r10 = org.telegram.messenger.SharedConfig.streamMedia
+            r11.setChecked(r10)
+            goto L_0x03af
+        L_0x01f4:
+            int r10 = r9.enableAllStreamRow
+            if (r12 != r10) goto L_0x0204
+            org.telegram.messenger.SharedConfig.toggleStreamAllVideo()
+            org.telegram.ui.Cells.TextCheckCell r11 = (org.telegram.ui.Cells.TextCheckCell) r11
+            boolean r10 = org.telegram.messenger.SharedConfig.streamAllVideo
+            r11.setChecked(r10)
+            goto L_0x03af
+        L_0x0204:
+            int r10 = r9.enableMkvRow
+            if (r12 != r10) goto L_0x0214
+            org.telegram.messenger.SharedConfig.toggleStreamMkv()
+            org.telegram.ui.Cells.TextCheckCell r11 = (org.telegram.ui.Cells.TextCheckCell) r11
+            boolean r10 = org.telegram.messenger.SharedConfig.streamMkv
+            r11.setChecked(r10)
+            goto L_0x03af
+        L_0x0214:
+            int r10 = r9.enableCacheStreamRow
+            if (r12 != r10) goto L_0x0224
+            org.telegram.messenger.SharedConfig.toggleSaveStreamMedia()
+            org.telegram.ui.Cells.TextCheckCell r11 = (org.telegram.ui.Cells.TextCheckCell) r11
+            boolean r10 = org.telegram.messenger.SharedConfig.saveStreamMedia
+            r11.setChecked(r10)
+            goto L_0x03af
+        L_0x0224:
+            int r10 = r9.quickRepliesRow
+            if (r12 != r10) goto L_0x0232
+            org.telegram.ui.QuickRepliesSettingsActivity r10 = new org.telegram.ui.QuickRepliesSettingsActivity
+            r10.<init>()
+            r9.presentFragment(r10)
+            goto L_0x03af
+        L_0x0232:
+            int r10 = r9.autoplayGifsRow
+            if (r12 != r10) goto L_0x0246
+            org.telegram.messenger.SharedConfig.toggleAutoplayGifs()
+            boolean r10 = r11 instanceof org.telegram.ui.Cells.TextCheckCell
+            if (r10 == 0) goto L_0x03af
+            org.telegram.ui.Cells.TextCheckCell r11 = (org.telegram.ui.Cells.TextCheckCell) r11
+            boolean r10 = org.telegram.messenger.SharedConfig.autoplayGifs
+            r11.setChecked(r10)
+            goto L_0x03af
+        L_0x0246:
+            int r10 = r9.autoplayVideoRow
+            if (r12 != r10) goto L_0x025a
+            org.telegram.messenger.SharedConfig.toggleAutoplayVideo()
+            boolean r10 = r11 instanceof org.telegram.ui.Cells.TextCheckCell
+            if (r10 == 0) goto L_0x03af
+            org.telegram.ui.Cells.TextCheckCell r11 = (org.telegram.ui.Cells.TextCheckCell) r11
+            boolean r10 = org.telegram.messenger.SharedConfig.autoplayVideo
+            r11.setChecked(r10)
+            goto L_0x03af
+        L_0x025a:
+            int r10 = r9.clearDraftsRow
+            if (r12 != r10) goto L_0x03af
+            org.telegram.ui.ActionBar.AlertDialog$Builder r10 = new org.telegram.ui.ActionBar.AlertDialog$Builder
+            android.app.Activity r11 = r9.getParentActivity()
+            r10.<init>((android.content.Context) r11)
+            r11 = 2131624418(0x7f0e01e2, float:1.8876015E38)
+            java.lang.String r12 = "AreYouSureClearDraftsTitle"
+            java.lang.String r11 = org.telegram.messenger.LocaleController.getString(r12, r11)
+            r10.setTitle(r11)
+            r11 = 2131624417(0x7f0e01e1, float:1.8876013E38)
+            java.lang.String r12 = "AreYouSureClearDrafts"
+            java.lang.String r11 = org.telegram.messenger.LocaleController.getString(r12, r11)
+            r10.setMessage(r11)
+            r11 = 2131625361(0x7f0e0591, float:1.8877928E38)
+            java.lang.String r12 = "Delete"
+            java.lang.String r11 = org.telegram.messenger.LocaleController.getString(r12, r11)
+            org.telegram.ui.DataSettingsActivity$$ExternalSyntheticLambda1 r12 = new org.telegram.ui.DataSettingsActivity$$ExternalSyntheticLambda1
+            r12.<init>(r9)
+            r10.setPositiveButton(r11, r12)
+            java.lang.String r11 = org.telegram.messenger.LocaleController.getString(r8, r7)
+            r10.setNegativeButton(r11, r6)
+            org.telegram.ui.ActionBar.AlertDialog r10 = r10.create()
+            r9.showDialog(r10)
+            android.view.View r10 = r10.getButton(r5)
+            android.widget.TextView r10 = (android.widget.TextView) r10
+            if (r10 == 0) goto L_0x03af
+            int r11 = org.telegram.ui.ActionBar.Theme.getColor(r14)
+            r10.setTextColor(r11)
+            goto L_0x03af
+        L_0x02af:
+            boolean r10 = org.telegram.messenger.LocaleController.isRTL
+            r14 = 1117257728(0x42980000, float:76.0)
+            if (r10 == 0) goto L_0x02be
+            int r10 = org.telegram.messenger.AndroidUtilities.dp(r14)
+            float r10 = (float) r10
+            int r10 = (r13 > r10 ? 1 : (r13 == r10 ? 0 : -1))
+            if (r10 <= 0) goto L_0x02d0
+        L_0x02be:
+            boolean r10 = org.telegram.messenger.LocaleController.isRTL
+            if (r10 != 0) goto L_0x0383
+            int r10 = r11.getMeasuredWidth()
+            int r14 = org.telegram.messenger.AndroidUtilities.dp(r14)
+            int r10 = r10 - r14
+            float r10 = (float) r10
+            int r10 = (r13 > r10 ? 1 : (r13 == r10 ? 0 : -1))
+            if (r10 < 0) goto L_0x0383
+        L_0x02d0:
+            org.telegram.ui.DataSettingsActivity$ListAdapter r10 = r9.listAdapter
+            int r13 = r9.resetDownloadRow
+            boolean r10 = r10.isRowEnabled(r13)
+            r13 = r11
+            org.telegram.ui.Cells.NotificationsCheckCell r13 = (org.telegram.ui.Cells.NotificationsCheckCell) r13
+            boolean r14 = r13.isChecked()
+            int r0 = r9.mobileRow
+            if (r12 != r0) goto L_0x02f8
+            int r0 = r9.currentAccount
+            org.telegram.messenger.DownloadController r0 = org.telegram.messenger.DownloadController.getInstance(r0)
+            org.telegram.messenger.DownloadController$Preset r0 = r0.mobilePreset
+            int r1 = r9.currentAccount
+            org.telegram.messenger.DownloadController r1 = org.telegram.messenger.DownloadController.getInstance(r1)
+            org.telegram.messenger.DownloadController$Preset r1 = r1.mediumPreset
+            java.lang.String r5 = "mobilePreset"
+            java.lang.String r6 = "currentMobilePreset"
+            goto L_0x0328
+        L_0x02f8:
+            int r0 = r9.wifiRow
+            if (r12 != r0) goto L_0x0312
+            int r0 = r9.currentAccount
+            org.telegram.messenger.DownloadController r0 = org.telegram.messenger.DownloadController.getInstance(r0)
+            org.telegram.messenger.DownloadController$Preset r0 = r0.wifiPreset
+            int r1 = r9.currentAccount
+            org.telegram.messenger.DownloadController r1 = org.telegram.messenger.DownloadController.getInstance(r1)
+            org.telegram.messenger.DownloadController$Preset r1 = r1.highPreset
+            java.lang.String r5 = "wifiPreset"
+            java.lang.String r6 = "currentWifiPreset"
+            r2 = 1
+            goto L_0x0328
+        L_0x0312:
+            int r0 = r9.currentAccount
+            org.telegram.messenger.DownloadController r0 = org.telegram.messenger.DownloadController.getInstance(r0)
+            org.telegram.messenger.DownloadController$Preset r0 = r0.roamingPreset
+            int r2 = r9.currentAccount
+            org.telegram.messenger.DownloadController r2 = org.telegram.messenger.DownloadController.getInstance(r2)
+            org.telegram.messenger.DownloadController$Preset r2 = r2.lowPreset
+            java.lang.String r5 = "roamingPreset"
+            java.lang.String r6 = "currentRoamingPreset"
+            r1 = r2
+            r2 = 2
+        L_0x0328:
+            if (r14 != 0) goto L_0x0332
+            boolean r7 = r0.enabled
+            if (r7 == 0) goto L_0x0332
+            r0.set((org.telegram.messenger.DownloadController.Preset) r1)
+            goto L_0x0337
+        L_0x0332:
+            boolean r1 = r0.enabled
+            r1 = r1 ^ r3
+            r0.enabled = r1
+        L_0x0337:
+            int r1 = r9.currentAccount
+            android.content.SharedPreferences r1 = org.telegram.messenger.MessagesController.getMainSettings(r1)
+            android.content.SharedPreferences$Editor r1 = r1.edit()
+            java.lang.String r0 = r0.toString()
+            r1.putString(r5, r0)
+            r1.putInt(r6, r4)
+            r1.commit()
+            r14 = r14 ^ r3
+            r13.setChecked(r14)
+            org.telegram.ui.Components.RecyclerListView r13 = r9.listView
+            androidx.recyclerview.widget.RecyclerView$ViewHolder r11 = r13.findContainingViewHolder(r11)
+            if (r11 == 0) goto L_0x035f
+            org.telegram.ui.DataSettingsActivity$ListAdapter r13 = r9.listAdapter
+            r13.onBindViewHolder(r11, r12)
+        L_0x035f:
+            int r11 = r9.currentAccount
+            org.telegram.messenger.DownloadController r11 = org.telegram.messenger.DownloadController.getInstance(r11)
+            r11.checkAutodownloadSettings()
+            int r11 = r9.currentAccount
+            org.telegram.messenger.DownloadController r11 = org.telegram.messenger.DownloadController.getInstance(r11)
+            r11.savePresetToServer(r2)
+            org.telegram.ui.DataSettingsActivity$ListAdapter r11 = r9.listAdapter
+            int r12 = r9.resetDownloadRow
+            boolean r11 = r11.isRowEnabled(r12)
+            if (r10 == r11) goto L_0x03af
+            org.telegram.ui.DataSettingsActivity$ListAdapter r10 = r9.listAdapter
+            int r11 = r9.resetDownloadRow
+            r10.notifyItemChanged(r11)
+            goto L_0x03af
+        L_0x0383:
+            int r10 = r9.mobileRow
+            if (r12 != r10) goto L_0x0389
+            r1 = 0
+            goto L_0x038e
+        L_0x0389:
+            int r10 = r9.wifiRow
+            if (r12 != r10) goto L_0x038e
+            r1 = 1
+        L_0x038e:
+            org.telegram.ui.DataAutoDownloadActivity r10 = new org.telegram.ui.DataAutoDownloadActivity
+            r10.<init>(r1)
+            r9.presentFragment(r10)
+            goto L_0x03af
+        L_0x0397:
+            if (r12 != r14) goto L_0x039b
+            r0 = 2
+            goto L_0x03a1
+        L_0x039b:
+            int r10 = r9.saveToGalleryChannelsRow
+            if (r12 != r10) goto L_0x03a0
+            goto L_0x03a1
+        L_0x03a0:
+            r0 = 1
+        L_0x03a1:
+            org.telegram.messenger.SharedConfig.toggleSaveToGalleryFlag(r0)
+            org.telegram.ui.Cells.TextCheckCell r11 = (org.telegram.ui.Cells.TextCheckCell) r11
+            int r10 = org.telegram.messenger.SharedConfig.saveToGalleryFlags
+            r10 = r10 & r0
+            if (r10 == 0) goto L_0x03ac
+            r2 = 1
+        L_0x03ac:
+            r11.setChecked(r2)
+        L_0x03af:
+            return
+        */
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.DataSettingsActivity.lambda$createView$6(android.content.Context, android.view.View, int, float, float):void");
     }
 
     /* access modifiers changed from: private */
@@ -526,13 +823,13 @@ public class DataSettingsActivity extends BaseFragment {
             String string;
             boolean z;
             DownloadController.Preset currentRoamingPreset;
-            String str;
             NotificationsCheckCell notificationsCheckCell;
             RecyclerView.ViewHolder viewHolder2 = viewHolder;
             int i2 = i;
             int itemViewType = viewHolder.getItemViewType();
             if (itemViewType != 0) {
                 boolean z2 = false;
+                boolean z3 = true;
                 if (itemViewType == 1) {
                     TextSettingsCell textSettingsCell = (TextSettingsCell) viewHolder2.itemView;
                     textSettingsCell.setCanDisable(false);
@@ -540,18 +837,18 @@ public class DataSettingsActivity extends BaseFragment {
                     if (i2 == DataSettingsActivity.this.storageUsageRow) {
                         textSettingsCell.setText(LocaleController.getString("StorageUsage", NUM), true);
                     } else if (i2 == DataSettingsActivity.this.useLessDataForCallsRow) {
-                        String str2 = null;
+                        String str = null;
                         int i3 = MessagesController.getGlobalMainSettings().getInt("VoipDataSaving", VoIPHelper.getDataSavingDefault());
                         if (i3 == 0) {
-                            str2 = LocaleController.getString("UseLessDataNever", NUM);
+                            str = LocaleController.getString("UseLessDataNever", NUM);
                         } else if (i3 == 1) {
-                            str2 = LocaleController.getString("UseLessDataOnMobile", NUM);
+                            str = LocaleController.getString("UseLessDataOnMobile", NUM);
                         } else if (i3 == 2) {
-                            str2 = LocaleController.getString("UseLessDataAlways", NUM);
+                            str = LocaleController.getString("UseLessDataAlways", NUM);
                         } else if (i3 == 3) {
-                            str2 = LocaleController.getString("UseLessDataOnRoaming", NUM);
+                            str = LocaleController.getString("UseLessDataOnRoaming", NUM);
                         }
-                        textSettingsCell.setTextAndValue(LocaleController.getString("VoipUseLessData", NUM), str2, true);
+                        textSettingsCell.setTextAndValue(LocaleController.getString("VoipUseLessData", NUM), str, true);
                     } else if (i2 == DataSettingsActivity.this.dataUsageRow) {
                         String string2 = LocaleController.getString("NetworkUsage", NUM);
                         if (DataSettingsActivity.this.storageNumRow != -1) {
@@ -601,16 +898,18 @@ public class DataSettingsActivity extends BaseFragment {
                         headerCell.setText(LocaleController.getString("Streaming", NUM));
                     } else if (i2 == DataSettingsActivity.this.autoplayHeaderRow) {
                         headerCell.setText(LocaleController.getString("AutoplayMedia", NUM));
+                    } else if (i2 == DataSettingsActivity.this.saveToGallerySectionRow) {
+                        headerCell.setText(LocaleController.getString("SaveToGallery", NUM));
                     }
                 } else if (itemViewType == 3) {
                     TextCheckCell textCheckCell = (TextCheckCell) viewHolder2.itemView;
                     if (i2 == DataSettingsActivity.this.enableStreamRow) {
                         String string3 = LocaleController.getString("EnableStreaming", NUM);
-                        boolean z3 = SharedConfig.streamMedia;
+                        boolean z4 = SharedConfig.streamMedia;
                         if (DataSettingsActivity.this.enableAllStreamRow != -1) {
                             z2 = true;
                         }
-                        textCheckCell.setTextAndCheck(string3, z3, z2);
+                        textCheckCell.setTextAndCheck(string3, z4, z2);
                     } else if (i2 != DataSettingsActivity.this.enableCacheStreamRow) {
                         if (i2 == DataSettingsActivity.this.enableMkvRow) {
                             textCheckCell.setTextAndCheck("(beta only) Show MKV as Video", SharedConfig.streamMkv, true);
@@ -620,6 +919,24 @@ public class DataSettingsActivity extends BaseFragment {
                             textCheckCell.setTextAndCheck(LocaleController.getString("AutoplayGIF", NUM), SharedConfig.autoplayGifs, true);
                         } else if (i2 == DataSettingsActivity.this.autoplayVideoRow) {
                             textCheckCell.setTextAndCheck(LocaleController.getString("AutoplayVideo", NUM), SharedConfig.autoplayVideo, false);
+                        } else if (i2 == DataSettingsActivity.this.saveToGalleryPeerRow) {
+                            String string4 = LocaleController.getString("SaveToGalleryPrivate", NUM);
+                            if ((SharedConfig.saveToGalleryFlags & 1) != 0) {
+                                z2 = true;
+                            }
+                            textCheckCell.setTextAndCheck(string4, z2, true);
+                        } else if (i2 == DataSettingsActivity.this.saveToGalleryGroupsRow) {
+                            String string5 = LocaleController.getString("SaveToGalleryGroups", NUM);
+                            if ((SharedConfig.saveToGalleryFlags & 2) != 0) {
+                                z2 = true;
+                            }
+                            textCheckCell.setTextAndCheck(string5, z2, true);
+                        } else if (i2 == DataSettingsActivity.this.saveToGalleryChannelsRow) {
+                            String string6 = LocaleController.getString("SaveToGalleryChannels", NUM);
+                            if ((SharedConfig.saveToGalleryFlags & 4) == 0) {
+                                z3 = false;
+                            }
+                            textCheckCell.setTextAndCheck(string6, z3, false);
                         }
                     }
                 } else if (itemViewType == 4) {
@@ -643,60 +960,57 @@ public class DataSettingsActivity extends BaseFragment {
                         z = DownloadController.getInstance(DataSettingsActivity.this.currentAccount).roamingPreset.enabled;
                         currentRoamingPreset = DownloadController.getInstance(DataSettingsActivity.this.currentAccount).getCurrentRoamingPreset();
                     }
-                    String str3 = string;
+                    String str2 = string;
                     int i5 = 0;
-                    boolean z4 = false;
-                    int i6 = 0;
                     boolean z5 = false;
+                    int i6 = 0;
                     boolean z6 = false;
+                    boolean z7 = false;
                     while (true) {
                         int[] iArr = currentRoamingPreset.mask;
                         if (i5 >= iArr.length) {
                             break;
                         }
-                        if (!z4 && (iArr[i5] & 1) != 0) {
-                            i6++;
-                            z4 = true;
-                        }
-                        if (!z5 && (iArr[i5] & 4) != 0) {
+                        if (!z5 && (iArr[i5] & 1) != 0) {
                             i6++;
                             z5 = true;
                         }
-                        if (!z6 && (iArr[i5] & 8) != 0) {
+                        if (!z6 && (iArr[i5] & 4) != 0) {
                             i6++;
                             z6 = true;
+                        }
+                        if (!z7 && (iArr[i5] & 8) != 0) {
+                            i6++;
+                            z7 = true;
                         }
                         i5++;
                     }
                     if (!currentRoamingPreset.enabled || i6 == 0) {
                         notificationsCheckCell = notificationsCheckCell2;
-                        str = str3;
                         sb.append(LocaleController.getString("NoMediaAutoDownload", NUM));
                     } else {
-                        if (z4) {
-                            sb.append(LocaleController.getString("AutoDownloadPhotosOn", NUM));
-                        }
                         if (z5) {
-                            if (sb.length() > 0) {
-                                sb.append(", ");
-                            }
-                            sb.append(LocaleController.getString("AutoDownloadVideosOn", NUM));
-                            notificationsCheckCell = notificationsCheckCell2;
-                            str = str3;
-                            sb.append(String.format(" (%1$s)", new Object[]{AndroidUtilities.formatFileSize((long) currentRoamingPreset.sizes[DownloadController.typeToIndex(4)], true)}));
-                        } else {
-                            notificationsCheckCell = notificationsCheckCell2;
-                            str = str3;
+                            sb.append(LocaleController.getString("AutoDownloadPhotosOn", NUM));
                         }
                         if (z6) {
                             if (sb.length() > 0) {
                                 sb.append(", ");
                             }
+                            sb.append(LocaleController.getString("AutoDownloadVideosOn", NUM));
+                            notificationsCheckCell = notificationsCheckCell2;
+                            sb.append(String.format(" (%1$s)", new Object[]{AndroidUtilities.formatFileSize(currentRoamingPreset.sizes[DownloadController.typeToIndex(4)], true)}));
+                        } else {
+                            notificationsCheckCell = notificationsCheckCell2;
+                        }
+                        if (z7) {
+                            if (sb.length() > 0) {
+                                sb.append(", ");
+                            }
                             sb.append(LocaleController.getString("AutoDownloadFilesOn", NUM));
-                            sb.append(String.format(" (%1$s)", new Object[]{AndroidUtilities.formatFileSize((long) currentRoamingPreset.sizes[DownloadController.typeToIndex(8)], true)}));
+                            sb.append(String.format(" (%1$s)", new Object[]{AndroidUtilities.formatFileSize(currentRoamingPreset.sizes[DownloadController.typeToIndex(8)], true)}));
                         }
                     }
-                    notificationsCheckCell.setTextAndValueAndCheck(str, sb, (z4 || z5 || z6) && z, 0, true, true);
+                    notificationsCheckCell.setTextAndValueAndCheck(str2, sb, (z5 || z6 || z7) && z, 0, true, true);
                 }
             } else if (i2 == DataSettingsActivity.this.clearDraftsSectionRow) {
                 viewHolder2.itemView.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, NUM, "windowBackgroundGrayShadow"));
@@ -732,7 +1046,7 @@ public class DataSettingsActivity extends BaseFragment {
                     return true;
                 }
                 return false;
-            } else if (i == DataSettingsActivity.this.mobileRow || i == DataSettingsActivity.this.roamingRow || i == DataSettingsActivity.this.wifiRow || i == DataSettingsActivity.this.storageUsageRow || i == DataSettingsActivity.this.useLessDataForCallsRow || i == DataSettingsActivity.this.dataUsageRow || i == DataSettingsActivity.this.proxyRow || i == DataSettingsActivity.this.clearDraftsRow || i == DataSettingsActivity.this.enableCacheStreamRow || i == DataSettingsActivity.this.enableStreamRow || i == DataSettingsActivity.this.enableAllStreamRow || i == DataSettingsActivity.this.enableMkvRow || i == DataSettingsActivity.this.quickRepliesRow || i == DataSettingsActivity.this.autoplayVideoRow || i == DataSettingsActivity.this.autoplayGifsRow || i == DataSettingsActivity.this.storageNumRow) {
+            } else if (i == DataSettingsActivity.this.mobileRow || i == DataSettingsActivity.this.roamingRow || i == DataSettingsActivity.this.wifiRow || i == DataSettingsActivity.this.storageUsageRow || i == DataSettingsActivity.this.useLessDataForCallsRow || i == DataSettingsActivity.this.dataUsageRow || i == DataSettingsActivity.this.proxyRow || i == DataSettingsActivity.this.clearDraftsRow || i == DataSettingsActivity.this.enableCacheStreamRow || i == DataSettingsActivity.this.enableStreamRow || i == DataSettingsActivity.this.enableAllStreamRow || i == DataSettingsActivity.this.enableMkvRow || i == DataSettingsActivity.this.quickRepliesRow || i == DataSettingsActivity.this.autoplayVideoRow || i == DataSettingsActivity.this.autoplayGifsRow || i == DataSettingsActivity.this.storageNumRow || i == DataSettingsActivity.this.saveToGalleryGroupsRow || i == DataSettingsActivity.this.saveToGalleryPeerRow || i == DataSettingsActivity.this.saveToGalleryChannelsRow) {
                 return true;
             } else {
                 return false;
@@ -768,13 +1082,13 @@ public class DataSettingsActivity extends BaseFragment {
         }
 
         public int getItemViewType(int i) {
-            if (i == DataSettingsActivity.this.mediaDownloadSection2Row || i == DataSettingsActivity.this.usageSection2Row || i == DataSettingsActivity.this.callsSection2Row || i == DataSettingsActivity.this.proxySection2Row || i == DataSettingsActivity.this.autoplaySectionRow || i == DataSettingsActivity.this.clearDraftsSectionRow) {
+            if (i == DataSettingsActivity.this.mediaDownloadSection2Row || i == DataSettingsActivity.this.usageSection2Row || i == DataSettingsActivity.this.callsSection2Row || i == DataSettingsActivity.this.proxySection2Row || i == DataSettingsActivity.this.autoplaySectionRow || i == DataSettingsActivity.this.clearDraftsSectionRow || i == DataSettingsActivity.this.saveToGalleryDividerRow) {
                 return 0;
             }
-            if (i == DataSettingsActivity.this.mediaDownloadSectionRow || i == DataSettingsActivity.this.streamSectionRow || i == DataSettingsActivity.this.callsSectionRow || i == DataSettingsActivity.this.usageSectionRow || i == DataSettingsActivity.this.proxySectionRow || i == DataSettingsActivity.this.autoplayHeaderRow) {
+            if (i == DataSettingsActivity.this.mediaDownloadSectionRow || i == DataSettingsActivity.this.streamSectionRow || i == DataSettingsActivity.this.callsSectionRow || i == DataSettingsActivity.this.usageSectionRow || i == DataSettingsActivity.this.proxySectionRow || i == DataSettingsActivity.this.autoplayHeaderRow || i == DataSettingsActivity.this.saveToGallerySectionRow) {
                 return 2;
             }
-            if (i == DataSettingsActivity.this.enableCacheStreamRow || i == DataSettingsActivity.this.enableStreamRow || i == DataSettingsActivity.this.enableAllStreamRow || i == DataSettingsActivity.this.enableMkvRow || i == DataSettingsActivity.this.autoplayGifsRow || i == DataSettingsActivity.this.autoplayVideoRow) {
+            if (i == DataSettingsActivity.this.enableCacheStreamRow || i == DataSettingsActivity.this.enableStreamRow || i == DataSettingsActivity.this.enableAllStreamRow || i == DataSettingsActivity.this.enableMkvRow || i == DataSettingsActivity.this.autoplayGifsRow || i == DataSettingsActivity.this.autoplayVideoRow || i == DataSettingsActivity.this.saveToGalleryGroupsRow || i == DataSettingsActivity.this.saveToGalleryPeerRow || i == DataSettingsActivity.this.saveToGalleryChannelsRow) {
                 return 3;
             }
             if (i == DataSettingsActivity.this.enableAllStreamInfoRow) {

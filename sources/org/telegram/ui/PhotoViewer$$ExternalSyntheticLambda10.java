@@ -1,16 +1,15 @@
 package org.telegram.ui;
 
-import android.view.View;
-import android.view.WindowInsets;
+import android.content.DialogInterface;
 
-public final /* synthetic */ class PhotoViewer$$ExternalSyntheticLambda10 implements View.OnApplyWindowInsetsListener {
-    public final /* synthetic */ PhotoViewer f$0;
+public final /* synthetic */ class PhotoViewer$$ExternalSyntheticLambda10 implements DialogInterface.OnDismissListener {
+    public final /* synthetic */ Runnable f$0;
 
-    public /* synthetic */ PhotoViewer$$ExternalSyntheticLambda10(PhotoViewer photoViewer) {
-        this.f$0 = photoViewer;
+    public /* synthetic */ PhotoViewer$$ExternalSyntheticLambda10(Runnable runnable) {
+        this.f$0 = runnable;
     }
 
-    public final WindowInsets onApplyWindowInsets(View view, WindowInsets windowInsets) {
-        return this.f$0.lambda$setParentActivity$4(view, windowInsets);
+    public final void onDismiss(DialogInterface dialogInterface) {
+        this.f$0.run();
     }
 }

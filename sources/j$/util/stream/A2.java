@@ -1,71 +1,63 @@
 package j$.util.stream;
 
-import j$.util.function.BiConsumer;
-import j$.util.function.BiFunction;
+import j$.util.function.Consumer;
 import j$.util.function.b;
-import j$.util.function.u;
-import j$.util.function.v;
+import j$.util.function.p;
+import j$.util.function.q;
 import j$.util.function.w;
 import j$.util.function.y;
 
-class A2 extends V2 {
-    public final /* synthetic */ int b = 3;
-    final /* synthetic */ Object c;
-    final /* synthetic */ Object d;
-    final /* synthetic */ Object e;
+class A2 extends T2 implements S2, CLASSNAMEl3 {
+    final /* synthetic */ y b;
+    final /* synthetic */ w c;
+    final /* synthetic */ b d;
 
-    /* JADX INFO: super call moved to the top of the method (can break code semantics) */
-    public A2(CLASSNAMEf4 f4Var, BiConsumer biConsumer, BiConsumer biConsumer2, y yVar) {
-        super(f4Var);
-        this.c = biConsumer;
-        this.d = biConsumer2;
-        this.e = yVar;
+    A2(y yVar, w wVar, b bVar) {
+        this.b = yVar;
+        this.c = wVar;
+        this.d = bVar;
     }
 
-    public T2 a() {
-        switch (this.b) {
-            case 0:
-                return new B2((y) this.e, (w) this.d, (b) this.c);
-            case 1:
-                return new G2((y) this.e, (u) this.d, (b) this.c);
-            case 2:
-                return new H2(this.e, (BiFunction) this.d, (b) this.c);
-            case 3:
-                return new L2((y) this.e, (BiConsumer) this.d, (BiConsumer) this.c);
-            default:
-                return new P2((y) this.e, (v) this.d, (b) this.c);
-        }
+    public /* synthetic */ void accept(double d2) {
+        CLASSNAMEo1.f(this);
+        throw null;
     }
 
-    /* JADX INFO: super call moved to the top of the method (can break code semantics) */
-    public A2(CLASSNAMEf4 f4Var, b bVar, BiFunction biFunction, Object obj) {
-        super(f4Var);
-        this.c = bVar;
-        this.d = biFunction;
-        this.e = obj;
+    public /* synthetic */ void accept(int i) {
+        CLASSNAMEo1.d(this);
+        throw null;
     }
 
-    /* JADX INFO: super call moved to the top of the method (can break code semantics) */
-    public A2(CLASSNAMEf4 f4Var, b bVar, u uVar, y yVar) {
-        super(f4Var);
-        this.c = bVar;
-        this.d = uVar;
-        this.e = yVar;
+    public void accept(long j) {
+        this.c.accept(this.a, j);
     }
 
-    /* JADX INFO: super call moved to the top of the method (can break code semantics) */
-    public A2(CLASSNAMEf4 f4Var, b bVar, v vVar, y yVar) {
-        super(f4Var);
-        this.c = bVar;
-        this.d = vVar;
-        this.e = yVar;
+    public /* synthetic */ Consumer andThen(Consumer consumer) {
+        return Consumer.CC.$default$andThen(this, consumer);
     }
 
-    /* JADX INFO: super call moved to the top of the method (can break code semantics) */
-    public A2(CLASSNAMEf4 f4Var, b bVar, w wVar, y yVar) {
-        super(f4Var);
-        this.c = bVar;
-        this.d = wVar;
-        this.e = yVar;
+    /* renamed from: b */
+    public /* synthetic */ void accept(Long l) {
+        CLASSNAMEo1.c(this, l);
+    }
+
+    public q f(q qVar) {
+        qVar.getClass();
+        return new p(this, qVar);
+    }
+
+    public void h(S2 s2) {
+        this.a = this.d.apply(this.a, ((A2) s2).a);
+    }
+
+    public /* synthetic */ void m() {
+    }
+
+    public void n(long j) {
+        this.a = this.b.get();
+    }
+
+    public /* synthetic */ boolean o() {
+        return false;
     }
 }

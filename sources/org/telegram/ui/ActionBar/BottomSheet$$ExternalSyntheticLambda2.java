@@ -1,15 +1,15 @@
 package org.telegram.ui.ActionBar;
 
-import android.view.View;
+import android.animation.ValueAnimator;
 
-public final /* synthetic */ class BottomSheet$$ExternalSyntheticLambda2 implements View.OnClickListener {
+public final /* synthetic */ class BottomSheet$$ExternalSyntheticLambda2 implements ValueAnimator.AnimatorUpdateListener {
     public final /* synthetic */ BottomSheet f$0;
 
     public /* synthetic */ BottomSheet$$ExternalSyntheticLambda2(BottomSheet bottomSheet) {
         this.f$0 = bottomSheet;
     }
 
-    public final void onClick(View view) {
-        this.f$0.lambda$onCreate$3(view);
+    public final void onAnimationUpdate(ValueAnimator valueAnimator) {
+        this.f$0.lambda$dismiss$5(valueAnimator);
     }
 }

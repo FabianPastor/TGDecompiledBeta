@@ -15,8 +15,9 @@ public abstract class TLRPC$Document extends TLObject {
     public long id;
     public byte[] iv;
     public byte[] key;
+    public String localPath;
     public String mime_type;
-    public int size;
+    public long size;
     public ArrayList<TLRPC$PhotoSize> thumbs = new ArrayList<>();
     public long user_id;
     public int version;
@@ -28,6 +29,9 @@ public abstract class TLRPC$Document extends TLObject {
             case -2027738169:
                 tLRPC$Document = new TLRPC$TL_document_layer82();
                 break;
+            case -1881881384:
+                tLRPC$Document = new TLRPC$TL_document();
+                break;
             case -1683841855:
                 tLRPC$Document = new TLRPC$TL_document_layer113();
                 break;
@@ -38,7 +42,7 @@ public abstract class TLRPC$Document extends TLObject {
                 tLRPC$Document = new TLRPC$TL_document_layer53();
                 break;
             case 512177195:
-                tLRPC$Document = new TLRPC$TL_document();
+                tLRPC$Document = new TLRPC$TL_document_layer142();
                 break;
             case 922273905:
                 tLRPC$Document = new TLRPC$TL_documentEmpty();

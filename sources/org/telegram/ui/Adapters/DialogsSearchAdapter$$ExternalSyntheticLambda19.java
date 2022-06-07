@@ -1,17 +1,15 @@
 package org.telegram.ui.Adapters;
 
-import androidx.collection.LongSparseArray;
-import java.util.ArrayList;
+import java.util.Comparator;
 import org.telegram.ui.Adapters.DialogsSearchAdapter;
 
-public final /* synthetic */ class DialogsSearchAdapter$$ExternalSyntheticLambda19 implements DialogsSearchAdapter.OnRecentSearchLoaded {
-    public final /* synthetic */ DialogsSearchAdapter f$0;
+public final /* synthetic */ class DialogsSearchAdapter$$ExternalSyntheticLambda19 implements Comparator {
+    public static final /* synthetic */ DialogsSearchAdapter$$ExternalSyntheticLambda19 INSTANCE = new DialogsSearchAdapter$$ExternalSyntheticLambda19();
 
-    public /* synthetic */ DialogsSearchAdapter$$ExternalSyntheticLambda19(DialogsSearchAdapter dialogsSearchAdapter) {
-        this.f$0 = dialogsSearchAdapter;
+    private /* synthetic */ DialogsSearchAdapter$$ExternalSyntheticLambda19() {
     }
 
-    public final void setRecentSearch(ArrayList arrayList, LongSparseArray longSparseArray) {
-        this.f$0.lambda$loadRecentSearch$2(arrayList, longSparseArray);
+    public final int compare(Object obj, Object obj2) {
+        return DialogsSearchAdapter.lambda$loadRecentSearch$3((DialogsSearchAdapter.RecentSearchObject) obj, (DialogsSearchAdapter.RecentSearchObject) obj2);
     }
 }

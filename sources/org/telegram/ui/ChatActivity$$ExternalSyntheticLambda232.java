@@ -1,15 +1,15 @@
 package org.telegram.ui;
 
-import org.telegram.ui.Components.RecyclerAnimationScrollHelper;
+import org.telegram.ui.Adapters.StickersAdapter;
 
-public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda232 implements RecyclerAnimationScrollHelper.ScrollListener {
+public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda232 implements StickersAdapter.StickersAdapterDelegate {
     public final /* synthetic */ ChatActivity f$0;
 
     public /* synthetic */ ChatActivity$$ExternalSyntheticLambda232(ChatActivity chatActivity) {
         this.f$0 = chatActivity;
     }
 
-    public final void onScroll() {
-        this.f$0.invalidateMessagesVisiblePart();
+    public final void needChangePanelVisibility(boolean z) {
+        this.f$0.lambda$initStickers$89(z);
     }
 }

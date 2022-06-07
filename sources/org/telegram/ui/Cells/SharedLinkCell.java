@@ -2,6 +2,8 @@ package org.telegram.ui.Cells;
 
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.CornerPathEffect;
+import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.Rect;
 import android.graphics.Region;
@@ -70,12 +72,14 @@ public class SharedLinkCell extends FrameLayout {
     public int pressCount;
     /* access modifiers changed from: private */
     public int pressedLink;
+    private Theme.ResourcesProvider resourcesProvider;
     private SpoilerEffect spoilerPressed;
     private int spoilerTypePressed;
     private Stack<SpoilerEffect> spoilersPool;
     private StaticLayout titleLayout;
     private TextPaint titleTextPaint;
     private int titleY;
+    private Paint urlPaint;
     private LinkPath urlPath;
     private int viewType;
 
@@ -154,11 +158,11 @@ public class SharedLinkCell extends FrameLayout {
         }
     }
 
-    public SharedLinkCell(Context context) {
-        this(context, 0);
+    public SharedLinkCell(Context context, int i) {
+        this(context, i, (Theme.ResourcesProvider) null);
     }
 
-    public SharedLinkCell(Context context, int i) {
+    public SharedLinkCell(Context context, int i, Theme.ResourcesProvider resourcesProvider2) {
         super(context);
         this.checkingForLongPress = false;
         this.pendingCheckForLongPress = null;
@@ -179,6 +183,7 @@ public class SharedLinkCell extends FrameLayout {
         this.patchedDescriptionLayout2 = new AtomicReference<>();
         this.captionY = AndroidUtilities.dp(30.0f);
         this.fromInfoLayoutY = AndroidUtilities.dp(30.0f);
+        this.resourcesProvider = resourcesProvider2;
         this.viewType = i;
         setFocusable(true);
         LinkPath linkPath = new LinkPath();
@@ -187,7 +192,7 @@ public class SharedLinkCell extends FrameLayout {
         TextPaint textPaint = new TextPaint(1);
         this.titleTextPaint = textPaint;
         textPaint.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
-        this.titleTextPaint.setColor(Theme.getColor("windowBackgroundWhiteBlackText"));
+        this.titleTextPaint.setColor(Theme.getColor("windowBackgroundWhiteBlackText", resourcesProvider2));
         this.descriptionTextPaint = new TextPaint(1);
         this.titleTextPaint.setTextSize((float) AndroidUtilities.dp(14.0f));
         this.descriptionTextPaint.setTextSize((float) AndroidUtilities.dp(14.0f));
@@ -195,8 +200,8 @@ public class SharedLinkCell extends FrameLayout {
         ImageReceiver imageReceiver = new ImageReceiver(this);
         this.linkImageView = imageReceiver;
         imageReceiver.setRoundRadius(AndroidUtilities.dp(4.0f));
-        this.letterDrawable = new LetterDrawable();
-        CheckBox2 checkBox2 = new CheckBox2(context, 21);
+        this.letterDrawable = new LetterDrawable(resourcesProvider2);
+        CheckBox2 checkBox2 = new CheckBox2(context, 21, resourcesProvider2);
         this.checkBox = checkBox2;
         checkBox2.setVisibility(4);
         this.checkBox.setColor((String) null, "windowBackgroundWhite", "checkboxCheck");
@@ -246,10 +251,10 @@ public class SharedLinkCell extends FrameLayout {
     /* JADX WARNING: Removed duplicated region for block: B:95:0x01fd  */
     @android.annotation.SuppressLint({"DrawAllocation"})
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    public void onMeasure(int r27, int r28) {
+    public void onMeasure(int r28, int r29) {
         /*
-            r26 = this;
-            r1 = r26
+            r27 = this;
+            r1 = r27
             r2 = 0
             r1.drawLinkImageView = r2
             r3 = 0
@@ -261,7 +266,7 @@ public class SharedLinkCell extends FrameLayout {
             r0.clear()
             java.util.ArrayList<java.lang.CharSequence> r0 = r1.links
             r0.clear()
-            int r0 = android.view.View.MeasureSpec.getSize(r27)
+            int r0 = android.view.View.MeasureSpec.getSize(r28)
             int r4 = org.telegram.messenger.AndroidUtilities.leftBaseline
             float r4 = (float) r4
             int r4 = org.telegram.messenger.AndroidUtilities.dp(r4)
@@ -959,7 +964,7 @@ public class SharedLinkCell extends FrameLayout {
             int r0 = org.telegram.messenger.AndroidUtilities.dp(r0)
             boolean r2 = org.telegram.messenger.LocaleController.isRTL
             if (r2 == 0) goto L_0x0575
-            int r2 = android.view.View.MeasureSpec.getSize(r27)
+            int r2 = android.view.View.MeasureSpec.getSize(r28)
             int r3 = org.telegram.messenger.AndroidUtilities.dp(r16)
             int r2 = r2 - r3
             int r2 = r2 - r0
@@ -1024,12 +1029,12 @@ public class SharedLinkCell extends FrameLayout {
             org.telegram.tgnet.TLObject r2 = r2.photoThumbsObject
             org.telegram.messenger.ImageLocation r20 = org.telegram.messenger.ImageLocation.getForObject(r7, r2)
             r22 = 0
-            r23 = 0
+            r24 = 0
             org.telegram.messenger.MessageObject r2 = r1.message
-            r25 = 0
+            r26 = 0
             r17 = r0
-            r24 = r2
-            r17.setImage(r18, r19, r20, r21, r22, r23, r24, r25)
+            r25 = r2
+            r17.setImage(r18, r19, r20, r21, r22, r24, r25, r26)
             r2 = 1
             r1.drawLinkImageView = r2
             goto L_0x060e
@@ -1154,7 +1159,7 @@ public class SharedLinkCell extends FrameLayout {
             int r3 = org.telegram.messenger.AndroidUtilities.dp(r3)
             int r3 = android.view.View.MeasureSpec.makeMeasureSpec(r3, r5)
             r2.measure(r4, r3)
-            int r2 = android.view.View.MeasureSpec.getSize(r27)
+            int r2 = android.view.View.MeasureSpec.getSize(r28)
             r3 = 1117257728(0x42980000, float:76.0)
             int r3 = org.telegram.messenger.AndroidUtilities.dp(r3)
             r4 = 1099431936(0x41880000, float:17.0)
@@ -1583,7 +1588,7 @@ public class SharedLinkCell extends FrameLayout {
     public void onDraw(Canvas canvas) {
         Canvas canvas2 = canvas;
         if (this.viewType == 1) {
-            this.description2TextPaint.setColor(Theme.getColor("windowBackgroundWhiteGrayText3"));
+            this.description2TextPaint.setColor(Theme.getColor("windowBackgroundWhiteGrayText3", this.resourcesProvider));
         }
         float f = 8.0f;
         if (this.dateLayout != null) {
@@ -1604,28 +1609,28 @@ public class SharedLinkCell extends FrameLayout {
             canvas.restore();
         }
         if (this.captionLayout != null) {
-            this.captionTextPaint.setColor(Theme.getColor("windowBackgroundWhiteBlackText"));
+            this.captionTextPaint.setColor(Theme.getColor("windowBackgroundWhiteBlackText", this.resourcesProvider));
             canvas.save();
             canvas2.translate((float) AndroidUtilities.dp(LocaleController.isRTL ? 8.0f : (float) AndroidUtilities.leftBaseline), (float) this.captionY);
             this.captionLayout.draw(canvas2);
             canvas.restore();
         }
         if (this.descriptionLayout != null) {
-            this.descriptionTextPaint.setColor(Theme.getColor("windowBackgroundWhiteBlackText"));
+            this.descriptionTextPaint.setColor(Theme.getColor("windowBackgroundWhiteBlackText", this.resourcesProvider));
             canvas.save();
             canvas2.translate((float) AndroidUtilities.dp(LocaleController.isRTL ? 8.0f : (float) AndroidUtilities.leftBaseline), (float) this.descriptionY);
             SpoilerEffect.renderWithRipple(this, false, this.descriptionTextPaint.getColor(), -AndroidUtilities.dp(2.0f), this.patchedDescriptionLayout, this.descriptionLayout, this.descriptionLayoutSpoilers, canvas);
             canvas.restore();
         }
         if (this.descriptionLayout2 != null) {
-            this.descriptionTextPaint.setColor(Theme.getColor("windowBackgroundWhiteBlackText"));
+            this.descriptionTextPaint.setColor(Theme.getColor("windowBackgroundWhiteBlackText", this.resourcesProvider));
             canvas.save();
             canvas2.translate((float) AndroidUtilities.dp(LocaleController.isRTL ? 8.0f : (float) AndroidUtilities.leftBaseline), (float) this.description2Y);
             SpoilerEffect.renderWithRipple(this, false, this.descriptionTextPaint.getColor(), -AndroidUtilities.dp(2.0f), this.patchedDescriptionLayout2, this.descriptionLayout2, this.descriptionLayout2Spoilers, canvas);
             canvas.restore();
         }
         if (!this.linkLayout.isEmpty()) {
-            this.descriptionTextPaint.setColor(Theme.getColor("windowBackgroundWhiteLinkText"));
+            this.descriptionTextPaint.setColor(Theme.getColor("windowBackgroundWhiteLinkText", this.resourcesProvider));
             int i = 0;
             for (int i2 = 0; i2 < this.linkLayout.size(); i2++) {
                 StaticLayout staticLayout2 = this.linkLayout.get(i2);
@@ -1640,10 +1645,16 @@ public class SharedLinkCell extends FrameLayout {
                             this.path.addRect((float) bounds2.left, (float) bounds2.top, (float) bounds2.right, (float) bounds2.bottom, Path.Direction.CW);
                         }
                     }
+                    if (this.urlPaint == null) {
+                        Paint paint = new Paint(1);
+                        this.urlPaint = paint;
+                        paint.setPathEffect(new CornerPathEffect((float) AndroidUtilities.dp(4.0f)));
+                    }
+                    this.urlPaint.setColor(Theme.getColor("chat_linkSelectBackground", this.resourcesProvider));
                     canvas.save();
                     canvas2.clipPath(this.path, Region.Op.DIFFERENCE);
                     if (this.pressedLink == i2) {
-                        canvas2.drawPath(this.urlPath, Theme.linkSelectionPaint);
+                        canvas2.drawPath(this.urlPath, this.urlPaint);
                     }
                     staticLayout2.draw(canvas2);
                     canvas.restore();
@@ -1655,7 +1666,7 @@ public class SharedLinkCell extends FrameLayout {
                     }
                     canvas2.clipPath(this.path);
                     if (this.pressedLink == i2) {
-                        canvas2.drawPath(this.urlPath, Theme.linkSelectionPaint);
+                        canvas2.drawPath(this.urlPath, this.urlPaint);
                     }
                     staticLayout2.draw(canvas2);
                     canvas.restore();
