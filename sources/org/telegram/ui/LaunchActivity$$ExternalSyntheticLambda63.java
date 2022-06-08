@@ -1,18 +1,12 @@
 package org.telegram.ui;
 
-import android.content.Intent;
-import org.telegram.messenger.ContactsLoadingObserver;
+public final /* synthetic */ class LaunchActivity$$ExternalSyntheticLambda63 implements Runnable {
+    public static final /* synthetic */ LaunchActivity$$ExternalSyntheticLambda63 INSTANCE = new LaunchActivity$$ExternalSyntheticLambda63();
 
-public final /* synthetic */ class LaunchActivity$$ExternalSyntheticLambda63 implements ContactsLoadingObserver.Callback {
-    public final /* synthetic */ LaunchActivity f$0;
-    public final /* synthetic */ Intent f$1;
-
-    public /* synthetic */ LaunchActivity$$ExternalSyntheticLambda63(LaunchActivity launchActivity, Intent intent) {
-        this.f$0 = launchActivity;
-        this.f$1 = intent;
+    private /* synthetic */ LaunchActivity$$ExternalSyntheticLambda63() {
     }
 
-    public final void onResult(boolean z) {
-        this.f$0.lambda$handleIntent$10(this.f$1, z);
+    public final void run() {
+        LaunchActivity.lambda$onResume$80();
     }
 }

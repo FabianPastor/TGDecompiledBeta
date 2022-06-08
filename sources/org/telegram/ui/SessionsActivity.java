@@ -402,11 +402,7 @@ public class SessionsActivity extends BaseFragment implements NotificationCenter
 
     /* access modifiers changed from: private */
     public /* synthetic */ void lambda$createView$2(TLRPC$TL_error tLRPC$TL_error, TLObject tLObject) {
-        if (getParentActivity() != null) {
-            if (tLRPC$TL_error != null || !(tLObject instanceof TLRPC$TL_boolTrue)) {
-                BulletinFactory.of(this).createSimpleBulletin(NUM, LocaleController.getString("UnknownError", NUM)).show();
-                return;
-            }
+        if (getParentActivity() != null && tLRPC$TL_error == null && (tLObject instanceof TLRPC$TL_boolTrue)) {
             BulletinFactory.of(this).createSimpleBulletin(NUM, LocaleController.getString("AllSessionsTerminated", NUM)).show();
             lambda$loadSessions$17(false);
         }

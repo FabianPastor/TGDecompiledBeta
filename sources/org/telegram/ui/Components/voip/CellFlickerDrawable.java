@@ -11,11 +11,13 @@ import android.graphics.drawable.Drawable;
 import android.view.View;
 import androidx.core.graphics.ColorUtils;
 import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.SvgHelper;
 
 public class CellFlickerDrawable {
     public float animationSpeedScale;
     public boolean drawFrame;
-    private Shader gradientShader;
+    /* access modifiers changed from: private */
+    public Shader gradientShader;
     private Shader gradientShader2;
     long lastUpdateTime;
     Matrix matrix;
@@ -141,13 +143,14 @@ public class CellFlickerDrawable {
         this.parentWidth = i;
     }
 
-    public DrawableInterface getDrawableInterface(View view) {
+    public DrawableInterface getDrawableInterface(View view, SvgHelper.SvgDrawable svgDrawable) {
         this.parentView = view;
-        return new DrawableInterface();
+        return new DrawableInterface(svgDrawable);
     }
 
     public class DrawableInterface extends Drawable {
         public float radius;
+        SvgHelper.SvgDrawable svgDrawable;
 
         public int getOpacity() {
             return -3;
@@ -156,7 +159,8 @@ public class CellFlickerDrawable {
         public void setColorFilter(ColorFilter colorFilter) {
         }
 
-        public DrawableInterface() {
+        public DrawableInterface(SvgHelper.SvgDrawable svgDrawable2) {
+            this.svgDrawable = svgDrawable2;
         }
 
         public void draw(Canvas canvas) {
@@ -164,6 +168,21 @@ public class CellFlickerDrawable {
             RectF rectF = AndroidUtilities.rectTmp;
             rectF.set(getBounds());
             CellFlickerDrawable.this.draw(canvas, rectF, this.radius);
+            SvgHelper.SvgDrawable svgDrawable2 = this.svgDrawable;
+            if (svgDrawable2 != null) {
+                svgDrawable2.setPaint(CellFlickerDrawable.this.paint);
+                CellFlickerDrawable cellFlickerDrawable = CellFlickerDrawable.this;
+                int i = cellFlickerDrawable.parentWidth;
+                int i2 = cellFlickerDrawable.size;
+                float f = (((float) ((i2 * 2) + i)) * cellFlickerDrawable.progress) - ((float) i2);
+                int i3 = (int) (((float) i) * 0.5f);
+                CellFlickerDrawable.this.matrix.setScale(1.0f / this.svgDrawable.getScale(), 0.0f);
+                CellFlickerDrawable.this.matrix.setTranslate(f - (((float) getBounds().centerX()) - (((float) i3) / 2.0f)), 0.0f);
+                CellFlickerDrawable.this.gradientShader.setLocalMatrix(CellFlickerDrawable.this.matrix);
+                int i4 = i3 / 2;
+                this.svgDrawable.setBounds(getBounds().centerX() - i4, getBounds().centerY() - i4, getBounds().centerX() + i4, getBounds().centerY() + i4);
+                this.svgDrawable.draw(canvas);
+            }
             CellFlickerDrawable.this.parentView.invalidate();
         }
 

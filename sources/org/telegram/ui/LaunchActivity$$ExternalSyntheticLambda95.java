@@ -1,18 +1,19 @@
 package org.telegram.ui;
 
-import org.telegram.messenger.LocationController;
-import org.telegram.ui.Components.SharingLocationsAlert;
+import android.view.View;
+import androidx.recyclerview.widget.ItemTouchHelper;
+import org.telegram.ui.Components.RecyclerListView;
 
-public final /* synthetic */ class LaunchActivity$$ExternalSyntheticLambda95 implements SharingLocationsAlert.SharingLocationsAlertDelegate {
+public final /* synthetic */ class LaunchActivity$$ExternalSyntheticLambda95 implements RecyclerListView.OnItemLongClickListener {
     public final /* synthetic */ LaunchActivity f$0;
-    public final /* synthetic */ int[] f$1;
+    public final /* synthetic */ ItemTouchHelper f$1;
 
-    public /* synthetic */ LaunchActivity$$ExternalSyntheticLambda95(LaunchActivity launchActivity, int[] iArr) {
+    public /* synthetic */ LaunchActivity$$ExternalSyntheticLambda95(LaunchActivity launchActivity, ItemTouchHelper itemTouchHelper) {
         this.f$0 = launchActivity;
-        this.f$1 = iArr;
+        this.f$1 = itemTouchHelper;
     }
 
-    public final void didSelectLocation(LocationController.SharingLocationInfo sharingLocationInfo) {
-        this.f$0.lambda$handleIntent$14(this.f$1, sharingLocationInfo);
+    public final boolean onItemClick(View view, int i) {
+        return this.f$0.lambda$onCreate$4(this.f$1, view, i);
     }
 }

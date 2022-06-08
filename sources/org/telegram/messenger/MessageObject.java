@@ -1,15 +1,10 @@
 package org.telegram.messenger;
 
-import android.graphics.Canvas;
-import android.graphics.ColorFilter;
-import android.graphics.Paint;
 import android.graphics.Point;
-import android.graphics.Rect;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
-import android.os.SystemClock;
 import android.text.Layout;
 import android.text.Spannable;
 import android.text.SpannableString;
@@ -18,7 +13,6 @@ import android.text.StaticLayout;
 import android.text.TextPaint;
 import android.text.TextUtils;
 import android.text.style.CharacterStyle;
-import android.text.style.ImageSpan;
 import android.util.Base64;
 import android.view.View;
 import androidx.collection.LongSparseArray;
@@ -142,7 +136,6 @@ import org.telegram.tgnet.TLRPC$WebDocument;
 import org.telegram.tgnet.TLRPC$WebPage;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Cells.ChatMessageCell;
-import org.telegram.ui.Components.TranscribeButton;
 import org.telegram.ui.Components.URLSpanNoUnderlineBold;
 import org.telegram.ui.Components.spoilers.SpoilerEffect;
 
@@ -2689,7 +2682,7 @@ public class MessageObject {
         L_0x04fc:
             r23 = r14
             java.lang.StringBuilder r4 = new java.lang.StringBuilder
-            r0 = 2131628827(0x7f0e131b, float:1.8884958E38)
+            r0 = 2131628828(0x7f0e131c, float:1.888496E38)
             java.lang.String r5 = "UserRestrictionsUntilForever"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r5, r0)
             r4.<init>(r0)
@@ -6375,7 +6368,7 @@ public class MessageObject {
             if (r0 == 0) goto L_0x046d
             boolean r0 = r0.megagroup
             if (r0 == 0) goto L_0x046d
-            r0 = 2131626569(0x7f0e0a49, float:1.8880378E38)
+            r0 = 2131626570(0x7f0e0a4a, float:1.888038E38)
             java.lang.String r1 = "MegaAddedBy"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             java.lang.CharSequence r0 = replaceWithLink(r0, r7, r8)
@@ -6601,7 +6594,7 @@ public class MessageObject {
             goto L_0x0var_
         L_0x065a:
             boolean r11 = r9 instanceof org.telegram.tgnet.TLRPC$TL_messageActionTTLChange
-            r13 = 2131626620(0x7f0e0a7c, float:1.8880481E38)
+            r13 = 2131626621(0x7f0e0a7d, float:1.8880483E38)
             java.lang.String r14 = "MessageLifetimeYouRemoved"
             java.lang.String r15 = "MessageLifetimeRemoved"
             if (r11 == 0) goto L_0x06d0
@@ -6609,7 +6602,7 @@ public class MessageObject {
             if (r0 == 0) goto L_0x06ae
             boolean r0 = r20.isOut()
             if (r0 == 0) goto L_0x068b
-            r0 = 2131626616(0x7f0e0a78, float:1.8880473E38)
+            r0 = 2131626617(0x7f0e0a79, float:1.8880475E38)
             java.lang.Object[] r1 = new java.lang.Object[r12]
             org.telegram.tgnet.TLRPC$Message r2 = r6.messageOwner
             org.telegram.tgnet.TLRPC$MessageAction r2 = r2.action
@@ -6623,7 +6616,7 @@ public class MessageObject {
             goto L_0x0var_
         L_0x068b:
             r3 = 0
-            r0 = 2131626615(0x7f0e0a77, float:1.8880471E38)
+            r0 = 2131626616(0x7f0e0a78, float:1.8880473E38)
             r1 = 2
             java.lang.Object[] r1 = new java.lang.Object[r1]
             java.lang.String r2 = org.telegram.messenger.UserObject.getFirstName(r2)
@@ -6648,7 +6641,7 @@ public class MessageObject {
             java.lang.String r1 = org.telegram.messenger.UserObject.getFirstName(r2)
             r2 = 0
             r0[r2] = r1
-            r1 = 2131626618(0x7f0e0a7a, float:1.8880477E38)
+            r1 = 2131626619(0x7f0e0a7b, float:1.888048E38)
             java.lang.String r0 = org.telegram.messenger.LocaleController.formatString(r15, r1, r0)
             r6.messageText = r0
             goto L_0x0var_
@@ -6741,7 +6734,7 @@ public class MessageObject {
             org.telegram.messenger.LocaleController r2 = org.telegram.messenger.LocaleController.getInstance()
             org.telegram.messenger.time.FastDateFormat r2 = r2.formatterYear
             if (r2 == 0) goto L_0x07b6
-            r2 = 2131629336(0x7f0e1518, float:1.888599E38)
+            r2 = 2131629337(0x7f0e1519, float:1.8885992E38)
             r3 = 2
             java.lang.Object[] r7 = new java.lang.Object[r3]
             org.telegram.messenger.LocaleController r3 = org.telegram.messenger.LocaleController.getInstance()
@@ -6780,7 +6773,7 @@ public class MessageObject {
         L_0x07e6:
             r1 = r10
         L_0x07e7:
-            r2 = 2131627004(0x7f0e0bfc, float:1.888126E38)
+            r2 = 2131627005(0x7f0e0bfd, float:1.8881262E38)
             r3 = 4
             java.lang.Object[] r3 = new java.lang.Object[r3]
             r4 = 0
@@ -6807,7 +6800,7 @@ public class MessageObject {
         L_0x0814:
             boolean r11 = r9 instanceof org.telegram.tgnet.TLRPC$TL_messageActionUserUpdatedPhoto
             if (r11 == 0) goto L_0x082e
-            r0 = 2131626935(0x7f0e0bb7, float:1.888112E38)
+            r0 = 2131626936(0x7f0e0bb8, float:1.8881122E38)
             java.lang.Object[] r1 = new java.lang.Object[r12]
             java.lang.String r2 = org.telegram.messenger.UserObject.getUserName(r2)
             r3 = 0
@@ -6846,7 +6839,7 @@ public class MessageObject {
             if (r1 == 0) goto L_0x08a6
             boolean r1 = r20.isOut()
             if (r1 == 0) goto L_0x0887
-            r1 = 2131626616(0x7f0e0a78, float:1.8880473E38)
+            r1 = 2131626617(0x7f0e0a79, float:1.8880475E38)
             java.lang.Object[] r2 = new java.lang.Object[r12]
             int r0 = r0.ttl_seconds
             java.lang.String r0 = org.telegram.messenger.LocaleController.formatTTLString(r0)
@@ -6858,7 +6851,7 @@ public class MessageObject {
             goto L_0x0var_
         L_0x0887:
             r3 = 0
-            r1 = 2131626615(0x7f0e0a77, float:1.8880471E38)
+            r1 = 2131626616(0x7f0e0a78, float:1.8880473E38)
             r4 = 2
             java.lang.Object[] r4 = new java.lang.Object[r4]
             java.lang.String r2 = org.telegram.messenger.UserObject.getFirstName(r2)
@@ -6881,7 +6874,7 @@ public class MessageObject {
             java.lang.String r1 = org.telegram.messenger.UserObject.getFirstName(r2)
             r11 = 0
             r0[r11] = r1
-            r1 = 2131626618(0x7f0e0a7a, float:1.8880477E38)
+            r1 = 2131626619(0x7f0e0a7b, float:1.888048E38)
             java.lang.String r0 = org.telegram.messenger.LocaleController.formatString(r15, r1, r0)
             r6.messageText = r0
             goto L_0x0var_
@@ -6907,7 +6900,7 @@ public class MessageObject {
         L_0x08f3:
             boolean r11 = r9 instanceof org.telegram.tgnet.TLRPC$TL_messageActionCreatedBroadcastList
             if (r11 == 0) goto L_0x0907
-            r0 = 2131629255(0x7f0e14c7, float:1.8885826E38)
+            r0 = 2131629256(0x7f0e14c8, float:1.8885828E38)
             r1 = 0
             java.lang.Object[] r1 = new java.lang.Object[r1]
             java.lang.String r2 = "YouCreatedBroadcastList"
@@ -7374,26 +7367,26 @@ public class MessageObject {
             int r2 = r6.currentAccount
             boolean r0 = org.telegram.messenger.ChatObject.isChannelAndNotMegaGroup(r0, r2)
             if (r0 == 0) goto L_0x0cdb
-            r0 = 2131627955(0x7f0e0fb3, float:1.888319E38)
+            r0 = 2131627956(0x7f0e0fb4, float:1.8883191E38)
             java.lang.String r1 = "RequestToJoinChannelApproved"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             goto L_0x0ce4
         L_0x0cdb:
-            r0 = 2131627959(0x7f0e0fb7, float:1.8883197E38)
+            r0 = 2131627960(0x7f0e0fb8, float:1.88832E38)
             java.lang.String r1 = "RequestToJoinGroupApproved"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
         L_0x0ce4:
             r6.messageText = r0
             goto L_0x0var_
         L_0x0ce8:
-            r0 = 2131628785(0x7f0e12f1, float:1.8884872E38)
+            r0 = 2131628786(0x7f0e12f2, float:1.8884875E38)
             java.lang.String r1 = "UserAcceptedToGroupAction"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             java.lang.CharSequence r0 = replaceWithLink(r0, r7, r8)
             r6.messageText = r0
             goto L_0x0var_
         L_0x0cf9:
-            r0 = 2131626934(0x7f0e0bb6, float:1.8881118E38)
+            r0 = 2131626935(0x7f0e0bb7, float:1.888112E38)
             java.lang.Object[] r1 = new java.lang.Object[r12]
             java.lang.String r2 = org.telegram.messenger.UserObject.getUserName(r2)
             r4 = 0
@@ -7429,13 +7422,13 @@ public class MessageObject {
             org.telegram.tgnet.TLRPC$Poll r0 = r1.poll
             boolean r0 = r0.quiz
             if (r0 == 0) goto L_0x0d53
-            r0 = 2131627809(0x7f0e0var_, float:1.8882893E38)
+            r0 = 2131627810(0x7f0e0var_, float:1.8882895E38)
             java.lang.String r1 = "QuizPoll"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             r6.messageText = r0
             goto L_0x0var_
         L_0x0d53:
-            r0 = 2131627566(0x7f0e0e2e, float:1.88824E38)
+            r0 = 2131627567(0x7f0e0e2f, float:1.8882402E38)
             java.lang.String r1 = "Poll"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             r6.messageText = r0
@@ -7538,7 +7531,7 @@ public class MessageObject {
         L_0x0e28:
             boolean r0 = r1 instanceof org.telegram.tgnet.TLRPC$TL_messageMediaUnsupported
             if (r0 == 0) goto L_0x0e39
-            r0 = 2131628741(0x7f0e12c5, float:1.8884783E38)
+            r0 = 2131628742(0x7f0e12c6, float:1.8884785E38)
             java.lang.String r1 = "UnsupportedMedia"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             r6.messageText = r0
@@ -8496,84 +8489,26 @@ public class MessageObject {
             }, 0, spannableString.length(), 33);
             return spannableString;
         }
-        CharSequence charSequence = this.messageOwner.voiceTranscription;
-        if (!TextUtils.isEmpty(charSequence)) {
-            charSequence = Emoji.replaceEmoji(charSequence, Theme.chat_msgTextPaint.getFontMetricsInt(), AndroidUtilities.dp(20.0f), false, this.contentType == 0, this.viewRef);
-            if (!this.messageOwner.voiceTranscriptionFinal && TranscribeButton.isTranscribing(this)) {
-                String str2 = charSequence + " ";
-                charSequence = !(str2 instanceof Spannable) ? new SpannableString(str2) : str2;
-                ((SpannableString) charSequence).setSpan(new LoadingPointsSpan(), charSequence.length() - 1, charSequence.length(), 33);
-            }
+        String str2 = this.messageOwner.voiceTranscription;
+        if (TextUtils.isEmpty(str2)) {
+            return str2;
         }
-        return charSequence;
+        return Emoji.replaceEmoji(str2, Theme.chat_msgTextPaint.getFontMetricsInt(), AndroidUtilities.dp(20.0f), false, this.contentType == 0, this.viewRef);
     }
 
-    private class LoadingPointsSpan extends ImageSpan {
-        public int color;
-        public float fontSize = ((float) SharedConfig.fontSize);
-
-        public LoadingPointsSpan() {
-            super(new LoadingPointsSpanDrawable(), 2);
-            this.color = Theme.getColor(MessageObject.this.isOutOwner() ? "chat_messageTextOut" : "chat_messageTextIn");
-            ((LoadingPointsSpanDrawable) getDrawable()).setSpan(this);
-            Drawable drawable = getDrawable();
-            float f = this.fontSize;
-            drawable.setBounds(0, 0, (int) (4.0f * f), AndroidUtilities.dp(f));
+    public float measureVoiceTranscriptionHeight() {
+        StaticLayout staticLayout;
+        CharSequence voiceTranscription = getVoiceTranscription();
+        if (voiceTranscription == null) {
+            return 0.0f;
         }
-
-        public void updateDrawState(TextPaint textPaint) {
-            this.fontSize = textPaint.getTextSize();
-            this.color = textPaint.getColor();
-            Drawable drawable = getDrawable();
-            float f = this.fontSize;
-            drawable.setBounds(0, 0, (int) (4.0f * f), AndroidUtilities.dp(f));
-            super.updateDrawState(textPaint);
+        int dp = AndroidUtilities.displaySize.x - AndroidUtilities.dp(needDrawAvatar() ? 147.0f : 95.0f);
+        if (Build.VERSION.SDK_INT >= 24) {
+            staticLayout = StaticLayout.Builder.obtain(voiceTranscription, 0, voiceTranscription.length(), Theme.chat_msgTextPaint, dp).setBreakStrategy(1).setHyphenationFrequency(0).setAlignment(Layout.Alignment.ALIGN_NORMAL).build();
+        } else {
+            staticLayout = new StaticLayout(voiceTranscription, Theme.chat_msgTextPaint, dp, Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
         }
-    }
-
-    private class LoadingPointsSpanDrawable extends Drawable {
-        private Paint RED;
-        private Paint paint = new Paint();
-        LoadingPointsSpan span;
-
-        public int getOpacity() {
-            return -2;
-        }
-
-        public void setAlpha(int i) {
-        }
-
-        public void setColorFilter(ColorFilter colorFilter) {
-        }
-
-        public LoadingPointsSpanDrawable() {
-            Paint paint2 = new Paint();
-            this.RED = paint2;
-            paint2.setColor(-65536);
-        }
-
-        public void setSpan(LoadingPointsSpan loadingPointsSpan) {
-            this.span = loadingPointsSpan;
-        }
-
-        public void draw(Canvas canvas) {
-            AtomicReference<WeakReference<View>> atomicReference = MessageObject.this.viewRef;
-            if (!(atomicReference == null || atomicReference.get() == null || MessageObject.this.viewRef.get().get() == null)) {
-                ((View) MessageObject.this.viewRef.get().get()).invalidate();
-            }
-            invalidateSelf();
-            Rect bounds = getBounds();
-            LoadingPointsSpan loadingPointsSpan = this.span;
-            float width = loadingPointsSpan == null ? ((float) bounds.width()) / 5.0f : loadingPointsSpan.fontSize;
-            Paint paint2 = this.paint;
-            LoadingPointsSpan loadingPointsSpan2 = this.span;
-            paint2.setColor(loadingPointsSpan2 == null ? -1 : loadingPointsSpan2.color);
-            for (int i = 0; i < 3; i++) {
-                float f = (float) i;
-                this.paint.setAlpha((int) (((-Math.pow((double) (((((((float) SystemClock.elapsedRealtime()) / 600.0f) + (0.75f * f)) % 1.0f) * 2.0f) - 1.0f), 2.0d)) + 1.0d) * 255.0d));
-                canvas.drawCircle((f + 1.0f) * width, ((float) bounds.top) + (((float) bounds.height()) * 0.82f), 0.18f * width, this.paint);
-            }
-        }
+        return (float) staticLayout.getHeight();
     }
 
     /* JADX WARNING: Code restructure failed: missing block: B:2:0x0006, code lost:
@@ -8792,7 +8727,7 @@ public class MessageObject {
         L_0x0037:
             java.util.regex.Pattern r5 = videoTimeUrlPattern     // Catch:{ Exception -> 0x0214 }
             if (r5 != 0) goto L_0x0043
-            java.lang.String r5 = "\\b(?:(\\d{1,2}):)?(\\d{1,3}):([0-5][0-9])\\s*(.*)"
+            java.lang.String r5 = "\\b(?:(\\d{1,2}):)?(\\d{1,3}):([0-5][0-9])\\b([^\\n]*)"
             java.util.regex.Pattern r5 = java.util.regex.Pattern.compile(r5)     // Catch:{ Exception -> 0x0214 }
             videoTimeUrlPattern = r5     // Catch:{ Exception -> 0x0214 }
         L_0x0043:

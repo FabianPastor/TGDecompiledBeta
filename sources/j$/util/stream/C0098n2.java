@@ -36,7 +36,7 @@ final class CLASSNAMEn2 extends Y3 implements CLASSNAMEy1, CLASSNAMEr1 {
     }
 
     /* renamed from: a  reason: collision with other method in class */
-    public CLASSNAMEy1 m16a() {
+    public CLASSNAMEy1 m577a() {
         return this;
     }
 
@@ -95,7 +95,7 @@ final class CLASSNAMEn2 extends Y3 implements CLASSNAMEy1, CLASSNAMEr1 {
     }
 
     /* renamed from: spliterator  reason: collision with other method in class */
-    public w m17spliterator() {
+    public w m578spliterator() {
         return super.spliterator();
     }
 

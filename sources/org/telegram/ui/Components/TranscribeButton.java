@@ -3,6 +3,7 @@ package org.telegram.ui.Components;
 import android.animation.TimeInterpolator;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.ColorFilter;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.Rect;
@@ -11,15 +12,19 @@ import android.graphics.drawable.Drawable;
 import android.graphics.drawable.RippleDrawable;
 import android.os.Build;
 import android.os.SystemClock;
+import android.text.TextPaint;
 import android.text.TextUtils;
+import android.text.style.ImageSpan;
 import android.util.StateSet;
 import android.view.View;
+import android.widget.Toast;
 import androidx.core.graphics.ColorUtils;
 import androidx.interpolator.view.animation.FastOutSlowInInterpolator;
 import java.util.Arrays;
 import java.util.HashMap;
 import org.telegram.messenger.AccountInstance;
 import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.BuildVars;
 import org.telegram.messenger.DialogObject;
 import org.telegram.messenger.FileLog;
@@ -297,10 +302,8 @@ public class TranscribeButton {
         canvas.save();
         canvas.translate((float) AndroidUtilities.dp(2.0f), (float) AndroidUtilities.dp(2.0f));
         if (this.isOpen) {
-            this.outIconDrawable.updateCurrentFrame();
             this.inIconDrawable.draw(canvas);
         } else {
-            this.inIconDrawable.updateCurrentFrame();
             this.outIconDrawable.draw(canvas);
         }
         canvas.restore();
@@ -323,6 +326,99 @@ public class TranscribeButton {
             fArr3[0] = fArr3[0] + (this.interpolator.getInterpolation(((float) (j2 - ((long) (i2 + 667)))) / 667.0f) * 250.0f);
         }
         return this.segments;
+    }
+
+    public static class LoadingPointsSpan extends ImageSpan {
+        private static LoadingPointsDrawable drawable;
+
+        /* JADX WARNING: Illegal instructions before constructor call */
+        /* Code decompiled incorrectly, please refer to instructions dump. */
+        public LoadingPointsSpan() {
+            /*
+                r6 = this;
+                org.telegram.ui.Components.TranscribeButton$LoadingPointsDrawable r0 = drawable
+                if (r0 != 0) goto L_0x000d
+                org.telegram.ui.Components.TranscribeButton$LoadingPointsDrawable r0 = new org.telegram.ui.Components.TranscribeButton$LoadingPointsDrawable
+                android.text.TextPaint r1 = org.telegram.ui.ActionBar.Theme.chat_msgTextPaint
+                r0.<init>(r1)
+                drawable = r0
+            L_0x000d:
+                r1 = 0
+                r6.<init>(r0, r1)
+                android.text.TextPaint r0 = org.telegram.ui.ActionBar.Theme.chat_msgTextPaint
+                float r0 = r0.getTextSize()
+                r2 = 1063507722(0x3var_d70a, float:0.89)
+                float r0 = r0 * r2
+                r2 = 1017370378(0x3ca3d70a, float:0.02)
+                float r2 = r2 * r0
+                int r2 = (int) r2
+                android.graphics.drawable.Drawable r3 = r6.getDrawable()
+                int r4 = (int) r0
+                r5 = 1067450368(0x3fa00000, float:1.25)
+                float r0 = r0 * r5
+                int r0 = (int) r0
+                int r0 = r0 + r2
+                r3.setBounds(r1, r2, r4, r0)
+                return
+            */
+            throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.TranscribeButton.LoadingPointsSpan.<init>():void");
+        }
+
+        public void updateDrawState(TextPaint textPaint) {
+            float textSize = textPaint.getTextSize() * 0.89f;
+            int i = (int) (0.02f * textSize);
+            getDrawable().setBounds(0, i, (int) textSize, ((int) (textSize * 1.25f)) + i);
+            super.updateDrawState(textPaint);
+        }
+    }
+
+    private static class LoadingPointsDrawable extends Drawable {
+        private int lastColor;
+        private RLottieDrawable lottie;
+        private Paint paint;
+
+        public int getOpacity() {
+            return -2;
+        }
+
+        public void setAlpha(int i) {
+        }
+
+        public void setColorFilter(ColorFilter colorFilter) {
+        }
+
+        public LoadingPointsDrawable(TextPaint textPaint) {
+            this.paint = textPaint;
+            float textSize = textPaint.getTextSize() * 0.89f;
+            AnonymousClass1 r0 = new RLottieDrawable(this, NUM, "dots_loading", (int) textSize, (int) (textSize * 1.25f)) {
+                /* access modifiers changed from: protected */
+                public boolean hasParentView() {
+                    return true;
+                }
+            };
+            this.lottie = r0;
+            r0.setAutoRepeat(1);
+            this.lottie.setCurrentFrame((int) ((((float) SystemClock.elapsedRealtime()) / 16.0f) % 60.0f));
+            this.lottie.setAllowDecodeSingleFrame(true);
+            this.lottie.start();
+        }
+
+        public void setColor(int i) {
+            this.lottie.beginApplyLayerColors();
+            this.lottie.setLayerColor("Comp 1.**", i);
+            this.lottie.commitApplyLayerColors();
+            this.lottie.setAllowDecodeSingleFrame(true);
+            this.lottie.updateCurrentFrame();
+        }
+
+        public void draw(Canvas canvas) {
+            int color = this.paint.getColor();
+            if (color != this.lastColor) {
+                setColor(color);
+                this.lastColor = color;
+            }
+            this.lottie.draw(canvas);
+        }
     }
 
     private static int reqInfoHash(MessageObject messageObject) {
@@ -418,6 +514,7 @@ public class TranscribeButton {
         boolean z;
         MessageObject messageObject2 = messageObject;
         TLObject tLObject2 = tLObject;
+        TLRPC$TL_error tLRPC$TL_error2 = tLRPC$TL_error;
         String str = "";
         if (tLObject2 instanceof TLRPC$TL_messages_transcribedAudio) {
             TLRPC$TL_messages_transcribedAudio tLRPC$TL_messages_transcribedAudio = (TLRPC$TL_messages_transcribedAudio) tLObject2;
@@ -436,6 +533,9 @@ public class TranscribeButton {
             messageObject2.messageOwner.voiceTranscriptionId = j4;
             j3 = j4;
         } else {
+            if (tLRPC$TL_error2 != null) {
+                Toast.makeText(ApplicationLoader.applicationContext, tLRPC$TL_error2.text, 0).show();
+            }
             j3 = 0;
             z = true;
         }

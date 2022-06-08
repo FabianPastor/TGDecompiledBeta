@@ -663,7 +663,7 @@ public class EmbedBottomSheet extends BottomSheet {
             int r1 = org.telegram.messenger.AndroidUtilities.dp(r7)
             int r4 = org.telegram.messenger.AndroidUtilities.dp(r7)
             r2.setPadding(r1, r6, r4, r6)
-            r1 = 2131627088(0x7f0e0CLASSNAME, float:1.888143E38)
+            r1 = 2131627089(0x7f0e0CLASSNAME, float:1.8881433E38)
             java.lang.String r4 = "OpenInBrowser"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r4, r1)
             java.lang.String r1 = r1.toUpperCase()

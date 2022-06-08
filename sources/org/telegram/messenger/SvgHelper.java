@@ -89,6 +89,7 @@ public class SvgHelper {
         private int currentColor;
         private String currentColorKey;
         protected int height;
+        private Paint overridePaint;
         protected HashMap<Object, Paint> paints = new HashMap<>();
         private ImageReceiver parentImageReceiver;
         private LinearGradient placeholderGradient;
@@ -126,15 +127,13 @@ public class SvgHelper {
                 setupGradient(str, this.colorAlpha);
             }
             Rect bounds = getBounds();
-            float width2 = ((float) bounds.width()) / ((float) this.width);
-            float height2 = ((float) bounds.height()) / ((float) this.height);
-            float max = this.aspectFill ? Math.max(width2, height2) : Math.min(width2, height2);
+            float scale = getScale();
             canvas.save();
             canvas2.translate((float) bounds.left, (float) bounds.top);
             if (!this.aspectFill) {
-                canvas2.translate((((float) bounds.width()) - (((float) this.width) * max)) / 2.0f, (((float) bounds.height()) - (((float) this.height) * max)) / 2.0f);
+                canvas2.translate((((float) bounds.width()) - (((float) this.width) * scale)) / 2.0f, (((float) bounds.height()) - (((float) this.height) * scale)) / 2.0f);
             }
-            canvas2.scale(max, max);
+            canvas2.scale(scale, scale);
             int size = this.commands.size();
             for (int i = 0; i < size; i++) {
                 Object obj = this.commands.get(i);
@@ -144,30 +143,34 @@ public class SvgHelper {
                 } else if (obj == null) {
                     canvas.restore();
                 } else {
-                    Paint paint = this.paints.get(obj);
-                    int alpha = paint.getAlpha();
-                    paint.setAlpha((int) (this.crossfadeAlpha * ((float) alpha)));
+                    Paint paint = this.overridePaint;
+                    if (paint == null) {
+                        paint = this.paints.get(obj);
+                    }
+                    Paint paint2 = paint;
+                    int alpha = paint2.getAlpha();
+                    paint2.setAlpha((int) (this.crossfadeAlpha * ((float) alpha)));
                     if (obj instanceof Path) {
-                        canvas2.drawPath((Path) obj, paint);
+                        canvas2.drawPath((Path) obj, paint2);
                     } else if (obj instanceof Rect) {
-                        canvas2.drawRect((Rect) obj, paint);
+                        canvas2.drawRect((Rect) obj, paint2);
                     } else if (obj instanceof RectF) {
-                        canvas2.drawRect((RectF) obj, paint);
+                        canvas2.drawRect((RectF) obj, paint2);
                     } else if (obj instanceof Line) {
                         Line line = (Line) obj;
-                        canvas.drawLine(line.x1, line.y1, line.x2, line.y2, paint);
+                        canvas.drawLine(line.x1, line.y1, line.x2, line.y2, paint2);
                     } else if (obj instanceof Circle) {
                         Circle circle = (Circle) obj;
-                        canvas2.drawCircle(circle.x1, circle.y1, circle.rad, paint);
+                        canvas2.drawCircle(circle.x1, circle.y1, circle.rad, paint2);
                     } else if (obj instanceof Oval) {
-                        canvas2.drawOval(((Oval) obj).rect, paint);
+                        canvas2.drawOval(((Oval) obj).rect, paint2);
                     } else if (obj instanceof RoundRect) {
                         RoundRect roundRect = (RoundRect) obj;
                         RectF rectF = roundRect.rect;
                         float f = roundRect.rx;
-                        canvas2.drawRoundRect(rectF, f, f, paint);
+                        canvas2.drawRoundRect(rectF, f, f, paint2);
                     }
-                    paint.setAlpha(alpha);
+                    paint2.setAlpha(alpha);
                 }
             }
             canvas.restore();
@@ -203,7 +206,7 @@ public class SvgHelper {
                 }
                 this.placeholderMatrix.reset();
                 this.placeholderMatrix.postTranslate((((float) (-parentPosition[0])) + totalTranslation) - ((float) bounds.left), 0.0f);
-                float f4 = 1.0f / max;
+                float f4 = 1.0f / scale;
                 this.placeholderMatrix.postScale(f4, f4);
                 this.placeholderGradient.setLocalMatrix(this.placeholderMatrix);
                 ImageReceiver imageReceiver2 = this.parentImageReceiver;
@@ -211,6 +214,13 @@ public class SvgHelper {
                     imageReceiver2.invalidate();
                 }
             }
+        }
+
+        public float getScale() {
+            Rect bounds = getBounds();
+            float width2 = ((float) bounds.width()) / ((float) this.width);
+            float height2 = ((float) bounds.height()) / ((float) this.height);
+            return this.aspectFill ? Math.max(width2, height2) : Math.min(width2, height2);
         }
 
         public void setAlpha(int i) {
@@ -372,6 +382,10 @@ public class SvgHelper {
                 return
             */
             throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.SvgHelper.SvgDrawable.setupGradient(java.lang.String, float):void");
+        }
+
+        public void setPaint(Paint paint) {
+            this.overridePaint = paint;
         }
     }
 

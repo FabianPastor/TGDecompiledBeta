@@ -1,20 +1,23 @@
 package org.telegram.ui;
 
 import android.content.DialogInterface;
-import org.telegram.ui.ActionBar.BaseFragment;
+import java.util.HashMap;
+import org.telegram.messenger.ContactsController;
 
 public final /* synthetic */ class LaunchActivity$$ExternalSyntheticLambda7 implements DialogInterface.OnClickListener {
-    public final /* synthetic */ String f$0;
-    public final /* synthetic */ String f$1;
-    public final /* synthetic */ BaseFragment f$2;
+    public final /* synthetic */ int f$0;
+    public final /* synthetic */ HashMap f$1;
+    public final /* synthetic */ boolean f$2;
+    public final /* synthetic */ boolean f$3;
 
-    public /* synthetic */ LaunchActivity$$ExternalSyntheticLambda7(String str, String str2, BaseFragment baseFragment) {
-        this.f$0 = str;
-        this.f$1 = str2;
-        this.f$2 = baseFragment;
+    public /* synthetic */ LaunchActivity$$ExternalSyntheticLambda7(int i, HashMap hashMap, boolean z, boolean z2) {
+        this.f$0 = i;
+        this.f$1 = hashMap;
+        this.f$2 = z;
+        this.f$3 = z2;
     }
 
     public final void onClick(DialogInterface dialogInterface, int i) {
-        LaunchActivity.lambda$handleIntent$22(this.f$0, this.f$1, this.f$2, dialogInterface, i);
+        ContactsController.getInstance(this.f$0).syncPhoneBookByAlert(this.f$1, this.f$2, this.f$3, false);
     }
 }

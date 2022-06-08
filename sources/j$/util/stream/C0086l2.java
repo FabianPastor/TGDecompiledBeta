@@ -76,7 +76,7 @@ class CLASSNAMEl2 implements CLASSNAMEy1 {
     }
 
     /* renamed from: spliterator  reason: collision with other method in class */
-    public w m15spliterator() {
+    public w m576spliterator() {
         return L.l(this.a, 0, this.b, 1040);
     }
 

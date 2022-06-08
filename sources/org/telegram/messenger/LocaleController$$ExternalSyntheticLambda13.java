@@ -17,6 +17,6 @@ public final /* synthetic */ class LocaleController$$ExternalSyntheticLambda13 i
     }
 
     public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        this.f$0.lambda$applyRemoteLanguage$11(this.f$1, this.f$2, tLObject, tLRPC$TL_error);
+        this.f$0.lambda$applyRemoteLanguage$15(this.f$1, this.f$2, tLObject, tLRPC$TL_error);
     }
 }

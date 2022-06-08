@@ -140,7 +140,7 @@ public class ChatThemeBottomSheet extends BottomSheet implements NotificationCen
             r4.setLines(r3)
             r4.setSingleLine(r3)
             java.lang.String r6 = "SelectTheme"
-            r7 = 2131628159(0x7f0e107f, float:1.8883603E38)
+            r7 = 2131628160(0x7f0e1080, float:1.8883605E38)
             java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r6, r7)
             r4.setText(r6)
             java.lang.String r6 = "dialogTextBlack"
@@ -174,7 +174,7 @@ public class ChatThemeBottomSheet extends BottomSheet implements NotificationCen
             r8 = 1105199104(0x41e00000, float:28.0)
             int r14 = org.telegram.messenger.AndroidUtilities.dp(r8)
             org.telegram.ui.Components.RLottieDrawable r8 = new org.telegram.ui.Components.RLottieDrawable
-            r11 = 2131558525(0x7f0d007d, float:1.8742368E38)
+            r11 = 2131558527(0x7f0d007f, float:1.8742372E38)
             java.lang.String r12 = "NUM"
             r15 = 0
             r16 = 0

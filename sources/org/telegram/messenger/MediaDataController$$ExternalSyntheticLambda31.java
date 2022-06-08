@@ -10,6 +10,6 @@ public final /* synthetic */ class MediaDataController$$ExternalSyntheticLambda3
     }
 
     public final void run() {
-        this.f$0.lambda$markFaturedStickersByIdAsRead$49(this.f$1);
+        this.f$0.lambda$loadBotKeyboard$153(this.f$1);
     }
 }

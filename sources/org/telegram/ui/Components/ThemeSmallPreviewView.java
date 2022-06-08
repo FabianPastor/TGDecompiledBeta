@@ -358,7 +358,12 @@ public class ThemeSmallPreviewView extends FrameLayout implements NotificationCe
             return null;
         }
         float max = (float) Math.max(AndroidUtilities.dp(120.0f) / bitmap.getWidth(), AndroidUtilities.dp(140.0f) / bitmap.getHeight());
-        return (bitmap.getWidth() <= 0 || bitmap.getHeight() <= 0 || Math.abs(max - 1.0f) < 0.0125f) ? bitmap : Bitmap.createScaledBitmap(bitmap, (int) (((float) bitmap.getWidth()) * max), (int) (((float) bitmap.getHeight()) * max), true);
+        if (bitmap.getWidth() <= 0 || bitmap.getHeight() <= 0 || Math.abs(max - 1.0f) < 0.0125f) {
+            return bitmap;
+        }
+        int width = (int) (((float) bitmap.getWidth()) * max);
+        int height = (int) (((float) bitmap.getHeight()) * max);
+        return (height <= 0 || width <= 0) ? bitmap : Bitmap.createScaledBitmap(bitmap, height, width, true);
     }
 
     public void setBackgroundColor(int i) {

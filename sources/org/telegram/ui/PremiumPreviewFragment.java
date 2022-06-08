@@ -21,9 +21,11 @@ import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
+import android.text.Html;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.TextUtils;
+import android.text.style.URLSpan;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -124,6 +126,7 @@ public class PremiumPreviewFragment extends BaseFragment implements Notification
     StarParticlesView particlesView;
     private PremiumButtonView premiumButtonView;
     ArrayList<PremiumFeatureData> premiumFeatures = new ArrayList<>();
+    int privacyRow;
     float progress;
     int rowCount;
     int sectionRow;
@@ -784,6 +787,9 @@ public class PremiumPreviewFragment extends BaseFragment implements Notification
     private void updateRows() {
         int i = 0;
         this.rowCount = 0;
+        this.sectionRow = -1;
+        this.statusRow = -1;
+        this.privacyRow = -1;
         int i2 = 0 + 1;
         this.rowCount = i2;
         this.paddingRow = 0;
@@ -796,16 +802,14 @@ public class PremiumPreviewFragment extends BaseFragment implements Notification
             int i4 = i3 + 1;
             this.rowCount = i4;
             this.statusRow = i3;
-            this.sectionRow = -1;
             this.rowCount = i4 + 1;
             this.lastPaddingRow = i4;
             this.buttonContainer.setVisibility(8);
         } else {
-            this.statusRow = -1;
             int i5 = this.rowCount;
             int i6 = i5 + 1;
             this.rowCount = i6;
-            this.sectionRow = i5;
+            this.privacyRow = i5;
             this.rowCount = i6 + 1;
             this.lastPaddingRow = i6;
             this.buttonContainer.setVisibility(0);
@@ -917,87 +921,101 @@ public class PremiumPreviewFragment extends BaseFragment implements Notification
                     z2 = false;
                 }
                 premiumFeatureCell.setData(premiumFeatureData, z2);
-            } else if (i3 == premiumPreviewFragment.statusRow) {
+            } else if (i3 == premiumPreviewFragment.statusRow || i3 == premiumPreviewFragment.privacyRow) {
                 TextInfoPrivacyCell textInfoPrivacyCell = (TextInfoPrivacyCell) viewHolder2.itemView;
                 CombinedDrawable combinedDrawable = new CombinedDrawable(new ColorDrawable(Theme.getColor("windowBackgroundGray")), Theme.getThemedDrawable(textInfoPrivacyCell.getContext(), NUM, Theme.getColor("windowBackgroundGrayShadow")), 0, 0);
                 combinedDrawable.setFullsize(true);
                 textInfoPrivacyCell.setBackground(combinedDrawable);
-                TLRPC$TL_help_premiumPromo premiumPromo = PremiumPreviewFragment.this.getMediaDataController().getPremiumPromo();
-                if (premiumPromo != null) {
-                    SpannableString spannableString = new SpannableString(premiumPromo.status_text);
-                    MediaDataController.addTextStyleRuns(premiumPromo.status_entities, (CharSequence) premiumPromo.status_text, (Spannable) spannableString);
-                    TextStyleSpan[] textStyleSpanArr = (TextStyleSpan[]) spannableString.getSpans(0, spannableString.length(), TextStyleSpan.class);
-                    int length = textStyleSpanArr.length;
-                    int i6 = 0;
-                    while (i6 < length) {
-                        TextStyleSpan.TextStyleRun textStyleRun = textStyleSpanArr[i6].getTextStyleRun();
-                        TLRPC$MessageEntity tLRPC$MessageEntity = textStyleRun.urlEntity;
-                        if (tLRPC$MessageEntity != null) {
-                            String str2 = premiumPromo.status_text;
-                            int i7 = tLRPC$MessageEntity.offset;
-                            str = TextUtils.substring(str2, i7, tLRPC$MessageEntity.length + i7);
-                        } else {
-                            str = null;
-                        }
-                        TLRPC$MessageEntity tLRPC$MessageEntity2 = textStyleRun.urlEntity;
-                        if (tLRPC$MessageEntity2 instanceof TLRPC$TL_messageEntityBotCommand) {
-                            spannableString.setSpan(new URLSpanBotCommand(str, i5, textStyleRun), textStyleRun.start, textStyleRun.end, 33);
-                        } else if ((tLRPC$MessageEntity2 instanceof TLRPC$TL_messageEntityHashtag) || (tLRPC$MessageEntity2 instanceof TLRPC$TL_messageEntityMention) || (tLRPC$MessageEntity2 instanceof TLRPC$TL_messageEntityCashtag)) {
-                            i2 = 33;
-                            spannableString.setSpan(new URLSpanNoUnderline(str, textStyleRun), textStyleRun.start, textStyleRun.end, 33);
-                            z = false;
-                            if (!z && (textStyleRun.flags & 256) != 0) {
-                                spannableString.setSpan(new TextStyleSpan(textStyleRun), textStyleRun.start, textStyleRun.end, i2);
-                            }
-                            i6++;
-                            i5 = 0;
-                        } else if (tLRPC$MessageEntity2 instanceof TLRPC$TL_messageEntityEmail) {
-                            spannableString.setSpan(new URLSpanReplacement("mailto:" + str, textStyleRun), textStyleRun.start, textStyleRun.end, 33);
-                        } else if (tLRPC$MessageEntity2 instanceof TLRPC$TL_messageEntityUrl) {
-                            if (!str.toLowerCase().contains("://")) {
-                                spannableString.setSpan(new URLSpanBrowser("http://" + str, textStyleRun), textStyleRun.start, textStyleRun.end, 33);
+                PremiumPreviewFragment premiumPreviewFragment2 = PremiumPreviewFragment.this;
+                if (i3 == premiumPreviewFragment2.statusRow) {
+                    TLRPC$TL_help_premiumPromo premiumPromo = premiumPreviewFragment2.getMediaDataController().getPremiumPromo();
+                    if (premiumPromo != null) {
+                        SpannableString spannableString = new SpannableString(premiumPromo.status_text);
+                        MediaDataController.addTextStyleRuns(premiumPromo.status_entities, (CharSequence) premiumPromo.status_text, (Spannable) spannableString);
+                        TextStyleSpan[] textStyleSpanArr = (TextStyleSpan[]) spannableString.getSpans(0, spannableString.length(), TextStyleSpan.class);
+                        int length = textStyleSpanArr.length;
+                        int i6 = 0;
+                        while (i6 < length) {
+                            TextStyleSpan.TextStyleRun textStyleRun = textStyleSpanArr[i6].getTextStyleRun();
+                            TLRPC$MessageEntity tLRPC$MessageEntity = textStyleRun.urlEntity;
+                            if (tLRPC$MessageEntity != null) {
+                                String str2 = premiumPromo.status_text;
+                                int i7 = tLRPC$MessageEntity.offset;
+                                str = TextUtils.substring(str2, i7, tLRPC$MessageEntity.length + i7);
                             } else {
-                                spannableString.setSpan(new URLSpanBrowser(str, textStyleRun), textStyleRun.start, textStyleRun.end, 33);
+                                str = null;
                             }
-                        } else if (tLRPC$MessageEntity2 instanceof TLRPC$TL_messageEntityBankCard) {
-                            spannableString.setSpan(new URLSpanNoUnderline("card:" + str, textStyleRun), textStyleRun.start, textStyleRun.end, 33);
-                        } else if (tLRPC$MessageEntity2 instanceof TLRPC$TL_messageEntityPhone) {
-                            String stripExceptNumbers = PhoneFormat.stripExceptNumbers(str);
-                            if (str.startsWith("+")) {
-                                stripExceptNumbers = "+" + stripExceptNumbers;
+                            TLRPC$MessageEntity tLRPC$MessageEntity2 = textStyleRun.urlEntity;
+                            if (tLRPC$MessageEntity2 instanceof TLRPC$TL_messageEntityBotCommand) {
+                                spannableString.setSpan(new URLSpanBotCommand(str, i5, textStyleRun), textStyleRun.start, textStyleRun.end, 33);
+                            } else if ((tLRPC$MessageEntity2 instanceof TLRPC$TL_messageEntityHashtag) || (tLRPC$MessageEntity2 instanceof TLRPC$TL_messageEntityMention) || (tLRPC$MessageEntity2 instanceof TLRPC$TL_messageEntityCashtag)) {
+                                i2 = 33;
+                                spannableString.setSpan(new URLSpanNoUnderline(str, textStyleRun), textStyleRun.start, textStyleRun.end, 33);
+                                z = false;
+                                if (!z && (textStyleRun.flags & 256) != 0) {
+                                    spannableString.setSpan(new TextStyleSpan(textStyleRun), textStyleRun.start, textStyleRun.end, i2);
+                                }
+                                i6++;
+                                i5 = 0;
+                            } else if (tLRPC$MessageEntity2 instanceof TLRPC$TL_messageEntityEmail) {
+                                spannableString.setSpan(new URLSpanReplacement("mailto:" + str, textStyleRun), textStyleRun.start, textStyleRun.end, 33);
+                            } else if (tLRPC$MessageEntity2 instanceof TLRPC$TL_messageEntityUrl) {
+                                if (!str.toLowerCase().contains("://")) {
+                                    spannableString.setSpan(new URLSpanBrowser("http://" + str, textStyleRun), textStyleRun.start, textStyleRun.end, 33);
+                                } else {
+                                    spannableString.setSpan(new URLSpanBrowser(str, textStyleRun), textStyleRun.start, textStyleRun.end, 33);
+                                }
+                            } else if (tLRPC$MessageEntity2 instanceof TLRPC$TL_messageEntityBankCard) {
+                                spannableString.setSpan(new URLSpanNoUnderline("card:" + str, textStyleRun), textStyleRun.start, textStyleRun.end, 33);
+                            } else if (tLRPC$MessageEntity2 instanceof TLRPC$TL_messageEntityPhone) {
+                                String stripExceptNumbers = PhoneFormat.stripExceptNumbers(str);
+                                if (str.startsWith("+")) {
+                                    stripExceptNumbers = "+" + stripExceptNumbers;
+                                }
+                                spannableString.setSpan(new URLSpanBrowser("tel:" + stripExceptNumbers, textStyleRun), textStyleRun.start, textStyleRun.end, 33);
+                            } else if (tLRPC$MessageEntity2 instanceof TLRPC$TL_messageEntityTextUrl) {
+                                spannableString.setSpan(new URLSpanReplacement(textStyleRun.urlEntity.url, textStyleRun), textStyleRun.start, textStyleRun.end, 33);
+                            } else if (tLRPC$MessageEntity2 instanceof TLRPC$TL_messageEntityMentionName) {
+                                spannableString.setSpan(new URLSpanUserMention("" + ((TLRPC$TL_messageEntityMentionName) textStyleRun.urlEntity).user_id, i5, textStyleRun), textStyleRun.start, textStyleRun.end, 33);
+                            } else if (tLRPC$MessageEntity2 instanceof TLRPC$TL_inputMessageEntityMentionName) {
+                                spannableString.setSpan(new URLSpanUserMention("" + ((TLRPC$TL_inputMessageEntityMentionName) textStyleRun.urlEntity).user_id.user_id, i5, textStyleRun), textStyleRun.start, textStyleRun.end, 33);
+                            } else if ((textStyleRun.flags & 4) != 0) {
+                                URLSpanMono uRLSpanMono = r7;
+                                i2 = 33;
+                                URLSpanMono uRLSpanMono2 = new URLSpanMono(spannableString, textStyleRun.start, textStyleRun.end, (byte) 0, textStyleRun);
+                                spannableString.setSpan(uRLSpanMono, textStyleRun.start, textStyleRun.end, 33);
+                                z = false;
+                                spannableString.setSpan(new TextStyleSpan(textStyleRun), textStyleRun.start, textStyleRun.end, i2);
+                                i6++;
+                                i5 = 0;
+                            } else {
+                                i2 = 33;
+                                spannableString.setSpan(new TextStyleSpan(textStyleRun), textStyleRun.start, textStyleRun.end, 33);
+                                z = true;
+                                spannableString.setSpan(new TextStyleSpan(textStyleRun), textStyleRun.start, textStyleRun.end, i2);
+                                i6++;
+                                i5 = 0;
                             }
-                            spannableString.setSpan(new URLSpanBrowser("tel:" + stripExceptNumbers, textStyleRun), textStyleRun.start, textStyleRun.end, 33);
-                        } else if (tLRPC$MessageEntity2 instanceof TLRPC$TL_messageEntityTextUrl) {
-                            spannableString.setSpan(new URLSpanReplacement(textStyleRun.urlEntity.url, textStyleRun), textStyleRun.start, textStyleRun.end, 33);
-                        } else if (tLRPC$MessageEntity2 instanceof TLRPC$TL_messageEntityMentionName) {
-                            spannableString.setSpan(new URLSpanUserMention("" + ((TLRPC$TL_messageEntityMentionName) textStyleRun.urlEntity).user_id, i5, textStyleRun), textStyleRun.start, textStyleRun.end, 33);
-                        } else if (tLRPC$MessageEntity2 instanceof TLRPC$TL_inputMessageEntityMentionName) {
-                            spannableString.setSpan(new URLSpanUserMention("" + ((TLRPC$TL_inputMessageEntityMentionName) textStyleRun.urlEntity).user_id.user_id, i5, textStyleRun), textStyleRun.start, textStyleRun.end, 33);
-                        } else if ((textStyleRun.flags & 4) != 0) {
-                            URLSpanMono uRLSpanMono = r7;
                             i2 = 33;
-                            URLSpanMono uRLSpanMono2 = new URLSpanMono(spannableString, textStyleRun.start, textStyleRun.end, (byte) 0, textStyleRun);
-                            spannableString.setSpan(uRLSpanMono, textStyleRun.start, textStyleRun.end, 33);
                             z = false;
                             spannableString.setSpan(new TextStyleSpan(textStyleRun), textStyleRun.start, textStyleRun.end, i2);
                             i6++;
                             i5 = 0;
-                        } else {
-                            i2 = 33;
-                            spannableString.setSpan(new TextStyleSpan(textStyleRun), textStyleRun.start, textStyleRun.end, 33);
-                            z = true;
-                            spannableString.setSpan(new TextStyleSpan(textStyleRun), textStyleRun.start, textStyleRun.end, i2);
-                            i6++;
-                            i5 = 0;
                         }
-                        i2 = 33;
-                        z = false;
-                        spannableString.setSpan(new TextStyleSpan(textStyleRun), textStyleRun.start, textStyleRun.end, i2);
-                        i6++;
-                        i5 = 0;
+                        textInfoPrivacyCell.setText(spannableString);
+                        return;
                     }
-                    textInfoPrivacyCell.setText(spannableString);
+                    return;
                 }
+                SpannableString spannableString2 = new SpannableString(Html.fromHtml(LocaleController.getString("AskAQuestionInfo", NUM).replace("\n", "<br>")));
+                URLSpan[] uRLSpanArr = (URLSpan[]) spannableString2.getSpans(0, spannableString2.length(), URLSpan.class);
+                for (URLSpan uRLSpan : uRLSpanArr) {
+                    int spanStart = spannableString2.getSpanStart(uRLSpan);
+                    int spanEnd = spannableString2.getSpanEnd(uRLSpan);
+                    spannableString2.removeSpan(uRLSpan);
+                    spannableString2.setSpan(new URLSpanNoUnderline(uRLSpan.getURL()), spanStart, spanEnd, 0);
+                }
+                textInfoPrivacyCell.setText(spannableString2);
             }
         }
 
@@ -1019,7 +1037,7 @@ public class PremiumPreviewFragment extends BaseFragment implements Notification
             if (i == premiumPreviewFragment.helpUsRow) {
                 return 4;
             }
-            if (i == premiumPreviewFragment.statusRow) {
+            if (i == premiumPreviewFragment.statusRow || i == premiumPreviewFragment.privacyRow) {
                 return 5;
             }
             if (i == premiumPreviewFragment.lastPaddingRow) {

@@ -173,10 +173,12 @@ public class ChatAttachAlertContactsLayout extends ChatAttachAlert.AttachAlertLa
 
         /* access modifiers changed from: private */
         public /* synthetic */ void lambda$setStatus$3() {
-            PhoneFormat instance = PhoneFormat.getInstance();
-            this.formattedPhoneNumber = instance.format("+" + this.currentUser.phone);
-            this.formattedPhoneNumberUser = this.currentUser;
-            AndroidUtilities.runOnUIThread(new ChatAttachAlertContactsLayout$UserCell$$ExternalSyntheticLambda1(this));
+            if (this.currentUser != null) {
+                PhoneFormat instance = PhoneFormat.getInstance();
+                this.formattedPhoneNumber = instance.format("+" + this.currentUser.phone);
+                this.formattedPhoneNumberUser = this.currentUser;
+                AndroidUtilities.runOnUIThread(new ChatAttachAlertContactsLayout$UserCell$$ExternalSyntheticLambda1(this));
+            }
         }
 
         /* access modifiers changed from: private */

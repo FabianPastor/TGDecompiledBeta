@@ -864,6 +864,10 @@ public class AnimatedFileDrawable extends BitmapDrawable implements Animatable {
         }
     }
 
+    public long getLastFrameTimestamp() {
+        return (long) this.lastTimeStamp;
+    }
+
     public int getMinimumHeight() {
         int i = 0;
         if (this.decoderCreated) {

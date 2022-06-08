@@ -674,7 +674,7 @@ public class UserCell extends FrameLayout implements NotificationCenter.Notifica
             boolean r6 = org.telegram.messenger.UserObject.isUserSelf(r1)
             if (r6 == 0) goto L_0x01a5
             org.telegram.ui.ActionBar.SimpleTextView r2 = r0.nameTextView
-            r4 = 2131628065(0x7f0e1021, float:1.8883412E38)
+            r4 = 2131628066(0x7f0e1022, float:1.8883414E38)
             java.lang.String r6 = "SavedMessages"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r6, r4)
             r2.setText(r4, r5)
@@ -857,7 +857,7 @@ public class UserCell extends FrameLayout implements NotificationCenter.Notifica
             int r6 = r0.statusOnlineColor
             r3.setTextColor(r6)
             org.telegram.ui.ActionBar.SimpleTextView r3 = r0.statusTextView
-            r6 = 2131627069(0x7f0e0c3d, float:1.8881392E38)
+            r6 = 2131627070(0x7f0e0c3e, float:1.8881394E38)
             java.lang.String r7 = "Online"
             java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r7, r6)
             r3.setText(r6)

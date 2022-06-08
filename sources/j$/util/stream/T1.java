@@ -75,7 +75,7 @@ class T1 implements CLASSNAMEu1 {
     }
 
     /* renamed from: spliterator  reason: collision with other method in class */
-    public w m5spliterator() {
+    public w m566spliterator() {
         return L.j(this.a, 0, this.b, 1040);
     }
 

@@ -709,7 +709,7 @@ public class FiltersSetupActivity extends BaseFragment implements NotificationCe
             }
         } else if (i != this.createFilterRow) {
         } else {
-            if ((getMessagesController().dialogFilters.size() < getMessagesController().dialogFiltersLimitDefault || getUserConfig().isPremium()) && getMessagesController().dialogFilters.size() < getMessagesController().dialogFiltersLimitPremium) {
+            if ((getMessagesController().dialogFilters.size() - 1 < getMessagesController().dialogFiltersLimitDefault || getUserConfig().isPremium()) && getMessagesController().dialogFilters.size() < getMessagesController().dialogFiltersLimitPremium) {
                 presentFragment(new FilterCreateActivity());
             } else {
                 showDialog(new LimitReachedBottomSheet(this, context, 3, this.currentAccount));
@@ -836,6 +836,9 @@ public class FiltersSetupActivity extends BaseFragment implements NotificationCe
             int indexOf = FiltersSetupActivity.this.getMessagesController().dialogFilters.indexOf(dialogFilter);
             if (indexOf >= 0) {
                 indexOf += FiltersSetupActivity.this.filtersStartRow;
+            }
+            if (!FiltersSetupActivity.this.showAllChats) {
+                indexOf--;
             }
             boolean unused = FiltersSetupActivity.this.ignoreUpdates = true;
             FiltersSetupActivity.this.getMessagesController().removeFilter(dialogFilter);

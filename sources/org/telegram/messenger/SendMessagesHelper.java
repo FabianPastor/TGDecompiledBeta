@@ -5249,7 +5249,7 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
             r7.sendCallback(r3, r4, r5, r6)
             goto L_0x049d
         L_0x001d:
-            r8 = 2131627064(0x7f0e0CLASSNAME, float:1.8881382E38)
+            r8 = 2131627065(0x7f0e0CLASSNAME, float:1.8881384E38)
             java.lang.String r9 = "OK"
             r10 = 0
             r11 = 1
@@ -5763,7 +5763,7 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
             r15 = 0
             android.widget.LinearLayout$LayoutParams r2 = org.telegram.ui.Components.LayoutHelper.createLinear(r10, r11, r12, r13, r14, r15)
             r4.addView(r1, r2)
-            r1 = 2131627064(0x7f0e0CLASSNAME, float:1.8881382E38)
+            r1 = 2131627065(0x7f0e0CLASSNAME, float:1.8881384E38)
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r9, r1)
             r2 = 0
             r0.setNegativeButton(r1, r2)
@@ -15692,7 +15692,7 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
         if (r5 == (r11 - 1)) goto L_0x0ccd;
      */
     /* JADX WARNING: Failed to process nested try/catch */
-    /* JADX WARNING: Incorrect type for immutable var: ssa=int, code=?, for r6v19, types: [boolean, int] */
+    /* JADX WARNING: Incorrect type for immutable var: ssa=int, code=?, for r6v19, types: [int, boolean] */
     /* JADX WARNING: Missing exception handler attribute for start block: B:234:0x060f */
     /* JADX WARNING: Multi-variable type inference failed */
     /* JADX WARNING: Removed duplicated region for block: B:133:0x02db A[Catch:{ Exception -> 0x02cc }] */

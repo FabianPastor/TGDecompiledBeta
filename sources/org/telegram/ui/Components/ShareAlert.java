@@ -841,7 +841,7 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
         L_0x02ea:
             org.telegram.ui.Components.StickerEmptyView r3 = r0.searchEmptyView
             android.widget.TextView r3 = r3.title
-            r13 = 2131626848(0x7f0e0b60, float:1.8880944E38)
+            r13 = 2131626849(0x7f0e0b61, float:1.8880946E38)
             java.lang.String r14 = "NoResult"
             java.lang.String r13 = org.telegram.messenger.LocaleController.getString(r14, r13)
             r3.setText(r13)
@@ -1003,7 +1003,7 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
             r3 = r3[r5]
             if (r3 == 0) goto L_0x0461
             android.widget.TextView r3 = r0.pickerBottomLayout
-            r9 = 2131629032(0x7f0e13e8, float:1.8885373E38)
+            r9 = 2131629033(0x7f0e13e9, float:1.8885375E38)
             java.lang.String r15 = "VoipGroupCopySpeakerLink"
             java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r15, r9)
             java.lang.String r9 = r9.toUpperCase()
@@ -1186,7 +1186,7 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
             org.telegram.ui.Components.EditTextEmoji r2 = r0.commentTextView
             r2.setBackgroundColor(r8)
             org.telegram.ui.Components.EditTextEmoji r2 = r0.commentTextView
-            r3 = 2131628259(0x7f0e10e3, float:1.8883806E38)
+            r3 = 2131628260(0x7f0e10e4, float:1.8883808E38)
             java.lang.String r4 = "ShareComment"
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r4, r3)
             r2.setHint(r3)
@@ -3036,7 +3036,7 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
             L_0x006c:
                 int r4 = r4.getThemedColor(r0)
                 r5.setBackgroundColor(r4)
-                r4 = 2131627844(0x7f0e0var_, float:1.8882964E38)
+                r4 = 2131627845(0x7f0e0var_, float:1.8882966E38)
                 java.lang.String r0 = "Recent"
                 java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r0, r4)
                 r5.setText(r4)

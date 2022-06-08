@@ -263,7 +263,7 @@ public class InviteLinkBottomSheet extends BottomSheet {
             boolean r5 = r2.revoked
             if (r5 == 0) goto L_0x0158
             android.widget.TextView r1 = r0.titleTextView
-            r4 = 2131628041(0x7f0e1009, float:1.8883363E38)
+            r4 = 2131628042(0x7f0e100a, float:1.8883365E38)
             java.lang.String r5 = "RevokedLink"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r5, r4)
             r1.setText(r4)

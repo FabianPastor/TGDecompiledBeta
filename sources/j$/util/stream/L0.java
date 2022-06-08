@@ -190,7 +190,7 @@ abstract class L0 extends CLASSNAMEc implements IntStream {
     }
 
     /* renamed from: iterator  reason: collision with other method in class */
-    public Iterator m0iterator() {
+    public Iterator m561iterator() {
         return L.g(spliterator());
     }
 

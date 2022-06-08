@@ -3,14 +3,18 @@ package org.telegram.ui.Components;
 import android.animation.TimeInterpolator;
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.LinearGradient;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.RectF;
+import android.graphics.Shader;
 import android.os.SystemClock;
 import android.view.View;
+import androidx.core.graphics.ColorUtils;
 import androidx.core.math.MathUtils;
 import java.util.ArrayList;
 import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.MediaController;
 import org.telegram.messenger.MessageObject;
 import org.telegram.ui.Components.SeekBar;
 
@@ -74,6 +78,7 @@ public class SeekBarWaveform {
 
     public void setWaveform(byte[] bArr) {
         this.waveformBytes = bArr;
+        this.heights = calculateHeights((int) (((float) this.width) / AndroidUtilities.dpf2(3.0f)));
     }
 
     public void setSelected(boolean z) {
@@ -351,214 +356,50 @@ public class SeekBarWaveform {
         }
     }
 
-    /* JADX WARNING: Code restructure failed: missing block: B:34:0x00e8, code lost:
-        if (r0.loadingPaintColor2 == r0.outerColor) goto L_0x0125;
-     */
-    /* Code decompiled incorrectly, please refer to instructions dump. */
-    private void drawFill(android.graphics.Canvas r17, float r18) {
-        /*
-            r16 = this;
-            r0 = r16
-            r1 = 1073741824(0x40000000, float:2.0)
-            float r1 = org.telegram.messenger.AndroidUtilities.dpf2(r1)
-            org.telegram.messenger.MessageObject r2 = r0.messageObject
-            r3 = 0
-            r4 = 1
-            r5 = 0
-            if (r2 == 0) goto L_0x0025
-            boolean r2 = r2.isContentUnread()
-            if (r2 == 0) goto L_0x0025
-            org.telegram.messenger.MessageObject r2 = r0.messageObject
-            boolean r2 = r2.isOut()
-            if (r2 != 0) goto L_0x0025
-            float r2 = r0.progress
-            int r2 = (r2 > r5 ? 1 : (r2 == r5 ? 0 : -1))
-            if (r2 > 0) goto L_0x0025
-            r2 = 1
-            goto L_0x0026
-        L_0x0025:
-            r2 = 0
-        L_0x0026:
-            r0.isUnread = r2
-            android.graphics.Paint r6 = paintInner
-            if (r2 == 0) goto L_0x002f
-            int r2 = r0.outerColor
-            goto L_0x0038
-        L_0x002f:
-            boolean r2 = r0.selected
-            if (r2 == 0) goto L_0x0036
-            int r2 = r0.selectedColor
-            goto L_0x0038
-        L_0x0036:
-            int r2 = r0.innerColor
-        L_0x0038:
-            r6.setColor(r2)
-            android.graphics.Paint r2 = paintOuter
-            int r6 = r0.outerColor
-            r2.setColor(r6)
-            org.telegram.ui.Components.AnimatedFloat r2 = r0.loadingFloat
-            android.view.View r6 = r0.parentView
-            r2.setParent(r6)
-            org.telegram.messenger.MediaController r2 = org.telegram.messenger.MediaController.getInstance()
-            org.telegram.messenger.MessageObject r6 = r0.messageObject
-            boolean r2 = r2.isPlayingMessage(r6)
-            org.telegram.ui.Components.AnimatedFloat r6 = r0.loadingFloat
-            boolean r7 = r0.loading
-            r8 = 1065353216(0x3var_, float:1.0)
-            if (r7 == 0) goto L_0x0060
-            if (r2 != 0) goto L_0x0060
-            r2 = 1065353216(0x3var_, float:1.0)
-            goto L_0x0061
-        L_0x0060:
-            r2 = 0
-        L_0x0061:
-            float r2 = r6.set(r2)
-            android.graphics.Paint r6 = paintInner
-            int r7 = r6.getColor()
-            int r9 = r0.innerColor
-            int r7 = androidx.core.graphics.ColorUtils.blendARGB(r7, r9, r2)
-            r6.setColor(r7)
-            android.graphics.Paint r6 = paintOuter
-            int r7 = r6.getAlpha()
-            float r7 = (float) r7
-            float r9 = r8 - r2
-            float r7 = r7 * r9
-            float r7 = r7 * r18
-            int r7 = (int) r7
-            r6.setAlpha(r7)
-            android.graphics.Paint r6 = paintInner
-            int r7 = r6.getAlpha()
-            float r7 = (float) r7
-            float r7 = r7 * r18
-            int r7 = (int) r7
-            r6.setAlpha(r7)
-            r11 = 0
-            r12 = 0
-            int r6 = r0.width
-            float r6 = (float) r6
-            float r13 = r6 + r1
-            int r6 = r0.height
-            float r14 = (float) r6
-            android.graphics.Paint r15 = paintInner
-            r10 = r17
-            r10.drawRect(r11, r12, r13, r14, r15)
-            int r6 = (r2 > r8 ? 1 : (r2 == r8 ? 0 : -1))
-            if (r6 >= 0) goto L_0x00bd
-            r11 = 0
-            r12 = 0
-            float r6 = r0.progress
-            int r7 = r0.width
-            float r7 = (float) r7
-            float r7 = r7 + r1
-            float r6 = r6 * r7
-            float r13 = r6 * r9
-            int r1 = r0.height
-            float r14 = (float) r1
-            android.graphics.Paint r15 = paintOuter
-            r10 = r17
-            r10.drawRect(r11, r12, r13, r14, r15)
-        L_0x00bd:
-            int r1 = (r2 > r5 ? 1 : (r2 == r5 ? 0 : -1))
-            if (r1 <= 0) goto L_0x0175
-            android.graphics.Paint r1 = r0.loadingPaint
-            if (r1 == 0) goto L_0x00ea
-            float r1 = r0.loadingPaintWidth
-            int r6 = r0.width
-            float r6 = (float) r6
-            float r1 = r1 - r6
-            float r1 = java.lang.Math.abs(r1)
-            double r6 = (double) r1
-            int r1 = r0.width
-            double r8 = (double) r1
-            r10 = 4602678819172646912(0x3feNUM, double:0.5)
-            java.lang.Double.isNaN(r8)
-            double r8 = r8 * r10
-            int r1 = (r6 > r8 ? 1 : (r6 == r8 ? 0 : -1))
-            if (r1 > 0) goto L_0x00ea
-            int r1 = r0.loadingPaintColor1
-            int r6 = r0.innerColor
-            if (r1 != r6) goto L_0x00ea
-            int r1 = r0.loadingPaintColor2
-            int r6 = r0.outerColor
-            if (r1 == r6) goto L_0x0125
-        L_0x00ea:
-            android.graphics.Paint r1 = r0.loadingPaint
-            if (r1 != 0) goto L_0x00f5
-            android.graphics.Paint r1 = new android.graphics.Paint
-            r1.<init>(r4)
-            r0.loadingPaint = r1
-        L_0x00f5:
-            int r1 = r0.innerColor
-            r0.loadingPaintColor1 = r1
-            int r1 = r0.outerColor
-            r0.loadingPaintColor2 = r1
-            android.graphics.Paint r1 = r0.loadingPaint
-            android.graphics.LinearGradient r14 = new android.graphics.LinearGradient
-            r7 = 0
-            r8 = 0
-            int r6 = r0.width
-            float r9 = (float) r6
-            r0.loadingPaintWidth = r9
-            r10 = 0
-            r6 = 3
-            int[] r11 = new int[r6]
-            int r12 = r0.loadingPaintColor1
-            r11[r3] = r12
-            int r3 = r0.loadingPaintColor2
-            r11[r4] = r3
-            r3 = 2
-            r11[r3] = r12
-            float[] r12 = new float[r6]
-            r12 = {0, NUM, NUM} // fill-array
-            android.graphics.Shader$TileMode r13 = android.graphics.Shader.TileMode.CLAMP
-            r6 = r14
-            r6.<init>(r7, r8, r9, r10, r11, r12, r13)
-            r1.setShader(r14)
-        L_0x0125:
-            android.graphics.Paint r1 = r0.loadingPaint
-            r3 = 1132396544(0x437var_, float:255.0)
-            float r2 = r2 * r3
-            float r2 = r2 * r18
-            int r2 = (int) r2
-            r1.setAlpha(r2)
-            r17.save()
-            long r1 = android.os.SystemClock.elapsedRealtime()
-            long r3 = r0.loadingStart
-            long r1 = r1 - r3
-            float r1 = (float) r1
-            r2 = 1132920832(0x43870000, float:270.0)
-            float r1 = r1 / r2
-            double r1 = (double) r1
-            r3 = 4604930618986332160(0x3feNUM, double:0.75)
-            double r1 = java.lang.Math.pow(r1, r3)
-            float r1 = (float) r1
-            r2 = 1070386381(0x3fcccccd, float:1.6)
-            float r1 = r1 % r2
-            r2 = 1058642330(0x3var_a, float:0.6)
-            float r1 = r1 - r2
-            float r2 = r0.loadingPaintWidth
-            float r1 = r1 * r2
-            r2 = r17
-            r2.translate(r1, r5)
-            float r7 = -r1
-            r8 = 0
-            int r3 = r0.width
-            int r3 = r3 + 5
-            float r3 = (float) r3
-            float r9 = r3 - r1
-            int r1 = r0.height
-            float r10 = (float) r1
-            android.graphics.Paint r11 = r0.loadingPaint
-            r6 = r17
-            r6.drawRect(r7, r8, r9, r10, r11)
-            r17.restore()
-            android.view.View r1 = r0.parentView
-            if (r1 == 0) goto L_0x0175
-            r1.invalidate()
-        L_0x0175:
-            return
-        */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.SeekBarWaveform.drawFill(android.graphics.Canvas, float):void");
+    private void drawFill(Canvas canvas, float f) {
+        float dpf2 = AndroidUtilities.dpf2(2.0f);
+        MessageObject messageObject2 = this.messageObject;
+        boolean z = messageObject2 != null && messageObject2.isContentUnread() && !this.messageObject.isOut() && this.progress <= 0.0f;
+        this.isUnread = z;
+        paintInner.setColor(z ? this.outerColor : this.selected ? this.selectedColor : this.innerColor);
+        paintOuter.setColor(this.outerColor);
+        this.loadingFloat.setParent(this.parentView);
+        float f2 = this.loadingFloat.set((!this.loading || MediaController.getInstance().isPlayingMessage(this.messageObject)) ? 0.0f : 1.0f);
+        Paint paint = paintInner;
+        paint.setColor(ColorUtils.blendARGB(paint.getColor(), this.innerColor, f2));
+        Paint paint2 = paintOuter;
+        float f3 = 1.0f - f2;
+        paint2.setAlpha((int) (((float) paint2.getAlpha()) * f3 * f));
+        Paint paint3 = paintInner;
+        paint3.setAlpha((int) (((float) paint3.getAlpha()) * f));
+        canvas.drawRect(0.0f, 0.0f, ((float) this.width) + dpf2, (float) this.height, paintInner);
+        if (f2 < 1.0f) {
+            canvas.drawRect(0.0f, 0.0f, this.progress * (((float) this.width) + dpf2) * f3, (float) this.height, paintOuter);
+        }
+        if (f2 > 0.0f) {
+            if (this.loadingPaint == null || Math.abs(this.loadingPaintWidth - ((float) this.width)) > ((float) AndroidUtilities.dp(8.0f)) || this.loadingPaintColor1 != this.innerColor || this.loadingPaintColor2 != this.outerColor) {
+                if (this.loadingPaint == null) {
+                    this.loadingPaint = new Paint(1);
+                }
+                this.loadingPaintColor1 = this.innerColor;
+                this.loadingPaintColor2 = this.outerColor;
+                Paint paint4 = this.loadingPaint;
+                float f4 = (float) this.width;
+                this.loadingPaintWidth = f4;
+                int i = this.loadingPaintColor1;
+                paint4.setShader(new LinearGradient(0.0f, 0.0f, f4, 0.0f, new int[]{i, this.loadingPaintColor2, i}, new float[]{0.0f, 0.2f, 0.4f}, Shader.TileMode.CLAMP));
+            }
+            this.loadingPaint.setAlpha((int) (f2 * 255.0f * f));
+            canvas.save();
+            float pow = ((((float) Math.pow((double) (((float) (SystemClock.elapsedRealtime() - this.loadingStart)) / 270.0f), 0.75d)) % 1.6f) - 0.6f) * this.loadingPaintWidth;
+            canvas.translate(pow, 0.0f);
+            canvas.drawRect(-pow, 0.0f, ((float) (this.width + 5)) - pow, (float) this.height, this.loadingPaint);
+            canvas.restore();
+            View view = this.parentView;
+            if (view != null) {
+                view.invalidate();
+            }
+        }
     }
 
     private void addBar(Path path2, float f, float f2) {

@@ -1746,6 +1746,7 @@ public final class R {
         public static final int db_migration_placeholder = NUM;
         public static final int default_pattern = NUM;
         public static final int diceloop = NUM;
+        public static final int dots_loading = NUM;
         public static final int download_arrow = NUM;
         public static final int download_finish = NUM;
         public static final int download_progress = NUM;
@@ -1832,6 +1833,7 @@ public final class R {
         public static final int sound_on = NUM;
         public static final int sound_out = NUM;
         public static final int speaker = NUM;
+        public static final int star_loader = NUM;
         public static final int statistic_preload = NUM;
         public static final int sun = NUM;
         public static final int sun_outline = NUM;
@@ -4358,6 +4360,7 @@ public final class R {
         public static final int LimitPremium = NUM;
         public static final int LimitReached = NUM;
         public static final int LimitReachedAccounts = NUM;
+        public static final int LimitReachedAccountsPremium = NUM;
         public static final int LimitReachedChatInFolders = NUM;
         public static final int LimitReachedChatInFoldersLocked = NUM;
         public static final int LimitReachedChatInFoldersPremium = NUM;

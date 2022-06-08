@@ -2266,12 +2266,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             messagesController.loadHintDialogs();
             messagesController.loadUserInfo(accountInstance.getUserConfig().getCurrentUser(), false, 0);
             accountInstance.getContactsController().checkInviteText();
-            accountInstance.getMediaDataController().loadRecents(2, false, true, false);
-            accountInstance.getMediaDataController().loadRecents(3, false, true, false);
-            accountInstance.getMediaDataController().checkFeaturedStickers();
-            accountInstance.getMediaDataController().checkReactions();
-            accountInstance.getMediaDataController().checkMenuBots();
-            accountInstance.getMediaDataController().checkPremiumPromo();
+            accountInstance.getMediaDataController().chekAllMedia();
             AndroidUtilities.runOnUIThread(new DialogsActivity$$ExternalSyntheticLambda31(accountInstance), 200);
             Iterator<String> it = messagesController.diceEmojies.iterator();
             while (it.hasNext()) {
@@ -2457,12 +2452,12 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             r10.proxyDrawable = r0
             org.telegram.ui.ActionBar.ActionBarMenuItem r0 = r6.addItem((int) r8, (android.graphics.drawable.Drawable) r0)
             r10.proxyItem = r0
-            r1 = 2131627738(0x7f0e0eda, float:1.8882749E38)
+            r1 = 2131627739(0x7f0e0edb, float:1.888275E38)
             java.lang.String r2 = "ProxySettings"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             r0.setContentDescription(r1)
             org.telegram.ui.Components.RLottieDrawable r0 = new org.telegram.ui.Components.RLottieDrawable
-            r18 = 2131558483(0x7f0d0053, float:1.8742283E38)
+            r18 = 2131558484(0x7f0d0054, float:1.8742285E38)
             r1 = 1105199104(0x41e00000, float:28.0)
             int r20 = org.telegram.messenger.AndroidUtilities.dp(r1)
             int r21 = org.telegram.messenger.AndroidUtilities.dp(r1)
@@ -2512,7 +2507,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
         L_0x012a:
             org.telegram.ui.ActionBar.ActionBarMenuItem r0 = r10.searchItem
             java.lang.String r1 = "Search"
-            r2 = 2131628080(0x7f0e1030, float:1.8883443E38)
+            r2 = 2131628081(0x7f0e1031, float:1.8883445E38)
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r1, r2)
             r0.setSearchFieldHint(r3)
             org.telegram.ui.ActionBar.ActionBarMenuItem r0 = r10.searchItem
@@ -2538,14 +2533,14 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
         L_0x0168:
             if (r0 != r5) goto L_0x0179
             org.telegram.ui.ActionBar.ActionBar r0 = r10.actionBar
-            r1 = 2131628148(0x7f0e1074, float:1.888358E38)
+            r1 = 2131628149(0x7f0e1075, float:1.8883583E38)
             java.lang.String r2 = "SelectChats"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             r0.setTitle(r1)
             goto L_0x0187
         L_0x0179:
             org.telegram.ui.ActionBar.ActionBar r0 = r10.actionBar
-            r1 = 2131628147(0x7f0e1073, float:1.8883578E38)
+            r1 = 2131628148(0x7f0e1074, float:1.888358E38)
             java.lang.String r2 = "SelectChat"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             r0.setTitle(r1)
@@ -3115,12 +3110,12 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             goto L_0x067c
         L_0x0662:
             org.telegram.ui.Components.RLottieImageView r0 = r10.floatingButton
-            r1 = 2131558586(0x7f0d00ba, float:1.8742492E38)
+            r1 = 2131558588(0x7f0d00bc, float:1.8742496E38)
             r2 = 52
             r3 = 52
             r0.setAnimation(r1, r2, r3)
             android.widget.FrameLayout r0 = r10.floatingButtonContainer
-            r1 = 2131626773(0x7f0e0b15, float:1.8880792E38)
+            r1 = 2131626774(0x7f0e0b16, float:1.8880794E38)
             java.lang.String r2 = "NewMessageTitle"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             r0.setContentDescription(r1)
@@ -4517,6 +4512,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                 boolean isEmpty = this.filterTabsView.isEmpty();
                 updateFilterTabsVisibility(z2);
                 int currentTabId = this.filterTabsView.getCurrentTabId();
+                int currentTabStableId = this.filterTabsView.getCurrentTabStableId();
                 if (currentTabId != this.filterTabsView.getDefaultTabId() && currentTabId >= arrayList.size()) {
                     this.filterTabsView.resetTabId();
                 }
@@ -4529,9 +4525,8 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                         this.filterTabsView.addTab(i2, arrayList.get(i2).localId, arrayList.get(i2).name, false, arrayList.get(i2).locked);
                     }
                 }
-                int currentTabId2 = this.filterTabsView.getCurrentTabId();
-                if (currentTabId2 >= 0 && this.viewPages[0].selectedType != currentTabId2) {
-                    int unused5 = this.viewPages[0].selectedType = currentTabId2;
+                if (currentTabStableId >= 0 && this.filterTabsView.getStableId(this.viewPages[0].selectedType) != currentTabStableId) {
+                    int unused5 = this.viewPages[0].selectedType = currentTabId;
                     isEmpty = true;
                 }
                 int i3 = 0;
@@ -4553,7 +4548,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                 ActionBarLayout actionBarLayout2 = this.parentLayout;
                 if (actionBarLayout2 != null) {
                     DrawerLayoutContainer drawerLayoutContainer = actionBarLayout2.getDrawerLayoutContainer();
-                    if (currentTabId2 != this.filterTabsView.getFirstTabId() && SharedConfig.getChatSwipeAction(this.currentAccount) == 5) {
+                    if (currentTabId != this.filterTabsView.getFirstTabId() && SharedConfig.getChatSwipeAction(this.currentAccount) == 5) {
                         z3 = false;
                     }
                     drawerLayoutContainer.setAllowOpenDrawerBySwipe(z3);
@@ -7186,7 +7181,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             r13.showDialog(r0)
             goto L_0x0168
         L_0x014f:
-            r0 = 2131627517(0x7f0e0dfd, float:1.88823E38)
+            r0 = 2131627518(0x7f0e0dfe, float:1.8882303E38)
             r1 = 1
             java.lang.Object[] r1 = new java.lang.Object[r1]
             java.lang.Object[] r2 = new java.lang.Object[r15]
@@ -7490,15 +7485,15 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             org.telegram.ui.ActionBar.AlertDialog$Builder r0 = new org.telegram.ui.ActionBar.AlertDialog$Builder
             android.app.Activity r1 = r26.getParentActivity()
             r0.<init>((android.content.Context) r1)
-            r1 = 2131627741(0x7f0e0edd, float:1.8882755E38)
+            r1 = 2131627742(0x7f0e0ede, float:1.8882757E38)
             java.lang.String r3 = "PsaHideChatAlertTitle"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r3, r1)
             r0.setTitle(r1)
-            r1 = 2131627740(0x7f0e0edc, float:1.8882753E38)
+            r1 = 2131627741(0x7f0e0edd, float:1.8882755E38)
             java.lang.String r3 = "PsaHideChatAlertText"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r3, r1)
             r0.setMessage(r1)
-            r1 = 2131627739(0x7f0e0edb, float:1.888275E38)
+            r1 = 2131627740(0x7f0e0edc, float:1.8882753E38)
             java.lang.String r3 = "PsaHide"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r3, r1)
             org.telegram.ui.DialogsActivity$$ExternalSyntheticLambda7 r3 = new org.telegram.ui.DialogsActivity$$ExternalSyntheticLambda7

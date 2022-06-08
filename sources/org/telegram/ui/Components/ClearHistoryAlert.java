@@ -458,7 +458,7 @@ public class ClearHistoryAlert extends BottomSheet {
             r5.<init>(r1)
             r6 = 0
             r5.setAutoRepeat(r6)
-            r7 = 2131558556(0x7f0d009c, float:1.8742431E38)
+            r7 = 2131558558(0x7f0d009e, float:1.8742435E38)
             r14 = 120(0x78, float:1.68E-43)
             r5.setAnimation(r7, r14, r14)
             r7 = 1101004800(0x41a00000, float:20.0)

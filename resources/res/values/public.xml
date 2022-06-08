@@ -1604,6 +1604,7 @@
     <public type="raw" name="db_migration_placeholder" id="NUM" />
     <public type="raw" name="default_pattern" id="NUM" />
     <public type="raw" name="diceloop" id="NUM" />
+    <public type="raw" name="dots_loading" id="NUM" />
     <public type="raw" name="download_arrow" id="NUM" />
     <public type="raw" name="download_finish" id="NUM" />
     <public type="raw" name="download_progress" id="NUM" />
@@ -1690,6 +1691,7 @@
     <public type="raw" name="sound_on" id="NUM" />
     <public type="raw" name="sound_out" id="NUM" />
     <public type="raw" name="speaker" id="NUM" />
+    <public type="raw" name="star_loader" id="NUM" />
     <public type="raw" name="statistic_preload" id="NUM" />
     <public type="raw" name="sun" id="NUM" />
     <public type="raw" name="sun_outline" id="NUM" />
@@ -4210,6 +4212,7 @@
     <public type="string" name="LimitPremium" id="NUM" />
     <public type="string" name="LimitReached" id="NUM" />
     <public type="string" name="LimitReachedAccounts" id="NUM" />
+    <public type="string" name="LimitReachedAccountsPremium" id="NUM" />
     <public type="string" name="LimitReachedChatInFolders" id="NUM" />
     <public type="string" name="LimitReachedChatInFoldersLocked" id="NUM" />
     <public type="string" name="LimitReachedChatInFoldersPremium" id="NUM" />

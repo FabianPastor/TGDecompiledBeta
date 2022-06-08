@@ -1,29 +1,21 @@
 package org.telegram.ui;
 
-import android.os.Bundle;
-import org.telegram.ui.ActionBar.AlertDialog;
-import org.telegram.ui.ActionBar.BaseFragment;
+import org.telegram.tgnet.TLRPC$Chat;
 
 public final /* synthetic */ class LaunchActivity$$ExternalSyntheticLambda35 implements Runnable {
     public final /* synthetic */ LaunchActivity f$0;
-    public final /* synthetic */ Bundle f$1;
-    public final /* synthetic */ Long f$2;
-    public final /* synthetic */ int[] f$3;
-    public final /* synthetic */ AlertDialog f$4;
-    public final /* synthetic */ BaseFragment f$5;
-    public final /* synthetic */ int f$6;
+    public final /* synthetic */ int f$1;
+    public final /* synthetic */ TLRPC$Chat f$2;
+    public final /* synthetic */ DialogsActivity f$3;
 
-    public /* synthetic */ LaunchActivity$$ExternalSyntheticLambda35(LaunchActivity launchActivity, Bundle bundle, Long l, int[] iArr, AlertDialog alertDialog, BaseFragment baseFragment, int i) {
+    public /* synthetic */ LaunchActivity$$ExternalSyntheticLambda35(LaunchActivity launchActivity, int i, TLRPC$Chat tLRPC$Chat, DialogsActivity dialogsActivity) {
         this.f$0 = launchActivity;
-        this.f$1 = bundle;
-        this.f$2 = l;
-        this.f$3 = iArr;
-        this.f$4 = alertDialog;
-        this.f$5 = baseFragment;
-        this.f$6 = i;
+        this.f$1 = i;
+        this.f$2 = tLRPC$Chat;
+        this.f$3 = dialogsActivity;
     }
 
     public final void run() {
-        this.f$0.lambda$runLinkRequest$69(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6);
+        this.f$0.lambda$runLinkRequest$38(this.f$1, this.f$2, this.f$3);
     }
 }

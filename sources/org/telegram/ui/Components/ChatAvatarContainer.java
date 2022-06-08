@@ -1022,6 +1022,7 @@ public class ChatAvatarContainer extends FrameLayout implements NotificationCent
         super.onAttachedToWindow();
         if (this.parentFragment != null) {
             NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.didUpdateConnectionState);
+            NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.emojiLoaded);
             this.currentConnectionState = ConnectionsManager.getInstance(this.currentAccount).getConnectionState();
             updateCurrentConnectionState();
         }
@@ -1032,14 +1033,27 @@ public class ChatAvatarContainer extends FrameLayout implements NotificationCent
         super.onDetachedFromWindow();
         if (this.parentFragment != null) {
             NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.didUpdateConnectionState);
+            NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.emojiLoaded);
         }
     }
 
     public void didReceivedNotification(int i, int i2, Object... objArr) {
-        int connectionState;
-        if (i == NotificationCenter.didUpdateConnectionState && this.currentConnectionState != (connectionState = ConnectionsManager.getInstance(this.currentAccount).getConnectionState())) {
-            this.currentConnectionState = connectionState;
-            updateCurrentConnectionState();
+        if (i == NotificationCenter.didUpdateConnectionState) {
+            int connectionState = ConnectionsManager.getInstance(this.currentAccount).getConnectionState();
+            if (this.currentConnectionState != connectionState) {
+                this.currentConnectionState = connectionState;
+                updateCurrentConnectionState();
+            }
+        } else if (i == NotificationCenter.emojiLoaded) {
+            SimpleTextView simpleTextView = this.titleTextView;
+            if (simpleTextView != null) {
+                simpleTextView.invalidate();
+            }
+            SimpleTextView simpleTextView2 = this.subtitleTextView;
+            if (simpleTextView2 != null) {
+                simpleTextView2.invalidate();
+            }
+            invalidate();
         }
     }
 

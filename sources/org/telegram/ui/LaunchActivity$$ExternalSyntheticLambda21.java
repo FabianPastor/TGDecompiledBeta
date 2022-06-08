@@ -1,15 +1,13 @@
 package org.telegram.ui;
 
-import android.view.View;
-
 public final /* synthetic */ class LaunchActivity$$ExternalSyntheticLambda21 implements Runnable {
-    public final /* synthetic */ View f$0;
+    public final /* synthetic */ int f$0;
 
-    public /* synthetic */ LaunchActivity$$ExternalSyntheticLambda21(View view) {
-        this.f$0 = view;
+    public /* synthetic */ LaunchActivity$$ExternalSyntheticLambda21(int i) {
+        this.f$0 = i;
     }
 
     public final void run() {
-        LaunchActivity.lambda$updateAppUpdateViews$72(this.f$0);
+        LaunchActivity.lambda$onPause$79(this.f$0);
     }
 }

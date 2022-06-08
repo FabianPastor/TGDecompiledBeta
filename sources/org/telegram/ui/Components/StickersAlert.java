@@ -1463,7 +1463,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
             org.telegram.tgnet.TLRPC$TL_messages_stickerSet r0 = r12.stickerSet
             org.telegram.tgnet.TLRPC$StickerSet r2 = r0.set
             boolean r2 = r2.masks
-            r6 = 2131627890(0x7f0e0var_, float:1.8883057E38)
+            r6 = 2131627891(0x7f0e0var_, float:1.888306E38)
             java.lang.String r7 = "RemoveStickersCount"
             if (r2 == 0) goto L_0x00f8
             java.lang.Object[] r2 = new java.lang.Object[r4]

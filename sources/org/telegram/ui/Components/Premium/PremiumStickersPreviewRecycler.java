@@ -398,7 +398,7 @@ public class PremiumStickersPreviewRecycler extends RecyclerListView implements 
         public void setSticker(TLRPC$Document tLRPC$Document) {
             this.centerImage.setImage(ImageLocation.getForDocument(tLRPC$Document), (String) null, DocumentObject.getSvgThumb(tLRPC$Document, "windowBackgroundGray", 0.5f), "webp", (Object) null, 1);
             if (MessageObject.isPremiumSticker(tLRPC$Document)) {
-                this.effectImage.setImage(ImageLocation.getForDocument(MessageObject.getPremiumStickerAnimation(tLRPC$Document), tLRPC$Document), (String) null, (ImageLocation) null, (String) null, "tgs", (Object) null, 1);
+                this.effectImage.setImage(ImageLocation.getForDocument(MessageObject.getPremiumStickerAnimation(tLRPC$Document), tLRPC$Document), "180_180_pcache", (ImageLocation) null, (String) null, "tgs", (Object) null, 1);
             }
         }
 

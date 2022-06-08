@@ -2,14 +2,14 @@ package org.telegram.ui;
 
 import android.content.DialogInterface;
 
-public final /* synthetic */ class LaunchActivity$$ExternalSyntheticLambda3 implements DialogInterface.OnClickListener {
-    public final /* synthetic */ int f$0;
+public final /* synthetic */ class LaunchActivity$$ExternalSyntheticLambda3 implements DialogInterface.OnCancelListener {
+    public final /* synthetic */ boolean[] f$0;
 
-    public /* synthetic */ LaunchActivity$$ExternalSyntheticLambda3(int i) {
-        this.f$0 = i;
+    public /* synthetic */ LaunchActivity$$ExternalSyntheticLambda3(boolean[] zArr) {
+        this.f$0 = zArr;
     }
 
-    public final void onClick(DialogInterface dialogInterface, int i) {
-        LaunchActivity.lambda$didReceivedNotification$81(this.f$0, dialogInterface, i);
+    public final void onCancel(DialogInterface dialogInterface) {
+        LaunchActivity.lambda$runLinkRequest$45(this.f$0, dialogInterface);
     }
 }
