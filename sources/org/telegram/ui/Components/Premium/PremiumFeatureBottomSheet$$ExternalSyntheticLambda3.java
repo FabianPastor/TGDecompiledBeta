@@ -11,6 +11,6 @@ public final /* synthetic */ class PremiumFeatureBottomSheet$$ExternalSyntheticL
     }
 
     public final int compare(Object obj, Object obj2) {
-        return PremiumFeatureBottomSheet.lambda$getViewForPosition$3(this.f$0, (UnlockPremiumReactionsWindow$ReactionDrawingObject) obj, (UnlockPremiumReactionsWindow$ReactionDrawingObject) obj2);
+        return PremiumFeatureBottomSheet.lambda$getViewForPosition$3(this.f$0, (ReactionDrawingObject) obj, (ReactionDrawingObject) obj2);
     }
 }

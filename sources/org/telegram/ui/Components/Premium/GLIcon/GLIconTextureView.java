@@ -22,6 +22,7 @@ import javax.microedition.khronos.egl.EGLDisplay;
 import javax.microedition.khronos.egl.EGLSurface;
 import javax.microedition.khronos.opengles.GL10;
 import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.EmuDetector;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.Utilities;
 import org.telegram.ui.Components.CubicBezierInterpolator;
@@ -358,17 +359,24 @@ public class GLIconTextureView extends TextureView implements TextureView.Surfac
 
     /* access modifiers changed from: private */
     public void initGL() {
+        int[] iArr;
         EGL10 egl10 = (EGL10) EGLContext.getEGL();
         this.mEgl = egl10;
         EGLDisplay eglGetDisplay = egl10.eglGetDisplay(EGL10.EGL_DEFAULT_DISPLAY);
         this.mEglDisplay = eglGetDisplay;
         if (eglGetDisplay != EGL10.EGL_NO_DISPLAY) {
             if (this.mEgl.eglInitialize(eglGetDisplay, new int[2])) {
-                int[] iArr = new int[1];
+                int[] iArr2 = new int[1];
                 EGLConfig[] eGLConfigArr = new EGLConfig[1];
+                if (EmuDetector.with(getContext()).detect()) {
+                    iArr = new int[]{12324, 8, 12323, 8, 12322, 8, 12321, 8, 12325, 16, 12344};
+                } else {
+                    iArr = new int[]{12352, 4, 12324, 8, 12323, 8, 12322, 8, 12321, 8, 12325, 16, 12326, 0, 12338, 1, 12344};
+                }
+                int[] iArr3 = iArr;
                 this.eglConfig = null;
-                if (this.mEgl.eglChooseConfig(this.mEglDisplay, new int[]{12352, 4, 12324, 8, 12323, 8, 12322, 8, 12321, 8, 12325, 16, 12326, 0, 12338, 1, 12344}, eGLConfigArr, 1, iArr)) {
-                    if (iArr[0] > 0) {
+                if (this.mEgl.eglChooseConfig(this.mEglDisplay, iArr3, eGLConfigArr, 1, iArr2)) {
+                    if (iArr2[0] > 0) {
                         this.eglConfig = eGLConfigArr[0];
                     }
                     EGLConfig eGLConfig = this.eglConfig;

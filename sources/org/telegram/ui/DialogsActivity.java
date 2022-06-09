@@ -2266,7 +2266,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             messagesController.loadHintDialogs();
             messagesController.loadUserInfo(accountInstance.getUserConfig().getCurrentUser(), false, 0);
             accountInstance.getContactsController().checkInviteText();
-            accountInstance.getMediaDataController().chekAllMedia();
+            accountInstance.getMediaDataController().chekAllMedia(false);
             AndroidUtilities.runOnUIThread(new DialogsActivity$$ExternalSyntheticLambda31(accountInstance), 200);
             Iterator<String> it = messagesController.diceEmojies.iterator();
             while (it.hasNext()) {

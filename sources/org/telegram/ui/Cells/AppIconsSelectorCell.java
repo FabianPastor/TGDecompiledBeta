@@ -19,6 +19,7 @@ import android.widget.TextView;
 import androidx.core.content.ContextCompat;
 import androidx.core.graphics.ColorUtils;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.LinearSmoothScroller;
 import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -89,28 +90,33 @@ public class AppIconsSelectorCell extends RecyclerListView implements Notificati
                 }
             }
         });
-        setOnItemClickListener((RecyclerListView.OnItemClickListener) new AppIconsSelectorCell$$ExternalSyntheticLambda0(this, baseFragment));
+        setOnItemClickListener((RecyclerListView.OnItemClickListener) new AppIconsSelectorCell$$ExternalSyntheticLambda0(this, baseFragment, context));
         updateIconsVisibility();
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$new$0(BaseFragment baseFragment, View view, int i) {
+    public /* synthetic */ void lambda$new$0(BaseFragment baseFragment, Context context, View view, int i) {
         IconHolderView iconHolderView = (IconHolderView) view;
         LauncherIconController.LauncherIcon launcherIcon = this.availableIcons.get(i);
-        if (!LauncherIconController.isEnabled(launcherIcon)) {
-            if (!launcherIcon.premium || UserConfig.hasPremiumOnAccounts()) {
-                LauncherIconController.setIcon(launcherIcon);
-                iconHolderView.setSelected(true, true);
-                for (int i2 = 0; i2 < getChildCount(); i2++) {
-                    IconHolderView iconHolderView2 = (IconHolderView) getChildAt(i2);
-                    if (iconHolderView2 != iconHolderView) {
-                        iconHolderView2.setSelected(false, true);
-                    }
-                }
-                NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.showBulletin, 5, launcherIcon);
-                return;
-            }
+        if (launcherIcon.premium && !UserConfig.hasPremiumOnAccounts()) {
             baseFragment.showDialog(new PremiumFeatureBottomSheet(baseFragment, 10));
+        } else if (!LauncherIconController.isEnabled(launcherIcon)) {
+            AnonymousClass3 r4 = new LinearSmoothScroller(this, context) {
+                public int calculateDtToFit(int i, int i2, int i3, int i4, int i5) {
+                    return (i3 - i) + AndroidUtilities.dp(16.0f);
+                }
+            };
+            r4.setTargetPosition(i);
+            this.linearLayoutManager.startSmoothScroll(r4);
+            LauncherIconController.setIcon(launcherIcon);
+            iconHolderView.setSelected(true, true);
+            for (int i2 = 0; i2 < getChildCount(); i2++) {
+                IconHolderView iconHolderView2 = (IconHolderView) getChildAt(i2);
+                if (iconHolderView2 != iconHolderView) {
+                    iconHolderView2.setSelected(false, true);
+                }
+            }
+            NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.showBulletin, 5, launcherIcon);
         }
     }
 

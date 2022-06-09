@@ -76,7 +76,7 @@ class CLASSNAMEc2 implements CLASSNAMEw1 {
     }
 
     /* renamed from: spliterator  reason: collision with other method in class */
-    public w m572spliterator() {
+    public w m574spliterator() {
         return L.k(this.a, 0, this.b, 1040);
     }
 

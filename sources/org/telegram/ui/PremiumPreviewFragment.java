@@ -956,6 +956,7 @@ public class PremiumPreviewFragment extends BaseFragment implements Notification
                                     spannableString.setSpan(new TextStyleSpan(textStyleRun), textStyleRun.start, textStyleRun.end, i2);
                                 }
                                 i6++;
+                                z2 = true;
                                 i5 = 0;
                             } else if (tLRPC$MessageEntity2 instanceof TLRPC$TL_messageEntityEmail) {
                                 spannableString.setSpan(new URLSpanReplacement("mailto:" + str, textStyleRun), textStyleRun.start, textStyleRun.end, 33);
@@ -974,7 +975,9 @@ public class PremiumPreviewFragment extends BaseFragment implements Notification
                                 }
                                 spannableString.setSpan(new URLSpanBrowser("tel:" + stripExceptNumbers, textStyleRun), textStyleRun.start, textStyleRun.end, 33);
                             } else if (tLRPC$MessageEntity2 instanceof TLRPC$TL_messageEntityTextUrl) {
-                                spannableString.setSpan(new URLSpanReplacement(textStyleRun.urlEntity.url, textStyleRun), textStyleRun.start, textStyleRun.end, 33);
+                                URLSpanReplacement uRLSpanReplacement = new URLSpanReplacement(textStyleRun.urlEntity.url, textStyleRun);
+                                uRLSpanReplacement.setNavigateToPremiumBot(z2);
+                                spannableString.setSpan(uRLSpanReplacement, textStyleRun.start, textStyleRun.end, 33);
                             } else if (tLRPC$MessageEntity2 instanceof TLRPC$TL_messageEntityMentionName) {
                                 spannableString.setSpan(new URLSpanUserMention("" + ((TLRPC$TL_messageEntityMentionName) textStyleRun.urlEntity).user_id, i5, textStyleRun), textStyleRun.start, textStyleRun.end, 33);
                             } else if (tLRPC$MessageEntity2 instanceof TLRPC$TL_inputMessageEntityMentionName) {
@@ -987,6 +990,7 @@ public class PremiumPreviewFragment extends BaseFragment implements Notification
                                 z = false;
                                 spannableString.setSpan(new TextStyleSpan(textStyleRun), textStyleRun.start, textStyleRun.end, i2);
                                 i6++;
+                                z2 = true;
                                 i5 = 0;
                             } else {
                                 i2 = 33;
@@ -994,12 +998,14 @@ public class PremiumPreviewFragment extends BaseFragment implements Notification
                                 z = true;
                                 spannableString.setSpan(new TextStyleSpan(textStyleRun), textStyleRun.start, textStyleRun.end, i2);
                                 i6++;
+                                z2 = true;
                                 i5 = 0;
                             }
                             i2 = 33;
                             z = false;
                             spannableString.setSpan(new TextStyleSpan(textStyleRun), textStyleRun.start, textStyleRun.end, i2);
                             i6++;
+                            z2 = true;
                             i5 = 0;
                         }
                         textInfoPrivacyCell.setText(spannableString);

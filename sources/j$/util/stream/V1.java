@@ -35,7 +35,7 @@ final class V1 extends U3 implements CLASSNAMEu1, CLASSNAMEp1 {
     }
 
     /* renamed from: a  reason: collision with other method in class */
-    public CLASSNAMEu1 m567a() {
+    public CLASSNAMEu1 m569a() {
         return this;
     }
 
@@ -94,7 +94,7 @@ final class V1 extends U3 implements CLASSNAMEu1, CLASSNAMEp1 {
     }
 
     /* renamed from: spliterator  reason: collision with other method in class */
-    public w m568spliterator() {
+    public w m570spliterator() {
         return super.spliterator();
     }
 

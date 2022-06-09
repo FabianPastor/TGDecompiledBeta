@@ -374,9 +374,9 @@ public class PremiumFeatureBottomSheet extends BottomSheet implements Notificati
                 }
             }
             for (int i4 = 0; i4 < arrayList2.size(); i4++) {
-                UnlockPremiumReactionsWindow$ReactionDrawingObject unlockPremiumReactionsWindow$ReactionDrawingObject = new UnlockPremiumReactionsWindow$ReactionDrawingObject(i4);
-                unlockPremiumReactionsWindow$ReactionDrawingObject.set((TLRPC$TL_availableReaction) arrayList2.get(i4));
-                arrayList.add(unlockPremiumReactionsWindow$ReactionDrawingObject);
+                ReactionDrawingObject reactionDrawingObject = new ReactionDrawingObject(i4);
+                reactionDrawingObject.set((TLRPC$TL_availableReaction) arrayList2.get(i4));
+                arrayList.add(reactionDrawingObject);
             }
             HashMap hashMap = new HashMap();
             hashMap.put("👌", 1);
@@ -407,11 +407,11 @@ public class PremiumFeatureBottomSheet extends BottomSheet implements Notificati
     }
 
     /* access modifiers changed from: private */
-    public static /* synthetic */ int lambda$getViewForPosition$3(HashMap hashMap, UnlockPremiumReactionsWindow$ReactionDrawingObject unlockPremiumReactionsWindow$ReactionDrawingObject, UnlockPremiumReactionsWindow$ReactionDrawingObject unlockPremiumReactionsWindow$ReactionDrawingObject2) {
+    public static /* synthetic */ int lambda$getViewForPosition$3(HashMap hashMap, ReactionDrawingObject reactionDrawingObject, ReactionDrawingObject reactionDrawingObject2) {
         int i = Integer.MAX_VALUE;
-        int intValue = hashMap.containsKey(unlockPremiumReactionsWindow$ReactionDrawingObject.reaction.reaction) ? ((Integer) hashMap.get(unlockPremiumReactionsWindow$ReactionDrawingObject.reaction.reaction)).intValue() : Integer.MAX_VALUE;
-        if (hashMap.containsKey(unlockPremiumReactionsWindow$ReactionDrawingObject2.reaction.reaction)) {
-            i = ((Integer) hashMap.get(unlockPremiumReactionsWindow$ReactionDrawingObject2.reaction.reaction)).intValue();
+        int intValue = hashMap.containsKey(reactionDrawingObject.reaction.reaction) ? ((Integer) hashMap.get(reactionDrawingObject.reaction.reaction)).intValue() : Integer.MAX_VALUE;
+        if (hashMap.containsKey(reactionDrawingObject2.reaction.reaction)) {
+            i = ((Integer) hashMap.get(reactionDrawingObject2.reaction.reaction)).intValue();
         }
         return i - intValue;
     }

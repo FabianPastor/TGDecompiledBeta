@@ -35,7 +35,7 @@ final class CLASSNAMEe2 extends W3 implements CLASSNAMEw1, CLASSNAMEq1 {
     }
 
     /* renamed from: a  reason: collision with other method in class */
-    public CLASSNAMEw1 m574a() {
+    public CLASSNAMEw1 m576a() {
         return this;
     }
 
@@ -94,7 +94,7 @@ final class CLASSNAMEe2 extends W3 implements CLASSNAMEw1, CLASSNAMEq1 {
     }
 
     /* renamed from: spliterator  reason: collision with other method in class */
-    public w m575spliterator() {
+    public w m577spliterator() {
         return super.spliterator();
     }
 

@@ -14,6 +14,7 @@ import java.io.File;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -26,6 +27,8 @@ import org.telegram.messenger.Utilities;
 
 public class RLottieDrawable extends BitmapDrawable implements Animatable {
     private static ThreadLocal<byte[]> bufferLocal = new ThreadLocal<>();
+    /* access modifiers changed from: private */
+    public static HashSet<String> generatingCacheFiles = new HashSet<>();
     private static DispatchQueuePool loadFrameRunnableQueue = new DispatchQueuePool(4);
     /* access modifiers changed from: private */
     public static ThreadPoolExecutor lottieCacheGenerateQueue;
@@ -36,6 +39,7 @@ public class RLottieDrawable extends BitmapDrawable implements Animatable {
     protected int autoRepeat;
     protected int autoRepeatPlayCount;
     protected volatile Bitmap backgroundBitmap;
+    File cacheFile;
     protected Runnable cacheGenerateTask;
     protected int currentFrame;
     private View currentParentView;
@@ -87,6 +91,7 @@ public class RLottieDrawable extends BitmapDrawable implements Animatable {
     public boolean shouldLimitFps;
     /* access modifiers changed from: private */
     public boolean singleFrameDecoded;
+    long startTime;
     protected int timeBetweenFrames;
     protected Runnable uiRunnable;
     /* access modifiers changed from: private */
@@ -106,6 +111,8 @@ public class RLottieDrawable extends BitmapDrawable implements Animatable {
     protected static native long createWithJson(String str, String str2, int[] iArr, int[] iArr2);
 
     public static native void destroy(long j);
+
+    private static native String getCacheFile(long j);
 
     public static native int getFrame(long j, int i, Bitmap bitmap, int i2, int i3, int i4, boolean z);
 
@@ -200,13 +207,6 @@ public class RLottieDrawable extends BitmapDrawable implements Animatable {
                 }
             }
         };
-        this.uiRunnableCacheFinished = new Runnable() {
-            public void run() {
-                RLottieDrawable rLottieDrawable = RLottieDrawable.this;
-                rLottieDrawable.cacheGenerateTask = null;
-                rLottieDrawable.decodeFrameFinishedInternal();
-            }
-        };
         this.uiRunnable = new Runnable() {
             public void run() {
                 boolean unused = RLottieDrawable.this.singleFrameDecoded = true;
@@ -230,25 +230,29 @@ public class RLottieDrawable extends BitmapDrawable implements Animatable {
                 if (!RLottieDrawable.this.isRecycled) {
                     RLottieDrawable rLottieDrawable = RLottieDrawable.this;
                     if (!rLottieDrawable.destroyWhenDone && rLottieDrawable.nativePtr != 0) {
+                        RLottieDrawable.this.startTime = System.currentTimeMillis();
                         ThreadPoolExecutor access$200 = RLottieDrawable.lottieCacheGenerateQueue;
                         RLottieDrawable rLottieDrawable2 = RLottieDrawable.this;
-                        RLottieDrawable$5$$ExternalSyntheticLambda0 rLottieDrawable$5$$ExternalSyntheticLambda0 = new RLottieDrawable$5$$ExternalSyntheticLambda0(this);
-                        rLottieDrawable2.cacheGenerateTask = rLottieDrawable$5$$ExternalSyntheticLambda0;
-                        access$200.execute(rLottieDrawable$5$$ExternalSyntheticLambda0);
+                        RLottieDrawable$4$$ExternalSyntheticLambda0 rLottieDrawable$4$$ExternalSyntheticLambda0 = new RLottieDrawable$4$$ExternalSyntheticLambda0(this);
+                        rLottieDrawable2.cacheGenerateTask = rLottieDrawable$4$$ExternalSyntheticLambda0;
+                        access$200.execute(rLottieDrawable$4$$ExternalSyntheticLambda0);
                     }
                 }
-                RLottieDrawable.this.decodeFrameFinishedInternal();
             }
 
             /* access modifiers changed from: private */
             public /* synthetic */ void lambda$run$0() {
+                long j = RLottieDrawable.this.nativePtr;
                 RLottieDrawable rLottieDrawable = RLottieDrawable.this;
-                if (rLottieDrawable.cacheGenerateTask != null) {
-                    long j = rLottieDrawable.nativePtr;
-                    RLottieDrawable rLottieDrawable2 = RLottieDrawable.this;
-                    RLottieDrawable.createCache(j, rLottieDrawable2.width, rLottieDrawable2.height);
-                    RLottieDrawable.uiHandler.post(RLottieDrawable.this.uiRunnableCacheFinished);
-                }
+                RLottieDrawable.createCache(j, rLottieDrawable.width, rLottieDrawable.height);
+                RLottieDrawable.uiHandler.post(RLottieDrawable.this.uiRunnableCacheFinished);
+            }
+        };
+        this.uiRunnableCacheFinished = new Runnable() {
+            public void run() {
+                RLottieDrawable.this.cacheGenerateTask = null;
+                RLottieDrawable.generatingCacheFiles.remove(RLottieDrawable.this.cacheFile.getPath());
+                RLottieDrawable.this.decodeFrameFinishedInternal();
             }
         };
         this.loadFrameRunnable = new Runnable() {
@@ -423,6 +427,10 @@ public class RLottieDrawable extends BitmapDrawable implements Animatable {
         if (this.nativePtr == 0) {
             file.delete();
         }
+        String cacheFile2 = getCacheFile(this.nativePtr);
+        if (cacheFile2 != null) {
+            this.cacheFile = new File(cacheFile2);
+        }
         if (this.shouldLimitFps && iArr2[1] < 60) {
             this.shouldLimitFps = false;
         }
@@ -451,13 +459,6 @@ public class RLottieDrawable extends BitmapDrawable implements Animatable {
                 }
             }
         };
-        this.uiRunnableCacheFinished = new Runnable() {
-            public void run() {
-                RLottieDrawable rLottieDrawable = RLottieDrawable.this;
-                rLottieDrawable.cacheGenerateTask = null;
-                rLottieDrawable.decodeFrameFinishedInternal();
-            }
-        };
         this.uiRunnable = new Runnable() {
             public void run() {
                 boolean unused = RLottieDrawable.this.singleFrameDecoded = true;
@@ -481,25 +482,29 @@ public class RLottieDrawable extends BitmapDrawable implements Animatable {
                 if (!RLottieDrawable.this.isRecycled) {
                     RLottieDrawable rLottieDrawable = RLottieDrawable.this;
                     if (!rLottieDrawable.destroyWhenDone && rLottieDrawable.nativePtr != 0) {
+                        RLottieDrawable.this.startTime = System.currentTimeMillis();
                         ThreadPoolExecutor access$200 = RLottieDrawable.lottieCacheGenerateQueue;
                         RLottieDrawable rLottieDrawable2 = RLottieDrawable.this;
-                        RLottieDrawable$5$$ExternalSyntheticLambda0 rLottieDrawable$5$$ExternalSyntheticLambda0 = new RLottieDrawable$5$$ExternalSyntheticLambda0(this);
-                        rLottieDrawable2.cacheGenerateTask = rLottieDrawable$5$$ExternalSyntheticLambda0;
-                        access$200.execute(rLottieDrawable$5$$ExternalSyntheticLambda0);
+                        RLottieDrawable$4$$ExternalSyntheticLambda0 rLottieDrawable$4$$ExternalSyntheticLambda0 = new RLottieDrawable$4$$ExternalSyntheticLambda0(this);
+                        rLottieDrawable2.cacheGenerateTask = rLottieDrawable$4$$ExternalSyntheticLambda0;
+                        access$200.execute(rLottieDrawable$4$$ExternalSyntheticLambda0);
                     }
                 }
-                RLottieDrawable.this.decodeFrameFinishedInternal();
             }
 
             /* access modifiers changed from: private */
             public /* synthetic */ void lambda$run$0() {
+                long j = RLottieDrawable.this.nativePtr;
                 RLottieDrawable rLottieDrawable = RLottieDrawable.this;
-                if (rLottieDrawable.cacheGenerateTask != null) {
-                    long j = rLottieDrawable.nativePtr;
-                    RLottieDrawable rLottieDrawable2 = RLottieDrawable.this;
-                    RLottieDrawable.createCache(j, rLottieDrawable2.width, rLottieDrawable2.height);
-                    RLottieDrawable.uiHandler.post(RLottieDrawable.this.uiRunnableCacheFinished);
-                }
+                RLottieDrawable.createCache(j, rLottieDrawable.width, rLottieDrawable.height);
+                RLottieDrawable.uiHandler.post(RLottieDrawable.this.uiRunnableCacheFinished);
+            }
+        };
+        this.uiRunnableCacheFinished = new Runnable() {
+            public void run() {
+                RLottieDrawable.this.cacheGenerateTask = null;
+                RLottieDrawable.generatingCacheFiles.remove(RLottieDrawable.this.cacheFile.getPath());
+                RLottieDrawable.this.decodeFrameFinishedInternal();
             }
         };
         this.loadFrameRunnable = new Runnable() {
@@ -707,13 +712,6 @@ public class RLottieDrawable extends BitmapDrawable implements Animatable {
                 }
             }
         };
-        this.uiRunnableCacheFinished = new Runnable() {
-            public void run() {
-                RLottieDrawable rLottieDrawable = RLottieDrawable.this;
-                rLottieDrawable.cacheGenerateTask = null;
-                rLottieDrawable.decodeFrameFinishedInternal();
-            }
-        };
         this.uiRunnable = new Runnable() {
             public void run() {
                 boolean unused = RLottieDrawable.this.singleFrameDecoded = true;
@@ -737,25 +735,29 @@ public class RLottieDrawable extends BitmapDrawable implements Animatable {
                 if (!RLottieDrawable.this.isRecycled) {
                     RLottieDrawable rLottieDrawable = RLottieDrawable.this;
                     if (!rLottieDrawable.destroyWhenDone && rLottieDrawable.nativePtr != 0) {
+                        RLottieDrawable.this.startTime = System.currentTimeMillis();
                         ThreadPoolExecutor access$200 = RLottieDrawable.lottieCacheGenerateQueue;
                         RLottieDrawable rLottieDrawable2 = RLottieDrawable.this;
-                        RLottieDrawable$5$$ExternalSyntheticLambda0 rLottieDrawable$5$$ExternalSyntheticLambda0 = new RLottieDrawable$5$$ExternalSyntheticLambda0(this);
-                        rLottieDrawable2.cacheGenerateTask = rLottieDrawable$5$$ExternalSyntheticLambda0;
-                        access$200.execute(rLottieDrawable$5$$ExternalSyntheticLambda0);
+                        RLottieDrawable$4$$ExternalSyntheticLambda0 rLottieDrawable$4$$ExternalSyntheticLambda0 = new RLottieDrawable$4$$ExternalSyntheticLambda0(this);
+                        rLottieDrawable2.cacheGenerateTask = rLottieDrawable$4$$ExternalSyntheticLambda0;
+                        access$200.execute(rLottieDrawable$4$$ExternalSyntheticLambda0);
                     }
                 }
-                RLottieDrawable.this.decodeFrameFinishedInternal();
             }
 
             /* access modifiers changed from: private */
             public /* synthetic */ void lambda$run$0() {
+                long j = RLottieDrawable.this.nativePtr;
                 RLottieDrawable rLottieDrawable = RLottieDrawable.this;
-                if (rLottieDrawable.cacheGenerateTask != null) {
-                    long j = rLottieDrawable.nativePtr;
-                    RLottieDrawable rLottieDrawable2 = RLottieDrawable.this;
-                    RLottieDrawable.createCache(j, rLottieDrawable2.width, rLottieDrawable2.height);
-                    RLottieDrawable.uiHandler.post(RLottieDrawable.this.uiRunnableCacheFinished);
-                }
+                RLottieDrawable.createCache(j, rLottieDrawable.width, rLottieDrawable.height);
+                RLottieDrawable.uiHandler.post(RLottieDrawable.this.uiRunnableCacheFinished);
+            }
+        };
+        this.uiRunnableCacheFinished = new Runnable() {
+            public void run() {
+                RLottieDrawable.this.cacheGenerateTask = null;
+                RLottieDrawable.generatingCacheFiles.remove(RLottieDrawable.this.cacheFile.getPath());
+                RLottieDrawable.this.decodeFrameFinishedInternal();
             }
         };
         this.loadFrameRunnable = new Runnable() {
@@ -1052,13 +1054,6 @@ public class RLottieDrawable extends BitmapDrawable implements Animatable {
                 }
             }
         };
-        this.uiRunnableCacheFinished = new Runnable() {
-            public void run() {
-                RLottieDrawable rLottieDrawable = RLottieDrawable.this;
-                rLottieDrawable.cacheGenerateTask = null;
-                rLottieDrawable.decodeFrameFinishedInternal();
-            }
-        };
         this.uiRunnable = new Runnable() {
             public void run() {
                 boolean unused = RLottieDrawable.this.singleFrameDecoded = true;
@@ -1082,25 +1077,29 @@ public class RLottieDrawable extends BitmapDrawable implements Animatable {
                 if (!RLottieDrawable.this.isRecycled) {
                     RLottieDrawable rLottieDrawable = RLottieDrawable.this;
                     if (!rLottieDrawable.destroyWhenDone && rLottieDrawable.nativePtr != 0) {
+                        RLottieDrawable.this.startTime = System.currentTimeMillis();
                         ThreadPoolExecutor access$200 = RLottieDrawable.lottieCacheGenerateQueue;
                         RLottieDrawable rLottieDrawable2 = RLottieDrawable.this;
-                        RLottieDrawable$5$$ExternalSyntheticLambda0 rLottieDrawable$5$$ExternalSyntheticLambda0 = new RLottieDrawable$5$$ExternalSyntheticLambda0(this);
-                        rLottieDrawable2.cacheGenerateTask = rLottieDrawable$5$$ExternalSyntheticLambda0;
-                        access$200.execute(rLottieDrawable$5$$ExternalSyntheticLambda0);
+                        RLottieDrawable$4$$ExternalSyntheticLambda0 rLottieDrawable$4$$ExternalSyntheticLambda0 = new RLottieDrawable$4$$ExternalSyntheticLambda0(this);
+                        rLottieDrawable2.cacheGenerateTask = rLottieDrawable$4$$ExternalSyntheticLambda0;
+                        access$200.execute(rLottieDrawable$4$$ExternalSyntheticLambda0);
                     }
                 }
-                RLottieDrawable.this.decodeFrameFinishedInternal();
             }
 
             /* access modifiers changed from: private */
             public /* synthetic */ void lambda$run$0() {
+                long j = RLottieDrawable.this.nativePtr;
                 RLottieDrawable rLottieDrawable = RLottieDrawable.this;
-                if (rLottieDrawable.cacheGenerateTask != null) {
-                    long j = rLottieDrawable.nativePtr;
-                    RLottieDrawable rLottieDrawable2 = RLottieDrawable.this;
-                    RLottieDrawable.createCache(j, rLottieDrawable2.width, rLottieDrawable2.height);
-                    RLottieDrawable.uiHandler.post(RLottieDrawable.this.uiRunnableCacheFinished);
-                }
+                RLottieDrawable.createCache(j, rLottieDrawable.width, rLottieDrawable.height);
+                RLottieDrawable.uiHandler.post(RLottieDrawable.this.uiRunnableCacheFinished);
+            }
+        };
+        this.uiRunnableCacheFinished = new Runnable() {
+            public void run() {
+                RLottieDrawable.this.cacheGenerateTask = null;
+                RLottieDrawable.generatingCacheFiles.remove(RLottieDrawable.this.cacheFile.getPath());
+                RLottieDrawable.this.decodeFrameFinishedInternal();
             }
         };
         this.loadFrameRunnable = new Runnable() {

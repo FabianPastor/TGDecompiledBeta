@@ -12,6 +12,7 @@ import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.UserConfig;
 import org.telegram.ui.ActionBar.BaseFragment;
@@ -349,9 +350,15 @@ public class DoubledLimitsBottomSheet extends BottomSheetWithRecyclerListView im
             r2.addView(r3, r4)
             org.telegram.ui.Components.Premium.PremiumButtonView r2 = r0.premiumButtonView
             android.widget.TextView r2 = r2.buttonTextView
-            org.telegram.ui.Components.Premium.DoubledLimitsBottomSheet$$ExternalSyntheticLambda0 r3 = new org.telegram.ui.Components.Premium.DoubledLimitsBottomSheet$$ExternalSyntheticLambda0
-            r3.<init>(r0, r1)
+            org.telegram.ui.Components.Premium.DoubledLimitsBottomSheet$$ExternalSyntheticLambda1 r3 = new org.telegram.ui.Components.Premium.DoubledLimitsBottomSheet$$ExternalSyntheticLambda1
+            r4 = r27
+            r3.<init>(r0, r4, r1)
             r2.setOnClickListener(r3)
+            org.telegram.ui.Components.Premium.PremiumButtonView r1 = r0.premiumButtonView
+            android.widget.TextView r1 = r1.overlayTextView
+            org.telegram.ui.Components.Premium.DoubledLimitsBottomSheet$$ExternalSyntheticLambda0 r2 = new org.telegram.ui.Components.Premium.DoubledLimitsBottomSheet$$ExternalSyntheticLambda0
+            r2.<init>(r0)
+            r1.setOnClickListener(r2)
             int r1 = r25.getCurrentAccount()
             org.telegram.messenger.UserConfig r1 = org.telegram.messenger.UserConfig.getInstance(r1)
             boolean r1 = r1.isPremium()
@@ -362,20 +369,22 @@ public class DoubledLimitsBottomSheet extends BottomSheetWithRecyclerListView im
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$new$0(BaseFragment baseFragment, View view) {
-        PremiumPreviewFragment.buyPremium(baseFragment, "double_limits");
+    public /* synthetic */ void lambda$new$0(int i, BaseFragment baseFragment, View view) {
+        if (!UserConfig.getInstance(i).isPremium()) {
+            PremiumPreviewFragment.buyPremium(baseFragment, "double_limits");
+        }
+        dismiss();
+    }
+
+    /* access modifiers changed from: private */
+    public /* synthetic */ void lambda$new$1(View view) {
         dismiss();
     }
 
     private void bindPremium(boolean z) {
-        int i = 8;
-        this.divider.setVisibility(z ? 8 : 0);
-        this.recyclerListView.setPadding(0, 0, 0, z ? 0 : AndroidUtilities.dp(72.0f));
-        PremiumButtonView premiumButtonView2 = this.premiumButtonView;
-        if (!z) {
-            i = 0;
+        if (z) {
+            this.premiumButtonView.setOverlayText(LocaleController.getString("OK", NUM), false);
         }
-        premiumButtonView2.setVisibility(i);
     }
 
     /* access modifiers changed from: protected */

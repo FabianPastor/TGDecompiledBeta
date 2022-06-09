@@ -245,6 +245,10 @@ public class AndroidUtilities {
         return i2;
     }
 
+    public static boolean isAccessibilityScreenReaderEnabled() {
+        return false;
+    }
+
     public static boolean isValidWallChar(char c) {
         return c == '-' || c == '~';
     }
@@ -5217,18 +5221,6 @@ public class AndroidUtilities {
             Double.parseDouble(str);
             return true;
         } catch (NumberFormatException unused) {
-            return false;
-        }
-    }
-
-    public static boolean isAccessibilityScreenReaderEnabled() {
-        try {
-            AccessibilityManager accessibilityManager2 = (AccessibilityManager) ApplicationLoader.applicationContext.getSystemService("accessibility");
-            if (accessibilityManager2 == null || !accessibilityManager2.isEnabled() || accessibilityManager2.getEnabledAccessibilityServiceList(1).isEmpty()) {
-                return false;
-            }
-            return true;
-        } catch (Exception unused) {
             return false;
         }
     }

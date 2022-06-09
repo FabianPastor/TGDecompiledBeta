@@ -33,7 +33,7 @@ final class W1 extends CLASSNAMEa2 implements CLASSNAMEu1 {
     }
 
     /* renamed from: spliterator  reason: collision with other method in class */
-    public w m569spliterator() {
+    public w m571spliterator() {
         return L.b();
     }
 

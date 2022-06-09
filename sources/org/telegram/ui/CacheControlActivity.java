@@ -552,7 +552,7 @@ public class CacheControlActivity extends BaseFragment implements NotificationCe
         getMediaDataController().ringtoneDataStore.checkRingtoneSoundsLoaded();
         this.cacheRemovedTooltip.setInfoText(LocaleController.formatString("CacheWasCleared", NUM, AndroidUtilities.formatFileSize(j)));
         this.cacheRemovedTooltip.showWithAction(0, 19, (Runnable) null, (Runnable) null);
-        MediaDataController.getInstance(this.currentAccount).chekAllMedia();
+        MediaDataController.getInstance(this.currentAccount).chekAllMedia(true);
     }
 
     public View createView(Context context) {

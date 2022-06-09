@@ -9107,15 +9107,16 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
 
     public void setEditingMessageObject(MessageObject messageObject, boolean z) {
         MessageObject messageObject2;
+        boolean z2;
         CharSequence charSequence;
         ArrayList<TLRPC$MessageEntity> arrayList;
         MessageObject messageObject3 = messageObject;
-        boolean z2 = z;
+        boolean z3 = z;
         if (this.audioToSend == null && this.videoToSendMessageObject == null && (messageObject2 = this.editingMessageObject) != messageObject3) {
             int i = 1;
-            boolean z3 = messageObject2 != null;
+            boolean z4 = messageObject2 != null;
             this.editingMessageObject = messageObject3;
-            this.editingCaption = z2;
+            this.editingCaption = z3;
             if (messageObject3 != null) {
                 AnimatorSet animatorSet = this.doneButtonAnimation;
                 if (animatorSet != null) {
@@ -9127,7 +9128,7 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
                 this.doneButtonImage.setScaleY(0.1f);
                 this.doneButtonImage.setAlpha(0.0f);
                 this.doneButtonImage.animate().alpha(1.0f).scaleX(1.0f).scaleY(1.0f).setDuration(150).setInterpolator(CubicBezierInterpolator.DEFAULT).start();
-                if (z2) {
+                if (z3) {
                     this.currentLimit = this.accountInstance.getMessagesController().maxCaptionLength;
                     charSequence = this.editingMessageObject.caption;
                 } else {
@@ -9230,7 +9231,7 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
                     }
                     charSequence2 = Emoji.replaceEmoji(new SpannableStringBuilder(spannableStringBuilder), this.messageEditText.getPaint().getFontMetricsInt(), AndroidUtilities.dp(20.0f), false);
                 }
-                if (this.draftMessage == null && !z3) {
+                if (this.draftMessage == null && !z4) {
                     this.draftMessage = this.messageEditText.length() > 0 ? this.messageEditText.getText() : null;
                     this.draftSearchWebpage = this.messageWebPageSearch;
                 }
@@ -9262,6 +9263,7 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
                 if (imageView != null) {
                     imageView.setVisibility(8);
                 }
+                z2 = true;
             } else {
                 Runnable runnable2 = this.setTextFieldRunnable;
                 if (runnable2 != null) {
@@ -9334,10 +9336,11 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
                 if (getVisibility() == 0) {
                     this.delegate.onAttachButtonShow();
                 }
+                z2 = true;
                 updateFieldRight(1);
             }
-            updateFieldHint(false);
-            updateSendAsButton(false);
+            updateFieldHint(z2);
+            updateSendAsButton(z2);
         }
     }
 
@@ -9874,6 +9877,7 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
     }
 
     public void updateSendAsButton(boolean z) {
+        float f;
         ChatActivity chatActivity = this.parentFragment;
         if (chatActivity != null && this.delegate != null) {
             TLRPC$ChatFull chatFull = chatActivity.getMessagesController().getChatFull(-this.dialog_id);
@@ -9898,11 +9902,13 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
             boolean z3 = tLRPC$Peer != null && (this.delegate.getSendAsPeers() == null || this.delegate.getSendAsPeers().peers.size() > 1) && !isEditingMessage() && !isRecordingAudioVideo() && this.recordedAudioPanel.getVisibility() != 0;
             int dp = AndroidUtilities.dp(2.0f);
             ViewGroup.MarginLayoutParams marginLayoutParams = (ViewGroup.MarginLayoutParams) this.senderSelectView.getLayoutParams();
-            float f = 0.0f;
-            float f2 = z3 ? 0.0f : 1.0f;
-            float f3 = z3 ? (float) (((-this.senderSelectView.getLayoutParams().width) - marginLayoutParams.leftMargin) - dp) : 0.0f;
-            float f4 = z3 ? 1.0f : 0.0f;
-            if (!z3) {
+            float f2 = 0.0f;
+            float f3 = z3 ? 0.0f : 1.0f;
+            float f4 = z3 ? (float) (((-this.senderSelectView.getLayoutParams().width) - marginLayoutParams.leftMargin) - dp) : 0.0f;
+            float f5 = z3 ? 1.0f : 0.0f;
+            if (z3) {
+                f = 0.0f;
+            } else {
                 f = (float) (((-this.senderSelectView.getLayoutParams().width) - marginLayoutParams.leftMargin) - dp);
             }
             if (z2 != z3) {
@@ -9914,30 +9920,33 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
                 if (this.parentFragment.getOtherSameChatsDiff() != 0 || !this.parentFragment.fragmentOpened || !z) {
                     this.senderSelectView.setVisibility(z3 ? 0 : 8);
                     this.senderSelectView.setTranslationX(f);
-                    for (ImageView translationX : this.emojiButton) {
-                        translationX.setTranslationX(f);
+                    if (z3) {
+                        f2 = f;
                     }
-                    this.messageEditText.setTranslationX(f);
-                    this.senderSelectView.setAlpha(f4);
+                    for (ImageView translationX : this.emojiButton) {
+                        translationX.setTranslationX(f2);
+                    }
+                    this.messageEditText.setTranslationX(f2);
+                    this.senderSelectView.setAlpha(f5);
                     this.senderSelectView.setTag((Object) null);
                     return;
                 }
                 ValueAnimator duration = ValueAnimator.ofFloat(new float[]{0.0f, 1.0f}).setDuration(150);
-                this.senderSelectView.setTranslationX(f3);
+                this.senderSelectView.setTranslationX(f4);
                 this.messageEditText.setTranslationX(this.senderSelectView.getTranslationX());
-                final float f5 = f3;
-                duration.addUpdateListener(new ChatActivityEnterView$$ExternalSyntheticLambda5(this, f2, f4, f5, f));
+                final float f6 = f4;
+                duration.addUpdateListener(new ChatActivityEnterView$$ExternalSyntheticLambda5(this, f3, f5, f6, f));
                 final boolean z4 = z3;
-                final float f6 = f2;
-                final float f7 = f4;
-                final float f8 = f;
+                final float f7 = f3;
+                final float f8 = f5;
+                final float f9 = f;
                 duration.addListener(new AnimatorListenerAdapter() {
                     public void onAnimationStart(Animator animator) {
                         if (z4) {
                             ChatActivityEnterView.this.senderSelectView.setVisibility(0);
                         }
-                        ChatActivityEnterView.this.senderSelectView.setAlpha(f6);
-                        ChatActivityEnterView.this.senderSelectView.setTranslationX(f5);
+                        ChatActivityEnterView.this.senderSelectView.setAlpha(f7);
+                        ChatActivityEnterView.this.senderSelectView.setTranslationX(f6);
                         for (ImageView translationX : ChatActivityEnterView.this.emojiButton) {
                             translationX.setTranslationX(ChatActivityEnterView.this.senderSelectView.getTranslationX());
                         }
@@ -9964,8 +9973,8 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
                         } else {
                             ChatActivityEnterView.this.senderSelectView.setVisibility(8);
                         }
-                        ChatActivityEnterView.this.senderSelectView.setAlpha(f7);
-                        ChatActivityEnterView.this.senderSelectView.setTranslationX(f8);
+                        ChatActivityEnterView.this.senderSelectView.setAlpha(f8);
+                        ChatActivityEnterView.this.senderSelectView.setTranslationX(f9);
                         for (ImageView translationX : ChatActivityEnterView.this.emojiButton) {
                             translationX.setTranslationX(ChatActivityEnterView.this.senderSelectView.getTranslationX());
                         }

@@ -628,8 +628,8 @@ public class LimitReachedBottomSheet extends BottomSheetWithRecyclerListView {
             limitParams2.premiumLimit = 4;
             limitParams2.icon = NUM;
             limitParams2.descriptionStr = LocaleController.formatString("LimitReachedAccounts", NUM, 3, Integer.valueOf(limitParams2.premiumLimit));
-            limitParams2.descriptionStrPremium = LocaleController.formatString("LimitReachedAccountsPremium", NUM, new Object[0]);
-            limitParams2.descriptionStrLocked = LocaleController.formatString("LimitReachedAccountsPremium", NUM, new Object[0]);
+            limitParams2.descriptionStrPremium = LocaleController.formatString("LimitReachedAccountsPremium", NUM, Integer.valueOf(limitParams2.premiumLimit));
+            limitParams2.descriptionStrLocked = LocaleController.formatString("LimitReachedAccountsPremium", NUM, Integer.valueOf(limitParams2.defaultLimit));
         }
         return limitParams2;
     }
