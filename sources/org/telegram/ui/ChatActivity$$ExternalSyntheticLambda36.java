@@ -1,18 +1,17 @@
 package org.telegram.ui;
 
 import android.content.DialogInterface;
-import org.telegram.messenger.MessageObject;
 
 public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda36 implements DialogInterface.OnClickListener {
     public final /* synthetic */ ChatActivity f$0;
-    public final /* synthetic */ MessageObject f$1;
+    public final /* synthetic */ String f$1;
 
-    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda36(ChatActivity chatActivity, MessageObject messageObject) {
+    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda36(ChatActivity chatActivity, String str) {
         this.f$0 = chatActivity;
-        this.f$1 = messageObject;
+        this.f$1 = str;
     }
 
     public final void onClick(DialogInterface dialogInterface, int i) {
-        this.f$0.lambda$processSelectedOption$210(this.f$1, dialogInterface, i);
+        this.f$0.lambda$didPressMessageUrl$243(this.f$1, dialogInterface, i);
     }
 }

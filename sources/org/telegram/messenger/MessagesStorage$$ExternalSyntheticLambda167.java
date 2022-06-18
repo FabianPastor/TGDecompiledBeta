@@ -18,6 +18,6 @@ public final /* synthetic */ class MessagesStorage$$ExternalSyntheticLambda167 i
     }
 
     public final void run() {
-        this.f$0.lambda$putEncryptedChat$141(this.f$1, this.f$2, this.f$3);
+        this.f$0.lambda$putEncryptedChat$142(this.f$1, this.f$2, this.f$3);
     }
 }

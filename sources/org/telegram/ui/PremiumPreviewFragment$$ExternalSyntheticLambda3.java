@@ -1,17 +1,13 @@
 package org.telegram.ui;
 
-import java.util.Comparator;
-import org.telegram.messenger.MessagesController;
-import org.telegram.ui.PremiumPreviewFragment;
+public final /* synthetic */ class PremiumPreviewFragment$$ExternalSyntheticLambda3 implements Runnable {
+    public final /* synthetic */ PremiumPreviewFragment f$0;
 
-public final /* synthetic */ class PremiumPreviewFragment$$ExternalSyntheticLambda3 implements Comparator {
-    public final /* synthetic */ MessagesController f$0;
-
-    public /* synthetic */ PremiumPreviewFragment$$ExternalSyntheticLambda3(MessagesController messagesController) {
-        this.f$0 = messagesController;
+    public /* synthetic */ PremiumPreviewFragment$$ExternalSyntheticLambda3(PremiumPreviewFragment premiumPreviewFragment) {
+        this.f$0 = premiumPreviewFragment;
     }
 
-    public final int compare(Object obj, Object obj2) {
-        return PremiumPreviewFragment.lambda$fillPremiumFeaturesList$3(this.f$0, (PremiumPreviewFragment.PremiumFeatureData) obj, (PremiumPreviewFragment.PremiumFeatureData) obj2);
+    public final void run() {
+        this.f$0.lambda$createView$2();
     }
 }

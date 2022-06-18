@@ -10,6 +10,6 @@ public final /* synthetic */ class LoginActivity$LoginActivitySmsView$$ExternalS
     }
 
     public final void run() {
-        this.f$0.lambda$onShow$38();
+        this.f$0.lambda$tryHideProgress$15();
     }
 }

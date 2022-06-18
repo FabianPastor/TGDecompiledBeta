@@ -14,6 +14,6 @@ public final /* synthetic */ class MessagesStorage$$ExternalSyntheticLambda160 i
     }
 
     public final void run() {
-        this.f$0.lambda$updateChatInfo$100(this.f$1, this.f$2);
+        this.f$0.lambda$updateChatInfo$101(this.f$1, this.f$2);
     }
 }

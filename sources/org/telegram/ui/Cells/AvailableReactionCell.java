@@ -95,9 +95,9 @@ public class AvailableReactionCell extends FrameLayout {
             java.lang.String r3 = "windowBackgroundGray"
             org.telegram.messenger.SvgHelper$SvgDrawable r8 = org.telegram.messenger.DocumentObject.getSvgThumb((org.telegram.tgnet.TLRPC$Document) r1, (java.lang.String) r3, (float) r2)
             org.telegram.ui.Components.BackupImageView r4 = r10.imageView
-            org.telegram.tgnet.TLRPC$Document r1 = r11.static_icon
+            org.telegram.tgnet.TLRPC$Document r1 = r11.center_icon
             org.telegram.messenger.ImageLocation r5 = org.telegram.messenger.ImageLocation.getForDocument(r1)
-            java.lang.String r6 = "50_50"
+            java.lang.String r6 = "40_40_lastframe"
             java.lang.String r7 = "webp"
             r9 = r11
             r4.setImage((org.telegram.messenger.ImageLocation) r5, (java.lang.String) r6, (java.lang.String) r7, (android.graphics.drawable.Drawable) r8, (java.lang.Object) r9)

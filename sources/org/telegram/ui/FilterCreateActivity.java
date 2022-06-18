@@ -1326,7 +1326,7 @@ public class FilterCreateActivity extends BaseFragment {
                 if (r5 == 0) goto L_0x0395
                 boolean r11 = r5.bot
                 if (r11 == 0) goto L_0x01e6
-                r11 = 2131624698(0x7f0e02fa, float:1.8876583E38)
+                r11 = 2131624697(0x7f0e02f9, float:1.8876581E38)
                 java.lang.String r12 = "Bot"
                 java.lang.String r11 = org.telegram.messenger.LocaleController.getString(r12, r11)
             L_0x01e4:
@@ -1378,7 +1378,7 @@ public class FilterCreateActivity extends BaseFragment {
                 java.lang.String r11 = org.telegram.messenger.LocaleController.getString(r12, r11)
                 goto L_0x0226
             L_0x0244:
-                r11 = 2131626577(0x7f0e0a51, float:1.8880394E38)
+                r11 = 2131626578(0x7f0e0a52, float:1.8880396E38)
                 java.lang.String r12 = "MegaPrivate"
                 java.lang.String r11 = org.telegram.messenger.LocaleController.getString(r12, r11)
                 goto L_0x0226
@@ -1392,7 +1392,7 @@ public class FilterCreateActivity extends BaseFragment {
                 java.lang.String r11 = org.telegram.messenger.LocaleController.getString(r12, r11)
                 goto L_0x0226
             L_0x0262:
-                r11 = 2131626580(0x7f0e0a54, float:1.88804E38)
+                r11 = 2131626581(0x7f0e0a55, float:1.8880402E38)
                 java.lang.String r12 = "MegaPublic"
                 java.lang.String r11 = org.telegram.messenger.LocaleController.getString(r12, r11)
                 goto L_0x0226

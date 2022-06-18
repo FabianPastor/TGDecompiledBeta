@@ -223,6 +223,7 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
     public ImageView cancelBotButton;
     /* access modifiers changed from: private */
     public NumberTextView captionLimitView;
+    private float chatSearchExpandOffset;
     private boolean clearBotButtonsOnKeyboardOpen;
     /* access modifiers changed from: private */
     public boolean closeAnimationInProgress;
@@ -2943,7 +2944,7 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
             r1.setOnClickListener(r2)
             android.widget.ImageView[] r1 = r7.emojiButton
             r1 = r1[r0]
-            r2 = 2131623977(0x7f0e0029, float:1.887512E38)
+            r2 = 2131623978(0x7f0e002a, float:1.8875123E38)
             java.lang.String r6 = "AccDescrEmojiButton"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r6, r2)
             r1.setContentDescription(r2)
@@ -3158,7 +3159,7 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
             r5 = 8
             r1.setVisibility(r5)
             android.widget.ImageView r1 = r7.scheduledButton
-            r5 = 2131628073(0x7f0e1029, float:1.8883428E38)
+            r5 = 2131628078(0x7f0e102e, float:1.8883439E38)
             java.lang.String r6 = "ScheduledMessages"
             java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r6, r5)
             r1.setContentDescription(r5)
@@ -3330,11 +3331,11 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
             android.widget.ImageView r1 = r7.notifyButton
             boolean r2 = r7.silent
             if (r2 == 0) goto L_0x0627
-            r2 = 2131623968(0x7f0e0020, float:1.8875102E38)
+            r2 = 2131623969(0x7f0e0021, float:1.8875104E38)
             java.lang.String r3 = "AccDescrChanSilentOn"
             goto L_0x062c
         L_0x0627:
-            r2 = 2131623967(0x7f0e001f, float:1.88751E38)
+            r2 = 2131623968(0x7f0e0020, float:1.8875102E38)
             java.lang.String r3 = "AccDescrChanSilentOff"
         L_0x062c:
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
@@ -3407,7 +3408,7 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
             r1.<init>(r7)
             r0.setOnClickListener(r1)
             android.widget.ImageView r0 = r7.attachButton
-            r1 = 2131623955(0x7f0e0013, float:1.8875076E38)
+            r1 = 2131623956(0x7f0e0014, float:1.8875078E38)
             java.lang.String r2 = "AccDescrAttachButton"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             r0.setContentDescription(r1)
@@ -3464,7 +3465,7 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
             android.widget.ImageView$ScaleType r1 = android.widget.ImageView.ScaleType.CENTER
             r0.setScaleType(r1)
             org.telegram.ui.Components.RLottieImageView r0 = r7.recordDeleteImageView
-            r1 = 2131558418(0x7f0d0012, float:1.8742151E38)
+            r1 = 2131558419(0x7f0d0013, float:1.8742153E38)
             r2 = 28
             r3 = 28
             r0.setAnimation(r1, r2, r3)
@@ -3584,7 +3585,7 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
             android.widget.ImageView$ScaleType r3 = android.widget.ImageView.ScaleType.MATRIX
             r2.setScaleType(r3)
             android.widget.ImageView r2 = r7.recordedAudioPlayButton
-            r3 = 2131623950(0x7f0e000e, float:1.8875066E38)
+            r3 = 2131623951(0x7f0e000f, float:1.8875068E38)
             java.lang.String r6 = "AccActionPlay"
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r6, r3)
             r2.setContentDescription(r3)
@@ -3740,7 +3741,7 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
             int r2 = org.telegram.messenger.AndroidUtilities.dp(r2)
             r1.setPadding(r11, r11, r2, r11)
             android.widget.ImageView r1 = r7.audioSendButton
-            r2 = 2131624107(0x7f0e00ab, float:1.8875384E38)
+            r2 = 2131624103(0x7f0e00a7, float:1.8875376E38)
             java.lang.String r6 = "AccDescrVoiceMessage"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r6, r2)
             r1.setContentDescription(r2)
@@ -3777,7 +3778,7 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
             int r2 = org.telegram.messenger.AndroidUtilities.dp(r2)
             r1.setPadding(r11, r11, r2, r11)
             android.widget.ImageView r1 = r7.videoSendButton
-            r2 = 2131624105(0x7f0e00a9, float:1.887538E38)
+            r2 = 2131624101(0x7f0e00a5, float:1.8875372E38)
             java.lang.String r6 = "AccDescrVideoMessage"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r6, r2)
             r1.setContentDescription(r2)
@@ -3825,7 +3826,7 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
             r7.progressDrawable = r6
             r1.setImageDrawable(r6)
             android.widget.ImageView r1 = r7.cancelBotButton
-            r6 = 2131624813(0x7f0e036d, float:1.8876816E38)
+            r6 = 2131624812(0x7f0e036c, float:1.8876814E38)
             java.lang.String r9 = "Cancel"
             java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r9, r6)
             r1.setContentDescription(r6)
@@ -3892,7 +3893,7 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
             java.lang.String r1 = "chat_messagePanelSend"
             int r1 = r7.getThemedColor(r1)
             android.view.View r6 = r7.sendButton
-            r9 = 2131628164(0x7f0e1084, float:1.8883613E38)
+            r9 = 2131628169(0x7f0e1089, float:1.8883623E38)
             java.lang.String r10 = "Send"
             java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r10, r9)
             r6.setContentDescription(r9)
@@ -4007,7 +4008,7 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
             r1.<init>(r7)
             r0.setOnClickListener(r1)
             android.widget.ImageView r0 = r7.expandStickersButton
-            r1 = 2131623978(0x7f0e002a, float:1.8875123E38)
+            r1 = 2131623979(0x7f0e002b, float:1.8875125E38)
             java.lang.String r3 = "AccDescrExpandPanel"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r3, r1)
             r0.setContentDescription(r1)
@@ -4970,7 +4971,7 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
         if (z) {
             canvas.save();
             if (view == this.textFieldContainer) {
-                int dp = this.animatedTop + AndroidUtilities.dp(2.0f);
+                int dp = (int) (((float) (this.animatedTop + AndroidUtilities.dp(2.0f))) + this.chatSearchExpandOffset);
                 View view2 = this.topView;
                 if (view2 != null && view2.getVisibility() == 0) {
                     dp += this.topView.getHeight();
@@ -4998,18 +4999,19 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
         Theme.chat_composeShadowDrawable.setAlpha((int) (this.composeShadowAlpha * 255.0f));
         Theme.chat_composeShadowDrawable.setBounds(0, intrinsicHeight, getMeasuredWidth(), intrinsicHeight2);
         Theme.chat_composeShadowDrawable.draw(canvas);
+        int i = (int) (((float) intrinsicHeight2) + this.chatSearchExpandOffset);
         if (this.allowBlur) {
             this.backgroundPaint.setColor(getThemedColor("chat_messagePanelBackground"));
             if (!SharedConfig.chatBlurEnabled() || this.sizeNotifierLayout == null) {
-                canvas.drawRect(0.0f, (float) intrinsicHeight2, (float) getWidth(), (float) getHeight(), this.backgroundPaint);
+                canvas.drawRect(0.0f, (float) i, (float) getWidth(), (float) getHeight(), this.backgroundPaint);
                 return;
             }
             Rect rect2 = AndroidUtilities.rectTmp2;
-            rect2.set(0, intrinsicHeight2, getWidth(), getHeight());
+            rect2.set(0, i, getWidth(), getHeight());
             this.sizeNotifierLayout.drawBlurRect(canvas, (float) getTop(), rect2, this.backgroundPaint, false);
             return;
         }
-        canvas.drawRect(0.0f, (float) intrinsicHeight2, (float) getWidth(), (float) getHeight(), getThemedPaint("paintChatComposeBackground"));
+        canvas.drawRect(0.0f, (float) i, (float) getWidth(), (float) getHeight(), getThemedPaint("paintChatComposeBackground"));
     }
 
     /* access modifiers changed from: private */
@@ -10509,14 +10511,14 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
                         if (obj3 instanceof TLRPC$Document) {
                             TLRPC$Document tLRPC$Document = (TLRPC$Document) obj3;
                             SendMessagesHelper.getInstance(ChatActivityEnterView.this.currentAccount).sendSticker(tLRPC$Document, str, ChatActivityEnterView.this.dialog_id, ChatActivityEnterView.this.replyingMessageObject, ChatActivityEnterView.this.getThreadMessage(), obj2, (MessageObject.SendAnimationData) null, z, i);
-                            MediaDataController.getInstance(ChatActivityEnterView.this.currentAccount).addRecentGif(tLRPC$Document, (int) (System.currentTimeMillis() / 1000));
+                            MediaDataController.getInstance(ChatActivityEnterView.this.currentAccount).addRecentGif(tLRPC$Document, (int) (System.currentTimeMillis() / 1000), true);
                             if (DialogObject.isEncryptedDialog(ChatActivityEnterView.this.dialog_id)) {
                                 ChatActivityEnterView.this.accountInstance.getMessagesController().saveGif(obj4, tLRPC$Document);
                             }
                         } else if (obj3 instanceof TLRPC$BotInlineResult) {
                             TLRPC$BotInlineResult tLRPC$BotInlineResult = (TLRPC$BotInlineResult) obj3;
                             if (tLRPC$BotInlineResult.document != null) {
-                                MediaDataController.getInstance(ChatActivityEnterView.this.currentAccount).addRecentGif(tLRPC$BotInlineResult.document, (int) (System.currentTimeMillis() / 1000));
+                                MediaDataController.getInstance(ChatActivityEnterView.this.currentAccount).addRecentGif(tLRPC$BotInlineResult.document, (int) (System.currentTimeMillis() / 1000), false);
                                 if (DialogObject.isEncryptedDialog(ChatActivityEnterView.this.dialog_id)) {
                                     ChatActivityEnterView.this.accountInstance.getMessagesController().saveGif(obj4, tLRPC$BotInlineResult.document);
                                 }
@@ -11443,7 +11445,7 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
     }
 
     public void addRecentGif(TLRPC$Document tLRPC$Document) {
-        MediaDataController.getInstance(this.currentAccount).addRecentGif(tLRPC$Document, (int) (System.currentTimeMillis() / 1000));
+        MediaDataController.getInstance(this.currentAccount).addRecentGif(tLRPC$Document, (int) (System.currentTimeMillis() / 1000), true);
         EmojiView emojiView2 = this.emojiView;
         if (emojiView2 != null) {
             emojiView2.addRecentGif(tLRPC$Document);
@@ -12907,5 +12909,10 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
         Theme.ResourcesProvider resourcesProvider2 = this.resourcesProvider;
         Paint paint2 = resourcesProvider2 != null ? resourcesProvider2.getPaint(str) : null;
         return paint2 != null ? paint2 : Theme.getThemePaint(str);
+    }
+
+    public void setChatSearchExpandOffset(float f) {
+        this.chatSearchExpandOffset = f;
+        invalidate();
     }
 }

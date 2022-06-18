@@ -722,11 +722,11 @@ public class ReactionsEffectOverlay {
             r6 = 1
             if (r12 == r6) goto L_0x0558
             org.telegram.messenger.ImageReceiver r23 = r9.getImageReceiver()
-            org.telegram.tgnet.TLRPC$Document r6 = r10.static_icon
+            org.telegram.tgnet.TLRPC$Document r6 = r10.center_icon
             org.telegram.messenger.ImageLocation r24 = org.telegram.messenger.ImageLocation.getForDocument(r6)
             r26 = 0
             r29 = 1
-            java.lang.String r25 = "40_40"
+            java.lang.String r25 = "40_40_lastframe"
             java.lang.String r27 = "webp"
             r28 = r10
             r23.setImage(r24, r25, r26, r27, r28, r29)
@@ -940,7 +940,7 @@ public class ReactionsEffectOverlay {
     public static int sizeForBigReaction() {
         int dp = AndroidUtilities.dp(350.0f);
         Point point = AndroidUtilities.displaySize;
-        return (int) (((float) Math.round(((float) Math.min(dp, Math.min(point.x, point.y))) * 0.5f)) / AndroidUtilities.density);
+        return (int) (((float) Math.round(((float) Math.min(dp, Math.min(point.x, point.y))) * 0.7f)) / AndroidUtilities.density);
     }
 
     private class AvatarParticle {

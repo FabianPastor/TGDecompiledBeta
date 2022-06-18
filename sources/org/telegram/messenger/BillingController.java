@@ -6,7 +6,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import androidx.core.util.Consumer;
-import com.android.billingclient.api.AcknowledgePurchaseParams;
 import com.android.billingclient.api.BillingClient;
 import com.android.billingclient.api.BillingClientStateListener;
 import com.android.billingclient.api.BillingFlowParams;
@@ -91,31 +90,6 @@ public class BillingController implements PurchasesUpdatedListener, BillingClien
         return false;
     }
 
-    /* renamed from: acknowledgePurchase */
-    public void lambda$acknowledgePurchase$0(List<String> list, String str) {
-        if (isReady()) {
-            this.billingClient.acknowledgePurchase(AcknowledgePurchaseParams.newBuilder().setPurchaseToken(str).build(), new BillingController$$ExternalSyntheticLambda0(this, list, str));
-        }
-    }
-
-    /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$acknowledgePurchase$1(List list, String str, BillingResult billingResult) {
-        int responseCode = billingResult.getResponseCode();
-        Iterator it = list.iterator();
-        while (it.hasNext()) {
-            this.resultListeners.get((String) it.next()).accept(billingResult);
-        }
-        if (responseCode == 0) {
-            Iterator it2 = list.iterator();
-            while (it2.hasNext()) {
-                this.resultListeners.remove((String) it2.next());
-            }
-        }
-        if (responseCode == -3 || responseCode == -1 || responseCode == 6) {
-            AndroidUtilities.runOnUIThread(new BillingController$$ExternalSyntheticLambda3(this, list, str), 15000);
-        }
-    }
-
     public void onPurchasesUpdated(BillingResult billingResult, List<Purchase> list) {
         FileLog.d("Billing purchases updated: " + billingResult + ", " + list);
         if (list != null) {
@@ -125,18 +99,20 @@ public class BillingController implements PurchasesUpdatedListener, BillingClien
                     TLRPC$TL_payments_assignPlayMarketTransaction tLRPC$TL_payments_assignPlayMarketTransaction = new TLRPC$TL_payments_assignPlayMarketTransaction();
                     tLRPC$TL_payments_assignPlayMarketTransaction.purchase_token = next.getPurchaseToken();
                     AccountInstance instance2 = AccountInstance.getInstance(UserConfig.selectedAccount);
-                    instance2.getConnectionsManager().sendRequest(tLRPC$TL_payments_assignPlayMarketTransaction, new BillingController$$ExternalSyntheticLambda5(this, instance2, next));
+                    instance2.getConnectionsManager().sendRequest(tLRPC$TL_payments_assignPlayMarketTransaction, new BillingController$$ExternalSyntheticLambda3(this, instance2, next, billingResult));
                 }
             }
         }
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$onPurchasesUpdated$2(AccountInstance accountInstance, Purchase purchase, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+    public /* synthetic */ void lambda$onPurchasesUpdated$0(AccountInstance accountInstance, Purchase purchase, BillingResult billingResult, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         if (tLObject instanceof TLRPC$Updates) {
             accountInstance.getMessagesController().processUpdates((TLRPC$Updates) tLObject, false);
-            lambda$acknowledgePurchase$0(purchase.getProducts(), purchase.getPurchaseToken());
             this.requestingTokens.remove(purchase.getPurchaseToken());
+            for (String remove : purchase.getProducts()) {
+                this.resultListeners.remove(remove).accept(billingResult);
+            }
         }
     }
 
@@ -146,13 +122,13 @@ public class BillingController implements PurchasesUpdatedListener, BillingClien
 
     public void onBillingSetupFinished(BillingResult billingResult) {
         if (billingResult.getResponseCode() == 0) {
-            queryProductDetails(Collections.singletonList(PREMIUM_PRODUCT), BillingController$$ExternalSyntheticLambda1.INSTANCE);
-            queryPurchases("subs", new BillingController$$ExternalSyntheticLambda2(this));
+            queryProductDetails(Collections.singletonList(PREMIUM_PRODUCT), BillingController$$ExternalSyntheticLambda0.INSTANCE);
+            queryPurchases("subs", new BillingController$$ExternalSyntheticLambda1(this));
         }
     }
 
     /* access modifiers changed from: private */
-    public static /* synthetic */ void lambda$onBillingSetupFinished$4(BillingResult billingResult, List list) {
+    public static /* synthetic */ void lambda$onBillingSetupFinished$2(BillingResult billingResult, List list) {
         if (billingResult.getResponseCode() == 0) {
             Iterator it = list.iterator();
             while (it.hasNext()) {
@@ -161,7 +137,7 @@ public class BillingController implements PurchasesUpdatedListener, BillingClien
                     PREMIUM_PRODUCT_DETAILS = productDetails;
                 }
             }
-            AndroidUtilities.runOnUIThread(BillingController$$ExternalSyntheticLambda4.INSTANCE);
+            AndroidUtilities.runOnUIThread(BillingController$$ExternalSyntheticLambda2.INSTANCE);
         }
     }
 }

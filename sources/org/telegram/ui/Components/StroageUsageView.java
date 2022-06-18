@@ -316,7 +316,7 @@ public class StroageUsageView extends FrameLayout {
                 RectF rectF = AndroidUtilities.rectTmp;
                 rectF.set((float) AndroidUtilities.dp(24.0f), (float) AndroidUtilities.dp(17.0f), (float) (getMeasuredWidth() - AndroidUtilities.dp(24.0f)), (float) AndroidUtilities.dp(23.0f));
                 StroageUsageView.this.cellFlickerDrawable.setParentWidth(getMeasuredWidth());
-                StroageUsageView.this.cellFlickerDrawable.draw(canvas, rectF, (float) AndroidUtilities.dp(3.0f));
+                StroageUsageView.this.cellFlickerDrawable.draw(canvas, rectF, (float) AndroidUtilities.dp(3.0f), (View) null);
             } else {
                 Canvas canvas3 = canvas;
             }
@@ -324,8 +324,9 @@ public class StroageUsageView extends FrameLayout {
             if (!StroageUsageView.this.calculating) {
                 int measuredWidth = (int) (((float) (getMeasuredWidth() - (AndroidUtilities.dp(24.0f) * 2))) * StroageUsageView.this.progress2);
                 int dp2 = AndroidUtilities.dp(24.0f) + measuredWidth;
-                canvas.drawLine((float) dp, (float) AndroidUtilities.dp(20.0f), (float) (AndroidUtilities.dp(24.0f) + measuredWidth), (float) AndroidUtilities.dp(20.0f), StroageUsageView.this.paintProgress2);
-                canvas.drawRect((float) dp2, (float) (AndroidUtilities.dp(20.0f) - AndroidUtilities.dp(3.0f)), (float) (dp2 + AndroidUtilities.dp(3.0f)), (float) (AndroidUtilities.dp(20.0f) + AndroidUtilities.dp(3.0f)), StroageUsageView.this.bgPaint);
+                Canvas canvas4 = canvas;
+                canvas4.drawLine((float) dp, (float) AndroidUtilities.dp(20.0f), (float) (AndroidUtilities.dp(24.0f) + measuredWidth), (float) AndroidUtilities.dp(20.0f), StroageUsageView.this.paintProgress2);
+                canvas4.drawRect((float) dp2, (float) (AndroidUtilities.dp(20.0f) - AndroidUtilities.dp(3.0f)), (float) (dp2 + AndroidUtilities.dp(3.0f)), (float) (AndroidUtilities.dp(20.0f) + AndroidUtilities.dp(3.0f)), StroageUsageView.this.bgPaint);
             }
             if (!StroageUsageView.this.calculating) {
                 int measuredWidth2 = (int) (((float) (getMeasuredWidth() - (AndroidUtilities.dp(24.0f) * 2))) * StroageUsageView.this.progress);
@@ -333,9 +334,9 @@ public class StroageUsageView extends FrameLayout {
                     measuredWidth2 = AndroidUtilities.dp(1.0f);
                 }
                 int dp3 = AndroidUtilities.dp(24.0f) + measuredWidth2;
-                Canvas canvas4 = canvas;
-                canvas4.drawLine((float) dp, (float) AndroidUtilities.dp(20.0f), (float) (AndroidUtilities.dp(24.0f) + measuredWidth2), (float) AndroidUtilities.dp(20.0f), StroageUsageView.this.paintProgress);
-                canvas4.drawRect((float) dp3, (float) (AndroidUtilities.dp(20.0f) - AndroidUtilities.dp(3.0f)), (float) (dp3 + AndroidUtilities.dp(3.0f)), (float) (AndroidUtilities.dp(20.0f) + AndroidUtilities.dp(3.0f)), StroageUsageView.this.bgPaint);
+                Canvas canvas5 = canvas;
+                canvas5.drawLine((float) dp, (float) AndroidUtilities.dp(20.0f), (float) (AndroidUtilities.dp(24.0f) + measuredWidth2), (float) AndroidUtilities.dp(20.0f), StroageUsageView.this.paintProgress);
+                canvas5.drawRect((float) dp3, (float) (AndroidUtilities.dp(20.0f) - AndroidUtilities.dp(3.0f)), (float) (dp3 + AndroidUtilities.dp(3.0f)), (float) (AndroidUtilities.dp(20.0f) + AndroidUtilities.dp(3.0f)), StroageUsageView.this.bgPaint);
             }
         }
     }

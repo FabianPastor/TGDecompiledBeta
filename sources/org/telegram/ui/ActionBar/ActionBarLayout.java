@@ -180,6 +180,7 @@ public class ActionBarLayout extends FrameLayout {
         private float pressX;
         private float pressY;
         private Rect rect = new Rect();
+        private boolean wasPortrait;
 
         public LayoutContainer(Context context) {
             super(context);
@@ -227,6 +228,11 @@ public class ActionBarLayout extends FrameLayout {
             int i3;
             int size = View.MeasureSpec.getSize(i);
             int size2 = View.MeasureSpec.getSize(i2);
+            boolean z = size2 > size;
+            if (this.wasPortrait != z && ActionBarLayout.this.isInPreviewMode()) {
+                ActionBarLayout.this.finishPreviewFragment();
+            }
+            this.wasPortrait = z;
             int childCount = getChildCount();
             int i4 = 0;
             while (true) {
@@ -1190,7 +1196,8 @@ public class ActionBarLayout extends FrameLayout {
                         f = CubicBezierInterpolator.EASE_OUT_QUINT.getInterpolation(ActionBarLayout.this.animationProgress);
                     }
                     if (z) {
-                        ActionBarLayout.this.containerView.setAlpha(f);
+                        float clamp = MathUtils.clamp(f, 0.0f, 1.0f);
+                        ActionBarLayout.this.containerView.setAlpha(clamp);
                         if (z3) {
                             float f2 = (0.3f * f) + 0.7f;
                             ActionBarLayout.this.containerView.setScaleX(f2);
@@ -1199,12 +1206,12 @@ public class ActionBarLayout extends FrameLayout {
                                 float f3 = 1.0f - f;
                                 ActionBarLayout.this.containerView.setTranslationY(((float) AndroidUtilities.dp(40.0f)) * f3);
                                 ActionBarLayout.this.previewMenu.setTranslationY(((float) (-AndroidUtilities.dp(70.0f))) * f3);
-                                float f4 = (0.05f * f) + 0.95f;
+                                float f4 = (f * 0.05f) + 0.95f;
                                 ActionBarLayout.this.previewMenu.setScaleX(f4);
                                 ActionBarLayout.this.previewMenu.setScaleY(f4);
                             }
-                            ActionBarLayout.this.previewBackgroundDrawable.setAlpha((int) (46.0f * f));
-                            Theme.moveUpDrawable.setAlpha((int) (f * 255.0f));
+                            ActionBarLayout.this.previewBackgroundDrawable.setAlpha((int) (46.0f * clamp));
+                            Theme.moveUpDrawable.setAlpha((int) (clamp * 255.0f));
                             ActionBarLayout.this.containerView.invalidate();
                             ActionBarLayout.this.invalidate();
                         } else {
@@ -1212,14 +1219,15 @@ public class ActionBarLayout extends FrameLayout {
                         }
                     } else {
                         float f5 = 1.0f - f;
-                        ActionBarLayout.this.containerViewBack.setAlpha(f5);
+                        float clamp2 = MathUtils.clamp(f5, 0.0f, 1.0f);
+                        ActionBarLayout.this.containerViewBack.setAlpha(clamp2);
                         if (z3) {
-                            float f6 = (0.1f * f5) + 0.9f;
+                            float f6 = (f5 * 0.1f) + 0.9f;
                             ActionBarLayout.this.containerViewBack.setScaleX(f6);
                             ActionBarLayout.this.containerViewBack.setScaleY(f6);
-                            ActionBarLayout.this.previewBackgroundDrawable.setAlpha((int) (46.0f * f5));
+                            ActionBarLayout.this.previewBackgroundDrawable.setAlpha((int) (46.0f * clamp2));
                             if (ActionBarLayout.this.previewMenu == null) {
-                                Theme.moveUpDrawable.setAlpha((int) (f5 * 255.0f));
+                                Theme.moveUpDrawable.setAlpha((int) (clamp2 * 255.0f));
                             }
                             ActionBarLayout.this.containerView.invalidate();
                             ActionBarLayout.this.invalidate();

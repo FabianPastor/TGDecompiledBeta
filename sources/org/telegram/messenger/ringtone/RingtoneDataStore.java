@@ -277,7 +277,7 @@ public class RingtoneDataStore {
         File pathToAttach;
         for (int i = 0; i < arrayList.size(); i++) {
             CachedTone cachedTone = (CachedTone) arrayList.get(i);
-            if ((TextUtils.isEmpty(cachedTone.localUri) || !new File(cachedTone.localUri).exists()) && (tLRPC$Document = cachedTone.document) != null && ((pathToAttach = FileLoader.getInstance(this.currentAccount).getPathToAttach(tLRPC$Document)) == null || !pathToAttach.exists())) {
+            if (cachedTone != null && ((TextUtils.isEmpty(cachedTone.localUri) || !new File(cachedTone.localUri).exists()) && (tLRPC$Document = cachedTone.document) != null && ((pathToAttach = FileLoader.getInstance(this.currentAccount).getPathToAttach(tLRPC$Document)) == null || !pathToAttach.exists()))) {
                 AndroidUtilities.runOnUIThread(new RingtoneDataStore$$ExternalSyntheticLambda4(this, tLRPC$Document));
             }
         }
@@ -332,9 +332,16 @@ public class RingtoneDataStore {
             loadFromPrefs(true);
             this.loaded = true;
         }
-        for (int i = 0; i < this.userRingtones.size(); i++) {
-            if (this.userRingtones.get(i).document != null && this.userRingtones.get(i).document.id == j) {
-                return this.userRingtones.get(i).document;
+        int i = 0;
+        while (i < this.userRingtones.size()) {
+            try {
+                if (this.userRingtones.get(i) != null && this.userRingtones.get(i).document != null && this.userRingtones.get(i).document.id == j) {
+                    return this.userRingtones.get(i).document;
+                }
+                i++;
+            } catch (Exception e) {
+                FileLog.e((Throwable) e);
+                return null;
             }
         }
         return null;

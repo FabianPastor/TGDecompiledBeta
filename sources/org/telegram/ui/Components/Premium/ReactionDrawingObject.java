@@ -8,6 +8,7 @@ import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.DocumentObject;
 import org.telegram.messenger.ImageLocation;
 import org.telegram.messenger.ImageReceiver;
+import org.telegram.messenger.SvgHelper;
 import org.telegram.tgnet.TLRPC$TL_availableReaction;
 import org.telegram.ui.Components.Premium.CarouselView;
 import org.telegram.ui.Components.Reactions.ReactionsEffectOverlay;
@@ -26,25 +27,29 @@ public class ReactionDrawingObject extends CarouselView.DrawingObject {
     }
 
     public void onAttachToWindow(View view, int i) {
-        this.parentView = view;
+        View view2 = view;
+        this.parentView = view2;
         if (i == 0) {
-            this.imageReceiver.setParentView(view);
+            this.imageReceiver.setParentView(view2);
             this.imageReceiver.onAttachedToWindow();
             this.imageReceiver.setLayerNum(Integer.MAX_VALUE);
-            this.imageReceiver.setImage(ImageLocation.getForDocument(this.reaction.appear_animation), "60_60_nolimit", (ImageLocation) null, (String) null, DocumentObject.getSvgThumb(this.reaction.activate_animation, "windowBackgroundGray", 0.5f), 0, "tgs", this.reaction, 0);
-            this.imageReceiver.setAutoRepeat(0);
-            if (this.imageReceiver.getLottieAnimation() != null) {
-                this.imageReceiver.getLottieAnimation().setCurrentFrame(0, false);
+            SvgHelper.SvgDrawable svgThumb = DocumentObject.getSvgThumb(this.reaction.activate_animation, "windowBackgroundGray", 0.5f);
+            this.actionReceiver.setParentView(view2);
+            this.actionReceiver.onAttachedToWindow();
+            this.actionReceiver.setLayerNum(Integer.MAX_VALUE);
+            this.actionReceiver.setAllowStartLottieAnimation(false);
+            this.actionReceiver.setImage(ImageLocation.getForDocument(this.reaction.activate_animation), "50_50_nolimit", (ImageLocation) null, (String) null, svgThumb, 0, "tgs", this.reaction, 0);
+            this.actionReceiver.setAutoRepeat(0);
+            if (this.actionReceiver.getLottieAnimation() != null) {
+                this.actionReceiver.getLottieAnimation().setCurrentFrame(0, false);
+                this.actionReceiver.getLottieAnimation().stop();
+                return;
             }
-            this.imageReceiver.startAnimation();
             return;
         }
-        this.effectImageReceiver.setParentView(view);
+        this.effectImageReceiver.setParentView(view2);
         this.effectImageReceiver.onAttachedToWindow();
         this.effectImageReceiver.setLayerNum(Integer.MAX_VALUE);
-        this.actionReceiver.setParentView(view);
-        this.actionReceiver.onAttachedToWindow();
-        this.actionReceiver.setLayerNum(Integer.MAX_VALUE);
         this.effectImageReceiver.setAllowStartLottieAnimation(false);
         int sizeForBigReaction = ReactionsEffectOverlay.sizeForBigReaction();
         ImageReceiver imageReceiver2 = this.effectImageReceiver;
@@ -54,13 +59,6 @@ public class ReactionDrawingObject extends CarouselView.DrawingObject {
         if (this.effectImageReceiver.getLottieAnimation() != null) {
             this.effectImageReceiver.getLottieAnimation().setCurrentFrame(0, false);
             this.effectImageReceiver.getLottieAnimation().stop();
-        }
-        this.actionReceiver.setAllowStartLottieAnimation(false);
-        this.actionReceiver.setImage(ImageLocation.getForDocument(this.reaction.activate_animation), "60_60_nolimit", (ImageLocation) null, (String) null, (Drawable) null, 0, "tgs", this.reaction, 0);
-        this.actionReceiver.setAutoRepeat(0);
-        if (this.actionReceiver.getLottieAnimation() != null) {
-            this.actionReceiver.getLottieAnimation().setCurrentFrame(0, false);
-            this.actionReceiver.getLottieAnimation().stop();
         }
     }
 
@@ -82,6 +80,12 @@ public class ReactionDrawingObject extends CarouselView.DrawingObject {
         this.rect.set((int) f5, (int) f6, (int) (f + f4), (int) (f4 + f2));
         this.imageReceiver.setImageCoords(f5, f6, dp2, dp2);
         this.actionReceiver.setImageCoords(f5, f6, dp2, dp2);
+        if (this.actionReceiver.getLottieAnimation() != null && this.actionReceiver.getLottieAnimation().hasBitmap()) {
+            this.actionReceiver.draw(canvas);
+            if ((this.actionReceiver.getLottieAnimation() == null || !this.actionReceiver.getLottieAnimation().isLastFrame()) && this.selected && this.actionReceiver.getLottieAnimation() != null && !this.actionReceiver.getLottieAnimation().isRunning()) {
+                this.actionReceiver.getLottieAnimation().start();
+            }
+        }
         if (this.selected || this.selectedProgress != 0.0f) {
             float f7 = (float) dp;
             float f8 = f7 / 2.0f;
@@ -97,6 +101,9 @@ public class ReactionDrawingObject extends CarouselView.DrawingObject {
             } else {
                 this.effectImageReceiver.draw(canvas);
             }
+            if (this.selected && this.effectImageReceiver.getLottieAnimation() != null && this.effectImageReceiver.getLottieAnimation().isLastFrame()) {
+                this.carouselView.autoplayToNext();
+            }
             if (this.selected && this.effectImageReceiver.getLottieAnimation() != null && !this.effectImageReceiver.getLottieAnimation().isRunning() && !this.effectImageReceiver.getLottieAnimation().isLastFrame()) {
                 this.effectImageReceiver.getLottieAnimation().start();
             }
@@ -111,7 +118,9 @@ public class ReactionDrawingObject extends CarouselView.DrawingObject {
                     this.selectedProgress = var_;
                     if (var_ > 1.0f) {
                         this.selectedProgress = 1.0f;
+                        return;
                     }
+                    return;
                 }
             }
             if (!z) {
@@ -121,16 +130,6 @@ public class ReactionDrawingObject extends CarouselView.DrawingObject {
                     this.selectedProgress = 0.0f;
                 }
             }
-        }
-        if (this.actionReceiver.getLottieAnimation() == null || !this.actionReceiver.getLottieAnimation().hasBitmap()) {
-            this.imageReceiver.draw(canvas);
-            return;
-        }
-        this.actionReceiver.draw(canvas);
-        if (this.actionReceiver.getLottieAnimation() != null && this.actionReceiver.getLottieAnimation().isLastFrame()) {
-            this.selected = false;
-        } else if (this.selected && this.actionReceiver.getLottieAnimation() != null && !this.actionReceiver.getLottieAnimation().isRunning()) {
-            this.actionReceiver.getLottieAnimation().start();
         }
     }
 

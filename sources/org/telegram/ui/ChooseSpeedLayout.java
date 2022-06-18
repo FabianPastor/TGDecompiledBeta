@@ -23,25 +23,31 @@ public class ChooseSpeedLayout {
         ActionBarMenuSubItem addItem = ActionBarMenuItem.addItem(this.speedSwipeBackLayout, NUM, LocaleController.getString("Back", NUM), false, (Theme.ResourcesProvider) null);
         addItem.setOnClickListener(new ChooseSpeedLayout$$ExternalSyntheticLambda5(popupSwipeBackLayout));
         addItem.setColors(-328966, -328966);
+        addItem.setSelectorColor(NUM);
         ActionBarMenuSubItem addItem2 = ActionBarMenuItem.addItem(this.speedSwipeBackLayout, NUM, LocaleController.getString("SpeedVerySlow", NUM), false, (Theme.ResourcesProvider) null);
         addItem2.setColors(-328966, -328966);
         addItem2.setOnClickListener(new ChooseSpeedLayout$$ExternalSyntheticLambda2(callback));
+        addItem2.setSelectorColor(NUM);
         this.speedItems[0] = addItem2;
         ActionBarMenuSubItem addItem3 = ActionBarMenuItem.addItem(this.speedSwipeBackLayout, NUM, LocaleController.getString("SpeedSlow", NUM), false, (Theme.ResourcesProvider) null);
         addItem3.setColors(-328966, -328966);
         addItem3.setOnClickListener(new ChooseSpeedLayout$$ExternalSyntheticLambda0(callback));
+        addItem3.setSelectorColor(NUM);
         this.speedItems[1] = addItem3;
         ActionBarMenuSubItem addItem4 = ActionBarMenuItem.addItem(this.speedSwipeBackLayout, NUM, LocaleController.getString("SpeedNormal", NUM), false, (Theme.ResourcesProvider) null);
         addItem4.setColors(-328966, -328966);
         addItem4.setOnClickListener(new ChooseSpeedLayout$$ExternalSyntheticLambda3(callback));
+        addItem4.setSelectorColor(NUM);
         this.speedItems[2] = addItem4;
         ActionBarMenuSubItem addItem5 = ActionBarMenuItem.addItem(this.speedSwipeBackLayout, NUM, LocaleController.getString("SpeedFast", NUM), false, (Theme.ResourcesProvider) null);
         addItem5.setColors(-328966, -328966);
         addItem5.setOnClickListener(new ChooseSpeedLayout$$ExternalSyntheticLambda4(callback));
+        addItem5.setSelectorColor(NUM);
         this.speedItems[3] = addItem5;
         ActionBarMenuSubItem addItem6 = ActionBarMenuItem.addItem(this.speedSwipeBackLayout, NUM, LocaleController.getString("SpeedVeryFast", NUM), false, (Theme.ResourcesProvider) null);
         addItem6.setColors(-328966, -328966);
         addItem6.setOnClickListener(new ChooseSpeedLayout$$ExternalSyntheticLambda1(callback));
+        addItem6.setSelectorColor(NUM);
         this.speedItems[4] = addItem6;
     }
 

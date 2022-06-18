@@ -1,15 +1,16 @@
 package org.telegram.ui;
 
-import org.telegram.ui.Adapters.StickersAdapter;
+import org.telegram.tgnet.RequestDelegate;
+import org.telegram.tgnet.TLObject;
+import org.telegram.tgnet.TLRPC$TL_error;
 
-public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda232 implements StickersAdapter.StickersAdapterDelegate {
-    public final /* synthetic */ ChatActivity f$0;
+public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda232 implements RequestDelegate {
+    public static final /* synthetic */ ChatActivity$$ExternalSyntheticLambda232 INSTANCE = new ChatActivity$$ExternalSyntheticLambda232();
 
-    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda232(ChatActivity chatActivity) {
-        this.f$0 = chatActivity;
+    private /* synthetic */ ChatActivity$$ExternalSyntheticLambda232() {
     }
 
-    public final void needChangePanelVisibility(boolean z) {
-        this.f$0.lambda$initStickers$89(z);
+    public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+        ChatActivity.lambda$markSponsoredAsRead$245(tLObject, tLRPC$TL_error);
     }
 }

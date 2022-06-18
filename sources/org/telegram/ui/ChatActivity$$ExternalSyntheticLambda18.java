@@ -1,17 +1,16 @@
 package org.telegram.ui;
 
-import android.content.DialogInterface;
+import android.animation.ValueAnimator;
+import org.telegram.ui.Components.CrossfadeDrawable;
 
-public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda18 implements DialogInterface.OnCancelListener {
-    public final /* synthetic */ ChatActivity f$0;
-    public final /* synthetic */ int f$1;
+public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda18 implements ValueAnimator.AnimatorUpdateListener {
+    public final /* synthetic */ CrossfadeDrawable f$0;
 
-    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda18(ChatActivity chatActivity, int i) {
-        this.f$0 = chatActivity;
-        this.f$1 = i;
+    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda18(CrossfadeDrawable crossfadeDrawable) {
+        this.f$0 = crossfadeDrawable;
     }
 
-    public final void onCancel(DialogInterface dialogInterface) {
-        this.f$0.lambda$processSelectedOption$208(this.f$1, dialogInterface);
+    public final void onAnimationUpdate(ValueAnimator valueAnimator) {
+        this.f$0.setProgress(((Float) valueAnimator.getAnimatedValue()).floatValue());
     }
 }

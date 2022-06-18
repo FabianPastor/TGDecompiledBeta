@@ -803,7 +803,7 @@ public class MediaDataController extends BaseController {
     public /* synthetic */ void lambda$putPremiumPromoToCache$9(TLRPC$TL_help_premiumPromo tLRPC$TL_help_premiumPromo, int i) {
         if (tLRPC$TL_help_premiumPromo != null) {
             try {
-                getMessagesStorage().getDatabase().executeFast("DELETE FROM attach_menu_bots").stepThis().dispose();
+                getMessagesStorage().getDatabase().executeFast("DELETE FROM premium_promo").stepThis().dispose();
                 SQLitePreparedStatement executeFast = getMessagesStorage().getDatabase().executeFast("REPLACE INTO premium_promo VALUES(?, ?)");
                 executeFast.requery();
                 NativeByteBuffer nativeByteBuffer = new NativeByteBuffer(tLRPC$TL_help_premiumPromo.getObjectSize());
@@ -1001,9 +1001,6 @@ public class MediaDataController extends BaseController {
             ImageReceiver imageReceiver4 = new ImageReceiver();
             imageReceiver4.setImage(ImageLocation.getForDocument(tLRPC$TL_availableReaction.center_icon), (String) null, (Drawable) null, (String) null, (Object) null, 11);
             ImageLoader.getInstance().loadImageForImageReceiver(imageReceiver4);
-            ImageReceiver imageReceiver5 = new ImageReceiver();
-            imageReceiver5.setImage(ImageLocation.getForDocument(tLRPC$TL_availableReaction.static_icon), (String) null, (Drawable) null, (String) null, (Object) null, 11);
-            ImageLoader.getInstance().loadImageForImageReceiver(imageReceiver5);
         }
         NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.reactionsDidLoad, new Object[0]);
     }
@@ -1293,31 +1290,33 @@ public class MediaDataController extends BaseController {
         return false;
     }
 
-    public void addRecentGif(TLRPC$Document tLRPC$Document, int i) {
-        boolean z;
+    public void addRecentGif(TLRPC$Document tLRPC$Document, int i, boolean z) {
+        boolean z2;
         if (tLRPC$Document != null) {
             int i2 = 0;
             while (true) {
                 if (i2 >= this.recentGifs.size()) {
-                    z = false;
+                    z2 = false;
                     break;
                 }
                 TLRPC$Document tLRPC$Document2 = this.recentGifs.get(i2);
                 if (tLRPC$Document2.id == tLRPC$Document.id) {
                     this.recentGifs.remove(i2);
                     this.recentGifs.add(0, tLRPC$Document2);
-                    z = true;
+                    z2 = true;
                     break;
                 }
                 i2++;
             }
-            if (!z) {
+            if (!z2) {
                 this.recentGifs.add(0, tLRPC$Document);
             }
             if ((this.recentGifs.size() > getMessagesController().savedGifsLimitDefault && !UserConfig.getInstance(this.currentAccount).isPremium()) || this.recentGifs.size() > getMessagesController().savedGifsLimitPremium) {
                 ArrayList<TLRPC$Document> arrayList = this.recentGifs;
                 getMessagesStorage().getStorageQueue().postRunnable(new MediaDataController$$ExternalSyntheticLambda87(this, arrayList.remove(arrayList.size() - 1)));
-                AndroidUtilities.runOnUIThread(new MediaDataController$$ExternalSyntheticLambda120(tLRPC$Document));
+                if (z) {
+                    AndroidUtilities.runOnUIThread(new MediaDataController$$ExternalSyntheticLambda120(tLRPC$Document));
+                }
             }
             ArrayList arrayList2 = new ArrayList();
             arrayList2.add(tLRPC$Document);
@@ -5403,7 +5402,7 @@ public class MediaDataController extends BaseController {
             androidx.core.content.pm.ShortcutInfoCompat$Builder r9 = new androidx.core.content.pm.ShortcutInfoCompat$Builder     // Catch:{ all -> 0x02cd }
             android.content.Context r10 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ all -> 0x02cd }
             r9.<init>((android.content.Context) r10, (java.lang.String) r8)     // Catch:{ all -> 0x02cd }
-            r10 = 2131626769(0x7f0e0b11, float:1.8880784E38)
+            r10 = 2131626770(0x7f0e0b12, float:1.8880786E38)
             java.lang.String r11 = org.telegram.messenger.LocaleController.getString(r0, r10)     // Catch:{ all -> 0x02cd }
             androidx.core.content.pm.ShortcutInfoCompat$Builder r9 = r9.setShortLabel(r11)     // Catch:{ all -> 0x02cd }
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r0, r10)     // Catch:{ all -> 0x02cd }
@@ -6105,7 +6104,7 @@ public class MediaDataController extends BaseController {
             boolean r8 = org.telegram.messenger.UserObject.isReplyUser((org.telegram.tgnet.TLRPC$User) r5)     // Catch:{ Exception -> 0x0253 }
             if (r8 == 0) goto L_0x0074
             java.lang.String r8 = "RepliesTitle"
-            r9 = 2131627907(0x7f0e0var_, float:1.8883092E38)
+            r9 = 2131627912(0x7f0e0var_, float:1.8883102E38)
             java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r8, r9)     // Catch:{ Exception -> 0x0253 }
         L_0x0071:
             r9 = r4
@@ -6115,7 +6114,7 @@ public class MediaDataController extends BaseController {
             boolean r8 = org.telegram.messenger.UserObject.isUserSelf(r5)     // Catch:{ Exception -> 0x0253 }
             if (r8 == 0) goto L_0x0084
             java.lang.String r8 = "SavedMessages"
-            r9 = 2131628066(0x7f0e1022, float:1.8883414E38)
+            r9 = 2131628071(0x7f0e1027, float:1.8883424E38)
             java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r8, r9)     // Catch:{ Exception -> 0x0253 }
             goto L_0x0071
         L_0x0084:
@@ -9161,7 +9160,7 @@ public class MediaDataController extends BaseController {
                     imageReceiver.setImage(ImageLocation.getForDocument(tLRPC$Document), (String) null, (Drawable) null, "webp", (Object) null, 1);
                     ImageLoader.getInstance().loadImageForImageReceiver(imageReceiver);
                     ImageReceiver imageReceiver2 = new ImageReceiver();
-                    imageReceiver2.setImage(ImageLocation.getForDocument(MessageObject.getPremiumStickerAnimation(tLRPC$Document), tLRPC$Document), "140_140", (ImageLocation) null, (String) null, "tgs", (Object) null, 1);
+                    imageReceiver2.setImage(ImageLocation.getForDocument(MessageObject.getPremiumStickerAnimation(tLRPC$Document), tLRPC$Document), (String) null, (ImageLocation) null, (String) null, "tgs", (Object) null, 1);
                     ImageLoader.getInstance().loadImageForImageReceiver(imageReceiver2);
                 }
                 i++;

@@ -117,7 +117,7 @@ public class BlockingUpdateView extends FrameLayout implements NotificationCente
                 this.cellFlickerDrawable.setParentWidth(getMeasuredWidth());
                 RectF rectF = AndroidUtilities.rectTmp;
                 rectF.set(0.0f, 0.0f, (float) getMeasuredWidth(), (float) getMeasuredHeight());
-                this.cellFlickerDrawable.draw(canvas, rectF, (float) AndroidUtilities.dp(4.0f));
+                this.cellFlickerDrawable.draw(canvas, rectF, (float) AndroidUtilities.dp(4.0f), (View) null);
                 invalidate();
             }
 

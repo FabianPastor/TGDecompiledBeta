@@ -23,9 +23,6 @@ public class CircularProgressDrawable extends Drawable {
         return -2;
     }
 
-    public void setAlpha(int i) {
-    }
-
     public void setColorFilter(ColorFilter colorFilter) {
     }
 
@@ -85,5 +82,9 @@ public class CircularProgressDrawable extends Drawable {
 
     public void setColor(int i) {
         this.paint.setColor(i);
+    }
+
+    public void setAlpha(int i) {
+        this.paint.setAlpha(i);
     }
 }

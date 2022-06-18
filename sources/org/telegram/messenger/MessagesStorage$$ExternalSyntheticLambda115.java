@@ -16,6 +16,6 @@ public final /* synthetic */ class MessagesStorage$$ExternalSyntheticLambda115 i
     }
 
     public final void run() {
-        this.f$0.lambda$isMigratedChat$107(this.f$1, this.f$2, this.f$3);
+        this.f$0.lambda$isMigratedChat$108(this.f$1, this.f$2, this.f$3);
     }
 }

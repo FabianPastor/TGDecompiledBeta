@@ -168,6 +168,10 @@ public class Bulletin {
     public Bulletin show() {
         if (!this.showing && this.containerLayout != null) {
             this.showing = true;
+            CharSequence accessibilityText = this.layout.getAccessibilityText();
+            if (accessibilityText != null) {
+                AndroidUtilities.makeAccessibilityAnnouncement(accessibilityText);
+            }
             if (this.layout.getParent() == this.parentLayout) {
                 Bulletin bulletin = visibleBulletin;
                 if (bulletin != null) {
@@ -591,6 +595,11 @@ public class Bulletin {
             void animateExit(Layout layout, Runnable runnable, Runnable runnable2, Consumer<Float> consumer, int i);
         }
 
+        /* access modifiers changed from: protected */
+        public CharSequence getAccessibilityText() {
+            return null;
+        }
+
         public Layout(Context context, Theme.ResourcesProvider resourcesProvider2) {
             super(context);
             this.resourcesProvider = resourcesProvider2;
@@ -977,6 +986,10 @@ public class Bulletin {
             textView2.setTextSize(1, 15.0f);
             addView(textView2, LayoutHelper.createFrameRelatively(-2.0f, -2.0f, 8388627, 56.0f, 0.0f, 16.0f, 0.0f));
         }
+
+        public CharSequence getAccessibilityText() {
+            return this.textView.getText();
+        }
     }
 
     @SuppressLint({"ViewConstructor"})
@@ -997,6 +1010,10 @@ public class Bulletin {
             textView2.setTextSize(1, 15.0f);
             textView2.setTypeface(Typeface.SANS_SERIF);
             addView(textView2, LayoutHelper.createFrameRelatively(-1.0f, -2.0f, 8388627, 56.0f, 0.0f, 16.0f, 0.0f));
+        }
+
+        public CharSequence getAccessibilityText() {
+            return this.textView.getText();
         }
     }
 
@@ -1031,6 +1048,10 @@ public class Bulletin {
             textView2.setTypeface(Typeface.SANS_SERIF);
             textView2.setTextSize(1, 13.0f);
             linearLayout.addView(textView2);
+        }
+
+        public CharSequence getAccessibilityText() {
+            return this.titleTextView.getText() + ".\n" + this.subtitleTextView.getText();
         }
     }
 
@@ -1084,6 +1105,10 @@ public class Bulletin {
                 RLottieImageView rLottieImageView = this.imageView;
                 rLottieImageView.setLayerColor(str + ".**", this.textColor);
             }
+        }
+
+        public CharSequence getAccessibilityText() {
+            return this.titleTextView.getText() + ".\n" + this.subtitleTextView.getText();
         }
     }
 
@@ -1141,6 +1166,10 @@ public class Bulletin {
 
         public void setIconPaddingBottom(int i) {
             this.imageView.setLayoutParams(LayoutHelper.createFrameRelatively(56.0f, (float) (48 - i), 8388627, 0.0f, 0.0f, 0.0f, (float) i));
+        }
+
+        public CharSequence getAccessibilityText() {
+            return this.textView.getText();
         }
     }
 

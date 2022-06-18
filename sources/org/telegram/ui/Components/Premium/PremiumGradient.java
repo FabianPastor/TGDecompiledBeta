@@ -28,6 +28,7 @@ public class PremiumGradient {
     public Drawable premiumStarColoredDrawable = ContextCompat.getDrawable(ApplicationLoader.applicationContext, NUM).mutate();
     public Drawable premiumStarDrawableMini = ContextCompat.getDrawable(ApplicationLoader.applicationContext, NUM).mutate();
     public InternalDrawable premiumStarMenuDrawable = createGradientDrawable(ContextCompat.getDrawable(ApplicationLoader.applicationContext, NUM));
+    public InternalDrawable premiumStarMenuDrawable2 = createGradientDrawable(ContextCompat.getDrawable(ApplicationLoader.applicationContext, NUM));
 
     public static PremiumGradient getInstance() {
         if (instance == null) {
@@ -65,6 +66,7 @@ public class PremiumGradient {
             this.premiumStarDrawableMini.setColorFilter(new PorterDuffColorFilter(this.lastStarColor, PorterDuff.Mode.MULTIPLY));
         }
         this.premiumStarMenuDrawable = checkColors(this.premiumStarMenuDrawable);
+        this.premiumStarMenuDrawable2 = checkColors(this.premiumStarMenuDrawable2);
     }
 
     private InternalDrawable checkColors(InternalDrawable internalDrawable) {
@@ -123,10 +125,10 @@ public class PremiumGradient {
         Matrix matrix = new Matrix();
         public final Paint paint = new Paint(1);
         Shader shader;
-        float x1 = 0.0f;
-        float x2 = 1.5f;
-        float y1 = 1.0f;
-        float y2 = 0.0f;
+        public float x1 = 0.0f;
+        public float x2 = 1.5f;
+        public float y1 = 1.0f;
+        public float y2 = 0.0f;
 
         public GradientTools(String str, String str2, String str3, String str4) {
             this.colorKey1 = str;

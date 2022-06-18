@@ -305,10 +305,10 @@ public class ReactedHeaderView extends FrameLayout {
             boolean r4 = r4.equals(r5)
             if (r4 == 0) goto L_0x007f
             org.telegram.ui.Components.BackupImageView r5 = r11.reactView
-            org.telegram.tgnet.TLRPC$Document r12 = r10.static_icon
+            org.telegram.tgnet.TLRPC$Document r12 = r10.center_icon
             org.telegram.messenger.ImageLocation r6 = org.telegram.messenger.ImageLocation.getForDocument(r12)
             r9 = 0
-            java.lang.String r7 = "50_50"
+            java.lang.String r7 = "40_40_lastframe"
             java.lang.String r8 = "webp"
             r5.setImage((org.telegram.messenger.ImageLocation) r6, (java.lang.String) r7, (java.lang.String) r8, (android.graphics.drawable.Drawable) r9, (java.lang.Object) r10)
             org.telegram.ui.Components.BackupImageView r12 = r11.reactView

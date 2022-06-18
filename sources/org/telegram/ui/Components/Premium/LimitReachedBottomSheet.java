@@ -3,13 +3,11 @@ package org.telegram.ui.Components.Premium;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Canvas;
-import android.text.SpannableStringBuilder;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
@@ -39,7 +37,6 @@ import org.telegram.ui.Cells.GroupCreateUserCell;
 import org.telegram.ui.Cells.HeaderCell;
 import org.telegram.ui.Cells.ShadowSectionCell;
 import org.telegram.ui.Components.BottomSheetWithRecyclerListView;
-import org.telegram.ui.Components.ColoredImageSpan;
 import org.telegram.ui.Components.FlickerLoadingView;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.RecyclerItemsEnterAnimator;
@@ -60,6 +57,8 @@ public class LimitReachedBottomSheet extends BottomSheetWithRecyclerListView {
     public ArrayList<TLRPC$Chat> inactiveChats = new ArrayList<>();
     /* access modifiers changed from: private */
     public ArrayList<String> inactiveChatsSignatures = new ArrayList<>();
+    /* access modifiers changed from: private */
+    public boolean isVeryLargeFile;
     LimitParams limitParams;
     LimitPreviewView limitPreviewView;
     private boolean loading = false;
@@ -104,14 +103,7 @@ public class LimitReachedBottomSheet extends BottomSheetWithRecyclerListView {
         super.onViewCreated(frameLayout);
         Context context = frameLayout.getContext();
         this.premiumButtonView = new PremiumButtonView(context, true);
-        if (UserConfig.getInstance(this.currentAccount).isPremium() || MessagesController.getInstance(this.currentAccount).premiumLocked) {
-            this.premiumButtonView.buttonTextView.setText(LocaleController.getString(NUM));
-        } else {
-            SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder();
-            spannableStringBuilder.append(LocaleController.getString("IncreaseLimit", NUM)).append(" d");
-            spannableStringBuilder.setSpan(new ColoredImageSpan(ContextCompat.getDrawable(context, NUM)), spannableStringBuilder.length() - 1, spannableStringBuilder.length(), 0);
-            this.premiumButtonView.buttonTextView.setText(spannableStringBuilder);
-        }
+        updatePremiumButtonText();
         if (!this.hasFixedSize) {
             AnonymousClass1 r1 = new View(this, context) {
                 /* access modifiers changed from: protected */
@@ -128,7 +120,7 @@ public class LimitReachedBottomSheet extends BottomSheetWithRecyclerListView {
         this.recyclerListView.setPadding(0, 0, 0, AndroidUtilities.dp(72.0f));
         this.recyclerListView.setOnItemClickListener((RecyclerListView.OnItemClickListener) new LimitReachedBottomSheet$$ExternalSyntheticLambda9(this));
         this.recyclerListView.setOnItemLongClickListener((RecyclerListView.OnItemLongClickListener) new LimitReachedBottomSheet$$ExternalSyntheticLambda10(this));
-        this.premiumButtonView.buttonTextView.setOnClickListener(new LimitReachedBottomSheet$$ExternalSyntheticLambda2(this));
+        this.premiumButtonView.buttonLayout.setOnClickListener(new LimitReachedBottomSheet$$ExternalSyntheticLambda2(this));
         this.premiumButtonView.overlayTextView.setOnClickListener(new LimitReachedBottomSheet$$ExternalSyntheticLambda3(this));
         this.enterAnimator = new RecyclerItemsEnterAnimator(this.recyclerListView, true);
     }
@@ -167,7 +159,7 @@ public class LimitReachedBottomSheet extends BottomSheetWithRecyclerListView {
 
     /* access modifiers changed from: private */
     public /* synthetic */ void lambda$onViewCreated$2(View view) {
-        if (UserConfig.getInstance(this.currentAccount).isPremium() || MessagesController.getInstance(this.currentAccount).premiumLocked) {
+        if (UserConfig.getInstance(this.currentAccount).isPremium() || MessagesController.getInstance(this.currentAccount).premiumLocked || this.isVeryLargeFile) {
             dismiss();
             return;
         }
@@ -195,6 +187,16 @@ public class LimitReachedBottomSheet extends BottomSheetWithRecyclerListView {
                 leaveFromSelectedGroups();
             }
         }
+    }
+
+    public void updatePremiumButtonText() {
+        if (UserConfig.getInstance(this.currentAccount).isPremium() || MessagesController.getInstance(this.currentAccount).premiumLocked || this.isVeryLargeFile) {
+            this.premiumButtonView.buttonTextView.setText(LocaleController.getString(NUM));
+            this.premiumButtonView.hideIcon();
+            return;
+        }
+        this.premiumButtonView.buttonTextView.setText(LocaleController.getString("IncreaseLimit", NUM));
+        this.premiumButtonView.setIcon(this.type == 7 ? NUM : NUM);
     }
 
     private void leaveFromSelectedGroups() {
@@ -236,7 +238,7 @@ public class LimitReachedBottomSheet extends BottomSheetWithRecyclerListView {
             } else if (i == 5) {
                 str = LocaleController.formatPluralString("LeaveCommunities", this.selectedChats.size(), new Object[0]);
             }
-            this.premiumButtonView.setOverlayText(str, true);
+            this.premiumButtonView.setOverlayText(str, true, true);
             return;
         }
         this.premiumButtonView.clearOverlayText();
@@ -340,6 +342,11 @@ public class LimitReachedBottomSheet extends BottomSheetWithRecyclerListView {
         this.currentValue = i;
     }
 
+    public void setVeryLargeFile(boolean z) {
+        this.isVeryLargeFile = z;
+        updatePremiumButtonText();
+    }
+
     private class HeaderView extends LinearLayout {
         /* JADX WARNING: Illegal instructions before constructor call */
         @android.annotation.SuppressLint({"SetTextI18n"})
@@ -369,19 +376,23 @@ public class LimitReachedBottomSheet extends BottomSheetWithRecyclerListView {
                 if (r5 == 0) goto L_0x003a
                 org.telegram.ui.Components.Premium.LimitReachedBottomSheet$LimitParams r7 = r1.limitParams
                 java.lang.String r7 = r7.descriptionStrLocked
-                goto L_0x0051
+                goto L_0x0058
             L_0x003a:
                 int r7 = r18.currentAccount
                 org.telegram.messenger.UserConfig r7 = org.telegram.messenger.UserConfig.getInstance(r7)
                 boolean r7 = r7.isPremium()
-                if (r7 == 0) goto L_0x004d
-                org.telegram.ui.Components.Premium.LimitReachedBottomSheet$LimitParams r7 = r1.limitParams
-                java.lang.String r7 = r7.descriptionStrPremium
-                goto L_0x0051
-            L_0x004d:
+                if (r7 != 0) goto L_0x0054
+                boolean r7 = r18.isVeryLargeFile
+                if (r7 == 0) goto L_0x004f
+                goto L_0x0054
+            L_0x004f:
                 org.telegram.ui.Components.Premium.LimitReachedBottomSheet$LimitParams r7 = r1.limitParams
                 java.lang.String r7 = r7.descriptionStr
-            L_0x0051:
+                goto L_0x0058
+            L_0x0054:
+                org.telegram.ui.Components.Premium.LimitReachedBottomSheet$LimitParams r7 = r1.limitParams
+                java.lang.String r7 = r7.descriptionStrPremium
+            L_0x0058:
                 org.telegram.ui.Components.Premium.LimitReachedBottomSheet$LimitParams r8 = r1.limitParams
                 int r9 = r8.defaultLimit
                 int r8 = r8.premiumLimit
@@ -389,72 +400,76 @@ public class LimitReachedBottomSheet extends BottomSheetWithRecyclerListView {
                 int r12 = r1.type
                 r13 = 3
                 r14 = 7
-                if (r12 != r13) goto L_0x0071
+                if (r12 != r13) goto L_0x0078
                 int r10 = r18.currentAccount
                 org.telegram.messenger.MessagesController r10 = org.telegram.messenger.MessagesController.getInstance(r10)
                 java.util.ArrayList<org.telegram.messenger.MessagesController$DialogFilter> r10 = r10.dialogFilters
                 int r10 = r10.size()
                 int r10 = r10 - r3
-                goto L_0x0077
-            L_0x0071:
-                if (r12 != r14) goto L_0x0077
+                goto L_0x007e
+            L_0x0078:
+                if (r12 != r14) goto L_0x007e
                 int r10 = org.telegram.messenger.UserConfig.getActivatedAccountsCount()
-            L_0x0077:
+            L_0x007e:
                 int r12 = r1.type
-                if (r12 != 0) goto L_0x00a7
+                if (r12 != 0) goto L_0x00ae
                 int r10 = r18.currentAccount
                 org.telegram.messenger.MessagesController r10 = org.telegram.messenger.MessagesController.getInstance(r10)
                 java.util.ArrayList r10 = r10.getDialogs(r6)
                 int r12 = r10.size()
                 r13 = 0
                 r15 = 0
-            L_0x008d:
-                if (r15 >= r12) goto L_0x00a6
+            L_0x0094:
+                if (r15 >= r12) goto L_0x00ad
                 java.lang.Object r16 = r10.get(r15)
                 r11 = r16
                 org.telegram.tgnet.TLRPC$Dialog r11 = (org.telegram.tgnet.TLRPC$Dialog) r11
                 boolean r3 = r11 instanceof org.telegram.tgnet.TLRPC$TL_dialogFolder
-                if (r3 == 0) goto L_0x009c
-                goto L_0x00a2
-            L_0x009c:
+                if (r3 == 0) goto L_0x00a3
+                goto L_0x00a9
+            L_0x00a3:
                 boolean r3 = r11.pinned
-                if (r3 == 0) goto L_0x00a2
+                if (r3 == 0) goto L_0x00a9
                 int r13 = r13 + 1
-            L_0x00a2:
+            L_0x00a9:
                 int r15 = r15 + 1
                 r3 = 1
-                goto L_0x008d
-            L_0x00a6:
+                goto L_0x0094
+            L_0x00ad:
                 r10 = r13
-            L_0x00a7:
+            L_0x00ae:
                 int r3 = r18.currentAccount
                 org.telegram.messenger.UserConfig r3 = org.telegram.messenger.UserConfig.getInstance(r3)
                 boolean r3 = r3.isPremium()
-                if (r3 == 0) goto L_0x00b9
-                r11 = 1065353216(0x3var_, float:1.0)
-                r10 = r8
-                goto L_0x00d0
-            L_0x00b9:
-                if (r10 >= 0) goto L_0x00bc
+                if (r3 != 0) goto L_0x00db
+                boolean r3 = r18.isVeryLargeFile
+                if (r3 == 0) goto L_0x00c3
+                goto L_0x00db
+            L_0x00c3:
+                if (r10 >= 0) goto L_0x00c6
                 r10 = r9
-            L_0x00bc:
+            L_0x00c6:
                 int r3 = r1.type
-                if (r3 != r14) goto L_0x00cc
-                if (r10 <= r9) goto L_0x00c9
+                if (r3 != r14) goto L_0x00d6
+                if (r10 <= r9) goto L_0x00d3
                 int r3 = r10 - r9
                 float r3 = (float) r3
                 int r11 = r8 - r9
                 float r11 = (float) r11
-                goto L_0x00ce
-            L_0x00c9:
+                goto L_0x00d8
+            L_0x00d3:
                 r11 = 1056964608(0x3var_, float:0.5)
-                goto L_0x00d0
-            L_0x00cc:
+                goto L_0x00de
+            L_0x00d6:
                 float r3 = (float) r10
                 float r11 = (float) r8
-            L_0x00ce:
+            L_0x00d8:
                 float r11 = r3 / r11
-            L_0x00d0:
+                goto L_0x00de
+            L_0x00db:
+                r11 = 1065353216(0x3var_, float:1.0)
+                r10 = r8
+            L_0x00de:
                 org.telegram.ui.Components.Premium.LimitPreviewView r3 = new org.telegram.ui.Components.Premium.LimitPreviewView
                 r3.<init>(r2, r4, r10, r8)
                 r1.limitPreviewView = r3
@@ -467,48 +482,47 @@ public class LimitReachedBottomSheet extends BottomSheetWithRecyclerListView {
                 r4 = 8
                 r3.setVisibility(r4)
                 r3 = 6
-                if (r5 == 0) goto L_0x00f3
+                if (r5 == 0) goto L_0x0101
                 org.telegram.ui.Components.Premium.LimitPreviewView r4 = r1.limitPreviewView
                 r4.setPremiumLocked()
-                goto L_0x0143
-            L_0x00f3:
+                goto L_0x013c
+            L_0x0101:
                 int r5 = r18.currentAccount
                 org.telegram.messenger.UserConfig r5 = org.telegram.messenger.UserConfig.getInstance(r5)
                 boolean r5 = r5.isPremium()
-                if (r5 != 0) goto L_0x010e
-                int r5 = r1.type
-                r8 = 2
-                if (r5 == r8) goto L_0x0109
-                r8 = 5
-                if (r5 != r8) goto L_0x010e
-            L_0x0109:
-                org.telegram.ui.Components.Premium.LimitPreviewView r5 = r1.limitPreviewView
-                r5.setDelayedAnimation()
-            L_0x010e:
-                int r5 = r18.currentAccount
-                org.telegram.messenger.UserConfig r5 = org.telegram.messenger.UserConfig.getInstance(r5)
-                boolean r5 = r5.isPremium()
-                if (r5 == 0) goto L_0x0143
+                if (r5 != 0) goto L_0x0115
+                boolean r5 = r18.isVeryLargeFile
+                if (r5 == 0) goto L_0x013c
+            L_0x0115:
                 org.telegram.ui.Components.Premium.LimitPreviewView r5 = r1.limitPreviewView
                 android.widget.TextView r5 = r5.premiumCount
                 r5.setVisibility(r4)
                 int r4 = r1.type
-                if (r4 != r3) goto L_0x0131
+                if (r4 != r3) goto L_0x012a
                 org.telegram.ui.Components.Premium.LimitPreviewView r4 = r1.limitPreviewView
                 android.widget.TextView r4 = r4.defaultCount
                 java.lang.String r5 = "2 GB"
                 r4.setText(r5)
-                goto L_0x013c
-            L_0x0131:
+                goto L_0x0135
+            L_0x012a:
                 org.telegram.ui.Components.Premium.LimitPreviewView r4 = r1.limitPreviewView
                 android.widget.TextView r4 = r4.defaultCount
                 java.lang.String r5 = java.lang.Integer.toString(r9)
                 r4.setText(r5)
-            L_0x013c:
+            L_0x0135:
                 org.telegram.ui.Components.Premium.LimitPreviewView r4 = r1.limitPreviewView
                 android.widget.TextView r4 = r4.defaultCount
                 r4.setVisibility(r6)
-            L_0x0143:
+            L_0x013c:
+                int r4 = r1.type
+                r5 = 2
+                if (r4 == r5) goto L_0x0144
+                r5 = 5
+                if (r4 != r5) goto L_0x0149
+            L_0x0144:
+                org.telegram.ui.Components.Premium.LimitPreviewView r4 = r1.limitPreviewView
+                r4.setDelayedAnimation()
+            L_0x0149:
                 org.telegram.ui.Components.Premium.LimitPreviewView r4 = r1.limitPreviewView
                 r8 = -1
                 r9 = -2
@@ -526,18 +540,18 @@ public class LimitReachedBottomSheet extends BottomSheetWithRecyclerListView {
                 android.graphics.Typeface r5 = org.telegram.messenger.AndroidUtilities.getTypeface(r5)
                 r4.setTypeface(r5)
                 int r1 = r1.type
-                if (r1 != r3) goto L_0x0173
+                if (r1 != r3) goto L_0x0179
                 r1 = 2131625799(0x7f0e0747, float:1.8878816E38)
                 java.lang.String r3 = "FileTooLarge"
                 java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r3, r1)
                 r4.setText(r1)
-                goto L_0x017f
-            L_0x0173:
-                r1 = 2131626393(0x7f0e0999, float:1.888002E38)
+                goto L_0x0185
+            L_0x0179:
+                r1 = 2131626394(0x7f0e099a, float:1.8880023E38)
                 java.lang.String r3 = "LimitReached"
                 java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r3, r1)
                 r4.setText(r1)
-            L_0x017f:
+            L_0x0185:
                 r1 = 1101004800(0x41a00000, float:20.0)
                 r3 = 1
                 r4.setTextSize(r3, r1)
@@ -622,7 +636,7 @@ public class LimitReachedBottomSheet extends BottomSheetWithRecyclerListView {
             limitParams2.icon = NUM;
             limitParams2.descriptionStr = LocaleController.formatString("LimitReachedFileSize", NUM, "2 GB", "4 GB");
             limitParams2.descriptionStrPremium = LocaleController.formatString("LimitReachedFileSizePremium", NUM, "4 GB");
-            limitParams2.descriptionStrLocked = LocaleController.formatString("LimitReachedFileSizeLocked", NUM, Integer.valueOf(limitParams2.defaultLimit));
+            limitParams2.descriptionStrLocked = LocaleController.formatString("LimitReachedFileSizeLocked", NUM, "2 GB");
         } else if (i == 7) {
             limitParams2.defaultLimit = 3;
             limitParams2.premiumLimit = 4;

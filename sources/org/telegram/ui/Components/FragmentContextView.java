@@ -412,7 +412,7 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
                 RectF rectF = AndroidUtilities.rectTmp;
                 float f = (float) dp;
                 rectF.set(f, f, (float) (getWidth() - dp), (float) (getHeight() - dp));
-                FragmentContextView.this.joinButtonFlicker.draw(canvas, rectF, (float) AndroidUtilities.dp(16.0f));
+                FragmentContextView.this.joinButtonFlicker.draw(canvas, rectF, (float) AndroidUtilities.dp(16.0f), this);
                 if (FragmentContextView.this.joinButtonFlicker.getProgress() < 1.0f && !FragmentContextView.this.joinButtonFlicker.repeatEnabled) {
                     invalidate();
                 }
@@ -1074,7 +1074,7 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
             r0.setTopPadding(r7)
         L_0x009b:
             r7 = 5
-            r10 = 2131623972(0x7f0e0024, float:1.887511E38)
+            r10 = 2131623973(0x7f0e0025, float:1.8875113E38)
             java.lang.String r11 = "AccDescrClosePlayer"
             r12 = 1097859072(0x41700000, float:15.0)
             r13 = 19
@@ -1479,7 +1479,7 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
             android.widget.FrameLayout$LayoutParams r2 = org.telegram.ui.Components.LayoutHelper.createFrame(r2, r3, r4, r5, r6, r7, r8)
             r1.setLayoutParams(r2)
             android.widget.ImageView r1 = r0.closeButton
-            r2 = 2131624090(0x7f0e009a, float:1.887535E38)
+            r2 = 2131624086(0x7f0e0096, float:1.8875342E38)
             java.lang.String r3 = "AccDescrStopLiveLocation"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             r1.setContentDescription(r2)
@@ -2414,8 +2414,8 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
             if (r1 != 0) goto L_0x03ac
             org.telegram.ui.ActionBar.BaseFragment r1 = r0.fragment
             org.telegram.ui.Components.BulletinFactory r1 = org.telegram.ui.Components.BulletinFactory.of(r1)
-            r2 = 2131558478(0x7f0d004e, float:1.8742273E38)
-            r3 = 2131626251(0x7f0e090b, float:1.8879733E38)
+            r2 = 2131558480(0x7f0d0050, float:1.8742277E38)
+            r3 = 2131626252(0x7f0e090c, float:1.8879735E38)
             java.lang.String r4 = "InviteExpired"
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r4, r3)
             org.telegram.ui.Components.Bulletin r1 = r1.createSimpleBulletin(r2, r3)
@@ -2534,14 +2534,14 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
             boolean r6 = org.telegram.messenger.ChatObject.isChannelOrGiga(r6)
             if (r6 == 0) goto L_0x0237
             org.telegram.ui.Components.AudioPlayerAlert$ClippingTextViewSwitcher r6 = r0.titleTextView
-            r9 = 2131628974(0x7f0e13ae, float:1.8885256E38)
+            r9 = 2131628980(0x7f0e13b4, float:1.8885268E38)
             java.lang.String r11 = "VoipChannelScheduledVoiceChat"
             java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r11, r9)
             r6.setText(r9, r5)
             goto L_0x0245
         L_0x0237:
             org.telegram.ui.Components.AudioPlayerAlert$ClippingTextViewSwitcher r6 = r0.titleTextView
-            r9 = 2131629084(0x7f0e141c, float:1.8885479E38)
+            r9 = 2131629090(0x7f0e1422, float:1.8885491E38)
             java.lang.String r11 = "VoipGroupScheduledVoiceChat"
             java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r11, r9)
             r6.setText(r9, r5)
@@ -2564,7 +2564,7 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
             r9.setVisibility(r5)
             org.telegram.tgnet.TLRPC$GroupCall r9 = r4.call
             boolean r9 = r9.rtmp_stream
-            r11 = 2131628988(0x7f0e13bc, float:1.8885284E38)
+            r11 = 2131628994(0x7f0e13c2, float:1.8885296E38)
             if (r9 == 0) goto L_0x027a
             org.telegram.ui.Components.AudioPlayerAlert$ClippingTextViewSwitcher r6 = r0.titleTextView
             java.lang.String r9 = org.telegram.messenger.LocaleController.getString((int) r11)
@@ -2580,7 +2580,7 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
             goto L_0x029a
         L_0x028c:
             org.telegram.ui.Components.AudioPlayerAlert$ClippingTextViewSwitcher r6 = r0.titleTextView
-            r9 = 2131629118(0x7f0e143e, float:1.8885548E38)
+            r9 = 2131629124(0x7f0e1444, float:1.888556E38)
             java.lang.String r11 = "VoipGroupVoiceChat"
             java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r11, r9)
             r6.setText(r9, r5)
@@ -2591,10 +2591,10 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
             org.telegram.ui.Components.AudioPlayerAlert$ClippingTextViewSwitcher r6 = r0.subtitleTextView
             boolean r4 = r4.rtmp_stream
             if (r4 == 0) goto L_0x02aa
-            r4 = 2131628916(0x7f0e1374, float:1.8885138E38)
+            r4 = 2131628922(0x7f0e137a, float:1.888515E38)
             goto L_0x02ad
         L_0x02aa:
-            r4 = 2131626599(0x7f0e0a67, float:1.8880439E38)
+            r4 = 2131626600(0x7f0e0a68, float:1.888044E38)
         L_0x02ad:
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString((int) r4)
             r6.setText(r4, r5)

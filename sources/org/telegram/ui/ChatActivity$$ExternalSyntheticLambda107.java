@@ -1,15 +1,15 @@
 package org.telegram.ui;
 
-import android.widget.PopupWindow;
+import android.view.MotionEvent;
+import android.view.View;
 
-public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda107 implements PopupWindow.OnDismissListener {
-    public final /* synthetic */ ChatActivity f$0;
+public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda107 implements View.OnTouchListener {
+    public static final /* synthetic */ ChatActivity$$ExternalSyntheticLambda107 INSTANCE = new ChatActivity$$ExternalSyntheticLambda107();
 
-    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda107(ChatActivity chatActivity) {
-        this.f$0 = chatActivity;
+    private /* synthetic */ ChatActivity$$ExternalSyntheticLambda107() {
     }
 
-    public final void onDismiss() {
-        this.f$0.lambda$createView$40();
+    public final boolean onTouch(View view, MotionEvent motionEvent) {
+        return ChatActivity.lambda$createView$23(view, motionEvent);
     }
 }

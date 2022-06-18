@@ -66,7 +66,7 @@ public class ChatPullingDownDrawable implements NotificationCenter.NotificationC
     int[] params = new int[3];
     View parentView;
     Path path = new Path();
-    float progressToBottomPannel;
+    float progressToBottomPanel;
     private final Theme.ResourcesProvider resourcesProvider;
     boolean showBottomPanel;
     AnimatorSet showReleaseAnimator;
@@ -587,8 +587,8 @@ public class ChatPullingDownDrawable implements NotificationCenter.NotificationC
         return this.nextChat.id;
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:17:0x006d  */
-    /* JADX WARNING: Removed duplicated region for block: B:22:0x00b1  */
+    /* JADX WARNING: Removed duplicated region for block: B:17:0x0078  */
+    /* JADX WARNING: Removed duplicated region for block: B:22:0x00bc  */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public void drawBottomPanel(android.graphics.Canvas r17, int r18, int r19, int r20) {
         /*
@@ -602,14 +602,14 @@ public class ChatPullingDownDrawable implements NotificationCenter.NotificationC
             r10 = 0
             r11 = 1065353216(0x3var_, float:1.0)
             if (r1 == 0) goto L_0x0028
-            float r3 = r0.progressToBottomPannel
+            float r3 = r0.progressToBottomPanel
             int r4 = (r3 > r11 ? 1 : (r3 == r11 ? 0 : -1))
             if (r4 == 0) goto L_0x0028
             float r3 = r3 + r2
-            r0.progressToBottomPannel = r3
+            r0.progressToBottomPanel = r3
             int r1 = (r3 > r11 ? 1 : (r3 == r11 ? 0 : -1))
             if (r1 <= 0) goto L_0x0022
-            r0.progressToBottomPannel = r11
+            r0.progressToBottomPanel = r11
             goto L_0x003f
         L_0x0022:
             android.view.View r1 = r0.fragmentView
@@ -617,26 +617,30 @@ public class ChatPullingDownDrawable implements NotificationCenter.NotificationC
             goto L_0x003f
         L_0x0028:
             if (r1 != 0) goto L_0x003f
-            float r1 = r0.progressToBottomPannel
+            float r1 = r0.progressToBottomPanel
             int r3 = (r1 > r10 ? 1 : (r1 == r10 ? 0 : -1))
             if (r3 == 0) goto L_0x003f
             float r1 = r1 - r2
-            r0.progressToBottomPannel = r1
+            r0.progressToBottomPanel = r1
             int r1 = (r1 > r10 ? 1 : (r1 == r10 ? 0 : -1))
             if (r1 >= 0) goto L_0x003a
-            r0.progressToBottomPannel = r10
+            r0.progressToBottomPanel = r10
             goto L_0x003f
         L_0x003a:
             android.view.View r1 = r0.fragmentView
             r1.invalidate()
         L_0x003f:
+            android.text.TextPaint r1 = r0.textPaint2
+            java.lang.String r2 = "chat_messagePanelHint"
+            int r2 = r0.getThemedColor(r2)
+            r1.setColor(r2)
             java.lang.String r1 = "paintChatComposeBackground"
             android.graphics.Paint r12 = r0.getThemedPaint(r1)
             int r13 = r12.getAlpha()
             android.text.TextPaint r1 = r0.textPaint2
             int r14 = r1.getAlpha()
             float r1 = (float) r13
-            float r2 = r0.progressToBottomPannel
+            float r2 = r0.progressToBottomPanel
             float r1 = r1 * r2
             int r1 = (int) r1
             r12.setAlpha(r1)
@@ -652,15 +656,15 @@ public class ChatPullingDownDrawable implements NotificationCenter.NotificationC
             android.text.StaticLayout r1 = r0.layout1
             r2 = 1092616192(0x41200000, float:10.0)
             r3 = 1073741824(0x40000000, float:2.0)
-            if (r1 == 0) goto L_0x00ad
+            if (r1 == 0) goto L_0x00b8
             float r1 = r0.swipeToReleaseProgress
             int r4 = (r1 > r11 ? 1 : (r1 == r11 ? 0 : -1))
-            if (r4 >= 0) goto L_0x00ad
+            if (r4 >= 0) goto L_0x00b8
             android.text.TextPaint r4 = r0.textPaint2
             float r5 = (float) r14
             float r1 = r11 - r1
             float r5 = r5 * r1
-            float r1 = r0.progressToBottomPannel
+            float r1 = r0.progressToBottomPanel
             float r5 = r5 * r1
             int r1 = (int) r5
             r4.setAlpha(r1)
@@ -686,16 +690,16 @@ public class ChatPullingDownDrawable implements NotificationCenter.NotificationC
             android.text.StaticLayout r1 = r0.layout1
             r1.draw(r7)
             r17.restore()
-        L_0x00ad:
+        L_0x00b8:
             android.text.StaticLayout r1 = r0.layout2
-            if (r1 == 0) goto L_0x00f0
+            if (r1 == 0) goto L_0x00fb
             float r1 = r0.swipeToReleaseProgress
             int r4 = (r1 > r10 ? 1 : (r1 == r10 ? 0 : -1))
-            if (r4 <= 0) goto L_0x00f0
+            if (r4 <= 0) goto L_0x00fb
             android.text.TextPaint r4 = r0.textPaint2
             float r5 = (float) r14
             float r5 = r5 * r1
-            float r1 = r0.progressToBottomPannel
+            float r1 = r0.progressToBottomPanel
             float r5 = r5 * r1
             int r1 = (int) r5
             r4.setAlpha(r1)
@@ -722,7 +726,7 @@ public class ChatPullingDownDrawable implements NotificationCenter.NotificationC
             android.text.StaticLayout r1 = r0.layout2
             r1.draw(r7)
             r17.restore()
-        L_0x00f0:
+        L_0x00fb:
             android.text.TextPaint r1 = r0.textPaint2
             r1.setAlpha(r14)
             r12.setAlpha(r13)
@@ -737,7 +741,7 @@ public class ChatPullingDownDrawable implements NotificationCenter.NotificationC
     }
 
     public boolean needDrawBottomPanel() {
-        return (this.showBottomPanel || this.progressToBottomPannel > 0.0f) && !this.emptyStub;
+        return (this.showBottomPanel || this.progressToBottomPanel > 0.0f) && !this.emptyStub;
     }
 
     public boolean animationIsRunning() {

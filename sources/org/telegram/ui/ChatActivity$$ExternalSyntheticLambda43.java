@@ -1,16 +1,17 @@
 package org.telegram.ui;
 
 import android.content.DialogInterface;
-import org.telegram.ui.Cells.ChatMessageCell;
 
-public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda43 implements DialogInterface.OnDismissListener {
-    public final /* synthetic */ ChatMessageCell f$0;
+public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda43 implements DialogInterface.OnClickListener {
+    public final /* synthetic */ ChatActivity f$0;
+    public final /* synthetic */ boolean f$1;
 
-    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda43(ChatMessageCell chatMessageCell) {
-        this.f$0 = chatMessageCell;
+    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda43(ChatActivity chatActivity, boolean z) {
+        this.f$0 = chatActivity;
+        this.f$1 = z;
     }
 
-    public final void onDismiss(DialogInterface dialogInterface) {
-        ChatActivity.lambda$didPressMessageUrl$236(this.f$0, dialogInterface);
+    public final void onClick(DialogInterface dialogInterface, int i) {
+        this.f$0.lambda$checkRecordLocked$218(this.f$1, dialogInterface, i);
     }
 }

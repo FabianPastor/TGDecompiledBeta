@@ -1,19 +1,25 @@
 package org.telegram.messenger;
 
-import java.util.List;
+import com.android.billingclient.api.BillingResult;
+import com.android.billingclient.api.Purchase;
+import org.telegram.tgnet.RequestDelegate;
+import org.telegram.tgnet.TLObject;
+import org.telegram.tgnet.TLRPC$TL_error;
 
-public final /* synthetic */ class BillingController$$ExternalSyntheticLambda3 implements Runnable {
+public final /* synthetic */ class BillingController$$ExternalSyntheticLambda3 implements RequestDelegate {
     public final /* synthetic */ BillingController f$0;
-    public final /* synthetic */ List f$1;
-    public final /* synthetic */ String f$2;
+    public final /* synthetic */ AccountInstance f$1;
+    public final /* synthetic */ Purchase f$2;
+    public final /* synthetic */ BillingResult f$3;
 
-    public /* synthetic */ BillingController$$ExternalSyntheticLambda3(BillingController billingController, List list, String str) {
+    public /* synthetic */ BillingController$$ExternalSyntheticLambda3(BillingController billingController, AccountInstance accountInstance, Purchase purchase, BillingResult billingResult) {
         this.f$0 = billingController;
-        this.f$1 = list;
-        this.f$2 = str;
+        this.f$1 = accountInstance;
+        this.f$2 = purchase;
+        this.f$3 = billingResult;
     }
 
-    public final void run() {
-        this.f$0.lambda$acknowledgePurchase$0(this.f$1, this.f$2);
+    public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+        this.f$0.lambda$onPurchasesUpdated$0(this.f$1, this.f$2, this.f$3, tLObject, tLRPC$TL_error);
     }
 }

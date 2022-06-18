@@ -17,14 +17,12 @@ import android.text.TextUtils;
 import android.text.style.ImageSpan;
 import android.util.StateSet;
 import android.view.View;
-import android.widget.Toast;
 import androidx.core.graphics.ColorUtils;
 import androidx.interpolator.view.animation.FastOutSlowInInterpolator;
 import java.util.Arrays;
 import java.util.HashMap;
 import org.telegram.messenger.AccountInstance;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.BuildVars;
 import org.telegram.messenger.DialogObject;
 import org.telegram.messenger.FileLog;
@@ -514,7 +512,6 @@ public class TranscribeButton {
         boolean z;
         MessageObject messageObject2 = messageObject;
         TLObject tLObject2 = tLObject;
-        TLRPC$TL_error tLRPC$TL_error2 = tLRPC$TL_error;
         String str = "";
         if (tLObject2 instanceof TLRPC$TL_messages_transcribedAudio) {
             TLRPC$TL_messages_transcribedAudio tLRPC$TL_messages_transcribedAudio = (TLRPC$TL_messages_transcribedAudio) tLObject2;
@@ -533,9 +530,6 @@ public class TranscribeButton {
             messageObject2.messageOwner.voiceTranscriptionId = j4;
             j3 = j4;
         } else {
-            if (tLRPC$TL_error2 != null) {
-                Toast.makeText(ApplicationLoader.applicationContext, tLRPC$TL_error2.text, 0).show();
-            }
             j3 = 0;
             z = true;
         }

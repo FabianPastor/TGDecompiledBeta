@@ -12,6 +12,6 @@ public final /* synthetic */ class MessagesStorage$$ExternalSyntheticLambda93 im
     }
 
     public final void run() {
-        this.f$0.lambda$isDialogHasTopMessage$138(this.f$1, this.f$2);
+        this.f$0.lambda$isDialogHasTopMessage$139(this.f$1, this.f$2);
     }
 }

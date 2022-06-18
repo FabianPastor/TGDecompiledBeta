@@ -14,6 +14,6 @@ public final /* synthetic */ class MessagesStorage$$ExternalSyntheticLambda139 i
     }
 
     public final void run() {
-        this.f$0.lambda$unpinAllDialogsExceptNew$185(this.f$1, this.f$2);
+        this.f$0.lambda$unpinAllDialogsExceptNew$186(this.f$1, this.f$2);
     }
 }

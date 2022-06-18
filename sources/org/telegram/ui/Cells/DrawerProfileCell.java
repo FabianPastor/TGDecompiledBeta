@@ -1,16 +1,8 @@
 package org.telegram.ui.Cells;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
 import android.graphics.Paint;
-import android.graphics.PorterDuff;
-import android.graphics.PorterDuffColorFilter;
 import android.graphics.Rect;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.ColorDrawable;
-import android.graphics.drawable.Drawable;
-import android.graphics.drawable.GradientDrawable;
 import android.graphics.drawable.RippleDrawable;
 import android.os.Build;
 import android.text.TextUtils;
@@ -33,6 +25,8 @@ import org.telegram.ui.Components.AvatarDrawable;
 import org.telegram.ui.Components.BackupImageView;
 import org.telegram.ui.Components.CubicBezierInterpolator;
 import org.telegram.ui.Components.LayoutHelper;
+import org.telegram.ui.Components.Premium.PremiumGradient;
+import org.telegram.ui.Components.Premium.StarParticlesView;
 import org.telegram.ui.Components.RLottieDrawable;
 import org.telegram.ui.Components.RLottieImageView;
 import org.telegram.ui.Components.SnowflakesEffect;
@@ -43,22 +37,25 @@ public class DrawerProfileCell extends FrameLayout implements NotificationCenter
     private boolean accountsShown;
     private ImageView arrowView;
     private BackupImageView avatarImageView;
-    private Paint backPaint = new Paint(1);
     private Integer currentColor;
     private Integer currentMoonColor;
-    private int darkThemeBackgroundColor;
     private RLottieImageView darkThemeView;
     private Rect destRect = new Rect();
+    public boolean drawPremium;
+    public float drawPremiumProgress;
+    PremiumGradient.GradientTools gradientTools;
     private TextView nameTextView;
     private Paint paint = new Paint();
     private TextView phoneTextView;
     private ImageView shadowView;
     private SnowflakesEffect snowflakesEffect;
     private Rect srcRect = new Rect();
+    StarParticlesView.Drawable starParticlesDrawable;
     private RLottieDrawable sunDrawable;
 
     public DrawerProfileCell(Context context, DrawerLayoutContainer drawerLayoutContainer) {
         super(context);
+        new Paint(1);
         ImageView imageView = new ImageView(context);
         this.shadowView = imageView;
         imageView.setVisibility(4);
@@ -124,10 +121,7 @@ public class DrawerProfileCell extends FrameLayout implements NotificationCenter
         this.darkThemeView.setScaleType(ImageView.ScaleType.CENTER);
         this.darkThemeView.setAnimation(this.sunDrawable);
         if (Build.VERSION.SDK_INT >= 21) {
-            RLottieImageView rLottieImageView = this.darkThemeView;
-            int color2 = Theme.getColor("listSelectorSDK21");
-            this.darkThemeBackgroundColor = color2;
-            rLottieImageView.setBackgroundDrawable(Theme.createSelectorDrawable(color2, 1, AndroidUtilities.dp(17.0f)));
+            this.darkThemeView.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.getColor("listSelectorSDK21"), 1, AndroidUtilities.dp(17.0f)));
             Theme.setRippleDrawableForceSoftware((RippleDrawable) this.darkThemeView.getBackground());
         }
         this.darkThemeView.setOnClickListener(new DrawerProfileCell$$ExternalSyntheticLambda0(this));
@@ -216,7 +210,7 @@ public class DrawerProfileCell extends FrameLayout implements NotificationCenter
             int r2 = org.telegram.ui.ActionBar.Theme.selectedAutoNightType
             if (r2 == 0) goto L_0x00a9
             android.content.Context r2 = r6.getContext()
-            r3 = 2131624604(0x7f0e029c, float:1.8876392E38)
+            r3 = 2131624603(0x7f0e029b, float:1.887639E38)
             java.lang.String r4 = "AutoNightModeOff"
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r4, r3)
             android.widget.Toast r2 = android.widget.Toast.makeText(r2, r3, r1)
@@ -316,95 +310,296 @@ public class DrawerProfileCell extends FrameLayout implements NotificationCenter
     }
 
     /* access modifiers changed from: protected */
-    public void onDraw(Canvas canvas) {
-        boolean z;
-        int i;
-        Drawable cachedWallpaper = Theme.getCachedWallpaper();
-        int i2 = 0;
-        boolean z2 = !applyBackground(false).equals("chats_menuTopBackground") && Theme.isCustomTheme() && !Theme.isPatternWallpaper() && cachedWallpaper != null && !(cachedWallpaper instanceof ColorDrawable) && !(cachedWallpaper instanceof GradientDrawable);
-        if (z2 || !Theme.hasThemeKey("chats_menuTopShadowCats")) {
-            if (Theme.hasThemeKey("chats_menuTopShadow")) {
-                i = Theme.getColor("chats_menuTopShadow");
-            } else {
-                i = Theme.getServiceMessageColor() | -16777216;
+    public void onLayout(boolean z, int i, int i2, int i3, int i4) {
+        super.onLayout(z, i, i2, i3, i4);
+        if (this.drawPremium) {
+            if (this.starParticlesDrawable == null) {
+                StarParticlesView.Drawable drawable = new StarParticlesView.Drawable(15);
+                this.starParticlesDrawable = drawable;
+                drawable.init();
+                StarParticlesView.Drawable drawable2 = this.starParticlesDrawable;
+                drawable2.speedScale = 0.8f;
+                drawable2.minLifeTime = 3000;
             }
-            z = false;
-        } else {
-            i = Theme.getColor("chats_menuTopShadowCats");
-            z = true;
+            this.starParticlesDrawable.rect.set((float) this.avatarImageView.getLeft(), (float) this.avatarImageView.getTop(), (float) this.avatarImageView.getRight(), (float) this.avatarImageView.getBottom());
+            this.starParticlesDrawable.rect.inset((float) (-AndroidUtilities.dp(20.0f)), (float) (-AndroidUtilities.dp(20.0f)));
+            this.starParticlesDrawable.resetPositions();
         }
-        Integer num = this.currentColor;
-        if (num == null || num.intValue() != i) {
-            this.currentColor = Integer.valueOf(i);
-            this.shadowView.getDrawable().setColorFilter(new PorterDuffColorFilter(i, PorterDuff.Mode.MULTIPLY));
-        }
-        int color = Theme.getColor("chats_menuName");
-        Integer num2 = this.currentMoonColor;
-        if (num2 == null || num2.intValue() != color) {
-            this.currentMoonColor = Integer.valueOf(color);
-            this.sunDrawable.beginApplyLayerColors();
-            this.sunDrawable.setLayerColor("Sunny.**", this.currentMoonColor.intValue());
-            this.sunDrawable.setLayerColor("Path 6.**", this.currentMoonColor.intValue());
-            this.sunDrawable.setLayerColor("Path.**", this.currentMoonColor.intValue());
-            this.sunDrawable.setLayerColor("Path 5.**", this.currentMoonColor.intValue());
-            this.sunDrawable.commitApplyLayerColors();
-        }
-        this.nameTextView.setTextColor(Theme.getColor("chats_menuName"));
-        if (z2) {
-            this.phoneTextView.setTextColor(Theme.getColor("chats_menuPhone"));
-            if (this.shadowView.getVisibility() != 0) {
-                this.shadowView.setVisibility(0);
-            }
-            if ((cachedWallpaper instanceof ColorDrawable) || (cachedWallpaper instanceof GradientDrawable)) {
-                cachedWallpaper.setBounds(0, 0, getMeasuredWidth(), getMeasuredHeight());
-                cachedWallpaper.draw(canvas);
-                i2 = Theme.getColor("listSelectorSDK21");
-            } else if (cachedWallpaper instanceof BitmapDrawable) {
-                Bitmap bitmap = ((BitmapDrawable) cachedWallpaper).getBitmap();
-                float max = Math.max(((float) getMeasuredWidth()) / ((float) bitmap.getWidth()), ((float) getMeasuredHeight()) / ((float) bitmap.getHeight()));
-                int measuredWidth = (int) (((float) getMeasuredWidth()) / max);
-                int measuredHeight = (int) (((float) getMeasuredHeight()) / max);
-                int width = (bitmap.getWidth() - measuredWidth) / 2;
-                int height = (bitmap.getHeight() - measuredHeight) / 2;
-                this.srcRect.set(width, height, measuredWidth + width, measuredHeight + height);
-                this.destRect.set(0, 0, getMeasuredWidth(), getMeasuredHeight());
-                try {
-                    canvas.drawBitmap(bitmap, this.srcRect, this.destRect, this.paint);
-                } catch (Throwable th) {
-                    FileLog.e(th);
-                }
-                i2 = (Theme.getServiceMessageColor() & 16777215) | NUM;
-            }
-        } else {
-            if (!z) {
-                i2 = 4;
-            }
-            if (this.shadowView.getVisibility() != i2) {
-                this.shadowView.setVisibility(i2);
-            }
-            this.phoneTextView.setTextColor(Theme.getColor("chats_menuPhoneCats"));
-            super.onDraw(canvas);
-            i2 = Theme.getColor("listSelectorSDK21");
-        }
-        if (i2 != 0) {
-            if (i2 != this.darkThemeBackgroundColor) {
-                Paint paint2 = this.backPaint;
-                this.darkThemeBackgroundColor = i2;
-                paint2.setColor(i2);
-                if (Build.VERSION.SDK_INT >= 21) {
-                    Drawable background = this.darkThemeView.getBackground();
-                    this.darkThemeBackgroundColor = i2;
-                    Theme.setSelectorDrawableColor(background, i2, true);
-                }
-            }
-            if (z2 && (cachedWallpaper instanceof BitmapDrawable)) {
-                canvas.drawCircle(this.darkThemeView.getX() + ((float) (this.darkThemeView.getMeasuredWidth() / 2)), this.darkThemeView.getY() + ((float) (this.darkThemeView.getMeasuredHeight() / 2)), (float) AndroidUtilities.dp(17.0f), this.backPaint);
-            }
-        }
-        SnowflakesEffect snowflakesEffect2 = this.snowflakesEffect;
-        if (snowflakesEffect2 != null) {
-            snowflakesEffect2.onDraw(this, canvas);
-        }
+    }
+
+    /* access modifiers changed from: protected */
+    /* JADX WARNING: Removed duplicated region for block: B:67:0x01b7  */
+    /* JADX WARNING: Removed duplicated region for block: B:76:0x021e  */
+    /* JADX WARNING: Removed duplicated region for block: B:78:? A[RETURN, SYNTHETIC] */
+    /* Code decompiled incorrectly, please refer to instructions dump. */
+    public void onDraw(android.graphics.Canvas r12) {
+        /*
+            r11 = this;
+            android.graphics.drawable.Drawable r0 = org.telegram.ui.ActionBar.Theme.getCachedWallpaper()
+            r1 = 0
+            java.lang.String r2 = r11.applyBackground(r1)
+            java.lang.String r3 = "chats_menuTopBackground"
+            boolean r2 = r2.equals(r3)
+            r3 = 1
+            if (r2 != 0) goto L_0x002a
+            boolean r2 = org.telegram.ui.ActionBar.Theme.isCustomTheme()
+            if (r2 == 0) goto L_0x002a
+            boolean r2 = org.telegram.ui.ActionBar.Theme.isPatternWallpaper()
+            if (r2 != 0) goto L_0x002a
+            if (r0 == 0) goto L_0x002a
+            boolean r2 = r0 instanceof android.graphics.drawable.ColorDrawable
+            if (r2 != 0) goto L_0x002a
+            boolean r2 = r0 instanceof android.graphics.drawable.GradientDrawable
+            if (r2 != 0) goto L_0x002a
+            r2 = 1
+            goto L_0x002b
+        L_0x002a:
+            r2 = 0
+        L_0x002b:
+            if (r2 != 0) goto L_0x003b
+            java.lang.String r4 = "chats_menuTopShadowCats"
+            boolean r5 = org.telegram.ui.ActionBar.Theme.hasThemeKey(r4)
+            if (r5 == 0) goto L_0x003b
+            int r4 = org.telegram.ui.ActionBar.Theme.getColor(r4)
+            r5 = 1
+            goto L_0x0050
+        L_0x003b:
+            java.lang.String r4 = "chats_menuTopShadow"
+            boolean r5 = org.telegram.ui.ActionBar.Theme.hasThemeKey(r4)
+            if (r5 == 0) goto L_0x0048
+            int r4 = org.telegram.ui.ActionBar.Theme.getColor(r4)
+            goto L_0x004f
+        L_0x0048:
+            int r4 = org.telegram.ui.ActionBar.Theme.getServiceMessageColor()
+            r5 = -16777216(0xfffffffffvar_, float:-1.7014118E38)
+            r4 = r4 | r5
+        L_0x004f:
+            r5 = 0
+        L_0x0050:
+            java.lang.Integer r6 = r11.currentColor
+            if (r6 == 0) goto L_0x005a
+            int r6 = r6.intValue()
+            if (r6 == r4) goto L_0x0070
+        L_0x005a:
+            java.lang.Integer r6 = java.lang.Integer.valueOf(r4)
+            r11.currentColor = r6
+            android.widget.ImageView r6 = r11.shadowView
+            android.graphics.drawable.Drawable r6 = r6.getDrawable()
+            android.graphics.PorterDuffColorFilter r7 = new android.graphics.PorterDuffColorFilter
+            android.graphics.PorterDuff$Mode r8 = android.graphics.PorterDuff.Mode.MULTIPLY
+            r7.<init>(r4, r8)
+            r6.setColorFilter(r7)
+        L_0x0070:
+            java.lang.String r4 = "chats_menuName"
+            int r6 = org.telegram.ui.ActionBar.Theme.getColor(r4)
+            java.lang.Integer r7 = r11.currentMoonColor
+            if (r7 == 0) goto L_0x0080
+            int r7 = r7.intValue()
+            if (r7 == r6) goto L_0x00c4
+        L_0x0080:
+            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
+            r11.currentMoonColor = r6
+            org.telegram.ui.Components.RLottieDrawable r6 = r11.sunDrawable
+            r6.beginApplyLayerColors()
+            org.telegram.ui.Components.RLottieDrawable r6 = r11.sunDrawable
+            java.lang.Integer r7 = r11.currentMoonColor
+            int r7 = r7.intValue()
+            java.lang.String r8 = "Sunny.**"
+            r6.setLayerColor(r8, r7)
+            org.telegram.ui.Components.RLottieDrawable r6 = r11.sunDrawable
+            java.lang.Integer r7 = r11.currentMoonColor
+            int r7 = r7.intValue()
+            java.lang.String r8 = "Path 6.**"
+            r6.setLayerColor(r8, r7)
+            org.telegram.ui.Components.RLottieDrawable r6 = r11.sunDrawable
+            java.lang.Integer r7 = r11.currentMoonColor
+            int r7 = r7.intValue()
+            java.lang.String r8 = "Path.**"
+            r6.setLayerColor(r8, r7)
+            org.telegram.ui.Components.RLottieDrawable r6 = r11.sunDrawable
+            java.lang.Integer r7 = r11.currentMoonColor
+            int r7 = r7.intValue()
+            java.lang.String r8 = "Path 5.**"
+            r6.setLayerColor(r8, r7)
+            org.telegram.ui.Components.RLottieDrawable r6 = r11.sunDrawable
+            r6.commitApplyLayerColors()
+        L_0x00c4:
+            android.widget.TextView r6 = r11.nameTextView
+            int r4 = org.telegram.ui.ActionBar.Theme.getColor(r4)
+            r6.setTextColor(r4)
+            java.lang.String r4 = "listSelectorSDK21"
+            if (r2 == 0) goto L_0x016a
+            android.widget.TextView r2 = r11.phoneTextView
+            java.lang.String r5 = "chats_menuPhone"
+            int r5 = org.telegram.ui.ActionBar.Theme.getColor(r5)
+            r2.setTextColor(r5)
+            android.widget.ImageView r2 = r11.shadowView
+            int r2 = r2.getVisibility()
+            if (r2 == 0) goto L_0x00e9
+            android.widget.ImageView r2 = r11.shadowView
+            r2.setVisibility(r1)
+        L_0x00e9:
+            boolean r2 = r0 instanceof android.graphics.drawable.ColorDrawable
+            if (r2 != 0) goto L_0x0158
+            boolean r2 = r0 instanceof android.graphics.drawable.GradientDrawable
+            if (r2 == 0) goto L_0x00f2
+            goto L_0x0158
+        L_0x00f2:
+            boolean r2 = r0 instanceof android.graphics.drawable.BitmapDrawable
+            if (r2 == 0) goto L_0x018c
+            android.graphics.drawable.BitmapDrawable r0 = (android.graphics.drawable.BitmapDrawable) r0
+            android.graphics.Bitmap r0 = r0.getBitmap()
+            int r2 = r11.getMeasuredWidth()
+            float r2 = (float) r2
+            int r4 = r0.getWidth()
+            float r4 = (float) r4
+            float r2 = r2 / r4
+            int r4 = r11.getMeasuredHeight()
+            float r4 = (float) r4
+            int r5 = r0.getHeight()
+            float r5 = (float) r5
+            float r4 = r4 / r5
+            float r2 = java.lang.Math.max(r2, r4)
+            int r4 = r11.getMeasuredWidth()
+            float r4 = (float) r4
+            float r4 = r4 / r2
+            int r4 = (int) r4
+            int r5 = r11.getMeasuredHeight()
+            float r5 = (float) r5
+            float r5 = r5 / r2
+            int r2 = (int) r5
+            int r5 = r0.getWidth()
+            int r5 = r5 - r4
+            int r5 = r5 / 2
+            int r6 = r0.getHeight()
+            int r6 = r6 - r2
+            int r6 = r6 / 2
+            android.graphics.Rect r7 = r11.srcRect
+            int r4 = r4 + r5
+            int r2 = r2 + r6
+            r7.set(r5, r6, r4, r2)
+            android.graphics.Rect r2 = r11.destRect
+            int r4 = r11.getMeasuredWidth()
+            int r5 = r11.getMeasuredHeight()
+            r2.set(r1, r1, r4, r5)
+            android.graphics.Rect r1 = r11.srcRect     // Catch:{ all -> 0x0150 }
+            android.graphics.Rect r2 = r11.destRect     // Catch:{ all -> 0x0150 }
+            android.graphics.Paint r4 = r11.paint     // Catch:{ all -> 0x0150 }
+            r12.drawBitmap(r0, r1, r2, r4)     // Catch:{ all -> 0x0150 }
+            goto L_0x0154
+        L_0x0150:
+            r0 = move-exception
+            org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)
+        L_0x0154:
+            org.telegram.ui.ActionBar.Theme.getServiceMessageColor()
+            goto L_0x018c
+        L_0x0158:
+            int r2 = r11.getMeasuredWidth()
+            int r5 = r11.getMeasuredHeight()
+            r0.setBounds(r1, r1, r2, r5)
+            r0.draw(r12)
+            org.telegram.ui.ActionBar.Theme.getColor(r4)
+            goto L_0x018c
+        L_0x016a:
+            if (r5 == 0) goto L_0x016d
+            goto L_0x016e
+        L_0x016d:
+            r1 = 4
+        L_0x016e:
+            android.widget.ImageView r0 = r11.shadowView
+            int r0 = r0.getVisibility()
+            if (r0 == r1) goto L_0x017b
+            android.widget.ImageView r0 = r11.shadowView
+            r0.setVisibility(r1)
+        L_0x017b:
+            android.widget.TextView r0 = r11.phoneTextView
+            java.lang.String r1 = "chats_menuPhoneCats"
+            int r1 = org.telegram.ui.ActionBar.Theme.getColor(r1)
+            r0.setTextColor(r1)
+            super.onDraw(r12)
+            org.telegram.ui.ActionBar.Theme.getColor(r4)
+        L_0x018c:
+            boolean r0 = r11.drawPremium
+            r1 = 1033171465(0x3d94var_, float:0.07272727)
+            r2 = 1065353216(0x3var_, float:1.0)
+            r4 = 0
+            if (r0 == 0) goto L_0x01a0
+            float r5 = r11.drawPremiumProgress
+            int r6 = (r5 > r2 ? 1 : (r5 == r2 ? 0 : -1))
+            if (r6 == 0) goto L_0x01a0
+            float r5 = r5 + r1
+            r11.drawPremiumProgress = r5
+            goto L_0x01ab
+        L_0x01a0:
+            if (r0 != 0) goto L_0x01ab
+            float r0 = r11.drawPremiumProgress
+            int r5 = (r0 > r4 ? 1 : (r0 == r4 ? 0 : -1))
+            if (r5 == 0) goto L_0x01ab
+            float r0 = r0 - r1
+            r11.drawPremiumProgress = r0
+        L_0x01ab:
+            float r0 = r11.drawPremiumProgress
+            float r0 = org.telegram.messenger.Utilities.clamp(r0, r2, r4)
+            r11.drawPremiumProgress = r0
+            int r0 = (r0 > r4 ? 1 : (r0 == r4 ? 0 : -1))
+            if (r0 == 0) goto L_0x021a
+            org.telegram.ui.Components.Premium.PremiumGradient$GradientTools r0 = r11.gradientTools
+            if (r0 != 0) goto L_0x01db
+            org.telegram.ui.Components.Premium.PremiumGradient$GradientTools r0 = new org.telegram.ui.Components.Premium.PremiumGradient$GradientTools
+            r1 = 0
+            java.lang.String r2 = "premiumGradientBottomSheet1"
+            java.lang.String r5 = "premiumGradientBottomSheet2"
+            java.lang.String r6 = "premiumGradientBottomSheet3"
+            r0.<init>(r2, r5, r6, r1)
+            r11.gradientTools = r0
+            r0.x1 = r4
+            r1 = 1066192077(0x3f8ccccd, float:1.1)
+            r0.y1 = r1
+            r1 = 1069547520(0x3fCLASSNAME, float:1.5)
+            r0.x2 = r1
+            r1 = -1102263091(0xffffffffbe4ccccd, float:-0.2)
+            r0.y2 = r1
+            r0.exactly = r3
+        L_0x01db:
+            org.telegram.ui.Components.Premium.PremiumGradient$GradientTools r4 = r11.gradientTools
+            r5 = 0
+            r6 = 0
+            int r7 = r11.getMeasuredWidth()
+            int r8 = r11.getMeasuredHeight()
+            r9 = 0
+            r10 = 0
+            r4.gradientMatrix(r5, r6, r7, r8, r9, r10)
+            org.telegram.ui.Components.Premium.PremiumGradient$GradientTools r0 = r11.gradientTools
+            android.graphics.Paint r0 = r0.paint
+            float r1 = r11.drawPremiumProgress
+            r2 = 1132396544(0x437var_, float:255.0)
+            float r1 = r1 * r2
+            int r1 = (int) r1
+            r0.setAlpha(r1)
+            r3 = 0
+            r4 = 0
+            int r0 = r11.getMeasuredWidth()
+            float r5 = (float) r0
+            int r0 = r11.getMeasuredHeight()
+            float r6 = (float) r0
+            org.telegram.ui.Components.Premium.PremiumGradient$GradientTools r0 = r11.gradientTools
+            android.graphics.Paint r7 = r0.paint
+            r2 = r12
+            r2.drawRect(r3, r4, r5, r6, r7)
+            org.telegram.ui.Components.Premium.StarParticlesView$Drawable r0 = r11.starParticlesDrawable
+            if (r0 == 0) goto L_0x0217
+            float r1 = r11.drawPremiumProgress
+            r0.onDraw(r12, r1)
+        L_0x0217:
+            r11.invalidate()
+        L_0x021a:
+            org.telegram.ui.Components.SnowflakesEffect r0 = r11.snowflakesEffect
+            if (r0 == 0) goto L_0x0221
+            r0.onDraw(r11, r12)
+        L_0x0221:
+            return
+        */
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Cells.DrawerProfileCell.onDraw(android.graphics.Canvas):void");
     }
 
     public boolean isInAvatar(float f, float f2) {
@@ -431,6 +626,7 @@ public class DrawerProfileCell extends FrameLayout implements NotificationCenter
                 userName = Emoji.replaceEmoji(userName, this.nameTextView.getPaint().getFontMetricsInt(), AndroidUtilities.dp(22.0f), false);
             } catch (Exception unused) {
             }
+            this.drawPremium = false;
             this.nameTextView.setText(userName);
             TextView textView = this.phoneTextView;
             PhoneFormat instance = PhoneFormat.getInstance();

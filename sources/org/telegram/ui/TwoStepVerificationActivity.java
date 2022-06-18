@@ -275,7 +275,7 @@ public class TwoStepVerificationActivity extends BaseFragment implements Notific
             org.telegram.ui.Components.RLottieImageView r10 = new org.telegram.ui.Components.RLottieImageView
             r10.<init>(r1)
             r0.lockImageView = r10
-            r11 = 2131558544(0x7f0d0090, float:1.8742407E38)
+            r11 = 2131558555(0x7f0d009b, float:1.874243E38)
             r12 = 120(0x78, float:1.68E-43)
             r10.setAnimation(r11, r12, r12)
             org.telegram.ui.Components.RLottieImageView r10 = r0.lockImageView
@@ -442,7 +442,7 @@ public class TwoStepVerificationActivity extends BaseFragment implements Notific
             r13 = r13 | 48
             r4.setGravity(r13)
             android.widget.TextView r4 = r0.bottomTextView
-            r13 = 2131629271(0x7f0e14d7, float:1.8885858E38)
+            r13 = 2131629277(0x7f0e14dd, float:1.888587E38)
             java.lang.String r15 = "YourEmailInfo"
             java.lang.String r13 = org.telegram.messenger.LocaleController.getString(r15, r13)
             r4.setText(r13)
@@ -545,7 +545,7 @@ public class TwoStepVerificationActivity extends BaseFragment implements Notific
             int r6 = org.telegram.messenger.AndroidUtilities.dp(r6)
             r4.setPadding(r12, r3, r6, r3)
             android.widget.TextView r4 = r0.cancelResetButton
-            r6 = 2131624833(0x7f0e0381, float:1.8876857E38)
+            r6 = 2131624832(0x7f0e0380, float:1.8876855E38)
             java.lang.String r12 = "CancelReset"
             java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r12, r6)
             r4.setText(r6)
@@ -646,7 +646,7 @@ public class TwoStepVerificationActivity extends BaseFragment implements Notific
             org.telegram.ui.Components.TransformableLoginButtonView r4 = r0.floatingButtonIcon
             r4.setDrawBackground(r3)
             android.widget.FrameLayout r4 = r0.floatingButtonContainer
-            r6 = 2131626792(0x7f0e0b28, float:1.888083E38)
+            r6 = 2131626793(0x7f0e0b29, float:1.8880832E38)
             java.lang.String r6 = org.telegram.messenger.LocaleController.getString((int) r6)
             r4.setContentDescription(r6)
             android.widget.FrameLayout r4 = r0.floatingButtonContainer
@@ -781,7 +781,7 @@ public class TwoStepVerificationActivity extends BaseFragment implements Notific
             boolean r1 = r0.passwordEntered
             if (r1 == 0) goto L_0x0533
             org.telegram.ui.ActionBar.ActionBar r1 = r0.actionBar
-            r2 = 2131628697(0x7f0e1299, float:1.8884694E38)
+            r2 = 2131628702(0x7f0e129e, float:1.8884704E38)
             java.lang.String r4 = "TwoStepVerificationTitle"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r4, r2)
             r1.setTitle(r2)
@@ -794,20 +794,20 @@ public class TwoStepVerificationActivity extends BaseFragment implements Notific
             org.telegram.ui.TwoStepVerificationActivity$TwoStepVerificationActivityDelegate r1 = r0.delegate
             if (r1 == 0) goto L_0x054c
             android.widget.TextView r1 = r0.titleTextView
-            r2 = 2131627551(0x7f0e0e1f, float:1.888237E38)
+            r2 = 2131627553(0x7f0e0e21, float:1.8882374E38)
             java.lang.String r3 = "PleaseEnterCurrentPasswordTransfer"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             r1.setText(r2)
             goto L_0x0569
         L_0x054c:
             android.widget.TextView r1 = r0.titleTextView
-            r2 = 2131629281(0x7f0e14e1, float:1.8885878E38)
+            r2 = 2131629287(0x7f0e14e7, float:1.888589E38)
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString((int) r2)
             r1.setText(r2)
             android.widget.TextView r1 = r0.subtitleTextView
             r1.setVisibility(r3)
             android.widget.TextView r1 = r0.subtitleTextView
-            r2 = 2131626497(0x7f0e0a01, float:1.8880232E38)
+            r2 = 2131626498(0x7f0e0a02, float:1.8880234E38)
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString((int) r2)
             r1.setText(r2)
         L_0x0569:

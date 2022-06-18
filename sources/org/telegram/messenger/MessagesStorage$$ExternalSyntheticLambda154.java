@@ -17,6 +17,6 @@ public final /* synthetic */ class MessagesStorage$$ExternalSyntheticLambda154 i
     }
 
     public final void run() {
-        this.f$0.lambda$markMessagesAsRead$165(this.f$1, this.f$2, this.f$3);
+        this.f$0.lambda$markMessagesAsRead$166(this.f$1, this.f$2, this.f$3);
     }
 }

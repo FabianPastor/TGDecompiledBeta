@@ -1567,6 +1567,7 @@
     <public type="mipmap" name="icon_foreground" id="NUM" />
     <public type="mipmap" name="icon_foreground_round" id="NUM" />
     <public type="mipmap" name="icon_foreground_sa" id="NUM" />
+    <public type="raw" name="addone_icon" id="NUM" />
     <public type="raw" name="android_30" id="NUM" />
     <public type="raw" name="attach_contact" id="NUM" />
     <public type="raw" name="attach_file" id="NUM" />
@@ -1605,6 +1606,7 @@
     <public type="raw" name="default_pattern" id="NUM" />
     <public type="raw" name="diceloop" id="NUM" />
     <public type="raw" name="dots_loading" id="NUM" />
+    <public type="raw" name="double_icon" id="NUM" />
     <public type="raw" name="download_arrow" id="NUM" />
     <public type="raw" name="download_finish" id="NUM" />
     <public type="raw" name="download_progress" id="NUM" />
@@ -1670,6 +1672,15 @@
     <public type="raw" name="pip_video_request" id="NUM" />
     <public type="raw" name="pip_voice_request" id="NUM" />
     <public type="raw" name="player_prev" id="NUM" />
+    <public type="raw" name="premium_object_adsbubble" id="NUM" />
+    <public type="raw" name="premium_object_bubble" id="NUM" />
+    <public type="raw" name="premium_object_folder" id="NUM" />
+    <public type="raw" name="premium_object_like" id="NUM" />
+    <public type="raw" name="premium_object_noads" id="NUM" />
+    <public type="raw" name="premium_object_settings" id="NUM" />
+    <public type="raw" name="premium_object_user" id="NUM" />
+    <public type="raw" name="premium_object_video" id="NUM" />
+    <public type="raw" name="premium_object_video2" id="NUM" />
     <public type="raw" name="qr_code_logo" id="NUM" />
     <public type="raw" name="qr_code_logo_2" id="NUM" />
     <public type="raw" name="qr_login" id="NUM" />
@@ -1720,6 +1731,7 @@
     <public type="raw" name="tsv_setup_monkey_peek" id="NUM" />
     <public type="raw" name="tsv_setup_monkey_tracking" id="NUM" />
     <public type="raw" name="ubuntu_30" id="NUM" />
+    <public type="raw" name="unlock_icon" id="NUM" />
     <public type="raw" name="utyan_call" id="NUM" />
     <public type="raw" name="utyan_change_number" id="NUM" />
     <public type="raw" name="utyan_gigagroup" id="NUM" />
@@ -1765,6 +1777,7 @@
     <public type="string" name="AboutPremiumDescription" id="NUM" />
     <public type="string" name="AboutPremiumDescription2" id="NUM" />
     <public type="string" name="AboutPremiumTitle" id="NUM" />
+    <public type="string" name="AboutTelegramPremium" id="NUM" />
     <public type="string" name="AccActionCancelDownload" id="NUM" />
     <public type="string" name="AccActionDownload" id="NUM" />
     <public type="string" name="AccActionEnterSelectionMode" id="NUM" />
@@ -1834,11 +1847,6 @@
     <public type="string" name="AccDescrNumberOfPeopleReactions_one" id="NUM" />
     <public type="string" name="AccDescrNumberOfPeopleReactions_other" id="NUM" />
     <public type="string" name="AccDescrNumberOfPeopleReactions_two" id="NUM" />
-    <public type="string" name="AccDescrNumberOfReactions_few" id="NUM" />
-    <public type="string" name="AccDescrNumberOfReactions_many" id="NUM" />
-    <public type="string" name="AccDescrNumberOfReactions_one" id="NUM" />
-    <public type="string" name="AccDescrNumberOfReactions_other" id="NUM" />
-    <public type="string" name="AccDescrNumberOfReactions_two" id="NUM" />
     <public type="string" name="AccDescrNumberOfReplies_few" id="NUM" />
     <public type="string" name="AccDescrNumberOfReplies_many" id="NUM" />
     <public type="string" name="AccDescrNumberOfReplies_one" id="NUM" />
@@ -1935,6 +1943,7 @@
     <public type="string" name="AccDescrVoipCamSwitchedToFront" id="NUM" />
     <public type="string" name="AccDescrVoipMicOff" id="NUM" />
     <public type="string" name="AccDescrVoipMicOn" id="NUM" />
+    <public type="string" name="AccDescrYouReactedWith" id="NUM" />
     <public type="string" name="AccExitFullscreen" id="NUM" />
     <public type="string" name="AccPinnedMessagesList" id="NUM" />
     <public type="string" name="AccReleaseForArchive" id="NUM" />
@@ -2122,6 +2131,8 @@
     <public type="string" name="AddUserErrorBlacklisted" id="NUM" />
     <public type="string" name="AddedBy" id="NUM" />
     <public type="string" name="AddedToFavorites" id="NUM" />
+    <public type="string" name="AdditionalReactions" id="NUM" />
+    <public type="string" name="AdditionalReactionsDescription" id="NUM" />
     <public type="string" name="AdminWillBeRemoved" id="NUM" />
     <public type="string" name="Agree" id="NUM" />
     <public type="string" name="Alert" id="NUM" />
@@ -2673,6 +2684,7 @@
     <public type="string" name="ChangePhoneNumber" id="NUM" />
     <public type="string" name="ChangePhoneNumberInfo" id="NUM" />
     <public type="string" name="ChangePhoneNumberOccupied" id="NUM" />
+    <public type="string" name="ChangePhoneNumberSuccess" id="NUM" />
     <public type="string" name="ChangePublicLimitReached" id="NUM" />
     <public type="string" name="ChangeRecipient" id="NUM" />
     <public type="string" name="ChangeRecoveryEmail" id="NUM" />
@@ -3834,6 +3846,7 @@
     <public type="string" name="ForwardsRestrictedInfoChannel" id="NUM" />
     <public type="string" name="ForwardsRestrictedInfoGroup" id="NUM" />
     <public type="string" name="FreeOfTotal" id="NUM" />
+    <public type="string" name="FreshChangePhoneForbidden" id="NUM" />
     <public type="string" name="From" id="NUM" />
     <public type="string" name="FromCamera" id="NUM" />
     <public type="string" name="FromChats_few" id="NUM" />
@@ -4812,6 +4825,7 @@
     <public type="string" name="NotificationMessagePhoto" id="NUM" />
     <public type="string" name="NotificationMessagePoll2" id="NUM" />
     <public type="string" name="NotificationMessageQuiz2" id="NUM" />
+    <public type="string" name="NotificationMessageRecurringPay" id="NUM" />
     <public type="string" name="NotificationMessageRound" id="NUM" />
     <public type="string" name="NotificationMessageSDPhoto" id="NUM" />
     <public type="string" name="NotificationMessageSDVideo" id="NUM" />
@@ -5402,13 +5416,16 @@
     <public type="string" name="PremiumPreviewAnimatedProfiles" id="NUM" />
     <public type="string" name="PremiumPreviewAnimatedProfilesDescription" id="NUM" />
     <public type="string" name="PremiumPreviewAppIcon" id="NUM" />
+    <public type="string" name="PremiumPreviewAppIcon2" id="NUM" />
     <public type="string" name="PremiumPreviewAppIconDescription" id="NUM" />
+    <public type="string" name="PremiumPreviewAppIconDescription2" id="NUM" />
     <public type="string" name="PremiumPreviewDownloadSpeed" id="NUM" />
     <public type="string" name="PremiumPreviewDownloadSpeedDescription" id="NUM" />
     <public type="string" name="PremiumPreviewLimits" id="NUM" />
     <public type="string" name="PremiumPreviewLimitsDescription" id="NUM" />
     <public type="string" name="PremiumPreviewNoAds" id="NUM" />
     <public type="string" name="PremiumPreviewNoAdsDescription" id="NUM" />
+    <public type="string" name="PremiumPreviewNoAdsDescription2" id="NUM" />
     <public type="string" name="PremiumPreviewProfileBadge" id="NUM" />
     <public type="string" name="PremiumPreviewProfileBadgeDescription" id="NUM" />
     <public type="string" name="PremiumPreviewReactions" id="NUM" />
@@ -6532,6 +6549,7 @@
     <public type="string" name="UnhideFromTop" id="NUM" />
     <public type="string" name="UnknownError" id="NUM" />
     <public type="string" name="UnlockFingerprint" id="NUM" />
+    <public type="string" name="UnlockPremiumIcons" id="NUM" />
     <public type="string" name="UnlockPremiumReactions" id="NUM" />
     <public type="string" name="UnlockPremiumReactionsDescription" id="NUM" />
     <public type="string" name="UnlockPremiumStickers" id="NUM" />

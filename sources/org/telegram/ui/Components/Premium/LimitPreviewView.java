@@ -211,7 +211,19 @@ public class LimitPreviewView extends LinearLayout {
         } else if (this.premiumLocked) {
             int dp2 = AndroidUtilities.dp(14.0f);
             float measuredWidth2 = (((float) dp2) + (((float) (getMeasuredWidth() - (dp2 * 2))) * 0.5f)) - (((float) this.limitIcon.getMeasuredWidth()) / 2.0f);
-            this.limitIcon.setAlpha(1.0f);
+            boolean z2 = this.wasAnimation;
+            if (!z2 && this.animationCanPlay) {
+                this.wasAnimation = true;
+                this.limitIcon.animate().alpha(1.0f).scaleX(1.0f).scaleY(1.0f).setDuration(200).setInterpolator(new OvershootInterpolator()).start();
+            } else if (!z2) {
+                this.limitIcon.setAlpha(0.0f);
+                this.limitIcon.setScaleX(0.0f);
+                this.limitIcon.setScaleY(0.0f);
+            } else {
+                this.limitIcon.setAlpha(1.0f);
+                this.limitIcon.setScaleX(1.0f);
+                this.limitIcon.setScaleY(1.0f);
+            }
             this.limitIcon.setTranslationX(measuredWidth2);
         } else {
             CounterView counterView3 = this.limitIcon;

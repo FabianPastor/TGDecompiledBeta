@@ -17,6 +17,6 @@ public final /* synthetic */ class MessagesStorage$$ExternalSyntheticLambda155 i
     }
 
     public final void run() {
-        this.f$0.lambda$updateDialogsWithReadMessages$88(this.f$1, this.f$2, this.f$3);
+        this.f$0.lambda$updateDialogsWithReadMessages$89(this.f$1, this.f$2, this.f$3);
     }
 }

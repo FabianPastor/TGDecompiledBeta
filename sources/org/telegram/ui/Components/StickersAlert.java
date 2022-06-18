@@ -141,8 +141,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
     private TextView pickerBottomLayout;
     /* access modifiers changed from: private */
     public ContentPreviewViewer.ContentPreviewViewerDelegate previewDelegate;
-    /* access modifiers changed from: private */
-    public TextView previewSendButton;
+    private TextView previewSendButton;
     private View previewSendButtonShadow;
     private int reqId;
     /* access modifiers changed from: private */
@@ -283,7 +282,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
             }
 
             public boolean needSend() {
-                return StickersAlert.this.previewSendButton.getVisibility() == 0 && StickersAlert.this.importingStickers == null;
+                return StickersAlert.this.delegate != null;
             }
 
             public long getDialogId() {
@@ -425,7 +424,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
             }
 
             public boolean needSend() {
-                return StickersAlert.this.previewSendButton.getVisibility() == 0 && StickersAlert.this.importingStickers == null;
+                return StickersAlert.this.delegate != null;
             }
 
             public long getDialogId() {
@@ -575,7 +574,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
             }
 
             public boolean needSend() {
-                return StickersAlert.this.previewSendButton.getVisibility() == 0 && StickersAlert.this.importingStickers == null;
+                return StickersAlert.this.delegate != null;
             }
 
             public long getDialogId() {
@@ -651,11 +650,11 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
                     }
 
                     public Animator createAnimator(ViewGroup viewGroup, TransitionValues transitionValues, TransitionValues transitionValues2) {
-                        int access$600 = StickersAlert.this.scrollOffsetY;
+                        int access$500 = StickersAlert.this.scrollOffsetY;
                         int intValue = ((Integer) transitionValues.values.get("offset")).intValue() - ((Integer) transitionValues2.values.get("offset")).intValue();
                         ValueAnimator ofFloat = ValueAnimator.ofFloat(new float[]{0.0f, 1.0f});
                         ofFloat.setDuration(250);
-                        ofFloat.addUpdateListener(new StickersAlert$2$$ExternalSyntheticLambda0(this, intValue, access$600));
+                        ofFloat.addUpdateListener(new StickersAlert$2$$ExternalSyntheticLambda0(this, intValue, access$500));
                         return ofFloat;
                     }
 
@@ -757,7 +756,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
                 }
                 if (StickersAlert.this.gridView.getPaddingTop() != i6) {
                     boolean unused4 = StickersAlert.this.ignoreLayout = true;
-                    StickersAlert.this.gridView.setPadding(AndroidUtilities.dp(10.0f), i6, AndroidUtilities.dp(10.0f), 0);
+                    StickersAlert.this.gridView.setPadding(AndroidUtilities.dp(10.0f), i6, AndroidUtilities.dp(10.0f), AndroidUtilities.dp(8.0f));
                     StickersAlert.this.emptyView.setPadding(0, i6, 0, 0);
                     boolean unused5 = StickersAlert.this.ignoreLayout = false;
                 }
@@ -1463,7 +1462,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
             org.telegram.tgnet.TLRPC$TL_messages_stickerSet r0 = r12.stickerSet
             org.telegram.tgnet.TLRPC$StickerSet r2 = r0.set
             boolean r2 = r2.masks
-            r6 = 2131627891(0x7f0e0var_, float:1.888306E38)
+            r6 = 2131627896(0x7f0e0var_, float:1.888307E38)
             java.lang.String r7 = "RemoveStickersCount"
             if (r2 == 0) goto L_0x00f8
             java.lang.Object[] r2 = new java.lang.Object[r4]
@@ -1502,7 +1501,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
         L_0x012c:
             org.telegram.tgnet.TLRPC$TL_messages_stickerSet r0 = r12.stickerSet
             org.telegram.tgnet.TLRPC$StickerSet r2 = r0.set
-            r6 = 2131624282(0x7f0e015a, float:1.887574E38)
+            r6 = 2131624279(0x7f0e0157, float:1.8875733E38)
             java.lang.String r7 = "AddStickersCount"
             if (r2 == 0) goto L_0x0154
             boolean r2 = r2.masks
@@ -1558,7 +1557,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
             if (r0 == 0) goto L_0x01aa
             goto L_0x01c2
         L_0x01aa:
-            r0 = 2131626202(0x7f0e08da, float:1.8879634E38)
+            r0 = 2131626203(0x7f0e08db, float:1.8879636E38)
             java.lang.String r1 = "ImportStickersProcessing"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             java.lang.String r0 = r0.toUpperCase()
@@ -1570,7 +1569,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
         L_0x01c2:
             org.telegram.ui.Components.StickersAlert$$ExternalSyntheticLambda6 r0 = new org.telegram.ui.Components.StickersAlert$$ExternalSyntheticLambda6
             r0.<init>(r12)
-            r1 = 2131626189(0x7f0e08cd, float:1.8879607E38)
+            r1 = 2131626190(0x7f0e08ce, float:1.887961E38)
             java.lang.Object[] r2 = new java.lang.Object[r4]
             java.util.ArrayList<org.telegram.messenger.SendMessagesHelper$ImportingSticker> r7 = r12.importingStickersPaths
             if (r7 == 0) goto L_0x01d1

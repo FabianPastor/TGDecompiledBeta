@@ -698,7 +698,7 @@ public class SpoilerEffect extends Drawable {
      */
     @android.annotation.SuppressLint({"WrongConstant"})
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    public static void renderWithRipple(android.view.View r22, boolean r23, int r24, int r25, java.util.concurrent.atomic.AtomicReference<android.text.Layout> r26, android.text.Layout r27, java.util.List<org.telegram.ui.Components.spoilers.SpoilerEffect> r28, android.graphics.Canvas r29) {
+    public static void renderWithRipple(android.view.View r22, boolean r23, int r24, int r25, java.util.concurrent.atomic.AtomicReference<android.text.Layout> r26, android.text.Layout r27, java.util.List<org.telegram.ui.Components.spoilers.SpoilerEffect> r28, android.graphics.Canvas r29, boolean r30) {
         /*
             r0 = r22
             r1 = r24
@@ -840,7 +840,7 @@ public class SpoilerEffect extends Drawable {
             r2.draw(r11)
         L_0x014e:
             boolean r4 = r28.isEmpty()
-            if (r4 != 0) goto L_0x027b
+            if (r4 != 0) goto L_0x028f
             android.graphics.Path r4 = tempPath
             r4.rewind()
             java.util.Iterator r4 = r28.iterator()
@@ -907,10 +907,18 @@ public class SpoilerEffect extends Drawable {
         L_0x01dc:
             r2 = 0
         L_0x01dd:
-            if (r2 == 0) goto L_0x01f4
+            if (r2 == 0) goto L_0x0208
+            int r4 = r22.getMeasuredWidth()
+            if (r30 == 0) goto L_0x01f7
+            android.view.ViewParent r5 = r22.getParent()
+            boolean r5 = r5 instanceof android.view.View
+            if (r5 == 0) goto L_0x01f7
+            android.view.ViewParent r4 = r22.getParent()
+            android.view.View r4 = (android.view.View) r4
+            int r4 = r4.getMeasuredWidth()
+        L_0x01f7:
             r5 = 0
             r6 = 0
-            int r4 = r22.getMeasuredWidth()
             float r7 = (float) r4
             int r4 = r22.getMeasuredHeight()
             float r8 = (float) r4
@@ -918,42 +926,42 @@ public class SpoilerEffect extends Drawable {
             r10 = 31
             r4 = r29
             r4.saveLayer(r5, r6, r7, r8, r9, r10)
-            goto L_0x01f7
-        L_0x01f4:
+            goto L_0x020b
+        L_0x0208:
             r29.save()
-        L_0x01f7:
+        L_0x020b:
             int r4 = r22.getPaddingTop()
             int r4 = -r4
             float r4 = (float) r4
             r11.translate(r12, r4)
             java.util.Iterator r4 = r28.iterator()
-        L_0x0204:
+        L_0x0218:
             boolean r5 = r4.hasNext()
-            if (r5 == 0) goto L_0x0241
+            if (r5 == 0) goto L_0x0255
             java.lang.Object r5 = r4.next()
             org.telegram.ui.Components.spoilers.SpoilerEffect r5 = (org.telegram.ui.Components.spoilers.SpoilerEffect) r5
             r6 = r23
             r5.setInvalidateParent(r6)
             android.view.View r7 = r5.getParentView()
-            if (r7 == r0) goto L_0x021e
+            if (r7 == r0) goto L_0x0232
             r5.setParentView(r0)
-        L_0x021e:
+        L_0x0232:
             boolean r7 = r5.shouldInvalidateColor()
-            if (r7 == 0) goto L_0x023a
+            if (r7 == 0) goto L_0x024e
             android.text.TextPaint r7 = org.telegram.ui.ActionBar.Theme.chat_msgTextPaint
             int r7 = r7.getColor()
             float r8 = r5.getRippleProgress()
             float r8 = java.lang.Math.max(r12, r8)
             int r7 = androidx.core.graphics.ColorUtils.blendARGB(r1, r7, r8)
             r5.setColor(r7)
-            goto L_0x023d
-        L_0x023a:
+            goto L_0x0251
+        L_0x024e:
             r5.setColor(r1)
-        L_0x023d:
+        L_0x0251:
             r5.draw(r11)
-            goto L_0x0204
-        L_0x0241:
-            if (r2 == 0) goto L_0x0278
+            goto L_0x0218
+        L_0x0255:
+            if (r2 == 0) goto L_0x028c
             android.graphics.Path r0 = tempPath
             r0.rewind()
             r0 = 0
@@ -962,7 +970,7 @@ public class SpoilerEffect extends Drawable {
             android.graphics.Path r1 = tempPath
             r0.getRipplePath(r1)
             android.graphics.Paint r0 = xRefPaint
-            if (r0 != 0) goto L_0x0271
+            if (r0 != 0) goto L_0x0285
             android.graphics.Paint r0 = new android.graphics.Paint
             r1 = 1
             r0.<init>(r1)
@@ -974,16 +982,16 @@ public class SpoilerEffect extends Drawable {
             android.graphics.PorterDuff$Mode r2 = android.graphics.PorterDuff.Mode.CLEAR
             r1.<init>(r2)
             r0.setXfermode(r1)
-        L_0x0271:
+        L_0x0285:
             android.graphics.Path r0 = tempPath
             android.graphics.Paint r1 = xRefPaint
             r11.drawPath(r0, r1)
-        L_0x0278:
+        L_0x028c:
             r29.restore()
-        L_0x027b:
+        L_0x028f:
             return
         */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.spoilers.SpoilerEffect.renderWithRipple(android.view.View, boolean, int, int, java.util.concurrent.atomic.AtomicReference, android.text.Layout, java.util.List, android.graphics.Canvas):void");
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.spoilers.SpoilerEffect.renderWithRipple(android.view.View, boolean, int, int, java.util.concurrent.atomic.AtomicReference, android.text.Layout, java.util.List, android.graphics.Canvas, boolean):void");
     }
 
     private static class Particle {

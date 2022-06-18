@@ -11,6 +11,6 @@ public final /* synthetic */ class LoginActivity$LoginActivitySmsView$$ExternalS
     }
 
     public final void onDismiss(DialogInterface dialogInterface) {
-        this.f$0.lambda$onNextPressed$21(dialogInterface);
+        this.f$0.lambda$onNextPressed$19(dialogInterface);
     }
 }

@@ -18,6 +18,6 @@ public final /* synthetic */ class MessagesStorage$$ExternalSyntheticLambda123 i
     }
 
     public final void run() {
-        this.f$0.lambda$getSentFile$128(this.f$1, this.f$2, this.f$3, this.f$4);
+        this.f$0.lambda$getSentFile$129(this.f$1, this.f$2, this.f$3, this.f$4);
     }
 }

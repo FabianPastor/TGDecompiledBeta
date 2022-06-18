@@ -270,11 +270,11 @@ public class SessionBottomSheet extends BottomSheet {
         BulletinFactory.of(getContainer(), (Theme.ResourcesProvider) null).createCopyBulletin(LocaleController.getString("TextCopied", NUM)).show();
     }
 
-    /* JADX WARNING: Code restructure failed: missing block: B:39:0x00c3, code lost:
+    /* JADX WARNING: Code restructure failed: missing block: B:39:0x00c4, code lost:
         if (r13.app_name.toLowerCase().contains("desktop") != false) goto L_0x009b;
      */
-    /* JADX WARNING: Removed duplicated region for block: B:50:0x00fb  */
-    /* JADX WARNING: Removed duplicated region for block: B:51:0x010c  */
+    /* JADX WARNING: Removed duplicated region for block: B:50:0x00fc  */
+    /* JADX WARNING: Removed duplicated region for block: B:51:0x010d  */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     private void setAnimation(org.telegram.tgnet.TLRPC$TL_authorization r13, org.telegram.ui.Components.RLottieImageView r14) {
         /*
@@ -290,25 +290,25 @@ public class SessionBottomSheet extends BottomSheet {
             java.lang.String r1 = r1.toLowerCase()
             java.lang.String r2 = "safari"
             boolean r2 = r1.contains(r2)
-            r3 = 2131558587(0x7f0d00bb, float:1.8742494E38)
+            r3 = 2131558599(0x7f0d00c7, float:1.8742518E38)
             java.lang.String r4 = "avatar_backgroundBlue"
-            r5 = 2131558427(0x7f0d001b, float:1.874217E38)
+            r5 = 2131558428(0x7f0d001c, float:1.8742172E38)
             r6 = 1
             java.lang.String r7 = "avatar_backgroundCyan"
             r8 = 0
             java.lang.String r9 = "avatar_backgroundPink"
             if (r2 == 0) goto L_0x0035
-            r3 = 2131558511(0x7f0d006f, float:1.874234E38)
+            r3 = 2131558522(0x7f0d007a, float:1.8742362E38)
         L_0x0031:
             r4 = r9
         L_0x0032:
             r13 = 1
-            goto L_0x00e8
+            goto L_0x00e9
         L_0x0035:
             java.lang.String r2 = "edge"
             boolean r2 = r1.contains(r2)
             if (r2 == 0) goto L_0x0041
-            r3 = 2131558442(0x7f0d002a, float:1.87422E38)
+            r3 = 2131558444(0x7f0d002c, float:1.8742204E38)
             goto L_0x0031
         L_0x0041:
             java.lang.String r2 = "chrome"
@@ -317,24 +317,24 @@ public class SessionBottomSheet extends BottomSheet {
         L_0x0049:
             r4 = r9
             r13 = 1
-            r3 = 2131558427(0x7f0d001b, float:1.874217E38)
-            goto L_0x00e8
+            r3 = 2131558428(0x7f0d001c, float:1.8742172E38)
+            goto L_0x00e9
         L_0x0050:
             java.lang.String r2 = "opera"
             boolean r10 = r1.contains(r2)
             java.lang.String r11 = "firefox"
-            if (r10 != 0) goto L_0x00c6
+            if (r10 != 0) goto L_0x00c7
             boolean r10 = r1.contains(r11)
-            if (r10 != 0) goto L_0x00c6
+            if (r10 != 0) goto L_0x00c7
             java.lang.String r10 = "vivaldi"
             boolean r10 = r1.contains(r10)
             if (r10 == 0) goto L_0x0069
-            goto L_0x00c6
+            goto L_0x00c7
         L_0x0069:
             java.lang.String r2 = "ubuntu"
             boolean r2 = r0.contains(r2)
             if (r2 == 0) goto L_0x0075
-            r3 = 2131558552(0x7f0d0098, float:1.8742423E38)
+            r3 = 2131558563(0x7f0d00a3, float:1.8742445E38)
             goto L_0x0032
         L_0x0075:
             java.lang.String r2 = "ios"
@@ -343,12 +343,12 @@ public class SessionBottomSheet extends BottomSheet {
             java.lang.String r13 = "ipad"
             boolean r13 = r1.contains(r13)
             if (r13 == 0) goto L_0x008c
-            r13 = 2131558476(0x7f0d004c, float:1.8742269E38)
-            r3 = 2131558476(0x7f0d004c, float:1.8742269E38)
+            r13 = 2131558478(0x7f0d004e, float:1.8742273E38)
+            r3 = 2131558478(0x7f0d004e, float:1.8742273E38)
             goto L_0x0032
         L_0x008c:
-            r13 = 2131558477(0x7f0d004d, float:1.874227E38)
-            r3 = 2131558477(0x7f0d004d, float:1.874227E38)
+            r13 = 2131558479(0x7f0d004f, float:1.8742275E38)
+            r3 = 2131558479(0x7f0d004f, float:1.8742275E38)
             goto L_0x0032
         L_0x0093:
             java.lang.String r1 = "windows"
@@ -361,47 +361,47 @@ public class SessionBottomSheet extends BottomSheet {
             java.lang.String r1 = "macos"
             boolean r1 = r0.contains(r1)
             if (r1 == 0) goto L_0x00a9
-            r3 = 2131558480(0x7f0d0050, float:1.8742277E38)
+            r3 = 2131558482(0x7f0d0052, float:1.8742281E38)
             goto L_0x009b
         L_0x00a9:
             java.lang.String r1 = "android"
             boolean r0 = r0.contains(r1)
-            if (r0 == 0) goto L_0x00b7
-            r3 = 2131558400(0x7f0d0000, float:1.8742115E38)
+            if (r0 == 0) goto L_0x00b8
+            r3 = 2131558401(0x7f0d0001, float:1.8742117E38)
             java.lang.String r4 = "avatar_backgroundGreen"
             goto L_0x0032
-        L_0x00b7:
+        L_0x00b8:
             java.lang.String r13 = r13.app_name
             java.lang.String r13 = r13.toLowerCase()
             java.lang.String r0 = "desktop"
             boolean r13 = r13.contains(r0)
             if (r13 == 0) goto L_0x0049
             goto L_0x009b
-        L_0x00c6:
+        L_0x00c7:
             boolean r13 = r1.contains(r2)
-            if (r13 == 0) goto L_0x00d3
+            if (r13 == 0) goto L_0x00d4
             r13 = 2131165383(0x7var_c7, float:1.7944982E38)
             r3 = 2131165383(0x7var_c7, float:1.7944982E38)
-            goto L_0x00e6
-        L_0x00d3:
+            goto L_0x00e7
+        L_0x00d4:
             boolean r13 = r1.contains(r11)
-            if (r13 == 0) goto L_0x00e0
+            if (r13 == 0) goto L_0x00e1
             r13 = 2131165382(0x7var_c6, float:1.794498E38)
             r3 = 2131165382(0x7var_c6, float:1.794498E38)
-            goto L_0x00e6
-        L_0x00e0:
+            goto L_0x00e7
+        L_0x00e1:
             r13 = 2131165384(0x7var_c8, float:1.7944984E38)
             r3 = 2131165384(0x7var_c8, float:1.7944984E38)
-        L_0x00e6:
+        L_0x00e7:
             r4 = r9
             r13 = 0
-        L_0x00e8:
+        L_0x00e9:
             r0 = 1109917696(0x42280000, float:42.0)
             int r0 = org.telegram.messenger.AndroidUtilities.dp(r0)
             int r1 = org.telegram.ui.ActionBar.Theme.getColor(r4)
             android.graphics.drawable.ShapeDrawable r0 = org.telegram.ui.ActionBar.Theme.createCircleDrawable(r0, r1)
             r14.setBackground(r0)
-            if (r13 == 0) goto L_0x010c
+            if (r13 == 0) goto L_0x010d
             r13 = 2
             int[] r13 = new int[r13]
             r13[r8] = r8
@@ -409,12 +409,12 @@ public class SessionBottomSheet extends BottomSheet {
             r13[r6] = r0
             r0 = 50
             r14.setAnimation(r3, r0, r0, r13)
-            goto L_0x0117
-        L_0x010c:
+            goto L_0x0118
+        L_0x010d:
             android.content.Context r13 = r12.getContext()
             android.graphics.drawable.Drawable r13 = androidx.core.content.ContextCompat.getDrawable(r13, r3)
             r14.setImageDrawable(r13)
-        L_0x0117:
+        L_0x0118:
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.SessionBottomSheet.setAnimation(org.telegram.tgnet.TLRPC$TL_authorization, org.telegram.ui.Components.RLottieImageView):void");

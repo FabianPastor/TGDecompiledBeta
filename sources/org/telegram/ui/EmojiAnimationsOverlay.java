@@ -1,5 +1,6 @@
 package org.telegram.ui;
 
+import android.app.Activity;
 import android.graphics.Canvas;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
@@ -305,7 +306,10 @@ public class EmojiAnimationsOverlay implements NotificationCenter.NotificationCe
     }
 
     public boolean onTapItem(ChatMessageCell chatMessageCell, ChatActivity chatActivity2) {
-        if (chatActivity2.currentUser == null || chatActivity2.isSecretChat() || chatMessageCell.getMessageObject() == null || chatMessageCell.getMessageObject().getId() < 0) {
+        if (chatActivity2.isSecretChat() || chatMessageCell.getMessageObject() == null || chatMessageCell.getMessageObject().getId() < 0) {
+            return false;
+        }
+        if (!chatMessageCell.getMessageObject().isPremiumSticker() && chatActivity2.currentUser == null) {
             return false;
         }
         boolean showAnimationForCell = showAnimationForCell(chatMessageCell, -1, true, false);
@@ -313,8 +317,9 @@ public class EmojiAnimationsOverlay implements NotificationCenter.NotificationCe
             chatMessageCell.performHapticFeedback(3);
         }
         if (chatMessageCell.getMessageObject().isPremiumSticker()) {
-            chatMessageCell.getMessageObject().wasPlayedPremiumAnimation = true;
             chatMessageCell.getMessageObject().forcePlayEffect = false;
+            chatMessageCell.getMessageObject().messageOwner.premiumEffectWasPlayed = true;
+            chatActivity2.getMessagesStorage().updateMessageCustomParams(this.dialogId, chatMessageCell.getMessageObject().messageOwner);
             return showAnimationForCell;
         }
         Integer printingStringType = MessagesController.getInstance(this.currentAccount).getPrintingStringType(this.dialogId, this.threadMsgId);
@@ -350,7 +355,6 @@ public class EmojiAnimationsOverlay implements NotificationCenter.NotificationCe
     private boolean showAnimationForCell(ChatMessageCell chatMessageCell, int i, boolean z, boolean z2) {
         MessageObject messageObject;
         String stickerEmoji;
-        ArrayList arrayList;
         TLRPC$VideoSize tLRPC$VideoSize;
         TLRPC$Document tLRPC$Document;
         boolean z3;
@@ -368,7 +372,11 @@ public class EmojiAnimationsOverlay implements NotificationCenter.NotificationCe
         }
         String unwrapEmoji = unwrapEmoji(stickerEmoji);
         boolean isPremiumSticker = (messageObject = chatMessageCell.getMessageObject()).isPremiumSticker();
-        if ((!supportedEmoji.contains(unwrapEmoji) && !isPremiumSticker) || (((arrayList = this.emojiInteractionsStickersMap.get(unwrapEmoji)) == null || arrayList.isEmpty()) && !isPremiumSticker)) {
+        if (!supportedEmoji.contains(unwrapEmoji) && !isPremiumSticker) {
+            return false;
+        }
+        ArrayList arrayList = this.emojiInteractionsStickersMap.get(unwrapEmoji);
+        if ((arrayList == null || arrayList.isEmpty()) && !isPremiumSticker) {
             return false;
         }
         int i5 = 0;
@@ -418,15 +426,15 @@ public class EmojiAnimationsOverlay implements NotificationCenter.NotificationCe
                 } else {
                     i3 = num.intValue();
                 }
-                z3 = isPremiumSticker;
                 this.lastAnimationIndex.put(Long.valueOf(tLRPC$Document.id), Integer.valueOf((i3 + 1) % 4));
                 ImageLocation forDocument = ImageLocation.getForDocument(tLRPC$Document);
                 drawingObject.imageReceiver.setUniqKeyPrefix(i3 + "_" + drawingObject.messageId + "_");
                 drawingObject.imageReceiver.setImage(forDocument, i8 + "_" + i8 + "_pcache", (Drawable) null, "tgs", this.set, 1);
-            } else {
                 z3 = isPremiumSticker;
+            } else {
                 int i9 = (int) ((imageWidth * 1.5f) / AndroidUtilities.density);
                 if (i6 > 0) {
+                    z3 = isPremiumSticker;
                     Integer num2 = this.lastAnimationIndex.get(Long.valueOf(messageObject.getDocument().id));
                     if (num2 == null) {
                         i2 = 0;
@@ -435,9 +443,11 @@ public class EmojiAnimationsOverlay implements NotificationCenter.NotificationCe
                     }
                     this.lastAnimationIndex.put(Long.valueOf(messageObject.getDocument().id), Integer.valueOf((i2 + 1) % 4));
                     drawingObject.imageReceiver.setUniqKeyPrefix(i2 + "_" + drawingObject.messageId + "_");
+                } else {
+                    z3 = isPremiumSticker;
                 }
                 drawingObject.document = messageObject.getDocument();
-                drawingObject.imageReceiver.setImage(ImageLocation.getForDocument(tLRPC$VideoSize, messageObject.getDocument()), i9 + "_" + i9 + "_pcache", (Drawable) null, "tgs", this.set, 1);
+                drawingObject.imageReceiver.setImage(ImageLocation.getForDocument(tLRPC$VideoSize, messageObject.getDocument()), i9 + "_" + i9, (Drawable) null, "tgs", this.set, 1);
             }
             drawingObject.imageReceiver.setLayerNum(Integer.MAX_VALUE);
             drawingObject.imageReceiver.setAutoRepeat(0);
@@ -533,7 +543,11 @@ public class EmojiAnimationsOverlay implements NotificationCenter.NotificationCe
 
     /* access modifiers changed from: private */
     public /* synthetic */ void lambda$showStickerSetBulletin$3(MessageObject messageObject) {
-        StickersAlert stickersAlert = new StickersAlert(this.chatActivity.getParentActivity(), this.chatActivity, messageObject.getInputStickerSet(), (TLRPC$TL_messages_stickerSet) null, (StickersAlert.StickersAlertDelegate) null, this.chatActivity.getResourceProvider());
+        Activity parentActivity = this.chatActivity.getParentActivity();
+        ChatActivity chatActivity2 = this.chatActivity;
+        TLRPC$InputStickerSet inputStickerSet = messageObject.getInputStickerSet();
+        ChatActivity chatActivity3 = this.chatActivity;
+        StickersAlert stickersAlert = new StickersAlert(parentActivity, chatActivity2, inputStickerSet, (TLRPC$TL_messages_stickerSet) null, chatActivity3.chatActivityEnterView, chatActivity3.getResourceProvider());
         stickersAlert.setCalcMandatoryInsets(this.chatActivity.isKeyboardVisible());
         this.chatActivity.showDialog(stickersAlert);
     }

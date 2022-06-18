@@ -271,7 +271,7 @@ public class IntroActivity extends BaseFragment implements NotificationCenter.No
                 this.cellFlickerDrawable.setParentWidth(getMeasuredWidth());
                 RectF rectF = AndroidUtilities.rectTmp;
                 rectF.set(0.0f, 0.0f, (float) getMeasuredWidth(), (float) getMeasuredHeight());
-                this.cellFlickerDrawable.draw(canvas, rectF, (float) AndroidUtilities.dp(4.0f));
+                this.cellFlickerDrawable.draw(canvas, rectF, (float) AndroidUtilities.dp(4.0f), (View) null);
                 invalidate();
             }
 
@@ -382,7 +382,7 @@ public class IntroActivity extends BaseFragment implements NotificationCenter.No
             r10 = 5
             r7[r10] = r9
             r5.postNotificationName(r6, r7)
-            r10 = 2131624092(0x7f0e009c, float:1.8875354E38)
+            r10 = 2131624088(0x7f0e0098, float:1.8875346E38)
             java.lang.String r10 = org.telegram.messenger.LocaleController.getString((int) r10)
             r9.setContentDescription(r10)
             return

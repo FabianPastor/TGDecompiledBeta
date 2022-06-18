@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
 import android.opengl.Matrix;
+import androidx.core.graphics.ColorUtils;
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 import org.telegram.ui.ActionBar.Theme;
@@ -23,6 +24,7 @@ public class GLIconRenderer implements GLSurfaceView.Renderer {
     public float gradientScaleY;
     public float gradientStartX;
     public float gradientStartY;
+    public boolean isDarkBackground;
     private int mHeight;
     private final float[] mMVPMatrix = new float[16];
     private final float[] mProjectionMatrix = new float[16];
@@ -30,9 +32,11 @@ public class GLIconRenderer implements GLSurfaceView.Renderer {
     private final float[] mViewMatrix = new float[16];
     private int mWidth;
     public Star3DIcon star;
+    private final int style;
 
     public GLIconRenderer(Context context2, int i) {
         this.context = context2;
+        this.style = i;
         updateColors();
     }
 
@@ -62,6 +66,11 @@ public class GLIconRenderer implements GLSurfaceView.Renderer {
         Bitmap bitmap = this.backgroundBitmap;
         if (bitmap != null) {
             star3DIcon2.setBackground(bitmap);
+        }
+        if (this.isDarkBackground) {
+            Star3DIcon star3DIcon3 = this.star;
+            star3DIcon3.spec1 = 1.0f;
+            star3DIcon3.spec2 = 0.2f;
         }
     }
 
@@ -102,5 +111,10 @@ public class GLIconRenderer implements GLSurfaceView.Renderer {
     public void updateColors() {
         this.color1 = Theme.getColor(this.colorKey1);
         this.color2 = Theme.getColor(this.colorKey2);
+        boolean z = true;
+        if (this.style != 1 || ColorUtils.calculateLuminance(Theme.getColor("dialogBackground")) >= 0.5d) {
+            z = false;
+        }
+        this.isDarkBackground = z;
     }
 }

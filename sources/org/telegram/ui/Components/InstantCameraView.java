@@ -321,7 +321,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
                     float width = rectF.width() / 2.0f;
                     canvas.drawRoundRect(rectF, width, width, paint3);
                     rectF.inset((float) AndroidUtilities.dp(1.0f), (float) AndroidUtilities.dp(1.0f));
-                    this.flickerDrawable.draw(canvas, rectF, width);
+                    this.flickerDrawable.draw(canvas, rectF, width, (View) null);
                     invalidate();
                 }
             }

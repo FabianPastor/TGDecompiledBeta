@@ -12,6 +12,6 @@ public final /* synthetic */ class MessagesStorage$$ExternalSyntheticLambda122 i
     }
 
     public final void run() {
-        this.f$0.lambda$broadcastScheduledMessagesChange$168(this.f$1, this.f$2);
+        this.f$0.lambda$broadcastScheduledMessagesChange$169(this.f$1, this.f$2);
     }
 }

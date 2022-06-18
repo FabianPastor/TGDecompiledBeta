@@ -14,6 +14,6 @@ public final /* synthetic */ class MessagesStorage$$ExternalSyntheticLambda108 i
     }
 
     public final void run() {
-        this.f$0.lambda$overwriteChannel$151(this.f$1, this.f$2);
+        this.f$0.lambda$overwriteChannel$152(this.f$1, this.f$2);
     }
 }

@@ -4,14 +4,12 @@ import android.view.View;
 
 public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda93 implements View.OnClickListener {
     public final /* synthetic */ boolean[] f$0;
-    public final /* synthetic */ Runnable f$1;
 
-    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda93(boolean[] zArr, Runnable runnable) {
+    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda93(boolean[] zArr) {
         this.f$0 = zArr;
-        this.f$1 = runnable;
     }
 
     public final void onClick(View view) {
-        ChatActivity.lambda$createMenu$166(this.f$0, this.f$1, view);
+        ChatActivity.lambda$processSelectedOption$195(this.f$0, view);
     }
 }

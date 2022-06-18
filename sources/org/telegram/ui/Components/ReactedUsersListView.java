@@ -346,7 +346,7 @@ public class ReactedUsersListView extends FrameLayout {
                 if (tLRPC$TL_messagePeerReaction.reaction != null) {
                     TLRPC$TL_availableReaction tLRPC$TL_availableReaction = MediaDataController.getInstance(ReactedUsersListView.this.currentAccount).getReactionsMap().get(tLRPC$TL_messagePeerReaction.reaction);
                     if (tLRPC$TL_availableReaction != null) {
-                        this.reactView.setImage(ImageLocation.getForDocument(tLRPC$TL_availableReaction.static_icon), "50_50", "webp", (Drawable) DocumentObject.getSvgThumb(tLRPC$TL_availableReaction.static_icon.thumbs, "windowBackgroundGray", 1.0f), (Object) tLRPC$TL_availableReaction);
+                        this.reactView.setImage(ImageLocation.getForDocument(tLRPC$TL_availableReaction.center_icon), "40_40_lastframe", "webp", (Drawable) DocumentObject.getSvgThumb(tLRPC$TL_availableReaction.static_icon.thumbs, "windowBackgroundGray", 1.0f), (Object) tLRPC$TL_availableReaction);
                     } else {
                         this.reactView.setImageDrawable((Drawable) null);
                     }

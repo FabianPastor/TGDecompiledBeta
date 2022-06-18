@@ -15754,7 +15754,7 @@ public class Theme {
             chat_contextResult_shadowUnderSwitchDrawable = r5
             org.telegram.ui.Components.RLottieDrawable[] r5 = chat_attachButtonDrawables
             org.telegram.ui.Components.RLottieDrawable r8 = new org.telegram.ui.Components.RLottieDrawable
-            r9 = 2131558403(0x7f0d0003, float:1.874212E38)
+            r9 = 2131558404(0x7f0d0004, float:1.8742123E38)
             r10 = 1104150528(0x41d00000, float:26.0)
             int r11 = org.telegram.messenger.AndroidUtilities.dp(r10)
             int r12 = org.telegram.messenger.AndroidUtilities.dp(r10)
@@ -15763,7 +15763,7 @@ public class Theme {
             r5[r6] = r8
             org.telegram.ui.Components.RLottieDrawable[] r5 = chat_attachButtonDrawables
             org.telegram.ui.Components.RLottieDrawable r8 = new org.telegram.ui.Components.RLottieDrawable
-            r9 = 2131558405(0x7f0d0005, float:1.8742125E38)
+            r9 = 2131558406(0x7f0d0006, float:1.8742127E38)
             int r11 = org.telegram.messenger.AndroidUtilities.dp(r10)
             int r12 = org.telegram.messenger.AndroidUtilities.dp(r10)
             java.lang.String r13 = "attach_music"
@@ -15771,7 +15771,7 @@ public class Theme {
             r5[r7] = r8
             org.telegram.ui.Components.RLottieDrawable[] r5 = chat_attachButtonDrawables
             org.telegram.ui.Components.RLottieDrawable r8 = new org.telegram.ui.Components.RLottieDrawable
-            r9 = 2131558402(0x7f0d0002, float:1.8742119E38)
+            r9 = 2131558403(0x7f0d0003, float:1.874212E38)
             int r11 = org.telegram.messenger.AndroidUtilities.dp(r10)
             int r12 = org.telegram.messenger.AndroidUtilities.dp(r10)
             java.lang.String r13 = "attach_file"
@@ -15779,7 +15779,7 @@ public class Theme {
             r5[r3] = r8
             org.telegram.ui.Components.RLottieDrawable[] r5 = chat_attachButtonDrawables
             org.telegram.ui.Components.RLottieDrawable r8 = new org.telegram.ui.Components.RLottieDrawable
-            r9 = 2131558401(0x7f0d0001, float:1.8742117E38)
+            r9 = 2131558402(0x7f0d0002, float:1.8742119E38)
             int r11 = org.telegram.messenger.AndroidUtilities.dp(r10)
             int r12 = org.telegram.messenger.AndroidUtilities.dp(r10)
             java.lang.String r13 = "attach_contact"
@@ -15789,7 +15789,7 @@ public class Theme {
             org.telegram.ui.Components.RLottieDrawable[] r5 = chat_attachButtonDrawables
             r8 = 4
             org.telegram.ui.Components.RLottieDrawable r11 = new org.telegram.ui.Components.RLottieDrawable
-            r12 = 2131558404(0x7f0d0004, float:1.8742123E38)
+            r12 = 2131558405(0x7f0d0005, float:1.8742125E38)
             int r13 = org.telegram.messenger.AndroidUtilities.dp(r10)
             int r14 = org.telegram.messenger.AndroidUtilities.dp(r10)
             java.lang.String r15 = "attach_location"
@@ -15798,7 +15798,7 @@ public class Theme {
             org.telegram.ui.Components.RLottieDrawable[] r5 = chat_attachButtonDrawables
             r8 = 5
             org.telegram.ui.Components.RLottieDrawable r11 = new org.telegram.ui.Components.RLottieDrawable
-            r12 = 2131558406(0x7f0d0006, float:1.8742127E38)
+            r12 = 2131558407(0x7f0d0007, float:1.8742129E38)
             int r13 = org.telegram.messenger.AndroidUtilities.dp(r10)
             int r10 = org.telegram.messenger.AndroidUtilities.dp(r10)
             java.lang.String r14 = "attach_poll"

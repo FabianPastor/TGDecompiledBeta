@@ -13,6 +13,7 @@ import android.view.animation.OvershootInterpolator;
 import android.widget.OverScroller;
 import j$.util.Comparator$CC;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.Utilities;
@@ -50,6 +51,7 @@ public class CarouselView extends View implements PagerHeaderView {
 
     public static class DrawingObject {
         public double angle;
+        CarouselView carouselView;
         public float x;
         public float y;
         float yRelative;
@@ -179,6 +181,15 @@ public class CarouselView extends View implements PagerHeaderView {
         });
         this.drawingObjects = arrayList;
         this.drawingObjectsSorted = new ArrayList<>(arrayList);
+        for (int i = 0; i < arrayList.size() / 2; i++) {
+            float f = (float) i;
+            ((DrawingObject) arrayList.get(i)).y = ((float) arrayList.size()) / f;
+            ((DrawingObject) arrayList.get((arrayList.size() - 1) - i)).y = ((float) arrayList.size()) / f;
+        }
+        Collections.sort(arrayList, this.comparator);
+        for (int i2 = 0; i2 < arrayList.size(); i2++) {
+            ((DrawingObject) arrayList.get(i2)).carouselView = this;
+        }
     }
 
     /* access modifiers changed from: private */
@@ -256,8 +267,8 @@ public class CarouselView extends View implements PagerHeaderView {
     public void onAttachedToWindow() {
         super.onAttachedToWindow();
         for (int i = 0; i < 2; i++) {
-            for (int i2 = 0; i2 < this.drawingObjects.size(); i2++) {
-                ((DrawingObject) this.drawingObjects.get(i2)).onAttachToWindow(this, i);
+            for (int i2 = 0; i2 < this.drawingObjectsSorted.size(); i2++) {
+                ((DrawingObject) this.drawingObjectsSorted.get(i2)).onAttachToWindow(this, i);
             }
         }
     }
@@ -389,19 +400,25 @@ public class CarouselView extends View implements PagerHeaderView {
             r13.scrollToInternal(r1)
         L_0x00cd:
             int r0 = r13.getMeasuredWidth()
+            float r0 = (float) r0
+            int r1 = r13.getMeasuredHeight()
+            float r1 = (float) r1
+            r5 = 1067869798(0x3fa66666, float:1.3)
+            float r1 = r1 * r5
+            float r0 = java.lang.Math.min(r0, r1)
             r1 = 1124859904(0x430CLASSNAME, float:140.0)
             int r1 = org.telegram.messenger.AndroidUtilities.dp(r1)
-            int r0 = r0 - r1
-            float r0 = (float) r0
+            float r1 = (float) r1
+            float r0 = r0 - r1
             r1 = 1056964608(0x3var_, float:0.5)
             float r0 = r0 * r1
             r1 = 1058642330(0x3var_a, float:0.6)
             float r1 = r1 * r0
             r5 = 0
-        L_0x00e3:
+        L_0x00f2:
             java.util.ArrayList<? extends org.telegram.ui.Components.Premium.CarouselView$DrawingObject> r6 = r13.drawingObjects
             int r6 = r6.size()
-            if (r5 >= r6) goto L_0x0138
+            if (r5 >= r6) goto L_0x0147
             java.util.ArrayList<? extends org.telegram.ui.Components.Premium.CarouselView$DrawingObject> r6 = r13.drawingObjects
             java.lang.Object r6 = r6.get(r5)
             org.telegram.ui.Components.Premium.CarouselView$DrawingObject r6 = (org.telegram.ui.Components.Premium.CarouselView.DrawingObject) r6
@@ -437,15 +454,15 @@ public class CarouselView extends View implements PagerHeaderView {
             float r7 = r7 + r8
             r6.y = r7
             int r5 = r5 + 1
-            goto L_0x00e3
-        L_0x0138:
+            goto L_0x00f2
+        L_0x0147:
             java.util.ArrayList<? extends org.telegram.ui.Components.Premium.CarouselView$DrawingObject> r0 = r13.drawingObjectsSorted
             java.util.Comparator<org.telegram.ui.Components.Premium.CarouselView$DrawingObject> r1 = r13.comparator
             java.util.Collections.sort(r0, r1)
-        L_0x013f:
+        L_0x014e:
             java.util.ArrayList<? extends org.telegram.ui.Components.Premium.CarouselView$DrawingObject> r0 = r13.drawingObjectsSorted
             int r0 = r0.size()
-            if (r4 >= r0) goto L_0x016a
+            if (r4 >= r0) goto L_0x0179
             java.util.ArrayList<? extends org.telegram.ui.Components.Premium.CarouselView$DrawingObject> r0 = r13.drawingObjectsSorted
             java.lang.Object r0 = r0.get(r4)
             org.telegram.ui.Components.Premium.CarouselView$DrawingObject r0 = (org.telegram.ui.Components.Premium.CarouselView.DrawingObject) r0
@@ -462,8 +479,9 @@ public class CarouselView extends View implements PagerHeaderView {
             float r2 = r0.y
             r0.draw(r14, r1, r2, r3)
             int r4 = r4 + 1
-            goto L_0x013f
-        L_0x016a:
+            goto L_0x014e
+        L_0x0179:
+            r13.invalidate()
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.Premium.CarouselView.onDraw(android.graphics.Canvas):void");
@@ -499,6 +517,19 @@ public class CarouselView extends View implements PagerHeaderView {
         float clamp = 1.0f - Utilities.clamp(Math.abs(f) / ((float) getMeasuredWidth()), 1.0f, 0.0f);
         setScaleX(clamp);
         setScaleY(clamp);
+    }
+
+    public void autoplayToNext() {
+        AndroidUtilities.cancelRunOnUIThread(this.autoScrollRunnable);
+        if (this.autoPlayEnabled) {
+            ArrayList<? extends DrawingObject> arrayList = this.drawingObjectsSorted;
+            int indexOf = this.drawingObjects.indexOf((DrawingObject) arrayList.get(arrayList.size() - 1)) - 1;
+            if (indexOf < 0) {
+                indexOf = this.drawingObjects.size() - 1;
+            }
+            ((DrawingObject) this.drawingObjects.get(indexOf)).select();
+            AndroidUtilities.runOnUIThread(this.autoScrollRunnable, 16);
+        }
     }
 
     /* access modifiers changed from: package-private */

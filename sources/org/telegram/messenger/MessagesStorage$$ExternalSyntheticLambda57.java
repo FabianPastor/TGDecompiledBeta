@@ -28,6 +28,6 @@ public final /* synthetic */ class MessagesStorage$$ExternalSyntheticLambda57 im
     }
 
     public final void run() {
-        this.f$0.lambda$getWidgetDialogs$132(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6, this.f$7, this.f$8);
+        this.f$0.lambda$getWidgetDialogs$133(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6, this.f$7, this.f$8);
     }
 }

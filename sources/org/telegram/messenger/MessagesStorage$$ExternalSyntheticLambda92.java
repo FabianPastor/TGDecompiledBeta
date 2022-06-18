@@ -14,6 +14,6 @@ public final /* synthetic */ class MessagesStorage$$ExternalSyntheticLambda92 im
     }
 
     public final void run() {
-        this.f$0.lambda$putChannelAdmins$92(this.f$1, this.f$2);
+        this.f$0.lambda$putChannelAdmins$93(this.f$1, this.f$2);
     }
 }

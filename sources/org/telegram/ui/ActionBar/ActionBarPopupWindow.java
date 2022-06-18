@@ -444,13 +444,13 @@ public class ActionBarPopupWindow extends PopupWindow {
         }
 
         /* access modifiers changed from: protected */
-        /* JADX WARNING: Removed duplicated region for block: B:29:0x009d  */
-        /* JADX WARNING: Removed duplicated region for block: B:30:0x00a0  */
-        /* JADX WARNING: Removed duplicated region for block: B:33:0x00ab  */
-        /* JADX WARNING: Removed duplicated region for block: B:34:0x00c7  */
-        /* JADX WARNING: Removed duplicated region for block: B:58:0x0158  */
-        /* JADX WARNING: Removed duplicated region for block: B:71:0x01c4  */
-        /* JADX WARNING: Removed duplicated region for block: B:80:0x01c7 A[SYNTHETIC] */
+        /* JADX WARNING: Removed duplicated region for block: B:31:0x00a9  */
+        /* JADX WARNING: Removed duplicated region for block: B:32:0x00ac  */
+        /* JADX WARNING: Removed duplicated region for block: B:35:0x00b7  */
+        /* JADX WARNING: Removed duplicated region for block: B:36:0x00d3  */
+        /* JADX WARNING: Removed duplicated region for block: B:60:0x0164  */
+        /* JADX WARNING: Removed duplicated region for block: B:75:0x01dc  */
+        /* JADX WARNING: Removed duplicated region for block: B:86:0x01df A[SYNTHETIC] */
         /* Code decompiled incorrectly, please refer to instructions dump. */
         public void onDraw(android.graphics.Canvas r19) {
             /*
@@ -458,7 +458,7 @@ public class ActionBarPopupWindow extends PopupWindow {
                 r0 = r18
                 r8 = r19
                 android.graphics.drawable.Drawable r1 = r0.backgroundDrawable
-                if (r1 == 0) goto L_0x01cc
+                if (r1 == 0) goto L_0x01e4
                 int r1 = r0.gapStartY
                 android.widget.ScrollView r2 = r0.scrollView
                 int r2 = r2.getScrollY()
@@ -473,35 +473,39 @@ public class ActionBarPopupWindow extends PopupWindow {
                 android.widget.LinearLayout r2 = r0.linearLayout
                 int r2 = r2.getChildCount()
                 r12 = 1
-                if (r1 >= r2) goto L_0x0036
+                if (r1 >= r2) goto L_0x0042
                 android.widget.LinearLayout r2 = r0.linearLayout
                 android.view.View r2 = r2.getChildAt(r1)
                 boolean r2 = r2 instanceof org.telegram.ui.ActionBar.ActionBarPopupWindow.GapView
-                if (r2 == 0) goto L_0x0033
+                if (r2 == 0) goto L_0x003f
+                android.widget.LinearLayout r2 = r0.linearLayout
+                android.view.View r2 = r2.getChildAt(r1)
+                int r2 = r2.getVisibility()
+                if (r2 != 0) goto L_0x003f
                 r13 = 1
-                goto L_0x0037
-            L_0x0033:
+                goto L_0x0043
+            L_0x003f:
                 int r1 = r1 + 1
                 goto L_0x001e
-            L_0x0036:
+            L_0x0042:
                 r13 = 0
-            L_0x0037:
+            L_0x0043:
                 r14 = 0
-            L_0x0038:
+            L_0x0044:
                 r1 = 2
-                if (r14 >= r1) goto L_0x01cc
+                if (r14 >= r1) goto L_0x01e4
                 r15 = 1098907648(0x41800000, float:16.0)
-                if (r14 != r12) goto L_0x0048
+                if (r14 != r12) goto L_0x0054
                 int r1 = org.telegram.messenger.AndroidUtilities.dp(r15)
                 int r1 = -r1
-                if (r9 >= r1) goto L_0x0048
-                goto L_0x01cc
-            L_0x0048:
+                if (r9 >= r1) goto L_0x0054
+                goto L_0x01e4
+            L_0x0054:
                 r7 = 255(0xff, float:3.57E-43)
                 r6 = -1000000(0xfffffffffff0bdc0, float:NaN)
-                if (r13 == 0) goto L_0x0079
+                if (r13 == 0) goto L_0x0085
                 int r1 = r0.backAlpha
-                if (r1 == r7) goto L_0x0079
+                if (r1 == r7) goto L_0x0085
                 r2 = 0
                 android.graphics.Rect r1 = r0.bgPaddings
                 int r1 = r1.top
@@ -520,12 +524,12 @@ public class ActionBarPopupWindow extends PopupWindow {
                 r7 = r16
                 r1.saveLayerAlpha(r2, r3, r4, r5, r6, r7)
                 r1 = 0
-                goto L_0x0095
-            L_0x0079:
+                goto L_0x00a1
+            L_0x0085:
                 r12 = -1000000(0xfffffffffff0bdc0, float:NaN)
                 r17 = 255(0xff, float:3.57E-43)
                 int r1 = r0.gapStartY
-                if (r1 == r12) goto L_0x0097
+                if (r1 == r12) goto L_0x00a3
                 r19.save()
                 android.graphics.Rect r1 = r0.bgPaddings
                 int r1 = r1.top
@@ -533,24 +537,24 @@ public class ActionBarPopupWindow extends PopupWindow {
                 int r3 = r18.getMeasuredHeight()
                 r8.clipRect(r11, r1, r2, r3)
                 r1 = 1
-            L_0x0095:
+            L_0x00a1:
                 r2 = 1
-                goto L_0x0099
-            L_0x0097:
+                goto L_0x00a5
+            L_0x00a3:
                 r1 = 1
                 r2 = 0
-            L_0x0099:
+            L_0x00a5:
                 android.graphics.drawable.Drawable r3 = r0.backgroundDrawable
-                if (r1 == 0) goto L_0x00a0
+                if (r1 == 0) goto L_0x00ac
                 int r7 = r0.backAlpha
-                goto L_0x00a2
-            L_0x00a0:
+                goto L_0x00ae
+            L_0x00ac:
                 r7 = 255(0xff, float:3.57E-43)
-            L_0x00a2:
+            L_0x00ae:
                 r3.setAlpha(r7)
                 boolean r1 = r0.shownFromBottom
                 r3 = 1065353216(0x3var_, float:1.0)
-                if (r1 == 0) goto L_0x00c7
+                if (r1 == 0) goto L_0x00d3
                 int r1 = r18.getMeasuredHeight()
                 android.graphics.drawable.Drawable r4 = r0.backgroundDrawable
                 float r5 = (float) r1
@@ -564,28 +568,28 @@ public class ActionBarPopupWindow extends PopupWindow {
                 float r5 = r5 * r6
                 int r5 = (int) r5
                 r4.setBounds(r11, r3, r5, r1)
-                goto L_0x0151
-            L_0x00c7:
+                goto L_0x015d
+            L_0x00d3:
                 int r1 = org.telegram.messenger.AndroidUtilities.dp(r15)
                 int r1 = -r1
-                if (r9 <= r1) goto L_0x012a
+                if (r9 <= r1) goto L_0x0136
                 int r1 = r18.getMeasuredHeight()
                 float r1 = (float) r1
                 float r4 = r0.backScaleY
                 float r1 = r1 * r4
                 int r1 = (int) r1
-                if (r14 != 0) goto L_0x010c
+                if (r14 != 0) goto L_0x0118
                 android.graphics.drawable.Drawable r4 = r0.backgroundDrawable
                 android.widget.ScrollView r5 = r0.scrollView
                 int r5 = r5.getScrollY()
                 int r5 = -r5
                 int r6 = r0.gapStartY
-                if (r6 == r12) goto L_0x00ec
+                if (r6 == r12) goto L_0x00f8
                 int r3 = org.telegram.messenger.AndroidUtilities.dp(r3)
-                goto L_0x00ed
-            L_0x00ec:
+                goto L_0x00f9
+            L_0x00f8:
                 r3 = 0
-            L_0x00ed:
+            L_0x00f9:
                 int r5 = r5 + r3
                 int r3 = r18.getMeasuredWidth()
                 float r3 = (float) r3
@@ -593,22 +597,22 @@ public class ActionBarPopupWindow extends PopupWindow {
                 float r3 = r3 * r6
                 int r3 = (int) r3
                 int r6 = r0.gapStartY
-                if (r6 == r12) goto L_0x0105
+                if (r6 == r12) goto L_0x0111
                 int r6 = org.telegram.messenger.AndroidUtilities.dp(r15)
                 int r6 = r6 + r9
                 int r1 = java.lang.Math.min(r1, r6)
-            L_0x0105:
+            L_0x0111:
                 int r6 = r0.subtractBackgroundHeight
                 int r1 = r1 - r6
                 r4.setBounds(r11, r5, r3, r1)
-                goto L_0x0151
-            L_0x010c:
-                if (r1 >= r10) goto L_0x0117
+                goto L_0x015d
+            L_0x0118:
+                if (r1 >= r10) goto L_0x0123
                 int r1 = r0.gapStartY
-                if (r1 == r12) goto L_0x01c7
+                if (r1 == r12) goto L_0x01df
                 r19.restore()
-                goto L_0x01c7
-            L_0x0117:
+                goto L_0x01df
+            L_0x0123:
                 android.graphics.drawable.Drawable r3 = r0.backgroundDrawable
                 int r4 = r18.getMeasuredWidth()
                 float r4 = (float) r4
@@ -618,17 +622,17 @@ public class ActionBarPopupWindow extends PopupWindow {
                 int r5 = r0.subtractBackgroundHeight
                 int r1 = r1 - r5
                 r3.setBounds(r11, r10, r4, r1)
-                goto L_0x0151
-            L_0x012a:
+                goto L_0x015d
+            L_0x0136:
                 android.graphics.drawable.Drawable r1 = r0.backgroundDrawable
                 int r3 = r0.gapStartY
-                if (r3 >= 0) goto L_0x0132
+                if (r3 >= 0) goto L_0x013e
                 r3 = 0
-                goto L_0x0137
-            L_0x0132:
+                goto L_0x0143
+            L_0x013e:
                 int r3 = org.telegram.messenger.AndroidUtilities.dp(r15)
                 int r3 = -r3
-            L_0x0137:
+            L_0x0143:
                 int r4 = r18.getMeasuredWidth()
                 float r4 = (float) r4
                 float r5 = r0.backScaleX
@@ -642,10 +646,10 @@ public class ActionBarPopupWindow extends PopupWindow {
                 int r6 = r0.subtractBackgroundHeight
                 int r5 = r5 - r6
                 r1.setBounds(r11, r3, r4, r5)
-            L_0x0151:
+            L_0x015d:
                 android.graphics.drawable.Drawable r1 = r0.backgroundDrawable
                 r1.draw(r8)
-                if (r13 == 0) goto L_0x01c2
+                if (r13 == 0) goto L_0x01da
                 r19.save()
                 android.graphics.Rect r1 = org.telegram.messenger.AndroidUtilities.rectTmp2
                 android.graphics.drawable.Drawable r3 = r0.backgroundDrawable
@@ -657,14 +661,18 @@ public class ActionBarPopupWindow extends PopupWindow {
                 r1.inset(r4, r3)
                 r8.clipRect(r1)
                 r1 = 0
-            L_0x0177:
+            L_0x0183:
                 android.widget.LinearLayout r3 = r0.linearLayout
                 int r3 = r3.getChildCount()
-                if (r1 >= r3) goto L_0x01bf
+                if (r1 >= r3) goto L_0x01d7
                 android.widget.LinearLayout r3 = r0.linearLayout
                 android.view.View r3 = r3.getChildAt(r1)
                 boolean r3 = r3 instanceof org.telegram.ui.ActionBar.ActionBarPopupWindow.GapView
-                if (r3 == 0) goto L_0x01bc
+                if (r3 == 0) goto L_0x01d4
+                android.widget.LinearLayout r3 = r0.linearLayout
+                android.view.View r3 = r3.getChildAt(r1)
+                int r3 = r3.getVisibility()
+                if (r3 != 0) goto L_0x01d4
                 r19.save()
                 android.widget.LinearLayout r3 = r0.linearLayout
                 android.view.View r3 = r3.getChildAt(r1)
@@ -672,35 +680,35 @@ public class ActionBarPopupWindow extends PopupWindow {
                 r4 = 0
                 r6 = r3
                 r5 = 0
-            L_0x0197:
-                if (r6 == r0) goto L_0x01ab
+            L_0x01af:
+                if (r6 == r0) goto L_0x01c3
                 float r7 = r6.getX()
                 float r4 = r4 + r7
                 float r7 = r6.getY()
                 float r5 = r5 + r7
                 android.view.ViewParent r6 = r6.getParent()
                 android.view.View r6 = (android.view.View) r6
-                if (r6 != 0) goto L_0x0197
-            L_0x01ab:
+                if (r6 != 0) goto L_0x01af
+            L_0x01c3:
                 android.widget.ScrollView r6 = r0.scrollView
                 float r6 = r6.getScaleY()
                 float r5 = r5 * r6
                 r8.translate(r4, r5)
                 r3.draw(r8)
                 r19.restore()
-            L_0x01bc:
+            L_0x01d4:
                 int r1 = r1 + 1
-                goto L_0x0177
-            L_0x01bf:
+                goto L_0x0183
+            L_0x01d7:
                 r19.restore()
-            L_0x01c2:
-                if (r2 == 0) goto L_0x01c7
+            L_0x01da:
+                if (r2 == 0) goto L_0x01df
                 r19.restore()
-            L_0x01c7:
+            L_0x01df:
                 int r14 = r14 + 1
                 r12 = 1
-                goto L_0x0038
-            L_0x01cc:
+                goto L_0x0044
+            L_0x01e4:
                 return
             */
             throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ActionBar.ActionBarPopupWindow.ActionBarPopupWindowLayout.onDraw(android.graphics.Canvas):void");

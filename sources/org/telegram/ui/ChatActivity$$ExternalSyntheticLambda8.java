@@ -10,6 +10,6 @@ public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda8 implem
     }
 
     public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-        this.f$0.lambda$showMentionDownButton$111(valueAnimator);
+        this.f$0.lambda$dimBehindView$77(valueAnimator);
     }
 }

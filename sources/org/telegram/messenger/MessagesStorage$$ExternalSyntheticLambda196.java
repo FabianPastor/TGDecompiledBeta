@@ -11,6 +11,6 @@ public final /* synthetic */ class MessagesStorage$$ExternalSyntheticLambda196 i
     }
 
     public final int compare(Object obj, Object obj2) {
-        return MessagesStorage.lambda$checkLoadedRemoteFilters$42(this.f$0, (Long) obj, (Long) obj2);
+        return MessagesStorage.lambda$resetDialogs$68(this.f$0, (Long) obj, (Long) obj2);
     }
 }

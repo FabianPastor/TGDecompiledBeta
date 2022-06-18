@@ -390,7 +390,7 @@ public class ContentPreviewViewer {
                     MediaDataController.getInstance(ContentPreviewViewer.this.currentAccount).removeRecentGif(ContentPreviewViewer.this.currentDocument);
                     ContentPreviewViewer.this.delegate.gifAddedOrDeleted();
                 } else if (((Integer) arrayList.get(intValue)).intValue() == 2) {
-                    MediaDataController.getInstance(ContentPreviewViewer.this.currentAccount).addRecentGif(ContentPreviewViewer.this.currentDocument, (int) (System.currentTimeMillis() / 1000));
+                    MediaDataController.getInstance(ContentPreviewViewer.this.currentAccount).addRecentGif(ContentPreviewViewer.this.currentDocument, (int) (System.currentTimeMillis() / 1000), true);
                     MessagesController.getInstance(ContentPreviewViewer.this.currentAccount).saveGif("gif", ContentPreviewViewer.this.currentDocument);
                     ContentPreviewViewer.this.delegate.gifAddedOrDeleted();
                 } else if (((Integer) arrayList.get(intValue)).intValue() == 3) {
@@ -520,7 +520,7 @@ public class ContentPreviewViewer {
             this.unlockPremiumView = unlockPremiumView2;
             this.containerView.addView(unlockPremiumView2, LayoutHelper.createFrame(-1, -1.0f));
             this.unlockPremiumView.setOnClickListener(new ContentPreviewViewer$$ExternalSyntheticLambda1(this));
-            this.unlockPremiumView.premiumButtonView.buttonTextView.setOnClickListener(new ContentPreviewViewer$$ExternalSyntheticLambda2(this));
+            this.unlockPremiumView.premiumButtonView.buttonLayout.setOnClickListener(new ContentPreviewViewer$$ExternalSyntheticLambda2(this));
         }
         AndroidUtilities.updateViewVisibilityAnimated(this.unlockPremiumView, false, 1.0f, false);
         AndroidUtilities.updateViewVisibilityAnimated(this.unlockPremiumView, true);

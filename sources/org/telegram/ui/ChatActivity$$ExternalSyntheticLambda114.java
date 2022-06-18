@@ -1,19 +1,15 @@
 package org.telegram.ui;
 
-import org.telegram.ui.ActionBar.Theme;
+import android.view.View;
 
 public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda114 implements Runnable {
-    public final /* synthetic */ Theme.ThemeAccent f$0;
-    public final /* synthetic */ Theme.ThemeInfo f$1;
-    public final /* synthetic */ boolean f$2;
+    public final /* synthetic */ View f$0;
 
-    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda114(Theme.ThemeAccent themeAccent, Theme.ThemeInfo themeInfo, boolean z) {
-        this.f$0 = themeAccent;
-        this.f$1 = themeInfo;
-        this.f$2 = z;
+    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda114(View view) {
+        this.f$0 = view;
     }
 
     public final void run() {
-        ChatActivity.lambda$didReceivedNotification$119(this.f$0, this.f$1, this.f$2);
+        this.f$0.performHapticFeedback(3, 2);
     }
 }

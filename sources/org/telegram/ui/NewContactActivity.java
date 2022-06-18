@@ -100,7 +100,7 @@ public class NewContactActivity extends BaseFragment implements AdapterView.OnIt
             r2.setAllowOverlayTitle(r3)
             org.telegram.ui.ActionBar.ActionBar r2 = r1.actionBar
             java.lang.String r4 = "AddContactTitle"
-            r5 = 2131624263(0x7f0e0147, float:1.88757E38)
+            r5 = 2131624260(0x7f0e0144, float:1.8875695E38)
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r4, r5)
             r2.setTitle(r4)
             org.telegram.ui.ActionBar.ActionBar r2 = r1.actionBar
@@ -296,7 +296,7 @@ public class NewContactActivity extends BaseFragment implements AdapterView.OnIt
             r8 = 5
             r7.setImeOptions(r8)
             org.telegram.ui.Components.EditTextBoldCursor r7 = r1.lastNameField
-            r8 = 2131626359(0x7f0e0977, float:1.8879952E38)
+            r8 = 2131626360(0x7f0e0978, float:1.8879954E38)
             java.lang.String r9 = "LastName"
             java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r9, r8)
             r7.setHint(r8)

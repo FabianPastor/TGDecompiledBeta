@@ -1709,6 +1709,7 @@ public final class R {
     }
 
     public static final class raw {
+        public static final int addone_icon = NUM;
         public static final int android_30 = NUM;
         public static final int attach_contact = NUM;
         public static final int attach_file = NUM;
@@ -1747,6 +1748,7 @@ public final class R {
         public static final int default_pattern = NUM;
         public static final int diceloop = NUM;
         public static final int dots_loading = NUM;
+        public static final int double_icon = NUM;
         public static final int download_arrow = NUM;
         public static final int download_finish = NUM;
         public static final int download_progress = NUM;
@@ -1812,6 +1814,15 @@ public final class R {
         public static final int pip_video_request = NUM;
         public static final int pip_voice_request = NUM;
         public static final int player_prev = NUM;
+        public static final int premium_object_adsbubble = NUM;
+        public static final int premium_object_bubble = NUM;
+        public static final int premium_object_folder = NUM;
+        public static final int premium_object_like = NUM;
+        public static final int premium_object_noads = NUM;
+        public static final int premium_object_settings = NUM;
+        public static final int premium_object_user = NUM;
+        public static final int premium_object_video = NUM;
+        public static final int premium_object_video2 = NUM;
         public static final int qr_code_logo = NUM;
         public static final int qr_code_logo_2 = NUM;
         public static final int qr_login = NUM;
@@ -1862,6 +1873,7 @@ public final class R {
         public static final int tsv_setup_monkey_peek = NUM;
         public static final int tsv_setup_monkey_tracking = NUM;
         public static final int ubuntu_30 = NUM;
+        public static final int unlock_icon = NUM;
         public static final int utyan_call = NUM;
         public static final int utyan_change_number = NUM;
         public static final int utyan_gigagroup = NUM;
@@ -1913,6 +1925,7 @@ public final class R {
         public static final int AboutPremiumDescription = NUM;
         public static final int AboutPremiumDescription2 = NUM;
         public static final int AboutPremiumTitle = NUM;
+        public static final int AboutTelegramPremium = NUM;
         public static final int AccActionCancelDownload = NUM;
         public static final int AccActionDownload = NUM;
         public static final int AccActionEnterSelectionMode = NUM;
@@ -1982,11 +1995,6 @@ public final class R {
         public static final int AccDescrNumberOfPeopleReactions_one = NUM;
         public static final int AccDescrNumberOfPeopleReactions_other = NUM;
         public static final int AccDescrNumberOfPeopleReactions_two = NUM;
-        public static final int AccDescrNumberOfReactions_few = NUM;
-        public static final int AccDescrNumberOfReactions_many = NUM;
-        public static final int AccDescrNumberOfReactions_one = NUM;
-        public static final int AccDescrNumberOfReactions_other = NUM;
-        public static final int AccDescrNumberOfReactions_two = NUM;
         public static final int AccDescrNumberOfReplies_few = NUM;
         public static final int AccDescrNumberOfReplies_many = NUM;
         public static final int AccDescrNumberOfReplies_one = NUM;
@@ -2083,6 +2091,7 @@ public final class R {
         public static final int AccDescrVoipCamSwitchedToFront = NUM;
         public static final int AccDescrVoipMicOff = NUM;
         public static final int AccDescrVoipMicOn = NUM;
+        public static final int AccDescrYouReactedWith = NUM;
         public static final int AccExitFullscreen = NUM;
         public static final int AccPinnedMessagesList = NUM;
         public static final int AccReleaseForArchive = NUM;
@@ -2270,6 +2279,8 @@ public final class R {
         public static final int AddUserErrorBlacklisted = NUM;
         public static final int AddedBy = NUM;
         public static final int AddedToFavorites = NUM;
+        public static final int AdditionalReactions = NUM;
+        public static final int AdditionalReactionsDescription = NUM;
         public static final int AdminWillBeRemoved = NUM;
         public static final int Agree = NUM;
         public static final int Alert = NUM;
@@ -2821,6 +2832,7 @@ public final class R {
         public static final int ChangePhoneNumber = NUM;
         public static final int ChangePhoneNumberInfo = NUM;
         public static final int ChangePhoneNumberOccupied = NUM;
+        public static final int ChangePhoneNumberSuccess = NUM;
         public static final int ChangePublicLimitReached = NUM;
         public static final int ChangeRecipient = NUM;
         public static final int ChangeRecoveryEmail = NUM;
@@ -3982,6 +3994,7 @@ public final class R {
         public static final int ForwardsRestrictedInfoChannel = NUM;
         public static final int ForwardsRestrictedInfoGroup = NUM;
         public static final int FreeOfTotal = NUM;
+        public static final int FreshChangePhoneForbidden = NUM;
         public static final int From = NUM;
         public static final int FromCamera = NUM;
         public static final int FromChats_few = NUM;
@@ -4960,6 +4973,7 @@ public final class R {
         public static final int NotificationMessagePhoto = NUM;
         public static final int NotificationMessagePoll2 = NUM;
         public static final int NotificationMessageQuiz2 = NUM;
+        public static final int NotificationMessageRecurringPay = NUM;
         public static final int NotificationMessageRound = NUM;
         public static final int NotificationMessageSDPhoto = NUM;
         public static final int NotificationMessageSDVideo = NUM;
@@ -5550,13 +5564,16 @@ public final class R {
         public static final int PremiumPreviewAnimatedProfiles = NUM;
         public static final int PremiumPreviewAnimatedProfilesDescription = NUM;
         public static final int PremiumPreviewAppIcon = NUM;
+        public static final int PremiumPreviewAppIcon2 = NUM;
         public static final int PremiumPreviewAppIconDescription = NUM;
+        public static final int PremiumPreviewAppIconDescription2 = NUM;
         public static final int PremiumPreviewDownloadSpeed = NUM;
         public static final int PremiumPreviewDownloadSpeedDescription = NUM;
         public static final int PremiumPreviewLimits = NUM;
         public static final int PremiumPreviewLimitsDescription = NUM;
         public static final int PremiumPreviewNoAds = NUM;
         public static final int PremiumPreviewNoAdsDescription = NUM;
+        public static final int PremiumPreviewNoAdsDescription2 = NUM;
         public static final int PremiumPreviewProfileBadge = NUM;
         public static final int PremiumPreviewProfileBadgeDescription = NUM;
         public static final int PremiumPreviewReactions = NUM;
@@ -6680,6 +6697,7 @@ public final class R {
         public static final int UnhideFromTop = NUM;
         public static final int UnknownError = NUM;
         public static final int UnlockFingerprint = NUM;
+        public static final int UnlockPremiumIcons = NUM;
         public static final int UnlockPremiumReactions = NUM;
         public static final int UnlockPremiumReactionsDescription = NUM;
         public static final int UnlockPremiumStickers = NUM;

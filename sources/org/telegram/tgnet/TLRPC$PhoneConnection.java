@@ -9,6 +9,7 @@ public abstract class TLRPC$PhoneConnection extends TLObject {
     public byte[] peer_tag;
     public int port;
     public boolean stun;
+    public boolean tcp;
     public boolean turn;
     public String username;
 

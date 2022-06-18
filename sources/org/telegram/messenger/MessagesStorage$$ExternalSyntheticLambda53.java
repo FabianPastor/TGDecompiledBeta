@@ -14,6 +14,6 @@ public final /* synthetic */ class MessagesStorage$$ExternalSyntheticLambda53 im
     }
 
     public final void run() {
-        this.f$0.lambda$getDownloadQueue$147(this.f$1, this.f$2);
+        this.f$0.lambda$getDownloadQueue$148(this.f$1, this.f$2);
     }
 }

@@ -12,6 +12,6 @@ public final /* synthetic */ class MessagesStorage$$ExternalSyntheticLambda68 im
     }
 
     public final void run() {
-        this.f$0.lambda$markMessageReactionsAsRead$199(this.f$1, this.f$2);
+        this.f$0.lambda$resetMentionsCount$83(this.f$1, this.f$2);
     }
 }

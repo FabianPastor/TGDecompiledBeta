@@ -10,6 +10,6 @@ public final /* synthetic */ class MessagesStorage$$ExternalSyntheticLambda64 im
     }
 
     public final void run() {
-        this.f$0.lambda$loadChannelAdmins$91(this.f$1);
+        this.f$0.lambda$deleteWallpaper$53(this.f$1);
     }
 }

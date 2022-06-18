@@ -1,17 +1,15 @@
 package org.telegram.ui;
 
-import org.telegram.tgnet.RequestDelegate;
-import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC$TL_error;
+import org.telegram.messenger.MessagesStorage;
 
-public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda213 implements RequestDelegate {
+public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda213 implements MessagesStorage.IntCallback {
     public final /* synthetic */ ChatActivity f$0;
 
     public /* synthetic */ ChatActivity$$ExternalSyntheticLambda213(ChatActivity chatActivity) {
         this.f$0 = chatActivity;
     }
 
-    public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        this.f$0.lambda$onTransitionAnimationEnd$136(tLObject, tLRPC$TL_error);
+    public final void run(int i) {
+        this.f$0.lambda$createView$32(i);
     }
 }

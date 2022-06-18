@@ -74,6 +74,7 @@ import org.telegram.ui.Components.AvatarDrawable;
 import org.telegram.ui.Components.BackupImageView;
 import org.telegram.ui.Components.CircularProgressDrawable;
 import org.telegram.ui.Components.CrossfadeDrawable;
+import org.telegram.ui.Components.CubicBezierInterpolator;
 import org.telegram.ui.Components.EditTextBoldCursor;
 import org.telegram.ui.Components.EditTextEmoji;
 import org.telegram.ui.Components.ImageUpdater;
@@ -326,7 +327,8 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
             if (!z) {
                 f = 0.0f;
             }
-            valueAnimator2.setDuration((long) (Math.abs(progress - f) * 150.0f));
+            valueAnimator2.setDuration((long) (Math.abs(progress - f) * 200.0f));
+            this.doneButtonDrawableAnimator.setInterpolator(CubicBezierInterpolator.DEFAULT);
             this.doneButtonDrawableAnimator.start();
         }
     }

@@ -42,6 +42,8 @@ public class PopupSwipeBackLayout extends FrameLayout {
     /* access modifiers changed from: private */
     public boolean isSwipeDisallowed;
     private int lastHeightReported = -1;
+    float lastToProgress;
+    float lastTransitionProgress;
     private Path mPath = new Path();
     private RectF mRect = new RectF();
     /* access modifiers changed from: private */
@@ -148,10 +150,14 @@ public class PopupSwipeBackLayout extends FrameLayout {
     public void invalidateTransforms(boolean z) {
         float f;
         float f2;
-        if (!this.onSwipeBackProgressListeners.isEmpty()) {
-            for (int i = 0; i < this.onSwipeBackProgressListeners.size(); i++) {
-                this.onSwipeBackProgressListeners.get(i).onSwipeBackProgress(this, this.toProgress, this.transitionProgress);
+        if (!(this.lastToProgress == this.toProgress && this.lastTransitionProgress == this.transitionProgress)) {
+            if (!this.onSwipeBackProgressListeners.isEmpty()) {
+                for (int i = 0; i < this.onSwipeBackProgressListeners.size(); i++) {
+                    this.onSwipeBackProgressListeners.get(i).onSwipeBackProgress(this, this.toProgress, this.transitionProgress);
+                }
             }
+            this.lastToProgress = this.toProgress;
+            this.lastTransitionProgress = this.transitionProgress;
         }
         View childAt = getChildAt(0);
         View view = null;

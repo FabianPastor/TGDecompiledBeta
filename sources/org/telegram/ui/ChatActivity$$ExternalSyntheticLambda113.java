@@ -1,15 +1,17 @@
 package org.telegram.ui;
 
-import java.util.concurrent.atomic.AtomicReference;
+import androidx.core.util.Consumer;
+import java.util.List;
+import org.telegram.ui.Components.ReactedUsersListView;
 
-public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda113 implements Runnable {
-    public final /* synthetic */ AtomicReference f$0;
+public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda113 implements Consumer {
+    public final /* synthetic */ ReactedUsersListView f$0;
 
-    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda113(AtomicReference atomicReference) {
-        this.f$0 = atomicReference;
+    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda113(ReactedUsersListView reactedUsersListView) {
+        this.f$0 = reactedUsersListView;
     }
 
-    public final void run() {
-        ChatActivity.lambda$createMenu$175(this.f$0);
+    public final void accept(Object obj) {
+        this.f$0.setSeenUsers((List) obj);
     }
 }

@@ -77,14 +77,14 @@ public class DoubledLimitsBottomSheet extends BottomSheetWithRecyclerListView im
             org.telegram.messenger.MessagesController r5 = org.telegram.messenger.MessagesController.getInstance(r27)
             org.telegram.ui.Components.Premium.DoubledLimitsBottomSheet$Limit r12 = new org.telegram.ui.Components.Premium.DoubledLimitsBottomSheet$Limit
             java.lang.String r6 = "GroupsAndChannelsLimitTitle"
-            r7 = 2131626107(0x7f0e087b, float:1.887944E38)
+            r7 = 2131626108(0x7f0e087c, float:1.8879443E38)
             java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r6, r7)
             java.lang.Object[] r6 = new java.lang.Object[r4]
             int r8 = r5.channelsLimitPremium
             java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
             r6[r2] = r8
             java.lang.String r8 = "GroupsAndChannelsLimitSubtitle"
-            r9 = 2131626106(0x7f0e087a, float:1.8879439E38)
+            r9 = 2131626107(0x7f0e087b, float:1.887944E38)
             java.lang.String r8 = org.telegram.messenger.LocaleController.formatString(r8, r9, r6)
             int r9 = r5.channelsLimitDefault
             int r10 = r5.channelsLimitPremium
@@ -94,14 +94,14 @@ public class DoubledLimitsBottomSheet extends BottomSheetWithRecyclerListView im
             r3.add(r12)
             org.telegram.ui.Components.Premium.DoubledLimitsBottomSheet$Limit r6 = new org.telegram.ui.Components.Premium.DoubledLimitsBottomSheet$Limit
             java.lang.String r7 = "PinChatsLimitTitle"
-            r8 = 2131627517(0x7f0e0dfd, float:1.88823E38)
+            r8 = 2131627519(0x7f0e0dff, float:1.8882305E38)
             java.lang.String r14 = org.telegram.messenger.LocaleController.getString(r7, r8)
             java.lang.Object[] r7 = new java.lang.Object[r4]
             int r8 = r5.dialogFiltersPinnedLimitPremium
             java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
             r7[r2] = r8
             java.lang.String r8 = "PinChatsLimitSubtitle"
-            r9 = 2131627516(0x7f0e0dfc, float:1.8882299E38)
+            r9 = 2131627518(0x7f0e0dfe, float:1.8882303E38)
             java.lang.String r15 = org.telegram.messenger.LocaleController.formatString(r8, r9, r7)
             int r7 = r5.dialogFiltersPinnedLimitDefault
             int r8 = r5.dialogFiltersPinnedLimitPremium
@@ -113,14 +113,14 @@ public class DoubledLimitsBottomSheet extends BottomSheetWithRecyclerListView im
             r3.add(r6)
             org.telegram.ui.Components.Premium.DoubledLimitsBottomSheet$Limit r6 = new org.telegram.ui.Components.Premium.DoubledLimitsBottomSheet$Limit
             java.lang.String r7 = "PublicLinksLimitTitle"
-            r8 = 2131627754(0x7f0e0eea, float:1.8882781E38)
+            r8 = 2131627759(0x7f0e0eef, float:1.8882792E38)
             java.lang.String r20 = org.telegram.messenger.LocaleController.getString(r7, r8)
             java.lang.Object[] r7 = new java.lang.Object[r4]
             int r8 = r5.publicLinksLimitPremium
             java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
             r7[r2] = r8
             java.lang.String r8 = "PublicLinksLimitSubtitle"
-            r9 = 2131627753(0x7f0e0ee9, float:1.888278E38)
+            r9 = 2131627758(0x7f0e0eee, float:1.888279E38)
             java.lang.String r21 = org.telegram.messenger.LocaleController.formatString(r8, r9, r7)
             int r7 = r5.publicLinksLimitDefault
             int r8 = r5.publicLinksLimitPremium
@@ -132,14 +132,14 @@ public class DoubledLimitsBottomSheet extends BottomSheetWithRecyclerListView im
             r3.add(r6)
             org.telegram.ui.Components.Premium.DoubledLimitsBottomSheet$Limit r6 = new org.telegram.ui.Components.Premium.DoubledLimitsBottomSheet$Limit
             java.lang.String r7 = "SavedGifsLimitTitle"
-            r8 = 2131628065(0x7f0e1021, float:1.8883412E38)
+            r8 = 2131628070(0x7f0e1026, float:1.8883422E38)
             java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r7, r8)
             java.lang.Object[] r7 = new java.lang.Object[r4]
             int r8 = r5.savedGifsLimitPremium
             java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
             r7[r2] = r8
             java.lang.String r8 = "SavedGifsLimitSubtitle"
-            r9 = 2131628064(0x7f0e1020, float:1.888341E38)
+            r9 = 2131628069(0x7f0e1025, float:1.888342E38)
             java.lang.String r11 = org.telegram.messenger.LocaleController.formatString(r8, r9, r7)
             int r12 = r5.savedGifsLimitDefault
             int r13 = r5.savedGifsLimitPremium
@@ -168,14 +168,14 @@ public class DoubledLimitsBottomSheet extends BottomSheetWithRecyclerListView im
             r3.add(r6)
             org.telegram.ui.Components.Premium.DoubledLimitsBottomSheet$Limit r6 = new org.telegram.ui.Components.Premium.DoubledLimitsBottomSheet$Limit
             java.lang.String r7 = "BioLimitTitle"
-            r8 = 2131624668(0x7f0e02dc, float:1.8876522E38)
+            r8 = 2131624667(0x7f0e02db, float:1.887652E38)
             java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r7, r8)
             java.lang.Object[] r7 = new java.lang.Object[r4]
             int r8 = r5.stickersFavedLimitPremium
             java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
             r7[r2] = r8
             java.lang.String r8 = "BioLimitSubtitle"
-            r9 = 2131624667(0x7f0e02db, float:1.887652E38)
+            r9 = 2131624666(0x7f0e02da, float:1.8876518E38)
             java.lang.String r11 = org.telegram.messenger.LocaleController.formatString(r8, r9, r7)
             int r12 = r5.aboutLengthLimitDefault
             int r13 = r5.aboutLengthLimitPremium
@@ -184,14 +184,14 @@ public class DoubledLimitsBottomSheet extends BottomSheetWithRecyclerListView im
             r3.add(r6)
             org.telegram.ui.Components.Premium.DoubledLimitsBottomSheet$Limit r6 = new org.telegram.ui.Components.Premium.DoubledLimitsBottomSheet$Limit
             java.lang.String r7 = "CaptionsLimitTitle"
-            r8 = 2131624839(0x7f0e0387, float:1.887687E38)
+            r8 = 2131624838(0x7f0e0386, float:1.8876867E38)
             java.lang.String r16 = org.telegram.messenger.LocaleController.getString(r7, r8)
             java.lang.Object[] r7 = new java.lang.Object[r4]
             int r8 = r5.stickersFavedLimitPremium
             java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
             r7[r2] = r8
             java.lang.String r8 = "CaptionsLimitSubtitle"
-            r9 = 2131624838(0x7f0e0386, float:1.8876867E38)
+            r9 = 2131624837(0x7f0e0385, float:1.8876865E38)
             java.lang.String r17 = org.telegram.messenger.LocaleController.formatString(r8, r9, r7)
             int r7 = r5.captionLengthLimitDefault
             int r8 = r5.captionLengthLimitPremium
@@ -228,137 +228,142 @@ public class DoubledLimitsBottomSheet extends BottomSheetWithRecyclerListView im
             r9 = 2131625017(0x7f0e0439, float:1.887723E38)
             java.lang.String r17 = org.telegram.messenger.LocaleController.formatString(r8, r9, r7)
             int r7 = r5.dialogFiltersChatsLimitDefault
-            int r8 = r5.dialogFiltersChatsLimitPremium
+            int r5 = r5.dialogFiltersChatsLimitPremium
             r15 = r6
             r18 = r7
-            r19 = r8
+            r19 = r5
             r15.<init>(r16, r17, r18, r19)
             r3.add(r6)
-            org.telegram.ui.Components.Premium.DoubledLimitsBottomSheet$Limit r6 = new org.telegram.ui.Components.Premium.DoubledLimitsBottomSheet$Limit
-            java.lang.String r7 = "ConnectedAccountsLimitTitle"
-            r8 = 2131625217(0x7f0e0501, float:1.8877636E38)
-            java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r7, r8)
-            java.lang.Object[] r7 = new java.lang.Object[r4]
-            int r5 = r5.dialogFiltersChatsLimitPremium
-            java.lang.Integer r5 = java.lang.Integer.valueOf(r5)
-            r7[r2] = r5
-            java.lang.String r5 = "ConnectedAccountsLimitSubtitle"
+            org.telegram.ui.Components.Premium.DoubledLimitsBottomSheet$Limit r5 = new org.telegram.ui.Components.Premium.DoubledLimitsBottomSheet$Limit
+            java.lang.String r6 = "ConnectedAccountsLimitTitle"
+            r7 = 2131625217(0x7f0e0501, float:1.8877636E38)
+            java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r6, r7)
+            java.lang.Object[] r6 = new java.lang.Object[r4]
+            r7 = 4
+            java.lang.Integer r7 = java.lang.Integer.valueOf(r7)
+            r6[r2] = r7
+            java.lang.String r7 = "ConnectedAccountsLimitSubtitle"
             r8 = 2131625216(0x7f0e0500, float:1.8877634E38)
-            java.lang.String r11 = org.telegram.messenger.LocaleController.formatString(r5, r8, r7)
-            r12 = 3
-            r13 = 4
-            r9 = r6
-            r9.<init>(r10, r11, r12, r13)
-            r3.add(r6)
+            java.lang.String r10 = org.telegram.messenger.LocaleController.formatString(r7, r8, r6)
+            r11 = 3
+            r12 = 4
+            r13 = 0
+            r8 = r5
+            r8.<init>(r9, r10, r11, r12)
+            r3.add(r5)
             r0.rowCount = r2
             r5 = 0
             int r5 = r5 + r4
             r0.rowCount = r5
             r0.headerRow = r2
             r0.limitsStartRow = r5
-            int r2 = r3.size()
-            int r5 = r5 + r2
+            int r3 = r3.size()
+            int r5 = r5 + r3
             r0.rowCount = r5
-            android.widget.FrameLayout r2 = new android.widget.FrameLayout
-            android.content.Context r3 = r25.getContext()
-            r2.<init>(r3)
-            r0.titleLayout = r2
-            android.widget.TextView r2 = new android.widget.TextView
-            android.content.Context r3 = r25.getContext()
-            r2.<init>(r3)
-            r0.titleView = r2
-            java.lang.String r3 = "DoubledLimits"
-            r5 = 2131625524(0x7f0e0634, float:1.8878258E38)
-            java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r3, r5)
-            r2.setText(r3)
-            android.widget.TextView r2 = r0.titleView
-            r3 = 17
-            r2.setGravity(r3)
-            android.widget.TextView r2 = r0.titleView
-            r3 = 1101004800(0x41a00000, float:20.0)
-            r2.setTextSize(r4, r3)
-            android.widget.TextView r2 = r0.titleView
-            java.lang.String r3 = "windowBackgroundWhiteBlackText"
-            int r3 = org.telegram.ui.ActionBar.Theme.getColor(r3)
-            r2.setTextColor(r3)
-            android.widget.TextView r2 = r0.titleView
-            java.lang.String r3 = "fonts/rmedium.ttf"
-            android.graphics.Typeface r3 = org.telegram.messenger.AndroidUtilities.getTypeface(r3)
-            r2.setTypeface(r3)
-            android.widget.FrameLayout r2 = r0.titleLayout
-            android.widget.TextView r3 = r0.titleView
-            r5 = -2
-            r6 = 16
-            android.widget.FrameLayout$LayoutParams r5 = org.telegram.ui.Components.LayoutHelper.createFrame((int) r5, (int) r5, (int) r6)
-            r2.addView(r3, r5)
-            android.widget.ImageView r2 = new android.widget.ImageView
-            android.content.Context r3 = r25.getContext()
-            r2.<init>(r3)
-            r0.titleImage = r2
-            org.telegram.ui.Components.Premium.PremiumGradient r3 = org.telegram.ui.Components.Premium.PremiumGradient.getInstance()
+            android.widget.FrameLayout r3 = new android.widget.FrameLayout
             android.content.Context r5 = r25.getContext()
-            r7 = 2131166022(0x7var_, float:1.7946278E38)
-            android.graphics.drawable.Drawable r5 = androidx.core.content.ContextCompat.getDrawable(r5, r7)
-            org.telegram.ui.Components.Premium.PremiumGradient$InternalDrawable r3 = r3.createGradientDrawable(r5)
-            r2.setImageDrawable(r3)
-            android.widget.FrameLayout r2 = r0.titleLayout
-            android.widget.ImageView r3 = r0.titleImage
-            r5 = 40
-            r7 = 28
-            android.widget.FrameLayout$LayoutParams r5 = org.telegram.ui.Components.LayoutHelper.createFrame((int) r5, (int) r7, (int) r6)
-            r2.addView(r3, r5)
-            android.view.ViewGroup r2 = r0.containerView
+            r3.<init>(r5)
+            r0.titleLayout = r3
+            android.widget.TextView r3 = new android.widget.TextView
+            android.content.Context r5 = r25.getContext()
+            r3.<init>(r5)
+            r0.titleView = r3
+            java.lang.String r5 = "DoubledLimits"
+            r6 = 2131625524(0x7f0e0634, float:1.8878258E38)
+            java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r5, r6)
+            r3.setText(r5)
+            android.widget.TextView r3 = r0.titleView
+            r5 = 17
+            r3.setGravity(r5)
+            android.widget.TextView r3 = r0.titleView
+            r5 = 1101004800(0x41a00000, float:20.0)
+            r3.setTextSize(r4, r5)
+            android.widget.TextView r3 = r0.titleView
+            java.lang.String r5 = "windowBackgroundWhiteBlackText"
+            int r5 = org.telegram.ui.ActionBar.Theme.getColor(r5)
+            r3.setTextColor(r5)
+            android.widget.TextView r3 = r0.titleView
+            java.lang.String r5 = "fonts/rmedium.ttf"
+            android.graphics.Typeface r5 = org.telegram.messenger.AndroidUtilities.getTypeface(r5)
+            r3.setTypeface(r5)
             android.widget.FrameLayout r3 = r0.titleLayout
-            r5 = -1
-            r6 = 1109393408(0x42200000, float:40.0)
-            android.widget.FrameLayout$LayoutParams r5 = org.telegram.ui.Components.LayoutHelper.createFrame(r5, r6)
-            r2.addView(r3, r5)
-            org.telegram.ui.Components.Premium.DoubledLimitsBottomSheet$1 r2 = new org.telegram.ui.Components.Premium.DoubledLimitsBottomSheet$1
-            android.content.Context r3 = r25.getContext()
-            r2.<init>(r0, r3)
-            r0.divider = r2
-            java.lang.String r3 = "dialogBackground"
-            int r3 = org.telegram.ui.ActionBar.Theme.getColor(r3)
-            r2.setBackgroundColor(r3)
-            android.view.ViewGroup r2 = r0.containerView
-            android.view.View r3 = r0.divider
-            r5 = -1
-            r6 = 1116733440(0x42900000, float:72.0)
-            r7 = 80
-            r8 = 0
+            android.widget.TextView r5 = r0.titleView
+            r6 = -2
+            r7 = 16
+            android.widget.FrameLayout$LayoutParams r6 = org.telegram.ui.Components.LayoutHelper.createFrame((int) r6, (int) r6, (int) r7)
+            r3.addView(r5, r6)
+            android.widget.ImageView r3 = new android.widget.ImageView
+            android.content.Context r5 = r25.getContext()
+            r3.<init>(r5)
+            r0.titleImage = r3
+            org.telegram.ui.Components.Premium.PremiumGradient r5 = org.telegram.ui.Components.Premium.PremiumGradient.getInstance()
+            android.content.Context r6 = r25.getContext()
+            r8 = 2131166022(0x7var_, float:1.7946278E38)
+            android.graphics.drawable.Drawable r6 = androidx.core.content.ContextCompat.getDrawable(r6, r8)
+            org.telegram.ui.Components.Premium.PremiumGradient$InternalDrawable r5 = r5.createGradientDrawable(r6)
+            r3.setImageDrawable(r5)
+            android.widget.FrameLayout r3 = r0.titleLayout
+            android.widget.ImageView r5 = r0.titleImage
+            r6 = 40
+            r8 = 28
+            android.widget.FrameLayout$LayoutParams r6 = org.telegram.ui.Components.LayoutHelper.createFrame((int) r6, (int) r8, (int) r7)
+            r3.addView(r5, r6)
+            android.view.ViewGroup r3 = r0.containerView
+            android.widget.FrameLayout r5 = r0.titleLayout
+            r6 = -1
+            r7 = 1109393408(0x42200000, float:40.0)
+            android.widget.FrameLayout$LayoutParams r6 = org.telegram.ui.Components.LayoutHelper.createFrame(r6, r7)
+            r3.addView(r5, r6)
+            org.telegram.ui.Components.Premium.DoubledLimitsBottomSheet$1 r3 = new org.telegram.ui.Components.Premium.DoubledLimitsBottomSheet$1
+            android.content.Context r5 = r25.getContext()
+            r3.<init>(r0, r5)
+            r0.divider = r3
+            java.lang.String r5 = "dialogBackground"
+            int r5 = org.telegram.ui.ActionBar.Theme.getColor(r5)
+            r3.setBackgroundColor(r5)
+            android.view.ViewGroup r3 = r0.containerView
+            android.view.View r5 = r0.divider
+            r6 = -1
+            r7 = 1116733440(0x42900000, float:72.0)
+            r8 = 80
             r9 = 0
             r10 = 0
             r11 = 0
+            r12 = 0
+            android.widget.FrameLayout$LayoutParams r6 = org.telegram.ui.Components.LayoutHelper.createFrame(r6, r7, r8, r9, r10, r11, r12)
+            r3.addView(r5, r6)
+            org.telegram.ui.Components.Premium.PremiumButtonView r3 = new org.telegram.ui.Components.Premium.PremiumButtonView
+            android.content.Context r5 = r25.getContext()
+            r3.<init>(r5, r4)
+            r0.premiumButtonView = r3
+            android.widget.TextView r3 = r3.buttonTextView
+            java.lang.String r4 = org.telegram.ui.PremiumPreviewFragment.getPremiumButtonText(r27)
+            r3.setText(r4)
+            android.view.ViewGroup r3 = r0.containerView
+            org.telegram.ui.Components.Premium.PremiumButtonView r4 = r0.premiumButtonView
+            r5 = -1
+            r6 = 1111490560(0x42400000, float:48.0)
+            r7 = 80
+            r8 = 1098907648(0x41800000, float:16.0)
+            r10 = 1098907648(0x41800000, float:16.0)
+            r11 = 1094713344(0x41400000, float:12.0)
             android.widget.FrameLayout$LayoutParams r5 = org.telegram.ui.Components.LayoutHelper.createFrame(r5, r6, r7, r8, r9, r10, r11)
-            r2.addView(r3, r5)
-            org.telegram.ui.Components.Premium.PremiumButtonView r2 = new org.telegram.ui.Components.Premium.PremiumButtonView
-            android.content.Context r3 = r25.getContext()
-            r2.<init>(r3, r4)
-            r0.premiumButtonView = r2
-            android.widget.TextView r2 = r2.buttonTextView
-            java.lang.String r3 = org.telegram.ui.PremiumPreviewFragment.getPremiumButtonText(r27)
-            r2.setText(r3)
-            android.view.ViewGroup r2 = r0.containerView
+            r3.addView(r4, r5)
             org.telegram.ui.Components.Premium.PremiumButtonView r3 = r0.premiumButtonView
-            r4 = -1
-            r5 = 1111490560(0x42400000, float:48.0)
-            r6 = 80
-            r7 = 1098907648(0x41800000, float:16.0)
-            r9 = 1098907648(0x41800000, float:16.0)
-            r10 = 1094713344(0x41400000, float:12.0)
-            android.widget.FrameLayout$LayoutParams r4 = org.telegram.ui.Components.LayoutHelper.createFrame(r4, r5, r6, r7, r8, r9, r10)
-            r2.addView(r3, r4)
-            org.telegram.ui.Components.Premium.PremiumButtonView r2 = r0.premiumButtonView
-            android.widget.TextView r2 = r2.buttonTextView
-            org.telegram.ui.Components.Premium.DoubledLimitsBottomSheet$$ExternalSyntheticLambda1 r3 = new org.telegram.ui.Components.Premium.DoubledLimitsBottomSheet$$ExternalSyntheticLambda1
-            r4 = r27
-            r3.<init>(r0, r4, r1)
-            r2.setOnClickListener(r3)
+            android.widget.FrameLayout r3 = r3.buttonLayout
+            org.telegram.ui.Components.Premium.DoubledLimitsBottomSheet$$ExternalSyntheticLambda1 r4 = new org.telegram.ui.Components.Premium.DoubledLimitsBottomSheet$$ExternalSyntheticLambda1
+            r5 = r27
+            r4.<init>(r0, r5, r1)
+            r3.setOnClickListener(r4)
             org.telegram.ui.Components.Premium.PremiumButtonView r1 = r0.premiumButtonView
             android.widget.TextView r1 = r1.overlayTextView
-            org.telegram.ui.Components.Premium.DoubledLimitsBottomSheet$$ExternalSyntheticLambda0 r2 = new org.telegram.ui.Components.Premium.DoubledLimitsBottomSheet$$ExternalSyntheticLambda0
-            r2.<init>(r0)
-            r1.setOnClickListener(r2)
+            org.telegram.ui.Components.Premium.DoubledLimitsBottomSheet$$ExternalSyntheticLambda0 r3 = new org.telegram.ui.Components.Premium.DoubledLimitsBottomSheet$$ExternalSyntheticLambda0
+            r3.<init>(r0)
+            r1.setOnClickListener(r3)
+            org.telegram.ui.Components.RecyclerListView r1 = r0.recyclerListView
+            r3 = 1116733440(0x42900000, float:72.0)
+            int r3 = org.telegram.messenger.AndroidUtilities.dp(r3)
+            r1.setPadding(r2, r2, r2, r3)
             int r1 = r25.getCurrentAccount()
             org.telegram.messenger.UserConfig r1 = org.telegram.messenger.UserConfig.getInstance(r1)
             boolean r1 = r1.isPremium()
@@ -383,7 +388,7 @@ public class DoubledLimitsBottomSheet extends BottomSheetWithRecyclerListView im
 
     private void bindPremium(boolean z) {
         if (z) {
-            this.premiumButtonView.setOverlayText(LocaleController.getString("OK", NUM), false);
+            this.premiumButtonView.setOverlayText(LocaleController.getString("OK", NUM), false, false);
         }
     }
 

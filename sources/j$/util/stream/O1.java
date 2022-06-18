@@ -30,7 +30,7 @@ final class O1 extends R1 implements CLASSNAMEu1 {
     }
 
     /* renamed from: spliterator  reason: collision with other method in class */
-    public w m564spliterator() {
+    public w m1spliterator() {
         return new CLASSNAMEf2(this);
     }
 

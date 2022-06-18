@@ -181,7 +181,7 @@ abstract class CLASSNAMEd1 extends CLASSNAMEc implements CLASSNAMEe1 {
     }
 
     /* renamed from: iterator  reason: collision with other method in class */
-    public Iterator m575iterator() {
+    public Iterator m12iterator() {
         return L.h(spliterator());
     }
 

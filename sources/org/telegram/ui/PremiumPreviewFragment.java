@@ -21,11 +21,9 @@ import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
-import android.text.Html;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.TextUtils;
-import android.text.style.URLSpan;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -53,7 +51,10 @@ import org.telegram.messenger.MediaDataController;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.Utilities;
+import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC$MessageEntity;
+import org.telegram.tgnet.TLRPC$TL_boolTrue;
+import org.telegram.tgnet.TLRPC$TL_error;
 import org.telegram.tgnet.TLRPC$TL_help_premiumPromo;
 import org.telegram.tgnet.TLRPC$TL_inputMessageEntityMentionName;
 import org.telegram.tgnet.TLRPC$TL_messageEntityBankCard;
@@ -66,12 +67,14 @@ import org.telegram.tgnet.TLRPC$TL_messageEntityMentionName;
 import org.telegram.tgnet.TLRPC$TL_messageEntityPhone;
 import org.telegram.tgnet.TLRPC$TL_messageEntityTextUrl;
 import org.telegram.tgnet.TLRPC$TL_messageEntityUrl;
+import org.telegram.tgnet.TLRPC$TL_payments_canPurchasePremium;
 import org.telegram.ui.ActionBar.ActionBar;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.ActionBar.ThemeDescription;
 import org.telegram.ui.Cells.ShadowSectionCell;
 import org.telegram.ui.Cells.TextInfoPrivacyCell;
+import org.telegram.ui.Components.AlertsCreator;
 import org.telegram.ui.Components.CombinedDrawable;
 import org.telegram.ui.Components.CubicBezierInterpolator;
 import org.telegram.ui.Components.FillLastLinearLayoutManager;
@@ -574,12 +577,11 @@ public class PremiumPreviewFragment extends BaseFragment implements Notification
         this.backgroundView.imageView.setStarParticlesView(this.particlesView);
         this.contentView.addView(this.particlesView, LayoutHelper.createFrame(-1, -2.0f));
         this.contentView.addView(this.backgroundView, LayoutHelper.createFrame(-1, -2.0f));
-        this.listView.setOnItemClickListener((RecyclerListView.OnItemClickListener) new PremiumPreviewFragment$$ExternalSyntheticLambda5(this));
+        this.listView.setOnItemClickListener((RecyclerListView.OnItemClickListener) new PremiumPreviewFragment$$ExternalSyntheticLambda7(this));
         this.contentView.addView(this.listView);
         PremiumButtonView premiumButtonView2 = new PremiumButtonView(context, false);
         this.premiumButtonView = premiumButtonView2;
-        premiumButtonView2.buttonTextView.setText(getPremiumButtonText(this.currentAccount));
-        this.premiumButtonView.buttonTextView.setOnClickListener(new PremiumPreviewFragment$$ExternalSyntheticLambda0(this));
+        premiumButtonView2.setButton(getPremiumButtonText(this.currentAccount), new PremiumPreviewFragment$$ExternalSyntheticLambda0(this));
         this.buttonContainer = new FrameLayout(context);
         View view = new View(context);
         this.buttonDivider = view;
@@ -606,7 +608,7 @@ public class PremiumPreviewFragment extends BaseFragment implements Notification
         updateRows();
         this.backgroundView.imageView.startEnterAnimation(-180, 200);
         if (this.forcePremium) {
-            AndroidUtilities.runOnUIThread(new PremiumPreviewFragment$$ExternalSyntheticLambda2(this), 400);
+            AndroidUtilities.runOnUIThread(new PremiumPreviewFragment$$ExternalSyntheticLambda3(this), 400);
         }
         MediaDataController.getInstance(this.currentAccount).preloadPremiumPreviewStickers();
         return this.fragmentView;
@@ -622,7 +624,7 @@ public class PremiumPreviewFragment extends BaseFragment implements Notification
                 showDialog(doubledLimitsBottomSheet);
                 return;
             }
-            showDialog(new PremiumFeatureBottomSheet(this, premiumFeatureCell.data.type));
+            showDialog(new PremiumFeatureBottomSheet(this, premiumFeatureCell.data.type, false));
         }
     }
 
@@ -663,7 +665,7 @@ public class PremiumPreviewFragment extends BaseFragment implements Notification
                 i2++;
             }
         }
-        Collections.sort(arrayList, new PremiumPreviewFragment$$ExternalSyntheticLambda3(instance));
+        Collections.sort(arrayList, new PremiumPreviewFragment$$ExternalSyntheticLambda4(instance));
     }
 
     /* access modifiers changed from: private */
@@ -708,7 +710,8 @@ public class PremiumPreviewFragment extends BaseFragment implements Notification
                 List<ProductDetails.SubscriptionOfferDetails> subscriptionOfferDetails = productDetails.getSubscriptionOfferDetails();
                 if (!subscriptionOfferDetails.isEmpty()) {
                     BillingController.getInstance().addResultListener("telegram_premium", new PremiumPreviewFragment$$ExternalSyntheticLambda1(baseFragment));
-                    BillingController.getInstance().launchBillingFlow(baseFragment.getParentActivity(), Collections.singletonList(BillingFlowParams.ProductDetailsParams.newBuilder().setProductDetails(BillingController.PREMIUM_PRODUCT_DETAILS).setOfferToken(subscriptionOfferDetails.get(0).getOfferToken()).build()));
+                    TLRPC$TL_payments_canPurchasePremium tLRPC$TL_payments_canPurchasePremium = new TLRPC$TL_payments_canPurchasePremium();
+                    baseFragment.getConnectionsManager().sendRequest(tLRPC$TL_payments_canPurchasePremium, new PremiumPreviewFragment$$ExternalSyntheticLambda5(baseFragment, subscriptionOfferDetails, tLRPC$TL_payments_canPurchasePremium));
                 }
             }
         }
@@ -721,6 +724,7 @@ public class PremiumPreviewFragment extends BaseFragment implements Notification
                 PremiumPreviewFragment premiumPreviewFragment = (PremiumPreviewFragment) baseFragment;
                 premiumPreviewFragment.setForcePremium();
                 premiumPreviewFragment.getMediaDataController().loadPremiumPromo(false);
+                premiumPreviewFragment.listView.smoothScrollToPosition(0);
             } else {
                 baseFragment.presentFragment(new PremiumPreviewFragment().setForcePremium());
             }
@@ -731,6 +735,15 @@ public class PremiumPreviewFragment extends BaseFragment implements Notification
                 }
                 ((LaunchActivity) baseFragment.getParentActivity()).getFireworksOverlay().start();
             }
+        }
+    }
+
+    /* access modifiers changed from: private */
+    public static /* synthetic */ void lambda$buyPremium$5(TLObject tLObject, BaseFragment baseFragment, List list, TLRPC$TL_error tLRPC$TL_error, TLRPC$TL_payments_canPurchasePremium tLRPC$TL_payments_canPurchasePremium) {
+        if (tLObject instanceof TLRPC$TL_boolTrue) {
+            BillingController.getInstance().launchBillingFlow(baseFragment.getParentActivity(), Collections.singletonList(BillingFlowParams.ProductDetailsParams.newBuilder().setProductDetails(BillingController.PREMIUM_PRODUCT_DETAILS).setOfferToken(((ProductDetails.SubscriptionOfferDetails) list.get(0)).getOfferToken()).build()));
+        } else {
+            AlertsCreator.processError(baseFragment.getCurrentAccount(), tLRPC$TL_error, baseFragment, tLRPC$TL_payments_canPurchasePremium, new Object[0]);
         }
     }
 
@@ -797,21 +810,14 @@ public class PremiumPreviewFragment extends BaseFragment implements Notification
         int size = i2 + this.premiumFeatures.size();
         this.rowCount = size;
         this.featuresEndRow = size;
+        int i3 = size + 1;
+        this.rowCount = i3;
+        this.statusRow = size;
+        this.rowCount = i3 + 1;
+        this.lastPaddingRow = i3;
         if (getUserConfig().isPremium() || this.forcePremium) {
-            int i3 = this.rowCount;
-            int i4 = i3 + 1;
-            this.rowCount = i4;
-            this.statusRow = i3;
-            this.rowCount = i4 + 1;
-            this.lastPaddingRow = i4;
             this.buttonContainer.setVisibility(8);
         } else {
-            int i5 = this.rowCount;
-            int i6 = i5 + 1;
-            this.rowCount = i6;
-            this.privacyRow = i5;
-            this.rowCount = i6 + 1;
-            this.lastPaddingRow = i6;
             this.buttonContainer.setVisibility(0);
         }
         if (this.buttonContainer.getVisibility() == 0) {
@@ -822,6 +828,9 @@ public class PremiumPreviewFragment extends BaseFragment implements Notification
     }
 
     public boolean onFragmentCreate() {
+        if (getMessagesController().premiumLocked) {
+            return false;
+        }
         NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.billingProductDetailsUpdated);
         NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.currentUserPremiumStatusChanged);
         getNotificationCenter().addObserver(this, NotificationCenter.premiumPromoUpdated);
@@ -905,6 +914,7 @@ public class PremiumPreviewFragment extends BaseFragment implements Notification
         }
 
         public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int i) {
+            TLRPC$TL_help_premiumPromo premiumPromo;
             String str;
             int i2;
             boolean z;
@@ -927,101 +937,87 @@ public class PremiumPreviewFragment extends BaseFragment implements Notification
                 combinedDrawable.setFullsize(true);
                 textInfoPrivacyCell.setBackground(combinedDrawable);
                 PremiumPreviewFragment premiumPreviewFragment2 = PremiumPreviewFragment.this;
-                if (i3 == premiumPreviewFragment2.statusRow) {
-                    TLRPC$TL_help_premiumPromo premiumPromo = premiumPreviewFragment2.getMediaDataController().getPremiumPromo();
-                    if (premiumPromo != null) {
-                        SpannableString spannableString = new SpannableString(premiumPromo.status_text);
-                        MediaDataController.addTextStyleRuns(premiumPromo.status_entities, (CharSequence) premiumPromo.status_text, (Spannable) spannableString);
-                        TextStyleSpan[] textStyleSpanArr = (TextStyleSpan[]) spannableString.getSpans(0, spannableString.length(), TextStyleSpan.class);
-                        int length = textStyleSpanArr.length;
-                        int i6 = 0;
-                        while (i6 < length) {
-                            TextStyleSpan.TextStyleRun textStyleRun = textStyleSpanArr[i6].getTextStyleRun();
-                            TLRPC$MessageEntity tLRPC$MessageEntity = textStyleRun.urlEntity;
-                            if (tLRPC$MessageEntity != null) {
-                                String str2 = premiumPromo.status_text;
-                                int i7 = tLRPC$MessageEntity.offset;
-                                str = TextUtils.substring(str2, i7, tLRPC$MessageEntity.length + i7);
-                            } else {
-                                str = null;
-                            }
-                            TLRPC$MessageEntity tLRPC$MessageEntity2 = textStyleRun.urlEntity;
-                            if (tLRPC$MessageEntity2 instanceof TLRPC$TL_messageEntityBotCommand) {
-                                spannableString.setSpan(new URLSpanBotCommand(str, i5, textStyleRun), textStyleRun.start, textStyleRun.end, 33);
-                            } else if ((tLRPC$MessageEntity2 instanceof TLRPC$TL_messageEntityHashtag) || (tLRPC$MessageEntity2 instanceof TLRPC$TL_messageEntityMention) || (tLRPC$MessageEntity2 instanceof TLRPC$TL_messageEntityCashtag)) {
-                                i2 = 33;
-                                spannableString.setSpan(new URLSpanNoUnderline(str, textStyleRun), textStyleRun.start, textStyleRun.end, 33);
-                                z = false;
-                                if (!z && (textStyleRun.flags & 256) != 0) {
-                                    spannableString.setSpan(new TextStyleSpan(textStyleRun), textStyleRun.start, textStyleRun.end, i2);
-                                }
-                                i6++;
-                                z2 = true;
-                                i5 = 0;
-                            } else if (tLRPC$MessageEntity2 instanceof TLRPC$TL_messageEntityEmail) {
-                                spannableString.setSpan(new URLSpanReplacement("mailto:" + str, textStyleRun), textStyleRun.start, textStyleRun.end, 33);
-                            } else if (tLRPC$MessageEntity2 instanceof TLRPC$TL_messageEntityUrl) {
-                                if (!str.toLowerCase().contains("://")) {
-                                    spannableString.setSpan(new URLSpanBrowser("http://" + str, textStyleRun), textStyleRun.start, textStyleRun.end, 33);
-                                } else {
-                                    spannableString.setSpan(new URLSpanBrowser(str, textStyleRun), textStyleRun.start, textStyleRun.end, 33);
-                                }
-                            } else if (tLRPC$MessageEntity2 instanceof TLRPC$TL_messageEntityBankCard) {
-                                spannableString.setSpan(new URLSpanNoUnderline("card:" + str, textStyleRun), textStyleRun.start, textStyleRun.end, 33);
-                            } else if (tLRPC$MessageEntity2 instanceof TLRPC$TL_messageEntityPhone) {
-                                String stripExceptNumbers = PhoneFormat.stripExceptNumbers(str);
-                                if (str.startsWith("+")) {
-                                    stripExceptNumbers = "+" + stripExceptNumbers;
-                                }
-                                spannableString.setSpan(new URLSpanBrowser("tel:" + stripExceptNumbers, textStyleRun), textStyleRun.start, textStyleRun.end, 33);
-                            } else if (tLRPC$MessageEntity2 instanceof TLRPC$TL_messageEntityTextUrl) {
-                                URLSpanReplacement uRLSpanReplacement = new URLSpanReplacement(textStyleRun.urlEntity.url, textStyleRun);
-                                uRLSpanReplacement.setNavigateToPremiumBot(z2);
-                                spannableString.setSpan(uRLSpanReplacement, textStyleRun.start, textStyleRun.end, 33);
-                            } else if (tLRPC$MessageEntity2 instanceof TLRPC$TL_messageEntityMentionName) {
-                                spannableString.setSpan(new URLSpanUserMention("" + ((TLRPC$TL_messageEntityMentionName) textStyleRun.urlEntity).user_id, i5, textStyleRun), textStyleRun.start, textStyleRun.end, 33);
-                            } else if (tLRPC$MessageEntity2 instanceof TLRPC$TL_inputMessageEntityMentionName) {
-                                spannableString.setSpan(new URLSpanUserMention("" + ((TLRPC$TL_inputMessageEntityMentionName) textStyleRun.urlEntity).user_id.user_id, i5, textStyleRun), textStyleRun.start, textStyleRun.end, 33);
-                            } else if ((textStyleRun.flags & 4) != 0) {
-                                URLSpanMono uRLSpanMono = r7;
-                                i2 = 33;
-                                URLSpanMono uRLSpanMono2 = new URLSpanMono(spannableString, textStyleRun.start, textStyleRun.end, (byte) 0, textStyleRun);
-                                spannableString.setSpan(uRLSpanMono, textStyleRun.start, textStyleRun.end, 33);
-                                z = false;
-                                spannableString.setSpan(new TextStyleSpan(textStyleRun), textStyleRun.start, textStyleRun.end, i2);
-                                i6++;
-                                z2 = true;
-                                i5 = 0;
-                            } else {
-                                i2 = 33;
-                                spannableString.setSpan(new TextStyleSpan(textStyleRun), textStyleRun.start, textStyleRun.end, 33);
-                                z = true;
-                                spannableString.setSpan(new TextStyleSpan(textStyleRun), textStyleRun.start, textStyleRun.end, i2);
-                                i6++;
-                                z2 = true;
-                                i5 = 0;
-                            }
+                if (i3 == premiumPreviewFragment2.statusRow && (premiumPromo = premiumPreviewFragment2.getMediaDataController().getPremiumPromo()) != null) {
+                    SpannableString spannableString = new SpannableString(premiumPromo.status_text);
+                    MediaDataController.addTextStyleRuns(premiumPromo.status_entities, (CharSequence) premiumPromo.status_text, (Spannable) spannableString);
+                    TextStyleSpan[] textStyleSpanArr = (TextStyleSpan[]) spannableString.getSpans(0, spannableString.length(), TextStyleSpan.class);
+                    int length = textStyleSpanArr.length;
+                    int i6 = 0;
+                    while (i6 < length) {
+                        TextStyleSpan.TextStyleRun textStyleRun = textStyleSpanArr[i6].getTextStyleRun();
+                        TLRPC$MessageEntity tLRPC$MessageEntity = textStyleRun.urlEntity;
+                        if (tLRPC$MessageEntity != null) {
+                            String str2 = premiumPromo.status_text;
+                            int i7 = tLRPC$MessageEntity.offset;
+                            str = TextUtils.substring(str2, i7, tLRPC$MessageEntity.length + i7);
+                        } else {
+                            str = null;
+                        }
+                        TLRPC$MessageEntity tLRPC$MessageEntity2 = textStyleRun.urlEntity;
+                        if (tLRPC$MessageEntity2 instanceof TLRPC$TL_messageEntityBotCommand) {
+                            spannableString.setSpan(new URLSpanBotCommand(str, i5, textStyleRun), textStyleRun.start, textStyleRun.end, 33);
+                        } else if ((tLRPC$MessageEntity2 instanceof TLRPC$TL_messageEntityHashtag) || (tLRPC$MessageEntity2 instanceof TLRPC$TL_messageEntityMention) || (tLRPC$MessageEntity2 instanceof TLRPC$TL_messageEntityCashtag)) {
                             i2 = 33;
+                            spannableString.setSpan(new URLSpanNoUnderline(str, textStyleRun), textStyleRun.start, textStyleRun.end, 33);
+                            z = false;
+                            if (!z && (textStyleRun.flags & 256) != 0) {
+                                spannableString.setSpan(new TextStyleSpan(textStyleRun), textStyleRun.start, textStyleRun.end, i2);
+                            }
+                            i6++;
+                            z2 = true;
+                            i5 = 0;
+                        } else if (tLRPC$MessageEntity2 instanceof TLRPC$TL_messageEntityEmail) {
+                            spannableString.setSpan(new URLSpanReplacement("mailto:" + str, textStyleRun), textStyleRun.start, textStyleRun.end, 33);
+                        } else if (tLRPC$MessageEntity2 instanceof TLRPC$TL_messageEntityUrl) {
+                            if (!str.toLowerCase().contains("://")) {
+                                spannableString.setSpan(new URLSpanBrowser("http://" + str, textStyleRun), textStyleRun.start, textStyleRun.end, 33);
+                            } else {
+                                spannableString.setSpan(new URLSpanBrowser(str, textStyleRun), textStyleRun.start, textStyleRun.end, 33);
+                            }
+                        } else if (tLRPC$MessageEntity2 instanceof TLRPC$TL_messageEntityBankCard) {
+                            spannableString.setSpan(new URLSpanNoUnderline("card:" + str, textStyleRun), textStyleRun.start, textStyleRun.end, 33);
+                        } else if (tLRPC$MessageEntity2 instanceof TLRPC$TL_messageEntityPhone) {
+                            String stripExceptNumbers = PhoneFormat.stripExceptNumbers(str);
+                            if (str.startsWith("+")) {
+                                stripExceptNumbers = "+" + stripExceptNumbers;
+                            }
+                            spannableString.setSpan(new URLSpanBrowser("tel:" + stripExceptNumbers, textStyleRun), textStyleRun.start, textStyleRun.end, 33);
+                        } else if (tLRPC$MessageEntity2 instanceof TLRPC$TL_messageEntityTextUrl) {
+                            URLSpanReplacement uRLSpanReplacement = new URLSpanReplacement(textStyleRun.urlEntity.url, textStyleRun);
+                            uRLSpanReplacement.setNavigateToPremiumBot(z2);
+                            spannableString.setSpan(uRLSpanReplacement, textStyleRun.start, textStyleRun.end, 33);
+                        } else if (tLRPC$MessageEntity2 instanceof TLRPC$TL_messageEntityMentionName) {
+                            spannableString.setSpan(new URLSpanUserMention("" + ((TLRPC$TL_messageEntityMentionName) textStyleRun.urlEntity).user_id, i5, textStyleRun), textStyleRun.start, textStyleRun.end, 33);
+                        } else if (tLRPC$MessageEntity2 instanceof TLRPC$TL_inputMessageEntityMentionName) {
+                            spannableString.setSpan(new URLSpanUserMention("" + ((TLRPC$TL_inputMessageEntityMentionName) textStyleRun.urlEntity).user_id.user_id, i5, textStyleRun), textStyleRun.start, textStyleRun.end, 33);
+                        } else if ((textStyleRun.flags & 4) != 0) {
+                            URLSpanMono uRLSpanMono = r7;
+                            i2 = 33;
+                            URLSpanMono uRLSpanMono2 = new URLSpanMono(spannableString, textStyleRun.start, textStyleRun.end, (byte) 0, textStyleRun);
+                            spannableString.setSpan(uRLSpanMono, textStyleRun.start, textStyleRun.end, 33);
                             z = false;
                             spannableString.setSpan(new TextStyleSpan(textStyleRun), textStyleRun.start, textStyleRun.end, i2);
                             i6++;
                             z2 = true;
                             i5 = 0;
+                        } else {
+                            i2 = 33;
+                            spannableString.setSpan(new TextStyleSpan(textStyleRun), textStyleRun.start, textStyleRun.end, 33);
+                            z = true;
+                            spannableString.setSpan(new TextStyleSpan(textStyleRun), textStyleRun.start, textStyleRun.end, i2);
+                            i6++;
+                            z2 = true;
+                            i5 = 0;
                         }
-                        textInfoPrivacyCell.setText(spannableString);
-                        return;
+                        i2 = 33;
+                        z = false;
+                        spannableString.setSpan(new TextStyleSpan(textStyleRun), textStyleRun.start, textStyleRun.end, i2);
+                        i6++;
+                        z2 = true;
+                        i5 = 0;
                     }
-                    return;
+                    textInfoPrivacyCell.setText(spannableString);
                 }
-                SpannableString spannableString2 = new SpannableString(Html.fromHtml(LocaleController.getString("AskAQuestionInfo", NUM).replace("\n", "<br>")));
-                URLSpan[] uRLSpanArr = (URLSpan[]) spannableString2.getSpans(0, spannableString2.length(), URLSpan.class);
-                for (URLSpan uRLSpan : uRLSpanArr) {
-                    int spanStart = spannableString2.getSpanStart(uRLSpan);
-                    int spanEnd = spannableString2.getSpanEnd(uRLSpan);
-                    spannableString2.removeSpan(uRLSpan);
-                    spannableString2.setSpan(new URLSpanNoUnderline(uRLSpan.getURL()), spanStart, spanEnd, 0);
-                }
-                textInfoPrivacyCell.setText(spannableString2);
             }
         }
 
@@ -1092,7 +1088,7 @@ public class PremiumPreviewFragment extends BaseFragment implements Notification
                 public void onLongPress() {
                     super.onLongPress();
                     PremiumPreviewFragment premiumPreviewFragment = PremiumPreviewFragment.this;
-                    if (premiumPreviewFragment.settingsView == null) {
+                    if (premiumPreviewFragment.settingsView == null || BuildVars.DEBUG_PRIVATE_VERSION) {
                         premiumPreviewFragment.settingsView = new FrameLayout(this.val$context);
                         ScrollView scrollView = new ScrollView(this.val$context);
                         scrollView.addView(new GLIconSettingsView(this.val$context, BackgroundView.this.imageView.mRenderer));
@@ -1145,7 +1141,7 @@ public class PremiumPreviewFragment extends BaseFragment implements Notification
     }
 
     public ArrayList<ThemeDescription> getThemeDescriptions() {
-        return SimpleThemeDescription.createThemeDescriptions(new PremiumPreviewFragment$$ExternalSyntheticLambda4(this), "premiumGradient1", "premiumGradient2", "premiumGradient3", "premiumGradient4", "premiumGradientBackground1", "premiumGradientBackground2", "premiumGradientBackground3", "premiumGradientBackground4", "premiumGradientBackgroundOverlay", "premiumStarGradient1", "premiumStarGradient2", "premiumStartSmallStarsColor");
+        return SimpleThemeDescription.createThemeDescriptions(new PremiumPreviewFragment$$ExternalSyntheticLambda6(this), "premiumGradient1", "premiumGradient2", "premiumGradient3", "premiumGradient4", "premiumGradientBackground1", "premiumGradientBackground2", "premiumGradientBackground3", "premiumGradientBackground4", "premiumGradientBackgroundOverlay", "premiumStarGradient1", "premiumStarGradient2", "premiumStartSmallStarsColor");
     }
 
     /* access modifiers changed from: private */

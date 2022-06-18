@@ -400,6 +400,7 @@ public class SharedDocumentCell extends FrameLayout implements DownloadControlle
         boolean z3;
         String str;
         String str2;
+        String str3;
         MessageObject messageObject2 = messageObject;
         MessageObject messageObject3 = this.message;
         if (messageObject3 == null || messageObject2 == null || messageObject3.getId() == messageObject.getId()) {
@@ -418,45 +419,29 @@ public class SharedDocumentCell extends FrameLayout implements DownloadControlle
         }
         TLRPC$Document document = messageObject.getDocument();
         int i = 8;
-        String str3 = "";
+        String str4 = "";
         if (document != null) {
-            String str4 = null;
+            String str5 = null;
             if (messageObject.isMusic()) {
                 for (int i2 = 0; i2 < document.attributes.size(); i2++) {
                     TLRPC$DocumentAttribute tLRPC$DocumentAttribute = document.attributes.get(i2);
-                    if ((tLRPC$DocumentAttribute instanceof TLRPC$TL_documentAttributeAudio) && !(((str = tLRPC$DocumentAttribute.performer) == null || str.length() == 0) && ((str2 = tLRPC$DocumentAttribute.title) == null || str2.length() == 0))) {
-                        str4 = messageObject.getMusicAuthor() + " - " + messageObject.getMusicTitle();
+                    if ((tLRPC$DocumentAttribute instanceof TLRPC$TL_documentAttributeAudio) && !(((str2 = tLRPC$DocumentAttribute.performer) == null || str2.length() == 0) && ((str3 = tLRPC$DocumentAttribute.title) == null || str3.length() == 0))) {
+                        str5 = messageObject.getMusicAuthor() + " - " + messageObject.getMusicTitle();
                     }
                 }
             }
             String documentFileName = (messageObject.isVideo() || (messageObject2.messageOwner.media instanceof TLRPC$TL_messageMediaPhoto) || MessageObject.isGifDocument(document)) ? null : FileLoader.getDocumentFileName(document);
-            if (TextUtils.isEmpty(documentFileName)) {
-                if (document.mime_type.startsWith("video")) {
-                    if (MessageObject.isGifDocument(document)) {
-                        documentFileName = LocaleController.getString("AttachGif", NUM);
-                    } else {
-                        documentFileName = LocaleController.getString("AttachVideo", NUM);
-                    }
-                } else if (document.mime_type.startsWith("image")) {
-                    if (MessageObject.isGifDocument(document)) {
-                        documentFileName = LocaleController.getString("AttachGif", NUM);
-                    } else {
-                        documentFileName = LocaleController.getString("AttachPhoto", NUM);
-                    }
-                } else if (document.mime_type.startsWith("audio")) {
-                    documentFileName = LocaleController.getString("AttachAudio", NUM);
-                } else {
-                    documentFileName = LocaleController.getString("AttachDocument", NUM);
-                }
+            if (TextUtils.isEmpty(documentFileName) && (str = document.mime_type) != null) {
+                documentFileName = str.startsWith("video") ? MessageObject.isGifDocument(document) ? LocaleController.getString("AttachGif", NUM) : LocaleController.getString("AttachVideo", NUM) : document.mime_type.startsWith("image") ? MessageObject.isGifDocument(document) ? LocaleController.getString("AttachGif", NUM) : LocaleController.getString("AttachPhoto", NUM) : document.mime_type.startsWith("audio") ? LocaleController.getString("AttachAudio", NUM) : LocaleController.getString("AttachDocument", NUM);
             }
-            if (str4 == null) {
-                str4 = documentFileName;
+            if (str5 == null) {
+                str5 = documentFileName;
             }
-            CharSequence highlightText = AndroidUtilities.highlightText((CharSequence) str4, messageObject2.highlightedWords, this.resourcesProvider);
+            CharSequence highlightText = AndroidUtilities.highlightText((CharSequence) str5, messageObject2.highlightedWords, this.resourcesProvider);
             if (highlightText != null) {
                 this.nameTextView.setText(highlightText);
             } else {
-                this.nameTextView.setText(str4);
+                this.nameTextView.setText(str5);
             }
             this.placeholderImageView.setVisibility(0);
             this.extTextView.setVisibility(0);
@@ -464,9 +449,9 @@ public class SharedDocumentCell extends FrameLayout implements DownloadControlle
             TextView textView = this.extTextView;
             int lastIndexOf = documentFileName.lastIndexOf(46);
             if (lastIndexOf != -1) {
-                str3 = documentFileName.substring(lastIndexOf + 1).toLowerCase();
+                str4 = documentFileName.substring(lastIndexOf + 1).toLowerCase();
             }
-            textView.setText(str3);
+            textView.setText(str4);
             TLRPC$PhotoSize closestPhotoSizeWithSize = FileLoader.getClosestPhotoSizeWithSize(document.thumbs, 320);
             TLRPC$PhotoSize closestPhotoSizeWithSize2 = FileLoader.getClosestPhotoSizeWithSize(document.thumbs, 40);
             if (closestPhotoSizeWithSize2 == closestPhotoSizeWithSize) {
@@ -505,9 +490,9 @@ public class SharedDocumentCell extends FrameLayout implements DownloadControlle
                 }
             }
         } else {
-            this.nameTextView.setText(str3);
-            this.extTextView.setText(str3);
-            this.dateTextView.setText(str3);
+            this.nameTextView.setText(str4);
+            this.extTextView.setText(str4);
+            this.dateTextView.setText(str4);
             this.placeholderImageView.setVisibility(0);
             this.extTextView.setVisibility(0);
             this.extTextView.setAlpha(1.0f);
