@@ -105,21 +105,21 @@ public class ReportAlert extends BottomSheet {
             r7 = 5
             r8 = 6
             if (r2 != 0) goto L_0x007d
-            r9 = 2131627951(0x7f0e0faf, float:1.888318E38)
+            r9 = 2131627956(0x7f0e0fb4, float:1.8883191E38)
             java.lang.String r10 = "ReportTitleSpam"
             java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r10, r9)
             r5.setText(r9)
             goto L_0x00ca
         L_0x007d:
             if (r2 != r8) goto L_0x008c
-            r9 = 2131627949(0x7f0e0fad, float:1.8883177E38)
+            r9 = 2131627954(0x7f0e0fb2, float:1.8883187E38)
             java.lang.String r10 = "ReportTitleFake"
             java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r10, r9)
             r5.setText(r9)
             goto L_0x00ca
         L_0x008c:
             if (r2 != r3) goto L_0x009b
-            r9 = 2131627952(0x7f0e0fb0, float:1.8883183E38)
+            r9 = 2131627957(0x7f0e0fb5, float:1.8883193E38)
             java.lang.String r10 = "ReportTitleViolence"
             java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r10, r9)
             r5.setText(r9)
@@ -127,14 +127,14 @@ public class ReportAlert extends BottomSheet {
         L_0x009b:
             r9 = 2
             if (r2 != r9) goto L_0x00ab
-            r9 = 2131627948(0x7f0e0fac, float:1.8883175E38)
+            r9 = 2131627953(0x7f0e0fb1, float:1.8883185E38)
             java.lang.String r10 = "ReportTitleChild"
             java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r10, r9)
             r5.setText(r9)
             goto L_0x00ca
         L_0x00ab:
             if (r2 != r7) goto L_0x00ba
-            r9 = 2131627950(0x7f0e0fae, float:1.8883179E38)
+            r9 = 2131627955(0x7f0e0fb3, float:1.888319E38)
             java.lang.String r10 = "ReportTitlePornography"
             java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r10, r9)
             r5.setText(r9)
@@ -142,7 +142,7 @@ public class ReportAlert extends BottomSheet {
         L_0x00ba:
             r9 = 100
             if (r2 != r9) goto L_0x00ca
-            r9 = 2131627922(0x7f0e0var_, float:1.8883122E38)
+            r9 = 2131627927(0x7f0e0var_, float:1.8883132E38)
             java.lang.String r10 = "ReportChat"
             java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r10, r9)
             r5.setText(r9)
@@ -164,7 +164,7 @@ public class ReportAlert extends BottomSheet {
             int r9 = org.telegram.ui.ActionBar.Theme.getColor(r9)
             r5.setTextColor(r9)
             r5.setGravity(r3)
-            r9 = 2131627934(0x7f0e0f9e, float:1.8883146E38)
+            r9 = 2131627939(0x7f0e0fa3, float:1.8883157E38)
             java.lang.String r10 = "ReportInfo"
             java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r10, r9)
             r5.setText(r9)
@@ -221,7 +221,7 @@ public class ReportAlert extends BottomSheet {
             org.telegram.ui.Components.EditTextBoldCursor r4 = r0.editText
             r4.setImeOptions(r8)
             org.telegram.ui.Components.EditTextBoldCursor r4 = r0.editText
-            r5 = 2131627933(0x7f0e0f9d, float:1.8883144E38)
+            r5 = 2131627938(0x7f0e0fa2, float:1.8883155E38)
             java.lang.String r7 = "ReportHint"
             java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r7, r5)
             r4.setHint(r5)
@@ -254,7 +254,7 @@ public class ReportAlert extends BottomSheet {
             r0.clearButton = r4
             r4.setBackground(r10)
             org.telegram.ui.Components.ReportAlert$BottomSheetCell r1 = r0.clearButton
-            r4 = 2131627938(0x7f0e0fa2, float:1.8883155E38)
+            r4 = 2131627943(0x7f0e0fa7, float:1.8883165E38)
             java.lang.String r5 = "ReportSend"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r5, r4)
             r1.setText(r4)

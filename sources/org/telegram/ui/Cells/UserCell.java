@@ -674,7 +674,7 @@ public class UserCell extends FrameLayout implements NotificationCenter.Notifica
             boolean r6 = org.telegram.messenger.UserObject.isUserSelf(r1)
             if (r6 == 0) goto L_0x01a5
             org.telegram.ui.ActionBar.SimpleTextView r2 = r0.nameTextView
-            r4 = 2131628071(0x7f0e1027, float:1.8883424E38)
+            r4 = 2131628074(0x7f0e102a, float:1.888343E38)
             java.lang.String r6 = "SavedMessages"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r6, r4)
             r2.setText(r4, r5)
@@ -808,14 +808,14 @@ public class UserCell extends FrameLayout implements NotificationCenter.Notifica
             goto L_0x028b
         L_0x027c:
             org.telegram.ui.ActionBar.SimpleTextView r3 = r0.statusTextView
-            r6 = 2131624729(0x7f0e0319, float:1.8876646E38)
+            r6 = 2131624734(0x7f0e031e, float:1.8876656E38)
             java.lang.String r7 = "BotStatusCantRead"
             java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r7, r6)
             r3.setText(r6)
             goto L_0x02f9
         L_0x028b:
             org.telegram.ui.ActionBar.SimpleTextView r3 = r0.statusTextView
-            r6 = 2131624730(0x7f0e031a, float:1.8876648E38)
+            r6 = 2131624735(0x7f0e031f, float:1.8876658E38)
             java.lang.String r7 = "BotStatusRead"
             java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r7, r6)
             r3.setText(r6)
@@ -857,7 +857,7 @@ public class UserCell extends FrameLayout implements NotificationCenter.Notifica
             int r6 = r0.statusOnlineColor
             r3.setTextColor(r6)
             org.telegram.ui.ActionBar.SimpleTextView r3 = r0.statusTextView
-            r6 = 2131627072(0x7f0e0CLASSNAME, float:1.8881398E38)
+            r6 = 2131627077(0x7f0e0CLASSNAME, float:1.8881408E38)
             java.lang.String r7 = "Online"
             java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r7, r6)
             r3.setText(r6)

@@ -382,7 +382,7 @@ public class IntroActivity extends BaseFragment implements NotificationCenter.No
             r10 = 5
             r7[r10] = r9
             r5.postNotificationName(r6, r7)
-            r10 = 2131624088(0x7f0e0098, float:1.8875346E38)
+            r10 = 2131624090(0x7f0e009a, float:1.887535E38)
             java.lang.String r10 = org.telegram.messenger.LocaleController.getString((int) r10)
             r9.setContentDescription(r10)
             return

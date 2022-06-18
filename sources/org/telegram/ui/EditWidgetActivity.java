@@ -217,7 +217,7 @@ public class EditWidgetActivity extends BaseFragment {
                 org.telegram.ui.Cells.ChatActionCell r9 = new org.telegram.ui.Cells.ChatActionCell
                 r9.<init>(r2)
                 java.lang.String r10 = "WidgetPreview"
-                r11 = 2131629241(0x7f0e14b9, float:1.8885797E38)
+                r11 = 2131629244(0x7f0e14bc, float:1.8885803E38)
                 java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r10, r11)
                 r9.setCustomText(r10)
                 r11 = -2
@@ -332,7 +332,7 @@ public class EditWidgetActivity extends BaseFragment {
                 org.telegram.ui.EditWidgetActivity r0 = r1.this$0
                 int r0 = r0.widgetType
                 r2 = 1111490560(0x42400000, float:48.0)
-                r3 = 2131628071(0x7f0e1027, float:1.8883424E38)
+                r3 = 2131628074(0x7f0e102a, float:1.888343E38)
                 java.lang.String r4 = "SavedMessages"
                 r5 = 0
                 r6 = 0
@@ -418,14 +418,14 @@ public class EditWidgetActivity extends BaseFragment {
             L_0x00c7:
                 boolean r10 = org.telegram.messenger.UserObject.isReplyUser((org.telegram.tgnet.TLRPC$User) r0)
                 if (r10 == 0) goto L_0x00d7
-                r10 = 2131627912(0x7f0e0var_, float:1.8883102E38)
+                r10 = 2131627917(0x7f0e0f8d, float:1.8883112E38)
                 java.lang.String r11 = "RepliesTitle"
                 java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r11, r10)
                 goto L_0x00ef
             L_0x00d7:
                 boolean r10 = org.telegram.messenger.UserObject.isDeleted(r0)
                 if (r10 == 0) goto L_0x00e7
-                r10 = 2131626123(0x7f0e088b, float:1.8879473E38)
+                r10 = 2131626128(0x7f0e0890, float:1.8879483E38)
                 java.lang.String r11 = "HiddenName"
                 java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r11, r10)
                 goto L_0x00ef
@@ -503,7 +503,7 @@ public class EditWidgetActivity extends BaseFragment {
             L_0x0158:
                 android.view.ViewGroup[] r4 = r1.cells
                 r4 = r4[r13]
-                r11 = 2131230915(0x7var_c3, float:1.8077896E38)
+                r11 = 2131230917(0x7var_c5, float:1.80779E38)
                 android.view.View r4 = r4.findViewById(r11)
                 android.widget.TextView r4 = (android.widget.TextView) r4
                 r4.setText(r10)
@@ -589,7 +589,7 @@ public class EditWidgetActivity extends BaseFragment {
                 r11.setBitmap(r2)     // Catch:{ all -> 0x0222 }
                 android.view.ViewGroup[] r0 = r1.cells     // Catch:{ all -> 0x0222 }
                 r0 = r0[r13]     // Catch:{ all -> 0x0222 }
-                r2 = 2131230911(0x7var_bf, float:1.8077888E38)
+                r2 = 2131230913(0x7var_c1, float:1.8077892E38)
                 android.view.View r0 = r0.findViewById(r2)     // Catch:{ all -> 0x0222 }
                 android.widget.ImageView r0 = (android.widget.ImageView) r0     // Catch:{ all -> 0x0222 }
                 r0.setImageBitmap(r10)     // Catch:{ all -> 0x0222 }
@@ -661,7 +661,7 @@ public class EditWidgetActivity extends BaseFragment {
             L_0x02b3:
                 boolean r0 = r2.isOutOwner()
                 if (r0 == 0) goto L_0x02c4
-                r0 = 2131626028(0x7f0e082c, float:1.887928E38)
+                r0 = 2131626033(0x7f0e0831, float:1.887929E38)
                 java.lang.String r3 = "FromYou"
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r3, r0)
             L_0x02c2:
@@ -888,7 +888,7 @@ public class EditWidgetActivity extends BaseFragment {
                 if (r3 == 0) goto L_0x0484
                 int r3 = r0.ttl_seconds
                 if (r3 == 0) goto L_0x0484
-                r0 = 2131624496(0x7f0e0230, float:1.8876173E38)
+                r0 = 2131624501(0x7f0e0235, float:1.8876183E38)
                 java.lang.String r3 = "AttachPhotoExpired"
                 java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r3, r0)
                 goto L_0x0556
@@ -900,7 +900,7 @@ public class EditWidgetActivity extends BaseFragment {
                 if (r3 == 0) goto L_0x049d
                 int r3 = r0.ttl_seconds
                 if (r3 == 0) goto L_0x049d
-                r0 = 2131624502(0x7f0e0236, float:1.8876186E38)
+                r0 = 2131624507(0x7f0e023b, float:1.8876196E38)
                 java.lang.String r3 = "AttachVideoExpired"
                 java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r3, r0)
                 goto L_0x0556
@@ -998,7 +998,7 @@ public class EditWidgetActivity extends BaseFragment {
             L_0x0556:
                 android.view.ViewGroup[] r0 = r1.cells
                 r0 = r0[r13]
-                r3 = 2131230916(0x7var_c4, float:1.8077898E38)
+                r3 = 2131230918(0x7var_c6, float:1.8077902E38)
                 android.view.View r0 = r0.findViewById(r3)
                 android.widget.TextView r0 = (android.widget.TextView) r0
                 org.telegram.tgnet.TLRPC$Message r2 = r2.messageOwner
@@ -1008,7 +1008,7 @@ public class EditWidgetActivity extends BaseFragment {
                 r0.setText(r2)
                 android.view.ViewGroup[] r0 = r1.cells
                 r0 = r0[r13]
-                r2 = 2131230914(0x7var_c2, float:1.8077894E38)
+                r2 = 2131230916(0x7var_c4, float:1.8077898E38)
                 android.view.View r0 = r0.findViewById(r2)
                 android.widget.TextView r0 = (android.widget.TextView) r0
                 java.lang.String r3 = r8.toString()
@@ -1024,7 +1024,7 @@ public class EditWidgetActivity extends BaseFragment {
                 if (r0 == 0) goto L_0x05ad
                 android.view.ViewGroup[] r0 = r1.cells
                 r0 = r0[r13]
-                r2 = 2131230916(0x7var_c4, float:1.8077898E38)
+                r2 = 2131230918(0x7var_c6, float:1.8077902E38)
                 android.view.View r0 = r0.findViewById(r2)
                 android.widget.TextView r0 = (android.widget.TextView) r0
                 int r2 = r14.last_message_date
@@ -1033,7 +1033,7 @@ public class EditWidgetActivity extends BaseFragment {
                 r0.setText(r2)
                 goto L_0x05bd
             L_0x05ad:
-                r2 = 2131230916(0x7var_c4, float:1.8077898E38)
+                r2 = 2131230918(0x7var_c6, float:1.8077902E38)
                 android.view.ViewGroup[] r0 = r1.cells
                 r0 = r0[r13]
                 android.view.View r0 = r0.findViewById(r2)
@@ -1042,13 +1042,13 @@ public class EditWidgetActivity extends BaseFragment {
             L_0x05bd:
                 android.view.ViewGroup[] r0 = r1.cells
                 r0 = r0[r13]
-                r2 = 2131230914(0x7var_c2, float:1.8077894E38)
+                r2 = 2131230916(0x7var_c4, float:1.8077898E38)
                 android.view.View r0 = r0.findViewById(r2)
                 android.widget.TextView r0 = (android.widget.TextView) r0
                 r0.setText(r8)
             L_0x05cd:
                 int r0 = r14.unread_count
-                r2 = 2131230912(0x7var_c0, float:1.807789E38)
+                r2 = 2131230914(0x7var_c2, float:1.8077894E38)
                 if (r0 <= 0) goto L_0x0629
                 android.view.ViewGroup[] r0 = r1.cells
                 r0 = r0[r13]
@@ -1094,7 +1094,7 @@ public class EditWidgetActivity extends BaseFragment {
                 int r13 = r13 + 1
                 r4 = r17
                 r2 = 1111490560(0x42400000, float:48.0)
-                r3 = 2131628071(0x7f0e1027, float:1.8883424E38)
+                r3 = 2131628074(0x7f0e102a, float:1.888343E38)
                 r5 = 0
                 r8 = 8
                 r9 = 2
@@ -1102,7 +1102,7 @@ public class EditWidgetActivity extends BaseFragment {
             L_0x0645:
                 android.view.ViewGroup[] r0 = r1.cells
                 r0 = r0[r12]
-                r2 = 2131230913(0x7var_c1, float:1.8077892E38)
+                r2 = 2131230915(0x7var_c3, float:1.8077896E38)
                 android.view.View r0 = r0.findViewById(r2)
                 android.view.ViewGroup[] r3 = r1.cells
                 r4 = 1
@@ -1190,15 +1190,15 @@ public class EditWidgetActivity extends BaseFragment {
             L_0x070f:
                 r3 = 0
             L_0x0710:
-                r5 = 2131230790(0x7var_, float:1.8077643E38)
-                r8 = 2131230791(0x7var_, float:1.8077645E38)
+                r5 = 2131230792(0x7var_, float:1.8077647E38)
+                r8 = 2131230793(0x7var_, float:1.8077649E38)
                 if (r3 != 0) goto L_0x0741
                 android.view.ViewGroup[] r3 = r1.cells
                 r3 = r3[r2]
                 if (r4 != 0) goto L_0x071f
                 goto L_0x0722
             L_0x071f:
-                r5 = 2131230791(0x7var_, float:1.8077645E38)
+                r5 = 2131230793(0x7var_, float:1.8077649E38)
             L_0x0722:
                 android.view.View r3 = r3.findViewById(r5)
                 r5 = 4
@@ -1224,7 +1224,7 @@ public class EditWidgetActivity extends BaseFragment {
                 if (r4 != 0) goto L_0x0748
                 goto L_0x074b
             L_0x0748:
-                r5 = 2131230791(0x7var_, float:1.8077645E38)
+                r5 = 2131230793(0x7var_, float:1.8077649E38)
             L_0x074b:
                 android.view.View r5 = r10.findViewById(r5)
                 r5.setVisibility(r12)
@@ -1247,22 +1247,22 @@ public class EditWidgetActivity extends BaseFragment {
                 boolean r8 = org.telegram.messenger.UserObject.isUserSelf(r0)
                 if (r8 == 0) goto L_0x0786
                 r10 = r17
-                r8 = 2131628071(0x7f0e1027, float:1.8883424E38)
+                r8 = 2131628074(0x7f0e102a, float:1.888343E38)
                 java.lang.String r11 = org.telegram.messenger.LocaleController.getString(r10, r8)
                 goto L_0x07af
             L_0x0786:
                 r10 = r17
-                r8 = 2131628071(0x7f0e1027, float:1.8883424E38)
+                r8 = 2131628074(0x7f0e102a, float:1.888343E38)
                 boolean r11 = org.telegram.messenger.UserObject.isReplyUser((org.telegram.tgnet.TLRPC$User) r0)
                 if (r11 == 0) goto L_0x079b
-                r11 = 2131627912(0x7f0e0var_, float:1.8883102E38)
+                r11 = 2131627917(0x7f0e0f8d, float:1.8883112E38)
                 java.lang.String r13 = "RepliesTitle"
                 java.lang.String r11 = org.telegram.messenger.LocaleController.getString(r13, r11)
                 goto L_0x07af
             L_0x079b:
                 boolean r11 = org.telegram.messenger.UserObject.isDeleted(r0)
                 if (r11 == 0) goto L_0x07ab
-                r11 = 2131626123(0x7f0e088b, float:1.8879473E38)
+                r11 = 2131626128(0x7f0e0890, float:1.8879483E38)
                 java.lang.String r13 = "HiddenName"
                 java.lang.String r11 = org.telegram.messenger.LocaleController.getString(r13, r11)
                 goto L_0x07af
@@ -1319,10 +1319,10 @@ public class EditWidgetActivity extends BaseFragment {
                 android.view.ViewGroup[] r13 = r1.cells
                 r13 = r13[r2]
                 if (r4 != 0) goto L_0x080b
-                r14 = 2131230798(0x7var_e, float:1.8077659E38)
+                r14 = 2131230800(0x7var_, float:1.8077663E38)
                 goto L_0x080e
             L_0x080b:
-                r14 = 2131230799(0x7var_f, float:1.807766E38)
+                r14 = 2131230801(0x7var_, float:1.8077665E38)
             L_0x080e:
                 android.view.View r13 = r13.findViewById(r14)
                 android.widget.TextView r13 = (android.widget.TextView) r13
@@ -1409,10 +1409,10 @@ public class EditWidgetActivity extends BaseFragment {
                 android.view.ViewGroup[] r0 = r1.cells     // Catch:{ all -> 0x08cf }
                 r0 = r0[r2]     // Catch:{ all -> 0x08cf }
                 if (r4 != 0) goto L_0x08c2
-                r5 = 2131230792(0x7var_, float:1.8077647E38)
+                r5 = 2131230794(0x7var_a, float:1.807765E38)
                 goto L_0x08c5
             L_0x08c2:
-                r5 = 2131230793(0x7var_, float:1.8077649E38)
+                r5 = 2131230795(0x7var_b, float:1.8077653E38)
             L_0x08c5:
                 android.view.View r0 = r0.findViewById(r5)     // Catch:{ all -> 0x08cf }
                 android.widget.ImageView r0 = (android.widget.ImageView) r0     // Catch:{ all -> 0x08cf }
@@ -1455,10 +1455,10 @@ public class EditWidgetActivity extends BaseFragment {
                 android.view.ViewGroup[] r5 = r1.cells
                 r5 = r5[r2]
                 if (r4 != 0) goto L_0x090c
-                r8 = 2131230794(0x7var_a, float:1.807765E38)
+                r8 = 2131230796(0x7var_c, float:1.8077655E38)
                 goto L_0x090f
             L_0x090c:
-                r8 = 2131230795(0x7var_b, float:1.8077653E38)
+                r8 = 2131230797(0x7var_d, float:1.8077657E38)
             L_0x090f:
                 android.view.View r5 = r5.findViewById(r8)
                 android.widget.TextView r5 = (android.widget.TextView) r5
@@ -1466,10 +1466,10 @@ public class EditWidgetActivity extends BaseFragment {
                 android.view.ViewGroup[] r0 = r1.cells
                 r0 = r0[r2]
                 if (r4 != 0) goto L_0x0922
-                r5 = 2131230796(0x7var_c, float:1.8077655E38)
+                r5 = 2131230798(0x7var_e, float:1.8077659E38)
                 goto L_0x0925
             L_0x0922:
-                r5 = 2131230797(0x7var_d, float:1.8077657E38)
+                r5 = 2131230799(0x7var_f, float:1.807766E38)
             L_0x0925:
                 android.view.View r0 = r0.findViewById(r5)
                 r0.setVisibility(r12)
@@ -1479,10 +1479,10 @@ public class EditWidgetActivity extends BaseFragment {
                 android.view.ViewGroup[] r0 = r1.cells
                 r0 = r0[r2]
                 if (r4 != 0) goto L_0x0938
-                r5 = 2131230796(0x7var_c, float:1.8077655E38)
+                r5 = 2131230798(0x7var_e, float:1.8077659E38)
                 goto L_0x093b
             L_0x0938:
-                r5 = 2131230797(0x7var_d, float:1.8077657E38)
+                r5 = 2131230799(0x7var_f, float:1.807766E38)
             L_0x093b:
                 android.view.View r0 = r0.findViewById(r5)
                 r5 = 8

@@ -13,6 +13,7 @@ import android.graphics.PorterDuffColorFilter;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
+import android.os.Bundle;
 import android.text.style.CharacterStyle;
 import android.view.MotionEvent;
 import android.view.View;
@@ -1252,6 +1253,10 @@ public class ForwardingPreviewView extends FrameLayout {
 
                 public /* synthetic */ void needShowPremiumFeatures() {
                     ChatMessageCell.ChatMessageCellDelegate.CC.$default$needShowPremiumFeatures(this);
+                }
+
+                public /* synthetic */ boolean onAccessibilityAction(int i, Bundle bundle) {
+                    return ChatMessageCell.ChatMessageCellDelegate.CC.$default$onAccessibilityAction(this, i, bundle);
                 }
 
                 public /* synthetic */ void onDiceFinished() {

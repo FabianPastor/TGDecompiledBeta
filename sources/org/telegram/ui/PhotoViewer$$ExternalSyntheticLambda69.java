@@ -1,19 +1,17 @@
 package org.telegram.ui;
 
-import java.io.File;
-import org.telegram.messenger.FileLoader;
-import org.telegram.tgnet.TLObject;
+import android.view.View;
 
-public final /* synthetic */ class PhotoViewer$$ExternalSyntheticLambda69 implements FileLoader.FileResolver {
-    public final /* synthetic */ PhotoViewer f$0;
-    public final /* synthetic */ TLObject f$1;
+public final /* synthetic */ class PhotoViewer$$ExternalSyntheticLambda69 implements Runnable {
+    public final /* synthetic */ boolean f$0;
+    public final /* synthetic */ View f$1;
 
-    public /* synthetic */ PhotoViewer$$ExternalSyntheticLambda69(PhotoViewer photoViewer, TLObject tLObject) {
-        this.f$0 = photoViewer;
-        this.f$1 = tLObject;
+    public /* synthetic */ PhotoViewer$$ExternalSyntheticLambda69(boolean z, View view) {
+        this.f$0 = z;
+        this.f$1 = view;
     }
 
-    public final File getFile() {
-        return this.f$0.lambda$checkProgress$66(this.f$1);
+    public final void run() {
+        PhotoViewer.lambda$setItemVisible$66(this.f$0, this.f$1);
     }
 }

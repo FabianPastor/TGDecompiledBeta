@@ -3,12 +3,12 @@ package org.telegram.ui;
 import android.animation.AnimatorSet;
 import org.telegram.ui.PhotoViewer;
 
-public final /* synthetic */ class PhotoViewer$68$$ExternalSyntheticLambda0 implements Runnable {
-    public final /* synthetic */ PhotoViewer.AnonymousClass68 f$0;
+public final /* synthetic */ class PhotoViewer$69$$ExternalSyntheticLambda0 implements Runnable {
+    public final /* synthetic */ PhotoViewer.AnonymousClass69 f$0;
     public final /* synthetic */ int f$1;
     public final /* synthetic */ AnimatorSet f$2;
 
-    public /* synthetic */ PhotoViewer$68$$ExternalSyntheticLambda0(PhotoViewer.AnonymousClass68 r1, int i, AnimatorSet animatorSet) {
+    public /* synthetic */ PhotoViewer$69$$ExternalSyntheticLambda0(PhotoViewer.AnonymousClass69 r1, int i, AnimatorSet animatorSet) {
         this.f$0 = r1;
         this.f$1 = i;
         this.f$2 = animatorSet;

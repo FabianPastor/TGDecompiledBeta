@@ -24926,11 +24926,11 @@ public class MessagesStorage extends BaseController {
             return
         L_0x0023:
             java.lang.String r8 = "SavedMessages"
-            r9 = 2131628071(0x7f0e1027, float:1.8883424E38)
+            r9 = 2131628074(0x7f0e102a, float:1.888343E38)
             java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r8, r9)     // Catch:{ Exception -> 0x06c9 }
             java.lang.String r8 = r8.toLowerCase()     // Catch:{ Exception -> 0x06c9 }
             java.lang.String r9 = "saved messages"
-            r10 = 2131627912(0x7f0e0var_, float:1.8883102E38)
+            r10 = 2131627917(0x7f0e0f8d, float:1.8883112E38)
             java.lang.String r11 = org.telegram.messenger.LocaleController.getString(r4, r10)     // Catch:{ Exception -> 0x06c9 }
             java.lang.String r11 = r11.toLowerCase()     // Catch:{ Exception -> 0x06c9 }
             java.lang.String r12 = "replies"
@@ -25106,7 +25106,7 @@ public class MessagesStorage extends BaseController {
             r7.<init>()     // Catch:{ Exception -> 0x06c9 }
             r7.date = r4     // Catch:{ Exception -> 0x06c9 }
             r4 = r21
-            r8 = 2131627912(0x7f0e0var_, float:1.8883102E38)
+            r8 = 2131627917(0x7f0e0f8d, float:1.8883112E38)
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r4, r8)     // Catch:{ Exception -> 0x06c9 }
             r7.name = r4     // Catch:{ Exception -> 0x06c9 }
             r7.object = r6     // Catch:{ Exception -> 0x06c9 }

@@ -254,7 +254,7 @@ public class PasscodeActivity extends BaseFragment implements NotificationCenter
             org.telegram.ui.ActionBar.ActionBarMenuItem r3 = r3.addItem((int) r4, (int) r5)
             r0.otherItem = r3
             r5 = 2131165840(0x7var_, float:1.7945908E38)
-            r12 = 2131627162(0x7f0e0c9a, float:1.888158E38)
+            r12 = 2131627167(0x7f0e0c9f, float:1.888159E38)
             java.lang.String r12 = org.telegram.messenger.LocaleController.getString((int) r12)
             org.telegram.ui.ActionBar.ActionBarMenuSubItem r3 = r3.addSubItem(r8, r5, r12)
             goto L_0x00ce
@@ -317,21 +317,21 @@ public class PasscodeActivity extends BaseFragment implements NotificationCenter
             int r6 = r6.length()
             if (r6 == 0) goto L_0x0161
             android.widget.TextView r6 = r0.titleTextView
-            r7 = 2131625643(0x7f0e06ab, float:1.88785E38)
+            r7 = 2131625648(0x7f0e06b0, float:1.887851E38)
             java.lang.String r9 = "EnterNewPasscode"
             java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r9, r7)
             r6.setText(r7)
             goto L_0x017c
         L_0x0161:
             android.widget.TextView r6 = r0.titleTextView
-            r7 = 2131625276(0x7f0e053c, float:1.8877755E38)
+            r7 = 2131625281(0x7f0e0541, float:1.8877766E38)
             java.lang.String r9 = "CreatePasscode"
             java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r9, r7)
             r6.setText(r7)
             goto L_0x017c
         L_0x0170:
             android.widget.TextView r6 = r0.titleTextView
-            r7 = 2131625647(0x7f0e06af, float:1.8878508E38)
+            r7 = 2131625652(0x7f0e06b4, float:1.8878518E38)
             java.lang.String r7 = org.telegram.messenger.LocaleController.getString((int) r7)
             r6.setText(r7)
         L_0x017c:
@@ -400,7 +400,7 @@ public class PasscodeActivity extends BaseFragment implements NotificationCenter
             r11 = 8
         L_0x020b:
             r6.setVisibility(r11)
-            r11 = 2131625929(0x7f0e07c9, float:1.887908E38)
+            r11 = 2131625934(0x7f0e07ce, float:1.887909E38)
             java.lang.String r11 = org.telegram.messenger.LocaleController.getString((int) r11)
             r6.setText(r11)
             r21 = -1
@@ -431,7 +431,7 @@ public class PasscodeActivity extends BaseFragment implements NotificationCenter
             int r9 = org.telegram.ui.ActionBar.Theme.getColor(r9)
             r6.setTextColor(r9)
             android.widget.TextView r6 = r0.passcodesDoNotMatchTextView
-            r9 = 2131627163(0x7f0e0c9b, float:1.8881583E38)
+            r9 = 2131627168(0x7f0e0ca0, float:1.8881593E38)
             java.lang.String r9 = org.telegram.messenger.LocaleController.getString((int) r9)
             r6.setText(r9)
             android.widget.TextView r6 = r0.passcodesDoNotMatchTextView
@@ -450,7 +450,7 @@ public class PasscodeActivity extends BaseFragment implements NotificationCenter
             org.telegram.ui.Components.OutlineTextContainerView r6 = new org.telegram.ui.Components.OutlineTextContainerView
             r6.<init>(r1)
             r0.outlinePasswordView = r6
-            r9 = 2131625644(0x7f0e06ac, float:1.8878502E38)
+            r9 = 2131625649(0x7f0e06b1, float:1.8878512E38)
             java.lang.String r9 = org.telegram.messenger.LocaleController.getString((int) r9)
             r6.setText(r9)
             org.telegram.ui.Components.EditTextBoldCursor r6 = new org.telegram.ui.Components.EditTextBoldCursor
@@ -743,7 +743,7 @@ public class PasscodeActivity extends BaseFragment implements NotificationCenter
             org.telegram.ui.Components.TransformableLoginButtonView r2 = r0.floatingButtonIcon
             r2.setDrawBackground(r4)
             android.widget.FrameLayout r2 = r0.floatingButtonContainer
-            r5 = 2131626793(0x7f0e0b29, float:1.8880832E38)
+            r5 = 2131626798(0x7f0e0b2e, float:1.8880842E38)
             java.lang.String r5 = org.telegram.messenger.LocaleController.getString((int) r5)
             r2.setContentDescription(r5)
             android.widget.FrameLayout r2 = r0.floatingButtonContainer
@@ -791,7 +791,7 @@ public class PasscodeActivity extends BaseFragment implements NotificationCenter
             goto L_0x05e6
         L_0x058d:
             org.telegram.ui.ActionBar.ActionBar r3 = r0.actionBar
-            r5 = 2131627154(0x7f0e0CLASSNAME, float:1.8881564E38)
+            r5 = 2131627159(0x7f0e0CLASSNAME, float:1.8881575E38)
             java.lang.String r6 = "Passcode"
             java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r6, r5)
             r3.setTitle(r5)

@@ -601,6 +601,7 @@ public class SearchDownloadsContainer extends FrameLayout implements Notificatio
             bottomSheet.show();
             if (Build.VERSION.SDK_INT >= 23) {
                 AndroidUtilities.setLightStatusBar(bottomSheet.getWindow(), !Theme.isCurrentThemeDark());
+                AndroidUtilities.setLightNavigationBar(bottomSheet.getWindow(), !Theme.isCurrentThemeDark());
             }
             textView3.setOnClickListener(new SearchDownloadsContainer$$ExternalSyntheticLambda0(this, bottomSheet));
             textView4.setOnClickListener(new SearchDownloadsContainer$$ExternalSyntheticLambda1(this, bottomSheet));

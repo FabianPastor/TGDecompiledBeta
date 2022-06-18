@@ -11,6 +11,6 @@ public final /* synthetic */ class PhotoViewer$66$$ExternalSyntheticLambda0 impl
     }
 
     public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-        this.f$0.lambda$createAnimator$0(valueAnimator);
+        this.f$0.lambda$onDisappear$0(valueAnimator);
     }
 }

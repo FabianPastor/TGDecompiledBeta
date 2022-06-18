@@ -1515,6 +1515,10 @@ public class AlertDialog extends Dialog implements Drawable.Callback {
         AndroidUtilities.runOnUIThread(this.showRunnable, j);
     }
 
+    public ViewGroup getButtonsLayout() {
+        return this.buttonsLayout;
+    }
+
     public static class Builder {
         private AlertDialog alertDialog;
 

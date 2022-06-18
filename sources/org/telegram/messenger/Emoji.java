@@ -9,7 +9,6 @@ import android.graphics.ColorFilter;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
-import android.os.Build;
 import android.text.Spannable;
 import android.text.TextPaint;
 import android.text.TextUtils;
@@ -189,9 +188,6 @@ public class Emoji {
         return emojiDrawable;
     }
 
-    /* JADX WARNING: Code restructure failed: missing block: B:2:0x000a, code lost:
-        r2 = org.telegram.messenger.EmojiData.emojiAliasMap.get(r2);
-     */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     private static org.telegram.messenger.Emoji.DrawableInfo getDrawableInfo(java.lang.CharSequence r2) {
         /*
@@ -363,14 +359,6 @@ public class Emoji {
         return parseEmojis(charSequence, (int[]) null);
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:102:0x0171 A[Catch:{ Exception -> 0x0244 }] */
-    /* JADX WARNING: Removed duplicated region for block: B:107:0x017a A[Catch:{ Exception -> 0x0244 }] */
-    /* JADX WARNING: Removed duplicated region for block: B:156:0x0214 A[Catch:{ Exception -> 0x0244 }] */
-    /* JADX WARNING: Removed duplicated region for block: B:160:0x0238  */
-    /* JADX WARNING: Removed duplicated region for block: B:25:0x0063 A[Catch:{ Exception -> 0x0244 }] */
-    /* JADX WARNING: Removed duplicated region for block: B:73:0x00f6 A[Catch:{ Exception -> 0x0244 }] */
-    /* JADX WARNING: Removed duplicated region for block: B:74:0x0100 A[Catch:{ Exception -> 0x0244 }] */
-    /* JADX WARNING: Removed duplicated region for block: B:78:0x0108 A[Catch:{ Exception -> 0x0244 }] */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public static java.util.ArrayList<org.telegram.messenger.Emoji.EmojiSpanRange> parseEmojis(java.lang.CharSequence r24, int[] r25) {
         /*
@@ -730,29 +718,101 @@ public class Emoji {
         return replaceEmoji(charSequence, fontMetricsInt, i, z, iArr, false, (AtomicReference<WeakReference<View>>) null);
     }
 
-    public static CharSequence replaceEmoji(CharSequence charSequence, Paint.FontMetricsInt fontMetricsInt, int i, boolean z, int[] iArr, boolean z2, AtomicReference<WeakReference<View>> atomicReference) {
-        Spannable spannable;
-        if (SharedConfig.useSystemEmoji || charSequence == null || charSequence.length() == 0) {
-            return charSequence;
-        }
-        if (z || !(charSequence instanceof Spannable)) {
-            spannable = Spannable.Factory.getInstance().newSpannable(charSequence.toString());
-        } else {
-            spannable = (Spannable) charSequence;
-        }
-        ArrayList<EmojiSpanRange> parseEmojis = parseEmojis(charSequence, iArr);
-        for (int i2 = 0; i2 < parseEmojis.size(); i2++) {
-            EmojiSpanRange emojiSpanRange = parseEmojis.get(i2);
-            EmojiDrawable emojiDrawable = getEmojiDrawable(emojiSpanRange.code);
-            if (emojiDrawable != null) {
-                spannable.setSpan(new EmojiSpan(emojiDrawable, 0, i, fontMetricsInt), emojiSpanRange.start, emojiSpanRange.end, 33);
-            }
-            int i3 = Build.VERSION.SDK_INT;
-            if ((i3 < 23 || i3 >= 29) && !BuildVars.DEBUG_PRIVATE_VERSION && i2 + 1 >= 50) {
-                break;
-            }
-        }
-        return spannable;
+    /*  JADX ERROR: IF instruction can be used only in fallback mode
+        jadx.core.utils.exceptions.CodegenException: IF instruction can be used only in fallback mode
+        	at jadx.core.codegen.InsnGen.fallbackOnlyInsn(InsnGen.java:579)
+        	at jadx.core.codegen.InsnGen.makeInsnBody(InsnGen.java:485)
+        	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:250)
+        	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:221)
+        	at jadx.core.codegen.RegionGen.makeSimpleBlock(RegionGen.java:109)
+        	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:55)
+        	at jadx.core.codegen.RegionGen.makeSimpleRegion(RegionGen.java:92)
+        	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:58)
+        	at jadx.core.codegen.MethodGen.addRegionInsns(MethodGen.java:211)
+        	at jadx.core.codegen.MethodGen.addInstructions(MethodGen.java:204)
+        	at jadx.core.codegen.ClassGen.addMethodCode(ClassGen.java:318)
+        	at jadx.core.codegen.ClassGen.addMethod(ClassGen.java:271)
+        	at jadx.core.codegen.ClassGen.lambda$addInnerClsAndMethods$2(ClassGen.java:240)
+        	at java.util.stream.ForEachOps$ForEachOp$OfRef.accept(ForEachOps.java:183)
+        	at java.util.ArrayList.forEach(ArrayList.java:1259)
+        	at java.util.stream.SortedOps$RefSortingSink.end(SortedOps.java:395)
+        	at java.util.stream.Sink$ChainedReference.end(Sink.java:258)
+        	at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:483)
+        	at java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:472)
+        	at java.util.stream.ForEachOps$ForEachOp.evaluateSequential(ForEachOps.java:150)
+        	at java.util.stream.ForEachOps$ForEachOp$OfRef.evaluateSequential(ForEachOps.java:173)
+        	at java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:234)
+        	at java.util.stream.ReferencePipeline.forEach(ReferencePipeline.java:485)
+        	at jadx.core.codegen.ClassGen.addInnerClsAndMethods(ClassGen.java:236)
+        	at jadx.core.codegen.ClassGen.addClassBody(ClassGen.java:227)
+        	at jadx.core.codegen.ClassGen.addClassCode(ClassGen.java:112)
+        	at jadx.core.codegen.ClassGen.makeClass(ClassGen.java:78)
+        	at jadx.core.codegen.CodeGen.wrapCodeGen(CodeGen.java:44)
+        	at jadx.core.codegen.CodeGen.generateJavaCode(CodeGen.java:33)
+        	at jadx.core.codegen.CodeGen.generate(CodeGen.java:21)
+        	at jadx.core.ProcessClass.generateCode(ProcessClass.java:61)
+        	at jadx.core.dex.nodes.ClassNode.decompile(ClassNode.java:273)
+        */
+    public static java.lang.CharSequence replaceEmoji(java.lang.CharSequence r3, android.graphics.Paint.FontMetricsInt r4, int r5, boolean r6, int[] r7, boolean r8, java.util.concurrent.atomic.AtomicReference<java.lang.ref.WeakReference<android.view.View>> r9) {
+        /*
+            boolean r8 = org.telegram.messenger.SharedConfig.useSystemEmoji
+            if (r8 != 0) goto L_0x0067
+            if (r3 == 0) goto L_0x0067
+            int r8 = r3.length()
+            if (r8 != 0) goto L_0x000d
+            goto L_0x0067
+        L_0x000d:
+            if (r6 != 0) goto L_0x0016
+            boolean r6 = r3 instanceof android.text.Spannable
+            if (r6 == 0) goto L_0x0016
+            android.text.Spannable r3 = (android.text.Spannable) r3
+            goto L_0x0022
+        L_0x0016:
+            android.text.Spannable$Factory r6 = android.text.Spannable.Factory.getInstance()
+            java.lang.String r3 = r3.toString()
+            android.text.Spannable r3 = r6.newSpannable(r3)
+        L_0x0022:
+            java.util.ArrayList r6 = parseEmojis(r3, r7)
+            r7 = 0
+            r8 = 0
+        L_0x0028:
+            int r9 = r6.size()
+            if (r8 >= r9) goto L_0x0067
+            java.lang.Object r9 = r6.get(r8)
+            org.telegram.messenger.Emoji$EmojiSpanRange r9 = (org.telegram.messenger.Emoji.EmojiSpanRange) r9
+            java.lang.CharSequence r0 = r9.code     // Catch:{ Exception -> 0x004b }
+            org.telegram.messenger.Emoji$EmojiDrawable r0 = getEmojiDrawable(r0)     // Catch:{ Exception -> 0x004b }
+            if (r0 == 0) goto L_0x004f
+            org.telegram.messenger.Emoji$EmojiSpan r1 = new org.telegram.messenger.Emoji$EmojiSpan     // Catch:{ Exception -> 0x004b }
+            r1.<init>(r0, r7, r5, r4)     // Catch:{ Exception -> 0x004b }
+            int r0 = r9.start     // Catch:{ Exception -> 0x004b }
+            int r9 = r9.end     // Catch:{ Exception -> 0x004b }
+            r2 = 33
+            r3.setSpan(r1, r0, r9, r2)     // Catch:{ Exception -> 0x004b }
+            goto L_0x004f
+        L_0x004b:
+            r9 = move-exception
+            org.telegram.messenger.FileLog.e((java.lang.Throwable) r9)
+        L_0x004f:
+            int r9 = android.os.Build.VERSION.SDK_INT
+            r0 = 23
+            if (r9 < r0) goto L_0x0059
+            r0 = 29
+            if (r9 < r0) goto L_0x0064
+        L_0x0059:
+            boolean r9 = org.telegram.messenger.BuildVars.DEBUG_PRIVATE_VERSION
+            if (r9 != 0) goto L_0x0064
+            int r9 = r8 + 1
+            r0 = 50
+            if (r9 < r0) goto L_0x0064
+            goto L_0x0067
+        L_0x0064:
+            int r8 = r8 + 1
+            goto L_0x0028
+        L_0x0067:
+            return r3
+        */
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.Emoji.replaceEmoji(java.lang.CharSequence, android.graphics.Paint$FontMetricsInt, int, boolean, int[], boolean, java.util.concurrent.atomic.AtomicReference):java.lang.CharSequence");
     }
 
     public static class EmojiSpan extends ImageSpan {

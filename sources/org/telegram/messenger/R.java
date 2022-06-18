@@ -1379,7 +1379,9 @@ public final class R {
     }
 
     public static final class id {
+        public static final int acc_action_chat_preview = NUM;
         public static final int acc_action_msg_options = NUM;
+        public static final int acc_action_open_forwarded_origin = NUM;
         public static final int acc_action_open_photo = NUM;
         public static final int acc_action_small_button = NUM;
         public static final int accessibility_action_clickable_span = NUM;
@@ -1927,10 +1929,12 @@ public final class R {
         public static final int AboutPremiumTitle = NUM;
         public static final int AboutTelegramPremium = NUM;
         public static final int AccActionCancelDownload = NUM;
+        public static final int AccActionChatPreview = NUM;
         public static final int AccActionDownload = NUM;
         public static final int AccActionEnterSelectionMode = NUM;
         public static final int AccActionMessageOptions = NUM;
         public static final int AccActionOpenFile = NUM;
+        public static final int AccActionOpenForwardedOrigin = NUM;
         public static final int AccActionPause = NUM;
         public static final int AccActionPlay = NUM;
         public static final int AccActionRecordVideo = NUM;
@@ -2287,6 +2291,9 @@ public final class R {
         public static final int AlertClearHistory = NUM;
         public static final int AllAccounts = NUM;
         public static final int AllMedia = NUM;
+        public static final int AllNMedia_few = NUM;
+        public static final int AllNMedia_many = NUM;
+        public static final int AllNMedia_other = NUM;
         public static final int AllNPhotos_few = NUM;
         public static final int AllNPhotos_many = NUM;
         public static final int AllNPhotos_other = NUM;
@@ -6028,8 +6035,6 @@ public final class R {
         public static final int SaveChangesAlertText = NUM;
         public static final int SaveChangesAlertTitle = NUM;
         public static final int SaveForNotifications = NUM;
-        public static final int SaveGroupMedia = NUM;
-        public static final int SaveGroupMediaMessage = NUM;
         public static final int SaveLink = NUM;
         public static final int SaveLinkHeader = NUM;
         public static final int SaveTheme = NUM;

@@ -14,6 +14,6 @@ public final /* synthetic */ class PhotoViewer$$ExternalSyntheticLambda3 impleme
     }
 
     public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-        this.f$0.lambda$cropRotate$46(this.f$1, this.f$2, valueAnimator);
+        this.f$0.lambda$cropRotate$47(this.f$1, this.f$2, valueAnimator);
     }
 }

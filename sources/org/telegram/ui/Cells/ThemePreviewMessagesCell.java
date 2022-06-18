@@ -11,6 +11,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
+import android.os.Bundle;
 import android.text.style.CharacterStyle;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
@@ -403,6 +404,10 @@ public class ThemePreviewMessagesCell extends LinearLayout {
 
                     public /* synthetic */ void needShowPremiumFeatures() {
                         ChatMessageCell.ChatMessageCellDelegate.CC.$default$needShowPremiumFeatures(this);
+                    }
+
+                    public /* synthetic */ boolean onAccessibilityAction(int i, Bundle bundle) {
+                        return ChatMessageCell.ChatMessageCellDelegate.CC.$default$onAccessibilityAction(this, i, bundle);
                     }
 
                     public /* synthetic */ void onDiceFinished() {

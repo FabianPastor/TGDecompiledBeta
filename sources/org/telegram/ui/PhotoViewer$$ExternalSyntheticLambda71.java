@@ -1,19 +1,19 @@
 package org.telegram.ui;
 
-import org.telegram.messenger.ImageReceiver;
+import java.io.File;
+import org.telegram.messenger.FileLoader;
+import org.telegram.tgnet.TLRPC$Message;
 
-public final /* synthetic */ class PhotoViewer$$ExternalSyntheticLambda71 implements ImageReceiver.ImageReceiverDelegate {
+public final /* synthetic */ class PhotoViewer$$ExternalSyntheticLambda71 implements FileLoader.FileResolver {
     public final /* synthetic */ PhotoViewer f$0;
+    public final /* synthetic */ TLRPC$Message f$1;
 
-    public /* synthetic */ PhotoViewer$$ExternalSyntheticLambda71(PhotoViewer photoViewer) {
+    public /* synthetic */ PhotoViewer$$ExternalSyntheticLambda71(PhotoViewer photoViewer, TLRPC$Message tLRPC$Message) {
         this.f$0 = photoViewer;
+        this.f$1 = tLRPC$Message;
     }
 
-    public final void didSetImage(ImageReceiver imageReceiver, boolean z, boolean z2, boolean z3) {
-        this.f$0.lambda$setParentActivity$35(imageReceiver, z, z2, z3);
-    }
-
-    public /* synthetic */ void onAnimationReady(ImageReceiver imageReceiver) {
-        ImageReceiver.ImageReceiverDelegate.CC.$default$onAnimationReady(this, imageReceiver);
+    public final File getFile() {
+        return this.f$0.lambda$checkProgress$68(this.f$1);
     }
 }

@@ -8,6 +8,6 @@ public final /* synthetic */ class PhotoViewer$$ExternalSyntheticLambda52 implem
     }
 
     public final void run() {
-        this.f$0.lambda$new$0();
+        this.f$0.lambda$closePaintMode$64();
     }
 }

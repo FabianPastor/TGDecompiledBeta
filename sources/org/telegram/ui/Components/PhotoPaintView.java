@@ -316,7 +316,7 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
             r2.setPadding(r14, r7, r15, r7)
             android.widget.TextView r2 = r0.cancelTextView
             java.lang.String r14 = "Cancel"
-            r15 = 2131624812(0x7f0e036c, float:1.8876814E38)
+            r15 = 2131624817(0x7f0e0371, float:1.8876824E38)
             java.lang.String r14 = org.telegram.messenger.LocaleController.getString(r14, r15)
             java.lang.String r14 = r14.toUpperCase()
             r2.setText(r14)
@@ -348,7 +348,7 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
             r2.setPadding(r5, r7, r10, r7)
             android.widget.TextView r2 = r0.doneTextView
             java.lang.String r5 = "Done"
-            r10 = 2131625518(0x7f0e062e, float:1.8878246E38)
+            r10 = 2131625523(0x7f0e0633, float:1.8878256E38)
             java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r5, r10)
             java.lang.String r5 = r5.toUpperCase()
             r2.setText(r5)
@@ -367,7 +367,7 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
             r2.setScaleType(r4)
             android.widget.ImageView r2 = r0.paintButton
             java.lang.String r4 = "AccDescrPaint"
-            r5 = 2131624029(0x7f0e005d, float:1.8875226E38)
+            r5 = 2131624031(0x7f0e005f, float:1.887523E38)
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r4, r5)
             r2.setContentDescription(r4)
             android.widget.ImageView r2 = r0.paintButton
@@ -412,7 +412,7 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
             android.widget.ImageView$ScaleType r1 = android.widget.ImageView.ScaleType.CENTER
             r2.setScaleType(r1)
             java.lang.String r1 = "AccDescrPlaceText"
-            r5 = 2131624037(0x7f0e0065, float:1.8875242E38)
+            r5 = 2131624039(0x7f0e0067, float:1.8875246E38)
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r1, r5)
             r2.setContentDescription(r1)
             r1 = 2131165855(0x7var_f, float:1.7945939E38)
