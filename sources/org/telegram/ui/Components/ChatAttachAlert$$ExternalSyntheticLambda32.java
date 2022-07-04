@@ -1,20 +1,16 @@
 package org.telegram.ui.Components;
 
-import android.content.DialogInterface;
-import org.telegram.tgnet.TLRPC;
+import org.telegram.tgnet.TLRPC$User;
+import org.telegram.ui.Components.ChatAttachAlertContactsLayout;
 
-public final /* synthetic */ class ChatAttachAlert$$ExternalSyntheticLambda32 implements DialogInterface.OnClickListener {
+public final /* synthetic */ class ChatAttachAlert$$ExternalSyntheticLambda32 implements ChatAttachAlertContactsLayout.PhonebookShareAlertDelegate {
     public final /* synthetic */ ChatAttachAlert f$0;
-    public final /* synthetic */ TLRPC.TL_attachMenuBot f$1;
-    public final /* synthetic */ TLRPC.User f$2;
 
-    public /* synthetic */ ChatAttachAlert$$ExternalSyntheticLambda32(ChatAttachAlert chatAttachAlert, TLRPC.TL_attachMenuBot tL_attachMenuBot, TLRPC.User user) {
+    public /* synthetic */ ChatAttachAlert$$ExternalSyntheticLambda32(ChatAttachAlert chatAttachAlert) {
         this.f$0 = chatAttachAlert;
-        this.f$1 = tL_attachMenuBot;
-        this.f$2 = user;
     }
 
-    public final void onClick(DialogInterface dialogInterface, int i) {
-        this.f$0.m738xdf2da15f(this.f$1, this.f$2, dialogInterface, i);
+    public final void didSelectContact(TLRPC$User tLRPC$User, boolean z, int i) {
+        this.f$0.lambda$openContactsLayout$24(tLRPC$User, z, i);
     }
 }

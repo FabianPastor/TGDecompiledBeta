@@ -12,6 +12,6 @@ public final /* synthetic */ class ChatAttachAlertPhotoLayoutPreview$$ExternalSy
     }
 
     public final void run() {
-        this.f$0.m848x7a1626c9(this.f$1);
+        this.f$0.lambda$onShow$0(this.f$1);
     }
 }

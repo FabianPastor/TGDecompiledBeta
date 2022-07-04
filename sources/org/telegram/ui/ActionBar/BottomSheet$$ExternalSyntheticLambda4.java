@@ -10,6 +10,6 @@ public final /* synthetic */ class BottomSheet$$ExternalSyntheticLambda4 impleme
     }
 
     public final void onClick(View view) {
-        this.f$0.m2564lambda$onCreate$3$orgtelegramuiActionBarBottomSheet(view);
+        this.f$0.lambda$onCreate$3(view);
     }
 }

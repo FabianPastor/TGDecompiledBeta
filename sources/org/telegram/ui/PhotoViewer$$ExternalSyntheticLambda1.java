@@ -1,15 +1,15 @@
 package org.telegram.ui;
 
-import android.content.DialogInterface;
+import android.animation.ValueAnimator;
 
-public final /* synthetic */ class PhotoViewer$$ExternalSyntheticLambda1 implements DialogInterface.OnDismissListener {
-    public final /* synthetic */ Runnable f$0;
+public final /* synthetic */ class PhotoViewer$$ExternalSyntheticLambda1 implements ValueAnimator.AnimatorUpdateListener {
+    public final /* synthetic */ PhotoViewer f$0;
 
-    public /* synthetic */ PhotoViewer$$ExternalSyntheticLambda1(Runnable runnable) {
-        this.f$0 = runnable;
+    public /* synthetic */ PhotoViewer$$ExternalSyntheticLambda1(PhotoViewer photoViewer) {
+        this.f$0 = photoViewer;
     }
 
-    public final void onDismiss(DialogInterface dialogInterface) {
-        this.f$0.run();
+    public final void onAnimationUpdate(ValueAnimator valueAnimator) {
+        this.f$0.lambda$switchToEditMode$57(valueAnimator);
     }
 }

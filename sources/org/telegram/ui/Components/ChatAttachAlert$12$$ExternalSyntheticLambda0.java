@@ -11,6 +11,6 @@ public final /* synthetic */ class ChatAttachAlert$12$$ExternalSyntheticLambda0 
     }
 
     public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-        this.f$0.m748x162979f7(valueAnimator);
+        this.f$0.lambda$afterTextChanged$0(valueAnimator);
     }
 }

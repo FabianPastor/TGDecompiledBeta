@@ -1,15 +1,15 @@
 package org.telegram.ui;
 
-import android.view.View;
+import android.content.DialogInterface;
 
-public final /* synthetic */ class PhotoViewer$$ExternalSyntheticLambda10 implements View.OnClickListener {
-    public final /* synthetic */ PhotoViewer f$0;
+public final /* synthetic */ class PhotoViewer$$ExternalSyntheticLambda10 implements DialogInterface.OnDismissListener {
+    public final /* synthetic */ Runnable f$0;
 
-    public /* synthetic */ PhotoViewer$$ExternalSyntheticLambda10(PhotoViewer photoViewer) {
-        this.f$0 = photoViewer;
+    public /* synthetic */ PhotoViewer$$ExternalSyntheticLambda10(Runnable runnable) {
+        this.f$0 = runnable;
     }
 
-    public final void onClick(View view) {
-        this.f$0.m4258lambda$setParentActivity$11$orgtelegramuiPhotoViewer(view);
+    public final void onDismiss(DialogInterface dialogInterface) {
+        this.f$0.run();
     }
 }

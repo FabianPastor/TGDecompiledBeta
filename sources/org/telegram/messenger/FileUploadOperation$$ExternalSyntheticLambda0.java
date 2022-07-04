@@ -8,6 +8,6 @@ public final /* synthetic */ class FileUploadOperation$$ExternalSyntheticLambda0
     }
 
     public final void run() {
-        this.f$0.m1867lambda$cancel$2$orgtelegrammessengerFileUploadOperation();
+        this.f$0.lambda$cancel$2();
     }
 }

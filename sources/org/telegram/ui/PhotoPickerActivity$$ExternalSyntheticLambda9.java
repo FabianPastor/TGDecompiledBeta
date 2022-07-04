@@ -1,19 +1,16 @@
 package org.telegram.ui;
 
-import org.telegram.tgnet.TLObject;
+import android.view.KeyEvent;
+import org.telegram.ui.ActionBar.ActionBarPopupWindow;
 
-public final /* synthetic */ class PhotoPickerActivity$$ExternalSyntheticLambda9 implements Runnable {
+public final /* synthetic */ class PhotoPickerActivity$$ExternalSyntheticLambda9 implements ActionBarPopupWindow.OnDispatchKeyEventListener {
     public final /* synthetic */ PhotoPickerActivity f$0;
-    public final /* synthetic */ TLObject f$1;
-    public final /* synthetic */ boolean f$2;
 
-    public /* synthetic */ PhotoPickerActivity$$ExternalSyntheticLambda9(PhotoPickerActivity photoPickerActivity, TLObject tLObject, boolean z) {
+    public /* synthetic */ PhotoPickerActivity$$ExternalSyntheticLambda9(PhotoPickerActivity photoPickerActivity) {
         this.f$0 = photoPickerActivity;
-        this.f$1 = tLObject;
-        this.f$2 = z;
     }
 
-    public final void run() {
-        this.f$0.m4224lambda$searchBotUser$8$orgtelegramuiPhotoPickerActivity(this.f$1, this.f$2);
+    public final void onDispatchKeyEvent(KeyEvent keyEvent) {
+        this.f$0.lambda$createView$5(keyEvent);
     }
 }

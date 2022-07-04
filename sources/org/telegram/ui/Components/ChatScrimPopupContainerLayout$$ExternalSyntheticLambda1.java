@@ -10,6 +10,6 @@ public final /* synthetic */ class ChatScrimPopupContainerLayout$$ExternalSynthe
     }
 
     public final void onSwipeBackProgress(PopupSwipeBackLayout popupSwipeBackLayout, float f, float f2) {
-        this.f$0.m874x3780fe62(popupSwipeBackLayout, f, f2);
+        this.f$0.lambda$setPopupWindowLayout$1(popupSwipeBackLayout, f, f2);
     }
 }

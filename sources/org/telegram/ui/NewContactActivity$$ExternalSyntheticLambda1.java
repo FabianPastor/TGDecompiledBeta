@@ -11,6 +11,6 @@ public final /* synthetic */ class NewContactActivity$$ExternalSyntheticLambda1 
     }
 
     public final boolean onKey(View view, int i, KeyEvent keyEvent) {
-        return this.f$0.m3967lambda$createView$7$orgtelegramuiNewContactActivity(view, i, keyEvent);
+        return this.f$0.lambda$createView$7(view, i, keyEvent);
     }
 }

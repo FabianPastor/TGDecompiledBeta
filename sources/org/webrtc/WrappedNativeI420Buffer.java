@@ -18,16 +18,17 @@ class WrappedNativeI420Buffer implements VideoFrame.I420Buffer {
         return VideoFrame.I420Buffer.CC.$default$getBufferType(this);
     }
 
-    WrappedNativeI420Buffer(int width2, int height2, ByteBuffer dataY2, int strideY2, ByteBuffer dataU2, int strideU2, ByteBuffer dataV2, int strideV2, long nativeBuffer2) {
-        this.width = width2;
-        this.height = height2;
-        this.dataY = dataY2;
-        this.strideY = strideY2;
-        this.dataU = dataU2;
-        this.strideU = strideU2;
-        this.dataV = dataV2;
-        this.strideV = strideV2;
-        this.nativeBuffer = nativeBuffer2;
+    @CalledByNative
+    WrappedNativeI420Buffer(int i, int i2, ByteBuffer byteBuffer, int i3, ByteBuffer byteBuffer2, int i4, ByteBuffer byteBuffer3, int i5, long j) {
+        this.width = i;
+        this.height = i2;
+        this.dataY = byteBuffer;
+        this.strideY = i3;
+        this.dataU = byteBuffer2;
+        this.strideU = i4;
+        this.dataV = byteBuffer3;
+        this.strideV = i5;
+        this.nativeBuffer = j;
         retain();
     }
 
@@ -76,7 +77,7 @@ class WrappedNativeI420Buffer implements VideoFrame.I420Buffer {
         JniCommon.nativeReleaseRef(this.nativeBuffer);
     }
 
-    public VideoFrame.Buffer cropAndScale(int cropX, int cropY, int cropWidth, int cropHeight, int scaleWidth, int scaleHeight) {
-        return JavaI420Buffer.cropAndScaleI420(this, cropX, cropY, cropWidth, cropHeight, scaleWidth, scaleHeight);
+    public VideoFrame.Buffer cropAndScale(int i, int i2, int i3, int i4, int i5, int i6) {
+        return JavaI420Buffer.cropAndScaleI420(this, i, i2, i3, i4, i5, i6);
     }
 }

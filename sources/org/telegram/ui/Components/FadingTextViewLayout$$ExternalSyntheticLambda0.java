@@ -10,6 +10,6 @@ public final /* synthetic */ class FadingTextViewLayout$$ExternalSyntheticLambda
     }
 
     public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-        this.f$0.m958lambda$new$0$orgtelegramuiComponentsFadingTextViewLayout(valueAnimator);
+        this.f$0.lambda$new$0(valueAnimator);
     }
 }

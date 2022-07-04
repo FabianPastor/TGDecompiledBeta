@@ -2,14 +2,12 @@ package org.telegram.messenger;
 
 public final /* synthetic */ class NotificationsController$$ExternalSyntheticLambda14 implements Runnable {
     public final /* synthetic */ NotificationsController f$0;
-    public final /* synthetic */ long f$1;
 
-    public /* synthetic */ NotificationsController$$ExternalSyntheticLambda14(NotificationsController notificationsController, long j) {
+    public /* synthetic */ NotificationsController$$ExternalSyntheticLambda14(NotificationsController notificationsController) {
         this.f$0 = notificationsController;
-        this.f$1 = j;
     }
 
     public final void run() {
-        this.f$0.m2352x8a2b000c(this.f$1);
+        this.f$0.lambda$showNotifications$25();
     }
 }

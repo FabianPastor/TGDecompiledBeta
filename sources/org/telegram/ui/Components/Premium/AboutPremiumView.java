@@ -19,15 +19,15 @@ public class AboutPremiumView extends LinearLayout {
         textView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         textView.setText(LocaleController.getString("AboutPremiumTitle", NUM));
         addView(textView);
-        TextView description = new TextView(context);
-        description.setTextSize(1, 14.0f);
-        description.setTextColor(Theme.getColor("windowBackgroundWhiteBlackText"));
-        description.setText(AndroidUtilities.replaceTags(LocaleController.getString("AboutPremiumDescription", NUM)));
-        addView(description, LayoutHelper.createLinear(-1, -2, 0.0f, 0, 0, 0, 0, 0));
-        TextView description2 = new TextView(context);
-        description2.setTextSize(1, 14.0f);
-        description2.setTextColor(Theme.getColor("windowBackgroundWhiteBlackText"));
-        description2.setText(AndroidUtilities.replaceTags(LocaleController.getString("AboutPremiumDescription2", NUM)));
-        addView(description2, LayoutHelper.createLinear(-1, -2, 0.0f, 0, 0, 24, 0, 0));
+        TextView textView2 = new TextView(context);
+        textView2.setTextSize(1, 14.0f);
+        textView2.setTextColor(Theme.getColor("windowBackgroundWhiteBlackText"));
+        textView2.setText(AndroidUtilities.replaceTags(LocaleController.getString("AboutPremiumDescription", NUM)));
+        addView(textView2, LayoutHelper.createLinear(-1, -2, 0.0f, 0, 0, 0, 0, 0));
+        TextView textView3 = new TextView(context);
+        textView3.setTextSize(1, 14.0f);
+        textView3.setTextColor(Theme.getColor("windowBackgroundWhiteBlackText"));
+        textView3.setText(AndroidUtilities.replaceTags(LocaleController.getString("AboutPremiumDescription2", NUM)));
+        addView(textView3, LayoutHelper.createLinear(-1, -2, 0.0f, 0, 0, 24, 0, 0));
     }
 }

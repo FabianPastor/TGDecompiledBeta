@@ -20,27 +20,26 @@ public class LauncherIconController {
         setIcon(LauncherIcon.DEFAULT);
     }
 
-    public static boolean isEnabled(LauncherIcon icon) {
-        Context ctx = ApplicationLoader.applicationContext;
-        int i = ctx.getPackageManager().getComponentEnabledSetting(icon.getComponentName(ctx));
-        if (i != 1) {
-            return i == 0 && icon == LauncherIcon.DEFAULT;
+    public static boolean isEnabled(LauncherIcon launcherIcon) {
+        Context context = ApplicationLoader.applicationContext;
+        int componentEnabledSetting = context.getPackageManager().getComponentEnabledSetting(launcherIcon.getComponentName(context));
+        if (componentEnabledSetting == 1) {
+            return true;
         }
-        return true;
+        if (componentEnabledSetting == 0 && launcherIcon == LauncherIcon.DEFAULT) {
+            return true;
+        }
+        return false;
     }
 
-    public static void setIcon(LauncherIcon icon) {
-        int i;
-        Context ctx = ApplicationLoader.applicationContext;
-        PackageManager pm = ctx.getPackageManager();
-        for (LauncherIcon i2 : LauncherIcon.values()) {
-            ComponentName componentName = i2.getComponentName(ctx);
-            if (i2 == icon) {
-                i = 1;
-            } else {
-                i = 2;
-            }
-            pm.setComponentEnabledSetting(componentName, i, 1);
+    public static void setIcon(LauncherIcon launcherIcon) {
+        Context context = ApplicationLoader.applicationContext;
+        PackageManager packageManager = context.getPackageManager();
+        LauncherIcon[] values = LauncherIcon.values();
+        int length = values.length;
+        for (int i = 0; i < length; i++) {
+            LauncherIcon launcherIcon2 = values[i];
+            packageManager.setComponentEnabledSetting(launcherIcon2.getComponentName(context), launcherIcon2 == launcherIcon ? 1 : 2, 1);
         }
     }
 
@@ -59,24 +58,24 @@ public class LauncherIconController {
         public final boolean premium;
         public final int title;
 
-        public ComponentName getComponentName(Context ctx) {
+        public ComponentName getComponentName(Context context) {
             if (this.componentName == null) {
-                String packageName = ctx.getPackageName();
+                String packageName = context.getPackageName();
                 this.componentName = new ComponentName(packageName, "org.telegram.messenger." + this.key);
             }
             return this.componentName;
         }
 
-        private LauncherIcon(String key2, int background2, int foreground2, int title2) {
-            this(r9, r10, key2, background2, foreground2, title2, false);
+        private LauncherIcon(String str, int i, int i2, int i3) {
+            this(r9, r10, str, i, i2, i3, false);
         }
 
-        private LauncherIcon(String key2, int background2, int foreground2, int title2, boolean premium2) {
-            this.key = key2;
-            this.background = background2;
-            this.foreground = foreground2;
-            this.title = title2;
-            this.premium = premium2;
+        private LauncherIcon(String str, int i, int i2, int i3, boolean z) {
+            this.key = str;
+            this.background = i;
+            this.foreground = i2;
+            this.title = i3;
+            this.premium = z;
         }
     }
 }

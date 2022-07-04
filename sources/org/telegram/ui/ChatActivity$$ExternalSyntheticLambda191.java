@@ -1,15 +1,20 @@
 package org.telegram.ui;
 
-import android.animation.ValueAnimator;
+import org.telegram.tgnet.TLRPC$TL_error;
+import org.telegram.tgnet.TLRPC$TL_messages_editMessage;
 
-public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda191 implements ValueAnimator.AnimatorUpdateListener {
+public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda191 implements Runnable {
     public final /* synthetic */ ChatActivity f$0;
+    public final /* synthetic */ TLRPC$TL_error f$1;
+    public final /* synthetic */ TLRPC$TL_messages_editMessage f$2;
 
-    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda191(ChatActivity chatActivity) {
+    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda191(ChatActivity chatActivity, TLRPC$TL_error tLRPC$TL_error, TLRPC$TL_messages_editMessage tLRPC$TL_messages_editMessage) {
         this.f$0 = chatActivity;
+        this.f$1 = tLRPC$TL_error;
+        this.f$2 = tLRPC$TL_messages_editMessage;
     }
 
-    public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-        this.f$0.m3013lambda$hidePinnedMessageView$142$orgtelegramuiChatActivity(valueAnimator);
+    public final void run() {
+        this.f$0.lambda$processSelectedOption$208(this.f$1, this.f$2);
     }
 }

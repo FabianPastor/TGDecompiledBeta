@@ -1,20 +1,17 @@
 package org.telegram.ui;
 
-import android.content.DialogInterface;
-import org.telegram.tgnet.TLRPC;
+import org.telegram.tgnet.TLRPC$TL_messages_sendScheduledMessages;
 
-public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda193 implements DialogInterface.OnClickListener {
+public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda193 implements Runnable {
     public final /* synthetic */ ChatActivity f$0;
-    public final /* synthetic */ TLRPC.TL_payments_bankCardData f$1;
-    public final /* synthetic */ String f$2;
+    public final /* synthetic */ TLRPC$TL_messages_sendScheduledMessages f$1;
 
-    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda193(ChatActivity chatActivity, TLRPC.TL_payments_bankCardData tL_payments_bankCardData, String str) {
+    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda193(ChatActivity chatActivity, TLRPC$TL_messages_sendScheduledMessages tLRPC$TL_messages_sendScheduledMessages) {
         this.f$0 = chatActivity;
-        this.f$1 = tL_payments_bankCardData;
-        this.f$2 = str;
+        this.f$1 = tLRPC$TL_messages_sendScheduledMessages;
     }
 
-    public final void onClick(DialogInterface dialogInterface, int i) {
-        this.f$0.m2999lambda$didPressMessageUrl$237$orgtelegramuiChatActivity(this.f$1, this.f$2, dialogInterface, i);
+    public final void run() {
+        this.f$0.lambda$processSelectedOption$213(this.f$1);
     }
 }

@@ -22,42 +22,50 @@ public class RoundVideoPlayingDrawable extends Drawable {
     private final Theme.ResourcesProvider resourcesProvider;
     private boolean started = false;
 
+    public int getOpacity() {
+        return -2;
+    }
+
+    public void setColorFilter(ColorFilter colorFilter) {
+    }
+
     public RoundVideoPlayingDrawable(View view, Theme.ResourcesProvider resourcesProvider2) {
         this.resourcesProvider = resourcesProvider2;
         this.parentView = view;
     }
 
     private void update() {
-        long newTime = System.currentTimeMillis();
-        long dt = newTime - this.lastUpdateTime;
-        this.lastUpdateTime = newTime;
-        if (dt > 50) {
-            dt = 50;
+        long currentTimeMillis = System.currentTimeMillis();
+        long j = currentTimeMillis - this.lastUpdateTime;
+        this.lastUpdateTime = currentTimeMillis;
+        if (j > 50) {
+            j = 50;
         }
-        float f = this.progress1 + ((((float) dt) / 300.0f) * ((float) this.progress1Direction));
-        this.progress1 = f;
-        if (f > 1.0f) {
+        float f = (float) j;
+        float f2 = this.progress1 + ((f / 300.0f) * ((float) this.progress1Direction));
+        this.progress1 = f2;
+        if (f2 > 1.0f) {
             this.progress1Direction = -1;
             this.progress1 = 1.0f;
-        } else if (f < 0.0f) {
+        } else if (f2 < 0.0f) {
             this.progress1Direction = 1;
             this.progress1 = 0.0f;
         }
-        float f2 = this.progress2 + ((((float) dt) / 310.0f) * ((float) this.progress2Direction));
-        this.progress2 = f2;
-        if (f2 > 1.0f) {
+        float f3 = this.progress2 + ((f / 310.0f) * ((float) this.progress2Direction));
+        this.progress2 = f3;
+        if (f3 > 1.0f) {
             this.progress2Direction = -1;
             this.progress2 = 1.0f;
-        } else if (f2 < 0.0f) {
+        } else if (f3 < 0.0f) {
             this.progress2Direction = 1;
             this.progress2 = 0.0f;
         }
-        float f3 = this.progress3 + ((((float) dt) / 320.0f) * ((float) this.progress3Direction));
-        this.progress3 = f3;
-        if (f3 > 1.0f) {
+        float f4 = this.progress3 + ((f / 320.0f) * ((float) this.progress3Direction));
+        this.progress3 = f4;
+        if (f4 > 1.0f) {
             this.progress3Direction = -1;
             this.progress3 = 1.0f;
-        } else if (f3 < 0.0f) {
+        } else if (f4 < 0.0f) {
             this.progress3Direction = 1;
             this.progress3 = 0.0f;
         }
@@ -85,28 +93,21 @@ public class RoundVideoPlayingDrawable extends Drawable {
             Paint paint2 = this.paint;
             paint2.setAlpha((int) (((float) i) * (((float) paint2.getAlpha()) / 255.0f)));
         }
-        int x = getBounds().left;
-        int y = getBounds().top;
-        for (int a = 0; a < 3; a++) {
-            canvas.drawRect((float) (AndroidUtilities.dp(2.0f) + x), (float) (AndroidUtilities.dp((this.progress1 * 7.0f) + 2.0f) + y), (float) (AndroidUtilities.dp(4.0f) + x), (float) (AndroidUtilities.dp(10.0f) + y), this.paint);
+        int i2 = getBounds().left;
+        int i3 = getBounds().top;
+        for (int i4 = 0; i4 < 3; i4++) {
+            canvas.drawRect((float) (AndroidUtilities.dp(2.0f) + i2), (float) (AndroidUtilities.dp((this.progress1 * 7.0f) + 2.0f) + i3), (float) (AndroidUtilities.dp(4.0f) + i2), (float) (AndroidUtilities.dp(10.0f) + i3), this.paint);
             Canvas canvas2 = canvas;
-            canvas2.drawRect((float) (AndroidUtilities.dp(5.0f) + x), (float) (AndroidUtilities.dp((this.progress2 * 7.0f) + 2.0f) + y), (float) (AndroidUtilities.dp(7.0f) + x), (float) (AndroidUtilities.dp(10.0f) + y), this.paint);
-            canvas2.drawRect((float) (AndroidUtilities.dp(8.0f) + x), (float) (AndroidUtilities.dp((this.progress3 * 7.0f) + 2.0f) + y), (float) (AndroidUtilities.dp(10.0f) + x), (float) (AndroidUtilities.dp(10.0f) + y), this.paint);
+            canvas2.drawRect((float) (AndroidUtilities.dp(5.0f) + i2), (float) (AndroidUtilities.dp((this.progress2 * 7.0f) + 2.0f) + i3), (float) (AndroidUtilities.dp(7.0f) + i2), (float) (AndroidUtilities.dp(10.0f) + i3), this.paint);
+            canvas2.drawRect((float) (AndroidUtilities.dp(8.0f) + i2), (float) (AndroidUtilities.dp((this.progress3 * 7.0f) + 2.0f) + i3), (float) (AndroidUtilities.dp(10.0f) + i2), (float) (AndroidUtilities.dp(10.0f) + i3), this.paint);
         }
-        if (this.started != 0) {
+        if (this.started) {
             update();
         }
     }
 
-    public void setAlpha(int alpha2) {
-        this.alpha = alpha2;
-    }
-
-    public void setColorFilter(ColorFilter cf) {
-    }
-
-    public int getOpacity() {
-        return -2;
+    public void setAlpha(int i) {
+        this.alpha = i;
     }
 
     public int getIntrinsicWidth() {
@@ -117,9 +118,9 @@ public class RoundVideoPlayingDrawable extends Drawable {
         return AndroidUtilities.dp(12.0f);
     }
 
-    private int getThemedColor(String key) {
+    private int getThemedColor(String str) {
         Theme.ResourcesProvider resourcesProvider2 = this.resourcesProvider;
-        Integer color = resourcesProvider2 != null ? resourcesProvider2.getColor(key) : null;
-        return color != null ? color.intValue() : Theme.getColor(key);
+        Integer color = resourcesProvider2 != null ? resourcesProvider2.getColor(str) : null;
+        return color != null ? color.intValue() : Theme.getColor(str);
     }
 }

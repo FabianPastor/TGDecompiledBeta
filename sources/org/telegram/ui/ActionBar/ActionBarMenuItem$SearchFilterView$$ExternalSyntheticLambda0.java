@@ -11,6 +11,6 @@ public final /* synthetic */ class ActionBarMenuItem$SearchFilterView$$ExternalS
     }
 
     public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-        this.f$0.m2550x8690ed44(valueAnimator);
+        this.f$0.lambda$setSelectedForDelete$0(valueAnimator);
     }
 }

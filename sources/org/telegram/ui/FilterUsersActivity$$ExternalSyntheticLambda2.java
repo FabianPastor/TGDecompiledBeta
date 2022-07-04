@@ -10,7 +10,7 @@ public final /* synthetic */ class FilterUsersActivity$$ExternalSyntheticLambda2
     }
 
     public final void didSetColor() {
-        this.f$0.m3475xCLASSNAMEb04bb();
+        this.f$0.lambda$getThemeDescriptions$3();
     }
 
     public /* synthetic */ void onAnimationProgress(float f) {

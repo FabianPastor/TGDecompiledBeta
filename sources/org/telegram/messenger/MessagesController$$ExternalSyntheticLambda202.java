@@ -1,19 +1,22 @@
 package org.telegram.messenger;
 
-import org.telegram.tgnet.RequestDelegate;
-import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC;
+import androidx.collection.LongSparseArray;
+import org.telegram.tgnet.TLRPC$updates_Difference;
 
-public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda202 implements RequestDelegate {
+public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda202 implements Runnable {
     public final /* synthetic */ MessagesController f$0;
-    public final /* synthetic */ long f$1;
+    public final /* synthetic */ TLRPC$updates_Difference f$1;
+    public final /* synthetic */ LongSparseArray f$2;
+    public final /* synthetic */ LongSparseArray f$3;
 
-    public /* synthetic */ MessagesController$$ExternalSyntheticLambda202(MessagesController messagesController, long j) {
+    public /* synthetic */ MessagesController$$ExternalSyntheticLambda202(MessagesController messagesController, TLRPC$updates_Difference tLRPC$updates_Difference, LongSparseArray longSparseArray, LongSparseArray longSparseArray2) {
         this.f$0 = messagesController;
-        this.f$1 = j;
+        this.f$1 = tLRPC$updates_Difference;
+        this.f$2 = longSparseArray;
+        this.f$3 = longSparseArray2;
     }
 
-    public final void run(TLObject tLObject, TLRPC.TL_error tL_error) {
-        this.f$0.m375x4d3d5863(this.f$1, tLObject, tL_error);
+    public final void run() {
+        this.f$0.lambda$getDifference$281(this.f$1, this.f$2, this.f$3);
     }
 }

@@ -1,15 +1,15 @@
 package org.telegram.ui;
 
-import android.view.View;
+import org.telegram.messenger.MessagesStorage;
 
-public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda212 implements View.OnClickListener {
+public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda212 implements MessagesStorage.BooleanCallback {
     public final /* synthetic */ ChatActivity f$0;
 
     public /* synthetic */ ChatActivity$$ExternalSyntheticLambda212(ChatActivity chatActivity) {
         this.f$0 = chatActivity;
     }
 
-    public final void onClick(View view) {
-        this.f$0.m2925lambda$createMenu$171$orgtelegramuiChatActivity(view);
+    public final void run(boolean z) {
+        this.f$0.lambda$createView$71(z);
     }
 }

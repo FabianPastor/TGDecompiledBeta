@@ -11,6 +11,6 @@ public final /* synthetic */ class FilesMigrationService$FilesMigrationBottomShe
     }
 
     public final void onClick(View view) {
-        this.f$0.m1877xavar_eacf(view);
+        this.f$0.lambda$new$0(view);
     }
 }

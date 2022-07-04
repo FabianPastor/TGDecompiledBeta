@@ -12,6 +12,6 @@ public final /* synthetic */ class ThemeEditorView$EditorAlert$$ExternalSyntheti
     }
 
     public final void onItemClick(View view, int i) {
-        this.f$0.m1484xc2ffCLASSNAMEa(view, i);
+        this.f$0.lambda$new$0(view, i);
     }
 }

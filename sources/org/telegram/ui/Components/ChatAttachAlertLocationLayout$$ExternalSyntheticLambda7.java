@@ -1,17 +1,15 @@
 package org.telegram.ui.Components;
 
-import com.google.android.gms.maps.MapView;
+import com.google.android.gms.maps.GoogleMap;
 
-public final /* synthetic */ class ChatAttachAlertLocationLayout$$ExternalSyntheticLambda7 implements Runnable {
+public final /* synthetic */ class ChatAttachAlertLocationLayout$$ExternalSyntheticLambda7 implements GoogleMap.OnMapLoadedCallback {
     public final /* synthetic */ ChatAttachAlertLocationLayout f$0;
-    public final /* synthetic */ MapView f$1;
 
-    public /* synthetic */ ChatAttachAlertLocationLayout$$ExternalSyntheticLambda7(ChatAttachAlertLocationLayout chatAttachAlertLocationLayout, MapView mapView) {
+    public /* synthetic */ ChatAttachAlertLocationLayout$$ExternalSyntheticLambda7(ChatAttachAlertLocationLayout chatAttachAlertLocationLayout) {
         this.f$0 = chatAttachAlertLocationLayout;
-        this.f$1 = mapView;
     }
 
-    public final void run() {
-        this.f$0.m803x3bb95800(this.f$1);
+    public final void onMapLoaded() {
+        this.f$0.lambda$new$9();
     }
 }

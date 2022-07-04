@@ -10,6 +10,6 @@ public final /* synthetic */ class StickerMasksAlert$$ExternalSyntheticLambda1 i
     }
 
     public final void onClick(View view) {
-        this.f$0.m1429lambda$new$4$orgtelegramuiComponentsStickerMasksAlert(view);
+        this.f$0.lambda$new$3(view);
     }
 }

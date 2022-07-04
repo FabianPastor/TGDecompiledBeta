@@ -7,6 +7,7 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Path;
+import android.graphics.RectF;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
@@ -38,14 +39,14 @@ public class PremiumButtonView extends FrameLayout {
     public boolean showOverlay;
 
     /* JADX INFO: super call moved to the top of the method (can break code semantics) */
-    public PremiumButtonView(Context context, boolean createOverlayTextView) {
+    public PremiumButtonView(Context context, boolean z) {
         super(context);
         Context context2 = context;
         CellFlickerDrawable cellFlickerDrawable = new CellFlickerDrawable();
         this.flickerDrawable = cellFlickerDrawable;
         cellFlickerDrawable.animationSpeedScale = 1.2f;
-        this.flickerDrawable.drawFrame = false;
-        this.flickerDrawable.repeatProgress = 4.0f;
+        cellFlickerDrawable.drawFrame = false;
+        cellFlickerDrawable.repeatProgress = 4.0f;
         LinearLayout linearLayout = new LinearLayout(context2);
         linearLayout.setOrientation(0);
         TextView textView = new TextView(context2);
@@ -65,7 +66,7 @@ public class PremiumButtonView extends FrameLayout {
         linearLayout.addView(this.buttonTextView, LayoutHelper.createLinear(-2, -2, 16));
         linearLayout.addView(this.iconView, LayoutHelper.createLinear(24, 24, 0.0f, 16, 4, 0, 0, 0));
         addView(this.buttonLayout);
-        if (createOverlayTextView) {
+        if (z) {
             TextView textView2 = new TextView(context2);
             this.overlayTextView = textView2;
             textView2.setPadding(AndroidUtilities.dp(34.0f), 0, AndroidUtilities.dp(34.0f), 0);
@@ -81,13 +82,14 @@ public class PremiumButtonView extends FrameLayout {
     }
 
     /* access modifiers changed from: protected */
-    public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+    public void onMeasure(int i, int i2) {
+        super.onMeasure(i, i2);
     }
 
     /* access modifiers changed from: protected */
     public void dispatchDraw(Canvas canvas) {
-        AndroidUtilities.rectTmp.set(0.0f, 0.0f, (float) getMeasuredWidth(), (float) getMeasuredHeight());
+        RectF rectF = AndroidUtilities.rectTmp;
+        rectF.set(0.0f, 0.0f, (float) getMeasuredWidth(), (float) getMeasuredHeight());
         if (this.overlayProgress != 1.0f || !this.drawOverlayColor) {
             if (this.inc) {
                 float f = this.progress + 0.016f;
@@ -103,12 +105,12 @@ public class PremiumButtonView extends FrameLayout {
                 }
             }
             PremiumGradient.getInstance().updateMainGradientMatrix(0, 0, getMeasuredWidth(), getMeasuredHeight(), this.progress * ((float) (-getMeasuredWidth())) * 0.1f, 0.0f);
-            canvas.drawRoundRect(AndroidUtilities.rectTmp, (float) AndroidUtilities.dp(8.0f), (float) AndroidUtilities.dp(8.0f), PremiumGradient.getInstance().getMainGradientPaint());
+            canvas.drawRoundRect(rectF, (float) AndroidUtilities.dp(8.0f), (float) AndroidUtilities.dp(8.0f), PremiumGradient.getInstance().getMainGradientPaint());
             invalidate();
         }
         if (!BuildVars.IS_BILLING_UNAVAILABLE) {
             this.flickerDrawable.setParentWidth(getMeasuredWidth());
-            this.flickerDrawable.draw(canvas, AndroidUtilities.rectTmp, (float) AndroidUtilities.dp(8.0f), (View) null);
+            this.flickerDrawable.draw(canvas, rectF, (float) AndroidUtilities.dp(8.0f), (View) null);
         }
         float f3 = this.overlayProgress;
         if (f3 != 0.0f && this.drawOverlayColor) {
@@ -118,30 +120,30 @@ public class PremiumButtonView extends FrameLayout {
                 this.path.addCircle(((float) getMeasuredWidth()) / 2.0f, ((float) getMeasuredHeight()) / 2.0f, ((float) Math.max(getMeasuredWidth(), getMeasuredHeight())) * 1.4f * this.overlayProgress, Path.Direction.CW);
                 canvas.save();
                 canvas.clipPath(this.path);
-                canvas.drawRoundRect(AndroidUtilities.rectTmp, (float) AndroidUtilities.dp(8.0f), (float) AndroidUtilities.dp(8.0f), this.paintOverlayPaint);
+                canvas.drawRoundRect(rectF, (float) AndroidUtilities.dp(8.0f), (float) AndroidUtilities.dp(8.0f), this.paintOverlayPaint);
                 canvas.restore();
             } else {
-                canvas.drawRoundRect(AndroidUtilities.rectTmp, (float) AndroidUtilities.dp(8.0f), (float) AndroidUtilities.dp(8.0f), this.paintOverlayPaint);
+                canvas.drawRoundRect(rectF, (float) AndroidUtilities.dp(8.0f), (float) AndroidUtilities.dp(8.0f), this.paintOverlayPaint);
             }
         }
         super.dispatchDraw(canvas);
     }
 
-    public void setOverlayText(String text, boolean drawOverlayColor2, boolean animated) {
+    public void setOverlayText(String str, boolean z, boolean z2) {
         this.showOverlay = true;
-        this.drawOverlayColor = drawOverlayColor2;
-        this.overlayTextView.setText(text);
-        updateOverlay(animated);
+        this.drawOverlayColor = z;
+        this.overlayTextView.setText(str);
+        updateOverlay(z2);
     }
 
-    private void updateOverlay(boolean animated) {
+    private void updateOverlay(boolean z) {
         ValueAnimator valueAnimator = this.overlayAnimator;
         if (valueAnimator != null) {
             valueAnimator.removeAllListeners();
             this.overlayAnimator.cancel();
         }
         float f = 1.0f;
-        if (!animated) {
+        if (!z) {
             if (!this.showOverlay) {
                 f = 0.0f;
             }
@@ -158,13 +160,13 @@ public class PremiumButtonView extends FrameLayout {
         ValueAnimator ofFloat = ValueAnimator.ofFloat(fArr);
         this.overlayAnimator = ofFloat;
         ofFloat.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-            public void onAnimationUpdate(ValueAnimator animation) {
-                float unused = PremiumButtonView.this.overlayProgress = ((Float) animation.getAnimatedValue()).floatValue();
+            public void onAnimationUpdate(ValueAnimator valueAnimator) {
+                float unused = PremiumButtonView.this.overlayProgress = ((Float) valueAnimator.getAnimatedValue()).floatValue();
                 PremiumButtonView.this.updateOverlayProgress();
             }
         });
         this.overlayAnimator.addListener(new AnimatorListenerAdapter() {
-            public void onAnimationEnd(Animator animation) {
+            public void onAnimationEnd(Animator animator) {
                 PremiumButtonView premiumButtonView = PremiumButtonView.this;
                 float unused = premiumButtonView.overlayProgress = premiumButtonView.showOverlay ? 1.0f : 0.0f;
                 PremiumButtonView.this.updateOverlayProgress();
@@ -196,16 +198,17 @@ public class PremiumButtonView extends FrameLayout {
         updateOverlay(true);
     }
 
-    public void setIcon(int id) {
-        this.iconView.setAnimation(id, 24, 24);
-        this.flickerDrawable.progress = 2.0f;
-        this.flickerDrawable.setOnRestartCallback(new PremiumButtonView$$ExternalSyntheticLambda0(this));
+    public void setIcon(int i) {
+        this.iconView.setAnimation(i, 24, 24);
+        CellFlickerDrawable cellFlickerDrawable = this.flickerDrawable;
+        cellFlickerDrawable.progress = 2.0f;
+        cellFlickerDrawable.setOnRestartCallback(new PremiumButtonView$$ExternalSyntheticLambda0(this));
         invalidate();
         this.iconView.setVisibility(0);
     }
 
-    /* renamed from: lambda$setIcon$0$org-telegram-ui-Components-Premium-PremiumButtonView  reason: not valid java name */
-    public /* synthetic */ void m1250x1bdc7e71() {
+    /* access modifiers changed from: private */
+    public /* synthetic */ void lambda$setIcon$0() {
         this.iconView.getAnimatedDrawable().setCurrentFrame(0, true);
         this.iconView.playAnimation();
     }
@@ -215,8 +218,8 @@ public class PremiumButtonView extends FrameLayout {
         this.iconView.setVisibility(8);
     }
 
-    public void setButton(String text, View.OnClickListener clickListener) {
-        this.buttonTextView.setText(text);
-        this.buttonLayout.setOnClickListener(clickListener);
+    public void setButton(String str, View.OnClickListener onClickListener) {
+        this.buttonTextView.setText(str);
+        this.buttonLayout.setOnClickListener(onClickListener);
     }
 }

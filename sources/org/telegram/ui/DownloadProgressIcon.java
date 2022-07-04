@@ -5,6 +5,7 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
+import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
 import android.view.View;
 import java.util.ArrayList;
@@ -27,17 +28,15 @@ public class DownloadProgressIcon extends View implements NotificationCenter.Not
     ImageReceiver downloadCompleteImageReceiver = new ImageReceiver(this);
     RLottieDrawable downloadDrawable;
     ImageReceiver downloadImageReceiver = new ImageReceiver(this);
-    boolean hasUnviewedDownloads;
     Paint paint = new Paint(1);
     Paint paint2 = new Paint(1);
     float progress;
     float progressDt;
     boolean showCompletedIcon;
 
-    /* JADX INFO: super call moved to the top of the method (can break code semantics) */
-    public DownloadProgressIcon(int currentAccount2, Context context) {
+    public DownloadProgressIcon(int i, Context context) {
         super(context);
-        this.currentAccount = currentAccount2;
+        this.currentAccount = i;
         RLottieDrawable rLottieDrawable = new RLottieDrawable(NUM, "download_progress", AndroidUtilities.dp(28.0f), AndroidUtilities.dp(28.0f), true, (int[]) null);
         this.downloadDrawable = rLottieDrawable;
         rLottieDrawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor("actionBarDefaultIcon"), PorterDuff.Mode.MULTIPLY));
@@ -52,11 +51,13 @@ public class DownloadProgressIcon extends View implements NotificationCenter.Not
     }
 
     /* access modifiers changed from: protected */
-    public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        super.onMeasure(View.MeasureSpec.makeMeasureSpec(View.MeasureSpec.getSize(widthMeasureSpec), NUM), View.MeasureSpec.makeMeasureSpec(View.MeasureSpec.getSize(heightMeasureSpec), NUM));
-        int padding = AndroidUtilities.dp(15.0f);
-        this.downloadImageReceiver.setImageCoords((float) padding, (float) padding, (float) (getMeasuredWidth() - (padding * 2)), (float) (getMeasuredHeight() - (padding * 2)));
-        this.downloadCompleteImageReceiver.setImageCoords((float) padding, (float) padding, (float) (getMeasuredWidth() - (padding * 2)), (float) (getMeasuredHeight() - (padding * 2)));
+    public void onMeasure(int i, int i2) {
+        super.onMeasure(View.MeasureSpec.makeMeasureSpec(View.MeasureSpec.getSize(i), NUM), View.MeasureSpec.makeMeasureSpec(View.MeasureSpec.getSize(i2), NUM));
+        int dp = AndroidUtilities.dp(15.0f);
+        float f = (float) dp;
+        int i3 = dp * 2;
+        this.downloadImageReceiver.setImageCoords(f, f, (float) (getMeasuredWidth() - i3), (float) (getMeasuredHeight() - i3));
+        this.downloadCompleteImageReceiver.setImageCoords(f, f, (float) (getMeasuredWidth() - i3), (float) (getMeasuredHeight() - i3));
     }
 
     /* access modifiers changed from: protected */
@@ -85,16 +86,19 @@ public class DownloadProgressIcon extends View implements NotificationCenter.Not
                     this.currentProgress = f2;
                 }
             }
-            int cy = (getMeasuredHeight() / 2) + AndroidUtilities.dp(8.0f);
-            float r = (float) AndroidUtilities.dp(1.0f);
-            float startPadding = (float) AndroidUtilities.dp(16.0f);
-            float width = ((float) getMeasuredWidth()) - (2.0f * startPadding);
-            AndroidUtilities.rectTmp.set(startPadding, ((float) cy) - r, ((float) getMeasuredWidth()) - startPadding, ((float) cy) + r);
-            canvas.drawRoundRect(AndroidUtilities.rectTmp, r, r, this.paint2);
-            AndroidUtilities.rectTmp.set(startPadding, ((float) cy) - r, (this.currentProgress * width) + startPadding, ((float) cy) + r);
-            canvas.drawRoundRect(AndroidUtilities.rectTmp, r, r, this.paint);
+            float dp = (float) AndroidUtilities.dp(1.0f);
+            float dp2 = (float) AndroidUtilities.dp(16.0f);
+            float measuredWidth = ((float) getMeasuredWidth()) - (2.0f * dp2);
+            RectF rectF = AndroidUtilities.rectTmp;
+            float measuredHeight = (float) ((getMeasuredHeight() / 2) + AndroidUtilities.dp(8.0f));
+            float f5 = measuredHeight - dp;
+            float f6 = measuredHeight + dp;
+            rectF.set(dp2, f5, ((float) getMeasuredWidth()) - dp2, f6);
+            canvas.drawRoundRect(rectF, dp, dp, this.paint2);
+            rectF.set(dp2, f5, (measuredWidth * this.currentProgress) + dp2, f6);
+            canvas.drawRoundRect(rectF, dp, dp, this.paint);
             canvas.save();
-            canvas.clipRect(0.0f, 0.0f, (float) getMeasuredWidth(), ((float) cy) - r);
+            canvas.clipRect(0.0f, 0.0f, (float) getMeasuredWidth(), f5);
             if (this.progress != 1.0f) {
                 this.showCompletedIcon = false;
             }
@@ -131,21 +135,21 @@ public class DownloadProgressIcon extends View implements NotificationCenter.Not
     }
 
     private void updateDownloadingListeners() {
-        DownloadController downloadController = DownloadController.getInstance(this.currentAccount);
-        HashMap<String, ProgressObserver> observerHashMap = new HashMap<>();
+        DownloadController instance = DownloadController.getInstance(this.currentAccount);
+        HashMap hashMap = new HashMap();
         for (int i = 0; i < this.currentListeners.size(); i++) {
-            observerHashMap.put(this.currentListeners.get(i).fileName, this.currentListeners.get(i));
+            hashMap.put(this.currentListeners.get(i).fileName, this.currentListeners.get(i));
             DownloadController.getInstance(this.currentAccount).removeLoadingFileObserver(this.currentListeners.get(i));
         }
         this.currentListeners.clear();
-        for (int i2 = 0; i2 < downloadController.downloadingFiles.size(); i2++) {
-            String filename = downloadController.downloadingFiles.get(i2).getFileName();
-            if (FileLoader.getInstance(this.currentAccount).isLoadingFile(filename)) {
-                ProgressObserver progressObserver = observerHashMap.get(filename);
+        for (int i2 = 0; i2 < instance.downloadingFiles.size(); i2++) {
+            String fileName = instance.downloadingFiles.get(i2).getFileName();
+            if (FileLoader.getInstance(this.currentAccount).isLoadingFile(fileName)) {
+                ProgressObserver progressObserver = (ProgressObserver) hashMap.get(fileName);
                 if (progressObserver == null) {
-                    progressObserver = new ProgressObserver(filename);
+                    progressObserver = new ProgressObserver(fileName);
                 }
-                DownloadController.getInstance(this.currentAccount).addLoadingFileObserver(filename, progressObserver);
+                DownloadController.getInstance(this.currentAccount).addLoadingFileObserver(fileName, progressObserver);
                 this.currentListeners.add(progressObserver);
             }
         }
@@ -159,17 +163,17 @@ public class DownloadProgressIcon extends View implements NotificationCenter.Not
     }
 
     public void updateProgress() {
-        MessagesStorage instance = MessagesStorage.getInstance(this.currentAccount);
-        long total = 0;
-        long downloaded = 0;
+        MessagesStorage.getInstance(this.currentAccount);
+        long j = 0;
+        long j2 = 0;
         for (int i = 0; i < this.currentListeners.size(); i++) {
-            total += this.currentListeners.get(i).total;
-            downloaded += this.currentListeners.get(i).downloaded;
+            j += this.currentListeners.get(i).total;
+            j2 += this.currentListeners.get(i).downloaded;
         }
-        if (total == 0) {
+        if (j == 0) {
             this.progress = 1.0f;
         } else {
-            this.progress = ((float) downloaded) / ((float) total);
+            this.progress = ((float) j2) / ((float) j);
         }
         float f = this.progress;
         if (f > 1.0f) {
@@ -188,8 +192,8 @@ public class DownloadProgressIcon extends View implements NotificationCenter.Not
         this.currentListeners.clear();
     }
 
-    public void didReceivedNotification(int id, int account, Object... args) {
-        if (id == NotificationCenter.onDownloadingFilesChanged) {
+    public void didReceivedNotification(int i, int i2, Object... objArr) {
+        if (i == NotificationCenter.onDownloadingFilesChanged) {
             updateDownloadingListeners();
             updateProgress();
         }
@@ -201,27 +205,27 @@ public class DownloadProgressIcon extends View implements NotificationCenter.Not
         public final String fileName;
         long total;
 
-        private ProgressObserver(String fileName2) {
-            this.fileName = fileName2;
-        }
-
-        public void onFailedDownload(String fileName2, boolean canceled) {
-        }
-
-        public void onSuccessDownload(String fileName2) {
-        }
-
-        public void onProgressDownload(String fileName2, long downloadSize, long totalSize) {
-            this.downloaded = downloadSize;
-            this.total = totalSize;
-            DownloadProgressIcon.this.updateProgress();
-        }
-
-        public void onProgressUpload(String fileName2, long downloadSize, long totalSize, boolean isEncrypted) {
-        }
-
         public int getObserverTag() {
             return 0;
+        }
+
+        public void onFailedDownload(String str, boolean z) {
+        }
+
+        public void onProgressUpload(String str, long j, long j2, boolean z) {
+        }
+
+        public void onSuccessDownload(String str) {
+        }
+
+        private ProgressObserver(String str) {
+            this.fileName = str;
+        }
+
+        public void onProgressDownload(String str, long j, long j2) {
+            this.downloaded = j;
+            this.total = j2;
+            DownloadProgressIcon.this.updateProgress();
         }
     }
 }

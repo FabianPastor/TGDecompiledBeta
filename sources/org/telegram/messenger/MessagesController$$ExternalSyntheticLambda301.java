@@ -1,19 +1,22 @@
 package org.telegram.messenger;
 
-public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda301 implements Runnable {
-    public final /* synthetic */ MessagesController f$0;
-    public final /* synthetic */ int f$1;
-    public final /* synthetic */ long f$2;
-    public final /* synthetic */ int f$3;
+import java.util.List;
+import org.telegram.tgnet.RequestDelegate;
+import org.telegram.tgnet.TLObject;
+import org.telegram.tgnet.TLRPC$TL_error;
 
-    public /* synthetic */ MessagesController$$ExternalSyntheticLambda301(MessagesController messagesController, int i, long j, int i2) {
+public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda301 implements RequestDelegate {
+    public final /* synthetic */ MessagesController f$0;
+    public final /* synthetic */ long f$1;
+    public final /* synthetic */ List f$2;
+
+    public /* synthetic */ MessagesController$$ExternalSyntheticLambda301(MessagesController messagesController, long j, List list) {
         this.f$0 = messagesController;
-        this.f$1 = i;
-        this.f$2 = j;
-        this.f$3 = i2;
+        this.f$1 = j;
+        this.f$2 = list;
     }
 
-    public final void run() {
-        this.f$0.m385lambda$sendTyping$141$orgtelegrammessengerMessagesController(this.f$1, this.f$2, this.f$3);
+    public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+        this.f$0.lambda$setChatReactions$358(this.f$1, this.f$2, tLObject, tLRPC$TL_error);
     }
 }

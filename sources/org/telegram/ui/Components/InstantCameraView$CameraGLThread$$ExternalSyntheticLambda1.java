@@ -11,6 +11,6 @@ public final /* synthetic */ class InstantCameraView$CameraGLThread$$ExternalSyn
     }
 
     public final void onFrameAvailable(SurfaceTexture surfaceTexture) {
-        this.f$0.m1039xbcdb2188(surfaceTexture);
+        this.f$0.lambda$handleMessage$1(surfaceTexture);
     }
 }

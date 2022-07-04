@@ -15,7 +15,7 @@ import org.telegram.messenger.MessagesStorage;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.NotificationsController;
 import org.telegram.messenger.UserConfig;
-import org.telegram.tgnet.TLRPC;
+import org.telegram.tgnet.TLRPC$User;
 import org.telegram.ui.ActionBar.SimpleTextView;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.AvatarDrawable;
@@ -60,8 +60,8 @@ public class DrawerUserCell extends FrameLayout implements NotificationCenter.No
     }
 
     /* access modifiers changed from: protected */
-    public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        super.onMeasure(View.MeasureSpec.makeMeasureSpec(View.MeasureSpec.getSize(widthMeasureSpec), NUM), View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(48.0f), NUM));
+    public void onMeasure(int i, int i2) {
+        super.onMeasure(View.MeasureSpec.makeMeasureSpec(View.MeasureSpec.getSize(i), NUM), View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(48.0f), NUM));
     }
 
     /* access modifiers changed from: protected */
@@ -83,42 +83,42 @@ public class DrawerUserCell extends FrameLayout implements NotificationCenter.No
         NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.emojiLoaded);
     }
 
-    public void didReceivedNotification(int id, int account, Object... args) {
-        if (id == NotificationCenter.currentUserPremiumStatusChanged) {
-            int i = this.accountNumber;
-            if (account == i) {
-                setAccount(i);
+    public void didReceivedNotification(int i, int i2, Object... objArr) {
+        if (i == NotificationCenter.currentUserPremiumStatusChanged) {
+            int i3 = this.accountNumber;
+            if (i2 == i3) {
+                setAccount(i3);
             }
-        } else if (id == NotificationCenter.emojiLoaded) {
+        } else if (i == NotificationCenter.emojiLoaded) {
             this.textView.invalidate();
         }
     }
 
-    public void setAccount(int account) {
-        this.accountNumber = account;
-        TLRPC.User user = UserConfig.getInstance(account).getCurrentUser();
-        if (user != null) {
-            this.avatarDrawable.setInfo(user);
-            CharSequence text = ContactsController.formatName(user.first_name, user.last_name);
-            int i = 0;
+    public void setAccount(int i) {
+        this.accountNumber = i;
+        TLRPC$User currentUser = UserConfig.getInstance(i).getCurrentUser();
+        if (currentUser != null) {
+            this.avatarDrawable.setInfo(currentUser);
+            CharSequence formatName = ContactsController.formatName(currentUser.first_name, currentUser.last_name);
+            int i2 = 0;
             try {
-                text = Emoji.replaceEmoji(text, this.textView.getPaint().getFontMetricsInt(), AndroidUtilities.dp(20.0f), false);
-            } catch (Exception e) {
+                formatName = Emoji.replaceEmoji(formatName, this.textView.getPaint().getFontMetricsInt(), AndroidUtilities.dp(20.0f), false);
+            } catch (Exception unused) {
             }
-            this.textView.setText(text);
-            if (MessagesController.getInstance(account).isPremiumUser(user)) {
+            this.textView.setText(formatName);
+            if (MessagesController.getInstance(i).isPremiumUser(currentUser)) {
                 this.textView.setDrawablePadding(AndroidUtilities.dp(6.0f));
                 this.textView.setRightDrawable(PremiumGradient.getInstance().premiumStarDrawableMini);
             } else {
                 this.textView.setRightDrawable((Drawable) null);
             }
-            this.imageView.getImageReceiver().setCurrentAccount(account);
-            this.imageView.setForUserOrChat(user, this.avatarDrawable);
+            this.imageView.getImageReceiver().setCurrentAccount(i);
+            this.imageView.setForUserOrChat(currentUser, this.avatarDrawable);
             GroupCreateCheckBox groupCreateCheckBox = this.checkBox;
-            if (account != UserConfig.selectedAccount) {
-                i = 4;
+            if (i != UserConfig.selectedAccount) {
+                i2 = 4;
             }
-            groupCreateCheckBox.setVisibility(i);
+            groupCreateCheckBox.setVisibility(i2);
         }
     }
 
@@ -128,21 +128,24 @@ public class DrawerUserCell extends FrameLayout implements NotificationCenter.No
 
     /* access modifiers changed from: protected */
     public void onDraw(Canvas canvas) {
-        int counter;
-        if (UserConfig.getActivatedAccountsCount() > 1 && NotificationsController.getInstance(this.accountNumber).showBadgeNumber && (counter = MessagesStorage.getInstance(this.accountNumber).getMainUnreadCount()) > 0) {
-            String text = String.format("%d", new Object[]{Integer.valueOf(counter)});
-            int countTop = AndroidUtilities.dp(12.5f);
-            int textWidth = (int) Math.ceil((double) Theme.dialogs_countTextPaint.measureText(text));
-            int countWidth = Math.max(AndroidUtilities.dp(10.0f), textWidth);
-            int x = ((getMeasuredWidth() - countWidth) - AndroidUtilities.dp(25.0f)) - AndroidUtilities.dp(5.5f);
-            this.rect.set((float) x, (float) countTop, (float) (x + countWidth + AndroidUtilities.dp(14.0f)), (float) (AndroidUtilities.dp(23.0f) + countTop));
-            canvas.drawRoundRect(this.rect, AndroidUtilities.density * 11.5f, AndroidUtilities.density * 11.5f, Theme.dialogs_countPaint);
-            canvas.drawText(text, this.rect.left + ((this.rect.width() - ((float) textWidth)) / 2.0f), (float) (AndroidUtilities.dp(16.0f) + countTop), Theme.dialogs_countTextPaint);
+        int mainUnreadCount;
+        if (UserConfig.getActivatedAccountsCount() > 1 && NotificationsController.getInstance(this.accountNumber).showBadgeNumber && (mainUnreadCount = MessagesStorage.getInstance(this.accountNumber).getMainUnreadCount()) > 0) {
+            String format = String.format("%d", new Object[]{Integer.valueOf(mainUnreadCount)});
+            int dp = AndroidUtilities.dp(12.5f);
+            int ceil = (int) Math.ceil((double) Theme.dialogs_countTextPaint.measureText(format));
+            int max = Math.max(AndroidUtilities.dp(10.0f), ceil);
+            int measuredWidth = ((getMeasuredWidth() - max) - AndroidUtilities.dp(25.0f)) - AndroidUtilities.dp(5.5f);
+            this.rect.set((float) measuredWidth, (float) dp, (float) (measuredWidth + max + AndroidUtilities.dp(14.0f)), (float) (AndroidUtilities.dp(23.0f) + dp));
+            RectF rectF = this.rect;
+            float f = AndroidUtilities.density;
+            canvas.drawRoundRect(rectF, f * 11.5f, f * 11.5f, Theme.dialogs_countPaint);
+            RectF rectF2 = this.rect;
+            canvas.drawText(format, rectF2.left + ((rectF2.width() - ((float) ceil)) / 2.0f), (float) (dp + AndroidUtilities.dp(16.0f)), Theme.dialogs_countTextPaint);
         }
     }
 
-    public void onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo info) {
-        super.onInitializeAccessibilityNodeInfo(info);
-        info.addAction(16);
+    public void onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo accessibilityNodeInfo) {
+        super.onInitializeAccessibilityNodeInfo(accessibilityNodeInfo);
+        accessibilityNodeInfo.addAction(16);
     }
 }

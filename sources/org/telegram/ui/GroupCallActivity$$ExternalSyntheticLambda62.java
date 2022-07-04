@@ -1,23 +1,16 @@
 package org.telegram.ui;
 
-import android.content.DialogInterface;
-import org.telegram.messenger.ChatObject;
-import org.telegram.ui.Cells.CheckBoxCell;
+import android.view.View;
+import org.telegram.ui.Components.RecyclerListView;
 
-public final /* synthetic */ class GroupCallActivity$$ExternalSyntheticLambda62 implements DialogInterface.OnClickListener {
-    public final /* synthetic */ ChatObject.Call f$0;
-    public final /* synthetic */ CheckBoxCell[] f$1;
-    public final /* synthetic */ long f$2;
-    public final /* synthetic */ Runnable f$3;
+public final /* synthetic */ class GroupCallActivity$$ExternalSyntheticLambda62 implements RecyclerListView.OnItemClickListener {
+    public final /* synthetic */ GroupCallActivity f$0;
 
-    public /* synthetic */ GroupCallActivity$$ExternalSyntheticLambda62(ChatObject.Call call, CheckBoxCell[] checkBoxCellArr, long j, Runnable runnable) {
-        this.f$0 = call;
-        this.f$1 = checkBoxCellArr;
-        this.f$2 = j;
-        this.f$3 = runnable;
+    public /* synthetic */ GroupCallActivity$$ExternalSyntheticLambda62(GroupCallActivity groupCallActivity) {
+        this.f$0 = groupCallActivity;
     }
 
-    public final void onClick(DialogInterface dialogInterface, int i) {
-        GroupCallActivity.processOnLeave(this.f$0, this.f$1[0].isChecked(), this.f$2, this.f$3);
+    public final void onItemClick(View view, int i) {
+        this.f$0.lambda$new$14(view, i);
     }
 }

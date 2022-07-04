@@ -12,6 +12,6 @@ public final /* synthetic */ class EmojiAnimationsOverlay$$ExternalSyntheticLamb
     }
 
     public final void run() {
-        this.f$0.m3445xCLASSNAMEe9be0(this.f$1);
+        this.f$0.lambda$showStickerSetBulletin$3(this.f$1);
     }
 }

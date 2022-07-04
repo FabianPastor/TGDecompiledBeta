@@ -11,6 +11,6 @@ public final /* synthetic */ class PhotoViewer$52$$ExternalSyntheticLambda0 impl
     }
 
     public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-        this.f$0.m4321lambda$onSurfaceTextureUpdated$3$orgtelegramuiPhotoViewer$52(valueAnimator);
+        this.f$0.lambda$onSurfaceTextureUpdated$3(valueAnimator);
     }
 }

@@ -20,21 +20,15 @@ class H264Utils {
     H264Utils() {
     }
 
-    public static Map<String, String> getDefaultH264Params(boolean isHighProfile) {
-        String str;
-        Map<String, String> params = new HashMap<>();
-        params.put("level-asymmetry-allowed", "1");
-        params.put("packetization-mode", "1");
-        if (isHighProfile) {
-            str = "640c1f";
-        } else {
-            str = "42e01f";
-        }
-        params.put("profile-level-id", str);
-        return params;
+    public static Map<String, String> getDefaultH264Params(boolean z) {
+        HashMap hashMap = new HashMap();
+        hashMap.put("level-asymmetry-allowed", "1");
+        hashMap.put("packetization-mode", "1");
+        hashMap.put("profile-level-id", z ? "640c1f" : "42e01f");
+        return hashMap;
     }
 
-    public static boolean isSameH264Profile(Map<String, String> params1, Map<String, String> params2) {
-        return nativeIsSameH264Profile(params1, params2);
+    public static boolean isSameH264Profile(Map<String, String> map, Map<String, String> map2) {
+        return nativeIsSameH264Profile(map, map2);
     }
 }

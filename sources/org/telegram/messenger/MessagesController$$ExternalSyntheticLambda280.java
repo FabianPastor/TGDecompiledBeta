@@ -2,15 +2,18 @@ package org.telegram.messenger;
 
 import org.telegram.tgnet.RequestDelegate;
 import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC;
+import org.telegram.tgnet.TLRPC$TL_error;
 
 public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda280 implements RequestDelegate {
-    public static final /* synthetic */ MessagesController$$ExternalSyntheticLambda280 INSTANCE = new MessagesController$$ExternalSyntheticLambda280();
+    public final /* synthetic */ MessagesController f$0;
+    public final /* synthetic */ long f$1;
 
-    private /* synthetic */ MessagesController$$ExternalSyntheticLambda280() {
+    public /* synthetic */ MessagesController$$ExternalSyntheticLambda280(MessagesController messagesController, long j) {
+        this.f$0 = messagesController;
+        this.f$1 = j;
     }
 
-    public final void run(TLObject tLObject, TLRPC.TL_error tL_error) {
-        MessagesController.lambda$markMessageContentAsRead$191(tLObject, tL_error);
+    public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+        this.f$0.lambda$markDialogAsUnread$284(this.f$1, tLObject, tLRPC$TL_error);
     }
 }

@@ -7,7 +7,7 @@ import android.os.SystemClock;
 import java.util.ArrayList;
 
 public class DispatchQueueMainThreadSync extends Thread {
-    private static int indexPointer = 0;
+    private static int indexPointer;
     private volatile Handler handler;
     public final int index;
     private boolean isRecycled;
@@ -17,31 +17,34 @@ public class DispatchQueueMainThreadSync extends Thread {
     /* access modifiers changed from: private */
     public ArrayList<PostponedTask> postponedTasks;
 
-    public DispatchQueueMainThreadSync(String threadName) {
-        this(threadName, true);
+    public void handleMessage(Message message) {
     }
 
-    public DispatchQueueMainThreadSync(String threadName, boolean start) {
+    public DispatchQueueMainThreadSync(String str) {
+        this(str, true);
+    }
+
+    public DispatchQueueMainThreadSync(String str, boolean z) {
         this.handler = null;
         int i = indexPointer;
         indexPointer = i + 1;
         this.index = i;
         this.postponedTasks = new ArrayList<>();
-        setName(threadName);
-        if (start) {
+        setName(str);
+        if (z) {
             start();
         }
     }
 
-    public void sendMessage(Message msg, int delay) {
+    public void sendMessage(Message message, int i) {
         checkThread();
         if (!this.isRecycled) {
             if (!this.isRunning) {
-                this.postponedTasks.add(new PostponedTask(msg, delay));
-            } else if (delay <= 0) {
-                this.handler.sendMessage(msg);
+                this.postponedTasks.add(new PostponedTask(message, i));
+            } else if (i <= 0) {
+                this.handler.sendMessage(message);
             } else {
-                this.handler.sendMessageDelayed(msg, (long) delay);
+                this.handler.sendMessageDelayed(message, (long) i);
             }
         }
     }
@@ -68,9 +71,9 @@ public class DispatchQueueMainThreadSync extends Thread {
         }
     }
 
-    public void cancelRunnables(Runnable[] runnables) {
+    public void cancelRunnables(Runnable[] runnableArr) {
         checkThread();
-        for (Runnable cancelRunnable : runnables) {
+        for (Runnable cancelRunnable : runnableArr) {
             cancelRunnable(cancelRunnable);
         }
     }
@@ -81,18 +84,18 @@ public class DispatchQueueMainThreadSync extends Thread {
         return postRunnable(runnable, 0);
     }
 
-    public boolean postRunnable(Runnable runnable, long delay) {
+    public boolean postRunnable(Runnable runnable, long j) {
         checkThread();
         if (this.isRecycled) {
             return false;
         }
         if (!this.isRunning) {
-            this.postponedTasks.add(new PostponedTask(runnable, delay));
+            this.postponedTasks.add(new PostponedTask(runnable, j));
             return true;
-        } else if (delay <= 0) {
+        } else if (j <= 0) {
             return this.handler.post(runnable);
         } else {
-            return this.handler.postDelayed(runnable, delay);
+            return this.handler.postDelayed(runnable, j);
         }
     }
 
@@ -100,9 +103,6 @@ public class DispatchQueueMainThreadSync extends Thread {
         checkThread();
         this.postponedTasks.clear();
         this.handler.removeCallbacksAndMessages((Object) null);
-    }
-
-    public void handleMessage(Message inputMessage) {
     }
 
     public long getLastTaskTime() {
@@ -115,8 +115,8 @@ public class DispatchQueueMainThreadSync extends Thread {
         this.isRecycled = true;
     }
 
-    /* renamed from: lambda$recycle$0$org-telegram-messenger-DispatchQueueMainThreadSync  reason: not valid java name */
-    public /* synthetic */ void m1796x30a1b77a() {
+    /* access modifiers changed from: private */
+    public /* synthetic */ void lambda$recycle$0() {
         this.handler.getLooper().quit();
     }
 
@@ -135,9 +135,9 @@ public class DispatchQueueMainThreadSync extends Thread {
         Looper.loop();
     }
 
-    /* renamed from: lambda$run$1$org-telegram-messenger-DispatchQueueMainThreadSync  reason: not valid java name */
-    public /* synthetic */ boolean m1797lambda$run$1$orgtelegrammessengerDispatchQueueMainThreadSync(Message msg) {
-        handleMessage(msg);
+    /* access modifiers changed from: private */
+    public /* synthetic */ boolean lambda$run$1(Message message) {
+        handleMessage(message);
         return true;
     }
 
@@ -154,14 +154,14 @@ public class DispatchQueueMainThreadSync extends Thread {
         Message message;
         Runnable runnable;
 
-        public PostponedTask(Message msg, int delay2) {
-            this.message = msg;
-            this.delay = (long) delay2;
+        public PostponedTask(Message message2, int i) {
+            this.message = message2;
+            this.delay = (long) i;
         }
 
-        public PostponedTask(Runnable runnable2, long delay2) {
+        public PostponedTask(Runnable runnable2, long j) {
             this.runnable = runnable2;
-            this.delay = delay2;
+            this.delay = j;
         }
 
         public void run() {

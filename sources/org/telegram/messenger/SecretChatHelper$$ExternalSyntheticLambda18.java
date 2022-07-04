@@ -1,19 +1,19 @@
 package org.telegram.messenger;
 
-import org.telegram.tgnet.RequestDelegate;
-import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC;
+import org.telegram.tgnet.TLRPC$EncryptedChat;
 
-public final /* synthetic */ class SecretChatHelper$$ExternalSyntheticLambda18 implements RequestDelegate {
+public final /* synthetic */ class SecretChatHelper$$ExternalSyntheticLambda18 implements Runnable {
     public final /* synthetic */ SecretChatHelper f$0;
-    public final /* synthetic */ long f$1;
+    public final /* synthetic */ TLRPC$EncryptedChat f$1;
+    public final /* synthetic */ TLRPC$EncryptedChat f$2;
 
-    public /* synthetic */ SecretChatHelper$$ExternalSyntheticLambda18(SecretChatHelper secretChatHelper, long j) {
+    public /* synthetic */ SecretChatHelper$$ExternalSyntheticLambda18(SecretChatHelper secretChatHelper, TLRPC$EncryptedChat tLRPC$EncryptedChat, TLRPC$EncryptedChat tLRPC$EncryptedChat2) {
         this.f$0 = secretChatHelper;
-        this.f$1 = j;
+        this.f$1 = tLRPC$EncryptedChat;
+        this.f$2 = tLRPC$EncryptedChat2;
     }
 
-    public final void run(TLObject tLObject, TLRPC.TL_error tL_error) {
-        this.f$0.m2360xbee5b370(this.f$1, tLObject, tL_error);
+    public final void run() {
+        this.f$0.lambda$processUpdateEncryption$2(this.f$1, this.f$2);
     }
 }

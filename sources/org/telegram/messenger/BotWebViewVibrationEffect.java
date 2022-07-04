@@ -18,10 +18,10 @@ public enum BotWebViewVibrationEffect {
     public final long[] timings;
     private Object vibrationEffect;
 
-    private BotWebViewVibrationEffect(long[] timings2, int[] amplitudes2, long[] fallbackTimings2) {
-        this.timings = timings2;
-        this.amplitudes = amplitudes2;
-        this.fallbackTimings = fallbackTimings2;
+    private BotWebViewVibrationEffect(long[] jArr, int[] iArr, long[] jArr2) {
+        this.timings = jArr;
+        this.amplitudes = iArr;
+        this.fallbackTimings = jArr2;
     }
 
     public VibrationEffect getVibrationEffectForOreo() {

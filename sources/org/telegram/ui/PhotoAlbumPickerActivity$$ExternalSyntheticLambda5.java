@@ -11,6 +11,6 @@ public final /* synthetic */ class PhotoAlbumPickerActivity$$ExternalSyntheticLa
     }
 
     public final void onDispatchKeyEvent(KeyEvent keyEvent) {
-        this.f$0.m4211lambda$createView$4$orgtelegramuiPhotoAlbumPickerActivity(keyEvent);
+        this.f$0.lambda$createView$4(keyEvent);
     }
 }

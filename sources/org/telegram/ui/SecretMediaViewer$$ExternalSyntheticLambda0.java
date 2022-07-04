@@ -11,6 +11,6 @@ public final /* synthetic */ class SecretMediaViewer$$ExternalSyntheticLambda0 i
     }
 
     public final WindowInsets onApplyWindowInsets(View view, WindowInsets windowInsets) {
-        return this.f$0.m4580lambda$setParentActivity$0$orgtelegramuiSecretMediaViewer(view, windowInsets);
+        return this.f$0.lambda$setParentActivity$0(view, windowInsets);
     }
 }

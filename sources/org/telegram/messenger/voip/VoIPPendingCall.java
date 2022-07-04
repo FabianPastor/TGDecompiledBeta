@@ -8,7 +8,8 @@ import org.telegram.messenger.AccountInstance;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.UserConfig;
-import org.telegram.tgnet.TLRPC;
+import org.telegram.tgnet.TLRPC$User;
+import org.telegram.tgnet.TLRPC$UserFull;
 import org.telegram.ui.Components.voip.VoIPHelper;
 
 public final class VoIPPendingCall {
@@ -22,30 +23,30 @@ public final class VoIPPendingCall {
     private final long userId;
     private final boolean video;
 
-    public static VoIPPendingCall startOrSchedule(Activity activity2, long userId2, boolean video2, AccountInstance accountInstance2) {
-        return new VoIPPendingCall(activity2, userId2, video2, 1000, accountInstance2);
+    public static VoIPPendingCall startOrSchedule(Activity activity2, long j, boolean z, AccountInstance accountInstance2) {
+        return new VoIPPendingCall(activity2, j, z, 1000, accountInstance2);
     }
 
-    /* renamed from: lambda$new$0$org-telegram-messenger-voip-VoIPPendingCall  reason: not valid java name */
-    public /* synthetic */ void m2432lambda$new$0$orgtelegrammessengervoipVoIPPendingCall(int id, int account, Object[] args) {
-        if (id == NotificationCenter.didUpdateConnectionState) {
+    /* access modifiers changed from: private */
+    public /* synthetic */ void lambda$new$0(int i, int i2, Object[] objArr) {
+        if (i == NotificationCenter.didUpdateConnectionState) {
             onConnectionStateUpdated(false);
         }
     }
 
-    /* renamed from: lambda$new$1$org-telegram-messenger-voip-VoIPPendingCall  reason: not valid java name */
-    public /* synthetic */ void m2433lambda$new$1$orgtelegrammessengervoipVoIPPendingCall() {
+    /* access modifiers changed from: private */
+    public /* synthetic */ void lambda$new$1() {
         onConnectionStateUpdated(true);
     }
 
-    private VoIPPendingCall(Activity activity2, long userId2, boolean video2, long expirationTime, AccountInstance accountInstance2) {
+    private VoIPPendingCall(Activity activity2, long j, boolean z, long j2, AccountInstance accountInstance2) {
         VoIPPendingCall$$ExternalSyntheticLambda1 voIPPendingCall$$ExternalSyntheticLambda1 = new VoIPPendingCall$$ExternalSyntheticLambda1(this);
         this.observer = voIPPendingCall$$ExternalSyntheticLambda1;
         VoIPPendingCall$$ExternalSyntheticLambda0 voIPPendingCall$$ExternalSyntheticLambda0 = new VoIPPendingCall$$ExternalSyntheticLambda0(this);
         this.releaseRunnable = voIPPendingCall$$ExternalSyntheticLambda0;
         this.activity = activity2;
-        this.userId = userId2;
-        this.video = video2;
+        this.userId = j;
+        this.video = z;
         this.accountInstance = accountInstance2;
         if (!onConnectionStateUpdated(false)) {
             NotificationCenter instance = NotificationCenter.getInstance(UserConfig.selectedAccount);
@@ -53,21 +54,21 @@ public final class VoIPPendingCall {
             instance.addObserver(voIPPendingCall$$ExternalSyntheticLambda1, NotificationCenter.didUpdateConnectionState);
             Handler handler2 = new Handler(Looper.myLooper());
             this.handler = handler2;
-            handler2.postDelayed(voIPPendingCall$$ExternalSyntheticLambda0, expirationTime);
+            handler2.postDelayed(voIPPendingCall$$ExternalSyntheticLambda0, j2);
         }
     }
 
-    private boolean onConnectionStateUpdated(boolean force) {
-        if (this.released || (!force && !isConnected(this.accountInstance) && !isAirplaneMode())) {
+    private boolean onConnectionStateUpdated(boolean z) {
+        if (this.released || (!z && !isConnected(this.accountInstance) && !isAirplaneMode())) {
             return false;
         }
         MessagesController messagesController = this.accountInstance.getMessagesController();
-        TLRPC.User user = messagesController.getUser(Long.valueOf(this.userId));
+        TLRPC$User user = messagesController.getUser(Long.valueOf(this.userId));
         if (user != null) {
-            TLRPC.UserFull userFull = messagesController.getUserFull(user.id);
+            TLRPC$UserFull userFull = messagesController.getUserFull(user.id);
             VoIPHelper.startCall(user, this.video, userFull != null && userFull.video_calls_available, this.activity, userFull, this.accountInstance);
         } else if (isAirplaneMode()) {
-            VoIPHelper.startCall((TLRPC.User) null, this.video, false, this.activity, (TLRPC.UserFull) null, this.accountInstance);
+            VoIPHelper.startCall((TLRPC$User) null, this.video, false, this.activity, (TLRPC$UserFull) null, this.accountInstance);
         }
         release();
         return true;

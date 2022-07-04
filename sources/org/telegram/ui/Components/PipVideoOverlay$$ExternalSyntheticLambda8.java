@@ -1,14 +1,13 @@
 package org.telegram.ui.Components;
 
-import android.view.View;
+public final /* synthetic */ class PipVideoOverlay$$ExternalSyntheticLambda8 implements Runnable {
+    public final /* synthetic */ PipVideoOverlay f$0;
 
-public final /* synthetic */ class PipVideoOverlay$$ExternalSyntheticLambda8 implements View.OnClickListener {
-    public static final /* synthetic */ PipVideoOverlay$$ExternalSyntheticLambda8 INSTANCE = new PipVideoOverlay$$ExternalSyntheticLambda8();
-
-    private /* synthetic */ PipVideoOverlay$$ExternalSyntheticLambda8() {
+    public /* synthetic */ PipVideoOverlay$$ExternalSyntheticLambda8(PipVideoOverlay pipVideoOverlay) {
+        this.f$0 = pipVideoOverlay;
     }
 
-    public final void onClick(View view) {
-        PipVideoOverlay.dimissAndDestroy();
+    public final void run() {
+        this.f$0.lambda$new$4();
     }
 }

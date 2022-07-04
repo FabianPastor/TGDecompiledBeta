@@ -1,30 +1,19 @@
 package org.telegram.ui;
 
-import android.view.View;
-import android.widget.HorizontalScrollView;
-import android.widget.LinearLayout;
-import androidx.viewpager.widget.ViewPager;
 import java.util.concurrent.atomic.AtomicBoolean;
-import org.telegram.ui.Components.ReactionTabHolderView;
+import java.util.concurrent.atomic.AtomicReference;
+import org.telegram.messenger.LanguageDetector;
 
-public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda209 implements View.OnClickListener {
-    public final /* synthetic */ ViewPager f$0;
-    public final /* synthetic */ int f$1;
-    public final /* synthetic */ LinearLayout f$2;
-    public final /* synthetic */ AtomicBoolean f$3;
-    public final /* synthetic */ HorizontalScrollView f$4;
-    public final /* synthetic */ ReactionTabHolderView f$5;
+public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda209 implements LanguageDetector.ExceptionCallback {
+    public final /* synthetic */ AtomicBoolean f$0;
+    public final /* synthetic */ AtomicReference f$1;
 
-    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda209(ViewPager viewPager, int i, LinearLayout linearLayout, AtomicBoolean atomicBoolean, HorizontalScrollView horizontalScrollView, ReactionTabHolderView reactionTabHolderView) {
-        this.f$0 = viewPager;
-        this.f$1 = i;
-        this.f$2 = linearLayout;
-        this.f$3 = atomicBoolean;
-        this.f$4 = horizontalScrollView;
-        this.f$5 = reactionTabHolderView;
+    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda209(AtomicBoolean atomicBoolean, AtomicReference atomicReference) {
+        this.f$0 = atomicBoolean;
+        this.f$1 = atomicReference;
     }
 
-    public final void onClick(View view) {
-        ChatActivity.lambda$createMenu$157(this.f$0, this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, view);
+    public final void run(Exception exc) {
+        ChatActivity.lambda$createMenu$175(this.f$0, this.f$1, exc);
     }
 }

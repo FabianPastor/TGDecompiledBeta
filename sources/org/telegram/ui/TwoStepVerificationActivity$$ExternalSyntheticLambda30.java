@@ -2,15 +2,16 @@ package org.telegram.ui;
 
 import org.telegram.tgnet.RequestDelegate;
 import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC;
+import org.telegram.tgnet.TLRPC$TL_error;
 
 public final /* synthetic */ class TwoStepVerificationActivity$$ExternalSyntheticLambda30 implements RequestDelegate {
-    public static final /* synthetic */ TwoStepVerificationActivity$$ExternalSyntheticLambda30 INSTANCE = new TwoStepVerificationActivity$$ExternalSyntheticLambda30();
+    public final /* synthetic */ TwoStepVerificationActivity f$0;
 
-    private /* synthetic */ TwoStepVerificationActivity$$ExternalSyntheticLambda30() {
+    public /* synthetic */ TwoStepVerificationActivity$$ExternalSyntheticLambda30(TwoStepVerificationActivity twoStepVerificationActivity) {
+        this.f$0 = twoStepVerificationActivity;
     }
 
-    public final void run(TLObject tLObject, TLRPC.TL_error tL_error) {
-        TwoStepVerificationActivity.lambda$checkSecretValues$28(tLObject, tL_error);
+    public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+        this.f$0.lambda$cancelPasswordReset$9(tLObject, tLRPC$TL_error);
     }
 }

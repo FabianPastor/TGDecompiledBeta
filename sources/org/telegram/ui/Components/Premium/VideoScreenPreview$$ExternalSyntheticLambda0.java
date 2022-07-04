@@ -12,6 +12,6 @@ public final /* synthetic */ class VideoScreenPreview$$ExternalSyntheticLambda0 
     }
 
     public final void run() {
-        this.f$0.m1258xd410a2f6(this.f$1);
+        this.f$0.lambda$setVideo$0(this.f$1);
     }
 }

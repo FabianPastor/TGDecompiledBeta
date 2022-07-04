@@ -11,6 +11,6 @@ public final /* synthetic */ class GroupCreateActivity$$ExternalSyntheticLambda5
     }
 
     public final boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
-        return this.f$0.m3570lambda$createView$1$orgtelegramuiGroupCreateActivity(textView, i, keyEvent);
+        return this.f$0.lambda$createView$1(textView, i, keyEvent);
     }
 }

@@ -1,15 +1,18 @@
 package org.telegram.ui;
 
-public final /* synthetic */ class SessionsActivity$$ExternalSyntheticLambda3 implements Runnable {
-    public final /* synthetic */ SessionsActivity f$0;
-    public final /* synthetic */ boolean f$1;
+import android.view.View;
+import org.telegram.ui.ActionBar.AlertDialog;
 
-    public /* synthetic */ SessionsActivity$$ExternalSyntheticLambda3(SessionsActivity sessionsActivity, boolean z) {
+public final /* synthetic */ class SessionsActivity$$ExternalSyntheticLambda3 implements View.OnClickListener {
+    public final /* synthetic */ SessionsActivity f$0;
+    public final /* synthetic */ AlertDialog.Builder f$1;
+
+    public /* synthetic */ SessionsActivity$$ExternalSyntheticLambda3(SessionsActivity sessionsActivity, AlertDialog.Builder builder) {
         this.f$0 = sessionsActivity;
-        this.f$1 = z;
+        this.f$1 = builder;
     }
 
-    public final void run() {
-        this.f$0.m4600lambda$loadSessions$17$orgtelegramuiSessionsActivity(this.f$1);
+    public final void onClick(View view) {
+        this.f$0.lambda$createView$1(this.f$1, view);
     }
 }

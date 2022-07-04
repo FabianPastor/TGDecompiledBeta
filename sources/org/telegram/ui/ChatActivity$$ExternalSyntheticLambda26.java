@@ -1,13 +1,15 @@
 package org.telegram.ui;
 
-public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda26 implements Runnable {
+import android.content.DialogInterface;
+
+public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda26 implements DialogInterface.OnClickListener {
     public final /* synthetic */ ChatActivity f$0;
 
     public /* synthetic */ ChatActivity$$ExternalSyntheticLambda26(ChatActivity chatActivity) {
         this.f$0 = chatActivity;
     }
 
-    public final void run() {
-        this.f$0.m2929lambda$createMenu$176$orgtelegramuiChatActivity();
+    public final void onClick(DialogInterface dialogInterface, int i) {
+        this.f$0.lambda$showGigagroupConvertAlert$124(dialogInterface, i);
     }
 }

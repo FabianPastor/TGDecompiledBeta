@@ -1,18 +1,16 @@
 package org.telegram.ui;
 
-import org.telegram.tgnet.TLRPC;
+import android.view.View;
 import org.telegram.ui.LoginActivity;
 
-public final /* synthetic */ class LoginActivity$LoginActivityRegisterView$$ExternalSyntheticLambda8 implements Runnable {
+public final /* synthetic */ class LoginActivity$LoginActivityRegisterView$$ExternalSyntheticLambda8 implements View.OnFocusChangeListener {
     public final /* synthetic */ LoginActivity.LoginActivityRegisterView f$0;
-    public final /* synthetic */ TLRPC.FileLocation f$1;
 
-    public /* synthetic */ LoginActivity$LoginActivityRegisterView$$ExternalSyntheticLambda8(LoginActivity.LoginActivityRegisterView loginActivityRegisterView, TLRPC.FileLocation fileLocation) {
+    public /* synthetic */ LoginActivity$LoginActivityRegisterView$$ExternalSyntheticLambda8(LoginActivity.LoginActivityRegisterView loginActivityRegisterView) {
         this.f$0 = loginActivityRegisterView;
-        this.f$1 = fileLocation;
     }
 
-    public final void run() {
-        this.f$0.m3830xd6312490(this.f$1);
+    public final void onFocusChange(View view, boolean z) {
+        this.f$0.lambda$new$10(view, z);
     }
 }

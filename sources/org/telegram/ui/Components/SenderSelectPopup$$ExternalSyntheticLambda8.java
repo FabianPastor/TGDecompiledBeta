@@ -17,6 +17,6 @@ public final /* synthetic */ class SenderSelectPopup$$ExternalSyntheticLambda8 i
     }
 
     public final void onItemClick(View view, int i) {
-        this.f$0.m1336lambda$new$0$orgtelegramuiComponentsSenderSelectPopup(this.f$1, this.f$2, view, i);
+        this.f$0.lambda$new$0(this.f$1, this.f$2, view, i);
     }
 }

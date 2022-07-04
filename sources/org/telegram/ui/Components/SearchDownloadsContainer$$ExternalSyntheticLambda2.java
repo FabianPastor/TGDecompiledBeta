@@ -8,6 +8,6 @@ public final /* synthetic */ class SearchDownloadsContainer$$ExternalSyntheticLa
     }
 
     public final void run() {
-        this.f$0.m1324x6715ce55();
+        this.f$0.lambda$checkFilesExist$3();
     }
 }

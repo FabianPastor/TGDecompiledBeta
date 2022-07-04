@@ -7,22 +7,26 @@ class JniHelper {
     JniHelper() {
     }
 
-    static byte[] getStringBytes(String s) {
+    @CalledByNative
+    static byte[] getStringBytes(String str) {
         try {
-            return s.getBytes("ISO-8859-1");
-        } catch (UnsupportedEncodingException e) {
+            return str.getBytes("ISO-8859-1");
+        } catch (UnsupportedEncodingException unused) {
             throw new RuntimeException("ISO-8859-1 is unsupported");
         }
     }
 
+    @CalledByNative
     static Object getStringClass() {
         return String.class;
     }
 
+    @CalledByNative
     static Object getKey(Map.Entry entry) {
         return entry.getKey();
     }
 
+    @CalledByNative
     static Object getValue(Map.Entry entry) {
         return entry.getValue();
     }

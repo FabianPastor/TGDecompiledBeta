@@ -11,6 +11,6 @@ public final /* synthetic */ class ContentPreviewViewer$$ExternalSyntheticLambda
     }
 
     public final boolean onTouch(View view, MotionEvent motionEvent) {
-        return this.f$0.m3345lambda$setParentActivity$5$orgtelegramuiContentPreviewViewer(view, motionEvent);
+        return this.f$0.lambda$setParentActivity$5(view, motionEvent);
     }
 }

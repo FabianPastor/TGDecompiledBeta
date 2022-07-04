@@ -11,6 +11,6 @@ public final /* synthetic */ class TooManyCommunitiesActivity$$ExternalSynthetic
     }
 
     public final void onItemClick(View view, int i) {
-        this.f$0.m4711lambda$new$0$orgtelegramuiTooManyCommunitiesActivity(view, i);
+        this.f$0.lambda$new$0(view, i);
     }
 }

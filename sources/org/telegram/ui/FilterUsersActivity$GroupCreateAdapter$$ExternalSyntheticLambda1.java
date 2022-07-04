@@ -12,6 +12,6 @@ public final /* synthetic */ class FilterUsersActivity$GroupCreateAdapter$$Exter
     }
 
     public final void run() {
-        this.f$0.m3478xvar_bc3f(this.f$1);
+        this.f$0.lambda$searchDialogs$1(this.f$1);
     }
 }

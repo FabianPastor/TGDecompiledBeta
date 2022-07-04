@@ -11,6 +11,6 @@ public final /* synthetic */ class PremiumStickersPreviewRecycler$$ExternalSynth
     }
 
     public final void onItemClick(View view, int i) {
-        this.f$0.m1255x52e0d79d(view, i);
+        this.f$0.lambda$new$1(view, i);
     }
 }

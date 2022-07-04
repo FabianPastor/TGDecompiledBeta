@@ -1,15 +1,12 @@
 package org.telegram.messenger.voip;
 
-import org.telegram.messenger.voip.Instance;
+public final /* synthetic */ class VoIPService$$ExternalSyntheticLambda62 implements Runnable {
+    public static final /* synthetic */ VoIPService$$ExternalSyntheticLambda62 INSTANCE = new VoIPService$$ExternalSyntheticLambda62();
 
-public final /* synthetic */ class VoIPService$$ExternalSyntheticLambda62 implements Instance.OnSignalBarsUpdatedListener {
-    public final /* synthetic */ VoIPService f$0;
-
-    public /* synthetic */ VoIPService$$ExternalSyntheticLambda62(VoIPService voIPService) {
-        this.f$0 = voIPService;
+    private /* synthetic */ VoIPService$$ExternalSyntheticLambda62() {
     }
 
-    public final void onSignalBarsUpdated(int i) {
-        this.f$0.onSignalBarCountChanged(i);
+    public final void run() {
+        VoIPService.lambda$configureDeviceForCall$77();
     }
 }

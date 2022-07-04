@@ -11,6 +11,6 @@ public final /* synthetic */ class ChatActivity$83$$ExternalSyntheticLambda0 imp
     }
 
     public final void run(boolean z) {
-        this.f$0.m3163lambda$onCovert$0$orgtelegramuiChatActivity$83(z);
+        this.f$0.lambda$onCovert$0(z);
     }
 }

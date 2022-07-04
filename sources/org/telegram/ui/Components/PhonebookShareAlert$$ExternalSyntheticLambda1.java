@@ -14,6 +14,6 @@ public final /* synthetic */ class PhonebookShareAlert$$ExternalSyntheticLambda1
     }
 
     public final void onClick(View view) {
-        this.f$0.m1160lambda$new$2$orgtelegramuiComponentsPhonebookShareAlert(this.f$1, this.f$2, view);
+        this.f$0.lambda$new$2(this.f$1, this.f$2, view);
     }
 }

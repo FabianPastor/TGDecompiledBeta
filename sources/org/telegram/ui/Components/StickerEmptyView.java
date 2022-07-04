@@ -3,19 +3,24 @@ package org.telegram.ui.Components;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.view.View;
+import android.view.ViewPropertyAnimator;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.DocumentObject;
+import org.telegram.messenger.ImageLocation;
+import org.telegram.messenger.MediaDataController;
 import org.telegram.messenger.NotificationCenter;
+import org.telegram.messenger.SvgHelper;
 import org.telegram.messenger.UserConfig;
+import org.telegram.tgnet.TLRPC$Document;
+import org.telegram.tgnet.TLRPC$TL_messages_stickerSet;
 import org.telegram.ui.ActionBar.Theme;
 
 public class StickerEmptyView extends FrameLayout implements NotificationCenter.NotificationCenterDelegate {
-    public static final int STICKER_TYPE_DONE = 2;
-    public static final int STICKER_TYPE_NO_CONTACTS = 0;
-    public static final int STICKER_TYPE_SEARCH = 1;
     private boolean animateLayoutChange;
     String colorKey1;
     int currentAccount;
@@ -34,17 +39,19 @@ public class StickerEmptyView extends FrameLayout implements NotificationCenter.
     public final TextView subtitle;
     public final TextView title;
 
-    public StickerEmptyView(Context context, View progressView2, int type) {
-        this(context, progressView2, type, (Theme.ResourcesProvider) null);
+    public StickerEmptyView(Context context, View view, int i) {
+        this(context, view, i, (Theme.ResourcesProvider) null);
     }
 
-    public StickerEmptyView(Context context, View progressView2, int type, Theme.ResourcesProvider resourcesProvider2) {
+    public StickerEmptyView(Context context, View view, int i, Theme.ResourcesProvider resourcesProvider2) {
         super(context);
         this.currentAccount = UserConfig.selectedAccount;
         this.showProgressRunnable = new Runnable() {
             public void run() {
-                if (StickerEmptyView.this.progressView != null) {
-                    if (StickerEmptyView.this.progressView.getVisibility() != 0) {
+                StickerEmptyView stickerEmptyView = StickerEmptyView.this;
+                View view = stickerEmptyView.progressView;
+                if (view != null) {
+                    if (view.getVisibility() != 0) {
                         StickerEmptyView.this.progressView.setVisibility(0);
                         StickerEmptyView.this.progressView.setAlpha(0.0f);
                     }
@@ -52,26 +59,26 @@ public class StickerEmptyView extends FrameLayout implements NotificationCenter.
                     StickerEmptyView.this.progressView.animate().alpha(1.0f).setDuration(150).start();
                     return;
                 }
-                StickerEmptyView.this.progressBar.animate().alpha(1.0f).scaleY(1.0f).scaleX(1.0f).setDuration(150).start();
+                stickerEmptyView.progressBar.animate().alpha(1.0f).scaleY(1.0f).scaleX(1.0f).setDuration(150).start();
             }
         };
         this.colorKey1 = "emptyListPlaceholder";
         this.resourcesProvider = resourcesProvider2;
-        this.progressView = progressView2;
-        this.stickerType = type;
-        AnonymousClass2 r0 = new LinearLayout(context) {
-            public void setVisibility(int visibility) {
-                if (getVisibility() == 8 && visibility == 0) {
+        this.progressView = view;
+        this.stickerType = i;
+        AnonymousClass2 r13 = new LinearLayout(context) {
+            public void setVisibility(int i) {
+                if (getVisibility() == 8 && i == 0) {
                     StickerEmptyView.this.setSticker();
                     StickerEmptyView.this.stickerView.getImageReceiver().startAnimation();
-                } else if (visibility == 8) {
+                } else if (i == 8) {
                     StickerEmptyView.this.stickerView.getImageReceiver().clearImage();
                 }
-                super.setVisibility(visibility);
+                super.setVisibility(i);
             }
         };
-        this.linearLayout = r0;
-        r0.setOrientation(1);
+        this.linearLayout = r13;
+        r13.setOrientation(1);
         BackupImageView backupImageView = new BackupImageView(context);
         this.stickerView = backupImageView;
         backupImageView.setOnClickListener(new StickerEmptyView$$ExternalSyntheticLambda0(this));
@@ -92,7 +99,7 @@ public class StickerEmptyView extends FrameLayout implements NotificationCenter.
         this.linearLayout.addView(textView, LayoutHelper.createLinear(-2, -2, 1, 0, 12, 0, 0));
         this.linearLayout.addView(textView2, LayoutHelper.createLinear(-2, -2, 1, 0, 8, 0, 0));
         addView(this.linearLayout, LayoutHelper.createFrame(-2, -2.0f, 17, 56.0f, 0.0f, 56.0f, 30.0f));
-        if (progressView2 == null) {
+        if (view == null) {
             RadialProgressView radialProgressView = new RadialProgressView(context, resourcesProvider2);
             this.progressBar = radialProgressView;
             radialProgressView.setAlpha(0.0f);
@@ -102,25 +109,25 @@ public class StickerEmptyView extends FrameLayout implements NotificationCenter.
         }
     }
 
-    /* renamed from: lambda$new$0$org-telegram-ui-Components-StickerEmptyView  reason: not valid java name */
-    public /* synthetic */ void m1424lambda$new$0$orgtelegramuiComponentsStickerEmptyView(View view) {
+    /* access modifiers changed from: private */
+    public /* synthetic */ void lambda$new$0(View view) {
         this.stickerView.getImageReceiver().startAnimation();
     }
 
     /* access modifiers changed from: protected */
-    public void onLayout(boolean changed, int left, int top, int right, int bottom) {
-        int i;
-        super.onLayout(changed, left, top, right, bottom);
-        if ((this.animateLayoutChange || this.preventMoving) && (i = this.lastH) > 0 && i != getMeasuredHeight()) {
-            float y = ((float) (this.lastH - getMeasuredHeight())) / 2.0f;
+    public void onLayout(boolean z, int i, int i2, int i3, int i4) {
+        int i5;
+        super.onLayout(z, i, i2, i3, i4);
+        if ((this.animateLayoutChange || this.preventMoving) && (i5 = this.lastH) > 0 && i5 != getMeasuredHeight()) {
+            float measuredHeight = ((float) (this.lastH - getMeasuredHeight())) / 2.0f;
             LinearLayout linearLayout2 = this.linearLayout;
-            linearLayout2.setTranslationY(linearLayout2.getTranslationY() + y);
+            linearLayout2.setTranslationY(linearLayout2.getTranslationY() + measuredHeight);
             if (!this.preventMoving) {
                 this.linearLayout.animate().translationY(0.0f).setInterpolator(CubicBezierInterpolator.DEFAULT).setDuration(250);
             }
             RadialProgressView radialProgressView = this.progressBar;
             if (radialProgressView != null) {
-                radialProgressView.setTranslationY(radialProgressView.getTranslationY() + y);
+                radialProgressView.setTranslationY(radialProgressView.getTranslationY() + measuredHeight);
                 if (!this.preventMoving) {
                     this.progressBar.animate().translationY(0.0f).setInterpolator(CubicBezierInterpolator.DEFAULT).setDuration(250);
                 }
@@ -129,16 +136,16 @@ public class StickerEmptyView extends FrameLayout implements NotificationCenter.
         this.lastH = getMeasuredHeight();
     }
 
-    public void setColors(String titleKey, String subtitleKey, String key1, String key2) {
-        this.title.setTag(titleKey);
-        this.title.setTextColor(getThemedColor(titleKey));
-        this.subtitle.setTag(subtitleKey);
-        this.subtitle.setTextColor(getThemedColor(subtitleKey));
-        this.colorKey1 = key1;
+    public void setColors(String str, String str2, String str3, String str4) {
+        this.title.setTag(str);
+        this.title.setTextColor(getThemedColor(str));
+        this.subtitle.setTag(str2);
+        this.subtitle.setTextColor(getThemedColor(str2));
+        this.colorKey1 = str3;
     }
 
-    public void setVisibility(int visibility) {
-        if (getVisibility() != visibility && visibility == 0) {
+    public void setVisibility(int i) {
+        if (getVisibility() != i && i == 0) {
             if (this.progressShowing) {
                 this.linearLayout.animate().alpha(0.0f).scaleY(0.8f).scaleX(0.8f).setDuration(150).start();
                 this.progressView.setVisibility(0);
@@ -149,7 +156,7 @@ public class StickerEmptyView extends FrameLayout implements NotificationCenter.
                 if (view != null) {
                     view.animate().setListener((Animator.AnimatorListener) null).cancel();
                     this.progressView.animate().setListener(new AnimatorListenerAdapter() {
-                        public void onAnimationEnd(Animator animation) {
+                        public void onAnimationEnd(Animator animator) {
                             StickerEmptyView.this.progressView.setVisibility(8);
                         }
                     }).alpha(0.0f).setDuration(150).start();
@@ -159,7 +166,7 @@ public class StickerEmptyView extends FrameLayout implements NotificationCenter.
                 this.stickerView.getImageReceiver().startAnimation();
             }
         }
-        super.setVisibility(visibility);
+        super.setVisibility(i);
         if (getVisibility() == 0) {
             setSticker();
             return;
@@ -172,7 +179,7 @@ public class StickerEmptyView extends FrameLayout implements NotificationCenter.
         if (view2 != null) {
             view2.animate().setListener((Animator.AnimatorListener) null).cancel();
             this.progressView.animate().setListener(new AnimatorListenerAdapter() {
-                public void onAnimationEnd(Animator animation) {
+                public void onAnimationEnd(Animator animator) {
                     StickerEmptyView.this.progressView.setVisibility(8);
                 }
             }).alpha(0.0f).setDuration(150).start();
@@ -200,139 +207,98 @@ public class StickerEmptyView extends FrameLayout implements NotificationCenter.
         NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.diceStickersDidLoad);
     }
 
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v12, resolved type: java.lang.Object} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r1v3, resolved type: org.telegram.tgnet.TLRPC$Document} */
     /* access modifiers changed from: private */
-    /* JADX WARNING: Multi-variable type inference failed */
-    /* Code decompiled incorrectly, please refer to instructions dump. */
     public void setSticker() {
-        /*
-            r13 = this;
-            r0 = 0
-            r1 = 0
-            r2 = 0
-            int r3 = r13.stickerType
-            r4 = 2
-            java.lang.String r5 = "tg_placeholders_android"
-            if (r3 != r4) goto L_0x0017
-            int r3 = r13.currentAccount
-            org.telegram.messenger.MediaDataController r3 = org.telegram.messenger.MediaDataController.getInstance(r3)
-            java.lang.String r6 = "👍"
-            org.telegram.tgnet.TLRPC$Document r1 = r3.getEmojiAnimatedSticker(r6)
-            goto L_0x0048
-        L_0x0017:
-            int r3 = r13.currentAccount
-            org.telegram.messenger.MediaDataController r3 = org.telegram.messenger.MediaDataController.getInstance(r3)
-            org.telegram.tgnet.TLRPC$TL_messages_stickerSet r2 = r3.getStickerSetByName(r5)
-            if (r2 != 0) goto L_0x002d
-            int r3 = r13.currentAccount
-            org.telegram.messenger.MediaDataController r3 = org.telegram.messenger.MediaDataController.getInstance(r3)
-            org.telegram.tgnet.TLRPC$TL_messages_stickerSet r2 = r3.getStickerSetByEmojiOrName(r5)
-        L_0x002d:
-            if (r2 == 0) goto L_0x0046
-            int r3 = r13.stickerType
-            if (r3 < 0) goto L_0x0046
-            java.util.ArrayList r6 = r2.documents
-            int r6 = r6.size()
-            if (r3 >= r6) goto L_0x0046
-            java.util.ArrayList r3 = r2.documents
-            int r6 = r13.stickerType
-            java.lang.Object r3 = r3.get(r6)
-            r1 = r3
-            org.telegram.tgnet.TLRPC$Document r1 = (org.telegram.tgnet.TLRPC.Document) r1
-        L_0x0046:
-            java.lang.String r0 = "130_130"
-        L_0x0048:
-            r3 = 1
-            if (r1 == 0) goto L_0x0086
-            java.util.ArrayList<org.telegram.tgnet.TLRPC$PhotoSize> r5 = r1.thumbs
-            java.lang.String r6 = r13.colorKey1
-            r7 = 1045220557(0x3e4ccccd, float:0.2)
-            org.telegram.messenger.SvgHelper$SvgDrawable r5 = org.telegram.messenger.DocumentObject.getSvgThumb((java.util.ArrayList<org.telegram.tgnet.TLRPC.PhotoSize>) r5, (java.lang.String) r6, (float) r7)
-            if (r5 == 0) goto L_0x005d
-            r6 = 512(0x200, float:7.175E-43)
-            r5.overrideWidthAndHeight(r6, r6)
-        L_0x005d:
-            org.telegram.messenger.ImageLocation r12 = org.telegram.messenger.ImageLocation.getForDocument(r1)
-            org.telegram.ui.Components.BackupImageView r6 = r13.stickerView
-            java.lang.String r9 = "tgs"
-            r7 = r12
-            r8 = r0
-            r10 = r5
-            r11 = r2
-            r6.setImage((org.telegram.messenger.ImageLocation) r7, (java.lang.String) r8, (java.lang.String) r9, (android.graphics.drawable.Drawable) r10, (java.lang.Object) r11)
-            int r6 = r13.stickerType
-            r7 = 9
-            if (r6 != r7) goto L_0x007c
-            org.telegram.ui.Components.BackupImageView r4 = r13.stickerView
-            org.telegram.messenger.ImageReceiver r4 = r4.getImageReceiver()
-            r4.setAutoRepeat(r3)
-            goto L_0x0085
-        L_0x007c:
-            org.telegram.ui.Components.BackupImageView r3 = r13.stickerView
-            org.telegram.messenger.ImageReceiver r3 = r3.getImageReceiver()
-            r3.setAutoRepeat(r4)
-        L_0x0085:
-            goto L_0x009d
-        L_0x0086:
-            int r4 = r13.currentAccount
-            org.telegram.messenger.MediaDataController r4 = org.telegram.messenger.MediaDataController.getInstance(r4)
-            r6 = 0
-            if (r2 != 0) goto L_0x0090
-            goto L_0x0091
-        L_0x0090:
-            r3 = 0
-        L_0x0091:
-            r4.loadStickersByEmojiOrName(r5, r6, r3)
-            org.telegram.ui.Components.BackupImageView r3 = r13.stickerView
-            org.telegram.messenger.ImageReceiver r3 = r3.getImageReceiver()
-            r3.clearImage()
-        L_0x009d:
-            return
-        */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.StickerEmptyView.setSticker():void");
+        TLRPC$TL_messages_stickerSet tLRPC$TL_messages_stickerSet;
+        String str;
+        TLRPC$Document tLRPC$Document;
+        int i;
+        TLRPC$Document tLRPC$Document2 = null;
+        if (this.stickerType == 2) {
+            tLRPC$Document = MediaDataController.getInstance(this.currentAccount).getEmojiAnimatedSticker("👍");
+            str = null;
+            tLRPC$TL_messages_stickerSet = null;
+        } else {
+            TLRPC$TL_messages_stickerSet stickerSetByName = MediaDataController.getInstance(this.currentAccount).getStickerSetByName("tg_placeholders_android");
+            if (stickerSetByName == null) {
+                stickerSetByName = MediaDataController.getInstance(this.currentAccount).getStickerSetByEmojiOrName("tg_placeholders_android");
+            }
+            if (stickerSetByName != null && (i = this.stickerType) >= 0 && i < stickerSetByName.documents.size()) {
+                tLRPC$Document2 = stickerSetByName.documents.get(this.stickerType);
+            }
+            tLRPC$TL_messages_stickerSet = stickerSetByName;
+            tLRPC$Document = tLRPC$Document2;
+            str = "130_130";
+        }
+        boolean z = true;
+        if (tLRPC$Document != null) {
+            SvgHelper.SvgDrawable svgThumb = DocumentObject.getSvgThumb(tLRPC$Document.thumbs, this.colorKey1, 0.2f);
+            if (svgThumb != null) {
+                svgThumb.overrideWidthAndHeight(512, 512);
+            }
+            this.stickerView.setImage(ImageLocation.getForDocument(tLRPC$Document), str, "tgs", (Drawable) svgThumb, (Object) tLRPC$TL_messages_stickerSet);
+            if (this.stickerType == 9) {
+                this.stickerView.getImageReceiver().setAutoRepeat(1);
+            } else {
+                this.stickerView.getImageReceiver().setAutoRepeat(2);
+            }
+        } else {
+            MediaDataController instance = MediaDataController.getInstance(this.currentAccount);
+            if (tLRPC$TL_messages_stickerSet != null) {
+                z = false;
+            }
+            instance.loadStickersByEmojiOrName("tg_placeholders_android", false, z);
+            this.stickerView.getImageReceiver().clearImage();
+        }
     }
 
-    public void didReceivedNotification(int id, int account, Object... args) {
-        if (id == NotificationCenter.diceStickersDidLoad && "tg_placeholders_android".equals(args[0]) && getVisibility() == 0) {
+    public void didReceivedNotification(int i, int i2, Object... objArr) {
+        if (i == NotificationCenter.diceStickersDidLoad && "tg_placeholders_android".equals(objArr[0]) && getVisibility() == 0) {
             setSticker();
         }
     }
 
-    public void setKeyboardHeight(int keyboardSize2, boolean animated) {
-        if (this.keyboardSize != keyboardSize2) {
+    public void setKeyboardHeight(int i, boolean z) {
+        if (this.keyboardSize != i) {
+            int i2 = 0;
             if (getVisibility() != 0) {
-                animated = false;
+                z = false;
             }
-            this.keyboardSize = keyboardSize2;
-            float y = (float) ((-(keyboardSize2 >> 1)) + (keyboardSize2 > 0 ? AndroidUtilities.dp(20.0f) : 0));
-            if (animated) {
-                this.linearLayout.animate().translationY(y).setInterpolator(CubicBezierInterpolator.DEFAULT).setDuration(250);
+            this.keyboardSize = i;
+            int i3 = -(i >> 1);
+            if (i > 0) {
+                i2 = AndroidUtilities.dp(20.0f);
+            }
+            float f = (float) (i3 + i2);
+            if (z) {
+                ViewPropertyAnimator translationY = this.linearLayout.animate().translationY(f);
+                CubicBezierInterpolator cubicBezierInterpolator = CubicBezierInterpolator.DEFAULT;
+                translationY.setInterpolator(cubicBezierInterpolator).setDuration(250);
                 RadialProgressView radialProgressView = this.progressBar;
                 if (radialProgressView != null) {
-                    radialProgressView.animate().translationY(y).setInterpolator(CubicBezierInterpolator.DEFAULT).setDuration(250);
+                    radialProgressView.animate().translationY(f).setInterpolator(cubicBezierInterpolator).setDuration(250);
                     return;
                 }
                 return;
             }
-            this.linearLayout.setTranslationY(y);
+            this.linearLayout.setTranslationY(f);
             RadialProgressView radialProgressView2 = this.progressBar;
             if (radialProgressView2 != null) {
-                radialProgressView2.setTranslationY(y);
+                radialProgressView2.setTranslationY(f);
             }
         }
     }
 
-    public void showProgress(boolean show) {
-        showProgress(show, true);
+    public void showProgress(boolean z) {
+        showProgress(z, true);
     }
 
-    public void showProgress(boolean show, boolean animated) {
-        if (this.progressShowing != show) {
-            this.progressShowing = show;
+    public void showProgress(boolean z, boolean z2) {
+        if (this.progressShowing != z) {
+            this.progressShowing = z;
             if (getVisibility() == 0) {
-                if (animated) {
-                    if (show) {
+                if (z2) {
+                    if (z) {
                         this.linearLayout.animate().alpha(0.0f).scaleY(0.8f).scaleX(0.8f).setDuration(150).start();
                         this.showProgressRunnable.run();
                         return;
@@ -342,7 +308,7 @@ public class StickerEmptyView extends FrameLayout implements NotificationCenter.
                     if (view != null) {
                         view.animate().setListener((Animator.AnimatorListener) null).cancel();
                         this.progressView.animate().setListener(new AnimatorListenerAdapter() {
-                            public void onAnimationEnd(Animator animation) {
+                            public void onAnimationEnd(Animator animator) {
                                 StickerEmptyView.this.progressView.setVisibility(8);
                             }
                         }).alpha(0.0f).setDuration(150).start();
@@ -350,7 +316,7 @@ public class StickerEmptyView extends FrameLayout implements NotificationCenter.
                         this.progressBar.animate().alpha(0.0f).scaleY(0.5f).scaleX(0.5f).setDuration(150).start();
                     }
                     this.stickerView.getImageReceiver().startAnimation();
-                } else if (show) {
+                } else if (z) {
                     this.linearLayout.animate().cancel();
                     this.linearLayout.setAlpha(0.0f);
                     this.linearLayout.setScaleX(0.8f);
@@ -384,13 +350,13 @@ public class StickerEmptyView extends FrameLayout implements NotificationCenter.
         }
     }
 
-    public void setAnimateLayoutChange(boolean animate) {
-        this.animateLayoutChange = animate;
+    public void setAnimateLayoutChange(boolean z) {
+        this.animateLayoutChange = z;
     }
 
-    public void setPreventMoving(boolean preventMoving2) {
-        this.preventMoving = preventMoving2;
-        if (!preventMoving2) {
+    public void setPreventMoving(boolean z) {
+        this.preventMoving = z;
+        if (!z) {
             this.linearLayout.setTranslationY(0.0f);
             RadialProgressView radialProgressView = this.progressBar;
             if (radialProgressView != null) {
@@ -399,15 +365,15 @@ public class StickerEmptyView extends FrameLayout implements NotificationCenter.
         }
     }
 
-    private int getThemedColor(String key) {
+    private int getThemedColor(String str) {
         Theme.ResourcesProvider resourcesProvider2 = this.resourcesProvider;
-        Integer color = resourcesProvider2 != null ? resourcesProvider2.getColor(key) : null;
-        return color != null ? color.intValue() : Theme.getColor(key);
+        Integer color = resourcesProvider2 != null ? resourcesProvider2.getColor(str) : null;
+        return color != null ? color.intValue() : Theme.getColor(str);
     }
 
-    public void setStickerType(int stickerType2) {
-        if (this.stickerType != stickerType2) {
-            this.stickerType = stickerType2;
+    public void setStickerType(int i) {
+        if (this.stickerType != i) {
+            this.stickerType = i;
             setSticker();
         }
     }

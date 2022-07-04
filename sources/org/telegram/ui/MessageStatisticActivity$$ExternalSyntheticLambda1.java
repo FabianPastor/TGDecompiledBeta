@@ -12,6 +12,6 @@ public final /* synthetic */ class MessageStatisticActivity$$ExternalSyntheticLa
     }
 
     public final void run() {
-        this.f$0.m3954lambda$loadStat$4$orgtelegramuiMessageStatisticActivity(this.f$1);
+        this.f$0.lambda$loadStat$4(this.f$1);
     }
 }

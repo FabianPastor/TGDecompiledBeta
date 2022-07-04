@@ -1,15 +1,15 @@
 package org.telegram.ui;
 
-import android.content.DialogInterface;
-import org.telegram.messenger.MessagesController;
+import android.animation.ValueAnimator;
 
-public final /* synthetic */ class DialogsActivity$$ExternalSyntheticLambda5 implements DialogInterface.OnClickListener {
-    public static final /* synthetic */ DialogsActivity$$ExternalSyntheticLambda5 INSTANCE = new DialogsActivity$$ExternalSyntheticLambda5();
+public final /* synthetic */ class DialogsActivity$$ExternalSyntheticLambda5 implements ValueAnimator.AnimatorUpdateListener {
+    public final /* synthetic */ DialogsActivity f$0;
 
-    private /* synthetic */ DialogsActivity$$ExternalSyntheticLambda5() {
+    public /* synthetic */ DialogsActivity$$ExternalSyntheticLambda5(DialogsActivity dialogsActivity) {
+        this.f$0 = dialogsActivity;
     }
 
-    public final void onClick(DialogInterface dialogInterface, int i) {
-        MessagesController.getGlobalNotificationsSettings().edit().putBoolean("askedAboutMiuiLockscreen", true).commit();
+    public final void onAnimationUpdate(ValueAnimator valueAnimator) {
+        this.f$0.lambda$hideFloatingButton$50(valueAnimator);
     }
 }

@@ -1,14 +1,19 @@
 package org.telegram.ui;
 
-import org.telegram.ui.Components.NumberPicker;
+import org.telegram.messenger.ImageReceiver;
 
-public final /* synthetic */ class PhotoViewer$$ExternalSyntheticLambda72 implements NumberPicker.Formatter {
-    public static final /* synthetic */ PhotoViewer$$ExternalSyntheticLambda72 INSTANCE = new PhotoViewer$$ExternalSyntheticLambda72();
+public final /* synthetic */ class PhotoViewer$$ExternalSyntheticLambda72 implements ImageReceiver.ImageReceiverDelegate {
+    public final /* synthetic */ PhotoViewer f$0;
 
-    private /* synthetic */ PhotoViewer$$ExternalSyntheticLambda72() {
+    public /* synthetic */ PhotoViewer$$ExternalSyntheticLambda72(PhotoViewer photoViewer) {
+        this.f$0 = photoViewer;
     }
 
-    public final String format(int i) {
-        return PhotoViewer.lambda$setParentActivity$26(i);
+    public final void didSetImage(ImageReceiver imageReceiver, boolean z, boolean z2, boolean z3) {
+        this.f$0.lambda$setParentActivity$35(imageReceiver, z, z2, z3);
+    }
+
+    public /* synthetic */ void onAnimationReady(ImageReceiver imageReceiver) {
+        ImageReceiver.ImageReceiverDelegate.CC.$default$onAnimationReady(this, imageReceiver);
     }
 }

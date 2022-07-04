@@ -1,13 +1,19 @@
 package org.telegram.ui.Components;
 
-public final /* synthetic */ class ChatAttachAlertPhotoLayout$$ExternalSyntheticLambda15 implements Runnable {
-    public final /* synthetic */ ChatAttachAlertPhotoLayout f$0;
+import android.view.View;
+import org.telegram.ui.ActionBar.Theme;
+import org.telegram.ui.Components.RecyclerListView;
 
-    public /* synthetic */ ChatAttachAlertPhotoLayout$$ExternalSyntheticLambda15(ChatAttachAlertPhotoLayout chatAttachAlertPhotoLayout) {
+public final /* synthetic */ class ChatAttachAlertPhotoLayout$$ExternalSyntheticLambda15 implements RecyclerListView.OnItemClickListener {
+    public final /* synthetic */ ChatAttachAlertPhotoLayout f$0;
+    public final /* synthetic */ Theme.ResourcesProvider f$1;
+
+    public /* synthetic */ ChatAttachAlertPhotoLayout$$ExternalSyntheticLambda15(ChatAttachAlertPhotoLayout chatAttachAlertPhotoLayout, Theme.ResourcesProvider resourcesProvider) {
         this.f$0 = chatAttachAlertPhotoLayout;
+        this.f$1 = resourcesProvider;
     }
 
-    public final void run() {
-        this.f$0.m838x4439fb2e();
+    public final void onItemClick(View view, int i) {
+        this.f$0.lambda$new$1(this.f$1, view, i);
     }
 }

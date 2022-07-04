@@ -1,16 +1,14 @@
 package org.telegram.messenger;
 
-import android.content.DialogInterface;
-import org.telegram.ui.ActionBar.BaseFragment;
+import com.google.android.gms.tasks.OnSuccessListener;
 
-public final /* synthetic */ class AndroidUtilities$$ExternalSyntheticLambda7 implements DialogInterface.OnClickListener {
-    public final /* synthetic */ BaseFragment f$0;
+public final /* synthetic */ class AndroidUtilities$$ExternalSyntheticLambda7 implements OnSuccessListener {
+    public static final /* synthetic */ AndroidUtilities$$ExternalSyntheticLambda7 INSTANCE = new AndroidUtilities$$ExternalSyntheticLambda7();
 
-    public /* synthetic */ AndroidUtilities$$ExternalSyntheticLambda7(BaseFragment baseFragment) {
-        this.f$0 = baseFragment;
+    private /* synthetic */ AndroidUtilities$$ExternalSyntheticLambda7() {
     }
 
-    public final void onClick(DialogInterface dialogInterface, int i) {
-        AndroidUtilities.lambda$isGoogleMapsInstalled$4(this.f$0, dialogInterface, i);
+    public final void onSuccess(Object obj) {
+        AndroidUtilities.lambda$setWaitingForSms$5((Void) obj);
     }
 }

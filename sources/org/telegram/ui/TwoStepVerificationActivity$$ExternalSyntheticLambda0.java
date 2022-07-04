@@ -10,6 +10,6 @@ public final /* synthetic */ class TwoStepVerificationActivity$$ExternalSyntheti
     }
 
     public final void onClick(DialogInterface dialogInterface, int i) {
-        this.f$0.m4717xec9f1fee(dialogInterface, i);
+        this.f$0.lambda$cancelPasswordReset$10(dialogInterface, i);
     }
 }

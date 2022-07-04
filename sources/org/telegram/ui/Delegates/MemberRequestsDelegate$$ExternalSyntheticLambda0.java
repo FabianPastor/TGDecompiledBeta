@@ -10,6 +10,6 @@ public final /* synthetic */ class MemberRequestsDelegate$$ExternalSyntheticLamb
     }
 
     public final void onDismiss(DialogInterface dialogInterface) {
-        this.f$0.m1634x1290dd7(dialogInterface);
+        this.f$0.lambda$onItemClick$0(dialogInterface);
     }
 }

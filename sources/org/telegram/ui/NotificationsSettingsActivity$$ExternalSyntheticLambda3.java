@@ -8,6 +8,6 @@ public final /* synthetic */ class NotificationsSettingsActivity$$ExternalSynthe
     }
 
     public final void run() {
-        this.f$0.m3989xfd0bCLASSNAMEc();
+        this.f$0.lambda$loadExceptions$1();
     }
 }

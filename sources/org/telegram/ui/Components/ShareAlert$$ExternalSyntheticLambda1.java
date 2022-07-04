@@ -1,20 +1,15 @@
 package org.telegram.ui.Components;
 
-import android.content.Context;
-import org.telegram.tgnet.TLObject;
+import android.view.View;
 
-public final /* synthetic */ class ShareAlert$$ExternalSyntheticLambda1 implements Runnable {
+public final /* synthetic */ class ShareAlert$$ExternalSyntheticLambda1 implements View.OnClickListener {
     public final /* synthetic */ ShareAlert f$0;
-    public final /* synthetic */ TLObject f$1;
-    public final /* synthetic */ Context f$2;
 
-    public /* synthetic */ ShareAlert$$ExternalSyntheticLambda1(ShareAlert shareAlert, TLObject tLObject, Context context) {
+    public /* synthetic */ ShareAlert$$ExternalSyntheticLambda1(ShareAlert shareAlert) {
         this.f$0 = shareAlert;
-        this.f$1 = tLObject;
-        this.f$2 = context;
     }
 
-    public final void run() {
-        this.f$0.m1349lambda$new$0$orgtelegramuiComponentsShareAlert(this.f$1, this.f$2);
+    public final void onClick(View view) {
+        this.f$0.lambda$onSendLongClick$13(view);
     }
 }

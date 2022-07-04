@@ -11,6 +11,6 @@ public final /* synthetic */ class CountrySelectActivity$$ExternalSyntheticLambd
     }
 
     public final void onItemClick(View view, int i) {
-        this.f$0.m3350lambda$createView$0$orgtelegramuiCountrySelectActivity(view, i);
+        this.f$0.lambda$createView$0(view, i);
     }
 }

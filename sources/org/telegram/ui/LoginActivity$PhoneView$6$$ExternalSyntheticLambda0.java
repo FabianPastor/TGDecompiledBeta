@@ -14,6 +14,6 @@ public final /* synthetic */ class LoginActivity$PhoneView$6$$ExternalSyntheticL
     }
 
     public final void run() {
-        this.f$0.m3916lambda$onConfirm$0$orgtelegramuiLoginActivity$PhoneView$6(this.f$1, this.f$2);
+        this.f$0.lambda$onConfirm$0(this.f$1, this.f$2);
     }
 }

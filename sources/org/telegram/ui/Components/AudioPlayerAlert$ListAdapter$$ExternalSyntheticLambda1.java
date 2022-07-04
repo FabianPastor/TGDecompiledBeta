@@ -12,6 +12,6 @@ public final /* synthetic */ class AudioPlayerAlert$ListAdapter$$ExternalSynthet
     }
 
     public final void run() {
-        this.f$0.m555xe1d541a0(this.f$1);
+        this.f$0.lambda$search$0(this.f$1);
     }
 }

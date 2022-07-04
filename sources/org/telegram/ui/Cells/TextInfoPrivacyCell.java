@@ -30,6 +30,14 @@ public class TextInfoPrivacyCell extends FrameLayout {
     private TextView textView;
     private int topPadding;
 
+    /* access modifiers changed from: protected */
+    public void afterTextDraw() {
+    }
+
+    /* access modifiers changed from: protected */
+    public void onTextDraw() {
+    }
+
     public TextInfoPrivacyCell(Context context) {
         this(context, 21, (Theme.ResourcesProvider) null);
     }
@@ -38,11 +46,7 @@ public class TextInfoPrivacyCell extends FrameLayout {
         this(context, 21, resourcesProvider2);
     }
 
-    public TextInfoPrivacyCell(Context context, int padding) {
-        this(context, padding, (Theme.ResourcesProvider) null);
-    }
-
-    public TextInfoPrivacyCell(Context context, int padding, Theme.ResourcesProvider resourcesProvider2) {
+    public TextInfoPrivacyCell(Context context, int i, Theme.ResourcesProvider resourcesProvider2) {
         super(context);
         this.linkTextColorKey = "windowBackgroundWhiteLinkText";
         this.topPadding = 10;
@@ -60,14 +64,15 @@ public class TextInfoPrivacyCell extends FrameLayout {
         };
         this.textView = r0;
         r0.setTextSize(1, 14.0f);
-        int i = 5;
+        int i2 = 5;
         this.textView.setGravity(LocaleController.isRTL ? 5 : 3);
         this.textView.setPadding(0, AndroidUtilities.dp(10.0f), 0, AndroidUtilities.dp(17.0f));
         this.textView.setMovementMethod(LinkMovementMethod.getInstance());
         this.textView.setTextColor(getThemedColor("windowBackgroundWhiteGrayText4"));
         this.textView.setLinkTextColor(getThemedColor(this.linkTextColorKey));
         this.textView.setImportantForAccessibility(2);
-        addView(this.textView, LayoutHelper.createFrame(-1, -2.0f, (!LocaleController.isRTL ? 3 : i) | 48, (float) padding, 0.0f, (float) padding, 0.0f));
+        float f = (float) i;
+        addView(this.textView, LayoutHelper.createFrame(-1, -2.0f, (!LocaleController.isRTL ? 3 : i2) | 48, f, 0.0f, f, 0.0f));
     }
 
     /* access modifiers changed from: protected */
@@ -83,70 +88,69 @@ public class TextInfoPrivacyCell extends FrameLayout {
         super.onDraw(canvas);
     }
 
-    /* access modifiers changed from: protected */
-    public void onTextDraw() {
+    public void setLinkTextColorKey(String str) {
+        this.linkTextColorKey = str;
     }
 
     /* access modifiers changed from: protected */
-    public void afterTextDraw() {
-    }
-
-    public void setLinkTextColorKey(String key) {
-        this.linkTextColorKey = key;
-    }
-
-    /* access modifiers changed from: protected */
-    public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+    public void onMeasure(int i, int i2) {
         if (this.fixedSize != 0) {
-            super.onMeasure(View.MeasureSpec.makeMeasureSpec(View.MeasureSpec.getSize(widthMeasureSpec), NUM), View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp((float) this.fixedSize), NUM));
+            super.onMeasure(View.MeasureSpec.makeMeasureSpec(View.MeasureSpec.getSize(i), NUM), View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp((float) this.fixedSize), NUM));
         } else {
-            super.onMeasure(View.MeasureSpec.makeMeasureSpec(View.MeasureSpec.getSize(widthMeasureSpec), NUM), View.MeasureSpec.makeMeasureSpec(0, 0));
+            super.onMeasure(View.MeasureSpec.makeMeasureSpec(View.MeasureSpec.getSize(i), NUM), View.MeasureSpec.makeMeasureSpec(0, 0));
         }
     }
 
-    public void setTopPadding(int topPadding2) {
-        this.topPadding = topPadding2;
+    public void setTopPadding(int i) {
+        this.topPadding = i;
     }
 
-    public void setBottomPadding(int value) {
-        this.bottomPadding = value;
+    public void setBottomPadding(int i) {
+        this.bottomPadding = i;
     }
 
-    public void setFixedSize(int size) {
-        this.fixedSize = size;
+    public void setFixedSize(int i) {
+        this.fixedSize = i;
     }
 
-    public void setText(CharSequence text2) {
-        if (!TextUtils.equals(text2, this.text)) {
-            this.text = text2;
-            if (text2 == null) {
+    public void setText(CharSequence charSequence) {
+        if (!TextUtils.equals(charSequence, this.text)) {
+            this.text = charSequence;
+            if (charSequence == null) {
                 this.textView.setPadding(0, AndroidUtilities.dp(2.0f), 0, 0);
             } else {
                 this.textView.setPadding(0, AndroidUtilities.dp((float) this.topPadding), 0, AndroidUtilities.dp((float) this.bottomPadding));
             }
             SpannableString spannableString = null;
-            if (text2 != null) {
-                int len = text2.length();
-                for (int i = 0; i < len - 1; i++) {
-                    if (text2.charAt(i) == 10 && text2.charAt(i + 1) == 10) {
-                        if (spannableString == null) {
-                            spannableString = new SpannableString(text2);
+            if (charSequence != null) {
+                int length = charSequence.length();
+                for (int i = 0; i < length - 1; i++) {
+                    if (charSequence.charAt(i) == 10) {
+                        int i2 = i + 1;
+                        if (charSequence.charAt(i2) == 10) {
+                            if (spannableString == null) {
+                                spannableString = new SpannableString(charSequence);
+                            }
+                            spannableString.setSpan(new AbsoluteSizeSpan(10, true), i2, i + 2, 33);
                         }
-                        spannableString.setSpan(new AbsoluteSizeSpan(10, true), i + 1, i + 2, 33);
                     }
                 }
             }
-            this.textView.setText(spannableString != null ? spannableString : text2);
+            TextView textView2 = this.textView;
+            if (spannableString != null) {
+                charSequence = spannableString;
+            }
+            textView2.setText(charSequence);
         }
     }
 
-    public void setTextColor(int color) {
-        this.textView.setTextColor(color);
+    public void setTextColor(int i) {
+        this.textView.setTextColor(i);
     }
 
-    public void setTextColor(String key) {
-        this.textView.setTextColor(getThemedColor(key));
-        this.textView.setTag(key);
+    public void setTextColor(String str) {
+        this.textView.setTextColor(getThemedColor(str));
+        this.textView.setTag(str);
     }
 
     public TextView getTextView() {
@@ -157,35 +161,35 @@ public class TextInfoPrivacyCell extends FrameLayout {
         return this.textView.length();
     }
 
-    public void setEnabled(boolean value, ArrayList<Animator> animators) {
+    public void setEnabled(boolean z, ArrayList<Animator> arrayList) {
         float f = 1.0f;
-        if (animators != null) {
+        if (arrayList != null) {
             TextView textView2 = this.textView;
             Property property = View.ALPHA;
             float[] fArr = new float[1];
-            if (!value) {
+            if (!z) {
                 f = 0.5f;
             }
             fArr[0] = f;
-            animators.add(ObjectAnimator.ofFloat(textView2, property, fArr));
+            arrayList.add(ObjectAnimator.ofFloat(textView2, property, fArr));
             return;
         }
         TextView textView3 = this.textView;
-        if (!value) {
+        if (!z) {
             f = 0.5f;
         }
         textView3.setAlpha(f);
     }
 
-    public void onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo info) {
-        super.onInitializeAccessibilityNodeInfo(info);
-        info.setClassName(TextView.class.getName());
-        info.setText(this.text);
+    public void onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo accessibilityNodeInfo) {
+        super.onInitializeAccessibilityNodeInfo(accessibilityNodeInfo);
+        accessibilityNodeInfo.setClassName(TextView.class.getName());
+        accessibilityNodeInfo.setText(this.text);
     }
 
-    private int getThemedColor(String key) {
+    private int getThemedColor(String str) {
         Theme.ResourcesProvider resourcesProvider2 = this.resourcesProvider;
-        Integer color = resourcesProvider2 != null ? resourcesProvider2.getColor(key) : null;
-        return color != null ? color.intValue() : Theme.getColor(key);
+        Integer color = resourcesProvider2 != null ? resourcesProvider2.getColor(str) : null;
+        return color != null ? color.intValue() : Theme.getColor(str);
     }
 }

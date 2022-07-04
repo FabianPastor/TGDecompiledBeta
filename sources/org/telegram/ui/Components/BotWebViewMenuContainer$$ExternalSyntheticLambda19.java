@@ -1,19 +1,15 @@
 package org.telegram.ui.Components;
 
-import androidx.dynamicanimation.animation.DynamicAnimation;
+import org.telegram.ui.Components.ChatAttachAlertBotWebViewLayout;
 
-public final /* synthetic */ class BotWebViewMenuContainer$$ExternalSyntheticLambda19 implements DynamicAnimation.OnAnimationEndListener {
+public final /* synthetic */ class BotWebViewMenuContainer$$ExternalSyntheticLambda19 implements ChatAttachAlertBotWebViewLayout.WebViewSwipeContainer.Delegate {
     public final /* synthetic */ BotWebViewMenuContainer f$0;
-    public final /* synthetic */ boolean f$1;
-    public final /* synthetic */ ChatActivityBotWebViewButton f$2;
 
-    public /* synthetic */ BotWebViewMenuContainer$$ExternalSyntheticLambda19(BotWebViewMenuContainer botWebViewMenuContainer, boolean z, ChatActivityBotWebViewButton chatActivityBotWebViewButton) {
+    public /* synthetic */ BotWebViewMenuContainer$$ExternalSyntheticLambda19(BotWebViewMenuContainer botWebViewMenuContainer) {
         this.f$0 = botWebViewMenuContainer;
-        this.f$1 = z;
-        this.f$2 = chatActivityBotWebViewButton;
     }
 
-    public final void onAnimationEnd(DynamicAnimation dynamicAnimation, boolean z, float f, float f2) {
-        this.f$0.m594x31347e4(this.f$1, this.f$2, dynamicAnimation, z, f, f2);
+    public final void onDismiss() {
+        this.f$0.dismiss();
     }
 }

@@ -1,19 +1,19 @@
 package org.telegram.messenger;
 
-import org.telegram.tgnet.RequestDelegate;
-import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC;
+import org.telegram.tgnet.TLRPC$Message;
 
-public final /* synthetic */ class MediaDataController$$ExternalSyntheticLambda46 implements RequestDelegate {
+public final /* synthetic */ class MediaDataController$$ExternalSyntheticLambda46 implements Runnable {
     public final /* synthetic */ MediaDataController f$0;
-    public final /* synthetic */ int f$1;
+    public final /* synthetic */ long f$1;
+    public final /* synthetic */ TLRPC$Message f$2;
 
-    public /* synthetic */ MediaDataController$$ExternalSyntheticLambda46(MediaDataController mediaDataController, int i) {
+    public /* synthetic */ MediaDataController$$ExternalSyntheticLambda46(MediaDataController mediaDataController, long j, TLRPC$Message tLRPC$Message) {
         this.f$0 = mediaDataController;
-        this.f$1 = i;
+        this.f$1 = j;
+        this.f$2 = tLRPC$Message;
     }
 
-    public final void run(TLObject tLObject, TLRPC.TL_error tL_error) {
-        this.f$0.m2001x299e7302(this.f$1, tLObject, tL_error);
+    public final void run() {
+        this.f$0.lambda$putBotKeyboard$156(this.f$1, this.f$2);
     }
 }

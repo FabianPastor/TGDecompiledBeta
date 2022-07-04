@@ -1,32 +1,22 @@
 package org.telegram.ui;
 
+import org.telegram.messenger.LocaleController;
 import org.telegram.tgnet.RequestDelegate;
 import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC;
-import org.telegram.ui.ActionBar.AlertDialog;
+import org.telegram.tgnet.TLRPC$TL_error;
 
 public final /* synthetic */ class LaunchActivity$$ExternalSyntheticLambda89 implements RequestDelegate {
     public final /* synthetic */ LaunchActivity f$0;
-    public final /* synthetic */ int[] f$1;
-    public final /* synthetic */ int f$2;
-    public final /* synthetic */ AlertDialog f$3;
-    public final /* synthetic */ TLRPC.TL_account_getAuthorizationForm f$4;
-    public final /* synthetic */ String f$5;
-    public final /* synthetic */ String f$6;
-    public final /* synthetic */ String f$7;
+    public final /* synthetic */ LocaleController.LocaleInfo[] f$1;
+    public final /* synthetic */ String f$2;
 
-    public /* synthetic */ LaunchActivity$$ExternalSyntheticLambda89(LaunchActivity launchActivity, int[] iArr, int i, AlertDialog alertDialog, TLRPC.TL_account_getAuthorizationForm tL_account_getAuthorizationForm, String str, String str2, String str3) {
+    public /* synthetic */ LaunchActivity$$ExternalSyntheticLambda89(LaunchActivity launchActivity, LocaleController.LocaleInfo[] localeInfoArr, String str) {
         this.f$0 = launchActivity;
-        this.f$1 = iArr;
-        this.f$2 = i;
-        this.f$3 = alertDialog;
-        this.f$4 = tL_account_getAuthorizationForm;
-        this.f$5 = str;
-        this.f$6 = str2;
-        this.f$7 = str3;
+        this.f$1 = localeInfoArr;
+        this.f$2 = str;
     }
 
-    public final void run(TLObject tLObject, TLRPC.TL_error tL_error) {
-        this.f$0.m3685lambda$runLinkRequest$54$orgtelegramuiLaunchActivity(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6, this.f$7, tLObject, tL_error);
+    public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+        this.f$0.lambda$showLanguageAlert$100(this.f$1, this.f$2, tLObject, tLRPC$TL_error);
     }
 }

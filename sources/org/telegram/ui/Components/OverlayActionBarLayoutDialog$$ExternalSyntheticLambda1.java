@@ -10,6 +10,6 @@ public final /* synthetic */ class OverlayActionBarLayoutDialog$$ExternalSynthet
     }
 
     public final void onClick(View view) {
-        this.f$0.m1118x63034fab(view);
+        this.f$0.lambda$new$0(view);
     }
 }

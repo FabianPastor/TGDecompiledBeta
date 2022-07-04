@@ -17,6 +17,6 @@ public final /* synthetic */ class TooManyCommunitiesActivity$SearchAdapter$$Ext
     }
 
     public final void run() {
-        this.f$0.m4715x4fa86aaa(this.f$1, this.f$2, this.f$3);
+        this.f$0.lambda$updateSearchResults$2(this.f$1, this.f$2, this.f$3);
     }
 }

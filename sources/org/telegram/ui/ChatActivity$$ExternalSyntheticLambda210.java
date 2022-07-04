@@ -1,16 +1,30 @@
 package org.telegram.ui;
 
-import android.view.View;
-import org.telegram.ui.ActionBar.ActionBarPopupWindow;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicReference;
+import org.telegram.messenger.LanguageDetector;
+import org.telegram.ui.ActionBar.ActionBarMenuSubItem;
 
-public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda210 implements View.OnClickListener {
-    public final /* synthetic */ ActionBarPopupWindow.ActionBarPopupWindowLayout f$0;
+public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda210 implements LanguageDetector.StringCallback {
+    public final /* synthetic */ ChatActivity f$0;
+    public final /* synthetic */ String[] f$1;
+    public final /* synthetic */ String f$2;
+    public final /* synthetic */ boolean f$3;
+    public final /* synthetic */ ActionBarMenuSubItem f$4;
+    public final /* synthetic */ AtomicBoolean f$5;
+    public final /* synthetic */ AtomicReference f$6;
 
-    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda210(ActionBarPopupWindow.ActionBarPopupWindowLayout actionBarPopupWindowLayout) {
-        this.f$0 = actionBarPopupWindowLayout;
+    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda210(ChatActivity chatActivity, String[] strArr, String str, boolean z, ActionBarMenuSubItem actionBarMenuSubItem, AtomicBoolean atomicBoolean, AtomicReference atomicReference) {
+        this.f$0 = chatActivity;
+        this.f$1 = strArr;
+        this.f$2 = str;
+        this.f$3 = z;
+        this.f$4 = actionBarMenuSubItem;
+        this.f$5 = atomicBoolean;
+        this.f$6 = atomicReference;
     }
 
-    public final void onClick(View view) {
-        this.f$0.getSwipeBack().closeForeground();
+    public final void run(String str) {
+        this.f$0.lambda$createMenu$174(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6, str);
     }
 }

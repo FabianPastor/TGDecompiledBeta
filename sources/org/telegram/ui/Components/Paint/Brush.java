@@ -18,10 +18,6 @@ public interface Brush {
     boolean isLightSaber();
 
     public static class Radial implements Brush {
-        public float getSpacing() {
-            return 0.15f;
-        }
-
         public float getAlpha() {
             return 0.85f;
         }
@@ -32,6 +28,10 @@ public interface Brush {
 
         public float getScale() {
             return 1.0f;
+        }
+
+        public float getSpacing() {
+            return 0.15f;
         }
 
         public boolean isLightSaber() {
@@ -46,24 +46,24 @@ public interface Brush {
     }
 
     public static class Elliptical implements Brush {
-        public float getSpacing() {
-            return 0.04f;
-        }
-
         public float getAlpha() {
             return 0.3f;
-        }
-
-        public float getAngle() {
-            return (float) Math.toRadians(125.0d);
         }
 
         public float getScale() {
             return 1.5f;
         }
 
+        public float getSpacing() {
+            return 0.04f;
+        }
+
         public boolean isLightSaber() {
             return false;
+        }
+
+        public float getAngle() {
+            return (float) Math.toRadians(125.0d);
         }
 
         public Bitmap getStamp() {
@@ -74,10 +74,6 @@ public interface Brush {
     }
 
     public static class Neon implements Brush {
-        public float getSpacing() {
-            return 0.07f;
-        }
-
         public float getAlpha() {
             return 0.7f;
         }
@@ -88,6 +84,10 @@ public interface Brush {
 
         public float getScale() {
             return 1.45f;
+        }
+
+        public float getSpacing() {
+            return 0.07f;
         }
 
         public boolean isLightSaber() {
@@ -102,10 +102,6 @@ public interface Brush {
     }
 
     public static class Arrow implements Brush {
-        public float getSpacing() {
-            return 0.15f;
-        }
-
         public float getAlpha() {
             return 0.85f;
         }
@@ -116,6 +112,10 @@ public interface Brush {
 
         public float getScale() {
             return 1.0f;
+        }
+
+        public float getSpacing() {
+            return 0.15f;
         }
 
         public boolean isLightSaber() {

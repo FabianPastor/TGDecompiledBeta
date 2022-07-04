@@ -20,6 +20,6 @@ public final /* synthetic */ class ChatActivityEnterView$58$$ExternalSyntheticLa
     }
 
     public final void didSelectDate(boolean z, int i) {
-        this.f$0.m708x1774b15d(this.f$1, this.f$2, this.f$3, this.f$4, z, i);
+        this.f$0.lambda$onGifSelected$0(this.f$1, this.f$2, this.f$3, this.f$4, z, i);
     }
 }

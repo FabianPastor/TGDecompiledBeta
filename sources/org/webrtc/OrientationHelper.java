@@ -9,13 +9,13 @@ public class OrientationHelper {
     public static volatile int cameraRotation;
     /* access modifiers changed from: private */
     public OrientationEventListener orientationEventListener = new OrientationEventListener(ApplicationLoader.applicationContext) {
-        public void onOrientationChanged(int orientation) {
-            if (OrientationHelper.this.orientationEventListener != null && orientation != -1) {
+        public void onOrientationChanged(int i) {
+            if (OrientationHelper.this.orientationEventListener != null && i != -1) {
                 OrientationHelper orientationHelper = OrientationHelper.this;
-                int newOrietation = orientationHelper.roundOrientation(orientation, orientationHelper.rotation);
-                if (newOrietation != OrientationHelper.this.rotation) {
+                int access$200 = orientationHelper.roundOrientation(i, orientationHelper.rotation);
+                if (access$200 != OrientationHelper.this.rotation) {
                     OrientationHelper orientationHelper2 = OrientationHelper.this;
-                    orientationHelper2.onOrientationUpdate(orientationHelper2.rotation = newOrietation);
+                    orientationHelper2.onOrientationUpdate(orientationHelper2.rotation = access$200);
                 }
             }
         }
@@ -23,23 +23,20 @@ public class OrientationHelper {
     /* access modifiers changed from: private */
     public int rotation;
 
-    /* access modifiers changed from: private */
-    public int roundOrientation(int orientation, int orientationHistory) {
-        int dist;
-        if (orientationHistory == -1) {
-            dist = 1;
-        } else {
-            int dist2 = Math.abs(orientation - orientationHistory);
-            dist = Math.min(dist2, 360 - dist2) >= 50 ? 1 : 0;
-        }
-        if (dist != 0) {
-            return (((orientation + 45) / 90) * 90) % 360;
-        }
-        return orientationHistory;
+    /* access modifiers changed from: protected */
+    public void onOrientationUpdate(int i) {
     }
 
-    /* access modifiers changed from: protected */
-    public void onOrientationUpdate(int orientation) {
+    /* access modifiers changed from: private */
+    public int roundOrientation(int i, int i2) {
+        boolean z = true;
+        if (i2 != -1) {
+            int abs = Math.abs(i - i2);
+            if (Math.min(abs, 360 - abs) < 50) {
+                z = false;
+            }
+        }
+        return z ? (((i + 45) / 90) * 90) % 360 : i2;
     }
 
     public void start() {

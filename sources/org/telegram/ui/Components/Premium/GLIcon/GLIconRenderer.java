@@ -11,10 +11,6 @@ import javax.microedition.khronos.opengles.GL10;
 import org.telegram.ui.ActionBar.Theme;
 
 public class GLIconRenderer implements GLSurfaceView.Renderer {
-    public static final int DIALOG_STYLE = 1;
-    public static final int FRAGMENT_STYLE = 0;
-    private static final float Z_FAR = 200.0f;
-    private static final float Z_NEAR = 1.0f;
     public float angleX = 0.0f;
     public float angleX2 = 0.0f;
     public float angleY = 0.0f;
@@ -38,36 +34,28 @@ public class GLIconRenderer implements GLSurfaceView.Renderer {
     public Star3DIcon star;
     private final int style;
 
-    public GLIconRenderer(Context context2, int style2) {
+    public GLIconRenderer(Context context2, int i) {
         this.context = context2;
-        this.style = style2;
+        this.style = i;
         updateColors();
     }
 
-    public static int loadShader(int type, String shaderSrc) {
-        int[] compiled = new int[1];
-        int shader = GLES20.glCreateShader(type);
-        if (shader == 0) {
+    public static int loadShader(int i, String str) {
+        int[] iArr = new int[1];
+        int glCreateShader = GLES20.glCreateShader(i);
+        if (glCreateShader == 0) {
             return 0;
         }
-        GLES20.glShaderSource(shader, shaderSrc);
-        GLES20.glCompileShader(shader);
-        GLES20.glGetShaderiv(shader, 35713, compiled, 0);
-        if (compiled[0] != 0) {
-            return shader;
+        GLES20.glShaderSource(glCreateShader, str);
+        GLES20.glCompileShader(glCreateShader);
+        GLES20.glGetShaderiv(glCreateShader, 35713, iArr, 0);
+        if (iArr[0] != 0) {
+            return glCreateShader;
         }
-        throw new RuntimeException("Could not compile program: " + GLES20.glGetShaderInfoLog(shader) + " " + shaderSrc);
+        throw new RuntimeException("Could not compile program: " + GLES20.glGetShaderInfoLog(glCreateShader) + " " + str);
     }
 
-    public static void checkGlError(String glOperation, int program) {
-        int glGetError = GLES20.glGetError();
-        int error = glGetError;
-        if (glGetError != 0) {
-            throw new RuntimeException(glOperation + ": glError " + error + GLES20.glGetShaderInfoLog(program));
-        }
-    }
-
-    public void onSurfaceCreated(GL10 glUnused, EGLConfig config) {
+    public void onSurfaceCreated(GL10 gl10, EGLConfig eGLConfig) {
         GLES20.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
         Star3DIcon star3DIcon = this.star;
         if (star3DIcon != null) {
@@ -80,12 +68,13 @@ public class GLIconRenderer implements GLSurfaceView.Renderer {
             star3DIcon2.setBackground(bitmap);
         }
         if (this.isDarkBackground) {
-            this.star.spec1 = 1.0f;
-            this.star.spec2 = 0.2f;
+            Star3DIcon star3DIcon3 = this.star;
+            star3DIcon3.spec1 = 1.0f;
+            star3DIcon3.spec2 = 0.2f;
         }
     }
 
-    public void onDrawFrame(GL10 glUnused) {
+    public void onDrawFrame(GL10 gl10) {
         GLES20.glClear(16640);
         GLES20.glEnable(2929);
         Matrix.setLookAtM(this.mViewMatrix, 0, 0.0f, 0.0f, 100.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f);
@@ -99,24 +88,24 @@ public class GLIconRenderer implements GLSurfaceView.Renderer {
         Star3DIcon star3DIcon = this.star;
         if (star3DIcon != null) {
             star3DIcon.gradientColor1 = this.color1;
-            this.star.gradientColor2 = this.color2;
-            this.star.draw(this.mMVPMatrix, this.mRotationMatrix, this.mWidth, this.mHeight, this.gradientStartX, this.gradientScaleX, this.gradientStartY, this.gradientScaleY);
+            star3DIcon.gradientColor2 = this.color2;
+            star3DIcon.draw(this.mMVPMatrix, this.mRotationMatrix, this.mWidth, this.mHeight, this.gradientStartX, this.gradientScaleX, this.gradientStartY, this.gradientScaleY);
         }
     }
 
-    public void onSurfaceChanged(GL10 glUnused, int width, int height) {
-        this.mWidth = width;
-        this.mHeight = height;
-        GLES20.glViewport(0, 0, width, height);
-        Matrix.perspectiveM(this.mProjectionMatrix, 0, 53.13f, ((float) width) / ((float) height), 1.0f, 200.0f);
+    public void onSurfaceChanged(GL10 gl10, int i, int i2) {
+        this.mWidth = i;
+        this.mHeight = i2;
+        GLES20.glViewport(0, 0, i, i2);
+        Matrix.perspectiveM(this.mProjectionMatrix, 0, 53.13f, ((float) i) / ((float) i2), 1.0f, 200.0f);
     }
 
-    public void setBackground(Bitmap gradientTextureBitmap) {
+    public void setBackground(Bitmap bitmap) {
         Star3DIcon star3DIcon = this.star;
         if (star3DIcon != null) {
-            star3DIcon.setBackground(gradientTextureBitmap);
+            star3DIcon.setBackground(bitmap);
         }
-        this.backgroundBitmap = gradientTextureBitmap;
+        this.backgroundBitmap = bitmap;
     }
 
     public void updateColors() {

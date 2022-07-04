@@ -8,6 +8,6 @@ public final /* synthetic */ class VideoSeekPreviewImage$$ExternalSyntheticLambd
     }
 
     public final void run() {
-        this.f$0.m1553lambda$open$2$orgtelegramuiComponentsVideoSeekPreviewImage();
+        this.f$0.lambda$open$2();
     }
 }

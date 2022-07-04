@@ -12,6 +12,6 @@ public final /* synthetic */ class ShareAlert$SearchField$$ExternalSyntheticLamb
     }
 
     public final boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
-        return this.f$0.m1367lambda$new$1$orgtelegramuiComponentsShareAlert$SearchField(textView, i, keyEvent);
+        return this.f$0.lambda$new$1(textView, i, keyEvent);
     }
 }

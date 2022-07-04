@@ -1,15 +1,18 @@
 package org.telegram.ui;
 
-import android.content.DialogInterface;
+import org.telegram.messenger.MediaController;
+import org.telegram.ui.Components.FilterGLThread;
+import org.telegram.ui.Components.FilterShaders;
+import org.telegram.ui.Components.VideoEditTextureView;
 
-public final /* synthetic */ class PhotoViewer$$ExternalSyntheticLambda79 implements DialogInterface.OnClickListener {
-    public final /* synthetic */ PhotoViewer f$0;
+public final /* synthetic */ class PhotoViewer$$ExternalSyntheticLambda79 implements VideoEditTextureView.VideoEditTextureViewDelegate {
+    public final /* synthetic */ MediaController.SavedFilterState f$0;
 
-    public /* synthetic */ PhotoViewer$$ExternalSyntheticLambda79(PhotoViewer photoViewer) {
-        this.f$0 = photoViewer;
+    public /* synthetic */ PhotoViewer$$ExternalSyntheticLambda79(MediaController.SavedFilterState savedFilterState) {
+        this.f$0 = savedFilterState;
     }
 
-    public final void onClick(DialogInterface dialogInterface, int i) {
-        this.f$0.m4296lambda$switchToEditMode$59$orgtelegramuiPhotoViewer(dialogInterface, i);
+    public final void onEGLThreadAvailable(FilterGLThread filterGLThread) {
+        filterGLThread.setFilterGLThreadDelegate(FilterShaders.getFilterShadersDelegate(this.f$0));
     }
 }

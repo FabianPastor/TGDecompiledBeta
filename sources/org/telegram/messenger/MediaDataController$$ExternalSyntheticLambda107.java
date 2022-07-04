@@ -1,19 +1,19 @@
 package org.telegram.messenger;
 
+import org.telegram.tgnet.TLRPC$TL_updateBotCommands;
+
 public final /* synthetic */ class MediaDataController$$ExternalSyntheticLambda107 implements Runnable {
     public final /* synthetic */ MediaDataController f$0;
-    public final /* synthetic */ long f$1;
-    public final /* synthetic */ int f$2;
-    public final /* synthetic */ int f$3;
+    public final /* synthetic */ TLRPC$TL_updateBotCommands f$1;
+    public final /* synthetic */ long f$2;
 
-    public /* synthetic */ MediaDataController$$ExternalSyntheticLambda107(MediaDataController mediaDataController, long j, int i, int i2) {
+    public /* synthetic */ MediaDataController$$ExternalSyntheticLambda107(MediaDataController mediaDataController, TLRPC$TL_updateBotCommands tLRPC$TL_updateBotCommands, long j) {
         this.f$0 = mediaDataController;
-        this.f$1 = j;
-        this.f$2 = i;
-        this.f$3 = i2;
+        this.f$1 = tLRPC$TL_updateBotCommands;
+        this.f$2 = j;
     }
 
     public final void run() {
-        this.f$0.m2087x449572c6(this.f$1, this.f$2, this.f$3);
+        this.f$0.lambda$updateBotInfo$158(this.f$1, this.f$2);
     }
 }

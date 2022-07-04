@@ -1,6 +1,6 @@
 package org.telegram.ui.Components;
 
-import android.content.Context;
+import android.app.Activity;
 import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
 import android.view.MotionEvent;
@@ -30,136 +30,157 @@ public abstract class BottomSheetWithRecyclerListView extends BottomSheet {
     boolean wasDrawn;
 
     /* access modifiers changed from: protected */
+    public boolean canDismissWithSwipe() {
+        return false;
+    }
+
+    /* access modifiers changed from: protected */
     public abstract RecyclerListView.SelectionAdapter createAdapter();
 
     /* access modifiers changed from: protected */
     public abstract CharSequence getTitle();
 
-    public BottomSheetWithRecyclerListView(BaseFragment fragment, boolean needFocus, final boolean hasFixedSize2) {
-        super(fragment.getParentActivity(), needFocus);
-        this.baseFragment = fragment;
-        this.hasFixedSize = hasFixedSize2;
-        final Context context = fragment.getParentActivity();
-        final Drawable headerShadowDrawable = ContextCompat.getDrawable(context, NUM).mutate();
-        final FrameLayout containerView = new FrameLayout(context) {
+    /* access modifiers changed from: protected */
+    public void onPreDraw(Canvas canvas, int i, float f) {
+    }
+
+    /* access modifiers changed from: protected */
+    public void onPreMeasure(int i, int i2) {
+    }
+
+    public void onViewCreated(FrameLayout frameLayout) {
+    }
+
+    public BottomSheetWithRecyclerListView(BaseFragment baseFragment2, boolean z, final boolean z2) {
+        super(baseFragment2.getParentActivity(), z);
+        this.baseFragment = baseFragment2;
+        this.hasFixedSize = z2;
+        final Activity parentActivity = baseFragment2.getParentActivity();
+        final Drawable mutate = ContextCompat.getDrawable(parentActivity, NUM).mutate();
+        final AnonymousClass1 r0 = new FrameLayout(parentActivity) {
             /* access modifiers changed from: protected */
-            public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-                int unused = BottomSheetWithRecyclerListView.this.contentHeight = View.MeasureSpec.getSize(heightMeasureSpec);
-                BottomSheetWithRecyclerListView.this.onPreMeasure(widthMeasureSpec, heightMeasureSpec);
-                super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+            public void onMeasure(int i, int i2) {
+                int unused = BottomSheetWithRecyclerListView.this.contentHeight = View.MeasureSpec.getSize(i2);
+                BottomSheetWithRecyclerListView.this.onPreMeasure(i, i2);
+                super.onMeasure(i, i2);
             }
 
             /* access modifiers changed from: protected */
             public void dispatchDraw(Canvas canvas) {
-                if (!hasFixedSize2) {
-                    RecyclerView.ViewHolder holder = BottomSheetWithRecyclerListView.this.recyclerListView.findViewHolderForAdapterPosition(0);
-                    int top = -AndroidUtilities.dp(16.0f);
-                    if (holder != null) {
-                        top = holder.itemView.getBottom() - AndroidUtilities.dp(16.0f);
+                if (!z2) {
+                    RecyclerView.ViewHolder findViewHolderForAdapterPosition = BottomSheetWithRecyclerListView.this.recyclerListView.findViewHolderForAdapterPosition(0);
+                    int i = -AndroidUtilities.dp(16.0f);
+                    if (findViewHolderForAdapterPosition != null) {
+                        i = findViewHolderForAdapterPosition.itemView.getBottom() - AndroidUtilities.dp(16.0f);
                     }
-                    float progressToFullView = 1.0f - (((float) (AndroidUtilities.dp(16.0f) + top)) / ((float) AndroidUtilities.dp(56.0f)));
-                    if (progressToFullView < 0.0f) {
-                        progressToFullView = 0.0f;
+                    float dp = 1.0f - (((float) (AndroidUtilities.dp(16.0f) + i)) / ((float) AndroidUtilities.dp(56.0f)));
+                    if (dp < 0.0f) {
+                        dp = 0.0f;
                     }
-                    AndroidUtilities.updateViewVisibilityAnimated(BottomSheetWithRecyclerListView.this.actionBar, progressToFullView != 0.0f, 1.0f, BottomSheetWithRecyclerListView.this.wasDrawn);
-                    BottomSheetWithRecyclerListView.this.shadowDrawable.setBounds(0, top, getMeasuredWidth(), getMeasuredHeight());
+                    BottomSheetWithRecyclerListView bottomSheetWithRecyclerListView = BottomSheetWithRecyclerListView.this;
+                    AndroidUtilities.updateViewVisibilityAnimated(bottomSheetWithRecyclerListView.actionBar, dp != 0.0f, 1.0f, bottomSheetWithRecyclerListView.wasDrawn);
+                    BottomSheetWithRecyclerListView.this.shadowDrawable.setBounds(0, i, getMeasuredWidth(), getMeasuredHeight());
                     BottomSheetWithRecyclerListView.this.shadowDrawable.draw(canvas);
-                    BottomSheetWithRecyclerListView.this.onPreDraw(canvas, top, progressToFullView);
+                    BottomSheetWithRecyclerListView.this.onPreDraw(canvas, i, dp);
                 }
                 super.dispatchDraw(canvas);
-                if (!(BottomSheetWithRecyclerListView.this.actionBar == null || BottomSheetWithRecyclerListView.this.actionBar.getVisibility() != 0 || BottomSheetWithRecyclerListView.this.actionBar.getAlpha() == 0.0f)) {
-                    headerShadowDrawable.setBounds(0, BottomSheetWithRecyclerListView.this.actionBar.getBottom(), getMeasuredWidth(), BottomSheetWithRecyclerListView.this.actionBar.getBottom() + headerShadowDrawable.getIntrinsicHeight());
-                    headerShadowDrawable.setAlpha((int) (BottomSheetWithRecyclerListView.this.actionBar.getAlpha() * 255.0f));
-                    headerShadowDrawable.draw(canvas);
+                ActionBar actionBar = BottomSheetWithRecyclerListView.this.actionBar;
+                if (!(actionBar == null || actionBar.getVisibility() != 0 || BottomSheetWithRecyclerListView.this.actionBar.getAlpha() == 0.0f)) {
+                    mutate.setBounds(0, BottomSheetWithRecyclerListView.this.actionBar.getBottom(), getMeasuredWidth(), BottomSheetWithRecyclerListView.this.actionBar.getBottom() + mutate.getIntrinsicHeight());
+                    mutate.setAlpha((int) (BottomSheetWithRecyclerListView.this.actionBar.getAlpha() * 255.0f));
+                    mutate.draw(canvas);
                 }
                 BottomSheetWithRecyclerListView.this.wasDrawn = true;
             }
 
             /* access modifiers changed from: protected */
-            public boolean drawChild(Canvas canvas, View child, long drawingTime) {
-                if (hasFixedSize2 || !BottomSheetWithRecyclerListView.this.clipToActionBar || child != BottomSheetWithRecyclerListView.this.recyclerListView) {
-                    return super.drawChild(canvas, child, drawingTime);
+            public boolean drawChild(Canvas canvas, View view, long j) {
+                if (!z2) {
+                    BottomSheetWithRecyclerListView bottomSheetWithRecyclerListView = BottomSheetWithRecyclerListView.this;
+                    if (bottomSheetWithRecyclerListView.clipToActionBar && view == bottomSheetWithRecyclerListView.recyclerListView) {
+                        canvas.save();
+                        canvas.clipRect(0, BottomSheetWithRecyclerListView.this.actionBar.getMeasuredHeight(), getMeasuredWidth(), getMeasuredHeight());
+                        super.drawChild(canvas, view, j);
+                        canvas.restore();
+                        return true;
+                    }
                 }
-                canvas.save();
-                canvas.clipRect(0, BottomSheetWithRecyclerListView.this.actionBar.getMeasuredHeight(), getMeasuredWidth(), getMeasuredHeight());
-                super.drawChild(canvas, child, drawingTime);
-                canvas.restore();
-                return true;
+                return super.drawChild(canvas, view, j);
             }
 
-            public boolean dispatchTouchEvent(MotionEvent event) {
-                if (event.getAction() == 0 && event.getY() < ((float) BottomSheetWithRecyclerListView.this.shadowDrawable.getBounds().top)) {
+            public boolean dispatchTouchEvent(MotionEvent motionEvent) {
+                if (motionEvent.getAction() == 0 && motionEvent.getY() < ((float) BottomSheetWithRecyclerListView.this.shadowDrawable.getBounds().top)) {
                     BottomSheetWithRecyclerListView.this.dismiss();
                 }
-                return super.dispatchTouchEvent(event);
+                return super.dispatchTouchEvent(motionEvent);
             }
         };
-        RecyclerListView recyclerListView2 = new RecyclerListView(context);
+        RecyclerListView recyclerListView2 = new RecyclerListView(parentActivity);
         this.recyclerListView = recyclerListView2;
-        recyclerListView2.setLayoutManager(new LinearLayoutManager(context));
-        final RecyclerListView.SelectionAdapter adapter = createAdapter();
-        if (hasFixedSize2) {
+        recyclerListView2.setLayoutManager(new LinearLayoutManager(parentActivity));
+        final RecyclerListView.SelectionAdapter createAdapter = createAdapter();
+        if (z2) {
             this.recyclerListView.setHasFixedSize(true);
-            this.recyclerListView.setAdapter(adapter);
-            setCustomView(containerView);
-            containerView.addView(this.recyclerListView, LayoutHelper.createFrame(-1, -2.0f));
+            this.recyclerListView.setAdapter(createAdapter);
+            setCustomView(r0);
+            r0.addView(this.recyclerListView, LayoutHelper.createFrame(-1, -2.0f));
         } else {
             this.recyclerListView.setAdapter(new RecyclerListView.SelectionAdapter() {
-                public boolean isEnabled(RecyclerView.ViewHolder holder) {
-                    return adapter.isEnabled(holder);
+                public boolean isEnabled(RecyclerView.ViewHolder viewHolder) {
+                    return createAdapter.isEnabled(viewHolder);
                 }
 
-                public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-                    if (viewType == -1000) {
-                        return new RecyclerListView.Holder(new View(context) {
+                public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
+                    if (i == -1000) {
+                        return new RecyclerListView.Holder(new View(parentActivity) {
                             /* access modifiers changed from: protected */
-                            public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-                                int h;
+                            public void onMeasure(int i, int i2) {
+                                int i3;
                                 if (BottomSheetWithRecyclerListView.this.contentHeight == 0) {
-                                    h = AndroidUtilities.dp(300.0f);
+                                    i3 = AndroidUtilities.dp(300.0f);
                                 } else {
-                                    h = (int) (((float) BottomSheetWithRecyclerListView.this.contentHeight) * BottomSheetWithRecyclerListView.this.topPadding);
+                                    i3 = (int) (((float) BottomSheetWithRecyclerListView.this.contentHeight) * BottomSheetWithRecyclerListView.this.topPadding);
                                 }
-                                super.onMeasure(widthMeasureSpec, View.MeasureSpec.makeMeasureSpec(h, NUM));
+                                super.onMeasure(i, View.MeasureSpec.makeMeasureSpec(i3, NUM));
                             }
                         });
                     }
-                    return adapter.onCreateViewHolder(parent, viewType);
+                    return createAdapter.onCreateViewHolder(viewGroup, i);
                 }
 
-                public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-                    if (position != 0) {
-                        adapter.onBindViewHolder(holder, position - 1);
+                public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int i) {
+                    if (i != 0) {
+                        createAdapter.onBindViewHolder(viewHolder, i - 1);
                     }
                 }
 
-                public int getItemViewType(int position) {
-                    if (position == 0) {
+                public int getItemViewType(int i) {
+                    if (i == 0) {
                         return -1000;
                     }
-                    return adapter.getItemViewType(position - 1);
+                    return createAdapter.getItemViewType(i - 1);
                 }
 
                 public int getItemCount() {
-                    return adapter.getItemCount() + 1;
+                    return createAdapter.getItemCount() + 1;
                 }
             });
-            this.containerView = containerView;
-            AnonymousClass3 r5 = new ActionBar(context) {
-                public void setAlpha(float alpha) {
-                    if (getAlpha() != alpha) {
-                        super.setAlpha(alpha);
-                        containerView.invalidate();
+            this.containerView = r0;
+            AnonymousClass3 r10 = new ActionBar(parentActivity) {
+                public void setAlpha(float f) {
+                    if (getAlpha() != f) {
+                        super.setAlpha(f);
+                        r0.invalidate();
                     }
                 }
 
-                public void setTag(Object tag) {
-                    super.setTag(tag);
+                public void setTag(Object obj) {
+                    super.setTag(obj);
                     BottomSheetWithRecyclerListView.this.updateStatusBar();
                 }
             };
-            this.actionBar = r5;
-            r5.setBackgroundColor(getThemedColor("dialogBackground"));
+            this.actionBar = r10;
+            r10.setBackgroundColor(getThemedColor("dialogBackground"));
             this.actionBar.setTitleColor(getThemedColor("windowBackgroundWhiteBlackText"));
             this.actionBar.setItemsBackgroundColor(getThemedColor("actionBarActionModeDefaultSelector"), false);
             this.actionBar.setItemsColor(getThemedColor("actionBarActionModeDefaultIcon"), false);
@@ -167,47 +188,31 @@ public abstract class BottomSheetWithRecyclerListView extends BottomSheet {
             this.actionBar.setBackButtonImage(NUM);
             this.actionBar.setTitle(getTitle());
             this.actionBar.setActionBarMenuOnItemClick(new ActionBar.ActionBarMenuOnItemClick() {
-                public void onItemClick(int id) {
-                    if (id == -1) {
+                public void onItemClick(int i) {
+                    if (i == -1) {
                         BottomSheetWithRecyclerListView.this.dismiss();
                     }
                 }
             });
-            containerView.addView(this.recyclerListView);
-            containerView.addView(this.actionBar, LayoutHelper.createFrame(-1, -2.0f, 0, 6.0f, 0.0f, 6.0f, 0.0f));
-            this.recyclerListView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-                public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                    super.onScrolled(recyclerView, dx, dy);
-                    containerView.invalidate();
+            r0.addView(this.recyclerListView);
+            r0.addView(this.actionBar, LayoutHelper.createFrame(-1, -2.0f, 0, 6.0f, 0.0f, 6.0f, 0.0f));
+            this.recyclerListView.addOnScrollListener(new RecyclerView.OnScrollListener(this) {
+                public void onScrolled(RecyclerView recyclerView, int i, int i2) {
+                    super.onScrolled(recyclerView, i, i2);
+                    r0.invalidate();
                 }
             });
         }
-        onViewCreated(containerView);
+        onViewCreated(r0);
         updateStatusBar();
-    }
-
-    /* access modifiers changed from: protected */
-    public void onPreMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-    }
-
-    /* access modifiers changed from: protected */
-    public void onPreDraw(Canvas canvas, int top, float progressToFullView) {
     }
 
     private boolean isLightStatusBar() {
         return ColorUtils.calculateLuminance(Theme.getColor("dialogBackground")) > 0.699999988079071d;
     }
 
-    public void onViewCreated(FrameLayout containerView) {
-    }
-
     public void notifyDataSetChanged() {
         this.recyclerListView.getAdapter().notifyDataSetChanged();
-    }
-
-    /* access modifiers changed from: protected */
-    public boolean canDismissWithSwipe() {
-        return false;
     }
 
     /* access modifiers changed from: private */

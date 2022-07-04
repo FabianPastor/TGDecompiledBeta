@@ -1,27 +1,19 @@
 package org.telegram.messenger;
 
-import java.util.ArrayList;
+import org.telegram.tgnet.TLRPC$StickerSet;
 
 public final /* synthetic */ class MediaDataController$$ExternalSyntheticLambda92 implements Runnable {
     public final /* synthetic */ MediaDataController f$0;
-    public final /* synthetic */ int f$1;
-    public final /* synthetic */ ArrayList f$2;
-    public final /* synthetic */ boolean f$3;
-    public final /* synthetic */ long f$4;
-    public final /* synthetic */ int f$5;
-    public final /* synthetic */ int f$6;
+    public final /* synthetic */ TLRPC$StickerSet f$1;
+    public final /* synthetic */ int f$2;
 
-    public /* synthetic */ MediaDataController$$ExternalSyntheticLambda92(MediaDataController mediaDataController, int i, ArrayList arrayList, boolean z, long j, int i2, int i3) {
+    public /* synthetic */ MediaDataController$$ExternalSyntheticLambda92(MediaDataController mediaDataController, TLRPC$StickerSet tLRPC$StickerSet, int i) {
         this.f$0 = mediaDataController;
-        this.f$1 = i;
-        this.f$2 = arrayList;
-        this.f$3 = z;
-        this.f$4 = j;
-        this.f$5 = i2;
-        this.f$6 = i3;
+        this.f$1 = tLRPC$StickerSet;
+        this.f$2 = i;
     }
 
     public final void run() {
-        this.f$0.m2088x3a2b6177(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6);
+        this.f$0.lambda$toggleStickerSetInternal$80(this.f$1, this.f$2);
     }
 }

@@ -10,6 +10,6 @@ public final /* synthetic */ class BotWebViewContainer$$ExternalSyntheticLambda1
     }
 
     public final void onDismiss(DialogInterface dialogInterface) {
-        this.f$0.m583x26CLASSNAMEa7e(dialogInterface);
+        this.f$0.lambda$onOpenUri$2(dialogInterface);
     }
 }

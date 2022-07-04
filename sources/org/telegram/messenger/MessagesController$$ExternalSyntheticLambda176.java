@@ -1,19 +1,17 @@
 package org.telegram.messenger;
 
-import org.telegram.tgnet.RequestDelegate;
-import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC;
+import org.telegram.tgnet.TLRPC$TL_messages_sponsoredMessages;
 
-public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda176 implements RequestDelegate {
+public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda176 implements Runnable {
     public final /* synthetic */ MessagesController f$0;
-    public final /* synthetic */ int f$1;
+    public final /* synthetic */ TLRPC$TL_messages_sponsoredMessages f$1;
 
-    public /* synthetic */ MessagesController$$ExternalSyntheticLambda176(MessagesController messagesController, int i) {
+    public /* synthetic */ MessagesController$$ExternalSyntheticLambda176(MessagesController messagesController, TLRPC$TL_messages_sponsoredMessages tLRPC$TL_messages_sponsoredMessages) {
         this.f$0 = messagesController;
-        this.f$1 = i;
+        this.f$1 = tLRPC$TL_messages_sponsoredMessages;
     }
 
-    public final void run(TLObject tLObject, TLRPC.TL_error tL_error) {
-        this.f$0.m273xf1CLASSNAMEb97(this.f$1, tLObject, tL_error);
+    public final void run() {
+        this.f$0.lambda$getSponsoredMessages$337(this.f$1);
     }
 }

@@ -10,6 +10,6 @@ public final /* synthetic */ class LimitReachedBottomSheet$$ExternalSyntheticLam
     }
 
     public final void onClick(View view) {
-        this.f$0.m1246xa4b10a55(view);
+        this.f$0.lambda$onViewCreated$3(view);
     }
 }

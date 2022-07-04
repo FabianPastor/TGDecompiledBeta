@@ -1,17 +1,15 @@
 package org.telegram.ui;
 
-import org.telegram.tgnet.TLObject;
+import android.view.View;
 
-public final /* synthetic */ class ChatEditTypeActivity$$ExternalSyntheticLambda1 implements Runnable {
+public final /* synthetic */ class ChatEditTypeActivity$$ExternalSyntheticLambda1 implements View.OnClickListener {
     public final /* synthetic */ ChatEditTypeActivity f$0;
-    public final /* synthetic */ TLObject f$1;
 
-    public /* synthetic */ ChatEditTypeActivity$$ExternalSyntheticLambda1(ChatEditTypeActivity chatEditTypeActivity, TLObject tLObject) {
+    public /* synthetic */ ChatEditTypeActivity$$ExternalSyntheticLambda1(ChatEditTypeActivity chatEditTypeActivity) {
         this.f$0 = chatEditTypeActivity;
-        this.f$1 = tLObject;
     }
 
-    public final void run() {
-        this.f$0.m3222x81781f5a(this.f$1);
+    public final void onClick(View view) {
+        this.f$0.lambda$createView$3(view);
     }
 }

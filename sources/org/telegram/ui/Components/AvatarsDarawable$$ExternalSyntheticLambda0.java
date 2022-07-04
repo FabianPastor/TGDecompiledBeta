@@ -10,6 +10,6 @@ public final /* synthetic */ class AvatarsDarawable$$ExternalSyntheticLambda0 im
     }
 
     public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-        this.f$0.m563x32cd51d(valueAnimator);
+        this.f$0.lambda$commitTransition$0(valueAnimator);
     }
 }

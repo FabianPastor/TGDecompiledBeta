@@ -10,7 +10,6 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Property;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
@@ -21,22 +20,33 @@ import java.util.Locale;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
-import org.telegram.messenger.MessagesStorage;
 import org.telegram.messenger.UserConfig;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC;
+import org.telegram.tgnet.TLRPC$ChannelParticipant;
+import org.telegram.tgnet.TLRPC$ChatFull;
+import org.telegram.tgnet.TLRPC$ChatParticipant;
+import org.telegram.tgnet.TLRPC$TL_channelParticipantAdmin;
+import org.telegram.tgnet.TLRPC$TL_channelParticipantCreator;
+import org.telegram.tgnet.TLRPC$TL_chatChannelParticipant;
+import org.telegram.tgnet.TLRPC$TL_chatInviteExported;
+import org.telegram.tgnet.TLRPC$TL_chatInviteImporter;
+import org.telegram.tgnet.TLRPC$TL_chatParticipantAdmin;
+import org.telegram.tgnet.TLRPC$TL_chatParticipantCreator;
+import org.telegram.tgnet.TLRPC$TL_error;
+import org.telegram.tgnet.TLRPC$TL_inputUserEmpty;
+import org.telegram.tgnet.TLRPC$TL_messages_chatInviteImporters;
+import org.telegram.tgnet.TLRPC$TL_messages_getChatInviteImporters;
+import org.telegram.tgnet.TLRPC$TL_users_getUsers;
+import org.telegram.tgnet.TLRPC$User;
+import org.telegram.tgnet.TLRPC$Vector;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.BottomSheet;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Cells.HeaderCell;
-import org.telegram.ui.Cells.ShadowSectionCell;
 import org.telegram.ui.Cells.TextInfoPrivacyCell;
 import org.telegram.ui.Cells.UserCell;
-import org.telegram.ui.Components.LinkActionView;
 import org.telegram.ui.Components.RecyclerListView;
-import org.telegram.ui.LinkEditActivity;
-import org.telegram.ui.ManageLinksActivity;
 import org.telegram.ui.ProfileActivity;
 
 public class InviteLinkBottomSheet extends BottomSheet {
@@ -58,8 +68,8 @@ public class InviteLinkBottomSheet extends BottomSheet {
     boolean hasMore;
     /* access modifiers changed from: private */
     public boolean ignoreLayout;
-    TLRPC.ChatFull info;
-    TLRPC.TL_chatInviteExported invite;
+    TLRPC$ChatFull info;
+    TLRPC$TL_chatInviteExported invite;
     InviteDelegate inviteDelegate;
     /* access modifiers changed from: private */
     public boolean isChannel;
@@ -67,7 +77,7 @@ public class InviteLinkBottomSheet extends BottomSheet {
     int joinedEndRow;
     int joinedHeaderRow;
     int joinedStartRow;
-    ArrayList<TLRPC.TL_chatInviteImporter> joinedUsers = new ArrayList<>();
+    ArrayList<TLRPC$TL_chatInviteImporter> joinedUsers = new ArrayList<>();
     int linkActionRow;
     int linkInfoRow;
     /* access modifiers changed from: private */
@@ -77,7 +87,7 @@ public class InviteLinkBottomSheet extends BottomSheet {
     int requestedEndRow;
     int requestedHeaderRow;
     int requestedStartRow;
-    ArrayList<TLRPC.TL_chatInviteImporter> requestedUsers = new ArrayList<>();
+    ArrayList<TLRPC$TL_chatInviteImporter> requestedUsers = new ArrayList<>();
     int rowCount;
     /* access modifiers changed from: private */
     public int scrollOffsetY;
@@ -89,30 +99,35 @@ public class InviteLinkBottomSheet extends BottomSheet {
     public final long timeDif;
     private TextView titleTextView;
     private boolean titleVisible;
-    HashMap<Long, TLRPC.User> users;
+    HashMap<Long, TLRPC$User> users;
     boolean usersLoading;
 
     public interface InviteDelegate {
-        void linkRevoked(TLRPC.TL_chatInviteExported tL_chatInviteExported);
+        void linkRevoked(TLRPC$TL_chatInviteExported tLRPC$TL_chatInviteExported);
 
-        void onLinkDeleted(TLRPC.TL_chatInviteExported tL_chatInviteExported);
+        void onLinkDeleted(TLRPC$TL_chatInviteExported tLRPC$TL_chatInviteExported);
 
-        void onLinkEdited(TLRPC.TL_chatInviteExported tL_chatInviteExported);
+        void onLinkEdited(TLRPC$TL_chatInviteExported tLRPC$TL_chatInviteExported);
 
-        void permanentLinkReplaced(TLRPC.TL_chatInviteExported tL_chatInviteExported, TLRPC.TL_chatInviteExported tL_chatInviteExported2);
+        void permanentLinkReplaced(TLRPC$TL_chatInviteExported tLRPC$TL_chatInviteExported, TLRPC$TL_chatInviteExported tLRPC$TL_chatInviteExported2);
+    }
+
+    /* access modifiers changed from: protected */
+    public boolean canDismissWithSwipe() {
+        return false;
     }
 
     /* JADX WARNING: Illegal instructions before constructor call */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    public InviteLinkBottomSheet(android.content.Context r25, org.telegram.tgnet.TLRPC.TL_chatInviteExported r26, org.telegram.tgnet.TLRPC.ChatFull r27, java.util.HashMap<java.lang.Long, org.telegram.tgnet.TLRPC.User> r28, org.telegram.ui.ActionBar.BaseFragment r29, long r30, boolean r32, boolean r33) {
+    public InviteLinkBottomSheet(android.content.Context r19, org.telegram.tgnet.TLRPC$TL_chatInviteExported r20, org.telegram.tgnet.TLRPC$ChatFull r21, java.util.HashMap<java.lang.Long, org.telegram.tgnet.TLRPC$User> r22, org.telegram.ui.ActionBar.BaseFragment r23, long r24, boolean r26, boolean r27) {
         /*
-            r24 = this;
-            r0 = r24
-            r1 = r25
-            r2 = r26
-            r3 = r28
-            r4 = r29
-            r5 = r32
+            r18 = this;
+            r0 = r18
+            r1 = r19
+            r2 = r20
+            r3 = r22
+            r4 = r23
+            r5 = r26
             r6 = 0
             r0.<init>(r1, r6)
             java.util.ArrayList r7 = new java.util.ArrayList
@@ -127,255 +142,250 @@ public class InviteLinkBottomSheet extends BottomSheet {
             r0.invite = r2
             r0.users = r3
             r0.fragment = r4
-            r8 = r27
+            r8 = r21
             r0.info = r8
-            r9 = r30
-            r0.chatId = r9
+            r8 = r24
+            r0.chatId = r8
             r0.permanent = r5
-            r11 = r33
-            r0.isChannel = r11
-            java.lang.String r12 = "graySection"
-            int r12 = r0.getThemedColor(r12)
-            r0.fixNavigationBar(r12)
-            java.util.HashMap<java.lang.Long, org.telegram.tgnet.TLRPC$User> r12 = r0.users
-            if (r12 != 0) goto L_0x004b
-            java.util.HashMap r12 = new java.util.HashMap
-            r12.<init>()
-            r0.users = r12
+            r8 = r27
+            r0.isChannel = r8
+            java.lang.String r8 = "graySection"
+            int r8 = r0.getThemedColor(r8)
+            r0.fixNavigationBar(r8)
+            java.util.HashMap<java.lang.Long, org.telegram.tgnet.TLRPC$User> r8 = r0.users
+            if (r8 != 0) goto L_0x004b
+            java.util.HashMap r8 = new java.util.HashMap
+            r8.<init>()
+            r0.users = r8
         L_0x004b:
-            int r12 = r0.currentAccount
-            org.telegram.tgnet.ConnectionsManager r12 = org.telegram.tgnet.ConnectionsManager.getInstance(r12)
-            int r12 = r12.getCurrentTime()
-            long r12 = (long) r12
-            long r14 = java.lang.System.currentTimeMillis()
-            r16 = 1000(0x3e8, double:4.94E-321)
-            long r14 = r14 / r16
-            long r12 = r12 - r14
-            r0.timeDif = r12
-            org.telegram.ui.Components.InviteLinkBottomSheet$1 r12 = new org.telegram.ui.Components.InviteLinkBottomSheet$1
-            r12.<init>(r1)
-            r0.containerView = r12
-            android.view.ViewGroup r12 = r0.containerView
-            r12.setWillNotDraw(r6)
-            android.widget.FrameLayout$LayoutParams r12 = new android.widget.FrameLayout$LayoutParams
-            r13 = -1
-            int r14 = org.telegram.messenger.AndroidUtilities.getShadowHeight()
-            r15 = 51
-            r12.<init>(r13, r14, r15)
-            r13 = 1111490560(0x42400000, float:48.0)
-            int r13 = org.telegram.messenger.AndroidUtilities.dp(r13)
-            r12.topMargin = r13
-            android.view.View r13 = new android.view.View
-            r13.<init>(r1)
-            r0.shadow = r13
-            r14 = 0
-            r13.setAlpha(r14)
-            android.view.View r13 = r0.shadow
-            r15 = 4
-            r13.setVisibility(r15)
-            android.view.View r13 = r0.shadow
-            java.lang.Integer r14 = java.lang.Integer.valueOf(r7)
-            r13.setTag(r14)
-            android.view.ViewGroup r13 = r0.containerView
-            android.view.View r14 = r0.shadow
-            r13.addView(r14, r12)
-            org.telegram.ui.Components.InviteLinkBottomSheet$2 r13 = new org.telegram.ui.Components.InviteLinkBottomSheet$2
-            r13.<init>(r1)
-            r0.listView = r13
-            r14 = 14
-            java.lang.Integer r14 = java.lang.Integer.valueOf(r14)
-            r13.setTag(r14)
-            androidx.recyclerview.widget.LinearLayoutManager r13 = new androidx.recyclerview.widget.LinearLayoutManager
-            android.content.Context r14 = r24.getContext()
-            r13.<init>(r14, r7, r6)
-            org.telegram.ui.Components.RecyclerListView r14 = r0.listView
-            r14.setLayoutManager(r13)
-            org.telegram.ui.Components.RecyclerListView r14 = r0.listView
-            org.telegram.ui.Components.InviteLinkBottomSheet$Adapter r15 = new org.telegram.ui.Components.InviteLinkBottomSheet$Adapter
-            r7 = 0
-            r15.<init>()
-            r0.adapter = r15
-            r14.setAdapter(r15)
-            org.telegram.ui.Components.RecyclerListView r7 = r0.listView
-            r7.setVerticalScrollBarEnabled(r6)
-            org.telegram.ui.Components.RecyclerListView r7 = r0.listView
-            r7.setClipToPadding(r6)
-            org.telegram.ui.Components.RecyclerListView r7 = r0.listView
-            r14 = 1
-            r7.setNestedScrollingEnabled(r14)
-            org.telegram.ui.Components.RecyclerListView r7 = r0.listView
-            org.telegram.ui.Components.InviteLinkBottomSheet$3 r14 = new org.telegram.ui.Components.InviteLinkBottomSheet$3
-            r14.<init>(r13)
-            r7.setOnScrollListener(r14)
-            org.telegram.ui.Components.RecyclerListView r7 = r0.listView
-            org.telegram.ui.Components.InviteLinkBottomSheet$$ExternalSyntheticLambda4 r14 = new org.telegram.ui.Components.InviteLinkBottomSheet$$ExternalSyntheticLambda4
-            r14.<init>(r0, r2, r3, r4)
-            r7.setOnItemClickListener((org.telegram.ui.Components.RecyclerListView.OnItemClickListener) r14)
-            android.widget.TextView r7 = new android.widget.TextView
-            r7.<init>(r1)
-            r0.titleTextView = r7
-            r14 = 1
-            r7.setLines(r14)
-            android.widget.TextView r7 = r0.titleTextView
-            r7.setSingleLine(r14)
-            android.widget.TextView r7 = r0.titleTextView
-            r15 = 1101004800(0x41a00000, float:20.0)
-            r7.setTextSize(r14, r15)
-            android.widget.TextView r7 = r0.titleTextView
-            android.text.TextUtils$TruncateAt r14 = android.text.TextUtils.TruncateAt.END
-            r7.setEllipsize(r14)
-            android.widget.TextView r7 = r0.titleTextView
-            r14 = 1102577664(0x41b80000, float:23.0)
-            int r15 = org.telegram.messenger.AndroidUtilities.dp(r14)
-            int r14 = org.telegram.messenger.AndroidUtilities.dp(r14)
-            r7.setPadding(r15, r6, r14, r6)
-            android.widget.TextView r7 = r0.titleTextView
-            r14 = 16
-            r7.setGravity(r14)
-            android.widget.TextView r7 = r0.titleTextView
-            java.lang.String r14 = "fonts/rmedium.ttf"
-            android.graphics.Typeface r14 = org.telegram.messenger.AndroidUtilities.getTypeface(r14)
-            r7.setTypeface(r14)
-            r7 = 2131626263(0x7f0e0917, float:1.8879757E38)
-            java.lang.String r14 = "InviteLink"
-            if (r5 != 0) goto L_0x016b
-            boolean r15 = r2.expired
-            if (r15 == 0) goto L_0x014a
-            android.widget.TextView r7 = r0.titleTextView
-            r14 = 2131625789(0x7f0e073d, float:1.8878796E38)
-            java.lang.String r15 = "ExpiredLink"
-            java.lang.String r14 = org.telegram.messenger.LocaleController.getString(r15, r14)
-            r7.setText(r14)
-            goto L_0x0166
-        L_0x014a:
-            boolean r15 = r2.revoked
-            if (r15 == 0) goto L_0x015d
-            android.widget.TextView r7 = r0.titleTextView
-            r14 = 2131628055(0x7f0e1017, float:1.8883392E38)
-            java.lang.String r15 = "RevokedLink"
-            java.lang.String r14 = org.telegram.messenger.LocaleController.getString(r15, r14)
-            r7.setText(r14)
-            goto L_0x0166
-        L_0x015d:
-            android.widget.TextView r15 = r0.titleTextView
-            java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r14, r7)
-            r15.setText(r7)
-        L_0x0166:
-            r7 = 1
+            int r8 = r0.currentAccount
+            org.telegram.tgnet.ConnectionsManager r8 = org.telegram.tgnet.ConnectionsManager.getInstance(r8)
+            int r8 = r8.getCurrentTime()
+            long r8 = (long) r8
+            long r10 = java.lang.System.currentTimeMillis()
+            r12 = 1000(0x3e8, double:4.94E-321)
+            long r10 = r10 / r12
+            long r8 = r8 - r10
+            r0.timeDif = r8
+            org.telegram.ui.Components.InviteLinkBottomSheet$1 r8 = new org.telegram.ui.Components.InviteLinkBottomSheet$1
+            r8.<init>(r1)
+            r0.containerView = r8
+            r8.setWillNotDraw(r6)
+            android.widget.FrameLayout$LayoutParams r8 = new android.widget.FrameLayout$LayoutParams
+            r9 = -1
+            int r10 = org.telegram.messenger.AndroidUtilities.getShadowHeight()
+            r11 = 51
+            r8.<init>(r9, r10, r11)
+            r9 = 1111490560(0x42400000, float:48.0)
+            int r9 = org.telegram.messenger.AndroidUtilities.dp(r9)
+            r8.topMargin = r9
+            android.view.View r9 = new android.view.View
+            r9.<init>(r1)
+            r0.shadow = r9
+            r10 = 0
+            r9.setAlpha(r10)
+            android.view.View r9 = r0.shadow
+            r11 = 4
+            r9.setVisibility(r11)
+            android.view.View r9 = r0.shadow
+            java.lang.Integer r12 = java.lang.Integer.valueOf(r7)
+            r9.setTag(r12)
+            android.view.ViewGroup r9 = r0.containerView
+            android.view.View r12 = r0.shadow
+            r9.addView(r12, r8)
+            org.telegram.ui.Components.InviteLinkBottomSheet$2 r8 = new org.telegram.ui.Components.InviteLinkBottomSheet$2
+            r8.<init>(r1)
+            r0.listView = r8
+            r9 = 14
+            java.lang.Integer r9 = java.lang.Integer.valueOf(r9)
+            r8.setTag(r9)
+            androidx.recyclerview.widget.LinearLayoutManager r8 = new androidx.recyclerview.widget.LinearLayoutManager
+            android.content.Context r9 = r18.getContext()
+            r8.<init>(r9, r7, r6)
+            org.telegram.ui.Components.RecyclerListView r9 = r0.listView
+            r9.setLayoutManager(r8)
+            org.telegram.ui.Components.RecyclerListView r9 = r0.listView
+            org.telegram.ui.Components.InviteLinkBottomSheet$Adapter r12 = new org.telegram.ui.Components.InviteLinkBottomSheet$Adapter
+            r13 = 0
+            r12.<init>()
+            r0.adapter = r12
+            r9.setAdapter(r12)
+            org.telegram.ui.Components.RecyclerListView r9 = r0.listView
+            r9.setVerticalScrollBarEnabled(r6)
+            org.telegram.ui.Components.RecyclerListView r9 = r0.listView
+            r9.setClipToPadding(r6)
+            org.telegram.ui.Components.RecyclerListView r9 = r0.listView
+            r9.setNestedScrollingEnabled(r7)
+            org.telegram.ui.Components.RecyclerListView r9 = r0.listView
+            org.telegram.ui.Components.InviteLinkBottomSheet$3 r12 = new org.telegram.ui.Components.InviteLinkBottomSheet$3
+            r12.<init>(r8)
+            r9.setOnScrollListener(r12)
+            org.telegram.ui.Components.RecyclerListView r8 = r0.listView
+            org.telegram.ui.Components.InviteLinkBottomSheet$$ExternalSyntheticLambda4 r9 = new org.telegram.ui.Components.InviteLinkBottomSheet$$ExternalSyntheticLambda4
+            r9.<init>(r0, r2, r3, r4)
+            r8.setOnItemClickListener((org.telegram.ui.Components.RecyclerListView.OnItemClickListener) r9)
+            android.widget.TextView r4 = new android.widget.TextView
+            r4.<init>(r1)
+            r0.titleTextView = r4
+            r4.setLines(r7)
+            android.widget.TextView r1 = r0.titleTextView
+            r1.setSingleLine(r7)
+            android.widget.TextView r1 = r0.titleTextView
+            r4 = 1101004800(0x41a00000, float:20.0)
+            r1.setTextSize(r7, r4)
+            android.widget.TextView r1 = r0.titleTextView
+            android.text.TextUtils$TruncateAt r4 = android.text.TextUtils.TruncateAt.END
+            r1.setEllipsize(r4)
+            android.widget.TextView r1 = r0.titleTextView
+            r4 = 1102577664(0x41b80000, float:23.0)
+            int r8 = org.telegram.messenger.AndroidUtilities.dp(r4)
+            int r4 = org.telegram.messenger.AndroidUtilities.dp(r4)
+            r1.setPadding(r8, r6, r4, r6)
+            android.widget.TextView r1 = r0.titleTextView
+            r4 = 16
+            r1.setGravity(r4)
+            android.widget.TextView r1 = r0.titleTextView
+            java.lang.String r4 = "fonts/rmedium.ttf"
+            android.graphics.Typeface r4 = org.telegram.messenger.AndroidUtilities.getTypeface(r4)
+            r1.setTypeface(r4)
+            r1 = 2131626263(0x7f0e0917, float:1.8879757E38)
+            java.lang.String r4 = "InviteLink"
+            if (r5 != 0) goto L_0x0164
+            boolean r5 = r2.expired
+            if (r5 == 0) goto L_0x0145
+            android.widget.TextView r1 = r0.titleTextView
+            r4 = 2131625789(0x7f0e073d, float:1.8878796E38)
+            java.lang.String r5 = "ExpiredLink"
+            java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r5, r4)
+            r1.setText(r4)
+            goto L_0x0161
+        L_0x0145:
+            boolean r5 = r2.revoked
+            if (r5 == 0) goto L_0x0158
+            android.widget.TextView r1 = r0.titleTextView
+            r4 = 2131628055(0x7f0e1017, float:1.8883392E38)
+            java.lang.String r5 = "RevokedLink"
+            java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r5, r4)
+            r1.setText(r4)
+            goto L_0x0161
+        L_0x0158:
+            android.widget.TextView r5 = r0.titleTextView
+            java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r4, r1)
+            r5.setText(r1)
+        L_0x0161:
             r0.titleVisible = r7
-            r14 = 0
-            goto L_0x0182
-        L_0x016b:
-            android.widget.TextView r15 = r0.titleTextView
-            java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r14, r7)
-            r15.setText(r7)
+            goto L_0x0179
+        L_0x0164:
+            android.widget.TextView r5 = r0.titleTextView
+            java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r4, r1)
+            r5.setText(r1)
             r0.titleVisible = r6
-            android.widget.TextView r7 = r0.titleTextView
-            r14 = 4
-            r7.setVisibility(r14)
-            android.widget.TextView r7 = r0.titleTextView
+            android.widget.TextView r1 = r0.titleTextView
+            r1.setVisibility(r11)
+            android.widget.TextView r1 = r0.titleTextView
+            r1.setAlpha(r10)
+        L_0x0179:
+            java.lang.String r1 = r2.title
+            boolean r1 = android.text.TextUtils.isEmpty(r1)
+            if (r1 != 0) goto L_0x01a5
+            android.text.SpannableStringBuilder r1 = new android.text.SpannableStringBuilder
+            java.lang.String r4 = r2.title
+            r1.<init>(r4)
+            android.widget.TextView r4 = r0.titleTextView
+            android.text.TextPaint r4 = r4.getPaint()
+            android.graphics.Paint$FontMetricsInt r4 = r4.getFontMetricsInt()
+            android.widget.TextView r5 = r0.titleTextView
+            android.text.TextPaint r5 = r5.getPaint()
+            float r5 = r5.getTextSize()
+            int r5 = (int) r5
+            org.telegram.messenger.Emoji.replaceEmoji(r1, r4, r5, r6)
+            android.widget.TextView r4 = r0.titleTextView
+            r4.setText(r1)
+        L_0x01a5:
+            android.view.ViewGroup r1 = r0.containerView
+            org.telegram.ui.Components.RecyclerListView r4 = r0.listView
+            r11 = -1
+            r12 = -1082130432(0xffffffffbvar_, float:-1.0)
+            r13 = 51
             r14 = 0
-            r7.setAlpha(r14)
-        L_0x0182:
-            java.lang.String r7 = r2.title
-            boolean r7 = android.text.TextUtils.isEmpty(r7)
-            if (r7 != 0) goto L_0x01ae
-            android.text.SpannableStringBuilder r7 = new android.text.SpannableStringBuilder
-            java.lang.String r15 = r2.title
-            r7.<init>(r15)
-            android.widget.TextView r15 = r0.titleTextView
-            android.text.TextPaint r15 = r15.getPaint()
-            android.graphics.Paint$FontMetricsInt r15 = r15.getFontMetricsInt()
-            android.widget.TextView r14 = r0.titleTextView
-            android.text.TextPaint r14 = r14.getPaint()
-            float r14 = r14.getTextSize()
-            int r14 = (int) r14
-            org.telegram.messenger.Emoji.replaceEmoji(r7, r15, r14, r6)
-            android.widget.TextView r6 = r0.titleTextView
-            r6.setText(r7)
-        L_0x01ae:
-            android.view.ViewGroup r6 = r0.containerView
-            org.telegram.ui.Components.RecyclerListView r7 = r0.listView
-            r17 = -1
-            r18 = -1082130432(0xffffffffbvar_, float:-1.0)
-            r19 = 51
-            r20 = 0
-            boolean r14 = r0.titleVisible
+            boolean r5 = r0.titleVisible
+            r6 = 1110441984(0x42300000, float:44.0)
+            if (r5 != 0) goto L_0x01b7
+            r15 = 0
+            goto L_0x01b9
+        L_0x01b7:
             r15 = 1110441984(0x42300000, float:44.0)
-            if (r14 != 0) goto L_0x01c3
-            r21 = 0
-            goto L_0x01c5
-        L_0x01c3:
-            r21 = 1110441984(0x42300000, float:44.0)
-        L_0x01c5:
-            r22 = 0
-            r23 = 0
-            android.widget.FrameLayout$LayoutParams r14 = org.telegram.ui.Components.LayoutHelper.createFrame(r17, r18, r19, r20, r21, r22, r23)
-            r6.addView(r7, r14)
-            android.view.ViewGroup r6 = r0.containerView
-            android.widget.TextView r7 = r0.titleTextView
-            r16 = -1
-            boolean r14 = r0.titleVisible
-            if (r14 != 0) goto L_0x01dd
-            r17 = 1110441984(0x42300000, float:44.0)
-            goto L_0x01e1
-        L_0x01dd:
-            r15 = 1112014848(0x42480000, float:50.0)
-            r17 = 1112014848(0x42480000, float:50.0)
-        L_0x01e1:
-            r18 = 51
-            r19 = 0
-            r20 = 0
-            r21 = 0
-            r22 = 0
-            android.widget.FrameLayout$LayoutParams r14 = org.telegram.ui.Components.LayoutHelper.createFrame(r16, r17, r18, r19, r20, r21, r22)
-            r6.addView(r7, r14)
-            r24.updateRows()
-            r24.loadUsers()
-            if (r3 == 0) goto L_0x0206
-            long r6 = r2.admin_id
-            java.lang.Long r6 = java.lang.Long.valueOf(r6)
-            java.lang.Object r6 = r3.get(r6)
-            if (r6 != 0) goto L_0x0209
-        L_0x0206:
-            r24.loadCreator()
-        L_0x0209:
-            r24.updateColors()
+        L_0x01b9:
+            r16 = 0
+            r17 = 0
+            android.widget.FrameLayout$LayoutParams r5 = org.telegram.ui.Components.LayoutHelper.createFrame(r11, r12, r13, r14, r15, r16, r17)
+            r1.addView(r4, r5)
+            android.view.ViewGroup r1 = r0.containerView
+            android.widget.TextView r4 = r0.titleTextView
+            r7 = -1
+            boolean r5 = r0.titleVisible
+            if (r5 != 0) goto L_0x01d0
+            r8 = 1110441984(0x42300000, float:44.0)
+            goto L_0x01d4
+        L_0x01d0:
+            r6 = 1112014848(0x42480000, float:50.0)
+            r8 = 1112014848(0x42480000, float:50.0)
+        L_0x01d4:
+            r9 = 51
+            r10 = 0
+            r11 = 0
+            r12 = 0
+            r13 = 0
+            android.widget.FrameLayout$LayoutParams r5 = org.telegram.ui.Components.LayoutHelper.createFrame(r7, r8, r9, r10, r11, r12, r13)
+            r1.addView(r4, r5)
+            r18.updateRows()
+            r18.loadUsers()
+            if (r3 == 0) goto L_0x01f5
+            long r1 = r2.admin_id
+            java.lang.Long r1 = java.lang.Long.valueOf(r1)
+            java.lang.Object r1 = r3.get(r1)
+            if (r1 != 0) goto L_0x01f8
+        L_0x01f5:
+            r18.loadCreator()
+        L_0x01f8:
+            r18.updateColors()
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.InviteLinkBottomSheet.<init>(android.content.Context, org.telegram.tgnet.TLRPC$TL_chatInviteExported, org.telegram.tgnet.TLRPC$ChatFull, java.util.HashMap, org.telegram.ui.ActionBar.BaseFragment, long, boolean, boolean):void");
     }
 
-    /* renamed from: lambda$new$1$org-telegram-ui-Components-InviteLinkBottomSheet  reason: not valid java name */
-    public /* synthetic */ void m1052lambda$new$1$orgtelegramuiComponentsInviteLinkBottomSheet(TLRPC.TL_chatInviteExported invite2, HashMap users2, BaseFragment fragment2, View view, int position) {
-        if (position != this.creatorRow || invite2.admin_id != UserConfig.getInstance(this.currentAccount).clientUserId) {
-            boolean isRequestedUserRow = true;
-            boolean isJoinedUserRow = position >= this.joinedStartRow && position < this.joinedEndRow;
-            if (position < this.requestedStartRow || position >= this.requestedEndRow) {
-                isRequestedUserRow = false;
+    /* access modifiers changed from: private */
+    public /* synthetic */ void lambda$new$1(TLRPC$TL_chatInviteExported tLRPC$TL_chatInviteExported, HashMap hashMap, BaseFragment baseFragment, View view, int i) {
+        if (i != this.creatorRow || tLRPC$TL_chatInviteExported.admin_id != UserConfig.getInstance(this.currentAccount).clientUserId) {
+            int i2 = this.joinedStartRow;
+            boolean z = true;
+            boolean z2 = i >= i2 && i < this.joinedEndRow;
+            int i3 = this.requestedStartRow;
+            if (i < i3 || i >= this.requestedEndRow) {
+                z = false;
             }
-            if ((position == this.creatorRow || isJoinedUserRow || isRequestedUserRow) && users2 != null) {
-                long userId = invite2.admin_id;
-                if (isJoinedUserRow) {
-                    userId = this.joinedUsers.get(position - this.joinedStartRow).user_id;
-                } else if (isRequestedUserRow) {
-                    userId = this.requestedUsers.get(position - this.requestedStartRow).user_id;
+            if ((i == this.creatorRow || z2 || z) && hashMap != null) {
+                long j = tLRPC$TL_chatInviteExported.admin_id;
+                if (z2) {
+                    j = this.joinedUsers.get(i - i2).user_id;
+                } else if (z) {
+                    j = this.requestedUsers.get(i - i3).user_id;
                 }
-                TLRPC.User user = (TLRPC.User) users2.get(Long.valueOf(userId));
-                if (user != null) {
-                    MessagesController.getInstance(UserConfig.selectedAccount).putUser(user, false);
-                    AndroidUtilities.runOnUIThread(new InviteLinkBottomSheet$$ExternalSyntheticLambda1(this, user, fragment2), 100);
+                TLRPC$User tLRPC$User = (TLRPC$User) hashMap.get(Long.valueOf(j));
+                if (tLRPC$User != null) {
+                    MessagesController.getInstance(UserConfig.selectedAccount).putUser(tLRPC$User, false);
+                    AndroidUtilities.runOnUIThread(new InviteLinkBottomSheet$$ExternalSyntheticLambda1(this, tLRPC$User, baseFragment), 100);
                     dismiss();
                 }
             }
         }
     }
 
-    /* renamed from: lambda$new$0$org-telegram-ui-Components-InviteLinkBottomSheet  reason: not valid java name */
-    public /* synthetic */ void m1051lambda$new$0$orgtelegramuiComponentsInviteLinkBottomSheet(TLRPC.User user, BaseFragment fragment2) {
+    /* access modifiers changed from: private */
+    public /* synthetic */ void lambda$new$0(TLRPC$User tLRPC$User, BaseFragment baseFragment) {
         Bundle bundle = new Bundle();
-        bundle.putLong("user_id", user.id);
-        fragment2.presentFragment(new ProfileActivity(bundle));
+        bundle.putLong("user_id", tLRPC$User.id);
+        baseFragment.presentFragment(new ProfileActivity(bundle));
         this.isNeedReopen = true;
     }
 
@@ -392,20 +402,20 @@ public class InviteLinkBottomSheet extends BottomSheet {
         this.listView.setGlowColor(Theme.getColor("dialogScrollGlow"));
         this.shadow.setBackgroundColor(Theme.getColor("dialogShadowLine"));
         setBackgroundColor(Theme.getColor("dialogBackground"));
-        int count = this.listView.getHiddenChildCount();
+        int hiddenChildCount = this.listView.getHiddenChildCount();
         for (int i = 0; i < this.listView.getChildCount(); i++) {
             updateColorForView(this.listView.getChildAt(i));
         }
-        for (int a = 0; a < count; a++) {
-            updateColorForView(this.listView.getHiddenChildAt(a));
+        for (int i2 = 0; i2 < hiddenChildCount; i2++) {
+            updateColorForView(this.listView.getHiddenChildAt(i2));
         }
-        int count2 = this.listView.getCachedChildCount();
-        for (int a2 = 0; a2 < count2; a2++) {
-            updateColorForView(this.listView.getCachedChildAt(a2));
+        int cachedChildCount = this.listView.getCachedChildCount();
+        for (int i3 = 0; i3 < cachedChildCount; i3++) {
+            updateColorForView(this.listView.getCachedChildAt(i3));
         }
-        int count3 = this.listView.getAttachedScrapChildCount();
-        for (int a3 = 0; a3 < count3; a3++) {
-            updateColorForView(this.listView.getAttachedScrapChildAt(a3));
+        int attachedScrapChildCount = this.listView.getAttachedScrapChildCount();
+        for (int i4 = 0; i4 < attachedScrapChildCount; i4++) {
+            updateColorForView(this.listView.getAttachedScrapChildAt(i4));
         }
         this.containerView.invalidate();
     }
@@ -428,15 +438,15 @@ public class InviteLinkBottomSheet extends BottomSheet {
         } else if (view instanceof UserCell) {
             ((UserCell) view).update(0);
         }
-        RecyclerView.ViewHolder holder = this.listView.getChildViewHolder(view);
-        if (holder == null) {
+        RecyclerView.ViewHolder childViewHolder = this.listView.getChildViewHolder(view);
+        if (childViewHolder == null) {
             return;
         }
-        if (holder.getItemViewType() == 7) {
+        if (childViewHolder.getItemViewType() == 7) {
             CombinedDrawable combinedDrawable2 = new CombinedDrawable(new ColorDrawable(Theme.getColor("windowBackgroundGray")), Theme.getThemedDrawable(view.getContext(), NUM, "windowBackgroundGrayShadow"), 0, 0);
             combinedDrawable2.setFullsize(true);
             view.setBackgroundDrawable(combinedDrawable2);
-        } else if (holder.getItemViewType() == 2) {
+        } else if (childViewHolder.getItemViewType() == 2) {
             CombinedDrawable combinedDrawable3 = new CombinedDrawable(new ColorDrawable(Theme.getColor("windowBackgroundGray")), Theme.getThemedDrawable(view.getContext(), NUM, "windowBackgroundGrayShadow"), 0, 0);
             combinedDrawable3.setFullsize(true);
             view.setBackgroundDrawable(combinedDrawable3);
@@ -444,455 +454,501 @@ public class InviteLinkBottomSheet extends BottomSheet {
     }
 
     private void loadCreator() {
-        TLRPC.TL_users_getUsers req = new TLRPC.TL_users_getUsers();
-        req.id.add(MessagesController.getInstance(UserConfig.selectedAccount).getInputUser(this.invite.admin_id));
-        ConnectionsManager.getInstance(UserConfig.selectedAccount).sendRequest(req, new InviteLinkBottomSheet$$ExternalSyntheticLambda2(this));
+        TLRPC$TL_users_getUsers tLRPC$TL_users_getUsers = new TLRPC$TL_users_getUsers();
+        tLRPC$TL_users_getUsers.id.add(MessagesController.getInstance(UserConfig.selectedAccount).getInputUser(this.invite.admin_id));
+        ConnectionsManager.getInstance(UserConfig.selectedAccount).sendRequest(tLRPC$TL_users_getUsers, new InviteLinkBottomSheet$$ExternalSyntheticLambda2(this));
     }
 
-    /* renamed from: lambda$loadCreator$2$org-telegram-ui-Components-InviteLinkBottomSheet  reason: not valid java name */
-    public /* synthetic */ void m1048x3644d1d(final TLObject response, final TLRPC.TL_error error) {
+    /* access modifiers changed from: private */
+    public /* synthetic */ void lambda$loadCreator$2(final TLObject tLObject, final TLRPC$TL_error tLRPC$TL_error) {
         AndroidUtilities.runOnUIThread(new Runnable() {
             public void run() {
-                if (error == null) {
-                    InviteLinkBottomSheet.this.users.put(Long.valueOf(InviteLinkBottomSheet.this.invite.admin_id), (TLRPC.User) ((TLRPC.Vector) response).objects.get(0));
+                if (tLRPC$TL_error == null) {
+                    InviteLinkBottomSheet inviteLinkBottomSheet = InviteLinkBottomSheet.this;
+                    inviteLinkBottomSheet.users.put(Long.valueOf(inviteLinkBottomSheet.invite.admin_id), (TLRPC$User) ((TLRPC$Vector) tLObject).objects.get(0));
                     InviteLinkBottomSheet.this.adapter.notifyDataSetChanged();
                 }
             }
         });
     }
 
-    /* access modifiers changed from: protected */
-    public boolean canDismissWithSwipe() {
-        return false;
-    }
-
+    /* JADX WARNING: Removed duplicated region for block: B:21:0x007d  */
+    /* JADX WARNING: Removed duplicated region for block: B:24:0x00a7  */
+    /* JADX WARNING: Removed duplicated region for block: B:25:0x00c9  */
+    /* JADX WARNING: Removed duplicated region for block: B:32:0x00e8  */
+    /* Code decompiled incorrectly, please refer to instructions dump. */
     private void updateRows() {
-        boolean needLoadUsers = false;
-        this.rowCount = 0;
-        this.dividerRow = -1;
-        this.divider2Row = -1;
-        this.divider3Row = -1;
-        this.joinedHeaderRow = -1;
-        this.joinedStartRow = -1;
-        this.joinedEndRow = -1;
-        this.emptyView2 = -1;
-        this.emptyView3 = -1;
-        this.linkActionRow = -1;
-        this.linkInfoRow = -1;
-        this.emptyHintRow = -1;
-        this.requestedHeaderRow = -1;
-        this.requestedStartRow = -1;
-        this.requestedEndRow = -1;
-        this.loadingRow = -1;
-        if (!this.permanent) {
-            int i = 0 + 1;
-            this.rowCount = i;
-            this.linkActionRow = 0;
-            this.rowCount = i + 1;
-            this.linkInfoRow = i;
-        }
-        int i2 = this.rowCount;
-        int i3 = i2 + 1;
-        this.rowCount = i3;
-        this.creatorHeaderRow = i2;
-        int i4 = i3 + 1;
-        this.rowCount = i4;
-        this.creatorRow = i3;
-        this.rowCount = i4 + 1;
-        this.emptyView = i4;
-        boolean needUsers = this.invite.usage > 0 || this.invite.usage_limit > 0 || this.invite.requested > 0;
-        if (this.invite.usage > this.joinedUsers.size() || (this.invite.request_needed && this.invite.requested > this.requestedUsers.size())) {
-            needLoadUsers = true;
-        }
-        boolean usersLoaded = false;
-        if (!this.joinedUsers.isEmpty()) {
-            int i5 = this.rowCount;
-            int i6 = i5 + 1;
-            this.rowCount = i6;
-            this.dividerRow = i5;
-            int i7 = i6 + 1;
-            this.rowCount = i7;
-            this.joinedHeaderRow = i6;
-            this.joinedStartRow = i7;
-            int size = i7 + this.joinedUsers.size();
-            this.rowCount = size;
-            this.joinedEndRow = size;
-            this.rowCount = size + 1;
-            this.emptyView2 = size;
-            usersLoaded = true;
-        }
-        if (!this.requestedUsers.isEmpty()) {
-            int i8 = this.rowCount;
-            int i9 = i8 + 1;
-            this.rowCount = i9;
-            this.divider2Row = i8;
-            int i10 = i9 + 1;
-            this.rowCount = i10;
-            this.requestedHeaderRow = i9;
-            this.requestedStartRow = i10;
-            int size2 = i10 + this.requestedUsers.size();
-            this.rowCount = size2;
-            this.requestedEndRow = size2;
-            this.rowCount = size2 + 1;
-            this.emptyView3 = size2;
-            usersLoaded = true;
-        }
-        if ((needUsers || needLoadUsers) && !usersLoaded) {
-            int i11 = this.rowCount;
-            int i12 = i11 + 1;
-            this.rowCount = i12;
-            this.dividerRow = i11;
-            int i13 = i12 + 1;
-            this.rowCount = i13;
-            this.loadingRow = i12;
-            this.rowCount = i13 + 1;
-            this.emptyView2 = i13;
-        }
-        if (this.emptyHintRow == -1) {
-            int i14 = this.rowCount;
-            this.rowCount = i14 + 1;
-            this.divider3Row = i14;
-        }
-        this.adapter.notifyDataSetChanged();
+        /*
+            r6 = this;
+            r0 = 0
+            r6.rowCount = r0
+            r1 = -1
+            r6.dividerRow = r1
+            r6.divider2Row = r1
+            r6.divider3Row = r1
+            r6.joinedHeaderRow = r1
+            r6.joinedStartRow = r1
+            r6.joinedEndRow = r1
+            r6.emptyView2 = r1
+            r6.emptyView3 = r1
+            r6.linkActionRow = r1
+            r6.linkInfoRow = r1
+            r6.emptyHintRow = r1
+            r6.requestedHeaderRow = r1
+            r6.requestedStartRow = r1
+            r6.requestedEndRow = r1
+            r6.loadingRow = r1
+            boolean r2 = r6.permanent
+            r3 = 1
+            if (r2 != 0) goto L_0x0033
+            r2 = 0
+            int r2 = r2 + r3
+            r6.rowCount = r2
+            r6.linkActionRow = r0
+            int r4 = r2 + 1
+            r6.rowCount = r4
+            r6.linkInfoRow = r2
+        L_0x0033:
+            int r2 = r6.rowCount
+            int r4 = r2 + 1
+            r6.rowCount = r4
+            r6.creatorHeaderRow = r2
+            int r2 = r4 + 1
+            r6.rowCount = r2
+            r6.creatorRow = r4
+            int r4 = r2 + 1
+            r6.rowCount = r4
+            r6.emptyView = r2
+            org.telegram.tgnet.TLRPC$TL_chatInviteExported r2 = r6.invite
+            int r4 = r2.usage
+            if (r4 > 0) goto L_0x0058
+            int r5 = r2.usage_limit
+            if (r5 > 0) goto L_0x0058
+            int r2 = r2.requested
+            if (r2 <= 0) goto L_0x0056
+            goto L_0x0058
+        L_0x0056:
+            r2 = 0
+            goto L_0x0059
+        L_0x0058:
+            r2 = 1
+        L_0x0059:
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$TL_chatInviteImporter> r5 = r6.joinedUsers
+            int r5 = r5.size()
+            if (r4 > r5) goto L_0x0074
+            org.telegram.tgnet.TLRPC$TL_chatInviteExported r4 = r6.invite
+            boolean r5 = r4.request_needed
+            if (r5 == 0) goto L_0x0072
+            int r4 = r4.requested
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$TL_chatInviteImporter> r5 = r6.requestedUsers
+            int r5 = r5.size()
+            if (r4 <= r5) goto L_0x0072
+            goto L_0x0074
+        L_0x0072:
+            r4 = 0
+            goto L_0x0075
+        L_0x0074:
+            r4 = 1
+        L_0x0075:
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$TL_chatInviteImporter> r5 = r6.joinedUsers
+            boolean r5 = r5.isEmpty()
+            if (r5 != 0) goto L_0x009f
+            int r0 = r6.rowCount
+            int r5 = r0 + 1
+            r6.rowCount = r5
+            r6.dividerRow = r0
+            int r0 = r5 + 1
+            r6.rowCount = r0
+            r6.joinedHeaderRow = r5
+            r6.joinedStartRow = r0
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$TL_chatInviteImporter> r5 = r6.joinedUsers
+            int r5 = r5.size()
+            int r0 = r0 + r5
+            r6.rowCount = r0
+            r6.joinedEndRow = r0
+            int r5 = r0 + 1
+            r6.rowCount = r5
+            r6.emptyView2 = r0
+            r0 = 1
+        L_0x009f:
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$TL_chatInviteImporter> r5 = r6.requestedUsers
+            boolean r5 = r5.isEmpty()
+            if (r5 != 0) goto L_0x00c9
+            int r0 = r6.rowCount
+            int r5 = r0 + 1
+            r6.rowCount = r5
+            r6.divider2Row = r0
+            int r0 = r5 + 1
+            r6.rowCount = r0
+            r6.requestedHeaderRow = r5
+            r6.requestedStartRow = r0
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$TL_chatInviteImporter> r5 = r6.requestedUsers
+            int r5 = r5.size()
+            int r0 = r0 + r5
+            r6.rowCount = r0
+            r6.requestedEndRow = r0
+            int r5 = r0 + 1
+            r6.rowCount = r5
+            r6.emptyView3 = r0
+            goto L_0x00ca
+        L_0x00c9:
+            r3 = r0
+        L_0x00ca:
+            if (r2 != 0) goto L_0x00ce
+            if (r4 == 0) goto L_0x00e4
+        L_0x00ce:
+            if (r3 != 0) goto L_0x00e4
+            int r0 = r6.rowCount
+            int r2 = r0 + 1
+            r6.rowCount = r2
+            r6.dividerRow = r0
+            int r0 = r2 + 1
+            r6.rowCount = r0
+            r6.loadingRow = r2
+            int r2 = r0 + 1
+            r6.rowCount = r2
+            r6.emptyView2 = r0
+        L_0x00e4:
+            int r0 = r6.emptyHintRow
+            if (r0 != r1) goto L_0x00f0
+            int r0 = r6.rowCount
+            int r1 = r0 + 1
+            r6.rowCount = r1
+            r6.divider3Row = r0
+        L_0x00f0:
+            org.telegram.ui.Components.InviteLinkBottomSheet$Adapter r0 = r6.adapter
+            r0.notifyDataSetChanged()
+            return
+        */
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.InviteLinkBottomSheet.updateRows():void");
     }
 
     private class Adapter extends RecyclerListView.SelectionAdapter {
         private Adapter() {
         }
 
-        public int getItemViewType(int position) {
-            if (position == InviteLinkBottomSheet.this.creatorHeaderRow || position == InviteLinkBottomSheet.this.requestedHeaderRow || position == InviteLinkBottomSheet.this.joinedHeaderRow) {
+        public int getItemViewType(int i) {
+            InviteLinkBottomSheet inviteLinkBottomSheet = InviteLinkBottomSheet.this;
+            if (i == inviteLinkBottomSheet.creatorHeaderRow || i == inviteLinkBottomSheet.requestedHeaderRow || i == inviteLinkBottomSheet.joinedHeaderRow) {
                 return 0;
             }
-            if (position == InviteLinkBottomSheet.this.creatorRow) {
+            if (i == inviteLinkBottomSheet.creatorRow) {
                 return 1;
             }
-            if (position >= InviteLinkBottomSheet.this.requestedStartRow && position < InviteLinkBottomSheet.this.requestedEndRow) {
+            if (i >= inviteLinkBottomSheet.requestedStartRow && i < inviteLinkBottomSheet.requestedEndRow) {
                 return 1;
             }
-            if (position >= InviteLinkBottomSheet.this.joinedStartRow && position < InviteLinkBottomSheet.this.joinedEndRow) {
+            if (i >= inviteLinkBottomSheet.joinedStartRow && i < inviteLinkBottomSheet.joinedEndRow) {
                 return 1;
             }
-            if (position == InviteLinkBottomSheet.this.dividerRow || position == InviteLinkBottomSheet.this.divider2Row) {
+            if (i == inviteLinkBottomSheet.dividerRow || i == inviteLinkBottomSheet.divider2Row) {
                 return 2;
             }
-            if (position == InviteLinkBottomSheet.this.linkActionRow) {
+            if (i == inviteLinkBottomSheet.linkActionRow) {
                 return 3;
             }
-            if (position == InviteLinkBottomSheet.this.linkInfoRow) {
+            if (i == inviteLinkBottomSheet.linkInfoRow) {
                 return 4;
             }
-            if (position == InviteLinkBottomSheet.this.loadingRow) {
+            if (i == inviteLinkBottomSheet.loadingRow) {
                 return 5;
             }
-            if (position == InviteLinkBottomSheet.this.emptyView || position == InviteLinkBottomSheet.this.emptyView2 || position == InviteLinkBottomSheet.this.emptyView3) {
+            if (i == inviteLinkBottomSheet.emptyView || i == inviteLinkBottomSheet.emptyView2 || i == inviteLinkBottomSheet.emptyView3) {
                 return 6;
             }
-            if (position == InviteLinkBottomSheet.this.divider3Row) {
+            if (i == inviteLinkBottomSheet.divider3Row) {
                 return 7;
             }
-            if (position == InviteLinkBottomSheet.this.emptyHintRow) {
+            if (i == inviteLinkBottomSheet.emptyHintRow) {
                 return 8;
             }
             return 0;
         }
 
-        public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            View view;
-            Context context = parent.getContext();
-            switch (viewType) {
-                case 1:
-                    view = new UserCell(context, 12, 0, true);
-                    break;
-                case 2:
-                    view = new ShadowSectionCell(context, 12, Theme.getColor("windowBackgroundGray"));
-                    break;
-                case 3:
-                    BaseFragment baseFragment = InviteLinkBottomSheet.this.fragment;
-                    InviteLinkBottomSheet inviteLinkBottomSheet = InviteLinkBottomSheet.this;
-                    LinkActionView linkActionView = new LinkActionView(context, baseFragment, inviteLinkBottomSheet, inviteLinkBottomSheet.chatId, false, InviteLinkBottomSheet.this.isChannel);
-                    linkActionView.setDelegate(new LinkActionView.Delegate() {
-                        public /* synthetic */ void showUsersForPermanentLink() {
-                            LinkActionView.Delegate.CC.$default$showUsersForPermanentLink(this);
-                        }
-
-                        public void revokeLink() {
-                            if (InviteLinkBottomSheet.this.fragment instanceof ManageLinksActivity) {
-                                ((ManageLinksActivity) InviteLinkBottomSheet.this.fragment).revokeLink(InviteLinkBottomSheet.this.invite);
-                            } else {
-                                TLRPC.TL_messages_editExportedChatInvite req = new TLRPC.TL_messages_editExportedChatInvite();
-                                req.link = InviteLinkBottomSheet.this.invite.link;
-                                req.revoked = true;
-                                req.peer = MessagesController.getInstance(InviteLinkBottomSheet.this.currentAccount).getInputPeer(-InviteLinkBottomSheet.this.chatId);
-                                ConnectionsManager.getInstance(InviteLinkBottomSheet.this.currentAccount).sendRequest(req, new InviteLinkBottomSheet$Adapter$1$$ExternalSyntheticLambda3(this));
-                            }
-                            InviteLinkBottomSheet.this.dismiss();
-                        }
-
-                        /* renamed from: lambda$revokeLink$1$org-telegram-ui-Components-InviteLinkBottomSheet$Adapter$1  reason: not valid java name */
-                        public /* synthetic */ void m1056x3dCLASSNAMEcc2(TLObject response, TLRPC.TL_error error) {
-                            AndroidUtilities.runOnUIThread(new InviteLinkBottomSheet$Adapter$1$$ExternalSyntheticLambda1(this, error, response));
-                        }
-
-                        /* renamed from: lambda$revokeLink$0$org-telegram-ui-Components-InviteLinkBottomSheet$Adapter$1  reason: not valid java name */
-                        public /* synthetic */ void m1055x37c2CLASSNAME(TLRPC.TL_error error, TLObject response) {
-                            if (error != null) {
-                                return;
-                            }
-                            if (response instanceof TLRPC.TL_messages_exportedChatInviteReplaced) {
-                                TLRPC.TL_messages_exportedChatInviteReplaced replaced = (TLRPC.TL_messages_exportedChatInviteReplaced) response;
-                                if (InviteLinkBottomSheet.this.info != null) {
-                                    InviteLinkBottomSheet.this.info.exported_invite = (TLRPC.TL_chatInviteExported) replaced.new_invite;
-                                }
-                                if (InviteLinkBottomSheet.this.inviteDelegate != null) {
-                                    InviteLinkBottomSheet.this.inviteDelegate.permanentLinkReplaced(InviteLinkBottomSheet.this.invite, InviteLinkBottomSheet.this.info.exported_invite);
-                                    return;
-                                }
-                                return;
-                            }
-                            if (InviteLinkBottomSheet.this.info != null) {
-                                TLRPC.ChatFull chatFull = InviteLinkBottomSheet.this.info;
-                                chatFull.invitesCount--;
-                                if (InviteLinkBottomSheet.this.info.invitesCount < 0) {
-                                    InviteLinkBottomSheet.this.info.invitesCount = 0;
-                                }
-                                MessagesStorage.getInstance(InviteLinkBottomSheet.this.currentAccount).saveChatLinksCount(InviteLinkBottomSheet.this.chatId, InviteLinkBottomSheet.this.info.invitesCount);
-                            }
-                            if (InviteLinkBottomSheet.this.inviteDelegate != null) {
-                                InviteLinkBottomSheet.this.inviteDelegate.linkRevoked(InviteLinkBottomSheet.this.invite);
-                            }
-                        }
-
-                        public void editLink() {
-                            if (InviteLinkBottomSheet.this.fragment instanceof ManageLinksActivity) {
-                                ((ManageLinksActivity) InviteLinkBottomSheet.this.fragment).editLink(InviteLinkBottomSheet.this.invite);
-                            } else {
-                                LinkEditActivity activity = new LinkEditActivity(1, InviteLinkBottomSheet.this.chatId);
-                                activity.setInviteToEdit(InviteLinkBottomSheet.this.invite);
-                                activity.setCallback(new LinkEditActivity.Callback() {
-                                    public void onLinkCreated(TLObject response) {
-                                    }
-
-                                    public void onLinkEdited(TLRPC.TL_chatInviteExported inviteToEdit, TLObject response) {
-                                        if (InviteLinkBottomSheet.this.inviteDelegate != null) {
-                                            InviteLinkBottomSheet.this.inviteDelegate.onLinkEdited(inviteToEdit);
-                                        }
-                                    }
-
-                                    public void onLinkRemoved(TLRPC.TL_chatInviteExported inviteFinal) {
-                                    }
-
-                                    public void revokeLink(TLRPC.TL_chatInviteExported inviteFinal) {
-                                    }
-                                });
-                                InviteLinkBottomSheet.this.fragment.presentFragment(activity);
-                            }
-                            InviteLinkBottomSheet.this.dismiss();
-                        }
-
-                        public void removeLink() {
-                            if (InviteLinkBottomSheet.this.fragment instanceof ManageLinksActivity) {
-                                ((ManageLinksActivity) InviteLinkBottomSheet.this.fragment).deleteLink(InviteLinkBottomSheet.this.invite);
-                            } else {
-                                TLRPC.TL_messages_deleteExportedChatInvite req = new TLRPC.TL_messages_deleteExportedChatInvite();
-                                req.link = InviteLinkBottomSheet.this.invite.link;
-                                req.peer = MessagesController.getInstance(InviteLinkBottomSheet.this.currentAccount).getInputPeer(-InviteLinkBottomSheet.this.chatId);
-                                ConnectionsManager.getInstance(InviteLinkBottomSheet.this.currentAccount).sendRequest(req, new InviteLinkBottomSheet$Adapter$1$$ExternalSyntheticLambda2(this));
-                            }
-                            InviteLinkBottomSheet.this.dismiss();
-                        }
-
-                        /* renamed from: lambda$removeLink$3$org-telegram-ui-Components-InviteLinkBottomSheet$Adapter$1  reason: not valid java name */
-                        public /* synthetic */ void m1054x3var_(TLObject response, TLRPC.TL_error error) {
-                            AndroidUtilities.runOnUIThread(new InviteLinkBottomSheet$Adapter$1$$ExternalSyntheticLambda0(this, error));
-                        }
-
-                        /* renamed from: lambda$removeLink$2$org-telegram-ui-Components-InviteLinkBottomSheet$Adapter$1  reason: not valid java name */
-                        public /* synthetic */ void m1053x393c9de3(TLRPC.TL_error error) {
-                            if (error == null && InviteLinkBottomSheet.this.inviteDelegate != null) {
-                                InviteLinkBottomSheet.this.inviteDelegate.onLinkDeleted(InviteLinkBottomSheet.this.invite);
-                            }
-                        }
-                    });
-                    linkActionView.setLayoutParams(new RecyclerView.LayoutParams(-1, -2));
-                    view = linkActionView;
-                    break;
-                case 4:
-                    TimerPrivacyCell timerPrivacyCell = new TimerPrivacyCell(context);
-                    CombinedDrawable combinedDrawable = new CombinedDrawable(new ColorDrawable(Theme.getColor("windowBackgroundGray")), Theme.getThemedDrawable(context, NUM, "windowBackgroundGrayShadow"));
-                    combinedDrawable.setFullsize(true);
-                    timerPrivacyCell.setBackground(combinedDrawable);
-                    view = timerPrivacyCell;
-                    break;
-                case 5:
-                    FlickerLoadingView flickerLoadingView = new FlickerLoadingView(context);
-                    flickerLoadingView.setIsSingleCell(true);
-                    flickerLoadingView.setViewType(10);
-                    flickerLoadingView.showDate(false);
-                    flickerLoadingView.setPaddingLeft(AndroidUtilities.dp(10.0f));
-                    FlickerLoadingView flickerLoadingView2 = flickerLoadingView;
-                    view = flickerLoadingView;
-                    break;
-                case 6:
-                    view = new View(context) {
-                        /* access modifiers changed from: protected */
-                        public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-                            super.onMeasure(widthMeasureSpec, View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(5.0f), NUM));
-                        }
-                    };
-                    break;
-                case 7:
-                    View view2 = new ShadowSectionCell(context, 12);
-                    CombinedDrawable combinedDrawable2 = new CombinedDrawable(new ColorDrawable(Theme.getColor("windowBackgroundGray")), Theme.getThemedDrawable(context, NUM, "windowBackgroundGrayShadow"), 0, 0);
-                    combinedDrawable2.setFullsize(true);
-                    view2.setBackgroundDrawable(combinedDrawable2);
-                    view = view2;
-                    break;
-                case 8:
-                    view = new EmptyHintRow(context);
-                    break;
-                default:
-                    HeaderCell headerCell = new HeaderCell(context, "windowBackgroundWhiteBlueHeader", 21, 15, true);
-                    headerCell.getTextView2().setTextColor(Theme.getColor("windowBackgroundWhiteRedText"));
-                    headerCell.getTextView2().setTextSize(15);
-                    headerCell.getTextView2().setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
-                    HeaderCell headerCell2 = headerCell;
-                    view = headerCell;
-                    break;
-            }
-            view.setLayoutParams(new RecyclerView.LayoutParams(-1, -2));
-            return new RecyclerListView.Holder(view);
+        /* JADX WARNING: type inference failed for: r11v2, types: [android.view.View] */
+        /* JADX WARNING: type inference failed for: r11v6 */
+        /* JADX WARNING: type inference failed for: r11v12 */
+        /* JADX WARNING: type inference failed for: r11v13 */
+        /* JADX WARNING: type inference failed for: r0v12, types: [org.telegram.ui.Components.LinkActionView] */
+        /* JADX WARNING: type inference failed for: r11v14 */
+        /* JADX WARNING: type inference failed for: r11v15 */
+        /* JADX WARNING: type inference failed for: r11v16 */
+        /* JADX WARNING: type inference failed for: r0v13, types: [org.telegram.ui.Cells.HeaderCell] */
+        /* JADX WARNING: Multi-variable type inference failed */
+        /* Code decompiled incorrectly, please refer to instructions dump. */
+        public androidx.recyclerview.widget.RecyclerView.ViewHolder onCreateViewHolder(android.view.ViewGroup r11, int r12) {
+            /*
+                r10 = this;
+                android.content.Context r1 = r11.getContext()
+                java.lang.String r11 = "windowBackgroundGrayShadow"
+                r8 = -2
+                r9 = -1
+                java.lang.String r0 = "windowBackgroundGray"
+                r2 = 12
+                r3 = 1
+                r4 = 0
+                switch(r12) {
+                    case 1: goto L_0x00e2;
+                    case 2: goto L_0x00d8;
+                    case 3: goto L_0x00b2;
+                    case 4: goto L_0x008e;
+                    case 5: goto L_0x0074;
+                    case 6: goto L_0x006d;
+                    case 7: goto L_0x004c;
+                    case 8: goto L_0x0043;
+                    default: goto L_0x0011;
+                }
+            L_0x0011:
+                org.telegram.ui.Cells.HeaderCell r11 = new org.telegram.ui.Cells.HeaderCell
+                r3 = 21
+                r4 = 15
+                r5 = 1
+                java.lang.String r2 = "windowBackgroundWhiteBlueHeader"
+                r0 = r11
+                r0.<init>(r1, r2, r3, r4, r5)
+                org.telegram.ui.ActionBar.SimpleTextView r12 = r11.getTextView2()
+                java.lang.String r0 = "windowBackgroundWhiteRedText"
+                int r0 = org.telegram.ui.ActionBar.Theme.getColor(r0)
+                r12.setTextColor(r0)
+                org.telegram.ui.ActionBar.SimpleTextView r12 = r11.getTextView2()
+                r0 = 15
+                r12.setTextSize(r0)
+                org.telegram.ui.ActionBar.SimpleTextView r12 = r11.getTextView2()
+                java.lang.String r0 = "fonts/rmedium.ttf"
+                android.graphics.Typeface r0 = org.telegram.messenger.AndroidUtilities.getTypeface(r0)
+                r12.setTypeface(r0)
+                goto L_0x00e7
+            L_0x0043:
+                org.telegram.ui.Components.InviteLinkBottomSheet$EmptyHintRow r11 = new org.telegram.ui.Components.InviteLinkBottomSheet$EmptyHintRow
+                org.telegram.ui.Components.InviteLinkBottomSheet r12 = org.telegram.ui.Components.InviteLinkBottomSheet.this
+                r11.<init>(r12, r1)
+                goto L_0x00e7
+            L_0x004c:
+                org.telegram.ui.Cells.ShadowSectionCell r12 = new org.telegram.ui.Cells.ShadowSectionCell
+                r12.<init>((android.content.Context) r1, (int) r2)
+                r2 = 2131165436(0x7var_fc, float:1.794509E38)
+                android.graphics.drawable.Drawable r11 = org.telegram.ui.ActionBar.Theme.getThemedDrawable((android.content.Context) r1, (int) r2, (java.lang.String) r11)
+                android.graphics.drawable.ColorDrawable r1 = new android.graphics.drawable.ColorDrawable
+                int r0 = org.telegram.ui.ActionBar.Theme.getColor(r0)
+                r1.<init>(r0)
+                org.telegram.ui.Components.CombinedDrawable r0 = new org.telegram.ui.Components.CombinedDrawable
+                r0.<init>(r1, r11, r4, r4)
+                r0.setFullsize(r3)
+                r12.setBackgroundDrawable(r0)
+                goto L_0x00b0
+            L_0x006d:
+                org.telegram.ui.Components.InviteLinkBottomSheet$Adapter$2 r11 = new org.telegram.ui.Components.InviteLinkBottomSheet$Adapter$2
+                r11.<init>(r10, r1)
+                goto L_0x00e7
+            L_0x0074:
+                org.telegram.ui.Components.FlickerLoadingView r11 = new org.telegram.ui.Components.FlickerLoadingView
+                r11.<init>(r1)
+                r11.setIsSingleCell(r3)
+                r12 = 10
+                r11.setViewType(r12)
+                r11.showDate(r4)
+                r12 = 1092616192(0x41200000, float:10.0)
+                int r12 = org.telegram.messenger.AndroidUtilities.dp(r12)
+                r11.setPaddingLeft(r12)
+                goto L_0x00e7
+            L_0x008e:
+                org.telegram.ui.Components.InviteLinkBottomSheet$TimerPrivacyCell r12 = new org.telegram.ui.Components.InviteLinkBottomSheet$TimerPrivacyCell
+                org.telegram.ui.Components.InviteLinkBottomSheet r2 = org.telegram.ui.Components.InviteLinkBottomSheet.this
+                r12.<init>(r1)
+                org.telegram.ui.Components.CombinedDrawable r2 = new org.telegram.ui.Components.CombinedDrawable
+                android.graphics.drawable.ColorDrawable r4 = new android.graphics.drawable.ColorDrawable
+                int r0 = org.telegram.ui.ActionBar.Theme.getColor(r0)
+                r4.<init>(r0)
+                r0 = 2131165435(0x7var_fb, float:1.7945087E38)
+                android.graphics.drawable.Drawable r11 = org.telegram.ui.ActionBar.Theme.getThemedDrawable((android.content.Context) r1, (int) r0, (java.lang.String) r11)
+                r2.<init>(r4, r11)
+                r2.setFullsize(r3)
+                r12.setBackground(r2)
+            L_0x00b0:
+                r11 = r12
+                goto L_0x00e7
+            L_0x00b2:
+                org.telegram.ui.Components.LinkActionView r11 = new org.telegram.ui.Components.LinkActionView
+                org.telegram.ui.Components.InviteLinkBottomSheet r3 = org.telegram.ui.Components.InviteLinkBottomSheet.this
+                org.telegram.ui.ActionBar.BaseFragment r2 = r3.fragment
+                long r4 = r3.chatId
+                r6 = 0
+                org.telegram.ui.Components.InviteLinkBottomSheet r12 = org.telegram.ui.Components.InviteLinkBottomSheet.this
+                boolean r7 = r12.isChannel
+                r0 = r11
+                r0.<init>(r1, r2, r3, r4, r6, r7)
+                org.telegram.ui.Components.InviteLinkBottomSheet$Adapter$1 r12 = new org.telegram.ui.Components.InviteLinkBottomSheet$Adapter$1
+                r12.<init>()
+                r11.setDelegate(r12)
+                androidx.recyclerview.widget.RecyclerView$LayoutParams r12 = new androidx.recyclerview.widget.RecyclerView$LayoutParams
+                r12.<init>((int) r9, (int) r8)
+                r11.setLayoutParams(r12)
+                goto L_0x00e7
+            L_0x00d8:
+                org.telegram.ui.Cells.ShadowSectionCell r11 = new org.telegram.ui.Cells.ShadowSectionCell
+                int r12 = org.telegram.ui.ActionBar.Theme.getColor(r0)
+                r11.<init>((android.content.Context) r1, (int) r2, (int) r12)
+                goto L_0x00e7
+            L_0x00e2:
+                org.telegram.ui.Cells.UserCell r11 = new org.telegram.ui.Cells.UserCell
+                r11.<init>(r1, r2, r4, r3)
+            L_0x00e7:
+                androidx.recyclerview.widget.RecyclerView$LayoutParams r12 = new androidx.recyclerview.widget.RecyclerView$LayoutParams
+                r12.<init>((int) r9, (int) r8)
+                r11.setLayoutParams(r12)
+                org.telegram.ui.Components.RecyclerListView$Holder r12 = new org.telegram.ui.Components.RecyclerListView$Holder
+                r12.<init>(r11)
+                return r12
+            */
+            throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.InviteLinkBottomSheet.Adapter.onCreateViewHolder(android.view.ViewGroup, int):androidx.recyclerview.widget.RecyclerView$ViewHolder");
         }
 
-        public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-            TLRPC.User user;
-            RecyclerView.ViewHolder viewHolder = holder;
-            int i = position;
-            switch (holder.getItemViewType()) {
-                case 0:
-                    HeaderCell headerCell = (HeaderCell) viewHolder.itemView;
-                    if (i == InviteLinkBottomSheet.this.creatorHeaderRow) {
-                        headerCell.setText(LocaleController.getString("LinkCreatedeBy", NUM));
-                        headerCell.setText2((CharSequence) null);
-                        return;
-                    } else if (i == InviteLinkBottomSheet.this.joinedHeaderRow) {
-                        if (InviteLinkBottomSheet.this.invite.usage > 0) {
-                            headerCell.setText(LocaleController.formatPluralString("PeopleJoined", InviteLinkBottomSheet.this.invite.usage, new Object[0]));
-                        } else {
-                            headerCell.setText(LocaleController.getString("NoOneJoined", NUM));
-                        }
-                        if (InviteLinkBottomSheet.this.invite.expired || InviteLinkBottomSheet.this.invite.revoked || InviteLinkBottomSheet.this.invite.usage_limit <= 0 || InviteLinkBottomSheet.this.invite.usage <= 0) {
-                            headerCell.setText2((CharSequence) null);
-                            return;
-                        } else {
-                            headerCell.setText2(LocaleController.formatPluralString("PeopleJoinedRemaining", InviteLinkBottomSheet.this.invite.usage_limit - InviteLinkBottomSheet.this.invite.usage, new Object[0]));
-                            return;
-                        }
-                    } else if (i == InviteLinkBottomSheet.this.requestedHeaderRow) {
-                        headerCell.setText(LocaleController.formatPluralString("JoinRequests", InviteLinkBottomSheet.this.invite.requested, new Object[0]));
-                        return;
+        public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int i) {
+            int i2;
+            int i3;
+            String str;
+            TLRPC$User tLRPC$User;
+            String string;
+            int itemViewType = viewHolder.getItemViewType();
+            String str2 = null;
+            int i4 = 0;
+            if (itemViewType == 0) {
+                HeaderCell headerCell = (HeaderCell) viewHolder.itemView;
+                InviteLinkBottomSheet inviteLinkBottomSheet = InviteLinkBottomSheet.this;
+                if (i == inviteLinkBottomSheet.creatorHeaderRow) {
+                    headerCell.setText(LocaleController.getString("LinkCreatedeBy", NUM));
+                    headerCell.setText2((CharSequence) null);
+                } else if (i == inviteLinkBottomSheet.joinedHeaderRow) {
+                    int i5 = inviteLinkBottomSheet.invite.usage;
+                    if (i5 > 0) {
+                        headerCell.setText(LocaleController.formatPluralString("PeopleJoined", i5, new Object[0]));
                     } else {
-                        return;
+                        headerCell.setText(LocaleController.getString("NoOneJoined", NUM));
                     }
-                case 1:
-                    UserCell userCell = (UserCell) viewHolder.itemView;
-                    String role = null;
-                    String status = null;
-                    if (i == InviteLinkBottomSheet.this.creatorRow) {
-                        user = InviteLinkBottomSheet.this.users.get(Long.valueOf(InviteLinkBottomSheet.this.invite.admin_id));
-                        if (user == null) {
-                            user = MessagesController.getInstance(InviteLinkBottomSheet.this.currentAccount).getUser(Long.valueOf(InviteLinkBottomSheet.this.invite.admin_id));
-                        }
-                        if (user != null) {
-                            status = LocaleController.formatDateAudio((long) InviteLinkBottomSheet.this.invite.date, false);
-                        }
-                        if (!(InviteLinkBottomSheet.this.info == null || user == null || InviteLinkBottomSheet.this.info.participants == null)) {
-                            int i2 = 0;
-                            while (true) {
-                                if (i2 < InviteLinkBottomSheet.this.info.participants.participants.size()) {
-                                    if (InviteLinkBottomSheet.this.info.participants.participants.get(i2).user_id == user.id) {
-                                        TLRPC.ChatParticipant part = InviteLinkBottomSheet.this.info.participants.participants.get(i2);
-                                        if (part instanceof TLRPC.TL_chatChannelParticipant) {
-                                            TLRPC.ChannelParticipant channelParticipant = ((TLRPC.TL_chatChannelParticipant) part).channelParticipant;
-                                            role = !TextUtils.isEmpty(channelParticipant.rank) ? channelParticipant.rank : channelParticipant instanceof TLRPC.TL_channelParticipantCreator ? LocaleController.getString("ChannelCreator", NUM) : channelParticipant instanceof TLRPC.TL_channelParticipantAdmin ? LocaleController.getString("ChannelAdmin", NUM) : null;
-                                        } else {
-                                            role = part instanceof TLRPC.TL_chatParticipantCreator ? LocaleController.getString("ChannelCreator", NUM) : part instanceof TLRPC.TL_chatParticipantAdmin ? LocaleController.getString("ChannelAdmin", NUM) : null;
-                                        }
-                                    } else {
-                                        i2++;
+                    TLRPC$TL_chatInviteExported tLRPC$TL_chatInviteExported = InviteLinkBottomSheet.this.invite;
+                    if (tLRPC$TL_chatInviteExported.expired || tLRPC$TL_chatInviteExported.revoked || (i2 = tLRPC$TL_chatInviteExported.usage_limit) <= 0 || (i3 = tLRPC$TL_chatInviteExported.usage) <= 0) {
+                        headerCell.setText2((CharSequence) null);
+                    } else {
+                        headerCell.setText2(LocaleController.formatPluralString("PeopleJoinedRemaining", i2 - i3, new Object[0]));
+                    }
+                } else if (i == inviteLinkBottomSheet.requestedHeaderRow) {
+                    headerCell.setText(LocaleController.formatPluralString("JoinRequests", inviteLinkBottomSheet.invite.requested, new Object[0]));
+                }
+            } else if (itemViewType == 1) {
+                UserCell userCell = (UserCell) viewHolder.itemView;
+                InviteLinkBottomSheet inviteLinkBottomSheet2 = InviteLinkBottomSheet.this;
+                if (i == inviteLinkBottomSheet2.creatorRow) {
+                    TLRPC$User tLRPC$User2 = inviteLinkBottomSheet2.users.get(Long.valueOf(inviteLinkBottomSheet2.invite.admin_id));
+                    if (tLRPC$User2 == null) {
+                        tLRPC$User2 = MessagesController.getInstance(InviteLinkBottomSheet.this.currentAccount).getUser(Long.valueOf(InviteLinkBottomSheet.this.invite.admin_id));
+                    }
+                    String formatDateAudio = tLRPC$User2 != null ? LocaleController.formatDateAudio((long) InviteLinkBottomSheet.this.invite.date, false) : null;
+                    TLRPC$ChatFull tLRPC$ChatFull = InviteLinkBottomSheet.this.info;
+                    if (tLRPC$ChatFull != null && tLRPC$User2 != null && tLRPC$ChatFull.participants != null) {
+                        while (true) {
+                            if (i4 >= InviteLinkBottomSheet.this.info.participants.participants.size()) {
+                                break;
+                            } else if (InviteLinkBottomSheet.this.info.participants.participants.get(i4).user_id == tLRPC$User2.id) {
+                                TLRPC$ChatParticipant tLRPC$ChatParticipant = InviteLinkBottomSheet.this.info.participants.participants.get(i4);
+                                if (tLRPC$ChatParticipant instanceof TLRPC$TL_chatChannelParticipant) {
+                                    TLRPC$ChannelParticipant tLRPC$ChannelParticipant = ((TLRPC$TL_chatChannelParticipant) tLRPC$ChatParticipant).channelParticipant;
+                                    if (!TextUtils.isEmpty(tLRPC$ChannelParticipant.rank)) {
+                                        str2 = tLRPC$ChannelParticipant.rank;
+                                    } else if (tLRPC$ChannelParticipant instanceof TLRPC$TL_channelParticipantCreator) {
+                                        str2 = LocaleController.getString("ChannelCreator", NUM);
+                                    } else if (tLRPC$ChannelParticipant instanceof TLRPC$TL_channelParticipantAdmin) {
+                                        str2 = LocaleController.getString("ChannelAdmin", NUM);
                                     }
+                                } else {
+                                    if (tLRPC$ChatParticipant instanceof TLRPC$TL_chatParticipantCreator) {
+                                        string = LocaleController.getString("ChannelCreator", NUM);
+                                    } else if (tLRPC$ChatParticipant instanceof TLRPC$TL_chatParticipantAdmin) {
+                                        string = LocaleController.getString("ChannelAdmin", NUM);
+                                    }
+                                    str2 = string;
                                 }
+                            } else {
+                                i4++;
                             }
                         }
-                    } else {
-                        int startRow = InviteLinkBottomSheet.this.joinedStartRow;
-                        List<TLRPC.TL_chatInviteImporter> usersList = InviteLinkBottomSheet.this.joinedUsers;
-                        if (InviteLinkBottomSheet.this.requestedStartRow != -1 && i >= InviteLinkBottomSheet.this.requestedStartRow) {
-                            startRow = InviteLinkBottomSheet.this.requestedStartRow;
-                            usersList = InviteLinkBottomSheet.this.requestedUsers;
-                        }
-                        user = InviteLinkBottomSheet.this.users.get(Long.valueOf(usersList.get(i - startRow).user_id));
                     }
-                    userCell.setAdminRole(role);
-                    userCell.setData(user, (CharSequence) null, status, 0, false);
-                    return;
-                case 3:
-                    LinkActionView actionView = (LinkActionView) viewHolder.itemView;
-                    actionView.setUsers(0, (ArrayList<TLRPC.User>) null);
-                    actionView.setLink(InviteLinkBottomSheet.this.invite.link);
-                    actionView.setRevoke(InviteLinkBottomSheet.this.invite.revoked);
-                    actionView.setPermanent(InviteLinkBottomSheet.this.invite.permanent);
-                    actionView.setCanEdit(InviteLinkBottomSheet.this.canEdit);
-                    actionView.hideRevokeOption(!InviteLinkBottomSheet.this.canEdit);
-                    return;
-                case 4:
-                    TimerPrivacyCell privacyCell = (TimerPrivacyCell) viewHolder.itemView;
-                    privacyCell.cancelTimer();
-                    privacyCell.timer = false;
-                    privacyCell.setTextColor(Theme.getColor("windowBackgroundWhiteGrayText4"));
-                    privacyCell.setFixedSize(0);
-                    if (InviteLinkBottomSheet.this.invite.revoked) {
-                        privacyCell.setText(LocaleController.getString("LinkIsNoActive", NUM));
-                        return;
-                    } else if (InviteLinkBottomSheet.this.invite.expired) {
-                        if (InviteLinkBottomSheet.this.invite.usage_limit <= 0 || InviteLinkBottomSheet.this.invite.usage_limit != InviteLinkBottomSheet.this.invite.usage) {
-                            privacyCell.setText(LocaleController.getString("LinkIsExpired", NUM));
-                            privacyCell.setTextColor(Theme.getColor("windowBackgroundWhiteRedText"));
-                            return;
-                        }
-                        privacyCell.setText(LocaleController.getString("LinkIsExpiredLimitReached", NUM));
-                        return;
-                    } else if (InviteLinkBottomSheet.this.invite.expire_date > 0) {
-                        long currentTime = System.currentTimeMillis() + (InviteLinkBottomSheet.this.timeDif * 1000);
-                        long timeLeft = (((long) InviteLinkBottomSheet.this.invite.expire_date) * 1000) - currentTime;
-                        if (timeLeft < 0) {
-                            timeLeft = 0;
-                        }
-                        if (timeLeft > 86400000) {
-                            privacyCell.setText(LocaleController.formatString("LinkExpiresIn", NUM, LocaleController.formatDateAudio((long) InviteLinkBottomSheet.this.invite.expire_date, false)));
-                            return;
-                        }
-                        long j = currentTime;
-                        privacyCell.timer = true;
-                        privacyCell.runTimer();
-                        privacyCell.setText(LocaleController.formatString("LinkExpiresInTime", NUM, String.format(Locale.ENGLISH, "%02d", new Object[]{Integer.valueOf((int) (((timeLeft / 1000) / 60) / 60))}) + String.format(Locale.ENGLISH, ":%02d", new Object[]{Integer.valueOf((int) (((timeLeft / 1000) / 60) % 60))}) + String.format(Locale.ENGLISH, ":%02d", new Object[]{Integer.valueOf((int) ((timeLeft / 1000) % 60))})));
-                        return;
-                    } else {
-                        privacyCell.setFixedSize(12);
-                        privacyCell.setText((CharSequence) null);
+                    tLRPC$User = tLRPC$User2;
+                    str = formatDateAudio;
+                } else {
+                    int i6 = inviteLinkBottomSheet2.joinedStartRow;
+                    ArrayList<TLRPC$TL_chatInviteImporter> arrayList = inviteLinkBottomSheet2.joinedUsers;
+                    int i7 = inviteLinkBottomSheet2.requestedStartRow;
+                    if (i7 != -1 && i >= i7) {
+                        arrayList = inviteLinkBottomSheet2.requestedUsers;
+                        i6 = i7;
+                    }
+                    tLRPC$User = InviteLinkBottomSheet.this.users.get(Long.valueOf(arrayList.get(i - i6).user_id));
+                    str = null;
+                }
+                userCell.setAdminRole(str2);
+                userCell.setData(tLRPC$User, (CharSequence) null, str, 0, false);
+            } else if (itemViewType == 3) {
+                LinkActionView linkActionView = (LinkActionView) viewHolder.itemView;
+                linkActionView.setUsers(0, (ArrayList<TLRPC$User>) null);
+                linkActionView.setLink(InviteLinkBottomSheet.this.invite.link);
+                linkActionView.setRevoke(InviteLinkBottomSheet.this.invite.revoked);
+                linkActionView.setPermanent(InviteLinkBottomSheet.this.invite.permanent);
+                linkActionView.setCanEdit(InviteLinkBottomSheet.this.canEdit);
+                linkActionView.hideRevokeOption(!InviteLinkBottomSheet.this.canEdit);
+            } else if (itemViewType == 4) {
+                TimerPrivacyCell timerPrivacyCell = (TimerPrivacyCell) viewHolder.itemView;
+                timerPrivacyCell.cancelTimer();
+                timerPrivacyCell.timer = false;
+                timerPrivacyCell.setTextColor(Theme.getColor("windowBackgroundWhiteGrayText4"));
+                timerPrivacyCell.setFixedSize(0);
+                TLRPC$TL_chatInviteExported tLRPC$TL_chatInviteExported2 = InviteLinkBottomSheet.this.invite;
+                if (tLRPC$TL_chatInviteExported2.revoked) {
+                    timerPrivacyCell.setText(LocaleController.getString("LinkIsNoActive", NUM));
+                } else if (tLRPC$TL_chatInviteExported2.expired) {
+                    int i8 = tLRPC$TL_chatInviteExported2.usage_limit;
+                    if (i8 <= 0 || i8 != tLRPC$TL_chatInviteExported2.usage) {
+                        timerPrivacyCell.setText(LocaleController.getString("LinkIsExpired", NUM));
+                        timerPrivacyCell.setTextColor(Theme.getColor("windowBackgroundWhiteRedText"));
                         return;
                     }
-                case 8:
-                    EmptyHintRow emptyHintRow = (EmptyHintRow) viewHolder.itemView;
-                    if (InviteLinkBottomSheet.this.invite.usage_limit > 0) {
-                        emptyHintRow.textView.setText(LocaleController.formatPluralString("PeopleCanJoinViaLinkCount", InviteLinkBottomSheet.this.invite.usage_limit, new Object[0]));
-                        emptyHintRow.textView.setVisibility(0);
+                    timerPrivacyCell.setText(LocaleController.getString("LinkIsExpiredLimitReached", NUM));
+                } else if (tLRPC$TL_chatInviteExported2.expire_date > 0) {
+                    long currentTimeMillis = System.currentTimeMillis() + (InviteLinkBottomSheet.this.timeDif * 1000);
+                    int i9 = InviteLinkBottomSheet.this.invite.expire_date;
+                    long j = (((long) i9) * 1000) - currentTimeMillis;
+                    if (j < 0) {
+                        j = 0;
+                    }
+                    if (j > 86400000) {
+                        timerPrivacyCell.setText(LocaleController.formatString("LinkExpiresIn", NUM, LocaleController.formatDateAudio((long) i9, false)));
                         return;
                     }
-                    emptyHintRow.textView.setVisibility(8);
+                    long j2 = j / 1000;
+                    int i10 = (int) (j2 % 60);
+                    long j3 = j2 / 60;
+                    int i11 = (int) (j3 / 60);
+                    StringBuilder sb = new StringBuilder();
+                    Locale locale = Locale.ENGLISH;
+                    sb.append(String.format(locale, "%02d", new Object[]{Integer.valueOf(i11)}));
+                    sb.append(String.format(locale, ":%02d", new Object[]{Integer.valueOf((int) (j3 % 60))}));
+                    sb.append(String.format(locale, ":%02d", new Object[]{Integer.valueOf(i10)}));
+                    String sb2 = sb.toString();
+                    timerPrivacyCell.timer = true;
+                    timerPrivacyCell.runTimer();
+                    timerPrivacyCell.setText(LocaleController.formatString("LinkExpiresInTime", NUM, sb2));
+                } else {
+                    timerPrivacyCell.setFixedSize(12);
+                    timerPrivacyCell.setText((CharSequence) null);
+                }
+            } else if (itemViewType == 8) {
+                EmptyHintRow emptyHintRow = (EmptyHintRow) viewHolder.itemView;
+                int i12 = InviteLinkBottomSheet.this.invite.usage_limit;
+                if (i12 > 0) {
+                    emptyHintRow.textView.setText(LocaleController.formatPluralString("PeopleCanJoinViaLinkCount", i12, new Object[0]));
+                    emptyHintRow.textView.setVisibility(0);
                     return;
-                default:
-                    return;
+                }
+                emptyHintRow.textView.setVisibility(8);
             }
         }
 
@@ -900,9 +956,10 @@ public class InviteLinkBottomSheet extends BottomSheet {
             return InviteLinkBottomSheet.this.rowCount;
         }
 
-        public boolean isEnabled(RecyclerView.ViewHolder holder) {
-            int position = holder.getAdapterPosition();
-            return position == InviteLinkBottomSheet.this.creatorRow ? InviteLinkBottomSheet.this.invite.admin_id != UserConfig.getInstance(InviteLinkBottomSheet.this.currentAccount).clientUserId : (position >= InviteLinkBottomSheet.this.joinedStartRow && position < InviteLinkBottomSheet.this.joinedEndRow) || (position >= InviteLinkBottomSheet.this.requestedStartRow && position < InviteLinkBottomSheet.this.requestedEndRow);
+        public boolean isEnabled(RecyclerView.ViewHolder viewHolder) {
+            int adapterPosition = viewHolder.getAdapterPosition();
+            InviteLinkBottomSheet inviteLinkBottomSheet = InviteLinkBottomSheet.this;
+            return adapterPosition == inviteLinkBottomSheet.creatorRow ? inviteLinkBottomSheet.invite.admin_id != UserConfig.getInstance(inviteLinkBottomSheet.currentAccount).clientUserId : (adapterPosition >= inviteLinkBottomSheet.joinedStartRow && adapterPosition < inviteLinkBottomSheet.joinedEndRow) || (adapterPosition >= inviteLinkBottomSheet.requestedStartRow && adapterPosition < inviteLinkBottomSheet.requestedEndRow);
         }
     }
 
@@ -918,20 +975,20 @@ public class InviteLinkBottomSheet extends BottomSheet {
             this.containerView.invalidate();
             return;
         }
-        View child = this.listView.getChildAt(0);
-        RecyclerListView.Holder holder = (RecyclerListView.Holder) this.listView.findContainingViewHolder(child);
-        int top = child.getTop();
-        int newOffset = 0;
+        int i = 0;
+        View childAt = this.listView.getChildAt(0);
+        RecyclerListView.Holder holder = (RecyclerListView.Holder) this.listView.findContainingViewHolder(childAt);
+        int top = childAt.getTop();
         if (top < 0 || holder == null || holder.getAdapterPosition() != 0) {
             runShadowAnimation(true);
         } else {
-            newOffset = top;
             runShadowAnimation(false);
+            i = top;
         }
-        if (this.scrollOffsetY != newOffset) {
+        if (this.scrollOffsetY != i) {
             RecyclerListView recyclerListView2 = this.listView;
-            this.scrollOffsetY = newOffset;
-            recyclerListView2.setTopGlowOffset(newOffset);
+            this.scrollOffsetY = i;
+            recyclerListView2.setTopGlowOffset(i);
             TextView textView = this.titleTextView;
             if (textView != null) {
                 textView.setTranslationY((float) this.scrollOffsetY);
@@ -941,10 +998,10 @@ public class InviteLinkBottomSheet extends BottomSheet {
         }
     }
 
-    private void runShadowAnimation(final boolean show) {
-        if ((show && this.shadow.getTag() != null) || (!show && this.shadow.getTag() == null)) {
-            this.shadow.setTag(show ? null : 1);
-            if (show) {
+    private void runShadowAnimation(final boolean z) {
+        if ((z && this.shadow.getTag() != null) || (!z && this.shadow.getTag() == null)) {
+            this.shadow.setTag(z ? null : 1);
+            if (z) {
                 this.shadow.setVisibility(0);
                 this.titleTextView.setVisibility(0);
             }
@@ -959,7 +1016,7 @@ public class InviteLinkBottomSheet extends BottomSheet {
             Property property = View.ALPHA;
             float[] fArr = new float[1];
             float f = 1.0f;
-            fArr[0] = show ? 1.0f : 0.0f;
+            fArr[0] = z ? 1.0f : 0.0f;
             animatorArr[0] = ObjectAnimator.ofFloat(view, property, fArr);
             animatorSet2.playTogether(animatorArr);
             if (!this.titleVisible) {
@@ -968,7 +1025,7 @@ public class InviteLinkBottomSheet extends BottomSheet {
                 TextView textView = this.titleTextView;
                 Property property2 = View.ALPHA;
                 float[] fArr2 = new float[1];
-                if (!show) {
+                if (!z) {
                     f = 0.0f;
                 }
                 fArr2[0] = f;
@@ -977,17 +1034,17 @@ public class InviteLinkBottomSheet extends BottomSheet {
             }
             this.shadowAnimation.setDuration(150);
             this.shadowAnimation.addListener(new AnimatorListenerAdapter() {
-                public void onAnimationEnd(Animator animation) {
-                    if (InviteLinkBottomSheet.this.shadowAnimation != null && InviteLinkBottomSheet.this.shadowAnimation.equals(animation)) {
-                        if (!show) {
+                public void onAnimationEnd(Animator animator) {
+                    if (InviteLinkBottomSheet.this.shadowAnimation != null && InviteLinkBottomSheet.this.shadowAnimation.equals(animator)) {
+                        if (!z) {
                             InviteLinkBottomSheet.this.shadow.setVisibility(4);
                         }
                         AnimatorSet unused = InviteLinkBottomSheet.this.shadowAnimation = null;
                     }
                 }
 
-                public void onAnimationCancel(Animator animation) {
-                    if (InviteLinkBottomSheet.this.shadowAnimation != null && InviteLinkBottomSheet.this.shadowAnimation.equals(animation)) {
+                public void onAnimationCancel(Animator animator) {
+                    if (InviteLinkBottomSheet.this.shadowAnimation != null && InviteLinkBottomSheet.this.shadowAnimation.equals(animator)) {
                         AnimatorSet unused = InviteLinkBottomSheet.this.shadowAnimation = null;
                     }
                 }
@@ -997,62 +1054,55 @@ public class InviteLinkBottomSheet extends BottomSheet {
     }
 
     public void loadUsers() {
-        boolean loadRequestedUsers;
         if (!this.usersLoading) {
             boolean z = false;
-            boolean hasMoreJoinedUsers = this.invite.usage > this.joinedUsers.size();
-            if (this.invite.request_needed && this.invite.requested > this.requestedUsers.size()) {
-                z = true;
+            boolean z2 = this.invite.usage > this.joinedUsers.size();
+            TLRPC$TL_chatInviteExported tLRPC$TL_chatInviteExported = this.invite;
+            boolean z3 = tLRPC$TL_chatInviteExported.request_needed && tLRPC$TL_chatInviteExported.requested > this.requestedUsers.size();
+            if (!z2) {
+                if (z3) {
+                    z = true;
+                } else {
+                    return;
+                }
             }
-            boolean hasMoreRequestedUsers = z;
-            if (hasMoreJoinedUsers) {
-                loadRequestedUsers = false;
-            } else if (hasMoreRequestedUsers) {
-                loadRequestedUsers = true;
+            ArrayList<TLRPC$TL_chatInviteImporter> arrayList = z ? this.requestedUsers : this.joinedUsers;
+            TLRPC$TL_messages_getChatInviteImporters tLRPC$TL_messages_getChatInviteImporters = new TLRPC$TL_messages_getChatInviteImporters();
+            tLRPC$TL_messages_getChatInviteImporters.flags |= 2;
+            tLRPC$TL_messages_getChatInviteImporters.link = this.invite.link;
+            tLRPC$TL_messages_getChatInviteImporters.peer = MessagesController.getInstance(UserConfig.selectedAccount).getInputPeer(-this.chatId);
+            tLRPC$TL_messages_getChatInviteImporters.requested = z;
+            if (arrayList.isEmpty()) {
+                tLRPC$TL_messages_getChatInviteImporters.offset_user = new TLRPC$TL_inputUserEmpty();
             } else {
-                return;
-            }
-            List<TLRPC.TL_chatInviteImporter> importersList = loadRequestedUsers ? this.requestedUsers : this.joinedUsers;
-            TLRPC.TL_messages_getChatInviteImporters req = new TLRPC.TL_messages_getChatInviteImporters();
-            req.flags |= 2;
-            req.link = this.invite.link;
-            req.peer = MessagesController.getInstance(UserConfig.selectedAccount).getInputPeer(-this.chatId);
-            req.requested = loadRequestedUsers;
-            if (importersList.isEmpty()) {
-                req.offset_user = new TLRPC.TL_inputUserEmpty();
-            } else {
-                TLRPC.TL_chatInviteImporter invitedUser = importersList.get(importersList.size() - 1);
-                req.offset_user = MessagesController.getInstance(this.currentAccount).getInputUser(this.users.get(Long.valueOf(invitedUser.user_id)));
-                req.offset_date = invitedUser.date;
+                TLRPC$TL_chatInviteImporter tLRPC$TL_chatInviteImporter = arrayList.get(arrayList.size() - 1);
+                tLRPC$TL_messages_getChatInviteImporters.offset_user = MessagesController.getInstance(this.currentAccount).getInputUser(this.users.get(Long.valueOf(tLRPC$TL_chatInviteImporter.user_id)));
+                tLRPC$TL_messages_getChatInviteImporters.offset_date = tLRPC$TL_chatInviteImporter.date;
             }
             this.usersLoading = true;
-            ConnectionsManager.getInstance(UserConfig.selectedAccount).sendRequest(req, new InviteLinkBottomSheet$$ExternalSyntheticLambda3(this, importersList, loadRequestedUsers, hasMoreRequestedUsers));
+            ConnectionsManager.getInstance(UserConfig.selectedAccount).sendRequest(tLRPC$TL_messages_getChatInviteImporters, new InviteLinkBottomSheet$$ExternalSyntheticLambda3(this, arrayList, z, z3));
         }
     }
 
-    /* renamed from: lambda$loadUsers$4$org-telegram-ui-Components-InviteLinkBottomSheet  reason: not valid java name */
-    public /* synthetic */ void m1050x3da8babf(List importersList, boolean loadRequestedUsers, boolean hasMoreRequestedUsers, TLObject response, TLRPC.TL_error error) {
-        AndroidUtilities.runOnUIThread(new InviteLinkBottomSheet$$ExternalSyntheticLambda0(this, error, response, importersList, loadRequestedUsers, hasMoreRequestedUsers));
+    /* access modifiers changed from: private */
+    public /* synthetic */ void lambda$loadUsers$4(List list, boolean z, boolean z2, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+        AndroidUtilities.runOnUIThread(new InviteLinkBottomSheet$$ExternalSyntheticLambda0(this, tLRPC$TL_error, tLObject, list, z, z2));
     }
 
-    /* renamed from: lambda$loadUsers$3$org-telegram-ui-Components-InviteLinkBottomSheet  reason: not valid java name */
-    public /* synthetic */ void m1049x4bfvar_a0(TLRPC.TL_error error, TLObject response, List importersList, boolean loadRequestedUsers, boolean hasMoreRequestedUsers) {
-        if (error == null) {
-            TLRPC.TL_messages_chatInviteImporters inviteImporters = (TLRPC.TL_messages_chatInviteImporters) response;
-            importersList.addAll(inviteImporters.importers);
-            for (int i = 0; i < inviteImporters.users.size(); i++) {
-                TLRPC.User user = inviteImporters.users.get(i);
-                this.users.put(Long.valueOf(user.id), user);
+    /* access modifiers changed from: private */
+    public /* synthetic */ void lambda$loadUsers$3(TLRPC$TL_error tLRPC$TL_error, TLObject tLObject, List list, boolean z, boolean z2) {
+        if (tLRPC$TL_error == null) {
+            TLRPC$TL_messages_chatInviteImporters tLRPC$TL_messages_chatInviteImporters = (TLRPC$TL_messages_chatInviteImporters) tLObject;
+            list.addAll(tLRPC$TL_messages_chatInviteImporters.importers);
+            for (int i = 0; i < tLRPC$TL_messages_chatInviteImporters.users.size(); i++) {
+                TLRPC$User tLRPC$User = tLRPC$TL_messages_chatInviteImporters.users.get(i);
+                this.users.put(Long.valueOf(tLRPC$User.id), tLRPC$User);
             }
-            boolean z = true;
-            if (loadRequestedUsers) {
-                if (importersList.size() >= inviteImporters.count) {
-                    z = false;
-                }
-            } else if (importersList.size() >= inviteImporters.count && !hasMoreRequestedUsers) {
-                z = false;
+            boolean z3 = true;
+            if (!z ? !(list.size() < tLRPC$TL_messages_chatInviteImporters.count || z2) : list.size() >= tLRPC$TL_messages_chatInviteImporters.count) {
+                z3 = false;
             }
-            this.hasMore = z;
+            this.hasMore = z3;
             updateRows();
         }
         this.usersLoading = false;
@@ -1066,9 +1116,10 @@ public class InviteLinkBottomSheet extends BottomSheet {
         boolean timer;
         Runnable timerRunnable = new Runnable() {
             public void run() {
-                int p;
-                if (!(InviteLinkBottomSheet.this.listView == null || InviteLinkBottomSheet.this.listView.getAdapter() == null || (p = InviteLinkBottomSheet.this.listView.getChildAdapterPosition(TimerPrivacyCell.this)) < 0)) {
-                    InviteLinkBottomSheet.this.adapter.onBindViewHolder(InviteLinkBottomSheet.this.listView.getChildViewHolder(TimerPrivacyCell.this), p);
+                int childAdapterPosition;
+                if (!(InviteLinkBottomSheet.this.listView == null || InviteLinkBottomSheet.this.listView.getAdapter() == null || (childAdapterPosition = InviteLinkBottomSheet.this.listView.getChildAdapterPosition(TimerPrivacyCell.this)) < 0)) {
+                    InviteLinkBottomSheet inviteLinkBottomSheet = InviteLinkBottomSheet.this;
+                    inviteLinkBottomSheet.adapter.onBindViewHolder(inviteLinkBottomSheet.listView.getChildViewHolder(TimerPrivacyCell.this), childAdapterPosition);
                 }
                 AndroidUtilities.runOnUIThread(this);
             }
@@ -1105,7 +1156,7 @@ public class InviteLinkBottomSheet extends BottomSheet {
     private class EmptyHintRow extends FrameLayout {
         TextView textView;
 
-        public EmptyHintRow(Context context) {
+        public EmptyHintRow(InviteLinkBottomSheet inviteLinkBottomSheet, Context context) {
             super(context);
             TextView textView2 = new TextView(context);
             this.textView = textView2;
@@ -1116,12 +1167,12 @@ public class InviteLinkBottomSheet extends BottomSheet {
         }
 
         /* access modifiers changed from: protected */
-        public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-            super.onMeasure(widthMeasureSpec, View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(84.0f), NUM));
+        public void onMeasure(int i, int i2) {
+            super.onMeasure(i, View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(84.0f), NUM));
         }
     }
 
-    public void setCanEdit(boolean canEdit2) {
-        this.canEdit = canEdit2;
+    public void setCanEdit(boolean z) {
+        this.canEdit = z;
     }
 }

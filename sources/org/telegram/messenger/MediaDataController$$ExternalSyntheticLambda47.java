@@ -1,19 +1,25 @@
 package org.telegram.messenger;
 
-import org.telegram.tgnet.RequestDelegate;
-import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC;
-
-public final /* synthetic */ class MediaDataController$$ExternalSyntheticLambda47 implements RequestDelegate {
+public final /* synthetic */ class MediaDataController$$ExternalSyntheticLambda47 implements Runnable {
     public final /* synthetic */ MediaDataController f$0;
-    public final /* synthetic */ int f$1;
+    public final /* synthetic */ long f$1;
+    public final /* synthetic */ boolean f$2;
+    public final /* synthetic */ int f$3;
+    public final /* synthetic */ int f$4;
+    public final /* synthetic */ int f$5;
+    public final /* synthetic */ int f$6;
 
-    public /* synthetic */ MediaDataController$$ExternalSyntheticLambda47(MediaDataController mediaDataController, int i) {
+    public /* synthetic */ MediaDataController$$ExternalSyntheticLambda47(MediaDataController mediaDataController, long j, boolean z, int i, int i2, int i3, int i4) {
         this.f$0 = mediaDataController;
-        this.f$1 = i;
+        this.f$1 = j;
+        this.f$2 = z;
+        this.f$3 = i;
+        this.f$4 = i2;
+        this.f$5 = i3;
+        this.f$6 = i4;
     }
 
-    public final void run(TLObject tLObject, TLRPC.TL_error tL_error) {
-        this.f$0.m2039lambda$loadRecents$33$orgtelegrammessengerMediaDataController(this.f$1, tLObject, tL_error);
+    public final void run() {
+        this.f$0.lambda$processLoadedMediaCount$97(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6);
     }
 }

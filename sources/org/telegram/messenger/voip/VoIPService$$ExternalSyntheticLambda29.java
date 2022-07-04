@@ -2,14 +2,12 @@ package org.telegram.messenger.voip;
 
 public final /* synthetic */ class VoIPService$$ExternalSyntheticLambda29 implements Runnable {
     public final /* synthetic */ VoIPService f$0;
-    public final /* synthetic */ int f$1;
 
-    public /* synthetic */ VoIPService$$ExternalSyntheticLambda29(VoIPService voIPService, int i) {
+    public /* synthetic */ VoIPService$$ExternalSyntheticLambda29(VoIPService voIPService) {
         this.f$0 = voIPService;
-        this.f$1 = i;
     }
 
     public final void run() {
-        this.f$0.m2478x77725var_(this.f$1);
+        this.f$0.lambda$onStartCommand$2();
     }
 }

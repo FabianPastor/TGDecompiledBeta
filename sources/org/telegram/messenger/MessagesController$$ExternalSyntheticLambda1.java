@@ -1,19 +1,17 @@
 package org.telegram.messenger;
 
-import androidx.collection.LongSparseArray;
+import android.content.DialogInterface;
 
-public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda1 implements Runnable {
+public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda1 implements DialogInterface.OnCancelListener {
     public final /* synthetic */ MessagesController f$0;
-    public final /* synthetic */ LongSparseArray f$1;
-    public final /* synthetic */ LongSparseArray f$2;
+    public final /* synthetic */ int f$1;
 
-    public /* synthetic */ MessagesController$$ExternalSyntheticLambda1(MessagesController messagesController, LongSparseArray longSparseArray, LongSparseArray longSparseArray2) {
+    public /* synthetic */ MessagesController$$ExternalSyntheticLambda1(MessagesController messagesController, int i) {
         this.f$0 = messagesController;
-        this.f$1 = longSparseArray;
-        this.f$2 = longSparseArray2;
+        this.f$1 = i;
     }
 
-    public final void run() {
-        this.f$0.m428x3f8a7e71(this.f$1, this.f$2);
+    public final void onCancel(DialogInterface dialogInterface) {
+        this.f$0.lambda$convertToGigaGroup$222(this.f$1, dialogInterface);
     }
 }

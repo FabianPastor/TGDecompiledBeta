@@ -17,23 +17,23 @@ public class GLIconSettingsView extends LinearLayout {
     public static float smallStarsSize = 1.0f;
 
     /* JADX INFO: super call moved to the top of the method (can break code semantics) */
-    public GLIconSettingsView(Context context, GLIconRenderer mRenderer) {
+    public GLIconSettingsView(Context context, GLIconRenderer gLIconRenderer) {
         super(context);
         final Context context2 = context;
-        final GLIconRenderer gLIconRenderer = mRenderer;
+        final GLIconRenderer gLIconRenderer2 = gLIconRenderer;
         setOrientation(1);
-        TextView saturationTextView = new TextView(context2);
-        saturationTextView.setText("Spectral top ");
-        saturationTextView.setTextColor(Theme.getColor("dialogTextBlue2"));
-        saturationTextView.setTextSize(1, 16.0f);
-        saturationTextView.setLines(1);
-        saturationTextView.setMaxLines(1);
-        saturationTextView.setSingleLine(true);
+        TextView textView = new TextView(context2);
+        textView.setText("Spectral top ");
+        textView.setTextColor(Theme.getColor("dialogTextBlue2"));
+        textView.setTextSize(1, 16.0f);
+        textView.setLines(1);
+        textView.setMaxLines(1);
+        textView.setSingleLine(true);
         int i = 3;
-        saturationTextView.setGravity((LocaleController.isRTL ? 3 : 5) | 48);
-        addView(saturationTextView, LayoutHelper.createFrame(-2, -1.0f, (LocaleController.isRTL ? 3 : 5) | 48, 21.0f, 13.0f, 21.0f, 0.0f));
-        SeekBarView seekBar = new SeekBarView(context2);
-        seekBar.setDelegate(new SeekBarView.SeekBarViewDelegate() {
+        textView.setGravity((LocaleController.isRTL ? 3 : 5) | 48);
+        addView(textView, LayoutHelper.createFrame(-2, -1.0f, (LocaleController.isRTL ? 3 : 5) | 48, 21.0f, 13.0f, 21.0f, 0.0f));
+        SeekBarView seekBarView = new SeekBarView(context2);
+        seekBarView.setDelegate(new SeekBarView.SeekBarViewDelegate(this) {
             public /* synthetic */ CharSequence getContentDescription() {
                 return SeekBarView.SeekBarViewDelegate.CC.$default$getContentDescription(this);
             }
@@ -42,27 +42,27 @@ public class GLIconSettingsView extends LinearLayout {
                 return SeekBarView.SeekBarViewDelegate.CC.$default$getStepsCount(this);
             }
 
-            public void onSeekBarDrag(boolean stop, float progress) {
-                gLIconRenderer.star.spec1 = 2.0f * progress;
+            public void onSeekBarPressed(boolean z) {
             }
 
-            public void onSeekBarPressed(boolean pressed) {
+            public void onSeekBarDrag(boolean z, float f) {
+                gLIconRenderer2.star.spec1 = f * 2.0f;
             }
         });
-        seekBar.setProgress(gLIconRenderer.star.spec1 / 2.0f);
-        seekBar.setReportChanges(true);
-        addView(seekBar, LayoutHelper.createFrame(-1, 38.0f, 0, 5.0f, 4.0f, 5.0f, 0.0f));
-        TextView saturationTextView2 = new TextView(context2);
-        saturationTextView2.setText("Spectral bottom ");
-        saturationTextView2.setTextColor(Theme.getColor("dialogTextBlue2"));
-        saturationTextView2.setTextSize(1, 16.0f);
-        saturationTextView2.setLines(1);
-        saturationTextView2.setMaxLines(1);
-        saturationTextView2.setSingleLine(true);
-        saturationTextView2.setGravity((LocaleController.isRTL ? 3 : 5) | 48);
-        addView(saturationTextView2, LayoutHelper.createFrame(-2, -1.0f, (LocaleController.isRTL ? 3 : 5) | 48, 21.0f, 13.0f, 21.0f, 0.0f));
-        SeekBarView seekBar2 = new SeekBarView(context2);
-        seekBar2.setDelegate(new SeekBarView.SeekBarViewDelegate() {
+        seekBarView.setProgress(gLIconRenderer2.star.spec1 / 2.0f);
+        seekBarView.setReportChanges(true);
+        addView(seekBarView, LayoutHelper.createFrame(-1, 38.0f, 0, 5.0f, 4.0f, 5.0f, 0.0f));
+        TextView textView2 = new TextView(context2);
+        textView2.setText("Spectral bottom ");
+        textView2.setTextColor(Theme.getColor("dialogTextBlue2"));
+        textView2.setTextSize(1, 16.0f);
+        textView2.setLines(1);
+        textView2.setMaxLines(1);
+        textView2.setSingleLine(true);
+        textView2.setGravity((LocaleController.isRTL ? 3 : 5) | 48);
+        addView(textView2, LayoutHelper.createFrame(-2, -1.0f, (LocaleController.isRTL ? 3 : 5) | 48, 21.0f, 13.0f, 21.0f, 0.0f));
+        SeekBarView seekBarView2 = new SeekBarView(context2);
+        seekBarView2.setDelegate(new SeekBarView.SeekBarViewDelegate(this) {
             public /* synthetic */ CharSequence getContentDescription() {
                 return SeekBarView.SeekBarViewDelegate.CC.$default$getContentDescription(this);
             }
@@ -71,28 +71,28 @@ public class GLIconSettingsView extends LinearLayout {
                 return SeekBarView.SeekBarViewDelegate.CC.$default$getStepsCount(this);
             }
 
-            public void onSeekBarDrag(boolean stop, float progress) {
-                gLIconRenderer.star.spec2 = 2.0f * progress;
+            public void onSeekBarPressed(boolean z) {
             }
 
-            public void onSeekBarPressed(boolean pressed) {
+            public void onSeekBarDrag(boolean z, float f) {
+                gLIconRenderer2.star.spec2 = f * 2.0f;
             }
         });
-        seekBar2.setProgress(gLIconRenderer.star.spec2 / 2.0f);
-        seekBar2.setReportChanges(true);
-        addView(seekBar2, LayoutHelper.createFrame(-1, 38.0f, 0, 5.0f, 4.0f, 5.0f, 0.0f));
-        TextView saturationTextView3 = new TextView(context2);
-        saturationTextView3.setText("Setup spec color");
-        saturationTextView3.setTextSize(1, 16.0f);
-        saturationTextView3.setLines(1);
-        saturationTextView3.setGravity(17);
-        saturationTextView3.setMaxLines(1);
-        saturationTextView3.setSingleLine(true);
-        saturationTextView3.setTextColor(Theme.getColor("featuredStickers_buttonText"));
-        saturationTextView3.setBackground(Theme.AdaptiveRipple.filledRect(Theme.getColor("featuredStickers_addButton"), 4.0f));
-        saturationTextView3.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                AnonymousClass2 r0 = new ColorPicker(context2, false, new ColorPicker.ColorPickerDelegate() {
+        seekBarView2.setProgress(gLIconRenderer2.star.spec2 / 2.0f);
+        seekBarView2.setReportChanges(true);
+        addView(seekBarView2, LayoutHelper.createFrame(-1, 38.0f, 0, 5.0f, 4.0f, 5.0f, 0.0f));
+        TextView textView3 = new TextView(context2);
+        textView3.setText("Setup spec color");
+        textView3.setTextSize(1, 16.0f);
+        textView3.setLines(1);
+        textView3.setGravity(17);
+        textView3.setMaxLines(1);
+        textView3.setSingleLine(true);
+        textView3.setTextColor(Theme.getColor("featuredStickers_buttonText"));
+        textView3.setBackground(Theme.AdaptiveRipple.filledRect(Theme.getColor("featuredStickers_addButton"), 4.0f));
+        textView3.setOnClickListener(new View.OnClickListener(this) {
+            public void onClick(View view) {
+                AnonymousClass2 r10 = new ColorPicker(this, context2, false, new ColorPicker.ColorPickerDelegate() {
                     public /* synthetic */ void deleteTheme() {
                         ColorPicker.ColorPickerDelegate.CC.$default$deleteTheme(this);
                     }
@@ -101,47 +101,39 @@ public class GLIconSettingsView extends LinearLayout {
                         return ColorPicker.ColorPickerDelegate.CC.$default$getDefaultColor(this, i);
                     }
 
-                    public /* synthetic */ boolean hasChanges() {
-                        return ColorPicker.ColorPickerDelegate.CC.$default$hasChanges(this);
-                    }
-
                     public /* synthetic */ void openThemeCreate(boolean z) {
                         ColorPicker.ColorPickerDelegate.CC.$default$openThemeCreate(this, z);
                     }
 
-                    public /* synthetic */ void rotateColors() {
-                        ColorPicker.ColorPickerDelegate.CC.$default$rotateColors(this);
-                    }
-
-                    public void setColor(int color, int num, boolean applyNow) {
-                        gLIconRenderer.star.specColor = color;
+                    public void setColor(int i, int i2, boolean z) {
+                        gLIconRenderer2.star.specColor = i;
                     }
                 }) {
                     /* access modifiers changed from: protected */
-                    public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-                        super.onMeasure(widthMeasureSpec, View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(300.0f), NUM));
+                    public void onMeasure(int i, int i2) {
+                        super.onMeasure(i, View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(300.0f), NUM));
                     }
                 };
-                r0.setColor(gLIconRenderer.star.specColor, 0);
-                r0.setType(-1, true, 1, 1, false, 0, false);
+                r10.setColor(gLIconRenderer2.star.specColor, 0);
+                r10.setType(-1, true, 1, 1, false, 0, false);
                 BottomSheet bottomSheet = new BottomSheet(context2, false);
-                bottomSheet.setCustomView(r0);
+                bottomSheet.setCustomView(r10);
                 bottomSheet.setDimBehind(false);
                 bottomSheet.show();
             }
         });
-        addView(saturationTextView3, LayoutHelper.createFrame(-1, 48.0f, 16, 16.0f, 0.0f, 16.0f, 0.0f));
-        TextView saturationTextView4 = new TextView(context2);
-        saturationTextView4.setText("Diffuse ");
-        saturationTextView4.setTextColor(Theme.getColor("dialogTextBlue2"));
-        saturationTextView4.setTextSize(1, 16.0f);
-        saturationTextView4.setLines(1);
-        saturationTextView4.setMaxLines(1);
-        saturationTextView4.setSingleLine(true);
-        saturationTextView4.setGravity((LocaleController.isRTL ? 3 : 5) | 48);
-        addView(saturationTextView4, LayoutHelper.createFrame(-2, -1.0f, (LocaleController.isRTL ? 3 : 5) | 48, 21.0f, 13.0f, 21.0f, 0.0f));
-        SeekBarView seekBar3 = new SeekBarView(context2);
-        seekBar3.setDelegate(new SeekBarView.SeekBarViewDelegate() {
+        addView(textView3, LayoutHelper.createFrame(-1, 48.0f, 16, 16.0f, 0.0f, 16.0f, 0.0f));
+        TextView textView4 = new TextView(context2);
+        textView4.setText("Diffuse ");
+        textView4.setTextColor(Theme.getColor("dialogTextBlue2"));
+        textView4.setTextSize(1, 16.0f);
+        textView4.setLines(1);
+        textView4.setMaxLines(1);
+        textView4.setSingleLine(true);
+        textView4.setGravity((LocaleController.isRTL ? 3 : 5) | 48);
+        addView(textView4, LayoutHelper.createFrame(-2, -1.0f, (LocaleController.isRTL ? 3 : 5) | 48, 21.0f, 13.0f, 21.0f, 0.0f));
+        SeekBarView seekBarView3 = new SeekBarView(context2);
+        seekBarView3.setDelegate(new SeekBarView.SeekBarViewDelegate(this) {
             public /* synthetic */ CharSequence getContentDescription() {
                 return SeekBarView.SeekBarViewDelegate.CC.$default$getContentDescription(this);
             }
@@ -150,27 +142,27 @@ public class GLIconSettingsView extends LinearLayout {
                 return SeekBarView.SeekBarViewDelegate.CC.$default$getStepsCount(this);
             }
 
-            public void onSeekBarDrag(boolean stop, float progress) {
-                gLIconRenderer.star.diffuse = progress;
+            public void onSeekBarPressed(boolean z) {
             }
 
-            public void onSeekBarPressed(boolean pressed) {
+            public void onSeekBarDrag(boolean z, float f) {
+                gLIconRenderer2.star.diffuse = f;
             }
         });
-        seekBar3.setProgress(gLIconRenderer.star.diffuse);
-        seekBar3.setReportChanges(true);
-        addView(seekBar3, LayoutHelper.createFrame(-1, 38.0f, 0, 5.0f, 4.0f, 5.0f, 0.0f));
-        TextView saturationTextView5 = new TextView(context2);
-        saturationTextView5.setText("Normal map spectral");
-        saturationTextView5.setTextColor(Theme.getColor("dialogTextBlue2"));
-        saturationTextView5.setTextSize(1, 16.0f);
-        saturationTextView5.setLines(1);
-        saturationTextView5.setMaxLines(1);
-        saturationTextView5.setSingleLine(true);
-        saturationTextView5.setGravity((LocaleController.isRTL ? 3 : 5) | 48);
-        addView(saturationTextView5, LayoutHelper.createFrame(-2, -1.0f, (LocaleController.isRTL ? 3 : 5) | 48, 21.0f, 13.0f, 21.0f, 0.0f));
-        SeekBarView seekBar4 = new SeekBarView(context2);
-        seekBar4.setDelegate(new SeekBarView.SeekBarViewDelegate() {
+        seekBarView3.setProgress(gLIconRenderer2.star.diffuse);
+        seekBarView3.setReportChanges(true);
+        addView(seekBarView3, LayoutHelper.createFrame(-1, 38.0f, 0, 5.0f, 4.0f, 5.0f, 0.0f));
+        TextView textView5 = new TextView(context2);
+        textView5.setText("Normal map spectral");
+        textView5.setTextColor(Theme.getColor("dialogTextBlue2"));
+        textView5.setTextSize(1, 16.0f);
+        textView5.setLines(1);
+        textView5.setMaxLines(1);
+        textView5.setSingleLine(true);
+        textView5.setGravity((LocaleController.isRTL ? 3 : 5) | 48);
+        addView(textView5, LayoutHelper.createFrame(-2, -1.0f, (LocaleController.isRTL ? 3 : 5) | 48, 21.0f, 13.0f, 21.0f, 0.0f));
+        SeekBarView seekBarView4 = new SeekBarView(context2);
+        seekBarView4.setDelegate(new SeekBarView.SeekBarViewDelegate(this) {
             public /* synthetic */ CharSequence getContentDescription() {
                 return SeekBarView.SeekBarViewDelegate.CC.$default$getContentDescription(this);
             }
@@ -179,28 +171,28 @@ public class GLIconSettingsView extends LinearLayout {
                 return SeekBarView.SeekBarViewDelegate.CC.$default$getStepsCount(this);
             }
 
-            public void onSeekBarDrag(boolean stop, float progress) {
-                gLIconRenderer.star.normalSpec = 2.0f * progress;
+            public void onSeekBarPressed(boolean z) {
             }
 
-            public void onSeekBarPressed(boolean pressed) {
+            public void onSeekBarDrag(boolean z, float f) {
+                gLIconRenderer2.star.normalSpec = f * 2.0f;
             }
         });
-        seekBar4.setProgress(gLIconRenderer.star.normalSpec / 2.0f);
-        seekBar4.setReportChanges(true);
-        addView(seekBar4, LayoutHelper.createFrame(-1, 38.0f, 0, 5.0f, 4.0f, 5.0f, 0.0f));
-        TextView saturationTextView6 = new TextView(context2);
-        saturationTextView6.setText("Setup normal spec color");
-        saturationTextView6.setTextSize(1, 16.0f);
-        saturationTextView6.setLines(1);
-        saturationTextView6.setGravity(17);
-        saturationTextView6.setMaxLines(1);
-        saturationTextView6.setSingleLine(true);
-        saturationTextView6.setTextColor(Theme.getColor("featuredStickers_buttonText"));
-        saturationTextView6.setBackground(Theme.AdaptiveRipple.filledRect(Theme.getColor("featuredStickers_addButton"), 4.0f));
-        saturationTextView6.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                AnonymousClass2 r0 = new ColorPicker(context2, false, new ColorPicker.ColorPickerDelegate() {
+        seekBarView4.setProgress(gLIconRenderer2.star.normalSpec / 2.0f);
+        seekBarView4.setReportChanges(true);
+        addView(seekBarView4, LayoutHelper.createFrame(-1, 38.0f, 0, 5.0f, 4.0f, 5.0f, 0.0f));
+        TextView textView6 = new TextView(context2);
+        textView6.setText("Setup normal spec color");
+        textView6.setTextSize(1, 16.0f);
+        textView6.setLines(1);
+        textView6.setGravity(17);
+        textView6.setMaxLines(1);
+        textView6.setSingleLine(true);
+        textView6.setTextColor(Theme.getColor("featuredStickers_buttonText"));
+        textView6.setBackground(Theme.AdaptiveRipple.filledRect(Theme.getColor("featuredStickers_addButton"), 4.0f));
+        textView6.setOnClickListener(new View.OnClickListener(this) {
+            public void onClick(View view) {
+                AnonymousClass2 r10 = new ColorPicker(this, context2, false, new ColorPicker.ColorPickerDelegate() {
                     public /* synthetic */ void deleteTheme() {
                         ColorPicker.ColorPickerDelegate.CC.$default$deleteTheme(this);
                     }
@@ -209,49 +201,41 @@ public class GLIconSettingsView extends LinearLayout {
                         return ColorPicker.ColorPickerDelegate.CC.$default$getDefaultColor(this, i);
                     }
 
-                    public /* synthetic */ boolean hasChanges() {
-                        return ColorPicker.ColorPickerDelegate.CC.$default$hasChanges(this);
-                    }
-
                     public /* synthetic */ void openThemeCreate(boolean z) {
                         ColorPicker.ColorPickerDelegate.CC.$default$openThemeCreate(this, z);
                     }
 
-                    public /* synthetic */ void rotateColors() {
-                        ColorPicker.ColorPickerDelegate.CC.$default$rotateColors(this);
-                    }
-
-                    public void setColor(int color, int num, boolean applyNow) {
-                        if (num == 0) {
-                            gLIconRenderer.star.normalSpecColor = color;
+                    public void setColor(int i, int i2, boolean z) {
+                        if (i2 == 0) {
+                            gLIconRenderer2.star.normalSpecColor = i;
                         }
                     }
                 }) {
                     /* access modifiers changed from: protected */
-                    public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-                        super.onMeasure(widthMeasureSpec, View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(300.0f), NUM));
+                    public void onMeasure(int i, int i2) {
+                        super.onMeasure(i, View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(300.0f), NUM));
                     }
                 };
-                r0.setColor(gLIconRenderer.star.normalSpecColor, 0);
-                r0.setType(-1, true, 1, 1, false, 0, false);
+                r10.setColor(gLIconRenderer2.star.normalSpecColor, 0);
+                r10.setType(-1, true, 1, 1, false, 0, false);
                 BottomSheet bottomSheet = new BottomSheet(context2, false);
-                bottomSheet.setCustomView(r0);
+                bottomSheet.setCustomView(r10);
                 bottomSheet.setDimBehind(false);
                 bottomSheet.show();
             }
         });
-        addView(saturationTextView6, LayoutHelper.createFrame(-1, 48.0f, 16, 16.0f, 0.0f, 16.0f, 0.0f));
-        TextView saturationTextView7 = new TextView(context2);
-        saturationTextView7.setText("Small starts size");
-        saturationTextView7.setTextColor(Theme.getColor("dialogTextBlue2"));
-        saturationTextView7.setTextSize(1, 16.0f);
-        saturationTextView7.setLines(1);
-        saturationTextView7.setMaxLines(1);
-        saturationTextView7.setSingleLine(true);
-        saturationTextView7.setGravity((LocaleController.isRTL ? 3 : 5) | 48);
-        addView(saturationTextView7, LayoutHelper.createFrame(-2, -1.0f, (!LocaleController.isRTL ? 5 : i) | 48, 21.0f, 13.0f, 21.0f, 0.0f));
-        SeekBarView seekBar5 = new SeekBarView(context2);
-        seekBar5.setDelegate(new SeekBarView.SeekBarViewDelegate() {
+        addView(textView6, LayoutHelper.createFrame(-1, 48.0f, 16, 16.0f, 0.0f, 16.0f, 0.0f));
+        TextView textView7 = new TextView(context2);
+        textView7.setText("Small starts size");
+        textView7.setTextColor(Theme.getColor("dialogTextBlue2"));
+        textView7.setTextSize(1, 16.0f);
+        textView7.setLines(1);
+        textView7.setMaxLines(1);
+        textView7.setSingleLine(true);
+        textView7.setGravity((LocaleController.isRTL ? 3 : 5) | 48);
+        addView(textView7, LayoutHelper.createFrame(-2, -1.0f, (!LocaleController.isRTL ? 5 : i) | 48, 21.0f, 13.0f, 21.0f, 0.0f));
+        SeekBarView seekBarView5 = new SeekBarView(context2);
+        seekBarView5.setDelegate(new SeekBarView.SeekBarViewDelegate(this) {
             public /* synthetic */ CharSequence getContentDescription() {
                 return SeekBarView.SeekBarViewDelegate.CC.$default$getContentDescription(this);
             }
@@ -260,15 +244,15 @@ public class GLIconSettingsView extends LinearLayout {
                 return SeekBarView.SeekBarViewDelegate.CC.$default$getStepsCount(this);
             }
 
-            public void onSeekBarDrag(boolean stop, float progress) {
-                GLIconSettingsView.smallStarsSize = 2.0f * progress;
+            public void onSeekBarPressed(boolean z) {
             }
 
-            public void onSeekBarPressed(boolean pressed) {
+            public void onSeekBarDrag(boolean z, float f) {
+                GLIconSettingsView.smallStarsSize = f * 2.0f;
             }
         });
-        seekBar5.setProgress(smallStarsSize / 2.0f);
-        seekBar5.setReportChanges(true);
-        addView(seekBar5, LayoutHelper.createFrame(-1, 38.0f, 0, 5.0f, 4.0f, 5.0f, 0.0f));
+        seekBarView5.setProgress(smallStarsSize / 2.0f);
+        seekBarView5.setReportChanges(true);
+        addView(seekBarView5, LayoutHelper.createFrame(-1, 38.0f, 0, 5.0f, 4.0f, 5.0f, 0.0f));
     }
 }

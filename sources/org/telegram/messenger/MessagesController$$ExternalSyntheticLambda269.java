@@ -2,15 +2,22 @@ package org.telegram.messenger;
 
 import org.telegram.tgnet.RequestDelegate;
 import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC;
+import org.telegram.tgnet.TLRPC$TL_error;
 
 public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda269 implements RequestDelegate {
-    public static final /* synthetic */ MessagesController$$ExternalSyntheticLambda269 INSTANCE = new MessagesController$$ExternalSyntheticLambda269();
+    public final /* synthetic */ MessagesController f$0;
+    public final /* synthetic */ int f$1;
+    public final /* synthetic */ String f$2;
+    public final /* synthetic */ String f$3;
 
-    private /* synthetic */ MessagesController$$ExternalSyntheticLambda269() {
+    public /* synthetic */ MessagesController$$ExternalSyntheticLambda269(MessagesController messagesController, int i, String str, String str2) {
+        this.f$0 = messagesController;
+        this.f$1 = i;
+        this.f$2 = str;
+        this.f$3 = str2;
     }
 
-    public final void run(TLObject tLObject, TLRPC.TL_error tL_error) {
-        MessagesController.lambda$completeReadTask$197(tLObject, tL_error);
+    public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+        this.f$0.lambda$checkPromoInfoInternal$139(this.f$1, this.f$2, this.f$3, tLObject, tLRPC$TL_error);
     }
 }

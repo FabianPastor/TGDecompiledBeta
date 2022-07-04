@@ -13,6 +13,6 @@ public final /* synthetic */ class SearchViewPager$$ExternalSyntheticLambda0 imp
     }
 
     public final void onClick(DialogInterface dialogInterface, int i) {
-        this.f$0.m1333x21ad9157(this.f$1, dialogInterface, i);
+        this.f$0.lambda$onActionBarItemClick$2(this.f$1, dialogInterface, i);
     }
 }

@@ -12,6 +12,6 @@ public final /* synthetic */ class ThemeSetUrlActivity$$ExternalSyntheticLambda0
     }
 
     public final void onCancel(DialogInterface dialogInterface) {
-        this.f$0.m4705lambda$saveTheme$13$orgtelegramuiThemeSetUrlActivity(this.f$1, dialogInterface);
+        this.f$0.lambda$saveTheme$13(this.f$1, dialogInterface);
     }
 }

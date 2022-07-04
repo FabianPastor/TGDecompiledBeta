@@ -13,6 +13,6 @@ public final /* synthetic */ class RestrictedLanguagesSelectActivity$$ExternalSy
     }
 
     public final void onClick(DialogInterface dialogInterface, int i) {
-        this.f$0.m4572xfa6cd87d(this.f$1, dialogInterface, i);
+        this.f$0.lambda$createView$2(this.f$1, dialogInterface, i);
     }
 }

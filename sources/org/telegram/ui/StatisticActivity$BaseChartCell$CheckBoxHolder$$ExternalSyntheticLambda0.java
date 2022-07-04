@@ -14,6 +14,6 @@ public final /* synthetic */ class StatisticActivity$BaseChartCell$CheckBoxHolde
     }
 
     public final void onClick(View view) {
-        this.f$0.m4628x59b53508(this.f$1, view);
+        this.f$0.lambda$setData$0(this.f$1, view);
     }
 }

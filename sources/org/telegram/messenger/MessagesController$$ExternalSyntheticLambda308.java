@@ -1,29 +1,24 @@
 package org.telegram.messenger;
 
-import androidx.collection.LongSparseArray;
 import java.util.ArrayList;
-import org.telegram.tgnet.TLRPC;
+import org.telegram.tgnet.RequestDelegate;
+import org.telegram.tgnet.TLObject;
+import org.telegram.tgnet.TLRPC$TL_error;
 
-public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda308 implements Runnable {
+public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda308 implements RequestDelegate {
     public final /* synthetic */ MessagesController f$0;
-    public final /* synthetic */ int f$1;
-    public final /* synthetic */ ArrayList f$2;
-    public final /* synthetic */ boolean f$3;
-    public final /* synthetic */ TLRPC.TL_messages_peerDialogs f$4;
-    public final /* synthetic */ LongSparseArray f$5;
-    public final /* synthetic */ TLRPC.TL_messages_dialogs f$6;
+    public final /* synthetic */ long f$1;
+    public final /* synthetic */ boolean f$2;
+    public final /* synthetic */ ArrayList f$3;
 
-    public /* synthetic */ MessagesController$$ExternalSyntheticLambda308(MessagesController messagesController, int i, ArrayList arrayList, boolean z, TLRPC.TL_messages_peerDialogs tL_messages_peerDialogs, LongSparseArray longSparseArray, TLRPC.TL_messages_dialogs tL_messages_dialogs) {
+    public /* synthetic */ MessagesController$$ExternalSyntheticLambda308(MessagesController messagesController, long j, boolean z, ArrayList arrayList) {
         this.f$0 = messagesController;
-        this.f$1 = i;
-        this.f$2 = arrayList;
-        this.f$3 = z;
-        this.f$4 = tL_messages_peerDialogs;
-        this.f$5 = longSparseArray;
-        this.f$6 = tL_messages_dialogs;
+        this.f$1 = j;
+        this.f$2 = z;
+        this.f$3 = arrayList;
     }
 
-    public final void run() {
-        this.f$0.m272xCLASSNAMEecd6(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6);
+    public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+        this.f$0.lambda$reloadMessages$53(this.f$1, this.f$2, this.f$3, tLObject, tLRPC$TL_error);
     }
 }

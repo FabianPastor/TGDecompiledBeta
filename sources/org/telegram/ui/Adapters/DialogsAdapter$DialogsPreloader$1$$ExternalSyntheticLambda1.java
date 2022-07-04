@@ -14,6 +14,6 @@ public final /* synthetic */ class DialogsAdapter$DialogsPreloader$1$$ExternalSy
     }
 
     public final void run() {
-        this.f$0.m2604xCLASSNAMEb96d0(this.f$1, this.f$2);
+        this.f$0.lambda$onMessagesLoaded$0(this.f$1, this.f$2);
     }
 }

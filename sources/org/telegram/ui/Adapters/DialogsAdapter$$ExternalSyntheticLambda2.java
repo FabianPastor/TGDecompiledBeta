@@ -8,6 +8,6 @@ public final /* synthetic */ class DialogsAdapter$$ExternalSyntheticLambda2 impl
     }
 
     public final void run() {
-        this.f$0.m2599x3d1e216b();
+        this.f$0.lambda$onBindViewHolder$2();
     }
 }

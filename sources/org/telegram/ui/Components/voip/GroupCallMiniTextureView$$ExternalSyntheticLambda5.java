@@ -8,6 +8,6 @@ public final /* synthetic */ class GroupCallMiniTextureView$$ExternalSyntheticLa
     }
 
     public final void run() {
-        this.f$0.m1579xCLASSNAMEd612d();
+        this.f$0.lambda$new$0();
     }
 }

@@ -1,17 +1,16 @@
 package org.telegram.ui.Components;
 
-public final /* synthetic */ class SharedMediaLayout$$ExternalSyntheticLambda17 implements Runnable {
-    public final /* synthetic */ SharedMediaLayout f$0;
-    public final /* synthetic */ int f$1;
-    public final /* synthetic */ RecyclerListView f$2;
+import java.util.ArrayList;
+import org.telegram.ui.DialogsActivity;
 
-    public /* synthetic */ SharedMediaLayout$$ExternalSyntheticLambda17(SharedMediaLayout sharedMediaLayout, int i, RecyclerListView recyclerListView) {
+public final /* synthetic */ class SharedMediaLayout$$ExternalSyntheticLambda17 implements DialogsActivity.DialogsActivityDelegate {
+    public final /* synthetic */ SharedMediaLayout f$0;
+
+    public /* synthetic */ SharedMediaLayout$$ExternalSyntheticLambda17(SharedMediaLayout sharedMediaLayout) {
         this.f$0 = sharedMediaLayout;
-        this.f$1 = i;
-        this.f$2 = recyclerListView;
     }
 
-    public final void run() {
-        this.f$0.m1375xe0c6abc(this.f$1, this.f$2);
+    public final void didSelectDialogs(DialogsActivity dialogsActivity, ArrayList arrayList, CharSequence charSequence, boolean z) {
+        this.f$0.lambda$onActionBarItemClick$16(dialogsActivity, arrayList, charSequence, z);
     }
 }

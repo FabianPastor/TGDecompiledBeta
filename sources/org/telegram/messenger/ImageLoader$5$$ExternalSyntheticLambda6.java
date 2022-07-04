@@ -21,6 +21,6 @@ public final /* synthetic */ class ImageLoader$5$$ExternalSyntheticLambda6 imple
     }
 
     public final void run() {
-        this.f$0.m1892lambda$fileDidLoaded$5$orgtelegrammessengerImageLoader$5(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5);
+        this.f$0.lambda$fileDidLoaded$5(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5);
     }
 }

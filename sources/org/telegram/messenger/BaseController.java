@@ -6,9 +6,9 @@ public class BaseController {
     protected final int currentAccount;
     private AccountInstance parentAccountInstance;
 
-    public BaseController(int num) {
-        this.parentAccountInstance = AccountInstance.getInstance(num);
-        this.currentAccount = num;
+    public BaseController(int i) {
+        this.parentAccountInstance = AccountInstance.getInstance(i);
+        this.currentAccount = i;
     }
 
     /* access modifiers changed from: protected */

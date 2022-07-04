@@ -10,6 +10,6 @@ public final /* synthetic */ class NewContactActivity$$ExternalSyntheticLambda8 
     }
 
     public final void didSelectCountry(CountrySelectActivity.Country country) {
-        this.f$0.m3963lambda$createView$3$orgtelegramuiNewContactActivity(country);
+        this.f$0.lambda$createView$3(country);
     }
 }

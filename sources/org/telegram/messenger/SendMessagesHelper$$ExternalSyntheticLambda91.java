@@ -1,21 +1,28 @@
 package org.telegram.messenger;
 
-public final /* synthetic */ class SendMessagesHelper$$ExternalSyntheticLambda91 implements Runnable {
-    public final /* synthetic */ String f$0;
-    public final /* synthetic */ AccountInstance f$1;
-    public final /* synthetic */ long f$2;
-    public final /* synthetic */ boolean f$3;
-    public final /* synthetic */ int f$4;
+import org.telegram.tgnet.TLRPC$InputCheckPasswordSRP;
+import org.telegram.tgnet.TLRPC$KeyboardButton;
+import org.telegram.ui.ChatActivity;
+import org.telegram.ui.TwoStepVerificationActivity;
 
-    public /* synthetic */ SendMessagesHelper$$ExternalSyntheticLambda91(String str, AccountInstance accountInstance, long j, boolean z, int i) {
-        this.f$0 = str;
-        this.f$1 = accountInstance;
-        this.f$2 = j;
-        this.f$3 = z;
-        this.f$4 = i;
+public final /* synthetic */ class SendMessagesHelper$$ExternalSyntheticLambda91 implements TwoStepVerificationActivity.TwoStepVerificationActivityDelegate {
+    public final /* synthetic */ SendMessagesHelper f$0;
+    public final /* synthetic */ boolean f$1;
+    public final /* synthetic */ MessageObject f$2;
+    public final /* synthetic */ TLRPC$KeyboardButton f$3;
+    public final /* synthetic */ TwoStepVerificationActivity f$4;
+    public final /* synthetic */ ChatActivity f$5;
+
+    public /* synthetic */ SendMessagesHelper$$ExternalSyntheticLambda91(SendMessagesHelper sendMessagesHelper, boolean z, MessageObject messageObject, TLRPC$KeyboardButton tLRPC$KeyboardButton, TwoStepVerificationActivity twoStepVerificationActivity, ChatActivity chatActivity) {
+        this.f$0 = sendMessagesHelper;
+        this.f$1 = z;
+        this.f$2 = messageObject;
+        this.f$3 = tLRPC$KeyboardButton;
+        this.f$4 = twoStepVerificationActivity;
+        this.f$5 = chatActivity;
     }
 
-    public final void run() {
-        Utilities.stageQueue.postRunnable(new SendMessagesHelper$$ExternalSyntheticLambda88(this.f$0, this.f$1, this.f$2, this.f$3, this.f$4));
+    public final void didEnterPassword(TLRPC$InputCheckPasswordSRP tLRPC$InputCheckPasswordSRP) {
+        this.f$0.lambda$sendCallback$24(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, tLRPC$InputCheckPasswordSRP);
     }
 }

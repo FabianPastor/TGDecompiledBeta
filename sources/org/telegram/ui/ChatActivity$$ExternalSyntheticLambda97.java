@@ -1,20 +1,15 @@
 package org.telegram.ui;
 
-import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC;
+import android.view.View;
 
-public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda97 implements Runnable {
+public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda97 implements View.OnLongClickListener {
     public final /* synthetic */ ChatActivity f$0;
-    public final /* synthetic */ TLObject f$1;
-    public final /* synthetic */ TLRPC.User f$2;
 
-    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda97(ChatActivity chatActivity, TLObject tLObject, TLRPC.User user) {
+    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda97(ChatActivity chatActivity) {
         this.f$0 = chatActivity;
-        this.f$1 = tLObject;
-        this.f$2 = user;
     }
 
-    public final void run() {
-        this.f$0.m3037lambda$onTransitionAnimationEnd$134$orgtelegramuiChatActivity(this.f$1, this.f$2);
+    public final boolean onLongClick(View view) {
+        return this.f$0.lambda$createView$41(view);
     }
 }

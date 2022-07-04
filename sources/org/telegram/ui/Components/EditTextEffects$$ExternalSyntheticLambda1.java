@@ -8,6 +8,6 @@ public final /* synthetic */ class EditTextEffects$$ExternalSyntheticLambda1 imp
     }
 
     public final void run() {
-        this.f$0.m912lambda$new$1$orgtelegramuiComponentsEditTextEffects();
+        this.f$0.lambda$new$0();
     }
 }

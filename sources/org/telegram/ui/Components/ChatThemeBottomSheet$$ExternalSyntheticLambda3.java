@@ -10,6 +10,6 @@ public final /* synthetic */ class ChatThemeBottomSheet$$ExternalSyntheticLambda
     }
 
     public final void onClick(View view) {
-        this.f$0.m879lambda$new$2$orgtelegramuiComponentsChatThemeBottomSheet(view);
+        this.f$0.lambda$new$2(view);
     }
 }

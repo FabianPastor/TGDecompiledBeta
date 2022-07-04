@@ -1,19 +1,16 @@
 package org.telegram.messenger;
 
-import java.util.ArrayList;
+import org.telegram.tgnet.RequestDelegate;
+import org.telegram.tgnet.TLObject;
+import org.telegram.tgnet.TLRPC$TL_error;
 
-public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda342 implements Runnable {
-    public final /* synthetic */ MessagesController f$0;
-    public final /* synthetic */ long f$1;
-    public final /* synthetic */ ArrayList f$2;
+public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda342 implements RequestDelegate {
+    public static final /* synthetic */ MessagesController$$ExternalSyntheticLambda342 INSTANCE = new MessagesController$$ExternalSyntheticLambda342();
 
-    public /* synthetic */ MessagesController$$ExternalSyntheticLambda342(MessagesController messagesController, long j, ArrayList arrayList) {
-        this.f$0 = messagesController;
-        this.f$1 = j;
-        this.f$2 = arrayList;
+    private /* synthetic */ MessagesController$$ExternalSyntheticLambda342() {
     }
 
-    public final void run() {
-        this.f$0.m225xeb847e66(this.f$1, this.f$2);
+    public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+        MessagesController.lambda$reportSpam$56(tLObject, tLRPC$TL_error);
     }
 }

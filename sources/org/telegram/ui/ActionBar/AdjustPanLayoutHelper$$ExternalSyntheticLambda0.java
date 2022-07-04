@@ -10,6 +10,6 @@ public final /* synthetic */ class AdjustPanLayoutHelper$$ExternalSyntheticLambd
     }
 
     public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-        this.f$0.m2551x3382a933(valueAnimator);
+        this.f$0.lambda$animateHeight$0(valueAnimator);
     }
 }

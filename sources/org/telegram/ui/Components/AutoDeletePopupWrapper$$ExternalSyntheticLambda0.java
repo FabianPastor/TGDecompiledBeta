@@ -19,6 +19,6 @@ public final /* synthetic */ class AutoDeletePopupWrapper$$ExternalSyntheticLamb
     }
 
     public final void onClick(View view) {
-        this.f$0.m560lambda$new$5$orgtelegramuiComponentsAutoDeletePopupWrapper(this.f$1, this.f$2, this.f$3, view);
+        this.f$0.lambda$new$5(this.f$1, this.f$2, this.f$3, view);
     }
 }

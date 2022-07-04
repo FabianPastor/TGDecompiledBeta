@@ -11,6 +11,6 @@ public final /* synthetic */ class ThemeEditorView$1$$ExternalSyntheticLambda0 i
     }
 
     public final void onDismiss(DialogInterface dialogInterface) {
-        this.f$0.m1483x37CLASSNAME(dialogInterface);
+        this.f$0.lambda$onTouchEvent$1(dialogInterface);
     }
 }

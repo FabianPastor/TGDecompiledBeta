@@ -36,35 +36,35 @@ public class ThreadUtils {
         }
     }
 
-    public static void executeUninterruptibly(BlockingOperation operation) {
-        boolean wasInterrupted = false;
+    public static void executeUninterruptibly(BlockingOperation blockingOperation) {
+        boolean z = false;
         while (true) {
             try {
-                operation.run();
+                blockingOperation.run();
                 break;
-            } catch (InterruptedException e) {
-                wasInterrupted = true;
+            } catch (InterruptedException unused) {
+                z = true;
             }
         }
-        if (wasInterrupted) {
+        if (z) {
             Thread.currentThread().interrupt();
         }
     }
 
-    public static boolean joinUninterruptibly(Thread thread, long timeoutMs) {
-        long startTimeMs = SystemClock.elapsedRealtime();
-        long timeRemainingMs = timeoutMs;
-        boolean wasInterrupted = false;
-        while (timeRemainingMs > 0) {
+    public static boolean joinUninterruptibly(Thread thread, long j) {
+        long elapsedRealtime = SystemClock.elapsedRealtime();
+        boolean z = false;
+        long j2 = j;
+        while (j2 > 0) {
             try {
-                thread.join(timeRemainingMs);
+                thread.join(j2);
                 break;
-            } catch (InterruptedException e) {
-                wasInterrupted = true;
-                timeRemainingMs = timeoutMs - (SystemClock.elapsedRealtime() - startTimeMs);
+            } catch (InterruptedException unused) {
+                j2 = j - (SystemClock.elapsedRealtime() - elapsedRealtime);
+                z = true;
             }
         }
-        if (wasInterrupted) {
+        if (z) {
             Thread.currentThread().interrupt();
         }
         return !thread.isAlive();
@@ -78,35 +78,35 @@ public class ThreadUtils {
         });
     }
 
-    public static void awaitUninterruptibly(final CountDownLatch latch) {
+    public static void awaitUninterruptibly(final CountDownLatch countDownLatch) {
         executeUninterruptibly(new BlockingOperation() {
             public void run() throws InterruptedException {
-                latch.await();
+                countDownLatch.await();
             }
         });
     }
 
-    public static boolean awaitUninterruptibly(CountDownLatch barrier, long timeoutMs) {
-        long startTimeMs = SystemClock.elapsedRealtime();
-        long timeRemainingMs = timeoutMs;
-        boolean wasInterrupted = false;
-        boolean result = false;
+    public static boolean awaitUninterruptibly(CountDownLatch countDownLatch, long j) {
+        long elapsedRealtime = SystemClock.elapsedRealtime();
+        boolean z = false;
+        long j2 = j;
+        boolean z2 = false;
         while (true) {
             try {
-                result = barrier.await(timeRemainingMs, TimeUnit.MILLISECONDS);
+                z = countDownLatch.await(j2, TimeUnit.MILLISECONDS);
                 break;
-            } catch (InterruptedException e) {
-                wasInterrupted = true;
-                timeRemainingMs = timeoutMs - (SystemClock.elapsedRealtime() - startTimeMs);
-                if (timeRemainingMs <= 0) {
+            } catch (InterruptedException unused) {
+                z2 = true;
+                j2 = j - (SystemClock.elapsedRealtime() - elapsedRealtime);
+                if (j2 <= 0) {
                     break;
                 }
             }
         }
-        if (wasInterrupted) {
+        if (z2) {
             Thread.currentThread().interrupt();
         }
-        return result;
+        return z;
     }
 
     public static <V> V invokeAtFrontUninterruptibly(Handler handler, final Callable<V> callable) {
@@ -117,46 +117,46 @@ public class ThreadUtils {
                 throw new RuntimeException(e);
             }
         } else {
-            final AnonymousClass1Result result = new Object() {
+            final AnonymousClass1Result r0 = new Object() {
                 public V value;
             };
-            final AnonymousClass1CaughtException caughtException = new Object() {
+            final AnonymousClass1CaughtException r1 = new Object() {
                 Exception e;
             };
-            final CountDownLatch barrier = new CountDownLatch(1);
+            final CountDownLatch countDownLatch = new CountDownLatch(1);
             handler.post(new Runnable() {
                 public void run() {
                     try {
                         AnonymousClass1Result.this.value = callable.call();
                     } catch (Exception e) {
-                        caughtException.e = e;
+                        r1.e = e;
                     }
-                    barrier.countDown();
+                    countDownLatch.countDown();
                 }
             });
-            awaitUninterruptibly(barrier);
-            if (caughtException.e == null) {
-                return result.value;
+            awaitUninterruptibly(countDownLatch);
+            if (r1.e == null) {
+                return r0.value;
             }
-            RuntimeException runtimeException = new RuntimeException(caughtException.e);
-            runtimeException.setStackTrace(concatStackTraces(caughtException.e.getStackTrace(), runtimeException.getStackTrace()));
+            RuntimeException runtimeException = new RuntimeException(r1.e);
+            runtimeException.setStackTrace(concatStackTraces(r1.e.getStackTrace(), runtimeException.getStackTrace()));
             throw runtimeException;
         }
     }
 
-    public static void invokeAtFrontUninterruptibly(Handler handler, final Runnable runner) {
+    public static void invokeAtFrontUninterruptibly(Handler handler, final Runnable runnable) {
         invokeAtFrontUninterruptibly(handler, new Callable<Void>() {
             public Void call() {
-                runner.run();
+                runnable.run();
                 return null;
             }
         });
     }
 
-    static StackTraceElement[] concatStackTraces(StackTraceElement[] inner, StackTraceElement[] outer) {
-        StackTraceElement[] combined = new StackTraceElement[(inner.length + outer.length)];
-        System.arraycopy(inner, 0, combined, 0, inner.length);
-        System.arraycopy(outer, 0, combined, inner.length, outer.length);
-        return combined;
+    static StackTraceElement[] concatStackTraces(StackTraceElement[] stackTraceElementArr, StackTraceElement[] stackTraceElementArr2) {
+        StackTraceElement[] stackTraceElementArr3 = new StackTraceElement[(stackTraceElementArr.length + stackTraceElementArr2.length)];
+        System.arraycopy(stackTraceElementArr, 0, stackTraceElementArr3, 0, stackTraceElementArr.length);
+        System.arraycopy(stackTraceElementArr2, 0, stackTraceElementArr3, stackTraceElementArr.length, stackTraceElementArr2.length);
+        return stackTraceElementArr3;
     }
 }

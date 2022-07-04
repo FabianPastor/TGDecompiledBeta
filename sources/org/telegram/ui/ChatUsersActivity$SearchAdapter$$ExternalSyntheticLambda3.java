@@ -20,6 +20,6 @@ public final /* synthetic */ class ChatUsersActivity$SearchAdapter$$ExternalSynt
     }
 
     public final void run() {
-        this.f$0.m3323x4d77140(this.f$1, this.f$2, this.f$3, this.f$4);
+        this.f$0.lambda$updateSearchResults$4(this.f$1, this.f$2, this.f$3, this.f$4);
     }
 }

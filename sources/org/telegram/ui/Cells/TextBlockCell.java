@@ -25,19 +25,19 @@ public class TextBlockCell extends FrameLayout {
         addView(this.textView, LayoutHelper.createFrame(-1, -2.0f, (!LocaleController.isRTL ? 3 : i) | 48, 23.0f, 10.0f, 23.0f, 10.0f));
     }
 
-    public void setTextColor(int color) {
-        this.textView.setTextColor(color);
+    public void setTextColor(int i) {
+        this.textView.setTextColor(i);
     }
 
-    public void setText(String text, boolean divider) {
-        this.textView.setText(text);
-        this.needDivider = divider;
-        setWillNotDraw(!divider);
+    public void setText(String str, boolean z) {
+        this.textView.setText(str);
+        this.needDivider = z;
+        setWillNotDraw(!z);
     }
 
     /* access modifiers changed from: protected */
-    public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        super.onMeasure(View.MeasureSpec.makeMeasureSpec(View.MeasureSpec.getSize(widthMeasureSpec), NUM), heightMeasureSpec);
+    public void onMeasure(int i, int i2) {
+        super.onMeasure(View.MeasureSpec.makeMeasureSpec(View.MeasureSpec.getSize(i), NUM), i2);
     }
 
     /* access modifiers changed from: protected */

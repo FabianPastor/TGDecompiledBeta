@@ -11,6 +11,6 @@ public final /* synthetic */ class ThemePreviewActivity$22$$ExternalSyntheticLam
     }
 
     public final void onClick(DialogInterface dialogInterface, int i) {
-        this.f$0.m4694lambda$deleteTheme$0$orgtelegramuiThemePreviewActivity$22(dialogInterface, i);
+        this.f$0.lambda$deleteTheme$0(dialogInterface, i);
     }
 }

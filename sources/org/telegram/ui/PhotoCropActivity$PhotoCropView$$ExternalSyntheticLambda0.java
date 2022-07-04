@@ -12,6 +12,6 @@ public final /* synthetic */ class PhotoCropActivity$PhotoCropView$$ExternalSynt
     }
 
     public final boolean onTouch(View view, MotionEvent motionEvent) {
-        return this.f$0.m4216lambda$init$0$orgtelegramuiPhotoCropActivity$PhotoCropView(view, motionEvent);
+        return this.f$0.lambda$init$0(view, motionEvent);
     }
 }

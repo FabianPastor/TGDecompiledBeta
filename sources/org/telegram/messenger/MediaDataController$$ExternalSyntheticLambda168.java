@@ -1,23 +1,20 @@
 package org.telegram.messenger;
 
-import org.telegram.tgnet.TLRPC;
+import org.telegram.tgnet.RequestDelegate;
+import org.telegram.tgnet.TLObject;
+import org.telegram.tgnet.TLRPC$TL_error;
+import org.telegram.tgnet.TLRPC$TL_messages_getFeaturedStickers;
 
-public final /* synthetic */ class MediaDataController$$ExternalSyntheticLambda168 implements Runnable {
+public final /* synthetic */ class MediaDataController$$ExternalSyntheticLambda168 implements RequestDelegate {
     public final /* synthetic */ MediaDataController f$0;
-    public final /* synthetic */ TLRPC.StickerSet f$1;
-    public final /* synthetic */ int f$2;
-    public final /* synthetic */ int f$3;
-    public final /* synthetic */ TLRPC.TL_messages_stickerSet f$4;
+    public final /* synthetic */ TLRPC$TL_messages_getFeaturedStickers f$1;
 
-    public /* synthetic */ MediaDataController$$ExternalSyntheticLambda168(MediaDataController mediaDataController, TLRPC.StickerSet stickerSet, int i, int i2, TLRPC.TL_messages_stickerSet tL_messages_stickerSet) {
+    public /* synthetic */ MediaDataController$$ExternalSyntheticLambda168(MediaDataController mediaDataController, TLRPC$TL_messages_getFeaturedStickers tLRPC$TL_messages_getFeaturedStickers) {
         this.f$0 = mediaDataController;
-        this.f$1 = stickerSet;
-        this.f$2 = i;
-        this.f$3 = i2;
-        this.f$4 = tL_messages_stickerSet;
+        this.f$1 = tLRPC$TL_messages_getFeaturedStickers;
     }
 
-    public final void run() {
-        this.f$0.m2110xd5e9dfa4(this.f$1, this.f$2, this.f$3, this.f$4);
+    public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+        this.f$0.lambda$loadFeaturedStickers$40(this.f$1, tLObject, tLRPC$TL_error);
     }
 }

@@ -1,13 +1,16 @@
 package org.telegram.messenger;
 
-public final /* synthetic */ class ContactsController$$ExternalSyntheticLambda62 implements Runnable {
-    public final /* synthetic */ ContactsController f$0;
+import org.telegram.tgnet.RequestDelegate;
+import org.telegram.tgnet.TLObject;
+import org.telegram.tgnet.TLRPC$TL_error;
 
-    public /* synthetic */ ContactsController$$ExternalSyntheticLambda62(ContactsController contactsController) {
-        this.f$0 = contactsController;
+public final /* synthetic */ class ContactsController$$ExternalSyntheticLambda62 implements RequestDelegate {
+    public static final /* synthetic */ ContactsController$$ExternalSyntheticLambda62 INSTANCE = new ContactsController$$ExternalSyntheticLambda62();
+
+    private /* synthetic */ ContactsController$$ExternalSyntheticLambda62() {
     }
 
-    public final void run() {
-        this.f$0.m45x5e12a568();
+    public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+        ContactsController.lambda$resetImportedContacts$9(tLObject, tLRPC$TL_error);
     }
 }

@@ -1,19 +1,14 @@
 package org.telegram.ui;
 
-import org.telegram.tgnet.TLRPC;
+import android.content.DialogInterface;
 
-public final /* synthetic */ class ThemeSetUrlActivity$$ExternalSyntheticLambda1 implements Runnable {
-    public final /* synthetic */ ThemeSetUrlActivity f$0;
-    public final /* synthetic */ TLRPC.TL_error f$1;
-    public final /* synthetic */ TLRPC.TL_account_updateTheme f$2;
+public final /* synthetic */ class ThemeSetUrlActivity$$ExternalSyntheticLambda1 implements DialogInterface.OnCancelListener {
+    public static final /* synthetic */ ThemeSetUrlActivity$$ExternalSyntheticLambda1 INSTANCE = new ThemeSetUrlActivity$$ExternalSyntheticLambda1();
 
-    public /* synthetic */ ThemeSetUrlActivity$$ExternalSyntheticLambda1(ThemeSetUrlActivity themeSetUrlActivity, TLRPC.TL_error tL_error, TLRPC.TL_account_updateTheme tL_account_updateTheme) {
-        this.f$0 = themeSetUrlActivity;
-        this.f$1 = tL_error;
-        this.f$2 = tL_account_updateTheme;
+    private /* synthetic */ ThemeSetUrlActivity$$ExternalSyntheticLambda1() {
     }
 
-    public final void run() {
-        this.f$0.m4703lambda$saveTheme$11$orgtelegramuiThemeSetUrlActivity(this.f$1, this.f$2);
+    public final void onCancel(DialogInterface dialogInterface) {
+        ThemeSetUrlActivity.lambda$saveTheme$9(dialogInterface);
     }
 }

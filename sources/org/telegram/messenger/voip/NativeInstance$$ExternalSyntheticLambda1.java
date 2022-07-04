@@ -12,6 +12,6 @@ public final /* synthetic */ class NativeInstance$$ExternalSyntheticLambda1 impl
     }
 
     public final void run() {
-        this.f$0.m2431xvar_CLASSNAME(this.f$1, this.f$2);
+        this.f$0.lambda$onParticipantDescriptionsRequired$2(this.f$1, this.f$2);
     }
 }

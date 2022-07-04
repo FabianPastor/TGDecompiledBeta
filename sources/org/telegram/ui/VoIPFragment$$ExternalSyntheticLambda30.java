@@ -1,17 +1,15 @@
 package org.telegram.ui;
 
-import android.content.DialogInterface;
+import org.telegram.ui.Components.voip.VoIPFloatingLayout;
 
-public final /* synthetic */ class VoIPFragment$$ExternalSyntheticLambda30 implements DialogInterface.OnDismissListener {
+public final /* synthetic */ class VoIPFragment$$ExternalSyntheticLambda30 implements VoIPFloatingLayout.VoIPFloatingLayoutDelegate {
     public final /* synthetic */ VoIPFragment f$0;
-    public final /* synthetic */ boolean[] f$1;
 
-    public /* synthetic */ VoIPFragment$$ExternalSyntheticLambda30(VoIPFragment voIPFragment, boolean[] zArr) {
+    public /* synthetic */ VoIPFragment$$ExternalSyntheticLambda30(VoIPFragment voIPFragment) {
         this.f$0 = voIPFragment;
-        this.f$1 = zArr;
     }
 
-    public final void onDismiss(DialogInterface dialogInterface) {
-        this.f$0.m4830lambda$updateViewState$19$orgtelegramuiVoIPFragment(this.f$1, dialogInterface);
+    public final void onChange(float f, boolean z) {
+        this.f$0.lambda$createView$5(f, z);
     }
 }

@@ -39,10 +39,11 @@ public interface NetworkChangeDetector {
     public static class IPAddress {
         public final byte[] address;
 
-        public IPAddress(byte[] address2) {
-            this.address = address2;
+        public IPAddress(byte[] bArr) {
+            this.address = bArr;
         }
 
+        @CalledByNative("IPAddress")
         private byte[] getAddress() {
             return this.address;
         }
@@ -55,30 +56,35 @@ public interface NetworkChangeDetector {
         public final ConnectionType type;
         public final ConnectionType underlyingTypeForVpn;
 
-        public NetworkInformation(String name2, ConnectionType type2, ConnectionType underlyingTypeForVpn2, long handle2, IPAddress[] addresses) {
-            this.name = name2;
-            this.type = type2;
-            this.underlyingTypeForVpn = underlyingTypeForVpn2;
-            this.handle = handle2;
-            this.ipAddresses = addresses;
+        public NetworkInformation(String str, ConnectionType connectionType, ConnectionType connectionType2, long j, IPAddress[] iPAddressArr) {
+            this.name = str;
+            this.type = connectionType;
+            this.underlyingTypeForVpn = connectionType2;
+            this.handle = j;
+            this.ipAddresses = iPAddressArr;
         }
 
+        @CalledByNative("NetworkInformation")
         private IPAddress[] getIpAddresses() {
             return this.ipAddresses;
         }
 
+        @CalledByNative("NetworkInformation")
         private ConnectionType getConnectionType() {
             return this.type;
         }
 
+        @CalledByNative("NetworkInformation")
         private ConnectionType getUnderlyingConnectionTypeForVpn() {
             return this.underlyingTypeForVpn;
         }
 
+        @CalledByNative("NetworkInformation")
         private long getHandle() {
             return this.handle;
         }
 
+        @CalledByNative("NetworkInformation")
         private String getName() {
             return this.name;
         }

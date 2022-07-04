@@ -1,20 +1,20 @@
 package org.telegram.messenger;
 
-import android.content.Context;
-import org.telegram.ui.ActionBar.AlertDialog;
+import org.telegram.tgnet.RequestDelegate;
+import org.telegram.tgnet.TLObject;
+import org.telegram.tgnet.TLRPC$EncryptedChat;
+import org.telegram.tgnet.TLRPC$TL_error;
 
-public final /* synthetic */ class SecretChatHelper$$ExternalSyntheticLambda31 implements Runnable {
+public final /* synthetic */ class SecretChatHelper$$ExternalSyntheticLambda31 implements RequestDelegate {
     public final /* synthetic */ SecretChatHelper f$0;
-    public final /* synthetic */ Context f$1;
-    public final /* synthetic */ AlertDialog f$2;
+    public final /* synthetic */ TLRPC$EncryptedChat f$1;
 
-    public /* synthetic */ SecretChatHelper$$ExternalSyntheticLambda31(SecretChatHelper secretChatHelper, Context context, AlertDialog alertDialog) {
+    public /* synthetic */ SecretChatHelper$$ExternalSyntheticLambda31(SecretChatHelper secretChatHelper, TLRPC$EncryptedChat tLRPC$EncryptedChat) {
         this.f$0 = secretChatHelper;
-        this.f$1 = context;
-        this.f$2 = alertDialog;
+        this.f$1 = tLRPC$EncryptedChat;
     }
 
-    public final void run() {
-        this.f$0.m2382x82eeabcd(this.f$1, this.f$2);
+    public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+        this.f$0.lambda$acceptSecretChat$22(this.f$1, tLObject, tLRPC$TL_error);
     }
 }

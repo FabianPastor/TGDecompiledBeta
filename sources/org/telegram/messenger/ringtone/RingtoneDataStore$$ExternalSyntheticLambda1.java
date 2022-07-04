@@ -8,6 +8,6 @@ public final /* synthetic */ class RingtoneDataStore$$ExternalSyntheticLambda1 i
     }
 
     public final void run() {
-        this.f$0.m2421lambda$new$0$orgtelegrammessengerringtoneRingtoneDataStore();
+        this.f$0.lambda$new$0();
     }
 }

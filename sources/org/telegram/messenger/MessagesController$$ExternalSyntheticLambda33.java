@@ -8,6 +8,6 @@ public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda33
     }
 
     public final void run() {
-        this.f$0.m156lambda$cleanup$34$orgtelegrammessengerMessagesController();
+        this.f$0.lambda$updateTimerProc$128();
     }
 }

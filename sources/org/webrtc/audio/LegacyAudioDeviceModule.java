@@ -12,11 +12,11 @@ public class LegacyAudioDeviceModule implements AudioDeviceModule {
     public void release() {
     }
 
-    public void setSpeakerMute(boolean mute) {
-        WebRtcAudioTrack.setSpeakerMute(mute);
+    public void setSpeakerMute(boolean z) {
+        WebRtcAudioTrack.setSpeakerMute(z);
     }
 
-    public void setMicrophoneMute(boolean mute) {
-        WebRtcAudioRecord.setMicrophoneMute(mute);
+    public void setMicrophoneMute(boolean z) {
+        WebRtcAudioRecord.setMicrophoneMute(z);
     }
 }

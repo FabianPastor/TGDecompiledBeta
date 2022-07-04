@@ -1,21 +1,17 @@
 package org.telegram.ui;
 
-import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC;
+import android.view.KeyEvent;
+import android.widget.TextView;
 import org.telegram.ui.LoginActivity;
 
-public final /* synthetic */ class LoginActivity$PhoneView$$ExternalSyntheticLambda6 implements Runnable {
+public final /* synthetic */ class LoginActivity$PhoneView$$ExternalSyntheticLambda6 implements TextView.OnEditorActionListener {
     public final /* synthetic */ LoginActivity.PhoneView f$0;
-    public final /* synthetic */ TLRPC.TL_error f$1;
-    public final /* synthetic */ TLObject f$2;
 
-    public /* synthetic */ LoginActivity$PhoneView$$ExternalSyntheticLambda6(LoginActivity.PhoneView phoneView, TLRPC.TL_error tL_error, TLObject tLObject) {
+    public /* synthetic */ LoginActivity$PhoneView$$ExternalSyntheticLambda6(LoginActivity.PhoneView phoneView) {
         this.f$0 = phoneView;
-        this.f$1 = tL_error;
-        this.f$2 = tLObject;
     }
 
-    public final void run() {
-        this.f$0.m3899lambda$new$12$orgtelegramuiLoginActivity$PhoneView(this.f$1, this.f$2);
+    public final boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
+        return this.f$0.lambda$new$6(textView, i, keyEvent);
     }
 }

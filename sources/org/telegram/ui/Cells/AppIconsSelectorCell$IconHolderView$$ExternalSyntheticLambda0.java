@@ -11,6 +11,6 @@ public final /* synthetic */ class AppIconsSelectorCell$IconHolderView$$External
     }
 
     public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-        this.f$0.m2781xfd226fea(valueAnimator);
+        this.f$0.lambda$setSelected$0(valueAnimator);
     }
 }

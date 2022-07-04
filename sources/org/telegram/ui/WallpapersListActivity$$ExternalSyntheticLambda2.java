@@ -8,6 +8,6 @@ public final /* synthetic */ class WallpapersListActivity$$ExternalSyntheticLamb
     }
 
     public final void run() {
-        this.f$0.m4837lambda$createView$1$orgtelegramuiWallpapersListActivity();
+        this.f$0.lambda$createView$1();
     }
 }

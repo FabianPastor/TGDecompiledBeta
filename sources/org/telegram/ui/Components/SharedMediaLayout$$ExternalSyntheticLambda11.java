@@ -1,15 +1,15 @@
 package org.telegram.ui.Components;
 
-import android.view.View;
+import java.util.Comparator;
+import org.telegram.ui.Components.SharedMediaLayout;
 
-public final /* synthetic */ class SharedMediaLayout$$ExternalSyntheticLambda11 implements View.OnClickListener {
-    public final /* synthetic */ SharedMediaLayout f$0;
+public final /* synthetic */ class SharedMediaLayout$$ExternalSyntheticLambda11 implements Comparator {
+    public static final /* synthetic */ SharedMediaLayout$$ExternalSyntheticLambda11 INSTANCE = new SharedMediaLayout$$ExternalSyntheticLambda11();
 
-    public /* synthetic */ SharedMediaLayout$$ExternalSyntheticLambda11(SharedMediaLayout sharedMediaLayout) {
-        this.f$0 = sharedMediaLayout;
+    private /* synthetic */ SharedMediaLayout$$ExternalSyntheticLambda11() {
     }
 
-    public final void onClick(View view) {
-        this.f$0.m1383lambda$new$5$orgtelegramuiComponentsSharedMediaLayout(view);
+    public final int compare(Object obj, Object obj2) {
+        return SharedMediaLayout.lambda$loadFastScrollData$11((SharedMediaLayout.Period) obj, (SharedMediaLayout.Period) obj2);
     }
 }

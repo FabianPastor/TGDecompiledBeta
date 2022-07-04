@@ -1,19 +1,21 @@
 package org.telegram.messenger;
 
-import org.telegram.tgnet.RequestDelegate;
-import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC;
+import org.telegram.tgnet.TLRPC$updates_Difference;
 
-public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda201 implements RequestDelegate {
+public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda201 implements Runnable {
     public final /* synthetic */ MessagesController f$0;
-    public final /* synthetic */ long f$1;
+    public final /* synthetic */ TLRPC$updates_Difference f$1;
+    public final /* synthetic */ int f$2;
+    public final /* synthetic */ int f$3;
 
-    public /* synthetic */ MessagesController$$ExternalSyntheticLambda201(MessagesController messagesController, long j) {
+    public /* synthetic */ MessagesController$$ExternalSyntheticLambda201(MessagesController messagesController, TLRPC$updates_Difference tLRPC$updates_Difference, int i, int i2) {
         this.f$0 = messagesController;
-        this.f$1 = j;
+        this.f$1 = tLRPC$updates_Difference;
+        this.f$2 = i;
+        this.f$3 = i2;
     }
 
-    public final void run(TLObject tLObject, TLRPC.TL_error tL_error) {
-        this.f$0.m312lambda$pinDialog$288$orgtelegrammessengerMessagesController(this.f$1, tLObject, tL_error);
+    public final void run() {
+        this.f$0.lambda$getDifference$274(this.f$1, this.f$2, this.f$3);
     }
 }

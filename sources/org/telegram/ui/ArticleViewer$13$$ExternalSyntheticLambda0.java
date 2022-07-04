@@ -10,6 +10,6 @@ public final /* synthetic */ class ArticleViewer$13$$ExternalSyntheticLambda0 im
     }
 
     public final void run() {
-        this.f$0.m2706lambda$onTextChanged$0$orgtelegramuiArticleViewer$13();
+        this.f$0.lambda$onTextChanged$0();
     }
 }

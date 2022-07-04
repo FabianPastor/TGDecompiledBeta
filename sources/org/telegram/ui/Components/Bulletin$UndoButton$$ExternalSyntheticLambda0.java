@@ -11,6 +11,6 @@ public final /* synthetic */ class Bulletin$UndoButton$$ExternalSyntheticLambda0
     }
 
     public final void onClick(View view) {
-        this.f$0.m644lambda$new$0$orgtelegramuiComponentsBulletin$UndoButton(view);
+        this.f$0.lambda$new$0(view);
     }
 }

@@ -1,15 +1,19 @@
 package org.telegram.ui;
 
-import org.telegram.ui.Components.VideoSeekPreviewImage;
+import android.view.View;
+import org.telegram.ui.ActionBar.Theme;
+import org.telegram.ui.Components.RecyclerListView;
 
-public final /* synthetic */ class PhotoViewer$$ExternalSyntheticLambda78 implements VideoSeekPreviewImage.VideoSeekPreviewImageDelegate {
+public final /* synthetic */ class PhotoViewer$$ExternalSyntheticLambda78 implements RecyclerListView.OnItemLongClickListener {
     public final /* synthetic */ PhotoViewer f$0;
+    public final /* synthetic */ Theme.ResourcesProvider f$1;
 
-    public /* synthetic */ PhotoViewer$$ExternalSyntheticLambda78(PhotoViewer photoViewer) {
+    public /* synthetic */ PhotoViewer$$ExternalSyntheticLambda78(PhotoViewer photoViewer, Theme.ResourcesProvider resourcesProvider) {
         this.f$0 = photoViewer;
+        this.f$1 = resourcesProvider;
     }
 
-    public final void onReady() {
-        this.f$0.m4243xfCLASSNAMEaa91();
+    public final boolean onItemClick(View view, int i) {
+        return this.f$0.lambda$setParentActivity$41(this.f$1, view, i);
     }
 }

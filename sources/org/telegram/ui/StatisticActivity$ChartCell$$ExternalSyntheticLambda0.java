@@ -17,6 +17,6 @@ public final /* synthetic */ class StatisticActivity$ChartCell$$ExternalSyntheti
     }
 
     public final void run() {
-        this.f$0.m4630lambda$onZoomed$0$orgtelegramuiStatisticActivity$ChartCell(this.f$1, this.f$2, this.f$3);
+        this.f$0.lambda$onZoomed$0(this.f$1, this.f$2, this.f$3);
     }
 }

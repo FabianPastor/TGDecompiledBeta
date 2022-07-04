@@ -1,22 +1,13 @@
 package org.telegram.messenger.camera;
 
-import android.graphics.Bitmap;
-import java.io.File;
-
 public final /* synthetic */ class CameraController$$ExternalSyntheticLambda15 implements Runnable {
-    public final /* synthetic */ CameraController f$0;
-    public final /* synthetic */ File f$1;
-    public final /* synthetic */ Bitmap f$2;
-    public final /* synthetic */ long f$3;
+    public final /* synthetic */ CameraSession f$0;
 
-    public /* synthetic */ CameraController$$ExternalSyntheticLambda15(CameraController cameraController, File file, Bitmap bitmap, long j) {
-        this.f$0 = cameraController;
-        this.f$1 = file;
-        this.f$2 = bitmap;
-        this.f$3 = j;
+    public /* synthetic */ CameraController$$ExternalSyntheticLambda15(CameraSession cameraSession) {
+        this.f$0 = cameraSession;
     }
 
     public final void run() {
-        this.f$0.m2397x1d61ce23(this.f$1, this.f$2, this.f$3);
+        CameraController.lambda$startPreview$7(this.f$0);
     }
 }

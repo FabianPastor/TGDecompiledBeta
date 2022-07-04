@@ -1,23 +1,19 @@
 package org.telegram.ui;
 
-import org.telegram.messenger.MessageObject;
-import org.telegram.ui.ActionBar.ActionBarLayout;
-import org.telegram.ui.ActionBar.BaseFragment;
+import android.view.MotionEvent;
+import android.view.View;
+import org.telegram.ui.ContentPreviewViewer;
 
-public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda105 implements Runnable {
+public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda105 implements View.OnTouchListener {
     public final /* synthetic */ ChatActivity f$0;
-    public final /* synthetic */ BaseFragment f$1;
-    public final /* synthetic */ MessageObject f$2;
-    public final /* synthetic */ ActionBarLayout f$3;
+    public final /* synthetic */ ContentPreviewViewer.ContentPreviewViewerDelegate f$1;
 
-    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda105(ChatActivity chatActivity, BaseFragment baseFragment, MessageObject messageObject, ActionBarLayout actionBarLayout) {
+    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda105(ChatActivity chatActivity, ContentPreviewViewer.ContentPreviewViewerDelegate contentPreviewViewerDelegate) {
         this.f$0 = chatActivity;
-        this.f$1 = baseFragment;
-        this.f$2 = messageObject;
-        this.f$3 = actionBarLayout;
+        this.f$1 = contentPreviewViewerDelegate;
     }
 
-    public final void run() {
-        this.f$0.m3016lambda$migrateToNewChat$127$orgtelegramuiChatActivity(this.f$1, this.f$2, this.f$3);
+    public final boolean onTouch(View view, MotionEvent motionEvent) {
+        return this.f$0.lambda$createView$42(this.f$1, view, motionEvent);
     }
 }

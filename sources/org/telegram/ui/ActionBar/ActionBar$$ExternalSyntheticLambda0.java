@@ -10,6 +10,6 @@ public final /* synthetic */ class ActionBar$$ExternalSyntheticLambda0 implement
     }
 
     public final void onClick(View view) {
-        this.f$0.m2527x3228e969(view);
+        this.f$0.lambda$createBackButtonImage$1(view);
     }
 }

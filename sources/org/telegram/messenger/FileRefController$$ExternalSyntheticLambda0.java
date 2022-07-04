@@ -12,6 +12,6 @@ public final /* synthetic */ class FileRefController$$ExternalSyntheticLambda0 i
     }
 
     public final void run() {
-        this.f$0.m1839xe8bd82fa(this.f$1);
+        this.f$0.lambda$onUpdateObjectReference$25(this.f$1);
     }
 }

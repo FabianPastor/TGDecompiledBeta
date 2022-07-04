@@ -16,6 +16,6 @@ public final /* synthetic */ class AboutLinkCell$3$$ExternalSyntheticLambda0 imp
     }
 
     public final void onClick(DialogInterface dialogInterface, int i) {
-        this.f$0.m2778lambda$run$0$orgtelegramuiCellsAboutLinkCell$3(this.f$1, this.f$2, dialogInterface, i);
+        this.f$0.lambda$run$0(this.f$1, this.f$2, dialogInterface, i);
     }
 }

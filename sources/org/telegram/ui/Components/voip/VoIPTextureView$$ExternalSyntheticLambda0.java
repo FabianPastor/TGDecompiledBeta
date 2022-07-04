@@ -20,6 +20,6 @@ public final /* synthetic */ class VoIPTextureView$$ExternalSyntheticLambda0 imp
     }
 
     public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-        this.f$0.m1621x20db84c2(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, valueAnimator);
+        this.f$0.lambda$onLayout$0(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, valueAnimator);
     }
 }

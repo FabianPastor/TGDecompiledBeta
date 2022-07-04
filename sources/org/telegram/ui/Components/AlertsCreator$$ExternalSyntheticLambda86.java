@@ -1,18 +1,15 @@
 package org.telegram.ui.Components;
 
-import android.view.View;
-import android.widget.LinearLayout;
+import org.telegram.ui.ActionBar.AlertDialog;
 
-public final /* synthetic */ class AlertsCreator$$ExternalSyntheticLambda86 implements View.OnClickListener {
-    public final /* synthetic */ int[] f$0;
-    public final /* synthetic */ LinearLayout f$1;
+public final /* synthetic */ class AlertsCreator$$ExternalSyntheticLambda86 implements Runnable {
+    public final /* synthetic */ AlertDialog f$0;
 
-    public /* synthetic */ AlertsCreator$$ExternalSyntheticLambda86(int[] iArr, LinearLayout linearLayout) {
-        this.f$0 = iArr;
-        this.f$1 = linearLayout;
+    public /* synthetic */ AlertsCreator$$ExternalSyntheticLambda86(AlertDialog alertDialog) {
+        this.f$0 = alertDialog;
     }
 
-    public final void onClick(View view) {
-        AlertsCreator.lambda$createLocationUpdateDialog$93(this.f$0, this.f$1, view);
+    public final void run() {
+        AlertsCreator.lambda$performAskAQuestion$20(this.f$0);
     }
 }

@@ -10,6 +10,6 @@ public final /* synthetic */ class SpoilersTextView$$ExternalSyntheticLambda2 im
     }
 
     public final void onSpoilerClicked(SpoilerEffect spoilerEffect, float f, float f2) {
-        this.f$0.m1576x69fa7571(spoilerEffect, f, f2);
+        this.f$0.lambda$new$2(spoilerEffect, f, f2);
     }
 }

@@ -1,28 +1,30 @@
 package org.telegram.ui;
 
-import java.util.ArrayList;
-import java.util.concurrent.atomic.AtomicInteger;
-import org.telegram.messenger.AndroidUtilities;
-import org.telegram.tgnet.RequestDelegate;
+import android.content.DialogInterface;
 import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC;
+import org.telegram.tgnet.TLRPC$TL_chatAdminRights;
+import org.telegram.tgnet.TLRPC$TL_chatBannedRights;
 
-public final /* synthetic */ class ChatUsersActivity$$ExternalSyntheticLambda5 implements RequestDelegate {
-    public final /* synthetic */ ArrayList f$0;
-    public final /* synthetic */ int f$1;
-    public final /* synthetic */ AtomicInteger f$2;
-    public final /* synthetic */ ArrayList f$3;
-    public final /* synthetic */ Runnable f$4;
+public final /* synthetic */ class ChatUsersActivity$$ExternalSyntheticLambda5 implements DialogInterface.OnClickListener {
+    public final /* synthetic */ ChatUsersActivity f$0;
+    public final /* synthetic */ CharSequence[] f$1;
+    public final /* synthetic */ long f$2;
+    public final /* synthetic */ TLRPC$TL_chatAdminRights f$3;
+    public final /* synthetic */ String f$4;
+    public final /* synthetic */ TLObject f$5;
+    public final /* synthetic */ TLRPC$TL_chatBannedRights f$6;
 
-    public /* synthetic */ ChatUsersActivity$$ExternalSyntheticLambda5(ArrayList arrayList, int i, AtomicInteger atomicInteger, ArrayList arrayList2, Runnable runnable) {
-        this.f$0 = arrayList;
-        this.f$1 = i;
-        this.f$2 = atomicInteger;
-        this.f$3 = arrayList2;
-        this.f$4 = runnable;
+    public /* synthetic */ ChatUsersActivity$$ExternalSyntheticLambda5(ChatUsersActivity chatUsersActivity, CharSequence[] charSequenceArr, long j, TLRPC$TL_chatAdminRights tLRPC$TL_chatAdminRights, String str, TLObject tLObject, TLRPC$TL_chatBannedRights tLRPC$TL_chatBannedRights) {
+        this.f$0 = chatUsersActivity;
+        this.f$1 = charSequenceArr;
+        this.f$2 = j;
+        this.f$3 = tLRPC$TL_chatAdminRights;
+        this.f$4 = str;
+        this.f$5 = tLObject;
+        this.f$6 = tLRPC$TL_chatBannedRights;
     }
 
-    public final void run(TLObject tLObject, TLRPC.TL_error tL_error) {
-        AndroidUtilities.runOnUIThread(new ChatUsersActivity$$ExternalSyntheticLambda15(tL_error, tLObject, this.f$0, this.f$1, this.f$2, this.f$3, this.f$4));
+    public final void onClick(DialogInterface dialogInterface, int i) {
+        this.f$0.lambda$createMenuForParticipant$9(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6, dialogInterface, i);
     }
 }

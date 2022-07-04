@@ -1,25 +1,26 @@
 package org.telegram.messenger;
 
-import java.util.ArrayList;
+import org.telegram.tgnet.RequestDelegate;
+import org.telegram.tgnet.TLObject;
+import org.telegram.tgnet.TLRPC$TL_error;
+import org.telegram.tgnet.TLRPC$TL_messages_search;
 
-public final /* synthetic */ class MediaDataController$$ExternalSyntheticLambda147 implements Runnable {
+public final /* synthetic */ class MediaDataController$$ExternalSyntheticLambda147 implements RequestDelegate {
     public final /* synthetic */ MediaDataController f$0;
-    public final /* synthetic */ ArrayList f$1;
-    public final /* synthetic */ ArrayList f$2;
-    public final /* synthetic */ int f$3;
-    public final /* synthetic */ long f$4;
-    public final /* synthetic */ boolean f$5;
+    public final /* synthetic */ int f$1;
+    public final /* synthetic */ TLRPC$TL_messages_search f$2;
+    public final /* synthetic */ long f$3;
+    public final /* synthetic */ int f$4;
 
-    public /* synthetic */ MediaDataController$$ExternalSyntheticLambda147(MediaDataController mediaDataController, ArrayList arrayList, ArrayList arrayList2, int i, long j, boolean z) {
+    public /* synthetic */ MediaDataController$$ExternalSyntheticLambda147(MediaDataController mediaDataController, int i, TLRPC$TL_messages_search tLRPC$TL_messages_search, long j, int i2) {
         this.f$0 = mediaDataController;
-        this.f$1 = arrayList;
-        this.f$2 = arrayList2;
-        this.f$3 = i;
-        this.f$4 = j;
-        this.f$5 = z;
+        this.f$1 = i;
+        this.f$2 = tLRPC$TL_messages_search;
+        this.f$3 = j;
+        this.f$4 = i2;
     }
 
-    public final void run() {
-        this.f$0.m2086xd1210c3c(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5);
+    public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+        this.f$0.lambda$loadPinnedMessages$122(this.f$1, this.f$2, this.f$3, this.f$4, tLObject, tLRPC$TL_error);
     }
 }

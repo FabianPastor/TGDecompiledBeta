@@ -11,6 +11,6 @@ public final /* synthetic */ class StickerMasksAlert$SearchField$$ExternalSynthe
     }
 
     public final void onClick(View view) {
-        this.f$0.m1430xef7b9934(view);
+        this.f$0.lambda$new$0(view);
     }
 }

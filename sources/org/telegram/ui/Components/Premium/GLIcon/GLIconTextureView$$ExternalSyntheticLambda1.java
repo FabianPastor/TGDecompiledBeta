@@ -10,6 +10,6 @@ public final /* synthetic */ class GLIconTextureView$$ExternalSyntheticLambda1 i
     }
 
     public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-        this.f$0.m1233xvar_var_(valueAnimator);
+        this.f$0.lambda$new$2(valueAnimator);
     }
 }

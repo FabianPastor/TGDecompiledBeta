@@ -1,13 +1,15 @@
 package org.telegram.ui.Components;
 
-public final /* synthetic */ class AudioPlayerAlert$$ExternalSyntheticLambda9 implements Runnable {
+import org.telegram.ui.ActionBar.ActionBarMenuItem;
+
+public final /* synthetic */ class AudioPlayerAlert$$ExternalSyntheticLambda9 implements ActionBarMenuItem.ActionBarMenuItemDelegate {
     public final /* synthetic */ AudioPlayerAlert f$0;
 
     public /* synthetic */ AudioPlayerAlert$$ExternalSyntheticLambda9(AudioPlayerAlert audioPlayerAlert) {
         this.f$0 = audioPlayerAlert;
     }
 
-    public final void run() {
-        this.f$0.m547x607d8ff4();
+    public final void onItemClick(int i) {
+        this.f$0.lambda$new$4(i);
     }
 }

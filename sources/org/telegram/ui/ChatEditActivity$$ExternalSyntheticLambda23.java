@@ -1,19 +1,16 @@
 package org.telegram.ui;
 
-import org.telegram.ui.ActionBar.ThemeDescription;
+import android.view.KeyEvent;
+import android.widget.TextView;
 
-public final /* synthetic */ class ChatEditActivity$$ExternalSyntheticLambda23 implements ThemeDescription.ThemeDescriptionDelegate {
+public final /* synthetic */ class ChatEditActivity$$ExternalSyntheticLambda23 implements TextView.OnEditorActionListener {
     public final /* synthetic */ ChatEditActivity f$0;
 
     public /* synthetic */ ChatEditActivity$$ExternalSyntheticLambda23(ChatEditActivity chatEditActivity) {
         this.f$0 = chatEditActivity;
     }
 
-    public final void didSetColor() {
-        this.f$0.m3204lambda$getThemeDescriptions$31$orgtelegramuiChatEditActivity();
-    }
-
-    public /* synthetic */ void onAnimationProgress(float f) {
-        ThemeDescription.ThemeDescriptionDelegate.CC.$default$onAnimationProgress(this, f);
+    public final boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
+        return this.f$0.lambda$createView$7(textView, i, keyEvent);
     }
 }

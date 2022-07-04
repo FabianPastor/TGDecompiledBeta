@@ -15,34 +15,34 @@ public class FeedWidgetProvider extends AppWidgetProvider {
         super.onReceive(context, intent);
     }
 
-    public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
-        super.onUpdate(context, appWidgetManager, appWidgetIds);
-        for (int appWidgetId : appWidgetIds) {
-            updateWidget(context, appWidgetManager, appWidgetId);
+    public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] iArr) {
+        super.onUpdate(context, appWidgetManager, iArr);
+        for (int updateWidget : iArr) {
+            updateWidget(context, appWidgetManager, updateWidget);
         }
     }
 
-    public void onDeleted(Context context, int[] appWidgetIds) {
-        super.onDeleted(context, appWidgetIds);
-        for (int a = 0; a < appWidgetIds.length; a++) {
+    public void onDeleted(Context context, int[] iArr) {
+        super.onDeleted(context, iArr);
+        for (int i = 0; i < iArr.length; i++) {
             SharedPreferences.Editor edit = context.getSharedPreferences("shortcut_widget", 0).edit();
-            SharedPreferences.Editor remove = edit.remove("account" + appWidgetIds[a]);
-            remove.remove("dialogId" + appWidgetIds[a]).commit();
+            SharedPreferences.Editor remove = edit.remove("account" + iArr[i]);
+            remove.remove("dialogId" + iArr[i]).commit();
         }
     }
 
-    public static void updateWidget(Context context, AppWidgetManager appWidgetManager, int appWidgetId) {
-        Intent intent2 = new Intent(context, FeedWidgetService.class);
-        intent2.putExtra("appWidgetId", appWidgetId);
-        intent2.setData(Uri.parse(intent2.toUri(1)));
-        RemoteViews rv = new RemoteViews(context.getPackageName(), NUM);
-        rv.setRemoteAdapter(appWidgetId, NUM, intent2);
-        rv.setEmptyView(NUM, NUM);
-        Intent intent = new Intent(ApplicationLoader.applicationContext, LaunchActivity.class);
-        intent.setAction("com.tmessages.openchat" + Math.random() + Integer.MAX_VALUE);
-        intent.addFlags(67108864);
-        intent.addCategory("android.intent.category.LAUNCHER");
-        rv.setPendingIntentTemplate(NUM, PendingIntent.getActivity(ApplicationLoader.applicationContext, 0, intent, NUM));
-        appWidgetManager.updateAppWidget(appWidgetId, rv);
+    public static void updateWidget(Context context, AppWidgetManager appWidgetManager, int i) {
+        Intent intent = new Intent(context, FeedWidgetService.class);
+        intent.putExtra("appWidgetId", i);
+        intent.setData(Uri.parse(intent.toUri(1)));
+        RemoteViews remoteViews = new RemoteViews(context.getPackageName(), NUM);
+        remoteViews.setRemoteAdapter(i, NUM, intent);
+        remoteViews.setEmptyView(NUM, NUM);
+        Intent intent2 = new Intent(ApplicationLoader.applicationContext, LaunchActivity.class);
+        intent2.setAction("com.tmessages.openchat" + Math.random() + Integer.MAX_VALUE);
+        intent2.addFlags(67108864);
+        intent2.addCategory("android.intent.category.LAUNCHER");
+        remoteViews.setPendingIntentTemplate(NUM, PendingIntent.getActivity(ApplicationLoader.applicationContext, 0, intent2, NUM));
+        appWidgetManager.updateAppWidget(i, remoteViews);
     }
 }

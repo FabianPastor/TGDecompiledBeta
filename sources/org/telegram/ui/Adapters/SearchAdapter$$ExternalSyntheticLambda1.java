@@ -10,6 +10,6 @@ public final /* synthetic */ class SearchAdapter$$ExternalSyntheticLambda1 imple
     }
 
     public final void run() {
-        this.f$0.m2642lambda$processSearch$1$orgtelegramuiAdaptersSearchAdapter(this.f$1);
+        this.f$0.lambda$processSearch$1(this.f$1);
     }
 }

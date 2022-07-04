@@ -10,6 +10,6 @@ public final /* synthetic */ class ChatActivityMemberRequestsDelegate$$ExternalS
     }
 
     public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-        this.f$0.m1625x95fe199e(valueAnimator);
+        this.f$0.lambda$animatePendingRequests$2(valueAnimator);
     }
 }

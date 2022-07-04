@@ -18,15 +18,15 @@ public final class EmuInputDevicesDetector {
     }
 
     public static boolean detect() {
-        List<String> deviceNames = getInputDevicesNames();
-        if (deviceNames != null) {
-            for (String deviceName : deviceNames) {
+        List<String> inputDevicesNames = getInputDevicesNames();
+        if (inputDevicesNames != null) {
+            for (String next : inputDevicesNames) {
                 String[] strArr = RESTRICTED_DEVICES;
                 int length = strArr.length;
                 int i = 0;
                 while (true) {
                     if (i < length) {
-                        if (deviceName.toLowerCase().contains(strArr[i])) {
+                        if (next.toLowerCase().contains(strArr[i])) {
                             return true;
                         }
                         i++;
@@ -38,23 +38,22 @@ public final class EmuInputDevicesDetector {
     }
 
     private static List<String> getInputDevicesNames() {
-        File devicesFile = new File("/proc/bus/input/devices");
-        if (!devicesFile.canRead()) {
+        File file = new File("/proc/bus/input/devices");
+        if (!file.canRead()) {
             return null;
         }
         try {
-            List<String> lines = new ArrayList<>();
-            BufferedReader r = new BufferedReader(new InputStreamReader(new FileInputStream(devicesFile)));
+            ArrayList arrayList = new ArrayList();
+            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(new FileInputStream(file)));
             while (true) {
-                String readLine = r.readLine();
-                String line = readLine;
+                String readLine = bufferedReader.readLine();
                 if (readLine == null) {
-                    return lines;
+                    return arrayList;
                 }
-                if (line.startsWith("N: Name=\"")) {
-                    String name = line.substring("N: Name=\"".length(), line.length() - 1);
-                    if (!TextUtils.isEmpty(name)) {
-                        lines.add(name);
+                if (readLine.startsWith("N: Name=\"")) {
+                    String substring = readLine.substring(9, readLine.length() - 1);
+                    if (!TextUtils.isEmpty(substring)) {
+                        arrayList.add(substring);
                     }
                 }
             }

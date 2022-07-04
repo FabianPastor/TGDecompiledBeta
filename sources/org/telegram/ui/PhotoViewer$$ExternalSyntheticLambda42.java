@@ -1,13 +1,18 @@
 package org.telegram.ui;
 
-public final /* synthetic */ class PhotoViewer$$ExternalSyntheticLambda42 implements Runnable {
-    public final /* synthetic */ PhotoViewer f$0;
+import android.view.View;
+import org.telegram.ui.ActionBar.Theme;
 
-    public /* synthetic */ PhotoViewer$$ExternalSyntheticLambda42(PhotoViewer photoViewer) {
+public final /* synthetic */ class PhotoViewer$$ExternalSyntheticLambda42 implements View.OnLongClickListener {
+    public final /* synthetic */ PhotoViewer f$0;
+    public final /* synthetic */ Theme.ResourcesProvider f$1;
+
+    public /* synthetic */ PhotoViewer$$ExternalSyntheticLambda42(PhotoViewer photoViewer, Theme.ResourcesProvider resourcesProvider) {
         this.f$0 = photoViewer;
+        this.f$1 = resourcesProvider;
     }
 
-    public final void run() {
-        this.f$0.m4240lambda$createPaintView$61$orgtelegramuiPhotoViewer();
+    public final boolean onLongClick(View view) {
+        return this.f$0.lambda$setParentActivity$15(this.f$1, view);
     }
 }

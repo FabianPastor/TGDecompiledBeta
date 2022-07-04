@@ -10,6 +10,6 @@ public final /* synthetic */ class BottomSheet$$ExternalSyntheticLambda1 impleme
     }
 
     public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-        this.f$0.m2565x3bf1CLASSNAME(valueAnimator);
+        this.f$0.lambda$setHideSystemVerticalInsets$0(valueAnimator);
     }
 }

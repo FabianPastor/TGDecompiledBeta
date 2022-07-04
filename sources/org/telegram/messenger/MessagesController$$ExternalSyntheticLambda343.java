@@ -1,19 +1,16 @@
 package org.telegram.messenger;
 
-import java.util.ArrayList;
+import org.telegram.tgnet.RequestDelegate;
+import org.telegram.tgnet.TLObject;
+import org.telegram.tgnet.TLRPC$TL_error;
 
-public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda343 implements Runnable {
-    public final /* synthetic */ MessagesController f$0;
-    public final /* synthetic */ long f$1;
-    public final /* synthetic */ ArrayList f$2;
+public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda343 implements RequestDelegate {
+    public static final /* synthetic */ MessagesController$$ExternalSyntheticLambda343 INSTANCE = new MessagesController$$ExternalSyntheticLambda343();
 
-    public /* synthetic */ MessagesController$$ExternalSyntheticLambda343(MessagesController messagesController, long j, ArrayList arrayList) {
-        this.f$0 = messagesController;
-        this.f$1 = j;
-        this.f$2 = arrayList;
+    private /* synthetic */ MessagesController$$ExternalSyntheticLambda343() {
     }
 
-    public final void run() {
-        this.f$0.m226xd0c5ed27(this.f$1, this.f$2);
+    public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+        MessagesController.lambda$removeSuggestion$22(tLObject, tLRPC$TL_error);
     }
 }

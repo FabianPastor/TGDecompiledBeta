@@ -39,9 +39,21 @@ public class SlideChooseView extends View {
     private boolean startMoving;
     private int startMovingPreset;
     private TextPaint textPaint;
-    private boolean touchWasClose;
     private float xTouchDown;
     private float yTouchDown;
+
+    public interface Callback {
+
+        /* renamed from: org.telegram.ui.Components.SlideChooseView$Callback$-CC  reason: invalid class name */
+        public final /* synthetic */ class CC {
+            public static void $default$onTouchEnd(Callback callback) {
+            }
+        }
+
+        void onOptionSelected(int i);
+
+        void onTouchEnd();
+    }
 
     public SlideChooseView(Context context) {
         this(context, (Theme.ResourcesProvider) null);
@@ -50,9 +62,9 @@ public class SlideChooseView extends View {
     public SlideChooseView(Context context, Theme.ResourcesProvider resourcesProvider2) {
         super(context);
         this.dashedFrom = -1;
-        this.selectedIndexAnimatedHolder = new AnimatedFloat((View) this, 120, (TimeInterpolator) CubicBezierInterpolator.DEFAULT);
-        this.movingAnimatedHolder = new AnimatedFloat((View) this, 150, (TimeInterpolator) CubicBezierInterpolator.DEFAULT);
-        this.touchWasClose = false;
+        CubicBezierInterpolator cubicBezierInterpolator = CubicBezierInterpolator.DEFAULT;
+        this.selectedIndexAnimatedHolder = new AnimatedFloat((View) this, 120, (TimeInterpolator) cubicBezierInterpolator);
+        this.movingAnimatedHolder = new AnimatedFloat((View) this, 150, (TimeInterpolator) cubicBezierInterpolator);
         this.resourcesProvider = resourcesProvider2;
         this.paint = new Paint(1);
         this.textPaint = new TextPaint(1);
@@ -68,8 +80,8 @@ public class SlideChooseView extends View {
             }
 
             /* access modifiers changed from: protected */
-            public void setProgress(int progress) {
-                SlideChooseView.this.setOption(progress);
+            public void setProgress(int i) {
+                SlideChooseView.this.setOption(i);
             }
 
             /* access modifiers changed from: protected */
@@ -78,7 +90,7 @@ public class SlideChooseView extends View {
             }
 
             /* access modifiers changed from: protected */
-            public CharSequence getContentDescription(View host) {
+            public CharSequence getContentDescription(View view) {
                 if (SlideChooseView.this.selectedIndex < SlideChooseView.this.optionsStr.length) {
                     return SlideChooseView.this.optionsStr[SlideChooseView.this.selectedIndex];
                 }
@@ -91,16 +103,16 @@ public class SlideChooseView extends View {
         this.callback = callback2;
     }
 
-    public void setOptions(int selected, String... options) {
-        this.optionsStr = options;
-        this.selectedIndex = selected;
-        this.optionsSizes = new int[options.length];
-        int i = 0;
+    public void setOptions(int i, String... strArr) {
+        this.optionsStr = strArr;
+        this.selectedIndex = i;
+        this.optionsSizes = new int[strArr.length];
+        int i2 = 0;
         while (true) {
-            String[] strArr = this.optionsStr;
-            if (i < strArr.length) {
-                this.optionsSizes[i] = (int) Math.ceil((double) this.textPaint.measureText(strArr[i]));
-                i++;
+            String[] strArr2 = this.optionsStr;
+            if (i2 < strArr2.length) {
+                this.optionsSizes[i2] = (int) Math.ceil((double) this.textPaint.measureText(strArr2[i2]));
+                i2++;
             } else {
                 requestLayout();
                 return;
@@ -108,27 +120,27 @@ public class SlideChooseView extends View {
         }
     }
 
-    public void setDashedFrom(int from) {
-        this.dashedFrom = from;
+    public void setDashedFrom(int i) {
+        this.dashedFrom = i;
     }
 
-    public boolean onTouchEvent(MotionEvent event) {
-        float x = event.getX();
-        float y = event.getY();
+    public boolean onTouchEvent(MotionEvent motionEvent) {
+        float x = motionEvent.getX();
+        float y = motionEvent.getY();
         int i = this.circleSize;
-        float indexTouch = MathUtils.clamp(((x - ((float) this.sideSide)) + (((float) i) / 2.0f)) / ((float) ((this.lineSize + (this.gapSize * 2)) + i)), 0.0f, (float) (this.optionsStr.length - 1));
-        boolean isClose = Math.abs(indexTouch - ((float) Math.round(indexTouch))) < 0.35f;
-        if (isClose) {
-            indexTouch = (float) Math.round(indexTouch);
+        float clamp = MathUtils.clamp(((x - ((float) this.sideSide)) + (((float) i) / 2.0f)) / ((float) ((this.lineSize + (this.gapSize * 2)) + i)), 0.0f, (float) (this.optionsStr.length - 1));
+        boolean z = Math.abs(clamp - ((float) Math.round(clamp))) < 0.35f;
+        if (z) {
+            clamp = (float) Math.round(clamp);
         }
-        if (event.getAction() == 0) {
+        if (motionEvent.getAction() == 0) {
             this.xTouchDown = x;
             this.yTouchDown = y;
-            this.selectedIndexTouch = indexTouch;
+            this.selectedIndexTouch = clamp;
             this.startMovingPreset = this.selectedIndex;
             this.startMoving = true;
             invalidate();
-        } else if (event.getAction() == 2) {
+        } else if (motionEvent.getAction() == 2) {
             if (!this.moving && Math.abs(this.xTouchDown - x) > Math.abs(this.yTouchDown - y)) {
                 getParent().requestDisallowInterceptTouchEvent(true);
             }
@@ -137,17 +149,17 @@ public class SlideChooseView extends View {
                 this.startMoving = false;
             }
             if (this.moving) {
-                this.selectedIndexTouch = indexTouch;
+                this.selectedIndexTouch = clamp;
                 invalidate();
-                if (Math.round(this.selectedIndexTouch) != this.selectedIndex && isClose) {
+                if (Math.round(this.selectedIndexTouch) != this.selectedIndex && z) {
                     setOption(Math.round(this.selectedIndexTouch));
                 }
             }
             invalidate();
-        } else if (event.getAction() == 1 || event.getAction() == 3) {
+        } else if (motionEvent.getAction() == 1 || motionEvent.getAction() == 3) {
             if (!this.moving) {
-                this.selectedIndexTouch = indexTouch;
-                if (Math.round(indexTouch) != this.selectedIndex) {
+                this.selectedIndexTouch = clamp;
+                if (Math.round(clamp) != this.selectedIndex) {
                     setOption(Math.round(this.selectedIndexTouch));
                 }
             } else {
@@ -169,145 +181,137 @@ public class SlideChooseView extends View {
     }
 
     /* access modifiers changed from: private */
-    public void setOption(int index) {
-        if (this.selectedIndex != index) {
+    public void setOption(int i) {
+        if (this.selectedIndex != i) {
             try {
                 performHapticFeedback(9, 1);
-            } catch (Exception e) {
+            } catch (Exception unused) {
             }
         }
-        this.selectedIndex = index;
+        this.selectedIndex = i;
         Callback callback2 = this.callback;
         if (callback2 != null) {
-            callback2.onOptionSelected(index);
+            callback2.onOptionSelected(i);
         }
         invalidate();
     }
 
     /* access modifiers changed from: protected */
-    public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        super.onMeasure(widthMeasureSpec, View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(74.0f), NUM));
+    public void onMeasure(int i, int i2) {
+        super.onMeasure(i, View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(74.0f), NUM));
         this.circleSize = AndroidUtilities.dp(6.0f);
         this.gapSize = AndroidUtilities.dp(2.0f);
         this.sideSide = AndroidUtilities.dp(22.0f);
         int measuredWidth = getMeasuredWidth();
-        int i = this.circleSize;
+        int i3 = this.circleSize;
         String[] strArr = this.optionsStr;
-        this.lineSize = (((measuredWidth - (i * strArr.length)) - ((this.gapSize * 2) * (strArr.length - 1))) - (this.sideSide * 2)) / (strArr.length - 1);
+        this.lineSize = (((measuredWidth - (i3 * strArr.length)) - ((this.gapSize * 2) * (strArr.length - 1))) - (this.sideSide * 2)) / (strArr.length - 1);
     }
 
     /* access modifiers changed from: protected */
     public void onDraw(Canvas canvas) {
-        float t;
+        int i;
+        float f;
+        int i2;
+        float f2;
         Canvas canvas2 = canvas;
-        float selectedIndexAnimated = this.selectedIndexAnimatedHolder.set((float) this.selectedIndex);
-        float f = 0.0f;
-        float f2 = 1.0f;
-        float movingAnimated = this.movingAnimatedHolder.set(this.moving ? 1.0f : 0.0f);
-        int i = 2;
-        int cy = (getMeasuredHeight() / 2) + AndroidUtilities.dp(11.0f);
-        int a = 0;
-        while (a < this.optionsStr.length) {
-            int i2 = this.sideSide;
-            int i3 = this.lineSize + (this.gapSize * 2);
-            int i4 = this.circleSize;
-            int cx = i2 + ((i3 + i4) * a) + (i4 / i);
-            float t2 = Math.max(f, f2 - Math.abs(((float) a) - selectedIndexAnimated));
-            float ut = MathUtils.clamp((selectedIndexAnimated - ((float) a)) + f2, f, f2);
-            int color = ColorUtils.blendARGB(getThemedColor("switchTrack"), getThemedColor("switchTrackChecked"), ut);
-            this.paint.setColor(color);
-            this.linePaint.setColor(color);
-            canvas2.drawCircle((float) cx, (float) cy, (float) AndroidUtilities.lerp(this.circleSize / i, AndroidUtilities.dp(6.0f), t2), this.paint);
-            if (a != 0) {
-                int x = ((cx - (this.circleSize / i)) - this.gapSize) - this.lineSize;
-                int width = this.lineSize;
-                int i5 = this.dashedFrom;
-                if (i5 == -1 || a - 1 < i5) {
-                    float f3 = ut;
-                    t = t2;
-                    float nt = MathUtils.clamp(1.0f - Math.abs((((float) a) - selectedIndexAnimated) - 1.0f), 0.0f, 1.0f);
-                    int width2 = (int) (((float) width) - (((float) AndroidUtilities.dp(3.0f)) * MathUtils.clamp(1.0f - Math.min(Math.abs(((float) a) - selectedIndexAnimated), Math.abs((((float) a) - selectedIndexAnimated) - 1.0f)), 0.0f, 1.0f)));
-                    int x2 = (int) (((float) x) + (((float) AndroidUtilities.dp(3.0f)) * nt));
-                    int i6 = x2;
-                    int i7 = width2;
-                    canvas.drawRect((float) x2, (float) (cy - AndroidUtilities.dp(1.0f)), (float) (x2 + width2), (float) (AndroidUtilities.dp(1.0f) + cy), this.paint);
+        float f3 = this.selectedIndexAnimatedHolder.set((float) this.selectedIndex);
+        float f4 = 0.0f;
+        float f5 = 1.0f;
+        float f6 = this.movingAnimatedHolder.set(this.moving ? 1.0f : 0.0f);
+        int measuredHeight = (getMeasuredHeight() / 2) + AndroidUtilities.dp(11.0f);
+        int i3 = 0;
+        while (i3 < this.optionsStr.length) {
+            int i4 = this.sideSide;
+            int i5 = this.lineSize + (this.gapSize * 2);
+            int i6 = this.circleSize;
+            int i7 = i4 + ((i5 + i6) * i3) + (i6 / 2);
+            float f7 = (float) i3;
+            float f8 = f7 - f3;
+            float max = Math.max(f4, f5 - Math.abs(f8));
+            int blendARGB = ColorUtils.blendARGB(getThemedColor("switchTrack"), getThemedColor("switchTrackChecked"), MathUtils.clamp((f3 - f7) + f5, f4, f5));
+            this.paint.setColor(blendARGB);
+            this.linePaint.setColor(blendARGB);
+            float f9 = (float) measuredHeight;
+            canvas2.drawCircle((float) i7, f9, (float) AndroidUtilities.lerp(this.circleSize / 2, AndroidUtilities.dp(6.0f), max), this.paint);
+            if (i3 != 0) {
+                int i8 = (i7 - (this.circleSize / 2)) - this.gapSize;
+                int i9 = this.lineSize;
+                int i10 = i8 - i9;
+                int i11 = this.dashedFrom;
+                if (i11 == -1 || i3 - 1 < i11) {
+                    f = max;
+                    i = i7;
+                    float var_ = f8 - 1.0f;
+                    float clamp = MathUtils.clamp(1.0f - Math.abs(var_), 0.0f, 1.0f);
+                    float clamp2 = MathUtils.clamp(1.0f - Math.min(Math.abs(f8), Math.abs(var_)), 0.0f, 1.0f);
+                    int dp = (int) (((float) i10) + (((float) AndroidUtilities.dp(3.0f)) * clamp));
+                    canvas.drawRect((float) dp, (float) (measuredHeight - AndroidUtilities.dp(1.0f)), (float) (dp + ((int) (((float) i9) - (((float) AndroidUtilities.dp(3.0f)) * clamp2)))), (float) (AndroidUtilities.dp(1.0f) + measuredHeight), this.paint);
                 } else {
-                    int x3 = AndroidUtilities.dp(3.0f) + x;
-                    int width3 = width - AndroidUtilities.dp(3.0f);
-                    int dash = width3 / AndroidUtilities.dp(13.0f);
-                    if (this.lastDash != dash) {
-                        float gap = ((float) (width3 - (AndroidUtilities.dp(8.0f) * dash))) / ((float) (dash - 1));
-                        Paint paint2 = this.linePaint;
-                        int i8 = color;
-                        float f4 = ut;
-                        float[] fArr = new float[i];
-                        fArr[0] = (float) AndroidUtilities.dp(6.0f);
-                        fArr[1] = gap;
-                        paint2.setPathEffect(new DashPathEffect(fArr, 0.0f));
-                        this.lastDash = dash;
+                    int dp2 = i10 + AndroidUtilities.dp(3.0f);
+                    int dp3 = i9 - AndroidUtilities.dp(3.0f);
+                    int dp4 = dp3 / AndroidUtilities.dp(13.0f);
+                    if (this.lastDash != dp4) {
+                        f2 = max;
+                        i2 = i7;
+                        this.linePaint.setPathEffect(new DashPathEffect(new float[]{(float) AndroidUtilities.dp(6.0f), ((float) (dp3 - (AndroidUtilities.dp(8.0f) * dp4))) / ((float) (dp4 - 1))}, 0.0f));
+                        this.lastDash = dp4;
                     } else {
-                        float f5 = ut;
+                        f2 = max;
+                        i2 = i7;
                     }
-                    int i9 = dash;
-                    t = t2;
-                    canvas.drawLine((float) (AndroidUtilities.dp(1.0f) + x3), (float) cy, (float) ((x3 + width3) - AndroidUtilities.dp(1.0f)), (float) cy, this.linePaint);
+                    float dp5 = (float) ((dp2 + dp3) - AndroidUtilities.dp(1.0f));
+                    float var_ = f9;
+                    float var_ = dp5;
+                    f = f2;
+                    float var_ = f9;
+                    i = i2;
+                    canvas.drawLine((float) (AndroidUtilities.dp(1.0f) + dp2), var_, var_, var_, this.linePaint);
                 }
             } else {
-                float f6 = ut;
-                t = t2;
+                f = max;
+                i = i7;
             }
-            int size = this.optionsSizes[a];
-            String text = this.optionsStr[a];
-            this.textPaint.setColor(ColorUtils.blendARGB(getThemedColor("windowBackgroundWhiteGrayText"), getThemedColor("windowBackgroundWhiteBlueText"), t));
-            if (a == 0) {
-                canvas2.drawText(text, (float) AndroidUtilities.dp(22.0f), (float) AndroidUtilities.dp(28.0f), this.textPaint);
-            } else if (a == this.optionsStr.length - 1) {
-                canvas2.drawText(text, (float) ((getMeasuredWidth() - size) - AndroidUtilities.dp(22.0f)), (float) AndroidUtilities.dp(28.0f), this.textPaint);
+            int i12 = this.optionsSizes[i3];
+            String str = this.optionsStr[i3];
+            this.textPaint.setColor(ColorUtils.blendARGB(getThemedColor("windowBackgroundWhiteGrayText"), getThemedColor("windowBackgroundWhiteBlueText"), f));
+            if (i3 == 0) {
+                canvas2.drawText(str, (float) AndroidUtilities.dp(22.0f), (float) AndroidUtilities.dp(28.0f), this.textPaint);
+            } else if (i3 == this.optionsStr.length - 1) {
+                canvas2.drawText(str, (float) ((getMeasuredWidth() - i12) - AndroidUtilities.dp(22.0f)), (float) AndroidUtilities.dp(28.0f), this.textPaint);
             } else {
-                canvas2.drawText(text, (float) (cx - (size / 2)), (float) AndroidUtilities.dp(28.0f), this.textPaint);
+                canvas2.drawText(str, (float) (i - (i12 / 2)), (float) AndroidUtilities.dp(28.0f), this.textPaint);
             }
-            a++;
-            f = 0.0f;
-            f2 = 1.0f;
-            i = 2;
+            i3++;
+            f4 = 0.0f;
+            f5 = 1.0f;
         }
-        int i10 = this.lineSize + (this.gapSize * 2);
-        int i11 = this.circleSize;
-        float cx2 = ((float) this.sideSide) + (((float) (i10 + i11)) * selectedIndexAnimated) + ((float) (i11 / 2));
+        int i13 = this.lineSize + (this.gapSize * 2);
+        int i14 = this.circleSize;
+        float var_ = ((float) this.sideSide) + (((float) (i13 + i14)) * f3) + ((float) (i14 / 2));
         this.paint.setColor(ColorUtils.setAlphaComponent(getThemedColor("switchTrackChecked"), 80));
-        canvas2.drawCircle(cx2, (float) cy, (float) AndroidUtilities.dp(12.0f * movingAnimated), this.paint);
+        float var_ = (float) measuredHeight;
+        canvas2.drawCircle(var_, var_, (float) AndroidUtilities.dp(f6 * 12.0f), this.paint);
         this.paint.setColor(getThemedColor("switchTrackChecked"));
-        canvas2.drawCircle(cx2, (float) cy, (float) AndroidUtilities.dp(6.0f), this.paint);
+        canvas2.drawCircle(var_, var_, (float) AndroidUtilities.dp(6.0f), this.paint);
     }
 
-    public void onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo info) {
-        super.onInitializeAccessibilityNodeInfo(info);
-        this.accessibilityDelegate.onInitializeAccessibilityNodeInfoInternal(this, info);
+    public void onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo accessibilityNodeInfo) {
+        super.onInitializeAccessibilityNodeInfo(accessibilityNodeInfo);
+        this.accessibilityDelegate.onInitializeAccessibilityNodeInfoInternal(this, accessibilityNodeInfo);
     }
 
-    public boolean performAccessibilityAction(int action, Bundle arguments) {
-        return super.performAccessibilityAction(action, arguments) || this.accessibilityDelegate.performAccessibilityActionInternal(this, action, arguments);
+    public boolean performAccessibilityAction(int i, Bundle bundle) {
+        return super.performAccessibilityAction(i, bundle) || this.accessibilityDelegate.performAccessibilityActionInternal(this, i, bundle);
     }
 
     public int getSelectedIndex() {
         return this.selectedIndex;
     }
 
-    private int getThemedColor(String key) {
+    private int getThemedColor(String str) {
         Theme.ResourcesProvider resourcesProvider2 = this.resourcesProvider;
-        Integer color = resourcesProvider2 != null ? resourcesProvider2.getColor(key) : null;
-        return color != null ? color.intValue() : Theme.getColor(key);
-    }
-
-    public interface Callback {
-        void onOptionSelected(int i);
-
-        void onTouchEnd();
-
-        /* renamed from: org.telegram.ui.Components.SlideChooseView$Callback$-CC  reason: invalid class name */
-        public final /* synthetic */ class CC {
-            public static void $default$onTouchEnd(Callback _this) {
-            }
-        }
+        Integer color = resourcesProvider2 != null ? resourcesProvider2.getColor(str) : null;
+        return color != null ? color.intValue() : Theme.getColor(str);
     }
 }

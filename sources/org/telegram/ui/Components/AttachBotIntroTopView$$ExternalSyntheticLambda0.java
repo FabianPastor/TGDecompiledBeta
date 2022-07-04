@@ -10,6 +10,6 @@ public final /* synthetic */ class AttachBotIntroTopView$$ExternalSyntheticLambd
     }
 
     public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-        this.f$0.m538lambda$new$0$orgtelegramuiComponentsAttachBotIntroTopView(valueAnimator);
+        this.f$0.lambda$new$0(valueAnimator);
     }
 }

@@ -14,6 +14,6 @@ public final /* synthetic */ class GcmPushListenerService$$ExternalSyntheticLamb
     }
 
     public final void run() {
-        this.f$0.m71x1d2d684b(this.f$1, this.f$2);
+        this.f$0.lambda$onMessageReceived$3(this.f$1, this.f$2);
     }
 }

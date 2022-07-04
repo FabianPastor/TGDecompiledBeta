@@ -1,20 +1,14 @@
 package org.telegram.ui.Components;
 
-import android.content.DialogInterface;
-import android.view.KeyEvent;
-import android.widget.TextView;
-import org.telegram.ui.ActionBar.AlertDialog;
+import org.telegram.ui.Components.NumberPicker;
 
-public final /* synthetic */ class AlertsCreator$$ExternalSyntheticLambda110 implements TextView.OnEditorActionListener {
-    public final /* synthetic */ AlertDialog f$0;
-    public final /* synthetic */ DialogInterface.OnClickListener f$1;
+public final /* synthetic */ class AlertsCreator$$ExternalSyntheticLambda110 implements NumberPicker.Formatter {
+    public static final /* synthetic */ AlertsCreator$$ExternalSyntheticLambda110 INSTANCE = new AlertsCreator$$ExternalSyntheticLambda110();
 
-    public /* synthetic */ AlertsCreator$$ExternalSyntheticLambda110(AlertDialog alertDialog, DialogInterface.OnClickListener onClickListener) {
-        this.f$0 = alertDialog;
-        this.f$1 = onClickListener;
+    private /* synthetic */ AlertsCreator$$ExternalSyntheticLambda110() {
     }
 
-    public final boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
-        return AlertsCreator.lambda$createChangeNameAlert$36(this.f$0, this.f$1, textView, i, keyEvent);
+    public final String format(int i) {
+        return String.format("%02d", new Object[]{Integer.valueOf(i)});
     }
 }

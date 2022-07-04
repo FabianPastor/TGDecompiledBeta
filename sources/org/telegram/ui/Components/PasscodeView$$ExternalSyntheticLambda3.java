@@ -10,6 +10,6 @@ public final /* synthetic */ class PasscodeView$$ExternalSyntheticLambda3 implem
     }
 
     public final void onClick(View view) {
-        this.f$0.m1147lambda$new$4$orgtelegramuiComponentsPasscodeView(view);
+        this.f$0.lambda$new$1(view);
     }
 }

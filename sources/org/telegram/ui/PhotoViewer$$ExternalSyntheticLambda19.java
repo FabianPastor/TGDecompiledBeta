@@ -10,6 +10,6 @@ public final /* synthetic */ class PhotoViewer$$ExternalSyntheticLambda19 implem
     }
 
     public final void onClick(View view) {
-        this.f$0.m4274lambda$setParentActivity$31$orgtelegramuiPhotoViewer(view);
+        this.f$0.lambda$switchToEditMode$60(view);
     }
 }

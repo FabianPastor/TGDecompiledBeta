@@ -1,16 +1,16 @@
 package org.telegram.ui.Components;
 
 import android.content.DialogInterface;
-import org.telegram.ui.ActionBar.BaseFragment;
+import org.telegram.messenger.AndroidUtilities;
 
-public final /* synthetic */ class AlertsCreator$$ExternalSyntheticLambda46 implements DialogInterface.OnClickListener {
-    public final /* synthetic */ BaseFragment f$0;
+public final /* synthetic */ class AlertsCreator$$ExternalSyntheticLambda46 implements DialogInterface.OnShowListener {
+    public final /* synthetic */ EditTextBoldCursor f$0;
 
-    public /* synthetic */ AlertsCreator$$ExternalSyntheticLambda46(BaseFragment baseFragment) {
-        this.f$0 = baseFragment;
+    public /* synthetic */ AlertsCreator$$ExternalSyntheticLambda46(EditTextBoldCursor editTextBoldCursor) {
+        this.f$0 = editTextBoldCursor;
     }
 
-    public final void onClick(DialogInterface dialogInterface, int i) {
-        AlertsCreator.performAskAQuestion(this.f$0);
+    public final void onShow(DialogInterface dialogInterface) {
+        AndroidUtilities.runOnUIThread(new AlertsCreator$$ExternalSyntheticLambda87(this.f$0));
     }
 }

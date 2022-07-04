@@ -74,6 +74,10 @@ public final class Instance {
         void onStateUpdated(int i, boolean z);
     }
 
+    public static int getConnectionMaxLayer() {
+        return 92;
+    }
+
     static {
         List<String> list;
         if (Build.VERSION.SDK_INT >= 18) {
@@ -91,12 +95,12 @@ public final class Instance {
         return globalServerConfig;
     }
 
-    public static void setGlobalServerConfig(String serverConfigJson) {
+    public static void setGlobalServerConfig(String str) {
         try {
-            globalServerConfig = new ServerConfig(new JSONObject(serverConfigJson));
+            globalServerConfig = new ServerConfig(new JSONObject(str));
             NativeInstance nativeInstance = instance;
             if (nativeInstance != null) {
-                nativeInstance.setGlobalServerConfig(serverConfigJson);
+                nativeInstance.setGlobalServerConfig(str);
             }
         } catch (JSONException e) {
             if (BuildVars.LOGS_ENABLED) {
@@ -109,26 +113,22 @@ public final class Instance {
         instance = null;
     }
 
-    public static NativeInstance makeInstance(String version, Config config, String persistentStateFilePath, Endpoint[] endpoints, Proxy proxy, int networkType, EncryptionKey encryptionKey, VideoSink remoteSink, long videoCapturer, NativeInstance.AudioLevelsCallback audioLevelsCallback) {
-        if (!"2.4.4".equals(version)) {
+    public static NativeInstance makeInstance(String str, Config config, String str2, Endpoint[] endpointArr, Proxy proxy, int i, EncryptionKey encryptionKey, VideoSink videoSink, long j, NativeInstance.AudioLevelsCallback audioLevelsCallback) {
+        if (!"2.4.4".equals(str)) {
             ContextUtils.initialize(ApplicationLoader.applicationContext);
         }
-        instance = NativeInstance.make(version, config, persistentStateFilePath, endpoints, proxy, networkType, encryptionKey, remoteSink, videoCapturer, audioLevelsCallback);
+        instance = NativeInstance.make(str, config, str2, endpointArr, proxy, i, encryptionKey, videoSink, j, audioLevelsCallback);
         setGlobalServerConfig(globalServerConfig.jsonObject.toString());
         setBufferSize(bufferSize);
         return instance;
     }
 
-    public static void setBufferSize(int size) {
-        bufferSize = size;
+    public static void setBufferSize(int i) {
+        bufferSize = i;
         NativeInstance nativeInstance = instance;
         if (nativeInstance != null) {
-            nativeInstance.setBufferSize(size);
+            nativeInstance.setBufferSize(i);
         }
-    }
-
-    public static int getConnectionMaxLayer() {
-        return 92;
     }
 
     public static String getVersion() {
@@ -159,19 +159,19 @@ public final class Instance {
         public final double receiveTimeout;
         public final String statsLogPath;
 
-        public Config(double initializationTimeout2, double receiveTimeout2, int dataSaving2, boolean enableP2p2, boolean enableAec2, boolean enableNs2, boolean enableAgc2, boolean enableCallUpgrade2, boolean enableSm2, String logPath2, String statsLogPath2, int maxApiLayer2) {
-            this.initializationTimeout = initializationTimeout2;
-            this.receiveTimeout = receiveTimeout2;
-            this.dataSaving = dataSaving2;
-            this.enableP2p = enableP2p2;
-            this.enableAec = enableAec2;
-            this.enableNs = enableNs2;
-            this.enableAgc = enableAgc2;
-            this.enableCallUpgrade = enableCallUpgrade2;
-            this.logPath = logPath2;
-            this.statsLogPath = statsLogPath2;
-            this.maxApiLayer = maxApiLayer2;
-            this.enableSm = enableSm2;
+        public Config(double d, double d2, int i, boolean z, boolean z2, boolean z3, boolean z4, boolean z5, boolean z6, String str, String str2, int i2) {
+            this.initializationTimeout = d;
+            this.receiveTimeout = d2;
+            this.dataSaving = i;
+            this.enableP2p = z;
+            this.enableAec = z2;
+            this.enableNs = z3;
+            this.enableAgc = z4;
+            this.enableCallUpgrade = z5;
+            this.logPath = str;
+            this.statsLogPath = str2;
+            this.maxApiLayer = i2;
+            this.enableSm = z6;
         }
 
         public String toString() {
@@ -193,19 +193,19 @@ public final class Instance {
         public final int type;
         public final String username;
 
-        public Endpoint(boolean isRtc2, long id2, String ipv42, String ipv62, int port2, int type2, byte[] peerTag2, boolean turn2, boolean stun2, String username2, String password2, boolean tcp2) {
-            this.isRtc = isRtc2;
-            this.id = id2;
-            this.ipv4 = ipv42;
-            this.ipv6 = ipv62;
-            this.port = port2;
-            this.type = type2;
-            this.peerTag = peerTag2;
-            this.turn = turn2;
-            this.stun = stun2;
-            this.username = username2;
-            this.password = password2;
-            this.tcp = tcp2;
+        public Endpoint(boolean z, long j, String str, String str2, int i, int i2, byte[] bArr, boolean z2, boolean z3, String str3, String str4, boolean z4) {
+            this.isRtc = z;
+            this.id = j;
+            this.ipv4 = str;
+            this.ipv6 = str2;
+            this.port = i;
+            this.type = i2;
+            this.peerTag = bArr;
+            this.turn = z2;
+            this.stun = z3;
+            this.username = str3;
+            this.password = str4;
+            this.tcp = z4;
         }
 
         public String toString() {
@@ -219,11 +219,11 @@ public final class Instance {
         public final String password;
         public final int port;
 
-        public Proxy(String host2, int port2, String login2, String password2) {
-            this.host = host2;
-            this.port = port2;
-            this.login = login2;
-            this.password = password2;
+        public Proxy(String str, int i, String str2, String str3) {
+            this.host = str;
+            this.port = i;
+            this.login = str2;
+            this.password = str3;
         }
 
         public String toString() {
@@ -235,9 +235,9 @@ public final class Instance {
         public final boolean isOutgoing;
         public final byte[] value;
 
-        public EncryptionKey(byte[] value2, boolean isOutgoing2) {
-            this.value = value2;
-            this.isOutgoing = isOutgoing2;
+        public EncryptionKey(byte[] bArr, boolean z) {
+            this.value = bArr;
+            this.isOutgoing = z;
         }
 
         public String toString() {
@@ -251,11 +251,11 @@ public final class Instance {
         public final byte[] persistentState;
         public final TrafficStats trafficStats;
 
-        public FinalState(byte[] persistentState2, String debugLog2, TrafficStats trafficStats2, boolean isRatingSuggested2) {
-            this.persistentState = persistentState2;
-            this.debugLog = debugLog2;
+        public FinalState(byte[] bArr, String str, TrafficStats trafficStats2, boolean z) {
+            this.persistentState = bArr;
+            this.debugLog = str;
             this.trafficStats = trafficStats2;
-            this.isRatingSuggested = isRatingSuggested2;
+            this.isRatingSuggested = z;
         }
 
         public String toString() {
@@ -269,11 +269,11 @@ public final class Instance {
         public final long bytesSentMobile;
         public final long bytesSentWifi;
 
-        public TrafficStats(long bytesSentWifi2, long bytesReceivedWifi2, long bytesSentMobile2, long bytesReceivedMobile2) {
-            this.bytesSentWifi = bytesSentWifi2;
-            this.bytesReceivedWifi = bytesReceivedWifi2;
-            this.bytesSentMobile = bytesSentMobile2;
-            this.bytesReceivedMobile = bytesReceivedMobile2;
+        public TrafficStats(long j, long j2, long j3, long j4) {
+            this.bytesSentWifi = j;
+            this.bytesReceivedWifi = j2;
+            this.bytesSentMobile = j3;
+            this.bytesReceivedMobile = j4;
         }
 
         public String toString() {
@@ -286,10 +286,10 @@ public final class Instance {
         public final String hash;
         public final String setup;
 
-        public Fingerprint(String hash2, String setup2, String fingerprint2) {
-            this.hash = hash2;
-            this.setup = setup2;
-            this.fingerprint = fingerprint2;
+        public Fingerprint(String str, String str2, String str3) {
+            this.hash = str;
+            this.setup = str2;
+            this.fingerprint = str3;
         }
 
         public String toString() {
@@ -312,20 +312,20 @@ public final class Instance {
         public final String tcpType;
         public final String type;
 
-        public Candidate(String port2, String protocol2, String network2, String generation2, String id2, String component2, String foundation2, String priority2, String ip2, String type2, String tcpType2, String relAddr2, String relPort2) {
-            this.port = port2;
-            this.protocol = protocol2;
-            this.network = network2;
-            this.generation = generation2;
-            this.id = id2;
-            this.component = component2;
-            this.foundation = foundation2;
-            this.priority = priority2;
-            this.ip = ip2;
-            this.type = type2;
-            this.tcpType = tcpType2;
-            this.relAddr = relAddr2;
-            this.relPort = relPort2;
+        public Candidate(String str, String str2, String str3, String str4, String str5, String str6, String str7, String str8, String str9, String str10, String str11, String str12, String str13) {
+            this.port = str;
+            this.protocol = str2;
+            this.network = str3;
+            this.generation = str4;
+            this.id = str5;
+            this.component = str6;
+            this.foundation = str7;
+            this.priority = str8;
+            this.ip = str9;
+            this.type = str10;
+            this.tcpType = str11;
+            this.relAddr = str12;
+            this.relPort = str13;
         }
 
         public String toString() {
@@ -349,28 +349,28 @@ public final class Instance {
         public final boolean useSystemAec;
         public final boolean useSystemNs;
 
-        private ServerConfig(JSONObject jsonObject2) {
-            this.jsonObject = jsonObject2;
-            this.useSystemNs = jsonObject2.optBoolean("use_system_ns", true);
-            this.useSystemAec = jsonObject2.optBoolean("use_system_aec", true);
-            this.enableStunMarking = jsonObject2.optBoolean("voip_enable_stun_marking", false);
-            this.hangupUiTimeout = jsonObject2.optDouble("hangup_ui_timeout", 5.0d);
-            this.enable_vp8_encoder = jsonObject2.optBoolean("enable_vp8_encoder", true);
-            this.enable_vp8_decoder = jsonObject2.optBoolean("enable_vp8_decoder", true);
-            this.enable_vp9_encoder = jsonObject2.optBoolean("enable_vp9_encoder", true);
-            this.enable_vp9_decoder = jsonObject2.optBoolean("enable_vp9_decoder", true);
-            this.enable_h265_encoder = jsonObject2.optBoolean("enable_h265_encoder", true);
-            this.enable_h265_decoder = jsonObject2.optBoolean("enable_h265_decoder", true);
-            this.enable_h264_encoder = jsonObject2.optBoolean("enable_h264_encoder", true);
-            this.enable_h264_decoder = jsonObject2.optBoolean("enable_h264_decoder", true);
+        private ServerConfig(JSONObject jSONObject) {
+            this.jsonObject = jSONObject;
+            this.useSystemNs = jSONObject.optBoolean("use_system_ns", true);
+            this.useSystemAec = jSONObject.optBoolean("use_system_aec", true);
+            this.enableStunMarking = jSONObject.optBoolean("voip_enable_stun_marking", false);
+            this.hangupUiTimeout = jSONObject.optDouble("hangup_ui_timeout", 5.0d);
+            this.enable_vp8_encoder = jSONObject.optBoolean("enable_vp8_encoder", true);
+            this.enable_vp8_decoder = jSONObject.optBoolean("enable_vp8_decoder", true);
+            this.enable_vp9_encoder = jSONObject.optBoolean("enable_vp9_encoder", true);
+            this.enable_vp9_decoder = jSONObject.optBoolean("enable_vp9_decoder", true);
+            this.enable_h265_encoder = jSONObject.optBoolean("enable_h265_encoder", true);
+            this.enable_h265_decoder = jSONObject.optBoolean("enable_h265_decoder", true);
+            this.enable_h264_encoder = jSONObject.optBoolean("enable_h264_encoder", true);
+            this.enable_h264_decoder = jSONObject.optBoolean("enable_h264_decoder", true);
         }
 
-        public String getString(String key) {
-            return getString(key, "");
+        public String getString(String str) {
+            return getString(str, "");
         }
 
-        public String getString(String key, String fallback) {
-            return this.jsonObject.optString(key, fallback);
+        public String getString(String str, String str2) {
+            return this.jsonObject.optString(str, str2);
         }
     }
 }

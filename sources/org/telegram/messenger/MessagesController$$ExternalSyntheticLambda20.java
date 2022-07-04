@@ -1,22 +1,13 @@
 package org.telegram.messenger;
 
-import java.util.ArrayList;
-import org.telegram.messenger.MessagesController;
-
 public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda20 implements Runnable {
     public final /* synthetic */ MessagesController f$0;
-    public final /* synthetic */ ArrayList f$1;
-    public final /* synthetic */ long f$2;
-    public final /* synthetic */ MessagesController.SponsoredMessagesInfo f$3;
 
-    public /* synthetic */ MessagesController$$ExternalSyntheticLambda20(MessagesController messagesController, ArrayList arrayList, long j, MessagesController.SponsoredMessagesInfo sponsoredMessagesInfo) {
+    public /* synthetic */ MessagesController$$ExternalSyntheticLambda20(MessagesController messagesController) {
         this.f$0 = messagesController;
-        this.f$1 = arrayList;
-        this.f$2 = j;
-        this.f$3 = sponsoredMessagesInfo;
     }
 
     public final void run() {
-        this.f$0.m239x1817db81(this.f$1, this.f$2, this.f$3);
+        this.f$0.lambda$toggleChannelInvitesHistory$234();
     }
 }

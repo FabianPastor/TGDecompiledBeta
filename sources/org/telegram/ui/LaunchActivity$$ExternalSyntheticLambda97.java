@@ -1,24 +1,20 @@
 package org.telegram.ui;
 
-import android.view.View;
-import org.telegram.ui.Components.RecyclerListView;
+import org.telegram.tgnet.TLRPC$User;
+import org.telegram.ui.ContactsActivity;
 
-public final /* synthetic */ class LaunchActivity$$ExternalSyntheticLambda97 implements RecyclerListView.OnItemClickListenerExtended {
+public final /* synthetic */ class LaunchActivity$$ExternalSyntheticLambda97 implements ContactsActivity.ContactsActivityDelegate {
     public final /* synthetic */ LaunchActivity f$0;
+    public final /* synthetic */ boolean f$1;
+    public final /* synthetic */ int[] f$2;
 
-    public /* synthetic */ LaunchActivity$$ExternalSyntheticLambda97(LaunchActivity launchActivity) {
+    public /* synthetic */ LaunchActivity$$ExternalSyntheticLambda97(LaunchActivity launchActivity, boolean z, int[] iArr) {
         this.f$0 = launchActivity;
+        this.f$1 = z;
+        this.f$2 = iArr;
     }
 
-    public /* synthetic */ boolean hasDoubleTap(View view, int i) {
-        return RecyclerListView.OnItemClickListenerExtended.CC.$default$hasDoubleTap(this, view, i);
-    }
-
-    public /* synthetic */ void onDoubleTap(View view, int i, float f, float f2) {
-        RecyclerListView.OnItemClickListenerExtended.CC.$default$onDoubleTap(this, view, i, f, f2);
-    }
-
-    public final void onItemClick(View view, int i, float f, float f2) {
-        this.f$0.m3653lambda$onCreate$3$orgtelegramuiLaunchActivity(view, i, f, f2);
+    public final void didSelectContact(TLRPC$User tLRPC$User, String str, ContactsActivity contactsActivity) {
+        this.f$0.lambda$handleIntent$17(this.f$1, this.f$2, tLRPC$User, str, contactsActivity);
     }
 }

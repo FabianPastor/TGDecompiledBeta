@@ -12,6 +12,6 @@ public final /* synthetic */ class StatisticActivity$$ExternalSyntheticLambda2 i
     }
 
     public final void run() {
-        this.f$0.m4619lambda$onFragmentCreate$0$orgtelegramuiStatisticActivity(this.f$1);
+        this.f$0.lambda$onFragmentCreate$0(this.f$1);
     }
 }

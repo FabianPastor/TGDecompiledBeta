@@ -17,10 +17,7 @@ import org.telegram.ui.ActionBar.Theme;
 
 public class OutlineTextContainerView extends FrameLayout {
     private static final SimpleFloatPropertyCompat<OutlineTextContainerView> ERROR_PROGRESS_PROPERTY = new SimpleFloatPropertyCompat("errorProgress", OutlineTextContainerView$$ExternalSyntheticLambda1.INSTANCE, OutlineTextContainerView$$ExternalSyntheticLambda3.INSTANCE).setMultiplier(100.0f);
-    private static final int PADDING_LEFT = 14;
-    private static final int PADDING_TEXT = 4;
     private static final SimpleFloatPropertyCompat<OutlineTextContainerView> SELECTION_PROGRESS_PROPERTY = new SimpleFloatPropertyCompat("selectionProgress", OutlineTextContainerView$$ExternalSyntheticLambda0.INSTANCE, OutlineTextContainerView$$ExternalSyntheticLambda2.INSTANCE).setMultiplier(100.0f);
-    private static final float SPRING_MULTIPLIER = 100.0f;
     private EditText attachedEditText;
     /* access modifiers changed from: private */
     public float errorProgress;
@@ -36,20 +33,22 @@ public class OutlineTextContainerView extends FrameLayout {
     private float strokeWidthSelected = ((float) AndroidUtilities.dp(1.5f));
     private TextPaint textPaint = new TextPaint(1);
 
-    static /* synthetic */ void lambda$static$1(OutlineTextContainerView obj, float value) {
-        obj.selectionProgress = value;
-        if (!obj.forceUseCenter) {
-            Paint paint = obj.outlinePaint;
-            float f = obj.strokeWidthRegular;
-            paint.setStrokeWidth(f + ((obj.strokeWidthSelected - f) * value));
-            obj.updateColor();
+    /* access modifiers changed from: private */
+    public static /* synthetic */ void lambda$static$1(OutlineTextContainerView outlineTextContainerView, float f) {
+        outlineTextContainerView.selectionProgress = f;
+        if (!outlineTextContainerView.forceUseCenter) {
+            Paint paint = outlineTextContainerView.outlinePaint;
+            float f2 = outlineTextContainerView.strokeWidthRegular;
+            paint.setStrokeWidth(f2 + ((outlineTextContainerView.strokeWidthSelected - f2) * f));
+            outlineTextContainerView.updateColor();
         }
-        obj.invalidate();
+        outlineTextContainerView.invalidate();
     }
 
-    static /* synthetic */ void lambda$static$3(OutlineTextContainerView obj, float value) {
-        obj.errorProgress = value;
-        obj.updateColor();
+    /* access modifiers changed from: private */
+    public static /* synthetic */ void lambda$static$3(OutlineTextContainerView outlineTextContainerView, float f) {
+        outlineTextContainerView.errorProgress = f;
+        outlineTextContainerView.updateColor();
     }
 
     public OutlineTextContainerView(Context context) {
@@ -63,8 +62,8 @@ public class OutlineTextContainerView extends FrameLayout {
         setPadding(0, AndroidUtilities.dp(6.0f), 0, 0);
     }
 
-    public void setForceUseCenter(boolean forceUseCenter2) {
-        this.forceUseCenter = forceUseCenter2;
+    public void setForceUseCenter(boolean z) {
+        this.forceUseCenter = z;
         invalidate();
     }
 
@@ -72,18 +71,18 @@ public class OutlineTextContainerView extends FrameLayout {
         return this.attachedEditText;
     }
 
-    public void attachEditText(EditText attachedEditText2) {
-        this.attachedEditText = attachedEditText2;
+    public void attachEditText(EditText editText) {
+        this.attachedEditText = editText;
         invalidate();
     }
 
-    public void setText(String text) {
-        this.mText = text;
+    public void setText(String str) {
+        this.mText = str;
         invalidate();
     }
 
-    private void setColor(int color) {
-        this.outlinePaint.setColor(color);
+    private void setColor(int i) {
+        this.outlinePaint.setColor(i);
         invalidate();
     }
 
@@ -92,33 +91,33 @@ public class OutlineTextContainerView extends FrameLayout {
         setColor(ColorUtils.blendARGB(ColorUtils.blendARGB(Theme.getColor("windowBackgroundWhiteInputField"), Theme.getColor("windowBackgroundWhiteInputFieldActivated"), this.selectionProgress), Theme.getColor("dialogTextRed"), this.errorProgress));
     }
 
-    public void animateSelection(float newValue) {
-        animateSelection(newValue, true);
+    public void animateSelection(float f) {
+        animateSelection(f, true);
     }
 
-    public void animateSelection(float newValue, boolean animate) {
-        if (!animate) {
-            this.selectionProgress = newValue;
+    public void animateSelection(float f, boolean z) {
+        if (!z) {
+            this.selectionProgress = f;
             if (!this.forceUseCenter) {
                 Paint paint = this.outlinePaint;
-                float f = this.strokeWidthRegular;
-                paint.setStrokeWidth(f + ((this.strokeWidthSelected - f) * newValue));
+                float f2 = this.strokeWidthRegular;
+                paint.setStrokeWidth(f2 + ((this.strokeWidthSelected - f2) * f));
             }
             updateColor();
             return;
         }
-        animateSpring(this.selectionSpring, newValue);
+        animateSpring(this.selectionSpring, f);
     }
 
-    public void animateError(float newValue) {
-        animateSpring(this.errorSpring, newValue);
+    public void animateError(float f) {
+        animateSpring(this.errorSpring, f);
     }
 
-    private void animateSpring(SpringAnimation spring, float newValue) {
-        float newValue2 = newValue * 100.0f;
-        if (spring.getSpring() == null || newValue2 != spring.getSpring().getFinalPosition()) {
-            spring.cancel();
-            spring.setSpring(new SpringForce(newValue2).setStiffness(500.0f).setDampingRatio(1.0f).setFinalPosition(newValue2)).start();
+    private void animateSpring(SpringAnimation springAnimation, float f) {
+        float f2 = f * 100.0f;
+        if (springAnimation.getSpring() == null || f2 != springAnimation.getSpring().getFinalPosition()) {
+            springAnimation.cancel();
+            springAnimation.setSpring(new SpringForce(f2).setStiffness(500.0f).setDampingRatio(1.0f).setFinalPosition(f2)).start();
         }
     }
 
@@ -126,36 +125,32 @@ public class OutlineTextContainerView extends FrameLayout {
     public void onDraw(Canvas canvas) {
         Canvas canvas2 = canvas;
         super.onDraw(canvas);
-        float textOffset = (this.textPaint.getTextSize() / 2.0f) - ((float) AndroidUtilities.dp(1.75f));
-        float topY = ((float) getPaddingTop()) + textOffset;
-        float centerY = (((float) getHeight()) / 2.0f) + (this.textPaint.getTextSize() / 2.0f);
+        float paddingTop = ((float) getPaddingTop()) + ((this.textPaint.getTextSize() / 2.0f) - ((float) AndroidUtilities.dp(1.75f)));
+        float height = (((float) getHeight()) / 2.0f) + (this.textPaint.getTextSize() / 2.0f);
         EditText editText = this.attachedEditText;
-        boolean useCenter = (editText != null && editText.length() == 0 && TextUtils.isEmpty(this.attachedEditText.getHint())) || this.forceUseCenter;
-        float textY = useCenter ? ((centerY - topY) * (1.0f - this.selectionProgress)) + topY : topY;
-        float stroke = this.outlinePaint.getStrokeWidth();
-        float f = 0.75f;
-        if (useCenter) {
-            f = 0.75f + ((1.0f - this.selectionProgress) * 0.25f);
+        boolean z = (editText != null && editText.length() == 0 && TextUtils.isEmpty(this.attachedEditText.getHint())) || this.forceUseCenter;
+        if (z) {
+            paddingTop += (height - paddingTop) * (1.0f - this.selectionProgress);
         }
-        float scaleX = f;
-        float textWidth = this.textPaint.measureText(this.mText) * scaleX;
+        float f = paddingTop;
+        float strokeWidth = this.outlinePaint.getStrokeWidth();
+        float f2 = z ? 0.75f + ((1.0f - this.selectionProgress) * 0.25f) : 0.75f;
+        float measureText = this.textPaint.measureText(this.mText) * f2;
         canvas.save();
-        this.rect.set((float) (getPaddingLeft() + AndroidUtilities.dp(10.0f)), (float) getPaddingTop(), (float) ((getWidth() - AndroidUtilities.dp(18.0f)) - getPaddingRight()), ((float) getPaddingTop()) + (stroke * 2.0f));
+        this.rect.set((float) (getPaddingLeft() + AndroidUtilities.dp(10.0f)), (float) getPaddingTop(), (float) ((getWidth() - AndroidUtilities.dp(18.0f)) - getPaddingRight()), ((float) getPaddingTop()) + (strokeWidth * 2.0f));
         canvas2.clipRect(this.rect, Region.Op.DIFFERENCE);
-        this.rect.set(((float) getPaddingLeft()) + stroke, ((float) getPaddingTop()) + stroke, (((float) getWidth()) - stroke) - ((float) getPaddingRight()), (((float) getHeight()) - stroke) - ((float) getPaddingBottom()));
+        this.rect.set(((float) getPaddingLeft()) + strokeWidth, ((float) getPaddingTop()) + strokeWidth, (((float) getWidth()) - strokeWidth) - ((float) getPaddingRight()), (((float) getHeight()) - strokeWidth) - ((float) getPaddingBottom()));
         canvas2.drawRoundRect(this.rect, (float) AndroidUtilities.dp(6.0f), (float) AndroidUtilities.dp(6.0f), this.outlinePaint);
         canvas.restore();
-        float left = (float) (getPaddingLeft() + AndroidUtilities.dp(10.0f));
-        float lineY = ((float) getPaddingTop()) + stroke;
-        float fromLeft = left + (textWidth / 2.0f);
-        float f2 = textOffset;
-        float textOffset2 = scaleX;
-        canvas.drawLine(fromLeft + ((((left + textWidth) + ((float) AndroidUtilities.dp(10.0f))) - fromLeft) * (useCenter ? this.selectionProgress : 1.0f)), lineY, ((((float) getWidth()) - stroke) - ((float) getPaddingRight())) - ((float) AndroidUtilities.dp(6.0f)), lineY, this.outlinePaint);
-        float fromRight = (textWidth / 2.0f) + left + ((float) AndroidUtilities.dp(4.0f));
-        canvas.drawLine(left, lineY, fromRight + ((left - fromRight) * (useCenter ? this.selectionProgress : 1.0f)), lineY, this.outlinePaint);
+        float paddingLeft = (float) (getPaddingLeft() + AndroidUtilities.dp(10.0f));
+        float paddingTop2 = ((float) getPaddingTop()) + strokeWidth;
+        float f3 = paddingLeft + (measureText / 2.0f);
+        canvas.drawLine(f3 + ((((paddingLeft + measureText) + ((float) AndroidUtilities.dp(10.0f))) - f3) * (z ? this.selectionProgress : 1.0f)), paddingTop2, ((((float) getWidth()) - strokeWidth) - ((float) getPaddingRight())) - ((float) AndroidUtilities.dp(6.0f)), paddingTop2, this.outlinePaint);
+        float dp = f3 + ((float) AndroidUtilities.dp(4.0f));
+        canvas.drawLine(paddingLeft, paddingTop2, dp + ((paddingLeft - dp) * (z ? this.selectionProgress : 1.0f)), paddingTop2, this.outlinePaint);
         canvas.save();
-        canvas2.scale(textOffset2, textOffset2, (float) (getPaddingLeft() + AndroidUtilities.dp(18.0f)), textY);
-        canvas2.drawText(this.mText, (float) (getPaddingLeft() + AndroidUtilities.dp(14.0f)), textY, this.textPaint);
+        canvas2.scale(f2, f2, (float) (getPaddingLeft() + AndroidUtilities.dp(18.0f)), f);
+        canvas2.drawText(this.mText, (float) (getPaddingLeft() + AndroidUtilities.dp(14.0f)), f, this.textPaint);
         canvas.restore();
     }
 }

@@ -12,6 +12,6 @@ public final /* synthetic */ class VoIPPiPView$FloatingView$3$$ExternalSynthetic
     }
 
     public final void run() {
-        this.f$0.m1618xbeabb793(this.f$1);
+        this.f$0.lambda$onAnimationEnd$0(this.f$1);
     }
 }

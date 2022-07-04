@@ -1,15 +1,17 @@
 package org.telegram.ui.Components;
 
-import android.view.View;
+import org.telegram.ui.Components.ChatAttachAlert;
 
-public final /* synthetic */ class ChatAttachAlertPhotoLayout$$ExternalSyntheticLambda11 implements View.OnClickListener {
+public final /* synthetic */ class ChatAttachAlertPhotoLayout$$ExternalSyntheticLambda11 implements Runnable {
     public final /* synthetic */ ChatAttachAlertPhotoLayout f$0;
+    public final /* synthetic */ ChatAttachAlert.AttachAlertLayout f$1;
 
-    public /* synthetic */ ChatAttachAlertPhotoLayout$$ExternalSyntheticLambda11(ChatAttachAlertPhotoLayout chatAttachAlertPhotoLayout) {
+    public /* synthetic */ ChatAttachAlertPhotoLayout$$ExternalSyntheticLambda11(ChatAttachAlertPhotoLayout chatAttachAlertPhotoLayout, ChatAttachAlert.AttachAlertLayout attachAlertLayout) {
         this.f$0 = chatAttachAlertPhotoLayout;
+        this.f$1 = attachAlertLayout;
     }
 
-    public final void onClick(View view) {
-        this.f$0.m833x316cb28e(view);
+    public final void run() {
+        this.f$0.lambda$onShow$16(this.f$1);
     }
 }

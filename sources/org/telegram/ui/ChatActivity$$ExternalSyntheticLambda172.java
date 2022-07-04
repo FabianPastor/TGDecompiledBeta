@@ -1,23 +1,21 @@
 package org.telegram.ui;
 
 import java.util.ArrayList;
-import org.telegram.tgnet.TLRPC;
-import org.telegram.ui.GroupCreateActivity;
 
-public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda172 implements GroupCreateActivity.ContactsAddActivityDelegate {
+public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda172 implements Runnable {
     public final /* synthetic */ ChatActivity f$0;
-    public final /* synthetic */ long f$1;
+    public final /* synthetic */ ArrayList f$1;
+    public final /* synthetic */ ArrayList f$2;
+    public final /* synthetic */ int f$3;
 
-    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda172(ChatActivity chatActivity, long j) {
+    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda172(ChatActivity chatActivity, ArrayList arrayList, ArrayList arrayList2, int i) {
         this.f$0 = chatActivity;
-        this.f$1 = j;
+        this.f$1 = arrayList;
+        this.f$2 = arrayList2;
+        this.f$3 = i;
     }
 
-    public final void didSelectUsers(ArrayList arrayList, int i) {
-        this.f$0.m2954lambda$createView$34$orgtelegramuiChatActivity(this.f$1, arrayList, i);
-    }
-
-    public /* synthetic */ void needAddBot(TLRPC.User user) {
-        GroupCreateActivity.ContactsAddActivityDelegate.CC.$default$needAddBot(this, user);
+    public final void run() {
+        this.f$0.lambda$unpinMessage$187(this.f$1, this.f$2, this.f$3);
     }
 }

@@ -10,6 +10,6 @@ public final /* synthetic */ class ScrollSlidingTabStrip$$ExternalSyntheticLambd
     }
 
     public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-        this.f$0.m1317x18a44158(valueAnimator);
+        this.f$0.lambda$checkLongPress$7(valueAnimator);
     }
 }

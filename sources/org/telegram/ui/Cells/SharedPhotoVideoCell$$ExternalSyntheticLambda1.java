@@ -10,6 +10,6 @@ public final /* synthetic */ class SharedPhotoVideoCell$$ExternalSyntheticLambda
     }
 
     public final boolean onLongClick(View view) {
-        return this.f$0.m2820lambda$new$1$orgtelegramuiCellsSharedPhotoVideoCell(view);
+        return this.f$0.lambda$new$1(view);
     }
 }

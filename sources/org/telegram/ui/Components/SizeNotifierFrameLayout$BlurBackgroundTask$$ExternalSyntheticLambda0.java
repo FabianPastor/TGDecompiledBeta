@@ -11,6 +11,6 @@ public final /* synthetic */ class SizeNotifierFrameLayout$BlurBackgroundTask$$E
     }
 
     public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-        this.f$0.m1411xda6var_(valueAnimator);
+        this.f$0.lambda$run$0(valueAnimator);
     }
 }

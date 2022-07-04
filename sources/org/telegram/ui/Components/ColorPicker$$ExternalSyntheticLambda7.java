@@ -10,7 +10,7 @@ public final /* synthetic */ class ColorPicker$$ExternalSyntheticLambda7 impleme
     }
 
     public final void didSetColor() {
-        this.f$0.m892xdb6var_();
+        this.f$0.lambda$provideThemeDescriptions$7();
     }
 
     public /* synthetic */ void onAnimationProgress(float f) {

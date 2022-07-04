@@ -1,19 +1,21 @@
 package org.telegram.ui;
 
-import android.content.Context;
-import android.view.View;
+import org.telegram.tgnet.RequestDelegate;
+import org.telegram.tgnet.TLObject;
+import org.telegram.tgnet.TLRPC$TL_account_confirmPhone;
+import org.telegram.tgnet.TLRPC$TL_error;
 import org.telegram.ui.LoginActivity;
 
-public final /* synthetic */ class LoginActivity$LoginActivitySmsView$$ExternalSyntheticLambda37 implements View.OnClickListener {
+public final /* synthetic */ class LoginActivity$LoginActivitySmsView$$ExternalSyntheticLambda37 implements RequestDelegate {
     public final /* synthetic */ LoginActivity.LoginActivitySmsView f$0;
-    public final /* synthetic */ Context f$1;
+    public final /* synthetic */ TLRPC$TL_account_confirmPhone f$1;
 
-    public /* synthetic */ LoginActivity$LoginActivitySmsView$$ExternalSyntheticLambda37(LoginActivity.LoginActivitySmsView loginActivitySmsView, Context context) {
+    public /* synthetic */ LoginActivity$LoginActivitySmsView$$ExternalSyntheticLambda37(LoginActivity.LoginActivitySmsView loginActivitySmsView, TLRPC$TL_account_confirmPhone tLRPC$TL_account_confirmPhone) {
         this.f$0 = loginActivitySmsView;
-        this.f$1 = context;
+        this.f$1 = tLRPC$TL_account_confirmPhone;
     }
 
-    public final void onClick(View view) {
-        this.f$0.m3855lambda$new$7$orgtelegramuiLoginActivity$LoginActivitySmsView(this.f$1, view);
+    public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+        this.f$0.lambda$onNextPressed$26(this.f$1, tLObject, tLRPC$TL_error);
     }
 }

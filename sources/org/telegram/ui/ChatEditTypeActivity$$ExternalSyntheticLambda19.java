@@ -1,15 +1,19 @@
 package org.telegram.ui;
 
-public final /* synthetic */ class ChatEditTypeActivity$$ExternalSyntheticLambda19 implements Runnable {
-    public final /* synthetic */ ChatEditTypeActivity f$0;
-    public final /* synthetic */ String f$1;
+import org.telegram.tgnet.RequestDelegate;
+import org.telegram.tgnet.TLObject;
+import org.telegram.tgnet.TLRPC$TL_error;
 
-    public /* synthetic */ ChatEditTypeActivity$$ExternalSyntheticLambda19(ChatEditTypeActivity chatEditTypeActivity, String str) {
+public final /* synthetic */ class ChatEditTypeActivity$$ExternalSyntheticLambda19 implements RequestDelegate {
+    public final /* synthetic */ ChatEditTypeActivity f$0;
+    public final /* synthetic */ boolean f$1;
+
+    public /* synthetic */ ChatEditTypeActivity$$ExternalSyntheticLambda19(ChatEditTypeActivity chatEditTypeActivity, boolean z) {
         this.f$0 = chatEditTypeActivity;
-        this.f$1 = str;
+        this.f$1 = z;
     }
 
-    public final void run() {
-        this.f$0.m3211lambda$checkUserName$17$orgtelegramuiChatEditTypeActivity(this.f$1);
+    public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+        this.f$0.lambda$generateLink$19(this.f$1, tLObject, tLRPC$TL_error);
     }
 }

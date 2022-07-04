@@ -10,6 +10,6 @@ public final /* synthetic */ class DispatchQueuePoolMainThreadSync$$ExternalSynt
     }
 
     public final void run() {
-        this.f$0.m1800xa5323214(this.f$1);
+        this.f$0.lambda$execute$0(this.f$1);
     }
 }

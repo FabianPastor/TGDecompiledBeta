@@ -2,15 +2,19 @@ package org.telegram.ui;
 
 import org.telegram.tgnet.RequestDelegate;
 import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC;
+import org.telegram.tgnet.TLRPC$TL_error;
+import org.telegram.tgnet.TLRPC$TL_payments_sendPaymentForm;
 
 public final /* synthetic */ class PaymentFormActivity$$ExternalSyntheticLambda57 implements RequestDelegate {
-    public static final /* synthetic */ PaymentFormActivity$$ExternalSyntheticLambda57 INSTANCE = new PaymentFormActivity$$ExternalSyntheticLambda57();
+    public final /* synthetic */ PaymentFormActivity f$0;
+    public final /* synthetic */ TLRPC$TL_payments_sendPaymentForm f$1;
 
-    private /* synthetic */ PaymentFormActivity$$ExternalSyntheticLambda57() {
+    public /* synthetic */ PaymentFormActivity$$ExternalSyntheticLambda57(PaymentFormActivity paymentFormActivity, TLRPC$TL_payments_sendPaymentForm tLRPC$TL_payments_sendPaymentForm) {
+        this.f$0 = paymentFormActivity;
+        this.f$1 = tLRPC$TL_payments_sendPaymentForm;
     }
 
-    public final void run(TLObject tLObject, TLRPC.TL_error tL_error) {
-        PaymentFormActivity.lambda$sendForm$51(tLObject, tL_error);
+    public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+        this.f$0.lambda$sendData$58(this.f$1, tLObject, tLRPC$TL_error);
     }
 }

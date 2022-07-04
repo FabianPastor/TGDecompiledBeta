@@ -13,6 +13,6 @@ public final /* synthetic */ class StatisticActivity$$ExternalSyntheticLambda0 i
     }
 
     public final void onClick(DialogInterface dialogInterface, int i) {
-        this.f$0.m4614lambda$createView$4$orgtelegramuiStatisticActivity(this.f$1, dialogInterface, i);
+        this.f$0.lambda$createView$4(this.f$1, dialogInterface, i);
     }
 }

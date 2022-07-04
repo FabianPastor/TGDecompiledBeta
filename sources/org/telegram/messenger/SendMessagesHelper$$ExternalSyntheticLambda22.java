@@ -1,15 +1,13 @@
 package org.telegram.messenger;
 
 public final /* synthetic */ class SendMessagesHelper$$ExternalSyntheticLambda22 implements Runnable {
-    public final /* synthetic */ int f$0;
-    public final /* synthetic */ AccountInstance f$1;
+    public final /* synthetic */ SendMessagesHelper f$0;
 
-    public /* synthetic */ SendMessagesHelper$$ExternalSyntheticLambda22(int i, AccountInstance accountInstance) {
-        this.f$0 = i;
-        this.f$1 = accountInstance;
+    public /* synthetic */ SendMessagesHelper$$ExternalSyntheticLambda22(SendMessagesHelper sendMessagesHelper) {
+        this.f$0 = sendMessagesHelper;
     }
 
     public final void run() {
-        SendMessagesHelper.lambda$handleError$78(this.f$0, this.f$1);
+        this.f$0.lambda$new$0();
     }
 }

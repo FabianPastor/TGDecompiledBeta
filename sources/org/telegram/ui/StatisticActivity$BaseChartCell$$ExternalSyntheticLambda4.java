@@ -11,6 +11,6 @@ public final /* synthetic */ class StatisticActivity$BaseChartCell$$ExternalSynt
     }
 
     public final void onClick(View view) {
-        this.f$0.m4626lambda$new$3$orgtelegramuiStatisticActivity$BaseChartCell(view);
+        this.f$0.lambda$new$3(view);
     }
 }

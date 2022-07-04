@@ -2,7 +2,7 @@ package org.telegram.ui;
 
 import org.telegram.tgnet.RequestDelegate;
 import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC;
+import org.telegram.tgnet.TLRPC$TL_error;
 import org.telegram.ui.ActionBar.AlertDialog;
 
 public final /* synthetic */ class LaunchActivity$$ExternalSyntheticLambda80 implements RequestDelegate {
@@ -14,7 +14,7 @@ public final /* synthetic */ class LaunchActivity$$ExternalSyntheticLambda80 imp
         this.f$1 = alertDialog;
     }
 
-    public final void run(TLObject tLObject, TLRPC.TL_error tL_error) {
-        this.f$0.m3689lambda$runLinkRequest$58$orgtelegramuiLaunchActivity(this.f$1, tLObject, tL_error);
+    public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+        this.f$0.lambda$runLinkRequest$58(this.f$1, tLObject, tLRPC$TL_error);
     }
 }

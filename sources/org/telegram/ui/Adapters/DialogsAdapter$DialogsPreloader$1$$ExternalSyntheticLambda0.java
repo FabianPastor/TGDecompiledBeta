@@ -12,6 +12,6 @@ public final /* synthetic */ class DialogsAdapter$DialogsPreloader$1$$ExternalSy
     }
 
     public final void run() {
-        this.f$0.m2603x11937a70(this.f$1);
+        this.f$0.lambda$onError$1(this.f$1);
     }
 }

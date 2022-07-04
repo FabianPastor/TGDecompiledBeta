@@ -1,12 +1,17 @@
 package org.telegram.messenger;
 
-public final /* synthetic */ class LocationController$$ExternalSyntheticLambda17 implements Runnable {
-    public static final /* synthetic */ LocationController$$ExternalSyntheticLambda17 INSTANCE = new LocationController$$ExternalSyntheticLambda17();
+import java.util.ArrayList;
 
-    private /* synthetic */ LocationController$$ExternalSyntheticLambda17() {
+public final /* synthetic */ class LocationController$$ExternalSyntheticLambda17 implements Runnable {
+    public final /* synthetic */ LocationController f$0;
+    public final /* synthetic */ ArrayList f$1;
+
+    public /* synthetic */ LocationController$$ExternalSyntheticLambda17(LocationController locationController, ArrayList arrayList) {
+        this.f$0 = locationController;
+        this.f$1 = arrayList;
     }
 
     public final void run() {
-        NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.newLocationAvailable, new Object[0]);
+        this.f$0.lambda$loadSharingLocations$16(this.f$1);
     }
 }

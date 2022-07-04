@@ -1,15 +1,16 @@
 package org.telegram.ui.ActionBar;
 
-import android.widget.PopupWindow;
+import android.view.KeyEvent;
+import org.telegram.ui.ActionBar.ActionBarPopupWindow;
 
-public final /* synthetic */ class ActionBarMenuItem$$ExternalSyntheticLambda14 implements PopupWindow.OnDismissListener {
+public final /* synthetic */ class ActionBarMenuItem$$ExternalSyntheticLambda14 implements ActionBarPopupWindow.OnDispatchKeyEventListener {
     public final /* synthetic */ ActionBarMenuItem f$0;
 
     public /* synthetic */ ActionBarMenuItem$$ExternalSyntheticLambda14(ActionBarMenuItem actionBarMenuItem) {
         this.f$0 = actionBarMenuItem;
     }
 
-    public final void onDismiss() {
-        this.f$0.m2548x7858737a();
+    public final void onDispatchKeyEvent(KeyEvent keyEvent) {
+        this.f$0.lambda$createPopupLayout$2(keyEvent);
     }
 }

@@ -18,18 +18,34 @@ public class ReplaceableIconDrawable extends Drawable implements Animator.Animat
     private Drawable outDrawable;
     private float progress = 1.0f;
 
+    public int getOpacity() {
+        return -2;
+    }
+
+    public void onAnimationCancel(Animator animator) {
+    }
+
+    public void onAnimationRepeat(Animator animator) {
+    }
+
+    public void onAnimationStart(Animator animator) {
+    }
+
+    public void setAlpha(int i) {
+    }
+
     public ReplaceableIconDrawable(Context context2) {
         this.context = context2;
     }
 
-    public void setIcon(int resId, boolean animated) {
-        if (this.currentResId != resId) {
-            setIcon(ContextCompat.getDrawable(this.context, resId).mutate(), animated);
-            this.currentResId = resId;
+    public void setIcon(int i, boolean z) {
+        if (this.currentResId != i) {
+            setIcon(ContextCompat.getDrawable(this.context, i).mutate(), z);
+            this.currentResId = i;
         }
     }
 
-    public void setIcon(Drawable drawable, boolean animated) {
+    public void setIcon(Drawable drawable, boolean z) {
         if (drawable == null) {
             this.currentDrawable = null;
             this.outDrawable = null;
@@ -37,7 +53,7 @@ public class ReplaceableIconDrawable extends Drawable implements Animator.Animat
             return;
         }
         if (getBounds() == null || getBounds().isEmpty()) {
-            animated = false;
+            z = false;
         }
         Drawable drawable2 = this.currentDrawable;
         if (drawable == drawable2) {
@@ -55,7 +71,7 @@ public class ReplaceableIconDrawable extends Drawable implements Animator.Animat
             valueAnimator.removeAllListeners();
             this.animation.cancel();
         }
-        if (!animated) {
+        if (!z) {
             this.progress = 1.0f;
             this.outDrawable = null;
             return;
@@ -68,48 +84,52 @@ public class ReplaceableIconDrawable extends Drawable implements Animator.Animat
         this.animation.start();
     }
 
-    /* renamed from: lambda$setIcon$0$org-telegram-ui-Components-ReplaceableIconDrawable  reason: not valid java name */
-    public /* synthetic */ void m1308xd9f8d97e(ValueAnimator animation2) {
-        this.progress = ((Float) animation2.getAnimatedValue()).floatValue();
+    /* access modifiers changed from: private */
+    public /* synthetic */ void lambda$setIcon$0(ValueAnimator valueAnimator) {
+        this.progress = ((Float) valueAnimator.getAnimatedValue()).floatValue();
         invalidateSelf();
     }
 
     /* access modifiers changed from: protected */
-    public void onBoundsChange(Rect bounds) {
-        super.onBoundsChange(bounds);
-        updateBounds(this.currentDrawable, bounds);
-        updateBounds(this.outDrawable, bounds);
+    public void onBoundsChange(Rect rect) {
+        super.onBoundsChange(rect);
+        updateBounds(this.currentDrawable, rect);
+        updateBounds(this.outDrawable, rect);
     }
 
-    private void updateBounds(Drawable d, Rect bounds) {
-        int top;
-        int offset;
-        int left;
-        int offset2;
-        if (d != null) {
-            if (d.getIntrinsicHeight() < 0) {
-                offset = bounds.top;
-                top = bounds.bottom;
+    private void updateBounds(Drawable drawable, Rect rect) {
+        int i;
+        int i2;
+        int i3;
+        int i4;
+        if (drawable != null) {
+            if (drawable.getIntrinsicHeight() < 0) {
+                i2 = rect.top;
+                i = rect.bottom;
             } else {
-                int offset3 = (bounds.height() - d.getIntrinsicHeight()) / 2;
-                offset = bounds.top + offset3;
-                top = bounds.top + offset3 + d.getIntrinsicHeight();
+                int height = (rect.height() - drawable.getIntrinsicHeight()) / 2;
+                int i5 = rect.top;
+                int i6 = i5 + height;
+                i = i5 + height + drawable.getIntrinsicHeight();
+                i2 = i6;
             }
-            if (d.getIntrinsicWidth() < 0) {
-                offset2 = bounds.left;
-                left = bounds.right;
+            if (drawable.getIntrinsicWidth() < 0) {
+                i4 = rect.left;
+                i3 = rect.right;
             } else {
-                int offset4 = (bounds.width() - d.getIntrinsicWidth()) / 2;
-                offset2 = bounds.left + offset4;
-                left = bounds.left + offset4 + d.getIntrinsicWidth();
+                int width = (rect.width() - drawable.getIntrinsicWidth()) / 2;
+                int i7 = rect.left;
+                int i8 = i7 + width;
+                i3 = i7 + width + drawable.getIntrinsicWidth();
+                i4 = i8;
             }
-            d.setBounds(offset2, offset, left, top);
+            drawable.setBounds(i4, i2, i3, i);
         }
     }
 
     public void draw(Canvas canvas) {
-        int cX = getBounds().centerX();
-        int cY = getBounds().centerY();
+        int centerX = getBounds().centerX();
+        int centerY = getBounds().centerY();
         if (this.progress == 1.0f || this.currentDrawable == null) {
             Drawable drawable = this.currentDrawable;
             if (drawable != null) {
@@ -119,7 +139,7 @@ public class ReplaceableIconDrawable extends Drawable implements Animator.Animat
         } else {
             canvas.save();
             float f = this.progress;
-            canvas.scale(f, f, (float) cX, (float) cY);
+            canvas.scale(f, f, (float) centerX, (float) centerY);
             this.currentDrawable.setAlpha((int) (this.progress * 255.0f));
             this.currentDrawable.draw(canvas);
             canvas.restore();
@@ -134,15 +154,12 @@ public class ReplaceableIconDrawable extends Drawable implements Animator.Animat
             }
             return;
         }
-        float progressRev = 1.0f - f2;
+        float f3 = 1.0f - f2;
         canvas.save();
-        canvas.scale(progressRev, progressRev, (float) cX, (float) cY);
-        this.outDrawable.setAlpha((int) (255.0f * progressRev));
+        canvas.scale(f3, f3, (float) centerX, (float) centerY);
+        this.outDrawable.setAlpha((int) (f3 * 255.0f));
         this.outDrawable.draw(canvas);
         canvas.restore();
-    }
-
-    public void setAlpha(int alpha) {
     }
 
     public void setColorFilter(ColorFilter colorFilter2) {
@@ -158,21 +175,8 @@ public class ReplaceableIconDrawable extends Drawable implements Animator.Animat
         invalidateSelf();
     }
 
-    public int getOpacity() {
-        return -2;
-    }
-
-    public void onAnimationEnd(Animator animation2) {
+    public void onAnimationEnd(Animator animator) {
         this.outDrawable = null;
         invalidateSelf();
-    }
-
-    public void onAnimationStart(Animator animation2) {
-    }
-
-    public void onAnimationCancel(Animator animation2) {
-    }
-
-    public void onAnimationRepeat(Animator animation2) {
     }
 }

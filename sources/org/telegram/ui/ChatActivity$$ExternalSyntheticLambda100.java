@@ -1,22 +1,24 @@
 package org.telegram.ui;
 
-import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC;
+import android.view.View;
+import org.telegram.messenger.MessageObject;
+import org.telegram.tgnet.TLRPC$KeyboardButton;
+import org.telegram.ui.ChatActivity;
 
-public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda100 implements Runnable {
+public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda100 implements View.OnLongClickListener {
     public final /* synthetic */ ChatActivity f$0;
-    public final /* synthetic */ TLRPC.TL_error f$1;
-    public final /* synthetic */ TLObject f$2;
-    public final /* synthetic */ TLRPC.TL_messages_getWebPagePreview f$3;
+    public final /* synthetic */ TLRPC$KeyboardButton f$1;
+    public final /* synthetic */ MessageObject f$2;
+    public final /* synthetic */ ChatActivity.PinnedMessageButton f$3;
 
-    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda100(ChatActivity chatActivity, TLRPC.TL_error tL_error, TLObject tLObject, TLRPC.TL_messages_getWebPagePreview tL_messages_getWebPagePreview) {
+    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda100(ChatActivity chatActivity, TLRPC$KeyboardButton tLRPC$KeyboardButton, MessageObject messageObject, ChatActivity.PinnedMessageButton pinnedMessageButton) {
         this.f$0 = chatActivity;
-        this.f$1 = tL_error;
-        this.f$2 = tLObject;
-        this.f$3 = tL_messages_getWebPagePreview;
+        this.f$1 = tLRPC$KeyboardButton;
+        this.f$2 = messageObject;
+        this.f$3 = pinnedMessageButton;
     }
 
-    public final void run() {
-        this.f$0.m3089lambda$searchLinks$98$orgtelegramuiChatActivity(this.f$1, this.f$2, this.f$3);
+    public final boolean onLongClick(View view) {
+        return this.f$0.lambda$updatePinnedMessageView$144(this.f$1, this.f$2, this.f$3, view);
     }
 }

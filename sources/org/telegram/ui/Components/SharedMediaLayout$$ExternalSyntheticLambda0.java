@@ -10,6 +10,6 @@ public final /* synthetic */ class SharedMediaLayout$$ExternalSyntheticLambda0 i
     }
 
     public final void onClick(View view) {
-        this.f$0.m1380lambda$new$2$orgtelegramuiComponentsSharedMediaLayout(view);
+        this.f$0.lambda$new$3(view);
     }
 }

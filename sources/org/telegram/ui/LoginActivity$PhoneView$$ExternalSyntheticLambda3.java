@@ -1,18 +1,16 @@
 package org.telegram.ui;
 
-import java.util.List;
+import android.view.View;
 import org.telegram.ui.LoginActivity;
 
-public final /* synthetic */ class LoginActivity$PhoneView$$ExternalSyntheticLambda3 implements Runnable {
+public final /* synthetic */ class LoginActivity$PhoneView$$ExternalSyntheticLambda3 implements View.OnClickListener {
     public final /* synthetic */ LoginActivity.PhoneView f$0;
-    public final /* synthetic */ List f$1;
 
-    public /* synthetic */ LoginActivity$PhoneView$$ExternalSyntheticLambda3(LoginActivity.PhoneView phoneView, List list) {
+    public /* synthetic */ LoginActivity$PhoneView$$ExternalSyntheticLambda3(LoginActivity.PhoneView phoneView) {
         this.f$0 = phoneView;
-        this.f$1 = list;
     }
 
-    public final void run() {
-        this.f$0.m3895lambda$fillNumber$21$orgtelegramuiLoginActivity$PhoneView(this.f$1);
+    public final void onClick(View view) {
+        this.f$0.lambda$new$7(view);
     }
 }

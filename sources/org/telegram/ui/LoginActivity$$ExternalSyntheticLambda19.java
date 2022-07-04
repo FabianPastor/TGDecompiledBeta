@@ -1,8 +1,10 @@
 package org.telegram.ui;
 
-import android.content.DialogInterface;
+import org.telegram.tgnet.RequestDelegate;
+import org.telegram.tgnet.TLObject;
+import org.telegram.tgnet.TLRPC$TL_error;
 
-public final /* synthetic */ class LoginActivity$$ExternalSyntheticLambda19 implements DialogInterface.OnClickListener {
+public final /* synthetic */ class LoginActivity$$ExternalSyntheticLambda19 implements RequestDelegate {
     public final /* synthetic */ LoginActivity f$0;
     public final /* synthetic */ String f$1;
     public final /* synthetic */ String f$2;
@@ -15,7 +17,7 @@ public final /* synthetic */ class LoginActivity$$ExternalSyntheticLambda19 impl
         this.f$3 = str3;
     }
 
-    public final void onClick(DialogInterface dialogInterface, int i) {
-        this.f$0.m3783lambda$tryResetAccount$20$orgtelegramuiLoginActivity(this.f$1, this.f$2, this.f$3, dialogInterface, i);
+    public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+        this.f$0.lambda$tryResetAccount$19(this.f$1, this.f$2, this.f$3, tLObject, tLRPC$TL_error);
     }
 }

@@ -8,6 +8,6 @@ public final /* synthetic */ class LaunchActivity$$ExternalSyntheticLambda30 imp
     }
 
     public final void run() {
-        this.f$0.m3693lambda$runLinkRequest$62$orgtelegramuiLaunchActivity();
+        this.f$0.lambda$didReceivedNotification$89();
     }
 }

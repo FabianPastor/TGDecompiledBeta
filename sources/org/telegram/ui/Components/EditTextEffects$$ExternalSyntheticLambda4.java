@@ -8,6 +8,6 @@ public final /* synthetic */ class EditTextEffects$$ExternalSyntheticLambda4 imp
     }
 
     public final void run() {
-        this.f$0.m915xd5a1var_d();
+        this.f$0.lambda$new$2();
     }
 }

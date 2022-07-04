@@ -21,6 +21,6 @@ public final /* synthetic */ class ContextLinkCell$1$$ExternalSyntheticLambda0 i
     }
 
     public final void run() {
-        this.f$0.m2789lambda$run$0$orgtelegramuiCellsContextLinkCell$1(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5);
+        this.f$0.lambda$run$0(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5);
     }
 }

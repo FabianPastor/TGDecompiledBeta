@@ -1,16 +1,21 @@
 package org.telegram.ui.Components.Premium;
 
-import android.view.View;
-import org.telegram.ui.Components.RecyclerListView;
+import android.content.DialogInterface;
+import java.util.ArrayList;
+import org.telegram.tgnet.TLRPC$User;
 
-public final /* synthetic */ class LimitReachedBottomSheet$$ExternalSyntheticLambda1 implements RecyclerListView.OnItemLongClickListener {
+public final /* synthetic */ class LimitReachedBottomSheet$$ExternalSyntheticLambda1 implements DialogInterface.OnClickListener {
     public final /* synthetic */ LimitReachedBottomSheet f$0;
+    public final /* synthetic */ ArrayList f$1;
+    public final /* synthetic */ TLRPC$User f$2;
 
-    public /* synthetic */ LimitReachedBottomSheet$$ExternalSyntheticLambda1(LimitReachedBottomSheet limitReachedBottomSheet) {
+    public /* synthetic */ LimitReachedBottomSheet$$ExternalSyntheticLambda1(LimitReachedBottomSheet limitReachedBottomSheet, ArrayList arrayList, TLRPC$User tLRPC$User) {
         this.f$0 = limitReachedBottomSheet;
+        this.f$1 = arrayList;
+        this.f$2 = tLRPC$User;
     }
 
-    public final boolean onItemClick(View view, int i) {
-        return this.f$0.m1245x9ead3ef6(view, i);
+    public final void onClick(DialogInterface dialogInterface, int i) {
+        this.f$0.lambda$leaveFromSelectedGroups$4(this.f$1, this.f$2, dialogInterface, i);
     }
 }

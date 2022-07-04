@@ -1,15 +1,19 @@
 package org.telegram.ui;
 
-public final /* synthetic */ class ThemeActivity$$ExternalSyntheticLambda9 implements Runnable {
-    public final /* synthetic */ ThemeActivity f$0;
-    public final /* synthetic */ String f$1;
+import org.telegram.ui.ActionBar.ThemeDescription;
 
-    public /* synthetic */ ThemeActivity$$ExternalSyntheticLambda9(ThemeActivity themeActivity, String str) {
+public final /* synthetic */ class ThemeActivity$$ExternalSyntheticLambda9 implements ThemeDescription.ThemeDescriptionDelegate {
+    public final /* synthetic */ ThemeActivity f$0;
+
+    public /* synthetic */ ThemeActivity$$ExternalSyntheticLambda9(ThemeActivity themeActivity) {
         this.f$0 = themeActivity;
-        this.f$1 = str;
     }
 
-    public final void run() {
-        this.f$0.m4660lambda$updateSunTime$8$orgtelegramuiThemeActivity(this.f$1);
+    public final void didSetColor() {
+        this.f$0.lambda$getThemeDescriptions$10();
+    }
+
+    public /* synthetic */ void onAnimationProgress(float f) {
+        ThemeDescription.ThemeDescriptionDelegate.CC.$default$onAnimationProgress(this, f);
     }
 }

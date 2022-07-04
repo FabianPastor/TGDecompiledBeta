@@ -8,6 +8,6 @@ public final /* synthetic */ class IntroActivity$$ExternalSyntheticLambda3 imple
     }
 
     public final void run() {
-        this.f$0.m3606lambda$updateColors$6$orgtelegramuiIntroActivity();
+        this.f$0.lambda$updateColors$6();
     }
 }

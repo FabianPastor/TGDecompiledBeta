@@ -10,6 +10,6 @@ public final /* synthetic */ class AlertDialog$$ExternalSyntheticLambda5 impleme
     }
 
     public final void onClick(View view) {
-        this.f$0.m2556lambda$onCreate$4$orgtelegramuiActionBarAlertDialog(view);
+        this.f$0.lambda$onCreate$2(view);
     }
 }

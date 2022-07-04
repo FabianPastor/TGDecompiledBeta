@@ -1,16 +1,15 @@
 package org.telegram.ui;
 
-import android.view.View;
-import org.telegram.ui.Components.RecyclerListView;
+import org.telegram.ui.Components.AlertsCreator;
 
-public final /* synthetic */ class PhotoViewer$$ExternalSyntheticLambda74 implements RecyclerListView.OnItemClickListener {
+public final /* synthetic */ class PhotoViewer$$ExternalSyntheticLambda74 implements AlertsCreator.ScheduleDatePickerDelegate {
     public final /* synthetic */ PhotoViewer f$0;
 
     public /* synthetic */ PhotoViewer$$ExternalSyntheticLambda74(PhotoViewer photoViewer) {
         this.f$0 = photoViewer;
     }
 
-    public final void onItemClick(View view, int i) {
-        this.f$0.m4282lambda$setParentActivity$39$orgtelegramuiPhotoViewer(view, i);
+    public final void didSelectDate(boolean z, int i) {
+        this.f$0.sendPressed(z, i);
     }
 }

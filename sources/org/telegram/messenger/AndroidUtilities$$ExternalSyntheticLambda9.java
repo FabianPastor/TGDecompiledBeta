@@ -1,15 +1,15 @@
 package org.telegram.messenger;
 
-import android.view.View;
+import java.util.ArrayList;
 
-public final /* synthetic */ class AndroidUtilities$$ExternalSyntheticLambda9 implements View.OnClickListener {
-    public final /* synthetic */ Runnable f$0;
+public final /* synthetic */ class AndroidUtilities$$ExternalSyntheticLambda9 implements Runnable {
+    public final /* synthetic */ ArrayList f$0;
 
-    public /* synthetic */ AndroidUtilities$$ExternalSyntheticLambda9(Runnable runnable) {
-        this.f$0 = runnable;
+    public /* synthetic */ AndroidUtilities$$ExternalSyntheticLambda9(ArrayList arrayList) {
+        this.f$0 = arrayList;
     }
 
-    public final void onClick(View view) {
-        this.f$0.run();
+    public final void run() {
+        NotificationCenter.getInstance(UserConfig.selectedAccount).doOnIdle(new AndroidUtilities$$ExternalSyntheticLambda8(this.f$0));
     }
 }

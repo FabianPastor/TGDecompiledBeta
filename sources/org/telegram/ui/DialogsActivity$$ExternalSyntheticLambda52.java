@@ -1,19 +1,16 @@
 package org.telegram.ui;
 
-import android.view.View;
-import org.telegram.ui.Components.RecyclerListView;
-import org.telegram.ui.DialogsActivity;
+import android.view.KeyEvent;
+import org.telegram.ui.ActionBar.ActionBarPopupWindow;
 
-public final /* synthetic */ class DialogsActivity$$ExternalSyntheticLambda52 implements RecyclerListView.OnItemClickListener {
+public final /* synthetic */ class DialogsActivity$$ExternalSyntheticLambda52 implements ActionBarPopupWindow.OnDispatchKeyEventListener {
     public final /* synthetic */ DialogsActivity f$0;
-    public final /* synthetic */ DialogsActivity.ViewPage f$1;
 
-    public /* synthetic */ DialogsActivity$$ExternalSyntheticLambda52(DialogsActivity dialogsActivity, DialogsActivity.ViewPage viewPage) {
+    public /* synthetic */ DialogsActivity$$ExternalSyntheticLambda52(DialogsActivity dialogsActivity) {
         this.f$0 = dialogsActivity;
-        this.f$1 = viewPage;
     }
 
-    public final void onItemClick(View view, int i) {
-        this.f$0.m3379lambda$createView$5$orgtelegramuiDialogsActivity(this.f$1, view, i);
+    public final void onDispatchKeyEvent(KeyEvent keyEvent) {
+        this.f$0.lambda$onSendLongClick$56(keyEvent);
     }
 }

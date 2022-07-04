@@ -8,6 +8,6 @@ public final /* synthetic */ class LaunchActivity$$ExternalSyntheticLambda31 imp
     }
 
     public final void run() {
-        this.f$0.m3710x2dcba16c();
+        this.f$0.lambda$onCreate$5();
     }
 }

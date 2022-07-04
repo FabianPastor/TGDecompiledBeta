@@ -10,6 +10,6 @@ public final /* synthetic */ class ChatAttachAlertDocumentLayout$1$$ExternalSynt
     }
 
     public final void run() {
-        this.f$0.m792xf4e8da1();
+        this.f$0.lambda$onReceive$0();
     }
 }

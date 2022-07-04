@@ -1,20 +1,17 @@
 package org.telegram.messenger;
 
-import java.util.ArrayList;
-import org.telegram.messenger.MediaDataController;
+import org.telegram.tgnet.TLRPC$Document;
 
 public final /* synthetic */ class MediaDataController$$ExternalSyntheticLambda87 implements Runnable {
-    public final /* synthetic */ MediaDataController.KeywordResultCallback f$0;
-    public final /* synthetic */ ArrayList f$1;
-    public final /* synthetic */ String f$2;
+    public final /* synthetic */ MediaDataController f$0;
+    public final /* synthetic */ TLRPC$Document f$1;
 
-    public /* synthetic */ MediaDataController$$ExternalSyntheticLambda87(MediaDataController.KeywordResultCallback keywordResultCallback, ArrayList arrayList, String str) {
-        this.f$0 = keywordResultCallback;
-        this.f$1 = arrayList;
-        this.f$2 = str;
+    public /* synthetic */ MediaDataController$$ExternalSyntheticLambda87(MediaDataController mediaDataController, TLRPC$Document tLRPC$Document) {
+        this.f$0 = mediaDataController;
+        this.f$1 = tLRPC$Document;
     }
 
     public final void run() {
-        this.f$0.run(this.f$1, this.f$2);
+        this.f$0.lambda$addRecentGif$23(this.f$1);
     }
 }

@@ -10,6 +10,6 @@ public final /* synthetic */ class PassportActivity$8$$ExternalSyntheticLambda0 
     }
 
     public final void run() {
-        this.f$0.m4114lambda$run$11$orgtelegramuiPassportActivity$8();
+        this.f$0.lambda$run$11();
     }
 }

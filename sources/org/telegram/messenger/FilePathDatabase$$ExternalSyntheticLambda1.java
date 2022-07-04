@@ -8,6 +8,6 @@ public final /* synthetic */ class FilePathDatabase$$ExternalSyntheticLambda1 im
     }
 
     public final void run() {
-        this.f$0.m1832lambda$new$0$orgtelegrammessengerFilePathDatabase();
+        this.f$0.lambda$clear$4();
     }
 }

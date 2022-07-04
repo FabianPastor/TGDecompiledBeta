@@ -1,15 +1,16 @@
 package org.telegram.ui;
 
 import android.view.View;
+import org.telegram.ui.Components.RecyclerListView;
 
-public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda251 implements View.OnClickListener {
-    public final /* synthetic */ boolean[] f$0;
+public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda251 implements RecyclerListView.OnItemLongClickListener {
+    public final /* synthetic */ ChatActivity f$0;
 
-    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda251(boolean[] zArr) {
-        this.f$0 = zArr;
+    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda251(ChatActivity chatActivity) {
+        this.f$0 = chatActivity;
     }
 
-    public final void onClick(View view) {
-        ChatActivity.lambda$processSelectedOption$196(this.f$0, view);
+    public final boolean onItemClick(View view, int i) {
+        return this.f$0.lambda$createView$48(view, i);
     }
 }

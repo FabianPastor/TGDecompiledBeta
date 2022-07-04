@@ -10,6 +10,6 @@ public final /* synthetic */ class ProfileNotificationsActivity$$ExternalSynthet
     }
 
     public final void onClick(DialogInterface dialogInterface, int i) {
-        this.f$0.m4535lambda$createView$0$orgtelegramuiProfileNotificationsActivity(dialogInterface, i);
+        this.f$0.lambda$createView$0(dialogInterface, i);
     }
 }

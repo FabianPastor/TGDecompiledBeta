@@ -14,6 +14,6 @@ public final /* synthetic */ class Painting$$ExternalSyntheticLambda3 implements
     }
 
     public final void run() {
-        this.f$0.m1125lambda$paintStroke$0$orgtelegramuiComponentsPaintPainting(this.f$1, this.f$2, this.f$3);
+        this.f$0.lambda$paintStroke$0(this.f$1, this.f$2, this.f$3);
     }
 }

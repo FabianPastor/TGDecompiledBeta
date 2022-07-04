@@ -16,6 +16,6 @@ public final /* synthetic */ class PhotoViewer$12$$ExternalSyntheticLambda9 impl
     }
 
     public final void didSelectDialogs(DialogsActivity dialogsActivity, ArrayList arrayList, CharSequence charSequence, boolean z) {
-        this.f$0.m4305lambda$onItemClick$4$orgtelegramuiPhotoViewer$12(this.f$1, this.f$2, dialogsActivity, arrayList, charSequence, z);
+        this.f$0.lambda$onItemClick$4(this.f$1, this.f$2, dialogsActivity, arrayList, charSequence, z);
     }
 }

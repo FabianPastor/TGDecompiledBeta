@@ -1,15 +1,14 @@
 package org.telegram.ui;
 
-import android.content.DialogInterface;
+import java.util.Comparator;
 
-public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda208 implements DialogInterface.OnShowListener {
-    public final /* synthetic */ ChatActivity f$0;
+public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda208 implements Comparator {
+    public static final /* synthetic */ ChatActivity$$ExternalSyntheticLambda208 INSTANCE = new ChatActivity$$ExternalSyntheticLambda208();
 
-    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda208(ChatActivity chatActivity) {
-        this.f$0 = chatActivity;
+    private /* synthetic */ ChatActivity$$ExternalSyntheticLambda208() {
     }
 
-    public final void onShow(DialogInterface dialogInterface) {
-        this.f$0.m3083lambda$scrollToMessageId$108$orgtelegramuiChatActivity(dialogInterface);
+    public final int compare(Object obj, Object obj2) {
+        return ((Integer) obj2).compareTo((Integer) obj);
     }
 }

@@ -1,21 +1,16 @@
 package org.telegram.ui;
 
-import org.telegram.ui.Components.NumberPicker;
+import android.view.KeyEvent;
+import org.telegram.ui.ActionBar.ActionBarPopupWindow;
 
-public final /* synthetic */ class GroupCallActivity$$ExternalSyntheticLambda56 implements NumberPicker.OnValueChangeListener {
+public final /* synthetic */ class GroupCallActivity$$ExternalSyntheticLambda56 implements ActionBarPopupWindow.OnDispatchKeyEventListener {
     public final /* synthetic */ GroupCallActivity f$0;
-    public final /* synthetic */ NumberPicker f$1;
-    public final /* synthetic */ NumberPicker f$2;
-    public final /* synthetic */ NumberPicker f$3;
 
-    public /* synthetic */ GroupCallActivity$$ExternalSyntheticLambda56(GroupCallActivity groupCallActivity, NumberPicker numberPicker, NumberPicker numberPicker2, NumberPicker numberPicker3) {
+    public /* synthetic */ GroupCallActivity$$ExternalSyntheticLambda56(GroupCallActivity groupCallActivity) {
         this.f$0 = groupCallActivity;
-        this.f$1 = numberPicker;
-        this.f$2 = numberPicker2;
-        this.f$3 = numberPicker3;
     }
 
-    public final void onValueChange(NumberPicker numberPicker, int i, int i2) {
-        this.f$0.m3532lambda$new$31$orgtelegramuiGroupCallActivity(this.f$1, this.f$2, this.f$3, numberPicker, i, i2);
+    public final void onDispatchKeyEvent(KeyEvent keyEvent) {
+        this.f$0.lambda$showMenuForCell$59(keyEvent);
     }
 }

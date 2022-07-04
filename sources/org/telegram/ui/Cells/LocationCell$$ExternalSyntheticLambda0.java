@@ -18,6 +18,6 @@ public final /* synthetic */ class LocationCell$$ExternalSyntheticLambda0 implem
     }
 
     public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-        this.f$0.m2806lambda$setLocation$0$orgtelegramuiCellsLocationCell(this.f$1, this.f$2, this.f$3, this.f$4, valueAnimator);
+        this.f$0.lambda$setLocation$0(this.f$1, this.f$2, this.f$3, this.f$4, valueAnimator);
     }
 }

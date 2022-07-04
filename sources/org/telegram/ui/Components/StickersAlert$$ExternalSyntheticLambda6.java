@@ -1,17 +1,15 @@
 package org.telegram.ui.Components;
 
-import android.view.KeyEvent;
-import android.widget.TextView;
-import org.telegram.ui.ActionBar.AlertDialog;
+import android.view.View;
 
-public final /* synthetic */ class StickersAlert$$ExternalSyntheticLambda6 implements TextView.OnEditorActionListener {
-    public final /* synthetic */ AlertDialog.Builder f$0;
+public final /* synthetic */ class StickersAlert$$ExternalSyntheticLambda6 implements View.OnClickListener {
+    public final /* synthetic */ StickersAlert f$0;
 
-    public /* synthetic */ StickersAlert$$ExternalSyntheticLambda6(AlertDialog.Builder builder) {
-        this.f$0 = builder;
+    public /* synthetic */ StickersAlert$$ExternalSyntheticLambda6(StickersAlert stickersAlert) {
+        this.f$0 = stickersAlert;
     }
 
-    public final boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
-        return StickersAlert.lambda$showNameEnterAlert$22(this.f$0, textView, i, keyEvent);
+    public final void onClick(View view) {
+        this.f$0.lambda$updateFields$19(view);
     }
 }

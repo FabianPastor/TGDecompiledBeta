@@ -1,19 +1,19 @@
 package org.telegram.messenger;
 
-import org.telegram.tgnet.RequestDelegate;
-import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC;
+import org.telegram.ui.ActionBar.Theme;
 
-public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda205 implements RequestDelegate {
+public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda205 implements Runnable {
     public final /* synthetic */ MessagesController f$0;
-    public final /* synthetic */ long f$1;
+    public final /* synthetic */ Theme.ThemeInfo f$1;
+    public final /* synthetic */ Theme.ThemeAccent f$2;
 
-    public /* synthetic */ MessagesController$$ExternalSyntheticLambda205(MessagesController messagesController, long j) {
+    public /* synthetic */ MessagesController$$ExternalSyntheticLambda205(MessagesController messagesController, Theme.ThemeInfo themeInfo, Theme.ThemeAccent themeAccent) {
         this.f$0 = messagesController;
-        this.f$1 = j;
+        this.f$1 = themeInfo;
+        this.f$2 = themeAccent;
     }
 
-    public final void run(TLObject tLObject, TLRPC.TL_error tL_error) {
-        this.f$0.m396x156var_a8(this.f$1, tLObject, tL_error);
+    public final void run() {
+        this.f$0.lambda$didReceivedNotification$32(this.f$1, this.f$2);
     }
 }

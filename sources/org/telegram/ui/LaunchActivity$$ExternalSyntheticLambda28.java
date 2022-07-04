@@ -8,6 +8,6 @@ public final /* synthetic */ class LaunchActivity$$ExternalSyntheticLambda28 imp
     }
 
     public final void run() {
-        this.f$0.m3652lambda$onCreate$2$orgtelegramuiLaunchActivity();
+        this.f$0.lambda$checkFreeDiscSpace$95();
     }
 }

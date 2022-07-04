@@ -11,51 +11,48 @@ import org.telegram.messenger.AndroidUtilities;
 
 public class CircularProgressDrawable extends Drawable {
     private final RectF bounds;
-    private final FastOutSlowInInterpolator interpolator;
+    private final FastOutSlowInInterpolator interpolator = new FastOutSlowInInterpolator();
     private final Paint paint;
     private float segmentFrom;
     private float segmentTo;
-    private float size;
-    private long start;
-    private float thickness;
+    private float size = ((float) AndroidUtilities.dp(18.0f));
+    private long start = -1;
+    private float thickness = ((float) AndroidUtilities.dp(2.25f));
 
-    public CircularProgressDrawable() {
-        this(-1);
+    public int getOpacity() {
+        return -2;
     }
 
-    public CircularProgressDrawable(int color) {
-        this.size = (float) AndroidUtilities.dp(18.0f);
-        this.thickness = (float) AndroidUtilities.dp(2.25f);
-        this.start = -1;
-        this.interpolator = new FastOutSlowInInterpolator();
+    public void setColorFilter(ColorFilter colorFilter) {
+    }
+
+    public CircularProgressDrawable(int i) {
         Paint paint2 = new Paint();
         this.paint = paint2;
         paint2.setStyle(Paint.Style.STROKE);
         this.bounds = new RectF();
-        setColor(color);
+        setColor(i);
     }
 
-    public CircularProgressDrawable(float size2, float thickness2, int color) {
-        this.size = (float) AndroidUtilities.dp(18.0f);
-        this.thickness = (float) AndroidUtilities.dp(2.25f);
-        this.start = -1;
-        this.interpolator = new FastOutSlowInInterpolator();
+    public CircularProgressDrawable(float f, float f2, int i) {
         Paint paint2 = new Paint();
         this.paint = paint2;
         paint2.setStyle(Paint.Style.STROKE);
         this.bounds = new RectF();
-        this.size = size2;
-        this.thickness = thickness2;
-        setColor(color);
+        this.size = f;
+        this.thickness = f2;
+        setColor(i);
     }
 
     private void updateSegment() {
-        long t = (SystemClock.elapsedRealtime() - this.start) % 5400;
-        this.segmentFrom = (((float) (t * 1520)) / 5400.0f) - 20.0f;
-        this.segmentTo = ((float) (1520 * t)) / 5400.0f;
+        long elapsedRealtime = (SystemClock.elapsedRealtime() - this.start) % 5400;
+        float f = ((float) (1520 * elapsedRealtime)) / 5400.0f;
+        this.segmentFrom = f - 20.0f;
+        this.segmentTo = f;
         for (int i = 0; i < 4; i++) {
-            this.segmentTo += this.interpolator.getInterpolation(((float) (t - ((long) (i * 1350)))) / 667.0f) * 250.0f;
-            this.segmentFrom += this.interpolator.getInterpolation(((float) (t - ((long) ((i * 1350) + 667)))) / 667.0f) * 250.0f;
+            int i2 = i * 1350;
+            this.segmentTo += this.interpolator.getInterpolation(((float) (elapsedRealtime - ((long) i2))) / 667.0f) * 250.0f;
+            this.segmentFrom += this.interpolator.getInterpolation(((float) (elapsedRealtime - ((long) (i2 + 667)))) / 667.0f) * 250.0f;
         }
     }
 
@@ -70,29 +67,24 @@ public class CircularProgressDrawable extends Drawable {
         invalidateSelf();
     }
 
-    public void setBounds(int left, int top, int right, int bottom) {
-        int width = right - left;
-        int height = bottom - top;
+    public void setBounds(int i, int i2, int i3, int i4) {
         RectF rectF = this.bounds;
-        float f = this.thickness;
-        float f2 = this.size;
-        rectF.set(((float) left) + (((((float) width) - (f / 2.0f)) - f2) / 2.0f), ((float) top) + (((((float) height) - (f / 2.0f)) - f2) / 2.0f), ((float) left) + (((((float) width) + (f / 2.0f)) + f2) / 2.0f), ((float) top) + (((((float) height) + (f / 2.0f)) + f2) / 2.0f));
-        super.setBounds(left, top, right, bottom);
+        float f = (float) i;
+        float f2 = (float) (i3 - i);
+        float f3 = this.thickness;
+        float f4 = this.size;
+        float f5 = (float) i2;
+        float f6 = (float) (i4 - i2);
+        rectF.set((((f2 - (f3 / 2.0f)) - f4) / 2.0f) + f, (((f6 - (f3 / 2.0f)) - f4) / 2.0f) + f5, f + (((f2 + (f3 / 2.0f)) + f4) / 2.0f), f5 + (((f6 + (f3 / 2.0f)) + f4) / 2.0f));
+        super.setBounds(i, i2, i3, i4);
         this.paint.setStrokeWidth(this.thickness);
     }
 
-    public void setColor(int color) {
-        this.paint.setColor(color);
+    public void setColor(int i) {
+        this.paint.setColor(i);
     }
 
-    public void setAlpha(int alpha) {
-        this.paint.setAlpha(alpha);
-    }
-
-    public void setColorFilter(ColorFilter colorFilter) {
-    }
-
-    public int getOpacity() {
-        return -2;
+    public void setAlpha(int i) {
+        this.paint.setAlpha(i);
     }
 }

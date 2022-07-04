@@ -5,6 +5,7 @@ import android.graphics.BitmapShader;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.graphics.Paint;
+import android.graphics.Point;
 import android.graphics.Shader;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
@@ -19,7 +20,6 @@ public class SpoilerEffectBitmapFactory {
     final DispatchQueue dispatchQueue = new DispatchQueue("SpoilerEffectBitmapFactory");
     boolean isRunning;
     long lastUpdateTime;
-    Matrix localMatrix = new Matrix();
     private Bitmap shaderBitmap;
     Canvas shaderCanvas;
     Paint shaderPaint;
@@ -34,7 +34,10 @@ public class SpoilerEffectBitmapFactory {
     }
 
     private SpoilerEffectBitmapFactory() {
-        int min = (int) Math.min(((float) Math.min(AndroidUtilities.displaySize.x, AndroidUtilities.displaySize.y)) * 0.5f, (float) AndroidUtilities.dp(SharedConfig.getDevicePerformanceClass() == 2 ? 200.0f : 150.0f));
+        new Matrix();
+        int dp = AndroidUtilities.dp(SharedConfig.getDevicePerformanceClass() == 2 ? 200.0f : 150.0f);
+        Point point = AndroidUtilities.displaySize;
+        int min = (int) Math.min(((float) Math.min(point.x, point.y)) * 0.5f, (float) dp);
         this.size = min;
         if (min < AndroidUtilities.dp(100.0f)) {
             this.size = AndroidUtilities.dp(100.0f);
@@ -49,31 +52,39 @@ public class SpoilerEffectBitmapFactory {
             this.shaderCanvas = new Canvas(this.shaderBitmap);
             this.shaderPaint = new Paint();
             this.shaderSpoilerEffects = new ArrayList<>(100);
-            this.shaderPaint.setShader(new BitmapShader(this.shaderBitmap, Shader.TileMode.REPEAT, Shader.TileMode.REPEAT));
+            Paint paint = this.shaderPaint;
+            Bitmap bitmap = this.shaderBitmap;
+            Shader.TileMode tileMode = Shader.TileMode.REPEAT;
+            paint.setShader(new BitmapShader(bitmap, tileMode, tileMode));
             int i2 = this.size;
-            int step = (int) (((float) i2) / 10.0f);
-            int particleCount = (int) ((((float) i2) / ((float) AndroidUtilities.dp(200.0f))) * 60.0f);
-            for (int i3 = 0; i3 < 10; i3++) {
-                for (int j = 0; j < 10; j++) {
-                    SpoilerEffect shaderSpoilerEffect = new SpoilerEffect();
-                    shaderSpoilerEffect.setBounds(step * i3, (step * j) - AndroidUtilities.dp(5.0f), (step * i3) + step + AndroidUtilities.dp(3.0f), (step * j) + step + AndroidUtilities.dp(5.0f));
-                    shaderSpoilerEffect.drawPoints = true;
+            int i3 = (int) (((float) i2) / 10.0f);
+            int dp = (int) ((((float) i2) / ((float) AndroidUtilities.dp(200.0f))) * 60.0f);
+            for (int i4 = 0; i4 < 10; i4++) {
+                for (int i5 = 0; i5 < 10; i5++) {
+                    SpoilerEffect spoilerEffect = new SpoilerEffect();
+                    int i6 = i3 * i4;
+                    int i7 = i3 * i5;
+                    spoilerEffect.setBounds(i6, i7 - AndroidUtilities.dp(5.0f), i6 + i3 + AndroidUtilities.dp(3.0f), i7 + i3 + AndroidUtilities.dp(5.0f));
+                    spoilerEffect.drawPoints = true;
                     int length = SpoilerEffect.ALPHAS.length;
                     int[] iArr = new int[2];
-                    iArr[1] = particleCount * 2;
+                    iArr[1] = dp * 2;
                     iArr[0] = length;
-                    shaderSpoilerEffect.particlePoints = (float[][]) Array.newInstance(float.class, iArr);
-                    shaderSpoilerEffect.setMaxParticlesCount(particleCount);
-                    shaderSpoilerEffect.setColor(-1);
-                    this.shaderSpoilerEffects.add(shaderSpoilerEffect);
+                    spoilerEffect.particlePoints = (float[][]) Array.newInstance(float.class, iArr);
+                    spoilerEffect.setMaxParticlesCount(dp);
+                    spoilerEffect.setColor(-1);
+                    this.shaderSpoilerEffects.add(spoilerEffect);
                 }
             }
-            for (int i4 = 0; i4 < 10; i4++) {
-                for (int j2 = 0; j2 < 10; j2++) {
-                    this.shaderSpoilerEffects.get((i4 * 10) + j2).draw(this.shaderCanvas);
+            for (int i8 = 0; i8 < 10; i8++) {
+                for (int i9 = 0; i9 < 10; i9++) {
+                    this.shaderSpoilerEffects.get((i8 * 10) + i9).draw(this.shaderCanvas);
                 }
             }
-            this.shaderPaint.setShader(new BitmapShader(this.shaderBitmap, Shader.TileMode.REPEAT, Shader.TileMode.REPEAT));
+            Paint paint2 = this.shaderPaint;
+            Bitmap bitmap2 = this.shaderBitmap;
+            Shader.TileMode tileMode2 = Shader.TileMode.REPEAT;
+            paint2.setShader(new BitmapShader(bitmap2, tileMode2, tileMode2));
             this.lastUpdateTime = System.currentTimeMillis();
         }
         return this.shaderPaint;
@@ -83,13 +94,12 @@ public class SpoilerEffectBitmapFactory {
         if (System.currentTimeMillis() - this.lastUpdateTime > 32 && !this.isRunning) {
             this.lastUpdateTime = System.currentTimeMillis();
             this.isRunning = true;
-            this.dispatchQueue.postRunnable(new SpoilerEffectBitmapFactory$$ExternalSyntheticLambda1(this, this.bufferBitmap));
+            this.dispatchQueue.postRunnable(new SpoilerEffectBitmapFactory$$ExternalSyntheticLambda0(this, this.bufferBitmap));
         }
     }
 
-    /* renamed from: lambda$checkUpdate$1$org-telegram-ui-Components-spoilers-SpoilerEffectBitmapFactory  reason: not valid java name */
-    public /* synthetic */ void m1573x4b015506(Bitmap bufferBitmapFinall) {
-        Bitmap bitmap = bufferBitmapFinall;
+    /* access modifiers changed from: private */
+    public /* synthetic */ void lambda$checkUpdate$1(Bitmap bitmap) {
         if (bitmap == null) {
             int i = this.size;
             bitmap = Bitmap.createBitmap(i, i, Bitmap.Config.ARGB_8888);
@@ -101,23 +111,26 @@ public class SpoilerEffectBitmapFactory {
         } else {
             bitmap2.eraseColor(0);
         }
-        Canvas shaderCanvas2 = new Canvas(bitmap);
-        Canvas backgroundCanvas = new Canvas(this.backgroundBitmap);
+        Canvas canvas = new Canvas(bitmap);
+        Canvas canvas2 = new Canvas(this.backgroundBitmap);
         for (int i3 = 0; i3 < 10; i3++) {
-            for (int j = 0; j < 10; j++) {
-                this.shaderSpoilerEffects.get((i3 * 10) + j).draw(backgroundCanvas);
+            for (int i4 = 0; i4 < 10; i4++) {
+                this.shaderSpoilerEffects.get((i3 * 10) + i4).draw(canvas2);
             }
         }
         bitmap.eraseColor(0);
-        shaderCanvas2.drawBitmap(this.backgroundBitmap, 0.0f, 0.0f, (Paint) null);
-        AndroidUtilities.runOnUIThread(new SpoilerEffectBitmapFactory$$ExternalSyntheticLambda0(this, bitmap));
+        canvas.drawBitmap(this.backgroundBitmap, 0.0f, 0.0f, (Paint) null);
+        AndroidUtilities.runOnUIThread(new SpoilerEffectBitmapFactory$$ExternalSyntheticLambda1(this, bitmap));
     }
 
-    /* renamed from: lambda$checkUpdate$0$org-telegram-ui-Components-spoilers-SpoilerEffectBitmapFactory  reason: not valid java name */
-    public /* synthetic */ void m1572xcca05127(Bitmap finalBitmap) {
+    /* access modifiers changed from: private */
+    public /* synthetic */ void lambda$checkUpdate$0(Bitmap bitmap) {
         this.bufferBitmap = this.shaderBitmap;
-        this.shaderBitmap = finalBitmap;
-        this.shaderPaint.setShader(new BitmapShader(this.shaderBitmap, Shader.TileMode.REPEAT, Shader.TileMode.REPEAT));
+        this.shaderBitmap = bitmap;
+        Paint paint = this.shaderPaint;
+        Bitmap bitmap2 = this.shaderBitmap;
+        Shader.TileMode tileMode = Shader.TileMode.REPEAT;
+        paint.setShader(new BitmapShader(bitmap2, tileMode, tileMode));
         this.isRunning = false;
     }
 }

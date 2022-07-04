@@ -1,15 +1,15 @@
 package org.telegram.ui.Components;
 
-import org.telegram.messenger.GenericProvider;
+import androidx.dynamicanimation.animation.DynamicAnimation;
 
-public final /* synthetic */ class BotWebViewMenuContainer$$ExternalSyntheticLambda7 implements GenericProvider {
-    public final /* synthetic */ ChatActivityEnterView f$0;
+public final /* synthetic */ class BotWebViewMenuContainer$$ExternalSyntheticLambda7 implements DynamicAnimation.OnAnimationUpdateListener {
+    public final /* synthetic */ BotWebViewMenuContainer f$0;
 
-    public /* synthetic */ BotWebViewMenuContainer$$ExternalSyntheticLambda7(ChatActivityEnterView chatActivityEnterView) {
-        this.f$0 = chatActivityEnterView;
+    public /* synthetic */ BotWebViewMenuContainer$$ExternalSyntheticLambda7(BotWebViewMenuContainer botWebViewMenuContainer) {
+        this.f$0 = botWebViewMenuContainer;
     }
 
-    public final Object provide(Object obj) {
-        return BotWebViewMenuContainer.lambda$new$7(this.f$0, (Void) obj);
+    public final void onAnimationUpdate(DynamicAnimation dynamicAnimation, float f, float f2) {
+        this.f$0.lambda$animateBotButton$10(dynamicAnimation, f, f2);
     }
 }

@@ -8,6 +8,6 @@ public final /* synthetic */ class VoIPTimerView$$ExternalSyntheticLambda0 imple
     }
 
     public final void run() {
-        this.f$0.m1622lambda$new$0$orgtelegramuiComponentsvoipVoIPTimerView();
+        this.f$0.lambda$new$0();
     }
 }

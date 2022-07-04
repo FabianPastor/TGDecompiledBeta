@@ -13,6 +13,6 @@ public final /* synthetic */ class AudioPlayerAlert$ClippingTextViewSwitcher$$Ex
     }
 
     public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-        this.f$0.m551x606a7338(this.f$1, valueAnimator);
+        this.f$0.lambda$setText$1(this.f$1, valueAnimator);
     }
 }

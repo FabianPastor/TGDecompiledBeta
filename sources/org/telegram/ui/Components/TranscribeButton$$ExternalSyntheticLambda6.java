@@ -3,7 +3,7 @@ package org.telegram.ui.Components;
 import org.telegram.messenger.MessageObject;
 import org.telegram.tgnet.RequestDelegate;
 import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC;
+import org.telegram.tgnet.TLRPC$TL_error;
 
 public final /* synthetic */ class TranscribeButton$$ExternalSyntheticLambda6 implements RequestDelegate {
     public final /* synthetic */ MessageObject f$0;
@@ -20,7 +20,7 @@ public final /* synthetic */ class TranscribeButton$$ExternalSyntheticLambda6 im
         this.f$4 = i2;
     }
 
-    public final void run(TLObject tLObject, TLRPC.TL_error tL_error) {
-        TranscribeButton.lambda$transcribePressed$4(this.f$0, this.f$1, this.f$2, this.f$3, this.f$4, tLObject, tL_error);
+    public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+        TranscribeButton.lambda$transcribePressed$4(this.f$0, this.f$1, this.f$2, this.f$3, this.f$4, tLObject, tLRPC$TL_error);
     }
 }

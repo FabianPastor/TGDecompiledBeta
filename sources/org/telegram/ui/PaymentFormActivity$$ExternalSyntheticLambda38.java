@@ -1,20 +1,19 @@
 package org.telegram.ui;
 
 import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC;
 
 public final /* synthetic */ class PaymentFormActivity$$ExternalSyntheticLambda38 implements Runnable {
     public final /* synthetic */ PaymentFormActivity f$0;
-    public final /* synthetic */ TLRPC.TL_error f$1;
-    public final /* synthetic */ TLObject f$2;
+    public final /* synthetic */ TLObject f$1;
+    public final /* synthetic */ Runnable f$2;
 
-    public /* synthetic */ PaymentFormActivity$$ExternalSyntheticLambda38(PaymentFormActivity paymentFormActivity, TLRPC.TL_error tL_error, TLObject tLObject) {
+    public /* synthetic */ PaymentFormActivity$$ExternalSyntheticLambda38(PaymentFormActivity paymentFormActivity, TLObject tLObject, Runnable runnable) {
         this.f$0 = paymentFormActivity;
-        this.f$1 = tL_error;
-        this.f$2 = tLObject;
+        this.f$1 = tLObject;
+        this.f$2 = runnable;
     }
 
     public final void run() {
-        this.f$0.m4191lambda$sendSavedForm$49$orgtelegramuiPaymentFormActivity(this.f$1, this.f$2);
+        this.f$0.lambda$sendSavedForm$48(this.f$1, this.f$2);
     }
 }

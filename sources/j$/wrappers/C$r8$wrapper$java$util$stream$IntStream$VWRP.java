@@ -1,179 +1,175 @@
 package j$.wrappers;
 
-import j$.util.IntSummaryStatistics;
-import j$.util.IntSummaryStatisticsConversions;
-import j$.util.OptionalConversions;
-import j$.util.OptionalDouble;
-import j$.util.OptionalInt;
+import j$.util.CLASSNAMEa;
+import j$.util.CLASSNAMEh;
+import j$.util.CLASSNAMEj;
+import j$.util.CLASSNAMEk;
 import j$.util.function.BiConsumer;
-import j$.util.function.IntBinaryOperator;
-import j$.util.function.IntConsumer;
-import j$.util.function.IntFunction;
-import j$.util.function.IntPredicate;
-import j$.util.function.IntToDoubleFunction;
-import j$.util.function.IntToLongFunction;
-import j$.util.function.IntUnaryOperator;
-import j$.util.function.ObjIntConsumer;
-import j$.util.function.Supplier;
-import j$.util.stream.BaseStream;
-import j$.util.stream.DoubleStream;
+import j$.util.function.j;
+import j$.util.function.l;
+import j$.util.function.m;
+import j$.util.function.n;
+import j$.util.function.v;
+import j$.util.function.y;
+import j$.util.stream.CLASSNAMEe1;
+import j$.util.stream.CLASSNAMEg;
 import j$.util.stream.IntStream;
-import j$.util.stream.LongStream;
 import j$.util.stream.Stream;
+import j$.util.stream.U;
 
 /* renamed from: j$.wrappers.$r8$wrapper$java$util$stream$IntStream$-V-WRP  reason: invalid class name */
-/* compiled from: IntStream */
 public final /* synthetic */ class C$r8$wrapper$java$util$stream$IntStream$VWRP implements IntStream {
-    final /* synthetic */ java.util.stream.IntStream wrappedValue;
+    final /* synthetic */ java.util.stream.IntStream a;
 
     private /* synthetic */ C$r8$wrapper$java$util$stream$IntStream$VWRP(java.util.stream.IntStream intStream) {
-        this.wrappedValue = intStream;
+        this.a = intStream;
     }
 
     public static /* synthetic */ IntStream convert(java.util.stream.IntStream intStream) {
         if (intStream == null) {
             return null;
         }
-        return intStream instanceof C$r8$wrapper$java$util$stream$IntStream$WRP ? ((C$r8$wrapper$java$util$stream$IntStream$WRP) intStream).wrappedValue : new C$r8$wrapper$java$util$stream$IntStream$VWRP(intStream);
+        return intStream instanceof C$r8$wrapper$java$util$stream$IntStream$WRP ? ((C$r8$wrapper$java$util$stream$IntStream$WRP) intStream).a : new C$r8$wrapper$java$util$stream$IntStream$VWRP(intStream);
     }
 
-    public /* synthetic */ boolean allMatch(IntPredicate intPredicate) {
-        return this.wrappedValue.allMatch(C$r8$wrapper$java$util$function$IntPredicate$WRP.convert(intPredicate));
+    public /* synthetic */ U A(X x) {
+        return L0.n0(this.a.mapToDouble(x == null ? null : x.a));
     }
 
-    public /* synthetic */ boolean anyMatch(IntPredicate intPredicate) {
-        return this.wrappedValue.anyMatch(C$r8$wrapper$java$util$function$IntPredicate$WRP.convert(intPredicate));
+    public /* synthetic */ boolean C(V v) {
+        return this.a.allMatch(W.a(v));
     }
 
-    public /* synthetic */ DoubleStream asDoubleStream() {
-        return C$r8$wrapper$java$util$stream$DoubleStream$VWRP.convert(this.wrappedValue.asDoubleStream());
+    public /* synthetic */ boolean F(V v) {
+        return this.a.anyMatch(W.a(v));
     }
 
-    public /* synthetic */ LongStream asLongStream() {
-        return C$r8$wrapper$java$util$stream$LongStream$VWRP.convert(this.wrappedValue.asLongStream());
+    public /* synthetic */ void I(l lVar) {
+        this.a.forEachOrdered(S.a(lVar));
     }
 
-    public /* synthetic */ OptionalDouble average() {
-        return OptionalConversions.convert(this.wrappedValue.average());
+    public /* synthetic */ Stream J(m mVar) {
+        return C$r8$wrapper$java$util$stream$Stream$VWRP.convert(this.a.mapToObj(U.a(mVar)));
+    }
+
+    public /* synthetic */ int N(int i, j jVar) {
+        return this.a.reduce(i, P.a(jVar));
+    }
+
+    public /* synthetic */ IntStream P(m mVar) {
+        return convert(this.a.flatMap(U.a(mVar)));
+    }
+
+    public /* synthetic */ void U(l lVar) {
+        this.a.forEach(S.a(lVar));
+    }
+
+    public /* synthetic */ CLASSNAMEk a0(j jVar) {
+        return CLASSNAMEa.r(this.a.reduce(P.a(jVar)));
+    }
+
+    public /* synthetic */ U asDoubleStream() {
+        return L0.n0(this.a.asDoubleStream());
+    }
+
+    public /* synthetic */ CLASSNAMEe1 asLongStream() {
+        return N0.n0(this.a.asLongStream());
+    }
+
+    public /* synthetic */ CLASSNAMEj average() {
+        return CLASSNAMEa.q(this.a.average());
     }
 
     public /* synthetic */ Stream boxed() {
-        return C$r8$wrapper$java$util$stream$Stream$VWRP.convert(this.wrappedValue.boxed());
+        return C$r8$wrapper$java$util$stream$Stream$VWRP.convert(this.a.boxed());
+    }
+
+    public /* synthetic */ IntStream c0(l lVar) {
+        return convert(this.a.peek(S.a(lVar)));
     }
 
     public /* synthetic */ void close() {
-        this.wrappedValue.close();
-    }
-
-    public /* synthetic */ Object collect(Supplier supplier, ObjIntConsumer objIntConsumer, BiConsumer biConsumer) {
-        return this.wrappedValue.collect(C$r8$wrapper$java$util$function$Supplier$WRP.convert(supplier), C$r8$wrapper$java$util$function$ObjIntConsumer$WRP.convert(objIntConsumer), C$r8$wrapper$java$util$function$BiConsumer$WRP.convert(biConsumer));
+        this.a.close();
     }
 
     public /* synthetic */ long count() {
-        return this.wrappedValue.count();
+        return this.a.count();
     }
 
     public /* synthetic */ IntStream distinct() {
-        return convert(this.wrappedValue.distinct());
+        return convert(this.a.distinct());
     }
 
-    public /* synthetic */ IntStream filter(IntPredicate intPredicate) {
-        return convert(this.wrappedValue.filter(C$r8$wrapper$java$util$function$IntPredicate$WRP.convert(intPredicate)));
+    public /* synthetic */ CLASSNAMEe1 f(n nVar) {
+        return N0.n0(this.a.mapToLong(CLASSNAMEa0.a(nVar)));
     }
 
-    public /* synthetic */ OptionalInt findAny() {
-        return OptionalConversions.convert(this.wrappedValue.findAny());
+    public /* synthetic */ CLASSNAMEk findAny() {
+        return CLASSNAMEa.r(this.a.findAny());
     }
 
-    public /* synthetic */ OptionalInt findFirst() {
-        return OptionalConversions.convert(this.wrappedValue.findFirst());
+    public /* synthetic */ CLASSNAMEk findFirst() {
+        return CLASSNAMEa.r(this.a.findFirst());
     }
 
-    public /* synthetic */ IntStream flatMap(IntFunction intFunction) {
-        return convert(this.wrappedValue.flatMap(C$r8$wrapper$java$util$function$IntFunction$WRP.convert(intFunction)));
-    }
-
-    public /* synthetic */ void forEach(IntConsumer intConsumer) {
-        this.wrappedValue.forEach(C$r8$wrapper$java$util$function$IntConsumer$WRP.convert(intConsumer));
-    }
-
-    public /* synthetic */ void forEachOrdered(IntConsumer intConsumer) {
-        this.wrappedValue.forEachOrdered(C$r8$wrapper$java$util$function$IntConsumer$WRP.convert(intConsumer));
+    public /* synthetic */ IntStream h(V v) {
+        return convert(this.a.filter(W.a(v)));
     }
 
     public /* synthetic */ boolean isParallel() {
-        return this.wrappedValue.isParallel();
+        return this.a.isParallel();
+    }
+
+    public /* synthetic */ Object k0(y yVar, v vVar, BiConsumer biConsumer) {
+        return this.a.collect(A0.a(yVar), u0.a(vVar), r.a(biConsumer));
     }
 
     public /* synthetic */ IntStream limit(long j) {
-        return convert(this.wrappedValue.limit(j));
+        return convert(this.a.limit(j));
     }
 
-    public /* synthetic */ IntStream map(IntUnaryOperator intUnaryOperator) {
-        return convert(this.wrappedValue.map(C$r8$wrapper$java$util$function$IntUnaryOperator$WRP.convert(intUnaryOperator)));
+    public /* synthetic */ CLASSNAMEk max() {
+        return CLASSNAMEa.r(this.a.max());
     }
 
-    public /* synthetic */ DoubleStream mapToDouble(IntToDoubleFunction intToDoubleFunction) {
-        return C$r8$wrapper$java$util$stream$DoubleStream$VWRP.convert(this.wrappedValue.mapToDouble(C$r8$wrapper$java$util$function$IntToDoubleFunction$WRP.convert(intToDoubleFunction)));
+    public /* synthetic */ CLASSNAMEk min() {
+        return CLASSNAMEa.r(this.a.min());
     }
 
-    public /* synthetic */ LongStream mapToLong(IntToLongFunction intToLongFunction) {
-        return C$r8$wrapper$java$util$stream$LongStream$VWRP.convert(this.wrappedValue.mapToLong(C$r8$wrapper$java$util$function$IntToLongFunction$WRP.convert(intToLongFunction)));
+    public /* synthetic */ CLASSNAMEg onClose(Runnable runnable) {
+        return H0.n0(this.a.onClose(runnable));
     }
 
-    public /* synthetic */ Stream mapToObj(IntFunction intFunction) {
-        return C$r8$wrapper$java$util$stream$Stream$VWRP.convert(this.wrappedValue.mapToObj(C$r8$wrapper$java$util$function$IntFunction$WRP.convert(intFunction)));
-    }
-
-    public /* synthetic */ OptionalInt max() {
-        return OptionalConversions.convert(this.wrappedValue.max());
-    }
-
-    public /* synthetic */ OptionalInt min() {
-        return OptionalConversions.convert(this.wrappedValue.min());
-    }
-
-    public /* synthetic */ boolean noneMatch(IntPredicate intPredicate) {
-        return this.wrappedValue.noneMatch(C$r8$wrapper$java$util$function$IntPredicate$WRP.convert(intPredicate));
-    }
-
-    public /* synthetic */ BaseStream onClose(Runnable runnable) {
-        return C$r8$wrapper$java$util$stream$BaseStream$VWRP.convert(this.wrappedValue.onClose(runnable));
-    }
-
-    public /* synthetic */ IntStream peek(IntConsumer intConsumer) {
-        return convert(this.wrappedValue.peek(C$r8$wrapper$java$util$function$IntConsumer$WRP.convert(intConsumer)));
-    }
-
-    public /* synthetic */ int reduce(int i, IntBinaryOperator intBinaryOperator) {
-        return this.wrappedValue.reduce(i, C$r8$wrapper$java$util$function$IntBinaryOperator$WRP.convert(intBinaryOperator));
-    }
-
-    public /* synthetic */ OptionalInt reduce(IntBinaryOperator intBinaryOperator) {
-        return OptionalConversions.convert(this.wrappedValue.reduce(C$r8$wrapper$java$util$function$IntBinaryOperator$WRP.convert(intBinaryOperator)));
+    public /* synthetic */ IntStream q(CLASSNAMEb0 b0Var) {
+        return convert(this.a.map(CLASSNAMEc0.a(b0Var)));
     }
 
     public /* synthetic */ IntStream skip(long j) {
-        return convert(this.wrappedValue.skip(j));
+        return convert(this.a.skip(j));
     }
 
     public /* synthetic */ IntStream sorted() {
-        return convert(this.wrappedValue.sorted());
+        return convert(this.a.sorted());
     }
 
     public /* synthetic */ int sum() {
-        return this.wrappedValue.sum();
+        return this.a.sum();
     }
 
-    public /* synthetic */ IntSummaryStatistics summaryStatistics() {
-        return IntSummaryStatisticsConversions.convert(this.wrappedValue.summaryStatistics());
+    public CLASSNAMEh summaryStatistics() {
+        this.a.summaryStatistics();
+        throw new Error("Java 8+ API desugaring (library desugaring) cannot convert from java.util.IntSummaryStatistics");
     }
 
     public /* synthetic */ int[] toArray() {
-        return this.wrappedValue.toArray();
+        return this.a.toArray();
     }
 
-    public /* synthetic */ BaseStream unordered() {
-        return C$r8$wrapper$java$util$stream$BaseStream$VWRP.convert(this.wrappedValue.unordered());
+    public /* synthetic */ CLASSNAMEg unordered() {
+        return H0.n0(this.a.unordered());
+    }
+
+    public /* synthetic */ boolean v(V v) {
+        return this.a.noneMatch(W.a(v));
     }
 }

@@ -8,6 +8,6 @@ public final /* synthetic */ class ContactsLoadingObserver$$ExternalSyntheticLam
     }
 
     public final void run() {
-        this.f$0.m1795lambda$new$1$orgtelegrammessengerContactsLoadingObserver();
+        this.f$0.lambda$new$1();
     }
 }

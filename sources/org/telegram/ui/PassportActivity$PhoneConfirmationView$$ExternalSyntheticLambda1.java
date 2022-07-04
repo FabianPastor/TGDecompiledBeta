@@ -1,17 +1,16 @@
 package org.telegram.ui;
 
-import org.telegram.tgnet.RequestDelegate;
-import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC;
+import android.content.DialogInterface;
 import org.telegram.ui.PassportActivity;
 
-public final /* synthetic */ class PassportActivity$PhoneConfirmationView$$ExternalSyntheticLambda1 implements RequestDelegate {
-    public static final /* synthetic */ PassportActivity$PhoneConfirmationView$$ExternalSyntheticLambda1 INSTANCE = new PassportActivity$PhoneConfirmationView$$ExternalSyntheticLambda1();
+public final /* synthetic */ class PassportActivity$PhoneConfirmationView$$ExternalSyntheticLambda1 implements DialogInterface.OnClickListener {
+    public final /* synthetic */ PassportActivity.PhoneConfirmationView f$0;
 
-    private /* synthetic */ PassportActivity$PhoneConfirmationView$$ExternalSyntheticLambda1() {
+    public /* synthetic */ PassportActivity$PhoneConfirmationView$$ExternalSyntheticLambda1(PassportActivity.PhoneConfirmationView phoneConfirmationView) {
+        this.f$0 = phoneConfirmationView;
     }
 
-    public final void run(TLObject tLObject, TLRPC.TL_error tL_error) {
-        PassportActivity.PhoneConfirmationView.lambda$onBackPressed$9(tLObject, tL_error);
+    public final void onClick(DialogInterface dialogInterface, int i) {
+        this.f$0.lambda$onBackPressed$8(dialogInterface, i);
     }
 }

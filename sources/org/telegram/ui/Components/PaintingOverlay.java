@@ -22,14 +22,26 @@ public class PaintingOverlay extends FrameLayout {
     private HashMap<View, VideoEditedInfo.MediaEntity> mediaEntityViews;
     private Bitmap paintBitmap;
 
+    public boolean dispatchTouchEvent(MotionEvent motionEvent) {
+        return false;
+    }
+
+    public boolean onInterceptTouchEvent(MotionEvent motionEvent) {
+        return false;
+    }
+
+    public boolean onTouchEvent(MotionEvent motionEvent) {
+        return false;
+    }
+
     public PaintingOverlay(Context context) {
         super(context);
     }
 
-    public void setData(String paintPath, ArrayList<VideoEditedInfo.MediaEntity> entities, boolean isVideo, boolean startAfterSet) {
-        setEntities(entities, isVideo, startAfterSet);
-        if (paintPath != null) {
-            this.paintBitmap = BitmapFactory.decodeFile(paintPath);
+    public void setData(String str, ArrayList<VideoEditedInfo.MediaEntity> arrayList, boolean z, boolean z2) {
+        setEntities(arrayList, z, z2);
+        if (str != null) {
+            this.paintBitmap = BitmapFactory.decodeFile(str);
             BitmapDrawable bitmapDrawable = new BitmapDrawable(this.paintBitmap);
             this.backgroundDrawable = bitmapDrawable;
             setBackground(bitmapDrawable);
@@ -41,41 +53,29 @@ public class PaintingOverlay extends FrameLayout {
     }
 
     /* access modifiers changed from: protected */
-    public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+    public void onMeasure(int i, int i2) {
         this.ignoreLayout = true;
-        setMeasuredDimension(View.MeasureSpec.getSize(widthMeasureSpec), View.MeasureSpec.getSize(heightMeasureSpec));
+        setMeasuredDimension(View.MeasureSpec.getSize(i), View.MeasureSpec.getSize(i2));
         if (this.mediaEntityViews != null) {
-            int width = getMeasuredWidth();
-            int height = getMeasuredHeight();
-            int N = getChildCount();
-            for (int a = 0; a < N; a++) {
-                View child = getChildAt(a);
-                VideoEditedInfo.MediaEntity entity = this.mediaEntityViews.get(child);
-                if (entity != null) {
-                    if (child instanceof EditTextOutline) {
-                        child.measure(View.MeasureSpec.makeMeasureSpec(entity.viewWidth, NUM), View.MeasureSpec.makeMeasureSpec(0, 0));
-                        float sc = (entity.textViewWidth * ((float) width)) / ((float) entity.viewWidth);
-                        child.setScaleX(entity.scale * sc);
-                        child.setScaleY(entity.scale * sc);
+            int measuredWidth = getMeasuredWidth();
+            int measuredHeight = getMeasuredHeight();
+            int childCount = getChildCount();
+            for (int i3 = 0; i3 < childCount; i3++) {
+                View childAt = getChildAt(i3);
+                VideoEditedInfo.MediaEntity mediaEntity = this.mediaEntityViews.get(childAt);
+                if (mediaEntity != null) {
+                    if (childAt instanceof EditTextOutline) {
+                        childAt.measure(View.MeasureSpec.makeMeasureSpec(mediaEntity.viewWidth, NUM), View.MeasureSpec.makeMeasureSpec(0, 0));
+                        float f = (mediaEntity.textViewWidth * ((float) measuredWidth)) / ((float) mediaEntity.viewWidth);
+                        childAt.setScaleX(mediaEntity.scale * f);
+                        childAt.setScaleY(mediaEntity.scale * f);
                     } else {
-                        child.measure(View.MeasureSpec.makeMeasureSpec((int) (((float) width) * entity.width), NUM), View.MeasureSpec.makeMeasureSpec((int) (((float) height) * entity.height), NUM));
+                        childAt.measure(View.MeasureSpec.makeMeasureSpec((int) (((float) measuredWidth) * mediaEntity.width), NUM), View.MeasureSpec.makeMeasureSpec((int) (((float) measuredHeight) * mediaEntity.height), NUM));
                     }
                 }
             }
         }
         this.ignoreLayout = false;
-    }
-
-    public boolean dispatchTouchEvent(MotionEvent ev) {
-        return false;
-    }
-
-    public boolean onInterceptTouchEvent(MotionEvent ev) {
-        return false;
-    }
-
-    public boolean onTouchEvent(MotionEvent event) {
-        return false;
     }
 
     public void requestLayout() {
@@ -85,25 +85,25 @@ public class PaintingOverlay extends FrameLayout {
     }
 
     /* access modifiers changed from: protected */
-    public void onLayout(boolean changed, int left, int top, int right, int bottom) {
-        int y;
-        int x;
+    public void onLayout(boolean z, int i, int i2, int i3, int i4) {
+        int i5;
+        int i6;
         if (this.mediaEntityViews != null) {
-            int width = getMeasuredWidth();
-            int height = getMeasuredHeight();
-            int N = getChildCount();
-            for (int a = 0; a < N; a++) {
-                View child = getChildAt(a);
-                VideoEditedInfo.MediaEntity entity = this.mediaEntityViews.get(child);
-                if (entity != null) {
-                    if (child instanceof EditTextOutline) {
-                        x = ((int) (((float) width) * entity.textViewX)) - (child.getMeasuredWidth() / 2);
-                        y = ((int) (((float) height) * entity.textViewY)) - (child.getMeasuredHeight() / 2);
+            int measuredWidth = getMeasuredWidth();
+            int measuredHeight = getMeasuredHeight();
+            int childCount = getChildCount();
+            for (int i7 = 0; i7 < childCount; i7++) {
+                View childAt = getChildAt(i7);
+                VideoEditedInfo.MediaEntity mediaEntity = this.mediaEntityViews.get(childAt);
+                if (mediaEntity != null) {
+                    if (childAt instanceof EditTextOutline) {
+                        i5 = ((int) (((float) measuredWidth) * mediaEntity.textViewX)) - (childAt.getMeasuredWidth() / 2);
+                        i6 = ((int) (((float) measuredHeight) * mediaEntity.textViewY)) - (childAt.getMeasuredHeight() / 2);
                     } else {
-                        x = (int) (((float) width) * entity.x);
-                        y = (int) (((float) height) * entity.y);
+                        i5 = (int) (((float) measuredWidth) * mediaEntity.x);
+                        i6 = (int) (((float) measuredHeight) * mediaEntity.y);
                     }
-                    child.layout(x, y, child.getMeasuredWidth() + x, child.getMeasuredHeight() + y);
+                    childAt.layout(i5, i6, childAt.getMeasuredWidth() + i5, childAt.getMeasuredHeight() + i6);
                 }
             }
         }
@@ -121,17 +121,17 @@ public class PaintingOverlay extends FrameLayout {
     }
 
     public void showAll() {
-        int count = getChildCount();
-        for (int a = 0; a < count; a++) {
-            getChildAt(a).setVisibility(0);
+        int childCount = getChildCount();
+        for (int i = 0; i < childCount; i++) {
+            getChildAt(i).setVisibility(0);
         }
         setBackground(this.backgroundDrawable);
     }
 
     public void hideEntities() {
-        int count = getChildCount();
-        for (int a = 0; a < count; a++) {
-            getChildAt(a).setVisibility(4);
+        int childCount = getChildCount();
+        for (int i = 0; i < childCount; i++) {
+            getChildAt(i).setVisibility(4);
         }
     }
 
@@ -139,173 +139,162 @@ public class PaintingOverlay extends FrameLayout {
         setBackground((Drawable) null);
     }
 
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v0, resolved type: org.telegram.ui.Components.PaintingOverlay$1} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v1, resolved type: org.telegram.ui.Components.PaintingOverlay$1} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v2, resolved type: org.telegram.ui.Components.PaintingOverlay$1} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r6v10, resolved type: org.telegram.ui.Components.BackupImageView} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v3, resolved type: org.telegram.ui.Components.PaintingOverlay$1} */
+    /* JADX WARNING: type inference failed for: r6v5, types: [org.telegram.ui.Components.PaintingOverlay$1, android.view.View, android.widget.EditText, org.telegram.ui.Components.Paint.Views.EditTextOutline] */
     /* JADX WARNING: Multi-variable type inference failed */
+    /* JADX WARNING: Unknown variable types count: 1 */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    public void setEntities(java.util.ArrayList<org.telegram.messenger.VideoEditedInfo.MediaEntity> r19, boolean r20, boolean r21) {
+    public void setEntities(java.util.ArrayList<org.telegram.messenger.VideoEditedInfo.MediaEntity> r18, boolean r19, boolean r20) {
         /*
-            r18 = this;
-            r0 = r18
-            r1 = r19
-            r18.reset()
+            r17 = this;
+            r0 = r17
+            r1 = r18
+            r17.reset()
             java.util.HashMap r2 = new java.util.HashMap
             r2.<init>()
             r0.mediaEntityViews = r2
-            if (r1 == 0) goto L_0x0143
-            boolean r2 = r19.isEmpty()
-            if (r2 != 0) goto L_0x0143
-            r2 = 0
-            int r3 = r19.size()
-        L_0x001b:
-            if (r2 >= r3) goto L_0x0143
-            java.lang.Object r4 = r1.get(r2)
-            org.telegram.messenger.VideoEditedInfo$MediaEntity r4 = (org.telegram.messenger.VideoEditedInfo.MediaEntity) r4
-            r5 = 0
-            byte r6 = r4.type
-            r7 = 1
-            r8 = 0
-            if (r6 != 0) goto L_0x007e
-            org.telegram.ui.Components.BackupImageView r6 = new org.telegram.ui.Components.BackupImageView
-            android.content.Context r9 = r18.getContext()
-            r6.<init>(r9)
-            r6.setAspectFit(r7)
-            org.telegram.messenger.ImageReceiver r15 = r6.getImageReceiver()
+            if (r1 == 0) goto L_0x0138
+            boolean r2 = r18.isEmpty()
+            if (r2 != 0) goto L_0x0138
+            int r2 = r18.size()
+            r3 = 0
+            r4 = 0
+        L_0x001c:
+            if (r4 >= r2) goto L_0x0138
+            java.lang.Object r5 = r1.get(r4)
+            org.telegram.messenger.VideoEditedInfo$MediaEntity r5 = (org.telegram.messenger.VideoEditedInfo.MediaEntity) r5
+            byte r6 = r5.type
+            r7 = 0
+            r8 = 1
+            if (r6 != 0) goto L_0x0079
+            org.telegram.ui.Components.BackupImageView r7 = new org.telegram.ui.Components.BackupImageView
+            android.content.Context r6 = r17.getContext()
+            r7.<init>(r6)
+            r7.setAspectFit(r8)
+            org.telegram.messenger.ImageReceiver r9 = r7.getImageReceiver()
+            if (r19 == 0) goto L_0x0049
+            r9.setAllowDecodeSingleFrame(r8)
+            r9.setAllowStartLottieAnimation(r3)
             if (r20 == 0) goto L_0x0049
-            r15.setAllowDecodeSingleFrame(r7)
-            r15.setAllowStartLottieAnimation(r8)
-            if (r21 == 0) goto L_0x0049
-            org.telegram.ui.Components.PaintingOverlay$$ExternalSyntheticLambda0 r7 = org.telegram.ui.Components.PaintingOverlay$$ExternalSyntheticLambda0.INSTANCE
-            r15.setDelegate(r7)
+            org.telegram.ui.Components.PaintingOverlay$$ExternalSyntheticLambda0 r6 = org.telegram.ui.Components.PaintingOverlay$$ExternalSyntheticLambda0.INSTANCE
+            r9.setDelegate(r6)
         L_0x0049:
-            org.telegram.tgnet.TLRPC$Document r7 = r4.document
-            java.util.ArrayList<org.telegram.tgnet.TLRPC$PhotoSize> r7 = r7.thumbs
+            org.telegram.tgnet.TLRPC$Document r6 = r5.document
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$PhotoSize> r6 = r6.thumbs
             r8 = 90
-            org.telegram.tgnet.TLRPC$PhotoSize r7 = org.telegram.messenger.FileLoader.getClosestPhotoSizeWithSize(r7, r8)
-            org.telegram.tgnet.TLRPC$Document r8 = r4.document
+            org.telegram.tgnet.TLRPC$PhotoSize r6 = org.telegram.messenger.FileLoader.getClosestPhotoSizeWithSize(r6, r8)
+            org.telegram.tgnet.TLRPC$Document r8 = r5.document
             org.telegram.messenger.ImageLocation r10 = org.telegram.messenger.ImageLocation.getForDocument(r8)
             r11 = 0
-            org.telegram.tgnet.TLRPC$Document r8 = r4.document
-            org.telegram.messenger.ImageLocation r12 = org.telegram.messenger.ImageLocation.getForDocument((org.telegram.tgnet.TLRPC.PhotoSize) r7, (org.telegram.tgnet.TLRPC.Document) r8)
+            org.telegram.tgnet.TLRPC$Document r8 = r5.document
+            org.telegram.messenger.ImageLocation r12 = org.telegram.messenger.ImageLocation.getForDocument((org.telegram.tgnet.TLRPC$PhotoSize) r6, (org.telegram.tgnet.TLRPC$Document) r8)
             r13 = 0
-            java.lang.Object r8 = r4.parentObject
+            java.lang.Object r15 = r5.parentObject
             r16 = 1
             java.lang.String r14 = "webp"
-            r9 = r15
-            r17 = r15
-            r15 = r8
             r9.setImage((org.telegram.messenger.ImageLocation) r10, (java.lang.String) r11, (org.telegram.messenger.ImageLocation) r12, (java.lang.String) r13, (java.lang.String) r14, (java.lang.Object) r15, (int) r16)
-            byte r8 = r4.subType
-            r8 = r8 & 2
-            if (r8 == 0) goto L_0x0079
-            r8 = -1082130432(0xffffffffbvar_, float:-1.0)
-            r6.setScaleX(r8)
+            byte r6 = r5.subType
+            r6 = r6 & 2
+            if (r6 == 0) goto L_0x0075
+            r6 = -1082130432(0xffffffffbvar_, float:-1.0)
+            r7.setScaleX(r6)
+        L_0x0075:
+            r5.view = r7
+            goto L_0x0112
         L_0x0079:
-            r5 = r6
-            r4.view = r6
-            goto L_0x011c
-        L_0x007e:
-            byte r6 = r4.type
-            if (r6 != r7) goto L_0x011c
+            if (r6 != r8) goto L_0x0112
             org.telegram.ui.Components.PaintingOverlay$1 r6 = new org.telegram.ui.Components.PaintingOverlay$1
-            android.content.Context r9 = r18.getContext()
-            r6.<init>(r9)
-            r6.setBackgroundColor(r8)
+            android.content.Context r9 = r17.getContext()
+            r6.<init>(r0, r9)
+            r6.setBackgroundColor(r3)
             r9 = 1088421888(0x40e00000, float:7.0)
             int r10 = org.telegram.messenger.AndroidUtilities.dp(r9)
             int r11 = org.telegram.messenger.AndroidUtilities.dp(r9)
             int r12 = org.telegram.messenger.AndroidUtilities.dp(r9)
             int r9 = org.telegram.messenger.AndroidUtilities.dp(r9)
             r6.setPadding(r10, r11, r12, r9)
-            int r9 = r4.fontSize
+            int r9 = r5.fontSize
             float r9 = (float) r9
-            r6.setTextSize(r8, r9)
-            java.lang.String r9 = r4.text
+            r6.setTextSize(r3, r9)
+            java.lang.String r9 = r5.text
             r6.setText(r9)
+            r6.setTypeface(r7, r8)
+            r7 = 17
+            r6.setGravity(r7)
+            r6.setHorizontallyScrolling(r3)
+            r7 = 268435456(0x10000000, float:2.5243549E-29)
+            r6.setImeOptions(r7)
+            r6.setFocusableInTouchMode(r8)
+            r6.setEnabled(r3)
+            int r7 = r6.getInputType()
+            r7 = r7 | 16384(0x4000, float:2.2959E-41)
+            r6.setInputType(r7)
+            int r7 = android.os.Build.VERSION.SDK_INT
+            r8 = 23
+            if (r7 < r8) goto L_0x00cf
+            r6.setBreakStrategy(r3)
+        L_0x00cf:
+            byte r7 = r5.subType
+            r8 = r7 & 1
             r9 = 0
-            r6.setTypeface(r9, r7)
-            r9 = 17
-            r6.setGravity(r9)
-            r6.setHorizontallyScrolling(r8)
-            r9 = 268435456(0x10000000, float:2.5243549E-29)
-            r6.setImeOptions(r9)
-            r6.setFocusableInTouchMode(r7)
-            r6.setEnabled(r8)
-            int r9 = r6.getInputType()
-            r9 = r9 | 16384(0x4000, float:2.2959E-41)
-            r6.setInputType(r9)
-            int r9 = android.os.Build.VERSION.SDK_INT
-            r10 = 23
-            if (r9 < r10) goto L_0x00d7
-            r6.setBreakStrategy(r8)
-        L_0x00d7:
-            byte r9 = r4.subType
-            r7 = r7 & r9
-            r9 = 0
-            if (r7 == 0) goto L_0x00ed
+            if (r8 == 0) goto L_0x00e6
             r7 = -1
             r6.setTextColor(r7)
-            int r7 = r4.color
+            int r7 = r5.color
             r6.setStrokeColor(r7)
-            r6.setFrameColor(r8)
-            r6.setShadowLayer(r9, r9, r9, r8)
-            goto L_0x0118
-        L_0x00ed:
-            byte r7 = r4.subType
+            r6.setFrameColor(r3)
+            r6.setShadowLayer(r9, r9, r9, r3)
+            goto L_0x010f
+        L_0x00e6:
             r7 = r7 & 4
-            if (r7 == 0) goto L_0x0104
+            if (r7 == 0) goto L_0x00fb
             r7 = -16777216(0xfffffffffvar_, float:-1.7014118E38)
             r6.setTextColor(r7)
-            r6.setStrokeColor(r8)
-            int r7 = r4.color
+            r6.setStrokeColor(r3)
+            int r7 = r5.color
             r6.setFrameColor(r7)
-            r6.setShadowLayer(r9, r9, r9, r8)
-            goto L_0x0118
-        L_0x0104:
-            int r7 = r4.color
+            r6.setShadowLayer(r9, r9, r9, r3)
+            goto L_0x010f
+        L_0x00fb:
+            int r7 = r5.color
             r6.setTextColor(r7)
-            r6.setStrokeColor(r8)
-            r6.setFrameColor(r8)
+            r6.setStrokeColor(r3)
+            r6.setFrameColor(r3)
             r7 = 1084227584(0x40a00000, float:5.0)
             r8 = 1065353216(0x3var_, float:1.0)
             r10 = 1711276032(0x66000000, float:1.5111573E23)
             r6.setShadowLayer(r7, r9, r8, r10)
-        L_0x0118:
-            r5 = r6
-            r4.view = r6
-            goto L_0x011d
-        L_0x011c:
-        L_0x011d:
-            if (r5 == 0) goto L_0x013f
-            r0.addView(r5)
-            float r6 = r4.rotation
+        L_0x010f:
+            r5.view = r6
+            r7 = r6
+        L_0x0112:
+            if (r7 == 0) goto L_0x0134
+            r0.addView(r7)
+            float r6 = r5.rotation
             float r6 = -r6
-            double r6 = (double) r6
-            r8 = 4614256656552045848(0x400921fb54442d18, double:3.NUM)
-            java.lang.Double.isNaN(r6)
-            double r6 = r6 / r8
-            r8 = 4640537203540230144(0xNUM, double:180.0)
-            double r6 = r6 * r8
-            float r6 = (float) r6
-            r5.setRotation(r6)
+            double r8 = (double) r6
+            r10 = 4614256656552045848(0x400921fb54442d18, double:3.NUM)
+            java.lang.Double.isNaN(r8)
+            double r8 = r8 / r10
+            r10 = 4640537203540230144(0xNUM, double:180.0)
+            double r8 = r8 * r10
+            float r6 = (float) r8
+            r7.setRotation(r6)
             java.util.HashMap<android.view.View, org.telegram.messenger.VideoEditedInfo$MediaEntity> r6 = r0.mediaEntityViews
-            r6.put(r5, r4)
-        L_0x013f:
-            int r2 = r2 + 1
-            goto L_0x001b
-        L_0x0143:
+            r6.put(r7, r5)
+        L_0x0134:
+            int r4 = r4 + 1
+            goto L_0x001c
+        L_0x0138:
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.PaintingOverlay.setEntities(java.util.ArrayList, boolean, boolean):void");
     }
 
-    static /* synthetic */ void lambda$setEntities$0(ImageReceiver imageReceiver1, boolean set, boolean thumb, boolean memCache) {
-        RLottieDrawable drawable;
-        if (set && !thumb && (drawable = imageReceiver1.getLottieAnimation()) != null) {
-            drawable.start();
+    /* access modifiers changed from: private */
+    public static /* synthetic */ void lambda$setEntities$0(ImageReceiver imageReceiver, boolean z, boolean z2, boolean z3) {
+        RLottieDrawable lottieAnimation;
+        if (z && !z2 && (lottieAnimation = imageReceiver.getLottieAnimation()) != null) {
+            lottieAnimation.start();
         }
     }
 
@@ -320,29 +309,30 @@ public class PaintingOverlay extends FrameLayout {
         return this.paintBitmap;
     }
 
-    public void setAlpha(float alpha) {
-        super.setAlpha(alpha);
+    public void setAlpha(float f) {
+        super.setAlpha(f);
         Drawable drawable = this.backgroundDrawable;
         if (drawable != null) {
-            drawable.setAlpha((int) (255.0f * alpha));
+            drawable.setAlpha((int) (255.0f * f));
         }
-        int count = getChildCount();
-        for (int i = 0; i < count; i++) {
-            View child = getChildAt(i);
-            if (child != null && child.getParent() == this) {
-                child.setAlpha(alpha);
+        int childCount = getChildCount();
+        for (int i = 0; i < childCount; i++) {
+            View childAt = getChildAt(i);
+            if (childAt != null && childAt.getParent() == this) {
+                childAt.setAlpha(f);
             }
         }
     }
 
     public Bitmap getThumb() {
-        float w = (float) getMeasuredWidth();
-        float h = (float) getMeasuredHeight();
-        float scale = Math.max(w / ((float) AndroidUtilities.dp(120.0f)), h / ((float) AndroidUtilities.dp(120.0f)));
-        Bitmap bitmap = Bitmap.createBitmap((int) (w / scale), (int) (h / scale), Bitmap.Config.ARGB_8888);
-        Canvas canvas = new Canvas(bitmap);
-        canvas.scale(1.0f / scale, 1.0f / scale);
+        float measuredWidth = (float) getMeasuredWidth();
+        float measuredHeight = (float) getMeasuredHeight();
+        float max = Math.max(measuredWidth / ((float) AndroidUtilities.dp(120.0f)), measuredHeight / ((float) AndroidUtilities.dp(120.0f)));
+        Bitmap createBitmap = Bitmap.createBitmap((int) (measuredWidth / max), (int) (measuredHeight / max), Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(createBitmap);
+        float f = 1.0f / max;
+        canvas.scale(f, f);
         draw(canvas);
-        return bitmap;
+        return createBitmap;
     }
 }

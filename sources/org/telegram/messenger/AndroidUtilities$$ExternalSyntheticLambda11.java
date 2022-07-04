@@ -1,15 +1,15 @@
 package org.telegram.messenger;
 
-import androidx.dynamicanimation.animation.DynamicAnimation;
+import java.util.Comparator;
+import org.telegram.messenger.AndroidUtilities;
 
-public final /* synthetic */ class AndroidUtilities$$ExternalSyntheticLambda11 implements DynamicAnimation.OnAnimationEndListener {
-    public final /* synthetic */ Runnable f$0;
+public final /* synthetic */ class AndroidUtilities$$ExternalSyntheticLambda11 implements Comparator {
+    public static final /* synthetic */ AndroidUtilities$$ExternalSyntheticLambda11 INSTANCE = new AndroidUtilities$$ExternalSyntheticLambda11();
 
-    public /* synthetic */ AndroidUtilities$$ExternalSyntheticLambda11(Runnable runnable) {
-        this.f$0 = runnable;
+    private /* synthetic */ AndroidUtilities$$ExternalSyntheticLambda11() {
     }
 
-    public final void onAnimationEnd(DynamicAnimation dynamicAnimation, boolean z, float f, float f2) {
-        AndroidUtilities.lambda$shakeViewSpring$6(this.f$0, dynamicAnimation, z, f, f2);
+    public final int compare(Object obj, Object obj2) {
+        return AndroidUtilities.lambda$pruneOverlaps$3((AndroidUtilities.LinkSpec) obj, (AndroidUtilities.LinkSpec) obj2);
     }
 }

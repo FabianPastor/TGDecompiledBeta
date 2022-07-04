@@ -1,17 +1,19 @@
 package org.telegram.messenger;
 
-import org.telegram.tgnet.TLRPC;
+import android.util.SparseBooleanArray;
 
 public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda93 implements Runnable {
     public final /* synthetic */ MessagesController f$0;
-    public final /* synthetic */ TLRPC.Updates f$1;
+    public final /* synthetic */ SparseBooleanArray f$1;
+    public final /* synthetic */ long f$2;
 
-    public /* synthetic */ MessagesController$$ExternalSyntheticLambda93(MessagesController messagesController, TLRPC.Updates updates) {
+    public /* synthetic */ MessagesController$$ExternalSyntheticLambda93(MessagesController messagesController, SparseBooleanArray sparseBooleanArray, long j) {
         this.f$0 = messagesController;
-        this.f$1 = updates;
+        this.f$1 = sparseBooleanArray;
+        this.f$2 = j;
     }
 
     public final void run() {
-        this.f$0.m169lambda$createChat$208$orgtelegrammessengerMessagesController(this.f$1);
+        this.f$0.lambda$checkUnreadReactions$335(this.f$1, this.f$2);
     }
 }

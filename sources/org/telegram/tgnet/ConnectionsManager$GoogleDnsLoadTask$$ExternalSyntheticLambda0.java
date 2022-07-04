@@ -12,6 +12,6 @@ public final /* synthetic */ class ConnectionsManager$GoogleDnsLoadTask$$Externa
     }
 
     public final void run() {
-        this.f$0.m2525x742a8d37(this.f$1);
+        this.f$0.lambda$onPostExecute$1(this.f$1);
     }
 }

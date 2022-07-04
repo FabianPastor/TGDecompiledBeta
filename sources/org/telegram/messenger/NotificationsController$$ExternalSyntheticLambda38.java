@@ -1,13 +1,12 @@
 package org.telegram.messenger;
 
 public final /* synthetic */ class NotificationsController$$ExternalSyntheticLambda38 implements Runnable {
-    public final /* synthetic */ NotificationsController f$0;
+    public static final /* synthetic */ NotificationsController$$ExternalSyntheticLambda38 INSTANCE = new NotificationsController$$ExternalSyntheticLambda38();
 
-    public /* synthetic */ NotificationsController$$ExternalSyntheticLambda38(NotificationsController notificationsController) {
-        this.f$0 = notificationsController;
+    private /* synthetic */ NotificationsController$$ExternalSyntheticLambda38() {
     }
 
     public final void run() {
-        this.f$0.m2328x16c2e2d7();
+        NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.pushMessagesUpdated, new Object[0]);
     }
 }

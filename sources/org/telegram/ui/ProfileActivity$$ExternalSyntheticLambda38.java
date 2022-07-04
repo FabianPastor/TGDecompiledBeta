@@ -1,23 +1,29 @@
 package org.telegram.ui;
 
-import android.content.DialogInterface;
+import android.content.Context;
+import android.view.View;
+import org.telegram.ui.Components.RecyclerListView;
 
-public final /* synthetic */ class ProfileActivity$$ExternalSyntheticLambda38 implements DialogInterface.OnClickListener {
+public final /* synthetic */ class ProfileActivity$$ExternalSyntheticLambda38 implements RecyclerListView.OnItemClickListenerExtended {
     public final /* synthetic */ ProfileActivity f$0;
-    public final /* synthetic */ String f$1;
-    public final /* synthetic */ int f$2;
-    public final /* synthetic */ String[] f$3;
-    public final /* synthetic */ String f$4;
+    public final /* synthetic */ long f$1;
+    public final /* synthetic */ Context f$2;
 
-    public /* synthetic */ ProfileActivity$$ExternalSyntheticLambda38(ProfileActivity profileActivity, String str, int i, String[] strArr, String str2) {
+    public /* synthetic */ ProfileActivity$$ExternalSyntheticLambda38(ProfileActivity profileActivity, long j, Context context) {
         this.f$0 = profileActivity;
-        this.f$1 = str;
-        this.f$2 = i;
-        this.f$3 = strArr;
-        this.f$4 = str2;
+        this.f$1 = j;
+        this.f$2 = context;
     }
 
-    public final void onClick(DialogInterface dialogInterface, int i) {
-        this.f$0.m4420lambda$processOnClickOrPress$21$orgtelegramuiProfileActivity(this.f$1, this.f$2, this.f$3, this.f$4, dialogInterface, i);
+    public /* synthetic */ boolean hasDoubleTap(View view, int i) {
+        return RecyclerListView.OnItemClickListenerExtended.CC.$default$hasDoubleTap(this, view, i);
+    }
+
+    public /* synthetic */ void onDoubleTap(View view, int i, float f, float f2) {
+        RecyclerListView.OnItemClickListenerExtended.CC.$default$onDoubleTap(this, view, i, f, f2);
+    }
+
+    public final void onItemClick(View view, int i, float f, float f2) {
+        this.f$0.lambda$createView$4(this.f$1, this.f$2, view, i, f, f2);
     }
 }

@@ -10,6 +10,6 @@ public final /* synthetic */ class GroupCallPip$$ExternalSyntheticLambda0 implem
     }
 
     public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-        this.f$0.m1007lambda$pinnedToCenter$3$orgtelegramuiComponentsGroupCallPip(valueAnimator);
+        this.f$0.lambda$pinnedToCenter$3(valueAnimator);
     }
 }

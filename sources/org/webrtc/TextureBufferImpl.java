@@ -34,48 +34,48 @@ public class TextureBufferImpl implements VideoFrame.TextureBuffer {
 
     /* JADX WARNING: Illegal instructions before constructor call */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    public TextureBufferImpl(int r13, int r14, org.webrtc.VideoFrame.TextureBuffer.Type r15, int r16, android.graphics.Matrix r17, android.os.Handler r18, org.webrtc.YuvConverter r19, java.lang.Runnable r20) {
+    public TextureBufferImpl(int r12, int r13, org.webrtc.VideoFrame.TextureBuffer.Type r14, int r15, android.graphics.Matrix r16, android.os.Handler r17, org.webrtc.YuvConverter r18, java.lang.Runnable r19) {
         /*
-            r12 = this;
+            r11 = this;
             org.webrtc.TextureBufferImpl$1 r10 = new org.webrtc.TextureBufferImpl$1
-            r11 = r20
-            r10.<init>(r11)
-            r0 = r12
-            r1 = r13
-            r2 = r14
-            r3 = r13
-            r4 = r14
-            r5 = r15
-            r6 = r16
-            r7 = r17
-            r8 = r18
-            r9 = r19
+            r0 = r19
+            r10.<init>(r0)
+            r0 = r11
+            r1 = r12
+            r2 = r13
+            r3 = r12
+            r4 = r13
+            r5 = r14
+            r6 = r15
+            r7 = r16
+            r8 = r17
+            r9 = r18
             r0.<init>(r1, r2, r3, r4, r5, r6, r7, r8, r9, r10)
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.webrtc.TextureBufferImpl.<init>(int, int, org.webrtc.VideoFrame$TextureBuffer$Type, int, android.graphics.Matrix, android.os.Handler, org.webrtc.YuvConverter, java.lang.Runnable):void");
     }
 
-    TextureBufferImpl(int width2, int height2, VideoFrame.TextureBuffer.Type type2, int id2, Matrix transformMatrix2, Handler toI420Handler2, YuvConverter yuvConverter2, RefCountMonitor refCountMonitor2) {
-        this(width2, height2, width2, height2, type2, id2, transformMatrix2, toI420Handler2, yuvConverter2, refCountMonitor2);
+    TextureBufferImpl(int i, int i2, VideoFrame.TextureBuffer.Type type2, int i3, Matrix matrix, Handler handler, YuvConverter yuvConverter2, RefCountMonitor refCountMonitor2) {
+        this(i, i2, i, i2, type2, i3, matrix, handler, yuvConverter2, refCountMonitor2);
     }
 
-    private TextureBufferImpl(int unscaledWidth2, int unscaledHeight2, int width2, int height2, VideoFrame.TextureBuffer.Type type2, int id2, Matrix transformMatrix2, Handler toI420Handler2, YuvConverter yuvConverter2, RefCountMonitor refCountMonitor2) {
-        this.unscaledWidth = unscaledWidth2;
-        this.unscaledHeight = unscaledHeight2;
-        this.width = width2;
-        this.height = height2;
+    private TextureBufferImpl(int i, int i2, int i3, int i4, VideoFrame.TextureBuffer.Type type2, int i5, Matrix matrix, Handler handler, YuvConverter yuvConverter2, RefCountMonitor refCountMonitor2) {
+        this.unscaledWidth = i;
+        this.unscaledHeight = i2;
+        this.width = i3;
+        this.height = i4;
         this.type = type2;
-        this.id = id2;
-        this.transformMatrix = transformMatrix2;
-        this.toI420Handler = toI420Handler2;
+        this.id = i5;
+        this.transformMatrix = matrix;
+        this.toI420Handler = handler;
         this.yuvConverter = yuvConverter2;
         this.refCountDelegate = new RefCountDelegate(new TextureBufferImpl$$ExternalSyntheticLambda1(this, refCountMonitor2));
         this.refCountMonitor = refCountMonitor2;
     }
 
-    /* renamed from: lambda$new$0$org-webrtc-TextureBufferImpl  reason: not valid java name */
-    public /* synthetic */ void m1666lambda$new$0$orgwebrtcTextureBufferImpl(RefCountMonitor refCountMonitor2) {
+    /* access modifiers changed from: private */
+    public /* synthetic */ void lambda$new$0(RefCountMonitor refCountMonitor2) {
         refCountMonitor2.onDestroy(this);
     }
 
@@ -102,37 +102,35 @@ public class TextureBufferImpl implements VideoFrame.TextureBuffer {
     public VideoFrame.I420Buffer toI420() {
         try {
             return (VideoFrame.I420Buffer) ThreadUtils.invokeAtFrontUninterruptibly(this.toI420Handler, new TextureBufferImpl$$ExternalSyntheticLambda2(this));
-        } catch (Throwable e) {
-            FileLog.e(e);
-            int frameWidth = getWidth();
-            int frameHeight = getHeight();
-            int stride = ((frameWidth + 7) / 8) * 8;
-            int uvHeight = (frameHeight + 1) / 2;
-            ByteBuffer i420ByteBuffer = JniCommon.nativeAllocateByteBuffer(stride * (frameHeight + uvHeight));
-            while (i420ByteBuffer.hasRemaining()) {
-                i420ByteBuffer.put((byte) 0);
+        } catch (Throwable th) {
+            FileLog.e(th);
+            int width2 = getWidth();
+            int height2 = getHeight();
+            int i = ((width2 + 7) / 8) * 8;
+            int i2 = (height2 + 1) / 2;
+            ByteBuffer nativeAllocateByteBuffer = JniCommon.nativeAllocateByteBuffer((height2 + i2) * i);
+            while (nativeAllocateByteBuffer.hasRemaining()) {
+                nativeAllocateByteBuffer.put((byte) 0);
             }
-            int i = stride / 4;
-            int uPos = (stride * frameHeight) + 0;
-            int vPos = uPos + (stride / 2);
-            i420ByteBuffer.position(0);
-            i420ByteBuffer.limit((stride * frameHeight) + 0);
-            ByteBuffer dataY = i420ByteBuffer.slice();
-            i420ByteBuffer.position(uPos);
-            int uvSize = ((uvHeight - 1) * stride) + (stride / 2);
-            i420ByteBuffer.limit(uPos + uvSize);
-            ByteBuffer dataU = i420ByteBuffer.slice();
-            i420ByteBuffer.position(vPos);
-            i420ByteBuffer.limit(vPos + uvSize);
-            int i2 = vPos;
-            int i3 = uPos;
-            ByteBuffer byteBuffer = i420ByteBuffer;
-            return JavaI420Buffer.wrap(frameWidth, frameHeight, dataY, stride, dataU, stride, i420ByteBuffer.slice(), stride, new TextureBufferImpl$$ExternalSyntheticLambda0(i420ByteBuffer));
+            int i3 = i / 4;
+            int i4 = (i * height2) + 0;
+            int i5 = i / 2;
+            int i6 = i4 + i5;
+            nativeAllocateByteBuffer.position(0);
+            nativeAllocateByteBuffer.limit(i4);
+            ByteBuffer slice = nativeAllocateByteBuffer.slice();
+            nativeAllocateByteBuffer.position(i4);
+            int i7 = ((i2 - 1) * i) + i5;
+            nativeAllocateByteBuffer.limit(i4 + i7);
+            ByteBuffer slice2 = nativeAllocateByteBuffer.slice();
+            nativeAllocateByteBuffer.position(i6);
+            nativeAllocateByteBuffer.limit(i6 + i7);
+            return JavaI420Buffer.wrap(width2, height2, slice, i, slice2, i, nativeAllocateByteBuffer.slice(), i, new TextureBufferImpl$$ExternalSyntheticLambda0(nativeAllocateByteBuffer));
         }
     }
 
-    /* renamed from: lambda$toI420$1$org-webrtc-TextureBufferImpl  reason: not valid java name */
-    public /* synthetic */ VideoFrame.I420Buffer m1667lambda$toI420$1$orgwebrtcTextureBufferImpl() throws Exception {
+    /* access modifiers changed from: private */
+    public /* synthetic */ VideoFrame.I420Buffer lambda$toI420$1() throws Exception {
         return this.yuvConverter.convert(this);
     }
 
@@ -146,12 +144,12 @@ public class TextureBufferImpl implements VideoFrame.TextureBuffer {
         this.refCountDelegate.release();
     }
 
-    public VideoFrame.Buffer cropAndScale(int cropX, int cropY, int cropWidth, int cropHeight, int scaleWidth, int scaleHeight) {
-        Matrix cropAndScaleMatrix = new Matrix();
-        int i = this.height;
-        cropAndScaleMatrix.preTranslate(((float) cropX) / ((float) this.width), ((float) (i - (cropY + cropHeight))) / ((float) i));
-        cropAndScaleMatrix.preScale(((float) cropWidth) / ((float) this.width), ((float) cropHeight) / ((float) this.height));
-        return applyTransformMatrix(cropAndScaleMatrix, Math.round(((float) (this.unscaledWidth * cropWidth)) / ((float) this.width)), Math.round(((float) (this.unscaledHeight * cropHeight)) / ((float) this.height)), scaleWidth, scaleHeight);
+    public VideoFrame.Buffer cropAndScale(int i, int i2, int i3, int i4, int i5, int i6) {
+        Matrix matrix = new Matrix();
+        int i7 = this.height;
+        matrix.preTranslate(((float) i) / ((float) this.width), ((float) (i7 - (i2 + i4))) / ((float) i7));
+        matrix.preScale(((float) i3) / ((float) this.width), ((float) i4) / ((float) this.height));
+        return applyTransformMatrix(matrix, Math.round(((float) (this.unscaledWidth * i3)) / ((float) this.width)), Math.round(((float) (this.unscaledHeight * i4)) / ((float) this.height)), i5, i6);
     }
 
     public int getUnscaledWidth() {
@@ -170,24 +168,25 @@ public class TextureBufferImpl implements VideoFrame.TextureBuffer {
         return this.yuvConverter;
     }
 
-    public TextureBufferImpl applyTransformMatrix(Matrix transformMatrix2, int newWidth, int newHeight) {
-        return applyTransformMatrix(transformMatrix2, newWidth, newHeight, newWidth, newHeight);
+    public TextureBufferImpl applyTransformMatrix(Matrix matrix, int i, int i2) {
+        return applyTransformMatrix(matrix, i, i2, i, i2);
     }
 
-    private TextureBufferImpl applyTransformMatrix(Matrix transformMatrix2, int unscaledWidth2, int unscaledHeight2, int scaledWidth, int scaledHeight) {
-        Matrix newMatrix = new Matrix(this.transformMatrix);
-        newMatrix.preConcat(transformMatrix2);
+    private TextureBufferImpl applyTransformMatrix(Matrix matrix, int i, int i2, int i3, int i4) {
+        Matrix matrix2 = new Matrix(this.transformMatrix);
+        Matrix matrix3 = matrix;
+        matrix2.preConcat(matrix);
         retain();
-        return new TextureBufferImpl(unscaledWidth2, unscaledHeight2, scaledWidth, scaledHeight, this.type, this.id, newMatrix, this.toI420Handler, this.yuvConverter, new RefCountMonitor() {
-            public void onRetain(TextureBufferImpl textureBuffer) {
+        return new TextureBufferImpl(i, i2, i3, i4, this.type, this.id, matrix2, this.toI420Handler, this.yuvConverter, new RefCountMonitor() {
+            public void onRetain(TextureBufferImpl textureBufferImpl) {
                 TextureBufferImpl.this.refCountMonitor.onRetain(TextureBufferImpl.this);
             }
 
-            public void onRelease(TextureBufferImpl textureBuffer) {
+            public void onRelease(TextureBufferImpl textureBufferImpl) {
                 TextureBufferImpl.this.refCountMonitor.onRelease(TextureBufferImpl.this);
             }
 
-            public void onDestroy(TextureBufferImpl textureBuffer) {
+            public void onDestroy(TextureBufferImpl textureBufferImpl) {
                 TextureBufferImpl.this.release();
             }
         });

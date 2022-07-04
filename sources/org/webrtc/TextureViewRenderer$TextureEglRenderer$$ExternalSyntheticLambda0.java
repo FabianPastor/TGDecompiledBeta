@@ -10,6 +10,6 @@ public final /* synthetic */ class TextureViewRenderer$TextureEglRenderer$$Exter
     }
 
     public final void run() {
-        this.f$0.m1670xd9a95a80();
+        this.f$0.lambda$onFirstFrameRendered$0();
     }
 }

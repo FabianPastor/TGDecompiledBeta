@@ -1,15 +1,14 @@
 package org.telegram.ui.Components;
 
-import org.telegram.ui.ActionBar.AlertDialog;
+import org.telegram.ui.Components.NumberPicker;
 
-public final /* synthetic */ class AlertsCreator$$ExternalSyntheticLambda113 implements Runnable {
-    public final /* synthetic */ AlertDialog f$0;
+public final /* synthetic */ class AlertsCreator$$ExternalSyntheticLambda113 implements NumberPicker.Formatter {
+    public static final /* synthetic */ AlertsCreator$$ExternalSyntheticLambda113 INSTANCE = new AlertsCreator$$ExternalSyntheticLambda113();
 
-    public /* synthetic */ AlertsCreator$$ExternalSyntheticLambda113(AlertDialog alertDialog) {
-        this.f$0 = alertDialog;
+    private /* synthetic */ AlertsCreator$$ExternalSyntheticLambda113() {
     }
 
-    public final void run() {
-        AlertsCreator.lambda$performAskAQuestion$20(this.f$0);
+    public final String format(int i) {
+        return AlertsCreator.lambda$createDatePickerDialog$41(i);
     }
 }

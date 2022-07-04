@@ -12,6 +12,6 @@ public final /* synthetic */ class FilterGLThread$$ExternalSyntheticLambda4 impl
     }
 
     public final void run() {
-        this.f$0.m965lambda$setVideoSize$3$orgtelegramuiComponentsFilterGLThread(this.f$1, this.f$2);
+        this.f$0.lambda$setSurfaceTextureSize$6(this.f$1, this.f$2);
     }
 }

@@ -1,21 +1,16 @@
 package org.telegram.ui.Components;
 
-import android.content.DialogInterface;
+import android.view.KeyEvent;
+import android.widget.TextView;
+import org.telegram.messenger.AndroidUtilities;
 
-public final /* synthetic */ class AlertsCreator$$ExternalSyntheticLambda84 implements DialogInterface.OnClickListener {
-    public final /* synthetic */ long f$0;
-    public final /* synthetic */ int[] f$1;
-    public final /* synthetic */ int f$2;
-    public final /* synthetic */ Runnable f$3;
+public final /* synthetic */ class AlertsCreator$$ExternalSyntheticLambda84 implements TextView.OnEditorActionListener {
+    public static final /* synthetic */ AlertsCreator$$ExternalSyntheticLambda84 INSTANCE = new AlertsCreator$$ExternalSyntheticLambda84();
 
-    public /* synthetic */ AlertsCreator$$ExternalSyntheticLambda84(long j, int[] iArr, int i, Runnable runnable) {
-        this.f$0 = j;
-        this.f$1 = iArr;
-        this.f$2 = i;
-        this.f$3 = runnable;
+    private /* synthetic */ AlertsCreator$$ExternalSyntheticLambda84() {
     }
 
-    public final void onClick(DialogInterface dialogInterface, int i) {
-        AlertsCreator.lambda$createColorSelectDialog$89(this.f$0, this.f$1, this.f$2, this.f$3, dialogInterface, i);
+    public final boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
+        return AndroidUtilities.hideKeyboard(textView);
     }
 }

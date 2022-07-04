@@ -12,6 +12,6 @@ public final /* synthetic */ class RingtoneDataStore$$ExternalSyntheticLambda2 i
     }
 
     public final void run() {
-        this.f$0.m2417x495026ca(this.f$1);
+        this.f$0.lambda$checkRingtoneSoundsLoaded$5(this.f$1);
     }
 }

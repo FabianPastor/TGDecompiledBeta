@@ -10,6 +10,6 @@ public final /* synthetic */ class ProfileActivity$$ExternalSyntheticLambda0 imp
     }
 
     public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-        this.f$0.m4394lambda$createView$14$orgtelegramuiProfileActivity(valueAnimator);
+        this.f$0.lambda$onCustomTransitionAnimation$30(valueAnimator);
     }
 }

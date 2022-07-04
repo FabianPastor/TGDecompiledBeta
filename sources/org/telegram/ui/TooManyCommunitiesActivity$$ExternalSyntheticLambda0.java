@@ -10,6 +10,6 @@ public final /* synthetic */ class TooManyCommunitiesActivity$$ExternalSynthetic
     }
 
     public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-        this.f$0.m4708x1d4158b0(valueAnimator);
+        this.f$0.lambda$loadInactiveChannels$3(valueAnimator);
     }
 }

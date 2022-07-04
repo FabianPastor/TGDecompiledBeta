@@ -18,6 +18,6 @@ public final /* synthetic */ class LimitPreviewView$$ExternalSyntheticLambda0 im
     }
 
     public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-        this.f$0.m1237xfbb0c7b7(this.f$1, this.f$2, this.f$3, this.f$4, valueAnimator);
+        this.f$0.lambda$onLayout$0(this.f$1, this.f$2, this.f$3, this.f$4, valueAnimator);
     }
 }

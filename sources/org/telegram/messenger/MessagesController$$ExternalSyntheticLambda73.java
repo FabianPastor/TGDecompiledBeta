@@ -1,24 +1,23 @@
 package org.telegram.messenger;
 
-import org.telegram.tgnet.TLRPC;
-import org.telegram.ui.ActionBar.BaseFragment;
-
 public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda73 implements Runnable {
     public final /* synthetic */ MessagesController f$0;
-    public final /* synthetic */ TLRPC.TL_error f$1;
-    public final /* synthetic */ BaseFragment f$2;
-    public final /* synthetic */ TLRPC.TL_channels_editAdmin f$3;
-    public final /* synthetic */ boolean f$4;
+    public final /* synthetic */ long f$1;
+    public final /* synthetic */ int f$2;
+    public final /* synthetic */ boolean f$3;
+    public final /* synthetic */ int f$4;
+    public final /* synthetic */ int f$5;
 
-    public /* synthetic */ MessagesController$$ExternalSyntheticLambda73(MessagesController messagesController, TLRPC.TL_error tL_error, BaseFragment baseFragment, TLRPC.TL_channels_editAdmin tL_channels_editAdmin, boolean z) {
+    public /* synthetic */ MessagesController$$ExternalSyntheticLambda73(MessagesController messagesController, long j, int i, boolean z, int i2, int i3) {
         this.f$0 = messagesController;
-        this.f$1 = tL_error;
-        this.f$2 = baseFragment;
-        this.f$3 = tL_channels_editAdmin;
-        this.f$4 = z;
+        this.f$1 = j;
+        this.f$2 = i;
+        this.f$3 = z;
+        this.f$4 = i2;
+        this.f$5 = i3;
     }
 
     public final void run() {
-        this.f$0.m403xc3a34a72(this.f$1, this.f$2, this.f$3, this.f$4);
+        this.f$0.lambda$markDialogAsRead$205(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5);
     }
 }

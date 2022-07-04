@@ -12,6 +12,6 @@ public final /* synthetic */ class JoinGroupAlert$$ExternalSyntheticLambda0 impl
     }
 
     public final void onDismiss(DialogInterface dialogInterface) {
-        this.f$0.m1080lambda$new$2$orgtelegramuiComponentsJoinGroupAlert(this.f$1, dialogInterface);
+        this.f$0.lambda$new$4(this.f$1, dialogInterface);
     }
 }

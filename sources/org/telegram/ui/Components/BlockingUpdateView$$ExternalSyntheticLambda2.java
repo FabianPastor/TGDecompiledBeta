@@ -12,6 +12,6 @@ public final /* synthetic */ class BlockingUpdateView$$ExternalSyntheticLambda2 
     }
 
     public final void run() {
-        this.f$0.m570lambda$show$2$orgtelegramuiComponentsBlockingUpdateView(this.f$1);
+        this.f$0.lambda$show$2(this.f$1);
     }
 }

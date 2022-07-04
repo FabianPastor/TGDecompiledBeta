@@ -8,6 +8,6 @@ public final /* synthetic */ class ChatAvatarContainer$$ExternalSyntheticLambda3
     }
 
     public final void run() {
-        this.f$0.m860xb8f0eCLASSNAME();
+        this.f$0.lambda$fadeOutToLessWidth$3();
     }
 }

@@ -8,6 +8,6 @@ public final /* synthetic */ class MotionBackgroundDrawable$$ExternalSyntheticLa
     }
 
     public final void run() {
-        this.f$0.m1117lambda$new$0$orgtelegramuiComponentsMotionBackgroundDrawable();
+        this.f$0.lambda$new$0();
     }
 }

@@ -11,15 +11,17 @@ public class MediaConstraints {
         private final String key;
         private final String value;
 
-        public KeyValuePair(String key2, String value2) {
-            this.key = key2;
-            this.value = value2;
+        public KeyValuePair(String str, String str2) {
+            this.key = str;
+            this.value = str2;
         }
 
+        @CalledByNative("KeyValuePair")
         public String getKey() {
             return this.key;
         }
 
+        @CalledByNative("KeyValuePair")
         public String getValue() {
             return this.value;
         }
@@ -28,15 +30,15 @@ public class MediaConstraints {
             return this.key + ": " + this.value;
         }
 
-        public boolean equals(Object other) {
-            if (this == other) {
+        public boolean equals(Object obj) {
+            if (this == obj) {
                 return true;
             }
-            if (other == null || getClass() != other.getClass()) {
+            if (obj == null || getClass() != obj.getClass()) {
                 return false;
             }
-            KeyValuePair that = (KeyValuePair) other;
-            if (!this.key.equals(that.key) || !this.value.equals(that.value)) {
+            KeyValuePair keyValuePair = (KeyValuePair) obj;
+            if (!this.key.equals(keyValuePair.key) || !this.value.equals(keyValuePair.value)) {
                 return false;
             }
             return true;
@@ -48,15 +50,15 @@ public class MediaConstraints {
     }
 
     private static String stringifyKeyValuePairList(List<KeyValuePair> list) {
-        StringBuilder builder = new StringBuilder("[");
-        for (KeyValuePair pair : list) {
-            if (builder.length() > 1) {
-                builder.append(", ");
+        StringBuilder sb = new StringBuilder("[");
+        for (KeyValuePair next : list) {
+            if (sb.length() > 1) {
+                sb.append(", ");
             }
-            builder.append(pair.toString());
+            sb.append(next.toString());
         }
-        builder.append("]");
-        return builder.toString();
+        sb.append("]");
+        return sb.toString();
     }
 
     public String toString() {
@@ -64,11 +66,13 @@ public class MediaConstraints {
     }
 
     /* access modifiers changed from: package-private */
+    @CalledByNative
     public List<KeyValuePair> getMandatory() {
         return this.mandatory;
     }
 
     /* access modifiers changed from: package-private */
+    @CalledByNative
     public List<KeyValuePair> getOptional() {
         return this.optional;
     }

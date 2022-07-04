@@ -11,6 +11,6 @@ public final /* synthetic */ class ScrollSlidingTabStrip$3$$ExternalSyntheticLam
     }
 
     public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-        this.f$0.m1319xddfcbcca(valueAnimator);
+        this.f$0.lambda$createAnimator$0(valueAnimator);
     }
 }

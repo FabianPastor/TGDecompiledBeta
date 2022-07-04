@@ -10,6 +10,6 @@ public final /* synthetic */ class TextSelectionHelper$$ExternalSyntheticLambda0
     }
 
     public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-        this.f$0.m2825xb705f8cf(valueAnimator);
+        this.f$0.lambda$showHandleViews$0(valueAnimator);
     }
 }

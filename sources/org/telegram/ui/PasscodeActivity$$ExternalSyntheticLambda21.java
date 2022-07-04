@@ -1,15 +1,14 @@
 package org.telegram.ui;
 
-import android.view.View;
+import org.telegram.ui.Components.NumberPicker;
 
-public final /* synthetic */ class PasscodeActivity$$ExternalSyntheticLambda21 implements View.OnFocusChangeListener {
-    public final /* synthetic */ PasscodeActivity f$0;
+public final /* synthetic */ class PasscodeActivity$$ExternalSyntheticLambda21 implements NumberPicker.Formatter {
+    public static final /* synthetic */ PasscodeActivity$$ExternalSyntheticLambda21 INSTANCE = new PasscodeActivity$$ExternalSyntheticLambda21();
 
-    public /* synthetic */ PasscodeActivity$$ExternalSyntheticLambda21(PasscodeActivity passcodeActivity) {
-        this.f$0 = passcodeActivity;
+    private /* synthetic */ PasscodeActivity$$ExternalSyntheticLambda21() {
     }
 
-    public final void onFocusChange(View view, boolean z) {
-        this.f$0.m4009lambda$createView$8$orgtelegramuiPasscodeActivity(view, z);
+    public final String format(int i) {
+        return PasscodeActivity.lambda$createView$3(i);
     }
 }

@@ -1,22 +1,18 @@
 package org.telegram.ui;
 
-import java.util.concurrent.CountDownLatch;
-import org.telegram.messenger.MessagesStorage;
+import android.content.Context;
+import android.view.View;
 
-public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda87 implements Runnable {
+public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda87 implements View.OnClickListener {
     public final /* synthetic */ ChatActivity f$0;
-    public final /* synthetic */ MessagesStorage f$1;
-    public final /* synthetic */ int f$2;
-    public final /* synthetic */ CountDownLatch f$3;
+    public final /* synthetic */ Context f$1;
 
-    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda87(ChatActivity chatActivity, MessagesStorage messagesStorage, int i, CountDownLatch countDownLatch) {
+    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda87(ChatActivity chatActivity, Context context) {
         this.f$0 = chatActivity;
-        this.f$1 = messagesStorage;
-        this.f$2 = i;
-        this.f$3 = countDownLatch;
+        this.f$1 = context;
     }
 
-    public final void run() {
-        this.f$0.m3029lambda$onFragmentCreate$8$orgtelegramuiChatActivity(this.f$1, this.f$2, this.f$3);
+    public final void onClick(View view) {
+        this.f$0.lambda$createView$36(this.f$1, view);
     }
 }

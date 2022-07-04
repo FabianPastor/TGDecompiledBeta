@@ -10,6 +10,6 @@ public final /* synthetic */ class NotificationsCustomSettingsActivity$$External
     }
 
     public final void run() {
-        this.f$0.m3976x5cCLASSNAMEf(this.f$1);
+        this.f$0.lambda$createView$4(this.f$1);
     }
 }

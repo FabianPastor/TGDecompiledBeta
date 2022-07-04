@@ -12,6 +12,6 @@ public final /* synthetic */ class ConnectionsManager$DnsTxtLoadTask$$ExternalSy
     }
 
     public final void run() {
-        this.f$0.m2520xfe7b2956(this.f$1);
+        this.f$0.lambda$onPostExecute$1(this.f$1);
     }
 }

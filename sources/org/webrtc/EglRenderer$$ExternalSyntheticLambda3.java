@@ -12,6 +12,6 @@ public final /* synthetic */ class EglRenderer$$ExternalSyntheticLambda3 impleme
     }
 
     public final void run() {
-        this.f$0.m1650lambda$release$1$orgwebrtcEglRenderer(this.f$1);
+        this.f$0.lambda$release$1(this.f$1);
     }
 }

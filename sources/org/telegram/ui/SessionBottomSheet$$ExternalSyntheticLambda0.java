@@ -12,6 +12,6 @@ public final /* synthetic */ class SessionBottomSheet$$ExternalSyntheticLambda0 
     }
 
     public final void onClick(DialogInterface dialogInterface, int i) {
-        this.f$0.m4583lambda$copyText$1$orgtelegramuiSessionBottomSheet(this.f$1, dialogInterface, i);
+        this.f$0.lambda$copyText$1(this.f$1, dialogInterface, i);
     }
 }

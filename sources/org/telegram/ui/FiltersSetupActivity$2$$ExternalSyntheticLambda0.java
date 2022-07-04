@@ -10,6 +10,6 @@ public final /* synthetic */ class FiltersSetupActivity$2$$ExternalSyntheticLamb
     }
 
     public final void run() {
-        this.f$0.m3489lambda$onTouchEvent$0$orgtelegramuiFiltersSetupActivity$2();
+        this.f$0.lambda$onTouchEvent$0();
     }
 }

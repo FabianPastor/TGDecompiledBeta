@@ -1,19 +1,15 @@
 package org.telegram.ui;
 
-import org.telegram.tgnet.RequestDelegate;
-import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC;
-
-public final /* synthetic */ class ProfileActivity$$ExternalSyntheticLambda27 implements RequestDelegate {
+public final /* synthetic */ class ProfileActivity$$ExternalSyntheticLambda27 implements Runnable {
     public final /* synthetic */ ProfileActivity f$0;
-    public final /* synthetic */ String f$1;
+    public final /* synthetic */ Object[] f$1;
 
-    public /* synthetic */ ProfileActivity$$ExternalSyntheticLambda27(ProfileActivity profileActivity, String str) {
+    public /* synthetic */ ProfileActivity$$ExternalSyntheticLambda27(ProfileActivity profileActivity, Object[] objArr) {
         this.f$0 = profileActivity;
-        this.f$1 = str;
+        this.f$1 = objArr;
     }
 
-    public final void run(TLObject tLObject, TLRPC.TL_error tL_error) {
-        this.f$0.m4404lambda$didUploadPhoto$35$orgtelegramuiProfileActivity(this.f$1, tLObject, tL_error);
+    public final void run() {
+        this.f$0.lambda$didReceivedNotification$29(this.f$1);
     }
 }

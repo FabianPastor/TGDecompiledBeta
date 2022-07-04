@@ -1,15 +1,17 @@
 package org.telegram.ui.Components;
 
-import android.view.View;
+import java.util.ArrayList;
+import java.util.Comparator;
+import org.telegram.messenger.MediaController;
 
-public final /* synthetic */ class ChatAttachAlertPhotoLayout$$ExternalSyntheticLambda12 implements View.OnClickListener {
-    public final /* synthetic */ ChatAttachAlertPhotoLayout f$0;
+public final /* synthetic */ class ChatAttachAlertPhotoLayout$$ExternalSyntheticLambda12 implements Comparator {
+    public final /* synthetic */ ArrayList f$0;
 
-    public /* synthetic */ ChatAttachAlertPhotoLayout$$ExternalSyntheticLambda12(ChatAttachAlertPhotoLayout chatAttachAlertPhotoLayout) {
-        this.f$0 = chatAttachAlertPhotoLayout;
+    public /* synthetic */ ChatAttachAlertPhotoLayout$$ExternalSyntheticLambda12(ArrayList arrayList) {
+        this.f$0 = arrayList;
     }
 
-    public final void onClick(View view) {
-        this.f$0.m834x5aCLASSNAMEcf(view);
+    public final int compare(Object obj, Object obj2) {
+        return ChatAttachAlertPhotoLayout.lambda$updateAlbumsDropDown$8(this.f$0, (MediaController.AlbumEntry) obj, (MediaController.AlbumEntry) obj2);
     }
 }

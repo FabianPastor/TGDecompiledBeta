@@ -8,6 +8,6 @@ public final /* synthetic */ class MediaDataController$$ExternalSyntheticLambda1
     }
 
     public final void run() {
-        this.f$0.m2019lambda$loadHints$105$orgtelegrammessengerMediaDataController();
+        this.f$0.lambda$clearTopPeers$111();
     }
 }

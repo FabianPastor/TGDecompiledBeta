@@ -17,6 +17,6 @@ public final /* synthetic */ class ChatAttachAlertContactsLayout$ShareSearchAdap
     }
 
     public final void run() {
-        this.f$0.m781xcea3a044(this.f$1, this.f$2, this.f$3);
+        this.f$0.lambda$updateSearchResults$3(this.f$1, this.f$2, this.f$3);
     }
 }

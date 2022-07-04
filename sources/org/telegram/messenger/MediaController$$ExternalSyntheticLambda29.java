@@ -1,15 +1,17 @@
 package org.telegram.messenger;
 
-import org.telegram.ui.ActionBar.AlertDialog;
-
 public final /* synthetic */ class MediaController$$ExternalSyntheticLambda29 implements Runnable {
-    public final /* synthetic */ AlertDialog f$0;
+    public final /* synthetic */ MediaController f$0;
+    public final /* synthetic */ MessageObject f$1;
+    public final /* synthetic */ float f$2;
 
-    public /* synthetic */ MediaController$$ExternalSyntheticLambda29(AlertDialog alertDialog) {
-        this.f$0 = alertDialog;
+    public /* synthetic */ MediaController$$ExternalSyntheticLambda29(MediaController mediaController, MessageObject messageObject, float f) {
+        this.f$0 = mediaController;
+        this.f$1 = messageObject;
+        this.f$2 = f;
     }
 
     public final void run() {
-        MediaController.lambda$saveFile$35(this.f$0);
+        this.f$0.lambda$setPlaybackSpeed$15(this.f$1, this.f$2);
     }
 }

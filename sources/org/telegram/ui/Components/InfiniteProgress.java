@@ -7,8 +7,6 @@ import android.graphics.RectF;
 import org.telegram.messenger.AndroidUtilities;
 
 public class InfiniteProgress {
-    private static final float risingTime = 500.0f;
-    private static final float rotationTime = 2000.0f;
     private RectF cicleRect = new RectF();
     private float currentCircleLength;
     private float currentProgressTime;
@@ -19,34 +17,34 @@ public class InfiniteProgress {
     private int radius;
     private boolean risingCircleLength;
 
-    public InfiniteProgress(int rad) {
-        this.radius = rad;
+    public InfiniteProgress(int i) {
+        this.radius = i;
         Paint paint = new Paint(1);
         this.progressPaint = paint;
         paint.setStyle(Paint.Style.STROKE);
         this.progressPaint.setStrokeCap(Paint.Cap.ROUND);
     }
 
-    public void setAlpha(float alpha) {
-        this.progressPaint.setAlpha((int) (((float) Color.alpha(this.progressColor)) * alpha));
+    public void setAlpha(float f) {
+        this.progressPaint.setAlpha((int) (f * ((float) Color.alpha(this.progressColor))));
     }
 
-    public void setColor(int color) {
-        this.progressColor = color;
-        this.progressPaint.setColor(color);
+    public void setColor(int i) {
+        this.progressColor = i;
+        this.progressPaint.setColor(i);
     }
 
     private void updateAnimation() {
-        long newTime = System.currentTimeMillis();
-        long dt = newTime - this.lastUpdateTime;
-        if (dt > 17) {
-            dt = 17;
+        long currentTimeMillis = System.currentTimeMillis();
+        long j = currentTimeMillis - this.lastUpdateTime;
+        if (j > 17) {
+            j = 17;
         }
-        this.lastUpdateTime = newTime;
-        float f = this.radOffset + (((float) (360 * dt)) / 2000.0f);
+        this.lastUpdateTime = currentTimeMillis;
+        float f = this.radOffset + (((float) (360 * j)) / 2000.0f);
         this.radOffset = f;
         this.radOffset = f - ((float) (((int) (f / 360.0f)) * 360));
-        float f2 = this.currentProgressTime + ((float) dt);
+        float f2 = this.currentProgressTime + ((float) j);
         this.currentProgressTime = f2;
         if (f2 >= 500.0f) {
             this.currentProgressTime = 500.0f;
@@ -67,11 +65,11 @@ public class InfiniteProgress {
         }
     }
 
-    public void draw(Canvas canvas, float cx, float cy, float scale) {
+    public void draw(Canvas canvas, float f, float f2, float f3) {
         RectF rectF = this.cicleRect;
         int i = this.radius;
-        rectF.set(cx - (((float) i) * scale), cy - (((float) i) * scale), (((float) i) * scale) + cx, (((float) i) * scale) + cy);
-        this.progressPaint.setStrokeWidth(((float) AndroidUtilities.dp(2.0f)) * scale);
+        rectF.set(f - (((float) i) * f3), f2 - (((float) i) * f3), f + (((float) i) * f3), f2 + (((float) i) * f3));
+        this.progressPaint.setStrokeWidth(((float) AndroidUtilities.dp(2.0f)) * f3);
         canvas.drawArc(this.cicleRect, this.radOffset, this.currentCircleLength, false, this.progressPaint);
         updateAnimation();
     }

@@ -10,6 +10,6 @@ public final /* synthetic */ class VoIPPiPView$$ExternalSyntheticLambda0 impleme
     }
 
     public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-        this.f$0.m1615lambda$new$0$orgtelegramuiComponentsvoipVoIPPiPView(valueAnimator);
+        this.f$0.lambda$new$0(valueAnimator);
     }
 }

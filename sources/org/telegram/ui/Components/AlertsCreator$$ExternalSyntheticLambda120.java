@@ -1,36 +1,21 @@
 package org.telegram.ui.Components;
 
-import org.telegram.messenger.MessagesStorage;
-import org.telegram.tgnet.TLRPC;
-import org.telegram.ui.ActionBar.BaseFragment;
-import org.telegram.ui.ActionBar.Theme;
+import org.telegram.ui.Components.NumberPicker;
 
-public final /* synthetic */ class AlertsCreator$$ExternalSyntheticLambda120 implements MessagesStorage.IntCallback {
-    public final /* synthetic */ BaseFragment f$0;
-    public final /* synthetic */ boolean f$1;
-    public final /* synthetic */ boolean f$2;
-    public final /* synthetic */ TLRPC.Chat f$3;
-    public final /* synthetic */ TLRPC.User f$4;
-    public final /* synthetic */ boolean f$5;
-    public final /* synthetic */ boolean f$6;
-    public final /* synthetic */ MessagesStorage.BooleanCallback f$7;
-    public final /* synthetic */ Theme.ResourcesProvider f$8;
-    public final /* synthetic */ boolean[] f$9;
+public final /* synthetic */ class AlertsCreator$$ExternalSyntheticLambda120 implements NumberPicker.OnScrollListener {
+    public final /* synthetic */ boolean f$0;
+    public final /* synthetic */ NumberPicker f$1;
+    public final /* synthetic */ NumberPicker f$2;
+    public final /* synthetic */ NumberPicker f$3;
 
-    public /* synthetic */ AlertsCreator$$ExternalSyntheticLambda120(BaseFragment baseFragment, boolean z, boolean z2, TLRPC.Chat chat, TLRPC.User user, boolean z3, boolean z4, MessagesStorage.BooleanCallback booleanCallback, Theme.ResourcesProvider resourcesProvider, boolean[] zArr) {
-        this.f$0 = baseFragment;
-        this.f$1 = z;
-        this.f$2 = z2;
-        this.f$3 = chat;
-        this.f$4 = user;
-        this.f$5 = z3;
-        this.f$6 = z4;
-        this.f$7 = booleanCallback;
-        this.f$8 = resourcesProvider;
-        this.f$9 = zArr;
+    public /* synthetic */ AlertsCreator$$ExternalSyntheticLambda120(boolean z, NumberPicker numberPicker, NumberPicker numberPicker2, NumberPicker numberPicker3) {
+        this.f$0 = z;
+        this.f$1 = numberPicker;
+        this.f$2 = numberPicker2;
+        this.f$3 = numberPicker3;
     }
 
-    public final void run(int i) {
-        AlertsCreator.lambda$createClearOrDeleteDialogAlert$24(this.f$0, this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6, this.f$7, this.f$8, this.f$9, i);
+    public final void onScrollStateChange(NumberPicker numberPicker, int i) {
+        AlertsCreator.lambda$createDatePickerDialog$45(this.f$0, this.f$1, this.f$2, this.f$3, numberPicker, i);
     }
 }

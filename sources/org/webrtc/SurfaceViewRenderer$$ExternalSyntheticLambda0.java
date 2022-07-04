@@ -12,6 +12,6 @@ public final /* synthetic */ class SurfaceViewRenderer$$ExternalSyntheticLambda0
     }
 
     public final void run() {
-        this.f$0.m1665lambda$onFrameResolutionChanged$0$orgwebrtcSurfaceViewRenderer(this.f$1, this.f$2);
+        this.f$0.lambda$onFrameResolutionChanged$0(this.f$1, this.f$2);
     }
 }

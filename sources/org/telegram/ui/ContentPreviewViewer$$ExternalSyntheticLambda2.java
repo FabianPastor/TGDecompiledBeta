@@ -10,6 +10,6 @@ public final /* synthetic */ class ContentPreviewViewer$$ExternalSyntheticLambda
     }
 
     public final void onClick(View view) {
-        this.f$0.m3347x74051990(view);
+        this.f$0.lambda$showUnlockPremiumView$1(view);
     }
 }

@@ -6,26 +6,22 @@ import android.text.Spanned;
 public class CodepointsLengthInputFilter implements InputFilter {
     private final int mMax;
 
-    public CodepointsLengthInputFilter(int max) {
-        this.mMax = max;
+    public CodepointsLengthInputFilter(int i) {
+        this.mMax = i;
     }
 
-    public CharSequence filter(CharSequence source, int start, int end, Spanned dest, int dstart, int dend) {
-        int keep = this.mMax - (Character.codePointCount(dest, 0, dest.length()) - Character.codePointCount(dest, dstart, dend));
-        if (keep <= 0) {
+    public CharSequence filter(CharSequence charSequence, int i, int i2, Spanned spanned, int i3, int i4) {
+        int codePointCount = this.mMax - (Character.codePointCount(spanned, 0, spanned.length()) - Character.codePointCount(spanned, i3, i4));
+        if (codePointCount <= 0) {
             return "";
         }
-        if (keep >= Character.codePointCount(source, start, end)) {
+        if (codePointCount >= Character.codePointCount(charSequence, i, i2)) {
             return null;
         }
-        int keep2 = keep + start;
-        if (!Character.isHighSurrogate(source.charAt(keep2 - 1)) || keep2 - 1 != start) {
-            return source.subSequence(start, keep2);
+        int i5 = codePointCount + i;
+        if (!Character.isHighSurrogate(charSequence.charAt(i5 - 1)) || i5 - 1 != i) {
+            return charSequence.subSequence(i, i5);
         }
         return "";
-    }
-
-    public int getMax() {
-        return this.mMax;
     }
 }

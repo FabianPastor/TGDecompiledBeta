@@ -16,6 +16,6 @@ public final /* synthetic */ class SharedMediaLayout$5$$ExternalSyntheticLambda0
     }
 
     public final void onClick(View view) {
-        this.f$0.m1391lambda$onClick$0$orgtelegramuiComponentsSharedMediaLayout$5(this.f$1, this.f$2, view);
+        this.f$0.lambda$onClick$0(this.f$1, this.f$2, view);
     }
 }

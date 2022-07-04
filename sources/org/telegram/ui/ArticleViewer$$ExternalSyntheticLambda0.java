@@ -10,6 +10,6 @@ public final /* synthetic */ class ArticleViewer$$ExternalSyntheticLambda0 imple
     }
 
     public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-        this.f$0.m2665lambda$checkScrollAnimated$29$orgtelegramuiArticleViewer(valueAnimator);
+        this.f$0.lambda$checkScrollAnimated$29(valueAnimator);
     }
 }

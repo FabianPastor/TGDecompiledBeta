@@ -17,12 +17,13 @@ import org.telegram.messenger.ImageReceiver;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.UserObject;
 import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC;
+import org.telegram.tgnet.TLRPC$Chat;
+import org.telegram.tgnet.TLRPC$ChatInvite;
+import org.telegram.tgnet.TLRPC$User;
 import org.telegram.ui.ActionBar.Theme;
 
 public class SenderSelectView extends View {
     private static final FloatPropertyCompat<SenderSelectView> MENU_PROGRESS = new SimpleFloatPropertyCompat("menuProgress", SenderSelectView$$ExternalSyntheticLambda3.INSTANCE, SenderSelectView$$ExternalSyntheticLambda4.INSTANCE).setMultiplier(100.0f);
-    private static final float SPRING_MULTIPLIER = 100.0f;
     private AvatarDrawable avatarDrawable = new AvatarDrawable();
     private ImageReceiver avatarImage = new ImageReceiver(this);
     private Paint backgroundPaint = new Paint(1);
@@ -36,9 +37,10 @@ public class SenderSelectView extends View {
     private boolean scaleOut;
     private Drawable selectorDrawable;
 
-    static /* synthetic */ void lambda$static$1(SenderSelectView obj, float value) {
-        obj.menuProgress = value;
-        obj.invalidate();
+    /* access modifiers changed from: private */
+    public static /* synthetic */ void lambda$static$1(SenderSelectView senderSelectView, float f) {
+        senderSelectView.menuProgress = f;
+        senderSelectView.invalidate();
     }
 
     public SenderSelectView(Context context) {
@@ -72,65 +74,63 @@ public class SenderSelectView extends View {
     }
 
     /* access modifiers changed from: protected */
-    public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+    public void onMeasure(int i, int i2) {
         super.onMeasure(View.MeasureSpec.makeMeasureSpec(getLayoutParams().width, NUM), View.MeasureSpec.makeMeasureSpec(getLayoutParams().height, NUM));
         this.avatarImage.setImageCoords(0.0f, 0.0f, (float) getMeasuredWidth(), (float) getMeasuredHeight());
     }
 
     /* access modifiers changed from: protected */
     public void onDraw(Canvas canvas) {
-        float sc;
         canvas.save();
+        float f = 1.0f;
         if (this.scaleOut) {
-            sc = 1.0f - this.menuProgress;
+            f = 1.0f - this.menuProgress;
         } else if (this.scaleIn) {
-            sc = this.menuProgress;
-        } else {
-            sc = 1.0f;
+            f = this.menuProgress;
         }
-        canvas.scale(sc, sc, ((float) getWidth()) / 2.0f, ((float) getHeight()) / 2.0f);
+        canvas.scale(f, f, ((float) getWidth()) / 2.0f, ((float) getHeight()) / 2.0f);
         super.onDraw(canvas);
         this.avatarImage.draw(canvas);
-        int alpha = (int) (this.menuProgress * 255.0f);
-        this.backgroundPaint.setAlpha(alpha);
+        int i = (int) (this.menuProgress * 255.0f);
+        this.backgroundPaint.setAlpha(i);
         canvas.drawCircle(((float) getWidth()) / 2.0f, ((float) getHeight()) / 2.0f, ((float) Math.min(getWidth(), getHeight())) / 2.0f, this.backgroundPaint);
         canvas.save();
-        this.menuPaint.setAlpha(alpha);
-        float padding = ((float) AndroidUtilities.dp(9.0f)) + this.menuPaint.getStrokeWidth();
+        this.menuPaint.setAlpha(i);
+        float dp = ((float) AndroidUtilities.dp(9.0f)) + this.menuPaint.getStrokeWidth();
         Canvas canvas2 = canvas;
-        float f = padding;
-        canvas2.drawLine(f, padding, ((float) getWidth()) - padding, ((float) getHeight()) - padding, this.menuPaint);
-        canvas2.drawLine(f, ((float) getHeight()) - padding, ((float) getWidth()) - padding, padding, this.menuPaint);
+        float f2 = dp;
+        canvas2.drawLine(f2, dp, ((float) getWidth()) - dp, ((float) getHeight()) - dp, this.menuPaint);
+        canvas2.drawLine(f2, ((float) getHeight()) - dp, ((float) getWidth()) - dp, dp, this.menuPaint);
         canvas.restore();
         this.selectorDrawable.setBounds(0, 0, getWidth(), getHeight());
         this.selectorDrawable.draw(canvas);
         canvas.restore();
     }
 
-    public void setAvatar(TLObject obj) {
-        String objName = "";
-        if (obj instanceof TLRPC.User) {
-            objName = UserObject.getFirstName((TLRPC.User) obj);
-        } else if (obj instanceof TLRPC.Chat) {
-            objName = ((TLRPC.Chat) obj).title;
-        } else if (obj instanceof TLRPC.ChatInvite) {
-            objName = ((TLRPC.ChatInvite) obj).title;
+    public void setAvatar(TLObject tLObject) {
+        String str;
+        if (tLObject instanceof TLRPC$User) {
+            str = UserObject.getFirstName((TLRPC$User) tLObject);
+        } else if (tLObject instanceof TLRPC$Chat) {
+            str = ((TLRPC$Chat) tLObject).title;
+        } else {
+            str = tLObject instanceof TLRPC$ChatInvite ? ((TLRPC$ChatInvite) tLObject).title : "";
         }
-        setContentDescription(LocaleController.formatString("AccDescrSendAsPeer", NUM, objName));
-        this.avatarDrawable.setInfo(obj);
-        this.avatarImage.setForUserOrChat(obj, this.avatarDrawable);
+        setContentDescription(LocaleController.formatString("AccDescrSendAsPeer", NUM, str));
+        this.avatarDrawable.setInfo(tLObject);
+        this.avatarImage.setForUserOrChat(tLObject, this.avatarDrawable);
     }
 
-    public void setProgress(float progress) {
-        setProgress(progress, true);
+    public void setProgress(float f) {
+        setProgress(f, true);
     }
 
-    public void setProgress(float progress, boolean animate) {
-        setProgress(progress, animate, progress != 0.0f);
+    public void setProgress(float f, boolean z) {
+        setProgress(f, z, f != 0.0f);
     }
 
-    public void setProgress(float progress, boolean animate, boolean useSpring) {
-        if (animate) {
+    public void setProgress(float f, boolean z, boolean z2) {
+        if (z) {
             SpringAnimation springAnimation = this.menuSpring;
             if (springAnimation != null) {
                 springAnimation.cancel();
@@ -139,33 +139,32 @@ public class SenderSelectView extends View {
             if (valueAnimator != null) {
                 valueAnimator.cancel();
             }
-            boolean z = false;
+            boolean z3 = false;
             this.scaleIn = false;
             this.scaleOut = false;
-            if (useSpring) {
-                float startValue = this.menuProgress * 100.0f;
-                SpringAnimation springAnimation2 = (SpringAnimation) new SpringAnimation(this, MENU_PROGRESS).setStartValue(startValue);
+            if (z2) {
+                float f2 = this.menuProgress * 100.0f;
+                SpringAnimation springAnimation2 = (SpringAnimation) new SpringAnimation(this, MENU_PROGRESS).setStartValue(f2);
                 this.menuSpring = springAnimation2;
-                boolean reverse = progress < this.menuProgress;
-                float finalPos = 100.0f * progress;
-                this.scaleIn = reverse;
-                if (!reverse) {
-                    z = true;
+                if (f < this.menuProgress) {
+                    z3 = true;
                 }
-                this.scaleOut = z;
-                springAnimation2.setSpring(new SpringForce(finalPos).setFinalPosition(finalPos).setStiffness(450.0f).setDampingRatio(1.0f));
-                this.menuSpring.addUpdateListener(new SenderSelectView$$ExternalSyntheticLambda2(this, reverse, startValue, finalPos));
+                float f3 = f * 100.0f;
+                this.scaleIn = z3;
+                this.scaleOut = !z3;
+                springAnimation2.setSpring(new SpringForce(f3).setFinalPosition(f3).setStiffness(450.0f).setDampingRatio(1.0f));
+                this.menuSpring.addUpdateListener(new SenderSelectView$$ExternalSyntheticLambda2(this, z3, f2, f3));
                 this.menuSpring.addEndListener(new SenderSelectView$$ExternalSyntheticLambda1(this));
                 this.menuSpring.start();
                 return;
             }
-            ValueAnimator duration = ValueAnimator.ofFloat(new float[]{this.menuProgress, progress}).setDuration(200);
+            ValueAnimator duration = ValueAnimator.ofFloat(new float[]{this.menuProgress, f}).setDuration(200);
             this.menuAnimator = duration;
             duration.setInterpolator(CubicBezierInterpolator.DEFAULT);
             this.menuAnimator.addUpdateListener(new SenderSelectView$$ExternalSyntheticLambda0(this));
             this.menuAnimator.addListener(new AnimatorListenerAdapter() {
-                public void onAnimationEnd(Animator animation) {
-                    if (animation == SenderSelectView.this.menuAnimator) {
+                public void onAnimationEnd(Animator animator) {
+                    if (animator == SenderSelectView.this.menuAnimator) {
                         ValueAnimator unused = SenderSelectView.this.menuAnimator = null;
                     }
                 }
@@ -173,38 +172,38 @@ public class SenderSelectView extends View {
             this.menuAnimator.start();
             return;
         }
-        this.menuProgress = progress;
+        this.menuProgress = f;
         invalidate();
     }
 
-    /* renamed from: lambda$setProgress$2$org-telegram-ui-Components-SenderSelectView  reason: not valid java name */
-    public /* synthetic */ void m1345lambda$setProgress$2$orgtelegramuiComponentsSenderSelectView(boolean reverse, float startValue, float finalPos, DynamicAnimation animation, float value, float velocity) {
-        if (reverse) {
-            if (value > startValue / 2.0f || !this.scaleIn) {
+    /* access modifiers changed from: private */
+    public /* synthetic */ void lambda$setProgress$2(boolean z, float f, float f2, DynamicAnimation dynamicAnimation, float f3, float f4) {
+        if (z) {
+            if (f3 > f / 2.0f || !this.scaleIn) {
                 return;
             }
-        } else if (value < finalPos / 2.0f || !this.scaleOut) {
+        } else if (f3 < f2 / 2.0f || !this.scaleOut) {
             return;
         }
-        this.scaleIn = !reverse;
-        this.scaleOut = reverse;
+        this.scaleIn = !z;
+        this.scaleOut = z;
     }
 
-    /* renamed from: lambda$setProgress$3$org-telegram-ui-Components-SenderSelectView  reason: not valid java name */
-    public /* synthetic */ void m1346lambda$setProgress$3$orgtelegramuiComponentsSenderSelectView(DynamicAnimation animation, boolean canceled, float value, float velocity) {
+    /* access modifiers changed from: private */
+    public /* synthetic */ void lambda$setProgress$3(DynamicAnimation dynamicAnimation, boolean z, float f, float f2) {
         this.scaleIn = false;
         this.scaleOut = false;
-        if (!canceled) {
-            animation.cancel();
+        if (!z) {
+            dynamicAnimation.cancel();
         }
-        if (animation == this.menuSpring) {
+        if (dynamicAnimation == this.menuSpring) {
             this.menuSpring = null;
         }
     }
 
-    /* renamed from: lambda$setProgress$4$org-telegram-ui-Components-SenderSelectView  reason: not valid java name */
-    public /* synthetic */ void m1347lambda$setProgress$4$orgtelegramuiComponentsSenderSelectView(ValueAnimator animation) {
-        this.menuProgress = ((Float) animation.getAnimatedValue()).floatValue();
+    /* access modifiers changed from: private */
+    public /* synthetic */ void lambda$setProgress$4(ValueAnimator valueAnimator) {
+        this.menuProgress = ((Float) valueAnimator.getAnimatedValue()).floatValue();
         invalidate();
     }
 
@@ -213,8 +212,8 @@ public class SenderSelectView extends View {
     }
 
     /* access modifiers changed from: protected */
-    public boolean verifyDrawable(Drawable who) {
-        return super.verifyDrawable(who) || this.selectorDrawable == who;
+    public boolean verifyDrawable(Drawable drawable) {
+        return super.verifyDrawable(drawable) || this.selectorDrawable == drawable;
     }
 
     /* access modifiers changed from: protected */

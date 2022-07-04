@@ -10,6 +10,6 @@ public final /* synthetic */ class JoinCallByUrlAlert$$ExternalSyntheticLambda0 
     }
 
     public final void onClick(View view) {
-        this.f$0.m1075lambda$new$0$orgtelegramuiComponentsJoinCallByUrlAlert(view);
+        this.f$0.lambda$new$0(view);
     }
 }

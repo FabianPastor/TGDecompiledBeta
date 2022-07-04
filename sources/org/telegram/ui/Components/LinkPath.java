@@ -34,99 +34,81 @@ public class LinkPath extends Path {
     public LinkPath() {
     }
 
-    public LinkPath(boolean roundRect) {
-        this.useRoundRect = roundRect;
+    public LinkPath(boolean z) {
+        this.useRoundRect = z;
     }
 
-    public void setCurrentLayout(Layout layout, int start, float yOffset) {
+    public void setCurrentLayout(Layout layout, int i, float f) {
         int lineCount;
         this.currentLayout = layout;
-        this.currentLine = layout.getLineForOffset(start);
+        this.currentLine = layout.getLineForOffset(i);
         this.lastTop = -1.0f;
-        this.heightOffset = yOffset;
+        this.heightOffset = f;
         if (Build.VERSION.SDK_INT >= 28 && (lineCount = layout.getLineCount()) > 0) {
-            this.lineHeight = layout.getLineBottom(lineCount - 1) - layout.getLineTop(lineCount - 1);
+            int i2 = lineCount - 1;
+            this.lineHeight = layout.getLineBottom(i2) - layout.getLineTop(i2);
         }
     }
 
-    public void setAllowReset(boolean value) {
-        this.allowReset = value;
+    public void setAllowReset(boolean z) {
+        this.allowReset = z;
     }
 
-    public void setUseRoundRect(boolean value) {
-        this.useRoundRect = value;
+    public void setUseRoundRect(boolean z) {
+        this.useRoundRect = z;
     }
 
-    public boolean isUsingRoundRect() {
-        return this.useRoundRect;
+    public void setBaselineShift(int i) {
+        this.baselineShift = i;
     }
 
-    public void setBaselineShift(int value) {
-        this.baselineShift = value;
-    }
-
-    public void addRect(float left, float top, float right, float bottom, Path.Direction dir) {
-        float right2;
-        float left2;
-        float y2;
-        float y22;
-        float y;
-        float f = this.heightOffset;
-        float top2 = top + f;
-        float bottom2 = bottom + f;
-        float f2 = this.lastTop;
-        if (f2 == -1.0f) {
-            this.lastTop = top2;
-        } else if (f2 != top2) {
-            this.lastTop = top2;
+    public void addRect(float f, float f2, float f3, float f4, Path.Direction direction) {
+        float f5 = this.heightOffset;
+        float f6 = f2 + f5;
+        float f7 = f5 + f4;
+        float f8 = this.lastTop;
+        if (f8 == -1.0f) {
+            this.lastTop = f6;
+        } else if (f8 != f6) {
+            this.lastTop = f6;
             this.currentLine++;
         }
         float lineRight = this.currentLayout.getLineRight(this.currentLine);
         float lineLeft = this.currentLayout.getLineLeft(this.currentLine);
-        if (left >= lineRight) {
+        if (f >= lineRight) {
             return;
         }
-        if (left > lineLeft || right > lineLeft) {
-            if (right > lineRight) {
-                right2 = lineRight;
-            } else {
-                right2 = right;
+        if (f > lineLeft || f3 > lineLeft) {
+            float f9 = f3 > lineRight ? lineRight : f3;
+            if (f >= lineLeft) {
+                lineLeft = f;
             }
-            if (left < lineLeft) {
-                left2 = lineLeft;
-            } else {
-                left2 = left;
-            }
-            float y3 = top2;
-            float f3 = 0.0f;
-            if (Build.VERSION.SDK_INT >= 28) {
-                y2 = bottom2;
-                if (bottom2 - top2 > ((float) this.lineHeight)) {
-                    y2 = this.heightOffset + (bottom2 != ((float) this.currentLayout.getHeight()) ? ((float) this.currentLayout.getLineBottom(this.currentLine)) - this.currentLayout.getSpacingAdd() : 0.0f);
+            float var_ = 0.0f;
+            if (Build.VERSION.SDK_INT < 28) {
+                if (f7 != ((float) this.currentLayout.getHeight())) {
+                    var_ = this.currentLayout.getSpacingAdd();
                 }
-            } else {
-                y2 = bottom2 - (bottom2 != ((float) this.currentLayout.getHeight()) ? this.currentLayout.getSpacingAdd() : 0.0f);
+                f7 -= var_;
+            } else if (f7 - f6 > ((float) this.lineHeight)) {
+                float var_ = this.heightOffset;
+                if (f7 != ((float) this.currentLayout.getHeight())) {
+                    var_ = ((float) this.currentLayout.getLineBottom(this.currentLine)) - this.currentLayout.getSpacingAdd();
+                }
+                f7 = var_ + var_;
             }
             int i = this.baselineShift;
             if (i < 0) {
-                y = y3;
-                y22 = y2 + ((float) i);
+                f7 += (float) i;
             } else if (i > 0) {
-                y = y3 + ((float) i);
-                y22 = y2;
-            } else {
-                y = y3;
-                y22 = y2;
+                f6 += (float) i;
             }
+            float var_ = f7;
+            float var_ = f6;
             if (this.useRoundRect) {
-                float radius = left2 - (0 != 0 ? 0.0f : ((float) getRadius()) / 2.0f);
-                if (0 == 0) {
-                    f3 = ((float) getRadius()) / 2.0f;
-                }
-                super.addRect(radius, y, f3 + right2, y22, dir);
-                return;
+                super.addRect(lineLeft - (((float) getRadius()) / 2.0f), var_, f9 + (((float) getRadius()) / 2.0f), var_, direction);
+            } else {
+                super.addRect(lineLeft, var_, f9, var_, direction);
             }
-            super.addRect(left2, y, right2, y22, dir);
         }
     }
 

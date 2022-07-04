@@ -10,6 +10,6 @@ public final /* synthetic */ class MentionsAdapter$$ExternalSyntheticLambda9 imp
     }
 
     public final void didPressedImage(ContextLinkCell contextLinkCell) {
-        this.f$0.m2627xddefa6d9(contextLinkCell);
+        this.f$0.lambda$onCreateViewHolder$9(contextLinkCell);
     }
 }

@@ -11,6 +11,6 @@ public final /* synthetic */ class ChatActivity$ChatActivityAdapter$1$$ExternalS
     }
 
     public final void onProfileSelected(ReactedUsersListView reactedUsersListView, long j) {
-        this.f$0.m3170xe9448af9(reactedUsersListView, j);
+        this.f$0.lambda$didPressReaction$3(reactedUsersListView, j);
     }
 }

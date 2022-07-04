@@ -1,13 +1,20 @@
 package org.telegram.ui;
 
-public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda41 implements Runnable {
-    public final /* synthetic */ ChatActivity f$0;
+import android.content.DialogInterface;
+import org.telegram.tgnet.TLRPC$TL_payments_bankCardData;
 
-    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda41(ChatActivity chatActivity) {
+public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda41 implements DialogInterface.OnClickListener {
+    public final /* synthetic */ ChatActivity f$0;
+    public final /* synthetic */ TLRPC$TL_payments_bankCardData f$1;
+    public final /* synthetic */ String f$2;
+
+    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda41(ChatActivity chatActivity, TLRPC$TL_payments_bankCardData tLRPC$TL_payments_bankCardData, String str) {
         this.f$0 = chatActivity;
+        this.f$1 = tLRPC$TL_payments_bankCardData;
+        this.f$2 = str;
     }
 
-    public final void run() {
-        this.f$0.m3023lambda$onEditTextDialogClose$86$orgtelegramuiChatActivity();
+    public final void onClick(DialogInterface dialogInterface, int i) {
+        this.f$0.lambda$didPressMessageUrl$237(this.f$1, this.f$2, dialogInterface, i);
     }
 }

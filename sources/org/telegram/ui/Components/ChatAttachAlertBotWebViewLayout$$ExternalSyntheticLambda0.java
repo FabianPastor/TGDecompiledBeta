@@ -10,6 +10,6 @@ public final /* synthetic */ class ChatAttachAlertBotWebViewLayout$$ExternalSynt
     }
 
     public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-        this.f$0.m766xea23d588(valueAnimator);
+        this.f$0.lambda$onPanTransitionStart$9(valueAnimator);
     }
 }

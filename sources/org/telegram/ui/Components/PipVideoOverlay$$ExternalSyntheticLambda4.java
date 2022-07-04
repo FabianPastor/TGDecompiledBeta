@@ -1,14 +1,15 @@
 package org.telegram.ui.Components;
 
-import org.telegram.ui.Components.SimpleFloatPropertyCompat;
+import androidx.dynamicanimation.animation.DynamicAnimation;
 
-public final /* synthetic */ class PipVideoOverlay$$ExternalSyntheticLambda4 implements SimpleFloatPropertyCompat.Setter {
-    public static final /* synthetic */ PipVideoOverlay$$ExternalSyntheticLambda4 INSTANCE = new PipVideoOverlay$$ExternalSyntheticLambda4();
+public final /* synthetic */ class PipVideoOverlay$$ExternalSyntheticLambda4 implements DynamicAnimation.OnAnimationEndListener {
+    public final /* synthetic */ PipVideoOverlay f$0;
 
-    private /* synthetic */ PipVideoOverlay$$ExternalSyntheticLambda4() {
+    public /* synthetic */ PipVideoOverlay$$ExternalSyntheticLambda4(PipVideoOverlay pipVideoOverlay) {
+        this.f$0 = pipVideoOverlay;
     }
 
-    public final void set(Object obj, float f) {
-        PipVideoOverlay.lambda$static$1((PipVideoOverlay) obj, f);
+    public final void onAnimationEnd(DynamicAnimation dynamicAnimation, boolean z, float f, float f2) {
+        this.f$0.lambda$showInternal$7(dynamicAnimation, z, f, f2);
     }
 }

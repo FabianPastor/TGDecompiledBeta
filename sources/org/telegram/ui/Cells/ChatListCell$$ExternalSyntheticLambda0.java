@@ -12,6 +12,6 @@ public final /* synthetic */ class ChatListCell$$ExternalSyntheticLambda0 implem
     }
 
     public final void onClick(View view) {
-        this.f$0.m2783lambda$new$0$orgtelegramuiCellsChatListCell(this.f$1, view);
+        this.f$0.lambda$new$0(this.f$1, view);
     }
 }

@@ -2,7 +2,7 @@ package org.telegram.ui.Components;
 
 import org.telegram.tgnet.RequestDelegate;
 import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC;
+import org.telegram.tgnet.TLRPC$TL_error;
 import org.telegram.ui.Components.SharedMediaLayout;
 
 public final /* synthetic */ class SharedMediaLayout$CommonGroupsAdapter$$ExternalSyntheticLambda1 implements RequestDelegate {
@@ -14,7 +14,7 @@ public final /* synthetic */ class SharedMediaLayout$CommonGroupsAdapter$$Extern
         this.f$1 = i;
     }
 
-    public final void run(TLObject tLObject, TLRPC.TL_error tL_error) {
-        this.f$0.m1393xfa1b5b69(this.f$1, tLObject, tL_error);
+    public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+        this.f$0.lambda$getChats$1(this.f$1, tLObject, tLRPC$TL_error);
     }
 }

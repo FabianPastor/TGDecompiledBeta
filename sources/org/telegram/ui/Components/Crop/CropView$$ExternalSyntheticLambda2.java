@@ -25,6 +25,6 @@ public final /* synthetic */ class CropView$$ExternalSyntheticLambda2 implements
     }
 
     public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-        this.f$0.m900lambda$maximize$2$orgtelegramuiComponentsCropCropView(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6, this.f$7, valueAnimator);
+        this.f$0.lambda$maximize$2(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6, this.f$7, valueAnimator);
     }
 }

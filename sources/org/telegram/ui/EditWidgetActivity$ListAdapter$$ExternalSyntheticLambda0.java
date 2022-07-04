@@ -15,6 +15,6 @@ public final /* synthetic */ class EditWidgetActivity$ListAdapter$$ExternalSynth
     }
 
     public final boolean onTouch(View view, MotionEvent motionEvent) {
-        return this.f$0.m3441x37efab4f(this.f$1, view, motionEvent);
+        return this.f$0.lambda$onCreateViewHolder$0(this.f$1, view, motionEvent);
     }
 }

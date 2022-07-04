@@ -9,31 +9,31 @@ public class URLSpanBotCommand extends URLSpanNoUnderline {
     public int currentType;
     private TextStyleSpan.TextStyleRun style;
 
-    public URLSpanBotCommand(String url, int type) {
-        this(url, type, (TextStyleSpan.TextStyleRun) null);
+    public URLSpanBotCommand(String str, int i) {
+        this(str, i, (TextStyleSpan.TextStyleRun) null);
     }
 
-    public URLSpanBotCommand(String url, int type, TextStyleSpan.TextStyleRun run) {
-        super(url);
-        this.currentType = type;
-        this.style = run;
+    public URLSpanBotCommand(String str, int i, TextStyleSpan.TextStyleRun textStyleRun) {
+        super(str);
+        this.currentType = i;
+        this.style = textStyleRun;
     }
 
-    public void updateDrawState(TextPaint p) {
-        super.updateDrawState(p);
+    public void updateDrawState(TextPaint textPaint) {
+        super.updateDrawState(textPaint);
         int i = this.currentType;
         if (i == 2) {
-            p.setColor(-1);
+            textPaint.setColor(-1);
         } else if (i == 1) {
-            p.setColor(Theme.getColor(enabled ? "chat_messageLinkOut" : "chat_messageTextOut"));
+            textPaint.setColor(Theme.getColor(enabled ? "chat_messageLinkOut" : "chat_messageTextOut"));
         } else {
-            p.setColor(Theme.getColor(enabled ? "chat_messageLinkIn" : "chat_messageTextIn"));
+            textPaint.setColor(Theme.getColor(enabled ? "chat_messageLinkIn" : "chat_messageTextIn"));
         }
         TextStyleSpan.TextStyleRun textStyleRun = this.style;
         if (textStyleRun != null) {
-            textStyleRun.applyStyle(p);
+            textStyleRun.applyStyle(textPaint);
         } else {
-            p.setUnderlineText(false);
+            textPaint.setUnderlineText(false);
         }
     }
 }

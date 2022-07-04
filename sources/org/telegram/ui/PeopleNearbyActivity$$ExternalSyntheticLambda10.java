@@ -1,19 +1,16 @@
 package org.telegram.ui;
 
-import org.telegram.ui.ActionBar.ThemeDescription;
+import android.view.View;
+import org.telegram.ui.Components.RecyclerListView;
 
-public final /* synthetic */ class PeopleNearbyActivity$$ExternalSyntheticLambda10 implements ThemeDescription.ThemeDescriptionDelegate {
+public final /* synthetic */ class PeopleNearbyActivity$$ExternalSyntheticLambda10 implements RecyclerListView.OnItemClickListener {
     public final /* synthetic */ PeopleNearbyActivity f$0;
 
     public /* synthetic */ PeopleNearbyActivity$$ExternalSyntheticLambda10(PeopleNearbyActivity peopleNearbyActivity) {
         this.f$0 = peopleNearbyActivity;
     }
 
-    public final void didSetColor() {
-        this.f$0.m4205xb9b21fb();
-    }
-
-    public /* synthetic */ void onAnimationProgress(float f) {
-        ThemeDescription.ThemeDescriptionDelegate.CC.$default$onAnimationProgress(this, f);
+    public final void onItemClick(View view, int i) {
+        this.f$0.lambda$createView$2(view, i);
     }
 }

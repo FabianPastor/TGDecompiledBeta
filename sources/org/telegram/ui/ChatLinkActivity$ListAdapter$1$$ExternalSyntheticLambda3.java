@@ -12,6 +12,6 @@ public final /* synthetic */ class ChatLinkActivity$ListAdapter$1$$ExternalSynth
     }
 
     public final void run() {
-        this.f$0.m3256xavar_(this.f$1);
+        this.f$0.lambda$overrideCancel$4(this.f$1);
     }
 }

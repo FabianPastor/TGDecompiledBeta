@@ -10,6 +10,6 @@ public final /* synthetic */ class SwipeGestureSettingsView$$ExternalSyntheticLa
     }
 
     public final void onValueChange(NumberPicker numberPicker, int i, int i2) {
-        this.f$0.m1469lambda$new$1$orgtelegramuiComponentsSwipeGestureSettingsView(numberPicker, i, i2);
+        this.f$0.lambda$new$1(numberPicker, i, i2);
     }
 }

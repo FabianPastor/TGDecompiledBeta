@@ -13,6 +13,6 @@ public final /* synthetic */ class LinkSpanDrawable$LinksTextView$$ExternalSynth
     }
 
     public final void run() {
-        this.f$0.m1110x6CLASSNAMEbbe9(this.f$1);
+        this.f$0.lambda$onTouchEvent$0(this.f$1);
     }
 }

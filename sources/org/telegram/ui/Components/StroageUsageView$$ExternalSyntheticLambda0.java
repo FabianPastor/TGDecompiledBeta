@@ -10,6 +10,6 @@ public final /* synthetic */ class StroageUsageView$$ExternalSyntheticLambda0 im
     }
 
     public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-        this.f$0.m1465xb842a2b9(valueAnimator);
+        this.f$0.lambda$setStorageUsage$0(valueAnimator);
     }
 }

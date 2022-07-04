@@ -1,13 +1,18 @@
 package org.telegram.ui.Components;
 
-public final /* synthetic */ class ChatAttachAlert$$ExternalSyntheticLambda11 implements Runnable {
-    public final /* synthetic */ ChatAttachAlert f$0;
+import android.view.View;
+import org.telegram.ui.ActionBar.Theme;
 
-    public /* synthetic */ ChatAttachAlert$$ExternalSyntheticLambda11(ChatAttachAlert chatAttachAlert) {
+public final /* synthetic */ class ChatAttachAlert$$ExternalSyntheticLambda11 implements View.OnClickListener {
+    public final /* synthetic */ ChatAttachAlert f$0;
+    public final /* synthetic */ Theme.ResourcesProvider f$1;
+
+    public /* synthetic */ ChatAttachAlert$$ExternalSyntheticLambda11(ChatAttachAlert chatAttachAlert, Theme.ResourcesProvider resourcesProvider) {
         this.f$0 = chatAttachAlert;
+        this.f$1 = resourcesProvider;
     }
 
-    public final void run() {
-        this.f$0.removeFromRoot();
+    public final void onClick(View view) {
+        this.f$0.lambda$new$12(this.f$1, view);
     }
 }

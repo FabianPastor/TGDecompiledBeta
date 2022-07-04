@@ -11,6 +11,6 @@ public final /* synthetic */ class PhotoFilterView$ToolsAdapter$$ExternalSynthet
     }
 
     public final void onProgressChanged(int i, int i2) {
-        this.f$0.m1175x4dda4bfb(i, i2);
+        this.f$0.lambda$onCreateViewHolder$0(i, i2);
     }
 }

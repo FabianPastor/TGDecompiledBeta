@@ -6,10 +6,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
-import android.graphics.PorterDuff;
 import android.graphics.RectF;
-import android.text.Layout;
-import android.text.StaticLayout;
 import android.text.TextPaint;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.ui.Components.EditTextBoldCursor;
@@ -35,15 +32,15 @@ public class EditTextOutline extends EditTextBoldCursor {
     }
 
     /* access modifiers changed from: protected */
-    public void onTextChanged(CharSequence text, int start, int before, int after) {
-        super.onTextChanged(text, start, before, after);
+    public void onTextChanged(CharSequence charSequence, int i, int i2, int i3) {
+        super.onTextChanged(charSequence, i, i2, i3);
         this.mUpdateCachedBitmap = true;
     }
 
     /* access modifiers changed from: protected */
-    public void onSizeChanged(int w, int h, int oldw, int oldh) {
-        super.onSizeChanged(w, h, oldw, oldh);
-        if (w <= 0 || h <= 0) {
+    public void onSizeChanged(int i, int i2, int i3, int i4) {
+        super.onSizeChanged(i, i2, i3, i4);
+        if (i <= 0 || i2 <= 0) {
             this.mCache = null;
             return;
         }
@@ -52,31 +49,31 @@ public class EditTextOutline extends EditTextBoldCursor {
         if (bitmap != null) {
             bitmap.recycle();
         }
-        this.mCache = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
+        this.mCache = Bitmap.createBitmap(i, i2, Bitmap.Config.ARGB_8888);
     }
 
-    public void setStrokeColor(int strokeColor) {
-        this.mStrokeColor = strokeColor;
+    public void setStrokeColor(int i) {
+        this.mStrokeColor = i;
         this.mUpdateCachedBitmap = true;
         invalidate();
     }
 
-    public void setFrameColor(int frameColor) {
-        int i = this.mFrameColor;
-        if (i == 0 && frameColor != 0) {
+    public void setFrameColor(int i) {
+        int i2 = this.mFrameColor;
+        if (i2 == 0 && i != 0) {
             setPadding(AndroidUtilities.dp(19.0f), AndroidUtilities.dp(7.0f), AndroidUtilities.dp(19.0f), AndroidUtilities.dp(7.0f));
             setCursorColor(-16777216);
-        } else if (i != 0 && frameColor == 0) {
+        } else if (i2 != 0 && i == 0) {
             setPadding(AndroidUtilities.dp(7.0f), AndroidUtilities.dp(7.0f), AndroidUtilities.dp(7.0f), AndroidUtilities.dp(7.0f));
             setCursorColor(-1);
         }
-        this.mFrameColor = frameColor;
-        if (frameColor != 0) {
-            float lightness = AndroidUtilities.computePerceivedBrightness(frameColor);
-            if (lightness == 0.0f) {
-                lightness = ((float) Color.red(this.mFrameColor)) / 255.0f;
+        this.mFrameColor = i;
+        if (i != 0) {
+            float computePerceivedBrightness = AndroidUtilities.computePerceivedBrightness(i);
+            if (computePerceivedBrightness == 0.0f) {
+                computePerceivedBrightness = ((float) Color.red(this.mFrameColor)) / 255.0f;
             }
-            if (((double) lightness) > 0.87d) {
+            if (((double) computePerceivedBrightness) > 0.87d) {
                 setTextColor(-16777216);
             } else {
                 setTextColor(-1);
@@ -86,241 +83,579 @@ public class EditTextOutline extends EditTextBoldCursor {
         invalidate();
     }
 
-    public void setStrokeWidth(float strokeWidth) {
-        this.mStrokeWidth = strokeWidth;
+    public void setStrokeWidth(float f) {
+        this.mStrokeWidth = f;
         this.mUpdateCachedBitmap = true;
         invalidate();
     }
 
     /* access modifiers changed from: protected */
-    public void onDraw(Canvas canvas) {
-        boolean hasChanges;
-        int i;
-        float f;
-        float inset;
-        int cx;
-        Layout sl;
-        boolean hasChanges2;
-        float padding;
-        float f2;
-        Canvas canvas2 = canvas;
-        float f3 = 0.0f;
-        if (!(this.mCache == null || this.mStrokeColor == 0)) {
-            if (this.mUpdateCachedBitmap) {
-                int w = (getMeasuredWidth() - getPaddingLeft()) - getPaddingRight();
-                int h = getMeasuredHeight();
-                String text = getText().toString();
-                this.mCanvas.setBitmap(this.mCache);
-                this.mCanvas.drawColor(0, PorterDuff.Mode.CLEAR);
-                float f4 = this.mStrokeWidth;
-                if (f4 <= 0.0f) {
-                    f4 = (float) Math.ceil((double) (getTextSize() / 11.5f));
-                }
-                float strokeWidth = f4;
-                this.textPaint.setStrokeWidth(strokeWidth);
-                this.textPaint.setColor(this.mStrokeColor);
-                this.textPaint.setTextSize(getTextSize());
-                this.textPaint.setTypeface(getTypeface());
-                this.textPaint.setStyle(Paint.Style.FILL_AND_STROKE);
-                float f5 = strokeWidth;
-                StaticLayout sl2 = new StaticLayout(text, this.textPaint, w, Layout.Alignment.ALIGN_CENTER, 1.0f, 0.0f, true);
-                this.mCanvas.save();
-                this.mCanvas.translate((float) getPaddingLeft(), ((float) getPaddingTop()) + (((float) (((h - getPaddingTop()) - getPaddingBottom()) - sl2.getHeight())) / 2.0f));
-                sl2.draw(this.mCanvas);
-                this.mCanvas.restore();
-                this.mUpdateCachedBitmap = false;
-            }
-            canvas2.drawBitmap(this.mCache, 0.0f, 0.0f, this.textPaint);
-        }
-        int i2 = this.mFrameColor;
-        if (i2 != 0) {
-            this.paint.setColor(i2);
-            Layout sl3 = getLayout();
-            if (sl3 == null) {
-                super.onDraw(canvas);
-                return;
-            }
-            float[] fArr = this.lines;
-            if (fArr == null || fArr.length != sl3.getLineCount()) {
-                this.lines = new float[sl3.getLineCount()];
-            }
-            float rad = (float) AndroidUtilities.dp(6.0f);
-            float padding2 = (float) AndroidUtilities.dp(6.0f);
-            float inset2 = (float) AndroidUtilities.dp(26.0f);
-            for (int a = 0; a < this.lines.length; a++) {
-                float w2 = (float) Math.ceil((double) (sl3.getLineRight(a) - sl3.getLineLeft(a)));
-                if (w2 > ((float) AndroidUtilities.dp(1.0f))) {
-                    this.lines[a] = (padding2 * 2.0f) + w2;
-                } else {
-                    this.lines[a] = 0.0f;
-                }
-            }
-            while (true) {
-                hasChanges = false;
-                int a2 = 1;
-                while (true) {
-                    float[] fArr2 = this.lines;
-                    if (a2 >= fArr2.length) {
-                        break;
-                    }
-                    if (fArr2[a2] != f3) {
-                        float diff = fArr2[a2] - fArr2[a2 - 1];
-                        if (diff > f3) {
-                            if (diff < inset2) {
-                                fArr2[a2 - 1] = fArr2[a2];
-                                hasChanges = true;
-                            } else if (diff < rad * 4.0f) {
-                                double d = (double) fArr2[a2];
-                                double ceil = Math.ceil((double) ((4.0f * rad) - diff));
-                                Double.isNaN(d);
-                                fArr2[a2] = (float) (d + ceil);
-                                hasChanges = true;
-                            }
-                        } else if (diff < f3) {
-                            if ((-diff) < inset2) {
-                                fArr2[a2] = fArr2[a2 - 1];
-                                hasChanges = true;
-                            } else if ((-diff) < rad * 4.0f) {
-                                int i3 = a2 - 1;
-                                double d2 = (double) fArr2[i3];
-                                double ceil2 = Math.ceil((double) ((4.0f * rad) + diff));
-                                Double.isNaN(d2);
-                                fArr2[i3] = (float) (d2 + ceil2);
-                                hasChanges = true;
-                            }
-                        }
-                    }
-                    a2++;
-                    f3 = 0.0f;
-                }
-                if (!hasChanges) {
-                    break;
-                }
-                float f6 = padding2;
-                float f7 = inset2;
-                boolean z = hasChanges;
-                sl3 = sl3;
-                f3 = 0.0f;
-            }
-            int cx2 = getMeasuredWidth() / 2;
-            float top = (float) ((getMeasuredHeight() - sl3.getHeight()) / 2);
-            int a3 = 0;
-            while (a3 < this.lines.length) {
-                int lineBottom = sl3.getLineBottom(a3) - sl3.getLineTop(a3);
-                boolean z2 = true;
-                if (a3 != this.lines.length - 1) {
-                    f = 1.0f;
-                    i = AndroidUtilities.dp(1.0f);
-                } else {
-                    f = 1.0f;
-                    i = 0;
-                }
-                int h2 = (lineBottom - i) + (a3 != 0 ? AndroidUtilities.dp(f) : 0);
-                float[] fArr3 = this.lines;
-                if (fArr3[a3] <= padding2 * 2.0f) {
-                    top += (float) h2;
-                    sl = sl3;
-                    cx = cx2;
-                    padding = padding2;
-                    inset = inset2;
-                    hasChanges2 = hasChanges;
-                } else {
-                    boolean topLess = a3 > 0 && fArr3[a3 + -1] > fArr3[a3] && fArr3[a3 + -1] > padding2 * 2.0f;
-                    boolean bottomLess = a3 + 1 < fArr3.length && fArr3[a3 + 1] > fArr3[a3] && fArr3[a3 + 1] > padding2 * 2.0f;
-                    boolean drawTop = a3 == 0 || fArr3[a3 + -1] != fArr3[a3];
-                    if (a3 != fArr3.length - 1 && fArr3[a3] == fArr3[a3 + 1]) {
-                        z2 = false;
-                    }
-                    boolean drawBottom = z2;
-                    this.path.reset();
-                    if (a3 != 0) {
-                        top -= 1.0f;
-                        h2++;
-                    }
-                    padding = padding2;
-                    float bottom = (float) Math.ceil((double) (((float) h2) + top));
-                    float[] fArr4 = this.lines;
-                    float cx1 = (((float) cx2) - (fArr4[a3] / 2.0f)) + rad;
-                    float cx22 = (((float) cx2) + (fArr4[a3] / 2.0f)) - rad;
-                    this.path.moveTo(cx1, top);
-                    if (!drawTop) {
-                        sl = sl3;
-                        cx = cx2;
-                        inset = inset2;
-                        hasChanges2 = hasChanges;
-                        this.path.lineTo(cx22 + rad, top);
-                    } else if (topLess) {
-                        sl = sl3;
-                        this.path.lineTo(cx22 + (rad * 2.0f), top);
-                        cx = cx2;
-                        inset = inset2;
-                        this.rect.set(cx22 + rad, top, cx22 + (rad * 3.0f), top + (rad * 2.0f));
-                        hasChanges2 = hasChanges;
-                        this.path.arcTo(this.rect, 270.0f, -90.0f, false);
-                    } else {
-                        sl = sl3;
-                        cx = cx2;
-                        inset = inset2;
-                        hasChanges2 = hasChanges;
-                        this.path.lineTo(cx22, top);
-                        this.rect.set(cx22 - rad, top, cx22 + rad, (rad * 2.0f) + top);
-                        this.path.arcTo(this.rect, 270.0f, 90.0f, false);
-                    }
-                    this.path.lineTo(cx22 + rad, bottom - rad);
-                    if (drawBottom) {
-                        if (bottomLess) {
-                            this.rect.set(cx22 + rad, bottom - (rad * 2.0f), cx22 + (rad * 3.0f), bottom);
-                            this.path.arcTo(this.rect, 180.0f, -90.0f, false);
-                            this.path.lineTo(cx1 - (rad * 2.0f), bottom);
-                            f2 = -90.0f;
-                        } else {
-                            this.rect.set(cx22 - rad, bottom - (rad * 2.0f), cx22 + rad, bottom);
-                            this.path.arcTo(this.rect, 0.0f, 90.0f, false);
-                            f2 = -90.0f;
-                            this.path.lineTo(cx1, bottom);
-                        }
-                        if (bottomLess) {
-                            this.rect.set(cx1 - (rad * 3.0f), bottom - (rad * 2.0f), cx1 - rad, bottom);
-                            this.path.arcTo(this.rect, 90.0f, f2, false);
-                        } else {
-                            this.rect.set(cx1 - rad, bottom - (rad * 2.0f), cx1 + rad, bottom);
-                            this.path.arcTo(this.rect, 90.0f, 90.0f, false);
-                        }
-                    } else {
-                        f2 = -90.0f;
-                        this.path.lineTo(cx22 + rad, bottom);
-                        this.path.lineTo(cx1 - rad, bottom);
-                    }
-                    this.path.lineTo(cx1 - rad, top - rad);
-                    if (!drawTop) {
-                        this.path.lineTo(cx1 - rad, top);
-                    } else if (topLess) {
-                        this.rect.set(cx1 - (3.0f * rad), top, cx1 - rad, top + (rad * 2.0f));
-                        this.path.arcTo(this.rect, 0.0f, f2, false);
-                    } else {
-                        this.rect.set(cx1 - rad, top, cx1 + rad, top + (rad * 2.0f));
-                        this.path.arcTo(this.rect, 180.0f, 90.0f, false);
-                    }
-                    this.path.close();
-                    canvas2.drawPath(this.path, this.paint);
-                    if (a3 != 0) {
-                        top += 1.0f;
-                        h2--;
-                    }
-                    top += (float) h2;
-                }
-                a3++;
-                padding2 = padding;
-                hasChanges = hasChanges2;
-                sl3 = sl;
-                cx2 = cx;
-                inset2 = inset;
-            }
-            int i4 = cx2;
-            float f8 = padding2;
-            float f9 = inset2;
-            boolean z3 = hasChanges;
-        }
-        super.onDraw(canvas);
+    /* JADX WARNING: Removed duplicated region for block: B:102:0x02bd  */
+    /* JADX WARNING: Removed duplicated region for block: B:105:0x02d7  */
+    /* JADX WARNING: Removed duplicated region for block: B:111:0x034f  */
+    /* JADX WARNING: Removed duplicated region for block: B:114:0x0366  */
+    /* JADX WARNING: Removed duplicated region for block: B:117:0x0399  */
+    /* JADX WARNING: Removed duplicated region for block: B:120:0x03b2  */
+    /* JADX WARNING: Removed duplicated region for block: B:121:0x03b6  */
+    /* JADX WARNING: Removed duplicated region for block: B:81:0x0213  */
+    /* JADX WARNING: Removed duplicated region for block: B:82:0x0215  */
+    /* JADX WARNING: Removed duplicated region for block: B:86:0x0223  */
+    /* JADX WARNING: Removed duplicated region for block: B:87:0x0226  */
+    /* JADX WARNING: Removed duplicated region for block: B:92:0x0235  */
+    /* JADX WARNING: Removed duplicated region for block: B:93:0x0237  */
+    /* JADX WARNING: Removed duplicated region for block: B:96:0x023f  */
+    /* JADX WARNING: Removed duplicated region for block: B:99:0x026a  */
+    @android.annotation.SuppressLint({"DrawAllocation"})
+    /* Code decompiled incorrectly, please refer to instructions dump. */
+    public void onDraw(android.graphics.Canvas r25) {
+        /*
+            r24 = this;
+            r0 = r24
+            r1 = r25
+            android.graphics.Bitmap r2 = r0.mCache
+            r3 = 0
+            r4 = 1073741824(0x40000000, float:2.0)
+            r5 = 0
+            if (r2 == 0) goto L_0x00bd
+            int r2 = r0.mStrokeColor
+            if (r2 == 0) goto L_0x00bd
+            boolean r2 = r0.mUpdateCachedBitmap
+            if (r2 == 0) goto L_0x00b6
+            int r2 = r24.getMeasuredWidth()
+            int r6 = r24.getPaddingLeft()
+            int r2 = r2 - r6
+            int r6 = r24.getPaddingRight()
+            int r10 = r2 - r6
+            int r2 = r24.getMeasuredHeight()
+            android.text.Editable r6 = r24.getText()
+            java.lang.String r8 = r6.toString()
+            android.graphics.Canvas r6 = r0.mCanvas
+            android.graphics.Bitmap r7 = r0.mCache
+            r6.setBitmap(r7)
+            android.graphics.Canvas r6 = r0.mCanvas
+            android.graphics.PorterDuff$Mode r7 = android.graphics.PorterDuff.Mode.CLEAR
+            r6.drawColor(r5, r7)
+            float r6 = r0.mStrokeWidth
+            int r7 = (r6 > r3 ? 1 : (r6 == r3 ? 0 : -1))
+            if (r7 <= 0) goto L_0x0044
+            goto L_0x0051
+        L_0x0044:
+            float r6 = r24.getTextSize()
+            r7 = 1094189056(0x41380000, float:11.5)
+            float r6 = r6 / r7
+            double r6 = (double) r6
+            double r6 = java.lang.Math.ceil(r6)
+            float r6 = (float) r6
+        L_0x0051:
+            android.text.TextPaint r7 = r0.textPaint
+            r7.setStrokeWidth(r6)
+            android.text.TextPaint r6 = r0.textPaint
+            int r7 = r0.mStrokeColor
+            r6.setColor(r7)
+            android.text.TextPaint r6 = r0.textPaint
+            float r7 = r24.getTextSize()
+            r6.setTextSize(r7)
+            android.text.TextPaint r6 = r0.textPaint
+            android.graphics.Typeface r7 = r24.getTypeface()
+            r6.setTypeface(r7)
+            android.text.TextPaint r6 = r0.textPaint
+            android.graphics.Paint$Style r7 = android.graphics.Paint.Style.FILL_AND_STROKE
+            r6.setStyle(r7)
+            android.text.StaticLayout r6 = new android.text.StaticLayout
+            android.text.TextPaint r9 = r0.textPaint
+            android.text.Layout$Alignment r11 = android.text.Layout.Alignment.ALIGN_CENTER
+            r12 = 1065353216(0x3var_, float:1.0)
+            r13 = 0
+            r14 = 1
+            r7 = r6
+            r7.<init>(r8, r9, r10, r11, r12, r13, r14)
+            android.graphics.Canvas r7 = r0.mCanvas
+            r7.save()
+            int r7 = r24.getPaddingTop()
+            int r2 = r2 - r7
+            int r7 = r24.getPaddingBottom()
+            int r2 = r2 - r7
+            int r7 = r6.getHeight()
+            int r2 = r2 - r7
+            float r2 = (float) r2
+            float r2 = r2 / r4
+            android.graphics.Canvas r7 = r0.mCanvas
+            int r8 = r24.getPaddingLeft()
+            float r8 = (float) r8
+            int r9 = r24.getPaddingTop()
+            float r9 = (float) r9
+            float r2 = r2 + r9
+            r7.translate(r8, r2)
+            android.graphics.Canvas r2 = r0.mCanvas
+            r6.draw(r2)
+            android.graphics.Canvas r2 = r0.mCanvas
+            r2.restore()
+            r0.mUpdateCachedBitmap = r5
+        L_0x00b6:
+            android.graphics.Bitmap r2 = r0.mCache
+            android.text.TextPaint r6 = r0.textPaint
+            r1.drawBitmap(r2, r3, r3, r6)
+        L_0x00bd:
+            int r2 = r0.mFrameColor
+            if (r2 == 0) goto L_0x03cd
+            android.graphics.Paint r6 = r0.paint
+            r6.setColor(r2)
+            android.text.Layout r2 = r24.getLayout()
+            if (r2 != 0) goto L_0x00d0
+            super.onDraw(r25)
+            return
+        L_0x00d0:
+            float[] r6 = r0.lines
+            if (r6 == 0) goto L_0x00db
+            int r6 = r6.length
+            int r7 = r2.getLineCount()
+            if (r6 == r7) goto L_0x00e3
+        L_0x00db:
+            int r6 = r2.getLineCount()
+            float[] r6 = new float[r6]
+            r0.lines = r6
+        L_0x00e3:
+            r6 = 1086324736(0x40CLASSNAME, float:6.0)
+            int r7 = org.telegram.messenger.AndroidUtilities.dp(r6)
+            float r7 = (float) r7
+            int r6 = org.telegram.messenger.AndroidUtilities.dp(r6)
+            float r6 = (float) r6
+            r8 = 1104150528(0x41d00000, float:26.0)
+            int r8 = org.telegram.messenger.AndroidUtilities.dp(r8)
+            float r8 = (float) r8
+            r9 = 0
+        L_0x00f7:
+            float[] r10 = r0.lines
+            int r10 = r10.length
+            r11 = 1065353216(0x3var_, float:1.0)
+            if (r9 >= r10) goto L_0x0125
+            float r10 = r2.getLineRight(r9)
+            float r12 = r2.getLineLeft(r9)
+            float r10 = r10 - r12
+            double r12 = (double) r10
+            double r12 = java.lang.Math.ceil(r12)
+            float r10 = (float) r12
+            int r11 = org.telegram.messenger.AndroidUtilities.dp(r11)
+            float r11 = (float) r11
+            int r11 = (r10 > r11 ? 1 : (r10 == r11 ? 0 : -1))
+            if (r11 <= 0) goto L_0x011e
+            float[] r11 = r0.lines
+            float r12 = r6 * r4
+            float r10 = r10 + r12
+            r11[r9] = r10
+            goto L_0x0122
+        L_0x011e:
+            float[] r10 = r0.lines
+            r10[r9] = r3
+        L_0x0122:
+            int r9 = r9 + 1
+            goto L_0x00f7
+        L_0x0125:
+            r9 = 1
+            r10 = 1
+            r12 = 0
+        L_0x0128:
+            float[] r13 = r0.lines
+            int r14 = r13.length
+            if (r10 >= r14) goto L_0x0192
+            r14 = r13[r10]
+            int r14 = (r14 > r3 ? 1 : (r14 == r3 ? 0 : -1))
+            if (r14 != 0) goto L_0x0134
+            goto L_0x018a
+        L_0x0134:
+            r14 = r13[r10]
+            int r15 = r10 + -1
+            r16 = r13[r15]
+            float r14 = r14 - r16
+            r16 = 1082130432(0x40800000, float:4.0)
+            int r17 = (r14 > r3 ? 1 : (r14 == r3 ? 0 : -1))
+            if (r17 <= 0) goto L_0x0164
+            int r17 = (r14 > r8 ? 1 : (r14 == r8 ? 0 : -1))
+            if (r17 >= 0) goto L_0x014c
+            r12 = r13[r10]
+            r13[r15] = r12
+        L_0x014a:
+            r12 = 1
+            goto L_0x018a
+        L_0x014c:
+            float r16 = r16 * r7
+            int r15 = (r14 > r16 ? 1 : (r14 == r16 ? 0 : -1))
+            if (r15 >= 0) goto L_0x018a
+            r12 = r13[r10]
+            double r4 = (double) r12
+            float r12 = r16 - r14
+            double r14 = (double) r12
+            double r14 = java.lang.Math.ceil(r14)
+            java.lang.Double.isNaN(r4)
+            double r4 = r4 + r14
+            float r4 = (float) r4
+            r13[r10] = r4
+            goto L_0x014a
+        L_0x0164:
+            int r4 = (r14 > r3 ? 1 : (r14 == r3 ? 0 : -1))
+            if (r4 >= 0) goto L_0x018a
+            float r4 = -r14
+            int r5 = (r4 > r8 ? 1 : (r4 == r8 ? 0 : -1))
+            if (r5 >= 0) goto L_0x0172
+            r4 = r13[r15]
+            r13[r10] = r4
+            goto L_0x014a
+        L_0x0172:
+            float r16 = r16 * r7
+            int r4 = (r4 > r16 ? 1 : (r4 == r16 ? 0 : -1))
+            if (r4 >= 0) goto L_0x018a
+            r4 = r13[r15]
+            double r4 = (double) r4
+            float r12 = r16 + r14
+            double r11 = (double) r12
+            double r11 = java.lang.Math.ceil(r11)
+            java.lang.Double.isNaN(r4)
+            double r4 = r4 + r11
+            float r4 = (float) r4
+            r13[r15] = r4
+            goto L_0x014a
+        L_0x018a:
+            int r10 = r10 + 1
+            r4 = 1073741824(0x40000000, float:2.0)
+            r5 = 0
+            r11 = 1065353216(0x3var_, float:1.0)
+            goto L_0x0128
+        L_0x0192:
+            if (r12 != 0) goto L_0x03c6
+            int r4 = r24.getMeasuredWidth()
+            int r4 = r4 / 2
+            int r5 = r24.getMeasuredHeight()
+            int r8 = r2.getHeight()
+            int r5 = r5 - r8
+            int r5 = r5 / 2
+            float r5 = (float) r5
+            r8 = 0
+        L_0x01a7:
+            float[] r10 = r0.lines
+            int r10 = r10.length
+            if (r8 >= r10) goto L_0x03cd
+            int r10 = r2.getLineBottom(r8)
+            int r11 = r2.getLineTop(r8)
+            int r10 = r10 - r11
+            float[] r11 = r0.lines
+            int r11 = r11.length
+            int r11 = r11 - r9
+            if (r8 == r11) goto L_0x01c2
+            r11 = 1065353216(0x3var_, float:1.0)
+            int r12 = org.telegram.messenger.AndroidUtilities.dp(r11)
+            goto L_0x01c5
+        L_0x01c2:
+            r11 = 1065353216(0x3var_, float:1.0)
+            r12 = 0
+        L_0x01c5:
+            int r10 = r10 - r12
+            if (r8 == 0) goto L_0x01cd
+            int r12 = org.telegram.messenger.AndroidUtilities.dp(r11)
+            goto L_0x01ce
+        L_0x01cd:
+            r12 = 0
+        L_0x01ce:
+            int r10 = r10 + r12
+            float[] r11 = r0.lines
+            r12 = r11[r8]
+            r13 = 1073741824(0x40000000, float:2.0)
+            float r15 = r6 * r13
+            int r12 = (r12 > r15 ? 1 : (r12 == r15 ? 0 : -1))
+            if (r12 > 0) goto L_0x01eb
+            float r10 = (float) r10
+            float r5 = r5 + r10
+            r23 = r2
+            r22 = r4
+            r21 = r6
+            r2 = 1065353216(0x3var_, float:1.0)
+            r3 = 1073741824(0x40000000, float:2.0)
+            r9 = 0
+            r10 = 0
+            goto L_0x03ba
+        L_0x01eb:
+            if (r8 <= 0) goto L_0x01ff
+            int r12 = r8 + -1
+            r13 = r11[r12]
+            r16 = r11[r8]
+            int r13 = (r13 > r16 ? 1 : (r13 == r16 ? 0 : -1))
+            if (r13 <= 0) goto L_0x01ff
+            r12 = r11[r12]
+            int r12 = (r12 > r15 ? 1 : (r12 == r15 ? 0 : -1))
+            if (r12 <= 0) goto L_0x01ff
+            r12 = 1
+            goto L_0x0200
+        L_0x01ff:
+            r12 = 0
+        L_0x0200:
+            int r13 = r8 + 1
+            int r14 = r11.length
+            if (r13 >= r14) goto L_0x0215
+            r14 = r11[r13]
+            r18 = r11[r8]
+            int r14 = (r14 > r18 ? 1 : (r14 == r18 ? 0 : -1))
+            if (r14 <= 0) goto L_0x0215
+            r14 = r11[r13]
+            int r14 = (r14 > r15 ? 1 : (r14 == r15 ? 0 : -1))
+            if (r14 <= 0) goto L_0x0215
+            r15 = 1
+            goto L_0x0216
+        L_0x0215:
+            r15 = 0
+        L_0x0216:
+            if (r8 == 0) goto L_0x0226
+            int r14 = r8 + -1
+            r14 = r11[r14]
+            r18 = r11[r8]
+            int r14 = (r14 > r18 ? 1 : (r14 == r18 ? 0 : -1))
+            if (r14 == 0) goto L_0x0223
+            goto L_0x0226
+        L_0x0223:
+            r18 = 0
+            goto L_0x0228
+        L_0x0226:
+            r18 = 1
+        L_0x0228:
+            int r14 = r11.length
+            int r14 = r14 - r9
+            if (r8 == r14) goto L_0x0237
+            r14 = r11[r8]
+            r11 = r11[r13]
+            int r11 = (r14 > r11 ? 1 : (r14 == r11 ? 0 : -1))
+            if (r11 == 0) goto L_0x0235
+            goto L_0x0237
+        L_0x0235:
+            r11 = 0
+            goto L_0x0238
+        L_0x0237:
+            r11 = 1
+        L_0x0238:
+            android.graphics.Path r13 = r0.path
+            r13.reset()
+            if (r8 == 0) goto L_0x0244
+            r13 = 1065353216(0x3var_, float:1.0)
+            float r5 = r5 - r13
+            int r10 = r10 + 1
+        L_0x0244:
+            float r13 = (float) r10
+            float r13 = r13 + r5
+            r19 = r10
+            double r9 = (double) r13
+            double r9 = java.lang.Math.ceil(r9)
+            float r9 = (float) r9
+            float r10 = (float) r4
+            float[] r13 = r0.lines
+            r20 = r13[r8]
+            r17 = 1073741824(0x40000000, float:2.0)
+            float r20 = r20 / r17
+            float r20 = r10 - r20
+            float r14 = r20 + r7
+            r13 = r13[r8]
+            float r13 = r13 / r17
+            float r10 = r10 + r13
+            float r10 = r10 - r7
+            android.graphics.Path r13 = r0.path
+            r13.moveTo(r14, r5)
+            r20 = 1077936128(0x40400000, float:3.0)
+            if (r18 == 0) goto L_0x02bd
+            if (r12 == 0) goto L_0x0297
+            android.graphics.Path r3 = r0.path
+            r17 = 1073741824(0x40000000, float:2.0)
+            float r21 = r7 * r17
+            float r13 = r10 + r21
+            r3.lineTo(r13, r5)
+            android.graphics.RectF r3 = r0.rect
+            float r13 = r10 + r7
+            float r22 = r7 * r20
+            r23 = r2
+            float r2 = r10 + r22
+            r22 = r4
+            float r4 = r5 + r21
+            r3.set(r13, r5, r2, r4)
+            android.graphics.Path r2 = r0.path
+            android.graphics.RectF r3 = r0.rect
+            r21 = r6
+            r4 = 1132920832(0x43870000, float:270.0)
+            r6 = 0
+            r13 = -1028390912(0xffffffffc2b40000, float:-90.0)
+            r2.arcTo(r3, r4, r13, r6)
+            goto L_0x02ca
+        L_0x0297:
+            r23 = r2
+            r22 = r4
+            r21 = r6
+            android.graphics.Path r2 = r0.path
+            r2.lineTo(r10, r5)
+            android.graphics.RectF r2 = r0.rect
+            float r3 = r10 - r7
+            float r4 = r10 + r7
+            r6 = 1073741824(0x40000000, float:2.0)
+            float r13 = r7 * r6
+            float r13 = r13 + r5
+            r2.set(r3, r5, r4, r13)
+            android.graphics.Path r2 = r0.path
+            android.graphics.RectF r3 = r0.rect
+            r4 = 1132920832(0x43870000, float:270.0)
+            r6 = 1119092736(0x42b40000, float:90.0)
+            r13 = 0
+            r2.arcTo(r3, r4, r6, r13)
+            goto L_0x02ca
+        L_0x02bd:
+            r23 = r2
+            r22 = r4
+            r21 = r6
+            android.graphics.Path r2 = r0.path
+            float r3 = r10 + r7
+            r2.lineTo(r3, r5)
+        L_0x02ca:
+            android.graphics.Path r2 = r0.path
+            float r3 = r10 + r7
+            float r4 = r9 - r7
+            r2.lineTo(r3, r4)
+            r2 = 1127481344(0x43340000, float:180.0)
+            if (r11 == 0) goto L_0x034f
+            if (r15 == 0) goto L_0x02f9
+            android.graphics.RectF r4 = r0.rect
+            r6 = 1073741824(0x40000000, float:2.0)
+            float r11 = r7 * r6
+            float r6 = r9 - r11
+            float r13 = r7 * r20
+            float r10 = r10 + r13
+            r4.set(r3, r6, r10, r9)
+            android.graphics.Path r3 = r0.path
+            android.graphics.RectF r4 = r0.rect
+            r6 = -1028390912(0xffffffffc2b40000, float:-90.0)
+            r10 = 0
+            r3.arcTo(r4, r2, r6, r10)
+            android.graphics.Path r3 = r0.path
+            float r4 = r14 - r11
+            r3.lineTo(r4, r9)
+            goto L_0x0315
+        L_0x02f9:
+            android.graphics.RectF r4 = r0.rect
+            float r10 = r10 - r7
+            r6 = 1073741824(0x40000000, float:2.0)
+            float r11 = r7 * r6
+            float r6 = r9 - r11
+            r4.set(r10, r6, r3, r9)
+            android.graphics.Path r3 = r0.path
+            android.graphics.RectF r4 = r0.rect
+            r6 = 1119092736(0x42b40000, float:90.0)
+            r10 = 0
+            r11 = 0
+            r3.arcTo(r4, r10, r6, r11)
+            android.graphics.Path r3 = r0.path
+            r3.lineTo(r14, r9)
+        L_0x0315:
+            if (r15 == 0) goto L_0x0335
+            android.graphics.RectF r3 = r0.rect
+            float r4 = r7 * r20
+            float r4 = r14 - r4
+            r6 = 1073741824(0x40000000, float:2.0)
+            float r10 = r7 * r6
+            float r10 = r9 - r10
+            float r11 = r14 - r7
+            r3.set(r4, r10, r11, r9)
+            android.graphics.Path r3 = r0.path
+            android.graphics.RectF r4 = r0.rect
+            r9 = -1028390912(0xffffffffc2b40000, float:-90.0)
+            r10 = 1119092736(0x42b40000, float:90.0)
+            r11 = 0
+            r3.arcTo(r4, r10, r9, r11)
+            goto L_0x035b
+        L_0x0335:
+            r6 = 1073741824(0x40000000, float:2.0)
+            r10 = 1119092736(0x42b40000, float:90.0)
+            r11 = 0
+            android.graphics.RectF r3 = r0.rect
+            float r4 = r14 - r7
+            float r13 = r7 * r6
+            float r6 = r9 - r13
+            float r13 = r14 + r7
+            r3.set(r4, r6, r13, r9)
+            android.graphics.Path r3 = r0.path
+            android.graphics.RectF r4 = r0.rect
+            r3.arcTo(r4, r10, r10, r11)
+            goto L_0x035b
+        L_0x034f:
+            android.graphics.Path r4 = r0.path
+            r4.lineTo(r3, r9)
+            android.graphics.Path r3 = r0.path
+            float r4 = r14 - r7
+            r3.lineTo(r4, r9)
+        L_0x035b:
+            android.graphics.Path r3 = r0.path
+            float r4 = r14 - r7
+            float r6 = r5 - r7
+            r3.lineTo(r4, r6)
+            if (r18 == 0) goto L_0x0399
+            if (r12 == 0) goto L_0x0382
+            android.graphics.RectF r2 = r0.rect
+            float r20 = r20 * r7
+            float r14 = r14 - r20
+            r3 = 1073741824(0x40000000, float:2.0)
+            float r6 = r7 * r3
+            float r6 = r6 + r5
+            r2.set(r14, r5, r4, r6)
+            android.graphics.Path r2 = r0.path
+            android.graphics.RectF r4 = r0.rect
+            r6 = -1028390912(0xffffffffc2b40000, float:-90.0)
+            r9 = 0
+            r10 = 0
+            r2.arcTo(r4, r9, r6, r10)
+            goto L_0x03a2
+        L_0x0382:
+            r3 = 1073741824(0x40000000, float:2.0)
+            r9 = 0
+            r10 = 0
+            android.graphics.RectF r6 = r0.rect
+            float r14 = r14 + r7
+            float r11 = r7 * r3
+            float r11 = r11 + r5
+            r6.set(r4, r5, r14, r11)
+            android.graphics.Path r4 = r0.path
+            android.graphics.RectF r6 = r0.rect
+            r11 = 1119092736(0x42b40000, float:90.0)
+            r4.arcTo(r6, r2, r11, r10)
+            goto L_0x03a2
+        L_0x0399:
+            r3 = 1073741824(0x40000000, float:2.0)
+            r9 = 0
+            r10 = 0
+            android.graphics.Path r2 = r0.path
+            r2.lineTo(r4, r5)
+        L_0x03a2:
+            android.graphics.Path r2 = r0.path
+            r2.close()
+            android.graphics.Path r2 = r0.path
+            android.graphics.Paint r4 = r0.paint
+            r1.drawPath(r2, r4)
+            r2 = 1065353216(0x3var_, float:1.0)
+            if (r8 == 0) goto L_0x03b6
+            float r5 = r5 + r2
+            int r4 = r19 + -1
+            goto L_0x03b8
+        L_0x03b6:
+            r4 = r19
+        L_0x03b8:
+            float r4 = (float) r4
+            float r5 = r5 + r4
+        L_0x03ba:
+            int r8 = r8 + 1
+            r6 = r21
+            r4 = r22
+            r2 = r23
+            r3 = 0
+            r9 = 1
+            goto L_0x01a7
+        L_0x03c6:
+            r4 = 1073741824(0x40000000, float:2.0)
+            r5 = 0
+            r11 = 1065353216(0x3var_, float:1.0)
+            goto L_0x0125
+        L_0x03cd:
+            super.onDraw(r25)
+            return
+        */
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.Paint.Views.EditTextOutline.onDraw(android.graphics.Canvas):void");
     }
 }

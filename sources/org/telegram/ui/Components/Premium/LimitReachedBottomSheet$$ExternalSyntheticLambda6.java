@@ -1,17 +1,17 @@
 package org.telegram.ui.Components.Premium;
 
+import org.telegram.tgnet.RequestDelegate;
 import org.telegram.tgnet.TLObject;
+import org.telegram.tgnet.TLRPC$TL_error;
 
-public final /* synthetic */ class LimitReachedBottomSheet$$ExternalSyntheticLambda6 implements Runnable {
+public final /* synthetic */ class LimitReachedBottomSheet$$ExternalSyntheticLambda6 implements RequestDelegate {
     public final /* synthetic */ LimitReachedBottomSheet f$0;
-    public final /* synthetic */ TLObject f$1;
 
-    public /* synthetic */ LimitReachedBottomSheet$$ExternalSyntheticLambda6(LimitReachedBottomSheet limitReachedBottomSheet, TLObject tLObject) {
+    public /* synthetic */ LimitReachedBottomSheet$$ExternalSyntheticLambda6(LimitReachedBottomSheet limitReachedBottomSheet) {
         this.f$0 = limitReachedBottomSheet;
-        this.f$1 = tLObject;
     }
 
-    public final void run() {
-        this.f$0.m1240xb43ddbfe(this.f$1);
+    public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+        this.f$0.lambda$loadAdminedChannels$6(tLObject, tLRPC$TL_error);
     }
 }

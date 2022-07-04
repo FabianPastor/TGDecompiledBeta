@@ -10,6 +10,6 @@ public final /* synthetic */ class IntroActivity$5$$ExternalSyntheticLambda0 imp
     }
 
     public final void run() {
-        this.f$0.m3608lambda$didReceivedNotification$0$orgtelegramuiIntroActivity$5();
+        this.f$0.lambda$didReceivedNotification$0();
     }
 }

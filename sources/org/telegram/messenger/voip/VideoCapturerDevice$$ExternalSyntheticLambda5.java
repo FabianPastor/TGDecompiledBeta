@@ -12,6 +12,6 @@ public final /* synthetic */ class VideoCapturerDevice$$ExternalSyntheticLambda5
     }
 
     public final void run() {
-        this.f$0.m511lambda$init$5$orgtelegrammessengervoipVideoCapturerDevice(this.f$1, this.f$2);
+        this.f$0.lambda$init$5(this.f$1, this.f$2);
     }
 }

@@ -10,6 +10,6 @@ public final /* synthetic */ class CropRotationWheel$$ExternalSyntheticLambda3 i
     }
 
     public final boolean onLongClick(View view) {
-        return this.f$0.m895lambda$new$1$orgtelegramuiComponentsCropCropRotationWheel(view);
+        return this.f$0.lambda$new$1(view);
     }
 }

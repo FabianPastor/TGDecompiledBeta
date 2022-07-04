@@ -1,18 +1,15 @@
 package org.telegram.ui;
 
-import android.view.View;
-import java.util.ArrayList;
+import android.content.DialogInterface;
 
-public final /* synthetic */ class DialogsActivity$$ExternalSyntheticLambda16 implements View.OnClickListener {
+public final /* synthetic */ class DialogsActivity$$ExternalSyntheticLambda16 implements DialogInterface.OnDismissListener {
     public final /* synthetic */ DialogsActivity f$0;
-    public final /* synthetic */ ArrayList f$1;
 
-    public /* synthetic */ DialogsActivity$$ExternalSyntheticLambda16(DialogsActivity dialogsActivity, ArrayList arrayList) {
+    public /* synthetic */ DialogsActivity$$ExternalSyntheticLambda16(DialogsActivity dialogsActivity) {
         this.f$0 = dialogsActivity;
-        this.f$1 = arrayList;
     }
 
-    public final void onClick(View view) {
-        this.f$0.m3416lambda$showChatPreview$29$orgtelegramuiDialogsActivity(this.f$1, view);
+    public final void onDismiss(DialogInterface dialogInterface) {
+        this.f$0.lambda$showSuggestion$47(dialogInterface);
     }
 }

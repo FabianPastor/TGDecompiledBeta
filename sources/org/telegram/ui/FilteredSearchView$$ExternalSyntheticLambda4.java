@@ -11,6 +11,6 @@ public final /* synthetic */ class FilteredSearchView$$ExternalSyntheticLambda4 
     }
 
     public final void onItemClick(View view, int i) {
-        this.f$0.m3482lambda$new$1$orgtelegramuiFilteredSearchView(view, i);
+        this.f$0.lambda$new$1(view, i);
     }
 }

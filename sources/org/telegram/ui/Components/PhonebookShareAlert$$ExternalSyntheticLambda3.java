@@ -18,6 +18,6 @@ public final /* synthetic */ class PhonebookShareAlert$$ExternalSyntheticLambda3
     }
 
     public final boolean onLongClick(View view) {
-        return this.f$0.m1161lambda$new$3$orgtelegramuiComponentsPhonebookShareAlert(this.f$1, this.f$2, this.f$3, view);
+        return this.f$0.lambda$new$3(this.f$1, this.f$2, this.f$3, view);
     }
 }

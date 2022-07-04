@@ -12,6 +12,6 @@ public final /* synthetic */ class ChangeUsernameActivity$$ExternalSyntheticLamb
     }
 
     public final void onCancel(DialogInterface dialogInterface) {
-        this.f$0.m2854lambda$saveName$8$orgtelegramuiChangeUsernameActivity(this.f$1, dialogInterface);
+        this.f$0.lambda$saveName$8(this.f$1, dialogInterface);
     }
 }

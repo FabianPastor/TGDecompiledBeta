@@ -1,20 +1,19 @@
 package org.telegram.messenger;
 
+import android.animation.ValueAnimator;
 import android.view.Window;
-import java.util.ArrayList;
+import org.telegram.messenger.AndroidUtilities;
 
-public final /* synthetic */ class AndroidUtilities$$ExternalSyntheticLambda1 implements Runnable {
-    public final /* synthetic */ ArrayList f$0;
-    public final /* synthetic */ long f$1;
-    public final /* synthetic */ Window f$2;
+public final /* synthetic */ class AndroidUtilities$$ExternalSyntheticLambda1 implements ValueAnimator.AnimatorUpdateListener {
+    public final /* synthetic */ AndroidUtilities.IntColorCallback f$0;
+    public final /* synthetic */ Window f$1;
 
-    public /* synthetic */ AndroidUtilities$$ExternalSyntheticLambda1(ArrayList arrayList, long j, Window window) {
-        this.f$0 = arrayList;
-        this.f$1 = j;
-        this.f$2 = window;
+    public /* synthetic */ AndroidUtilities$$ExternalSyntheticLambda1(AndroidUtilities.IntColorCallback intColorCallback, Window window) {
+        this.f$0 = intColorCallback;
+        this.f$1 = window;
     }
 
-    public final void run() {
-        AndroidUtilities.lambda$registerFlagSecure$11(this.f$0, this.f$1, this.f$2);
+    public final void onAnimationUpdate(ValueAnimator valueAnimator) {
+        AndroidUtilities.lambda$setNavigationBarColor$12(this.f$0, this.f$1, valueAnimator);
     }
 }

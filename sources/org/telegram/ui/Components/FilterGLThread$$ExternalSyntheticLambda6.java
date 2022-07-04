@@ -14,6 +14,6 @@ public final /* synthetic */ class FilterGLThread$$ExternalSyntheticLambda6 impl
     }
 
     public final void run() {
-        this.f$0.m962lambda$requestRender$7$orgtelegramuiComponentsFilterGLThread(this.f$1, this.f$2, this.f$3);
+        this.f$0.lambda$requestRender$7(this.f$1, this.f$2, this.f$3);
     }
 }

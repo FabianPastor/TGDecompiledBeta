@@ -1,15 +1,13 @@
 package org.telegram.ui;
 
-import android.content.DialogInterface;
-
-public final /* synthetic */ class PaymentFormActivity$$ExternalSyntheticLambda32 implements DialogInterface.OnClickListener {
+public final /* synthetic */ class PaymentFormActivity$$ExternalSyntheticLambda32 implements Runnable {
     public final /* synthetic */ PaymentFormActivity f$0;
 
     public /* synthetic */ PaymentFormActivity$$ExternalSyntheticLambda32(PaymentFormActivity paymentFormActivity) {
         this.f$0 = paymentFormActivity;
     }
 
-    public final void onClick(DialogInterface dialogInterface, int i) {
-        this.f$0.m4159lambda$createView$29$orgtelegramuiPaymentFormActivity(dialogInterface, i);
+    public final void run() {
+        this.f$0.lambda$loadPasswordInfo$33();
     }
 }

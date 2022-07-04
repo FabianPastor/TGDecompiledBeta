@@ -10,6 +10,6 @@ public final /* synthetic */ class JoinToSendSettingsView$$ExternalSyntheticLamb
     }
 
     public final void run() {
-        this.f$0.m1091lambda$new$3$orgtelegramuiComponentsJoinToSendSettingsView(this.f$1);
+        this.f$0.lambda$new$4(this.f$1);
     }
 }

@@ -1,17 +1,17 @@
 package org.telegram.messenger.voip;
 
-import org.telegram.tgnet.RequestDelegate;
-import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC;
+import org.telegram.messenger.voip.NativeInstance;
 
-public final /* synthetic */ class VoIPService$$ExternalSyntheticLambda75 implements RequestDelegate {
+public final /* synthetic */ class VoIPService$$ExternalSyntheticLambda75 implements NativeInstance.RequestCurrentTimeCallback {
     public final /* synthetic */ VoIPService f$0;
+    public final /* synthetic */ int f$1;
 
-    public /* synthetic */ VoIPService$$ExternalSyntheticLambda75(VoIPService voIPService) {
+    public /* synthetic */ VoIPService$$ExternalSyntheticLambda75(VoIPService voIPService, int i) {
         this.f$0 = voIPService;
+        this.f$1 = i;
     }
 
-    public final void run(TLObject tLObject, TLRPC.TL_error tL_error) {
-        this.f$0.m2435x369d975f(tLObject, tL_error);
+    public final void run(long j) {
+        this.f$0.lambda$createGroupInstance$49(this.f$1, j);
     }
 }

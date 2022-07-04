@@ -21,7 +21,7 @@ import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.UserObject;
-import org.telegram.tgnet.TLRPC;
+import org.telegram.tgnet.TLRPC$User;
 import org.telegram.ui.ActionBar.ActionBar;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.Theme;
@@ -33,7 +33,6 @@ import org.telegram.ui.Components.EditTextBoldCursor;
 import org.telegram.ui.Components.LayoutHelper;
 
 public class ContactAddActivity extends BaseFragment implements NotificationCenter.NotificationCenterDelegate {
-    private static final int done_button = 1;
     private boolean addContact;
     private AvatarDrawable avatarDrawable;
     private BackupImageView avatarImage;
@@ -61,12 +60,17 @@ public class ContactAddActivity extends BaseFragment implements NotificationCent
         void didAddToContacts();
     }
 
-    public ContactAddActivity(Bundle args) {
-        super(args);
+    /* access modifiers changed from: private */
+    public static /* synthetic */ boolean lambda$createView$0(View view, MotionEvent motionEvent) {
+        return true;
     }
 
-    public ContactAddActivity(Bundle args, Theme.ResourcesProvider resourcesProvider2) {
-        super(args);
+    public ContactAddActivity(Bundle bundle) {
+        super(bundle);
+    }
+
+    public ContactAddActivity(Bundle bundle, Theme.ResourcesProvider resourcesProvider2) {
+        super(bundle);
         this.resourcesProvider = resourcesProvider2;
     }
 
@@ -81,11 +85,7 @@ public class ContactAddActivity extends BaseFragment implements NotificationCent
         this.addContact = getArguments().getBoolean("addContact", false);
         SharedPreferences notificationsSettings = MessagesController.getNotificationsSettings(this.currentAccount);
         this.needAddException = notificationsSettings.getBoolean("dialog_bar_exception" + this.user_id, false);
-        TLRPC.User user = null;
-        if (this.user_id != 0) {
-            user = getMessagesController().getUser(Long.valueOf(this.user_id));
-        }
-        if (user == null || !super.onFragmentCreate()) {
+        if ((this.user_id != 0 ? getMessagesController().getUser(Long.valueOf(this.user_id)) : null) == null || !super.onFragmentCreate()) {
             return false;
         }
         return true;
@@ -109,11 +109,11 @@ public class ContactAddActivity extends BaseFragment implements NotificationCent
             this.actionBar.setTitle(LocaleController.getString("EditName", NUM));
         }
         this.actionBar.setActionBarMenuOnItemClick(new ActionBar.ActionBarMenuOnItemClick() {
-            public void onItemClick(int id) {
-                if (id == -1) {
+            public void onItemClick(int i) {
+                if (i == -1) {
                     ContactAddActivity.this.finishFragment();
-                } else if (id == 1 && ContactAddActivity.this.firstNameField.getText().length() != 0) {
-                    TLRPC.User user = ContactAddActivity.this.getMessagesController().getUser(Long.valueOf(ContactAddActivity.this.user_id));
+                } else if (i == 1 && ContactAddActivity.this.firstNameField.getText().length() != 0) {
+                    TLRPC$User user = ContactAddActivity.this.getMessagesController().getUser(Long.valueOf(ContactAddActivity.this.user_id));
                     user.first_name = ContactAddActivity.this.firstNameField.getText().toString();
                     user.last_name = ContactAddActivity.this.lastNameField.getText().toString();
                     ContactAddActivity.this.getContactsController().addContact(user, ContactAddActivity.this.checkBoxCell != null && ContactAddActivity.this.checkBoxCell.isChecked());
@@ -150,25 +150,29 @@ public class ContactAddActivity extends BaseFragment implements NotificationCent
         this.nameTextView.setEllipsize(TextUtils.TruncateAt.END);
         this.nameTextView.setGravity(LocaleController.isRTL ? 5 : 3);
         this.nameTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
-        frameLayout.addView(this.nameTextView, LayoutHelper.createFrame(-2, -2.0f, (LocaleController.isRTL ? 5 : 3) | 48, LocaleController.isRTL ? 0.0f : 80.0f, 3.0f, LocaleController.isRTL ? 80.0f : 0.0f, 0.0f));
-        TextView textView2 = new TextView(context2);
-        this.onlineTextView = textView2;
-        textView2.setTextColor(Theme.getColor("windowBackgroundWhiteGrayText3", this.resourcesProvider));
+        TextView textView2 = this.nameTextView;
+        boolean z = LocaleController.isRTL;
+        frameLayout.addView(textView2, LayoutHelper.createFrame(-2, -2.0f, (z ? 5 : 3) | 48, z ? 0.0f : 80.0f, 3.0f, z ? 80.0f : 0.0f, 0.0f));
+        TextView textView3 = new TextView(context2);
+        this.onlineTextView = textView3;
+        textView3.setTextColor(Theme.getColor("windowBackgroundWhiteGrayText3", this.resourcesProvider));
         this.onlineTextView.setTextSize(1, 14.0f);
         this.onlineTextView.setLines(1);
         this.onlineTextView.setMaxLines(1);
         this.onlineTextView.setSingleLine(true);
         this.onlineTextView.setEllipsize(TextUtils.TruncateAt.END);
         this.onlineTextView.setGravity(LocaleController.isRTL ? 5 : 3);
-        frameLayout.addView(this.onlineTextView, LayoutHelper.createFrame(-2, -2.0f, (LocaleController.isRTL ? 5 : 3) | 48, LocaleController.isRTL ? 0.0f : 80.0f, 32.0f, LocaleController.isRTL ? 80.0f : 0.0f, 0.0f));
-        AnonymousClass2 r7 = new EditTextBoldCursor(context2) {
+        TextView textView4 = this.onlineTextView;
+        boolean z2 = LocaleController.isRTL;
+        frameLayout.addView(textView4, LayoutHelper.createFrame(-2, -2.0f, (z2 ? 5 : 3) | 48, z2 ? 0.0f : 80.0f, 32.0f, z2 ? 80.0f : 0.0f, 0.0f));
+        AnonymousClass2 r5 = new EditTextBoldCursor(context2) {
             /* access modifiers changed from: protected */
             public Theme.ResourcesProvider getResourcesProvider() {
                 return ContactAddActivity.this.resourcesProvider;
             }
         };
-        this.firstNameField = r7;
-        r7.setTextSize(1, 18.0f);
+        this.firstNameField = r5;
+        r5.setTextSize(1, 18.0f);
         this.firstNameField.setHintTextColor(Theme.getColor("windowBackgroundWhiteHintText", this.resourcesProvider));
         this.firstNameField.setTextColor(Theme.getColor("windowBackgroundWhiteBlackText", this.resourcesProvider));
         this.firstNameField.setBackgroundDrawable((Drawable) null);
@@ -188,11 +192,11 @@ public class ContactAddActivity extends BaseFragment implements NotificationCent
         this.firstNameField.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             boolean focused;
 
-            public void onFocusChange(View v, boolean hasFocus) {
-                if (!ContactAddActivity.this.paused && !hasFocus && this.focused) {
+            public void onFocusChange(View view, boolean z) {
+                if (!ContactAddActivity.this.paused && !z && this.focused) {
                     FileLog.d("changed");
                 }
-                this.focused = hasFocus;
+                this.focused = z;
             }
         });
         AnonymousClass4 r4 = new EditTextBoldCursor(context2) {
@@ -219,7 +223,7 @@ public class ContactAddActivity extends BaseFragment implements NotificationCent
         this.lastNameField.setCursorWidth(1.5f);
         linearLayout.addView(this.lastNameField, LayoutHelper.createLinear(-1, 36, 24.0f, 16.0f, 24.0f, 0.0f));
         this.lastNameField.setOnEditorActionListener(new ContactAddActivity$$ExternalSyntheticLambda3(this));
-        TLRPC.User user = getMessagesController().getUser(Long.valueOf(this.user_id));
+        TLRPC$User user = getMessagesController().getUser(Long.valueOf(this.user_id));
         if (user != null) {
             if (user.phone == null && (str = this.phone) != null) {
                 user.phone = PhoneFormat.stripExceptNumbers(str);
@@ -229,9 +233,9 @@ public class ContactAddActivity extends BaseFragment implements NotificationCent
             editTextBoldCursor.setSelection(editTextBoldCursor.length());
             this.lastNameField.setText(user.last_name);
         }
-        TextView textView3 = new TextView(context2);
-        this.infoTextView = textView3;
-        textView3.setTextColor(Theme.getColor("windowBackgroundWhiteGrayText4"));
+        TextView textView5 = new TextView(context2);
+        this.infoTextView = textView5;
+        textView5.setTextColor(Theme.getColor("windowBackgroundWhiteGrayText4"));
         this.infoTextView.setTextSize(1, 14.0f);
         this.infoTextView.setGravity(LocaleController.isRTL ? 5 : 3);
         if (this.addContact) {
@@ -251,12 +255,8 @@ public class ContactAddActivity extends BaseFragment implements NotificationCent
         return this.fragmentView;
     }
 
-    static /* synthetic */ boolean lambda$createView$0(View v, MotionEvent event) {
-        return true;
-    }
-
-    /* renamed from: lambda$createView$1$org-telegram-ui-ContactAddActivity  reason: not valid java name */
-    public /* synthetic */ boolean m3328lambda$createView$1$orgtelegramuiContactAddActivity(TextView textView, int i, KeyEvent keyEvent) {
+    /* access modifiers changed from: private */
+    public /* synthetic */ boolean lambda$createView$1(TextView textView, int i, KeyEvent keyEvent) {
         if (i != 5) {
             return false;
         }
@@ -266,8 +266,8 @@ public class ContactAddActivity extends BaseFragment implements NotificationCent
         return true;
     }
 
-    /* renamed from: lambda$createView$2$org-telegram-ui-ContactAddActivity  reason: not valid java name */
-    public /* synthetic */ boolean m3329lambda$createView$2$orgtelegramuiContactAddActivity(TextView textView, int i, KeyEvent keyEvent) {
+    /* access modifiers changed from: private */
+    public /* synthetic */ boolean lambda$createView$2(TextView textView, int i, KeyEvent keyEvent) {
         if (i != 6) {
             return false;
         }
@@ -275,8 +275,8 @@ public class ContactAddActivity extends BaseFragment implements NotificationCent
         return true;
     }
 
-    /* renamed from: lambda$createView$3$org-telegram-ui-ContactAddActivity  reason: not valid java name */
-    public /* synthetic */ void m3330lambda$createView$3$orgtelegramuiContactAddActivity(View v) {
+    /* access modifiers changed from: private */
+    public /* synthetic */ void lambda$createView$3(View view) {
         CheckBoxCell checkBoxCell2 = this.checkBoxCell;
         checkBoxCell2.setChecked(!checkBoxCell2.isChecked(), true);
     }
@@ -286,7 +286,7 @@ public class ContactAddActivity extends BaseFragment implements NotificationCent
     }
 
     private void updateAvatarLayout() {
-        TLRPC.User user;
+        TLRPC$User user;
         if (this.nameTextView != null && (user = getMessagesController().getUser(Long.valueOf(this.user_id))) != null) {
             if (TextUtils.isEmpty(user.phone)) {
                 this.nameTextView.setText(LocaleController.getString("MobileHidden", NUM));
@@ -307,10 +307,10 @@ public class ContactAddActivity extends BaseFragment implements NotificationCent
         }
     }
 
-    public void didReceivedNotification(int id, int account, Object... args) {
-        if (id == NotificationCenter.updateInterfaces) {
-            int mask = args[0].intValue();
-            if ((MessagesController.UPDATE_MASK_AVATAR & mask) != 0 || (MessagesController.UPDATE_MASK_STATUS & mask) != 0) {
+    public void didReceivedNotification(int i, int i2, Object... objArr) {
+        if (i == NotificationCenter.updateInterfaces) {
+            int intValue = objArr[0].intValue();
+            if ((MessagesController.UPDATE_MASK_AVATAR & intValue) != 0 || (intValue & MessagesController.UPDATE_MASK_STATUS) != 0) {
                 updateAvatarLayout();
             }
         }
@@ -333,48 +333,47 @@ public class ContactAddActivity extends BaseFragment implements NotificationCent
         }
     }
 
-    public void onTransitionAnimationEnd(boolean isOpen, boolean backward) {
-        if (isOpen) {
+    public void onTransitionAnimationEnd(boolean z, boolean z2) {
+        if (z) {
             this.firstNameField.requestFocus();
             AndroidUtilities.showKeyboard(this.firstNameField);
         }
     }
 
     public ArrayList<ThemeDescription> getThemeDescriptions() {
-        ArrayList<ThemeDescription> themeDescriptions = new ArrayList<>();
-        ThemeDescription.ThemeDescriptionDelegate cellDelegate = new ContactAddActivity$$ExternalSyntheticLambda4(this);
-        themeDescriptions.add(new ThemeDescription(this.fragmentView, ThemeDescription.FLAG_BACKGROUND, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhite"));
-        themeDescriptions.add(new ThemeDescription(this.actionBar, ThemeDescription.FLAG_BACKGROUND, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "actionBarDefault"));
-        themeDescriptions.add(new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_ITEMSCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "actionBarDefaultIcon"));
-        themeDescriptions.add(new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_TITLECOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "actionBarDefaultTitle"));
-        themeDescriptions.add(new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_SELECTORCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "actionBarDefaultSelector"));
-        themeDescriptions.add(new ThemeDescription(this.nameTextView, ThemeDescription.FLAG_TEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlackText"));
-        themeDescriptions.add(new ThemeDescription(this.onlineTextView, ThemeDescription.FLAG_TEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteGrayText3"));
-        themeDescriptions.add(new ThemeDescription(this.firstNameField, ThemeDescription.FLAG_TEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlackText"));
-        themeDescriptions.add(new ThemeDescription(this.firstNameField, ThemeDescription.FLAG_HINTTEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteHintText"));
-        themeDescriptions.add(new ThemeDescription(this.firstNameField, ThemeDescription.FLAG_BACKGROUNDFILTER, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteInputField"));
-        themeDescriptions.add(new ThemeDescription(this.firstNameField, ThemeDescription.FLAG_BACKGROUNDFILTER | ThemeDescription.FLAG_DRAWABLESELECTEDSTATE, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteInputFieldActivated"));
-        themeDescriptions.add(new ThemeDescription(this.lastNameField, ThemeDescription.FLAG_TEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlackText"));
-        themeDescriptions.add(new ThemeDescription(this.lastNameField, ThemeDescription.FLAG_HINTTEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteHintText"));
-        themeDescriptions.add(new ThemeDescription(this.lastNameField, ThemeDescription.FLAG_BACKGROUNDFILTER, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteInputField"));
-        themeDescriptions.add(new ThemeDescription(this.lastNameField, ThemeDescription.FLAG_BACKGROUNDFILTER | ThemeDescription.FLAG_DRAWABLESELECTEDSTATE, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteInputFieldActivated"));
-        themeDescriptions.add(new ThemeDescription(this.infoTextView, ThemeDescription.FLAG_TEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteGrayText4"));
-        themeDescriptions.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, Theme.avatarDrawables, cellDelegate, "avatar_text"));
-        themeDescriptions.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, cellDelegate, "avatar_backgroundRed"));
-        themeDescriptions.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, cellDelegate, "avatar_backgroundOrange"));
-        ThemeDescription.ThemeDescriptionDelegate themeDescriptionDelegate = cellDelegate;
-        themeDescriptions.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, themeDescriptionDelegate, "avatar_backgroundViolet"));
-        ThemeDescription.ThemeDescriptionDelegate themeDescriptionDelegate2 = cellDelegate;
-        themeDescriptions.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, themeDescriptionDelegate2, "avatar_backgroundGreen"));
-        themeDescriptions.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, themeDescriptionDelegate, "avatar_backgroundCyan"));
-        themeDescriptions.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, themeDescriptionDelegate2, "avatar_backgroundBlue"));
-        themeDescriptions.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, themeDescriptionDelegate, "avatar_backgroundPink"));
-        return themeDescriptions;
+        ArrayList<ThemeDescription> arrayList = new ArrayList<>();
+        ContactAddActivity$$ExternalSyntheticLambda4 contactAddActivity$$ExternalSyntheticLambda4 = new ContactAddActivity$$ExternalSyntheticLambda4(this);
+        arrayList.add(new ThemeDescription(this.fragmentView, ThemeDescription.FLAG_BACKGROUND, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhite"));
+        arrayList.add(new ThemeDescription(this.actionBar, ThemeDescription.FLAG_BACKGROUND, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "actionBarDefault"));
+        arrayList.add(new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_ITEMSCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "actionBarDefaultIcon"));
+        arrayList.add(new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_TITLECOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "actionBarDefaultTitle"));
+        arrayList.add(new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_SELECTORCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "actionBarDefaultSelector"));
+        arrayList.add(new ThemeDescription(this.nameTextView, ThemeDescription.FLAG_TEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlackText"));
+        arrayList.add(new ThemeDescription(this.onlineTextView, ThemeDescription.FLAG_TEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteGrayText3"));
+        arrayList.add(new ThemeDescription(this.firstNameField, ThemeDescription.FLAG_TEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlackText"));
+        arrayList.add(new ThemeDescription(this.firstNameField, ThemeDescription.FLAG_HINTTEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteHintText"));
+        arrayList.add(new ThemeDescription(this.firstNameField, ThemeDescription.FLAG_BACKGROUNDFILTER, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteInputField"));
+        arrayList.add(new ThemeDescription(this.firstNameField, ThemeDescription.FLAG_BACKGROUNDFILTER | ThemeDescription.FLAG_DRAWABLESELECTEDSTATE, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteInputFieldActivated"));
+        arrayList.add(new ThemeDescription(this.lastNameField, ThemeDescription.FLAG_TEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlackText"));
+        arrayList.add(new ThemeDescription(this.lastNameField, ThemeDescription.FLAG_HINTTEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteHintText"));
+        arrayList.add(new ThemeDescription(this.lastNameField, ThemeDescription.FLAG_BACKGROUNDFILTER, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteInputField"));
+        arrayList.add(new ThemeDescription(this.lastNameField, ThemeDescription.FLAG_BACKGROUNDFILTER | ThemeDescription.FLAG_DRAWABLESELECTEDSTATE, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteInputFieldActivated"));
+        arrayList.add(new ThemeDescription(this.infoTextView, ThemeDescription.FLAG_TEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteGrayText4"));
+        ContactAddActivity$$ExternalSyntheticLambda4 contactAddActivity$$ExternalSyntheticLambda42 = contactAddActivity$$ExternalSyntheticLambda4;
+        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, Theme.avatarDrawables, contactAddActivity$$ExternalSyntheticLambda42, "avatar_text"));
+        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, contactAddActivity$$ExternalSyntheticLambda42, "avatar_backgroundRed"));
+        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, contactAddActivity$$ExternalSyntheticLambda42, "avatar_backgroundOrange"));
+        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, contactAddActivity$$ExternalSyntheticLambda42, "avatar_backgroundViolet"));
+        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, contactAddActivity$$ExternalSyntheticLambda42, "avatar_backgroundGreen"));
+        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, contactAddActivity$$ExternalSyntheticLambda42, "avatar_backgroundCyan"));
+        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, contactAddActivity$$ExternalSyntheticLambda42, "avatar_backgroundBlue"));
+        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, contactAddActivity$$ExternalSyntheticLambda42, "avatar_backgroundPink"));
+        return arrayList;
     }
 
-    /* renamed from: lambda$getThemeDescriptions$4$org-telegram-ui-ContactAddActivity  reason: not valid java name */
-    public /* synthetic */ void m3331lambda$getThemeDescriptions$4$orgtelegramuiContactAddActivity() {
-        TLRPC.User user;
+    /* access modifiers changed from: private */
+    public /* synthetic */ void lambda$getThemeDescriptions$4() {
+        TLRPC$User user;
         if (this.avatarImage != null && (user = getMessagesController().getUser(Long.valueOf(this.user_id))) != null) {
             this.avatarDrawable.setInfo(user);
             this.avatarImage.invalidate();

@@ -8,6 +8,6 @@ public final /* synthetic */ class ProfileNotificationsActivity$$ExternalSynthet
     }
 
     public final void run() {
-        this.f$0.m4536lambda$createView$1$orgtelegramuiProfileNotificationsActivity();
+        this.f$0.lambda$createView$1();
     }
 }

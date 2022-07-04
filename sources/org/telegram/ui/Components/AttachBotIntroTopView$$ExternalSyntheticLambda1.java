@@ -10,7 +10,7 @@ public final /* synthetic */ class AttachBotIntroTopView$$ExternalSyntheticLambd
     }
 
     public final void didSetImage(ImageReceiver imageReceiver, boolean z, boolean z2, boolean z3) {
-        this.f$0.m539lambda$new$1$orgtelegramuiComponentsAttachBotIntroTopView(imageReceiver, z, z2, z3);
+        this.f$0.lambda$new$1(imageReceiver, z, z2, z3);
     }
 
     public /* synthetic */ void onAnimationReady(ImageReceiver imageReceiver) {

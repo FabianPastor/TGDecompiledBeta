@@ -10,6 +10,6 @@ public final /* synthetic */ class PhotoPickerAlbumsCell$$ExternalSyntheticLambd
     }
 
     public final void onClick(View view) {
-        this.f$0.m2812lambda$new$0$orgtelegramuiCellsPhotoPickerAlbumsCell(view);
+        this.f$0.lambda$new$0(view);
     }
 }

@@ -15,6 +15,6 @@ public final /* synthetic */ class DoubledLimitsBottomSheet$$ExternalSyntheticLa
     }
 
     public final void onClick(View view) {
-        this.f$0.m1230x68CLASSNAMEb8b(this.f$1, this.f$2, view);
+        this.f$0.lambda$new$0(this.f$1, this.f$2, view);
     }
 }

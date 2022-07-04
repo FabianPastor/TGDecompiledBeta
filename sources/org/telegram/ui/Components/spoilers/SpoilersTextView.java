@@ -28,61 +28,61 @@ public class SpoilersTextView extends TextView {
         super(context);
     }
 
-    /* renamed from: lambda$new$2$org-telegram-ui-Components-spoilers-SpoilersTextView  reason: not valid java name */
-    public /* synthetic */ void m1576x69fa7571(SpoilerEffect eff, float x, float y) {
+    /* access modifiers changed from: private */
+    public /* synthetic */ void lambda$new$2(SpoilerEffect spoilerEffect, float f, float f2) {
         if (!this.isSpoilersRevealed) {
-            eff.setOnRippleEndCallback(new SpoilersTextView$$ExternalSyntheticLambda1(this));
-            float rad = (float) Math.sqrt(Math.pow((double) getWidth(), 2.0d) + Math.pow((double) getHeight(), 2.0d));
-            for (SpoilerEffect ef : this.spoilers) {
-                ef.startRipple(x, y, rad);
+            spoilerEffect.setOnRippleEndCallback(new SpoilersTextView$$ExternalSyntheticLambda0(this));
+            float sqrt = (float) Math.sqrt(Math.pow((double) getWidth(), 2.0d) + Math.pow((double) getHeight(), 2.0d));
+            for (SpoilerEffect startRipple : this.spoilers) {
+                startRipple.startRipple(f, f2, sqrt);
             }
         }
     }
 
-    /* renamed from: lambda$new$1$org-telegram-ui-Components-spoilers-SpoilersTextView  reason: not valid java name */
-    public /* synthetic */ void m1575x4fdef6d2() {
-        post(new SpoilersTextView$$ExternalSyntheticLambda0(this));
+    /* access modifiers changed from: private */
+    public /* synthetic */ void lambda$new$1() {
+        post(new SpoilersTextView$$ExternalSyntheticLambda1(this));
     }
 
-    /* renamed from: lambda$new$0$org-telegram-ui-Components-spoilers-SpoilersTextView  reason: not valid java name */
-    public /* synthetic */ void m1574x35CLASSNAME() {
+    /* access modifiers changed from: private */
+    public /* synthetic */ void lambda$new$0() {
         this.isSpoilersRevealed = true;
         invalidateSpoilers();
     }
 
-    public boolean dispatchTouchEvent(MotionEvent event) {
-        if (this.clickDetector.onTouchEvent(event)) {
+    public boolean dispatchTouchEvent(MotionEvent motionEvent) {
+        if (this.clickDetector.onTouchEvent(motionEvent)) {
             return true;
         }
-        return super.dispatchTouchEvent(event);
+        return super.dispatchTouchEvent(motionEvent);
     }
 
-    public void setText(CharSequence text, TextView.BufferType type) {
+    public void setText(CharSequence charSequence, TextView.BufferType bufferType) {
         this.isSpoilersRevealed = false;
-        super.setText(text, type);
+        super.setText(charSequence, bufferType);
     }
 
     /* access modifiers changed from: protected */
-    public void onTextChanged(CharSequence text, int start, int lengthBefore, int lengthAfter) {
-        super.onTextChanged(text, start, lengthBefore, lengthAfter);
+    public void onTextChanged(CharSequence charSequence, int i, int i2, int i3) {
+        super.onTextChanged(charSequence, i, i2, i3);
         invalidateSpoilers();
     }
 
     /* access modifiers changed from: protected */
-    public void onSizeChanged(int w, int h, int oldw, int oldh) {
-        super.onSizeChanged(w, h, oldw, oldh);
+    public void onSizeChanged(int i, int i2, int i3, int i4) {
+        super.onSizeChanged(i, i2, i3, i4);
         invalidateSpoilers();
     }
 
     /* access modifiers changed from: protected */
     public void onDraw(Canvas canvas) {
-        int pl = getPaddingLeft();
-        int pt = getPaddingTop();
+        int paddingLeft = getPaddingLeft();
+        int paddingTop = getPaddingTop();
         canvas.save();
         this.path.rewind();
-        for (SpoilerEffect eff : this.spoilers) {
-            Rect bounds = eff.getBounds();
-            this.path.addRect((float) (bounds.left + pl), (float) (bounds.top + pt), (float) (bounds.right + pl), (float) (bounds.bottom + pt), Path.Direction.CW);
+        for (SpoilerEffect bounds : this.spoilers) {
+            Rect bounds2 = bounds.getBounds();
+            this.path.addRect((float) (bounds2.left + paddingLeft), (float) (bounds2.top + paddingTop), (float) (bounds2.right + paddingLeft), (float) (bounds2.bottom + paddingTop), Path.Direction.CW);
         }
         canvas.clipPath(this.path, Region.Op.DIFFERENCE);
         super.onDraw(canvas);
@@ -97,18 +97,18 @@ public class SpoilersTextView extends TextView {
         super.onDraw(canvas);
         canvas.restore();
         if (!this.spoilers.isEmpty()) {
-            boolean useAlphaLayer = this.spoilers.get(0).getRippleProgress() != -1.0f;
-            if (useAlphaLayer) {
+            boolean z = this.spoilers.get(0).getRippleProgress() != -1.0f;
+            if (z) {
                 canvas.saveLayer(0.0f, 0.0f, (float) getMeasuredWidth(), (float) getMeasuredHeight(), (Paint) null, 31);
             } else {
                 canvas.save();
             }
             canvas.translate((float) getPaddingLeft(), (float) (getPaddingTop() + AndroidUtilities.dp(2.0f)));
-            for (SpoilerEffect eff2 : this.spoilers) {
-                eff2.setColor(getPaint().getColor());
-                eff2.draw(canvas);
+            for (SpoilerEffect next : this.spoilers) {
+                next.setColor(getPaint().getColor());
+                next.draw(canvas);
             }
-            if (useAlphaLayer) {
+            if (z) {
                 this.path.rewind();
                 this.spoilers.get(0).getRipplePath(this.path);
                 if (this.xRefPaint == null) {

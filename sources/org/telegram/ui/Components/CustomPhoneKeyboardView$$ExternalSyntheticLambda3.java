@@ -8,6 +8,6 @@ public final /* synthetic */ class CustomPhoneKeyboardView$$ExternalSyntheticLam
     }
 
     public final void run() {
-        this.f$0.m904lambda$new$1$orgtelegramuiComponentsCustomPhoneKeyboardView();
+        this.f$0.lambda$new$0();
     }
 }

@@ -1,21 +1,19 @@
 package org.telegram.messenger;
 
-import org.telegram.tgnet.RequestDelegate;
-import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC;
+import org.telegram.tgnet.TLRPC$TL_messages_sendMultiMedia;
 
-public final /* synthetic */ class FileRefController$$ExternalSyntheticLambda5 implements RequestDelegate {
+public final /* synthetic */ class FileRefController$$ExternalSyntheticLambda5 implements Runnable {
     public final /* synthetic */ FileRefController f$0;
-    public final /* synthetic */ String f$1;
-    public final /* synthetic */ String f$2;
+    public final /* synthetic */ TLRPC$TL_messages_sendMultiMedia f$1;
+    public final /* synthetic */ Object[] f$2;
 
-    public /* synthetic */ FileRefController$$ExternalSyntheticLambda5(FileRefController fileRefController, String str, String str2) {
+    public /* synthetic */ FileRefController$$ExternalSyntheticLambda5(FileRefController fileRefController, TLRPC$TL_messages_sendMultiMedia tLRPC$TL_messages_sendMultiMedia, Object[] objArr) {
         this.f$0 = fileRefController;
-        this.f$1 = str;
-        this.f$2 = str2;
+        this.f$1 = tLRPC$TL_messages_sendMultiMedia;
+        this.f$2 = objArr;
     }
 
-    public final void run(TLObject tLObject, TLRPC.TL_error tL_error) {
-        this.f$0.m1841xedaf0ec8(this.f$1, this.f$2, tLObject, tL_error);
+    public final void run() {
+        this.f$0.lambda$sendErrorToObject$30(this.f$1, this.f$2);
     }
 }

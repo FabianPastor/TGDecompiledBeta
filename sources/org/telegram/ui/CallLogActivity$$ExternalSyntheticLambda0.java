@@ -14,6 +14,6 @@ public final /* synthetic */ class CallLogActivity$$ExternalSyntheticLambda0 imp
     }
 
     public final void onClick(DialogInterface dialogInterface, int i) {
-        this.f$0.m2751lambda$showDeleteAlert$5$orgtelegramuiCallLogActivity(this.f$1, this.f$2, dialogInterface, i);
+        this.f$0.lambda$showDeleteAlert$5(this.f$1, this.f$2, dialogInterface, i);
     }
 }

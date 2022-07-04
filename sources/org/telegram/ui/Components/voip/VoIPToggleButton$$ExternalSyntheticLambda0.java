@@ -10,6 +10,6 @@ public final /* synthetic */ class VoIPToggleButton$$ExternalSyntheticLambda0 im
     }
 
     public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-        this.f$0.m1623xb7677e67(valueAnimator);
+        this.f$0.lambda$setChecked$1(valueAnimator);
     }
 }

@@ -10,6 +10,6 @@ public final /* synthetic */ class GroupCreateFinalActivity$$ExternalSyntheticLa
     }
 
     public final void onDismiss(DialogInterface dialogInterface) {
-        this.f$0.m3582lambda$createView$3$orgtelegramuiGroupCreateFinalActivity(dialogInterface);
+        this.f$0.lambda$createView$3(dialogInterface);
     }
 }

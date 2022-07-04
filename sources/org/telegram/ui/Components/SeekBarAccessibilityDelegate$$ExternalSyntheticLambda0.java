@@ -12,6 +12,6 @@ public final /* synthetic */ class SeekBarAccessibilityDelegate$$ExternalSynthet
     }
 
     public final void run() {
-        this.f$0.m1335x308b6507(this.f$1);
+        this.f$0.lambda$postAccessibilityEventRunnable$0(this.f$1);
     }
 }

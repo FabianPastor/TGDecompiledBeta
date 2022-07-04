@@ -1,13 +1,17 @@
 package org.telegram.messenger.voip;
 
-public final /* synthetic */ class VoIPService$$ExternalSyntheticLambda44 implements Runnable {
-    public final /* synthetic */ NativeInstance f$0;
+import android.media.AudioManager;
 
-    public /* synthetic */ VoIPService$$ExternalSyntheticLambda44(NativeInstance nativeInstance) {
-        this.f$0 = nativeInstance;
+public final /* synthetic */ class VoIPService$$ExternalSyntheticLambda44 implements Runnable {
+    public final /* synthetic */ VoIPService f$0;
+    public final /* synthetic */ AudioManager f$1;
+
+    public /* synthetic */ VoIPService$$ExternalSyntheticLambda44(VoIPService voIPService, AudioManager audioManager) {
+        this.f$0 = voIPService;
+        this.f$1 = audioManager;
     }
 
     public final void run() {
-        this.f$0.stopGroup();
+        this.f$0.lambda$configureDeviceForCall$79(this.f$1);
     }
 }

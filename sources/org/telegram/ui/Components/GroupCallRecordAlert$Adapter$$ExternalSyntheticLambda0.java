@@ -13,6 +13,6 @@ public final /* synthetic */ class GroupCallRecordAlert$Adapter$$ExternalSynthet
     }
 
     public final void onClick(View view) {
-        this.f$0.m1014x107e1182(this.f$1, view);
+        this.f$0.lambda$instantiateItem$0(this.f$1, view);
     }
 }

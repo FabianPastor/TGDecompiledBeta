@@ -1,16 +1,17 @@
 package org.telegram.messenger;
 
-import org.telegram.tgnet.RequestDelegate;
 import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC;
 
-public final /* synthetic */ class MediaDataController$$ExternalSyntheticLambda80 implements RequestDelegate {
-    public static final /* synthetic */ MediaDataController$$ExternalSyntheticLambda80 INSTANCE = new MediaDataController$$ExternalSyntheticLambda80();
+public final /* synthetic */ class MediaDataController$$ExternalSyntheticLambda80 implements Runnable {
+    public final /* synthetic */ MediaDataController f$0;
+    public final /* synthetic */ TLObject f$1;
 
-    private /* synthetic */ MediaDataController$$ExternalSyntheticLambda80() {
+    public /* synthetic */ MediaDataController$$ExternalSyntheticLambda80(MediaDataController mediaDataController, TLObject tLObject) {
+        this.f$0 = mediaDataController;
+        this.f$1 = tLObject;
     }
 
-    public final void run(TLObject tLObject, TLRPC.TL_error tL_error) {
-        MediaDataController.lambda$markFaturedStickersByIdAsRead$48(tLObject, tL_error);
+    public final void run() {
+        this.f$0.lambda$clearRecentStickers$15(this.f$1);
     }
 }

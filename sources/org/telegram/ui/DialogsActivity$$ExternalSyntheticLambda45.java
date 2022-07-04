@@ -1,15 +1,19 @@
 package org.telegram.ui;
 
-import org.telegram.messenger.MessagesStorage;
+import org.telegram.ui.DialogsActivity;
 
-public final /* synthetic */ class DialogsActivity$$ExternalSyntheticLambda45 implements MessagesStorage.IntCallback {
+public final /* synthetic */ class DialogsActivity$$ExternalSyntheticLambda45 implements Runnable {
     public final /* synthetic */ DialogsActivity f$0;
+    public final /* synthetic */ DialogsActivity.ViewPage f$1;
+    public final /* synthetic */ Object[] f$2;
 
-    public /* synthetic */ DialogsActivity$$ExternalSyntheticLambda45(DialogsActivity dialogsActivity) {
+    public /* synthetic */ DialogsActivity$$ExternalSyntheticLambda45(DialogsActivity dialogsActivity, DialogsActivity.ViewPage viewPage, Object[] objArr) {
         this.f$0 = dialogsActivity;
+        this.f$1 = viewPage;
+        this.f$2 = objArr;
     }
 
-    public final void run(int i) {
-        this.f$0.m3398lambda$onResume$16$orgtelegramuiDialogsActivity(i);
+    public final void run() {
+        this.f$0.lambda$didReceivedNotification$44(this.f$1, this.f$2);
     }
 }

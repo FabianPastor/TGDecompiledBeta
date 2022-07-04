@@ -10,6 +10,6 @@ public final /* synthetic */ class PhotoViewer$FirstFrameView$$ExternalSynthetic
     }
 
     public final void run() {
-        this.f$0.m4337xd6e5ddb9();
+        this.f$0.lambda$checkFromPlayer$1();
     }
 }

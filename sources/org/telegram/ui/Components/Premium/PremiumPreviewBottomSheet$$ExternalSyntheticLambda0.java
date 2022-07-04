@@ -10,6 +10,6 @@ public final /* synthetic */ class PremiumPreviewBottomSheet$$ExternalSyntheticL
     }
 
     public final void onDismiss(DialogInterface dialogInterface) {
-        this.f$0.m1254xbc2e2CLASSNAME(dialogInterface);
+        this.f$0.lambda$showDialog$0(dialogInterface);
     }
 }

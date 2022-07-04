@@ -10,99 +10,88 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.widget.RemoteViews;
 import java.util.ArrayList;
-import org.telegram.tgnet.TLRPC;
+import org.telegram.tgnet.TLRPC$Chat;
+import org.telegram.tgnet.TLRPC$User;
 import org.telegram.ui.LaunchActivity;
 
 public class ContactsWidgetProvider extends AppWidgetProvider {
+    private static int getCellsForSize(int i) {
+        int i2 = 2;
+        while (i2 * 86 < i) {
+            i2++;
+        }
+        return i2 - 1;
+    }
+
     public void onReceive(Context context, Intent intent) {
         super.onReceive(context, intent);
     }
 
-    public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
-        super.onUpdate(context, appWidgetManager, appWidgetIds);
-        for (int appWidgetId : appWidgetIds) {
-            updateWidget(context, appWidgetManager, appWidgetId);
+    public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] iArr) {
+        super.onUpdate(context, appWidgetManager, iArr);
+        for (int updateWidget : iArr) {
+            updateWidget(context, appWidgetManager, updateWidget);
         }
     }
 
-    public void onDeleted(Context context, int[] appWidgetIds) {
-        super.onDeleted(context, appWidgetIds);
+    public void onDeleted(Context context, int[] iArr) {
+        super.onDeleted(context, iArr);
         ApplicationLoader.postInitApplication();
-        SharedPreferences preferences = context.getSharedPreferences("shortcut_widget", 0);
-        SharedPreferences.Editor editor = preferences.edit();
-        for (int a = 0; a < appWidgetIds.length; a++) {
-            int accountId = preferences.getInt("account" + appWidgetIds[a], -1);
-            if (accountId >= 0) {
-                AccountInstance.getInstance(accountId).getMessagesStorage().clearWidgetDialogs(appWidgetIds[a]);
+        SharedPreferences sharedPreferences = context.getSharedPreferences("shortcut_widget", 0);
+        SharedPreferences.Editor edit = sharedPreferences.edit();
+        for (int i = 0; i < iArr.length; i++) {
+            int i2 = sharedPreferences.getInt("account" + iArr[i], -1);
+            if (i2 >= 0) {
+                AccountInstance.getInstance(i2).getMessagesStorage().clearWidgetDialogs(iArr[i]);
             }
-            editor.remove("account" + appWidgetIds[a]);
-            editor.remove("type" + appWidgetIds[a]);
-            editor.remove("deleted" + appWidgetIds[a]);
+            edit.remove("account" + iArr[i]);
+            edit.remove("type" + iArr[i]);
+            edit.remove("deleted" + iArr[i]);
         }
-        editor.commit();
+        edit.commit();
     }
 
-    public void onAppWidgetOptionsChanged(Context context, AppWidgetManager appWidgetManager, int appWidgetId, Bundle newOptions) {
-        updateWidget(context, appWidgetManager, appWidgetId);
-        super.onAppWidgetOptionsChanged(context, appWidgetManager, appWidgetId, newOptions);
+    public void onAppWidgetOptionsChanged(Context context, AppWidgetManager appWidgetManager, int i, Bundle bundle) {
+        updateWidget(context, appWidgetManager, i);
+        super.onAppWidgetOptionsChanged(context, appWidgetManager, i, bundle);
     }
 
-    private static int getCellsForSize(int size) {
-        int n = 2;
-        while (n * 86 < size) {
-            n++;
-        }
-        return n - 1;
-    }
-
-    public static void updateWidget(Context context, AppWidgetManager appWidgetManager, int appWidgetId) {
-        int id;
+    public static void updateWidget(Context context, AppWidgetManager appWidgetManager, int i) {
         Context context2 = context;
         AppWidgetManager appWidgetManager2 = appWidgetManager;
-        int i = appWidgetId;
+        int i2 = i;
         ApplicationLoader.postInitApplication();
-        int rows = getCellsForSize(appWidgetManager.getAppWidgetOptions(appWidgetId).getInt("appWidgetMaxHeight"));
-        Intent intent2 = new Intent(context2, ContactsWidgetService.class);
-        intent2.putExtra("appWidgetId", i);
-        intent2.setData(Uri.parse(intent2.toUri(1)));
-        SharedPreferences preferences = context2.getSharedPreferences("shortcut_widget", 0);
-        if (!preferences.getBoolean("deleted" + i, false)) {
-            int accountId = preferences.getInt("account" + i, -1);
-            if (accountId == -1) {
-                SharedPreferences.Editor editor = preferences.edit();
-                editor.putInt("account" + i, UserConfig.selectedAccount);
-                editor.putInt("type" + i, 0).commit();
+        int cellsForSize = getCellsForSize(appWidgetManager.getAppWidgetOptions(i).getInt("appWidgetMaxHeight"));
+        Intent intent = new Intent(context2, ContactsWidgetService.class);
+        intent.putExtra("appWidgetId", i2);
+        intent.setData(Uri.parse(intent.toUri(1)));
+        SharedPreferences sharedPreferences = context2.getSharedPreferences("shortcut_widget", 0);
+        int i3 = NUM;
+        if (!sharedPreferences.getBoolean("deleted" + i2, false)) {
+            int i4 = sharedPreferences.getInt("account" + i2, -1);
+            if (i4 == -1) {
+                SharedPreferences.Editor edit = sharedPreferences.edit();
+                edit.putInt("account" + i2, UserConfig.selectedAccount);
+                edit.putInt("type" + i2, 0).commit();
             }
-            ArrayList<Long> selectedDialogs = new ArrayList<>();
-            if (accountId >= 0) {
-                int i2 = accountId;
-                SharedPreferences sharedPreferences = preferences;
-                AccountInstance.getInstance(accountId).getMessagesStorage().getWidgetDialogIds(appWidgetId, 1, selectedDialogs, (ArrayList<TLRPC.User>) null, (ArrayList<TLRPC.Chat>) null, false);
-            } else {
-                SharedPreferences sharedPreferences2 = preferences;
+            ArrayList arrayList = new ArrayList();
+            if (i4 >= 0) {
+                AccountInstance.getInstance(i4).getMessagesStorage().getWidgetDialogIds(i, 1, arrayList, (ArrayList<TLRPC$User>) null, (ArrayList<TLRPC$Chat>) null, false);
             }
-            int count = (int) Math.ceil((double) (((float) selectedDialogs.size()) / 2.0f));
-            if (rows == 1 || count <= 1) {
-                id = NUM;
-            } else if (rows == 2 || count <= 2) {
-                id = NUM;
-            } else if (rows == 3 || count <= 3) {
-                id = NUM;
-            } else {
-                id = NUM;
+            int ceil = (int) Math.ceil((double) (((float) arrayList.size()) / 2.0f));
+            if (cellsForSize != 1 && ceil > 1) {
+                i3 = (cellsForSize == 2 || ceil <= 2) ? NUM : (cellsForSize == 3 || ceil <= 3) ? NUM : NUM;
             }
-        } else {
-            id = NUM;
         }
-        RemoteViews rv = new RemoteViews(context.getPackageName(), id);
-        rv.setRemoteAdapter(i, NUM, intent2);
-        rv.setEmptyView(NUM, NUM);
-        Intent intent = new Intent(ApplicationLoader.applicationContext, LaunchActivity.class);
-        intent.setAction("com.tmessages.openchat" + Math.random() + Integer.MAX_VALUE);
-        intent.addFlags(67108864);
-        intent.addCategory("android.intent.category.LAUNCHER");
-        rv.setPendingIntentTemplate(NUM, PendingIntent.getActivity(ApplicationLoader.applicationContext, 0, intent, NUM));
-        appWidgetManager2.updateAppWidget(i, rv);
-        appWidgetManager2.notifyAppWidgetViewDataChanged(i, NUM);
+        RemoteViews remoteViews = new RemoteViews(context.getPackageName(), i3);
+        remoteViews.setRemoteAdapter(i2, NUM, intent);
+        remoteViews.setEmptyView(NUM, NUM);
+        Intent intent2 = new Intent(ApplicationLoader.applicationContext, LaunchActivity.class);
+        intent2.setAction("com.tmessages.openchat" + Math.random() + Integer.MAX_VALUE);
+        intent2.addFlags(67108864);
+        intent2.addCategory("android.intent.category.LAUNCHER");
+        remoteViews.setPendingIntentTemplate(NUM, PendingIntent.getActivity(ApplicationLoader.applicationContext, 0, intent2, NUM));
+        appWidgetManager2.updateAppWidget(i2, remoteViews);
+        appWidgetManager2.notifyAppWidgetViewDataChanged(i2, NUM);
     }
 }

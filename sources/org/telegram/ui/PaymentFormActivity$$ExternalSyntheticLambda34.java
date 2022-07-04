@@ -1,19 +1,19 @@
 package org.telegram.ui;
 
-import org.telegram.tgnet.TLRPC;
+import android.content.Intent;
 
 public final /* synthetic */ class PaymentFormActivity$$ExternalSyntheticLambda34 implements Runnable {
     public final /* synthetic */ PaymentFormActivity f$0;
-    public final /* synthetic */ TLRPC.TL_account_password f$1;
-    public final /* synthetic */ byte[] f$2;
+    public final /* synthetic */ int f$1;
+    public final /* synthetic */ Intent f$2;
 
-    public /* synthetic */ PaymentFormActivity$$ExternalSyntheticLambda34(PaymentFormActivity paymentFormActivity, TLRPC.TL_account_password tL_account_password, byte[] bArr) {
+    public /* synthetic */ PaymentFormActivity$$ExternalSyntheticLambda34(PaymentFormActivity paymentFormActivity, int i, Intent intent) {
         this.f$0 = paymentFormActivity;
-        this.f$1 = tL_account_password;
-        this.f$2 = bArr;
+        this.f$1 = i;
+        this.f$2 = intent;
     }
 
     public final void run() {
-        this.f$0.m4136lambda$checkPassword$61$orgtelegramuiPaymentFormActivity(this.f$1, this.f$2);
+        this.f$0.lambda$onActivityResultFragment$39(this.f$1, this.f$2);
     }
 }

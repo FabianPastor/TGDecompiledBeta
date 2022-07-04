@@ -1,17 +1,16 @@
 package org.telegram.ui.Components;
 
-import com.google.android.gms.maps.MapView;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.model.Marker;
 
-public final /* synthetic */ class ChatAttachAlertLocationLayout$$ExternalSyntheticLambda8 implements Runnable {
+public final /* synthetic */ class ChatAttachAlertLocationLayout$$ExternalSyntheticLambda8 implements GoogleMap.OnMarkerClickListener {
     public final /* synthetic */ ChatAttachAlertLocationLayout f$0;
-    public final /* synthetic */ MapView f$1;
 
-    public /* synthetic */ ChatAttachAlertLocationLayout$$ExternalSyntheticLambda8(ChatAttachAlertLocationLayout chatAttachAlertLocationLayout, MapView mapView) {
+    public /* synthetic */ ChatAttachAlertLocationLayout$$ExternalSyntheticLambda8(ChatAttachAlertLocationLayout chatAttachAlertLocationLayout) {
         this.f$0 = chatAttachAlertLocationLayout;
-        this.f$1 = mapView;
     }
 
-    public final void run() {
-        this.f$0.m804xc8a66f1f(this.f$1);
+    public final boolean onMarkerClick(Marker marker) {
+        return this.f$0.lambda$onMapInit$19(marker);
     }
 }

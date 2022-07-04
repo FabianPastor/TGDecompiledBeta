@@ -11,6 +11,6 @@ public final /* synthetic */ class PassportActivity$$ExternalSyntheticLambda39 i
     }
 
     public final boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
-        return this.f$0.m4074lambda$createPhoneInterface$30$orgtelegramuiPassportActivity(textView, i, keyEvent);
+        return this.f$0.lambda$createEmailVerificationInterface$5(textView, i, keyEvent);
     }
 }

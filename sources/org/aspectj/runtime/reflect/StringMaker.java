@@ -8,11 +8,8 @@ class StringMaker {
     static StringMaker shortStringMaker;
     int cacheOffset;
     boolean includeArgs = true;
-    boolean includeEnclosingPoint = true;
-    boolean includeJoinPointTypeName = true;
     boolean includeModifiers = false;
     boolean includeThrows = false;
-    boolean shortKindName = true;
     boolean shortPrimaryTypeNames = false;
     boolean shortTypeNames = true;
 
@@ -27,8 +24,6 @@ class StringMaker {
         stringMaker.includeThrows = false;
         stringMaker.includeModifiers = false;
         stringMaker.shortPrimaryTypeNames = true;
-        stringMaker.includeJoinPointTypeName = false;
-        stringMaker.includeEnclosingPoint = false;
         stringMaker.cacheOffset = 0;
         StringMaker stringMaker2 = new StringMaker();
         middleStringMaker = stringMaker2;
@@ -45,96 +40,95 @@ class StringMaker {
         stringMaker3.includeThrows = false;
         stringMaker3.includeModifiers = true;
         stringMaker3.shortPrimaryTypeNames = false;
-        stringMaker3.shortKindName = false;
         stringMaker3.cacheOffset = 2;
     }
 
     /* access modifiers changed from: package-private */
-    public String makeKindName(String name) {
-        int dash = name.lastIndexOf(45);
-        if (dash == -1) {
-            return name;
+    public String makeKindName(String str) {
+        int lastIndexOf = str.lastIndexOf(45);
+        if (lastIndexOf == -1) {
+            return str;
         }
-        return name.substring(dash + 1);
+        return str.substring(lastIndexOf + 1);
     }
 
     /* access modifiers changed from: package-private */
-    public String makeModifiersString(int modifiers) {
+    public String makeModifiersString(int i) {
         if (!this.includeModifiers) {
             return "";
         }
-        String str = Modifier.toString(modifiers);
-        if (str.length() == 0) {
+        String modifier = Modifier.toString(i);
+        if (modifier.length() == 0) {
             return "";
         }
         StringBuffer stringBuffer = new StringBuffer();
-        stringBuffer.append(str);
+        stringBuffer.append(modifier);
         stringBuffer.append(" ");
         return stringBuffer.toString();
     }
 
     /* access modifiers changed from: package-private */
-    public String stripPackageName(String name) {
-        int dot = name.lastIndexOf(46);
-        if (dot == -1) {
-            return name;
+    public String stripPackageName(String str) {
+        int lastIndexOf = str.lastIndexOf(46);
+        if (lastIndexOf == -1) {
+            return str;
         }
-        return name.substring(dot + 1);
+        return str.substring(lastIndexOf + 1);
     }
 
     /* access modifiers changed from: package-private */
-    public String makeTypeName(Class type, String typeName, boolean shortName) {
-        if (type == null) {
+    public String makeTypeName(Class cls, String str, boolean z) {
+        if (cls == null) {
             return "ANONYMOUS";
         }
-        if (type.isArray()) {
-            Class componentType = type.getComponentType();
+        if (cls.isArray()) {
+            Class<?> componentType = cls.getComponentType();
             StringBuffer stringBuffer = new StringBuffer();
-            stringBuffer.append(makeTypeName(componentType, componentType.getName(), shortName));
+            stringBuffer.append(makeTypeName(componentType, componentType.getName(), z));
             stringBuffer.append("[]");
             return stringBuffer.toString();
-        } else if (shortName) {
-            return stripPackageName(typeName).replace('$', '.');
+        } else if (z) {
+            return stripPackageName(str).replace('$', '.');
         } else {
-            return typeName.replace('$', '.');
+            return str.replace('$', '.');
         }
     }
 
-    public String makeTypeName(Class type) {
-        return makeTypeName(type, type.getName(), this.shortTypeNames);
+    public String makeTypeName(Class cls) {
+        return makeTypeName(cls, cls.getName(), this.shortTypeNames);
     }
 
-    public String makePrimaryTypeName(Class type, String typeName) {
-        return makeTypeName(type, typeName, this.shortPrimaryTypeNames);
+    public String makePrimaryTypeName(Class cls, String str) {
+        return makeTypeName(cls, str, this.shortPrimaryTypeNames);
     }
 
-    public void addTypeNames(StringBuffer buf, Class[] types) {
-        for (int i = 0; i < types.length; i++) {
+    public void addTypeNames(StringBuffer stringBuffer, Class[] clsArr) {
+        for (int i = 0; i < clsArr.length; i++) {
             if (i > 0) {
-                buf.append(", ");
+                stringBuffer.append(", ");
             }
-            buf.append(makeTypeName(types[i]));
+            stringBuffer.append(makeTypeName(clsArr[i]));
         }
     }
 
-    public void addSignature(StringBuffer buf, Class[] types) {
-        if (types != null) {
+    public void addSignature(StringBuffer stringBuffer, Class[] clsArr) {
+        if (clsArr != null) {
             if (this.includeArgs) {
-                buf.append("(");
-                addTypeNames(buf, types);
-                buf.append(")");
-            } else if (types.length == 0) {
-                buf.append("()");
+                stringBuffer.append("(");
+                addTypeNames(stringBuffer, clsArr);
+                stringBuffer.append(")");
+            } else if (clsArr.length == 0) {
+                stringBuffer.append("()");
             } else {
-                buf.append("(..)");
+                stringBuffer.append("(..)");
             }
         }
     }
 
-    public void addThrows(StringBuffer buf, Class[] types) {
-        if (this.includeThrows && types != null && types.length != 0) {
-            buf.append(" throws ");
-            addTypeNames(buf, types);
+    public void addThrows(StringBuffer stringBuffer, Class[] clsArr) {
+        if (this.includeThrows && clsArr != null && clsArr.length != 0) {
+            stringBuffer.append(" throws ");
+            addTypeNames(stringBuffer, clsArr);
         }
     }
 }

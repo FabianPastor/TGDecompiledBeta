@@ -12,6 +12,6 @@ public final /* synthetic */ class ImageLoader$ArtworkLoadTask$$ExternalSyntheti
     }
 
     public final void run() {
-        this.f$0.m1896x647e920b(this.f$1);
+        this.f$0.lambda$onPostExecute$0(this.f$1);
     }
 }

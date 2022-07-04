@@ -9,17 +9,20 @@ public class RtcCertificatePem {
 
     private static native RtcCertificatePem nativeGenerateCertificate(PeerConnection.KeyType keyType, long j);
 
-    public RtcCertificatePem(String privateKey2, String certificate2) {
-        this.privateKey = privateKey2;
-        this.certificate = certificate2;
+    @CalledByNative
+    public RtcCertificatePem(String str, String str2) {
+        this.privateKey = str;
+        this.certificate = str2;
     }
 
     /* access modifiers changed from: package-private */
+    @CalledByNative
     public String getPrivateKey() {
         return this.privateKey;
     }
 
     /* access modifiers changed from: package-private */
+    @CalledByNative
     public String getCertificate() {
         return this.certificate;
     }
@@ -32,11 +35,11 @@ public class RtcCertificatePem {
         return nativeGenerateCertificate(keyType, 2592000);
     }
 
-    public static RtcCertificatePem generateCertificate(long expires) {
-        return nativeGenerateCertificate(PeerConnection.KeyType.ECDSA, expires);
+    public static RtcCertificatePem generateCertificate(long j) {
+        return nativeGenerateCertificate(PeerConnection.KeyType.ECDSA, j);
     }
 
-    public static RtcCertificatePem generateCertificate(PeerConnection.KeyType keyType, long expires) {
-        return nativeGenerateCertificate(keyType, expires);
+    public static RtcCertificatePem generateCertificate(PeerConnection.KeyType keyType, long j) {
+        return nativeGenerateCertificate(keyType, j);
     }
 }

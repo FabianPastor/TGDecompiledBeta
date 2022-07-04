@@ -21,6 +21,6 @@ public final /* synthetic */ class ChatNotificationsPopupWrapper$$ExternalSynthe
     }
 
     public final void onClick(View view) {
-        this.f$0.m869xCLASSNAMEeb4a5(this.f$1, this.f$2, this.f$3, this.f$4, view);
+        this.f$0.lambda$new$6(this.f$1, this.f$2, this.f$3, this.f$4, view);
     }
 }

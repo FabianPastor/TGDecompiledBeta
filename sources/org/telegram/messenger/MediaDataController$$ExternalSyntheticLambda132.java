@@ -1,19 +1,12 @@
 package org.telegram.messenger;
 
-import org.telegram.tgnet.TLObject;
+public final /* synthetic */ class MediaDataController$$ExternalSyntheticLambda132 implements GenericProvider {
+    public static final /* synthetic */ MediaDataController$$ExternalSyntheticLambda132 INSTANCE = new MediaDataController$$ExternalSyntheticLambda132();
 
-public final /* synthetic */ class MediaDataController$$ExternalSyntheticLambda132 implements Runnable {
-    public final /* synthetic */ MediaDataController f$0;
-    public final /* synthetic */ String f$1;
-    public final /* synthetic */ TLObject f$2;
-
-    public /* synthetic */ MediaDataController$$ExternalSyntheticLambda132(MediaDataController mediaDataController, String str, TLObject tLObject) {
-        this.f$0 = mediaDataController;
-        this.f$1 = str;
-        this.f$2 = tLObject;
+    private /* synthetic */ MediaDataController$$ExternalSyntheticLambda132() {
     }
 
-    public final void run() {
-        this.f$0.m2120x28e352b1(this.f$1, this.f$2);
+    public final Object provide(Object obj) {
+        return MediaDataController.lambda$getEntities$141((Void) obj);
     }
 }

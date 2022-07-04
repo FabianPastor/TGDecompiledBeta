@@ -32,29 +32,28 @@ public class HeaderCell extends FrameLayout {
         this(context, "windowBackgroundWhiteBlueHeader", 21, 15, false, resourcesProvider2);
     }
 
-    public HeaderCell(Context context, int padding) {
-        this(context, "windowBackgroundWhiteBlueHeader", padding, 15, false, (Theme.ResourcesProvider) null);
+    public HeaderCell(Context context, int i) {
+        this(context, "windowBackgroundWhiteBlueHeader", i, 15, false, (Theme.ResourcesProvider) null);
     }
 
-    public HeaderCell(Context context, int padding, Theme.ResourcesProvider resourcesProvider2) {
-        this(context, "windowBackgroundWhiteBlueHeader", padding, 15, false, resourcesProvider2);
+    public HeaderCell(Context context, int i, Theme.ResourcesProvider resourcesProvider2) {
+        this(context, "windowBackgroundWhiteBlueHeader", i, 15, false, resourcesProvider2);
     }
 
-    public HeaderCell(Context context, String textColorKey, int padding, int topMargin, boolean text2) {
-        this(context, textColorKey, padding, topMargin, text2, (Theme.ResourcesProvider) null);
+    public HeaderCell(Context context, String str, int i, int i2, boolean z) {
+        this(context, str, i, i2, z, (Theme.ResourcesProvider) null);
     }
 
-    public HeaderCell(Context context, String textColorKey, int padding, int topMargin, boolean text2, Theme.ResourcesProvider resourcesProvider2) {
-        this(context, textColorKey, padding, topMargin, 0, text2, resourcesProvider2);
+    public HeaderCell(Context context, String str, int i, int i2, boolean z, Theme.ResourcesProvider resourcesProvider2) {
+        this(context, str, i, i2, 0, z, resourcesProvider2);
     }
 
     /* JADX INFO: super call moved to the top of the method (can break code semantics) */
-    public HeaderCell(Context context, String textColorKey, int padding, int topMargin, int bottomMargin, boolean text2, Theme.ResourcesProvider resourcesProvider2) {
+    public HeaderCell(Context context, String str, int i, int i2, int i3, boolean z, Theme.ResourcesProvider resourcesProvider2) {
         super(context);
-        String str = textColorKey;
-        int i = padding;
-        int i2 = topMargin;
-        int i3 = bottomMargin;
+        String str2 = str;
+        int i4 = i2;
+        int i5 = i3;
         this.height = 40;
         this.resourcesProvider = resourcesProvider2;
         TextView textView3 = new TextView(getContext());
@@ -62,68 +61,70 @@ public class HeaderCell extends FrameLayout {
         textView3.setTextSize(1, 15.0f);
         this.textView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         this.textView.setEllipsize(TextUtils.TruncateAt.END);
+        int i6 = 5;
         this.textView.setGravity((LocaleController.isRTL ? 5 : 3) | 16);
-        this.textView.setMinHeight(AndroidUtilities.dp((float) (this.height - i2)));
-        this.textView.setTextColor(getThemedColor(str));
-        this.textView.setTag(str);
-        addView(this.textView, LayoutHelper.createFrame(-1, -1.0f, (LocaleController.isRTL ? 5 : 3) | 48, (float) i, (float) i2, (float) i, text2 ? 0.0f : (float) i3));
-        if (text2) {
+        this.textView.setMinHeight(AndroidUtilities.dp((float) (this.height - i4)));
+        this.textView.setTextColor(getThemedColor(str2));
+        this.textView.setTag(str2);
+        float f = (float) i;
+        addView(this.textView, LayoutHelper.createFrame(-1, -1.0f, (LocaleController.isRTL ? 5 : 3) | 48, f, (float) i4, f, z ? 0.0f : (float) i5));
+        if (z) {
             SimpleTextView simpleTextView = new SimpleTextView(getContext());
             this.textView2 = simpleTextView;
             simpleTextView.setTextSize(13);
             this.textView2.setGravity((LocaleController.isRTL ? 3 : 5) | 48);
-            addView(this.textView2, LayoutHelper.createFrame(-1, -1.0f, (LocaleController.isRTL ? 3 : 5) | 48, (float) i, 21.0f, (float) i, (float) i3));
+            addView(this.textView2, LayoutHelper.createFrame(-1, -1.0f, (LocaleController.isRTL ? 3 : i6) | 48, f, 21.0f, f, (float) i5));
         }
         ViewCompat.setAccessibilityHeading(this, true);
     }
 
-    public void setHeight(int value) {
+    public void setHeight(int i) {
         TextView textView3 = this.textView;
-        this.height = value;
-        textView3.setMinHeight(AndroidUtilities.dp((float) value) - ((FrameLayout.LayoutParams) this.textView.getLayoutParams()).topMargin);
+        this.height = i;
+        textView3.setMinHeight(AndroidUtilities.dp((float) i) - ((FrameLayout.LayoutParams) this.textView.getLayoutParams()).topMargin);
     }
 
-    public void setEnabled(boolean value, ArrayList<Animator> animators) {
+    public void setEnabled(boolean z, ArrayList<Animator> arrayList) {
         float f = 1.0f;
-        if (animators != null) {
+        if (arrayList != null) {
             TextView textView3 = this.textView;
             Property property = View.ALPHA;
             float[] fArr = new float[1];
-            if (!value) {
+            if (!z) {
                 f = 0.5f;
             }
             fArr[0] = f;
-            animators.add(ObjectAnimator.ofFloat(textView3, property, fArr));
+            arrayList.add(ObjectAnimator.ofFloat(textView3, property, fArr));
             return;
         }
         TextView textView4 = this.textView;
-        if (!value) {
+        if (!z) {
             f = 0.5f;
         }
         textView4.setAlpha(f);
     }
 
     /* access modifiers changed from: protected */
-    public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        super.onMeasure(View.MeasureSpec.makeMeasureSpec(View.MeasureSpec.getSize(widthMeasureSpec), NUM), View.MeasureSpec.makeMeasureSpec(0, 0));
+    public void onMeasure(int i, int i2) {
+        super.onMeasure(View.MeasureSpec.makeMeasureSpec(View.MeasureSpec.getSize(i), NUM), View.MeasureSpec.makeMeasureSpec(0, 0));
     }
 
-    public void setTextSize(float dip) {
-        this.textView.setTextSize(1, dip);
+    public void setTextSize(float f) {
+        this.textView.setTextSize(1, f);
     }
 
-    public void setTextColor(int color) {
-        this.textView.setTextColor(color);
+    public void setTextColor(int i) {
+        this.textView.setTextColor(i);
     }
 
-    public void setText(CharSequence text) {
-        this.textView.setText(text);
+    public void setText(CharSequence charSequence) {
+        this.textView.setText(charSequence);
     }
 
-    public void setText2(CharSequence text) {
+    public void setText2(CharSequence charSequence) {
         SimpleTextView simpleTextView = this.textView2;
         if (simpleTextView != null) {
-            simpleTextView.setText(text);
+            simpleTextView.setText(charSequence);
         }
     }
 
@@ -135,20 +136,21 @@ public class HeaderCell extends FrameLayout {
         return this.textView2;
     }
 
-    public void onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo info) {
-        AccessibilityNodeInfo.CollectionItemInfo collection;
-        super.onInitializeAccessibilityNodeInfo(info);
-        if (Build.VERSION.SDK_INT >= 28) {
-            info.setHeading(true);
-        } else if (Build.VERSION.SDK_INT >= 19 && (collection = info.getCollectionItemInfo()) != null) {
-            info.setCollectionItemInfo(AccessibilityNodeInfo.CollectionItemInfo.obtain(collection.getRowIndex(), collection.getRowSpan(), collection.getColumnIndex(), collection.getColumnSpan(), true));
+    public void onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo accessibilityNodeInfo) {
+        AccessibilityNodeInfo.CollectionItemInfo collectionItemInfo;
+        super.onInitializeAccessibilityNodeInfo(accessibilityNodeInfo);
+        int i = Build.VERSION.SDK_INT;
+        if (i >= 28) {
+            accessibilityNodeInfo.setHeading(true);
+        } else if (i >= 19 && (collectionItemInfo = accessibilityNodeInfo.getCollectionItemInfo()) != null) {
+            accessibilityNodeInfo.setCollectionItemInfo(AccessibilityNodeInfo.CollectionItemInfo.obtain(collectionItemInfo.getRowIndex(), collectionItemInfo.getRowSpan(), collectionItemInfo.getColumnIndex(), collectionItemInfo.getColumnSpan(), true));
         }
-        info.setEnabled(true);
+        accessibilityNodeInfo.setEnabled(true);
     }
 
-    private int getThemedColor(String key) {
+    private int getThemedColor(String str) {
         Theme.ResourcesProvider resourcesProvider2 = this.resourcesProvider;
-        Integer color = resourcesProvider2 != null ? resourcesProvider2.getColor(key) : null;
-        return color != null ? color.intValue() : Theme.getColor(key);
+        Integer color = resourcesProvider2 != null ? resourcesProvider2.getColor(str) : null;
+        return color != null ? color.intValue() : Theme.getColor(str);
     }
 }

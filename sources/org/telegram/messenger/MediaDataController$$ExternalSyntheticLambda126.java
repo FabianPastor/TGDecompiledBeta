@@ -1,15 +1,15 @@
 package org.telegram.messenger;
 
-public final /* synthetic */ class MediaDataController$$ExternalSyntheticLambda126 implements Runnable {
-    public final /* synthetic */ MediaDataController f$0;
-    public final /* synthetic */ String f$1;
+import java.util.Comparator;
+import org.telegram.tgnet.TLRPC$MessageEntity;
 
-    public /* synthetic */ MediaDataController$$ExternalSyntheticLambda126(MediaDataController mediaDataController, String str) {
-        this.f$0 = mediaDataController;
-        this.f$1 = str;
+public final /* synthetic */ class MediaDataController$$ExternalSyntheticLambda126 implements Comparator {
+    public static final /* synthetic */ MediaDataController$$ExternalSyntheticLambda126 INSTANCE = new MediaDataController$$ExternalSyntheticLambda126();
+
+    private /* synthetic */ MediaDataController$$ExternalSyntheticLambda126() {
     }
 
-    public final void run() {
-        this.f$0.m1985xvar_(this.f$1);
+    public final int compare(Object obj, Object obj2) {
+        return MediaDataController.lambda$static$120((TLRPC$MessageEntity) obj, (TLRPC$MessageEntity) obj2);
     }
 }

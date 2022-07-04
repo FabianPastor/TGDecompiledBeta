@@ -10,6 +10,6 @@ public final /* synthetic */ class GigagroupConvertAlert$$ExternalSyntheticLambd
     }
 
     public final void onClick(DialogInterface dialogInterface, int i) {
-        this.f$0.m1001lambda$new$0$orgtelegramuiComponentsGigagroupConvertAlert(dialogInterface, i);
+        this.f$0.lambda$new$0(dialogInterface, i);
     }
 }

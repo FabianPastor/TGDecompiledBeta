@@ -1,20 +1,17 @@
 package org.telegram.ui;
 
-import android.content.DialogInterface;
-import org.telegram.tgnet.TLRPC;
+import org.telegram.ui.Components.AlertsCreator;
 
-public final /* synthetic */ class LocationActivity$$ExternalSyntheticLambda32 implements DialogInterface.OnClickListener {
+public final /* synthetic */ class LocationActivity$$ExternalSyntheticLambda32 implements AlertsCreator.ScheduleDatePickerDelegate {
     public final /* synthetic */ LocationActivity f$0;
-    public final /* synthetic */ TLRPC.User f$1;
-    public final /* synthetic */ int f$2;
+    public final /* synthetic */ Object f$1;
 
-    public /* synthetic */ LocationActivity$$ExternalSyntheticLambda32(LocationActivity locationActivity, TLRPC.User user, int i) {
+    public /* synthetic */ LocationActivity$$ExternalSyntheticLambda32(LocationActivity locationActivity, Object obj) {
         this.f$0 = locationActivity;
-        this.f$1 = user;
-        this.f$2 = i;
+        this.f$1 = obj;
     }
 
-    public final void onClick(DialogInterface dialogInterface, int i) {
-        this.f$0.m3758lambda$openProximityAlert$22$orgtelegramuiLocationActivity(this.f$1, this.f$2, dialogInterface, i);
+    public final void didSelectDate(boolean z, int i) {
+        this.f$0.lambda$createView$13(this.f$1, z, i);
     }
 }

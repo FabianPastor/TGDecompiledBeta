@@ -1,22 +1,18 @@
 package org.telegram.ui;
 
-import org.telegram.tgnet.RequestDelegate;
-import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC;
-import org.telegram.ui.ActionBar.AlertDialog;
+import android.content.DialogInterface;
+import org.telegram.ui.Cells.TextCheckCell;
 
-public final /* synthetic */ class PrivacySettingsActivity$$ExternalSyntheticLambda3 implements RequestDelegate {
+public final /* synthetic */ class PrivacySettingsActivity$$ExternalSyntheticLambda3 implements DialogInterface.OnClickListener {
     public final /* synthetic */ PrivacySettingsActivity f$0;
-    public final /* synthetic */ AlertDialog f$1;
-    public final /* synthetic */ TLRPC.TL_account_setAccountTTL f$2;
+    public final /* synthetic */ TextCheckCell f$1;
 
-    public /* synthetic */ PrivacySettingsActivity$$ExternalSyntheticLambda3(PrivacySettingsActivity privacySettingsActivity, AlertDialog alertDialog, TLRPC.TL_account_setAccountTTL tL_account_setAccountTTL) {
+    public /* synthetic */ PrivacySettingsActivity$$ExternalSyntheticLambda3(PrivacySettingsActivity privacySettingsActivity, TextCheckCell textCheckCell) {
         this.f$0 = privacySettingsActivity;
-        this.f$1 = alertDialog;
-        this.f$2 = tL_account_setAccountTTL;
+        this.f$1 = textCheckCell;
     }
 
-    public final void run(TLObject tLObject, TLRPC.TL_error tL_error) {
-        this.f$0.m4373lambda$createView$3$orgtelegramuiPrivacySettingsActivity(this.f$1, this.f$2, tLObject, tL_error);
+    public final void onClick(DialogInterface dialogInterface, int i) {
+        this.f$0.lambda$createView$9(this.f$1, dialogInterface, i);
     }
 }

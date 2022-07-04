@@ -10,6 +10,6 @@ public final /* synthetic */ class FileUploadOperation$$ExternalSyntheticLambda4
     }
 
     public final void run() {
-        this.f$0.m1869x2bbbbcc2(this.f$1);
+        this.f$0.lambda$onNetworkChanged$1(this.f$1);
     }
 }

@@ -1,15 +1,14 @@
 package org.telegram.ui.Components;
 
-import androidx.dynamicanimation.animation.DynamicAnimation;
+import org.telegram.ui.Components.SimpleFloatPropertyCompat;
 
-public final /* synthetic */ class BotWebViewMenuContainer$$ExternalSyntheticLambda20 implements DynamicAnimation.OnAnimationUpdateListener {
-    public final /* synthetic */ BotWebViewMenuContainer f$0;
+public final /* synthetic */ class BotWebViewMenuContainer$$ExternalSyntheticLambda20 implements SimpleFloatPropertyCompat.Getter {
+    public static final /* synthetic */ BotWebViewMenuContainer$$ExternalSyntheticLambda20 INSTANCE = new BotWebViewMenuContainer$$ExternalSyntheticLambda20();
 
-    public /* synthetic */ BotWebViewMenuContainer$$ExternalSyntheticLambda20(BotWebViewMenuContainer botWebViewMenuContainer) {
-        this.f$0 = botWebViewMenuContainer;
+    private /* synthetic */ BotWebViewMenuContainer$$ExternalSyntheticLambda20() {
     }
 
-    public final void onAnimationUpdate(DynamicAnimation dynamicAnimation, float f, float f2) {
-        this.f$0.m593xd53aad85(dynamicAnimation, f, f2);
+    public final float get(Object obj) {
+        return ((BotWebViewMenuContainer) obj).actionBarTransitionProgress;
     }
 }

@@ -4,6 +4,7 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.ColorFilter;
 import android.graphics.Paint;
+import android.graphics.Point;
 import android.graphics.Rect;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.GradientDrawable;
@@ -17,7 +18,6 @@ import org.telegram.messenger.DispatchQueue;
 import org.telegram.messenger.Utilities;
 
 public class BackgroundGradientDrawable extends GradientDrawable {
-    public static final float DEFAULT_COMPRESS_RATIO = 0.5f;
     private final Paint bitmapPaint;
     private final ArrayMap<IntSize, Bitmap> bitmaps = new ArrayMap<>();
     private final int[] colors;
@@ -37,10 +37,10 @@ public class BackgroundGradientDrawable extends GradientDrawable {
     }
 
     public static class ListenerAdapter implements Listener {
-        public void onSizeReady(int width, int height) {
+        public void onAllSizesReady() {
         }
 
-        public void onAllSizesReady() {
+        public void onSizeReady(int i, int i2) {
         }
     }
 
@@ -54,57 +54,62 @@ public class BackgroundGradientDrawable extends GradientDrawable {
             BOTH
         }
 
-        private Sizes(int width, int height, int... additionalSizes) {
-            IntSize[] intSizeArr = new IntSize[((additionalSizes.length / 2) + 1)];
+        private Sizes(int i, int i2, int... iArr) {
+            IntSize[] intSizeArr = new IntSize[((iArr.length / 2) + 1)];
             this.arr = intSizeArr;
-            intSizeArr[0] = new IntSize(width, height);
-            for (int i = 0; i < additionalSizes.length / 2; i++) {
-                this.arr[i + 1] = new IntSize(additionalSizes[i * 2], additionalSizes[(i * 2) + 1]);
+            IntSize intSize = new IntSize(i, i2);
+            int i3 = 0;
+            intSizeArr[0] = intSize;
+            while (i3 < iArr.length / 2) {
+                int i4 = i3 + 1;
+                int i5 = i3 * 2;
+                this.arr[i4] = new IntSize(iArr[i5], iArr[i5 + 1]);
+                i3 = i4;
             }
         }
 
-        public static Sizes of(int width, int height, int... additionalSizes) {
-            return new Sizes(width, height, additionalSizes);
+        public static Sizes of(int i, int i2, int... iArr) {
+            return new Sizes(i, i2, iArr);
         }
 
         public static Sizes ofDeviceScreen() {
             return ofDeviceScreen(0.5f);
         }
 
-        public static Sizes ofDeviceScreen(float compressRatio) {
-            return ofDeviceScreen(compressRatio, Orientation.BOTH);
+        public static Sizes ofDeviceScreen(float f) {
+            return ofDeviceScreen(f, Orientation.BOTH);
         }
 
         public static Sizes ofDeviceScreen(Orientation orientation) {
             return ofDeviceScreen(0.5f, orientation);
         }
 
-        public static Sizes ofDeviceScreen(float compressRatio, Orientation orientation) {
-            int width = (int) (((float) AndroidUtilities.displaySize.x) * compressRatio);
-            int height = (int) (((float) AndroidUtilities.displaySize.y) * compressRatio);
-            if (width == height) {
-                return of(width, height, new int[0]);
+        public static Sizes ofDeviceScreen(float f, Orientation orientation) {
+            Point point = AndroidUtilities.displaySize;
+            int i = (int) (((float) point.x) * f);
+            int i2 = (int) (((float) point.y) * f);
+            if (i == i2) {
+                return of(i, i2, new int[0]);
             }
             boolean z = true;
             if (orientation == Orientation.BOTH) {
-                return of(width, height, height, width);
+                return of(i, i2, i2, i);
             }
             boolean z2 = orientation == Orientation.PORTRAIT;
-            if (width >= height) {
+            if (i >= i2) {
                 z = false;
             }
-            int[] iArr = new int[0];
-            return z2 == z ? of(width, height, iArr) : of(height, width, iArr);
+            return z2 == z ? of(i, i2, new int[0]) : of(i2, i, new int[0]);
         }
     }
 
-    public BackgroundGradientDrawable(GradientDrawable.Orientation orientation, int[] colors2) {
-        super(orientation, colors2);
+    public BackgroundGradientDrawable(GradientDrawable.Orientation orientation, int[] iArr) {
+        super(orientation, iArr);
         Paint paint = new Paint(1);
         this.bitmapPaint = paint;
         this.disposed = false;
         setDither(true);
-        this.colors = colors2;
+        this.colors = iArr;
         paint.setDither(true);
     }
 
@@ -114,64 +119,64 @@ public class BackgroundGradientDrawable extends GradientDrawable {
             return;
         }
         Rect bounds = getBounds();
-        Bitmap bitmap = findBestBitmapForSize(bounds.width(), bounds.height());
-        if (bitmap != null) {
-            canvas.drawBitmap(bitmap, (Rect) null, bounds, this.bitmapPaint);
+        Bitmap findBestBitmapForSize = findBestBitmapForSize(bounds.width(), bounds.height());
+        if (findBestBitmapForSize != null) {
+            canvas.drawBitmap(findBestBitmapForSize, (Rect) null, bounds, this.bitmapPaint);
         } else {
             super.draw(canvas);
         }
     }
 
-    public Disposable drawExactBoundsSize(Canvas canvas, View ownerView) {
-        return drawExactBoundsSize(canvas, ownerView, 0.5f);
+    public Disposable drawExactBoundsSize(Canvas canvas, View view) {
+        return drawExactBoundsSize(canvas, view, 0.5f);
     }
 
-    public Disposable drawExactBoundsSize(Canvas canvas, final View ownerView, float compressRatio) {
+    public Disposable drawExactBoundsSize(Canvas canvas, final View view, float f) {
         if (this.disposed) {
             super.draw(canvas);
             return null;
         }
         Rect bounds = getBounds();
-        int width = (int) (((float) bounds.width()) * compressRatio);
-        int height = (int) (((float) bounds.height()) * compressRatio);
-        int count = this.bitmaps.size();
-        for (int i = 0; i < count; i++) {
-            IntSize size = this.bitmaps.keyAt(i);
-            if (size.width == width && size.height == height) {
-                Bitmap bitmap = this.bitmaps.valueAt(i);
-                if (bitmap != null) {
-                    canvas.drawBitmap(bitmap, (Rect) null, bounds, this.bitmapPaint);
+        int width = (int) (((float) bounds.width()) * f);
+        int height = (int) (((float) bounds.height()) * f);
+        int size = this.bitmaps.size();
+        for (int i = 0; i < size; i++) {
+            IntSize keyAt = this.bitmaps.keyAt(i);
+            if (keyAt.width == width && keyAt.height == height) {
+                Bitmap valueAt = this.bitmaps.valueAt(i);
+                if (valueAt != null) {
+                    canvas.drawBitmap(valueAt, (Rect) null, bounds, this.bitmapPaint);
                 } else {
                     super.draw(canvas);
                 }
-                return this.disposables.get(ownerView);
+                return this.disposables.get(view);
             }
         }
-        Disposable oldDisposable = this.disposables.remove(ownerView);
-        if (oldDisposable != null) {
-            oldDisposable.dispose();
+        Disposable remove = this.disposables.remove(view);
+        if (remove != null) {
+            remove.dispose();
         }
-        IntSize size2 = new IntSize(width, height);
-        this.bitmaps.put(size2, null);
-        this.isForExactBounds.put(size2, true);
-        Disposable disposable = this.disposables.put(ownerView, new BackgroundGradientDrawable$$ExternalSyntheticLambda2(this, ownerView, startDitheringInternal(new IntSize[]{size2}, new ListenerAdapter() {
+        IntSize intSize = new IntSize(width, height);
+        this.bitmaps.put(intSize, null);
+        this.isForExactBounds.put(intSize, Boolean.TRUE);
+        Disposable put = this.disposables.put(view, new BackgroundGradientDrawable$$ExternalSyntheticLambda2(this, view, startDitheringInternal(new IntSize[]{intSize}, new ListenerAdapter() {
             public void onAllSizesReady() {
-                ownerView.invalidate();
+                view.invalidate();
             }
         }, 0)));
         super.draw(canvas);
-        return disposable;
+        return put;
     }
 
-    /* renamed from: lambda$drawExactBoundsSize$0$org-telegram-ui-Components-BackgroundGradientDrawable  reason: not valid java name */
-    public /* synthetic */ void m564xc8CLASSNAMEd9(View ownerView, Disposable delegate) {
-        this.disposables.remove(ownerView);
-        delegate.dispose();
+    /* access modifiers changed from: private */
+    public /* synthetic */ void lambda$drawExactBoundsSize$0(View view, Disposable disposable) {
+        this.disposables.remove(view);
+        disposable.dispose();
     }
 
-    public void setAlpha(int alpha) {
-        super.setAlpha(alpha);
-        this.bitmapPaint.setAlpha(alpha);
+    public void setAlpha(int i) {
+        super.setAlpha(i);
+        this.bitmapPaint.setAlpha(i);
     }
 
     public void setColorFilter(ColorFilter colorFilter) {
@@ -196,130 +201,142 @@ public class BackgroundGradientDrawable extends GradientDrawable {
         return startDithering(sizes, listener, 0);
     }
 
-    public Disposable startDithering(Sizes sizes, Listener listener, long delay) {
+    public Disposable startDithering(Sizes sizes, Listener listener, long j) {
         if (this.disposed) {
             return null;
         }
-        List<IntSize> sizesList = new ArrayList<>(sizes.arr.length);
-        for (IntSize size : sizes.arr) {
-            if (!this.bitmaps.containsKey(size)) {
-                this.bitmaps.put(size, null);
-                sizesList.add(size);
+        ArrayList arrayList = new ArrayList(sizes.arr.length);
+        for (IntSize intSize : sizes.arr) {
+            if (!this.bitmaps.containsKey(intSize)) {
+                this.bitmaps.put(intSize, null);
+                arrayList.add(intSize);
             }
         }
-        if (sizesList.isEmpty() != 0) {
+        if (arrayList.isEmpty()) {
             return null;
         }
-        return startDitheringInternal((IntSize[]) sizesList.toArray(new IntSize[0]), listener, delay);
+        return startDitheringInternal((IntSize[]) arrayList.toArray(new IntSize[0]), listener, j);
     }
 
-    private Disposable startDitheringInternal(IntSize[] sizesArr, Listener listener, long delay) {
-        IntSize[] intSizeArr = sizesArr;
+    private Disposable startDitheringInternal(IntSize[] intSizeArr, Listener listener, long j) {
         if (intSizeArr.length == 0) {
             return null;
         }
-        Listener[] listenerReference = {listener};
-        Runnable[] runnables = new Runnable[intSizeArr.length];
-        this.ditheringRunnables.add(runnables);
+        Listener[] listenerArr = {listener};
+        Runnable[] runnableArr = new Runnable[intSizeArr.length];
+        this.ditheringRunnables.add(runnableArr);
         for (int i = 0; i < intSizeArr.length; i++) {
-            IntSize size = intSizeArr[i];
-            if (size.width == 0) {
-                long j = delay;
-            } else if (size.height == 0) {
-                long j2 = delay;
-            } else {
+            IntSize intSize = intSizeArr[i];
+            if (!(intSize.width == 0 || intSize.height == 0)) {
                 DispatchQueue dispatchQueue = Utilities.globalQueue;
-                BackgroundGradientDrawable$$ExternalSyntheticLambda0 backgroundGradientDrawable$$ExternalSyntheticLambda0 = new BackgroundGradientDrawable$$ExternalSyntheticLambda0(this, size, runnables, i, listenerReference);
-                runnables[i] = backgroundGradientDrawable$$ExternalSyntheticLambda0;
-                dispatchQueue.postRunnable(backgroundGradientDrawable$$ExternalSyntheticLambda0, delay);
+                BackgroundGradientDrawable$$ExternalSyntheticLambda0 backgroundGradientDrawable$$ExternalSyntheticLambda0 = new BackgroundGradientDrawable$$ExternalSyntheticLambda0(this, intSize, runnableArr, i, listenerArr);
+                runnableArr[i] = backgroundGradientDrawable$$ExternalSyntheticLambda0;
+                dispatchQueue.postRunnable(backgroundGradientDrawable$$ExternalSyntheticLambda0, j);
             }
         }
-        long j3 = delay;
-        return new BackgroundGradientDrawable$$ExternalSyntheticLambda3(this, listenerReference, runnables, sizesArr);
+        return new BackgroundGradientDrawable$$ExternalSyntheticLambda3(this, listenerArr, runnableArr, intSizeArr);
     }
 
-    /* renamed from: lambda$startDitheringInternal$2$org-telegram-ui-Components-BackgroundGradientDrawable  reason: not valid java name */
-    public /* synthetic */ void m566xfdd06cfb(IntSize size, Runnable[] runnables, int index, Listener[] listenerReference) {
-        IntSize intSize = size;
+    /* access modifiers changed from: private */
+    public /* synthetic */ void lambda$startDitheringInternal$2(IntSize intSize, Runnable[] runnableArr, int i, Listener[] listenerArr) {
         try {
-            try {
-                AndroidUtilities.runOnUIThread(new BackgroundGradientDrawable$$ExternalSyntheticLambda1(this, runnables, createDitheredGradientBitmap(getOrientation(), this.colors, intSize.width, intSize.height), size, index, listenerReference));
-            } catch (Throwable th) {
-                th = th;
-                AndroidUtilities.runOnUIThread(new BackgroundGradientDrawable$$ExternalSyntheticLambda1(this, runnables, (Bitmap) null, size, index, listenerReference));
-                throw th;
-            }
-        } catch (Throwable th2) {
-            th = th2;
-            AndroidUtilities.runOnUIThread(new BackgroundGradientDrawable$$ExternalSyntheticLambda1(this, runnables, (Bitmap) null, size, index, listenerReference));
+            AndroidUtilities.runOnUIThread(new BackgroundGradientDrawable$$ExternalSyntheticLambda1(this, runnableArr, createDitheredGradientBitmap(getOrientation(), this.colors, intSize.width, intSize.height), intSize, i, listenerArr));
+        } catch (Throwable th) {
+            AndroidUtilities.runOnUIThread(new BackgroundGradientDrawable$$ExternalSyntheticLambda1(this, runnableArr, (Bitmap) null, intSize, i, listenerArr));
             throw th;
         }
     }
 
-    /* renamed from: lambda$startDitheringInternal$1$org-telegram-ui-Components-BackgroundGradientDrawable  reason: not valid java name */
-    public /* synthetic */ void m565xd47CLASSNAMEba(Runnable[] runnables, Bitmap bitmap, IntSize size, int index, Listener[] listenerReference) {
-        if (this.ditheringRunnables.contains(runnables)) {
-            if (bitmap != null) {
-                this.bitmaps.put(size, bitmap);
-            } else {
-                this.bitmaps.remove(size);
-                this.isForExactBounds.remove(size);
-            }
-            runnables[index] = null;
-            boolean hasNotNull = false;
-            if (runnables.length > 1) {
-                int j = 0;
-                while (true) {
-                    if (j >= runnables.length) {
-                        break;
-                    } else if (runnables[j] != null) {
-                        hasNotNull = true;
-                        break;
-                    } else {
-                        j++;
-                    }
-                }
-            }
-            if (!hasNotNull) {
-                this.ditheringRunnables.remove(runnables);
-            }
-            if (listenerReference[0] != null) {
-                listenerReference[0].onSizeReady(size.width, size.height);
-                if (!hasNotNull) {
-                    listenerReference[0].onAllSizesReady();
-                    listenerReference[0] = null;
-                }
-            }
-        } else if (bitmap != null) {
-            bitmap.recycle();
-        }
+    /* access modifiers changed from: private */
+    /* JADX WARNING: Removed duplicated region for block: B:17:0x0037  */
+    /* JADX WARNING: Removed duplicated region for block: B:20:0x0040  */
+    /* JADX WARNING: Removed duplicated region for block: B:28:? A[RETURN, SYNTHETIC] */
+    /* Code decompiled incorrectly, please refer to instructions dump. */
+    public /* synthetic */ void lambda$startDitheringInternal$1(java.lang.Runnable[] r4, android.graphics.Bitmap r5, org.telegram.ui.Components.IntSize r6, int r7, org.telegram.ui.Components.BackgroundGradientDrawable.Listener[] r8) {
+        /*
+            r3 = this;
+            java.util.List<java.lang.Runnable[]> r0 = r3.ditheringRunnables
+            boolean r0 = r0.contains(r4)
+            if (r0 != 0) goto L_0x000e
+            if (r5 == 0) goto L_0x000d
+            r5.recycle()
+        L_0x000d:
+            return
+        L_0x000e:
+            if (r5 == 0) goto L_0x0016
+            androidx.collection.ArrayMap<org.telegram.ui.Components.IntSize, android.graphics.Bitmap> r0 = r3.bitmaps
+            r0.put(r6, r5)
+            goto L_0x0020
+        L_0x0016:
+            androidx.collection.ArrayMap<org.telegram.ui.Components.IntSize, android.graphics.Bitmap> r5 = r3.bitmaps
+            r5.remove(r6)
+            androidx.collection.ArrayMap<org.telegram.ui.Components.IntSize, java.lang.Boolean> r5 = r3.isForExactBounds
+            r5.remove(r6)
+        L_0x0020:
+            r5 = 0
+            r4[r7] = r5
+            int r7 = r4.length
+            r0 = 1
+            r1 = 0
+            if (r7 <= r0) goto L_0x0034
+            r7 = 0
+        L_0x0029:
+            int r2 = r4.length
+            if (r7 >= r2) goto L_0x0034
+            r2 = r4[r7]
+            if (r2 == 0) goto L_0x0031
+            goto L_0x0035
+        L_0x0031:
+            int r7 = r7 + 1
+            goto L_0x0029
+        L_0x0034:
+            r0 = 0
+        L_0x0035:
+            if (r0 != 0) goto L_0x003c
+            java.util.List<java.lang.Runnable[]> r7 = r3.ditheringRunnables
+            r7.remove(r4)
+        L_0x003c:
+            r4 = r8[r1]
+            if (r4 == 0) goto L_0x0052
+            r4 = r8[r1]
+            int r7 = r6.width
+            int r6 = r6.height
+            r4.onSizeReady(r7, r6)
+            if (r0 != 0) goto L_0x0052
+            r4 = r8[r1]
+            r4.onAllSizesReady()
+            r8[r1] = r5
+        L_0x0052:
+            return
+        */
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.BackgroundGradientDrawable.lambda$startDitheringInternal$1(java.lang.Runnable[], android.graphics.Bitmap, org.telegram.ui.Components.IntSize, int, org.telegram.ui.Components.BackgroundGradientDrawable$Listener[]):void");
     }
 
-    /* renamed from: lambda$startDitheringInternal$3$org-telegram-ui-Components-BackgroundGradientDrawable  reason: not valid java name */
-    public /* synthetic */ void m567x2724CLASSNAMEc(Listener[] listenerReference, Runnable[] runnables, IntSize[] sizesArr) {
-        listenerReference[0] = null;
-        if (this.ditheringRunnables.contains(runnables)) {
-            Utilities.globalQueue.cancelRunnables(runnables);
-            this.ditheringRunnables.remove(runnables);
+    /* access modifiers changed from: private */
+    public /* synthetic */ void lambda$startDitheringInternal$3(Listener[] listenerArr, Runnable[] runnableArr, IntSize[] intSizeArr) {
+        listenerArr[0] = null;
+        if (this.ditheringRunnables.contains(runnableArr)) {
+            Utilities.globalQueue.cancelRunnables(runnableArr);
+            this.ditheringRunnables.remove(runnableArr);
         }
-        for (IntSize size : sizesArr) {
-            Bitmap bitmap = this.bitmaps.remove(size);
-            this.isForExactBounds.remove(size);
-            if (bitmap != null) {
-                bitmap.recycle();
+        for (IntSize intSize : intSizeArr) {
+            Bitmap remove = this.bitmaps.remove(intSize);
+            this.isForExactBounds.remove(intSize);
+            if (remove != null) {
+                remove.recycle();
             }
         }
     }
 
     public void dispose() {
         if (!this.disposed) {
-            for (int i = this.ditheringRunnables.size() - 1; i >= 0; i--) {
-                Utilities.globalQueue.cancelRunnables(this.ditheringRunnables.remove(i));
+            for (int size = this.ditheringRunnables.size() - 1; size >= 0; size--) {
+                Utilities.globalQueue.cancelRunnables(this.ditheringRunnables.remove(size));
             }
-            for (int i2 = this.bitmaps.size() - 1; i2 >= 0; i2--) {
-                Bitmap bitmap = this.bitmaps.removeAt(i2);
-                if (bitmap != null) {
-                    bitmap.recycle();
+            for (int size2 = this.bitmaps.size() - 1; size2 >= 0; size2--) {
+                Bitmap removeAt = this.bitmaps.removeAt(size2);
+                if (removeAt != null) {
+                    removeAt.recycle();
                 }
             }
             this.isForExactBounds.clear();
@@ -328,153 +345,189 @@ public class BackgroundGradientDrawable extends GradientDrawable {
         }
     }
 
-    private Bitmap findBestBitmapForSize(int width, int height) {
-        Bitmap bitmap;
-        Boolean forExactBounds;
-        Bitmap bestBitmap = null;
-        float minDist = Float.MAX_VALUE;
-        int count = this.bitmaps.size();
-        for (int i = 0; i < count; i++) {
-            IntSize size = this.bitmaps.keyAt(i);
-            float dist = (float) Math.sqrt(Math.pow((double) (width - size.width), 2.0d) + Math.pow((double) (height - size.height), 2.0d));
-            if (dist < minDist && (bitmap = this.bitmaps.valueAt(i)) != null && ((forExactBounds = this.isForExactBounds.get(size)) == null || !forExactBounds.booleanValue())) {
-                bestBitmap = bitmap;
-                minDist = dist;
+    private Bitmap findBestBitmapForSize(int i, int i2) {
+        Bitmap valueAt;
+        Boolean bool;
+        int size = this.bitmaps.size();
+        Bitmap bitmap = null;
+        float f = Float.MAX_VALUE;
+        for (int i3 = 0; i3 < size; i3++) {
+            IntSize keyAt = this.bitmaps.keyAt(i3);
+            float sqrt = (float) Math.sqrt(Math.pow((double) (i - keyAt.width), 2.0d) + Math.pow((double) (i2 - keyAt.height), 2.0d));
+            if (sqrt < f && (valueAt = this.bitmaps.valueAt(i3)) != null && ((bool = this.isForExactBounds.get(keyAt)) == null || !bool.booleanValue())) {
+                f = sqrt;
+                bitmap = valueAt;
             }
         }
-        return bestBitmap;
+        return bitmap;
     }
 
     /* renamed from: org.telegram.ui.Components.BackgroundGradientDrawable$2  reason: invalid class name */
     static /* synthetic */ class AnonymousClass2 {
         static final /* synthetic */ int[] $SwitchMap$android$graphics$drawable$GradientDrawable$Orientation;
 
+        /* JADX WARNING: Can't wrap try/catch for region: R(14:0|1|2|3|4|5|6|7|8|9|10|11|12|(3:13|14|16)) */
+        /* JADX WARNING: Can't wrap try/catch for region: R(16:0|1|2|3|4|5|6|7|8|9|10|11|12|13|14|16) */
+        /* JADX WARNING: Failed to process nested try/catch */
+        /* JADX WARNING: Missing exception handler attribute for start block: B:11:0x003e */
+        /* JADX WARNING: Missing exception handler attribute for start block: B:13:0x0049 */
+        /* JADX WARNING: Missing exception handler attribute for start block: B:3:0x0012 */
+        /* JADX WARNING: Missing exception handler attribute for start block: B:5:0x001d */
+        /* JADX WARNING: Missing exception handler attribute for start block: B:7:0x0028 */
+        /* JADX WARNING: Missing exception handler attribute for start block: B:9:0x0033 */
         static {
-            int[] iArr = new int[GradientDrawable.Orientation.values().length];
-            $SwitchMap$android$graphics$drawable$GradientDrawable$Orientation = iArr;
-            try {
-                iArr[GradientDrawable.Orientation.TOP_BOTTOM.ordinal()] = 1;
-            } catch (NoSuchFieldError e) {
-            }
-            try {
-                $SwitchMap$android$graphics$drawable$GradientDrawable$Orientation[GradientDrawable.Orientation.TR_BL.ordinal()] = 2;
-            } catch (NoSuchFieldError e2) {
-            }
-            try {
-                $SwitchMap$android$graphics$drawable$GradientDrawable$Orientation[GradientDrawable.Orientation.RIGHT_LEFT.ordinal()] = 3;
-            } catch (NoSuchFieldError e3) {
-            }
-            try {
-                $SwitchMap$android$graphics$drawable$GradientDrawable$Orientation[GradientDrawable.Orientation.BR_TL.ordinal()] = 4;
-            } catch (NoSuchFieldError e4) {
-            }
-            try {
-                $SwitchMap$android$graphics$drawable$GradientDrawable$Orientation[GradientDrawable.Orientation.BOTTOM_TOP.ordinal()] = 5;
-            } catch (NoSuchFieldError e5) {
-            }
-            try {
-                $SwitchMap$android$graphics$drawable$GradientDrawable$Orientation[GradientDrawable.Orientation.BL_TR.ordinal()] = 6;
-            } catch (NoSuchFieldError e6) {
-            }
-            try {
-                $SwitchMap$android$graphics$drawable$GradientDrawable$Orientation[GradientDrawable.Orientation.LEFT_RIGHT.ordinal()] = 7;
-            } catch (NoSuchFieldError e7) {
-            }
+            /*
+                android.graphics.drawable.GradientDrawable$Orientation[] r0 = android.graphics.drawable.GradientDrawable.Orientation.values()
+                int r0 = r0.length
+                int[] r0 = new int[r0]
+                $SwitchMap$android$graphics$drawable$GradientDrawable$Orientation = r0
+                android.graphics.drawable.GradientDrawable$Orientation r1 = android.graphics.drawable.GradientDrawable.Orientation.TOP_BOTTOM     // Catch:{ NoSuchFieldError -> 0x0012 }
+                int r1 = r1.ordinal()     // Catch:{ NoSuchFieldError -> 0x0012 }
+                r2 = 1
+                r0[r1] = r2     // Catch:{ NoSuchFieldError -> 0x0012 }
+            L_0x0012:
+                int[] r0 = $SwitchMap$android$graphics$drawable$GradientDrawable$Orientation     // Catch:{ NoSuchFieldError -> 0x001d }
+                android.graphics.drawable.GradientDrawable$Orientation r1 = android.graphics.drawable.GradientDrawable.Orientation.TR_BL     // Catch:{ NoSuchFieldError -> 0x001d }
+                int r1 = r1.ordinal()     // Catch:{ NoSuchFieldError -> 0x001d }
+                r2 = 2
+                r0[r1] = r2     // Catch:{ NoSuchFieldError -> 0x001d }
+            L_0x001d:
+                int[] r0 = $SwitchMap$android$graphics$drawable$GradientDrawable$Orientation     // Catch:{ NoSuchFieldError -> 0x0028 }
+                android.graphics.drawable.GradientDrawable$Orientation r1 = android.graphics.drawable.GradientDrawable.Orientation.RIGHT_LEFT     // Catch:{ NoSuchFieldError -> 0x0028 }
+                int r1 = r1.ordinal()     // Catch:{ NoSuchFieldError -> 0x0028 }
+                r2 = 3
+                r0[r1] = r2     // Catch:{ NoSuchFieldError -> 0x0028 }
+            L_0x0028:
+                int[] r0 = $SwitchMap$android$graphics$drawable$GradientDrawable$Orientation     // Catch:{ NoSuchFieldError -> 0x0033 }
+                android.graphics.drawable.GradientDrawable$Orientation r1 = android.graphics.drawable.GradientDrawable.Orientation.BR_TL     // Catch:{ NoSuchFieldError -> 0x0033 }
+                int r1 = r1.ordinal()     // Catch:{ NoSuchFieldError -> 0x0033 }
+                r2 = 4
+                r0[r1] = r2     // Catch:{ NoSuchFieldError -> 0x0033 }
+            L_0x0033:
+                int[] r0 = $SwitchMap$android$graphics$drawable$GradientDrawable$Orientation     // Catch:{ NoSuchFieldError -> 0x003e }
+                android.graphics.drawable.GradientDrawable$Orientation r1 = android.graphics.drawable.GradientDrawable.Orientation.BOTTOM_TOP     // Catch:{ NoSuchFieldError -> 0x003e }
+                int r1 = r1.ordinal()     // Catch:{ NoSuchFieldError -> 0x003e }
+                r2 = 5
+                r0[r1] = r2     // Catch:{ NoSuchFieldError -> 0x003e }
+            L_0x003e:
+                int[] r0 = $SwitchMap$android$graphics$drawable$GradientDrawable$Orientation     // Catch:{ NoSuchFieldError -> 0x0049 }
+                android.graphics.drawable.GradientDrawable$Orientation r1 = android.graphics.drawable.GradientDrawable.Orientation.BL_TR     // Catch:{ NoSuchFieldError -> 0x0049 }
+                int r1 = r1.ordinal()     // Catch:{ NoSuchFieldError -> 0x0049 }
+                r2 = 6
+                r0[r1] = r2     // Catch:{ NoSuchFieldError -> 0x0049 }
+            L_0x0049:
+                int[] r0 = $SwitchMap$android$graphics$drawable$GradientDrawable$Orientation     // Catch:{ NoSuchFieldError -> 0x0054 }
+                android.graphics.drawable.GradientDrawable$Orientation r1 = android.graphics.drawable.GradientDrawable.Orientation.LEFT_RIGHT     // Catch:{ NoSuchFieldError -> 0x0054 }
+                int r1 = r1.ordinal()     // Catch:{ NoSuchFieldError -> 0x0054 }
+                r2 = 7
+                r0[r1] = r2     // Catch:{ NoSuchFieldError -> 0x0054 }
+            L_0x0054:
+                return
+            */
+            throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.BackgroundGradientDrawable.AnonymousClass2.<clinit>():void");
         }
     }
 
-    public static Rect getGradientPoints(GradientDrawable.Orientation orientation, int width, int height) {
-        Rect outRect = new Rect();
+    public static Rect getGradientPoints(GradientDrawable.Orientation orientation, int i, int i2) {
+        Rect rect = new Rect();
         switch (AnonymousClass2.$SwitchMap$android$graphics$drawable$GradientDrawable$Orientation[orientation.ordinal()]) {
             case 1:
-                outRect.left = width / 2;
-                outRect.top = 0;
-                outRect.right = outRect.left;
-                outRect.bottom = height;
+                int i3 = i / 2;
+                rect.left = i3;
+                rect.top = 0;
+                rect.right = i3;
+                rect.bottom = i2;
                 break;
             case 2:
-                outRect.left = width;
-                outRect.top = 0;
-                outRect.right = 0;
-                outRect.bottom = height;
+                rect.left = i;
+                rect.top = 0;
+                rect.right = 0;
+                rect.bottom = i2;
                 break;
             case 3:
-                outRect.left = width;
-                outRect.top = height / 2;
-                outRect.right = 0;
-                outRect.bottom = outRect.top;
+                rect.left = i;
+                int i4 = i2 / 2;
+                rect.top = i4;
+                rect.right = 0;
+                rect.bottom = i4;
                 break;
             case 4:
-                outRect.left = width;
-                outRect.top = height;
-                outRect.right = 0;
-                outRect.bottom = 0;
+                rect.left = i;
+                rect.top = i2;
+                rect.right = 0;
+                rect.bottom = 0;
                 break;
             case 5:
-                outRect.left = width / 2;
-                outRect.top = height;
-                outRect.right = outRect.left;
-                outRect.bottom = 0;
+                int i5 = i / 2;
+                rect.left = i5;
+                rect.top = i2;
+                rect.right = i5;
+                rect.bottom = 0;
                 break;
             case 6:
-                outRect.left = 0;
-                outRect.top = height;
-                outRect.right = width;
-                outRect.bottom = 0;
+                rect.left = 0;
+                rect.top = i2;
+                rect.right = i;
+                rect.bottom = 0;
                 break;
             case 7:
-                outRect.left = 0;
-                outRect.top = height / 2;
-                outRect.right = width;
-                outRect.bottom = outRect.top;
+                rect.left = 0;
+                int i6 = i2 / 2;
+                rect.top = i6;
+                rect.right = i;
+                rect.bottom = i6;
                 break;
             default:
-                outRect.left = 0;
-                outRect.top = 0;
-                outRect.right = width;
-                outRect.bottom = height;
+                rect.left = 0;
+                rect.top = 0;
+                rect.right = i;
+                rect.bottom = i2;
                 break;
         }
-        return outRect;
+        return rect;
     }
 
-    public static Rect getGradientPoints(int gradientAngle, int width, int height) {
-        return getGradientPoints(getGradientOrientation(gradientAngle), width, height);
+    public static Rect getGradientPoints(int i, int i2, int i3) {
+        return getGradientPoints(getGradientOrientation(i), i2, i3);
     }
 
-    public static GradientDrawable.Orientation getGradientOrientation(int gradientAngle) {
-        switch (gradientAngle) {
-            case 0:
-                return GradientDrawable.Orientation.BOTTOM_TOP;
-            case 90:
-                return GradientDrawable.Orientation.LEFT_RIGHT;
-            case 135:
-                return GradientDrawable.Orientation.TL_BR;
-            case 180:
-                return GradientDrawable.Orientation.TOP_BOTTOM;
-            case 225:
-                return GradientDrawable.Orientation.TR_BL;
-            case 270:
-                return GradientDrawable.Orientation.RIGHT_LEFT;
-            case 315:
-                return GradientDrawable.Orientation.BR_TL;
-            default:
-                return GradientDrawable.Orientation.BL_TR;
+    public static GradientDrawable.Orientation getGradientOrientation(int i) {
+        if (i == 0) {
+            return GradientDrawable.Orientation.BOTTOM_TOP;
         }
+        if (i == 90) {
+            return GradientDrawable.Orientation.LEFT_RIGHT;
+        }
+        if (i == 135) {
+            return GradientDrawable.Orientation.TL_BR;
+        }
+        if (i == 180) {
+            return GradientDrawable.Orientation.TOP_BOTTOM;
+        }
+        if (i == 225) {
+            return GradientDrawable.Orientation.TR_BL;
+        }
+        if (i == 270) {
+            return GradientDrawable.Orientation.RIGHT_LEFT;
+        }
+        if (i != 315) {
+            return GradientDrawable.Orientation.BL_TR;
+        }
+        return GradientDrawable.Orientation.BR_TL;
     }
 
-    public static BitmapDrawable createDitheredGradientBitmapDrawable(int angle, int[] colors2, int width, int height) {
-        return createDitheredGradientBitmapDrawable(getGradientOrientation(angle), colors2, width, height);
+    public static BitmapDrawable createDitheredGradientBitmapDrawable(int i, int[] iArr, int i2, int i3) {
+        return createDitheredGradientBitmapDrawable(getGradientOrientation(i), iArr, i2, i3);
     }
 
-    public static BitmapDrawable createDitheredGradientBitmapDrawable(GradientDrawable.Orientation orientation, int[] colors2, int width, int height) {
-        return new BitmapDrawable(ApplicationLoader.applicationContext.getResources(), createDitheredGradientBitmap(orientation, colors2, width, height));
+    public static BitmapDrawable createDitheredGradientBitmapDrawable(GradientDrawable.Orientation orientation, int[] iArr, int i, int i2) {
+        return new BitmapDrawable(ApplicationLoader.applicationContext.getResources(), createDitheredGradientBitmap(orientation, iArr, i, i2));
     }
 
-    private static Bitmap createDitheredGradientBitmap(GradientDrawable.Orientation orientation, int[] colors2, int width, int height) {
-        Rect r = getGradientPoints(orientation, width, height);
-        Bitmap ditheredGradientBitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
-        Utilities.drawDitheredGradient(ditheredGradientBitmap, colors2, r.left, r.top, r.right, r.bottom);
-        return ditheredGradientBitmap;
+    private static Bitmap createDitheredGradientBitmap(GradientDrawable.Orientation orientation, int[] iArr, int i, int i2) {
+        Rect gradientPoints = getGradientPoints(orientation, i, i2);
+        Bitmap createBitmap = Bitmap.createBitmap(i, i2, Bitmap.Config.ARGB_8888);
+        Utilities.drawDitheredGradient(createBitmap, iArr, gradientPoints.left, gradientPoints.top, gradientPoints.right, gradientPoints.bottom);
+        return createBitmap;
     }
 }

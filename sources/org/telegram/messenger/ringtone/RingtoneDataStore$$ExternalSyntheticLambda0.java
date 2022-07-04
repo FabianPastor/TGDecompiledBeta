@@ -8,6 +8,6 @@ public final /* synthetic */ class RingtoneDataStore$$ExternalSyntheticLambda0 i
     }
 
     public final void run() {
-        this.f$0.m2418xdfb099d5();
+        this.f$0.lambda$loadFromPrefs$3();
     }
 }

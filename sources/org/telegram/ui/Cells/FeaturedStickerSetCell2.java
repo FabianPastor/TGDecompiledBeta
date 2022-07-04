@@ -26,7 +26,9 @@ import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.SvgHelper;
 import org.telegram.messenger.UserConfig;
 import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC;
+import org.telegram.tgnet.TLRPC$Document;
+import org.telegram.tgnet.TLRPC$PhotoSize;
+import org.telegram.tgnet.TLRPC$StickerSetCovered;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.ActionBar.ThemeDescription;
 import org.telegram.ui.Components.BackupImageView;
@@ -46,7 +48,7 @@ public class FeaturedStickerSetCell2 extends FrameLayout {
     public boolean isInstalled;
     private boolean needDivider;
     private final Theme.ResourcesProvider resourcesProvider;
-    private TLRPC.StickerSetCovered stickersSet;
+    private TLRPC$StickerSetCovered stickersSet;
     private final TextView textView;
     private final TextView valueTextView;
 
@@ -63,7 +65,9 @@ public class FeaturedStickerSetCell2 extends FrameLayout {
         textView2.setEllipsize(TextUtils.TruncateAt.END);
         int i = 5;
         textView2.setGravity(LocaleController.isRTL ? 5 : 3);
-        addView(textView2, LayoutHelper.createFrame(-2, -2.0f, LocaleController.isRTL ? 5 : 3, LocaleController.isRTL ? 22.0f : 71.0f, 10.0f, LocaleController.isRTL ? 71.0f : 22.0f, 0.0f));
+        boolean z = LocaleController.isRTL;
+        float f = 71.0f;
+        addView(textView2, LayoutHelper.createFrame(-2, -2.0f, z ? 5 : 3, z ? 22.0f : 71.0f, 10.0f, z ? 71.0f : 22.0f, 0.0f));
         TextView textView3 = new TextView(context);
         this.valueTextView = textView3;
         textView3.setTextColor(Theme.getColor("windowBackgroundWhiteGrayText2"));
@@ -73,12 +77,14 @@ public class FeaturedStickerSetCell2 extends FrameLayout {
         textView3.setSingleLine(true);
         textView3.setEllipsize(TextUtils.TruncateAt.END);
         textView3.setGravity(LocaleController.isRTL ? 5 : 3);
-        addView(textView3, LayoutHelper.createFrame(-2, -2.0f, LocaleController.isRTL ? 5 : 3, LocaleController.isRTL ? 100.0f : 71.0f, 35.0f, LocaleController.isRTL ? 71.0f : 100.0f, 0.0f));
+        boolean z2 = LocaleController.isRTL;
+        addView(textView3, LayoutHelper.createFrame(-2, -2.0f, z2 ? 5 : 3, z2 ? 100.0f : 71.0f, 35.0f, !z2 ? 100.0f : f, 0.0f));
         BackupImageView backupImageView = new BackupImageView(context);
         this.imageView = backupImageView;
         backupImageView.setAspectFit(true);
         backupImageView.setLayerNum(1);
-        addView(backupImageView, LayoutHelper.createFrame(48, 48.0f, (!LocaleController.isRTL ? 3 : i) | 48, LocaleController.isRTL ? 0.0f : 12.0f, 8.0f, LocaleController.isRTL ? 12.0f : 0.0f, 0.0f));
+        boolean z3 = LocaleController.isRTL;
+        addView(backupImageView, LayoutHelper.createFrame(48, 48.0f, (!z3 ? 3 : i) | 48, z3 ? 0.0f : 12.0f, 8.0f, z3 ? 12.0f : 0.0f, 0.0f));
         ProgressButton progressButton = new ProgressButton(context);
         this.addButton = progressButton;
         progressButton.setText(LocaleController.getString("Add", NUM));
@@ -100,51 +106,50 @@ public class FeaturedStickerSetCell2 extends FrameLayout {
     }
 
     /* access modifiers changed from: protected */
-    public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        super.onMeasure(View.MeasureSpec.makeMeasureSpec(View.MeasureSpec.getSize(widthMeasureSpec), NUM), View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(64.0f) + (this.needDivider ? 1 : 0), NUM));
-        int width = this.addButton.getMeasuredWidth();
-        int width2 = this.delButton.getMeasuredWidth();
+    public void onMeasure(int i, int i2) {
+        super.onMeasure(View.MeasureSpec.makeMeasureSpec(View.MeasureSpec.getSize(i), NUM), View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(64.0f) + (this.needDivider ? 1 : 0), NUM));
+        int measuredWidth = this.addButton.getMeasuredWidth();
+        int measuredWidth2 = this.delButton.getMeasuredWidth();
         FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) this.delButton.getLayoutParams();
-        if (width2 < width) {
-            layoutParams.rightMargin = AndroidUtilities.dp(14.0f) + ((width - width2) / 2);
+        if (measuredWidth2 < measuredWidth) {
+            layoutParams.rightMargin = AndroidUtilities.dp(14.0f) + ((measuredWidth - measuredWidth2) / 2);
         } else {
             layoutParams.rightMargin = AndroidUtilities.dp(14.0f);
         }
-        measureChildWithMargins(this.textView, widthMeasureSpec, width, heightMeasureSpec, 0);
+        measureChildWithMargins(this.textView, i, measuredWidth, i2, 0);
     }
 
-    public void setStickersSet(TLRPC.StickerSetCovered set, boolean divider, boolean unread, boolean forceInstalled, boolean animated) {
-        TLRPC.Document sticker;
-        TLObject object;
+    public void setStickersSet(TLRPC$StickerSetCovered tLRPC$StickerSetCovered, boolean z, boolean z2, boolean z3, boolean z4) {
         ImageLocation imageLocation;
-        TLRPC.StickerSetCovered stickerSetCovered = set;
-        boolean z = divider;
+        TLRPC$StickerSetCovered tLRPC$StickerSetCovered2 = tLRPC$StickerSetCovered;
+        boolean z5 = z;
         AnimatorSet animatorSet = this.currentAnimation;
+        TLRPC$Document tLRPC$Document = null;
         if (animatorSet != null) {
             animatorSet.cancel();
             this.currentAnimation = null;
         }
-        this.needDivider = z;
-        this.stickersSet = stickerSetCovered;
-        setWillNotDraw(!z);
+        this.needDivider = z5;
+        this.stickersSet = tLRPC$StickerSetCovered2;
+        setWillNotDraw(!z5);
         this.textView.setText(this.stickersSet.set.title);
-        if (unread) {
-            Drawable drawable = new Drawable() {
+        if (z2) {
+            AnonymousClass1 r1 = new Drawable(this) {
                 Paint paint = new Paint(1);
 
-                public void draw(Canvas canvas) {
-                    this.paint.setColor(-12277526);
-                    canvas.drawCircle((float) AndroidUtilities.dp(4.0f), (float) AndroidUtilities.dp(5.0f), (float) AndroidUtilities.dp(3.0f), this.paint);
+                public int getOpacity() {
+                    return -2;
                 }
 
-                public void setAlpha(int alpha) {
+                public void setAlpha(int i) {
                 }
 
                 public void setColorFilter(ColorFilter colorFilter) {
                 }
 
-                public int getOpacity() {
-                    return -2;
+                public void draw(Canvas canvas) {
+                    this.paint.setColor(-12277526);
+                    canvas.drawCircle((float) AndroidUtilities.dp(4.0f), (float) AndroidUtilities.dp(5.0f), (float) AndroidUtilities.dp(3.0f), this.paint);
                 }
 
                 public int getIntrinsicWidth() {
@@ -155,59 +160,63 @@ public class FeaturedStickerSetCell2 extends FrameLayout {
                     return AndroidUtilities.dp(8.0f);
                 }
             };
-            this.textView.setCompoundDrawablesWithIntrinsicBounds(LocaleController.isRTL ? null : drawable, (Drawable) null, LocaleController.isRTL ? drawable : null, (Drawable) null);
+            TextView textView2 = this.textView;
+            boolean z6 = LocaleController.isRTL;
+            AnonymousClass1 r5 = z6 ? null : r1;
+            if (!z6) {
+                r1 = null;
+            }
+            textView2.setCompoundDrawablesWithIntrinsicBounds(r5, (Drawable) null, r1, (Drawable) null);
         } else {
             this.textView.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
         }
-        this.valueTextView.setText(LocaleController.formatPluralString("Stickers", stickerSetCovered.set.count, new Object[0]));
-        if (stickerSetCovered.cover != null) {
-            sticker = stickerSetCovered.cover;
-        } else if (!stickerSetCovered.covers.isEmpty()) {
-            sticker = stickerSetCovered.covers.get(0);
-        } else {
-            sticker = null;
+        this.valueTextView.setText(LocaleController.formatPluralString("Stickers", tLRPC$StickerSetCovered2.set.count, new Object[0]));
+        TLRPC$Document tLRPC$Document2 = tLRPC$StickerSetCovered2.cover;
+        if (tLRPC$Document2 != null) {
+            tLRPC$Document = tLRPC$Document2;
+        } else if (!tLRPC$StickerSetCovered2.covers.isEmpty()) {
+            tLRPC$Document = tLRPC$StickerSetCovered2.covers.get(0);
         }
-        if (sticker == null) {
-            this.imageView.setImage((ImageLocation) null, (String) null, "webp", (Drawable) null, (Object) set);
-        } else if (MessageObject.canAutoplayAnimatedSticker(sticker)) {
-            TLObject object2 = FileLoader.getClosestPhotoSizeWithSize(stickerSetCovered.set.thumbs, 90);
-            if (object2 == null) {
-                object = sticker;
-            } else {
-                object = object2;
+        float f = 1.0f;
+        if (tLRPC$Document == null) {
+            this.imageView.setImage((ImageLocation) null, (String) null, "webp", (Drawable) null, (Object) tLRPC$StickerSetCovered);
+        } else if (MessageObject.canAutoplayAnimatedSticker(tLRPC$Document)) {
+            TLObject closestPhotoSizeWithSize = FileLoader.getClosestPhotoSizeWithSize(tLRPC$StickerSetCovered2.set.thumbs, 90);
+            if (closestPhotoSizeWithSize == null) {
+                closestPhotoSizeWithSize = tLRPC$Document;
             }
-            SvgHelper.SvgDrawable svgThumb = DocumentObject.getSvgThumb(stickerSetCovered.set.thumbs, "windowBackgroundGray", 1.0f);
-            if (object instanceof TLRPC.Document) {
-                imageLocation = ImageLocation.getForDocument(FileLoader.getClosestPhotoSizeWithSize(sticker.thumbs, 90), sticker);
+            SvgHelper.SvgDrawable svgThumb = DocumentObject.getSvgThumb(tLRPC$StickerSetCovered2.set.thumbs, "windowBackgroundGray", 1.0f);
+            boolean z7 = closestPhotoSizeWithSize instanceof TLRPC$Document;
+            if (z7) {
+                imageLocation = ImageLocation.getForDocument(FileLoader.getClosestPhotoSizeWithSize(tLRPC$Document.thumbs, 90), tLRPC$Document);
             } else {
-                imageLocation = ImageLocation.getForSticker((TLRPC.PhotoSize) object, sticker, stickerSetCovered.set.thumb_version);
+                imageLocation = ImageLocation.getForSticker((TLRPC$PhotoSize) closestPhotoSizeWithSize, tLRPC$Document, tLRPC$StickerSetCovered2.set.thumb_version);
             }
-            if (!(object instanceof TLRPC.Document) || !MessageObject.isAnimatedStickerDocument(sticker, true)) {
-                ImageLocation imageLocation2 = imageLocation;
+            ImageLocation imageLocation2 = imageLocation;
+            if (!z7 || !MessageObject.isAnimatedStickerDocument(tLRPC$Document, true)) {
                 if (imageLocation2 == null || imageLocation2.imageType != 1) {
-                    this.imageView.setImage(imageLocation2, "50_50", "webp", (Drawable) svgThumb, (Object) set);
+                    this.imageView.setImage(imageLocation2, "50_50", "webp", (Drawable) svgThumb, (Object) tLRPC$StickerSetCovered);
                 } else {
-                    this.imageView.setImage(imageLocation2, "50_50", "tgs", (Drawable) svgThumb, (Object) set);
+                    this.imageView.setImage(imageLocation2, "50_50", "tgs", (Drawable) svgThumb, (Object) tLRPC$StickerSetCovered);
                 }
             } else if (svgThumb != null) {
-                this.imageView.setImage(ImageLocation.getForDocument(sticker), "50_50", (Drawable) svgThumb, 0, (Object) set);
+                this.imageView.setImage(ImageLocation.getForDocument(tLRPC$Document), "50_50", (Drawable) svgThumb, 0, (Object) tLRPC$StickerSetCovered);
             } else {
-                ImageLocation imageLocation3 = imageLocation;
-                this.imageView.setImage(ImageLocation.getForDocument(sticker), "50_50", imageLocation, (String) null, 0, (Object) set);
+                this.imageView.setImage(ImageLocation.getForDocument(tLRPC$Document), "50_50", imageLocation2, (String) null, 0, (Object) tLRPC$StickerSetCovered);
             }
         } else {
-            TLRPC.PhotoSize thumb = FileLoader.getClosestPhotoSizeWithSize(sticker.thumbs, 90);
-            if (thumb != null) {
-                this.imageView.setImage(ImageLocation.getForDocument(thumb, sticker), "50_50", "webp", (Drawable) null, (Object) set);
+            TLRPC$PhotoSize closestPhotoSizeWithSize2 = FileLoader.getClosestPhotoSizeWithSize(tLRPC$Document.thumbs, 90);
+            if (closestPhotoSizeWithSize2 != null) {
+                this.imageView.setImage(ImageLocation.getForDocument(closestPhotoSizeWithSize2, tLRPC$Document), "50_50", "webp", (Drawable) null, (Object) tLRPC$StickerSetCovered);
             } else {
-                this.imageView.setImage(ImageLocation.getForDocument(sticker), "50_50", "webp", (Drawable) null, (Object) set);
+                this.imageView.setImage(ImageLocation.getForDocument(tLRPC$Document), "50_50", "webp", (Drawable) null, (Object) tLRPC$StickerSetCovered);
             }
         }
         this.addButton.setVisibility(0);
-        boolean z2 = forceInstalled || MediaDataController.getInstance(this.currentAccount).isStickerPackInstalled(stickerSetCovered.set.id);
-        this.isInstalled = z2;
-        if (animated) {
-            if (z2) {
+        boolean z8 = z3 || MediaDataController.getInstance(this.currentAccount).isStickerPackInstalled(tLRPC$StickerSetCovered2.set.id);
+        this.isInstalled = z8;
+        if (z4) {
+            if (z8) {
                 this.delButton.setVisibility(0);
             } else {
                 this.addButton.setVisibility(0);
@@ -217,21 +226,21 @@ public class FeaturedStickerSetCell2 extends FrameLayout {
             animatorSet2.setDuration(250);
             AnimatorSet animatorSet3 = this.currentAnimation;
             Animator[] animatorArr = new Animator[6];
-            TextView textView2 = this.delButton;
+            TextView textView3 = this.delButton;
             Property property = View.ALPHA;
             float[] fArr = new float[1];
             fArr[0] = this.isInstalled ? 1.0f : 0.0f;
-            animatorArr[0] = ObjectAnimator.ofFloat(textView2, property, fArr);
-            TextView textView3 = this.delButton;
+            animatorArr[0] = ObjectAnimator.ofFloat(textView3, property, fArr);
+            TextView textView4 = this.delButton;
             Property property2 = View.SCALE_X;
             float[] fArr2 = new float[1];
             fArr2[0] = this.isInstalled ? 1.0f : 0.0f;
-            animatorArr[1] = ObjectAnimator.ofFloat(textView3, property2, fArr2);
-            TextView textView4 = this.delButton;
+            animatorArr[1] = ObjectAnimator.ofFloat(textView4, property2, fArr2);
+            TextView textView5 = this.delButton;
             Property property3 = View.SCALE_Y;
             float[] fArr3 = new float[1];
             fArr3[0] = this.isInstalled ? 1.0f : 0.0f;
-            animatorArr[2] = ObjectAnimator.ofFloat(textView4, property3, fArr3);
+            animatorArr[2] = ObjectAnimator.ofFloat(textView5, property3, fArr3);
             ProgressButton progressButton = this.addButton;
             Property property4 = View.ALPHA;
             float[] fArr4 = new float[1];
@@ -245,11 +254,14 @@ public class FeaturedStickerSetCell2 extends FrameLayout {
             ProgressButton progressButton3 = this.addButton;
             Property property6 = View.SCALE_Y;
             float[] fArr6 = new float[1];
-            fArr6[0] = this.isInstalled ? 0.0f : 1.0f;
+            if (this.isInstalled) {
+                f = 0.0f;
+            }
+            fArr6[0] = f;
             animatorArr[5] = ObjectAnimator.ofFloat(progressButton3, property6, fArr6);
             animatorSet3.playTogether(animatorArr);
             this.currentAnimation.addListener(new AnimatorListenerAdapter() {
-                public void onAnimationEnd(Animator animation) {
+                public void onAnimationEnd(Animator animator) {
                     if (FeaturedStickerSetCell2.this.isInstalled) {
                         FeaturedStickerSetCell2.this.addButton.setVisibility(4);
                     } else {
@@ -259,7 +271,7 @@ public class FeaturedStickerSetCell2 extends FrameLayout {
             });
             this.currentAnimation.setInterpolator(new OvershootInterpolator(1.02f));
             this.currentAnimation.start();
-        } else if (z2) {
+        } else if (z8) {
             this.delButton.setVisibility(0);
             this.delButton.setAlpha(1.0f);
             this.delButton.setScaleX(1.0f);
@@ -280,7 +292,7 @@ public class FeaturedStickerSetCell2 extends FrameLayout {
         }
     }
 
-    public TLRPC.StickerSetCovered getStickerSet() {
+    public TLRPC$StickerSetCovered getStickerSet() {
         return this.stickersSet;
     }
 
@@ -289,8 +301,8 @@ public class FeaturedStickerSetCell2 extends FrameLayout {
         this.delButton.setOnClickListener(onClickListener);
     }
 
-    public void setDrawProgress(boolean value, boolean animated) {
-        this.addButton.setDrawProgress(value, animated);
+    public void setDrawProgress(boolean z, boolean z2) {
+        this.addButton.setDrawProgress(z, z2);
     }
 
     public boolean isInstalled() {
@@ -313,22 +325,16 @@ public class FeaturedStickerSetCell2 extends FrameLayout {
         this.addButton.setBackgroundRoundRect(Theme.getColor("featuredStickers_addButton"), Theme.getColor("featuredStickers_addButtonPressed"));
     }
 
-    public static void createThemeDescriptions(List<ThemeDescription> descriptions, RecyclerListView listView, ThemeDescription.ThemeDescriptionDelegate delegate) {
-        List<ThemeDescription> list = descriptions;
-        list.add(new ThemeDescription((View) listView, ThemeDescription.FLAG_TEXTCOLOR, new Class[]{FeaturedStickerSetCell.class}, new String[]{"textView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlackText"));
-        RecyclerListView recyclerListView = listView;
-        list.add(new ThemeDescription((View) recyclerListView, ThemeDescription.FLAG_TEXTCOLOR, new Class[]{FeaturedStickerSetCell.class}, new String[]{"valueTextView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteGrayText2"));
-        RecyclerListView recyclerListView2 = listView;
-        list.add(new ThemeDescription((View) recyclerListView2, ThemeDescription.FLAG_TEXTCOLOR, new Class[]{FeaturedStickerSetCell.class}, new String[]{"addButton"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "featuredStickers_buttonText"));
-        list.add(new ThemeDescription((View) recyclerListView, ThemeDescription.FLAG_TEXTCOLOR, new Class[]{FeaturedStickerSetCell.class}, new String[]{"delButton"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "featuredStickers_removeButtonText"));
-        list.add(new ThemeDescription(recyclerListView2, 0, new Class[]{FeaturedStickerSetCell.class}, Theme.dividerPaint, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "divider"));
-        list.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, delegate, "featuredStickers_buttonProgress"));
-        list.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, delegate, "featuredStickers_addButtonPressed"));
-    }
-
-    private int getThemedColor(String key) {
-        Theme.ResourcesProvider resourcesProvider2 = this.resourcesProvider;
-        Integer color = resourcesProvider2 != null ? resourcesProvider2.getColor(key) : null;
-        return color != null ? color.intValue() : Theme.getColor(key);
+    public static void createThemeDescriptions(List<ThemeDescription> list, RecyclerListView recyclerListView, ThemeDescription.ThemeDescriptionDelegate themeDescriptionDelegate) {
+        List<ThemeDescription> list2 = list;
+        list2.add(new ThemeDescription((View) recyclerListView, ThemeDescription.FLAG_TEXTCOLOR, new Class[]{FeaturedStickerSetCell.class}, new String[]{"textView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlackText"));
+        RecyclerListView recyclerListView2 = recyclerListView;
+        list2.add(new ThemeDescription((View) recyclerListView2, ThemeDescription.FLAG_TEXTCOLOR, new Class[]{FeaturedStickerSetCell.class}, new String[]{"valueTextView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteGrayText2"));
+        RecyclerListView recyclerListView3 = recyclerListView;
+        list2.add(new ThemeDescription((View) recyclerListView3, ThemeDescription.FLAG_TEXTCOLOR, new Class[]{FeaturedStickerSetCell.class}, new String[]{"addButton"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "featuredStickers_buttonText"));
+        list2.add(new ThemeDescription((View) recyclerListView2, ThemeDescription.FLAG_TEXTCOLOR, new Class[]{FeaturedStickerSetCell.class}, new String[]{"delButton"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "featuredStickers_removeButtonText"));
+        list2.add(new ThemeDescription(recyclerListView3, 0, new Class[]{FeaturedStickerSetCell.class}, Theme.dividerPaint, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "divider"));
+        list2.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, themeDescriptionDelegate, "featuredStickers_buttonProgress"));
+        list2.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, themeDescriptionDelegate, "featuredStickers_addButtonPressed"));
     }
 }

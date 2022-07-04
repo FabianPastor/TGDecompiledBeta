@@ -10,6 +10,6 @@ public final /* synthetic */ class PhotoFilterView$$ExternalSyntheticLambda9 imp
     }
 
     public final void onEGLThreadAvailable(FilterGLThread filterGLThread) {
-        this.f$0.m1164lambda$new$0$orgtelegramuiComponentsPhotoFilterView(filterGLThread);
+        this.f$0.lambda$new$0(filterGLThread);
     }
 }

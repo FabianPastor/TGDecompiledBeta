@@ -1,13 +1,15 @@
 package org.telegram.ui;
 
-public final /* synthetic */ class TwoStepVerificationSetupActivity$$ExternalSyntheticLambda10 implements Runnable {
-    public final /* synthetic */ CodeNumberField f$0;
+import android.view.View;
 
-    public /* synthetic */ TwoStepVerificationSetupActivity$$ExternalSyntheticLambda10(CodeNumberField codeNumberField) {
-        this.f$0 = codeNumberField;
+public final /* synthetic */ class TwoStepVerificationSetupActivity$$ExternalSyntheticLambda10 implements View.OnClickListener {
+    public final /* synthetic */ TwoStepVerificationSetupActivity f$0;
+
+    public /* synthetic */ TwoStepVerificationSetupActivity$$ExternalSyntheticLambda10(TwoStepVerificationSetupActivity twoStepVerificationSetupActivity) {
+        this.f$0 = twoStepVerificationSetupActivity;
     }
 
-    public final void run() {
-        this.f$0.animateSuccessProgress(1.0f);
+    public final void onClick(View view) {
+        this.f$0.lambda$createView$8(view);
     }
 }

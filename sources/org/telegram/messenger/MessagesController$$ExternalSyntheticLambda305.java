@@ -1,33 +1,22 @@
 package org.telegram.messenger;
 
-import androidx.collection.LongSparseArray;
-import java.util.ArrayList;
-import org.telegram.tgnet.TLRPC;
+import org.telegram.tgnet.RequestDelegate;
+import org.telegram.tgnet.TLObject;
+import org.telegram.tgnet.TLRPC$TL_error;
+import org.telegram.tgnet.TLRPC$TL_messages_getMessagesViews;
 
-public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda305 implements Runnable {
+public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda305 implements RequestDelegate {
     public final /* synthetic */ MessagesController f$0;
-    public final /* synthetic */ int f$1;
-    public final /* synthetic */ ArrayList f$2;
-    public final /* synthetic */ ArrayList f$3;
-    public final /* synthetic */ ArrayList f$4;
-    public final /* synthetic */ TLRPC.messages_Dialogs f$5;
-    public final /* synthetic */ ArrayList f$6;
-    public final /* synthetic */ LongSparseArray f$7;
-    public final /* synthetic */ LongSparseArray f$8;
+    public final /* synthetic */ long f$1;
+    public final /* synthetic */ TLRPC$TL_messages_getMessagesViews f$2;
 
-    public /* synthetic */ MessagesController$$ExternalSyntheticLambda305(MessagesController messagesController, int i, ArrayList arrayList, ArrayList arrayList2, ArrayList arrayList3, TLRPC.messages_Dialogs messages_dialogs, ArrayList arrayList4, LongSparseArray longSparseArray, LongSparseArray longSparseArray2) {
+    public /* synthetic */ MessagesController$$ExternalSyntheticLambda305(MessagesController messagesController, long j, TLRPC$TL_messages_getMessagesViews tLRPC$TL_messages_getMessagesViews) {
         this.f$0 = messagesController;
-        this.f$1 = i;
-        this.f$2 = arrayList;
-        this.f$3 = arrayList2;
-        this.f$4 = arrayList3;
-        this.f$5 = messages_dialogs;
-        this.f$6 = arrayList4;
-        this.f$7 = longSparseArray;
-        this.f$8 = longSparseArray2;
+        this.f$1 = j;
+        this.f$2 = tLRPC$TL_messages_getMessagesViews;
     }
 
-    public final void run() {
-        this.f$0.m321x90c7CLASSNAMEc(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6, this.f$7, this.f$8);
+    public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+        this.f$0.lambda$updateTimerProc$125(this.f$1, this.f$2, tLObject, tLRPC$TL_error);
     }
 }

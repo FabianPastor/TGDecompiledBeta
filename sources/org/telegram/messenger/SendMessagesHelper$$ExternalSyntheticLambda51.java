@@ -1,29 +1,27 @@
 package org.telegram.messenger;
 
-import java.util.ArrayList;
-import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC;
+import org.telegram.tgnet.TLRPC$Message;
 
 public final /* synthetic */ class SendMessagesHelper$$ExternalSyntheticLambda51 implements Runnable {
     public final /* synthetic */ SendMessagesHelper f$0;
-    public final /* synthetic */ TLRPC.TL_error f$1;
-    public final /* synthetic */ TLObject f$2;
-    public final /* synthetic */ ArrayList f$3;
-    public final /* synthetic */ ArrayList f$4;
-    public final /* synthetic */ boolean f$5;
-    public final /* synthetic */ TLRPC.TL_messages_sendMultiMedia f$6;
+    public final /* synthetic */ TLRPC$Message f$1;
+    public final /* synthetic */ long f$2;
+    public final /* synthetic */ int f$3;
+    public final /* synthetic */ TLRPC$Message f$4;
+    public final /* synthetic */ int f$5;
+    public final /* synthetic */ int f$6;
 
-    public /* synthetic */ SendMessagesHelper$$ExternalSyntheticLambda51(SendMessagesHelper sendMessagesHelper, TLRPC.TL_error tL_error, TLObject tLObject, ArrayList arrayList, ArrayList arrayList2, boolean z, TLRPC.TL_messages_sendMultiMedia tL_messages_sendMultiMedia) {
+    public /* synthetic */ SendMessagesHelper$$ExternalSyntheticLambda51(SendMessagesHelper sendMessagesHelper, TLRPC$Message tLRPC$Message, long j, int i, TLRPC$Message tLRPC$Message2, int i2, int i3) {
         this.f$0 = sendMessagesHelper;
-        this.f$1 = tL_error;
-        this.f$2 = tLObject;
-        this.f$3 = arrayList;
-        this.f$4 = arrayList2;
-        this.f$5 = z;
-        this.f$6 = tL_messages_sendMultiMedia;
+        this.f$1 = tLRPC$Message;
+        this.f$2 = j;
+        this.f$3 = i;
+        this.f$4 = tLRPC$Message2;
+        this.f$5 = i2;
+        this.f$6 = i3;
     }
 
     public final void run() {
-        this.f$0.m470xe0e6var_b(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6);
+        this.f$0.lambda$sendMessage$10(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6);
     }
 }

@@ -1,15 +1,16 @@
 package org.telegram.messenger;
 
-public final /* synthetic */ class DownloadController$$ExternalSyntheticLambda13 implements Runnable {
-    public final /* synthetic */ DownloadController f$0;
-    public final /* synthetic */ MessageObject f$1;
+import org.telegram.tgnet.RequestDelegate;
+import org.telegram.tgnet.TLObject;
+import org.telegram.tgnet.TLRPC$TL_error;
 
-    public /* synthetic */ DownloadController$$ExternalSyntheticLambda13(DownloadController downloadController, MessageObject messageObject) {
-        this.f$0 = downloadController;
-        this.f$1 = messageObject;
+public final /* synthetic */ class DownloadController$$ExternalSyntheticLambda13 implements RequestDelegate {
+    public static final /* synthetic */ DownloadController$$ExternalSyntheticLambda13 INSTANCE = new DownloadController$$ExternalSyntheticLambda13();
+
+    private /* synthetic */ DownloadController$$ExternalSyntheticLambda13() {
     }
 
-    public final void run() {
-        this.f$0.m69x71var_eb7(this.f$1);
+    public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+        DownloadController.lambda$savePresetToServer$3(tLObject, tLRPC$TL_error);
     }
 }

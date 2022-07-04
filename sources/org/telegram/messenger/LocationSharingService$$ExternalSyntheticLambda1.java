@@ -8,6 +8,6 @@ public final /* synthetic */ class LocationSharingService$$ExternalSyntheticLamb
     }
 
     public final void run() {
-        this.f$0.m1946lambda$onCreate$1$orgtelegrammessengerLocationSharingService();
+        this.f$0.lambda$onCreate$1();
     }
 }

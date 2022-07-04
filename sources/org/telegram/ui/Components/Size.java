@@ -7,8 +7,8 @@ public class Size {
     public Size() {
     }
 
-    public Size(float width2, float height2) {
-        this.width = width2;
-        this.height = height2;
+    public Size(float f, float f2) {
+        this.width = f;
+        this.height = f2;
     }
 }

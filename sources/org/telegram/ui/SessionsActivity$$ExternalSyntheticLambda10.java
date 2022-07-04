@@ -1,16 +1,23 @@
 package org.telegram.ui;
 
-import org.telegram.tgnet.RequestDelegate;
-import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC;
+import org.telegram.tgnet.TLRPC$TL_error;
+import org.telegram.tgnet.TLRPC$TL_webAuthorization;
+import org.telegram.ui.ActionBar.AlertDialog;
 
-public final /* synthetic */ class SessionsActivity$$ExternalSyntheticLambda10 implements RequestDelegate {
-    public static final /* synthetic */ SessionsActivity$$ExternalSyntheticLambda10 INSTANCE = new SessionsActivity$$ExternalSyntheticLambda10();
+public final /* synthetic */ class SessionsActivity$$ExternalSyntheticLambda10 implements Runnable {
+    public final /* synthetic */ SessionsActivity f$0;
+    public final /* synthetic */ AlertDialog f$1;
+    public final /* synthetic */ TLRPC$TL_error f$2;
+    public final /* synthetic */ TLRPC$TL_webAuthorization f$3;
 
-    private /* synthetic */ SessionsActivity$$ExternalSyntheticLambda10() {
+    public /* synthetic */ SessionsActivity$$ExternalSyntheticLambda10(SessionsActivity sessionsActivity, AlertDialog alertDialog, TLRPC$TL_error tLRPC$TL_error, TLRPC$TL_webAuthorization tLRPC$TL_webAuthorization) {
+        this.f$0 = sessionsActivity;
+        this.f$1 = alertDialog;
+        this.f$2 = tLRPC$TL_error;
+        this.f$3 = tLRPC$TL_webAuthorization;
     }
 
-    public final void run(TLObject tLObject, TLRPC.TL_error tL_error) {
-        SessionsActivity.lambda$createView$0(tLObject, tL_error);
+    public final void run() {
+        this.f$0.lambda$createView$10(this.f$1, this.f$2, this.f$3);
     }
 }

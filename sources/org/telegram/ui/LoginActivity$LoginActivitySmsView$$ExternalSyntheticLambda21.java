@@ -1,24 +1,19 @@
 package org.telegram.ui;
 
-import android.os.Bundle;
-import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.LoginActivity;
 
 public final /* synthetic */ class LoginActivity$LoginActivitySmsView$$ExternalSyntheticLambda21 implements Runnable {
     public final /* synthetic */ LoginActivity.LoginActivitySmsView f$0;
-    public final /* synthetic */ TLRPC.TL_error f$1;
-    public final /* synthetic */ Bundle f$2;
-    public final /* synthetic */ TLObject f$3;
+    public final /* synthetic */ int f$1;
+    public final /* synthetic */ boolean f$2;
 
-    public /* synthetic */ LoginActivity$LoginActivitySmsView$$ExternalSyntheticLambda21(LoginActivity.LoginActivitySmsView loginActivitySmsView, TLRPC.TL_error tL_error, Bundle bundle, TLObject tLObject) {
+    public /* synthetic */ LoginActivity$LoginActivitySmsView$$ExternalSyntheticLambda21(LoginActivity.LoginActivitySmsView loginActivitySmsView, int i, boolean z) {
         this.f$0 = loginActivitySmsView;
-        this.f$1 = tL_error;
-        this.f$2 = bundle;
-        this.f$3 = tLObject;
+        this.f$1 = i;
+        this.f$2 = z;
     }
 
     public final void run() {
-        this.f$0.m3873xd16CLASSNAME(this.f$1, this.f$2, this.f$3);
+        this.f$0.lambda$tryShowProgress$11(this.f$1, this.f$2);
     }
 }

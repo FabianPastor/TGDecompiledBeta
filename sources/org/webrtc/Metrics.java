@@ -11,6 +11,7 @@ public class Metrics {
 
     private static native Metrics nativeGetAndReset();
 
+    @CalledByNative
     Metrics() {
     }
 
@@ -20,19 +21,22 @@ public class Metrics {
         public final int min;
         public final Map<Integer, Integer> samples = new HashMap();
 
-        public HistogramInfo(int min2, int max2, int bucketCount2) {
-            this.min = min2;
-            this.max = max2;
-            this.bucketCount = bucketCount2;
+        @CalledByNative("HistogramInfo")
+        public HistogramInfo(int i, int i2, int i3) {
+            this.min = i;
+            this.max = i2;
+            this.bucketCount = i3;
         }
 
-        public void addSample(int value, int numEvents) {
-            this.samples.put(Integer.valueOf(value), Integer.valueOf(numEvents));
+        @CalledByNative("HistogramInfo")
+        public void addSample(int i, int i2) {
+            this.samples.put(Integer.valueOf(i), Integer.valueOf(i2));
         }
     }
 
-    private void add(String name, HistogramInfo info) {
-        this.map.put(name, info);
+    @CalledByNative
+    private void add(String str, HistogramInfo histogramInfo) {
+        this.map.put(str, histogramInfo);
     }
 
     public static void enable() {

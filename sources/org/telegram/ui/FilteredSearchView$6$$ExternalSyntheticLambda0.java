@@ -10,6 +10,6 @@ public final /* synthetic */ class FilteredSearchView$6$$ExternalSyntheticLambda
     }
 
     public final void run() {
-        this.f$0.m3486lambda$onScrolled$0$orgtelegramuiFilteredSearchView$6();
+        this.f$0.lambda$onScrolled$0();
     }
 }

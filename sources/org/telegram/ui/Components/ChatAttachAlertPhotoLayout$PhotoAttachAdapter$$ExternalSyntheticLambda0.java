@@ -11,6 +11,6 @@ public final /* synthetic */ class ChatAttachAlertPhotoLayout$PhotoAttachAdapter
     }
 
     public final void onCheckClick(PhotoAttachPhotoCell photoAttachPhotoCell) {
-        this.f$0.m847xCLASSNAMEvar_(photoAttachPhotoCell);
+        this.f$0.lambda$createHolder$0(photoAttachPhotoCell);
     }
 }

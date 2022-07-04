@@ -1,17 +1,17 @@
 package org.telegram.messenger;
 
-import org.telegram.tgnet.RequestDelegate;
-import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC;
+import org.telegram.tgnet.TLRPC$Chat;
 
-public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda148 implements RequestDelegate {
+public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda148 implements Runnable {
     public final /* synthetic */ MessagesController f$0;
+    public final /* synthetic */ TLRPC$Chat f$1;
 
-    public /* synthetic */ MessagesController$$ExternalSyntheticLambda148(MessagesController messagesController) {
+    public /* synthetic */ MessagesController$$ExternalSyntheticLambda148(MessagesController messagesController, TLRPC$Chat tLRPC$Chat) {
         this.f$0 = messagesController;
+        this.f$1 = tLRPC$Chat;
     }
 
-    public final void run(TLObject tLObject, TLRPC.TL_error tL_error) {
-        this.f$0.m151x58f7var_(tLObject, tL_error);
+    public final void run() {
+        this.f$0.lambda$putChat$39(this.f$1);
     }
 }

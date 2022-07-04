@@ -8,6 +8,6 @@ public final /* synthetic */ class UndoView$$ExternalSyntheticLambda5 implements
     }
 
     public final void run() {
-        this.f$0.m1541lambda$showWithAction$7$orgtelegramuiComponentsUndoView();
+        this.f$0.lambda$showWithAction$7();
     }
 }

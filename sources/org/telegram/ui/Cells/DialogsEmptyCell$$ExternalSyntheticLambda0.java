@@ -10,6 +10,6 @@ public final /* synthetic */ class DialogsEmptyCell$$ExternalSyntheticLambda0 im
     }
 
     public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-        this.f$0.m2794x5deb8595(valueAnimator);
+        this.f$0.lambda$startUtyanExpandAnimation$3(valueAnimator);
     }
 }

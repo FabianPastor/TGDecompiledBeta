@@ -10,6 +10,6 @@ public final /* synthetic */ class ProfileNotificationsActivity$$ExternalSynthet
     }
 
     public final void didSelectValues(int i, int i2) {
-        this.f$0.m4539lambda$createView$4$orgtelegramuiProfileNotificationsActivity(i, i2);
+        this.f$0.lambda$createView$4(i, i2);
     }
 }

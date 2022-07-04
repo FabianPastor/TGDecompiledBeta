@@ -1,16 +1,15 @@
 package org.telegram.ui.Components;
 
-import org.telegram.tgnet.RequestDelegate;
-import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC;
+import android.view.View;
 
-public final /* synthetic */ class TranslateAlert$$ExternalSyntheticLambda3 implements RequestDelegate {
-    public static final /* synthetic */ TranslateAlert$$ExternalSyntheticLambda3 INSTANCE = new TranslateAlert$$ExternalSyntheticLambda3();
+public final /* synthetic */ class TranslateAlert$$ExternalSyntheticLambda3 implements View.OnClickListener {
+    public final /* synthetic */ TranslateAlert f$0;
 
-    private /* synthetic */ TranslateAlert$$ExternalSyntheticLambda3() {
+    public /* synthetic */ TranslateAlert$$ExternalSyntheticLambda3(TranslateAlert translateAlert) {
+        this.f$0 = translateAlert;
     }
 
-    public final void run(TLObject tLObject, TLRPC.TL_error tL_error) {
-        TranslateAlert.lambda$translateText$13(tLObject, tL_error);
+    public final void onClick(View view) {
+        this.f$0.lambda$new$3(view);
     }
 }

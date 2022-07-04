@@ -10,6 +10,6 @@ public final /* synthetic */ class SubstringLayoutAnimator$$ExternalSyntheticLam
     }
 
     public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-        this.f$0.m1467xebd39380(valueAnimator);
+        this.f$0.lambda$create$0(valueAnimator);
     }
 }

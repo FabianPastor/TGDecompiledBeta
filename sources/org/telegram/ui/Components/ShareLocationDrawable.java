@@ -14,21 +14,28 @@ public class ShareLocationDrawable extends Drawable {
     private long lastUpdateTime = 0;
     private float[] progress = {0.0f, -0.5f};
 
-    public ShareLocationDrawable(Context context, int type) {
-        this.currentType = type;
-        if (type == 4) {
+    public int getOpacity() {
+        return -2;
+    }
+
+    public void setAlpha(int i) {
+    }
+
+    public ShareLocationDrawable(Context context, int i) {
+        this.currentType = i;
+        if (i == 4) {
             this.drawable = context.getResources().getDrawable(NUM);
             this.drawableLeft = context.getResources().getDrawable(NUM);
             this.drawableRight = context.getResources().getDrawable(NUM);
-        } else if (type == 3) {
+        } else if (i == 3) {
             this.drawable = context.getResources().getDrawable(NUM);
             this.drawableLeft = context.getResources().getDrawable(NUM);
             this.drawableRight = context.getResources().getDrawable(NUM);
-        } else if (type == 2) {
+        } else if (i == 2) {
             this.drawable = context.getResources().getDrawable(NUM);
             this.drawableLeft = context.getResources().getDrawable(NUM);
             this.drawableRight = context.getResources().getDrawable(NUM);
-        } else if (type == 1) {
+        } else if (i == 1) {
             this.drawable = context.getResources().getDrawable(NUM);
             this.drawableLeft = context.getResources().getDrawable(NUM);
             this.drawableRight = context.getResources().getDrawable(NUM);
@@ -40,134 +47,128 @@ public class ShareLocationDrawable extends Drawable {
     }
 
     private void update() {
-        long newTime = System.currentTimeMillis();
-        long dt = newTime - this.lastUpdateTime;
-        this.lastUpdateTime = newTime;
-        if (dt > 16) {
-            dt = 16;
+        long currentTimeMillis = System.currentTimeMillis();
+        long j = currentTimeMillis - this.lastUpdateTime;
+        this.lastUpdateTime = currentTimeMillis;
+        if (j > 16) {
+            j = 16;
         }
-        for (int a = 0; a < 2; a++) {
+        for (int i = 0; i < 2; i++) {
             float[] fArr = this.progress;
-            if (fArr[a] >= 1.0f) {
-                fArr[a] = 0.0f;
+            if (fArr[i] >= 1.0f) {
+                fArr[i] = 0.0f;
             }
-            fArr[a] = fArr[a] + (((float) dt) / 1300.0f);
-            if (fArr[a] > 1.0f) {
-                fArr[a] = 1.0f;
+            fArr[i] = fArr[i] + (((float) j) / 1300.0f);
+            if (fArr[i] > 1.0f) {
+                fArr[i] = 1.0f;
             }
         }
         invalidateSelf();
     }
 
     public void draw(Canvas canvas) {
-        int size;
-        int drawableW;
-        int cy;
-        int cx2;
-        int cx;
-        int h;
-        int w;
-        float alpha;
+        int i;
+        int dp;
+        int dp2;
+        int dp3;
+        int dp4;
+        int dp5;
+        int dp6;
+        float f;
         Canvas canvas2 = canvas;
-        int drawableW2 = this.drawable.getIntrinsicWidth();
-        int drawableH = this.drawable.getIntrinsicHeight();
-        int size2 = this.currentType;
-        int i = 3;
-        int i2 = 4;
-        int i3 = 1;
-        if (size2 == 4) {
-            size = AndroidUtilities.dp(24.0f);
-        } else if (size2 == 3) {
-            size = AndroidUtilities.dp(44.0f);
-        } else if (size2 == 2) {
-            size = AndroidUtilities.dp(32.0f);
-        } else if (size2 == 1) {
-            size = AndroidUtilities.dp(30.0f);
+        int intrinsicWidth = this.drawable.getIntrinsicWidth();
+        int intrinsicHeight = this.drawable.getIntrinsicHeight();
+        int i2 = this.currentType;
+        int i3 = 3;
+        int i4 = 4;
+        int i5 = 1;
+        if (i2 == 4) {
+            i = AndroidUtilities.dp(24.0f);
+        } else if (i2 == 3) {
+            i = AndroidUtilities.dp(44.0f);
+        } else if (i2 == 2) {
+            i = AndroidUtilities.dp(32.0f);
+        } else if (i2 == 1) {
+            i = AndroidUtilities.dp(30.0f);
         } else {
-            size = AndroidUtilities.dp(120.0f);
+            i = AndroidUtilities.dp(120.0f);
         }
-        int y = getBounds().top + ((getIntrinsicHeight() - size) / 2);
-        int x = getBounds().left + ((getIntrinsicWidth() - size) / 2);
-        this.drawable.setBounds(x, y, x + drawableW2, y + drawableH);
+        int intrinsicHeight2 = getBounds().top + ((getIntrinsicHeight() - i) / 2);
+        int intrinsicWidth2 = getBounds().left + ((getIntrinsicWidth() - i) / 2);
+        int i6 = intrinsicWidth + intrinsicWidth2;
+        this.drawable.setBounds(intrinsicWidth2, intrinsicHeight2, i6, intrinsicHeight2 + intrinsicHeight);
         this.drawable.draw(canvas2);
-        int a = 0;
-        for (int i4 = 2; a < i4; i4 = 2) {
+        int i7 = 0;
+        while (i7 < 2) {
             float[] fArr = this.progress;
-            if (fArr[a] < 0.0f) {
-                drawableW = drawableW2;
-            } else {
-                float scale = (fArr[a] * 0.5f) + 0.5f;
-                int w2 = this.currentType;
-                if (w2 == i2) {
-                    w = AndroidUtilities.dp(2.5f * scale);
-                    h = AndroidUtilities.dp(6.5f * scale);
-                    int tx = AndroidUtilities.dp(this.progress[a] * 6.0f);
-                    cx = (x + AndroidUtilities.dp(3.0f)) - tx;
-                    cy = (y + (drawableH / 2)) - AndroidUtilities.dp(2.0f);
-                    cx2 = ((x + drawableW2) - AndroidUtilities.dp(3.0f)) + tx;
-                } else if (w2 == i) {
-                    w = AndroidUtilities.dp(5.0f * scale);
-                    h = AndroidUtilities.dp(18.0f * scale);
-                    int tx2 = AndroidUtilities.dp(this.progress[a] * 15.0f);
-                    cx = (AndroidUtilities.dp(2.0f) + x) - tx2;
-                    cy = ((drawableH / 2) + y) - AndroidUtilities.dp(7.0f);
-                    cx2 = ((x + drawableW2) - AndroidUtilities.dp(2.0f)) + tx2;
-                } else if (w2 == i4) {
-                    w = AndroidUtilities.dp(5.0f * scale);
-                    h = AndroidUtilities.dp(18.0f * scale);
-                    int tx3 = AndroidUtilities.dp(this.progress[a] * 15.0f);
-                    cx = (AndroidUtilities.dp(2.0f) + x) - tx3;
-                    cy = y + (drawableH / 2);
-                    cx2 = ((x + drawableW2) - AndroidUtilities.dp(2.0f)) + tx3;
-                } else if (w2 == i3) {
-                    w = AndroidUtilities.dp(2.5f * scale);
-                    h = AndroidUtilities.dp(6.5f * scale);
-                    int tx4 = AndroidUtilities.dp(this.progress[a] * 6.0f);
-                    cx = (AndroidUtilities.dp(7.0f) + x) - tx4;
-                    cy = y + (drawableH / 2);
-                    cx2 = ((x + drawableW2) - AndroidUtilities.dp(7.0f)) + tx4;
+            if (fArr[i7] >= 0.0f) {
+                float f2 = (fArr[i7] * 0.5f) + 0.5f;
+                int i8 = this.currentType;
+                if (i8 == i4) {
+                    dp = AndroidUtilities.dp(2.5f * f2);
+                    dp2 = AndroidUtilities.dp(f2 * 6.5f);
+                    dp3 = AndroidUtilities.dp(this.progress[i7] * 6.0f);
+                    dp4 = (intrinsicWidth2 + AndroidUtilities.dp(3.0f)) - dp3;
+                    dp5 = (intrinsicHeight2 + (intrinsicHeight / 2)) - AndroidUtilities.dp(2.0f);
+                    dp6 = AndroidUtilities.dp(3.0f);
+                } else if (i8 == i3) {
+                    dp = AndroidUtilities.dp(5.0f * f2);
+                    dp2 = AndroidUtilities.dp(f2 * 18.0f);
+                    dp3 = AndroidUtilities.dp(this.progress[i7] * 15.0f);
+                    dp4 = (AndroidUtilities.dp(2.0f) + intrinsicWidth2) - dp3;
+                    dp5 = ((intrinsicHeight / 2) + intrinsicHeight2) - AndroidUtilities.dp(7.0f);
+                    dp6 = AndroidUtilities.dp(2.0f);
+                } else if (i8 == 2) {
+                    dp = AndroidUtilities.dp(5.0f * f2);
+                    dp2 = AndroidUtilities.dp(f2 * 18.0f);
+                    dp3 = AndroidUtilities.dp(this.progress[i7] * 15.0f);
+                    dp4 = (AndroidUtilities.dp(2.0f) + intrinsicWidth2) - dp3;
+                    dp5 = intrinsicHeight2 + (intrinsicHeight / 2);
+                    dp6 = AndroidUtilities.dp(2.0f);
+                } else if (i8 == i5) {
+                    dp = AndroidUtilities.dp(2.5f * f2);
+                    dp2 = AndroidUtilities.dp(f2 * 6.5f);
+                    dp3 = AndroidUtilities.dp(this.progress[i7] * 6.0f);
+                    dp4 = (AndroidUtilities.dp(7.0f) + intrinsicWidth2) - dp3;
+                    dp5 = intrinsicHeight2 + (intrinsicHeight / 2);
+                    dp6 = AndroidUtilities.dp(7.0f);
                 } else {
-                    w = AndroidUtilities.dp(5.0f * scale);
-                    h = AndroidUtilities.dp(18.0f * scale);
-                    int tx5 = AndroidUtilities.dp(this.progress[a] * 15.0f);
-                    cx = (x + AndroidUtilities.dp(42.0f)) - tx5;
-                    cy = (y + (drawableH / 2)) - AndroidUtilities.dp(7.0f);
-                    cx2 = ((x + drawableW2) - AndroidUtilities.dp(42.0f)) + tx5;
+                    dp = AndroidUtilities.dp(5.0f * f2);
+                    dp2 = AndroidUtilities.dp(f2 * 18.0f);
+                    dp3 = AndroidUtilities.dp(this.progress[i7] * 15.0f);
+                    dp4 = (intrinsicWidth2 + AndroidUtilities.dp(42.0f)) - dp3;
+                    dp5 = (intrinsicHeight2 + (intrinsicHeight / 2)) - AndroidUtilities.dp(7.0f);
+                    dp6 = AndroidUtilities.dp(42.0f);
                 }
+                int i9 = (i6 - dp6) + dp3;
                 float[] fArr2 = this.progress;
-                if (fArr2[a] < 0.5f) {
-                    alpha = fArr2[a] / 0.5f;
+                if (fArr2[i7] < 0.5f) {
+                    f = fArr2[i7] / 0.5f;
                 } else {
-                    alpha = 1.0f - ((fArr2[a] - 0.5f) / 0.5f);
+                    f = 1.0f - ((fArr2[i7] - 0.5f) / 0.5f);
                 }
-                this.drawableLeft.setAlpha((int) (alpha * 255.0f));
-                drawableW = drawableW2;
-                this.drawableLeft.setBounds(cx - w, cy - h, cx + w, cy + h);
+                int i10 = (int) (f * 255.0f);
+                this.drawableLeft.setAlpha(i10);
+                int i11 = dp5 - dp2;
+                int i12 = dp5 + dp2;
+                this.drawableLeft.setBounds(dp4 - dp, i11, dp4 + dp, i12);
                 this.drawableLeft.draw(canvas2);
-                this.drawableRight.setAlpha((int) (alpha * 255.0f));
-                this.drawableRight.setBounds(cx2 - w, cy - h, cx2 + w, cy + h);
+                this.drawableRight.setAlpha(i10);
+                this.drawableRight.setBounds(i9 - dp, i11, i9 + dp, i12);
                 this.drawableRight.draw(canvas2);
             }
-            a++;
-            drawableW2 = drawableW;
-            i = 3;
-            i2 = 4;
-            i3 = 1;
+            i7++;
+            i3 = 3;
+            i4 = 4;
+            i5 = 1;
         }
         update();
     }
 
-    public void setAlpha(int alpha) {
-    }
-
-    public void setColorFilter(ColorFilter cf) {
-        this.drawable.setColorFilter(cf);
-        this.drawableLeft.setColorFilter(cf);
-        this.drawableRight.setColorFilter(cf);
-    }
-
-    public int getOpacity() {
-        return -2;
+    public void setColorFilter(ColorFilter colorFilter) {
+        this.drawable.setColorFilter(colorFilter);
+        this.drawableLeft.setColorFilter(colorFilter);
+        this.drawableRight.setColorFilter(colorFilter);
     }
 
     public int getIntrinsicWidth() {

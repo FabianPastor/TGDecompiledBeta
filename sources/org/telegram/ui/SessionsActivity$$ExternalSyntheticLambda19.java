@@ -1,22 +1,16 @@
 package org.telegram.ui;
 
+import org.telegram.tgnet.RequestDelegate;
 import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC;
+import org.telegram.tgnet.TLRPC$TL_error;
 
-public final /* synthetic */ class SessionsActivity$$ExternalSyntheticLambda19 implements Runnable {
-    public final /* synthetic */ SessionsActivity f$0;
-    public final /* synthetic */ TLRPC.TL_error f$1;
-    public final /* synthetic */ TLObject f$2;
-    public final /* synthetic */ boolean f$3;
+public final /* synthetic */ class SessionsActivity$$ExternalSyntheticLambda19 implements RequestDelegate {
+    public static final /* synthetic */ SessionsActivity$$ExternalSyntheticLambda19 INSTANCE = new SessionsActivity$$ExternalSyntheticLambda19();
 
-    public /* synthetic */ SessionsActivity$$ExternalSyntheticLambda19(SessionsActivity sessionsActivity, TLRPC.TL_error tL_error, TLObject tLObject, boolean z) {
-        this.f$0 = sessionsActivity;
-        this.f$1 = tL_error;
-        this.f$2 = tLObject;
-        this.f$3 = z;
+    private /* synthetic */ SessionsActivity$$ExternalSyntheticLambda19() {
     }
 
-    public final void run() {
-        this.f$0.m4601lambda$loadSessions$18$orgtelegramuiSessionsActivity(this.f$1, this.f$2, this.f$3);
+    public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+        SessionsActivity.lambda$createView$0(tLObject, tLRPC$TL_error);
     }
 }

@@ -10,6 +10,6 @@ public final /* synthetic */ class BaseChartView$$ExternalSyntheticLambda0 imple
     }
 
     public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-        this.f$0.m2898lambda$new$0$orgtelegramuiChartsBaseChartView(valueAnimator);
+        this.f$0.lambda$new$1(valueAnimator);
     }
 }

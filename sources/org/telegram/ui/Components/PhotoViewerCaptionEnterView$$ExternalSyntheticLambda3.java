@@ -10,6 +10,6 @@ public final /* synthetic */ class PhotoViewerCaptionEnterView$$ExternalSyntheti
     }
 
     public final void onClick(View view) {
-        this.f$0.m1197x2fe3bd6f(view);
+        this.f$0.lambda$new$5(view);
     }
 }

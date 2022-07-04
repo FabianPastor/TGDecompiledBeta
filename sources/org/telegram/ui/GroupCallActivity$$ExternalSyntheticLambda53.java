@@ -1,14 +1,23 @@
 package org.telegram.ui;
 
-import org.telegram.ui.Components.NumberPicker;
+import org.telegram.tgnet.RequestDelegate;
+import org.telegram.tgnet.TLObject;
+import org.telegram.tgnet.TLRPC$Chat;
+import org.telegram.tgnet.TLRPC$InputPeer;
+import org.telegram.tgnet.TLRPC$TL_error;
 
-public final /* synthetic */ class GroupCallActivity$$ExternalSyntheticLambda53 implements NumberPicker.Formatter {
-    public static final /* synthetic */ GroupCallActivity$$ExternalSyntheticLambda53 INSTANCE = new GroupCallActivity$$ExternalSyntheticLambda53();
+public final /* synthetic */ class GroupCallActivity$$ExternalSyntheticLambda53 implements RequestDelegate {
+    public final /* synthetic */ GroupCallActivity f$0;
+    public final /* synthetic */ TLRPC$Chat f$1;
+    public final /* synthetic */ TLRPC$InputPeer f$2;
 
-    private /* synthetic */ GroupCallActivity$$ExternalSyntheticLambda53() {
+    public /* synthetic */ GroupCallActivity$$ExternalSyntheticLambda53(GroupCallActivity groupCallActivity, TLRPC$Chat tLRPC$Chat, TLRPC$InputPeer tLRPC$InputPeer) {
+        this.f$0 = groupCallActivity;
+        this.f$1 = tLRPC$Chat;
+        this.f$2 = tLRPC$InputPeer;
     }
 
-    public final String format(int i) {
-        return String.format("%02d", new Object[]{Integer.valueOf(i)});
+    public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+        this.f$0.lambda$new$28(this.f$1, this.f$2, tLObject, tLRPC$TL_error);
     }
 }

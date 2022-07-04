@@ -1,29 +1,25 @@
 package org.telegram.ui;
 
-import android.content.Context;
-import android.view.View;
-import org.telegram.ui.Components.RecyclerListView;
+import org.telegram.messenger.LanguageDetector;
 
-public final /* synthetic */ class ProfileActivity$$ExternalSyntheticLambda31 implements RecyclerListView.OnItemClickListenerExtended {
+public final /* synthetic */ class ProfileActivity$$ExternalSyntheticLambda31 implements LanguageDetector.StringCallback {
     public final /* synthetic */ ProfileActivity f$0;
-    public final /* synthetic */ long f$1;
-    public final /* synthetic */ Context f$2;
+    public final /* synthetic */ String[] f$1;
+    public final /* synthetic */ boolean[] f$2;
+    public final /* synthetic */ String f$3;
+    public final /* synthetic */ boolean f$4;
+    public final /* synthetic */ Runnable f$5;
 
-    public /* synthetic */ ProfileActivity$$ExternalSyntheticLambda31(ProfileActivity profileActivity, long j, Context context) {
+    public /* synthetic */ ProfileActivity$$ExternalSyntheticLambda31(ProfileActivity profileActivity, String[] strArr, boolean[] zArr, String str, boolean z, Runnable runnable) {
         this.f$0 = profileActivity;
-        this.f$1 = j;
-        this.f$2 = context;
+        this.f$1 = strArr;
+        this.f$2 = zArr;
+        this.f$3 = str;
+        this.f$4 = z;
+        this.f$5 = runnable;
     }
 
-    public /* synthetic */ boolean hasDoubleTap(View view, int i) {
-        return RecyclerListView.OnItemClickListenerExtended.CC.$default$hasDoubleTap(this, view, i);
-    }
-
-    public /* synthetic */ void onDoubleTap(View view, int i, float f, float f2) {
-        RecyclerListView.OnItemClickListenerExtended.CC.$default$onDoubleTap(this, view, i, f, f2);
-    }
-
-    public final void onItemClick(View view, int i, float f, float f2) {
-        this.f$0.m4396lambda$createView$4$orgtelegramuiProfileActivity(this.f$1, this.f$2, view, i, f, f2);
+    public final void run(String str) {
+        this.f$0.lambda$processOnClickOrPress$23(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, str);
     }
 }

@@ -10,6 +10,6 @@ public final /* synthetic */ class StarParticlesView$$ExternalSyntheticLambda0 i
     }
 
     public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-        this.f$0.m1257x5530cCLASSNAME(valueAnimator);
+        this.f$0.lambda$flingParticles$0(valueAnimator);
     }
 }

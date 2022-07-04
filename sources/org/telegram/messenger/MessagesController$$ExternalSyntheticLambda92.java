@@ -1,17 +1,17 @@
 package org.telegram.messenger;
 
-import org.telegram.tgnet.TLRPC;
+import android.util.SparseArray;
 
 public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda92 implements Runnable {
     public final /* synthetic */ MessagesController f$0;
-    public final /* synthetic */ TLRPC.TL_updateUserTyping f$1;
+    public final /* synthetic */ SparseArray f$1;
 
-    public /* synthetic */ MessagesController$$ExternalSyntheticLambda92(MessagesController messagesController, TLRPC.TL_updateUserTyping tL_updateUserTyping) {
+    public /* synthetic */ MessagesController$$ExternalSyntheticLambda92(MessagesController messagesController, SparseArray sparseArray) {
         this.f$0 = messagesController;
-        this.f$1 = tL_updateUserTyping;
+        this.f$1 = sparseArray;
     }
 
     public final void run() {
-        this.f$0.m334x3d739ead(this.f$1);
+        this.f$0.lambda$getChannelDifference$266(this.f$1);
     }
 }

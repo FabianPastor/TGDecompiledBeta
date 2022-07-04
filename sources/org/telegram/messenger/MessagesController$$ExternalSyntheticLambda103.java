@@ -1,27 +1,24 @@
 package org.telegram.messenger;
 
-import androidx.collection.LongSparseArray;
-import org.telegram.messenger.support.LongSparseIntArray;
-import org.telegram.tgnet.TLRPC;
+import java.io.File;
+import org.telegram.ui.ActionBar.Theme;
 
 public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda103 implements Runnable {
     public final /* synthetic */ MessagesController f$0;
-    public final /* synthetic */ TLRPC.messages_Dialogs f$1;
-    public final /* synthetic */ LongSparseArray f$2;
-    public final /* synthetic */ LongSparseArray f$3;
-    public final /* synthetic */ boolean f$4;
-    public final /* synthetic */ LongSparseIntArray f$5;
+    public final /* synthetic */ String f$1;
+    public final /* synthetic */ File f$2;
+    public final /* synthetic */ Theme.ThemeAccent f$3;
+    public final /* synthetic */ Theme.ThemeInfo f$4;
 
-    public /* synthetic */ MessagesController$$ExternalSyntheticLambda103(MessagesController messagesController, TLRPC.messages_Dialogs messages_dialogs, LongSparseArray longSparseArray, LongSparseArray longSparseArray2, boolean z, LongSparseIntArray longSparseIntArray) {
+    public /* synthetic */ MessagesController$$ExternalSyntheticLambda103(MessagesController messagesController, String str, File file, Theme.ThemeAccent themeAccent, Theme.ThemeInfo themeInfo) {
         this.f$0 = messagesController;
-        this.f$1 = messages_dialogs;
-        this.f$2 = longSparseArray;
-        this.f$3 = longSparseArray2;
-        this.f$4 = z;
-        this.f$5 = longSparseIntArray;
+        this.f$1 = str;
+        this.f$2 = file;
+        this.f$3 = themeAccent;
+        this.f$4 = themeInfo;
     }
 
     public final void run() {
-        this.f$0.m315xda2fc5cf(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5);
+        this.f$0.lambda$saveThemeToServer$99(this.f$1, this.f$2, this.f$3, this.f$4);
     }
 }

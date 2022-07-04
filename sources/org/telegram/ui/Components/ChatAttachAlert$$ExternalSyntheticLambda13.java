@@ -1,17 +1,18 @@
 package org.telegram.ui.Components;
 
-import org.telegram.ui.ActionBar.BottomSheet;
+import android.view.View;
+import org.telegram.ui.ActionBar.Theme;
 
-public final /* synthetic */ class ChatAttachAlert$$ExternalSyntheticLambda13 implements Runnable {
+public final /* synthetic */ class ChatAttachAlert$$ExternalSyntheticLambda13 implements View.OnLongClickListener {
     public final /* synthetic */ ChatAttachAlert f$0;
-    public final /* synthetic */ BottomSheet.BottomSheetDelegateInterface f$1;
+    public final /* synthetic */ Theme.ResourcesProvider f$1;
 
-    public /* synthetic */ ChatAttachAlert$$ExternalSyntheticLambda13(ChatAttachAlert chatAttachAlert, BottomSheet.BottomSheetDelegateInterface bottomSheetDelegateInterface) {
+    public /* synthetic */ ChatAttachAlert$$ExternalSyntheticLambda13(ChatAttachAlert chatAttachAlert, Theme.ResourcesProvider resourcesProvider) {
         this.f$0 = chatAttachAlert;
-        this.f$1 = bottomSheetDelegateInterface;
+        this.f$1 = resourcesProvider;
     }
 
-    public final void run() {
-        this.f$0.m733xdd86b746(this.f$1);
+    public final boolean onLongClick(View view) {
+        return this.f$0.lambda$new$16(this.f$1, view);
     }
 }

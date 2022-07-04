@@ -1,17 +1,21 @@
 package org.telegram.ui;
 
-import org.telegram.tgnet.RequestDelegate;
-import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC;
+import android.view.View;
+import org.telegram.ui.ActionBar.BottomSheet;
+import org.telegram.ui.Cells.RadioButtonCell;
 
-public final /* synthetic */ class ChatEditActivity$$ExternalSyntheticLambda21 implements RequestDelegate {
+public final /* synthetic */ class ChatEditActivity$$ExternalSyntheticLambda21 implements View.OnClickListener {
     public final /* synthetic */ ChatEditActivity f$0;
+    public final /* synthetic */ RadioButtonCell[] f$1;
+    public final /* synthetic */ BottomSheet.Builder f$2;
 
-    public /* synthetic */ ChatEditActivity$$ExternalSyntheticLambda21(ChatEditActivity chatEditActivity) {
+    public /* synthetic */ ChatEditActivity$$ExternalSyntheticLambda21(ChatEditActivity chatEditActivity, RadioButtonCell[] radioButtonCellArr, BottomSheet.Builder builder) {
         this.f$0 = chatEditActivity;
+        this.f$1 = radioButtonCellArr;
+        this.f$2 = builder;
     }
 
-    public final void run(TLObject tLObject, TLRPC.TL_error tL_error) {
-        this.f$0.m3206lambda$loadLinksCount$1$orgtelegramuiChatEditActivity(tLObject, tL_error);
+    public final void onClick(View view) {
+        this.f$0.lambda$createView$12(this.f$1, this.f$2, view);
     }
 }

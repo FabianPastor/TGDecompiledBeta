@@ -10,6 +10,6 @@ public final /* synthetic */ class DoubledLimitsBottomSheet$$ExternalSyntheticLa
     }
 
     public final void onClick(View view) {
-        this.f$0.m1231x233bfc0c(view);
+        this.f$0.lambda$new$1(view);
     }
 }

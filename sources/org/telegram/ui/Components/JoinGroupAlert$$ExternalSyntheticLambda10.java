@@ -1,13 +1,18 @@
 package org.telegram.ui.Components;
 
-public final /* synthetic */ class JoinGroupAlert$$ExternalSyntheticLambda10 implements Runnable {
-    public final /* synthetic */ JoinGroupAlert f$0;
+import org.telegram.messenger.MessagesController;
+import org.telegram.tgnet.TLRPC$TL_error;
 
-    public /* synthetic */ JoinGroupAlert$$ExternalSyntheticLambda10(JoinGroupAlert joinGroupAlert) {
+public final /* synthetic */ class JoinGroupAlert$$ExternalSyntheticLambda10 implements MessagesController.ErrorDelegate {
+    public final /* synthetic */ JoinGroupAlert f$0;
+    public final /* synthetic */ boolean f$1;
+
+    public /* synthetic */ JoinGroupAlert$$ExternalSyntheticLambda10(JoinGroupAlert joinGroupAlert, boolean z) {
         this.f$0 = joinGroupAlert;
+        this.f$1 = z;
     }
 
-    public final void run() {
-        this.f$0.m1077lambda$new$1$orgtelegramuiComponentsJoinGroupAlert();
+    public final boolean run(TLRPC$TL_error tLRPC$TL_error) {
+        return this.f$0.lambda$new$3(this.f$1, tLRPC$TL_error);
     }
 }

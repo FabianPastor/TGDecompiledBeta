@@ -1,15 +1,15 @@
 package org.telegram.ui.Components;
 
-import androidx.core.util.Consumer;
+import org.telegram.messenger.GenericProvider;
 
-public final /* synthetic */ class BotWebViewMenuContainer$$ExternalSyntheticLambda16 implements Consumer {
-    public final /* synthetic */ BotWebViewMenuContainer f$0;
+public final /* synthetic */ class BotWebViewMenuContainer$$ExternalSyntheticLambda16 implements GenericProvider {
+    public final /* synthetic */ ChatActivityEnterView f$0;
 
-    public /* synthetic */ BotWebViewMenuContainer$$ExternalSyntheticLambda16(BotWebViewMenuContainer botWebViewMenuContainer) {
-        this.f$0 = botWebViewMenuContainer;
+    public /* synthetic */ BotWebViewMenuContainer$$ExternalSyntheticLambda16(ChatActivityEnterView chatActivityEnterView) {
+        this.f$0 = chatActivityEnterView;
     }
 
-    public final void accept(Object obj) {
-        this.f$0.m604lambda$new$9$orgtelegramuiComponentsBotWebViewMenuContainer((Float) obj);
+    public final Object provide(Object obj) {
+        return BotWebViewMenuContainer.lambda$new$7(this.f$0, (Void) obj);
     }
 }

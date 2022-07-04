@@ -1,23 +1,15 @@
 package org.telegram.ui;
 
-import android.content.DialogInterface;
-import android.text.style.URLSpan;
-import android.widget.TextView;
+import org.telegram.ui.Components.VideoSeekPreviewImage;
 
-public final /* synthetic */ class PhotoViewer$$ExternalSyntheticLambda80 implements DialogInterface.OnClickListener {
+public final /* synthetic */ class PhotoViewer$$ExternalSyntheticLambda80 implements VideoSeekPreviewImage.VideoSeekPreviewImageDelegate {
     public final /* synthetic */ PhotoViewer f$0;
-    public final /* synthetic */ URLSpan f$1;
-    public final /* synthetic */ TextView f$2;
-    public final /* synthetic */ int f$3;
 
-    public /* synthetic */ PhotoViewer$$ExternalSyntheticLambda80(PhotoViewer photoViewer, URLSpan uRLSpan, TextView textView, int i) {
+    public /* synthetic */ PhotoViewer$$ExternalSyntheticLambda80(PhotoViewer photoViewer) {
         this.f$0 = photoViewer;
-        this.f$1 = uRLSpan;
-        this.f$2 = textView;
-        this.f$3 = i;
     }
 
-    public final void onClick(DialogInterface dialogInterface, int i) {
-        this.f$0.m4253lambda$onLinkLongPress$1$orgtelegramuiPhotoViewer(this.f$1, this.f$2, this.f$3, dialogInterface, i);
+    public final void onReady() {
+        this.f$0.lambda$createVideoControlsInterface$48();
     }
 }

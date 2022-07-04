@@ -8,6 +8,6 @@ public final /* synthetic */ class DispatchQueueMainThreadSync$$ExternalSyntheti
     }
 
     public final void run() {
-        this.f$0.m1796x30a1b77a();
+        this.f$0.lambda$recycle$0();
     }
 }

@@ -12,6 +12,6 @@ public final /* synthetic */ class AnimatedPhoneNumberEditText$$ExternalSyntheti
     }
 
     public final void run() {
-        this.f$0.m532xbfd6e9c9(this.f$1, this.f$2);
+        this.f$0.lambda$setHintText$0(this.f$1, this.f$2);
     }
 }

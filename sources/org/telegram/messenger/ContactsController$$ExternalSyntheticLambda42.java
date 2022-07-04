@@ -1,14 +1,17 @@
 package org.telegram.messenger;
 
-import java.util.Comparator;
+import org.telegram.tgnet.TLRPC$User;
 
-public final /* synthetic */ class ContactsController$$ExternalSyntheticLambda42 implements Comparator {
-    public static final /* synthetic */ ContactsController$$ExternalSyntheticLambda42 INSTANCE = new ContactsController$$ExternalSyntheticLambda42();
+public final /* synthetic */ class ContactsController$$ExternalSyntheticLambda42 implements Runnable {
+    public final /* synthetic */ ContactsController f$0;
+    public final /* synthetic */ TLRPC$User f$1;
 
-    private /* synthetic */ ContactsController$$ExternalSyntheticLambda42() {
+    public /* synthetic */ ContactsController$$ExternalSyntheticLambda42(ContactsController contactsController, TLRPC$User tLRPC$User) {
+        this.f$0 = contactsController;
+        this.f$1 = tLRPC$User;
     }
 
-    public final int compare(Object obj, Object obj2) {
-        return ContactsController.lambda$processLoadedContacts$31((String) obj, (String) obj2);
+    public final void run() {
+        this.f$0.lambda$addContact$50(this.f$1);
     }
 }

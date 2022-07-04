@@ -12,38 +12,38 @@ public class URLSpanReplacement extends URLSpan {
     private boolean navigateToPremiumBot;
     private TextStyleSpan.TextStyleRun style;
 
-    public URLSpanReplacement(String url) {
-        this(url, (TextStyleSpan.TextStyleRun) null);
+    public URLSpanReplacement(String str) {
+        this(str, (TextStyleSpan.TextStyleRun) null);
     }
 
     /* JADX INFO: super call moved to the top of the method (can break code semantics) */
-    public URLSpanReplacement(String url, TextStyleSpan.TextStyleRun run) {
-        super(url != null ? url.replace(8238, ' ') : url);
-        this.style = run;
+    public URLSpanReplacement(String str, TextStyleSpan.TextStyleRun textStyleRun) {
+        super(str != null ? str.replace(8238, ' ') : str);
+        this.style = textStyleRun;
     }
 
-    public void setNavigateToPremiumBot(boolean navigateToPremiumBot2) {
-        this.navigateToPremiumBot = navigateToPremiumBot2;
+    public void setNavigateToPremiumBot(boolean z) {
+        this.navigateToPremiumBot = z;
     }
 
     public TextStyleSpan.TextStyleRun getTextStyleRun() {
         return this.style;
     }
 
-    public void onClick(View widget) {
-        if (this.navigateToPremiumBot && (widget.getContext() instanceof LaunchActivity)) {
-            ((LaunchActivity) widget.getContext()).setNavigateToPremiumBot(true);
+    public void onClick(View view) {
+        if (this.navigateToPremiumBot && (view.getContext() instanceof LaunchActivity)) {
+            ((LaunchActivity) view.getContext()).setNavigateToPremiumBot(true);
         }
-        Browser.openUrl(widget.getContext(), Uri.parse(getURL()));
+        Browser.openUrl(view.getContext(), Uri.parse(getURL()));
     }
 
-    public void updateDrawState(TextPaint p) {
-        int color = p.getColor();
-        super.updateDrawState(p);
+    public void updateDrawState(TextPaint textPaint) {
+        int color = textPaint.getColor();
+        super.updateDrawState(textPaint);
         TextStyleSpan.TextStyleRun textStyleRun = this.style;
         if (textStyleRun != null) {
-            textStyleRun.applyStyle(p);
-            p.setUnderlineText(p.linkColor == color);
+            textStyleRun.applyStyle(textPaint);
+            textPaint.setUnderlineText(textPaint.linkColor == color);
         }
     }
 }

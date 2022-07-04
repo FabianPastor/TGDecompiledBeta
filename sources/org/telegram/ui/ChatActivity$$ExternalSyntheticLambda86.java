@@ -1,21 +1,18 @@
 package org.telegram.ui;
 
-import org.telegram.messenger.MessagesController;
+import android.content.Context;
+import android.view.View;
 
-public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda86 implements Runnable {
+public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda86 implements View.OnClickListener {
     public final /* synthetic */ ChatActivity f$0;
-    public final /* synthetic */ MessagesController f$1;
-    public final /* synthetic */ CharSequence f$2;
-    public final /* synthetic */ boolean f$3;
+    public final /* synthetic */ Context f$1;
 
-    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda86(ChatActivity chatActivity, MessagesController messagesController, CharSequence charSequence, boolean z) {
+    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda86(ChatActivity chatActivity, Context context) {
         this.f$0 = chatActivity;
-        this.f$1 = messagesController;
-        this.f$2 = charSequence;
-        this.f$3 = z;
+        this.f$1 = context;
     }
 
-    public final void run() {
-        this.f$0.m3088lambda$searchLinks$97$orgtelegramuiChatActivity(this.f$1, this.f$2, this.f$3);
+    public final void onClick(View view) {
+        this.f$0.lambda$createView$72(this.f$1, view);
     }
 }

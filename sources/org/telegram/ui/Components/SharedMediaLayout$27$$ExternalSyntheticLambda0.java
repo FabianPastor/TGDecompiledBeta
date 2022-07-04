@@ -15,6 +15,6 @@ public final /* synthetic */ class SharedMediaLayout$27$$ExternalSyntheticLambda
     }
 
     public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-        this.f$0.m1389xvar_(this.f$1, this.f$2, valueAnimator);
+        this.f$0.lambda$onPreDraw$0(this.f$1, this.f$2, valueAnimator);
     }
 }

@@ -13,6 +13,6 @@ public final /* synthetic */ class LimitReachedBottomSheet$$ExternalSyntheticLam
     }
 
     public final void onClick(DialogInterface dialogInterface, int i) {
-        this.f$0.m1249xcbc3b480(this.f$1, dialogInterface, i);
+        this.f$0.lambda$revokeLinks$8(this.f$1, dialogInterface, i);
     }
 }

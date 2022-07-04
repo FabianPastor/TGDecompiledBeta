@@ -10,7 +10,7 @@ public final /* synthetic */ class IntroActivity$$ExternalSyntheticLambda6 imple
     }
 
     public final void didSetColor() {
-        this.f$0.m3605lambda$getThemeDescriptions$5$orgtelegramuiIntroActivity();
+        this.f$0.lambda$getThemeDescriptions$5();
     }
 
     public /* synthetic */ void onAnimationProgress(float f) {

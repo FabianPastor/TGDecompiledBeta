@@ -39,19 +39,19 @@ public class PremiumFeatureCell extends FrameLayout {
         this.imageView = imageView2;
         imageView2.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
         addView(this.imageView, LayoutHelper.createFrame(28, 28.0f, 0, 18.0f, 12.0f, 0.0f, 0.0f));
-        ImageView nextIcon = new ImageView(context);
-        nextIcon.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
-        nextIcon.setImageResource(NUM);
-        nextIcon.setColorFilter(Theme.getColor("switchTrack"));
-        addView(nextIcon, LayoutHelper.createFrame(24, 24.0f, 21, 0.0f, 0.0f, 18.0f, 0.0f));
+        ImageView imageView3 = new ImageView(context);
+        imageView3.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
+        imageView3.setImageResource(NUM);
+        imageView3.setColorFilter(Theme.getColor("switchTrack"));
+        addView(imageView3, LayoutHelper.createFrame(24, 24.0f, 21, 0.0f, 0.0f, 18.0f, 0.0f));
     }
 
-    public void setData(PremiumPreviewFragment.PremiumFeatureData data2, boolean drawDivider2) {
-        this.data = data2;
-        this.title.setText(data2.title);
-        this.description.setText(data2.description);
-        this.imageView.setImageResource(data2.icon);
-        this.drawDivider = drawDivider2;
+    public void setData(PremiumPreviewFragment.PremiumFeatureData premiumFeatureData, boolean z) {
+        this.data = premiumFeatureData;
+        this.title.setText(premiumFeatureData.title);
+        this.description.setText(premiumFeatureData.description);
+        this.imageView.setImageResource(premiumFeatureData.icon);
+        this.drawDivider = z;
     }
 
     /* access modifiers changed from: protected */

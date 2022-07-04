@@ -15,6 +15,6 @@ public final /* synthetic */ class PhotoViewer$FirstFrameView$$ExternalSynthetic
     }
 
     public final void run() {
-        this.f$0.m4338x99d24718(this.f$1, this.f$2);
+        this.f$0.lambda$checkFromPlayer$2(this.f$1, this.f$2);
     }
 }

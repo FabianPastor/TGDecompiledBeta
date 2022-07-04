@@ -1,25 +1,17 @@
 package org.telegram.messenger;
 
-import androidx.collection.LongSparseArray;
+import java.util.ArrayList;
+import java.util.Comparator;
+import org.telegram.messenger.MediaDataController;
 
-public final /* synthetic */ class MediaDataController$$ExternalSyntheticLambda123 implements Runnable {
-    public final /* synthetic */ MediaDataController f$0;
-    public final /* synthetic */ LongSparseArray f$1;
-    public final /* synthetic */ LongSparseArray f$2;
-    public final /* synthetic */ boolean f$3;
-    public final /* synthetic */ long f$4;
-    public final /* synthetic */ Runnable f$5;
+public final /* synthetic */ class MediaDataController$$ExternalSyntheticLambda123 implements Comparator {
+    public final /* synthetic */ ArrayList f$0;
 
-    public /* synthetic */ MediaDataController$$ExternalSyntheticLambda123(MediaDataController mediaDataController, LongSparseArray longSparseArray, LongSparseArray longSparseArray2, boolean z, long j, Runnable runnable) {
-        this.f$0 = mediaDataController;
-        this.f$1 = longSparseArray;
-        this.f$2 = longSparseArray2;
-        this.f$3 = z;
-        this.f$4 = j;
-        this.f$5 = runnable;
+    public /* synthetic */ MediaDataController$$ExternalSyntheticLambda123(ArrayList arrayList) {
+        this.f$0 = arrayList;
     }
 
-    public final void run() {
-        this.f$0.m2046xcCLASSNAMEvar_(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5);
+    public final int compare(Object obj, Object obj2) {
+        return MediaDataController.lambda$getEmojiSuggestions$172(this.f$0, (MediaDataController.KeywordResult) obj, (MediaDataController.KeywordResult) obj2);
     }
 }

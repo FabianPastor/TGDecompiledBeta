@@ -13,6 +13,6 @@ public final /* synthetic */ class NotificationBadge$ZukHomeBadger$$ExternalSynt
     }
 
     public final void run() {
-        this.f$0.m2321x7f3var_c2(this.f$1);
+        this.f$0.lambda$executeBadge$0(this.f$1);
     }
 }

@@ -8,6 +8,6 @@ public final /* synthetic */ class PhotoViewer$$ExternalSyntheticLambda47 implem
     }
 
     public final void run() {
-        this.f$0.m4252lambda$onDraw$77$orgtelegramuiPhotoViewer();
+        this.f$0.onLongPress();
     }
 }

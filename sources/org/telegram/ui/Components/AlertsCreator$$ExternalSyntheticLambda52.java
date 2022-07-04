@@ -1,17 +1,19 @@
 package org.telegram.ui.Components;
 
 import android.content.DialogInterface;
-import org.telegram.ui.CacheControlActivity;
-import org.telegram.ui.LaunchActivity;
+import android.view.View;
+import org.telegram.ui.ActionBar.AlertDialog;
 
-public final /* synthetic */ class AlertsCreator$$ExternalSyntheticLambda52 implements DialogInterface.OnClickListener {
-    public final /* synthetic */ LaunchActivity f$0;
+public final /* synthetic */ class AlertsCreator$$ExternalSyntheticLambda52 implements View.OnClickListener {
+    public final /* synthetic */ AlertDialog.Builder f$0;
+    public final /* synthetic */ DialogInterface.OnClickListener f$1;
 
-    public /* synthetic */ AlertsCreator$$ExternalSyntheticLambda52(LaunchActivity launchActivity) {
-        this.f$0 = launchActivity;
+    public /* synthetic */ AlertsCreator$$ExternalSyntheticLambda52(AlertDialog.Builder builder, DialogInterface.OnClickListener onClickListener) {
+        this.f$0 = builder;
+        this.f$1 = onClickListener;
     }
 
-    public final void onClick(DialogInterface dialogInterface, int i) {
-        this.f$0.m3690lambda$runLinkRequest$59$orgtelegramuiLaunchActivity(new CacheControlActivity());
+    public final void onClick(View view) {
+        AlertsCreator.lambda$createSingleChoiceDialog$106(this.f$0, this.f$1, view);
     }
 }

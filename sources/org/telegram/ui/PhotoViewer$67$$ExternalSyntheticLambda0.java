@@ -11,6 +11,6 @@ public final /* synthetic */ class PhotoViewer$67$$ExternalSyntheticLambda0 impl
     }
 
     public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-        this.f$0.m4325lambda$createAnimator$0$orgtelegramuiPhotoViewer$67(valueAnimator);
+        this.f$0.lambda$createAnimator$0(valueAnimator);
     }
 }

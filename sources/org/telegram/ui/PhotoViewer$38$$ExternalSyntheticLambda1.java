@@ -13,6 +13,6 @@ public final /* synthetic */ class PhotoViewer$38$$ExternalSyntheticLambda1 impl
     }
 
     public final void run() {
-        this.f$0.m4315lambda$onTouchEvent$1$orgtelegramuiPhotoViewer$38(this.f$1);
+        this.f$0.lambda$onTouchEvent$1(this.f$1);
     }
 }

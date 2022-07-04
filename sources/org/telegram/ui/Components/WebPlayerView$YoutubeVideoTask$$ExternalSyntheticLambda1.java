@@ -12,6 +12,6 @@ public final /* synthetic */ class WebPlayerView$YoutubeVideoTask$$ExternalSynth
     }
 
     public final void run() {
-        this.f$0.m1570x81fc3c6c(this.f$1);
+        this.f$0.lambda$doInBackground$1(this.f$1);
     }
 }

@@ -39,29 +39,29 @@ public class CreationTextCell extends FrameLayout {
     }
 
     /* access modifiers changed from: protected */
-    public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        int width = View.MeasureSpec.getSize(widthMeasureSpec);
-        int dp = AndroidUtilities.dp(48.0f);
-        this.textView.measure(View.MeasureSpec.makeMeasureSpec(width - AndroidUtilities.dp(94.0f), Integer.MIN_VALUE), View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(20.0f), NUM));
-        this.imageView.measure(View.MeasureSpec.makeMeasureSpec(width, Integer.MIN_VALUE), View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(50.0f), NUM));
-        setMeasuredDimension(width, AndroidUtilities.dp(50.0f));
+    public void onMeasure(int i, int i2) {
+        int size = View.MeasureSpec.getSize(i);
+        AndroidUtilities.dp(48.0f);
+        this.textView.measure(View.MeasureSpec.makeMeasureSpec(size - AndroidUtilities.dp(94.0f), Integer.MIN_VALUE), View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(20.0f), NUM));
+        this.imageView.measure(View.MeasureSpec.makeMeasureSpec(size, Integer.MIN_VALUE), View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(50.0f), NUM));
+        setMeasuredDimension(size, AndroidUtilities.dp(50.0f));
     }
 
     /* access modifiers changed from: protected */
-    public void onLayout(boolean changed, int left, int top, int right, int bottom) {
-        int viewLeft;
-        int width = right - left;
-        int viewTop = ((bottom - top) - this.textView.getTextHeight()) / 2;
+    public void onLayout(boolean z, int i, int i2, int i3, int i4) {
+        int i5;
+        int i6 = i3 - i;
+        int textHeight = ((i4 - i2) - this.textView.getTextHeight()) / 2;
         if (LocaleController.isRTL) {
-            viewLeft = (getMeasuredWidth() - this.textView.getMeasuredWidth()) - AndroidUtilities.dp(this.imageView.getVisibility() == 0 ? (float) this.startPadding : 25.0f);
+            i5 = (getMeasuredWidth() - this.textView.getMeasuredWidth()) - AndroidUtilities.dp(this.imageView.getVisibility() == 0 ? (float) this.startPadding : 25.0f);
         } else {
-            viewLeft = AndroidUtilities.dp(this.imageView.getVisibility() == 0 ? (float) this.startPadding : 25.0f);
+            i5 = AndroidUtilities.dp(this.imageView.getVisibility() == 0 ? (float) this.startPadding : 25.0f);
         }
         SimpleTextView simpleTextView = this.textView;
-        simpleTextView.layout(viewLeft, viewTop, simpleTextView.getMeasuredWidth() + viewLeft, this.textView.getMeasuredHeight() + viewTop);
-        int viewLeft2 = !LocaleController.isRTL ? (AndroidUtilities.dp((float) this.startPadding) - this.imageView.getMeasuredWidth()) / 2 : (width - this.imageView.getMeasuredWidth()) - AndroidUtilities.dp(25.0f);
+        simpleTextView.layout(i5, textHeight, simpleTextView.getMeasuredWidth() + i5, this.textView.getMeasuredHeight() + textHeight);
+        int dp = !LocaleController.isRTL ? (AndroidUtilities.dp((float) this.startPadding) - this.imageView.getMeasuredWidth()) / 2 : (i6 - this.imageView.getMeasuredWidth()) - AndroidUtilities.dp(25.0f);
         ImageView imageView2 = this.imageView;
-        imageView2.layout(viewLeft2, 0, imageView2.getMeasuredWidth() + viewLeft2, this.imageView.getMeasuredHeight());
+        imageView2.layout(dp, 0, imageView2.getMeasuredWidth() + dp, this.imageView.getMeasuredHeight());
     }
 
     /* access modifiers changed from: protected */
@@ -72,9 +72,9 @@ public class CreationTextCell extends FrameLayout {
         }
     }
 
-    public void setTextAndIcon(String text, Drawable icon, boolean divider2) {
-        this.textView.setText(text);
-        this.imageView.setImageDrawable(icon);
-        this.divider = divider2;
+    public void setTextAndIcon(String str, Drawable drawable, boolean z) {
+        this.textView.setText(str);
+        this.imageView.setImageDrawable(drawable);
+        this.divider = z;
     }
 }

@@ -7,28 +7,28 @@ public class SharedPrefsHelper {
     private static String WEB_VIEW_SHOWN_DIALOG_FORMAT = "confirm_shown_%d_%d";
     private static SharedPreferences webViewBotsPrefs;
 
-    public static void init(Context ctx) {
-        webViewBotsPrefs = ctx.getSharedPreferences("webview_bots", 0);
+    public static void init(Context context) {
+        webViewBotsPrefs = context.getSharedPreferences("webview_bots", 0);
     }
 
-    public static boolean isWebViewConfirmShown(int currentAccount, long botId) {
-        return webViewBotsPrefs.getBoolean(String.format(WEB_VIEW_SHOWN_DIALOG_FORMAT, new Object[]{Integer.valueOf(currentAccount), Long.valueOf(botId)}), false);
+    public static boolean isWebViewConfirmShown(int i, long j) {
+        return webViewBotsPrefs.getBoolean(String.format(WEB_VIEW_SHOWN_DIALOG_FORMAT, new Object[]{Integer.valueOf(i), Long.valueOf(j)}), false);
     }
 
-    public static void setWebViewConfirmShown(int currentAccount, long botId, boolean shown) {
-        webViewBotsPrefs.edit().putBoolean(String.format(WEB_VIEW_SHOWN_DIALOG_FORMAT, new Object[]{Integer.valueOf(currentAccount), Long.valueOf(botId)}), shown).apply();
+    public static void setWebViewConfirmShown(int i, long j, boolean z) {
+        webViewBotsPrefs.edit().putBoolean(String.format(WEB_VIEW_SHOWN_DIALOG_FORMAT, new Object[]{Integer.valueOf(i), Long.valueOf(j)}), z).apply();
     }
 
-    public static void cleanupAccount(int account) {
+    public static void cleanupAccount(int i) {
         SharedPreferences sharedPreferences = webViewBotsPrefs;
         if (sharedPreferences != null) {
-            SharedPreferences.Editor editor = sharedPreferences.edit();
-            for (String key : webViewBotsPrefs.getAll().keySet()) {
-                if (key.startsWith("confirm_shown_" + account + "_")) {
-                    editor.remove(key);
+            SharedPreferences.Editor edit = sharedPreferences.edit();
+            for (String next : webViewBotsPrefs.getAll().keySet()) {
+                if (next.startsWith("confirm_shown_" + i + "_")) {
+                    edit.remove(next);
                 }
             }
-            editor.apply();
+            edit.apply();
         }
     }
 

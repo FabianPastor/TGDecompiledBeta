@@ -12,6 +12,6 @@ public final /* synthetic */ class DialogsActivity$30$$ExternalSyntheticLambda2 
     }
 
     public final void didSelectFilter(MessagesController.DialogFilter dialogFilter) {
-        this.f$0.m3430lambda$onItemClick$2$orgtelegramuiDialogsActivity$30(dialogFilter);
+        this.f$0.lambda$onItemClick$2(dialogFilter);
     }
 }

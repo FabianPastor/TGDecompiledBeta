@@ -8,6 +8,6 @@ public final /* synthetic */ class ChatActivityEnterView$$ExternalSyntheticLambd
     }
 
     public final void run() {
-        this.f$0.m680lambda$new$9$orgtelegramuiComponentsChatActivityEnterView();
+        this.f$0.lambda$new$5();
     }
 }

@@ -12,6 +12,6 @@ public final /* synthetic */ class NotificationsCustomSettingsActivity$SearchAda
     }
 
     public final void run() {
-        this.f$0.m3987xa1b56767(this.f$1);
+        this.f$0.lambda$searchDialogs$1(this.f$1);
     }
 }

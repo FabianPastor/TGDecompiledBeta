@@ -1,15 +1,17 @@
 package org.telegram.ui.Components;
 
-import androidx.core.util.Consumer;
+import org.telegram.tgnet.RequestDelegate;
+import org.telegram.tgnet.TLObject;
+import org.telegram.tgnet.TLRPC$TL_error;
 
-public final /* synthetic */ class BotWebViewMenuContainer$$ExternalSyntheticLambda17 implements Consumer {
+public final /* synthetic */ class BotWebViewMenuContainer$$ExternalSyntheticLambda17 implements RequestDelegate {
     public final /* synthetic */ BotWebViewMenuContainer f$0;
 
     public /* synthetic */ BotWebViewMenuContainer$$ExternalSyntheticLambda17(BotWebViewMenuContainer botWebViewMenuContainer) {
         this.f$0 = botWebViewMenuContainer;
     }
 
-    public final void accept(Object obj) {
-        this.f$0.m607xaef3a196((Float) obj);
+    public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+        this.f$0.lambda$new$3(tLObject, tLRPC$TL_error);
     }
 }

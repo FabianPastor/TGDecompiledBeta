@@ -12,6 +12,6 @@ public final /* synthetic */ class ReactedHeaderView$$ExternalSyntheticLambda1 i
     }
 
     public final void run() {
-        this.f$0.m1283x41acb31c(this.f$1);
+        this.f$0.lambda$onAttachedToWindow$0(this.f$1);
     }
 }

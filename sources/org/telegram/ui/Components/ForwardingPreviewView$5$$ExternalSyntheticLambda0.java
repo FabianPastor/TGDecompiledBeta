@@ -10,6 +10,6 @@ public final /* synthetic */ class ForwardingPreviewView$5$$ExternalSyntheticLam
     }
 
     public final void run() {
-        this.f$0.m985xd7ee3461();
+        this.f$0.lambda$onAllAnimationsDone$1();
     }
 }

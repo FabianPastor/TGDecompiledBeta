@@ -1,17 +1,15 @@
 package org.telegram.ui;
 
-import org.telegram.tgnet.TLRPC;
-
 public final /* synthetic */ class GroupCallActivity$$ExternalSyntheticLambda38 implements Runnable {
     public final /* synthetic */ GroupCallActivity f$0;
-    public final /* synthetic */ TLRPC.TL_error f$1;
+    public final /* synthetic */ long f$1;
 
-    public /* synthetic */ GroupCallActivity$$ExternalSyntheticLambda38(GroupCallActivity groupCallActivity, TLRPC.TL_error tL_error) {
+    public /* synthetic */ GroupCallActivity$$ExternalSyntheticLambda38(GroupCallActivity groupCallActivity, long j) {
         this.f$0 = groupCallActivity;
-        this.f$1 = tL_error;
+        this.f$1 = j;
     }
 
     public final void run() {
-        this.f$0.m3529lambda$new$27$orgtelegramuiGroupCallActivity(this.f$1);
+        this.f$0.lambda$processSelectedOption$55(this.f$1);
     }
 }

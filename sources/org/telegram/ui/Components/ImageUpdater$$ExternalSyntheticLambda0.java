@@ -15,6 +15,6 @@ public final /* synthetic */ class ImageUpdater$$ExternalSyntheticLambda0 implem
     }
 
     public final void onClick(DialogInterface dialogInterface, int i) {
-        this.f$0.m1027lambda$openMenu$0$orgtelegramuiComponentsImageUpdater(this.f$1, this.f$2, dialogInterface, i);
+        this.f$0.lambda$openMenu$0(this.f$1, this.f$2, dialogInterface, i);
     }
 }

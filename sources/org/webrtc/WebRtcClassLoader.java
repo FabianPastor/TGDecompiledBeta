@@ -4,10 +4,11 @@ class WebRtcClassLoader {
     WebRtcClassLoader() {
     }
 
+    @CalledByNative
     static Object getClassLoader() {
-        Object loader = WebRtcClassLoader.class.getClassLoader();
-        if (loader != null) {
-            return loader;
+        ClassLoader classLoader = WebRtcClassLoader.class.getClassLoader();
+        if (classLoader != null) {
+            return classLoader;
         }
         throw new RuntimeException("Failed to get WebRTC class loader.");
     }

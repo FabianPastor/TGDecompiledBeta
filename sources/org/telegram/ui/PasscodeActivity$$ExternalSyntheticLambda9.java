@@ -1,15 +1,16 @@
 package org.telegram.ui;
 
-public final /* synthetic */ class PasscodeActivity$$ExternalSyntheticLambda9 implements Runnable {
-    public final /* synthetic */ PasscodeActivity f$0;
-    public final /* synthetic */ Runnable f$1;
+import android.view.KeyEvent;
+import android.widget.TextView;
 
-    public /* synthetic */ PasscodeActivity$$ExternalSyntheticLambda9(PasscodeActivity passcodeActivity, Runnable runnable) {
+public final /* synthetic */ class PasscodeActivity$$ExternalSyntheticLambda9 implements TextView.OnEditorActionListener {
+    public final /* synthetic */ PasscodeActivity f$0;
+
+    public /* synthetic */ PasscodeActivity$$ExternalSyntheticLambda9(PasscodeActivity passcodeActivity) {
         this.f$0 = passcodeActivity;
-        this.f$1 = runnable;
     }
 
-    public final void run() {
-        this.f$0.m4001x5ef7bfc3(this.f$1);
+    public final boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
+        return this.f$0.lambda$createView$10(textView, i, keyEvent);
     }
 }

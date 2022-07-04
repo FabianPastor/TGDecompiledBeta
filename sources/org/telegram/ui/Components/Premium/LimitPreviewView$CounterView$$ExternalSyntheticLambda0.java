@@ -13,6 +13,6 @@ public final /* synthetic */ class LimitPreviewView$CounterView$$ExternalSynthet
     }
 
     public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-        this.f$0.m1238x1ef3fe0c(this.f$1, valueAnimator);
+        this.f$0.lambda$createAnimationLayouts$0(this.f$1, valueAnimator);
     }
 }

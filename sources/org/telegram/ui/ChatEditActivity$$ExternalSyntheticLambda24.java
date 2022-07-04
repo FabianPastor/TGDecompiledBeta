@@ -1,16 +1,13 @@
 package org.telegram.ui;
 
-import org.telegram.tgnet.TLRPC;
-import org.telegram.ui.LocationActivity;
-
-public final /* synthetic */ class ChatEditActivity$$ExternalSyntheticLambda24 implements LocationActivity.LocationActivityDelegate {
+public final /* synthetic */ class ChatEditActivity$$ExternalSyntheticLambda24 implements Runnable {
     public final /* synthetic */ ChatEditActivity f$0;
 
     public /* synthetic */ ChatEditActivity$$ExternalSyntheticLambda24(ChatEditActivity chatEditActivity) {
         this.f$0 = chatEditActivity;
     }
 
-    public final void didSelectLocation(TLRPC.MessageMedia messageMedia, int i, boolean z, int i2) {
-        this.f$0.m3201lambda$createView$8$orgtelegramuiChatEditActivity(messageMedia, i, z, i2);
+    public final void run() {
+        this.f$0.lambda$createView$4();
     }
 }

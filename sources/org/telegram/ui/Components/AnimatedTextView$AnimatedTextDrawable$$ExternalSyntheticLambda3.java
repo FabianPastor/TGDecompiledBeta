@@ -23,6 +23,6 @@ public final /* synthetic */ class AnimatedTextView$AnimatedTextDrawable$$Extern
     }
 
     public final void run(CharSequence charSequence, int i, int i2) {
-        this.f$0.m534x604cea82(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6, charSequence, i, i2);
+        this.f$0.lambda$setText$0(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6, charSequence, i, i2);
     }
 }

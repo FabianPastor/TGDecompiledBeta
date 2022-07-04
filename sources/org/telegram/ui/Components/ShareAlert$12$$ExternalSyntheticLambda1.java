@@ -11,6 +11,6 @@ public final /* synthetic */ class ShareAlert$12$$ExternalSyntheticLambda1 imple
     }
 
     public final void run(int i) {
-        this.f$0.m1364lambda$hidePopup$2$orgtelegramuiComponentsShareAlert$12(i);
+        this.f$0.lambda$hidePopup$2(i);
     }
 }

@@ -1,19 +1,24 @@
 package org.telegram.messenger;
 
-import org.telegram.tgnet.RequestDelegate;
-import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC;
+import androidx.collection.LongSparseArray;
+import java.util.ArrayList;
 
-public final /* synthetic */ class MediaDataController$$ExternalSyntheticLambda72 implements RequestDelegate {
+public final /* synthetic */ class MediaDataController$$ExternalSyntheticLambda72 implements Runnable {
     public final /* synthetic */ MediaDataController f$0;
-    public final /* synthetic */ TLRPC.Document f$1;
+    public final /* synthetic */ ArrayList f$1;
+    public final /* synthetic */ long f$2;
+    public final /* synthetic */ LongSparseArray f$3;
+    public final /* synthetic */ Runnable f$4;
 
-    public /* synthetic */ MediaDataController$$ExternalSyntheticLambda72(MediaDataController mediaDataController, TLRPC.Document document) {
+    public /* synthetic */ MediaDataController$$ExternalSyntheticLambda72(MediaDataController mediaDataController, ArrayList arrayList, long j, LongSparseArray longSparseArray, Runnable runnable) {
         this.f$0 = mediaDataController;
-        this.f$1 = document;
+        this.f$1 = arrayList;
+        this.f$2 = j;
+        this.f$3 = longSparseArray;
+        this.f$4 = runnable;
     }
 
-    public final void run(TLObject tLObject, TLRPC.TL_error tL_error) {
-        this.f$0.m2105x9CLASSNAMEa4e(this.f$1, tLObject, tL_error);
+    public final void run() {
+        this.f$0.lambda$loadReplyMessagesForMessages$131(this.f$1, this.f$2, this.f$3, this.f$4);
     }
 }

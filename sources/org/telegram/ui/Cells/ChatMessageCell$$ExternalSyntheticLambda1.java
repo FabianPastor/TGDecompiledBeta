@@ -8,6 +8,6 @@ public final /* synthetic */ class ChatMessageCell$$ExternalSyntheticLambda1 imp
     }
 
     public final void run() {
-        this.f$0.m2785x7457b3cf();
+        this.f$0.lambda$checkSpoilersMotionEvent$0();
     }
 }

@@ -15,12 +15,12 @@ public abstract class SeekBarAccessibilityDelegate extends View.AccessibilityDel
     /* access modifiers changed from: private */
     public final Map<View, Runnable> accessibilityEventRunnables = new HashMap(4);
     private final View.OnAttachStateChangeListener onAttachStateChangeListener = new View.OnAttachStateChangeListener() {
-        public void onViewAttachedToWindow(View v) {
+        public void onViewAttachedToWindow(View view) {
         }
 
-        public void onViewDetachedFromWindow(View v) {
-            v.removeCallbacks((Runnable) SeekBarAccessibilityDelegate.this.accessibilityEventRunnables.remove(v));
-            v.removeOnAttachStateChangeListener(this);
+        public void onViewDetachedFromWindow(View view) {
+            view.removeCallbacks((Runnable) SeekBarAccessibilityDelegate.this.accessibilityEventRunnables.remove(view));
+            view.removeOnAttachStateChangeListener(this);
         }
     };
 
@@ -33,80 +33,80 @@ public abstract class SeekBarAccessibilityDelegate extends View.AccessibilityDel
     /* access modifiers changed from: protected */
     public abstract void doScroll(View view, boolean z);
 
-    public boolean performAccessibilityAction(View host, int action, Bundle args) {
-        if (super.performAccessibilityAction(host, action, args)) {
-            return true;
-        }
-        return performAccessibilityActionInternal(host, action, args);
+    /* access modifiers changed from: protected */
+    public CharSequence getContentDescription(View view) {
+        return null;
     }
 
-    public boolean performAccessibilityActionInternal(View host, int action, Bundle args) {
+    public boolean performAccessibilityAction(View view, int i, Bundle bundle) {
+        if (super.performAccessibilityAction(view, i, bundle)) {
+            return true;
+        }
+        return performAccessibilityActionInternal(view, i, bundle);
+    }
+
+    public boolean performAccessibilityActionInternal(View view, int i, Bundle bundle) {
         boolean z = false;
-        if (action != 4096 && action != 8192) {
+        if (i != 4096 && i != 8192) {
             return false;
         }
-        if (action == 8192) {
+        if (i == 8192) {
             z = true;
         }
-        doScroll(host, z);
-        if (host != null) {
-            postAccessibilityEventRunnable(host);
+        doScroll(view, z);
+        if (view != null) {
+            postAccessibilityEventRunnable(view);
         }
         return true;
     }
 
-    public final boolean performAccessibilityActionInternal(int action, Bundle args) {
-        return performAccessibilityActionInternal((View) null, action, args);
+    public final boolean performAccessibilityActionInternal(int i, Bundle bundle) {
+        return performAccessibilityActionInternal((View) null, i, bundle);
     }
 
-    private void postAccessibilityEventRunnable(View host) {
-        if (ViewCompat.isAttachedToWindow(host)) {
-            Runnable runnable = this.accessibilityEventRunnables.get(host);
+    private void postAccessibilityEventRunnable(View view) {
+        if (ViewCompat.isAttachedToWindow(view)) {
+            Runnable runnable = this.accessibilityEventRunnables.get(view);
             if (runnable == null) {
                 Map<View, Runnable> map = this.accessibilityEventRunnables;
-                SeekBarAccessibilityDelegate$$ExternalSyntheticLambda0 seekBarAccessibilityDelegate$$ExternalSyntheticLambda0 = new SeekBarAccessibilityDelegate$$ExternalSyntheticLambda0(this, host);
+                SeekBarAccessibilityDelegate$$ExternalSyntheticLambda0 seekBarAccessibilityDelegate$$ExternalSyntheticLambda0 = new SeekBarAccessibilityDelegate$$ExternalSyntheticLambda0(this, view);
+                map.put(view, seekBarAccessibilityDelegate$$ExternalSyntheticLambda0);
+                view.addOnAttachStateChangeListener(this.onAttachStateChangeListener);
                 runnable = seekBarAccessibilityDelegate$$ExternalSyntheticLambda0;
-                map.put(host, seekBarAccessibilityDelegate$$ExternalSyntheticLambda0);
-                host.addOnAttachStateChangeListener(this.onAttachStateChangeListener);
             } else {
-                host.removeCallbacks(runnable);
+                view.removeCallbacks(runnable);
             }
-            host.postDelayed(runnable, 400);
+            view.postDelayed(runnable, 400);
         }
     }
 
-    /* renamed from: lambda$postAccessibilityEventRunnable$0$org-telegram-ui-Components-SeekBarAccessibilityDelegate  reason: not valid java name */
-    public /* synthetic */ void m1335x308b6507(View host) {
-        sendAccessibilityEvent(host, 4);
+    /* access modifiers changed from: private */
+    public /* synthetic */ void lambda$postAccessibilityEventRunnable$0(View view) {
+        sendAccessibilityEvent(view, 4);
     }
 
-    public void onInitializeAccessibilityNodeInfo(View host, AccessibilityNodeInfo info) {
-        super.onInitializeAccessibilityNodeInfo(host, info);
-        onInitializeAccessibilityNodeInfoInternal(host, info);
+    public void onInitializeAccessibilityNodeInfo(View view, AccessibilityNodeInfo accessibilityNodeInfo) {
+        super.onInitializeAccessibilityNodeInfo(view, accessibilityNodeInfo);
+        onInitializeAccessibilityNodeInfoInternal(view, accessibilityNodeInfo);
     }
 
-    public void onInitializeAccessibilityNodeInfoInternal(View host, AccessibilityNodeInfo info) {
-        info.setClassName(SEEK_BAR_CLASS_NAME);
-        CharSequence contentDescription = getContentDescription(host);
+    public void onInitializeAccessibilityNodeInfoInternal(View view, AccessibilityNodeInfo accessibilityNodeInfo) {
+        accessibilityNodeInfo.setClassName(SEEK_BAR_CLASS_NAME);
+        CharSequence contentDescription = getContentDescription(view);
         if (!TextUtils.isEmpty(contentDescription)) {
-            info.setText(contentDescription);
+            accessibilityNodeInfo.setText(contentDescription);
         }
         if (Build.VERSION.SDK_INT >= 21) {
-            if (canScrollBackward(host)) {
-                info.addAction(AccessibilityNodeInfo.AccessibilityAction.ACTION_SCROLL_BACKWARD);
+            if (canScrollBackward(view)) {
+                accessibilityNodeInfo.addAction(AccessibilityNodeInfo.AccessibilityAction.ACTION_SCROLL_BACKWARD);
             }
-            if (canScrollForward(host)) {
-                info.addAction(AccessibilityNodeInfo.AccessibilityAction.ACTION_SCROLL_FORWARD);
+            if (canScrollForward(view)) {
+                accessibilityNodeInfo.addAction(AccessibilityNodeInfo.AccessibilityAction.ACTION_SCROLL_FORWARD);
             }
         }
     }
 
-    public final void onInitializeAccessibilityNodeInfoInternal(AccessibilityNodeInfo info) {
-        onInitializeAccessibilityNodeInfoInternal((View) null, info);
-    }
-
-    /* access modifiers changed from: protected */
-    public CharSequence getContentDescription(View host) {
-        return null;
+    public final void onInitializeAccessibilityNodeInfoInternal(AccessibilityNodeInfo accessibilityNodeInfo) {
+        onInitializeAccessibilityNodeInfoInternal((View) null, accessibilityNodeInfo);
     }
 }

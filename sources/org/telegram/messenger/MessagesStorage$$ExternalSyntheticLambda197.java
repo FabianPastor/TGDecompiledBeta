@@ -1,21 +1,16 @@
 package org.telegram.messenger;
 
-import java.util.ArrayList;
+import java.util.Comparator;
+import org.telegram.messenger.support.LongSparseIntArray;
 
-public final /* synthetic */ class MessagesStorage$$ExternalSyntheticLambda197 implements Runnable {
-    public final /* synthetic */ MessagesStorage f$0;
-    public final /* synthetic */ long f$1;
-    public final /* synthetic */ ArrayList f$2;
-    public final /* synthetic */ int f$3;
+public final /* synthetic */ class MessagesStorage$$ExternalSyntheticLambda197 implements Comparator {
+    public final /* synthetic */ LongSparseIntArray f$0;
 
-    public /* synthetic */ MessagesStorage$$ExternalSyntheticLambda197(MessagesStorage messagesStorage, long j, ArrayList arrayList, int i) {
-        this.f$0 = messagesStorage;
-        this.f$1 = j;
-        this.f$2 = arrayList;
-        this.f$3 = i;
+    public /* synthetic */ MessagesStorage$$ExternalSyntheticLambda197(LongSparseIntArray longSparseIntArray) {
+        this.f$0 = longSparseIntArray;
     }
 
-    public final void run() {
-        this.f$0.m2230x37aba7bf(this.f$1, this.f$2, this.f$3);
+    public final int compare(Object obj, Object obj2) {
+        return MessagesStorage.lambda$checkLoadedRemoteFilters$42(this.f$0, (Long) obj, (Long) obj2);
     }
 }

@@ -1,15 +1,17 @@
 package org.telegram.ui.Components;
 
-import android.animation.ValueAnimator;
+import org.telegram.ui.ActionBar.BottomSheet;
 
-public final /* synthetic */ class ChatAttachAlert$$ExternalSyntheticLambda21 implements ValueAnimator.AnimatorUpdateListener {
+public final /* synthetic */ class ChatAttachAlert$$ExternalSyntheticLambda21 implements Runnable {
     public final /* synthetic */ ChatAttachAlert f$0;
+    public final /* synthetic */ BottomSheet.BottomSheetDelegateInterface f$1;
 
-    public /* synthetic */ ChatAttachAlert$$ExternalSyntheticLambda21(ChatAttachAlert chatAttachAlert) {
+    public /* synthetic */ ChatAttachAlert$$ExternalSyntheticLambda21(ChatAttachAlert chatAttachAlert, BottomSheet.BottomSheetDelegateInterface bottomSheetDelegateInterface) {
         this.f$0 = chatAttachAlert;
+        this.f$1 = bottomSheetDelegateInterface;
     }
 
-    public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-        this.f$0.m735x635f8a04(valueAnimator);
+    public final void run() {
+        this.f$0.lambda$onCustomOpenAnimation$27(this.f$1);
     }
 }

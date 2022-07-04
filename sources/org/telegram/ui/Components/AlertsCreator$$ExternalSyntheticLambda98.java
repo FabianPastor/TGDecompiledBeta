@@ -1,17 +1,16 @@
 package org.telegram.ui.Components;
 
-import android.view.View;
+import org.telegram.tgnet.RequestDelegate;
+import org.telegram.tgnet.TLObject;
+import org.telegram.tgnet.TLRPC$TL_error;
 
-public final /* synthetic */ class AlertsCreator$$ExternalSyntheticLambda98 implements View.OnClickListener {
-    public final /* synthetic */ boolean[] f$0;
-    public final /* synthetic */ int f$1;
+public final /* synthetic */ class AlertsCreator$$ExternalSyntheticLambda98 implements RequestDelegate {
+    public static final /* synthetic */ AlertsCreator$$ExternalSyntheticLambda98 INSTANCE = new AlertsCreator$$ExternalSyntheticLambda98();
 
-    public /* synthetic */ AlertsCreator$$ExternalSyntheticLambda98(boolean[] zArr, int i) {
-        this.f$0 = zArr;
-        this.f$1 = i;
+    private /* synthetic */ AlertsCreator$$ExternalSyntheticLambda98() {
     }
 
-    public final void onClick(View view) {
-        AlertsCreator.lambda$createBlockDialogAlert$38(this.f$0, this.f$1, view);
+    public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+        AlertsCreator.lambda$createChangeBioAlert$29(tLObject, tLRPC$TL_error);
     }
 }
