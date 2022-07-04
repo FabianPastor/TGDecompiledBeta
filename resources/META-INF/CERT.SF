@@ -1,10 +1,10 @@
 Signature-Version: 1.0
 Created-By: Android Gradle 7.0.3
-SHA1-Digest-Manifest: BvGnyAh9La2D1Jpeh2cuGELhrSU=
+SHA1-Digest-Manifest: yIlI1txZIjw5FY9ebqLzWXJq8/Q=
 X-Android-APK-Signed: 2
 
 Name: AndroidManifest.xml
-SHA1-Digest: HksanXHDakUfceB/3FSm/3uAGT0=
+SHA1-Digest: PArmE7QQN2y0rJRHhf7mwx40AOg=
 
 Name: META-INF/androidx.annotation_annotation-experimental.version
 SHA1-Digest: 4Tx/OE4OYuecGI9+583MUWSivc0=
@@ -10552,13 +10552,13 @@ Name: builddef.lst
 SHA1-Digest: b4iFOKGOQFQJO7IF+KXHSQsv2sI=
 
 Name: classes.dex
-SHA1-Digest: JwuGkHvIkKZDf7eOdM7nleeaUrY=
+SHA1-Digest: HCr9yM7HXPo8mwzby3gKx9u3uuc=
 
 Name: classes2.dex
 SHA1-Digest: tqeJRCuCNeOUW7qj0s2Wo7feq3s=
 
 Name: classes3.dex
-SHA1-Digest: OUXdEfWbCrMBRKaNGxhaw7g8L2A=
+SHA1-Digest: hBfoAA1DlYuN/3lBUuYhBORpYzs=
 
 Name: com/google/android/search/verification/client/R.java
 SHA1-Digest: CIvj9T4PvsdJr6yfeJo7sTlaGfQ=
@@ -10624,25 +10624,25 @@ Name: lib/arm64-v8a/liblanguage_id_jni.so
 SHA1-Digest: t7P6h8rsFIyAseOFqTtwHhqIMFw=
 
 Name: lib/arm64-v8a/libtmessages.42.so
-SHA1-Digest: j+9BpXQYaPBYSGVSZylXOAUHuQY=
+SHA1-Digest: qO+STSHVX3hMhOX3eEvKnxwD5YU=
 
 Name: lib/armeabi-v7a/liblanguage_id_jni.so
 SHA1-Digest: pDQRN1LMtmK8vbXS5aq7JQ/tlow=
 
 Name: lib/armeabi-v7a/libtmessages.42.so
-SHA1-Digest: otQtFoxWA0fuGObcmJpFT9673bo=
+SHA1-Digest: aKhx/bvL7l2Ue0LKZlYj5AjA3+w=
 
 Name: lib/x86/liblanguage_id_jni.so
 SHA1-Digest: 1R0ziNMuJtkOsRH6aq52bvYzNvs=
 
 Name: lib/x86/libtmessages.42.so
-SHA1-Digest: lFCLeSFa0wEae+4K8qHtX4nCLSk=
+SHA1-Digest: alWZfvme5NqzLeWzm39yTvSC8pU=
 
 Name: lib/x86_64/liblanguage_id_jni.so
 SHA1-Digest: 0F7r//X3czk2qGFK8RXwhK1KkMU=
 
 Name: lib/x86_64/libtmessages.42.so
-SHA1-Digest: 5brDLYRQtsGkXae4W8CbQRx4DlU=
+SHA1-Digest: fGxnLR+SrrKw6FBKtY8e46y0fe0=
 
 Name: play-services-auth-api-phone.properties
 SHA1-Digest: 4xRXfC5wD7cP7zkWXYe1OQH2mf8=
@@ -12953,6 +12953,9 @@ SHA1-Digest: anuL0UE/3X95F/TTgyOTLzLJuew=
 
 Name: res/AE0.png
 SHA1-Digest: SewM8fFwMRezNPp6FosA45WYITM=
+
+Name: res/AGD.svg
+SHA1-Digest: m+vsJ27Ek1FtcLZ/NMmrwFzRQRY=
 
 Name: res/AH0.png
 SHA1-Digest: 02hT5USN8KSatUAtT3WUhxD1eYw=
@@ -20889,6 +20892,9 @@ SHA1-Digest: BaiixQev21i6w7zfKv04B3xG9S8=
 Name: res/mEm.png
 SHA1-Digest: G3TPnNdUkuMKBvtVmTJBX6WSY2Q=
 
+Name: res/mFj.svg
+SHA1-Digest: tvPLVJ4seBOMMsVeqtb8rI1u7xo=
+
 Name: res/mGC.png
 SHA1-Digest: 0d0cCTREA2igG0cZXYAYGK732j4=
 
@@ -23623,7 +23629,7 @@ Name: res/zyk.png
 SHA1-Digest: TfrDVZtDk24WW6zV+5bliTNiuI8=
 
 Name: resources.arsc
-SHA1-Digest: 2IiDE/28HR7foVpWa9nWYj0gQi4=
+SHA1-Digest: cGtXDyYtJA9D08WjHG76UMwSANo=
 
 Name: transport-api.properties
 SHA1-Digest: /JnnuH3pAnVsbL2i4WeJtM5GCqI=

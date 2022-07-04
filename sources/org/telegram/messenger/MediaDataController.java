@@ -220,6 +220,7 @@ public class MediaDataController extends BaseController {
     private static RectF bitmapRect;
     private static Comparator<TLRPC$MessageEntity> entityComparator = MediaDataController$$ExternalSyntheticLambda126.INSTANCE;
     private static Paint erasePaint;
+    private static final Object[] lockObjects = new Object[4];
     private static Paint roundPaint;
     private static Path roundPath;
     private HashMap<String, ArrayList<TLRPC$Document>> allStickers = new HashMap<>();
@@ -342,10 +343,16 @@ public class MediaDataController extends BaseController {
     public static /* synthetic */ void lambda$saveDraft$146(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
     }
 
+    static {
+        for (int i = 0; i < 4; i++) {
+            lockObjects[i] = new Object();
+        }
+    }
+
     public static MediaDataController getInstance(int i) {
         MediaDataController mediaDataController = Instance[i];
         if (mediaDataController == null) {
-            synchronized (MediaDataController.class) {
+            synchronized (lockObjects) {
                 mediaDataController = Instance[i];
                 if (mediaDataController == null) {
                     MediaDataController[] mediaDataControllerArr = Instance;

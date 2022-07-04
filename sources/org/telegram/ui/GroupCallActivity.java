@@ -885,7 +885,7 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
                 r7 = 1103101952(0x41CLASSNAME, float:24.0)
                 int r11 = org.telegram.messenger.AndroidUtilities.dp(r7)
                 int r12 = org.telegram.messenger.AndroidUtilities.dp(r7)
-                r9 = 2131558534(0x7f0d0086, float:1.8742387E38)
+                r9 = 2131558536(0x7f0d0088, float:1.874239E38)
                 java.lang.String r10 = "NUM"
                 r13 = 1
                 r14 = 0
@@ -2931,7 +2931,7 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
             android.graphics.drawable.Drawable r1 = r1.mutate()
             r8.shadowDrawable = r1
             org.telegram.ui.Components.RLottieDrawable r1 = new org.telegram.ui.Components.RLottieDrawable
-            r17 = 2131558585(0x7f0d00b9, float:1.874249E38)
+            r17 = 2131558587(0x7f0d00bb, float:1.8742494E38)
             r2 = 1116733440(0x42900000, float:72.0)
             int r19 = org.telegram.messenger.AndroidUtilities.dp(r2)
             int r20 = org.telegram.messenger.AndroidUtilities.dp(r2)
@@ -8474,7 +8474,7 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
             org.telegram.ui.Components.ProfileGalleryView r6 = r7.avatarsViewPager
             r6.setCreateThumbFromParent(r9)
             org.telegram.ui.Components.ProfileGalleryView r6 = r7.avatarsViewPager
-            r6.initIfEmpty(r8, r5)
+            r6.initIfEmpty(r8, r5, r9)
             org.telegram.ui.Components.voip.GroupCallMiniTextureView r5 = r7.scrimRenderer
             if (r5 == 0) goto L_0x0640
             r5.setShowingAsScrimView(r9, r9)
@@ -9820,7 +9820,7 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
                     forUser2 = ImageLocation.getForLocal(this.avatar);
                 }
                 GroupCallActivity.this.avatarsViewPager.setCreateThumbFromParent(false);
-                GroupCallActivity.this.avatarsViewPager.initIfEmpty(forUser, forUser2);
+                GroupCallActivity.this.avatarsViewPager.initIfEmpty(forUser, forUser2, true);
                 this.avatar = null;
                 this.avatarBig = null;
                 AndroidUtilities.updateVisibleRows(GroupCallActivity.this.listView);
@@ -9844,7 +9844,7 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
                 forChat2 = ImageLocation.getForLocal(this.avatar);
             }
             GroupCallActivity.this.avatarsViewPager.setCreateThumbFromParent(false);
-            GroupCallActivity.this.avatarsViewPager.initIfEmpty(forChat, forChat2);
+            GroupCallActivity.this.avatarsViewPager.initIfEmpty(forChat, forChat2, true);
             this.avatar = null;
             this.avatarBig = null;
             AndroidUtilities.updateVisibleRows(GroupCallActivity.this.listView);

@@ -474,7 +474,7 @@ public final class BulletinFactory {
             java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r7, r5)
             android.text.SpannableStringBuilder r5 = org.telegram.messenger.AndroidUtilities.replaceTags(r5)
         L_0x003a:
-            r7 = 2131558524(0x7f0d007c, float:1.8742366E38)
+            r7 = 2131558526(0x7f0d007e, float:1.874237E38)
             java.lang.String[] r8 = new java.lang.String[r1]
             r0.setAnimation(r7, r12, r12, r8)
             r7 = -1

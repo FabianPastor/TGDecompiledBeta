@@ -1070,6 +1070,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
     private int returnToMessageId;
     /* access modifiers changed from: private */
     public AnimatorSet runningAnimation;
+    /* access modifiers changed from: private */
+    public int runningAnimationIndex = -1;
     private TLRPC$TL_messages_discussionMessage savedDiscussionMessage;
     private TLRPC$messages_Messages savedHistory;
     private boolean savedNoDiscussion;
@@ -5488,7 +5490,6 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             org.telegram.ui.ChatActivity$25 r3 = new org.telegram.ui.ChatActivity$25
             long r1 = r9.dialog_id
             int r0 = r9.threadMessageId
-            org.telegram.ui.Components.SizeNotifierFrameLayout r6 = r9.contentView
             org.telegram.ui.ChatActivity$ThemeDelegate r7 = r9.themeDelegate
             r24 = r0
             r0 = r3
@@ -5504,6 +5505,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             r12 = 51
             r5 = r24
             r12 = -1
+            r6 = r38
             r0.<init>(r2, r3, r5, r6, r7)
             r9.mentionContainer = r14
             org.telegram.ui.Components.SizeNotifierFrameLayout r0 = r9.contentView
@@ -10021,8 +10023,10 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 animatorArr[0] = ObjectAnimator.ofFloat(frameLayout, property, fArr);
                 animatorSet2.playTogether(animatorArr);
                 this.runningAnimation.setDuration(150);
+                this.runningAnimationIndex = getNotificationCenter().setAnimationInProgress(this.runningAnimationIndex, (int[]) null);
                 this.runningAnimation.addListener(new AnimatorListenerAdapter() {
                     public void onAnimationEnd(Animator animator) {
+                        ChatActivity.this.getNotificationCenter().onAnimationFinish(ChatActivity.this.runningAnimationIndex);
                         if (ChatActivity.this.runningAnimation != null && ChatActivity.this.runningAnimation.equals(animator)) {
                             if (!z) {
                                 ChatActivity.this.stickersAdapter.clearSearch();
@@ -17045,7 +17049,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         if (r4.get(r4.size() - 2) == r8.scrollToMessage) goto L_0x0var_;
      */
     /* JADX WARNING: Incorrect type for immutable var: ssa=boolean, code=?, for r12v14, types: [boolean] */
-    /* JADX WARNING: Incorrect type for immutable var: ssa=int, code=?, for r2v558, types: [int, boolean] */
+    /* JADX WARNING: Incorrect type for immutable var: ssa=int, code=?, for r2v558, types: [boolean, int] */
     /* JADX WARNING: Multi-variable type inference failed */
     /* JADX WARNING: Removed duplicated region for block: B:1421:0x1af7 A[SYNTHETIC, Splitter:B:1421:0x1af7] */
     /* JADX WARNING: Removed duplicated region for block: B:1444:0x1b4a  */
@@ -24850,7 +24854,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
 
     /* JADX WARNING: type inference failed for: r4v33 */
     /* JADX WARNING: type inference failed for: r4v34 */
-    /* JADX WARNING: Incorrect type for immutable var: ssa=int, code=?, for r4v32, types: [int, boolean] */
+    /* JADX WARNING: Incorrect type for immutable var: ssa=int, code=?, for r4v32, types: [boolean, int] */
     /* JADX WARNING: Removed duplicated region for block: B:393:0x0657  */
     /* JADX WARNING: Removed duplicated region for block: B:434:0x0701  */
     /* JADX WARNING: Removed duplicated region for block: B:437:0x070b  */

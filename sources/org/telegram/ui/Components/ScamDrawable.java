@@ -1,6 +1,7 @@
 package org.telegram.ui.Components;
 
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.ColorFilter;
 import android.graphics.Paint;
 import android.graphics.RectF;
@@ -10,6 +11,8 @@ import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
 
 public class ScamDrawable extends Drawable {
+    int alpha;
+    int colorAlpha;
     private int currentType;
     private Paint paint = new Paint(1);
     private RectF rect = new RectF();
@@ -21,15 +24,14 @@ public class ScamDrawable extends Drawable {
         return -2;
     }
 
-    public void setAlpha(int i) {
-    }
-
     public void setColorFilter(ColorFilter colorFilter) {
     }
 
     public ScamDrawable(int i, int i2) {
         TextPaint textPaint2 = new TextPaint(1);
         this.textPaint = textPaint2;
+        this.colorAlpha = 255;
+        this.alpha = 255;
         this.currentType = i2;
         textPaint2.setTextSize((float) AndroidUtilities.dp((float) i));
         this.textPaint.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
@@ -59,6 +61,15 @@ public class ScamDrawable extends Drawable {
     public void setColor(int i) {
         this.textPaint.setColor(i);
         this.paint.setColor(i);
+        this.colorAlpha = Color.alpha(i);
+    }
+
+    public void setAlpha(int i) {
+        if (this.alpha != i) {
+            int i2 = (int) (((float) this.colorAlpha) * (((float) i) / 255.0f));
+            this.paint.setAlpha(i2);
+            this.textPaint.setAlpha(i2);
+        }
     }
 
     public int getIntrinsicWidth() {

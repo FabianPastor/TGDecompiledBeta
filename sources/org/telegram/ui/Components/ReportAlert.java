@@ -79,7 +79,7 @@ public class ReportAlert extends BottomSheet {
             r5.addView(r6, r7)
             org.telegram.ui.Components.RLottieImageView r5 = new org.telegram.ui.Components.RLottieImageView
             r5.<init>(r1)
-            r7 = 2131558521(0x7f0d0079, float:1.874236E38)
+            r7 = 2131558523(0x7f0d007b, float:1.8742364E38)
             r8 = 120(0x78, float:1.68E-43)
             r5.setAnimation(r7, r8, r8)
             r5.playAnimation()

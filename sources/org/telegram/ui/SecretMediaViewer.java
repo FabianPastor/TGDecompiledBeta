@@ -79,7 +79,8 @@ public class SecretMediaViewer implements NotificationCenter.NotificationCenterD
     /* access modifiers changed from: private */
     public Paint blackPaint = new Paint();
     private boolean canDragDown = true;
-    private ImageReceiver centerImage = new ImageReceiver();
+    /* access modifiers changed from: private */
+    public ImageReceiver centerImage = new ImageReceiver();
     private float clipBottom;
     private float clipBottomOrigin;
     private float clipHorizontal;
@@ -197,7 +198,7 @@ public class SecretMediaViewer implements NotificationCenter.NotificationCenterD
         return false;
     }
 
-    static /* synthetic */ int access$1110(SecretMediaViewer secretMediaViewer) {
+    static /* synthetic */ int access$1210(SecretMediaViewer secretMediaViewer) {
         int i = secretMediaViewer.playerRetryPlayCount;
         secretMediaViewer.playerRetryPlayCount = i - 1;
         return i;
@@ -222,6 +223,18 @@ public class SecretMediaViewer implements NotificationCenter.NotificationCenterD
         /* access modifiers changed from: protected */
         public boolean drawChild(Canvas canvas, View view, long j) {
             return view != SecretMediaViewer.this.aspectRatioFrameLayout && super.drawChild(canvas, view, j);
+        }
+
+        /* access modifiers changed from: protected */
+        public void onAttachedToWindow() {
+            super.onAttachedToWindow();
+            SecretMediaViewer.this.centerImage.onAttachedToWindow();
+        }
+
+        /* access modifiers changed from: protected */
+        public void onDetachedFromWindow() {
+            super.onDetachedFromWindow();
+            SecretMediaViewer.this.centerImage.onDetachedFromWindow();
         }
     }
 
@@ -467,7 +480,7 @@ public class SecretMediaViewer implements NotificationCenter.NotificationCenterD
 
                     public void onError(VideoPlayer videoPlayer, Exception exc) {
                         if (SecretMediaViewer.this.playerRetryPlayCount > 0) {
-                            SecretMediaViewer.access$1110(SecretMediaViewer.this);
+                            SecretMediaViewer.access$1210(SecretMediaViewer.this);
                             AndroidUtilities.runOnUIThread(new SecretMediaViewer$1$$ExternalSyntheticLambda0(this, file), 100);
                             return;
                         }

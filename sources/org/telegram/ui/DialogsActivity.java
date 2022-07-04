@@ -3109,7 +3109,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             goto L_0x067c
         L_0x0662:
             org.telegram.ui.Components.RLottieImageView r0 = r10.floatingButton
-            r1 = 2131558600(0x7f0d00c8, float:1.874252E38)
+            r1 = 2131558602(0x7f0d00ca, float:1.8742524E38)
             r2 = 52
             r3 = 52
             r0.setAnimation(r1, r2, r3)

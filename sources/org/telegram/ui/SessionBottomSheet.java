@@ -290,7 +290,7 @@ public class SessionBottomSheet extends BottomSheet {
             java.lang.String r1 = r1.toLowerCase()
             java.lang.String r2 = "safari"
             boolean r2 = r1.contains(r2)
-            r3 = 2131558599(0x7f0d00c7, float:1.8742518E38)
+            r3 = 2131558601(0x7f0d00c9, float:1.8742522E38)
             java.lang.String r4 = "avatar_backgroundBlue"
             r5 = 2131558428(0x7f0d001c, float:1.8742172E38)
             r6 = 1
@@ -298,7 +298,7 @@ public class SessionBottomSheet extends BottomSheet {
             r8 = 0
             java.lang.String r9 = "avatar_backgroundPink"
             if (r2 == 0) goto L_0x0035
-            r3 = 2131558522(0x7f0d007a, float:1.8742362E38)
+            r3 = 2131558524(0x7f0d007c, float:1.8742366E38)
         L_0x0031:
             r4 = r9
         L_0x0032:
@@ -334,7 +334,7 @@ public class SessionBottomSheet extends BottomSheet {
             java.lang.String r2 = "ubuntu"
             boolean r2 = r0.contains(r2)
             if (r2 == 0) goto L_0x0075
-            r3 = 2131558563(0x7f0d00a3, float:1.8742445E38)
+            r3 = 2131558565(0x7f0d00a5, float:1.874245E38)
             goto L_0x0032
         L_0x0075:
             java.lang.String r2 = "ios"

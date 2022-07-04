@@ -4,7 +4,6 @@ public class TLRPC$TL_messageActionPaymentSent_layer140 extends TLRPC$TL_message
     public static int constructor = NUM;
 
     public void readParams(AbstractSerializedData abstractSerializedData, boolean z) {
-        this.flags = abstractSerializedData.readInt32(z);
         this.currency = abstractSerializedData.readString(z);
         this.total_amount = abstractSerializedData.readInt64(z);
     }

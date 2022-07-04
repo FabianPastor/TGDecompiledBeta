@@ -1819,10 +1819,12 @@ public final class R {
         public static final int player_prev = NUM;
         public static final int premium_object_adsbubble = NUM;
         public static final int premium_object_bubble = NUM;
+        public static final int premium_object_fire = NUM;
         public static final int premium_object_folder = NUM;
         public static final int premium_object_like = NUM;
         public static final int premium_object_noads = NUM;
         public static final int premium_object_settings = NUM;
+        public static final int premium_object_star2 = NUM;
         public static final int premium_object_user = NUM;
         public static final int premium_object_video = NUM;
         public static final int premium_object_video2 = NUM;

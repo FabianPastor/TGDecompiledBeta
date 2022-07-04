@@ -15,16 +15,21 @@ import androidx.dynamicanimation.animation.SpringForce;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.SharedConfig;
+import org.telegram.messenger.UserConfig;
 import org.telegram.tgnet.TLRPC$BotInlineResult;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Adapters.MentionsAdapter;
 import org.telegram.ui.Adapters.PaddedListAdapter;
+import org.telegram.ui.ChatActivity;
 import org.telegram.ui.ContentPreviewViewer;
 
 public class MentionsContainerView extends BlurredFrameLayout {
     /* access modifiers changed from: private */
     public MentionsAdapter adapter;
+    private int animationIndex = -1;
+    ChatActivity chatActivity;
     private Integer color;
     private float containerBottom;
     private float containerPadding;
@@ -57,7 +62,7 @@ public class MentionsContainerView extends BlurredFrameLayout {
     /* access modifiers changed from: private */
     public boolean switchLayoutManagerOnEnd = false;
     /* access modifiers changed from: private */
-    public Runnable updateVisibilityRunnable = new MentionsContainerView$$ExternalSyntheticLambda2(this);
+    public Runnable updateVisibilityRunnable = new MentionsContainerView$$ExternalSyntheticLambda3(this);
 
     /* access modifiers changed from: protected */
     public boolean canOpen() {
@@ -85,29 +90,34 @@ public class MentionsContainerView extends BlurredFrameLayout {
 
     /* JADX WARNING: Illegal instructions before constructor call */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    public MentionsContainerView(android.content.Context r17, long r18, int r20, org.telegram.ui.Components.SizeNotifierFrameLayout r21, org.telegram.ui.ActionBar.Theme.ResourcesProvider r22) {
+    public MentionsContainerView(android.content.Context r17, long r18, int r20, org.telegram.ui.ChatActivity r21, org.telegram.ui.ActionBar.Theme.ResourcesProvider r22) {
         /*
             r16 = this;
             r6 = r16
             r8 = r17
-            r0 = r21
+            r7 = r21
             r14 = r22
+            org.telegram.ui.Components.SizeNotifierFrameLayout r0 = r7.contentView
             r6.<init>(r8, r0)
             r15 = 0
             r6.shouldLiftMentions = r15
-            android.graphics.Rect r1 = new android.graphics.Rect
-            r1.<init>()
-            r6.rect = r1
+            android.graphics.Rect r0 = new android.graphics.Rect
+            r0.<init>()
+            r6.rect = r0
             r6.ignoreLayout = r15
             r6.scrollToFirst = r15
             r6.shown = r15
-            org.telegram.ui.Components.MentionsContainerView$$ExternalSyntheticLambda2 r1 = new org.telegram.ui.Components.MentionsContainerView$$ExternalSyntheticLambda2
-            r1.<init>(r6)
-            r6.updateVisibilityRunnable = r1
+            org.telegram.ui.Components.MentionsContainerView$$ExternalSyntheticLambda3 r0 = new org.telegram.ui.Components.MentionsContainerView$$ExternalSyntheticLambda3
+            r0.<init>(r6)
+            r6.updateVisibilityRunnable = r0
+            r13 = -1
+            r6.animationIndex = r13
             r6.listViewHiding = r15
-            r1 = 0
-            r6.hideT = r1
+            r0 = 0
+            r6.hideT = r0
             r6.switchLayoutManagerOnEnd = r15
+            r6.chatActivity = r7
+            org.telegram.ui.Components.SizeNotifierFrameLayout r0 = r7.contentView
             r6.sizeNotifierFrameLayout = r0
             r6.resourcesProvider = r14
             r6.drawBlur = r15
@@ -139,18 +149,18 @@ public class MentionsContainerView extends BlurredFrameLayout {
             r6.linearLayoutManager = r0
             r1 = 1
             r0.setOrientation(r1)
-            org.telegram.ui.Components.MentionsContainerView$2 r7 = new org.telegram.ui.Components.MentionsContainerView$2
+            org.telegram.ui.Components.MentionsContainerView$2 r9 = new org.telegram.ui.Components.MentionsContainerView$2
             r3 = 100
             r4 = 0
             r5 = 0
-            r0 = r7
+            r0 = r9
             r1 = r16
             r2 = r17
             r0.<init>(r2, r3, r4, r5)
-            r6.gridLayoutManager = r7
+            r6.gridLayoutManager = r9
             org.telegram.ui.Components.MentionsContainerView$3 r0 = new org.telegram.ui.Components.MentionsContainerView$3
             r0.<init>()
-            r7.setSpanSizeLookup(r0)
+            r9.setSpanSizeLookup(r0)
             androidx.recyclerview.widget.DefaultItemAnimator r0 = new androidx.recyclerview.widget.DefaultItemAnimator
             r0.<init>()
             r1 = 150(0x96, double:7.4E-322)
@@ -169,12 +179,14 @@ public class MentionsContainerView extends BlurredFrameLayout {
             androidx.recyclerview.widget.LinearLayoutManager r1 = r6.linearLayoutManager
             r0.setLayoutManager(r1)
             org.telegram.ui.Adapters.MentionsAdapter r0 = new org.telegram.ui.Adapters.MentionsAdapter
-            org.telegram.ui.Components.MentionsContainerView$4 r13 = new org.telegram.ui.Components.MentionsContainerView$4
-            r13.<init>()
+            org.telegram.ui.Components.MentionsContainerView$4 r1 = new org.telegram.ui.Components.MentionsContainerView$4
+            r1.<init>(r7)
             r9 = 0
             r7 = r0
             r10 = r18
             r12 = r20
+            r2 = -1
+            r13 = r1
             r7.<init>(r8, r9, r10, r12, r13, r14)
             r6.adapter = r0
             org.telegram.ui.Adapters.PaddedListAdapter r1 = new org.telegram.ui.Adapters.PaddedListAdapter
@@ -183,14 +195,13 @@ public class MentionsContainerView extends BlurredFrameLayout {
             org.telegram.ui.Components.MentionsContainerView$MentionsListView r0 = r6.listView
             r0.setAdapter(r1)
             org.telegram.ui.Components.MentionsContainerView$MentionsListView r0 = r6.listView
-            r1 = -1
-            r2 = -1082130432(0xffffffffbvar_, float:-1.0)
-            android.widget.FrameLayout$LayoutParams r1 = org.telegram.ui.Components.LayoutHelper.createFrame(r1, r2)
+            r1 = -1082130432(0xffffffffbvar_, float:-1.0)
+            android.widget.FrameLayout$LayoutParams r1 = org.telegram.ui.Components.LayoutHelper.createFrame(r2, r1)
             r6.addView(r0, r1)
             r6.setReversed(r15)
             return
         */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.MentionsContainerView.<init>(android.content.Context, long, int, org.telegram.ui.Components.SizeNotifierFrameLayout, org.telegram.ui.ActionBar.Theme$ResourcesProvider):void");
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.MentionsContainerView.<init>(android.content.Context, long, int, org.telegram.ui.ChatActivity, org.telegram.ui.ActionBar.Theme$ResourcesProvider):void");
     }
 
     public void onPanTransitionStart() {
@@ -338,6 +349,11 @@ public class MentionsContainerView extends BlurredFrameLayout {
     }
 
     /* access modifiers changed from: private */
+    public /* synthetic */ void lambda$new$1() {
+        NotificationCenter.getInstance(UserConfig.selectedAccount).doOnIdle(new MentionsContainerView$$ExternalSyntheticLambda4(this));
+    }
+
+    /* access modifiers changed from: private */
     public /* synthetic */ void lambda$new$0() {
         updateListViewTranslation(!this.shown, true);
     }
@@ -368,7 +384,7 @@ public class MentionsContainerView extends BlurredFrameLayout {
         if (springAnimation != null) {
             springAnimation.cancel();
         }
-        AndroidUtilities.runOnUIThread(this.updateVisibilityRunnable);
+        AndroidUtilities.runOnUIThread(this.updateVisibilityRunnable, this.chatActivity.fragmentOpened ? 0 : 50);
         if (z) {
             onOpen();
         } else {
@@ -424,12 +440,15 @@ public class MentionsContainerView extends BlurredFrameLayout {
                         }
                         return;
                     }
+                    int i2 = UserConfig.selectedAccount;
+                    this.animationIndex = NotificationCenter.getInstance(i2).setAnimationInProgress(this.animationIndex, (int[]) null);
                     SpringAnimation spring = new SpringAnimation(new FloatValueHolder(translationY)).setSpring(new SpringForce(f4).setDampingRatio(1.0f).setStiffness(550.0f));
                     this.listViewTranslationAnimator = spring;
-                    spring.addUpdateListener(new MentionsContainerView$$ExternalSyntheticLambda1(this, f5, f6, translationY, f4));
+                    spring.addUpdateListener(new MentionsContainerView$$ExternalSyntheticLambda2(this, f5, f6, translationY, f4));
                     if (z) {
-                        this.listViewTranslationAnimator.addEndListener(new MentionsContainerView$$ExternalSyntheticLambda0(this, z));
+                        this.listViewTranslationAnimator.addEndListener(new MentionsContainerView$$ExternalSyntheticLambda1(this, z));
                     }
+                    this.listViewTranslationAnimator.addEndListener(new MentionsContainerView$$ExternalSyntheticLambda0(this, i2));
                     this.listViewTranslationAnimator.start();
                     return;
                 }
@@ -446,13 +465,13 @@ public class MentionsContainerView extends BlurredFrameLayout {
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$updateListViewTranslation$1(float f, float f2, float f3, float f4, DynamicAnimation dynamicAnimation, float f5, float f6) {
+    public /* synthetic */ void lambda$updateListViewTranslation$2(float f, float f2, float f3, float f4, DynamicAnimation dynamicAnimation, float f5, float f6) {
         this.listView.setTranslationY(f5);
         this.hideT = AndroidUtilities.lerp(f, f2, (f5 - f3) / (f4 - f3));
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$updateListViewTranslation$2(boolean z, DynamicAnimation dynamicAnimation, boolean z2, float f, float f2) {
+    public /* synthetic */ void lambda$updateListViewTranslation$3(boolean z, DynamicAnimation dynamicAnimation, boolean z2, float f, float f2) {
         if (!z2) {
             this.listViewTranslationAnimator = null;
             setVisibility(z ? 8 : 0);
@@ -463,6 +482,11 @@ public class MentionsContainerView extends BlurredFrameLayout {
                 updateVisibility(true);
             }
         }
+    }
+
+    /* access modifiers changed from: private */
+    public /* synthetic */ void lambda$updateListViewTranslation$4(int i, DynamicAnimation dynamicAnimation, boolean z, float f, float f2) {
+        NotificationCenter.getInstance(i).onAnimationFinish(this.animationIndex);
     }
 
     public class MentionsListView extends RecyclerListView {

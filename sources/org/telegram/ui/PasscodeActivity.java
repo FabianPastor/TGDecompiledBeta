@@ -279,7 +279,7 @@ public class PasscodeActivity extends BaseFragment implements NotificationCenter
             r0.lockImageView = r9
             r9.setFocusable(r4)
             org.telegram.ui.Components.RLottieImageView r9 = r0.lockImageView
-            r12 = 2131558555(0x7f0d009b, float:1.874243E38)
+            r12 = 2131558557(0x7f0d009d, float:1.8742433E38)
             r6 = 120(0x78, float:1.68E-43)
             r9.setAnimation(r12, r6, r6)
             org.telegram.ui.Components.RLottieImageView r9 = r0.lockImageView

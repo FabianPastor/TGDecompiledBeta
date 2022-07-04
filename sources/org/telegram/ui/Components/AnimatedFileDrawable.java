@@ -161,6 +161,10 @@ public class AnimatedFileDrawable extends BitmapDrawable implements Animatable {
         return i;
     }
 
+    static {
+        new ScheduledThreadPoolExecutor(4, new ThreadPoolExecutor.DiscardPolicy());
+    }
+
     /* access modifiers changed from: private */
     public void invalidateInternal() {
         for (int i = 0; i < this.parents.size(); i++) {

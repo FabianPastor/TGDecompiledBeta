@@ -53,7 +53,7 @@ public class FilePathDatabase {
             } else {
                 int intValue = this.database.executeInt("PRAGMA user_version", new Object[0]).intValue();
                 if (BuildVars.LOGS_ENABLED) {
-                    FileLog.d("current db version = " + intValue);
+                    FileLog.d("current files db version = " + intValue);
                 }
                 if (intValue == 0) {
                     throw new Exception("malformed");
@@ -116,13 +116,19 @@ public class FilePathDatabase {
     }
 
     public String getPath(long j, int i, int i2, boolean z) {
+        long j2 = j;
+        int i3 = i;
+        int i4 = i2;
         if (!z) {
             String str = null;
             try {
                 SQLiteDatabase sQLiteDatabase = this.database;
-                SQLiteCursor queryFinalized = sQLiteDatabase.queryFinalized("SELECT path FROM paths WHERE document_id = " + j + " AND dc_id = " + i + " AND type = " + i2, new Object[0]);
+                SQLiteCursor queryFinalized = sQLiteDatabase.queryFinalized("SELECT path FROM paths WHERE document_id = " + j2 + " AND dc_id = " + i3 + " AND type = " + i4, new Object[0]);
                 if (queryFinalized.next()) {
                     str = queryFinalized.stringValue(0);
+                    if (BuildVars.DEBUG_VERSION) {
+                        FileLog.d("get file path id=" + j2 + " dc=" + i3 + " type=" + i4 + " path=" + str);
+                    }
                 }
                 queryFinalized.dispose();
             } catch (SQLiteException e) {
@@ -133,7 +139,7 @@ public class FilePathDatabase {
             CountDownLatch countDownLatch = new CountDownLatch(1);
             String[] strArr = new String[1];
             System.currentTimeMillis();
-            this.dispatchQueue.postRunnable(new FilePathDatabase$$ExternalSyntheticLambda2(this, j, i, i2, strArr, countDownLatch));
+            this.dispatchQueue.postRunnable(new FilePathDatabase$$ExternalSyntheticLambda3(this, j, i, i2, strArr, countDownLatch));
             try {
                 countDownLatch.await();
             } catch (Exception unused) {
@@ -151,6 +157,9 @@ public class FilePathDatabase {
             SQLiteCursor queryFinalized = sQLiteDatabase.queryFinalized("SELECT path FROM paths WHERE document_id = " + j + " AND dc_id = " + i + " AND type = " + i2, new Object[0]);
             if (queryFinalized.next()) {
                 strArr[0] = queryFinalized.stringValue(0);
+                if (BuildVars.DEBUG_VERSION) {
+                    FileLog.d("get file path id=" + j + " dc=" + i + " type=" + i2 + " path=" + strArr[0]);
+                }
             }
             queryFinalized.dispose();
         } catch (SQLiteException e) {
@@ -160,11 +169,14 @@ public class FilePathDatabase {
     }
 
     public void putPath(long j, int i, int i2, String str) {
-        this.dispatchQueue.postRunnable(new FilePathDatabase$$ExternalSyntheticLambda3(this, str, j, i, i2));
+        this.dispatchQueue.postRunnable(new FilePathDatabase$$ExternalSyntheticLambda2(this, j, i, i2, str));
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$putPath$2(String str, long j, int i, int i2) {
+    public /* synthetic */ void lambda$putPath$2(long j, int i, int i2, String str) {
+        if (BuildVars.DEBUG_VERSION) {
+            FileLog.d("put file path id=" + j + " dc=" + i + " type=" + i2 + " path=" + str);
+        }
         if (str != null) {
             try {
                 SQLitePreparedStatement executeFast = this.database.executeFast("REPLACE INTO paths VALUES(?, ?, ?, ?)");

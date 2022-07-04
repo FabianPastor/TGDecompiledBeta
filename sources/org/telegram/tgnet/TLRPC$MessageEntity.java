@@ -27,6 +27,9 @@ public abstract class TLRPC$MessageEntity extends TLObject {
             case -1090087980:
                 tLRPC$MessageEntity = new TLRPC$TL_messageEntityStrike();
                 break;
+            case -727707947:
+                tLRPC$MessageEntity = new TLRPC$TL_messageEntityCustomEmoji();
+                break;
             case -595914432:
                 tLRPC$MessageEntity = new TLRPC$TL_messageEntityMentionName();
                 break;

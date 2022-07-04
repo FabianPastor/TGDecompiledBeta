@@ -1677,10 +1677,12 @@
     <public type="raw" name="player_prev" id="NUM" />
     <public type="raw" name="premium_object_adsbubble" id="NUM" />
     <public type="raw" name="premium_object_bubble" id="NUM" />
+    <public type="raw" name="premium_object_fire" id="NUM" />
     <public type="raw" name="premium_object_folder" id="NUM" />
     <public type="raw" name="premium_object_like" id="NUM" />
     <public type="raw" name="premium_object_noads" id="NUM" />
     <public type="raw" name="premium_object_settings" id="NUM" />
+    <public type="raw" name="premium_object_star2" id="NUM" />
     <public type="raw" name="premium_object_user" id="NUM" />
     <public type="raw" name="premium_object_video" id="NUM" />
     <public type="raw" name="premium_object_video2" id="NUM" />

@@ -401,7 +401,7 @@ public class MessagesController extends BaseController implements NotificationCe
     public static int UPDATE_MASK_USER_PRINT = 64;
     private static volatile long lastPasswordCheckTime;
     private static volatile long lastThemeCheckTime;
-    private static volatile Object[] lockObjects = new Object[4];
+    private static final Object[] lockObjects = new Object[4];
     private int DIALOGS_LOAD_TYPE_CACHE;
     private int DIALOGS_LOAD_TYPE_CHANNEL;
     private int DIALOGS_LOAD_TYPE_UNKNOWN;
@@ -13563,7 +13563,7 @@ public class MessagesController extends BaseController implements NotificationCe
     /* JADX WARNING: type inference failed for: r1v18 */
     /* JADX WARNING: type inference failed for: r1v19 */
     /* access modifiers changed from: private */
-    /* JADX WARNING: Incorrect type for immutable var: ssa=int, code=?, for r1v12, types: [int, boolean] */
+    /* JADX WARNING: Incorrect type for immutable var: ssa=int, code=?, for r1v12, types: [boolean, int] */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public /* synthetic */ void lambda$processLoadedDialogs$178(org.telegram.tgnet.TLRPC$Message r27, int r28, org.telegram.tgnet.TLRPC$messages_Dialogs r29, java.util.ArrayList r30, boolean r31, int r32, androidx.collection.LongSparseArray r33, androidx.collection.LongSparseArray r34, androidx.collection.LongSparseArray r35, int r36, boolean r37, int r38, java.util.ArrayList r39) {
         /*

@@ -137,6 +137,7 @@ public class StarParticlesView extends View {
         /* access modifiers changed from: private */
         public final Bitmap[] stars = new Bitmap[3];
         public boolean startFromCenter;
+        public boolean svg;
         public int type;
         public boolean useBlur;
         public boolean useGradient;
@@ -196,10 +197,19 @@ public class StarParticlesView extends View {
                 int i3 = this.type;
                 if (i3 == 9) {
                     this.stars[i] = SvgHelper.getBitmap(i == 0 ? NUM : i == 1 ? NUM : NUM, i2, i2, ColorUtils.setAlphaComponent(Theme.getColor(this.colorKey), 30));
+                    this.svg = true;
                 } else if (i3 == 3) {
                     this.stars[i] = SvgHelper.getBitmap(i == 0 ? NUM : i == 1 ? NUM : NUM, i2, i2, ColorUtils.setAlphaComponent(Theme.getColor(this.colorKey), 30));
+                    this.svg = true;
                 } else if (i3 == 7) {
                     this.stars[i] = SvgHelper.getBitmap(i == 0 ? NUM : i == 1 ? NUM : NUM, i2, i2, ColorUtils.setAlphaComponent(Theme.getColor(this.colorKey), 30));
+                    this.svg = true;
+                } else if (i3 == 1001) {
+                    this.stars[i] = SvgHelper.getBitmap(NUM, i2, i2, ColorUtils.setAlphaComponent(Theme.getColor(this.colorKey), 30));
+                    this.svg = true;
+                } else if (i3 == 1002) {
+                    this.stars[i] = SvgHelper.getBitmap(NUM, i2, i2, ColorUtils.setAlphaComponent(Theme.getColor(this.colorKey), 30));
+                    this.svg = true;
                 } else {
                     Bitmap createBitmap = Bitmap.createBitmap(i2, i2, Bitmap.Config.ARGB_8888);
                     this.stars[i] = createBitmap;
@@ -237,7 +247,11 @@ public class StarParticlesView extends View {
                             if (this.roundEffect) {
                                 mainGradientPaint.setPathEffect(new CornerPathEffect(AndroidUtilities.dpf2(((float) this.size1) / 5.0f)));
                             }
-                            mainGradientPaint.setAlpha(120);
+                            if (this.useBlur) {
+                                mainGradientPaint.setAlpha(60);
+                            } else {
+                                mainGradientPaint.setAlpha(120);
+                            }
                             canvas.drawPath(path, mainGradientPaint);
                             mainGradientPaint.setPathEffect((PathEffect) null);
                             mainGradientPaint.setAlpha(255);
@@ -505,14 +519,13 @@ public class StarParticlesView extends View {
                 double atan2 = Math.atan2((double) (this.x - Drawable.this.rect.centerX()), (double) (this.y - Drawable.this.rect.centerY()));
                 this.vecX = (float) Math.sin(atan2);
                 this.vecY = (float) Math.cos(atan2);
-                int i4 = Drawable.this.type;
-                if (i4 == 9 || i4 == 3 || i4 == 7) {
+                if (Drawable.this.svg) {
                     this.alpha = (int) ((((float) (Utilities.fastRandom.nextInt(50) + 50)) / 100.0f) * 120.0f);
                 } else {
                     this.alpha = (int) ((((float) (Utilities.fastRandom.nextInt(50) + 50)) / 100.0f) * 255.0f);
                 }
-                int i5 = Drawable.this.type;
-                if ((i5 == 6 && ((i = this.starIndex) == 1 || i == 2)) || i5 == 9 || i5 == 3 || i5 == 7) {
+                int i4 = Drawable.this.type;
+                if ((i4 == 6 && ((i = this.starIndex) == 1 || i == 2)) || i4 == 9 || i4 == 3 || i4 == 7) {
                     this.randomRotate = (float) ((int) ((((float) (Utilities.fastRandom.nextInt() % 100)) / 100.0f) * 45.0f));
                 }
                 Drawable drawable4 = Drawable.this;

@@ -85,6 +85,7 @@ public class NotificationsController extends BaseController {
     public static final int TYPE_PRIVATE = 1;
     protected static AudioManager audioManager = ((AudioManager) ApplicationLoader.applicationContext.getSystemService("audio"));
     public static long globalSecretChatId = DialogObject.makeEncryptedDialogId(1);
+    private static final Object[] lockObjects = new Object[4];
     /* access modifiers changed from: private */
     public static NotificationManagerCompat notificationManager;
     private static DispatchQueue notificationsQueue = new DispatchQueue("notificationsQueue");
@@ -152,12 +153,15 @@ public class NotificationsController extends BaseController {
             systemNotificationManager = (NotificationManager) ApplicationLoader.applicationContext.getSystemService("notification");
             checkOtherNotificationsChannel();
         }
+        for (int i = 0; i < 4; i++) {
+            lockObjects[i] = new Object();
+        }
     }
 
     public static NotificationsController getInstance(int i) {
         NotificationsController notificationsController = Instance[i];
         if (notificationsController == null) {
-            synchronized (NotificationsController.class) {
+            synchronized (lockObjects[i]) {
                 notificationsController = Instance[i];
                 if (notificationsController == null) {
                     NotificationsController[] notificationsControllerArr = Instance;

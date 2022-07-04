@@ -235,7 +235,7 @@ public class SharedConfig {
         return i;
     }
 
-    /* JADX WARNING: Code restructure failed: missing block: B:78:0x03ae, code lost:
+    /* JADX WARNING: Code restructure failed: missing block: B:80:0x03b0, code lost:
         return;
      */
     /* JADX WARNING: Removed duplicated region for block: B:40:0x0161 A[Catch:{ Exception -> 0x017f }] */
@@ -246,125 +246,124 @@ public class SharedConfig {
     /* JADX WARNING: Removed duplicated region for block: B:62:0x01f9 A[Catch:{ Exception -> 0x017f }] */
     /* JADX WARNING: Removed duplicated region for block: B:65:0x021e A[Catch:{ Exception -> 0x017f }] */
     /* JADX WARNING: Removed duplicated region for block: B:66:0x0221 A[Catch:{ Exception -> 0x017f }] */
-    /* JADX WARNING: Removed duplicated region for block: B:71:0x03a1 A[Catch:{ Exception -> 0x03a7 }] */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public static void loadConfig() {
         /*
             java.lang.Object r0 = sync
             monitor-enter(r0)
-            boolean r1 = configLoaded     // Catch:{ all -> 0x03af }
-            if (r1 != 0) goto L_0x03ad
-            android.content.Context r1 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ all -> 0x03af }
+            boolean r1 = configLoaded     // Catch:{ all -> 0x03b1 }
+            if (r1 != 0) goto L_0x03af
+            android.content.Context r1 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ all -> 0x03b1 }
             if (r1 != 0) goto L_0x000d
-            goto L_0x03ad
+            goto L_0x03af
         L_0x000d:
-            android.content.Context r1 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ all -> 0x03af }
+            android.content.Context r1 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ all -> 0x03b1 }
             java.lang.String r2 = "background_activity"
             r3 = 0
-            android.content.SharedPreferences r1 = r1.getSharedPreferences(r2, r3)     // Catch:{ all -> 0x03af }
-            android.content.SharedPreferences unused = org.telegram.messenger.SharedConfig.BackgroundActivityPrefs.prefs = r1     // Catch:{ all -> 0x03af }
-            android.content.Context r1 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ all -> 0x03af }
+            android.content.SharedPreferences r1 = r1.getSharedPreferences(r2, r3)     // Catch:{ all -> 0x03b1 }
+            android.content.SharedPreferences unused = org.telegram.messenger.SharedConfig.BackgroundActivityPrefs.prefs = r1     // Catch:{ all -> 0x03b1 }
+            android.content.Context r1 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ all -> 0x03b1 }
             java.lang.String r2 = "userconfing"
-            android.content.SharedPreferences r1 = r1.getSharedPreferences(r2, r3)     // Catch:{ all -> 0x03af }
+            android.content.SharedPreferences r1 = r1.getSharedPreferences(r2, r3)     // Catch:{ all -> 0x03b1 }
             java.lang.String r2 = "saveIncomingPhotos"
-            boolean r2 = r1.getBoolean(r2, r3)     // Catch:{ all -> 0x03af }
-            saveIncomingPhotos = r2     // Catch:{ all -> 0x03af }
+            boolean r2 = r1.getBoolean(r2, r3)     // Catch:{ all -> 0x03b1 }
+            saveIncomingPhotos = r2     // Catch:{ all -> 0x03b1 }
             java.lang.String r2 = "passcodeHash1"
             java.lang.String r4 = ""
-            java.lang.String r2 = r1.getString(r2, r4)     // Catch:{ all -> 0x03af }
-            passcodeHash = r2     // Catch:{ all -> 0x03af }
+            java.lang.String r2 = r1.getString(r2, r4)     // Catch:{ all -> 0x03b1 }
+            passcodeHash = r2     // Catch:{ all -> 0x03b1 }
             java.lang.String r2 = "appLocked"
-            boolean r2 = r1.getBoolean(r2, r3)     // Catch:{ all -> 0x03af }
-            appLocked = r2     // Catch:{ all -> 0x03af }
+            boolean r2 = r1.getBoolean(r2, r3)     // Catch:{ all -> 0x03b1 }
+            appLocked = r2     // Catch:{ all -> 0x03b1 }
             java.lang.String r2 = "passcodeType"
-            int r2 = r1.getInt(r2, r3)     // Catch:{ all -> 0x03af }
-            passcodeType = r2     // Catch:{ all -> 0x03af }
+            int r2 = r1.getInt(r2, r3)     // Catch:{ all -> 0x03b1 }
+            passcodeType = r2     // Catch:{ all -> 0x03b1 }
             java.lang.String r2 = "passcodeRetryInMs"
             r4 = 0
-            long r6 = r1.getLong(r2, r4)     // Catch:{ all -> 0x03af }
-            passcodeRetryInMs = r6     // Catch:{ all -> 0x03af }
+            long r6 = r1.getLong(r2, r4)     // Catch:{ all -> 0x03b1 }
+            passcodeRetryInMs = r6     // Catch:{ all -> 0x03b1 }
             java.lang.String r2 = "lastUptimeMillis"
-            long r4 = r1.getLong(r2, r4)     // Catch:{ all -> 0x03af }
-            lastUptimeMillis = r4     // Catch:{ all -> 0x03af }
+            long r4 = r1.getLong(r2, r4)     // Catch:{ all -> 0x03b1 }
+            lastUptimeMillis = r4     // Catch:{ all -> 0x03b1 }
             java.lang.String r2 = "badPasscodeTries"
-            int r2 = r1.getInt(r2, r3)     // Catch:{ all -> 0x03af }
-            badPasscodeTries = r2     // Catch:{ all -> 0x03af }
+            int r2 = r1.getInt(r2, r3)     // Catch:{ all -> 0x03b1 }
+            badPasscodeTries = r2     // Catch:{ all -> 0x03b1 }
             java.lang.String r2 = "autoLockIn"
             r4 = 3600(0xe10, float:5.045E-42)
-            int r2 = r1.getInt(r2, r4)     // Catch:{ all -> 0x03af }
-            autoLockIn = r2     // Catch:{ all -> 0x03af }
+            int r2 = r1.getInt(r2, r4)     // Catch:{ all -> 0x03b1 }
+            autoLockIn = r2     // Catch:{ all -> 0x03b1 }
             java.lang.String r2 = "lastPauseTime"
-            int r2 = r1.getInt(r2, r3)     // Catch:{ all -> 0x03af }
-            lastPauseTime = r2     // Catch:{ all -> 0x03af }
+            int r2 = r1.getInt(r2, r3)     // Catch:{ all -> 0x03b1 }
+            lastPauseTime = r2     // Catch:{ all -> 0x03b1 }
             java.lang.String r2 = "useFingerprint"
             r4 = 1
-            boolean r2 = r1.getBoolean(r2, r4)     // Catch:{ all -> 0x03af }
-            useFingerprint = r2     // Catch:{ all -> 0x03af }
+            boolean r2 = r1.getBoolean(r2, r4)     // Catch:{ all -> 0x03b1 }
+            useFingerprint = r2     // Catch:{ all -> 0x03b1 }
             java.lang.String r2 = "lastUpdateVersion2"
             java.lang.String r5 = "3.5"
-            java.lang.String r2 = r1.getString(r2, r5)     // Catch:{ all -> 0x03af }
-            lastUpdateVersion = r2     // Catch:{ all -> 0x03af }
+            java.lang.String r2 = r1.getString(r2, r5)     // Catch:{ all -> 0x03b1 }
+            lastUpdateVersion = r2     // Catch:{ all -> 0x03b1 }
             java.lang.String r2 = "allowScreenCapture"
-            boolean r2 = r1.getBoolean(r2, r3)     // Catch:{ all -> 0x03af }
-            allowScreenCapture = r2     // Catch:{ all -> 0x03af }
+            boolean r2 = r1.getBoolean(r2, r3)     // Catch:{ all -> 0x03b1 }
+            allowScreenCapture = r2     // Catch:{ all -> 0x03b1 }
             java.lang.String r2 = "lastLocalId"
             r5 = -210000(0xfffffffffffccbb0, float:NaN)
-            int r2 = r1.getInt(r2, r5)     // Catch:{ all -> 0x03af }
-            lastLocalId = r2     // Catch:{ all -> 0x03af }
+            int r2 = r1.getInt(r2, r5)     // Catch:{ all -> 0x03b1 }
+            lastLocalId = r2     // Catch:{ all -> 0x03b1 }
             java.lang.String r2 = "pushString2"
             java.lang.String r5 = ""
-            java.lang.String r2 = r1.getString(r2, r5)     // Catch:{ all -> 0x03af }
-            pushString = r2     // Catch:{ all -> 0x03af }
+            java.lang.String r2 = r1.getString(r2, r5)     // Catch:{ all -> 0x03b1 }
+            pushString = r2     // Catch:{ all -> 0x03b1 }
             java.lang.String r2 = "pushStatSent"
-            boolean r2 = r1.getBoolean(r2, r3)     // Catch:{ all -> 0x03af }
-            pushStatSent = r2     // Catch:{ all -> 0x03af }
+            boolean r2 = r1.getBoolean(r2, r3)     // Catch:{ all -> 0x03b1 }
+            pushStatSent = r2     // Catch:{ all -> 0x03b1 }
             java.lang.String r2 = "passportConfigJson"
             java.lang.String r5 = ""
-            java.lang.String r2 = r1.getString(r2, r5)     // Catch:{ all -> 0x03af }
-            passportConfigJson = r2     // Catch:{ all -> 0x03af }
+            java.lang.String r2 = r1.getString(r2, r5)     // Catch:{ all -> 0x03b1 }
+            passportConfigJson = r2     // Catch:{ all -> 0x03b1 }
             java.lang.String r2 = "passportConfigHash"
-            int r2 = r1.getInt(r2, r3)     // Catch:{ all -> 0x03af }
-            passportConfigHash = r2     // Catch:{ all -> 0x03af }
+            int r2 = r1.getInt(r2, r3)     // Catch:{ all -> 0x03b1 }
+            passportConfigHash = r2     // Catch:{ all -> 0x03b1 }
             java.lang.String r2 = "storageCacheDir"
             r5 = 0
-            java.lang.String r2 = r1.getString(r2, r5)     // Catch:{ all -> 0x03af }
-            storageCacheDir = r2     // Catch:{ all -> 0x03af }
+            java.lang.String r2 = r1.getString(r2, r5)     // Catch:{ all -> 0x03b1 }
+            storageCacheDir = r2     // Catch:{ all -> 0x03b1 }
             java.lang.String r2 = "pushAuthKey"
-            java.lang.String r2 = r1.getString(r2, r5)     // Catch:{ all -> 0x03af }
-            boolean r6 = android.text.TextUtils.isEmpty(r2)     // Catch:{ all -> 0x03af }
+            java.lang.String r2 = r1.getString(r2, r5)     // Catch:{ all -> 0x03b1 }
+            boolean r6 = android.text.TextUtils.isEmpty(r2)     // Catch:{ all -> 0x03b1 }
             if (r6 != 0) goto L_0x00d4
-            byte[] r2 = android.util.Base64.decode(r2, r3)     // Catch:{ all -> 0x03af }
-            pushAuthKey = r2     // Catch:{ all -> 0x03af }
+            byte[] r2 = android.util.Base64.decode(r2, r3)     // Catch:{ all -> 0x03b1 }
+            pushAuthKey = r2     // Catch:{ all -> 0x03b1 }
         L_0x00d4:
-            java.lang.String r2 = passcodeHash     // Catch:{ all -> 0x03af }
-            int r2 = r2.length()     // Catch:{ all -> 0x03af }
+            java.lang.String r2 = passcodeHash     // Catch:{ all -> 0x03b1 }
+            int r2 = r2.length()     // Catch:{ all -> 0x03b1 }
             if (r2 <= 0) goto L_0x00ed
-            int r2 = lastPauseTime     // Catch:{ all -> 0x03af }
+            int r2 = lastPauseTime     // Catch:{ all -> 0x03b1 }
             if (r2 != 0) goto L_0x00ed
-            long r6 = android.os.SystemClock.elapsedRealtime()     // Catch:{ all -> 0x03af }
+            long r6 = android.os.SystemClock.elapsedRealtime()     // Catch:{ all -> 0x03b1 }
             r8 = 1000(0x3e8, double:4.94E-321)
             long r6 = r6 / r8
             r8 = 600(0x258, double:2.964E-321)
             long r6 = r6 - r8
-            int r2 = (int) r6     // Catch:{ all -> 0x03af }
-            lastPauseTime = r2     // Catch:{ all -> 0x03af }
+            int r2 = (int) r6     // Catch:{ all -> 0x03b1 }
+            lastPauseTime = r2     // Catch:{ all -> 0x03b1 }
         L_0x00ed:
             java.lang.String r2 = "passcodeSalt"
             java.lang.String r6 = ""
-            java.lang.String r2 = r1.getString(r2, r6)     // Catch:{ all -> 0x03af }
-            int r6 = r2.length()     // Catch:{ all -> 0x03af }
+            java.lang.String r2 = r1.getString(r2, r6)     // Catch:{ all -> 0x03b1 }
+            int r6 = r2.length()     // Catch:{ all -> 0x03b1 }
             if (r6 <= 0) goto L_0x0102
-            byte[] r2 = android.util.Base64.decode(r2, r3)     // Catch:{ all -> 0x03af }
-            passcodeSalt = r2     // Catch:{ all -> 0x03af }
+            byte[] r2 = android.util.Base64.decode(r2, r3)     // Catch:{ all -> 0x03b1 }
+            passcodeSalt = r2     // Catch:{ all -> 0x03b1 }
             goto L_0x0106
         L_0x0102:
-            byte[] r2 = new byte[r3]     // Catch:{ all -> 0x03af }
-            passcodeSalt = r2     // Catch:{ all -> 0x03af }
+            byte[] r2 = new byte[r3]     // Catch:{ all -> 0x03b1 }
+            passcodeSalt = r2     // Catch:{ all -> 0x03b1 }
         L_0x0106:
             java.lang.String r2 = "appUpdateCheckTime"
-            long r6 = java.lang.System.currentTimeMillis()     // Catch:{ all -> 0x03af }
-            long r6 = r1.getLong(r2, r6)     // Catch:{ all -> 0x03af }
-            lastUpdateCheckTime = r6     // Catch:{ all -> 0x03af }
+            long r6 = java.lang.System.currentTimeMillis()     // Catch:{ all -> 0x03b1 }
+            long r6 = r1.getLong(r2, r6)     // Catch:{ all -> 0x03b1 }
+            lastUpdateCheckTime = r6     // Catch:{ all -> 0x03b1 }
             java.lang.String r2 = "appUpdate"
             java.lang.String r2 = r1.getString(r2, r5)     // Catch:{ Exception -> 0x017f }
             if (r2 == 0) goto L_0x013e
@@ -422,240 +421,241 @@ public class SharedConfig {
             goto L_0x0183
         L_0x017f:
             r1 = move-exception
-            org.telegram.messenger.FileLog.e((java.lang.Throwable) r1)     // Catch:{ all -> 0x03af }
+            org.telegram.messenger.FileLog.e((java.lang.Throwable) r1)     // Catch:{ all -> 0x03b1 }
         L_0x0183:
-            android.content.Context r1 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ all -> 0x03af }
+            android.content.Context r1 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ all -> 0x03b1 }
             java.lang.String r2 = "mainconfig"
-            android.content.SharedPreferences r1 = r1.getSharedPreferences(r2, r3)     // Catch:{ all -> 0x03af }
+            android.content.SharedPreferences r1 = r1.getSharedPreferences(r2, r3)     // Catch:{ all -> 0x03b1 }
             java.lang.String r2 = "save_gallery"
-            boolean r2 = r1.getBoolean(r2, r3)     // Catch:{ all -> 0x03af }
+            boolean r2 = r1.getBoolean(r2, r3)     // Catch:{ all -> 0x03b1 }
             if (r2 == 0) goto L_0x01ac
             r2 = 7
-            saveToGalleryFlags = r2     // Catch:{ all -> 0x03af }
-            android.content.SharedPreferences$Editor r2 = r1.edit()     // Catch:{ all -> 0x03af }
+            saveToGalleryFlags = r2     // Catch:{ all -> 0x03b1 }
+            android.content.SharedPreferences$Editor r2 = r1.edit()     // Catch:{ all -> 0x03b1 }
             java.lang.String r6 = "save_gallery"
-            android.content.SharedPreferences$Editor r2 = r2.remove(r6)     // Catch:{ all -> 0x03af }
+            android.content.SharedPreferences$Editor r2 = r2.remove(r6)     // Catch:{ all -> 0x03b1 }
             java.lang.String r6 = "save_gallery_flags"
-            int r7 = saveToGalleryFlags     // Catch:{ all -> 0x03af }
-            android.content.SharedPreferences$Editor r2 = r2.putInt(r6, r7)     // Catch:{ all -> 0x03af }
-            r2.apply()     // Catch:{ all -> 0x03af }
+            int r7 = saveToGalleryFlags     // Catch:{ all -> 0x03b1 }
+            android.content.SharedPreferences$Editor r2 = r2.putInt(r6, r7)     // Catch:{ all -> 0x03b1 }
+            r2.apply()     // Catch:{ all -> 0x03b1 }
             goto L_0x01b4
         L_0x01ac:
             java.lang.String r2 = "save_gallery_flags"
-            int r2 = r1.getInt(r2, r3)     // Catch:{ all -> 0x03af }
-            saveToGalleryFlags = r2     // Catch:{ all -> 0x03af }
+            int r2 = r1.getInt(r2, r3)     // Catch:{ all -> 0x03b1 }
+            saveToGalleryFlags = r2     // Catch:{ all -> 0x03b1 }
         L_0x01b4:
             java.lang.String r2 = "autoplay_gif"
-            boolean r2 = r1.getBoolean(r2, r4)     // Catch:{ all -> 0x03af }
-            autoplayGifs = r2     // Catch:{ all -> 0x03af }
+            boolean r2 = r1.getBoolean(r2, r4)     // Catch:{ all -> 0x03b1 }
+            autoplayGifs = r2     // Catch:{ all -> 0x03b1 }
             java.lang.String r2 = "autoplay_video"
-            boolean r2 = r1.getBoolean(r2, r4)     // Catch:{ all -> 0x03af }
-            autoplayVideo = r2     // Catch:{ all -> 0x03af }
+            boolean r2 = r1.getBoolean(r2, r4)     // Catch:{ all -> 0x03b1 }
+            autoplayVideo = r2     // Catch:{ all -> 0x03b1 }
             java.lang.String r2 = "mapPreviewType"
             r6 = 2
-            int r2 = r1.getInt(r2, r6)     // Catch:{ all -> 0x03af }
-            mapPreviewType = r2     // Catch:{ all -> 0x03af }
+            int r2 = r1.getInt(r2, r6)     // Catch:{ all -> 0x03b1 }
+            mapPreviewType = r2     // Catch:{ all -> 0x03b1 }
             java.lang.String r2 = "raise_to_speak"
-            boolean r2 = r1.getBoolean(r2, r3)     // Catch:{ all -> 0x03af }
-            raiseToSpeak = r2     // Catch:{ all -> 0x03af }
+            boolean r2 = r1.getBoolean(r2, r3)     // Catch:{ all -> 0x03b1 }
+            raiseToSpeak = r2     // Catch:{ all -> 0x03b1 }
             java.lang.String r2 = "custom_tabs"
-            boolean r2 = r1.getBoolean(r2, r4)     // Catch:{ all -> 0x03af }
-            customTabs = r2     // Catch:{ all -> 0x03af }
+            boolean r2 = r1.getBoolean(r2, r4)     // Catch:{ all -> 0x03b1 }
+            customTabs = r2     // Catch:{ all -> 0x03b1 }
             java.lang.String r2 = "direct_share"
-            boolean r2 = r1.getBoolean(r2, r4)     // Catch:{ all -> 0x03af }
-            directShare = r2     // Catch:{ all -> 0x03af }
+            boolean r2 = r1.getBoolean(r2, r4)     // Catch:{ all -> 0x03b1 }
+            directShare = r2     // Catch:{ all -> 0x03b1 }
             java.lang.String r2 = "shuffleMusic"
-            boolean r2 = r1.getBoolean(r2, r3)     // Catch:{ all -> 0x03af }
-            shuffleMusic = r2     // Catch:{ all -> 0x03af }
+            boolean r2 = r1.getBoolean(r2, r3)     // Catch:{ all -> 0x03b1 }
+            shuffleMusic = r2     // Catch:{ all -> 0x03b1 }
             if (r2 != 0) goto L_0x01f9
             java.lang.String r2 = "playOrderReversed"
-            boolean r2 = r1.getBoolean(r2, r3)     // Catch:{ all -> 0x03af }
+            boolean r2 = r1.getBoolean(r2, r3)     // Catch:{ all -> 0x03b1 }
             if (r2 == 0) goto L_0x01f9
             r2 = 1
             goto L_0x01fa
         L_0x01f9:
             r2 = 0
         L_0x01fa:
-            playOrderReversed = r2     // Catch:{ all -> 0x03af }
+            playOrderReversed = r2     // Catch:{ all -> 0x03b1 }
             java.lang.String r2 = "inappCamera"
-            boolean r2 = r1.getBoolean(r2, r4)     // Catch:{ all -> 0x03af }
-            inappCamera = r2     // Catch:{ all -> 0x03af }
+            boolean r2 = r1.getBoolean(r2, r4)     // Catch:{ all -> 0x03b1 }
+            inappCamera = r2     // Catch:{ all -> 0x03b1 }
             java.lang.String r2 = "cameraCache"
-            boolean r2 = r1.contains(r2)     // Catch:{ all -> 0x03af }
-            hasCameraCache = r2     // Catch:{ all -> 0x03af }
-            roundCamera16to9 = r4     // Catch:{ all -> 0x03af }
+            boolean r2 = r1.contains(r2)     // Catch:{ all -> 0x03b1 }
+            hasCameraCache = r2     // Catch:{ all -> 0x03b1 }
+            roundCamera16to9 = r4     // Catch:{ all -> 0x03b1 }
             java.lang.String r2 = "repeatMode"
-            int r2 = r1.getInt(r2, r3)     // Catch:{ all -> 0x03af }
-            repeatMode = r2     // Catch:{ all -> 0x03af }
+            int r2 = r1.getInt(r2, r3)     // Catch:{ all -> 0x03b1 }
+            repeatMode = r2     // Catch:{ all -> 0x03b1 }
             java.lang.String r2 = "fons_size"
-            boolean r7 = org.telegram.messenger.AndroidUtilities.isTablet()     // Catch:{ all -> 0x03af }
+            boolean r7 = org.telegram.messenger.AndroidUtilities.isTablet()     // Catch:{ all -> 0x03b1 }
             if (r7 == 0) goto L_0x0221
             r7 = 18
             goto L_0x0223
         L_0x0221:
             r7 = 16
         L_0x0223:
-            int r2 = r1.getInt(r2, r7)     // Catch:{ all -> 0x03af }
-            fontSize = r2     // Catch:{ all -> 0x03af }
+            int r2 = r1.getInt(r2, r7)     // Catch:{ all -> 0x03b1 }
+            fontSize = r2     // Catch:{ all -> 0x03b1 }
             java.lang.String r2 = "bubbleRadius"
             r7 = 17
-            int r2 = r1.getInt(r2, r7)     // Catch:{ all -> 0x03af }
-            bubbleRadius = r2     // Catch:{ all -> 0x03af }
+            int r2 = r1.getInt(r2, r7)     // Catch:{ all -> 0x03b1 }
+            bubbleRadius = r2     // Catch:{ all -> 0x03b1 }
             java.lang.String r2 = "iv_font_size"
-            int r7 = fontSize     // Catch:{ all -> 0x03af }
-            int r2 = r1.getInt(r2, r7)     // Catch:{ all -> 0x03af }
-            ivFontSize = r2     // Catch:{ all -> 0x03af }
+            int r7 = fontSize     // Catch:{ all -> 0x03b1 }
+            int r2 = r1.getInt(r2, r7)     // Catch:{ all -> 0x03b1 }
+            ivFontSize = r2     // Catch:{ all -> 0x03b1 }
             java.lang.String r2 = "allowBigEmoji"
-            boolean r2 = r1.getBoolean(r2, r4)     // Catch:{ all -> 0x03af }
-            allowBigEmoji = r2     // Catch:{ all -> 0x03af }
+            boolean r2 = r1.getBoolean(r2, r4)     // Catch:{ all -> 0x03b1 }
+            allowBigEmoji = r2     // Catch:{ all -> 0x03b1 }
             java.lang.String r2 = "useSystemEmoji"
-            boolean r2 = r1.getBoolean(r2, r3)     // Catch:{ all -> 0x03af }
-            useSystemEmoji = r2     // Catch:{ all -> 0x03af }
+            boolean r2 = r1.getBoolean(r2, r3)     // Catch:{ all -> 0x03b1 }
+            useSystemEmoji = r2     // Catch:{ all -> 0x03b1 }
             java.lang.String r2 = "streamMedia"
-            boolean r2 = r1.getBoolean(r2, r4)     // Catch:{ all -> 0x03af }
-            streamMedia = r2     // Catch:{ all -> 0x03af }
+            boolean r2 = r1.getBoolean(r2, r4)     // Catch:{ all -> 0x03b1 }
+            streamMedia = r2     // Catch:{ all -> 0x03b1 }
             java.lang.String r2 = "saveStreamMedia"
-            boolean r2 = r1.getBoolean(r2, r4)     // Catch:{ all -> 0x03af }
-            saveStreamMedia = r2     // Catch:{ all -> 0x03af }
+            boolean r2 = r1.getBoolean(r2, r4)     // Catch:{ all -> 0x03b1 }
+            saveStreamMedia = r2     // Catch:{ all -> 0x03b1 }
             java.lang.String r2 = "smoothKeyboard2"
-            boolean r2 = r1.getBoolean(r2, r4)     // Catch:{ all -> 0x03af }
-            smoothKeyboard = r2     // Catch:{ all -> 0x03af }
+            boolean r2 = r1.getBoolean(r2, r4)     // Catch:{ all -> 0x03b1 }
+            smoothKeyboard = r2     // Catch:{ all -> 0x03b1 }
             java.lang.String r2 = "pauseMusicOnRecord"
-            boolean r2 = r1.getBoolean(r2, r3)     // Catch:{ all -> 0x03af }
-            pauseMusicOnRecord = r2     // Catch:{ all -> 0x03af }
+            boolean r2 = r1.getBoolean(r2, r3)     // Catch:{ all -> 0x03b1 }
+            pauseMusicOnRecord = r2     // Catch:{ all -> 0x03b1 }
             java.lang.String r2 = "chatBlur"
-            boolean r2 = r1.getBoolean(r2, r4)     // Catch:{ all -> 0x03af }
-            chatBlur = r2     // Catch:{ all -> 0x03af }
+            boolean r2 = r1.getBoolean(r2, r4)     // Catch:{ all -> 0x03b1 }
+            chatBlur = r2     // Catch:{ all -> 0x03b1 }
             java.lang.String r2 = "streamAllVideo"
-            boolean r7 = org.telegram.messenger.BuildVars.DEBUG_VERSION     // Catch:{ all -> 0x03af }
-            boolean r2 = r1.getBoolean(r2, r7)     // Catch:{ all -> 0x03af }
-            streamAllVideo = r2     // Catch:{ all -> 0x03af }
+            boolean r7 = org.telegram.messenger.BuildVars.DEBUG_VERSION     // Catch:{ all -> 0x03b1 }
+            boolean r2 = r1.getBoolean(r2, r7)     // Catch:{ all -> 0x03b1 }
+            streamAllVideo = r2     // Catch:{ all -> 0x03b1 }
             java.lang.String r2 = "streamMkv"
-            boolean r2 = r1.getBoolean(r2, r3)     // Catch:{ all -> 0x03af }
-            streamMkv = r2     // Catch:{ all -> 0x03af }
+            boolean r2 = r1.getBoolean(r2, r3)     // Catch:{ all -> 0x03b1 }
+            streamMkv = r2     // Catch:{ all -> 0x03b1 }
             java.lang.String r2 = "suggestStickers"
-            int r2 = r1.getInt(r2, r3)     // Catch:{ all -> 0x03af }
-            suggestStickers = r2     // Catch:{ all -> 0x03af }
+            int r2 = r1.getInt(r2, r3)     // Catch:{ all -> 0x03b1 }
+            suggestStickers = r2     // Catch:{ all -> 0x03b1 }
             java.lang.String r2 = "sortContactsByName"
-            boolean r2 = r1.getBoolean(r2, r3)     // Catch:{ all -> 0x03af }
-            sortContactsByName = r2     // Catch:{ all -> 0x03af }
+            boolean r2 = r1.getBoolean(r2, r3)     // Catch:{ all -> 0x03b1 }
+            sortContactsByName = r2     // Catch:{ all -> 0x03b1 }
             java.lang.String r2 = "sortFilesByName"
-            boolean r2 = r1.getBoolean(r2, r3)     // Catch:{ all -> 0x03af }
-            sortFilesByName = r2     // Catch:{ all -> 0x03af }
+            boolean r2 = r1.getBoolean(r2, r3)     // Catch:{ all -> 0x03b1 }
+            sortFilesByName = r2     // Catch:{ all -> 0x03b1 }
             java.lang.String r2 = "noSoundHintShowed"
-            boolean r2 = r1.getBoolean(r2, r3)     // Catch:{ all -> 0x03af }
-            noSoundHintShowed = r2     // Catch:{ all -> 0x03af }
+            boolean r2 = r1.getBoolean(r2, r3)     // Catch:{ all -> 0x03b1 }
+            noSoundHintShowed = r2     // Catch:{ all -> 0x03b1 }
             java.lang.String r2 = "directShareHash2"
-            java.lang.String r2 = r1.getString(r2, r5)     // Catch:{ all -> 0x03af }
-            directShareHash = r2     // Catch:{ all -> 0x03af }
+            java.lang.String r2 = r1.getString(r2, r5)     // Catch:{ all -> 0x03b1 }
+            directShareHash = r2     // Catch:{ all -> 0x03b1 }
             java.lang.String r2 = "useThreeLinesLayout"
-            boolean r2 = r1.getBoolean(r2, r3)     // Catch:{ all -> 0x03af }
-            useThreeLinesLayout = r2     // Catch:{ all -> 0x03af }
+            boolean r2 = r1.getBoolean(r2, r3)     // Catch:{ all -> 0x03b1 }
+            useThreeLinesLayout = r2     // Catch:{ all -> 0x03b1 }
             java.lang.String r2 = "archiveHidden"
-            boolean r2 = r1.getBoolean(r2, r3)     // Catch:{ all -> 0x03af }
-            archiveHidden = r2     // Catch:{ all -> 0x03af }
+            boolean r2 = r1.getBoolean(r2, r3)     // Catch:{ all -> 0x03b1 }
+            archiveHidden = r2     // Catch:{ all -> 0x03b1 }
             java.lang.String r2 = "distanceSystemType"
-            int r2 = r1.getInt(r2, r3)     // Catch:{ all -> 0x03af }
-            distanceSystemType = r2     // Catch:{ all -> 0x03af }
+            int r2 = r1.getInt(r2, r3)     // Catch:{ all -> 0x03b1 }
+            distanceSystemType = r2     // Catch:{ all -> 0x03b1 }
             java.lang.String r2 = "devicePerformanceClass"
             r5 = -1
-            int r2 = r1.getInt(r2, r5)     // Catch:{ all -> 0x03af }
-            devicePerformanceClass = r2     // Catch:{ all -> 0x03af }
+            int r2 = r1.getInt(r2, r5)     // Catch:{ all -> 0x03b1 }
+            devicePerformanceClass = r2     // Catch:{ all -> 0x03b1 }
             java.lang.String r2 = "loopStickers"
-            boolean r2 = r1.getBoolean(r2, r4)     // Catch:{ all -> 0x03af }
-            loopStickers = r2     // Catch:{ all -> 0x03af }
+            boolean r2 = r1.getBoolean(r2, r4)     // Catch:{ all -> 0x03b1 }
+            loopStickers = r2     // Catch:{ all -> 0x03b1 }
             java.lang.String r2 = "keep_media"
-            int r2 = r1.getInt(r2, r6)     // Catch:{ all -> 0x03af }
-            keepMedia = r2     // Catch:{ all -> 0x03af }
+            int r2 = r1.getInt(r2, r6)     // Catch:{ all -> 0x03b1 }
+            keepMedia = r2     // Catch:{ all -> 0x03b1 }
             java.lang.String r2 = "noStatusBar"
-            boolean r2 = r1.getBoolean(r2, r4)     // Catch:{ all -> 0x03af }
-            noStatusBar = r2     // Catch:{ all -> 0x03af }
+            boolean r2 = r1.getBoolean(r2, r4)     // Catch:{ all -> 0x03b1 }
+            noStatusBar = r2     // Catch:{ all -> 0x03b1 }
             java.lang.String r2 = "forceRtmpStream"
-            boolean r2 = r1.getBoolean(r2, r3)     // Catch:{ all -> 0x03af }
-            forceRtmpStream = r2     // Catch:{ all -> 0x03af }
+            boolean r2 = r1.getBoolean(r2, r3)     // Catch:{ all -> 0x03b1 }
+            forceRtmpStream = r2     // Catch:{ all -> 0x03b1 }
             java.lang.String r2 = "debugWebView"
-            boolean r2 = r1.getBoolean(r2, r3)     // Catch:{ all -> 0x03af }
-            debugWebView = r2     // Catch:{ all -> 0x03af }
+            boolean r2 = r1.getBoolean(r2, r3)     // Catch:{ all -> 0x03b1 }
+            debugWebView = r2     // Catch:{ all -> 0x03b1 }
             java.lang.String r2 = "lastKeepMediaCheckTime"
-            int r2 = r1.getInt(r2, r3)     // Catch:{ all -> 0x03af }
-            lastKeepMediaCheckTime = r2     // Catch:{ all -> 0x03af }
+            int r2 = r1.getInt(r2, r3)     // Catch:{ all -> 0x03b1 }
+            lastKeepMediaCheckTime = r2     // Catch:{ all -> 0x03b1 }
             java.lang.String r2 = "lastLogsCheckTime"
-            int r2 = r1.getInt(r2, r3)     // Catch:{ all -> 0x03af }
-            lastLogsCheckTime = r2     // Catch:{ all -> 0x03af }
+            int r2 = r1.getInt(r2, r3)     // Catch:{ all -> 0x03b1 }
+            lastLogsCheckTime = r2     // Catch:{ all -> 0x03b1 }
             java.lang.String r2 = "searchMessagesAsListHintShows"
-            int r2 = r1.getInt(r2, r3)     // Catch:{ all -> 0x03af }
-            searchMessagesAsListHintShows = r2     // Catch:{ all -> 0x03af }
+            int r2 = r1.getInt(r2, r3)     // Catch:{ all -> 0x03b1 }
+            searchMessagesAsListHintShows = r2     // Catch:{ all -> 0x03b1 }
             java.lang.String r2 = "searchMessagesAsListUsed"
-            boolean r2 = r1.getBoolean(r2, r3)     // Catch:{ all -> 0x03af }
-            searchMessagesAsListUsed = r2     // Catch:{ all -> 0x03af }
+            boolean r2 = r1.getBoolean(r2, r3)     // Catch:{ all -> 0x03b1 }
+            searchMessagesAsListUsed = r2     // Catch:{ all -> 0x03b1 }
             java.lang.String r2 = "stickersReorderingHintUsed"
-            boolean r2 = r1.getBoolean(r2, r3)     // Catch:{ all -> 0x03af }
-            stickersReorderingHintUsed = r2     // Catch:{ all -> 0x03af }
+            boolean r2 = r1.getBoolean(r2, r3)     // Catch:{ all -> 0x03b1 }
+            stickersReorderingHintUsed = r2     // Catch:{ all -> 0x03b1 }
             java.lang.String r2 = "textSelectionHintShows"
-            int r2 = r1.getInt(r2, r3)     // Catch:{ all -> 0x03af }
-            textSelectionHintShows = r2     // Catch:{ all -> 0x03af }
+            int r2 = r1.getInt(r2, r3)     // Catch:{ all -> 0x03b1 }
+            textSelectionHintShows = r2     // Catch:{ all -> 0x03b1 }
             java.lang.String r2 = "scheduledOrNoSoundHintShows"
-            int r2 = r1.getInt(r2, r3)     // Catch:{ all -> 0x03af }
-            scheduledOrNoSoundHintShows = r2     // Catch:{ all -> 0x03af }
+            int r2 = r1.getInt(r2, r3)     // Catch:{ all -> 0x03b1 }
+            scheduledOrNoSoundHintShows = r2     // Catch:{ all -> 0x03b1 }
             java.lang.String r2 = "forwardingOptionsHintShown"
-            boolean r2 = r1.getBoolean(r2, r3)     // Catch:{ all -> 0x03af }
-            forwardingOptionsHintShown = r2     // Catch:{ all -> 0x03af }
+            boolean r2 = r1.getBoolean(r2, r3)     // Catch:{ all -> 0x03b1 }
+            forwardingOptionsHintShown = r2     // Catch:{ all -> 0x03b1 }
             java.lang.String r2 = "lockRecordAudioVideoHint"
-            int r2 = r1.getInt(r2, r3)     // Catch:{ all -> 0x03af }
-            lockRecordAudioVideoHint = r2     // Catch:{ all -> 0x03af }
+            int r2 = r1.getInt(r2, r3)     // Catch:{ all -> 0x03b1 }
+            lockRecordAudioVideoHint = r2     // Catch:{ all -> 0x03b1 }
             java.lang.String r2 = "disableVoiceAudioEffects"
-            boolean r2 = r1.getBoolean(r2, r3)     // Catch:{ all -> 0x03af }
-            disableVoiceAudioEffects = r2     // Catch:{ all -> 0x03af }
+            boolean r2 = r1.getBoolean(r2, r3)     // Catch:{ all -> 0x03b1 }
+            disableVoiceAudioEffects = r2     // Catch:{ all -> 0x03b1 }
             java.lang.String r2 = "noiseSupression"
-            boolean r2 = r1.getBoolean(r2, r3)     // Catch:{ all -> 0x03af }
-            noiseSupression = r2     // Catch:{ all -> 0x03af }
+            boolean r2 = r1.getBoolean(r2, r3)     // Catch:{ all -> 0x03b1 }
+            noiseSupression = r2     // Catch:{ all -> 0x03b1 }
             java.lang.String r2 = "ChatSwipeAction"
-            int r2 = r1.getInt(r2, r5)     // Catch:{ all -> 0x03af }
-            chatSwipeAction = r2     // Catch:{ all -> 0x03af }
+            int r2 = r1.getInt(r2, r5)     // Catch:{ all -> 0x03b1 }
+            chatSwipeAction = r2     // Catch:{ all -> 0x03b1 }
             java.lang.String r2 = "messageSeenCount"
             r5 = 3
-            int r2 = r1.getInt(r2, r5)     // Catch:{ all -> 0x03af }
-            messageSeenHintCount = r2     // Catch:{ all -> 0x03af }
+            int r2 = r1.getInt(r2, r5)     // Catch:{ all -> 0x03b1 }
+            messageSeenHintCount = r2     // Catch:{ all -> 0x03b1 }
             java.lang.String r2 = "emojiInteractionsHintCount"
-            int r2 = r1.getInt(r2, r5)     // Catch:{ all -> 0x03af }
-            emojiInteractionsHintCount = r2     // Catch:{ all -> 0x03af }
+            int r2 = r1.getInt(r2, r5)     // Catch:{ all -> 0x03b1 }
+            emojiInteractionsHintCount = r2     // Catch:{ all -> 0x03b1 }
             java.lang.String r2 = "dayNightThemeSwitchHintCount"
-            int r2 = r1.getInt(r2, r5)     // Catch:{ all -> 0x03af }
-            dayNightThemeSwitchHintCount = r2     // Catch:{ all -> 0x03af }
+            int r2 = r1.getInt(r2, r5)     // Catch:{ all -> 0x03b1 }
+            dayNightThemeSwitchHintCount = r2     // Catch:{ all -> 0x03b1 }
             java.lang.String r2 = "mediaColumnsCount"
-            int r2 = r1.getInt(r2, r5)     // Catch:{ all -> 0x03af }
-            mediaColumnsCount = r2     // Catch:{ all -> 0x03af }
+            int r2 = r1.getInt(r2, r5)     // Catch:{ all -> 0x03b1 }
+            mediaColumnsCount = r2     // Catch:{ all -> 0x03b1 }
             java.lang.String r2 = "fastScrollHintCount"
-            int r2 = r1.getInt(r2, r5)     // Catch:{ all -> 0x03af }
-            fastScrollHintCount = r2     // Catch:{ all -> 0x03af }
+            int r2 = r1.getInt(r2, r5)     // Catch:{ all -> 0x03b1 }
+            fastScrollHintCount = r2     // Catch:{ all -> 0x03b1 }
             java.lang.String r2 = "dontAskManageStorage"
-            boolean r1 = r1.getBoolean(r2, r3)     // Catch:{ all -> 0x03af }
-            dontAskManageStorage = r1     // Catch:{ all -> 0x03af }
-            android.content.Context r1 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ all -> 0x03af }
+            boolean r1 = r1.getBoolean(r2, r3)     // Catch:{ all -> 0x03b1 }
+            dontAskManageStorage = r1     // Catch:{ all -> 0x03b1 }
+            android.content.Context r1 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ all -> 0x03b1 }
             java.lang.String r2 = "Notifications"
-            android.content.SharedPreferences r1 = r1.getSharedPreferences(r2, r3)     // Catch:{ all -> 0x03af }
+            android.content.SharedPreferences r1 = r1.getSharedPreferences(r2, r3)     // Catch:{ all -> 0x03b1 }
             java.lang.String r2 = "AllAccounts"
-            boolean r1 = r1.getBoolean(r2, r4)     // Catch:{ all -> 0x03af }
-            showNotificationsForAllAccounts = r1     // Catch:{ all -> 0x03af }
-            configLoaded = r4     // Catch:{ all -> 0x03af }
-            int r1 = android.os.Build.VERSION.SDK_INT     // Catch:{ Exception -> 0x03a7 }
+            boolean r1 = r1.getBoolean(r2, r4)     // Catch:{ all -> 0x03b1 }
+            showNotificationsForAllAccounts = r1     // Catch:{ all -> 0x03b1 }
+            configLoaded = r4     // Catch:{ all -> 0x03b1 }
+            int r1 = android.os.Build.VERSION.SDK_INT     // Catch:{ Exception -> 0x03a9 }
             r2 = 19
-            if (r1 < r2) goto L_0x03ab
-            boolean r1 = debugWebView     // Catch:{ Exception -> 0x03a7 }
-            android.webkit.WebView.setWebContentsDebuggingEnabled(r1)     // Catch:{ Exception -> 0x03a7 }
-            goto L_0x03ab
-        L_0x03a7:
+            if (r1 < r2) goto L_0x03ad
+            boolean r1 = debugWebView     // Catch:{ Exception -> 0x03a9 }
+            if (r1 == 0) goto L_0x03ad
+            android.webkit.WebView.setWebContentsDebuggingEnabled(r4)     // Catch:{ Exception -> 0x03a9 }
+            goto L_0x03ad
+        L_0x03a9:
             r1 = move-exception
-            org.telegram.messenger.FileLog.e((java.lang.Throwable) r1)     // Catch:{ all -> 0x03af }
-        L_0x03ab:
-            monitor-exit(r0)     // Catch:{ all -> 0x03af }
-            return
+            org.telegram.messenger.FileLog.e((java.lang.Throwable) r1)     // Catch:{ all -> 0x03b1 }
         L_0x03ad:
-            monitor-exit(r0)     // Catch:{ all -> 0x03af }
+            monitor-exit(r0)     // Catch:{ all -> 0x03b1 }
             return
         L_0x03af:
+            monitor-exit(r0)     // Catch:{ all -> 0x03b1 }
+            return
+        L_0x03b1:
             r1 = move-exception
-            monitor-exit(r0)     // Catch:{ all -> 0x03af }
+            monitor-exit(r0)     // Catch:{ all -> 0x03b1 }
             throw r1
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.SharedConfig.loadConfig():void");
