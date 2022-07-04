@@ -1,15 +1,24 @@
 package org.telegram.ui;
 
-import android.animation.ValueAnimator;
+import android.view.View;
+import org.telegram.messenger.MessageObject;
+import org.telegram.tgnet.TLRPC;
+import org.telegram.ui.ChatActivity;
 
-public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda1 implements ValueAnimator.AnimatorUpdateListener {
+public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda1 implements View.OnLongClickListener {
     public final /* synthetic */ ChatActivity f$0;
+    public final /* synthetic */ TLRPC.KeyboardButton f$1;
+    public final /* synthetic */ MessageObject f$2;
+    public final /* synthetic */ ChatActivity.PinnedMessageButton f$3;
 
-    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda1(ChatActivity chatActivity) {
+    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda1(ChatActivity chatActivity, TLRPC.KeyboardButton keyboardButton, MessageObject messageObject, ChatActivity.PinnedMessageButton pinnedMessageButton) {
         this.f$0 = chatActivity;
+        this.f$1 = keyboardButton;
+        this.f$2 = messageObject;
+        this.f$3 = pinnedMessageButton;
     }
 
-    public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-        this.f$0.lambda$showMentionDownButton$113(valueAnimator);
+    public final boolean onLongClick(View view) {
+        return this.f$0.m3128lambda$updatePinnedMessageView$144$orgtelegramuiChatActivity(this.f$1, this.f$2, this.f$3, view);
     }
 }

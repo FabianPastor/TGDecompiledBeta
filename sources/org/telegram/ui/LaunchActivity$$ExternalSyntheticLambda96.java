@@ -1,18 +1,15 @@
 package org.telegram.ui;
 
-import org.telegram.messenger.LocationController;
-import org.telegram.ui.Components.SharingLocationsAlert;
+import org.telegram.ui.Components.PasscodeView;
 
-public final /* synthetic */ class LaunchActivity$$ExternalSyntheticLambda96 implements SharingLocationsAlert.SharingLocationsAlertDelegate {
+public final /* synthetic */ class LaunchActivity$$ExternalSyntheticLambda96 implements PasscodeView.PasscodeViewDelegate {
     public final /* synthetic */ LaunchActivity f$0;
-    public final /* synthetic */ int[] f$1;
 
-    public /* synthetic */ LaunchActivity$$ExternalSyntheticLambda96(LaunchActivity launchActivity, int[] iArr) {
+    public /* synthetic */ LaunchActivity$$ExternalSyntheticLambda96(LaunchActivity launchActivity) {
         this.f$0 = launchActivity;
-        this.f$1 = iArr;
     }
 
-    public final void didSelectLocation(LocationController.SharingLocationInfo sharingLocationInfo) {
-        this.f$0.lambda$handleIntent$14(this.f$1, sharingLocationInfo);
+    public final void didAcceptedPassword() {
+        this.f$0.m3709lambda$showPasscodeActivity$9$orgtelegramuiLaunchActivity();
     }
 }

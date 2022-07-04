@@ -12,6 +12,6 @@ public final /* synthetic */ class GroupStickersActivity$SearchAdapter$$External
     }
 
     public final void run() {
-        this.f$0.lambda$onSearchStickers$2(this.f$1);
+        this.f$0.m3599x6d5579f5(this.f$1);
     }
 }

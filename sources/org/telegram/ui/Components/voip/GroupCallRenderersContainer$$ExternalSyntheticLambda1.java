@@ -10,6 +10,6 @@ public final /* synthetic */ class GroupCallRenderersContainer$$ExternalSyntheti
     }
 
     public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-        this.f$0.lambda$animateSwipeToBack$7(valueAnimator);
+        this.f$0.m1595x12aba67d(valueAnimator);
     }
 }

@@ -19,8 +19,8 @@ public class ColoredImageSpan extends ReplacementSpan {
     private int topOffset;
     boolean usePaintColor;
 
-    public ColoredImageSpan(int i) {
-        this(ContextCompat.getDrawable(ApplicationLoader.applicationContext, i));
+    public ColoredImageSpan(int imageRes) {
+        this(ContextCompat.getDrawable(ApplicationLoader.applicationContext, imageRes));
     }
 
     public ColoredImageSpan(Drawable drawable2) {
@@ -30,39 +30,44 @@ public class ColoredImageSpan extends ReplacementSpan {
         drawable2.setBounds(0, 0, drawable2.getIntrinsicWidth(), drawable2.getIntrinsicHeight());
     }
 
-    public void setSize(int i) {
-        this.size = i;
-        this.drawable.setBounds(0, 0, i, i);
+    public void setSize(int size2) {
+        this.size = size2;
+        this.drawable.setBounds(0, 0, size2, size2);
     }
 
-    public int getSize(Paint paint, CharSequence charSequence, int i, int i2, Paint.FontMetricsInt fontMetricsInt) {
-        int i3 = this.size;
-        return i3 != 0 ? i3 : this.drawable.getIntrinsicWidth();
+    public int getSize(Paint paint, CharSequence charSequence, int i, int i1, Paint.FontMetricsInt fontMetricsInt) {
+        int i2 = this.size;
+        return i2 != 0 ? i2 : this.drawable.getIntrinsicWidth();
     }
 
-    public void draw(Canvas canvas, CharSequence charSequence, int i, int i2, float f, int i3, int i4, int i5, Paint paint) {
-        int i6;
+    public void draw(Canvas canvas, CharSequence text, int start, int end, float x, int top, int y, int bottom, Paint paint) {
+        int color;
         if (this.usePaintColor) {
-            i6 = paint.getColor();
+            color = paint.getColor();
         } else {
-            i6 = Theme.getColor(this.colorKey);
+            color = Theme.getColor(this.colorKey);
         }
-        if (this.drawableColor != i6) {
-            this.drawableColor = i6;
+        if (this.drawableColor != color) {
+            this.drawableColor = color;
             this.drawable.setColorFilter(new PorterDuffColorFilter(this.drawableColor, PorterDuff.Mode.MULTIPLY));
         }
-        int i7 = i5 - i3;
-        int i8 = this.size;
-        if (i8 == 0) {
-            i8 = this.drawable.getIntrinsicHeight();
+        int lineHeight = bottom - top;
+        int drawableHeight = this.size;
+        if (drawableHeight == 0) {
+            drawableHeight = this.drawable.getIntrinsicHeight();
         }
         canvas.save();
-        canvas.translate(f, (float) (i3 + ((i7 - i8) / 2) + AndroidUtilities.dp((float) this.topOffset)));
+        canvas.translate(x, (float) (top + ((lineHeight - drawableHeight) / 2) + AndroidUtilities.dp((float) this.topOffset)));
         this.drawable.draw(canvas);
         canvas.restore();
     }
 
-    public void setTopOffset(int i) {
-        this.topOffset = i;
+    public void setColorKey(String colorKey2) {
+        this.colorKey = colorKey2;
+        this.usePaintColor = false;
+    }
+
+    public void setTopOffset(int topOffset2) {
+        this.topOffset = topOffset2;
     }
 }

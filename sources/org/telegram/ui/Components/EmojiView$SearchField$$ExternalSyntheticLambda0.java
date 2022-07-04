@@ -11,6 +11,6 @@ public final /* synthetic */ class EmojiView$SearchField$$ExternalSyntheticLambd
     }
 
     public final void onClick(View view) {
-        this.f$0.lambda$new$0(view);
+        this.f$0.m947lambda$new$0$orgtelegramuiComponentsEmojiView$SearchField(view);
     }
 }

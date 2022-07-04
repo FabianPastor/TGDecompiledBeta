@@ -8,6 +8,6 @@ public final /* synthetic */ class AudioTrackJNI$$ExternalSyntheticLambda0 imple
     }
 
     public final void run() {
-        this.f$0.lambda$startThread$0();
+        this.f$0.m2427lambda$startThread$0$orgtelegrammessengervoipAudioTrackJNI();
     }
 }

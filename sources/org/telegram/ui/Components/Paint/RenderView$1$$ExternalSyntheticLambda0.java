@@ -10,6 +10,6 @@ public final /* synthetic */ class RenderView$1$$ExternalSyntheticLambda0 implem
     }
 
     public final void run() {
-        this.f$0.lambda$onSurfaceTextureDestroyed$1();
+        this.f$0.m1130xvar_d7var_();
     }
 }

@@ -1,18 +1,16 @@
 package org.telegram.ui;
 
-import android.view.View;
-import org.telegram.ui.ActionBar.AlertDialog;
+import org.telegram.tgnet.RequestDelegate;
+import org.telegram.tgnet.TLObject;
+import org.telegram.tgnet.TLRPC;
 
-public final /* synthetic */ class PrivacySettingsActivity$$ExternalSyntheticLambda5 implements View.OnClickListener {
-    public final /* synthetic */ PrivacySettingsActivity f$0;
-    public final /* synthetic */ AlertDialog.Builder f$1;
+public final /* synthetic */ class PrivacySettingsActivity$$ExternalSyntheticLambda5 implements RequestDelegate {
+    public static final /* synthetic */ PrivacySettingsActivity$$ExternalSyntheticLambda5 INSTANCE = new PrivacySettingsActivity$$ExternalSyntheticLambda5();
 
-    public /* synthetic */ PrivacySettingsActivity$$ExternalSyntheticLambda5(PrivacySettingsActivity privacySettingsActivity, AlertDialog.Builder builder) {
-        this.f$0 = privacySettingsActivity;
-        this.f$1 = builder;
+    private /* synthetic */ PrivacySettingsActivity$$ExternalSyntheticLambda5() {
     }
 
-    public final void onClick(View view) {
-        this.f$0.lambda$createView$4(this.f$1, view);
+    public final void run(TLObject tLObject, TLRPC.TL_error tL_error) {
+        PrivacySettingsActivity.lambda$createView$12(tLObject, tL_error);
     }
 }

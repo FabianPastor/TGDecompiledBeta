@@ -14,6 +14,6 @@ public final /* synthetic */ class CarouselView$$ExternalSyntheticLambda0 implem
     }
 
     public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-        this.f$0.lambda$scrollToInternal$2(this.f$1, this.f$2, valueAnimator);
+        this.f$0.m1228x2d4b5a8(this.f$1, this.f$2, valueAnimator);
     }
 }

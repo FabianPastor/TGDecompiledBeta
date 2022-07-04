@@ -12,6 +12,6 @@ public final /* synthetic */ class ChangeBioActivity$$ExternalSyntheticLambda0 i
     }
 
     public final void onCancel(DialogInterface dialogInterface) {
-        this.f$0.lambda$saveName$5(this.f$1, dialogInterface);
+        this.f$0.m2843lambda$saveName$5$orgtelegramuiChangeBioActivity(this.f$1, dialogInterface);
     }
 }

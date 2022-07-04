@@ -10,6 +10,6 @@ public final /* synthetic */ class BottomSheet$$ExternalSyntheticLambda0 impleme
     }
 
     public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-        this.f$0.lambda$startOpenAnimation$4(valueAnimator);
+        this.f$0.m2562lambda$dismiss$5$orgtelegramuiActionBarBottomSheet(valueAnimator);
     }
 }

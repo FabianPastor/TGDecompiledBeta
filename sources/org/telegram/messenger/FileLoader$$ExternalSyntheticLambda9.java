@@ -1,15 +1,35 @@
 package org.telegram.messenger;
 
+import org.telegram.tgnet.TLRPC;
+
 public final /* synthetic */ class FileLoader$$ExternalSyntheticLambda9 implements Runnable {
     public final /* synthetic */ FileLoader f$0;
-    public final /* synthetic */ boolean f$1;
+    public final /* synthetic */ TLRPC.Document f$1;
+    public final /* synthetic */ int f$10;
+    public final /* synthetic */ SecureDocument f$2;
+    public final /* synthetic */ WebFile f$3;
+    public final /* synthetic */ TLRPC.TL_fileLocationToBeDeprecated f$4;
+    public final /* synthetic */ ImageLocation f$5;
+    public final /* synthetic */ Object f$6;
+    public final /* synthetic */ String f$7;
+    public final /* synthetic */ long f$8;
+    public final /* synthetic */ int f$9;
 
-    public /* synthetic */ FileLoader$$ExternalSyntheticLambda9(FileLoader fileLoader, boolean z) {
+    public /* synthetic */ FileLoader$$ExternalSyntheticLambda9(FileLoader fileLoader, TLRPC.Document document, SecureDocument secureDocument, WebFile webFile, TLRPC.TL_fileLocationToBeDeprecated tL_fileLocationToBeDeprecated, ImageLocation imageLocation, Object obj, String str, long j, int i, int i2) {
         this.f$0 = fileLoader;
-        this.f$1 = z;
+        this.f$1 = document;
+        this.f$2 = secureDocument;
+        this.f$3 = webFile;
+        this.f$4 = tL_fileLocationToBeDeprecated;
+        this.f$5 = imageLocation;
+        this.f$6 = obj;
+        this.f$7 = str;
+        this.f$8 = j;
+        this.f$9 = i;
+        this.f$10 = i2;
     }
 
     public final void run() {
-        this.f$0.lambda$onNetworkChanged$4(this.f$1);
+        this.f$0.m1822lambda$loadFile$9$orgtelegrammessengerFileLoader(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6, this.f$7, this.f$8, this.f$9, this.f$10);
     }
 }

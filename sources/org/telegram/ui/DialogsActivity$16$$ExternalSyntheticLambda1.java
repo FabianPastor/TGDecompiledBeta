@@ -11,6 +11,6 @@ public final /* synthetic */ class DialogsActivity$16$$ExternalSyntheticLambda1 
     }
 
     public final void onClick(DialogInterface dialogInterface, int i) {
-        this.f$0.lambda$needClearList$2(dialogInterface, i);
+        this.f$0.m3425lambda$needClearList$2$orgtelegramuiDialogsActivity$16(dialogInterface, i);
     }
 }

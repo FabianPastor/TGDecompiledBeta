@@ -1,15 +1,16 @@
 package org.telegram.ui.Components;
 
-import android.view.MotionEvent;
 import android.view.View;
+import org.telegram.ui.ActionBar.BottomSheet;
 
-public final /* synthetic */ class AlertsCreator$$ExternalSyntheticLambda78 implements View.OnTouchListener {
-    public static final /* synthetic */ AlertsCreator$$ExternalSyntheticLambda78 INSTANCE = new AlertsCreator$$ExternalSyntheticLambda78();
+public final /* synthetic */ class AlertsCreator$$ExternalSyntheticLambda78 implements View.OnClickListener {
+    public final /* synthetic */ BottomSheet f$0;
 
-    private /* synthetic */ AlertsCreator$$ExternalSyntheticLambda78() {
+    public /* synthetic */ AlertsCreator$$ExternalSyntheticLambda78(BottomSheet bottomSheet) {
+        this.f$0 = bottomSheet;
     }
 
-    public final boolean onTouch(View view, MotionEvent motionEvent) {
-        return AlertsCreator.lambda$createCalendarPickerDialog$76(view, motionEvent);
+    public final void onClick(View view) {
+        this.f$0.dismiss();
     }
 }

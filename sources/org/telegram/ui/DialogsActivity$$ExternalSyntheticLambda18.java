@@ -1,15 +1,20 @@
 package org.telegram.ui;
 
 import android.view.View;
+import org.telegram.ui.Cells.DialogCell;
 
 public final /* synthetic */ class DialogsActivity$$ExternalSyntheticLambda18 implements View.OnClickListener {
     public final /* synthetic */ DialogsActivity f$0;
+    public final /* synthetic */ DialogCell f$1;
+    public final /* synthetic */ long f$2;
 
-    public /* synthetic */ DialogsActivity$$ExternalSyntheticLambda18(DialogsActivity dialogsActivity) {
+    public /* synthetic */ DialogsActivity$$ExternalSyntheticLambda18(DialogsActivity dialogsActivity, DialogCell dialogCell, long j) {
         this.f$0 = dialogsActivity;
+        this.f$1 = dialogCell;
+        this.f$2 = j;
     }
 
     public final void onClick(View view) {
-        this.f$0.lambda$createView$13(view);
+        this.f$0.m3412lambda$showChatPreview$25$orgtelegramuiDialogsActivity(this.f$1, this.f$2, view);
     }
 }

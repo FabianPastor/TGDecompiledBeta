@@ -12,6 +12,6 @@ public final /* synthetic */ class NotificationsSettingsActivity$$ExternalSynthe
     }
 
     public final void onClick(DialogInterface dialogInterface, int i) {
-        this.f$0.lambda$createView$7(this.f$1, dialogInterface, i);
+        this.f$0.m3993x486e87d1(this.f$1, dialogInterface, i);
     }
 }

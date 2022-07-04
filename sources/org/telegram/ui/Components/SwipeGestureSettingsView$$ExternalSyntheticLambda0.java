@@ -8,6 +8,6 @@ public final /* synthetic */ class SwipeGestureSettingsView$$ExternalSyntheticLa
     }
 
     public final void run() {
-        this.f$0.lambda$swapIcons$2();
+        this.f$0.m1470x6d65954c();
     }
 }

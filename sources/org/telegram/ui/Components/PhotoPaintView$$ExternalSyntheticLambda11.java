@@ -1,16 +1,15 @@
 package org.telegram.ui.Components;
 
-import android.view.MotionEvent;
-import android.view.View;
+import android.content.DialogInterface;
 
-public final /* synthetic */ class PhotoPaintView$$ExternalSyntheticLambda11 implements View.OnTouchListener {
+public final /* synthetic */ class PhotoPaintView$$ExternalSyntheticLambda11 implements DialogInterface.OnDismissListener {
     public final /* synthetic */ PhotoPaintView f$0;
 
     public /* synthetic */ PhotoPaintView$$ExternalSyntheticLambda11(PhotoPaintView photoPaintView) {
         this.f$0 = photoPaintView;
     }
 
-    public final boolean onTouch(View view, MotionEvent motionEvent) {
-        return this.f$0.lambda$showPopup$18(view, motionEvent);
+    public final void onDismiss(DialogInterface dialogInterface) {
+        this.f$0.m1186x23375var_(dialogInterface);
     }
 }

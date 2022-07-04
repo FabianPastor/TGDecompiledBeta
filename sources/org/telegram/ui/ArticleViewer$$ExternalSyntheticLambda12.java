@@ -1,15 +1,13 @@
 package org.telegram.ui;
 
-import android.view.View;
-
-public final /* synthetic */ class ArticleViewer$$ExternalSyntheticLambda12 implements View.OnClickListener {
+public final /* synthetic */ class ArticleViewer$$ExternalSyntheticLambda12 implements Runnable {
     public final /* synthetic */ ArticleViewer f$0;
 
     public /* synthetic */ ArticleViewer$$ExternalSyntheticLambda12(ArticleViewer articleViewer) {
         this.f$0 = articleViewer;
     }
 
-    public final void onClick(View view) {
-        this.f$0.lambda$setParentActivity$23(view);
+    public final void run() {
+        this.f$0.m2667lambda$collapse$34$orgtelegramuiArticleViewer();
     }
 }

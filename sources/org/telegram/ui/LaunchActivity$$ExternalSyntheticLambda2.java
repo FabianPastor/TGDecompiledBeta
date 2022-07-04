@@ -1,19 +1,22 @@
 package org.telegram.ui;
 
-import android.content.DialogInterface;
+import java.util.ArrayList;
+import org.telegram.ui.DialogsActivity;
 
-public final /* synthetic */ class LaunchActivity$$ExternalSyntheticLambda2 implements DialogInterface.OnCancelListener {
-    public final /* synthetic */ int f$0;
-    public final /* synthetic */ int[] f$1;
-    public final /* synthetic */ Runnable f$2;
+public final /* synthetic */ class LaunchActivity$$ExternalSyntheticLambda2 implements DialogsActivity.DialogsActivityDelegate {
+    public final /* synthetic */ LaunchActivity f$0;
+    public final /* synthetic */ boolean f$1;
+    public final /* synthetic */ int f$2;
+    public final /* synthetic */ String f$3;
 
-    public /* synthetic */ LaunchActivity$$ExternalSyntheticLambda2(int i, int[] iArr, Runnable runnable) {
-        this.f$0 = i;
-        this.f$1 = iArr;
-        this.f$2 = runnable;
+    public /* synthetic */ LaunchActivity$$ExternalSyntheticLambda2(LaunchActivity launchActivity, boolean z, int i, String str) {
+        this.f$0 = launchActivity;
+        this.f$1 = z;
+        this.f$2 = i;
+        this.f$3 = str;
     }
 
-    public final void onCancel(DialogInterface dialogInterface) {
-        LaunchActivity.lambda$runImportRequest$27(this.f$0, this.f$1, this.f$2, dialogInterface);
+    public final void didSelectDialogs(DialogsActivity dialogsActivity, ArrayList arrayList, CharSequence charSequence, boolean z) {
+        this.f$0.m3681lambda$runLinkRequest$50$orgtelegramuiLaunchActivity(this.f$1, this.f$2, this.f$3, dialogsActivity, arrayList, charSequence, z);
     }
 }

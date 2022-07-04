@@ -29,7 +29,7 @@ public class Intro {
 
     public static native void setTelegramTextures(int i, int i2, int i3);
 
-    public static void setBackgroundColor(int i) {
-        setBackgroundColor(((float) Color.red(i)) / 255.0f, ((float) Color.green(i)) / 255.0f, ((float) Color.blue(i)) / 255.0f, ((float) Color.alpha(i)) / 255.0f);
+    public static void setBackgroundColor(int color) {
+        setBackgroundColor(((float) Color.red(color)) / 255.0f, ((float) Color.green(color)) / 255.0f, ((float) Color.blue(color)) / 255.0f, ((float) Color.alpha(color)) / 255.0f);
     }
 }

@@ -1,15 +1,23 @@
 package org.telegram.ui;
 
-import android.view.View;
+import org.telegram.ui.Components.ReactionsContainerLayout;
 
-public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda73 implements View.OnClickListener {
+public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda73 implements Runnable {
     public final /* synthetic */ ChatActivity f$0;
+    public final /* synthetic */ int f$1;
+    public final /* synthetic */ int f$2;
+    public final /* synthetic */ boolean f$3;
+    public final /* synthetic */ ReactionsContainerLayout f$4;
 
-    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda73(ChatActivity chatActivity) {
+    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda73(ChatActivity chatActivity, int i, int i2, boolean z, ReactionsContainerLayout reactionsContainerLayout) {
         this.f$0 = chatActivity;
+        this.f$1 = i;
+        this.f$2 = i2;
+        this.f$3 = z;
+        this.f$4 = reactionsContainerLayout;
     }
 
-    public final void onClick(View view) {
-        this.f$0.lambda$createView$75(view);
+    public final void run() {
+        this.f$0.m2934lambda$createMenu$182$orgtelegramuiChatActivity(this.f$1, this.f$2, this.f$3, this.f$4);
     }
 }

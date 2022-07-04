@@ -1,19 +1,27 @@
 package org.telegram.ui;
 
-import android.view.View;
-import androidx.recyclerview.widget.ItemTouchHelper;
-import org.telegram.ui.Components.RecyclerListView;
+import java.util.ArrayList;
+import org.telegram.tgnet.TLRPC;
+import org.telegram.ui.Components.ChatAttachAlertContactsLayout;
 
-public final /* synthetic */ class LaunchActivity$$ExternalSyntheticLambda95 implements RecyclerListView.OnItemLongClickListener {
+public final /* synthetic */ class LaunchActivity$$ExternalSyntheticLambda95 implements ChatAttachAlertContactsLayout.PhonebookShareAlertDelegate {
     public final /* synthetic */ LaunchActivity f$0;
-    public final /* synthetic */ ItemTouchHelper f$1;
+    public final /* synthetic */ ChatActivity f$1;
+    public final /* synthetic */ ArrayList f$2;
+    public final /* synthetic */ int f$3;
+    public final /* synthetic */ CharSequence f$4;
+    public final /* synthetic */ boolean f$5;
 
-    public /* synthetic */ LaunchActivity$$ExternalSyntheticLambda95(LaunchActivity launchActivity, ItemTouchHelper itemTouchHelper) {
+    public /* synthetic */ LaunchActivity$$ExternalSyntheticLambda95(LaunchActivity launchActivity, ChatActivity chatActivity, ArrayList arrayList, int i, CharSequence charSequence, boolean z) {
         this.f$0 = launchActivity;
-        this.f$1 = itemTouchHelper;
+        this.f$1 = chatActivity;
+        this.f$2 = arrayList;
+        this.f$3 = i;
+        this.f$4 = charSequence;
+        this.f$5 = z;
     }
 
-    public final boolean onItemClick(View view, int i) {
-        return this.f$0.lambda$onCreate$4(this.f$1, view, i);
+    public final void didSelectContact(TLRPC.User user, boolean z, int i) {
+        this.f$0.m3641lambda$didSelectDialogs$77$orgtelegramuiLaunchActivity(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, user, z, i);
     }
 }

@@ -11,6 +11,6 @@ public final /* synthetic */ class ChatReactionsEditActivity$$ExternalSyntheticL
     }
 
     public final void onItemClick(View view, int i) {
-        this.f$0.lambda$createView$1(view, i);
+        this.f$0.m3271lambda$createView$1$orgtelegramuiChatReactionsEditActivity(view, i);
     }
 }

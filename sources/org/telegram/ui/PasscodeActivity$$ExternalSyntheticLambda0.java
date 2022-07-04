@@ -10,6 +10,6 @@ public final /* synthetic */ class PasscodeActivity$$ExternalSyntheticLambda0 im
     }
 
     public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-        this.f$0.lambda$setCustomKeyboardVisible$13(valueAnimator);
+        this.f$0.m4017x97ad0356(valueAnimator);
     }
 }

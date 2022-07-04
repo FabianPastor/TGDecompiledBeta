@@ -5,7 +5,6 @@ import android.animation.AnimatorListenerAdapter;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Path;
-import android.graphics.RectF;
 import android.view.View;
 import android.view.ViewPropertyAnimator;
 import android.widget.FrameLayout;
@@ -53,39 +52,39 @@ public class ChatActivityBotWebViewButton extends FrameLayout {
         setWillNotDraw(false);
     }
 
-    public void setBotMenuButton(BotCommandsMenuView botCommandsMenuView) {
-        this.menuButton = botCommandsMenuView;
+    public void setBotMenuButton(BotCommandsMenuView menuButton2) {
+        this.menuButton = menuButton2;
         invalidate();
     }
 
-    public void setupButtonParams(boolean z, String str, int i, int i2, final boolean z2) {
-        setClickable(z);
-        this.rippleView.setVisibility(z ? 0 : 8);
-        this.textView.setText(str);
-        this.textView.setTextColor(i2);
-        this.buttonColor = i;
-        this.rippleView.setBackground(Theme.createSelectorDrawable(BotWebViewContainer.getMainButtonRippleColor(i), 2));
-        this.progressView.setProgressColor(i2);
-        if (this.progressWasVisible != z2) {
-            this.progressWasVisible = z2;
+    public void setupButtonParams(boolean isActive, String text, int color, int textColor, final boolean isProgressVisible) {
+        setClickable(isActive);
+        this.rippleView.setVisibility(isActive ? 0 : 8);
+        this.textView.setText(text);
+        this.textView.setTextColor(textColor);
+        this.buttonColor = color;
+        this.rippleView.setBackground(Theme.createSelectorDrawable(BotWebViewContainer.getMainButtonRippleColor(color), 2));
+        this.progressView.setProgressColor(textColor);
+        if (this.progressWasVisible != isProgressVisible) {
+            this.progressWasVisible = isProgressVisible;
             this.progressView.animate().cancel();
             float f = 0.0f;
-            if (z2) {
+            if (isProgressVisible) {
                 this.progressView.setAlpha(0.0f);
                 this.progressView.setVisibility(0);
             }
             ViewPropertyAnimator animate = this.progressView.animate();
             float f2 = 1.0f;
-            if (z2) {
+            if (isProgressVisible) {
                 f = 1.0f;
             }
-            ViewPropertyAnimator scaleX = animate.alpha(f).scaleX(z2 ? 1.0f : 0.1f);
-            if (!z2) {
+            ViewPropertyAnimator scaleX = animate.alpha(f).scaleX(isProgressVisible ? 1.0f : 0.1f);
+            if (!isProgressVisible) {
                 f2 = 0.1f;
             }
             scaleX.scaleY(f2).setDuration(250).setListener(new AnimatorListenerAdapter() {
-                public void onAnimationEnd(Animator animator) {
-                    if (!z2) {
+                public void onAnimationEnd(Animator animation) {
+                    if (!isProgressVisible) {
                         ChatActivityBotWebViewButton.this.progressView.setVisibility(8);
                     }
                 }
@@ -94,33 +93,32 @@ public class ChatActivityBotWebViewButton extends FrameLayout {
         invalidate();
     }
 
-    public void setProgress(float f) {
-        this.progress = f;
-        this.backgroundColor = ColorUtils.blendARGB(Theme.getColor("chat_messagePanelVoiceBackground"), this.buttonColor, f);
+    public void setProgress(float progress2) {
+        this.progress = progress2;
+        this.backgroundColor = ColorUtils.blendARGB(Theme.getColor("chat_messagePanelVoiceBackground"), this.buttonColor, progress2);
         for (int i = 0; i < getChildCount(); i++) {
-            getChildAt(i).setAlpha(f);
+            getChildAt(i).setAlpha(progress2);
         }
         invalidate();
     }
 
-    public void setMeasuredButtonWidth(int i) {
-        this.menuButtonWidth = i;
+    public void setMeasuredButtonWidth(int width) {
+        this.menuButtonWidth = width;
         invalidate();
     }
 
     public void draw(Canvas canvas) {
         canvas.save();
-        float height = ((float) (getHeight() - AndroidUtilities.dp(32.0f))) / 2.0f;
-        float max = ((float) Math.max((getWidth() - this.menuButtonWidth) - AndroidUtilities.dp(4.0f), getHeight())) * this.progress;
-        float dp = ((float) AndroidUtilities.dp(16.0f)) + max;
-        RectF rectF = AndroidUtilities.rectTmp;
-        rectF.set(((float) AndroidUtilities.dp(14.0f)) - max, (((float) AndroidUtilities.dp(4.0f)) + height) - max, ((float) (AndroidUtilities.dp(6.0f) + this.menuButtonWidth)) + max, ((float) (getHeight() - AndroidUtilities.dp(12.0f))) + max);
+        float menuY = ((float) (getHeight() - AndroidUtilities.dp(32.0f))) / 2.0f;
+        float offset = ((float) Math.max((getWidth() - this.menuButtonWidth) - AndroidUtilities.dp(4.0f), getHeight())) * this.progress;
+        float rad = ((float) AndroidUtilities.dp(16.0f)) + offset;
+        AndroidUtilities.rectTmp.set(((float) AndroidUtilities.dp(14.0f)) - offset, (((float) AndroidUtilities.dp(4.0f)) + menuY) - offset, ((float) (AndroidUtilities.dp(6.0f) + this.menuButtonWidth)) + offset, ((float) (getHeight() - AndroidUtilities.dp(12.0f))) + offset);
         this.path.rewind();
-        this.path.addRoundRect(rectF, dp, dp, Path.Direction.CW);
+        this.path.addRoundRect(AndroidUtilities.rectTmp, rad, rad, Path.Direction.CW);
         canvas.clipPath(this.path);
         canvas.drawColor(this.backgroundColor);
-        canvas.saveLayerAlpha(rectF, (int) ((1.0f - (Math.min(0.5f, this.progress) / 0.5f)) * 255.0f), 31);
-        canvas.translate((float) AndroidUtilities.dp(10.0f), height);
+        canvas.saveLayerAlpha(AndroidUtilities.rectTmp, (int) ((1.0f - (Math.min(0.5f, this.progress) / 0.5f)) * 255.0f), 31);
+        canvas.translate((float) AndroidUtilities.dp(10.0f), menuY);
         BotCommandsMenuView botCommandsMenuView = this.menuButton;
         if (botCommandsMenuView != null) {
             botCommandsMenuView.setDrawBackgroundDrawable(false);

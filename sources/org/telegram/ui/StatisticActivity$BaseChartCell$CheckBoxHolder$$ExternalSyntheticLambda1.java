@@ -14,6 +14,6 @@ public final /* synthetic */ class StatisticActivity$BaseChartCell$CheckBoxHolde
     }
 
     public final boolean onLongClick(View view) {
-        return this.f$0.lambda$setData$1(this.f$1, view);
+        return this.f$0.m4629xd81638e7(this.f$1, view);
     }
 }

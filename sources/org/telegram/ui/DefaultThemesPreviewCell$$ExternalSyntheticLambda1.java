@@ -14,6 +14,6 @@ public final /* synthetic */ class DefaultThemesPreviewCell$$ExternalSyntheticLa
     }
 
     public final void onItemClick(View view, int i) {
-        this.f$0.lambda$new$0(this.f$1, view, i);
+        this.f$0.m3366lambda$new$0$orgtelegramuiDefaultThemesPreviewCell(this.f$1, view, i);
     }
 }

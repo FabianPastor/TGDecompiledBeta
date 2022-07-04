@@ -10,6 +10,6 @@ public final /* synthetic */ class SharingLocationsAlert$$ExternalSyntheticLambd
     }
 
     public final void onClick(View view) {
-        this.f$0.lambda$new$2(view);
+        this.f$0.m1406lambda$new$1$orgtelegramuiComponentsSharingLocationsAlert(view);
     }
 }

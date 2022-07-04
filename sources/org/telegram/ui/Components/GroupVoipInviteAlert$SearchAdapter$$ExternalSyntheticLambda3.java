@@ -17,6 +17,6 @@ public final /* synthetic */ class GroupVoipInviteAlert$SearchAdapter$$ExternalS
     }
 
     public final void run() {
-        this.f$0.lambda$processSearch$1(this.f$1, this.f$2, this.f$3);
+        this.f$0.m1019x8591429b(this.f$1, this.f$2, this.f$3);
     }
 }

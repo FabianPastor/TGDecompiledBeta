@@ -23,21 +23,6 @@ public class LetterDrawable extends Drawable {
     private float textLeft;
     private float textWidth;
 
-    public int getIntrinsicHeight() {
-        return 0;
-    }
-
-    public int getIntrinsicWidth() {
-        return 0;
-    }
-
-    public int getOpacity() {
-        return -2;
-    }
-
-    public void setColorFilter(ColorFilter colorFilter) {
-    }
-
     public LetterDrawable() {
         this((Theme.ResourcesProvider) null);
     }
@@ -53,18 +38,18 @@ public class LetterDrawable extends Drawable {
         namePaint.setColor(Theme.getColor("sharedMedia_linkPlaceholderText", resourcesProvider));
     }
 
-    public void setBackgroundColor(int i) {
-        paint.setColor(i);
+    public void setBackgroundColor(int value) {
+        paint.setColor(value);
     }
 
-    public void setColor(int i) {
-        namePaint.setColor(i);
+    public void setColor(int value) {
+        namePaint.setColor(value);
     }
 
-    public void setTitle(String str) {
+    public void setTitle(String title) {
         this.stringBuilder.setLength(0);
-        if (str != null && str.length() > 0) {
-            this.stringBuilder.append(str.substring(0, 1));
+        if (title != null && title.length() > 0) {
+            this.stringBuilder.append(title.substring(0, 1));
         }
         if (this.stringBuilder.length() > 0) {
             try {
@@ -90,16 +75,31 @@ public class LetterDrawable extends Drawable {
             canvas.drawRoundRect(this.rect, (float) AndroidUtilities.dp(4.0f), (float) AndroidUtilities.dp(4.0f), paint);
             canvas.save();
             if (this.textLayout != null) {
-                float width = (float) bounds.width();
-                canvas.translate((((float) bounds.left) + ((width - this.textWidth) / 2.0f)) - this.textLeft, ((float) bounds.top) + ((width - this.textHeight) / 2.0f));
+                int size = bounds.width();
+                canvas.translate((((float) bounds.left) + ((((float) size) - this.textWidth) / 2.0f)) - this.textLeft, ((float) bounds.top) + ((((float) size) - this.textHeight) / 2.0f));
                 this.textLayout.draw(canvas);
             }
             canvas.restore();
         }
     }
 
-    public void setAlpha(int i) {
-        namePaint.setAlpha(i);
-        paint.setAlpha(i);
+    public void setAlpha(int alpha) {
+        namePaint.setAlpha(alpha);
+        paint.setAlpha(alpha);
+    }
+
+    public void setColorFilter(ColorFilter cf) {
+    }
+
+    public int getOpacity() {
+        return -2;
+    }
+
+    public int getIntrinsicWidth() {
+        return 0;
+    }
+
+    public int getIntrinsicHeight() {
+        return 0;
     }
 }

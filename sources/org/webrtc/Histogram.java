@@ -9,19 +9,19 @@ class Histogram {
 
     private static native long nativeCreateEnumeration(String str, int i);
 
-    private Histogram(long j) {
-        this.handle = j;
+    private Histogram(long handle2) {
+        this.handle = handle2;
     }
 
-    public static Histogram createCounts(String str, int i, int i2, int i3) {
-        return new Histogram(nativeCreateCounts(str, i, i2, i3));
+    public static Histogram createCounts(String name, int min, int max, int bucketCount) {
+        return new Histogram(nativeCreateCounts(name, min, max, bucketCount));
     }
 
-    public static Histogram createEnumeration(String str, int i) {
-        return new Histogram(nativeCreateEnumeration(str, i));
+    public static Histogram createEnumeration(String name, int max) {
+        return new Histogram(nativeCreateEnumeration(name, max));
     }
 
-    public void addSample(int i) {
-        nativeAddSample(this.handle, i);
+    public void addSample(int sample) {
+        nativeAddSample(this.handle, sample);
     }
 }

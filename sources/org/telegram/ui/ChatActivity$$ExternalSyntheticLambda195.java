@@ -1,23 +1,17 @@
 package org.telegram.ui;
 
-import org.telegram.messenger.MessageObject;
-import org.telegram.ui.ActionBar.ActionBarLayout;
-import org.telegram.ui.ActionBar.BaseFragment;
+import android.content.DialogInterface;
 
-public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda195 implements Runnable {
+public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda195 implements DialogInterface.OnClickListener {
     public final /* synthetic */ ChatActivity f$0;
-    public final /* synthetic */ BaseFragment f$1;
-    public final /* synthetic */ MessageObject f$2;
-    public final /* synthetic */ ActionBarLayout f$3;
+    public final /* synthetic */ boolean f$1;
 
-    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda195(ChatActivity chatActivity, BaseFragment baseFragment, MessageObject messageObject, ActionBarLayout actionBarLayout) {
+    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda195(ChatActivity chatActivity, boolean z) {
         this.f$0 = chatActivity;
-        this.f$1 = baseFragment;
-        this.f$2 = messageObject;
-        this.f$3 = actionBarLayout;
+        this.f$1 = z;
     }
 
-    public final void run() {
-        this.f$0.lambda$migrateToNewChat$127(this.f$1, this.f$2, this.f$3);
+    public final void onClick(DialogInterface dialogInterface, int i) {
+        this.f$0.m2911lambda$checkRecordLocked$218$orgtelegramuiChatActivity(this.f$1, dialogInterface, i);
     }
 }

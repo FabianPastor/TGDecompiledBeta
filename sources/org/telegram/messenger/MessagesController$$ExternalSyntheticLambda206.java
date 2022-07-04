@@ -1,15 +1,19 @@
 package org.telegram.messenger;
 
-public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda206 implements Runnable {
-    public final /* synthetic */ MessagesController f$0;
-    public final /* synthetic */ boolean f$1;
+import org.telegram.tgnet.RequestDelegate;
+import org.telegram.tgnet.TLObject;
+import org.telegram.tgnet.TLRPC;
 
-    public /* synthetic */ MessagesController$$ExternalSyntheticLambda206(MessagesController messagesController, boolean z) {
+public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda206 implements RequestDelegate {
+    public final /* synthetic */ MessagesController f$0;
+    public final /* synthetic */ long f$1;
+
+    public /* synthetic */ MessagesController$$ExternalSyntheticLambda206(MessagesController messagesController, long j) {
         this.f$0 = messagesController;
-        this.f$1 = z;
+        this.f$1 = j;
     }
 
-    public final void run() {
-        this.f$0.lambda$checkPromoInfo$134(this.f$1);
+    public final void run(TLObject tLObject, TLRPC.TL_error tL_error) {
+        this.f$0.m437x7a7cada0(this.f$1, tLObject, tL_error);
     }
 }

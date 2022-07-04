@@ -11,6 +11,6 @@ public final /* synthetic */ class PrivacyControlActivity$$ExternalSyntheticLamb
     }
 
     public final void onItemClick(View view, int i) {
-        this.f$0.lambda$createView$2(view, i);
+        this.f$0.m4365lambda$createView$2$orgtelegramuiPrivacyControlActivity(view, i);
     }
 }

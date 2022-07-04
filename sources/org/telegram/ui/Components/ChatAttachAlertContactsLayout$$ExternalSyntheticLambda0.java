@@ -10,7 +10,7 @@ public final /* synthetic */ class ChatAttachAlertContactsLayout$$ExternalSynthe
     }
 
     public final void didSetColor() {
-        this.f$0.lambda$getThemeDescriptions$2();
+        this.f$0.m775x637b688a();
     }
 
     public /* synthetic */ void onAnimationProgress(float f) {

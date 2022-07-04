@@ -1,16 +1,24 @@
 package org.telegram.ui;
 
+import java.util.List;
+import org.telegram.messenger.AndroidUtilities;
 import org.telegram.tgnet.RequestDelegate;
 import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC$TL_error;
+import org.telegram.tgnet.TLRPC;
+import org.telegram.ui.ActionBar.BaseFragment;
 
 public final /* synthetic */ class PremiumPreviewFragment$$ExternalSyntheticLambda7 implements RequestDelegate {
-    public static final /* synthetic */ PremiumPreviewFragment$$ExternalSyntheticLambda7 INSTANCE = new PremiumPreviewFragment$$ExternalSyntheticLambda7();
+    public final /* synthetic */ BaseFragment f$0;
+    public final /* synthetic */ List f$1;
+    public final /* synthetic */ TLRPC.TL_payments_canPurchasePremium f$2;
 
-    private /* synthetic */ PremiumPreviewFragment$$ExternalSyntheticLambda7() {
+    public /* synthetic */ PremiumPreviewFragment$$ExternalSyntheticLambda7(BaseFragment baseFragment, List list, TLRPC.TL_payments_canPurchasePremium tL_payments_canPurchasePremium) {
+        this.f$0 = baseFragment;
+        this.f$1 = list;
+        this.f$2 = tL_payments_canPurchasePremium;
     }
 
-    public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        PremiumPreviewFragment.lambda$sentPremiumButtonClick$8(tLObject, tLRPC$TL_error);
+    public final void run(TLObject tLObject, TLRPC.TL_error tL_error) {
+        AndroidUtilities.runOnUIThread(new PremiumPreviewFragment$$ExternalSyntheticLambda4(tLObject, this.f$0, this.f$1, tL_error, this.f$2));
     }
 }

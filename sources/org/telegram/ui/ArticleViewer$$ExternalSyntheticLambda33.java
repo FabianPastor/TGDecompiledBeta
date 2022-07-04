@@ -1,21 +1,15 @@
 package org.telegram.ui;
 
-import org.telegram.tgnet.RequestDelegate;
-import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC$TL_error;
+import android.content.DialogInterface;
 
-public final /* synthetic */ class ArticleViewer$$ExternalSyntheticLambda33 implements RequestDelegate {
+public final /* synthetic */ class ArticleViewer$$ExternalSyntheticLambda33 implements DialogInterface.OnDismissListener {
     public final /* synthetic */ ArticleViewer f$0;
-    public final /* synthetic */ int f$1;
-    public final /* synthetic */ long f$2;
 
-    public /* synthetic */ ArticleViewer$$ExternalSyntheticLambda33(ArticleViewer articleViewer, int i, long j) {
+    public /* synthetic */ ArticleViewer$$ExternalSyntheticLambda33(ArticleViewer articleViewer) {
         this.f$0 = articleViewer;
-        this.f$1 = i;
-        this.f$2 = j;
     }
 
-    public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        this.f$0.lambda$setParentActivity$11(this.f$1, this.f$2, tLObject, tLRPC$TL_error);
+    public final void onDismiss(DialogInterface dialogInterface) {
+        this.f$0.m2699lambda$showDialog$44$orgtelegramuiArticleViewer(dialogInterface);
     }
 }

@@ -10,6 +10,6 @@ public final /* synthetic */ class SenderSelectPopup$$ExternalSyntheticLambda0 i
     }
 
     public final void onAnimationEnd(DynamicAnimation dynamicAnimation, boolean z, float f, float f2) {
-        this.f$0.lambda$startDismissAnimation$7(dynamicAnimation, z, f, f2);
+        this.f$0.m1339xbfb002ad(dynamicAnimation, z, f, f2);
     }
 }

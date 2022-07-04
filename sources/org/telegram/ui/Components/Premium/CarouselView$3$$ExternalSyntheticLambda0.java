@@ -10,6 +10,6 @@ public final /* synthetic */ class CarouselView$3$$ExternalSyntheticLambda0 impl
     }
 
     public final void run() {
-        this.f$0.lambda$onAnimationEnd$0();
+        this.f$0.m1229xeCLASSNAMEa6();
     }
 }

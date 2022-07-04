@@ -1,13 +1,15 @@
 package org.telegram.ui;
 
-public final /* synthetic */ class ArticleViewer$$ExternalSyntheticLambda22 implements Runnable {
+import android.content.DialogInterface;
+
+public final /* synthetic */ class ArticleViewer$$ExternalSyntheticLambda22 implements DialogInterface.OnDismissListener {
     public final /* synthetic */ ArticleViewer f$0;
 
     public /* synthetic */ ArticleViewer$$ExternalSyntheticLambda22(ArticleViewer articleViewer) {
         this.f$0 = articleViewer;
     }
 
-    public final void run() {
-        this.f$0.lambda$close$36();
+    public final void onDismiss(DialogInterface dialogInterface) {
+        this.f$0.m2698lambda$showCopyPopup$1$orgtelegramuiArticleViewer(dialogInterface);
     }
 }

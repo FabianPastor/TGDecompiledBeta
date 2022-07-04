@@ -11,6 +11,6 @@ public final /* synthetic */ class ReactionsDoubleTapManageActivity$$ExternalSyn
     }
 
     public final void onItemClick(View view, int i) {
-        this.f$0.lambda$createView$0(view, i);
+        this.f$0.m4570x634b36cc(view, i);
     }
 }

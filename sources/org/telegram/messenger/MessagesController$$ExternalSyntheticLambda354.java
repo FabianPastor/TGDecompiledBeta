@@ -1,16 +1,19 @@
 package org.telegram.messenger;
 
-import org.telegram.tgnet.RequestDelegate;
-import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC$TL_error;
+import android.util.SparseBooleanArray;
 
-public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda354 implements RequestDelegate {
-    public static final /* synthetic */ MessagesController$$ExternalSyntheticLambda354 INSTANCE = new MessagesController$$ExternalSyntheticLambda354();
+public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda354 implements Runnable {
+    public final /* synthetic */ MessagesController f$0;
+    public final /* synthetic */ SparseBooleanArray f$1;
+    public final /* synthetic */ long f$2;
 
-    private /* synthetic */ MessagesController$$ExternalSyntheticLambda354() {
+    public /* synthetic */ MessagesController$$ExternalSyntheticLambda354(MessagesController messagesController, SparseBooleanArray sparseBooleanArray, long j) {
+        this.f$0 = messagesController;
+        this.f$1 = sparseBooleanArray;
+        this.f$2 = j;
     }
 
-    public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        MessagesController.lambda$reportSpam$55(tLObject, tLRPC$TL_error);
+    public final void run() {
+        this.f$0.m155xe06509a2(this.f$1, this.f$2);
     }
 }

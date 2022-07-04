@@ -15,6 +15,6 @@ public final /* synthetic */ class PollCreateActivity$ListAdapter$$ExternalSynth
     }
 
     public final boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
-        return this.f$0.lambda$onCreateViewHolder$1(this.f$1, textView, i, keyEvent);
+        return this.f$0.m4346x2beeCLASSNAMEb(this.f$1, textView, i, keyEvent);
     }
 }

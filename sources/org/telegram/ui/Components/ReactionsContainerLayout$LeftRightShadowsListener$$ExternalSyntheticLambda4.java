@@ -10,6 +10,6 @@ public final /* synthetic */ class ReactionsContainerLayout$LeftRightShadowsList
     }
 
     public final void run() {
-        this.f$0.lambda$onScrolled$1();
+        this.f$0.m1303xe64ce9a1();
     }
 }

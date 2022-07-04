@@ -1,15 +1,15 @@
 package org.telegram.ui;
 
-import android.widget.PopupWindow;
+import android.content.DialogInterface;
 
-public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda110 implements PopupWindow.OnDismissListener {
+public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda110 implements DialogInterface.OnCancelListener {
     public final /* synthetic */ ChatActivity f$0;
 
     public /* synthetic */ ChatActivity$$ExternalSyntheticLambda110(ChatActivity chatActivity) {
         this.f$0 = chatActivity;
     }
 
-    public final void onDismiss() {
-        this.f$0.lambda$createView$52();
+    public final void onCancel(DialogInterface dialogInterface) {
+        this.f$0.m3019lambda$new$1$orgtelegramuiChatActivity(dialogInterface);
     }
 }

@@ -45,10 +45,10 @@ public class FlatCheckBox extends View {
         this.checkPaint.setStrokeWidth((float) AndroidUtilities.dp(2.0f));
     }
 
-    public void recolor(int i) {
+    public void recolor(int c) {
         this.colorActive = Theme.getColor("windowBackgroundWhite");
         this.colorTextActive = -1;
-        this.colorInactive = i;
+        this.colorInactive = c;
         invalidate();
     }
 
@@ -64,15 +64,15 @@ public class FlatCheckBox extends View {
         this.attached = false;
     }
 
-    public void setChecked(boolean z) {
-        setChecked(z, true);
+    public void setChecked(boolean enabled2) {
+        setChecked(enabled2, true);
     }
 
-    public void setChecked(boolean z, boolean z2) {
-        this.checked = z;
+    public void setChecked(boolean enabled2, boolean animate) {
+        this.checked = enabled2;
         float f = 1.0f;
-        if (!this.attached || !z2) {
-            if (!z) {
+        if (!this.attached || !animate) {
+            if (!enabled2) {
                 f = 0.0f;
             }
             this.progress = f;
@@ -85,7 +85,7 @@ public class FlatCheckBox extends View {
         }
         float[] fArr = new float[2];
         fArr[0] = this.progress;
-        if (!z) {
+        if (!enabled2) {
             f = 0.0f;
         }
         fArr[1] = f;
@@ -96,21 +96,21 @@ public class FlatCheckBox extends View {
         this.checkAnimator.start();
     }
 
-    /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$setChecked$0(ValueAnimator valueAnimator) {
-        this.progress = ((Float) valueAnimator.getAnimatedValue()).floatValue();
+    /* renamed from: lambda$setChecked$0$org-telegram-ui-Components-FlatCheckBox  reason: not valid java name */
+    public /* synthetic */ void m973lambda$setChecked$0$orgtelegramuiComponentsFlatCheckBox(ValueAnimator animation) {
+        this.progress = ((Float) animation.getAnimatedValue()).floatValue();
         invalidate();
     }
 
-    public void setText(String str) {
-        this.text = str;
+    public void setText(String text2) {
+        this.text = text2;
         requestLayout();
     }
 
     /* access modifiers changed from: protected */
-    public void onMeasure(int i, int i2) {
+    public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         String str = this.text;
-        setMeasuredDimension((str == null ? 0 : (int) this.textPaint.measureText(str)) + (this.INNER_PADDING << 1) + (this.P * 2), this.HEIGHT + AndroidUtilities.dp(4.0f));
+        setMeasuredDimension((this.P * 2) + (str == null ? 0 : (int) this.textPaint.measureText(str)) + (this.INNER_PADDING << 1), this.HEIGHT + AndroidUtilities.dp(4.0f));
         if (getMeasuredWidth() != this.lastW) {
             this.rectF.set(0.0f, 0.0f, (float) getMeasuredWidth(), (float) getMeasuredHeight());
             this.rectF.inset(((float) this.P) + (this.outLinePaint.getStrokeWidth() / 2.0f), ((float) this.P) + (this.outLinePaint.getStrokeWidth() / 2.0f) + ((float) AndroidUtilities.dp(2.0f)));
@@ -118,19 +118,20 @@ public class FlatCheckBox extends View {
     }
 
     public void draw(Canvas canvas) {
-        float f;
+        float textTranslation;
         super.draw(canvas);
-        float f2 = this.progress;
-        if (f2 <= 0.5f) {
-            f = f2 / 0.5f;
-            this.fillPaint.setColor(Color.rgb(Color.red(this.colorActive) + ((int) (((float) (Color.red(this.colorInactive) - Color.red(this.colorActive))) * f)), Color.green(this.colorActive) + ((int) (((float) (Color.green(this.colorInactive) - Color.green(this.colorActive))) * f)), Color.blue(this.colorActive) + ((int) (((float) (Color.blue(this.colorInactive) - Color.blue(this.colorActive))) * f))));
-            this.textPaint.setColor(Color.rgb(Color.red(this.colorInactive) + ((int) (((float) (Color.red(this.colorTextActive) - Color.red(this.colorInactive))) * f)), Color.green(this.colorInactive) + ((int) (((float) (Color.green(this.colorTextActive) - Color.green(this.colorInactive))) * f)), Color.blue(this.colorInactive) + ((int) (((float) (Color.blue(this.colorTextActive) - Color.blue(this.colorInactive))) * f))));
+        float f = this.progress;
+        if (f <= 0.5f) {
+            float checkProgress = f / 0.5f;
+            textTranslation = checkProgress;
+            this.fillPaint.setColor(Color.rgb(Color.red(this.colorActive) + ((int) (((float) (Color.red(this.colorInactive) - Color.red(this.colorActive))) * checkProgress)), Color.green(this.colorActive) + ((int) (((float) (Color.green(this.colorInactive) - Color.green(this.colorActive))) * checkProgress)), Color.blue(this.colorActive) + ((int) (((float) (Color.blue(this.colorInactive) - Color.blue(this.colorActive))) * checkProgress))));
+            this.textPaint.setColor(Color.rgb(Color.red(this.colorInactive) + ((int) (((float) (Color.red(this.colorTextActive) - Color.red(this.colorInactive))) * checkProgress)), Color.green(this.colorInactive) + ((int) (((float) (Color.green(this.colorTextActive) - Color.green(this.colorInactive))) * checkProgress)), Color.blue(this.colorInactive) + ((int) (((float) (Color.blue(this.colorTextActive) - Color.blue(this.colorInactive))) * checkProgress))));
         } else {
+            textTranslation = 1.0f;
             this.textPaint.setColor(this.colorTextActive);
             this.fillPaint.setColor(this.colorInactive);
-            f = 1.0f;
         }
-        int measuredHeight = getMeasuredHeight() >> 1;
+        int heightHalf = getMeasuredHeight() >> 1;
         this.outLinePaint.setColor(this.colorInactive);
         RectF rectF2 = this.rectF;
         int i = this.HEIGHT;
@@ -140,18 +141,18 @@ public class FlatCheckBox extends View {
         canvas.drawRoundRect(rectF3, ((float) i2) / 2.0f, ((float) i2) / 2.0f, this.outLinePaint);
         String str = this.text;
         if (str != null) {
-            canvas.drawText(str, ((float) (getMeasuredWidth() >> 1)) + (f * ((float) this.TRANSLETE_TEXT)), ((float) measuredHeight) + (this.textPaint.getTextSize() * 0.35f), this.textPaint);
+            canvas.drawText(str, ((float) (getMeasuredWidth() >> 1)) + (((float) this.TRANSLETE_TEXT) * textTranslation), ((float) heightHalf) + (this.textPaint.getTextSize() * 0.35f), this.textPaint);
         }
-        float f3 = 2.0f - (this.progress / 0.5f);
+        float bounceProgress = 2.0f - (this.progress / 0.5f);
         canvas.save();
-        canvas.scale(0.9f, 0.9f, AndroidUtilities.dpf2(7.0f), (float) measuredHeight);
-        canvas.translate((float) AndroidUtilities.dp(12.0f), (float) (measuredHeight - AndroidUtilities.dp(9.0f)));
+        canvas.scale(0.9f, 0.9f, AndroidUtilities.dpf2(7.0f), (float) heightHalf);
+        canvas.translate((float) AndroidUtilities.dp(12.0f), (float) (heightHalf - AndroidUtilities.dp(9.0f)));
         if (this.progress > 0.5f) {
             this.checkPaint.setColor(this.colorTextActive);
-            float f4 = 1.0f - f3;
             Canvas canvas2 = canvas;
-            canvas2.drawLine(AndroidUtilities.dpf2(7.0f), (float) ((int) AndroidUtilities.dpf2(13.0f)), (float) ((int) (AndroidUtilities.dpf2(7.0f) - (((float) AndroidUtilities.dp(4.0f)) * f4))), (float) ((int) (AndroidUtilities.dpf2(13.0f) - (((float) AndroidUtilities.dp(4.0f)) * f4))), this.checkPaint);
-            canvas.drawLine((float) ((int) AndroidUtilities.dpf2(7.0f)), (float) ((int) AndroidUtilities.dpf2(13.0f)), (float) ((int) (AndroidUtilities.dpf2(7.0f) + (((float) AndroidUtilities.dp(8.0f)) * f4))), (float) ((int) (AndroidUtilities.dpf2(13.0f) - (((float) AndroidUtilities.dp(8.0f)) * f4))), this.checkPaint);
+            canvas2.drawLine(AndroidUtilities.dpf2(7.0f), (float) ((int) AndroidUtilities.dpf2(13.0f)), (float) ((int) (AndroidUtilities.dpf2(7.0f) - (((float) AndroidUtilities.dp(4.0f)) * (1.0f - bounceProgress)))), (float) ((int) (AndroidUtilities.dpf2(13.0f) - (((float) AndroidUtilities.dp(4.0f)) * (1.0f - bounceProgress)))), this.checkPaint);
+            Canvas canvas3 = canvas;
+            canvas3.drawLine((float) ((int) AndroidUtilities.dpf2(7.0f)), (float) ((int) AndroidUtilities.dpf2(13.0f)), (float) ((int) (AndroidUtilities.dpf2(7.0f) + (((float) AndroidUtilities.dp(8.0f)) * (1.0f - bounceProgress)))), (float) ((int) (AndroidUtilities.dpf2(13.0f) - (((float) AndroidUtilities.dp(8.0f)) * (1.0f - bounceProgress)))), this.checkPaint);
         }
         canvas.restore();
     }

@@ -2,7 +2,7 @@ package org.telegram.ui.Components;
 
 import org.telegram.tgnet.RequestDelegate;
 import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC$TL_error;
+import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.ActionBar.ActionBarMenuSubItem;
 
 public final /* synthetic */ class BotWebViewContainer$$ExternalSyntheticLambda8 implements RequestDelegate {
@@ -14,7 +14,7 @@ public final /* synthetic */ class BotWebViewContainer$$ExternalSyntheticLambda8
         this.f$1 = actionBarMenuSubItem;
     }
 
-    public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        this.f$0.lambda$loadFlickerAndSettingsItem$5(this.f$1, tLObject, tLRPC$TL_error);
+    public final void run(TLObject tLObject, TLRPC.TL_error tL_error) {
+        this.f$0.m578xcCLASSNAMEe9(this.f$1, tLObject, tL_error);
     }
 }

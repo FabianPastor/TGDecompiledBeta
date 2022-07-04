@@ -10,8 +10,7 @@ import android.text.StaticLayout;
 import android.text.TextPaint;
 import android.text.TextUtils;
 import android.util.TypedValue;
-import androidx.annotation.Keep;
-import androidx.core.util.ObjectsCompat$$ExternalSyntheticBackport0;
+import androidx.core.graphics.ColorUtils$$ExternalSyntheticBackport0;
 import androidx.dynamicanimation.animation.FloatPropertyCompat;
 import androidx.dynamicanimation.animation.SpringAnimation;
 import androidx.dynamicanimation.animation.SpringForce;
@@ -19,6 +18,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class AnimatedPhoneNumberEditText extends HintEditText {
+    private static final float SPRING_MULTIPLIER = 100.0f;
+    private static final boolean USE_NUMBERS_ANIMATION = false;
     /* access modifiers changed from: private */
     public ObjectAnimator animator;
     private Runnable hintAnimationCallback;
@@ -39,45 +40,40 @@ public class AnimatedPhoneNumberEditText extends HintEditText {
         super(context);
     }
 
-    public void setHintText(String str) {
-        String str2;
-        boolean z = !TextUtils.isEmpty(str);
-        boolean z2 = false;
+    public void setHintText(String value) {
+        boolean show = !TextUtils.isEmpty(value);
+        boolean runAnimation = false;
         Boolean bool = this.wasHintVisible;
-        if (bool == null || bool.booleanValue() != z) {
+        if (bool == null || bool.booleanValue() != show) {
             this.hintAnimationValues.clear();
-            for (SpringAnimation cancel : this.hintAnimations) {
-                cancel.cancel();
+            for (SpringAnimation a : this.hintAnimations) {
+                a.cancel();
             }
             this.hintAnimations.clear();
-            this.wasHintVisible = Boolean.valueOf(z);
-            z2 = TextUtils.isEmpty(getText());
+            this.wasHintVisible = Boolean.valueOf(show);
+            runAnimation = TextUtils.isEmpty(getText());
         }
-        if (z) {
-            str2 = str;
-        } else {
-            str2 = this.wasHint;
+        String str = show ? value : this.wasHint;
+        if (str == null) {
+            str = "";
         }
-        if (str2 == null) {
-            str2 = "";
+        this.wasHint = value;
+        if (show || !runAnimation) {
+            super.setHintText(value);
         }
-        this.wasHint = str;
-        if (z || !z2) {
-            super.setHintText(str);
-        }
-        if (z2) {
-            runHintAnimation(str2.length(), z, new AnimatedPhoneNumberEditText$$ExternalSyntheticLambda1(this, z, str));
+        if (runAnimation) {
+            runHintAnimation(str.length(), show, new AnimatedPhoneNumberEditText$$ExternalSyntheticLambda1(this, show, value));
         }
     }
 
-    /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$setHintText$0(boolean z, String str) {
+    /* renamed from: lambda$setHintText$0$org-telegram-ui-Components-AnimatedPhoneNumberEditText  reason: not valid java name */
+    public /* synthetic */ void m532xbfd6e9c9(boolean show, String value) {
         this.hintAnimationValues.clear();
-        for (SpringAnimation cancel : this.hintAnimations) {
-            cancel.cancel();
+        for (SpringAnimation a : this.hintAnimations) {
+            a.cancel();
         }
-        if (!z) {
-            super.setHintText(str);
+        if (!show) {
+            super.setHintText(value);
         }
     }
 
@@ -85,41 +81,40 @@ public class AnimatedPhoneNumberEditText extends HintEditText {
         return this.wasHint;
     }
 
-    private void runHintAnimation(int i, boolean z, Runnable runnable) {
-        Runnable runnable2 = this.hintAnimationCallback;
-        if (runnable2 != null) {
-            removeCallbacks(runnable2);
+    private void runHintAnimation(int length, boolean show, Runnable callback) {
+        Runnable runnable = this.hintAnimationCallback;
+        if (runnable != null) {
+            removeCallbacks(runnable);
         }
-        for (int i2 = 0; i2 < i; i2++) {
-            float f = 0.0f;
-            float f2 = z ? 0.0f : 1.0f;
-            if (z) {
-                f = 1.0f;
+        for (int i = 0; i < length; i++) {
+            float finalValue = 0.0f;
+            float startValue = show ? 0.0f : 1.0f;
+            if (show) {
+                finalValue = 1.0f;
             }
-            float f3 = f * 100.0f;
-            SpringAnimation springAnimation = (SpringAnimation) new SpringAnimation(Integer.valueOf(i2), this.hintFadeProperty).setSpring(new SpringForce(f3).setStiffness(500.0f).setDampingRatio(1.0f).setFinalPosition(f3)).setStartValue(100.0f * f2);
+            SpringAnimation springAnimation = (SpringAnimation) new SpringAnimation(Integer.valueOf(i), this.hintFadeProperty).setSpring(new SpringForce(finalValue * 100.0f).setStiffness(500.0f).setDampingRatio(1.0f).setFinalPosition(finalValue * 100.0f)).setStartValue(100.0f * startValue);
             this.hintAnimations.add(springAnimation);
-            this.hintAnimationValues.add(Float.valueOf(f2));
+            this.hintAnimationValues.add(Float.valueOf(startValue));
             springAnimation.getClass();
-            postDelayed(new AnimatedPhoneNumberEditText$$ExternalSyntheticLambda0(springAnimation), ((long) i2) * 5);
+            postDelayed(new AnimatedPhoneNumberEditText$$ExternalSyntheticLambda0(springAnimation), ((long) i) * 5);
         }
-        this.hintAnimationCallback = runnable;
-        postDelayed(runnable, (((long) i) * 5) + 150);
+        this.hintAnimationCallback = callback;
+        postDelayed(callback, (((long) length) * 5) + 150);
     }
 
-    public void setTextSize(int i, float f) {
-        super.setTextSize(i, f);
-        this.textPaint.setTextSize(TypedValue.applyDimension(i, f, getResources().getDisplayMetrics()));
+    public void setTextSize(int unit, float size) {
+        super.setTextSize(unit, size);
+        this.textPaint.setTextSize(TypedValue.applyDimension(unit, size, getResources().getDisplayMetrics()));
     }
 
-    public void setTextColor(int i) {
-        super.setTextColor(i);
-        this.textPaint.setColor(i);
+    public void setTextColor(int color) {
+        super.setTextColor(color);
+        this.textPaint.setColor(color);
     }
 
     /* access modifiers changed from: protected */
-    public void onTextChanged(CharSequence charSequence, int i, int i2, int i3) {
-        super.onTextChanged(charSequence, i, i2, i3);
+    public void onTextChanged(CharSequence text, int start, int lengthBefore, int lengthAfter) {
+        super.onTextChanged(text, start, lengthBefore, lengthAfter);
     }
 
     /* access modifiers changed from: protected */
@@ -127,8 +122,9 @@ public class AnimatedPhoneNumberEditText extends HintEditText {
         super.onDraw(canvas);
     }
 
-    public void setNewText(String str) {
-        if (this.oldLetters != null && this.letters != null && !ObjectsCompat$$ExternalSyntheticBackport0.m(this.oldText, str)) {
+    public void setNewText(String text) {
+        String str = text;
+        if (this.oldLetters != null && this.letters != null && !ColorUtils$$ExternalSyntheticBackport0.m(this.oldText, str)) {
             ObjectAnimator objectAnimator = this.animator;
             if (objectAnimator != null) {
                 objectAnimator.cancel();
@@ -137,31 +133,30 @@ public class AnimatedPhoneNumberEditText extends HintEditText {
             this.oldLetters.clear();
             this.oldLetters.addAll(this.letters);
             this.letters.clear();
-            int i = 0;
-            boolean z = TextUtils.isEmpty(this.oldText) && !TextUtils.isEmpty(str);
+            boolean replace = TextUtils.isEmpty(this.oldText) && !TextUtils.isEmpty(text);
             this.progress = 0.0f;
-            while (i < str.length()) {
-                int i2 = i + 1;
-                String substring = str.substring(i, i2);
-                String substring2 = (this.oldLetters.isEmpty() || i >= this.oldText.length()) ? null : this.oldText.substring(i, i2);
-                if (z || substring2 == null || !substring2.equals(substring)) {
-                    if (z && substring2 == null) {
+            int a = 0;
+            while (a < text.length()) {
+                String ch = str.substring(a, a + 1);
+                String oldCh = (this.oldLetters.isEmpty() || a >= this.oldText.length()) ? null : this.oldText.substring(a, a + 1);
+                if (replace || oldCh == null || !oldCh.equals(ch)) {
+                    if (replace && oldCh == null) {
                         this.oldLetters.add(new StaticLayout("", this.textPaint, 0, Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false));
                     }
                     TextPaint textPaint2 = this.textPaint;
-                    this.letters.add(new StaticLayout(substring, textPaint2, (int) Math.ceil((double) textPaint2.measureText(substring)), Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false));
+                    this.letters.add(new StaticLayout(ch, textPaint2, (int) Math.ceil((double) textPaint2.measureText(ch)), Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false));
                 } else {
-                    this.letters.add(this.oldLetters.get(i));
-                    this.oldLetters.set(i, (Object) null);
+                    this.letters.add(this.oldLetters.get(a));
+                    this.oldLetters.set(a, (Object) null);
                 }
-                i = i2;
+                a++;
             }
             if (!this.oldLetters.isEmpty()) {
                 ObjectAnimator ofFloat = ObjectAnimator.ofFloat(this, "progress", new float[]{-1.0f, 0.0f});
                 this.animator = ofFloat;
                 ofFloat.setDuration(150);
                 this.animator.addListener(new AnimatorListenerAdapter() {
-                    public void onAnimationEnd(Animator animator) {
+                    public void onAnimationEnd(Animator animation) {
                         ObjectAnimator unused = AnimatedPhoneNumberEditText.this.animator = null;
                         AnimatedPhoneNumberEditText.this.oldLetters.clear();
                     }
@@ -174,21 +169,19 @@ public class AnimatedPhoneNumberEditText extends HintEditText {
     }
 
     /* access modifiers changed from: protected */
-    public void onPreDrawHintCharacter(int i, Canvas canvas, float f, float f2) {
-        if (i < this.hintAnimationValues.size()) {
-            this.hintPaint.setAlpha((int) (this.hintAnimationValues.get(i).floatValue() * 255.0f));
+    public void onPreDrawHintCharacter(int index, Canvas canvas, float pivotX, float pivotY) {
+        if (index < this.hintAnimationValues.size()) {
+            this.hintPaint.setAlpha((int) (this.hintAnimationValues.get(index).floatValue() * 255.0f));
         }
     }
 
-    @Keep
-    public void setProgress(float f) {
-        if (this.progress != f) {
-            this.progress = f;
+    public void setProgress(float value) {
+        if (this.progress != value) {
+            this.progress = value;
             invalidate();
         }
     }
 
-    @Keep
     public float getProgress() {
         return this.progress;
     }
@@ -198,16 +191,16 @@ public class AnimatedPhoneNumberEditText extends HintEditText {
             super("hint_fade");
         }
 
-        public float getValue(Integer num) {
-            if (num.intValue() < AnimatedPhoneNumberEditText.this.hintAnimationValues.size()) {
-                return ((Float) AnimatedPhoneNumberEditText.this.hintAnimationValues.get(num.intValue())).floatValue() * 100.0f;
+        public float getValue(Integer object) {
+            if (object.intValue() < AnimatedPhoneNumberEditText.this.hintAnimationValues.size()) {
+                return ((Float) AnimatedPhoneNumberEditText.this.hintAnimationValues.get(object.intValue())).floatValue() * 100.0f;
             }
             return 0.0f;
         }
 
-        public void setValue(Integer num, float f) {
-            if (num.intValue() < AnimatedPhoneNumberEditText.this.hintAnimationValues.size()) {
-                AnimatedPhoneNumberEditText.this.hintAnimationValues.set(num.intValue(), Float.valueOf(f / 100.0f));
+        public void setValue(Integer object, float value) {
+            if (object.intValue() < AnimatedPhoneNumberEditText.this.hintAnimationValues.size()) {
+                AnimatedPhoneNumberEditText.this.hintAnimationValues.set(object.intValue(), Float.valueOf(value / 100.0f));
                 AnimatedPhoneNumberEditText.this.invalidate();
             }
         }

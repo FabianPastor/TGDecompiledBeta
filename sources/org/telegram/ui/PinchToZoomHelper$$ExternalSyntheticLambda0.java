@@ -10,6 +10,6 @@ public final /* synthetic */ class PinchToZoomHelper$$ExternalSyntheticLambda0 i
     }
 
     public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-        this.f$0.lambda$finishZoom$0(valueAnimator);
+        this.f$0.m4341lambda$finishZoom$0$orgtelegramuiPinchToZoomHelper(valueAnimator);
     }
 }

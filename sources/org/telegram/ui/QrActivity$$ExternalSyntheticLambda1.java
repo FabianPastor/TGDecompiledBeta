@@ -1,17 +1,16 @@
 package org.telegram.ui;
 
-import android.animation.ValueAnimator;
+import org.telegram.ui.ActionBar.EmojiThemes;
+import org.telegram.ui.QrActivity;
 
-public final /* synthetic */ class QrActivity$$ExternalSyntheticLambda1 implements ValueAnimator.AnimatorUpdateListener {
+public final /* synthetic */ class QrActivity$$ExternalSyntheticLambda1 implements QrActivity.OnItemSelectedListener {
     public final /* synthetic */ QrActivity f$0;
-    public final /* synthetic */ int[] f$1;
 
-    public /* synthetic */ QrActivity$$ExternalSyntheticLambda1(QrActivity qrActivity, int[] iArr) {
+    public /* synthetic */ QrActivity$$ExternalSyntheticLambda1(QrActivity qrActivity) {
         this.f$0 = qrActivity;
-        this.f$1 = iArr;
     }
 
-    public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-        this.f$0.lambda$onItemSelected$8(this.f$1, valueAnimator);
+    public final void onItemSelected(EmojiThemes emojiThemes, int i) {
+        this.f$0.m4556lambda$createView$2$orgtelegramuiQrActivity(emojiThemes, i);
     }
 }

@@ -1,20 +1,13 @@
 package org.telegram.ui;
 
-import android.content.DialogInterface;
-import org.telegram.ui.Cells.ChatMessageCell;
-
-public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda23 implements DialogInterface.OnCancelListener {
+public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda23 implements Runnable {
     public final /* synthetic */ ChatActivity f$0;
-    public final /* synthetic */ int f$1;
-    public final /* synthetic */ ChatMessageCell f$2;
 
-    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda23(ChatActivity chatActivity, int i, ChatMessageCell chatMessageCell) {
+    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda23(ChatActivity chatActivity) {
         this.f$0 = chatActivity;
-        this.f$1 = i;
-        this.f$2 = chatMessageCell;
     }
 
-    public final void onCancel(DialogInterface dialogInterface) {
-        this.f$0.lambda$didPressMessageUrl$241(this.f$1, this.f$2, dialogInterface);
+    public final void run() {
+        this.f$0.m2914x4eb1d54c();
     }
 }

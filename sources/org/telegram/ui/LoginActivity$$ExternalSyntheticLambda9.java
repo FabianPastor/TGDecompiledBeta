@@ -1,15 +1,15 @@
 package org.telegram.ui;
 
-import android.view.View;
+import org.telegram.messenger.GenericProvider;
 
-public final /* synthetic */ class LoginActivity$$ExternalSyntheticLambda9 implements View.OnClickListener {
-    public final /* synthetic */ LoginActivity f$0;
+public final /* synthetic */ class LoginActivity$$ExternalSyntheticLambda9 implements GenericProvider {
+    public final /* synthetic */ boolean f$0;
 
-    public /* synthetic */ LoginActivity$$ExternalSyntheticLambda9(LoginActivity loginActivity) {
-        this.f$0 = loginActivity;
+    public /* synthetic */ LoginActivity$$ExternalSyntheticLambda9(boolean z) {
+        this.f$0 = z;
     }
 
-    public final void onClick(View view) {
-        this.f$0.lambda$createView$1(view);
+    public final Object provide(Object obj) {
+        return LoginActivity.lambda$needFinishActivity$16(this.f$0, (Void) obj);
     }
 }

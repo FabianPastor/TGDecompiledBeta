@@ -1,16 +1,13 @@
 package org.telegram.messenger;
 
-import org.telegram.tgnet.RequestDelegate;
-import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC$TL_error;
+public final /* synthetic */ class NotificationsController$$ExternalSyntheticLambda39 implements Runnable {
+    public final /* synthetic */ NotificationsController f$0;
 
-public final /* synthetic */ class NotificationsController$$ExternalSyntheticLambda39 implements RequestDelegate {
-    public static final /* synthetic */ NotificationsController$$ExternalSyntheticLambda39 INSTANCE = new NotificationsController$$ExternalSyntheticLambda39();
-
-    private /* synthetic */ NotificationsController$$ExternalSyntheticLambda39() {
+    public /* synthetic */ NotificationsController$$ExternalSyntheticLambda39(NotificationsController notificationsController) {
+        this.f$0 = notificationsController;
     }
 
-    public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        NotificationsController.lambda$updateServerNotificationsSettings$40(tLObject, tLRPC$TL_error);
+    public final void run() {
+        this.f$0.m2329x832e582c();
     }
 }

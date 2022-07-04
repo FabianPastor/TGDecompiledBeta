@@ -3,15 +3,17 @@ package org.telegram.messenger;
 import org.telegram.messenger.MessagesStorage;
 
 public final /* synthetic */ class MessagesStorage$$ExternalSyntheticLambda4 implements Runnable {
-    public final /* synthetic */ MessagesStorage.IntCallback f$0;
-    public final /* synthetic */ int[] f$1;
+    public final /* synthetic */ MessagesStorage f$0;
+    public final /* synthetic */ long f$1;
+    public final /* synthetic */ MessagesStorage.IntCallback f$2;
 
-    public /* synthetic */ MessagesStorage$$ExternalSyntheticLambda4(MessagesStorage.IntCallback intCallback, int[] iArr) {
-        this.f$0 = intCallback;
-        this.f$1 = iArr;
+    public /* synthetic */ MessagesStorage$$ExternalSyntheticLambda4(MessagesStorage messagesStorage, long j, MessagesStorage.IntCallback intCallback) {
+        this.f$0 = messagesStorage;
+        this.f$1 = j;
+        this.f$2 = intCallback;
     }
 
     public final void run() {
-        this.f$0.run(this.f$1[0]);
+        this.f$0.m2179x2522CLASSNAMEd(this.f$1, this.f$2);
     }
 }

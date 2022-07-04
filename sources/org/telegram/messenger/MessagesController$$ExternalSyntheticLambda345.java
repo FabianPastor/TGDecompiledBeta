@@ -1,16 +1,21 @@
 package org.telegram.messenger;
 
-import org.telegram.tgnet.RequestDelegate;
-import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC$TL_error;
+import java.util.ArrayList;
 
-public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda345 implements RequestDelegate {
-    public static final /* synthetic */ MessagesController$$ExternalSyntheticLambda345 INSTANCE = new MessagesController$$ExternalSyntheticLambda345();
+public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda345 implements Runnable {
+    public final /* synthetic */ MessagesController f$0;
+    public final /* synthetic */ long f$1;
+    public final /* synthetic */ ArrayList f$2;
+    public final /* synthetic */ ArrayList f$3;
 
-    private /* synthetic */ MessagesController$$ExternalSyntheticLambda345() {
+    public /* synthetic */ MessagesController$$ExternalSyntheticLambda345(MessagesController messagesController, long j, ArrayList arrayList, ArrayList arrayList2) {
+        this.f$0 = messagesController;
+        this.f$1 = j;
+        this.f$2 = arrayList;
+        this.f$3 = arrayList2;
     }
 
-    public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        MessagesController.lambda$hidePromoDialog$108(tLObject, tLRPC$TL_error);
+    public final void run() {
+        this.f$0.m370xaavar_fe0(this.f$1, this.f$2, this.f$3);
     }
 }

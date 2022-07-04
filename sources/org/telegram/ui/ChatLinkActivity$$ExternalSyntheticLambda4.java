@@ -1,21 +1,18 @@
 package org.telegram.ui;
 
-import android.content.DialogInterface;
-import org.telegram.tgnet.TLRPC$Chat;
-import org.telegram.tgnet.TLRPC$ChatFull;
+import org.telegram.messenger.MessagesStorage;
+import org.telegram.ui.ActionBar.BaseFragment;
 
-public final /* synthetic */ class ChatLinkActivity$$ExternalSyntheticLambda4 implements DialogInterface.OnClickListener {
+public final /* synthetic */ class ChatLinkActivity$$ExternalSyntheticLambda4 implements MessagesStorage.LongCallback {
     public final /* synthetic */ ChatLinkActivity f$0;
-    public final /* synthetic */ TLRPC$ChatFull f$1;
-    public final /* synthetic */ TLRPC$Chat f$2;
+    public final /* synthetic */ BaseFragment f$1;
 
-    public /* synthetic */ ChatLinkActivity$$ExternalSyntheticLambda4(ChatLinkActivity chatLinkActivity, TLRPC$ChatFull tLRPC$ChatFull, TLRPC$Chat tLRPC$Chat) {
+    public /* synthetic */ ChatLinkActivity$$ExternalSyntheticLambda4(ChatLinkActivity chatLinkActivity, BaseFragment baseFragment) {
         this.f$0 = chatLinkActivity;
-        this.f$1 = tLRPC$ChatFull;
-        this.f$2 = tLRPC$Chat;
+        this.f$1 = baseFragment;
     }
 
-    public final void onClick(DialogInterface dialogInterface, int i) {
-        this.f$0.lambda$showLinkAlert$9(this.f$1, this.f$2, dialogInterface, i);
+    public final void run(long j) {
+        this.f$0.m3238lambda$linkChat$10$orgtelegramuiChatLinkActivity(this.f$1, j);
     }
 }

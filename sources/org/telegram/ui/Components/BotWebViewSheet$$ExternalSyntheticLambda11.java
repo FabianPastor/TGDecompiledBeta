@@ -1,17 +1,15 @@
 package org.telegram.ui.Components;
 
-import org.telegram.tgnet.TLRPC$TL_error;
+import android.view.View;
+import android.view.WindowInsets;
 
-public final /* synthetic */ class BotWebViewSheet$$ExternalSyntheticLambda11 implements Runnable {
-    public final /* synthetic */ BotWebViewSheet f$0;
-    public final /* synthetic */ TLRPC$TL_error f$1;
+public final /* synthetic */ class BotWebViewSheet$$ExternalSyntheticLambda11 implements View.OnApplyWindowInsetsListener {
+    public static final /* synthetic */ BotWebViewSheet$$ExternalSyntheticLambda11 INSTANCE = new BotWebViewSheet$$ExternalSyntheticLambda11();
 
-    public /* synthetic */ BotWebViewSheet$$ExternalSyntheticLambda11(BotWebViewSheet botWebViewSheet, TLRPC$TL_error tLRPC$TL_error) {
-        this.f$0 = botWebViewSheet;
-        this.f$1 = tLRPC$TL_error;
+    private /* synthetic */ BotWebViewSheet$$ExternalSyntheticLambda11() {
     }
 
-    public final void run() {
-        this.f$0.lambda$new$2(this.f$1);
+    public final WindowInsets onApplyWindowInsets(View view, WindowInsets windowInsets) {
+        return view.setPadding(0, 0, 0, windowInsets.getSystemWindowInsetBottom());
     }
 }

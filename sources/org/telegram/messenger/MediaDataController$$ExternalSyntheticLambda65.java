@@ -1,17 +1,21 @@
 package org.telegram.messenger;
 
-import java.util.ArrayList;
+import org.telegram.tgnet.RequestDelegate;
+import org.telegram.tgnet.TLObject;
+import org.telegram.tgnet.TLRPC;
 
-public final /* synthetic */ class MediaDataController$$ExternalSyntheticLambda65 implements Runnable {
+public final /* synthetic */ class MediaDataController$$ExternalSyntheticLambda65 implements RequestDelegate {
     public final /* synthetic */ MediaDataController f$0;
-    public final /* synthetic */ ArrayList f$1;
+    public final /* synthetic */ Object f$1;
+    public final /* synthetic */ TLRPC.TL_messages_faveSticker f$2;
 
-    public /* synthetic */ MediaDataController$$ExternalSyntheticLambda65(MediaDataController mediaDataController, ArrayList arrayList) {
+    public /* synthetic */ MediaDataController$$ExternalSyntheticLambda65(MediaDataController mediaDataController, Object obj, TLRPC.TL_messages_faveSticker tL_messages_faveSticker) {
         this.f$0 = mediaDataController;
-        this.f$1 = arrayList;
+        this.f$1 = obj;
+        this.f$2 = tL_messages_faveSticker;
     }
 
-    public final void run() {
-        this.f$0.lambda$buildShortcuts$103(this.f$1);
+    public final void run(TLObject tLObject, TLRPC.TL_error tL_error) {
+        this.f$0.m1968x16db8CLASSNAME(this.f$1, this.f$2, tLObject, tL_error);
     }
 }

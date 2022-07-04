@@ -1,18 +1,16 @@
 package org.telegram.ui;
 
-import org.telegram.tgnet.TLObject;
+import android.content.DialogInterface;
 import org.telegram.ui.LoginActivity;
 
-public final /* synthetic */ class LoginActivity$LoginActivityRegisterView$$ExternalSyntheticLambda15 implements Runnable {
+public final /* synthetic */ class LoginActivity$LoginActivityRegisterView$$ExternalSyntheticLambda15 implements DialogInterface.OnDismissListener {
     public final /* synthetic */ LoginActivity.LoginActivityRegisterView f$0;
-    public final /* synthetic */ TLObject f$1;
 
-    public /* synthetic */ LoginActivity$LoginActivityRegisterView$$ExternalSyntheticLambda15(LoginActivity.LoginActivityRegisterView loginActivityRegisterView, TLObject tLObject) {
+    public /* synthetic */ LoginActivity$LoginActivityRegisterView$$ExternalSyntheticLambda15(LoginActivity.LoginActivityRegisterView loginActivityRegisterView) {
         this.f$0 = loginActivityRegisterView;
-        this.f$1 = tLObject;
     }
 
-    public final void run() {
-        this.f$0.lambda$onNextPressed$17(this.f$1);
+    public final void onDismiss(DialogInterface dialogInterface) {
+        this.f$0.m3825xdba43e6f(dialogInterface);
     }
 }

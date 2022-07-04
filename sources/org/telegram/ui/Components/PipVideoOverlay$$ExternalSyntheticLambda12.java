@@ -1,14 +1,13 @@
 package org.telegram.ui.Components;
 
-import org.telegram.ui.Components.SimpleFloatPropertyCompat;
+public final /* synthetic */ class PipVideoOverlay$$ExternalSyntheticLambda12 implements Runnable {
+    public final /* synthetic */ PipVideoOverlay f$0;
 
-public final /* synthetic */ class PipVideoOverlay$$ExternalSyntheticLambda12 implements SimpleFloatPropertyCompat.Setter {
-    public static final /* synthetic */ PipVideoOverlay$$ExternalSyntheticLambda12 INSTANCE = new PipVideoOverlay$$ExternalSyntheticLambda12();
-
-    private /* synthetic */ PipVideoOverlay$$ExternalSyntheticLambda12() {
+    public /* synthetic */ PipVideoOverlay$$ExternalSyntheticLambda12(PipVideoOverlay pipVideoOverlay) {
+        this.f$0 = pipVideoOverlay;
     }
 
-    public final void set(Object obj, float f) {
-        PipVideoOverlay.lambda$static$3((PipVideoOverlay) obj, f);
+    public final void run() {
+        this.f$0.m1212lambda$new$5$orgtelegramuiComponentsPipVideoOverlay();
     }
 }

@@ -9,37 +9,37 @@ public class URLSpanUserMention extends URLSpanNoUnderline {
     private int currentType;
     private TextStyleSpan.TextStyleRun style;
 
-    public URLSpanUserMention(String str, int i) {
-        this(str, i, (TextStyleSpan.TextStyleRun) null);
+    public URLSpanUserMention(String url, int type) {
+        this(url, type, (TextStyleSpan.TextStyleRun) null);
     }
 
-    public URLSpanUserMention(String str, int i, TextStyleSpan.TextStyleRun textStyleRun) {
-        super(str);
-        this.currentType = i;
-        this.style = textStyleRun;
+    public URLSpanUserMention(String url, int type, TextStyleSpan.TextStyleRun run) {
+        super(url);
+        this.currentType = type;
+        this.style = run;
     }
 
-    public void onClick(View view) {
-        super.onClick(view);
+    public void onClick(View widget) {
+        super.onClick(widget);
     }
 
-    public void updateDrawState(TextPaint textPaint) {
-        super.updateDrawState(textPaint);
+    public void updateDrawState(TextPaint p) {
+        super.updateDrawState(p);
         int i = this.currentType;
         if (i == 3) {
-            textPaint.setColor(Theme.getColor("windowBackgroundWhiteLinkText"));
+            p.setColor(Theme.getColor("windowBackgroundWhiteLinkText"));
         } else if (i == 2) {
-            textPaint.setColor(-1);
+            p.setColor(-1);
         } else if (i == 1) {
-            textPaint.setColor(Theme.getColor("chat_messageLinkOut"));
+            p.setColor(Theme.getColor("chat_messageLinkOut"));
         } else {
-            textPaint.setColor(Theme.getColor("chat_messageLinkIn"));
+            p.setColor(Theme.getColor("chat_messageLinkIn"));
         }
         TextStyleSpan.TextStyleRun textStyleRun = this.style;
         if (textStyleRun != null) {
-            textStyleRun.applyStyle(textPaint);
+            textStyleRun.applyStyle(p);
         } else {
-            textPaint.setUnderlineText(false);
+            p.setUnderlineText(false);
         }
     }
 }

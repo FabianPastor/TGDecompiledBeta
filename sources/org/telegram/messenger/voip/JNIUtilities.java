@@ -1,6 +1,5 @@
 package org.telegram.messenger.voip;
 
-import android.annotation.TargetApi;
 import android.net.ConnectivityManager;
 import android.net.LinkAddress;
 import android.net.LinkProperties;
@@ -20,106 +19,103 @@ import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.FileLog;
 
 public class JNIUtilities {
-    public static int getMaxVideoResolution() {
-        return 320;
+    public static String getCurrentNetworkInterfaceName() {
+        LinkProperties props;
+        ConnectivityManager cm = (ConnectivityManager) ApplicationLoader.applicationContext.getSystemService("connectivity");
+        Network net = cm.getActiveNetwork();
+        if (net == null || (props = cm.getLinkProperties(net)) == null) {
+            return null;
+        }
+        return props.getInterfaceName();
+    }
+
+    public static String[] getLocalNetworkAddressesAndInterfaceName() {
+        LinkProperties linkProps;
+        ConnectivityManager cm = (ConnectivityManager) ApplicationLoader.applicationContext.getSystemService("connectivity");
+        if (Build.VERSION.SDK_INT >= 23) {
+            Network net = cm.getActiveNetwork();
+            if (net == null || (linkProps = cm.getLinkProperties(net)) == null) {
+                return null;
+            }
+            String ipv4 = null;
+            String ipv6 = null;
+            for (LinkAddress addr : linkProps.getLinkAddresses()) {
+                InetAddress a = addr.getAddress();
+                if (a instanceof Inet4Address) {
+                    if (!a.isLinkLocalAddress()) {
+                        ipv4 = a.getHostAddress();
+                    }
+                } else if ((a instanceof Inet6Address) && !a.isLinkLocalAddress() && (a.getAddress()[0] & 240) != 240) {
+                    ipv6 = a.getHostAddress();
+                }
+            }
+            return new String[]{linkProps.getInterfaceName(), ipv4, ipv6};
+        }
+        try {
+            Enumeration<NetworkInterface> itfs = NetworkInterface.getNetworkInterfaces();
+            if (itfs == null) {
+                return null;
+            }
+            while (itfs.hasMoreElements()) {
+                NetworkInterface itf = itfs.nextElement();
+                if (!itf.isLoopback()) {
+                    if (itf.isUp()) {
+                        Enumeration<InetAddress> addrs = itf.getInetAddresses();
+                        String ipv42 = null;
+                        String ipv62 = null;
+                        while (addrs.hasMoreElements()) {
+                            InetAddress a2 = addrs.nextElement();
+                            if (a2 instanceof Inet4Address) {
+                                if (!a2.isLinkLocalAddress()) {
+                                    ipv42 = a2.getHostAddress();
+                                }
+                            } else if ((a2 instanceof Inet6Address) && !a2.isLinkLocalAddress() && (a2.getAddress()[0] & 240) != 240) {
+                                ipv62 = a2.getHostAddress();
+                            }
+                        }
+                        return new String[]{itf.getName(), ipv42, ipv62};
+                    }
+                }
+            }
+            return null;
+        } catch (Exception x) {
+            FileLog.e((Throwable) x);
+            return null;
+        }
+    }
+
+    public static String[] getCarrierInfo() {
+        TelephonyManager tm = (TelephonyManager) ApplicationLoader.applicationContext.getSystemService("phone");
+        if (Build.VERSION.SDK_INT >= 24) {
+            tm = tm.createForSubscriptionId(SubscriptionManager.getDefaultDataSubscriptionId());
+        }
+        if (TextUtils.isEmpty(tm.getNetworkOperatorName())) {
+            return null;
+        }
+        String mnc = "";
+        String mcc = "";
+        String carrierID = tm.getNetworkOperator();
+        if (carrierID != null && carrierID.length() > 3) {
+            mcc = carrierID.substring(0, 3);
+            mnc = carrierID.substring(3);
+        }
+        return new String[]{tm.getNetworkOperatorName(), tm.getNetworkCountryIso().toUpperCase(), mcc, mnc};
+    }
+
+    public static int[] getWifiInfo() {
+        try {
+            WifiInfo info = ((WifiManager) ApplicationLoader.applicationContext.getSystemService("wifi")).getConnectionInfo();
+            return new int[]{info.getRssi(), info.getLinkSpeed()};
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     public static String getSupportedVideoCodecs() {
         return "";
     }
 
-    @TargetApi(23)
-    public static String getCurrentNetworkInterfaceName() {
-        LinkProperties linkProperties;
-        ConnectivityManager connectivityManager = (ConnectivityManager) ApplicationLoader.applicationContext.getSystemService("connectivity");
-        Network activeNetwork = connectivityManager.getActiveNetwork();
-        if (activeNetwork == null || (linkProperties = connectivityManager.getLinkProperties(activeNetwork)) == null) {
-            return null;
-        }
-        return linkProperties.getInterfaceName();
-    }
-
-    public static String[] getLocalNetworkAddressesAndInterfaceName() {
-        LinkProperties linkProperties;
-        ConnectivityManager connectivityManager = (ConnectivityManager) ApplicationLoader.applicationContext.getSystemService("connectivity");
-        String str = null;
-        if (Build.VERSION.SDK_INT >= 23) {
-            Network activeNetwork = connectivityManager.getActiveNetwork();
-            if (activeNetwork == null || (linkProperties = connectivityManager.getLinkProperties(activeNetwork)) == null) {
-                return null;
-            }
-            String str2 = null;
-            for (LinkAddress address : linkProperties.getLinkAddresses()) {
-                InetAddress address2 = address.getAddress();
-                if (address2 instanceof Inet4Address) {
-                    if (!address2.isLinkLocalAddress()) {
-                        str = address2.getHostAddress();
-                    }
-                } else if ((address2 instanceof Inet6Address) && !address2.isLinkLocalAddress() && (address2.getAddress()[0] & 240) != 240) {
-                    str2 = address2.getHostAddress();
-                }
-            }
-            return new String[]{linkProperties.getInterfaceName(), str, str2};
-        }
-        try {
-            Enumeration<NetworkInterface> networkInterfaces = NetworkInterface.getNetworkInterfaces();
-            if (networkInterfaces == null) {
-                return null;
-            }
-            while (networkInterfaces.hasMoreElements()) {
-                NetworkInterface nextElement = networkInterfaces.nextElement();
-                if (!nextElement.isLoopback()) {
-                    if (nextElement.isUp()) {
-                        Enumeration<InetAddress> inetAddresses = nextElement.getInetAddresses();
-                        String str3 = null;
-                        String str4 = null;
-                        while (inetAddresses.hasMoreElements()) {
-                            InetAddress nextElement2 = inetAddresses.nextElement();
-                            if (nextElement2 instanceof Inet4Address) {
-                                if (!nextElement2.isLinkLocalAddress()) {
-                                    str3 = nextElement2.getHostAddress();
-                                }
-                            } else if ((nextElement2 instanceof Inet6Address) && !nextElement2.isLinkLocalAddress() && (nextElement2.getAddress()[0] & 240) != 240) {
-                                str4 = nextElement2.getHostAddress();
-                            }
-                        }
-                        return new String[]{nextElement.getName(), str3, str4};
-                    }
-                }
-            }
-            return null;
-        } catch (Exception e) {
-            FileLog.e((Throwable) e);
-            return null;
-        }
-    }
-
-    public static String[] getCarrierInfo() {
-        String str;
-        TelephonyManager telephonyManager = (TelephonyManager) ApplicationLoader.applicationContext.getSystemService("phone");
-        if (Build.VERSION.SDK_INT >= 24) {
-            telephonyManager = telephonyManager.createForSubscriptionId(SubscriptionManager.getDefaultDataSubscriptionId());
-        }
-        if (TextUtils.isEmpty(telephonyManager.getNetworkOperatorName())) {
-            return null;
-        }
-        String networkOperator = telephonyManager.getNetworkOperator();
-        String str2 = "";
-        if (networkOperator == null || networkOperator.length() <= 3) {
-            str = str2;
-        } else {
-            str2 = networkOperator.substring(0, 3);
-            str = networkOperator.substring(3);
-        }
-        return new String[]{telephonyManager.getNetworkOperatorName(), telephonyManager.getNetworkCountryIso().toUpperCase(), str2, str};
-    }
-
-    public static int[] getWifiInfo() {
-        try {
-            WifiInfo connectionInfo = ((WifiManager) ApplicationLoader.applicationContext.getSystemService("wifi")).getConnectionInfo();
-            return new int[]{connectionInfo.getRssi(), connectionInfo.getLinkSpeed()};
-        } catch (Exception unused) {
-            return null;
-        }
+    public static int getMaxVideoResolution() {
+        return 320;
     }
 }

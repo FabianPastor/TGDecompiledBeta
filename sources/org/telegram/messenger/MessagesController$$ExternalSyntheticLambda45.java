@@ -1,19 +1,17 @@
 package org.telegram.messenger;
 
+import org.telegram.tgnet.TLObject;
+
 public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda45 implements Runnable {
     public final /* synthetic */ MessagesController f$0;
-    public final /* synthetic */ int f$1;
-    public final /* synthetic */ long f$2;
-    public final /* synthetic */ int f$3;
+    public final /* synthetic */ TLObject f$1;
 
-    public /* synthetic */ MessagesController$$ExternalSyntheticLambda45(MessagesController messagesController, int i, long j, int i2) {
+    public /* synthetic */ MessagesController$$ExternalSyntheticLambda45(MessagesController messagesController, TLObject tLObject) {
         this.f$0 = messagesController;
-        this.f$1 = i;
-        this.f$2 = j;
-        this.f$3 = i2;
+        this.f$1 = tLObject;
     }
 
     public final void run() {
-        this.f$0.lambda$sendTyping$143(this.f$1, this.f$2, this.f$3);
+        this.f$0.m283xbe2505c5(this.f$1);
     }
 }

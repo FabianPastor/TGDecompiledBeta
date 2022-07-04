@@ -1,15 +1,15 @@
 package org.telegram.ui.Components;
 
+import android.view.MotionEvent;
 import android.view.View;
 
-public final /* synthetic */ class StickersAlert$$ExternalSyntheticLambda5 implements View.OnClickListener {
-    public final /* synthetic */ StickersAlert f$0;
+public final /* synthetic */ class StickersAlert$$ExternalSyntheticLambda5 implements View.OnTouchListener {
+    public static final /* synthetic */ StickersAlert$$ExternalSyntheticLambda5 INSTANCE = new StickersAlert$$ExternalSyntheticLambda5();
 
-    public /* synthetic */ StickersAlert$$ExternalSyntheticLambda5(StickersAlert stickersAlert) {
-        this.f$0 = stickersAlert;
+    private /* synthetic */ StickersAlert$$ExternalSyntheticLambda5() {
     }
 
-    public final void onClick(View view) {
-        this.f$0.lambda$init$12(view);
+    public final boolean onTouch(View view, MotionEvent motionEvent) {
+        return StickersAlert.lambda$init$9(view, motionEvent);
     }
 }

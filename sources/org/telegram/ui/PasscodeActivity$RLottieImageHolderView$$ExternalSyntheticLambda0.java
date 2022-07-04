@@ -11,6 +11,6 @@ public final /* synthetic */ class PasscodeActivity$RLottieImageHolderView$$Exte
     }
 
     public final void onClick(View view) {
-        this.f$0.lambda$new$0(view);
+        this.f$0.m4022x8045aa27(view);
     }
 }

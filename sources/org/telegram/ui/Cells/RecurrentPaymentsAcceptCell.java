@@ -36,9 +36,7 @@ public class RecurrentPaymentsAcceptCell extends FrameLayout {
         this.textView.setMaxLines(2);
         this.textView.setGravity((LocaleController.isRTL ? 5 : 3) | 16);
         this.textView.setEllipsize(TextUtils.TruncateAt.END);
-        TextView textView2 = this.textView;
-        boolean z = LocaleController.isRTL;
-        addView(textView2, LayoutHelper.createFrame(-1, -1.0f, (!z ? 3 : i) | 48, z ? 16.0f : 58.0f, 21.0f, z ? 58.0f : 16.0f, 21.0f));
+        addView(this.textView, LayoutHelper.createFrame(-1, -1.0f, (!LocaleController.isRTL ? 3 : i) | 48, LocaleController.isRTL ? 16.0f : 58.0f, 21.0f, LocaleController.isRTL ? 58.0f : 16.0f, 21.0f));
         setWillNotDraw(false);
     }
 
@@ -46,12 +44,12 @@ public class RecurrentPaymentsAcceptCell extends FrameLayout {
         return this.textView;
     }
 
-    public void setText(CharSequence charSequence) {
-        this.textView.setText(charSequence);
+    public void setText(CharSequence text) {
+        this.textView.setText(text);
     }
 
-    public void setChecked(boolean z) {
-        this.checkBox.setChecked(z, true);
+    public void setChecked(boolean checked) {
+        this.checkBox.setChecked(checked, true);
     }
 
     /* access modifiers changed from: protected */

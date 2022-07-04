@@ -18,30 +18,30 @@ public class ShadowSectionCell extends View {
         this(context, 12, resourcesProvider);
     }
 
-    public ShadowSectionCell(Context context, int i) {
-        this(context, i, (Theme.ResourcesProvider) null);
+    public ShadowSectionCell(Context context, int s) {
+        this(context, s, (Theme.ResourcesProvider) null);
     }
 
-    public ShadowSectionCell(Context context, int i, Theme.ResourcesProvider resourcesProvider) {
+    public ShadowSectionCell(Context context, int s, Theme.ResourcesProvider resourcesProvider) {
         super(context);
         setBackgroundDrawable(Theme.getThemedDrawable(context, NUM, Theme.getColor("windowBackgroundGrayShadow", resourcesProvider)));
-        this.size = i;
+        this.size = s;
     }
 
-    public ShadowSectionCell(Context context, int i, int i2) {
-        this(context, i, i2, (Theme.ResourcesProvider) null);
+    public ShadowSectionCell(Context context, int s, int backgroundColor) {
+        this(context, s, backgroundColor, (Theme.ResourcesProvider) null);
     }
 
-    public ShadowSectionCell(Context context, int i, int i2, Theme.ResourcesProvider resourcesProvider) {
+    public ShadowSectionCell(Context context, int s, int backgroundColor, Theme.ResourcesProvider resourcesProvider) {
         super(context);
-        CombinedDrawable combinedDrawable = new CombinedDrawable(new ColorDrawable(i2), Theme.getThemedDrawable(context, NUM, Theme.getColor("windowBackgroundGrayShadow", resourcesProvider)), 0, 0);
+        CombinedDrawable combinedDrawable = new CombinedDrawable(new ColorDrawable(backgroundColor), Theme.getThemedDrawable(context, NUM, Theme.getColor("windowBackgroundGrayShadow", resourcesProvider)), 0, 0);
         combinedDrawable.setFullsize(true);
         setBackgroundDrawable(combinedDrawable);
-        this.size = i;
+        this.size = s;
     }
 
     /* access modifiers changed from: protected */
-    public void onMeasure(int i, int i2) {
-        super.onMeasure(View.MeasureSpec.makeMeasureSpec(View.MeasureSpec.getSize(i), NUM), View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp((float) this.size), NUM));
+    public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        super.onMeasure(View.MeasureSpec.makeMeasureSpec(View.MeasureSpec.getSize(widthMeasureSpec), NUM), View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp((float) this.size), NUM));
     }
 }

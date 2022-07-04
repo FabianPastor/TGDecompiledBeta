@@ -1,19 +1,17 @@
 package org.telegram.messenger;
 
-import java.util.ArrayList;
+import org.telegram.tgnet.RequestDelegate;
+import org.telegram.tgnet.TLObject;
+import org.telegram.tgnet.TLRPC;
 
-public final /* synthetic */ class MediaDataController$$ExternalSyntheticLambda43 implements Runnable {
+public final /* synthetic */ class MediaDataController$$ExternalSyntheticLambda43 implements RequestDelegate {
     public final /* synthetic */ MediaDataController f$0;
-    public final /* synthetic */ long f$1;
-    public final /* synthetic */ ArrayList f$2;
 
-    public /* synthetic */ MediaDataController$$ExternalSyntheticLambda43(MediaDataController mediaDataController, long j, ArrayList arrayList) {
+    public /* synthetic */ MediaDataController$$ExternalSyntheticLambda43(MediaDataController mediaDataController) {
         this.f$0 = mediaDataController;
-        this.f$1 = j;
-        this.f$2 = arrayList;
     }
 
-    public final void run() {
-        this.f$0.lambda$loadReplyMessagesForMessages$130(this.f$1, this.f$2);
+    public final void run(TLObject tLObject, TLRPC.TL_error tL_error) {
+        this.f$0.m2036xe44dvar_(tLObject, tL_error);
     }
 }

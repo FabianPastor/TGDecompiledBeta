@@ -16,47 +16,47 @@ public class ChooseSpeedLayout {
         void onSpeedSelected(float f);
     }
 
-    public ChooseSpeedLayout(Context context, PopupSwipeBackLayout popupSwipeBackLayout, Callback callback) {
+    public ChooseSpeedLayout(Context context, PopupSwipeBackLayout swipeBackLayout, Callback callback) {
         ActionBarPopupWindow.ActionBarPopupWindowLayout actionBarPopupWindowLayout = new ActionBarPopupWindow.ActionBarPopupWindowLayout(context, 0, (Theme.ResourcesProvider) null);
         this.speedSwipeBackLayout = actionBarPopupWindowLayout;
         actionBarPopupWindowLayout.setFitItems(true);
-        ActionBarMenuSubItem addItem = ActionBarMenuItem.addItem(this.speedSwipeBackLayout, NUM, LocaleController.getString("Back", NUM), false, (Theme.ResourcesProvider) null);
-        addItem.setOnClickListener(new ChooseSpeedLayout$$ExternalSyntheticLambda5(popupSwipeBackLayout));
-        addItem.setColors(-328966, -328966);
-        addItem.setSelectorColor(NUM);
-        ActionBarMenuSubItem addItem2 = ActionBarMenuItem.addItem(this.speedSwipeBackLayout, NUM, LocaleController.getString("SpeedVerySlow", NUM), false, (Theme.ResourcesProvider) null);
-        addItem2.setColors(-328966, -328966);
-        addItem2.setOnClickListener(new ChooseSpeedLayout$$ExternalSyntheticLambda2(callback));
-        addItem2.setSelectorColor(NUM);
-        this.speedItems[0] = addItem2;
-        ActionBarMenuSubItem addItem3 = ActionBarMenuItem.addItem(this.speedSwipeBackLayout, NUM, LocaleController.getString("SpeedSlow", NUM), false, (Theme.ResourcesProvider) null);
-        addItem3.setColors(-328966, -328966);
-        addItem3.setOnClickListener(new ChooseSpeedLayout$$ExternalSyntheticLambda0(callback));
-        addItem3.setSelectorColor(NUM);
-        this.speedItems[1] = addItem3;
-        ActionBarMenuSubItem addItem4 = ActionBarMenuItem.addItem(this.speedSwipeBackLayout, NUM, LocaleController.getString("SpeedNormal", NUM), false, (Theme.ResourcesProvider) null);
-        addItem4.setColors(-328966, -328966);
-        addItem4.setOnClickListener(new ChooseSpeedLayout$$ExternalSyntheticLambda3(callback));
-        addItem4.setSelectorColor(NUM);
-        this.speedItems[2] = addItem4;
-        ActionBarMenuSubItem addItem5 = ActionBarMenuItem.addItem(this.speedSwipeBackLayout, NUM, LocaleController.getString("SpeedFast", NUM), false, (Theme.ResourcesProvider) null);
-        addItem5.setColors(-328966, -328966);
-        addItem5.setOnClickListener(new ChooseSpeedLayout$$ExternalSyntheticLambda4(callback));
-        addItem5.setSelectorColor(NUM);
-        this.speedItems[3] = addItem5;
-        ActionBarMenuSubItem addItem6 = ActionBarMenuItem.addItem(this.speedSwipeBackLayout, NUM, LocaleController.getString("SpeedVeryFast", NUM), false, (Theme.ResourcesProvider) null);
-        addItem6.setColors(-328966, -328966);
-        addItem6.setOnClickListener(new ChooseSpeedLayout$$ExternalSyntheticLambda1(callback));
-        addItem6.setSelectorColor(NUM);
-        this.speedItems[4] = addItem6;
+        ActionBarMenuSubItem backItem = ActionBarMenuItem.addItem(this.speedSwipeBackLayout, NUM, LocaleController.getString("Back", NUM), false, (Theme.ResourcesProvider) null);
+        backItem.setOnClickListener(new ChooseSpeedLayout$$ExternalSyntheticLambda5(swipeBackLayout));
+        backItem.setColors(-328966, -328966);
+        backItem.setSelectorColor(NUM);
+        ActionBarMenuSubItem item = ActionBarMenuItem.addItem(this.speedSwipeBackLayout, NUM, LocaleController.getString("SpeedVerySlow", NUM), false, (Theme.ResourcesProvider) null);
+        item.setColors(-328966, -328966);
+        item.setOnClickListener(new ChooseSpeedLayout$$ExternalSyntheticLambda0(callback));
+        item.setSelectorColor(NUM);
+        this.speedItems[0] = item;
+        ActionBarMenuSubItem item2 = ActionBarMenuItem.addItem(this.speedSwipeBackLayout, NUM, LocaleController.getString("SpeedSlow", NUM), false, (Theme.ResourcesProvider) null);
+        item2.setColors(-328966, -328966);
+        item2.setOnClickListener(new ChooseSpeedLayout$$ExternalSyntheticLambda1(callback));
+        item2.setSelectorColor(NUM);
+        this.speedItems[1] = item2;
+        ActionBarMenuSubItem item3 = ActionBarMenuItem.addItem(this.speedSwipeBackLayout, NUM, LocaleController.getString("SpeedNormal", NUM), false, (Theme.ResourcesProvider) null);
+        item3.setColors(-328966, -328966);
+        item3.setOnClickListener(new ChooseSpeedLayout$$ExternalSyntheticLambda2(callback));
+        item3.setSelectorColor(NUM);
+        this.speedItems[2] = item3;
+        ActionBarMenuSubItem item4 = ActionBarMenuItem.addItem(this.speedSwipeBackLayout, NUM, LocaleController.getString("SpeedFast", NUM), false, (Theme.ResourcesProvider) null);
+        item4.setColors(-328966, -328966);
+        item4.setOnClickListener(new ChooseSpeedLayout$$ExternalSyntheticLambda3(callback));
+        item4.setSelectorColor(NUM);
+        this.speedItems[3] = item4;
+        ActionBarMenuSubItem item5 = ActionBarMenuItem.addItem(this.speedSwipeBackLayout, NUM, LocaleController.getString("SpeedVeryFast", NUM), false, (Theme.ResourcesProvider) null);
+        item5.setColors(-328966, -328966);
+        item5.setOnClickListener(new ChooseSpeedLayout$$ExternalSyntheticLambda4(callback));
+        item5.setSelectorColor(NUM);
+        this.speedItems[4] = item5;
     }
 
-    public void update(float f) {
-        for (int i = 0; i < this.speedItems.length; i++) {
-            if ((i != 0 || Math.abs(f - 0.25f) >= 0.001f) && ((i != 1 || Math.abs(f - 0.5f) >= 0.001f) && ((i != 2 || Math.abs(f - 1.0f) >= 0.001f) && ((i != 3 || Math.abs(f - 1.5f) >= 0.001f) && (i != 4 || Math.abs(f - 2.0f) >= 0.001f))))) {
-                this.speedItems[i].setColors(-328966, -328966);
+    public void update(float currentVideoSpeed) {
+        for (int a = 0; a < this.speedItems.length; a++) {
+            if ((a != 0 || Math.abs(currentVideoSpeed - 0.25f) >= 0.001f) && ((a != 1 || Math.abs(currentVideoSpeed - 0.5f) >= 0.001f) && ((a != 2 || Math.abs(currentVideoSpeed - 1.0f) >= 0.001f) && ((a != 3 || Math.abs(currentVideoSpeed - 1.5f) >= 0.001f) && (a != 4 || Math.abs(currentVideoSpeed - 2.0f) >= 0.001f))))) {
+                this.speedItems[a].setColors(-328966, -328966);
             } else {
-                this.speedItems[i].setColors(-9718023, -9718023);
+                this.speedItems[a].setColors(-9718023, -9718023);
             }
         }
     }

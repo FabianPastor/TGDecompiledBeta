@@ -12,6 +12,6 @@ public final /* synthetic */ class FileUploadOperation$$ExternalSyntheticLambda3
     }
 
     public final void run() {
-        this.f$0.lambda$checkNewDataAvailable$3(this.f$1, this.f$2);
+        this.f$0.m1868x53f1b98(this.f$1, this.f$2);
     }
 }

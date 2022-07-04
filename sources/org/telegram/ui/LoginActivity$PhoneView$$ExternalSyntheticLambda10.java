@@ -1,17 +1,18 @@
 package org.telegram.ui;
 
+import android.content.DialogInterface;
 import org.telegram.ui.LoginActivity;
 
-public final /* synthetic */ class LoginActivity$PhoneView$$ExternalSyntheticLambda10 implements Runnable {
+public final /* synthetic */ class LoginActivity$PhoneView$$ExternalSyntheticLambda10 implements DialogInterface.OnClickListener {
     public final /* synthetic */ LoginActivity.PhoneView f$0;
-    public final /* synthetic */ String f$1;
+    public final /* synthetic */ int f$1;
 
-    public /* synthetic */ LoginActivity$PhoneView$$ExternalSyntheticLambda10(LoginActivity.PhoneView phoneView, String str) {
+    public /* synthetic */ LoginActivity$PhoneView$$ExternalSyntheticLambda10(LoginActivity.PhoneView phoneView, int i) {
         this.f$0 = phoneView;
-        this.f$1 = str;
+        this.f$1 = i;
     }
 
-    public final void run() {
-        this.f$0.lambda$onNextPressed$14(this.f$1);
+    public final void onClick(DialogInterface dialogInterface, int i) {
+        this.f$0.m3910lambda$onNextPressed$16$orgtelegramuiLoginActivity$PhoneView(this.f$1, dialogInterface, i);
     }
 }

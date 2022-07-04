@@ -14,6 +14,6 @@ public final /* synthetic */ class ChatAttachAlertDocumentLayout$$ExternalSynthe
     }
 
     public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-        this.f$0.lambda$runAnimation$4(this.f$1, this.f$2, valueAnimator);
+        this.f$0.m789xe59159a1(this.f$1, this.f$2, valueAnimator);
     }
 }

@@ -11,6 +11,6 @@ public final /* synthetic */ class EmojiView$StickersGridAdapter$$ExternalSynthe
     }
 
     public final void onClick(DialogInterface dialogInterface, int i) {
-        this.f$0.lambda$onCreateViewHolder$0(dialogInterface, i);
+        this.f$0.m948xd2fvar_(dialogInterface, i);
     }
 }

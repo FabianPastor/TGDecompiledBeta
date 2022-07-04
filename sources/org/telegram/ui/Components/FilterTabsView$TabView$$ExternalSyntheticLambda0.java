@@ -11,6 +11,6 @@ public final /* synthetic */ class FilterTabsView$TabView$$ExternalSyntheticLamb
     }
 
     public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-        this.f$0.lambda$shakeLockIcon$0(valueAnimator);
+        this.f$0.m970xe6a17167(valueAnimator);
     }
 }

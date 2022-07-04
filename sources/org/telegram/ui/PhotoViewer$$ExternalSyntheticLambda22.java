@@ -1,15 +1,15 @@
 package org.telegram.ui;
 
-import android.view.View;
+import android.animation.ValueAnimator;
 
-public final /* synthetic */ class PhotoViewer$$ExternalSyntheticLambda22 implements View.OnClickListener {
+public final /* synthetic */ class PhotoViewer$$ExternalSyntheticLambda22 implements ValueAnimator.AnimatorUpdateListener {
     public final /* synthetic */ PhotoViewer f$0;
 
     public /* synthetic */ PhotoViewer$$ExternalSyntheticLambda22(PhotoViewer photoViewer) {
         this.f$0 = photoViewer;
     }
 
-    public final void onClick(View view) {
-        this.f$0.lambda$setParentActivity$20(view);
+    public final void onAnimationUpdate(ValueAnimator valueAnimator) {
+        this.f$0.m4299lambda$toggleActionBar$65$orgtelegramuiPhotoViewer(valueAnimator);
     }
 }

@@ -1,15 +1,19 @@
 package org.telegram.ui.Components;
 
-import android.view.View;
+import android.content.DialogInterface;
+import androidx.core.util.Consumer;
+import java.util.concurrent.atomic.AtomicBoolean;
 
-public final /* synthetic */ class AlertsCreator$$ExternalSyntheticLambda68 implements View.OnClickListener {
-    public final /* synthetic */ boolean[] f$0;
+public final /* synthetic */ class AlertsCreator$$ExternalSyntheticLambda68 implements DialogInterface.OnDismissListener {
+    public final /* synthetic */ AtomicBoolean f$0;
+    public final /* synthetic */ Consumer f$1;
 
-    public /* synthetic */ AlertsCreator$$ExternalSyntheticLambda68(boolean[] zArr) {
-        this.f$0 = zArr;
+    public /* synthetic */ AlertsCreator$$ExternalSyntheticLambda68(AtomicBoolean atomicBoolean, Consumer consumer) {
+        this.f$0 = atomicBoolean;
+        this.f$1 = consumer;
     }
 
-    public final void onClick(View view) {
-        AlertsCreator.lambda$createClearOrDeleteDialogAlert$23(this.f$0, view);
+    public final void onDismiss(DialogInterface dialogInterface) {
+        AlertsCreator.lambda$createWebViewPermissionsRequestDialog$4(this.f$0, this.f$1, dialogInterface);
     }
 }

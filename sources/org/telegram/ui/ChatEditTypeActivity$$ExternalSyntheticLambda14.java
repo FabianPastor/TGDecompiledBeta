@@ -1,15 +1,15 @@
 package org.telegram.ui;
 
-import org.telegram.messenger.MessagesStorage;
+import android.view.View;
 
-public final /* synthetic */ class ChatEditTypeActivity$$ExternalSyntheticLambda14 implements MessagesStorage.LongCallback {
+public final /* synthetic */ class ChatEditTypeActivity$$ExternalSyntheticLambda14 implements View.OnClickListener {
     public final /* synthetic */ ChatEditTypeActivity f$0;
 
     public /* synthetic */ ChatEditTypeActivity$$ExternalSyntheticLambda14(ChatEditTypeActivity chatEditTypeActivity) {
         this.f$0 = chatEditTypeActivity;
     }
 
-    public final void run(long j) {
-        this.f$0.lambda$tryUpdateJoinSettings$7(j);
+    public final void onClick(View view) {
+        this.f$0.m3214lambda$createView$4$orgtelegramuiChatEditTypeActivity(view);
     }
 }

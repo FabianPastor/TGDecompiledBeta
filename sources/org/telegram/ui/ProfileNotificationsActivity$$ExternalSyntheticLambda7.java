@@ -14,6 +14,6 @@ public final /* synthetic */ class ProfileNotificationsActivity$$ExternalSynthet
     }
 
     public final void onItemClick(View view, int i) {
-        this.f$0.lambda$createView$6(this.f$1, view, i);
+        this.f$0.m4541lambda$createView$6$orgtelegramuiProfileNotificationsActivity(this.f$1, view, i);
     }
 }

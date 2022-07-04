@@ -10,33 +10,33 @@ import java.util.regex.Pattern;
 
 public class SmsReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
-        String str;
         if (intent != null) {
+            String message = "";
             try {
-                SharedPreferences sharedPreferences = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", 0);
-                String string = sharedPreferences.getString("sms_hash", (String) null);
-                if (!"com.google.android.gms.auth.api.phone.SMS_RETRIEVED".equals(intent.getAction())) {
-                    str = "";
-                } else if (AndroidUtilities.isWaitingForSms()) {
-                    str = (String) intent.getExtras().get("com.google.android.gms.auth.api.phone.EXTRA_SMS_MESSAGE");
-                } else {
-                    return;
+                SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", 0);
+                String hash = preferences.getString("sms_hash", (String) null);
+                if ("com.google.android.gms.auth.api.phone.SMS_RETRIEVED".equals(intent.getAction())) {
+                    if (AndroidUtilities.isWaitingForSms()) {
+                        message = (String) intent.getExtras().get("com.google.android.gms.auth.api.phone.EXTRA_SMS_MESSAGE");
+                    } else {
+                        return;
+                    }
                 }
-                if (!TextUtils.isEmpty(str)) {
-                    Matcher matcher = Pattern.compile("[0-9\\-]+").matcher(str);
+                if (!TextUtils.isEmpty(message)) {
+                    Matcher matcher = Pattern.compile("[0-9\\-]+").matcher(message);
                     if (matcher.find()) {
-                        String replace = matcher.group(0).replace("-", "");
-                        if (replace.length() >= 3) {
-                            if (string != null) {
-                                SharedPreferences.Editor edit = sharedPreferences.edit();
-                                edit.putString("sms_hash_code", string + "|" + replace).commit();
+                        String code = matcher.group(0).replace("-", "");
+                        if (code.length() >= 3) {
+                            if (hash != null) {
+                                SharedPreferences.Editor edit = preferences.edit();
+                                edit.putString("sms_hash_code", hash + "|" + code).commit();
                             }
-                            AndroidUtilities.runOnUIThread(new SmsReceiver$$ExternalSyntheticLambda0(replace));
+                            AndroidUtilities.runOnUIThread(new SmsReceiver$$ExternalSyntheticLambda0(code));
                         }
                     }
                 }
-            } catch (Throwable th) {
-                FileLog.e(th);
+            } catch (Throwable e) {
+                FileLog.e(e);
             }
         }
     }

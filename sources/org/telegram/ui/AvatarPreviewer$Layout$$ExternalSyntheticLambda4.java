@@ -11,6 +11,6 @@ public final /* synthetic */ class AvatarPreviewer$Layout$$ExternalSyntheticLamb
     }
 
     public final void onDismiss(DialogInterface dialogInterface) {
-        this.f$0.lambda$showBottomSheet$2(dialogInterface);
+        this.f$0.m2719lambda$showBottomSheet$2$orgtelegramuiAvatarPreviewer$Layout(dialogInterface);
     }
 }

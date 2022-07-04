@@ -18,6 +18,8 @@ import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.LayoutHelper;
 
 public class CropRotationWheel extends FrameLayout {
+    private static final int DELTA_ANGLE = 5;
+    private static final int MAX_ANGLE = 45;
     private ImageView aspectRatioButton;
     private Paint bluePaint;
     private String degreesText;
@@ -44,9 +46,6 @@ public class CropRotationWheel extends FrameLayout {
         boolean rotate90Pressed();
     }
 
-    public void setFreeform(boolean z) {
-    }
-
     public CropRotationWheel(Context context) {
         super(context);
         Paint paint = new Paint();
@@ -66,7 +65,7 @@ public class CropRotationWheel extends FrameLayout {
         imageView.setImageResource(NUM);
         this.mirrorButton.setBackgroundDrawable(Theme.createSelectorDrawable(NUM));
         this.mirrorButton.setScaleType(ImageView.ScaleType.CENTER);
-        this.mirrorButton.setOnClickListener(new CropRotationWheel$$ExternalSyntheticLambda1(this));
+        this.mirrorButton.setOnClickListener(new CropRotationWheel$$ExternalSyntheticLambda0(this));
         this.mirrorButton.setOnLongClickListener(new CropRotationWheel$$ExternalSyntheticLambda3(this));
         this.mirrorButton.setContentDescription(LocaleController.getString("AccDescrMirror", NUM));
         addView(this.mirrorButton, LayoutHelper.createFrame(70, 64, 19));
@@ -75,7 +74,7 @@ public class CropRotationWheel extends FrameLayout {
         imageView2.setImageResource(NUM);
         this.aspectRatioButton.setBackgroundDrawable(Theme.createSelectorDrawable(NUM));
         this.aspectRatioButton.setScaleType(ImageView.ScaleType.CENTER);
-        this.aspectRatioButton.setOnClickListener(new CropRotationWheel$$ExternalSyntheticLambda0(this));
+        this.aspectRatioButton.setOnClickListener(new CropRotationWheel$$ExternalSyntheticLambda1(this));
         this.aspectRatioButton.setVisibility(8);
         this.aspectRatioButton.setContentDescription(LocaleController.getString("AccDescrAspectRatio", NUM));
         addView(this.aspectRatioButton, LayoutHelper.createFrame(70, 64, 19));
@@ -95,67 +94,71 @@ public class CropRotationWheel extends FrameLayout {
         setRotation(0.0f, false);
     }
 
-    /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$new$0(View view) {
+    /* renamed from: lambda$new$0$org-telegram-ui-Components-Crop-CropRotationWheel  reason: not valid java name */
+    public /* synthetic */ void m894lambda$new$0$orgtelegramuiComponentsCropCropRotationWheel(View v) {
         RotationWheelListener rotationWheelListener = this.rotationListener;
         if (rotationWheelListener != null) {
             setMirrored(rotationWheelListener.mirror());
         }
     }
 
-    /* access modifiers changed from: private */
-    public /* synthetic */ boolean lambda$new$1(View view) {
+    /* renamed from: lambda$new$1$org-telegram-ui-Components-Crop-CropRotationWheel  reason: not valid java name */
+    public /* synthetic */ boolean m895lambda$new$1$orgtelegramuiComponentsCropCropRotationWheel(View v) {
         this.aspectRatioButton.callOnClick();
         return true;
     }
 
-    /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$new$2(View view) {
+    /* renamed from: lambda$new$2$org-telegram-ui-Components-Crop-CropRotationWheel  reason: not valid java name */
+    public /* synthetic */ void m896lambda$new$2$orgtelegramuiComponentsCropCropRotationWheel(View v) {
         RotationWheelListener rotationWheelListener = this.rotationListener;
         if (rotationWheelListener != null) {
             rotationWheelListener.aspectRatioPressed();
         }
     }
 
-    /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$new$3(View view) {
+    /* renamed from: lambda$new$3$org-telegram-ui-Components-Crop-CropRotationWheel  reason: not valid java name */
+    public /* synthetic */ void m897lambda$new$3$orgtelegramuiComponentsCropCropRotationWheel(View v) {
         RotationWheelListener rotationWheelListener = this.rotationListener;
         if (rotationWheelListener != null) {
             setRotated(rotationWheelListener.rotate90Pressed());
         }
     }
 
-    public void setMirrored(boolean z) {
-        this.mirrorButton.setColorFilter(z ? new PorterDuffColorFilter(Theme.getColor("dialogFloatingButton"), PorterDuff.Mode.MULTIPLY) : null);
+    public void setFreeform(boolean freeform) {
     }
 
-    public void setRotated(boolean z) {
-        this.rotation90Button.setColorFilter(z ? new PorterDuffColorFilter(Theme.getColor("dialogFloatingButton"), PorterDuff.Mode.MULTIPLY) : null);
+    public void setMirrored(boolean value) {
+        this.mirrorButton.setColorFilter(value ? new PorterDuffColorFilter(Theme.getColor("dialogFloatingButton"), PorterDuff.Mode.MULTIPLY) : null);
+    }
+
+    public void setRotated(boolean value) {
+        this.rotation90Button.setColorFilter(value ? new PorterDuffColorFilter(Theme.getColor("dialogFloatingButton"), PorterDuff.Mode.MULTIPLY) : null);
     }
 
     /* access modifiers changed from: protected */
-    public void onMeasure(int i, int i2) {
-        super.onMeasure(View.MeasureSpec.makeMeasureSpec(Math.min(View.MeasureSpec.getSize(i), AndroidUtilities.dp(400.0f)), NUM), i2);
+    public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        super.onMeasure(View.MeasureSpec.makeMeasureSpec(Math.min(View.MeasureSpec.getSize(widthMeasureSpec), AndroidUtilities.dp(400.0f)), NUM), heightMeasureSpec);
     }
 
-    public void reset(boolean z) {
+    public void reset(boolean resetMirror) {
         setRotation(0.0f, false);
-        if (z) {
+        if (resetMirror) {
             setMirrored(false);
         }
         setRotated(false);
     }
 
-    public void setListener(RotationWheelListener rotationWheelListener) {
-        this.rotationListener = rotationWheelListener;
+    public void setListener(RotationWheelListener listener) {
+        this.rotationListener = listener;
     }
 
-    public void setRotation(float f, boolean z) {
-        this.rotation = f;
-        if (((double) Math.abs(f)) < 0.099d) {
-            f = Math.abs(f);
+    public void setRotation(float rotation2, boolean animated) {
+        this.rotation = rotation2;
+        float value = rotation2;
+        if (((double) Math.abs(value)) < 0.099d) {
+            value = Math.abs(value);
         }
-        this.degreesText = String.format("%.1fº", new Object[]{Float.valueOf(f)});
+        this.degreesText = String.format("%.1fº", new Object[]{Float.valueOf(value)});
         invalidate();
     }
 
@@ -163,45 +166,45 @@ public class CropRotationWheel extends FrameLayout {
         return this.rotation;
     }
 
-    public void setAspectLock(boolean z) {
-        this.aspectRatioButton.setColorFilter(z ? new PorterDuffColorFilter(-11420173, PorterDuff.Mode.MULTIPLY) : null);
+    public void setAspectLock(boolean enabled) {
+        this.aspectRatioButton.setColorFilter(enabled ? new PorterDuffColorFilter(-11420173, PorterDuff.Mode.MULTIPLY) : null);
     }
 
-    public boolean onTouchEvent(MotionEvent motionEvent) {
-        int actionMasked = motionEvent.getActionMasked();
-        float x = motionEvent.getX();
-        if (actionMasked == 0) {
+    public boolean onTouchEvent(MotionEvent ev) {
+        int action = ev.getActionMasked();
+        float x = ev.getX();
+        if (action == 0) {
             this.prevX = x;
             RotationWheelListener rotationWheelListener = this.rotationListener;
             if (rotationWheelListener != null) {
                 rotationWheelListener.onStart();
             }
-        } else if (actionMasked == 1 || actionMasked == 3) {
+        } else if (action == 1 || action == 3) {
             RotationWheelListener rotationWheelListener2 = this.rotationListener;
             if (rotationWheelListener2 != null) {
                 rotationWheelListener2.onEnd(this.rotation);
             }
             AndroidUtilities.makeAccessibilityAnnouncement(String.format("%.1f°", new Object[]{Float.valueOf(this.rotation)}));
-        } else if (actionMasked == 2) {
+        } else if (action == 2) {
             float f = this.rotation;
             double d = (double) ((this.prevX - x) / AndroidUtilities.density);
             Double.isNaN(d);
-            float max = Math.max(-45.0f, Math.min(45.0f, f + ((float) ((d / 3.141592653589793d) / 1.649999976158142d))));
+            float newAngle = Math.max(-45.0f, Math.min(45.0f, f + ((float) ((d / 3.141592653589793d) / 1.649999976158142d))));
             if (Build.VERSION.SDK_INT >= 27) {
                 try {
-                    if ((Math.abs(max - 45.0f) < 0.001f && Math.abs(this.rotation - 45.0f) >= 0.001f) || (Math.abs(max - -45.0f) < 0.001f && Math.abs(this.rotation - -45.0f) >= 0.001f)) {
+                    if ((Math.abs(newAngle - 45.0f) < 0.001f && Math.abs(this.rotation - 45.0f) >= 0.001f) || (Math.abs(newAngle - -45.0f) < 0.001f && Math.abs(this.rotation - -45.0f) >= 0.001f)) {
                         performHapticFeedback(3, 1);
-                    } else if (Math.floor((double) (this.rotation / 2.5f)) != Math.floor((double) (max / 2.5f))) {
+                    } else if (Math.floor((double) (this.rotation / 2.5f)) != Math.floor((double) (newAngle / 2.5f))) {
                         performHapticFeedback(9, 1);
                     }
-                } catch (Exception unused) {
+                } catch (Exception e) {
                 }
             }
-            if (((double) Math.abs(max - this.rotation)) > 0.001d) {
-                if (((double) Math.abs(max)) < 0.05d) {
-                    max = 0.0f;
+            if (((double) Math.abs(newAngle - this.rotation)) > 0.001d) {
+                if (((double) Math.abs(newAngle)) < 0.05d) {
+                    newAngle = 0.0f;
                 }
-                setRotation(max, false);
+                setRotation(newAngle, false);
                 RotationWheelListener rotationWheelListener3 = this.rotationListener;
                 if (rotationWheelListener3 != null) {
                     rotationWheelListener3.onChange(this.rotation);
@@ -214,54 +217,67 @@ public class CropRotationWheel extends FrameLayout {
 
     /* access modifiers changed from: protected */
     public void onDraw(Canvas canvas) {
+        Paint paint;
         Canvas canvas2 = canvas;
         super.onDraw(canvas);
         int width = getWidth();
         int height = getHeight();
-        float f = (-this.rotation) * 2.0f;
-        float f2 = f % 5.0f;
-        int floor = (int) Math.floor((double) (f / 5.0f));
+        float angle = (-this.rotation) * 2.0f;
+        float delta = angle % 5.0f;
+        int segments = (int) Math.floor((double) (angle / 5.0f));
         int i = 0;
         while (i < 16) {
-            Paint paint = this.whitePaint;
-            if (i < floor || (i == 0 && f2 < 0.0f)) {
+            Paint paint2 = this.whitePaint;
+            int a = i;
+            if (a < segments || (a == 0 && delta < 0.0f)) {
                 paint = this.bluePaint;
+            } else {
+                paint = paint2;
             }
-            int i2 = i;
-            drawLine(canvas, i, f2, width, height, i == floor || (i == 0 && floor == -1), paint);
-            if (i2 != 0) {
-                int i3 = -i2;
-                drawLine(canvas, i3, f2, width, height, i3 == floor + 1, i3 > floor ? this.bluePaint : this.whitePaint);
+            boolean z = false;
+            int i2 = a;
+            int i3 = i;
+            drawLine(canvas, a, delta, width, height, a == segments || (a == 0 && segments == -1), paint);
+            if (i3 != 0) {
+                int a2 = -i3;
+                Paint paint3 = a2 > segments ? this.bluePaint : this.whitePaint;
+                if (a2 == segments + 1) {
+                    z = true;
+                }
+                int i4 = a2;
+                drawLine(canvas, a2, delta, width, height, z, paint3);
             }
-            i = i2 + 1;
+            i = i3 + 1;
         }
         this.bluePaint.setAlpha(255);
         this.tempRect.left = (float) ((width - AndroidUtilities.dp(2.5f)) / 2);
         this.tempRect.top = (float) ((height - AndroidUtilities.dp(22.0f)) / 2);
         this.tempRect.right = (float) ((AndroidUtilities.dp(2.5f) + width) / 2);
-        this.tempRect.bottom = (float) ((height + AndroidUtilities.dp(22.0f)) / 2);
+        this.tempRect.bottom = (float) ((AndroidUtilities.dp(22.0f) + height) / 2);
         canvas2.drawRoundRect(this.tempRect, (float) AndroidUtilities.dp(2.0f), (float) AndroidUtilities.dp(2.0f), this.bluePaint);
         canvas2.drawText(this.degreesText, (((float) width) - this.degreesTextPaint.measureText(this.degreesText)) / 2.0f, (float) AndroidUtilities.dp(14.0f), this.degreesTextPaint);
     }
 
     /* access modifiers changed from: protected */
-    public void drawLine(Canvas canvas, int i, float f, int i2, int i3, boolean z, Paint paint) {
-        int dp = (int) ((((float) i2) / 2.0f) - ((float) AndroidUtilities.dp(70.0f)));
-        double d = (double) dp;
-        double cos = Math.cos(Math.toRadians((double) (90.0f - (((float) (i * 5)) + f))));
+    public void drawLine(Canvas canvas, int i, float delta, int width, int height, boolean center, Paint paint) {
+        Paint paint2;
+        int i2 = width;
+        int radius = (int) ((((float) i2) / 2.0f) - ((float) AndroidUtilities.dp(70.0f)));
+        double d = (double) radius;
+        double cos = Math.cos(Math.toRadians((double) (90.0f - (((float) (i * 5)) + delta))));
         Double.isNaN(d);
-        int i4 = (int) (d * cos);
-        int i5 = (i2 / 2) + i4;
-        float abs = ((float) Math.abs(i4)) / ((float) dp);
-        int min = Math.min(255, Math.max(0, (int) ((1.0f - (abs * abs)) * 255.0f)));
-        if (z) {
-            paint = this.bluePaint;
+        int val = (int) (d * cos);
+        int x = (i2 / 2) + val;
+        float f = ((float) Math.abs(val)) / ((float) radius);
+        int alpha = Math.min(255, Math.max(0, (int) ((1.0f - (f * f)) * 255.0f)));
+        if (center) {
+            paint2 = this.bluePaint;
+        } else {
+            paint2 = paint;
         }
-        Paint paint2 = paint;
-        paint2.setAlpha(min);
-        int i6 = z ? 4 : 2;
-        int dp2 = AndroidUtilities.dp(z ? 16.0f : 12.0f);
-        int i7 = i6 / 2;
-        canvas.drawRect((float) (i5 - i7), (float) ((i3 - dp2) / 2), (float) (i5 + i7), (float) ((i3 + dp2) / 2), paint2);
+        paint2.setAlpha(alpha);
+        int w = center ? 4 : 2;
+        int h = AndroidUtilities.dp(center ? 16.0f : 12.0f);
+        canvas.drawRect((float) (x - (w / 2)), (float) ((height - h) / 2), (float) ((w / 2) + x), (float) ((height + h) / 2), paint2);
     }
 }

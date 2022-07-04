@@ -8,6 +8,6 @@ public final /* synthetic */ class MessagesStorage$$ExternalSyntheticLambda22 im
     }
 
     public final void run() {
-        this.f$0.lambda$resetAllUnreadCounters$188();
+        this.f$0.m2167lambda$getContacts$117$orgtelegrammessengerMessagesStorage();
     }
 }

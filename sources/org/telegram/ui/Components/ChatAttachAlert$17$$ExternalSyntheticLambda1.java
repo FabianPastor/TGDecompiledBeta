@@ -11,6 +11,6 @@ public final /* synthetic */ class ChatAttachAlert$17$$ExternalSyntheticLambda1 
     }
 
     public final void onAnimationUpdate(DynamicAnimation dynamicAnimation, float f, float f2) {
-        this.f$0.lambda$onAnimationEnd$0(dynamicAnimation, f, f2);
+        this.f$0.m749xe4ba0CLASSNAME(dynamicAnimation, f, f2);
     }
 }

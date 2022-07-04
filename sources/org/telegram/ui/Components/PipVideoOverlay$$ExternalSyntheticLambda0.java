@@ -10,6 +10,6 @@ public final /* synthetic */ class PipVideoOverlay$$ExternalSyntheticLambda0 imp
     }
 
     public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-        this.f$0.lambda$toggleControls$6(valueAnimator);
+        this.f$0.m1217x6d8831f6(valueAnimator);
     }
 }

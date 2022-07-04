@@ -1,13 +1,21 @@
 package org.aspectj.runtime.reflect;
 
-abstract class CodeSignatureImpl extends MemberSignatureImpl {
+import org.aspectj.lang.reflect.CodeSignature;
+
+abstract class CodeSignatureImpl extends MemberSignatureImpl implements CodeSignature {
     Class[] exceptionTypes;
+    String[] parameterNames;
     Class[] parameterTypes;
 
-    CodeSignatureImpl(int i, String str, Class cls, Class[] clsArr, String[] strArr, Class[] clsArr2) {
-        super(i, str, cls);
-        this.parameterTypes = clsArr;
-        this.exceptionTypes = clsArr2;
+    CodeSignatureImpl(int modifiers, String name, Class declaringType, Class[] parameterTypes2, String[] parameterNames2, Class[] exceptionTypes2) {
+        super(modifiers, name, declaringType);
+        this.parameterTypes = parameterTypes2;
+        this.parameterNames = parameterNames2;
+        this.exceptionTypes = exceptionTypes2;
+    }
+
+    CodeSignatureImpl(String stringRep) {
+        super(stringRep);
     }
 
     public Class[] getParameterTypes() {
@@ -15,6 +23,13 @@ abstract class CodeSignatureImpl extends MemberSignatureImpl {
             this.parameterTypes = extractTypes(3);
         }
         return this.parameterTypes;
+    }
+
+    public String[] getParameterNames() {
+        if (this.parameterNames == null) {
+            this.parameterNames = extractStrings(4);
+        }
+        return this.parameterNames;
     }
 
     public Class[] getExceptionTypes() {

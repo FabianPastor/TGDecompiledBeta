@@ -20,6 +20,6 @@ public final /* synthetic */ class FilePathDatabase$$ExternalSyntheticLambda3 im
     }
 
     public final void run() {
-        this.f$0.lambda$getPath$1(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5);
+        this.f$0.m1831lambda$getPath$1$orgtelegrammessengerFilePathDatabase(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5);
     }
 }

@@ -26,6 +26,6 @@ public final /* synthetic */ class DataAutoDownloadActivity$$ExternalSyntheticLa
     }
 
     public final void onClick(View view) {
-        this.f$0.lambda$createView$0(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6, view);
+        this.f$0.m3353lambda$createView$0$orgtelegramuiDataAutoDownloadActivity(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6, view);
     }
 }

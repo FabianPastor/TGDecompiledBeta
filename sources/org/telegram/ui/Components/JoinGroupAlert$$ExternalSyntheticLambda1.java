@@ -1,8 +1,9 @@
 package org.telegram.ui.Components;
 
-import android.content.DialogInterface;
+import org.telegram.messenger.MessagesController;
+import org.telegram.tgnet.TLRPC;
 
-public final /* synthetic */ class JoinGroupAlert$$ExternalSyntheticLambda1 implements DialogInterface.OnDismissListener {
+public final /* synthetic */ class JoinGroupAlert$$ExternalSyntheticLambda1 implements MessagesController.ErrorDelegate {
     public final /* synthetic */ JoinGroupAlert f$0;
     public final /* synthetic */ boolean f$1;
 
@@ -11,7 +12,7 @@ public final /* synthetic */ class JoinGroupAlert$$ExternalSyntheticLambda1 impl
         this.f$1 = z;
     }
 
-    public final void onDismiss(DialogInterface dialogInterface) {
-        this.f$0.lambda$new$2(this.f$1, dialogInterface);
+    public final boolean run(TLRPC.TL_error tL_error) {
+        return this.f$0.m1081lambda$new$3$orgtelegramuiComponentsJoinGroupAlert(this.f$1, tL_error);
     }
 }

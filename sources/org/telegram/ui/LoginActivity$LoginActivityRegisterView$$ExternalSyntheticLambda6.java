@@ -1,16 +1,18 @@
 package org.telegram.ui;
 
-import android.view.View;
+import org.telegram.tgnet.TLObject;
 import org.telegram.ui.LoginActivity;
 
-public final /* synthetic */ class LoginActivity$LoginActivityRegisterView$$ExternalSyntheticLambda6 implements View.OnClickListener {
+public final /* synthetic */ class LoginActivity$LoginActivityRegisterView$$ExternalSyntheticLambda6 implements Runnable {
     public final /* synthetic */ LoginActivity.LoginActivityRegisterView f$0;
+    public final /* synthetic */ TLObject f$1;
 
-    public /* synthetic */ LoginActivity$LoginActivityRegisterView$$ExternalSyntheticLambda6(LoginActivity.LoginActivityRegisterView loginActivityRegisterView) {
+    public /* synthetic */ LoginActivity$LoginActivityRegisterView$$ExternalSyntheticLambda6(LoginActivity.LoginActivityRegisterView loginActivityRegisterView, TLObject tLObject) {
         this.f$0 = loginActivityRegisterView;
+        this.f$1 = tLObject;
     }
 
-    public final void onClick(View view) {
-        this.f$0.lambda$new$7(view);
+    public final void run() {
+        this.f$0.m3831xfbCLASSNAMEd91(this.f$1);
     }
 }

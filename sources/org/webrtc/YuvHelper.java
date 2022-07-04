@@ -13,78 +13,86 @@ public class YuvHelper {
 
     private static native void nativeI420ToNV12(ByteBuffer byteBuffer, int i, ByteBuffer byteBuffer2, int i2, ByteBuffer byteBuffer3, int i3, ByteBuffer byteBuffer4, int i4, ByteBuffer byteBuffer5, int i5, int i6, int i7);
 
-    public static void I420Copy(ByteBuffer byteBuffer, int i, ByteBuffer byteBuffer2, int i2, ByteBuffer byteBuffer3, int i3, ByteBuffer byteBuffer4, int i4, int i5) {
-        ByteBuffer byteBuffer5 = byteBuffer4;
-        int i6 = (i4 + 1) / 2;
-        int i7 = i4 * i5;
-        int i8 = ((i5 + 1) / 2) * i6;
-        int i9 = (i8 * 2) + i7;
-        if (byteBuffer4.capacity() >= i9) {
-            byteBuffer5.position(0);
-            ByteBuffer slice = byteBuffer4.slice();
-            byteBuffer5.position(i7);
-            ByteBuffer slice2 = byteBuffer4.slice();
-            byteBuffer5.position(i8 + i7);
-            nativeI420Copy(byteBuffer, i, byteBuffer2, i2, byteBuffer3, i3, slice, i4, slice2, i6, byteBuffer4.slice(), i6, i4, i5);
+    public static void I420Copy(ByteBuffer srcY, int srcStrideY, ByteBuffer srcU, int srcStrideU, ByteBuffer srcV, int srcStrideV, ByteBuffer dst, int width, int height) {
+        ByteBuffer byteBuffer = dst;
+        int chromaHeight = (height + 1) / 2;
+        int chromaWidth = (width + 1) / 2;
+        int minSize = (width * height) + (chromaWidth * chromaHeight * 2);
+        if (dst.capacity() >= minSize) {
+            int startU = height * width;
+            int startV = startU + (chromaHeight * chromaWidth);
+            byteBuffer.position(0);
+            ByteBuffer dstY = dst.slice();
+            byteBuffer.position(startU);
+            ByteBuffer dstU = dst.slice();
+            byteBuffer.position(startV);
+            int i = startV;
+            int i2 = startU;
+            int i3 = minSize;
+            nativeI420Copy(srcY, srcStrideY, srcU, srcStrideU, srcV, srcStrideV, dstY, width, dstU, chromaWidth, dst.slice(), chromaWidth, width, height);
             return;
         }
-        throw new IllegalArgumentException("Expected destination buffer capacity to be at least " + i9 + " was " + byteBuffer4.capacity());
+        throw new IllegalArgumentException("Expected destination buffer capacity to be at least " + minSize + " was " + dst.capacity());
     }
 
-    public static void I420ToNV12(ByteBuffer byteBuffer, int i, ByteBuffer byteBuffer2, int i2, ByteBuffer byteBuffer3, int i3, ByteBuffer byteBuffer4, int i4, int i5) {
-        ByteBuffer byteBuffer5 = byteBuffer4;
-        int i6 = (i4 + 1) / 2;
-        int i7 = i4 * i5;
-        int i8 = (((i5 + 1) / 2) * i6 * 2) + i7;
-        if (byteBuffer4.capacity() >= i8) {
-            byteBuffer5.position(0);
-            ByteBuffer slice = byteBuffer4.slice();
-            byteBuffer5.position(i7);
-            int i9 = i6 * 2;
-            nativeI420ToNV12(byteBuffer, i, byteBuffer2, i2, byteBuffer3, i3, slice, i4, byteBuffer4.slice(), i9, i4, i5);
+    public static void I420ToNV12(ByteBuffer srcY, int srcStrideY, ByteBuffer srcU, int srcStrideU, ByteBuffer srcV, int srcStrideV, ByteBuffer dst, int width, int height) {
+        ByteBuffer byteBuffer = dst;
+        int chromaWidth = (width + 1) / 2;
+        int minSize = (width * height) + (chromaWidth * ((height + 1) / 2) * 2);
+        if (dst.capacity() >= minSize) {
+            int startUV = height * width;
+            byteBuffer.position(0);
+            ByteBuffer dstY = dst.slice();
+            byteBuffer.position(startUV);
+            int i = startUV;
+            nativeI420ToNV12(srcY, srcStrideY, srcU, srcStrideU, srcV, srcStrideV, dstY, width, dst.slice(), chromaWidth * 2, width, height);
             return;
         }
-        throw new IllegalArgumentException("Expected destination buffer capacity to be at least " + i8 + " was " + byteBuffer4.capacity());
+        throw new IllegalArgumentException("Expected destination buffer capacity to be at least " + minSize + " was " + dst.capacity());
     }
 
-    public static void I420Rotate(ByteBuffer byteBuffer, int i, ByteBuffer byteBuffer2, int i2, ByteBuffer byteBuffer3, int i3, ByteBuffer byteBuffer4, int i4, int i5, int i6) {
-        ByteBuffer byteBuffer5 = byteBuffer4;
-        int i7 = i6 % 180;
-        int i8 = i7 == 0 ? i4 : i5;
-        int i9 = i7 == 0 ? i5 : i4;
-        int i10 = (i8 + 1) / 2;
-        int i11 = i9 * i8;
-        int i12 = ((i9 + 1) / 2) * i10;
-        int i13 = (i12 * 2) + i11;
-        if (byteBuffer4.capacity() >= i13) {
-            byteBuffer5.position(0);
-            ByteBuffer slice = byteBuffer4.slice();
-            byteBuffer5.position(i11);
-            ByteBuffer slice2 = byteBuffer4.slice();
-            byteBuffer5.position(i12 + i11);
-            nativeI420Rotate(byteBuffer, i, byteBuffer2, i2, byteBuffer3, i3, slice, i8, slice2, i10, byteBuffer4.slice(), i10, i4, i5, i6);
+    public static void I420Rotate(ByteBuffer srcY, int srcStrideY, ByteBuffer srcU, int srcStrideU, ByteBuffer srcV, int srcStrideV, ByteBuffer dst, int srcWidth, int srcHeight, int rotationMode) {
+        ByteBuffer byteBuffer = dst;
+        int i = rotationMode;
+        int dstWidth = i % 180 == 0 ? srcWidth : srcHeight;
+        int dstHeight = i % 180 == 0 ? srcHeight : srcWidth;
+        int dstChromaHeight = (dstHeight + 1) / 2;
+        int dstChromaWidth = (dstWidth + 1) / 2;
+        int minSize = (dstWidth * dstHeight) + (dstChromaWidth * dstChromaHeight * 2);
+        if (dst.capacity() >= minSize) {
+            int startU = dstHeight * dstWidth;
+            int startV = startU + (dstChromaHeight * dstChromaWidth);
+            byteBuffer.position(0);
+            ByteBuffer dstY = dst.slice();
+            byteBuffer.position(startU);
+            ByteBuffer dstU = dst.slice();
+            byteBuffer.position(startV);
+            int i2 = startV;
+            int i3 = startU;
+            int i4 = minSize;
+            nativeI420Rotate(srcY, srcStrideY, srcU, srcStrideU, srcV, srcStrideV, dstY, dstWidth, dstU, dstChromaWidth, dst.slice(), dstChromaWidth, srcWidth, srcHeight, rotationMode);
             return;
         }
-        throw new IllegalArgumentException("Expected destination buffer capacity to be at least " + i13 + " was " + byteBuffer4.capacity());
+        throw new IllegalArgumentException("Expected destination buffer capacity to be at least " + minSize + " was " + dst.capacity());
     }
 
-    public static void copyPlane(ByteBuffer byteBuffer, int i, ByteBuffer byteBuffer2, int i2, int i3, int i4) {
-        nativeCopyPlane(byteBuffer, i, byteBuffer2, i2, i3, i4);
+    public static void copyPlane(ByteBuffer src, int srcStride, ByteBuffer dst, int dstStride, int width, int height) {
+        nativeCopyPlane(src, srcStride, dst, dstStride, width, height);
     }
 
-    public static void ABGRToI420(ByteBuffer byteBuffer, int i, ByteBuffer byteBuffer2, int i2, ByteBuffer byteBuffer3, int i3, ByteBuffer byteBuffer4, int i4, int i5, int i6) {
-        nativeABGRToI420(byteBuffer, i, byteBuffer2, i2, byteBuffer3, i3, byteBuffer4, i4, i5, i6);
+    public static void ABGRToI420(ByteBuffer src, int srcStride, ByteBuffer dstY, int dstStrideY, ByteBuffer dstU, int dstStrideU, ByteBuffer dstV, int dstStrideV, int width, int height) {
+        nativeABGRToI420(src, srcStride, dstY, dstStrideY, dstU, dstStrideU, dstV, dstStrideV, width, height);
     }
 
-    public static void I420Copy(ByteBuffer byteBuffer, int i, ByteBuffer byteBuffer2, int i2, ByteBuffer byteBuffer3, int i3, ByteBuffer byteBuffer4, int i4, ByteBuffer byteBuffer5, int i5, ByteBuffer byteBuffer6, int i6, int i7, int i8) {
-        nativeI420Copy(byteBuffer, i, byteBuffer2, i2, byteBuffer3, i3, byteBuffer4, i4, byteBuffer5, i5, byteBuffer6, i6, i7, i8);
+    public static void I420Copy(ByteBuffer srcY, int srcStrideY, ByteBuffer srcU, int srcStrideU, ByteBuffer srcV, int srcStrideV, ByteBuffer dstY, int dstStrideY, ByteBuffer dstU, int dstStrideU, ByteBuffer dstV, int dstStrideV, int width, int height) {
+        nativeI420Copy(srcY, srcStrideY, srcU, srcStrideU, srcV, srcStrideV, dstY, dstStrideY, dstU, dstStrideU, dstV, dstStrideV, width, height);
     }
 
-    public static void I420ToNV12(ByteBuffer byteBuffer, int i, ByteBuffer byteBuffer2, int i2, ByteBuffer byteBuffer3, int i3, ByteBuffer byteBuffer4, int i4, ByteBuffer byteBuffer5, int i5, int i6, int i7) {
-        nativeI420ToNV12(byteBuffer, i, byteBuffer2, i2, byteBuffer3, i3, byteBuffer4, i4, byteBuffer5, i5, i6, i7);
+    public static void I420ToNV12(ByteBuffer srcY, int srcStrideY, ByteBuffer srcU, int srcStrideU, ByteBuffer srcV, int srcStrideV, ByteBuffer dstY, int dstStrideY, ByteBuffer dstUV, int dstStrideUV, int width, int height) {
+        nativeI420ToNV12(srcY, srcStrideY, srcU, srcStrideU, srcV, srcStrideV, dstY, dstStrideY, dstUV, dstStrideUV, width, height);
     }
 
-    public static void I420Rotate(ByteBuffer byteBuffer, int i, ByteBuffer byteBuffer2, int i2, ByteBuffer byteBuffer3, int i3, ByteBuffer byteBuffer4, int i4, ByteBuffer byteBuffer5, int i5, ByteBuffer byteBuffer6, int i6, int i7, int i8, int i9) {
-        nativeI420Rotate(byteBuffer, i, byteBuffer2, i2, byteBuffer3, i3, byteBuffer4, i4, byteBuffer5, i5, byteBuffer6, i6, i7, i8, i9);
+    public static void I420Rotate(ByteBuffer srcY, int srcStrideY, ByteBuffer srcU, int srcStrideU, ByteBuffer srcV, int srcStrideV, ByteBuffer dstY, int dstStrideY, ByteBuffer dstU, int dstStrideU, ByteBuffer dstV, int dstStrideV, int srcWidth, int srcHeight, int rotationMode) {
+        nativeI420Rotate(srcY, srcStrideY, srcU, srcStrideU, srcV, srcStrideV, dstY, dstStrideY, dstU, dstStrideU, dstV, dstStrideV, srcWidth, srcHeight, rotationMode);
     }
 }

@@ -18,6 +18,6 @@ public final /* synthetic */ class PremiumFeatureBottomSheet$$ExternalSyntheticL
     }
 
     public final void onClick(View view) {
-        this.f$0.lambda$new$1(this.f$1, this.f$2, this.f$3, view);
+        this.f$0.m1252x35711CLASSNAME(this.f$1, this.f$2, this.f$3, view);
     }
 }

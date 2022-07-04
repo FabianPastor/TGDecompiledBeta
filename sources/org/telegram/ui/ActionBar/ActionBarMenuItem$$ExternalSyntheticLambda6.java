@@ -3,13 +3,13 @@ package org.telegram.ui.ActionBar;
 import android.view.View;
 
 public final /* synthetic */ class ActionBarMenuItem$$ExternalSyntheticLambda6 implements View.OnClickListener {
-    public final /* synthetic */ ActionBarMenuSubItem f$0;
+    public final /* synthetic */ ActionBarMenuItem f$0;
 
-    public /* synthetic */ ActionBarMenuItem$$ExternalSyntheticLambda6(ActionBarMenuSubItem actionBarMenuSubItem) {
-        this.f$0 = actionBarMenuSubItem;
+    public /* synthetic */ ActionBarMenuItem$$ExternalSyntheticLambda6(ActionBarMenuItem actionBarMenuItem) {
+        this.f$0 = actionBarMenuItem;
     }
 
     public final void onClick(View view) {
-        this.f$0.openSwipeBack();
+        this.f$0.m2537lambda$addSubItem$5$orgtelegramuiActionBarActionBarMenuItem(view);
     }
 }

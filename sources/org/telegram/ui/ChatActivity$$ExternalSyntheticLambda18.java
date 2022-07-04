@@ -1,16 +1,19 @@
 package org.telegram.ui;
 
-import android.animation.ValueAnimator;
-import org.telegram.ui.Components.CrossfadeDrawable;
+import org.telegram.ui.ActionBar.Theme;
 
-public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda18 implements ValueAnimator.AnimatorUpdateListener {
-    public final /* synthetic */ CrossfadeDrawable f$0;
+public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda18 implements Runnable {
+    public final /* synthetic */ Theme.ThemeAccent f$0;
+    public final /* synthetic */ Theme.ThemeInfo f$1;
+    public final /* synthetic */ boolean f$2;
 
-    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda18(CrossfadeDrawable crossfadeDrawable) {
-        this.f$0 = crossfadeDrawable;
+    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda18(Theme.ThemeAccent themeAccent, Theme.ThemeInfo themeInfo, boolean z) {
+        this.f$0 = themeAccent;
+        this.f$1 = themeInfo;
+        this.f$2 = z;
     }
 
-    public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-        this.f$0.setProgress(((Float) valueAnimator.getAnimatedValue()).floatValue());
+    public final void run() {
+        ChatActivity.lambda$didReceivedNotification$120(this.f$0, this.f$1, this.f$2);
     }
 }

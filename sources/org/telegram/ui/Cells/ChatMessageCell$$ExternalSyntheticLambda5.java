@@ -10,6 +10,6 @@ public final /* synthetic */ class ChatMessageCell$$ExternalSyntheticLambda5 imp
     }
 
     public final void run() {
-        this.f$0.lambda$checkSpoilersMotionEvent$3(this.f$1);
+        this.f$0.m2787xcf5a9992(this.f$1);
     }
 }

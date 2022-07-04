@@ -11,6 +11,6 @@ public final /* synthetic */ class ShareAlert$SearchField$$ExternalSyntheticLamb
     }
 
     public final void onClick(View view) {
-        this.f$0.lambda$new$0(view);
+        this.f$0.m1366lambda$new$0$orgtelegramuiComponentsShareAlert$SearchField(view);
     }
 }

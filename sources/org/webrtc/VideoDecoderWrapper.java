@@ -9,8 +9,7 @@ class VideoDecoderWrapper {
     VideoDecoderWrapper() {
     }
 
-    @CalledByNative
-    static VideoDecoder.Callback createDecoderCallback(long j) {
-        return new VideoDecoderWrapper$$ExternalSyntheticLambda0(j);
+    static VideoDecoder.Callback createDecoderCallback(long nativeDecoder) {
+        return new VideoDecoderWrapper$$ExternalSyntheticLambda0(nativeDecoder);
     }
 }

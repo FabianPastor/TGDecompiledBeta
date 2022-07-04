@@ -1,16 +1,17 @@
 package org.telegram.messenger;
 
-import org.telegram.tgnet.RequestDelegate;
-import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC$TL_error;
+import android.util.SparseArray;
 
-public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda352 implements RequestDelegate {
-    public static final /* synthetic */ MessagesController$$ExternalSyntheticLambda352 INSTANCE = new MessagesController$$ExternalSyntheticLambda352();
+public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda352 implements Runnable {
+    public final /* synthetic */ MessagesController f$0;
+    public final /* synthetic */ SparseArray f$1;
 
-    private /* synthetic */ MessagesController$$ExternalSyntheticLambda352() {
+    public /* synthetic */ MessagesController$$ExternalSyntheticLambda352(MessagesController messagesController, SparseArray sparseArray) {
+        this.f$0 = messagesController;
+        this.f$1 = sparseArray;
     }
 
-    public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        MessagesController.lambda$unregistedPush$252(tLObject, tLRPC$TL_error);
+    public final void run() {
+        this.f$0.m213x1668CLASSNAME(this.f$1);
     }
 }

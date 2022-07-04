@@ -11,6 +11,6 @@ public final /* synthetic */ class LoginActivity$PhoneNumberConfirmView$$Externa
     }
 
     public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-        this.f$0.lambda$animateProgress$5(valueAnimator);
+        this.f$0.m3894x5a9042aa(valueAnimator);
     }
 }

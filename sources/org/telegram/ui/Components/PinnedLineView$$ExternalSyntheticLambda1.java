@@ -10,6 +10,6 @@ public final /* synthetic */ class PinnedLineView$$ExternalSyntheticLambda1 impl
     }
 
     public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-        this.f$0.lambda$set$1(valueAnimator);
+        this.f$0.m1210lambda$set$1$orgtelegramuiComponentsPinnedLineView(valueAnimator);
     }
 }

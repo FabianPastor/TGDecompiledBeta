@@ -1,18 +1,15 @@
 package org.telegram.ui.Components;
 
 import android.view.View;
-import android.widget.ImageView;
 
-public final /* synthetic */ class ShareAlert$$ExternalSyntheticLambda7 implements View.OnLongClickListener {
+public final /* synthetic */ class ShareAlert$$ExternalSyntheticLambda7 implements View.OnClickListener {
     public final /* synthetic */ ShareAlert f$0;
-    public final /* synthetic */ ImageView f$1;
 
-    public /* synthetic */ ShareAlert$$ExternalSyntheticLambda7(ShareAlert shareAlert, ImageView imageView) {
+    public /* synthetic */ ShareAlert$$ExternalSyntheticLambda7(ShareAlert shareAlert) {
         this.f$0 = shareAlert;
-        this.f$1 = imageView;
     }
 
-    public final boolean onLongClick(View view) {
-        return this.f$0.lambda$new$8(this.f$1, view);
+    public final void onClick(View view) {
+        this.f$0.m1355lambda$new$7$orgtelegramuiComponentsShareAlert(view);
     }
 }

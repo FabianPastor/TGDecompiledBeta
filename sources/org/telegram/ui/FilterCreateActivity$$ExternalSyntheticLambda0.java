@@ -10,6 +10,6 @@ public final /* synthetic */ class FilterCreateActivity$$ExternalSyntheticLambda
     }
 
     public final void onClick(DialogInterface dialogInterface, int i) {
-        this.f$0.lambda$checkDiscard$7(dialogInterface, i);
+        this.f$0.m3458lambda$checkDiscard$6$orgtelegramuiFilterCreateActivity(dialogInterface, i);
     }
 }

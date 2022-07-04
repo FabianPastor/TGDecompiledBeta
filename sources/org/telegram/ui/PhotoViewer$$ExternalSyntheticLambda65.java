@@ -1,17 +1,17 @@
 package org.telegram.ui;
 
-import org.telegram.ui.PhotoViewer;
+import android.view.View;
 
 public final /* synthetic */ class PhotoViewer$$ExternalSyntheticLambda65 implements Runnable {
-    public final /* synthetic */ PhotoViewer f$0;
-    public final /* synthetic */ PhotoViewer.PlaceProviderObject f$1;
+    public final /* synthetic */ boolean f$0;
+    public final /* synthetic */ View f$1;
 
-    public /* synthetic */ PhotoViewer$$ExternalSyntheticLambda65(PhotoViewer photoViewer, PhotoViewer.PlaceProviderObject placeProviderObject) {
-        this.f$0 = photoViewer;
-        this.f$1 = placeProviderObject;
+    public /* synthetic */ PhotoViewer$$ExternalSyntheticLambda65(boolean z, View view) {
+        this.f$0 = z;
+        this.f$1 = view;
     }
 
     public final void run() {
-        this.f$0.lambda$closePhoto$73(this.f$1);
+        PhotoViewer.lambda$setItemVisible$66(this.f$0, this.f$1);
     }
 }

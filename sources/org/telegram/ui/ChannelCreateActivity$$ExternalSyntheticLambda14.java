@@ -1,15 +1,17 @@
 package org.telegram.ui;
 
-public final /* synthetic */ class ChannelCreateActivity$$ExternalSyntheticLambda14 implements Runnable {
-    public final /* synthetic */ ChannelCreateActivity f$0;
-    public final /* synthetic */ String f$1;
+import org.telegram.tgnet.RequestDelegate;
+import org.telegram.tgnet.TLObject;
+import org.telegram.tgnet.TLRPC;
 
-    public /* synthetic */ ChannelCreateActivity$$ExternalSyntheticLambda14(ChannelCreateActivity channelCreateActivity, String str) {
+public final /* synthetic */ class ChannelCreateActivity$$ExternalSyntheticLambda14 implements RequestDelegate {
+    public final /* synthetic */ ChannelCreateActivity f$0;
+
+    public /* synthetic */ ChannelCreateActivity$$ExternalSyntheticLambda14(ChannelCreateActivity channelCreateActivity) {
         this.f$0 = channelCreateActivity;
-        this.f$1 = str;
     }
 
-    public final void run() {
-        this.f$0.lambda$checkUserName$23(this.f$1);
+    public final void run(TLObject tLObject, TLRPC.TL_error tL_error) {
+        this.f$0.m2892x3a0330bb(tLObject, tL_error);
     }
 }

@@ -1,17 +1,14 @@
 package org.telegram.messenger;
 
-import org.telegram.tgnet.TLRPC$TL_help_inviteText;
+import java.util.Comparator;
 
-public final /* synthetic */ class ContactsController$$ExternalSyntheticLambda40 implements Runnable {
-    public final /* synthetic */ ContactsController f$0;
-    public final /* synthetic */ TLRPC$TL_help_inviteText f$1;
+public final /* synthetic */ class ContactsController$$ExternalSyntheticLambda40 implements Comparator {
+    public static final /* synthetic */ ContactsController$$ExternalSyntheticLambda40 INSTANCE = new ContactsController$$ExternalSyntheticLambda40();
 
-    public /* synthetic */ ContactsController$$ExternalSyntheticLambda40(ContactsController contactsController, TLRPC$TL_help_inviteText tLRPC$TL_help_inviteText) {
-        this.f$0 = contactsController;
-        this.f$1 = tLRPC$TL_help_inviteText;
+    private /* synthetic */ ContactsController$$ExternalSyntheticLambda40() {
     }
 
-    public final void run() {
-        this.f$0.lambda$checkInviteText$2(this.f$1);
+    public final int compare(Object obj, Object obj2) {
+        return ContactsController.lambda$buildContactsSectionsArrays$44((String) obj, (String) obj2);
     }
 }

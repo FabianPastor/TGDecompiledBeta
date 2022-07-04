@@ -10,6 +10,6 @@ public final /* synthetic */ class ActionIntroActivity$$ExternalSyntheticLambda0
     }
 
     public final void onClick(DialogInterface dialogInterface, int i) {
-        this.f$0.lambda$onRequestPermissionsResultFragment$7(dialogInterface, i);
+        this.f$0.m2586lambda$createView$1$orgtelegramuiActionIntroActivity(dialogInterface, i);
     }
 }

@@ -1,16 +1,15 @@
 package org.telegram.ui;
 
-import android.view.KeyEvent;
-import org.telegram.ui.ActionBar.ActionBarPopupWindow;
+import android.view.View;
+import android.view.WindowInsets;
 
-public final /* synthetic */ class ArticleViewer$$ExternalSyntheticLambda39 implements ActionBarPopupWindow.OnDispatchKeyEventListener {
-    public final /* synthetic */ ArticleViewer f$0;
+public final /* synthetic */ class ArticleViewer$$ExternalSyntheticLambda39 implements View.OnApplyWindowInsetsListener {
+    public static final /* synthetic */ ArticleViewer$$ExternalSyntheticLambda39 INSTANCE = new ArticleViewer$$ExternalSyntheticLambda39();
 
-    public /* synthetic */ ArticleViewer$$ExternalSyntheticLambda39(ArticleViewer articleViewer) {
-        this.f$0 = articleViewer;
+    private /* synthetic */ ArticleViewer$$ExternalSyntheticLambda39() {
     }
 
-    public final void onDispatchKeyEvent(KeyEvent keyEvent) {
-        this.f$0.lambda$showPopup$3(keyEvent);
+    public final WindowInsets onApplyWindowInsets(View view, WindowInsets windowInsets) {
+        return ArticleViewer.lambda$setParentActivity$8(view, windowInsets);
     }
 }

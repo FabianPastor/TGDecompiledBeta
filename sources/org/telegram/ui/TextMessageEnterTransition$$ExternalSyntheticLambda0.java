@@ -15,6 +15,6 @@ public final /* synthetic */ class TextMessageEnterTransition$$ExternalSynthetic
     }
 
     public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-        this.f$0.lambda$new$0(this.f$1, this.f$2, valueAnimator);
+        this.f$0.m4651lambda$new$0$orgtelegramuiTextMessageEnterTransition(this.f$1, this.f$2, valueAnimator);
     }
 }

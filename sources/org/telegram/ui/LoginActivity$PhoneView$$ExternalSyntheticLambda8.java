@@ -1,15 +1,23 @@
 package org.telegram.ui;
 
-import org.telegram.ui.LoginActivity;
+import j$.util.function.Function;
+import org.telegram.ui.CountrySelectActivity;
 
-public final /* synthetic */ class LoginActivity$PhoneView$$ExternalSyntheticLambda8 implements Runnable {
-    public final /* synthetic */ LoginActivity.PhoneView f$0;
+public final /* synthetic */ class LoginActivity$PhoneView$$ExternalSyntheticLambda8 implements Function {
+    public static final /* synthetic */ LoginActivity$PhoneView$$ExternalSyntheticLambda8 INSTANCE = new LoginActivity$PhoneView$$ExternalSyntheticLambda8();
 
-    public /* synthetic */ LoginActivity$PhoneView$$ExternalSyntheticLambda8(LoginActivity.PhoneView phoneView) {
-        this.f$0 = phoneView;
+    private /* synthetic */ LoginActivity$PhoneView$$ExternalSyntheticLambda8() {
     }
 
-    public final void run() {
-        this.f$0.lambda$new$2();
+    public /* synthetic */ Function andThen(Function function) {
+        return Function.CC.$default$andThen(this, function);
+    }
+
+    public final Object apply(Object obj) {
+        return ((CountrySelectActivity.Country) obj).name;
+    }
+
+    public /* synthetic */ Function compose(Function function) {
+        return Function.CC.$default$compose(this, function);
     }
 }

@@ -15,6 +15,12 @@ import org.telegram.messenger.SvgHelper;
 import org.telegram.ui.ActionBar.Theme;
 
 public class StickerTabView extends FrameLayout {
+    public static final int EMOJI_TYPE = 2;
+    public static final int ICON_TYPE = 1;
+    private static final int IMAGE_SMALL_SIZE = 26;
+    public static final int SMALL_HEIGHT = 36;
+    public static final int SMALL_WIDTH = 38;
+    public static final int STICKER_TYPE = 0;
     private static int indexPointer;
     public float dragOffset;
     ValueAnimator dragOffsetAnimator;
@@ -32,20 +38,20 @@ public class StickerTabView extends FrameLayout {
     public int type;
     View visibleView;
 
-    public StickerTabView(Context context, int i) {
+    public StickerTabView(Context context, int type2) {
         super(context);
-        this.type = i;
-        int i2 = indexPointer;
-        indexPointer = i2 + 1;
-        this.index = i2;
-        if (i == 2) {
+        this.type = type2;
+        int i = indexPointer;
+        indexPointer = i + 1;
+        this.index = i;
+        if (type2 == 2) {
             BackupImageView backupImageView = new BackupImageView(getContext());
             this.imageView = backupImageView;
             backupImageView.setLayerNum(1);
             this.imageView.setAspectFit(false);
             addView(this.imageView, LayoutHelper.createFrame(26, 26, 17));
             this.visibleView = this.imageView;
-        } else if (i == 1) {
+        } else if (type2 == 1) {
             ImageView imageView2 = new ImageView(context);
             this.iconView = imageView2;
             imageView2.setScaleType(ImageView.ScaleType.CENTER_CROP);
@@ -70,43 +76,37 @@ public class StickerTabView extends FrameLayout {
         this.textView.setVisibility(8);
     }
 
-    public void setExpanded(boolean z) {
+    public void setExpanded(boolean expanded2) {
         int i = this.type;
         if (i != 2) {
-            this.expanded = z;
-            float f = i == 1 ? 24.0f : 26.0f;
-            float f2 = i == 1 ? 38.0f : 56.0f;
-            this.visibleView.getLayoutParams().width = AndroidUtilities.dp(z ? f2 : f);
-            ViewGroup.LayoutParams layoutParams = this.visibleView.getLayoutParams();
-            if (z) {
-                f = f2;
-            }
-            layoutParams.height = AndroidUtilities.dp(f);
-            this.textView.setVisibility(z ? 0 : 8);
+            this.expanded = expanded2;
+            float size = i == 1 ? 24.0f : 26.0f;
+            float sizeExpanded = i == 1 ? 38.0f : 56.0f;
+            this.visibleView.getLayoutParams().width = AndroidUtilities.dp(expanded2 ? sizeExpanded : size);
+            this.visibleView.getLayoutParams().height = AndroidUtilities.dp(expanded2 ? sizeExpanded : size);
+            this.textView.setVisibility(expanded2 ? 0 : 8);
             if (this.type != 1 && this.roundImage) {
                 this.imageView.setRoundRadius(AndroidUtilities.dp(((float) this.visibleView.getLayoutParams().width) / 2.0f));
             }
         }
     }
 
-    public void updateExpandProgress(float f) {
+    public void updateExpandProgress(float expandProgress) {
         int i = this.type;
         if (i != 2) {
             if (this.expanded) {
-                float f2 = i == 1 ? 24.0f : 26.0f;
-                float f3 = i == 1 ? 38.0f : 56.0f;
-                float f4 = 86.0f - f3;
-                float f5 = 1.0f - f;
-                this.visibleView.setTranslationY((((((float) AndroidUtilities.dp(36.0f - f2)) / 2.0f) - (((float) AndroidUtilities.dp(f4)) / 2.0f)) * f5) - (((float) AndroidUtilities.dp(8.0f)) * f));
-                this.visibleView.setTranslationX(((((float) AndroidUtilities.dp(38.0f - f2)) / 2.0f) - (((float) AndroidUtilities.dp(f4)) / 2.0f)) * f5);
-                this.textView.setAlpha(Math.max(0.0f, (f - 0.5f) / 0.5f));
-                this.textView.setTranslationY(((float) (-AndroidUtilities.dp(40.0f))) * f5);
-                this.textView.setTranslationX(((float) (-AndroidUtilities.dp(12.0f))) * f5);
+                float size = i == 1 ? 24.0f : 26.0f;
+                float sizeExpanded = i == 1 ? 38.0f : 56.0f;
+                this.visibleView.setTranslationY((((((float) AndroidUtilities.dp(36.0f - size)) / 2.0f) - (((float) AndroidUtilities.dp(86.0f - sizeExpanded)) / 2.0f)) * (1.0f - expandProgress)) - (((float) AndroidUtilities.dp(8.0f)) * expandProgress));
+                this.visibleView.setTranslationX(((((float) AndroidUtilities.dp(38.0f - size)) / 2.0f) - (((float) AndroidUtilities.dp(86.0f - sizeExpanded)) / 2.0f)) * (1.0f - expandProgress));
+                this.textView.setAlpha(Math.max(0.0f, (expandProgress - 0.5f) / 0.5f));
+                this.textView.setTranslationY(((float) (-AndroidUtilities.dp(40.0f))) * (1.0f - expandProgress));
+                this.textView.setTranslationX(((float) (-AndroidUtilities.dp(12.0f))) * (1.0f - expandProgress));
                 this.visibleView.setPivotX(0.0f);
                 this.visibleView.setPivotY(0.0f);
-                float f6 = ((f2 / f3) * f5) + f;
-                this.visibleView.setScaleX(f6);
-                this.visibleView.setScaleY(f6);
+                float s = ((size / sizeExpanded) * (1.0f - expandProgress)) + expandProgress;
+                this.visibleView.setScaleX(s);
+                this.visibleView.setScaleY(s);
                 return;
             }
             this.visibleView.setTranslationX(0.0f);
@@ -122,7 +122,7 @@ public class StickerTabView extends FrameLayout {
         invalidate();
     }
 
-    public void animateIfPositionChanged(final ViewGroup viewGroup) {
+    public void animateIfPositionChanged(final ViewGroup parent) {
         float f = this.lastLeft;
         if (((float) getLeft()) != f && this.hasSavedLeft) {
             this.dragOffset = f - ((float) getLeft());
@@ -137,15 +137,14 @@ public class StickerTabView extends FrameLayout {
                 public void onAnimationUpdate(ValueAnimator valueAnimator) {
                     StickerTabView.this.dragOffset = ((Float) valueAnimator.getAnimatedValue()).floatValue();
                     StickerTabView.this.invalidate();
-                    viewGroup.invalidate();
+                    parent.invalidate();
                 }
             });
             this.dragOffsetAnimator.addListener(new AnimatorListenerAdapter() {
-                public void onAnimationEnd(Animator animator) {
-                    StickerTabView stickerTabView = StickerTabView.this;
-                    stickerTabView.dragOffset = 0.0f;
-                    stickerTabView.invalidate();
-                    viewGroup.invalidate();
+                public void onAnimationEnd(Animator animation) {
+                    StickerTabView.this.dragOffset = 0.0f;
+                    StickerTabView.this.invalidate();
+                    parent.invalidate();
                 }
             });
             this.dragOffsetAnimator.start();

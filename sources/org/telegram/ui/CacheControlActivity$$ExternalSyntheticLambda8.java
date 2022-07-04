@@ -14,6 +14,6 @@ public final /* synthetic */ class CacheControlActivity$$ExternalSyntheticLambda
     }
 
     public final void onItemClick(View view, int i) {
-        this.f$0.lambda$createView$6(this.f$1, view, i);
+        this.f$0.m2727lambda$createView$6$orgtelegramuiCacheControlActivity(this.f$1, view, i);
     }
 }

@@ -1,21 +1,19 @@
 package org.telegram.messenger;
 
-import java.util.ArrayList;
+import org.telegram.tgnet.TLRPC;
 
 public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda70 implements Runnable {
     public final /* synthetic */ MessagesController f$0;
-    public final /* synthetic */ long f$1;
-    public final /* synthetic */ int f$2;
-    public final /* synthetic */ ArrayList f$3;
+    public final /* synthetic */ TLRPC.TL_error f$1;
+    public final /* synthetic */ long f$2;
 
-    public /* synthetic */ MessagesController$$ExternalSyntheticLambda70(MessagesController messagesController, long j, int i, ArrayList arrayList) {
+    public /* synthetic */ MessagesController$$ExternalSyntheticLambda70(MessagesController messagesController, TLRPC.TL_error tL_error, long j) {
         this.f$0 = messagesController;
-        this.f$1 = j;
-        this.f$2 = i;
-        this.f$3 = arrayList;
+        this.f$1 = tL_error;
+        this.f$2 = j;
     }
 
     public final void run() {
-        this.f$0.lambda$checkUnreadReactions$332(this.f$1, this.f$2, this.f$3);
+        this.f$0.m253lambda$loadFullChat$47$orgtelegrammessengerMessagesController(this.f$1, this.f$2);
     }
 }

@@ -4,6 +4,7 @@ import android.graphics.Bitmap;
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.InputStream;
 import java.io.RandomAccessFile;
 import org.telegram.messenger.audioinfo.m4a.M4AInfo;
 import org.telegram.messenger.audioinfo.mp3.MP3Info;
@@ -28,7 +29,16 @@ public abstract class AudioInfo {
     protected String title;
     protected short track;
     protected short tracks;
+    protected String version;
     protected short year;
+
+    public String getBrand() {
+        return this.brand;
+    }
+
+    public String getVersion() {
+        return this.version;
+    }
 
     public long getDuration() {
         return this.duration;
@@ -108,19 +118,20 @@ public abstract class AudioInfo {
 
     public static AudioInfo getAudioInfo(File file) {
         try {
-            byte[] bArr = new byte[12];
+            byte[] header = new byte[12];
             RandomAccessFile randomAccessFile = new RandomAccessFile(file, "r");
-            randomAccessFile.readFully(bArr, 0, 8);
+            randomAccessFile.readFully(header, 0, 8);
             randomAccessFile.close();
-            BufferedInputStream bufferedInputStream = new BufferedInputStream(new FileInputStream(file));
-            if (bArr[4] == 102 && bArr[5] == 116 && bArr[6] == 121 && bArr[7] == 112) {
-                return new M4AInfo(bufferedInputStream);
+            InputStream input = new BufferedInputStream(new FileInputStream(file));
+            if (header[4] == 102 && header[5] == 116 && header[6] == 121 && header[7] == 112) {
+                return new M4AInfo(input);
             }
             if (file.getAbsolutePath().endsWith("mp3")) {
-                return new MP3Info(bufferedInputStream, file.length());
+                return new MP3Info(input, file.length());
             }
             return null;
-        } catch (Exception unused) {
+        } catch (Exception e) {
+            return null;
         }
     }
 }

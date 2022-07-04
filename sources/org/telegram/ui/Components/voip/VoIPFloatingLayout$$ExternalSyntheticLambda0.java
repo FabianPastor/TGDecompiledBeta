@@ -10,6 +10,6 @@ public final /* synthetic */ class VoIPFloatingLayout$$ExternalSyntheticLambda0 
     }
 
     public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-        this.f$0.lambda$new$0(valueAnimator);
+        this.f$0.m1609lambda$new$0$orgtelegramuiComponentsvoipVoIPFloatingLayout(valueAnimator);
     }
 }

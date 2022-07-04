@@ -8,6 +8,6 @@ public final /* synthetic */ class TranscribeButton$$ExternalSyntheticLambda5 im
     }
 
     public final void run() {
-        this.f$0.lambda$new$0();
+        this.f$0.m1502lambda$new$1$orgtelegramuiComponentsTranscribeButton();
     }
 }

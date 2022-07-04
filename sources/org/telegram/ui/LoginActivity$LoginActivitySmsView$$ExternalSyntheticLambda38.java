@@ -1,21 +1,16 @@
 package org.telegram.ui;
 
-import org.telegram.tgnet.RequestDelegate;
-import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC$TL_auth_signIn;
-import org.telegram.tgnet.TLRPC$TL_error;
+import android.view.View;
 import org.telegram.ui.LoginActivity;
 
-public final /* synthetic */ class LoginActivity$LoginActivitySmsView$$ExternalSyntheticLambda38 implements RequestDelegate {
+public final /* synthetic */ class LoginActivity$LoginActivitySmsView$$ExternalSyntheticLambda38 implements View.OnFocusChangeListener {
     public final /* synthetic */ LoginActivity.LoginActivitySmsView f$0;
-    public final /* synthetic */ TLRPC$TL_auth_signIn f$1;
 
-    public /* synthetic */ LoginActivity$LoginActivitySmsView$$ExternalSyntheticLambda38(LoginActivity.LoginActivitySmsView loginActivitySmsView, TLRPC$TL_auth_signIn tLRPC$TL_auth_signIn) {
+    public /* synthetic */ LoginActivity$LoginActivitySmsView$$ExternalSyntheticLambda38(LoginActivity.LoginActivitySmsView loginActivitySmsView) {
         this.f$0 = loginActivitySmsView;
-        this.f$1 = tLRPC$TL_auth_signIn;
     }
 
-    public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        this.f$0.lambda$onNextPressed$33(this.f$1, tLObject, tLRPC$TL_error);
+    public final void onFocusChange(View view, boolean z) {
+        this.f$0.m3875x7465586c(view, z);
     }
 }

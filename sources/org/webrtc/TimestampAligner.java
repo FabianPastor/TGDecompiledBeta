@@ -15,9 +15,9 @@ public class TimestampAligner {
         return nativeRtcTimeNanos();
     }
 
-    public long translateTimestamp(long j) {
+    public long translateTimestamp(long cameraTimeNs) {
         checkNativeAlignerExists();
-        return nativeTranslateTimestamp(this.nativeTimestampAligner, j);
+        return nativeTranslateTimestamp(this.nativeTimestampAligner, cameraTimeNs);
     }
 
     public void dispose() {

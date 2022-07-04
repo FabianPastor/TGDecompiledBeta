@@ -7,13 +7,13 @@ import org.telegram.messenger.AndroidUtilities;
 public class FixedHeightEmptyCell extends View {
     int heightInDp;
 
-    public FixedHeightEmptyCell(Context context, int i) {
+    public FixedHeightEmptyCell(Context context, int heightInDp2) {
         super(context);
-        this.heightInDp = i;
+        this.heightInDp = heightInDp2;
     }
 
     /* access modifiers changed from: protected */
-    public void onMeasure(int i, int i2) {
-        super.onMeasure(i, View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp((float) this.heightInDp), NUM));
+    public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        super.onMeasure(widthMeasureSpec, View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp((float) this.heightInDp), NUM));
     }
 }

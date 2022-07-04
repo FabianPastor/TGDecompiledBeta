@@ -10,6 +10,6 @@ public final /* synthetic */ class RTMPStreamPipOverlay$$ExternalSyntheticLambda
     }
 
     public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-        this.f$0.lambda$toggleControls$5(valueAnimator);
+        this.f$0.m1605x4e63256(valueAnimator);
     }
 }

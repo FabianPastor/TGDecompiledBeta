@@ -3,13 +3,13 @@ package org.telegram.ui;
 import android.view.View;
 
 public final /* synthetic */ class CallLogActivity$$ExternalSyntheticLambda2 implements View.OnClickListener {
-    public final /* synthetic */ boolean[] f$0;
+    public final /* synthetic */ CallLogActivity f$0;
 
-    public /* synthetic */ CallLogActivity$$ExternalSyntheticLambda2(boolean[] zArr) {
-        this.f$0 = zArr;
+    public /* synthetic */ CallLogActivity$$ExternalSyntheticLambda2(CallLogActivity callLogActivity) {
+        this.f$0 = callLogActivity;
     }
 
     public final void onClick(View view) {
-        CallLogActivity.lambda$showDeleteAlert$4(this.f$0, view);
+        this.f$0.m2746lambda$createView$3$orgtelegramuiCallLogActivity(view);
     }
 }

@@ -8,6 +8,6 @@ public final /* synthetic */ class PremiumStickersPreviewRecycler$$ExternalSynth
     }
 
     public final void run() {
-        this.f$0.lambda$onLayout$2();
+        this.f$0.m1256xvar_dcc1();
     }
 }

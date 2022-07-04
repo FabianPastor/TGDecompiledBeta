@@ -1,22 +1,21 @@
 package org.telegram.ui;
 
-import org.telegram.tgnet.RequestDelegate;
-import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC$TL_channels_getParticipants;
-import org.telegram.tgnet.TLRPC$TL_error;
+import java.util.ArrayList;
+import org.telegram.tgnet.TLRPC;
+import org.telegram.ui.GroupCreateActivity;
 
-public final /* synthetic */ class ProfileActivity$$ExternalSyntheticLambda35 implements RequestDelegate {
+public final /* synthetic */ class ProfileActivity$$ExternalSyntheticLambda35 implements GroupCreateActivity.ContactsAddActivityDelegate {
     public final /* synthetic */ ProfileActivity f$0;
-    public final /* synthetic */ TLRPC$TL_channels_getParticipants f$1;
-    public final /* synthetic */ int f$2;
 
-    public /* synthetic */ ProfileActivity$$ExternalSyntheticLambda35(ProfileActivity profileActivity, TLRPC$TL_channels_getParticipants tLRPC$TL_channels_getParticipants, int i) {
+    public /* synthetic */ ProfileActivity$$ExternalSyntheticLambda35(ProfileActivity profileActivity) {
         this.f$0 = profileActivity;
-        this.f$1 = tLRPC$TL_channels_getParticipants;
-        this.f$2 = i;
     }
 
-    public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        this.f$0.lambda$getChannelParticipants$27(this.f$1, this.f$2, tLObject, tLRPC$TL_error);
+    public final void didSelectUsers(ArrayList arrayList, int i) {
+        this.f$0.m4417lambda$openAddMember$28$orgtelegramuiProfileActivity(arrayList, i);
+    }
+
+    public /* synthetic */ void needAddBot(TLRPC.User user) {
+        GroupCreateActivity.ContactsAddActivityDelegate.CC.$default$needAddBot(this, user);
     }
 }

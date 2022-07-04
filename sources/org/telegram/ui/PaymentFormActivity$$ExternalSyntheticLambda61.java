@@ -1,16 +1,15 @@
 package org.telegram.ui;
 
-import org.telegram.tgnet.RequestDelegate;
-import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC$TL_error;
+import android.view.View;
 
-public final /* synthetic */ class PaymentFormActivity$$ExternalSyntheticLambda61 implements RequestDelegate {
-    public static final /* synthetic */ PaymentFormActivity$$ExternalSyntheticLambda61 INSTANCE = new PaymentFormActivity$$ExternalSyntheticLambda61();
+public final /* synthetic */ class PaymentFormActivity$$ExternalSyntheticLambda61 implements View.OnClickListener {
+    public final /* synthetic */ PaymentFormActivity f$0;
 
-    private /* synthetic */ PaymentFormActivity$$ExternalSyntheticLambda61() {
+    public /* synthetic */ PaymentFormActivity$$ExternalSyntheticLambda61(PaymentFormActivity paymentFormActivity) {
+        this.f$0 = paymentFormActivity;
     }
 
-    public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        PaymentFormActivity.lambda$createView$27(tLObject, tLRPC$TL_error);
+    public final void onClick(View view) {
+        this.f$0.m4143lambda$createView$12$orgtelegramuiPaymentFormActivity(view);
     }
 }

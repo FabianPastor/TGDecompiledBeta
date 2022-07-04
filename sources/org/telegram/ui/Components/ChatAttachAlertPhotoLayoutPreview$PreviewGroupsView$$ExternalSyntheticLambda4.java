@@ -17,6 +17,6 @@ public final /* synthetic */ class ChatAttachAlertPhotoLayoutPreview$PreviewGrou
     }
 
     public final void run() {
-        this.f$0.lambda$onTouchEvent$3(this.f$1, this.f$2, this.f$3);
+        this.f$0.m851x3ce7e05(this.f$1, this.f$2, this.f$3);
     }
 }

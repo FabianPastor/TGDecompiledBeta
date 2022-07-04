@@ -10,6 +10,6 @@ public final /* synthetic */ class StickersAdapter$$ExternalSyntheticLambda0 imp
     }
 
     public final void run() {
-        this.f$0.lambda$searchEmojiByKeyword$1(this.f$1);
+        this.f$0.m2653xf9CLASSNAMEf8c(this.f$1);
     }
 }

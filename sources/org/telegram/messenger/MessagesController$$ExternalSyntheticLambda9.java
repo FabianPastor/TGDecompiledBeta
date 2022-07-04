@@ -1,18 +1,17 @@
 package org.telegram.messenger;
 
-import org.telegram.messenger.MessagesController;
-import org.telegram.tgnet.TLRPC$TL_error;
+import java.util.ArrayList;
 
 public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda9 implements Runnable {
-    public final /* synthetic */ MessagesController.ErrorDelegate f$0;
-    public final /* synthetic */ TLRPC$TL_error f$1;
+    public final /* synthetic */ MessagesController f$0;
+    public final /* synthetic */ ArrayList f$1;
 
-    public /* synthetic */ MessagesController$$ExternalSyntheticLambda9(MessagesController.ErrorDelegate errorDelegate, TLRPC$TL_error tLRPC$TL_error) {
-        this.f$0 = errorDelegate;
-        this.f$1 = tLRPC$TL_error;
+    public /* synthetic */ MessagesController$$ExternalSyntheticLambda9(MessagesController messagesController, ArrayList arrayList) {
+        this.f$0 = messagesController;
+        this.f$1 = arrayList;
     }
 
     public final void run() {
-        this.f$0.run(this.f$1);
+        this.f$0.m207x1d2a75f4(this.f$1);
     }
 }

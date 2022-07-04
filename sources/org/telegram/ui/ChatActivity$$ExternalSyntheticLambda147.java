@@ -1,13 +1,16 @@
 package org.telegram.ui;
 
-public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda147 implements Runnable {
-    public final /* synthetic */ ChatActivity f$0;
+import org.telegram.tgnet.RequestDelegate;
+import org.telegram.tgnet.TLObject;
+import org.telegram.tgnet.TLRPC;
 
-    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda147(ChatActivity chatActivity) {
-        this.f$0 = chatActivity;
+public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda147 implements RequestDelegate {
+    public static final /* synthetic */ ChatActivity$$ExternalSyntheticLambda147 INSTANCE = new ChatActivity$$ExternalSyntheticLambda147();
+
+    private /* synthetic */ ChatActivity$$ExternalSyntheticLambda147() {
     }
 
-    public final void run() {
-        this.f$0.lambda$didReceivedNotification$117();
+    public final void run(TLObject tLObject, TLRPC.TL_error tL_error) {
+        ChatActivity.lambda$markSponsoredAsRead$245(tLObject, tL_error);
     }
 }

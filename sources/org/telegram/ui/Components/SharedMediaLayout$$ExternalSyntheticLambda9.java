@@ -1,17 +1,15 @@
 package org.telegram.ui.Components;
 
-public final /* synthetic */ class SharedMediaLayout$$ExternalSyntheticLambda9 implements Runnable {
-    public final /* synthetic */ SharedMediaLayout f$0;
-    public final /* synthetic */ int f$1;
-    public final /* synthetic */ RecyclerListView f$2;
+import android.view.View;
 
-    public /* synthetic */ SharedMediaLayout$$ExternalSyntheticLambda9(SharedMediaLayout sharedMediaLayout, int i, RecyclerListView recyclerListView) {
+public final /* synthetic */ class SharedMediaLayout$$ExternalSyntheticLambda9 implements View.OnClickListener {
+    public final /* synthetic */ SharedMediaLayout f$0;
+
+    public /* synthetic */ SharedMediaLayout$$ExternalSyntheticLambda9(SharedMediaLayout sharedMediaLayout) {
         this.f$0 = sharedMediaLayout;
-        this.f$1 = i;
-        this.f$2 = recyclerListView;
     }
 
-    public final void run() {
-        this.f$0.lambda$checkLoadMoreScroll$10(this.f$1, this.f$2);
+    public final void onClick(View view) {
+        this.f$0.m1381lambda$new$3$orgtelegramuiComponentsSharedMediaLayout(view);
     }
 }

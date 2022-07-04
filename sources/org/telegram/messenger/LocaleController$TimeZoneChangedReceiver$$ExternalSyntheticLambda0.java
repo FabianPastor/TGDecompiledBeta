@@ -10,6 +10,6 @@ public final /* synthetic */ class LocaleController$TimeZoneChangedReceiver$$Ext
     }
 
     public final void run() {
-        this.f$0.lambda$onReceive$0();
+        this.f$0.m1916xb3806a48();
     }
 }

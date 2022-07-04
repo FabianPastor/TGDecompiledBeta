@@ -1,15 +1,15 @@
 package org.telegram.ui;
 
-public final /* synthetic */ class ThemeActivity$$ExternalSyntheticLambda7 implements Runnable {
-    public final /* synthetic */ ThemeActivity f$0;
-    public final /* synthetic */ String f$1;
+import android.content.DialogInterface;
 
-    public /* synthetic */ ThemeActivity$$ExternalSyntheticLambda7(ThemeActivity themeActivity, String str) {
+public final /* synthetic */ class ThemeActivity$$ExternalSyntheticLambda7 implements DialogInterface.OnDismissListener {
+    public final /* synthetic */ ThemeActivity f$0;
+
+    public /* synthetic */ ThemeActivity$$ExternalSyntheticLambda7(ThemeActivity themeActivity) {
         this.f$0 = themeActivity;
-        this.f$1 = str;
     }
 
-    public final void run() {
-        this.f$0.lambda$updateSunTime$8(this.f$1);
+    public final void onDismiss(DialogInterface dialogInterface) {
+        this.f$0.m4657lambda$didReceivedNotification$1$orgtelegramuiThemeActivity(dialogInterface);
     }
 }

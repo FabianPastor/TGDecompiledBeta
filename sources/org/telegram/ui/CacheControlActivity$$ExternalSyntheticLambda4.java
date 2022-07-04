@@ -8,6 +8,6 @@ public final /* synthetic */ class CacheControlActivity$$ExternalSyntheticLambda
     }
 
     public final void run() {
-        this.f$0.lambda$onFragmentCreate$0();
+        this.f$0.m2730lambda$onFragmentCreate$1$orgtelegramuiCacheControlActivity();
     }
 }

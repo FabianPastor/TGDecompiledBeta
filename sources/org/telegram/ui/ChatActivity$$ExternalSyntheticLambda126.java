@@ -1,13 +1,15 @@
 package org.telegram.ui;
 
-public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda126 implements Runnable {
+import org.telegram.messenger.MessagesStorage;
+
+public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda126 implements MessagesStorage.IntCallback {
     public final /* synthetic */ ChatActivity f$0;
 
     public /* synthetic */ ChatActivity$$ExternalSyntheticLambda126(ChatActivity chatActivity) {
         this.f$0 = chatActivity;
     }
 
-    public final void run() {
-        this.f$0.lambda$new$0();
+    public final void run(int i) {
+        this.f$0.m2952lambda$createView$32$orgtelegramuiChatActivity(i);
     }
 }

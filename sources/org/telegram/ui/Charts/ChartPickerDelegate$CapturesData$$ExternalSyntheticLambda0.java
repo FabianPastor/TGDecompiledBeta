@@ -11,6 +11,6 @@ public final /* synthetic */ class ChartPickerDelegate$CapturesData$$ExternalSyn
     }
 
     public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-        this.f$0.lambda$captured$0(valueAnimator);
+        this.f$0.m2905x947CLASSNAMEcf(valueAnimator);
     }
 }

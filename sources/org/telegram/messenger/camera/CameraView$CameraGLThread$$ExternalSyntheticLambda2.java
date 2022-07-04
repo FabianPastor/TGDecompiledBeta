@@ -10,6 +10,6 @@ public final /* synthetic */ class CameraView$CameraGLThread$$ExternalSyntheticL
     }
 
     public final void run() {
-        this.f$0.lambda$onDraw$1();
+        this.f$0.m2414x9c0a5ccc();
     }
 }

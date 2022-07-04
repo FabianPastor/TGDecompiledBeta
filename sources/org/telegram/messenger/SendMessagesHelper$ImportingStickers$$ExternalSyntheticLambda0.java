@@ -12,6 +12,6 @@ public final /* synthetic */ class SendMessagesHelper$ImportingStickers$$Externa
     }
 
     public final void run() {
-        this.f$0.lambda$onMediaImport$0(this.f$1);
+        this.f$0.m2389xb92aa0e3(this.f$1);
     }
 }

@@ -1,13 +1,15 @@
 package org.telegram.messenger.voip;
 
-public final /* synthetic */ class VoIPService$$ExternalSyntheticLambda11 implements Runnable {
+import android.media.MediaPlayer;
+
+public final /* synthetic */ class VoIPService$$ExternalSyntheticLambda11 implements MediaPlayer.OnPreparedListener {
     public final /* synthetic */ VoIPService f$0;
 
     public /* synthetic */ VoIPService$$ExternalSyntheticLambda11(VoIPService voIPService) {
         this.f$0 = voIPService;
     }
 
-    public final void run() {
-        this.f$0.lambda$setMicMute$0();
+    public final void onPrepared(MediaPlayer mediaPlayer) {
+        this.f$0.m2507xd4dCLASSNAME(mediaPlayer);
     }
 }

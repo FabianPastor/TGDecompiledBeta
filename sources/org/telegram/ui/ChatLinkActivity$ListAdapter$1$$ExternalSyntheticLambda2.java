@@ -12,6 +12,6 @@ public final /* synthetic */ class ChatLinkActivity$ListAdapter$1$$ExternalSynth
     }
 
     public final void run() {
-        this.f$0.lambda$onJoinRequestToggle$2(this.f$1);
+        this.f$0.m3251xa640e8aa(this.f$1);
     }
 }

@@ -1,16 +1,15 @@
 package org.telegram.ui;
 
-import android.view.View;
-import org.telegram.ui.Components.RecyclerListView;
+import com.google.android.gms.maps.GoogleMap;
 
-public final /* synthetic */ class LocationActivity$$ExternalSyntheticLambda38 implements RecyclerListView.OnItemClickListener {
+public final /* synthetic */ class LocationActivity$$ExternalSyntheticLambda38 implements GoogleMap.OnCameraMoveListener {
     public final /* synthetic */ LocationActivity f$0;
 
     public /* synthetic */ LocationActivity$$ExternalSyntheticLambda38(LocationActivity locationActivity) {
         this.f$0 = locationActivity;
     }
 
-    public final void onItemClick(View view, int i) {
-        this.f$0.lambda$createView$20(view, i);
+    public final void onCameraMove() {
+        this.f$0.m3756lambda$onMapInit$30$orgtelegramuiLocationActivity();
     }
 }

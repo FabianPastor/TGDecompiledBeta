@@ -15,6 +15,6 @@ public final /* synthetic */ class ChatAttachAlert$1$$ExternalSyntheticLambda1 i
     }
 
     public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-        this.f$0.lambda$onWebAppSetActionBarColor$1(this.f$1, this.f$2, valueAnimator);
+        this.f$0.m746x676708a3(this.f$1, this.f$2, valueAnimator);
     }
 }

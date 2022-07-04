@@ -1,20 +1,17 @@
 package org.telegram.ui;
 
-import org.telegram.messenger.MessageObject;
-import org.telegram.ui.Components.AlertsCreator;
+import android.view.View;
 
-public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda238 implements AlertsCreator.ScheduleDatePickerDelegate {
+public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda238 implements View.OnClickListener {
     public final /* synthetic */ ChatActivity f$0;
-    public final /* synthetic */ MessageObject.GroupedMessages f$1;
-    public final /* synthetic */ MessageObject f$2;
+    public final /* synthetic */ int f$1;
 
-    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda238(ChatActivity chatActivity, MessageObject.GroupedMessages groupedMessages, MessageObject messageObject) {
+    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda238(ChatActivity chatActivity, int i) {
         this.f$0 = chatActivity;
-        this.f$1 = groupedMessages;
-        this.f$2 = messageObject;
+        this.f$1 = i;
     }
 
-    public final void didSelectDate(boolean z, int i) {
-        this.f$0.lambda$processSelectedOption$216(this.f$1, this.f$2, z, i);
+    public final void onClick(View view) {
+        this.f$0.m2938lambda$createView$16$orgtelegramuiChatActivity(this.f$1, view);
     }
 }

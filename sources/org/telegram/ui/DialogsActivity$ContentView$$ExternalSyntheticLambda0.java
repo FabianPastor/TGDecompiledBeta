@@ -10,6 +10,6 @@ public final /* synthetic */ class DialogsActivity$ContentView$$ExternalSyntheti
     }
 
     public final void run() {
-        this.f$0.lambda$onTouchEvent$0();
+        this.f$0.m3434x3054591d();
     }
 }

@@ -11,6 +11,6 @@ public final /* synthetic */ class ProfileActivity$PagerIndicatorView$$ExternalS
     }
 
     public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-        this.f$0.lambda$new$0(valueAnimator);
+        this.f$0.m4446lambda$new$0$orgtelegramuiProfileActivity$PagerIndicatorView(valueAnimator);
     }
 }

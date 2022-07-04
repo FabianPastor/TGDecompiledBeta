@@ -13,6 +13,6 @@ public final /* synthetic */ class ChatAvatarContainer$$ExternalSyntheticLambda2
     }
 
     public final void onClick(View view) {
-        this.f$0.lambda$new$1(this.f$1, view);
+        this.f$0.m863lambda$new$1$orgtelegramuiComponentsChatAvatarContainer(this.f$1, view);
     }
 }

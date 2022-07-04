@@ -1,19 +1,15 @@
 package org.telegram.ui.Components;
 
-import org.telegram.messenger.AndroidUtilities;
-import org.telegram.ui.Components.AlertsCreator;
-import org.telegram.ui.Components.ChatNotificationsPopupWrapper;
+public final /* synthetic */ class ChatNotificationsPopupWrapper$$ExternalSyntheticLambda10 implements Runnable {
+    public final /* synthetic */ ChatNotificationsPopupWrapper f$0;
+    public final /* synthetic */ long f$1;
 
-public final /* synthetic */ class ChatNotificationsPopupWrapper$$ExternalSyntheticLambda10 implements AlertsCreator.ScheduleDatePickerDelegate {
-    public final /* synthetic */ int f$0;
-    public final /* synthetic */ ChatNotificationsPopupWrapper.Callback f$1;
-
-    public /* synthetic */ ChatNotificationsPopupWrapper$$ExternalSyntheticLambda10(int i, ChatNotificationsPopupWrapper.Callback callback) {
-        this.f$0 = i;
-        this.f$1 = callback;
+    public /* synthetic */ ChatNotificationsPopupWrapper$$ExternalSyntheticLambda10(ChatNotificationsPopupWrapper chatNotificationsPopupWrapper, long j) {
+        this.f$0 = chatNotificationsPopupWrapper;
+        this.f$1 = j;
     }
 
-    public final void didSelectDate(boolean z, int i) {
-        AndroidUtilities.runOnUIThread(new ChatNotificationsPopupWrapper$$ExternalSyntheticLambda7(i, this.f$0, this.f$1), 16);
+    public final void run() {
+        this.f$0.m872x80790d7d(this.f$1);
     }
 }

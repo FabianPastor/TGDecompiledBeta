@@ -1,15 +1,16 @@
 package org.telegram.ui.Components;
 
-import org.telegram.messenger.AndroidUtilities;
+import java.util.ArrayList;
+import org.telegram.ui.Components.ChatAttachAlertAudioLayout;
 
-public final /* synthetic */ class ChatAttachAlert$$ExternalSyntheticLambda24 implements Runnable {
-    public final /* synthetic */ EditTextBoldCursor f$0;
+public final /* synthetic */ class ChatAttachAlert$$ExternalSyntheticLambda24 implements ChatAttachAlertAudioLayout.AudioSelectDelegate {
+    public final /* synthetic */ ChatAttachAlert f$0;
 
-    public /* synthetic */ ChatAttachAlert$$ExternalSyntheticLambda24(EditTextBoldCursor editTextBoldCursor) {
-        this.f$0 = editTextBoldCursor;
+    public /* synthetic */ ChatAttachAlert$$ExternalSyntheticLambda24(ChatAttachAlert chatAttachAlert) {
+        this.f$0 = chatAttachAlert;
     }
 
-    public final void run() {
-        AndroidUtilities.showKeyboard(this.f$0);
+    public final void didSelectAudio(ArrayList arrayList, CharSequence charSequence, boolean z, int i) {
+        this.f$0.m739x51cvar_b4(arrayList, charSequence, z, i);
     }
 }

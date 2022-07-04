@@ -1,15 +1,16 @@
 package org.telegram.ui.Components;
 
-import android.view.View;
+import android.content.DialogInterface;
+import org.telegram.messenger.AndroidUtilities;
 
-public final /* synthetic */ class AlertsCreator$$ExternalSyntheticLambda69 implements View.OnClickListener {
-    public final /* synthetic */ boolean[] f$0;
+public final /* synthetic */ class AlertsCreator$$ExternalSyntheticLambda69 implements DialogInterface.OnShowListener {
+    public final /* synthetic */ EditTextBoldCursor f$0;
 
-    public /* synthetic */ AlertsCreator$$ExternalSyntheticLambda69(boolean[] zArr) {
-        this.f$0 = zArr;
+    public /* synthetic */ AlertsCreator$$ExternalSyntheticLambda69(EditTextBoldCursor editTextBoldCursor) {
+        this.f$0 = editTextBoldCursor;
     }
 
-    public final void onClick(View view) {
-        AlertsCreator.lambda$createDeleteMessagesAlert$114(this.f$0, view);
+    public final void onShow(DialogInterface dialogInterface) {
+        AndroidUtilities.runOnUIThread(new AlertsCreator$$ExternalSyntheticLambda114(this.f$0));
     }
 }

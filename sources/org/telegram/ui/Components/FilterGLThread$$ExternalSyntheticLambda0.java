@@ -10,6 +10,6 @@ public final /* synthetic */ class FilterGLThread$$ExternalSyntheticLambda0 impl
     }
 
     public final void onFrameAvailable(SurfaceTexture surfaceTexture) {
-        this.f$0.lambda$initGL$1(surfaceTexture);
+        this.f$0.m960lambda$initGL$1$orgtelegramuiComponentsFilterGLThread(surfaceTexture);
     }
 }

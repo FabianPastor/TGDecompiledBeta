@@ -1,16 +1,19 @@
 package org.telegram.ui;
 
-import org.telegram.messenger.MessagesController;
-import org.telegram.tgnet.TLRPC$TL_error;
+import android.content.Context;
+import android.view.View;
+import org.telegram.ui.Components.RecyclerListView;
 
-public final /* synthetic */ class ChatRightsEditActivity$$ExternalSyntheticLambda17 implements MessagesController.ErrorDelegate {
+public final /* synthetic */ class ChatRightsEditActivity$$ExternalSyntheticLambda17 implements RecyclerListView.OnItemClickListener {
     public final /* synthetic */ ChatRightsEditActivity f$0;
+    public final /* synthetic */ Context f$1;
 
-    public /* synthetic */ ChatRightsEditActivity$$ExternalSyntheticLambda17(ChatRightsEditActivity chatRightsEditActivity) {
+    public /* synthetic */ ChatRightsEditActivity$$ExternalSyntheticLambda17(ChatRightsEditActivity chatRightsEditActivity, Context context) {
         this.f$0 = chatRightsEditActivity;
+        this.f$1 = context;
     }
 
-    public final boolean run(TLRPC$TL_error tLRPC$TL_error) {
-        return this.f$0.lambda$onDonePressed$17(tLRPC$TL_error);
+    public final void onItemClick(View view, int i) {
+        this.f$0.m3277lambda$createView$6$orgtelegramuiChatRightsEditActivity(this.f$1, view, i);
     }
 }

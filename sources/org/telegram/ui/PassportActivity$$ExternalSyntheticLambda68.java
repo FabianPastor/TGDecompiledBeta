@@ -1,17 +1,15 @@
 package org.telegram.ui;
 
-import org.telegram.messenger.AndroidUtilities;
-import org.telegram.tgnet.RequestDelegate;
-import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC$TL_error;
+import org.telegram.ui.CountrySelectActivity;
 
-public final /* synthetic */ class PassportActivity$$ExternalSyntheticLambda68 implements RequestDelegate {
-    public static final /* synthetic */ PassportActivity$$ExternalSyntheticLambda68 INSTANCE = new PassportActivity$$ExternalSyntheticLambda68();
+public final /* synthetic */ class PassportActivity$$ExternalSyntheticLambda68 implements CountrySelectActivity.CountrySelectActivityDelegate {
+    public final /* synthetic */ PassportActivity f$0;
 
-    private /* synthetic */ PassportActivity$$ExternalSyntheticLambda68() {
+    public /* synthetic */ PassportActivity$$ExternalSyntheticLambda68(PassportActivity passportActivity) {
+        this.f$0 = passportActivity;
     }
 
-    public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        AndroidUtilities.runOnUIThread(new PassportActivity$$ExternalSyntheticLambda46(tLObject));
+    public final void didSelectCountry(CountrySelectActivity.Country country) {
+        this.f$0.m4072lambda$createPhoneInterface$28$orgtelegramuiPassportActivity(country);
     }
 }

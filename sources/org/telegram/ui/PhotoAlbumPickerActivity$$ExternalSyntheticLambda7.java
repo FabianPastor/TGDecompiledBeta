@@ -10,6 +10,6 @@ public final /* synthetic */ class PhotoAlbumPickerActivity$$ExternalSyntheticLa
     }
 
     public final void didSelectDate(boolean z, int i) {
-        this.f$0.lambda$createView$2(z, i);
+        this.f$0.m4212lambda$createView$5$orgtelegramuiPhotoAlbumPickerActivity(z, i);
     }
 }

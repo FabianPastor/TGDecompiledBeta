@@ -12,6 +12,6 @@ public final /* synthetic */ class WebviewActivity$TelegramWebviewProxy$$Externa
     }
 
     public final void run() {
-        this.f$0.lambda$postEvent$0(this.f$1);
+        this.f$0.m4856xaa8var_a3(this.f$1);
     }
 }

@@ -10,6 +10,6 @@ public final /* synthetic */ class PinnedLineView$$ExternalSyntheticLambda0 impl
     }
 
     public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-        this.f$0.lambda$selectPosition$0(valueAnimator);
+        this.f$0.m1209xd2955f1c(valueAnimator);
     }
 }

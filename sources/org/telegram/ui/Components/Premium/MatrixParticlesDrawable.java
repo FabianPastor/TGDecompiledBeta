@@ -45,91 +45,97 @@ public class MatrixParticlesDrawable {
 
     /* access modifiers changed from: package-private */
     public void onDraw(Canvas canvas) {
-        Particle particle;
         int i;
-        int i2;
-        int width = this.drawingRect.width() / this.size;
-        int height = this.drawingRect.height() / this.size;
-        if (width != 0 && height != 0) {
-            long currentTimeMillis = System.currentTimeMillis();
+        Particle particle;
+        int n;
+        int y;
+        int nx = this.drawingRect.width() / this.size;
+        int ny = this.drawingRect.height() / this.size;
+        if (nx != 0 && ny != 0) {
+            long currentTime = System.currentTimeMillis();
             ArrayList<Particle>[] arrayListArr = this.particles;
             AnonymousClass1 r12 = null;
-            int i3 = 0;
-            if (arrayListArr == null || arrayListArr.length != width + 1) {
-                this.particles = new ArrayList[(width + 1)];
-                for (int i4 = 0; i4 <= width; i4++) {
-                    this.particles[i4] = new ArrayList<>();
+            if (arrayListArr == null || arrayListArr.length != nx + 1) {
+                this.particles = new ArrayList[(nx + 1)];
+                for (int x = 0; x <= nx; x++) {
+                    this.particles[x] = new ArrayList<>();
                     Particle particle2 = new Particle();
-                    particle2.init(height, currentTimeMillis);
-                    this.particles[i4].add(particle2);
+                    particle2.init(ny, currentTime);
+                    this.particles[x].add(particle2);
                 }
             }
             MatrixTextParticle[][] matrixTextParticleArr = this.matrixTextParticles;
-            if (!(matrixTextParticleArr != null && matrixTextParticleArr.length == width + 1 && matrixTextParticleArr[0].length == height + 1)) {
-                this.matrixTextParticles = new MatrixTextParticle[(width + 1)][];
-                for (int i5 = 0; i5 <= width; i5++) {
-                    this.matrixTextParticles[i5] = new MatrixTextParticle[(height + 1)];
-                    for (int i6 = 0; i6 <= height; i6++) {
-                        this.matrixTextParticles[i5][i6] = new MatrixTextParticle();
-                        this.matrixTextParticles[i5][i6].init(currentTimeMillis);
+            int i2 = 0;
+            if (!(matrixTextParticleArr != null && matrixTextParticleArr.length == nx + 1 && matrixTextParticleArr[0].length == ny + 1)) {
+                this.matrixTextParticles = new MatrixTextParticle[(nx + 1)][];
+                for (int x2 = 0; x2 <= nx; x2++) {
+                    this.matrixTextParticles[x2] = new MatrixTextParticle[(ny + 1)];
+                    for (int y2 = 0; y2 <= ny; y2++) {
+                        this.matrixTextParticles[x2][y2] = new MatrixTextParticle();
+                        this.matrixTextParticles[x2][y2].init(currentTime);
                     }
                 }
             }
-            int i7 = 0;
-            while (i7 <= width) {
-                ArrayList<Particle> arrayList = this.particles[i7];
-                int i8 = 0;
-                while (i8 < arrayList.size()) {
-                    Particle particle3 = arrayList.get(i8);
-                    int i9 = 1;
-                    if (currentTimeMillis - particle3.time > 50) {
-                        int i10 = particle3.y + 1;
-                        particle3.y = i10;
-                        particle3.time = currentTimeMillis;
-                        if (i10 - particle3.len >= height) {
-                            if (arrayList.size() == 1) {
-                                particle3.reset(currentTimeMillis);
+            int x3 = 0;
+            while (x3 <= nx) {
+                ArrayList<Particle> list = this.particles[x3];
+                int i3 = 0;
+                while (i3 < list.size()) {
+                    Particle particle3 = list.get(i3);
+                    int i4 = 1;
+                    if (currentTime - particle3.time > 50) {
+                        particle3.y++;
+                        particle3.time = currentTime;
+                        if (particle3.y - particle3.len >= ny) {
+                            if (list.size() == 1) {
+                                particle3.reset(currentTime);
                             } else {
-                                arrayList.remove(particle3);
-                                i8--;
+                                list.remove(particle3);
+                                i3--;
                             }
                         }
-                        if (particle3.y > particle3.len && i8 == arrayList.size() - 1 && Math.abs(Utilities.fastRandom.nextInt(4)) == 0) {
-                            Particle particle4 = new Particle();
-                            particle4.reset(currentTimeMillis);
-                            arrayList.add(particle4);
+                        if (particle3.y > particle3.len && i3 == list.size() - 1 && Math.abs(Utilities.fastRandom.nextInt(4)) == 0) {
+                            Particle newParticle = new Particle();
+                            newParticle.reset(currentTime);
+                            list.add(newParticle);
                         }
+                        i = i3;
+                    } else {
+                        i = i3;
                     }
-                    int i11 = i8;
-                    int min = Math.min(particle3.y, height + 1);
-                    int max = Math.max(i3, particle3.y - particle3.len);
-                    while (max < min) {
-                        int i12 = this.size;
-                        float f = (float) (i12 * i7);
-                        float f2 = (float) (i12 * max);
-                        if (!this.excludeRect.contains(f, f2)) {
-                            float clamp = Utilities.clamp(((1.0f - (((float) (particle3.y - max)) / ((float) (particle3.len - i9)))) * 0.8f) + 0.2f, 1.0f, 0.0f);
-                            i = max;
-                            i2 = min;
+                    int n2 = Math.min(particle3.y, ny + 1);
+                    int y3 = Math.max(i2, particle3.y - particle3.len);
+                    while (y3 < n2) {
+                        int i5 = this.size;
+                        float finalX = (float) (i5 * x3);
+                        float finalY = (float) (i5 * y3);
+                        if (!this.excludeRect.contains(finalX, finalY)) {
+                            float f = finalX;
+                            y = y3;
+                            n = n2;
                             particle = particle3;
-                            this.matrixTextParticles[i7][max].draw(canvas, f, f2, currentTimeMillis, clamp);
+                            this.matrixTextParticles[x3][y3].draw(canvas, finalX, finalY, currentTime, Utilities.clamp(((1.0f - (((float) (particle3.y - y3)) / ((float) (particle3.len - i4)))) * 0.8f) + 0.2f, 1.0f, 0.0f));
                         } else {
-                            i = max;
-                            i2 = min;
+                            float f2 = finalX;
+                            y = y3;
+                            n = n2;
                             particle = particle3;
                         }
-                        max = i + 1;
-                        min = i2;
+                        y3 = y + 1;
+                        n2 = n;
                         particle3 = particle;
-                        i9 = 1;
+                        i4 = 1;
                     }
-                    i8 = i11 + 1;
+                    int i6 = y3;
+                    int i7 = n2;
+                    Particle particle4 = particle3;
+                    i3 = i + 1;
                     r12 = null;
-                    i3 = 0;
+                    i2 = 0;
                 }
-                i7++;
+                x3++;
                 r12 = null;
-                i3 = 0;
+                i2 = 0;
             }
         }
     }
@@ -139,59 +145,59 @@ public class MatrixParticlesDrawable {
         long time;
         int y;
 
-        private Particle(MatrixParticlesDrawable matrixParticlesDrawable) {
+        private Particle() {
             this.len = 5;
         }
 
-        public void init(int i, long j) {
-            this.y = Math.abs(Utilities.fastRandom.nextInt() % i);
-            this.time = j;
+        public void init(int ny, long currentTime) {
+            this.y = Math.abs(Utilities.fastRandom.nextInt() % ny);
+            this.time = currentTime;
             this.len = Math.abs(Utilities.fastRandom.nextInt() % 6) + 4;
         }
 
-        public void reset(long j) {
+        public void reset(long currentTime) {
             this.y = 0;
-            this.time = j;
+            this.time = currentTime;
             this.len = Math.abs(Utilities.fastRandom.nextInt() % 6) + 4;
         }
     }
 
     private class MatrixTextParticle {
         int index;
+        long lastUpdateTime;
         int nextIndex;
         long nextUpdateTime;
 
         private MatrixTextParticle() {
         }
 
-        public void init(long j) {
+        public void init(long time) {
             this.index = Math.abs(Utilities.fastRandom.nextInt() % 16);
             this.nextIndex = Math.abs(Utilities.fastRandom.nextInt() % 16);
-            this.nextUpdateTime = j + ((long) Math.abs(Utilities.fastRandom.nextInt() % 300)) + 150;
+            this.lastUpdateTime = time;
+            this.nextUpdateTime = ((long) Math.abs(Utilities.fastRandom.nextInt() % 300)) + time + 150;
         }
 
-        public void draw(Canvas canvas, float f, float f2, long j, float f3) {
-            long j2 = this.nextUpdateTime;
-            if (j2 - j < 150) {
-                float clamp = Utilities.clamp(1.0f - (((float) (j2 - j)) / 150.0f), 1.0f, 0.0f);
-                MatrixParticlesDrawable.this.paint.setAlpha((int) ((1.0f - clamp) * f3 * 255.0f));
-                MatrixParticlesDrawable matrixParticlesDrawable = MatrixParticlesDrawable.this;
-                canvas.drawBitmap(matrixParticlesDrawable.bitmaps[this.index], f, f2, matrixParticlesDrawable.paint);
-                MatrixParticlesDrawable.this.paint.setAlpha((int) (f3 * clamp * 255.0f));
-                MatrixParticlesDrawable matrixParticlesDrawable2 = MatrixParticlesDrawable.this;
-                canvas.drawBitmap(matrixParticlesDrawable2.bitmaps[this.nextIndex], f, f2, matrixParticlesDrawable2.paint);
+        public void draw(Canvas canvas, float x, float y, long currentTime, float alpha) {
+            long j = this.nextUpdateTime;
+            if (j - currentTime < 150) {
+                float p = Utilities.clamp(1.0f - (((float) (j - currentTime)) / 150.0f), 1.0f, 0.0f);
+                MatrixParticlesDrawable.this.paint.setAlpha((int) ((1.0f - p) * alpha * 255.0f));
+                canvas.drawBitmap(MatrixParticlesDrawable.this.bitmaps[this.index], x, y, MatrixParticlesDrawable.this.paint);
+                MatrixParticlesDrawable.this.paint.setAlpha((int) (p * alpha * 255.0f));
+                canvas.drawBitmap(MatrixParticlesDrawable.this.bitmaps[this.nextIndex], x, y, MatrixParticlesDrawable.this.paint);
                 MatrixParticlesDrawable.this.paint.setAlpha(255);
-                if (clamp >= 1.0f) {
+                if (p >= 1.0f) {
                     this.index = this.nextIndex;
+                    this.lastUpdateTime = currentTime;
                     this.nextIndex = Math.abs(Utilities.fastRandom.nextInt() % 16);
-                    this.nextUpdateTime = j + ((long) Math.abs(Utilities.fastRandom.nextInt() % 300)) + 150;
+                    this.nextUpdateTime = ((long) Math.abs(Utilities.fastRandom.nextInt() % 300)) + currentTime + 150;
                     return;
                 }
                 return;
             }
-            MatrixParticlesDrawable.this.paint.setAlpha((int) (f3 * 255.0f));
-            MatrixParticlesDrawable matrixParticlesDrawable3 = MatrixParticlesDrawable.this;
-            canvas.drawBitmap(matrixParticlesDrawable3.bitmaps[this.index], f, f2, matrixParticlesDrawable3.paint);
+            MatrixParticlesDrawable.this.paint.setAlpha((int) (255.0f * alpha));
+            canvas.drawBitmap(MatrixParticlesDrawable.this.bitmaps[this.index], x, y, MatrixParticlesDrawable.this.paint);
         }
     }
 }

@@ -15,6 +15,6 @@ public final /* synthetic */ class BotWebViewSheet$2$$ExternalSyntheticLambda4 i
     }
 
     public final void onInvoiceStatusChanged(PaymentFormActivity.InvoiceStatus invoiceStatus) {
-        this.f$0.lambda$onWebAppOpenInvoice$3(this.f$1, this.f$2, invoiceStatus);
+        this.f$0.m633xbbcfe935(this.f$1, this.f$2, invoiceStatus);
     }
 }

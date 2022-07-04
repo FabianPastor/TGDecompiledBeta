@@ -15,6 +15,6 @@ public final /* synthetic */ class WallpaperCell$$ExternalSyntheticLambda0 imple
     }
 
     public final void onClick(View view) {
-        this.f$0.lambda$new$0(this.f$1, this.f$2, view);
+        this.f$0.m2837lambda$new$0$orgtelegramuiCellsWallpaperCell(this.f$1, this.f$2, view);
     }
 }

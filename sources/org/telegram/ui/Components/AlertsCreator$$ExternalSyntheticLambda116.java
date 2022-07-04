@@ -1,14 +1,21 @@
 package org.telegram.ui.Components;
 
-import org.telegram.ui.Components.NumberPicker;
+import org.telegram.messenger.AndroidUtilities;
+import org.telegram.ui.ActionBar.AlertDialog;
+import org.telegram.ui.ActionBar.BaseFragment;
 
-public final /* synthetic */ class AlertsCreator$$ExternalSyntheticLambda116 implements NumberPicker.Formatter {
-    public static final /* synthetic */ AlertsCreator$$ExternalSyntheticLambda116 INSTANCE = new AlertsCreator$$ExternalSyntheticLambda116();
+public final /* synthetic */ class AlertsCreator$$ExternalSyntheticLambda116 implements Runnable {
+    public final /* synthetic */ EditTextBoldCursor f$0;
+    public final /* synthetic */ AlertDialog f$1;
+    public final /* synthetic */ BaseFragment f$2;
 
-    private /* synthetic */ AlertsCreator$$ExternalSyntheticLambda116() {
+    public /* synthetic */ AlertsCreator$$ExternalSyntheticLambda116(EditTextBoldCursor editTextBoldCursor, AlertDialog alertDialog, BaseFragment baseFragment) {
+        this.f$0 = editTextBoldCursor;
+        this.f$1 = alertDialog;
+        this.f$2 = baseFragment;
     }
 
-    public final String format(int i) {
-        return AlertsCreator.lambda$createTTLAlert$107(i);
+    public final void run() {
+        AndroidUtilities.runOnUIThread(new AlertsCreator$$ExternalSyntheticLambda115(this.f$0, this.f$1, this.f$2));
     }
 }

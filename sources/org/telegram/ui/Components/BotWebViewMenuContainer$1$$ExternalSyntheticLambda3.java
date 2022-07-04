@@ -13,6 +13,6 @@ public final /* synthetic */ class BotWebViewMenuContainer$1$$ExternalSyntheticL
     }
 
     public final void onInvoiceStatusChanged(PaymentFormActivity.InvoiceStatus invoiceStatus) {
-        this.f$0.lambda$onWebAppOpenInvoice$2(this.f$1, invoiceStatus);
+        this.f$0.m611x23556258(this.f$1, invoiceStatus);
     }
 }

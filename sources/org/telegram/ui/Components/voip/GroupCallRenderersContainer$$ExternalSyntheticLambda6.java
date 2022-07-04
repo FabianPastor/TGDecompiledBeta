@@ -13,6 +13,6 @@ public final /* synthetic */ class GroupCallRenderersContainer$$ExternalSyntheti
     }
 
     public final void onClick(View view) {
-        this.f$0.lambda$new$2(this.f$1, view);
+        this.f$0.m1591x30f2e92f(this.f$1, view);
     }
 }

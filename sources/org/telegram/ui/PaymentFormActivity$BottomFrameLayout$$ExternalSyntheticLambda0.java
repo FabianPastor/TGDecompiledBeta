@@ -11,6 +11,6 @@ public final /* synthetic */ class PaymentFormActivity$BottomFrameLayout$$Extern
     }
 
     public final void onAnimationEnd(DynamicAnimation dynamicAnimation, boolean z, float f, float f2) {
-        this.f$0.lambda$setChecked$1(dynamicAnimation, z, f, f2);
+        this.f$0.m4196x9ae007f6(dynamicAnimation, z, f, f2);
     }
 }

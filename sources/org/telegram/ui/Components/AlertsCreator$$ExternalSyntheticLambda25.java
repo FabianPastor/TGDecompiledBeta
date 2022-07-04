@@ -1,17 +1,16 @@
 package org.telegram.ui.Components;
 
-import android.content.DialogInterface;
-import org.telegram.messenger.MessagesController;
-import org.telegram.ui.ActionBar.BaseFragment;
+import android.widget.LinearLayout;
+import org.telegram.ui.Components.NumberPicker;
 
-public final /* synthetic */ class AlertsCreator$$ExternalSyntheticLambda25 implements DialogInterface.OnClickListener {
-    public final /* synthetic */ BaseFragment f$0;
+public final /* synthetic */ class AlertsCreator$$ExternalSyntheticLambda25 implements NumberPicker.OnValueChangeListener {
+    public final /* synthetic */ LinearLayout f$0;
 
-    public /* synthetic */ AlertsCreator$$ExternalSyntheticLambda25(BaseFragment baseFragment) {
-        this.f$0 = baseFragment;
+    public /* synthetic */ AlertsCreator$$ExternalSyntheticLambda25(LinearLayout linearLayout) {
+        this.f$0 = linearLayout;
     }
 
-    public final void onClick(DialogInterface dialogInterface, int i) {
-        MessagesController.getInstance(this.f$0.getCurrentAccount()).openByUserName("spambot", this.f$0, 1);
+    public final void onValueChange(NumberPicker numberPicker, int i, int i2) {
+        AlertsCreator.lambda$createMuteForPickerDialog$74(this.f$0, numberPicker, i, i2);
     }
 }

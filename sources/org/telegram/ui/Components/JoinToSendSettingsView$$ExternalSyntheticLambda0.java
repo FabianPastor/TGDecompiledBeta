@@ -10,6 +10,6 @@ public final /* synthetic */ class JoinToSendSettingsView$$ExternalSyntheticLamb
     }
 
     public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-        this.f$0.lambda$setJoinToSend$6(valueAnimator);
+        this.f$0.m1094x8640bff6(valueAnimator);
     }
 }

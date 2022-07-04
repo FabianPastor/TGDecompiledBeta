@@ -10,6 +10,6 @@ public final /* synthetic */ class GroupCallUserCell$$ExternalSyntheticLambda1 i
     }
 
     public final void onClick(View view) {
-        this.f$0.lambda$new$5(view);
+        this.f$0.m2803lambda$new$5$orgtelegramuiCellsGroupCallUserCell(view);
     }
 }

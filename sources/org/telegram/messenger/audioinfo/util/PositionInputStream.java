@@ -8,18 +8,18 @@ public class PositionInputStream extends FilterInputStream {
     private long position;
     private long positionMark;
 
-    public PositionInputStream(InputStream inputStream) {
-        this(inputStream, 0);
+    public PositionInputStream(InputStream delegate) {
+        this(delegate, 0);
     }
 
-    public PositionInputStream(InputStream inputStream, long j) {
-        super(inputStream);
-        this.position = j;
+    public PositionInputStream(InputStream delegate, long position2) {
+        super(delegate);
+        this.position = position2;
     }
 
-    public synchronized void mark(int i) {
+    public synchronized void mark(int readlimit) {
         this.positionMark = this.position;
-        super.mark(i);
+        super.mark(readlimit);
     }
 
     public synchronized void reset() throws IOException {
@@ -28,31 +28,31 @@ public class PositionInputStream extends FilterInputStream {
     }
 
     public int read() throws IOException {
-        int read = super.read();
-        if (read >= 0) {
+        int data = super.read();
+        if (data >= 0) {
             this.position++;
         }
-        return read;
+        return data;
     }
 
-    public int read(byte[] bArr, int i, int i2) throws IOException {
-        long j = this.position;
-        int read = super.read(bArr, i, i2);
+    public int read(byte[] b, int off, int len) throws IOException {
+        long p = this.position;
+        int read = super.read(b, off, len);
         if (read > 0) {
-            this.position = j + ((long) read);
+            this.position = ((long) read) + p;
         }
         return read;
     }
 
-    public final int read(byte[] bArr) throws IOException {
-        return read(bArr, 0, bArr.length);
+    public final int read(byte[] b) throws IOException {
+        return read(b, 0, b.length);
     }
 
-    public long skip(long j) throws IOException {
-        long j2 = this.position;
-        long skip = super.skip(j);
-        this.position = j2 + skip;
-        return skip;
+    public long skip(long n) throws IOException {
+        long p = this.position;
+        long skipped = super.skip(n);
+        this.position = p + skipped;
+        return skipped;
     }
 
     public long getPosition() {

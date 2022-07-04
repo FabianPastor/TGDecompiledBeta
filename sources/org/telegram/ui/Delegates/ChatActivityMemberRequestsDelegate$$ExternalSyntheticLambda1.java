@@ -10,6 +10,6 @@ public final /* synthetic */ class ChatActivityMemberRequestsDelegate$$ExternalS
     }
 
     public final void onClick(View view) {
-        this.f$0.lambda$getView$1(view);
+        this.f$0.m1626x24bd3119(view);
     }
 }

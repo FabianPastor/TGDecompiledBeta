@@ -10,6 +10,6 @@ public final /* synthetic */ class KeyboardHideHelper$$ExternalSyntheticLambda0 
     }
 
     public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-        this.f$0.lambda$onTouch$0(valueAnimator);
+        this.f$0.m3616lambda$onTouch$0$orgtelegramuiKeyboardHideHelper(valueAnimator);
     }
 }

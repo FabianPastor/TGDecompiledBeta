@@ -11,6 +11,6 @@ public final /* synthetic */ class VideoEditTextureView$$ExternalSyntheticLambda
     }
 
     public final void onVideoSurfaceCreated(SurfaceTexture surfaceTexture) {
-        this.f$0.lambda$onSurfaceTextureAvailable$0(surfaceTexture);
+        this.f$0.m1547xaf4fCLASSNAME(surfaceTexture);
     }
 }

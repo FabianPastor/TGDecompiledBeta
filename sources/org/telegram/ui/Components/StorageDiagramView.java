@@ -35,7 +35,7 @@ public class StorageDiagramView extends View {
     }
 
     /* access modifiers changed from: protected */
-    public void onMeasure(int i, int i2) {
+    public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(110.0f), NUM), View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(110.0f), NUM));
         this.rectF.set((float) AndroidUtilities.dp(3.0f), (float) AndroidUtilities.dp(3.0f), (float) (getMeasuredWidth() - AndroidUtilities.dp(3.0f)), (float) (getMeasuredHeight() - AndroidUtilities.dp(3.0f)));
         updateDescription();
@@ -44,12 +44,12 @@ public class StorageDiagramView extends View {
         this.textPaint2.setTextSize((float) AndroidUtilities.dp(13.0f));
     }
 
-    public void setData(ClearViewData[] clearViewDataArr) {
-        this.data = clearViewDataArr;
+    public void setData(ClearViewData[] data2) {
+        this.data = data2;
         invalidate();
-        this.drawingPercentage = new float[clearViewDataArr.length];
-        this.animateToPercentage = new float[clearViewDataArr.length];
-        this.startFromPercentage = new float[clearViewDataArr.length];
+        this.drawingPercentage = new float[data2.length];
+        this.animateToPercentage = new float[data2.length];
+        this.startFromPercentage = new float[data2.length];
         update(false);
         if (this.enabledCount > 1) {
             this.singleProgress = 0.0f;
@@ -60,152 +60,165 @@ public class StorageDiagramView extends View {
 
     /* access modifiers changed from: protected */
     public void onDraw(Canvas canvas) {
+        double d;
         int i;
-        Canvas canvas2;
-        Canvas canvas3 = canvas;
+        float percent;
+        float a;
+        float a2;
+        Canvas canvas2 = canvas;
         if (this.data != null) {
             float f = 1.0f;
+            float f2 = 0.0f;
             if (this.enabledCount > 1) {
-                float f2 = this.singleProgress;
-                if (f2 > 0.0f) {
-                    double d = (double) f2;
-                    Double.isNaN(d);
-                    float f3 = (float) (d - 0.04d);
-                    this.singleProgress = f3;
-                    if (f3 < 0.0f) {
+                float f3 = this.singleProgress;
+                if (f3 > 0.0f) {
+                    double d2 = (double) f3;
+                    Double.isNaN(d2);
+                    float f4 = (float) (d2 - 0.04d);
+                    this.singleProgress = f4;
+                    if (f4 < 0.0f) {
                         this.singleProgress = 0.0f;
                     }
                 }
             } else {
-                float f4 = this.singleProgress;
-                if (f4 < 1.0f) {
-                    double d2 = (double) f4;
-                    Double.isNaN(d2);
-                    float f5 = (float) (d2 + 0.04d);
-                    this.singleProgress = f5;
-                    if (f5 > 1.0f) {
+                float f5 = this.singleProgress;
+                if (f5 < 1.0f) {
+                    double d3 = (double) f5;
+                    Double.isNaN(d3);
+                    float f6 = (float) (d3 + 0.04d);
+                    this.singleProgress = f6;
+                    if (f6 > 1.0f) {
                         this.singleProgress = 1.0f;
                     }
                 }
             }
+            float startFrom = 0.0f;
             int i2 = 0;
-            int i3 = 0;
-            float f6 = 0.0f;
             while (true) {
                 ClearViewData[] clearViewDataArr = this.data;
+                d = 180.0d;
                 i = 255;
-                if (i3 >= clearViewDataArr.length) {
+                if (i2 >= clearViewDataArr.length) {
                     break;
                 }
-                if (clearViewDataArr[i3] != null) {
+                if (clearViewDataArr[i2] != null) {
                     float[] fArr = this.drawingPercentage;
-                    if (fArr[i3] != 0.0f) {
-                        float f7 = fArr[i3];
-                        if (clearViewDataArr[i3].firstDraw) {
-                            float f8 = (-360.0f * f7) + ((f - this.singleProgress) * 10.0f);
-                            float f9 = f8 > 0.0f ? 0.0f : f8;
-                            clearViewDataArr[i3].paint.setColor(Theme.getColor(clearViewDataArr[i3].color));
-                            this.data[i3].paint.setAlpha(255);
-                            double width = (double) (this.rectF.width() / 2.0f);
-                            Double.isNaN(width);
-                            double d3 = (double) f9;
-                            Double.isNaN(d3);
-                            if (Math.abs((float) (d3 * ((3.141592653589793d * width) / 180.0d))) <= f) {
+                    if (fArr[i2] != 0.0f) {
+                        float percent2 = fArr[i2];
+                        if (clearViewDataArr[i2].firstDraw) {
+                            float a3 = (-360.0f * percent2) + ((f - this.singleProgress) * 10.0f);
+                            if (a3 > 0.0f) {
+                                a2 = 0.0f;
+                            } else {
+                                a2 = a3;
+                            }
+                            this.data[i2].paint.setColor(Theme.getColor(this.data[i2].color));
+                            this.data[i2].paint.setAlpha(255);
+                            float r = this.rectF.width() / 2.0f;
+                            double d4 = (double) r;
+                            Double.isNaN(d4);
+                            double d5 = (double) a2;
+                            Double.isNaN(d5);
+                            if (Math.abs((float) (((d4 * 3.141592653589793d) / 180.0d) * d5)) <= f) {
                                 float centerX = this.rectF.centerX();
-                                double d4 = (double) (-90.0f - (360.0f * f6));
-                                double cos = Math.cos(Math.toRadians(d4));
-                                Double.isNaN(width);
-                                float var_ = centerX + ((float) (width * cos));
+                                double d6 = (double) r;
+                                double cos = Math.cos(Math.toRadians((double) (-90.0f - (startFrom * 360.0f))));
+                                Double.isNaN(d6);
+                                float x = centerX + ((float) (d6 * cos));
                                 float centerY = this.rectF.centerY();
-                                double sin = Math.sin(Math.toRadians(d4));
-                                Double.isNaN(width);
-                                float var_ = centerY + ((float) (width * sin));
+                                double d7 = (double) r;
+                                double sin = Math.sin(Math.toRadians((double) (-90.0f - (360.0f * startFrom))));
+                                Double.isNaN(d7);
+                                float y = centerY + ((float) (d7 * sin));
                                 if (Build.VERSION.SDK_INT >= 21) {
-                                    canvas3.drawPoint(var_, var_, this.data[i3].paint);
+                                    canvas2.drawPoint(x, y, this.data[i2].paint);
                                 } else {
-                                    this.data[i3].paint.setStyle(Paint.Style.FILL);
-                                    canvas3.drawCircle(var_, var_, this.data[i3].paint.getStrokeWidth() / 2.0f, this.data[i3].paint);
+                                    this.data[i2].paint.setStyle(Paint.Style.FILL);
+                                    canvas2.drawCircle(x, y, this.data[i2].paint.getStrokeWidth() / 2.0f, this.data[i2].paint);
                                 }
                             } else {
-                                this.data[i3].paint.setStyle(Paint.Style.STROKE);
-                                canvas.drawArc(this.rectF, -90.0f - (360.0f * f6), f9, false, this.data[i3].paint);
+                                this.data[i2].paint.setStyle(Paint.Style.STROKE);
+                                float f7 = a2;
+                                float f8 = r;
+                                canvas.drawArc(this.rectF, -90.0f - (360.0f * startFrom), a2, false, this.data[i2].paint);
                             }
                         }
-                        f6 += f7;
+                        startFrom += percent2;
+                    }
+                }
+                i2++;
+                f = 1.0f;
+            }
+            float startFrom2 = 0.0f;
+            int i3 = 0;
+            while (true) {
+                ClearViewData[] clearViewDataArr2 = this.data;
+                if (i3 >= clearViewDataArr2.length) {
+                    break;
+                }
+                if (clearViewDataArr2[i3] != null) {
+                    float[] fArr2 = this.drawingPercentage;
+                    if (fArr2[i3] != f2) {
+                        float percent3 = fArr2[i3];
+                        if (!clearViewDataArr2[i3].firstDraw) {
+                            float a4 = (percent3 * -360.0f) + ((1.0f - this.singleProgress) * 10.0f);
+                            if (a4 > f2) {
+                                a = 0.0f;
+                            } else {
+                                a = a4;
+                            }
+                            this.data[i3].paint.setColor(Theme.getColor(this.data[i3].color));
+                            this.data[i3].paint.setAlpha(i);
+                            float r2 = this.rectF.width() / 2.0f;
+                            double d8 = (double) r2;
+                            Double.isNaN(d8);
+                            double d9 = (double) a;
+                            Double.isNaN(d9);
+                            float len = (float) (((d8 * 3.141592653589793d) / d) * d9);
+                            if (Math.abs(len) <= 1.0f) {
+                                float centerX2 = this.rectF.centerX();
+                                double d10 = (double) r2;
+                                double cos2 = Math.cos(Math.toRadians((double) (-90.0f - (startFrom2 * 360.0f))));
+                                Double.isNaN(d10);
+                                float x2 = centerX2 + ((float) (d10 * cos2));
+                                float centerY2 = this.rectF.centerY();
+                                double d11 = (double) r2;
+                                percent = percent3;
+                                double sin2 = Math.sin(Math.toRadians((double) (-90.0f - (startFrom2 * 360.0f))));
+                                Double.isNaN(d11);
+                                float y2 = centerY2 + ((float) (d11 * sin2));
+                                if (Build.VERSION.SDK_INT >= 21) {
+                                    canvas2.drawPoint(x2, y2, this.data[i3].paint);
+                                } else {
+                                    this.data[i3].paint.setStyle(Paint.Style.FILL);
+                                    canvas2.drawCircle(x2, y2, this.data[i3].paint.getStrokeWidth() / 2.0f, this.data[i3].paint);
+                                }
+                            } else {
+                                percent = percent3;
+                                this.data[i3].paint.setStyle(Paint.Style.STROKE);
+                                float f9 = len;
+                                float var_ = r2;
+                                canvas.drawArc(this.rectF, -90.0f - (startFrom2 * 360.0f), a, false, this.data[i3].paint);
+                            }
+                        } else {
+                            percent = percent3;
+                        }
+                        startFrom2 += percent;
                     }
                 }
                 i3++;
-                f = 1.0f;
-            }
-            float var_ = 0.0f;
-            while (true) {
-                ClearViewData[] clearViewDataArr2 = this.data;
-                if (i2 >= clearViewDataArr2.length) {
-                    break;
-                }
-                if (clearViewDataArr2[i2] != null) {
-                    float[] fArr2 = this.drawingPercentage;
-                    if (fArr2[i2] != 0.0f) {
-                        float var_ = fArr2[i2];
-                        if (!clearViewDataArr2[i2].firstDraw) {
-                            float var_ = (var_ * -360.0f) + ((1.0f - this.singleProgress) * 10.0f);
-                            float var_ = var_ > 0.0f ? 0.0f : var_;
-                            clearViewDataArr2[i2].paint.setColor(Theme.getColor(clearViewDataArr2[i2].color));
-                            this.data[i2].paint.setAlpha(i);
-                            double width2 = (double) (this.rectF.width() / 2.0f);
-                            Double.isNaN(width2);
-                            double d5 = (double) var_;
-                            Double.isNaN(d5);
-                            if (Math.abs((float) (((width2 * 3.141592653589793d) / 180.0d) * d5)) <= 1.0f) {
-                                float centerX2 = this.rectF.centerX();
-                                double d6 = (double) (-90.0f - (var_ * 360.0f));
-                                double cos2 = Math.cos(Math.toRadians(d6));
-                                Double.isNaN(width2);
-                                float var_ = centerX2 + ((float) (cos2 * width2));
-                                float centerY2 = this.rectF.centerY();
-                                double sin2 = Math.sin(Math.toRadians(d6));
-                                Double.isNaN(width2);
-                                float var_ = centerY2 + ((float) (width2 * sin2));
-                                if (Build.VERSION.SDK_INT >= 21) {
-                                    canvas2 = canvas;
-                                    canvas2.drawPoint(var_, var_, this.data[i2].paint);
-                                } else {
-                                    canvas2 = canvas;
-                                    this.data[i2].paint.setStyle(Paint.Style.FILL);
-                                    canvas2.drawCircle(var_, var_, this.data[i2].paint.getStrokeWidth() / 2.0f, this.data[i2].paint);
-                                }
-                            } else {
-                                canvas2 = canvas;
-                                this.data[i2].paint.setStyle(Paint.Style.STROKE);
-                                canvas.drawArc(this.rectF, -90.0f - (var_ * 360.0f), var_, false, this.data[i2].paint);
-                                var_ += var_;
-                                i2++;
-                                canvas3 = canvas2;
-                                i = 255;
-                            }
-                        } else {
-                            canvas2 = canvas3;
-                        }
-                        var_ += var_;
-                        i2++;
-                        canvas3 = canvas2;
-                        i = 255;
-                    }
-                }
-                canvas2 = canvas3;
-                i2++;
-                canvas3 = canvas2;
                 i = 255;
+                f2 = 0.0f;
+                d = 180.0d;
             }
-            Canvas canvas4 = canvas3;
             if (this.layout1 != null) {
                 canvas.save();
-                canvas4.translate((float) ((getMeasuredWidth() - this.layout1.getWidth()) >> 1), (float) ((((getMeasuredHeight() - this.layout1.getHeight()) - this.layout2.getHeight()) >> 1) + AndroidUtilities.dp(2.0f)));
+                canvas2.translate((float) ((getMeasuredWidth() - this.layout1.getWidth()) >> 1), (float) ((((getMeasuredHeight() - this.layout1.getHeight()) - this.layout2.getHeight()) >> 1) + AndroidUtilities.dp(2.0f)));
                 this.textPaint.setColor(Theme.getColor("windowBackgroundWhiteBlackText"));
                 this.textPaint2.setColor(Theme.getColor("windowBackgroundWhiteBlackText"));
-                this.layout1.draw(canvas4);
-                canvas4.translate(0.0f, (float) this.layout1.getHeight());
-                this.layout2.draw(canvas4);
+                this.layout1.draw(canvas2);
+                canvas2.translate(0.0f, (float) this.layout1.getHeight());
+                this.layout2.draw(canvas2);
                 canvas.restore();
             }
         }
@@ -219,19 +232,19 @@ public class StorageDiagramView extends View {
         private final StorageDiagramView parentView;
         public long size;
 
-        public ClearViewData(StorageDiagramView storageDiagramView) {
+        public ClearViewData(StorageDiagramView parentView2) {
             Paint paint2 = new Paint(1);
             this.paint = paint2;
-            this.parentView = storageDiagramView;
+            this.parentView = parentView2;
             paint2.setStyle(Paint.Style.STROKE);
             this.paint.setStrokeWidth((float) AndroidUtilities.dp(5.0f));
             this.paint.setStrokeCap(Paint.Cap.ROUND);
             this.paint.setStrokeJoin(Paint.Join.ROUND);
         }
 
-        public void setClear(boolean z) {
-            if (this.clear != z) {
-                this.clear = z;
+        public void setClear(boolean clear2) {
+            if (this.clear != clear2) {
+                this.clear = clear2;
                 this.parentView.updateDescription();
                 this.firstDraw = true;
                 this.parentView.update(true);
@@ -240,50 +253,50 @@ public class StorageDiagramView extends View {
     }
 
     /* access modifiers changed from: private */
-    public void update(boolean z) {
-        final ClearViewData[] clearViewDataArr = this.data;
-        if (clearViewDataArr != null) {
-            long j = 0;
-            for (int i = 0; i < clearViewDataArr.length; i++) {
-                if (clearViewDataArr[i] != null && clearViewDataArr[i].clear) {
-                    j += clearViewDataArr[i].size;
+    public void update(boolean animate) {
+        long total = 0;
+        final ClearViewData[] data2 = this.data;
+        if (data2 != null) {
+            for (int i = 0; i < data2.length; i++) {
+                if (data2[i] != null && data2[i].clear) {
+                    total += data2[i].size;
                 }
             }
+            float k = 0.0f;
+            float max = 0.0f;
             this.enabledCount = 0;
-            float f = 0.0f;
-            float f2 = 0.0f;
-            for (int i2 = 0; i2 < clearViewDataArr.length; i2++) {
-                if (clearViewDataArr[i2] != null && clearViewDataArr[i2].clear) {
+            for (int i2 = 0; i2 < data2.length; i2++) {
+                if (data2[i2] != null && data2[i2].clear) {
                     this.enabledCount++;
                 }
-                if (clearViewDataArr[i2] == null || !clearViewDataArr[i2].clear) {
+                if (data2[i2] == null || !data2[i2].clear) {
                     this.animateToPercentage[i2] = 0.0f;
                 } else {
-                    float f3 = ((float) clearViewDataArr[i2].size) / ((float) j);
-                    if (f3 < 0.02777f) {
-                        f3 = 0.02777f;
+                    float percent = ((float) data2[i2].size) / ((float) total);
+                    if (percent < 0.02777f) {
+                        percent = 0.02777f;
                     }
-                    f += f3;
-                    if (f3 > f2 && clearViewDataArr[i2].clear) {
-                        f2 = f3;
+                    k += percent;
+                    if (percent > max && data2[i2].clear) {
+                        max = percent;
                     }
-                    this.animateToPercentage[i2] = f3;
+                    this.animateToPercentage[i2] = percent;
                 }
             }
-            if (f > 1.0f) {
-                float f4 = 1.0f / f;
-                for (int i3 = 0; i3 < clearViewDataArr.length; i3++) {
-                    if (clearViewDataArr[i3] != null) {
+            if (k > 1.0f) {
+                float l = 1.0f / k;
+                for (int i3 = 0; i3 < data2.length; i3++) {
+                    if (data2[i3] != null) {
                         float[] fArr = this.animateToPercentage;
-                        fArr[i3] = fArr[i3] * f4;
+                        fArr[i3] = fArr[i3] * l;
                     }
                 }
             }
-            if (!z) {
-                System.arraycopy(this.animateToPercentage, 0, this.drawingPercentage, 0, clearViewDataArr.length);
+            if (!animate) {
+                System.arraycopy(this.animateToPercentage, 0, this.drawingPercentage, 0, data2.length);
                 return;
             }
-            System.arraycopy(this.drawingPercentage, 0, this.startFromPercentage, 0, clearViewDataArr.length);
+            System.arraycopy(this.drawingPercentage, 0, this.startFromPercentage, 0, data2.length);
             ValueAnimator valueAnimator2 = this.valueAnimator;
             if (valueAnimator2 != null) {
                 valueAnimator2.removeAllListeners();
@@ -291,12 +304,12 @@ public class StorageDiagramView extends View {
             }
             ValueAnimator ofFloat = ValueAnimator.ofFloat(new float[]{0.0f, 1.0f});
             this.valueAnimator = ofFloat;
-            ofFloat.addUpdateListener(new StorageDiagramView$$ExternalSyntheticLambda0(this, clearViewDataArr));
-            this.valueAnimator.addListener(new AnimatorListenerAdapter(this) {
-                public void onAnimationEnd(Animator animator) {
+            ofFloat.addUpdateListener(new StorageDiagramView$$ExternalSyntheticLambda0(this, data2));
+            this.valueAnimator.addListener(new AnimatorListenerAdapter() {
+                public void onAnimationEnd(Animator animation) {
                     int i = 0;
                     while (true) {
-                        ClearViewData[] clearViewDataArr = clearViewDataArr;
+                        ClearViewData[] clearViewDataArr = data2;
                         if (i < clearViewDataArr.length) {
                             if (clearViewDataArr[i] != null) {
                                 clearViewDataArr[i].firstDraw = false;
@@ -314,11 +327,11 @@ public class StorageDiagramView extends View {
         }
     }
 
-    /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$update$0(ClearViewData[] clearViewDataArr, ValueAnimator valueAnimator2) {
-        float floatValue = ((Float) valueAnimator2.getAnimatedValue()).floatValue();
-        for (int i = 0; i < clearViewDataArr.length; i++) {
-            this.drawingPercentage[i] = (this.startFromPercentage[i] * (1.0f - floatValue)) + (this.animateToPercentage[i] * floatValue);
+    /* renamed from: lambda$update$0$org-telegram-ui-Components-StorageDiagramView  reason: not valid java name */
+    public /* synthetic */ void m1464lambda$update$0$orgtelegramuiComponentsStorageDiagramView(ClearViewData[] data2, ValueAnimator animation) {
+        float v = ((Float) animation.getAnimatedValue()).floatValue();
+        for (int i = 0; i < data2.length; i++) {
+            this.drawingPercentage[i] = (this.startFromPercentage[i] * (1.0f - v)) + (this.animateToPercentage[i] * v);
         }
         invalidate();
     }
@@ -326,7 +339,7 @@ public class StorageDiagramView extends View {
     /* access modifiers changed from: private */
     public void updateDescription() {
         if (this.data != null) {
-            long j = 0;
+            long total = 0;
             int i = 0;
             while (true) {
                 ClearViewData[] clearViewDataArr = this.data;
@@ -334,16 +347,16 @@ public class StorageDiagramView extends View {
                     break;
                 }
                 if (clearViewDataArr[i] != null && clearViewDataArr[i].clear) {
-                    j += clearViewDataArr[i].size;
+                    total += this.data[i].size;
                 }
                 i++;
             }
             String str = " ";
-            String[] split = AndroidUtilities.formatFileSize(j).split(str);
-            if (split.length > 1) {
-                this.layout1 = new StaticLayout(j == 0 ? str : split[0], this.textPaint, getMeasuredWidth(), Layout.Alignment.ALIGN_CENTER, 1.0f, 0.0f, false);
-                if (j != 0) {
-                    str = split[1];
+            String[] str2 = AndroidUtilities.formatFileSize(total).split(str);
+            if (str2.length > 1) {
+                this.layout1 = new StaticLayout(total == 0 ? str : str2[0], this.textPaint, getMeasuredWidth(), Layout.Alignment.ALIGN_CENTER, 1.0f, 0.0f, false);
+                if (total != 0) {
+                    str = str2[1];
                 }
                 this.layout2 = new StaticLayout(str, this.textPaint2, getMeasuredWidth(), Layout.Alignment.ALIGN_CENTER, 1.0f, 0.0f, false);
             }

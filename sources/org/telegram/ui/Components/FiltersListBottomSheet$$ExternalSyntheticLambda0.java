@@ -11,6 +11,6 @@ public final /* synthetic */ class FiltersListBottomSheet$$ExternalSyntheticLamb
     }
 
     public final void onItemClick(View view, int i) {
-        this.f$0.lambda$new$0(view, i);
+        this.f$0.m971lambda$new$0$orgtelegramuiComponentsFiltersListBottomSheet(view, i);
     }
 }

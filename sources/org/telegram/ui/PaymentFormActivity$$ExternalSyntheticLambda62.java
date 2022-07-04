@@ -1,15 +1,15 @@
 package org.telegram.ui;
 
-import org.telegram.ui.CountrySelectActivity;
+import android.view.View;
 
-public final /* synthetic */ class PaymentFormActivity$$ExternalSyntheticLambda62 implements CountrySelectActivity.CountrySelectActivityDelegate {
+public final /* synthetic */ class PaymentFormActivity$$ExternalSyntheticLambda62 implements View.OnClickListener {
     public final /* synthetic */ PaymentFormActivity f$0;
 
     public /* synthetic */ PaymentFormActivity$$ExternalSyntheticLambda62(PaymentFormActivity paymentFormActivity) {
         this.f$0 = paymentFormActivity;
     }
 
-    public final void didSelectCountry(CountrySelectActivity.Country country) {
-        this.f$0.lambda$createView$0(country);
+    public final void onClick(View view) {
+        this.f$0.m4144lambda$createView$13$orgtelegramuiPaymentFormActivity(view);
     }
 }

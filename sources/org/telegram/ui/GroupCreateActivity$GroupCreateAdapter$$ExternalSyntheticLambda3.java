@@ -15,6 +15,6 @@ public final /* synthetic */ class GroupCreateActivity$GroupCreateAdapter$$Exter
     }
 
     public final void run() {
-        this.f$0.lambda$updateSearchResults$4(this.f$1, this.f$2);
+        this.f$0.m3580x892cvar_(this.f$1, this.f$2);
     }
 }

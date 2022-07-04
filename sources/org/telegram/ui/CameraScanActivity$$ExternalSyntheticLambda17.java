@@ -1,17 +1,15 @@
 package org.telegram.ui;
 
-import org.telegram.messenger.MrzRecognizer;
+import androidx.dynamicanimation.animation.DynamicAnimation;
 
-public final /* synthetic */ class CameraScanActivity$$ExternalSyntheticLambda17 implements Runnable {
+public final /* synthetic */ class CameraScanActivity$$ExternalSyntheticLambda17 implements DynamicAnimation.OnAnimationUpdateListener {
     public final /* synthetic */ CameraScanActivity f$0;
-    public final /* synthetic */ MrzRecognizer.Result f$1;
 
-    public /* synthetic */ CameraScanActivity$$ExternalSyntheticLambda17(CameraScanActivity cameraScanActivity, MrzRecognizer.Result result) {
+    public /* synthetic */ CameraScanActivity$$ExternalSyntheticLambda17(CameraScanActivity cameraScanActivity) {
         this.f$0 = cameraScanActivity;
-        this.f$1 = result;
     }
 
-    public final void run() {
-        this.f$0.lambda$processShot$11(this.f$1);
+    public final void onAnimationUpdate(DynamicAnimation dynamicAnimation, float f, float f2) {
+        this.f$0.m2773lambda$updateRecognized$6$orgtelegramuiCameraScanActivity(dynamicAnimation, f, f2);
     }
 }

@@ -1,15 +1,13 @@
 package org.telegram.ui;
 
-import android.view.MotionEvent;
-import android.view.View;
+public final /* synthetic */ class LocationActivity$$ExternalSyntheticLambda8 implements Runnable {
+    public final /* synthetic */ LocationActivity f$0;
 
-public final /* synthetic */ class LocationActivity$$ExternalSyntheticLambda8 implements View.OnTouchListener {
-    public static final /* synthetic */ LocationActivity$$ExternalSyntheticLambda8 INSTANCE = new LocationActivity$$ExternalSyntheticLambda8();
-
-    private /* synthetic */ LocationActivity$$ExternalSyntheticLambda8() {
+    public /* synthetic */ LocationActivity$$ExternalSyntheticLambda8(LocationActivity locationActivity) {
+        this.f$0 = locationActivity;
     }
 
-    public final boolean onTouch(View view, MotionEvent motionEvent) {
-        return LocationActivity.lambda$createView$7(view, motionEvent);
+    public final void run() {
+        this.f$0.m3760lambda$openProximityAlert$24$orgtelegramuiLocationActivity();
     }
 }

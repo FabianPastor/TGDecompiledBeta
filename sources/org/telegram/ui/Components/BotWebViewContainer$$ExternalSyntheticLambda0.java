@@ -13,6 +13,6 @@ public final /* synthetic */ class BotWebViewContainer$$ExternalSyntheticLambda0
     }
 
     public final void onClick(DialogInterface dialogInterface, int i) {
-        this.f$0.lambda$onOpenUri$1(this.f$1, dialogInterface, i);
+        this.f$0.m582xecf7a89f(this.f$1, dialogInterface, i);
     }
 }

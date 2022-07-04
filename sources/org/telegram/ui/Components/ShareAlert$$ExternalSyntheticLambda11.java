@@ -1,20 +1,20 @@
 package org.telegram.ui.Components;
 
-import android.content.Context;
-import org.telegram.tgnet.RequestDelegate;
-import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC$TL_error;
+import android.view.View;
+import org.telegram.ui.ActionBar.ActionBarMenuSubItem;
 
-public final /* synthetic */ class ShareAlert$$ExternalSyntheticLambda11 implements RequestDelegate {
+public final /* synthetic */ class ShareAlert$$ExternalSyntheticLambda11 implements View.OnClickListener {
     public final /* synthetic */ ShareAlert f$0;
-    public final /* synthetic */ Context f$1;
+    public final /* synthetic */ ActionBarMenuSubItem f$1;
+    public final /* synthetic */ ActionBarMenuSubItem f$2;
 
-    public /* synthetic */ ShareAlert$$ExternalSyntheticLambda11(ShareAlert shareAlert, Context context) {
+    public /* synthetic */ ShareAlert$$ExternalSyntheticLambda11(ShareAlert shareAlert, ActionBarMenuSubItem actionBarMenuSubItem, ActionBarMenuSubItem actionBarMenuSubItem2) {
         this.f$0 = shareAlert;
-        this.f$1 = context;
+        this.f$1 = actionBarMenuSubItem;
+        this.f$2 = actionBarMenuSubItem2;
     }
 
-    public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        this.f$0.lambda$new$1(this.f$1, tLObject, tLRPC$TL_error);
+    public final void onClick(View view) {
+        this.f$0.m1357lambda$onSendLongClick$10$orgtelegramuiComponentsShareAlert(this.f$1, this.f$2, view);
     }
 }

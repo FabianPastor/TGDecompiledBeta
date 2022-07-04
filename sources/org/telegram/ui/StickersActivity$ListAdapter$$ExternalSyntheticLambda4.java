@@ -15,6 +15,6 @@ public final /* synthetic */ class StickersActivity$ListAdapter$$ExternalSynthet
     }
 
     public final boolean onTouch(View view, MotionEvent motionEvent) {
-        return this.f$0.lambda$onCreateViewHolder$2(this.f$1, view, motionEvent);
+        return this.f$0.m4645xd97bc1b5(this.f$1, view, motionEvent);
     }
 }

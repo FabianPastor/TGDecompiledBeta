@@ -2,7 +2,7 @@ package org.telegram.messenger.voip;
 
 import org.telegram.messenger.voip.NativeInstance;
 
-public final /* synthetic */ class VoIPService$$ExternalSyntheticLambda73 implements NativeInstance.RequestBroadcastPartCallback {
+public final /* synthetic */ class VoIPService$$ExternalSyntheticLambda73 implements NativeInstance.VideoSourcesCallback {
     public final /* synthetic */ VoIPService f$0;
     public final /* synthetic */ int f$1;
 
@@ -11,7 +11,7 @@ public final /* synthetic */ class VoIPService$$ExternalSyntheticLambda73 implem
         this.f$1 = i;
     }
 
-    public final void run(long j, long j2, int i, int i2) {
-        this.f$0.lambda$createGroupInstance$47(this.f$1, j, j2, i, i2);
+    public final void run(long j, int[] iArr) {
+        this.f$0.m2450xbb6aavar_(this.f$1, j, iArr);
     }
 }

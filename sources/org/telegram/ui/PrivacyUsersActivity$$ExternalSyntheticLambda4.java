@@ -11,6 +11,6 @@ public final /* synthetic */ class PrivacyUsersActivity$$ExternalSyntheticLambda
     }
 
     public final void didSelectUsers(ArrayList arrayList) {
-        this.f$0.lambda$createView$0(arrayList);
+        this.f$0.m4382lambda$createView$0$orgtelegramuiPrivacyUsersActivity(arrayList);
     }
 }

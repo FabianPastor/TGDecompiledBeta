@@ -1,18 +1,18 @@
 package org.telegram.ui;
 
-import java.util.ArrayList;
+import org.telegram.tgnet.RequestDelegate;
+import org.telegram.tgnet.TLObject;
+import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.ProfileActivity;
 
-public final /* synthetic */ class ProfileActivity$SearchAdapter$$ExternalSyntheticLambda85 implements Runnable {
+public final /* synthetic */ class ProfileActivity$SearchAdapter$$ExternalSyntheticLambda85 implements RequestDelegate {
     public final /* synthetic */ ProfileActivity.SearchAdapter f$0;
-    public final /* synthetic */ ArrayList f$1;
 
-    public /* synthetic */ ProfileActivity$SearchAdapter$$ExternalSyntheticLambda85(ProfileActivity.SearchAdapter searchAdapter, ArrayList arrayList) {
+    public /* synthetic */ ProfileActivity$SearchAdapter$$ExternalSyntheticLambda85(ProfileActivity.SearchAdapter searchAdapter) {
         this.f$0 = searchAdapter;
-        this.f$1 = arrayList;
     }
 
-    public final void run() {
-        this.f$0.lambda$loadFaqWebPage$84(this.f$1);
+    public final void run(TLObject tLObject, TLRPC.TL_error tL_error) {
+        this.f$0.m4448xd152d752(tLObject, tL_error);
     }
 }

@@ -1,38 +1,18 @@
 package org.telegram.ui;
 
-import android.content.DialogInterface;
-import java.util.ArrayList;
+import java.util.Comparator;
 import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC$TL_chatAdminRights;
-import org.telegram.tgnet.TLRPC$TL_chatBannedRights;
-import org.telegram.tgnet.TLRPC$User;
 
-public final /* synthetic */ class ChatUsersActivity$$ExternalSyntheticLambda3 implements DialogInterface.OnClickListener {
+public final /* synthetic */ class ChatUsersActivity$$ExternalSyntheticLambda3 implements Comparator {
     public final /* synthetic */ ChatUsersActivity f$0;
-    public final /* synthetic */ ArrayList f$1;
-    public final /* synthetic */ TLRPC$User f$2;
-    public final /* synthetic */ long f$3;
-    public final /* synthetic */ boolean f$4;
-    public final /* synthetic */ TLObject f$5;
-    public final /* synthetic */ int f$6;
-    public final /* synthetic */ TLRPC$TL_chatAdminRights f$7;
-    public final /* synthetic */ TLRPC$TL_chatBannedRights f$8;
-    public final /* synthetic */ String f$9;
+    public final /* synthetic */ int f$1;
 
-    public /* synthetic */ ChatUsersActivity$$ExternalSyntheticLambda3(ChatUsersActivity chatUsersActivity, ArrayList arrayList, TLRPC$User tLRPC$User, long j, boolean z, TLObject tLObject, int i, TLRPC$TL_chatAdminRights tLRPC$TL_chatAdminRights, TLRPC$TL_chatBannedRights tLRPC$TL_chatBannedRights, String str) {
+    public /* synthetic */ ChatUsersActivity$$ExternalSyntheticLambda3(ChatUsersActivity chatUsersActivity, int i) {
         this.f$0 = chatUsersActivity;
-        this.f$1 = arrayList;
-        this.f$2 = tLRPC$User;
-        this.f$3 = j;
-        this.f$4 = z;
-        this.f$5 = tLObject;
-        this.f$6 = i;
-        this.f$7 = tLRPC$TL_chatAdminRights;
-        this.f$8 = tLRPC$TL_chatBannedRights;
-        this.f$9 = str;
+        this.f$1 = i;
     }
 
-    public final void onClick(DialogInterface dialogInterface, int i) {
-        this.f$0.lambda$createMenuForParticipant$6(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6, this.f$7, this.f$8, this.f$9, dialogInterface, i);
+    public final int compare(Object obj, Object obj2) {
+        return this.f$0.m3313lambda$sortUsers$17$orgtelegramuiChatUsersActivity(this.f$1, (TLObject) obj, (TLObject) obj2);
     }
 }

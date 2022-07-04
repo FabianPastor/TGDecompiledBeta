@@ -1,13 +1,16 @@
 package org.telegram.ui.Components;
 
-public final /* synthetic */ class PhotoPaintView$$ExternalSyntheticLambda13 implements Runnable {
+import org.telegram.tgnet.TLRPC;
+import org.telegram.ui.Components.StickerMasksAlert;
+
+public final /* synthetic */ class PhotoPaintView$$ExternalSyntheticLambda13 implements StickerMasksAlert.StickerMasksAlertDelegate {
     public final /* synthetic */ PhotoPaintView f$0;
 
     public /* synthetic */ PhotoPaintView$$ExternalSyntheticLambda13(PhotoPaintView photoPaintView) {
         this.f$0 = photoPaintView;
     }
 
-    public final void run() {
-        this.f$0.lambda$showBrushSettings$15();
+    public final void onStickerSelected(Object obj, TLRPC.Document document) {
+        this.f$0.m1185x3df5var_(obj, document);
     }
 }

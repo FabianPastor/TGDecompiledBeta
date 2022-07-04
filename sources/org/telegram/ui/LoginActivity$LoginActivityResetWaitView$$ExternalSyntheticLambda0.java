@@ -11,6 +11,6 @@ public final /* synthetic */ class LoginActivity$LoginActivityResetWaitView$$Ext
     }
 
     public final void onClick(DialogInterface dialogInterface, int i) {
-        this.f$0.lambda$new$2(dialogInterface, i);
+        this.f$0.m3844x7d2dca06(dialogInterface, i);
     }
 }

@@ -10,7 +10,7 @@ public final /* synthetic */ class ProxySettingsActivity$$ExternalSyntheticLambd
     }
 
     public final void didSetColor() {
-        this.f$0.lambda$getThemeDescriptions$6();
+        this.f$0.m4552x763ae1bf();
     }
 
     public /* synthetic */ void onAnimationProgress(float f) {

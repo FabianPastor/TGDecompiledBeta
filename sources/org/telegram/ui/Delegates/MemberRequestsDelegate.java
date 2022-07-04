@@ -3,14 +3,12 @@ package org.telegram.ui.Delegates;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.ValueAnimator;
-import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Path;
-import android.graphics.Point;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 import android.graphics.Rect;
@@ -46,12 +44,7 @@ import org.telegram.messenger.UserObject;
 import org.telegram.messenger.Utilities;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC$TL_chatInviteImporter;
-import org.telegram.tgnet.TLRPC$TL_error;
-import org.telegram.tgnet.TLRPC$TL_messages_chatInviteImporters;
-import org.telegram.tgnet.TLRPC$TL_messages_hideChatJoinRequest;
-import org.telegram.tgnet.TLRPC$TL_updates;
-import org.telegram.tgnet.TLRPC$User;
+import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.ActionBar.ActionBarMenu;
 import org.telegram.ui.ActionBar.ActionBarMenuItem;
 import org.telegram.ui.ActionBar.ActionBarMenuSubItem;
@@ -78,18 +71,18 @@ import org.telegram.ui.ProfileActivity;
 public class MemberRequestsDelegate implements MemberRequestCell.OnClickListener {
     /* access modifiers changed from: private */
     public final Adapter adapter = new Adapter();
-    private final ArrayList<TLRPC$TL_chatInviteImporter> allImporters = new ArrayList<>();
+    private final ArrayList<TLRPC.TL_chatInviteImporter> allImporters = new ArrayList<>();
     private final long chatId;
     private final MemberRequestsController controller;
     private final int currentAccount;
     /* access modifiers changed from: private */
-    public final List<TLRPC$TL_chatInviteImporter> currentImporters = new ArrayList();
+    public final List<TLRPC.TL_chatInviteImporter> currentImporters = new ArrayList();
     private StickerEmptyView emptyView;
     /* access modifiers changed from: private */
     public final BaseFragment fragment;
     /* access modifiers changed from: private */
     public boolean hasMore;
-    private TLRPC$TL_chatInviteImporter importer;
+    private TLRPC.TL_chatInviteImporter importer;
     public final boolean isChannel;
     private boolean isDataLoaded;
     private boolean isFirstLoading = true;
@@ -102,10 +95,10 @@ public class MemberRequestsDelegate implements MemberRequestCell.OnClickListener
     private final FrameLayout layoutContainer;
     /* access modifiers changed from: private */
     public final RecyclerView.OnScrollListener listScrollListener = new RecyclerView.OnScrollListener() {
-        public void onScrolled(RecyclerView recyclerView, int i, int i2) {
-            LinearLayoutManager linearLayoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
-            if (MemberRequestsDelegate.this.hasMore && !MemberRequestsDelegate.this.isLoading && linearLayoutManager != null) {
-                if (MemberRequestsDelegate.this.adapter.getItemCount() - linearLayoutManager.findLastVisibleItemPosition() < 10) {
+        public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+            LinearLayoutManager layoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
+            if (MemberRequestsDelegate.this.hasMore && !MemberRequestsDelegate.this.isLoading && layoutManager != null) {
+                if (MemberRequestsDelegate.this.adapter.getItemCount() - layoutManager.findLastVisibleItemPosition() < 10) {
                     MemberRequestsDelegate.this.loadMembers();
                 }
             }
@@ -121,16 +114,16 @@ public class MemberRequestsDelegate implements MemberRequestCell.OnClickListener
     private Runnable searchRunnable;
     private final boolean showSearchMenu;
     /* access modifiers changed from: private */
-    public final LongSparseArray<TLRPC$User> users = new LongSparseArray<>();
+    public final LongSparseArray<TLRPC.User> users = new LongSparseArray<>();
 
-    public MemberRequestsDelegate(BaseFragment baseFragment, FrameLayout frameLayout, long j, boolean z) {
-        this.fragment = baseFragment;
-        this.layoutContainer = frameLayout;
-        this.chatId = j;
-        int currentAccount2 = baseFragment.getCurrentAccount();
+    public MemberRequestsDelegate(BaseFragment fragment2, FrameLayout layoutContainer2, long chatId2, boolean showSearchMenu2) {
+        this.fragment = fragment2;
+        this.layoutContainer = layoutContainer2;
+        this.chatId = chatId2;
+        int currentAccount2 = fragment2.getCurrentAccount();
         this.currentAccount = currentAccount2;
-        this.isChannel = ChatObject.isChannelAndNotMegaGroup(j, currentAccount2);
-        this.showSearchMenu = z;
+        this.isChannel = ChatObject.isChannelAndNotMegaGroup(chatId2, currentAccount2);
+        this.showSearchMenu = showSearchMenu2;
         this.controller = MemberRequestsController.getInstance(currentAccount2);
     }
 
@@ -148,11 +141,11 @@ public class MemberRequestsDelegate implements MemberRequestCell.OnClickListener
             StickerEmptyView emptyView2 = getEmptyView();
             this.emptyView = emptyView2;
             this.rootLayout.addView(emptyView2, LayoutHelper.createFrame(-1, -1.0f));
-            LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this.fragment.getParentActivity());
+            LinearLayoutManager layoutManager = new LinearLayoutManager(this.fragment.getParentActivity());
             RecyclerListView recyclerListView = new RecyclerListView(this.fragment.getParentActivity());
             this.recyclerView = recyclerListView;
             recyclerListView.setAdapter(this.adapter);
-            this.recyclerView.setLayoutManager(linearLayoutManager);
+            this.recyclerView.setLayoutManager(layoutManager);
             this.recyclerView.setOnItemClickListener((RecyclerListView.OnItemClickListener) new MemberRequestsDelegate$$ExternalSyntheticLambda9(this));
             this.recyclerView.setOnScrollListener(this.listScrollListener);
             this.recyclerView.setSelectorDrawableColor(Theme.getColor("listSelectorSDK21", this.fragment.getResourceProvider()));
@@ -161,8 +154,8 @@ public class MemberRequestsDelegate implements MemberRequestCell.OnClickListener
         return this.rootLayout;
     }
 
-    public void setShowLastItemDivider(boolean z) {
-        this.isShowLastItemDivider = z;
+    public void setShowLastItemDivider(boolean showLastItemDivider) {
+        this.isShowLastItemDivider = showLastItemDivider;
     }
 
     public Adapter getAdapter() {
@@ -230,30 +223,30 @@ public class MemberRequestsDelegate implements MemberRequestCell.OnClickListener
         return this.searchEmptyView;
     }
 
-    public void setRecyclerView(RecyclerListView recyclerListView) {
-        this.recyclerView = recyclerListView;
-        recyclerListView.setOnItemClickListener((RecyclerListView.OnItemClickListener) new MemberRequestsDelegate$$ExternalSyntheticLambda9(this));
-        final RecyclerView.OnScrollListener onScrollListener = recyclerListView.getOnScrollListener();
-        if (onScrollListener == null) {
-            recyclerListView.setOnScrollListener(this.listScrollListener);
+    public void setRecyclerView(RecyclerListView recyclerView2) {
+        this.recyclerView = recyclerView2;
+        recyclerView2.setOnItemClickListener((RecyclerListView.OnItemClickListener) new MemberRequestsDelegate$$ExternalSyntheticLambda9(this));
+        final RecyclerView.OnScrollListener currentScrollListener = recyclerView2.getOnScrollListener();
+        if (currentScrollListener == null) {
+            recyclerView2.setOnScrollListener(this.listScrollListener);
         } else {
-            recyclerListView.setOnScrollListener(new RecyclerView.OnScrollListener() {
-                public void onScrollStateChanged(RecyclerView recyclerView, int i) {
-                    super.onScrollStateChanged(recyclerView, i);
-                    onScrollListener.onScrollStateChanged(recyclerView, i);
-                    MemberRequestsDelegate.this.listScrollListener.onScrollStateChanged(recyclerView, i);
+            recyclerView2.setOnScrollListener(new RecyclerView.OnScrollListener() {
+                public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                    super.onScrollStateChanged(recyclerView, newState);
+                    currentScrollListener.onScrollStateChanged(recyclerView, newState);
+                    MemberRequestsDelegate.this.listScrollListener.onScrollStateChanged(recyclerView, newState);
                 }
 
-                public void onScrolled(RecyclerView recyclerView, int i, int i2) {
-                    super.onScrolled(recyclerView, i, i2);
-                    onScrollListener.onScrolled(recyclerView, i, i2);
-                    MemberRequestsDelegate.this.listScrollListener.onScrolled(recyclerView, i, i2);
+                public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                    super.onScrolled(recyclerView, dx, dy);
+                    currentScrollListener.onScrolled(recyclerView, dx, dy);
+                    MemberRequestsDelegate.this.listScrollListener.onScrolled(recyclerView, dx, dy);
                 }
             });
         }
     }
 
-    public void onItemClick(View view, int i) {
+    public void onItemClick(View view, int position) {
         if (view instanceof MemberRequestCell) {
             if (this.isSearchExpanded) {
                 AndroidUtilities.hideKeyboard(this.fragment.getParentActivity().getCurrentFocus());
@@ -262,34 +255,33 @@ public class MemberRequestsDelegate implements MemberRequestCell.OnClickListener
         }
     }
 
-    /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$onItemClick$1(MemberRequestCell memberRequestCell) {
-        TLRPC$TL_chatInviteImporter importer2 = memberRequestCell.getImporter();
+    /* renamed from: lambda$onItemClick$1$org-telegram-ui-Delegates-MemberRequestsDelegate  reason: not valid java name */
+    public /* synthetic */ void m1635xf2d2b3f6(MemberRequestCell cell) {
+        TLRPC.TL_chatInviteImporter importer2 = cell.getImporter();
         this.importer = importer2;
-        TLRPC$User tLRPC$User = this.users.get(importer2.user_id);
-        if (tLRPC$User != null) {
-            this.fragment.getMessagesController().putUser(tLRPC$User, false);
-            Point point = AndroidUtilities.displaySize;
-            if (tLRPC$User.photo == null || (point.x > point.y)) {
+        TLRPC.User user = this.users.get(importer2.user_id);
+        if (user != null) {
+            this.fragment.getMessagesController().putUser(user, false);
+            if (user.photo == null || (AndroidUtilities.displaySize.x > AndroidUtilities.displaySize.y)) {
                 this.isNeedRestoreList = true;
                 this.fragment.dismissCurrentDialog();
-                Bundle bundle = new Bundle();
-                ProfileActivity profileActivity = new ProfileActivity(bundle);
-                bundle.putLong("user_id", tLRPC$User.id);
-                bundle.putBoolean("removeFragmentOnChatOpen", false);
+                Bundle args = new Bundle();
+                ProfileActivity profileActivity = new ProfileActivity(args);
+                args.putLong("user_id", user.id);
+                args.putBoolean("removeFragmentOnChatOpen", false);
                 this.fragment.presentFragment(profileActivity);
             } else if (this.previewDialog == null) {
-                PreviewDialog previewDialog2 = new PreviewDialog(this.fragment.getParentActivity(), (RecyclerListView) memberRequestCell.getParent(), this.fragment.getResourceProvider(), this.isChannel);
+                PreviewDialog previewDialog2 = new PreviewDialog(this.fragment.getParentActivity(), (RecyclerListView) cell.getParent(), this.fragment.getResourceProvider(), this.isChannel);
                 this.previewDialog = previewDialog2;
-                previewDialog2.setImporter(this.importer, memberRequestCell.getAvatarImageView());
+                previewDialog2.setImporter(this.importer, cell.getAvatarImageView());
                 this.previewDialog.setOnDismissListener(new MemberRequestsDelegate$$ExternalSyntheticLambda0(this));
                 this.previewDialog.show();
             }
         }
     }
 
-    /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$onItemClick$0(DialogInterface dialogInterface) {
+    /* renamed from: lambda$onItemClick$0$org-telegram-ui-Delegates-MemberRequestsDelegate  reason: not valid java name */
+    public /* synthetic */ void m1634x1290dd7(DialogInterface dialog) {
         this.previewDialog = null;
     }
 
@@ -302,11 +294,11 @@ public class MemberRequestsDelegate implements MemberRequestCell.OnClickListener
         return false;
     }
 
-    public void setSearchExpanded(boolean z) {
-        this.isSearchExpanded = z;
+    public void setSearchExpanded(boolean isExpanded) {
+        this.isSearchExpanded = isExpanded;
     }
 
-    public void setQuery(String str) {
+    public void setQuery(String query2) {
         if (this.searchRunnable != null) {
             Utilities.searchQueue.cancelRunnable(this.searchRunnable);
             this.searchRunnable = null;
@@ -316,9 +308,9 @@ public class MemberRequestsDelegate implements MemberRequestCell.OnClickListener
             ConnectionsManager.getInstance(this.currentAccount).cancelRequest(this.searchRequestId, false);
             this.searchRequestId = 0;
         }
-        this.query = str;
+        this.query = query2;
         if (!this.isDataLoaded || !this.allImporters.isEmpty()) {
-            if (TextUtils.isEmpty(str)) {
+            if (TextUtils.isEmpty(query2)) {
                 this.adapter.setItems(this.allImporters);
                 setViewVisible(this.recyclerView, true, true);
                 setViewVisible(this.loadingView, false, false);
@@ -326,7 +318,7 @@ public class MemberRequestsDelegate implements MemberRequestCell.OnClickListener
                 if (stickerEmptyView != null) {
                     stickerEmptyView.setVisibility(4);
                 }
-                if (str == null && this.showSearchMenu) {
+                if (query2 == null && this.showSearchMenu) {
                     ActionBarMenuItem item = this.fragment.getActionBar().createMenu().getItem(0);
                     if (this.allImporters.isEmpty()) {
                         i = 8;
@@ -338,11 +330,11 @@ public class MemberRequestsDelegate implements MemberRequestCell.OnClickListener
                 setViewVisible(this.recyclerView, false, false);
                 setViewVisible(this.loadingView, true, true);
                 DispatchQueue dispatchQueue = Utilities.searchQueue;
-                MemberRequestsDelegate$$ExternalSyntheticLambda1 memberRequestsDelegate$$ExternalSyntheticLambda1 = new MemberRequestsDelegate$$ExternalSyntheticLambda1(this);
-                this.searchRunnable = memberRequestsDelegate$$ExternalSyntheticLambda1;
-                dispatchQueue.postRunnable(memberRequestsDelegate$$ExternalSyntheticLambda1, 300);
+                MemberRequestsDelegate$$ExternalSyntheticLambda2 memberRequestsDelegate$$ExternalSyntheticLambda2 = new MemberRequestsDelegate$$ExternalSyntheticLambda2(this);
+                this.searchRunnable = memberRequestsDelegate$$ExternalSyntheticLambda2;
+                dispatchQueue.postRunnable(memberRequestsDelegate$$ExternalSyntheticLambda2, 300);
             }
-            if (str != null) {
+            if (query2 != null) {
                 StickerEmptyView stickerEmptyView2 = this.emptyView;
                 if (stickerEmptyView2 != null) {
                     stickerEmptyView2.setVisibility(4);
@@ -360,126 +352,127 @@ public class MemberRequestsDelegate implements MemberRequestCell.OnClickListener
     }
 
     public void loadMembers() {
-        TLRPC$TL_messages_chatInviteImporters cachedImporters;
-        boolean z = true;
-        if (this.isFirstLoading && (cachedImporters = this.controller.getCachedImporters(this.chatId)) != null) {
+        TLRPC.TL_messages_chatInviteImporters firstImporters;
+        boolean isNeedShowLoading = true;
+        if (this.isFirstLoading && (firstImporters = this.controller.getCachedImporters(this.chatId)) != null) {
+            isNeedShowLoading = false;
             this.isDataLoaded = true;
-            onImportersLoaded(cachedImporters, (String) null, true, true);
-            z = false;
+            onImportersLoaded(firstImporters, (String) null, true, true);
         }
-        AndroidUtilities.runOnUIThread(new MemberRequestsDelegate$$ExternalSyntheticLambda5(this, z));
+        AndroidUtilities.runOnUIThread(new MemberRequestsDelegate$$ExternalSyntheticLambda5(this, isNeedShowLoading));
     }
 
-    /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$loadMembers$5(boolean z) {
-        TLRPC$TL_chatInviteImporter tLRPC$TL_chatInviteImporter;
-        boolean isEmpty = TextUtils.isEmpty(this.query);
-        boolean z2 = this.currentImporters.isEmpty() || this.isFirstLoading;
-        String str = this.query;
+    /* renamed from: lambda$loadMembers$5$org-telegram-ui-Delegates-MemberRequestsDelegate  reason: not valid java name */
+    public /* synthetic */ void m1633xbbbcvar_(boolean needShowLoading) {
+        TLRPC.TL_chatInviteImporter lastInvitedUser;
+        boolean isEmptyQuery = TextUtils.isEmpty(this.query);
+        boolean isEmptyOffset = this.currentImporters.isEmpty() || this.isFirstLoading;
+        String lastQuery = this.query;
         this.isLoading = true;
         this.isFirstLoading = false;
-        MemberRequestsDelegate$$ExternalSyntheticLambda2 memberRequestsDelegate$$ExternalSyntheticLambda2 = (!isEmpty || !z) ? null : new MemberRequestsDelegate$$ExternalSyntheticLambda2(this);
-        if (isEmpty) {
-            AndroidUtilities.runOnUIThread(memberRequestsDelegate$$ExternalSyntheticLambda2, 300);
+        MemberRequestsDelegate$$ExternalSyntheticLambda1 memberRequestsDelegate$$ExternalSyntheticLambda1 = (!isEmptyQuery || !needShowLoading) ? null : new MemberRequestsDelegate$$ExternalSyntheticLambda1(this);
+        if (isEmptyQuery) {
+            AndroidUtilities.runOnUIThread(memberRequestsDelegate$$ExternalSyntheticLambda1, 300);
         }
-        if (isEmpty || this.currentImporters.isEmpty()) {
-            tLRPC$TL_chatInviteImporter = null;
+        if (isEmptyQuery || this.currentImporters.isEmpty()) {
+            lastInvitedUser = null;
         } else {
-            List<TLRPC$TL_chatInviteImporter> list = this.currentImporters;
-            tLRPC$TL_chatInviteImporter = list.get(list.size() - 1);
+            List<TLRPC.TL_chatInviteImporter> list = this.currentImporters;
+            lastInvitedUser = list.get(list.size() - 1);
         }
-        this.searchRequestId = this.controller.getImporters(this.chatId, str, tLRPC$TL_chatInviteImporter, this.users, new MemberRequestsDelegate$$ExternalSyntheticLambda8(this, isEmpty, memberRequestsDelegate$$ExternalSyntheticLambda2, str, z2));
+        MemberRequestsDelegate$$ExternalSyntheticLambda1 memberRequestsDelegate$$ExternalSyntheticLambda12 = memberRequestsDelegate$$ExternalSyntheticLambda1;
+        this.searchRequestId = this.controller.getImporters(this.chatId, lastQuery, lastInvitedUser, this.users, new MemberRequestsDelegate$$ExternalSyntheticLambda8(this, isEmptyQuery, memberRequestsDelegate$$ExternalSyntheticLambda1, lastQuery, isEmptyOffset));
     }
 
-    /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$loadMembers$2() {
+    /* renamed from: lambda$loadMembers$2$org-telegram-ui-Delegates-MemberRequestsDelegate  reason: not valid java name */
+    public /* synthetic */ void m1630xe6CLASSNAMEb8() {
         setViewVisible(this.loadingView, true, true);
     }
 
-    /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$loadMembers$4(boolean z, Runnable runnable, String str, boolean z2, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        AndroidUtilities.runOnUIThread(new MemberRequestsDelegate$$ExternalSyntheticLambda6(this, z, runnable, str, tLRPC$TL_error, tLObject, z2));
+    /* renamed from: lambda$loadMembers$4$org-telegram-ui-Delegates-MemberRequestsDelegate  reason: not valid java name */
+    public /* synthetic */ void m1632xca134cf6(boolean isEmptyQuery, Runnable showLoadingRunnable, String lastQuery, boolean isEmptyOffset, TLObject response, TLRPC.TL_error error) {
+        AndroidUtilities.runOnUIThread(new MemberRequestsDelegate$$ExternalSyntheticLambda6(this, isEmptyQuery, showLoadingRunnable, lastQuery, error, response, isEmptyOffset));
     }
 
-    /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$loadMembers$3(boolean z, Runnable runnable, String str, TLRPC$TL_error tLRPC$TL_error, TLObject tLObject, boolean z2) {
+    /* renamed from: lambda$loadMembers$3$org-telegram-ui-Delegates-MemberRequestsDelegate  reason: not valid java name */
+    public /* synthetic */ void m1631xd869a6d7(boolean isEmptyQuery, Runnable showLoadingRunnable, String lastQuery, TLRPC.TL_error error, TLObject response, boolean isEmptyOffset) {
         this.isLoading = false;
         this.isDataLoaded = true;
-        if (z) {
-            AndroidUtilities.cancelRunOnUIThread(runnable);
+        if (isEmptyQuery) {
+            AndroidUtilities.cancelRunOnUIThread(showLoadingRunnable);
         }
         setViewVisible(this.loadingView, false, false);
-        if (TextUtils.equals(str, this.query) && tLRPC$TL_error == null) {
+        if (TextUtils.equals(lastQuery, this.query) && error == null) {
             this.isDataLoaded = true;
-            onImportersLoaded((TLRPC$TL_messages_chatInviteImporters) tLObject, str, z2, false);
+            onImportersLoaded((TLRPC.TL_messages_chatInviteImporters) response, lastQuery, isEmptyOffset, false);
         }
     }
 
-    private void onImportersLoaded(TLRPC$TL_messages_chatInviteImporters tLRPC$TL_messages_chatInviteImporters, String str, boolean z, boolean z2) {
-        boolean z3 = false;
-        for (int i = 0; i < tLRPC$TL_messages_chatInviteImporters.users.size(); i++) {
-            TLRPC$User tLRPC$User = tLRPC$TL_messages_chatInviteImporters.users.get(i);
-            this.users.put(tLRPC$User.id, tLRPC$User);
+    private void onImportersLoaded(TLRPC.TL_messages_chatInviteImporters importers, String lastQuery, boolean isEmptyOffset, boolean fromCache) {
+        for (int i = 0; i < importers.users.size(); i++) {
+            TLRPC.User user = importers.users.get(i);
+            this.users.put(user.id, user);
         }
-        if (z) {
-            this.adapter.setItems(tLRPC$TL_messages_chatInviteImporters.importers);
+        if (isEmptyOffset) {
+            this.adapter.setItems(importers.importers);
         } else {
-            this.adapter.appendItems(tLRPC$TL_messages_chatInviteImporters.importers);
+            this.adapter.appendItems(importers.importers);
         }
-        if (TextUtils.isEmpty(str)) {
+        boolean z = false;
+        if (TextUtils.isEmpty(lastQuery)) {
             this.allImporters.clear();
-            this.allImporters.addAll(tLRPC$TL_messages_chatInviteImporters.importers);
+            this.allImporters.addAll(importers.importers);
             if (this.showSearchMenu) {
                 this.fragment.getActionBar().createMenu().getItem(0).setVisibility(this.allImporters.isEmpty() ? 8 : 0);
             }
         }
-        onImportersChanged(str, z2, false);
-        if (this.currentImporters.size() < tLRPC$TL_messages_chatInviteImporters.count) {
-            z3 = true;
+        onImportersChanged(lastQuery, fromCache, false);
+        if (this.currentImporters.size() < importers.count) {
+            z = true;
         }
-        this.hasMore = z3;
+        this.hasMore = z;
     }
 
-    public void onAddClicked(TLRPC$TL_chatInviteImporter tLRPC$TL_chatInviteImporter) {
-        hideChatJoinRequest(tLRPC$TL_chatInviteImporter, true);
+    public void onAddClicked(TLRPC.TL_chatInviteImporter importer2) {
+        hideChatJoinRequest(importer2, true);
     }
 
-    public void onDismissClicked(TLRPC$TL_chatInviteImporter tLRPC$TL_chatInviteImporter) {
-        hideChatJoinRequest(tLRPC$TL_chatInviteImporter, false);
+    public void onDismissClicked(TLRPC.TL_chatInviteImporter importer2) {
+        hideChatJoinRequest(importer2, false);
     }
 
-    public void setAdapterItemsEnabled(boolean z) {
-        int access$200;
-        if (this.recyclerView != null && (access$200 = this.adapter.extraFirstHolders()) >= 0 && access$200 < this.recyclerView.getChildCount()) {
-            this.recyclerView.getChildAt(access$200).setEnabled(z);
+    public void setAdapterItemsEnabled(boolean adapterItemsEnabled) {
+        int position;
+        if (this.recyclerView != null && (position = this.adapter.extraFirstHolders()) >= 0 && position < this.recyclerView.getChildCount()) {
+            this.recyclerView.getChildAt(position).setEnabled(adapterItemsEnabled);
         }
     }
 
     /* access modifiers changed from: protected */
-    public void onImportersChanged(String str, boolean z, boolean z2) {
-        boolean z3;
-        if (TextUtils.isEmpty(str)) {
-            z3 = !this.allImporters.isEmpty() || z;
+    public void onImportersChanged(String query2, boolean fromCache, boolean fromHide) {
+        boolean isListVisible;
+        if (TextUtils.isEmpty(query2)) {
+            isListVisible = !this.allImporters.isEmpty() || fromCache;
             StickerEmptyView stickerEmptyView = this.emptyView;
             if (stickerEmptyView != null) {
-                stickerEmptyView.setVisibility(z3 ? 4 : 0);
+                stickerEmptyView.setVisibility(isListVisible ? 4 : 0);
             }
             StickerEmptyView stickerEmptyView2 = this.searchEmptyView;
             if (stickerEmptyView2 != null) {
                 stickerEmptyView2.setVisibility(4);
             }
         } else {
-            z3 = !this.currentImporters.isEmpty() || z;
+            isListVisible = !this.currentImporters.isEmpty() || fromCache;
             StickerEmptyView stickerEmptyView3 = this.emptyView;
             if (stickerEmptyView3 != null) {
                 stickerEmptyView3.setVisibility(4);
             }
             StickerEmptyView stickerEmptyView4 = this.searchEmptyView;
             if (stickerEmptyView4 != null) {
-                stickerEmptyView4.setVisibility(z3 ? 4 : 0);
+                stickerEmptyView4.setVisibility(isListVisible ? 4 : 0);
             }
         }
-        setViewVisible(this.recyclerView, z3, true);
+        setViewVisible(this.recyclerView, isListVisible, true);
         if (this.allImporters.isEmpty()) {
             StickerEmptyView stickerEmptyView5 = this.emptyView;
             if (stickerEmptyView5 != null) {
@@ -501,79 +494,81 @@ public class MemberRequestsDelegate implements MemberRequestCell.OnClickListener
         return !this.allImporters.isEmpty();
     }
 
-    private void hideChatJoinRequest(TLRPC$TL_chatInviteImporter tLRPC$TL_chatInviteImporter, boolean z) {
-        TLRPC$User tLRPC$User = this.users.get(tLRPC$TL_chatInviteImporter.user_id);
-        if (tLRPC$User != null) {
-            TLRPC$TL_messages_hideChatJoinRequest tLRPC$TL_messages_hideChatJoinRequest = new TLRPC$TL_messages_hideChatJoinRequest();
-            tLRPC$TL_messages_hideChatJoinRequest.approved = z;
-            tLRPC$TL_messages_hideChatJoinRequest.peer = MessagesController.getInstance(this.currentAccount).getInputPeer(-this.chatId);
-            tLRPC$TL_messages_hideChatJoinRequest.user_id = MessagesController.getInstance(this.currentAccount).getInputUser(tLRPC$User);
-            ConnectionsManager.getInstance(this.currentAccount).sendRequest(tLRPC$TL_messages_hideChatJoinRequest, new MemberRequestsDelegate$$ExternalSyntheticLambda7(this, tLRPC$TL_chatInviteImporter, z, tLRPC$User, tLRPC$TL_messages_hideChatJoinRequest));
+    private void hideChatJoinRequest(TLRPC.TL_chatInviteImporter importer2, boolean isApproved) {
+        TLRPC.User user = this.users.get(importer2.user_id);
+        if (user != null) {
+            TLRPC.TL_messages_hideChatJoinRequest req = new TLRPC.TL_messages_hideChatJoinRequest();
+            req.approved = isApproved;
+            req.peer = MessagesController.getInstance(this.currentAccount).getInputPeer(-this.chatId);
+            req.user_id = MessagesController.getInstance(this.currentAccount).getInputUser(user);
+            ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new MemberRequestsDelegate$$ExternalSyntheticLambda7(this, importer2, isApproved, user, req));
         }
     }
 
-    /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$hideChatJoinRequest$7(TLRPC$TL_chatInviteImporter tLRPC$TL_chatInviteImporter, boolean z, TLRPC$User tLRPC$User, TLRPC$TL_messages_hideChatJoinRequest tLRPC$TL_messages_hideChatJoinRequest, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        if (tLRPC$TL_error == null) {
-            MessagesController.getInstance(this.currentAccount).processUpdates((TLRPC$TL_updates) tLObject, false);
+    /* renamed from: lambda$hideChatJoinRequest$7$org-telegram-ui-Delegates-MemberRequestsDelegate  reason: not valid java name */
+    public /* synthetic */ void m1629xa1bba2bb(TLRPC.TL_chatInviteImporter importer2, boolean isApproved, TLRPC.User user, TLRPC.TL_messages_hideChatJoinRequest req, TLObject response, TLRPC.TL_error error) {
+        if (error == null) {
+            MessagesController.getInstance(this.currentAccount).processUpdates((TLRPC.TL_updates) response, false);
         }
-        AndroidUtilities.runOnUIThread(new MemberRequestsDelegate$$ExternalSyntheticLambda3(this, tLRPC$TL_error, tLObject, tLRPC$TL_chatInviteImporter, z, tLRPC$User, tLRPC$TL_messages_hideChatJoinRequest));
+        AndroidUtilities.runOnUIThread(new MemberRequestsDelegate$$ExternalSyntheticLambda3(this, error, response, importer2, isApproved, user, req));
     }
 
-    /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$hideChatJoinRequest$6(TLRPC$TL_error tLRPC$TL_error, TLObject tLObject, TLRPC$TL_chatInviteImporter tLRPC$TL_chatInviteImporter, boolean z, TLRPC$User tLRPC$User, TLRPC$TL_messages_hideChatJoinRequest tLRPC$TL_messages_hideChatJoinRequest) {
-        String str;
+    /* renamed from: lambda$hideChatJoinRequest$6$org-telegram-ui-Delegates-MemberRequestsDelegate  reason: not valid java name */
+    public /* synthetic */ void m1628xb011fc9c(TLRPC.TL_error error, TLObject response, TLRPC.TL_chatInviteImporter importer2, boolean isApproved, TLRPC.User user, TLRPC.TL_messages_hideChatJoinRequest req) {
+        String message;
+        TLRPC.TL_chatInviteImporter tL_chatInviteImporter = importer2;
+        TLRPC.User user2 = user;
         int i = 0;
-        if (tLRPC$TL_error == null) {
-            TLRPC$TL_updates tLRPC$TL_updates = (TLRPC$TL_updates) tLObject;
-            if (!tLRPC$TL_updates.chats.isEmpty()) {
-                MessagesController.getInstance(this.currentAccount).loadFullChat(tLRPC$TL_updates.chats.get(0).id, 0, true);
+        if (error == null) {
+            TLRPC.TL_updates updates = (TLRPC.TL_updates) response;
+            if (!updates.chats.isEmpty()) {
+                MessagesController.getInstance(this.currentAccount).loadFullChat(((TLRPC.Chat) updates.chats.get(0)).id, 0, true);
             }
             int i2 = 0;
             while (true) {
                 if (i2 >= this.allImporters.size()) {
                     break;
-                } else if (this.allImporters.get(i2).user_id == tLRPC$TL_chatInviteImporter.user_id) {
+                } else if (this.allImporters.get(i2).user_id == tL_chatInviteImporter.user_id) {
                     this.allImporters.remove(i2);
                     break;
                 } else {
                     i2++;
                 }
             }
-            this.adapter.removeItem(tLRPC$TL_chatInviteImporter);
+            this.adapter.removeItem(tL_chatInviteImporter);
             onImportersChanged(this.query, false, true);
-            if (z) {
-                Bulletin.MultiLineLayout multiLineLayout = new Bulletin.MultiLineLayout(this.fragment.getParentActivity(), this.fragment.getResourceProvider());
-                multiLineLayout.imageView.setRoundRadius(AndroidUtilities.dp(15.0f));
-                multiLineLayout.imageView.setForUserOrChat(tLRPC$User, new AvatarDrawable(tLRPC$User));
-                String firstName = UserObject.getFirstName(tLRPC$User);
+            if (isApproved) {
+                Bulletin.MultiLineLayout layout = new Bulletin.MultiLineLayout(this.fragment.getParentActivity(), this.fragment.getResourceProvider());
+                layout.imageView.setRoundRadius(AndroidUtilities.dp(15.0f));
+                layout.imageView.setForUserOrChat(user2, new AvatarDrawable(user2));
+                String userName = UserObject.getFirstName(user);
                 if (this.isChannel) {
-                    str = LocaleController.formatString("HasBeenAddedToChannel", NUM, firstName);
+                    message = LocaleController.formatString("HasBeenAddedToChannel", NUM, userName);
                 } else {
-                    str = LocaleController.formatString("HasBeenAddedToGroup", NUM, firstName);
+                    message = LocaleController.formatString("HasBeenAddedToGroup", NUM, userName);
                 }
-                SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(str);
-                int indexOf = str.indexOf(firstName);
-                spannableStringBuilder.setSpan(new TypefaceSpan(AndroidUtilities.getTypeface("fonts/rmedium.ttf")), indexOf, firstName.length() + indexOf, 18);
-                multiLineLayout.textView.setText(spannableStringBuilder);
+                SpannableStringBuilder stringBuilder = new SpannableStringBuilder(message);
+                int start = message.indexOf(userName);
+                stringBuilder.setSpan(new TypefaceSpan(AndroidUtilities.getTypeface("fonts/rmedium.ttf")), start, userName.length() + start, 18);
+                layout.textView.setText(stringBuilder);
                 if (this.allImporters.isEmpty()) {
-                    Bulletin.make(this.fragment, (Bulletin.Layout) multiLineLayout, 2750).show();
+                    Bulletin.make(this.fragment, (Bulletin.Layout) layout, 2750).show();
                 } else {
-                    Bulletin.make(this.layoutContainer, (Bulletin.Layout) multiLineLayout, 2750).show();
+                    Bulletin.make(this.layoutContainer, (Bulletin.Layout) layout, 2750).show();
                 }
             }
-            ActionBarMenu createMenu = this.fragment.getActionBar().createMenu();
+            ActionBarMenu menu = this.fragment.getActionBar().createMenu();
             if (TextUtils.isEmpty(this.query) && this.showSearchMenu) {
-                ActionBarMenuItem item = createMenu.getItem(0);
+                ActionBarMenuItem item = menu.getItem(0);
                 if (this.allImporters.isEmpty()) {
                     i = 8;
                 }
                 item.setVisibility(i);
-                return;
             }
+            TLRPC.TL_messages_hideChatJoinRequest tL_messages_hideChatJoinRequest = req;
             return;
         }
-        AlertsCreator.processError(this.currentAccount, tLRPC$TL_error, this.fragment, tLRPC$TL_messages_hideChatJoinRequest, new Object[0]);
+        AlertsCreator.processError(this.currentAccount, error, this.fragment, req, new Object[0]);
     }
 
     /* access modifiers changed from: private */
@@ -582,21 +577,21 @@ public class MemberRequestsDelegate implements MemberRequestCell.OnClickListener
         this.importer = null;
     }
 
-    private void setViewVisible(View view, boolean z, boolean z2) {
+    private void setViewVisible(View view, boolean isVisible, boolean isAnimated) {
         if (view != null) {
             int i = 0;
-            boolean z3 = view.getVisibility() == 0;
-            float f = z ? 1.0f : 0.0f;
-            if (z != z3 || f != view.getAlpha()) {
-                if (z2) {
-                    if (z) {
+            boolean isCurrentVisible = view.getVisibility() == 0;
+            float targetAlpha = isVisible ? 1.0f : 0.0f;
+            if (isVisible != isCurrentVisible || targetAlpha != view.getAlpha()) {
+                if (isAnimated) {
+                    if (isVisible) {
                         view.setAlpha(0.0f);
                     }
                     view.setVisibility(0);
-                    view.animate().alpha(f).setDuration(150).start();
+                    view.animate().alpha(targetAlpha).setDuration(150).start();
                     return;
                 }
-                if (!z) {
+                if (!isVisible) {
                     i = 4;
                 }
                 view.setVisibility(i);
@@ -608,98 +603,107 @@ public class MemberRequestsDelegate implements MemberRequestCell.OnClickListener
         private Adapter() {
         }
 
-        public RecyclerListView.Holder onCreateViewHolder(ViewGroup viewGroup, int i) {
-            MemberRequestCell memberRequestCell;
-            if (i == 1) {
-                View view = new View(viewGroup.getContext());
-                view.setBackground(Theme.getThemedDrawable(viewGroup.getContext(), NUM, "windowBackgroundGrayShadow"));
-                memberRequestCell = view;
-            } else if (i == 2) {
-                memberRequestCell = new View(this, viewGroup.getContext()) {
-                    /* access modifiers changed from: protected */
-                    public void onMeasure(int i, int i2) {
-                        super.onMeasure(i, View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(52.0f), NUM));
-                    }
-                };
-            } else if (i != 3) {
-                Context context = viewGroup.getContext();
-                MemberRequestsDelegate memberRequestsDelegate = MemberRequestsDelegate.this;
-                MemberRequestCell memberRequestCell2 = new MemberRequestCell(context, memberRequestsDelegate, memberRequestsDelegate.isChannel);
-                memberRequestCell2.setBackgroundColor(Theme.getColor("windowBackgroundWhite", MemberRequestsDelegate.this.fragment.getResourceProvider()));
-                memberRequestCell = memberRequestCell2;
-            } else {
-                memberRequestCell = new View(viewGroup.getContext());
+        public RecyclerListView.Holder onCreateViewHolder(ViewGroup parent, int viewType) {
+            View view;
+            switch (viewType) {
+                case 1:
+                    View view2 = new View(parent.getContext());
+                    view2.setBackground(Theme.getThemedDrawable(parent.getContext(), NUM, "windowBackgroundGrayShadow"));
+                    view = view2;
+                    break;
+                case 2:
+                    view = new View(parent.getContext()) {
+                        /* access modifiers changed from: protected */
+                        public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+                            super.onMeasure(widthMeasureSpec, View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(52.0f), NUM));
+                        }
+                    };
+                    break;
+                case 3:
+                    view = new View(parent.getContext());
+                    break;
+                default:
+                    Context context = parent.getContext();
+                    MemberRequestsDelegate memberRequestsDelegate = MemberRequestsDelegate.this;
+                    MemberRequestCell cell = new MemberRequestCell(context, memberRequestsDelegate, memberRequestsDelegate.isChannel);
+                    cell.setBackgroundColor(Theme.getColor("windowBackgroundWhite", MemberRequestsDelegate.this.fragment.getResourceProvider()));
+                    MemberRequestCell memberRequestCell = cell;
+                    view = cell;
+                    break;
             }
-            return new RecyclerListView.Holder(memberRequestCell);
+            return new RecyclerListView.Holder(view);
         }
 
-        public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int i) {
-            if (viewHolder.getItemViewType() == 0) {
-                MemberRequestCell memberRequestCell = (MemberRequestCell) viewHolder.itemView;
-                int extraFirstHolders = i - extraFirstHolders();
+        public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+            if (holder.getItemViewType() == 0) {
+                MemberRequestCell cell = (MemberRequestCell) holder.itemView;
+                int position2 = position - extraFirstHolders();
                 LongSparseArray access$700 = MemberRequestsDelegate.this.users;
-                TLRPC$TL_chatInviteImporter tLRPC$TL_chatInviteImporter = (TLRPC$TL_chatInviteImporter) MemberRequestsDelegate.this.currentImporters.get(extraFirstHolders);
+                TLRPC.TL_chatInviteImporter tL_chatInviteImporter = (TLRPC.TL_chatInviteImporter) MemberRequestsDelegate.this.currentImporters.get(position2);
                 boolean z = true;
-                if (extraFirstHolders == MemberRequestsDelegate.this.currentImporters.size() - 1) {
+                if (position2 == MemberRequestsDelegate.this.currentImporters.size() - 1) {
                     z = false;
                 }
-                memberRequestCell.setData(access$700, tLRPC$TL_chatInviteImporter, z);
-            } else if (viewHolder.getItemViewType() == 2) {
-                viewHolder.itemView.requestLayout();
+                cell.setData(access$700, tL_chatInviteImporter, z);
+            } else if (holder.getItemViewType() == 2) {
+                holder.itemView.requestLayout();
             }
         }
 
-        public boolean isEnabled(RecyclerView.ViewHolder viewHolder) {
-            return viewHolder.getItemViewType() == 0;
+        public boolean isEnabled(RecyclerView.ViewHolder holder) {
+            return holder.getItemViewType() == 0;
         }
 
         public int getItemCount() {
             return extraFirstHolders() + MemberRequestsDelegate.this.currentImporters.size() + extraLastHolders();
         }
 
-        public int getItemViewType(int i) {
+        public int getItemViewType(int position) {
             if (MemberRequestsDelegate.this.isShowLastItemDivider) {
-                if (i != MemberRequestsDelegate.this.currentImporters.size() || MemberRequestsDelegate.this.currentImporters.isEmpty()) {
+                if (position != MemberRequestsDelegate.this.currentImporters.size() || MemberRequestsDelegate.this.currentImporters.isEmpty()) {
                     return 0;
                 }
                 return 1;
-            } else if (i == 0) {
+            } else if (position == 0) {
                 return 2;
             } else {
-                return i == getItemCount() - 1 ? 3 : 0;
+                if (position == getItemCount() - 1) {
+                    return 3;
+                }
+                return 0;
             }
         }
 
-        @SuppressLint({"NotifyDataSetChanged"})
-        public void setItems(List<TLRPC$TL_chatInviteImporter> list) {
+        public void setItems(List<TLRPC.TL_chatInviteImporter> newItems) {
             MemberRequestsDelegate.this.currentImporters.clear();
-            MemberRequestsDelegate.this.currentImporters.addAll(list);
+            MemberRequestsDelegate.this.currentImporters.addAll(newItems);
             notifyDataSetChanged();
         }
 
-        public void appendItems(List<TLRPC$TL_chatInviteImporter> list) {
-            MemberRequestsDelegate.this.currentImporters.addAll(list);
-            if (MemberRequestsDelegate.this.currentImporters.size() > list.size()) {
-                notifyItemChanged((MemberRequestsDelegate.this.currentImporters.size() - list.size()) - 1);
+        public void appendItems(List<TLRPC.TL_chatInviteImporter> newItems) {
+            MemberRequestsDelegate.this.currentImporters.addAll(newItems);
+            if (MemberRequestsDelegate.this.currentImporters.size() > newItems.size()) {
+                notifyItemChanged((MemberRequestsDelegate.this.currentImporters.size() - newItems.size()) - 1);
             }
-            notifyItemRangeInserted(MemberRequestsDelegate.this.currentImporters.size() - list.size(), list.size());
+            notifyItemRangeInserted(MemberRequestsDelegate.this.currentImporters.size() - newItems.size(), newItems.size());
         }
 
-        public void removeItem(TLRPC$TL_chatInviteImporter tLRPC$TL_chatInviteImporter) {
+        public void removeItem(TLRPC.TL_chatInviteImporter item) {
+            int position = -1;
             int i = 0;
             while (true) {
                 if (i >= MemberRequestsDelegate.this.currentImporters.size()) {
-                    i = -1;
                     break;
-                } else if (((TLRPC$TL_chatInviteImporter) MemberRequestsDelegate.this.currentImporters.get(i)).user_id == tLRPC$TL_chatInviteImporter.user_id) {
+                } else if (((TLRPC.TL_chatInviteImporter) MemberRequestsDelegate.this.currentImporters.get(i)).user_id == item.user_id) {
+                    position = i;
                     break;
                 } else {
                     i++;
                 }
             }
-            if (i >= 0) {
-                MemberRequestsDelegate.this.currentImporters.remove(i);
-                notifyItemRemoved(i + extraFirstHolders());
+            if (position >= 0) {
+                MemberRequestsDelegate.this.currentImporters.remove(position);
+                notifyItemRemoved(extraFirstHolders() + position);
                 if (MemberRequestsDelegate.this.currentImporters.isEmpty()) {
                     notifyItemRemoved(1);
                 }
@@ -725,7 +729,7 @@ public class MemberRequestsDelegate implements MemberRequestCell.OnClickListener
         /* access modifiers changed from: private */
         public final ViewGroup contentView;
         private BackupImageView imageView;
-        private TLRPC$TL_chatInviteImporter importer;
+        private TLRPC.TL_chatInviteImporter importer;
         /* access modifiers changed from: private */
         public final TextView nameText;
         /* access modifiers changed from: private */
@@ -741,10 +745,10 @@ public class MemberRequestsDelegate implements MemberRequestCell.OnClickListener
         /* access modifiers changed from: private */
         public final ProfileGalleryView viewPager;
 
-        public PreviewDialog(Context context, RecyclerListView recyclerListView, Theme.ResourcesProvider resourcesProvider, boolean z) {
+        public PreviewDialog(Context context, RecyclerListView parentListView, Theme.ResourcesProvider resourcesProvider, boolean isChannel) {
             super(context, NUM);
-            int i;
             String str;
+            int i;
             Drawable mutate = getContext().getResources().getDrawable(NUM).mutate();
             this.pagerShadowDrawable = mutate;
             TextView textView = new TextView(getContext());
@@ -755,81 +759,78 @@ public class MemberRequestsDelegate implements MemberRequestCell.OnClickListener
                 private final Path clipPath = new Path();
                 private boolean firstSizeChange = true;
                 private final GestureDetector gestureDetector = new GestureDetector(getContext(), new GestureDetector.SimpleOnGestureListener() {
-                    public boolean onDown(MotionEvent motionEvent) {
+                    public boolean onDown(MotionEvent e) {
                         return true;
                     }
 
-                    public boolean onSingleTapUp(MotionEvent motionEvent) {
-                        if (!(PreviewDialog.this.pagerShadowDrawable.getBounds().contains((int) motionEvent.getX(), (int) motionEvent.getY()) || (((float) PreviewDialog.this.popupLayout.getLeft()) < motionEvent.getX() && motionEvent.getX() < ((float) PreviewDialog.this.popupLayout.getRight()) && ((float) PreviewDialog.this.popupLayout.getTop()) < motionEvent.getY() && motionEvent.getY() < ((float) PreviewDialog.this.popupLayout.getBottom())))) {
+                    public boolean onSingleTapUp(MotionEvent e) {
+                        if (!(PreviewDialog.this.pagerShadowDrawable.getBounds().contains((int) e.getX(), (int) e.getY()) || (((float) PreviewDialog.this.popupLayout.getLeft()) < e.getX() && e.getX() < ((float) PreviewDialog.this.popupLayout.getRight()) && ((float) PreviewDialog.this.popupLayout.getTop()) < e.getY() && e.getY() < ((float) PreviewDialog.this.popupLayout.getBottom())))) {
                             PreviewDialog.this.dismiss();
                         }
-                        return super.onSingleTapUp(motionEvent);
+                        return super.onSingleTapUp(e);
                     }
                 });
                 private final RectF rectF = new RectF();
 
-                @SuppressLint({"ClickableViewAccessibility"})
-                public boolean onTouchEvent(MotionEvent motionEvent) {
-                    return this.gestureDetector.onTouchEvent(motionEvent);
+                public boolean onTouchEvent(MotionEvent event) {
+                    return this.gestureDetector.onTouchEvent(event);
                 }
 
                 /* access modifiers changed from: protected */
-                public void onMeasure(int i, int i2) {
+                public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
                     setWillNotDraw(false);
-                    super.onMeasure(i, i2);
-                    int min = Math.min(getMeasuredWidth(), getMeasuredHeight());
+                    super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+                    int minSize = Math.min(getMeasuredWidth(), getMeasuredHeight());
                     double measuredHeight = (double) getMeasuredHeight();
                     Double.isNaN(measuredHeight);
-                    int min2 = Math.min(min, (int) (measuredHeight * 0.66d)) - (AndroidUtilities.dp(12.0f) * 2);
-                    int makeMeasureSpec = View.MeasureSpec.makeMeasureSpec(min2, Integer.MIN_VALUE);
-                    PreviewDialog.this.viewPager.measure(makeMeasureSpec, makeMeasureSpec);
-                    PreviewDialog.this.pagerIndicator.measure(makeMeasureSpec, makeMeasureSpec);
-                    int makeMeasureSpec2 = View.MeasureSpec.makeMeasureSpec(min2 - (AndroidUtilities.dp(16.0f) * 2), NUM);
-                    PreviewDialog.this.nameText.measure(makeMeasureSpec2, View.MeasureSpec.makeMeasureSpec(0, 0));
-                    PreviewDialog.this.bioText.measure(makeMeasureSpec2, View.MeasureSpec.makeMeasureSpec(0, 0));
+                    int pagerSize = Math.min(minSize, (int) (measuredHeight * 0.66d)) - (AndroidUtilities.dp(12.0f) * 2);
+                    int pagerSpec = View.MeasureSpec.makeMeasureSpec(pagerSize, Integer.MIN_VALUE);
+                    PreviewDialog.this.viewPager.measure(pagerSpec, pagerSpec);
+                    PreviewDialog.this.pagerIndicator.measure(pagerSpec, pagerSpec);
+                    int textWidthSpec = View.MeasureSpec.makeMeasureSpec(pagerSize - (AndroidUtilities.dp(16.0f) * 2), NUM);
+                    PreviewDialog.this.nameText.measure(textWidthSpec, View.MeasureSpec.makeMeasureSpec(0, 0));
+                    PreviewDialog.this.bioText.measure(textWidthSpec, View.MeasureSpec.makeMeasureSpec(0, 0));
                     PreviewDialog.this.popupLayout.measure(View.MeasureSpec.makeMeasureSpec(PreviewDialog.this.viewPager.getMeasuredWidth() + (PreviewDialog.this.shadowPaddingLeft * 2), Integer.MIN_VALUE), View.MeasureSpec.makeMeasureSpec(0, 0));
                 }
 
                 /* access modifiers changed from: protected */
-                public void onLayout(boolean z, int i, int i2, int i3, int i4) {
-                    int height = (getHeight() - PreviewDialog.this.getContentHeight()) / 2;
-                    int width = (getWidth() - PreviewDialog.this.viewPager.getMeasuredWidth()) / 2;
-                    PreviewDialog.this.viewPager.layout(width, height, PreviewDialog.this.viewPager.getMeasuredWidth() + width, PreviewDialog.this.viewPager.getMeasuredHeight() + height);
+                public void onLayout(boolean changed, int l, int t, int r, int b) {
+                    int top = (getHeight() - PreviewDialog.this.getContentHeight()) / 2;
+                    int left = (getWidth() - PreviewDialog.this.viewPager.getMeasuredWidth()) / 2;
+                    PreviewDialog.this.viewPager.layout(left, top, PreviewDialog.this.viewPager.getMeasuredWidth() + left, PreviewDialog.this.viewPager.getMeasuredHeight() + top);
                     PreviewDialog.this.pagerIndicator.layout(PreviewDialog.this.viewPager.getLeft(), PreviewDialog.this.viewPager.getTop(), PreviewDialog.this.viewPager.getRight(), PreviewDialog.this.viewPager.getTop() + PreviewDialog.this.pagerIndicator.getMeasuredHeight());
-                    int measuredHeight = height + PreviewDialog.this.viewPager.getMeasuredHeight() + AndroidUtilities.dp(12.0f);
-                    PreviewDialog.this.nameText.layout(PreviewDialog.this.viewPager.getLeft() + AndroidUtilities.dp(16.0f), measuredHeight, PreviewDialog.this.viewPager.getRight() - AndroidUtilities.dp(16.0f), PreviewDialog.this.nameText.getMeasuredHeight() + measuredHeight);
-                    int measuredHeight2 = measuredHeight + PreviewDialog.this.nameText.getMeasuredHeight();
-                    int i5 = 8;
+                    int top2 = top + PreviewDialog.this.viewPager.getMeasuredHeight() + AndroidUtilities.dp(12.0f);
+                    PreviewDialog.this.nameText.layout(PreviewDialog.this.viewPager.getLeft() + AndroidUtilities.dp(16.0f), top2, PreviewDialog.this.viewPager.getRight() - AndroidUtilities.dp(16.0f), PreviewDialog.this.nameText.getMeasuredHeight() + top2);
+                    int top3 = top2 + PreviewDialog.this.nameText.getMeasuredHeight();
+                    int i = 8;
                     if (PreviewDialog.this.bioText.getVisibility() != 8) {
-                        int dp = measuredHeight2 + AndroidUtilities.dp(4.0f);
-                        PreviewDialog.this.bioText.layout(PreviewDialog.this.nameText.getLeft(), dp, PreviewDialog.this.nameText.getRight(), PreviewDialog.this.bioText.getMeasuredHeight() + dp);
-                        measuredHeight2 = dp + PreviewDialog.this.bioText.getMeasuredHeight();
+                        int top4 = top3 + AndroidUtilities.dp(4.0f);
+                        PreviewDialog.this.bioText.layout(PreviewDialog.this.nameText.getLeft(), top4, PreviewDialog.this.nameText.getRight(), PreviewDialog.this.bioText.getMeasuredHeight() + top4);
+                        top3 = top4 + PreviewDialog.this.bioText.getMeasuredHeight();
                     }
-                    int dp2 = measuredHeight2 + AndroidUtilities.dp(12.0f);
-                    PreviewDialog.this.pagerShadowDrawable.setBounds(PreviewDialog.this.viewPager.getLeft() - PreviewDialog.this.shadowPaddingLeft, PreviewDialog.this.viewPager.getTop() - PreviewDialog.this.shadowPaddingTop, PreviewDialog.this.viewPager.getRight() + PreviewDialog.this.shadowPaddingLeft, PreviewDialog.this.shadowPaddingTop + dp2);
-                    PreviewDialog.this.popupLayout.layout((PreviewDialog.this.viewPager.getRight() - PreviewDialog.this.popupLayout.getMeasuredWidth()) + PreviewDialog.this.shadowPaddingLeft, dp2, PreviewDialog.this.viewPager.getRight() + PreviewDialog.this.shadowPaddingLeft, PreviewDialog.this.popupLayout.getMeasuredHeight() + dp2);
+                    int top5 = top3 + AndroidUtilities.dp(12.0f);
+                    PreviewDialog.this.pagerShadowDrawable.setBounds(PreviewDialog.this.viewPager.getLeft() - PreviewDialog.this.shadowPaddingLeft, PreviewDialog.this.viewPager.getTop() - PreviewDialog.this.shadowPaddingTop, PreviewDialog.this.viewPager.getRight() + PreviewDialog.this.shadowPaddingLeft, PreviewDialog.this.shadowPaddingTop + top5);
+                    PreviewDialog.this.popupLayout.layout((PreviewDialog.this.viewPager.getRight() - PreviewDialog.this.popupLayout.getMeasuredWidth()) + PreviewDialog.this.shadowPaddingLeft, top5, PreviewDialog.this.viewPager.getRight() + PreviewDialog.this.shadowPaddingLeft, PreviewDialog.this.popupLayout.getMeasuredHeight() + top5);
                     ActionBarPopupWindow.ActionBarPopupWindowLayout access$1300 = PreviewDialog.this.popupLayout;
-                    if (PreviewDialog.this.popupLayout.getBottom() < i4) {
-                        i5 = 0;
+                    if (PreviewDialog.this.popupLayout.getBottom() < b) {
+                        i = 0;
                     }
-                    access$1300.setVisibility(i5);
-                    int dp3 = AndroidUtilities.dp(6.0f);
-                    this.rectF.set((float) PreviewDialog.this.viewPager.getLeft(), (float) PreviewDialog.this.viewPager.getTop(), (float) PreviewDialog.this.viewPager.getRight(), (float) (PreviewDialog.this.viewPager.getTop() + (dp3 * 2)));
+                    access$1300.setVisibility(i);
+                    int radius = AndroidUtilities.dp(6.0f);
+                    this.rectF.set((float) PreviewDialog.this.viewPager.getLeft(), (float) PreviewDialog.this.viewPager.getTop(), (float) PreviewDialog.this.viewPager.getRight(), (float) (PreviewDialog.this.viewPager.getTop() + (radius * 2)));
                     this.clipPath.reset();
-                    float f = (float) dp3;
-                    this.clipPath.addRoundRect(this.rectF, f, f, Path.Direction.CW);
-                    this.rectF.set((float) i, (float) (PreviewDialog.this.viewPager.getTop() + dp3), (float) i3, (float) i4);
+                    this.clipPath.addRoundRect(this.rectF, (float) radius, (float) radius, Path.Direction.CW);
+                    this.rectF.set((float) l, (float) (PreviewDialog.this.viewPager.getTop() + radius), (float) r, (float) b);
                     this.clipPath.addRect(this.rectF, Path.Direction.CW);
                 }
 
                 /* access modifiers changed from: protected */
-                public void onSizeChanged(int i, int i2, int i3, int i4) {
-                    super.onSizeChanged(i, i2, i3, i4);
-                    Point point = AndroidUtilities.displaySize;
-                    if (point.x > point.y) {
+                public void onSizeChanged(int w, int h, int oldw, int oldh) {
+                    super.onSizeChanged(w, h, oldw, oldh);
+                    if (AndroidUtilities.displaySize.x > AndroidUtilities.displaySize.y) {
                         PreviewDialog.super.dismiss();
                     }
-                    if (i != i3 && i2 != i4) {
+                    if (w != oldw && h != oldh) {
                         if (!this.firstSizeChange) {
                             PreviewDialog.this.updateBackgroundBitmap();
                         }
@@ -852,25 +853,25 @@ public class MemberRequestsDelegate implements MemberRequestCell.OnClickListener
                 }
 
                 /* access modifiers changed from: protected */
-                public boolean verifyDrawable(Drawable drawable) {
-                    return drawable == PreviewDialog.this.pagerShadowDrawable || super.verifyDrawable(drawable);
+                public boolean verifyDrawable(Drawable who) {
+                    return who == PreviewDialog.this.pagerShadowDrawable || super.verifyDrawable(who);
                 }
             };
             this.contentView = r3;
             setCancelable(true);
             r3.setVisibility(4);
-            int color = Theme.getColor("actionBarDefaultSubmenuBackground", MemberRequestsDelegate.this.fragment.getResourceProvider());
-            mutate.setColorFilter(new PorterDuffColorFilter(color, PorterDuff.Mode.MULTIPLY));
+            int backgroundColor = Theme.getColor("actionBarDefaultSubmenuBackground", MemberRequestsDelegate.this.fragment.getResourceProvider());
+            mutate.setColorFilter(new PorterDuffColorFilter(backgroundColor, PorterDuff.Mode.MULTIPLY));
             mutate.setCallback(r3);
-            Rect rect = new Rect();
-            mutate.getPadding(rect);
-            this.shadowPaddingTop = rect.top;
-            this.shadowPaddingLeft = rect.left;
+            Rect paddingRect = new Rect();
+            mutate.getPadding(paddingRect);
+            this.shadowPaddingTop = paddingRect.top;
+            this.shadowPaddingLeft = paddingRect.left;
             ActionBarPopupWindow.ActionBarPopupWindowLayout actionBarPopupWindowLayout = new ActionBarPopupWindow.ActionBarPopupWindowLayout(context, resourcesProvider);
             this.popupLayout = actionBarPopupWindowLayout;
-            actionBarPopupWindowLayout.setBackgroundColor(color);
+            actionBarPopupWindowLayout.setBackgroundColor(backgroundColor);
             r3.addView(actionBarPopupWindowLayout);
-            AnonymousClass1 r5 = new AvatarPreviewPagerIndicator(this, getContext(), MemberRequestsDelegate.this) {
+            AnonymousClass1 r7 = new AvatarPreviewPagerIndicator(getContext(), MemberRequestsDelegate.this) {
                 /* access modifiers changed from: protected */
                 public void onDraw(Canvas canvas) {
                     if (this.profileGalleryView.getRealCount() > 1) {
@@ -878,13 +879,13 @@ public class MemberRequestsDelegate implements MemberRequestCell.OnClickListener
                     }
                 }
             };
-            this.pagerIndicator = r5;
-            ProfileGalleryView profileGalleryView = new ProfileGalleryView(context, MemberRequestsDelegate.this.fragment.getActionBar(), recyclerListView, r5);
+            this.pagerIndicator = r7;
+            ProfileGalleryView profileGalleryView = new ProfileGalleryView(context, MemberRequestsDelegate.this.fragment.getActionBar(), parentListView, r7);
             this.viewPager = profileGalleryView;
             profileGalleryView.setCreateThumbFromParent(true);
             r3.addView(profileGalleryView);
-            r5.setProfileGalleryView(profileGalleryView);
-            r3.addView(r5);
+            r7.setProfileGalleryView(profileGalleryView);
+            r3.addView(r7);
             textView.setMaxLines(1);
             textView.setTextColor(Theme.getColor("windowBackgroundWhiteBlackText", MemberRequestsDelegate.this.fragment.getResourceProvider()));
             textView.setTextSize(16.0f);
@@ -893,93 +894,91 @@ public class MemberRequestsDelegate implements MemberRequestCell.OnClickListener
             textView2.setTextColor(Theme.getColor("windowBackgroundWhiteGrayText", MemberRequestsDelegate.this.fragment.getResourceProvider()));
             textView2.setTextSize(14.0f);
             r3.addView(textView2);
-            ActionBarMenuSubItem actionBarMenuSubItem = new ActionBarMenuSubItem(context, true, false);
-            actionBarMenuSubItem.setColors(Theme.getColor("actionBarDefaultSubmenuItem", resourcesProvider), Theme.getColor("actionBarDefaultSubmenuItemIcon", resourcesProvider));
-            actionBarMenuSubItem.setSelectorColor(Theme.getColor("dialogButtonSelector", resourcesProvider));
-            if (z) {
+            ActionBarMenuSubItem addCell = new ActionBarMenuSubItem(context, true, false);
+            addCell.setColors(Theme.getColor("actionBarDefaultSubmenuItem", resourcesProvider), Theme.getColor("actionBarDefaultSubmenuItemIcon", resourcesProvider));
+            addCell.setSelectorColor(Theme.getColor("dialogButtonSelector", resourcesProvider));
+            if (isChannel) {
                 i = NUM;
                 str = "AddToChannel";
             } else {
                 i = NUM;
                 str = "AddToGroup";
             }
-            actionBarMenuSubItem.setTextAndIcon(LocaleController.getString(str, i), NUM);
-            actionBarMenuSubItem.setOnClickListener(new MemberRequestsDelegate$PreviewDialog$$ExternalSyntheticLambda2(this));
-            actionBarPopupWindowLayout.addView(actionBarMenuSubItem);
-            ActionBarMenuSubItem actionBarMenuSubItem2 = new ActionBarMenuSubItem(context, false, false);
-            actionBarMenuSubItem2.setColors(Theme.getColor("actionBarDefaultSubmenuItem", resourcesProvider), Theme.getColor("actionBarDefaultSubmenuItemIcon", resourcesProvider));
-            actionBarMenuSubItem2.setSelectorColor(Theme.getColor("dialogButtonSelector", resourcesProvider));
-            actionBarMenuSubItem2.setTextAndIcon(LocaleController.getString("SendMessage", NUM), NUM);
-            actionBarMenuSubItem2.setOnClickListener(new MemberRequestsDelegate$PreviewDialog$$ExternalSyntheticLambda3(this));
-            actionBarPopupWindowLayout.addView(actionBarMenuSubItem2);
-            ActionBarMenuSubItem actionBarMenuSubItem3 = new ActionBarMenuSubItem(context, false, true);
-            actionBarMenuSubItem3.setColors(Theme.getColor("dialogTextRed2", resourcesProvider), Theme.getColor("dialogRedIcon", resourcesProvider));
-            actionBarMenuSubItem3.setSelectorColor(Theme.getColor("dialogButtonSelector", resourcesProvider));
-            actionBarMenuSubItem3.setTextAndIcon(LocaleController.getString("DismissRequest", NUM), NUM);
-            actionBarMenuSubItem3.setOnClickListener(new MemberRequestsDelegate$PreviewDialog$$ExternalSyntheticLambda1(this));
-            actionBarPopupWindowLayout.addView(actionBarMenuSubItem3);
+            addCell.setTextAndIcon(LocaleController.getString(str, i), NUM);
+            addCell.setOnClickListener(new MemberRequestsDelegate$PreviewDialog$$ExternalSyntheticLambda1(this));
+            actionBarPopupWindowLayout.addView(addCell);
+            ActionBarMenuSubItem sendMsgCell = new ActionBarMenuSubItem(context, false, false);
+            sendMsgCell.setColors(Theme.getColor("actionBarDefaultSubmenuItem", resourcesProvider), Theme.getColor("actionBarDefaultSubmenuItemIcon", resourcesProvider));
+            sendMsgCell.setSelectorColor(Theme.getColor("dialogButtonSelector", resourcesProvider));
+            sendMsgCell.setTextAndIcon(LocaleController.getString("SendMessage", NUM), NUM);
+            sendMsgCell.setOnClickListener(new MemberRequestsDelegate$PreviewDialog$$ExternalSyntheticLambda2(this));
+            actionBarPopupWindowLayout.addView(sendMsgCell);
+            ActionBarMenuSubItem dismissCell = new ActionBarMenuSubItem(context, false, true);
+            dismissCell.setColors(Theme.getColor("dialogTextRed2", resourcesProvider), Theme.getColor("dialogRedIcon", resourcesProvider));
+            dismissCell.setSelectorColor(Theme.getColor("dialogButtonSelector", resourcesProvider));
+            dismissCell.setTextAndIcon(LocaleController.getString("DismissRequest", NUM), NUM);
+            dismissCell.setOnClickListener(new MemberRequestsDelegate$PreviewDialog$$ExternalSyntheticLambda3(this));
+            actionBarPopupWindowLayout.addView(dismissCell);
         }
 
-        /* access modifiers changed from: private */
-        public /* synthetic */ void lambda$new$0(View view) {
-            TLRPC$TL_chatInviteImporter tLRPC$TL_chatInviteImporter = this.importer;
-            if (tLRPC$TL_chatInviteImporter != null) {
-                MemberRequestsDelegate.this.onAddClicked(tLRPC$TL_chatInviteImporter);
+        /* renamed from: lambda$new$0$org-telegram-ui-Delegates-MemberRequestsDelegate$PreviewDialog  reason: not valid java name */
+        public /* synthetic */ void m1636x8a31fab9(View v) {
+            TLRPC.TL_chatInviteImporter tL_chatInviteImporter = this.importer;
+            if (tL_chatInviteImporter != null) {
+                MemberRequestsDelegate.this.onAddClicked(tL_chatInviteImporter);
             }
             MemberRequestsDelegate.this.hidePreview();
         }
 
-        /* access modifiers changed from: private */
-        public /* synthetic */ void lambda$new$1(View view) {
+        /* renamed from: lambda$new$1$org-telegram-ui-Delegates-MemberRequestsDelegate$PreviewDialog  reason: not valid java name */
+        public /* synthetic */ void m1637x892fe98(View v) {
             if (this.importer != null) {
                 MemberRequestsDelegate.this.isNeedRestoreList = true;
                 super.dismiss();
                 MemberRequestsDelegate.this.fragment.dismissCurrentDialog();
-                Bundle bundle = new Bundle();
-                bundle.putLong("user_id", this.importer.user_id);
-                MemberRequestsDelegate.this.fragment.presentFragment(new ChatActivity(bundle));
+                Bundle args = new Bundle();
+                args.putLong("user_id", this.importer.user_id);
+                MemberRequestsDelegate.this.fragment.presentFragment(new ChatActivity(args));
             }
         }
 
-        /* access modifiers changed from: private */
-        public /* synthetic */ void lambda$new$2(View view) {
-            TLRPC$TL_chatInviteImporter tLRPC$TL_chatInviteImporter = this.importer;
-            if (tLRPC$TL_chatInviteImporter != null) {
-                MemberRequestsDelegate.this.onDismissClicked(tLRPC$TL_chatInviteImporter);
+        /* renamed from: lambda$new$2$org-telegram-ui-Delegates-MemberRequestsDelegate$PreviewDialog  reason: not valid java name */
+        public /* synthetic */ void m1638x86var_(View v) {
+            TLRPC.TL_chatInviteImporter tL_chatInviteImporter = this.importer;
+            if (tL_chatInviteImporter != null) {
+                MemberRequestsDelegate.this.onDismissClicked(tL_chatInviteImporter);
             }
             MemberRequestsDelegate.this.hidePreview();
         }
 
         /* access modifiers changed from: protected */
-        public void onCreate(Bundle bundle) {
-            super.onCreate(bundle);
+        public void onCreate(Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
             getWindow().setWindowAnimations(NUM);
             setContentView(this.contentView, new ViewGroup.LayoutParams(-1, -1));
-            WindowManager.LayoutParams attributes = getWindow().getAttributes();
-            attributes.width = -1;
-            attributes.height = -1;
-            attributes.dimAmount = 0.0f;
-            int i = attributes.flags & -3;
-            attributes.flags = i;
-            attributes.gravity = 51;
-            int i2 = Build.VERSION.SDK_INT;
-            if (i2 >= 21) {
-                attributes.flags = i | -NUM;
+            WindowManager.LayoutParams params = getWindow().getAttributes();
+            params.width = -1;
+            params.height = -1;
+            params.dimAmount = 0.0f;
+            params.flags &= -3;
+            params.gravity = 51;
+            if (Build.VERSION.SDK_INT >= 21) {
+                params.flags |= -NUM;
             }
-            if (i2 >= 28) {
-                attributes.layoutInDisplayCutoutMode = 1;
+            if (Build.VERSION.SDK_INT >= 28) {
+                params.layoutInDisplayCutoutMode = 1;
             }
-            getWindow().setAttributes(attributes);
+            getWindow().setAttributes(params);
         }
 
-        public void setImporter(TLRPC$TL_chatInviteImporter tLRPC$TL_chatInviteImporter, BackupImageView backupImageView) {
-            this.importer = tLRPC$TL_chatInviteImporter;
-            this.imageView = backupImageView;
-            this.viewPager.setParentAvatarImage(backupImageView);
-            this.viewPager.setData(tLRPC$TL_chatInviteImporter.user_id, true);
-            this.nameText.setText(UserObject.getUserName((TLRPC$User) MemberRequestsDelegate.this.users.get(tLRPC$TL_chatInviteImporter.user_id)));
-            this.bioText.setText(tLRPC$TL_chatInviteImporter.about);
-            this.bioText.setVisibility(TextUtils.isEmpty(tLRPC$TL_chatInviteImporter.about) ? 8 : 0);
+        public void setImporter(TLRPC.TL_chatInviteImporter importer2, BackupImageView imageView2) {
+            this.importer = importer2;
+            this.imageView = imageView2;
+            this.viewPager.setParentAvatarImage(imageView2);
+            this.viewPager.setData(importer2.user_id, true);
+            this.nameText.setText(UserObject.getUserName((TLRPC.User) MemberRequestsDelegate.this.users.get(importer2.user_id)));
+            this.bioText.setText(importer2.about);
+            this.bioText.setVisibility(TextUtils.isEmpty(importer2.about) ? 8 : 0);
             this.contentView.requestLayout();
         }
 
@@ -988,8 +987,8 @@ public class MemberRequestsDelegate implements MemberRequestCell.OnClickListener
             AndroidUtilities.runOnUIThread(new MemberRequestsDelegate$PreviewDialog$$ExternalSyntheticLambda4(this), 80);
         }
 
-        /* access modifiers changed from: private */
-        public /* synthetic */ void lambda$show$3() {
+        /* renamed from: lambda$show$3$org-telegram-ui-Delegates-MemberRequestsDelegate$PreviewDialog  reason: not valid java name */
+        public /* synthetic */ void m1640x8f2a92bf() {
             updateBackgroundBitmap();
             runAnimation(true);
         }
@@ -998,20 +997,20 @@ public class MemberRequestsDelegate implements MemberRequestCell.OnClickListener
             runAnimation(false);
         }
 
-        private void runAnimation(final boolean z) {
+        private void runAnimation(boolean show) {
+            final boolean z = show;
             ValueAnimator valueAnimator = this.animator;
             if (valueAnimator != null) {
                 valueAnimator.cancel();
             }
-            int[] iArr = new int[2];
-            this.imageView.getLocationOnScreen(iArr);
+            int[] location = new int[2];
+            this.imageView.getLocationOnScreen(location);
             float f = 1.0f;
-            final float width = (((float) this.imageView.getWidth()) * 1.0f) / ((float) getContentWidth());
-            float width2 = (((float) this.imageView.getWidth()) / 2.0f) / width;
-            float f2 = 1.0f - width;
-            float left = (float) (iArr[0] - (this.viewPager.getLeft() + ((int) ((((float) getContentWidth()) * f2) / 2.0f))));
-            float top = (float) (iArr[1] - (this.viewPager.getTop() + ((int) ((((float) getContentHeight()) * f2) / 2.0f))));
-            int i = (-this.popupLayout.getTop()) / 2;
+            final float fromScale = (((float) this.imageView.getWidth()) * 1.0f) / ((float) getContentWidth());
+            float fromRadius = (((float) this.imageView.getWidth()) / 2.0f) / fromScale;
+            float xFrom = (float) (location[0] - (this.viewPager.getLeft() + ((int) ((((float) getContentWidth()) * (1.0f - fromScale)) / 2.0f))));
+            float yFrom = (float) (location[1] - (this.viewPager.getTop() + ((int) ((((float) getContentHeight()) * (1.0f - fromScale)) / 2.0f))));
+            int popupLayoutTranslation = (-this.popupLayout.getTop()) / 2;
             float[] fArr = new float[2];
             fArr[0] = z ? 0.0f : 1.0f;
             if (!z) {
@@ -1020,19 +1019,22 @@ public class MemberRequestsDelegate implements MemberRequestCell.OnClickListener
             fArr[1] = f;
             ValueAnimator ofFloat = ValueAnimator.ofFloat(fArr);
             this.animator = ofFloat;
-            ofFloat.addUpdateListener(new MemberRequestsDelegate$PreviewDialog$$ExternalSyntheticLambda0(this, width, left, top, width2, i));
+            int[] iArr = location;
+            MemberRequestsDelegate$PreviewDialog$$ExternalSyntheticLambda0 memberRequestsDelegate$PreviewDialog$$ExternalSyntheticLambda0 = r0;
+            MemberRequestsDelegate$PreviewDialog$$ExternalSyntheticLambda0 memberRequestsDelegate$PreviewDialog$$ExternalSyntheticLambda02 = new MemberRequestsDelegate$PreviewDialog$$ExternalSyntheticLambda0(this, fromScale, xFrom, yFrom, fromRadius, popupLayoutTranslation);
+            ofFloat.addUpdateListener(memberRequestsDelegate$PreviewDialog$$ExternalSyntheticLambda0);
             this.animator.addListener(new AnimatorListenerAdapter() {
-                public void onAnimationStart(Animator animator) {
-                    super.onAnimationStart(animator);
+                public void onAnimationStart(Animator animation) {
+                    super.onAnimationStart(animation);
                     PreviewDialog.this.contentView.setVisibility(0);
                     if (z) {
-                        PreviewDialog.this.contentView.setScaleX(width);
-                        PreviewDialog.this.contentView.setScaleY(width);
+                        PreviewDialog.this.contentView.setScaleX(fromScale);
+                        PreviewDialog.this.contentView.setScaleY(fromScale);
                     }
                 }
 
-                public void onAnimationEnd(Animator animator) {
-                    super.onAnimationEnd(animator);
+                public void onAnimationEnd(Animator animation) {
+                    super.onAnimationEnd(animation);
                     if (!z) {
                         PreviewDialog.super.dismiss();
                     }
@@ -1043,64 +1045,66 @@ public class MemberRequestsDelegate implements MemberRequestCell.OnClickListener
             this.animator.start();
         }
 
-        /* access modifiers changed from: private */
-        public /* synthetic */ void lambda$runAnimation$4(float f, float f2, float f3, float f4, int i, ValueAnimator valueAnimator) {
-            float floatValue = ((Float) valueAnimator.getAnimatedValue()).floatValue();
+        /* renamed from: lambda$runAnimation$4$org-telegram-ui-Delegates-MemberRequestsDelegate$PreviewDialog  reason: not valid java name */
+        public /* synthetic */ void m1639x49c0d8e2(float fromScale, float xFrom, float yFrom, float fromRadius, int popupLayoutTranslation, ValueAnimator animation) {
+            float floatValue = ((Float) animation.getAnimatedValue()).floatValue();
             this.animationProgress = floatValue;
-            float f5 = f + ((1.0f - f) * floatValue);
-            this.contentView.setScaleX(f5);
-            this.contentView.setScaleY(f5);
-            this.contentView.setTranslationX(f2 * (1.0f - this.animationProgress));
-            this.contentView.setTranslationY(f3 * (1.0f - this.animationProgress));
-            int i2 = (int) (f4 * (1.0f - this.animationProgress));
-            this.viewPager.setRoundRadius(i2, i2);
-            float clamp = MathUtils.clamp((this.animationProgress * 2.0f) - 1.0f, 0.0f, 1.0f);
-            this.pagerShadowDrawable.setAlpha((int) (clamp * 255.0f));
-            this.nameText.setAlpha(clamp);
-            this.bioText.setAlpha(clamp);
-            this.popupLayout.setTranslationY(((float) i) * (1.0f - this.animationProgress));
-            this.popupLayout.setAlpha(clamp);
+            float scale = ((1.0f - fromScale) * floatValue) + fromScale;
+            this.contentView.setScaleX(scale);
+            this.contentView.setScaleY(scale);
+            this.contentView.setTranslationX((1.0f - this.animationProgress) * xFrom);
+            this.contentView.setTranslationY((1.0f - this.animationProgress) * yFrom);
+            int roundRadius = (int) ((1.0f - this.animationProgress) * fromRadius);
+            this.viewPager.setRoundRadius(roundRadius, roundRadius);
+            float alpha = MathUtils.clamp((this.animationProgress * 2.0f) - 1.0f, 0.0f, 1.0f);
+            this.pagerShadowDrawable.setAlpha((int) (alpha * 255.0f));
+            this.nameText.setAlpha(alpha);
+            this.bioText.setAlpha(alpha);
+            this.popupLayout.setTranslationY(((float) popupLayoutTranslation) * (1.0f - this.animationProgress));
+            this.popupLayout.setAlpha(alpha);
             BitmapDrawable bitmapDrawable = this.backgroundDrawable;
             if (bitmapDrawable != null) {
                 bitmapDrawable.setAlpha((int) (this.animationProgress * 255.0f));
             }
-            this.pagerIndicator.setAlpha(clamp);
+            this.pagerIndicator.setAlpha(alpha);
         }
 
         private Bitmap getBlurredBitmap() {
-            int measuredWidth = (int) (((float) this.contentView.getMeasuredWidth()) / 6.0f);
-            int measuredHeight = (int) (((float) this.contentView.getMeasuredHeight()) / 6.0f);
-            Bitmap createBitmap = Bitmap.createBitmap(measuredWidth, measuredHeight, Bitmap.Config.ARGB_8888);
-            Canvas canvas = new Canvas(createBitmap);
-            canvas.scale(0.16666667f, 0.16666667f);
+            int width = (int) (((float) this.contentView.getMeasuredWidth()) / 6.0f);
+            int height = (int) (((float) this.contentView.getMeasuredHeight()) / 6.0f);
+            Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+            Canvas canvas = new Canvas(bitmap);
+            canvas.scale(1.0f / 6.0f, 1.0f / 6.0f);
             canvas.save();
             ((LaunchActivity) MemberRequestsDelegate.this.fragment.getParentActivity()).getActionBarLayout().draw(canvas);
             canvas.drawColor(ColorUtils.setAlphaComponent(-16777216, 76));
-            Dialog visibleDialog = MemberRequestsDelegate.this.fragment.getVisibleDialog();
-            if (visibleDialog != null) {
-                visibleDialog.getWindow().getDecorView().draw(canvas);
+            Dialog dialog = MemberRequestsDelegate.this.fragment.getVisibleDialog();
+            if (dialog != null) {
+                dialog.getWindow().getDecorView().draw(canvas);
             }
-            Utilities.stackBlurBitmap(createBitmap, Math.max(7, Math.max(measuredWidth, measuredHeight) / 180));
-            return createBitmap;
+            Utilities.stackBlurBitmap(bitmap, Math.max(7, Math.max(width, height) / 180));
+            return bitmap;
         }
 
         /* access modifiers changed from: private */
         public void updateBackgroundBitmap() {
-            BitmapDrawable bitmapDrawable = this.backgroundDrawable;
-            int alpha = (bitmapDrawable == null || Build.VERSION.SDK_INT < 19) ? 255 : bitmapDrawable.getAlpha();
-            BitmapDrawable bitmapDrawable2 = new BitmapDrawable(getContext().getResources(), getBlurredBitmap());
-            this.backgroundDrawable = bitmapDrawable2;
-            bitmapDrawable2.setAlpha(alpha);
+            int oldAlpha = 255;
+            if (this.backgroundDrawable != null && Build.VERSION.SDK_INT >= 19) {
+                oldAlpha = this.backgroundDrawable.getAlpha();
+            }
+            BitmapDrawable bitmapDrawable = new BitmapDrawable(getContext().getResources(), getBlurredBitmap());
+            this.backgroundDrawable = bitmapDrawable;
+            bitmapDrawable.setAlpha(oldAlpha);
             getWindow().setBackgroundDrawable(this.backgroundDrawable);
         }
 
         /* access modifiers changed from: private */
         public int getContentHeight() {
-            int measuredHeight = this.viewPager.getMeasuredHeight() + AndroidUtilities.dp(12.0f) + this.nameText.getMeasuredHeight();
+            int height = this.viewPager.getMeasuredHeight() + AndroidUtilities.dp(12.0f) + this.nameText.getMeasuredHeight();
             if (this.bioText.getVisibility() != 8) {
-                measuredHeight += AndroidUtilities.dp(4.0f) + this.bioText.getMeasuredHeight();
+                height += AndroidUtilities.dp(4.0f) + this.bioText.getMeasuredHeight();
             }
-            return measuredHeight + AndroidUtilities.dp(12.0f) + this.popupLayout.getMeasuredHeight();
+            return height + AndroidUtilities.dp(12.0f) + this.popupLayout.getMeasuredHeight();
         }
 
         private int getContentWidth() {

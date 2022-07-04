@@ -13,6 +13,6 @@ public final /* synthetic */ class PasscodeActivity$4$$ExternalSyntheticLambda0 
     }
 
     public final void run() {
-        this.f$0.lambda$onItemClick$0(this.f$1);
+        this.f$0.m4020lambda$onItemClick$0$orgtelegramuiPasscodeActivity$4(this.f$1);
     }
 }

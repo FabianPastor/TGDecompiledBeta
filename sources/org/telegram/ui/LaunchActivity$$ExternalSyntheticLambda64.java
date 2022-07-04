@@ -13,6 +13,6 @@ public final /* synthetic */ class LaunchActivity$$ExternalSyntheticLambda64 imp
     }
 
     public final void onResult(boolean z) {
-        this.f$0.lambda$handleIntent$10(this.f$1, z);
+        this.f$0.m3642lambda$handleIntent$10$orgtelegramuiLaunchActivity(this.f$1, z);
     }
 }

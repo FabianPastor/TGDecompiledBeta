@@ -15,14 +15,14 @@ public class SimpleFloatPropertyCompat<T> extends FloatPropertyCompat<T> {
         void set(T t, float f);
     }
 
-    public SimpleFloatPropertyCompat(String str, Getter<T> getter2, Setter<T> setter2) {
-        super(str);
+    public SimpleFloatPropertyCompat(String name, Getter<T> getter2, Setter<T> setter2) {
+        super(name);
         this.getter = getter2;
         this.setter = setter2;
     }
 
-    public SimpleFloatPropertyCompat<T> setMultiplier(float f) {
-        this.multiplier = f;
+    public SimpleFloatPropertyCompat<T> setMultiplier(float multiplier2) {
+        this.multiplier = multiplier2;
         return this;
     }
 
@@ -30,11 +30,11 @@ public class SimpleFloatPropertyCompat<T> extends FloatPropertyCompat<T> {
         return this.multiplier;
     }
 
-    public float getValue(T t) {
-        return this.getter.get(t) * this.multiplier;
+    public float getValue(T object) {
+        return this.getter.get(object) * this.multiplier;
     }
 
-    public void setValue(T t, float f) {
-        this.setter.set(t, f / this.multiplier);
+    public void setValue(T object, float value) {
+        this.setter.set(object, value / this.multiplier);
     }
 }

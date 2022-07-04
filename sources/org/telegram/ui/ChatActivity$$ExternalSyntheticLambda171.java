@@ -1,15 +1,15 @@
 package org.telegram.ui;
 
-public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda171 implements Runnable {
-    public final /* synthetic */ ChatActivity f$0;
-    public final /* synthetic */ Runnable f$1;
+import org.telegram.ui.Delegates.ChatActivityMemberRequestsDelegate;
 
-    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda171(ChatActivity chatActivity, Runnable runnable) {
+public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda171 implements ChatActivityMemberRequestsDelegate.Callback {
+    public final /* synthetic */ ChatActivity f$0;
+
+    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda171(ChatActivity chatActivity) {
         this.f$0 = chatActivity;
-        this.f$1 = runnable;
     }
 
-    public final void run() {
-        this.f$0.lambda$openDiscussionMessageChat$227(this.f$1);
+    public final void onEnterOffsetChanged() {
+        this.f$0.invalidateChatListViewTopPadding();
     }
 }

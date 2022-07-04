@@ -11,6 +11,6 @@ public final /* synthetic */ class ShareAlert$11$$ExternalSyntheticLambda0 imple
     }
 
     public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-        this.f$0.lambda$onDraw$0(valueAnimator);
+        this.f$0.m1363lambda$onDraw$0$orgtelegramuiComponentsShareAlert$11(valueAnimator);
     }
 }

@@ -19,6 +19,6 @@ public final /* synthetic */ class GroupCallFullscreenAdapter$GroupCallUserCell$
     }
 
     public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-        this.f$0.lambda$updateState$0(this.f$1, this.f$2, this.f$3, this.f$4, valueAnimator);
+        this.f$0.m1004x4c7d1511(this.f$1, this.f$2, this.f$3, this.f$4, valueAnimator);
     }
 }

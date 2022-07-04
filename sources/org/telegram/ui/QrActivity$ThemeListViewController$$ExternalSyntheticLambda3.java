@@ -12,6 +12,6 @@ public final /* synthetic */ class QrActivity$ThemeListViewController$$ExternalS
     }
 
     public final void run() {
-        this.f$0.lambda$setupLightDarkTheme$3(this.f$1);
+        this.f$0.m4569x6d48bd22(this.f$1);
     }
 }

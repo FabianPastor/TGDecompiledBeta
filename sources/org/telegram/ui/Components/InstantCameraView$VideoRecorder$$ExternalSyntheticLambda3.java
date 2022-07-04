@@ -10,6 +10,6 @@ public final /* synthetic */ class InstantCameraView$VideoRecorder$$ExternalSynt
     }
 
     public final void run() {
-        this.f$0.lambda$handleVideoFrameAvailable$0();
+        this.f$0.m1045x434a2d80();
     }
 }

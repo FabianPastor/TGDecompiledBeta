@@ -1,15 +1,19 @@
 package org.telegram.ui;
 
-import androidx.core.util.Consumer;
+import org.telegram.ui.ActionBar.AlertDialog;
 
-public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda112 implements Consumer {
+public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda112 implements Runnable {
     public final /* synthetic */ ChatActivity f$0;
+    public final /* synthetic */ AlertDialog[] f$1;
+    public final /* synthetic */ int f$2;
 
-    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda112(ChatActivity chatActivity) {
+    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda112(ChatActivity chatActivity, AlertDialog[] alertDialogArr, int i) {
         this.f$0 = chatActivity;
+        this.f$1 = alertDialogArr;
+        this.f$2 = i;
     }
 
-    public final void accept(Object obj) {
-        this.f$0.lambda$createView$49((Integer) obj);
+    public final void run() {
+        this.f$0.m3110lambda$showRequestUrlAlert$233$orgtelegramuiChatActivity(this.f$1, this.f$2);
     }
 }

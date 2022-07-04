@@ -1,15 +1,16 @@
 package org.telegram.ui;
 
+import android.content.DialogInterface;
 import org.telegram.ui.LoginActivity;
 
-public final /* synthetic */ class LoginActivity$LoginActivitySmsView$$ExternalSyntheticLambda11 implements Runnable {
+public final /* synthetic */ class LoginActivity$LoginActivitySmsView$$ExternalSyntheticLambda11 implements DialogInterface.OnClickListener {
     public final /* synthetic */ LoginActivity.LoginActivitySmsView f$0;
 
     public /* synthetic */ LoginActivity$LoginActivitySmsView$$ExternalSyntheticLambda11(LoginActivity.LoginActivitySmsView loginActivitySmsView) {
         this.f$0 = loginActivitySmsView;
     }
 
-    public final void run() {
-        this.f$0.lambda$tryHideProgress$14();
+    public final void onClick(DialogInterface dialogInterface, int i) {
+        this.f$0.m3854lambda$new$6$orgtelegramuiLoginActivity$LoginActivitySmsView(dialogInterface, i);
     }
 }

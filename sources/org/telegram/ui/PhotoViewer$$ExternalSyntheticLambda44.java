@@ -1,15 +1,19 @@
 package org.telegram.ui;
 
-import android.view.MotionEvent;
-import android.view.View;
+import android.animation.ValueAnimator;
 
-public final /* synthetic */ class PhotoViewer$$ExternalSyntheticLambda44 implements View.OnTouchListener {
-    public static final /* synthetic */ PhotoViewer$$ExternalSyntheticLambda44 INSTANCE = new PhotoViewer$$ExternalSyntheticLambda44();
+public final /* synthetic */ class PhotoViewer$$ExternalSyntheticLambda44 implements ValueAnimator.AnimatorUpdateListener {
+    public final /* synthetic */ PhotoViewer f$0;
+    public final /* synthetic */ int f$1;
+    public final /* synthetic */ int f$2;
 
-    private /* synthetic */ PhotoViewer$$ExternalSyntheticLambda44() {
+    public /* synthetic */ PhotoViewer$$ExternalSyntheticLambda44(PhotoViewer photoViewer, int i, int i2) {
+        this.f$0 = photoViewer;
+        this.f$1 = i;
+        this.f$2 = i2;
     }
 
-    public final boolean onTouch(View view, MotionEvent motionEvent) {
-        return PhotoViewer.lambda$setParentActivity$25(view, motionEvent);
+    public final void onAnimationUpdate(ValueAnimator valueAnimator) {
+        this.f$0.m4231lambda$animateNavBarColorTo$42$orgtelegramuiPhotoViewer(this.f$1, this.f$2, valueAnimator);
     }
 }

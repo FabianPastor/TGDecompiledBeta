@@ -11,19 +11,19 @@ public class DispatchQueuePoolMainThreadSync {
     private Runnable cleanupRunnable = new Runnable() {
         public void run() {
             if (!DispatchQueuePoolMainThreadSync.this.queues.isEmpty()) {
-                long elapsedRealtime = SystemClock.elapsedRealtime();
-                int size = DispatchQueuePoolMainThreadSync.this.queues.size();
-                int i = 0;
-                while (i < size) {
-                    DispatchQueueMainThreadSync dispatchQueueMainThreadSync = (DispatchQueueMainThreadSync) DispatchQueuePoolMainThreadSync.this.queues.get(i);
-                    if (dispatchQueueMainThreadSync.getLastTaskTime() < elapsedRealtime - 30000) {
-                        dispatchQueueMainThreadSync.recycle();
-                        DispatchQueuePoolMainThreadSync.this.queues.remove(i);
+                long currentTime = SystemClock.elapsedRealtime();
+                int a = 0;
+                int N = DispatchQueuePoolMainThreadSync.this.queues.size();
+                while (a < N) {
+                    DispatchQueueMainThreadSync queue = (DispatchQueueMainThreadSync) DispatchQueuePoolMainThreadSync.this.queues.get(a);
+                    if (queue.getLastTaskTime() < currentTime - 30000) {
+                        queue.recycle();
+                        DispatchQueuePoolMainThreadSync.this.queues.remove(a);
                         DispatchQueuePoolMainThreadSync.access$110(DispatchQueuePoolMainThreadSync.this);
-                        i--;
-                        size--;
+                        a--;
+                        N--;
                     }
-                    i++;
+                    a++;
                 }
             }
             if (!DispatchQueuePoolMainThreadSync.this.queues.isEmpty() || !DispatchQueuePoolMainThreadSync.this.busyQueues.isEmpty()) {
@@ -43,54 +43,54 @@ public class DispatchQueuePoolMainThreadSync {
     public LinkedList<DispatchQueueMainThreadSync> queues = new LinkedList<>();
     private int totalTasksCount;
 
-    static /* synthetic */ int access$110(DispatchQueuePoolMainThreadSync dispatchQueuePoolMainThreadSync) {
-        int i = dispatchQueuePoolMainThreadSync.createdCount;
-        dispatchQueuePoolMainThreadSync.createdCount = i - 1;
+    static /* synthetic */ int access$110(DispatchQueuePoolMainThreadSync x0) {
+        int i = x0.createdCount;
+        x0.createdCount = i - 1;
         return i;
     }
 
-    public DispatchQueuePoolMainThreadSync(int i) {
-        this.maxCount = i;
+    public DispatchQueuePoolMainThreadSync(int count) {
+        this.maxCount = count;
         this.guid = Utilities.random.nextInt();
     }
 
     public void execute(Runnable runnable) {
-        DispatchQueueMainThreadSync dispatchQueueMainThreadSync;
+        DispatchQueueMainThreadSync queue;
         if (!this.busyQueues.isEmpty() && (this.totalTasksCount / 2 <= this.busyQueues.size() || (this.queues.isEmpty() && this.createdCount >= this.maxCount))) {
-            dispatchQueueMainThreadSync = this.busyQueues.remove(0);
+            queue = this.busyQueues.remove(0);
         } else if (this.queues.isEmpty()) {
-            dispatchQueueMainThreadSync = new DispatchQueueMainThreadSync("DispatchQueuePool" + this.guid + "_" + Utilities.random.nextInt());
-            dispatchQueueMainThreadSync.setPriority(10);
+            queue = new DispatchQueueMainThreadSync("DispatchQueuePool" + this.guid + "_" + Utilities.random.nextInt());
+            queue.setPriority(10);
             this.createdCount = this.createdCount + 1;
         } else {
-            dispatchQueueMainThreadSync = this.queues.remove(0);
+            queue = this.queues.remove(0);
         }
         if (!this.cleanupScheduled) {
             AndroidUtilities.runOnUIThread(this.cleanupRunnable, 30000);
             this.cleanupScheduled = true;
         }
         this.totalTasksCount++;
-        this.busyQueues.add(dispatchQueueMainThreadSync);
-        this.busyQueuesMap.put(dispatchQueueMainThreadSync.index, this.busyQueuesMap.get(dispatchQueueMainThreadSync.index, 0) + 1);
-        dispatchQueueMainThreadSync.postRunnable(new DispatchQueuePoolMainThreadSync$$ExternalSyntheticLambda0(this, runnable, dispatchQueueMainThreadSync));
+        this.busyQueues.add(queue);
+        this.busyQueuesMap.put(queue.index, this.busyQueuesMap.get(queue.index, 0) + 1);
+        queue.postRunnable(new DispatchQueuePoolMainThreadSync$$ExternalSyntheticLambda0(this, runnable, queue));
     }
 
-    /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$execute$1(Runnable runnable, DispatchQueueMainThreadSync dispatchQueueMainThreadSync) {
+    /* renamed from: lambda$execute$1$org-telegram-messenger-DispatchQueuePoolMainThreadSync  reason: not valid java name */
+    public /* synthetic */ void m1801xa66884f3(Runnable runnable, DispatchQueueMainThreadSync queue) {
         runnable.run();
-        AndroidUtilities.runOnUIThread(new DispatchQueuePoolMainThreadSync$$ExternalSyntheticLambda1(this, dispatchQueueMainThreadSync));
+        AndroidUtilities.runOnUIThread(new DispatchQueuePoolMainThreadSync$$ExternalSyntheticLambda1(this, queue));
     }
 
-    /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$execute$0(DispatchQueueMainThreadSync dispatchQueueMainThreadSync) {
+    /* renamed from: lambda$execute$0$org-telegram-messenger-DispatchQueuePoolMainThreadSync  reason: not valid java name */
+    public /* synthetic */ void m1800xa5323214(DispatchQueueMainThreadSync queue) {
         this.totalTasksCount--;
-        int i = this.busyQueuesMap.get(dispatchQueueMainThreadSync.index) - 1;
-        if (i == 0) {
-            this.busyQueuesMap.delete(dispatchQueueMainThreadSync.index);
-            this.busyQueues.remove(dispatchQueueMainThreadSync);
-            this.queues.add(dispatchQueueMainThreadSync);
+        int remainingTasksCount = this.busyQueuesMap.get(queue.index) - 1;
+        if (remainingTasksCount == 0) {
+            this.busyQueuesMap.delete(queue.index);
+            this.busyQueues.remove(queue);
+            this.queues.add(queue);
             return;
         }
-        this.busyQueuesMap.put(dispatchQueueMainThreadSync.index, i);
+        this.busyQueuesMap.put(queue.index, remainingTasksCount);
     }
 }

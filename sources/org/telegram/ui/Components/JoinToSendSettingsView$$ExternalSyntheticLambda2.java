@@ -10,6 +10,6 @@ public final /* synthetic */ class JoinToSendSettingsView$$ExternalSyntheticLamb
     }
 
     public final void onClick(View view) {
-        this.f$0.lambda$new$5(view);
+        this.f$0.m1093lambda$new$5$orgtelegramuiComponentsJoinToSendSettingsView(view);
     }
 }

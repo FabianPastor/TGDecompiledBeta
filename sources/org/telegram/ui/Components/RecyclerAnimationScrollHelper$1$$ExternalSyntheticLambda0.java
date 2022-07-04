@@ -20,6 +20,6 @@ public final /* synthetic */ class RecyclerAnimationScrollHelper$1$$ExternalSynt
     }
 
     public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-        this.f$0.lambda$onLayoutChange$0(this.f$1, this.f$2, this.f$3, this.f$4, valueAnimator);
+        this.f$0.m1304xb4285cce(this.f$1, this.f$2, this.f$3, this.f$4, valueAnimator);
     }
 }

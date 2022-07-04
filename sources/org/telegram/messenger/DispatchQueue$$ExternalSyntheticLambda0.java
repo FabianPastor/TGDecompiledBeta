@@ -11,6 +11,6 @@ public final /* synthetic */ class DispatchQueue$$ExternalSyntheticLambda0 imple
     }
 
     public final boolean handleMessage(Message message) {
-        return this.f$0.lambda$run$0(message);
+        return this.f$0.m56lambda$run$0$orgtelegrammessengerDispatchQueue(message);
     }
 }

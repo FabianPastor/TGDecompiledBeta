@@ -14,6 +14,6 @@ public final /* synthetic */ class GLIconTextureView$1$$ExternalSyntheticLambda0
     }
 
     public final void run() {
-        this.f$0.lambda$onSingleTapUp$0(this.f$1, this.f$2);
+        this.f$0.m1236x35462var_(this.f$1, this.f$2);
     }
 }

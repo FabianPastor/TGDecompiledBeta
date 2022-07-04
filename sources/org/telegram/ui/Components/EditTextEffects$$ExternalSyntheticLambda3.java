@@ -8,6 +8,6 @@ public final /* synthetic */ class EditTextEffects$$ExternalSyntheticLambda3 imp
     }
 
     public final void run() {
-        this.f$0.lambda$onSpoilerClicked$3();
+        this.f$0.m914x12b589de();
     }
 }

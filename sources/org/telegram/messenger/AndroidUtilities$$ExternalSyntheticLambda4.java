@@ -1,15 +1,12 @@
 package org.telegram.messenger;
 
-import android.view.View;
+public final /* synthetic */ class AndroidUtilities$$ExternalSyntheticLambda4 implements GenericProvider {
+    public static final /* synthetic */ AndroidUtilities$$ExternalSyntheticLambda4 INSTANCE = new AndroidUtilities$$ExternalSyntheticLambda4();
 
-public final /* synthetic */ class AndroidUtilities$$ExternalSyntheticLambda4 implements View.OnClickListener {
-    public final /* synthetic */ Runnable f$0;
-
-    public /* synthetic */ AndroidUtilities$$ExternalSyntheticLambda4(Runnable runnable) {
-        this.f$0 = runnable;
+    private /* synthetic */ AndroidUtilities$$ExternalSyntheticLambda4() {
     }
 
-    public final void onClick(View view) {
-        this.f$0.run();
+    public final Object provide(Object obj) {
+        return AndroidUtilities.lambda$formatSpannableSimple$7((Integer) obj);
     }
 }

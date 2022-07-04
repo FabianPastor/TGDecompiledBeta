@@ -1,6 +1,5 @@
 package org.telegram.messenger;
 
-import android.annotation.TargetApi;
 import android.app.AppOpsManager;
 import android.content.Intent;
 import android.os.Process;
@@ -35,28 +34,26 @@ public class XiaomiUtilities {
         return !TextUtils.isEmpty(AndroidUtilities.getSystemProperty("ro.miui.ui.version.name"));
     }
 
-    @TargetApi(19)
-    public static boolean isCustomPermissionGranted(int i) {
+    public static boolean isCustomPermissionGranted(int permission) {
         try {
-            Class cls = Integer.TYPE;
-            if (((Integer) AppOpsManager.class.getMethod("checkOpNoThrow", new Class[]{cls, cls, String.class}).invoke((AppOpsManager) ApplicationLoader.applicationContext.getSystemService("appops"), new Object[]{Integer.valueOf(i), Integer.valueOf(Process.myUid()), ApplicationLoader.applicationContext.getPackageName()})).intValue() == 0) {
+            if (((Integer) AppOpsManager.class.getMethod("checkOpNoThrow", new Class[]{Integer.TYPE, Integer.TYPE, String.class}).invoke((AppOpsManager) ApplicationLoader.applicationContext.getSystemService("appops"), new Object[]{Integer.valueOf(permission), Integer.valueOf(Process.myUid()), ApplicationLoader.applicationContext.getPackageName()})).intValue() == 0) {
                 return true;
             }
             return false;
-        } catch (Exception e) {
-            FileLog.e((Throwable) e);
+        } catch (Exception x) {
+            FileLog.e((Throwable) x);
             return true;
         }
     }
 
     public static int getMIUIMajorVersion() {
-        String systemProperty = AndroidUtilities.getSystemProperty("ro.miui.ui.version.name");
-        if (systemProperty == null) {
+        String prop = AndroidUtilities.getSystemProperty("ro.miui.ui.version.name");
+        if (prop == null) {
             return -1;
         }
         try {
-            return Integer.parseInt(systemProperty.replace("V", ""));
-        } catch (NumberFormatException unused) {
+            return Integer.parseInt(prop.replace("V", ""));
+        } catch (NumberFormatException e) {
             return -1;
         }
     }

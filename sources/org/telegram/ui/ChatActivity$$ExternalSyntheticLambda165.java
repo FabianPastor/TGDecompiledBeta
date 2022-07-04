@@ -1,19 +1,16 @@
 package org.telegram.ui;
 
-public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda165 implements Runnable {
-    public final /* synthetic */ ChatActivity f$0;
-    public final /* synthetic */ int f$1;
-    public final /* synthetic */ int f$2;
-    public final /* synthetic */ boolean f$3;
+import android.view.View;
+import org.telegram.ui.Components.RecyclerListView;
 
-    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda165(ChatActivity chatActivity, int i, int i2, boolean z) {
+public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda165 implements RecyclerListView.OnItemClickListener {
+    public final /* synthetic */ ChatActivity f$0;
+
+    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda165(ChatActivity chatActivity) {
         this.f$0 = chatActivity;
-        this.f$1 = i;
-        this.f$2 = i2;
-        this.f$3 = z;
     }
 
-    public final void run() {
-        this.f$0.lambda$deleteHistory$3(this.f$1, this.f$2, this.f$3);
+    public final void onItemClick(View view, int i) {
+        this.f$0.m3015lambda$initStickers$90$orgtelegramuiChatActivity(view, i);
     }
 }

@@ -10,6 +10,7 @@ import org.telegram.ui.GroupCallActivity;
 import org.telegram.ui.GroupCallTabletGridAdapter;
 
 public class GroupCallGridCell extends FrameLayout {
+    public static final int CELL_HEIGHT = 165;
     public boolean attached;
     public GroupCallTabletGridAdapter gridAdapter;
     private final boolean isTabletGrid;
@@ -18,39 +19,44 @@ public class GroupCallGridCell extends FrameLayout {
     GroupCallMiniTextureView renderer;
     public int spanCount;
 
-    public GroupCallGridCell(Context context, boolean z) {
+    public GroupCallGridCell(Context context, boolean isTabletGrid2) {
         super(context);
-        this.isTabletGrid = z;
+        this.isTabletGrid = isTabletGrid2;
     }
 
     /* access modifiers changed from: protected */
-    public void onMeasure(int i, int i2) {
-        int i3;
+    public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        float parentWidth;
+        float h;
         if (this.isTabletGrid) {
-            ((View) getParent()).getMeasuredWidth();
-            super.onMeasure(i, View.MeasureSpec.makeMeasureSpec(this.gridAdapter.getItemHeight(this.position), NUM));
+            float measuredWidth = (((float) ((View) getParent()).getMeasuredWidth()) / 6.0f) * ((float) this.spanCount);
+            super.onMeasure(widthMeasureSpec, View.MeasureSpec.makeMeasureSpec(this.gridAdapter.getItemHeight(this.position), NUM));
             return;
         }
-        float f = GroupCallActivity.isLandscapeMode ? 3.0f : 2.0f;
+        float spanCount2 = GroupCallActivity.isLandscapeMode ? 3.0f : 2.0f;
         if (getParent() != null) {
-            i3 = ((View) getParent()).getMeasuredWidth();
+            parentWidth = (float) ((View) getParent()).getMeasuredWidth();
         } else {
-            i3 = View.MeasureSpec.getSize(i);
+            parentWidth = (float) View.MeasureSpec.getSize(widthMeasureSpec);
         }
-        float f2 = (float) i3;
-        super.onMeasure(i, View.MeasureSpec.makeMeasureSpec((int) ((GroupCallActivity.isTabletMode ? f2 / 2.0f : f2 / f) + ((float) AndroidUtilities.dp(4.0f))), NUM));
+        if (GroupCallActivity.isTabletMode) {
+            h = parentWidth / 2.0f;
+        } else {
+            h = parentWidth / spanCount2;
+        }
+        super.onMeasure(widthMeasureSpec, View.MeasureSpec.makeMeasureSpec((int) (((float) AndroidUtilities.dp(4.0f)) + h), NUM));
     }
 
-    public void setData(AccountInstance accountInstance, ChatObject.VideoParticipant videoParticipant, ChatObject.Call call, long j) {
-        this.participant = videoParticipant;
+    public void setData(AccountInstance accountInstance, ChatObject.VideoParticipant participant2, ChatObject.Call call, long selfPeerId) {
+        this.participant = participant2;
     }
 
     public ChatObject.VideoParticipant getParticipant() {
         return this.participant;
     }
 
-    public void setRenderer(GroupCallMiniTextureView groupCallMiniTextureView) {
-        this.renderer = groupCallMiniTextureView;
+    public void setRenderer(GroupCallMiniTextureView renderer2) {
+        this.renderer = renderer2;
     }
 
     public GroupCallMiniTextureView getRenderer() {
@@ -70,13 +76,10 @@ public class GroupCallGridCell extends FrameLayout {
     }
 
     public float getItemHeight() {
-        int measuredHeight;
         GroupCallTabletGridAdapter groupCallTabletGridAdapter = this.gridAdapter;
         if (groupCallTabletGridAdapter != null) {
-            measuredHeight = groupCallTabletGridAdapter.getItemHeight(this.position);
-        } else {
-            measuredHeight = getMeasuredHeight();
+            return (float) groupCallTabletGridAdapter.getItemHeight(this.position);
         }
-        return (float) measuredHeight;
+        return (float) getMeasuredHeight();
     }
 }

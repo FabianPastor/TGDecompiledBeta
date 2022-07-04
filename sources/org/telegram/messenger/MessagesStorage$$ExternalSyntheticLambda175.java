@@ -1,17 +1,25 @@
 package org.telegram.messenger;
 
-import org.telegram.tgnet.TLRPC$TL_updates;
+import org.telegram.tgnet.TLRPC;
 
 public final /* synthetic */ class MessagesStorage$$ExternalSyntheticLambda175 implements Runnable {
     public final /* synthetic */ MessagesStorage f$0;
-    public final /* synthetic */ TLRPC$TL_updates f$1;
+    public final /* synthetic */ long f$1;
+    public final /* synthetic */ int f$2;
+    public final /* synthetic */ TLRPC.InputChannel f$3;
+    public final /* synthetic */ int f$4;
+    public final /* synthetic */ long f$5;
 
-    public /* synthetic */ MessagesStorage$$ExternalSyntheticLambda175(MessagesStorage messagesStorage, TLRPC$TL_updates tLRPC$TL_updates) {
+    public /* synthetic */ MessagesStorage$$ExternalSyntheticLambda175(MessagesStorage messagesStorage, long j, int i, TLRPC.InputChannel inputChannel, int i2, long j2) {
         this.f$0 = messagesStorage;
-        this.f$1 = tLRPC$TL_updates;
+        this.f$1 = j;
+        this.f$2 = i;
+        this.f$3 = inputChannel;
+        this.f$4 = i2;
+        this.f$5 = j2;
     }
 
     public final void run() {
-        this.f$0.lambda$updateMessageStateAndIdInternal$162(this.f$1);
+        this.f$0.m2205xd2b302ee(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5);
     }
 }

@@ -1,16 +1,21 @@
 package org.telegram.messenger;
 
-import org.telegram.tgnet.TLRPC$TL_theme;
-import org.telegram.ui.ActionBar.Theme;
+import org.telegram.tgnet.RequestDelegate;
+import org.telegram.tgnet.TLObject;
+import org.telegram.tgnet.TLRPC;
 
-public final /* synthetic */ class FileRefController$$ExternalSyntheticLambda9 implements Runnable {
-    public final /* synthetic */ TLRPC$TL_theme f$0;
+public final /* synthetic */ class FileRefController$$ExternalSyntheticLambda9 implements RequestDelegate {
+    public final /* synthetic */ FileRefController f$0;
+    public final /* synthetic */ String f$1;
+    public final /* synthetic */ String f$2;
 
-    public /* synthetic */ FileRefController$$ExternalSyntheticLambda9(TLRPC$TL_theme tLRPC$TL_theme) {
-        this.f$0 = tLRPC$TL_theme;
+    public /* synthetic */ FileRefController$$ExternalSyntheticLambda9(FileRefController fileRefController, String str, String str2) {
+        this.f$0 = fileRefController;
+        this.f$1 = str;
+        this.f$2 = str2;
     }
 
-    public final void run() {
-        Theme.setThemeFileReference(this.f$0);
+    public final void run(TLObject tLObject, TLRPC.TL_error tL_error) {
+        this.f$0.m1849x689a13b7(this.f$1, this.f$2, tLObject, tL_error);
     }
 }

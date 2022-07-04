@@ -10,6 +10,6 @@ public final /* synthetic */ class LoginActivity$LoginActivityRecoverView$$Exter
     }
 
     public final void run() {
-        this.f$0.lambda$onPasscodeError$6();
+        this.f$0.m3818x6db0269();
     }
 }

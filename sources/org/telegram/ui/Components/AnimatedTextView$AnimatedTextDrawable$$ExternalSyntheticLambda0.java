@@ -11,6 +11,6 @@ public final /* synthetic */ class AnimatedTextView$AnimatedTextDrawable$$Extern
     }
 
     public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-        this.f$0.lambda$setText$3(valueAnimator);
+        this.f$0.m537x9edb82df(valueAnimator);
     }
 }

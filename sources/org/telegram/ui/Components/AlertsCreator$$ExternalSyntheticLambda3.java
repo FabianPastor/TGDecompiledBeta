@@ -1,17 +1,20 @@
 package org.telegram.ui.Components;
 
-import android.content.DialogInterface;
+import java.util.Calendar;
+import org.telegram.ui.Components.NumberPicker;
 
-public final /* synthetic */ class AlertsCreator$$ExternalSyntheticLambda3 implements DialogInterface.OnClickListener {
+public final /* synthetic */ class AlertsCreator$$ExternalSyntheticLambda3 implements NumberPicker.Formatter {
     public final /* synthetic */ long f$0;
-    public final /* synthetic */ Runnable f$1;
+    public final /* synthetic */ Calendar f$1;
+    public final /* synthetic */ int f$2;
 
-    public /* synthetic */ AlertsCreator$$ExternalSyntheticLambda3(long j, Runnable runnable) {
+    public /* synthetic */ AlertsCreator$$ExternalSyntheticLambda3(long j, Calendar calendar, int i) {
         this.f$0 = j;
-        this.f$1 = runnable;
+        this.f$1 = calendar;
+        this.f$2 = i;
     }
 
-    public final void onClick(DialogInterface dialogInterface, int i) {
-        AlertsCreator.lambda$createColorSelectDialog$91(this.f$0, this.f$1, dialogInterface, i);
+    public final String format(int i) {
+        return AlertsCreator.lambda$createDatePickerDialog$57(this.f$0, this.f$1, this.f$2, i);
     }
 }

@@ -12,6 +12,6 @@ public final /* synthetic */ class PieChartView$$ExternalSyntheticLambda0 implem
     }
 
     public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-        this.f$0.lambda$updateCharValues$0(this.f$1, valueAnimator);
+        this.f$0.m2906lambda$updateCharValues$0$orgtelegramuiChartsPieChartView(this.f$1, valueAnimator);
     }
 }

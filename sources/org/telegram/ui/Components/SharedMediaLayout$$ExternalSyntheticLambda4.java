@@ -1,15 +1,21 @@
 package org.telegram.ui.Components;
 
-import android.view.MotionEvent;
-import android.view.View;
+import org.telegram.ui.ActionBar.ThemeDescription;
 
-public final /* synthetic */ class SharedMediaLayout$$ExternalSyntheticLambda4 implements View.OnTouchListener {
-    public static final /* synthetic */ SharedMediaLayout$$ExternalSyntheticLambda4 INSTANCE = new SharedMediaLayout$$ExternalSyntheticLambda4();
+public final /* synthetic */ class SharedMediaLayout$$ExternalSyntheticLambda4 implements ThemeDescription.ThemeDescriptionDelegate {
+    public final /* synthetic */ SharedMediaLayout f$0;
+    public final /* synthetic */ int f$1;
 
-    private /* synthetic */ SharedMediaLayout$$ExternalSyntheticLambda4() {
+    public /* synthetic */ SharedMediaLayout$$ExternalSyntheticLambda4(SharedMediaLayout sharedMediaLayout, int i) {
+        this.f$0 = sharedMediaLayout;
+        this.f$1 = i;
     }
 
-    public final boolean onTouch(View view, MotionEvent motionEvent) {
-        return SharedMediaLayout.lambda$new$8(view, motionEvent);
+    public final void didSetColor() {
+        this.f$0.m1376xf9b297a9(this.f$1);
+    }
+
+    public /* synthetic */ void onAnimationProgress(float f) {
+        ThemeDescription.ThemeDescriptionDelegate.CC.$default$onAnimationProgress(this, f);
     }
 }

@@ -12,15 +12,14 @@ public class MediaSource {
         ENDED,
         MUTED;
 
-        @CalledByNative("State")
-        static State fromNativeIndex(int i) {
-            return values()[i];
+        static State fromNativeIndex(int nativeIndex) {
+            return values()[nativeIndex];
         }
     }
 
-    public MediaSource(long j) {
-        this.refCountDelegate = new RefCountDelegate(new MediaSource$$ExternalSyntheticLambda0(j));
-        this.nativeSource = j;
+    public MediaSource(long nativeSource2) {
+        this.refCountDelegate = new RefCountDelegate(new MediaSource$$ExternalSyntheticLambda0(nativeSource2));
+        this.nativeSource = nativeSource2;
     }
 
     public State state() {

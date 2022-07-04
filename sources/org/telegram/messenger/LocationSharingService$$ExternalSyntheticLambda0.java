@@ -8,6 +8,6 @@ public final /* synthetic */ class LocationSharingService$$ExternalSyntheticLamb
     }
 
     public final void run() {
-        this.f$0.lambda$didReceivedNotification$2();
+        this.f$0.m1945x7be92e23();
     }
 }

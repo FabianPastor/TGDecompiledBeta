@@ -1,19 +1,16 @@
 package org.telegram.ui;
 
-import org.telegram.ui.ActionBar.ThemeDescription;
+import java.util.ArrayList;
+import org.telegram.ui.FilteredSearchView;
 
-public final /* synthetic */ class DialogsActivity$$ExternalSyntheticLambda53 implements ThemeDescription.ThemeDescriptionDelegate {
+public final /* synthetic */ class DialogsActivity$$ExternalSyntheticLambda53 implements FilteredSearchView.Delegate {
     public final /* synthetic */ DialogsActivity f$0;
 
     public /* synthetic */ DialogsActivity$$ExternalSyntheticLambda53(DialogsActivity dialogsActivity) {
         this.f$0 = dialogsActivity;
     }
 
-    public final void didSetColor() {
-        this.f$0.lambda$getThemeDescriptions$58();
-    }
-
-    public /* synthetic */ void onAnimationProgress(float f) {
-        ThemeDescription.ThemeDescriptionDelegate.CC.$default$onAnimationProgress(this, f);
+    public final void updateFiltersView(boolean z, ArrayList arrayList, ArrayList arrayList2, boolean z2) {
+        this.f$0.m3381lambda$createView$7$orgtelegramuiDialogsActivity(z, arrayList, arrayList2, z2);
     }
 }

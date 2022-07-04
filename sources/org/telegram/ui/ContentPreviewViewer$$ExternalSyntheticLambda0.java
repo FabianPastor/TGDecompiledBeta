@@ -11,6 +11,6 @@ public final /* synthetic */ class ContentPreviewViewer$$ExternalSyntheticLambda
     }
 
     public final WindowInsets onApplyWindowInsets(View view, WindowInsets windowInsets) {
-        return this.f$0.lambda$setParentActivity$4(view, windowInsets);
+        return this.f$0.m3344lambda$setParentActivity$4$orgtelegramuiContentPreviewViewer(view, windowInsets);
     }
 }

@@ -3,26 +3,25 @@ package org.telegram.ui;
 import android.os.Bundle;
 import org.telegram.tgnet.RequestDelegate;
 import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC$TL_error;
+import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.ActionBar.AlertDialog;
-import org.telegram.ui.ActionBar.BaseFragment;
 
 public final /* synthetic */ class LaunchActivity$$ExternalSyntheticLambda84 implements RequestDelegate {
     public final /* synthetic */ LaunchActivity f$0;
     public final /* synthetic */ AlertDialog f$1;
-    public final /* synthetic */ BaseFragment f$2;
-    public final /* synthetic */ int f$3;
-    public final /* synthetic */ Bundle f$4;
+    public final /* synthetic */ String f$2;
+    public final /* synthetic */ Bundle f$3;
+    public final /* synthetic */ TLRPC.TL_account_sendConfirmPhoneCode f$4;
 
-    public /* synthetic */ LaunchActivity$$ExternalSyntheticLambda84(LaunchActivity launchActivity, AlertDialog alertDialog, BaseFragment baseFragment, int i, Bundle bundle) {
+    public /* synthetic */ LaunchActivity$$ExternalSyntheticLambda84(LaunchActivity launchActivity, AlertDialog alertDialog, String str, Bundle bundle, TLRPC.TL_account_sendConfirmPhoneCode tL_account_sendConfirmPhoneCode) {
         this.f$0 = launchActivity;
         this.f$1 = alertDialog;
-        this.f$2 = baseFragment;
-        this.f$3 = i;
-        this.f$4 = bundle;
+        this.f$2 = str;
+        this.f$3 = bundle;
+        this.f$4 = tL_account_sendConfirmPhoneCode;
     }
 
-    public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        this.f$0.lambda$runLinkRequest$68(this.f$1, this.f$2, this.f$3, this.f$4, tLObject, tLRPC$TL_error);
+    public final void run(TLObject tLObject, TLRPC.TL_error tL_error) {
+        this.f$0.m3644lambda$handleIntent$12$orgtelegramuiLaunchActivity(this.f$1, this.f$2, this.f$3, this.f$4, tLObject, tL_error);
     }
 }

@@ -4,12 +4,14 @@ import android.view.View;
 
 public final /* synthetic */ class PaymentFormActivity$$ExternalSyntheticLambda13 implements View.OnClickListener {
     public final /* synthetic */ PaymentFormActivity f$0;
+    public final /* synthetic */ String f$1;
 
-    public /* synthetic */ PaymentFormActivity$$ExternalSyntheticLambda13(PaymentFormActivity paymentFormActivity) {
+    public /* synthetic */ PaymentFormActivity$$ExternalSyntheticLambda13(PaymentFormActivity paymentFormActivity, String str) {
         this.f$0 = paymentFormActivity;
+        this.f$1 = str;
     }
 
     public final void onClick(View view) {
-        this.f$0.lambda$createView$9(view);
+        this.f$0.m4155lambda$createView$24$orgtelegramuiPaymentFormActivity(this.f$1, view);
     }
 }

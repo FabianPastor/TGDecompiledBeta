@@ -2,7 +2,7 @@ package org.telegram.ui.Components;
 
 import org.telegram.tgnet.RequestDelegate;
 import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC$TL_error;
+import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.Components.SharedMediaLayout;
 
 public final /* synthetic */ class SharedMediaLayout$MediaSearchAdapter$$ExternalSyntheticLambda4 implements RequestDelegate {
@@ -18,7 +18,7 @@ public final /* synthetic */ class SharedMediaLayout$MediaSearchAdapter$$Externa
         this.f$3 = str;
     }
 
-    public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        this.f$0.lambda$queryServerSearch$1(this.f$1, this.f$2, this.f$3, tLObject, tLRPC$TL_error);
+    public final void run(TLObject tLObject, TLRPC.TL_error tL_error) {
+        this.f$0.m1401xCLASSNAMEd879e(this.f$1, this.f$2, this.f$3, tLObject, tL_error);
     }
 }

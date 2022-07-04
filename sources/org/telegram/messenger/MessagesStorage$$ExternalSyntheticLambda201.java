@@ -1,15 +1,13 @@
 package org.telegram.messenger;
 
-import java.util.Comparator;
-import org.telegram.ui.Adapters.DialogsSearchAdapter;
+public final /* synthetic */ class MessagesStorage$$ExternalSyntheticLambda201 implements Runnable {
+    public final /* synthetic */ MessagesStorage f$0;
 
-public final /* synthetic */ class MessagesStorage$$ExternalSyntheticLambda201 implements Comparator {
-    public static final /* synthetic */ MessagesStorage$$ExternalSyntheticLambda201 INSTANCE = new MessagesStorage$$ExternalSyntheticLambda201();
-
-    private /* synthetic */ MessagesStorage$$ExternalSyntheticLambda201() {
+    public /* synthetic */ MessagesStorage$$ExternalSyntheticLambda201(MessagesStorage messagesStorage) {
+        this.f$0 = messagesStorage;
     }
 
-    public final int compare(Object obj, Object obj2) {
-        return MessagesStorage.lambda$localSearch$198((DialogsSearchAdapter.DialogSearchResult) obj, (DialogsSearchAdapter.DialogSearchResult) obj2);
+    public final void run() {
+        this.f$0.m2151lambda$deleteDialog$61$orgtelegrammessengerMessagesStorage();
     }
 }

@@ -1,23 +1,21 @@
 package org.telegram.ui;
 
-public final /* synthetic */ class ProfileActivity$$ExternalSyntheticLambda28 implements Runnable {
-    public final /* synthetic */ ProfileActivity f$0;
-    public final /* synthetic */ boolean[] f$1;
-    public final /* synthetic */ String f$2;
-    public final /* synthetic */ int f$3;
-    public final /* synthetic */ String[] f$4;
-    public final /* synthetic */ String f$5;
+import org.telegram.tgnet.RequestDelegate;
+import org.telegram.tgnet.TLObject;
+import org.telegram.tgnet.TLRPC;
 
-    public /* synthetic */ ProfileActivity$$ExternalSyntheticLambda28(ProfileActivity profileActivity, boolean[] zArr, String str, int i, String[] strArr, String str2) {
+public final /* synthetic */ class ProfileActivity$$ExternalSyntheticLambda28 implements RequestDelegate {
+    public final /* synthetic */ ProfileActivity f$0;
+    public final /* synthetic */ TLRPC.TL_channels_getParticipants f$1;
+    public final /* synthetic */ int f$2;
+
+    public /* synthetic */ ProfileActivity$$ExternalSyntheticLambda28(ProfileActivity profileActivity, TLRPC.TL_channels_getParticipants tL_channels_getParticipants, int i) {
         this.f$0 = profileActivity;
-        this.f$1 = zArr;
-        this.f$2 = str;
-        this.f$3 = i;
-        this.f$4 = strArr;
-        this.f$5 = str2;
+        this.f$1 = tL_channels_getParticipants;
+        this.f$2 = i;
     }
 
-    public final void run() {
-        this.f$0.lambda$processOnClickOrPress$22(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5);
+    public final void run(TLObject tLObject, TLRPC.TL_error tL_error) {
+        this.f$0.m4408lambda$getChannelParticipants$27$orgtelegramuiProfileActivity(this.f$1, this.f$2, tLObject, tL_error);
     }
 }

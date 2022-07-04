@@ -18,12 +18,12 @@ public class BlurredRecyclerView extends RecyclerListView {
     }
 
     /* access modifiers changed from: protected */
-    public void onMeasure(int i, int i2) {
+    public void onMeasure(int widthSpec, int heightSpec) {
         this.globalIgnoreLayout = true;
         updateTopPadding();
         super.setPadding(getPaddingLeft(), this.topPadding + this.blurTopPadding, getPaddingRight(), getPaddingBottom());
         this.globalIgnoreLayout = false;
-        super.onMeasure(i, i2);
+        super.onMeasure(widthSpec, heightSpec);
     }
 
     /* access modifiers changed from: protected */
@@ -61,15 +61,15 @@ public class BlurredRecyclerView extends RecyclerListView {
         super.dispatchDraw(canvas);
     }
 
-    public boolean drawChild(Canvas canvas, View view, long j) {
-        if (view.getY() + ((float) view.getMeasuredHeight()) < ((float) this.blurTopPadding)) {
+    public boolean drawChild(Canvas canvas, View child, long drawingTime) {
+        if (child.getY() + ((float) child.getMeasuredHeight()) < ((float) this.blurTopPadding)) {
             return true;
         }
-        return super.drawChild(canvas, view, j);
+        return super.drawChild(canvas, child, drawingTime);
     }
 
-    public void setPadding(int i, int i2, int i3, int i4) {
-        this.topPadding = i2;
-        super.setPadding(i, i2 + this.blurTopPadding, i3, i4);
+    public void setPadding(int left, int top, int right, int bottom) {
+        this.topPadding = top;
+        super.setPadding(left, this.blurTopPadding + top, right, bottom);
     }
 }

@@ -20,6 +20,6 @@ public final /* synthetic */ class ImageLoader$ThumbGenerateTask$$ExternalSynthe
     }
 
     public final void run() {
-        this.f$0.lambda$run$1(this.f$1, this.f$2, this.f$3, this.f$4);
+        this.f$0.m1914x4b36var_(this.f$1, this.f$2, this.f$3, this.f$4);
     }
 }

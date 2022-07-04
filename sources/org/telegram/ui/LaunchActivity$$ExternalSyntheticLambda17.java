@@ -1,19 +1,13 @@
 package org.telegram.ui;
 
-import android.view.View;
-import org.telegram.messenger.LocaleController;
-import org.telegram.ui.Cells.LanguageCell;
+public final /* synthetic */ class LaunchActivity$$ExternalSyntheticLambda17 implements Runnable {
+    public final /* synthetic */ int f$0;
 
-public final /* synthetic */ class LaunchActivity$$ExternalSyntheticLambda17 implements View.OnClickListener {
-    public final /* synthetic */ LocaleController.LocaleInfo[] f$0;
-    public final /* synthetic */ LanguageCell[] f$1;
-
-    public /* synthetic */ LaunchActivity$$ExternalSyntheticLambda17(LocaleController.LocaleInfo[] localeInfoArr, LanguageCell[] languageCellArr) {
-        this.f$0 = localeInfoArr;
-        this.f$1 = languageCellArr;
+    public /* synthetic */ LaunchActivity$$ExternalSyntheticLambda17(int i) {
+        this.f$0 = i;
     }
 
-    public final void onClick(View view) {
-        LaunchActivity.lambda$showLanguageAlertInternal$96(this.f$0, this.f$1, view);
+    public final void run() {
+        LaunchActivity.lambda$onPause$79(this.f$0);
     }
 }

@@ -1,15 +1,21 @@
 package org.telegram.ui;
 
-import android.view.View;
+import java.util.ArrayList;
 
-public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda80 implements View.OnClickListener {
+public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda80 implements Runnable {
     public final /* synthetic */ ChatActivity f$0;
+    public final /* synthetic */ ArrayList f$1;
+    public final /* synthetic */ ArrayList f$2;
+    public final /* synthetic */ int f$3;
 
-    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda80(ChatActivity chatActivity) {
+    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda80(ChatActivity chatActivity, ArrayList arrayList, ArrayList arrayList2, int i) {
         this.f$0 = chatActivity;
+        this.f$1 = arrayList;
+        this.f$2 = arrayList2;
+        this.f$3 = i;
     }
 
-    public final void onClick(View view) {
-        this.f$0.lambda$createView$33(view);
+    public final void run() {
+        this.f$0.m3115lambda$unpinMessage$187$orgtelegramuiChatActivity(this.f$1, this.f$2, this.f$3);
     }
 }

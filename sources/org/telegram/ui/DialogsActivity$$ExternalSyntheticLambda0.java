@@ -10,6 +10,6 @@ public final /* synthetic */ class DialogsActivity$$ExternalSyntheticLambda0 imp
     }
 
     public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-        this.f$0.lambda$getCustomSlideTransition$59(valueAnimator);
+        this.f$0.m3370lambda$animateContactsAlpha$51$orgtelegramuiDialogsActivity(valueAnimator);
     }
 }

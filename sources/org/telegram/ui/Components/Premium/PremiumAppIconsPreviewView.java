@@ -3,7 +3,6 @@ package org.telegram.ui.Components.Premium;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
-import android.graphics.RectF;
 import android.view.View;
 import android.widget.FrameLayout;
 import java.util.ArrayList;
@@ -26,9 +25,9 @@ public class PremiumAppIconsPreviewView extends FrameLayout implements PagerHead
 
     public PremiumAppIconsPreviewView(Context context) {
         super(context);
-        for (LauncherIconController.LauncherIcon launcherIcon : LauncherIconController.LauncherIcon.values()) {
-            if (launcherIcon.premium) {
-                this.icons.add(launcherIcon);
+        for (LauncherIconController.LauncherIcon icon : LauncherIconController.LauncherIcon.values()) {
+            if (icon.premium) {
+                this.icons.add(icon);
             }
             if (this.icons.size() == 3) {
                 break;
@@ -45,68 +44,66 @@ public class PremiumAppIconsPreviewView extends FrameLayout implements PagerHead
         setClipChildren(false);
     }
 
-    private AdaptiveIconImageView newIconView(Context context, int i) {
-        LauncherIconController.LauncherIcon launcherIcon = this.icons.get(i);
-        AdaptiveIconImageView adaptiveIconImageView = new AdaptiveIconImageView(this, context, i);
-        adaptiveIconImageView.setLayoutParams(LayoutHelper.createFrame(-2, -2.0f, 17, 0.0f, 52.0f, 0.0f, 0.0f));
-        adaptiveIconImageView.setForeground(launcherIcon.foreground);
-        adaptiveIconImageView.setBackgroundResource(launcherIcon.background);
-        adaptiveIconImageView.setPadding(AndroidUtilities.dp(8.0f));
-        adaptiveIconImageView.setBackgroundOuterPadding(AndroidUtilities.dp(32.0f));
-        addView(adaptiveIconImageView);
-        return adaptiveIconImageView;
+    private AdaptiveIconImageView newIconView(Context ctx, int i) {
+        LauncherIconController.LauncherIcon icon = this.icons.get(i);
+        AdaptiveIconImageView iconImageView = new AdaptiveIconImageView(ctx, i);
+        iconImageView.setLayoutParams(LayoutHelper.createFrame(-2, -2.0f, 17, 0.0f, 52.0f, 0.0f, 0.0f));
+        iconImageView.setForeground(icon.foreground);
+        iconImageView.setBackgroundResource(icon.background);
+        iconImageView.setPadding(AndroidUtilities.dp(8.0f));
+        iconImageView.setBackgroundOuterPadding(AndroidUtilities.dp(32.0f));
+        addView(iconImageView);
+        return iconImageView;
     }
 
     /* access modifiers changed from: protected */
-    public void onMeasure(int i, int i2) {
-        super.onMeasure(i, i2);
+    public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
         if (!this.isEmpty) {
-            int min = Math.min(View.MeasureSpec.getSize(i), View.MeasureSpec.getSize(i2));
-            int dp = AndroidUtilities.dp(76.0f);
-            FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) this.topIcon.getLayoutParams();
-            layoutParams.height = dp;
-            layoutParams.width = dp;
-            float f = (float) dp;
-            layoutParams.bottomMargin = (int) ((((float) min) * 0.1f) + f);
-            FrameLayout.LayoutParams layoutParams2 = (FrameLayout.LayoutParams) this.bottomLeftIcon.getLayoutParams();
-            layoutParams2.height = dp;
-            layoutParams2.width = dp;
-            int i3 = (int) (f * 0.95f);
-            layoutParams2.rightMargin = i3;
-            FrameLayout.LayoutParams layoutParams3 = (FrameLayout.LayoutParams) this.bottomRightIcon.getLayoutParams();
-            layoutParams3.height = dp;
-            layoutParams3.width = dp;
-            layoutParams3.leftMargin = i3;
+            int minSide = Math.min(View.MeasureSpec.getSize(widthMeasureSpec), View.MeasureSpec.getSize(heightMeasureSpec));
+            int size = AndroidUtilities.dp(76.0f);
+            FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) this.topIcon.getLayoutParams();
+            params.height = size;
+            params.width = size;
+            params.bottomMargin = (int) (((float) size) + (((float) minSide) * 0.1f));
+            FrameLayout.LayoutParams params2 = (FrameLayout.LayoutParams) this.bottomLeftIcon.getLayoutParams();
+            params2.height = size;
+            params2.width = size;
+            params2.rightMargin = (int) (((float) size) * 0.95f);
+            FrameLayout.LayoutParams params3 = (FrameLayout.LayoutParams) this.bottomRightIcon.getLayoutParams();
+            params3.height = size;
+            params3.width = size;
+            params3.leftMargin = (int) (((float) size) * 0.95f);
         }
     }
 
-    public void setOffset(float f) {
+    public void setOffset(float translationX) {
         if (!this.isEmpty) {
-            float measuredWidth = f / ((float) getMeasuredWidth());
-            float interpolation = CubicBezierInterpolator.EASE_IN.getInterpolation(measuredWidth);
-            this.bottomRightIcon.setTranslationX((((float) (getRight() - this.bottomRightIcon.getRight())) + (((float) this.bottomRightIcon.getWidth()) * 1.5f) + ((float) AndroidUtilities.dp(32.0f))) * interpolation);
-            this.bottomRightIcon.setTranslationY(((float) AndroidUtilities.dp(16.0f)) * interpolation);
-            float f2 = 1.0f;
-            float clamp = Utilities.clamp(AndroidUtilities.lerp(1.0f, 1.5f, interpolation), 1.0f, 0.0f);
-            this.bottomRightIcon.setScaleX(clamp);
-            this.bottomRightIcon.setScaleY(clamp);
-            this.topIcon.setTranslationY(((((float) (getTop() - this.topIcon.getTop())) - (((float) this.topIcon.getHeight()) * 1.8f)) - ((float) AndroidUtilities.dp(32.0f))) * measuredWidth);
-            this.topIcon.setTranslationX(((float) AndroidUtilities.dp(16.0f)) * measuredWidth);
-            float clamp2 = Utilities.clamp(AndroidUtilities.lerp(1.0f, 1.8f, measuredWidth), 1.0f, 0.0f);
-            this.topIcon.setScaleX(clamp2);
-            this.topIcon.setScaleY(clamp2);
-            float interpolation2 = CubicBezierInterpolator.EASE_OUT.getInterpolation(measuredWidth);
-            this.bottomLeftIcon.setTranslationX(((((float) (getLeft() - this.bottomLeftIcon.getLeft())) - (((float) this.bottomLeftIcon.getWidth()) * 2.5f)) + ((float) AndroidUtilities.dp(32.0f))) * interpolation2);
-            this.bottomLeftIcon.setTranslationY(interpolation2 * (((float) (getBottom() - this.bottomLeftIcon.getBottom())) + (((float) this.bottomLeftIcon.getHeight()) * 2.5f) + ((float) AndroidUtilities.dp(32.0f))));
-            float clamp3 = Utilities.clamp(AndroidUtilities.lerp(1.0f, 2.5f, measuredWidth), 1.0f, 0.0f);
-            this.bottomLeftIcon.setScaleX(clamp3);
-            this.bottomLeftIcon.setScaleY(clamp3);
-            if (measuredWidth < 0.4f) {
-                f2 = measuredWidth / 0.4f;
+            float progress = translationX / ((float) getMeasuredWidth());
+            float rightProgress = CubicBezierInterpolator.EASE_IN.getInterpolation(progress);
+            this.bottomRightIcon.setTranslationX((((float) (getRight() - this.bottomRightIcon.getRight())) + (((float) this.bottomRightIcon.getWidth()) * 1.5f) + ((float) AndroidUtilities.dp(32.0f))) * rightProgress);
+            this.bottomRightIcon.setTranslationY(((float) AndroidUtilities.dp(16.0f)) * rightProgress);
+            float p = 1.0f;
+            float scale = Utilities.clamp(AndroidUtilities.lerp(1.0f, 1.5f, rightProgress), 1.0f, 0.0f);
+            this.bottomRightIcon.setScaleX(scale);
+            this.bottomRightIcon.setScaleY(scale);
+            this.topIcon.setTranslationY(((((float) (getTop() - this.topIcon.getTop())) - (((float) this.topIcon.getHeight()) * 1.8f)) - ((float) AndroidUtilities.dp(32.0f))) * progress);
+            this.topIcon.setTranslationX(((float) AndroidUtilities.dp(16.0f)) * progress);
+            float scale2 = Utilities.clamp(AndroidUtilities.lerp(1.0f, 1.8f, progress), 1.0f, 0.0f);
+            this.topIcon.setScaleX(scale2);
+            this.topIcon.setScaleY(scale2);
+            float leftProgress = CubicBezierInterpolator.EASE_OUT.getInterpolation(progress);
+            this.bottomLeftIcon.setTranslationX(((((float) (getLeft() - this.bottomLeftIcon.getLeft())) - (((float) this.bottomLeftIcon.getWidth()) * 2.5f)) + ((float) AndroidUtilities.dp(32.0f))) * leftProgress);
+            this.bottomLeftIcon.setTranslationY((((float) (getBottom() - this.bottomLeftIcon.getBottom())) + (((float) this.bottomLeftIcon.getHeight()) * 2.5f) + ((float) AndroidUtilities.dp(32.0f))) * leftProgress);
+            float scale3 = Utilities.clamp(AndroidUtilities.lerp(1.0f, 2.5f, progress), 1.0f, 0.0f);
+            this.bottomLeftIcon.setScaleX(scale3);
+            this.bottomLeftIcon.setScaleY(scale3);
+            if (progress < 0.4f) {
+                p = progress / 0.4f;
             }
-            this.bottomRightIcon.particlesScale = f2;
-            this.topIcon.particlesScale = f2;
-            this.bottomLeftIcon.particlesScale = f2;
+            this.bottomRightIcon.particlesScale = p;
+            this.topIcon.particlesScale = p;
+            this.bottomLeftIcon.particlesScale = p;
         }
     }
 
@@ -115,37 +112,34 @@ public class PremiumAppIconsPreviewView extends FrameLayout implements PagerHead
         Paint paint = new Paint(1);
         float particlesScale;
 
-        public AdaptiveIconImageView(PremiumAppIconsPreviewView premiumAppIconsPreviewView, Context context, int i) {
-            super(context);
-            StarParticlesView.Drawable drawable2 = this.drawable;
-            drawable2.size1 = 12;
-            drawable2.size2 = 8;
-            drawable2.size3 = 6;
+        public AdaptiveIconImageView(Context ctx, int i) {
+            super(ctx);
+            this.drawable.size1 = 12;
+            this.drawable.size2 = 8;
+            this.drawable.size3 = 6;
             if (i == 1) {
-                drawable2.type = 1001;
+                this.drawable.type = 1001;
             }
             if (i == 0) {
-                drawable2.type = 1002;
+                this.drawable.type = 1002;
             }
-            drawable2.colorKey = "premiumStartSmallStarsColor2";
-            drawable2.init();
+            this.drawable.colorKey = "premiumStartSmallStarsColor2";
+            this.drawable.init();
             this.paint.setColor(-1);
         }
 
         public void draw(Canvas canvas) {
-            int dp = AndroidUtilities.dp(10.0f);
+            int outBoundOffset = AndroidUtilities.dp(10.0f);
             this.drawable.excludeRect.set((float) AndroidUtilities.dp(5.0f), (float) AndroidUtilities.dp(5.0f), (float) (getMeasuredWidth() - AndroidUtilities.dp(5.0f)), (float) (getMeasuredHeight() - AndroidUtilities.dp(5.0f)));
-            float f = (float) (-dp);
-            this.drawable.rect.set(f, f, (float) (getWidth() + dp), (float) (getHeight() + dp));
+            this.drawable.rect.set((float) (-outBoundOffset), (float) (-outBoundOffset), (float) (getWidth() + outBoundOffset), (float) (getHeight() + outBoundOffset));
             canvas.save();
-            float f2 = this.particlesScale;
-            canvas.scale(1.0f - f2, 1.0f - f2, ((float) getMeasuredWidth()) / 2.0f, ((float) getMeasuredHeight()) / 2.0f);
+            float f = this.particlesScale;
+            canvas.scale(1.0f - f, 1.0f - f, ((float) getMeasuredWidth()) / 2.0f, ((float) getMeasuredHeight()) / 2.0f);
             this.drawable.onDraw(canvas);
             canvas.restore();
             invalidate();
-            RectF rectF = AndroidUtilities.rectTmp;
-            rectF.set(0.0f, 0.0f, (float) getWidth(), (float) getHeight());
-            canvas.drawRoundRect(rectF, (float) AndroidUtilities.dp(18.0f), (float) AndroidUtilities.dp(18.0f), this.paint);
+            AndroidUtilities.rectTmp.set(0.0f, 0.0f, (float) getWidth(), (float) getHeight());
+            canvas.drawRoundRect(AndroidUtilities.rectTmp, (float) AndroidUtilities.dp(18.0f), (float) AndroidUtilities.dp(18.0f), this.paint);
             super.draw(canvas);
         }
     }

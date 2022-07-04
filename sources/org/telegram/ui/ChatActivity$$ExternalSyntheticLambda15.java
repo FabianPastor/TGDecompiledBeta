@@ -1,18 +1,17 @@
 package org.telegram.ui;
 
-import android.animation.ValueAnimator;
-import android.view.View;
+import androidx.core.util.Consumer;
+import java.util.List;
+import org.telegram.ui.Components.ReactedUsersListView;
 
-public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda15 implements ValueAnimator.AnimatorUpdateListener {
-    public final /* synthetic */ ChatActivity f$0;
-    public final /* synthetic */ View f$1;
+public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda15 implements Consumer {
+    public final /* synthetic */ ReactedUsersListView f$0;
 
-    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda15(ChatActivity chatActivity, View view) {
-        this.f$0 = chatActivity;
-        this.f$1 = view;
+    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda15(ReactedUsersListView reactedUsersListView) {
+        this.f$0 = reactedUsersListView;
     }
 
-    public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-        this.f$0.lambda$hideInfoView$85(this.f$1, valueAnimator);
+    public final void accept(Object obj) {
+        this.f$0.setSeenUsers((List) obj);
     }
 }

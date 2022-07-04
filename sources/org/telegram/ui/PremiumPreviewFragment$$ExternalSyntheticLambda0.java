@@ -10,6 +10,6 @@ public final /* synthetic */ class PremiumPreviewFragment$$ExternalSyntheticLamb
     }
 
     public final void onClick(View view) {
-        this.f$0.lambda$createView$1(view);
+        this.f$0.m4355lambda$createView$1$orgtelegramuiPremiumPreviewFragment(view);
     }
 }

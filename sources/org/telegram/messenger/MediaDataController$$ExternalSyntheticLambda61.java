@@ -1,19 +1,23 @@
 package org.telegram.messenger;
 
-import org.telegram.tgnet.TLRPC$TL_messages_stickerSet;
+import org.telegram.tgnet.RequestDelegate;
+import org.telegram.tgnet.TLObject;
+import org.telegram.tgnet.TLRPC;
 
-public final /* synthetic */ class MediaDataController$$ExternalSyntheticLambda61 implements Runnable {
+public final /* synthetic */ class MediaDataController$$ExternalSyntheticLambda61 implements RequestDelegate {
     public final /* synthetic */ MediaDataController f$0;
-    public final /* synthetic */ String f$1;
-    public final /* synthetic */ TLRPC$TL_messages_stickerSet f$2;
+    public final /* synthetic */ long f$1;
+    public final /* synthetic */ long f$2;
+    public final /* synthetic */ TLRPC.TL_channels_getMessages f$3;
 
-    public /* synthetic */ MediaDataController$$ExternalSyntheticLambda61(MediaDataController mediaDataController, String str, TLRPC$TL_messages_stickerSet tLRPC$TL_messages_stickerSet) {
+    public /* synthetic */ MediaDataController$$ExternalSyntheticLambda61(MediaDataController mediaDataController, long j, long j2, TLRPC.TL_channels_getMessages tL_channels_getMessages) {
         this.f$0 = mediaDataController;
-        this.f$1 = str;
-        this.f$2 = tLRPC$TL_messages_stickerSet;
+        this.f$1 = j;
+        this.f$2 = j2;
+        this.f$3 = tL_channels_getMessages;
     }
 
-    public final void run() {
-        this.f$0.lambda$processLoadedDiceStickers$62(this.f$1, this.f$2);
+    public final void run(TLObject tLObject, TLRPC.TL_error tL_error) {
+        this.f$0.m2028x78a52d59(this.f$1, this.f$2, this.f$3, tLObject, tL_error);
     }
 }

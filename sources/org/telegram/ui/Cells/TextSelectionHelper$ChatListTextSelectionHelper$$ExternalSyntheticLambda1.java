@@ -13,6 +13,6 @@ public final /* synthetic */ class TextSelectionHelper$ChatListTextSelectionHelp
     }
 
     public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-        this.f$0.lambda$onTextSelected$0(this.f$1, valueAnimator);
+        this.f$0.m2829x6ff5dada(this.f$1, valueAnimator);
     }
 }

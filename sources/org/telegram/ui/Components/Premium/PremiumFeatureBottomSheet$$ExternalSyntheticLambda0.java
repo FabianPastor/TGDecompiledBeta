@@ -10,6 +10,6 @@ public final /* synthetic */ class PremiumFeatureBottomSheet$$ExternalSyntheticL
     }
 
     public final void onClick(View view) {
-        this.f$0.lambda$new$2(view);
+        this.f$0.m1251xa132acd3(view);
     }
 }

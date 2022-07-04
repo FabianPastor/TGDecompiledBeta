@@ -12,6 +12,6 @@ public final /* synthetic */ class GroupCreateActivity$GroupCreateAdapter$$Exter
     }
 
     public final void run() {
-        this.f$0.lambda$searchDialogs$1(this.f$1);
+        this.f$0.m3578xd8151674(this.f$1);
     }
 }

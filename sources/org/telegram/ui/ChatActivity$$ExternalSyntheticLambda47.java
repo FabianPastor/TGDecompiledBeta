@@ -1,16 +1,13 @@
 package org.telegram.ui;
 
-import android.content.DialogInterface;
-import org.telegram.ui.Cells.ChatMessageCell;
+public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda47 implements Runnable {
+    public final /* synthetic */ ChatActivity f$0;
 
-public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda47 implements DialogInterface.OnDismissListener {
-    public final /* synthetic */ ChatMessageCell f$0;
-
-    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda47(ChatMessageCell chatMessageCell) {
-        this.f$0 = chatMessageCell;
+    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda47(ChatActivity chatActivity) {
+        this.f$0 = chatActivity;
     }
 
-    public final void onDismiss(DialogInterface dialogInterface) {
-        ChatActivity.lambda$didPressMessageUrl$238(this.f$0, dialogInterface);
+    public final void run() {
+        this.f$0.m3059lambda$processSelectedOption$191$orgtelegramuiChatActivity();
     }
 }

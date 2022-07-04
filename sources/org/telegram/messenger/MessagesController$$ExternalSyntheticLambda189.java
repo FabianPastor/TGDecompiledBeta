@@ -1,26 +1,25 @@
 package org.telegram.messenger;
 
-import java.io.File;
-import org.telegram.tgnet.TLRPC$TL_wallPaperSettings;
-import org.telegram.tgnet.TLRPC$WallPaper;
-import org.telegram.ui.ActionBar.Theme;
+import org.telegram.tgnet.RequestDelegate;
+import org.telegram.tgnet.TLObject;
+import org.telegram.tgnet.TLRPC;
 
-public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda189 implements Runnable {
+public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda189 implements RequestDelegate {
     public final /* synthetic */ MessagesController f$0;
-    public final /* synthetic */ TLRPC$WallPaper f$1;
-    public final /* synthetic */ TLRPC$TL_wallPaperSettings f$2;
-    public final /* synthetic */ Theme.OverrideWallpaperInfo f$3;
-    public final /* synthetic */ File f$4;
+    public final /* synthetic */ int f$1;
+    public final /* synthetic */ TLRPC.Chat f$2;
+    public final /* synthetic */ TLRPC.User f$3;
+    public final /* synthetic */ boolean f$4;
 
-    public /* synthetic */ MessagesController$$ExternalSyntheticLambda189(MessagesController messagesController, TLRPC$WallPaper tLRPC$WallPaper, TLRPC$TL_wallPaperSettings tLRPC$TL_wallPaperSettings, Theme.OverrideWallpaperInfo overrideWallpaperInfo, File file) {
+    public /* synthetic */ MessagesController$$ExternalSyntheticLambda189(MessagesController messagesController, int i, TLRPC.Chat chat, TLRPC.User user, boolean z) {
         this.f$0 = messagesController;
-        this.f$1 = tLRPC$WallPaper;
-        this.f$2 = tLRPC$TL_wallPaperSettings;
-        this.f$3 = overrideWallpaperInfo;
-        this.f$4 = file;
+        this.f$1 = i;
+        this.f$2 = chat;
+        this.f$3 = user;
+        this.f$4 = z;
     }
 
-    public final void run() {
-        this.f$0.lambda$didReceivedNotification$26(this.f$1, this.f$2, this.f$3, this.f$4);
+    public final void run(TLObject tLObject, TLRPC.TL_error tL_error) {
+        this.f$0.m313lambda$pinMessage$105$orgtelegrammessengerMessagesController(this.f$1, this.f$2, this.f$3, this.f$4, tLObject, tL_error);
     }
 }

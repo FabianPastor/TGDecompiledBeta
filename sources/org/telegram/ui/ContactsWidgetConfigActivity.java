@@ -9,8 +9,8 @@ public class ContactsWidgetConfigActivity extends ExternalActionActivity {
     private int creatingAppWidgetId = 0;
 
     /* access modifiers changed from: protected */
-    public boolean handleIntent(Intent intent, boolean z, boolean z2, boolean z3, int i, int i2) {
-        if (!checkPasscode(intent, z, z2, z3, i, i2)) {
+    public boolean handleIntent(Intent intent, boolean isNew, boolean restore, boolean fromPassword, int intentAccount, int state) {
+        if (!checkPasscode(intent, isNew, restore, fromPassword, intentAccount, state)) {
             return false;
         }
         Bundle extras = intent.getExtras();
@@ -18,18 +18,18 @@ public class ContactsWidgetConfigActivity extends ExternalActionActivity {
             this.creatingAppWidgetId = extras.getInt("appWidgetId", 0);
         }
         if (this.creatingAppWidgetId != 0) {
-            Bundle bundle = new Bundle();
-            bundle.putBoolean("onlySelect", true);
-            bundle.putInt("dialogsType", 10);
-            bundle.putBoolean("allowSwitchAccount", true);
-            EditWidgetActivity editWidgetActivity = new EditWidgetActivity(1, this.creatingAppWidgetId);
-            editWidgetActivity.setDelegate(new ContactsWidgetConfigActivity$$ExternalSyntheticLambda0(this));
+            Bundle args = new Bundle();
+            args.putBoolean("onlySelect", true);
+            args.putInt("dialogsType", 10);
+            args.putBoolean("allowSwitchAccount", true);
+            EditWidgetActivity fragment = new EditWidgetActivity(1, this.creatingAppWidgetId);
+            fragment.setDelegate(new ContactsWidgetConfigActivity$$ExternalSyntheticLambda0(this));
             if (AndroidUtilities.isTablet()) {
                 if (this.layersActionBarLayout.fragmentsStack.isEmpty()) {
-                    this.layersActionBarLayout.addFragmentToStack(editWidgetActivity);
+                    this.layersActionBarLayout.addFragmentToStack(fragment);
                 }
             } else if (this.actionBarLayout.fragmentsStack.isEmpty()) {
-                this.actionBarLayout.addFragmentToStack(editWidgetActivity);
+                this.actionBarLayout.addFragmentToStack(fragment);
             }
             if (!AndroidUtilities.isTablet()) {
                 this.backgroundTablet.setVisibility(8);
@@ -45,11 +45,11 @@ public class ContactsWidgetConfigActivity extends ExternalActionActivity {
         return true;
     }
 
-    /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$handleIntent$0(ArrayList arrayList) {
-        Intent intent = new Intent();
-        intent.putExtra("appWidgetId", this.creatingAppWidgetId);
-        setResult(-1, intent);
+    /* renamed from: lambda$handleIntent$0$org-telegram-ui-ContactsWidgetConfigActivity  reason: not valid java name */
+    public /* synthetic */ void m3341x77d48fd5(ArrayList dialogs) {
+        Intent resultValue = new Intent();
+        resultValue.putExtra("appWidgetId", this.creatingAppWidgetId);
+        setResult(-1, resultValue);
         finish();
     }
 }

@@ -1,17 +1,15 @@
 package org.telegram.ui;
 
-import org.telegram.ui.Cells.TextCheckCell;
+import android.content.DialogInterface;
 
-public final /* synthetic */ class PrivacySettingsActivity$$ExternalSyntheticLambda10 implements Runnable {
+public final /* synthetic */ class PrivacySettingsActivity$$ExternalSyntheticLambda10 implements DialogInterface.OnClickListener {
     public final /* synthetic */ PrivacySettingsActivity f$0;
-    public final /* synthetic */ TextCheckCell f$1;
 
-    public /* synthetic */ PrivacySettingsActivity$$ExternalSyntheticLambda10(PrivacySettingsActivity privacySettingsActivity, TextCheckCell textCheckCell) {
+    public /* synthetic */ PrivacySettingsActivity$$ExternalSyntheticLambda10(PrivacySettingsActivity privacySettingsActivity) {
         this.f$0 = privacySettingsActivity;
-        this.f$1 = textCheckCell;
     }
 
-    public final void run() {
-        this.f$0.lambda$createView$7(this.f$1);
+    public final void onClick(DialogInterface dialogInterface, int i) {
+        this.f$0.m4376lambda$createView$6$orgtelegramuiPrivacySettingsActivity(dialogInterface, i);
     }
 }

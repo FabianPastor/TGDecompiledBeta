@@ -1,15 +1,15 @@
 package org.telegram.ui;
 
-import android.animation.ValueAnimator;
+import android.widget.PopupWindow;
 
-public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda13 implements ValueAnimator.AnimatorUpdateListener {
+public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda13 implements PopupWindow.OnDismissListener {
     public final /* synthetic */ ChatActivity f$0;
 
     public /* synthetic */ ChatActivity$$ExternalSyntheticLambda13(ChatActivity chatActivity) {
         this.f$0 = chatActivity;
     }
 
-    public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-        this.f$0.lambda$updateReactionsMentionButton$79(valueAnimator);
+    public final void onDismiss() {
+        this.f$0.m2972lambda$createView$52$orgtelegramuiChatActivity();
     }
 }

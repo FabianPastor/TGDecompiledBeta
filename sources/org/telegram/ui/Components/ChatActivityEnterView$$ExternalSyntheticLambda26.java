@@ -1,18 +1,15 @@
 package org.telegram.ui.Components;
 
-import android.app.Activity;
 import android.view.View;
 
-public final /* synthetic */ class ChatActivityEnterView$$ExternalSyntheticLambda26 implements View.OnClickListener {
-    public final /* synthetic */ ChatActivityEnterView f$0;
-    public final /* synthetic */ Activity f$1;
+public final /* synthetic */ class ChatActivityEnterView$$ExternalSyntheticLambda26 implements Runnable {
+    public final /* synthetic */ View f$0;
 
-    public /* synthetic */ ChatActivityEnterView$$ExternalSyntheticLambda26(ChatActivityEnterView chatActivityEnterView, Activity activity) {
-        this.f$0 = chatActivityEnterView;
-        this.f$1 = activity;
+    public /* synthetic */ ChatActivityEnterView$$ExternalSyntheticLambda26(View view) {
+        this.f$0 = view;
     }
 
-    public final void onClick(View view) {
-        this.f$0.lambda$new$14(this.f$1, view);
+    public final void run() {
+        this.f$0.callOnClick();
     }
 }

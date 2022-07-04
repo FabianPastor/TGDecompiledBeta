@@ -1,23 +1,15 @@
 package org.telegram.ui.Adapters;
 
-import java.util.ArrayList;
+import java.util.Comparator;
+import org.telegram.ui.Adapters.DialogsSearchAdapter;
 
-public final /* synthetic */ class DialogsSearchAdapter$$ExternalSyntheticLambda10 implements Runnable {
-    public final /* synthetic */ DialogsSearchAdapter f$0;
-    public final /* synthetic */ int f$1;
-    public final /* synthetic */ ArrayList f$2;
-    public final /* synthetic */ ArrayList f$3;
-    public final /* synthetic */ ArrayList f$4;
+public final /* synthetic */ class DialogsSearchAdapter$$ExternalSyntheticLambda10 implements Comparator {
+    public static final /* synthetic */ DialogsSearchAdapter$$ExternalSyntheticLambda10 INSTANCE = new DialogsSearchAdapter$$ExternalSyntheticLambda10();
 
-    public /* synthetic */ DialogsSearchAdapter$$ExternalSyntheticLambda10(DialogsSearchAdapter dialogsSearchAdapter, int i, ArrayList arrayList, ArrayList arrayList2, ArrayList arrayList3) {
-        this.f$0 = dialogsSearchAdapter;
-        this.f$1 = i;
-        this.f$2 = arrayList;
-        this.f$3 = arrayList2;
-        this.f$4 = arrayList3;
+    private /* synthetic */ DialogsSearchAdapter$$ExternalSyntheticLambda10() {
     }
 
-    public final void run() {
-        this.f$0.lambda$updateSearchResults$12(this.f$1, this.f$2, this.f$3, this.f$4);
+    public final int compare(Object obj, Object obj2) {
+        return DialogsSearchAdapter.lambda$loadRecentSearch$3((DialogsSearchAdapter.RecentSearchObject) obj, (DialogsSearchAdapter.RecentSearchObject) obj2);
     }
 }

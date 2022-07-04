@@ -10,7 +10,7 @@ public final /* synthetic */ class TooManyCommunitiesActivity$$ExternalSynthetic
     }
 
     public final void didSetColor() {
-        this.f$0.lambda$getThemeDescriptions$6();
+        this.f$0.m4707x2ada7624();
     }
 
     public /* synthetic */ void onAnimationProgress(float f) {

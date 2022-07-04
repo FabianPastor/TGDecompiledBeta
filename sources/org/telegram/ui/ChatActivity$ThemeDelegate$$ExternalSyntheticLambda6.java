@@ -15,6 +15,6 @@ public final /* synthetic */ class ChatActivity$ThemeDelegate$$ExternalSynthetic
     }
 
     public final void run() {
-        this.f$0.lambda$setCurrentTheme$1(this.f$1, this.f$2);
+        this.f$0.m3174x3b4bd149(this.f$1, this.f$2);
     }
 }

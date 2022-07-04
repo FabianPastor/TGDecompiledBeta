@@ -19,6 +19,6 @@ public final /* synthetic */ class EglRenderer$$ExternalSyntheticLambda7 impleme
     }
 
     public final void run() {
-        this.f$0.lambda$addFrameListener$3(this.f$1, this.f$2, this.f$3, this.f$4);
+        this.f$0.m1646lambda$addFrameListener$3$orgwebrtcEglRenderer(this.f$1, this.f$2, this.f$3, this.f$4);
     }
 }

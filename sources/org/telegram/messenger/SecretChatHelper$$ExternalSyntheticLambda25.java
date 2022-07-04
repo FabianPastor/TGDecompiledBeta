@@ -1,15 +1,21 @@
 package org.telegram.messenger;
 
-import java.util.Comparator;
-import org.telegram.tgnet.TLRPC$Message;
+import org.telegram.tgnet.TLRPC;
 
-public final /* synthetic */ class SecretChatHelper$$ExternalSyntheticLambda25 implements Comparator {
-    public static final /* synthetic */ SecretChatHelper$$ExternalSyntheticLambda25 INSTANCE = new SecretChatHelper$$ExternalSyntheticLambda25();
+public final /* synthetic */ class SecretChatHelper$$ExternalSyntheticLambda25 implements Runnable {
+    public final /* synthetic */ SecretChatHelper f$0;
+    public final /* synthetic */ int f$1;
+    public final /* synthetic */ TLRPC.EncryptedChat f$2;
+    public final /* synthetic */ int f$3;
 
-    private /* synthetic */ SecretChatHelper$$ExternalSyntheticLambda25() {
+    public /* synthetic */ SecretChatHelper$$ExternalSyntheticLambda25(SecretChatHelper secretChatHelper, int i, TLRPC.EncryptedChat encryptedChat, int i2) {
+        this.f$0 = secretChatHelper;
+        this.f$1 = i;
+        this.f$2 = encryptedChat;
+        this.f$3 = i2;
     }
 
-    public final int compare(Object obj, Object obj2) {
-        return AndroidUtilities.compare(((TLRPC$Message) obj).seq_out, ((TLRPC$Message) obj2).seq_out);
+    public final void run() {
+        this.f$0.m2377lambda$resendMessages$15$orgtelegrammessengerSecretChatHelper(this.f$1, this.f$2, this.f$3);
     }
 }

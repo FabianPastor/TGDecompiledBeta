@@ -10,6 +10,6 @@ public final /* synthetic */ class LinkActionView$$ExternalSyntheticLambda0 impl
     }
 
     public final void onClick(DialogInterface dialogInterface, int i) {
-        this.f$0.lambda$new$3(dialogInterface, i);
+        this.f$0.m1100lambda$new$3$orgtelegramuiComponentsLinkActionView(dialogInterface, i);
     }
 }

@@ -1,17 +1,16 @@
 package org.telegram.ui;
 
-import android.view.KeyEvent;
-import android.widget.TextView;
+import android.content.DialogInterface;
 import org.telegram.ui.LoginActivity;
 
-public final /* synthetic */ class LoginActivity$LoginActivityRegisterView$$ExternalSyntheticLambda11 implements TextView.OnEditorActionListener {
+public final /* synthetic */ class LoginActivity$LoginActivityRegisterView$$ExternalSyntheticLambda11 implements DialogInterface.OnClickListener {
     public final /* synthetic */ LoginActivity.LoginActivityRegisterView f$0;
 
     public /* synthetic */ LoginActivity$LoginActivityRegisterView$$ExternalSyntheticLambda11(LoginActivity.LoginActivityRegisterView loginActivityRegisterView) {
         this.f$0 = loginActivityRegisterView;
     }
 
-    public final boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
-        return this.f$0.lambda$new$11(textView, i, keyEvent);
+    public final void onClick(DialogInterface dialogInterface, int i) {
+        this.f$0.m3835x9CLASSNAMEb17(dialogInterface, i);
     }
 }

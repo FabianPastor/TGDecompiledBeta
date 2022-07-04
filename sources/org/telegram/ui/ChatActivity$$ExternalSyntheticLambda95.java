@@ -1,17 +1,17 @@
 package org.telegram.ui;
 
-import android.view.View;
+import org.telegram.tgnet.TLObject;
 
-public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda95 implements View.OnClickListener {
-    public final /* synthetic */ boolean[] f$0;
-    public final /* synthetic */ Runnable f$1;
+public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda95 implements Runnable {
+    public final /* synthetic */ ChatActivity f$0;
+    public final /* synthetic */ TLObject f$1;
 
-    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda95(boolean[] zArr, Runnable runnable) {
-        this.f$0 = zArr;
-        this.f$1 = runnable;
+    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda95(ChatActivity chatActivity, TLObject tLObject) {
+        this.f$0 = chatActivity;
+        this.f$1 = tLObject;
     }
 
-    public final void onClick(View view) {
-        ChatActivity.lambda$createMenu$169(this.f$0, this.f$1, view);
+    public final void run() {
+        this.f$0.m3112xbaeavar_(this.f$1);
     }
 }

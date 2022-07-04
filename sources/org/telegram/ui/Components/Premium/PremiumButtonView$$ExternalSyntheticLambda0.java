@@ -8,6 +8,6 @@ public final /* synthetic */ class PremiumButtonView$$ExternalSyntheticLambda0 i
     }
 
     public final void run() {
-        this.f$0.lambda$setIcon$0();
+        this.f$0.m1250x1bdc7e71();
     }
 }

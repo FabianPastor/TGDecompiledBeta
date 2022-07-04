@@ -13,6 +13,6 @@ public final /* synthetic */ class LoginActivity$PhoneNumberConfirmView$$Externa
     }
 
     public final void onClick(View view) {
-        this.f$0.lambda$new$3(this.f$1, view);
+        this.f$0.m3892x5f9bf9c3(this.f$1, view);
     }
 }

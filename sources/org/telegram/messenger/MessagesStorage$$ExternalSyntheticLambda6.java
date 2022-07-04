@@ -1,13 +1,19 @@
 package org.telegram.messenger;
 
+import org.telegram.tgnet.NativeByteBuffer;
+
 public final /* synthetic */ class MessagesStorage$$ExternalSyntheticLambda6 implements Runnable {
     public final /* synthetic */ MessagesStorage f$0;
+    public final /* synthetic */ long f$1;
+    public final /* synthetic */ NativeByteBuffer f$2;
 
-    public /* synthetic */ MessagesStorage$$ExternalSyntheticLambda6(MessagesStorage messagesStorage) {
+    public /* synthetic */ MessagesStorage$$ExternalSyntheticLambda6(MessagesStorage messagesStorage, long j, NativeByteBuffer nativeByteBuffer) {
         this.f$0 = messagesStorage;
+        this.f$1 = j;
+        this.f$2 = nativeByteBuffer;
     }
 
     public final void run() {
-        this.f$0.lambda$fixNotificationSettings$8();
+        this.f$0.m2144xvar_f3e(this.f$1, this.f$2);
     }
 }

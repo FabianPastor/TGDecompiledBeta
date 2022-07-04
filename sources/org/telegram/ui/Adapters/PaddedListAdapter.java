@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import org.telegram.ui.Components.RecyclerListView;
 
 public class PaddedListAdapter extends RecyclerListView.SelectionAdapter {
+    private final int PADDING_VIEW_TYPE = -983904;
     private GetPaddingRunnable getPaddingRunnable;
     private int lastPadding;
     private RecyclerView.AdapterDataObserver mDataObserver;
@@ -18,47 +19,88 @@ public class PaddedListAdapter extends RecyclerListView.SelectionAdapter {
         int run(int i);
     }
 
-    public PaddedListAdapter(RecyclerListView.SelectionAdapter selectionAdapter) {
+    public PaddedListAdapter(RecyclerListView.SelectionAdapter adapter) {
         AnonymousClass2 r0 = new RecyclerView.AdapterDataObserver() {
             public void onChanged() {
                 super.onChanged();
                 PaddedListAdapter.this.notifyDataSetChanged();
             }
 
-            public void onItemRangeChanged(int i, int i2) {
-                super.onItemRangeChanged(i, i2);
-                PaddedListAdapter.this.notifyItemRangeChanged(i + 1, i2);
+            public void onItemRangeChanged(int positionStart, int itemCount) {
+                super.onItemRangeChanged(positionStart, itemCount);
+                PaddedListAdapter.this.notifyItemRangeChanged(positionStart + 1, itemCount);
             }
 
-            public void onItemRangeInserted(int i, int i2) {
-                super.onItemRangeInserted(i, i2);
-                PaddedListAdapter.this.notifyItemRangeInserted(i + 1, i2);
+            public void onItemRangeInserted(int positionStart, int itemCount) {
+                super.onItemRangeInserted(positionStart, itemCount);
+                PaddedListAdapter.this.notifyItemRangeInserted(positionStart + 1, itemCount);
             }
 
-            public void onItemRangeRemoved(int i, int i2) {
-                super.onItemRangeRemoved(i, i2);
-                PaddedListAdapter.this.notifyItemRangeRemoved(i + 1, i2);
+            public void onItemRangeRemoved(int positionStart, int itemCount) {
+                super.onItemRangeRemoved(positionStart, itemCount);
+                PaddedListAdapter.this.notifyItemRangeRemoved(positionStart + 1, itemCount);
             }
 
-            public void onItemRangeMoved(int i, int i2, int i3) {
-                super.onItemRangeMoved(i, i2, i3);
-                PaddedListAdapter.this.notifyItemRangeChanged(i + 1, i2 + 1 + i3);
+            public void onItemRangeMoved(int fromPosition, int toPosition, int itemCount) {
+                super.onItemRangeMoved(fromPosition, toPosition, itemCount);
+                PaddedListAdapter.this.notifyItemRangeChanged(fromPosition + 1, toPosition + 1 + itemCount);
             }
         };
         this.mDataObserver = r0;
-        this.wrappedAdapter = selectionAdapter;
-        selectionAdapter.registerAdapterDataObserver(r0);
+        this.wrappedAdapter = adapter;
+        adapter.registerAdapterDataObserver(r0);
     }
 
-    public boolean isEnabled(RecyclerView.ViewHolder viewHolder) {
-        if (viewHolder.getAdapterPosition() == 0) {
+    public PaddedListAdapter(RecyclerListView.SelectionAdapter adapter, GetPaddingRunnable getPaddingRunnable2) {
+        AnonymousClass2 r0 = new RecyclerView.AdapterDataObserver() {
+            public void onChanged() {
+                super.onChanged();
+                PaddedListAdapter.this.notifyDataSetChanged();
+            }
+
+            public void onItemRangeChanged(int positionStart, int itemCount) {
+                super.onItemRangeChanged(positionStart, itemCount);
+                PaddedListAdapter.this.notifyItemRangeChanged(positionStart + 1, itemCount);
+            }
+
+            public void onItemRangeInserted(int positionStart, int itemCount) {
+                super.onItemRangeInserted(positionStart, itemCount);
+                PaddedListAdapter.this.notifyItemRangeInserted(positionStart + 1, itemCount);
+            }
+
+            public void onItemRangeRemoved(int positionStart, int itemCount) {
+                super.onItemRangeRemoved(positionStart, itemCount);
+                PaddedListAdapter.this.notifyItemRangeRemoved(positionStart + 1, itemCount);
+            }
+
+            public void onItemRangeMoved(int fromPosition, int toPosition, int itemCount) {
+                super.onItemRangeMoved(fromPosition, toPosition, itemCount);
+                PaddedListAdapter.this.notifyItemRangeChanged(fromPosition + 1, toPosition + 1 + itemCount);
+            }
+        };
+        this.mDataObserver = r0;
+        this.wrappedAdapter = adapter;
+        adapter.registerAdapterDataObserver(r0);
+        this.getPaddingRunnable = getPaddingRunnable2;
+    }
+
+    public boolean isEnabled(RecyclerView.ViewHolder holder) {
+        if (holder.getAdapterPosition() == 0) {
             return false;
         }
-        return this.wrappedAdapter.isEnabled(viewHolder);
+        return this.wrappedAdapter.isEnabled(holder);
     }
 
-    public void setPadding(int i) {
-        this.padding = Integer.valueOf(i);
+    public void setPadding(int padding2) {
+        this.padding = Integer.valueOf(padding2);
+        View view = this.paddingView;
+        if (view != null) {
+            view.requestLayout();
+        }
+    }
+
+    public void setPadding(GetPaddingRunnable getPaddingRunnable2) {
+        this.getPaddingRunnable = getPaddingRunnable2;
         View view = this.paddingView;
         if (view != null) {
             view.requestLayout();
@@ -66,7 +108,7 @@ public class PaddedListAdapter extends RecyclerListView.SelectionAdapter {
     }
 
     /* access modifiers changed from: private */
-    public int getPadding(int i) {
+    public int getPadding(int parentHeight) {
         Integer num = this.padding;
         if (num != null) {
             int intValue = num.intValue();
@@ -75,7 +117,7 @@ public class PaddedListAdapter extends RecyclerListView.SelectionAdapter {
         }
         GetPaddingRunnable getPaddingRunnable2 = this.getPaddingRunnable;
         if (getPaddingRunnable2 != null) {
-            int run = getPaddingRunnable2.run(i);
+            int run = getPaddingRunnable2.run(parentHeight);
             this.lastPadding = run;
             return run;
         }
@@ -87,14 +129,14 @@ public class PaddedListAdapter extends RecyclerListView.SelectionAdapter {
         return this.lastPadding;
     }
 
-    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
-        if (i != -983904) {
-            return this.wrappedAdapter.onCreateViewHolder(viewGroup, i);
+    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        if (viewType != -983904) {
+            return this.wrappedAdapter.onCreateViewHolder(parent, viewType);
         }
-        AnonymousClass1 r0 = new View(viewGroup.getContext()) {
+        AnonymousClass1 r1 = new View(parent.getContext()) {
             /* access modifiers changed from: protected */
-            public void onMeasure(int i, int i2) {
-                super.onMeasure(i, View.MeasureSpec.makeMeasureSpec(PaddedListAdapter.this.getPadding(((View) getParent()).getMeasuredHeight()), NUM));
+            public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+                super.onMeasure(widthMeasureSpec, View.MeasureSpec.makeMeasureSpec(PaddedListAdapter.this.getPadding(((View) getParent()).getMeasuredHeight()), NUM));
             }
 
             /* access modifiers changed from: protected */
@@ -109,20 +151,20 @@ public class PaddedListAdapter extends RecyclerListView.SelectionAdapter {
                 PaddedListAdapter.this.paddingViewAttached = false;
             }
         };
-        this.paddingView = r0;
-        return new RecyclerListView.Holder(r0);
+        this.paddingView = r1;
+        return new RecyclerListView.Holder(r1);
     }
 
-    public int getItemViewType(int i) {
-        if (i == 0) {
+    public int getItemViewType(int position) {
+        if (position == 0) {
             return -983904;
         }
-        return this.wrappedAdapter.getItemViewType(i - 1);
+        return this.wrappedAdapter.getItemViewType(position - 1);
     }
 
-    public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int i) {
-        if (i > 0) {
-            this.wrappedAdapter.onBindViewHolder(viewHolder, i - 1);
+    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+        if (position > 0) {
+            this.wrappedAdapter.onBindViewHolder(holder, position - 1);
         }
     }
 

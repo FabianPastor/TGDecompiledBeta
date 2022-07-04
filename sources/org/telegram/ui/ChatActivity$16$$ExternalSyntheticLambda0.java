@@ -10,6 +10,6 @@ public final /* synthetic */ class ChatActivity$16$$ExternalSyntheticLambda0 imp
     }
 
     public final void run() {
-        this.f$0.lambda$onLayoutChildren$0();
+        this.f$0.m3151lambda$onLayoutChildren$0$orgtelegramuiChatActivity$16();
     }
 }

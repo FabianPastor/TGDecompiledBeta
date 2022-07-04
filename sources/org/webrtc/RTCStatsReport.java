@@ -6,9 +6,9 @@ public class RTCStatsReport {
     private final Map<String, RTCStats> stats;
     private final long timestampUs;
 
-    public RTCStatsReport(long j, Map<String, RTCStats> map) {
-        this.timestampUs = j;
-        this.stats = map;
+    public RTCStatsReport(long timestampUs2, Map<String, RTCStats> stats2) {
+        this.timestampUs = timestampUs2;
+        this.stats = stats2;
     }
 
     public double getTimestampUs() {
@@ -20,24 +20,23 @@ public class RTCStatsReport {
     }
 
     public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append("{ timestampUs: ");
-        sb.append(this.timestampUs);
-        sb.append(", stats: [\n");
-        boolean z = true;
-        for (RTCStats next : this.stats.values()) {
-            if (!z) {
-                sb.append(",\n");
+        StringBuilder builder = new StringBuilder();
+        builder.append("{ timestampUs: ");
+        builder.append(this.timestampUs);
+        builder.append(", stats: [\n");
+        boolean first = true;
+        for (RTCStats stat : this.stats.values()) {
+            if (!first) {
+                builder.append(",\n");
             }
-            sb.append(next);
-            z = false;
+            builder.append(stat);
+            first = false;
         }
-        sb.append(" ] }");
-        return sb.toString();
+        builder.append(" ] }");
+        return builder.toString();
     }
 
-    @CalledByNative
-    private static RTCStatsReport create(long j, Map map) {
-        return new RTCStatsReport(j, map);
+    private static RTCStatsReport create(long timestampUs2, Map stats2) {
+        return new RTCStatsReport(timestampUs2, stats2);
     }
 }

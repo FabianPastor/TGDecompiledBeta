@@ -17,52 +17,50 @@ public class LanguageDetector {
         return true;
     }
 
-    public static void detectLanguage(String str, StringCallback stringCallback, ExceptionCallback exceptionCallback) {
-        detectLanguage(str, stringCallback, exceptionCallback, false);
+    public static void detectLanguage(String text, StringCallback onSuccess, ExceptionCallback onFail) {
+        detectLanguage(text, onSuccess, onFail, false);
     }
 
-    public static void detectLanguage(String str, StringCallback stringCallback, ExceptionCallback exceptionCallback, boolean z) {
-        if (z) {
+    public static void detectLanguage(String text, StringCallback onSuccess, ExceptionCallback onFail, boolean initializeFirst) {
+        if (initializeFirst) {
             try {
                 MlKitContext.zza(ApplicationLoader.applicationContext);
             } catch (IllegalStateException e) {
-                if (!z) {
-                    detectLanguage(str, stringCallback, exceptionCallback, true);
+                if (!initializeFirst) {
+                    detectLanguage(text, onSuccess, onFail, true);
                     return;
-                } else if (exceptionCallback != null) {
-                    exceptionCallback.run(e);
+                } else if (onFail != null) {
+                    onFail.run(e);
                     return;
                 } else {
                     return;
                 }
             } catch (Exception e2) {
-                if (exceptionCallback != null) {
-                    exceptionCallback.run(e2);
+                if (onFail != null) {
+                    onFail.run(e2);
                     return;
                 }
                 return;
-            } catch (Throwable unused) {
-                if (exceptionCallback != null) {
-                    exceptionCallback.run((Exception) null);
+            } catch (Throwable th) {
+                if (onFail != null) {
+                    onFail.run((Exception) null);
                     return;
                 }
                 return;
             }
         }
-        LanguageIdentification.getClient().identifyLanguage(str).addOnSuccessListener(new LanguageDetector$$ExternalSyntheticLambda1(stringCallback)).addOnFailureListener(new LanguageDetector$$ExternalSyntheticLambda0(exceptionCallback));
+        LanguageIdentification.getClient().identifyLanguage(text).addOnSuccessListener(new LanguageDetector$$ExternalSyntheticLambda1(onSuccess)).addOnFailureListener(new LanguageDetector$$ExternalSyntheticLambda0(onFail));
     }
 
-    /* access modifiers changed from: private */
-    public static /* synthetic */ void lambda$detectLanguage$0(StringCallback stringCallback, String str) {
-        if (stringCallback != null) {
-            stringCallback.run(str);
+    static /* synthetic */ void lambda$detectLanguage$0(StringCallback onSuccess, String str) {
+        if (onSuccess != null) {
+            onSuccess.run(str);
         }
     }
 
-    /* access modifiers changed from: private */
-    public static /* synthetic */ void lambda$detectLanguage$1(ExceptionCallback exceptionCallback, Exception exc) {
-        if (exceptionCallback != null) {
-            exceptionCallback.run(exc);
+    static /* synthetic */ void lambda$detectLanguage$1(ExceptionCallback onFail, Exception e) {
+        if (onFail != null) {
+            onFail.run(e);
         }
     }
 }

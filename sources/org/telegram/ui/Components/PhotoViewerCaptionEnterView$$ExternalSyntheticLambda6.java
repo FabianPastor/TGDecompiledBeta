@@ -10,6 +10,6 @@ public final /* synthetic */ class PhotoViewerCaptionEnterView$$ExternalSyntheti
     }
 
     public final void onFocusChange(View view, boolean z) {
-        this.f$0.lambda$new$1(view, z);
+        this.f$0.m1198x311a104e(view, z);
     }
 }

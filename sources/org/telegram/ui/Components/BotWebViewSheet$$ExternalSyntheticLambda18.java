@@ -1,14 +1,15 @@
 package org.telegram.ui.Components;
 
-import org.telegram.ui.Components.SimpleFloatPropertyCompat;
+public final /* synthetic */ class BotWebViewSheet$$ExternalSyntheticLambda18 implements Runnable {
+    public final /* synthetic */ BotWebViewSheet f$0;
+    public final /* synthetic */ Runnable f$1;
 
-public final /* synthetic */ class BotWebViewSheet$$ExternalSyntheticLambda18 implements SimpleFloatPropertyCompat.Getter {
-    public static final /* synthetic */ BotWebViewSheet$$ExternalSyntheticLambda18 INSTANCE = new BotWebViewSheet$$ExternalSyntheticLambda18();
-
-    private /* synthetic */ BotWebViewSheet$$ExternalSyntheticLambda18() {
+    public /* synthetic */ BotWebViewSheet$$ExternalSyntheticLambda18(BotWebViewSheet botWebViewSheet, Runnable runnable) {
+        this.f$0 = botWebViewSheet;
+        this.f$1 = runnable;
     }
 
-    public final float get(Object obj) {
-        return ((BotWebViewSheet) obj).actionBarTransitionProgress;
+    public final void run() {
+        this.f$0.m615lambda$dismiss$19$orgtelegramuiComponentsBotWebViewSheet(this.f$1);
     }
 }

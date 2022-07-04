@@ -11,9 +11,9 @@ public enum ID3v2Encoding {
     private final Charset charset;
     private final int zeroBytes;
 
-    private ID3v2Encoding(Charset charset2, int i) {
+    private ID3v2Encoding(Charset charset2, int zeroBytes2) {
         this.charset = charset2;
-        this.zeroBytes = i;
+        this.zeroBytes = zeroBytes2;
     }
 
     public Charset getCharset() {

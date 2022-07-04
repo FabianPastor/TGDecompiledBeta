@@ -12,16 +12,16 @@ public class ProgressView {
     public float progressHeight = ((float) AndroidUtilities.dp(2.0f));
     public int width;
 
-    public void setProgressColors(int i, int i2) {
-        this.innerPaint.setColor(i);
-        this.outerPaint.setColor(i2);
+    public void setProgressColors(int innerColor, int outerColor) {
+        this.innerPaint.setColor(innerColor);
+        this.outerPaint.setColor(outerColor);
     }
 
-    public void setProgress(float f) {
-        this.currentProgress = f;
-        if (f < 0.0f) {
+    public void setProgress(float progress) {
+        this.currentProgress = progress;
+        if (progress < 0.0f) {
             this.currentProgress = 0.0f;
-        } else if (f > 1.0f) {
+        } else if (progress > 1.0f) {
             this.currentProgress = 1.0f;
         }
     }

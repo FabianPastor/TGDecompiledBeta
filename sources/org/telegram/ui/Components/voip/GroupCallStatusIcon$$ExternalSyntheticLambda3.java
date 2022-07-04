@@ -8,6 +8,6 @@ public final /* synthetic */ class GroupCallStatusIcon$$ExternalSyntheticLambda3
     }
 
     public final void run() {
-        this.f$0.lambda$new$0();
+        this.f$0.m1600lambda$new$3$orgtelegramuiComponentsvoipGroupCallStatusIcon();
     }
 }

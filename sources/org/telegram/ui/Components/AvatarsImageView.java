@@ -8,14 +8,14 @@ import org.telegram.tgnet.TLObject;
 public class AvatarsImageView extends View {
     public final AvatarsDarawable avatarsDarawable;
 
-    public AvatarsImageView(Context context, boolean z) {
+    public AvatarsImageView(Context context, boolean inCall) {
         super(context);
-        this.avatarsDarawable = new AvatarsDarawable(this, z);
+        this.avatarsDarawable = new AvatarsDarawable(this, inCall);
     }
 
     /* access modifiers changed from: protected */
-    public void onMeasure(int i, int i2) {
-        super.onMeasure(i, i2);
+    public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
         this.avatarsDarawable.width = getMeasuredWidth();
         this.avatarsDarawable.height = getMeasuredHeight();
     }
@@ -38,35 +38,35 @@ public class AvatarsImageView extends View {
         this.avatarsDarawable.onDetachedFromWindow();
     }
 
-    public void setStyle(int i) {
-        this.avatarsDarawable.setStyle(i);
+    public void setStyle(int style) {
+        this.avatarsDarawable.setStyle(style);
     }
 
-    public void setDelegate(Runnable runnable) {
-        this.avatarsDarawable.setDelegate(runnable);
+    public void setDelegate(Runnable delegate) {
+        this.avatarsDarawable.setDelegate(delegate);
     }
 
-    public void setObject(int i, int i2, TLObject tLObject) {
-        this.avatarsDarawable.setObject(i, i2, tLObject);
+    public void setObject(int a, int currentAccount, TLObject object) {
+        this.avatarsDarawable.setObject(a, currentAccount, object);
     }
 
     public void reset() {
         this.avatarsDarawable.reset();
     }
 
-    public void setCount(int i) {
-        this.avatarsDarawable.setCount(i);
+    public void setCount(int usersCount) {
+        this.avatarsDarawable.setCount(usersCount);
     }
 
-    public void commitTransition(boolean z) {
-        this.avatarsDarawable.commitTransition(z);
+    public void commitTransition(boolean animated) {
+        this.avatarsDarawable.commitTransition(animated);
     }
 
     public void updateAfterTransitionEnd() {
         this.avatarsDarawable.updateAfterTransitionEnd();
     }
 
-    public void setCentered(boolean z) {
-        this.avatarsDarawable.setCentered(z);
+    public void setCentered(boolean centered) {
+        this.avatarsDarawable.setCentered(centered);
     }
 }

@@ -1,19 +1,16 @@
 package org.telegram.ui;
 
-import org.telegram.ui.ActionBar.ThemeDescription;
+import org.telegram.tgnet.RequestDelegate;
+import org.telegram.tgnet.TLObject;
+import org.telegram.tgnet.TLRPC;
 
-public final /* synthetic */ class PremiumPreviewFragment$$ExternalSyntheticLambda10 implements ThemeDescription.ThemeDescriptionDelegate {
-    public final /* synthetic */ PremiumPreviewFragment f$0;
+public final /* synthetic */ class PremiumPreviewFragment$$ExternalSyntheticLambda10 implements RequestDelegate {
+    public static final /* synthetic */ PremiumPreviewFragment$$ExternalSyntheticLambda10 INSTANCE = new PremiumPreviewFragment$$ExternalSyntheticLambda10();
 
-    public /* synthetic */ PremiumPreviewFragment$$ExternalSyntheticLambda10(PremiumPreviewFragment premiumPreviewFragment) {
-        this.f$0 = premiumPreviewFragment;
+    private /* synthetic */ PremiumPreviewFragment$$ExternalSyntheticLambda10() {
     }
 
-    public final void didSetColor() {
-        this.f$0.updateColors();
-    }
-
-    public /* synthetic */ void onAnimationProgress(float f) {
-        ThemeDescription.ThemeDescriptionDelegate.CC.$default$onAnimationProgress(this, f);
+    public final void run(TLObject tLObject, TLRPC.TL_error tL_error) {
+        PremiumPreviewFragment.lambda$sentShowFeaturePreview$10(tLObject, tL_error);
     }
 }

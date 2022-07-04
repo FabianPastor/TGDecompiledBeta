@@ -8,6 +8,6 @@ public final /* synthetic */ class RecyclerListView$$ExternalSyntheticLambda0 im
     }
 
     public final void run() {
-        this.f$0.lambda$highlightRowInternal$0();
+        this.f$0.m1306x6956124b();
     }
 }

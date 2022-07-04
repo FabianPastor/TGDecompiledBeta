@@ -1,16 +1,15 @@
 package org.telegram.ui.Components;
 
-import org.telegram.tgnet.RequestDelegate;
-import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC$TL_error;
+import android.view.View;
 
-public final /* synthetic */ class AlertsCreator$$ExternalSyntheticLambda96 implements RequestDelegate {
-    public static final /* synthetic */ AlertsCreator$$ExternalSyntheticLambda96 INSTANCE = new AlertsCreator$$ExternalSyntheticLambda96();
+public final /* synthetic */ class AlertsCreator$$ExternalSyntheticLambda96 implements View.OnClickListener {
+    public final /* synthetic */ boolean[] f$0;
 
-    private /* synthetic */ AlertsCreator$$ExternalSyntheticLambda96() {
+    public /* synthetic */ AlertsCreator$$ExternalSyntheticLambda96(boolean[] zArr) {
+        this.f$0 = zArr;
     }
 
-    public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        AlertsCreator.lambda$createReportAlert$85(tLObject, tLRPC$TL_error);
+    public final void onClick(View view) {
+        AlertsCreator.lambda$createDeleteMessagesAlert$115(this.f$0, view);
     }
 }

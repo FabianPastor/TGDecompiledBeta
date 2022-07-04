@@ -1,16 +1,15 @@
 package org.telegram.ui;
 
-import org.telegram.tgnet.RequestDelegate;
-import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC$TL_error;
+import android.view.View;
 
-public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda232 implements RequestDelegate {
-    public static final /* synthetic */ ChatActivity$$ExternalSyntheticLambda232 INSTANCE = new ChatActivity$$ExternalSyntheticLambda232();
+public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda232 implements View.OnClickListener {
+    public final /* synthetic */ ChatActivity f$0;
 
-    private /* synthetic */ ChatActivity$$ExternalSyntheticLambda232() {
+    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda232(ChatActivity chatActivity) {
+        this.f$0 = chatActivity;
     }
 
-    public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        ChatActivity.lambda$markSponsoredAsRead$245(tLObject, tLRPC$TL_error);
+    public final void onClick(View view) {
+        this.f$0.m2992lambda$createView$73$orgtelegramuiChatActivity(view);
     }
 }

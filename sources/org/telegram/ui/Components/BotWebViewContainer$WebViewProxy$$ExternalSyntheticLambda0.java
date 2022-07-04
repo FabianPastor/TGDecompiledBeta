@@ -14,6 +14,6 @@ public final /* synthetic */ class BotWebViewContainer$WebViewProxy$$ExternalSyn
     }
 
     public final void run() {
-        this.f$0.lambda$postEvent$0(this.f$1, this.f$2);
+        this.f$0.m592x6a2a9d10(this.f$1, this.f$2);
     }
 }

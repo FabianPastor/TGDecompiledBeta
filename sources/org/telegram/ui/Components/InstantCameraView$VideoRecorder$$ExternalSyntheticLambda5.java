@@ -11,6 +11,6 @@ public final /* synthetic */ class InstantCameraView$VideoRecorder$$ExternalSynt
     }
 
     public final void didSelectDate(boolean z, int i) {
-        this.f$0.lambda$handleStopRecording$2(z, i);
+        this.f$0.m1040xe1e3b08b(z, i);
     }
 }

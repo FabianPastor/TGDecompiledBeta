@@ -1,15 +1,15 @@
 package org.telegram.ui.Components;
 
-import android.view.View;
+import android.widget.PopupWindow;
 
-public final /* synthetic */ class PhotoPaintView$$ExternalSyntheticLambda3 implements View.OnClickListener {
+public final /* synthetic */ class PhotoPaintView$$ExternalSyntheticLambda3 implements PopupWindow.OnDismissListener {
     public final /* synthetic */ PhotoPaintView f$0;
 
     public /* synthetic */ PhotoPaintView$$ExternalSyntheticLambda3(PhotoPaintView photoPaintView) {
         this.f$0 = photoPaintView;
     }
 
-    public final void onClick(View view) {
-        this.f$0.lambda$new$1(view);
+    public final void onDismiss() {
+        this.f$0.m1195lambda$showPopup$20$orgtelegramuiComponentsPhotoPaintView();
     }
 }

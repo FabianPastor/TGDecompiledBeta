@@ -13,6 +13,6 @@ public final /* synthetic */ class SecretMediaViewer$1$$ExternalSyntheticLambda0
     }
 
     public final void run() {
-        this.f$0.lambda$onError$0(this.f$1);
+        this.f$0.m4581lambda$onError$0$orgtelegramuiSecretMediaViewer$1(this.f$1);
     }
 }

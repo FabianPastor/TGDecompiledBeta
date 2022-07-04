@@ -1,16 +1,17 @@
 package org.telegram.messenger;
 
-import java.util.Comparator;
-import org.telegram.tgnet.TLRPC$Update;
+import android.content.DialogInterface;
 
-public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda222 implements Comparator {
+public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda222 implements DialogInterface.OnCancelListener {
     public final /* synthetic */ MessagesController f$0;
+    public final /* synthetic */ int f$1;
 
-    public /* synthetic */ MessagesController$$ExternalSyntheticLambda222(MessagesController messagesController) {
+    public /* synthetic */ MessagesController$$ExternalSyntheticLambda222(MessagesController messagesController, int i) {
         this.f$0 = messagesController;
+        this.f$1 = i;
     }
 
-    public final int compare(Object obj, Object obj2) {
-        return this.f$0.lambda$new$8((TLRPC$Update) obj, (TLRPC$Update) obj2);
+    public final void onCancel(DialogInterface dialogInterface) {
+        this.f$0.m309x481a2ec9(this.f$1, dialogInterface);
     }
 }

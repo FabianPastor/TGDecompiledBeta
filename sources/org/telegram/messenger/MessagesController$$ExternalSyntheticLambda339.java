@@ -1,24 +1,17 @@
 package org.telegram.messenger;
 
-import org.telegram.tgnet.RequestDelegate;
-import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC$TL_error;
-import org.telegram.tgnet.TLRPC$User;
+import androidx.core.util.Consumer;
 
-public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda339 implements RequestDelegate {
-    public final /* synthetic */ MessagesController f$0;
-    public final /* synthetic */ boolean f$1;
-    public final /* synthetic */ TLRPC$User f$2;
-    public final /* synthetic */ long f$3;
+public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda339 implements Runnable {
+    public final /* synthetic */ Consumer f$0;
+    public final /* synthetic */ int f$1;
 
-    public /* synthetic */ MessagesController$$ExternalSyntheticLambda339(MessagesController messagesController, boolean z, TLRPC$User tLRPC$User, long j) {
-        this.f$0 = messagesController;
-        this.f$1 = z;
-        this.f$2 = tLRPC$User;
-        this.f$3 = j;
+    public /* synthetic */ MessagesController$$ExternalSyntheticLambda339(Consumer consumer, int i) {
+        this.f$0 = consumer;
+        this.f$1 = i;
     }
 
-    public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        this.f$0.lambda$deleteParticipantFromChat$248(this.f$1, this.f$2, this.f$3, tLObject, tLRPC$TL_error);
+    public final void run() {
+        this.f$0.accept(Integer.valueOf(this.f$1));
     }
 }

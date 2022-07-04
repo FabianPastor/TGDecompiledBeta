@@ -9,6 +9,6 @@ public final /* synthetic */ class NotificationsController$$ExternalSyntheticLam
     }
 
     public final void onHeaderDecoded(ImageDecoder imageDecoder, ImageDecoder.ImageInfo imageInfo, ImageDecoder.Source source) {
-        imageDecoder.setPostProcessor(NotificationsController$$ExternalSyntheticLambda1.INSTANCE);
+        imageDecoder.setPostProcessor(NotificationsController$$ExternalSyntheticLambda11.INSTANCE);
     }
 }

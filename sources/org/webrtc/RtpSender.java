@@ -26,25 +26,24 @@ public class RtpSender {
 
     private static native boolean nativeSetTrack(long j, long j2);
 
-    @CalledByNative
-    public RtpSender(long j) {
-        this.nativeRtpSender = j;
-        this.cachedTrack = MediaStreamTrack.createMediaStreamTrack(nativeGetTrack(j));
-        long nativeGetDtmfSender = nativeGetDtmfSender(j);
-        this.dtmfSender = nativeGetDtmfSender != 0 ? new DtmfSender(nativeGetDtmfSender) : null;
+    public RtpSender(long nativeRtpSender2) {
+        this.nativeRtpSender = nativeRtpSender2;
+        this.cachedTrack = MediaStreamTrack.createMediaStreamTrack(nativeGetTrack(nativeRtpSender2));
+        long nativeDtmfSender = nativeGetDtmfSender(nativeRtpSender2);
+        this.dtmfSender = nativeDtmfSender != 0 ? new DtmfSender(nativeDtmfSender) : null;
     }
 
-    public boolean setTrack(MediaStreamTrack mediaStreamTrack, boolean z) {
+    public boolean setTrack(MediaStreamTrack track, boolean takeOwnership) {
         checkRtpSenderExists();
-        if (!nativeSetTrack(this.nativeRtpSender, mediaStreamTrack == null ? 0 : mediaStreamTrack.getNativeMediaStreamTrack())) {
+        if (!nativeSetTrack(this.nativeRtpSender, track == null ? 0 : track.getNativeMediaStreamTrack())) {
             return false;
         }
-        MediaStreamTrack mediaStreamTrack2 = this.cachedTrack;
-        if (mediaStreamTrack2 != null && this.ownsTrack) {
-            mediaStreamTrack2.dispose();
+        MediaStreamTrack mediaStreamTrack = this.cachedTrack;
+        if (mediaStreamTrack != null && this.ownsTrack) {
+            mediaStreamTrack.dispose();
         }
-        this.cachedTrack = mediaStreamTrack;
-        this.ownsTrack = z;
+        this.cachedTrack = track;
+        this.ownsTrack = takeOwnership;
         return true;
     }
 
@@ -52,9 +51,9 @@ public class RtpSender {
         return this.cachedTrack;
     }
 
-    public void setStreams(List<String> list) {
+    public void setStreams(List<String> streamIds) {
         checkRtpSenderExists();
-        nativeSetStreams(this.nativeRtpSender, list);
+        nativeSetStreams(this.nativeRtpSender, streamIds);
     }
 
     public List<String> getStreams() {
@@ -62,9 +61,9 @@ public class RtpSender {
         return nativeGetStreams(this.nativeRtpSender);
     }
 
-    public boolean setParameters(RtpParameters rtpParameters) {
+    public boolean setParameters(RtpParameters parameters) {
         checkRtpSenderExists();
-        return nativeSetParameters(this.nativeRtpSender, rtpParameters);
+        return nativeSetParameters(this.nativeRtpSender, parameters);
     }
 
     public RtpParameters getParameters() {

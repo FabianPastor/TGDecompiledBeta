@@ -8,6 +8,6 @@ public final /* synthetic */ class DataSettingsActivity$$ExternalSyntheticLambda
     }
 
     public final void run() {
-        this.f$0.lambda$createView$3();
+        this.f$0.m3360lambda$createView$3$orgtelegramuiDataSettingsActivity();
     }
 }

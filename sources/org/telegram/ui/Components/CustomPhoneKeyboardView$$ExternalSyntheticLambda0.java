@@ -12,6 +12,6 @@ public final /* synthetic */ class CustomPhoneKeyboardView$$ExternalSyntheticLam
     }
 
     public final void onClick(View view) {
-        this.f$0.lambda$new$2(this.f$1, view);
+        this.f$0.m905lambda$new$2$orgtelegramuiComponentsCustomPhoneKeyboardView(this.f$1, view);
     }
 }

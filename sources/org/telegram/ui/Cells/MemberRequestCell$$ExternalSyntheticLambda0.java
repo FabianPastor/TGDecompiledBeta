@@ -13,6 +13,6 @@ public final /* synthetic */ class MemberRequestCell$$ExternalSyntheticLambda0 i
     }
 
     public final void onClick(View view) {
-        this.f$0.lambda$new$1(this.f$1, view);
+        this.f$0.m2808lambda$new$0$orgtelegramuiCellsMemberRequestCell(this.f$1, view);
     }
 }

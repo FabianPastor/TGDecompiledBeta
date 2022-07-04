@@ -1,15 +1,19 @@
 package org.telegram.ui;
 
-import android.view.View;
+import org.telegram.ui.Components.SlideChooseView;
 
-public final /* synthetic */ class LinkEditActivity$$ExternalSyntheticLambda3 implements View.OnClickListener {
+public final /* synthetic */ class LinkEditActivity$$ExternalSyntheticLambda3 implements SlideChooseView.Callback {
     public final /* synthetic */ LinkEditActivity f$0;
 
     public /* synthetic */ LinkEditActivity$$ExternalSyntheticLambda3(LinkEditActivity linkEditActivity) {
         this.f$0 = linkEditActivity;
     }
 
-    public final void onClick(View view) {
-        this.f$0.lambda$createView$6(view);
+    public final void onOptionSelected(int i) {
+        this.f$0.m3719lambda$createView$4$orgtelegramuiLinkEditActivity(i);
+    }
+
+    public /* synthetic */ void onTouchEnd() {
+        SlideChooseView.Callback.CC.$default$onTouchEnd(this);
     }
 }

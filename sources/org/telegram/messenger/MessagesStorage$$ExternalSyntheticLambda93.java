@@ -2,16 +2,14 @@ package org.telegram.messenger;
 
 public final /* synthetic */ class MessagesStorage$$ExternalSyntheticLambda93 implements Runnable {
     public final /* synthetic */ MessagesStorage f$0;
-    public final /* synthetic */ long f$1;
-    public final /* synthetic */ Runnable f$2;
+    public final /* synthetic */ boolean f$1;
 
-    public /* synthetic */ MessagesStorage$$ExternalSyntheticLambda93(MessagesStorage messagesStorage, long j, Runnable runnable) {
+    public /* synthetic */ MessagesStorage$$ExternalSyntheticLambda93(MessagesStorage messagesStorage, boolean z) {
         this.f$0 = messagesStorage;
-        this.f$1 = j;
-        this.f$2 = runnable;
+        this.f$1 = z;
     }
 
     public final void run() {
-        this.f$0.lambda$isDialogHasTopMessage$139(this.f$1, this.f$2);
+        this.f$0.m2164x60dfe28(this.f$1);
     }
 }

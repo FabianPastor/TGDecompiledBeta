@@ -14,37 +14,37 @@ public class DefaultVideoDecoderFactory implements VideoDecoderFactory {
         return VideoDecoderFactory.CC.$default$createDecoder((VideoDecoderFactory) this, str);
     }
 
-    public DefaultVideoDecoderFactory(EglBase.Context context) {
-        this.hardwareVideoDecoderFactory = new HardwareVideoDecoderFactory(context);
-        this.platformSoftwareVideoDecoderFactory = new PlatformSoftwareVideoDecoderFactory(context);
+    public DefaultVideoDecoderFactory(EglBase.Context eglContext) {
+        this.hardwareVideoDecoderFactory = new HardwareVideoDecoderFactory(eglContext);
+        this.platformSoftwareVideoDecoderFactory = new PlatformSoftwareVideoDecoderFactory(eglContext);
     }
 
-    DefaultVideoDecoderFactory(VideoDecoderFactory videoDecoderFactory) {
-        this.hardwareVideoDecoderFactory = videoDecoderFactory;
+    DefaultVideoDecoderFactory(VideoDecoderFactory hardwareVideoDecoderFactory2) {
+        this.hardwareVideoDecoderFactory = hardwareVideoDecoderFactory2;
         this.platformSoftwareVideoDecoderFactory = null;
     }
 
-    public VideoDecoder createDecoder(VideoCodecInfo videoCodecInfo) {
+    public VideoDecoder createDecoder(VideoCodecInfo codecType) {
         VideoDecoderFactory videoDecoderFactory;
-        VideoDecoder createDecoder = this.softwareVideoDecoderFactory.createDecoder(videoCodecInfo);
-        VideoDecoder createDecoder2 = this.hardwareVideoDecoderFactory.createDecoder(videoCodecInfo);
-        if (createDecoder == null && (videoDecoderFactory = this.platformSoftwareVideoDecoderFactory) != null) {
-            createDecoder = videoDecoderFactory.createDecoder(videoCodecInfo);
+        VideoDecoder softwareDecoder = this.softwareVideoDecoderFactory.createDecoder(codecType);
+        VideoDecoder hardwareDecoder = this.hardwareVideoDecoderFactory.createDecoder(codecType);
+        if (softwareDecoder == null && (videoDecoderFactory = this.platformSoftwareVideoDecoderFactory) != null) {
+            softwareDecoder = videoDecoderFactory.createDecoder(codecType);
         }
-        if (createDecoder2 == null || createDecoder == null) {
-            return createDecoder2 != null ? createDecoder2 : createDecoder;
+        if (hardwareDecoder == null || softwareDecoder == null) {
+            return hardwareDecoder != null ? hardwareDecoder : softwareDecoder;
         }
-        return new VideoDecoderFallback(createDecoder, createDecoder2);
+        return new VideoDecoderFallback(softwareDecoder, hardwareDecoder);
     }
 
     public VideoCodecInfo[] getSupportedCodecs() {
-        LinkedHashSet linkedHashSet = new LinkedHashSet();
-        linkedHashSet.addAll(Arrays.asList(this.softwareVideoDecoderFactory.getSupportedCodecs()));
-        linkedHashSet.addAll(Arrays.asList(this.hardwareVideoDecoderFactory.getSupportedCodecs()));
+        LinkedHashSet<VideoCodecInfo> supportedCodecInfos = new LinkedHashSet<>();
+        supportedCodecInfos.addAll(Arrays.asList(this.softwareVideoDecoderFactory.getSupportedCodecs()));
+        supportedCodecInfos.addAll(Arrays.asList(this.hardwareVideoDecoderFactory.getSupportedCodecs()));
         VideoDecoderFactory videoDecoderFactory = this.platformSoftwareVideoDecoderFactory;
         if (videoDecoderFactory != null) {
-            linkedHashSet.addAll(Arrays.asList(videoDecoderFactory.getSupportedCodecs()));
+            supportedCodecInfos.addAll(Arrays.asList(videoDecoderFactory.getSupportedCodecs()));
         }
-        return (VideoCodecInfo[]) linkedHashSet.toArray(new VideoCodecInfo[linkedHashSet.size()]);
+        return (VideoCodecInfo[]) supportedCodecInfos.toArray(new VideoCodecInfo[supportedCodecInfos.size()]);
     }
 }

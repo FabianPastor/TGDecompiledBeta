@@ -15,6 +15,6 @@ public final /* synthetic */ class BotWebViewMenuContainer$1$$ExternalSyntheticL
     }
 
     public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-        this.f$0.lambda$onWebAppSetBackgroundColor$1(this.f$1, this.f$2, valueAnimator);
+        this.f$0.m613x368abaf7(this.f$1, this.f$2, valueAnimator);
     }
 }

@@ -1,6 +1,7 @@
 package org.telegram.ui.Components;
 
 import org.telegram.messenger.MessageObject;
+import org.telegram.messenger.NotificationCenter;
 
 public final /* synthetic */ class TranscribeButton$$ExternalSyntheticLambda2 implements Runnable {
     public final /* synthetic */ MessageObject f$0;
@@ -14,6 +15,6 @@ public final /* synthetic */ class TranscribeButton$$ExternalSyntheticLambda2 im
     }
 
     public final void run() {
-        TranscribeButton.lambda$finishTranscription$6(this.f$0, this.f$1, this.f$2);
+        NotificationCenter.getInstance(this.f$0.currentAccount).postNotificationName(NotificationCenter.voiceTranscriptionUpdate, this.f$0, Long.valueOf(this.f$1), this.f$2, true, true);
     }
 }

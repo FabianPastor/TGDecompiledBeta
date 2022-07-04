@@ -1,20 +1,28 @@
 package org.telegram.ui;
 
-import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC$User;
+import android.content.DialogInterface;
+import android.text.style.CharacterStyle;
+import org.telegram.messenger.MessageObject;
+import org.telegram.ui.Cells.ChatMessageCell;
 
-public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda188 implements Runnable {
+public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda188 implements DialogInterface.OnClickListener {
     public final /* synthetic */ ChatActivity f$0;
-    public final /* synthetic */ TLObject f$1;
-    public final /* synthetic */ TLRPC$User f$2;
+    public final /* synthetic */ String f$1;
+    public final /* synthetic */ CharacterStyle f$2;
+    public final /* synthetic */ MessageObject f$3;
+    public final /* synthetic */ ChatMessageCell f$4;
+    public final /* synthetic */ int f$5;
 
-    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda188(ChatActivity chatActivity, TLObject tLObject, TLRPC$User tLRPC$User) {
+    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda188(ChatActivity chatActivity, String str, CharacterStyle characterStyle, MessageObject messageObject, ChatMessageCell chatMessageCell, int i) {
         this.f$0 = chatActivity;
-        this.f$1 = tLObject;
-        this.f$2 = tLRPC$User;
+        this.f$1 = str;
+        this.f$2 = characterStyle;
+        this.f$3 = messageObject;
+        this.f$4 = chatMessageCell;
+        this.f$5 = i;
     }
 
-    public final void run() {
-        this.f$0.lambda$onTransitionAnimationEnd$134(this.f$1, this.f$2);
+    public final void onClick(DialogInterface dialogInterface, int i) {
+        this.f$0.m3043lambda$openClickableLink$235$orgtelegramuiChatActivity(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, dialogInterface, i);
     }
 }

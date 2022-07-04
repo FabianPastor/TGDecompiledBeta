@@ -1,14 +1,24 @@
 package org.telegram.ui;
 
-import org.telegram.ui.Components.NumberPicker;
+import android.view.View;
+import org.telegram.ui.Components.RecyclerListView;
 
-public final /* synthetic */ class GroupCallActivity$$ExternalSyntheticLambda59 implements NumberPicker.Formatter {
-    public static final /* synthetic */ GroupCallActivity$$ExternalSyntheticLambda59 INSTANCE = new GroupCallActivity$$ExternalSyntheticLambda59();
+public final /* synthetic */ class GroupCallActivity$$ExternalSyntheticLambda59 implements RecyclerListView.OnItemClickListenerExtended {
+    public final /* synthetic */ GroupCallActivity f$0;
 
-    private /* synthetic */ GroupCallActivity$$ExternalSyntheticLambda59() {
+    public /* synthetic */ GroupCallActivity$$ExternalSyntheticLambda59(GroupCallActivity groupCallActivity) {
+        this.f$0 = groupCallActivity;
     }
 
-    public final String format(int i) {
-        return String.format("%02d", new Object[]{Integer.valueOf(i)});
+    public /* synthetic */ boolean hasDoubleTap(View view, int i) {
+        return RecyclerListView.OnItemClickListenerExtended.CC.$default$hasDoubleTap(this, view, i);
+    }
+
+    public /* synthetic */ void onDoubleTap(View view, int i, float f, float f2) {
+        RecyclerListView.OnItemClickListenerExtended.CC.$default$onDoubleTap(this, view, i, f, f2);
+    }
+
+    public final void onItemClick(View view, int i, float f, float f2) {
+        this.f$0.m3514lambda$new$12$orgtelegramuiGroupCallActivity(view, i, f, f2);
     }
 }

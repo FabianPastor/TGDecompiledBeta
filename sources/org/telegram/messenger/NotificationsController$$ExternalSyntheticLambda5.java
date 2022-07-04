@@ -8,6 +8,6 @@ public final /* synthetic */ class NotificationsController$$ExternalSyntheticLam
     }
 
     public final void run() {
-        this.f$0.lambda$playInChatSound$29();
+        this.f$0.m2355x8d3d4342();
     }
 }

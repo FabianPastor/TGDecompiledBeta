@@ -6,7 +6,6 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
-import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
 import android.view.View;
 import androidx.core.content.ContextCompat;
@@ -15,10 +14,11 @@ import org.telegram.messenger.DocumentObject;
 import org.telegram.messenger.ImageLocation;
 import org.telegram.messenger.ImageReceiver;
 import org.telegram.messenger.MediaDataController;
-import org.telegram.tgnet.TLRPC$TL_attachMenuBot;
-import org.telegram.tgnet.TLRPC$TL_attachMenuBotIcon;
+import org.telegram.tgnet.TLRPC;
 
 public class AttachBotIntroTopView extends View {
+    private static final int ICONS_SIDE_PADDING = 24;
+    private static final int ICONS_SIZE_DP = 42;
     private Drawable attachDrawable;
     private Paint backgroundPaint = new Paint(1);
     private ImageReceiver imageReceiver;
@@ -36,34 +36,34 @@ public class AttachBotIntroTopView extends View {
         this.paint.setStrokeCap(Paint.Cap.ROUND);
     }
 
-    /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$new$1(ImageReceiver imageReceiver2, boolean z, boolean z2, boolean z3) {
-        ValueAnimator duration = ValueAnimator.ofFloat(new float[]{0.0f, 1.0f}).setDuration(150);
-        duration.addUpdateListener(new AttachBotIntroTopView$$ExternalSyntheticLambda0(this));
-        duration.start();
+    /* renamed from: lambda$new$1$org-telegram-ui-Components-AttachBotIntroTopView  reason: not valid java name */
+    public /* synthetic */ void m539lambda$new$1$orgtelegramuiComponentsAttachBotIntroTopView(ImageReceiver imageReceiver1, boolean set, boolean thumb, boolean memCache) {
+        ValueAnimator anim = ValueAnimator.ofFloat(new float[]{0.0f, 1.0f}).setDuration(150);
+        anim.addUpdateListener(new AttachBotIntroTopView$$ExternalSyntheticLambda0(this));
+        anim.start();
     }
 
-    /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$new$0(ValueAnimator valueAnimator) {
-        this.imageReceiver.setAlpha(((Float) valueAnimator.getAnimatedValue()).floatValue());
+    /* renamed from: lambda$new$0$org-telegram-ui-Components-AttachBotIntroTopView  reason: not valid java name */
+    public /* synthetic */ void m538lambda$new$0$orgtelegramuiComponentsAttachBotIntroTopView(ValueAnimator animation) {
+        this.imageReceiver.setAlpha(((Float) animation.getAnimatedValue()).floatValue());
         invalidate();
     }
 
-    public void setAttachBot(TLRPC$TL_attachMenuBot tLRPC$TL_attachMenuBot) {
-        TLRPC$TL_attachMenuBotIcon staticAttachMenuBotIcon = MediaDataController.getStaticAttachMenuBotIcon(tLRPC$TL_attachMenuBot);
-        if (staticAttachMenuBotIcon != null) {
-            this.imageReceiver.setImage(ImageLocation.getForDocument(staticAttachMenuBotIcon.icon), "42_42", DocumentObject.getSvgThumb(staticAttachMenuBotIcon.icon, "dialogTextGray2", 1.0f), "svg", tLRPC$TL_attachMenuBot, 0);
+    public void setAttachBot(TLRPC.TL_attachMenuBot bot) {
+        TLRPC.TL_attachMenuBotIcon icon = MediaDataController.getStaticAttachMenuBotIcon(bot);
+        if (icon != null) {
+            this.imageReceiver.setImage(ImageLocation.getForDocument(icon.icon), "42_42", DocumentObject.getSvgThumb(icon.icon, "dialogTextGray2", 1.0f), "svg", bot, 0);
         }
     }
 
-    public void setBackgroundColor(int i) {
-        this.backgroundPaint.setColor(i);
+    public void setBackgroundColor(int color) {
+        this.backgroundPaint.setColor(color);
     }
 
-    public void setColor(int i) {
-        this.attachDrawable.setColorFilter(i, PorterDuff.Mode.SRC_IN);
-        this.paint.setColor(i);
-        this.imageReceiver.setColorFilter(new PorterDuffColorFilter(i, PorterDuff.Mode.SRC_IN));
+    public void setColor(int color) {
+        this.attachDrawable.setColorFilter(color, PorterDuff.Mode.SRC_IN);
+        this.paint.setColor(color);
+        this.imageReceiver.setColorFilter(new PorterDuffColorFilter(color, PorterDuff.Mode.SRC_IN));
     }
 
     /* access modifiers changed from: protected */
@@ -81,9 +81,8 @@ public class AttachBotIntroTopView extends View {
     /* access modifiers changed from: protected */
     public void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        RectF rectF = AndroidUtilities.rectTmp;
-        rectF.set(0.0f, 0.0f, (float) getWidth(), (float) (getHeight() + AndroidUtilities.dp(6.0f)));
-        canvas.drawRoundRect(rectF, (float) AndroidUtilities.dp(6.0f), (float) AndroidUtilities.dp(6.0f), this.backgroundPaint);
+        AndroidUtilities.rectTmp.set(0.0f, 0.0f, (float) getWidth(), (float) (getHeight() + AndroidUtilities.dp(6.0f)));
+        canvas.drawRoundRect(AndroidUtilities.rectTmp, (float) AndroidUtilities.dp(6.0f), (float) AndroidUtilities.dp(6.0f), this.backgroundPaint);
         this.imageReceiver.setImageCoords((((float) getWidth()) / 2.0f) - ((float) AndroidUtilities.dp(66.0f)), (((float) getHeight()) / 2.0f) - (((float) AndroidUtilities.dp(42.0f)) / 2.0f), (float) AndroidUtilities.dp(42.0f), (float) AndroidUtilities.dp(42.0f));
         this.imageReceiver.draw(canvas);
         Canvas canvas2 = canvas;

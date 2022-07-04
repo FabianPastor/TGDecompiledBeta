@@ -1,18 +1,13 @@
 package org.telegram.messenger;
 
-import android.animation.ValueAnimator;
-import org.telegram.ui.Components.VideoPlayer;
-
-public final /* synthetic */ class MediaController$$ExternalSyntheticLambda0 implements ValueAnimator.AnimatorUpdateListener {
+public final /* synthetic */ class MediaController$$ExternalSyntheticLambda0 implements Runnable {
     public final /* synthetic */ MediaController f$0;
-    public final /* synthetic */ VideoPlayer f$1;
 
-    public /* synthetic */ MediaController$$ExternalSyntheticLambda0(MediaController mediaController, VideoPlayer videoPlayer) {
+    public /* synthetic */ MediaController$$ExternalSyntheticLambda0(MediaController mediaController) {
         this.f$0 = mediaController;
-        this.f$1 = videoPlayer;
     }
 
-    public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-        this.f$0.lambda$cleanupPlayer$10(this.f$1, valueAnimator);
+    public final void run() {
+        this.f$0.m95lambda$new$3$orgtelegrammessengerMediaController();
     }
 }

@@ -12,6 +12,6 @@ public final /* synthetic */ class VideoCapturerDevice$$ExternalSyntheticLambda4
     }
 
     public final void run() {
-        this.f$0.lambda$onStateChanged$7(this.f$1, this.f$2);
+        this.f$0.m516x7b06e05b(this.f$1, this.f$2);
     }
 }

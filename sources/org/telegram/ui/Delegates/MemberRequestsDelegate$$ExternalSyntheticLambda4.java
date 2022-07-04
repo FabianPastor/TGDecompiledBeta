@@ -12,6 +12,6 @@ public final /* synthetic */ class MemberRequestsDelegate$$ExternalSyntheticLamb
     }
 
     public final void run() {
-        this.f$0.lambda$onItemClick$1(this.f$1);
+        this.f$0.m1635xf2d2b3f6(this.f$1);
     }
 }

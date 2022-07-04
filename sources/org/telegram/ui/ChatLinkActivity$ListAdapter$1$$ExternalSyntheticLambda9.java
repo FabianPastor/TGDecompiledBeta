@@ -13,6 +13,6 @@ public final /* synthetic */ class ChatLinkActivity$ListAdapter$1$$ExternalSynth
     }
 
     public final void run(long j) {
-        this.f$0.lambda$migrateIfNeeded$0(this.f$1, j);
+        this.f$0.m3249xa6773969(this.f$1, j);
     }
 }

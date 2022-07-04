@@ -10,6 +10,6 @@ public final /* synthetic */ class TooManyCommunitiesActivity$$ExternalSynthetic
     }
 
     public final void onClick(View view) {
-        this.f$0.lambda$createView$2(view);
+        this.f$0.m4706lambda$createView$2$orgtelegramuiTooManyCommunitiesActivity(view);
     }
 }

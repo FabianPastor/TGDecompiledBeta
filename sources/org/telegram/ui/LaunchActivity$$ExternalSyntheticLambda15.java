@@ -1,15 +1,19 @@
 package org.telegram.ui;
 
-import android.view.View;
+import android.content.DialogInterface;
 
-public final /* synthetic */ class LaunchActivity$$ExternalSyntheticLambda15 implements View.OnClickListener {
-    public final /* synthetic */ LaunchActivity f$0;
+public final /* synthetic */ class LaunchActivity$$ExternalSyntheticLambda15 implements DialogInterface.OnCancelListener {
+    public final /* synthetic */ int f$0;
+    public final /* synthetic */ int[] f$1;
+    public final /* synthetic */ Runnable f$2;
 
-    public /* synthetic */ LaunchActivity$$ExternalSyntheticLambda15(LaunchActivity launchActivity) {
-        this.f$0 = launchActivity;
+    public /* synthetic */ LaunchActivity$$ExternalSyntheticLambda15(int i, int[] iArr, Runnable runnable) {
+        this.f$0 = i;
+        this.f$1 = iArr;
+        this.f$2 = runnable;
     }
 
-    public final void onClick(View view) {
-        this.f$0.lambda$createUpdateUI$71(view);
+    public final void onCancel(DialogInterface dialogInterface) {
+        LaunchActivity.lambda$runImportRequest$27(this.f$0, this.f$1, this.f$2, dialogInterface);
     }
 }

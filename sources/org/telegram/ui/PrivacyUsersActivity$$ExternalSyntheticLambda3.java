@@ -11,6 +11,6 @@ public final /* synthetic */ class PrivacyUsersActivity$$ExternalSyntheticLambda
     }
 
     public final boolean onItemClick(View view, int i) {
-        return this.f$0.lambda$createView$2(view, i);
+        return this.f$0.m4384lambda$createView$2$orgtelegramuiPrivacyUsersActivity(view, i);
     }
 }

@@ -14,6 +14,6 @@ public final /* synthetic */ class FloatingToolbar$FloatingToolbarPopup$$Externa
     }
 
     public final void onClick(View view) {
-        this.f$0.lambda$createOverflowButton$0(this.f$1, view);
+        this.f$0.m2574xCLASSNAMEd917(this.f$1, view);
     }
 }

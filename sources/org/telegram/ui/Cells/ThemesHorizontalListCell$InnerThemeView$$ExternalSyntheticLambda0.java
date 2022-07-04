@@ -13,6 +13,6 @@ public final /* synthetic */ class ThemesHorizontalListCell$InnerThemeView$$Exte
     }
 
     public final void run() {
-        this.f$0.lambda$parseTheme$0(this.f$1);
+        this.f$0.m2835xf3b65e37(this.f$1);
     }
 }

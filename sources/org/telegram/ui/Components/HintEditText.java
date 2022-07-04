@@ -12,38 +12,29 @@ public class HintEditText extends EditTextBoldCursor {
     private String hintText;
     private Rect rect = new Rect();
 
-    /* access modifiers changed from: protected */
-    public void onPreDrawHintCharacter(int i, Canvas canvas, float f, float f2) {
-    }
-
-    /* access modifiers changed from: protected */
-    public boolean shouldDrawBehindText(int i) {
-        return false;
-    }
-
     public HintEditText(Context context) {
         super(context);
         this.hintPaint.setColor(Theme.getColor("windowBackgroundWhiteHintText"));
     }
 
-    public void setTextSize(int i, float f) {
-        super.setTextSize(i, f);
-        this.hintPaint.setTextSize(TypedValue.applyDimension(i, f, getResources().getDisplayMetrics()));
+    public void setTextSize(int unit, float size) {
+        super.setTextSize(unit, size);
+        this.hintPaint.setTextSize(TypedValue.applyDimension(unit, size, getResources().getDisplayMetrics()));
     }
 
     public String getHintText() {
         return this.hintText;
     }
 
-    public void setHintText(String str) {
-        this.hintText = str;
+    public void setHintText(String value) {
+        this.hintText = value;
         onTextChange();
         setText(getText());
     }
 
     /* access modifiers changed from: protected */
-    public void onLayout(boolean z, int i, int i2, int i3, int i4) {
-        super.onLayout(z, i, i2, i3, i4);
+    public void onLayout(boolean changed, int left, int top, int right, int bottom) {
+        super.onLayout(changed, left, top, right, bottom);
         onTextChange();
     }
 
@@ -53,33 +44,41 @@ public class HintEditText extends EditTextBoldCursor {
 
     /* access modifiers changed from: protected */
     public void onDraw(Canvas canvas) {
-        float f;
+        float newOffset;
         if (this.hintText != null && length() < this.hintText.length()) {
-            float f2 = 0.0f;
-            for (int i = 0; i < this.hintText.length(); i++) {
-                if (i < length()) {
-                    f = getPaint().measureText(getText(), i, i + 1);
+            float offsetX = 0.0f;
+            for (int a = 0; a < this.hintText.length(); a++) {
+                if (a < length()) {
+                    newOffset = getPaint().measureText(getText(), a, a + 1);
                 } else {
-                    f = this.hintPaint.measureText(this.hintText, i, i + 1);
+                    newOffset = this.hintPaint.measureText(this.hintText, a, a + 1);
                 }
-                float f3 = f;
-                if (shouldDrawBehindText(i) || i >= length()) {
+                if (shouldDrawBehindText(a) || a >= length()) {
                     int color = this.hintPaint.getColor();
                     canvas.save();
                     TextPaint textPaint = this.hintPaint;
                     String str = this.hintText;
                     textPaint.getTextBounds(str, 0, str.length(), this.rect);
-                    float height = ((float) (getHeight() + this.rect.height())) / 2.0f;
-                    onPreDrawHintCharacter(i, canvas, f2, height);
-                    canvas.drawText(this.hintText, i, i + 1, f2, height, this.hintPaint);
-                    f2 += f3;
+                    float offsetY = ((float) (getHeight() + this.rect.height())) / 2.0f;
+                    onPreDrawHintCharacter(a, canvas, offsetX, offsetY);
+                    canvas.drawText(this.hintText, a, a + 1, offsetX, offsetY, this.hintPaint);
+                    offsetX += newOffset;
                     canvas.restore();
                     this.hintPaint.setColor(color);
                 } else {
-                    f2 += f3;
+                    offsetX += newOffset;
                 }
             }
         }
         super.onDraw(canvas);
+    }
+
+    /* access modifiers changed from: protected */
+    public boolean shouldDrawBehindText(int index) {
+        return false;
+    }
+
+    /* access modifiers changed from: protected */
+    public void onPreDrawHintCharacter(int index, Canvas canvas, float pivotX, float pivotY) {
     }
 }

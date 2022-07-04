@@ -1,23 +1,30 @@
 package org.telegram.messenger;
 
-import org.telegram.tgnet.RequestDelegate;
-import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC$TL_error;
+import androidx.collection.LongSparseArray;
+import java.util.ArrayList;
 
-public final /* synthetic */ class MediaDataController$$ExternalSyntheticLambda151 implements RequestDelegate {
+public final /* synthetic */ class MediaDataController$$ExternalSyntheticLambda151 implements Runnable {
     public final /* synthetic */ MediaDataController f$0;
-    public final /* synthetic */ long f$1;
-    public final /* synthetic */ int f$2;
-    public final /* synthetic */ int f$3;
+    public final /* synthetic */ ArrayList f$1;
+    public final /* synthetic */ boolean f$2;
+    public final /* synthetic */ ArrayList f$3;
+    public final /* synthetic */ ArrayList f$4;
+    public final /* synthetic */ ArrayList f$5;
+    public final /* synthetic */ LongSparseArray f$6;
+    public final /* synthetic */ LongSparseArray f$7;
 
-    public /* synthetic */ MediaDataController$$ExternalSyntheticLambda151(MediaDataController mediaDataController, long j, int i, int i2) {
+    public /* synthetic */ MediaDataController$$ExternalSyntheticLambda151(MediaDataController mediaDataController, ArrayList arrayList, boolean z, ArrayList arrayList2, ArrayList arrayList3, ArrayList arrayList4, LongSparseArray longSparseArray, LongSparseArray longSparseArray2) {
         this.f$0 = mediaDataController;
-        this.f$1 = j;
-        this.f$2 = i;
-        this.f$3 = i2;
+        this.f$1 = arrayList;
+        this.f$2 = z;
+        this.f$3 = arrayList2;
+        this.f$4 = arrayList3;
+        this.f$5 = arrayList4;
+        this.f$6 = longSparseArray;
+        this.f$7 = longSparseArray2;
     }
 
-    public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        this.f$0.lambda$getMediaCount$94(this.f$1, this.f$2, this.f$3, tLObject, tLRPC$TL_error);
+    public final void run() {
+        this.f$0.m1973xd99db1b2(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6, this.f$7);
     }
 }

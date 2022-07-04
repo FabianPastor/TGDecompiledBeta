@@ -8,6 +8,6 @@ public final /* synthetic */ class PasscodeView$$ExternalSyntheticLambda8 implem
     }
 
     public final void run() {
-        this.f$0.lambda$onResume$6();
+        this.f$0.m1149lambda$processDone$5$orgtelegramuiComponentsPasscodeView();
     }
 }

@@ -10,6 +10,6 @@ public final /* synthetic */ class LoginActivity$LoginActivityRegisterView$4$$Ex
     }
 
     public final void run() {
-        this.f$0.lambda$$1();
+        this.f$0.m3840x755da674();
     }
 }

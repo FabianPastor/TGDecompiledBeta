@@ -10,6 +10,6 @@ public final /* synthetic */ class WebPlayerView$2$1$$ExternalSyntheticLambda0 i
     }
 
     public final void run() {
-        this.f$0.lambda$onPreDraw$0();
+        this.f$0.m1567lambda$onPreDraw$0$orgtelegramuiComponentsWebPlayerView$2$1();
     }
 }

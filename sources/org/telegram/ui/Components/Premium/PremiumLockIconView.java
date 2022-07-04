@@ -7,7 +7,6 @@ import android.graphics.Color;
 import android.graphics.LinearGradient;
 import android.graphics.Paint;
 import android.graphics.Path;
-import android.graphics.RectF;
 import android.graphics.Shader;
 import android.widget.ImageView;
 import androidx.core.graphics.ColorUtils;
@@ -26,6 +25,7 @@ public class PremiumLockIconView extends ImageView {
     private float[] colorFloat = new float[3];
     int currentColor = -1;
     ImageReceiver imageReceiver;
+    public boolean isEnter;
     private boolean locked;
     Paint oldShaderPaint;
     Paint paint = new Paint(1);
@@ -37,34 +37,33 @@ public class PremiumLockIconView extends ImageView {
     boolean waitingImage;
     boolean wasDrawn;
 
-    public PremiumLockIconView(Context context, int i) {
+    public PremiumLockIconView(Context context, int type2) {
         super(context);
-        this.type = i;
-        setImageResource(i == TYPE_REACTIONS ? NUM : NUM);
-        if (i == TYPE_REACTIONS) {
+        this.type = type2;
+        setImageResource(type2 == TYPE_REACTIONS ? NUM : NUM);
+        if (type2 == TYPE_REACTIONS) {
             StarParticlesView.Drawable drawable = new StarParticlesView.Drawable(5);
             this.starParticles = drawable;
             drawable.updateColors();
+            this.starParticles.roundEffect = false;
             StarParticlesView.Drawable drawable2 = this.starParticles;
-            drawable2.roundEffect = false;
             drawable2.size2 = 4;
             drawable2.size3 = 4;
-            drawable2.size1 = 2;
-            drawable2.speedScale = 0.1f;
-            drawable2.init();
+            this.starParticles.size1 = 2;
+            this.starParticles.speedScale = 0.1f;
+            this.starParticles.init();
         }
     }
 
     /* access modifiers changed from: protected */
-    public void onMeasure(int i, int i2) {
-        super.onMeasure(i, i2);
+    public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
         if (this.type == TYPE_REACTIONS) {
             this.path.rewind();
-            RectF rectF = AndroidUtilities.rectTmp;
-            rectF.set(0.0f, 0.0f, (float) getMeasuredWidth(), (float) getMeasuredHeight());
-            this.path.addCircle(rectF.width() / 2.0f, rectF.centerY(), rectF.width() / 2.0f, Path.Direction.CW);
-            rectF.set((((float) getMeasuredWidth()) / 2.0f) + ((float) AndroidUtilities.dp(2.5f)), (((float) getMeasuredHeight()) / 2.0f) + AndroidUtilities.dpf2(5.7f), ((float) getMeasuredWidth()) - AndroidUtilities.dpf2(0.2f), (float) getMeasuredHeight());
-            this.path.addRoundRect(rectF, (float) AndroidUtilities.dp(2.0f), (float) AndroidUtilities.dp(2.0f), Path.Direction.CW);
+            AndroidUtilities.rectTmp.set(0.0f, 0.0f, (float) getMeasuredWidth(), (float) getMeasuredHeight());
+            this.path.addCircle(AndroidUtilities.rectTmp.width() / 2.0f, AndroidUtilities.rectTmp.centerY(), AndroidUtilities.rectTmp.width() / 2.0f, Path.Direction.CW);
+            AndroidUtilities.rectTmp.set((((float) getMeasuredWidth()) / 2.0f) + ((float) AndroidUtilities.dp(2.5f)), (((float) getMeasuredHeight()) / 2.0f) + AndroidUtilities.dpf2(5.7f), ((float) getMeasuredWidth()) - AndroidUtilities.dpf2(0.2f), (float) getMeasuredHeight());
+            this.path.addRoundRect(AndroidUtilities.rectTmp, (float) AndroidUtilities.dp(2.0f), (float) AndroidUtilities.dp(2.0f), Path.Direction.CW);
             this.path.close();
             this.starParticles.rect.set(0.0f, 0.0f, (float) getMeasuredWidth(), (float) getMeasuredHeight());
             this.starParticles.rect.inset((float) AndroidUtilities.dp(6.0f), (float) AndroidUtilities.dp(6.0f));
@@ -73,11 +72,11 @@ public class PremiumLockIconView extends ImageView {
         updateGradient();
     }
 
-    public void setColor(int i) {
-        if (this.currentColor != i) {
-            this.currentColor = i;
+    public void setColor(int color) {
+        if (this.currentColor != color) {
+            this.currentColor = color;
             if (this.type == TYPE_REACTIONS) {
-                this.paint.setColor(i);
+                this.paint.setColor(color);
             } else {
                 updateGradient();
             }
@@ -103,25 +102,24 @@ public class PremiumLockIconView extends ImageView {
                 canvas.drawPath(this.path, PremiumGradient.getInstance().getMainGradientPaint());
             }
             this.cellFlickerDrawable.setParentWidth(getMeasuredWidth() / 2);
-            CellFlickerDrawable cellFlickerDrawable2 = this.cellFlickerDrawable;
-            cellFlickerDrawable2.drawFrame = false;
-            cellFlickerDrawable2.draw(canvas, this.path, this);
+            this.cellFlickerDrawable.drawFrame = false;
+            this.cellFlickerDrawable.draw(canvas, this.path, this);
             canvas.save();
             canvas.clipPath(this.path);
             this.starParticles.onDraw(canvas);
             canvas.restore();
             invalidate();
         } else {
-            float measuredWidth = ((float) getMeasuredWidth()) / 2.0f;
-            float measuredHeight = ((float) getMeasuredHeight()) / 2.0f;
+            float cx = ((float) getMeasuredWidth()) / 2.0f;
+            float cy = ((float) getMeasuredHeight()) / 2.0f;
             if (this.oldShaderPaint == null) {
                 this.shaderCrossfadeProgress = 1.0f;
             }
             float f = this.shaderCrossfadeProgress;
             if (f != 1.0f) {
                 this.paint.setAlpha((int) (f * 255.0f));
-                canvas.drawCircle(measuredWidth, measuredHeight, measuredWidth, this.oldShaderPaint);
-                canvas.drawCircle(measuredWidth, measuredHeight, measuredWidth, this.paint);
+                canvas.drawCircle(cx, cy, cx, this.oldShaderPaint);
+                canvas.drawCircle(cx, cy, cx, this.paint);
                 float f2 = this.shaderCrossfadeProgress + 0.10666667f;
                 this.shaderCrossfadeProgress = f2;
                 if (f2 > 1.0f) {
@@ -131,7 +129,7 @@ public class PremiumLockIconView extends ImageView {
                 invalidate();
                 this.paint.setAlpha(255);
             } else {
-                canvas.drawCircle(measuredWidth, measuredHeight, measuredWidth, this.paint);
+                canvas.drawCircle(cx, cy, cx, this.paint);
             }
         }
         super.onDraw(canvas);
@@ -147,27 +145,27 @@ public class PremiumLockIconView extends ImageView {
         if (bitmap == null) {
             return -1;
         }
-        float height = ((float) (bitmap.getHeight() - 1)) / 10.0f;
-        float width = ((float) (bitmap.getWidth() - 1)) / 10.0f;
-        int i = 0;
-        int i2 = 0;
-        int i3 = 0;
-        int i4 = 0;
-        for (int i5 = 0; i5 < 10; i5++) {
-            for (int i6 = 0; i6 < 10; i6++) {
-                int pixel = bitmap.getPixel((int) (((float) i5) * width), (int) (((float) i6) * height));
+        float stepH = ((float) (bitmap.getHeight() - 1)) / 10.0f;
+        float stepW = ((float) (bitmap.getWidth() - 1)) / 10.0f;
+        int r = 0;
+        int g = 0;
+        int b = 0;
+        int amount = 0;
+        for (int i = 0; i < 10; i++) {
+            for (int j = 0; j < 10; j++) {
+                int pixel = bitmap.getPixel((int) (((float) i) * stepW), (int) (((float) j) * stepH));
                 if (pixel != 0) {
-                    i2 += Color.red(pixel);
-                    i3 += Color.green(pixel);
-                    i4 += Color.blue(pixel);
-                    i++;
+                    r += Color.red(pixel);
+                    g += Color.green(pixel);
+                    b += Color.blue(pixel);
+                    amount++;
                 }
             }
         }
-        if (i == 0) {
+        if (amount == 0) {
             return 0;
         }
-        return Color.argb(255, i2 / i, i3 / i, i4 / i);
+        return Color.argb(255, r / amount, g / amount, b / amount);
     }
 
     private void updateGradient() {
@@ -178,10 +176,10 @@ public class PremiumLockIconView extends ImageView {
             if (fArr[2] > 0.7f) {
                 fArr[2] = 0.7f;
             }
-            int HSVToColor = Color.HSVToColor(fArr);
-            int blendARGB = ColorUtils.blendARGB(HSVToColor, Theme.getColor("windowBackgroundWhite"), 0.5f);
-            int blendARGB2 = ColorUtils.blendARGB(HSVToColor, Theme.getColor("windowBackgroundWhite"), 0.4f);
-            if (this.shader == null || this.color1 != blendARGB2 || this.color2 != blendARGB) {
+            int baseColor = Color.HSVToColor(fArr);
+            int c2 = ColorUtils.blendARGB(baseColor, Theme.getColor("windowBackgroundWhite"), 0.5f);
+            int c1 = ColorUtils.blendARGB(baseColor, Theme.getColor("windowBackgroundWhite"), 0.4f);
+            if (this.shader == null || this.color1 != c1 || this.color2 != c2) {
                 if (this.wasDrawn) {
                     Paint paint2 = this.paint;
                     this.oldShaderPaint = paint2;
@@ -189,9 +187,9 @@ public class PremiumLockIconView extends ImageView {
                     this.shaderCrossfadeProgress = 0.0f;
                 }
                 this.paint = new Paint(1);
-                this.color1 = blendARGB2;
-                this.color2 = blendARGB;
-                LinearGradient linearGradient = new LinearGradient(0.0f, (float) getMeasuredHeight(), 0.0f, 0.0f, new int[]{blendARGB2, blendARGB}, (float[]) null, Shader.TileMode.CLAMP);
+                this.color1 = c1;
+                this.color2 = c2;
+                LinearGradient linearGradient = new LinearGradient(0.0f, (float) getMeasuredHeight(), 0.0f, 0.0f, new int[]{c1, c2}, (float[]) null, Shader.TileMode.CLAMP);
                 this.shader = linearGradient;
                 this.paint.setShader(linearGradient);
                 invalidate();
@@ -205,22 +203,23 @@ public class PremiumLockIconView extends ImageView {
         invalidate();
     }
 
-    public void play(int i) {
-        CellFlickerDrawable cellFlickerDrawable2 = this.cellFlickerDrawable;
-        cellFlickerDrawable2.progress = 0.0f;
-        cellFlickerDrawable2.repeatEnabled = false;
+    public void play(int delay) {
+        this.isEnter = true;
+        this.cellFlickerDrawable.progress = 0.0f;
+        this.cellFlickerDrawable.repeatEnabled = false;
         invalidate();
-        animate().scaleX(1.1f).scaleY(1.1f).setStartDelay((long) i).setInterpolator(AndroidUtilities.overshootInterpolator).setDuration(300);
+        animate().scaleX(1.1f).scaleY(1.1f).setStartDelay((long) delay).setInterpolator(AndroidUtilities.overshootInterpolator).setDuration(300);
     }
 
     public void resetAnimation() {
+        this.isEnter = false;
         setScaleX(0.0f);
         setScaleY(0.0f);
     }
 
-    public void setLocked(boolean z) {
+    public void setLocked(boolean locked2) {
         if (this.type != TYPE_REACTIONS) {
-            setImageResource(z ? NUM : NUM);
+            setImageResource(locked2 ? NUM : NUM);
         }
     }
 }

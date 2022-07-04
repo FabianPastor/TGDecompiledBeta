@@ -13,6 +13,6 @@ public final /* synthetic */ class ChatPullingDownDrawable$$ExternalSyntheticLam
     }
 
     public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-        this.f$0.lambda$showReleaseState$0(this.f$1, valueAnimator);
+        this.f$0.m3268x50791e1e(this.f$1, valueAnimator);
     }
 }

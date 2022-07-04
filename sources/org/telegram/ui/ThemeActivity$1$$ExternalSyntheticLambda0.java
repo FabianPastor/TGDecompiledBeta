@@ -11,6 +11,6 @@ public final /* synthetic */ class ThemeActivity$1$$ExternalSyntheticLambda0 imp
     }
 
     public final void onClick(DialogInterface dialogInterface, int i) {
-        this.f$0.lambda$onItemClick$0(dialogInterface, i);
+        this.f$0.m4662lambda$onItemClick$0$orgtelegramuiThemeActivity$1(dialogInterface, i);
     }
 }

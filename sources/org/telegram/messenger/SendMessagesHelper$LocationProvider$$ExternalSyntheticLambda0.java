@@ -10,6 +10,6 @@ public final /* synthetic */ class SendMessagesHelper$LocationProvider$$External
     }
 
     public final void run() {
-        this.f$0.lambda$start$0();
+        this.f$0.m2391x9940a2de();
     }
 }

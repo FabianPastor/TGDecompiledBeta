@@ -1,13 +1,14 @@
 package org.telegram.ui.Components;
 
-public final /* synthetic */ class ChatActivityEnterView$$ExternalSyntheticLambda46 implements Runnable {
-    public final /* synthetic */ ChatActivityEnterView f$0;
+import org.telegram.messenger.MediaController;
 
-    public /* synthetic */ ChatActivityEnterView$$ExternalSyntheticLambda46(ChatActivityEnterView chatActivityEnterView) {
-        this.f$0 = chatActivityEnterView;
+public final /* synthetic */ class ChatActivityEnterView$$ExternalSyntheticLambda46 implements Runnable {
+    public static final /* synthetic */ ChatActivityEnterView$$ExternalSyntheticLambda46 INSTANCE = new ChatActivityEnterView$$ExternalSyntheticLambda46();
+
+    private /* synthetic */ ChatActivityEnterView$$ExternalSyntheticLambda46() {
     }
 
     public final void run() {
-        this.f$0.lambda$setFieldFocused$44();
+        MediaController.getInstance().stopRecording(0, false, 0);
     }
 }

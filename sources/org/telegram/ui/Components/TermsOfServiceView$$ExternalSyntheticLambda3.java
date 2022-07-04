@@ -10,6 +10,6 @@ public final /* synthetic */ class TermsOfServiceView$$ExternalSyntheticLambda3 
     }
 
     public final void onClick(View view) {
-        this.f$0.lambda$new$6(view);
+        this.f$0.m1475lambda$new$4$orgtelegramuiComponentsTermsOfServiceView(view);
     }
 }

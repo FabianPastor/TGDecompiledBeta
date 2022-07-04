@@ -1,18 +1,21 @@
 package org.telegram.ui.Components;
 
-import android.content.DialogInterface;
-import org.telegram.tgnet.TLRPC$EncryptedChat;
+import org.telegram.ui.Components.NumberPicker;
 
-public final /* synthetic */ class AlertsCreator$$ExternalSyntheticLambda21 implements DialogInterface.OnClickListener {
-    public final /* synthetic */ TLRPC$EncryptedChat f$0;
+public final /* synthetic */ class AlertsCreator$$ExternalSyntheticLambda21 implements NumberPicker.OnScrollListener {
+    public final /* synthetic */ boolean f$0;
     public final /* synthetic */ NumberPicker f$1;
+    public final /* synthetic */ NumberPicker f$2;
+    public final /* synthetic */ NumberPicker f$3;
 
-    public /* synthetic */ AlertsCreator$$ExternalSyntheticLambda21(TLRPC$EncryptedChat tLRPC$EncryptedChat, NumberPicker numberPicker) {
-        this.f$0 = tLRPC$EncryptedChat;
+    public /* synthetic */ AlertsCreator$$ExternalSyntheticLambda21(boolean z, NumberPicker numberPicker, NumberPicker numberPicker2, NumberPicker numberPicker3) {
+        this.f$0 = z;
         this.f$1 = numberPicker;
+        this.f$2 = numberPicker2;
+        this.f$3 = numberPicker3;
     }
 
-    public final void onClick(DialogInterface dialogInterface, int i) {
-        AlertsCreator.lambda$createTTLAlert$108(this.f$0, this.f$1, dialogInterface, i);
+    public final void onScrollStateChange(NumberPicker numberPicker, int i) {
+        AlertsCreator.lambda$createDatePickerDialog$43(this.f$0, this.f$1, this.f$2, this.f$3, numberPicker, i);
     }
 }

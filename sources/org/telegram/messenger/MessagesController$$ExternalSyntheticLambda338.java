@@ -1,22 +1,17 @@
 package org.telegram.messenger;
 
-import org.telegram.tgnet.RequestDelegate;
-import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC$TL_contacts_getBlocked;
-import org.telegram.tgnet.TLRPC$TL_error;
-
-public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda338 implements RequestDelegate {
+public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda338 implements Runnable {
     public final /* synthetic */ MessagesController f$0;
-    public final /* synthetic */ boolean f$1;
-    public final /* synthetic */ TLRPC$TL_contacts_getBlocked f$2;
+    public final /* synthetic */ long f$1;
+    public final /* synthetic */ Runnable f$2;
 
-    public /* synthetic */ MessagesController$$ExternalSyntheticLambda338(MessagesController messagesController, boolean z, TLRPC$TL_contacts_getBlocked tLRPC$TL_contacts_getBlocked) {
+    public /* synthetic */ MessagesController$$ExternalSyntheticLambda338(MessagesController messagesController, long j, Runnable runnable) {
         this.f$0 = messagesController;
-        this.f$1 = z;
-        this.f$2 = tLRPC$TL_contacts_getBlocked;
+        this.f$1 = j;
+        this.f$2 = runnable;
     }
 
-    public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        this.f$0.lambda$getBlockedPeers$90(this.f$1, this.f$2, tLObject, tLRPC$TL_error);
+    public final void run() {
+        this.f$0.m406x27071b4b(this.f$1, this.f$2);
     }
 }

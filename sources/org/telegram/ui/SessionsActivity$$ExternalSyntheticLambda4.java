@@ -1,15 +1,17 @@
 package org.telegram.ui;
 
-import android.view.View;
+import org.telegram.tgnet.RequestDelegate;
+import org.telegram.tgnet.TLObject;
+import org.telegram.tgnet.TLRPC;
 
-public final /* synthetic */ class SessionsActivity$$ExternalSyntheticLambda4 implements View.OnClickListener {
-    public final /* synthetic */ boolean[] f$0;
+public final /* synthetic */ class SessionsActivity$$ExternalSyntheticLambda4 implements RequestDelegate {
+    public final /* synthetic */ SessionsActivity f$0;
 
-    public /* synthetic */ SessionsActivity$$ExternalSyntheticLambda4(boolean[] zArr) {
-        this.f$0 = zArr;
+    public /* synthetic */ SessionsActivity$$ExternalSyntheticLambda4(SessionsActivity sessionsActivity) {
+        this.f$0 = sessionsActivity;
     }
 
-    public final void onClick(View view) {
-        SessionsActivity.lambda$createView$7(this.f$0, view);
+    public final void run(TLObject tLObject, TLRPC.TL_error tL_error) {
+        this.f$0.m4591lambda$createView$3$orgtelegramuiSessionsActivity(tLObject, tL_error);
     }
 }

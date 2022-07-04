@@ -11,6 +11,6 @@ public final /* synthetic */ class TrendingStickersAlert$AlertContainerView$$Ext
     }
 
     public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-        this.f$0.lambda$setStatusBarVisible$0(valueAnimator);
+        this.f$0.m1529x25fea2ec(valueAnimator);
     }
 }

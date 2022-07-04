@@ -1,15 +1,13 @@
 package org.telegram.ui;
 
-import android.view.MotionEvent;
-import android.view.View;
+public final /* synthetic */ class DialogsActivity$$ExternalSyntheticLambda28 implements Runnable {
+    public final /* synthetic */ DialogsActivity f$0;
 
-public final /* synthetic */ class DialogsActivity$$ExternalSyntheticLambda28 implements View.OnTouchListener {
-    public static final /* synthetic */ DialogsActivity$$ExternalSyntheticLambda28 INSTANCE = new DialogsActivity$$ExternalSyntheticLambda28();
-
-    private /* synthetic */ DialogsActivity$$ExternalSyntheticLambda28() {
+    public /* synthetic */ DialogsActivity$$ExternalSyntheticLambda28(DialogsActivity dialogsActivity) {
+        this.f$0 = dialogsActivity;
     }
 
-    public final boolean onTouch(View view, MotionEvent motionEvent) {
-        return DialogsActivity.lambda$createActionMode$15(view, motionEvent);
+    public final void run() {
+        this.f$0.m3411lambda$pinDialog$40$orgtelegramuiDialogsActivity();
     }
 }

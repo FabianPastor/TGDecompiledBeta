@@ -10,6 +10,6 @@ public final /* synthetic */ class PollEditTextCell$$ExternalSyntheticLambda0 im
     }
 
     public final void onClick(View view) {
-        this.f$0.lambda$new$0(view);
+        this.f$0.m2813lambda$new$0$orgtelegramuiCellsPollEditTextCell(view);
     }
 }

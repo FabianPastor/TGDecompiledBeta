@@ -12,6 +12,6 @@ public final /* synthetic */ class ForwardingPreviewView$5$$ExternalSyntheticLam
     }
 
     public final void run() {
-        this.f$0.lambda$endAnimations$2(this.f$1);
+        this.f$0.m983xCLASSNAMEa9(this.f$1);
     }
 }

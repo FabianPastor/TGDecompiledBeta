@@ -20,6 +20,6 @@ public final /* synthetic */ class StatisticActivity$ChartViewData$$ExternalSynt
     }
 
     public final void run() {
-        this.f$0.lambda$load$0(this.f$1, this.f$2, this.f$3, this.f$4);
+        this.f$0.m4632lambda$load$0$orgtelegramuiStatisticActivity$ChartViewData(this.f$1, this.f$2, this.f$3, this.f$4);
     }
 }

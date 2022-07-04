@@ -1,13 +1,23 @@
 package org.telegram.ui.Components;
 
-public final /* synthetic */ class StickersAlert$$ExternalSyntheticLambda16 implements Runnable {
-    public final /* synthetic */ EditTextBoldCursor f$0;
+import org.telegram.messenger.MediaDataController;
+import org.telegram.tgnet.TLObject;
+import org.telegram.tgnet.TLRPC;
 
-    public /* synthetic */ StickersAlert$$ExternalSyntheticLambda16(EditTextBoldCursor editTextBoldCursor) {
-        this.f$0 = editTextBoldCursor;
+public final /* synthetic */ class StickersAlert$$ExternalSyntheticLambda16 implements Runnable {
+    public final /* synthetic */ StickersAlert f$0;
+    public final /* synthetic */ TLRPC.TL_error f$1;
+    public final /* synthetic */ TLObject f$2;
+    public final /* synthetic */ MediaDataController f$3;
+
+    public /* synthetic */ StickersAlert$$ExternalSyntheticLambda16(StickersAlert stickersAlert, TLRPC.TL_error tL_error, TLObject tLObject, MediaDataController mediaDataController) {
+        this.f$0 = stickersAlert;
+        this.f$1 = tL_error;
+        this.f$2 = tLObject;
+        this.f$3 = mediaDataController;
     }
 
     public final void run() {
-        StickersAlert.lambda$showNameEnterAlert$24(this.f$0);
+        this.f$0.m1443lambda$loadStickerSet$5$orgtelegramuiComponentsStickersAlert(this.f$1, this.f$2, this.f$3);
     }
 }

@@ -1,15 +1,14 @@
 package org.telegram.messenger;
 
-import java.util.ArrayList;
+import android.text.util.Linkify;
 
-public final /* synthetic */ class AndroidUtilities$$ExternalSyntheticLambda8 implements Runnable {
-    public final /* synthetic */ ArrayList f$0;
+public final /* synthetic */ class AndroidUtilities$$ExternalSyntheticLambda8 implements Linkify.MatchFilter {
+    public static final /* synthetic */ AndroidUtilities$$ExternalSyntheticLambda8 INSTANCE = new AndroidUtilities$$ExternalSyntheticLambda8();
 
-    public /* synthetic */ AndroidUtilities$$ExternalSyntheticLambda8(ArrayList arrayList) {
-        this.f$0 = arrayList;
+    private /* synthetic */ AndroidUtilities$$ExternalSyntheticLambda8() {
     }
 
-    public final void run() {
-        AndroidUtilities.lambda$recycleBitmaps$0(this.f$0);
+    public final boolean acceptMatch(CharSequence charSequence, int i, int i2) {
+        return AndroidUtilities.lambda$static$2(charSequence, i, i2);
     }
 }

@@ -15,6 +15,6 @@ public final /* synthetic */ class SharedMediaLayout$MediaSearchAdapter$$Externa
     }
 
     public final void run() {
-        this.f$0.lambda$search$2(this.f$1, this.f$2);
+        this.f$0.m1402xcvar_ee(this.f$1, this.f$2);
     }
 }

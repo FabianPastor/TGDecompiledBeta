@@ -8,6 +8,6 @@ public final /* synthetic */ class ThemeSmallPreviewView$$ExternalSyntheticLambd
     }
 
     public final void run() {
-        this.f$0.lambda$playEmojiAnimation$5();
+        this.f$0.m1494x92d17632();
     }
 }

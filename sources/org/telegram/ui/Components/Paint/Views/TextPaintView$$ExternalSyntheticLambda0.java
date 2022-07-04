@@ -8,6 +8,6 @@ public final /* synthetic */ class TextPaintView$$ExternalSyntheticLambda0 imple
     }
 
     public final void run() {
-        this.f$0.lambda$beginEditing$0();
+        this.f$0.m1141x1f9d2ff3();
     }
 }

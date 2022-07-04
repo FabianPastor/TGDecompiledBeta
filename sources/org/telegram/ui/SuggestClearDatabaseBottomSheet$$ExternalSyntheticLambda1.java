@@ -13,6 +13,6 @@ public final /* synthetic */ class SuggestClearDatabaseBottomSheet$$ExternalSynt
     }
 
     public final void onClick(View view) {
-        this.f$0.lambda$new$1(this.f$1, view);
+        this.f$0.m4650lambda$new$1$orgtelegramuiSuggestClearDatabaseBottomSheet(this.f$1, view);
     }
 }

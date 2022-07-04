@@ -1,21 +1,16 @@
 package org.telegram.messenger;
 
+import org.telegram.tgnet.RequestDelegate;
 import org.telegram.tgnet.TLObject;
+import org.telegram.tgnet.TLRPC;
 
-public final /* synthetic */ class MediaDataController$$ExternalSyntheticLambda81 implements Runnable {
-    public final /* synthetic */ MediaDataController f$0;
-    public final /* synthetic */ TLObject f$1;
-    public final /* synthetic */ int f$2;
-    public final /* synthetic */ long f$3;
+public final /* synthetic */ class MediaDataController$$ExternalSyntheticLambda81 implements RequestDelegate {
+    public static final /* synthetic */ MediaDataController$$ExternalSyntheticLambda81 INSTANCE = new MediaDataController$$ExternalSyntheticLambda81();
 
-    public /* synthetic */ MediaDataController$$ExternalSyntheticLambda81(MediaDataController mediaDataController, TLObject tLObject, int i, long j) {
-        this.f$0 = mediaDataController;
-        this.f$1 = tLObject;
-        this.f$2 = i;
-        this.f$3 = j;
+    private /* synthetic */ MediaDataController$$ExternalSyntheticLambda81() {
     }
 
-    public final void run() {
-        this.f$0.lambda$loadStickers$68(this.f$1, this.f$2, this.f$3);
+    public final void run(TLObject tLObject, TLRPC.TL_error tL_error) {
+        MediaDataController.lambda$removeInline$113(tLObject, tL_error);
     }
 }

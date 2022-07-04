@@ -2,34 +2,20 @@ package org.webrtc;
 
 public interface VideoDecoder {
 
-    /* renamed from: org.webrtc.VideoDecoder$-CC  reason: invalid class name */
-    public final /* synthetic */ class CC {
-        @CalledByNative
-        public static long $default$createNativeVideoDecoder(VideoDecoder videoDecoder) {
-            return 0;
-        }
-    }
-
     public interface Callback {
         void onDecodedFrame(VideoFrame videoFrame, Integer num, Integer num2);
     }
 
-    @CalledByNative
     long createNativeVideoDecoder();
 
-    @CalledByNative
     VideoCodecStatus decode(EncodedImage encodedImage, DecodeInfo decodeInfo);
 
-    @CalledByNative
     String getImplementationName();
 
-    @CalledByNative
     boolean getPrefersLateDecoding();
 
-    @CalledByNative
     VideoCodecStatus initDecode(Settings settings, Callback callback);
 
-    @CalledByNative
     VideoCodecStatus release();
 
     public static class Settings {
@@ -37,11 +23,10 @@ public interface VideoDecoder {
         public final int numberOfCores;
         public final int width;
 
-        @CalledByNative("Settings")
-        public Settings(int i, int i2, int i3) {
-            this.numberOfCores = i;
-            this.width = i2;
-            this.height = i3;
+        public Settings(int numberOfCores2, int width2, int height2) {
+            this.numberOfCores = numberOfCores2;
+            this.width = width2;
+            this.height = height2;
         }
     }
 
@@ -49,9 +34,16 @@ public interface VideoDecoder {
         public final boolean isMissingFrames;
         public final long renderTimeMs;
 
-        public DecodeInfo(boolean z, long j) {
-            this.isMissingFrames = z;
-            this.renderTimeMs = j;
+        public DecodeInfo(boolean isMissingFrames2, long renderTimeMs2) {
+            this.isMissingFrames = isMissingFrames2;
+            this.renderTimeMs = renderTimeMs2;
+        }
+    }
+
+    /* renamed from: org.webrtc.VideoDecoder$-CC  reason: invalid class name */
+    public final /* synthetic */ class CC {
+        public static long $default$createNativeVideoDecoder(VideoDecoder _this) {
+            return 0;
         }
     }
 }

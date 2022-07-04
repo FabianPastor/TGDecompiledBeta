@@ -10,6 +10,6 @@ public final /* synthetic */ class BotWebViewSheet$$ExternalSyntheticLambda0 imp
     }
 
     public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-        this.f$0.lambda$new$7(valueAnimator);
+        this.f$0.m623lambda$new$7$orgtelegramuiComponentsBotWebViewSheet(valueAnimator);
     }
 }

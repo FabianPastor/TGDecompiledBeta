@@ -14,6 +14,6 @@ public final /* synthetic */ class ChatAttachAlertAudioLayout$SearchAdapter$$Ext
     }
 
     public final void run() {
-        this.f$0.lambda$search$1(this.f$1, this.f$2);
+        this.f$0.m757xb4e282d3(this.f$1, this.f$2);
     }
 }

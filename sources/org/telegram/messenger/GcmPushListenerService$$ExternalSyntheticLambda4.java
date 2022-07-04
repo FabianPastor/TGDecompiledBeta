@@ -8,6 +8,6 @@ public final /* synthetic */ class GcmPushListenerService$$ExternalSyntheticLamb
     }
 
     public final void run() {
-        GcmPushListenerService.lambda$sendRegistrationToServer$9(this.f$0);
+        GcmPushListenerService.lambda$onNewToken$5(this.f$0);
     }
 }

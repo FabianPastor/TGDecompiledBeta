@@ -1,6 +1,6 @@
 package org.telegram.ui;
 
-import org.telegram.tgnet.TLRPC$MessageMedia;
+import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.LocationActivity;
 
 public final /* synthetic */ class GroupCreateFinalActivity$$ExternalSyntheticLambda9 implements LocationActivity.LocationActivityDelegate {
@@ -10,7 +10,7 @@ public final /* synthetic */ class GroupCreateFinalActivity$$ExternalSyntheticLa
         this.f$0 = groupCreateFinalActivity;
     }
 
-    public final void didSelectLocation(TLRPC$MessageMedia tLRPC$MessageMedia, int i, boolean z, int i2) {
-        this.f$0.lambda$createView$5(tLRPC$MessageMedia, i, z, i2);
+    public final void didSelectLocation(TLRPC.MessageMedia messageMedia, int i, boolean z, int i2) {
+        this.f$0.m3584lambda$createView$5$orgtelegramuiGroupCreateFinalActivity(messageMedia, i, z, i2);
     }
 }

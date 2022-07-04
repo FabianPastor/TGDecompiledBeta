@@ -1,17 +1,19 @@
 package org.telegram.ui;
 
-import java.util.Comparator;
+import org.telegram.ui.ActionBar.ThemeDescription;
 
-public final /* synthetic */ class ProfileActivity$$ExternalSyntheticLambda29 implements Comparator {
+public final /* synthetic */ class ProfileActivity$$ExternalSyntheticLambda29 implements ThemeDescription.ThemeDescriptionDelegate {
     public final /* synthetic */ ProfileActivity f$0;
-    public final /* synthetic */ int f$1;
 
-    public /* synthetic */ ProfileActivity$$ExternalSyntheticLambda29(ProfileActivity profileActivity, int i) {
+    public /* synthetic */ ProfileActivity$$ExternalSyntheticLambda29(ProfileActivity profileActivity) {
         this.f$0 = profileActivity;
-        this.f$1 = i;
     }
 
-    public final int compare(Object obj, Object obj2) {
-        return this.f$0.lambda$updateOnlineCount$31(this.f$1, (Integer) obj, (Integer) obj2);
+    public final void didSetColor() {
+        this.f$0.m4409lambda$getThemeDescriptions$40$orgtelegramuiProfileActivity();
+    }
+
+    public /* synthetic */ void onAnimationProgress(float f) {
+        ThemeDescription.ThemeDescriptionDelegate.CC.$default$onAnimationProgress(this, f);
     }
 }

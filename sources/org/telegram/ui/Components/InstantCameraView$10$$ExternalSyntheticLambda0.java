@@ -10,6 +10,6 @@ public final /* synthetic */ class InstantCameraView$10$$ExternalSyntheticLambda
     }
 
     public final void run() {
-        this.f$0.lambda$run$0();
+        this.f$0.m1037lambda$run$0$orgtelegramuiComponentsInstantCameraView$10();
     }
 }

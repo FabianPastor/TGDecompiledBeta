@@ -19,6 +19,6 @@ public final /* synthetic */ class NotificationsSettingsActivity$$ExternalSynthe
     }
 
     public final void onItemClick(View view, int i, float f, float f2) {
-        this.f$0.lambda$createView$8(view, i, f, f2);
+        this.f$0.m3994xbde8ae12(view, i, f, f2);
     }
 }

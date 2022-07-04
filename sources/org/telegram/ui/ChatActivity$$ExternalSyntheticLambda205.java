@@ -1,21 +1,15 @@
 package org.telegram.ui;
 
-import android.widget.ImageView;
+import android.content.DialogInterface;
 
-public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda205 implements Runnable {
-    public final /* synthetic */ long[] f$0;
-    public final /* synthetic */ boolean[] f$1;
-    public final /* synthetic */ ImageView f$2;
-    public final /* synthetic */ ImageView f$3;
+public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda205 implements DialogInterface.OnDismissListener {
+    public final /* synthetic */ ChatActivity f$0;
 
-    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda205(long[] jArr, boolean[] zArr, ImageView imageView, ImageView imageView2) {
-        this.f$0 = jArr;
-        this.f$1 = zArr;
-        this.f$2 = imageView;
-        this.f$3 = imageView2;
+    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda205(ChatActivity chatActivity) {
+        this.f$0 = chatActivity;
     }
 
-    public final void run() {
-        ChatActivity.lambda$createMenu$165(this.f$0, this.f$1, this.f$2, this.f$3);
+    public final void onDismiss(DialogInterface dialogInterface) {
+        this.f$0.m3070lambda$processSelectedOption$206$orgtelegramuiChatActivity(dialogInterface);
     }
 }

@@ -6,27 +6,25 @@ import android.text.style.MetricAffectingSpan;
 public class TextPaintSpan extends MetricAffectingSpan {
     private TextPaint textPaint;
 
-    public TextPaintSpan(TextPaint textPaint2) {
-        this.textPaint = textPaint2;
+    public TextPaintSpan(TextPaint paint) {
+        this.textPaint = paint;
     }
 
-    public void updateMeasureState(TextPaint textPaint2) {
-        textPaint2.setColor(this.textPaint.getColor());
-        textPaint2.setTypeface(this.textPaint.getTypeface());
-        textPaint2.setFlags(this.textPaint.getFlags());
-        textPaint2.setTextSize(this.textPaint.getTextSize());
-        TextPaint textPaint3 = this.textPaint;
-        textPaint2.baselineShift = textPaint3.baselineShift;
-        textPaint2.bgColor = textPaint3.bgColor;
+    public void updateMeasureState(TextPaint p) {
+        p.setColor(this.textPaint.getColor());
+        p.setTypeface(this.textPaint.getTypeface());
+        p.setFlags(this.textPaint.getFlags());
+        p.setTextSize(this.textPaint.getTextSize());
+        p.baselineShift = this.textPaint.baselineShift;
+        p.bgColor = this.textPaint.bgColor;
     }
 
-    public void updateDrawState(TextPaint textPaint2) {
-        textPaint2.setColor(this.textPaint.getColor());
-        textPaint2.setTypeface(this.textPaint.getTypeface());
-        textPaint2.setFlags(this.textPaint.getFlags());
-        textPaint2.setTextSize(this.textPaint.getTextSize());
-        TextPaint textPaint3 = this.textPaint;
-        textPaint2.baselineShift = textPaint3.baselineShift;
-        textPaint2.bgColor = textPaint3.bgColor;
+    public void updateDrawState(TextPaint p) {
+        p.setColor(this.textPaint.getColor());
+        p.setTypeface(this.textPaint.getTypeface());
+        p.setFlags(this.textPaint.getFlags());
+        p.setTextSize(this.textPaint.getTextSize());
+        p.baselineShift = this.textPaint.baselineShift;
+        p.bgColor = this.textPaint.bgColor;
     }
 }

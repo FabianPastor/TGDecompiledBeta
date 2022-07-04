@@ -11,6 +11,6 @@ public final /* synthetic */ class AdminLogFilterAlert$$ExternalSyntheticLambda1
     }
 
     public final void onItemClick(View view, int i) {
-        this.f$0.lambda$new$0(view, i);
+        this.f$0.m529lambda$new$0$orgtelegramuiComponentsAdminLogFilterAlert(view, i);
     }
 }

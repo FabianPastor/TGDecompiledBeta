@@ -11,6 +11,6 @@ public final /* synthetic */ class BottomSheet$ContainerView$$ExternalSyntheticL
     }
 
     public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-        this.f$0.lambda$onLayout$1(valueAnimator);
+        this.f$0.m2569x6CLASSNAMEdvar_(valueAnimator);
     }
 }

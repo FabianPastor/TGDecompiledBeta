@@ -1,17 +1,17 @@
 package org.telegram.messenger;
 
-import androidx.collection.LongSparseArray;
+import org.telegram.tgnet.TLRPC;
 
 public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda95 implements Runnable {
     public final /* synthetic */ MessagesController f$0;
-    public final /* synthetic */ LongSparseArray f$1;
+    public final /* synthetic */ TLRPC.User f$1;
 
-    public /* synthetic */ MessagesController$$ExternalSyntheticLambda95(MessagesController messagesController, LongSparseArray longSparseArray) {
+    public /* synthetic */ MessagesController$$ExternalSyntheticLambda95(MessagesController messagesController, TLRPC.User user) {
         this.f$0 = messagesController;
-        this.f$1 = longSparseArray;
+        this.f$1 = user;
     }
 
     public final void run() {
-        this.f$0.lambda$processUpdateArray$319(this.f$1);
+        this.f$0.m256lambda$loadFullUser$50$orgtelegrammessengerMessagesController(this.f$1);
     }
 }

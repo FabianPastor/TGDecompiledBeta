@@ -18,19 +18,19 @@ class VLog {
     VLog() {
     }
 
-    public static void e(Throwable th) {
-        e((String) null, th);
+    public static void e(Throwable x) {
+        e((String) null, x);
     }
 
-    public static void e(String str, Throwable th) {
-        StringWriter stringWriter = new StringWriter();
-        if (!TextUtils.isEmpty(str)) {
-            stringWriter.append(str);
-            stringWriter.append(": ");
+    public static void e(String msg, Throwable x) {
+        StringWriter sw = new StringWriter();
+        if (!TextUtils.isEmpty(msg)) {
+            sw.append(msg);
+            sw.append(": ");
         }
-        th.printStackTrace(new PrintWriter(stringWriter));
-        for (String e : stringWriter.toString().split("\n")) {
-            e(e);
+        x.printStackTrace(new PrintWriter(sw));
+        for (String line : sw.toString().split("\n")) {
+            e(line);
         }
     }
 }

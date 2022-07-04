@@ -12,6 +12,6 @@ public final /* synthetic */ class ChatScrimPopupContainerLayout$$ExternalSynthe
     }
 
     public final void onSizeChanged() {
-        this.f$0.lambda$setPopupWindowLayout$0(this.f$1);
+        this.f$0.m873xaa93e743(this.f$1);
     }
 }

@@ -10,6 +10,6 @@ public final /* synthetic */ class ChatActivity$ChatScrollCallback$$ExternalSynt
     }
 
     public final void run() {
-        this.f$0.lambda$onEndAnimation$0();
+        this.f$0.m3171x2CLASSNAMECLASSNAMEe();
     }
 }

@@ -10,6 +10,6 @@ public final /* synthetic */ class PassportActivity$$ExternalSyntheticLambda16 i
     }
 
     public final void onClick(View view) {
-        this.f$0.lambda$createManageInterface$22(view);
+        this.f$0.m4062lambda$createManageInterface$22$orgtelegramuiPassportActivity(view);
     }
 }

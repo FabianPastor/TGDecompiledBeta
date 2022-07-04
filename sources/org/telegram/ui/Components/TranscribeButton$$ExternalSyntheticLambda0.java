@@ -13,6 +13,6 @@ public final /* synthetic */ class TranscribeButton$$ExternalSyntheticLambda0 im
     }
 
     public final void run() {
-        NotificationCenter.getInstance(this.f$0).postNotificationName(NotificationCenter.voiceTranscriptionUpdate, this.f$1, null, null, Boolean.FALSE, null);
+        NotificationCenter.getInstance(this.f$0).postNotificationName(NotificationCenter.voiceTranscriptionUpdate, this.f$1, null, null, true, true);
     }
 }

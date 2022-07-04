@@ -10,6 +10,6 @@ public final /* synthetic */ class GroupCallRecordAlert$$ExternalSyntheticLambda
     }
 
     public final void onClick(View view) {
-        this.f$0.lambda$new$0(view);
+        this.f$0.m1012lambda$new$0$orgtelegramuiComponentsGroupCallRecordAlert(view);
     }
 }

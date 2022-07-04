@@ -1,13 +1,14 @@
 package org.telegram.ui;
 
-public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda120 implements Runnable {
-    public final /* synthetic */ ChatActivity f$0;
+import java.util.Comparator;
 
-    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda120(ChatActivity chatActivity) {
-        this.f$0 = chatActivity;
+public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda120 implements Comparator {
+    public static final /* synthetic */ ChatActivity$$ExternalSyntheticLambda120 INSTANCE = new ChatActivity$$ExternalSyntheticLambda120();
+
+    private /* synthetic */ ChatActivity$$ExternalSyntheticLambda120() {
     }
 
-    public final void run() {
-        this.f$0.lambda$processSelectedOption$191();
+    public final int compare(Object obj, Object obj2) {
+        return ((Integer) obj2).compareTo((Integer) obj);
     }
 }

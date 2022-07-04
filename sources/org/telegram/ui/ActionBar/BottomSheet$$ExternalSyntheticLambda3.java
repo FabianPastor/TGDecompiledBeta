@@ -11,6 +11,6 @@ public final /* synthetic */ class BottomSheet$$ExternalSyntheticLambda3 impleme
     }
 
     public final WindowInsets onApplyWindowInsets(View view, WindowInsets windowInsets) {
-        return this.f$0.lambda$new$1(view, windowInsets);
+        return this.f$0.m2563lambda$new$1$orgtelegramuiActionBarBottomSheet(view, windowInsets);
     }
 }

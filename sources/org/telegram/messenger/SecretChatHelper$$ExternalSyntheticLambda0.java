@@ -12,6 +12,6 @@ public final /* synthetic */ class SecretChatHelper$$ExternalSyntheticLambda0 im
     }
 
     public final void onCancel(DialogInterface dialogInterface) {
-        this.f$0.lambda$startSecretChat$31(this.f$1, dialogInterface);
+        this.f$0.m2384x255288e4(this.f$1, dialogInterface);
     }
 }

@@ -10,6 +10,6 @@ public final /* synthetic */ class DialogsAdapter$$ExternalSyntheticLambda1 impl
     }
 
     public final void accept(Object obj) {
-        this.f$0.lambda$onBindViewHolder$3((Float) obj);
+        this.f$0.m2600xc9be4c6c((Float) obj);
     }
 }

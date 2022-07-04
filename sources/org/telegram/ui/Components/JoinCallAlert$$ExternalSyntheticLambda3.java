@@ -13,6 +13,6 @@ public final /* synthetic */ class JoinCallAlert$$ExternalSyntheticLambda3 imple
     }
 
     public final void onClick(View view) {
-        this.f$0.lambda$new$7(this.f$1, view);
+        this.f$0.m1073lambda$new$7$orgtelegramuiComponentsJoinCallAlert(this.f$1, view);
     }
 }

@@ -8,6 +8,6 @@ public final /* synthetic */ class VideoPlayerSeekBar$$ExternalSyntheticLambda0 
     }
 
     public final void run() {
-        this.f$0.lambda$onTouch$0();
+        this.f$0.m1551lambda$onTouch$0$orgtelegramuiComponentsVideoPlayerSeekBar();
     }
 }

@@ -10,7 +10,7 @@ public final /* synthetic */ class VideoSource$$ExternalSyntheticLambda1 impleme
     }
 
     public final void onFrame(VideoFrame videoFrame) {
-        this.f$0.lambda$setVideoProcessor$1(videoFrame);
+        this.f$0.m1676lambda$setVideoProcessor$1$orgwebrtcVideoSource(videoFrame);
     }
 
     public /* synthetic */ void setParentSink(VideoSink videoSink) {

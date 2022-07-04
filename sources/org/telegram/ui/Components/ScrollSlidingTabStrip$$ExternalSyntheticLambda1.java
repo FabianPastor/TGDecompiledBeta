@@ -14,6 +14,6 @@ public final /* synthetic */ class ScrollSlidingTabStrip$$ExternalSyntheticLambd
     }
 
     public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-        this.f$0.lambda$expandStickers$6(this.f$1, this.f$2, valueAnimator);
+        this.f$0.m1318xe446e308(this.f$1, this.f$2, valueAnimator);
     }
 }

@@ -10,6 +10,6 @@ public final /* synthetic */ class ShareAlert$$ExternalSyntheticLambda0 implemen
     }
 
     public final void onClick(View view) {
-        this.f$0.lambda$onSendLongClick$14(view);
+        this.f$0.m1353lambda$new$4$orgtelegramuiComponentsShareAlert(view);
     }
 }

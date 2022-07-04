@@ -11,42 +11,44 @@ import org.telegram.ui.ActionBar.ActionBarPopupWindow;
 import org.telegram.ui.ActionBar.Theme;
 
 public class ReadAllMentionsMenu {
-    public static ActionBarPopupWindow show(int i, Activity activity, FrameLayout frameLayout, View view, Theme.ResourcesProvider resourcesProvider, Runnable runnable) {
+    public static final int TYPE_MENTIONS = 1;
+    public static final int TYPE_REACTIONS = 0;
+
+    public static ActionBarPopupWindow show(int type, Activity activity, FrameLayout contentView, View mentionButton, Theme.ResourcesProvider resourcesProvider, Runnable onRead) {
         String str;
-        int i2;
-        ActionBarPopupWindow.ActionBarPopupWindowLayout actionBarPopupWindowLayout = new ActionBarPopupWindow.ActionBarPopupWindowLayout(activity);
-        actionBarPopupWindowLayout.setMinimumWidth(AndroidUtilities.dp(200.0f));
-        ActionBarMenuSubItem actionBarMenuSubItem = new ActionBarMenuSubItem((Context) activity, true, true, resourcesProvider);
-        actionBarMenuSubItem.setMinimumWidth(AndroidUtilities.dp(200.0f));
-        if (i == 0) {
-            i2 = NUM;
+        int i;
+        ActionBarPopupWindow.ActionBarPopupWindowLayout popupWindowLayout = new ActionBarPopupWindow.ActionBarPopupWindowLayout(activity);
+        popupWindowLayout.setMinimumWidth(AndroidUtilities.dp(200.0f));
+        ActionBarMenuSubItem cell = new ActionBarMenuSubItem((Context) activity, true, true, resourcesProvider);
+        cell.setMinimumWidth(AndroidUtilities.dp(200.0f));
+        if (type == 0) {
+            i = NUM;
             str = "ReadAllReactions";
         } else {
-            i2 = NUM;
+            i = NUM;
             str = "ReadAllMentions";
         }
-        actionBarMenuSubItem.setTextAndIcon(LocaleController.getString(str, i2), NUM);
-        actionBarMenuSubItem.setOnClickListener(new ReadAllMentionsMenu$$ExternalSyntheticLambda0(runnable));
-        actionBarPopupWindowLayout.addView(actionBarMenuSubItem);
-        ActionBarPopupWindow actionBarPopupWindow = new ActionBarPopupWindow(actionBarPopupWindowLayout, -2, -2);
-        actionBarPopupWindow.setPauseNotifications(true);
-        actionBarPopupWindow.setDismissAnimationDuration(220);
-        actionBarPopupWindow.setOutsideTouchable(true);
-        actionBarPopupWindow.setClippingEnabled(true);
-        actionBarPopupWindow.setAnimationStyle(NUM);
-        actionBarPopupWindow.setFocusable(true);
-        actionBarPopupWindowLayout.measure(View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(1000.0f), Integer.MIN_VALUE), View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(1000.0f), Integer.MIN_VALUE));
-        actionBarPopupWindow.setInputMethodMode(2);
-        actionBarPopupWindow.setSoftInputMode(0);
-        actionBarPopupWindow.getContentView().setFocusableInTouchMode(true);
-        actionBarPopupWindow.showAtLocation(frameLayout, 51, (int) (((view.getX() + ((float) view.getWidth())) - ((float) actionBarPopupWindowLayout.getMeasuredWidth())) + ((float) AndroidUtilities.dp(8.0f))), (int) (view.getY() - ((float) actionBarPopupWindowLayout.getMeasuredHeight())));
-        return actionBarPopupWindow;
+        cell.setTextAndIcon(LocaleController.getString(str, i), NUM);
+        cell.setOnClickListener(new ReadAllMentionsMenu$$ExternalSyntheticLambda0(onRead));
+        popupWindowLayout.addView(cell);
+        ActionBarPopupWindow scrimPopupWindow = new ActionBarPopupWindow(popupWindowLayout, -2, -2);
+        scrimPopupWindow.setPauseNotifications(true);
+        scrimPopupWindow.setDismissAnimationDuration(220);
+        scrimPopupWindow.setOutsideTouchable(true);
+        scrimPopupWindow.setClippingEnabled(true);
+        scrimPopupWindow.setAnimationStyle(NUM);
+        scrimPopupWindow.setFocusable(true);
+        popupWindowLayout.measure(View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(1000.0f), Integer.MIN_VALUE), View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(1000.0f), Integer.MIN_VALUE));
+        scrimPopupWindow.setInputMethodMode(2);
+        scrimPopupWindow.setSoftInputMode(0);
+        scrimPopupWindow.getContentView().setFocusableInTouchMode(true);
+        scrimPopupWindow.showAtLocation(contentView, 51, (int) (((mentionButton.getX() + ((float) mentionButton.getWidth())) - ((float) popupWindowLayout.getMeasuredWidth())) + ((float) AndroidUtilities.dp(8.0f))), (int) (mentionButton.getY() - ((float) popupWindowLayout.getMeasuredHeight())));
+        return scrimPopupWindow;
     }
 
-    /* access modifiers changed from: private */
-    public static /* synthetic */ void lambda$show$0(Runnable runnable, View view) {
-        if (runnable != null) {
-            runnable.run();
+    static /* synthetic */ void lambda$show$0(Runnable onRead, View view) {
+        if (onRead != null) {
+            onRead.run();
         }
     }
 }

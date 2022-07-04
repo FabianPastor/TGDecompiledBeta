@@ -10,6 +10,6 @@ public final /* synthetic */ class ChecksHintView$1$$ExternalSyntheticLambda0 im
     }
 
     public final void run() {
-        this.f$0.lambda$onAnimationEnd$0();
+        this.f$0.m884x9d80fCLASSNAME();
     }
 }

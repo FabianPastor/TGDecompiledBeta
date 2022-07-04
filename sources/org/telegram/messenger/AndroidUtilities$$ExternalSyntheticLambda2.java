@@ -1,16 +1,15 @@
 package org.telegram.messenger;
 
-import android.content.DialogInterface;
-import org.telegram.ui.ActionBar.BaseFragment;
+import java.util.Comparator;
+import org.telegram.messenger.AndroidUtilities;
 
-public final /* synthetic */ class AndroidUtilities$$ExternalSyntheticLambda2 implements DialogInterface.OnClickListener {
-    public final /* synthetic */ BaseFragment f$0;
+public final /* synthetic */ class AndroidUtilities$$ExternalSyntheticLambda2 implements Comparator {
+    public static final /* synthetic */ AndroidUtilities$$ExternalSyntheticLambda2 INSTANCE = new AndroidUtilities$$ExternalSyntheticLambda2();
 
-    public /* synthetic */ AndroidUtilities$$ExternalSyntheticLambda2(BaseFragment baseFragment) {
-        this.f$0 = baseFragment;
+    private /* synthetic */ AndroidUtilities$$ExternalSyntheticLambda2() {
     }
 
-    public final void onClick(DialogInterface dialogInterface, int i) {
-        AndroidUtilities.lambda$isGoogleMapsInstalled$4(this.f$0, dialogInterface, i);
+    public final int compare(Object obj, Object obj2) {
+        return AndroidUtilities.lambda$pruneOverlaps$3((AndroidUtilities.LinkSpec) obj, (AndroidUtilities.LinkSpec) obj2);
     }
 }

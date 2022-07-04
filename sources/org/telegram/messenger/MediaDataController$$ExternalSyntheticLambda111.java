@@ -1,21 +1,19 @@
 package org.telegram.messenger;
 
-import java.util.ArrayList;
-
 public final /* synthetic */ class MediaDataController$$ExternalSyntheticLambda111 implements Runnable {
     public final /* synthetic */ MediaDataController f$0;
-    public final /* synthetic */ boolean f$1;
-    public final /* synthetic */ int f$2;
-    public final /* synthetic */ ArrayList f$3;
+    public final /* synthetic */ long f$1;
+    public final /* synthetic */ long f$2;
+    public final /* synthetic */ long f$3;
 
-    public /* synthetic */ MediaDataController$$ExternalSyntheticLambda111(MediaDataController mediaDataController, boolean z, int i, ArrayList arrayList) {
+    public /* synthetic */ MediaDataController$$ExternalSyntheticLambda111(MediaDataController mediaDataController, long j, long j2, long j3) {
         this.f$0 = mediaDataController;
-        this.f$1 = z;
-        this.f$2 = i;
-        this.f$3 = arrayList;
+        this.f$1 = j;
+        this.f$2 = j2;
+        this.f$3 = j3;
     }
 
     public final void run() {
-        this.f$0.lambda$processLoadedRecentDocuments$36(this.f$1, this.f$2, this.f$3);
+        this.f$0.m2027lambda$loadMusic$102$orgtelegrammessengerMediaDataController(this.f$1, this.f$2, this.f$3);
     }
 }

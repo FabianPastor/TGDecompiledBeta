@@ -20,24 +20,17 @@ public class ScamDrawable extends Drawable {
     private TextPaint textPaint;
     private int textWidth;
 
-    public int getOpacity() {
-        return -2;
-    }
-
-    public void setColorFilter(ColorFilter colorFilter) {
-    }
-
-    public ScamDrawable(int i, int i2) {
+    public ScamDrawable(int textSize, int type) {
         TextPaint textPaint2 = new TextPaint(1);
         this.textPaint = textPaint2;
         this.colorAlpha = 255;
         this.alpha = 255;
-        this.currentType = i2;
-        textPaint2.setTextSize((float) AndroidUtilities.dp((float) i));
+        this.currentType = type;
+        textPaint2.setTextSize((float) AndroidUtilities.dp((float) textSize));
         this.textPaint.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         this.paint.setStyle(Paint.Style.STROKE);
         this.paint.setStrokeWidth((float) AndroidUtilities.dp(1.0f));
-        if (i2 == 0) {
+        if (type == 0) {
             this.text = LocaleController.getString("ScamMessage", NUM);
         } else {
             this.text = LocaleController.getString("FakeMessage", NUM);
@@ -46,29 +39,29 @@ public class ScamDrawable extends Drawable {
     }
 
     public void checkText() {
-        String str;
+        String newText;
         if (this.currentType == 0) {
-            str = LocaleController.getString("ScamMessage", NUM);
+            newText = LocaleController.getString("ScamMessage", NUM);
         } else {
-            str = LocaleController.getString("FakeMessage", NUM);
+            newText = LocaleController.getString("FakeMessage", NUM);
         }
-        if (!str.equals(this.text)) {
-            this.text = str;
-            this.textWidth = (int) Math.ceil((double) this.textPaint.measureText(str));
+        if (!newText.equals(this.text)) {
+            this.text = newText;
+            this.textWidth = (int) Math.ceil((double) this.textPaint.measureText(newText));
         }
     }
 
-    public void setColor(int i) {
-        this.textPaint.setColor(i);
-        this.paint.setColor(i);
-        this.colorAlpha = Color.alpha(i);
+    public void setColor(int color) {
+        this.textPaint.setColor(color);
+        this.paint.setColor(color);
+        this.colorAlpha = Color.alpha(color);
     }
 
-    public void setAlpha(int i) {
-        if (this.alpha != i) {
-            int i2 = (int) (((float) this.colorAlpha) * (((float) i) / 255.0f));
-            this.paint.setAlpha(i2);
-            this.textPaint.setAlpha(i2);
+    public void setAlpha(int alpha2) {
+        if (this.alpha != alpha2) {
+            int localAlpha = (int) (((float) this.colorAlpha) * (((float) alpha2) / 255.0f));
+            this.paint.setAlpha(localAlpha);
+            this.textPaint.setAlpha(localAlpha);
         }
     }
 
@@ -84,5 +77,12 @@ public class ScamDrawable extends Drawable {
         this.rect.set(getBounds());
         canvas.drawRoundRect(this.rect, (float) AndroidUtilities.dp(2.0f), (float) AndroidUtilities.dp(2.0f), this.paint);
         canvas.drawText(this.text, this.rect.left + ((float) AndroidUtilities.dp(5.0f)), this.rect.top + ((float) AndroidUtilities.dp(12.0f)), this.textPaint);
+    }
+
+    public void setColorFilter(ColorFilter colorFilter) {
+    }
+
+    public int getOpacity() {
+        return -2;
     }
 }

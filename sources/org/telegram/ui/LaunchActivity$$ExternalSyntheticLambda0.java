@@ -10,6 +10,6 @@ public final /* synthetic */ class LaunchActivity$$ExternalSyntheticLambda0 impl
     }
 
     public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-        this.f$0.lambda$didReceivedNotification$88(valueAnimator);
+        this.f$0.m3634lambda$didReceivedNotification$88$orgtelegramuiLaunchActivity(valueAnimator);
     }
 }

@@ -13,6 +13,6 @@ public final /* synthetic */ class KeyboardHideHelper$2$$ExternalSyntheticLambda
     }
 
     public final void run() {
-        this.f$0.lambda$onAnimationEnd$0(this.f$1);
+        this.f$0.m3617lambda$onAnimationEnd$0$orgtelegramuiKeyboardHideHelper$2(this.f$1);
     }
 }

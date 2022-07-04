@@ -1,13 +1,20 @@
 package org.telegram.ui;
 
-public final /* synthetic */ class PasscodeActivity$$ExternalSyntheticLambda17 implements Runnable {
-    public final /* synthetic */ PasscodeActivity f$0;
+import android.content.DialogInterface;
+import org.telegram.ui.Components.NumberPicker;
 
-    public /* synthetic */ PasscodeActivity$$ExternalSyntheticLambda17(PasscodeActivity passcodeActivity) {
+public final /* synthetic */ class PasscodeActivity$$ExternalSyntheticLambda17 implements DialogInterface.OnClickListener {
+    public final /* synthetic */ PasscodeActivity f$0;
+    public final /* synthetic */ NumberPicker f$1;
+    public final /* synthetic */ int f$2;
+
+    public /* synthetic */ PasscodeActivity$$ExternalSyntheticLambda17(PasscodeActivity passcodeActivity, NumberPicker numberPicker, int i) {
         this.f$0 = passcodeActivity;
+        this.f$1 = numberPicker;
+        this.f$2 = i;
     }
 
-    public final void run() {
-        this.f$0.lambda$processDone$20();
+    public final void onClick(DialogInterface dialogInterface, int i) {
+        this.f$0.m4007lambda$createView$4$orgtelegramuiPasscodeActivity(this.f$1, this.f$2, dialogInterface, i);
     }
 }

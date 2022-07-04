@@ -1,17 +1,15 @@
 package org.telegram.ui.Adapters;
 
-import org.telegram.ui.Cells.GraySectionCell;
+import android.view.View;
 
-public final /* synthetic */ class DialogsSearchAdapter$$ExternalSyntheticLambda18 implements Runnable {
+public final /* synthetic */ class DialogsSearchAdapter$$ExternalSyntheticLambda18 implements View.OnClickListener {
     public final /* synthetic */ DialogsSearchAdapter f$0;
-    public final /* synthetic */ GraySectionCell f$1;
 
-    public /* synthetic */ DialogsSearchAdapter$$ExternalSyntheticLambda18(DialogsSearchAdapter dialogsSearchAdapter, GraySectionCell graySectionCell) {
+    public /* synthetic */ DialogsSearchAdapter$$ExternalSyntheticLambda18(DialogsSearchAdapter dialogsSearchAdapter) {
         this.f$0 = dialogsSearchAdapter;
-        this.f$1 = graySectionCell;
     }
 
-    public final void run() {
-        this.f$0.lambda$onBindViewHolder$20(this.f$1);
+    public final void onClick(View view) {
+        this.f$0.m2609x4b149f8d(view);
     }
 }

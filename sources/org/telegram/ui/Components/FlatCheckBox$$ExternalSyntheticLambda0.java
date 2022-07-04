@@ -10,6 +10,6 @@ public final /* synthetic */ class FlatCheckBox$$ExternalSyntheticLambda0 implem
     }
 
     public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-        this.f$0.lambda$setChecked$0(valueAnimator);
+        this.f$0.m973lambda$setChecked$0$orgtelegramuiComponentsFlatCheckBox(valueAnimator);
     }
 }

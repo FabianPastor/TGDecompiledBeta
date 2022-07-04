@@ -15,6 +15,6 @@ public final /* synthetic */ class BotWebViewSheet$2$$ExternalSyntheticLambda1 i
     }
 
     public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-        this.f$0.lambda$onWebAppSetBackgroundColor$2(this.f$1, this.f$2, valueAnimator);
+        this.f$0.m635x6adb50d4(this.f$1, this.f$2, valueAnimator);
     }
 }

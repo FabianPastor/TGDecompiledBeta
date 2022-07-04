@@ -11,6 +11,6 @@ public final /* synthetic */ class StickersActivity$ListAdapter$$ExternalSynthet
     }
 
     public final void onClick(View view) {
-        this.f$0.lambda$onBindViewHolder$1(view);
+        this.f$0.m4647x4c6adcf3(view);
     }
 }

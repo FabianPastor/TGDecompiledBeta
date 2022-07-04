@@ -1,15 +1,15 @@
 package org.telegram.ui;
 
-import org.telegram.ui.Adapters.StickersAdapter;
+import android.animation.ValueAnimator;
 
-public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda235 implements StickersAdapter.StickersAdapterDelegate {
+public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda235 implements ValueAnimator.AnimatorUpdateListener {
     public final /* synthetic */ ChatActivity f$0;
 
     public /* synthetic */ ChatActivity$$ExternalSyntheticLambda235(ChatActivity chatActivity) {
         this.f$0 = chatActivity;
     }
 
-    public final void needChangePanelVisibility(boolean z) {
-        this.f$0.lambda$initStickers$89(z);
+    public final void onAnimationUpdate(ValueAnimator valueAnimator) {
+        this.f$0.m3117lambda$updateBottomOverlay$138$orgtelegramuiChatActivity(valueAnimator);
     }
 }

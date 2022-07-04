@@ -8,6 +8,6 @@ public final /* synthetic */ class PopupNotificationActivity$$ExternalSyntheticL
     }
 
     public final void run() {
-        this.f$0.lambda$onTouchEventMy$3();
+        this.f$0.m4352xca89b57d();
     }
 }

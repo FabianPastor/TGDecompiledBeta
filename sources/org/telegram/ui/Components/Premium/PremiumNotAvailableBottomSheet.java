@@ -1,7 +1,7 @@
 package org.telegram.ui.Components.Premium;
 
-import android.app.Activity;
 import android.content.ActivityNotFoundException;
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.view.View;
@@ -19,46 +19,45 @@ import org.telegram.ui.Components.LayoutHelper;
 
 public class PremiumNotAvailableBottomSheet extends BottomSheet {
     /* JADX INFO: super call moved to the top of the method (can break code semantics) */
-    public PremiumNotAvailableBottomSheet(BaseFragment baseFragment) {
-        super(baseFragment.getParentActivity(), false);
-        Activity parentActivity = baseFragment.getParentActivity();
-        LinearLayout linearLayout = new LinearLayout(parentActivity);
+    public PremiumNotAvailableBottomSheet(BaseFragment fragment) {
+        super(fragment.getParentActivity(), false);
+        Context context = fragment.getParentActivity();
+        LinearLayout linearLayout = new LinearLayout(context);
         linearLayout.setOrientation(1);
-        TextView textView = new TextView(parentActivity);
-        textView.setGravity(8388611);
-        textView.setTextColor(Theme.getColor("dialogTextBlack"));
-        textView.setTextSize(1, 20.0f);
-        textView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
-        linearLayout.addView(textView, LayoutHelper.createFrame(-1, -2.0f, 0, 21.0f, 16.0f, 21.0f, 0.0f));
-        TextView textView2 = new TextView(parentActivity);
-        textView2.setGravity(8388611);
-        textView2.setTextSize(1, 16.0f);
-        textView2.setTextColor(Theme.getColor("dialogTextBlack"));
-        linearLayout.addView(textView2, LayoutHelper.createFrame(-1, -2.0f, 0, 21.0f, 15.0f, 21.0f, 16.0f));
-        TextView textView3 = new TextView(parentActivity);
-        textView3.setPadding(AndroidUtilities.dp(34.0f), 0, AndroidUtilities.dp(34.0f), 0);
-        textView3.setGravity(17);
-        textView3.setTextColor(Theme.getColor("featuredStickers_buttonText"));
-        textView3.setTextSize(1, 14.0f);
-        textView3.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
-        textView3.setBackground(Theme.AdaptiveRipple.filledRect("featuredStickers_addButton", 8.0f));
-        textView3.setText(LocaleController.getString(NUM));
-        textView3.setOnClickListener(PremiumNotAvailableBottomSheet$$ExternalSyntheticLambda0.INSTANCE);
-        FrameLayout frameLayout = new FrameLayout(parentActivity);
-        frameLayout.addView(textView3, LayoutHelper.createFrame(-1, 48.0f, 16, 16.0f, 0.0f, 16.0f, 0.0f));
-        frameLayout.setBackgroundColor(getThemedColor("dialogBackground"));
-        linearLayout.addView(frameLayout, LayoutHelper.createLinear(-1, 68, 80));
-        textView.setText(AndroidUtilities.replaceTags(LocaleController.getString(NUM)));
-        textView2.setText(AndroidUtilities.replaceTags(LocaleController.getString(NUM)));
-        ScrollView scrollView = new ScrollView(parentActivity);
+        TextView title = new TextView(context);
+        title.setGravity(8388611);
+        title.setTextColor(Theme.getColor("dialogTextBlack"));
+        title.setTextSize(1, 20.0f);
+        title.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
+        linearLayout.addView(title, LayoutHelper.createFrame(-1, -2.0f, 0, 21.0f, 16.0f, 21.0f, 0.0f));
+        TextView description = new TextView(context);
+        description.setGravity(8388611);
+        description.setTextSize(1, 16.0f);
+        description.setTextColor(Theme.getColor("dialogTextBlack"));
+        linearLayout.addView(description, LayoutHelper.createFrame(-1, -2.0f, 0, 21.0f, 15.0f, 21.0f, 16.0f));
+        TextView buttonTextView = new TextView(context);
+        buttonTextView.setPadding(AndroidUtilities.dp(34.0f), 0, AndroidUtilities.dp(34.0f), 0);
+        buttonTextView.setGravity(17);
+        buttonTextView.setTextColor(Theme.getColor("featuredStickers_buttonText"));
+        buttonTextView.setTextSize(1, 14.0f);
+        buttonTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
+        buttonTextView.setBackground(Theme.AdaptiveRipple.filledRect("featuredStickers_addButton", 8.0f));
+        buttonTextView.setText(LocaleController.getString(NUM));
+        buttonTextView.setOnClickListener(PremiumNotAvailableBottomSheet$$ExternalSyntheticLambda0.INSTANCE);
+        FrameLayout buttonContainer = new FrameLayout(context);
+        buttonContainer.addView(buttonTextView, LayoutHelper.createFrame(-1, 48.0f, 16, 16.0f, 0.0f, 16.0f, 0.0f));
+        buttonContainer.setBackgroundColor(getThemedColor("dialogBackground"));
+        linearLayout.addView(buttonContainer, LayoutHelper.createLinear(-1, 68, 80));
+        title.setText(AndroidUtilities.replaceTags(LocaleController.getString(NUM)));
+        description.setText(AndroidUtilities.replaceTags(LocaleController.getString(NUM)));
+        ScrollView scrollView = new ScrollView(context);
         scrollView.addView(linearLayout);
         setCustomView(scrollView);
     }
 
-    /* access modifiers changed from: private */
-    public static /* synthetic */ void lambda$new$0(View view) {
+    static /* synthetic */ void lambda$new$0(View v) {
         try {
-            view.getContext().startActivity(new Intent("android.intent.action.VIEW", Uri.parse("https://play.google.com/store/apps/details?id=org.telegram.messenger")));
+            v.getContext().startActivity(new Intent("android.intent.action.VIEW", Uri.parse("https://play.google.com/store/apps/details?id=org.telegram.messenger")));
         } catch (ActivityNotFoundException e) {
             FileLog.e((Throwable) e);
         }

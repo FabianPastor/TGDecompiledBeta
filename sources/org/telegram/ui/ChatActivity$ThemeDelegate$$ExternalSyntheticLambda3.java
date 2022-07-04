@@ -10,6 +10,6 @@ public final /* synthetic */ class ChatActivity$ThemeDelegate$$ExternalSynthetic
     }
 
     public final void run() {
-        this.f$0.lambda$new$0();
+        this.f$0.m3173lambda$new$0$orgtelegramuiChatActivity$ThemeDelegate();
     }
 }

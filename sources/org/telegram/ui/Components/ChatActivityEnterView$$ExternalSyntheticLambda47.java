@@ -1,15 +1,16 @@
 package org.telegram.ui.Components;
 
-public final /* synthetic */ class ChatActivityEnterView$$ExternalSyntheticLambda47 implements Runnable {
-    public final /* synthetic */ ChatActivityEnterView f$0;
-    public final /* synthetic */ CharSequence f$1;
+import android.view.KeyEvent;
+import org.telegram.ui.ActionBar.ActionBarPopupWindow;
 
-    public /* synthetic */ ChatActivityEnterView$$ExternalSyntheticLambda47(ChatActivityEnterView chatActivityEnterView, CharSequence charSequence) {
+public final /* synthetic */ class ChatActivityEnterView$$ExternalSyntheticLambda47 implements ActionBarPopupWindow.OnDispatchKeyEventListener {
+    public final /* synthetic */ ChatActivityEnterView f$0;
+
+    public /* synthetic */ ChatActivityEnterView$$ExternalSyntheticLambda47(ChatActivityEnterView chatActivityEnterView) {
         this.f$0 = chatActivityEnterView;
-        this.f$1 = charSequence;
     }
 
-    public final void run() {
-        this.f$0.lambda$setEditingMessageObject$43(this.f$1);
+    public final void onDispatchKeyEvent(KeyEvent keyEvent) {
+        this.f$0.m682xvar_var_c(keyEvent);
     }
 }

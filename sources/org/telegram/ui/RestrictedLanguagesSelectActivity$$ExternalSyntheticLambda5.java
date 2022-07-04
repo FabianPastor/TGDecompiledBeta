@@ -11,6 +11,6 @@ public final /* synthetic */ class RestrictedLanguagesSelectActivity$$ExternalSy
     }
 
     public final boolean onItemClick(View view, int i) {
-        return this.f$0.lambda$createView$3(view, i);
+        return this.f$0.m4573x3df7var_e(view, i);
     }
 }

@@ -2,17 +2,19 @@ package org.telegram.ui.Cells;
 
 import android.content.Context;
 import android.graphics.Canvas;
-import android.graphics.Point;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.text.Layout;
+import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.StaticLayout;
 import android.text.TextUtils;
 import android.text.style.ClickableSpan;
+import android.text.style.URLSpan;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.accessibility.AccessibilityNodeInfo;
-import androidx.core.util.ObjectsCompat$$ExternalSyntheticBackport0;
+import androidx.core.graphics.ColorUtils$$ExternalSyntheticBackport0;
 import java.util.Iterator;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.Emoji;
@@ -26,15 +28,11 @@ import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.SharedConfig;
 import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC$BotInfo;
-import org.telegram.tgnet.TLRPC$Document;
-import org.telegram.tgnet.TLRPC$Photo;
-import org.telegram.tgnet.TLRPC$PhotoSize;
-import org.telegram.tgnet.TLRPC$TL_photo;
-import org.telegram.tgnet.TLRPC$TL_photoStrippedSize;
+import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.LinkPath;
 import org.telegram.ui.Components.TypefaceSpan;
+import org.telegram.ui.Components.URLSpanNoUnderline;
 
 public class BotHelpCell extends View {
     private boolean animating;
@@ -53,6 +51,7 @@ public class BotHelpCell extends View {
     private int textX;
     private int textY;
     private LinkPath urlPath = new LinkPath();
+    public boolean wasDraw;
     private int width;
 
     public interface BotHelpCellDelegate {
@@ -80,302 +79,222 @@ public class BotHelpCell extends View {
         invalidate();
     }
 
-    public void setText(boolean z, String str) {
-        setText(z, str, (TLObject) null, (TLRPC$BotInfo) null);
+    public void setText(boolean bot, String text) {
+        setText(bot, text, (TLObject) null, (TLRPC.BotInfo) null);
     }
 
-    public void setText(boolean z, String str, TLObject tLObject, TLRPC$BotInfo tLRPC$BotInfo) {
-        int i;
-        TLObject tLObject2 = tLObject;
-        boolean z2 = tLObject2 != null;
-        boolean z3 = !TextUtils.isEmpty(str);
-        if ((str == null || str.length() == 0) && !z2) {
+    public void setText(boolean bot, String text, TLObject imageOrAnimation, TLRPC.BotInfo botInfo) {
+        String text2;
+        int maxWidth;
+        TLObject tLObject = imageOrAnimation;
+        boolean photoVisible = tLObject != null;
+        boolean textVisible = !TextUtils.isEmpty(text);
+        if ((text == null || text.length() == 0) && !photoVisible) {
             setVisibility(8);
             return;
         }
-        String str2 = str == null ? "" : str;
-        if (!str2.equals(this.oldText) || this.isPhotoVisible != z2) {
-            this.isPhotoVisible = z2;
-            this.isTextVisible = z3;
-            if (z2) {
-                String keyForParentObject = FileRefController.getKeyForParentObject(tLRPC$BotInfo);
-                if (!ObjectsCompat$$ExternalSyntheticBackport0.m(this.currentPhotoKey, keyForParentObject)) {
-                    this.currentPhotoKey = keyForParentObject;
-                    if (tLObject2 instanceof TLRPC$TL_photo) {
-                        TLRPC$Photo tLRPC$Photo = (TLRPC$Photo) tLObject2;
-                        this.imageReceiver.setImage(ImageLocation.getForPhoto(FileLoader.getClosestPhotoSizeWithSize(tLRPC$Photo.sizes, 400), tLRPC$Photo), "400_400", (Drawable) null, "jpg", tLRPC$BotInfo, 0);
-                    } else if (tLObject2 instanceof TLRPC$Document) {
-                        TLRPC$Document tLRPC$Document = (TLRPC$Document) tLObject2;
-                        TLRPC$PhotoSize closestPhotoSizeWithSize = FileLoader.getClosestPhotoSizeWithSize(tLRPC$Document.thumbs, 400);
-                        BitmapDrawable bitmapDrawable = null;
+        if (text == null) {
+            text2 = "";
+        } else {
+            text2 = text;
+        }
+        if (text2 == null || !text2.equals(this.oldText) || this.isPhotoVisible != photoVisible) {
+            this.isPhotoVisible = photoVisible;
+            this.isTextVisible = textVisible;
+            if (photoVisible) {
+                String photoKey = FileRefController.getKeyForParentObject(botInfo);
+                if (!ColorUtils$$ExternalSyntheticBackport0.m(this.currentPhotoKey, photoKey)) {
+                    this.currentPhotoKey = photoKey;
+                    if (tLObject instanceof TLRPC.TL_photo) {
+                        TLRPC.Photo photo = (TLRPC.Photo) tLObject;
+                        this.imageReceiver.setImage(ImageLocation.getForPhoto(FileLoader.getClosestPhotoSizeWithSize(photo.sizes, 400), photo), "400_400", (Drawable) null, "jpg", botInfo, 0);
+                    } else if (tLObject instanceof TLRPC.Document) {
+                        TLRPC.Document doc = (TLRPC.Document) tLObject;
+                        TLRPC.PhotoSize photoThumb = FileLoader.getClosestPhotoSizeWithSize(doc.thumbs, 400);
+                        BitmapDrawable strippedThumb = null;
                         if (SharedConfig.getDevicePerformanceClass() != 0) {
-                            Iterator<TLRPC$PhotoSize> it = tLRPC$Document.thumbs.iterator();
+                            Iterator<TLRPC.PhotoSize> it = doc.thumbs.iterator();
                             while (it.hasNext()) {
-                                TLRPC$PhotoSize next = it.next();
-                                if (next instanceof TLRPC$TL_photoStrippedSize) {
-                                    bitmapDrawable = new BitmapDrawable(getResources(), ImageLoader.getStrippedPhotoBitmap(next.bytes, "b"));
+                                TLRPC.PhotoSize photoSize = it.next();
+                                if (photoSize instanceof TLRPC.TL_photoStrippedSize) {
+                                    strippedThumb = new BitmapDrawable(getResources(), ImageLoader.getStrippedPhotoBitmap(photoSize.bytes, "b"));
                                 }
                             }
                         }
-                        this.imageReceiver.setImage(ImageLocation.getForDocument(tLRPC$Document), "g", ImageLocation.getForDocument(MessageObject.getDocumentVideoThumb(tLRPC$Document), tLRPC$Document), (String) null, ImageLocation.getForDocument(closestPhotoSizeWithSize, tLRPC$Document), "86_86_b", bitmapDrawable, tLRPC$Document.size, "mp4", tLRPC$BotInfo, 0);
+                        this.imageReceiver.setImage(ImageLocation.getForDocument(doc), "g", ImageLocation.getForDocument(MessageObject.getDocumentVideoThumb(doc), doc), (String) null, ImageLocation.getForDocument(photoThumb, doc), "86_86_b", strippedThumb, doc.size, "mp4", botInfo, 0);
                     }
-                    int dp = AndroidUtilities.dp((float) SharedConfig.bubbleRadius) - AndroidUtilities.dp(2.0f);
-                    int dp2 = AndroidUtilities.dp(4.0f);
+                    int topRadius = AndroidUtilities.dp((float) SharedConfig.bubbleRadius) - AndroidUtilities.dp(2.0f);
+                    int bottomRadius = AndroidUtilities.dp(4.0f);
                     if (!this.isTextVisible) {
-                        dp2 = dp;
+                        bottomRadius = topRadius;
                     }
-                    this.imageReceiver.setRoundRadius(dp, dp, dp2, dp2);
+                    this.imageReceiver.setRoundRadius(topRadius, topRadius, bottomRadius, bottomRadius);
                 }
             }
-            this.oldText = AndroidUtilities.getSafeString(str2);
+            this.oldText = AndroidUtilities.getSafeString(text2);
             setVisibility(0);
             if (AndroidUtilities.isTablet()) {
-                i = AndroidUtilities.getMinTabletSide();
+                maxWidth = (int) (((float) AndroidUtilities.getMinTabletSide()) * 0.7f);
             } else {
-                Point point = AndroidUtilities.displaySize;
-                i = Math.min(point.x, point.y);
+                maxWidth = (int) (((float) Math.min(AndroidUtilities.displaySize.x, AndroidUtilities.displaySize.y)) * 0.7f);
             }
-            int i2 = (int) (((float) i) * 0.7f);
             if (this.isTextVisible) {
-                String[] split = str2.split("\n");
-                SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder();
-                String string = LocaleController.getString(NUM);
-                if (z) {
-                    spannableStringBuilder.append(string);
-                    spannableStringBuilder.append("\n\n");
+                String[] lines = text2.split("\n");
+                SpannableStringBuilder stringBuilder = new SpannableStringBuilder();
+                String help = LocaleController.getString(NUM);
+                if (bot) {
+                    stringBuilder.append(help);
+                    stringBuilder.append("\n\n");
                 }
-                for (int i3 = 0; i3 < split.length; i3++) {
-                    spannableStringBuilder.append(split[i3].trim());
-                    if (i3 != split.length - 1) {
-                        spannableStringBuilder.append("\n");
+                for (int a = 0; a < lines.length; a++) {
+                    stringBuilder.append(lines[a].trim());
+                    if (a != lines.length - 1) {
+                        stringBuilder.append("\n");
                     }
                 }
-                MessageObject.addLinks(false, spannableStringBuilder);
-                if (z) {
-                    spannableStringBuilder.setSpan(new TypefaceSpan(AndroidUtilities.getTypeface("fonts/rmedium.ttf")), 0, string.length(), 33);
+                MessageObject.addLinks(false, stringBuilder);
+                if (bot) {
+                    stringBuilder.setSpan(new TypefaceSpan(AndroidUtilities.getTypeface("fonts/rmedium.ttf")), 0, help.length(), 33);
                 }
-                Emoji.replaceEmoji(spannableStringBuilder, Theme.chat_msgTextPaint.getFontMetricsInt(), AndroidUtilities.dp(20.0f), false);
+                Emoji.replaceEmoji(stringBuilder, Theme.chat_msgTextPaint.getFontMetricsInt(), AndroidUtilities.dp(20.0f), false);
                 try {
-                    StaticLayout staticLayout = new StaticLayout(spannableStringBuilder, Theme.chat_msgTextPaint, i2 - (this.isPhotoVisible ? AndroidUtilities.dp(5.0f) : 0), Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+                    StaticLayout staticLayout = new StaticLayout(stringBuilder, Theme.chat_msgTextPaint, maxWidth - (this.isPhotoVisible ? AndroidUtilities.dp(5.0f) : 0), Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
                     this.textLayout = staticLayout;
                     this.width = 0;
                     this.height = staticLayout.getHeight() + AndroidUtilities.dp(22.0f);
-                    int lineCount = this.textLayout.getLineCount();
-                    for (int i4 = 0; i4 < lineCount; i4++) {
-                        this.width = (int) Math.ceil((double) Math.max((float) this.width, this.textLayout.getLineWidth(i4) + this.textLayout.getLineLeft(i4)));
+                    int count = this.textLayout.getLineCount();
+                    for (int a2 = 0; a2 < count; a2++) {
+                        this.width = (int) Math.ceil((double) Math.max((float) this.width, this.textLayout.getLineWidth(a2) + this.textLayout.getLineLeft(a2)));
                     }
-                    if (this.width > i2 || this.isPhotoVisible) {
-                        this.width = i2;
+                    if (this.width > maxWidth || this.isPhotoVisible) {
+                        this.width = maxWidth;
                     }
                 } catch (Exception e) {
                     FileLog.e((Throwable) e);
                 }
             } else if (this.isPhotoVisible) {
-                this.width = i2;
+                this.width = maxWidth;
             }
-            int dp3 = this.width + AndroidUtilities.dp(22.0f);
-            this.width = dp3;
+            int dp = this.width + AndroidUtilities.dp(22.0f);
+            this.width = dp;
             if (this.isPhotoVisible) {
-                int i5 = this.height;
-                double d = (double) dp3;
+                int i = this.height;
+                double d = (double) dp;
                 Double.isNaN(d);
-                int i6 = (int) (d * 0.5625d);
-                this.photoHeight = i6;
-                this.height = i5 + i6 + AndroidUtilities.dp(4.0f);
+                int i2 = (int) (d * 0.5625d);
+                this.photoHeight = i2;
+                this.height = i + i2 + AndroidUtilities.dp(4.0f);
             }
         }
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:63:0x0105 A[ORIG_RETURN, RETURN, SYNTHETIC] */
-    /* JADX WARNING: Removed duplicated region for block: B:64:? A[RETURN, SYNTHETIC] */
-    /* Code decompiled incorrectly, please refer to instructions dump. */
-    public boolean onTouchEvent(android.view.MotionEvent r8) {
-        /*
-            r7 = this;
-            float r0 = r8.getX()
-            float r1 = r8.getY()
-            android.text.StaticLayout r2 = r7.textLayout
-            r3 = 0
-            r4 = 1
-            if (r2 == 0) goto L_0x00fc
-            int r2 = r8.getAction()
-            if (r2 == 0) goto L_0x002b
-            android.text.style.ClickableSpan r2 = r7.pressedLink
-            if (r2 == 0) goto L_0x001f
-            int r2 = r8.getAction()
-            if (r2 != r4) goto L_0x001f
-            goto L_0x002b
-        L_0x001f:
-            int r0 = r8.getAction()
-            r1 = 3
-            if (r0 != r1) goto L_0x00fc
-            r7.resetPressedLink()
-            goto L_0x00fc
-        L_0x002b:
-            int r2 = r8.getAction()
-            if (r2 != 0) goto L_0x00af
-            r7.resetPressedLink()
-            int r2 = r7.textX     // Catch:{ Exception -> 0x00a5 }
-            float r2 = (float) r2     // Catch:{ Exception -> 0x00a5 }
-            float r0 = r0 - r2
-            int r0 = (int) r0     // Catch:{ Exception -> 0x00a5 }
-            int r2 = r7.textY     // Catch:{ Exception -> 0x00a5 }
-            float r2 = (float) r2     // Catch:{ Exception -> 0x00a5 }
-            float r1 = r1 - r2
-            int r1 = (int) r1     // Catch:{ Exception -> 0x00a5 }
-            android.text.StaticLayout r2 = r7.textLayout     // Catch:{ Exception -> 0x00a5 }
-            int r1 = r2.getLineForVertical(r1)     // Catch:{ Exception -> 0x00a5 }
-            android.text.StaticLayout r2 = r7.textLayout     // Catch:{ Exception -> 0x00a5 }
-            float r0 = (float) r0     // Catch:{ Exception -> 0x00a5 }
-            int r2 = r2.getOffsetForHorizontal(r1, r0)     // Catch:{ Exception -> 0x00a5 }
-            android.text.StaticLayout r5 = r7.textLayout     // Catch:{ Exception -> 0x00a5 }
-            float r5 = r5.getLineLeft(r1)     // Catch:{ Exception -> 0x00a5 }
-            int r6 = (r5 > r0 ? 1 : (r5 == r0 ? 0 : -1))
-            if (r6 > 0) goto L_0x00a1
-            android.text.StaticLayout r6 = r7.textLayout     // Catch:{ Exception -> 0x00a5 }
-            float r1 = r6.getLineWidth(r1)     // Catch:{ Exception -> 0x00a5 }
-            float r5 = r5 + r1
-            int r0 = (r5 > r0 ? 1 : (r5 == r0 ? 0 : -1))
-            if (r0 < 0) goto L_0x00a1
-            android.text.StaticLayout r0 = r7.textLayout     // Catch:{ Exception -> 0x00a5 }
-            java.lang.CharSequence r0 = r0.getText()     // Catch:{ Exception -> 0x00a5 }
-            android.text.Spannable r0 = (android.text.Spannable) r0     // Catch:{ Exception -> 0x00a5 }
-            java.lang.Class<android.text.style.ClickableSpan> r1 = android.text.style.ClickableSpan.class
-            java.lang.Object[] r1 = r0.getSpans(r2, r2, r1)     // Catch:{ Exception -> 0x00a5 }
-            android.text.style.ClickableSpan[] r1 = (android.text.style.ClickableSpan[]) r1     // Catch:{ Exception -> 0x00a5 }
-            int r2 = r1.length     // Catch:{ Exception -> 0x00a5 }
-            if (r2 == 0) goto L_0x009d
-            r7.resetPressedLink()     // Catch:{ Exception -> 0x00a5 }
-            r1 = r1[r3]     // Catch:{ Exception -> 0x00a5 }
-            r7.pressedLink = r1     // Catch:{ Exception -> 0x00a5 }
-            int r1 = r0.getSpanStart(r1)     // Catch:{ Exception -> 0x0095 }
-            org.telegram.ui.Components.LinkPath r2 = r7.urlPath     // Catch:{ Exception -> 0x0095 }
-            android.text.StaticLayout r5 = r7.textLayout     // Catch:{ Exception -> 0x0095 }
-            r6 = 0
-            r2.setCurrentLayout(r5, r1, r6)     // Catch:{ Exception -> 0x0095 }
-            android.text.StaticLayout r2 = r7.textLayout     // Catch:{ Exception -> 0x0095 }
-            android.text.style.ClickableSpan r5 = r7.pressedLink     // Catch:{ Exception -> 0x0095 }
-            int r0 = r0.getSpanEnd(r5)     // Catch:{ Exception -> 0x0095 }
-            org.telegram.ui.Components.LinkPath r5 = r7.urlPath     // Catch:{ Exception -> 0x0095 }
-            r2.getSelectionPath(r1, r0, r5)     // Catch:{ Exception -> 0x0095 }
-            goto L_0x00fa
-        L_0x0095:
-            r0 = move-exception
-            org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)     // Catch:{ Exception -> 0x009a }
-            goto L_0x00fa
-        L_0x009a:
-            r0 = move-exception
-            r1 = 1
-            goto L_0x00a7
-        L_0x009d:
-            r7.resetPressedLink()     // Catch:{ Exception -> 0x00a5 }
-            goto L_0x00fc
-        L_0x00a1:
-            r7.resetPressedLink()     // Catch:{ Exception -> 0x00a5 }
-            goto L_0x00fc
-        L_0x00a5:
-            r0 = move-exception
-            r1 = 0
-        L_0x00a7:
-            r7.resetPressedLink()
-            org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)
-            r0 = r1
-            goto L_0x00fd
-        L_0x00af:
-            android.text.style.ClickableSpan r0 = r7.pressedLink
-            if (r0 == 0) goto L_0x00fc
-            boolean r1 = r0 instanceof org.telegram.ui.Components.URLSpanNoUnderline     // Catch:{ Exception -> 0x00f3 }
-            if (r1 == 0) goto L_0x00dd
-            org.telegram.ui.Components.URLSpanNoUnderline r0 = (org.telegram.ui.Components.URLSpanNoUnderline) r0     // Catch:{ Exception -> 0x00f3 }
-            java.lang.String r0 = r0.getURL()     // Catch:{ Exception -> 0x00f3 }
-            java.lang.String r1 = "@"
-            boolean r1 = r0.startsWith(r1)     // Catch:{ Exception -> 0x00f3 }
-            if (r1 != 0) goto L_0x00d5
-            java.lang.String r1 = "#"
-            boolean r1 = r0.startsWith(r1)     // Catch:{ Exception -> 0x00f3 }
-            if (r1 != 0) goto L_0x00d5
-            java.lang.String r1 = "/"
-            boolean r1 = r0.startsWith(r1)     // Catch:{ Exception -> 0x00f3 }
-            if (r1 == 0) goto L_0x00f7
-        L_0x00d5:
-            org.telegram.ui.Cells.BotHelpCell$BotHelpCellDelegate r1 = r7.delegate     // Catch:{ Exception -> 0x00f3 }
-            if (r1 == 0) goto L_0x00f7
-            r1.didPressUrl(r0)     // Catch:{ Exception -> 0x00f3 }
-            goto L_0x00f7
-        L_0x00dd:
-            boolean r1 = r0 instanceof android.text.style.URLSpan     // Catch:{ Exception -> 0x00f3 }
-            if (r1 == 0) goto L_0x00ef
-            org.telegram.ui.Cells.BotHelpCell$BotHelpCellDelegate r1 = r7.delegate     // Catch:{ Exception -> 0x00f3 }
-            if (r1 == 0) goto L_0x00f7
-            android.text.style.URLSpan r0 = (android.text.style.URLSpan) r0     // Catch:{ Exception -> 0x00f3 }
-            java.lang.String r0 = r0.getURL()     // Catch:{ Exception -> 0x00f3 }
-            r1.didPressUrl(r0)     // Catch:{ Exception -> 0x00f3 }
-            goto L_0x00f7
-        L_0x00ef:
-            r0.onClick(r7)     // Catch:{ Exception -> 0x00f3 }
-            goto L_0x00f7
-        L_0x00f3:
-            r0 = move-exception
-            org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)
-        L_0x00f7:
-            r7.resetPressedLink()
-        L_0x00fa:
-            r0 = 1
-            goto L_0x00fd
-        L_0x00fc:
-            r0 = 0
-        L_0x00fd:
-            if (r0 != 0) goto L_0x0105
-            boolean r8 = super.onTouchEvent(r8)
-            if (r8 == 0) goto L_0x0106
-        L_0x0105:
-            r3 = 1
-        L_0x0106:
-            return r3
-        */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Cells.BotHelpCell.onTouchEvent(android.view.MotionEvent):boolean");
+    public boolean onTouchEvent(MotionEvent event) {
+        BotHelpCellDelegate botHelpCellDelegate;
+        float x = event.getX();
+        float y = event.getY();
+        boolean result = false;
+        if (this.textLayout != null) {
+            if (event.getAction() == 0 || (this.pressedLink != null && event.getAction() == 1)) {
+                if (event.getAction() == 0) {
+                    resetPressedLink();
+                    try {
+                        int x2 = (int) (x - ((float) this.textX));
+                        int line = this.textLayout.getLineForVertical((int) (y - ((float) this.textY)));
+                        int off = this.textLayout.getOffsetForHorizontal(line, (float) x2);
+                        float left = this.textLayout.getLineLeft(line);
+                        if (left > ((float) x2) || this.textLayout.getLineWidth(line) + left < ((float) x2)) {
+                            resetPressedLink();
+                        } else {
+                            Spannable buffer = (Spannable) this.textLayout.getText();
+                            ClickableSpan[] link = (ClickableSpan[]) buffer.getSpans(off, off, ClickableSpan.class);
+                            if (link.length != 0) {
+                                resetPressedLink();
+                                ClickableSpan clickableSpan = link[0];
+                                this.pressedLink = clickableSpan;
+                                result = true;
+                                try {
+                                    int start = buffer.getSpanStart(clickableSpan);
+                                    this.urlPath.setCurrentLayout(this.textLayout, start, 0.0f);
+                                    this.textLayout.getSelectionPath(start, buffer.getSpanEnd(this.pressedLink), this.urlPath);
+                                } catch (Exception e) {
+                                    FileLog.e((Throwable) e);
+                                }
+                            } else {
+                                resetPressedLink();
+                            }
+                        }
+                    } catch (Exception e2) {
+                        resetPressedLink();
+                        FileLog.e((Throwable) e2);
+                    }
+                } else {
+                    ClickableSpan clickableSpan2 = this.pressedLink;
+                    if (clickableSpan2 != null) {
+                        try {
+                            if (clickableSpan2 instanceof URLSpanNoUnderline) {
+                                String url = ((URLSpanNoUnderline) clickableSpan2).getURL();
+                                if ((url.startsWith("@") || url.startsWith("#") || url.startsWith("/")) && (botHelpCellDelegate = this.delegate) != null) {
+                                    botHelpCellDelegate.didPressUrl(url);
+                                }
+                            } else if (clickableSpan2 instanceof URLSpan) {
+                                BotHelpCellDelegate botHelpCellDelegate2 = this.delegate;
+                                if (botHelpCellDelegate2 != null) {
+                                    botHelpCellDelegate2.didPressUrl(((URLSpan) clickableSpan2).getURL());
+                                }
+                            } else {
+                                clickableSpan2.onClick(this);
+                            }
+                        } catch (Exception e3) {
+                            FileLog.e((Throwable) e3);
+                        }
+                        resetPressedLink();
+                        result = true;
+                    }
+                }
+            } else if (event.getAction() == 3) {
+                resetPressedLink();
+            }
+        }
+        return result || super.onTouchEvent(event);
     }
 
     /* access modifiers changed from: protected */
-    public void onMeasure(int i, int i2) {
-        setMeasuredDimension(View.MeasureSpec.makeMeasureSpec(View.MeasureSpec.getSize(i), NUM), this.height + AndroidUtilities.dp(8.0f));
+    public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        setMeasuredDimension(View.MeasureSpec.makeMeasureSpec(View.MeasureSpec.getSize(widthMeasureSpec), NUM), this.height + AndroidUtilities.dp(8.0f));
     }
 
     /* access modifiers changed from: protected */
     public void onDraw(Canvas canvas) {
-        int width2 = (getWidth() - this.width) / 2;
-        int dp = this.photoHeight + AndroidUtilities.dp(2.0f);
+        int x = (getWidth() - this.width) / 2;
+        int y = this.photoHeight + AndroidUtilities.dp(2.0f);
         Drawable shadowDrawable = Theme.chat_msgInMediaDrawable.getShadowDrawable();
         if (shadowDrawable != null) {
-            shadowDrawable.setBounds(width2, dp, this.width + width2, this.height + dp);
+            shadowDrawable.setBounds(x, y, this.width + x, this.height + y);
             shadowDrawable.draw(canvas);
         }
-        Point point = AndroidUtilities.displaySize;
-        int i = point.x;
-        int i2 = point.y;
+        int w = AndroidUtilities.displaySize.x;
+        int h = AndroidUtilities.displaySize.y;
         if (getParent() instanceof View) {
             View view = (View) getParent();
-            i = view.getMeasuredWidth();
-            i2 = view.getMeasuredHeight();
+            w = view.getMeasuredWidth();
+            h = view.getMeasuredHeight();
         }
-        int i3 = i2;
-        Theme.MessageDrawable messageDrawable = (Theme.MessageDrawable) getThemedDrawable("drawableMsgInMedia");
-        messageDrawable.setTop((int) getY(), i, i3, false, false);
-        messageDrawable.setBounds(width2, 0, this.width + width2, this.height);
-        messageDrawable.draw(canvas);
+        Theme.MessageDrawable drawable = (Theme.MessageDrawable) getThemedDrawable("drawableMsgInMedia");
+        drawable.setTop((int) getY(), w, h, false, false);
+        drawable.setBounds(x, 0, this.width + x, this.height);
+        drawable.draw(canvas);
         ImageReceiver imageReceiver2 = this.imageReceiver;
-        int i4 = this.imagePadding;
-        imageReceiver2.setImageCoords((float) (width2 + i4), (float) i4, (float) (this.width - (i4 * 2)), (float) (this.photoHeight - i4));
+        int i = this.imagePadding;
+        imageReceiver2.setImageCoords((float) (x + i), (float) i, (float) (this.width - (i * 2)), (float) (this.photoHeight - i));
         this.imageReceiver.draw(canvas);
         Theme.chat_msgTextPaint.setColor(getThemedColor("chat_messageTextIn"));
         Theme.chat_msgTextPaint.linkColor = getThemedColor("chat_messageLinkIn");
         canvas.save();
-        int dp2 = AndroidUtilities.dp(this.isPhotoVisible ? 14.0f : 11.0f) + width2;
-        this.textX = dp2;
-        float f = (float) dp2;
-        int dp3 = AndroidUtilities.dp(11.0f) + dp;
-        this.textY = dp3;
-        canvas.translate(f, (float) dp3);
+        int dp = AndroidUtilities.dp(this.isPhotoVisible ? 14.0f : 11.0f) + x;
+        this.textX = dp;
+        int dp2 = AndroidUtilities.dp(11.0f) + y;
+        this.textY = dp2;
+        canvas.translate((float) dp, (float) dp2);
         if (this.pressedLink != null) {
             canvas.drawPath(this.urlPath, Theme.chat_urlPaint);
         }
@@ -384,6 +303,7 @@ public class BotHelpCell extends View {
             staticLayout.draw(canvas);
         }
         canvas.restore();
+        this.wasDraw = true;
     }
 
     /* access modifiers changed from: protected */
@@ -396,30 +316,31 @@ public class BotHelpCell extends View {
     public void onDetachedFromWindow() {
         super.onDetachedFromWindow();
         this.imageReceiver.onDetachedFromWindow();
+        this.wasDraw = false;
     }
 
-    public void onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo accessibilityNodeInfo) {
-        super.onInitializeAccessibilityNodeInfo(accessibilityNodeInfo);
-        accessibilityNodeInfo.setText(this.textLayout.getText());
+    public void onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo info) {
+        super.onInitializeAccessibilityNodeInfo(info);
+        info.setText(this.textLayout.getText());
     }
 
     public boolean animating() {
         return this.animating;
     }
 
-    public void setAnimating(boolean z) {
-        this.animating = z;
+    public void setAnimating(boolean animating2) {
+        this.animating = animating2;
     }
 
-    private int getThemedColor(String str) {
+    private int getThemedColor(String key) {
         Theme.ResourcesProvider resourcesProvider2 = this.resourcesProvider;
-        Integer color = resourcesProvider2 != null ? resourcesProvider2.getColor(str) : null;
-        return color != null ? color.intValue() : Theme.getColor(str);
+        Integer color = resourcesProvider2 != null ? resourcesProvider2.getColor(key) : null;
+        return color != null ? color.intValue() : Theme.getColor(key);
     }
 
-    private Drawable getThemedDrawable(String str) {
+    private Drawable getThemedDrawable(String drawableKey) {
         Theme.ResourcesProvider resourcesProvider2 = this.resourcesProvider;
-        Drawable drawable = resourcesProvider2 != null ? resourcesProvider2.getDrawable(str) : null;
-        return drawable != null ? drawable : Theme.getThemeDrawable(str);
+        Drawable drawable = resourcesProvider2 != null ? resourcesProvider2.getDrawable(drawableKey) : null;
+        return drawable != null ? drawable : Theme.getThemeDrawable(drawableKey);
     }
 }

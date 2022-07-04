@@ -15,6 +15,6 @@ public final /* synthetic */ class MentionsAdapter$$ExternalSyntheticLambda5 imp
     }
 
     public final void run() {
-        this.f$0.lambda$searchUsernameOrHashtag$7(this.f$1, this.f$2);
+        this.f$0.m2635xea5050b6(this.f$1, this.f$2);
     }
 }

@@ -1,15 +1,15 @@
 package org.telegram.ui.Components;
 
-import android.content.DialogInterface;
+import android.view.MotionEvent;
+import android.view.View;
 
-public final /* synthetic */ class ChatAttachAlert$$ExternalSyntheticLambda5 implements DialogInterface.OnDismissListener {
-    public final /* synthetic */ ChatAttachAlert f$0;
+public final /* synthetic */ class ChatAttachAlert$$ExternalSyntheticLambda5 implements View.OnTouchListener {
+    public static final /* synthetic */ ChatAttachAlert$$ExternalSyntheticLambda5 INSTANCE = new ChatAttachAlert$$ExternalSyntheticLambda5();
 
-    public /* synthetic */ ChatAttachAlert$$ExternalSyntheticLambda5(ChatAttachAlert chatAttachAlert) {
-        this.f$0 = chatAttachAlert;
+    private /* synthetic */ ChatAttachAlert$$ExternalSyntheticLambda5() {
     }
 
-    public final void onDismiss(DialogInterface dialogInterface) {
-        this.f$0.lambda$dismiss$34(dialogInterface);
+    public final boolean onTouch(View view, MotionEvent motionEvent) {
+        return ChatAttachAlert.lambda$new$10(view, motionEvent);
     }
 }

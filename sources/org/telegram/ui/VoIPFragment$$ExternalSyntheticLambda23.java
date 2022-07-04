@@ -1,13 +1,15 @@
 package org.telegram.ui;
 
-public final /* synthetic */ class VoIPFragment$$ExternalSyntheticLambda23 implements Runnable {
+import org.telegram.ui.Components.voip.VoIPFloatingLayout;
+
+public final /* synthetic */ class VoIPFragment$$ExternalSyntheticLambda23 implements VoIPFloatingLayout.VoIPFloatingLayoutDelegate {
     public final /* synthetic */ VoIPFragment f$0;
 
     public /* synthetic */ VoIPFragment$$ExternalSyntheticLambda23(VoIPFragment voIPFragment) {
         this.f$0 = voIPFragment;
     }
 
-    public final void run() {
-        this.f$0.lambda$startTransitionFromPiP$14();
+    public final void onChange(float f, boolean z) {
+        this.f$0.m4808lambda$createView$5$orgtelegramuiVoIPFragment(f, z);
     }
 }

@@ -10,6 +10,6 @@ public final /* synthetic */ class TextSelectionHelper$$ExternalSyntheticLambda1
     }
 
     public final void onClick(View view) {
-        this.f$0.lambda$showActions$2(view);
+        this.f$0.m2824lambda$showActions$2$orgtelegramuiCellsTextSelectionHelper(view);
     }
 }

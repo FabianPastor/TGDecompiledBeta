@@ -1,17 +1,22 @@
 package org.telegram.ui;
 
-import androidx.core.util.Consumer;
-import java.util.List;
-import org.telegram.ui.Components.ReactedUsersListView;
+import org.telegram.ui.ActionBar.AlertDialog;
+import org.telegram.ui.Cells.ChatMessageCell;
 
-public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda113 implements Consumer {
-    public final /* synthetic */ ReactedUsersListView f$0;
+public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda113 implements Runnable {
+    public final /* synthetic */ ChatActivity f$0;
+    public final /* synthetic */ AlertDialog[] f$1;
+    public final /* synthetic */ int f$2;
+    public final /* synthetic */ ChatMessageCell f$3;
 
-    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda113(ReactedUsersListView reactedUsersListView) {
-        this.f$0 = reactedUsersListView;
+    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda113(ChatActivity chatActivity, AlertDialog[] alertDialogArr, int i, ChatMessageCell chatMessageCell) {
+        this.f$0 = chatActivity;
+        this.f$1 = alertDialogArr;
+        this.f$2 = i;
+        this.f$3 = chatMessageCell;
     }
 
-    public final void accept(Object obj) {
-        this.f$0.setSeenUsers((List) obj);
+    public final void run() {
+        this.f$0.m3003lambda$didPressMessageUrl$242$orgtelegramuiChatActivity(this.f$1, this.f$2, this.f$3);
     }
 }

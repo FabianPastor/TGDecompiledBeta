@@ -8,6 +8,6 @@ public final /* synthetic */ class FilteredSearchView$$ExternalSyntheticLambda0 
     }
 
     public final void run() {
-        this.f$0.lambda$new$0();
+        this.f$0.m3481lambda$new$0$orgtelegramuiFilteredSearchView();
     }
 }

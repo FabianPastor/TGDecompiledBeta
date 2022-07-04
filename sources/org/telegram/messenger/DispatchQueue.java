@@ -7,40 +7,37 @@ import android.os.SystemClock;
 import java.util.concurrent.CountDownLatch;
 
 public class DispatchQueue extends Thread {
-    private static int indexPointer;
+    private static int indexPointer = 0;
     private volatile Handler handler;
     public final int index;
     private long lastTaskTime;
     private CountDownLatch syncLatch;
 
-    public void handleMessage(Message message) {
+    public DispatchQueue(String threadName) {
+        this(threadName, true);
     }
 
-    public DispatchQueue(String str) {
-        this(str, true);
-    }
-
-    public DispatchQueue(String str, boolean z) {
+    public DispatchQueue(String threadName, boolean start) {
         this.handler = null;
         this.syncLatch = new CountDownLatch(1);
         int i = indexPointer;
         indexPointer = i + 1;
         this.index = i;
-        setName(str);
-        if (z) {
+        setName(threadName);
+        if (start) {
             start();
         }
     }
 
-    public void sendMessage(Message message, int i) {
+    public void sendMessage(Message msg, int delay) {
         try {
             this.syncLatch.await();
-            if (i <= 0) {
-                this.handler.sendMessage(message);
+            if (delay <= 0) {
+                this.handler.sendMessage(msg);
             } else {
-                this.handler.sendMessageDelayed(message, (long) i);
+                this.handler.sendMessageDelayed(msg, (long) delay);
             }
-        } catch (Exception unused) {
+        } catch (Exception e) {
         }
     }
 
@@ -53,10 +50,10 @@ public class DispatchQueue extends Thread {
         }
     }
 
-    public void cancelRunnables(Runnable[] runnableArr) {
+    public void cancelRunnables(Runnable[] runnables) {
         try {
             this.syncLatch.await();
-            for (Runnable removeCallbacks : runnableArr) {
+            for (Runnable removeCallbacks : runnables) {
                 this.handler.removeCallbacks(removeCallbacks);
             }
         } catch (Exception e) {
@@ -69,16 +66,16 @@ public class DispatchQueue extends Thread {
         return postRunnable(runnable, 0);
     }
 
-    public boolean postRunnable(Runnable runnable, long j) {
+    public boolean postRunnable(Runnable runnable, long delay) {
         try {
             this.syncLatch.await();
         } catch (Exception e) {
             FileLog.e((Throwable) e, false);
         }
-        if (j <= 0) {
+        if (delay <= 0) {
             return this.handler.post(runnable);
         }
-        return this.handler.postDelayed(runnable, j);
+        return this.handler.postDelayed(runnable, delay);
     }
 
     public void cleanupQueue() {
@@ -88,6 +85,9 @@ public class DispatchQueue extends Thread {
         } catch (Exception e) {
             FileLog.e((Throwable) e, false);
         }
+    }
+
+    public void handleMessage(Message inputMessage) {
     }
 
     public long getLastTaskTime() {
@@ -105,9 +105,9 @@ public class DispatchQueue extends Thread {
         Looper.loop();
     }
 
-    /* access modifiers changed from: private */
-    public /* synthetic */ boolean lambda$run$0(Message message) {
-        handleMessage(message);
+    /* renamed from: lambda$run$0$org-telegram-messenger-DispatchQueue  reason: not valid java name */
+    public /* synthetic */ boolean m56lambda$run$0$orgtelegrammessengerDispatchQueue(Message msg) {
+        handleMessage(msg);
         return true;
     }
 

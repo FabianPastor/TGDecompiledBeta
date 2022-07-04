@@ -15,6 +15,6 @@ public final /* synthetic */ class LaunchActivity$$ExternalSyntheticLambda61 imp
     }
 
     public final void run() {
-        this.f$0.lambda$didReceivedNotification$93(this.f$1, this.f$2);
+        this.f$0.m3639lambda$didReceivedNotification$93$orgtelegramuiLaunchActivity(this.f$1, this.f$2);
     }
 }

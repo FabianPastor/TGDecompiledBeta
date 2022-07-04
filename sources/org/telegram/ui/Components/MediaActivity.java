@@ -7,7 +7,7 @@ import android.view.View;
 import androidx.core.graphics.ColorUtils;
 import java.util.ArrayList;
 import org.telegram.messenger.LocaleController;
-import org.telegram.tgnet.TLRPC$ChatFull;
+import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.SimpleTextView;
 import org.telegram.ui.ActionBar.Theme;
@@ -18,7 +18,7 @@ import org.telegram.ui.ProfileActivity;
 
 public class MediaActivity extends BaseFragment implements SharedMediaLayout.SharedMediaPreloaderDelegate {
     ProfileActivity.AvatarImageView avatarImageView;
-    private TLRPC$ChatFull currentChatInfo;
+    private TLRPC.ChatFull currentChatInfo;
     private long dialogId;
     AudioPlayerAlert.ClippingTextViewSwitcher mediaCounterTextView;
     /* access modifiers changed from: private */
@@ -26,8 +26,8 @@ public class MediaActivity extends BaseFragment implements SharedMediaLayout.Sha
     SharedMediaLayout sharedMediaLayout;
     private SharedMediaLayout.SharedMediaPreloader sharedMediaPreloader;
 
-    public MediaActivity(Bundle bundle, SharedMediaLayout.SharedMediaPreloader sharedMediaPreloader2) {
-        super(bundle);
+    public MediaActivity(Bundle args, SharedMediaLayout.SharedMediaPreloader sharedMediaPreloader2) {
+        super(args);
         this.sharedMediaPreloader = sharedMediaPreloader2;
     }
 
@@ -41,44 +41,44 @@ public class MediaActivity extends BaseFragment implements SharedMediaLayout.Sha
         return super.onFragmentCreate();
     }
 
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v21, resolved type: org.telegram.tgnet.TLRPC$Chat} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v34, resolved type: org.telegram.tgnet.TLRPC$Chat} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v35, resolved type: org.telegram.tgnet.TLRPC$Chat} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v36, resolved type: org.telegram.tgnet.TLRPC$Chat} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v4, resolved type: org.telegram.tgnet.TLRPC$Chat} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v5, resolved type: org.telegram.tgnet.TLRPC$Chat} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v6, resolved type: org.telegram.tgnet.TLRPC$Chat} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v13, resolved type: org.telegram.tgnet.TLRPC$User} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v7, resolved type: org.telegram.tgnet.TLRPC$Chat} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r6v32, resolved type: org.telegram.tgnet.TLRPC$User} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v8, resolved type: org.telegram.tgnet.TLRPC$Chat} */
     /* JADX WARNING: Multi-variable type inference failed */
-    /* JADX WARNING: Removed duplicated region for block: B:22:0x0209  */
-    /* JADX WARNING: Removed duplicated region for block: B:25:0x021f  */
-    /* JADX WARNING: Removed duplicated region for block: B:26:0x022a  */
-    /* JADX WARNING: Removed duplicated region for block: B:29:0x0233  */
-    /* JADX WARNING: Removed duplicated region for block: B:30:0x023b  */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public android.view.View createView(android.content.Context r26) {
         /*
             r25 = this;
             r15 = r25
-            r2 = r26
+            r14 = r26
             org.telegram.ui.ActionBar.ActionBar r0 = r15.actionBar
             org.telegram.ui.ActionBar.BackDrawable r1 = new org.telegram.ui.ActionBar.BackDrawable
-            r14 = 0
-            r1.<init>(r14)
+            r13 = 0
+            r1.<init>(r13)
             r0.setBackButtonDrawable(r1)
             org.telegram.ui.ActionBar.ActionBar r0 = r15.actionBar
-            r0.setCastShadows(r14)
+            r0.setCastShadows(r13)
             org.telegram.ui.ActionBar.ActionBar r0 = r15.actionBar
-            r0.setAddToContainer(r14)
+            r0.setAddToContainer(r13)
             org.telegram.ui.ActionBar.ActionBar r0 = r15.actionBar
             org.telegram.ui.Components.MediaActivity$1 r1 = new org.telegram.ui.Components.MediaActivity$1
             r1.<init>()
             r0.setActionBarMenuOnItemClick(r1)
-            android.widget.FrameLayout r13 = new android.widget.FrameLayout
-            r13.<init>(r2)
-            org.telegram.ui.Components.MediaActivity$2 r12 = new org.telegram.ui.Components.MediaActivity$2
-            r12.<init>(r2, r13)
-            r11 = 1
-            r12.needBlur = r11
-            r15.fragmentView = r12
+            android.widget.FrameLayout r0 = new android.widget.FrameLayout
+            r0.<init>(r14)
+            r12 = r0
+            org.telegram.ui.Components.MediaActivity$2 r0 = new org.telegram.ui.Components.MediaActivity$2
+            r0.<init>(r14, r12)
+            r11 = r0
+            r10 = 1
+            r11.needBlur = r10
+            r15.fragmentView = r11
             org.telegram.ui.ActionBar.SimpleTextView r0 = new org.telegram.ui.ActionBar.SimpleTextView
-            r0.<init>(r2)
+            r0.<init>(r14)
             r15.nameTextView = r0
             r1 = 18
             r0.setTextSize(r1)
@@ -95,87 +95,86 @@ public class MediaActivity extends BaseFragment implements SharedMediaLayout.Sha
             int r1 = -r1
             r0.setLeftDrawableTopPadding(r1)
             org.telegram.ui.ActionBar.SimpleTextView r0 = r15.nameTextView
-            r0.setScrollNonFitText(r11)
+            r0.setScrollNonFitText(r10)
             org.telegram.ui.ActionBar.SimpleTextView r0 = r15.nameTextView
             r1 = 2
             r0.setImportantForAccessibility(r1)
             org.telegram.ui.ActionBar.SimpleTextView r0 = r15.nameTextView
-            r3 = -2
-            r4 = -1073741824(0xffffffffCLASSNAME, float:-2.0)
-            r5 = 51
-            r6 = 1122762752(0x42eCLASSNAME, float:118.0)
+            r1 = -2
+            r2 = -1073741824(0xffffffffCLASSNAME, float:-2.0)
+            r3 = 51
+            r4 = 1122762752(0x42eCLASSNAME, float:118.0)
+            r5 = 0
+            r6 = 1113587712(0x42600000, float:56.0)
             r7 = 0
-            r8 = 1113587712(0x42600000, float:56.0)
-            r9 = 0
-            android.widget.FrameLayout$LayoutParams r1 = org.telegram.ui.Components.LayoutHelper.createFrame(r3, r4, r5, r6, r7, r8, r9)
-            r13.addView(r0, r1)
+            android.widget.FrameLayout$LayoutParams r1 = org.telegram.ui.Components.LayoutHelper.createFrame(r1, r2, r3, r4, r5, r6, r7)
+            r12.addView(r0, r1)
             org.telegram.ui.Components.MediaActivity$3 r0 = new org.telegram.ui.Components.MediaActivity$3
-            r0.<init>(r15, r2)
+            r0.<init>(r14)
             r15.avatarImageView = r0
             org.telegram.messenger.ImageReceiver r0 = r0.getImageReceiver()
-            r0.setAllowDecodeSingleFrame(r11)
+            r0.setAllowDecodeSingleFrame(r10)
             org.telegram.ui.ProfileActivity$AvatarImageView r0 = r15.avatarImageView
             r1 = 1101529088(0x41a80000, float:21.0)
             int r1 = org.telegram.messenger.AndroidUtilities.dp(r1)
             r0.setRoundRadius(r1)
             org.telegram.ui.ProfileActivity$AvatarImageView r0 = r15.avatarImageView
-            r10 = 0
-            r0.setPivotX(r10)
+            r9 = 0
+            r0.setPivotX(r9)
             org.telegram.ui.ProfileActivity$AvatarImageView r0 = r15.avatarImageView
-            r0.setPivotY(r10)
-            org.telegram.ui.Components.AvatarDrawable r9 = new org.telegram.ui.Components.AvatarDrawable
-            r9.<init>()
-            r9.setProfile(r11)
+            r0.setPivotY(r9)
+            org.telegram.ui.Components.AvatarDrawable r0 = new org.telegram.ui.Components.AvatarDrawable
+            r0.<init>()
+            r8 = r0
+            r8.setProfile(r10)
             org.telegram.ui.ProfileActivity$AvatarImageView r0 = r15.avatarImageView
-            r0.setImageDrawable(r9)
+            r0.setImageDrawable(r8)
             org.telegram.ui.ProfileActivity$AvatarImageView r0 = r15.avatarImageView
-            r16 = 42
-            r17 = 1109917696(0x42280000, float:42.0)
-            r18 = 51
-            r19 = 1115684864(0x42800000, float:64.0)
-            r20 = 0
-            r21 = 0
-            r22 = 0
-            android.widget.FrameLayout$LayoutParams r1 = org.telegram.ui.Components.LayoutHelper.createFrame(r16, r17, r18, r19, r20, r21, r22)
-            r13.addView(r0, r1)
+            r1 = 42
+            r2 = 1109917696(0x42280000, float:42.0)
+            r4 = 1115684864(0x42800000, float:64.0)
+            r6 = 0
+            android.widget.FrameLayout$LayoutParams r1 = org.telegram.ui.Components.LayoutHelper.createFrame(r1, r2, r3, r4, r5, r6, r7)
+            r12.addView(r0, r1)
             org.telegram.ui.Components.MediaActivity$4 r0 = new org.telegram.ui.Components.MediaActivity$4
-            r0.<init>(r15, r2, r2)
+            r0.<init>(r14, r14)
             r15.mediaCounterTextView = r0
-            r16 = -2
-            r17 = -1073741824(0xffffffffCLASSNAME, float:-2.0)
-            r19 = 1122762752(0x42eCLASSNAME, float:118.0)
-            r21 = 1113587712(0x42600000, float:56.0)
-            android.widget.FrameLayout$LayoutParams r1 = org.telegram.ui.Components.LayoutHelper.createFrame(r16, r17, r18, r19, r20, r21, r22)
-            r13.addView(r0, r1)
-            org.telegram.ui.Components.MediaActivity$6 r8 = new org.telegram.ui.Components.MediaActivity$6
+            r1 = -2
+            r2 = -1073741824(0xffffffffCLASSNAME, float:-2.0)
+            r4 = 1122762752(0x42eCLASSNAME, float:118.0)
+            r6 = 1113587712(0x42600000, float:56.0)
+            android.widget.FrameLayout$LayoutParams r1 = org.telegram.ui.Components.LayoutHelper.createFrame(r1, r2, r3, r4, r5, r6, r7)
+            r12.addView(r0, r1)
+            org.telegram.ui.Components.MediaActivity$6 r7 = new org.telegram.ui.Components.MediaActivity$6
             long r3 = r15.dialogId
             org.telegram.ui.Components.SharedMediaLayout$SharedMediaPreloader r5 = r15.sharedMediaPreloader
-            org.telegram.tgnet.TLRPC$ChatFull r7 = r15.currentChatInfo
-            org.telegram.ui.Components.MediaActivity$5 r6 = new org.telegram.ui.Components.MediaActivity$5
-            r6.<init>()
+            org.telegram.tgnet.TLRPC$ChatFull r6 = r15.currentChatInfo
+            org.telegram.ui.Components.MediaActivity$5 r2 = new org.telegram.ui.Components.MediaActivity$5
+            r2.<init>()
             org.telegram.ui.ActionBar.Theme$ResourcesProvider r16 = r25.getResourceProvider()
             r17 = 0
             r18 = 0
             r19 = 0
             r20 = 0
-            r0 = r8
+            r0 = r7
             r1 = r25
-            r21 = r6
+            r21 = r2
+            r2 = r26
+            r22 = r6
             r6 = r17
-            r17 = r7
+            r23 = r7
             r7 = r18
-            r23 = r8
-            r8 = r17
-            r24 = r9
+            r24 = r8
+            r8 = r22
             r9 = r19
             r10 = r25
+            r17 = r11
             r11 = r21
-            r26 = r12
+            r18 = r12
             r12 = r20
-            r17 = r13
             r13 = r16
-            r14 = r17
-            r15 = r26
+            r14 = r18
+            r15 = r17
             r0.<init>(r1, r2, r3, r5, r6, r7, r8, r9, r10, r11, r12, r13, r14, r15)
             r0 = r25
             r1 = r23
@@ -190,129 +189,135 @@ public class MediaActivity extends BaseFragment implements SharedMediaLayout.Sha
             android.widget.ImageView r1 = r1.photoVideoOptionsItem
             r1.setTranslationY(r3)
             org.telegram.ui.Components.SharedMediaLayout r1 = r0.sharedMediaLayout
-            r3 = r26
+            r3 = r17
             r3.addView(r1)
             org.telegram.ui.ActionBar.ActionBar r1 = r0.actionBar
             r3.addView(r1)
-            r1 = r17
+            r1 = r18
             r3.addView(r1)
             java.util.ArrayList<android.view.View> r4 = r3.blurBehindViews
             org.telegram.ui.Components.SharedMediaLayout r5 = r0.sharedMediaLayout
             r4.add(r5)
-            long r4 = r0.dialogId
-            boolean r4 = org.telegram.messenger.DialogObject.isEncryptedDialog(r4)
-            r5 = 0
-            if (r4 == 0) goto L_0x018e
-            org.telegram.messenger.MessagesController r4 = r25.getMessagesController()
+            r4 = 0
+            long r5 = r0.dialogId
+            boolean r5 = org.telegram.messenger.DialogObject.isEncryptedDialog(r5)
+            if (r5 == 0) goto L_0x018f
+            org.telegram.messenger.MessagesController r5 = r25.getMessagesController()
             long r6 = r0.dialogId
             int r6 = org.telegram.messenger.DialogObject.getEncryptedChatId(r6)
             java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            org.telegram.tgnet.TLRPC$EncryptedChat r4 = r4.getEncryptedChat(r6)
-            if (r4 == 0) goto L_0x018b
+            org.telegram.tgnet.TLRPC$EncryptedChat r5 = r5.getEncryptedChat(r6)
+            if (r5 == 0) goto L_0x018c
             org.telegram.messenger.MessagesController r6 = r25.getMessagesController()
-            long r7 = r4.user_id
-            java.lang.Long r4 = java.lang.Long.valueOf(r7)
-            org.telegram.tgnet.TLRPC$User r4 = r6.getUser(r4)
-            if (r4 == 0) goto L_0x018b
-            org.telegram.ui.ActionBar.SimpleTextView r5 = r0.nameTextView
-            java.lang.String r6 = r4.first_name
-            java.lang.String r7 = r4.last_name
-            java.lang.String r6 = org.telegram.messenger.ContactsController.formatName(r6, r7)
-            r5.setText(r6)
-            r6 = r24
-            r6.setInfo((org.telegram.tgnet.TLRPC$User) r4)
-            goto L_0x01f1
-        L_0x018b:
-            r6 = r24
-            goto L_0x01f2
+            long r7 = r5.user_id
+            java.lang.Long r7 = java.lang.Long.valueOf(r7)
+            org.telegram.tgnet.TLRPC$User r6 = r6.getUser(r7)
+            if (r6 == 0) goto L_0x0189
+            org.telegram.ui.ActionBar.SimpleTextView r7 = r0.nameTextView
+            java.lang.String r8 = r6.first_name
+            java.lang.String r9 = r6.last_name
+            java.lang.String r8 = org.telegram.messenger.ContactsController.formatName(r8, r9)
+            r7.setText(r8)
+            r7 = r24
+            r7.setInfo((org.telegram.tgnet.TLRPC.User) r6)
+            r4 = r6
+            goto L_0x018e
+        L_0x0189:
+            r7 = r24
+            goto L_0x018e
+        L_0x018c:
+            r7 = r24
         L_0x018e:
-            r6 = r24
-            long r7 = r0.dialogId
-            boolean r4 = org.telegram.messenger.DialogObject.isUserDialog(r7)
-            if (r4 == 0) goto L_0x01d4
-            int r4 = r0.currentAccount
-            org.telegram.messenger.MessagesController r4 = org.telegram.messenger.MessagesController.getInstance(r4)
-            long r7 = r0.dialogId
-            java.lang.Long r7 = java.lang.Long.valueOf(r7)
-            org.telegram.tgnet.TLRPC$User r4 = r4.getUser(r7)
-            if (r4 == 0) goto L_0x01f2
-            boolean r7 = r4.self
-            if (r7 == 0) goto L_0x01c3
-            org.telegram.ui.ActionBar.SimpleTextView r4 = r0.nameTextView
-            r7 = 2131628077(0x7f0e102d, float:1.8883436E38)
-            java.lang.String r8 = "SavedMessages"
-            java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r8, r7)
-            r4.setText(r7)
-            r6.setAvatarType(r2)
-            r6.setSmallSize(r2)
-            goto L_0x01f2
-        L_0x01c3:
-            org.telegram.ui.ActionBar.SimpleTextView r5 = r0.nameTextView
-            java.lang.String r7 = r4.first_name
-            java.lang.String r8 = r4.last_name
-            java.lang.String r7 = org.telegram.messenger.ContactsController.formatName(r7, r8)
-            r5.setText(r7)
-            r6.setInfo((org.telegram.tgnet.TLRPC$User) r4)
-            goto L_0x01f1
-        L_0x01d4:
-            int r4 = r0.currentAccount
-            org.telegram.messenger.MessagesController r4 = org.telegram.messenger.MessagesController.getInstance(r4)
-            long r7 = r0.dialogId
-            long r7 = -r7
-            java.lang.Long r7 = java.lang.Long.valueOf(r7)
-            org.telegram.tgnet.TLRPC$Chat r4 = r4.getChat(r7)
-            if (r4 == 0) goto L_0x01f2
-            org.telegram.ui.ActionBar.SimpleTextView r5 = r0.nameTextView
-            java.lang.String r7 = r4.title
-            r5.setText(r7)
-            r6.setInfo((org.telegram.tgnet.TLRPC$Chat) r4)
-        L_0x01f1:
-            r5 = r4
-        L_0x01f2:
-            org.telegram.messenger.ImageLocation r4 = org.telegram.messenger.ImageLocation.getForUserOrChat(r5, r2)
-            org.telegram.ui.ProfileActivity$AvatarImageView r7 = r0.avatarImageView
+            goto L_0x01f4
+        L_0x018f:
+            r7 = r24
+            long r5 = r0.dialogId
+            boolean r5 = org.telegram.messenger.DialogObject.isUserDialog(r5)
+            if (r5 == 0) goto L_0x01d6
+            int r5 = r0.currentAccount
+            org.telegram.messenger.MessagesController r5 = org.telegram.messenger.MessagesController.getInstance(r5)
+            long r8 = r0.dialogId
+            java.lang.Long r6 = java.lang.Long.valueOf(r8)
+            org.telegram.tgnet.TLRPC$User r5 = r5.getUser(r6)
+            if (r5 == 0) goto L_0x01d5
+            boolean r6 = r5.self
+            if (r6 == 0) goto L_0x01c4
+            org.telegram.ui.ActionBar.SimpleTextView r6 = r0.nameTextView
+            r8 = 2131628077(0x7f0e102d, float:1.8883436E38)
+            java.lang.String r9 = "SavedMessages"
+            java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r9, r8)
+            r6.setText(r8)
+            r7.setAvatarType(r2)
+            r7.setSmallSize(r2)
+            goto L_0x01d5
+        L_0x01c4:
+            org.telegram.ui.ActionBar.SimpleTextView r6 = r0.nameTextView
+            java.lang.String r8 = r5.first_name
+            java.lang.String r9 = r5.last_name
+            java.lang.String r8 = org.telegram.messenger.ContactsController.formatName(r8, r9)
+            r6.setText(r8)
+            r7.setInfo((org.telegram.tgnet.TLRPC.User) r5)
+            r4 = r5
+        L_0x01d5:
+            goto L_0x01f4
+        L_0x01d6:
+            int r5 = r0.currentAccount
+            org.telegram.messenger.MessagesController r5 = org.telegram.messenger.MessagesController.getInstance(r5)
+            long r8 = r0.dialogId
+            long r8 = -r8
+            java.lang.Long r6 = java.lang.Long.valueOf(r8)
+            org.telegram.tgnet.TLRPC$Chat r5 = r5.getChat(r6)
+            if (r5 == 0) goto L_0x01f4
+            org.telegram.ui.ActionBar.SimpleTextView r6 = r0.nameTextView
+            java.lang.String r8 = r5.title
+            r6.setText(r8)
+            r7.setInfo((org.telegram.tgnet.TLRPC.Chat) r5)
+            r4 = r5
+        L_0x01f4:
+            org.telegram.messenger.ImageLocation r5 = org.telegram.messenger.ImageLocation.getForUserOrChat(r4, r2)
+            org.telegram.ui.ProfileActivity$AvatarImageView r6 = r0.avatarImageView
             java.lang.String r8 = "50_50"
-            r7.setImage((org.telegram.messenger.ImageLocation) r4, (java.lang.String) r8, (android.graphics.drawable.Drawable) r6, (java.lang.Object) r5)
-            org.telegram.ui.ActionBar.SimpleTextView r4 = r0.nameTextView
-            java.lang.CharSequence r4 = r4.getText()
-            boolean r4 = android.text.TextUtils.isEmpty(r4)
-            if (r4 == 0) goto L_0x0217
-            org.telegram.ui.ActionBar.SimpleTextView r4 = r0.nameTextView
-            r5 = 2131628296(0x7f0e1108, float:1.888388E38)
-            java.lang.String r6 = "SharedContentTitle"
-            java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r6, r5)
-            r4.setText(r5)
-        L_0x0217:
-            org.telegram.ui.Components.SharedMediaLayout r4 = r0.sharedMediaLayout
-            boolean r4 = r4.isSearchItemVisible()
-            if (r4 == 0) goto L_0x022a
-            org.telegram.ui.Components.SharedMediaLayout r4 = r0.sharedMediaLayout
-            org.telegram.ui.ActionBar.ActionBarMenuItem r4 = r4.getSearchItem()
-            r5 = 0
-            r4.setVisibility(r5)
-            goto L_0x022b
-        L_0x022a:
-            r5 = 0
-        L_0x022b:
-            org.telegram.ui.Components.SharedMediaLayout r4 = r0.sharedMediaLayout
-            boolean r4 = r4.isCalendarItemVisible()
-            if (r4 == 0) goto L_0x023b
-            org.telegram.ui.Components.SharedMediaLayout r4 = r0.sharedMediaLayout
-            android.widget.ImageView r4 = r4.photoVideoOptionsItem
-            r4.setVisibility(r5)
-            goto L_0x0243
-        L_0x023b:
-            org.telegram.ui.Components.SharedMediaLayout r4 = r0.sharedMediaLayout
-            android.widget.ImageView r4 = r4.photoVideoOptionsItem
-            r6 = 4
-            r4.setVisibility(r6)
-        L_0x0243:
-            org.telegram.ui.ActionBar.ActionBar r4 = r0.actionBar
-            r4.setDrawBlurBackground(r3)
-            r4 = 1065353216(0x3var_, float:1.0)
-            org.telegram.messenger.AndroidUtilities.updateViewVisibilityAnimated(r1, r2, r4, r5)
+            r6.setImage((org.telegram.messenger.ImageLocation) r5, (java.lang.String) r8, (android.graphics.drawable.Drawable) r7, (java.lang.Object) r4)
+            org.telegram.ui.ActionBar.SimpleTextView r6 = r0.nameTextView
+            java.lang.CharSequence r6 = r6.getText()
+            boolean r6 = android.text.TextUtils.isEmpty(r6)
+            if (r6 == 0) goto L_0x0219
+            org.telegram.ui.ActionBar.SimpleTextView r6 = r0.nameTextView
+            r8 = 2131628296(0x7f0e1108, float:1.888388E38)
+            java.lang.String r9 = "SharedContentTitle"
+            java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r9, r8)
+            r6.setText(r8)
+        L_0x0219:
+            org.telegram.ui.Components.SharedMediaLayout r6 = r0.sharedMediaLayout
+            boolean r6 = r6.isSearchItemVisible()
+            if (r6 == 0) goto L_0x022c
+            org.telegram.ui.Components.SharedMediaLayout r6 = r0.sharedMediaLayout
+            org.telegram.ui.ActionBar.ActionBarMenuItem r6 = r6.getSearchItem()
+            r8 = 0
+            r6.setVisibility(r8)
+            goto L_0x022d
+        L_0x022c:
+            r8 = 0
+        L_0x022d:
+            org.telegram.ui.Components.SharedMediaLayout r6 = r0.sharedMediaLayout
+            boolean r6 = r6.isCalendarItemVisible()
+            if (r6 == 0) goto L_0x023d
+            org.telegram.ui.Components.SharedMediaLayout r6 = r0.sharedMediaLayout
+            android.widget.ImageView r6 = r6.photoVideoOptionsItem
+            r6.setVisibility(r8)
+            goto L_0x0245
+        L_0x023d:
+            org.telegram.ui.Components.SharedMediaLayout r6 = r0.sharedMediaLayout
+            android.widget.ImageView r6 = r6.photoVideoOptionsItem
+            r9 = 4
+            r6.setVisibility(r9)
+        L_0x0245:
+            org.telegram.ui.ActionBar.ActionBar r6 = r0.actionBar
+            r6.setDrawBlurBackground(r3)
+            r6 = 1065353216(0x3var_, float:1.0)
+            org.telegram.messenger.AndroidUtilities.updateViewVisibilityAnimated(r1, r2, r6, r8)
             r25.updateMediaCount()
-            r25.lambda$getThemeDescriptions$0()
+            r25.m1111x87fdda83()
             return r3
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.MediaActivity.createView(android.content.Context):android.view.View");
@@ -320,33 +325,33 @@ public class MediaActivity extends BaseFragment implements SharedMediaLayout.Sha
 
     /* access modifiers changed from: private */
     public void updateMediaCount() {
-        int closestTab = this.sharedMediaLayout.getClosestTab();
-        int[] lastMediaCount = this.sharedMediaPreloader.getLastMediaCount();
-        if (closestTab >= 0 && lastMediaCount[closestTab] >= 0) {
-            if (closestTab == 0) {
+        int id = this.sharedMediaLayout.getClosestTab();
+        int[] mediaCount = this.sharedMediaPreloader.getLastMediaCount();
+        if (id >= 0 && mediaCount[id] >= 0) {
+            if (id == 0) {
                 if (this.sharedMediaLayout.getPhotosVideosTypeFilter() == 1) {
-                    this.mediaCounterTextView.setText(LocaleController.formatPluralString("Photos", lastMediaCount[6], new Object[0]));
+                    this.mediaCounterTextView.setText(LocaleController.formatPluralString("Photos", mediaCount[6], new Object[0]));
                 } else if (this.sharedMediaLayout.getPhotosVideosTypeFilter() == 2) {
-                    this.mediaCounterTextView.setText(LocaleController.formatPluralString("Videos", lastMediaCount[7], new Object[0]));
+                    this.mediaCounterTextView.setText(LocaleController.formatPluralString("Videos", mediaCount[7], new Object[0]));
                 } else {
-                    this.mediaCounterTextView.setText(LocaleController.formatPluralString("Media", lastMediaCount[0], new Object[0]));
+                    this.mediaCounterTextView.setText(LocaleController.formatPluralString("Media", mediaCount[0], new Object[0]));
                 }
-            } else if (closestTab == 1) {
-                this.mediaCounterTextView.setText(LocaleController.formatPluralString("Files", lastMediaCount[1], new Object[0]));
-            } else if (closestTab == 2) {
-                this.mediaCounterTextView.setText(LocaleController.formatPluralString("Voice", lastMediaCount[2], new Object[0]));
-            } else if (closestTab == 3) {
-                this.mediaCounterTextView.setText(LocaleController.formatPluralString("Links", lastMediaCount[3], new Object[0]));
-            } else if (closestTab == 4) {
-                this.mediaCounterTextView.setText(LocaleController.formatPluralString("MusicFiles", lastMediaCount[4], new Object[0]));
-            } else if (closestTab == 5) {
-                this.mediaCounterTextView.setText(LocaleController.formatPluralString("GIFs", lastMediaCount[5], new Object[0]));
+            } else if (id == 1) {
+                this.mediaCounterTextView.setText(LocaleController.formatPluralString("Files", mediaCount[1], new Object[0]));
+            } else if (id == 2) {
+                this.mediaCounterTextView.setText(LocaleController.formatPluralString("Voice", mediaCount[2], new Object[0]));
+            } else if (id == 3) {
+                this.mediaCounterTextView.setText(LocaleController.formatPluralString("Links", mediaCount[3], new Object[0]));
+            } else if (id == 4) {
+                this.mediaCounterTextView.setText(LocaleController.formatPluralString("MusicFiles", mediaCount[4], new Object[0]));
+            } else if (id == 5) {
+                this.mediaCounterTextView.setText(LocaleController.formatPluralString("GIFs", mediaCount[5], new Object[0]));
             }
         }
     }
 
-    public void setChatInfo(TLRPC$ChatFull tLRPC$ChatFull) {
-        this.currentChatInfo = tLRPC$ChatFull;
+    public void setChatInfo(TLRPC.ChatFull currentChatInfo2) {
+        this.currentChatInfo = currentChatInfo2;
     }
 
     public long getDialogId() {
@@ -364,7 +369,7 @@ public class MediaActivity extends BaseFragment implements SharedMediaLayout.Sha
 
     /* access modifiers changed from: private */
     /* renamed from: updateColors */
-    public void lambda$getThemeDescriptions$0() {
+    public void m1111x87fdda83() {
         this.actionBar.setBackgroundColor(Theme.getColor("windowBackgroundWhite"));
         this.actionBar.setItemsColor(Theme.getColor("windowBackgroundWhiteGrayText2"), false);
         this.actionBar.setItemsBackgroundColor(Theme.getColor("actionBarActionModeDefaultSelector"), false);
@@ -373,12 +378,11 @@ public class MediaActivity extends BaseFragment implements SharedMediaLayout.Sha
     }
 
     public ArrayList<ThemeDescription> getThemeDescriptions() {
-        MediaActivity$$ExternalSyntheticLambda0 mediaActivity$$ExternalSyntheticLambda0 = new MediaActivity$$ExternalSyntheticLambda0(this);
+        ThemeDescription.ThemeDescriptionDelegate themeDelegate = new MediaActivity$$ExternalSyntheticLambda0(this);
         ArrayList<ThemeDescription> arrayList = new ArrayList<>();
-        MediaActivity$$ExternalSyntheticLambda0 mediaActivity$$ExternalSyntheticLambda02 = mediaActivity$$ExternalSyntheticLambda0;
-        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, mediaActivity$$ExternalSyntheticLambda02, "windowBackgroundWhite"));
-        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, mediaActivity$$ExternalSyntheticLambda02, "actionBarActionModeDefaultSelector"));
-        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, mediaActivity$$ExternalSyntheticLambda02, "windowBackgroundWhiteBlackText"));
+        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, themeDelegate, "windowBackgroundWhite"));
+        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, themeDelegate, "actionBarActionModeDefaultSelector"));
+        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, themeDelegate, "windowBackgroundWhiteBlackText"));
         arrayList.addAll(this.sharedMediaLayout.getThemeDescriptions());
         return arrayList;
     }

@@ -11,6 +11,6 @@ public final /* synthetic */ class ChatAttachAlertPhotoLayoutPreview$PreviewGrou
     }
 
     public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-        this.f$0.lambda$stopDragging$0(valueAnimator);
+        this.f$0.m853x4294d1ca(valueAnimator);
     }
 }

@@ -1,21 +1,17 @@
 package org.telegram.tgnet;
 
 public final /* synthetic */ class ConnectionsManager$$ExternalSyntheticLambda11 implements Runnable {
-    public final /* synthetic */ RequestDelegate f$0;
-    public final /* synthetic */ TLObject f$1;
-    public final /* synthetic */ TLRPC$TL_error f$2;
-    public final /* synthetic */ RequestDelegateTimestamp f$3;
-    public final /* synthetic */ long f$4;
+    public final /* synthetic */ int f$0;
+    public final /* synthetic */ boolean f$1;
+    public final /* synthetic */ int f$2;
 
-    public /* synthetic */ ConnectionsManager$$ExternalSyntheticLambda11(RequestDelegate requestDelegate, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error, RequestDelegateTimestamp requestDelegateTimestamp, long j) {
-        this.f$0 = requestDelegate;
-        this.f$1 = tLObject;
-        this.f$2 = tLRPC$TL_error;
-        this.f$3 = requestDelegateTimestamp;
-        this.f$4 = j;
+    public /* synthetic */ ConnectionsManager$$ExternalSyntheticLambda11(int i, boolean z, int i2) {
+        this.f$0 = i;
+        this.f$1 = z;
+        this.f$2 = i2;
     }
 
     public final void run() {
-        ConnectionsManager.lambda$sendRequest$0(this.f$0, this.f$1, this.f$2, this.f$3, this.f$4);
+        ConnectionsManager.lambda$onRequestNewServerIpAndPort$8(this.f$0, this.f$1, this.f$2);
     }
 }

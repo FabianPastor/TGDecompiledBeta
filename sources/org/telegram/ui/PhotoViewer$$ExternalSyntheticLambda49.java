@@ -8,6 +8,6 @@ public final /* synthetic */ class PhotoViewer$$ExternalSyntheticLambda49 implem
     }
 
     public final void run() {
-        this.f$0.lambda$new$3();
+        this.f$0.m4276lambda$setParentActivity$33$orgtelegramuiPhotoViewer();
     }
 }

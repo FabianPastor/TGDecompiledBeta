@@ -27,10 +27,8 @@ public class RadioColorCell extends FrameLayout {
         this.radioButton = radioButton2;
         radioButton2.setSize(AndroidUtilities.dp(20.0f));
         this.radioButton.setColor(getThemedColor("dialogRadioBackground"), getThemedColor("dialogRadioBackgroundChecked"));
-        RadioButton radioButton3 = this.radioButton;
-        boolean z = LocaleController.isRTL;
         int i = 5;
-        addView(radioButton3, LayoutHelper.createFrame(22, 22.0f, (z ? 5 : 3) | 48, (float) (z ? 0 : 18), 14.0f, (float) (z ? 18 : 0), 0.0f));
+        addView(this.radioButton, LayoutHelper.createFrame(22, 22.0f, (LocaleController.isRTL ? 5 : 3) | 48, (float) (LocaleController.isRTL ? 0 : 18), 14.0f, (float) (LocaleController.isRTL ? 18 : 0), 0.0f));
         TextView textView2 = new TextView(context);
         this.textView = textView2;
         textView2.setTextColor(getThemedColor("dialogTextBlack"));
@@ -39,39 +37,37 @@ public class RadioColorCell extends FrameLayout {
         this.textView.setMaxLines(1);
         this.textView.setSingleLine(true);
         this.textView.setGravity((LocaleController.isRTL ? 5 : 3) | 16);
-        TextView textView3 = this.textView;
-        boolean z2 = LocaleController.isRTL;
-        addView(textView3, LayoutHelper.createFrame(-2, -2.0f, (!z2 ? 3 : i) | 48, (float) (z2 ? 21 : 51), 13.0f, (float) (z2 ? 51 : 21), 0.0f));
+        addView(this.textView, LayoutHelper.createFrame(-2, -2.0f, (!LocaleController.isRTL ? 3 : i) | 48, (float) (LocaleController.isRTL ? 21 : 51), 13.0f, (float) (LocaleController.isRTL ? 51 : 21), 0.0f));
     }
 
     /* access modifiers changed from: protected */
-    public void onMeasure(int i, int i2) {
-        super.onMeasure(View.MeasureSpec.makeMeasureSpec(View.MeasureSpec.getSize(i), NUM), View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(50.0f), NUM));
+    public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        super.onMeasure(View.MeasureSpec.makeMeasureSpec(View.MeasureSpec.getSize(widthMeasureSpec), NUM), View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(50.0f), NUM));
     }
 
-    public void setCheckColor(int i, int i2) {
-        this.radioButton.setColor(i, i2);
+    public void setCheckColor(int color1, int color2) {
+        this.radioButton.setColor(color1, color2);
     }
 
-    public void setTextAndValue(String str, boolean z) {
-        this.textView.setText(str);
-        this.radioButton.setChecked(z, false);
+    public void setTextAndValue(String text, boolean checked) {
+        this.textView.setText(text);
+        this.radioButton.setChecked(checked, false);
     }
 
-    public void setChecked(boolean z, boolean z2) {
-        this.radioButton.setChecked(z, z2);
+    public void setChecked(boolean checked, boolean animated) {
+        this.radioButton.setChecked(checked, animated);
     }
 
-    public void onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo accessibilityNodeInfo) {
-        super.onInitializeAccessibilityNodeInfo(accessibilityNodeInfo);
-        accessibilityNodeInfo.setClassName("android.widget.RadioButton");
-        accessibilityNodeInfo.setCheckable(true);
-        accessibilityNodeInfo.setChecked(this.radioButton.isChecked());
+    public void onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo info) {
+        super.onInitializeAccessibilityNodeInfo(info);
+        info.setClassName("android.widget.RadioButton");
+        info.setCheckable(true);
+        info.setChecked(this.radioButton.isChecked());
     }
 
-    private int getThemedColor(String str) {
+    private int getThemedColor(String key) {
         Theme.ResourcesProvider resourcesProvider2 = this.resourcesProvider;
-        Integer color = resourcesProvider2 != null ? resourcesProvider2.getColor(str) : null;
-        return color != null ? color.intValue() : Theme.getColor(str);
+        Integer color = resourcesProvider2 != null ? resourcesProvider2.getColor(key) : null;
+        return color != null ? color.intValue() : Theme.getColor(key);
     }
 }

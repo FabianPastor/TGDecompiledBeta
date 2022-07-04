@@ -1,23 +1,17 @@
 package org.telegram.ui.Components;
 
-import androidx.recyclerview.widget.RecyclerView;
-import org.telegram.messenger.MessagesController;
-import org.telegram.tgnet.TLRPC$ChatFull;
-import org.telegram.tgnet.TLRPC$Peer;
-import org.telegram.ui.Components.SenderSelectPopup;
+import android.content.DialogInterface;
 
-public final /* synthetic */ class ChatActivityEnterView$$ExternalSyntheticLambda59 implements SenderSelectPopup.OnSelectCallback {
+public final /* synthetic */ class ChatActivityEnterView$$ExternalSyntheticLambda59 implements DialogInterface.OnClickListener {
     public final /* synthetic */ ChatActivityEnterView f$0;
-    public final /* synthetic */ TLRPC$ChatFull f$1;
-    public final /* synthetic */ MessagesController f$2;
+    public final /* synthetic */ Runnable f$1;
 
-    public /* synthetic */ ChatActivityEnterView$$ExternalSyntheticLambda59(ChatActivityEnterView chatActivityEnterView, TLRPC$ChatFull tLRPC$ChatFull, MessagesController messagesController) {
+    public /* synthetic */ ChatActivityEnterView$$ExternalSyntheticLambda59(ChatActivityEnterView chatActivityEnterView, Runnable runnable) {
         this.f$0 = chatActivityEnterView;
-        this.f$1 = tLRPC$ChatFull;
-        this.f$2 = messagesController;
+        this.f$1 = runnable;
     }
 
-    public final void onPeerSelected(RecyclerView recyclerView, SenderSelectPopup.SenderView senderView, TLRPC$Peer tLRPC$Peer) {
-        this.f$0.lambda$new$13(this.f$1, this.f$2, recyclerView, senderView, tLRPC$Peer);
+    public final void onClick(DialogInterface dialogInterface, int i) {
+        this.f$0.m687xfdbfad07(this.f$1, dialogInterface, i);
     }
 }

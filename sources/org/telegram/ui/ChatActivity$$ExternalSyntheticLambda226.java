@@ -1,20 +1,15 @@
 package org.telegram.ui;
 
-import org.telegram.tgnet.RequestDelegate;
-import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC$TL_error;
-import org.telegram.tgnet.TLRPC$TL_messages_getWebPagePreview;
+import android.view.View;
 
-public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda226 implements RequestDelegate {
+public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda226 implements View.OnClickListener {
     public final /* synthetic */ ChatActivity f$0;
-    public final /* synthetic */ TLRPC$TL_messages_getWebPagePreview f$1;
 
-    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda226(ChatActivity chatActivity, TLRPC$TL_messages_getWebPagePreview tLRPC$TL_messages_getWebPagePreview) {
+    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda226(ChatActivity chatActivity) {
         this.f$0 = chatActivity;
-        this.f$1 = tLRPC$TL_messages_getWebPagePreview;
     }
 
-    public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        this.f$0.lambda$searchLinks$99(this.f$1, tLObject, tLRPC$TL_error);
+    public final void onClick(View view) {
+        this.f$0.m2978lambda$createView$59$orgtelegramuiChatActivity(view);
     }
 }

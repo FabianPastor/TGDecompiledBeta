@@ -12,11 +12,11 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.accessibility.AccessibilityNodeInfo;
 import android.view.animation.DecelerateInterpolator;
-import androidx.annotation.Keep;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
 
 public class ShutterButton extends View {
+    private static final int LONG_PRESS_TIME = 800;
     /* access modifiers changed from: private */
     public ShutterButtonDelegate delegate;
     private DecelerateInterpolator interpolator = new DecelerateInterpolator();
@@ -74,9 +74,9 @@ public class ShutterButton extends View {
         return this.delegate;
     }
 
-    private void setHighlighted(boolean z) {
+    private void setHighlighted(boolean value) {
         AnimatorSet animatorSet = new AnimatorSet();
-        if (z) {
+        if (value) {
             animatorSet.playTogether(new Animator[]{ObjectAnimator.ofFloat(this, View.SCALE_X, new float[]{1.06f}), ObjectAnimator.ofFloat(this, View.SCALE_Y, new float[]{1.06f})});
         } else {
             animatorSet.playTogether(new Animator[]{ObjectAnimator.ofFloat(this, View.SCALE_X, new float[]{1.0f}), ObjectAnimator.ofFloat(this, View.SCALE_Y, new float[]{1.0f})});
@@ -87,9 +87,8 @@ public class ShutterButton extends View {
         animatorSet.start();
     }
 
-    @Keep
-    public void setScaleX(float f) {
-        super.setScaleX(f);
+    public void setScaleX(float scaleX) {
+        super.setScaleX(scaleX);
         invalidate();
     }
 
@@ -99,23 +98,21 @@ public class ShutterButton extends View {
 
     /* access modifiers changed from: protected */
     public void onDraw(Canvas canvas) {
-        int measuredWidth = getMeasuredWidth() / 2;
-        int measuredHeight = getMeasuredHeight() / 2;
-        this.shadowDrawable.setBounds(measuredWidth - AndroidUtilities.dp(36.0f), measuredHeight - AndroidUtilities.dp(36.0f), AndroidUtilities.dp(36.0f) + measuredWidth, AndroidUtilities.dp(36.0f) + measuredHeight);
+        int cx = getMeasuredWidth() / 2;
+        int cy = getMeasuredHeight() / 2;
+        this.shadowDrawable.setBounds(cx - AndroidUtilities.dp(36.0f), cy - AndroidUtilities.dp(36.0f), AndroidUtilities.dp(36.0f) + cx, AndroidUtilities.dp(36.0f) + cy);
         this.shadowDrawable.draw(canvas);
         if (this.pressed || getScaleX() != 1.0f) {
-            float scaleX = (getScaleX() - 1.0f) / 0.06f;
-            this.whitePaint.setAlpha((int) (255.0f * scaleX));
-            float f = (float) measuredWidth;
-            float f2 = (float) measuredHeight;
-            canvas.drawCircle(f, f2, (float) AndroidUtilities.dp(26.0f), this.whitePaint);
+            float scale = (getScaleX() - 1.0f) / 0.06f;
+            this.whitePaint.setAlpha((int) (255.0f * scale));
+            canvas.drawCircle((float) cx, (float) cy, (float) AndroidUtilities.dp(26.0f), this.whitePaint);
             if (this.state == State.RECORDING) {
                 if (this.redProgress != 1.0f) {
-                    long abs = Math.abs(System.currentTimeMillis() - this.lastUpdateTime);
-                    if (abs > 17) {
-                        abs = 17;
+                    long dt = Math.abs(System.currentTimeMillis() - this.lastUpdateTime);
+                    if (dt > 17) {
+                        dt = 17;
                     }
-                    long j = this.totalTime + abs;
+                    long j = this.totalTime + dt;
                     this.totalTime = j;
                     if (j > 120) {
                         this.totalTime = 120;
@@ -123,9 +120,9 @@ public class ShutterButton extends View {
                     this.redProgress = this.interpolator.getInterpolation(((float) this.totalTime) / 120.0f);
                     invalidate();
                 }
-                canvas.drawCircle(f, f2, ((float) AndroidUtilities.dp(26.5f)) * scaleX * this.redProgress, this.redPaint);
+                canvas.drawCircle((float) cx, (float) cy, ((float) AndroidUtilities.dp(26.5f)) * scale * this.redProgress, this.redPaint);
             } else if (this.redProgress != 0.0f) {
-                canvas.drawCircle(f, f2, ((float) AndroidUtilities.dp(26.5f)) * scaleX, this.redPaint);
+                canvas.drawCircle((float) cx, (float) cy, ((float) AndroidUtilities.dp(26.5f)) * scale, this.redPaint);
             }
         } else if (this.redProgress != 0.0f) {
             this.redProgress = 0.0f;
@@ -133,58 +130,63 @@ public class ShutterButton extends View {
     }
 
     /* access modifiers changed from: protected */
-    public void onMeasure(int i, int i2) {
+    public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         setMeasuredDimension(AndroidUtilities.dp(84.0f), AndroidUtilities.dp(84.0f));
     }
 
     public boolean onTouchEvent(MotionEvent motionEvent) {
         float x = motionEvent.getX();
         float y = motionEvent.getY();
-        int action = motionEvent.getAction();
-        if (action == 0) {
-            AndroidUtilities.runOnUIThread(this.longPressed, 800);
-            this.pressed = true;
-            this.processRelease = true;
-            setHighlighted(true);
-        } else if (action == 1) {
-            setHighlighted(false);
-            AndroidUtilities.cancelRunOnUIThread(this.longPressed);
-            if (this.processRelease) {
-                this.delegate.shutterReleased();
-            }
-        } else if (action == 2) {
-            if (x >= 0.0f && x <= ((float) getMeasuredWidth())) {
-                x = 0.0f;
-            }
-            if (y >= 0.0f && y <= ((float) getMeasuredHeight())) {
-                y = 0.0f;
-            }
-            if (this.delegate.onTranslationChanged(x, y)) {
+        switch (motionEvent.getAction()) {
+            case 0:
+                AndroidUtilities.runOnUIThread(this.longPressed, 800);
+                this.pressed = true;
+                this.processRelease = true;
+                setHighlighted(true);
+                break;
+            case 1:
+                setHighlighted(false);
                 AndroidUtilities.cancelRunOnUIThread(this.longPressed);
-                if (this.state == State.RECORDING) {
-                    this.processRelease = false;
-                    setHighlighted(false);
-                    this.delegate.shutterCancel();
-                    setState(State.DEFAULT, true);
+                if (this.processRelease) {
+                    this.delegate.shutterReleased();
+                    break;
                 }
-            }
-        } else if (action == 3) {
-            setHighlighted(false);
-            this.pressed = false;
+                break;
+            case 2:
+                float dy = 0.0f;
+                float dx = (x < 0.0f || x > ((float) getMeasuredWidth())) ? x : 0.0f;
+                if (y < 0.0f || y > ((float) getMeasuredHeight())) {
+                    dy = y;
+                }
+                if (this.delegate.onTranslationChanged(dx, dy)) {
+                    AndroidUtilities.cancelRunOnUIThread(this.longPressed);
+                    if (this.state == State.RECORDING) {
+                        this.processRelease = false;
+                        setHighlighted(false);
+                        this.delegate.shutterCancel();
+                        setState(State.DEFAULT, true);
+                        break;
+                    }
+                }
+                break;
+            case 3:
+                setHighlighted(false);
+                this.pressed = false;
+                break;
         }
         return true;
     }
 
-    public void setState(State state2, boolean z) {
-        if (this.state != state2) {
-            this.state = state2;
-            if (z) {
+    public void setState(State value, boolean animated) {
+        if (this.state != value) {
+            this.state = value;
+            if (animated) {
                 this.lastUpdateTime = System.currentTimeMillis();
                 this.totalTime = 0;
                 if (this.state != State.RECORDING) {
                     this.redProgress = 0.0f;
                 }
-            } else if (state2 == State.RECORDING) {
+            } else if (value == State.RECORDING) {
                 this.redProgress = 1.0f;
             } else {
                 this.redProgress = 0.0f;
@@ -193,14 +195,14 @@ public class ShutterButton extends View {
         }
     }
 
-    public void onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo accessibilityNodeInfo) {
-        super.onInitializeAccessibilityNodeInfo(accessibilityNodeInfo);
-        accessibilityNodeInfo.setClassName("android.widget.Button");
-        accessibilityNodeInfo.setClickable(true);
-        accessibilityNodeInfo.setLongClickable(true);
+    public void onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo info) {
+        super.onInitializeAccessibilityNodeInfo(info);
+        info.setClassName("android.widget.Button");
+        info.setClickable(true);
+        info.setLongClickable(true);
         if (Build.VERSION.SDK_INT >= 21) {
-            accessibilityNodeInfo.addAction(new AccessibilityNodeInfo.AccessibilityAction(AccessibilityNodeInfo.AccessibilityAction.ACTION_CLICK.getId(), LocaleController.getString("AccActionTakePicture", NUM)));
-            accessibilityNodeInfo.addAction(new AccessibilityNodeInfo.AccessibilityAction(AccessibilityNodeInfo.AccessibilityAction.ACTION_LONG_CLICK.getId(), LocaleController.getString("AccActionRecordVideo", NUM)));
+            info.addAction(new AccessibilityNodeInfo.AccessibilityAction(AccessibilityNodeInfo.AccessibilityAction.ACTION_CLICK.getId(), LocaleController.getString("AccActionTakePicture", NUM)));
+            info.addAction(new AccessibilityNodeInfo.AccessibilityAction(AccessibilityNodeInfo.AccessibilityAction.ACTION_LONG_CLICK.getId(), LocaleController.getString("AccActionRecordVideo", NUM)));
         }
     }
 }

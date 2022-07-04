@@ -8,6 +8,6 @@ public final /* synthetic */ class ChatAttachAlertPhotoLayoutPreview$$ExternalSy
     }
 
     public final void run() {
-        this.f$0.lambda$onShow$1();
+        this.f$0.m849xe549668();
     }
 }

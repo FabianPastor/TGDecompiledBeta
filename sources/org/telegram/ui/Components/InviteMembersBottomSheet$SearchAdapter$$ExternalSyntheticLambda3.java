@@ -15,6 +15,6 @@ public final /* synthetic */ class InviteMembersBottomSheet$SearchAdapter$$Exter
     }
 
     public final void run() {
-        this.f$0.lambda$updateSearchResults$1(this.f$1, this.f$2);
+        this.f$0.m1068x989c1db9(this.f$1, this.f$2);
     }
 }

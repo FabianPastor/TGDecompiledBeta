@@ -26,7 +26,7 @@ public final /* synthetic */ class GroupCreateActivity$GroupCreateAdapter$$Exter
     }
 
     public final void onDataSetChanged(int i) {
-        this.f$0.lambda$new$0(i);
+        this.f$0.m3576x6d31CLASSNAME(i);
     }
 
     public /* synthetic */ void onSetHashtags(ArrayList arrayList, HashMap hashMap) {

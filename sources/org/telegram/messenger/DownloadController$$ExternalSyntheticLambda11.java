@@ -1,17 +1,15 @@
 package org.telegram.messenger;
 
-import org.telegram.tgnet.TLObject;
-
 public final /* synthetic */ class DownloadController$$ExternalSyntheticLambda11 implements Runnable {
     public final /* synthetic */ DownloadController f$0;
-    public final /* synthetic */ TLObject f$1;
+    public final /* synthetic */ MessageObject f$1;
 
-    public /* synthetic */ DownloadController$$ExternalSyntheticLambda11(DownloadController downloadController, TLObject tLObject) {
+    public /* synthetic */ DownloadController$$ExternalSyntheticLambda11(DownloadController downloadController, MessageObject messageObject) {
         this.f$0 = downloadController;
-        this.f$1 = tLObject;
+        this.f$1 = messageObject;
     }
 
     public final void run() {
-        this.f$0.lambda$loadAutoDownloadConfig$1(this.f$1);
+        this.f$0.m67xeda959f4(this.f$1);
     }
 }

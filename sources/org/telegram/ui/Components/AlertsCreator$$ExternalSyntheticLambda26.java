@@ -1,16 +1,16 @@
 package org.telegram.ui.Components;
 
-import android.content.DialogInterface;
-import org.telegram.ui.ActionBar.BaseFragment;
+import android.widget.LinearLayout;
+import org.telegram.ui.Components.NumberPicker;
 
-public final /* synthetic */ class AlertsCreator$$ExternalSyntheticLambda26 implements DialogInterface.OnClickListener {
-    public final /* synthetic */ BaseFragment f$0;
+public final /* synthetic */ class AlertsCreator$$ExternalSyntheticLambda26 implements NumberPicker.OnValueChangeListener {
+    public final /* synthetic */ LinearLayout f$0;
 
-    public /* synthetic */ AlertsCreator$$ExternalSyntheticLambda26(BaseFragment baseFragment) {
-        this.f$0 = baseFragment;
+    public /* synthetic */ AlertsCreator$$ExternalSyntheticLambda26(LinearLayout linearLayout) {
+        this.f$0 = linearLayout;
     }
 
-    public final void onClick(DialogInterface dialogInterface, int i) {
-        AlertsCreator.performAskAQuestion(this.f$0);
+    public final void onValueChange(NumberPicker numberPicker, int i, int i2) {
+        AlertsCreator.lambda$createSoundFrequencyPickerDialog$70(this.f$0, numberPicker, i, i2);
     }
 }

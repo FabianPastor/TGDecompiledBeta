@@ -24,8 +24,8 @@ public class UndoStore {
         this.delegate = undoStoreDelegate;
     }
 
-    public void registerUndo(UUID uuid, Runnable runnable) {
-        this.uuidToOperationMap.put(uuid, runnable);
+    public void registerUndo(UUID uuid, Runnable undoRunnable) {
+        this.uuidToOperationMap.put(uuid, undoRunnable);
         this.operations.add(uuid);
         notifyOfHistoryChanges();
     }
@@ -38,21 +38,27 @@ public class UndoStore {
 
     public void undo() {
         if (this.operations.size() != 0) {
-            int size = this.operations.size() - 1;
-            UUID uuid = this.operations.get(size);
+            int lastIndex = this.operations.size() - 1;
+            UUID uuid = this.operations.get(lastIndex);
             this.uuidToOperationMap.remove(uuid);
-            this.operations.remove(size);
+            this.operations.remove(lastIndex);
             this.uuidToOperationMap.get(uuid).run();
             notifyOfHistoryChanges();
         }
+    }
+
+    public void reset() {
+        this.operations.clear();
+        this.uuidToOperationMap.clear();
+        notifyOfHistoryChanges();
     }
 
     private void notifyOfHistoryChanges() {
         AndroidUtilities.runOnUIThread(new UndoStore$$ExternalSyntheticLambda0(this));
     }
 
-    /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$notifyOfHistoryChanges$0() {
+    /* renamed from: lambda$notifyOfHistoryChanges$0$org-telegram-ui-Components-Paint-UndoStore  reason: not valid java name */
+    public /* synthetic */ void m1137xe8ebcvar_() {
         UndoStoreDelegate undoStoreDelegate = this.delegate;
         if (undoStoreDelegate != null) {
             undoStoreDelegate.historyChanged();

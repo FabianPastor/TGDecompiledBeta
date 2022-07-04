@@ -8,6 +8,6 @@ public final /* synthetic */ class FeedRemoteViewsFactory$$ExternalSyntheticLamb
     }
 
     public final void run() {
-        this.f$0.lambda$onDataSetChanged$0();
+        this.f$0.m1802xab71b43d();
     }
 }

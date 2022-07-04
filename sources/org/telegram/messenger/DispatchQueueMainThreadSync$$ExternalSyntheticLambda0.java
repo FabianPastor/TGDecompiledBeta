@@ -11,6 +11,6 @@ public final /* synthetic */ class DispatchQueueMainThreadSync$$ExternalSyntheti
     }
 
     public final boolean handleMessage(Message message) {
-        return this.f$0.lambda$run$1(message);
+        return this.f$0.m1797lambda$run$1$orgtelegrammessengerDispatchQueueMainThreadSync(message);
     }
 }

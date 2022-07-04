@@ -25,6 +25,6 @@ public final /* synthetic */ class LaunchActivity$$ExternalSyntheticLambda67 imp
     }
 
     public final void run(long j) {
-        this.f$0.lambda$didSelectDialogs$76(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6, j);
+        this.f$0.m3640lambda$didSelectDialogs$76$orgtelegramuiLaunchActivity(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6, j);
     }
 }

@@ -1,15 +1,18 @@
 package org.telegram.ui;
 
-import org.telegram.ui.Components.ReactedUsersListView;
+import android.view.View;
+import org.telegram.messenger.MessageObject;
 
-public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda244 implements ReactedUsersListView.OnProfileSelectedListener {
+public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda244 implements View.OnClickListener {
     public final /* synthetic */ ChatActivity f$0;
+    public final /* synthetic */ MessageObject f$1;
 
-    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda244(ChatActivity chatActivity) {
+    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda244(ChatActivity chatActivity, MessageObject messageObject) {
         this.f$0 = chatActivity;
+        this.f$1 = messageObject;
     }
 
-    public final void onProfileSelected(ReactedUsersListView reactedUsersListView, long j) {
-        this.f$0.lambda$createMenu$158(reactedUsersListView, j);
+    public final void onClick(View view) {
+        this.f$0.m2920lambda$createMenu$162$orgtelegramuiChatActivity(this.f$1, view);
     }
 }

@@ -2,7 +2,7 @@ package org.telegram.ui.ActionBar;
 
 import org.telegram.tgnet.RequestDelegate;
 import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC$TL_error;
+import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.ActionBar.Theme;
 
 public final /* synthetic */ class Theme$ThemeInfo$$ExternalSyntheticLambda3 implements RequestDelegate {
@@ -14,7 +14,7 @@ public final /* synthetic */ class Theme$ThemeInfo$$ExternalSyntheticLambda3 imp
         this.f$1 = themeInfo2;
     }
 
-    public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        this.f$0.lambda$didReceivedNotification$2(this.f$1, tLObject, tLRPC$TL_error);
+    public final void run(TLObject tLObject, TLRPC.TL_error tL_error) {
+        this.f$0.m2585xd515e10e(this.f$1, tLObject, tL_error);
     }
 }
