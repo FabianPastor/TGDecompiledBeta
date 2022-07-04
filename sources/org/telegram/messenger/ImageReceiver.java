@@ -422,11 +422,11 @@ public class ImageReceiver implements NotificationCenter.NotificationCenterDeleg
             boolean r2 = r0 instanceof org.telegram.tgnet.TLRPC$User
             r3 = 0
             r4 = 0
-            if (r2 == 0) goto L_0x00a5
+            if (r2 == 0) goto L_0x00a4
             r2 = r0
             org.telegram.tgnet.TLRPC$User r2 = (org.telegram.tgnet.TLRPC$User) r2
             org.telegram.tgnet.TLRPC$UserProfilePhoto r5 = r2.photo
-            if (r5 == 0) goto L_0x00a1
+            if (r5 == 0) goto L_0x00a0
             android.graphics.drawable.BitmapDrawable r6 = r5.strippedBitmap
             byte[] r5 = r5.stripped_thumb
             if (r5 == 0) goto L_0x0023
@@ -435,40 +435,40 @@ public class ImageReceiver implements NotificationCenter.NotificationCenterDeleg
         L_0x0023:
             r5 = 0
         L_0x0024:
+            if (r20 == 0) goto L_0x009c
             int r7 = r13.currentAccount
             org.telegram.messenger.MessagesController r7 = org.telegram.messenger.MessagesController.getInstance(r7)
             boolean r7 = r7.isPremiumUser(r2)
-            if (r7 == 0) goto L_0x009d
+            if (r7 == 0) goto L_0x009c
             org.telegram.tgnet.TLRPC$UserProfilePhoto r7 = r2.photo
             boolean r7 = r7.has_video
-            if (r7 == 0) goto L_0x009d
-            if (r20 == 0) goto L_0x009d
+            if (r7 == 0) goto L_0x009c
             int r7 = r13.currentAccount
             org.telegram.messenger.MessagesController r7 = org.telegram.messenger.MessagesController.getInstance(r7)
             long r8 = r2.id
             org.telegram.tgnet.TLRPC$UserFull r7 = r7.getUserFull(r8)
-            if (r7 != 0) goto L_0x0051
-            int r8 = r13.currentAccount
-            org.telegram.messenger.MessagesController r8 = org.telegram.messenger.MessagesController.getInstance(r8)
-            int r9 = r13.currentGuid
-            r8.loadFullUser(r2, r9, r4)
-        L_0x0051:
-            if (r7 == 0) goto L_0x009d
+            if (r7 != 0) goto L_0x0052
+            int r7 = r13.currentAccount
+            org.telegram.messenger.MessagesController r7 = org.telegram.messenger.MessagesController.getInstance(r7)
+            int r8 = r13.currentGuid
+            r7.loadFullUser(r2, r8, r4)
+            goto L_0x009c
+        L_0x0052:
             org.telegram.tgnet.TLRPC$Photo r2 = r7.profile_photo
-            if (r2 == 0) goto L_0x009d
+            if (r2 == 0) goto L_0x009c
             java.util.ArrayList<org.telegram.tgnet.TLRPC$VideoSize> r2 = r2.video_sizes
-            if (r2 == 0) goto L_0x009d
+            if (r2 == 0) goto L_0x009c
             boolean r2 = r2.isEmpty()
-            if (r2 != 0) goto L_0x009d
+            if (r2 != 0) goto L_0x009c
             org.telegram.tgnet.TLRPC$Photo r2 = r7.profile_photo
             java.util.ArrayList<org.telegram.tgnet.TLRPC$VideoSize> r2 = r2.video_sizes
             java.lang.Object r2 = r2.get(r4)
             org.telegram.tgnet.TLRPC$VideoSize r2 = (org.telegram.tgnet.TLRPC$VideoSize) r2
-        L_0x006b:
+        L_0x006a:
             org.telegram.tgnet.TLRPC$Photo r3 = r7.profile_photo
             java.util.ArrayList<org.telegram.tgnet.TLRPC$VideoSize> r3 = r3.video_sizes
             int r3 = r3.size()
-            if (r4 >= r3) goto L_0x0097
+            if (r4 >= r3) goto L_0x0096
             org.telegram.tgnet.TLRPC$Photo r3 = r7.profile_photo
             java.util.ArrayList<org.telegram.tgnet.TLRPC$VideoSize> r3 = r3.video_sizes
             java.lang.Object r3 = r3.get(r4)
@@ -476,49 +476,49 @@ public class ImageReceiver implements NotificationCenter.NotificationCenterDeleg
             java.lang.String r3 = r3.type
             java.lang.String r8 = "p"
             boolean r3 = r8.equals(r3)
-            if (r3 == 0) goto L_0x0094
+            if (r3 == 0) goto L_0x0093
             org.telegram.tgnet.TLRPC$Photo r2 = r7.profile_photo
             java.util.ArrayList<org.telegram.tgnet.TLRPC$VideoSize> r2 = r2.video_sizes
             java.lang.Object r2 = r2.get(r4)
             org.telegram.tgnet.TLRPC$VideoSize r2 = (org.telegram.tgnet.TLRPC$VideoSize) r2
-            goto L_0x0097
-        L_0x0094:
+            goto L_0x0096
+        L_0x0093:
             int r4 = r4 + 1
-            goto L_0x006b
-        L_0x0097:
+            goto L_0x006a
+        L_0x0096:
             org.telegram.tgnet.TLRPC$Photo r3 = r7.profile_photo
             org.telegram.messenger.ImageLocation r3 = org.telegram.messenger.ImageLocation.getForPhoto((org.telegram.tgnet.TLRPC$VideoSize) r2, (org.telegram.tgnet.TLRPC$Photo) r3)
-        L_0x009d:
+        L_0x009c:
             r2 = r3
             r4 = r5
             r3 = r6
-            goto L_0x00a2
-        L_0x00a1:
+            goto L_0x00a1
+        L_0x00a0:
             r2 = r3
-        L_0x00a2:
+        L_0x00a1:
             r7 = r3
             r3 = r2
-            goto L_0x00ba
-        L_0x00a5:
+            goto L_0x00b9
+        L_0x00a4:
             boolean r2 = r0 instanceof org.telegram.tgnet.TLRPC$Chat
-            if (r2 == 0) goto L_0x00b9
+            if (r2 == 0) goto L_0x00b8
             r2 = r0
             org.telegram.tgnet.TLRPC$Chat r2 = (org.telegram.tgnet.TLRPC$Chat) r2
             org.telegram.tgnet.TLRPC$ChatPhoto r2 = r2.photo
-            if (r2 == 0) goto L_0x00b9
+            if (r2 == 0) goto L_0x00b8
             android.graphics.drawable.BitmapDrawable r5 = r2.strippedBitmap
             byte[] r2 = r2.stripped_thumb
-            if (r2 == 0) goto L_0x00b7
+            if (r2 == 0) goto L_0x00b6
             r4 = 1
-        L_0x00b7:
+        L_0x00b6:
             r7 = r5
-            goto L_0x00ba
-        L_0x00b9:
+            goto L_0x00b9
+        L_0x00b8:
             r7 = r3
-        L_0x00ba:
+        L_0x00b9:
             org.telegram.messenger.ImageLocation r5 = org.telegram.messenger.ImageLocation.getForUserOrChat(r0, r1)
             java.lang.String r6 = "50_50"
-            if (r3 == 0) goto L_0x00d9
+            if (r3 == 0) goto L_0x00d8
             r8 = 0
             r9 = 0
             r14 = 0
@@ -535,9 +535,9 @@ public class ImageReceiver implements NotificationCenter.NotificationCenterDeleg
             r0.setImage(r1, r2, r3, r4, r5, r6, r7, r8, r10, r11, r12)
             r0 = 3
             r13.animatedFileDrawableRepeatMaxCount = r0
-            goto L_0x010a
-        L_0x00d9:
-            if (r7 == 0) goto L_0x00e8
+            goto L_0x0109
+        L_0x00d8:
+            if (r7 == 0) goto L_0x00e7
             r4 = 0
             r8 = 0
             r0 = r16
@@ -547,9 +547,9 @@ public class ImageReceiver implements NotificationCenter.NotificationCenterDeleg
             r5 = r11
             r6 = r8
             r0.setImage(r1, r2, r3, r4, r5, r6)
-            goto L_0x010a
-        L_0x00e8:
-            if (r4 == 0) goto L_0x00fd
+            goto L_0x0109
+        L_0x00e7:
+            if (r4 == 0) goto L_0x00fc
             r1 = 2
             org.telegram.messenger.ImageLocation r3 = org.telegram.messenger.ImageLocation.getForUserOrChat(r0, r1)
             r7 = 0
@@ -560,8 +560,8 @@ public class ImageReceiver implements NotificationCenter.NotificationCenterDeleg
             r5 = r18
             r6 = r11
             r0.setImage((org.telegram.messenger.ImageLocation) r1, (java.lang.String) r2, (org.telegram.messenger.ImageLocation) r3, (java.lang.String) r4, (android.graphics.drawable.Drawable) r5, (java.lang.Object) r6, (int) r7)
-            goto L_0x010a
-        L_0x00fd:
+            goto L_0x0109
+        L_0x00fc:
             r4 = 0
             r7 = 0
             r0 = r16
@@ -571,7 +571,7 @@ public class ImageReceiver implements NotificationCenter.NotificationCenterDeleg
             r5 = r11
             r6 = r7
             r0.setImage(r1, r2, r3, r4, r5, r6)
-        L_0x010a:
+        L_0x0109:
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.ImageReceiver.setForUserOrChat(org.telegram.tgnet.TLObject, android.graphics.drawable.Drawable, java.lang.Object, boolean):void");

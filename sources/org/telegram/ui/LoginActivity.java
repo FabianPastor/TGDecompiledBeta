@@ -6077,7 +6077,7 @@ public class LoginActivity extends BaseFragment {
                 org.telegram.ui.Components.RLottieImageView r4 = new org.telegram.ui.Components.RLottieImageView
                 r4.<init>(r2)
                 r0.lockImageView = r4
-                r5 = 2131558557(0x7f0d009d, float:1.8742433E38)
+                r5 = 2131558558(0x7f0d009e, float:1.8742435E38)
                 r6 = 120(0x78, float:1.68E-43)
                 r4.setAnimation(r5, r6, r6)
                 org.telegram.ui.Components.RLottieImageView r4 = r0.lockImageView
@@ -6974,7 +6974,7 @@ public class LoginActivity extends BaseFragment {
                 org.telegram.ui.Components.RLottieImageView r5 = new org.telegram.ui.Components.RLottieImageView
                 r5.<init>(r2)
                 r0.inboxImageView = r5
-                r6 = 2131558558(0x7f0d009e, float:1.8742435E38)
+                r6 = 2131558559(0x7f0d009f, float:1.8742437E38)
                 r7 = 120(0x78, float:1.68E-43)
                 r5.setAnimation(r6, r7, r7)
                 org.telegram.ui.Components.RLottieImageView r5 = r0.inboxImageView

@@ -1713,7 +1713,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
             org.telegram.ui.PhotoViewer$FrameLayoutDrawer r7 = r5.containerView
             org.telegram.ui.ActionBar.Theme$ResourcesProvider r8 = r5.resourcesProvider
             org.telegram.ui.Components.BulletinFactory r7 = org.telegram.ui.Components.BulletinFactory.of(r7, r8)
-            r8 = 2131558589(0x7f0d00bd, float:1.8742498E38)
+            r8 = 2131558590(0x7f0d00be, float:1.87425E38)
             org.telegram.ui.Components.Bulletin r6 = r7.createSimpleBulletin(r8, r6)
             r6.show()
         L_0x0153:
@@ -19132,13 +19132,25 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
 
     /* access modifiers changed from: private */
     public /* synthetic */ void lambda$checkProgress$70(boolean z, File file, File file2, FileLoader.FileResolver fileResolver, int i, MessageObject messageObject, boolean z2, boolean z3, boolean z4, boolean z5) {
+        File file3;
         ChatActivity chatActivity;
         TLRPC$Document document;
         MessageObject messageObject2 = messageObject;
         boolean exists = (z || file == null) ? z : file.exists();
-        File file3 = (file2 != null || fileResolver == null) ? file2 : fileResolver.getFile();
+        File file4 = null;
+        if (file2 != null || fileResolver == null) {
+            if (fileResolver != null) {
+                file4 = fileResolver.getFile();
+            }
+            file3 = file2;
+        } else {
+            file3 = fileResolver.getFile();
+        }
         if (!exists && file3 != null) {
             exists = file3.exists();
+        }
+        if (!exists && file4 != null) {
+            exists = file4.exists();
         }
         boolean z6 = exists;
         if (!z6 && i != 0 && messageObject2 != null && z2 && DownloadController.getInstance(this.currentAccount).canDownloadMedia(messageObject2.messageOwner) != 0 && (((chatActivity = this.parentChatActivity) == null || chatActivity.getCurrentEncryptedChat() == null) && !messageObject.shouldEncryptPhotoOrVideo() && (document = messageObject.getDocument()) != null)) {

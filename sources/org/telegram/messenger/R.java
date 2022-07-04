@@ -1850,6 +1850,7 @@ public final class R {
         public static final int sound_out = NUM;
         public static final int speaker = NUM;
         public static final int star_loader = NUM;
+        public static final int start_texture = NUM;
         public static final int statistic_preload = NUM;
         public static final int sun = NUM;
         public static final int sun_outline = NUM;

@@ -2410,7 +2410,7 @@ public class LaunchActivity extends BasePermissionsActivity implements ActionBar
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r35v51, resolved type: boolean} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r35v52, resolved type: boolean} */
     /* JADX WARNING: type inference failed for: r10v2, types: [android.os.Bundle, java.lang.String] */
-    /* JADX WARNING: type inference failed for: r5v2, types: [boolean, int] */
+    /* JADX WARNING: type inference failed for: r5v2, types: [int, boolean] */
     /* JADX WARNING: type inference failed for: r10v6 */
     /* JADX WARNING: type inference failed for: r10v7 */
     /* JADX WARNING: type inference failed for: r10v8 */

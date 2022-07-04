@@ -1035,11 +1035,11 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
     private Size chooseOptimalSize(ArrayList<Size> arrayList) {
         ArrayList arrayList2 = new ArrayList();
         for (int i = 0; i < arrayList.size(); i++) {
-            if (Math.max(arrayList.get(i).mHeight, arrayList.get(i).mHeight) <= 1200 && Math.min(arrayList.get(i).mHeight, arrayList.get(i).mHeight) >= 320) {
+            if (Math.max(arrayList.get(i).mHeight, arrayList.get(i).mWidth) <= 1200 && Math.min(arrayList.get(i).mHeight, arrayList.get(i).mWidth) >= 320) {
                 arrayList2.add(arrayList.get(i));
             }
         }
-        if (arrayList2.isEmpty() || SharedConfig.getDevicePerformanceClass() == 0) {
+        if (arrayList2.isEmpty() || SharedConfig.getDevicePerformanceClass() == 0 || SharedConfig.getDevicePerformanceClass() == 1) {
             return CameraController.chooseOptimalSize(arrayList, 480, 270, this.aspectRatio);
         }
         Collections.sort(arrayList2, InstantCameraView$$ExternalSyntheticLambda6.INSTANCE);
@@ -1048,12 +1048,12 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
 
     /* access modifiers changed from: private */
     public static /* synthetic */ int lambda$chooseOptimalSize$2(Size size2, Size size3) {
-        float min = ((float) Math.min(size2.mHeight, size2.mWidth)) / ((float) Math.max(size2.mHeight, size2.mWidth));
-        float min2 = ((float) Math.min(size3.mHeight, size3.mWidth)) / ((float) Math.max(size3.mHeight, size3.mWidth));
-        if (min < min2) {
-            return 1;
+        float abs = Math.abs(1.0f - (((float) Math.min(size2.mHeight, size2.mWidth)) / ((float) Math.max(size2.mHeight, size2.mWidth))));
+        float abs2 = Math.abs(1.0f - (((float) Math.min(size3.mHeight, size3.mWidth)) / ((float) Math.max(size3.mHeight, size3.mWidth))));
+        if (abs < abs2) {
+            return -1;
         }
-        return min > min2 ? -1 : 0;
+        return abs > abs2 ? 1 : 0;
     }
 
     /* access modifiers changed from: private */
@@ -1215,13 +1215,16 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
             float min = f / ((float) Math.min(width, height));
             int i3 = (int) (((float) width) * min);
             int i4 = (int) (((float) height) * min);
-            if (i3 > i4) {
+            if (i3 == i4) {
                 float unused = InstantCameraView.this.scaleX = 1.0f;
-                float unused2 = InstantCameraView.this.scaleY = ((float) i3) / ((float) i2);
-                return;
+                float unused2 = InstantCameraView.this.scaleY = 1.0f;
+            } else if (i3 > i4) {
+                float unused3 = InstantCameraView.this.scaleX = 1.0f;
+                float unused4 = InstantCameraView.this.scaleY = ((float) i3) / ((float) i2);
+            } else {
+                float unused5 = InstantCameraView.this.scaleX = ((float) i4) / f;
+                float unused6 = InstantCameraView.this.scaleY = 1.0f;
             }
-            float unused3 = InstantCameraView.this.scaleX = ((float) i4) / f;
-            float unused4 = InstantCameraView.this.scaleY = 1.0f;
         }
 
         private boolean initGL() {
@@ -2591,7 +2594,11 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
             public void run() {
                 TextureView access$3600 = InstantCameraView.this.textureView;
                 if (access$3600 != null) {
-                    AndroidUtilities.runOnUIThread(new InstantCameraView$VideoRecorder$GenerateKeyframeThumbTask$$ExternalSyntheticLambda0(this, access$3600.getBitmap(AndroidUtilities.dp(56.0f), AndroidUtilities.dp(56.0f))));
+                    try {
+                        AndroidUtilities.runOnUIThread(new InstantCameraView$VideoRecorder$GenerateKeyframeThumbTask$$ExternalSyntheticLambda0(this, access$3600.getBitmap(AndroidUtilities.dp(56.0f), AndroidUtilities.dp(56.0f))));
+                    } catch (Exception e) {
+                        FileLog.e((Throwable) e);
+                    }
                 }
             }
 
@@ -3123,7 +3130,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
 
     /* access modifiers changed from: private */
     public String createFragmentShader(Size size2) {
-        if (SharedConfig.getDevicePerformanceClass() == 0 || ((float) Math.max(size2.getHeight(), size2.getWidth())) * 0.7f < ((float) MessagesController.getInstance(this.currentAccount).roundVideoSize)) {
+        if (SharedConfig.getDevicePerformanceClass() == 0 || SharedConfig.getDevicePerformanceClass() == 1 || ((float) Math.max(size2.getHeight(), size2.getWidth())) * 0.7f < ((float) MessagesController.getInstance(this.currentAccount).roundVideoSize)) {
             return "#extension GL_OES_EGL_image_external : require\nprecision highp float;\nvarying vec2 vTextureCoord;\nuniform float scaleX;\nuniform float scaleY;\nuniform float alpha;\nuniform samplerExternalOES sTexture;\nvoid main() {\n   vec2 coord = vec2((vTextureCoord.x - 0.5) * scaleX, (vTextureCoord.y - 0.5) * scaleY);\n   float coef = ceil(clamp(0.2601 - dot(coord, coord), 0.0, 1.0));\n   vec3 color = texture2D(sTexture, vTextureCoord).rgb * coef + (1.0 - step(0.001, coef));\n   gl_FragColor = vec4(color * alpha, alpha);\n}\n";
         }
         return "#extension GL_OES_EGL_image_external : require\nprecision highp float;\nvarying vec2 vTextureCoord;\nuniform float scaleX;\nuniform float scaleY;\nuniform float alpha;\nconst float kernel = 1.0;\nconst float pixelSizeX = 1.0 / " + size2.getWidth() + ".0;\nconst float pixelSizeY = 1.0 / " + size2.getHeight() + ".0;\nuniform samplerExternalOES sTexture;\nvoid main() {\n   vec3 accumulation = vec3(0);\n   vec3 weightsum = vec3(0);\n   for (float x = -kernel; x <= kernel; x++){\n       for (float y = -kernel; y <= kernel; y++){\n           accumulation += texture2D(sTexture, vTextureCoord + vec2(x * pixelSizeX, y * pixelSizeY)).xyz;\n           weightsum += 1.0;\n       }\n   }\n   vec4 textColor = vec4(accumulation / weightsum, 1.0);\n   vec2 coord = vec2((vTextureCoord.x - 0.5) * scaleX, (vTextureCoord.y - 0.5) * scaleY);\n   float coef = ceil(clamp(0.2601 - dot(coord, coord), 0.0, 1.0));\n   vec3 color = textColor.rgb * coef + (1.0 - step(0.001, coef));\n   gl_FragColor = vec4(color * alpha, alpha);\n}\n";

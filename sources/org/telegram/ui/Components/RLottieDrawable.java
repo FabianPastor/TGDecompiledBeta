@@ -29,7 +29,8 @@ public class RLottieDrawable extends BitmapDrawable implements Animatable {
     private static ThreadLocal<byte[]> bufferLocal = new ThreadLocal<>();
     /* access modifiers changed from: private */
     public static HashSet<String> generatingCacheFiles = new HashSet<>();
-    private static DispatchQueuePool loadFrameRunnableQueue = new DispatchQueuePool(4);
+    private static final DispatchQueuePool largeSizeLoadFrameRunnableQueue = new DispatchQueuePool(4);
+    private static final DispatchQueuePool loadFrameRunnableQueue = new DispatchQueuePool(2);
     /* access modifiers changed from: private */
     public static ThreadPoolExecutor lottieCacheGenerateQueue;
     private static ThreadLocal<byte[]> readBufferLocal = new ThreadLocal<>();
@@ -60,6 +61,7 @@ public class RLottieDrawable extends BitmapDrawable implements Animatable {
     protected volatile boolean isRecycled;
     protected volatile boolean isRunning;
     private long lastFrameTime;
+    private DispatchQueuePool loadFrameQueue;
     protected Runnable loadFrameRunnable;
     protected Runnable loadFrameTask;
     protected boolean loadingInBackground;
@@ -186,6 +188,8 @@ public class RLottieDrawable extends BitmapDrawable implements Animatable {
     }
 
     public RLottieDrawable(File file, int i, int i2, boolean z, boolean z2, int[] iArr, int i3) {
+        int i4 = i;
+        int i5 = i2;
         int[] iArr2 = new int[3];
         this.metaData = iArr2;
         this.customEndFrame = -1;
@@ -197,6 +201,8 @@ public class RLottieDrawable extends BitmapDrawable implements Animatable {
         this.scaleY = 1.0f;
         this.dstRect = new Rect();
         this.parentViews = new ArrayList<>();
+        DispatchQueuePool dispatchQueuePool = loadFrameRunnableQueue;
+        this.loadFrameQueue = dispatchQueuePool;
         this.uiRunnableNoFrame = new Runnable() {
             public void run() {
                 RLottieDrawable rLottieDrawable = RLottieDrawable.this;
@@ -414,15 +420,18 @@ public class RLottieDrawable extends BitmapDrawable implements Animatable {
                 }
             }
         };
-        int i4 = i;
         this.width = i4;
-        int i5 = i2;
         this.height = i5;
         this.shouldLimitFps = z2;
         getPaint().setFlags(2);
-        this.nativePtr = create(file.getAbsolutePath(), (String) null, i4, i5, iArr2, z, iArr, this.shouldLimitFps, i3);
+        this.nativePtr = create(file.getAbsolutePath(), (String) null, i, i2, iArr2, z, iArr, this.shouldLimitFps, i3);
         if (z && lottieCacheGenerateQueue == null) {
             lottieCacheGenerateQueue = new ThreadPoolExecutor(1, 1, 0, TimeUnit.MILLISECONDS, new LinkedBlockingQueue());
+        }
+        if (i4 > AndroidUtilities.dp(120.0f) || i5 > AndroidUtilities.dp(120.0f)) {
+            this.loadFrameQueue = largeSizeLoadFrameRunnableQueue;
+        } else {
+            this.loadFrameQueue = dispatchQueuePool;
         }
         if (this.nativePtr == 0) {
             file.delete();
@@ -438,6 +447,7 @@ public class RLottieDrawable extends BitmapDrawable implements Animatable {
     }
 
     public RLottieDrawable(File file, String str, int i, int i2, boolean z, boolean z2, int[] iArr, int i3) {
+        int i4 = i;
         int[] iArr2 = new int[3];
         this.metaData = iArr2;
         this.customEndFrame = -1;
@@ -449,6 +459,8 @@ public class RLottieDrawable extends BitmapDrawable implements Animatable {
         this.scaleY = 1.0f;
         this.dstRect = new Rect();
         this.parentViews = new ArrayList<>();
+        DispatchQueuePool dispatchQueuePool = loadFrameRunnableQueue;
+        this.loadFrameQueue = dispatchQueuePool;
         this.uiRunnableNoFrame = new Runnable() {
             public void run() {
                 RLottieDrawable rLottieDrawable = RLottieDrawable.this;
@@ -666,13 +678,12 @@ public class RLottieDrawable extends BitmapDrawable implements Animatable {
                 }
             }
         };
-        int i4 = i;
         this.width = i4;
         int i5 = i2;
         this.height = i5;
         this.shouldLimitFps = z2;
         getPaint().setFlags(2);
-        this.nativePtr = create(file.getAbsolutePath(), str, i4, i5, iArr2, z, iArr, this.shouldLimitFps, i3);
+        this.nativePtr = create(file.getAbsolutePath(), str, i, i5, iArr2, z, iArr, this.shouldLimitFps, i3);
         if (z && lottieCacheGenerateQueue == null) {
             lottieCacheGenerateQueue = new ThreadPoolExecutor(1, 1, 0, TimeUnit.MILLISECONDS, new LinkedBlockingQueue());
         }
@@ -683,6 +694,11 @@ public class RLottieDrawable extends BitmapDrawable implements Animatable {
             this.shouldLimitFps = false;
         }
         this.timeBetweenFrames = Math.max(this.shouldLimitFps ? 33 : 16, (int) (1000.0f / ((float) iArr2[1])));
+        if (i4 > AndroidUtilities.dp(100.0f) || i4 > AndroidUtilities.dp(100.0f)) {
+            this.loadFrameQueue = largeSizeLoadFrameRunnableQueue;
+        } else {
+            this.loadFrameQueue = dispatchQueuePool;
+        }
     }
 
     public RLottieDrawable(int i, String str, int i2, int i3) {
@@ -702,6 +718,7 @@ public class RLottieDrawable extends BitmapDrawable implements Animatable {
         this.scaleY = 1.0f;
         this.dstRect = new Rect();
         this.parentViews = new ArrayList<>();
+        this.loadFrameQueue = loadFrameRunnableQueue;
         this.uiRunnableNoFrame = new Runnable() {
             public void run() {
                 RLottieDrawable rLottieDrawable = RLottieDrawable.this;
@@ -1044,6 +1061,7 @@ public class RLottieDrawable extends BitmapDrawable implements Animatable {
         this.scaleY = 1.0f;
         this.dstRect = new Rect();
         this.parentViews = new ArrayList<>();
+        this.loadFrameQueue = loadFrameRunnableQueue;
         this.uiRunnableNoFrame = new Runnable() {
             public void run() {
                 RLottieDrawable rLottieDrawable = RLottieDrawable.this;
@@ -1586,7 +1604,7 @@ public class RLottieDrawable extends BitmapDrawable implements Animatable {
             this.pendingReplaceColors = iArr;
             this.newReplaceColors = null;
         }
-        DispatchQueuePool dispatchQueuePool = loadFrameRunnableQueue;
+        DispatchQueuePool dispatchQueuePool = this.loadFrameQueue;
         Runnable runnable = this.loadFrameRunnable;
         this.loadFrameTask = runnable;
         dispatchQueuePool.execute(runnable);

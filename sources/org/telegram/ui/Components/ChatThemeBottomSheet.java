@@ -174,7 +174,7 @@ public class ChatThemeBottomSheet extends BottomSheet implements NotificationCen
             r8 = 1105199104(0x41e00000, float:28.0)
             int r14 = org.telegram.messenger.AndroidUtilities.dp(r8)
             org.telegram.ui.Components.RLottieDrawable r8 = new org.telegram.ui.Components.RLottieDrawable
-            r11 = 2131558540(0x7f0d008c, float:1.8742399E38)
+            r11 = 2131558541(0x7f0d008d, float:1.87424E38)
             java.lang.String r12 = "NUM"
             r15 = 0
             r16 = 0

@@ -19023,7 +19023,7 @@ public class MessagesStorage extends BaseController {
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v13, resolved type: org.telegram.SQLite.SQLitePreparedStatement} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v15, resolved type: org.telegram.SQLite.SQLiteCursor} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v18, resolved type: org.telegram.SQLite.SQLitePreparedStatement} */
-    /* JADX WARNING: type inference failed for: r5v0, types: [long[], org.telegram.SQLite.SQLitePreparedStatement] */
+    /* JADX WARNING: type inference failed for: r5v0, types: [org.telegram.SQLite.SQLitePreparedStatement, long[]] */
     /* JADX WARNING: type inference failed for: r5v5 */
     /* JADX WARNING: type inference failed for: r5v9 */
     /* JADX WARNING: type inference failed for: r5v10 */
@@ -21085,12 +21085,12 @@ public class MessagesStorage extends BaseController {
     }
 
     /* JADX WARNING: type inference failed for: r6v0 */
-    /* JADX WARNING: type inference failed for: r6v1, types: [boolean, int] */
+    /* JADX WARNING: type inference failed for: r6v1, types: [int, boolean] */
     /* JADX WARNING: type inference failed for: r15v5 */
     /* JADX WARNING: type inference failed for: r15v10 */
     /* JADX WARNING: type inference failed for: r6v24 */
     /* access modifiers changed from: private */
-    /* JADX WARNING: Incorrect type for immutable var: ssa=int, code=?, for r15v2, types: [boolean, int] */
+    /* JADX WARNING: Incorrect type for immutable var: ssa=int, code=?, for r15v2, types: [int, boolean] */
     /* JADX WARNING: Removed duplicated region for block: B:46:0x0109 A[Catch:{ Exception -> 0x0286 }] */
     /* JADX WARNING: Removed duplicated region for block: B:53:0x01d8 A[Catch:{ Exception -> 0x0286 }] */
     /* JADX WARNING: Removed duplicated region for block: B:54:0x01dd A[Catch:{ Exception -> 0x0286 }] */

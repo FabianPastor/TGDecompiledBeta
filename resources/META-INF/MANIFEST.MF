@@ -3,7 +3,7 @@ Built-By: Signflinger
 Created-By: Android Gradle 7.0.3
 
 Name: AndroidManifest.xml
-SHA1-Digest: EAmyqqV4a7mXgirtqrsjgNDFZwI=
+SHA1-Digest: RD0hUYZuwjidRQJvwLh1VTuNszw=
 
 Name: META-INF/androidx.annotation_annotation-experimental.version
 SHA1-Digest: BeF7ZGqBckDCBhhvlPj0xwl01dw=
@@ -10539,7 +10539,7 @@ Name: assets/secureid_ocr_nn.dat
 SHA1-Digest: baCkFlis9uqkjrzfYyVFGLmb0x8=
 
 Name: assets/shaders/fragment2.glsl
-SHA1-Digest: O0G5ZsRXBBwNO1S2zWotSZwyqq4=
+SHA1-Digest: NRb5jCUO8XnqQqdKRzvHFPc9CJs=
 
 Name: assets/shaders/vertex2.glsl
 SHA1-Digest: PEOR3ZeGyvRkgLniD3+l/w1JWnM=
@@ -10551,13 +10551,13 @@ Name: builddef.lst
 SHA1-Digest: 2OFxLdkhRBE8GU89a6MioeZUiU4=
 
 Name: classes.dex
-SHA1-Digest: tIDYfBw2RT+VxiRo17Ce4t905/I=
+SHA1-Digest: 5/E+stW3yoUz3wwohMek6oENQmA=
 
 Name: classes2.dex
 SHA1-Digest: mB0Vg0+wQc0oX8FpWGz3P4+BpdA=
 
 Name: classes3.dex
-SHA1-Digest: 74/0BrMkfrVWPFylR8PJLFkumnQ=
+SHA1-Digest: 1yHoPyco3pmqjfWoUM+/heLLntU=
 
 Name: com/google/android/search/verification/client/R.java
 SHA1-Digest: 3OspJ3jk+6chzCfOCJPZHwrwxpA=
@@ -17396,6 +17396,9 @@ SHA1-Digest: s8NpBRd42a/IcJLT3tgrXsAF9r8=
 Name: res/Vrr.png
 SHA1-Digest: ETe3K5bQRW+SluRYBymz8z4NyeM=
 
+Name: res/VsA.svg
+SHA1-Digest: F9B3If5Z9j+OfritwGi9xk918B4=
+
 Name: res/VsK.png
 SHA1-Digest: L1No1XfE8ffkKfaISWcAoHvX6FA=
 
@@ -23628,7 +23631,7 @@ Name: res/zyk.png
 SHA1-Digest: vPrhwVgT0KjqkUXrvCQzp+nnQ3A=
 
 Name: resources.arsc
-SHA1-Digest: Y7+W88k14Dbn+RB3grq6G8LpEkY=
+SHA1-Digest: TbX46L3uPX5HGQu3vjNQfk5LUHE=
 
 Name: transport-api.properties
 SHA1-Digest: ix5ULUaUIINddTrXGghc/jPG7Rk=

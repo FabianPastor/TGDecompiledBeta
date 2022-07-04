@@ -13563,7 +13563,7 @@ public class MessagesController extends BaseController implements NotificationCe
     /* JADX WARNING: type inference failed for: r1v18 */
     /* JADX WARNING: type inference failed for: r1v19 */
     /* access modifiers changed from: private */
-    /* JADX WARNING: Incorrect type for immutable var: ssa=int, code=?, for r1v12, types: [boolean, int] */
+    /* JADX WARNING: Incorrect type for immutable var: ssa=int, code=?, for r1v12, types: [int, boolean] */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public /* synthetic */ void lambda$processLoadedDialogs$178(org.telegram.tgnet.TLRPC$Message r27, int r28, org.telegram.tgnet.TLRPC$messages_Dialogs r29, java.util.ArrayList r30, boolean r31, int r32, androidx.collection.LongSparseArray r33, androidx.collection.LongSparseArray r34, androidx.collection.LongSparseArray r35, int r36, boolean r37, int r38, java.util.ArrayList r39) {
         /*
@@ -14660,373 +14660,386 @@ public class MessagesController extends BaseController implements NotificationCe
     }
 
     /* access modifiers changed from: private */
-    /* JADX WARNING: Removed duplicated region for block: B:100:0x0294  */
-    /* JADX WARNING: Removed duplicated region for block: B:114:0x0297 A[SYNTHETIC] */
-    /* JADX WARNING: Removed duplicated region for block: B:118:0x0297 A[SYNTHETIC] */
-    /* JADX WARNING: Removed duplicated region for block: B:38:0x0109  */
-    /* JADX WARNING: Removed duplicated region for block: B:39:0x012c  */
-    /* JADX WARNING: Removed duplicated region for block: B:42:0x013b  */
-    /* JADX WARNING: Removed duplicated region for block: B:52:0x0188  */
-    /* JADX WARNING: Removed duplicated region for block: B:72:0x0202  */
-    /* JADX WARNING: Removed duplicated region for block: B:73:0x0209 A[ADDED_TO_REGION] */
+    /* JADX WARNING: Removed duplicated region for block: B:100:0x02aa  */
+    /* JADX WARNING: Removed duplicated region for block: B:114:0x02ad A[SYNTHETIC] */
+    /* JADX WARNING: Removed duplicated region for block: B:118:0x02ad A[SYNTHETIC] */
+    /* JADX WARNING: Removed duplicated region for block: B:38:0x010c  */
+    /* JADX WARNING: Removed duplicated region for block: B:39:0x0130  */
+    /* JADX WARNING: Removed duplicated region for block: B:42:0x013f  */
+    /* JADX WARNING: Removed duplicated region for block: B:52:0x019e  */
+    /* JADX WARNING: Removed duplicated region for block: B:72:0x0218  */
+    /* JADX WARNING: Removed duplicated region for block: B:73:0x021f A[ADDED_TO_REGION] */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    public /* synthetic */ void lambda$processDialogsUpdate$187(org.telegram.tgnet.TLRPC$messages_Dialogs r19, androidx.collection.LongSparseArray r20, androidx.collection.LongSparseArray r21, boolean r22, org.telegram.messenger.support.LongSparseIntArray r23) {
+    public /* synthetic */ void lambda$processDialogsUpdate$187(org.telegram.tgnet.TLRPC$messages_Dialogs r21, androidx.collection.LongSparseArray r22, androidx.collection.LongSparseArray r23, boolean r24, org.telegram.messenger.support.LongSparseIntArray r25) {
         /*
-            r18 = this;
-            r0 = r18
-            r1 = r19
-            r2 = r20
-            java.util.ArrayList<org.telegram.tgnet.TLRPC$User> r3 = r1.users
-            r4 = 1
-            r0.putUsers(r3, r4)
+            r20 = this;
+            r0 = r20
+            r1 = r21
+            r2 = r22
+            r3 = r24
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$User> r4 = r1.users
+            r5 = 1
+            r0.putUsers(r4, r5)
             java.util.ArrayList<org.telegram.tgnet.TLRPC$Chat> r1 = r1.chats
-            r0.putChats(r1, r4)
+            r0.putChats(r1, r5)
             r1 = 0
-            r3 = 0
-        L_0x0013:
-            int r5 = r20.size()
-            r6 = 0
-            if (r3 >= r5) goto L_0x029c
-            long r7 = r2.keyAt(r3)
-            boolean r5 = org.telegram.messenger.BuildVars.LOGS_ENABLED
-            if (r5 == 0) goto L_0x0036
-            java.lang.StringBuilder r5 = new java.lang.StringBuilder
-            r5.<init>()
-            java.lang.String r9 = "processDialogsUpdate "
-            r5.append(r9)
-            r5.append(r7)
-            java.lang.String r5 = r5.toString()
-            org.telegram.messenger.FileLog.d(r5)
-        L_0x0036:
-            java.lang.Object r5 = r2.valueAt(r3)
-            org.telegram.tgnet.TLRPC$Dialog r5 = (org.telegram.tgnet.TLRPC$Dialog) r5
-            androidx.collection.LongSparseArray<org.telegram.tgnet.TLRPC$Dialog> r9 = r0.dialogs_dict
-            java.lang.Object r9 = r9.get(r7)
-            org.telegram.tgnet.TLRPC$Dialog r9 = (org.telegram.tgnet.TLRPC$Dialog) r9
-            long r10 = r5.id
-            r12 = r21
-            java.lang.Object r10 = r12.get(r10)
-            org.telegram.messenger.MessageObject r10 = (org.telegram.messenger.MessageObject) r10
-            java.lang.String r11 = "processDialogsUpdate new message is null"
-            r13 = 0
-            if (r9 != 0) goto L_0x00be
-            boolean r9 = org.telegram.messenger.BuildVars.LOGS_ENABLED
-            if (r9 == 0) goto L_0x005d
-            java.lang.String r9 = "processDialogsUpdate dialog null"
-            org.telegram.messenger.FileLog.d(r9)
-        L_0x005d:
-            android.util.SparseIntArray r9 = r0.nextDialogsCacheOffset
-            int r15 = r5.folder_id
-            int r9 = r9.get(r15, r1)
-            int r9 = r9 + r4
-            android.util.SparseIntArray r15 = r0.nextDialogsCacheOffset
-            int r4 = r5.folder_id
-            r15.put(r4, r9)
-            androidx.collection.LongSparseArray<org.telegram.tgnet.TLRPC$Dialog> r4 = r0.dialogs_dict
-            r4.put(r7, r5)
-            androidx.collection.LongSparseArray<org.telegram.messenger.MessageObject> r4 = r0.dialogMessage
-            r4.put(r7, r10)
-            if (r10 != 0) goto L_0x0086
-            if (r22 == 0) goto L_0x007e
-            r0.checkLastDialogMessage(r5, r6, r13)
-        L_0x007e:
-            boolean r4 = org.telegram.messenger.BuildVars.LOGS_ENABLED
-            if (r4 == 0) goto L_0x00bb
-            org.telegram.messenger.FileLog.d(r11)
-            goto L_0x00bb
-        L_0x0086:
-            org.telegram.tgnet.TLRPC$Message r4 = r10.messageOwner
-            org.telegram.tgnet.TLRPC$Peer r4 = r4.peer_id
-            long r4 = r4.channel_id
-            int r6 = (r4 > r13 ? 1 : (r4 == r13 ? 0 : -1))
-            if (r6 != 0) goto L_0x00bb
-            android.util.SparseArray<org.telegram.messenger.MessageObject> r4 = r0.dialogMessagesByIds
-            int r5 = r10.getId()
-            r4.put(r5, r10)
-            int r4 = r0.dialogsLoadedTillDate
-            org.telegram.tgnet.TLRPC$Message r5 = r10.messageOwner
-            int r5 = r5.date
-            int r4 = java.lang.Math.min(r4, r5)
-            r0.dialogsLoadedTillDate = r4
-            org.telegram.tgnet.TLRPC$Message r4 = r10.messageOwner
-            long r4 = r4.random_id
-            int r6 = (r4 > r13 ? 1 : (r4 == r13 ? 0 : -1))
-            if (r6 == 0) goto L_0x00b2
-            androidx.collection.LongSparseArray<org.telegram.messenger.MessageObject> r6 = r0.dialogMessagesByRandomIds
-            r6.put(r4, r10)
-        L_0x00b2:
-            boolean r4 = org.telegram.messenger.BuildVars.LOGS_ENABLED
-            if (r4 == 0) goto L_0x00bb
-            java.lang.String r4 = "processDialogsUpdate new message not null"
-            org.telegram.messenger.FileLog.d(r4)
-        L_0x00bb:
-            r14 = 1
-            goto L_0x0297
-        L_0x00be:
-            boolean r4 = org.telegram.messenger.BuildVars.LOGS_ENABLED
-            if (r4 == 0) goto L_0x00c7
-            java.lang.String r4 = "processDialogsUpdate dialog not null"
-            org.telegram.messenger.FileLog.d(r4)
-        L_0x00c7:
-            int r4 = r5.unread_count
-            r9.unread_count = r4
-            int r4 = r9.unread_mentions_count
-            int r15 = r5.unread_mentions_count
-            r13 = 2
-            if (r4 == r15) goto L_0x0101
-            r9.unread_mentions_count = r15
-            java.util.ArrayList<java.lang.Long> r4 = r0.createdDialogMainThreadIds
-            long r14 = r9.id
-            java.lang.Long r14 = java.lang.Long.valueOf(r14)
-            boolean r4 = r4.contains(r14)
-            if (r4 == 0) goto L_0x0101
-            org.telegram.messenger.NotificationCenter r4 = r18.getNotificationCenter()
-            int r14 = org.telegram.messenger.NotificationCenter.updateMentionsCount
-            java.lang.Object[] r15 = new java.lang.Object[r13]
-            r16 = r7
-            long r6 = r9.id
-            java.lang.Long r6 = java.lang.Long.valueOf(r6)
-            r15[r1] = r6
-            int r6 = r9.unread_mentions_count
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            r7 = 1
-            r15[r7] = r6
-            r4.postNotificationName(r14, r15)
-            goto L_0x0103
-        L_0x0101:
-            r16 = r7
-        L_0x0103:
-            int r4 = r9.unread_reactions_count
-            int r6 = r5.unread_reactions_count
-            if (r4 == r6) goto L_0x012c
-            r9.unread_reactions_count = r6
-            org.telegram.messenger.NotificationCenter r4 = r18.getNotificationCenter()
-            int r6 = org.telegram.messenger.NotificationCenter.dialogsUnreadReactionsCounterChanged
-            r7 = 3
-            java.lang.Object[] r7 = new java.lang.Object[r7]
-            long r14 = r9.id
-            java.lang.Long r8 = java.lang.Long.valueOf(r14)
-            r7[r1] = r8
-            int r8 = r9.unread_reactions_count
-            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
-            r14 = 1
-            r7[r14] = r8
-            r8 = 0
-            r7[r13] = r8
-            r4.postNotificationName(r6, r7)
-            goto L_0x012d
-        L_0x012c:
-            r14 = 1
-        L_0x012d:
-            androidx.collection.LongSparseArray<org.telegram.messenger.MessageObject> r4 = r0.dialogMessage
-            r6 = r16
-            java.lang.Object r4 = r4.get(r6)
-            org.telegram.messenger.MessageObject r4 = (org.telegram.messenger.MessageObject) r4
-            boolean r8 = org.telegram.messenger.BuildVars.LOGS_ENABLED
-            if (r8 == 0) goto L_0x0180
-            java.lang.StringBuilder r8 = new java.lang.StringBuilder
-            r8.<init>()
-            java.lang.String r13 = "processDialogsUpdate oldMsg "
-            r8.append(r13)
-            r8.append(r4)
-            java.lang.String r13 = " old top_message = "
-            r8.append(r13)
-            int r13 = r9.top_message
-            r8.append(r13)
-            java.lang.String r13 = " new top_message = "
-            r8.append(r13)
-            int r13 = r5.top_message
-            r8.append(r13)
-            java.lang.String r8 = r8.toString()
-            org.telegram.messenger.FileLog.d(r8)
-            java.lang.StringBuilder r8 = new java.lang.StringBuilder
-            r8.<init>()
-            java.lang.String r13 = "processDialogsUpdate oldMsgDeleted "
-            r8.append(r13)
-            if (r4 == 0) goto L_0x0175
-            boolean r13 = r4.deleted
-            if (r13 == 0) goto L_0x0175
-            r13 = 1
-            goto L_0x0176
-        L_0x0175:
-            r13 = 0
-        L_0x0176:
-            r8.append(r13)
-            java.lang.String r8 = r8.toString()
-            org.telegram.messenger.FileLog.d(r8)
-        L_0x0180:
-            if (r4 == 0) goto L_0x0209
-            int r8 = r9.top_message
-            if (r8 <= 0) goto L_0x0188
-            goto L_0x0209
-        L_0x0188:
-            boolean r8 = r4.deleted
-            if (r8 != 0) goto L_0x0198
-            if (r10 == 0) goto L_0x0198
-            org.telegram.tgnet.TLRPC$Message r8 = r10.messageOwner
-            int r8 = r8.date
-            org.telegram.tgnet.TLRPC$Message r9 = r4.messageOwner
-            int r9 = r9.date
-            if (r8 <= r9) goto L_0x0297
-        L_0x0198:
-            androidx.collection.LongSparseArray<org.telegram.tgnet.TLRPC$Dialog> r8 = r0.dialogs_dict
-            r8.put(r6, r5)
+            r4 = 0
+        L_0x0015:
+            int r6 = r22.size()
+            if (r4 >= r6) goto L_0x02b5
+            long r8 = r2.keyAt(r4)
+            boolean r6 = org.telegram.messenger.BuildVars.LOGS_ENABLED
+            if (r6 == 0) goto L_0x0037
+            java.lang.StringBuilder r6 = new java.lang.StringBuilder
+            r6.<init>()
+            java.lang.String r10 = "processDialogsUpdate "
+            r6.append(r10)
+            r6.append(r8)
+            java.lang.String r6 = r6.toString()
+            org.telegram.messenger.FileLog.d(r6)
+        L_0x0037:
+            java.lang.Object r6 = r2.valueAt(r4)
+            org.telegram.tgnet.TLRPC$Dialog r6 = (org.telegram.tgnet.TLRPC$Dialog) r6
+            androidx.collection.LongSparseArray<org.telegram.tgnet.TLRPC$Dialog> r10 = r0.dialogs_dict
+            java.lang.Object r10 = r10.get(r8)
+            org.telegram.tgnet.TLRPC$Dialog r10 = (org.telegram.tgnet.TLRPC$Dialog) r10
+            long r11 = r6.id
+            r13 = r23
+            java.lang.Object r11 = r13.get(r11)
+            org.telegram.messenger.MessageObject r11 = (org.telegram.messenger.MessageObject) r11
+            java.lang.String r12 = "processDialogsUpdate new message is null"
+            r14 = 0
+            if (r10 != 0) goto L_0x00c0
+            boolean r10 = org.telegram.messenger.BuildVars.LOGS_ENABLED
+            if (r10 == 0) goto L_0x005e
+            java.lang.String r10 = "processDialogsUpdate dialog null"
+            org.telegram.messenger.FileLog.d(r10)
+        L_0x005e:
+            android.util.SparseIntArray r10 = r0.nextDialogsCacheOffset
+            int r7 = r6.folder_id
+            int r7 = r10.get(r7, r1)
+            int r7 = r7 + r5
+            android.util.SparseIntArray r10 = r0.nextDialogsCacheOffset
+            int r5 = r6.folder_id
+            r10.put(r5, r7)
+            androidx.collection.LongSparseArray<org.telegram.tgnet.TLRPC$Dialog> r5 = r0.dialogs_dict
+            r5.put(r8, r6)
             androidx.collection.LongSparseArray<org.telegram.messenger.MessageObject> r5 = r0.dialogMessage
-            r5.put(r6, r10)
-            org.telegram.tgnet.TLRPC$Message r5 = r4.messageOwner
+            r5.put(r8, r11)
+            if (r11 != 0) goto L_0x0088
+            if (r3 == 0) goto L_0x0080
+            r5 = 0
+            r0.checkLastDialogMessage(r6, r5, r14)
+        L_0x0080:
+            boolean r5 = org.telegram.messenger.BuildVars.LOGS_ENABLED
+            if (r5 == 0) goto L_0x00bd
+            org.telegram.messenger.FileLog.d(r12)
+            goto L_0x00bd
+        L_0x0088:
+            org.telegram.tgnet.TLRPC$Message r5 = r11.messageOwner
             org.telegram.tgnet.TLRPC$Peer r5 = r5.peer_id
             long r5 = r5.channel_id
-            r7 = 0
-            int r9 = (r5 > r7 ? 1 : (r5 == r7 ? 0 : -1))
-            if (r9 != 0) goto L_0x01b7
+            int r7 = (r5 > r14 ? 1 : (r5 == r14 ? 0 : -1))
+            if (r7 != 0) goto L_0x00bd
             android.util.SparseArray<org.telegram.messenger.MessageObject> r5 = r0.dialogMessagesByIds
-            int r6 = r4.getId()
-            r5.remove(r6)
-        L_0x01b7:
-            if (r10 == 0) goto L_0x01f8
-            int r5 = r4.getId()
-            int r6 = r10.getId()
-            if (r5 != r6) goto L_0x01c7
-            boolean r5 = r4.deleted
-            r10.deleted = r5
-        L_0x01c7:
-            org.telegram.tgnet.TLRPC$Message r5 = r10.messageOwner
-            org.telegram.tgnet.TLRPC$Peer r5 = r5.peer_id
-            long r5 = r5.channel_id
-            r7 = 0
-            int r9 = (r5 > r7 ? 1 : (r5 == r7 ? 0 : -1))
-            if (r9 != 0) goto L_0x01f8
-            android.util.SparseArray<org.telegram.messenger.MessageObject> r5 = r0.dialogMessagesByIds
-            int r6 = r10.getId()
-            r5.put(r6, r10)
+            int r6 = r11.getId()
+            r5.put(r6, r11)
             int r5 = r0.dialogsLoadedTillDate
-            org.telegram.tgnet.TLRPC$Message r6 = r10.messageOwner
+            org.telegram.tgnet.TLRPC$Message r6 = r11.messageOwner
             int r6 = r6.date
             int r5 = java.lang.Math.min(r5, r6)
             r0.dialogsLoadedTillDate = r5
-            org.telegram.tgnet.TLRPC$Message r5 = r10.messageOwner
+            org.telegram.tgnet.TLRPC$Message r5 = r11.messageOwner
             long r5 = r5.random_id
+            int r7 = (r5 > r14 ? 1 : (r5 == r14 ? 0 : -1))
+            if (r7 == 0) goto L_0x00b4
+            androidx.collection.LongSparseArray<org.telegram.messenger.MessageObject> r7 = r0.dialogMessagesByRandomIds
+            r7.put(r5, r11)
+        L_0x00b4:
+            boolean r5 = org.telegram.messenger.BuildVars.LOGS_ENABLED
+            if (r5 == 0) goto L_0x00bd
+            java.lang.String r5 = "processDialogsUpdate new message not null"
+            org.telegram.messenger.FileLog.d(r5)
+        L_0x00bd:
+            r9 = 1
+            goto L_0x02ad
+        L_0x00c0:
+            boolean r5 = org.telegram.messenger.BuildVars.LOGS_ENABLED
+            if (r5 == 0) goto L_0x00c9
+            java.lang.String r5 = "processDialogsUpdate dialog not null"
+            org.telegram.messenger.FileLog.d(r5)
+        L_0x00c9:
+            int r5 = r6.unread_count
+            r10.unread_count = r5
+            int r5 = r10.unread_mentions_count
+            int r7 = r6.unread_mentions_count
+            r14 = 2
+            if (r5 == r7) goto L_0x0104
+            r10.unread_mentions_count = r7
+            java.util.ArrayList<java.lang.Long> r5 = r0.createdDialogMainThreadIds
+            long r1 = r10.id
+            java.lang.Long r1 = java.lang.Long.valueOf(r1)
+            boolean r1 = r5.contains(r1)
+            if (r1 == 0) goto L_0x0104
+            org.telegram.messenger.NotificationCenter r1 = r20.getNotificationCenter()
+            int r2 = org.telegram.messenger.NotificationCenter.updateMentionsCount
+            java.lang.Object[] r5 = new java.lang.Object[r14]
+            r18 = r8
+            long r7 = r10.id
+            java.lang.Long r7 = java.lang.Long.valueOf(r7)
+            r8 = 0
+            r5[r8] = r7
+            int r8 = r10.unread_mentions_count
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            r9 = 1
+            r5[r9] = r8
+            r1.postNotificationName(r2, r5)
+            goto L_0x0106
+        L_0x0104:
+            r18 = r8
+        L_0x0106:
+            int r1 = r10.unread_reactions_count
+            int r2 = r6.unread_reactions_count
+            if (r1 == r2) goto L_0x0130
+            r10.unread_reactions_count = r2
+            org.telegram.messenger.NotificationCenter r1 = r20.getNotificationCenter()
+            int r2 = org.telegram.messenger.NotificationCenter.dialogsUnreadReactionsCounterChanged
+            r5 = 3
+            java.lang.Object[] r5 = new java.lang.Object[r5]
+            long r8 = r10.id
+            java.lang.Long r8 = java.lang.Long.valueOf(r8)
             r7 = 0
-            int r9 = (r5 > r7 ? 1 : (r5 == r7 ? 0 : -1))
-            if (r9 == 0) goto L_0x01fa
-            androidx.collection.LongSparseArray<org.telegram.messenger.MessageObject> r9 = r0.dialogMessagesByRandomIds
-            r9.put(r5, r10)
-            goto L_0x01fa
-        L_0x01f8:
-            r7 = 0
-        L_0x01fa:
-            org.telegram.tgnet.TLRPC$Message r4 = r4.messageOwner
-            long r4 = r4.random_id
-            int r6 = (r4 > r7 ? 1 : (r4 == r7 ? 0 : -1))
-            if (r6 == 0) goto L_0x0297
-            androidx.collection.LongSparseArray<org.telegram.messenger.MessageObject> r6 = r0.dialogMessagesByRandomIds
-            r6.remove(r4)
-            goto L_0x0297
-        L_0x0209:
-            if (r4 == 0) goto L_0x020f
-            boolean r8 = r4.deleted
-            if (r8 != 0) goto L_0x0215
-        L_0x020f:
-            int r8 = r5.top_message
-            int r9 = r9.top_message
-            if (r8 <= r9) goto L_0x0286
-        L_0x0215:
-            androidx.collection.LongSparseArray<org.telegram.tgnet.TLRPC$Dialog> r8 = r0.dialogs_dict
-            r8.put(r6, r5)
-            androidx.collection.LongSparseArray<org.telegram.messenger.MessageObject> r8 = r0.dialogMessage
-            r8.put(r6, r10)
-            if (r4 == 0) goto L_0x0243
-            org.telegram.tgnet.TLRPC$Message r6 = r4.messageOwner
-            org.telegram.tgnet.TLRPC$Peer r6 = r6.peer_id
-            long r6 = r6.channel_id
+            r5[r7] = r8
+            int r8 = r10.unread_reactions_count
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            r9 = 1
+            r5[r9] = r8
             r8 = 0
-            int r13 = (r6 > r8 ? 1 : (r6 == r8 ? 0 : -1))
-            if (r13 != 0) goto L_0x0243
-            android.util.SparseArray<org.telegram.messenger.MessageObject> r6 = r0.dialogMessagesByIds
-            int r7 = r4.getId()
-            r6.remove(r7)
-            org.telegram.tgnet.TLRPC$Message r6 = r4.messageOwner
-            long r6 = r6.random_id
-            int r13 = (r6 > r8 ? 1 : (r6 == r8 ? 0 : -1))
-            if (r13 == 0) goto L_0x0243
-            androidx.collection.LongSparseArray<org.telegram.messenger.MessageObject> r8 = r0.dialogMessagesByRandomIds
-            r8.remove(r6)
-        L_0x0243:
-            if (r10 == 0) goto L_0x0286
-            if (r4 == 0) goto L_0x0255
-            int r6 = r4.getId()
-            int r7 = r10.getId()
-            if (r6 != r7) goto L_0x0255
-            boolean r4 = r4.deleted
-            r10.deleted = r4
-        L_0x0255:
-            org.telegram.tgnet.TLRPC$Message r4 = r10.messageOwner
-            org.telegram.tgnet.TLRPC$Peer r4 = r4.peer_id
-            long r6 = r4.channel_id
-            r8 = 0
-            int r4 = (r6 > r8 ? 1 : (r6 == r8 ? 0 : -1))
-            if (r4 != 0) goto L_0x0286
-            android.util.SparseArray<org.telegram.messenger.MessageObject> r4 = r0.dialogMessagesByIds
-            int r6 = r10.getId()
-            r4.put(r6, r10)
-            int r4 = r0.dialogsLoadedTillDate
-            org.telegram.tgnet.TLRPC$Message r6 = r10.messageOwner
-            int r6 = r6.date
-            int r4 = java.lang.Math.min(r4, r6)
-            r0.dialogsLoadedTillDate = r4
-            org.telegram.tgnet.TLRPC$Message r4 = r10.messageOwner
-            long r6 = r4.random_id
-            r8 = 0
-            int r4 = (r6 > r8 ? 1 : (r6 == r8 ? 0 : -1))
-            if (r4 == 0) goto L_0x0288
-            androidx.collection.LongSparseArray<org.telegram.messenger.MessageObject> r4 = r0.dialogMessagesByRandomIds
-            r4.put(r6, r10)
-            goto L_0x0288
-        L_0x0286:
-            r8 = 0
-        L_0x0288:
-            if (r22 == 0) goto L_0x0297
-            if (r10 != 0) goto L_0x0297
-            r4 = 0
-            r0.checkLastDialogMessage(r5, r4, r8)
-            boolean r4 = org.telegram.messenger.BuildVars.LOGS_ENABLED
-            if (r4 == 0) goto L_0x0297
-            org.telegram.messenger.FileLog.d(r11)
-        L_0x0297:
-            int r3 = r3 + 1
-            r4 = 1
-            goto L_0x0013
-        L_0x029c:
-            java.util.ArrayList<org.telegram.tgnet.TLRPC$Dialog> r2 = r0.allDialogs
-            r2.clear()
+            r5[r14] = r8
+            r1.postNotificationName(r2, r5)
+            goto L_0x0131
+        L_0x0130:
+            r9 = 1
+        L_0x0131:
+            androidx.collection.LongSparseArray<org.telegram.messenger.MessageObject> r1 = r0.dialogMessage
+            r14 = r18
+            java.lang.Object r1 = r1.get(r14)
+            org.telegram.messenger.MessageObject r1 = (org.telegram.messenger.MessageObject) r1
+            boolean r2 = org.telegram.messenger.BuildVars.LOGS_ENABLED
+            if (r2 == 0) goto L_0x0196
+            java.lang.StringBuilder r2 = new java.lang.StringBuilder
+            r2.<init>()
+            java.lang.String r5 = "processDialogsUpdate oldMsg "
+            r2.append(r5)
+            r2.append(r1)
+            java.lang.String r5 = " old top_message = "
+            r2.append(r5)
+            int r5 = r10.top_message
+            r2.append(r5)
+            java.lang.String r5 = " new top_message = "
+            r2.append(r5)
+            int r5 = r6.top_message
+            r2.append(r5)
+            java.lang.String r5 = "  unread_count ="
+            r2.append(r5)
+            int r5 = r10.unread_count
+            r2.append(r5)
+            java.lang.String r5 = " fromCache="
+            r2.append(r5)
+            r2.append(r3)
+            java.lang.String r2 = r2.toString()
+            org.telegram.messenger.FileLog.d(r2)
+            java.lang.StringBuilder r2 = new java.lang.StringBuilder
+            r2.<init>()
+            java.lang.String r5 = "processDialogsUpdate oldMsgDeleted "
+            r2.append(r5)
+            if (r1 == 0) goto L_0x018b
+            boolean r5 = r1.deleted
+            if (r5 == 0) goto L_0x018b
+            r5 = 1
+            goto L_0x018c
+        L_0x018b:
+            r5 = 0
+        L_0x018c:
+            r2.append(r5)
+            java.lang.String r2 = r2.toString()
+            org.telegram.messenger.FileLog.d(r2)
+        L_0x0196:
+            if (r1 == 0) goto L_0x021f
+            int r2 = r10.top_message
+            if (r2 <= 0) goto L_0x019e
+            goto L_0x021f
+        L_0x019e:
+            boolean r2 = r1.deleted
+            if (r2 != 0) goto L_0x01ae
+            if (r11 == 0) goto L_0x01ae
+            org.telegram.tgnet.TLRPC$Message r2 = r11.messageOwner
+            int r2 = r2.date
+            org.telegram.tgnet.TLRPC$Message r5 = r1.messageOwner
+            int r5 = r5.date
+            if (r2 <= r5) goto L_0x02ad
+        L_0x01ae:
             androidx.collection.LongSparseArray<org.telegram.tgnet.TLRPC$Dialog> r2 = r0.dialogs_dict
-            int r2 = r2.size()
+            r2.put(r14, r6)
+            androidx.collection.LongSparseArray<org.telegram.messenger.MessageObject> r2 = r0.dialogMessage
+            r2.put(r14, r11)
+            org.telegram.tgnet.TLRPC$Message r2 = r1.messageOwner
+            org.telegram.tgnet.TLRPC$Peer r2 = r2.peer_id
+            long r5 = r2.channel_id
+            r14 = 0
+            int r2 = (r5 > r14 ? 1 : (r5 == r14 ? 0 : -1))
+            if (r2 != 0) goto L_0x01cd
+            android.util.SparseArray<org.telegram.messenger.MessageObject> r2 = r0.dialogMessagesByIds
+            int r5 = r1.getId()
+            r2.remove(r5)
+        L_0x01cd:
+            if (r11 == 0) goto L_0x020e
+            int r2 = r1.getId()
+            int r5 = r11.getId()
+            if (r2 != r5) goto L_0x01dd
+            boolean r2 = r1.deleted
+            r11.deleted = r2
+        L_0x01dd:
+            org.telegram.tgnet.TLRPC$Message r2 = r11.messageOwner
+            org.telegram.tgnet.TLRPC$Peer r2 = r2.peer_id
+            long r5 = r2.channel_id
+            r14 = 0
+            int r2 = (r5 > r14 ? 1 : (r5 == r14 ? 0 : -1))
+            if (r2 != 0) goto L_0x020e
+            android.util.SparseArray<org.telegram.messenger.MessageObject> r2 = r0.dialogMessagesByIds
+            int r5 = r11.getId()
+            r2.put(r5, r11)
+            int r2 = r0.dialogsLoadedTillDate
+            org.telegram.tgnet.TLRPC$Message r5 = r11.messageOwner
+            int r5 = r5.date
+            int r2 = java.lang.Math.min(r2, r5)
+            r0.dialogsLoadedTillDate = r2
+            org.telegram.tgnet.TLRPC$Message r2 = r11.messageOwner
+            long r5 = r2.random_id
+            r14 = 0
+            int r2 = (r5 > r14 ? 1 : (r5 == r14 ? 0 : -1))
+            if (r2 == 0) goto L_0x0210
+            androidx.collection.LongSparseArray<org.telegram.messenger.MessageObject> r2 = r0.dialogMessagesByRandomIds
+            r2.put(r5, r11)
+            goto L_0x0210
+        L_0x020e:
+            r14 = 0
+        L_0x0210:
+            org.telegram.tgnet.TLRPC$Message r1 = r1.messageOwner
+            long r1 = r1.random_id
+            int r5 = (r1 > r14 ? 1 : (r1 == r14 ? 0 : -1))
+            if (r5 == 0) goto L_0x02ad
+            androidx.collection.LongSparseArray<org.telegram.messenger.MessageObject> r5 = r0.dialogMessagesByRandomIds
+            r5.remove(r1)
+            goto L_0x02ad
+        L_0x021f:
+            if (r1 == 0) goto L_0x0225
+            boolean r2 = r1.deleted
+            if (r2 != 0) goto L_0x022b
+        L_0x0225:
+            int r2 = r6.top_message
+            int r5 = r10.top_message
+            if (r2 <= r5) goto L_0x029c
+        L_0x022b:
+            androidx.collection.LongSparseArray<org.telegram.tgnet.TLRPC$Dialog> r2 = r0.dialogs_dict
+            r2.put(r14, r6)
+            androidx.collection.LongSparseArray<org.telegram.messenger.MessageObject> r2 = r0.dialogMessage
+            r2.put(r14, r11)
+            if (r1 == 0) goto L_0x0259
+            org.telegram.tgnet.TLRPC$Message r2 = r1.messageOwner
+            org.telegram.tgnet.TLRPC$Peer r2 = r2.peer_id
+            long r14 = r2.channel_id
+            r16 = 0
+            int r2 = (r14 > r16 ? 1 : (r14 == r16 ? 0 : -1))
+            if (r2 != 0) goto L_0x0259
+            android.util.SparseArray<org.telegram.messenger.MessageObject> r2 = r0.dialogMessagesByIds
+            int r5 = r1.getId()
+            r2.remove(r5)
+            org.telegram.tgnet.TLRPC$Message r2 = r1.messageOwner
+            long r14 = r2.random_id
+            int r2 = (r14 > r16 ? 1 : (r14 == r16 ? 0 : -1))
+            if (r2 == 0) goto L_0x0259
+            androidx.collection.LongSparseArray<org.telegram.messenger.MessageObject> r2 = r0.dialogMessagesByRandomIds
+            r2.remove(r14)
+        L_0x0259:
+            if (r11 == 0) goto L_0x029c
+            if (r1 == 0) goto L_0x026b
+            int r2 = r1.getId()
+            int r5 = r11.getId()
+            if (r2 != r5) goto L_0x026b
+            boolean r1 = r1.deleted
+            r11.deleted = r1
+        L_0x026b:
+            org.telegram.tgnet.TLRPC$Message r1 = r11.messageOwner
+            org.telegram.tgnet.TLRPC$Peer r1 = r1.peer_id
+            long r1 = r1.channel_id
+            r14 = 0
+            int r5 = (r1 > r14 ? 1 : (r1 == r14 ? 0 : -1))
+            if (r5 != 0) goto L_0x029c
+            android.util.SparseArray<org.telegram.messenger.MessageObject> r1 = r0.dialogMessagesByIds
+            int r2 = r11.getId()
+            r1.put(r2, r11)
+            int r1 = r0.dialogsLoadedTillDate
+            org.telegram.tgnet.TLRPC$Message r2 = r11.messageOwner
+            int r2 = r2.date
+            int r1 = java.lang.Math.min(r1, r2)
+            r0.dialogsLoadedTillDate = r1
+            org.telegram.tgnet.TLRPC$Message r1 = r11.messageOwner
+            long r1 = r1.random_id
+            r14 = 0
+            int r5 = (r1 > r14 ? 1 : (r1 == r14 ? 0 : -1))
+            if (r5 == 0) goto L_0x029e
+            androidx.collection.LongSparseArray<org.telegram.messenger.MessageObject> r5 = r0.dialogMessagesByRandomIds
+            r5.put(r1, r11)
+            goto L_0x029e
+        L_0x029c:
+            r14 = 0
+        L_0x029e:
+            if (r3 == 0) goto L_0x02ad
+            if (r11 != 0) goto L_0x02ad
+            r1 = 0
+            r0.checkLastDialogMessage(r6, r1, r14)
+            boolean r1 = org.telegram.messenger.BuildVars.LOGS_ENABLED
+            if (r1 == 0) goto L_0x02ad
+            org.telegram.messenger.FileLog.d(r12)
+        L_0x02ad:
+            int r4 = r4 + 1
+            r2 = r22
+            r1 = 0
+            r5 = 1
+            goto L_0x0015
+        L_0x02b5:
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$Dialog> r1 = r0.allDialogs
+            r1.clear()
+            androidx.collection.LongSparseArray<org.telegram.tgnet.TLRPC$Dialog> r1 = r0.dialogs_dict
+            int r1 = r1.size()
+            r9 = 0
+        L_0x02c1:
+            if (r9 >= r1) goto L_0x02de
+            androidx.collection.LongSparseArray<org.telegram.tgnet.TLRPC$Dialog> r2 = r0.dialogs_dict
+            java.lang.Object r2 = r2.valueAt(r9)
+            org.telegram.tgnet.TLRPC$Dialog r2 = (org.telegram.tgnet.TLRPC$Dialog) r2
+            androidx.collection.LongSparseArray<org.telegram.tgnet.TLRPC$Dialog> r3 = r0.deletingDialogs
+            long r4 = r2.id
+            int r3 = r3.indexOfKey(r4)
+            if (r3 < 0) goto L_0x02d6
+            goto L_0x02db
+        L_0x02d6:
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$Dialog> r3 = r0.allDialogs
+            r3.add(r2)
+        L_0x02db:
+            int r9 = r9 + 1
+            goto L_0x02c1
+        L_0x02de:
+            r2 = 0
+            r0.sortDialogs(r2)
+            org.telegram.messenger.NotificationCenter r1 = r20.getNotificationCenter()
+            int r2 = org.telegram.messenger.NotificationCenter.dialogsNeedReload
             r3 = 0
-        L_0x02a8:
-            if (r3 >= r2) goto L_0x02c5
-            androidx.collection.LongSparseArray<org.telegram.tgnet.TLRPC$Dialog> r4 = r0.dialogs_dict
-            java.lang.Object r4 = r4.valueAt(r3)
-            org.telegram.tgnet.TLRPC$Dialog r4 = (org.telegram.tgnet.TLRPC$Dialog) r4
-            androidx.collection.LongSparseArray<org.telegram.tgnet.TLRPC$Dialog> r5 = r0.deletingDialogs
-            long r6 = r4.id
-            int r5 = r5.indexOfKey(r6)
-            if (r5 < 0) goto L_0x02bd
-            goto L_0x02c2
-        L_0x02bd:
-            java.util.ArrayList<org.telegram.tgnet.TLRPC$Dialog> r5 = r0.allDialogs
-            r5.add(r4)
-        L_0x02c2:
-            int r3 = r3 + 1
-            goto L_0x02a8
-        L_0x02c5:
-            r3 = 0
-            r0.sortDialogs(r3)
-            org.telegram.messenger.NotificationCenter r2 = r18.getNotificationCenter()
-            int r3 = org.telegram.messenger.NotificationCenter.dialogsNeedReload
-            java.lang.Object[] r1 = new java.lang.Object[r1]
-            r2.postNotificationName(r3, r1)
-            org.telegram.messenger.NotificationsController r1 = r18.getNotificationsController()
-            r2 = r23
+            java.lang.Object[] r3 = new java.lang.Object[r3]
+            r1.postNotificationName(r2, r3)
+            org.telegram.messenger.NotificationsController r1 = r20.getNotificationsController()
+            r2 = r25
             r1.processDialogsUpdateRead(r2)
             return
         */

@@ -349,11 +349,6 @@ public class MentionsContainerView extends BlurredFrameLayout {
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$new$1() {
-        NotificationCenter.getInstance(UserConfig.selectedAccount).doOnIdle(new MentionsContainerView$$ExternalSyntheticLambda4(this));
-    }
-
-    /* access modifiers changed from: private */
     public /* synthetic */ void lambda$new$0() {
         updateListViewTranslation(!this.shown, true);
     }
@@ -384,7 +379,7 @@ public class MentionsContainerView extends BlurredFrameLayout {
         if (springAnimation != null) {
             springAnimation.cancel();
         }
-        AndroidUtilities.runOnUIThread(this.updateVisibilityRunnable, this.chatActivity.fragmentOpened ? 0 : 50);
+        AndroidUtilities.runOnUIThread(this.updateVisibilityRunnable, this.chatActivity.fragmentOpened ? 0 : 100);
         if (z) {
             onOpen();
         } else {
@@ -465,13 +460,13 @@ public class MentionsContainerView extends BlurredFrameLayout {
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$updateListViewTranslation$2(float f, float f2, float f3, float f4, DynamicAnimation dynamicAnimation, float f5, float f6) {
+    public /* synthetic */ void lambda$updateListViewTranslation$1(float f, float f2, float f3, float f4, DynamicAnimation dynamicAnimation, float f5, float f6) {
         this.listView.setTranslationY(f5);
         this.hideT = AndroidUtilities.lerp(f, f2, (f5 - f3) / (f4 - f3));
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$updateListViewTranslation$3(boolean z, DynamicAnimation dynamicAnimation, boolean z2, float f, float f2) {
+    public /* synthetic */ void lambda$updateListViewTranslation$2(boolean z, DynamicAnimation dynamicAnimation, boolean z2, float f, float f2) {
         if (!z2) {
             this.listViewTranslationAnimator = null;
             setVisibility(z ? 8 : 0);
@@ -485,7 +480,7 @@ public class MentionsContainerView extends BlurredFrameLayout {
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$updateListViewTranslation$4(int i, DynamicAnimation dynamicAnimation, boolean z, float f, float f2) {
+    public /* synthetic */ void lambda$updateListViewTranslation$3(int i, DynamicAnimation dynamicAnimation, boolean z, float f, float f2) {
         NotificationCenter.getInstance(i).onAnimationFinish(this.animationIndex);
     }
 

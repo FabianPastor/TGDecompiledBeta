@@ -17049,7 +17049,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         if (r4.get(r4.size() - 2) == r8.scrollToMessage) goto L_0x0var_;
      */
     /* JADX WARNING: Incorrect type for immutable var: ssa=boolean, code=?, for r12v14, types: [boolean] */
-    /* JADX WARNING: Incorrect type for immutable var: ssa=int, code=?, for r2v558, types: [boolean, int] */
+    /* JADX WARNING: Incorrect type for immutable var: ssa=int, code=?, for r2v558, types: [int, boolean] */
     /* JADX WARNING: Multi-variable type inference failed */
     /* JADX WARNING: Removed duplicated region for block: B:1421:0x1af7 A[SYNTHETIC, Splitter:B:1421:0x1af7] */
     /* JADX WARNING: Removed duplicated region for block: B:1444:0x1b4a  */
@@ -24854,7 +24854,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
 
     /* JADX WARNING: type inference failed for: r4v33 */
     /* JADX WARNING: type inference failed for: r4v34 */
-    /* JADX WARNING: Incorrect type for immutable var: ssa=int, code=?, for r4v32, types: [boolean, int] */
+    /* JADX WARNING: Incorrect type for immutable var: ssa=int, code=?, for r4v32, types: [int, boolean] */
     /* JADX WARNING: Removed duplicated region for block: B:393:0x0657  */
     /* JADX WARNING: Removed duplicated region for block: B:434:0x0701  */
     /* JADX WARNING: Removed duplicated region for block: B:437:0x070b  */

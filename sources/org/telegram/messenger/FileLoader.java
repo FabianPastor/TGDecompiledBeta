@@ -1569,8 +1569,8 @@ public class FileLoader extends BaseController {
         return getPathToAttach(tLObject, (String) null, str, z, z2);
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:97:0x0155  */
-    /* JADX WARNING: Removed duplicated region for block: B:99:0x015d  */
+    /* JADX WARNING: Removed duplicated region for block: B:101:0x0166  */
+    /* JADX WARNING: Removed duplicated region for block: B:103:0x016e  */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public java.io.File getPathToAttach(org.telegram.tgnet.TLObject r11, java.lang.String r12, java.lang.String r13, boolean r14, boolean r15) {
         /*
@@ -1585,7 +1585,7 @@ public class FileLoader extends BaseController {
             r4 = r0
             r6 = 0
             r7 = 0
-            goto L_0x0153
+            goto L_0x0164
         L_0x0010:
             boolean r14 = r11 instanceof org.telegram.tgnet.TLRPC$Document
             r5 = 2
@@ -1621,9 +1621,10 @@ public class FileLoader extends BaseController {
             long r4 = r12.id
             int r12 = r12.dc_id
             java.io.File r2 = getDirectory(r3)
+        L_0x0048:
             r6 = r12
             r7 = r3
-            goto L_0x0153
+            goto L_0x0164
         L_0x004c:
             boolean r14 = r11 instanceof org.telegram.tgnet.TLRPC$Photo
             if (r14 == 0) goto L_0x0061
@@ -1636,161 +1637,177 @@ public class FileLoader extends BaseController {
         L_0x0061:
             boolean r14 = r11 instanceof org.telegram.tgnet.TLRPC$PhotoSize
             r8 = -2147483648(0xfffffffvar_, double:NaN)
-            if (r14 == 0) goto L_0x0097
+            if (r14 == 0) goto L_0x009f
             r12 = r11
             org.telegram.tgnet.TLRPC$PhotoSize r12 = (org.telegram.tgnet.TLRPC$PhotoSize) r12
             boolean r14 = r12 instanceof org.telegram.tgnet.TLRPC$TL_photoStrippedSize
-            if (r14 != 0) goto L_0x000b
+            if (r14 != 0) goto L_0x0097
             boolean r14 = r12 instanceof org.telegram.tgnet.TLRPC$TL_photoPathSize
             if (r14 == 0) goto L_0x0074
-            goto L_0x000b
+            goto L_0x0097
         L_0x0074:
             org.telegram.tgnet.TLRPC$FileLocation r14 = r12.location
-            if (r14 == 0) goto L_0x0090
+            if (r14 == 0) goto L_0x0091
             byte[] r2 = r14.key
-            if (r2 != 0) goto L_0x0090
+            if (r2 != 0) goto L_0x0091
             long r5 = r14.volume_id
             int r2 = (r5 > r8 ? 1 : (r5 == r8 ? 0 : -1))
             if (r2 != 0) goto L_0x0086
             int r14 = r14.local_id
-            if (r14 < 0) goto L_0x0090
+            if (r14 < 0) goto L_0x0091
         L_0x0086:
-            int r12 = r12.size
-            if (r12 >= 0) goto L_0x008b
-            goto L_0x0090
+            int r14 = r12.size
+            if (r14 >= 0) goto L_0x008b
+            goto L_0x0091
         L_0x008b:
-            java.io.File r12 = getDirectory(r4)
-            goto L_0x0094
-        L_0x0090:
-            java.io.File r12 = getDirectory(r3)
-        L_0x0094:
-            r2 = r12
-            goto L_0x000b
+            java.io.File r14 = getDirectory(r4)
+            r2 = r14
+            goto L_0x0097
+        L_0x0091:
+            java.io.File r14 = getDirectory(r3)
+            r2 = r14
+            goto L_0x0098
         L_0x0097:
+            r3 = 0
+        L_0x0098:
+            org.telegram.tgnet.TLRPC$FileLocation r12 = r12.location
+            long r4 = r12.volume_id
+            int r12 = r12.dc_id
+            goto L_0x0048
+        L_0x009f:
             boolean r14 = r11 instanceof org.telegram.tgnet.TLRPC$TL_videoSize
-            if (r14 == 0) goto L_0x00bf
+            if (r14 == 0) goto L_0x00d1
             r12 = r11
             org.telegram.tgnet.TLRPC$TL_videoSize r12 = (org.telegram.tgnet.TLRPC$TL_videoSize) r12
             org.telegram.tgnet.TLRPC$FileLocation r14 = r12.location
-            if (r14 == 0) goto L_0x00ba
+            if (r14 == 0) goto L_0x00c4
             byte[] r2 = r14.key
-            if (r2 != 0) goto L_0x00ba
+            if (r2 != 0) goto L_0x00c4
             long r5 = r14.volume_id
             int r2 = (r5 > r8 ? 1 : (r5 == r8 ? 0 : -1))
-            if (r2 != 0) goto L_0x00b0
+            if (r2 != 0) goto L_0x00b8
             int r14 = r14.local_id
-            if (r14 < 0) goto L_0x00ba
-        L_0x00b0:
-            int r12 = r12.size
-            if (r12 >= 0) goto L_0x00b5
-            goto L_0x00ba
-        L_0x00b5:
-            java.io.File r12 = getDirectory(r4)
-            goto L_0x0094
-        L_0x00ba:
-            java.io.File r12 = getDirectory(r3)
-            goto L_0x0094
-        L_0x00bf:
+            if (r14 < 0) goto L_0x00c4
+        L_0x00b8:
+            int r14 = r12.size
+            if (r14 >= 0) goto L_0x00bd
+            goto L_0x00c4
+        L_0x00bd:
+            java.io.File r14 = getDirectory(r4)
+            r2 = r14
+            r3 = 0
+            goto L_0x00c9
+        L_0x00c4:
+            java.io.File r14 = getDirectory(r3)
+            r2 = r14
+        L_0x00c9:
+            org.telegram.tgnet.TLRPC$FileLocation r12 = r12.location
+            long r4 = r12.volume_id
+            int r12 = r12.dc_id
+            goto L_0x0048
+        L_0x00d1:
             boolean r14 = r11 instanceof org.telegram.tgnet.TLRPC$FileLocation
-            if (r14 == 0) goto L_0x00e9
+            if (r14 == 0) goto L_0x00fb
             r12 = r11
             org.telegram.tgnet.TLRPC$FileLocation r12 = (org.telegram.tgnet.TLRPC$FileLocation) r12
             byte[] r14 = r12.key
-            if (r14 != 0) goto L_0x00dd
+            if (r14 != 0) goto L_0x00ef
             long r5 = r12.volume_id
             int r14 = (r5 > r8 ? 1 : (r5 == r8 ? 0 : -1))
-            if (r14 != 0) goto L_0x00d5
+            if (r14 != 0) goto L_0x00e7
             int r14 = r12.local_id
-            if (r14 >= 0) goto L_0x00d5
-            goto L_0x00dd
-        L_0x00d5:
+            if (r14 >= 0) goto L_0x00e7
+            goto L_0x00ef
+        L_0x00e7:
             int r12 = r12.dc_id
             java.io.File r14 = getDirectory(r4)
             r2 = r14
-            goto L_0x00e4
-        L_0x00dd:
+            goto L_0x00f6
+        L_0x00ef:
             java.io.File r12 = getDirectory(r3)
             r2 = r12
             r5 = r0
             r12 = 0
-        L_0x00e4:
+        L_0x00f6:
             r4 = r5
             r7 = 0
             r6 = r12
-            goto L_0x0153
-        L_0x00e9:
+            goto L_0x0164
+        L_0x00fb:
             boolean r14 = r11 instanceof org.telegram.tgnet.TLRPC$UserProfilePhoto
-            if (r14 != 0) goto L_0x013c
+            if (r14 != 0) goto L_0x014d
             boolean r14 = r11 instanceof org.telegram.tgnet.TLRPC$ChatPhoto
-            if (r14 == 0) goto L_0x00f2
-            goto L_0x013c
-        L_0x00f2:
+            if (r14 == 0) goto L_0x0104
+            goto L_0x014d
+        L_0x0104:
             boolean r12 = r11 instanceof org.telegram.messenger.WebFile
-            if (r12 == 0) goto L_0x012e
+            if (r12 == 0) goto L_0x013f
             r12 = r11
             org.telegram.messenger.WebFile r12 = (org.telegram.messenger.WebFile) r12
             java.lang.String r14 = r12.mime_type
             java.lang.String r2 = "image/"
             boolean r14 = r14.startsWith(r2)
-            if (r14 == 0) goto L_0x0108
+            if (r14 == 0) goto L_0x011c
             java.io.File r12 = getDirectory(r4)
-            goto L_0x0094
-        L_0x0108:
+        L_0x0119:
+            r2 = r12
+            goto L_0x000b
+        L_0x011c:
             java.lang.String r14 = r12.mime_type
             java.lang.String r2 = "audio/"
             boolean r14 = r14.startsWith(r2)
-            if (r14 == 0) goto L_0x0118
+            if (r14 == 0) goto L_0x012b
             java.io.File r12 = getDirectory(r7)
-            goto L_0x0094
-        L_0x0118:
+            goto L_0x0119
+        L_0x012b:
             java.lang.String r12 = r12.mime_type
             java.lang.String r14 = "video/"
             boolean r12 = r12.startsWith(r14)
-            if (r12 == 0) goto L_0x0128
+            if (r12 == 0) goto L_0x013a
             java.io.File r12 = getDirectory(r5)
-            goto L_0x0094
-        L_0x0128:
+            goto L_0x0119
+        L_0x013a:
             java.io.File r12 = getDirectory(r6)
-            goto L_0x0094
-        L_0x012e:
+            goto L_0x0119
+        L_0x013f:
             boolean r12 = r11 instanceof org.telegram.tgnet.TLRPC$TL_secureFile
-            if (r12 != 0) goto L_0x0136
+            if (r12 != 0) goto L_0x0147
             boolean r12 = r11 instanceof org.telegram.messenger.SecureDocument
             if (r12 == 0) goto L_0x000b
-        L_0x0136:
-            java.io.File r2 = getDirectory(r3)
-            goto L_0x000b
-        L_0x013c:
-            java.lang.String r14 = "s"
-            if (r12 != 0) goto L_0x0141
-            r12 = r14
-        L_0x0141:
-            boolean r12 = r14.equals(r12)
-            if (r12 == 0) goto L_0x014d
+        L_0x0147:
             java.io.File r2 = getDirectory(r3)
             goto L_0x000b
         L_0x014d:
+            java.lang.String r14 = "s"
+            if (r12 != 0) goto L_0x0152
+            r12 = r14
+        L_0x0152:
+            boolean r12 = r14.equals(r12)
+            if (r12 == 0) goto L_0x015e
+            java.io.File r2 = getDirectory(r3)
+            goto L_0x000b
+        L_0x015e:
             java.io.File r2 = getDirectory(r4)
             goto L_0x000b
-        L_0x0153:
-            if (r2 != 0) goto L_0x015d
+        L_0x0164:
+            if (r2 != 0) goto L_0x016e
             java.io.File r11 = new java.io.File
             java.lang.String r12 = ""
             r11.<init>(r12)
             return r11
-        L_0x015d:
+        L_0x016e:
             int r12 = (r4 > r0 ? 1 : (r4 == r0 ? 0 : -1))
-            if (r12 == 0) goto L_0x0178
+            if (r12 == 0) goto L_0x0189
             int r12 = org.telegram.messenger.UserConfig.selectedAccount
             org.telegram.messenger.FileLoader r12 = getInstance(r12)
             org.telegram.messenger.FilePathDatabase r3 = r12.getFileDatabase()
             r8 = r15
             java.lang.String r12 = r3.getPath(r4, r6, r7, r8)
-            if (r12 == 0) goto L_0x0178
+            if (r12 == 0) goto L_0x0189
             java.io.File r11 = new java.io.File
             r11.<init>(r12)
             return r11
-        L_0x0178:
+        L_0x0189:
             java.io.File r12 = new java.io.File
             java.lang.String r11 = getAttachFileName(r11, r13)
             r12.<init>(r2, r11)

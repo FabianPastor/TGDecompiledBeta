@@ -275,7 +275,7 @@ public class TwoStepVerificationActivity extends BaseFragment implements Notific
             org.telegram.ui.Components.RLottieImageView r10 = new org.telegram.ui.Components.RLottieImageView
             r10.<init>(r1)
             r0.lockImageView = r10
-            r11 = 2131558557(0x7f0d009d, float:1.8742433E38)
+            r11 = 2131558558(0x7f0d009e, float:1.8742435E38)
             r12 = 120(0x78, float:1.68E-43)
             r10.setAnimation(r11, r12, r12)
             org.telegram.ui.Components.RLottieImageView r10 = r0.lockImageView

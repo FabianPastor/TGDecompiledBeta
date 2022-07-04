@@ -2266,8 +2266,7 @@ public class FileLoadOperation {
                                 return;
                             }
                             this.cacheFileFinal = this.cacheFileTemp;
-                        }
-                        if (this.pathSaveData != null && this.cacheFileFinal.exists()) {
+                        } else if (this.pathSaveData != null && this.cacheFileFinal.exists()) {
                             this.delegate.saveFilePath(this.pathSaveData, this.cacheFileFinal);
                         }
                     } else {

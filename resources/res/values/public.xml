@@ -1708,6 +1708,7 @@
     <public type="raw" name="sound_out" id="NUM" />
     <public type="raw" name="speaker" id="NUM" />
     <public type="raw" name="star_loader" id="NUM" />
+    <public type="raw" name="start_texture" id="NUM" />
     <public type="raw" name="statistic_preload" id="NUM" />
     <public type="raw" name="sun" id="NUM" />
     <public type="raw" name="sun_outline" id="NUM" />

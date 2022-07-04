@@ -12,6 +12,6 @@ public final /* synthetic */ class MentionsContainerView$$ExternalSyntheticLambd
     }
 
     public final void onAnimationEnd(DynamicAnimation dynamicAnimation, boolean z, float f, float f2) {
-        this.f$0.lambda$updateListViewTranslation$3(this.f$1, dynamicAnimation, z, f, f2);
+        this.f$0.lambda$updateListViewTranslation$2(this.f$1, dynamicAnimation, z, f, f2);
     }
 }

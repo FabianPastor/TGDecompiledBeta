@@ -127,6 +127,7 @@ public class PremiumAppIconsPreviewView extends FrameLayout implements PagerHead
             if (i == 0) {
                 drawable2.type = 1002;
             }
+            drawable2.colorKey = "premiumStartSmallStarsColor2";
             drawable2.init();
             this.paint.setColor(-1);
         }
