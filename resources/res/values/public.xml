@@ -825,6 +825,7 @@
     <public type="drawable" name="msg_mini_customize" id="NUM" />
     <public type="drawable" name="msg_mini_premiumlock" id="NUM" />
     <public type="drawable" name="msg_mini_qr" id="NUM" />
+    <public type="drawable" name="msg_mini_stickerstar" id="NUM" />
     <public type="drawable" name="msg_minvideo" id="NUM" />
     <public type="drawable" name="msg_more_0_2" id="NUM" />
     <public type="drawable" name="msg_more_0_5" id="NUM" />
@@ -1782,11 +1783,13 @@
     <public type="string" name="AboutTelegramPremium" id="NUM" />
     <public type="string" name="AccActionCancelDownload" id="NUM" />
     <public type="string" name="AccActionChatPreview" id="NUM" />
+    <public type="string" name="AccActionCloseTranscription" id="NUM" />
     <public type="string" name="AccActionDownload" id="NUM" />
     <public type="string" name="AccActionEnterSelectionMode" id="NUM" />
     <public type="string" name="AccActionMessageOptions" id="NUM" />
     <public type="string" name="AccActionOpenFile" id="NUM" />
     <public type="string" name="AccActionOpenForwardedOrigin" id="NUM" />
+    <public type="string" name="AccActionOpenTranscription" id="NUM" />
     <public type="string" name="AccActionPause" id="NUM" />
     <public type="string" name="AccActionPlay" id="NUM" />
     <public type="string" name="AccActionRecordVideo" id="NUM" />
@@ -3632,6 +3635,7 @@
     <public type="string" name="FeaturedGifs" id="NUM" />
     <public type="string" name="FeaturedStickers" id="NUM" />
     <public type="string" name="FeaturedStickersInfo" id="NUM" />
+    <public type="string" name="FeaturedStickersPremium" id="NUM" />
     <public type="string" name="FeaturedStickersShort" id="NUM" />
     <public type="string" name="February" id="NUM" />
     <public type="string" name="FileSavedHint" id="NUM" />

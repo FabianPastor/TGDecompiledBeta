@@ -698,7 +698,7 @@ public class GroupStickersActivity extends BaseFragment implements NotificationC
                 java.lang.String r1 = "windowBackgroundGrayShadow"
                 android.graphics.drawable.Drawable r10 = org.telegram.ui.ActionBar.Theme.getThemedDrawable((android.content.Context) r10, (int) r0, (java.lang.String) r1)
                 r9.setBackground(r10)
-                r10 = 2131625112(0x7f0e0498, float:1.8877423E38)
+                r10 = 2131625114(0x7f0e049a, float:1.8877427E38)
                 java.lang.String r10 = org.telegram.messenger.LocaleController.getString((int) r10)
                 r9.setText(r10)
                 goto L_0x0041

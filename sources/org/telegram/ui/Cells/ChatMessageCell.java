@@ -651,9 +651,12 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
     public int totalCommentWidth;
     private int totalHeight;
     private int totalVisibleBlocksCount;
-    private TranscribeButton transcribeButton;
-    private float transcribeX;
-    private float transcribeY;
+    /* access modifiers changed from: private */
+    public TranscribeButton transcribeButton;
+    /* access modifiers changed from: private */
+    public float transcribeX;
+    /* access modifiers changed from: private */
+    public float transcribeY;
     /* access modifiers changed from: private */
     public final TransitionParams transitionParams;
     float transitionYOffsetForDrawables;
@@ -663,7 +666,8 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
     private ArrayList<LinkPath> urlPathSelection;
     /* access modifiers changed from: private */
     public boolean useSeekBarWaveform;
-    private boolean useTranscribeButton;
+    /* access modifiers changed from: private */
+    public boolean useTranscribeButton;
     private int viaNameWidth;
     private TypefaceSpan viaSpan1;
     private TypefaceSpan viaSpan2;
@@ -6625,11 +6629,11 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             int r9 = r9 + 500
             boolean r7 = r10.correct
             if (r7 == 0) goto L_0x01de
-            r7 = 2131624045(0x7f0e006d, float:1.8875259E38)
+            r7 = 2131624047(0x7f0e006f, float:1.8875263E38)
             java.lang.String r8 = "AccDescrQuizCorrectAnswer"
             goto L_0x01e3
         L_0x01de:
-            r7 = 2131624047(0x7f0e006f, float:1.8875263E38)
+            r7 = 2131624049(0x7f0e0071, float:1.8875267E38)
             java.lang.String r8 = "AccDescrQuizIncorrectAnswer"
         L_0x01e3:
             java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r8, r7)
@@ -7191,7 +7195,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
         L_0x05e2:
             boolean r2 = r1.isRepliesChat
             if (r2 == 0) goto L_0x05f2
-            r2 = 2131628913(0x7f0e1371, float:1.8885132E38)
+            r2 = 2131628916(0x7f0e1374, float:1.8885138E38)
             java.lang.String r3 = "ViewInChat"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
         L_0x05ef:
@@ -7201,7 +7205,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             boolean r2 = org.telegram.messenger.LocaleController.isRTL
             if (r2 == 0) goto L_0x060b
             if (r0 != 0) goto L_0x0602
-            r2 = 2131626382(0x7f0e098e, float:1.8879999E38)
+            r2 = 2131626385(0x7f0e0991, float:1.8880005E38)
             java.lang.String r3 = "LeaveAComment"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             goto L_0x061d
@@ -7212,7 +7216,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             goto L_0x061d
         L_0x060b:
             if (r0 != 0) goto L_0x0617
-            r2 = 2131626382(0x7f0e098e, float:1.8879999E38)
+            r2 = 2131626385(0x7f0e0991, float:1.8880005E38)
             java.lang.String r3 = "LeaveAComment"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             goto L_0x061d
@@ -7999,7 +8003,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             int r3 = r3 + 1
             goto L_0x0bf4
         L_0x0c1c:
-            r2 = 2131627074(0x7f0e0CLASSNAME, float:1.8881402E38)
+            r2 = 2131627077(0x7f0e0CLASSNAME, float:1.8881408E38)
             r3 = 2
             java.lang.Object[] r6 = new java.lang.Object[r3]
             java.lang.Integer r3 = java.lang.Integer.valueOf(r13)
@@ -8459,21 +8463,21 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             r51 = r3
             r3 = 11
             if (r12 != r3) goto L_0x0f5f
-            r0 = 2131628997(0x7f0e13c5, float:1.8885302E38)
+            r0 = 2131629000(0x7f0e13c8, float:1.8885309E38)
             java.lang.String r3 = "VoipChannelVoiceChat"
             java.lang.String r12 = org.telegram.messenger.LocaleController.getString(r3, r0)
             goto L_0x0f8e
         L_0x0f5f:
             r3 = 9
             if (r12 != r3) goto L_0x0f6d
-            r0 = 2131629127(0x7f0e1447, float:1.8885566E38)
+            r0 = 2131629130(0x7f0e144a, float:1.8885572E38)
             java.lang.String r3 = "VoipGroupVoiceChat"
             java.lang.String r12 = org.telegram.messenger.LocaleController.getString(r3, r0)
             goto L_0x0f8e
         L_0x0f6d:
             r3 = 6
             if (r12 != r3) goto L_0x0f7a
-            r0 = 2131625000(0x7f0e0428, float:1.8877196E38)
+            r0 = 2131625002(0x7f0e042a, float:1.88772E38)
             java.lang.String r3 = "ChatBackground"
             java.lang.String r12 = org.telegram.messenger.LocaleController.getString(r3, r0)
             goto L_0x0f8e
@@ -8481,7 +8485,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             java.lang.String r3 = "telegram_theme"
             boolean r0 = r3.equals(r0)
             if (r0 == 0) goto L_0x0f8c
-            r0 = 2131625183(0x7f0e04df, float:1.8877567E38)
+            r0 = 2131625185(0x7f0e04e1, float:1.887757E38)
             java.lang.String r3 = "ColorTheme"
             java.lang.String r12 = org.telegram.messenger.LocaleController.getString(r3, r0)
             goto L_0x0f8e
@@ -10899,7 +10903,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             r2 = 1
         L_0x2072:
             if (r2 == 0) goto L_0x20a1
-            r2 = 2131624480(0x7f0e0220, float:1.887614E38)
+            r2 = 2131624482(0x7f0e0222, float:1.8876145E38)
             java.lang.String r3 = "AttachGame"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             java.lang.String r4 = r2.toUpperCase()
@@ -10930,7 +10934,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             r12 = 4
             r3 = r3 & r12
             if (r3 == 0) goto L_0x20bf
-            r2 = 2131627404(0x7f0e0d8c, float:1.8882071E38)
+            r2 = 2131627407(0x7f0e0d8f, float:1.8882078E38)
             java.lang.String r3 = "PaymentReceipt"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             java.lang.String r2 = r2.toUpperCase()
@@ -10938,13 +10942,13 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
         L_0x20bf:
             boolean r2 = r2.test
             if (r2 == 0) goto L_0x20d1
-            r2 = 2131627424(0x7f0e0da0, float:1.8882112E38)
+            r2 = 2131627427(0x7f0e0da3, float:1.8882118E38)
             java.lang.String r3 = "PaymentTestInvoice"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             java.lang.String r2 = r2.toUpperCase()
             goto L_0x20de
         L_0x20d1:
-            r2 = 2131627390(0x7f0e0d7e, float:1.8882043E38)
+            r2 = 2131627393(0x7f0e0d81, float:1.888205E38)
             java.lang.String r3 = "PaymentInvoice"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             java.lang.String r2 = r2.toUpperCase()
@@ -11136,24 +11140,24 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             if (r4 == 0) goto L_0x226e
             boolean r4 = r3.video
             if (r4 == 0) goto L_0x2264
-            r4 = 2131624794(0x7f0e035a, float:1.8876778E38)
+            r4 = 2131624796(0x7f0e035c, float:1.8876782E38)
             java.lang.String r5 = "CallMessageVideoOutgoingMissed"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r5, r4)
             goto L_0x22d5
         L_0x2264:
-            r4 = 2131624788(0x7f0e0354, float:1.8876766E38)
+            r4 = 2131624790(0x7f0e0356, float:1.887677E38)
             java.lang.String r5 = "CallMessageOutgoingMissed"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r5, r4)
             goto L_0x22d5
         L_0x226e:
             boolean r4 = r3.video
             if (r4 == 0) goto L_0x227c
-            r4 = 2131624793(0x7f0e0359, float:1.8876776E38)
+            r4 = 2131624795(0x7f0e035b, float:1.887678E38)
             java.lang.String r5 = "CallMessageVideoOutgoing"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r5, r4)
             goto L_0x22d5
         L_0x227c:
-            r4 = 2131624787(0x7f0e0353, float:1.8876764E38)
+            r4 = 2131624789(0x7f0e0355, float:1.8876768E38)
             java.lang.String r5 = "CallMessageOutgoing"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r5, r4)
             goto L_0x22d5
@@ -11161,12 +11165,12 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             if (r4 == 0) goto L_0x22a0
             boolean r4 = r3.video
             if (r4 == 0) goto L_0x2296
-            r4 = 2131624792(0x7f0e0358, float:1.8876774E38)
+            r4 = 2131624794(0x7f0e035a, float:1.8876778E38)
             java.lang.String r5 = "CallMessageVideoIncomingMissed"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r5, r4)
             goto L_0x22d5
         L_0x2296:
-            r4 = 2131624786(0x7f0e0352, float:1.8876762E38)
+            r4 = 2131624788(0x7f0e0354, float:1.8876766E38)
             java.lang.String r5 = "CallMessageIncomingMissed"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r5, r4)
             goto L_0x22d5
@@ -11176,24 +11180,24 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             if (r4 == 0) goto L_0x22be
             boolean r4 = r3.video
             if (r4 == 0) goto L_0x22b4
-            r4 = 2131624791(0x7f0e0357, float:1.8876772E38)
+            r4 = 2131624793(0x7f0e0359, float:1.8876776E38)
             java.lang.String r5 = "CallMessageVideoIncomingDeclined"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r5, r4)
             goto L_0x22d5
         L_0x22b4:
-            r4 = 2131624785(0x7f0e0351, float:1.887676E38)
+            r4 = 2131624787(0x7f0e0353, float:1.8876764E38)
             java.lang.String r5 = "CallMessageIncomingDeclined"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r5, r4)
             goto L_0x22d5
         L_0x22be:
             boolean r4 = r3.video
             if (r4 == 0) goto L_0x22cc
-            r4 = 2131624790(0x7f0e0356, float:1.887677E38)
+            r4 = 2131624792(0x7f0e0358, float:1.8876774E38)
             java.lang.String r5 = "CallMessageVideoIncoming"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r5, r4)
             goto L_0x22d5
         L_0x22cc:
-            r4 = 2131624784(0x7f0e0350, float:1.8876757E38)
+            r4 = 2131624786(0x7f0e0352, float:1.8876762E38)
             java.lang.String r5 = "CallMessageIncoming"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r5, r4)
         L_0x22d5:
@@ -11412,7 +11416,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             java.lang.String r0 = r3.format(r0)
             goto L_0x2450
         L_0x248f:
-            r0 = 2131627071(0x7f0e0c3f, float:1.8881396E38)
+            r0 = 2131627074(0x7f0e0CLASSNAME, float:1.8881402E38)
             java.lang.String r3 = "NumberUnknown"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r3, r0)
             goto L_0x2450
@@ -11975,7 +11979,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
         L_0x28e3:
             boolean r4 = r1.pollClosed
             if (r4 == 0) goto L_0x28f1
-            r4 = 2131625899(0x7f0e07ab, float:1.8879019E38)
+            r4 = 2131625902(0x7f0e07ae, float:1.8879025E38)
             java.lang.String r5 = "FinalResults"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r5, r4)
             goto L_0x2926
@@ -11985,24 +11989,24 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             if (r5 == 0) goto L_0x290f
             boolean r4 = r4.public_voters
             if (r4 == 0) goto L_0x2905
-            r4 = 2131627820(0x7f0e0f2c, float:1.8882915E38)
+            r4 = 2131627823(0x7f0e0f2f, float:1.8882921E38)
             java.lang.String r5 = "QuizPoll"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r5, r4)
             goto L_0x2926
         L_0x2905:
-            r4 = 2131624355(0x7f0e01a3, float:1.8875887E38)
+            r4 = 2131624357(0x7f0e01a5, float:1.8875891E38)
             java.lang.String r5 = "AnonymousQuizPoll"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r5, r4)
             goto L_0x2926
         L_0x290f:
             boolean r4 = r4.public_voters
             if (r4 == 0) goto L_0x291d
-            r4 = 2131627765(0x7f0e0ef5, float:1.8882804E38)
+            r4 = 2131627768(0x7f0e0ef8, float:1.888281E38)
             java.lang.String r5 = "PublicPoll"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r5, r4)
             goto L_0x2926
         L_0x291d:
-            r4 = 2131624354(0x7f0e01a2, float:1.8875885E38)
+            r4 = 2131624356(0x7f0e01a4, float:1.887589E38)
             java.lang.String r5 = "AnonymousPoll"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r5, r4)
         L_0x2926:
@@ -12078,7 +12082,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             org.telegram.tgnet.TLRPC$PollResults r4 = r2.results
             int r4 = r4.total_voters
             if (r4 != 0) goto L_0x29bc
-            r4 = 2131626876(0x7f0e0b7c, float:1.8881E38)
+            r4 = 2131626879(0x7f0e0b7f, float:1.8881007E38)
             java.lang.String r6 = "NoVotesQuiz"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r6, r4)
             goto L_0x29c4
@@ -12095,7 +12099,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             org.telegram.tgnet.TLRPC$PollResults r4 = r2.results
             int r4 = r4.total_voters
             if (r4 != 0) goto L_0x29dc
-            r4 = 2131626875(0x7f0e0b7b, float:1.8880999E38)
+            r4 = 2131626878(0x7f0e0b7e, float:1.8881005E38)
             java.lang.String r6 = "NoVotes"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r6, r4)
             goto L_0x29e4
@@ -12712,19 +12716,19 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
         L_0x2e64:
             if (r12 >= r3) goto L_0x2e9c
             if (r12 != 0) goto L_0x2e72
-            r3 = 2131627586(0x7f0e0e42, float:1.888244E38)
+            r3 = 2131627589(0x7f0e0e45, float:1.8882447E38)
             java.lang.String r4 = "PollViewResults"
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r4, r3)
             goto L_0x2e88
         L_0x2e72:
             r3 = 1
             if (r12 != r3) goto L_0x2e7f
-            r3 = 2131627584(0x7f0e0e40, float:1.8882437E38)
+            r3 = 2131627587(0x7f0e0e43, float:1.8882443E38)
             java.lang.String r4 = "PollSubmitVotes"
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r4, r3)
             goto L_0x2e88
         L_0x2e7f:
-            r3 = 2131626875(0x7f0e0b7b, float:1.8880999E38)
+            r3 = 2131626878(0x7f0e0b7e, float:1.8881005E38)
             java.lang.String r4 = "NoVotes"
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r4, r3)
         L_0x2e88:
@@ -13514,7 +13518,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             r12 = 0
         L_0x3477:
             android.text.StaticLayout r0 = new android.text.StaticLayout
-            r2 = 2131624486(0x7f0e0226, float:1.8876153E38)
+            r2 = 2131624488(0x7f0e0228, float:1.8876157E38)
             java.lang.String r3 = "AttachLiveLocation"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             android.text.TextPaint r3 = org.telegram.ui.ActionBar.Theme.chat_locationTitlePaint
@@ -16151,7 +16155,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             if (r2 == 0) goto L_0x4708
             org.telegram.messenger.ImageReceiver r2 = r1.photoImage
             android.content.res.Resources r3 = r73.getResources()
-            r4 = 2131166181(0x7var_e5, float:1.79466E38)
+            r4 = 2131166182(0x7var_e6, float:1.7946602E38)
             android.graphics.drawable.Drawable r3 = r3.getDrawable(r4)
             r2.setImageBitmap((android.graphics.drawable.Drawable) r3)
         L_0x4703:
@@ -17556,7 +17560,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             r8 = 4
             r5 = r5 & r8
             if (r5 == 0) goto L_0x5180
-            r5 = 2131627404(0x7f0e0d8c, float:1.8882071E38)
+            r5 = 2131627407(0x7f0e0d8f, float:1.8882078E38)
             java.lang.String r8 = "PaymentReceipt"
             java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r8, r5)
         L_0x517d:
@@ -26040,7 +26044,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             if (r11 == 0) goto L_0x007e
             int r10 = r10.date
             int r4 = r4.date
-            r11 = 2131626217(0x7f0e08e9, float:1.8879664E38)
+            r11 = 2131626220(0x7f0e08ec, float:1.887967E38)
             java.lang.String r12 = "ImportedMessage"
             if (r10 != r4) goto L_0x005c
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r12, r11)
@@ -26184,7 +26188,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             boolean r2 = r2.isSponsored()
             r10 = 2147483646(0x7ffffffe, float:NaN)
             if (r2 == 0) goto L_0x0183
-            r2 = 2131628400(0x7f0e1170, float:1.8884092E38)
+            r2 = 2131628403(0x7f0e1173, float:1.8884098E38)
             java.lang.String r13 = "SponsoredMessage"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r13, r2)
             goto L_0x01d5
@@ -26203,7 +26207,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             if (r2 == 0) goto L_0x01c4
             java.lang.StringBuilder r2 = new java.lang.StringBuilder
             r2.<init>()
-            r15 = 2131625594(0x7f0e067a, float:1.88784E38)
+            r15 = 2131625596(0x7f0e067c, float:1.8878404E38)
             java.lang.String r6 = "EditedMessage"
             java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r6, r15)
             r2.append(r6)
@@ -26718,7 +26722,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             org.telegram.tgnet.TLRPC$Message r0 = r2.messageOwner
             long r6 = r0.via_bot_id
             java.lang.String r8 = "@"
-            r9 = 2131628874(0x7f0e134a, float:1.8885053E38)
+            r9 = 2131628877(0x7f0e134d, float:1.888506E38)
             java.lang.String r10 = "ViaBot"
             r11 = 0
             r13 = 2
@@ -26856,7 +26860,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             org.telegram.messenger.MessageObject r4 = r1.currentMessageObject
             boolean r4 = r4.isForwardedChannelPost()
             if (r4 == 0) goto L_0x0233
-            r4 = 2131625493(0x7f0e0615, float:1.8878196E38)
+            r4 = 2131625495(0x7f0e0617, float:1.88782E38)
             java.lang.String r9 = "DiscussChannel"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r9, r4)
             android.text.TextPaint r9 = org.telegram.ui.ActionBar.Theme.chat_adminPaint
@@ -26890,7 +26894,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             if (r4 == 0) goto L_0x027c
             int r9 = r4.length()
             if (r9 != 0) goto L_0x026a
-            r4 = 2131624996(0x7f0e0424, float:1.8877187E38)
+            r4 = 2131624998(0x7f0e0426, float:1.8877192E38)
             java.lang.String r9 = "ChatAdmin"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r9, r4)
         L_0x026a:
@@ -26956,7 +26960,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             int r4 = r1.getThemedColor(r4)
         L_0x02dc:
             r10 = r23
-            r8 = 2131628874(0x7f0e134a, float:1.8885053E38)
+            r8 = 2131628877(0x7f0e134d, float:1.888506E38)
             goto L_0x02f4
         L_0x02e2:
             org.telegram.messenger.MessageObject r4 = r1.currentMessageObject
@@ -27262,10 +27266,10 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             int r4 = r4 - r9
             r1.forwardedNameWidth = r4
         L_0x0552:
-            r4 = 2131626023(0x7f0e0827, float:1.887927E38)
+            r4 = 2131626026(0x7f0e082a, float:1.8879277E38)
             java.lang.String r9 = "From"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r9, r4)
-            r9 = 2131626031(0x7f0e082f, float:1.8879287E38)
+            r9 = 2131626034(0x7f0e0832, float:1.8879293E38)
             java.lang.String r12 = "FromFormatted"
             java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r12, r9)
             java.lang.String r12 = "%1$s"
@@ -27306,7 +27310,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             r9 = 3
             java.lang.Object[] r9 = new java.lang.Object[r9]
             r9[r5] = r13
-            r14 = 2131628874(0x7f0e134a, float:1.8885053E38)
+            r14 = 2131628877(0x7f0e134d, float:1.888506E38)
             java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r10, r14)
             r14 = 1
             r9[r14] = r10
@@ -27520,7 +27524,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             int r0 = r0 + r2
         L_0x077f:
             android.text.StaticLayout r2 = new android.text.StaticLayout
-            r3 = 2131626470(0x7f0e09e6, float:1.8880177E38)
+            r3 = 2131626473(0x7f0e09e9, float:1.8880183E38)
             java.lang.String r4 = "Loading"
             java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r4, r3)
             android.text.TextPaint r8 = org.telegram.ui.ActionBar.Theme.chat_replyNamePaint
@@ -27783,7 +27787,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             java.lang.String r3 = r6.title
         L_0x09a5:
             if (r3 != 0) goto L_0x09b0
-            r3 = 2131626470(0x7f0e09e6, float:1.8880177E38)
+            r3 = 2131626473(0x7f0e09e9, float:1.8880183E38)
             java.lang.String r6 = "Loading"
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r6, r3)
         L_0x09b0:
@@ -27982,10 +27986,10 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             r1.currentForwardNameString = r3
         L_0x0b44:
             java.lang.String r3 = r40.getForwardedMessageText(r41)
-            r6 = 2131626023(0x7f0e0827, float:1.887927E38)
+            r6 = 2131626026(0x7f0e082a, float:1.8879277E38)
             java.lang.String r7 = "From"
             java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r7, r6)
-            r7 = 2131626031(0x7f0e082f, float:1.8879287E38)
+            r7 = 2131626034(0x7f0e0832, float:1.8879293E38)
             java.lang.String r8 = "FromFormatted"
             java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r8, r7)
             java.lang.String r8 = "%1$s"
@@ -38559,23 +38563,25 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
 
         public AccessibilityNodeInfo createAccessibilityNodeInfo(int i) {
             String str;
-            String str2;
             int i2;
-            int i3;
+            String str2;
             String str3;
-            AccessibilityNodeInfo.CollectionItemInfo collectionItemInfo;
+            int i3;
+            int i4;
             String str4;
+            AccessibilityNodeInfo.CollectionItemInfo collectionItemInfo;
             String str5;
+            String str6;
             boolean z;
             TLRPC$TL_messagePeerReaction tLRPC$TL_messagePeerReaction;
-            String str6;
-            int i4;
             String str7;
-            int i5 = i;
+            int i5;
+            String str8;
+            int i6 = i;
             int[] iArr = {0, 0};
             ChatMessageCell.this.getLocationOnScreen(iArr);
-            int i6 = 10;
-            if (i5 == -1) {
+            int i7 = 10;
+            if (i6 == -1) {
                 AccessibilityNodeInfo obtain = AccessibilityNodeInfo.obtain(ChatMessageCell.this);
                 ChatMessageCell.this.onInitializeAccessibilityNodeInfo(obtain);
                 if (ChatMessageCell.this.accessibilityText == null) {
@@ -38587,24 +38593,24 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                         spannableStringBuilder.append(10);
                     }
                     if (ChatMessageCell.this.drawForwardedName) {
-                        int i7 = 0;
-                        while (i7 < 2) {
-                            if (ChatMessageCell.this.forwardedNameLayout[i7] != null) {
-                                spannableStringBuilder.append(ChatMessageCell.this.forwardedNameLayout[i7].getText());
-                                spannableStringBuilder.append(i7 == 0 ? " " : "\n");
+                        int i8 = 0;
+                        while (i8 < 2) {
+                            if (ChatMessageCell.this.forwardedNameLayout[i8] != null) {
+                                spannableStringBuilder.append(ChatMessageCell.this.forwardedNameLayout[i8].getText());
+                                spannableStringBuilder.append(i8 == 0 ? " " : "\n");
                             }
-                            i7++;
+                            i8++;
                         }
                     }
                     if (!TextUtils.isEmpty(ChatMessageCell.this.currentMessageObject.messageText)) {
                         spannableStringBuilder.append(ChatMessageCell.this.currentMessageObject.messageText);
                     }
                     if (ChatMessageCell.this.documentAttach == null || !((ChatMessageCell.this.documentAttachType == 1 || ChatMessageCell.this.documentAttachType == 2 || ChatMessageCell.this.documentAttachType == 4) && ChatMessageCell.this.buttonState == 1 && ChatMessageCell.this.loadingProgressLayout != null)) {
-                        str4 = " ";
+                        str5 = " ";
                     } else {
                         spannableStringBuilder.append("\n");
                         boolean isSending = ChatMessageCell.this.currentMessageObject.isSending();
-                        str4 = " ";
+                        str5 = " ";
                         spannableStringBuilder.append(LocaleController.formatString(isSending ? "AccDescrUploadProgress" : "AccDescrDownloadProgress", isSending ? NUM : NUM, AndroidUtilities.formatFileSize(ChatMessageCell.this.currentMessageObject.loadedFileSize), AndroidUtilities.formatFileSize(ChatMessageCell.this.lastLoadingSizeTotal)));
                     }
                     if (ChatMessageCell.this.currentMessageObject.isMusic()) {
@@ -38627,21 +38633,24 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                         spannableStringBuilder.append(ChatMessageCell.this.lastPoll.question);
                         spannableStringBuilder.append(", ");
                         if (ChatMessageCell.this.pollClosed) {
-                            str7 = LocaleController.getString("FinalResults", NUM);
+                            str8 = LocaleController.getString("FinalResults", NUM);
                         } else if (ChatMessageCell.this.lastPoll.quiz) {
                             if (ChatMessageCell.this.lastPoll.public_voters) {
-                                str7 = LocaleController.getString("QuizPoll", NUM);
+                                str8 = LocaleController.getString("QuizPoll", NUM);
                             } else {
-                                str7 = LocaleController.getString("AnonymousQuizPoll", NUM);
+                                str8 = LocaleController.getString("AnonymousQuizPoll", NUM);
                             }
                         } else if (ChatMessageCell.this.lastPoll.public_voters) {
-                            str7 = LocaleController.getString("PublicPoll", NUM);
+                            str8 = LocaleController.getString("PublicPoll", NUM);
                         } else {
-                            str7 = LocaleController.getString("AnonymousPoll", NUM);
+                            str8 = LocaleController.getString("AnonymousPoll", NUM);
                         }
-                        spannableStringBuilder.append(str7);
+                        spannableStringBuilder.append(str8);
                     }
-                    if (ChatMessageCell.this.currentMessageObject.messageOwner.media != null && !TextUtils.isEmpty(ChatMessageCell.this.currentMessageObject.caption)) {
+                    if (ChatMessageCell.this.currentMessageObject.isVoiceTranscriptionOpen()) {
+                        spannableStringBuilder.append("\n");
+                        spannableStringBuilder.append(ChatMessageCell.this.currentMessageObject.getVoiceTranscription());
+                    } else if (ChatMessageCell.this.currentMessageObject.messageOwner.media != null && !TextUtils.isEmpty(ChatMessageCell.this.currentMessageObject.caption)) {
                         spannableStringBuilder.append("\n");
                         spannableStringBuilder.append(ChatMessageCell.this.currentMessageObject.caption);
                     }
@@ -38656,33 +38665,33 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                         }
                     }
                     if (!ChatMessageCell.this.currentMessageObject.isOut()) {
-                        str5 = str4;
+                        str6 = str5;
                         spannableStringBuilder.append("\n");
-                        spannableStringBuilder.append(LocaleController.formatString("AccDescrReceivedDate", NUM, LocaleController.getString("TodayAt", NUM) + str5 + ChatMessageCell.this.currentTimeString));
+                        spannableStringBuilder.append(LocaleController.formatString("AccDescrReceivedDate", NUM, LocaleController.getString("TodayAt", NUM) + str6 + ChatMessageCell.this.currentTimeString));
                     } else if (ChatMessageCell.this.currentMessageObject.isSent()) {
                         spannableStringBuilder.append("\n");
                         if (ChatMessageCell.this.currentMessageObject.scheduled) {
                             spannableStringBuilder.append(LocaleController.formatString("AccDescrScheduledDate", NUM, ChatMessageCell.this.currentTimeString));
-                            str5 = str4;
+                            str6 = str5;
                         } else {
                             StringBuilder sb = new StringBuilder();
                             sb.append(LocaleController.getString("TodayAt", NUM));
-                            str5 = str4;
-                            sb.append(str5);
+                            str6 = str5;
+                            sb.append(str6);
                             sb.append(ChatMessageCell.this.currentTimeString);
                             spannableStringBuilder.append(LocaleController.formatString("AccDescrSentDate", NUM, sb.toString()));
                             spannableStringBuilder.append(", ");
                             if (ChatMessageCell.this.currentMessageObject.isUnread()) {
-                                i4 = NUM;
-                                str6 = "AccDescrMsgUnread";
+                                i5 = NUM;
+                                str7 = "AccDescrMsgUnread";
                             } else {
-                                i4 = NUM;
-                                str6 = "AccDescrMsgRead";
+                                i5 = NUM;
+                                str7 = "AccDescrMsgRead";
                             }
-                            spannableStringBuilder.append(LocaleController.getString(str6, i4));
+                            spannableStringBuilder.append(LocaleController.getString(str7, i5));
                         }
                     } else {
-                        str5 = str4;
+                        str6 = str5;
                         if (ChatMessageCell.this.currentMessageObject.isSending()) {
                             spannableStringBuilder.append("\n");
                             spannableStringBuilder.append(LocaleController.getString("AccDescrMsgSending", NUM));
@@ -38702,36 +38711,36 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                     if (!(ChatMessageCell.this.currentMessageObject.messageOwner.reactions == null || ChatMessageCell.this.currentMessageObject.messageOwner.reactions.results == null)) {
                         if (ChatMessageCell.this.currentMessageObject.messageOwner.reactions.results.size() == 1) {
                             TLRPC$TL_reactionCount tLRPC$TL_reactionCount = ChatMessageCell.this.currentMessageObject.messageOwner.reactions.results.get(0);
-                            int i8 = tLRPC$TL_reactionCount.count;
-                            if (i8 == 1) {
+                            int i9 = tLRPC$TL_reactionCount.count;
+                            if (i9 == 1) {
                                 spannableStringBuilder.append("\n");
-                                String str8 = "";
+                                String str9 = "";
                                 if (ChatMessageCell.this.currentMessageObject.messageOwner.reactions.recent_reactions == null || ChatMessageCell.this.currentMessageObject.messageOwner.reactions.recent_reactions.size() != 1 || (tLRPC$TL_messagePeerReaction = ChatMessageCell.this.currentMessageObject.messageOwner.reactions.recent_reactions.get(0)) == null) {
                                     z = false;
                                 } else {
                                     TLRPC$User user = MessagesController.getInstance(ChatMessageCell.this.currentAccount).getUser(Long.valueOf(MessageObject.getPeerId(tLRPC$TL_messagePeerReaction.peer_id)));
                                     z = UserObject.isUserSelf(user);
                                     if (user != null) {
-                                        str8 = UserObject.getFirstName(user);
+                                        str9 = UserObject.getFirstName(user);
                                     }
                                 }
                                 if (z) {
                                     spannableStringBuilder.append(LocaleController.formatString("AccDescrYouReactedWith", NUM, tLRPC$TL_reactionCount.reaction));
                                 } else {
-                                    spannableStringBuilder.append(LocaleController.formatString("AccDescrReactedWith", NUM, str8, tLRPC$TL_reactionCount.reaction));
+                                    spannableStringBuilder.append(LocaleController.formatString("AccDescrReactedWith", NUM, str9, tLRPC$TL_reactionCount.reaction));
                                 }
-                            } else if (i8 > 1) {
+                            } else if (i9 > 1) {
                                 spannableStringBuilder.append("\n");
                                 spannableStringBuilder.append(LocaleController.formatPluralString("AccDescrNumberOfPeopleReactions", tLRPC$TL_reactionCount.count, tLRPC$TL_reactionCount.reaction));
                             }
                         } else {
                             spannableStringBuilder.append(LocaleController.getString("Reactions", NUM)).append(": ");
                             int size = ChatMessageCell.this.currentMessageObject.messageOwner.reactions.results.size();
-                            for (int i9 = 0; i9 < size; i9++) {
-                                TLRPC$TL_reactionCount tLRPC$TL_reactionCount2 = ChatMessageCell.this.currentMessageObject.messageOwner.reactions.results.get(i9);
+                            for (int i10 = 0; i10 < size; i10++) {
+                                TLRPC$TL_reactionCount tLRPC$TL_reactionCount2 = ChatMessageCell.this.currentMessageObject.messageOwner.reactions.results.get(i10);
                                 if (tLRPC$TL_reactionCount2 != null) {
-                                    spannableStringBuilder.append(tLRPC$TL_reactionCount2.reaction).append(str5).append(tLRPC$TL_reactionCount2.count + "");
-                                    if (i9 + 1 < size) {
+                                    spannableStringBuilder.append(tLRPC$TL_reactionCount2.reaction).append(str6).append(tLRPC$TL_reactionCount2.count + "");
+                                    if (i10 + 1 < size) {
                                         spannableStringBuilder.append(", ");
                                     }
                                 }
@@ -38761,33 +38770,33 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                     }
                     ChatMessageCell.this.accessibilityText = spannableStringBuilder;
                 }
-                int i10 = Build.VERSION.SDK_INT;
-                if (i10 < 24) {
+                int i11 = Build.VERSION.SDK_INT;
+                if (i11 < 24) {
                     obtain.setContentDescription(ChatMessageCell.this.accessibilityText.toString());
                 } else {
                     obtain.setText(ChatMessageCell.this.accessibilityText);
                 }
                 obtain.setEnabled(true);
-                if (i10 >= 19 && (collectionItemInfo = obtain.getCollectionItemInfo()) != null) {
+                if (i11 >= 19 && (collectionItemInfo = obtain.getCollectionItemInfo()) != null) {
                     obtain.setCollectionItemInfo(AccessibilityNodeInfo.CollectionItemInfo.obtain(collectionItemInfo.getRowIndex(), 1, 0, 1, false));
                 }
-                if (i10 >= 21) {
+                if (i11 >= 21) {
                     obtain.addAction(new AccessibilityNodeInfo.AccessibilityAction(NUM, LocaleController.getString("AccActionMessageOptions", NUM)));
                     int access$8900 = ChatMessageCell.this.getIconForCurrentState();
                     if (access$8900 == 0) {
-                        str3 = LocaleController.getString("AccActionPlay", NUM);
+                        str4 = LocaleController.getString("AccActionPlay", NUM);
                     } else if (access$8900 == 1) {
-                        str3 = LocaleController.getString("AccActionPause", NUM);
+                        str4 = LocaleController.getString("AccActionPause", NUM);
                     } else if (access$8900 == 2) {
-                        str3 = LocaleController.getString("AccActionDownload", NUM);
+                        str4 = LocaleController.getString("AccActionDownload", NUM);
                     } else if (access$8900 == 3) {
-                        str3 = LocaleController.getString("AccActionCancelDownload", NUM);
+                        str4 = LocaleController.getString("AccActionCancelDownload", NUM);
                     } else if (access$8900 != 5) {
-                        str3 = ChatMessageCell.this.currentMessageObject.type == 16 ? LocaleController.getString("CallAgain", NUM) : null;
+                        str4 = ChatMessageCell.this.currentMessageObject.type == 16 ? LocaleController.getString("CallAgain", NUM) : null;
                     } else {
-                        str3 = LocaleController.getString("AccActionOpenFile", NUM);
+                        str4 = LocaleController.getString("AccActionOpenFile", NUM);
                     }
-                    obtain.addAction(new AccessibilityNodeInfo.AccessibilityAction(16, str3));
+                    obtain.addAction(new AccessibilityNodeInfo.AccessibilityAction(16, str4));
                     obtain.addAction(new AccessibilityNodeInfo.AccessibilityAction(32, LocaleController.getString("AccActionEnterSelectionMode", NUM)));
                     if (ChatMessageCell.this.getMiniIconForCurrentState() == 2) {
                         obtain.addAction(new AccessibilityNodeInfo.AccessibilityAction(NUM, LocaleController.getString("AccActionDownload", NUM)));
@@ -38799,44 +38808,47 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                 if ((ChatMessageCell.this.currentMessageObject.isVoice() || ChatMessageCell.this.currentMessageObject.isRoundVideo() || ChatMessageCell.this.currentMessageObject.isMusic()) && MediaController.getInstance().isPlayingMessage(ChatMessageCell.this.currentMessageObject)) {
                     ChatMessageCell.this.seekBarAccessibilityDelegate.onInitializeAccessibilityNodeInfoInternal(obtain);
                 }
-                if (i10 < 24) {
+                if (ChatMessageCell.this.useTranscribeButton && ChatMessageCell.this.transcribeButton != null) {
+                    obtain.addChild(ChatMessageCell.this, 493);
+                }
+                if (i11 < 24) {
                     ChatMessageCell chatMessageCell2 = ChatMessageCell.this;
                     if (chatMessageCell2.isChat && chatMessageCell2.currentUser != null && !ChatMessageCell.this.currentMessageObject.isOut()) {
                         obtain.addChild(ChatMessageCell.this, 5000);
                     }
                     if (ChatMessageCell.this.currentMessageObject.messageText instanceof Spannable) {
                         Spannable spannable = (Spannable) ChatMessageCell.this.currentMessageObject.messageText;
-                        int i11 = 0;
+                        int i12 = 0;
                         for (CharacterStyle characterStyle2 : (CharacterStyle[]) spannable.getSpans(0, spannable.length(), ClickableSpan.class)) {
-                            obtain.addChild(ChatMessageCell.this, i11 + 2000);
-                            i11++;
+                            obtain.addChild(ChatMessageCell.this, i12 + 2000);
+                            i12++;
                         }
                     }
                     if ((ChatMessageCell.this.currentMessageObject.caption instanceof Spannable) && ChatMessageCell.this.captionLayout != null) {
                         Spannable spannable2 = (Spannable) ChatMessageCell.this.currentMessageObject.caption;
-                        int i12 = 0;
+                        int i13 = 0;
                         for (CharacterStyle characterStyle3 : (CharacterStyle[]) spannable2.getSpans(0, spannable2.length(), ClickableSpan.class)) {
-                            obtain.addChild(ChatMessageCell.this, i12 + 3000);
-                            i12++;
+                            obtain.addChild(ChatMessageCell.this, i13 + 3000);
+                            i13++;
                         }
                     }
                 }
                 Iterator it = ChatMessageCell.this.botButtons.iterator();
-                int i13 = 0;
+                int i14 = 0;
                 while (it.hasNext()) {
                     BotButton botButton = (BotButton) it.next();
-                    obtain.addChild(ChatMessageCell.this, i13 + 1000);
-                    i13++;
+                    obtain.addChild(ChatMessageCell.this, i14 + 1000);
+                    i14++;
                 }
                 if (ChatMessageCell.this.hintButtonVisible && ChatMessageCell.this.pollHintX != -1 && ChatMessageCell.this.currentMessageObject.isPoll()) {
                     obtain.addChild(ChatMessageCell.this, 495);
                 }
                 Iterator it2 = ChatMessageCell.this.pollButtons.iterator();
-                int i14 = 0;
+                int i15 = 0;
                 while (it2.hasNext()) {
                     PollButton pollButton = (PollButton) it2.next();
-                    obtain.addChild(ChatMessageCell.this, i14 + 500);
-                    i14++;
+                    obtain.addChild(ChatMessageCell.this, i15 + 500);
+                    i15++;
                 }
                 if (ChatMessageCell.this.drawInstantView && !ChatMessageCell.this.instantButtonRect.isEmpty()) {
                     obtain.addChild(ChatMessageCell.this, 499);
@@ -38864,26 +38876,26 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                 return obtain;
             }
             AccessibilityNodeInfo obtain2 = AccessibilityNodeInfo.obtain();
-            obtain2.setSource(ChatMessageCell.this, i5);
+            obtain2.setSource(ChatMessageCell.this, i6);
             obtain2.setParent(ChatMessageCell.this);
             obtain2.setPackageName(ChatMessageCell.this.getContext().getPackageName());
-            if (i5 == 5000) {
+            if (i6 == 5000) {
                 if (ChatMessageCell.this.currentUser == null) {
                     return null;
                 }
                 obtain2.setText(UserObject.getUserName(ChatMessageCell.this.currentUser));
                 Rect rect2 = this.rect;
-                int access$10200 = (int) ChatMessageCell.this.nameX;
-                int access$10300 = (int) ChatMessageCell.this.nameY;
-                int access$102002 = (int) (ChatMessageCell.this.nameX + ((float) ChatMessageCell.this.nameWidth));
-                float access$103002 = ChatMessageCell.this.nameY;
+                int access$10400 = (int) ChatMessageCell.this.nameX;
+                int access$10500 = (int) ChatMessageCell.this.nameY;
+                int access$104002 = (int) (ChatMessageCell.this.nameX + ((float) ChatMessageCell.this.nameWidth));
+                float access$105002 = ChatMessageCell.this.nameY;
                 if (ChatMessageCell.this.nameLayout != null) {
-                    i6 = ChatMessageCell.this.nameLayout.getHeight();
+                    i7 = ChatMessageCell.this.nameLayout.getHeight();
                 }
-                rect2.set(access$10200, access$10300, access$102002, (int) (access$103002 + ((float) i6)));
+                rect2.set(access$10400, access$10500, access$104002, (int) (access$105002 + ((float) i7)));
                 obtain2.setBoundsInParent(this.rect);
-                if (ChatMessageCell.this.accessibilityVirtualViewBounds.get(i5) == null) {
-                    ChatMessageCell.this.accessibilityVirtualViewBounds.put(i5, new Rect(this.rect));
+                if (ChatMessageCell.this.accessibilityVirtualViewBounds.get(i6) == null) {
+                    ChatMessageCell.this.accessibilityVirtualViewBounds.put(i6, new Rect(this.rect));
                 }
                 this.rect.offset(iArr[0], iArr[1]);
                 obtain2.setBoundsInScreen(this.rect);
@@ -38893,27 +38905,27 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                 obtain2.setLongClickable(true);
                 obtain2.addAction(16);
                 obtain2.addAction(32);
-            } else if (i5 >= 3000) {
+            } else if (i6 >= 3000) {
                 if (!(ChatMessageCell.this.currentMessageObject.caption instanceof Spannable) || ChatMessageCell.this.captionLayout == null) {
                     return null;
                 }
                 Spannable spannable3 = (Spannable) ChatMessageCell.this.currentMessageObject.caption;
-                ClickableSpan linkById = getLinkById(i5, true);
+                ClickableSpan linkById = getLinkById(i6, true);
                 if (linkById == null) {
                     return null;
                 }
-                int[] access$10700 = ChatMessageCell.this.getRealSpanStartAndEnd(spannable3, linkById);
-                obtain2.setText(spannable3.subSequence(access$10700[0], access$10700[1]).toString());
+                int[] access$10900 = ChatMessageCell.this.getRealSpanStartAndEnd(spannable3, linkById);
+                obtain2.setText(spannable3.subSequence(access$10900[0], access$10900[1]).toString());
                 ChatMessageCell.this.captionLayout.getText().length();
-                ChatMessageCell.this.captionLayout.getSelectionPath(access$10700[0], access$10700[1], this.linkPath);
+                ChatMessageCell.this.captionLayout.getSelectionPath(access$10900[0], access$10900[1], this.linkPath);
                 this.linkPath.computeBounds(this.rectF, true);
                 Rect rect3 = this.rect;
                 RectF rectF2 = this.rectF;
                 rect3.set((int) rectF2.left, (int) rectF2.top, (int) rectF2.right, (int) rectF2.bottom);
                 this.rect.offset((int) ChatMessageCell.this.captionX, (int) ChatMessageCell.this.captionY);
                 obtain2.setBoundsInParent(this.rect);
-                if (ChatMessageCell.this.accessibilityVirtualViewBounds.get(i5) == null) {
-                    ChatMessageCell.this.accessibilityVirtualViewBounds.put(i5, new Rect(this.rect));
+                if (ChatMessageCell.this.accessibilityVirtualViewBounds.get(i6) == null) {
+                    ChatMessageCell.this.accessibilityVirtualViewBounds.put(i6, new Rect(this.rect));
                 }
                 this.rect.offset(iArr[0], iArr[1]);
                 obtain2.setBoundsInScreen(this.rect);
@@ -38923,17 +38935,17 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                 obtain2.setLongClickable(true);
                 obtain2.addAction(16);
                 obtain2.addAction(32);
-            } else if (i5 >= 2000) {
+            } else if (i6 >= 2000) {
                 if (!(ChatMessageCell.this.currentMessageObject.messageText instanceof Spannable)) {
                     return null;
                 }
                 Spannable spannable4 = (Spannable) ChatMessageCell.this.currentMessageObject.messageText;
-                ClickableSpan linkById2 = getLinkById(i5, false);
+                ClickableSpan linkById2 = getLinkById(i6, false);
                 if (linkById2 == null) {
                     return null;
                 }
-                int[] access$107002 = ChatMessageCell.this.getRealSpanStartAndEnd(spannable4, linkById2);
-                obtain2.setText(spannable4.subSequence(access$107002[0], access$107002[1]).toString());
+                int[] access$109002 = ChatMessageCell.this.getRealSpanStartAndEnd(spannable4, linkById2);
+                obtain2.setText(spannable4.subSequence(access$109002[0], access$109002[1]).toString());
                 Iterator<MessageObject.TextLayoutBlock> it3 = ChatMessageCell.this.currentMessageObject.textLayoutBlocks.iterator();
                 while (true) {
                     if (!it3.hasNext()) {
@@ -38941,9 +38953,9 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                     }
                     MessageObject.TextLayoutBlock next = it3.next();
                     int length = next.textLayout.getText().length();
-                    int i15 = next.charactersOffset;
-                    if (i15 <= access$107002[0] && length + i15 >= access$107002[1]) {
-                        next.textLayout.getSelectionPath(access$107002[0] - i15, access$107002[1] - i15, this.linkPath);
+                    int i16 = next.charactersOffset;
+                    if (i16 <= access$109002[0] && length + i16 >= access$109002[1]) {
+                        next.textLayout.getSelectionPath(access$109002[0] - i16, access$109002[1] - i16, this.linkPath);
                         this.linkPath.computeBounds(this.rectF, true);
                         Rect rect4 = this.rect;
                         RectF rectF3 = this.rectF;
@@ -38951,8 +38963,8 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                         this.rect.offset(0, (int) next.textYOffset);
                         this.rect.offset(ChatMessageCell.this.textX, ChatMessageCell.this.textY);
                         obtain2.setBoundsInParent(this.rect);
-                        if (ChatMessageCell.this.accessibilityVirtualViewBounds.get(i5) == null) {
-                            ChatMessageCell.this.accessibilityVirtualViewBounds.put(i5, new Rect(this.rect));
+                        if (ChatMessageCell.this.accessibilityVirtualViewBounds.get(i6) == null) {
+                            ChatMessageCell.this.accessibilityVirtualViewBounds.put(i6, new Rect(this.rect));
                         }
                         this.rect.offset(iArr[0], iArr[1]);
                         obtain2.setBoundsInScreen(this.rect);
@@ -38964,12 +38976,12 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                 obtain2.setLongClickable(true);
                 obtain2.addAction(16);
                 obtain2.addAction(32);
-            } else if (i5 >= 1000) {
-                int i16 = i5 - 1000;
-                if (i16 >= ChatMessageCell.this.botButtons.size()) {
+            } else if (i6 >= 1000) {
+                int i17 = i6 - 1000;
+                if (i17 >= ChatMessageCell.this.botButtons.size()) {
                     return null;
                 }
-                BotButton botButton2 = (BotButton) ChatMessageCell.this.botButtons.get(i16);
+                BotButton botButton2 = (BotButton) ChatMessageCell.this.botButtons.get(i17);
                 obtain2.setText(botButton2.title.getText());
                 obtain2.setClassName("android.widget.Button");
                 obtain2.setEnabled(true);
@@ -38977,23 +38989,23 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                 obtain2.addAction(16);
                 this.rect.set(botButton2.x, botButton2.y, botButton2.x + botButton2.width, botButton2.y + botButton2.height);
                 if (ChatMessageCell.this.currentMessageObject.isOutOwner()) {
-                    i3 = (ChatMessageCell.this.getMeasuredWidth() - ChatMessageCell.this.widthForButtons) - AndroidUtilities.dp(10.0f);
+                    i4 = (ChatMessageCell.this.getMeasuredWidth() - ChatMessageCell.this.widthForButtons) - AndroidUtilities.dp(10.0f);
                 } else {
-                    i3 = ChatMessageCell.this.backgroundDrawableLeft + AndroidUtilities.dp(ChatMessageCell.this.mediaBackground ? 1.0f : 7.0f);
+                    i4 = ChatMessageCell.this.backgroundDrawableLeft + AndroidUtilities.dp(ChatMessageCell.this.mediaBackground ? 1.0f : 7.0f);
                 }
-                this.rect.offset(i3, ChatMessageCell.this.layoutHeight);
+                this.rect.offset(i4, ChatMessageCell.this.layoutHeight);
                 obtain2.setBoundsInParent(this.rect);
-                if (ChatMessageCell.this.accessibilityVirtualViewBounds.get(i5) == null) {
-                    ChatMessageCell.this.accessibilityVirtualViewBounds.put(i5, new Rect(this.rect));
+                if (ChatMessageCell.this.accessibilityVirtualViewBounds.get(i6) == null) {
+                    ChatMessageCell.this.accessibilityVirtualViewBounds.put(i6, new Rect(this.rect));
                 }
                 this.rect.offset(iArr[0], iArr[1]);
                 obtain2.setBoundsInScreen(this.rect);
-            } else if (i5 >= 500) {
-                int i17 = i5 - 500;
-                if (i17 >= ChatMessageCell.this.pollButtons.size()) {
+            } else if (i6 >= 500) {
+                int i18 = i6 - 500;
+                if (i18 >= ChatMessageCell.this.pollButtons.size()) {
                     return null;
                 }
-                PollButton pollButton2 = (PollButton) ChatMessageCell.this.pollButtons.get(i17);
+                PollButton pollButton2 = (PollButton) ChatMessageCell.this.pollButtons.get(i18);
                 StringBuilder sb2 = new StringBuilder(pollButton2.title.getText());
                 if (!ChatMessageCell.this.pollVoted) {
                     obtain2.setClassName("android.widget.Button");
@@ -39005,44 +39017,44 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                     if (ChatMessageCell.this.lastPoll != null && ChatMessageCell.this.lastPoll.quiz && (pollButton2.chosen || pollButton2.correct)) {
                         sb2.append(", ");
                         if (pollButton2.correct) {
-                            i2 = NUM;
-                            str2 = "AccDescrQuizCorrectAnswer";
+                            i3 = NUM;
+                            str3 = "AccDescrQuizCorrectAnswer";
                         } else {
-                            i2 = NUM;
-                            str2 = "AccDescrQuizIncorrectAnswer";
+                            i3 = NUM;
+                            str3 = "AccDescrQuizIncorrectAnswer";
                         }
-                        sb2.append(LocaleController.getString(str2, i2));
+                        sb2.append(LocaleController.getString(str3, i3));
                     }
                 }
                 obtain2.setText(sb2);
                 obtain2.setEnabled(true);
                 obtain2.addAction(16);
-                int access$11600 = pollButton2.y + ChatMessageCell.this.namesOffset;
-                int access$11700 = ChatMessageCell.this.backgroundWidth - AndroidUtilities.dp(76.0f);
+                int access$11800 = pollButton2.y + ChatMessageCell.this.namesOffset;
+                int access$11900 = ChatMessageCell.this.backgroundWidth - AndroidUtilities.dp(76.0f);
                 Rect rect5 = this.rect;
-                int i18 = pollButton2.x;
-                rect5.set(i18, access$11600, access$11700 + i18, pollButton2.height + access$11600);
+                int i19 = pollButton2.x;
+                rect5.set(i19, access$11800, access$11900 + i19, pollButton2.height + access$11800);
                 obtain2.setBoundsInParent(this.rect);
-                if (ChatMessageCell.this.accessibilityVirtualViewBounds.get(i5) == null) {
-                    ChatMessageCell.this.accessibilityVirtualViewBounds.put(i5, new Rect(this.rect));
+                if (ChatMessageCell.this.accessibilityVirtualViewBounds.get(i6) == null) {
+                    ChatMessageCell.this.accessibilityVirtualViewBounds.put(i6, new Rect(this.rect));
                 }
                 this.rect.offset(iArr[0], iArr[1]);
                 obtain2.setBoundsInScreen(this.rect);
                 obtain2.setClickable(true);
-            } else if (i5 == 495) {
+            } else if (i6 == 495) {
                 obtain2.setClassName("android.widget.Button");
                 obtain2.setEnabled(true);
                 obtain2.setText(LocaleController.getString("AccDescrQuizExplanation", NUM));
                 obtain2.addAction(16);
                 this.rect.set(ChatMessageCell.this.pollHintX - AndroidUtilities.dp(8.0f), ChatMessageCell.this.pollHintY - AndroidUtilities.dp(8.0f), ChatMessageCell.this.pollHintX + AndroidUtilities.dp(32.0f), ChatMessageCell.this.pollHintY + AndroidUtilities.dp(32.0f));
                 obtain2.setBoundsInParent(this.rect);
-                if (ChatMessageCell.this.accessibilityVirtualViewBounds.get(i5) == null || !((Rect) ChatMessageCell.this.accessibilityVirtualViewBounds.get(i5)).equals(this.rect)) {
-                    ChatMessageCell.this.accessibilityVirtualViewBounds.put(i5, new Rect(this.rect));
+                if (ChatMessageCell.this.accessibilityVirtualViewBounds.get(i6) == null || !((Rect) ChatMessageCell.this.accessibilityVirtualViewBounds.get(i6)).equals(this.rect)) {
+                    ChatMessageCell.this.accessibilityVirtualViewBounds.put(i6, new Rect(this.rect));
                 }
                 this.rect.offset(iArr[0], iArr[1]);
                 obtain2.setBoundsInScreen(this.rect);
                 obtain2.setClickable(true);
-            } else if (i5 == 499) {
+            } else if (i6 == 499) {
                 obtain2.setClassName("android.widget.Button");
                 obtain2.setEnabled(true);
                 if (ChatMessageCell.this.instantViewLayout != null) {
@@ -39051,13 +39063,13 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                 obtain2.addAction(16);
                 ChatMessageCell.this.instantButtonRect.round(this.rect);
                 obtain2.setBoundsInParent(this.rect);
-                if (ChatMessageCell.this.accessibilityVirtualViewBounds.get(i5) == null || !((Rect) ChatMessageCell.this.accessibilityVirtualViewBounds.get(i5)).equals(this.rect)) {
-                    ChatMessageCell.this.accessibilityVirtualViewBounds.put(i5, new Rect(this.rect));
+                if (ChatMessageCell.this.accessibilityVirtualViewBounds.get(i6) == null || !((Rect) ChatMessageCell.this.accessibilityVirtualViewBounds.get(i6)).equals(this.rect)) {
+                    ChatMessageCell.this.accessibilityVirtualViewBounds.put(i6, new Rect(this.rect));
                 }
                 this.rect.offset(iArr[0], iArr[1]);
                 obtain2.setBoundsInScreen(this.rect);
                 obtain2.setClickable(true);
-            } else if (i5 == 498) {
+            } else if (i6 == 498) {
                 obtain2.setClassName("android.widget.ImageButton");
                 obtain2.setEnabled(true);
                 ChatMessageCell chatMessageCell4 = ChatMessageCell.this;
@@ -39069,13 +39081,13 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                 obtain2.addAction(16);
                 this.rect.set((int) ChatMessageCell.this.sideStartX, (int) ChatMessageCell.this.sideStartY, ((int) ChatMessageCell.this.sideStartX) + AndroidUtilities.dp(40.0f), ((int) ChatMessageCell.this.sideStartY) + AndroidUtilities.dp(32.0f));
                 obtain2.setBoundsInParent(this.rect);
-                if (ChatMessageCell.this.accessibilityVirtualViewBounds.get(i5) == null || !((Rect) ChatMessageCell.this.accessibilityVirtualViewBounds.get(i5)).equals(this.rect)) {
-                    ChatMessageCell.this.accessibilityVirtualViewBounds.put(i5, new Rect(this.rect));
+                if (ChatMessageCell.this.accessibilityVirtualViewBounds.get(i6) == null || !((Rect) ChatMessageCell.this.accessibilityVirtualViewBounds.get(i6)).equals(this.rect)) {
+                    ChatMessageCell.this.accessibilityVirtualViewBounds.put(i6, new Rect(this.rect));
                 }
                 this.rect.offset(iArr[0], iArr[1]);
                 obtain2.setBoundsInScreen(this.rect);
                 obtain2.setClickable(true);
-            } else if (i5 == 497) {
+            } else if (i6 == 497) {
                 obtain2.setEnabled(true);
                 StringBuilder sb3 = new StringBuilder();
                 sb3.append(LocaleController.getString("Reply", NUM));
@@ -39093,24 +39105,24 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                 obtain2.addAction(16);
                 Rect rect6 = this.rect;
                 ChatMessageCell chatMessageCell5 = ChatMessageCell.this;
-                int i19 = chatMessageCell5.replyStartX;
-                rect6.set(i19, chatMessageCell5.replyStartY, Math.max(chatMessageCell5.replyNameWidth, ChatMessageCell.this.replyTextWidth) + i19, ChatMessageCell.this.replyStartY + AndroidUtilities.dp(35.0f));
+                int i20 = chatMessageCell5.replyStartX;
+                rect6.set(i20, chatMessageCell5.replyStartY, Math.max(chatMessageCell5.replyNameWidth, ChatMessageCell.this.replyTextWidth) + i20, ChatMessageCell.this.replyStartY + AndroidUtilities.dp(35.0f));
                 obtain2.setBoundsInParent(this.rect);
-                if (ChatMessageCell.this.accessibilityVirtualViewBounds.get(i5) == null || !((Rect) ChatMessageCell.this.accessibilityVirtualViewBounds.get(i5)).equals(this.rect)) {
-                    ChatMessageCell.this.accessibilityVirtualViewBounds.put(i5, new Rect(this.rect));
+                if (ChatMessageCell.this.accessibilityVirtualViewBounds.get(i6) == null || !((Rect) ChatMessageCell.this.accessibilityVirtualViewBounds.get(i6)).equals(this.rect)) {
+                    ChatMessageCell.this.accessibilityVirtualViewBounds.put(i6, new Rect(this.rect));
                 }
                 this.rect.offset(iArr[0], iArr[1]);
                 obtain2.setBoundsInScreen(this.rect);
                 obtain2.setClickable(true);
-            } else if (i5 == 494) {
+            } else if (i6 == 494) {
                 obtain2.setEnabled(true);
                 StringBuilder sb4 = new StringBuilder();
                 if (!(ChatMessageCell.this.forwardedNameLayout[0] == null || ChatMessageCell.this.forwardedNameLayout[1] == null)) {
-                    int i20 = 0;
-                    while (i20 < 2) {
-                        sb4.append(ChatMessageCell.this.forwardedNameLayout[i20].getText());
-                        sb4.append(i20 == 0 ? " " : "\n");
-                        i20++;
+                    int i21 = 0;
+                    while (i21 < 2) {
+                        sb4.append(ChatMessageCell.this.forwardedNameLayout[i21].getText());
+                        sb4.append(i21 == 0 ? " " : "\n");
+                        i21++;
                     }
                 }
                 obtain2.setContentDescription(sb4.toString());
@@ -39118,32 +39130,49 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                 int min = (int) Math.min(ChatMessageCell.this.forwardNameX - ChatMessageCell.this.forwardNameOffsetX[0], ChatMessageCell.this.forwardNameX - ChatMessageCell.this.forwardNameOffsetX[1]);
                 this.rect.set(min, ChatMessageCell.this.forwardNameY, ChatMessageCell.this.forwardedNameWidth + min, ChatMessageCell.this.forwardNameY + AndroidUtilities.dp(32.0f));
                 obtain2.setBoundsInParent(this.rect);
-                if (ChatMessageCell.this.accessibilityVirtualViewBounds.get(i5) == null || !((Rect) ChatMessageCell.this.accessibilityVirtualViewBounds.get(i5)).equals(this.rect)) {
-                    ChatMessageCell.this.accessibilityVirtualViewBounds.put(i5, new Rect(this.rect));
+                if (ChatMessageCell.this.accessibilityVirtualViewBounds.get(i6) == null || !((Rect) ChatMessageCell.this.accessibilityVirtualViewBounds.get(i6)).equals(this.rect)) {
+                    ChatMessageCell.this.accessibilityVirtualViewBounds.put(i6, new Rect(this.rect));
                 }
                 this.rect.offset(iArr[0], iArr[1]);
                 obtain2.setBoundsInScreen(this.rect);
                 obtain2.setClickable(true);
-            } else if (i5 == 496) {
+            } else if (i6 == 496) {
                 obtain2.setClassName("android.widget.Button");
                 obtain2.setEnabled(true);
                 int access$8700 = ChatMessageCell.this.getRepliesCount();
                 if (ChatMessageCell.this.currentMessageObject == null || ChatMessageCell.this.currentMessageObject.shouldDrawWithoutBackground() || ChatMessageCell.this.currentMessageObject.isAnimatedEmoji()) {
-                    str = (ChatMessageCell.this.isRepliesChat || access$8700 <= 0) ? null : LocaleController.formatShortNumber(access$8700, (int[]) null);
+                    str2 = (ChatMessageCell.this.isRepliesChat || access$8700 <= 0) ? null : LocaleController.formatShortNumber(access$8700, (int[]) null);
                 } else if (ChatMessageCell.this.isRepliesChat) {
-                    str = LocaleController.getString("ViewInChat", NUM);
+                    str2 = LocaleController.getString("ViewInChat", NUM);
                 } else {
-                    str = access$8700 == 0 ? LocaleController.getString("LeaveAComment", NUM) : LocaleController.formatPluralString("CommentsCount", access$8700, new Object[0]);
+                    str2 = access$8700 == 0 ? LocaleController.getString("LeaveAComment", NUM) : LocaleController.formatPluralString("CommentsCount", access$8700, new Object[0]);
                 }
-                if (str != null) {
-                    obtain2.setText(str);
+                if (str2 != null) {
+                    obtain2.setText(str2);
                 }
                 obtain2.addAction(16);
                 this.rect.set(ChatMessageCell.this.commentButtonRect);
                 obtain2.setBoundsInParent(this.rect);
-                if (ChatMessageCell.this.accessibilityVirtualViewBounds.get(i5) == null || !((Rect) ChatMessageCell.this.accessibilityVirtualViewBounds.get(i5)).equals(this.rect)) {
-                    ChatMessageCell.this.accessibilityVirtualViewBounds.put(i5, new Rect(this.rect));
+                if (ChatMessageCell.this.accessibilityVirtualViewBounds.get(i6) == null || !((Rect) ChatMessageCell.this.accessibilityVirtualViewBounds.get(i6)).equals(this.rect)) {
+                    ChatMessageCell.this.accessibilityVirtualViewBounds.put(i6, new Rect(this.rect));
                 }
+                this.rect.offset(iArr[0], iArr[1]);
+                obtain2.setBoundsInScreen(this.rect);
+                obtain2.setClickable(true);
+            } else if (i6 == 493) {
+                obtain2.setClassName("android.widget.Button");
+                obtain2.setEnabled(true);
+                if (ChatMessageCell.this.currentMessageObject.isVoiceTranscriptionOpen()) {
+                    i2 = NUM;
+                    str = "AccActionCloseTranscription";
+                } else {
+                    i2 = NUM;
+                    str = "AccActionOpenTranscription";
+                }
+                obtain2.setText(LocaleController.getString(str, i2));
+                obtain2.addAction(16);
+                this.rect.set((int) ChatMessageCell.this.transcribeX, (int) ChatMessageCell.this.transcribeY, (int) (ChatMessageCell.this.transcribeX + ((float) AndroidUtilities.dp(30.0f))), (int) (ChatMessageCell.this.transcribeY + ((float) AndroidUtilities.dp(30.0f))));
+                obtain2.setBoundsInParent(this.rect);
                 this.rect.offset(iArr[0], iArr[1]);
                 obtain2.setBoundsInScreen(this.rect);
                 obtain2.setClickable(true);
@@ -39238,13 +39267,17 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                                 ChatMessageCell.this.delegate.didPressHiddenForward(ChatMessageCell.this);
                             }
                         }
-                    } else if (i == 496 && ChatMessageCell.this.delegate != null) {
-                        ChatMessageCell chatMessageCell7 = ChatMessageCell.this;
-                        if (chatMessageCell7.isRepliesChat) {
-                            chatMessageCell7.delegate.didPressSideButton(ChatMessageCell.this);
-                        } else {
-                            chatMessageCell7.delegate.didPressCommentButton(ChatMessageCell.this);
+                    } else if (i == 496) {
+                        if (ChatMessageCell.this.delegate != null) {
+                            ChatMessageCell chatMessageCell7 = ChatMessageCell.this;
+                            if (chatMessageCell7.isRepliesChat) {
+                                chatMessageCell7.delegate.didPressSideButton(ChatMessageCell.this);
+                            } else {
+                                chatMessageCell7.delegate.didPressCommentButton(ChatMessageCell.this);
+                            }
                         }
+                    } else if (i == 493 && ChatMessageCell.this.transcribeButton != null) {
+                        ChatMessageCell.this.transcribeButton.onTap();
                     }
                 } else if (i2 == 32) {
                     if (i >= 3000) {
@@ -39745,7 +39778,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                 org.telegram.ui.Cells.ChatMessageCell r3 = org.telegram.ui.Cells.ChatMessageCell.this
                 android.text.StaticLayout r3 = r3.timeLayout
                 if (r3 == 0) goto L_0x0162
-                r3 = 2131625594(0x7f0e067a, float:1.88784E38)
+                r3 = 2131625596(0x7f0e067c, float:1.8878404E38)
                 java.lang.String r6 = "EditedMessage"
                 java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r6, r3)
                 org.telegram.ui.Cells.ChatMessageCell r6 = org.telegram.ui.Cells.ChatMessageCell.this

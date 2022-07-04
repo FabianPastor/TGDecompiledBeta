@@ -942,7 +942,7 @@ public class GroupVoipInviteAlert extends UsersAlertBase {
                 org.telegram.ui.Cells.GraySectionCell r14 = (org.telegram.ui.Cells.GraySectionCell) r14
                 int r0 = r13.groupStartRow
                 if (r15 != r0) goto L_0x0021
-                r15 = 2131624915(0x7f0e03d3, float:1.8877023E38)
+                r15 = 2131624917(0x7f0e03d5, float:1.8877027E38)
                 java.lang.String r0 = "ChannelMembers"
                 java.lang.String r15 = org.telegram.messenger.LocaleController.getString(r0, r15)
                 r14.setText(r15)
@@ -950,7 +950,7 @@ public class GroupVoipInviteAlert extends UsersAlertBase {
             L_0x0021:
                 int r0 = r13.globalStartRow
                 if (r15 != r0) goto L_0x0133
-                r15 = 2131626076(0x7f0e085c, float:1.8879378E38)
+                r15 = 2131626079(0x7f0e085f, float:1.8879384E38)
                 java.lang.String r0 = "GlobalSearch"
                 java.lang.String r15 = org.telegram.messenger.LocaleController.getString(r0, r15)
                 r14.setText(r15)

@@ -66,7 +66,7 @@ public class StickerEmojiCell extends FrameLayout implements NotificationCenter.
         this.emojiTextView = textView;
         textView.setTextSize(1, 16.0f);
         new Paint(1).setColor(Theme.getColor("featuredStickers_addButton"));
-        PremiumLockIconView premiumLockIconView = new PremiumLockIconView(context, PremiumLockIconView.TYPE_STICKERS);
+        PremiumLockIconView premiumLockIconView = new PremiumLockIconView(context, PremiumLockIconView.TYPE_STICKERS_PREMIUM_LOCKED);
         this.premiumIconView = premiumLockIconView;
         premiumLockIconView.setImageReceiver(this.imageView.getImageReceiver());
         this.premiumIconView.setPadding(AndroidUtilities.dp(4.0f), AndroidUtilities.dp(4.0f), AndroidUtilities.dp(4.0f), AndroidUtilities.dp(4.0f));
@@ -239,11 +239,30 @@ public class StickerEmojiCell extends FrameLayout implements NotificationCenter.
     }
 
     private void updatePremiumStatus(boolean z) {
-        if (!this.isPremiumSticker || UserConfig.getInstance(this.currentAccount).isPremium()) {
-            this.showPremiumLock = false;
-        } else {
+        if (this.isPremiumSticker) {
             this.showPremiumLock = true;
+        } else {
+            this.showPremiumLock = false;
         }
+        FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) this.premiumIconView.getLayoutParams();
+        if (!UserConfig.getInstance(this.currentAccount).isPremium()) {
+            int dp = AndroidUtilities.dp(24.0f);
+            layoutParams.width = dp;
+            layoutParams.height = dp;
+            layoutParams.gravity = 81;
+            layoutParams.rightMargin = 0;
+            layoutParams.bottomMargin = 0;
+            this.premiumIconView.setPadding(AndroidUtilities.dp(4.0f), AndroidUtilities.dp(4.0f), AndroidUtilities.dp(4.0f), AndroidUtilities.dp(4.0f));
+        } else {
+            int dp2 = AndroidUtilities.dp(16.0f);
+            layoutParams.width = dp2;
+            layoutParams.height = dp2;
+            layoutParams.gravity = 85;
+            layoutParams.bottomMargin = AndroidUtilities.dp(8.0f);
+            layoutParams.rightMargin = AndroidUtilities.dp(8.0f);
+            this.premiumIconView.setPadding(AndroidUtilities.dp(1.0f), AndroidUtilities.dp(1.0f), AndroidUtilities.dp(1.0f), AndroidUtilities.dp(1.0f));
+        }
+        this.premiumIconView.setLocked(true ^ UserConfig.getInstance(this.currentAccount).isPremium());
         AndroidUtilities.updateViewVisibilityAnimated(this.premiumIconView, this.showPremiumLock, 0.9f, z);
         invalidate();
     }

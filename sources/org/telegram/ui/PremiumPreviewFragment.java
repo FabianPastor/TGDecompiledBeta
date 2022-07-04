@@ -399,7 +399,7 @@ public class PremiumPreviewFragment extends BaseFragment implements Notification
         mutate.setColorFilter(new PorterDuffColorFilter(getThemedColor("dialogBackground"), PorterDuff.Mode.MULTIPLY));
         this.shadowDrawable.getPadding(rect);
         if (Build.VERSION.SDK_INT >= 21) {
-            this.statusBarHeight = AndroidUtilities.statusBarHeight;
+            this.statusBarHeight = AndroidUtilities.isTablet() ? 0 : AndroidUtilities.statusBarHeight;
         }
         AnonymousClass1 r2 = new FrameLayout(context) {
             boolean iconInterceptedTouch;
@@ -432,7 +432,7 @@ public class PremiumPreviewFragment extends BaseFragment implements Notification
                     PremiumPreviewFragment.this.isLandscapeMode = false;
                 }
                 if (Build.VERSION.SDK_INT >= 21) {
-                    int unused = PremiumPreviewFragment.this.statusBarHeight = AndroidUtilities.statusBarHeight;
+                    int unused = PremiumPreviewFragment.this.statusBarHeight = AndroidUtilities.isTablet() ? 0 : AndroidUtilities.statusBarHeight;
                 }
                 PremiumPreviewFragment.this.backgroundView.measure(i, View.MeasureSpec.makeMeasureSpec(0, 0));
                 PremiumPreviewFragment.this.particlesView.getLayoutParams().height = PremiumPreviewFragment.this.backgroundView.getMeasuredHeight();
@@ -802,7 +802,10 @@ public class PremiumPreviewFragment extends BaseFragment implements Notification
             }
             NumberFormat currencyInstance = NumberFormat.getCurrencyInstance();
             currencyInstance.setCurrency(instance);
-            return LocaleController.formatString(NUM, currencyInstance.format((double) (((float) premiumPromo.monthly_amount) / 100.0f)));
+            double d = (double) premiumPromo.monthly_amount;
+            double pow = Math.pow(10.0d, (double) BillingController.getInstance().getCurrencyExp(premiumPromo.currency));
+            Double.isNaN(d);
+            return LocaleController.formatString(NUM, currencyInstance.format(d / pow));
         }
         String str = null;
         ProductDetails productDetails = BillingController.PREMIUM_PRODUCT_DETAILS;

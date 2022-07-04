@@ -1,5 +1,6 @@
 package org.telegram.messenger;
 
+import java.util.ArrayList;
 import org.telegram.messenger.DocumentObject;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC$Chat;
@@ -131,12 +132,14 @@ public class ImageLocation {
     public static ImageLocation getForUser(TLRPC$User tLRPC$User, int i) {
         TLRPC$UserProfilePhoto tLRPC$UserProfilePhoto;
         TLRPC$UserFull userFull;
+        TLRPC$Photo tLRPC$Photo;
+        ArrayList<TLRPC$VideoSize> arrayList;
         if (tLRPC$User == null || tLRPC$User.access_hash == 0 || (tLRPC$UserProfilePhoto = tLRPC$User.photo) == null) {
             return null;
         }
         if (i == 3) {
             int i2 = UserConfig.selectedAccount;
-            if (!MessagesController.getInstance(i2).isPremiumUser(tLRPC$User) || !tLRPC$User.photo.has_video || (userFull = MessagesController.getInstance(i2).getUserFull(tLRPC$User.id)) == null || userFull.profile_photo.video_sizes.isEmpty()) {
+            if (!MessagesController.getInstance(i2).isPremiumUser(tLRPC$User) || !tLRPC$User.photo.has_video || (userFull = MessagesController.getInstance(i2).getUserFull(tLRPC$User.id)) == null || (tLRPC$Photo = userFull.profile_photo) == null || (arrayList = tLRPC$Photo.video_sizes) == null || arrayList.isEmpty()) {
                 return null;
             }
             int i3 = 0;

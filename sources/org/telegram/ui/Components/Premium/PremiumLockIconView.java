@@ -19,13 +19,14 @@ import org.telegram.ui.Components.voip.CellFlickerDrawable;
 
 public class PremiumLockIconView extends ImageView {
     public static int TYPE_REACTIONS = 0;
-    public static int TYPE_STICKERS = 1;
+    public static int TYPE_STICKERS_PREMIUM_LOCKED = 1;
     CellFlickerDrawable cellFlickerDrawable = new CellFlickerDrawable();
     int color1;
     int color2;
     private float[] colorFloat = new float[3];
     int currentColor = -1;
     ImageReceiver imageReceiver;
+    private boolean locked;
     Paint oldShaderPaint;
     Paint paint = new Paint(1);
     Path path = new Path();
@@ -173,7 +174,7 @@ public class PremiumLockIconView extends ImageView {
         if (getMeasuredHeight() != 0 && getMeasuredWidth() != 0) {
             Color.colorToHSV(this.currentColor, this.colorFloat);
             float[] fArr = this.colorFloat;
-            fArr[1] = fArr[1] * 2.0f;
+            fArr[1] = fArr[1] * (this.locked ? 2.0f : 1.0f);
             if (fArr[2] > 0.7f) {
                 fArr[2] = 0.7f;
             }
@@ -215,5 +216,11 @@ public class PremiumLockIconView extends ImageView {
     public void resetAnimation() {
         setScaleX(0.0f);
         setScaleY(0.0f);
+    }
+
+    public void setLocked(boolean z) {
+        if (this.type != TYPE_REACTIONS) {
+            setImageResource(z ? NUM : NUM);
+        }
     }
 }

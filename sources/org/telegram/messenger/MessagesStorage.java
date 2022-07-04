@@ -115,7 +115,7 @@ import org.telegram.ui.Adapters.DialogsSearchAdapter;
 
 public class MessagesStorage extends BaseController {
     private static volatile MessagesStorage[] Instance = new MessagesStorage[4];
-    private static final int LAST_DB_VERSION = 97;
+    private static final int LAST_DB_VERSION = 98;
     private int archiveUnreadCount;
     private int[][] bots = {new int[2], new int[2]};
     private File cacheFile;
@@ -421,7 +421,7 @@ public class MessagesStorage extends BaseController {
                 this.database.executeFast("CREATE TABLE dialog_settings(did INTEGER PRIMARY KEY, flags INTEGER);").stepThis().dispose();
                 this.database.executeFast("CREATE TABLE web_recent_v3(id TEXT, type INTEGER, image_url TEXT, thumb_url TEXT, local_url TEXT, width INTEGER, height INTEGER, size INTEGER, date INTEGER, document BLOB, PRIMARY KEY (id, type));").stepThis().dispose();
                 this.database.executeFast("CREATE TABLE stickers_v2(id INTEGER PRIMARY KEY, data BLOB, date INTEGER, hash INTEGER);").stepThis().dispose();
-                this.database.executeFast("CREATE TABLE stickers_featured(id INTEGER PRIMARY KEY, data BLOB, unread BLOB, date INTEGER, hash INTEGER);").stepThis().dispose();
+                this.database.executeFast("CREATE TABLE stickers_featured(id INTEGER PRIMARY KEY, data BLOB, unread BLOB, date INTEGER, hash INTEGER, premium INTEGER);").stepThis().dispose();
                 this.database.executeFast("CREATE TABLE stickers_dice(emoji TEXT PRIMARY KEY, data BLOB, date INTEGER);").stepThis().dispose();
                 this.database.executeFast("CREATE TABLE hashtag_recent_v2(id TEXT PRIMARY KEY, date INTEGER);").stepThis().dispose();
                 this.database.executeFast("CREATE TABLE webpage_pending_v2(id INTEGER, mid INTEGER, uid INTEGER, PRIMARY KEY (id, mid, uid));").stepThis().dispose();
@@ -451,7 +451,7 @@ public class MessagesStorage extends BaseController {
                 this.database.executeFast("CREATE TABLE downloading_documents(data BLOB, hash INTEGER, id INTEGER, state INTEGER, date INTEGER, PRIMARY KEY(hash, id));").stepThis().dispose();
                 this.database.executeFast("CREATE TABLE attach_menu_bots(data BLOB, hash INTEGER, date INTEGER);").stepThis().dispose();
                 this.database.executeFast("CREATE TABLE premium_promo(data BLOB, date INTEGER);").stepThis().dispose();
-                this.database.executeFast("PRAGMA user_version = 97").stepThis().dispose();
+                this.database.executeFast("PRAGMA user_version = 98").stepThis().dispose();
                 AndroidUtilities.runOnUIThread(new MessagesStorage$$ExternalSyntheticLambda15(this));
                 loadDialogFilters();
                 loadUnreadMessages();
@@ -487,7 +487,7 @@ public class MessagesStorage extends BaseController {
                     }
                 }
                 queryFinalized.dispose();
-                if (intValue < 97) {
+                if (intValue < 98) {
                     updateDbToLastVersion(intValue);
                 }
                 AndroidUtilities.runOnUIThread(new MessagesStorage$$ExternalSyntheticLambda15(this));
@@ -577,7 +577,7 @@ public class MessagesStorage extends BaseController {
         MessagesStorage messagesStorage = this;
         int i4 = i;
         AndroidUtilities.runOnUIThread(new MessagesStorage$$ExternalSyntheticLambda17(messagesStorage));
-        FileLog.d("MessagesStorage start db migration from " + i4 + " to " + 97);
+        FileLog.d("MessagesStorage start db migration from " + i4 + " to " + 98);
         int i5 = 4;
         if (i4 < 4) {
             messagesStorage.database.executeFast("CREATE TABLE IF NOT EXISTS user_photos(uid INTEGER, id INTEGER, data BLOB, PRIMARY KEY (uid, id))").stepThis().dispose();
@@ -1591,6 +1591,12 @@ public class MessagesStorage extends BaseController {
             messagesStorage.database.executeFast("CREATE TABLE IF NOT EXISTS premium_promo(data BLOB, date INTEGER);").stepThis().dispose();
             messagesStorage.database.executeFast("UPDATE stickers_v2 SET date = 0");
             messagesStorage.database.executeFast("PRAGMA user_version = 97").stepThis().dispose();
+            i4 = 97;
+        }
+        if (i4 == 97) {
+            messagesStorage.database.executeFast("DROP TABLE IF EXISTS stickers_featured;").stepThis().dispose();
+            messagesStorage.database.executeFast("CREATE TABLE stickers_featured(id INTEGER PRIMARY KEY, data BLOB, unread BLOB, date INTEGER, hash INTEGER, premium INTEGER);").stepThis().dispose();
+            messagesStorage.database.executeFast("PRAGMA user_version = 98").stepThis().dispose();
         }
         FileLog.d("MessagesStorage db migration finished");
         AndroidUtilities.runOnUIThread(new MessagesStorage$$ExternalSyntheticLambda7(messagesStorage));
@@ -19010,7 +19016,7 @@ public class MessagesStorage extends BaseController {
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v13, resolved type: org.telegram.SQLite.SQLitePreparedStatement} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v15, resolved type: org.telegram.SQLite.SQLiteCursor} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v18, resolved type: org.telegram.SQLite.SQLitePreparedStatement} */
-    /* JADX WARNING: type inference failed for: r5v0, types: [long[], org.telegram.SQLite.SQLitePreparedStatement] */
+    /* JADX WARNING: type inference failed for: r5v0, types: [org.telegram.SQLite.SQLitePreparedStatement, long[]] */
     /* JADX WARNING: type inference failed for: r5v5 */
     /* JADX WARNING: type inference failed for: r5v9 */
     /* JADX WARNING: type inference failed for: r5v10 */
@@ -21071,12 +21077,12 @@ public class MessagesStorage extends BaseController {
     }
 
     /* JADX WARNING: type inference failed for: r6v0 */
-    /* JADX WARNING: type inference failed for: r6v1, types: [boolean, int] */
+    /* JADX WARNING: type inference failed for: r6v1, types: [int, boolean] */
     /* JADX WARNING: type inference failed for: r15v5 */
     /* JADX WARNING: type inference failed for: r15v10 */
     /* JADX WARNING: type inference failed for: r6v24 */
     /* access modifiers changed from: private */
-    /* JADX WARNING: Incorrect type for immutable var: ssa=int, code=?, for r15v2, types: [boolean, int] */
+    /* JADX WARNING: Incorrect type for immutable var: ssa=int, code=?, for r15v2, types: [int, boolean] */
     /* JADX WARNING: Removed duplicated region for block: B:46:0x0109 A[Catch:{ Exception -> 0x0286 }] */
     /* JADX WARNING: Removed duplicated region for block: B:53:0x01d8 A[Catch:{ Exception -> 0x0286 }] */
     /* JADX WARNING: Removed duplicated region for block: B:54:0x01dd A[Catch:{ Exception -> 0x0286 }] */
@@ -24926,11 +24932,11 @@ public class MessagesStorage extends BaseController {
             return
         L_0x0023:
             java.lang.String r8 = "SavedMessages"
-            r9 = 2131628074(0x7f0e102a, float:1.888343E38)
+            r9 = 2131628077(0x7f0e102d, float:1.8883436E38)
             java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r8, r9)     // Catch:{ Exception -> 0x06c9 }
             java.lang.String r8 = r8.toLowerCase()     // Catch:{ Exception -> 0x06c9 }
             java.lang.String r9 = "saved messages"
-            r10 = 2131627917(0x7f0e0f8d, float:1.8883112E38)
+            r10 = 2131627920(0x7f0e0var_, float:1.8883118E38)
             java.lang.String r11 = org.telegram.messenger.LocaleController.getString(r4, r10)     // Catch:{ Exception -> 0x06c9 }
             java.lang.String r11 = r11.toLowerCase()     // Catch:{ Exception -> 0x06c9 }
             java.lang.String r12 = "replies"
@@ -25106,7 +25112,7 @@ public class MessagesStorage extends BaseController {
             r7.<init>()     // Catch:{ Exception -> 0x06c9 }
             r7.date = r4     // Catch:{ Exception -> 0x06c9 }
             r4 = r21
-            r8 = 2131627917(0x7f0e0f8d, float:1.8883112E38)
+            r8 = 2131627920(0x7f0e0var_, float:1.8883118E38)
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r4, r8)     // Catch:{ Exception -> 0x06c9 }
             r7.name = r4     // Catch:{ Exception -> 0x06c9 }
             r7.object = r6     // Catch:{ Exception -> 0x06c9 }

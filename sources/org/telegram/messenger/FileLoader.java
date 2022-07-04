@@ -1204,14 +1204,18 @@ public class FileLoader extends BaseController {
     private boolean canSaveToPublicStorage(Object obj) {
         int i;
         if (SharedConfig.saveToGalleryFlags != 0 && !BuildVars.NO_SCOPED_STORAGE && (obj instanceof MessageObject)) {
-            long dialogId = ((MessageObject) obj).getDialogId();
-            if (dialogId >= 0) {
-                i = 1;
-            } else {
-                i = ChatObject.isChannelAndNotMegaGroup(getMessagesController().getChat(Long.valueOf(-dialogId))) ? 4 : 2;
-            }
-            if ((i & SharedConfig.saveToGalleryFlags) != 0) {
-                return true;
+            MessageObject messageObject = (MessageObject) obj;
+            long dialogId = messageObject.getDialogId();
+            long j = -dialogId;
+            if (!getMessagesController().isChatNoForwards(getMessagesController().getChat(Long.valueOf(j))) && !messageObject.messageOwner.noforwards) {
+                if (dialogId >= 0) {
+                    i = 1;
+                } else {
+                    i = ChatObject.isChannelAndNotMegaGroup(getMessagesController().getChat(Long.valueOf(j))) ? 4 : 2;
+                }
+                if ((i & SharedConfig.saveToGalleryFlags) != 0) {
+                    return true;
+                }
             }
         }
         return false;

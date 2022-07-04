@@ -1505,10 +1505,10 @@ public class ChatRightsEditActivity extends BaseFragment {
             android.app.Activity r1 = r22.getParentActivity()
             r0.<init>((android.content.Context) r1)
             boolean r1 = r13.asAdmin
-            r2 = 2131624248(0x7f0e0138, float:1.887567E38)
+            r2 = 2131624250(0x7f0e013a, float:1.8875674E38)
             java.lang.String r6 = "AddBot"
             if (r1 == 0) goto L_0x017a
-            r1 = 2131624249(0x7f0e0139, float:1.8875672E38)
+            r1 = 2131624251(0x7f0e013b, float:1.8875676E38)
             java.lang.String r7 = "AddBotAdmin"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r7, r1)
             goto L_0x017e
@@ -1537,21 +1537,21 @@ public class ChatRightsEditActivity extends BaseFragment {
             boolean r8 = r13.asAdmin
             if (r8 == 0) goto L_0x01bd
             if (r1 == 0) goto L_0x01af
-            r1 = 2131624254(0x7f0e013e, float:1.8875683E38)
+            r1 = 2131624256(0x7f0e0140, float:1.8875687E38)
             java.lang.Object[] r3 = new java.lang.Object[r4]
             r3[r5] = r7
             java.lang.String r4 = "AddBotMessageAdminChannel"
             java.lang.String r1 = org.telegram.messenger.LocaleController.formatString(r4, r1, r3)
             goto L_0x01d2
         L_0x01af:
-            r1 = 2131624255(0x7f0e013f, float:1.8875685E38)
+            r1 = 2131624257(0x7f0e0141, float:1.8875689E38)
             java.lang.Object[] r3 = new java.lang.Object[r4]
             r3[r5] = r7
             java.lang.String r4 = "AddBotMessageAdminGroup"
             java.lang.String r1 = org.telegram.messenger.LocaleController.formatString(r4, r1, r3)
             goto L_0x01d2
         L_0x01bd:
-            r1 = 2131624269(0x7f0e014d, float:1.8875713E38)
+            r1 = 2131624271(0x7f0e014f, float:1.8875717E38)
             java.lang.Object[] r3 = new java.lang.Object[r3]
             org.telegram.tgnet.TLRPC$User r8 = r13.currentUser
             java.lang.String r8 = org.telegram.messenger.UserObject.getUserName(r8)
@@ -1562,14 +1562,14 @@ public class ChatRightsEditActivity extends BaseFragment {
         L_0x01d2:
             android.text.SpannableStringBuilder r1 = org.telegram.messenger.AndroidUtilities.replaceTags(r1)
             r0.setMessage(r1)
-            r1 = 2131624817(0x7f0e0371, float:1.8876824E38)
+            r1 = 2131624819(0x7f0e0373, float:1.8876828E38)
             java.lang.String r3 = "Cancel"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r3, r1)
             r3 = 0
             r0.setNegativeButton(r1, r3)
             boolean r1 = r13.asAdmin
             if (r1 == 0) goto L_0x01f4
-            r1 = 2131624246(0x7f0e0136, float:1.8875666E38)
+            r1 = 2131624248(0x7f0e0138, float:1.887567E38)
             java.lang.String r2 = "AddAsAdmin"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             goto L_0x01f8
@@ -2002,7 +2002,7 @@ public class ChatRightsEditActivity extends BaseFragment {
                 org.telegram.ui.Components.AnimatedTextView r14 = r14.addBotButtonText
                 java.lang.StringBuilder r4 = new java.lang.StringBuilder
                 r4.<init>()
-                r5 = 2131624251(0x7f0e013b, float:1.8875676E38)
+                r5 = 2131624253(0x7f0e013d, float:1.887568E38)
                 java.lang.String r6 = "AddBotButton"
                 java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r6, r5)
                 r4.append(r5)
@@ -2011,11 +2011,11 @@ public class ChatRightsEditActivity extends BaseFragment {
                 org.telegram.ui.ChatRightsEditActivity r5 = org.telegram.ui.ChatRightsEditActivity.this
                 boolean r5 = r5.asAdmin
                 if (r5 == 0) goto L_0x00a8
-                r5 = 2131624252(0x7f0e013c, float:1.8875678E38)
+                r5 = 2131624254(0x7f0e013e, float:1.8875683E38)
                 java.lang.String r6 = "AddBotButtonAsAdmin"
                 goto L_0x00ad
             L_0x00a8:
-                r5 = 2131624253(0x7f0e013d, float:1.887568E38)
+                r5 = 2131624255(0x7f0e013f, float:1.8875685E38)
                 java.lang.String r6 = "AddBotButtonAsMember"
             L_0x00ad:
                 java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r6, r5)
@@ -2698,7 +2698,7 @@ public class ChatRightsEditActivity extends BaseFragment {
             if (r0 == 0) goto L_0x0156
             java.lang.StringBuilder r2 = new java.lang.StringBuilder
             r2.<init>()
-            r4 = 2131624251(0x7f0e013b, float:1.8875676E38)
+            r4 = 2131624253(0x7f0e013d, float:1.887568E38)
             java.lang.String r5 = "AddBotButton"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r5, r4)
             r2.append(r4)
@@ -2706,11 +2706,11 @@ public class ChatRightsEditActivity extends BaseFragment {
             r2.append(r4)
             boolean r4 = r8.asAdmin
             if (r4 == 0) goto L_0x0141
-            r4 = 2131624252(0x7f0e013c, float:1.8875678E38)
+            r4 = 2131624254(0x7f0e013e, float:1.8875683E38)
             java.lang.String r5 = "AddBotButtonAsAdmin"
             goto L_0x0146
         L_0x0141:
-            r4 = 2131624253(0x7f0e013d, float:1.887568E38)
+            r4 = 2131624255(0x7f0e013f, float:1.8875685E38)
             java.lang.String r5 = "AddBotButtonAsMember"
         L_0x0146:
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r5, r4)

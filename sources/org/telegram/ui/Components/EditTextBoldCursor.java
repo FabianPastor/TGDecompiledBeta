@@ -974,15 +974,15 @@ public class EditTextBoldCursor extends EditTextEffects {
                     invalidate();
                 }
             }
-            int i9 = (int) this.lineY;
-            int i10 = this.lastTouchX;
-            if (i10 < 0) {
-                i10 = getMeasuredWidth() / 2;
+            int scrollY2 = ((int) this.lineY) + getScrollY() + Math.min(Math.max(0, ((((getLayout() == null ? 0 : getLayout().getHeight()) - getMeasuredHeight()) + getPaddingBottom()) + getPaddingTop()) - getScrollY()), AndroidUtilities.dp(2.0f));
+            int i9 = this.lastTouchX;
+            if (i9 < 0) {
+                i9 = getMeasuredWidth() / 2;
             }
-            int i11 = i10;
-            int max = Math.max(i11, getMeasuredWidth() - i11) * 2;
+            int i10 = i9;
+            int max = Math.max(i10, getMeasuredWidth() - i10) * 2;
             if (this.lineActiveness < 1.0f) {
-                canvas.drawRect((float) getScrollX(), (float) (i9 - dp), (float) (getScrollX() + getMeasuredWidth()), (float) i9, this.linePaint);
+                canvas.drawRect((float) getScrollX(), (float) (scrollY2 - dp), (float) (getScrollX() + getMeasuredWidth()), (float) scrollY2, this.linePaint);
             }
             float f8 = this.lineActiveness;
             if (f8 > 0.0f) {
@@ -994,8 +994,8 @@ public class EditTextBoldCursor extends EditTextEffects {
                 if (!z5) {
                     f3 = interpolation;
                 }
-                float f9 = (float) i11;
-                canvas.drawRect(Math.max(0.0f, f9 - (this.activeLineWidth / 2.0f)) + ((float) getScrollX()), (float) (i9 - ((int) (f3 * ((float) AndroidUtilities.dp(2.0f))))), ((float) getScrollX()) + Math.min(f9 + (this.activeLineWidth / 2.0f), (float) getMeasuredWidth()), (float) i9, this.activeLinePaint);
+                float f9 = (float) i10;
+                canvas.drawRect(Math.max(0.0f, f9 - (this.activeLineWidth / 2.0f)) + ((float) getScrollX()), (float) (scrollY2 - ((int) (f3 * ((float) AndroidUtilities.dp(2.0f))))), ((float) getScrollX()) + Math.min(f9 + (this.activeLineWidth / 2.0f), (float) getMeasuredWidth()), (float) scrollY2, this.activeLinePaint);
             }
         }
     }

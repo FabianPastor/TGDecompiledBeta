@@ -556,7 +556,7 @@ public class FilterCreateActivity extends BaseFragment {
             int r1 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_READ
             r1 = r1 & r0
             if (r1 == 0) goto L_0x002e
-            r0 = 2131625865(0x7f0e0789, float:1.887895E38)
+            r0 = 2131625868(0x7f0e078c, float:1.8878956E38)
             java.lang.String r1 = "FilterNameUnread"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             goto L_0x00a8
@@ -564,7 +564,7 @@ public class FilterCreateActivity extends BaseFragment {
             int r1 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_MUTED
             r0 = r0 & r1
             if (r0 == 0) goto L_0x00a7
-            r0 = 2131625864(0x7f0e0788, float:1.8878948E38)
+            r0 = 2131625867(0x7f0e078b, float:1.8878954E38)
             java.lang.String r1 = "FilterNameNonMuted"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             goto L_0x00a8
@@ -575,7 +575,7 @@ public class FilterCreateActivity extends BaseFragment {
             r0 = r0 ^ -1
             r0 = r0 & r2
             if (r0 != 0) goto L_0x00a7
-            r0 = 2131625842(0x7f0e0772, float:1.8878903E38)
+            r0 = 2131625845(0x7f0e0775, float:1.887891E38)
             java.lang.String r1 = "FilterContacts"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             goto L_0x00a8
@@ -586,7 +586,7 @@ public class FilterCreateActivity extends BaseFragment {
             r0 = r0 ^ -1
             r0 = r0 & r2
             if (r0 != 0) goto L_0x00a7
-            r0 = 2131625872(0x7f0e0790, float:1.8878964E38)
+            r0 = 2131625875(0x7f0e0793, float:1.887897E38)
             java.lang.String r1 = "FilterNonContacts"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             goto L_0x00a8
@@ -597,7 +597,7 @@ public class FilterCreateActivity extends BaseFragment {
             r0 = r0 ^ -1
             r0 = r0 & r2
             if (r0 != 0) goto L_0x00a7
-            r0 = 2131625859(0x7f0e0783, float:1.8878938E38)
+            r0 = 2131625862(0x7f0e0786, float:1.8878944E38)
             java.lang.String r1 = "FilterGroups"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             goto L_0x00a8
@@ -608,7 +608,7 @@ public class FilterCreateActivity extends BaseFragment {
             r0 = r0 ^ -1
             r0 = r0 & r2
             if (r0 != 0) goto L_0x00a7
-            r0 = 2131625832(0x7f0e0768, float:1.8878883E38)
+            r0 = 2131625835(0x7f0e076b, float:1.887889E38)
             java.lang.String r1 = "FilterBots"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             goto L_0x00a8
@@ -619,7 +619,7 @@ public class FilterCreateActivity extends BaseFragment {
             r0 = r0 ^ -1
             r0 = r0 & r2
             if (r0 != 0) goto L_0x00a7
-            r0 = 2131625833(0x7f0e0769, float:1.8878885E38)
+            r0 = 2131625836(0x7f0e076c, float:1.8878891E38)
             java.lang.String r1 = "FilterChannels"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             goto L_0x00a8
@@ -1140,7 +1140,7 @@ public class FilterCreateActivity extends BaseFragment {
                 org.telegram.ui.FilterCreateActivity r2 = org.telegram.ui.FilterCreateActivity.this
                 int r2 = r2.includeSectionRow
                 if (r12 != r2) goto L_0x0037
-                r2 = 2131625861(0x7f0e0785, float:1.8878942E38)
+                r2 = 2131625864(0x7f0e0788, float:1.8878948E38)
                 java.lang.String r3 = "FilterIncludeInfo"
                 java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
                 r0.setText(r2)
@@ -1149,7 +1149,7 @@ public class FilterCreateActivity extends BaseFragment {
                 org.telegram.ui.FilterCreateActivity r2 = org.telegram.ui.FilterCreateActivity.this
                 int r2 = r2.excludeSectionRow
                 if (r12 != r2) goto L_0x004b
-                r2 = 2131625856(0x7f0e0780, float:1.8878932E38)
+                r2 = 2131625859(0x7f0e0783, float:1.8878938E38)
                 java.lang.String r3 = "FilterExcludeInfo"
                 java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
                 r0.setText(r2)
@@ -1180,7 +1180,7 @@ public class FilterCreateActivity extends BaseFragment {
                 r12 = 0
                 java.lang.String r0 = "windowBackgroundWhiteRedText5"
                 r11.setColors(r12, r0)
-                r12 = 2131625843(0x7f0e0773, float:1.8878905E38)
+                r12 = 2131625846(0x7f0e0776, float:1.8878911E38)
                 java.lang.String r0 = "FilterDelete"
                 java.lang.String r12 = org.telegram.messenger.LocaleController.getString(r0, r12)
                 r11.setText(r12, r2)
@@ -1221,7 +1221,7 @@ public class FilterCreateActivity extends BaseFragment {
                 r1 = 2131165677(0x7var_ed, float:1.7945578E38)
                 if (r12 != r0) goto L_0x0108
                 r11.setColors(r6, r5)
-                r0 = 2131625819(0x7f0e075b, float:1.8878857E38)
+                r0 = 2131625822(0x7f0e075e, float:1.8878863E38)
                 java.lang.String r4 = "FilterAddChats"
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r4, r0)
                 int r12 = r12 + r3
@@ -1237,7 +1237,7 @@ public class FilterCreateActivity extends BaseFragment {
                 int r0 = r0.excludeAddRow
                 if (r12 != r0) goto L_0x0395
                 r11.setColors(r6, r5)
-                r0 = 2131625875(0x7f0e0793, float:1.887897E38)
+                r0 = 2131625878(0x7f0e0796, float:1.8878976E38)
                 java.lang.String r4 = "FilterRemoveChats"
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r4, r0)
                 int r12 = r12 + r3
@@ -1326,7 +1326,7 @@ public class FilterCreateActivity extends BaseFragment {
                 if (r5 == 0) goto L_0x0395
                 boolean r11 = r5.bot
                 if (r11 == 0) goto L_0x01e6
-                r11 = 2131624702(0x7f0e02fe, float:1.8876591E38)
+                r11 = 2131624704(0x7f0e0300, float:1.8876595E38)
                 java.lang.String r12 = "Bot"
                 java.lang.String r11 = org.telegram.messenger.LocaleController.getString(r12, r11)
             L_0x01e4:
@@ -1335,12 +1335,12 @@ public class FilterCreateActivity extends BaseFragment {
             L_0x01e6:
                 boolean r11 = r5.contact
                 if (r11 == 0) goto L_0x01f4
-                r11 = 2131625841(0x7f0e0771, float:1.8878901E38)
+                r11 = 2131625844(0x7f0e0774, float:1.8878907E38)
                 java.lang.String r12 = "FilterContact"
                 java.lang.String r11 = org.telegram.messenger.LocaleController.getString(r12, r11)
                 goto L_0x01e4
             L_0x01f4:
-                r11 = 2131625871(0x7f0e078f, float:1.8878962E38)
+                r11 = 2131625874(0x7f0e0792, float:1.8878968E38)
                 java.lang.String r12 = "FilterNonContact"
                 java.lang.String r11 = org.telegram.messenger.LocaleController.getString(r12, r11)
                 goto L_0x01e4
@@ -1373,12 +1373,12 @@ public class FilterCreateActivity extends BaseFragment {
                 if (r11 == 0) goto L_0x0244
                 boolean r11 = r5.megagroup
                 if (r11 != 0) goto L_0x0244
-                r11 = 2131624944(0x7f0e03f0, float:1.8877082E38)
+                r11 = 2131624946(0x7f0e03f2, float:1.8877086E38)
                 java.lang.String r12 = "ChannelPrivate"
                 java.lang.String r11 = org.telegram.messenger.LocaleController.getString(r12, r11)
                 goto L_0x0226
             L_0x0244:
-                r11 = 2131626583(0x7f0e0a57, float:1.8880406E38)
+                r11 = 2131626586(0x7f0e0a5a, float:1.8880412E38)
                 java.lang.String r12 = "MegaPrivate"
                 java.lang.String r11 = org.telegram.messenger.LocaleController.getString(r12, r11)
                 goto L_0x0226
@@ -1387,12 +1387,12 @@ public class FilterCreateActivity extends BaseFragment {
                 if (r11 == 0) goto L_0x0262
                 boolean r11 = r5.megagroup
                 if (r11 != 0) goto L_0x0262
-                r11 = 2131624947(0x7f0e03f3, float:1.8877088E38)
+                r11 = 2131624949(0x7f0e03f5, float:1.8877092E38)
                 java.lang.String r12 = "ChannelPublic"
                 java.lang.String r11 = org.telegram.messenger.LocaleController.getString(r12, r11)
                 goto L_0x0226
             L_0x0262:
-                r11 = 2131626586(0x7f0e0a5a, float:1.8880412E38)
+                r11 = 2131626589(0x7f0e0a5d, float:1.8880418E38)
                 java.lang.String r12 = "MegaPublic"
                 java.lang.String r11 = org.telegram.messenger.LocaleController.getString(r12, r11)
                 goto L_0x0226
@@ -1405,7 +1405,7 @@ public class FilterCreateActivity extends BaseFragment {
                 org.telegram.ui.FilterCreateActivity r11 = org.telegram.ui.FilterCreateActivity.this
                 int r11 = r11.includeContactsRow
                 if (r12 != r11) goto L_0x0295
-                r11 = 2131625842(0x7f0e0772, float:1.8878903E38)
+                r11 = 2131625845(0x7f0e0775, float:1.887891E38)
                 java.lang.String r0 = "FilterContacts"
                 java.lang.String r11 = org.telegram.messenger.LocaleController.getString(r0, r11)
                 int r12 = r12 + r3
@@ -1424,7 +1424,7 @@ public class FilterCreateActivity extends BaseFragment {
                 org.telegram.ui.FilterCreateActivity r11 = org.telegram.ui.FilterCreateActivity.this
                 int r11 = r11.includeNonContactsRow
                 if (r12 != r11) goto L_0x02b3
-                r11 = 2131625872(0x7f0e0790, float:1.8878964E38)
+                r11 = 2131625875(0x7f0e0793, float:1.887897E38)
                 java.lang.String r0 = "FilterNonContacts"
                 java.lang.String r11 = org.telegram.messenger.LocaleController.getString(r0, r11)
                 int r12 = r12 + r3
@@ -1439,7 +1439,7 @@ public class FilterCreateActivity extends BaseFragment {
                 org.telegram.ui.FilterCreateActivity r11 = org.telegram.ui.FilterCreateActivity.this
                 int r11 = r11.includeGroupsRow
                 if (r12 != r11) goto L_0x02d1
-                r11 = 2131625859(0x7f0e0783, float:1.8878938E38)
+                r11 = 2131625862(0x7f0e0786, float:1.8878944E38)
                 java.lang.String r0 = "FilterGroups"
                 java.lang.String r11 = org.telegram.messenger.LocaleController.getString(r0, r11)
                 int r12 = r12 + r3
@@ -1454,7 +1454,7 @@ public class FilterCreateActivity extends BaseFragment {
                 org.telegram.ui.FilterCreateActivity r11 = org.telegram.ui.FilterCreateActivity.this
                 int r11 = r11.includeChannelsRow
                 if (r12 != r11) goto L_0x02ef
-                r11 = 2131625833(0x7f0e0769, float:1.8878885E38)
+                r11 = 2131625836(0x7f0e076c, float:1.8878891E38)
                 java.lang.String r0 = "FilterChannels"
                 java.lang.String r11 = org.telegram.messenger.LocaleController.getString(r0, r11)
                 int r12 = r12 + r3
@@ -1469,7 +1469,7 @@ public class FilterCreateActivity extends BaseFragment {
                 org.telegram.ui.FilterCreateActivity r11 = org.telegram.ui.FilterCreateActivity.this
                 int r11 = r11.includeBotsRow
                 if (r12 != r11) goto L_0x030d
-                r11 = 2131625832(0x7f0e0768, float:1.8878883E38)
+                r11 = 2131625835(0x7f0e076b, float:1.887889E38)
                 java.lang.String r0 = "FilterBots"
                 java.lang.String r11 = org.telegram.messenger.LocaleController.getString(r0, r11)
                 int r12 = r12 + r3
@@ -1484,7 +1484,7 @@ public class FilterCreateActivity extends BaseFragment {
                 org.telegram.ui.FilterCreateActivity r11 = org.telegram.ui.FilterCreateActivity.this
                 int r11 = r11.excludeMutedRow
                 if (r12 != r11) goto L_0x032c
-                r11 = 2131625862(0x7f0e0786, float:1.8878944E38)
+                r11 = 2131625865(0x7f0e0789, float:1.887895E38)
                 java.lang.String r0 = "FilterMuted"
                 java.lang.String r11 = org.telegram.messenger.LocaleController.getString(r0, r11)
                 int r12 = r12 + r3
@@ -1499,7 +1499,7 @@ public class FilterCreateActivity extends BaseFragment {
                 org.telegram.ui.FilterCreateActivity r11 = org.telegram.ui.FilterCreateActivity.this
                 int r11 = r11.excludeReadRow
                 if (r12 != r11) goto L_0x034b
-                r11 = 2131625873(0x7f0e0791, float:1.8878966E38)
+                r11 = 2131625876(0x7f0e0794, float:1.8878972E38)
                 java.lang.String r0 = "FilterRead"
                 java.lang.String r11 = org.telegram.messenger.LocaleController.getString(r0, r11)
                 int r12 = r12 + r3
@@ -1511,7 +1511,7 @@ public class FilterCreateActivity extends BaseFragment {
                 java.lang.String r12 = "read"
                 goto L_0x0290
             L_0x034b:
-                r11 = 2131625829(0x7f0e0765, float:1.8878877E38)
+                r11 = 2131625832(0x7f0e0768, float:1.8878883E38)
                 java.lang.String r0 = "FilterArchived"
                 java.lang.String r11 = org.telegram.messenger.LocaleController.getString(r0, r11)
                 int r12 = r12 + r3
@@ -1533,7 +1533,7 @@ public class FilterCreateActivity extends BaseFragment {
                 org.telegram.ui.FilterCreateActivity r0 = org.telegram.ui.FilterCreateActivity.this
                 int r0 = r0.includeHeaderRow
                 if (r12 != r0) goto L_0x0381
-                r12 = 2131625860(0x7f0e0784, float:1.887894E38)
+                r12 = 2131625863(0x7f0e0787, float:1.8878946E38)
                 java.lang.String r0 = "FilterInclude"
                 java.lang.String r12 = org.telegram.messenger.LocaleController.getString(r0, r12)
                 r11.setText(r12)
@@ -1542,7 +1542,7 @@ public class FilterCreateActivity extends BaseFragment {
                 org.telegram.ui.FilterCreateActivity r0 = org.telegram.ui.FilterCreateActivity.this
                 int r0 = r0.excludeHeaderRow
                 if (r12 != r0) goto L_0x0395
-                r12 = 2131625854(0x7f0e077e, float:1.8878928E38)
+                r12 = 2131625857(0x7f0e0781, float:1.8878934E38)
                 java.lang.String r0 = "FilterExclude"
                 java.lang.String r12 = org.telegram.messenger.LocaleController.getString(r0, r12)
                 r11.setText(r12)

@@ -372,6 +372,7 @@ public class AvatarPreviewer {
         /* access modifiers changed from: protected */
         public void onAttachedToWindow() {
             super.onAttachedToWindow();
+            this.imageReceiver.onAttachedToWindow();
             NotificationCenter.getInstance(UserConfig.selectedAccount).addObserver(this, NotificationCenter.fileLoaded);
             NotificationCenter.getInstance(UserConfig.selectedAccount).addObserver(this, NotificationCenter.fileLoadProgressChanged);
         }
@@ -379,6 +380,7 @@ public class AvatarPreviewer {
         /* access modifiers changed from: protected */
         public void onDetachedFromWindow() {
             super.onDetachedFromWindow();
+            this.imageReceiver.onDetachedFromWindow();
             NotificationCenter.getInstance(UserConfig.selectedAccount).removeObserver(this, NotificationCenter.fileLoaded);
             NotificationCenter.getInstance(UserConfig.selectedAccount).removeObserver(this, NotificationCenter.fileLoadProgressChanged);
         }

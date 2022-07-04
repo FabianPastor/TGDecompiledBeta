@@ -11,11 +11,13 @@
     <string name="AboutTelegramPremium">About Telegram Premium</string>
     <string name="AccActionCancelDownload">Cancel download</string>
     <string name="AccActionChatPreview">Chat Preview</string>
+    <string name="AccActionCloseTranscription">Close Transcription</string>
     <string name="AccActionDownload">Download</string>
     <string name="AccActionEnterSelectionMode">Enter selection mode</string>
     <string name="AccActionMessageOptions">Message options</string>
     <string name="AccActionOpenFile">Open file</string>
     <string name="AccActionOpenForwardedOrigin">Forwarded origin</string>
+    <string name="AccActionOpenTranscription">Open Voice Transcription</string>
     <string name="AccActionPause">Pause</string>
     <string name="AccActionPlay">Play</string>
     <string name="AccActionRecordVideo">Record video</string>
@@ -1861,6 +1863,7 @@
     <string name="FeaturedGifs">Trending GIFs</string>
     <string name="FeaturedStickers">Trending Stickers</string>
     <string name="FeaturedStickersInfo">These stickers are currently trending on Telegram. You can add custom stickers via the @stickers bot.</string>
+    <string name="FeaturedStickersPremium">Trending Premium Stickers</string>
     <string name="FeaturedStickersShort">Trending</string>
     <string name="February">February</string>
     <string name="FileSavedHint">File saved to downloads</string>

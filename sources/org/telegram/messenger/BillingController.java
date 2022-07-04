@@ -17,12 +17,15 @@ import com.android.billingclient.api.PurchasesResponseListener;
 import com.android.billingclient.api.PurchasesUpdatedListener;
 import com.android.billingclient.api.QueryProductDetailsParams;
 import com.android.billingclient.api.QueryPurchasesParams;
+import com.google.android.exoplayer2.util.Util;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import org.json.JSONObject;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC$TL_error;
 import org.telegram.tgnet.TLRPC$TL_payments_assignPlayMarketTransaction;
@@ -34,6 +37,7 @@ public class BillingController implements PurchasesUpdatedListener, BillingClien
     public static final String PREMIUM_PRODUCT_ID = "telegram_premium";
     private static BillingController instance;
     private BillingClient billingClient;
+    private Map<String, Integer> currencyExpMap = new HashMap();
     private List<String> requestingTokens = new ArrayList();
     private Map<String, Consumer<BillingResult>> resultListeners = new HashMap();
 
@@ -48,9 +52,35 @@ public class BillingController implements PurchasesUpdatedListener, BillingClien
         this.billingClient = BillingClient.newBuilder(context).enablePendingPurchases().setListener(this).build();
     }
 
+    public int getCurrencyExp(String str) {
+        Integer num = this.currencyExpMap.get(str);
+        if (num == null) {
+            return 0;
+        }
+        return num.intValue();
+    }
+
     public void startConnection() {
         if (!isReady()) {
-            this.billingClient.startConnection(this);
+            if (BuildVars.useInvoiceBilling()) {
+                try {
+                    InputStream open = ApplicationLoader.applicationContext.getAssets().open("currencies.json");
+                    parseCurrencies(new JSONObject(new String(Util.toByteArray(open), "UTF-8")));
+                    open.close();
+                } catch (Exception e) {
+                    FileLog.e((Throwable) e);
+                }
+            } else {
+                this.billingClient.startConnection(this);
+            }
+        }
+    }
+
+    private void parseCurrencies(JSONObject jSONObject) {
+        Iterator<String> keys = jSONObject.keys();
+        while (keys.hasNext()) {
+            String next = keys.next();
+            this.currencyExpMap.put(next, Integer.valueOf(jSONObject.optJSONObject(next).optInt("exp")));
         }
     }
 

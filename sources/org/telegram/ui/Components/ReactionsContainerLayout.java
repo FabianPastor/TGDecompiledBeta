@@ -895,7 +895,9 @@ public class ReactionsContainerLayout extends FrameLayout implements Notificatio
         if (getAlpha() != f && f == 0.0f) {
             this.lastVisibleViews.clear();
             for (int i = 0; i < this.recyclerListView.getChildCount(); i++) {
-                ((ReactionHolderView) this.recyclerListView.getChildAt(i)).resetAnimation();
+                if (this.recyclerListView.getChildAt(i) instanceof ReactionHolderView) {
+                    ((ReactionHolderView) this.recyclerListView.getChildAt(i)).resetAnimation();
+                }
             }
         }
         super.setAlpha(f);

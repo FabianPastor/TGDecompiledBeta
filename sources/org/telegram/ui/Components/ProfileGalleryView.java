@@ -1251,7 +1251,7 @@ public class ProfileGalleryView extends CircularViewPager implements Notificatio
                 if (r11 == 0) goto L_0x0101
                 int r9 = r11.imageType
                 if (r9 != r1) goto L_0x0101
-                java.lang.String r9 = "g"
+                java.lang.String r9 = "avatar"
                 r14 = r9
                 goto L_0x0102
             L_0x0101:

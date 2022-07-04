@@ -639,7 +639,7 @@ public class StickersSearchAdapter extends RecyclerListView.SelectionAdapter {
             android.widget.ImageView$ScaleType r0 = android.widget.ImageView.ScaleType.CENTER
             r8.setScaleType(r0)
             android.widget.ImageView r8 = r6.emptyImageView
-            r0 = 2131166165(0x7var_d5, float:1.7946568E38)
+            r0 = 2131166166(0x7var_d6, float:1.794657E38)
             r8.setImageResource(r0)
             android.widget.ImageView r8 = r6.emptyImageView
             android.graphics.PorterDuffColorFilter r0 = new android.graphics.PorterDuffColorFilter
@@ -663,7 +663,7 @@ public class StickersSearchAdapter extends RecyclerListView.SelectionAdapter {
             android.content.Context r3 = r6.context
             r8.<init>(r3)
             r6.emptyTextView = r8
-            r3 = 2131626871(0x7f0e0b77, float:1.888099E38)
+            r3 = 2131626874(0x7f0e0b7a, float:1.8880997E38)
             java.lang.String r5 = "NoStickersFound"
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r5, r3)
             r8.setText(r3)

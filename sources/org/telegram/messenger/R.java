@@ -797,6 +797,7 @@ public final class R {
         public static final int msg_mini_customize = NUM;
         public static final int msg_mini_premiumlock = NUM;
         public static final int msg_mini_qr = NUM;
+        public static final int msg_mini_stickerstar = NUM;
         public static final int msg_minvideo = NUM;
         public static final int msg_more_0_2 = NUM;
         public static final int msg_more_0_5 = NUM;
@@ -1930,11 +1931,13 @@ public final class R {
         public static final int AboutTelegramPremium = NUM;
         public static final int AccActionCancelDownload = NUM;
         public static final int AccActionChatPreview = NUM;
+        public static final int AccActionCloseTranscription = NUM;
         public static final int AccActionDownload = NUM;
         public static final int AccActionEnterSelectionMode = NUM;
         public static final int AccActionMessageOptions = NUM;
         public static final int AccActionOpenFile = NUM;
         public static final int AccActionOpenForwardedOrigin = NUM;
+        public static final int AccActionOpenTranscription = NUM;
         public static final int AccActionPause = NUM;
         public static final int AccActionPlay = NUM;
         public static final int AccActionRecordVideo = NUM;
@@ -3780,6 +3783,7 @@ public final class R {
         public static final int FeaturedGifs = NUM;
         public static final int FeaturedStickers = NUM;
         public static final int FeaturedStickersInfo = NUM;
+        public static final int FeaturedStickersPremium = NUM;
         public static final int FeaturedStickersShort = NUM;
         public static final int February = NUM;
         public static final int FileSavedHint = NUM;

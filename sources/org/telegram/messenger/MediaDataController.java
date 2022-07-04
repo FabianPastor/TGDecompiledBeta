@@ -263,6 +263,7 @@ public class MediaDataController extends BaseController {
     private int[] loadDate = new int[5];
     private int loadFeaturedDate;
     private long loadFeaturedHash;
+    public boolean loadFeaturedPremium;
     private long[] loadHash = new long[5];
     boolean loaded;
     boolean loading;
@@ -2205,28 +2206,35 @@ public class MediaDataController extends BaseController {
         }
     }
 
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v1, resolved type: boolean} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v2, resolved type: boolean} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v3, resolved type: int} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v4, resolved type: int} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v6, resolved type: int} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v7, resolved type: boolean} */
     /* access modifiers changed from: private */
-    /* JADX WARNING: Removed duplicated region for block: B:33:0x0082 A[DONT_GENERATE] */
+    /* JADX WARNING: Multi-variable type inference failed */
+    /* JADX WARNING: Removed duplicated region for block: B:42:0x0098 A[DONT_GENERATE] */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public /* synthetic */ void lambda$loadFeaturedStickers$38() {
         /*
-            r11 = this;
+            r14 = this;
             java.util.ArrayList r2 = new java.util.ArrayList
             r2.<init>()
             r0 = 0
             r1 = 0
             r3 = 0
-            org.telegram.messenger.MessagesStorage r5 = r11.getMessagesStorage()     // Catch:{ all -> 0x0079 }
-            org.telegram.SQLite.SQLiteDatabase r5 = r5.getDatabase()     // Catch:{ all -> 0x0079 }
-            java.lang.String r6 = "SELECT data, unread, date, hash FROM stickers_featured WHERE 1"
-            java.lang.Object[] r7 = new java.lang.Object[r1]     // Catch:{ all -> 0x0079 }
-            org.telegram.SQLite.SQLiteCursor r5 = r5.queryFinalized(r6, r7)     // Catch:{ all -> 0x0079 }
-            boolean r6 = r5.next()     // Catch:{ all -> 0x0075 }
-            if (r6 == 0) goto L_0x006e
-            org.telegram.tgnet.NativeByteBuffer r6 = r5.byteBufferValue(r1)     // Catch:{ all -> 0x0075 }
+            org.telegram.messenger.MessagesStorage r5 = r14.getMessagesStorage()     // Catch:{ all -> 0x008e }
+            org.telegram.SQLite.SQLiteDatabase r5 = r5.getDatabase()     // Catch:{ all -> 0x008e }
+            java.lang.String r6 = "SELECT data, unread, date, hash, premium FROM stickers_featured WHERE 1"
+            java.lang.Object[] r7 = new java.lang.Object[r1]     // Catch:{ all -> 0x008e }
+            org.telegram.SQLite.SQLiteCursor r5 = r5.queryFinalized(r6, r7)     // Catch:{ all -> 0x008e }
+            boolean r6 = r5.next()     // Catch:{ all -> 0x0089 }
+            if (r6 == 0) goto L_0x0081
+            org.telegram.tgnet.NativeByteBuffer r6 = r5.byteBufferValue(r1)     // Catch:{ all -> 0x0089 }
             if (r6 == 0) goto L_0x0046
-            java.util.ArrayList r7 = new java.util.ArrayList     // Catch:{ all -> 0x0075 }
-            r7.<init>()     // Catch:{ all -> 0x0075 }
+            java.util.ArrayList r7 = new java.util.ArrayList     // Catch:{ all -> 0x0089 }
+            r7.<init>()     // Catch:{ all -> 0x0089 }
             int r0 = r6.readInt32(r1)     // Catch:{ all -> 0x0044 }
             r8 = 0
         L_0x002f:
@@ -2242,65 +2250,88 @@ public class MediaDataController extends BaseController {
             goto L_0x0046
         L_0x0044:
             r0 = move-exception
-            goto L_0x007d
+            goto L_0x008c
         L_0x0046:
             r6 = 1
-            org.telegram.tgnet.NativeByteBuffer r6 = r5.byteBufferValue(r6)     // Catch:{ all -> 0x0075 }
-            if (r6 == 0) goto L_0x0065
-            int r7 = r6.readInt32(r1)     // Catch:{ all -> 0x0075 }
-            r8 = 0
+            org.telegram.tgnet.NativeByteBuffer r7 = r5.byteBufferValue(r6)     // Catch:{ all -> 0x0089 }
+            if (r7 == 0) goto L_0x0065
+            int r8 = r7.readInt32(r1)     // Catch:{ all -> 0x0089 }
+            r9 = 0
         L_0x0052:
-            if (r8 >= r7) goto L_0x0062
-            long r9 = r6.readInt64(r1)     // Catch:{ all -> 0x0075 }
-            java.lang.Long r9 = java.lang.Long.valueOf(r9)     // Catch:{ all -> 0x0075 }
-            r2.add(r9)     // Catch:{ all -> 0x0075 }
-            int r8 = r8 + 1
+            if (r9 >= r8) goto L_0x0062
+            long r10 = r7.readInt64(r1)     // Catch:{ all -> 0x0089 }
+            java.lang.Long r10 = java.lang.Long.valueOf(r10)     // Catch:{ all -> 0x0089 }
+            r2.add(r10)     // Catch:{ all -> 0x0089 }
+            int r9 = r9 + 1
             goto L_0x0052
         L_0x0062:
-            r6.reuse()     // Catch:{ all -> 0x0075 }
+            r7.reuse()     // Catch:{ all -> 0x0089 }
         L_0x0065:
-            r6 = 2
-            int r1 = r5.intValue(r6)     // Catch:{ all -> 0x0075 }
-            long r3 = r11.calcFeaturedStickersHash(r0)     // Catch:{ all -> 0x0075 }
-        L_0x006e:
+            r7 = 2
+            int r7 = r5.intValue(r7)     // Catch:{ all -> 0x0089 }
+            long r3 = r14.calcFeaturedStickersHash(r0)     // Catch:{ all -> 0x007b }
+            r8 = 4
+            int r8 = r5.intValue(r8)     // Catch:{ all -> 0x007b }
+            if (r8 != r6) goto L_0x0076
+            r1 = 1
+        L_0x0076:
+            r12 = r3
+            r3 = r1
+            r1 = r7
+            r6 = r12
+            goto L_0x0083
+        L_0x007b:
+            r6 = move-exception
+            r12 = r7
+            r7 = r0
+            r0 = r6
+            r6 = r12
+            goto L_0x0093
+        L_0x0081:
+            r6 = r3
+            r3 = 0
+        L_0x0083:
             r5.dispose()
-            r5 = r3
-            r4 = r1
+            r5 = r1
             r1 = r0
-            goto L_0x0088
-        L_0x0075:
+            goto L_0x009f
+        L_0x0089:
             r6 = move-exception
             r7 = r0
             r0 = r6
-            goto L_0x007d
-        L_0x0079:
+        L_0x008c:
+            r6 = 0
+            goto L_0x0093
+        L_0x008e:
             r5 = move-exception
             r7 = r0
+            r6 = 0
             r0 = r5
             r5 = r7
-        L_0x007d:
-            org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)     // Catch:{ all -> 0x008e }
-            if (r5 == 0) goto L_0x0085
+        L_0x0093:
+            org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)     // Catch:{ all -> 0x00a5 }
+            if (r5 == 0) goto L_0x009b
             r5.dispose()
-        L_0x0085:
-            r5 = r3
-            r4 = r1
+        L_0x009b:
+            r5 = r6
             r1 = r7
-        L_0x0088:
-            r3 = 1
-            r0 = r11
-            r0.processLoadedFeaturedStickers(r1, r2, r3, r4, r5)
+            r6 = r3
+            r3 = 0
+        L_0x009f:
+            r4 = 1
+            r0 = r14
+            r0.processLoadedFeaturedStickers(r1, r2, r3, r4, r5, r6)
             return
-        L_0x008e:
+        L_0x00a5:
             r0 = move-exception
-            if (r5 == 0) goto L_0x0094
+            if (r5 == 0) goto L_0x00ab
             r5.dispose()
-        L_0x0094:
-            goto L_0x0096
-        L_0x0095:
+        L_0x00ab:
+            goto L_0x00ad
+        L_0x00ac:
             throw r0
-        L_0x0096:
-            goto L_0x0095
+        L_0x00ad:
+            goto L_0x00ac
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MediaDataController.lambda$loadFeaturedStickers$38():void");
     }
@@ -2315,15 +2346,15 @@ public class MediaDataController extends BaseController {
         TLObject tLObject2 = tLObject;
         if (tLObject2 instanceof TLRPC$TL_messages_featuredStickers) {
             TLRPC$TL_messages_featuredStickers tLRPC$TL_messages_featuredStickers = (TLRPC$TL_messages_featuredStickers) tLObject2;
-            processLoadedFeaturedStickers(tLRPC$TL_messages_featuredStickers.sets, tLRPC$TL_messages_featuredStickers.unread, false, (int) (System.currentTimeMillis() / 1000), tLRPC$TL_messages_featuredStickers.hash);
+            processLoadedFeaturedStickers(tLRPC$TL_messages_featuredStickers.sets, tLRPC$TL_messages_featuredStickers.unread, tLRPC$TL_messages_featuredStickers.premium, false, (int) (System.currentTimeMillis() / 1000), tLRPC$TL_messages_featuredStickers.hash);
             return;
         }
-        processLoadedFeaturedStickers((ArrayList<TLRPC$StickerSetCovered>) null, (ArrayList<Long>) null, false, (int) (System.currentTimeMillis() / 1000), tLRPC$TL_messages_getFeaturedStickers.hash);
+        processLoadedFeaturedStickers((ArrayList<TLRPC$StickerSetCovered>) null, (ArrayList<Long>) null, false, false, (int) (System.currentTimeMillis() / 1000), tLRPC$TL_messages_getFeaturedStickers.hash);
     }
 
-    private void processLoadedFeaturedStickers(ArrayList<TLRPC$StickerSetCovered> arrayList, ArrayList<Long> arrayList2, boolean z, int i, long j) {
+    private void processLoadedFeaturedStickers(ArrayList<TLRPC$StickerSetCovered> arrayList, ArrayList<Long> arrayList2, boolean z, boolean z2, int i, long j) {
         AndroidUtilities.runOnUIThread(new MediaDataController$$ExternalSyntheticLambda13(this));
-        Utilities.stageQueue.postRunnable(new MediaDataController$$ExternalSyntheticLambda115(this, z, arrayList, i, j, arrayList2));
+        Utilities.stageQueue.postRunnable(new MediaDataController$$ExternalSyntheticLambda115(this, z2, arrayList, i, j, arrayList2, z));
     }
 
     /* access modifiers changed from: private */
@@ -2333,7 +2364,7 @@ public class MediaDataController extends BaseController {
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$processLoadedFeaturedStickers$45(boolean z, ArrayList arrayList, int i, long j, ArrayList arrayList2) {
+    public /* synthetic */ void lambda$processLoadedFeaturedStickers$45(boolean z, ArrayList arrayList, int i, long j, ArrayList arrayList2, boolean z2) {
         ArrayList arrayList3 = arrayList;
         int i2 = i;
         long j2 = j;
@@ -2358,15 +2389,15 @@ public class MediaDataController extends BaseController {
                     longSparseArray.put(tLRPC$StickerSetCovered.set.id, tLRPC$StickerSetCovered);
                 }
                 if (!z) {
-                    putFeaturedStickersToCache(arrayList4, arrayList2, i, j);
+                    putFeaturedStickersToCache(arrayList4, arrayList2, i, j, z2);
                 }
-                AndroidUtilities.runOnUIThread(new MediaDataController$$ExternalSyntheticLambda73(this, arrayList2, longSparseArray, arrayList4, j, i));
+                AndroidUtilities.runOnUIThread(new MediaDataController$$ExternalSyntheticLambda73(this, arrayList2, longSparseArray, arrayList4, j, i, z2));
             } catch (Throwable th) {
                 FileLog.e(th);
             }
         } else {
             AndroidUtilities.runOnUIThread(new MediaDataController$$ExternalSyntheticLambda18(this, i2));
-            putFeaturedStickersToCache((ArrayList<TLRPC$StickerSetCovered>) null, (ArrayList<Long>) null, i, 0);
+            putFeaturedStickersToCache((ArrayList<TLRPC$StickerSetCovered>) null, (ArrayList<Long>) null, i, 0, z2);
         }
     }
 
@@ -2379,12 +2410,13 @@ public class MediaDataController extends BaseController {
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$processLoadedFeaturedStickers$43(ArrayList arrayList, LongSparseArray longSparseArray, ArrayList arrayList2, long j, int i) {
+    public /* synthetic */ void lambda$processLoadedFeaturedStickers$43(ArrayList arrayList, LongSparseArray longSparseArray, ArrayList arrayList2, long j, int i, boolean z) {
         this.unreadStickerSets = arrayList;
         this.featuredStickerSetsById = longSparseArray;
         this.featuredStickerSets = arrayList2;
         this.loadFeaturedHash = j;
         this.loadFeaturedDate = i;
+        this.loadFeaturedPremium = z;
         loadStickers(3, true, false);
         getNotificationCenter().postNotificationName(NotificationCenter.featuredStickersDidLoad, new Object[0]);
     }
@@ -2394,35 +2426,40 @@ public class MediaDataController extends BaseController {
         this.loadFeaturedDate = i;
     }
 
-    private void putFeaturedStickersToCache(ArrayList<TLRPC$StickerSetCovered> arrayList, ArrayList<Long> arrayList2, int i, long j) {
-        getMessagesStorage().getStorageQueue().postRunnable(new MediaDataController$$ExternalSyntheticLambda74(this, arrayList != null ? new ArrayList(arrayList) : null, arrayList2, i, j));
+    private void putFeaturedStickersToCache(ArrayList<TLRPC$StickerSetCovered> arrayList, ArrayList<Long> arrayList2, int i, long j, boolean z) {
+        getMessagesStorage().getStorageQueue().postRunnable(new MediaDataController$$ExternalSyntheticLambda74(this, arrayList != null ? new ArrayList(arrayList) : null, arrayList2, i, j, z));
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$putFeaturedStickersToCache$46(ArrayList arrayList, ArrayList arrayList2, int i, long j) {
+    public /* synthetic */ void lambda$putFeaturedStickersToCache$46(ArrayList arrayList, ArrayList arrayList2, int i, long j, boolean z) {
+        int i2 = 1;
         if (arrayList != null) {
             try {
-                SQLitePreparedStatement executeFast = getMessagesStorage().getDatabase().executeFast("REPLACE INTO stickers_featured VALUES(?, ?, ?, ?, ?)");
+                SQLitePreparedStatement executeFast = getMessagesStorage().getDatabase().executeFast("REPLACE INTO stickers_featured VALUES(?, ?, ?, ?, ?, ?)");
                 executeFast.requery();
-                int i2 = 4;
-                for (int i3 = 0; i3 < arrayList.size(); i3++) {
-                    i2 += ((TLRPC$StickerSetCovered) arrayList.get(i3)).getObjectSize();
+                int i3 = 4;
+                for (int i4 = 0; i4 < arrayList.size(); i4++) {
+                    i3 += ((TLRPC$StickerSetCovered) arrayList.get(i4)).getObjectSize();
                 }
-                NativeByteBuffer nativeByteBuffer = new NativeByteBuffer(i2);
+                NativeByteBuffer nativeByteBuffer = new NativeByteBuffer(i3);
                 NativeByteBuffer nativeByteBuffer2 = new NativeByteBuffer((arrayList2.size() * 8) + 4);
                 nativeByteBuffer.writeInt32(arrayList.size());
-                for (int i4 = 0; i4 < arrayList.size(); i4++) {
-                    ((TLRPC$StickerSetCovered) arrayList.get(i4)).serializeToStream(nativeByteBuffer);
+                for (int i5 = 0; i5 < arrayList.size(); i5++) {
+                    ((TLRPC$StickerSetCovered) arrayList.get(i5)).serializeToStream(nativeByteBuffer);
                 }
                 nativeByteBuffer2.writeInt32(arrayList2.size());
-                for (int i5 = 0; i5 < arrayList2.size(); i5++) {
-                    nativeByteBuffer2.writeInt64(((Long) arrayList2.get(i5)).longValue());
+                for (int i6 = 0; i6 < arrayList2.size(); i6++) {
+                    nativeByteBuffer2.writeInt64(((Long) arrayList2.get(i6)).longValue());
                 }
                 executeFast.bindInteger(1, 1);
                 executeFast.bindByteBuffer(2, nativeByteBuffer);
                 executeFast.bindByteBuffer(3, nativeByteBuffer2);
                 executeFast.bindInteger(4, i);
                 executeFast.bindLong(5, j);
+                if (!z) {
+                    i2 = 0;
+                }
+                executeFast.bindInteger(6, i2);
                 executeFast.step();
                 nativeByteBuffer.reuse();
                 nativeByteBuffer2.reuse();
@@ -2460,7 +2497,7 @@ public class MediaDataController extends BaseController {
             this.unreadStickerSets.clear();
             this.loadFeaturedHash = calcFeaturedStickersHash(this.featuredStickerSets);
             getNotificationCenter().postNotificationName(NotificationCenter.featuredStickersDidLoad, new Object[0]);
-            putFeaturedStickersToCache(this.featuredStickerSets, this.unreadStickerSets, this.loadFeaturedDate, this.loadFeaturedHash);
+            putFeaturedStickersToCache(this.featuredStickerSets, this.unreadStickerSets, this.loadFeaturedDate, this.loadFeaturedHash, this.loadFeaturedPremium);
             if (z) {
                 getConnectionsManager().sendRequest(new TLRPC$TL_messages_readFeaturedStickers(), MediaDataController$$ExternalSyntheticLambda173.INSTANCE);
             }
@@ -2494,7 +2531,7 @@ public class MediaDataController extends BaseController {
         this.readingStickerSets.remove(Long.valueOf(j));
         this.loadFeaturedHash = calcFeaturedStickersHash(this.featuredStickerSets);
         getNotificationCenter().postNotificationName(NotificationCenter.featuredStickersDidLoad, new Object[0]);
-        putFeaturedStickersToCache(this.featuredStickerSets, this.unreadStickerSets, this.loadFeaturedDate, this.loadFeaturedHash);
+        putFeaturedStickersToCache(this.featuredStickerSets, this.unreadStickerSets, this.loadFeaturedDate, this.loadFeaturedHash, this.loadFeaturedPremium);
     }
 
     public int getArchivedStickersCount(int i) {
@@ -5402,13 +5439,13 @@ public class MediaDataController extends BaseController {
             androidx.core.content.pm.ShortcutInfoCompat$Builder r9 = new androidx.core.content.pm.ShortcutInfoCompat$Builder     // Catch:{ all -> 0x02cd }
             android.content.Context r10 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ all -> 0x02cd }
             r9.<init>((android.content.Context) r10, (java.lang.String) r8)     // Catch:{ all -> 0x02cd }
-            r10 = 2131626775(0x7f0e0b17, float:1.8880796E38)
+            r10 = 2131626778(0x7f0e0b1a, float:1.8880802E38)
             java.lang.String r11 = org.telegram.messenger.LocaleController.getString(r0, r10)     // Catch:{ all -> 0x02cd }
             androidx.core.content.pm.ShortcutInfoCompat$Builder r9 = r9.setShortLabel(r11)     // Catch:{ all -> 0x02cd }
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r0, r10)     // Catch:{ all -> 0x02cd }
             androidx.core.content.pm.ShortcutInfoCompat$Builder r0 = r9.setLongLabel(r0)     // Catch:{ all -> 0x02cd }
             android.content.Context r9 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ all -> 0x02cd }
-            r10 = 2131166138(0x7var_ba, float:1.7946513E38)
+            r10 = 2131166139(0x7var_bb, float:1.7946515E38)
             androidx.core.graphics.drawable.IconCompat r9 = androidx.core.graphics.drawable.IconCompat.createWithResource(r9, r10)     // Catch:{ all -> 0x02cd }
             androidx.core.content.pm.ShortcutInfoCompat$Builder r0 = r0.setIcon(r9)     // Catch:{ all -> 0x02cd }
             androidx.core.content.pm.ShortcutInfoCompat$Builder r0 = r0.setIntent(r2)     // Catch:{ all -> 0x02cd }
@@ -5626,7 +5663,7 @@ public class MediaDataController extends BaseController {
             goto L_0x02ab
         L_0x029f:
             android.content.Context r6 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ all -> 0x02cd }
-            r8 = 2131166139(0x7var_bb, float:1.7946515E38)
+            r8 = 2131166140(0x7var_bc, float:1.7946517E38)
             androidx.core.graphics.drawable.IconCompat r6 = androidx.core.graphics.drawable.IconCompat.createWithResource(r6, r8)     // Catch:{ all -> 0x02cd }
             r1.setIcon(r6)     // Catch:{ all -> 0x02cd }
         L_0x02ab:
@@ -6104,7 +6141,7 @@ public class MediaDataController extends BaseController {
             boolean r8 = org.telegram.messenger.UserObject.isReplyUser((org.telegram.tgnet.TLRPC$User) r5)     // Catch:{ Exception -> 0x0253 }
             if (r8 == 0) goto L_0x0074
             java.lang.String r8 = "RepliesTitle"
-            r9 = 2131627917(0x7f0e0f8d, float:1.8883112E38)
+            r9 = 2131627920(0x7f0e0var_, float:1.8883118E38)
             java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r8, r9)     // Catch:{ Exception -> 0x0253 }
         L_0x0071:
             r9 = r4
@@ -6114,7 +6151,7 @@ public class MediaDataController extends BaseController {
             boolean r8 = org.telegram.messenger.UserObject.isUserSelf(r5)     // Catch:{ Exception -> 0x0253 }
             if (r8 == 0) goto L_0x0084
             java.lang.String r8 = "SavedMessages"
-            r9 = 2131628074(0x7f0e102a, float:1.888343E38)
+            r9 = 2131628077(0x7f0e102d, float:1.8883436E38)
             java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r8, r9)     // Catch:{ Exception -> 0x0253 }
             goto L_0x0071
         L_0x0084:
