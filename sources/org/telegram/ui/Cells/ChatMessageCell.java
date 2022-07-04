@@ -813,7 +813,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             public static void $default$needReloadPolls(ChatMessageCellDelegate chatMessageCellDelegate) {
             }
 
-            public static void $default$needShowPremiumFeatures(ChatMessageCellDelegate chatMessageCellDelegate) {
+            public static void $default$needShowPremiumFeatures(ChatMessageCellDelegate chatMessageCellDelegate, String str) {
             }
 
             public static boolean $default$onAccessibilityAction(ChatMessageCellDelegate chatMessageCellDelegate, int i, Bundle bundle) {
@@ -908,7 +908,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
 
         void needReloadPolls();
 
-        void needShowPremiumFeatures();
+        void needShowPremiumFeatures(String str);
 
         boolean onAccessibilityAction(int i, Bundle bundle);
 

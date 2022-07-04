@@ -104,6 +104,7 @@ public class PremiumPreviewBottomSheet extends BottomSheetWithRecyclerListView {
             public void onItemClick(View view, int i) {
                 if (view instanceof PremiumFeatureCell) {
                     PremiumFeatureCell premiumFeatureCell = (PremiumFeatureCell) view;
+                    PremiumPreviewFragment.sentShowFeaturePreview(i, premiumFeatureCell.data.type);
                     if (premiumFeatureCell.data.type == 0) {
                         PremiumPreviewBottomSheet.this.showDialog(new DoubledLimitsBottomSheet(baseFragment, i));
                         return;
@@ -113,6 +114,7 @@ public class PremiumPreviewBottomSheet extends BottomSheetWithRecyclerListView {
             }
         });
         MediaDataController.getInstance(i).preloadPremiumPreviewStickers();
+        PremiumPreviewFragment.sentShowScreenStat("profile");
     }
 
     /* access modifiers changed from: private */
@@ -134,6 +136,7 @@ public class PremiumPreviewBottomSheet extends BottomSheetWithRecyclerListView {
         PremiumButtonView premiumButtonView = new PremiumButtonView(getContext(), false);
         premiumButtonView.setButton(PremiumPreviewFragment.getPremiumButtonText(this.currentAccount), new View.OnClickListener() {
             public void onClick(View view) {
+                PremiumPreviewFragment.sentPremiumButtonClick();
                 PremiumPreviewFragment.buyPremium(PremiumPreviewBottomSheet.this.fragment, "profile");
             }
         });

@@ -344,8 +344,8 @@ public class PrivacyControlActivity extends BaseFragment implements Notification
                     ChatMessageCell.ChatMessageCellDelegate.CC.$default$needReloadPolls(this);
                 }
 
-                public /* synthetic */ void needShowPremiumFeatures() {
-                    ChatMessageCell.ChatMessageCellDelegate.CC.$default$needShowPremiumFeatures(this);
+                public /* synthetic */ void needShowPremiumFeatures(String str) {
+                    ChatMessageCell.ChatMessageCellDelegate.CC.$default$needShowPremiumFeatures(this, str);
                 }
 
                 public /* synthetic */ boolean onAccessibilityAction(int i, Bundle bundle) {

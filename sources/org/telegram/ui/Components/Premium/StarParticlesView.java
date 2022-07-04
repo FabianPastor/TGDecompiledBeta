@@ -56,11 +56,11 @@ public class StarParticlesView extends View {
     public void onMeasure(int i, int i2) {
         super.onMeasure(i, i2);
         int measuredWidth = getMeasuredWidth() << (getMeasuredHeight() + 16);
+        this.drawable.rect.set(0.0f, 0.0f, (float) AndroidUtilities.dp(140.0f), (float) AndroidUtilities.dp(140.0f));
+        this.drawable.rect.offset((((float) getMeasuredWidth()) - this.drawable.rect.width()) / 2.0f, (((float) getMeasuredHeight()) - this.drawable.rect.height()) / 2.0f);
+        this.drawable.rect2.set(0.0f, 0.0f, (float) getMeasuredWidth(), (float) getMeasuredHeight());
         if (this.size != measuredWidth) {
             this.size = measuredWidth;
-            this.drawable.rect.set(0.0f, 0.0f, (float) AndroidUtilities.dp(140.0f), (float) AndroidUtilities.dp(140.0f));
-            this.drawable.rect.offset((((float) getMeasuredWidth()) - this.drawable.rect.width()) / 2.0f, (((float) getMeasuredHeight()) - this.drawable.rect.height()) / 2.0f);
-            this.drawable.rect2.set(0.0f, 0.0f, (float) getMeasuredWidth(), (float) getMeasuredHeight());
             this.drawable.resetPositions();
         }
     }
@@ -99,6 +99,7 @@ public class StarParticlesView extends View {
         float a2;
         public boolean checkBounds;
         public boolean checkTime;
+        public String colorKey;
         public final int count;
         /* access modifiers changed from: private */
         public boolean distributionAlgorithm;
@@ -149,6 +150,7 @@ public class StarParticlesView extends View {
             this.useBlur = false;
             this.roundEffect = true;
             this.type = -1;
+            this.colorKey = "premiumStartSmallStarsColor";
             this.count = i;
             this.distributionAlgorithm = i < 50 ? true : z;
         }
@@ -169,7 +171,7 @@ public class StarParticlesView extends View {
         }
 
         public void updateColors() {
-            int color = Theme.getColor("premiumStartSmallStarsColor");
+            int color = Theme.getColor(this.colorKey);
             if (this.lastColor != color) {
                 this.lastColor = color;
                 generateBitmaps();
@@ -193,18 +195,18 @@ public class StarParticlesView extends View {
                 int i2 = dp;
                 int i3 = this.type;
                 if (i3 == 9) {
-                    this.stars[i] = SvgHelper.getBitmap(i == 0 ? NUM : i == 1 ? NUM : NUM, i2, i2, ColorUtils.setAlphaComponent(Theme.getColor("premiumStartSmallStarsColor"), 30));
+                    this.stars[i] = SvgHelper.getBitmap(i == 0 ? NUM : i == 1 ? NUM : NUM, i2, i2, ColorUtils.setAlphaComponent(Theme.getColor(this.colorKey), 30));
                 } else if (i3 == 3) {
-                    this.stars[i] = SvgHelper.getBitmap(i == 0 ? NUM : i == 1 ? NUM : NUM, i2, i2, ColorUtils.setAlphaComponent(Theme.getColor("premiumStartSmallStarsColor"), 30));
+                    this.stars[i] = SvgHelper.getBitmap(i == 0 ? NUM : i == 1 ? NUM : NUM, i2, i2, ColorUtils.setAlphaComponent(Theme.getColor(this.colorKey), 30));
                 } else if (i3 == 7) {
-                    this.stars[i] = SvgHelper.getBitmap(i == 0 ? NUM : i == 1 ? NUM : NUM, i2, i2, ColorUtils.setAlphaComponent(Theme.getColor("premiumStartSmallStarsColor"), 30));
+                    this.stars[i] = SvgHelper.getBitmap(i == 0 ? NUM : i == 1 ? NUM : NUM, i2, i2, ColorUtils.setAlphaComponent(Theme.getColor(this.colorKey), 30));
                 } else {
                     Bitmap createBitmap = Bitmap.createBitmap(i2, i2, Bitmap.Config.ARGB_8888);
                     this.stars[i] = createBitmap;
                     Canvas canvas = new Canvas(createBitmap);
                     if (this.type == 6 && (i == 1 || i == 2)) {
                         android.graphics.drawable.Drawable drawable = ContextCompat.getDrawable(ApplicationLoader.applicationContext, NUM);
-                        drawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor("premiumStartSmallStarsColor"), PorterDuff.Mode.MULTIPLY));
+                        drawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(this.colorKey), PorterDuff.Mode.MULTIPLY));
                         drawable.setBounds(0, 0, i2, i2);
                         drawable.draw(canvas);
                     } else {
@@ -241,9 +243,9 @@ public class StarParticlesView extends View {
                             mainGradientPaint.setAlpha(255);
                         } else {
                             if (this.type == 100) {
-                                paint2.setColor(ColorUtils.setAlphaComponent(Theme.getColor("premiumStartSmallStarsColor"), 200));
+                                paint2.setColor(ColorUtils.setAlphaComponent(Theme.getColor(this.colorKey), 200));
                             } else {
-                                paint2.setColor(Theme.getColor("premiumStartSmallStarsColor"));
+                                paint2.setColor(Theme.getColor(this.colorKey));
                             }
                             if (this.roundEffect) {
                                 paint2.setPathEffect(new CornerPathEffect(AndroidUtilities.dpf2(((float) this.size1) / 5.0f)));

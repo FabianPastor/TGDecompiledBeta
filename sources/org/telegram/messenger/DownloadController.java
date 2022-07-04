@@ -1377,7 +1377,7 @@ public class DownloadController extends BaseController implements NotificationCe
     }
 
     /* access modifiers changed from: private */
-    /* JADX WARNING: Removed duplicated region for block: B:19:0x0061  */
+    /* JADX WARNING: Removed duplicated region for block: B:21:0x006f  */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public /* synthetic */ void lambda$startDownloadFile$5(org.telegram.messenger.MessageObject r10) {
         /*
@@ -1388,7 +1388,12 @@ public class DownloadController extends BaseController implements NotificationCe
             java.util.ArrayList<org.telegram.messenger.MessageObject> r2 = r9.recentDownloadingFiles
             int r2 = r2.size()
             r3 = 1
-            if (r1 >= r2) goto L_0x0028
+            if (r1 >= r2) goto L_0x0036
+            java.util.ArrayList<org.telegram.messenger.MessageObject> r2 = r9.recentDownloadingFiles
+            java.lang.Object r2 = r2.get(r1)
+            org.telegram.messenger.MessageObject r2 = (org.telegram.messenger.MessageObject) r2
+            org.telegram.tgnet.TLRPC$Document r2 = r2.getDocument()
+            if (r2 == 0) goto L_0x0033
             java.util.ArrayList<org.telegram.messenger.MessageObject> r2 = r9.recentDownloadingFiles
             java.lang.Object r2 = r2.get(r1)
             org.telegram.messenger.MessageObject r2 = (org.telegram.messenger.MessageObject) r2
@@ -1397,26 +1402,26 @@ public class DownloadController extends BaseController implements NotificationCe
             org.telegram.tgnet.TLRPC$Document r2 = r10.getDocument()
             long r6 = r2.id
             int r2 = (r4 > r6 ? 1 : (r4 == r6 ? 0 : -1))
-            if (r2 != 0) goto L_0x0025
+            if (r2 != 0) goto L_0x0033
             r1 = 1
-            goto L_0x0029
-        L_0x0025:
+            goto L_0x0037
+        L_0x0033:
             int r1 = r1 + 1
             goto L_0x0002
-        L_0x0028:
+        L_0x0036:
             r1 = 0
-        L_0x0029:
-            if (r1 != 0) goto L_0x005e
+        L_0x0037:
+            if (r1 != 0) goto L_0x006c
             r2 = 0
-        L_0x002c:
+        L_0x003a:
             java.util.ArrayList<org.telegram.messenger.MessageObject> r4 = r9.downloadingFiles
             int r4 = r4.size()
-            if (r2 >= r4) goto L_0x005e
+            if (r2 >= r4) goto L_0x006c
             java.util.ArrayList<org.telegram.messenger.MessageObject> r4 = r9.downloadingFiles
             java.lang.Object r4 = r4.get(r2)
             org.telegram.messenger.MessageObject r4 = (org.telegram.messenger.MessageObject) r4
             org.telegram.tgnet.TLRPC$Document r4 = r4.getDocument()
-            if (r4 == 0) goto L_0x005b
+            if (r4 == 0) goto L_0x0069
             java.util.ArrayList<org.telegram.messenger.MessageObject> r4 = r9.downloadingFiles
             java.lang.Object r4 = r4.get(r2)
             org.telegram.messenger.MessageObject r4 = (org.telegram.messenger.MessageObject) r4
@@ -1425,15 +1430,15 @@ public class DownloadController extends BaseController implements NotificationCe
             org.telegram.tgnet.TLRPC$Document r6 = r10.getDocument()
             long r6 = r6.id
             int r8 = (r4 > r6 ? 1 : (r4 == r6 ? 0 : -1))
-            if (r8 != 0) goto L_0x005b
-            goto L_0x005f
-        L_0x005b:
+            if (r8 != 0) goto L_0x0069
+            goto L_0x006d
+        L_0x0069:
             int r2 = r2 + 1
-            goto L_0x002c
-        L_0x005e:
+            goto L_0x003a
+        L_0x006c:
             r3 = r1
-        L_0x005f:
-            if (r3 != 0) goto L_0x0076
+        L_0x006d:
+            if (r3 != 0) goto L_0x0084
             java.util.ArrayList<org.telegram.messenger.MessageObject> r1 = r9.downloadingFiles
             r1.add(r10)
             org.telegram.messenger.MessagesStorage r1 = r9.getMessagesStorage()
@@ -1441,7 +1446,7 @@ public class DownloadController extends BaseController implements NotificationCe
             org.telegram.messenger.DownloadController$$ExternalSyntheticLambda7 r2 = new org.telegram.messenger.DownloadController$$ExternalSyntheticLambda7
             r2.<init>(r9, r10)
             r1.postRunnable(r2)
-        L_0x0076:
+        L_0x0084:
             org.telegram.messenger.NotificationCenter r10 = r9.getNotificationCenter()
             int r1 = org.telegram.messenger.NotificationCenter.onDownloadingFilesChanged
             java.lang.Object[] r0 = new java.lang.Object[r0]
