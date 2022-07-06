@@ -180,7 +180,7 @@ public class CameraSession {
     }
 
     /* access modifiers changed from: protected */
-    public void configureRoundCamera(boolean z) {
+    public boolean configureRoundCamera(boolean z) {
         int i;
         try {
             this.isVideo = true;
@@ -210,7 +210,6 @@ public class CameraSession {
                         parameters.setFocusMode("auto");
                     }
                     int i2 = this.jpegOrientation;
-                    boolean z2 = false;
                     if (i2 != -1) {
                         Camera.CameraInfo cameraInfo2 = this.info;
                         i = cameraInfo2.facing == 1 ? ((cameraInfo2.orientation - i2) + 360) % 360 : (cameraInfo2.orientation + i2) % 360;
@@ -220,15 +219,9 @@ public class CameraSession {
                     try {
                         parameters.setRotation(i);
                         if (this.info.facing == 1) {
-                            if ((360 - this.displayOrientation) % 360 == i) {
-                                z2 = true;
-                            }
-                            this.sameTakePictureOrientation = z2;
+                            this.sameTakePictureOrientation = (360 - this.displayOrientation) % 360 == i;
                         } else {
-                            if (this.displayOrientation == i) {
-                                z2 = true;
-                            }
-                            this.sameTakePictureOrientation = z2;
+                            this.sameTakePictureOrientation = this.displayOrientation == i;
                         }
                     } catch (Exception unused) {
                     }
@@ -246,7 +239,9 @@ public class CameraSession {
             FileLog.e((Throwable) e2);
         } catch (Throwable th) {
             FileLog.e(th);
+            return false;
         }
+        return true;
     }
 
     /* JADX WARNING: Removed duplicated region for block: B:26:0x0050  */
@@ -632,5 +627,13 @@ public class CameraSession {
             orientationEventListener2.disable();
             this.orientationEventListener = null;
         }
+    }
+
+    public Camera.Size getCurrentPreviewSize() {
+        return this.cameraInfo.camera.getParameters().getPreviewSize();
+    }
+
+    public Camera.Size getCurrentPictureSize() {
+        return this.cameraInfo.camera.getParameters().getPictureSize();
     }
 }

@@ -20,6 +20,7 @@ import android.graphics.PorterDuffXfermode;
 import android.graphics.RectF;
 import android.graphics.SurfaceTexture;
 import android.graphics.drawable.AnimatedVectorDrawable;
+import android.hardware.Camera;
 import android.media.AudioRecord;
 import android.media.MediaCodec;
 import android.media.MediaCrypto;
@@ -1089,11 +1090,27 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
 
     /* access modifiers changed from: private */
     public /* synthetic */ void lambda$createCamera$3() {
-        if (this.cameraSession != null) {
+        CameraSession cameraSession2 = this.cameraSession;
+        if (cameraSession2 != null) {
+            boolean z = false;
+            Camera.Size currentPreviewSize = cameraSession2.getCurrentPreviewSize();
+            if (!(currentPreviewSize.width == this.previewSize.getWidth() && currentPreviewSize.height == this.previewSize.getHeight())) {
+                this.previewSize = new Size(currentPreviewSize.width, currentPreviewSize.height);
+                FileLog.d("change preview size to w = " + this.previewSize.getWidth() + " h = " + this.previewSize.getHeight());
+            }
+            Camera.Size currentPictureSize = this.cameraSession.getCurrentPictureSize();
+            if (!(currentPictureSize.width == this.pictureSize.getWidth() && currentPictureSize.height == this.pictureSize.getHeight())) {
+                this.pictureSize = new Size(currentPictureSize.width, currentPictureSize.height);
+                FileLog.d("change picture size to w = " + this.pictureSize.getWidth() + " h = " + this.pictureSize.getHeight());
+                z = true;
+            }
             if (BuildVars.LOGS_ENABLED) {
                 FileLog.d("camera initied");
             }
             this.cameraSession.setInitied();
+            if (z) {
+                this.cameraThread.reinitForNewCamera();
+            }
         }
     }
 

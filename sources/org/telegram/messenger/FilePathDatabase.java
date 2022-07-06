@@ -252,6 +252,31 @@ public class FilePathDatabase {
         }
     }
 
+    public boolean hasAnotherRefOnFile(String str) {
+        CountDownLatch countDownLatch = new CountDownLatch(1);
+        boolean[] zArr = {false};
+        this.dispatchQueue.postRunnable(new FilePathDatabase$$ExternalSyntheticLambda5(this, str, zArr, countDownLatch));
+        try {
+            countDownLatch.await();
+        } catch (InterruptedException e) {
+            FileLog.e((Throwable) e);
+        }
+        return zArr[0];
+    }
+
+    /* access modifiers changed from: private */
+    public /* synthetic */ void lambda$hasAnotherRefOnFile$5(String str, boolean[] zArr, CountDownLatch countDownLatch) {
+        try {
+            SQLiteDatabase sQLiteDatabase = this.database;
+            if (sQLiteDatabase.queryFinalized("SELECT document_id FROM paths WHERE path = '" + str + "'", new Object[0]).next()) {
+                zArr[0] = true;
+            }
+        } catch (Exception e) {
+            FileLog.e((Throwable) e);
+        }
+        countDownLatch.countDown();
+    }
+
     public static class PathData {
         public final int dc;
         public final long id;
