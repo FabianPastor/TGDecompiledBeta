@@ -13,6 +13,9 @@ public abstract class TLRPC$PrivacyKey extends TLObject {
             case -778378131:
                 tLRPC$PrivacyKey = new TLRPC$TL_privacyKeyPhoneNumber();
                 break;
+            case 110621716:
+                tLRPC$PrivacyKey = new TLRPC$TL_privacyKeyVoiceMessages();
+                break;
             case 961092808:
                 tLRPC$PrivacyKey = new TLRPC$TL_privacyKeyPhoneP2P();
                 break;

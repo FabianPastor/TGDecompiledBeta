@@ -63,6 +63,7 @@ public class PremiumFeatureBottomSheet extends BottomSheet implements Notificati
         super(baseFragment.getParentActivity(), false);
         int i2 = i;
         boolean z2 = z;
+        fixNavigationBar();
         this.startType = i2;
         this.onlySelectedType = z2;
         this.svgIcon = SvgHelper.getDrawable(RLottieDrawable.readRes((File) null, NUM));

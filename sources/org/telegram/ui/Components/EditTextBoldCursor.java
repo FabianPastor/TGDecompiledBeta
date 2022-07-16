@@ -31,6 +31,7 @@ import android.view.ViewTreeObserver;
 import android.view.accessibility.AccessibilityNodeInfo;
 import android.widget.TextView;
 import androidx.annotation.Keep;
+import androidx.core.graphics.ColorUtils;
 import androidx.core.view.accessibility.AccessibilityNodeInfoCompat;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -50,6 +51,7 @@ public class EditTextBoldCursor extends EditTextEffects {
     private static Method getVerticalOffsetMethod;
     private static Field mCursorDrawableResField;
     private static Field mEditor;
+    private static Method mEditorInvalidateDisplayList;
     private static Field mScrollYField;
     private static boolean mScrollYGet;
     private static Field mShowCursorField;
@@ -239,11 +241,12 @@ public class EditTextBoldCursor extends EditTextEffects {
         return r0;
     }
 
-    /* JADX WARNING: Can't wrap try/catch for region: R(9:29|30|(1:32)|33|34|35|(1:37)|38|(1:40)) */
+    /* JADX WARNING: Can't wrap try/catch for region: R(9:31|32|(1:34)|35|36|37|(1:39)|40|(1:42)) */
     /* JADX WARNING: Failed to process nested try/catch */
-    /* JADX WARNING: Missing exception handler attribute for start block: B:34:0x00c9 */
-    /* JADX WARNING: Removed duplicated region for block: B:37:0x00cd A[Catch:{ all -> 0x00e8 }] */
-    /* JADX WARNING: Removed duplicated region for block: B:40:0x00de A[Catch:{ all -> 0x00e8 }] */
+    /* JADX WARNING: Missing exception handler attribute for start block: B:21:0x008c */
+    /* JADX WARNING: Missing exception handler attribute for start block: B:36:0x00d8 */
+    /* JADX WARNING: Removed duplicated region for block: B:39:0x00dc A[Catch:{ all -> 0x00f7 }] */
+    /* JADX WARNING: Removed duplicated region for block: B:42:0x00ed A[Catch:{ all -> 0x00f7 }] */
     @android.annotation.SuppressLint({"PrivateApi"})
     /* Code decompiled incorrectly, please refer to instructions dump. */
     private void init() {
@@ -298,66 +301,73 @@ public class EditTextBoldCursor extends EditTextEffects {
             r0.setAccessible(r1)     // Catch:{ all -> 0x0067 }
         L_0x0067:
             r0 = 0
-            java.lang.Class r4 = editorClass     // Catch:{ all -> 0x00a0 }
-            if (r4 != 0) goto L_0x00a4
+            java.lang.Class r4 = editorClass     // Catch:{ all -> 0x00af }
+            if (r4 != 0) goto L_0x00b3
             java.lang.Class<android.widget.TextView> r4 = android.widget.TextView.class
             java.lang.String r5 = "mEditor"
-            java.lang.reflect.Field r4 = r4.getDeclaredField(r5)     // Catch:{ all -> 0x00a0 }
-            mEditor = r4     // Catch:{ all -> 0x00a0 }
-            r4.setAccessible(r1)     // Catch:{ all -> 0x00a0 }
+            java.lang.reflect.Field r4 = r4.getDeclaredField(r5)     // Catch:{ all -> 0x00af }
+            mEditor = r4     // Catch:{ all -> 0x00af }
+            r4.setAccessible(r1)     // Catch:{ all -> 0x00af }
             java.lang.String r4 = "android.widget.Editor"
-            java.lang.Class r4 = java.lang.Class.forName(r4)     // Catch:{ all -> 0x00a0 }
-            editorClass = r4     // Catch:{ all -> 0x00a0 }
+            java.lang.Class r4 = java.lang.Class.forName(r4)     // Catch:{ all -> 0x00af }
+            editorClass = r4     // Catch:{ all -> 0x00af }
             java.lang.String r5 = "mShowCursor"
             java.lang.reflect.Field r4 = r4.getDeclaredField(r5)     // Catch:{ Exception -> 0x008c }
             mShowCursorField = r4     // Catch:{ Exception -> 0x008c }
             r4.setAccessible(r1)     // Catch:{ Exception -> 0x008c }
         L_0x008c:
+            java.lang.Class r4 = editorClass     // Catch:{ Exception -> 0x009b }
+            java.lang.String r5 = "invalidateTextDisplayList"
+            java.lang.Class[] r6 = new java.lang.Class[r0]     // Catch:{ Exception -> 0x009b }
+            java.lang.reflect.Method r4 = r4.getDeclaredMethod(r5, r6)     // Catch:{ Exception -> 0x009b }
+            mEditorInvalidateDisplayList = r4     // Catch:{ Exception -> 0x009b }
+            r4.setAccessible(r1)     // Catch:{ Exception -> 0x009b }
+        L_0x009b:
             java.lang.Class<android.widget.TextView> r4 = android.widget.TextView.class
             java.lang.String r5 = "getVerticalOffset"
-            java.lang.Class[] r6 = new java.lang.Class[r1]     // Catch:{ all -> 0x00a0 }
-            java.lang.Class r7 = java.lang.Boolean.TYPE     // Catch:{ all -> 0x00a0 }
-            r6[r0] = r7     // Catch:{ all -> 0x00a0 }
-            java.lang.reflect.Method r4 = r4.getDeclaredMethod(r5, r6)     // Catch:{ all -> 0x00a0 }
-            getVerticalOffsetMethod = r4     // Catch:{ all -> 0x00a0 }
-            r4.setAccessible(r1)     // Catch:{ all -> 0x00a0 }
-            goto L_0x00a4
-        L_0x00a0:
+            java.lang.Class[] r6 = new java.lang.Class[r1]     // Catch:{ all -> 0x00af }
+            java.lang.Class r7 = java.lang.Boolean.TYPE     // Catch:{ all -> 0x00af }
+            r6[r0] = r7     // Catch:{ all -> 0x00af }
+            java.lang.reflect.Method r4 = r4.getDeclaredMethod(r5, r6)     // Catch:{ all -> 0x00af }
+            getVerticalOffsetMethod = r4     // Catch:{ all -> 0x00af }
+            r4.setAccessible(r1)     // Catch:{ all -> 0x00af }
+            goto L_0x00b3
+        L_0x00af:
             r4 = move-exception
             org.telegram.messenger.FileLog.e((java.lang.Throwable) r4)
-        L_0x00a4:
+        L_0x00b3:
             android.graphics.drawable.ShapeDrawable r4 = r8.cursorDrawable
-            if (r4 != 0) goto L_0x00e8
-            android.graphics.drawable.GradientDrawable r4 = new android.graphics.drawable.GradientDrawable     // Catch:{ all -> 0x00c9 }
-            android.graphics.drawable.GradientDrawable$Orientation r5 = android.graphics.drawable.GradientDrawable.Orientation.TOP_BOTTOM     // Catch:{ all -> 0x00c9 }
-            int[] r2 = new int[r2]     // Catch:{ all -> 0x00c9 }
+            if (r4 != 0) goto L_0x00f7
+            android.graphics.drawable.GradientDrawable r4 = new android.graphics.drawable.GradientDrawable     // Catch:{ all -> 0x00d8 }
+            android.graphics.drawable.GradientDrawable$Orientation r5 = android.graphics.drawable.GradientDrawable.Orientation.TOP_BOTTOM     // Catch:{ all -> 0x00d8 }
+            int[] r2 = new int[r2]     // Catch:{ all -> 0x00d8 }
             r6 = -11230757(0xfffffffffvar_a1db, float:-2.8263674E38)
-            r2[r0] = r6     // Catch:{ all -> 0x00c9 }
-            r2[r1] = r6     // Catch:{ all -> 0x00c9 }
-            r4.<init>(r5, r2)     // Catch:{ all -> 0x00c9 }
-            r8.gradientDrawable = r4     // Catch:{ all -> 0x00c9 }
-            int r0 = android.os.Build.VERSION.SDK_INT     // Catch:{ all -> 0x00c9 }
-            if (r0 < r3) goto L_0x00c1
-            r8.setTextCursorDrawable(r4)     // Catch:{ all -> 0x00c9 }
-        L_0x00c1:
-            java.lang.reflect.Field r0 = mEditor     // Catch:{ all -> 0x00c9 }
-            java.lang.Object r0 = r0.get(r8)     // Catch:{ all -> 0x00c9 }
-            r8.editor = r0     // Catch:{ all -> 0x00c9 }
-        L_0x00c9:
-            java.lang.reflect.Field r0 = mCursorDrawableResField     // Catch:{ all -> 0x00e8 }
-            if (r0 != 0) goto L_0x00da
+            r2[r0] = r6     // Catch:{ all -> 0x00d8 }
+            r2[r1] = r6     // Catch:{ all -> 0x00d8 }
+            r4.<init>(r5, r2)     // Catch:{ all -> 0x00d8 }
+            r8.gradientDrawable = r4     // Catch:{ all -> 0x00d8 }
+            int r0 = android.os.Build.VERSION.SDK_INT     // Catch:{ all -> 0x00d8 }
+            if (r0 < r3) goto L_0x00d0
+            r8.setTextCursorDrawable(r4)     // Catch:{ all -> 0x00d8 }
+        L_0x00d0:
+            java.lang.reflect.Field r0 = mEditor     // Catch:{ all -> 0x00d8 }
+            java.lang.Object r0 = r0.get(r8)     // Catch:{ all -> 0x00d8 }
+            r8.editor = r0     // Catch:{ all -> 0x00d8 }
+        L_0x00d8:
+            java.lang.reflect.Field r0 = mCursorDrawableResField     // Catch:{ all -> 0x00f7 }
+            if (r0 != 0) goto L_0x00e9
             java.lang.Class<android.widget.TextView> r0 = android.widget.TextView.class
             java.lang.String r2 = "mCursorDrawableRes"
-            java.lang.reflect.Field r0 = r0.getDeclaredField(r2)     // Catch:{ all -> 0x00e8 }
-            mCursorDrawableResField = r0     // Catch:{ all -> 0x00e8 }
-            r0.setAccessible(r1)     // Catch:{ all -> 0x00e8 }
-        L_0x00da:
-            java.lang.reflect.Field r0 = mCursorDrawableResField     // Catch:{ all -> 0x00e8 }
-            if (r0 == 0) goto L_0x00e8
+            java.lang.reflect.Field r0 = r0.getDeclaredField(r2)     // Catch:{ all -> 0x00f7 }
+            mCursorDrawableResField = r0     // Catch:{ all -> 0x00f7 }
+            r0.setAccessible(r1)     // Catch:{ all -> 0x00f7 }
+        L_0x00e9:
+            java.lang.reflect.Field r0 = mCursorDrawableResField     // Catch:{ all -> 0x00f7 }
+            if (r0 == 0) goto L_0x00f7
             r1 = 2131165398(0x7var_d6, float:1.7945012E38)
-            java.lang.Integer r1 = java.lang.Integer.valueOf(r1)     // Catch:{ all -> 0x00e8 }
-            r0.set(r8, r1)     // Catch:{ all -> 0x00e8 }
-        L_0x00e8:
+            java.lang.Integer r1 = java.lang.Integer.valueOf(r1)     // Catch:{ all -> 0x00f7 }
+            r0.set(r8, r1)     // Catch:{ all -> 0x00f7 }
+        L_0x00f7:
             r0 = 1103101952(0x41CLASSNAME, float:24.0)
             int r0 = org.telegram.messenger.AndroidUtilities.dp(r0)
             r8.cursorSize = r0
@@ -707,7 +717,7 @@ public class EditTextBoldCursor extends EditTextEffects {
                 }
                 canvas2.scale(f6, f6);
                 canvas2.translate(0.0f, ((float) (-AndroidUtilities.dp(22.0f))) * this.headerAnimationProgress);
-                getPaint().setColor(AndroidUtilities.lerpColor(this.hintColor, this.headerHintColor, this.headerAnimationProgress));
+                getPaint().setColor(ColorUtils.blendARGB(this.hintColor, this.headerHintColor, this.headerAnimationProgress));
             } else {
                 getPaint().setColor(this.hintColor);
                 getPaint().setAlpha((int) (this.hintAlpha * 255.0f * (((float) Color.alpha(this.hintColor)) / 255.0f)));

@@ -11,6 +11,6 @@ public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda45 imple
     }
 
     public final void onDismiss(DialogInterface dialogInterface) {
-        ChatActivity.lambda$didPressMessageUrl$244(this.f$0, dialogInterface);
+        ChatActivity.lambda$didPressMessageUrl$245(this.f$0, dialogInterface);
     }
 }

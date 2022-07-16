@@ -7,6 +7,7 @@ public abstract class TLRPC$StickerSet extends TLObject {
     public boolean animated;
     public boolean archived;
     public int count;
+    public boolean emojis;
     public int flags;
     public boolean gifs;
     public int hash;
@@ -17,9 +18,11 @@ public abstract class TLRPC$StickerSet extends TLObject {
     public boolean official;
     public String short_name;
     public int thumb_dc_id;
+    public long thumb_document_id;
     public int thumb_version;
     public ArrayList<TLRPC$PhotoSize> thumbs = new ArrayList<>();
     public String title;
+    public boolean videos;
 
     public static TLRPC$StickerSet TLdeserialize(AbstractSerializedData abstractSerializedData, int i, boolean z) {
         TLRPC$StickerSet tLRPC$StickerSet;
@@ -31,10 +34,13 @@ public abstract class TLRPC$StickerSet extends TLObject {
                 tLRPC$StickerSet = new TLRPC$TL_stickerSet_layer75();
                 break;
             case -673242758:
-                tLRPC$StickerSet = new TLRPC$TL_stickerSet();
+                tLRPC$StickerSet = new TLRPC$TL_stickerSet_layer143();
                 break;
             case -290164953:
                 tLRPC$StickerSet = new TLRPC$TL_stickerSet_layer121();
+                break;
+            case 768691932:
+                tLRPC$StickerSet = new TLRPC$TL_stickerSet();
                 break;
             case 1088567208:
                 tLRPC$StickerSet = new TLRPC$TL_stickerSet_layer126();

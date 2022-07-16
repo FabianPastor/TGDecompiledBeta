@@ -4,14 +4,12 @@ import android.view.View;
 
 public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda99 implements View.OnLongClickListener {
     public final /* synthetic */ ChatActivity f$0;
-    public final /* synthetic */ View f$1;
 
-    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda99(ChatActivity chatActivity, View view) {
+    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda99(ChatActivity chatActivity) {
         this.f$0 = chatActivity;
-        this.f$1 = view;
     }
 
     public final boolean onLongClick(View view) {
-        return this.f$0.lambda$createView$14(this.f$1, view);
+        return this.f$0.lambda$createView$53(view);
     }
 }

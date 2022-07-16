@@ -1,15 +1,21 @@
 package org.telegram.ui.Components;
 
 import android.content.DialogInterface;
+import java.util.concurrent.atomic.AtomicBoolean;
+import org.telegram.ui.Components.BotWebViewContainer;
 
-public final /* synthetic */ class BotWebViewContainer$$ExternalSyntheticLambda1 implements DialogInterface.OnDismissListener {
+public final /* synthetic */ class BotWebViewContainer$$ExternalSyntheticLambda1 implements DialogInterface.OnClickListener {
     public final /* synthetic */ BotWebViewContainer f$0;
+    public final /* synthetic */ BotWebViewContainer.PopupButton f$1;
+    public final /* synthetic */ AtomicBoolean f$2;
 
-    public /* synthetic */ BotWebViewContainer$$ExternalSyntheticLambda1(BotWebViewContainer botWebViewContainer) {
+    public /* synthetic */ BotWebViewContainer$$ExternalSyntheticLambda1(BotWebViewContainer botWebViewContainer, BotWebViewContainer.PopupButton popupButton, AtomicBoolean atomicBoolean) {
         this.f$0 = botWebViewContainer;
+        this.f$1 = popupButton;
+        this.f$2 = atomicBoolean;
     }
 
-    public final void onDismiss(DialogInterface dialogInterface) {
-        this.f$0.lambda$onOpenUri$2(dialogInterface);
+    public final void onClick(DialogInterface dialogInterface, int i) {
+        this.f$0.lambda$onEventReceived$9(this.f$1, this.f$2, dialogInterface, i);
     }
 }

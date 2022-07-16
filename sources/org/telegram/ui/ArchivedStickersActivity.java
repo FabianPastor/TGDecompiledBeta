@@ -226,7 +226,9 @@ public class ArchivedStickersActivity extends BaseFragment implements Notificati
             }
             tLRPC$TL_messages_getArchivedStickers.offset_id = j;
             tLRPC$TL_messages_getArchivedStickers.limit = 15;
-            if (this.currentType != 1) {
+            int i = this.currentType;
+            tLRPC$TL_messages_getArchivedStickers.masks = i == 1;
+            if (i != 5) {
                 z = false;
             }
             tLRPC$TL_messages_getArchivedStickers.masks = z;

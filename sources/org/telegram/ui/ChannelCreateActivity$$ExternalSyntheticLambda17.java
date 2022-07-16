@@ -1,28 +1,17 @@
 package org.telegram.ui;
 
-import org.telegram.tgnet.TLRPC$InputFile;
-import org.telegram.tgnet.TLRPC$PhotoSize;
+import org.telegram.tgnet.TLObject;
 
 public final /* synthetic */ class ChannelCreateActivity$$ExternalSyntheticLambda17 implements Runnable {
     public final /* synthetic */ ChannelCreateActivity f$0;
-    public final /* synthetic */ TLRPC$InputFile f$1;
-    public final /* synthetic */ TLRPC$InputFile f$2;
-    public final /* synthetic */ String f$3;
-    public final /* synthetic */ double f$4;
-    public final /* synthetic */ TLRPC$PhotoSize f$5;
-    public final /* synthetic */ TLRPC$PhotoSize f$6;
+    public final /* synthetic */ TLObject f$1;
 
-    public /* synthetic */ ChannelCreateActivity$$ExternalSyntheticLambda17(ChannelCreateActivity channelCreateActivity, TLRPC$InputFile tLRPC$InputFile, TLRPC$InputFile tLRPC$InputFile2, String str, double d, TLRPC$PhotoSize tLRPC$PhotoSize, TLRPC$PhotoSize tLRPC$PhotoSize2) {
+    public /* synthetic */ ChannelCreateActivity$$ExternalSyntheticLambda17(ChannelCreateActivity channelCreateActivity, TLObject tLObject) {
         this.f$0 = channelCreateActivity;
-        this.f$1 = tLRPC$InputFile;
-        this.f$2 = tLRPC$InputFile2;
-        this.f$3 = str;
-        this.f$4 = d;
-        this.f$5 = tLRPC$PhotoSize;
-        this.f$6 = tLRPC$PhotoSize2;
+        this.f$1 = tLObject;
     }
 
     public final void run() {
-        this.f$0.lambda$didUploadPhoto$14(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6);
+        this.f$0.lambda$loadAdminedChannels$20(this.f$1);
     }
 }

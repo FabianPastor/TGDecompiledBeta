@@ -101,7 +101,7 @@ public class VideoScreenPreview extends FrameLayout implements PagerHeaderView, 
             MatrixParticlesDrawable matrixParticlesDrawable2 = new MatrixParticlesDrawable();
             this.matrixParticlesDrawable = matrixParticlesDrawable2;
             matrixParticlesDrawable2.init();
-        } else if (i2 == 6 || i2 == 9 || i2 == 3 || i2 == 7) {
+        } else if (i2 == 6 || i2 == 9 || i2 == 3 || i2 == 7 || i2 == 11) {
             StarParticlesView.Drawable drawable = new StarParticlesView.Drawable(40);
             this.starDrawable = drawable;
             drawable.speedScale = 3.0f;
@@ -293,7 +293,7 @@ public class VideoScreenPreview extends FrameLayout implements PagerHeaderView, 
             StarParticlesView.Drawable drawable = this.starDrawable;
             if (drawable != null) {
                 int i5 = this.type;
-                if (i5 == 6 || i5 == 9 || i5 == 3 || i5 == 7) {
+                if (i5 == 6 || i5 == 9 || i5 == 3 || i5 == 7 || i5 == 11) {
                     drawable.rect.set(0.0f, 0.0f, (float) getMeasuredWidth(), (float) getMeasuredHeight());
                     this.starDrawable.rect.inset((float) AndroidUtilities.dp(30.0f), (float) AndroidUtilities.dp(30.0f));
                 } else {

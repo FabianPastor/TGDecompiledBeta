@@ -984,7 +984,7 @@ public class QrActivity extends BaseFragment {
                 if (r6 > r14) goto L_0x0175
                 if (r6 != 0) goto L_0x0077
                 android.content.Context r7 = r33.getContext()
-                r8 = 2131166101(0x7var_, float:1.7946438E38)
+                r8 = 2131166103(0x7var_, float:1.7946442E38)
                 android.graphics.drawable.Drawable r7 = androidx.core.content.ContextCompat.getDrawable(r7, r8)
                 int r8 = org.telegram.messenger.AndroidUtilities.dp(r18)
                 float r8 = (float) r8
@@ -993,7 +993,7 @@ public class QrActivity extends BaseFragment {
             L_0x0077:
                 if (r6 != r11) goto L_0x008f
                 android.content.Context r7 = r33.getContext()
-                r8 = 2131166102(0x7var_, float:1.794644E38)
+                r8 = 2131166104(0x7var_, float:1.7946444E38)
                 android.graphics.drawable.Drawable r7 = androidx.core.content.ContextCompat.getDrawable(r7, r8)
                 r8 = 1103626240(0x41CLASSNAME, float:25.0)
                 int r8 = org.telegram.messenger.AndroidUtilities.dp(r8)
@@ -1002,7 +1002,7 @@ public class QrActivity extends BaseFragment {
                 goto L_0x00a4
             L_0x008f:
                 android.content.Context r7 = r33.getContext()
-                r8 = 2131166103(0x7var_, float:1.7946442E38)
+                r8 = 2131166105(0x7var_, float:1.7946446E38)
                 android.graphics.drawable.Drawable r7 = androidx.core.content.ContextCompat.getDrawable(r7, r8)
                 r8 = 1100480512(0x41980000, float:19.0)
                 int r8 = org.telegram.messenger.AndroidUtilities.dp(r8)

@@ -50,8 +50,9 @@ public class DispatchQueueMainThreadSync extends Thread {
     }
 
     private void checkThread() {
-        if (BuildVars.DEBUG_PRIVATE_VERSION && Thread.currentThread() != ApplicationLoader.applicationHandler.getLooper().getThread()) {
-            throw new IllegalStateException("Disaptch thread");
+        if (BuildVars.DEBUG_PRIVATE_VERSION) {
+            Thread.currentThread();
+            ApplicationLoader.applicationHandler.getLooper().getThread();
         }
     }
 

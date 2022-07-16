@@ -290,7 +290,7 @@ public class SessionBottomSheet extends BottomSheet {
             java.lang.String r1 = r1.toLowerCase()
             java.lang.String r2 = "safari"
             boolean r2 = r1.contains(r2)
-            r3 = 2131558602(0x7f0d00ca, float:1.8742524E38)
+            r3 = 2131558613(0x7f0d00d5, float:1.8742547E38)
             java.lang.String r4 = "avatar_backgroundBlue"
             r5 = 2131558428(0x7f0d001c, float:1.8742172E38)
             r6 = 1
@@ -298,7 +298,7 @@ public class SessionBottomSheet extends BottomSheet {
             r8 = 0
             java.lang.String r9 = "avatar_backgroundPink"
             if (r2 == 0) goto L_0x0035
-            r3 = 2131558524(0x7f0d007c, float:1.8742366E38)
+            r3 = 2131558531(0x7f0d0083, float:1.874238E38)
         L_0x0031:
             r4 = r9
         L_0x0032:
@@ -334,7 +334,7 @@ public class SessionBottomSheet extends BottomSheet {
             java.lang.String r2 = "ubuntu"
             boolean r2 = r0.contains(r2)
             if (r2 == 0) goto L_0x0075
-            r3 = 2131558566(0x7f0d00a6, float:1.8742451E38)
+            r3 = 2131558575(0x7f0d00af, float:1.874247E38)
             goto L_0x0032
         L_0x0075:
             java.lang.String r2 = "ios"
@@ -343,12 +343,12 @@ public class SessionBottomSheet extends BottomSheet {
             java.lang.String r13 = "ipad"
             boolean r13 = r1.contains(r13)
             if (r13 == 0) goto L_0x008c
-            r13 = 2131558478(0x7f0d004e, float:1.8742273E38)
-            r3 = 2131558478(0x7f0d004e, float:1.8742273E38)
-            goto L_0x0032
-        L_0x008c:
             r13 = 2131558479(0x7f0d004f, float:1.8742275E38)
             r3 = 2131558479(0x7f0d004f, float:1.8742275E38)
+            goto L_0x0032
+        L_0x008c:
+            r13 = 2131558480(0x7f0d0050, float:1.8742277E38)
+            r3 = 2131558480(0x7f0d0050, float:1.8742277E38)
             goto L_0x0032
         L_0x0093:
             java.lang.String r1 = "windows"
@@ -361,7 +361,7 @@ public class SessionBottomSheet extends BottomSheet {
             java.lang.String r1 = "macos"
             boolean r1 = r0.contains(r1)
             if (r1 == 0) goto L_0x00a9
-            r3 = 2131558482(0x7f0d0052, float:1.8742281E38)
+            r3 = 2131558486(0x7f0d0056, float:1.874229E38)
             goto L_0x009b
         L_0x00a9:
             java.lang.String r1 = "android"

@@ -9,17 +9,23 @@ import android.text.Editable;
 import android.text.Layout;
 import android.text.Spannable;
 import android.view.MotionEvent;
+import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Stack;
+import org.telegram.messenger.AndroidUtilities;
+import org.telegram.ui.Components.AnimatedEmojiSpan;
 import org.telegram.ui.Components.spoilers.SpoilerEffect;
 import org.telegram.ui.Components.spoilers.SpoilersClickDetector;
 
 public class EditTextEffects extends EditText {
+    private AnimatedEmojiSpan.EmojiGroupedSpans animatedEmojiDrawables;
     private SpoilersClickDetector clickDetector = new SpoilersClickDetector(this, this.spoilers, new EditTextEffects$$ExternalSyntheticLambda5(this));
     private boolean isSpoilersRevealed;
+    private Layout lastLayout = null;
     private float lastRippleX;
     private float lastRippleY;
     private Path path = new Path();
@@ -133,6 +139,7 @@ public class EditTextEffects extends EditText {
     public void onDetachedFromWindow() {
         super.onDetachedFromWindow();
         removeCallbacks(this.spoilerTimeout);
+        AnimatedEmojiSpan.release((View) this, this.animatedEmojiDrawables);
     }
 
     /* access modifiers changed from: protected */
@@ -151,17 +158,23 @@ public class EditTextEffects extends EditText {
                 int lineForOffset = layout.getLineForOffset(i);
                 int primaryHorizontal = (int) layout.getPrimaryHorizontal(i);
                 int lineTop = (int) (((float) (layout.getLineTop(lineForOffset) + layout.getLineBottom(lineForOffset))) / 2.0f);
-                for (SpoilerEffect next : this.spoilers) {
+                Iterator<SpoilerEffect> it = this.spoilers.iterator();
+                while (true) {
+                    if (!it.hasNext()) {
+                        break;
+                    }
+                    SpoilerEffect next = it.next();
                     if (next.getBounds().contains(primaryHorizontal, lineTop)) {
                         int i4 = i3 - i2;
                         this.selStart += i4;
                         this.selEnd += i4;
                         onSpoilerClicked(next, (float) primaryHorizontal, (float) lineTop);
-                        return;
+                        break;
                     }
                 }
             }
         }
+        this.animatedEmojiDrawables = AnimatedEmojiSpan.update(1, (View) this, this.animatedEmojiDrawables, getLayout());
     }
 
     public void setText(CharSequence charSequence, TextView.BufferType bufferType) {
@@ -173,6 +186,12 @@ public class EditTextEffects extends EditText {
             }
         }
         super.setText(charSequence, bufferType);
+    }
+
+    /* access modifiers changed from: protected */
+    public void onLayout(boolean z, int i, int i2, int i3, int i4) {
+        super.onLayout(z, i, i2, i3, i4);
+        this.animatedEmojiDrawables = AnimatedEmojiSpan.update(1, (View) this, this.animatedEmojiDrawables, getLayout());
     }
 
     public void setShouldRevealSpoilersByTouch(boolean z) {
@@ -226,6 +245,14 @@ public class EditTextEffects extends EditText {
         }
         canvas.clipPath(this.path, Region.Op.DIFFERENCE);
         super.onDraw(canvas);
+        Layout layout = this.lastLayout;
+        if (layout == null || layout != getLayout()) {
+            this.animatedEmojiDrawables = AnimatedEmojiSpan.update(1, (View) this, this.animatedEmojiDrawables, getLayout());
+            this.lastLayout = getLayout();
+        }
+        if (this.animatedEmojiDrawables != null) {
+            AnimatedEmojiSpan.drawAnimatedEmojis(canvas, getLayout(), this.animatedEmojiDrawables, 0.0f, this.spoilers, (float) (computeVerticalScrollOffset() - AndroidUtilities.dp(6.0f)), (float) (computeVerticalScrollOffset() + computeVerticalScrollExtent()), 0.0f, 1.0f);
+        }
         canvas.restore();
         canvas.save();
         canvas.clipPath(this.path);

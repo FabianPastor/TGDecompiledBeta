@@ -56,7 +56,7 @@ public class JoinToSendSettingsView extends LinearLayout {
             r1.<init>((android.content.Context) r6, (int) r2)
             r5.joinHeaderCell = r1
             java.lang.String r2 = "ChannelSettingsJoinTitle"
-            r3 = 2131624961(0x7f0e0401, float:1.8877116E38)
+            r3 = 2131624970(0x7f0e040a, float:1.8877135E38)
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r2, r3)
             r1.setText(r2)
             org.telegram.ui.Cells.HeaderCell r1 = r5.joinHeaderCell
@@ -72,7 +72,7 @@ public class JoinToSendSettingsView extends LinearLayout {
             r1.setBackground(r2)
             org.telegram.ui.Cells.TextCheckCell r1 = r5.joinToSendCell
             java.lang.String r2 = "ChannelSettingsJoinToSend"
-            r3 = 2131624962(0x7f0e0402, float:1.8877119E38)
+            r3 = 2131624971(0x7f0e040b, float:1.8877137E38)
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r2, r3)
             boolean r3 = r5.isJoinToSend
             r1.setTextAndCheck(r2, r3, r3)
@@ -104,7 +104,7 @@ public class JoinToSendSettingsView extends LinearLayout {
             android.graphics.drawable.Drawable r2 = org.telegram.ui.ActionBar.Theme.getSelectorDrawable(r0)
             r1.setBackground(r2)
             org.telegram.ui.Cells.TextCheckCell r1 = r5.joinRequestCell
-            r2 = 2131624959(0x7f0e03ff, float:1.8877112E38)
+            r2 = 2131624968(0x7f0e0408, float:1.887713E38)
             java.lang.String r4 = "ChannelSettingsJoinRequest"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r4, r2)
             boolean r4 = r5.isJoinRequest
@@ -133,7 +133,7 @@ public class JoinToSendSettingsView extends LinearLayout {
             org.telegram.ui.Cells.TextInfoPrivacyCell r7 = new org.telegram.ui.Cells.TextInfoPrivacyCell
             r7.<init>(r6)
             r5.joinToSendInfoCell = r7
-            r0 = 2131624963(0x7f0e0403, float:1.887712E38)
+            r0 = 2131624972(0x7f0e040c, float:1.8877139E38)
             java.lang.String r1 = "ChannelSettingsJoinToSendInfo"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             r7.setText(r0)
@@ -142,7 +142,7 @@ public class JoinToSendSettingsView extends LinearLayout {
             org.telegram.ui.Cells.TextInfoPrivacyCell r7 = new org.telegram.ui.Cells.TextInfoPrivacyCell
             r7.<init>(r6)
             r5.joinRequestInfoCell = r7
-            r6 = 2131624960(0x7f0e0400, float:1.8877114E38)
+            r6 = 2131624969(0x7f0e0409, float:1.8877133E38)
             java.lang.String r0 = "ChannelSettingsJoinRequestInfo"
             java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r0, r6)
             r7.setText(r6)
@@ -259,6 +259,16 @@ public class JoinToSendSettingsView extends LinearLayout {
         requestLayout();
     }
 
+    public void showJoinToSend(boolean z) {
+        this.joinToSendCell.setVisibility(z ? 0 : 8);
+        if (!z) {
+            this.isJoinToSend = true;
+            this.joinRequestCell.setVisibility(0);
+            updateToggleValue(1.0f);
+        }
+        requestLayout();
+    }
+
     /* renamed from: setJoinRequest */
     public void lambda$new$3(boolean z) {
         this.isJoinRequest = z;
@@ -307,12 +317,15 @@ public class JoinToSendSettingsView extends LinearLayout {
         int i5 = i3 - i;
         int measuredHeight = headerCell.getMeasuredHeight() + 0;
         headerCell.layout(0, 0, i5, measuredHeight);
-        TextCheckCell textCheckCell = this.joinToSendCell;
-        int measuredHeight2 = textCheckCell.getMeasuredHeight() + measuredHeight;
-        textCheckCell.layout(0, measuredHeight, i5, measuredHeight2);
+        if (this.joinToSendCell.getVisibility() == 0) {
+            TextCheckCell textCheckCell = this.joinToSendCell;
+            int measuredHeight2 = textCheckCell.getMeasuredHeight() + measuredHeight;
+            textCheckCell.layout(0, measuredHeight, i5, measuredHeight2);
+            measuredHeight = measuredHeight2;
+        }
         TextCheckCell textCheckCell2 = this.joinRequestCell;
-        int measuredHeight3 = textCheckCell2.getMeasuredHeight() + measuredHeight2;
-        textCheckCell2.layout(0, measuredHeight2, i5, measuredHeight3);
+        int measuredHeight3 = textCheckCell2.getMeasuredHeight() + measuredHeight;
+        textCheckCell2.layout(0, measuredHeight, i5, measuredHeight3);
         TextInfoPrivacyCell textInfoPrivacyCell = this.joinToSendInfoCell;
         textInfoPrivacyCell.layout(0, measuredHeight3, i5, textInfoPrivacyCell.getMeasuredHeight() + measuredHeight3);
         TextInfoPrivacyCell textInfoPrivacyCell2 = this.joinRequestInfoCell;
@@ -320,7 +333,14 @@ public class JoinToSendSettingsView extends LinearLayout {
     }
 
     private int calcHeight() {
-        return (int) (((float) (this.joinHeaderCell.getMeasuredHeight() + this.joinToSendCell.getMeasuredHeight())) + (((float) this.joinRequestCell.getMeasuredHeight()) * this.toggleValue) + ((float) AndroidUtilities.lerp(this.joinToSendInfoCell.getMeasuredHeight(), this.joinRequestInfoCell.getMeasuredHeight(), this.toggleValue)));
+        float f;
+        float measuredHeight = (float) this.joinHeaderCell.getMeasuredHeight();
+        if (this.joinToSendCell.getVisibility() == 0) {
+            f = ((float) this.joinToSendCell.getMeasuredHeight()) + (((float) this.joinRequestCell.getMeasuredHeight()) * this.toggleValue);
+        } else {
+            f = (float) this.joinRequestCell.getMeasuredHeight();
+        }
+        return (int) (measuredHeight + f + ((float) AndroidUtilities.lerp(this.joinToSendInfoCell.getMeasuredHeight(), this.joinRequestInfoCell.getMeasuredHeight(), this.toggleValue)));
     }
 
     /* access modifiers changed from: protected */

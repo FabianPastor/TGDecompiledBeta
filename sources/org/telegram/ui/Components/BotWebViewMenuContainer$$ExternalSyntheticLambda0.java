@@ -10,6 +10,6 @@ public final /* synthetic */ class BotWebViewMenuContainer$$ExternalSyntheticLam
     }
 
     public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-        this.f$0.lambda$onDismiss$17(valueAnimator);
+        this.f$0.lambda$onPanTransitionStart$15(valueAnimator);
     }
 }

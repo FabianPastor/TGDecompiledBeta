@@ -14,6 +14,6 @@ public final /* synthetic */ class MediaDataController$$ExternalSyntheticLambda6
     }
 
     public final void run() {
-        this.f$0.lambda$verifyAnimatedStickerMessageInternal$51(this.f$1, this.f$2);
+        this.f$0.lambda$verifyAnimatedStickerMessageInternal$53(this.f$1, this.f$2);
     }
 }

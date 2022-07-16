@@ -103,14 +103,14 @@ public class NumberPicker extends LinearLayout {
         return 0.9f;
     }
 
-    /* JADX WARNING: type inference failed for: r2v2, types: [boolean, byte] */
+    /* JADX WARNING: type inference failed for: r2v2, types: [byte, boolean] */
     static /* synthetic */ boolean access$280(NumberPicker numberPicker, int i) {
         ? r2 = (byte) (i ^ numberPicker.mIncrementVirtualButtonPressed);
         numberPicker.mIncrementVirtualButtonPressed = r2;
         return r2;
     }
 
-    /* JADX WARNING: type inference failed for: r2v2, types: [boolean, byte] */
+    /* JADX WARNING: type inference failed for: r2v2, types: [byte, boolean] */
     static /* synthetic */ boolean access$480(NumberPicker numberPicker, int i) {
         ? r2 = (byte) (i ^ numberPicker.mDecrementVirtualButtonPressed);
         numberPicker.mDecrementVirtualButtonPressed = r2;

@@ -8,6 +8,6 @@ public final /* synthetic */ class ChannelCreateActivity$$ExternalSyntheticLambd
     }
 
     public final void run() {
-        this.f$0.lambda$loadAdminedChannels$15();
+        this.f$0.lambda$new$3();
     }
 }

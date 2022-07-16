@@ -402,9 +402,11 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
             this.needReorder = false;
             this.activeReorderingRequests++;
             TLRPC$TL_messages_reorderStickerSets tLRPC$TL_messages_reorderStickerSets = new TLRPC$TL_messages_reorderStickerSets();
-            tLRPC$TL_messages_reorderStickerSets.masks = this.currentType == 1;
-            for (int i = 0; i < this.listAdapter.stickerSets.size(); i++) {
-                tLRPC$TL_messages_reorderStickerSets.order.add(Long.valueOf(((TLRPC$TL_messages_stickerSet) this.listAdapter.stickerSets.get(i)).set.id));
+            int i = this.currentType;
+            tLRPC$TL_messages_reorderStickerSets.masks = i == 1;
+            tLRPC$TL_messages_reorderStickerSets.masks = i == 5;
+            for (int i2 = 0; i2 < this.listAdapter.stickerSets.size(); i2++) {
+                tLRPC$TL_messages_reorderStickerSets.order.add(Long.valueOf(((TLRPC$TL_messages_stickerSet) this.listAdapter.stickerSets.get(i2)).set.id));
             }
             ConnectionsManager.getInstance(this.currentAccount).sendRequest(tLRPC$TL_messages_reorderStickerSets, new StickersActivity$$ExternalSyntheticLambda3(this));
             NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.stickersDidLoad, Integer.valueOf(this.currentType));

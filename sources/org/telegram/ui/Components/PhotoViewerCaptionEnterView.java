@@ -13,6 +13,7 @@ import android.graphics.PorterDuffColorFilter;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.os.Vibrator;
+import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
 import android.text.TextPaint;
 import android.text.TextUtils;
@@ -41,6 +42,7 @@ import org.telegram.tgnet.TLRPC$InputStickerSet;
 import org.telegram.tgnet.TLRPC$StickerSet;
 import org.telegram.tgnet.TLRPC$StickerSetCovered;
 import org.telegram.ui.ActionBar.AdjustPanLayoutHelper;
+import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.EmojiView;
 import org.telegram.ui.Components.SizeNotifierFrameLayoutPhoto;
@@ -702,7 +704,7 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
 
     private void createEmojiView() {
         if (this.emojiView == null) {
-            EmojiView emojiView2 = new EmojiView(false, false, getContext(), false, (TLRPC$ChatFull) null, (ViewGroup) null, (Theme.ResourcesProvider) null);
+            EmojiView emojiView2 = new EmojiView((BaseFragment) null, true, false, false, getContext(), false, (TLRPC$ChatFull) null, (ViewGroup) null, (Theme.ResourcesProvider) null);
             this.emojiView = emojiView2;
             emojiView2.setDelegate(new EmojiView.EmojiViewDelegate() {
                 public /* synthetic */ boolean canSchedule() {
@@ -787,6 +789,27 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
                     }
                     PhotoViewerCaptionEnterView.this.messageEditText.dispatchKeyEvent(new KeyEvent(0, 67));
                     return true;
+                }
+
+                public void onCustomEmojiSelected(long j, String str) {
+                    int selectionEnd = PhotoViewerCaptionEnterView.this.messageEditText.getSelectionEnd();
+                    if (selectionEnd < 0) {
+                        selectionEnd = 0;
+                    }
+                    try {
+                        boolean unused = PhotoViewerCaptionEnterView.this.innerTextChange = true;
+                        SpannableString spannableString = new SpannableString(str);
+                        spannableString.setSpan(new AnimatedEmojiSpan(j, PhotoViewerCaptionEnterView.this.messageEditText.getPaint().getFontMetricsInt()), 0, spannableString.length(), 33);
+                        PhotoViewerCaptionEnterView.this.messageEditText.setText(PhotoViewerCaptionEnterView.this.messageEditText.getText().insert(selectionEnd, spannableString));
+                        int length = selectionEnd + spannableString.length();
+                        PhotoViewerCaptionEnterView.this.messageEditText.setSelection(length, length);
+                    } catch (Exception e) {
+                        FileLog.e((Throwable) e);
+                    } catch (Throwable th) {
+                        boolean unused2 = PhotoViewerCaptionEnterView.this.innerTextChange = false;
+                        throw th;
+                    }
+                    boolean unused3 = PhotoViewerCaptionEnterView.this.innerTextChange = false;
                 }
 
                 public void onEmojiSelected(String str) {

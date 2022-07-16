@@ -900,7 +900,7 @@ public class GroupVoipInviteAlert extends UsersAlertBase {
                 android.content.Context r0 = r2.mContext
                 r1 = 0
                 r4.<init>(r0, r3, r3, r1)
-                r3 = 2131165771(0x7var_b, float:1.7945769E38)
+                r3 = 2131165772(0x7var_c, float:1.794577E38)
                 r4.setCustomRightImage(r3)
                 java.lang.String r3 = "voipgroup_nameText"
                 int r3 = org.telegram.ui.ActionBar.Theme.getColor(r3)
@@ -942,7 +942,7 @@ public class GroupVoipInviteAlert extends UsersAlertBase {
                 org.telegram.ui.Cells.GraySectionCell r14 = (org.telegram.ui.Cells.GraySectionCell) r14
                 int r0 = r13.groupStartRow
                 if (r15 != r0) goto L_0x0021
-                r15 = 2131624917(0x7f0e03d5, float:1.8877027E38)
+                r15 = 2131624926(0x7f0e03de, float:1.8877045E38)
                 java.lang.String r0 = "ChannelMembers"
                 java.lang.String r15 = org.telegram.messenger.LocaleController.getString(r0, r15)
                 r14.setText(r15)
@@ -950,7 +950,7 @@ public class GroupVoipInviteAlert extends UsersAlertBase {
             L_0x0021:
                 int r0 = r13.globalStartRow
                 if (r15 != r0) goto L_0x0133
-                r15 = 2131626079(0x7f0e085f, float:1.8879384E38)
+                r15 = 2131626116(0x7f0e0884, float:1.887946E38)
                 java.lang.String r0 = "GlobalSearch"
                 java.lang.String r15 = org.telegram.messenger.LocaleController.getString(r0, r15)
                 r14.setText(r15)
@@ -1189,7 +1189,7 @@ public class GroupVoipInviteAlert extends UsersAlertBase {
                 android.content.Context r3 = r5.mContext
                 r4 = 0
                 r7.<init>(r3, r0, r1, r4)
-                r0 = 2131165771(0x7var_b, float:1.7945769E38)
+                r0 = 2131165772(0x7var_c, float:1.794577E38)
                 r7.setCustomRightImage(r0)
                 java.lang.String r0 = "voipgroup_nameText"
                 int r0 = org.telegram.ui.ActionBar.Theme.getColor(r0)

@@ -32,9 +32,11 @@ import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Cells.ShadowSectionCell;
 import org.telegram.ui.Components.BottomSheetWithRecyclerListView;
 import org.telegram.ui.Components.CubicBezierInterpolator;
+import org.telegram.ui.Components.FireworksOverlay;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.Premium.GLIcon.GLIconRenderer;
 import org.telegram.ui.Components.Premium.GLIcon.GLIconTextureView;
+import org.telegram.ui.Components.Premium.GiftPremiumBottomSheet;
 import org.telegram.ui.Components.Premium.PremiumGradient;
 import org.telegram.ui.Components.Premium.StarParticlesView;
 import org.telegram.ui.Components.RecyclerListView;
@@ -42,22 +44,27 @@ import org.telegram.ui.PremiumFeatureCell;
 import org.telegram.ui.PremiumPreviewFragment;
 
 public class PremiumPreviewBottomSheet extends BottomSheetWithRecyclerListView {
+    boolean animateConfetti;
+    FrameLayout buttonContainer;
     int buttonRow;
-    int[] coords = new int[2];
+    int[] coords;
     int currentAccount;
     PremiumFeatureCell dummyCell;
     ValueAnimator enterAnimator;
     boolean enterTransitionInProgress;
-    float enterTransitionProgress = 0.0f;
+    float enterTransitionProgress;
     int featuresEndRow;
     int featuresStartRow;
+    FireworksOverlay fireworksOverlay;
     BaseFragment fragment;
+    GiftPremiumBottomSheet.GiftTier giftTier;
     PremiumGradient.GradientTools gradientTools;
     int helpUsRow;
     ViewGroup iconContainer;
     GLIconTextureView iconTextureView;
+    boolean isOutboundGift;
     int paddingRow;
-    ArrayList<PremiumPreviewFragment.PremiumFeatureData> premiumFeatures = new ArrayList<>();
+    ArrayList<PremiumPreviewFragment.PremiumFeatureData> premiumFeatures;
     int rowCount;
     int sectionRow;
     StarParticlesView starParticlesView;
@@ -70,14 +77,25 @@ public class PremiumPreviewBottomSheet extends BottomSheetWithRecyclerListView {
     int totalGradientHeight;
     TLRPC$User user;
 
-    public PremiumPreviewBottomSheet(final BaseFragment baseFragment, final int i, TLRPC$User tLRPC$User) {
+    public PremiumPreviewBottomSheet(BaseFragment baseFragment, int i, TLRPC$User tLRPC$User) {
+        this(baseFragment, i, tLRPC$User, (GiftPremiumBottomSheet.GiftTier) null);
+    }
+
+    public PremiumPreviewBottomSheet(BaseFragment baseFragment, int i, TLRPC$User tLRPC$User, GiftPremiumBottomSheet.GiftTier giftTier2) {
         super(baseFragment, false, false);
+        this.premiumFeatures = new ArrayList<>();
+        this.coords = new int[2];
+        this.enterTransitionProgress = 0.0f;
         this.fragment = baseFragment;
         this.topPadding = 0.26f;
         this.user = tLRPC$User;
         this.currentAccount = i;
+        this.giftTier = giftTier2;
         this.dummyCell = new PremiumFeatureCell(getContext());
         PremiumPreviewFragment.fillPremiumFeaturesList(this.premiumFeatures, i);
+        if (this.giftTier != null) {
+            this.buttonContainer.setVisibility(8);
+        }
         PremiumGradient.GradientTools gradientTools2 = new PremiumGradient.GradientTools("premiumGradient1", "premiumGradient2", "premiumGradient3", "premiumGradient4");
         this.gradientTools = gradientTools2;
         gradientTools2.exactly = true;
@@ -97,39 +115,53 @@ public class PremiumPreviewBottomSheet extends BottomSheetWithRecyclerListView {
         this.featuresEndRow = size;
         this.rowCount = size + 1;
         this.sectionRow = size;
-        if (!UserConfig.getInstance(i).isPremium()) {
+        if (!UserConfig.getInstance(i).isPremium() && giftTier2 == null) {
             int i4 = this.rowCount;
             this.rowCount = i4 + 1;
             this.buttonRow = i4;
         }
         this.recyclerListView.setPadding(AndroidUtilities.dp(6.0f), 0, AndroidUtilities.dp(6.0f), 0);
-        this.recyclerListView.setOnItemClickListener((RecyclerListView.OnItemClickListener) new RecyclerListView.OnItemClickListener() {
-            public void onItemClick(View view, int i) {
-                if (view instanceof PremiumFeatureCell) {
-                    PremiumFeatureCell premiumFeatureCell = (PremiumFeatureCell) view;
-                    PremiumPreviewFragment.sentShowFeaturePreview(i, premiumFeatureCell.data.type);
-                    if (premiumFeatureCell.data.type == 0) {
-                        PremiumPreviewBottomSheet.this.showDialog(new DoubledLimitsBottomSheet(baseFragment, i));
-                        return;
-                    }
-                    PremiumPreviewBottomSheet.this.showDialog(new PremiumFeatureBottomSheet(baseFragment, premiumFeatureCell.data.type, false));
-                }
-            }
-        });
+        this.recyclerListView.setOnItemClickListener((RecyclerListView.OnItemClickListener) new PremiumPreviewBottomSheet$$ExternalSyntheticLambda3(this, i, baseFragment));
         MediaDataController.getInstance(i).preloadPremiumPreviewStickers();
         PremiumPreviewFragment.sentShowScreenStat("profile");
+        FireworksOverlay fireworksOverlay2 = new FireworksOverlay(getContext());
+        this.fireworksOverlay = fireworksOverlay2;
+        this.container.addView(fireworksOverlay2, LayoutHelper.createFrame(-1, -1.0f));
     }
 
     /* access modifiers changed from: private */
-    public void showDialog(Dialog dialog) {
+    public /* synthetic */ void lambda$new$0(int i, BaseFragment baseFragment, View view, int i2) {
+        if (view instanceof PremiumFeatureCell) {
+            PremiumFeatureCell premiumFeatureCell = (PremiumFeatureCell) view;
+            PremiumPreviewFragment.sentShowFeaturePreview(i, premiumFeatureCell.data.type);
+            int i3 = premiumFeatureCell.data.type;
+            if (i3 == 0) {
+                showDialog(new DoubledLimitsBottomSheet(baseFragment, i));
+            } else {
+                showDialog(new PremiumFeatureBottomSheet(baseFragment, i3, false));
+            }
+        }
+    }
+
+    public PremiumPreviewBottomSheet setOutboundGift(boolean z) {
+        this.isOutboundGift = z;
+        return this;
+    }
+
+    public PremiumPreviewBottomSheet setAnimateConfetti(boolean z) {
+        this.animateConfetti = z;
+        return this;
+    }
+
+    private void showDialog(Dialog dialog) {
         this.iconTextureView.setDialogVisible(true);
         this.starParticlesView.setPaused(true);
-        dialog.setOnDismissListener(new PremiumPreviewBottomSheet$$ExternalSyntheticLambda0(this));
+        dialog.setOnDismissListener(new PremiumPreviewBottomSheet$$ExternalSyntheticLambda1(this));
         dialog.show();
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$showDialog$0(DialogInterface dialogInterface) {
+    public /* synthetic */ void lambda$showDialog$1(DialogInterface dialogInterface) {
         this.iconTextureView.setDialogVisible(false);
         this.starParticlesView.setPaused(false);
     }
@@ -143,16 +175,16 @@ public class PremiumPreviewBottomSheet extends BottomSheetWithRecyclerListView {
                 PremiumPreviewFragment.buyPremium(PremiumPreviewBottomSheet.this.fragment, "profile");
             }
         });
-        FrameLayout frameLayout2 = new FrameLayout(getContext());
+        this.buttonContainer = new FrameLayout(getContext());
         View view = new View(getContext());
         view.setBackgroundColor(Theme.getColor("divider"));
-        frameLayout2.addView(view, LayoutHelper.createFrame(-1, 1.0f));
+        this.buttonContainer.addView(view, LayoutHelper.createFrame(-1, 1.0f));
         view.getLayoutParams().height = 1;
         AndroidUtilities.updateViewVisibilityAnimated(view, true, 1.0f, false);
         if (!UserConfig.getInstance(this.currentAccount).isPremium()) {
-            frameLayout2.addView(premiumButtonView, LayoutHelper.createFrame(-1, 48.0f, 16, 16.0f, 0.0f, 16.0f, 0.0f));
-            frameLayout2.setBackgroundColor(getThemedColor("dialogBackground"));
-            frameLayout.addView(frameLayout2, LayoutHelper.createFrame(-1, 68, 80));
+            this.buttonContainer.addView(premiumButtonView, LayoutHelper.createFrame(-1, 48.0f, 16, 16.0f, 0.0f, 16.0f, 0.0f));
+            this.buttonContainer.setBackgroundColor(getThemedColor("dialogBackground"));
+            frameLayout.addView(this.buttonContainer, LayoutHelper.createFrame(-1, 68, 80));
         }
     }
 
@@ -174,18 +206,15 @@ public class PremiumPreviewBottomSheet extends BottomSheetWithRecyclerListView {
     }
 
     private class Adapter extends RecyclerListView.SelectionAdapter {
-        /* access modifiers changed from: private */
-        public static /* synthetic */ void lambda$onCreateViewHolder$0() {
-        }
-
         private Adapter() {
         }
 
         public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
             View view;
+            int i2 = i;
             Context context = viewGroup.getContext();
-            if (i == 0) {
-                AnonymousClass1 r14 = new LinearLayout(context) {
+            if (i2 == 0) {
+                AnonymousClass1 r1 = new LinearLayout(context) {
                     /* access modifiers changed from: protected */
                     public boolean drawChild(Canvas canvas, View view, long j) {
                         PremiumPreviewBottomSheet premiumPreviewBottomSheet = PremiumPreviewBottomSheet.this;
@@ -195,8 +224,8 @@ public class PremiumPreviewBottomSheet extends BottomSheetWithRecyclerListView {
                         return true;
                     }
                 };
-                PremiumPreviewBottomSheet.this.iconContainer = r14;
-                r14.setOrientation(1);
+                PremiumPreviewBottomSheet.this.iconContainer = r1;
+                r1.setOrientation(1);
                 PremiumPreviewBottomSheet.this.iconTextureView = new GLIconTextureView(this, context, 1) {
                     /* access modifiers changed from: protected */
                     public void onAttachedToWindow() {
@@ -217,25 +246,55 @@ public class PremiumPreviewBottomSheet extends BottomSheetWithRecyclerListView {
                 gLIconRenderer.colorKey1 = "premiumGradient1";
                 gLIconRenderer.colorKey2 = "premiumGradient2";
                 gLIconRenderer.updateColors();
-                r14.addView(PremiumPreviewBottomSheet.this.iconTextureView, LayoutHelper.createLinear(160, 160, 1));
+                r1.addView(PremiumPreviewBottomSheet.this.iconTextureView, LayoutHelper.createLinear(160, 160, 1));
                 TextView textView = new TextView(context);
                 textView.setTextSize(1, 16.0f);
                 textView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
                 textView.setGravity(1);
-                textView.setText(LocaleController.getString("TelegramPremium", NUM));
                 textView.setTextColor(Theme.getColor("windowBackgroundWhiteBlackText"));
                 textView.setLinkTextColor(Theme.getColor("windowBackgroundWhiteLinkText"));
-                r14.addView(textView, LayoutHelper.createLinear(-2, -2, 0.0f, 1, 40, 0, 40, 0));
+                r1.addView(textView, LayoutHelper.createLinear(-2, -2, 0.0f, 1, 40, 0, 40, 0));
                 TextView textView2 = new TextView(context);
                 textView2.setTextSize(1, 14.0f);
                 textView2.setGravity(1);
                 textView2.setTextColor(Theme.getColor("windowBackgroundWhiteBlackText"));
-                r14.addView(textView2, LayoutHelper.createLinear(-1, -2, 0.0f, 0, 16, 9, 16, 20));
-                TLRPC$User tLRPC$User = PremiumPreviewBottomSheet.this.user;
-                textView.setText(AndroidUtilities.replaceSingleTag(LocaleController.formatString("TelegramPremiumUserDialogTitle", NUM, ContactsController.formatName(tLRPC$User.first_name, tLRPC$User.last_name)), PremiumPreviewBottomSheet$Adapter$$ExternalSyntheticLambda0.INSTANCE));
-                textView2.setText(AndroidUtilities.replaceTags(LocaleController.getString("TelegramPremiumUserDialogSubtitle", NUM)));
+                textView2.setLinkTextColor(Theme.getColor("windowBackgroundWhiteLinkText"));
+                r1.addView(textView2, LayoutHelper.createLinear(-1, -2, 0.0f, 0, 16, 9, 16, 20));
+                PremiumPreviewBottomSheet premiumPreviewBottomSheet = PremiumPreviewBottomSheet.this;
+                GiftPremiumBottomSheet.GiftTier giftTier = premiumPreviewBottomSheet.giftTier;
+                if (giftTier != null) {
+                    String str = "";
+                    if (premiumPreviewBottomSheet.isOutboundGift) {
+                        Object[] objArr = new Object[2];
+                        TLRPC$User tLRPC$User = premiumPreviewBottomSheet.user;
+                        objArr[0] = tLRPC$User != null ? tLRPC$User.first_name : str;
+                        objArr[1] = Integer.valueOf(giftTier.getMonths());
+                        textView.setText(AndroidUtilities.replaceSingleTag(LocaleController.formatString(NUM, objArr), (Runnable) null));
+                        Object[] objArr2 = new Object[1];
+                        TLRPC$User tLRPC$User2 = PremiumPreviewBottomSheet.this.user;
+                        if (tLRPC$User2 != null) {
+                            str = tLRPC$User2.first_name;
+                        }
+                        objArr2[0] = str;
+                        textView2.setText(AndroidUtilities.replaceSingleTag(LocaleController.formatString(NUM, objArr2), (Runnable) null));
+                    } else {
+                        Object[] objArr3 = new Object[2];
+                        TLRPC$User tLRPC$User3 = premiumPreviewBottomSheet.user;
+                        if (tLRPC$User3 != null) {
+                            str = tLRPC$User3.first_name;
+                        }
+                        objArr3[0] = str;
+                        objArr3[1] = Integer.valueOf(giftTier.getMonths());
+                        textView.setText(AndroidUtilities.replaceSingleTag(LocaleController.formatString(NUM, objArr3), (Runnable) null));
+                        textView2.setText(AndroidUtilities.replaceTags(LocaleController.getString(NUM)));
+                    }
+                } else {
+                    TLRPC$User tLRPC$User4 = premiumPreviewBottomSheet.user;
+                    textView.setText(AndroidUtilities.replaceSingleTag(LocaleController.formatString(NUM, ContactsController.formatName(tLRPC$User4.first_name, tLRPC$User4.last_name)), (Runnable) null));
+                    textView2.setText(AndroidUtilities.replaceTags(LocaleController.getString(NUM)));
+                }
                 PremiumPreviewBottomSheet.this.starParticlesView = new StarParticlesView(context);
-                AnonymousClass3 r1 = new FrameLayout(context) {
+                AnonymousClass3 r3 = new FrameLayout(context) {
                     /* access modifiers changed from: protected */
                     public void onMeasure(int i, int i2) {
                         super.onMeasure(i, i2);
@@ -243,19 +302,19 @@ public class PremiumPreviewBottomSheet extends BottomSheetWithRecyclerListView {
                         premiumPreviewBottomSheet.starParticlesView.setTranslationY((((float) premiumPreviewBottomSheet.iconTextureView.getTop()) + (((float) PremiumPreviewBottomSheet.this.iconTextureView.getMeasuredHeight()) / 2.0f)) - (((float) PremiumPreviewBottomSheet.this.starParticlesView.getMeasuredHeight()) / 2.0f));
                     }
                 };
-                r1.setClipChildren(false);
-                r1.addView(PremiumPreviewBottomSheet.this.starParticlesView);
-                r1.addView(r14);
+                r3.setClipChildren(false);
+                r3.addView(PremiumPreviewBottomSheet.this.starParticlesView);
+                r3.addView(r1);
                 StarParticlesView.Drawable drawable = PremiumPreviewBottomSheet.this.starParticlesView.drawable;
                 drawable.useGradient = true;
                 drawable.init();
-                PremiumPreviewBottomSheet premiumPreviewBottomSheet = PremiumPreviewBottomSheet.this;
-                premiumPreviewBottomSheet.iconTextureView.setStarParticlesView(premiumPreviewBottomSheet.starParticlesView);
-                view = r1;
-            } else if (i == 2) {
+                PremiumPreviewBottomSheet premiumPreviewBottomSheet2 = PremiumPreviewBottomSheet.this;
+                premiumPreviewBottomSheet2.iconTextureView.setStarParticlesView(premiumPreviewBottomSheet2.starParticlesView);
+                view = r3;
+            } else if (i2 == 2) {
                 view = new ShadowSectionCell(context, 12, Theme.getColor("windowBackgroundGray"));
-            } else if (i != 3) {
-                view = i != 4 ? new PremiumFeatureCell(context) {
+            } else if (i2 != 3) {
+                view = i2 != 4 ? new PremiumFeatureCell(context) {
                     /* access modifiers changed from: protected */
                     public void dispatchDraw(Canvas canvas) {
                         RectF rectF = AndroidUtilities.rectTmp;
@@ -334,6 +393,18 @@ public class PremiumPreviewBottomSheet extends BottomSheetWithRecyclerListView {
     public void show() {
         super.show();
         NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.stopAllHeavyOperations, 4);
+        if (this.animateConfetti) {
+            AndroidUtilities.runOnUIThread(new PremiumPreviewBottomSheet$$ExternalSyntheticLambda2(this), 200);
+        }
+    }
+
+    /* access modifiers changed from: private */
+    public /* synthetic */ void lambda$show$2() {
+        try {
+            this.container.performHapticFeedback(3, 2);
+        } catch (Exception unused) {
+        }
+        this.fireworksOverlay.start();
     }
 
     public void dismiss() {
@@ -342,6 +413,9 @@ public class PremiumPreviewBottomSheet extends BottomSheetWithRecyclerListView {
         ValueAnimator valueAnimator = this.enterAnimator;
         if (valueAnimator != null) {
             valueAnimator.cancel();
+        }
+        if (this.fireworksOverlay.isStarted()) {
+            this.fireworksOverlay.animate().alpha(0.0f).setDuration(150).start();
         }
     }
 
@@ -390,7 +464,7 @@ public class PremiumPreviewBottomSheet extends BottomSheetWithRecyclerListView {
     /* access modifiers changed from: protected */
     public boolean onCustomOpenAnimation() {
         if (this.startEnterFromView == null) {
-            return true;
+            return false;
         }
         this.enterAnimator = ValueAnimator.ofFloat(new float[]{0.0f, 1.0f});
         this.enterTransitionProgress = 0.0f;
@@ -399,12 +473,7 @@ public class PremiumPreviewBottomSheet extends BottomSheetWithRecyclerListView {
         this.startEnterFromView.getRightDrawable().setAlpha(0);
         this.startEnterFromView.invalidate();
         this.iconTextureView.startEnterAnimation(-360, 100);
-        this.enterAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-            public void onAnimationUpdate(ValueAnimator valueAnimator) {
-                PremiumPreviewBottomSheet.this.enterTransitionProgress = ((Float) valueAnimator.getAnimatedValue()).floatValue();
-                PremiumPreviewBottomSheet.this.container.invalidate();
-            }
-        });
+        this.enterAnimator.addUpdateListener(new PremiumPreviewBottomSheet$$ExternalSyntheticLambda0(this));
         this.enterAnimator.addListener(new AnimatorListenerAdapter() {
             public void onAnimationEnd(Animator animator) {
                 PremiumPreviewBottomSheet premiumPreviewBottomSheet = PremiumPreviewBottomSheet.this;
@@ -412,20 +481,26 @@ public class PremiumPreviewBottomSheet extends BottomSheetWithRecyclerListView {
                 premiumPreviewBottomSheet.enterTransitionProgress = 1.0f;
                 premiumPreviewBottomSheet.iconContainer.invalidate();
                 ValueAnimator ofInt = ValueAnimator.ofInt(new int[]{0, 255});
-                final Drawable rightDrawable = PremiumPreviewBottomSheet.this.startEnterFromView.getRightDrawable();
-                ofInt.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-                    public void onAnimationUpdate(ValueAnimator valueAnimator) {
-                        rightDrawable.setAlpha(((Integer) valueAnimator.getAnimatedValue()).intValue());
-                        PremiumPreviewBottomSheet.this.startEnterFromView.invalidate();
-                    }
-                });
+                ofInt.addUpdateListener(new PremiumPreviewBottomSheet$2$$ExternalSyntheticLambda0(this, PremiumPreviewBottomSheet.this.startEnterFromView.getRightDrawable()));
                 ofInt.start();
                 super.onAnimationEnd(animator);
+            }
+
+            /* access modifiers changed from: private */
+            public /* synthetic */ void lambda$onAnimationEnd$0(Drawable drawable, ValueAnimator valueAnimator) {
+                drawable.setAlpha(((Integer) valueAnimator.getAnimatedValue()).intValue());
+                PremiumPreviewBottomSheet.this.startEnterFromView.invalidate();
             }
         });
         this.enterAnimator.setDuration(600);
         this.enterAnimator.setInterpolator(CubicBezierInterpolator.EASE_OUT_QUINT);
         this.enterAnimator.start();
         return super.onCustomOpenAnimation();
+    }
+
+    /* access modifiers changed from: private */
+    public /* synthetic */ void lambda$onCustomOpenAnimation$3(ValueAnimator valueAnimator) {
+        this.enterTransitionProgress = ((Float) valueAnimator.getAnimatedValue()).floatValue();
+        this.container.invalidate();
     }
 }

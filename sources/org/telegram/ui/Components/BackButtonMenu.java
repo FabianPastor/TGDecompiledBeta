@@ -59,7 +59,7 @@ public class BackButtonMenu {
             r7.<init>()
             android.app.Activity r8 = r25.getParentActivity()
             android.content.res.Resources r8 = r8.getResources()
-            r9 = 2131166085(0x7var_, float:1.7946405E38)
+            r9 = 2131166087(0x7var_, float:1.794641E38)
             android.graphics.drawable.Drawable r8 = r8.getDrawable(r9)
             android.graphics.drawable.Drawable r8 = r8.mutate()
             r8.getPadding(r7)
@@ -151,7 +151,7 @@ public class BackButtonMenu {
             if (r5 != r7) goto L_0x0121
             boolean r5 = org.telegram.messenger.UserObject.isUserSelf(r14)
             if (r5 == 0) goto L_0x0121
-            r5 = 2131628077(0x7f0e102d, float:1.8883436E38)
+            r5 = 2131628127(0x7f0e105f, float:1.8883538E38)
             java.lang.String r6 = "SavedMessages"
             java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r6, r5)
             r6 = 1
@@ -161,7 +161,7 @@ public class BackButtonMenu {
         L_0x0121:
             boolean r5 = org.telegram.messenger.UserObject.isReplyUser((org.telegram.tgnet.TLRPC$User) r14)
             if (r5 == 0) goto L_0x0139
-            r5 = 2131627920(0x7f0e0var_, float:1.8883118E38)
+            r5 = 2131627970(0x7f0e0fc2, float:1.888322E38)
             java.lang.String r6 = "RepliesTitle"
             java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r6, r5)
             r6 = 12
@@ -171,7 +171,7 @@ public class BackButtonMenu {
         L_0x0139:
             boolean r5 = org.telegram.messenger.UserObject.isDeleted(r14)
             if (r5 == 0) goto L_0x0154
-            r5 = 2131626131(0x7f0e0893, float:1.887949E38)
+            r5 = 2131626168(0x7f0e08b8, float:1.8879565E38)
             java.lang.String r7 = "HiddenName"
             java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r7, r5)
             r4.setInfo((org.telegram.tgnet.TLRPC$User) r14)

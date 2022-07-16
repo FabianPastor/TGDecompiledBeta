@@ -14,6 +14,6 @@ public final /* synthetic */ class BotWebViewSheet$$ExternalSyntheticLambda16 im
     }
 
     public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        this.f$0.lambda$requestWebView$16(this.f$1, tLObject, tLRPC$TL_error);
+        this.f$0.lambda$requestWebView$15(this.f$1, tLObject, tLRPC$TL_error);
     }
 }

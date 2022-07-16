@@ -27,14 +27,9 @@ public class BackDrawable extends Drawable {
         return -2;
     }
 
-    public void setAlpha(int i) {
-    }
-
-    public void setColorFilter(ColorFilter colorFilter) {
-    }
-
     public BackDrawable(boolean z) {
         this.paint.setStrokeWidth((float) AndroidUtilities.dp(2.0f));
+        this.paint.setStrokeCap(Paint.Cap.ROUND);
         this.alwaysClose = z;
     }
 
@@ -82,7 +77,7 @@ public class BackDrawable extends Drawable {
     }
 
     public void draw(Canvas canvas) {
-        float f;
+        float f = 1.0f;
         if (this.currentRotation != this.finalRotation) {
             if (this.lastFrameTime != 0) {
                 int currentTimeMillis = (int) (((long) this.currentAnimationTime) + (System.currentTimeMillis() - this.lastFrameTime));
@@ -118,17 +113,24 @@ public class BackDrawable extends Drawable {
             f = f3;
         } else {
             canvas.rotate((f3 * ((float) (this.reverseAngle ? -180 : 180))) + 135.0f);
-            f = 1.0f;
         }
-        canvas.drawLine(((float) (-AndroidUtilities.dp(7.0f))) - (((float) AndroidUtilities.dp(1.0f)) * f), 0.0f, (float) AndroidUtilities.dp(8.0f), 0.0f, this.paint);
-        float f4 = (float) (-AndroidUtilities.dp(0.5f));
-        float dp = ((float) AndroidUtilities.dp(7.0f)) + (((float) AndroidUtilities.dp(1.0f)) * f);
         Canvas canvas2 = canvas;
-        float dp2 = ((float) (-AndroidUtilities.dp(7.0f))) + (((float) AndroidUtilities.dp(7.0f)) * f);
-        float dp3 = ((float) AndroidUtilities.dp(0.5f)) - (((float) AndroidUtilities.dp(0.5f)) * f);
-        canvas2.drawLine(dp2, -f4, dp3, -dp, this.paint);
-        canvas2.drawLine(dp2, f4, dp3, dp, this.paint);
+        canvas2.drawLine((float) AndroidUtilities.dp(AndroidUtilities.lerp(-6.75f, -8.0f, f)), 0.0f, (float) AndroidUtilities.dp(8.0f), 0.0f, this.paint);
+        float dp = (float) AndroidUtilities.dp(-0.25f);
+        float dp2 = (float) AndroidUtilities.dp(AndroidUtilities.lerp(7.0f, 8.0f, f));
+        float dp3 = (float) AndroidUtilities.dp(AndroidUtilities.lerp(-7.25f, 0.0f, f));
+        float dp4 = (float) AndroidUtilities.dp(AndroidUtilities.lerp(0.5f, 0.0f, f));
+        canvas.drawLine(dp3, -dp, dp4, -dp2, this.paint);
+        canvas2.drawLine(dp3, dp, dp4, dp2, this.paint);
         canvas.restore();
+    }
+
+    public void setAlpha(int i) {
+        this.paint.setAlpha(i);
+    }
+
+    public void setColorFilter(ColorFilter colorFilter) {
+        this.paint.setColorFilter(colorFilter);
     }
 
     public int getIntrinsicWidth() {

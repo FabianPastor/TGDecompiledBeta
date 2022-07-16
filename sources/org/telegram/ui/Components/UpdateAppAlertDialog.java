@@ -129,7 +129,7 @@ public class UpdateAppAlertDialog extends BottomSheet {
             r0.setApplyTopPadding(r3)
             r0.setApplyBottomPadding(r3)
             android.content.res.Resources r5 = r21.getResources()
-            r6 = 2131166138(0x7var_ba, float:1.7946513E38)
+            r6 = 2131166140(0x7var_bc, float:1.7946517E38)
             android.graphics.drawable.Drawable r5 = r5.getDrawable(r6)
             android.graphics.drawable.Drawable r5 = r5.mutate()
             r0.shadowDrawable = r5
@@ -240,7 +240,7 @@ public class UpdateAppAlertDialog extends BottomSheet {
             r6.setSingleLine(r7)
             android.text.TextUtils$TruncateAt r10 = android.text.TextUtils.TruncateAt.END
             r6.setEllipsize(r10)
-            r10 = 2131624377(0x7f0e01b9, float:1.8875932E38)
+            r10 = 2131624384(0x7f0e01c0, float:1.8875946E38)
             java.lang.String r12 = "AppUpdate"
             java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r12, r10)
             r6.setText(r10)
@@ -268,7 +268,7 @@ public class UpdateAppAlertDialog extends BottomSheet {
             java.lang.String r12 = "dialogTextLink"
             int r13 = org.telegram.ui.ActionBar.Theme.getColor(r12)
             r6.setLinkTextColor(r13)
-            r13 = 2131624383(0x7f0e01bf, float:1.8875944E38)
+            r13 = 2131624390(0x7f0e01c6, float:1.8875958E38)
             java.lang.Object[] r4 = new java.lang.Object[r4]
             org.telegram.tgnet.TLRPC$TL_help_appUpdate r14 = r0.appUpdate
             java.lang.String r15 = r14.version
@@ -307,7 +307,7 @@ public class UpdateAppAlertDialog extends BottomSheet {
             java.lang.String r6 = r6.text
             boolean r6 = android.text.TextUtils.isEmpty(r6)
             if (r6 == 0) goto L_0x01df
-            r2 = 2131624378(0x7f0e01ba, float:1.8875934E38)
+            r2 = 2131624385(0x7f0e01c1, float:1.8875948E38)
             java.lang.String r6 = "AppUpdateChangelogEmpty"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r6, r2)
             android.text.SpannableStringBuilder r2 = org.telegram.messenger.AndroidUtilities.replaceTags(r2)
@@ -361,7 +361,7 @@ public class UpdateAppAlertDialog extends BottomSheet {
             r5.addView(r4, r2)
             org.telegram.ui.Components.UpdateAppAlertDialog$BottomSheetCell r2 = new org.telegram.ui.Components.UpdateAppAlertDialog$BottomSheetCell
             r2.<init>(r1, r3)
-            r4 = 2131624379(0x7f0e01bb, float:1.8875936E38)
+            r4 = 2131624386(0x7f0e01c2, float:1.887595E38)
             java.lang.Object[] r6 = new java.lang.Object[r3]
             java.lang.String r8 = "AppUpdateDownloadNow"
             java.lang.String r4 = org.telegram.messenger.LocaleController.formatString(r8, r4, r6)
@@ -381,7 +381,7 @@ public class UpdateAppAlertDialog extends BottomSheet {
             r5.addView(r2, r4)
             org.telegram.ui.Components.UpdateAppAlertDialog$BottomSheetCell r2 = new org.telegram.ui.Components.UpdateAppAlertDialog$BottomSheetCell
             r2.<init>(r1, r7)
-            r1 = 2131624382(0x7f0e01be, float:1.8875942E38)
+            r1 = 2131624389(0x7f0e01c5, float:1.8875956E38)
             java.lang.String r4 = "AppUpdateRemindMeLater"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r4, r1)
             r2.setText(r1, r3)

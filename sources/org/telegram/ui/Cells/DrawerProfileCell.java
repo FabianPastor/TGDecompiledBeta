@@ -210,7 +210,7 @@ public class DrawerProfileCell extends FrameLayout implements NotificationCenter
             int r2 = org.telegram.ui.ActionBar.Theme.selectedAutoNightType
             if (r2 == 0) goto L_0x00a9
             android.content.Context r2 = r6.getContext()
-            r3 = 2131624610(0x7f0e02a2, float:1.8876405E38)
+            r3 = 2131624617(0x7f0e02a9, float:1.8876419E38)
             java.lang.String r4 = "AutoNightModeOff"
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r4, r3)
             android.widget.Toast r2 = android.widget.Toast.makeText(r2, r3, r1)
@@ -539,7 +539,7 @@ public class DrawerProfileCell extends FrameLayout implements NotificationCenter
             r11.drawPremiumProgress = r0
         L_0x01ab:
             float r0 = r11.drawPremiumProgress
-            float r0 = org.telegram.messenger.Utilities.clamp(r0, r2, r4)
+            float r0 = org.telegram.messenger.Utilities.clamp((float) r0, (float) r2, (float) r4)
             r11.drawPremiumProgress = r0
             int r0 = (r0 > r4 ? 1 : (r0 == r4 ? 0 : -1))
             if (r0 == 0) goto L_0x021a

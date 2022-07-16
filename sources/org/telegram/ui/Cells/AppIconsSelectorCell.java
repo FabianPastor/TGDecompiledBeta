@@ -180,6 +180,7 @@ public class AppIconsSelectorCell extends RecyclerListView implements Notificati
     }
 
     private static final class IconHolderView extends LinearLayout {
+        private Paint fillPaint;
         /* access modifiers changed from: private */
         public AdaptiveIconImageView iconView;
         private Paint outlinePaint;
@@ -189,6 +190,7 @@ public class AppIconsSelectorCell extends RecyclerListView implements Notificati
         private IconHolderView(Context context) {
             super(context);
             this.outlinePaint = new Paint(1);
+            this.fillPaint = new Paint(1);
             setOrientation(1);
             setWillNotDraw(false);
             AdaptiveIconImageView adaptiveIconImageView = new AdaptiveIconImageView(context);
@@ -203,13 +205,15 @@ public class AppIconsSelectorCell extends RecyclerListView implements Notificati
             addView(this.titleView, LayoutHelper.createLinear(-2, -2, 1, 0, 4, 0, 0));
             this.outlinePaint.setStyle(Paint.Style.STROKE);
             this.outlinePaint.setStrokeWidth((float) Math.max(2, AndroidUtilities.dp(0.5f)));
+            this.fillPaint.setColor(-1);
         }
 
         public void draw(Canvas canvas) {
-            super.draw(canvas);
             float strokeWidth = this.outlinePaint.getStrokeWidth();
             RectF rectF = AndroidUtilities.rectTmp;
             rectF.set(((float) this.iconView.getLeft()) + strokeWidth, ((float) this.iconView.getTop()) + strokeWidth, ((float) this.iconView.getRight()) - strokeWidth, ((float) this.iconView.getBottom()) - strokeWidth);
+            canvas.drawRoundRect(rectF, (float) AndroidUtilities.dp(18.0f), (float) AndroidUtilities.dp(18.0f), this.fillPaint);
+            super.draw(canvas);
             canvas.drawRoundRect(rectF, (float) AndroidUtilities.dp(18.0f), (float) AndroidUtilities.dp(18.0f), this.outlinePaint);
         }
 

@@ -71,6 +71,7 @@ import org.telegram.tgnet.TLRPC$ChannelAdminLogEventAction;
 import org.telegram.tgnet.TLRPC$ChannelParticipant;
 import org.telegram.tgnet.TLRPC$Chat;
 import org.telegram.tgnet.TLRPC$ChatFull;
+import org.telegram.tgnet.TLRPC$Document;
 import org.telegram.tgnet.TLRPC$InputStickerSet;
 import org.telegram.tgnet.TLRPC$KeyboardButton;
 import org.telegram.tgnet.TLRPC$Message;
@@ -100,9 +101,11 @@ import org.telegram.tgnet.TLRPC$TL_messageMediaWebPage;
 import org.telegram.tgnet.TLRPC$TL_messages_exportedChatInvite;
 import org.telegram.tgnet.TLRPC$TL_messages_getExportedChatInvite;
 import org.telegram.tgnet.TLRPC$TL_messages_stickerSet;
+import org.telegram.tgnet.TLRPC$TL_premiumGiftOption;
 import org.telegram.tgnet.TLRPC$TL_reactionCount;
 import org.telegram.tgnet.TLRPC$User;
 import org.telegram.tgnet.TLRPC$UserFull;
+import org.telegram.tgnet.TLRPC$VideoSize;
 import org.telegram.tgnet.TLRPC$WebPage;
 import org.telegram.ui.ActionBar.ActionBar;
 import org.telegram.ui.ActionBar.ActionBarMenuItem;
@@ -1889,7 +1892,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
             r2.putExtra(r5, r0)
         L_0x0215:
             android.app.Activity r0 = r10.getParentActivity()
-            r3 = 2131628274(0x7f0e10f2, float:1.8883836E38)
+            r3 = 2131628324(0x7f0e1124, float:1.8883937E38)
             java.lang.String r4 = "ShareFile"
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r4, r3)
             android.content.Intent r2 = android.content.Intent.createChooser(r2, r3)
@@ -1926,9 +1929,9 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
             java.lang.String r1 = r1.toLowerCase()
             java.lang.String r2 = "attheme"
             boolean r1 = r1.endsWith(r2)
-            r2 = 2131627075(0x7f0e0CLASSNAME, float:1.8881404E38)
+            r2 = 2131627117(0x7f0e0c6d, float:1.888149E38)
             java.lang.String r3 = "OK"
-            r4 = 2131624375(0x7f0e01b7, float:1.8875928E38)
+            r4 = 2131624382(0x7f0e01be, float:1.8875942E38)
             java.lang.String r5 = "AppName"
             if (r1 == 0) goto L_0x02fa
             androidx.recyclerview.widget.LinearLayoutManager r1 = r10.chatLayoutManager
@@ -1976,7 +1979,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
             r0.<init>((android.content.Context) r1)
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r5, r4)
             r0.setTitle(r1)
-            r1 = 2131626231(0x7f0e08f7, float:1.8879692E38)
+            r1 = 2131626268(0x7f0e091c, float:1.8879767E38)
             java.lang.String r4 = "IncorrectTheme"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r4, r1)
             r0.setMessage(r1)
@@ -2005,7 +2008,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
             r0.<init>((android.content.Context) r1)
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r5, r4)
             r0.setTitle(r1)
-            r1 = 2131626230(0x7f0e08f6, float:1.887969E38)
+            r1 = 2131626267(0x7f0e091b, float:1.8879765E38)
             java.lang.String r4 = "IncorrectLocalization"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r4, r1)
             r0.setMessage(r1)
@@ -3129,7 +3132,15 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
                     }
                 };
                 r4.setDelegate(new ChatActionCell.ChatActionCellDelegate() {
+                    public /* synthetic */ void didOpenPremiumGift(ChatActionCell chatActionCell, TLRPC$TL_premiumGiftOption tLRPC$TL_premiumGiftOption, boolean z) {
+                        ChatActionCell.ChatActionCellDelegate.CC.$default$didOpenPremiumGift(this, chatActionCell, tLRPC$TL_premiumGiftOption, z);
+                    }
+
                     public void didPressReplyMessage(ChatActionCell chatActionCell, int i) {
+                    }
+
+                    public /* synthetic */ void needShowEffectOverlay(ChatActionCell chatActionCell, TLRPC$Document tLRPC$Document, TLRPC$VideoSize tLRPC$VideoSize) {
+                        ChatActionCell.ChatActionCellDelegate.CC.$default$needShowEffectOverlay(this, chatActionCell, tLRPC$Document, tLRPC$VideoSize);
                     }
 
                     public void didClickImage(ChatActionCell chatActionCell) {

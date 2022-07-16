@@ -13,6 +13,6 @@ public final /* synthetic */ class ChannelCreateActivity$$ExternalSyntheticLambd
     }
 
     public final void onClick(DialogInterface dialogInterface, int i) {
-        this.f$0.lambda$loadAdminedChannels$17(this.f$1, dialogInterface, i);
+        this.f$0.lambda$loadAdminedChannels$18(this.f$1, dialogInterface, i);
     }
 }

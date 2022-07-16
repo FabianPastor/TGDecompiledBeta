@@ -10,6 +10,6 @@ public final /* synthetic */ class ChannelCreateActivity$$ExternalSyntheticLambd
     }
 
     public final void onClick(View view) {
-        this.f$0.lambda$createView$7(view);
+        this.f$0.lambda$loadAdminedChannels$19(view);
     }
 }

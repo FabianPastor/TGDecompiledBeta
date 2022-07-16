@@ -10,6 +10,6 @@ public final /* synthetic */ class ChannelCreateActivity$$ExternalSyntheticLambd
     }
 
     public final void onDismiss(DialogInterface dialogInterface) {
-        this.f$0.lambda$createView$6(dialogInterface);
+        this.f$0.lambda$createView$7(dialogInterface);
     }
 }

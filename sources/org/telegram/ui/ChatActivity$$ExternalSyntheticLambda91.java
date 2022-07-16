@@ -1,21 +1,21 @@
 package org.telegram.ui;
 
 import android.view.View;
-import org.telegram.ui.ActionBar.ActionBarPopupWindow;
-import org.telegram.ui.Components.ReactedUsersListView;
+import android.widget.FrameLayout;
+import org.telegram.ui.Components.ChatActivityEnterTopView;
 
 public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda91 implements View.OnClickListener {
-    public final /* synthetic */ ReactedUsersListView f$0;
-    public final /* synthetic */ ActionBarPopupWindow.ActionBarPopupWindowLayout f$1;
-    public final /* synthetic */ int[] f$2;
+    public final /* synthetic */ ChatActivity f$0;
+    public final /* synthetic */ ChatActivityEnterTopView.EditViewButton f$1;
+    public final /* synthetic */ FrameLayout f$2;
 
-    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda91(ReactedUsersListView reactedUsersListView, ActionBarPopupWindow.ActionBarPopupWindowLayout actionBarPopupWindowLayout, int[] iArr) {
-        this.f$0 = reactedUsersListView;
-        this.f$1 = actionBarPopupWindowLayout;
-        this.f$2 = iArr;
+    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda91(ChatActivity chatActivity, ChatActivityEnterTopView.EditViewButton editViewButton, FrameLayout frameLayout) {
+        this.f$0 = chatActivity;
+        this.f$1 = editViewButton;
+        this.f$2 = frameLayout;
     }
 
     public final void onClick(View view) {
-        ChatActivity.lambda$createMenu$160(this.f$0, this.f$1, this.f$2, view);
+        this.f$0.lambda$createView$60(this.f$1, this.f$2, view);
     }
 }

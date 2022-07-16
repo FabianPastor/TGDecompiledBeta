@@ -1,5 +1,6 @@
 package org.telegram.messenger;
 
+import android.graphics.Paint;
 import android.graphics.Point;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
@@ -14,12 +15,10 @@ import android.text.TextPaint;
 import android.text.TextUtils;
 import android.text.style.CharacterStyle;
 import android.util.Base64;
-import android.view.View;
 import androidx.collection.LongSparseArray;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.StringReader;
-import java.lang.ref.WeakReference;
 import java.net.URLEncoder;
 import java.util.AbstractMap;
 import java.util.ArrayList;
@@ -68,6 +67,7 @@ import org.telegram.tgnet.TLRPC$TL_decryptedMessageActionSetMessageTTL;
 import org.telegram.tgnet.TLRPC$TL_document;
 import org.telegram.tgnet.TLRPC$TL_documentAttributeAnimated;
 import org.telegram.tgnet.TLRPC$TL_documentAttributeAudio;
+import org.telegram.tgnet.TLRPC$TL_documentAttributeCustomEmoji;
 import org.telegram.tgnet.TLRPC$TL_documentAttributeHasStickers;
 import org.telegram.tgnet.TLRPC$TL_documentAttributeImageSize;
 import org.telegram.tgnet.TLRPC$TL_documentAttributeSticker;
@@ -85,12 +85,14 @@ import org.telegram.tgnet.TLRPC$TL_messageActionChatEditPhoto;
 import org.telegram.tgnet.TLRPC$TL_messageActionChatJoinedByRequest;
 import org.telegram.tgnet.TLRPC$TL_messageActionContactSignUp;
 import org.telegram.tgnet.TLRPC$TL_messageActionEmpty;
+import org.telegram.tgnet.TLRPC$TL_messageActionGiftPremium;
 import org.telegram.tgnet.TLRPC$TL_messageActionHistoryClear;
 import org.telegram.tgnet.TLRPC$TL_messageActionLoginUnknownLocation;
 import org.telegram.tgnet.TLRPC$TL_messageActionPhoneCall;
 import org.telegram.tgnet.TLRPC$TL_messageActionUserUpdatedPhoto;
 import org.telegram.tgnet.TLRPC$TL_messageEmpty;
 import org.telegram.tgnet.TLRPC$TL_messageEncryptedAction;
+import org.telegram.tgnet.TLRPC$TL_messageEntityCustomEmoji;
 import org.telegram.tgnet.TLRPC$TL_messageEntityItalic;
 import org.telegram.tgnet.TLRPC$TL_messageEntityMentionName;
 import org.telegram.tgnet.TLRPC$TL_messageForwarded_old2;
@@ -136,6 +138,7 @@ import org.telegram.tgnet.TLRPC$WebDocument;
 import org.telegram.tgnet.TLRPC$WebPage;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Cells.ChatMessageCell;
+import org.telegram.ui.Components.AnimatedEmojiSpan;
 import org.telegram.ui.Components.URLSpanNoUnderlineBold;
 import org.telegram.ui.Components.spoilers.SpoilerEffect;
 
@@ -151,6 +154,7 @@ public class MessageObject {
     public static final int POSITION_FLAG_TOP = 4;
     public static final int TYPE_ANIMATED_STICKER = 15;
     public static final int TYPE_GEO = 4;
+    public static final int TYPE_GIFT_PREMIUM = 18;
     public static final int TYPE_PHOTO = 1;
     public static final int TYPE_POLL = 17;
     public static final int TYPE_ROUND_VIDEO = 5;
@@ -261,7 +265,6 @@ public class MessageObject {
     public boolean useCustomPhoto;
     public CharSequence vCardData;
     public VideoEditedInfo videoEditedInfo;
-    public AtomicReference<WeakReference<View>> viewRef;
     public boolean viewsReloaded;
     public int wantedBotKeyboardWidth;
     public boolean wasJustSent;
@@ -1801,7 +1804,6 @@ public class MessageObject {
     public MessageObject(int i, TLRPC$Message tLRPC$Message, String str, String str2, String str3, boolean z, boolean z2, boolean z3, boolean z4) {
         this.type = 1000;
         this.forceSeekTo = -1.0f;
-        this.viewRef = new AtomicReference<>((Object) null);
         this.localType = z ? 2 : 1;
         this.currentAccount = i;
         this.localName = str2;
@@ -1842,9 +1844,9 @@ public class MessageObject {
     }
 
     public MessageObject(int i, TLRPC$Message tLRPC$Message, MessageObject messageObject, AbstractMap<Long, TLRPC$User> abstractMap, AbstractMap<Long, TLRPC$Chat> abstractMap2, LongSparseArray<TLRPC$User> longSparseArray, LongSparseArray<TLRPC$Chat> longSparseArray2, boolean z, boolean z2, long j) {
-        TLRPC$User tLRPC$User;
         LongSparseArray<TLRPC$Chat> longSparseArray3;
         AbstractMap<Long, TLRPC$Chat> abstractMap3;
+        TLRPC$User tLRPC$User;
         TextPaint textPaint;
         int i2;
         TLRPC$Message tLRPC$Message2 = tLRPC$Message;
@@ -1853,7 +1855,6 @@ public class MessageObject {
         boolean z3 = z;
         this.type = 1000;
         this.forceSeekTo = -1.0f;
-        this.viewRef = new AtomicReference<>((Object) null);
         Theme.createCommonMessageResources();
         this.currentAccount = i;
         this.messageOwner = tLRPC$Message2;
@@ -1896,7 +1897,9 @@ public class MessageObject {
                 textPaint = Theme.chat_msgTextPaint;
             }
             int[] iArr = allowsBigEmoji() ? new int[1] : null;
-            this.messageText = Emoji.replaceEmoji(this.messageText, textPaint.getFontMetricsInt(), AndroidUtilities.dp(20.0f), false, iArr, this.contentType == 0, this.viewRef);
+            CharSequence replaceEmoji = Emoji.replaceEmoji(this.messageText, textPaint.getFontMetricsInt(), AndroidUtilities.dp(20.0f), false, iArr);
+            this.messageText = replaceEmoji;
+            replaceAnimatedEmoji(replaceEmoji, this.messageOwner.entities, textPaint.getFontMetricsInt());
             checkEmojiOnly(iArr);
             this.emojiAnimatedSticker = null;
             if (this.emojiOnlyCount == 1) {
@@ -2038,25 +2041,32 @@ public class MessageObject {
                         replaceFontMetrics.replaceFontMetrics(textPaint.getFontMetricsInt(), i);
                     }
                 }
+                CharSequence charSequence2 = this.messageText;
+                AnimatedEmojiSpan[] animatedEmojiSpanArr = (AnimatedEmojiSpan[]) ((Spannable) charSequence2).getSpans(0, charSequence2.length(), AnimatedEmojiSpan.class);
+                if (animatedEmojiSpanArr != null && animatedEmojiSpanArr.length > 0) {
+                    for (AnimatedEmojiSpan replaceFontMetrics2 : animatedEmojiSpanArr) {
+                        replaceFontMetrics2.replaceFontMetrics(textPaint.getFontMetricsInt(), i, 1);
+                    }
+                }
             }
         }
     }
 
-    /* JADX WARNING: Code restructure failed: missing block: B:430:0x0bde, code lost:
-        if (r9.id == r11.id) goto L_0x0be3;
+    /* JADX WARNING: Code restructure failed: missing block: B:430:0x0bd6, code lost:
+        if (r9.id == r11.id) goto L_0x0bdb;
      */
-    /* JADX WARNING: Removed duplicated region for block: B:182:0x04e4  */
-    /* JADX WARNING: Removed duplicated region for block: B:188:0x04f4 A[LOOP:0: B:167:0x04b1->B:188:0x04f4, LOOP_END] */
+    /* JADX WARNING: Removed duplicated region for block: B:182:0x04dc  */
+    /* JADX WARNING: Removed duplicated region for block: B:188:0x04ec A[LOOP:0: B:167:0x04a9->B:188:0x04ec, LOOP_END] */
     /* JADX WARNING: Removed duplicated region for block: B:445:0x0CLASSNAME  */
     /* JADX WARNING: Removed duplicated region for block: B:446:0x0CLASSNAME  */
-    /* JADX WARNING: Removed duplicated region for block: B:449:0x0CLASSNAME  */
-    /* JADX WARNING: Removed duplicated region for block: B:731:0x1483  */
-    /* JADX WARNING: Removed duplicated region for block: B:734:0x14d1  */
-    /* JADX WARNING: Removed duplicated region for block: B:736:0x14d4  */
-    /* JADX WARNING: Removed duplicated region for block: B:746:0x1546  */
-    /* JADX WARNING: Removed duplicated region for block: B:749:0x154d  */
-    /* JADX WARNING: Removed duplicated region for block: B:772:0x050c A[EDGE_INSN: B:772:0x050c->B:190:0x050c ?: BREAK  , SYNTHETIC] */
-    /* JADX WARNING: Removed duplicated region for block: B:774:? A[RETURN, SYNTHETIC] */
+    /* JADX WARNING: Removed duplicated region for block: B:449:0x0c2e  */
+    /* JADX WARNING: Removed duplicated region for block: B:731:0x147b  */
+    /* JADX WARNING: Removed duplicated region for block: B:734:0x14c9  */
+    /* JADX WARNING: Removed duplicated region for block: B:736:0x14cc  */
+    /* JADX WARNING: Removed duplicated region for block: B:746:0x153e  */
+    /* JADX WARNING: Removed duplicated region for block: B:749:0x1545  */
+    /* JADX WARNING: Removed duplicated region for block: B:768:0x0504 A[EDGE_INSN: B:768:0x0504->B:190:0x0504 ?: BREAK  , SYNTHETIC] */
+    /* JADX WARNING: Removed duplicated region for block: B:770:? A[RETURN, SYNTHETIC] */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public MessageObject(int r27, org.telegram.tgnet.TLRPC$TL_channelAdminLogEvent r28, java.util.ArrayList<org.telegram.messenger.MessageObject> r29, java.util.HashMap<java.lang.String, java.util.ArrayList<org.telegram.messenger.MessageObject>> r30, org.telegram.tgnet.TLRPC$Chat r31, int[] r32, boolean r33) {
         /*
@@ -2070,26 +2080,22 @@ public class MessageObject {
             r6.type = r1
             r1 = -1082130432(0xffffffffbvar_, float:-1.0)
             r6.forceSeekTo = r1
-            java.util.concurrent.atomic.AtomicReference r1 = new java.util.concurrent.atomic.AtomicReference
-            r9 = 0
-            r1.<init>(r9)
-            r6.viewRef = r1
             r6.currentEvent = r7
             r1 = r27
             r6.currentAccount = r1
             long r2 = r7.user_id
             r4 = 0
             int r10 = (r2 > r4 ? 1 : (r2 == r4 ? 0 : -1))
-            if (r10 <= 0) goto L_0x0039
+            if (r10 <= 0) goto L_0x0031
             org.telegram.messenger.MessagesController r1 = org.telegram.messenger.MessagesController.getInstance(r27)
             long r2 = r7.user_id
             java.lang.Long r2 = java.lang.Long.valueOf(r2)
             org.telegram.tgnet.TLRPC$User r1 = r1.getUser(r2)
             r10 = r1
-            goto L_0x003a
-        L_0x0039:
-            r10 = r9
-        L_0x003a:
+            goto L_0x0032
+        L_0x0031:
+            r10 = 0
+        L_0x0032:
             java.util.GregorianCalendar r1 = new java.util.GregorianCalendar
             r1.<init>()
             int r2 = r7.date
@@ -2131,61 +2137,61 @@ public class MessageObject {
             boolean r3 = r2 instanceof org.telegram.tgnet.TLRPC$TL_channelAdminLogEventActionChangeTitle
             java.lang.String r14 = ""
             java.lang.String r15 = "un1"
-            if (r3 == 0) goto L_0x00d3
+            if (r3 == 0) goto L_0x00cb
             org.telegram.tgnet.TLRPC$TL_channelAdminLogEventActionChangeTitle r2 = (org.telegram.tgnet.TLRPC$TL_channelAdminLogEventActionChangeTitle) r2
             java.lang.String r1 = r2.new_value
             boolean r2 = r0.megagroup
-            if (r2 == 0) goto L_0x00bb
-            r2 = 2131625692(0x7f0e06dc, float:1.88786E38)
+            if (r2 == 0) goto L_0x00b3
+            r2 = 2131625723(0x7f0e06fb, float:1.8878662E38)
             java.lang.Object[] r3 = new java.lang.Object[r11]
             r3[r9] = r1
             java.lang.String r1 = "EventLogEditedGroupTitle"
             java.lang.String r1 = org.telegram.messenger.LocaleController.formatString(r1, r2, r3)
             java.lang.CharSequence r1 = replaceWithLink(r1, r15, r10)
             r6.messageText = r1
-            goto L_0x00ce
-        L_0x00bb:
-            r2 = 2131625687(0x7f0e06d7, float:1.887859E38)
+            goto L_0x00c6
+        L_0x00b3:
+            r2 = 2131625718(0x7f0e06f6, float:1.8878652E38)
             java.lang.Object[] r3 = new java.lang.Object[r11]
             r3[r9] = r1
             java.lang.String r1 = "EventLogEditedChannelTitle"
             java.lang.String r1 = org.telegram.messenger.LocaleController.formatString(r1, r2, r3)
             java.lang.CharSequence r1 = replaceWithLink(r1, r15, r10)
             r6.messageText = r1
-        L_0x00ce:
+        L_0x00c6:
             r4 = r0
             r8 = r7
             r7 = r14
-            goto L_0x147e
-        L_0x00d3:
+            goto L_0x1476
+        L_0x00cb:
             boolean r3 = r2 instanceof org.telegram.tgnet.TLRPC$TL_channelAdminLogEventActionChangePhoto
-            if (r3 == 0) goto L_0x0172
+            if (r3 == 0) goto L_0x016a
             org.telegram.tgnet.TLRPC$TL_channelAdminLogEventActionChangePhoto r2 = (org.telegram.tgnet.TLRPC$TL_channelAdminLogEventActionChangePhoto) r2
             org.telegram.tgnet.TLRPC$TL_messageService r1 = new org.telegram.tgnet.TLRPC$TL_messageService
             r1.<init>()
             r6.messageOwner = r1
             org.telegram.tgnet.TLRPC$Photo r3 = r2.new_photo
             boolean r3 = r3 instanceof org.telegram.tgnet.TLRPC$TL_photoEmpty
-            if (r3 == 0) goto L_0x0111
+            if (r3 == 0) goto L_0x0109
             org.telegram.tgnet.TLRPC$TL_messageActionChatDeletePhoto r2 = new org.telegram.tgnet.TLRPC$TL_messageActionChatDeletePhoto
             r2.<init>()
             r1.action = r2
             boolean r1 = r0.megagroup
-            if (r1 == 0) goto L_0x0101
-            r1 = 2131625750(0x7f0e0716, float:1.8878717E38)
+            if (r1 == 0) goto L_0x00f9
+            r1 = 2131625781(0x7f0e0735, float:1.887878E38)
             java.lang.String r2 = "EventLogRemovedWGroupPhoto"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             java.lang.CharSequence r1 = replaceWithLink(r1, r15, r10)
             r6.messageText = r1
-            goto L_0x00ce
-        L_0x0101:
-            r1 = 2131625744(0x7f0e0710, float:1.8878705E38)
+            goto L_0x00c6
+        L_0x00f9:
+            r1 = 2131625775(0x7f0e072f, float:1.8878767E38)
             java.lang.String r2 = "EventLogRemovedChannelPhoto"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             java.lang.CharSequence r1 = replaceWithLink(r1, r15, r10)
             r6.messageText = r1
-            goto L_0x00ce
-        L_0x0111:
+            goto L_0x00c6
+        L_0x0109:
             org.telegram.tgnet.TLRPC$TL_messageActionChatEditPhoto r3 = new org.telegram.tgnet.TLRPC$TL_messageActionChatEditPhoto
             r3.<init>()
             r1.action = r3
@@ -2194,59 +2200,59 @@ public class MessageObject {
             org.telegram.tgnet.TLRPC$Photo r2 = r2.new_photo
             r1.photo = r2
             boolean r1 = r0.megagroup
-            if (r1 == 0) goto L_0x014a
+            if (r1 == 0) goto L_0x0142
             boolean r1 = r26.isVideoAvatar()
-            if (r1 == 0) goto L_0x013a
-            r1 = 2131625693(0x7f0e06dd, float:1.8878601E38)
+            if (r1 == 0) goto L_0x0132
+            r1 = 2131625724(0x7f0e06fc, float:1.8878664E38)
             java.lang.String r2 = "EventLogEditedGroupVideo"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             java.lang.CharSequence r1 = replaceWithLink(r1, r15, r10)
             r6.messageText = r1
-            goto L_0x00ce
-        L_0x013a:
-            r1 = 2131625690(0x7f0e06da, float:1.8878595E38)
+            goto L_0x00c6
+        L_0x0132:
+            r1 = 2131625721(0x7f0e06f9, float:1.8878658E38)
             java.lang.String r2 = "EventLogEditedGroupPhoto"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             java.lang.CharSequence r1 = replaceWithLink(r1, r15, r10)
             r6.messageText = r1
-            goto L_0x00ce
-        L_0x014a:
+            goto L_0x00c6
+        L_0x0142:
             boolean r1 = r26.isVideoAvatar()
-            if (r1 == 0) goto L_0x0161
-            r1 = 2131625688(0x7f0e06d8, float:1.8878591E38)
+            if (r1 == 0) goto L_0x0159
+            r1 = 2131625719(0x7f0e06f7, float:1.8878654E38)
             java.lang.String r2 = "EventLogEditedChannelVideo"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             java.lang.CharSequence r1 = replaceWithLink(r1, r15, r10)
             r6.messageText = r1
-            goto L_0x00ce
-        L_0x0161:
-            r1 = 2131625685(0x7f0e06d5, float:1.8878585E38)
+            goto L_0x00c6
+        L_0x0159:
+            r1 = 2131625716(0x7f0e06f4, float:1.8878648E38)
             java.lang.String r2 = "EventLogEditedChannelPhoto"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             java.lang.CharSequence r1 = replaceWithLink(r1, r15, r10)
             r6.messageText = r1
-            goto L_0x00ce
-        L_0x0172:
+            goto L_0x00c6
+        L_0x016a:
             boolean r3 = r2 instanceof org.telegram.tgnet.TLRPC$TL_channelAdminLogEventActionParticipantJoin
             java.lang.String r12 = "EventLogGroupJoined"
-            r11 = 2131625678(0x7f0e06ce, float:1.887857E38)
+            r11 = 2131625709(0x7f0e06ed, float:1.8878634E38)
             java.lang.String r9 = "EventLogChannelJoined"
-            if (r3 == 0) goto L_0x019c
+            if (r3 == 0) goto L_0x0194
             boolean r1 = r0.megagroup
-            if (r1 == 0) goto L_0x0190
-            r1 = 2131625715(0x7f0e06f3, float:1.8878646E38)
+            if (r1 == 0) goto L_0x0188
+            r1 = 2131625746(0x7f0e0712, float:1.8878709E38)
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r12, r1)
             java.lang.CharSequence r1 = replaceWithLink(r1, r15, r10)
             r6.messageText = r1
-            goto L_0x00ce
-        L_0x0190:
+            goto L_0x00c6
+        L_0x0188:
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r9, r11)
             java.lang.CharSequence r1 = replaceWithLink(r1, r15, r10)
             r6.messageText = r1
-            goto L_0x00ce
-        L_0x019c:
+            goto L_0x00c6
+        L_0x0194:
             boolean r3 = r2 instanceof org.telegram.tgnet.TLRPC$TL_channelAdminLogEventActionParticipantLeave
-            if (r3 == 0) goto L_0x01dc
+            if (r3 == 0) goto L_0x01d4
             org.telegram.tgnet.TLRPC$TL_messageService r1 = new org.telegram.tgnet.TLRPC$TL_messageService
             r1.<init>()
             r6.messageOwner = r1
@@ -2258,24 +2264,24 @@ public class MessageObject {
             long r2 = r7.user_id
             r1.user_id = r2
             boolean r1 = r0.megagroup
-            if (r1 == 0) goto L_0x01cb
-            r1 = 2131625720(0x7f0e06f8, float:1.8878656E38)
+            if (r1 == 0) goto L_0x01c3
+            r1 = 2131625751(0x7f0e0717, float:1.8878719E38)
             java.lang.String r2 = "EventLogLeftGroup"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             java.lang.CharSequence r1 = replaceWithLink(r1, r15, r10)
             r6.messageText = r1
-            goto L_0x00ce
-        L_0x01cb:
-            r1 = 2131625719(0x7f0e06f7, float:1.8878654E38)
+            goto L_0x00c6
+        L_0x01c3:
+            r1 = 2131625750(0x7f0e0716, float:1.8878717E38)
             java.lang.String r2 = "EventLogLeftChannel"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             java.lang.CharSequence r1 = replaceWithLink(r1, r15, r10)
             r6.messageText = r1
-            goto L_0x00ce
-        L_0x01dc:
+            goto L_0x00c6
+        L_0x01d4:
             boolean r3 = r2 instanceof org.telegram.tgnet.TLRPC$TL_channelAdminLogEventActionParticipantInvite
             java.lang.String r13 = "un2"
-            if (r3 == 0) goto L_0x0260
+            if (r3 == 0) goto L_0x0258
             org.telegram.tgnet.TLRPC$TL_channelAdminLogEventActionParticipantInvite r2 = (org.telegram.tgnet.TLRPC$TL_channelAdminLogEventActionParticipantInvite) r2
             org.telegram.tgnet.TLRPC$TL_messageService r1 = new org.telegram.tgnet.TLRPC$TL_messageService
             r1.<init>()
@@ -2287,69 +2293,69 @@ public class MessageObject {
             org.telegram.tgnet.TLRPC$Peer r1 = r1.peer
             long r1 = getPeerId(r1)
             int r3 = (r1 > r4 ? 1 : (r1 == r4 ? 0 : -1))
-            if (r3 <= 0) goto L_0x020d
+            if (r3 <= 0) goto L_0x0205
             int r3 = r6.currentAccount
             org.telegram.messenger.MessagesController r3 = org.telegram.messenger.MessagesController.getInstance(r3)
             java.lang.Long r4 = java.lang.Long.valueOf(r1)
             org.telegram.tgnet.TLRPC$User r3 = r3.getUser(r4)
-            goto L_0x021c
-        L_0x020d:
+            goto L_0x0214
+        L_0x0205:
             int r3 = r6.currentAccount
             org.telegram.messenger.MessagesController r3 = org.telegram.messenger.MessagesController.getInstance(r3)
             long r4 = -r1
             java.lang.Long r4 = java.lang.Long.valueOf(r4)
             org.telegram.tgnet.TLRPC$Chat r3 = r3.getChat(r4)
-        L_0x021c:
+        L_0x0214:
             org.telegram.tgnet.TLRPC$Message r4 = r6.messageOwner
             org.telegram.tgnet.TLRPC$Peer r4 = r4.from_id
             boolean r5 = r4 instanceof org.telegram.tgnet.TLRPC$TL_peerUser
-            if (r5 == 0) goto L_0x0249
+            if (r5 == 0) goto L_0x0241
             long r4 = r4.user_id
             int r16 = (r1 > r4 ? 1 : (r1 == r4 ? 0 : -1))
-            if (r16 != 0) goto L_0x0249
+            if (r16 != 0) goto L_0x0241
             boolean r1 = r0.megagroup
-            if (r1 == 0) goto L_0x023d
-            r1 = 2131625715(0x7f0e06f3, float:1.8878646E38)
+            if (r1 == 0) goto L_0x0235
+            r1 = 2131625746(0x7f0e0712, float:1.8878709E38)
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r12, r1)
             java.lang.CharSequence r1 = replaceWithLink(r1, r15, r10)
             r6.messageText = r1
-            goto L_0x00ce
-        L_0x023d:
+            goto L_0x00c6
+        L_0x0235:
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r9, r11)
             java.lang.CharSequence r1 = replaceWithLink(r1, r15, r10)
             r6.messageText = r1
-            goto L_0x00ce
-        L_0x0249:
-            r1 = 2131625668(0x7f0e06c4, float:1.887855E38)
+            goto L_0x00c6
+        L_0x0241:
+            r1 = 2131625699(0x7f0e06e3, float:1.8878613E38)
             java.lang.String r2 = "EventLogAdded"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             java.lang.CharSequence r1 = replaceWithLink(r1, r13, r3)
             r6.messageText = r1
             java.lang.CharSequence r1 = replaceWithLink(r1, r15, r10)
             r6.messageText = r1
-            goto L_0x00ce
-        L_0x0260:
+            goto L_0x00c6
+        L_0x0258:
             boolean r3 = r2 instanceof org.telegram.tgnet.TLRPC$TL_channelAdminLogEventActionParticipantToggleAdmin
             java.lang.String r9 = "%1$s"
             r11 = 32
             r12 = 10
-            if (r3 != 0) goto L_0x11bb
+            if (r3 != 0) goto L_0x11b3
             boolean r3 = r2 instanceof org.telegram.tgnet.TLRPC$TL_channelAdminLogEventActionParticipantToggleBan
-            if (r3 == 0) goto L_0x0282
+            if (r3 == 0) goto L_0x027a
             r3 = r2
             org.telegram.tgnet.TLRPC$TL_channelAdminLogEventActionParticipantToggleBan r3 = (org.telegram.tgnet.TLRPC$TL_channelAdminLogEventActionParticipantToggleBan) r3
             org.telegram.tgnet.TLRPC$ChannelParticipant r3 = r3.prev_participant
             boolean r3 = r3 instanceof org.telegram.tgnet.TLRPC$TL_channelParticipantAdmin
-            if (r3 == 0) goto L_0x0282
+            if (r3 == 0) goto L_0x027a
             r3 = r2
             org.telegram.tgnet.TLRPC$TL_channelAdminLogEventActionParticipantToggleBan r3 = (org.telegram.tgnet.TLRPC$TL_channelAdminLogEventActionParticipantToggleBan) r3
             org.telegram.tgnet.TLRPC$ChannelParticipant r3 = r3.new_participant
             boolean r3 = r3 instanceof org.telegram.tgnet.TLRPC$TL_channelParticipant
-            if (r3 == 0) goto L_0x0282
-            goto L_0x11bb
-        L_0x0282:
+            if (r3 == 0) goto L_0x027a
+            goto L_0x11b3
+        L_0x027a:
             boolean r3 = r2 instanceof org.telegram.tgnet.TLRPC$TL_channelAdminLogEventActionDefaultBannedRights
-            if (r3 == 0) goto L_0x0418
+            if (r3 == 0) goto L_0x0410
             org.telegram.tgnet.TLRPC$TL_channelAdminLogEventActionDefaultBannedRights r2 = (org.telegram.tgnet.TLRPC$TL_channelAdminLogEventActionDefaultBannedRights) r2
             org.telegram.tgnet.TLRPC$TL_message r1 = new org.telegram.tgnet.TLRPC$TL_message
             r1.<init>()
@@ -2357,213 +2363,213 @@ public class MessageObject {
             org.telegram.tgnet.TLRPC$TL_chatBannedRights r1 = r2.prev_banned_rights
             org.telegram.tgnet.TLRPC$TL_chatBannedRights r2 = r2.new_banned_rights
             java.lang.StringBuilder r3 = new java.lang.StringBuilder
-            r4 = 2131625681(0x7f0e06d1, float:1.8878577E38)
+            r4 = 2131625712(0x7f0e06f0, float:1.887864E38)
             java.lang.String r5 = "EventLogDefaultPermissions"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r5, r4)
             r3.<init>(r4)
-            if (r1 != 0) goto L_0x02a8
+            if (r1 != 0) goto L_0x02a0
             org.telegram.tgnet.TLRPC$TL_chatBannedRights r1 = new org.telegram.tgnet.TLRPC$TL_chatBannedRights
             r1.<init>()
-        L_0x02a8:
-            if (r2 != 0) goto L_0x02af
+        L_0x02a0:
+            if (r2 != 0) goto L_0x02a7
             org.telegram.tgnet.TLRPC$TL_chatBannedRights r2 = new org.telegram.tgnet.TLRPC$TL_chatBannedRights
             r2.<init>()
-        L_0x02af:
+        L_0x02a7:
             boolean r4 = r1.send_messages
             boolean r5 = r2.send_messages
-            if (r4 == r5) goto L_0x02d8
+            if (r4 == r5) goto L_0x02d0
             r3.append(r12)
             r3.append(r12)
             boolean r4 = r2.send_messages
-            if (r4 != 0) goto L_0x02c2
+            if (r4 != 0) goto L_0x02ba
             r4 = 43
-            goto L_0x02c4
-        L_0x02c2:
+            goto L_0x02bc
+        L_0x02ba:
             r4 = 45
-        L_0x02c4:
+        L_0x02bc:
             r3.append(r4)
             r3.append(r11)
-            r4 = 2131625757(0x7f0e071d, float:1.887873E38)
+            r4 = 2131625788(0x7f0e073c, float:1.8878794E38)
             java.lang.String r5 = "EventLogRestrictedSendMessages"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r5, r4)
             r3.append(r4)
             r4 = 1
-            goto L_0x02d9
-        L_0x02d8:
+            goto L_0x02d1
+        L_0x02d0:
             r4 = 0
-        L_0x02d9:
+        L_0x02d1:
             boolean r5 = r1.send_stickers
             boolean r9 = r2.send_stickers
-            if (r5 != r9) goto L_0x02f1
+            if (r5 != r9) goto L_0x02e9
             boolean r5 = r1.send_inline
             boolean r9 = r2.send_inline
-            if (r5 != r9) goto L_0x02f1
+            if (r5 != r9) goto L_0x02e9
             boolean r5 = r1.send_gifs
             boolean r9 = r2.send_gifs
-            if (r5 != r9) goto L_0x02f1
+            if (r5 != r9) goto L_0x02e9
             boolean r5 = r1.send_games
             boolean r9 = r2.send_games
-            if (r5 == r9) goto L_0x0315
-        L_0x02f1:
-            if (r4 != 0) goto L_0x02f7
+            if (r5 == r9) goto L_0x030d
+        L_0x02e9:
+            if (r4 != 0) goto L_0x02ef
             r3.append(r12)
             r4 = 1
-        L_0x02f7:
+        L_0x02ef:
             r3.append(r12)
             boolean r5 = r2.send_stickers
-            if (r5 != 0) goto L_0x0301
+            if (r5 != 0) goto L_0x02f9
             r5 = 43
-            goto L_0x0303
-        L_0x0301:
+            goto L_0x02fb
+        L_0x02f9:
             r5 = 45
-        L_0x0303:
+        L_0x02fb:
             r3.append(r5)
             r3.append(r11)
-            r5 = 2131625759(0x7f0e071f, float:1.8878735E38)
+            r5 = 2131625790(0x7f0e073e, float:1.8878798E38)
             java.lang.String r9 = "EventLogRestrictedSendStickers"
             java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r9, r5)
             r3.append(r5)
-        L_0x0315:
+        L_0x030d:
             boolean r5 = r1.send_media
             boolean r9 = r2.send_media
-            if (r5 == r9) goto L_0x033f
-            if (r4 != 0) goto L_0x0321
+            if (r5 == r9) goto L_0x0337
+            if (r4 != 0) goto L_0x0319
             r3.append(r12)
             r4 = 1
-        L_0x0321:
+        L_0x0319:
             r3.append(r12)
             boolean r5 = r2.send_media
-            if (r5 != 0) goto L_0x032b
+            if (r5 != 0) goto L_0x0323
             r5 = 43
-            goto L_0x032d
-        L_0x032b:
+            goto L_0x0325
+        L_0x0323:
             r5 = 45
-        L_0x032d:
+        L_0x0325:
             r3.append(r5)
             r3.append(r11)
-            r5 = 2131625756(0x7f0e071c, float:1.8878729E38)
+            r5 = 2131625787(0x7f0e073b, float:1.8878792E38)
             java.lang.String r9 = "EventLogRestrictedSendMedia"
             java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r9, r5)
             r3.append(r5)
-        L_0x033f:
+        L_0x0337:
             boolean r5 = r1.send_polls
             boolean r9 = r2.send_polls
-            if (r5 == r9) goto L_0x0369
-            if (r4 != 0) goto L_0x034b
+            if (r5 == r9) goto L_0x0361
+            if (r4 != 0) goto L_0x0343
             r3.append(r12)
             r4 = 1
-        L_0x034b:
+        L_0x0343:
             r3.append(r12)
             boolean r5 = r2.send_polls
-            if (r5 != 0) goto L_0x0355
+            if (r5 != 0) goto L_0x034d
             r5 = 43
-            goto L_0x0357
-        L_0x0355:
+            goto L_0x034f
+        L_0x034d:
             r5 = 45
-        L_0x0357:
+        L_0x034f:
             r3.append(r5)
             r3.append(r11)
-            r5 = 2131625758(0x7f0e071e, float:1.8878733E38)
+            r5 = 2131625789(0x7f0e073d, float:1.8878796E38)
             java.lang.String r9 = "EventLogRestrictedSendPolls"
             java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r9, r5)
             r3.append(r5)
-        L_0x0369:
+        L_0x0361:
             boolean r5 = r1.embed_links
             boolean r9 = r2.embed_links
-            if (r5 == r9) goto L_0x0393
-            if (r4 != 0) goto L_0x0375
+            if (r5 == r9) goto L_0x038b
+            if (r4 != 0) goto L_0x036d
             r3.append(r12)
             r4 = 1
-        L_0x0375:
+        L_0x036d:
             r3.append(r12)
             boolean r5 = r2.embed_links
-            if (r5 != 0) goto L_0x037f
+            if (r5 != 0) goto L_0x0377
             r5 = 43
-            goto L_0x0381
-        L_0x037f:
+            goto L_0x0379
+        L_0x0377:
             r5 = 45
-        L_0x0381:
+        L_0x0379:
             r3.append(r5)
             r3.append(r11)
-            r5 = 2131625755(0x7f0e071b, float:1.8878727E38)
+            r5 = 2131625786(0x7f0e073a, float:1.887879E38)
             java.lang.String r9 = "EventLogRestrictedSendEmbed"
             java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r9, r5)
             r3.append(r5)
-        L_0x0393:
+        L_0x038b:
             boolean r5 = r1.change_info
             boolean r9 = r2.change_info
-            if (r5 == r9) goto L_0x03bd
-            if (r4 != 0) goto L_0x039f
+            if (r5 == r9) goto L_0x03b5
+            if (r4 != 0) goto L_0x0397
             r3.append(r12)
             r4 = 1
-        L_0x039f:
+        L_0x0397:
             r3.append(r12)
             boolean r5 = r2.change_info
-            if (r5 != 0) goto L_0x03a9
+            if (r5 != 0) goto L_0x03a1
             r5 = 43
-            goto L_0x03ab
-        L_0x03a9:
+            goto L_0x03a3
+        L_0x03a1:
             r5 = 45
-        L_0x03ab:
+        L_0x03a3:
             r3.append(r5)
             r3.append(r11)
-            r5 = 2131625751(0x7f0e0717, float:1.8878719E38)
+            r5 = 2131625782(0x7f0e0736, float:1.8878782E38)
             java.lang.String r9 = "EventLogRestrictedChangeInfo"
             java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r9, r5)
             r3.append(r5)
-        L_0x03bd:
+        L_0x03b5:
             boolean r5 = r1.invite_users
             boolean r9 = r2.invite_users
-            if (r5 == r9) goto L_0x03e7
-            if (r4 != 0) goto L_0x03c9
+            if (r5 == r9) goto L_0x03df
+            if (r4 != 0) goto L_0x03c1
             r3.append(r12)
             r4 = 1
-        L_0x03c9:
+        L_0x03c1:
             r3.append(r12)
             boolean r5 = r2.invite_users
-            if (r5 != 0) goto L_0x03d3
+            if (r5 != 0) goto L_0x03cb
             r5 = 43
-            goto L_0x03d5
-        L_0x03d3:
+            goto L_0x03cd
+        L_0x03cb:
             r5 = 45
-        L_0x03d5:
+        L_0x03cd:
             r3.append(r5)
             r3.append(r11)
-            r5 = 2131625752(0x7f0e0718, float:1.887872E38)
+            r5 = 2131625783(0x7f0e0737, float:1.8878784E38)
             java.lang.String r9 = "EventLogRestrictedInviteUsers"
             java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r9, r5)
             r3.append(r5)
-        L_0x03e7:
+        L_0x03df:
             boolean r1 = r1.pin_messages
             boolean r5 = r2.pin_messages
-            if (r1 == r5) goto L_0x0410
-            if (r4 != 0) goto L_0x03f2
+            if (r1 == r5) goto L_0x0408
+            if (r4 != 0) goto L_0x03ea
             r3.append(r12)
-        L_0x03f2:
+        L_0x03ea:
             r3.append(r12)
             boolean r1 = r2.pin_messages
-            if (r1 != 0) goto L_0x03fc
+            if (r1 != 0) goto L_0x03f4
             r1 = 43
-            goto L_0x03fe
-        L_0x03fc:
+            goto L_0x03f6
+        L_0x03f4:
             r1 = 45
-        L_0x03fe:
+        L_0x03f6:
             r3.append(r1)
             r3.append(r11)
-            r1 = 2131625753(0x7f0e0719, float:1.8878723E38)
+            r1 = 2131625784(0x7f0e0738, float:1.8878786E38)
             java.lang.String r2 = "EventLogRestrictedPinMessages"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             r3.append(r1)
-        L_0x0410:
+        L_0x0408:
             java.lang.String r1 = r3.toString()
             r6.messageText = r1
-            goto L_0x00ce
-        L_0x0418:
+            goto L_0x00c6
+        L_0x0410:
             boolean r3 = r2 instanceof org.telegram.tgnet.TLRPC$TL_channelAdminLogEventActionParticipantToggleBan
             java.lang.String r11 = ", "
             java.lang.String r12 = "Hours"
             java.lang.String r4 = "Minutes"
-            if (r3 == 0) goto L_0x0736
+            if (r3 == 0) goto L_0x072e
             org.telegram.tgnet.TLRPC$TL_channelAdminLogEventActionParticipantToggleBan r2 = (org.telegram.tgnet.TLRPC$TL_channelAdminLogEventActionParticipantToggleBan) r2
             org.telegram.tgnet.TLRPC$TL_message r1 = new org.telegram.tgnet.TLRPC$TL_message
             r1.<init>()
@@ -2573,7 +2579,7 @@ public class MessageObject {
             long r5 = getPeerId(r1)
             r21 = 0
             int r1 = (r5 > r21 ? 1 : (r5 == r21 ? 0 : -1))
-            if (r1 <= 0) goto L_0x044d
+            if (r1 <= 0) goto L_0x0445
             r21 = r5
             r6 = r26
             int r1 = r6.currentAccount
@@ -2581,8 +2587,8 @@ public class MessageObject {
             java.lang.Long r5 = java.lang.Long.valueOf(r21)
             org.telegram.tgnet.TLRPC$User r1 = r1.getUser(r5)
             r5 = r4
-            goto L_0x0463
-        L_0x044d:
+            goto L_0x045b
+        L_0x0445:
             r21 = r5
             r6 = r26
             int r1 = r6.currentAccount
@@ -2592,24 +2598,24 @@ public class MessageObject {
             long r3 = -r3
             java.lang.Long r3 = java.lang.Long.valueOf(r3)
             org.telegram.tgnet.TLRPC$Chat r1 = r1.getChat(r3)
-        L_0x0463:
+        L_0x045b:
             org.telegram.tgnet.TLRPC$ChannelParticipant r3 = r2.prev_participant
             org.telegram.tgnet.TLRPC$TL_chatBannedRights r3 = r3.banned_rights
             org.telegram.tgnet.TLRPC$ChannelParticipant r2 = r2.new_participant
             org.telegram.tgnet.TLRPC$TL_chatBannedRights r2 = r2.banned_rights
             boolean r4 = r0.megagroup
-            if (r4 == 0) goto L_0x06ff
-            if (r2 == 0) goto L_0x047d
+            if (r4 == 0) goto L_0x06f7
+            if (r2 == 0) goto L_0x0475
             boolean r4 = r2.view_messages
-            if (r4 == 0) goto L_0x047d
-            if (r3 == 0) goto L_0x06ff
+            if (r4 == 0) goto L_0x0475
+            if (r3 == 0) goto L_0x06f7
             int r4 = r2.until_date
             int r15 = r3.until_date
-            if (r4 == r15) goto L_0x06ff
-        L_0x047d:
-            if (r2 == 0) goto L_0x04fc
+            if (r4 == r15) goto L_0x06f7
+        L_0x0475:
+            if (r2 == 0) goto L_0x04f4
             boolean r4 = org.telegram.messenger.AndroidUtilities.isBannedForever(r2)
-            if (r4 != 0) goto L_0x04fc
+            if (r4 != 0) goto L_0x04f4
             java.lang.StringBuilder r4 = new java.lang.StringBuilder
             r4.<init>()
             int r15 = r2.until_date
@@ -2633,64 +2639,64 @@ public class MessageObject {
             r7 = 3
             r14 = 0
             r16 = 0
-        L_0x04b1:
-            if (r14 >= r7) goto L_0x050c
-            if (r14 != 0) goto L_0x04c5
-            if (r13 == 0) goto L_0x04df
+        L_0x04a9:
+            if (r14 >= r7) goto L_0x0504
+            if (r14 != 0) goto L_0x04bd
+            if (r13 == 0) goto L_0x04d7
             r7 = 0
             java.lang.Object[] r0 = new java.lang.Object[r7]
             java.lang.String r7 = "Days"
             java.lang.String r0 = org.telegram.messenger.LocaleController.formatPluralString(r7, r13, r0)
-        L_0x04c0:
+        L_0x04b8:
             int r16 = r16 + 1
-        L_0x04c2:
+        L_0x04ba:
             r7 = r16
-            goto L_0x04e2
-        L_0x04c5:
+            goto L_0x04da
+        L_0x04bd:
             r0 = 1
-            if (r14 != r0) goto L_0x04d5
-            if (r8 == 0) goto L_0x04df
+            if (r14 != r0) goto L_0x04cd
+            if (r8 == 0) goto L_0x04d7
             r0 = 0
             java.lang.Object[] r7 = new java.lang.Object[r0]
             java.lang.String r7 = org.telegram.messenger.LocaleController.formatPluralString(r12, r8, r7)
             int r16 = r16 + 1
             r0 = r7
-            goto L_0x04c2
-        L_0x04d5:
+            goto L_0x04ba
+        L_0x04cd:
             r0 = 0
-            if (r15 == 0) goto L_0x04df
+            if (r15 == 0) goto L_0x04d7
             java.lang.Object[] r7 = new java.lang.Object[r0]
             java.lang.String r0 = org.telegram.messenger.LocaleController.formatPluralString(r5, r15, r7)
-            goto L_0x04c0
-        L_0x04df:
+            goto L_0x04b8
+        L_0x04d7:
             r7 = r16
             r0 = 0
-        L_0x04e2:
-            if (r0 == 0) goto L_0x04f0
+        L_0x04da:
+            if (r0 == 0) goto L_0x04e8
             int r16 = r4.length()
-            if (r16 <= 0) goto L_0x04ed
+            if (r16 <= 0) goto L_0x04e5
             r4.append(r11)
-        L_0x04ed:
+        L_0x04e5:
             r4.append(r0)
-        L_0x04f0:
+        L_0x04e8:
             r0 = 2
-            if (r7 != r0) goto L_0x04f4
-            goto L_0x050c
-        L_0x04f4:
+            if (r7 != r0) goto L_0x04ec
+            goto L_0x0504
+        L_0x04ec:
             int r14 = r14 + 1
             r0 = r31
             r16 = r7
             r7 = 3
-            goto L_0x04b1
-        L_0x04fc:
+            goto L_0x04a9
+        L_0x04f4:
             r23 = r14
             java.lang.StringBuilder r4 = new java.lang.StringBuilder
-            r0 = 2131628840(0x7f0e1328, float:1.8884984E38)
+            r0 = 2131628898(0x7f0e1362, float:1.8885102E38)
             java.lang.String r5 = "UserRestrictionsUntilForever"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r5, r0)
             r4.<init>(r0)
-        L_0x050c:
-            r0 = 2131625760(0x7f0e0720, float:1.8878737E38)
+        L_0x0504:
+            r0 = 2131625791(0x7f0e073f, float:1.88788E38)
             java.lang.String r5 = "EventLogRestrictedUntil"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r5, r0)
             int r5 = r0.indexOf(r9)
@@ -2707,262 +2713,262 @@ public class MessageObject {
             r8[r4] = r1
             java.lang.String r0 = java.lang.String.format(r0, r8)
             r7.<init>(r0)
-            if (r3 != 0) goto L_0x053e
+            if (r3 != 0) goto L_0x0536
             org.telegram.tgnet.TLRPC$TL_chatBannedRights r3 = new org.telegram.tgnet.TLRPC$TL_chatBannedRights
             r3.<init>()
-        L_0x053e:
-            if (r2 != 0) goto L_0x0545
+        L_0x0536:
+            if (r2 != 0) goto L_0x053d
             org.telegram.tgnet.TLRPC$TL_chatBannedRights r2 = new org.telegram.tgnet.TLRPC$TL_chatBannedRights
             r2.<init>()
-        L_0x0545:
+        L_0x053d:
             boolean r0 = r3.view_messages
             boolean r1 = r2.view_messages
-            if (r0 == r1) goto L_0x0572
+            if (r0 == r1) goto L_0x056a
             r0 = 10
             r7.append(r0)
             r7.append(r0)
             boolean r0 = r2.view_messages
-            if (r0 != 0) goto L_0x055a
+            if (r0 != 0) goto L_0x0552
             r0 = 43
-            goto L_0x055c
-        L_0x055a:
+            goto L_0x0554
+        L_0x0552:
             r0 = 45
-        L_0x055c:
+        L_0x0554:
             r7.append(r0)
             r0 = 32
             r7.append(r0)
-            r0 = 2131625754(0x7f0e071a, float:1.8878725E38)
+            r0 = 2131625785(0x7f0e0739, float:1.8878788E38)
             java.lang.String r1 = "EventLogRestrictedReadMessages"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             r7.append(r0)
             r0 = 1
-            goto L_0x0573
-        L_0x0572:
+            goto L_0x056b
+        L_0x056a:
             r0 = 0
-        L_0x0573:
+        L_0x056b:
             boolean r1 = r3.send_messages
             boolean r4 = r2.send_messages
-            if (r1 == r4) goto L_0x05a1
+            if (r1 == r4) goto L_0x0599
             r1 = 10
-            if (r0 != 0) goto L_0x0581
+            if (r0 != 0) goto L_0x0579
             r7.append(r1)
             r0 = 1
-        L_0x0581:
+        L_0x0579:
             r7.append(r1)
             boolean r1 = r2.send_messages
-            if (r1 != 0) goto L_0x058b
+            if (r1 != 0) goto L_0x0583
             r1 = 43
-            goto L_0x058d
-        L_0x058b:
+            goto L_0x0585
+        L_0x0583:
             r1 = 45
-        L_0x058d:
+        L_0x0585:
             r7.append(r1)
             r1 = 32
             r7.append(r1)
-            r1 = 2131625757(0x7f0e071d, float:1.887873E38)
+            r1 = 2131625788(0x7f0e073c, float:1.8878794E38)
             java.lang.String r4 = "EventLogRestrictedSendMessages"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r4, r1)
             r7.append(r1)
-        L_0x05a1:
+        L_0x0599:
             boolean r1 = r3.send_stickers
             boolean r4 = r2.send_stickers
-            if (r1 != r4) goto L_0x05b9
+            if (r1 != r4) goto L_0x05b1
             boolean r1 = r3.send_inline
             boolean r4 = r2.send_inline
-            if (r1 != r4) goto L_0x05b9
+            if (r1 != r4) goto L_0x05b1
             boolean r1 = r3.send_gifs
             boolean r4 = r2.send_gifs
-            if (r1 != r4) goto L_0x05b9
+            if (r1 != r4) goto L_0x05b1
             boolean r1 = r3.send_games
             boolean r4 = r2.send_games
-            if (r1 == r4) goto L_0x05e1
-        L_0x05b9:
+            if (r1 == r4) goto L_0x05d9
+        L_0x05b1:
             r1 = 10
-            if (r0 != 0) goto L_0x05c1
+            if (r0 != 0) goto L_0x05b9
             r7.append(r1)
             r0 = 1
-        L_0x05c1:
+        L_0x05b9:
             r7.append(r1)
             boolean r1 = r2.send_stickers
-            if (r1 != 0) goto L_0x05cb
+            if (r1 != 0) goto L_0x05c3
             r1 = 43
-            goto L_0x05cd
-        L_0x05cb:
+            goto L_0x05c5
+        L_0x05c3:
             r1 = 45
-        L_0x05cd:
+        L_0x05c5:
             r7.append(r1)
             r1 = 32
             r7.append(r1)
-            r1 = 2131625759(0x7f0e071f, float:1.8878735E38)
+            r1 = 2131625790(0x7f0e073e, float:1.8878798E38)
             java.lang.String r4 = "EventLogRestrictedSendStickers"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r4, r1)
             r7.append(r1)
-        L_0x05e1:
+        L_0x05d9:
             boolean r1 = r3.send_media
             boolean r4 = r2.send_media
-            if (r1 == r4) goto L_0x060f
+            if (r1 == r4) goto L_0x0607
             r1 = 10
-            if (r0 != 0) goto L_0x05ef
+            if (r0 != 0) goto L_0x05e7
             r7.append(r1)
             r0 = 1
-        L_0x05ef:
+        L_0x05e7:
             r7.append(r1)
             boolean r1 = r2.send_media
-            if (r1 != 0) goto L_0x05f9
+            if (r1 != 0) goto L_0x05f1
             r1 = 43
-            goto L_0x05fb
-        L_0x05f9:
+            goto L_0x05f3
+        L_0x05f1:
             r1 = 45
-        L_0x05fb:
+        L_0x05f3:
             r7.append(r1)
             r1 = 32
             r7.append(r1)
-            r1 = 2131625756(0x7f0e071c, float:1.8878729E38)
+            r1 = 2131625787(0x7f0e073b, float:1.8878792E38)
             java.lang.String r4 = "EventLogRestrictedSendMedia"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r4, r1)
             r7.append(r1)
-        L_0x060f:
+        L_0x0607:
             boolean r1 = r3.send_polls
             boolean r4 = r2.send_polls
-            if (r1 == r4) goto L_0x063d
+            if (r1 == r4) goto L_0x0635
             r1 = 10
-            if (r0 != 0) goto L_0x061d
+            if (r0 != 0) goto L_0x0615
             r7.append(r1)
             r0 = 1
-        L_0x061d:
+        L_0x0615:
             r7.append(r1)
             boolean r1 = r2.send_polls
-            if (r1 != 0) goto L_0x0627
+            if (r1 != 0) goto L_0x061f
             r1 = 43
-            goto L_0x0629
-        L_0x0627:
+            goto L_0x0621
+        L_0x061f:
             r1 = 45
-        L_0x0629:
+        L_0x0621:
             r7.append(r1)
             r1 = 32
             r7.append(r1)
-            r1 = 2131625758(0x7f0e071e, float:1.8878733E38)
+            r1 = 2131625789(0x7f0e073d, float:1.8878796E38)
             java.lang.String r4 = "EventLogRestrictedSendPolls"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r4, r1)
             r7.append(r1)
-        L_0x063d:
+        L_0x0635:
             boolean r1 = r3.embed_links
             boolean r4 = r2.embed_links
-            if (r1 == r4) goto L_0x066b
+            if (r1 == r4) goto L_0x0663
             r1 = 10
-            if (r0 != 0) goto L_0x064b
+            if (r0 != 0) goto L_0x0643
             r7.append(r1)
             r0 = 1
-        L_0x064b:
+        L_0x0643:
             r7.append(r1)
             boolean r1 = r2.embed_links
-            if (r1 != 0) goto L_0x0655
+            if (r1 != 0) goto L_0x064d
             r1 = 43
-            goto L_0x0657
-        L_0x0655:
+            goto L_0x064f
+        L_0x064d:
             r1 = 45
-        L_0x0657:
+        L_0x064f:
             r7.append(r1)
             r1 = 32
             r7.append(r1)
-            r1 = 2131625755(0x7f0e071b, float:1.8878727E38)
+            r1 = 2131625786(0x7f0e073a, float:1.887879E38)
             java.lang.String r4 = "EventLogRestrictedSendEmbed"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r4, r1)
             r7.append(r1)
-        L_0x066b:
+        L_0x0663:
             boolean r1 = r3.change_info
             boolean r4 = r2.change_info
-            if (r1 == r4) goto L_0x0699
+            if (r1 == r4) goto L_0x0691
             r1 = 10
-            if (r0 != 0) goto L_0x0679
+            if (r0 != 0) goto L_0x0671
             r7.append(r1)
             r0 = 1
-        L_0x0679:
+        L_0x0671:
             r7.append(r1)
             boolean r1 = r2.change_info
-            if (r1 != 0) goto L_0x0683
+            if (r1 != 0) goto L_0x067b
             r1 = 43
-            goto L_0x0685
-        L_0x0683:
+            goto L_0x067d
+        L_0x067b:
             r1 = 45
-        L_0x0685:
+        L_0x067d:
             r7.append(r1)
             r1 = 32
             r7.append(r1)
-            r1 = 2131625751(0x7f0e0717, float:1.8878719E38)
+            r1 = 2131625782(0x7f0e0736, float:1.8878782E38)
             java.lang.String r4 = "EventLogRestrictedChangeInfo"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r4, r1)
             r7.append(r1)
-        L_0x0699:
+        L_0x0691:
             boolean r1 = r3.invite_users
             boolean r4 = r2.invite_users
-            if (r1 == r4) goto L_0x06c7
+            if (r1 == r4) goto L_0x06bf
             r1 = 10
-            if (r0 != 0) goto L_0x06a7
+            if (r0 != 0) goto L_0x069f
             r7.append(r1)
             r0 = 1
-        L_0x06a7:
+        L_0x069f:
             r7.append(r1)
             boolean r1 = r2.invite_users
-            if (r1 != 0) goto L_0x06b1
+            if (r1 != 0) goto L_0x06a9
             r1 = 43
-            goto L_0x06b3
-        L_0x06b1:
+            goto L_0x06ab
+        L_0x06a9:
             r1 = 45
-        L_0x06b3:
+        L_0x06ab:
             r7.append(r1)
             r1 = 32
             r7.append(r1)
-            r1 = 2131625752(0x7f0e0718, float:1.887872E38)
+            r1 = 2131625783(0x7f0e0737, float:1.8878784E38)
             java.lang.String r4 = "EventLogRestrictedInviteUsers"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r4, r1)
             r7.append(r1)
-        L_0x06c7:
+        L_0x06bf:
             boolean r1 = r3.pin_messages
             boolean r3 = r2.pin_messages
-            if (r1 == r3) goto L_0x06f7
-            if (r0 != 0) goto L_0x06d5
+            if (r1 == r3) goto L_0x06ef
+            if (r0 != 0) goto L_0x06cd
             r0 = 10
             r7.append(r0)
-            goto L_0x06d7
-        L_0x06d5:
+            goto L_0x06cf
+        L_0x06cd:
             r0 = 10
-        L_0x06d7:
+        L_0x06cf:
             r7.append(r0)
             boolean r0 = r2.pin_messages
-            if (r0 != 0) goto L_0x06e1
+            if (r0 != 0) goto L_0x06d9
             r11 = 43
-            goto L_0x06e3
-        L_0x06e1:
+            goto L_0x06db
+        L_0x06d9:
             r11 = 45
-        L_0x06e3:
+        L_0x06db:
             r7.append(r11)
             r0 = 32
             r7.append(r0)
-            r0 = 2131625753(0x7f0e0719, float:1.8878723E38)
+            r0 = 2131625784(0x7f0e0738, float:1.8878786E38)
             java.lang.String r1 = "EventLogRestrictedPinMessages"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             r7.append(r0)
-        L_0x06f7:
+        L_0x06ef:
             java.lang.String r0 = r7.toString()
             r6.messageText = r0
-            goto L_0x0827
-        L_0x06ff:
+            goto L_0x081f
+        L_0x06f7:
             r23 = r14
-            if (r2 == 0) goto L_0x0713
-            if (r3 == 0) goto L_0x0709
+            if (r2 == 0) goto L_0x070b
+            if (r3 == 0) goto L_0x0701
             boolean r0 = r2.view_messages
-            if (r0 == 0) goto L_0x0713
-        L_0x0709:
-            r0 = 2131625679(0x7f0e06cf, float:1.8878573E38)
+            if (r0 == 0) goto L_0x070b
+        L_0x0701:
+            r0 = 2131625710(0x7f0e06ee, float:1.8878636E38)
             java.lang.String r2 = "EventLogChannelRestricted"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r2, r0)
-            goto L_0x071c
-        L_0x0713:
-            r0 = 2131625680(0x7f0e06d0, float:1.8878575E38)
+            goto L_0x0714
+        L_0x070b:
+            r0 = 2131625711(0x7f0e06ef, float:1.8878638E38)
             java.lang.String r2 = "EventLogChannelUnrestricted"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r2, r0)
-        L_0x071c:
+        L_0x0714:
             int r2 = r0.indexOf(r9)
             r3 = 1
             java.lang.Object[] r4 = new java.lang.Object[r3]
@@ -2973,24 +2979,24 @@ public class MessageObject {
             r4[r2] = r1
             java.lang.String r0 = java.lang.String.format(r0, r4)
             r6.messageText = r0
-            goto L_0x0827
-        L_0x0736:
+            goto L_0x081f
+        L_0x072e:
             r5 = r4
             r23 = r14
             boolean r0 = r2 instanceof org.telegram.tgnet.TLRPC$TL_channelAdminLogEventActionUpdatePinned
-            if (r0 == 0) goto L_0x07c1
+            if (r0 == 0) goto L_0x07b9
             org.telegram.tgnet.TLRPC$TL_channelAdminLogEventActionUpdatePinned r2 = (org.telegram.tgnet.TLRPC$TL_channelAdminLogEventActionUpdatePinned) r2
             org.telegram.tgnet.TLRPC$Message r0 = r2.message
-            if (r10 == 0) goto L_0x0798
+            if (r10 == 0) goto L_0x0790
             long r3 = r10.id
             r7 = 136817688(0x827aCLASSNAME, double:6.75969194E-316)
             int r1 = (r3 > r7 ? 1 : (r3 == r7 ? 0 : -1))
-            if (r1 != 0) goto L_0x0798
+            if (r1 != 0) goto L_0x0790
             org.telegram.tgnet.TLRPC$MessageFwdHeader r1 = r0.fwd_from
-            if (r1 == 0) goto L_0x0798
+            if (r1 == 0) goto L_0x0790
             org.telegram.tgnet.TLRPC$Peer r1 = r1.from_id
             boolean r1 = r1 instanceof org.telegram.tgnet.TLRPC$TL_peerChannel
-            if (r1 == 0) goto L_0x0798
+            if (r1 == 0) goto L_0x0790
             int r1 = r6.currentAccount
             org.telegram.messenger.MessagesController r1 = org.telegram.messenger.MessagesController.getInstance(r1)
             org.telegram.tgnet.TLRPC$Message r3 = r2.message
@@ -3001,130 +3007,130 @@ public class MessageObject {
             org.telegram.tgnet.TLRPC$Chat r1 = r1.getChat(r3)
             org.telegram.tgnet.TLRPC$Message r2 = r2.message
             boolean r3 = r2 instanceof org.telegram.tgnet.TLRPC$TL_messageEmpty
-            if (r3 != 0) goto L_0x0788
+            if (r3 != 0) goto L_0x0780
             boolean r2 = r2.pinned
-            if (r2 != 0) goto L_0x0777
-            goto L_0x0788
-        L_0x0777:
-            r2 = 2131625724(0x7f0e06fc, float:1.8878664E38)
+            if (r2 != 0) goto L_0x076f
+            goto L_0x0780
+        L_0x076f:
+            r2 = 2131625755(0x7f0e071b, float:1.8878727E38)
             java.lang.String r3 = "EventLogPinnedMessages"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             java.lang.CharSequence r1 = replaceWithLink(r2, r15, r1)
             r6.messageText = r1
-            goto L_0x07f6
-        L_0x0788:
-            r2 = 2131625775(0x7f0e072f, float:1.8878767E38)
+            goto L_0x07ee
+        L_0x0780:
+            r2 = 2131625806(0x7f0e074e, float:1.887883E38)
             java.lang.String r3 = "EventLogUnpinnedMessages"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             java.lang.CharSequence r1 = replaceWithLink(r2, r15, r1)
             r6.messageText = r1
-            goto L_0x07f6
-        L_0x0798:
+            goto L_0x07ee
+        L_0x0790:
             boolean r1 = r0 instanceof org.telegram.tgnet.TLRPC$TL_messageEmpty
-            if (r1 != 0) goto L_0x07b1
+            if (r1 != 0) goto L_0x07a9
             boolean r1 = r0.pinned
-            if (r1 != 0) goto L_0x07a1
-            goto L_0x07b1
-        L_0x07a1:
-            r1 = 2131625724(0x7f0e06fc, float:1.8878664E38)
+            if (r1 != 0) goto L_0x0799
+            goto L_0x07a9
+        L_0x0799:
+            r1 = 2131625755(0x7f0e071b, float:1.8878727E38)
             java.lang.String r2 = "EventLogPinnedMessages"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             java.lang.CharSequence r1 = replaceWithLink(r1, r15, r10)
             r6.messageText = r1
-            goto L_0x07f6
-        L_0x07b1:
-            r1 = 2131625775(0x7f0e072f, float:1.8878767E38)
+            goto L_0x07ee
+        L_0x07a9:
+            r1 = 2131625806(0x7f0e074e, float:1.887883E38)
             java.lang.String r2 = "EventLogUnpinnedMessages"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             java.lang.CharSequence r1 = replaceWithLink(r1, r15, r10)
             r6.messageText = r1
-            goto L_0x07f6
-        L_0x07c1:
+            goto L_0x07ee
+        L_0x07b9:
             boolean r0 = r2 instanceof org.telegram.tgnet.TLRPC$TL_channelAdminLogEventActionStopPoll
-            if (r0 == 0) goto L_0x07fe
+            if (r0 == 0) goto L_0x07f6
             org.telegram.tgnet.TLRPC$TL_channelAdminLogEventActionStopPoll r2 = (org.telegram.tgnet.TLRPC$TL_channelAdminLogEventActionStopPoll) r2
             org.telegram.tgnet.TLRPC$Message r0 = r2.message
             org.telegram.tgnet.TLRPC$MessageMedia r1 = r0.media
             boolean r2 = r1 instanceof org.telegram.tgnet.TLRPC$TL_messageMediaPoll
-            if (r2 == 0) goto L_0x07e7
+            if (r2 == 0) goto L_0x07df
             org.telegram.tgnet.TLRPC$TL_messageMediaPoll r1 = (org.telegram.tgnet.TLRPC$TL_messageMediaPoll) r1
             org.telegram.tgnet.TLRPC$Poll r1 = r1.poll
             boolean r1 = r1.quiz
-            if (r1 == 0) goto L_0x07e7
-            r1 = 2131625766(0x7f0e0726, float:1.887875E38)
+            if (r1 == 0) goto L_0x07df
+            r1 = 2131625797(0x7f0e0745, float:1.8878812E38)
             java.lang.String r2 = "EventLogStopQuiz"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             java.lang.CharSequence r1 = replaceWithLink(r1, r15, r10)
             r6.messageText = r1
-            goto L_0x07f6
-        L_0x07e7:
-            r1 = 2131625765(0x7f0e0725, float:1.8878747E38)
+            goto L_0x07ee
+        L_0x07df:
+            r1 = 2131625796(0x7f0e0744, float:1.887881E38)
             java.lang.String r2 = "EventLogStopPoll"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             java.lang.CharSequence r1 = replaceWithLink(r1, r15, r10)
             r6.messageText = r1
-        L_0x07f6:
+        L_0x07ee:
             r8 = r28
             r4 = r31
             r7 = r23
-            goto L_0x147f
-        L_0x07fe:
+            goto L_0x1477
+        L_0x07f6:
             boolean r0 = r2 instanceof org.telegram.tgnet.TLRPC$TL_channelAdminLogEventActionToggleSignatures
-            if (r0 == 0) goto L_0x082f
+            if (r0 == 0) goto L_0x0827
             org.telegram.tgnet.TLRPC$TL_channelAdminLogEventActionToggleSignatures r2 = (org.telegram.tgnet.TLRPC$TL_channelAdminLogEventActionToggleSignatures) r2
             boolean r0 = r2.new_value
-            if (r0 == 0) goto L_0x0818
-            r0 = 2131625772(0x7f0e072c, float:1.8878761E38)
+            if (r0 == 0) goto L_0x0810
+            r0 = 2131625803(0x7f0e074b, float:1.8878824E38)
             java.lang.String r1 = "EventLogToggledSignaturesOn"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             java.lang.CharSequence r0 = replaceWithLink(r0, r15, r10)
             r6.messageText = r0
-            goto L_0x0827
-        L_0x0818:
-            r0 = 2131625771(0x7f0e072b, float:1.887876E38)
+            goto L_0x081f
+        L_0x0810:
+            r0 = 2131625802(0x7f0e074a, float:1.8878822E38)
             java.lang.String r1 = "EventLogToggledSignaturesOff"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             java.lang.CharSequence r0 = replaceWithLink(r0, r15, r10)
             r6.messageText = r0
-        L_0x0827:
+        L_0x081f:
             r8 = r28
             r4 = r31
-        L_0x082b:
+        L_0x0823:
             r7 = r23
-            goto L_0x147e
-        L_0x082f:
+            goto L_0x1476
+        L_0x0827:
             boolean r0 = r2 instanceof org.telegram.tgnet.TLRPC$TL_channelAdminLogEventActionToggleInvites
-            if (r0 == 0) goto L_0x0859
+            if (r0 == 0) goto L_0x0851
             org.telegram.tgnet.TLRPC$TL_channelAdminLogEventActionToggleInvites r2 = (org.telegram.tgnet.TLRPC$TL_channelAdminLogEventActionToggleInvites) r2
             boolean r0 = r2.new_value
-            if (r0 == 0) goto L_0x0849
-            r0 = 2131625770(0x7f0e072a, float:1.8878757E38)
+            if (r0 == 0) goto L_0x0841
+            r0 = 2131625801(0x7f0e0749, float:1.887882E38)
             java.lang.String r1 = "EventLogToggledInvitesOn"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             java.lang.CharSequence r0 = replaceWithLink(r0, r15, r10)
             r6.messageText = r0
-            goto L_0x0827
-        L_0x0849:
-            r0 = 2131625769(0x7f0e0729, float:1.8878755E38)
+            goto L_0x081f
+        L_0x0841:
+            r0 = 2131625800(0x7f0e0748, float:1.8878818E38)
             java.lang.String r1 = "EventLogToggledInvitesOff"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             java.lang.CharSequence r0 = replaceWithLink(r0, r15, r10)
             r6.messageText = r0
-            goto L_0x0827
-        L_0x0859:
+            goto L_0x081f
+        L_0x0851:
             boolean r0 = r2 instanceof org.telegram.tgnet.TLRPC$TL_channelAdminLogEventActionDeleteMessage
-            if (r0 == 0) goto L_0x0871
+            if (r0 == 0) goto L_0x0869
             org.telegram.tgnet.TLRPC$TL_channelAdminLogEventActionDeleteMessage r2 = (org.telegram.tgnet.TLRPC$TL_channelAdminLogEventActionDeleteMessage) r2
             org.telegram.tgnet.TLRPC$Message r0 = r2.message
-            r1 = 2131625682(0x7f0e06d2, float:1.8878579E38)
+            r1 = 2131625713(0x7f0e06f1, float:1.8878642E38)
             java.lang.String r2 = "EventLogDeletedMessages"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             java.lang.CharSequence r1 = replaceWithLink(r1, r15, r10)
             r6.messageText = r1
-            goto L_0x07f6
-        L_0x0871:
+            goto L_0x07ee
+        L_0x0869:
             boolean r0 = r2 instanceof org.telegram.tgnet.TLRPC$TL_channelAdminLogEventActionChangeLinkedChat
-            if (r0 == 0) goto L_0x0922
+            if (r0 == 0) goto L_0x091a
             r0 = r2
             org.telegram.tgnet.TLRPC$TL_channelAdminLogEventActionChangeLinkedChat r0 = (org.telegram.tgnet.TLRPC$TL_channelAdminLogEventActionChangeLinkedChat) r0
             long r0 = r0.new_value
@@ -3132,98 +3138,98 @@ public class MessageObject {
             long r2 = r2.prev_value
             r4 = r31
             boolean r5 = r4.megagroup
-            if (r5 == 0) goto L_0x08d4
+            if (r5 == 0) goto L_0x08cc
             r7 = 0
             int r5 = (r0 > r7 ? 1 : (r0 == r7 ? 0 : -1))
-            if (r5 != 0) goto L_0x08af
+            if (r5 != 0) goto L_0x08a7
             int r0 = r6.currentAccount
             org.telegram.messenger.MessagesController r0 = org.telegram.messenger.MessagesController.getInstance(r0)
             java.lang.Long r1 = java.lang.Long.valueOf(r2)
             org.telegram.tgnet.TLRPC$Chat r0 = r0.getChat(r1)
-            r1 = 2131625746(0x7f0e0712, float:1.8878709E38)
+            r1 = 2131625777(0x7f0e0731, float:1.8878772E38)
             java.lang.String r2 = "EventLogRemovedLinkedChannel"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             java.lang.CharSequence r1 = replaceWithLink(r1, r15, r10)
             r6.messageText = r1
             java.lang.CharSequence r0 = replaceWithLink(r1, r13, r0)
             r6.messageText = r0
-            goto L_0x094d
-        L_0x08af:
+            goto L_0x0945
+        L_0x08a7:
             int r2 = r6.currentAccount
             org.telegram.messenger.MessagesController r2 = org.telegram.messenger.MessagesController.getInstance(r2)
             java.lang.Long r0 = java.lang.Long.valueOf(r0)
             org.telegram.tgnet.TLRPC$Chat r0 = r2.getChat(r0)
-            r1 = 2131625673(0x7f0e06c9, float:1.887856E38)
+            r1 = 2131625704(0x7f0e06e8, float:1.8878623E38)
             java.lang.String r2 = "EventLogChangedLinkedChannel"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             java.lang.CharSequence r1 = replaceWithLink(r1, r15, r10)
             r6.messageText = r1
             java.lang.CharSequence r0 = replaceWithLink(r1, r13, r0)
             r6.messageText = r0
-            goto L_0x094d
-        L_0x08d4:
+            goto L_0x0945
+        L_0x08cc:
             r7 = 0
             int r5 = (r0 > r7 ? 1 : (r0 == r7 ? 0 : -1))
-            if (r5 != 0) goto L_0x08fe
+            if (r5 != 0) goto L_0x08f6
             int r0 = r6.currentAccount
             org.telegram.messenger.MessagesController r0 = org.telegram.messenger.MessagesController.getInstance(r0)
             java.lang.Long r1 = java.lang.Long.valueOf(r2)
             org.telegram.tgnet.TLRPC$Chat r0 = r0.getChat(r1)
-            r1 = 2131625747(0x7f0e0713, float:1.887871E38)
+            r1 = 2131625778(0x7f0e0732, float:1.8878774E38)
             java.lang.String r2 = "EventLogRemovedLinkedGroup"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             java.lang.CharSequence r1 = replaceWithLink(r1, r15, r10)
             r6.messageText = r1
             java.lang.CharSequence r0 = replaceWithLink(r1, r13, r0)
             r6.messageText = r0
-            goto L_0x094d
-        L_0x08fe:
+            goto L_0x0945
+        L_0x08f6:
             int r2 = r6.currentAccount
             org.telegram.messenger.MessagesController r2 = org.telegram.messenger.MessagesController.getInstance(r2)
             java.lang.Long r0 = java.lang.Long.valueOf(r0)
             org.telegram.tgnet.TLRPC$Chat r0 = r2.getChat(r0)
-            r1 = 2131625674(0x7f0e06ca, float:1.8878563E38)
+            r1 = 2131625705(0x7f0e06e9, float:1.8878625E38)
             java.lang.String r2 = "EventLogChangedLinkedGroup"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             java.lang.CharSequence r1 = replaceWithLink(r1, r15, r10)
             r6.messageText = r1
             java.lang.CharSequence r0 = replaceWithLink(r1, r13, r0)
             r6.messageText = r0
-            goto L_0x094d
-        L_0x0922:
+            goto L_0x0945
+        L_0x091a:
             r4 = r31
             boolean r0 = r2 instanceof org.telegram.tgnet.TLRPC$TL_channelAdminLogEventActionTogglePreHistoryHidden
-            if (r0 == 0) goto L_0x0951
+            if (r0 == 0) goto L_0x0949
             org.telegram.tgnet.TLRPC$TL_channelAdminLogEventActionTogglePreHistoryHidden r2 = (org.telegram.tgnet.TLRPC$TL_channelAdminLogEventActionTogglePreHistoryHidden) r2
             boolean r0 = r2.new_value
-            if (r0 == 0) goto L_0x093e
-            r0 = 2131625767(0x7f0e0727, float:1.8878751E38)
+            if (r0 == 0) goto L_0x0936
+            r0 = 2131625798(0x7f0e0746, float:1.8878814E38)
             java.lang.String r1 = "EventLogToggledInvitesHistoryOff"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             java.lang.CharSequence r0 = replaceWithLink(r0, r15, r10)
             r6.messageText = r0
-            goto L_0x094d
-        L_0x093e:
-            r0 = 2131625768(0x7f0e0728, float:1.8878753E38)
+            goto L_0x0945
+        L_0x0936:
+            r0 = 2131625799(0x7f0e0747, float:1.8878816E38)
             java.lang.String r1 = "EventLogToggledInvitesHistoryOn"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             java.lang.CharSequence r0 = replaceWithLink(r0, r15, r10)
             r6.messageText = r0
-        L_0x094d:
+        L_0x0945:
             r8 = r28
-            goto L_0x082b
-        L_0x0951:
+            goto L_0x0823
+        L_0x0949:
             boolean r0 = r2 instanceof org.telegram.tgnet.TLRPC$TL_channelAdminLogEventActionChangeAbout
-            if (r0 == 0) goto L_0x09e2
+            if (r0 == 0) goto L_0x09da
             boolean r0 = r4.megagroup
-            if (r0 == 0) goto L_0x095f
-            r0 = 2131625689(0x7f0e06d9, float:1.8878593E38)
+            if (r0 == 0) goto L_0x0957
+            r0 = 2131625720(0x7f0e06f8, float:1.8878656E38)
             java.lang.String r2 = "EventLogEditedGroupDescription"
-            goto L_0x0964
-        L_0x095f:
-            r0 = 2131625684(0x7f0e06d4, float:1.8878583E38)
+            goto L_0x095c
+        L_0x0957:
+            r0 = 2131625715(0x7f0e06f3, float:1.8878646E38)
             java.lang.String r2 = "EventLogEditedChannelDescription"
-        L_0x0964:
+        L_0x095c:
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r2, r0)
             java.lang.CharSequence r0 = replaceWithLink(r0, r15, r10)
             r6.messageText = r0
@@ -3249,7 +3255,7 @@ public class MessageObject {
             org.telegram.tgnet.TLRPC$TL_channelAdminLogEventActionChangeAbout r1 = (org.telegram.tgnet.TLRPC$TL_channelAdminLogEventActionChangeAbout) r1
             java.lang.String r1 = r1.prev_value
             boolean r1 = android.text.TextUtils.isEmpty(r1)
-            if (r1 != 0) goto L_0x09d2
+            if (r1 != 0) goto L_0x09ca
             org.telegram.tgnet.TLRPC$TL_messageMediaWebPage r1 = new org.telegram.tgnet.TLRPC$TL_messageMediaWebPage
             r1.<init>()
             r0.media = r1
@@ -3263,7 +3269,7 @@ public class MessageObject {
             r8 = r23
             r1.display_url = r8
             r1.url = r8
-            r2 = 2131625725(0x7f0e06fd, float:1.8878666E38)
+            r2 = 2131625756(0x7f0e071c, float:1.8878729E38)
             java.lang.String r3 = "EventLogPreviousGroupDescription"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             r1.site_name = r2
@@ -3273,31 +3279,31 @@ public class MessageObject {
             org.telegram.tgnet.TLRPC$TL_channelAdminLogEventActionChangeAbout r2 = (org.telegram.tgnet.TLRPC$TL_channelAdminLogEventActionChangeAbout) r2
             java.lang.String r2 = r2.prev_value
             r1.description = r2
-            goto L_0x09db
-        L_0x09d2:
+            goto L_0x09d3
+        L_0x09ca:
             r8 = r23
             org.telegram.tgnet.TLRPC$TL_messageMediaEmpty r1 = new org.telegram.tgnet.TLRPC$TL_messageMediaEmpty
             r1.<init>()
             r0.media = r1
-        L_0x09db:
+        L_0x09d3:
             r25 = r8
             r8 = r7
             r7 = r25
-            goto L_0x147f
-        L_0x09e2:
+            goto L_0x1477
+        L_0x09da:
             r7 = r28
             r8 = r23
             boolean r0 = r2 instanceof org.telegram.tgnet.TLRPC$TL_channelAdminLogEventActionChangeTheme
-            if (r0 == 0) goto L_0x0a6d
+            if (r0 == 0) goto L_0x0a65
             boolean r0 = r4.megagroup
-            if (r0 == 0) goto L_0x09f4
-            r0 = 2131625691(0x7f0e06db, float:1.8878597E38)
+            if (r0 == 0) goto L_0x09ec
+            r0 = 2131625722(0x7f0e06fa, float:1.887866E38)
             java.lang.String r2 = "EventLogEditedGroupTheme"
-            goto L_0x09f9
-        L_0x09f4:
-            r0 = 2131625686(0x7f0e06d6, float:1.8878587E38)
+            goto L_0x09f1
+        L_0x09ec:
+            r0 = 2131625717(0x7f0e06f5, float:1.887865E38)
             java.lang.String r2 = "EventLogEditedChannelTheme"
-        L_0x09f9:
+        L_0x09f1:
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r2, r0)
             java.lang.CharSequence r0 = replaceWithLink(r0, r15, r10)
             r6.messageText = r0
@@ -3322,7 +3328,7 @@ public class MessageObject {
             org.telegram.tgnet.TLRPC$TL_channelAdminLogEventActionChangeTheme r1 = (org.telegram.tgnet.TLRPC$TL_channelAdminLogEventActionChangeTheme) r1
             java.lang.String r1 = r1.prev_value
             boolean r1 = android.text.TextUtils.isEmpty(r1)
-            if (r1 != 0) goto L_0x0a64
+            if (r1 != 0) goto L_0x0a5c
             org.telegram.tgnet.TLRPC$TL_messageMediaWebPage r1 = new org.telegram.tgnet.TLRPC$TL_messageMediaWebPage
             r1.<init>()
             r0.media = r1
@@ -3335,7 +3341,7 @@ public class MessageObject {
             r1.flags = r2
             r1.display_url = r8
             r1.url = r8
-            r2 = 2131625726(0x7f0e06fe, float:1.8878668E38)
+            r2 = 2131625757(0x7f0e071d, float:1.887873E38)
             java.lang.String r3 = "EventLogPreviousGroupTheme"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             r1.site_name = r2
@@ -3345,46 +3351,46 @@ public class MessageObject {
             org.telegram.tgnet.TLRPC$TL_channelAdminLogEventActionChangeTheme r2 = (org.telegram.tgnet.TLRPC$TL_channelAdminLogEventActionChangeTheme) r2
             java.lang.String r2 = r2.prev_value
             r1.description = r2
-            goto L_0x09db
-        L_0x0a64:
+            goto L_0x09d3
+        L_0x0a5c:
             org.telegram.tgnet.TLRPC$TL_messageMediaEmpty r1 = new org.telegram.tgnet.TLRPC$TL_messageMediaEmpty
             r1.<init>()
             r0.media = r1
-            goto L_0x09db
-        L_0x0a6d:
+            goto L_0x09d3
+        L_0x0a65:
             boolean r0 = r2 instanceof org.telegram.tgnet.TLRPC$TL_channelAdminLogEventActionChangeUsername
-            if (r0 == 0) goto L_0x0b73
+            if (r0 == 0) goto L_0x0b6b
             org.telegram.tgnet.TLRPC$TL_channelAdminLogEventActionChangeUsername r2 = (org.telegram.tgnet.TLRPC$TL_channelAdminLogEventActionChangeUsername) r2
             java.lang.String r0 = r2.new_value
             boolean r2 = android.text.TextUtils.isEmpty(r0)
-            if (r2 != 0) goto L_0x0a95
+            if (r2 != 0) goto L_0x0a8d
             boolean r2 = r4.megagroup
-            if (r2 == 0) goto L_0x0a85
-            r2 = 2131625672(0x7f0e06c8, float:1.8878559E38)
+            if (r2 == 0) goto L_0x0a7d
+            r2 = 2131625703(0x7f0e06e7, float:1.8878621E38)
             java.lang.String r3 = "EventLogChangedGroupLink"
-            goto L_0x0a8a
-        L_0x0a85:
-            r2 = 2131625671(0x7f0e06c7, float:1.8878557E38)
+            goto L_0x0a82
+        L_0x0a7d:
+            r2 = 2131625702(0x7f0e06e6, float:1.887862E38)
             java.lang.String r3 = "EventLogChangedChannelLink"
-        L_0x0a8a:
+        L_0x0a82:
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             java.lang.CharSequence r2 = replaceWithLink(r2, r15, r10)
             r6.messageText = r2
-            goto L_0x0aae
-        L_0x0a95:
+            goto L_0x0aa6
+        L_0x0a8d:
             boolean r2 = r4.megagroup
-            if (r2 == 0) goto L_0x0a9f
-            r2 = 2131625745(0x7f0e0711, float:1.8878707E38)
+            if (r2 == 0) goto L_0x0a97
+            r2 = 2131625776(0x7f0e0730, float:1.887877E38)
             java.lang.String r3 = "EventLogRemovedGroupLink"
-            goto L_0x0aa4
-        L_0x0a9f:
-            r2 = 2131625743(0x7f0e070f, float:1.8878703E38)
+            goto L_0x0a9c
+        L_0x0a97:
+            r2 = 2131625774(0x7f0e072e, float:1.8878765E38)
             java.lang.String r3 = "EventLogRemovedChannelLink"
-        L_0x0aa4:
+        L_0x0a9c:
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             java.lang.CharSequence r2 = replaceWithLink(r2, r15, r10)
             r6.messageText = r2
-        L_0x0aae:
+        L_0x0aa6:
             org.telegram.tgnet.TLRPC$TL_message r2 = new org.telegram.tgnet.TLRPC$TL_message
             r2.<init>()
             r3 = 0
@@ -3399,7 +3405,7 @@ public class MessageObject {
             int r1 = r7.date
             r2.date = r1
             boolean r1 = android.text.TextUtils.isEmpty(r0)
-            if (r1 != 0) goto L_0x0af3
+            if (r1 != 0) goto L_0x0aeb
             java.lang.StringBuilder r1 = new java.lang.StringBuilder
             r1.<init>()
             java.lang.String r3 = "https://"
@@ -3413,10 +3419,10 @@ public class MessageObject {
             r1.append(r0)
             java.lang.String r0 = r1.toString()
             r2.message = r0
-            goto L_0x0af5
-        L_0x0af3:
+            goto L_0x0aed
+        L_0x0aeb:
             r2.message = r8
-        L_0x0af5:
+        L_0x0aed:
             org.telegram.tgnet.TLRPC$TL_messageEntityUrl r0 = new org.telegram.tgnet.TLRPC$TL_messageEntityUrl
             r0.<init>()
             r1 = 0
@@ -3430,7 +3436,7 @@ public class MessageObject {
             org.telegram.tgnet.TLRPC$TL_channelAdminLogEventActionChangeUsername r0 = (org.telegram.tgnet.TLRPC$TL_channelAdminLogEventActionChangeUsername) r0
             java.lang.String r0 = r0.prev_value
             boolean r0 = android.text.TextUtils.isEmpty(r0)
-            if (r0 != 0) goto L_0x0b69
+            if (r0 != 0) goto L_0x0b61
             org.telegram.tgnet.TLRPC$TL_messageMediaWebPage r0 = new org.telegram.tgnet.TLRPC$TL_messageMediaWebPage
             r0.<init>()
             r2.media = r0
@@ -3443,7 +3449,7 @@ public class MessageObject {
             r0.flags = r1
             r0.display_url = r8
             r0.url = r8
-            r1 = 2131625727(0x7f0e06ff, float:1.887867E38)
+            r1 = 2131625758(0x7f0e071e, float:1.8878733E38)
             java.lang.String r3 = "EventLogPreviousLink"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r3, r1)
             r0.site_name = r1
@@ -3465,17 +3471,17 @@ public class MessageObject {
             r1.append(r3)
             java.lang.String r1 = r1.toString()
             r0.description = r1
-            goto L_0x0b70
-        L_0x0b69:
+            goto L_0x0b68
+        L_0x0b61:
             org.telegram.tgnet.TLRPC$TL_messageMediaEmpty r0 = new org.telegram.tgnet.TLRPC$TL_messageMediaEmpty
             r0.<init>()
             r2.media = r0
-        L_0x0b70:
+        L_0x0b68:
             r0 = r2
-            goto L_0x09db
-        L_0x0b73:
+            goto L_0x09d3
+        L_0x0b6b:
             boolean r0 = r2 instanceof org.telegram.tgnet.TLRPC$TL_channelAdminLogEventActionEditMessage
-            if (r0 == 0) goto L_0x0ce9
+            if (r0 == 0) goto L_0x0ce1
             org.telegram.tgnet.TLRPC$TL_message r0 = new org.telegram.tgnet.TLRPC$TL_message
             r0.<init>()
             r2 = 0
@@ -3490,24 +3496,24 @@ public class MessageObject {
             org.telegram.tgnet.TLRPC$Message r2 = r2.new_message
             org.telegram.tgnet.TLRPC$TL_channelAdminLogEventActionEditMessage r1 = (org.telegram.tgnet.TLRPC$TL_channelAdminLogEventActionEditMessage) r1
             org.telegram.tgnet.TLRPC$Message r1 = r1.prev_message
-            if (r2 == 0) goto L_0x0b9b
+            if (r2 == 0) goto L_0x0b93
             org.telegram.tgnet.TLRPC$Peer r3 = r2.from_id
-            if (r3 == 0) goto L_0x0b9b
+            if (r3 == 0) goto L_0x0b93
             r0.from_id = r3
-            goto L_0x0ba6
-        L_0x0b9b:
+            goto L_0x0b9e
+        L_0x0b93:
             org.telegram.tgnet.TLRPC$TL_peerUser r3 = new org.telegram.tgnet.TLRPC$TL_peerUser
             r3.<init>()
             r0.from_id = r3
             long r11 = r7.user_id
             r3.user_id = r11
-        L_0x0ba6:
+        L_0x0b9e:
             org.telegram.tgnet.TLRPC$MessageMedia r3 = r2.media
-            if (r3 == 0) goto L_0x0c6d
+            if (r3 == 0) goto L_0x0CLASSNAME
             boolean r5 = r3 instanceof org.telegram.tgnet.TLRPC$TL_messageMediaEmpty
-            if (r5 != 0) goto L_0x0c6d
+            if (r5 != 0) goto L_0x0CLASSNAME
             boolean r3 = r3 instanceof org.telegram.tgnet.TLRPC$TL_messageMediaWebPage
-            if (r3 != 0) goto L_0x0c6d
+            if (r3 != 0) goto L_0x0CLASSNAME
             java.lang.String r3 = r2.message
             java.lang.String r5 = r1.message
             boolean r3 = android.text.TextUtils.equals(r3, r5)
@@ -3517,58 +3523,58 @@ public class MessageObject {
             java.lang.Class r5 = r5.getClass()
             org.telegram.tgnet.TLRPC$MessageMedia r9 = r1.media
             java.lang.Class r9 = r9.getClass()
-            if (r5 != r9) goto L_0x0bf8
+            if (r5 != r9) goto L_0x0bf0
             org.telegram.tgnet.TLRPC$MessageMedia r5 = r2.media
             org.telegram.tgnet.TLRPC$Photo r9 = r5.photo
-            if (r9 == 0) goto L_0x0be1
+            if (r9 == 0) goto L_0x0bd9
             org.telegram.tgnet.TLRPC$MessageMedia r11 = r1.media
             org.telegram.tgnet.TLRPC$Photo r11 = r11.photo
-            if (r11 == 0) goto L_0x0be1
+            if (r11 == 0) goto L_0x0bd9
             long r12 = r9.id
             r23 = r8
             long r7 = r11.id
             int r9 = (r12 > r7 ? 1 : (r12 == r7 ? 0 : -1))
-            if (r9 != 0) goto L_0x0bfa
-            goto L_0x0be3
-        L_0x0be1:
+            if (r9 != 0) goto L_0x0bf2
+            goto L_0x0bdb
+        L_0x0bd9:
             r23 = r8
-        L_0x0be3:
+        L_0x0bdb:
             org.telegram.tgnet.TLRPC$Document r5 = r5.document
-            if (r5 == 0) goto L_0x0bf6
+            if (r5 == 0) goto L_0x0bee
             org.telegram.tgnet.TLRPC$MessageMedia r7 = r1.media
             org.telegram.tgnet.TLRPC$Document r7 = r7.document
-            if (r7 == 0) goto L_0x0bf6
+            if (r7 == 0) goto L_0x0bee
             long r8 = r5.id
             long r11 = r7.id
             int r5 = (r8 > r11 ? 1 : (r8 == r11 ? 0 : -1))
-            if (r5 == 0) goto L_0x0bf6
-            goto L_0x0bfa
-        L_0x0bf6:
+            if (r5 == 0) goto L_0x0bee
+            goto L_0x0bf2
+        L_0x0bee:
             r5 = 0
-            goto L_0x0bfb
-        L_0x0bf8:
+            goto L_0x0bf3
+        L_0x0bf0:
             r23 = r8
-        L_0x0bfa:
+        L_0x0bf2:
             r5 = 1
-        L_0x0bfb:
-            if (r5 == 0) goto L_0x0c0f
-            if (r3 == 0) goto L_0x0c0f
-            r5 = 2131625695(0x7f0e06df, float:1.8878605E38)
+        L_0x0bf3:
+            if (r5 == 0) goto L_0x0CLASSNAME
+            if (r3 == 0) goto L_0x0CLASSNAME
+            r5 = 2131625726(0x7f0e06fe, float:1.8878668E38)
             java.lang.String r7 = "EventLogEditedMediaCaption"
             java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r7, r5)
             java.lang.CharSequence r5 = replaceWithLink(r5, r15, r10)
             r6.messageText = r5
             goto L_0x0CLASSNAME
-        L_0x0c0f:
+        L_0x0CLASSNAME:
             if (r3 == 0) goto L_0x0CLASSNAME
-            r5 = 2131625683(0x7f0e06d3, float:1.887858E38)
+            r5 = 2131625714(0x7f0e06f2, float:1.8878644E38)
             java.lang.String r7 = "EventLogEditedCaption"
             java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r7, r5)
             java.lang.CharSequence r5 = replaceWithLink(r5, r15, r10)
             r6.messageText = r5
             goto L_0x0CLASSNAME
         L_0x0CLASSNAME:
-            r5 = 2131625694(0x7f0e06de, float:1.8878603E38)
+            r5 = 2131625725(0x7f0e06fd, float:1.8878666E38)
             java.lang.String r7 = "EventLogEditedMedia"
             java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r7, r5)
             java.lang.CharSequence r5 = replaceWithLink(r5, r15, r10)
@@ -3576,48 +3582,48 @@ public class MessageObject {
         L_0x0CLASSNAME:
             org.telegram.tgnet.TLRPC$MessageMedia r5 = r2.media
             r0.media = r5
-            if (r3 == 0) goto L_0x0cce
+            if (r3 == 0) goto L_0x0cc6
             org.telegram.tgnet.TLRPC$TL_webPage r3 = new org.telegram.tgnet.TLRPC$TL_webPage
             r3.<init>()
             r5.webpage = r3
             org.telegram.tgnet.TLRPC$MessageMedia r3 = r0.media
             org.telegram.tgnet.TLRPC$WebPage r3 = r3.webpage
-            r5 = 2131625721(0x7f0e06f9, float:1.8878658E38)
+            r5 = 2131625752(0x7f0e0718, float:1.887872E38)
             java.lang.String r7 = "EventLogOriginalCaption"
             java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r7, r5)
             r3.site_name = r5
             java.lang.String r3 = r1.message
             boolean r3 = android.text.TextUtils.isEmpty(r3)
-            if (r3 == 0) goto L_0x0CLASSNAME
+            if (r3 == 0) goto L_0x0c5c
             org.telegram.tgnet.TLRPC$MessageMedia r1 = r0.media
             org.telegram.tgnet.TLRPC$WebPage r1 = r1.webpage
-            r3 = 2131625722(0x7f0e06fa, float:1.887866E38)
+            r3 = 2131625753(0x7f0e0719, float:1.8878723E38)
             java.lang.String r5 = "EventLogOriginalCaptionEmpty"
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r5, r3)
             r1.description = r3
-            goto L_0x0cce
-        L_0x0CLASSNAME:
+            goto L_0x0cc6
+        L_0x0c5c:
             org.telegram.tgnet.TLRPC$MessageMedia r3 = r0.media
             org.telegram.tgnet.TLRPC$WebPage r3 = r3.webpage
             java.lang.String r1 = r1.message
             r3.description = r1
-            goto L_0x0cce
-        L_0x0c6d:
+            goto L_0x0cc6
+        L_0x0CLASSNAME:
             r23 = r8
-            r3 = 2131625696(0x7f0e06e0, float:1.8878607E38)
+            r3 = 2131625727(0x7f0e06ff, float:1.887867E38)
             java.lang.String r5 = "EventLogEditedMessages"
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r5, r3)
             java.lang.CharSequence r3 = replaceWithLink(r3, r15, r10)
             r6.messageText = r3
             org.telegram.tgnet.TLRPC$MessageAction r3 = r2.action
             boolean r3 = r3 instanceof org.telegram.tgnet.TLRPC$TL_messageActionGroupCall
-            if (r3 == 0) goto L_0x0c8d
+            if (r3 == 0) goto L_0x0CLASSNAME
             org.telegram.tgnet.TLRPC$TL_messageMediaEmpty r0 = new org.telegram.tgnet.TLRPC$TL_messageMediaEmpty
             r0.<init>()
             r2.media = r0
             r0 = r2
-            goto L_0x0cce
-        L_0x0c8d:
+            goto L_0x0cc6
+        L_0x0CLASSNAME:
             java.lang.String r3 = r2.message
             r0.message = r3
             org.telegram.tgnet.TLRPC$TL_messageMediaWebPage r3 = new org.telegram.tgnet.TLRPC$TL_messageMediaWebPage
@@ -3628,87 +3634,87 @@ public class MessageObject {
             r3.webpage = r5
             org.telegram.tgnet.TLRPC$MessageMedia r3 = r0.media
             org.telegram.tgnet.TLRPC$WebPage r3 = r3.webpage
-            r5 = 2131625723(0x7f0e06fb, float:1.8878662E38)
+            r5 = 2131625754(0x7f0e071a, float:1.8878725E38)
             java.lang.String r7 = "EventLogOriginalMessages"
             java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r7, r5)
             r3.site_name = r5
             java.lang.String r3 = r1.message
             boolean r3 = android.text.TextUtils.isEmpty(r3)
-            if (r3 == 0) goto L_0x0cc6
+            if (r3 == 0) goto L_0x0cbe
             org.telegram.tgnet.TLRPC$MessageMedia r1 = r0.media
             org.telegram.tgnet.TLRPC$WebPage r1 = r1.webpage
-            r3 = 2131625722(0x7f0e06fa, float:1.887866E38)
+            r3 = 2131625753(0x7f0e0719, float:1.8878723E38)
             java.lang.String r5 = "EventLogOriginalCaptionEmpty"
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r5, r3)
             r1.description = r3
-            goto L_0x0cce
-        L_0x0cc6:
+            goto L_0x0cc6
+        L_0x0cbe:
             org.telegram.tgnet.TLRPC$MessageMedia r3 = r0.media
             org.telegram.tgnet.TLRPC$WebPage r3 = r3.webpage
             java.lang.String r1 = r1.message
             r3.description = r1
-        L_0x0cce:
+        L_0x0cc6:
             org.telegram.tgnet.TLRPC$ReplyMarkup r1 = r2.reply_markup
             r0.reply_markup = r1
             org.telegram.tgnet.TLRPC$MessageMedia r1 = r0.media
             org.telegram.tgnet.TLRPC$WebPage r1 = r1.webpage
-            if (r1 == 0) goto L_0x0ce3
+            if (r1 == 0) goto L_0x0cdb
             r2 = 10
             r1.flags = r2
             r7 = r23
             r1.display_url = r7
             r1.url = r7
-            goto L_0x0ce5
-        L_0x0ce3:
+            goto L_0x0cdd
+        L_0x0cdb:
             r7 = r23
-        L_0x0ce5:
+        L_0x0cdd:
             r8 = r28
-            goto L_0x147f
-        L_0x0ce9:
+            goto L_0x1477
+        L_0x0ce1:
             r7 = r8
             boolean r0 = r2 instanceof org.telegram.tgnet.TLRPC$TL_channelAdminLogEventActionChangeStickerSet
-            if (r0 == 0) goto L_0x0d21
+            if (r0 == 0) goto L_0x0d19
             r0 = r2
             org.telegram.tgnet.TLRPC$TL_channelAdminLogEventActionChangeStickerSet r0 = (org.telegram.tgnet.TLRPC$TL_channelAdminLogEventActionChangeStickerSet) r0
             org.telegram.tgnet.TLRPC$InputStickerSet r0 = r0.new_stickerset
             org.telegram.tgnet.TLRPC$TL_channelAdminLogEventActionChangeStickerSet r2 = (org.telegram.tgnet.TLRPC$TL_channelAdminLogEventActionChangeStickerSet) r2
             org.telegram.tgnet.TLRPC$InputStickerSet r1 = r2.new_stickerset
-            if (r0 == 0) goto L_0x0d0e
+            if (r0 == 0) goto L_0x0d06
             boolean r0 = r0 instanceof org.telegram.tgnet.TLRPC$TL_inputStickerSetEmpty
-            if (r0 == 0) goto L_0x0cfe
-            goto L_0x0d0e
-        L_0x0cfe:
-            r0 = 2131625677(0x7f0e06cd, float:1.8878569E38)
+            if (r0 == 0) goto L_0x0cf6
+            goto L_0x0d06
+        L_0x0cf6:
+            r0 = 2131625708(0x7f0e06ec, float:1.8878632E38)
             java.lang.String r1 = "EventLogChangedStickersSet"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             java.lang.CharSequence r0 = replaceWithLink(r0, r15, r10)
             r6.messageText = r0
-            goto L_0x0d1d
-        L_0x0d0e:
-            r0 = 2131625749(0x7f0e0715, float:1.8878715E38)
+            goto L_0x0d15
+        L_0x0d06:
+            r0 = 2131625780(0x7f0e0734, float:1.8878778E38)
             java.lang.String r1 = "EventLogRemovedStickersSet"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             java.lang.CharSequence r0 = replaceWithLink(r0, r15, r10)
             r6.messageText = r0
-        L_0x0d1d:
+        L_0x0d15:
             r8 = r28
-            goto L_0x147e
-        L_0x0d21:
+            goto L_0x1476
+        L_0x0d19:
             boolean r0 = r2 instanceof org.telegram.tgnet.TLRPC$TL_channelAdminLogEventActionChangeLocation
-            if (r0 == 0) goto L_0x0d57
+            if (r0 == 0) goto L_0x0d4f
             org.telegram.tgnet.TLRPC$TL_channelAdminLogEventActionChangeLocation r2 = (org.telegram.tgnet.TLRPC$TL_channelAdminLogEventActionChangeLocation) r2
             org.telegram.tgnet.TLRPC$ChannelLocation r0 = r2.new_value
             boolean r1 = r0 instanceof org.telegram.tgnet.TLRPC$TL_channelLocationEmpty
-            if (r1 == 0) goto L_0x0d3d
-            r0 = 2131625748(0x7f0e0714, float:1.8878713E38)
+            if (r1 == 0) goto L_0x0d35
+            r0 = 2131625779(0x7f0e0733, float:1.8878776E38)
             java.lang.String r1 = "EventLogRemovedLocation"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             java.lang.CharSequence r0 = replaceWithLink(r0, r15, r10)
             r6.messageText = r0
-            goto L_0x0d1d
-        L_0x0d3d:
+            goto L_0x0d15
+        L_0x0d35:
             org.telegram.tgnet.TLRPC$TL_channelLocation r0 = (org.telegram.tgnet.TLRPC$TL_channelLocation) r0
-            r1 = 2131625675(0x7f0e06cb, float:1.8878565E38)
+            r1 = 2131625706(0x7f0e06ea, float:1.8878628E38)
             r2 = 1
             java.lang.Object[] r3 = new java.lang.Object[r2]
             java.lang.String r0 = r0.address
@@ -3718,42 +3724,42 @@ public class MessageObject {
             java.lang.String r0 = org.telegram.messenger.LocaleController.formatString(r0, r1, r3)
             java.lang.CharSequence r0 = replaceWithLink(r0, r15, r10)
             r6.messageText = r0
-            goto L_0x0d1d
-        L_0x0d57:
+            goto L_0x0d15
+        L_0x0d4f:
             boolean r0 = r2 instanceof org.telegram.tgnet.TLRPC$TL_channelAdminLogEventActionToggleSlowMode
             r1 = 3600(0xe10, float:5.045E-42)
-            if (r0 == 0) goto L_0x0daa
+            if (r0 == 0) goto L_0x0da2
             org.telegram.tgnet.TLRPC$TL_channelAdminLogEventActionToggleSlowMode r2 = (org.telegram.tgnet.TLRPC$TL_channelAdminLogEventActionToggleSlowMode) r2
             int r0 = r2.new_value
-            if (r0 != 0) goto L_0x0d73
-            r0 = 2131625773(0x7f0e072d, float:1.8878763E38)
+            if (r0 != 0) goto L_0x0d6b
+            r0 = 2131625804(0x7f0e074c, float:1.8878826E38)
             java.lang.String r1 = "EventLogToggledSlowmodeOff"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             java.lang.CharSequence r0 = replaceWithLink(r0, r15, r10)
             r6.messageText = r0
-            goto L_0x0d1d
-        L_0x0d73:
+            goto L_0x0d15
+        L_0x0d6b:
             r2 = 60
-            if (r0 >= r2) goto L_0x0d81
+            if (r0 >= r2) goto L_0x0d79
             r3 = 0
             java.lang.Object[] r1 = new java.lang.Object[r3]
             java.lang.String r2 = "Seconds"
             java.lang.String r0 = org.telegram.messenger.LocaleController.formatPluralString(r2, r0, r1)
-            goto L_0x0d94
-        L_0x0d81:
+            goto L_0x0d8c
+        L_0x0d79:
             r3 = 0
-            if (r0 >= r1) goto L_0x0d8c
+            if (r0 >= r1) goto L_0x0d84
             int r0 = r0 / r2
             java.lang.Object[] r1 = new java.lang.Object[r3]
             java.lang.String r0 = org.telegram.messenger.LocaleController.formatPluralString(r5, r0, r1)
-            goto L_0x0d94
-        L_0x0d8c:
+            goto L_0x0d8c
+        L_0x0d84:
             int r0 = r0 / r2
             int r0 = r0 / r2
             java.lang.Object[] r1 = new java.lang.Object[r3]
             java.lang.String r0 = org.telegram.messenger.LocaleController.formatPluralString(r12, r0, r1)
-        L_0x0d94:
-            r1 = 2131625774(0x7f0e072e, float:1.8878765E38)
+        L_0x0d8c:
+            r1 = 2131625805(0x7f0e074d, float:1.8878828E38)
             r2 = 1
             java.lang.Object[] r5 = new java.lang.Object[r2]
             r5[r3] = r0
@@ -3761,187 +3767,187 @@ public class MessageObject {
             java.lang.String r0 = org.telegram.messenger.LocaleController.formatString(r0, r1, r5)
             java.lang.CharSequence r0 = replaceWithLink(r0, r15, r10)
             r6.messageText = r0
-            goto L_0x0d1d
-        L_0x0daa:
+            goto L_0x0d15
+        L_0x0da2:
             boolean r0 = r2 instanceof org.telegram.tgnet.TLRPC$TL_channelAdminLogEventActionStartGroupCall
-            if (r0 == 0) goto L_0x0dde
+            if (r0 == 0) goto L_0x0dd6
             boolean r0 = org.telegram.messenger.ChatObject.isChannel(r31)
-            if (r0 == 0) goto L_0x0dcd
+            if (r0 == 0) goto L_0x0dc5
             boolean r0 = r4.megagroup
-            if (r0 == 0) goto L_0x0dbc
+            if (r0 == 0) goto L_0x0db4
             boolean r0 = r4.gigagroup
-            if (r0 == 0) goto L_0x0dcd
-        L_0x0dbc:
-            r0 = 2131625763(0x7f0e0723, float:1.8878743E38)
+            if (r0 == 0) goto L_0x0dc5
+        L_0x0db4:
+            r0 = 2131625794(0x7f0e0742, float:1.8878806E38)
             java.lang.String r1 = "EventLogStartedLiveStream"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             java.lang.CharSequence r0 = replaceWithLink(r0, r15, r10)
             r6.messageText = r0
-            goto L_0x0d1d
-        L_0x0dcd:
-            r0 = 2131625764(0x7f0e0724, float:1.8878745E38)
+            goto L_0x0d15
+        L_0x0dc5:
+            r0 = 2131625795(0x7f0e0743, float:1.8878808E38)
             java.lang.String r1 = "EventLogStartedVoiceChat"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             java.lang.CharSequence r0 = replaceWithLink(r0, r15, r10)
             r6.messageText = r0
-            goto L_0x0d1d
-        L_0x0dde:
+            goto L_0x0d15
+        L_0x0dd6:
             boolean r0 = r2 instanceof org.telegram.tgnet.TLRPC$TL_channelAdminLogEventActionDiscardGroupCall
-            if (r0 == 0) goto L_0x0e12
+            if (r0 == 0) goto L_0x0e0a
             boolean r0 = org.telegram.messenger.ChatObject.isChannel(r31)
-            if (r0 == 0) goto L_0x0e01
+            if (r0 == 0) goto L_0x0df9
             boolean r0 = r4.megagroup
-            if (r0 == 0) goto L_0x0df0
+            if (r0 == 0) goto L_0x0de8
             boolean r0 = r4.gigagroup
-            if (r0 == 0) goto L_0x0e01
-        L_0x0df0:
-            r0 = 2131625701(0x7f0e06e5, float:1.8878617E38)
+            if (r0 == 0) goto L_0x0df9
+        L_0x0de8:
+            r0 = 2131625732(0x7f0e0704, float:1.887868E38)
             java.lang.String r1 = "EventLogEndedLiveStream"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             java.lang.CharSequence r0 = replaceWithLink(r0, r15, r10)
             r6.messageText = r0
-            goto L_0x0d1d
-        L_0x0e01:
-            r0 = 2131625702(0x7f0e06e6, float:1.887862E38)
+            goto L_0x0d15
+        L_0x0df9:
+            r0 = 2131625733(0x7f0e0705, float:1.8878682E38)
             java.lang.String r1 = "EventLogEndedVoiceChat"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             java.lang.CharSequence r0 = replaceWithLink(r0, r15, r10)
             r6.messageText = r0
-            goto L_0x0d1d
-        L_0x0e12:
+            goto L_0x0d15
+        L_0x0e0a:
             boolean r0 = r2 instanceof org.telegram.tgnet.TLRPC$TL_channelAdminLogEventActionParticipantMute
-            if (r0 == 0) goto L_0x0e5b
+            if (r0 == 0) goto L_0x0e53
             org.telegram.tgnet.TLRPC$TL_channelAdminLogEventActionParticipantMute r2 = (org.telegram.tgnet.TLRPC$TL_channelAdminLogEventActionParticipantMute) r2
             org.telegram.tgnet.TLRPC$TL_groupCallParticipant r0 = r2.participant
             org.telegram.tgnet.TLRPC$Peer r0 = r0.peer
             long r0 = getPeerId(r0)
             r2 = 0
             int r5 = (r0 > r2 ? 1 : (r0 == r2 ? 0 : -1))
-            if (r5 <= 0) goto L_0x0e35
+            if (r5 <= 0) goto L_0x0e2d
             int r2 = r6.currentAccount
             org.telegram.messenger.MessagesController r2 = org.telegram.messenger.MessagesController.getInstance(r2)
             java.lang.Long r0 = java.lang.Long.valueOf(r0)
             org.telegram.tgnet.TLRPC$User r0 = r2.getUser(r0)
-            goto L_0x0e44
-        L_0x0e35:
+            goto L_0x0e3c
+        L_0x0e2d:
             int r2 = r6.currentAccount
             org.telegram.messenger.MessagesController r2 = org.telegram.messenger.MessagesController.getInstance(r2)
             long r0 = -r0
             java.lang.Long r0 = java.lang.Long.valueOf(r0)
             org.telegram.tgnet.TLRPC$Chat r0 = r2.getChat(r0)
-        L_0x0e44:
-            r1 = 2131625777(0x7f0e0731, float:1.8878772E38)
+        L_0x0e3c:
+            r1 = 2131625808(0x7f0e0750, float:1.8878834E38)
             java.lang.String r2 = "EventLogVoiceChatMuted"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             java.lang.CharSequence r1 = replaceWithLink(r1, r15, r10)
             r6.messageText = r1
             java.lang.CharSequence r0 = replaceWithLink(r1, r13, r0)
             r6.messageText = r0
-            goto L_0x0d1d
-        L_0x0e5b:
+            goto L_0x0d15
+        L_0x0e53:
             boolean r0 = r2 instanceof org.telegram.tgnet.TLRPC$TL_channelAdminLogEventActionParticipantUnmute
-            if (r0 == 0) goto L_0x0ea4
+            if (r0 == 0) goto L_0x0e9c
             org.telegram.tgnet.TLRPC$TL_channelAdminLogEventActionParticipantUnmute r2 = (org.telegram.tgnet.TLRPC$TL_channelAdminLogEventActionParticipantUnmute) r2
             org.telegram.tgnet.TLRPC$TL_groupCallParticipant r0 = r2.participant
             org.telegram.tgnet.TLRPC$Peer r0 = r0.peer
             long r0 = getPeerId(r0)
             r2 = 0
             int r5 = (r0 > r2 ? 1 : (r0 == r2 ? 0 : -1))
-            if (r5 <= 0) goto L_0x0e7e
+            if (r5 <= 0) goto L_0x0e76
             int r2 = r6.currentAccount
             org.telegram.messenger.MessagesController r2 = org.telegram.messenger.MessagesController.getInstance(r2)
             java.lang.Long r0 = java.lang.Long.valueOf(r0)
             org.telegram.tgnet.TLRPC$User r0 = r2.getUser(r0)
-            goto L_0x0e8d
-        L_0x0e7e:
+            goto L_0x0e85
+        L_0x0e76:
             int r2 = r6.currentAccount
             org.telegram.messenger.MessagesController r2 = org.telegram.messenger.MessagesController.getInstance(r2)
             long r0 = -r0
             java.lang.Long r0 = java.lang.Long.valueOf(r0)
             org.telegram.tgnet.TLRPC$Chat r0 = r2.getChat(r0)
-        L_0x0e8d:
-            r1 = 2131625779(0x7f0e0733, float:1.8878776E38)
+        L_0x0e85:
+            r1 = 2131625810(0x7f0e0752, float:1.8878838E38)
             java.lang.String r2 = "EventLogVoiceChatUnmuted"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             java.lang.CharSequence r1 = replaceWithLink(r1, r15, r10)
             r6.messageText = r1
             java.lang.CharSequence r0 = replaceWithLink(r1, r13, r0)
             r6.messageText = r0
-            goto L_0x0d1d
-        L_0x0ea4:
+            goto L_0x0d15
+        L_0x0e9c:
             boolean r0 = r2 instanceof org.telegram.tgnet.TLRPC$TL_channelAdminLogEventActionToggleGroupCallSetting
-            if (r0 == 0) goto L_0x0ed0
+            if (r0 == 0) goto L_0x0ec8
             org.telegram.tgnet.TLRPC$TL_channelAdminLogEventActionToggleGroupCallSetting r2 = (org.telegram.tgnet.TLRPC$TL_channelAdminLogEventActionToggleGroupCallSetting) r2
             boolean r0 = r2.join_muted
-            if (r0 == 0) goto L_0x0ebf
-            r0 = 2131625778(0x7f0e0732, float:1.8878774E38)
+            if (r0 == 0) goto L_0x0eb7
+            r0 = 2131625809(0x7f0e0751, float:1.8878836E38)
             java.lang.String r1 = "EventLogVoiceChatNotAllowedToSpeak"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             java.lang.CharSequence r0 = replaceWithLink(r0, r15, r10)
             r6.messageText = r0
-            goto L_0x0d1d
-        L_0x0ebf:
-            r0 = 2131625776(0x7f0e0730, float:1.887877E38)
+            goto L_0x0d15
+        L_0x0eb7:
+            r0 = 2131625807(0x7f0e074f, float:1.8878832E38)
             java.lang.String r1 = "EventLogVoiceChatAllowedToSpeak"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             java.lang.CharSequence r0 = replaceWithLink(r0, r15, r10)
             r6.messageText = r0
-            goto L_0x0d1d
-        L_0x0ed0:
+            goto L_0x0d15
+        L_0x0ec8:
             boolean r0 = r2 instanceof org.telegram.tgnet.TLRPC$TL_channelAdminLogEventActionParticipantJoinByInvite
-            if (r0 == 0) goto L_0x0ee7
+            if (r0 == 0) goto L_0x0edf
             org.telegram.tgnet.TLRPC$TL_channelAdminLogEventActionParticipantJoinByInvite r2 = (org.telegram.tgnet.TLRPC$TL_channelAdminLogEventActionParticipantJoinByInvite) r2
-            r0 = 2131624184(0x7f0e00f8, float:1.887554E38)
+            r0 = 2131624189(0x7f0e00fd, float:1.887555E38)
             java.lang.String r1 = "ActionInviteUser"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             java.lang.CharSequence r0 = replaceWithLink(r0, r15, r10)
             r6.messageText = r0
-            goto L_0x0d1d
-        L_0x0ee7:
+            goto L_0x0d15
+        L_0x0edf:
             boolean r0 = r2 instanceof org.telegram.tgnet.TLRPC$TL_channelAdminLogEventActionToggleNoForwards
-            if (r0 == 0) goto L_0x0var_
+            if (r0 == 0) goto L_0x0f3e
             org.telegram.tgnet.TLRPC$TL_channelAdminLogEventActionToggleNoForwards r2 = (org.telegram.tgnet.TLRPC$TL_channelAdminLogEventActionToggleNoForwards) r2
             boolean r0 = org.telegram.messenger.ChatObject.isChannel(r31)
-            if (r0 == 0) goto L_0x0ef9
+            if (r0 == 0) goto L_0x0ef1
             boolean r0 = r4.megagroup
-            if (r0 != 0) goto L_0x0ef9
+            if (r0 != 0) goto L_0x0ef1
             r0 = 1
-            goto L_0x0efa
-        L_0x0ef9:
+            goto L_0x0ef2
+        L_0x0ef1:
             r0 = 0
-        L_0x0efa:
+        L_0x0ef2:
             boolean r1 = r2.new_value
-            if (r1 == 0) goto L_0x0var_
+            if (r1 == 0) goto L_0x0f1a
             if (r0 == 0) goto L_0x0var_
             r0 = 2131624172(0x7f0e00ec, float:1.8875516E38)
             java.lang.String r1 = "ActionForwardsRestrictedChannel"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             java.lang.CharSequence r0 = replaceWithLink(r0, r15, r10)
             r6.messageText = r0
-            goto L_0x0d1d
+            goto L_0x0d15
         L_0x0var_:
             r0 = 2131624173(0x7f0e00ed, float:1.8875518E38)
             java.lang.String r1 = "ActionForwardsRestrictedGroup"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             java.lang.CharSequence r0 = replaceWithLink(r0, r15, r10)
             r6.messageText = r0
-            goto L_0x0d1d
-        L_0x0var_:
-            if (r0 == 0) goto L_0x0var_
+            goto L_0x0d15
+        L_0x0f1a:
+            if (r0 == 0) goto L_0x0f2d
             r0 = 2131624170(0x7f0e00ea, float:1.8875512E38)
             java.lang.String r1 = "ActionForwardsEnabledChannel"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             java.lang.CharSequence r0 = replaceWithLink(r0, r15, r10)
             r6.messageText = r0
-            goto L_0x0d1d
-        L_0x0var_:
+            goto L_0x0d15
+        L_0x0f2d:
             r0 = 2131624171(0x7f0e00eb, float:1.8875514E38)
             java.lang.String r1 = "ActionForwardsEnabledGroup"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             java.lang.CharSequence r0 = replaceWithLink(r0, r15, r10)
             r6.messageText = r0
-            goto L_0x0d1d
-        L_0x0var_:
+            goto L_0x0d15
+        L_0x0f3e:
             boolean r0 = r2 instanceof org.telegram.tgnet.TLRPC$TL_channelAdminLogEventActionExportedInviteDelete
             if (r0 == 0) goto L_0x0var_
             org.telegram.tgnet.TLRPC$TL_channelAdminLogEventActionExportedInviteDelete r2 = (org.telegram.tgnet.TLRPC$TL_channelAdminLogEventActionExportedInviteDelete) r2
@@ -3955,12 +3961,12 @@ public class MessageObject {
             org.telegram.tgnet.TLRPC$TL_chatInviteExported r1 = r2.invite
             java.lang.CharSequence r0 = replaceWithLink(r0, r13, r1)
             r6.messageText = r0
-            goto L_0x0d1d
+            goto L_0x0d15
         L_0x0var_:
             boolean r0 = r2 instanceof org.telegram.tgnet.TLRPC$TL_channelAdminLogEventActionExportedInviteRevoke
             if (r0 == 0) goto L_0x0var_
             org.telegram.tgnet.TLRPC$TL_channelAdminLogEventActionExportedInviteRevoke r2 = (org.telegram.tgnet.TLRPC$TL_channelAdminLogEventActionExportedInviteRevoke) r2
-            r0 = 2131624209(0x7f0e0111, float:1.8875591E38)
+            r0 = 2131624214(0x7f0e0116, float:1.8875601E38)
             r1 = 1
             java.lang.Object[] r3 = new java.lang.Object[r1]
             org.telegram.tgnet.TLRPC$TL_chatInviteExported r1 = r2.invite
@@ -3974,18 +3980,18 @@ public class MessageObject {
             org.telegram.tgnet.TLRPC$TL_chatInviteExported r1 = r2.invite
             java.lang.CharSequence r0 = replaceWithLink(r0, r13, r1)
             r6.messageText = r0
-            goto L_0x0d1d
+            goto L_0x0d15
         L_0x0var_:
             boolean r0 = r2 instanceof org.telegram.tgnet.TLRPC$TL_channelAdminLogEventActionExportedInviteEdit
-            if (r0 == 0) goto L_0x0fe2
+            if (r0 == 0) goto L_0x0fda
             org.telegram.tgnet.TLRPC$TL_channelAdminLogEventActionExportedInviteEdit r2 = (org.telegram.tgnet.TLRPC$TL_channelAdminLogEventActionExportedInviteEdit) r2
             org.telegram.tgnet.TLRPC$TL_chatInviteExported r0 = r2.prev_invite
             java.lang.String r0 = r0.link
-            if (r0 == 0) goto L_0x0fba
+            if (r0 == 0) goto L_0x0fb2
             org.telegram.tgnet.TLRPC$TL_chatInviteExported r1 = r2.new_invite
             java.lang.String r1 = r1.link
             boolean r0 = r0.equals(r1)
-            if (r0 == 0) goto L_0x0fba
+            if (r0 == 0) goto L_0x0fb2
             r0 = 2131624169(0x7f0e00e9, float:1.887551E38)
             r1 = 0
             java.lang.Object[] r3 = new java.lang.Object[r1]
@@ -3993,8 +3999,8 @@ public class MessageObject {
             java.lang.String r0 = org.telegram.messenger.LocaleController.formatString(r5, r0, r3)
             java.lang.CharSequence r0 = replaceWithLink(r0, r15, r10)
             r6.messageText = r0
-            goto L_0x0fcc
-        L_0x0fba:
+            goto L_0x0fc4
+        L_0x0fb2:
             r1 = 0
             r0 = 2131624168(0x7f0e00e8, float:1.8875508E38)
             java.lang.Object[] r3 = new java.lang.Object[r1]
@@ -4002,7 +4008,7 @@ public class MessageObject {
             java.lang.String r0 = org.telegram.messenger.LocaleController.formatString(r1, r0, r3)
             java.lang.CharSequence r0 = replaceWithLink(r0, r15, r10)
             r6.messageText = r0
-        L_0x0fcc:
+        L_0x0fc4:
             java.lang.CharSequence r0 = r6.messageText
             org.telegram.tgnet.TLRPC$TL_chatInviteExported r1 = r2.prev_invite
             java.lang.CharSequence r0 = replaceWithLink(r0, r13, r1)
@@ -4011,47 +4017,47 @@ public class MessageObject {
             java.lang.String r2 = "un3"
             java.lang.CharSequence r0 = replaceWithLink(r0, r2, r1)
             r6.messageText = r0
-            goto L_0x0d1d
-        L_0x0fe2:
+            goto L_0x0d15
+        L_0x0fda:
             boolean r0 = r2 instanceof org.telegram.tgnet.TLRPC$TL_channelAdminLogEventActionParticipantVolume
-            if (r0 == 0) goto L_0x1052
+            if (r0 == 0) goto L_0x104a
             org.telegram.tgnet.TLRPC$TL_channelAdminLogEventActionParticipantVolume r2 = (org.telegram.tgnet.TLRPC$TL_channelAdminLogEventActionParticipantVolume) r2
             org.telegram.tgnet.TLRPC$TL_groupCallParticipant r0 = r2.participant
             org.telegram.tgnet.TLRPC$Peer r0 = r0.peer
             long r0 = getPeerId(r0)
             r8 = 0
             int r3 = (r0 > r8 ? 1 : (r0 == r8 ? 0 : -1))
-            if (r3 <= 0) goto L_0x1005
+            if (r3 <= 0) goto L_0x0ffd
             int r3 = r6.currentAccount
             org.telegram.messenger.MessagesController r3 = org.telegram.messenger.MessagesController.getInstance(r3)
             java.lang.Long r0 = java.lang.Long.valueOf(r0)
             org.telegram.tgnet.TLRPC$User r0 = r3.getUser(r0)
-            goto L_0x1014
-        L_0x1005:
+            goto L_0x100c
+        L_0x0ffd:
             int r3 = r6.currentAccount
             org.telegram.messenger.MessagesController r3 = org.telegram.messenger.MessagesController.getInstance(r3)
             long r0 = -r0
             java.lang.Long r0 = java.lang.Long.valueOf(r0)
             org.telegram.tgnet.TLRPC$Chat r0 = r3.getChat(r0)
-        L_0x1014:
+        L_0x100c:
             org.telegram.tgnet.TLRPC$TL_groupCallParticipant r1 = r2.participant
             int r1 = org.telegram.messenger.ChatObject.getParticipantVolume(r1)
             double r1 = (double) r1
             r8 = 4636737291354636288(0xNUM, double:100.0)
             java.lang.Double.isNaN(r1)
             double r1 = r1 / r8
-            r3 = 2131624225(0x7f0e0121, float:1.8875624E38)
+            r3 = 2131624230(0x7f0e0126, float:1.8875634E38)
             r5 = 1
             java.lang.Object[] r8 = new java.lang.Object[r5]
             r11 = 0
             int r5 = (r1 > r11 ? 1 : (r1 == r11 ? 0 : -1))
-            if (r5 <= 0) goto L_0x1034
+            if (r5 <= 0) goto L_0x102c
             r11 = 4607182418800017408(0x3ffNUM, double:1.0)
             double r1 = java.lang.Math.max(r1, r11)
-            goto L_0x1036
-        L_0x1034:
+            goto L_0x102e
+        L_0x102c:
             r1 = 0
-        L_0x1036:
+        L_0x102e:
             int r1 = (int) r1
             java.lang.Integer r1 = java.lang.Integer.valueOf(r1)
             r2 = 0
@@ -4062,16 +4068,16 @@ public class MessageObject {
             r6.messageText = r1
             java.lang.CharSequence r0 = replaceWithLink(r1, r13, r0)
             r6.messageText = r0
-            goto L_0x0d1d
-        L_0x1052:
+            goto L_0x0d15
+        L_0x104a:
             boolean r0 = r2 instanceof org.telegram.tgnet.TLRPC$TL_channelAdminLogEventActionChangeHistoryTTL
-            if (r0 == 0) goto L_0x10e1
+            if (r0 == 0) goto L_0x10d9
             org.telegram.tgnet.TLRPC$TL_channelAdminLogEventActionChangeHistoryTTL r2 = (org.telegram.tgnet.TLRPC$TL_channelAdminLogEventActionChangeHistoryTTL) r2
             boolean r0 = r4.megagroup
-            if (r0 != 0) goto L_0x1084
+            if (r0 != 0) goto L_0x107c
             int r0 = r2.new_value
-            if (r0 == 0) goto L_0x1077
-            r1 = 2131624211(0x7f0e0113, float:1.8875595E38)
+            if (r0 == 0) goto L_0x106f
+            r1 = 2131624216(0x7f0e0118, float:1.8875605E38)
             r2 = 1
             java.lang.Object[] r3 = new java.lang.Object[r2]
             java.lang.String r0 = org.telegram.messenger.LocaleController.formatTTLString(r0)
@@ -4080,52 +4086,52 @@ public class MessageObject {
             java.lang.String r0 = "ActionTTLChannelChanged"
             java.lang.String r0 = org.telegram.messenger.LocaleController.formatString(r0, r1, r3)
             r6.messageText = r0
-            goto L_0x0d1d
-        L_0x1077:
-            r0 = 2131624212(0x7f0e0114, float:1.8875597E38)
+            goto L_0x0d15
+        L_0x106f:
+            r0 = 2131624217(0x7f0e0119, float:1.8875607E38)
             java.lang.String r1 = "ActionTTLChannelDisabled"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             r6.messageText = r0
-            goto L_0x0d1d
-        L_0x1084:
+            goto L_0x0d15
+        L_0x107c:
             int r0 = r2.new_value
-            if (r0 != 0) goto L_0x1099
-            r0 = 2131624213(0x7f0e0115, float:1.88756E38)
+            if (r0 != 0) goto L_0x1091
+            r0 = 2131624218(0x7f0e011a, float:1.887561E38)
             java.lang.String r1 = "ActionTTLDisabled"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             java.lang.CharSequence r0 = replaceWithLink(r0, r15, r10)
             r6.messageText = r0
-            goto L_0x0d1d
-        L_0x1099:
+            goto L_0x0d15
+        L_0x1091:
             r2 = 86400(0x15180, float:1.21072E-40)
-            if (r0 <= r2) goto L_0x10ac
+            if (r0 <= r2) goto L_0x10a4
             r1 = 86400(0x15180, float:1.21072E-40)
             int r0 = r0 / r1
             r2 = 0
             java.lang.Object[] r1 = new java.lang.Object[r2]
             java.lang.String r3 = "Days"
             java.lang.String r0 = org.telegram.messenger.LocaleController.formatPluralString(r3, r0, r1)
-            goto L_0x10cb
-        L_0x10ac:
+            goto L_0x10c3
+        L_0x10a4:
             r2 = 0
-            if (r0 < r1) goto L_0x10b7
+            if (r0 < r1) goto L_0x10af
             int r0 = r0 / r1
             java.lang.Object[] r1 = new java.lang.Object[r2]
             java.lang.String r0 = org.telegram.messenger.LocaleController.formatPluralString(r12, r0, r1)
-            goto L_0x10cb
-        L_0x10b7:
+            goto L_0x10c3
+        L_0x10af:
             r1 = 60
-            if (r0 < r1) goto L_0x10c3
+            if (r0 < r1) goto L_0x10bb
             int r0 = r0 / r1
             java.lang.Object[] r1 = new java.lang.Object[r2]
             java.lang.String r0 = org.telegram.messenger.LocaleController.formatPluralString(r5, r0, r1)
-            goto L_0x10cb
-        L_0x10c3:
+            goto L_0x10c3
+        L_0x10bb:
             java.lang.Object[] r1 = new java.lang.Object[r2]
             java.lang.String r3 = "Seconds"
             java.lang.String r0 = org.telegram.messenger.LocaleController.formatPluralString(r3, r0, r1)
-        L_0x10cb:
-            r1 = 2131624210(0x7f0e0112, float:1.8875593E38)
+        L_0x10c3:
+            r1 = 2131624215(0x7f0e0117, float:1.8875603E38)
             r3 = 1
             java.lang.Object[] r5 = new java.lang.Object[r3]
             r5[r2] = r0
@@ -4133,25 +4139,25 @@ public class MessageObject {
             java.lang.String r0 = org.telegram.messenger.LocaleController.formatString(r0, r1, r5)
             java.lang.CharSequence r0 = replaceWithLink(r0, r15, r10)
             r6.messageText = r0
-            goto L_0x0d1d
-        L_0x10e1:
+            goto L_0x0d15
+        L_0x10d9:
             boolean r0 = r2 instanceof org.telegram.tgnet.TLRPC$TL_channelAdminLogEventActionParticipantJoinByRequest
-            if (r0 == 0) goto L_0x1157
+            if (r0 == 0) goto L_0x114f
             org.telegram.tgnet.TLRPC$TL_channelAdminLogEventActionParticipantJoinByRequest r2 = (org.telegram.tgnet.TLRPC$TL_channelAdminLogEventActionParticipantJoinByRequest) r2
             org.telegram.tgnet.TLRPC$ExportedChatInvite r0 = r2.invite
             boolean r1 = r0 instanceof org.telegram.tgnet.TLRPC$TL_chatInviteExported
-            if (r1 == 0) goto L_0x10f9
+            if (r1 == 0) goto L_0x10f1
             org.telegram.tgnet.TLRPC$TL_chatInviteExported r0 = (org.telegram.tgnet.TLRPC$TL_chatInviteExported) r0
             java.lang.String r0 = r0.link
             java.lang.String r1 = "https://t.me/+PublicChat"
             boolean r0 = r1.equals(r0)
-            if (r0 != 0) goto L_0x10ff
-        L_0x10f9:
+            if (r0 != 0) goto L_0x10f7
+        L_0x10f1:
             org.telegram.tgnet.TLRPC$ExportedChatInvite r0 = r2.invite
             boolean r0 = r0 instanceof org.telegram.tgnet.TLRPC$TL_chatInvitePublicJoinRequests
-            if (r0 == 0) goto L_0x1126
-        L_0x10ff:
-            r0 = 2131626333(0x7f0e095d, float:1.88799E38)
+            if (r0 == 0) goto L_0x111e
+        L_0x10f7:
+            r0 = 2131626370(0x7f0e0982, float:1.8879974E38)
             java.lang.String r1 = "JoinedViaRequestApproved"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             java.lang.CharSequence r0 = replaceWithLink(r0, r15, r10)
@@ -4163,9 +4169,9 @@ public class MessageObject {
             org.telegram.tgnet.TLRPC$User r1 = r1.getUser(r2)
             java.lang.CharSequence r0 = replaceWithLink(r0, r13, r1)
             r6.messageText = r0
-            goto L_0x0d1d
-        L_0x1126:
-            r0 = 2131626332(0x7f0e095c, float:1.8879897E38)
+            goto L_0x0d15
+        L_0x111e:
+            r0 = 2131626369(0x7f0e0981, float:1.8879972E38)
             java.lang.String r1 = "JoinedViaInviteLinkApproved"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             java.lang.CharSequence r0 = replaceWithLink(r0, r15, r10)
@@ -4181,21 +4187,21 @@ public class MessageObject {
             java.lang.String r2 = "un3"
             java.lang.CharSequence r0 = replaceWithLink(r0, r2, r1)
             r6.messageText = r0
-            goto L_0x0d1d
-        L_0x1157:
+            goto L_0x0d15
+        L_0x114f:
             boolean r0 = r2 instanceof org.telegram.tgnet.TLRPC$TL_channelAdminLogEventActionSendMessage
-            if (r0 == 0) goto L_0x1170
+            if (r0 == 0) goto L_0x1168
             org.telegram.tgnet.TLRPC$TL_channelAdminLogEventActionSendMessage r2 = (org.telegram.tgnet.TLRPC$TL_channelAdminLogEventActionSendMessage) r2
             org.telegram.tgnet.TLRPC$Message r0 = r2.message
-            r1 = 2131625762(0x7f0e0722, float:1.8878741E38)
+            r1 = 2131625793(0x7f0e0741, float:1.8878804E38)
             java.lang.String r2 = "EventLogSendMessages"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             java.lang.CharSequence r1 = replaceWithLink(r1, r15, r10)
             r6.messageText = r1
-            goto L_0x0ce5
-        L_0x1170:
+            goto L_0x0cdd
+        L_0x1168:
             boolean r0 = r2 instanceof org.telegram.tgnet.TLRPC$TL_channelAdminLogEventActionChangeAvailableReactions
-            if (r0 == 0) goto L_0x11a2
+            if (r0 == 0) goto L_0x119a
             org.telegram.tgnet.TLRPC$TL_channelAdminLogEventActionChangeAvailableReactions r2 = (org.telegram.tgnet.TLRPC$TL_channelAdminLogEventActionChangeAvailableReactions) r2
             java.util.ArrayList<java.lang.String> r0 = r2.prev_value
             java.lang.String r0 = android.text.TextUtils.join(r11, r0)
@@ -4204,7 +4210,7 @@ public class MessageObject {
             org.telegram.tgnet.TLRPC$TL_channelAdminLogEventActionChangeAvailableReactions r1 = (org.telegram.tgnet.TLRPC$TL_channelAdminLogEventActionChangeAvailableReactions) r1
             java.util.ArrayList<java.lang.String> r1 = r1.new_value
             java.lang.String r1 = android.text.TextUtils.join(r11, r1)
-            r2 = 2131624207(0x7f0e010f, float:1.8875587E38)
+            r2 = 2131624212(0x7f0e0114, float:1.8875597E38)
             r3 = 2
             java.lang.Object[] r3 = new java.lang.Object[r3]
             r5 = 0
@@ -4215,8 +4221,8 @@ public class MessageObject {
             java.lang.String r0 = org.telegram.messenger.LocaleController.formatString(r0, r2, r3)
             java.lang.CharSequence r0 = replaceWithLink(r0, r15, r10)
             r6.messageText = r0
-            goto L_0x147e
-        L_0x11a2:
+            goto L_0x1476
+        L_0x119a:
             r8 = r28
             java.lang.StringBuilder r0 = new java.lang.StringBuilder
             r0.<init>()
@@ -4226,22 +4232,22 @@ public class MessageObject {
             r0.append(r1)
             java.lang.String r0 = r0.toString()
             r6.messageText = r0
-            goto L_0x147e
-        L_0x11bb:
+            goto L_0x1476
+        L_0x11b3:
             r4 = r0
             r8 = r7
             r7 = r14
             boolean r0 = r2 instanceof org.telegram.tgnet.TLRPC$TL_channelAdminLogEventActionParticipantToggleAdmin
-            if (r0 == 0) goto L_0x11c9
+            if (r0 == 0) goto L_0x11c1
             org.telegram.tgnet.TLRPC$TL_channelAdminLogEventActionParticipantToggleAdmin r2 = (org.telegram.tgnet.TLRPC$TL_channelAdminLogEventActionParticipantToggleAdmin) r2
             org.telegram.tgnet.TLRPC$ChannelParticipant r0 = r2.prev_participant
             org.telegram.tgnet.TLRPC$ChannelParticipant r1 = r2.new_participant
-            goto L_0x11cf
-        L_0x11c9:
+            goto L_0x11c7
+        L_0x11c1:
             org.telegram.tgnet.TLRPC$TL_channelAdminLogEventActionParticipantToggleBan r2 = (org.telegram.tgnet.TLRPC$TL_channelAdminLogEventActionParticipantToggleBan) r2
             org.telegram.tgnet.TLRPC$ChannelParticipant r0 = r2.prev_participant
             org.telegram.tgnet.TLRPC$ChannelParticipant r1 = r2.new_participant
-        L_0x11cf:
+        L_0x11c7:
             org.telegram.tgnet.TLRPC$TL_message r2 = new org.telegram.tgnet.TLRPC$TL_message
             r2.<init>()
             r6.messageOwner = r2
@@ -4249,24 +4255,24 @@ public class MessageObject {
             long r2 = getPeerId(r2)
             r11 = 0
             int r5 = (r2 > r11 ? 1 : (r2 == r11 ? 0 : -1))
-            if (r5 <= 0) goto L_0x11f1
+            if (r5 <= 0) goto L_0x11e9
             int r5 = r6.currentAccount
             org.telegram.messenger.MessagesController r5 = org.telegram.messenger.MessagesController.getInstance(r5)
             java.lang.Long r2 = java.lang.Long.valueOf(r2)
             org.telegram.tgnet.TLRPC$User r2 = r5.getUser(r2)
-            goto L_0x1200
-        L_0x11f1:
+            goto L_0x11f8
+        L_0x11e9:
             int r5 = r6.currentAccount
             org.telegram.messenger.MessagesController r5 = org.telegram.messenger.MessagesController.getInstance(r5)
             long r2 = -r2
             java.lang.Long r2 = java.lang.Long.valueOf(r2)
             org.telegram.tgnet.TLRPC$User r2 = r5.getUser(r2)
-        L_0x1200:
+        L_0x11f8:
             boolean r3 = r0 instanceof org.telegram.tgnet.TLRPC$TL_channelParticipantCreator
-            if (r3 != 0) goto L_0x122e
+            if (r3 != 0) goto L_0x1226
             boolean r3 = r1 instanceof org.telegram.tgnet.TLRPC$TL_channelParticipantCreator
-            if (r3 == 0) goto L_0x122e
-            r0 = 2131625676(0x7f0e06cc, float:1.8878567E38)
+            if (r3 == 0) goto L_0x1226
+            r0 = 2131625707(0x7f0e06eb, float:1.887863E38)
             java.lang.String r1 = "EventLogChangedOwnership"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             int r1 = r0.indexOf(r9)
@@ -4280,29 +4286,29 @@ public class MessageObject {
             r9[r2] = r1
             java.lang.String r0 = java.lang.String.format(r0, r9)
             r3.<init>(r0)
-            goto L_0x1478
-        L_0x122e:
+            goto L_0x1470
+        L_0x1226:
             org.telegram.tgnet.TLRPC$TL_chatAdminRights r3 = r0.admin_rights
             org.telegram.tgnet.TLRPC$TL_chatAdminRights r5 = r1.admin_rights
-            if (r3 != 0) goto L_0x1239
+            if (r3 != 0) goto L_0x1231
             org.telegram.tgnet.TLRPC$TL_chatAdminRights r3 = new org.telegram.tgnet.TLRPC$TL_chatAdminRights
             r3.<init>()
-        L_0x1239:
-            if (r5 != 0) goto L_0x1240
+        L_0x1231:
+            if (r5 != 0) goto L_0x1238
             org.telegram.tgnet.TLRPC$TL_chatAdminRights r5 = new org.telegram.tgnet.TLRPC$TL_chatAdminRights
             r5.<init>()
-        L_0x1240:
+        L_0x1238:
             boolean r11 = r5.other
-            if (r11 == 0) goto L_0x124e
-            r11 = 2131625737(0x7f0e0709, float:1.887869E38)
+            if (r11 == 0) goto L_0x1246
+            r11 = 2131625768(0x7f0e0728, float:1.8878753E38)
             java.lang.String r12 = "EventLogPromotedNoRights"
             java.lang.String r11 = org.telegram.messenger.LocaleController.getString(r12, r11)
-            goto L_0x1257
-        L_0x124e:
-            r11 = 2131625728(0x7f0e0700, float:1.8878672E38)
+            goto L_0x124f
+        L_0x1246:
+            r11 = 2131625759(0x7f0e071f, float:1.8878735E38)
             java.lang.String r12 = "EventLogPromoted"
             java.lang.String r11 = org.telegram.messenger.LocaleController.getString(r12, r11)
-        L_0x1257:
+        L_0x124f:
             int r9 = r11.indexOf(r9)
             java.lang.StringBuilder r12 = new java.lang.StringBuilder
             r13 = 1
@@ -4319,23 +4325,23 @@ public class MessageObject {
             java.lang.String r0 = r0.rank
             java.lang.String r2 = r1.rank
             boolean r0 = android.text.TextUtils.equals(r0, r2)
-            if (r0 != 0) goto L_0x12cd
+            if (r0 != 0) goto L_0x12c5
             java.lang.String r0 = r1.rank
             boolean r0 = android.text.TextUtils.isEmpty(r0)
-            if (r0 == 0) goto L_0x12a7
+            if (r0 == 0) goto L_0x129f
             r0 = 10
             r12.append(r0)
             r2 = 45
             r12.append(r2)
             r9 = 32
             r12.append(r9)
-            r1 = 2131625740(0x7f0e070c, float:1.8878696E38)
+            r1 = 2131625771(0x7f0e072b, float:1.887876E38)
             java.lang.String r11 = "EventLogPromotedRemovedTitle"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r11, r1)
             r12.append(r1)
             r0 = 43
-            goto L_0x12d1
-        L_0x12a7:
+            goto L_0x12c9
+        L_0x129f:
             r0 = 10
             r2 = 45
             r9 = 32
@@ -4343,7 +4349,7 @@ public class MessageObject {
             r0 = 43
             r12.append(r0)
             r12.append(r9)
-            r9 = 2131625742(0x7f0e070e, float:1.88787E38)
+            r9 = 2131625773(0x7f0e072d, float:1.8878763E38)
             r11 = 1
             java.lang.Object[] r13 = new java.lang.Object[r11]
             java.lang.String r1 = r1.rank
@@ -4352,237 +4358,237 @@ public class MessageObject {
             java.lang.String r1 = "EventLogPromotedTitle"
             java.lang.String r1 = org.telegram.messenger.LocaleController.formatString(r1, r9, r13)
             r12.append(r1)
-            goto L_0x12d1
-        L_0x12cd:
+            goto L_0x12c9
+        L_0x12c5:
             r0 = 43
             r2 = 45
-        L_0x12d1:
+        L_0x12c9:
             boolean r1 = r3.change_info
             boolean r9 = r5.change_info
-            if (r1 == r9) goto L_0x1303
+            if (r1 == r9) goto L_0x12fb
             r1 = 10
             r12.append(r1)
             boolean r1 = r5.change_info
-            if (r1 == 0) goto L_0x12e3
+            if (r1 == 0) goto L_0x12db
             r1 = 43
-            goto L_0x12e5
-        L_0x12e3:
+            goto L_0x12dd
+        L_0x12db:
             r1 = 45
-        L_0x12e5:
+        L_0x12dd:
             r12.append(r1)
             r1 = 32
             r12.append(r1)
             boolean r1 = r4.megagroup
-            if (r1 == 0) goto L_0x12f7
-            r1 = 2131625733(0x7f0e0705, float:1.8878682E38)
+            if (r1 == 0) goto L_0x12ef
+            r1 = 2131625764(0x7f0e0724, float:1.8878745E38)
             java.lang.String r9 = "EventLogPromotedChangeGroupInfo"
-            goto L_0x12fc
-        L_0x12f7:
-            r1 = 2131625732(0x7f0e0704, float:1.887868E38)
+            goto L_0x12f4
+        L_0x12ef:
+            r1 = 2131625763(0x7f0e0723, float:1.8878743E38)
             java.lang.String r9 = "EventLogPromotedChangeChannelInfo"
-        L_0x12fc:
+        L_0x12f4:
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r9, r1)
             r12.append(r1)
-        L_0x1303:
+        L_0x12fb:
             boolean r1 = r4.megagroup
-            if (r1 != 0) goto L_0x1357
+            if (r1 != 0) goto L_0x134f
             boolean r1 = r3.post_messages
             boolean r9 = r5.post_messages
-            if (r1 == r9) goto L_0x132f
+            if (r1 == r9) goto L_0x1327
             r1 = 10
             r12.append(r1)
             boolean r1 = r5.post_messages
-            if (r1 == 0) goto L_0x1319
+            if (r1 == 0) goto L_0x1311
             r1 = 43
-            goto L_0x131b
-        L_0x1319:
+            goto L_0x1313
+        L_0x1311:
             r1 = 45
-        L_0x131b:
+        L_0x1313:
             r12.append(r1)
             r1 = 32
             r12.append(r1)
-            r1 = 2131625739(0x7f0e070b, float:1.8878694E38)
+            r1 = 2131625770(0x7f0e072a, float:1.8878757E38)
             java.lang.String r9 = "EventLogPromotedPostMessages"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r9, r1)
             r12.append(r1)
-        L_0x132f:
+        L_0x1327:
             boolean r1 = r3.edit_messages
             boolean r9 = r5.edit_messages
-            if (r1 == r9) goto L_0x1357
+            if (r1 == r9) goto L_0x134f
             r1 = 10
             r12.append(r1)
             boolean r1 = r5.edit_messages
-            if (r1 == 0) goto L_0x1341
+            if (r1 == 0) goto L_0x1339
             r1 = 43
-            goto L_0x1343
-        L_0x1341:
+            goto L_0x133b
+        L_0x1339:
             r1 = 45
-        L_0x1343:
+        L_0x133b:
             r12.append(r1)
             r1 = 32
             r12.append(r1)
-            r1 = 2131625735(0x7f0e0707, float:1.8878686E38)
+            r1 = 2131625766(0x7f0e0726, float:1.887875E38)
             java.lang.String r9 = "EventLogPromotedEditMessages"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r9, r1)
             r12.append(r1)
-        L_0x1357:
+        L_0x134f:
             boolean r1 = r3.delete_messages
             boolean r9 = r5.delete_messages
-            if (r1 == r9) goto L_0x137f
+            if (r1 == r9) goto L_0x1377
             r1 = 10
             r12.append(r1)
             boolean r1 = r5.delete_messages
-            if (r1 == 0) goto L_0x1369
+            if (r1 == 0) goto L_0x1361
             r1 = 43
-            goto L_0x136b
-        L_0x1369:
+            goto L_0x1363
+        L_0x1361:
             r1 = 45
-        L_0x136b:
+        L_0x1363:
             r12.append(r1)
             r1 = 32
             r12.append(r1)
-            r1 = 2131625734(0x7f0e0706, float:1.8878684E38)
+            r1 = 2131625765(0x7f0e0725, float:1.8878747E38)
             java.lang.String r9 = "EventLogPromotedDeleteMessages"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r9, r1)
             r12.append(r1)
-        L_0x137f:
+        L_0x1377:
             boolean r1 = r3.add_admins
             boolean r9 = r5.add_admins
-            if (r1 == r9) goto L_0x13a7
+            if (r1 == r9) goto L_0x139f
             r1 = 10
             r12.append(r1)
             boolean r1 = r5.add_admins
-            if (r1 == 0) goto L_0x1391
+            if (r1 == 0) goto L_0x1389
             r1 = 43
-            goto L_0x1393
-        L_0x1391:
+            goto L_0x138b
+        L_0x1389:
             r1 = 45
-        L_0x1393:
+        L_0x138b:
             r12.append(r1)
             r1 = 32
             r12.append(r1)
-            r1 = 2131625729(0x7f0e0701, float:1.8878674E38)
+            r1 = 2131625760(0x7f0e0720, float:1.8878737E38)
             java.lang.String r9 = "EventLogPromotedAddAdmins"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r9, r1)
             r12.append(r1)
-        L_0x13a7:
+        L_0x139f:
             boolean r1 = r3.anonymous
             boolean r9 = r5.anonymous
-            if (r1 == r9) goto L_0x13cf
+            if (r1 == r9) goto L_0x13c7
             r1 = 10
             r12.append(r1)
             boolean r1 = r5.anonymous
-            if (r1 == 0) goto L_0x13b9
+            if (r1 == 0) goto L_0x13b1
             r1 = 43
-            goto L_0x13bb
-        L_0x13b9:
+            goto L_0x13b3
+        L_0x13b1:
             r1 = 45
-        L_0x13bb:
+        L_0x13b3:
             r12.append(r1)
             r1 = 32
             r12.append(r1)
-            r1 = 2131625741(0x7f0e070d, float:1.8878699E38)
+            r1 = 2131625772(0x7f0e072c, float:1.8878761E38)
             java.lang.String r9 = "EventLogPromotedSendAnonymously"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r9, r1)
             r12.append(r1)
-        L_0x13cf:
+        L_0x13c7:
             boolean r1 = r4.megagroup
-            if (r1 == 0) goto L_0x1423
+            if (r1 == 0) goto L_0x141b
             boolean r1 = r3.ban_users
             boolean r9 = r5.ban_users
-            if (r1 == r9) goto L_0x13fb
+            if (r1 == r9) goto L_0x13f3
             r1 = 10
             r12.append(r1)
             boolean r1 = r5.ban_users
-            if (r1 == 0) goto L_0x13e5
+            if (r1 == 0) goto L_0x13dd
             r1 = 43
-            goto L_0x13e7
-        L_0x13e5:
+            goto L_0x13df
+        L_0x13dd:
             r1 = 45
-        L_0x13e7:
+        L_0x13df:
             r12.append(r1)
             r1 = 32
             r12.append(r1)
-            r1 = 2131625731(0x7f0e0703, float:1.8878678E38)
+            r1 = 2131625762(0x7f0e0722, float:1.8878741E38)
             java.lang.String r9 = "EventLogPromotedBanUsers"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r9, r1)
             r12.append(r1)
-        L_0x13fb:
+        L_0x13f3:
             boolean r1 = r3.manage_call
             boolean r9 = r5.manage_call
-            if (r1 == r9) goto L_0x1423
+            if (r1 == r9) goto L_0x141b
             r1 = 10
             r12.append(r1)
             boolean r1 = r5.manage_call
-            if (r1 == 0) goto L_0x140d
+            if (r1 == 0) goto L_0x1405
             r1 = 43
-            goto L_0x140f
-        L_0x140d:
+            goto L_0x1407
+        L_0x1405:
             r1 = 45
-        L_0x140f:
+        L_0x1407:
             r12.append(r1)
             r1 = 32
             r12.append(r1)
-            r1 = 2131625736(0x7f0e0708, float:1.8878688E38)
+            r1 = 2131625767(0x7f0e0727, float:1.8878751E38)
             java.lang.String r9 = "EventLogPromotedManageCall"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r9, r1)
             r12.append(r1)
-        L_0x1423:
+        L_0x141b:
             boolean r1 = r3.invite_users
             boolean r9 = r5.invite_users
-            if (r1 == r9) goto L_0x144b
+            if (r1 == r9) goto L_0x1443
             r1 = 10
             r12.append(r1)
             boolean r1 = r5.invite_users
-            if (r1 == 0) goto L_0x1435
+            if (r1 == 0) goto L_0x142d
             r1 = 43
-            goto L_0x1437
-        L_0x1435:
+            goto L_0x142f
+        L_0x142d:
             r1 = 45
-        L_0x1437:
+        L_0x142f:
             r12.append(r1)
             r1 = 32
             r12.append(r1)
-            r1 = 2131625730(0x7f0e0702, float:1.8878676E38)
+            r1 = 2131625761(0x7f0e0721, float:1.887874E38)
             java.lang.String r9 = "EventLogPromotedAddUsers"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r9, r1)
             r12.append(r1)
-        L_0x144b:
+        L_0x1443:
             boolean r1 = r4.megagroup
-            if (r1 == 0) goto L_0x1477
+            if (r1 == 0) goto L_0x146f
             boolean r1 = r3.pin_messages
             boolean r3 = r5.pin_messages
-            if (r1 == r3) goto L_0x1477
+            if (r1 == r3) goto L_0x146f
             r1 = 10
             r12.append(r1)
             boolean r1 = r5.pin_messages
-            if (r1 == 0) goto L_0x1461
+            if (r1 == 0) goto L_0x1459
             r11 = 43
-            goto L_0x1463
-        L_0x1461:
+            goto L_0x145b
+        L_0x1459:
             r11 = 45
-        L_0x1463:
+        L_0x145b:
             r12.append(r11)
             r0 = 32
             r12.append(r0)
-            r0 = 2131625738(0x7f0e070a, float:1.8878692E38)
+            r0 = 2131625769(0x7f0e0729, float:1.8878755E38)
             java.lang.String r1 = "EventLogPromotedPinMessages"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             r12.append(r0)
-        L_0x1477:
+        L_0x146f:
             r3 = r12
-        L_0x1478:
+        L_0x1470:
             java.lang.String r0 = r3.toString()
             r6.messageText = r0
-        L_0x147e:
+        L_0x1476:
             r0 = 0
-        L_0x147f:
+        L_0x1477:
             org.telegram.tgnet.TLRPC$Message r1 = r6.messageOwner
-            if (r1 != 0) goto L_0x148a
+            if (r1 != 0) goto L_0x1482
             org.telegram.tgnet.TLRPC$TL_messageService r1 = new org.telegram.tgnet.TLRPC$TL_messageService
             r1.<init>()
             r6.messageOwner = r1
-        L_0x148a:
+        L_0x1482:
             org.telegram.tgnet.TLRPC$Message r1 = r6.messageOwner
             java.lang.CharSequence r2 = r6.messageText
             java.lang.String r2 = r2.toString()
@@ -4615,10 +4621,10 @@ public class MessageObject {
             r1.unread = r2
             org.telegram.messenger.MediaController r9 = org.telegram.messenger.MediaController.getInstance()
             boolean r1 = r0 instanceof org.telegram.tgnet.TLRPC$TL_messageEmpty
-            if (r1 == 0) goto L_0x14d2
+            if (r1 == 0) goto L_0x14ca
             r0 = 0
-        L_0x14d2:
-            if (r0 == 0) goto L_0x1546
+        L_0x14ca:
+            if (r0 == 0) goto L_0x153e
             r0.out = r2
             r1 = r32[r2]
             int r3 = r1 + 1
@@ -4645,15 +4651,15 @@ public class MessageObject {
             r23 = r2
             r16.<init>((int) r17, (org.telegram.tgnet.TLRPC$Message) r18, (java.util.AbstractMap<java.lang.Long, org.telegram.tgnet.TLRPC$User>) r19, (java.util.AbstractMap<java.lang.Long, org.telegram.tgnet.TLRPC$Chat>) r20, (boolean) r21, (boolean) r22, (long) r23)
             int r0 = r12.contentType
-            if (r0 < 0) goto L_0x1540
+            if (r0 < 0) goto L_0x1538
             boolean r0 = r9.isPlayingMessage(r12)
-            if (r0 == 0) goto L_0x151c
+            if (r0 == 0) goto L_0x1514
             org.telegram.messenger.MessageObject r0 = r9.getPlayingMessageObject()
             float r1 = r0.audioProgress
             r12.audioProgress = r1
             int r0 = r0.audioProgressSec
             r12.audioProgressSec = r0
-        L_0x151c:
+        L_0x1514:
             int r1 = r6.currentAccount
             r0 = r26
             r2 = r28
@@ -4661,29 +4667,29 @@ public class MessageObject {
             r4 = r30
             r5 = r33
             r0.createDateArray(r1, r2, r3, r4, r5)
-            if (r33 == 0) goto L_0x1534
+            if (r33 == 0) goto L_0x152c
             r13 = r29
             r0 = 0
             r13.add(r0, r12)
-            goto L_0x1549
-        L_0x1534:
+            goto L_0x1541
+        L_0x152c:
             r13 = r29
             int r0 = r29.size()
             r1 = 1
             int r0 = r0 - r1
             r13.add(r0, r12)
-            goto L_0x1549
-        L_0x1540:
+            goto L_0x1541
+        L_0x1538:
             r13 = r29
             r0 = -1
             r6.contentType = r0
-            goto L_0x1549
-        L_0x1546:
+            goto L_0x1541
+        L_0x153e:
             r13 = r29
             r11 = 0
-        L_0x1549:
+        L_0x1541:
             int r0 = r6.contentType
-            if (r0 < 0) goto L_0x15de
+            if (r0 < 0) goto L_0x15cd
             int r1 = r6.currentAccount
             r0 = r26
             r2 = r28
@@ -4691,76 +4697,66 @@ public class MessageObject {
             r4 = r30
             r5 = r33
             r0.createDateArray(r1, r2, r3, r4, r5)
-            if (r33 == 0) goto L_0x1563
+            if (r33 == 0) goto L_0x155b
             r0 = 0
             r13.add(r0, r6)
-            goto L_0x156c
-        L_0x1563:
+            goto L_0x1564
+        L_0x155b:
             int r0 = r29.size()
             r1 = 1
             int r0 = r0 - r1
             r13.add(r0, r6)
-        L_0x156c:
+        L_0x1564:
             java.lang.CharSequence r0 = r6.messageText
-            if (r0 != 0) goto L_0x1572
+            if (r0 != 0) goto L_0x156a
             r6.messageText = r7
-        L_0x1572:
+        L_0x156a:
             r26.setType()
             r26.measureInlineBotButtons()
             r26.generateCaption()
             org.telegram.tgnet.TLRPC$Message r0 = r6.messageOwner
             org.telegram.tgnet.TLRPC$MessageMedia r0 = r0.media
             boolean r0 = r0 instanceof org.telegram.tgnet.TLRPC$TL_messageMediaGame
-            if (r0 == 0) goto L_0x1586
+            if (r0 == 0) goto L_0x157e
             android.text.TextPaint r0 = org.telegram.ui.ActionBar.Theme.chat_msgGameTextPaint
-            goto L_0x1588
-        L_0x1586:
+            goto L_0x1580
+        L_0x157e:
             android.text.TextPaint r0 = org.telegram.ui.ActionBar.Theme.chat_msgTextPaint
-        L_0x1588:
+        L_0x1580:
             boolean r1 = r26.allowsBigEmoji()
-            if (r1 == 0) goto L_0x1592
+            if (r1 == 0) goto L_0x158a
             r1 = 1
             int[] r2 = new int[r1]
             r11 = r2
-        L_0x1592:
+        L_0x158a:
             java.lang.CharSequence r1 = r6.messageText
-            android.graphics.Paint$FontMetricsInt r0 = r0.getFontMetricsInt()
-            r2 = 1101004800(0x41a00000, float:20.0)
-            int r2 = org.telegram.messenger.AndroidUtilities.dp(r2)
-            r3 = 0
-            int r4 = r6.contentType
-            if (r4 != 0) goto L_0x15a5
-            r4 = 1
-            goto L_0x15a6
-        L_0x15a5:
+            android.graphics.Paint$FontMetricsInt r2 = r0.getFontMetricsInt()
+            r3 = 1101004800(0x41a00000, float:20.0)
+            int r3 = org.telegram.messenger.AndroidUtilities.dp(r3)
             r4 = 0
-        L_0x15a6:
-            java.util.concurrent.atomic.AtomicReference<java.lang.ref.WeakReference<android.view.View>> r5 = r6.viewRef
-            r27 = r1
-            r28 = r0
-            r29 = r2
-            r30 = r3
-            r31 = r11
-            r32 = r4
-            r33 = r5
-            java.lang.CharSequence r0 = org.telegram.messenger.Emoji.replaceEmoji(r27, r28, r29, r30, r31, r32, r33)
+            java.lang.CharSequence r1 = org.telegram.messenger.Emoji.replaceEmoji(r1, r2, r3, r4, r11)
+            r6.messageText = r1
+            org.telegram.tgnet.TLRPC$Message r2 = r6.messageOwner
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$MessageEntity> r2 = r2.entities
+            android.graphics.Paint$FontMetricsInt r0 = r0.getFontMetricsInt()
+            android.text.Spannable r0 = replaceAnimatedEmoji(r1, r2, r0)
             r6.messageText = r0
             r6.checkEmojiOnly(r11)
             boolean r0 = r9.isPlayingMessage(r6)
-            if (r0 == 0) goto L_0x15d1
+            if (r0 == 0) goto L_0x15c0
             org.telegram.messenger.MessageObject r0 = r9.getPlayingMessageObject()
             float r1 = r0.audioProgress
             r6.audioProgress = r1
             int r0 = r0.audioProgressSec
             r6.audioProgressSec = r0
-        L_0x15d1:
+        L_0x15c0:
             r6.generateLayout(r10)
             r0 = 1
             r6.layoutCreated = r0
             r0 = 0
             r6.generateThumbs(r0)
             r26.checkMediaExistance()
-        L_0x15de:
+        L_0x15cd:
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessageObject.<init>(int, org.telegram.tgnet.TLRPC$TL_channelAdminLogEvent, java.util.ArrayList, java.util.HashMap, org.telegram.tgnet.TLRPC$Chat, int[], boolean):void");
@@ -4835,7 +4831,9 @@ public class MessageObject {
             if (allowsBigEmoji()) {
                 iArr = new int[1];
             }
-            this.messageText = Emoji.replaceEmoji(this.messageText, textPaint.getFontMetricsInt(), AndroidUtilities.dp(20.0f), false, iArr, this.contentType == 0, this.viewRef);
+            CharSequence replaceEmoji = Emoji.replaceEmoji(this.messageText, textPaint.getFontMetricsInt(), AndroidUtilities.dp(20.0f), false, iArr);
+            this.messageText = replaceEmoji;
+            this.messageText = replaceAnimatedEmoji(replaceEmoji, this.messageOwner.entities, textPaint.getFontMetricsInt());
             checkEmojiOnly(iArr);
             generateLayout(user);
         }
@@ -4930,384 +4928,354 @@ public class MessageObject {
         }
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:135:0x02c5  */
-    /* JADX WARNING: Removed duplicated region for block: B:18:0x006a  */
+    /* JADX WARNING: Failed to insert additional move for type inference */
+    /* JADX WARNING: Incorrect type for immutable var: ssa=org.telegram.tgnet.TLRPC$User, code=org.telegram.tgnet.TLRPC$Chat, for r9v0, types: [org.telegram.tgnet.TLRPC$User] */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    public void generatePinMessageText(org.telegram.tgnet.TLRPC$User r18, org.telegram.tgnet.TLRPC$Chat r19) {
+    public void generatePinMessageText(org.telegram.tgnet.TLRPC$Chat r9, org.telegram.tgnet.TLRPC$Chat r10) {
         /*
-            r17 = this;
-            r0 = r17
-            if (r18 != 0) goto L_0x005b
-            if (r19 != 0) goto L_0x005b
-            boolean r1 = r17.isFromUser()
-            if (r1 == 0) goto L_0x0021
-            int r1 = r0.currentAccount
-            org.telegram.messenger.MessagesController r1 = org.telegram.messenger.MessagesController.getInstance(r1)
-            org.telegram.tgnet.TLRPC$Message r2 = r0.messageOwner
-            org.telegram.tgnet.TLRPC$Peer r2 = r2.from_id
-            long r2 = r2.user_id
-            java.lang.Long r2 = java.lang.Long.valueOf(r2)
-            org.telegram.tgnet.TLRPC$User r1 = r1.getUser(r2)
-            goto L_0x0023
-        L_0x0021:
-            r1 = r18
-        L_0x0023:
-            if (r1 != 0) goto L_0x005d
-            org.telegram.tgnet.TLRPC$Message r2 = r0.messageOwner
-            org.telegram.tgnet.TLRPC$Peer r2 = r2.peer_id
-            boolean r3 = r2 instanceof org.telegram.tgnet.TLRPC$TL_peerChannel
-            if (r3 == 0) goto L_0x0042
-            int r2 = r0.currentAccount
-            org.telegram.messenger.MessagesController r2 = org.telegram.messenger.MessagesController.getInstance(r2)
-            org.telegram.tgnet.TLRPC$Message r3 = r0.messageOwner
-            org.telegram.tgnet.TLRPC$Peer r3 = r3.peer_id
-            long r3 = r3.channel_id
-            java.lang.Long r3 = java.lang.Long.valueOf(r3)
-            org.telegram.tgnet.TLRPC$Chat r2 = r2.getChat(r3)
-            goto L_0x005f
-        L_0x0042:
-            boolean r2 = r2 instanceof org.telegram.tgnet.TLRPC$TL_peerChat
-            if (r2 == 0) goto L_0x005d
-            int r2 = r0.currentAccount
-            org.telegram.messenger.MessagesController r2 = org.telegram.messenger.MessagesController.getInstance(r2)
-            org.telegram.tgnet.TLRPC$Message r3 = r0.messageOwner
-            org.telegram.tgnet.TLRPC$Peer r3 = r3.peer_id
-            long r3 = r3.chat_id
-            java.lang.Long r3 = java.lang.Long.valueOf(r3)
-            org.telegram.tgnet.TLRPC$Chat r2 = r2.getChat(r3)
-            goto L_0x005f
-        L_0x005b:
-            r1 = r18
-        L_0x005d:
-            r2 = r19
-        L_0x005f:
-            org.telegram.messenger.MessageObject r3 = r0.replyMessageObject
-            r4 = 2131624198(0x7f0e0106, float:1.8875569E38)
-            java.lang.String r5 = "ActionPinnedNoText"
-            java.lang.String r6 = "un1"
-            if (r3 == 0) goto L_0x02be
-            org.telegram.tgnet.TLRPC$Message r7 = r3.messageOwner
-            boolean r8 = r7 instanceof org.telegram.tgnet.TLRPC$TL_messageEmpty
-            if (r8 != 0) goto L_0x02be
-            org.telegram.tgnet.TLRPC$MessageAction r7 = r7.action
-            boolean r7 = r7 instanceof org.telegram.tgnet.TLRPC$TL_messageActionHistoryClear
-            if (r7 == 0) goto L_0x0078
-            goto L_0x02be
-        L_0x0078:
-            boolean r3 = r3.isMusic()
-            if (r3 == 0) goto L_0x0093
-            r3 = 2131624197(0x7f0e0105, float:1.8875567E38)
-            java.lang.String r4 = "ActionPinnedMusic"
-            java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r4, r3)
-            if (r1 == 0) goto L_0x008a
-            goto L_0x008b
-        L_0x008a:
-            r1 = r2
-        L_0x008b:
-            java.lang.CharSequence r1 = replaceWithLink(r3, r6, r1)
-            r0.messageText = r1
-            goto L_0x02cc
-        L_0x0093:
-            org.telegram.messenger.MessageObject r3 = r0.replyMessageObject
-            boolean r3 = r3.isVideo()
-            if (r3 == 0) goto L_0x00b0
-            r3 = 2131624205(0x7f0e010d, float:1.8875583E38)
-            java.lang.String r4 = "ActionPinnedVideo"
-            java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r4, r3)
-            if (r1 == 0) goto L_0x00a7
-            goto L_0x00a8
-        L_0x00a7:
-            r1 = r2
-        L_0x00a8:
-            java.lang.CharSequence r1 = replaceWithLink(r3, r6, r1)
-            r0.messageText = r1
-            goto L_0x02cc
-        L_0x00b0:
-            org.telegram.messenger.MessageObject r3 = r0.replyMessageObject
-            boolean r3 = r3.isGif()
-            if (r3 == 0) goto L_0x00cd
-            r3 = 2131624196(0x7f0e0104, float:1.8875565E38)
-            java.lang.String r4 = "ActionPinnedGif"
-            java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r4, r3)
-            if (r1 == 0) goto L_0x00c4
-            goto L_0x00c5
-        L_0x00c4:
-            r1 = r2
-        L_0x00c5:
-            java.lang.CharSequence r1 = replaceWithLink(r3, r6, r1)
-            r0.messageText = r1
-            goto L_0x02cc
-        L_0x00cd:
-            org.telegram.messenger.MessageObject r3 = r0.replyMessageObject
-            boolean r3 = r3.isVoice()
-            if (r3 == 0) goto L_0x00ea
-            r3 = 2131624206(0x7f0e010e, float:1.8875585E38)
-            java.lang.String r4 = "ActionPinnedVoice"
-            java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r4, r3)
-            if (r1 == 0) goto L_0x00e1
-            goto L_0x00e2
-        L_0x00e1:
-            r1 = r2
-        L_0x00e2:
-            java.lang.CharSequence r1 = replaceWithLink(r3, r6, r1)
-            r0.messageText = r1
-            goto L_0x02cc
-        L_0x00ea:
-            org.telegram.messenger.MessageObject r3 = r0.replyMessageObject
-            boolean r3 = r3.isRoundVideo()
-            if (r3 == 0) goto L_0x0107
-            r3 = 2131624202(0x7f0e010a, float:1.8875577E38)
-            java.lang.String r4 = "ActionPinnedRound"
-            java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r4, r3)
-            if (r1 == 0) goto L_0x00fe
-            goto L_0x00ff
-        L_0x00fe:
-            r1 = r2
-        L_0x00ff:
-            java.lang.CharSequence r1 = replaceWithLink(r3, r6, r1)
-            r0.messageText = r1
-            goto L_0x02cc
-        L_0x0107:
-            org.telegram.messenger.MessageObject r3 = r0.replyMessageObject
-            boolean r3 = r3.isSticker()
-            if (r3 != 0) goto L_0x0117
-            org.telegram.messenger.MessageObject r3 = r0.replyMessageObject
-            boolean r3 = r3.isAnimatedSticker()
-            if (r3 == 0) goto L_0x0134
-        L_0x0117:
-            org.telegram.messenger.MessageObject r3 = r0.replyMessageObject
-            boolean r3 = r3.isAnimatedEmoji()
-            if (r3 != 0) goto L_0x0134
-            r3 = 2131624203(0x7f0e010b, float:1.887558E38)
-            java.lang.String r4 = "ActionPinnedSticker"
-            java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r4, r3)
-            if (r1 == 0) goto L_0x012b
-            goto L_0x012c
-        L_0x012b:
-            r1 = r2
-        L_0x012c:
-            java.lang.CharSequence r1 = replaceWithLink(r3, r6, r1)
-            r0.messageText = r1
-            goto L_0x02cc
-        L_0x0134:
-            org.telegram.messenger.MessageObject r3 = r0.replyMessageObject
-            org.telegram.tgnet.TLRPC$Message r7 = r3.messageOwner
-            org.telegram.tgnet.TLRPC$MessageMedia r7 = r7.media
-            boolean r8 = r7 instanceof org.telegram.tgnet.TLRPC$TL_messageMediaDocument
-            if (r8 == 0) goto L_0x0153
-            r3 = 2131624192(0x7f0e0100, float:1.8875557E38)
-            java.lang.String r4 = "ActionPinnedFile"
-            java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r4, r3)
-            if (r1 == 0) goto L_0x014a
-            goto L_0x014b
-        L_0x014a:
-            r1 = r2
-        L_0x014b:
-            java.lang.CharSequence r1 = replaceWithLink(r3, r6, r1)
-            r0.messageText = r1
-            goto L_0x02cc
-        L_0x0153:
-            boolean r8 = r7 instanceof org.telegram.tgnet.TLRPC$TL_messageMediaGeo
-            if (r8 == 0) goto L_0x016c
-            r3 = 2131624194(0x7f0e0102, float:1.887556E38)
-            java.lang.String r4 = "ActionPinnedGeo"
-            java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r4, r3)
-            if (r1 == 0) goto L_0x0163
-            goto L_0x0164
-        L_0x0163:
-            r1 = r2
-        L_0x0164:
-            java.lang.CharSequence r1 = replaceWithLink(r3, r6, r1)
-            r0.messageText = r1
-            goto L_0x02cc
-        L_0x016c:
-            boolean r8 = r7 instanceof org.telegram.tgnet.TLRPC$TL_messageMediaGeoLive
-            if (r8 == 0) goto L_0x0185
-            r3 = 2131624195(0x7f0e0103, float:1.8875563E38)
-            java.lang.String r4 = "ActionPinnedGeoLive"
-            java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r4, r3)
-            if (r1 == 0) goto L_0x017c
-            goto L_0x017d
-        L_0x017c:
-            r1 = r2
-        L_0x017d:
-            java.lang.CharSequence r1 = replaceWithLink(r3, r6, r1)
-            r0.messageText = r1
-            goto L_0x02cc
-        L_0x0185:
-            boolean r8 = r7 instanceof org.telegram.tgnet.TLRPC$TL_messageMediaContact
-            if (r8 == 0) goto L_0x019e
-            r3 = 2131624191(0x7f0e00ff, float:1.8875555E38)
-            java.lang.String r4 = "ActionPinnedContact"
-            java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r4, r3)
-            if (r1 == 0) goto L_0x0195
-            goto L_0x0196
-        L_0x0195:
-            r1 = r2
-        L_0x0196:
-            java.lang.CharSequence r1 = replaceWithLink(r3, r6, r1)
-            r0.messageText = r1
-            goto L_0x02cc
-        L_0x019e:
-            boolean r8 = r7 instanceof org.telegram.tgnet.TLRPC$TL_messageMediaPoll
-            if (r8 == 0) goto L_0x01d4
-            org.telegram.tgnet.TLRPC$TL_messageMediaPoll r7 = (org.telegram.tgnet.TLRPC$TL_messageMediaPoll) r7
-            org.telegram.tgnet.TLRPC$Poll r3 = r7.poll
-            boolean r3 = r3.quiz
-            if (r3 == 0) goto L_0x01bf
-            r3 = 2131624201(0x7f0e0109, float:1.8875575E38)
-            java.lang.String r4 = "ActionPinnedQuiz"
-            java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r4, r3)
-            if (r1 == 0) goto L_0x01b6
-            goto L_0x01b7
-        L_0x01b6:
-            r1 = r2
-        L_0x01b7:
-            java.lang.CharSequence r1 = replaceWithLink(r3, r6, r1)
-            r0.messageText = r1
-            goto L_0x02cc
-        L_0x01bf:
-            r3 = 2131624200(0x7f0e0108, float:1.8875573E38)
-            java.lang.String r4 = "ActionPinnedPoll"
-            java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r4, r3)
-            if (r1 == 0) goto L_0x01cb
-            goto L_0x01cc
-        L_0x01cb:
-            r1 = r2
-        L_0x01cc:
-            java.lang.CharSequence r1 = replaceWithLink(r3, r6, r1)
-            r0.messageText = r1
-            goto L_0x02cc
-        L_0x01d4:
-            boolean r8 = r7 instanceof org.telegram.tgnet.TLRPC$TL_messageMediaPhoto
-            if (r8 == 0) goto L_0x01ed
-            r3 = 2131624199(0x7f0e0107, float:1.887557E38)
-            java.lang.String r4 = "ActionPinnedPhoto"
-            java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r4, r3)
-            if (r1 == 0) goto L_0x01e4
-            goto L_0x01e5
-        L_0x01e4:
-            r1 = r2
-        L_0x01e5:
-            java.lang.CharSequence r1 = replaceWithLink(r3, r6, r1)
-            r0.messageText = r1
-            goto L_0x02cc
-        L_0x01ed:
-            boolean r7 = r7 instanceof org.telegram.tgnet.TLRPC$TL_messageMediaGame
-            r8 = 1101004800(0x41a00000, float:20.0)
-            r9 = 1
-            r10 = 0
-            if (r7 == 0) goto L_0x0245
-            r3 = 2131624193(0x7f0e0101, float:1.8875559E38)
-            java.lang.Object[] r4 = new java.lang.Object[r9]
-            java.lang.StringBuilder r5 = new java.lang.StringBuilder
-            r5.<init>()
-            java.lang.String r7 = "🎮 "
-            r5.append(r7)
-            org.telegram.messenger.MessageObject r7 = r0.replyMessageObject
-            org.telegram.tgnet.TLRPC$Message r7 = r7.messageOwner
-            org.telegram.tgnet.TLRPC$MessageMedia r7 = r7.media
-            org.telegram.tgnet.TLRPC$TL_game r7 = r7.game
-            java.lang.String r7 = r7.title
-            r5.append(r7)
-            java.lang.String r5 = r5.toString()
-            r4[r10] = r5
-            java.lang.String r5 = "ActionPinnedGame"
-            java.lang.String r3 = org.telegram.messenger.LocaleController.formatString(r5, r3, r4)
-            if (r1 == 0) goto L_0x0220
-            goto L_0x0221
-        L_0x0220:
-            r1 = r2
-        L_0x0221:
-            java.lang.CharSequence r11 = replaceWithLink(r3, r6, r1)
-            r0.messageText = r11
+            r8 = this;
+            if (r9 != 0) goto L_0x0055
+            if (r10 != 0) goto L_0x0055
+            boolean r0 = r8.isFromUser()
+            if (r0 == 0) goto L_0x001e
+            int r9 = r8.currentAccount
+            org.telegram.messenger.MessagesController r9 = org.telegram.messenger.MessagesController.getInstance(r9)
+            org.telegram.tgnet.TLRPC$Message r0 = r8.messageOwner
+            org.telegram.tgnet.TLRPC$Peer r0 = r0.from_id
+            long r0 = r0.user_id
+            java.lang.Long r0 = java.lang.Long.valueOf(r0)
+            org.telegram.tgnet.TLRPC$User r9 = r9.getUser(r0)
+        L_0x001e:
+            if (r9 != 0) goto L_0x0055
+            org.telegram.tgnet.TLRPC$Message r0 = r8.messageOwner
+            org.telegram.tgnet.TLRPC$Peer r0 = r0.peer_id
+            boolean r1 = r0 instanceof org.telegram.tgnet.TLRPC$TL_peerChannel
+            if (r1 == 0) goto L_0x003d
+            int r10 = r8.currentAccount
+            org.telegram.messenger.MessagesController r10 = org.telegram.messenger.MessagesController.getInstance(r10)
+            org.telegram.tgnet.TLRPC$Message r0 = r8.messageOwner
+            org.telegram.tgnet.TLRPC$Peer r0 = r0.peer_id
+            long r0 = r0.channel_id
+            java.lang.Long r0 = java.lang.Long.valueOf(r0)
+            org.telegram.tgnet.TLRPC$Chat r10 = r10.getChat(r0)
+            goto L_0x0055
+        L_0x003d:
+            boolean r0 = r0 instanceof org.telegram.tgnet.TLRPC$TL_peerChat
+            if (r0 == 0) goto L_0x0055
+            int r10 = r8.currentAccount
+            org.telegram.messenger.MessagesController r10 = org.telegram.messenger.MessagesController.getInstance(r10)
+            org.telegram.tgnet.TLRPC$Message r0 = r8.messageOwner
+            org.telegram.tgnet.TLRPC$Peer r0 = r0.peer_id
+            long r0 = r0.chat_id
+            java.lang.Long r0 = java.lang.Long.valueOf(r0)
+            org.telegram.tgnet.TLRPC$Chat r10 = r10.getChat(r0)
+        L_0x0055:
+            org.telegram.messenger.MessageObject r0 = r8.replyMessageObject
+            r1 = 2131624203(0x7f0e010b, float:1.887558E38)
+            java.lang.String r2 = "ActionPinnedNoText"
+            java.lang.String r3 = "un1"
+            if (r0 == 0) goto L_0x029b
+            org.telegram.tgnet.TLRPC$Message r4 = r0.messageOwner
+            boolean r5 = r4 instanceof org.telegram.tgnet.TLRPC$TL_messageEmpty
+            if (r5 != 0) goto L_0x029b
+            org.telegram.tgnet.TLRPC$MessageAction r4 = r4.action
+            boolean r4 = r4 instanceof org.telegram.tgnet.TLRPC$TL_messageActionHistoryClear
+            if (r4 == 0) goto L_0x006e
+            goto L_0x029b
+        L_0x006e:
+            boolean r0 = r0.isMusic()
+            if (r0 == 0) goto L_0x0089
+            r0 = 2131624202(0x7f0e010a, float:1.8875577E38)
+            java.lang.String r1 = "ActionPinnedMusic"
+            java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
+            if (r9 == 0) goto L_0x0080
+            goto L_0x0081
+        L_0x0080:
+            r9 = r10
+        L_0x0081:
+            java.lang.CharSequence r9 = replaceWithLink(r0, r3, r9)
+            r8.messageText = r9
+            goto L_0x02a9
+        L_0x0089:
+            org.telegram.messenger.MessageObject r0 = r8.replyMessageObject
+            boolean r0 = r0.isVideo()
+            if (r0 == 0) goto L_0x00a6
+            r0 = 2131624210(0x7f0e0112, float:1.8875593E38)
+            java.lang.String r1 = "ActionPinnedVideo"
+            java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
+            if (r9 == 0) goto L_0x009d
+            goto L_0x009e
+        L_0x009d:
+            r9 = r10
+        L_0x009e:
+            java.lang.CharSequence r9 = replaceWithLink(r0, r3, r9)
+            r8.messageText = r9
+            goto L_0x02a9
+        L_0x00a6:
+            org.telegram.messenger.MessageObject r0 = r8.replyMessageObject
+            boolean r0 = r0.isGif()
+            if (r0 == 0) goto L_0x00c3
+            r0 = 2131624201(0x7f0e0109, float:1.8875575E38)
+            java.lang.String r1 = "ActionPinnedGif"
+            java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
+            if (r9 == 0) goto L_0x00ba
+            goto L_0x00bb
+        L_0x00ba:
+            r9 = r10
+        L_0x00bb:
+            java.lang.CharSequence r9 = replaceWithLink(r0, r3, r9)
+            r8.messageText = r9
+            goto L_0x02a9
+        L_0x00c3:
+            org.telegram.messenger.MessageObject r0 = r8.replyMessageObject
+            boolean r0 = r0.isVoice()
+            if (r0 == 0) goto L_0x00e0
+            r0 = 2131624211(0x7f0e0113, float:1.8875595E38)
+            java.lang.String r1 = "ActionPinnedVoice"
+            java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
+            if (r9 == 0) goto L_0x00d7
+            goto L_0x00d8
+        L_0x00d7:
+            r9 = r10
+        L_0x00d8:
+            java.lang.CharSequence r9 = replaceWithLink(r0, r3, r9)
+            r8.messageText = r9
+            goto L_0x02a9
+        L_0x00e0:
+            org.telegram.messenger.MessageObject r0 = r8.replyMessageObject
+            boolean r0 = r0.isRoundVideo()
+            if (r0 == 0) goto L_0x00fd
+            r0 = 2131624207(0x7f0e010f, float:1.8875587E38)
+            java.lang.String r1 = "ActionPinnedRound"
+            java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
+            if (r9 == 0) goto L_0x00f4
+            goto L_0x00f5
+        L_0x00f4:
+            r9 = r10
+        L_0x00f5:
+            java.lang.CharSequence r9 = replaceWithLink(r0, r3, r9)
+            r8.messageText = r9
+            goto L_0x02a9
+        L_0x00fd:
+            org.telegram.messenger.MessageObject r0 = r8.replyMessageObject
+            boolean r0 = r0.isSticker()
+            if (r0 != 0) goto L_0x010d
+            org.telegram.messenger.MessageObject r0 = r8.replyMessageObject
+            boolean r0 = r0.isAnimatedSticker()
+            if (r0 == 0) goto L_0x012a
+        L_0x010d:
+            org.telegram.messenger.MessageObject r0 = r8.replyMessageObject
+            boolean r0 = r0.isAnimatedEmoji()
+            if (r0 != 0) goto L_0x012a
+            r0 = 2131624208(0x7f0e0110, float:1.887559E38)
+            java.lang.String r1 = "ActionPinnedSticker"
+            java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
+            if (r9 == 0) goto L_0x0121
+            goto L_0x0122
+        L_0x0121:
+            r9 = r10
+        L_0x0122:
+            java.lang.CharSequence r9 = replaceWithLink(r0, r3, r9)
+            r8.messageText = r9
+            goto L_0x02a9
+        L_0x012a:
+            org.telegram.messenger.MessageObject r0 = r8.replyMessageObject
+            org.telegram.tgnet.TLRPC$Message r4 = r0.messageOwner
+            org.telegram.tgnet.TLRPC$MessageMedia r4 = r4.media
+            boolean r5 = r4 instanceof org.telegram.tgnet.TLRPC$TL_messageMediaDocument
+            if (r5 == 0) goto L_0x0149
+            r0 = 2131624197(0x7f0e0105, float:1.8875567E38)
+            java.lang.String r1 = "ActionPinnedFile"
+            java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
+            if (r9 == 0) goto L_0x0140
+            goto L_0x0141
+        L_0x0140:
+            r9 = r10
+        L_0x0141:
+            java.lang.CharSequence r9 = replaceWithLink(r0, r3, r9)
+            r8.messageText = r9
+            goto L_0x02a9
+        L_0x0149:
+            boolean r5 = r4 instanceof org.telegram.tgnet.TLRPC$TL_messageMediaGeo
+            if (r5 == 0) goto L_0x0162
+            r0 = 2131624199(0x7f0e0107, float:1.887557E38)
+            java.lang.String r1 = "ActionPinnedGeo"
+            java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
+            if (r9 == 0) goto L_0x0159
+            goto L_0x015a
+        L_0x0159:
+            r9 = r10
+        L_0x015a:
+            java.lang.CharSequence r9 = replaceWithLink(r0, r3, r9)
+            r8.messageText = r9
+            goto L_0x02a9
+        L_0x0162:
+            boolean r5 = r4 instanceof org.telegram.tgnet.TLRPC$TL_messageMediaGeoLive
+            if (r5 == 0) goto L_0x017b
+            r0 = 2131624200(0x7f0e0108, float:1.8875573E38)
+            java.lang.String r1 = "ActionPinnedGeoLive"
+            java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
+            if (r9 == 0) goto L_0x0172
+            goto L_0x0173
+        L_0x0172:
+            r9 = r10
+        L_0x0173:
+            java.lang.CharSequence r9 = replaceWithLink(r0, r3, r9)
+            r8.messageText = r9
+            goto L_0x02a9
+        L_0x017b:
+            boolean r5 = r4 instanceof org.telegram.tgnet.TLRPC$TL_messageMediaContact
+            if (r5 == 0) goto L_0x0194
+            r0 = 2131624196(0x7f0e0104, float:1.8875565E38)
+            java.lang.String r1 = "ActionPinnedContact"
+            java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
+            if (r9 == 0) goto L_0x018b
+            goto L_0x018c
+        L_0x018b:
+            r9 = r10
+        L_0x018c:
+            java.lang.CharSequence r9 = replaceWithLink(r0, r3, r9)
+            r8.messageText = r9
+            goto L_0x02a9
+        L_0x0194:
+            boolean r5 = r4 instanceof org.telegram.tgnet.TLRPC$TL_messageMediaPoll
+            if (r5 == 0) goto L_0x01ca
+            org.telegram.tgnet.TLRPC$TL_messageMediaPoll r4 = (org.telegram.tgnet.TLRPC$TL_messageMediaPoll) r4
+            org.telegram.tgnet.TLRPC$Poll r0 = r4.poll
+            boolean r0 = r0.quiz
+            if (r0 == 0) goto L_0x01b5
+            r0 = 2131624206(0x7f0e010e, float:1.8875585E38)
+            java.lang.String r1 = "ActionPinnedQuiz"
+            java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
+            if (r9 == 0) goto L_0x01ac
+            goto L_0x01ad
+        L_0x01ac:
+            r9 = r10
+        L_0x01ad:
+            java.lang.CharSequence r9 = replaceWithLink(r0, r3, r9)
+            r8.messageText = r9
+            goto L_0x02a9
+        L_0x01b5:
+            r0 = 2131624205(0x7f0e010d, float:1.8875583E38)
+            java.lang.String r1 = "ActionPinnedPoll"
+            java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
+            if (r9 == 0) goto L_0x01c1
+            goto L_0x01c2
+        L_0x01c1:
+            r9 = r10
+        L_0x01c2:
+            java.lang.CharSequence r9 = replaceWithLink(r0, r3, r9)
+            r8.messageText = r9
+            goto L_0x02a9
+        L_0x01ca:
+            boolean r5 = r4 instanceof org.telegram.tgnet.TLRPC$TL_messageMediaPhoto
+            if (r5 == 0) goto L_0x01e3
+            r0 = 2131624204(0x7f0e010c, float:1.8875581E38)
+            java.lang.String r1 = "ActionPinnedPhoto"
+            java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
+            if (r9 == 0) goto L_0x01da
+            goto L_0x01db
+        L_0x01da:
+            r9 = r10
+        L_0x01db:
+            java.lang.CharSequence r9 = replaceWithLink(r0, r3, r9)
+            r8.messageText = r9
+            goto L_0x02a9
+        L_0x01e3:
+            boolean r4 = r4 instanceof org.telegram.tgnet.TLRPC$TL_messageMediaGame
+            r5 = 1101004800(0x41a00000, float:20.0)
+            r6 = 1
+            r7 = 0
+            if (r4 == 0) goto L_0x022f
+            r0 = 2131624198(0x7f0e0106, float:1.8875569E38)
+            java.lang.Object[] r1 = new java.lang.Object[r6]
+            java.lang.StringBuilder r2 = new java.lang.StringBuilder
+            r2.<init>()
+            java.lang.String r4 = "🎮 "
+            r2.append(r4)
+            org.telegram.messenger.MessageObject r4 = r8.replyMessageObject
+            org.telegram.tgnet.TLRPC$Message r4 = r4.messageOwner
+            org.telegram.tgnet.TLRPC$MessageMedia r4 = r4.media
+            org.telegram.tgnet.TLRPC$TL_game r4 = r4.game
+            java.lang.String r4 = r4.title
+            r2.append(r4)
+            java.lang.String r2 = r2.toString()
+            r1[r7] = r2
+            java.lang.String r2 = "ActionPinnedGame"
+            java.lang.String r0 = org.telegram.messenger.LocaleController.formatString(r2, r0, r1)
+            if (r9 == 0) goto L_0x0216
+            goto L_0x0217
+        L_0x0216:
+            r9 = r10
+        L_0x0217:
+            java.lang.CharSequence r9 = replaceWithLink(r0, r3, r9)
+            r8.messageText = r9
+            android.text.TextPaint r10 = org.telegram.ui.ActionBar.Theme.chat_msgTextPaint
+            android.graphics.Paint$FontMetricsInt r10 = r10.getFontMetricsInt()
+            int r0 = org.telegram.messenger.AndroidUtilities.dp(r5)
+            java.lang.CharSequence r9 = org.telegram.messenger.Emoji.replaceEmoji(r9, r10, r0, r7)
+            r8.messageText = r9
+            goto L_0x02a9
+        L_0x022f:
+            java.lang.CharSequence r0 = r0.messageText
+            if (r0 == 0) goto L_0x028c
+            int r0 = r0.length()
+            if (r0 <= 0) goto L_0x028c
+            org.telegram.messenger.MessageObject r0 = r8.replyMessageObject
+            java.lang.CharSequence r0 = r0.messageText
+            int r1 = r0.length()
+            r2 = 20
+            if (r1 <= r2) goto L_0x025a
+            java.lang.StringBuilder r1 = new java.lang.StringBuilder
+            r1.<init>()
+            java.lang.CharSequence r0 = r0.subSequence(r7, r2)
+            r1.append(r0)
+            java.lang.String r0 = "..."
+            r1.append(r0)
+            java.lang.String r0 = r1.toString()
+        L_0x025a:
             android.text.TextPaint r1 = org.telegram.ui.ActionBar.Theme.chat_msgTextPaint
-            android.graphics.Paint$FontMetricsInt r12 = r1.getFontMetricsInt()
-            int r13 = org.telegram.messenger.AndroidUtilities.dp(r8)
-            r14 = 0
-            int r1 = r0.contentType
-            if (r1 != 0) goto L_0x0238
-            r15 = 1
-            goto L_0x0239
-        L_0x0238:
-            r15 = 0
-        L_0x0239:
-            java.util.concurrent.atomic.AtomicReference<java.lang.ref.WeakReference<android.view.View>> r1 = r0.viewRef
-            r16 = r1
-            java.lang.CharSequence r1 = org.telegram.messenger.Emoji.replaceEmoji(r11, r12, r13, r14, r15, r16)
-            r0.messageText = r1
-            goto L_0x02cc
-        L_0x0245:
-            java.lang.CharSequence r3 = r3.messageText
-            if (r3 == 0) goto L_0x02af
-            int r3 = r3.length()
-            if (r3 <= 0) goto L_0x02af
-            org.telegram.messenger.MessageObject r3 = r0.replyMessageObject
-            java.lang.CharSequence r3 = r3.messageText
-            int r4 = r3.length()
-            r5 = 20
-            if (r4 <= r5) goto L_0x0270
-            java.lang.StringBuilder r4 = new java.lang.StringBuilder
-            r4.<init>()
-            java.lang.CharSequence r3 = r3.subSequence(r10, r5)
-            r4.append(r3)
-            java.lang.String r3 = "..."
-            r4.append(r3)
-            java.lang.String r3 = r4.toString()
-        L_0x0270:
-            r11 = r3
-            android.text.TextPaint r3 = org.telegram.ui.ActionBar.Theme.chat_msgTextPaint
-            android.graphics.Paint$FontMetricsInt r12 = r3.getFontMetricsInt()
-            int r13 = org.telegram.messenger.AndroidUtilities.dp(r8)
-            r14 = 0
-            int r3 = r0.contentType
-            if (r3 != 0) goto L_0x0282
-            r15 = 1
-            goto L_0x0283
-        L_0x0282:
-            r15 = 0
-        L_0x0283:
-            java.util.concurrent.atomic.AtomicReference<java.lang.ref.WeakReference<android.view.View>> r3 = r0.viewRef
-            r16 = r3
-            java.lang.CharSequence r3 = org.telegram.messenger.Emoji.replaceEmoji(r11, r12, r13, r14, r15, r16)
-            org.telegram.messenger.MessageObject r4 = r0.replyMessageObject
-            r5 = r3
-            android.text.Spannable r5 = (android.text.Spannable) r5
-            org.telegram.messenger.MediaDataController.addTextStyleRuns(r4, r5)
-            r4 = 2131624204(0x7f0e010c, float:1.8875581E38)
-            java.lang.String r5 = "ActionPinnedText"
-            java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r5, r4)
-            java.lang.CharSequence[] r5 = new java.lang.CharSequence[r9]
-            r5[r10] = r3
-            android.text.SpannableStringBuilder r3 = org.telegram.messenger.AndroidUtilities.formatSpannable(r4, r5)
-            if (r1 == 0) goto L_0x02a7
-            goto L_0x02a8
-        L_0x02a7:
-            r1 = r2
-        L_0x02a8:
-            java.lang.CharSequence r1 = replaceWithLink(r3, r6, r1)
-            r0.messageText = r1
-            goto L_0x02cc
-        L_0x02af:
-            java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r5, r4)
-            if (r1 == 0) goto L_0x02b6
-            goto L_0x02b7
-        L_0x02b6:
-            r1 = r2
-        L_0x02b7:
-            java.lang.CharSequence r1 = replaceWithLink(r3, r6, r1)
-            r0.messageText = r1
-            goto L_0x02cc
-        L_0x02be:
-            java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r5, r4)
-            if (r1 == 0) goto L_0x02c5
-            goto L_0x02c6
-        L_0x02c5:
-            r1 = r2
-        L_0x02c6:
-            java.lang.CharSequence r1 = replaceWithLink(r3, r6, r1)
-            r0.messageText = r1
-        L_0x02cc:
+            android.graphics.Paint$FontMetricsInt r1 = r1.getFontMetricsInt()
+            int r2 = org.telegram.messenger.AndroidUtilities.dp(r5)
+            java.lang.CharSequence r0 = org.telegram.messenger.Emoji.replaceEmoji(r0, r1, r2, r7)
+            org.telegram.messenger.MessageObject r1 = r8.replyMessageObject
+            r2 = r0
+            android.text.Spannable r2 = (android.text.Spannable) r2
+            org.telegram.messenger.MediaDataController.addTextStyleRuns(r1, r2)
+            r1 = 2131624209(0x7f0e0111, float:1.8875591E38)
+            java.lang.String r2 = "ActionPinnedText"
+            java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
+            java.lang.CharSequence[] r2 = new java.lang.CharSequence[r6]
+            r2[r7] = r0
+            android.text.SpannableStringBuilder r0 = org.telegram.messenger.AndroidUtilities.formatSpannable(r1, r2)
+            if (r9 == 0) goto L_0x0284
+            goto L_0x0285
+        L_0x0284:
+            r9 = r10
+        L_0x0285:
+            java.lang.CharSequence r9 = replaceWithLink(r0, r3, r9)
+            r8.messageText = r9
+            goto L_0x02a9
+        L_0x028c:
+            java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r2, r1)
+            if (r9 == 0) goto L_0x0293
+            goto L_0x0294
+        L_0x0293:
+            r9 = r10
+        L_0x0294:
+            java.lang.CharSequence r9 = replaceWithLink(r0, r3, r9)
+            r8.messageText = r9
+            goto L_0x02a9
+        L_0x029b:
+            java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r2, r1)
+            if (r9 == 0) goto L_0x02a2
+            goto L_0x02a3
+        L_0x02a2:
+            r9 = r10
+        L_0x02a3:
+            java.lang.CharSequence r9 = replaceWithLink(r0, r3, r9)
+            r8.messageText = r9
+        L_0x02a9:
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessageObject.generatePinMessageText(org.telegram.tgnet.TLRPC$User, org.telegram.tgnet.TLRPC$Chat):void");
@@ -5723,7 +5691,7 @@ public class MessageObject {
 
     public void measureInlineBotButtons() {
         int i;
-        CharSequence replaceEmoji;
+        CharSequence charSequence;
         TLRPC$TL_messageReactions tLRPC$TL_messageReactions;
         if (!this.isRestrictedMessage) {
             this.wantedBotKeyboardWidth = 0;
@@ -5753,11 +5721,11 @@ public class MessageObject {
                             if (str == null) {
                                 str = "";
                             }
-                            replaceEmoji = Emoji.replaceEmoji(str, Theme.chat_msgBotButtonPaint.getFontMetricsInt(), AndroidUtilities.dp(15.0f), false, this.contentType == 0, this.viewRef);
+                            charSequence = Emoji.replaceEmoji(str, Theme.chat_msgBotButtonPaint.getFontMetricsInt(), AndroidUtilities.dp(15.0f), false);
                         } else {
-                            replaceEmoji = LocaleController.getString("PaymentReceipt", NUM);
+                            charSequence = LocaleController.getString("PaymentReceipt", NUM);
                         }
-                        StaticLayout staticLayout = new StaticLayout(replaceEmoji, Theme.chat_msgBotButtonPaint, AndroidUtilities.dp(2000.0f), Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+                        StaticLayout staticLayout = new StaticLayout(charSequence, Theme.chat_msgBotButtonPaint, AndroidUtilities.dp(2000.0f), Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
                         if (staticLayout.getLineCount() > 0) {
                             float lineWidth = staticLayout.getLineWidth(0);
                             float lineLeft = staticLayout.getLineLeft(0);
@@ -5779,7 +5747,7 @@ public class MessageObject {
                     StringBuilder sb3 = this.botButtonsLayout;
                     sb3.append(0);
                     sb3.append(i5);
-                    StaticLayout staticLayout2 = new StaticLayout(Emoji.replaceEmoji(String.format("%d %s", new Object[]{Integer.valueOf(tLRPC$TL_reactionCount.count), tLRPC$TL_reactionCount.reaction}), Theme.chat_msgBotButtonPaint.getFontMetricsInt(), AndroidUtilities.dp(15.0f), false, this.contentType == 0, this.viewRef), Theme.chat_msgBotButtonPaint, AndroidUtilities.dp(2000.0f), Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+                    StaticLayout staticLayout2 = new StaticLayout(Emoji.replaceEmoji(String.format("%d %s", new Object[]{Integer.valueOf(tLRPC$TL_reactionCount.count), tLRPC$TL_reactionCount.reaction}), Theme.chat_msgBotButtonPaint.getFontMetricsInt(), AndroidUtilities.dp(15.0f), false), Theme.chat_msgBotButtonPaint, AndroidUtilities.dp(2000.0f), Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
                     if (staticLayout2.getLineCount() > 0) {
                         float lineWidth2 = staticLayout2.getLineWidth(0);
                         float lineLeft2 = staticLayout2.getLineLeft(0);
@@ -5845,21 +5813,23 @@ public class MessageObject {
         return tLRPC$Chat == null ? MessagesController.getInstance(this.currentAccount).getChat(Long.valueOf(j)) : tLRPC$Chat;
     }
 
+    /* JADX WARNING: type inference failed for: r2v128, types: [org.telegram.tgnet.TLRPC$Chat] */
+    /* JADX WARNING: Multi-variable type inference failed */
     /* JADX WARNING: Removed duplicated region for block: B:10:0x002c  */
     /* JADX WARNING: Removed duplicated region for block: B:13:0x0037  */
-    /* JADX WARNING: Removed duplicated region for block: B:186:0x0530  */
-    /* JADX WARNING: Removed duplicated region for block: B:190:0x0550  */
-    /* JADX WARNING: Removed duplicated region for block: B:212:0x05bc  */
-    /* JADX WARNING: Removed duplicated region for block: B:213:0x05d3  */
-    /* JADX WARNING: Removed duplicated region for block: B:229:0x0629  */
-    /* JADX WARNING: Removed duplicated region for block: B:230:0x0636  */
-    /* JADX WARNING: Removed duplicated region for block: B:257:0x06ec  */
-    /* JADX WARNING: Removed duplicated region for block: B:261:0x0713  */
-    /* JADX WARNING: Removed duplicated region for block: B:334:0x0925  */
-    /* JADX WARNING: Removed duplicated region for block: B:335:0x0932  */
-    /* JADX WARNING: Removed duplicated region for block: B:487:0x0d0f  */
-    /* JADX WARNING: Removed duplicated region for block: B:587:0x0var_  */
-    /* JADX WARNING: Removed duplicated region for block: B:604:? A[RETURN, SYNTHETIC] */
+    /* JADX WARNING: Removed duplicated region for block: B:197:0x0597  */
+    /* JADX WARNING: Removed duplicated region for block: B:201:0x05b7  */
+    /* JADX WARNING: Removed duplicated region for block: B:223:0x0623  */
+    /* JADX WARNING: Removed duplicated region for block: B:224:0x063a  */
+    /* JADX WARNING: Removed duplicated region for block: B:240:0x0690  */
+    /* JADX WARNING: Removed duplicated region for block: B:241:0x069d  */
+    /* JADX WARNING: Removed duplicated region for block: B:268:0x0753  */
+    /* JADX WARNING: Removed duplicated region for block: B:272:0x077a  */
+    /* JADX WARNING: Removed duplicated region for block: B:345:0x098c  */
+    /* JADX WARNING: Removed duplicated region for block: B:346:0x0999  */
+    /* JADX WARNING: Removed duplicated region for block: B:498:0x0d76  */
+    /* JADX WARNING: Removed duplicated region for block: B:598:0x0f9c  */
+    /* JADX WARNING: Removed duplicated region for block: B:615:? A[RETURN, SYNTHETIC] */
     /* JADX WARNING: Removed duplicated region for block: B:9:0x002a  */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     private void updateMessageText(java.util.AbstractMap<java.lang.Long, org.telegram.tgnet.TLRPC$User> r21, java.util.AbstractMap<java.lang.Long, org.telegram.tgnet.TLRPC$Chat> r22, androidx.collection.LongSparseArray<org.telegram.tgnet.TLRPC$User> r23, androidx.collection.LongSparseArray<org.telegram.tgnet.TLRPC$Chat> r24) {
@@ -5901,7 +5871,7 @@ public class MessageObject {
             java.lang.String r10 = ""
             r12 = 1
             r13 = 0
-            if (r9 == 0) goto L_0x0d0f
+            if (r9 == 0) goto L_0x0d76
             org.telegram.tgnet.TLRPC$MessageAction r9 = r3.action
             if (r9 == 0) goto L_0x0var_
             boolean r14 = r9 instanceof org.telegram.tgnet.TLRPC$TL_messageActionGroupCallScheduled
@@ -5926,7 +5896,7 @@ public class MessageObject {
             r6.messageText = r0
             goto L_0x0var_
         L_0x0067:
-            r0 = 2131624180(0x7f0e00f4, float:1.8875532E38)
+            r0 = 2131624185(0x7f0e00f9, float:1.8875543E38)
             java.lang.Object[] r1 = new java.lang.Object[r12]
             int r2 = r9.schedule_date
             long r2 = (long) r2
@@ -5986,7 +5956,7 @@ public class MessageObject {
         L_0x00db:
             boolean r1 = r20.isOut()
             if (r1 == 0) goto L_0x00f2
-            r1 = 2131624176(0x7f0e00f0, float:1.8875524E38)
+            r1 = 2131624181(0x7f0e00f5, float:1.8875534E38)
             java.lang.Object[] r2 = new java.lang.Object[r12]
             r2[r13] = r0
             java.lang.String r0 = "ActionGroupCallEndedByYou"
@@ -5994,7 +5964,7 @@ public class MessageObject {
             r6.messageText = r0
             goto L_0x0var_
         L_0x00f2:
-            r1 = 2131624175(0x7f0e00ef, float:1.8875522E38)
+            r1 = 2131624180(0x7f0e00f4, float:1.8875532E38)
             java.lang.Object[] r2 = new java.lang.Object[r12]
             r2[r13] = r0
             java.lang.String r0 = "ActionGroupCallEndedBy"
@@ -6018,13 +5988,13 @@ public class MessageObject {
         L_0x0121:
             boolean r0 = r20.isOut()
             if (r0 == 0) goto L_0x0134
-            r0 = 2131624182(0x7f0e00f6, float:1.8875536E38)
+            r0 = 2131624187(0x7f0e00fb, float:1.8875547E38)
             java.lang.String r1 = "ActionGroupCallStartedByYou"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             r6.messageText = r0
             goto L_0x0var_
         L_0x0134:
-            r0 = 2131624181(0x7f0e00f5, float:1.8875534E38)
+            r0 = 2131624186(0x7f0e00fa, float:1.8875545E38)
             java.lang.String r1 = "ActionGroupCallStarted"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             java.lang.CharSequence r0 = replaceWithLink(r0, r7, r8)
@@ -6048,9 +6018,9 @@ public class MessageObject {
             java.lang.Long r0 = (java.lang.Long) r0
             long r0 = r0.longValue()
         L_0x016b:
-            r2 = 2131624183(0x7f0e00f7, float:1.8875539E38)
+            r2 = 2131624188(0x7f0e00fc, float:1.8875549E38)
             java.lang.String r3 = "ActionGroupCallYouInvited"
-            r9 = 2131624177(0x7f0e00f1, float:1.8875526E38)
+            r9 = 2131624182(0x7f0e00f6, float:1.8875536E38)
             java.lang.String r11 = "ActionGroupCallInvited"
             int r12 = (r0 > r18 ? 1 : (r0 == r18 ? 0 : -1))
             if (r12 == 0) goto L_0x01c0
@@ -6067,7 +6037,7 @@ public class MessageObject {
             long r2 = r2.getClientUserId()
             int r5 = (r0 > r2 ? 1 : (r0 == r2 ? 0 : -1))
             if (r5 != 0) goto L_0x01ae
-            r0 = 2131624178(0x7f0e00f2, float:1.8875528E38)
+            r0 = 2131624183(0x7f0e00f7, float:1.8875539E38)
             java.lang.String r1 = "ActionGroupCallInvitedYou"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             java.lang.CharSequence r0 = replaceWithLink(r0, r7, r8)
@@ -6129,7 +6099,7 @@ public class MessageObject {
             long r16 = r11.getClientUserId()
             int r11 = (r13 > r16 ? 1 : (r13 == r16 ? 0 : -1))
             if (r11 != 0) goto L_0x024c
-            r0 = 2131624223(0x7f0e011f, float:1.887562E38)
+            r0 = 2131624228(0x7f0e0124, float:1.887563E38)
             java.lang.Object[] r1 = new java.lang.Object[r12]
             int r2 = r9.distance
             float r2 = (float) r2
@@ -6153,7 +6123,7 @@ public class MessageObject {
         L_0x025a:
             int r1 = (r2 > r16 ? 1 : (r2 == r16 ? 0 : -1))
             if (r1 != 0) goto L_0x027c
-            r1 = 2131624224(0x7f0e0120, float:1.8875622E38)
+            r1 = 2131624229(0x7f0e0125, float:1.8875632E38)
             java.lang.Object[] r2 = new java.lang.Object[r12]
             int r3 = r9.distance
             float r3 = (float) r3
@@ -6169,7 +6139,7 @@ public class MessageObject {
         L_0x027c:
             r4 = 2
             r5 = 0
-            r1 = 2131624222(0x7f0e011e, float:1.8875618E38)
+            r1 = 2131624227(0x7f0e0123, float:1.8875628E38)
             java.lang.Object[] r2 = new java.lang.Object[r12]
             int r3 = r9.distance
             float r3 = (float) r3
@@ -6193,7 +6163,7 @@ public class MessageObject {
             if (r11 == 0) goto L_0x02d2
             boolean r0 = r20.isOut()
             if (r0 == 0) goto L_0x02c1
-            r0 = 2131624230(0x7f0e0126, float:1.8875634E38)
+            r0 = 2131624235(0x7f0e012b, float:1.8875644E38)
             java.lang.String r1 = "ActionYouCreateGroup"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             r6.messageText = r0
@@ -6219,13 +6189,13 @@ public class MessageObject {
             if (r0 != 0) goto L_0x030e
             boolean r0 = r20.isOut()
             if (r0 == 0) goto L_0x02fd
-            r0 = 2131624232(0x7f0e0128, float:1.8875638E38)
+            r0 = 2131624237(0x7f0e012d, float:1.8875648E38)
             java.lang.String r1 = "ActionYouLeftUser"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             r6.messageText = r0
             goto L_0x0var_
         L_0x02fd:
-            r0 = 2131624188(0x7f0e00fc, float:1.8875549E38)
+            r0 = 2131624193(0x7f0e0101, float:1.8875559E38)
             java.lang.String r1 = "ActionLeftUser"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             java.lang.CharSequence r0 = replaceWithLink(r0, r7, r8)
@@ -6238,7 +6208,7 @@ public class MessageObject {
             org.telegram.tgnet.TLRPC$User r0 = r6.getUser(r4, r5, r0)
             boolean r1 = r20.isOut()
             if (r1 == 0) goto L_0x032f
-            r1 = 2131624231(0x7f0e0127, float:1.8875636E38)
+            r1 = 2131624236(0x7f0e012c, float:1.8875646E38)
             java.lang.String r2 = "ActionYouKickUser"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             java.lang.CharSequence r0 = replaceWithLink(r1, r15, r0)
@@ -6253,14 +6223,14 @@ public class MessageObject {
             long r3 = r3.getClientUserId()
             int r5 = (r1 > r3 ? 1 : (r1 == r3 ? 0 : -1))
             if (r5 != 0) goto L_0x0354
-            r0 = 2131624187(0x7f0e00fb, float:1.8875547E38)
+            r0 = 2131624192(0x7f0e0100, float:1.8875557E38)
             java.lang.String r1 = "ActionKickUserYou"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             java.lang.CharSequence r0 = replaceWithLink(r0, r7, r8)
             r6.messageText = r0
             goto L_0x0var_
         L_0x0354:
-            r1 = 2131624186(0x7f0e00fa, float:1.8875545E38)
+            r1 = 2131624191(0x7f0e00ff, float:1.8875555E38)
             java.lang.String r2 = "ActionKickUser"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             java.lang.CharSequence r0 = replaceWithLink(r1, r15, r0)
@@ -6285,7 +6255,7 @@ public class MessageObject {
             java.lang.Long r2 = (java.lang.Long) r2
             long r2 = r2.longValue()
         L_0x038e:
-            r9 = 2131624226(0x7f0e0122, float:1.8875626E38)
+            r9 = 2131624231(0x7f0e0127, float:1.8875636E38)
             java.lang.String r11 = "ActionYouAddUser"
             java.lang.String r13 = "ActionAddUser"
             int r14 = (r2 > r18 ? 1 : (r2 == r18 ? 0 : -1))
@@ -6312,7 +6282,7 @@ public class MessageObject {
             if (r1 == 0) goto L_0x03d2
             boolean r0 = r0.megagroup
             if (r0 != 0) goto L_0x03d2
-            r0 = 2131624911(0x7f0e03cf, float:1.8877015E38)
+            r0 = 2131624920(0x7f0e03d8, float:1.8877033E38)
             java.lang.String r1 = "ChannelJoined"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             r6.messageText = r0
@@ -6328,7 +6298,7 @@ public class MessageObject {
             long r0 = r0.getClientUserId()
             int r4 = (r2 > r0 ? 1 : (r2 == r0 ? 0 : -1))
             if (r4 != 0) goto L_0x03f7
-            r0 = 2131624916(0x7f0e03d4, float:1.8877025E38)
+            r0 = 2131624925(0x7f0e03dd, float:1.8877043E38)
             java.lang.String r1 = "ChannelMegaJoined"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             r6.messageText = r0
@@ -6376,14 +6346,14 @@ public class MessageObject {
             if (r0 == 0) goto L_0x046d
             boolean r0 = r0.megagroup
             if (r0 == 0) goto L_0x046d
-            r0 = 2131626579(0x7f0e0a53, float:1.8880398E38)
+            r0 = 2131626616(0x7f0e0a78, float:1.8880473E38)
             java.lang.String r1 = "MegaAddedBy"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             java.lang.CharSequence r0 = replaceWithLink(r0, r7, r8)
             r6.messageText = r0
             goto L_0x0var_
         L_0x046d:
-            r0 = 2131624873(0x7f0e03a9, float:1.8876938E38)
+            r0 = 2131624882(0x7f0e03b2, float:1.8876956E38)
             java.lang.String r1 = "ChannelAddedBy"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             java.lang.CharSequence r0 = replaceWithLink(r0, r7, r8)
@@ -6440,97 +6410,139 @@ public class MessageObject {
             if (r11 == 0) goto L_0x0512
             boolean r0 = r20.isOut()
             if (r0 == 0) goto L_0x0501
-            r0 = 2131624185(0x7f0e00f9, float:1.8875543E38)
+            r0 = 2131624190(0x7f0e00fe, float:1.8875553E38)
             java.lang.String r1 = "ActionInviteYou"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             r6.messageText = r0
             goto L_0x0var_
         L_0x0501:
-            r0 = 2131624184(0x7f0e00f8, float:1.887554E38)
+            r0 = 2131624189(0x7f0e00fd, float:1.887555E38)
             java.lang.String r1 = "ActionInviteUser"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             java.lang.CharSequence r0 = replaceWithLink(r0, r7, r8)
             r6.messageText = r0
             goto L_0x0var_
         L_0x0512:
+            boolean r11 = r9 instanceof org.telegram.tgnet.TLRPC$TL_messageActionGiftPremium
+            r13 = -1
+            if (r11 == 0) goto L_0x0579
+            boolean r0 = r8 instanceof org.telegram.tgnet.TLRPC$User
+            if (r0 == 0) goto L_0x053c
+            r0 = r8
+            org.telegram.tgnet.TLRPC$User r0 = (org.telegram.tgnet.TLRPC$User) r0
+            boolean r0 = r0.self
+            if (r0 == 0) goto L_0x053c
+            org.telegram.tgnet.TLRPC$Peer r0 = r3.peer_id
+            long r0 = r0.user_id
+            org.telegram.tgnet.TLRPC$User r0 = r6.getUser(r4, r5, r0)
+            r1 = 2131624175(0x7f0e00ef, float:1.8875522E38)
+            java.lang.String r1 = org.telegram.messenger.LocaleController.getString((int) r1)
+            android.text.SpannableStringBuilder r1 = org.telegram.messenger.AndroidUtilities.replaceTags(r1)
+            java.lang.CharSequence r0 = replaceWithLink(r1, r7, r0)
+            r6.messageText = r0
+            goto L_0x054d
+        L_0x053c:
+            r0 = 2131624174(0x7f0e00ee, float:1.887552E38)
+            java.lang.String r0 = org.telegram.messenger.LocaleController.getString((int) r0)
+            android.text.SpannableStringBuilder r0 = org.telegram.messenger.AndroidUtilities.replaceTags(r0)
+            java.lang.CharSequence r0 = replaceWithLink(r0, r7, r8)
+            r6.messageText = r0
+        L_0x054d:
+            java.lang.CharSequence r0 = r6.messageText
+            java.lang.String r0 = r0.toString()
+            int r0 = r0.indexOf(r15)
+            if (r0 == r13) goto L_0x0var_
+            java.lang.CharSequence r1 = r6.messageText
+            android.text.SpannableStringBuilder r1 = android.text.SpannableStringBuilder.valueOf(r1)
+            int r2 = r0 + 3
+            org.telegram.messenger.BillingController r3 = org.telegram.messenger.BillingController.getInstance()
+            org.telegram.tgnet.TLRPC$Message r4 = r6.messageOwner
+            org.telegram.tgnet.TLRPC$MessageAction r4 = r4.action
+            long r7 = r4.amount
+            java.lang.String r4 = r4.currency
+            java.lang.String r3 = r3.formatCurrency(r7, r4)
+            android.text.SpannableStringBuilder r0 = r1.replace(r0, r2, r3)
+            r6.messageText = r0
+            goto L_0x0var_
+        L_0x0579:
             boolean r11 = r9 instanceof org.telegram.tgnet.TLRPC$TL_messageActionChatEditPhoto
-            if (r11 == 0) goto L_0x059e
+            if (r11 == 0) goto L_0x0605
             org.telegram.tgnet.TLRPC$Peer r2 = r3.peer_id
-            if (r2 == 0) goto L_0x0525
+            if (r2 == 0) goto L_0x058c
             long r2 = r2.channel_id
             int r4 = (r2 > r18 ? 1 : (r2 == r18 ? 0 : -1))
-            if (r4 == 0) goto L_0x0525
+            if (r4 == 0) goto L_0x058c
             org.telegram.tgnet.TLRPC$Chat r0 = r6.getChat(r0, r1, r2)
-            goto L_0x0526
-        L_0x0525:
+            goto L_0x058d
+        L_0x058c:
             r0 = 0
-        L_0x0526:
+        L_0x058d:
             boolean r1 = org.telegram.messenger.ChatObject.isChannel(r0)
-            if (r1 == 0) goto L_0x0550
+            if (r1 == 0) goto L_0x05b7
             boolean r0 = r0.megagroup
-            if (r0 != 0) goto L_0x0550
+            if (r0 != 0) goto L_0x05b7
             boolean r0 = r20.isVideoAvatar()
-            if (r0 == 0) goto L_0x0543
+            if (r0 == 0) goto L_0x05aa
             r0 = 2131624161(0x7f0e00e1, float:1.8875494E38)
             java.lang.String r1 = "ActionChannelChangedVideo"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             r6.messageText = r0
             goto L_0x0var_
-        L_0x0543:
+        L_0x05aa:
             r0 = 2131624159(0x7f0e00df, float:1.887549E38)
             java.lang.String r1 = "ActionChannelChangedPhoto"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             r6.messageText = r0
             goto L_0x0var_
-        L_0x0550:
+        L_0x05b7:
             boolean r0 = r20.isOut()
-            if (r0 == 0) goto L_0x0576
+            if (r0 == 0) goto L_0x05dd
             boolean r0 = r20.isVideoAvatar()
-            if (r0 == 0) goto L_0x0569
-            r0 = 2131624229(0x7f0e0125, float:1.8875632E38)
+            if (r0 == 0) goto L_0x05d0
+            r0 = 2131624234(0x7f0e012a, float:1.8875642E38)
             java.lang.String r1 = "ActionYouChangedVideo"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             r6.messageText = r0
             goto L_0x0var_
-        L_0x0569:
-            r0 = 2131624227(0x7f0e0123, float:1.8875628E38)
+        L_0x05d0:
+            r0 = 2131624232(0x7f0e0128, float:1.8875638E38)
             java.lang.String r1 = "ActionYouChangedPhoto"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             r6.messageText = r0
             goto L_0x0var_
-        L_0x0576:
+        L_0x05dd:
             boolean r0 = r20.isVideoAvatar()
-            if (r0 == 0) goto L_0x058d
+            if (r0 == 0) goto L_0x05f4
             r0 = 2131624155(0x7f0e00db, float:1.8875482E38)
             java.lang.String r1 = "ActionChangedVideo"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             java.lang.CharSequence r0 = replaceWithLink(r0, r7, r8)
             r6.messageText = r0
             goto L_0x0var_
-        L_0x058d:
+        L_0x05f4:
             r0 = 2131624153(0x7f0e00d9, float:1.8875478E38)
             java.lang.String r1 = "ActionChangedPhoto"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             java.lang.CharSequence r0 = replaceWithLink(r0, r7, r8)
             r6.messageText = r0
             goto L_0x0var_
-        L_0x059e:
+        L_0x0605:
             boolean r11 = r9 instanceof org.telegram.tgnet.TLRPC$TL_messageActionChatEditTitle
-            if (r11 == 0) goto L_0x060b
+            if (r11 == 0) goto L_0x0672
             org.telegram.tgnet.TLRPC$Peer r2 = r3.peer_id
-            if (r2 == 0) goto L_0x05b1
+            if (r2 == 0) goto L_0x0618
             long r2 = r2.channel_id
             int r4 = (r2 > r18 ? 1 : (r2 == r18 ? 0 : -1))
-            if (r4 == 0) goto L_0x05b1
+            if (r4 == 0) goto L_0x0618
             org.telegram.tgnet.TLRPC$Chat r0 = r6.getChat(r0, r1, r2)
-            goto L_0x05b2
-        L_0x05b1:
+            goto L_0x0619
+        L_0x0618:
             r0 = 0
-        L_0x05b2:
+        L_0x0619:
             boolean r1 = org.telegram.messenger.ChatObject.isChannel(r0)
-            if (r1 == 0) goto L_0x05d3
+            if (r1 == 0) goto L_0x063a
             boolean r0 = r0.megagroup
-            if (r0 != 0) goto L_0x05d3
+            if (r0 != 0) goto L_0x063a
             r0 = 2131624160(0x7f0e00e0, float:1.8875492E38)
             java.lang.String r1 = "ActionChannelChangedTitle"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
@@ -6540,10 +6552,10 @@ public class MessageObject {
             java.lang.String r0 = r0.replace(r15, r1)
             r6.messageText = r0
             goto L_0x0var_
-        L_0x05d3:
+        L_0x063a:
             boolean r0 = r20.isOut()
-            if (r0 == 0) goto L_0x05f0
-            r0 = 2131624228(0x7f0e0124, float:1.887563E38)
+            if (r0 == 0) goto L_0x0657
+            r0 = 2131624233(0x7f0e0129, float:1.887564E38)
             java.lang.String r1 = "ActionYouChangedTitle"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             org.telegram.tgnet.TLRPC$Message r1 = r6.messageOwner
@@ -6552,7 +6564,7 @@ public class MessageObject {
             java.lang.String r0 = r0.replace(r15, r1)
             r6.messageText = r0
             goto L_0x0var_
-        L_0x05f0:
+        L_0x0657:
             r0 = 2131624154(0x7f0e00da, float:1.887548E38)
             java.lang.String r1 = "ActionChangedTitle"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
@@ -6563,54 +6575,54 @@ public class MessageObject {
             java.lang.CharSequence r0 = replaceWithLink(r0, r7, r8)
             r6.messageText = r0
             goto L_0x0var_
-        L_0x060b:
+        L_0x0672:
             boolean r11 = r9 instanceof org.telegram.tgnet.TLRPC$TL_messageActionChatDeletePhoto
-            if (r11 == 0) goto L_0x065a
+            if (r11 == 0) goto L_0x06c1
             org.telegram.tgnet.TLRPC$Peer r2 = r3.peer_id
-            if (r2 == 0) goto L_0x061e
+            if (r2 == 0) goto L_0x0685
             long r2 = r2.channel_id
             int r4 = (r2 > r18 ? 1 : (r2 == r18 ? 0 : -1))
-            if (r4 == 0) goto L_0x061e
+            if (r4 == 0) goto L_0x0685
             org.telegram.tgnet.TLRPC$Chat r0 = r6.getChat(r0, r1, r2)
-            goto L_0x061f
-        L_0x061e:
+            goto L_0x0686
+        L_0x0685:
             r0 = 0
-        L_0x061f:
+        L_0x0686:
             boolean r1 = org.telegram.messenger.ChatObject.isChannel(r0)
-            if (r1 == 0) goto L_0x0636
+            if (r1 == 0) goto L_0x069d
             boolean r0 = r0.megagroup
-            if (r0 != 0) goto L_0x0636
+            if (r0 != 0) goto L_0x069d
             r0 = 2131624162(0x7f0e00e2, float:1.8875496E38)
             java.lang.String r1 = "ActionChannelRemovedPhoto"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             r6.messageText = r0
             goto L_0x0var_
-        L_0x0636:
+        L_0x069d:
             boolean r0 = r20.isOut()
-            if (r0 == 0) goto L_0x0649
-            r0 = 2131624233(0x7f0e0129, float:1.887564E38)
+            if (r0 == 0) goto L_0x06b0
+            r0 = 2131624238(0x7f0e012e, float:1.887565E38)
             java.lang.String r1 = "ActionYouRemovedPhoto"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             r6.messageText = r0
             goto L_0x0var_
-        L_0x0649:
-            r0 = 2131624208(0x7f0e0110, float:1.887559E38)
+        L_0x06b0:
+            r0 = 2131624213(0x7f0e0115, float:1.88756E38)
             java.lang.String r1 = "ActionRemovedPhoto"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             java.lang.CharSequence r0 = replaceWithLink(r0, r7, r8)
             r6.messageText = r0
             goto L_0x0var_
-        L_0x065a:
+        L_0x06c1:
             boolean r11 = r9 instanceof org.telegram.tgnet.TLRPC$TL_messageActionTTLChange
-            r13 = 2131626630(0x7f0e0a86, float:1.8880502E38)
             java.lang.String r14 = "MessageLifetimeYouRemoved"
-            java.lang.String r15 = "MessageLifetimeRemoved"
-            if (r11 == 0) goto L_0x06d0
+            r15 = 2131626670(0x7f0e0aae, float:1.8880583E38)
+            java.lang.String r13 = "MessageLifetimeRemoved"
+            if (r11 == 0) goto L_0x0737
             int r0 = r9.ttl
-            if (r0 == 0) goto L_0x06ae
+            if (r0 == 0) goto L_0x0715
             boolean r0 = r20.isOut()
-            if (r0 == 0) goto L_0x068b
-            r0 = 2131626626(0x7f0e0a82, float:1.8880494E38)
+            if (r0 == 0) goto L_0x06f2
+            r0 = 2131626668(0x7f0e0aac, float:1.8880579E38)
             java.lang.Object[] r1 = new java.lang.Object[r12]
             org.telegram.tgnet.TLRPC$Message r2 = r6.messageOwner
             org.telegram.tgnet.TLRPC$MessageAction r2 = r2.action
@@ -6622,9 +6634,9 @@ public class MessageObject {
             java.lang.String r0 = org.telegram.messenger.LocaleController.formatString(r2, r0, r1)
             r6.messageText = r0
             goto L_0x0var_
-        L_0x068b:
+        L_0x06f2:
             r3 = 0
-            r0 = 2131626625(0x7f0e0a81, float:1.8880491E38)
+            r0 = 2131626667(0x7f0e0aab, float:1.8880577E38)
             r1 = 2
             java.lang.Object[] r1 = new java.lang.Object[r1]
             java.lang.String r2 = org.telegram.messenger.UserObject.getFirstName(r2)
@@ -6638,41 +6650,41 @@ public class MessageObject {
             java.lang.String r0 = org.telegram.messenger.LocaleController.formatString(r2, r0, r1)
             r6.messageText = r0
             goto L_0x0var_
-        L_0x06ae:
+        L_0x0715:
             boolean r0 = r20.isOut()
-            if (r0 == 0) goto L_0x06bc
-            java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r14, r13)
+            if (r0 == 0) goto L_0x0726
+            r0 = 2131626672(0x7f0e0ab0, float:1.8880587E38)
+            java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r14, r0)
             r6.messageText = r0
             goto L_0x0var_
-        L_0x06bc:
+        L_0x0726:
             java.lang.Object[] r0 = new java.lang.Object[r12]
             java.lang.String r1 = org.telegram.messenger.UserObject.getFirstName(r2)
             r2 = 0
             r0[r2] = r1
-            r1 = 2131626628(0x7f0e0a84, float:1.8880498E38)
-            java.lang.String r0 = org.telegram.messenger.LocaleController.formatString(r15, r1, r0)
+            java.lang.String r0 = org.telegram.messenger.LocaleController.formatString(r13, r15, r0)
             r6.messageText = r0
             goto L_0x0var_
-        L_0x06d0:
+        L_0x0737:
             boolean r11 = r9 instanceof org.telegram.tgnet.TLRPC$TL_messageActionSetMessagesTTL
-            if (r11 == 0) goto L_0x0775
+            if (r11 == 0) goto L_0x07dc
             org.telegram.tgnet.TLRPC$TL_messageActionSetMessagesTTL r9 = (org.telegram.tgnet.TLRPC$TL_messageActionSetMessagesTTL) r9
             org.telegram.tgnet.TLRPC$Peer r2 = r3.peer_id
-            if (r2 == 0) goto L_0x06e5
+            if (r2 == 0) goto L_0x074c
             long r2 = r2.channel_id
             int r4 = (r2 > r18 ? 1 : (r2 == r18 ? 0 : -1))
-            if (r4 == 0) goto L_0x06e5
+            if (r4 == 0) goto L_0x074c
             org.telegram.tgnet.TLRPC$Chat r0 = r6.getChat(r0, r1, r2)
-            goto L_0x06e6
-        L_0x06e5:
+            goto L_0x074d
+        L_0x074c:
             r0 = 0
-        L_0x06e6:
-            if (r0 == 0) goto L_0x0713
+        L_0x074d:
+            if (r0 == 0) goto L_0x077a
             boolean r0 = r0.megagroup
-            if (r0 != 0) goto L_0x0713
+            if (r0 != 0) goto L_0x077a
             int r0 = r9.period
-            if (r0 == 0) goto L_0x0706
-            r1 = 2131624211(0x7f0e0113, float:1.8875595E38)
+            if (r0 == 0) goto L_0x076d
+            r1 = 2131624216(0x7f0e0118, float:1.8875605E38)
             java.lang.Object[] r2 = new java.lang.Object[r12]
             java.lang.String r0 = org.telegram.messenger.LocaleController.formatTTLString(r0)
             r3 = 0
@@ -6681,18 +6693,18 @@ public class MessageObject {
             java.lang.String r0 = org.telegram.messenger.LocaleController.formatString(r0, r1, r2)
             r6.messageText = r0
             goto L_0x0var_
-        L_0x0706:
-            r0 = 2131624212(0x7f0e0114, float:1.8875597E38)
+        L_0x076d:
+            r0 = 2131624217(0x7f0e0119, float:1.8875607E38)
             java.lang.String r1 = "ActionTTLChannelDisabled"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             r6.messageText = r0
             goto L_0x0var_
-        L_0x0713:
+        L_0x077a:
             int r0 = r9.period
-            if (r0 == 0) goto L_0x0751
+            if (r0 == 0) goto L_0x07b8
             boolean r0 = r20.isOut()
-            if (r0 == 0) goto L_0x0735
-            r0 = 2131624214(0x7f0e0116, float:1.8875601E38)
+            if (r0 == 0) goto L_0x079c
+            r0 = 2131624219(0x7f0e011b, float:1.8875612E38)
             java.lang.Object[] r1 = new java.lang.Object[r12]
             int r2 = r9.period
             java.lang.String r2 = org.telegram.messenger.LocaleController.formatTTLString(r2)
@@ -6702,9 +6714,9 @@ public class MessageObject {
             java.lang.String r0 = org.telegram.messenger.LocaleController.formatString(r2, r0, r1)
             r6.messageText = r0
             goto L_0x0var_
-        L_0x0735:
+        L_0x079c:
             r3 = 0
-            r0 = 2131624210(0x7f0e0112, float:1.8875593E38)
+            r0 = 2131624215(0x7f0e0117, float:1.8875603E38)
             java.lang.Object[] r1 = new java.lang.Object[r12]
             int r2 = r9.period
             java.lang.String r2 = org.telegram.messenger.LocaleController.formatTTLString(r2)
@@ -6714,35 +6726,35 @@ public class MessageObject {
             java.lang.CharSequence r0 = replaceWithLink(r0, r7, r8)
             r6.messageText = r0
             goto L_0x0var_
-        L_0x0751:
+        L_0x07b8:
             boolean r0 = r20.isOut()
-            if (r0 == 0) goto L_0x0764
-            r0 = 2131624215(0x7f0e0117, float:1.8875603E38)
+            if (r0 == 0) goto L_0x07cb
+            r0 = 2131624220(0x7f0e011c, float:1.8875614E38)
             java.lang.String r1 = "ActionTTLYouDisabled"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             r6.messageText = r0
             goto L_0x0var_
-        L_0x0764:
-            r0 = 2131624213(0x7f0e0115, float:1.88756E38)
+        L_0x07cb:
+            r0 = 2131624218(0x7f0e011a, float:1.887561E38)
             java.lang.String r1 = "ActionTTLDisabled"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             java.lang.CharSequence r0 = replaceWithLink(r0, r7, r8)
             r6.messageText = r0
             goto L_0x0var_
-        L_0x0775:
+        L_0x07dc:
             boolean r11 = r9 instanceof org.telegram.tgnet.TLRPC$TL_messageActionLoginUnknownLocation
-            if (r11 == 0) goto L_0x080a
+            if (r11 == 0) goto L_0x0871
             int r0 = r3.date
             long r0 = (long) r0
             r2 = 1000(0x3e8, double:4.94E-321)
             long r0 = r0 * r2
             org.telegram.messenger.LocaleController r2 = org.telegram.messenger.LocaleController.getInstance()
             org.telegram.messenger.time.FastDateFormat r2 = r2.formatterDay
-            if (r2 == 0) goto L_0x07b6
+            if (r2 == 0) goto L_0x081d
             org.telegram.messenger.LocaleController r2 = org.telegram.messenger.LocaleController.getInstance()
             org.telegram.messenger.time.FastDateFormat r2 = r2.formatterYear
-            if (r2 == 0) goto L_0x07b6
-            r2 = 2131629349(0x7f0e1525, float:1.8886016E38)
+            if (r2 == 0) goto L_0x081d
+            r2 = 2131629409(0x7f0e1561, float:1.8886138E38)
             r3 = 2
             java.lang.Object[] r7 = new java.lang.Object[r3]
             org.telegram.messenger.LocaleController r3 = org.telegram.messenger.LocaleController.getInstance()
@@ -6756,8 +6768,8 @@ public class MessageObject {
             r7[r12] = r0
             java.lang.String r0 = "formatDateAtTime"
             java.lang.String r0 = org.telegram.messenger.LocaleController.formatString(r0, r2, r7)
-            goto L_0x07c9
-        L_0x07b6:
+            goto L_0x0830
+        L_0x081d:
             java.lang.StringBuilder r0 = new java.lang.StringBuilder
             r0.<init>()
             r0.append(r10)
@@ -6765,23 +6777,23 @@ public class MessageObject {
             int r1 = r1.date
             r0.append(r1)
             java.lang.String r0 = r0.toString()
-        L_0x07c9:
+        L_0x0830:
             int r1 = r6.currentAccount
             org.telegram.messenger.UserConfig r1 = org.telegram.messenger.UserConfig.getInstance(r1)
             org.telegram.tgnet.TLRPC$User r1 = r1.getCurrentUser()
-            if (r1 != 0) goto L_0x07df
+            if (r1 != 0) goto L_0x0846
             org.telegram.tgnet.TLRPC$Message r1 = r6.messageOwner
             org.telegram.tgnet.TLRPC$Peer r1 = r1.peer_id
             long r1 = r1.user_id
             org.telegram.tgnet.TLRPC$User r1 = r6.getUser(r4, r5, r1)
-        L_0x07df:
-            if (r1 == 0) goto L_0x07e6
+        L_0x0846:
+            if (r1 == 0) goto L_0x084d
             java.lang.String r1 = org.telegram.messenger.UserObject.getFirstName(r1)
-            goto L_0x07e7
-        L_0x07e6:
+            goto L_0x084e
+        L_0x084d:
             r1 = r10
-        L_0x07e7:
-            r2 = 2131627015(0x7f0e0CLASSNAME, float:1.8881282E38)
+        L_0x084e:
+            r2 = 2131627057(0x7f0e0CLASSNAME, float:1.8881368E38)
             r3 = 4
             java.lang.Object[] r3 = new java.lang.Object[r3]
             r4 = 0
@@ -6799,16 +6811,16 @@ public class MessageObject {
             java.lang.String r0 = org.telegram.messenger.LocaleController.formatString(r0, r2, r3)
             r6.messageText = r0
             goto L_0x0var_
-        L_0x080a:
+        L_0x0871:
             boolean r11 = r9 instanceof org.telegram.tgnet.TLRPC$TL_messageActionUserJoined
-            if (r11 != 0) goto L_0x0cf9
+            if (r11 != 0) goto L_0x0d60
             boolean r11 = r9 instanceof org.telegram.tgnet.TLRPC$TL_messageActionContactSignUp
-            if (r11 == 0) goto L_0x0814
-            goto L_0x0cf9
-        L_0x0814:
+            if (r11 == 0) goto L_0x087b
+            goto L_0x0d60
+        L_0x087b:
             boolean r11 = r9 instanceof org.telegram.tgnet.TLRPC$TL_messageActionUserUpdatedPhoto
-            if (r11 == 0) goto L_0x082e
-            r0 = 2131626945(0x7f0e0bc1, float:1.888114E38)
+            if (r11 == 0) goto L_0x0895
+            r0 = 2131626987(0x7f0e0beb, float:1.8881226E38)
             java.lang.Object[] r1 = new java.lang.Object[r12]
             java.lang.String r2 = org.telegram.messenger.UserObject.getUserName(r2)
             r3 = 0
@@ -6817,37 +6829,37 @@ public class MessageObject {
             java.lang.String r0 = org.telegram.messenger.LocaleController.formatString(r2, r0, r1)
             r6.messageText = r0
             goto L_0x0var_
-        L_0x082e:
+        L_0x0895:
             boolean r11 = r9 instanceof org.telegram.tgnet.TLRPC$TL_messageEncryptedAction
-            if (r11 == 0) goto L_0x08c8
+            if (r11 == 0) goto L_0x092f
             org.telegram.tgnet.TLRPC$DecryptedMessageAction r0 = r9.encryptedAction
             boolean r1 = r0 instanceof org.telegram.tgnet.TLRPC$TL_decryptedMessageActionScreenshotMessages
-            if (r1 == 0) goto L_0x085f
+            if (r1 == 0) goto L_0x08c6
             boolean r0 = r20.isOut()
-            if (r0 == 0) goto L_0x084e
-            r0 = 2131624217(0x7f0e0119, float:1.8875607E38)
+            if (r0 == 0) goto L_0x08b5
+            r0 = 2131624222(0x7f0e011e, float:1.8875618E38)
             r1 = 0
             java.lang.Object[] r1 = new java.lang.Object[r1]
             java.lang.String r2 = "ActionTakeScreenshootYou"
             java.lang.String r0 = org.telegram.messenger.LocaleController.formatString(r2, r0, r1)
             r6.messageText = r0
             goto L_0x0var_
-        L_0x084e:
-            r0 = 2131624216(0x7f0e0118, float:1.8875605E38)
+        L_0x08b5:
+            r0 = 2131624221(0x7f0e011d, float:1.8875616E38)
             java.lang.String r1 = "ActionTakeScreenshoot"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             java.lang.CharSequence r0 = replaceWithLink(r0, r7, r8)
             r6.messageText = r0
             goto L_0x0var_
-        L_0x085f:
+        L_0x08c6:
             boolean r1 = r0 instanceof org.telegram.tgnet.TLRPC$TL_decryptedMessageActionSetMessageTTL
             if (r1 == 0) goto L_0x0var_
             org.telegram.tgnet.TLRPC$TL_decryptedMessageActionSetMessageTTL r0 = (org.telegram.tgnet.TLRPC$TL_decryptedMessageActionSetMessageTTL) r0
             int r1 = r0.ttl_seconds
-            if (r1 == 0) goto L_0x08a6
+            if (r1 == 0) goto L_0x090d
             boolean r1 = r20.isOut()
-            if (r1 == 0) goto L_0x0887
-            r1 = 2131626626(0x7f0e0a82, float:1.8880494E38)
+            if (r1 == 0) goto L_0x08ee
+            r1 = 2131626668(0x7f0e0aac, float:1.8880579E38)
             java.lang.Object[] r2 = new java.lang.Object[r12]
             int r0 = r0.ttl_seconds
             java.lang.String r0 = org.telegram.messenger.LocaleController.formatTTLString(r0)
@@ -6857,9 +6869,9 @@ public class MessageObject {
             java.lang.String r0 = org.telegram.messenger.LocaleController.formatString(r0, r1, r2)
             r6.messageText = r0
             goto L_0x0var_
-        L_0x0887:
+        L_0x08ee:
             r3 = 0
-            r1 = 2131626625(0x7f0e0a81, float:1.8880491E38)
+            r1 = 2131626667(0x7f0e0aab, float:1.8880577E38)
             r4 = 2
             java.lang.Object[] r4 = new java.lang.Object[r4]
             java.lang.String r2 = org.telegram.messenger.UserObject.getFirstName(r2)
@@ -6871,128 +6883,128 @@ public class MessageObject {
             java.lang.String r0 = org.telegram.messenger.LocaleController.formatString(r0, r1, r4)
             r6.messageText = r0
             goto L_0x0var_
-        L_0x08a6:
+        L_0x090d:
             boolean r0 = r20.isOut()
-            if (r0 == 0) goto L_0x08b4
-            java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r14, r13)
+            if (r0 == 0) goto L_0x091e
+            r0 = 2131626672(0x7f0e0ab0, float:1.8880587E38)
+            java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r14, r0)
             r6.messageText = r0
             goto L_0x0var_
-        L_0x08b4:
+        L_0x091e:
             java.lang.Object[] r0 = new java.lang.Object[r12]
             java.lang.String r1 = org.telegram.messenger.UserObject.getFirstName(r2)
             r11 = 0
             r0[r11] = r1
-            r1 = 2131626628(0x7f0e0a84, float:1.8880498E38)
-            java.lang.String r0 = org.telegram.messenger.LocaleController.formatString(r15, r1, r0)
+            java.lang.String r0 = org.telegram.messenger.LocaleController.formatString(r13, r15, r0)
             r6.messageText = r0
             goto L_0x0var_
-        L_0x08c8:
+        L_0x092f:
             r11 = 0
             boolean r13 = r9 instanceof org.telegram.tgnet.TLRPC$TL_messageActionScreenshotTaken
-            if (r13 == 0) goto L_0x08f3
+            if (r13 == 0) goto L_0x095a
             boolean r0 = r20.isOut()
-            if (r0 == 0) goto L_0x08e2
-            r0 = 2131624217(0x7f0e0119, float:1.8875607E38)
+            if (r0 == 0) goto L_0x0949
+            r0 = 2131624222(0x7f0e011e, float:1.8875618E38)
             java.lang.Object[] r1 = new java.lang.Object[r11]
             java.lang.String r2 = "ActionTakeScreenshootYou"
             java.lang.String r0 = org.telegram.messenger.LocaleController.formatString(r2, r0, r1)
             r6.messageText = r0
             goto L_0x0var_
-        L_0x08e2:
-            r0 = 2131624216(0x7f0e0118, float:1.8875605E38)
+        L_0x0949:
+            r0 = 2131624221(0x7f0e011d, float:1.8875616E38)
             java.lang.String r1 = "ActionTakeScreenshoot"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             java.lang.CharSequence r0 = replaceWithLink(r0, r7, r8)
             r6.messageText = r0
             goto L_0x0var_
-        L_0x08f3:
+        L_0x095a:
             boolean r11 = r9 instanceof org.telegram.tgnet.TLRPC$TL_messageActionCreatedBroadcastList
-            if (r11 == 0) goto L_0x0907
-            r0 = 2131629268(0x7f0e14d4, float:1.8885852E38)
+            if (r11 == 0) goto L_0x096e
+            r0 = 2131629328(0x7f0e1510, float:1.8885974E38)
             r1 = 0
             java.lang.Object[] r1 = new java.lang.Object[r1]
             java.lang.String r2 = "YouCreatedBroadcastList"
             java.lang.String r0 = org.telegram.messenger.LocaleController.formatString(r2, r0, r1)
             r6.messageText = r0
             goto L_0x0var_
-        L_0x0907:
+        L_0x096e:
             boolean r11 = r9 instanceof org.telegram.tgnet.TLRPC$TL_messageActionChannelCreate
-            if (r11 == 0) goto L_0x093f
+            if (r11 == 0) goto L_0x09a6
             org.telegram.tgnet.TLRPC$Peer r2 = r3.peer_id
-            if (r2 == 0) goto L_0x091a
+            if (r2 == 0) goto L_0x0981
             long r2 = r2.channel_id
             int r4 = (r2 > r18 ? 1 : (r2 == r18 ? 0 : -1))
-            if (r4 == 0) goto L_0x091a
+            if (r4 == 0) goto L_0x0981
             org.telegram.tgnet.TLRPC$Chat r7 = r6.getChat(r0, r1, r2)
-            goto L_0x091b
-        L_0x091a:
+            goto L_0x0982
+        L_0x0981:
             r7 = 0
-        L_0x091b:
+        L_0x0982:
             boolean r0 = org.telegram.messenger.ChatObject.isChannel(r7)
-            if (r0 == 0) goto L_0x0932
+            if (r0 == 0) goto L_0x0999
             boolean r0 = r7.megagroup
-            if (r0 == 0) goto L_0x0932
+            if (r0 == 0) goto L_0x0999
             r0 = 2131624165(0x7f0e00e5, float:1.8875502E38)
             java.lang.String r1 = "ActionCreateMega"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             r6.messageText = r0
             goto L_0x0var_
-        L_0x0932:
+        L_0x0999:
             r0 = 2131624163(0x7f0e00e3, float:1.8875498E38)
             java.lang.String r1 = "ActionCreateChannel"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             r6.messageText = r0
             goto L_0x0var_
-        L_0x093f:
+        L_0x09a6:
             boolean r11 = r9 instanceof org.telegram.tgnet.TLRPC$TL_messageActionChatMigrateTo
-            if (r11 == 0) goto L_0x0950
-            r0 = 2131624189(0x7f0e00fd, float:1.887555E38)
+            if (r11 == 0) goto L_0x09b7
+            r0 = 2131624194(0x7f0e0102, float:1.887556E38)
             java.lang.String r1 = "ActionMigrateFromGroup"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             r6.messageText = r0
             goto L_0x0var_
-        L_0x0950:
+        L_0x09b7:
             boolean r11 = r9 instanceof org.telegram.tgnet.TLRPC$TL_messageActionChannelMigrateFrom
-            if (r11 == 0) goto L_0x0961
-            r0 = 2131624189(0x7f0e00fd, float:1.887555E38)
+            if (r11 == 0) goto L_0x09c8
+            r0 = 2131624194(0x7f0e0102, float:1.887556E38)
             java.lang.String r1 = "ActionMigrateFromGroup"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             r6.messageText = r0
             goto L_0x0var_
-        L_0x0961:
+        L_0x09c8:
             boolean r11 = r9 instanceof org.telegram.tgnet.TLRPC$TL_messageActionPinMessage
-            if (r11 == 0) goto L_0x0976
-            if (r2 != 0) goto L_0x0970
+            if (r11 == 0) goto L_0x09dd
+            if (r2 != 0) goto L_0x09d7
             org.telegram.tgnet.TLRPC$Peer r3 = r3.peer_id
             long r3 = r3.channel_id
             org.telegram.tgnet.TLRPC$Chat r7 = r6.getChat(r0, r1, r3)
-            goto L_0x0971
-        L_0x0970:
+            goto L_0x09d8
+        L_0x09d7:
             r7 = 0
-        L_0x0971:
+        L_0x09d8:
             r6.generatePinMessageText(r2, r7)
             goto L_0x0var_
-        L_0x0976:
+        L_0x09dd:
             boolean r0 = r9 instanceof org.telegram.tgnet.TLRPC$TL_messageActionHistoryClear
-            if (r0 == 0) goto L_0x0987
-            r0 = 2131626145(0x7f0e08a1, float:1.8879518E38)
+            if (r0 == 0) goto L_0x09ee
+            r0 = 2131626182(0x7f0e08c6, float:1.8879593E38)
             java.lang.String r1 = "HistoryCleared"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             r6.messageText = r0
             goto L_0x0var_
-        L_0x0987:
+        L_0x09ee:
             boolean r0 = r9 instanceof org.telegram.tgnet.TLRPC$TL_messageActionGameScore
-            if (r0 == 0) goto L_0x0990
+            if (r0 == 0) goto L_0x09f7
             r6.generateGameMessageText(r2)
             goto L_0x0var_
-        L_0x0990:
+        L_0x09f7:
             boolean r0 = r9 instanceof org.telegram.tgnet.TLRPC$TL_messageActionPhoneCall
-            if (r0 == 0) goto L_0x0aac
+            if (r0 == 0) goto L_0x0b13
             org.telegram.tgnet.TLRPC$TL_messageActionPhoneCall r9 = (org.telegram.tgnet.TLRPC$TL_messageActionPhoneCall) r9
             org.telegram.tgnet.TLRPC$PhoneCallDiscardReason r0 = r9.reason
             boolean r0 = r0 instanceof org.telegram.tgnet.TLRPC$TL_phoneCallDiscardReasonMissed
             boolean r1 = r20.isFromUser()
-            if (r1 == 0) goto L_0x09f0
+            if (r1 == 0) goto L_0x0a57
             org.telegram.tgnet.TLRPC$Message r1 = r6.messageOwner
             org.telegram.tgnet.TLRPC$Peer r1 = r1.from_id
             long r1 = r1.user_id
@@ -7000,85 +7012,85 @@ public class MessageObject {
             org.telegram.messenger.UserConfig r3 = org.telegram.messenger.UserConfig.getInstance(r3)
             long r3 = r3.getClientUserId()
             int r5 = (r1 > r3 ? 1 : (r1 == r3 ? 0 : -1))
-            if (r5 != 0) goto L_0x09f0
-            if (r0 == 0) goto L_0x09d4
+            if (r5 != 0) goto L_0x0a57
+            if (r0 == 0) goto L_0x0a3b
             boolean r0 = r9.video
-            if (r0 == 0) goto L_0x09c7
-            r0 = 2131624796(0x7f0e035c, float:1.8876782E38)
+            if (r0 == 0) goto L_0x0a2e
+            r0 = 2131624805(0x7f0e0365, float:1.88768E38)
             java.lang.String r1 = "CallMessageVideoOutgoingMissed"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             r6.messageText = r0
-            goto L_0x0a4b
-        L_0x09c7:
-            r0 = 2131624790(0x7f0e0356, float:1.887677E38)
+            goto L_0x0ab2
+        L_0x0a2e:
+            r0 = 2131624799(0x7f0e035f, float:1.8876788E38)
             java.lang.String r1 = "CallMessageOutgoingMissed"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             r6.messageText = r0
-            goto L_0x0a4b
-        L_0x09d4:
+            goto L_0x0ab2
+        L_0x0a3b:
             boolean r0 = r9.video
-            if (r0 == 0) goto L_0x09e4
-            r0 = 2131624795(0x7f0e035b, float:1.887678E38)
+            if (r0 == 0) goto L_0x0a4b
+            r0 = 2131624804(0x7f0e0364, float:1.8876798E38)
             java.lang.String r1 = "CallMessageVideoOutgoing"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             r6.messageText = r0
-            goto L_0x0a4b
-        L_0x09e4:
-            r0 = 2131624789(0x7f0e0355, float:1.8876768E38)
+            goto L_0x0ab2
+        L_0x0a4b:
+            r0 = 2131624798(0x7f0e035e, float:1.8876786E38)
             java.lang.String r1 = "CallMessageOutgoing"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             r6.messageText = r0
-            goto L_0x0a4b
-        L_0x09f0:
-            if (r0 == 0) goto L_0x0a0e
+            goto L_0x0ab2
+        L_0x0a57:
+            if (r0 == 0) goto L_0x0a75
             boolean r0 = r9.video
-            if (r0 == 0) goto L_0x0a02
-            r0 = 2131624794(0x7f0e035a, float:1.8876778E38)
+            if (r0 == 0) goto L_0x0a69
+            r0 = 2131624803(0x7f0e0363, float:1.8876796E38)
             java.lang.String r1 = "CallMessageVideoIncomingMissed"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             r6.messageText = r0
-            goto L_0x0a4b
-        L_0x0a02:
-            r0 = 2131624788(0x7f0e0354, float:1.8876766E38)
+            goto L_0x0ab2
+        L_0x0a69:
+            r0 = 2131624797(0x7f0e035d, float:1.8876784E38)
             java.lang.String r1 = "CallMessageIncomingMissed"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             r6.messageText = r0
-            goto L_0x0a4b
-        L_0x0a0e:
+            goto L_0x0ab2
+        L_0x0a75:
             org.telegram.tgnet.TLRPC$PhoneCallDiscardReason r0 = r9.reason
             boolean r0 = r0 instanceof org.telegram.tgnet.TLRPC$TL_phoneCallDiscardReasonBusy
-            if (r0 == 0) goto L_0x0a30
+            if (r0 == 0) goto L_0x0a97
             boolean r0 = r9.video
-            if (r0 == 0) goto L_0x0a24
-            r0 = 2131624793(0x7f0e0359, float:1.8876776E38)
+            if (r0 == 0) goto L_0x0a8b
+            r0 = 2131624802(0x7f0e0362, float:1.8876794E38)
             java.lang.String r1 = "CallMessageVideoIncomingDeclined"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             r6.messageText = r0
-            goto L_0x0a4b
-        L_0x0a24:
-            r0 = 2131624787(0x7f0e0353, float:1.8876764E38)
+            goto L_0x0ab2
+        L_0x0a8b:
+            r0 = 2131624796(0x7f0e035c, float:1.8876782E38)
             java.lang.String r1 = "CallMessageIncomingDeclined"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             r6.messageText = r0
-            goto L_0x0a4b
-        L_0x0a30:
+            goto L_0x0ab2
+        L_0x0a97:
             boolean r0 = r9.video
-            if (r0 == 0) goto L_0x0a40
-            r0 = 2131624792(0x7f0e0358, float:1.8876774E38)
+            if (r0 == 0) goto L_0x0aa7
+            r0 = 2131624801(0x7f0e0361, float:1.8876792E38)
             java.lang.String r1 = "CallMessageVideoIncoming"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             r6.messageText = r0
-            goto L_0x0a4b
-        L_0x0a40:
-            r0 = 2131624786(0x7f0e0352, float:1.8876762E38)
+            goto L_0x0ab2
+        L_0x0aa7:
+            r0 = 2131624795(0x7f0e035b, float:1.887678E38)
             java.lang.String r1 = "CallMessageIncoming"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             r6.messageText = r0
-        L_0x0a4b:
+        L_0x0ab2:
             int r0 = r9.duration
             if (r0 <= 0) goto L_0x0var_
             java.lang.String r0 = org.telegram.messenger.LocaleController.formatCallDuration(r0)
-            r1 = 2131624797(0x7f0e035d, float:1.8876784E38)
+            r1 = 2131624806(0x7f0e0366, float:1.8876802E38)
             r2 = 2
             java.lang.Object[] r2 = new java.lang.Object[r2]
             java.lang.CharSequence r3 = r6.messageText
@@ -7097,20 +7109,20 @@ public class MessageObject {
             r3.<init>(r4)
             int r0 = r0.length()
             int r0 = r0 + r2
-            if (r2 <= 0) goto L_0x0a8d
+            if (r2 <= 0) goto L_0x0af4
             int r4 = r2 + -1
             char r4 = r1.charAt(r4)
             r5 = 40
-            if (r4 != r5) goto L_0x0a8d
+            if (r4 != r5) goto L_0x0af4
             int r2 = r2 + -1
-        L_0x0a8d:
+        L_0x0af4:
             int r4 = r1.length()
-            if (r0 >= r4) goto L_0x0a9d
+            if (r0 >= r4) goto L_0x0b04
             char r1 = r1.charAt(r0)
             r4 = 41
-            if (r1 != r4) goto L_0x0a9d
+            if (r1 != r4) goto L_0x0b04
             int r0 = r0 + 1
-        L_0x0a9d:
+        L_0x0b04:
             org.telegram.ui.Components.TypefaceSpan r1 = new org.telegram.ui.Components.TypefaceSpan
             android.graphics.Typeface r4 = android.graphics.Typeface.DEFAULT
             r1.<init>(r4)
@@ -7118,16 +7130,16 @@ public class MessageObject {
             r3.setSpan(r1, r2, r0, r4)
             r6.messageText = r3
             goto L_0x0var_
-        L_0x0aac:
+        L_0x0b13:
             boolean r0 = r9 instanceof org.telegram.tgnet.TLRPC$TL_messageActionPaymentSent
-            if (r0 == 0) goto L_0x0abd
+            if (r0 == 0) goto L_0x0b24
             long r0 = r20.getDialogId()
             org.telegram.tgnet.TLRPC$User r0 = r6.getUser(r4, r5, r0)
             r6.generatePaymentSentMessageText(r0)
             goto L_0x0var_
-        L_0x0abd:
+        L_0x0b24:
             boolean r0 = r9 instanceof org.telegram.tgnet.TLRPC$TL_messageActionBotAllowed
-            if (r0 == 0) goto L_0x0b08
+            if (r0 == 0) goto L_0x0b6f
             org.telegram.tgnet.TLRPC$TL_messageActionBotAllowed r9 = (org.telegram.tgnet.TLRPC$TL_messageActionBotAllowed) r9
             java.lang.String r0 = r9.domain
             r1 = 2131624137(0x7f0e00c9, float:1.8875445E38)
@@ -7141,7 +7153,7 @@ public class MessageObject {
             r4[r5] = r0
             java.lang.String r1 = java.lang.String.format(r1, r4)
             r3.<init>(r1)
-            if (r2 < 0) goto L_0x0b04
+            if (r2 < 0) goto L_0x0b6b
             org.telegram.ui.Components.URLSpanNoUnderlineBold r1 = new org.telegram.ui.Components.URLSpanNoUnderlineBold
             java.lang.StringBuilder r4 = new java.lang.StringBuilder
             r4.<init>()
@@ -7154,116 +7166,116 @@ public class MessageObject {
             int r0 = r0 + r2
             r4 = 33
             r3.setSpan(r1, r2, r0, r4)
-        L_0x0b04:
+        L_0x0b6b:
             r6.messageText = r3
             goto L_0x0var_
-        L_0x0b08:
+        L_0x0b6f:
             boolean r0 = r9 instanceof org.telegram.tgnet.TLRPC$TL_messageActionSecureValuesSent
-            if (r0 == 0) goto L_0x0CLASSNAME
+            if (r0 == 0) goto L_0x0ca7
             org.telegram.tgnet.TLRPC$TL_messageActionSecureValuesSent r9 = (org.telegram.tgnet.TLRPC$TL_messageActionSecureValuesSent) r9
             java.lang.StringBuilder r0 = new java.lang.StringBuilder
             r0.<init>()
             java.util.ArrayList<org.telegram.tgnet.TLRPC$SecureValueType> r1 = r9.types
             int r1 = r1.size()
             r2 = 0
-        L_0x0b1a:
-            if (r2 >= r1) goto L_0x0CLASSNAME
+        L_0x0b81:
+            if (r2 >= r1) goto L_0x0c7c
             java.util.ArrayList<org.telegram.tgnet.TLRPC$SecureValueType> r3 = r9.types
             java.lang.Object r3 = r3.get(r2)
             org.telegram.tgnet.TLRPC$SecureValueType r3 = (org.telegram.tgnet.TLRPC$SecureValueType) r3
             int r7 = r0.length()
-            if (r7 <= 0) goto L_0x0b2f
+            if (r7 <= 0) goto L_0x0b96
             java.lang.String r7 = ", "
             r0.append(r7)
-        L_0x0b2f:
+        L_0x0b96:
             boolean r7 = r3 instanceof org.telegram.tgnet.TLRPC$TL_secureValueTypePhone
-            if (r7 == 0) goto L_0x0b41
+            if (r7 == 0) goto L_0x0ba8
             r3 = 2131624147(0x7f0e00d3, float:1.8875465E38)
             java.lang.String r7 = "ActionBotDocumentPhone"
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r7, r3)
             r0.append(r3)
             goto L_0x0CLASSNAME
-        L_0x0b41:
+        L_0x0ba8:
             boolean r7 = r3 instanceof org.telegram.tgnet.TLRPC$TL_secureValueTypeEmail
-            if (r7 == 0) goto L_0x0b53
+            if (r7 == 0) goto L_0x0bba
             r3 = 2131624141(0x7f0e00cd, float:1.8875453E38)
             java.lang.String r7 = "ActionBotDocumentEmail"
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r7, r3)
             r0.append(r3)
             goto L_0x0CLASSNAME
-        L_0x0b53:
+        L_0x0bba:
             boolean r7 = r3 instanceof org.telegram.tgnet.TLRPC$TL_secureValueTypeAddress
-            if (r7 == 0) goto L_0x0b65
+            if (r7 == 0) goto L_0x0bcc
             r3 = 2131624138(0x7f0e00ca, float:1.8875447E38)
             java.lang.String r7 = "ActionBotDocumentAddress"
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r7, r3)
             r0.append(r3)
             goto L_0x0CLASSNAME
-        L_0x0b65:
+        L_0x0bcc:
             boolean r7 = r3 instanceof org.telegram.tgnet.TLRPC$TL_secureValueTypePersonalDetails
-            if (r7 == 0) goto L_0x0b77
+            if (r7 == 0) goto L_0x0bde
             r3 = 2131624142(0x7f0e00ce, float:1.8875455E38)
             java.lang.String r7 = "ActionBotDocumentIdentity"
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r7, r3)
             r0.append(r3)
             goto L_0x0CLASSNAME
-        L_0x0b77:
+        L_0x0bde:
             boolean r7 = r3 instanceof org.telegram.tgnet.TLRPC$TL_secureValueTypePassport
-            if (r7 == 0) goto L_0x0b89
+            if (r7 == 0) goto L_0x0bf0
             r3 = 2131624145(0x7f0e00d1, float:1.8875461E38)
             java.lang.String r7 = "ActionBotDocumentPassport"
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r7, r3)
             r0.append(r3)
             goto L_0x0CLASSNAME
-        L_0x0b89:
+        L_0x0bf0:
             boolean r7 = r3 instanceof org.telegram.tgnet.TLRPC$TL_secureValueTypeDriverLicense
-            if (r7 == 0) goto L_0x0b9b
+            if (r7 == 0) goto L_0x0CLASSNAME
             r3 = 2131624140(0x7f0e00cc, float:1.8875451E38)
             java.lang.String r7 = "ActionBotDocumentDriverLicence"
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r7, r3)
             r0.append(r3)
             goto L_0x0CLASSNAME
-        L_0x0b9b:
+        L_0x0CLASSNAME:
             boolean r7 = r3 instanceof org.telegram.tgnet.TLRPC$TL_secureValueTypeIdentityCard
-            if (r7 == 0) goto L_0x0bac
+            if (r7 == 0) goto L_0x0CLASSNAME
             r3 = 2131624143(0x7f0e00cf, float:1.8875457E38)
             java.lang.String r7 = "ActionBotDocumentIdentityCard"
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r7, r3)
             r0.append(r3)
             goto L_0x0CLASSNAME
-        L_0x0bac:
+        L_0x0CLASSNAME:
             boolean r7 = r3 instanceof org.telegram.tgnet.TLRPC$TL_secureValueTypeUtilityBill
-            if (r7 == 0) goto L_0x0bbd
+            if (r7 == 0) goto L_0x0CLASSNAME
             r3 = 2131624150(0x7f0e00d6, float:1.8875472E38)
             java.lang.String r7 = "ActionBotDocumentUtilityBill"
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r7, r3)
             r0.append(r3)
             goto L_0x0CLASSNAME
-        L_0x0bbd:
+        L_0x0CLASSNAME:
             boolean r7 = r3 instanceof org.telegram.tgnet.TLRPC$TL_secureValueTypeBankStatement
-            if (r7 == 0) goto L_0x0bce
+            if (r7 == 0) goto L_0x0CLASSNAME
             r3 = 2131624139(0x7f0e00cb, float:1.887545E38)
             java.lang.String r7 = "ActionBotDocumentBankStatement"
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r7, r3)
             r0.append(r3)
             goto L_0x0CLASSNAME
-        L_0x0bce:
+        L_0x0CLASSNAME:
             boolean r7 = r3 instanceof org.telegram.tgnet.TLRPC$TL_secureValueTypeRentalAgreement
-            if (r7 == 0) goto L_0x0bdf
+            if (r7 == 0) goto L_0x0CLASSNAME
             r3 = 2131624148(0x7f0e00d4, float:1.8875468E38)
             java.lang.String r7 = "ActionBotDocumentRentalAgreement"
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r7, r3)
             r0.append(r3)
             goto L_0x0CLASSNAME
-        L_0x0bdf:
+        L_0x0CLASSNAME:
             boolean r7 = r3 instanceof org.telegram.tgnet.TLRPC$TL_secureValueTypeInternalPassport
-            if (r7 == 0) goto L_0x0bf0
+            if (r7 == 0) goto L_0x0CLASSNAME
             r3 = 2131624144(0x7f0e00d0, float:1.887546E38)
             java.lang.String r7 = "ActionBotDocumentInternalPassport"
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r7, r3)
             r0.append(r3)
             goto L_0x0CLASSNAME
-        L_0x0bf0:
+        L_0x0CLASSNAME:
             boolean r7 = r3 instanceof org.telegram.tgnet.TLRPC$TL_secureValueTypePassportRegistration
             if (r7 == 0) goto L_0x0CLASSNAME
             r3 = 2131624146(0x7f0e00d2, float:1.8875463E38)
@@ -7280,17 +7292,17 @@ public class MessageObject {
             r0.append(r3)
         L_0x0CLASSNAME:
             int r2 = r2 + 1
-            goto L_0x0b1a
-        L_0x0CLASSNAME:
+            goto L_0x0b81
+        L_0x0c7c:
             org.telegram.tgnet.TLRPC$Message r1 = r6.messageOwner
             org.telegram.tgnet.TLRPC$Peer r1 = r1.peer_id
             if (r1 == 0) goto L_0x0CLASSNAME
             long r1 = r1.user_id
             org.telegram.tgnet.TLRPC$User r7 = r6.getUser(r4, r5, r1)
-            goto L_0x0CLASSNAME
+            goto L_0x0c8a
         L_0x0CLASSNAME:
             r7 = 0
-        L_0x0CLASSNAME:
+        L_0x0c8a:
             r1 = 2131624151(0x7f0e00d7, float:1.8875474E38)
             r2 = 2
             java.lang.Object[] r2 = new java.lang.Object[r2]
@@ -7303,9 +7315,9 @@ public class MessageObject {
             java.lang.String r0 = org.telegram.messenger.LocaleController.formatString(r0, r1, r2)
             r6.messageText = r0
             goto L_0x0var_
-        L_0x0CLASSNAME:
+        L_0x0ca7:
             boolean r0 = r9 instanceof org.telegram.tgnet.TLRPC$TL_messageActionWebViewDataSent
-            if (r0 == 0) goto L_0x0c5a
+            if (r0 == 0) goto L_0x0cc1
             org.telegram.tgnet.TLRPC$TL_messageActionWebViewDataSent r9 = (org.telegram.tgnet.TLRPC$TL_messageActionWebViewDataSent) r9
             r0 = 2131624152(0x7f0e00d8, float:1.8875476E38)
             java.lang.Object[] r1 = new java.lang.Object[r12]
@@ -7316,85 +7328,85 @@ public class MessageObject {
             java.lang.String r0 = org.telegram.messenger.LocaleController.formatString(r2, r0, r1)
             r6.messageText = r0
             goto L_0x0var_
-        L_0x0c5a:
+        L_0x0cc1:
             boolean r0 = r9 instanceof org.telegram.tgnet.TLRPC$TL_messageActionSetChatTheme
-            if (r0 == 0) goto L_0x0cb9
+            if (r0 == 0) goto L_0x0d20
             org.telegram.tgnet.TLRPC$TL_messageActionSetChatTheme r9 = (org.telegram.tgnet.TLRPC$TL_messageActionSetChatTheme) r9
             java.lang.String r0 = r9.emoticon
             java.lang.String r1 = org.telegram.messenger.UserObject.getFirstName(r2)
             boolean r2 = org.telegram.messenger.UserObject.isUserSelf(r2)
             boolean r3 = android.text.TextUtils.isEmpty(r0)
-            if (r3 == 0) goto L_0x0CLASSNAME
-            if (r2 == 0) goto L_0x0c7f
-            r0 = 2131625037(0x7f0e044d, float:1.887727E38)
+            if (r3 == 0) goto L_0x0cfb
+            if (r2 == 0) goto L_0x0ce6
+            r0 = 2131625046(0x7f0e0456, float:1.8877289E38)
             r3 = 0
             java.lang.Object[] r1 = new java.lang.Object[r3]
             java.lang.String r2 = "ChatThemeDisabledYou"
             java.lang.String r0 = org.telegram.messenger.LocaleController.formatString(r2, r0, r1)
-            goto L_0x0CLASSNAME
-        L_0x0c7f:
+            goto L_0x0cf7
+        L_0x0ce6:
             r3 = 0
-            r2 = 2131625036(0x7f0e044c, float:1.8877269E38)
+            r2 = 2131625045(0x7f0e0455, float:1.8877287E38)
             r4 = 2
             java.lang.Object[] r4 = new java.lang.Object[r4]
             r4[r3] = r1
             r4[r12] = r0
             java.lang.String r0 = "ChatThemeDisabled"
             java.lang.String r0 = org.telegram.messenger.LocaleController.formatString(r0, r2, r4)
-        L_0x0CLASSNAME:
+        L_0x0cf7:
             r6.messageText = r0
             goto L_0x0var_
-        L_0x0CLASSNAME:
+        L_0x0cfb:
             r3 = 0
-            if (r2 == 0) goto L_0x0ca5
-            r1 = 2131625034(0x7f0e044a, float:1.8877265E38)
+            if (r2 == 0) goto L_0x0d0c
+            r1 = 2131625043(0x7f0e0453, float:1.8877283E38)
             java.lang.Object[] r2 = new java.lang.Object[r12]
             r2[r3] = r0
             java.lang.String r0 = "ChatThemeChangedYou"
             java.lang.String r0 = org.telegram.messenger.LocaleController.formatString(r0, r1, r2)
-            goto L_0x0cb5
-        L_0x0ca5:
-            r2 = 2131625033(0x7f0e0449, float:1.8877263E38)
+            goto L_0x0d1c
+        L_0x0d0c:
+            r2 = 2131625042(0x7f0e0452, float:1.887728E38)
             r4 = 2
             java.lang.Object[] r4 = new java.lang.Object[r4]
             r4[r3] = r1
             r4[r12] = r0
             java.lang.String r0 = "ChatThemeChangedTo"
             java.lang.String r0 = org.telegram.messenger.LocaleController.formatString(r0, r2, r4)
-        L_0x0cb5:
+        L_0x0d1c:
             r6.messageText = r0
             goto L_0x0var_
-        L_0x0cb9:
+        L_0x0d20:
             boolean r0 = r9 instanceof org.telegram.tgnet.TLRPC$TL_messageActionChatJoinedByRequest
             if (r0 == 0) goto L_0x0var_
             boolean r0 = org.telegram.messenger.UserObject.isUserSelf(r2)
-            if (r0 == 0) goto L_0x0ce8
+            if (r0 == 0) goto L_0x0d4f
             org.telegram.tgnet.TLRPC$Message r0 = r6.messageOwner
             org.telegram.tgnet.TLRPC$Peer r0 = r0.peer_id
             long r0 = r0.channel_id
             int r2 = r6.currentAccount
             boolean r0 = org.telegram.messenger.ChatObject.isChannelAndNotMegaGroup(r0, r2)
-            if (r0 == 0) goto L_0x0cdb
-            r0 = 2131627969(0x7f0e0fc1, float:1.8883217E38)
+            if (r0 == 0) goto L_0x0d42
+            r0 = 2131628019(0x7f0e0ff3, float:1.8883319E38)
             java.lang.String r1 = "RequestToJoinChannelApproved"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
-            goto L_0x0ce4
-        L_0x0cdb:
-            r0 = 2131627973(0x7f0e0fc5, float:1.8883226E38)
+            goto L_0x0d4b
+        L_0x0d42:
+            r0 = 2131628023(0x7f0e0ff7, float:1.8883327E38)
             java.lang.String r1 = "RequestToJoinGroupApproved"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
-        L_0x0ce4:
+        L_0x0d4b:
             r6.messageText = r0
             goto L_0x0var_
-        L_0x0ce8:
-            r0 = 2131628798(0x7f0e12fe, float:1.8884899E38)
+        L_0x0d4f:
+            r0 = 2131628856(0x7f0e1338, float:1.8885016E38)
             java.lang.String r1 = "UserAcceptedToGroupAction"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             java.lang.CharSequence r0 = replaceWithLink(r0, r7, r8)
             r6.messageText = r0
             goto L_0x0var_
-        L_0x0cf9:
-            r0 = 2131626944(0x7f0e0bc0, float:1.8881138E38)
+        L_0x0d60:
+            r0 = 2131626986(0x7f0e0bea, float:1.8881224E38)
             java.lang.Object[] r1 = new java.lang.Object[r12]
             java.lang.String r2 = org.telegram.messenger.UserObject.getUserName(r2)
             r4 = 0
@@ -7403,113 +7415,113 @@ public class MessageObject {
             java.lang.String r0 = org.telegram.messenger.LocaleController.formatString(r2, r0, r1)
             r6.messageText = r0
             goto L_0x0var_
-        L_0x0d0f:
+        L_0x0d76:
             r4 = 0
             r6.isRestrictedMessage = r4
             java.util.ArrayList<org.telegram.tgnet.TLRPC$TL_restrictionReason> r0 = r3.restriction_reason
             java.lang.String r0 = org.telegram.messenger.MessagesController.getRestrictionReason(r0)
             boolean r1 = android.text.TextUtils.isEmpty(r0)
-            if (r1 != 0) goto L_0x0d24
+            if (r1 != 0) goto L_0x0d8b
             r6.messageText = r0
             r6.isRestrictedMessage = r12
             goto L_0x0var_
-        L_0x0d24:
+        L_0x0d8b:
             boolean r0 = r20.isMediaEmpty()
-            if (r0 != 0) goto L_0x0ef6
+            if (r0 != 0) goto L_0x0f5d
             org.telegram.tgnet.TLRPC$Message r0 = r6.messageOwner
             org.telegram.tgnet.TLRPC$MessageMedia r1 = r0.media
             boolean r2 = r1 instanceof org.telegram.tgnet.TLRPC$TL_messageMediaDice
-            if (r2 == 0) goto L_0x0d3a
+            if (r2 == 0) goto L_0x0da1
             java.lang.String r0 = r20.getDiceEmoji()
             r6.messageText = r0
             goto L_0x0var_
-        L_0x0d3a:
+        L_0x0da1:
             boolean r2 = r1 instanceof org.telegram.tgnet.TLRPC$TL_messageMediaPoll
-            if (r2 == 0) goto L_0x0d60
+            if (r2 == 0) goto L_0x0dc7
             org.telegram.tgnet.TLRPC$TL_messageMediaPoll r1 = (org.telegram.tgnet.TLRPC$TL_messageMediaPoll) r1
             org.telegram.tgnet.TLRPC$Poll r0 = r1.poll
             boolean r0 = r0.quiz
-            if (r0 == 0) goto L_0x0d53
-            r0 = 2131627823(0x7f0e0f2f, float:1.8882921E38)
+            if (r0 == 0) goto L_0x0dba
+            r0 = 2131627873(0x7f0e0var_, float:1.8883023E38)
             java.lang.String r1 = "QuizPoll"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             r6.messageText = r0
             goto L_0x0var_
-        L_0x0d53:
-            r0 = 2131627577(0x7f0e0e39, float:1.8882422E38)
+        L_0x0dba:
+            r0 = 2131627619(0x7f0e0e63, float:1.8882508E38)
             java.lang.String r1 = "Poll"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             r6.messageText = r0
             goto L_0x0var_
-        L_0x0d60:
+        L_0x0dc7:
             boolean r2 = r1 instanceof org.telegram.tgnet.TLRPC$TL_messageMediaPhoto
-            if (r2 == 0) goto L_0x0d86
+            if (r2 == 0) goto L_0x0ded
             int r1 = r1.ttl_seconds
-            if (r1 == 0) goto L_0x0d79
+            if (r1 == 0) goto L_0x0de0
             boolean r0 = r0 instanceof org.telegram.tgnet.TLRPC$TL_message_secret
-            if (r0 != 0) goto L_0x0d79
-            r0 = 2131624479(0x7f0e021f, float:1.8876139E38)
+            if (r0 != 0) goto L_0x0de0
+            r0 = 2131624486(0x7f0e0226, float:1.8876153E38)
             java.lang.String r1 = "AttachDestructingPhoto"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             r6.messageText = r0
             goto L_0x0var_
-        L_0x0d79:
-            r0 = 2131624502(0x7f0e0236, float:1.8876186E38)
+        L_0x0de0:
+            r0 = 2131624509(0x7f0e023d, float:1.88762E38)
             java.lang.String r1 = "AttachPhoto"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             r6.messageText = r0
             goto L_0x0var_
-        L_0x0d86:
+        L_0x0ded:
             boolean r0 = r20.isVideo()
-            if (r0 != 0) goto L_0x0ed2
+            if (r0 != 0) goto L_0x0var_
             org.telegram.tgnet.TLRPC$Message r0 = r6.messageOwner
             org.telegram.tgnet.TLRPC$MessageMedia r0 = r0.media
             boolean r0 = r0 instanceof org.telegram.tgnet.TLRPC$TL_messageMediaDocument
-            if (r0 == 0) goto L_0x0da6
+            if (r0 == 0) goto L_0x0e0d
             org.telegram.tgnet.TLRPC$Document r0 = r20.getDocument()
             boolean r0 = r0 instanceof org.telegram.tgnet.TLRPC$TL_documentEmpty
-            if (r0 == 0) goto L_0x0da6
+            if (r0 == 0) goto L_0x0e0d
             org.telegram.tgnet.TLRPC$Message r0 = r6.messageOwner
             org.telegram.tgnet.TLRPC$MessageMedia r0 = r0.media
             int r0 = r0.ttl_seconds
-            if (r0 == 0) goto L_0x0da6
-            goto L_0x0ed2
-        L_0x0da6:
+            if (r0 == 0) goto L_0x0e0d
+            goto L_0x0var_
+        L_0x0e0d:
             boolean r0 = r20.isVoice()
-            if (r0 == 0) goto L_0x0db9
-            r0 = 2131624476(0x7f0e021c, float:1.8876133E38)
+            if (r0 == 0) goto L_0x0e20
+            r0 = 2131624483(0x7f0e0223, float:1.8876147E38)
             java.lang.String r1 = "AttachAudio"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             r6.messageText = r0
             goto L_0x0var_
-        L_0x0db9:
+        L_0x0e20:
             boolean r0 = r20.isRoundVideo()
-            if (r0 == 0) goto L_0x0dcc
-            r0 = 2131624504(0x7f0e0238, float:1.887619E38)
+            if (r0 == 0) goto L_0x0e33
+            r0 = 2131624511(0x7f0e023f, float:1.8876204E38)
             java.lang.String r1 = "AttachRound"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             r6.messageText = r0
             goto L_0x0var_
-        L_0x0dcc:
+        L_0x0e33:
             org.telegram.tgnet.TLRPC$Message r0 = r6.messageOwner
             org.telegram.tgnet.TLRPC$MessageMedia r1 = r0.media
             boolean r2 = r1 instanceof org.telegram.tgnet.TLRPC$TL_messageMediaGeo
-            if (r2 != 0) goto L_0x0ec6
+            if (r2 != 0) goto L_0x0f2d
             boolean r2 = r1 instanceof org.telegram.tgnet.TLRPC$TL_messageMediaVenue
-            if (r2 == 0) goto L_0x0dda
-            goto L_0x0ec6
-        L_0x0dda:
+            if (r2 == 0) goto L_0x0e41
+            goto L_0x0f2d
+        L_0x0e41:
             boolean r2 = r1 instanceof org.telegram.tgnet.TLRPC$TL_messageMediaGeoLive
-            if (r2 == 0) goto L_0x0deb
-            r0 = 2131624488(0x7f0e0228, float:1.8876157E38)
+            if (r2 == 0) goto L_0x0e52
+            r0 = 2131624495(0x7f0e022f, float:1.8876171E38)
             java.lang.String r1 = "AttachLiveLocation"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             r6.messageText = r0
             goto L_0x0var_
-        L_0x0deb:
+        L_0x0e52:
             boolean r2 = r1 instanceof org.telegram.tgnet.TLRPC$TL_messageMediaContact
-            if (r2 == 0) goto L_0x0e14
-            r0 = 2131624478(0x7f0e021e, float:1.8876137E38)
+            if (r2 == 0) goto L_0x0e7b
+            r0 = 2131624485(0x7f0e0225, float:1.8876151E38)
             java.lang.String r1 = "AttachContact"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             r6.messageText = r0
@@ -7524,74 +7536,74 @@ public class MessageObject {
             java.lang.CharSequence r0 = org.telegram.messenger.MessageObject.VCardData.parse(r0)
             r6.vCardData = r0
             goto L_0x0var_
-        L_0x0e14:
+        L_0x0e7b:
             boolean r2 = r1 instanceof org.telegram.tgnet.TLRPC$TL_messageMediaGame
-            if (r2 == 0) goto L_0x0e1e
+            if (r2 == 0) goto L_0x0e85
             java.lang.String r0 = r0.message
             r6.messageText = r0
             goto L_0x0var_
-        L_0x0e1e:
+        L_0x0e85:
             boolean r0 = r1 instanceof org.telegram.tgnet.TLRPC$TL_messageMediaInvoice
-            if (r0 == 0) goto L_0x0e28
+            if (r0 == 0) goto L_0x0e8f
             java.lang.String r0 = r1.description
             r6.messageText = r0
             goto L_0x0var_
-        L_0x0e28:
+        L_0x0e8f:
             boolean r0 = r1 instanceof org.telegram.tgnet.TLRPC$TL_messageMediaUnsupported
-            if (r0 == 0) goto L_0x0e39
-            r0 = 2131628754(0x7f0e12d2, float:1.888481E38)
+            if (r0 == 0) goto L_0x0ea0
+            r0 = 2131628812(0x7f0e130c, float:1.8884927E38)
             java.lang.String r1 = "UnsupportedMedia"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             r6.messageText = r0
             goto L_0x0var_
-        L_0x0e39:
+        L_0x0ea0:
             boolean r0 = r1 instanceof org.telegram.tgnet.TLRPC$TL_messageMediaDocument
             if (r0 == 0) goto L_0x0var_
             boolean r0 = r20.isSticker()
-            if (r0 != 0) goto L_0x0e93
+            if (r0 != 0) goto L_0x0efa
             org.telegram.tgnet.TLRPC$Document r0 = r20.getDocument()
             boolean r0 = isAnimatedStickerDocument(r0, r12)
-            if (r0 == 0) goto L_0x0e4e
-            goto L_0x0e93
-        L_0x0e4e:
+            if (r0 == 0) goto L_0x0eb5
+            goto L_0x0efa
+        L_0x0eb5:
             boolean r0 = r20.isMusic()
-            if (r0 == 0) goto L_0x0e61
-            r0 = 2131624501(0x7f0e0235, float:1.8876183E38)
+            if (r0 == 0) goto L_0x0ec8
+            r0 = 2131624508(0x7f0e023c, float:1.8876198E38)
             java.lang.String r1 = "AttachMusic"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             r6.messageText = r0
             goto L_0x0var_
-        L_0x0e61:
+        L_0x0ec8:
             boolean r0 = r20.isGif()
-            if (r0 == 0) goto L_0x0e74
-            r0 = 2131624483(0x7f0e0223, float:1.8876147E38)
+            if (r0 == 0) goto L_0x0edb
+            r0 = 2131624490(0x7f0e022a, float:1.8876161E38)
             java.lang.String r1 = "AttachGif"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             r6.messageText = r0
             goto L_0x0var_
-        L_0x0e74:
+        L_0x0edb:
             org.telegram.tgnet.TLRPC$Document r0 = r20.getDocument()
             java.lang.String r0 = org.telegram.messenger.FileLoader.getDocumentFileName(r0)
             boolean r1 = android.text.TextUtils.isEmpty(r0)
-            if (r1 != 0) goto L_0x0e86
+            if (r1 != 0) goto L_0x0eed
             r6.messageText = r0
             goto L_0x0var_
-        L_0x0e86:
-            r0 = 2131624481(0x7f0e0221, float:1.8876143E38)
+        L_0x0eed:
+            r0 = 2131624488(0x7f0e0228, float:1.8876157E38)
             java.lang.String r1 = "AttachDocument"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             r6.messageText = r0
             goto L_0x0var_
-        L_0x0e93:
+        L_0x0efa:
             java.lang.String r0 = r20.getStickerChar()
-            if (r0 == 0) goto L_0x0eba
+            if (r0 == 0) goto L_0x0var_
             int r1 = r0.length()
-            if (r1 <= 0) goto L_0x0eba
+            if (r1 <= 0) goto L_0x0var_
             r1 = 2
             java.lang.Object[] r1 = new java.lang.Object[r1]
             r2 = 0
             r1[r2] = r0
-            r0 = 2131624505(0x7f0e0239, float:1.8876192E38)
+            r0 = 2131624512(0x7f0e0240, float:1.8876206E38)
             java.lang.String r2 = "AttachSticker"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r2, r0)
             r1[r12] = r0
@@ -7599,71 +7611,71 @@ public class MessageObject {
             java.lang.String r0 = java.lang.String.format(r0, r1)
             r6.messageText = r0
             goto L_0x0var_
-        L_0x0eba:
-            r0 = 2131624505(0x7f0e0239, float:1.8876192E38)
+        L_0x0var_:
+            r0 = 2131624512(0x7f0e0240, float:1.8876206E38)
             java.lang.String r1 = "AttachSticker"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             r6.messageText = r0
             goto L_0x0var_
-        L_0x0ec6:
-            r0 = 2131624492(0x7f0e022c, float:1.8876165E38)
+        L_0x0f2d:
+            r0 = 2131624499(0x7f0e0233, float:1.887618E38)
             java.lang.String r1 = "AttachLocation"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             r6.messageText = r0
             goto L_0x0var_
-        L_0x0ed2:
+        L_0x0var_:
             org.telegram.tgnet.TLRPC$Message r0 = r6.messageOwner
             org.telegram.tgnet.TLRPC$MessageMedia r1 = r0.media
             int r1 = r1.ttl_seconds
-            if (r1 == 0) goto L_0x0eea
+            if (r1 == 0) goto L_0x0var_
             boolean r0 = r0 instanceof org.telegram.tgnet.TLRPC$TL_message_secret
-            if (r0 != 0) goto L_0x0eea
-            r0 = 2131624480(0x7f0e0220, float:1.887614E38)
+            if (r0 != 0) goto L_0x0var_
+            r0 = 2131624487(0x7f0e0227, float:1.8876155E38)
             java.lang.String r1 = "AttachDestructingVideo"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             r6.messageText = r0
             goto L_0x0var_
-        L_0x0eea:
-            r0 = 2131624508(0x7f0e023c, float:1.8876198E38)
+        L_0x0var_:
+            r0 = 2131624515(0x7f0e0243, float:1.8876212E38)
             java.lang.String r1 = "AttachVideo"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             r6.messageText = r0
             goto L_0x0var_
-        L_0x0ef6:
+        L_0x0f5d:
             org.telegram.tgnet.TLRPC$Message r0 = r6.messageOwner
             java.lang.String r0 = r0.message
-            if (r0 == 0) goto L_0x0f2f
-            int r0 = r0.length()     // Catch:{ all -> 0x0var_ }
+            if (r0 == 0) goto L_0x0var_
+            int r0 = r0.length()     // Catch:{ all -> 0x0f8f }
             r1 = 200(0xc8, float:2.8E-43)
             java.lang.String r2 = "‌"
-            if (r0 <= r1) goto L_0x0var_
-            java.util.regex.Pattern r0 = org.telegram.messenger.AndroidUtilities.BAD_CHARS_MESSAGE_LONG_PATTERN     // Catch:{ all -> 0x0var_ }
-            org.telegram.tgnet.TLRPC$Message r1 = r6.messageOwner     // Catch:{ all -> 0x0var_ }
-            java.lang.String r1 = r1.message     // Catch:{ all -> 0x0var_ }
-            java.util.regex.Matcher r0 = r0.matcher(r1)     // Catch:{ all -> 0x0var_ }
-            java.lang.String r0 = r0.replaceAll(r2)     // Catch:{ all -> 0x0var_ }
-            r6.messageText = r0     // Catch:{ all -> 0x0var_ }
+            if (r0 <= r1) goto L_0x0f7e
+            java.util.regex.Pattern r0 = org.telegram.messenger.AndroidUtilities.BAD_CHARS_MESSAGE_LONG_PATTERN     // Catch:{ all -> 0x0f8f }
+            org.telegram.tgnet.TLRPC$Message r1 = r6.messageOwner     // Catch:{ all -> 0x0f8f }
+            java.lang.String r1 = r1.message     // Catch:{ all -> 0x0f8f }
+            java.util.regex.Matcher r0 = r0.matcher(r1)     // Catch:{ all -> 0x0f8f }
+            java.lang.String r0 = r0.replaceAll(r2)     // Catch:{ all -> 0x0f8f }
+            r6.messageText = r0     // Catch:{ all -> 0x0f8f }
             goto L_0x0var_
-        L_0x0var_:
-            java.util.regex.Pattern r0 = org.telegram.messenger.AndroidUtilities.BAD_CHARS_MESSAGE_PATTERN     // Catch:{ all -> 0x0var_ }
-            org.telegram.tgnet.TLRPC$Message r1 = r6.messageOwner     // Catch:{ all -> 0x0var_ }
-            java.lang.String r1 = r1.message     // Catch:{ all -> 0x0var_ }
-            java.util.regex.Matcher r0 = r0.matcher(r1)     // Catch:{ all -> 0x0var_ }
-            java.lang.String r0 = r0.replaceAll(r2)     // Catch:{ all -> 0x0var_ }
-            r6.messageText = r0     // Catch:{ all -> 0x0var_ }
+        L_0x0f7e:
+            java.util.regex.Pattern r0 = org.telegram.messenger.AndroidUtilities.BAD_CHARS_MESSAGE_PATTERN     // Catch:{ all -> 0x0f8f }
+            org.telegram.tgnet.TLRPC$Message r1 = r6.messageOwner     // Catch:{ all -> 0x0f8f }
+            java.lang.String r1 = r1.message     // Catch:{ all -> 0x0f8f }
+            java.util.regex.Matcher r0 = r0.matcher(r1)     // Catch:{ all -> 0x0f8f }
+            java.lang.String r0 = r0.replaceAll(r2)     // Catch:{ all -> 0x0f8f }
+            r6.messageText = r0     // Catch:{ all -> 0x0f8f }
             goto L_0x0var_
-        L_0x0var_:
+        L_0x0f8f:
             org.telegram.tgnet.TLRPC$Message r0 = r6.messageOwner
             java.lang.String r0 = r0.message
             r6.messageText = r0
             goto L_0x0var_
-        L_0x0f2f:
+        L_0x0var_:
             r6.messageText = r0
         L_0x0var_:
             java.lang.CharSequence r0 = r6.messageText
-            if (r0 != 0) goto L_0x0var_
+            if (r0 != 0) goto L_0x0f9e
             r6.messageText = r10
-        L_0x0var_:
+        L_0x0f9e:
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessageObject.updateMessageText(java.util.AbstractMap, java.util.AbstractMap, androidx.collection.LongSparseArray, androidx.collection.LongSparseArray):void");
@@ -7755,6 +7767,9 @@ public class MessageObject {
             TLRPC$MessageAction tLRPC$MessageAction = tLRPC$Message.action;
             if (tLRPC$MessageAction instanceof TLRPC$TL_messageActionLoginUnknownLocation) {
                 this.type = 0;
+            } else if (tLRPC$MessageAction instanceof TLRPC$TL_messageActionGiftPremium) {
+                this.contentType = 1;
+                this.type = 18;
             } else if ((tLRPC$MessageAction instanceof TLRPC$TL_messageActionChatEditPhoto) || (tLRPC$MessageAction instanceof TLRPC$TL_messageActionUserUpdatedPhoto)) {
                 this.contentType = 1;
                 this.type = 11;
@@ -7804,7 +7819,9 @@ public class MessageObject {
                 if (allowsBigEmoji()) {
                     iArr = new int[1];
                 }
-                this.messageText = Emoji.replaceEmoji(this.messageText, textPaint.getFontMetricsInt(), AndroidUtilities.dp(20.0f), false, iArr, this.contentType == 0, this.viewRef);
+                CharSequence replaceEmoji = Emoji.replaceEmoji(this.messageText, textPaint.getFontMetricsInt(), AndroidUtilities.dp(20.0f), false, iArr);
+                this.messageText = replaceEmoji;
+                this.messageText = replaceAnimatedEmoji(replaceEmoji, this.messageOwner.entities, textPaint.getFontMetricsInt());
                 checkEmojiOnly(iArr);
                 generateLayout(user);
                 return true;
@@ -8353,20 +8370,20 @@ public class MessageObject {
     }
 
     /* JADX WARNING: Removed duplicated region for block: B:33:0x008e  */
-    /* JADX WARNING: Removed duplicated region for block: B:50:? A[RETURN, SYNTHETIC] */
+    /* JADX WARNING: Removed duplicated region for block: B:46:? A[RETURN, SYNTHETIC] */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public void generateLinkDescription() {
         /*
-            r14 = this;
-            java.lang.CharSequence r0 = r14.linkDescription
+            r10 = this;
+            java.lang.CharSequence r0 = r10.linkDescription
             if (r0 == 0) goto L_0x0005
             return
         L_0x0005:
-            org.telegram.tgnet.TLRPC$Message r0 = r14.messageOwner
+            org.telegram.tgnet.TLRPC$Message r0 = r10.messageOwner
             org.telegram.tgnet.TLRPC$MessageMedia r0 = r0.media
             boolean r1 = r0 instanceof org.telegram.tgnet.TLRPC$TL_messageMediaWebPage
-            r2 = 0
-            r3 = 1
+            r2 = 1
+            r3 = 0
             if (r1 == 0) goto L_0x0050
             org.telegram.tgnet.TLRPC$WebPage r1 = r0.webpage
             boolean r4 = r1 instanceof org.telegram.tgnet.TLRPC$TL_webPage
@@ -8374,13 +8391,13 @@ public class MessageObject {
             java.lang.String r1 = r1.description
             if (r1 == 0) goto L_0x0050
             android.text.Spannable$Factory r0 = android.text.Spannable.Factory.getInstance()
-            org.telegram.tgnet.TLRPC$Message r1 = r14.messageOwner
+            org.telegram.tgnet.TLRPC$Message r1 = r10.messageOwner
             org.telegram.tgnet.TLRPC$MessageMedia r1 = r1.media
             org.telegram.tgnet.TLRPC$WebPage r1 = r1.webpage
             java.lang.String r1 = r1.description
             android.text.Spannable r0 = r0.newSpannable(r1)
-            r14.linkDescription = r0
-            org.telegram.tgnet.TLRPC$Message r0 = r14.messageOwner
+            r10.linkDescription = r0
+            org.telegram.tgnet.TLRPC$Message r0 = r10.messageOwner
             org.telegram.tgnet.TLRPC$MessageMedia r0 = r0.media
             org.telegram.tgnet.TLRPC$WebPage r0 = r0.webpage
             java.lang.String r0 = r0.site_name
@@ -8410,12 +8427,12 @@ public class MessageObject {
             java.lang.String r1 = r1.description
             if (r1 == 0) goto L_0x006d
             android.text.Spannable$Factory r0 = android.text.Spannable.Factory.getInstance()
-            org.telegram.tgnet.TLRPC$Message r1 = r14.messageOwner
+            org.telegram.tgnet.TLRPC$Message r1 = r10.messageOwner
             org.telegram.tgnet.TLRPC$MessageMedia r1 = r1.media
             org.telegram.tgnet.TLRPC$TL_game r1 = r1.game
             java.lang.String r1 = r1.description
             android.text.Spannable r0 = r0.newSpannable(r1)
-            r14.linkDescription = r0
+            r10.linkDescription = r0
             goto L_0x0085
         L_0x006d:
             boolean r1 = r0 instanceof org.telegram.tgnet.TLRPC$TL_messageMediaInvoice
@@ -8423,59 +8440,50 @@ public class MessageObject {
             java.lang.String r0 = r0.description
             if (r0 == 0) goto L_0x0085
             android.text.Spannable$Factory r0 = android.text.Spannable.Factory.getInstance()
-            org.telegram.tgnet.TLRPC$Message r1 = r14.messageOwner
+            org.telegram.tgnet.TLRPC$Message r1 = r10.messageOwner
             org.telegram.tgnet.TLRPC$MessageMedia r1 = r1.media
             java.lang.String r1 = r1.description
             android.text.Spannable r0 = r0.newSpannable(r1)
-            r14.linkDescription = r0
+            r10.linkDescription = r0
         L_0x0085:
             r7 = 0
         L_0x0086:
-            java.lang.CharSequence r0 = r14.linkDescription
+            java.lang.CharSequence r0 = r10.linkDescription
             boolean r0 = android.text.TextUtils.isEmpty(r0)
-            if (r0 != 0) goto L_0x00db
-            java.lang.CharSequence r0 = r14.linkDescription
+            if (r0 != 0) goto L_0x00d1
+            java.lang.CharSequence r0 = r10.linkDescription
             boolean r0 = containsUrls(r0)
             if (r0 == 0) goto L_0x00a2
-            java.lang.CharSequence r0 = r14.linkDescription     // Catch:{ Exception -> 0x009e }
+            java.lang.CharSequence r0 = r10.linkDescription     // Catch:{ Exception -> 0x009e }
             android.text.Spannable r0 = (android.text.Spannable) r0     // Catch:{ Exception -> 0x009e }
-            org.telegram.messenger.AndroidUtilities.addLinks(r0, r3)     // Catch:{ Exception -> 0x009e }
+            org.telegram.messenger.AndroidUtilities.addLinks(r0, r2)     // Catch:{ Exception -> 0x009e }
             goto L_0x00a2
         L_0x009e:
             r0 = move-exception
             org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)
         L_0x00a2:
-            java.lang.CharSequence r8 = r14.linkDescription
-            android.text.TextPaint r0 = org.telegram.ui.ActionBar.Theme.chat_msgTextPaint
-            android.graphics.Paint$FontMetricsInt r9 = r0.getFontMetricsInt()
-            r0 = 1101004800(0x41a00000, float:20.0)
-            int r10 = org.telegram.messenger.AndroidUtilities.dp(r0)
-            r11 = 0
-            int r0 = r14.contentType
-            if (r0 != 0) goto L_0x00b7
-            r12 = 1
-            goto L_0x00b8
-        L_0x00b7:
-            r12 = 0
-        L_0x00b8:
-            java.util.concurrent.atomic.AtomicReference<java.lang.ref.WeakReference<android.view.View>> r13 = r14.viewRef
-            java.lang.CharSequence r0 = org.telegram.messenger.Emoji.replaceEmoji(r8, r9, r10, r11, r12, r13)
-            r14.linkDescription = r0
-            if (r7 == 0) goto L_0x00db
+            java.lang.CharSequence r0 = r10.linkDescription
+            android.text.TextPaint r1 = org.telegram.ui.ActionBar.Theme.chat_msgTextPaint
+            android.graphics.Paint$FontMetricsInt r1 = r1.getFontMetricsInt()
+            r2 = 1101004800(0x41a00000, float:20.0)
+            int r2 = org.telegram.messenger.AndroidUtilities.dp(r2)
+            java.lang.CharSequence r0 = org.telegram.messenger.Emoji.replaceEmoji(r0, r1, r2, r3)
+            r10.linkDescription = r0
+            if (r7 == 0) goto L_0x00d1
             boolean r0 = r0 instanceof android.text.Spannable
-            if (r0 != 0) goto L_0x00cf
+            if (r0 != 0) goto L_0x00c5
             android.text.SpannableStringBuilder r0 = new android.text.SpannableStringBuilder
-            java.lang.CharSequence r1 = r14.linkDescription
+            java.lang.CharSequence r1 = r10.linkDescription
             r0.<init>(r1)
-            r14.linkDescription = r0
-        L_0x00cf:
-            boolean r4 = r14.isOutOwner()
-            java.lang.CharSequence r5 = r14.linkDescription
+            r10.linkDescription = r0
+        L_0x00c5:
+            boolean r4 = r10.isOutOwner()
+            java.lang.CharSequence r5 = r10.linkDescription
             r6 = 0
             r8 = 0
             r9 = 0
             addUrlsByPattern(r4, r5, r6, r7, r8, r9)
-        L_0x00db:
+        L_0x00d1:
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessageObject.generateLinkDescription():void");
@@ -8498,10 +8506,7 @@ public class MessageObject {
             return spannableString;
         }
         String str2 = this.messageOwner.voiceTranscription;
-        if (TextUtils.isEmpty(str2)) {
-            return str2;
-        }
-        return Emoji.replaceEmoji(str2, Theme.chat_msgTextPaint.getFontMetricsInt(), AndroidUtilities.dp(20.0f), false, this.contentType == 0, this.viewRef);
+        return !TextUtils.isEmpty(str2) ? Emoji.replaceEmoji(str2, Theme.chat_msgTextPaint.getFontMetricsInt(), AndroidUtilities.dp(20.0f), false) : str2;
     }
 
     public float measureVoiceTranscriptionHeight() {
@@ -8553,142 +8558,135 @@ public class MessageObject {
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessageObject.isVoiceTranscriptionOpen():boolean");
     }
 
-    /* JADX WARNING: Code restructure failed: missing block: B:36:0x0083, code lost:
-        if (r9.messageOwner.send_state == 0) goto L_0x0085;
+    /* JADX WARNING: Code restructure failed: missing block: B:32:0x0089, code lost:
+        if (r10.messageOwner.send_state == 0) goto L_0x008b;
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:38:0x0089, code lost:
-        if (r9.messageOwner.id >= 0) goto L_0x008c;
+    /* JADX WARNING: Code restructure failed: missing block: B:34:0x008f, code lost:
+        if (r10.messageOwner.id >= 0) goto L_0x0092;
      */
-    /* JADX WARNING: Removed duplicated region for block: B:41:0x008f  */
-    /* JADX WARNING: Removed duplicated region for block: B:50:0x00bc  */
-    /* JADX WARNING: Removed duplicated region for block: B:51:0x00cd  */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public void generateCaption() {
         /*
-            r9 = this;
-            java.lang.CharSequence r0 = r9.caption
-            if (r0 != 0) goto L_0x00e9
-            boolean r0 = r9.isRoundVideo()
+            r10 = this;
+            java.lang.CharSequence r0 = r10.caption
+            if (r0 != 0) goto L_0x00ee
+            boolean r0 = r10.isRoundVideo()
             if (r0 == 0) goto L_0x000c
-            goto L_0x00e9
+            goto L_0x00ee
         L_0x000c:
-            boolean r0 = r9.isMediaEmpty()
-            if (r0 != 0) goto L_0x00e9
-            org.telegram.tgnet.TLRPC$Message r0 = r9.messageOwner
+            boolean r0 = r10.isMediaEmpty()
+            if (r0 != 0) goto L_0x00ee
+            org.telegram.tgnet.TLRPC$Message r0 = r10.messageOwner
             org.telegram.tgnet.TLRPC$MessageMedia r1 = r0.media
             boolean r1 = r1 instanceof org.telegram.tgnet.TLRPC$TL_messageMediaGame
-            if (r1 != 0) goto L_0x00e9
+            if (r1 != 0) goto L_0x00ee
             java.lang.String r0 = r0.message
             boolean r0 = android.text.TextUtils.isEmpty(r0)
-            if (r0 != 0) goto L_0x00e9
-            org.telegram.tgnet.TLRPC$Message r0 = r9.messageOwner
-            java.lang.String r1 = r0.message
-            android.text.TextPaint r0 = org.telegram.ui.ActionBar.Theme.chat_msgTextPaint
-            android.graphics.Paint$FontMetricsInt r2 = r0.getFontMetricsInt()
-            r0 = 1101004800(0x41a00000, float:20.0)
-            int r3 = org.telegram.messenger.AndroidUtilities.dp(r0)
-            r4 = 0
-            int r0 = r9.contentType
-            r7 = 1
-            r8 = 0
-            if (r0 != 0) goto L_0x003b
-            r5 = 1
-            goto L_0x003c
-        L_0x003b:
-            r5 = 0
-        L_0x003c:
-            java.util.concurrent.atomic.AtomicReference<java.lang.ref.WeakReference<android.view.View>> r6 = r9.viewRef
-            java.lang.CharSequence r0 = org.telegram.messenger.Emoji.replaceEmoji(r1, r2, r3, r4, r5, r6)
-            r9.caption = r0
-            org.telegram.tgnet.TLRPC$Message r0 = r9.messageOwner
+            if (r0 != 0) goto L_0x00ee
+            org.telegram.tgnet.TLRPC$Message r0 = r10.messageOwner
+            java.lang.String r0 = r0.message
+            android.text.TextPaint r1 = org.telegram.ui.ActionBar.Theme.chat_msgTextPaint
+            android.graphics.Paint$FontMetricsInt r1 = r1.getFontMetricsInt()
+            r2 = 1101004800(0x41a00000, float:20.0)
+            int r2 = org.telegram.messenger.AndroidUtilities.dp(r2)
+            r3 = 0
+            java.lang.CharSequence r0 = org.telegram.messenger.Emoji.replaceEmoji(r0, r1, r2, r3)
+            r10.caption = r0
+            org.telegram.tgnet.TLRPC$Message r1 = r10.messageOwner
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$MessageEntity> r1 = r1.entities
+            android.text.TextPaint r2 = org.telegram.ui.ActionBar.Theme.chat_msgTextPaint
+            android.graphics.Paint$FontMetricsInt r2 = r2.getFontMetricsInt()
+            android.text.Spannable r0 = replaceAnimatedEmoji(r0, r1, r2)
+            r10.caption = r0
+            org.telegram.tgnet.TLRPC$Message r0 = r10.messageOwner
             int r1 = r0.send_state
-            if (r1 == 0) goto L_0x004c
+            r2 = 1
+            if (r1 == 0) goto L_0x0052
             r0 = 0
-            goto L_0x0053
-        L_0x004c:
+            goto L_0x0059
+        L_0x0052:
             java.util.ArrayList<org.telegram.tgnet.TLRPC$MessageEntity> r0 = r0.entities
             boolean r0 = r0.isEmpty()
-            r0 = r0 ^ r7
-        L_0x0053:
-            if (r0 != 0) goto L_0x008c
-            long r0 = r9.eventId
-            r2 = 0
-            int r4 = (r0 > r2 ? 1 : (r0 == r2 ? 0 : -1))
-            if (r4 != 0) goto L_0x008d
-            org.telegram.tgnet.TLRPC$Message r0 = r9.messageOwner
+            r0 = r0 ^ r2
+        L_0x0059:
+            if (r0 != 0) goto L_0x0092
+            long r0 = r10.eventId
+            r4 = 0
+            int r6 = (r0 > r4 ? 1 : (r0 == r4 ? 0 : -1))
+            if (r6 != 0) goto L_0x0091
+            org.telegram.tgnet.TLRPC$Message r0 = r10.messageOwner
             org.telegram.tgnet.TLRPC$MessageMedia r0 = r0.media
             boolean r1 = r0 instanceof org.telegram.tgnet.TLRPC$TL_messageMediaPhoto_old
-            if (r1 != 0) goto L_0x008d
+            if (r1 != 0) goto L_0x0091
             boolean r1 = r0 instanceof org.telegram.tgnet.TLRPC$TL_messageMediaPhoto_layer68
-            if (r1 != 0) goto L_0x008d
+            if (r1 != 0) goto L_0x0091
             boolean r1 = r0 instanceof org.telegram.tgnet.TLRPC$TL_messageMediaPhoto_layer74
-            if (r1 != 0) goto L_0x008d
+            if (r1 != 0) goto L_0x0091
             boolean r1 = r0 instanceof org.telegram.tgnet.TLRPC$TL_messageMediaDocument_old
-            if (r1 != 0) goto L_0x008d
+            if (r1 != 0) goto L_0x0091
             boolean r1 = r0 instanceof org.telegram.tgnet.TLRPC$TL_messageMediaDocument_layer68
-            if (r1 != 0) goto L_0x008d
+            if (r1 != 0) goto L_0x0091
             boolean r0 = r0 instanceof org.telegram.tgnet.TLRPC$TL_messageMediaDocument_layer74
-            if (r0 != 0) goto L_0x008d
-            boolean r0 = r9.isOut()
-            if (r0 == 0) goto L_0x0085
-            org.telegram.tgnet.TLRPC$Message r0 = r9.messageOwner
+            if (r0 != 0) goto L_0x0091
+            boolean r0 = r10.isOut()
+            if (r0 == 0) goto L_0x008b
+            org.telegram.tgnet.TLRPC$Message r0 = r10.messageOwner
             int r0 = r0.send_state
-            if (r0 != 0) goto L_0x008d
-        L_0x0085:
-            org.telegram.tgnet.TLRPC$Message r0 = r9.messageOwner
+            if (r0 != 0) goto L_0x0091
+        L_0x008b:
+            org.telegram.tgnet.TLRPC$Message r0 = r10.messageOwner
             int r0 = r0.id
-            if (r0 >= 0) goto L_0x008c
-            goto L_0x008d
-        L_0x008c:
-            r7 = 0
-        L_0x008d:
-            if (r7 == 0) goto L_0x00b1
-            java.lang.CharSequence r0 = r9.caption
+            if (r0 >= 0) goto L_0x0092
+        L_0x0091:
+            r3 = 1
+        L_0x0092:
+            if (r3 == 0) goto L_0x00b6
+            java.lang.CharSequence r0 = r10.caption
             boolean r0 = containsUrls(r0)
-            if (r0 == 0) goto L_0x00a4
-            java.lang.CharSequence r0 = r9.caption     // Catch:{ Exception -> 0x00a0 }
-            android.text.Spannable r0 = (android.text.Spannable) r0     // Catch:{ Exception -> 0x00a0 }
+            if (r0 == 0) goto L_0x00a9
+            java.lang.CharSequence r0 = r10.caption     // Catch:{ Exception -> 0x00a5 }
+            android.text.Spannable r0 = (android.text.Spannable) r0     // Catch:{ Exception -> 0x00a5 }
             r1 = 5
-            org.telegram.messenger.AndroidUtilities.addLinks(r0, r1)     // Catch:{ Exception -> 0x00a0 }
-            goto L_0x00a4
-        L_0x00a0:
+            org.telegram.messenger.AndroidUtilities.addLinks(r0, r1)     // Catch:{ Exception -> 0x00a5 }
+            goto L_0x00a9
+        L_0x00a5:
             r0 = move-exception
             org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)
-        L_0x00a4:
-            boolean r1 = r9.isOutOwner()
-            java.lang.CharSequence r2 = r9.caption
-            r3 = 1
-            r4 = 0
-            r5 = 0
+        L_0x00a9:
+            boolean r4 = r10.isOutOwner()
+            java.lang.CharSequence r5 = r10.caption
             r6 = 1
-            addUrlsByPattern(r1, r2, r3, r4, r5, r6)
-        L_0x00b1:
-            java.lang.CharSequence r0 = r9.caption
-            r9.addEntitiesToText(r0, r7)
-            boolean r0 = r9.isVideo()
-            if (r0 == 0) goto L_0x00cd
-            boolean r1 = r9.isOutOwner()
-            java.lang.CharSequence r2 = r9.caption
+            r7 = 0
+            r8 = 0
+            r9 = 1
+            addUrlsByPattern(r4, r5, r6, r7, r8, r9)
+        L_0x00b6:
+            java.lang.CharSequence r0 = r10.caption
+            r10.addEntitiesToText(r0, r3)
+            boolean r0 = r10.isVideo()
+            if (r0 == 0) goto L_0x00d2
+            boolean r1 = r10.isOutOwner()
+            java.lang.CharSequence r2 = r10.caption
             r3 = 1
             r4 = 3
-            int r5 = r9.getDuration()
+            int r5 = r10.getDuration()
             r6 = 0
             addUrlsByPattern(r1, r2, r3, r4, r5, r6)
-            goto L_0x00e9
-        L_0x00cd:
-            boolean r0 = r9.isMusic()
-            if (r0 != 0) goto L_0x00d9
-            boolean r0 = r9.isVoice()
-            if (r0 == 0) goto L_0x00e9
-        L_0x00d9:
-            boolean r1 = r9.isOutOwner()
-            java.lang.CharSequence r2 = r9.caption
+            goto L_0x00ee
+        L_0x00d2:
+            boolean r0 = r10.isMusic()
+            if (r0 != 0) goto L_0x00de
+            boolean r0 = r10.isVoice()
+            if (r0 == 0) goto L_0x00ee
+        L_0x00de:
+            boolean r1 = r10.isOutOwner()
+            java.lang.CharSequence r2 = r10.caption
             r3 = 1
             r4 = 4
-            int r5 = r9.getDuration()
+            int r5 = r10.getDuration()
             r6 = 0
             addUrlsByPattern(r1, r2, r3, r4, r5, r6)
-        L_0x00e9:
+        L_0x00ee:
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessageObject.generateCaption():void");
@@ -9110,11 +9108,39 @@ public class MessageObject {
         return addEntitiesToText(charSequence, this.messageOwner.entities, isOutOwner(), true, z, z2);
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:116:0x0171  */
-    /* JADX WARNING: Removed duplicated region for block: B:144:0x0220  */
-    /* JADX WARNING: Removed duplicated region for block: B:198:0x03df  */
-    /* JADX WARNING: Removed duplicated region for block: B:201:0x03f3  */
-    /* JADX WARNING: Removed duplicated region for block: B:206:0x0225 A[SYNTHETIC] */
+    public static Spannable replaceAnimatedEmoji(CharSequence charSequence, ArrayList<TLRPC$MessageEntity> arrayList, Paint.FontMetricsInt fontMetricsInt) {
+        Spannable spannableString = charSequence instanceof Spannable ? (Spannable) charSequence : new SpannableString(charSequence);
+        Emoji.EmojiSpan[] emojiSpanArr = (Emoji.EmojiSpan[]) spannableString.getSpans(0, spannableString.length(), Emoji.EmojiSpan.class);
+        for (int i = 0; i < arrayList.size(); i++) {
+            TLRPC$MessageEntity tLRPC$MessageEntity = arrayList.get(i);
+            if (tLRPC$MessageEntity instanceof TLRPC$TL_messageEntityCustomEmoji) {
+                TLRPC$TL_messageEntityCustomEmoji tLRPC$TL_messageEntityCustomEmoji = (TLRPC$TL_messageEntityCustomEmoji) tLRPC$MessageEntity;
+                for (int i2 = 0; i2 < emojiSpanArr.length; i2++) {
+                    Emoji.EmojiSpan emojiSpan = emojiSpanArr[i2];
+                    if (emojiSpan != null) {
+                        int spanStart = spannableString.getSpanStart(emojiSpan);
+                        int spanEnd = spannableString.getSpanEnd(emojiSpan);
+                        if (tLRPC$TL_messageEntityCustomEmoji.offset == spanStart && tLRPC$TL_messageEntityCustomEmoji.length == spanEnd - spanStart) {
+                            spannableString.removeSpan(emojiSpan);
+                            emojiSpanArr[i2] = null;
+                        }
+                    }
+                }
+                if (tLRPC$MessageEntity.offset + tLRPC$MessageEntity.length <= spannableString.length()) {
+                    AnimatedEmojiSpan animatedEmojiSpan = new AnimatedEmojiSpan(tLRPC$TL_messageEntityCustomEmoji.document_id, fontMetricsInt);
+                    int i3 = tLRPC$MessageEntity.offset;
+                    spannableString.setSpan(animatedEmojiSpan, i3, tLRPC$MessageEntity.length + i3, 33);
+                }
+            }
+        }
+        return spannableString;
+    }
+
+    /* JADX WARNING: Removed duplicated region for block: B:120:0x017b  */
+    /* JADX WARNING: Removed duplicated region for block: B:148:0x022a  */
+    /* JADX WARNING: Removed duplicated region for block: B:202:0x03e9  */
+    /* JADX WARNING: Removed duplicated region for block: B:205:0x03fd  */
+    /* JADX WARNING: Removed duplicated region for block: B:210:0x022f A[SYNTHETIC] */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public static boolean addEntitiesToText(java.lang.CharSequence r17, java.util.ArrayList<org.telegram.tgnet.TLRPC$MessageEntity> r18, boolean r19, boolean r20, boolean r21, boolean r22) {
         /*
@@ -9163,16 +9189,16 @@ public class MessageObject {
             r8 = 0
         L_0x0045:
             r13 = 0
-            if (r8 >= r7) goto L_0x022a
+            if (r8 >= r7) goto L_0x0234
             java.lang.Object r15 = r6.get(r8)
             org.telegram.tgnet.TLRPC$MessageEntity r15 = (org.telegram.tgnet.TLRPC$MessageEntity) r15
             int r2 = r15.length
-            if (r2 <= 0) goto L_0x0224
+            if (r2 <= 0) goto L_0x022e
             int r2 = r15.offset
-            if (r2 < 0) goto L_0x0224
+            if (r2 < 0) goto L_0x022e
             int r12 = r17.length()
             if (r2 < r12) goto L_0x005e
-            goto L_0x0224
+            goto L_0x022e
         L_0x005e:
             int r2 = r15.offset
             int r12 = r15.length
@@ -9184,63 +9210,69 @@ public class MessageObject {
             int r2 = r2 - r12
             r15.length = r2
         L_0x0072:
-            if (r22 == 0) goto L_0x00a0
+            if (r22 == 0) goto L_0x00a4
             boolean r2 = r15 instanceof org.telegram.tgnet.TLRPC$TL_messageEntityBold
-            if (r2 != 0) goto L_0x00a0
+            if (r2 != 0) goto L_0x00a4
             boolean r2 = r15 instanceof org.telegram.tgnet.TLRPC$TL_messageEntityItalic
-            if (r2 != 0) goto L_0x00a0
+            if (r2 != 0) goto L_0x00a4
             boolean r2 = r15 instanceof org.telegram.tgnet.TLRPC$TL_messageEntityStrike
-            if (r2 != 0) goto L_0x00a0
+            if (r2 != 0) goto L_0x00a4
             boolean r2 = r15 instanceof org.telegram.tgnet.TLRPC$TL_messageEntityUnderline
-            if (r2 != 0) goto L_0x00a0
+            if (r2 != 0) goto L_0x00a4
             boolean r2 = r15 instanceof org.telegram.tgnet.TLRPC$TL_messageEntityBlockquote
-            if (r2 != 0) goto L_0x00a0
+            if (r2 != 0) goto L_0x00a4
             boolean r2 = r15 instanceof org.telegram.tgnet.TLRPC$TL_messageEntityCode
-            if (r2 != 0) goto L_0x00a0
+            if (r2 != 0) goto L_0x00a4
             boolean r2 = r15 instanceof org.telegram.tgnet.TLRPC$TL_messageEntityPre
-            if (r2 != 0) goto L_0x00a0
+            if (r2 != 0) goto L_0x00a4
             boolean r2 = r15 instanceof org.telegram.tgnet.TLRPC$TL_messageEntityMentionName
-            if (r2 != 0) goto L_0x00a0
+            if (r2 != 0) goto L_0x00a4
             boolean r2 = r15 instanceof org.telegram.tgnet.TLRPC$TL_inputMessageEntityMentionName
-            if (r2 != 0) goto L_0x00a0
+            if (r2 != 0) goto L_0x00a4
             boolean r2 = r15 instanceof org.telegram.tgnet.TLRPC$TL_messageEntityTextUrl
-            if (r2 != 0) goto L_0x00a0
+            if (r2 != 0) goto L_0x00a4
             boolean r2 = r15 instanceof org.telegram.tgnet.TLRPC$TL_messageEntitySpoiler
-            if (r2 == 0) goto L_0x00d4
-        L_0x00a0:
-            if (r3 == 0) goto L_0x00d4
+            if (r2 != 0) goto L_0x00a4
+            boolean r2 = r15 instanceof org.telegram.tgnet.TLRPC$TL_messageEntityCustomEmoji
+            if (r2 == 0) goto L_0x00d8
+        L_0x00a4:
+            if (r3 == 0) goto L_0x00d8
             int r2 = r3.length
-            if (r2 <= 0) goto L_0x00d4
+            if (r2 <= 0) goto L_0x00d8
             r2 = 0
-        L_0x00a6:
+        L_0x00aa:
             int r12 = r3.length
-            if (r2 >= r12) goto L_0x00d4
+            if (r2 >= r12) goto L_0x00d8
             r12 = r3[r2]
-            if (r12 != 0) goto L_0x00ae
-            goto L_0x00d1
-        L_0x00ae:
+            if (r12 != 0) goto L_0x00b2
+            goto L_0x00d5
+        L_0x00b2:
             r12 = r3[r2]
             int r12 = r1.getSpanStart(r12)
             r5 = r3[r2]
             int r5 = r1.getSpanEnd(r5)
             int r9 = r15.offset
-            if (r9 > r12) goto L_0x00c3
+            if (r9 > r12) goto L_0x00c7
             int r14 = r15.length
             int r14 = r14 + r9
-            if (r14 >= r12) goto L_0x00ca
-        L_0x00c3:
-            if (r9 > r5) goto L_0x00d1
+            if (r14 >= r12) goto L_0x00ce
+        L_0x00c7:
+            if (r9 > r5) goto L_0x00d5
             int r12 = r15.length
             int r9 = r9 + r12
-            if (r9 < r5) goto L_0x00d1
-        L_0x00ca:
+            if (r9 < r5) goto L_0x00d5
+        L_0x00ce:
             r5 = r3[r2]
             r1.removeSpan(r5)
             r3[r2] = r13
-        L_0x00d1:
+        L_0x00d5:
             int r2 = r2 + 1
-            goto L_0x00a6
-        L_0x00d4:
+            goto L_0x00aa
+        L_0x00d8:
+            boolean r2 = r15 instanceof org.telegram.tgnet.TLRPC$TL_messageEntityCustomEmoji
+            if (r2 == 0) goto L_0x00de
+            goto L_0x022e
+        L_0x00de:
             org.telegram.ui.Components.TextStyleSpan$TextStyleRun r2 = new org.telegram.ui.Components.TextStyleSpan$TextStyleRun
             r2.<init>()
             int r5 = r15.offset
@@ -9249,124 +9281,124 @@ public class MessageObject {
             int r5 = r5 + r9
             r2.end = r5
             boolean r5 = r15 instanceof org.telegram.tgnet.TLRPC$TL_messageEntitySpoiler
-            if (r5 == 0) goto L_0x00ed
+            if (r5 == 0) goto L_0x00f7
             r5 = 256(0x100, float:3.59E-43)
             r2.flags = r5
-        L_0x00ea:
+        L_0x00f4:
             r5 = 2
-            goto L_0x016a
-        L_0x00ed:
+            goto L_0x0174
+        L_0x00f7:
             boolean r5 = r15 instanceof org.telegram.tgnet.TLRPC$TL_messageEntityStrike
-            if (r5 == 0) goto L_0x00f6
+            if (r5 == 0) goto L_0x0100
             r5 = 8
             r2.flags = r5
-            goto L_0x00ea
-        L_0x00f6:
+            goto L_0x00f4
+        L_0x0100:
             boolean r5 = r15 instanceof org.telegram.tgnet.TLRPC$TL_messageEntityUnderline
-            if (r5 == 0) goto L_0x00ff
+            if (r5 == 0) goto L_0x0109
             r5 = 16
             r2.flags = r5
-            goto L_0x00ea
-        L_0x00ff:
+            goto L_0x00f4
+        L_0x0109:
             boolean r5 = r15 instanceof org.telegram.tgnet.TLRPC$TL_messageEntityBlockquote
-            if (r5 == 0) goto L_0x0108
+            if (r5 == 0) goto L_0x0112
             r5 = 32
             r2.flags = r5
-            goto L_0x00ea
-        L_0x0108:
+            goto L_0x00f4
+        L_0x0112:
             boolean r5 = r15 instanceof org.telegram.tgnet.TLRPC$TL_messageEntityBold
-            if (r5 == 0) goto L_0x0110
+            if (r5 == 0) goto L_0x011a
             r5 = 1
             r2.flags = r5
-            goto L_0x00ea
-        L_0x0110:
+            goto L_0x00f4
+        L_0x011a:
             boolean r5 = r15 instanceof org.telegram.tgnet.TLRPC$TL_messageEntityItalic
-            if (r5 == 0) goto L_0x0118
+            if (r5 == 0) goto L_0x0122
             r5 = 2
             r2.flags = r5
-            goto L_0x016a
-        L_0x0118:
+            goto L_0x0174
+        L_0x0122:
             r5 = 2
             boolean r9 = r15 instanceof org.telegram.tgnet.TLRPC$TL_messageEntityCode
-            if (r9 != 0) goto L_0x0167
+            if (r9 != 0) goto L_0x0171
             boolean r9 = r15 instanceof org.telegram.tgnet.TLRPC$TL_messageEntityPre
-            if (r9 == 0) goto L_0x0122
-            goto L_0x0167
-        L_0x0122:
+            if (r9 == 0) goto L_0x012c
+            goto L_0x0171
+        L_0x012c:
             boolean r9 = r15 instanceof org.telegram.tgnet.TLRPC$TL_messageEntityMentionName
             r12 = 64
-            if (r9 == 0) goto L_0x0131
-            if (r20 != 0) goto L_0x012c
-            goto L_0x0224
-        L_0x012c:
+            if (r9 == 0) goto L_0x013b
+            if (r20 != 0) goto L_0x0136
+            goto L_0x022e
+        L_0x0136:
             r2.flags = r12
             r2.urlEntity = r15
-            goto L_0x016a
-        L_0x0131:
+            goto L_0x0174
+        L_0x013b:
             boolean r9 = r15 instanceof org.telegram.tgnet.TLRPC$TL_inputMessageEntityMentionName
-            if (r9 == 0) goto L_0x013e
-            if (r20 != 0) goto L_0x0139
-            goto L_0x0224
-        L_0x0139:
+            if (r9 == 0) goto L_0x0148
+            if (r20 != 0) goto L_0x0143
+            goto L_0x022e
+        L_0x0143:
             r2.flags = r12
             r2.urlEntity = r15
-            goto L_0x016a
-        L_0x013e:
-            if (r22 == 0) goto L_0x0146
+            goto L_0x0174
+        L_0x0148:
+            if (r22 == 0) goto L_0x0150
             boolean r9 = r15 instanceof org.telegram.tgnet.TLRPC$TL_messageEntityTextUrl
-            if (r9 != 0) goto L_0x0146
-            goto L_0x0224
-        L_0x0146:
+            if (r9 != 0) goto L_0x0150
+            goto L_0x022e
+        L_0x0150:
             boolean r9 = r15 instanceof org.telegram.tgnet.TLRPC$TL_messageEntityUrl
-            if (r9 != 0) goto L_0x014e
+            if (r9 != 0) goto L_0x0158
             boolean r9 = r15 instanceof org.telegram.tgnet.TLRPC$TL_messageEntityTextUrl
-            if (r9 == 0) goto L_0x0158
-        L_0x014e:
+            if (r9 == 0) goto L_0x0162
+        L_0x0158:
             java.lang.String r9 = r15.url
             boolean r9 = org.telegram.messenger.browser.Browser.isPassportUrl(r9)
-            if (r9 == 0) goto L_0x0158
-            goto L_0x0224
-        L_0x0158:
+            if (r9 == 0) goto L_0x0162
+            goto L_0x022e
+        L_0x0162:
             boolean r9 = r15 instanceof org.telegram.tgnet.TLRPC$TL_messageEntityMention
-            if (r9 == 0) goto L_0x0160
-            if (r20 != 0) goto L_0x0160
-            goto L_0x0224
-        L_0x0160:
+            if (r9 == 0) goto L_0x016a
+            if (r20 != 0) goto L_0x016a
+            goto L_0x022e
+        L_0x016a:
             r9 = 128(0x80, float:1.794E-43)
             r2.flags = r9
             r2.urlEntity = r15
-            goto L_0x016a
-        L_0x0167:
+            goto L_0x0174
+        L_0x0171:
             r9 = 4
             r2.flags = r9
-        L_0x016a:
+        L_0x0174:
             int r9 = r11.size()
             r12 = 0
-        L_0x016f:
-            if (r12 >= r9) goto L_0x0219
+        L_0x0179:
+            if (r12 >= r9) goto L_0x0223
             java.lang.Object r13 = r11.get(r12)
             org.telegram.ui.Components.TextStyleSpan$TextStyleRun r13 = (org.telegram.ui.Components.TextStyleSpan.TextStyleRun) r13
             int r14 = r13.flags
             r15 = 256(0x100, float:3.59E-43)
             r14 = r14 & r15
-            if (r14 == 0) goto L_0x018b
+            if (r14 == 0) goto L_0x0195
             int r14 = r2.start
             int r15 = r13.start
-            if (r14 < r15) goto L_0x018b
+            if (r14 < r15) goto L_0x0195
             int r14 = r2.end
             int r15 = r13.end
-            if (r14 > r15) goto L_0x018b
-            goto L_0x01d9
-        L_0x018b:
+            if (r14 > r15) goto L_0x0195
+            goto L_0x01e3
+        L_0x0195:
             int r14 = r2.start
             int r15 = r13.start
-            if (r14 <= r15) goto L_0x01d5
+            if (r14 <= r15) goto L_0x01df
             int r15 = r13.end
-            if (r14 < r15) goto L_0x0196
-            goto L_0x01d9
-        L_0x0196:
+            if (r14 < r15) goto L_0x01a0
+            goto L_0x01e3
+        L_0x01a0:
             int r14 = r2.end
-            if (r14 >= r15) goto L_0x01b9
+            if (r14 >= r15) goto L_0x01c3
             org.telegram.ui.Components.TextStyleSpan$TextStyleRun r14 = new org.telegram.ui.Components.TextStyleSpan$TextStyleRun
             r14.<init>(r2)
             r14.merge(r13)
@@ -9381,8 +9413,8 @@ public class MessageObject {
             int r12 = r12 + r15
             int r9 = r9 + r15
             r11.add(r12, r14)
-            goto L_0x01cc
-        L_0x01b9:
+            goto L_0x01d6
+        L_0x01c3:
             org.telegram.ui.Components.TextStyleSpan$TextStyleRun r14 = new org.telegram.ui.Components.TextStyleSpan$TextStyleRun
             r14.<init>(r2)
             r14.merge(r13)
@@ -9391,26 +9423,26 @@ public class MessageObject {
             int r12 = r12 + 1
             int r9 = r9 + 1
             r11.add(r12, r14)
-        L_0x01cc:
+        L_0x01d6:
             int r14 = r2.start
             int r15 = r13.end
             r2.start = r15
             r13.end = r14
-            goto L_0x01d9
-        L_0x01d5:
+            goto L_0x01e3
+        L_0x01df:
             int r14 = r2.end
-            if (r15 < r14) goto L_0x01dc
-        L_0x01d9:
+            if (r15 < r14) goto L_0x01e6
+        L_0x01e3:
             r5 = r9
             r9 = 1
-            goto L_0x0214
-        L_0x01dc:
+            goto L_0x021e
+        L_0x01e6:
             int r5 = r13.end
-            if (r14 != r5) goto L_0x01e4
+            if (r14 != r5) goto L_0x01ee
             r13.merge(r2)
-            goto L_0x0211
-        L_0x01e4:
-            if (r14 >= r5) goto L_0x01fe
+            goto L_0x021b
+        L_0x01ee:
+            if (r14 >= r5) goto L_0x0208
             org.telegram.ui.Components.TextStyleSpan$TextStyleRun r5 = new org.telegram.ui.Components.TextStyleSpan$TextStyleRun
             r5.<init>(r13)
             r5.merge(r2)
@@ -9421,8 +9453,8 @@ public class MessageObject {
             r11.add(r12, r5)
             int r5 = r2.end
             r13.start = r5
-            goto L_0x0211
-        L_0x01fe:
+            goto L_0x021b
+        L_0x0208:
             org.telegram.ui.Components.TextStyleSpan$TextStyleRun r5 = new org.telegram.ui.Components.TextStyleSpan$TextStyleRun
             r5.<init>(r2)
             int r14 = r13.end
@@ -9431,71 +9463,71 @@ public class MessageObject {
             int r9 = r9 + 1
             r11.add(r12, r5)
             r13.merge(r2)
-        L_0x0211:
+        L_0x021b:
             r2.end = r15
-            goto L_0x01d9
-        L_0x0214:
+            goto L_0x01e3
+        L_0x021e:
             int r12 = r12 + r9
             r9 = r5
             r5 = 2
-            goto L_0x016f
-        L_0x0219:
+            goto L_0x0179
+        L_0x0223:
             r9 = 1
             int r5 = r2.start
             int r12 = r2.end
-            if (r5 >= r12) goto L_0x0225
+            if (r5 >= r12) goto L_0x022f
             r11.add(r2)
-            goto L_0x0225
-        L_0x0224:
+            goto L_0x022f
+        L_0x022e:
             r9 = 1
-        L_0x0225:
+        L_0x022f:
             int r8 = r8 + 1
             r2 = 0
             goto L_0x0045
-        L_0x022a:
+        L_0x0234:
             r9 = 1
             int r2 = r11.size()
             r12 = r4
             r14 = 0
-        L_0x0231:
-            if (r14 >= r2) goto L_0x03fb
+        L_0x023b:
+            if (r14 >= r2) goto L_0x0405
             java.lang.Object r3 = r11.get(r14)
             r15 = r3
             org.telegram.ui.Components.TextStyleSpan$TextStyleRun r15 = (org.telegram.ui.Components.TextStyleSpan.TextStyleRun) r15
             org.telegram.tgnet.TLRPC$MessageEntity r3 = r15.urlEntity
-            if (r3 == 0) goto L_0x0248
+            if (r3 == 0) goto L_0x0252
             int r4 = r3.offset
             int r3 = r3.length
             int r3 = r3 + r4
             java.lang.String r3 = android.text.TextUtils.substring(r0, r4, r3)
-            goto L_0x0249
-        L_0x0248:
+            goto L_0x0253
+        L_0x0252:
             r3 = r13
-        L_0x0249:
+        L_0x0253:
             org.telegram.tgnet.TLRPC$MessageEntity r4 = r15.urlEntity
             boolean r5 = r4 instanceof org.telegram.tgnet.TLRPC$TL_messageEntityBotCommand
             r8 = 33
-            if (r5 == 0) goto L_0x0263
+            if (r5 == 0) goto L_0x026d
             org.telegram.ui.Components.URLSpanBotCommand r4 = new org.telegram.ui.Components.URLSpanBotCommand
             r4.<init>(r3, r10, r15)
             int r3 = r15.start
             int r5 = r15.end
             r1.setSpan(r4, r3, r5, r8)
-        L_0x025d:
+        L_0x0267:
             r13 = 33
             r16 = 4
-            goto L_0x03dc
-        L_0x0263:
+            goto L_0x03e6
+        L_0x026d:
             boolean r5 = r4 instanceof org.telegram.tgnet.TLRPC$TL_messageEntityHashtag
-            if (r5 != 0) goto L_0x03cc
+            if (r5 != 0) goto L_0x03d6
             boolean r5 = r4 instanceof org.telegram.tgnet.TLRPC$TL_messageEntityMention
-            if (r5 != 0) goto L_0x03cc
+            if (r5 != 0) goto L_0x03d6
             boolean r5 = r4 instanceof org.telegram.tgnet.TLRPC$TL_messageEntityCashtag
-            if (r5 == 0) goto L_0x0271
-            goto L_0x03cc
-        L_0x0271:
+            if (r5 == 0) goto L_0x027b
+            goto L_0x03d6
+        L_0x027b:
             boolean r5 = r4 instanceof org.telegram.tgnet.TLRPC$TL_messageEntityEmail
-            if (r5 == 0) goto L_0x0293
+            if (r5 == 0) goto L_0x029d
             org.telegram.ui.Components.URLSpanReplacement r4 = new org.telegram.ui.Components.URLSpanReplacement
             java.lang.StringBuilder r5 = new java.lang.StringBuilder
             r5.<init>()
@@ -9507,14 +9539,14 @@ public class MessageObject {
             int r3 = r15.start
             int r5 = r15.end
             r1.setSpan(r4, r3, r5, r8)
-            goto L_0x025d
-        L_0x0293:
+            goto L_0x0267
+        L_0x029d:
             boolean r5 = r4 instanceof org.telegram.tgnet.TLRPC$TL_messageEntityUrl
-            if (r5 == 0) goto L_0x02ce
+            if (r5 == 0) goto L_0x02d8
             java.lang.String r4 = r3.toLowerCase()
             java.lang.String r5 = "://"
             boolean r4 = r4.contains(r5)
-            if (r4 != 0) goto L_0x02c1
+            if (r4 != 0) goto L_0x02cb
             org.telegram.ui.Components.URLSpanBrowser r4 = new org.telegram.ui.Components.URLSpanBrowser
             java.lang.StringBuilder r5 = new java.lang.StringBuilder
             r5.<init>()
@@ -9526,17 +9558,17 @@ public class MessageObject {
             int r3 = r15.start
             int r5 = r15.end
             r1.setSpan(r4, r3, r5, r8)
-            goto L_0x02ef
-        L_0x02c1:
+            goto L_0x02f9
+        L_0x02cb:
             org.telegram.ui.Components.URLSpanBrowser r4 = new org.telegram.ui.Components.URLSpanBrowser
             r4.<init>(r3, r15)
             int r3 = r15.start
             int r5 = r15.end
             r1.setSpan(r4, r3, r5, r8)
-            goto L_0x02ef
-        L_0x02ce:
+            goto L_0x02f9
+        L_0x02d8:
             boolean r5 = r4 instanceof org.telegram.tgnet.TLRPC$TL_messageEntityBankCard
-            if (r5 == 0) goto L_0x02f7
+            if (r5 == 0) goto L_0x0301
             org.telegram.ui.Components.URLSpanNoUnderline r4 = new org.telegram.ui.Components.URLSpanNoUnderline
             java.lang.StringBuilder r5 = new java.lang.StringBuilder
             r5.<init>()
@@ -9548,25 +9580,25 @@ public class MessageObject {
             int r3 = r15.start
             int r5 = r15.end
             r1.setSpan(r4, r3, r5, r8)
-        L_0x02ef:
+        L_0x02f9:
             r5 = 0
             r12 = 1
             r13 = 33
             r16 = 4
-            goto L_0x03dd
-        L_0x02f7:
+            goto L_0x03e7
+        L_0x0301:
             boolean r5 = r4 instanceof org.telegram.tgnet.TLRPC$TL_messageEntityPhone
-            if (r5 == 0) goto L_0x0334
+            if (r5 == 0) goto L_0x033e
             java.lang.String r4 = org.telegram.PhoneFormat.PhoneFormat.stripExceptNumbers(r3)
             java.lang.String r5 = "+"
             boolean r3 = r3.startsWith(r5)
-            if (r3 == 0) goto L_0x0316
+            if (r3 == 0) goto L_0x0320
             java.lang.StringBuilder r3 = new java.lang.StringBuilder
             r3.<init>()
             r3.append(r5)
             r3.append(r4)
             java.lang.String r4 = r3.toString()
-        L_0x0316:
+        L_0x0320:
             org.telegram.ui.Components.URLSpanBrowser r3 = new org.telegram.ui.Components.URLSpanBrowser
             java.lang.StringBuilder r5 = new java.lang.StringBuilder
             r5.<init>()
@@ -9578,10 +9610,10 @@ public class MessageObject {
             int r4 = r15.start
             int r5 = r15.end
             r1.setSpan(r3, r4, r5, r8)
-            goto L_0x02ef
-        L_0x0334:
+            goto L_0x02f9
+        L_0x033e:
             boolean r3 = r4 instanceof org.telegram.tgnet.TLRPC$TL_messageEntityTextUrl
-            if (r3 == 0) goto L_0x034a
+            if (r3 == 0) goto L_0x0354
             org.telegram.ui.Components.URLSpanReplacement r3 = new org.telegram.ui.Components.URLSpanReplacement
             org.telegram.tgnet.TLRPC$MessageEntity r4 = r15.urlEntity
             java.lang.String r4 = r4.url
@@ -9589,11 +9621,11 @@ public class MessageObject {
             int r4 = r15.start
             int r5 = r15.end
             r1.setSpan(r3, r4, r5, r8)
-            goto L_0x025d
-        L_0x034a:
+            goto L_0x0267
+        L_0x0354:
             boolean r3 = r4 instanceof org.telegram.tgnet.TLRPC$TL_messageEntityMentionName
             java.lang.String r5 = ""
-            if (r3 == 0) goto L_0x0373
+            if (r3 == 0) goto L_0x037d
             org.telegram.ui.Components.URLSpanUserMention r3 = new org.telegram.ui.Components.URLSpanUserMention
             java.lang.StringBuilder r4 = new java.lang.StringBuilder
             r4.<init>()
@@ -9607,10 +9639,10 @@ public class MessageObject {
             int r4 = r15.start
             int r5 = r15.end
             r1.setSpan(r3, r4, r5, r8)
-            goto L_0x025d
-        L_0x0373:
+            goto L_0x0267
+        L_0x037d:
             boolean r3 = r4 instanceof org.telegram.tgnet.TLRPC$TL_inputMessageEntityMentionName
-            if (r3 == 0) goto L_0x039c
+            if (r3 == 0) goto L_0x03a6
             org.telegram.ui.Components.URLSpanUserMention r3 = new org.telegram.ui.Components.URLSpanUserMention
             java.lang.StringBuilder r4 = new java.lang.StringBuilder
             r4.<init>()
@@ -9625,12 +9657,12 @@ public class MessageObject {
             int r4 = r15.start
             int r5 = r15.end
             r1.setSpan(r3, r4, r5, r8)
-            goto L_0x025d
-        L_0x039c:
+            goto L_0x0267
+        L_0x03a6:
             int r3 = r15.flags
             r16 = 4
             r3 = r3 & 4
-            if (r3 == 0) goto L_0x03bc
+            if (r3 == 0) goto L_0x03c6
             org.telegram.ui.Components.URLSpanMono r7 = new org.telegram.ui.Components.URLSpanMono
             int r5 = r15.start
             int r6 = r15.end
@@ -9644,8 +9676,8 @@ public class MessageObject {
             int r3 = r15.start
             int r4 = r15.end
             r1.setSpan(r9, r3, r4, r13)
-            goto L_0x03dc
-        L_0x03bc:
+            goto L_0x03e6
+        L_0x03c6:
             r13 = 33
             org.telegram.ui.Components.TextStyleSpan r3 = new org.telegram.ui.Components.TextStyleSpan
             r3.<init>(r15)
@@ -9653,8 +9685,8 @@ public class MessageObject {
             int r5 = r15.end
             r1.setSpan(r3, r4, r5, r13)
             r5 = 1
-            goto L_0x03dd
-        L_0x03cc:
+            goto L_0x03e7
+        L_0x03d6:
             r13 = 33
             r16 = 4
             org.telegram.ui.Components.URLSpanNoUnderline r4 = new org.telegram.ui.Components.URLSpanNoUnderline
@@ -9662,28 +9694,28 @@ public class MessageObject {
             int r3 = r15.start
             int r5 = r15.end
             r1.setSpan(r4, r3, r5, r13)
-        L_0x03dc:
+        L_0x03e6:
             r5 = 0
-        L_0x03dd:
-            if (r5 != 0) goto L_0x03f3
+        L_0x03e7:
+            if (r5 != 0) goto L_0x03fd
             int r3 = r15.flags
             r4 = 256(0x100, float:3.59E-43)
             r3 = r3 & r4
-            if (r3 == 0) goto L_0x03f5
+            if (r3 == 0) goto L_0x03ff
             org.telegram.ui.Components.TextStyleSpan r3 = new org.telegram.ui.Components.TextStyleSpan
             r3.<init>(r15)
             int r5 = r15.start
             int r6 = r15.end
             r1.setSpan(r3, r5, r6, r13)
-            goto L_0x03f5
-        L_0x03f3:
+            goto L_0x03ff
+        L_0x03fd:
             r4 = 256(0x100, float:3.59E-43)
-        L_0x03f5:
+        L_0x03ff:
             int r14 = r14 + 1
             r9 = 1
             r13 = 0
-            goto L_0x0231
-        L_0x03fb:
+            goto L_0x023b
+        L_0x0405:
             return r12
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessageObject.addEntitiesToText(java.lang.CharSequence, java.util.ArrayList, boolean, boolean, boolean, boolean):boolean");
@@ -11315,7 +11347,7 @@ public class MessageObject {
         int size = tLRPC$Document.attributes.size();
         for (int i = 0; i < size; i++) {
             TLRPC$DocumentAttribute tLRPC$DocumentAttribute = tLRPC$Document.attributes.get(i);
-            if (tLRPC$DocumentAttribute instanceof TLRPC$TL_documentAttributeSticker) {
+            if ((tLRPC$DocumentAttribute instanceof TLRPC$TL_documentAttributeSticker) || (tLRPC$DocumentAttribute instanceof TLRPC$TL_documentAttributeCustomEmoji)) {
                 TLRPC$InputStickerSet tLRPC$InputStickerSet = tLRPC$DocumentAttribute.stickerset;
                 if (tLRPC$InputStickerSet instanceof TLRPC$TL_inputStickerSetEmpty) {
                     return null;
@@ -11324,6 +11356,34 @@ public class MessageObject {
             }
         }
         return null;
+    }
+
+    public static String findAnimatedEmojiEmoticon(TLRPC$Document tLRPC$Document) {
+        if (tLRPC$Document == null) {
+            return "😀";
+        }
+        int size = tLRPC$Document.attributes.size();
+        for (int i = 0; i < size; i++) {
+            TLRPC$DocumentAttribute tLRPC$DocumentAttribute = tLRPC$Document.attributes.get(i);
+            if (tLRPC$DocumentAttribute instanceof TLRPC$TL_documentAttributeCustomEmoji) {
+                return tLRPC$DocumentAttribute.alt;
+            }
+        }
+        return "😀";
+    }
+
+    public static boolean isFreeEmoji(TLRPC$Document tLRPC$Document) {
+        if (tLRPC$Document == null) {
+            return false;
+        }
+        int size = tLRPC$Document.attributes.size();
+        for (int i = 0; i < size; i++) {
+            TLRPC$DocumentAttribute tLRPC$DocumentAttribute = tLRPC$Document.attributes.get(i);
+            if (tLRPC$DocumentAttribute instanceof TLRPC$TL_documentAttributeCustomEmoji) {
+                return ((TLRPC$TL_documentAttributeCustomEmoji) tLRPC$DocumentAttribute).free;
+            }
+        }
+        return false;
     }
 
     public static long getStickerSetId(TLRPC$Document tLRPC$Document) {
@@ -11408,7 +11468,7 @@ public class MessageObject {
             if (i5 == 10) {
                 return AndroidUtilities.dp(30.0f);
             }
-            if (i5 == 11) {
+            if (i5 == 11 || i5 == 18) {
                 return AndroidUtilities.dp(50.0f);
             }
             if (i5 == 5) {
@@ -11860,7 +11920,7 @@ public class MessageObject {
         /*
             r12 = this;
             org.telegram.tgnet.TLRPC$Document r0 = r12.getDocument()
-            r1 = 2131624515(0x7f0e0243, float:1.8876212E38)
+            r1 = 2131624522(0x7f0e024a, float:1.8876226E38)
             java.lang.String r2 = "AudioUnknownArtist"
             if (r0 == 0) goto L_0x015c
             r3 = 0
@@ -12024,7 +12084,7 @@ public class MessageObject {
             java.lang.String r13 = r6.title
             return r13
         L_0x014e:
-            r13 = 2131626036(0x7f0e0834, float:1.8879297E38)
+            r13 = 2131626067(0x7f0e0853, float:1.887936E38)
             java.lang.String r0 = "FromYou"
             java.lang.String r13 = org.telegram.messenger.LocaleController.getString(r0, r13)
             return r13

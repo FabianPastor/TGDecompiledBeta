@@ -10,6 +10,6 @@ public final /* synthetic */ class StickersAlert$$ExternalSyntheticLambda10 impl
     }
 
     public final void onClick(View view) {
-        this.f$0.lambda$updateFields$18(view);
+        this.f$0.lambda$updateFields$14(view);
     }
 }

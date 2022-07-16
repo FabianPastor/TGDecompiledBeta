@@ -82,6 +82,8 @@ public class PipVideoOverlay {
     public boolean isVideoCompleted;
     private boolean isVisible;
     /* access modifiers changed from: private */
+    public boolean isWebView;
+    /* access modifiers changed from: private */
     public Runnable longClickCallback = new PipVideoOverlay$$ExternalSyntheticLambda6(this);
     /* access modifiers changed from: private */
     public float[] longClickStartPoint = new float[2];
@@ -1089,7 +1091,9 @@ public class PipVideoOverlay {
         imageView3.setColorFilter(Theme.getColor("voipgroup_actionBarItems"), PorterDuff.Mode.MULTIPLY);
         this.playPauseButton.setBackground(Theme.createSelectorDrawable(Theme.getColor("listSelectorSDK21")));
         this.playPauseButton.setOnClickListener(new PipVideoOverlay$$ExternalSyntheticLambda1(this));
-        this.playPauseButton.setVisibility(this.innerView instanceof WebView ? 8 : 0);
+        boolean z4 = this.innerView instanceof WebView;
+        this.isWebView = z4;
+        this.playPauseButton.setVisibility(z4 ? 8 : 0);
         this.controlsView.addView(this.playPauseButton, LayoutHelper.createFrame(38, 38, 17));
         VideoProgressView videoProgressView2 = new VideoProgressView(context2);
         this.videoProgressView = videoProgressView2;
@@ -1237,16 +1241,18 @@ public class PipVideoOverlay {
         /* access modifiers changed from: protected */
         public void onDraw(Canvas canvas) {
             super.onDraw(canvas);
-            int width = getWidth();
-            int dp = AndroidUtilities.dp(10.0f);
-            float f = (float) ((width - dp) - dp);
-            int access$4600 = ((int) (PipVideoOverlay.this.videoProgress * f)) + dp;
-            float height = (float) (getHeight() - AndroidUtilities.dp(8.0f));
-            if (PipVideoOverlay.this.bufferProgress != 0.0f) {
-                float f2 = (float) dp;
-                canvas.drawLine(f2, height, f2 + (f * PipVideoOverlay.this.bufferProgress), height, this.bufferPaint);
+            if (!PipVideoOverlay.this.isWebView) {
+                int width = getWidth();
+                int dp = AndroidUtilities.dp(10.0f);
+                float f = (float) ((width - dp) - dp);
+                int access$4700 = ((int) (PipVideoOverlay.this.videoProgress * f)) + dp;
+                float height = (float) (getHeight() - AndroidUtilities.dp(8.0f));
+                if (PipVideoOverlay.this.bufferProgress != 0.0f) {
+                    float f2 = (float) dp;
+                    canvas.drawLine(f2, height, f2 + (f * PipVideoOverlay.this.bufferProgress), height, this.bufferPaint);
+                }
+                canvas.drawLine((float) dp, height, (float) access$4700, height, this.progressPaint);
             }
-            canvas.drawLine((float) dp, height, (float) access$4600, height, this.progressPaint);
         }
     }
 

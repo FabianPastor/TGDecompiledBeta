@@ -12,6 +12,6 @@ public final /* synthetic */ class ChannelCreateActivity$$ExternalSyntheticLambd
     }
 
     public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        this.f$0.lambda$loadAdminedChannels$20(tLObject, tLRPC$TL_error);
+        this.f$0.lambda$loadAdminedChannels$21(tLObject, tLRPC$TL_error);
     }
 }

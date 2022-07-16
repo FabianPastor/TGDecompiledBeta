@@ -29,15 +29,18 @@ import java.util.Stack;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.Emoji;
 import org.telegram.ui.Cells.DialogCell;
+import org.telegram.ui.Components.AnimatedEmojiSpan;
 import org.telegram.ui.Components.EmptyStubSpan;
 import org.telegram.ui.Components.StaticLayoutEx;
 import org.telegram.ui.Components.spoilers.SpoilerEffect;
 
 public class SimpleTextView extends View {
+    private boolean attachedToWindow;
     private boolean buildFullLayout;
     private boolean canHideRightDrawable;
     private int currentScrollDelay;
     private int drawablePadding = AndroidUtilities.dp(4.0f);
+    private AnimatedEmojiSpan.EmojiGroupedSpans emojiStack;
     private Paint fadePaint;
     private Paint fadePaintBack;
     private Layout firstLineLayout;
@@ -108,8 +111,17 @@ public class SimpleTextView extends View {
     }
 
     /* access modifiers changed from: protected */
+    public void onAttachedToWindow() {
+        super.onAttachedToWindow();
+        this.attachedToWindow = true;
+        this.emojiStack = AnimatedEmojiSpan.update(0, (View) this, this.emojiStack, this.layout);
+    }
+
+    /* access modifiers changed from: protected */
     public void onDetachedFromWindow() {
         super.onDetachedFromWindow();
+        this.attachedToWindow = false;
+        AnimatedEmojiSpan.release((View) this, this.emojiStack);
         this.wasLayout = false;
     }
 
@@ -321,6 +333,10 @@ public class SimpleTextView extends View {
             this.layout = null;
             this.textWidth = 0;
             this.textHeight = 0;
+        }
+        AnimatedEmojiSpan.release((View) this, this.emojiStack);
+        if (this.attachedToWindow) {
+            this.emojiStack = AnimatedEmojiSpan.update(0, (View) this, this.emojiStack, this.layout);
         }
         invalidate();
         return true;
@@ -751,6 +767,7 @@ public class SimpleTextView extends View {
             clipOutSpoilers(canvas);
             this.layout.draw(canvas);
             canvas.restore();
+            AnimatedEmojiSpan.drawAnimatedEmojis(canvas, this.layout, this.emojiStack, 0.0f, (List<SpoilerEffect>) null, 0.0f, 0.0f, 0.0f, 1.0f);
             drawSpoilers(canvas);
             return;
         }
@@ -761,6 +778,7 @@ public class SimpleTextView extends View {
         clipOutSpoilers(canvas);
         this.layout.draw(canvas);
         canvas.restore();
+        AnimatedEmojiSpan.drawAnimatedEmojis(canvas, this.layout, this.emojiStack, 0.0f, (List<SpoilerEffect>) null, 0.0f, 0.0f, 0.0f, 1.0f);
         drawSpoilers(canvas);
         canvas.restore();
     }

@@ -776,7 +776,7 @@ public class TrendingStickersLayout extends FrameLayout implements NotificationC
                 android.content.Context r0 = r6.context
                 r1 = 0
                 r8.<init>(r6, r0, r1)
-                org.telegram.ui.Components.BackupImageView r0 = r8.getImageView()
+                org.telegram.messenger.ImageReceiver r0 = r8.getImageView()
                 r0.setLayerNum(r7)
             L_0x0078:
                 r7 = r8

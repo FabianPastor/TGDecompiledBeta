@@ -1,5 +1,7 @@
 package org.telegram.tgnet;
 
+import java.util.ArrayList;
+
 public abstract class TLRPC$UserFull extends TLObject {
     public String about;
     public boolean blocked;
@@ -17,6 +19,7 @@ public abstract class TLRPC$UserFull extends TLObject {
     public boolean phone_calls_available;
     public boolean phone_calls_private;
     public int pinned_msg_id;
+    public ArrayList<TLRPC$TL_premiumGiftOption> premium_gifts = new ArrayList<>();
     public String private_forward_name;
     public TLRPC$Photo profile_photo;
     public TLRPC$TL_peerSettings settings;
@@ -24,15 +27,19 @@ public abstract class TLRPC$UserFull extends TLObject {
     public int ttl_period;
     public TLRPC$User user;
     public boolean video_calls_available;
+    public boolean voice_messages_forbidden;
 
     public static TLRPC$UserFull TLdeserialize(AbstractSerializedData abstractSerializedData, int i, boolean z) {
         TLRPC$UserFull tLRPC$UserFull;
         switch (i) {
             case -1938625919:
-                tLRPC$UserFull = new TLRPC$TL_userFull();
+                tLRPC$UserFull = new TLRPC$TL_userFull_layer143();
                 break;
             case -1901811583:
                 tLRPC$UserFull = new TLRPC$TL_userFull_layer98();
+                break;
+            case -994968513:
+                tLRPC$UserFull = new TLRPC$TL_userFull();
                 break;
             case -818518751:
                 tLRPC$UserFull = new TLRPC$TL_userFull_layer139();

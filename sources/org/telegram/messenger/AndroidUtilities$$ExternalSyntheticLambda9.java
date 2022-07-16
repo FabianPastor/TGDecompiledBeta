@@ -10,6 +10,6 @@ public final /* synthetic */ class AndroidUtilities$$ExternalSyntheticLambda9 im
     }
 
     public final void run() {
-        NotificationCenter.getInstance(UserConfig.selectedAccount).doOnIdle(new AndroidUtilities$$ExternalSyntheticLambda8(this.f$0));
+        Utilities.globalQueue.postRunnable(new AndroidUtilities$$ExternalSyntheticLambda8(this.f$0));
     }
 }

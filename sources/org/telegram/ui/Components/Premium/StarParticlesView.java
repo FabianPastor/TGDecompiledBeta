@@ -117,9 +117,9 @@ public class StarParticlesView extends View {
         public long minLifeTime = 2000;
         /* access modifiers changed from: private */
         public Paint paint = new Paint();
-        ArrayList<Particle> particles = new ArrayList<>();
+        public ArrayList<Particle> particles = new ArrayList<>();
         public boolean paused;
-        long pausedTime;
+        public long pausedTime;
         float[] points1;
         float[] points2;
         float[] points3;
@@ -198,76 +198,92 @@ public class StarParticlesView extends View {
                 if (i3 == 9) {
                     this.stars[i] = SvgHelper.getBitmap(i == 0 ? NUM : i == 1 ? NUM : NUM, i2, i2, ColorUtils.setAlphaComponent(Theme.getColor(this.colorKey), 30));
                     this.svg = true;
-                } else if (i3 == 3) {
-                    this.stars[i] = SvgHelper.getBitmap(i == 0 ? NUM : i == 1 ? NUM : NUM, i2, i2, ColorUtils.setAlphaComponent(Theme.getColor(this.colorKey), 30));
-                    this.svg = true;
-                } else if (i3 == 7) {
-                    this.stars[i] = SvgHelper.getBitmap(i == 0 ? NUM : i == 1 ? NUM : NUM, i2, i2, ColorUtils.setAlphaComponent(Theme.getColor(this.colorKey), 30));
-                    this.svg = true;
-                } else if (i3 == 1001) {
-                    this.stars[i] = SvgHelper.getBitmap(NUM, i2, i2, ColorUtils.setAlphaComponent(Theme.getColor(this.colorKey), 30));
-                    this.svg = true;
-                } else if (i3 == 1002) {
-                    this.stars[i] = SvgHelper.getBitmap(NUM, i2, i2, ColorUtils.setAlphaComponent(Theme.getColor(this.colorKey), 30));
-                    this.svg = true;
                 } else {
-                    Bitmap createBitmap = Bitmap.createBitmap(i2, i2, Bitmap.Config.ARGB_8888);
-                    this.stars[i] = createBitmap;
-                    Canvas canvas = new Canvas(createBitmap);
-                    if (this.type == 6 && (i == 1 || i == 2)) {
-                        android.graphics.drawable.Drawable drawable = ContextCompat.getDrawable(ApplicationLoader.applicationContext, NUM);
-                        drawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(this.colorKey), PorterDuff.Mode.MULTIPLY));
-                        drawable.setBounds(0, 0, i2, i2);
-                        drawable.draw(canvas);
+                    int i4 = NUM;
+                    if (i3 == 11) {
+                        if (i == 0) {
+                            i4 = NUM;
+                        } else if (i == 1) {
+                            i4 = NUM;
+                        }
+                        this.stars[i] = SvgHelper.getBitmap(i4, i2, i2, ColorUtils.setAlphaComponent(Theme.getColor(this.colorKey), 30));
+                        this.svg = true;
+                    } else if (i3 == 3) {
+                        if (i == 0) {
+                            i4 = NUM;
+                        } else if (i != 1) {
+                            i4 = NUM;
+                        }
+                        this.stars[i] = SvgHelper.getBitmap(i4, i2, i2, ColorUtils.setAlphaComponent(Theme.getColor(this.colorKey), 30));
+                        this.svg = true;
+                    } else if (i3 == 7) {
+                        this.stars[i] = SvgHelper.getBitmap(i == 0 ? NUM : i == 1 ? NUM : NUM, i2, i2, ColorUtils.setAlphaComponent(Theme.getColor(this.colorKey), 30));
+                        this.svg = true;
+                    } else if (i3 == 1001) {
+                        this.stars[i] = SvgHelper.getBitmap(NUM, i2, i2, ColorUtils.setAlphaComponent(Theme.getColor(this.colorKey), 30));
+                        this.svg = true;
+                    } else if (i3 == 1002) {
+                        this.stars[i] = SvgHelper.getBitmap(NUM, i2, i2, ColorUtils.setAlphaComponent(Theme.getColor(this.colorKey), 30));
+                        this.svg = true;
                     } else {
-                        Path path = new Path();
-                        float f2 = (float) (i2 >> 1);
-                        int i4 = (int) (f * f2);
-                        path.moveTo(0.0f, f2);
-                        float f3 = (float) i4;
-                        path.lineTo(f3, f3);
-                        path.lineTo(f2, 0.0f);
-                        float f4 = (float) (i2 - i4);
-                        path.lineTo(f4, f3);
-                        float f5 = (float) i2;
-                        path.lineTo(f5, f2);
-                        path.lineTo(f4, f4);
-                        path.lineTo(f2, f5);
-                        path.lineTo(f3, f4);
-                        path.lineTo(0.0f, f2);
-                        path.close();
-                        Paint paint2 = new Paint();
-                        if (this.useGradient) {
-                            if (i2 >= AndroidUtilities.dp(10.0f)) {
-                                PremiumGradient.getInstance().updateMainGradientMatrix(0, 0, i2, i2, (float) (i2 * -2), 0.0f);
+                        Bitmap createBitmap = Bitmap.createBitmap(i2, i2, Bitmap.Config.ARGB_8888);
+                        this.stars[i] = createBitmap;
+                        Canvas canvas = new Canvas(createBitmap);
+                        if (this.type == 6 && (i == 1 || i == 2)) {
+                            android.graphics.drawable.Drawable drawable = ContextCompat.getDrawable(ApplicationLoader.applicationContext, NUM);
+                            drawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(this.colorKey), PorterDuff.Mode.MULTIPLY));
+                            drawable.setBounds(0, 0, i2, i2);
+                            drawable.draw(canvas);
+                        } else {
+                            Path path = new Path();
+                            float f2 = (float) (i2 >> 1);
+                            int i5 = (int) (f * f2);
+                            path.moveTo(0.0f, f2);
+                            float f3 = (float) i5;
+                            path.lineTo(f3, f3);
+                            path.lineTo(f2, 0.0f);
+                            float f4 = (float) (i2 - i5);
+                            path.lineTo(f4, f3);
+                            float f5 = (float) i2;
+                            path.lineTo(f5, f2);
+                            path.lineTo(f4, f4);
+                            path.lineTo(f2, f5);
+                            path.lineTo(f3, f4);
+                            path.lineTo(0.0f, f2);
+                            path.close();
+                            Paint paint2 = new Paint();
+                            if (this.useGradient) {
+                                if (i2 >= AndroidUtilities.dp(10.0f)) {
+                                    PremiumGradient.getInstance().updateMainGradientMatrix(0, 0, i2, i2, (float) (i2 * -2), 0.0f);
+                                } else {
+                                    PremiumGradient.getInstance().updateMainGradientMatrix(0, 0, i2, i2, (float) (i2 * -4), 0.0f);
+                                }
+                                Paint mainGradientPaint = PremiumGradient.getInstance().getMainGradientPaint();
+                                if (this.roundEffect) {
+                                    mainGradientPaint.setPathEffect(new CornerPathEffect(AndroidUtilities.dpf2(((float) this.size1) / 5.0f)));
+                                }
+                                if (this.useBlur) {
+                                    mainGradientPaint.setAlpha(60);
+                                } else {
+                                    mainGradientPaint.setAlpha(120);
+                                }
+                                canvas.drawPath(path, mainGradientPaint);
+                                mainGradientPaint.setPathEffect((PathEffect) null);
+                                mainGradientPaint.setAlpha(255);
                             } else {
-                                PremiumGradient.getInstance().updateMainGradientMatrix(0, 0, i2, i2, (float) (i2 * -4), 0.0f);
-                            }
-                            Paint mainGradientPaint = PremiumGradient.getInstance().getMainGradientPaint();
-                            if (this.roundEffect) {
-                                mainGradientPaint.setPathEffect(new CornerPathEffect(AndroidUtilities.dpf2(((float) this.size1) / 5.0f)));
+                                if (this.type == 100) {
+                                    paint2.setColor(ColorUtils.setAlphaComponent(Theme.getColor(this.colorKey), 200));
+                                } else {
+                                    paint2.setColor(Theme.getColor(this.colorKey));
+                                }
+                                if (this.roundEffect) {
+                                    paint2.setPathEffect(new CornerPathEffect(AndroidUtilities.dpf2(((float) this.size1) / 5.0f)));
+                                }
+                                canvas.drawPath(path, paint2);
                             }
                             if (this.useBlur) {
-                                mainGradientPaint.setAlpha(60);
-                            } else {
-                                mainGradientPaint.setAlpha(120);
+                                Utilities.stackBlurBitmap(createBitmap, 2);
                             }
-                            canvas.drawPath(path, mainGradientPaint);
-                            mainGradientPaint.setPathEffect((PathEffect) null);
-                            mainGradientPaint.setAlpha(255);
-                        } else {
-                            if (this.type == 100) {
-                                paint2.setColor(ColorUtils.setAlphaComponent(Theme.getColor(this.colorKey), 200));
-                            } else {
-                                paint2.setColor(Theme.getColor(this.colorKey));
-                            }
-                            if (this.roundEffect) {
-                                paint2.setPathEffect(new CornerPathEffect(AndroidUtilities.dpf2(((float) this.size1) / 5.0f)));
-                            }
-                            canvas.drawPath(path, paint2);
-                        }
-                        if (this.useBlur) {
-                            Utilities.stackBlurBitmap(createBitmap, 2);
                         }
                     }
                 }
@@ -334,14 +350,13 @@ public class StarParticlesView extends View {
             }
         }
 
-        private class Particle {
+        public class Particle {
             private int alpha;
             /* access modifiers changed from: private */
             public float drawingX;
             /* access modifiers changed from: private */
             public float drawingY;
             float inProgress;
-            /* access modifiers changed from: private */
             public long lifeTime;
             private float randomRotate;
             private int starIndex;
@@ -352,13 +367,7 @@ public class StarParticlesView extends View {
             private float y;
             private float y2;
 
-            private Particle() {
-            }
-
-            static /* synthetic */ long access$114(Particle particle, long j) {
-                long j2 = particle.lifeTime + j;
-                particle.lifeTime = j2;
-                return j2;
+            public Particle() {
             }
 
             public void updatePoint() {
@@ -449,9 +458,9 @@ public class StarParticlesView extends View {
                     this.y += this.vecY * f5;
                     float f6 = this.inProgress;
                     if (f6 != 1.0f) {
-                        float access$600 = f6 + (drawable2.dt / 200.0f);
-                        this.inProgress = access$600;
-                        if (access$600 > 1.0f) {
+                        float access$400 = f6 + (drawable2.dt / 200.0f);
+                        this.inProgress = access$400;
+                        if (access$400 > 1.0f) {
                             this.inProgress = 1.0f;
                         }
                     }
@@ -525,7 +534,7 @@ public class StarParticlesView extends View {
                     this.alpha = (int) ((((float) (Utilities.fastRandom.nextInt(50) + 50)) / 100.0f) * 255.0f);
                 }
                 int i4 = Drawable.this.type;
-                if ((i4 == 6 && ((i = this.starIndex) == 1 || i == 2)) || i4 == 9 || i4 == 3 || i4 == 7) {
+                if ((i4 == 6 && ((i = this.starIndex) == 1 || i == 2)) || i4 == 9 || i4 == 3 || i4 == 7 || i4 == 11) {
                     this.randomRotate = (float) ((int) ((((float) (Utilities.fastRandom.nextInt() % 100)) / 100.0f) * 45.0f));
                 }
                 Drawable drawable4 = Drawable.this;
@@ -551,7 +560,7 @@ public class StarParticlesView extends View {
                 return;
             }
             for (int i = 0; i < this.drawable.particles.size(); i++) {
-                Drawable.Particle.access$114(this.drawable.particles.get(i), System.currentTimeMillis() - this.drawable.pausedTime);
+                this.drawable.particles.get(i).lifeTime += System.currentTimeMillis() - this.drawable.pausedTime;
             }
             invalidate();
         }

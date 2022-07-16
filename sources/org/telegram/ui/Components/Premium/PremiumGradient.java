@@ -118,23 +118,38 @@ public class PremiumGradient {
         final String colorKey2;
         final String colorKey3;
         final String colorKey4;
-        final int[] colors = new int[4];
-        public float cx = 0.5f;
-        public float cy = 0.5f;
+        final String colorKey5;
+        final int[] colors;
+        public float cx;
+        public float cy;
         public boolean exactly;
-        Matrix matrix = new Matrix();
-        public final Paint paint = new Paint(1);
+        Matrix matrix;
+        public final Paint paint;
         Shader shader;
-        public float x1 = 0.0f;
-        public float x2 = 1.5f;
-        public float y1 = 1.0f;
-        public float y2 = 0.0f;
+        public float x1;
+        public float x2;
+        public float y1;
+        public float y2;
 
         public GradientTools(String str, String str2, String str3, String str4) {
+            this(str, str2, str3, str4, (String) null);
+        }
+
+        public GradientTools(String str, String str2, String str3, String str4, String str5) {
+            this.cx = 0.5f;
+            this.cy = 0.5f;
+            this.matrix = new Matrix();
+            this.paint = new Paint(1);
+            this.colors = new int[5];
+            this.x1 = 0.0f;
+            this.y1 = 1.0f;
+            this.x2 = 1.5f;
+            this.y2 = 0.0f;
             this.colorKey1 = str;
             this.colorKey2 = str2;
             this.colorKey3 = str3;
             this.colorKey4 = str4;
+            this.colorKey5 = str5;
         }
 
         public void gradientMatrix(int i, int i2, int i3, int i4, float f, float f2) {
@@ -163,12 +178,15 @@ public class PremiumGradient {
             int color3 = str == null ? 0 : Theme.getColor(str);
             String str2 = this.colorKey4;
             int color4 = str2 == null ? 0 : Theme.getColor(str2);
+            String str3 = this.colorKey5;
+            int color5 = str3 == null ? 0 : Theme.getColor(str3);
             int[] iArr = this.colors;
-            if (iArr[0] != color || iArr[1] != color2 || iArr[2] != color3 || iArr[3] != color4) {
+            if (iArr[0] != color || iArr[1] != color2 || iArr[2] != color3 || iArr[3] != color4 || iArr[4] != color5) {
                 iArr[0] = color;
                 iArr[1] = color2;
                 iArr[2] = color3;
                 iArr[3] = color4;
+                iArr[4] = color5;
                 if (color3 == 0) {
                     float f = this.x1 * 100.0f;
                     float f2 = this.y1 * 100.0f;
@@ -180,16 +198,23 @@ public class PremiumGradient {
                     float f5 = this.x1 * 100.0f;
                     float f6 = this.y1 * 100.0f;
                     float f7 = this.x2 * 100.0f;
-                    float f8 = 100.0f * this.y2;
+                    float f8 = this.y2 * 100.0f;
                     int[] iArr3 = this.colors;
                     this.shader = new LinearGradient(f5, f6, f7, f8, new int[]{iArr3[0], iArr3[1], iArr3[2]}, new float[]{0.0f, 0.5f, 1.0f}, Shader.TileMode.CLAMP);
-                } else {
+                } else if (color5 == 0) {
                     float f9 = this.x1 * 100.0f;
                     float var_ = this.y1 * 100.0f;
                     float var_ = this.x2 * 100.0f;
                     float var_ = this.y2 * 100.0f;
                     int[] iArr4 = this.colors;
                     this.shader = new LinearGradient(f9, var_, var_, var_, new int[]{iArr4[0], iArr4[1], iArr4[2], iArr4[3]}, new float[]{0.0f, 0.5f, 0.78f, 1.0f}, Shader.TileMode.CLAMP);
+                } else {
+                    float var_ = this.x1 * 100.0f;
+                    float var_ = this.y1 * 100.0f;
+                    float var_ = this.x2 * 100.0f;
+                    float var_ = this.y2 * 100.0f;
+                    int[] iArr5 = this.colors;
+                    this.shader = new LinearGradient(var_, var_, var_, var_, new int[]{iArr5[0], iArr5[1], iArr5[2], iArr5[3], iArr5[4]}, new float[]{0.0f, 0.425f, 0.655f, 0.78f, 1.0f}, Shader.TileMode.CLAMP);
                 }
                 this.shader.setLocalMatrix(this.matrix);
                 this.paint.setShader(this.shader);

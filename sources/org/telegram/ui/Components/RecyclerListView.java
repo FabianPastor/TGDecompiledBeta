@@ -32,6 +32,7 @@ import android.view.accessibility.AccessibilityNodeInfo;
 import android.widget.FrameLayout;
 import androidx.core.content.ContextCompat;
 import androidx.core.graphics.ColorUtils;
+import androidx.core.util.Consumer;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import java.lang.reflect.Field;
@@ -135,6 +136,7 @@ public class RecyclerListView extends RecyclerView {
     protected int selectorPosition;
     private int selectorRadius;
     protected Rect selectorRect;
+    Consumer<Canvas> selectorTransformer;
     private int selectorType;
     /* access modifiers changed from: private */
     public boolean selfOnLayout;
@@ -236,6 +238,10 @@ public class RecyclerListView extends RecyclerView {
 
     public boolean hasOverlappingRendering() {
         return false;
+    }
+
+    public void setSelectorTransformer(Consumer<Canvas> consumer) {
+        this.selectorTransformer = consumer;
     }
 
     public FastScroll getFastScroll() {
@@ -2871,6 +2877,10 @@ public class RecyclerListView extends RecyclerView {
         }
     }
 
+    public Rect getSelectorRect() {
+        return this.selectorRect;
+    }
+
     /* access modifiers changed from: protected */
     public void dispatchDraw(Canvas canvas) {
         View view;
@@ -2880,12 +2890,24 @@ public class RecyclerListView extends RecyclerView {
         }
         if (this.drawSelectorBehind && !this.selectorRect.isEmpty()) {
             this.selectorDrawable.setBounds(this.selectorRect);
+            canvas.save();
+            Consumer<Canvas> consumer = this.selectorTransformer;
+            if (consumer != null) {
+                consumer.accept(canvas);
+            }
             this.selectorDrawable.draw(canvas);
+            canvas.restore();
         }
         super.dispatchDraw(canvas);
         if (!this.drawSelectorBehind && !this.selectorRect.isEmpty()) {
             this.selectorDrawable.setBounds(this.selectorRect);
+            canvas.save();
+            Consumer<Canvas> consumer2 = this.selectorTransformer;
+            if (consumer2 != null) {
+                consumer2.accept(canvas);
+            }
             this.selectorDrawable.draw(canvas);
+            canvas.restore();
         }
         FrameLayout frameLayout = this.overlayContainer;
         if (frameLayout != null) {

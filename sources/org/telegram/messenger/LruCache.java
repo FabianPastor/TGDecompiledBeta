@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Set;
 
 public class LruCache<T> {
     private final LinkedHashMap<String, T> map;
@@ -165,5 +166,9 @@ public class LruCache<T> {
 
     public final synchronized int maxSize() {
         return this.maxSize;
+    }
+
+    public final synchronized Set<Map.Entry<String, T>> entrySet() {
+        return this.map.entrySet();
     }
 }

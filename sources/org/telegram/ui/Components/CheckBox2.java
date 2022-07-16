@@ -2,9 +2,11 @@ package org.telegram.ui.Components;
 
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.Paint;
 import android.view.View;
 import android.view.accessibility.AccessibilityNodeInfo;
 import android.widget.CheckBox;
+import org.telegram.messenger.GenericProvider;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.CheckBoxBase;
 
@@ -18,6 +20,10 @@ public class CheckBox2 extends View {
     public CheckBox2(Context context, int i, Theme.ResourcesProvider resourcesProvider) {
         super(context);
         this.checkBoxBase = new CheckBoxBase(this, i, resourcesProvider);
+    }
+
+    public void setCirclePaintProvider(GenericProvider<Void, Paint> genericProvider) {
+        this.checkBoxBase.setCirclePaintProvider(genericProvider);
     }
 
     public void setProgressDelegate(CheckBoxBase.ProgressDelegate progressDelegate) {

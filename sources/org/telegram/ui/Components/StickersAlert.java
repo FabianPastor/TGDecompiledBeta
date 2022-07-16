@@ -97,8 +97,12 @@ import org.telegram.ui.Cells.FeaturedStickerSetInfoCell;
 import org.telegram.ui.Cells.StickerEmojiCell;
 import org.telegram.ui.ChatActivity;
 import org.telegram.ui.Components.Bulletin;
+import org.telegram.ui.Components.Premium.PremiumButtonView;
+import org.telegram.ui.Components.Premium.PremiumFeatureBottomSheet;
 import org.telegram.ui.Components.RecyclerListView;
 import org.telegram.ui.ContentPreviewViewer;
+import org.telegram.ui.LaunchActivity;
+import org.telegram.ui.PremiumPreviewFragment;
 
 public class StickersAlert extends BottomSheet implements NotificationCenter.NotificationCenterDelegate {
     /* access modifiers changed from: private */
@@ -126,6 +130,8 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
     private TLRPC$InputStickerSet inputStickerSet;
     private StickersAlertInstallDelegate installDelegate;
     /* access modifiers changed from: private */
+    public int itemHeight;
+    /* access modifiers changed from: private */
     public int itemSize;
     private String lastCheckName;
     private boolean lastNameAvailable;
@@ -139,10 +145,12 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
     /* access modifiers changed from: private */
     public FrameLayout pickerBottomFrameLayout;
     private TextView pickerBottomLayout;
+    private PremiumButtonView premiumButtonView;
     /* access modifiers changed from: private */
     public ContentPreviewViewer.ContentPreviewViewerDelegate previewDelegate;
     private TextView previewSendButton;
     private View previewSendButtonShadow;
+    public boolean probablyEmojis;
     private int reqId;
     /* access modifiers changed from: private */
     public int scrollOffsetY;
@@ -203,7 +211,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
     }
 
     /* access modifiers changed from: private */
-    public static /* synthetic */ void lambda$showNameEnterAlert$21(DialogInterface dialogInterface, int i) {
+    public static /* synthetic */ void lambda$showNameEnterAlert$22(DialogInterface dialogInterface, int i) {
     }
 
     /* access modifiers changed from: protected */
@@ -256,6 +264,10 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
 
             public /* synthetic */ void sendGif(Object obj, Object obj2, boolean z, int i) {
                 ContentPreviewViewer.ContentPreviewViewerDelegate.CC.$default$sendGif(this, obj, obj2, z, i);
+            }
+
+            public boolean can() {
+                return StickersAlert.this.stickerSet == null || StickersAlert.this.stickerSet.set == null || !StickersAlert.this.stickerSet.set.emojis;
             }
 
             public void sendSticker(TLRPC$Document tLRPC$Document, String str, Object obj, boolean z, int i) {
@@ -323,13 +335,13 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
             }
             tLRPC$TL_messages_getAttachedStickers.media = tLRPC$TL_inputStickeredMediaDocument;
         }
-        this.reqId = ConnectionsManager.getInstance(this.currentAccount).sendRequest(tLRPC$TL_messages_getAttachedStickers, new StickersAlert$$ExternalSyntheticLambda28(this, obj, tLRPC$TL_messages_getAttachedStickers, new StickersAlert$$ExternalSyntheticLambda31(this, tLRPC$TL_messages_getAttachedStickers)));
+        this.reqId = ConnectionsManager.getInstance(this.currentAccount).sendRequest(tLRPC$TL_messages_getAttachedStickers, new StickersAlert$$ExternalSyntheticLambda29(this, obj, tLRPC$TL_messages_getAttachedStickers, new StickersAlert$$ExternalSyntheticLambda32(this, tLRPC$TL_messages_getAttachedStickers)));
         init(context);
     }
 
     /* access modifiers changed from: private */
     public /* synthetic */ void lambda$new$1(TLRPC$TL_messages_getAttachedStickers tLRPC$TL_messages_getAttachedStickers, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        AndroidUtilities.runOnUIThread(new StickersAlert$$ExternalSyntheticLambda25(this, tLRPC$TL_error, tLObject, tLRPC$TL_messages_getAttachedStickers));
+        AndroidUtilities.runOnUIThread(new StickersAlert$$ExternalSyntheticLambda26(this, tLRPC$TL_error, tLObject, tLRPC$TL_messages_getAttachedStickers));
     }
 
     /* access modifiers changed from: private */
@@ -400,6 +412,10 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
                 ContentPreviewViewer.ContentPreviewViewerDelegate.CC.$default$sendGif(this, obj, obj2, z, i);
             }
 
+            public boolean can() {
+                return StickersAlert.this.stickerSet == null || StickersAlert.this.stickerSet.set == null || !StickersAlert.this.stickerSet.set.emojis;
+            }
+
             public void sendSticker(TLRPC$Document tLRPC$Document, String str, Object obj, boolean z, int i) {
                 if (StickersAlert.this.delegate != null) {
                     StickersAlert.this.delegate.onStickerSelected(tLRPC$Document, str, obj, (MessageObject.SendAnimationData) null, StickersAlert.this.clearsInputField, z, i);
@@ -438,7 +454,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
         this.parentActivity = (Activity) context;
         this.importingStickers = arrayList;
         this.importingSoftware = str;
-        Utilities.globalQueue.postRunnable(new StickersAlert$$ExternalSyntheticLambda21(this, arrayList, arrayList2));
+        Utilities.globalQueue.postRunnable(new StickersAlert$$ExternalSyntheticLambda22(this, arrayList, arrayList2));
         init(context);
     }
 
@@ -494,7 +510,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
                 }
             }
         }
-        AndroidUtilities.runOnUIThread(new StickersAlert$$ExternalSyntheticLambda20(this, arrayList3, bool));
+        AndroidUtilities.runOnUIThread(new StickersAlert$$ExternalSyntheticLambda21(this, arrayList3, bool));
     }
 
     /* access modifiers changed from: private */
@@ -548,6 +564,10 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
 
             public /* synthetic */ void sendGif(Object obj, Object obj2, boolean z, int i) {
                 ContentPreviewViewer.ContentPreviewViewerDelegate.CC.$default$sendGif(this, obj, obj2, z, i);
+            }
+
+            public boolean can() {
+                return StickersAlert.this.stickerSet == null || StickersAlert.this.stickerSet.set == null || !StickersAlert.this.stickerSet.set.emojis;
             }
 
             public void sendSticker(TLRPC$Document tLRPC$Document, String str, Object obj, boolean z, int i) {
@@ -610,7 +630,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
             if (this.stickerSet == null) {
                 TLRPC$TL_messages_getStickerSet tLRPC$TL_messages_getStickerSet = new TLRPC$TL_messages_getStickerSet();
                 tLRPC$TL_messages_getStickerSet.stickerset = this.inputStickerSet;
-                ConnectionsManager.getInstance(this.currentAccount).sendRequest(tLRPC$TL_messages_getStickerSet, new StickersAlert$$ExternalSyntheticLambda30(this, instance));
+                ConnectionsManager.getInstance(this.currentAccount).sendRequest(tLRPC$TL_messages_getStickerSet, new StickersAlert$$ExternalSyntheticLambda31(this, instance));
             } else {
                 if (this.adapter != null) {
                     updateSendButton();
@@ -630,7 +650,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
 
     /* access modifiers changed from: private */
     public /* synthetic */ void lambda$loadStickerSet$6(MediaDataController mediaDataController, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        AndroidUtilities.runOnUIThread(new StickersAlert$$ExternalSyntheticLambda24(this, tLRPC$TL_error, tLObject, mediaDataController));
+        AndroidUtilities.runOnUIThread(new StickersAlert$$ExternalSyntheticLambda25(this, tLRPC$TL_error, tLObject, mediaDataController));
     }
 
     /* access modifiers changed from: private */
@@ -650,11 +670,11 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
                     }
 
                     public Animator createAnimator(ViewGroup viewGroup, TransitionValues transitionValues, TransitionValues transitionValues2) {
-                        int access$500 = StickersAlert.this.scrollOffsetY;
+                        int access$600 = StickersAlert.this.scrollOffsetY;
                         int intValue = ((Integer) transitionValues.values.get("offset")).intValue() - ((Integer) transitionValues2.values.get("offset")).intValue();
                         ValueAnimator ofFloat = ValueAnimator.ofFloat(new float[]{0.0f, 1.0f});
                         ofFloat.setDuration(250);
-                        ofFloat.addUpdateListener(new StickersAlert$2$$ExternalSyntheticLambda0(this, intValue, access$500));
+                        ofFloat.addUpdateListener(new StickersAlert$2$$ExternalSyntheticLambda0(this, intValue, access$600));
                         return ofFloat;
                     }
 
@@ -698,6 +718,35 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
         }
     }
 
+    /* access modifiers changed from: private */
+    /* JADX WARNING: Code restructure failed: missing block: B:2:0x0004, code lost:
+        r1 = r0.set;
+     */
+    /* Code decompiled incorrectly, please refer to instructions dump. */
+    public boolean isEmoji() {
+        /*
+            r2 = this;
+            org.telegram.tgnet.TLRPC$TL_messages_stickerSet r0 = r2.stickerSet
+            if (r0 == 0) goto L_0x000c
+            org.telegram.tgnet.TLRPC$StickerSet r1 = r0.set
+            if (r1 == 0) goto L_0x000c
+            boolean r1 = r1.emojis
+            if (r1 != 0) goto L_0x0012
+        L_0x000c:
+            if (r0 != 0) goto L_0x0014
+            boolean r0 = r2.probablyEmojis
+            if (r0 == 0) goto L_0x0014
+        L_0x0012:
+            r0 = 1
+            goto L_0x0015
+        L_0x0014:
+            r0 = 0
+        L_0x0015:
+            return r0
+        */
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.StickersAlert.isEmoji():boolean");
+    }
+
     private void init(Context context) {
         Context context2 = context;
         AnonymousClass3 r1 = new FrameLayout(context2) {
@@ -718,53 +767,267 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
             }
 
             /* access modifiers changed from: protected */
-            public void onMeasure(int i, int i2) {
-                int dp;
-                int i3;
-                int size = View.MeasureSpec.getSize(i2);
-                boolean z = true;
-                if (Build.VERSION.SDK_INT >= 21) {
-                    boolean unused = StickersAlert.this.ignoreLayout = true;
-                    setPadding(StickersAlert.this.backgroundPaddingLeft, AndroidUtilities.statusBarHeight, StickersAlert.this.backgroundPaddingLeft, 0);
-                    boolean unused2 = StickersAlert.this.ignoreLayout = false;
-                }
-                int unused3 = StickersAlert.this.itemSize = (View.MeasureSpec.getSize(i) - AndroidUtilities.dp(36.0f)) / 5;
-                ViewGroup.MarginLayoutParams marginLayoutParams = (ViewGroup.MarginLayoutParams) StickersAlert.this.gridView.getLayoutParams();
-                if (StickersAlert.this.importingStickers != null) {
-                    dp = AndroidUtilities.dp(48.0f) + marginLayoutParams.bottomMargin + (Math.max(3, (int) Math.ceil((double) (((float) StickersAlert.this.importingStickers.size()) / 5.0f))) * AndroidUtilities.dp(82.0f)) + StickersAlert.this.backgroundPaddingTop;
-                    i3 = AndroidUtilities.statusBarHeight;
-                } else if (StickersAlert.this.stickerSetCovereds != null) {
-                    dp = AndroidUtilities.dp(8.0f) + marginLayoutParams.bottomMargin + (AndroidUtilities.dp(60.0f) * StickersAlert.this.stickerSetCovereds.size()) + (StickersAlert.this.adapter.stickersRowCount * AndroidUtilities.dp(82.0f)) + StickersAlert.this.backgroundPaddingTop;
-                    i3 = AndroidUtilities.dp(24.0f);
-                } else {
-                    dp = AndroidUtilities.dp(48.0f) + marginLayoutParams.bottomMargin + (Math.max(3, StickersAlert.this.stickerSet != null ? (int) Math.ceil((double) (((float) StickersAlert.this.stickerSet.documents.size()) / 5.0f)) : 0) * AndroidUtilities.dp(82.0f)) + StickersAlert.this.backgroundPaddingTop;
-                    i3 = AndroidUtilities.statusBarHeight;
-                }
-                int i4 = dp + i3;
-                int i5 = size / 5;
-                double d = (double) i5;
-                Double.isNaN(d);
-                int i6 = ((double) i4) < d * 3.2d ? 0 : i5 * 2;
-                if (i6 != 0 && i4 < size) {
-                    i6 -= size - i4;
-                }
-                if (i6 == 0) {
-                    i6 = StickersAlert.this.backgroundPaddingTop;
-                }
-                if (StickersAlert.this.stickerSetCovereds != null) {
-                    i6 += AndroidUtilities.dp(8.0f);
-                }
-                if (StickersAlert.this.gridView.getPaddingTop() != i6) {
-                    boolean unused4 = StickersAlert.this.ignoreLayout = true;
-                    StickersAlert.this.gridView.setPadding(AndroidUtilities.dp(10.0f), i6, AndroidUtilities.dp(10.0f), AndroidUtilities.dp(8.0f));
-                    StickersAlert.this.emptyView.setPadding(0, i6, 0, 0);
-                    boolean unused5 = StickersAlert.this.ignoreLayout = false;
-                }
-                if (i4 < size) {
-                    z = false;
-                }
-                this.fullHeight = z;
-                super.onMeasure(i, View.MeasureSpec.makeMeasureSpec(Math.min(i4, size), NUM));
+            /* JADX WARNING: Removed duplicated region for block: B:31:0x0197  */
+            /* JADX WARNING: Removed duplicated region for block: B:34:0x01ba  */
+            /* JADX WARNING: Removed duplicated region for block: B:35:0x01bc  */
+            /* JADX WARNING: Removed duplicated region for block: B:40:0x01ca  */
+            /* JADX WARNING: Removed duplicated region for block: B:43:0x01d8  */
+            /* JADX WARNING: Removed duplicated region for block: B:46:0x01e9  */
+            /* JADX WARNING: Removed duplicated region for block: B:48:0x0216  */
+            /* Code decompiled incorrectly, please refer to instructions dump. */
+            public void onMeasure(int r12, int r13) {
+                /*
+                    r11 = this;
+                    int r13 = android.view.View.MeasureSpec.getSize(r13)
+                    int r0 = android.os.Build.VERSION.SDK_INT
+                    r1 = 1
+                    r2 = 0
+                    r3 = 21
+                    if (r0 < r3) goto L_0x0027
+                    org.telegram.ui.Components.StickersAlert r0 = org.telegram.ui.Components.StickersAlert.this
+                    boolean unused = r0.ignoreLayout = r1
+                    org.telegram.ui.Components.StickersAlert r0 = org.telegram.ui.Components.StickersAlert.this
+                    int r0 = r0.backgroundPaddingLeft
+                    int r3 = org.telegram.messenger.AndroidUtilities.statusBarHeight
+                    org.telegram.ui.Components.StickersAlert r4 = org.telegram.ui.Components.StickersAlert.this
+                    int r4 = r4.backgroundPaddingLeft
+                    r11.setPadding(r0, r3, r4, r2)
+                    org.telegram.ui.Components.StickersAlert r0 = org.telegram.ui.Components.StickersAlert.this
+                    boolean unused = r0.ignoreLayout = r2
+                L_0x0027:
+                    org.telegram.ui.Components.StickersAlert r0 = org.telegram.ui.Components.StickersAlert.this
+                    boolean r0 = r0.isEmoji()
+                    r3 = 1114636288(0x42700000, float:60.0)
+                    r4 = 1108344832(0x42100000, float:36.0)
+                    if (r0 == 0) goto L_0x0083
+                    org.telegram.ui.Components.StickersAlert r0 = org.telegram.ui.Components.StickersAlert.this
+                    org.telegram.ui.Components.RecyclerListView r0 = r0.gridView
+                    int r0 = r0.getMeasuredWidth()
+                    if (r0 != 0) goto L_0x0043
+                    android.graphics.Point r0 = org.telegram.messenger.AndroidUtilities.displaySize
+                    int r0 = r0.x
+                L_0x0043:
+                    org.telegram.ui.Components.StickersAlert r5 = org.telegram.ui.Components.StickersAlert.this
+                    org.telegram.ui.Components.StickersAlert$GridAdapter r5 = r5.adapter
+                    boolean r6 = org.telegram.messenger.AndroidUtilities.isTablet()
+                    if (r6 == 0) goto L_0x0052
+                    r6 = 1114636288(0x42700000, float:60.0)
+                    goto L_0x0054
+                L_0x0052:
+                    r6 = 1110704128(0x42340000, float:45.0)
+                L_0x0054:
+                    int r6 = org.telegram.messenger.AndroidUtilities.dp(r6)
+                    int r0 = r0 / r6
+                    int r0 = java.lang.Math.max(r1, r0)
+                    int unused = r5.stickersPerRow = r0
+                    org.telegram.ui.Components.StickersAlert r0 = org.telegram.ui.Components.StickersAlert.this
+                    int r5 = android.view.View.MeasureSpec.getSize(r12)
+                    int r4 = org.telegram.messenger.AndroidUtilities.dp(r4)
+                    int r5 = r5 - r4
+                    org.telegram.ui.Components.StickersAlert r4 = org.telegram.ui.Components.StickersAlert.this
+                    org.telegram.ui.Components.StickersAlert$GridAdapter r4 = r4.adapter
+                    int r4 = r4.stickersPerRow
+                    int r5 = r5 / r4
+                    int unused = r0.itemSize = r5
+                    org.telegram.ui.Components.StickersAlert r0 = org.telegram.ui.Components.StickersAlert.this
+                    int r4 = r0.itemSize
+                    int unused = r0.itemHeight = r4
+                    goto L_0x00b1
+                L_0x0083:
+                    org.telegram.ui.Components.StickersAlert r0 = org.telegram.ui.Components.StickersAlert.this
+                    org.telegram.ui.Components.StickersAlert$GridAdapter r0 = r0.adapter
+                    r5 = 5
+                    int unused = r0.stickersPerRow = r5
+                    org.telegram.ui.Components.StickersAlert r0 = org.telegram.ui.Components.StickersAlert.this
+                    int r5 = android.view.View.MeasureSpec.getSize(r12)
+                    int r4 = org.telegram.messenger.AndroidUtilities.dp(r4)
+                    int r5 = r5 - r4
+                    org.telegram.ui.Components.StickersAlert r4 = org.telegram.ui.Components.StickersAlert.this
+                    org.telegram.ui.Components.StickersAlert$GridAdapter r4 = r4.adapter
+                    int r4 = r4.stickersPerRow
+                    int r5 = r5 / r4
+                    int unused = r0.itemSize = r5
+                    org.telegram.ui.Components.StickersAlert r0 = org.telegram.ui.Components.StickersAlert.this
+                    r4 = 1118044160(0x42a40000, float:82.0)
+                    int r4 = org.telegram.messenger.AndroidUtilities.dp(r4)
+                    int unused = r0.itemHeight = r4
+                L_0x00b1:
+                    org.telegram.ui.Components.StickersAlert r0 = org.telegram.ui.Components.StickersAlert.this
+                    org.telegram.ui.Components.StickersAlert$GridAdapter r0 = r0.adapter
+                    int r0 = r0.stickersPerRow
+                    float r0 = (float) r0
+                    org.telegram.ui.Components.StickersAlert r4 = org.telegram.ui.Components.StickersAlert.this
+                    org.telegram.ui.Components.RecyclerListView r4 = r4.gridView
+                    android.view.ViewGroup$LayoutParams r4 = r4.getLayoutParams()
+                    android.view.ViewGroup$MarginLayoutParams r4 = (android.view.ViewGroup.MarginLayoutParams) r4
+                    org.telegram.ui.Components.StickersAlert r5 = org.telegram.ui.Components.StickersAlert.this
+                    java.util.ArrayList r5 = r5.importingStickers
+                    r6 = 3
+                    r7 = 1111490560(0x42400000, float:48.0)
+                    r8 = 1090519040(0x41000000, float:8.0)
+                    if (r5 == 0) goto L_0x0107
+                    int r3 = org.telegram.messenger.AndroidUtilities.dp(r7)
+                    int r4 = r4.bottomMargin
+                    int r3 = r3 + r4
+                    org.telegram.ui.Components.StickersAlert r4 = org.telegram.ui.Components.StickersAlert.this
+                    java.util.ArrayList r4 = r4.importingStickers
+                    int r4 = r4.size()
+                    float r4 = (float) r4
+                    float r4 = r4 / r0
+                    double r4 = (double) r4
+                    double r4 = java.lang.Math.ceil(r4)
+                    int r0 = (int) r4
+                    int r0 = java.lang.Math.max(r6, r0)
+                    org.telegram.ui.Components.StickersAlert r4 = org.telegram.ui.Components.StickersAlert.this
+                    int r4 = r4.itemHeight
+                    int r0 = r0 * r4
+                    int r3 = r3 + r0
+                    org.telegram.ui.Components.StickersAlert r0 = org.telegram.ui.Components.StickersAlert.this
+                    int r0 = r0.backgroundPaddingTop
+                    int r3 = r3 + r0
+                    int r0 = org.telegram.messenger.AndroidUtilities.statusBarHeight
+                L_0x0104:
+                    int r3 = r3 + r0
+                    goto L_0x018f
+                L_0x0107:
+                    org.telegram.ui.Components.StickersAlert r5 = org.telegram.ui.Components.StickersAlert.this
+                    java.util.ArrayList r5 = r5.stickerSetCovereds
+                    if (r5 == 0) goto L_0x0149
+                    int r0 = org.telegram.messenger.AndroidUtilities.dp(r8)
+                    int r4 = r4.bottomMargin
+                    int r0 = r0 + r4
+                    int r3 = org.telegram.messenger.AndroidUtilities.dp(r3)
+                    org.telegram.ui.Components.StickersAlert r4 = org.telegram.ui.Components.StickersAlert.this
+                    java.util.ArrayList r4 = r4.stickerSetCovereds
+                    int r4 = r4.size()
+                    int r3 = r3 * r4
+                    int r0 = r0 + r3
+                    org.telegram.ui.Components.StickersAlert r3 = org.telegram.ui.Components.StickersAlert.this
+                    org.telegram.ui.Components.StickersAlert$GridAdapter r3 = r3.adapter
+                    int r3 = r3.stickersRowCount
+                    org.telegram.ui.Components.StickersAlert r4 = org.telegram.ui.Components.StickersAlert.this
+                    int r4 = r4.itemHeight
+                    int r3 = r3 * r4
+                    int r0 = r0 + r3
+                    org.telegram.ui.Components.StickersAlert r3 = org.telegram.ui.Components.StickersAlert.this
+                    int r3 = r3.backgroundPaddingTop
+                    int r0 = r0 + r3
+                    r3 = 1103101952(0x41CLASSNAME, float:24.0)
+                    int r3 = org.telegram.messenger.AndroidUtilities.dp(r3)
+                    int r3 = r3 + r0
+                    goto L_0x018f
+                L_0x0149:
+                    int r3 = org.telegram.messenger.AndroidUtilities.dp(r7)
+                    int r4 = r4.bottomMargin
+                    int r3 = r3 + r4
+                    org.telegram.ui.Components.StickersAlert r4 = org.telegram.ui.Components.StickersAlert.this
+                    boolean r4 = r4.isEmoji()
+                    if (r4 == 0) goto L_0x0159
+                    r6 = 2
+                L_0x0159:
+                    org.telegram.ui.Components.StickersAlert r4 = org.telegram.ui.Components.StickersAlert.this
+                    org.telegram.tgnet.TLRPC$TL_messages_stickerSet r4 = r4.stickerSet
+                    if (r4 == 0) goto L_0x0176
+                    org.telegram.ui.Components.StickersAlert r4 = org.telegram.ui.Components.StickersAlert.this
+                    org.telegram.tgnet.TLRPC$TL_messages_stickerSet r4 = r4.stickerSet
+                    java.util.ArrayList<org.telegram.tgnet.TLRPC$Document> r4 = r4.documents
+                    int r4 = r4.size()
+                    float r4 = (float) r4
+                    float r4 = r4 / r0
+                    double r4 = (double) r4
+                    double r4 = java.lang.Math.ceil(r4)
+                    int r0 = (int) r4
+                    goto L_0x0177
+                L_0x0176:
+                    r0 = 0
+                L_0x0177:
+                    int r0 = java.lang.Math.max(r6, r0)
+                    org.telegram.ui.Components.StickersAlert r4 = org.telegram.ui.Components.StickersAlert.this
+                    int r4 = r4.itemHeight
+                    int r0 = r0 * r4
+                    int r3 = r3 + r0
+                    org.telegram.ui.Components.StickersAlert r0 = org.telegram.ui.Components.StickersAlert.this
+                    int r0 = r0.backgroundPaddingTop
+                    int r3 = r3 + r0
+                    int r0 = org.telegram.messenger.AndroidUtilities.statusBarHeight
+                    goto L_0x0104
+                L_0x018f:
+                    org.telegram.ui.Components.StickersAlert r0 = org.telegram.ui.Components.StickersAlert.this
+                    boolean r0 = r0.isEmoji()
+                    if (r0 == 0) goto L_0x01a6
+                    float r0 = (float) r3
+                    org.telegram.ui.Components.StickersAlert r3 = org.telegram.ui.Components.StickersAlert.this
+                    int r3 = r3.itemHeight
+                    float r3 = (float) r3
+                    r4 = 1050253722(0x3e99999a, float:0.3)
+                    float r3 = r3 * r4
+                    float r0 = r0 + r3
+                    int r3 = (int) r0
+                L_0x01a6:
+                    double r4 = (double) r3
+                    float r0 = (float) r13
+                    r6 = 1084227584(0x40a00000, float:5.0)
+                    float r0 = r0 / r6
+                    double r6 = (double) r0
+                    r9 = 4614388178203810202(0x400999999999999a, double:3.2)
+                    java.lang.Double.isNaN(r6)
+                    double r6 = r6 * r9
+                    int r9 = (r4 > r6 ? 1 : (r4 == r6 ? 0 : -1))
+                    if (r9 >= 0) goto L_0x01bc
+                    r0 = 0
+                    goto L_0x01c1
+                L_0x01bc:
+                    r4 = 1073741824(0x40000000, float:2.0)
+                    float r0 = r0 * r4
+                    int r0 = (int) r0
+                L_0x01c1:
+                    if (r0 == 0) goto L_0x01c8
+                    if (r3 >= r13) goto L_0x01c8
+                    int r4 = r13 - r3
+                    int r0 = r0 - r4
+                L_0x01c8:
+                    if (r0 != 0) goto L_0x01d0
+                    org.telegram.ui.Components.StickersAlert r0 = org.telegram.ui.Components.StickersAlert.this
+                    int r0 = r0.backgroundPaddingTop
+                L_0x01d0:
+                    org.telegram.ui.Components.StickersAlert r4 = org.telegram.ui.Components.StickersAlert.this
+                    java.util.ArrayList r4 = r4.stickerSetCovereds
+                    if (r4 == 0) goto L_0x01dd
+                    int r4 = org.telegram.messenger.AndroidUtilities.dp(r8)
+                    int r0 = r0 + r4
+                L_0x01dd:
+                    org.telegram.ui.Components.StickersAlert r4 = org.telegram.ui.Components.StickersAlert.this
+                    org.telegram.ui.Components.RecyclerListView r4 = r4.gridView
+                    int r4 = r4.getPaddingTop()
+                    if (r4 == r0) goto L_0x0213
+                    org.telegram.ui.Components.StickersAlert r4 = org.telegram.ui.Components.StickersAlert.this
+                    boolean unused = r4.ignoreLayout = r1
+                    org.telegram.ui.Components.StickersAlert r4 = org.telegram.ui.Components.StickersAlert.this
+                    org.telegram.ui.Components.RecyclerListView r4 = r4.gridView
+                    r5 = 1092616192(0x41200000, float:10.0)
+                    int r6 = org.telegram.messenger.AndroidUtilities.dp(r5)
+                    int r5 = org.telegram.messenger.AndroidUtilities.dp(r5)
+                    int r7 = org.telegram.messenger.AndroidUtilities.dp(r8)
+                    r4.setPadding(r6, r0, r5, r7)
+                    org.telegram.ui.Components.StickersAlert r4 = org.telegram.ui.Components.StickersAlert.this
+                    android.widget.FrameLayout r4 = r4.emptyView
+                    r4.setPadding(r2, r0, r2, r2)
+                    org.telegram.ui.Components.StickersAlert r0 = org.telegram.ui.Components.StickersAlert.this
+                    boolean unused = r0.ignoreLayout = r2
+                L_0x0213:
+                    if (r3 < r13) goto L_0x0216
+                    goto L_0x0217
+                L_0x0216:
+                    r1 = 0
+                L_0x0217:
+                    r11.fullHeight = r1
+                    int r13 = java.lang.Math.min(r3, r13)
+                    r0 = 1073741824(0x40000000, float:2.0)
+                    int r13 = android.view.View.MeasureSpec.makeMeasureSpec(r13, r0)
+                    super.onMeasure(r12, r13)
+                    return
+                */
+                throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.StickersAlert.AnonymousClass3.onMeasure(int, int):void");
             }
 
             /* access modifiers changed from: protected */
@@ -1047,15 +1310,15 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
         this.gridView.setClipToPadding(false);
         this.gridView.setEnabled(true);
         this.gridView.setGlowColor(getThemedColor("dialogScrollGlow"));
-        this.gridView.setOnTouchListener(new StickersAlert$$ExternalSyntheticLambda13(this));
+        this.gridView.setOnTouchListener(new StickersAlert$$ExternalSyntheticLambda14(this));
         this.gridView.setOnScrollListener(new RecyclerView.OnScrollListener() {
             public void onScrolled(RecyclerView recyclerView, int i, int i2) {
                 StickersAlert.this.updateLayout();
             }
         });
-        StickersAlert$$ExternalSyntheticLambda35 stickersAlert$$ExternalSyntheticLambda35 = new StickersAlert$$ExternalSyntheticLambda35(this);
-        this.stickersOnItemClickListener = stickersAlert$$ExternalSyntheticLambda35;
-        this.gridView.setOnItemClickListener((RecyclerListView.OnItemClickListener) stickersAlert$$ExternalSyntheticLambda35);
+        StickersAlert$$ExternalSyntheticLambda36 stickersAlert$$ExternalSyntheticLambda36 = new StickersAlert$$ExternalSyntheticLambda36(this);
+        this.stickersOnItemClickListener = stickersAlert$$ExternalSyntheticLambda36;
+        this.gridView.setOnItemClickListener((RecyclerListView.OnItemClickListener) stickersAlert$$ExternalSyntheticLambda36);
         this.containerView.addView(this.gridView, LayoutHelper.createFrame(-1, -1.0f, 51, 0.0f, 48.0f, 0.0f, 48.0f));
         AnonymousClass9 r13 = new FrameLayout(context2) {
             public void requestLayout() {
@@ -1067,7 +1330,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
         this.emptyView = r13;
         this.containerView.addView(r13, LayoutHelper.createFrame(-1, -1.0f, 51, 0.0f, 0.0f, 0.0f, 48.0f));
         this.gridView.setEmptyView(this.emptyView);
-        this.emptyView.setOnTouchListener(StickersAlert$$ExternalSyntheticLambda14.INSTANCE);
+        this.emptyView.setOnTouchListener(StickersAlert$$ExternalSyntheticLambda15.INSTANCE);
         TextView textView = new TextView(context2);
         this.titleTextView = textView;
         textView.setLines(1);
@@ -1080,7 +1343,8 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
         this.titleTextView.setGravity(16);
         this.titleTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         this.containerView.addView(this.titleTextView, LayoutHelper.createFrame(-1, 50.0f, 51, 0.0f, 0.0f, 40.0f, 0.0f));
-        ActionBarMenuItem actionBarMenuItem = new ActionBarMenuItem(context, (ActionBarMenu) null, 0, getThemedColor("key_sheet_other"), this.resourcesProvider);
+        ActionBarMenuItem actionBarMenuItem = r1;
+        ActionBarMenuItem actionBarMenuItem2 = new ActionBarMenuItem(context, (ActionBarMenu) null, 0, getThemedColor("key_sheet_other"), this.resourcesProvider);
         this.optionsButton = actionBarMenuItem;
         actionBarMenuItem.setLongClickEnabled(false);
         this.optionsButton.setSubMenuOpenSide(2);
@@ -1090,7 +1354,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
         this.optionsButton.addSubItem(1, NUM, LocaleController.getString("StickersShare", NUM));
         this.optionsButton.addSubItem(2, NUM, LocaleController.getString("CopyLink", NUM));
         this.optionsButton.setOnClickListener(new StickersAlert$$ExternalSyntheticLambda3(this));
-        this.optionsButton.setDelegate(new StickersAlert$$ExternalSyntheticLambda33(this));
+        this.optionsButton.setDelegate(new StickersAlert$$ExternalSyntheticLambda34(this));
         this.optionsButton.setContentDescription(LocaleController.getString("AccDescrMoreOptions", NUM));
         this.optionsButton.setVisibility(this.inputStickerSet != null ? 0 : 8);
         this.emptyView.addView(new RadialProgressView(context2), LayoutHelper.createFrame(-2, -2, 17));
@@ -1113,12 +1377,17 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
         this.pickerBottomFrameLayout = frameLayout;
         frameLayout.addView(this.pickerBottomLayout, LayoutHelper.createFrame(-1, 48.0f));
         this.containerView.addView(this.pickerBottomFrameLayout, LayoutHelper.createFrame(-1, -2, 83));
+        PremiumButtonView premiumButtonView2 = new PremiumButtonView(context2, false);
+        this.premiumButtonView = premiumButtonView2;
+        premiumButtonView2.setIcon(NUM);
+        this.premiumButtonView.setVisibility(4);
+        this.containerView.addView(this.premiumButtonView, LayoutHelper.createFrame(-1, 48.0f, 87, 8.0f, 0.0f, 8.0f, 8.0f));
         FrameLayout frameLayout2 = new FrameLayout(context2);
         this.stickerPreviewLayout = frameLayout2;
         frameLayout2.setVisibility(8);
         this.stickerPreviewLayout.setSoundEffectsEnabled(false);
         this.containerView.addView(this.stickerPreviewLayout, LayoutHelper.createFrame(-1, -1.0f));
-        this.stickerPreviewLayout.setOnClickListener(new StickersAlert$$ExternalSyntheticLambda7(this));
+        this.stickerPreviewLayout.setOnClickListener(new StickersAlert$$ExternalSyntheticLambda6(this));
         BackupImageView backupImageView = new BackupImageView(context2);
         this.stickerImageView = backupImageView;
         backupImageView.setAspectFit(true);
@@ -1138,7 +1407,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
         this.previewSendButton.setPadding(AndroidUtilities.dp(29.0f), 0, AndroidUtilities.dp(29.0f), 0);
         this.previewSendButton.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         this.stickerPreviewLayout.addView(this.previewSendButton, LayoutHelper.createFrame(-1, 48, 83));
-        this.previewSendButton.setOnClickListener(new StickersAlert$$ExternalSyntheticLambda5(this));
+        this.previewSendButton.setOnClickListener(new StickersAlert$$ExternalSyntheticLambda4(this));
         FrameLayout.LayoutParams layoutParams3 = new FrameLayout.LayoutParams(-1, AndroidUtilities.getShadowHeight(), 83);
         layoutParams3.bottomMargin = AndroidUtilities.dp(48.0f);
         View view = new View(context2);
@@ -1164,15 +1433,16 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
     /* access modifiers changed from: private */
     public /* synthetic */ void lambda$init$8(View view, int i) {
         boolean z;
+        TLRPC$StickerSet tLRPC$StickerSet;
         int i2 = i;
         if (this.stickerSetCovereds != null) {
             TLRPC$StickerSetCovered tLRPC$StickerSetCovered = (TLRPC$StickerSetCovered) this.adapter.positionsToSets.get(i2);
             if (tLRPC$StickerSetCovered != null) {
                 dismiss();
                 TLRPC$TL_inputStickerSetID tLRPC$TL_inputStickerSetID = new TLRPC$TL_inputStickerSetID();
-                TLRPC$StickerSet tLRPC$StickerSet = tLRPC$StickerSetCovered.set;
-                tLRPC$TL_inputStickerSetID.access_hash = tLRPC$StickerSet.access_hash;
-                tLRPC$TL_inputStickerSetID.id = tLRPC$StickerSet.id;
+                TLRPC$StickerSet tLRPC$StickerSet2 = tLRPC$StickerSetCovered.set;
+                tLRPC$TL_inputStickerSetID.access_hash = tLRPC$StickerSet2.access_hash;
+                tLRPC$TL_inputStickerSetID.id = tLRPC$StickerSet2.id;
                 new StickersAlert(this.parentActivity, this.parentFragment, tLRPC$TL_inputStickerSetID, (TLRPC$TL_messages_stickerSet) null, (StickersAlertDelegate) null, this.resourcesProvider).show();
                 return;
             }
@@ -1204,7 +1474,8 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
                 if (!z) {
                     this.stickerEmojiTextView.setText(Emoji.replaceEmoji(MediaDataController.getInstance(this.currentAccount).getEmojiForSticker(this.selectedSticker.id), this.stickerEmojiTextView.getPaint().getFontMetricsInt(), AndroidUtilities.dp(30.0f), false));
                 }
-                if (!ContentPreviewViewer.getInstance().showMenuFor(view)) {
+                TLRPC$TL_messages_stickerSet tLRPC$TL_messages_stickerSet2 = this.stickerSet;
+                if ((tLRPC$TL_messages_stickerSet2 == null || (tLRPC$StickerSet = tLRPC$TL_messages_stickerSet2.set) == null || !tLRPC$StickerSet.emojis) && !ContentPreviewViewer.getInstance().showMenuFor(view)) {
                     this.stickerImageView.getImageReceiver().setImage(ImageLocation.getForDocument(this.selectedSticker), (String) null, ImageLocation.getForDocument(FileLoader.getClosestPhotoSizeWithSize(this.selectedSticker.thumbs, 90), this.selectedSticker), (String) null, "webp", (Object) this.stickerSet, 1);
                     FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) this.stickerPreviewLayout.getLayoutParams();
                     layoutParams.topMargin = this.scrollOffsetY;
@@ -1262,7 +1533,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
         Point point = AndroidUtilities.displaySize;
         int min = (int) (((float) (Math.min(point.x, point.y) / 2)) / AndroidUtilities.density);
         if (this.importingStickers != null) {
-            this.previewSendButton.setText(LocaleController.getString("ImportStickersRemove", NUM).toUpperCase());
+            this.previewSendButton.setText(LocaleController.getString("ImportStickersRemove", NUM));
             this.previewSendButton.setTextColor(getThemedColor("dialogTextRed"));
             float f = (float) min;
             this.stickerImageView.setLayoutParams(LayoutHelper.createFrame(min, f, 17, 0.0f, 0.0f, 0.0f, 30.0f));
@@ -1270,13 +1541,13 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
             this.previewSendButton.setVisibility(0);
             this.previewSendButtonShadow.setVisibility(0);
         } else if (this.delegate == null || ((tLRPC$TL_messages_stickerSet = this.stickerSet) != null && tLRPC$TL_messages_stickerSet.set.masks)) {
-            this.previewSendButton.setText(LocaleController.getString("Close", NUM).toUpperCase());
+            this.previewSendButton.setText(LocaleController.getString("Close", NUM));
             this.stickerImageView.setLayoutParams(LayoutHelper.createFrame(min, min, 17));
             this.stickerEmojiTextView.setLayoutParams(LayoutHelper.createFrame(min, min, 17));
             this.previewSendButton.setVisibility(8);
             this.previewSendButtonShadow.setVisibility(8);
         } else {
-            this.previewSendButton.setText(LocaleController.getString("SendSticker", NUM).toUpperCase());
+            this.previewSendButton.setText(LocaleController.getString("SendSticker", NUM));
             float f2 = (float) min;
             this.stickerImageView.setLayoutParams(LayoutHelper.createFrame(min, f2, 17, 0.0f, 0.0f, 0.0f, 30.0f));
             this.stickerEmojiTextView.setLayoutParams(LayoutHelper.createFrame(min, f2, 17, 0.0f, 0.0f, 0.0f, 30.0f));
@@ -1310,9 +1581,17 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
 
     /* access modifiers changed from: private */
     public void onSubItemClick(int i) {
+        String str;
         BaseFragment baseFragment;
-        if (this.stickerSet != null) {
-            String str = "https://" + MessagesController.getInstance(this.currentAccount).linkPrefix + "/addstickers/" + this.stickerSet.set.short_name;
+        TLRPC$TL_messages_stickerSet tLRPC$TL_messages_stickerSet = this.stickerSet;
+        if (tLRPC$TL_messages_stickerSet != null) {
+            TLRPC$StickerSet tLRPC$StickerSet = tLRPC$TL_messages_stickerSet.set;
+            if (tLRPC$StickerSet == null || !tLRPC$StickerSet.emojis) {
+                str = "https://" + MessagesController.getInstance(this.currentAccount).linkPrefix + "/addstickers/" + this.stickerSet.set.short_name;
+            } else {
+                str = "https://" + MessagesController.getInstance(this.currentAccount).linkPrefix + "/addemoji/" + this.stickerSet.set.short_name;
+            }
+            String str2 = str;
             if (i == 1) {
                 Context context = this.parentActivity;
                 if (context == null && (baseFragment = this.parentFragment) != null) {
@@ -1321,7 +1600,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
                 if (context == null) {
                     context = getContext();
                 }
-                ShareAlert shareAlert = new ShareAlert(context, (ArrayList<MessageObject>) null, str, false, str, false, this.resourcesProvider);
+                ShareAlert shareAlert = new ShareAlert(context, (ArrayList<MessageObject>) null, str2, false, str2, false, this.resourcesProvider);
                 BaseFragment baseFragment2 = this.parentFragment;
                 if (baseFragment2 != null) {
                     baseFragment2.showDialog(shareAlert);
@@ -1330,7 +1609,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
                 }
             } else if (i == 2) {
                 try {
-                    AndroidUtilities.addToClipboard(str);
+                    AndroidUtilities.addToClipboard(str2);
                     BulletinFactory.of((FrameLayout) this.containerView, this.resourcesProvider).createCopyLinkBulletin().show();
                 } catch (Exception e) {
                     FileLog.e((Throwable) e);
@@ -1339,12 +1618,16 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
         }
     }
 
-    /* JADX WARNING: Code restructure failed: missing block: B:72:0x0082, code lost:
+    /* JADX WARNING: Code restructure failed: missing block: B:108:0x0081, code lost:
         r1 = r1;
      */
-    /* JADX WARNING: Removed duplicated region for block: B:32:0x0087  */
-    /* JADX WARNING: Removed duplicated region for block: B:35:0x0094  */
-    /* JADX WARNING: Removed duplicated region for block: B:36:0x00b7  */
+    /* JADX WARNING: Removed duplicated region for block: B:32:0x0086  */
+    /* JADX WARNING: Removed duplicated region for block: B:35:0x0095  */
+    /* JADX WARNING: Removed duplicated region for block: B:43:0x00bb  */
+    /* JADX WARNING: Removed duplicated region for block: B:48:0x00e0  */
+    /* JADX WARNING: Removed duplicated region for block: B:61:0x012a  */
+    /* JADX WARNING: Removed duplicated region for block: B:64:0x0134  */
+    /* JADX WARNING: Removed duplicated region for block: B:65:0x0157  */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     private void updateFields() {
         /*
@@ -1354,26 +1637,26 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
             return
         L_0x0005:
             org.telegram.tgnet.TLRPC$TL_messages_stickerSet r1 = r12.stickerSet
-            r2 = 0
-            java.lang.String r3 = "Stickers"
+            java.lang.String r2 = "Stickers"
+            r3 = 0
             r4 = 1
             r5 = 0
-            if (r1 == 0) goto L_0x0183
-            java.util.regex.Pattern r0 = r12.urlPattern     // Catch:{ Exception -> 0x007d }
+            if (r1 == 0) goto L_0x0249
+            java.util.regex.Pattern r0 = r12.urlPattern     // Catch:{ Exception -> 0x007c }
             if (r0 != 0) goto L_0x001a
             java.lang.String r0 = "@[a-zA-Z\\d_]{1,32}"
-            java.util.regex.Pattern r0 = java.util.regex.Pattern.compile(r0)     // Catch:{ Exception -> 0x007d }
-            r12.urlPattern = r0     // Catch:{ Exception -> 0x007d }
+            java.util.regex.Pattern r0 = java.util.regex.Pattern.compile(r0)     // Catch:{ Exception -> 0x007c }
+            r12.urlPattern = r0     // Catch:{ Exception -> 0x007c }
         L_0x001a:
-            java.util.regex.Pattern r0 = r12.urlPattern     // Catch:{ Exception -> 0x007d }
-            org.telegram.tgnet.TLRPC$TL_messages_stickerSet r1 = r12.stickerSet     // Catch:{ Exception -> 0x007d }
-            org.telegram.tgnet.TLRPC$StickerSet r1 = r1.set     // Catch:{ Exception -> 0x007d }
-            java.lang.String r1 = r1.title     // Catch:{ Exception -> 0x007d }
-            java.util.regex.Matcher r0 = r0.matcher(r1)     // Catch:{ Exception -> 0x007d }
-            r1 = r2
+            java.util.regex.Pattern r0 = r12.urlPattern     // Catch:{ Exception -> 0x007c }
+            org.telegram.tgnet.TLRPC$TL_messages_stickerSet r1 = r12.stickerSet     // Catch:{ Exception -> 0x007c }
+            org.telegram.tgnet.TLRPC$StickerSet r1 = r1.set     // Catch:{ Exception -> 0x007c }
+            java.lang.String r1 = r1.title     // Catch:{ Exception -> 0x007c }
+            java.util.regex.Matcher r0 = r0.matcher(r1)     // Catch:{ Exception -> 0x007c }
+            r1 = r3
         L_0x0027:
             boolean r6 = r0.find()     // Catch:{ Exception -> 0x007a }
-            if (r6 == 0) goto L_0x0082
+            if (r6 == 0) goto L_0x0081
             if (r1 != 0) goto L_0x0049
             android.text.SpannableStringBuilder r6 = new android.text.SpannableStringBuilder     // Catch:{ Exception -> 0x007a }
             org.telegram.tgnet.TLRPC$TL_messages_stickerSet r7 = r12.stickerSet     // Catch:{ Exception -> 0x007a }
@@ -1388,7 +1671,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
             goto L_0x0049
         L_0x0046:
             r0 = move-exception
-            r2 = r6
+            r1 = r6
             goto L_0x007e
         L_0x0049:
             int r6 = r0.start()     // Catch:{ Exception -> 0x007a }
@@ -1413,26 +1696,105 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
             goto L_0x0027
         L_0x007a:
             r0 = move-exception
-            r2 = r1
             goto L_0x007e
-        L_0x007d:
+        L_0x007c:
             r0 = move-exception
+            r1 = r3
         L_0x007e:
             org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)
-            r1 = r2
-        L_0x0082:
+        L_0x0081:
             android.widget.TextView r0 = r12.titleTextView
-            if (r1 == 0) goto L_0x0087
-            goto L_0x008d
-        L_0x0087:
+            if (r1 == 0) goto L_0x0086
+            goto L_0x008c
+        L_0x0086:
             org.telegram.tgnet.TLRPC$TL_messages_stickerSet r1 = r12.stickerSet
             org.telegram.tgnet.TLRPC$StickerSet r1 = r1.set
             java.lang.String r1 = r1.title
-        L_0x008d:
+        L_0x008c:
             r0.setText(r1)
+            boolean r0 = r12.isEmoji()
+            if (r0 == 0) goto L_0x00bb
+            org.telegram.ui.Components.RecyclerListView r0 = r12.gridView
+            int r0 = r0.getMeasuredWidth()
+            if (r0 != 0) goto L_0x00a1
+            android.graphics.Point r0 = org.telegram.messenger.AndroidUtilities.displaySize
+            int r0 = r0.x
+        L_0x00a1:
+            org.telegram.ui.Components.StickersAlert$GridAdapter r1 = r12.adapter
+            boolean r6 = org.telegram.messenger.AndroidUtilities.isTablet()
+            if (r6 == 0) goto L_0x00ac
+            r6 = 1114636288(0x42700000, float:60.0)
+            goto L_0x00ae
+        L_0x00ac:
+            r6 = 1110704128(0x42340000, float:45.0)
+        L_0x00ae:
+            int r6 = org.telegram.messenger.AndroidUtilities.dp(r6)
+            int r0 = r0 / r6
+            int r0 = java.lang.Math.max(r4, r0)
+            int unused = r1.stickersPerRow = r0
+            goto L_0x00c1
+        L_0x00bb:
+            org.telegram.ui.Components.StickersAlert$GridAdapter r0 = r12.adapter
+            r1 = 5
+            int unused = r0.stickersPerRow = r1
+        L_0x00c1:
+            androidx.recyclerview.widget.GridLayoutManager r0 = r12.layoutManager
+            org.telegram.ui.Components.StickersAlert$GridAdapter r1 = r12.adapter
+            int r1 = r1.stickersPerRow
+            r0.setSpanCount(r1)
+            org.telegram.tgnet.TLRPC$TL_messages_stickerSet r0 = r12.stickerSet
+            org.telegram.tgnet.TLRPC$StickerSet r0 = r0.set
+            boolean r0 = r0.emojis
+            if (r0 == 0) goto L_0x012a
+            int r0 = r12.currentAccount
+            org.telegram.messenger.UserConfig r0 = org.telegram.messenger.UserConfig.getInstance(r0)
+            boolean r0 = r0.isPremium()
+            if (r0 != 0) goto L_0x012a
+            org.telegram.tgnet.TLRPC$TL_messages_stickerSet r0 = r12.stickerSet
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$Document> r0 = r0.documents
+            if (r0 == 0) goto L_0x0106
+            r0 = 0
+        L_0x00e7:
+            org.telegram.tgnet.TLRPC$TL_messages_stickerSet r1 = r12.stickerSet
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$Document> r1 = r1.documents
+            int r1 = r1.size()
+            if (r0 >= r1) goto L_0x0106
+            org.telegram.tgnet.TLRPC$TL_messages_stickerSet r1 = r12.stickerSet
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$Document> r1 = r1.documents
+            java.lang.Object r1 = r1.get(r0)
+            org.telegram.tgnet.TLRPC$Document r1 = (org.telegram.tgnet.TLRPC$Document) r1
+            boolean r1 = org.telegram.messenger.MessageObject.isFreeEmoji(r1)
+            if (r1 != 0) goto L_0x0103
+            r0 = 1
+            goto L_0x0107
+        L_0x0103:
+            int r0 = r0 + 1
+            goto L_0x00e7
+        L_0x0106:
+            r0 = 0
+        L_0x0107:
+            if (r0 == 0) goto L_0x0130
+            org.telegram.ui.Components.Premium.PremiumButtonView r0 = r12.premiumButtonView
+            r0.setVisibility(r5)
+            android.widget.TextView r0 = r12.pickerBottomLayout
+            r0.setBackground(r3)
+            r12.setButton(r3, r3, r3)
+            org.telegram.ui.Components.Premium.PremiumButtonView r0 = r12.premiumButtonView
+            r1 = 2131628788(0x7f0e12f4, float:1.8884879E38)
+            java.lang.String r2 = "UnlockPremiumEmoji"
+            java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
+            org.telegram.ui.Components.StickersAlert$$ExternalSyntheticLambda12 r2 = new org.telegram.ui.Components.StickersAlert$$ExternalSyntheticLambda12
+            r2.<init>(r12)
+            r0.setButton(r1, r2)
+            return
+        L_0x012a:
+            org.telegram.ui.Components.Premium.PremiumButtonView r0 = r12.premiumButtonView
+            r1 = 4
+            r0.setVisibility(r1)
+        L_0x0130:
             org.telegram.ui.Components.StickersAlert$StickersAlertCustomButtonDelegate r0 = r12.customButtonDelegate
-            if (r0 == 0) goto L_0x00b7
-            org.telegram.ui.Components.StickersAlert$$ExternalSyntheticLambda11 r7 = new org.telegram.ui.Components.StickersAlert$$ExternalSyntheticLambda11
+            if (r0 == 0) goto L_0x0157
+            org.telegram.ui.Components.StickersAlert$$ExternalSyntheticLambda10 r7 = new org.telegram.ui.Components.StickersAlert$$ExternalSyntheticLambda10
             r7.<init>(r12)
             org.telegram.ui.Components.StickersAlert$StickersAlertCustomButtonDelegate r0 = r12.customButtonDelegate
             java.lang.String r8 = r0.getCustomButtonText()
@@ -1444,159 +1806,176 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
             java.lang.String r11 = r0.getCustomButtonRippleColorKey()
             r6 = r12
             r6.setButton(r7, r8, r9, r10, r11)
-            goto L_0x017c
-        L_0x00b7:
+            goto L_0x0242
+        L_0x0157:
             org.telegram.tgnet.TLRPC$TL_messages_stickerSet r0 = r12.stickerSet
             org.telegram.tgnet.TLRPC$StickerSet r0 = r0.set
-            java.lang.String r1 = "MasksCount"
-            if (r0 == 0) goto L_0x012c
+            java.lang.String r1 = "EmojiCountButton"
+            java.lang.String r3 = "MasksCount"
+            if (r0 == 0) goto L_0x01df
             int r0 = r12.currentAccount
             org.telegram.messenger.MediaDataController r0 = org.telegram.messenger.MediaDataController.getInstance(r0)
-            org.telegram.tgnet.TLRPC$TL_messages_stickerSet r2 = r12.stickerSet
-            org.telegram.tgnet.TLRPC$StickerSet r2 = r2.set
-            long r6 = r2.id
+            org.telegram.tgnet.TLRPC$TL_messages_stickerSet r6 = r12.stickerSet
+            org.telegram.tgnet.TLRPC$StickerSet r6 = r6.set
+            long r6 = r6.id
             boolean r0 = r0.isStickerPackInstalled((long) r6)
-            if (r0 != 0) goto L_0x00d2
-            goto L_0x012c
-        L_0x00d2:
+            if (r0 != 0) goto L_0x0174
+            goto L_0x01df
+        L_0x0174:
             org.telegram.tgnet.TLRPC$TL_messages_stickerSet r0 = r12.stickerSet
-            org.telegram.tgnet.TLRPC$StickerSet r2 = r0.set
-            boolean r2 = r2.masks
-            r6 = 2131627904(0x7f0e0var_, float:1.8883086E38)
-            java.lang.String r7 = "RemoveStickersCount"
-            if (r2 == 0) goto L_0x00f8
-            java.lang.Object[] r2 = new java.lang.Object[r4]
-            java.util.ArrayList<org.telegram.tgnet.TLRPC$Document> r0 = r0.documents
-            int r0 = r0.size()
-            java.lang.Object[] r3 = new java.lang.Object[r5]
-            java.lang.String r0 = org.telegram.messenger.LocaleController.formatPluralString(r1, r0, r3)
-            r2[r5] = r0
-            java.lang.String r0 = org.telegram.messenger.LocaleController.formatString(r7, r6, r2)
-            java.lang.String r0 = r0.toUpperCase()
-            goto L_0x0110
-        L_0x00f8:
+            org.telegram.tgnet.TLRPC$StickerSet r6 = r0.set
+            boolean r7 = r6.masks
+            r8 = 2131627954(0x7f0e0fb2, float:1.8883187E38)
+            java.lang.String r9 = "RemoveStickersCount"
+            if (r7 == 0) goto L_0x0196
             java.lang.Object[] r1 = new java.lang.Object[r4]
             java.util.ArrayList<org.telegram.tgnet.TLRPC$Document> r0 = r0.documents
             int r0 = r0.size()
             java.lang.Object[] r2 = new java.lang.Object[r5]
             java.lang.String r0 = org.telegram.messenger.LocaleController.formatPluralString(r3, r0, r2)
             r1[r5] = r0
-            java.lang.String r0 = org.telegram.messenger.LocaleController.formatString(r7, r6, r1)
-            java.lang.String r0 = r0.toUpperCase()
-        L_0x0110:
+            java.lang.String r0 = org.telegram.messenger.LocaleController.formatString(r9, r8, r1)
+            goto L_0x01c3
+        L_0x0196:
+            boolean r3 = r6.emojis
+            if (r3 == 0) goto L_0x01af
+            java.lang.Object[] r2 = new java.lang.Object[r4]
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$Document> r0 = r0.documents
+            int r0 = r0.size()
+            java.lang.Object[] r3 = new java.lang.Object[r5]
+            java.lang.String r0 = org.telegram.messenger.LocaleController.formatPluralString(r1, r0, r3)
+            r2[r5] = r0
+            java.lang.String r0 = org.telegram.messenger.LocaleController.formatString(r9, r8, r2)
+            goto L_0x01c3
+        L_0x01af:
+            java.lang.Object[] r1 = new java.lang.Object[r4]
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$Document> r0 = r0.documents
+            int r0 = r0.size()
+            java.lang.Object[] r3 = new java.lang.Object[r5]
+            java.lang.String r0 = org.telegram.messenger.LocaleController.formatPluralString(r2, r0, r3)
+            r1[r5] = r0
+            java.lang.String r0 = org.telegram.messenger.LocaleController.formatString(r9, r8, r1)
+        L_0x01c3:
             org.telegram.tgnet.TLRPC$TL_messages_stickerSet r1 = r12.stickerSet
             org.telegram.tgnet.TLRPC$StickerSet r1 = r1.set
             boolean r1 = r1.official
             java.lang.String r2 = "dialogTextRed"
-            if (r1 == 0) goto L_0x0123
-            org.telegram.ui.Components.StickersAlert$$ExternalSyntheticLambda9 r1 = new org.telegram.ui.Components.StickersAlert$$ExternalSyntheticLambda9
+            if (r1 == 0) goto L_0x01d6
+            org.telegram.ui.Components.StickersAlert$$ExternalSyntheticLambda11 r1 = new org.telegram.ui.Components.StickersAlert$$ExternalSyntheticLambda11
             r1.<init>(r12)
             r12.setButton(r1, r0, r2)
-            goto L_0x017c
-        L_0x0123:
-            org.telegram.ui.Components.StickersAlert$$ExternalSyntheticLambda10 r1 = new org.telegram.ui.Components.StickersAlert$$ExternalSyntheticLambda10
+            goto L_0x0242
+        L_0x01d6:
+            org.telegram.ui.Components.StickersAlert$$ExternalSyntheticLambda5 r1 = new org.telegram.ui.Components.StickersAlert$$ExternalSyntheticLambda5
             r1.<init>(r12)
             r12.setButton(r1, r0, r2)
-            goto L_0x017c
-        L_0x012c:
+            goto L_0x0242
+        L_0x01df:
             org.telegram.tgnet.TLRPC$TL_messages_stickerSet r0 = r12.stickerSet
-            org.telegram.tgnet.TLRPC$StickerSet r2 = r0.set
-            r6 = 2131624283(0x7f0e015b, float:1.8875741E38)
-            java.lang.String r7 = "AddStickersCount"
-            if (r2 == 0) goto L_0x0154
-            boolean r2 = r2.masks
-            if (r2 == 0) goto L_0x0154
-            java.lang.Object[] r2 = new java.lang.Object[r4]
-            java.util.ArrayList<org.telegram.tgnet.TLRPC$Document> r0 = r0.documents
-            int r0 = r0.size()
-            java.lang.Object[] r3 = new java.lang.Object[r5]
-            java.lang.String r0 = org.telegram.messenger.LocaleController.formatPluralString(r1, r0, r3)
-            r2[r5] = r0
-            java.lang.String r0 = org.telegram.messenger.LocaleController.formatString(r7, r6, r2)
-            java.lang.String r0 = r0.toUpperCase()
-            goto L_0x016c
-        L_0x0154:
+            org.telegram.tgnet.TLRPC$StickerSet r6 = r0.set
+            r7 = 2131624290(0x7f0e0162, float:1.8875756E38)
+            java.lang.String r8 = "AddStickersCount"
+            if (r6 == 0) goto L_0x0203
+            boolean r9 = r6.masks
+            if (r9 == 0) goto L_0x0203
             java.lang.Object[] r1 = new java.lang.Object[r4]
             java.util.ArrayList<org.telegram.tgnet.TLRPC$Document> r0 = r0.documents
             int r0 = r0.size()
             java.lang.Object[] r2 = new java.lang.Object[r5]
             java.lang.String r0 = org.telegram.messenger.LocaleController.formatPluralString(r3, r0, r2)
             r1[r5] = r0
-            java.lang.String r0 = org.telegram.messenger.LocaleController.formatString(r7, r6, r1)
-            java.lang.String r0 = r0.toUpperCase()
-        L_0x016c:
+            java.lang.String r0 = org.telegram.messenger.LocaleController.formatString(r8, r7, r1)
+            goto L_0x0232
+        L_0x0203:
+            if (r6 == 0) goto L_0x021e
+            boolean r3 = r6.emojis
+            if (r3 == 0) goto L_0x021e
+            java.lang.Object[] r2 = new java.lang.Object[r4]
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$Document> r0 = r0.documents
+            int r0 = r0.size()
+            java.lang.Object[] r3 = new java.lang.Object[r5]
+            java.lang.String r0 = org.telegram.messenger.LocaleController.formatPluralString(r1, r0, r3)
+            r2[r5] = r0
+            java.lang.String r0 = org.telegram.messenger.LocaleController.formatString(r8, r7, r2)
+            goto L_0x0232
+        L_0x021e:
+            java.lang.Object[] r1 = new java.lang.Object[r4]
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$Document> r0 = r0.documents
+            int r0 = r0.size()
+            java.lang.Object[] r3 = new java.lang.Object[r5]
+            java.lang.String r0 = org.telegram.messenger.LocaleController.formatPluralString(r2, r0, r3)
+            r1[r5] = r0
+            java.lang.String r0 = org.telegram.messenger.LocaleController.formatString(r8, r7, r1)
+        L_0x0232:
             r3 = r0
-            org.telegram.ui.Components.StickersAlert$$ExternalSyntheticLambda4 r2 = new org.telegram.ui.Components.StickersAlert$$ExternalSyntheticLambda4
+            org.telegram.ui.Components.StickersAlert$$ExternalSyntheticLambda9 r2 = new org.telegram.ui.Components.StickersAlert$$ExternalSyntheticLambda9
             r2.<init>(r12)
             java.lang.String r4 = "featuredStickers_buttonText"
             java.lang.String r5 = "featuredStickers_addButton"
             java.lang.String r6 = "featuredStickers_addButtonPressed"
             r1 = r12
             r1.setButton(r2, r3, r4, r5, r6)
-        L_0x017c:
+        L_0x0242:
             org.telegram.ui.Components.StickersAlert$GridAdapter r0 = r12.adapter
             r0.notifyDataSetChanged()
-            goto L_0x0207
-        L_0x0183:
+            goto L_0x02c1
+        L_0x0249:
             java.util.ArrayList<android.os.Parcelable> r1 = r12.importingStickers
             java.lang.String r6 = "dialogTextBlue2"
-            if (r1 == 0) goto L_0x01f2
+            if (r1 == 0) goto L_0x02b0
             java.util.ArrayList<org.telegram.messenger.SendMessagesHelper$ImportingSticker> r7 = r12.importingStickersPaths
-            if (r7 == 0) goto L_0x0192
+            if (r7 == 0) goto L_0x0258
             int r1 = r7.size()
-            goto L_0x0196
-        L_0x0192:
+            goto L_0x025c
+        L_0x0258:
             int r1 = r1.size()
-        L_0x0196:
+        L_0x025c:
             java.lang.Object[] r7 = new java.lang.Object[r5]
-            java.lang.String r1 = org.telegram.messenger.LocaleController.formatPluralString(r3, r1, r7)
+            java.lang.String r1 = org.telegram.messenger.LocaleController.formatPluralString(r2, r1, r7)
             r0.setText(r1)
             java.util.HashMap<java.lang.String, org.telegram.messenger.SendMessagesHelper$ImportingSticker> r0 = r12.uploadImportStickers
-            if (r0 == 0) goto L_0x01c2
+            if (r0 == 0) goto L_0x0284
             boolean r0 = r0.isEmpty()
-            if (r0 == 0) goto L_0x01aa
-            goto L_0x01c2
-        L_0x01aa:
-            r0 = 2131626211(0x7f0e08e3, float:1.8879652E38)
+            if (r0 == 0) goto L_0x0270
+            goto L_0x0284
+        L_0x0270:
+            r0 = 2131626248(0x7f0e0908, float:1.8879727E38)
             java.lang.String r1 = "ImportStickersProcessing"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
-            java.lang.String r0 = r0.toUpperCase()
             java.lang.String r1 = "dialogTextGray2"
-            r12.setButton(r2, r0, r1)
+            r12.setButton(r3, r0, r1)
             android.widget.TextView r0 = r12.pickerBottomLayout
             r0.setEnabled(r5)
-            goto L_0x0207
-        L_0x01c2:
-            org.telegram.ui.Components.StickersAlert$$ExternalSyntheticLambda6 r0 = new org.telegram.ui.Components.StickersAlert$$ExternalSyntheticLambda6
+            goto L_0x02c1
+        L_0x0284:
+            org.telegram.ui.Components.StickersAlert$$ExternalSyntheticLambda7 r0 = new org.telegram.ui.Components.StickersAlert$$ExternalSyntheticLambda7
             r0.<init>(r12)
-            r1 = 2131626198(0x7f0e08d6, float:1.8879625E38)
-            java.lang.Object[] r2 = new java.lang.Object[r4]
+            r1 = 2131626235(0x7f0e08fb, float:1.88797E38)
+            java.lang.Object[] r3 = new java.lang.Object[r4]
             java.util.ArrayList<org.telegram.messenger.SendMessagesHelper$ImportingSticker> r7 = r12.importingStickersPaths
-            if (r7 == 0) goto L_0x01d1
-            goto L_0x01d3
-        L_0x01d1:
+            if (r7 == 0) goto L_0x0293
+            goto L_0x0295
+        L_0x0293:
             java.util.ArrayList<android.os.Parcelable> r7 = r12.importingStickers
-        L_0x01d3:
+        L_0x0295:
             int r7 = r7.size()
             java.lang.Object[] r8 = new java.lang.Object[r5]
-            java.lang.String r3 = org.telegram.messenger.LocaleController.formatPluralString(r3, r7, r8)
-            r2[r5] = r3
-            java.lang.String r3 = "ImportStickers"
-            java.lang.String r1 = org.telegram.messenger.LocaleController.formatString(r3, r1, r2)
-            java.lang.String r1 = r1.toUpperCase()
+            java.lang.String r2 = org.telegram.messenger.LocaleController.formatPluralString(r2, r7, r8)
+            r3[r5] = r2
+            java.lang.String r2 = "ImportStickers"
+            java.lang.String r1 = org.telegram.messenger.LocaleController.formatString(r2, r1, r3)
             r12.setButton(r0, r1, r6)
             android.widget.TextView r0 = r12.pickerBottomLayout
             r0.setEnabled(r4)
-            goto L_0x0207
-        L_0x01f2:
-            r0 = 2131625167(0x7f0e04cf, float:1.8877534E38)
+            goto L_0x02c1
+        L_0x02b0:
+            r0 = 2131625176(0x7f0e04d8, float:1.8877553E38)
             java.lang.String r1 = "Close"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
-            java.lang.String r0 = r0.toUpperCase()
             org.telegram.ui.Components.StickersAlert$$ExternalSyntheticLambda8 r1 = new org.telegram.ui.Components.StickersAlert$$ExternalSyntheticLambda8
             r1.<init>(r12)
             r12.setButton(r1, r0, r6)
-        L_0x0207:
+        L_0x02c1:
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.StickersAlert.updateFields():void");
@@ -1604,13 +1983,23 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
 
     /* access modifiers changed from: private */
     public /* synthetic */ void lambda$updateFields$13(View view) {
+        BaseFragment baseFragment = this.parentFragment;
+        if (baseFragment != null) {
+            new PremiumFeatureBottomSheet(baseFragment, 11, false).show();
+        } else if (getContext() instanceof LaunchActivity) {
+            ((LaunchActivity) getContext()).lambda$runLinkRequest$59(new PremiumPreviewFragment((String) null));
+        }
+    }
+
+    /* access modifiers changed from: private */
+    public /* synthetic */ void lambda$updateFields$14(View view) {
         if (this.customButtonDelegate.onCustomButtonPressed()) {
             dismiss();
         }
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$updateFields$16(View view) {
+    public /* synthetic */ void lambda$updateFields$17(View view) {
         dismiss();
         StickersAlertInstallDelegate stickersAlertInstallDelegate = this.installDelegate;
         if (stickersAlertInstallDelegate != null) {
@@ -1619,25 +2008,31 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
         if (this.inputStickerSet != null && !MediaDataController.getInstance(this.currentAccount).cancelRemovingStickerSet(this.inputStickerSet.id)) {
             TLRPC$TL_messages_installStickerSet tLRPC$TL_messages_installStickerSet = new TLRPC$TL_messages_installStickerSet();
             tLRPC$TL_messages_installStickerSet.stickerset = this.inputStickerSet;
-            ConnectionsManager.getInstance(this.currentAccount).sendRequest(tLRPC$TL_messages_installStickerSet, new StickersAlert$$ExternalSyntheticLambda27(this));
+            ConnectionsManager.getInstance(this.currentAccount).sendRequest(tLRPC$TL_messages_installStickerSet, new StickersAlert$$ExternalSyntheticLambda28(this));
         }
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$updateFields$15(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        AndroidUtilities.runOnUIThread(new StickersAlert$$ExternalSyntheticLambda23(this, tLRPC$TL_error, tLObject));
+    public /* synthetic */ void lambda$updateFields$16(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+        AndroidUtilities.runOnUIThread(new StickersAlert$$ExternalSyntheticLambda24(this, tLRPC$TL_error, tLObject));
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$updateFields$14(TLRPC$TL_error tLRPC$TL_error, TLObject tLObject) {
-        boolean z = this.stickerSet.set.masks;
+    public /* synthetic */ void lambda$updateFields$15(TLRPC$TL_error tLRPC$TL_error, TLObject tLObject) {
+        int i;
+        TLRPC$StickerSet tLRPC$StickerSet = this.stickerSet.set;
+        if (tLRPC$StickerSet.masks) {
+            i = 1;
+        } else {
+            i = tLRPC$StickerSet.emojis ? 5 : 0;
+        }
         if (tLRPC$TL_error == null) {
             try {
                 if (this.showTooltipWhenToggle) {
                     Bulletin.make(this.parentFragment, (Bulletin.Layout) new StickerSetBulletinLayout(this.pickerBottomFrameLayout.getContext(), this.stickerSet, 2, (TLRPC$Document) null, this.resourcesProvider), 1500).show();
                 }
                 if (tLObject instanceof TLRPC$TL_messages_stickerSetInstallResultArchive) {
-                    MediaDataController.getInstance(this.currentAccount).processStickerSetInstallResultArchive(this.parentFragment, true, z, (TLRPC$TL_messages_stickerSetInstallResultArchive) tLObject);
+                    MediaDataController.getInstance(this.currentAccount).processStickerSetInstallResultArchive(this.parentFragment, true, i, (TLRPC$TL_messages_stickerSetInstallResultArchive) tLObject);
                 }
             } catch (Exception e) {
                 FileLog.e((Throwable) e);
@@ -1645,17 +2040,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
         } else {
             Toast.makeText(getContext(), LocaleController.getString("ErrorOccurred", NUM), 0).show();
         }
-        MediaDataController.getInstance(this.currentAccount).loadStickers(z ? 1 : 0, false, true);
-    }
-
-    /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$updateFields$17(View view) {
-        StickersAlertInstallDelegate stickersAlertInstallDelegate = this.installDelegate;
-        if (stickersAlertInstallDelegate != null) {
-            stickersAlertInstallDelegate.onStickerSetUninstalled();
-        }
-        dismiss();
-        MediaDataController.getInstance(this.currentAccount).toggleStickerSet(getContext(), this.stickerSet, 1, this.parentFragment, true, this.showTooltipWhenToggle);
+        MediaDataController.getInstance(this.currentAccount).loadStickers(i, false, true);
     }
 
     /* access modifiers changed from: private */
@@ -1665,16 +2050,26 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
             stickersAlertInstallDelegate.onStickerSetUninstalled();
         }
         dismiss();
-        MediaDataController.getInstance(this.currentAccount).toggleStickerSet(getContext(), this.stickerSet, 0, this.parentFragment, true, this.showTooltipWhenToggle);
+        MediaDataController.getInstance(this.currentAccount).toggleStickerSet(getContext(), this.stickerSet, 1, this.parentFragment, true, this.showTooltipWhenToggle);
     }
 
     /* access modifiers changed from: private */
     public /* synthetic */ void lambda$updateFields$19(View view) {
-        showNameEnterAlert();
+        StickersAlertInstallDelegate stickersAlertInstallDelegate = this.installDelegate;
+        if (stickersAlertInstallDelegate != null) {
+            stickersAlertInstallDelegate.onStickerSetUninstalled();
+        }
+        dismiss();
+        MediaDataController.getInstance(this.currentAccount).toggleStickerSet(getContext(), this.stickerSet, 0, this.parentFragment, true, this.showTooltipWhenToggle);
     }
 
     /* access modifiers changed from: private */
     public /* synthetic */ void lambda$updateFields$20(View view) {
+        showNameEnterAlert();
+    }
+
+    /* access modifiers changed from: private */
+    public /* synthetic */ void lambda$updateFields$21(View view) {
         dismiss();
     }
 
@@ -1732,7 +2127,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
             }
         });
         frameLayout.addView(editTextBoldCursor, LayoutHelper.createFrame(-1, 36, 51));
-        editTextBoldCursor.setOnEditorActionListener(new StickersAlert$$ExternalSyntheticLambda15(builder));
+        editTextBoldCursor.setOnEditorActionListener(new StickersAlert$$ExternalSyntheticLambda16(builder));
         editTextBoldCursor.setSelection(editTextBoldCursor.length());
         builder.setNegativeButton(LocaleController.getString("Cancel", NUM), new StickersAlert$$ExternalSyntheticLambda0(editTextBoldCursor));
         textView.setText(AndroidUtilities.replaceTags(LocaleController.getString("ImportStickersEnterNameInfo", NUM)));
@@ -1744,11 +2139,11 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
         create.setOnShowListener(new StickersAlert$$ExternalSyntheticLambda2(editTextBoldCursor));
         create.show();
         editTextBoldCursor.requestFocus();
-        create.getButton(-1).setOnClickListener(new StickersAlert$$ExternalSyntheticLambda12(this, iArr, editTextBoldCursor, textView, textView2, builder));
+        create.getButton(-1).setOnClickListener(new StickersAlert$$ExternalSyntheticLambda13(this, iArr, editTextBoldCursor, textView, textView2, builder));
     }
 
     /* access modifiers changed from: private */
-    public static /* synthetic */ boolean lambda$showNameEnterAlert$22(AlertDialog.Builder builder, TextView textView, int i, KeyEvent keyEvent) {
+    public static /* synthetic */ boolean lambda$showNameEnterAlert$23(AlertDialog.Builder builder, TextView textView, int i, KeyEvent keyEvent) {
         if (i != 5) {
             return false;
         }
@@ -1757,13 +2152,13 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
     }
 
     /* access modifiers changed from: private */
-    public static /* synthetic */ void lambda$showNameEnterAlert$24(EditTextBoldCursor editTextBoldCursor) {
+    public static /* synthetic */ void lambda$showNameEnterAlert$25(EditTextBoldCursor editTextBoldCursor) {
         editTextBoldCursor.requestFocus();
         AndroidUtilities.showKeyboard(editTextBoldCursor);
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$showNameEnterAlert$29(int[] iArr, EditTextBoldCursor editTextBoldCursor, TextView textView, TextView textView2, AlertDialog.Builder builder, View view) {
+    public /* synthetic */ void lambda$showNameEnterAlert$30(int[] iArr, EditTextBoldCursor editTextBoldCursor, TextView textView, TextView textView2, AlertDialog.Builder builder, View view) {
         if (iArr[0] != 1) {
             if (iArr[0] == 0) {
                 iArr[0] = 1;
@@ -1771,7 +2166,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
                 String obj = editTextBoldCursor.getText().toString();
                 this.setTitle = obj;
                 tLRPC$TL_stickers_suggestShortName.title = obj;
-                ConnectionsManager.getInstance(this.currentAccount).sendRequest(tLRPC$TL_stickers_suggestShortName, new StickersAlert$$ExternalSyntheticLambda32(this, editTextBoldCursor, textView, textView2, iArr));
+                ConnectionsManager.getInstance(this.currentAccount).sendRequest(tLRPC$TL_stickers_suggestShortName, new StickersAlert$$ExternalSyntheticLambda33(this, editTextBoldCursor, textView, textView2, iArr));
             } else if (iArr[0] == 2) {
                 iArr[0] = 3;
                 if (!this.lastNameAvailable) {
@@ -1779,7 +2174,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
                     editTextBoldCursor.performHapticFeedback(3, 2);
                 }
                 AndroidUtilities.hideKeyboard(editTextBoldCursor);
-                SendMessagesHelper.getInstance(this.currentAccount).prepareImportStickers(this.setTitle, this.lastCheckName, this.importingSoftware, this.importingStickersPaths, new StickersAlert$$ExternalSyntheticLambda26(this));
+                SendMessagesHelper.getInstance(this.currentAccount).prepareImportStickers(this.setTitle, this.lastCheckName, this.importingSoftware, this.importingStickersPaths, new StickersAlert$$ExternalSyntheticLambda27(this));
                 builder.getDismissRunnable().run();
                 dismiss();
             }
@@ -1787,12 +2182,12 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$showNameEnterAlert$27(EditTextBoldCursor editTextBoldCursor, TextView textView, TextView textView2, int[] iArr, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        AndroidUtilities.runOnUIThread(new StickersAlert$$ExternalSyntheticLambda22(this, tLObject, editTextBoldCursor, textView, textView2, iArr));
+    public /* synthetic */ void lambda$showNameEnterAlert$28(EditTextBoldCursor editTextBoldCursor, TextView textView, TextView textView2, int[] iArr, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+        AndroidUtilities.runOnUIThread(new StickersAlert$$ExternalSyntheticLambda23(this, tLObject, editTextBoldCursor, textView, textView2, iArr));
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$showNameEnterAlert$26(TLObject tLObject, EditTextBoldCursor editTextBoldCursor, TextView textView, TextView textView2, int[] iArr) {
+    public /* synthetic */ void lambda$showNameEnterAlert$27(TLObject tLObject, EditTextBoldCursor editTextBoldCursor, TextView textView, TextView textView2, int[] iArr) {
         String str;
         boolean z = true;
         if (!(tLObject instanceof TLRPC$TL_stickers_suggestedShortName) || (str = ((TLRPC$TL_stickers_suggestedShortName) tLObject).short_name) == null) {
@@ -1811,7 +2206,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$showNameEnterAlert$28(String str) {
+    public /* synthetic */ void lambda$showNameEnterAlert$29(String str) {
         new ImportingAlert(getContext(), this.lastCheckName, (ChatActivity) null, this.resourcesProvider).show();
     }
 
@@ -1865,26 +2260,26 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
             textView.setText(LocaleController.getString("ImportStickersLinkChecking", NUM));
             textView.setTextColor(getThemedColor("windowBackgroundWhiteGrayText8"));
             this.lastCheckName = str;
-            StickersAlert$$ExternalSyntheticLambda17 stickersAlert$$ExternalSyntheticLambda17 = new StickersAlert$$ExternalSyntheticLambda17(this, str, textView);
-            this.checkRunnable = stickersAlert$$ExternalSyntheticLambda17;
-            AndroidUtilities.runOnUIThread(stickersAlert$$ExternalSyntheticLambda17, 300);
+            StickersAlert$$ExternalSyntheticLambda18 stickersAlert$$ExternalSyntheticLambda18 = new StickersAlert$$ExternalSyntheticLambda18(this, str, textView);
+            this.checkRunnable = stickersAlert$$ExternalSyntheticLambda18;
+            AndroidUtilities.runOnUIThread(stickersAlert$$ExternalSyntheticLambda18, 300);
         }
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$checkUrlAvailable$32(String str, TextView textView) {
+    public /* synthetic */ void lambda$checkUrlAvailable$33(String str, TextView textView) {
         TLRPC$TL_stickers_checkShortName tLRPC$TL_stickers_checkShortName = new TLRPC$TL_stickers_checkShortName();
         tLRPC$TL_stickers_checkShortName.short_name = str;
-        this.checkReqId = ConnectionsManager.getInstance(this.currentAccount).sendRequest(tLRPC$TL_stickers_checkShortName, new StickersAlert$$ExternalSyntheticLambda29(this, str, textView), 2);
+        this.checkReqId = ConnectionsManager.getInstance(this.currentAccount).sendRequest(tLRPC$TL_stickers_checkShortName, new StickersAlert$$ExternalSyntheticLambda30(this, str, textView), 2);
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$checkUrlAvailable$31(String str, TextView textView, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        AndroidUtilities.runOnUIThread(new StickersAlert$$ExternalSyntheticLambda19(this, str, tLRPC$TL_error, tLObject, textView));
+    public /* synthetic */ void lambda$checkUrlAvailable$32(String str, TextView textView, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+        AndroidUtilities.runOnUIThread(new StickersAlert$$ExternalSyntheticLambda20(this, str, tLRPC$TL_error, tLObject, textView));
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$checkUrlAvailable$30(String str, TLRPC$TL_error tLRPC$TL_error, TLObject tLObject, TextView textView) {
+    public /* synthetic */ void lambda$checkUrlAvailable$31(String str, TLRPC$TL_error tLRPC$TL_error, TLObject tLObject, TextView textView) {
         this.checkReqId = 0;
         String str2 = this.lastCheckName;
         if (str2 != null && str2.equals(str)) {
@@ -1917,6 +2312,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
             runShadowAnimation(0, false);
             i = top;
         }
+        runShadowAnimation(1, true);
         if (this.scrollOffsetY != i) {
             setScrollOffsetY(i);
         }
@@ -2099,7 +2495,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
             r1 = 1
             r5 = r5[r1]
             org.telegram.tgnet.TLRPC$InputFile r5 = (org.telegram.tgnet.TLRPC$InputFile) r5
-            org.telegram.ui.Components.StickersAlert$$ExternalSyntheticLambda18 r1 = new org.telegram.ui.Components.StickersAlert$$ExternalSyntheticLambda18
+            org.telegram.ui.Components.StickersAlert$$ExternalSyntheticLambda19 r1 = new org.telegram.ui.Components.StickersAlert$$ExternalSyntheticLambda19
             r1.<init>(r2, r4, r3)
             r3.uploadMedia(r0, r5, r1)
             goto L_0x0063
@@ -2128,7 +2524,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$didReceivedNotification$33(String str, SendMessagesHelper.ImportingSticker importingSticker) {
+    public /* synthetic */ void lambda$didReceivedNotification$34(String str, SendMessagesHelper.ImportingSticker importingSticker) {
         if (!isDismissed()) {
             this.uploadImportStickers.remove(str);
             if (!"application/x-tgsticker".equals(importingSticker.mimeType)) {
@@ -2156,14 +2552,12 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
     }
 
     private void setButton(View.OnClickListener onClickListener, String str, String str2, String str3, String str4) {
-        TextView textView = this.pickerBottomLayout;
-        this.buttonTextColorKey = str2;
-        textView.setTextColor(getThemedColor(str2));
-        TextView textView2 = this.pickerBottomLayout;
-        if (this.customButtonDelegate == null) {
-            str = str.toUpperCase();
+        if (str2 != null) {
+            TextView textView = this.pickerBottomLayout;
+            this.buttonTextColorKey = str2;
+            textView.setTextColor(getThemedColor(str2));
         }
-        textView2.setText(str);
+        this.pickerBottomLayout.setText(str);
         this.pickerBottomLayout.setOnClickListener(onClickListener);
         ViewGroup.MarginLayoutParams marginLayoutParams = (ViewGroup.MarginLayoutParams) this.pickerBottomLayout.getLayoutParams();
         ViewGroup.MarginLayoutParams marginLayoutParams2 = (ViewGroup.MarginLayoutParams) this.shadow[1].getLayoutParams();
@@ -2235,10 +2629,10 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
 
     public ArrayList<ThemeDescription> getThemeDescriptions() {
         ArrayList<ThemeDescription> arrayList = new ArrayList<>();
-        StickersAlert$$ExternalSyntheticLambda34 stickersAlert$$ExternalSyntheticLambda34 = new StickersAlert$$ExternalSyntheticLambda34(this);
+        StickersAlert$$ExternalSyntheticLambda35 stickersAlert$$ExternalSyntheticLambda35 = new StickersAlert$$ExternalSyntheticLambda35(this);
         arrayList.add(new ThemeDescription(this.containerView, 0, (Class[]) null, (Paint) null, new Drawable[]{this.shadowDrawable}, (ThemeDescription.ThemeDescriptionDelegate) null, "dialogBackground"));
         arrayList.add(new ThemeDescription(this.containerView, 0, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "key_sheet_scrollUp"));
-        this.adapter.getThemeDescriptions(arrayList, stickersAlert$$ExternalSyntheticLambda34);
+        this.adapter.getThemeDescriptions(arrayList, stickersAlert$$ExternalSyntheticLambda35);
         arrayList.add(new ThemeDescription(this.shadow[0], ThemeDescription.FLAG_BACKGROUND, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "dialogShadowLine"));
         arrayList.add(new ThemeDescription(this.shadow[1], ThemeDescription.FLAG_BACKGROUND, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "dialogShadowLine"));
         arrayList.add(new ThemeDescription(this.gridView, ThemeDescription.FLAG_LISTGLOWCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "dialogScrollGlow"));
@@ -2252,14 +2646,14 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
         arrayList.add(new ThemeDescription(this.previewSendButton, ThemeDescription.FLAG_BACKGROUNDFILTER, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "dialogBackground"));
         arrayList.add(new ThemeDescription(this.previewSendButton, ThemeDescription.FLAG_BACKGROUNDFILTER | ThemeDescription.FLAG_DRAWABLESELECTEDSTATE, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "listSelectorSDK21"));
         arrayList.add(new ThemeDescription(this.previewSendButtonShadow, ThemeDescription.FLAG_BACKGROUND, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "dialogShadowLine"));
-        StickersAlert$$ExternalSyntheticLambda34 stickersAlert$$ExternalSyntheticLambda342 = stickersAlert$$ExternalSyntheticLambda34;
-        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, stickersAlert$$ExternalSyntheticLambda342, "dialogLinkSelection"));
-        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, stickersAlert$$ExternalSyntheticLambda342, "dialogBackground"));
-        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, stickersAlert$$ExternalSyntheticLambda342, "key_sheet_other"));
-        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, stickersAlert$$ExternalSyntheticLambda342, "actionBarDefaultSubmenuItem"));
-        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, stickersAlert$$ExternalSyntheticLambda342, "actionBarDefaultSubmenuItemIcon"));
-        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, stickersAlert$$ExternalSyntheticLambda342, "dialogButtonSelector"));
-        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, stickersAlert$$ExternalSyntheticLambda342, "actionBarDefaultSubmenuBackground"));
+        StickersAlert$$ExternalSyntheticLambda35 stickersAlert$$ExternalSyntheticLambda352 = stickersAlert$$ExternalSyntheticLambda35;
+        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, stickersAlert$$ExternalSyntheticLambda352, "dialogLinkSelection"));
+        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, stickersAlert$$ExternalSyntheticLambda352, "dialogBackground"));
+        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, stickersAlert$$ExternalSyntheticLambda352, "key_sheet_other"));
+        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, stickersAlert$$ExternalSyntheticLambda352, "actionBarDefaultSubmenuItem"));
+        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, stickersAlert$$ExternalSyntheticLambda352, "actionBarDefaultSubmenuItemIcon"));
+        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, stickersAlert$$ExternalSyntheticLambda352, "dialogButtonSelector"));
+        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, stickersAlert$$ExternalSyntheticLambda352, "actionBarDefaultSubmenuBackground"));
         return arrayList;
     }
 
@@ -2342,7 +2736,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
                 android.content.Context r8 = r6.context
                 r0 = 0
                 r7.<init>(r8, r0)
-                org.telegram.ui.Components.BackupImageView r8 = r7.getImageView()
+                org.telegram.messenger.ImageReceiver r8 = r7.getImageView()
                 r0 = 7
                 r8.setLayerNum(r0)
             L_0x0035:

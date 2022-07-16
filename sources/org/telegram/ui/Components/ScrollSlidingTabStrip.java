@@ -305,16 +305,6 @@ public class ScrollSlidingTabStrip extends HorizontalScrollView {
         }
     }
 
-    public void removeTabs() {
-        this.tabsContainer.removeAllViews();
-        this.tabTypes.clear();
-        this.prevTypes.clear();
-        this.futureTabsPositions.clear();
-        this.tabCount = 0;
-        this.currentPosition = 0;
-        this.animateFromPosition = false;
-    }
-
     public void beginUpdate(boolean z) {
         this.prevTypes = this.tabTypes;
         this.tabTypes = new HashMap<>();
@@ -748,8 +738,7 @@ public class ScrollSlidingTabStrip extends HorizontalScrollView {
                     Object tag3 = childAt.getTag();
                     Object tag4 = childAt.getTag(NUM);
                     TLRPC$Document tLRPC$Document = (TLRPC$Document) childAt.getTag(NUM);
-                    boolean z = tag3 instanceof TLRPC$Document;
-                    if (z) {
+                    if (tag3 instanceof TLRPC$Document) {
                         TLRPC$PhotoSize closestPhotoSizeWithSize = FileLoader.getClosestPhotoSizeWithSize(tLRPC$Document.thumbs, 90);
                         if (!stickerTabView.inited) {
                             stickerTabView.svgThumb = DocumentObject.getSvgThumb((TLRPC$Document) tag3, "emptyListPlaceholder", 0.2f);
@@ -762,22 +751,22 @@ public class ScrollSlidingTabStrip extends HorizontalScrollView {
                         stickerTabView.inited = true;
                         SvgHelper.SvgDrawable svgDrawable = stickerTabView.svgThumb;
                         BackupImageView backupImageView = stickerTabView.imageView;
-                        if (!z || !MessageObject.isVideoSticker(tLRPC$Document)) {
-                            if (!z || !MessageObject.isAnimatedStickerDocument(tLRPC$Document, true)) {
-                                if (imageLocation.imageType == 1) {
-                                    backupImageView.setImage(imageLocation, "40_40", "tgs", (Drawable) svgDrawable, tag4);
-                                } else {
-                                    backupImageView.setImage(imageLocation, (String) null, "webp", (Drawable) svgDrawable, tag4);
-                                }
-                            } else if (svgDrawable != null) {
+                        if (MessageObject.isVideoSticker(tLRPC$Document)) {
+                            if (svgDrawable != null) {
                                 backupImageView.setImage(ImageLocation.getForDocument(tLRPC$Document), "40_40", (Drawable) svgDrawable, 0, tag4);
                             } else {
                                 backupImageView.setImage(ImageLocation.getForDocument(tLRPC$Document), "40_40", imageLocation, (String) null, 0, tag4);
                             }
-                        } else if (svgDrawable != null) {
-                            backupImageView.setImage(ImageLocation.getForDocument(tLRPC$Document), "40_40", (Drawable) svgDrawable, 0, tag4);
+                        } else if (MessageObject.isAnimatedStickerDocument(tLRPC$Document, true)) {
+                            if (svgDrawable != null) {
+                                backupImageView.setImage(ImageLocation.getForDocument(tLRPC$Document), "40_40", (Drawable) svgDrawable, 0, tag4);
+                            } else {
+                                backupImageView.setImage(ImageLocation.getForDocument(tLRPC$Document), "40_40", imageLocation, (String) null, 0, tag4);
+                            }
+                        } else if (imageLocation.imageType == 1) {
+                            backupImageView.setImage(imageLocation, "40_40", "tgs", (Drawable) svgDrawable, tag4);
                         } else {
-                            backupImageView.setImage(ImageLocation.getForDocument(tLRPC$Document), "40_40", imageLocation, (String) null, 0, tag4);
+                            backupImageView.setImage(imageLocation, (String) null, "webp", (Drawable) svgDrawable, tag4);
                         }
                         if (tag4 instanceof TLRPC$TL_messages_stickerSet) {
                             str = ((TLRPC$TL_messages_stickerSet) tag4).set.title;

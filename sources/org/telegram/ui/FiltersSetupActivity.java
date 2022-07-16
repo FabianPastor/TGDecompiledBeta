@@ -368,7 +368,7 @@ public class FiltersSetupActivity extends BaseFragment implements NotificationCe
                 java.lang.StringBuilder r1 = new java.lang.StringBuilder
                 r1.<init>()
                 boolean r3 = r10.isDefault()
-                r4 = 2131625829(0x7f0e0765, float:1.8878877E38)
+                r4 = 2131625860(0x7f0e0784, float:1.887894E38)
                 java.lang.String r5 = "FilterAllChats"
                 java.lang.String r6 = ", "
                 if (r3 != 0) goto L_0x00bd
@@ -385,7 +385,7 @@ public class FiltersSetupActivity extends BaseFragment implements NotificationCe
                 if (r3 == 0) goto L_0x0040
                 r1.append(r6)
             L_0x0040:
-                r3 = 2131625845(0x7f0e0775, float:1.887891E38)
+                r3 = 2131625876(0x7f0e0794, float:1.8878972E38)
                 java.lang.String r7 = "FilterContacts"
                 java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r7, r3)
                 r1.append(r3)
@@ -398,7 +398,7 @@ public class FiltersSetupActivity extends BaseFragment implements NotificationCe
                 if (r3 == 0) goto L_0x005c
                 r1.append(r6)
             L_0x005c:
-                r3 = 2131625875(0x7f0e0793, float:1.887897E38)
+                r3 = 2131625906(0x7f0e07b2, float:1.8879033E38)
                 java.lang.String r7 = "FilterNonContacts"
                 java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r7, r3)
                 r1.append(r3)
@@ -411,7 +411,7 @@ public class FiltersSetupActivity extends BaseFragment implements NotificationCe
                 if (r3 == 0) goto L_0x0078
                 r1.append(r6)
             L_0x0078:
-                r3 = 2131625862(0x7f0e0786, float:1.8878944E38)
+                r3 = 2131625893(0x7f0e07a5, float:1.8879007E38)
                 java.lang.String r7 = "FilterGroups"
                 java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r7, r3)
                 r1.append(r3)
@@ -424,7 +424,7 @@ public class FiltersSetupActivity extends BaseFragment implements NotificationCe
                 if (r3 == 0) goto L_0x0094
                 r1.append(r6)
             L_0x0094:
-                r3 = 2131625836(0x7f0e076c, float:1.8878891E38)
+                r3 = 2131625867(0x7f0e078b, float:1.8878954E38)
                 java.lang.String r7 = "FilterChannels"
                 java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r7, r3)
                 r1.append(r3)
@@ -437,7 +437,7 @@ public class FiltersSetupActivity extends BaseFragment implements NotificationCe
                 if (r3 == 0) goto L_0x00b0
                 r1.append(r6)
             L_0x00b0:
-                r3 = 2131625835(0x7f0e076b, float:1.887889E38)
+                r3 = 2131625866(0x7f0e078a, float:1.8878952E38)
                 java.lang.String r7 = "FilterBots"
                 java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r7, r3)
                 r1.append(r3)
@@ -469,7 +469,7 @@ public class FiltersSetupActivity extends BaseFragment implements NotificationCe
             L_0x00f5:
                 int r3 = r1.length()
                 if (r3 != 0) goto L_0x0107
-                r3 = 2131625871(0x7f0e078f, float:1.8878962E38)
+                r3 = 2131625902(0x7f0e07ae, float:1.8879025E38)
                 java.lang.String r6 = "FilterNoChats"
                 java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r6, r3)
                 r1.append(r3)

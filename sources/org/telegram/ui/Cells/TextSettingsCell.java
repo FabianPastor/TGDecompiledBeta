@@ -173,6 +173,19 @@ public class TextSettingsCell extends FrameLayout {
         requestLayout();
     }
 
+    public void setTextAndIcon(CharSequence charSequence, int i, boolean z) {
+        this.textView.setText(charSequence);
+        this.valueTextView.setVisibility(4);
+        if (i != 0) {
+            this.valueImageView.setVisibility(0);
+            this.valueImageView.setImageResource(i);
+        } else {
+            this.valueImageView.setVisibility(4);
+        }
+        this.needDivider = z;
+        setWillNotDraw(!z);
+    }
+
     public void setIcon(int i) {
         ViewGroup.MarginLayoutParams marginLayoutParams = (ViewGroup.MarginLayoutParams) this.textView.getLayoutParams();
         if (i == 0) {

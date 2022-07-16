@@ -1326,7 +1326,7 @@ public class FilterTabsView extends FrameLayout {
                 if (r1 != 0) goto L_0x07ac
                 org.telegram.ui.Components.FilterTabsView r1 = org.telegram.ui.Components.FilterTabsView.this
                 android.content.Context r2 = r34.getContext()
-                r3 = 2131166024(0x7var_, float:1.7946282E38)
+                r3 = 2131166026(0x7var_a, float:1.7946286E38)
                 android.graphics.drawable.Drawable r2 = androidx.core.content.ContextCompat.getDrawable(r2, r3)
                 android.graphics.drawable.Drawable unused = r1.lockDrawable = r2
             L_0x07ac:
@@ -1350,7 +1350,7 @@ public class FilterTabsView extends FrameLayout {
                 float r1 = r0.progressToLocked
                 r2 = 0
                 r3 = 1065353216(0x3var_, float:1.0)
-                float r1 = org.telegram.messenger.Utilities.clamp(r1, r3, r2)
+                float r1 = org.telegram.messenger.Utilities.clamp((float) r1, (float) r3, (float) r2)
                 r0.progressToLocked = r1
                 org.telegram.ui.Components.FilterTabsView r1 = org.telegram.ui.Components.FilterTabsView.this
                 java.lang.String r1 = r1.unactiveTextColorKey

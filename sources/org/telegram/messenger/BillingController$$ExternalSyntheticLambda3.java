@@ -1,25 +1,17 @@
 package org.telegram.messenger;
 
 import com.android.billingclient.api.BillingResult;
-import com.android.billingclient.api.Purchase;
-import org.telegram.tgnet.RequestDelegate;
-import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC$TL_error;
+import com.android.billingclient.api.PurchasesResponseListener;
+import java.util.List;
 
-public final /* synthetic */ class BillingController$$ExternalSyntheticLambda3 implements RequestDelegate {
+public final /* synthetic */ class BillingController$$ExternalSyntheticLambda3 implements PurchasesResponseListener {
     public final /* synthetic */ BillingController f$0;
-    public final /* synthetic */ AccountInstance f$1;
-    public final /* synthetic */ Purchase f$2;
-    public final /* synthetic */ BillingResult f$3;
 
-    public /* synthetic */ BillingController$$ExternalSyntheticLambda3(BillingController billingController, AccountInstance accountInstance, Purchase purchase, BillingResult billingResult) {
+    public /* synthetic */ BillingController$$ExternalSyntheticLambda3(BillingController billingController) {
         this.f$0 = billingController;
-        this.f$1 = accountInstance;
-        this.f$2 = purchase;
-        this.f$3 = billingResult;
     }
 
-    public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        this.f$0.lambda$onPurchasesUpdated$0(this.f$1, this.f$2, this.f$3, tLObject, tLRPC$TL_error);
+    public final void onQueryPurchasesResponse(BillingResult billingResult, List list) {
+        this.f$0.onPurchasesUpdated(billingResult, list);
     }
 }

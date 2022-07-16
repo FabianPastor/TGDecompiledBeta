@@ -48,6 +48,7 @@ import org.telegram.tgnet.TLRPC$TL_inputPrivacyKeyPhoneNumber;
 import org.telegram.tgnet.TLRPC$TL_inputPrivacyKeyPhoneP2P;
 import org.telegram.tgnet.TLRPC$TL_inputPrivacyKeyProfilePhoto;
 import org.telegram.tgnet.TLRPC$TL_inputPrivacyKeyStatusTimestamp;
+import org.telegram.tgnet.TLRPC$TL_inputPrivacyKeyVoiceMessages;
 import org.telegram.tgnet.TLRPC$TL_inputPrivacyValueAllowAll;
 import org.telegram.tgnet.TLRPC$TL_inputPrivacyValueAllowChatParticipants;
 import org.telegram.tgnet.TLRPC$TL_inputPrivacyValueAllowContacts;
@@ -499,6 +500,8 @@ public class PrivacyControlActivity extends BaseFragment implements Notification
             this.actionBar.setTitle(LocaleController.getString("Calls", NUM));
         } else if (i == 1) {
             this.actionBar.setTitle(LocaleController.getString("GroupsAndChannels", NUM));
+        } else if (i == 8) {
+            this.actionBar.setTitle(LocaleController.getString("PrivacyVoiceMessages", NUM));
         } else {
             this.actionBar.setTitle(LocaleController.getString("PrivacyLastSeen", NUM));
         }
@@ -693,6 +696,8 @@ public class PrivacyControlActivity extends BaseFragment implements Notification
             tLRPC$TL_account_setPrivacy.key = new TLRPC$TL_inputPrivacyKeyPhoneCall();
         } else if (i == 1) {
             tLRPC$TL_account_setPrivacy.key = new TLRPC$TL_inputPrivacyKeyChatInvite();
+        } else if (i == 8) {
+            tLRPC$TL_account_setPrivacy.key = new TLRPC$TL_inputPrivacyKeyVoiceMessages();
         } else {
             tLRPC$TL_account_setPrivacy.key = new TLRPC$TL_inputPrivacyKeyStatusTimestamp();
         }
@@ -926,7 +931,7 @@ public class PrivacyControlActivity extends BaseFragment implements Notification
         int i10 = i9 + 1;
         this.rowCount = i10;
         this.myContactsRow = i9;
-        if (i6 == 0 || i6 == 2 || i6 == 3 || i6 == 5 || i6 == 6) {
+        if (i6 == 0 || i6 == 2 || i6 == 3 || i6 == 5 || i6 == 6 || i6 == 8) {
             this.rowCount = i10 + 1;
             this.nobodyRow = i10;
         } else {
@@ -1152,7 +1157,7 @@ public class PrivacyControlActivity extends BaseFragment implements Notification
 
         public boolean isEnabled(RecyclerView.ViewHolder viewHolder) {
             int adapterPosition = viewHolder.getAdapterPosition();
-            return adapterPosition == PrivacyControlActivity.this.nobodyRow || adapterPosition == PrivacyControlActivity.this.everybodyRow || adapterPosition == PrivacyControlActivity.this.myContactsRow || adapterPosition == PrivacyControlActivity.this.neverShareRow || adapterPosition == PrivacyControlActivity.this.alwaysShareRow || (adapterPosition == PrivacyControlActivity.this.p2pRow && !ContactsController.getInstance(PrivacyControlActivity.this.currentAccount).getLoadingPrivicyInfo(3));
+            return adapterPosition == PrivacyControlActivity.this.nobodyRow || adapterPosition == PrivacyControlActivity.this.everybodyRow || adapterPosition == PrivacyControlActivity.this.myContactsRow || adapterPosition == PrivacyControlActivity.this.neverShareRow || adapterPosition == PrivacyControlActivity.this.alwaysShareRow || (adapterPosition == PrivacyControlActivity.this.p2pRow && !ContactsController.getInstance(PrivacyControlActivity.this.currentAccount).getLoadingPrivacyInfo(3));
         }
 
         public int getItemCount() {
@@ -1221,297 +1226,307 @@ public class PrivacyControlActivity extends BaseFragment implements Notification
         /* JADX WARNING: type inference failed for: r3v18 */
         /* JADX WARNING: type inference failed for: r3v20 */
         /* JADX WARNING: type inference failed for: r3v22 */
-        /* JADX WARNING: Code restructure failed: missing block: B:149:0x03c2, code lost:
-            if (org.telegram.ui.PrivacyControlActivity.access$1900(r10.this$0) == 2) goto L_0x0324;
+        /* JADX WARNING: Code restructure failed: missing block: B:158:0x0406, code lost:
+            if (org.telegram.ui.PrivacyControlActivity.access$1900(r11.this$0) == 2) goto L_0x0352;
          */
-        /* JADX WARNING: Code restructure failed: missing block: B:151:0x03cc, code lost:
-            if (r12 == org.telegram.ui.PrivacyControlActivity.access$2700(r10.this$0)) goto L_0x03ce;
+        /* JADX WARNING: Code restructure failed: missing block: B:160:0x0410, code lost:
+            if (r13 == org.telegram.ui.PrivacyControlActivity.access$2700(r11.this$0)) goto L_0x0412;
          */
         /* JADX WARNING: Multi-variable type inference failed */
-        /* JADX WARNING: Removed duplicated region for block: B:154:0x03d3  */
-        /* JADX WARNING: Removed duplicated region for block: B:209:? A[RETURN, SYNTHETIC] */
+        /* JADX WARNING: Removed duplicated region for block: B:163:0x0417  */
+        /* JADX WARNING: Removed duplicated region for block: B:219:? A[RETURN, SYNTHETIC] */
         /* Code decompiled incorrectly, please refer to instructions dump. */
-        public void onBindViewHolder(androidx.recyclerview.widget.RecyclerView.ViewHolder r11, int r12) {
+        public void onBindViewHolder(androidx.recyclerview.widget.RecyclerView.ViewHolder r12, int r13) {
             /*
-                r10 = this;
-                int r0 = r11.getItemViewType()
+                r11 = this;
+                int r0 = r12.getItemViewType()
                 r1 = -1
                 r2 = 3
                 r3 = 0
                 r4 = 1
-                if (r0 == 0) goto L_0x03f3
-                r5 = 4
-                r6 = 5
-                r7 = 6
-                r8 = 2
-                if (r0 == r4) goto L_0x0212
-                if (r0 == r8) goto L_0x0132
-                if (r0 == r2) goto L_0x0016
-                goto L_0x04e0
-            L_0x0016:
-                android.view.View r11 = r11.itemView
-                org.telegram.ui.Cells.RadioCell r11 = (org.telegram.ui.Cells.RadioCell) r11
+                if (r0 == 0) goto L_0x0437
+                r5 = 8
+                r6 = 4
+                r7 = 5
+                r8 = 6
+                r9 = 2
+                if (r0 == r4) goto L_0x022a
+                if (r0 == r9) goto L_0x0134
+                if (r0 == r2) goto L_0x0018
+                goto L_0x0524
+            L_0x0018:
+                android.view.View r12 = r12.itemView
+                org.telegram.ui.Cells.RadioCell r12 = (org.telegram.ui.Cells.RadioCell) r12
                 org.telegram.ui.PrivacyControlActivity r0 = org.telegram.ui.PrivacyControlActivity.this
                 int r0 = r0.everybodyRow
-                r5 = 2131626371(0x7f0e0983, float:1.8879976E38)
+                r5 = 2131626408(0x7f0e09a8, float:1.8880051E38)
                 java.lang.String r6 = "LastSeenContacts"
-                r7 = 2131626377(0x7f0e0989, float:1.8879988E38)
-                java.lang.String r9 = "LastSeenEverybody"
-                if (r12 == r0) goto L_0x0072
+                r7 = 2131626414(0x7f0e09ae, float:1.8880064E38)
+                java.lang.String r8 = "LastSeenEverybody"
+                if (r13 == r0) goto L_0x0074
                 org.telegram.ui.PrivacyControlActivity r0 = org.telegram.ui.PrivacyControlActivity.this
                 int r0 = r0.myContactsRow
-                if (r12 == r0) goto L_0x0072
+                if (r13 == r0) goto L_0x0074
                 org.telegram.ui.PrivacyControlActivity r0 = org.telegram.ui.PrivacyControlActivity.this
                 int r0 = r0.nobodyRow
-                if (r12 != r0) goto L_0x003d
-                goto L_0x0072
-            L_0x003d:
+                if (r13 != r0) goto L_0x003f
+                goto L_0x0074
+            L_0x003f:
                 org.telegram.ui.PrivacyControlActivity r0 = org.telegram.ui.PrivacyControlActivity.this
                 int r0 = r0.phoneContactsRow
-                if (r12 != r0) goto L_0x0058
-                java.lang.String r12 = org.telegram.messenger.LocaleController.getString(r6, r5)
+                if (r13 != r0) goto L_0x005a
+                java.lang.String r13 = org.telegram.messenger.LocaleController.getString(r6, r5)
                 org.telegram.ui.PrivacyControlActivity r0 = org.telegram.ui.PrivacyControlActivity.this
                 int r0 = r0.currentSubType
-                if (r0 != r4) goto L_0x0052
-                goto L_0x0053
-            L_0x0052:
+                if (r0 != r4) goto L_0x0054
+                goto L_0x0055
+            L_0x0054:
                 r4 = 0
-            L_0x0053:
-                r11.setText(r12, r4, r3)
-                goto L_0x04e0
-            L_0x0058:
+            L_0x0055:
+                r12.setText(r13, r4, r3)
+                goto L_0x0524
+            L_0x005a:
                 org.telegram.ui.PrivacyControlActivity r0 = org.telegram.ui.PrivacyControlActivity.this
                 int r0 = r0.phoneEverybodyRow
-                if (r12 != r0) goto L_0x04e0
-                java.lang.String r12 = org.telegram.messenger.LocaleController.getString(r9, r7)
+                if (r13 != r0) goto L_0x0524
+                java.lang.String r13 = org.telegram.messenger.LocaleController.getString(r8, r7)
                 org.telegram.ui.PrivacyControlActivity r0 = org.telegram.ui.PrivacyControlActivity.this
                 int r0 = r0.currentSubType
-                if (r0 != 0) goto L_0x006d
+                if (r0 != 0) goto L_0x006f
                 r3 = 1
-            L_0x006d:
-                r11.setText(r12, r3, r4)
-                goto L_0x04e0
-            L_0x0072:
+            L_0x006f:
+                r12.setText(r13, r3, r4)
+                goto L_0x0524
+            L_0x0074:
                 org.telegram.ui.PrivacyControlActivity r0 = org.telegram.ui.PrivacyControlActivity.this
                 int r0 = r0.everybodyRow
-                if (r12 != r0) goto L_0x00ab
-                org.telegram.ui.PrivacyControlActivity r12 = org.telegram.ui.PrivacyControlActivity.this
-                int r12 = r12.rulesType
-                if (r12 != r2) goto L_0x0099
-                r12 = 2131627130(0x7f0e0c7a, float:1.8881516E38)
+                if (r13 != r0) goto L_0x00ad
+                org.telegram.ui.PrivacyControlActivity r13 = org.telegram.ui.PrivacyControlActivity.this
+                int r13 = r13.rulesType
+                if (r13 != r2) goto L_0x009b
+                r13 = 2131627172(0x7f0e0ca4, float:1.88816E38)
                 java.lang.String r0 = "P2PEverybody"
-                java.lang.String r12 = org.telegram.messenger.LocaleController.getString(r0, r12)
+                java.lang.String r13 = org.telegram.messenger.LocaleController.getString(r0, r13)
                 org.telegram.ui.PrivacyControlActivity r0 = org.telegram.ui.PrivacyControlActivity.this
                 int r0 = r0.currentType
-                if (r0 != 0) goto L_0x0094
+                if (r0 != 0) goto L_0x0096
                 r3 = 1
-            L_0x0094:
-                r11.setText(r12, r3, r4)
-                goto L_0x04e0
-            L_0x0099:
-                java.lang.String r12 = org.telegram.messenger.LocaleController.getString(r9, r7)
+            L_0x0096:
+                r12.setText(r13, r3, r4)
+                goto L_0x0524
+            L_0x009b:
+                java.lang.String r13 = org.telegram.messenger.LocaleController.getString(r8, r7)
                 org.telegram.ui.PrivacyControlActivity r0 = org.telegram.ui.PrivacyControlActivity.this
                 int r0 = r0.currentType
-                if (r0 != 0) goto L_0x00a6
+                if (r0 != 0) goto L_0x00a8
                 r3 = 1
-            L_0x00a6:
-                r11.setText(r12, r3, r4)
-                goto L_0x04e0
-            L_0x00ab:
+            L_0x00a8:
+                r12.setText(r13, r3, r4)
+                goto L_0x0524
+            L_0x00ad:
                 org.telegram.ui.PrivacyControlActivity r0 = org.telegram.ui.PrivacyControlActivity.this
                 int r0 = r0.myContactsRow
-                if (r12 != r0) goto L_0x00fa
-                org.telegram.ui.PrivacyControlActivity r12 = org.telegram.ui.PrivacyControlActivity.this
-                int r12 = r12.rulesType
-                if (r12 != r2) goto L_0x00dd
-                r12 = 2131627125(0x7f0e0CLASSNAME, float:1.8881506E38)
+                if (r13 != r0) goto L_0x00fc
+                org.telegram.ui.PrivacyControlActivity r13 = org.telegram.ui.PrivacyControlActivity.this
+                int r13 = r13.rulesType
+                if (r13 != r2) goto L_0x00df
+                r13 = 2131627167(0x7f0e0c9f, float:1.888159E38)
                 java.lang.String r0 = "P2PContacts"
-                java.lang.String r12 = org.telegram.messenger.LocaleController.getString(r0, r12)
+                java.lang.String r13 = org.telegram.messenger.LocaleController.getString(r0, r13)
                 org.telegram.ui.PrivacyControlActivity r0 = org.telegram.ui.PrivacyControlActivity.this
                 int r0 = r0.currentType
-                if (r0 != r8) goto L_0x00ce
+                if (r0 != r9) goto L_0x00d0
                 r0 = 1
-                goto L_0x00cf
-            L_0x00ce:
+                goto L_0x00d1
+            L_0x00d0:
                 r0 = 0
-            L_0x00cf:
+            L_0x00d1:
                 org.telegram.ui.PrivacyControlActivity r2 = org.telegram.ui.PrivacyControlActivity.this
                 int r2 = r2.nobodyRow
-                if (r2 == r1) goto L_0x00d8
+                if (r2 == r1) goto L_0x00da
                 r3 = 1
-            L_0x00d8:
-                r11.setText(r12, r0, r3)
-                goto L_0x04e0
-            L_0x00dd:
-                java.lang.String r12 = org.telegram.messenger.LocaleController.getString(r6, r5)
+            L_0x00da:
+                r12.setText(r13, r0, r3)
+                goto L_0x0524
+            L_0x00df:
+                java.lang.String r13 = org.telegram.messenger.LocaleController.getString(r6, r5)
                 org.telegram.ui.PrivacyControlActivity r0 = org.telegram.ui.PrivacyControlActivity.this
                 int r0 = r0.currentType
-                if (r0 != r8) goto L_0x00eb
+                if (r0 != r9) goto L_0x00ed
                 r0 = 1
-                goto L_0x00ec
-            L_0x00eb:
+                goto L_0x00ee
+            L_0x00ed:
                 r0 = 0
-            L_0x00ec:
+            L_0x00ee:
                 org.telegram.ui.PrivacyControlActivity r2 = org.telegram.ui.PrivacyControlActivity.this
                 int r2 = r2.nobodyRow
-                if (r2 == r1) goto L_0x00f5
+                if (r2 == r1) goto L_0x00f7
                 r3 = 1
-            L_0x00f5:
-                r11.setText(r12, r0, r3)
-                goto L_0x04e0
-            L_0x00fa:
-                org.telegram.ui.PrivacyControlActivity r12 = org.telegram.ui.PrivacyControlActivity.this
-                int r12 = r12.rulesType
-                if (r12 != r2) goto L_0x011a
-                r12 = 2131627132(0x7f0e0c7c, float:1.888152E38)
+            L_0x00f7:
+                r12.setText(r13, r0, r3)
+                goto L_0x0524
+            L_0x00fc:
+                org.telegram.ui.PrivacyControlActivity r13 = org.telegram.ui.PrivacyControlActivity.this
+                int r13 = r13.rulesType
+                if (r13 != r2) goto L_0x011c
+                r13 = 2131627174(0x7f0e0ca6, float:1.8881605E38)
                 java.lang.String r0 = "P2PNobody"
-                java.lang.String r12 = org.telegram.messenger.LocaleController.getString(r0, r12)
+                java.lang.String r13 = org.telegram.messenger.LocaleController.getString(r0, r13)
                 org.telegram.ui.PrivacyControlActivity r0 = org.telegram.ui.PrivacyControlActivity.this
                 int r0 = r0.currentType
-                if (r0 != r4) goto L_0x0114
-                goto L_0x0115
-            L_0x0114:
+                if (r0 != r4) goto L_0x0116
+                goto L_0x0117
+            L_0x0116:
                 r4 = 0
-            L_0x0115:
-                r11.setText(r12, r4, r3)
-                goto L_0x04e0
-            L_0x011a:
-                r12 = 2131626380(0x7f0e098c, float:1.8879995E38)
+            L_0x0117:
+                r12.setText(r13, r4, r3)
+                goto L_0x0524
+            L_0x011c:
+                r13 = 2131626417(0x7f0e09b1, float:1.888007E38)
                 java.lang.String r0 = "LastSeenNobody"
-                java.lang.String r12 = org.telegram.messenger.LocaleController.getString(r0, r12)
+                java.lang.String r13 = org.telegram.messenger.LocaleController.getString(r0, r13)
                 org.telegram.ui.PrivacyControlActivity r0 = org.telegram.ui.PrivacyControlActivity.this
                 int r0 = r0.currentType
-                if (r0 != r4) goto L_0x012c
-                goto L_0x012d
-            L_0x012c:
+                if (r0 != r4) goto L_0x012e
+                goto L_0x012f
+            L_0x012e:
                 r4 = 0
-            L_0x012d:
-                r11.setText(r12, r4, r3)
-                goto L_0x04e0
-            L_0x0132:
-                android.view.View r11 = r11.itemView
-                org.telegram.ui.Cells.HeaderCell r11 = (org.telegram.ui.Cells.HeaderCell) r11
+            L_0x012f:
+                r12.setText(r13, r4, r3)
+                goto L_0x0524
+            L_0x0134:
+                android.view.View r12 = r12.itemView
+                org.telegram.ui.Cells.HeaderCell r12 = (org.telegram.ui.Cells.HeaderCell) r12
                 org.telegram.ui.PrivacyControlActivity r0 = org.telegram.ui.PrivacyControlActivity.this
                 int r0 = r0.sectionRow
-                if (r12 != r0) goto L_0x01d0
-                org.telegram.ui.PrivacyControlActivity r12 = org.telegram.ui.PrivacyControlActivity.this
-                int r12 = r12.rulesType
-                if (r12 != r7) goto L_0x0154
-                r12 = 2131627726(0x7f0e0ece, float:1.8882725E38)
+                if (r13 != r0) goto L_0x01e8
+                org.telegram.ui.PrivacyControlActivity r13 = org.telegram.ui.PrivacyControlActivity.this
+                int r13 = r13.rulesType
+                if (r13 != r8) goto L_0x0156
+                r13 = 2131627772(0x7f0e0efc, float:1.8882818E38)
                 java.lang.String r0 = "PrivacyPhoneTitle"
-                java.lang.String r12 = org.telegram.messenger.LocaleController.getString(r0, r12)
-                r11.setText(r12)
-                goto L_0x04e0
-            L_0x0154:
-                org.telegram.ui.PrivacyControlActivity r12 = org.telegram.ui.PrivacyControlActivity.this
-                int r12 = r12.rulesType
-                if (r12 != r6) goto L_0x016a
-                r12 = 2131627709(0x7f0e0ebd, float:1.888269E38)
+                java.lang.String r13 = org.telegram.messenger.LocaleController.getString(r0, r13)
+                r12.setText(r13)
+                goto L_0x0524
+            L_0x0156:
+                org.telegram.ui.PrivacyControlActivity r13 = org.telegram.ui.PrivacyControlActivity.this
+                int r13 = r13.rulesType
+                if (r13 != r7) goto L_0x016c
+                r13 = 2131627755(0x7f0e0eeb, float:1.8882783E38)
                 java.lang.String r0 = "PrivacyForwardsTitle"
-                java.lang.String r12 = org.telegram.messenger.LocaleController.getString(r0, r12)
-                r11.setText(r12)
-                goto L_0x04e0
-            L_0x016a:
-                org.telegram.ui.PrivacyControlActivity r12 = org.telegram.ui.PrivacyControlActivity.this
-                int r12 = r12.rulesType
-                if (r12 != r5) goto L_0x0180
-                r12 = 2131627734(0x7f0e0ed6, float:1.888274E38)
+                java.lang.String r13 = org.telegram.messenger.LocaleController.getString(r0, r13)
+                r12.setText(r13)
+                goto L_0x0524
+            L_0x016c:
+                org.telegram.ui.PrivacyControlActivity r13 = org.telegram.ui.PrivacyControlActivity.this
+                int r13 = r13.rulesType
+                if (r13 != r6) goto L_0x0182
+                r13 = 2131627780(0x7f0e0var_, float:1.8882834E38)
                 java.lang.String r0 = "PrivacyProfilePhotoTitle"
-                java.lang.String r12 = org.telegram.messenger.LocaleController.getString(r0, r12)
-                r11.setText(r12)
-                goto L_0x04e0
-            L_0x0180:
-                org.telegram.ui.PrivacyControlActivity r12 = org.telegram.ui.PrivacyControlActivity.this
-                int r12 = r12.rulesType
-                if (r12 != r2) goto L_0x0196
-                r12 = 2131627129(0x7f0e0CLASSNAME, float:1.8881514E38)
+                java.lang.String r13 = org.telegram.messenger.LocaleController.getString(r0, r13)
+                r12.setText(r13)
+                goto L_0x0524
+            L_0x0182:
+                org.telegram.ui.PrivacyControlActivity r13 = org.telegram.ui.PrivacyControlActivity.this
+                int r13 = r13.rulesType
+                if (r13 != r2) goto L_0x0198
+                r13 = 2131627171(0x7f0e0ca3, float:1.8881599E38)
                 java.lang.String r0 = "P2PEnabledWith"
-                java.lang.String r12 = org.telegram.messenger.LocaleController.getString(r0, r12)
-                r11.setText(r12)
-                goto L_0x04e0
-            L_0x0196:
-                org.telegram.ui.PrivacyControlActivity r12 = org.telegram.ui.PrivacyControlActivity.this
-                int r12 = r12.rulesType
-                if (r12 != r8) goto L_0x01ac
-                r12 = 2131629241(0x7f0e14b9, float:1.8885797E38)
+                java.lang.String r13 = org.telegram.messenger.LocaleController.getString(r0, r13)
+                r12.setText(r13)
+                goto L_0x0524
+            L_0x0198:
+                org.telegram.ui.PrivacyControlActivity r13 = org.telegram.ui.PrivacyControlActivity.this
+                int r13 = r13.rulesType
+                if (r13 != r9) goto L_0x01ae
+                r13 = 2131629301(0x7f0e14f5, float:1.888592E38)
                 java.lang.String r0 = "WhoCanCallMe"
-                java.lang.String r12 = org.telegram.messenger.LocaleController.getString(r0, r12)
-                r11.setText(r12)
-                goto L_0x04e0
-            L_0x01ac:
-                org.telegram.ui.PrivacyControlActivity r12 = org.telegram.ui.PrivacyControlActivity.this
-                int r12 = r12.rulesType
-                if (r12 != r4) goto L_0x01c2
-                r12 = 2131629236(0x7f0e14b4, float:1.8885787E38)
+                java.lang.String r13 = org.telegram.messenger.LocaleController.getString(r0, r13)
+                r12.setText(r13)
+                goto L_0x0524
+            L_0x01ae:
+                org.telegram.ui.PrivacyControlActivity r13 = org.telegram.ui.PrivacyControlActivity.this
+                int r13 = r13.rulesType
+                if (r13 != r4) goto L_0x01c4
+                r13 = 2131629296(0x7f0e14f0, float:1.8885909E38)
                 java.lang.String r0 = "WhoCanAddMe"
-                java.lang.String r12 = org.telegram.messenger.LocaleController.getString(r0, r12)
-                r11.setText(r12)
-                goto L_0x04e0
-            L_0x01c2:
-                r12 = 2131626382(0x7f0e098e, float:1.8879999E38)
+                java.lang.String r13 = org.telegram.messenger.LocaleController.getString(r0, r13)
+                r12.setText(r13)
+                goto L_0x0524
+            L_0x01c4:
+                org.telegram.ui.PrivacyControlActivity r13 = org.telegram.ui.PrivacyControlActivity.this
+                int r13 = r13.rulesType
+                if (r13 != r5) goto L_0x01da
+                r13 = 2131627787(0x7f0e0f0b, float:1.8882848E38)
+                java.lang.String r0 = "PrivacyVoiceMessagesTitle"
+                java.lang.String r13 = org.telegram.messenger.LocaleController.getString(r0, r13)
+                r12.setText(r13)
+                goto L_0x0524
+            L_0x01da:
+                r13 = 2131626419(0x7f0e09b3, float:1.8880074E38)
                 java.lang.String r0 = "LastSeenTitle"
-                java.lang.String r12 = org.telegram.messenger.LocaleController.getString(r0, r12)
-                r11.setText(r12)
-                goto L_0x04e0
-            L_0x01d0:
+                java.lang.String r13 = org.telegram.messenger.LocaleController.getString(r0, r13)
+                r12.setText(r13)
+                goto L_0x0524
+            L_0x01e8:
                 org.telegram.ui.PrivacyControlActivity r0 = org.telegram.ui.PrivacyControlActivity.this
                 int r0 = r0.shareSectionRow
-                if (r12 != r0) goto L_0x01e6
-                r12 = 2131624265(0x7f0e0149, float:1.8875705E38)
+                if (r13 != r0) goto L_0x01fe
+                r13 = 2131624272(0x7f0e0150, float:1.887572E38)
                 java.lang.String r0 = "AddExceptions"
-                java.lang.String r12 = org.telegram.messenger.LocaleController.getString(r0, r12)
-                r11.setText(r12)
-                goto L_0x04e0
-            L_0x01e6:
+                java.lang.String r13 = org.telegram.messenger.LocaleController.getString(r0, r13)
+                r12.setText(r13)
+                goto L_0x0524
+            L_0x01fe:
                 org.telegram.ui.PrivacyControlActivity r0 = org.telegram.ui.PrivacyControlActivity.this
                 int r0 = r0.p2pSectionRow
-                if (r12 != r0) goto L_0x01fc
-                r12 = 2131627713(0x7f0e0ec1, float:1.8882698E38)
+                if (r13 != r0) goto L_0x0214
+                r13 = 2131627759(0x7f0e0eef, float:1.8882792E38)
                 java.lang.String r0 = "PrivacyP2PHeader"
-                java.lang.String r12 = org.telegram.messenger.LocaleController.getString(r0, r12)
-                r11.setText(r12)
-                goto L_0x04e0
-            L_0x01fc:
+                java.lang.String r13 = org.telegram.messenger.LocaleController.getString(r0, r13)
+                r12.setText(r13)
+                goto L_0x0524
+            L_0x0214:
                 org.telegram.ui.PrivacyControlActivity r0 = org.telegram.ui.PrivacyControlActivity.this
                 int r0 = r0.phoneSectionRow
-                if (r12 != r0) goto L_0x04e0
-                r12 = 2131627727(0x7f0e0ecf, float:1.8882727E38)
+                if (r13 != r0) goto L_0x0524
+                r13 = 2131627773(0x7f0e0efd, float:1.888282E38)
                 java.lang.String r0 = "PrivacyPhoneTitle2"
-                java.lang.String r12 = org.telegram.messenger.LocaleController.getString(r0, r12)
-                r11.setText(r12)
-                goto L_0x04e0
-            L_0x0212:
-                android.view.View r11 = r11.itemView
-                org.telegram.ui.Cells.TextInfoPrivacyCell r11 = (org.telegram.ui.Cells.TextInfoPrivacyCell) r11
+                java.lang.String r13 = org.telegram.messenger.LocaleController.getString(r0, r13)
+                r12.setText(r13)
+                goto L_0x0524
+            L_0x022a:
+                android.view.View r12 = r12.itemView
+                org.telegram.ui.Cells.TextInfoPrivacyCell r12 = (org.telegram.ui.Cells.TextInfoPrivacyCell) r12
                 org.telegram.ui.PrivacyControlActivity r0 = org.telegram.ui.PrivacyControlActivity.this
                 int r0 = r0.detailRow
                 r1 = 2131165435(0x7var_fb, float:1.7945087E38)
-                r9 = 2131165436(0x7var_fc, float:1.794509E38)
-                if (r12 != r0) goto L_0x0329
-                org.telegram.ui.PrivacyControlActivity r12 = org.telegram.ui.PrivacyControlActivity.this
-                int r12 = r12.rulesType
-                if (r12 != r7) goto L_0x02af
-                org.telegram.ui.PrivacyControlActivity r12 = org.telegram.ui.PrivacyControlActivity.this
-                int r0 = r12.currentType
-                if (r0 != r4) goto L_0x023e
+                r10 = 2131165436(0x7var_fc, float:1.794509E38)
+                if (r13 != r0) goto L_0x0357
+                org.telegram.ui.PrivacyControlActivity r13 = org.telegram.ui.PrivacyControlActivity.this
+                int r13 = r13.rulesType
+                if (r13 != r8) goto L_0x02c7
+                org.telegram.ui.PrivacyControlActivity r13 = org.telegram.ui.PrivacyControlActivity.this
+                int r0 = r13.currentType
+                if (r0 != r4) goto L_0x0256
                 org.telegram.ui.PrivacyControlActivity r0 = org.telegram.ui.PrivacyControlActivity.this
                 int r0 = r0.currentSubType
-                if (r0 != r4) goto L_0x023e
+                if (r0 != r4) goto L_0x0256
                 r0 = 1
-                goto L_0x023f
-            L_0x023e:
+                goto L_0x0257
+            L_0x0256:
                 r0 = 0
-            L_0x023f:
-                boolean r12 = r12.prevSubtypeContacts = r0
-                if (r12 == 0) goto L_0x0253
-                r12 = 2131627724(0x7f0e0ecc, float:1.888272E38)
+            L_0x0257:
+                boolean r13 = r13.prevSubtypeContacts = r0
+                if (r13 == 0) goto L_0x026b
+                r13 = 2131627770(0x7f0e0efa, float:1.8882814E38)
                 java.lang.String r0 = "PrivacyPhoneInfo3"
-                java.lang.String r12 = org.telegram.messenger.LocaleController.getString(r0, r12)
-                r11.setText(r12)
-                goto L_0x0324
-            L_0x0253:
-                android.text.SpannableStringBuilder r12 = new android.text.SpannableStringBuilder
-                r12.<init>()
+                java.lang.String r13 = org.telegram.messenger.LocaleController.getString(r0, r13)
+                r12.setText(r13)
+                goto L_0x0352
+            L_0x026b:
+                android.text.SpannableStringBuilder r13 = new android.text.SpannableStringBuilder
+                r13.<init>()
                 java.util.Locale r0 = java.util.Locale.ENGLISH
                 java.lang.Object[] r2 = new java.lang.Object[r4]
                 org.telegram.ui.PrivacyControlActivity r5 = org.telegram.ui.PrivacyControlActivity.this
@@ -1527,261 +1542,279 @@ public class PrivacyControlActivity extends BaseFragment implements Notification
                 int r0 = r0.length()
                 r6 = 33
                 r2.setSpan(r5, r3, r0, r6)
-                r0 = 2131627722(0x7f0e0eca, float:1.8882716E38)
+                r0 = 2131627768(0x7f0e0ef8, float:1.888281E38)
                 java.lang.String r3 = "PrivacyPhoneInfo"
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r3, r0)
-                android.text.SpannableStringBuilder r0 = r12.append(r0)
+                android.text.SpannableStringBuilder r0 = r13.append(r0)
                 java.lang.String r3 = "\n\n"
                 android.text.SpannableStringBuilder r0 = r0.append(r3)
-                r3 = 2131627725(0x7f0e0ecd, float:1.8882723E38)
+                r3 = 2131627771(0x7f0e0efb, float:1.8882816E38)
                 java.lang.String r5 = "PrivacyPhoneInfo4"
                 java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r5, r3)
                 android.text.SpannableStringBuilder r0 = r0.append(r3)
                 java.lang.String r3 = "\n"
                 android.text.SpannableStringBuilder r0 = r0.append(r3)
                 r0.append(r2)
-                r11.setText(r12)
-                goto L_0x0324
-            L_0x02af:
-                org.telegram.ui.PrivacyControlActivity r12 = org.telegram.ui.PrivacyControlActivity.this
-                int r12 = r12.rulesType
-                if (r12 != r6) goto L_0x02c4
-                r12 = 2131627705(0x7f0e0eb9, float:1.8882682E38)
+                r12.setText(r13)
+                goto L_0x0352
+            L_0x02c7:
+                org.telegram.ui.PrivacyControlActivity r13 = org.telegram.ui.PrivacyControlActivity.this
+                int r13 = r13.rulesType
+                if (r13 != r7) goto L_0x02dd
+                r13 = 2131627751(0x7f0e0ee7, float:1.8882775E38)
                 java.lang.String r0 = "PrivacyForwardsInfo"
-                java.lang.String r12 = org.telegram.messenger.LocaleController.getString(r0, r12)
-                r11.setText(r12)
-                goto L_0x0324
-            L_0x02c4:
-                org.telegram.ui.PrivacyControlActivity r12 = org.telegram.ui.PrivacyControlActivity.this
-                int r12 = r12.rulesType
-                if (r12 != r5) goto L_0x02d9
-                r12 = 2131627732(0x7f0e0ed4, float:1.8882737E38)
+                java.lang.String r13 = org.telegram.messenger.LocaleController.getString(r0, r13)
+                r12.setText(r13)
+                goto L_0x0352
+            L_0x02dd:
+                org.telegram.ui.PrivacyControlActivity r13 = org.telegram.ui.PrivacyControlActivity.this
+                int r13 = r13.rulesType
+                if (r13 != r6) goto L_0x02f2
+                r13 = 2131627778(0x7f0e0var_, float:1.888283E38)
                 java.lang.String r0 = "PrivacyProfilePhotoInfo"
-                java.lang.String r12 = org.telegram.messenger.LocaleController.getString(r0, r12)
-                r11.setText(r12)
-                goto L_0x0324
-            L_0x02d9:
-                org.telegram.ui.PrivacyControlActivity r12 = org.telegram.ui.PrivacyControlActivity.this
-                int r12 = r12.rulesType
-                if (r12 != r2) goto L_0x02ee
-                r12 = 2131627696(0x7f0e0eb0, float:1.8882664E38)
+                java.lang.String r13 = org.telegram.messenger.LocaleController.getString(r0, r13)
+                r12.setText(r13)
+                goto L_0x0352
+            L_0x02f2:
+                org.telegram.ui.PrivacyControlActivity r13 = org.telegram.ui.PrivacyControlActivity.this
+                int r13 = r13.rulesType
+                if (r13 != r2) goto L_0x0307
+                r13 = 2131627742(0x7f0e0ede, float:1.8882757E38)
                 java.lang.String r0 = "PrivacyCallsP2PHelp"
-                java.lang.String r12 = org.telegram.messenger.LocaleController.getString(r0, r12)
-                r11.setText(r12)
-                goto L_0x0324
-            L_0x02ee:
-                org.telegram.ui.PrivacyControlActivity r12 = org.telegram.ui.PrivacyControlActivity.this
-                int r12 = r12.rulesType
-                if (r12 != r8) goto L_0x0303
-                r12 = 2131629242(0x7f0e14ba, float:1.88858E38)
+                java.lang.String r13 = org.telegram.messenger.LocaleController.getString(r0, r13)
+                r12.setText(r13)
+                goto L_0x0352
+            L_0x0307:
+                org.telegram.ui.PrivacyControlActivity r13 = org.telegram.ui.PrivacyControlActivity.this
+                int r13 = r13.rulesType
+                if (r13 != r9) goto L_0x031c
+                r13 = 2131629302(0x7f0e14f6, float:1.8885921E38)
                 java.lang.String r0 = "WhoCanCallMeInfo"
-                java.lang.String r12 = org.telegram.messenger.LocaleController.getString(r0, r12)
-                r11.setText(r12)
-                goto L_0x0324
-            L_0x0303:
-                org.telegram.ui.PrivacyControlActivity r12 = org.telegram.ui.PrivacyControlActivity.this
-                int r12 = r12.rulesType
-                if (r12 != r4) goto L_0x0318
-                r12 = 2131629237(0x7f0e14b5, float:1.888579E38)
+                java.lang.String r13 = org.telegram.messenger.LocaleController.getString(r0, r13)
+                r12.setText(r13)
+                goto L_0x0352
+            L_0x031c:
+                org.telegram.ui.PrivacyControlActivity r13 = org.telegram.ui.PrivacyControlActivity.this
+                int r13 = r13.rulesType
+                if (r13 != r4) goto L_0x0331
+                r13 = 2131629297(0x7f0e14f1, float:1.888591E38)
                 java.lang.String r0 = "WhoCanAddMeInfo"
-                java.lang.String r12 = org.telegram.messenger.LocaleController.getString(r0, r12)
-                r11.setText(r12)
-                goto L_0x0324
-            L_0x0318:
-                r12 = 2131625300(0x7f0e0554, float:1.8877804E38)
+                java.lang.String r13 = org.telegram.messenger.LocaleController.getString(r0, r13)
+                r12.setText(r13)
+                goto L_0x0352
+            L_0x0331:
+                org.telegram.ui.PrivacyControlActivity r13 = org.telegram.ui.PrivacyControlActivity.this
+                int r13 = r13.rulesType
+                if (r13 != r5) goto L_0x0346
+                r13 = 2131627785(0x7f0e0var_, float:1.8882844E38)
+                java.lang.String r0 = "PrivacyVoiceMessagesInfo"
+                java.lang.String r13 = org.telegram.messenger.LocaleController.getString(r0, r13)
+                r12.setText(r13)
+                goto L_0x0352
+            L_0x0346:
+                r13 = 2131625309(0x7f0e055d, float:1.8877822E38)
                 java.lang.String r0 = "CustomHelp"
-                java.lang.String r12 = org.telegram.messenger.LocaleController.getString(r0, r12)
-                r11.setText(r12)
-            L_0x0324:
+                java.lang.String r13 = org.telegram.messenger.LocaleController.getString(r0, r13)
+                r12.setText(r13)
+            L_0x0352:
                 r3 = 2131165435(0x7var_fb, float:1.7945087E38)
-                goto L_0x03d1
-            L_0x0329:
+                goto L_0x0415
+            L_0x0357:
                 org.telegram.ui.PrivacyControlActivity r0 = org.telegram.ui.PrivacyControlActivity.this
                 int r0 = r0.shareDetailRow
-                if (r12 != r0) goto L_0x03c6
-                org.telegram.ui.PrivacyControlActivity r12 = org.telegram.ui.PrivacyControlActivity.this
-                int r12 = r12.rulesType
-                if (r12 != r7) goto L_0x0347
-                r12 = 2131627723(0x7f0e0ecb, float:1.8882718E38)
+                if (r13 != r0) goto L_0x040a
+                org.telegram.ui.PrivacyControlActivity r13 = org.telegram.ui.PrivacyControlActivity.this
+                int r13 = r13.rulesType
+                if (r13 != r8) goto L_0x0375
+                r13 = 2131627769(0x7f0e0ef9, float:1.8882812E38)
                 java.lang.String r0 = "PrivacyPhoneInfo2"
-                java.lang.String r12 = org.telegram.messenger.LocaleController.getString(r0, r12)
-                r11.setText(r12)
-                goto L_0x03bc
-            L_0x0347:
-                org.telegram.ui.PrivacyControlActivity r12 = org.telegram.ui.PrivacyControlActivity.this
-                int r12 = r12.rulesType
-                if (r12 != r6) goto L_0x035c
-                r12 = 2131627706(0x7f0e0eba, float:1.8882684E38)
+                java.lang.String r13 = org.telegram.messenger.LocaleController.getString(r0, r13)
+                r12.setText(r13)
+                goto L_0x0400
+            L_0x0375:
+                org.telegram.ui.PrivacyControlActivity r13 = org.telegram.ui.PrivacyControlActivity.this
+                int r13 = r13.rulesType
+                if (r13 != r7) goto L_0x038b
+                r13 = 2131627752(0x7f0e0ee8, float:1.8882777E38)
                 java.lang.String r0 = "PrivacyForwardsInfo2"
-                java.lang.String r12 = org.telegram.messenger.LocaleController.getString(r0, r12)
-                r11.setText(r12)
-                goto L_0x03bc
-            L_0x035c:
-                org.telegram.ui.PrivacyControlActivity r12 = org.telegram.ui.PrivacyControlActivity.this
-                int r12 = r12.rulesType
-                if (r12 != r5) goto L_0x0371
-                r12 = 2131627733(0x7f0e0ed5, float:1.8882739E38)
+                java.lang.String r13 = org.telegram.messenger.LocaleController.getString(r0, r13)
+                r12.setText(r13)
+                goto L_0x0400
+            L_0x038b:
+                org.telegram.ui.PrivacyControlActivity r13 = org.telegram.ui.PrivacyControlActivity.this
+                int r13 = r13.rulesType
+                if (r13 != r6) goto L_0x03a0
+                r13 = 2131627779(0x7f0e0var_, float:1.8882832E38)
                 java.lang.String r0 = "PrivacyProfilePhotoInfo2"
-                java.lang.String r12 = org.telegram.messenger.LocaleController.getString(r0, r12)
-                r11.setText(r12)
-                goto L_0x03bc
-            L_0x0371:
-                org.telegram.ui.PrivacyControlActivity r12 = org.telegram.ui.PrivacyControlActivity.this
-                int r12 = r12.rulesType
-                if (r12 != r2) goto L_0x0386
-                r12 = 2131625302(0x7f0e0556, float:1.8877808E38)
+                java.lang.String r13 = org.telegram.messenger.LocaleController.getString(r0, r13)
+                r12.setText(r13)
+                goto L_0x0400
+            L_0x03a0:
+                org.telegram.ui.PrivacyControlActivity r13 = org.telegram.ui.PrivacyControlActivity.this
+                int r13 = r13.rulesType
+                if (r13 != r2) goto L_0x03b5
+                r13 = 2131625311(0x7f0e055f, float:1.8877826E38)
                 java.lang.String r0 = "CustomP2PInfo"
-                java.lang.String r12 = org.telegram.messenger.LocaleController.getString(r0, r12)
-                r11.setText(r12)
-                goto L_0x03bc
-            L_0x0386:
-                org.telegram.ui.PrivacyControlActivity r12 = org.telegram.ui.PrivacyControlActivity.this
-                int r12 = r12.rulesType
-                if (r12 != r8) goto L_0x039b
-                r12 = 2131625299(0x7f0e0553, float:1.8877802E38)
+                java.lang.String r13 = org.telegram.messenger.LocaleController.getString(r0, r13)
+                r12.setText(r13)
+                goto L_0x0400
+            L_0x03b5:
+                org.telegram.ui.PrivacyControlActivity r13 = org.telegram.ui.PrivacyControlActivity.this
+                int r13 = r13.rulesType
+                if (r13 != r9) goto L_0x03ca
+                r13 = 2131625308(0x7f0e055c, float:1.887782E38)
                 java.lang.String r0 = "CustomCallInfo"
-                java.lang.String r12 = org.telegram.messenger.LocaleController.getString(r0, r12)
-                r11.setText(r12)
-                goto L_0x03bc
-            L_0x039b:
-                org.telegram.ui.PrivacyControlActivity r12 = org.telegram.ui.PrivacyControlActivity.this
-                int r12 = r12.rulesType
-                if (r12 != r4) goto L_0x03b0
-                r12 = 2131625303(0x7f0e0557, float:1.887781E38)
+                java.lang.String r13 = org.telegram.messenger.LocaleController.getString(r0, r13)
+                r12.setText(r13)
+                goto L_0x0400
+            L_0x03ca:
+                org.telegram.ui.PrivacyControlActivity r13 = org.telegram.ui.PrivacyControlActivity.this
+                int r13 = r13.rulesType
+                if (r13 != r4) goto L_0x03df
+                r13 = 2131625312(0x7f0e0560, float:1.8877828E38)
                 java.lang.String r0 = "CustomShareInfo"
-                java.lang.String r12 = org.telegram.messenger.LocaleController.getString(r0, r12)
-                r11.setText(r12)
-                goto L_0x03bc
-            L_0x03b0:
-                r12 = 2131625304(0x7f0e0558, float:1.8877812E38)
+                java.lang.String r13 = org.telegram.messenger.LocaleController.getString(r0, r13)
+                r12.setText(r13)
+                goto L_0x0400
+            L_0x03df:
+                org.telegram.ui.PrivacyControlActivity r13 = org.telegram.ui.PrivacyControlActivity.this
+                int r13 = r13.rulesType
+                if (r13 != r5) goto L_0x03f4
+                r13 = 2131627786(0x7f0e0f0a, float:1.8882846E38)
+                java.lang.String r0 = "PrivacyVoiceMessagesInfo2"
+                java.lang.String r13 = org.telegram.messenger.LocaleController.getString(r0, r13)
+                r12.setText(r13)
+                goto L_0x0400
+            L_0x03f4:
+                r13 = 2131625313(0x7f0e0561, float:1.887783E38)
                 java.lang.String r0 = "CustomShareSettingsHelp"
-                java.lang.String r12 = org.telegram.messenger.LocaleController.getString(r0, r12)
-                r11.setText(r12)
-            L_0x03bc:
-                org.telegram.ui.PrivacyControlActivity r12 = org.telegram.ui.PrivacyControlActivity.this
-                int r12 = r12.rulesType
-                if (r12 != r8) goto L_0x03ce
-                goto L_0x0324
-            L_0x03c6:
+                java.lang.String r13 = org.telegram.messenger.LocaleController.getString(r0, r13)
+                r12.setText(r13)
+            L_0x0400:
+                org.telegram.ui.PrivacyControlActivity r13 = org.telegram.ui.PrivacyControlActivity.this
+                int r13 = r13.rulesType
+                if (r13 != r9) goto L_0x0412
+                goto L_0x0352
+            L_0x040a:
                 org.telegram.ui.PrivacyControlActivity r0 = org.telegram.ui.PrivacyControlActivity.this
                 int r0 = r0.p2pDetailRow
-                if (r12 != r0) goto L_0x03d1
-            L_0x03ce:
+                if (r13 != r0) goto L_0x0415
+            L_0x0412:
                 r3 = 2131165436(0x7var_fc, float:1.794509E38)
-            L_0x03d1:
-                if (r3 == 0) goto L_0x04e0
-                android.content.Context r12 = r10.mContext
+            L_0x0415:
+                if (r3 == 0) goto L_0x0524
+                android.content.Context r13 = r11.mContext
                 java.lang.String r0 = "windowBackgroundGrayShadow"
-                android.graphics.drawable.Drawable r12 = org.telegram.ui.ActionBar.Theme.getThemedDrawable((android.content.Context) r12, (int) r3, (java.lang.String) r0)
+                android.graphics.drawable.Drawable r13 = org.telegram.ui.ActionBar.Theme.getThemedDrawable((android.content.Context) r13, (int) r3, (java.lang.String) r0)
                 org.telegram.ui.Components.CombinedDrawable r0 = new org.telegram.ui.Components.CombinedDrawable
                 android.graphics.drawable.ColorDrawable r1 = new android.graphics.drawable.ColorDrawable
                 java.lang.String r2 = "windowBackgroundGray"
                 int r2 = org.telegram.ui.ActionBar.Theme.getColor(r2)
                 r1.<init>(r2)
-                r0.<init>(r1, r12)
+                r0.<init>(r1, r13)
                 r0.setFullsize(r4)
-                r11.setBackgroundDrawable(r0)
-                goto L_0x04e0
-            L_0x03f3:
-                android.view.View r11 = r11.itemView
-                org.telegram.ui.Cells.TextSettingsCell r11 = (org.telegram.ui.Cells.TextSettingsCell) r11
+                r12.setBackgroundDrawable(r0)
+                goto L_0x0524
+            L_0x0437:
+                android.view.View r12 = r12.itemView
+                org.telegram.ui.Cells.TextSettingsCell r12 = (org.telegram.ui.Cells.TextSettingsCell) r12
                 org.telegram.ui.PrivacyControlActivity r0 = org.telegram.ui.PrivacyControlActivity.this
                 int r0 = r0.alwaysShareRow
                 java.lang.String r5 = "Users"
-                r6 = 2131625614(0x7f0e068e, float:1.887844E38)
+                r6 = 2131625645(0x7f0e06ad, float:1.8878504E38)
                 java.lang.String r7 = "EmpryUsersPlaceholder"
-                if (r12 != r0) goto L_0x045d
-                org.telegram.ui.PrivacyControlActivity r12 = org.telegram.ui.PrivacyControlActivity.this
-                java.util.ArrayList r12 = r12.currentPlus
-                int r12 = r12.size()
-                if (r12 == 0) goto L_0x0423
-                org.telegram.ui.PrivacyControlActivity r12 = org.telegram.ui.PrivacyControlActivity.this
-                java.util.ArrayList r12 = r12.currentPlus
-                int r12 = r10.getUsersCount(r12)
+                if (r13 != r0) goto L_0x04a1
+                org.telegram.ui.PrivacyControlActivity r13 = org.telegram.ui.PrivacyControlActivity.this
+                java.util.ArrayList r13 = r13.currentPlus
+                int r13 = r13.size()
+                if (r13 == 0) goto L_0x0467
+                org.telegram.ui.PrivacyControlActivity r13 = org.telegram.ui.PrivacyControlActivity.this
+                java.util.ArrayList r13 = r13.currentPlus
+                int r13 = r11.getUsersCount(r13)
                 java.lang.Object[] r0 = new java.lang.Object[r3]
-                java.lang.String r12 = org.telegram.messenger.LocaleController.formatPluralString(r5, r12, r0)
-                goto L_0x0427
-            L_0x0423:
-                java.lang.String r12 = org.telegram.messenger.LocaleController.getString(r7, r6)
-            L_0x0427:
+                java.lang.String r13 = org.telegram.messenger.LocaleController.formatPluralString(r5, r13, r0)
+                goto L_0x046b
+            L_0x0467:
+                java.lang.String r13 = org.telegram.messenger.LocaleController.getString(r7, r6)
+            L_0x046b:
                 org.telegram.ui.PrivacyControlActivity r0 = org.telegram.ui.PrivacyControlActivity.this
                 int r0 = r0.rulesType
-                if (r0 == 0) goto L_0x0446
-                r0 = 2131624333(0x7f0e018d, float:1.8875843E38)
+                if (r0 == 0) goto L_0x048a
+                r0 = 2131624340(0x7f0e0194, float:1.8875857E38)
                 java.lang.String r2 = "AlwaysAllow"
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r2, r0)
                 org.telegram.ui.PrivacyControlActivity r2 = org.telegram.ui.PrivacyControlActivity.this
                 int r2 = r2.neverShareRow
-                if (r2 == r1) goto L_0x0441
+                if (r2 == r1) goto L_0x0485
                 r3 = 1
-            L_0x0441:
-                r11.setTextAndValue(r0, r12, r3)
-                goto L_0x04e0
-            L_0x0446:
-                r0 = 2131624334(0x7f0e018e, float:1.8875845E38)
+            L_0x0485:
+                r12.setTextAndValue(r0, r13, r3)
+                goto L_0x0524
+            L_0x048a:
+                r0 = 2131624341(0x7f0e0195, float:1.8875859E38)
                 java.lang.String r2 = "AlwaysShareWith"
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r2, r0)
                 org.telegram.ui.PrivacyControlActivity r2 = org.telegram.ui.PrivacyControlActivity.this
                 int r2 = r2.neverShareRow
-                if (r2 == r1) goto L_0x0458
+                if (r2 == r1) goto L_0x049c
                 r3 = 1
-            L_0x0458:
-                r11.setTextAndValue(r0, r12, r3)
-                goto L_0x04e0
-            L_0x045d:
+            L_0x049c:
+                r12.setTextAndValue(r0, r13, r3)
+                goto L_0x0524
+            L_0x04a1:
                 org.telegram.ui.PrivacyControlActivity r0 = org.telegram.ui.PrivacyControlActivity.this
                 int r0 = r0.neverShareRow
-                if (r12 != r0) goto L_0x04a8
-                org.telegram.ui.PrivacyControlActivity r12 = org.telegram.ui.PrivacyControlActivity.this
-                java.util.ArrayList r12 = r12.currentMinus
-                int r12 = r12.size()
-                if (r12 == 0) goto L_0x0482
-                org.telegram.ui.PrivacyControlActivity r12 = org.telegram.ui.PrivacyControlActivity.this
-                java.util.ArrayList r12 = r12.currentMinus
-                int r12 = r10.getUsersCount(r12)
+                if (r13 != r0) goto L_0x04ec
+                org.telegram.ui.PrivacyControlActivity r13 = org.telegram.ui.PrivacyControlActivity.this
+                java.util.ArrayList r13 = r13.currentMinus
+                int r13 = r13.size()
+                if (r13 == 0) goto L_0x04c6
+                org.telegram.ui.PrivacyControlActivity r13 = org.telegram.ui.PrivacyControlActivity.this
+                java.util.ArrayList r13 = r13.currentMinus
+                int r13 = r11.getUsersCount(r13)
                 java.lang.Object[] r0 = new java.lang.Object[r3]
-                java.lang.String r12 = org.telegram.messenger.LocaleController.formatPluralString(r5, r12, r0)
-                goto L_0x0486
-            L_0x0482:
-                java.lang.String r12 = org.telegram.messenger.LocaleController.getString(r7, r6)
-            L_0x0486:
+                java.lang.String r13 = org.telegram.messenger.LocaleController.formatPluralString(r5, r13, r0)
+                goto L_0x04ca
+            L_0x04c6:
+                java.lang.String r13 = org.telegram.messenger.LocaleController.getString(r7, r6)
+            L_0x04ca:
                 org.telegram.ui.PrivacyControlActivity r0 = org.telegram.ui.PrivacyControlActivity.this
                 int r0 = r0.rulesType
-                if (r0 == 0) goto L_0x049b
-                r0 = 2131626768(0x7f0e0b10, float:1.8880782E38)
+                if (r0 == 0) goto L_0x04df
+                r0 = 2131626810(0x7f0e0b3a, float:1.8880867E38)
                 java.lang.String r1 = "NeverAllow"
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
-                r11.setTextAndValue(r0, r12, r3)
-                goto L_0x04e0
-            L_0x049b:
-                r0 = 2131626769(0x7f0e0b11, float:1.8880784E38)
+                r12.setTextAndValue(r0, r13, r3)
+                goto L_0x0524
+            L_0x04df:
+                r0 = 2131626811(0x7f0e0b3b, float:1.8880869E38)
                 java.lang.String r1 = "NeverShareWith"
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
-                r11.setTextAndValue(r0, r12, r3)
-                goto L_0x04e0
-            L_0x04a8:
+                r12.setTextAndValue(r0, r13, r3)
+                goto L_0x0524
+            L_0x04ec:
                 org.telegram.ui.PrivacyControlActivity r0 = org.telegram.ui.PrivacyControlActivity.this
                 int r0 = r0.p2pRow
-                if (r12 != r0) goto L_0x04e0
-                org.telegram.ui.PrivacyControlActivity r12 = org.telegram.ui.PrivacyControlActivity.this
-                int r12 = r12.currentAccount
-                org.telegram.messenger.ContactsController r12 = org.telegram.messenger.ContactsController.getInstance(r12)
-                boolean r12 = r12.getLoadingPrivicyInfo(r2)
-                if (r12 == 0) goto L_0x04ca
-                r12 = 2131626473(0x7f0e09e9, float:1.8880183E38)
+                if (r13 != r0) goto L_0x0524
+                org.telegram.ui.PrivacyControlActivity r13 = org.telegram.ui.PrivacyControlActivity.this
+                int r13 = r13.currentAccount
+                org.telegram.messenger.ContactsController r13 = org.telegram.messenger.ContactsController.getInstance(r13)
+                boolean r13 = r13.getLoadingPrivacyInfo(r2)
+                if (r13 == 0) goto L_0x050e
+                r13 = 2131626510(0x7f0e0a0e, float:1.8880258E38)
                 java.lang.String r0 = "Loading"
-                java.lang.String r12 = org.telegram.messenger.LocaleController.getString(r0, r12)
-                goto L_0x04d4
-            L_0x04ca:
-                org.telegram.ui.PrivacyControlActivity r12 = org.telegram.ui.PrivacyControlActivity.this
-                org.telegram.messenger.AccountInstance r12 = r12.getAccountInstance()
-                java.lang.String r12 = org.telegram.ui.PrivacySettingsActivity.formatRulesString(r12, r2)
-            L_0x04d4:
-                r0 = 2131627712(0x7f0e0ec0, float:1.8882696E38)
+                java.lang.String r13 = org.telegram.messenger.LocaleController.getString(r0, r13)
+                goto L_0x0518
+            L_0x050e:
+                org.telegram.ui.PrivacyControlActivity r13 = org.telegram.ui.PrivacyControlActivity.this
+                org.telegram.messenger.AccountInstance r13 = r13.getAccountInstance()
+                java.lang.String r13 = org.telegram.ui.PrivacySettingsActivity.formatRulesString(r13, r2)
+            L_0x0518:
+                r0 = 2131627758(0x7f0e0eee, float:1.888279E38)
                 java.lang.String r1 = "PrivacyP2P2"
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
-                r11.setTextAndValue(r0, r12, r3)
-            L_0x04e0:
+                r12.setTextAndValue(r0, r13, r3)
+            L_0x0524:
                 return
             */
             throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.PrivacyControlActivity.ListAdapter.onBindViewHolder(androidx.recyclerview.widget.RecyclerView$ViewHolder, int):void");

@@ -6,14 +6,12 @@ import org.telegram.tgnet.TLRPC$TL_error;
 
 public final /* synthetic */ class ChatAttachAlertBotWebViewLayout$$ExternalSyntheticLambda12 implements RequestDelegate {
     public final /* synthetic */ ChatAttachAlertBotWebViewLayout f$0;
-    public final /* synthetic */ int f$1;
 
-    public /* synthetic */ ChatAttachAlertBotWebViewLayout$$ExternalSyntheticLambda12(ChatAttachAlertBotWebViewLayout chatAttachAlertBotWebViewLayout, int i) {
+    public /* synthetic */ ChatAttachAlertBotWebViewLayout$$ExternalSyntheticLambda12(ChatAttachAlertBotWebViewLayout chatAttachAlertBotWebViewLayout) {
         this.f$0 = chatAttachAlertBotWebViewLayout;
-        this.f$1 = i;
     }
 
     public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        this.f$0.lambda$requestWebView$12(this.f$1, tLObject, tLRPC$TL_error);
+        this.f$0.lambda$new$1(tLObject, tLRPC$TL_error);
     }
 }

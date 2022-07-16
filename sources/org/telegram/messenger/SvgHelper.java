@@ -10,7 +10,6 @@ import android.graphics.Path;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
-import android.os.SystemClock;
 import java.io.StringReader;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
@@ -75,25 +74,28 @@ public class SvgHelper {
     public static class SvgDrawable extends Drawable {
         private static float gradientWidth;
         private static long lastUpdateTime;
+        private static long lastUpdateTimeBackground;
         private static int[] parentPosition = new int[2];
         private static WeakReference<Drawable> shiftDrawable;
         /* access modifiers changed from: private */
         public static Runnable shiftRunnable;
         private static float totalTranslation;
+        private static float totalTranslationBackground;
         private boolean aspectFill = true;
-        private Bitmap backgroundBitmap;
-        private Canvas backgroundCanvas;
+        private Bitmap[] backgroundBitmap = new Bitmap[2];
+        private Canvas[] backgroundCanvas = new Canvas[2];
+        private Paint backgroundPaint;
         private float colorAlpha;
         protected ArrayList<Object> commands = new ArrayList<>();
         private float crossfadeAlpha = 1.0f;
-        private int currentColor;
+        private int[] currentColor = new int[2];
         private String currentColorKey;
         protected int height;
         private Paint overridePaint;
         protected HashMap<Object, Paint> paints = new HashMap<>();
         private ImageReceiver parentImageReceiver;
-        private LinearGradient placeholderGradient;
-        private Matrix placeholderMatrix;
+        private LinearGradient[] placeholderGradient = new LinearGradient[2];
+        private Matrix[] placeholderMatrix = new Matrix[2];
         protected int width;
 
         public int getOpacity() {
@@ -121,75 +123,60 @@ public class SvgHelper {
         }
 
         public void draw(Canvas canvas) {
+            drawInternal(canvas, false, System.currentTimeMillis(), (float) getBounds().left, (float) getBounds().top, (float) getBounds().width(), (float) getBounds().height());
+        }
+
+        /* JADX WARNING: type inference failed for: r2v0, types: [boolean] */
+        public void drawInternal(Canvas canvas, boolean z, long j, float f, float f2, float f3, float f4) {
+            Paint paint;
+            int i;
             Canvas canvas2 = canvas;
+            ? r2 = z;
+            float f5 = f;
+            float f6 = f3;
+            float f7 = f4;
             String str = this.currentColorKey;
             if (str != null) {
-                setupGradient(str, this.colorAlpha);
+                setupGradient(str, this.colorAlpha, r2);
             }
-            Rect bounds = getBounds();
-            float scale = getScale();
-            canvas.save();
-            canvas2.translate((float) bounds.left, (float) bounds.top);
-            if (!this.aspectFill) {
-                canvas2.translate((((float) bounds.width()) - (((float) this.width) * scale)) / 2.0f, (((float) bounds.height()) - (((float) this.height) * scale)) / 2.0f);
-            }
-            canvas2.scale(scale, scale);
-            int size = this.commands.size();
-            for (int i = 0; i < size; i++) {
-                Object obj = this.commands.get(i);
-                if (obj instanceof Matrix) {
-                    canvas.save();
-                    canvas2.concat((Matrix) obj);
-                } else if (obj == null) {
-                    canvas.restore();
-                } else {
-                    Paint paint = this.overridePaint;
-                    if (paint == null) {
-                        paint = this.paints.get(obj);
-                    }
-                    Paint paint2 = paint;
-                    int alpha = paint2.getAlpha();
-                    paint2.setAlpha((int) (this.crossfadeAlpha * ((float) alpha)));
-                    if (obj instanceof Path) {
-                        canvas2.drawPath((Path) obj, paint2);
-                    } else if (obj instanceof Rect) {
-                        canvas2.drawRect((Rect) obj, paint2);
-                    } else if (obj instanceof RectF) {
-                        canvas2.drawRect((RectF) obj, paint2);
-                    } else if (obj instanceof Line) {
-                        Line line = (Line) obj;
-                        canvas.drawLine(line.x1, line.y1, line.x2, line.y2, paint2);
-                    } else if (obj instanceof Circle) {
-                        Circle circle = (Circle) obj;
-                        canvas2.drawCircle(circle.x1, circle.y1, circle.rad, paint2);
-                    } else if (obj instanceof Oval) {
-                        canvas2.drawOval(((Oval) obj).rect, paint2);
-                    } else if (obj instanceof RoundRect) {
-                        RoundRect roundRect = (RoundRect) obj;
-                        RectF rectF = roundRect.rect;
-                        float f = roundRect.rx;
-                        canvas2.drawRoundRect(rectF, f, f, paint2);
-                    }
-                    paint2.setAlpha(alpha);
-                }
-            }
-            canvas.restore();
+            float scale = getScale((int) f6, (int) f7);
             if (this.placeholderGradient != null) {
-                if (shiftRunnable == null || shiftDrawable.get() == this) {
-                    long elapsedRealtime = SystemClock.elapsedRealtime();
-                    long abs = Math.abs(lastUpdateTime - elapsedRealtime);
-                    if (abs > 17) {
-                        abs = 16;
+                long j2 = 0;
+                long j3 = 64;
+                if (r2 != 0) {
+                    long j4 = j - lastUpdateTimeBackground;
+                    if (j4 <= 64) {
+                        j3 = j4;
                     }
-                    lastUpdateTime = elapsedRealtime;
-                    totalTranslation += (((float) abs) * gradientWidth) / 1800.0f;
+                    if (j3 > 0) {
+                        lastUpdateTimeBackground = j;
+                        totalTranslationBackground += (((float) j3) * gradientWidth) / 1800.0f;
+                        while (true) {
+                            float f8 = totalTranslationBackground;
+                            float f9 = gradientWidth;
+                            if (f8 < f9 * 2.0f) {
+                                break;
+                            }
+                            totalTranslationBackground = f8 - (f9 * 2.0f);
+                        }
+                    }
+                } else if (shiftRunnable == null || shiftDrawable.get() == this) {
+                    long j5 = j - lastUpdateTime;
+                    if (j5 <= 64) {
+                        j3 = j5;
+                    }
+                    if (j3 >= 0) {
+                        j2 = j3;
+                    }
+                    lastUpdateTime = j;
+                    totalTranslation += (((float) j2) * gradientWidth) / 1800.0f;
                     while (true) {
-                        float f2 = totalTranslation;
-                        float f3 = gradientWidth;
-                        if (f2 < f3 / 2.0f) {
+                        float var_ = totalTranslation;
+                        float var_ = gradientWidth;
+                        if (var_ < var_ / 2.0f) {
                             break;
                         }
-                        totalTranslation = f2 - f3;
+                        totalTranslation = var_ - var_;
                     }
                     shiftDrawable = new WeakReference<>(this);
                     Runnable runnable = shiftRunnable;
@@ -201,26 +188,80 @@ public class SvgHelper {
                     AndroidUtilities.runOnUIThread(svgHelper$SvgDrawable$$ExternalSyntheticLambda0, (long) (((int) (1000.0f / AndroidUtilities.screenRefreshRate)) - 1));
                 }
                 ImageReceiver imageReceiver = this.parentImageReceiver;
-                if (imageReceiver != null) {
+                if (imageReceiver == null || r2 != 0) {
+                    i = 0;
+                } else {
                     imageReceiver.getParentPosition(parentPosition);
+                    i = parentPosition[0];
                 }
-                this.placeholderMatrix.reset();
-                this.placeholderMatrix.postTranslate((((float) (-parentPosition[0])) + totalTranslation) - ((float) bounds.left), 0.0f);
-                float f4 = 1.0f / scale;
-                this.placeholderMatrix.postScale(f4, f4);
-                this.placeholderGradient.setLocalMatrix(this.placeholderMatrix);
+                this.placeholderMatrix[r2].reset();
+                if (r2 != 0) {
+                    this.placeholderMatrix[r2].postTranslate((((float) (-i)) + totalTranslationBackground) - f5, 0.0f);
+                } else {
+                    this.placeholderMatrix[r2].postTranslate((((float) (-i)) + totalTranslation) - f5, 0.0f);
+                }
+                float var_ = 1.0f / scale;
+                this.placeholderMatrix[r2].postScale(var_, var_);
+                this.placeholderGradient[r2].setLocalMatrix(this.placeholderMatrix[r2]);
                 ImageReceiver imageReceiver2 = this.parentImageReceiver;
-                if (imageReceiver2 != null) {
+                if (imageReceiver2 != null && r2 == 0) {
                     imageReceiver2.invalidate();
                 }
             }
+            canvas.save();
+            canvas2.translate(f5, f2);
+            if (!this.aspectFill) {
+                canvas2.translate((f6 - (((float) this.width) * scale)) / 2.0f, (f7 - (((float) this.height) * scale)) / 2.0f);
+            }
+            canvas2.scale(scale, scale);
+            int size = this.commands.size();
+            for (int i2 = 0; i2 < size; i2++) {
+                Object obj = this.commands.get(i2);
+                if (obj instanceof Matrix) {
+                    canvas.save();
+                } else if (obj == null) {
+                    canvas.restore();
+                } else {
+                    if (r2 != 0) {
+                        paint = this.backgroundPaint;
+                    } else {
+                        paint = this.overridePaint;
+                        if (paint == null) {
+                            paint = this.paints.get(obj);
+                        }
+                    }
+                    int alpha = paint.getAlpha();
+                    paint.setAlpha((int) (this.crossfadeAlpha * ((float) alpha)));
+                    if (obj instanceof Path) {
+                        canvas2.drawPath((Path) obj, paint);
+                    } else if (obj instanceof Rect) {
+                        canvas2.drawRect((Rect) obj, paint);
+                    } else if (obj instanceof RectF) {
+                        canvas2.drawRect((RectF) obj, paint);
+                    } else if (obj instanceof Line) {
+                        Line line = (Line) obj;
+                        canvas.drawLine(line.x1, line.y1, line.x2, line.y2, paint);
+                    } else if (obj instanceof Circle) {
+                        Circle circle = (Circle) obj;
+                        canvas2.drawCircle(circle.x1, circle.y1, circle.rad, paint);
+                    } else if (obj instanceof Oval) {
+                        canvas2.drawOval(((Oval) obj).rect, paint);
+                    } else if (obj instanceof RoundRect) {
+                        RoundRect roundRect = (RoundRect) obj;
+                        RectF rectF = roundRect.rect;
+                        float var_ = roundRect.rx;
+                        canvas2.drawRoundRect(rectF, var_, var_, paint);
+                    }
+                    paint.setAlpha(alpha);
+                }
+            }
+            canvas.restore();
         }
 
-        public float getScale() {
-            Rect bounds = getBounds();
-            float width2 = ((float) bounds.width()) / ((float) this.width);
-            float height2 = ((float) bounds.height()) / ((float) this.height);
-            return this.aspectFill ? Math.max(width2, height2) : Math.min(width2, height2);
+        public float getScale(int i, int i2) {
+            float f = ((float) i) / ((float) this.width);
+            float f2 = ((float) i2) / ((float) this.height);
+            return this.aspectFill ? Math.max(f, f2) : Math.min(f, f2);
         }
 
         public void setAlpha(int i) {
@@ -242,24 +283,25 @@ public class SvgHelper {
             this.parentImageReceiver = imageReceiver;
         }
 
-        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v14, resolved type: android.graphics.LinearGradient} */
-        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v17, resolved type: android.graphics.BitmapShader} */
-        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v21, resolved type: android.graphics.LinearGradient} */
-        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r6v5, resolved type: android.graphics.LinearGradient} */
+        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v6, resolved type: android.graphics.LinearGradient} */
+        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v8, resolved type: android.graphics.BitmapShader} */
+        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v12, resolved type: android.graphics.LinearGradient} */
+        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r6v8, resolved type: android.graphics.LinearGradient} */
         /* JADX WARNING: Multi-variable type inference failed */
         /* Code decompiled incorrectly, please refer to instructions dump. */
-        public void setupGradient(java.lang.String r20, float r21) {
+        public void setupGradient(java.lang.String r21, float r22, boolean r23) {
             /*
-                r19 = this;
-                r0 = r19
-                int r1 = org.telegram.ui.ActionBar.Theme.getColor(r20)
-                int r2 = r0.currentColor
-                if (r2 == r1) goto L_0x00f9
-                r2 = r21
-                r0.colorAlpha = r2
-                r2 = r20
-                r0.currentColorKey = r2
-                r0.currentColor = r1
+                r20 = this;
+                r0 = r20
+                int r1 = org.telegram.ui.ActionBar.Theme.getColor(r21)
+                int[] r2 = r0.currentColor
+                r3 = r2[r23]
+                if (r3 == r1) goto L_0x0138
+                r3 = r22
+                r0.colorAlpha = r3
+                r3 = r21
+                r0.currentColorKey = r3
+                r2[r23] = r1
                 android.graphics.Point r2 = org.telegram.messenger.AndroidUtilities.displaySize
                 int r2 = r2.x
                 r3 = 2
@@ -285,103 +327,135 @@ public class SvgHelper {
                 float r5 = r4 - r2
                 r6 = 1073741824(0x40000000, float:2.0)
                 float r5 = r5 / r6
-                android.graphics.LinearGradient r15 = new android.graphics.LinearGradient
-                r8 = 0
+                android.graphics.LinearGradient[] r7 = r0.placeholderGradient
+                android.graphics.LinearGradient r16 = new android.graphics.LinearGradient
                 r9 = 0
-                float r10 = gradientWidth
-                r11 = 0
-                r7 = 5
-                int[] r12 = new int[r7]
-                r16 = 0
-                r12[r16] = r16
-                r14 = 1
-                r12[r14] = r16
-                r12[r3] = r1
-                r13 = 3
-                r12[r13] = r16
-                r17 = 4
-                r12[r17] = r16
-                float[] r7 = new float[r7]
-                r18 = 0
-                r7[r16] = r18
+                r10 = 0
+                float r11 = gradientWidth
+                r12 = 0
+                r8 = 5
+                int[] r13 = new int[r8]
+                r17 = 0
+                r13[r17] = r17
+                r15 = 1
+                r13[r15] = r17
+                r13[r3] = r1
+                r14 = 3
+                r13[r14] = r17
+                r18 = 4
+                r13[r18] = r17
+                float[] r8 = new float[r8]
+                r19 = 0
+                r8[r17] = r19
                 float r2 = r2 / r6
                 float r6 = r5 - r2
-                r7[r14] = r6
-                r7[r3] = r5
+                r8[r15] = r6
+                r8[r3] = r5
                 float r5 = r5 + r2
-                r7[r13] = r5
-                r7[r17] = r4
+                r8[r14] = r5
+                r8[r18] = r4
                 android.graphics.Shader$TileMode r2 = android.graphics.Shader.TileMode.REPEAT
-                r4 = r7
-                r7 = r15
-                r13 = r4
+                r4 = r8
+                r8 = r16
+                r14 = r4
                 r4 = 1
-                r14 = r2
-                r7.<init>(r8, r9, r10, r11, r12, r13, r14)
-                r0.placeholderGradient = r15
+                r15 = r2
+                r8.<init>(r9, r10, r11, r12, r13, r14, r15)
+                r7[r23] = r16
                 int r2 = android.os.Build.VERSION.SDK_INT
                 r5 = 28
-                if (r2 < r5) goto L_0x009d
-                android.graphics.LinearGradient r2 = new android.graphics.LinearGradient
+                if (r2 < r5) goto L_0x00a2
+                android.graphics.LinearGradient r5 = new android.graphics.LinearGradient
                 r7 = 0
                 r8 = 0
                 float r9 = gradientWidth
                 r10 = 0
                 int[] r11 = new int[r3]
-                r11[r16] = r1
+                r11[r17] = r1
                 r11[r4] = r1
                 r12 = 0
                 android.graphics.Shader$TileMode r13 = android.graphics.Shader.TileMode.REPEAT
-                r6 = r2
+                r6 = r5
                 r6.<init>(r7, r8, r9, r10, r11, r12, r13)
-                goto L_0x00c0
-            L_0x009d:
-                android.graphics.Bitmap r2 = r0.backgroundBitmap
-                if (r2 != 0) goto L_0x00b2
-                android.graphics.Bitmap$Config r2 = android.graphics.Bitmap.Config.ARGB_8888
-                android.graphics.Bitmap r2 = android.graphics.Bitmap.createBitmap(r4, r4, r2)
-                r0.backgroundBitmap = r2
-                android.graphics.Canvas r2 = new android.graphics.Canvas
-                android.graphics.Bitmap r3 = r0.backgroundBitmap
-                r2.<init>(r3)
-                r0.backgroundCanvas = r2
-            L_0x00b2:
-                android.graphics.Canvas r2 = r0.backgroundCanvas
-                r2.drawColor(r1)
-                android.graphics.BitmapShader r2 = new android.graphics.BitmapShader
-                android.graphics.Bitmap r1 = r0.backgroundBitmap
+                goto L_0x00cf
+            L_0x00a2:
+                android.graphics.Bitmap[] r3 = r0.backgroundBitmap
+                r5 = r3[r23]
+                if (r5 != 0) goto L_0x00bd
+                android.graphics.Bitmap$Config r5 = android.graphics.Bitmap.Config.ARGB_8888
+                android.graphics.Bitmap r5 = android.graphics.Bitmap.createBitmap(r4, r4, r5)
+                r3[r23] = r5
+                android.graphics.Canvas[] r3 = r0.backgroundCanvas
+                android.graphics.Canvas r5 = new android.graphics.Canvas
+                android.graphics.Bitmap[] r6 = r0.backgroundBitmap
+                r6 = r6[r23]
+                r5.<init>(r6)
+                r3[r23] = r5
+            L_0x00bd:
+                android.graphics.Canvas[] r3 = r0.backgroundCanvas
+                r3 = r3[r23]
+                r3.drawColor(r1)
+                android.graphics.BitmapShader r5 = new android.graphics.BitmapShader
+                android.graphics.Bitmap[] r1 = r0.backgroundBitmap
+                r1 = r1[r23]
                 android.graphics.Shader$TileMode r3 = android.graphics.Shader.TileMode.REPEAT
-                r2.<init>(r1, r3, r3)
-            L_0x00c0:
-                android.graphics.Matrix r1 = new android.graphics.Matrix
-                r1.<init>()
-                r0.placeholderMatrix = r1
-                android.graphics.LinearGradient r3 = r0.placeholderGradient
-                r3.setLocalMatrix(r1)
-                java.util.HashMap<java.lang.Object, android.graphics.Paint> r1 = r0.paints
-                java.util.Collection r1 = r1.values()
-                java.util.Iterator r1 = r1.iterator()
-            L_0x00d6:
-                boolean r3 = r1.hasNext()
-                if (r3 == 0) goto L_0x00f9
-                java.lang.Object r3 = r1.next()
+                r5.<init>(r1, r3, r3)
+            L_0x00cf:
+                android.graphics.Matrix[] r1 = r0.placeholderMatrix
+                android.graphics.Matrix r3 = new android.graphics.Matrix
+                r3.<init>()
+                r1[r23] = r3
+                android.graphics.LinearGradient[] r1 = r0.placeholderGradient
+                r1 = r1[r23]
+                android.graphics.Matrix[] r3 = r0.placeholderMatrix
+                r3 = r3[r23]
+                r1.setLocalMatrix(r3)
+                r1 = 22
+                if (r23 == 0) goto L_0x010b
+                android.graphics.Paint r3 = r0.backgroundPaint
+                if (r3 != 0) goto L_0x00f2
+                android.graphics.Paint r3 = new android.graphics.Paint
+                r3.<init>(r4)
+                r0.backgroundPaint = r3
+            L_0x00f2:
+                if (r2 > r1) goto L_0x00fa
+                android.graphics.Paint r1 = r0.backgroundPaint
+                r1.setShader(r5)
+                goto L_0x0138
+            L_0x00fa:
+                android.graphics.Paint r1 = r0.backgroundPaint
+                android.graphics.ComposeShader r2 = new android.graphics.ComposeShader
+                android.graphics.LinearGradient[] r3 = r0.placeholderGradient
+                r3 = r3[r23]
+                android.graphics.PorterDuff$Mode r4 = android.graphics.PorterDuff.Mode.ADD
+                r2.<init>(r3, r5, r4)
+                r1.setShader(r2)
+                goto L_0x0138
+            L_0x010b:
+                java.util.HashMap<java.lang.Object, android.graphics.Paint> r2 = r0.paints
+                java.util.Collection r2 = r2.values()
+                java.util.Iterator r2 = r2.iterator()
+            L_0x0115:
+                boolean r3 = r2.hasNext()
+                if (r3 == 0) goto L_0x0138
+                java.lang.Object r3 = r2.next()
                 android.graphics.Paint r3 = (android.graphics.Paint) r3
                 int r4 = android.os.Build.VERSION.SDK_INT
-                r5 = 22
-                if (r4 > r5) goto L_0x00ec
-                r3.setShader(r2)
-                goto L_0x00d6
-            L_0x00ec:
+                if (r4 > r1) goto L_0x0129
+                r3.setShader(r5)
+                goto L_0x0115
+            L_0x0129:
                 android.graphics.ComposeShader r4 = new android.graphics.ComposeShader
-                android.graphics.LinearGradient r5 = r0.placeholderGradient
-                android.graphics.PorterDuff$Mode r6 = android.graphics.PorterDuff.Mode.ADD
-                r4.<init>(r5, r2, r6)
+                android.graphics.LinearGradient[] r6 = r0.placeholderGradient
+                r6 = r6[r23]
+                android.graphics.PorterDuff$Mode r7 = android.graphics.PorterDuff.Mode.ADD
+                r4.<init>(r6, r5, r7)
                 r3.setShader(r4)
-                goto L_0x00d6
-            L_0x00f9:
+                goto L_0x0115
+            L_0x0138:
                 return
             */
-            throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.SvgHelper.SvgDrawable.setupGradient(java.lang.String, float):void");
+            throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.SvgHelper.SvgDrawable.setupGradient(java.lang.String, float, boolean):void");
         }
 
         public void setPaint(Paint paint) {

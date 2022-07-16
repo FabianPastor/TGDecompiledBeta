@@ -37,6 +37,7 @@ import java.util.List;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
+import org.telegram.tgnet.TLRPC$Document;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.ChatActivity;
@@ -1158,6 +1159,14 @@ public class Bulletin {
 
         public void setAnimation(int i, int i2, int i3, String... strArr) {
             this.imageView.setAnimation(i, i2, i3);
+            for (String str : strArr) {
+                RLottieImageView rLottieImageView = this.imageView;
+                rLottieImageView.setLayerColor(str + ".**", this.textColor);
+            }
+        }
+
+        public void setAnimation(TLRPC$Document tLRPC$Document, int i, int i2, String... strArr) {
+            this.imageView.setAnimation(tLRPC$Document, i, i2);
             for (String str : strArr) {
                 RLottieImageView rLottieImageView = this.imageView;
                 rLottieImageView.setLayerColor(str + ".**", this.textColor);

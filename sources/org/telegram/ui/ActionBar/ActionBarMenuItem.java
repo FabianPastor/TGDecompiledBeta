@@ -750,7 +750,7 @@ public class ActionBarMenuItem extends FrameLayout {
             android.view.ViewPropertyAnimator r3 = r3.setDuration(r4)
             r3.start()
             android.content.Context r3 = r10.getContext()
-            r4 = 2131166086(0x7var_, float:1.7946407E38)
+            r4 = 2131166088(0x7var_, float:1.7946411E38)
             android.graphics.drawable.Drawable r3 = androidx.core.content.ContextCompat.getDrawable(r3, r4)
             android.graphics.drawable.Drawable r3 = r3.mutate()
             android.graphics.PorterDuffColorFilter r4 = new android.graphics.PorterDuffColorFilter

@@ -10,6 +10,6 @@ public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda4 implem
     }
 
     public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-        this.f$0.lambda$closeMenu$183(valueAnimator);
+        this.f$0.lambda$updateBottomOverlay$138(valueAnimator);
     }
 }

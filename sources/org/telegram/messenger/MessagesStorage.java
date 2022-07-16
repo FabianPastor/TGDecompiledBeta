@@ -19193,7 +19193,7 @@ public class MessagesStorage extends BaseController {
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v13, resolved type: org.telegram.SQLite.SQLitePreparedStatement} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v15, resolved type: org.telegram.SQLite.SQLiteCursor} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v18, resolved type: org.telegram.SQLite.SQLitePreparedStatement} */
-    /* JADX WARNING: type inference failed for: r5v0, types: [org.telegram.SQLite.SQLitePreparedStatement, long[]] */
+    /* JADX WARNING: type inference failed for: r5v0, types: [long[], org.telegram.SQLite.SQLitePreparedStatement] */
     /* JADX WARNING: type inference failed for: r5v5 */
     /* JADX WARNING: type inference failed for: r5v9 */
     /* JADX WARNING: type inference failed for: r5v10 */
@@ -21593,12 +21593,12 @@ public class MessagesStorage extends BaseController {
             TLRPC$MessageMedia tLRPC$MessageMedia = tLRPC$Message.media;
             if (tLRPC$MessageMedia instanceof TLRPC$TL_messageMediaUnsupported_old) {
                 if (tLRPC$MessageMedia.bytes.length == 0) {
-                    tLRPC$MessageMedia.bytes = Utilities.intToBytes(143);
+                    tLRPC$MessageMedia.bytes = Utilities.intToBytes(144);
                 }
             } else if (tLRPC$MessageMedia instanceof TLRPC$TL_messageMediaUnsupported) {
                 TLRPC$TL_messageMediaUnsupported_old tLRPC$TL_messageMediaUnsupported_old = new TLRPC$TL_messageMediaUnsupported_old();
                 tLRPC$Message.media = tLRPC$TL_messageMediaUnsupported_old;
-                tLRPC$TL_messageMediaUnsupported_old.bytes = Utilities.intToBytes(143);
+                tLRPC$TL_messageMediaUnsupported_old.bytes = Utilities.intToBytes(144);
                 tLRPC$Message.flags |= 512;
             }
         }
@@ -25142,11 +25142,11 @@ public class MessagesStorage extends BaseController {
             return
         L_0x0023:
             java.lang.String r8 = "SavedMessages"
-            r9 = 2131628077(0x7f0e102d, float:1.8883436E38)
+            r9 = 2131628127(0x7f0e105f, float:1.8883538E38)
             java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r8, r9)     // Catch:{ Exception -> 0x06c9 }
             java.lang.String r8 = r8.toLowerCase()     // Catch:{ Exception -> 0x06c9 }
             java.lang.String r9 = "saved messages"
-            r10 = 2131627920(0x7f0e0var_, float:1.8883118E38)
+            r10 = 2131627970(0x7f0e0fc2, float:1.888322E38)
             java.lang.String r11 = org.telegram.messenger.LocaleController.getString(r4, r10)     // Catch:{ Exception -> 0x06c9 }
             java.lang.String r11 = r11.toLowerCase()     // Catch:{ Exception -> 0x06c9 }
             java.lang.String r12 = "replies"
@@ -25322,7 +25322,7 @@ public class MessagesStorage extends BaseController {
             r7.<init>()     // Catch:{ Exception -> 0x06c9 }
             r7.date = r4     // Catch:{ Exception -> 0x06c9 }
             r4 = r21
-            r8 = 2131627920(0x7f0e0var_, float:1.8883118E38)
+            r8 = 2131627970(0x7f0e0fc2, float:1.888322E38)
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r4, r8)     // Catch:{ Exception -> 0x06c9 }
             r7.name = r4     // Catch:{ Exception -> 0x06c9 }
             r7.object = r6     // Catch:{ Exception -> 0x06c9 }

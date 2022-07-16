@@ -73,6 +73,7 @@ public class TextInfoPrivacyCell extends FrameLayout {
         this.textView.setImportantForAccessibility(2);
         float f = (float) i;
         addView(this.textView, LayoutHelper.createFrame(-1, -2.0f, (!LocaleController.isRTL ? 3 : i2) | 48, f, 0.0f, f, 0.0f));
+        setWillNotDraw(false);
     }
 
     /* access modifiers changed from: protected */

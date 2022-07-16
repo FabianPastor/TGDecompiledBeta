@@ -891,7 +891,7 @@ public class GroupCallUserCell extends FrameLayout {
             if (r5 == 0) goto L_0x01a8
             org.telegram.ui.ActionBar.SimpleTextView[] r5 = r0.statusTextView
             r5 = r5[r15]
-            r10 = 2131628543(0x7f0e11ff, float:1.8884382E38)
+            r10 = 2131628593(0x7f0e1231, float:1.8884483E38)
             java.lang.String r11 = "TapToAddPhotoOrBio"
             java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r11, r10)
             r5.setText(r10)
@@ -899,7 +899,7 @@ public class GroupCallUserCell extends FrameLayout {
         L_0x01a8:
             org.telegram.ui.ActionBar.SimpleTextView[] r5 = r0.statusTextView
             r5 = r5[r15]
-            r10 = 2131628544(0x7f0e1200, float:1.8884384E38)
+            r10 = 2131628594(0x7f0e1232, float:1.8884485E38)
             java.lang.String r11 = "TapToAddPhotoOrDescription"
             java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r11, r10)
             r5.setText(r10)
@@ -916,7 +916,7 @@ public class GroupCallUserCell extends FrameLayout {
             if (r5 == 0) goto L_0x01dd
             org.telegram.ui.ActionBar.SimpleTextView[] r5 = r0.statusTextView
             r5 = r5[r15]
-            r10 = 2131628540(0x7f0e11fc, float:1.8884376E38)
+            r10 = 2131628590(0x7f0e122e, float:1.8884477E38)
             java.lang.String r11 = "TapToAddBio"
             java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r11, r10)
             r5.setText(r10)
@@ -924,7 +924,7 @@ public class GroupCallUserCell extends FrameLayout {
         L_0x01dd:
             org.telegram.ui.ActionBar.SimpleTextView[] r5 = r0.statusTextView
             r5 = r5[r15]
-            r10 = 2131628541(0x7f0e11fd, float:1.8884378E38)
+            r10 = 2131628591(0x7f0e122f, float:1.888448E38)
             java.lang.String r11 = "TapToAddDescription"
             java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r11, r10)
             r5.setText(r10)
@@ -940,7 +940,7 @@ public class GroupCallUserCell extends FrameLayout {
             if (r5 != 0) goto L_0x021d
             org.telegram.ui.ActionBar.SimpleTextView[] r5 = r0.statusTextView
             r5 = r5[r15]
-            r10 = 2131628542(0x7f0e11fe, float:1.888438E38)
+            r10 = 2131628592(0x7f0e1230, float:1.8884481E38)
             java.lang.String r11 = "TapToAddPhoto"
             java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r11, r10)
             r5.setText(r10)
@@ -953,7 +953,7 @@ public class GroupCallUserCell extends FrameLayout {
         L_0x021d:
             org.telegram.ui.ActionBar.SimpleTextView[] r5 = r0.statusTextView
             r5 = r5[r15]
-            r10 = 2131628652(0x7f0e126c, float:1.8884603E38)
+            r10 = 2131628706(0x7f0e12a2, float:1.8884712E38)
             java.lang.String r11 = "ThisIsYou"
             java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r11, r10)
             r5.setText(r10)
@@ -1069,7 +1069,7 @@ public class GroupCallUserCell extends FrameLayout {
             r13.setLeftDrawable((android.graphics.drawable.Drawable) r14)
             org.telegram.ui.ActionBar.SimpleTextView[] r13 = r0.statusTextView
             r13 = r13[r7]
-            r14 = 2131628395(0x7f0e116b, float:1.8884081E38)
+            r14 = 2131628445(0x7f0e119d, float:1.8884183E38)
             java.lang.Object[] r15 = new java.lang.Object[r7]
             if (r2 >= r12) goto L_0x0315
             r11 = 1
@@ -1086,7 +1086,7 @@ public class GroupCallUserCell extends FrameLayout {
             r2.setLeftDrawable((android.graphics.drawable.Drawable) r10)
             org.telegram.ui.ActionBar.SimpleTextView[] r2 = r0.statusTextView
             r2 = r2[r7]
-            r11 = 2131628394(0x7f0e116a, float:1.888408E38)
+            r11 = 2131628444(0x7f0e119c, float:1.888418E38)
             java.lang.String r12 = "Speaking"
             java.lang.String r11 = org.telegram.messenger.LocaleController.getString(r12, r11)
             r2.setText(r11)

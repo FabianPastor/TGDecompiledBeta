@@ -12,10 +12,11 @@ public class TLRPC$TL_userFull extends TLRPC$UserFull {
         this.phone_calls_private = (readInt32 & 32) != 0;
         this.can_pin_message = (readInt32 & 128) != 0;
         this.has_scheduled = (readInt32 & 4096) != 0;
-        if ((readInt32 & 8192) != 0) {
+        this.video_calls_available = (readInt32 & 8192) != 0;
+        if ((readInt32 & 1048576) != 0) {
             z2 = true;
         }
-        this.video_calls_available = z2;
+        this.voice_messages_forbidden = z2;
         this.id = abstractSerializedData.readInt64(z);
         if ((this.flags & 2) != 0) {
             this.about = abstractSerializedData.readString(z);
@@ -66,7 +67,9 @@ public class TLRPC$TL_userFull extends TLRPC$UserFull {
         this.flags = i5;
         int i6 = this.video_calls_available ? i5 | 8192 : i5 & -8193;
         this.flags = i6;
-        abstractSerializedData.writeInt32(i6);
+        int i7 = this.voice_messages_forbidden ? i6 | 1048576 : i6 & -1048577;
+        this.flags = i7;
+        abstractSerializedData.writeInt32(i7);
         abstractSerializedData.writeInt64(this.id);
         if ((this.flags & 2) != 0) {
             abstractSerializedData.writeString(this.about);

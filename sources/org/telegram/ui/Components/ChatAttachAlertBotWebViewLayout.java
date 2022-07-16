@@ -4,6 +4,7 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.ValueAnimator;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.res.Configuration;
 import android.graphics.Canvas;
 import android.graphics.Paint;
@@ -16,6 +17,7 @@ import android.view.View;
 import android.view.ViewConfiguration;
 import android.webkit.WebView;
 import android.widget.FrameLayout;
+import android.widget.TextView;
 import androidx.core.math.MathUtils;
 import androidx.core.view.GestureDetectorCompat;
 import androidx.dynamicanimation.animation.DynamicAnimation;
@@ -26,6 +28,7 @@ import androidx.recyclerview.widget.ChatListItemAnimator;
 import java.util.Iterator;
 import org.json.JSONObject;
 import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.ContactsController;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.GenericProvider;
 import org.telegram.messenger.LocaleController;
@@ -43,10 +46,12 @@ import org.telegram.tgnet.TLRPC$TL_error;
 import org.telegram.tgnet.TLRPC$TL_messages_prolongWebView;
 import org.telegram.tgnet.TLRPC$TL_messages_requestWebView;
 import org.telegram.tgnet.TLRPC$TL_webViewResultUrl;
+import org.telegram.tgnet.TLRPC$User;
 import org.telegram.ui.ActionBar.ActionBar;
 import org.telegram.ui.ActionBar.ActionBarMenu;
 import org.telegram.ui.ActionBar.ActionBarMenuItem;
 import org.telegram.ui.ActionBar.ActionBarMenuSubItem;
+import org.telegram.ui.ActionBar.AlertDialog;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.ChatActivity;
@@ -67,10 +72,11 @@ public class ChatAttachAlertBotWebViewLayout extends ChatAttachAlert.AttachAlert
     public boolean isBotButtonAvailable;
     /* access modifiers changed from: private */
     public int measureOffsetY;
+    private boolean needCloseConfirmation;
     private boolean needReload;
     private ActionBarMenuItem otherItem;
     private long peerId;
-    private Runnable pollRunnable = new ChatAttachAlertBotWebViewLayout$$ExternalSyntheticLambda4(this);
+    private Runnable pollRunnable = new ChatAttachAlertBotWebViewLayout$$ExternalSyntheticLambda5(this);
     /* access modifiers changed from: private */
     public WebProgressView progressView;
     private long queryId;
@@ -114,13 +120,13 @@ public class ChatAttachAlertBotWebViewLayout extends ChatAttachAlert.AttachAlert
                 tLRPC$TL_messages_prolongWebView.send_as = MessagesController.getInstance(this.currentAccount).getInputPeer(tLRPC$Peer);
                 tLRPC$TL_messages_prolongWebView.flags |= 8192;
             }
-            ConnectionsManager.getInstance(this.currentAccount).sendRequest(tLRPC$TL_messages_prolongWebView, new ChatAttachAlertBotWebViewLayout$$ExternalSyntheticLambda11(this));
+            ConnectionsManager.getInstance(this.currentAccount).sendRequest(tLRPC$TL_messages_prolongWebView, new ChatAttachAlertBotWebViewLayout$$ExternalSyntheticLambda12(this));
         }
     }
 
     /* access modifiers changed from: private */
     public /* synthetic */ void lambda$new$1(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        AndroidUtilities.runOnUIThread(new ChatAttachAlertBotWebViewLayout$$ExternalSyntheticLambda9(this, tLRPC$TL_error));
+        AndroidUtilities.runOnUIThread(new ChatAttachAlertBotWebViewLayout$$ExternalSyntheticLambda10(this, tLRPC$TL_error));
     }
 
     /* access modifiers changed from: private */
@@ -145,8 +151,8 @@ public class ChatAttachAlertBotWebViewLayout extends ChatAttachAlert.AttachAlert
         this.parentAlert.actionBar.setActionBarMenuOnItemClick(new ActionBar.ActionBarMenuOnItemClick() {
             public void onItemClick(int i) {
                 if (i == -1) {
-                    if (!ChatAttachAlertBotWebViewLayout.this.onBackPressed()) {
-                        ChatAttachAlertBotWebViewLayout.this.parentAlert.dismiss();
+                    if (!ChatAttachAlertBotWebViewLayout.this.webViewContainer.onBackPressed()) {
+                        ChatAttachAlertBotWebViewLayout.this.onCheckDismissByUser();
                     }
                 } else if (i == NUM) {
                     Bundle bundle = new Bundle();
@@ -196,15 +202,15 @@ public class ChatAttachAlertBotWebViewLayout extends ChatAttachAlert.AttachAlert
         };
         this.swipeContainer = r8;
         r8.addView(this.webViewContainer, LayoutHelper.createFrame(-1, -1.0f));
-        this.swipeContainer.setScrollListener(new ChatAttachAlertBotWebViewLayout$$ExternalSyntheticLambda6(this));
-        this.swipeContainer.setScrollEndListener(new ChatAttachAlertBotWebViewLayout$$ExternalSyntheticLambda7(this));
-        this.swipeContainer.setDelegate(new ChatAttachAlertBotWebViewLayout$$ExternalSyntheticLambda13(this));
-        this.swipeContainer.setIsKeyboardVisible(new ChatAttachAlertBotWebViewLayout$$ExternalSyntheticLambda10(this));
+        this.swipeContainer.setScrollListener(new ChatAttachAlertBotWebViewLayout$$ExternalSyntheticLambda7(this));
+        this.swipeContainer.setScrollEndListener(new ChatAttachAlertBotWebViewLayout$$ExternalSyntheticLambda8(this));
+        this.swipeContainer.setDelegate(new ChatAttachAlertBotWebViewLayout$$ExternalSyntheticLambda14(this));
+        this.swipeContainer.setIsKeyboardVisible(new ChatAttachAlertBotWebViewLayout$$ExternalSyntheticLambda11(this));
         addView(this.swipeContainer, LayoutHelper.createFrame(-1, -1.0f));
         WebProgressView webProgressView = new WebProgressView(context, resourcesProvider);
         this.progressView = webProgressView;
         addView(webProgressView, LayoutHelper.createFrame(-1, -2.0f, 80, 0.0f, 0.0f, 0.0f, 84.0f));
-        this.webViewContainer.setWebViewProgressListener(new ChatAttachAlertBotWebViewLayout$$ExternalSyntheticLambda2(this));
+        this.webViewContainer.setWebViewProgressListener(new ChatAttachAlertBotWebViewLayout$$ExternalSyntheticLambda3(this));
         NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.didSetNewTheme);
     }
 
@@ -222,7 +228,9 @@ public class ChatAttachAlertBotWebViewLayout extends ChatAttachAlert.AttachAlert
 
     /* access modifiers changed from: private */
     public /* synthetic */ void lambda$new$5() {
-        this.parentAlert.dismiss();
+        if (!onCheckDismissByUser()) {
+            this.swipeContainer.stickTo(0.0f);
+        }
     }
 
     /* access modifiers changed from: private */
@@ -250,6 +258,33 @@ public class ChatAttachAlertBotWebViewLayout extends ChatAttachAlert.AttachAlert
     /* access modifiers changed from: private */
     public /* synthetic */ void lambda$new$7(ValueAnimator valueAnimator) {
         this.progressView.setAlpha(((Float) valueAnimator.getAnimatedValue()).floatValue());
+    }
+
+    public void setNeedCloseConfirmation(boolean z) {
+        this.needCloseConfirmation = z;
+    }
+
+    /* access modifiers changed from: package-private */
+    public boolean onDismissWithTouchOutside() {
+        onCheckDismissByUser();
+        return false;
+    }
+
+    public boolean onCheckDismissByUser() {
+        if (this.needCloseConfirmation) {
+            TLRPC$User user = MessagesController.getInstance(this.currentAccount).getUser(Long.valueOf(this.botId));
+            AlertDialog create = new AlertDialog.Builder(getContext()).setTitle(user != null ? ContactsController.formatName(user.first_name, user.last_name) : null).setMessage(LocaleController.getString(NUM)).setPositiveButton(LocaleController.getString(NUM), new ChatAttachAlertBotWebViewLayout$$ExternalSyntheticLambda2(this)).setNegativeButton(LocaleController.getString(NUM), (DialogInterface.OnClickListener) null).create();
+            create.show();
+            ((TextView) create.getButton(-1)).setTextColor(getThemedColor("dialogTextRed"));
+            return false;
+        }
+        this.parentAlert.dismiss();
+        return true;
+    }
+
+    /* access modifiers changed from: private */
+    public /* synthetic */ void lambda$onCheckDismissByUser$9(DialogInterface dialogInterface, int i) {
+        this.parentAlert.dismiss();
     }
 
     public void setCustomBackground(int i) {
@@ -333,7 +368,7 @@ public class ChatAttachAlertBotWebViewLayout extends ChatAttachAlert.AttachAlert
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$onPanTransitionStart$9(ValueAnimator valueAnimator) {
+    public /* synthetic */ void lambda$onPanTransitionStart$10(ValueAnimator valueAnimator) {
         int intValue = ((Integer) valueAnimator.getAnimatedValue()).intValue();
         if (this.webViewContainer.getWebView() != null) {
             this.webViewContainer.getWebView().setScrollY(intValue);
@@ -369,11 +404,11 @@ public class ChatAttachAlertBotWebViewLayout extends ChatAttachAlert.AttachAlert
             requestEnableKeyboard();
         }
         this.swipeContainer.setSwipeOffsetAnimationDisallowed(false);
-        AndroidUtilities.runOnUIThread(new ChatAttachAlertBotWebViewLayout$$ExternalSyntheticLambda5(this));
+        AndroidUtilities.runOnUIThread(new ChatAttachAlertBotWebViewLayout$$ExternalSyntheticLambda6(this));
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$onShown$10() {
+    public /* synthetic */ void lambda$onShown$11() {
         this.webViewContainer.restoreButtonData();
     }
 
@@ -387,7 +422,7 @@ public class ChatAttachAlertBotWebViewLayout extends ChatAttachAlert.AttachAlert
             return;
         }
         AndroidUtilities.hideKeyboard(this.parentAlert.baseFragment.getFragmentView());
-        AndroidUtilities.runOnUIThread(new ChatAttachAlertBotWebViewLayout$$ExternalSyntheticLambda3(this), 250);
+        AndroidUtilities.runOnUIThread(new ChatAttachAlertBotWebViewLayout$$ExternalSyntheticLambda4(this), 250);
     }
 
     /* access modifiers changed from: package-private */
@@ -454,17 +489,17 @@ public class ChatAttachAlertBotWebViewLayout extends ChatAttachAlert.AttachAlert
         } catch (Exception e) {
             FileLog.e((Throwable) e);
         }
-        ConnectionsManager.getInstance(i).sendRequest(tLRPC$TL_messages_requestWebView, new ChatAttachAlertBotWebViewLayout$$ExternalSyntheticLambda12(this, i));
+        ConnectionsManager.getInstance(i).sendRequest(tLRPC$TL_messages_requestWebView, new ChatAttachAlertBotWebViewLayout$$ExternalSyntheticLambda13(this, i));
         NotificationCenter.getInstance(i).addObserver(this, NotificationCenter.webViewResultSent);
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$requestWebView$12(int i, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        AndroidUtilities.runOnUIThread(new ChatAttachAlertBotWebViewLayout$$ExternalSyntheticLambda8(this, tLObject, i));
+    public /* synthetic */ void lambda$requestWebView$13(int i, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+        AndroidUtilities.runOnUIThread(new ChatAttachAlertBotWebViewLayout$$ExternalSyntheticLambda9(this, tLObject, i));
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$requestWebView$11(TLObject tLObject, int i) {
+    public /* synthetic */ void lambda$requestWebView$12(TLObject tLObject, int i) {
         if (tLObject instanceof TLRPC$TL_webViewResultUrl) {
             TLRPC$TL_webViewResultUrl tLRPC$TL_webViewResultUrl = (TLRPC$TL_webViewResultUrl) tLObject;
             this.queryId = tLRPC$TL_webViewResultUrl.query_id;
@@ -571,7 +606,11 @@ public class ChatAttachAlertBotWebViewLayout extends ChatAttachAlert.AttachAlert
 
     /* access modifiers changed from: package-private */
     public boolean onBackPressed() {
-        return this.webViewContainer.onBackPressed();
+        if (this.webViewContainer.onBackPressed()) {
+            return true;
+        }
+        onCheckDismissByUser();
+        return true;
     }
 
     public void requestLayout() {

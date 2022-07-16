@@ -55,8 +55,8 @@ public class DocumentObject {
 
     public static SvgHelper.SvgDrawable getSvgThumb(ArrayList<TLRPC$PhotoSize> arrayList, String str, float f) {
         int size = arrayList.size();
-        int i = 0;
         TLRPC$TL_photoPathSize tLRPC$TL_photoPathSize = null;
+        int i = 0;
         int i2 = 0;
         int i3 = 0;
         while (i < size) {
@@ -72,7 +72,7 @@ public class DocumentObject {
             } else {
                 SvgHelper.SvgDrawable drawableByPath = SvgHelper.getDrawableByPath(SvgHelper.decompress(tLRPC$TL_photoPathSize.bytes), i2, i3);
                 if (drawableByPath != null) {
-                    drawableByPath.setupGradient(str, f);
+                    drawableByPath.setupGradient(str, f, false);
                 }
                 return drawableByPath;
             }
@@ -93,7 +93,7 @@ public class DocumentObject {
         svgDrawable.paints.put(path, new Paint(1));
         svgDrawable.width = 512;
         svgDrawable.height = 512;
-        svgDrawable.setupGradient(str, f);
+        svgDrawable.setupGradient(str, f, false);
         return svgDrawable;
     }
 
@@ -106,21 +106,21 @@ public class DocumentObject {
         }
         int size = tLRPC$Document.thumbs.size();
         int i3 = 0;
-        int i4 = 0;
         while (true) {
-            if (i4 >= size) {
+            if (i3 >= size) {
                 break;
             }
-            TLRPC$PhotoSize tLRPC$PhotoSize = tLRPC$Document.thumbs.get(i4);
+            TLRPC$PhotoSize tLRPC$PhotoSize = tLRPC$Document.thumbs.get(i3);
             if (tLRPC$PhotoSize instanceof TLRPC$TL_photoPathSize) {
                 int size2 = tLRPC$Document.attributes.size();
+                int i4 = 0;
                 while (true) {
                     i = 512;
-                    if (i3 >= size2) {
+                    if (i4 >= size2) {
                         i2 = 512;
                         break;
                     }
-                    TLRPC$DocumentAttribute tLRPC$DocumentAttribute = tLRPC$Document.attributes.get(i3);
+                    TLRPC$DocumentAttribute tLRPC$DocumentAttribute = tLRPC$Document.attributes.get(i4);
                     if (tLRPC$DocumentAttribute instanceof TLRPC$TL_documentAttributeImageSize) {
                         int i5 = tLRPC$DocumentAttribute.w;
                         int i6 = tLRPC$DocumentAttribute.h;
@@ -128,13 +128,13 @@ public class DocumentObject {
                         i2 = i6;
                         break;
                     }
-                    i3++;
+                    i4++;
                 }
                 if (i != 0 && i2 != 0 && (svgDrawable = SvgHelper.getDrawableByPath(SvgHelper.decompress(tLRPC$PhotoSize.bytes), (int) (((float) i) * f2), (int) (((float) i2) * f2))) != null) {
-                    svgDrawable.setupGradient(str, f);
+                    svgDrawable.setupGradient(str, f, false);
                 }
             } else {
-                i4++;
+                i3++;
             }
         }
         return svgDrawable;

@@ -190,7 +190,7 @@ public class PhotoAlbumPickerActivity extends BaseFragment implements Notificati
         ActionBarMenuItem addItem = createMenu.addItem(0, NUM);
         addItem.setContentDescription(LocaleController.getString("AccDescrMoreOptions", NUM));
         addItem.addSubItem(1, NUM, LocaleController.getString("OpenInExternalApp", NUM));
-        AnonymousClass2 r2 = new SizeNotifierFrameLayout(context2) {
+        AnonymousClass2 r1 = new SizeNotifierFrameLayout(context2) {
             private boolean ignoreLayout;
             private int lastNotifyWidth;
 
@@ -383,8 +383,8 @@ public class PhotoAlbumPickerActivity extends BaseFragment implements Notificati
                 }
             }
         };
-        this.sizeNotifierFrameLayout = r2;
-        r2.setBackgroundColor(Theme.getColor("dialogBackground"));
+        this.sizeNotifierFrameLayout = r1;
+        r1.setBackgroundColor(Theme.getColor("dialogBackground"));
         this.fragmentView = this.sizeNotifierFrameLayout;
         this.actionBar.setTitle(LocaleController.getString("Gallery", NUM));
         RecyclerListView recyclerListView = new RecyclerListView(context2);
@@ -433,7 +433,7 @@ public class PhotoAlbumPickerActivity extends BaseFragment implements Notificati
         if (editTextEmoji != null) {
             editTextEmoji.onDestroy();
         }
-        this.commentTextView = new EditTextEmoji(context2, this.sizeNotifierFrameLayout, (BaseFragment) null, 1);
+        this.commentTextView = new EditTextEmoji(context, this.sizeNotifierFrameLayout, (BaseFragment) null, 1, false);
         this.commentTextView.setFilters(new InputFilter[]{new InputFilter.LengthFilter(MessagesController.getInstance(UserConfig.selectedAccount).maxCaptionLength)});
         this.commentTextView.setHint(LocaleController.getString("AddCaption", NUM));
         EditTextCaption editText = this.commentTextView.getEditText();
@@ -444,7 +444,7 @@ public class PhotoAlbumPickerActivity extends BaseFragment implements Notificati
         if (charSequence != null) {
             this.commentTextView.setText(charSequence);
         }
-        AnonymousClass3 r22 = new FrameLayout(context2) {
+        AnonymousClass3 r12 = new FrameLayout(context2) {
             public void onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo accessibilityNodeInfo) {
                 super.onInitializeAccessibilityNodeInfo(accessibilityNodeInfo);
                 accessibilityNodeInfo.setText(LocaleController.formatPluralString("AccDescrSendPhotos", PhotoAlbumPickerActivity.this.selectedPhotos.size(), new Object[0]));
@@ -453,8 +453,8 @@ public class PhotoAlbumPickerActivity extends BaseFragment implements Notificati
                 accessibilityNodeInfo.setClickable(true);
             }
         };
-        this.writeButtonContainer = r22;
-        r22.setFocusable(true);
+        this.writeButtonContainer = r12;
+        r12.setFocusable(true);
         this.writeButtonContainer.setFocusableInTouchMode(true);
         this.writeButtonContainer.setVisibility(4);
         this.writeButtonContainer.setScaleX(0.2f);
@@ -495,7 +495,7 @@ public class PhotoAlbumPickerActivity extends BaseFragment implements Notificati
         this.writeButton.setOnLongClickListener(new PhotoAlbumPickerActivity$$ExternalSyntheticLambda2(this));
         this.textPaint.setTextSize((float) AndroidUtilities.dp(12.0f));
         this.textPaint.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
-        AnonymousClass6 r23 = new View(context2) {
+        AnonymousClass6 r13 = new View(context2) {
             /* access modifiers changed from: protected */
             public void onDraw(Canvas canvas) {
                 String format = String.format("%d", new Object[]{Integer.valueOf(Math.max(1, PhotoAlbumPickerActivity.this.selectedPhotosOrder.size()))});
@@ -516,8 +516,8 @@ public class PhotoAlbumPickerActivity extends BaseFragment implements Notificati
                 canvas.drawText(format, (float) (measuredWidth - (ceil / 2)), (float) AndroidUtilities.dp(16.2f), PhotoAlbumPickerActivity.this.textPaint);
             }
         };
-        this.selectedCountView = r23;
-        r23.setAlpha(0.0f);
+        this.selectedCountView = r13;
+        r13.setAlpha(0.0f);
         this.selectedCountView.setScaleX(0.2f);
         this.selectedCountView.setScaleY(0.2f);
         this.sizeNotifierFrameLayout.addView(this.selectedCountView, LayoutHelper.createFrame(42, 24.0f, 85, 0.0f, 0.0f, -2.0f, 9.0f));

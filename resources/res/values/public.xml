@@ -765,6 +765,7 @@
     <public type="drawable" name="msg_gallery" id="NUM" />
     <public type="drawable" name="msg_gif" id="NUM" />
     <public type="drawable" name="msg_gif_add" id="NUM" />
+    <public type="drawable" name="msg_gift_premium" id="NUM" />
     <public type="drawable" name="msg_go_down" id="NUM" />
     <public type="drawable" name="msg_go_up" id="NUM" />
     <public type="drawable" name="msg_groups" id="NUM" />
@@ -888,6 +889,7 @@
     <public type="drawable" name="msg_premium_ads" id="NUM" />
     <public type="drawable" name="msg_premium_avatar" id="NUM" />
     <public type="drawable" name="msg_premium_badge" id="NUM" />
+    <public type="drawable" name="msg_premium_emoji" id="NUM" />
     <public type="drawable" name="msg_premium_icons" id="NUM" />
     <public type="drawable" name="msg_premium_limits" id="NUM" />
     <public type="drawable" name="msg_premium_liststar" id="NUM" />
@@ -1625,6 +1627,7 @@
     <public type="raw" name="folder_in" id="NUM" />
     <public type="raw" name="folder_out" id="NUM" />
     <public type="raw" name="forward" id="NUM" />
+    <public type="raw" name="gif_to_keyboard" id="NUM" />
     <public type="raw" name="gigagroup" id="NUM" />
     <public type="raw" name="gigagroup_convert" id="NUM" />
     <public type="raw" name="group_pip_delete_icon" id="NUM" />
@@ -1650,6 +1653,9 @@
     <public type="raw" name="incoming_calls" id="NUM" />
     <public type="raw" name="ipad_30" id="NUM" />
     <public type="raw" name="iphone_30" id="NUM" />
+    <public type="raw" name="keyboard_to_gif" id="NUM" />
+    <public type="raw" name="keyboard_to_smile" id="NUM" />
+    <public type="raw" name="keyboard_to_sticker" id="NUM" />
     <public type="raw" name="linkbroken" id="NUM" />
     <public type="raw" name="linux_30" id="NUM" />
     <public type="raw" name="mac_30" id="NUM" />
@@ -1675,6 +1681,7 @@
     <public type="raw" name="pip_video_request" id="NUM" />
     <public type="raw" name="pip_voice_request" id="NUM" />
     <public type="raw" name="player_prev" id="NUM" />
+    <public type="raw" name="premium_gift" id="NUM" />
     <public type="raw" name="premium_object_adsbubble" id="NUM" />
     <public type="raw" name="premium_object_bubble" id="NUM" />
     <public type="raw" name="premium_object_fire" id="NUM" />
@@ -1682,6 +1689,8 @@
     <public type="raw" name="premium_object_like" id="NUM" />
     <public type="raw" name="premium_object_noads" id="NUM" />
     <public type="raw" name="premium_object_settings" id="NUM" />
+    <public type="raw" name="premium_object_smile1" id="NUM" />
+    <public type="raw" name="premium_object_smile2" id="NUM" />
     <public type="raw" name="premium_object_star2" id="NUM" />
     <public type="raw" name="premium_object_user" id="NUM" />
     <public type="raw" name="premium_object_video" id="NUM" />
@@ -1700,6 +1709,7 @@
     <public type="raw" name="shared_link_enter" id="NUM" />
     <public type="raw" name="silent_mute" id="NUM" />
     <public type="raw" name="silent_unmute" id="NUM" />
+    <public type="raw" name="smile_to_keyboard" id="NUM" />
     <public type="raw" name="sms_incoming_info" id="NUM" />
     <public type="raw" name="sound_download" id="NUM" />
     <public type="raw" name="sound_in" id="NUM" />
@@ -1710,6 +1720,7 @@
     <public type="raw" name="star_loader" id="NUM" />
     <public type="raw" name="start_texture" id="NUM" />
     <public type="raw" name="statistic_preload" id="NUM" />
+    <public type="raw" name="sticker_to_keyboard" id="NUM" />
     <public type="raw" name="sun" id="NUM" />
     <public type="raw" name="sun_outline" id="NUM" />
     <public type="raw" name="swipe_delete" id="NUM" />
@@ -1746,10 +1757,12 @@
     <public type="raw" name="utyan_private" id="NUM" />
     <public type="raw" name="utyan_saved_messages" id="NUM" />
     <public type="raw" name="utyan_schedule" id="NUM" />
+    <public type="raw" name="video_to_voice" id="NUM" />
     <public type="raw" name="voice_mini" id="NUM" />
     <public type="raw" name="voice_muted" id="NUM" />
     <public type="raw" name="voice_outlined" id="NUM" />
     <public type="raw" name="voice_outlined2" id="NUM" />
+    <public type="raw" name="voice_to_video" id="NUM" />
     <public type="raw" name="voicechat_connecting" id="NUM" />
     <public type="raw" name="voicechat_join" id="NUM" />
     <public type="raw" name="voicechat_leave" id="NUM" />
@@ -2013,6 +2026,11 @@
     <public type="string" name="ActionForwardsEnabledGroup" id="NUM" />
     <public type="string" name="ActionForwardsRestrictedChannel" id="NUM" />
     <public type="string" name="ActionForwardsRestrictedGroup" id="NUM" />
+    <public type="string" name="ActionGiftInbound" id="NUM" />
+    <public type="string" name="ActionGiftOutbound" id="NUM" />
+    <public type="string" name="ActionGiftPremiumSubtitle" id="NUM" />
+    <public type="string" name="ActionGiftPremiumTitle" id="NUM" />
+    <public type="string" name="ActionGiftPremiumView" id="NUM" />
     <public type="string" name="ActionGroupCallEndedBy" id="NUM" />
     <public type="string" name="ActionGroupCallEndedByYou" id="NUM" />
     <public type="string" name="ActionGroupCallInvited" id="NUM" />
@@ -2102,6 +2120,8 @@
     <public type="string" name="AddContactFullChat" id="NUM" />
     <public type="string" name="AddContactPhonebookTitle" id="NUM" />
     <public type="string" name="AddContactTitle" id="NUM" />
+    <public type="string" name="AddEmojiInstalled" id="NUM" />
+    <public type="string" name="AddEmojiInstalledInfo" id="NUM" />
     <public type="string" name="AddExceptions" id="NUM" />
     <public type="string" name="AddMasks" id="NUM" />
     <public type="string" name="AddMasksInstalled" id="NUM" />
@@ -2577,6 +2597,8 @@
     <public type="string" name="BotStatusRead" id="NUM" />
     <public type="string" name="BotStop" id="NUM" />
     <public type="string" name="BotUnblock" id="NUM" />
+    <public type="string" name="BotWebViewChangesMayNotBeSaved" id="NUM" />
+    <public type="string" name="BotWebViewCloseAnyway" id="NUM" />
     <public type="string" name="BotWebViewDeleteBot" id="NUM" />
     <public type="string" name="BotWebViewFileChooserTitle" id="NUM" />
     <public type="string" name="BotWebViewNotAvailablePlaceholder" id="NUM" />
@@ -3444,7 +3466,29 @@
     <public type="string" name="Emoji6" id="NUM" />
     <public type="string" name="Emoji7" id="NUM" />
     <public type="string" name="Emoji8" id="NUM" />
+    <public type="string" name="EmojiArchived" id="NUM" />
+    <public type="string" name="EmojiArchivedInfo" id="NUM" />
+    <public type="string" name="EmojiCountButton_few" id="NUM" />
+    <public type="string" name="EmojiCountButton_many" id="NUM" />
+    <public type="string" name="EmojiCountButton_one" id="NUM" />
+    <public type="string" name="EmojiCountButton_other" id="NUM" />
+    <public type="string" name="EmojiCountButton_two" id="NUM" />
+    <public type="string" name="EmojiCountButton_zero" id="NUM" />
+    <public type="string" name="EmojiCount_few" id="NUM" />
+    <public type="string" name="EmojiCount_many" id="NUM" />
+    <public type="string" name="EmojiCount_one" id="NUM" />
+    <public type="string" name="EmojiCount_other" id="NUM" />
+    <public type="string" name="EmojiCount_two" id="NUM" />
+    <public type="string" name="EmojiCount_zero" id="NUM" />
     <public type="string" name="EmojiInteractionTapHint" id="NUM" />
+    <public type="string" name="EmojiPackCount_few" id="NUM" />
+    <public type="string" name="EmojiPackCount_many" id="NUM" />
+    <public type="string" name="EmojiPackCount_one" id="NUM" />
+    <public type="string" name="EmojiPackCount_other" id="NUM" />
+    <public type="string" name="EmojiPackCount_two" id="NUM" />
+    <public type="string" name="EmojiPackCount_zero" id="NUM" />
+    <public type="string" name="EmojiRemoved" id="NUM" />
+    <public type="string" name="EmojiRemovedInfo" id="NUM" />
     <public type="string" name="EmojiSuggestions" id="NUM" />
     <public type="string" name="EmojiSuggestionsInfo" id="NUM" />
     <public type="string" name="EmojiSuggestionsUrl" id="NUM" />
@@ -3897,6 +3941,12 @@
     <public type="string" name="GifSavedHint" id="NUM" />
     <public type="string" name="GifSavedToDownloadsHint" id="NUM" />
     <public type="string" name="GifsTab2" id="NUM" />
+    <public type="string" name="GiftPremium" id="NUM" />
+    <public type="string" name="GiftPremiumListFeaturesAndTerms" id="NUM" />
+    <public type="string" name="GiftPremiumOptionDiscount" id="NUM" />
+    <public type="string" name="GiftSubscriptionFor" id="NUM" />
+    <public type="string" name="GiftTelegramPremiumDescription" id="NUM" />
+    <public type="string" name="GiftTelegramPremiumTitle" id="NUM" />
     <public type="string" name="GigagroupAlertLearnMore" id="NUM" />
     <public type="string" name="GigagroupAlertText" id="NUM" />
     <public type="string" name="GigagroupAlertTitle" id="NUM" />
@@ -4458,6 +4508,11 @@
     <public type="string" name="Members_zero" id="NUM" />
     <public type="string" name="Mention" id="NUM" />
     <public type="string" name="Message" id="NUM" />
+    <public type="string" name="MessageContainsEmojiPack" id="NUM" />
+    <public type="string" name="MessageContainsEmojiPacks_few" id="NUM" />
+    <public type="string" name="MessageContainsEmojiPacks_many" id="NUM" />
+    <public type="string" name="MessageContainsEmojiPacks_other" id="NUM" />
+    <public type="string" name="MessageContainsEmojiPacks_two" id="NUM" />
     <public type="string" name="MessageCopied" id="NUM" />
     <public type="string" name="MessageLifetime" id="NUM" />
     <public type="string" name="MessageLifetimeChanged" id="NUM" />
@@ -5425,6 +5480,7 @@
     <public type="string" name="PopupEnabled" id="NUM" />
     <public type="string" name="PopupNotification" id="NUM" />
     <public type="string" name="PostingMembers" id="NUM" />
+    <public type="string" name="PremiumMore" id="NUM" />
     <public type="string" name="PremiumPreviewAdvancedChatManagement" id="NUM" />
     <public type="string" name="PremiumPreviewAdvancedChatManagementDescription" id="NUM" />
     <public type="string" name="PremiumPreviewAnimatedProfiles" id="NUM" />
@@ -5435,6 +5491,8 @@
     <public type="string" name="PremiumPreviewAppIconDescription2" id="NUM" />
     <public type="string" name="PremiumPreviewDownloadSpeed" id="NUM" />
     <public type="string" name="PremiumPreviewDownloadSpeedDescription" id="NUM" />
+    <public type="string" name="PremiumPreviewEmoji" id="NUM" />
+    <public type="string" name="PremiumPreviewEmojiDescription" id="NUM" />
     <public type="string" name="PremiumPreviewLimits" id="NUM" />
     <public type="string" name="PremiumPreviewLimitsDescription" id="NUM" />
     <public type="string" name="PremiumPreviewNoAds" id="NUM" />
@@ -5521,6 +5579,7 @@
     <public type="string" name="PreviewForwardVideo_two" id="NUM" />
     <public type="string" name="PreviewForwardVideo_zero" id="NUM" />
     <public type="string" name="PreviousPinnedMessage" id="NUM" />
+    <public type="string" name="PricePerMonth" id="NUM" />
     <public type="string" name="PrimaryLinkHelp" id="NUM" />
     <public type="string" name="PrimaryLinkHelpChannel" id="NUM" />
     <public type="string" name="PriorityInfo" id="NUM" />
@@ -5569,6 +5628,10 @@
     <public type="string" name="PrivacySettings" id="NUM" />
     <public type="string" name="PrivacySettingsChangedAlert" id="NUM" />
     <public type="string" name="PrivacyTitle" id="NUM" />
+    <public type="string" name="PrivacyVoiceMessages" id="NUM" />
+    <public type="string" name="PrivacyVoiceMessagesInfo" id="NUM" />
+    <public type="string" name="PrivacyVoiceMessagesInfo2" id="NUM" />
+    <public type="string" name="PrivacyVoiceMessagesTitle" id="NUM" />
     <public type="string" name="PrivateShares" id="NUM" />
     <public type="string" name="ProfileJoinChannel" id="NUM" />
     <public type="string" name="ProfileJoinGroup" id="NUM" />
@@ -6407,6 +6470,10 @@
     <public type="string" name="TelegramPremiumSubtitle" id="NUM" />
     <public type="string" name="TelegramPremiumUserDialogSubtitle" id="NUM" />
     <public type="string" name="TelegramPremiumUserDialogTitle" id="NUM" />
+    <public type="string" name="TelegramPremiumUserGiftedPremiumDialogSubtitle" id="NUM" />
+    <public type="string" name="TelegramPremiumUserGiftedPremiumDialogTitle" id="NUM" />
+    <public type="string" name="TelegramPremiumUserGiftedPremiumOutboundDialogSubtitle" id="NUM" />
+    <public type="string" name="TelegramPremiumUserGiftedPremiumOutboundDialogTitle" id="NUM" />
     <public type="string" name="TelegramTones" id="NUM" />
     <public type="string" name="TelegramVersion" id="NUM" />
     <public type="string" name="Terminate" id="NUM" />
@@ -6560,7 +6627,11 @@
     <public type="string" name="UndoAllCustom" id="NUM" />
     <public type="string" name="UnhideFromTop" id="NUM" />
     <public type="string" name="UnknownError" id="NUM" />
+    <public type="string" name="Unlock" id="NUM" />
     <public type="string" name="UnlockFingerprint" id="NUM" />
+    <public type="string" name="UnlockPremiumEmoji" id="NUM" />
+    <public type="string" name="UnlockPremiumEmojiHint" id="NUM" />
+    <public type="string" name="UnlockPremiumEmojiPack" id="NUM" />
     <public type="string" name="UnlockPremiumIcons" id="NUM" />
     <public type="string" name="UnlockPremiumReactions" id="NUM" />
     <public type="string" name="UnlockPremiumReactionsDescription" id="NUM" />
@@ -6715,6 +6786,7 @@
     <public type="string" name="VideoCaption" id="NUM" />
     <public type="string" name="VideoDoesNotSupportStreaming" id="NUM" />
     <public type="string" name="VideoMessagesAutodownload" id="NUM" />
+    <public type="string" name="VideoMessagesRestrictedByPrivacy" id="NUM" />
     <public type="string" name="VideoPreview" id="NUM" />
     <public type="string" name="VideoQualityIsTooLow" id="NUM" />
     <public type="string" name="VideoSavedHint" id="NUM" />
@@ -6771,6 +6843,7 @@
     <public type="string" name="Views_two" id="NUM" />
     <public type="string" name="Views_zero" id="NUM" />
     <public type="string" name="Vignette" id="NUM" />
+    <public type="string" name="VoiceMessagesRestrictedByPrivacy" id="NUM" />
     <public type="string" name="Voice_few" id="NUM" />
     <public type="string" name="Voice_many" id="NUM" />
     <public type="string" name="Voice_one" id="NUM" />

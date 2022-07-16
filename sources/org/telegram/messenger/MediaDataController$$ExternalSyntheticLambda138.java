@@ -12,6 +12,6 @@ public final /* synthetic */ class MediaDataController$$ExternalSyntheticLambda1
     }
 
     public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        this.f$0.lambda$loadReactions$11(tLObject, tLRPC$TL_error);
+        this.f$0.lambda$getStickerSet$27(tLObject, tLRPC$TL_error);
     }
 }

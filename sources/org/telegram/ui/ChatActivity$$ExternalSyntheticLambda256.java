@@ -1,15 +1,23 @@
 package org.telegram.ui;
 
-import org.telegram.ui.PinchToZoomHelper;
+import java.util.ArrayList;
+import org.telegram.tgnet.TLRPC$User;
+import org.telegram.ui.GroupCreateActivity;
 
-public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda256 implements PinchToZoomHelper.ClipBoundsListener {
+public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda256 implements GroupCreateActivity.ContactsAddActivityDelegate {
     public final /* synthetic */ ChatActivity f$0;
+    public final /* synthetic */ long f$1;
 
-    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda256(ChatActivity chatActivity) {
+    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda256(ChatActivity chatActivity, long j) {
         this.f$0 = chatActivity;
+        this.f$1 = j;
     }
 
-    public final void getClipTopBottom(float[] fArr) {
-        this.f$0.lambda$createView$76(fArr);
+    public final void didSelectUsers(ArrayList arrayList, int i) {
+        this.f$0.lambda$createView$34(this.f$1, arrayList, i);
+    }
+
+    public /* synthetic */ void needAddBot(TLRPC$User tLRPC$User) {
+        GroupCreateActivity.ContactsAddActivityDelegate.CC.$default$needAddBot(this, tLRPC$User);
     }
 }

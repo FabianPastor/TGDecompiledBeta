@@ -81,14 +81,13 @@ public class TranscribeButton {
         this.outIconDrawable = rLottieDrawable;
         rLottieDrawable.setCurrentFrame(0);
         this.outIconDrawable.setCallback(chatMessageCell);
-        this.outIconDrawable.addParentView(chatMessageCell);
         this.outIconDrawable.setOnFinishCallback(new TranscribeButton$$ExternalSyntheticLambda5(this), 19);
         this.outIconDrawable.setAllowDecodeSingleFrame(true);
         RLottieDrawable rLottieDrawable2 = new RLottieDrawable(NUM, "transcribe_in", AndroidUtilities.dp(26.0f), AndroidUtilities.dp(26.0f));
         this.inIconDrawable = rLottieDrawable2;
         rLottieDrawable2.setCurrentFrame(0);
         this.inIconDrawable.setCallback(chatMessageCell);
-        this.inIconDrawable.addParentView(chatMessageCell);
+        this.inIconDrawable.setMasterParent(chatMessageCell);
         this.inIconDrawable.setOnFinishCallback(new TranscribeButton$$ExternalSyntheticLambda4(this), 19);
         this.inIconDrawable.setAllowDecodeSingleFrame(true);
         this.isOpen = false;
@@ -239,12 +238,12 @@ public class TranscribeButton {
             this.inIconDrawable.setLayerColor("Artboard Outlines.**", this.iconColor);
             this.inIconDrawable.commitApplyLayerColors();
             this.inIconDrawable.setAllowDecodeSingleFrame(true);
-            this.inIconDrawable.updateCurrentFrame();
+            this.inIconDrawable.updateCurrentFrame(0, false);
             this.outIconDrawable.beginApplyLayerColors();
             this.outIconDrawable.setLayerColor("Artboard Outlines.**", this.iconColor);
             this.outIconDrawable.commitApplyLayerColors();
             this.outIconDrawable.setAllowDecodeSingleFrame(true);
-            this.outIconDrawable.updateCurrentFrame();
+            this.outIconDrawable.updateCurrentFrame(0, false);
         }
         if (this.strokePaint == null) {
             Paint paint = new Paint(1);
@@ -412,7 +411,7 @@ public class TranscribeButton {
             this.lottie.setLayerColor("Comp 1.**", i);
             this.lottie.commitApplyLayerColors();
             this.lottie.setAllowDecodeSingleFrame(true);
-            this.lottie.updateCurrentFrame();
+            this.lottie.updateCurrentFrame(0, false);
         }
 
         public void draw(Canvas canvas) {

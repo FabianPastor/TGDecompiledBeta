@@ -36,10 +36,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.android.billingclient.api.BillingFlowParams;
 import com.android.billingclient.api.BillingResult;
 import com.android.billingclient.api.ProductDetails;
-import java.text.NumberFormat;
+import com.android.billingclient.api.Purchase;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Currency;
 import java.util.Iterator;
 import java.util.List;
 import org.telegram.PhoneFormat.PhoneFormat;
@@ -56,11 +55,13 @@ import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC$MessageEntity;
 import org.telegram.tgnet.TLRPC$TL_boolTrue;
+import org.telegram.tgnet.TLRPC$TL_dataJSON;
 import org.telegram.tgnet.TLRPC$TL_error;
 import org.telegram.tgnet.TLRPC$TL_help_premiumPromo;
 import org.telegram.tgnet.TLRPC$TL_help_saveAppLog;
 import org.telegram.tgnet.TLRPC$TL_inputAppEvent;
 import org.telegram.tgnet.TLRPC$TL_inputMessageEntityMentionName;
+import org.telegram.tgnet.TLRPC$TL_inputStorePaymentPremiumSubscription;
 import org.telegram.tgnet.TLRPC$TL_jsonNull;
 import org.telegram.tgnet.TLRPC$TL_jsonObject;
 import org.telegram.tgnet.TLRPC$TL_jsonObjectValue;
@@ -75,7 +76,9 @@ import org.telegram.tgnet.TLRPC$TL_messageEntityMentionName;
 import org.telegram.tgnet.TLRPC$TL_messageEntityPhone;
 import org.telegram.tgnet.TLRPC$TL_messageEntityTextUrl;
 import org.telegram.tgnet.TLRPC$TL_messageEntityUrl;
+import org.telegram.tgnet.TLRPC$TL_payments_assignPlayMarketTransaction;
 import org.telegram.tgnet.TLRPC$TL_payments_canPurchasePremium;
+import org.telegram.tgnet.TLRPC$Updates;
 import org.telegram.ui.ActionBar.ActionBar;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.Theme;
@@ -176,25 +179,27 @@ public class PremiumPreviewFragment extends BaseFragment implements Notification
                 return "advanced_chat_management";
             case 10:
                 return "app_icons";
+            case 11:
+                return "premium_emoji";
             default:
                 return null;
         }
     }
 
     /* access modifiers changed from: private */
-    public static /* synthetic */ void lambda$sentPremiumButtonClick$8(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+    public static /* synthetic */ void lambda$sentPremiumButtonClick$13(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
     }
 
     /* access modifiers changed from: private */
-    public static /* synthetic */ void lambda$sentPremiumBuyCanceled$9(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+    public static /* synthetic */ void lambda$sentPremiumBuyCanceled$14(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
     }
 
     /* access modifiers changed from: private */
-    public static /* synthetic */ void lambda$sentShowFeaturePreview$10(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+    public static /* synthetic */ void lambda$sentShowFeaturePreview$15(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
     }
 
     /* access modifiers changed from: private */
-    public static /* synthetic */ void lambda$sentShowScreenStat$7(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+    public static /* synthetic */ void lambda$sentShowScreenStat$12(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
     }
 
     public boolean isLightStatusBar() {
@@ -207,167 +212,180 @@ public class PremiumPreviewFragment extends BaseFragment implements Notification
 
     /* JADX WARNING: Can't fix incorrect switch cases order */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    public static int severStringToFeatureType(java.lang.String r13) {
+    public static int serverStringToFeatureType(java.lang.String r14) {
         /*
-            r13.hashCode()
-            int r0 = r13.hashCode()
-            r1 = 10
-            r2 = 9
-            r3 = 8
-            r4 = 7
-            r5 = 6
-            r6 = 5
-            r7 = 4
-            r8 = 3
-            r9 = 2
-            r10 = 1
-            r11 = 0
-            r12 = -1
-            switch(r0) {
-                case -2145993328: goto L_0x0090;
-                case -1755514268: goto L_0x0085;
-                case -1040323278: goto L_0x007a;
-                case -1023650261: goto L_0x006f;
-                case -730864243: goto L_0x0064;
-                case -448825858: goto L_0x0059;
-                case -165039170: goto L_0x004e;
-                case -96210874: goto L_0x0043;
-                case 1182539900: goto L_0x0036;
-                case 1219849581: goto L_0x0029;
-                case 1832801148: goto L_0x001c;
-                default: goto L_0x0019;
-            }
-        L_0x0019:
+            r14.hashCode()
+            int r0 = r14.hashCode()
+            r1 = 11
+            r2 = 10
+            r3 = 9
+            r4 = 8
+            r5 = 7
+            r6 = 6
+            r7 = 5
+            r8 = 4
+            r9 = 3
+            r10 = 2
+            r11 = 1
+            r12 = 0
             r13 = -1
-            goto L_0x009a
-        L_0x001c:
-            java.lang.String r0 = "app_icons"
-            boolean r13 = r13.equals(r0)
-            if (r13 != 0) goto L_0x0025
-            goto L_0x0019
-        L_0x0025:
-            r13 = 10
-            goto L_0x009a
-        L_0x0029:
-            java.lang.String r0 = "advanced_chat_management"
-            boolean r13 = r13.equals(r0)
-            if (r13 != 0) goto L_0x0032
-            goto L_0x0019
-        L_0x0032:
-            r13 = 9
-            goto L_0x009a
-        L_0x0036:
-            java.lang.String r0 = "unique_reactions"
-            boolean r13 = r13.equals(r0)
-            if (r13 != 0) goto L_0x003f
-            goto L_0x0019
-        L_0x003f:
-            r13 = 8
-            goto L_0x009a
-        L_0x0043:
-            java.lang.String r0 = "double_limits"
-            boolean r13 = r13.equals(r0)
-            if (r13 != 0) goto L_0x004c
-            goto L_0x0019
-        L_0x004c:
-            r13 = 7
-            goto L_0x009a
-        L_0x004e:
-            java.lang.String r0 = "premium_stickers"
-            boolean r13 = r13.equals(r0)
-            if (r13 != 0) goto L_0x0057
-            goto L_0x0019
-        L_0x0057:
-            r13 = 6
-            goto L_0x009a
-        L_0x0059:
-            java.lang.String r0 = "faster_download"
-            boolean r13 = r13.equals(r0)
-            if (r13 != 0) goto L_0x0062
-            goto L_0x0019
-        L_0x0062:
-            r13 = 5
-            goto L_0x009a
-        L_0x0064:
-            java.lang.String r0 = "profile_badge"
-            boolean r13 = r13.equals(r0)
-            if (r13 != 0) goto L_0x006d
-            goto L_0x0019
-        L_0x006d:
-            r13 = 4
-            goto L_0x009a
-        L_0x006f:
-            java.lang.String r0 = "more_upload"
-            boolean r13 = r13.equals(r0)
-            if (r13 != 0) goto L_0x0078
-            goto L_0x0019
-        L_0x0078:
-            r13 = 3
-            goto L_0x009a
-        L_0x007a:
-            java.lang.String r0 = "no_ads"
-            boolean r13 = r13.equals(r0)
-            if (r13 != 0) goto L_0x0083
-            goto L_0x0019
-        L_0x0083:
-            r13 = 2
-            goto L_0x009a
-        L_0x0085:
-            java.lang.String r0 = "voice_to_text"
-            boolean r13 = r13.equals(r0)
-            if (r13 != 0) goto L_0x008e
-            goto L_0x0019
-        L_0x008e:
-            r13 = 1
-            goto L_0x009a
-        L_0x0090:
-            java.lang.String r0 = "animated_userpics"
-            boolean r13 = r13.equals(r0)
-            if (r13 != 0) goto L_0x0099
-            goto L_0x0019
-        L_0x0099:
-            r13 = 0
-        L_0x009a:
-            switch(r13) {
-                case 0: goto L_0x00a8;
-                case 1: goto L_0x00a7;
-                case 2: goto L_0x00a6;
-                case 3: goto L_0x00a5;
-                case 4: goto L_0x00a4;
-                case 5: goto L_0x00a3;
-                case 6: goto L_0x00a2;
-                case 7: goto L_0x00a1;
-                case 8: goto L_0x00a0;
-                case 9: goto L_0x009f;
-                case 10: goto L_0x009e;
-                default: goto L_0x009d;
+            switch(r0) {
+                case -2145993328: goto L_0x00a0;
+                case -1755514268: goto L_0x0094;
+                case -1040323278: goto L_0x0089;
+                case -1023650261: goto L_0x007e;
+                case -730864243: goto L_0x0073;
+                case -448825858: goto L_0x0068;
+                case -165039170: goto L_0x005d;
+                case -96210874: goto L_0x0052;
+                case -3189666: goto L_0x0045;
+                case 1182539900: goto L_0x0038;
+                case 1219849581: goto L_0x002b;
+                case 1832801148: goto L_0x001e;
+                default: goto L_0x001b;
             }
-        L_0x009d:
-            return r12
+        L_0x001b:
+            r14 = -1
+            goto L_0x00ab
+        L_0x001e:
+            java.lang.String r0 = "app_icons"
+            boolean r14 = r14.equals(r0)
+            if (r14 != 0) goto L_0x0027
+            goto L_0x001b
+        L_0x0027:
+            r14 = 11
+            goto L_0x00ab
+        L_0x002b:
+            java.lang.String r0 = "advanced_chat_management"
+            boolean r14 = r14.equals(r0)
+            if (r14 != 0) goto L_0x0034
+            goto L_0x001b
+        L_0x0034:
+            r14 = 10
+            goto L_0x00ab
+        L_0x0038:
+            java.lang.String r0 = "unique_reactions"
+            boolean r14 = r14.equals(r0)
+            if (r14 != 0) goto L_0x0041
+            goto L_0x001b
+        L_0x0041:
+            r14 = 9
+            goto L_0x00ab
+        L_0x0045:
+            java.lang.String r0 = "premium_emoji"
+            boolean r14 = r14.equals(r0)
+            if (r14 != 0) goto L_0x004e
+            goto L_0x001b
+        L_0x004e:
+            r14 = 8
+            goto L_0x00ab
+        L_0x0052:
+            java.lang.String r0 = "double_limits"
+            boolean r14 = r14.equals(r0)
+            if (r14 != 0) goto L_0x005b
+            goto L_0x001b
+        L_0x005b:
+            r14 = 7
+            goto L_0x00ab
+        L_0x005d:
+            java.lang.String r0 = "premium_stickers"
+            boolean r14 = r14.equals(r0)
+            if (r14 != 0) goto L_0x0066
+            goto L_0x001b
+        L_0x0066:
+            r14 = 6
+            goto L_0x00ab
+        L_0x0068:
+            java.lang.String r0 = "faster_download"
+            boolean r14 = r14.equals(r0)
+            if (r14 != 0) goto L_0x0071
+            goto L_0x001b
+        L_0x0071:
+            r14 = 5
+            goto L_0x00ab
+        L_0x0073:
+            java.lang.String r0 = "profile_badge"
+            boolean r14 = r14.equals(r0)
+            if (r14 != 0) goto L_0x007c
+            goto L_0x001b
+        L_0x007c:
+            r14 = 4
+            goto L_0x00ab
+        L_0x007e:
+            java.lang.String r0 = "more_upload"
+            boolean r14 = r14.equals(r0)
+            if (r14 != 0) goto L_0x0087
+            goto L_0x001b
+        L_0x0087:
+            r14 = 3
+            goto L_0x00ab
+        L_0x0089:
+            java.lang.String r0 = "no_ads"
+            boolean r14 = r14.equals(r0)
+            if (r14 != 0) goto L_0x0092
+            goto L_0x001b
+        L_0x0092:
+            r14 = 2
+            goto L_0x00ab
+        L_0x0094:
+            java.lang.String r0 = "voice_to_text"
+            boolean r14 = r14.equals(r0)
+            if (r14 != 0) goto L_0x009e
+            goto L_0x001b
         L_0x009e:
-            return r1
-        L_0x009f:
-            return r2
+            r14 = 1
+            goto L_0x00ab
         L_0x00a0:
-            return r7
-        L_0x00a1:
-            return r11
-        L_0x00a2:
-            return r6
-        L_0x00a3:
-            return r9
-        L_0x00a4:
-            return r5
-        L_0x00a5:
-            return r10
-        L_0x00a6:
-            return r8
-        L_0x00a7:
+            java.lang.String r0 = "animated_userpics"
+            boolean r14 = r14.equals(r0)
+            if (r14 != 0) goto L_0x00aa
+            goto L_0x001b
+        L_0x00aa:
+            r14 = 0
+        L_0x00ab:
+            switch(r14) {
+                case 0: goto L_0x00ba;
+                case 1: goto L_0x00b9;
+                case 2: goto L_0x00b8;
+                case 3: goto L_0x00b7;
+                case 4: goto L_0x00b6;
+                case 5: goto L_0x00b5;
+                case 6: goto L_0x00b4;
+                case 7: goto L_0x00b3;
+                case 8: goto L_0x00b2;
+                case 9: goto L_0x00b1;
+                case 10: goto L_0x00b0;
+                case 11: goto L_0x00af;
+                default: goto L_0x00ae;
+            }
+        L_0x00ae:
+            return r13
+        L_0x00af:
+            return r2
+        L_0x00b0:
             return r3
-        L_0x00a8:
+        L_0x00b1:
+            return r8
+        L_0x00b2:
+            return r1
+        L_0x00b3:
+            return r12
+        L_0x00b4:
+            return r7
+        L_0x00b5:
+            return r10
+        L_0x00b6:
+            return r6
+        L_0x00b7:
+            return r11
+        L_0x00b8:
+            return r9
+        L_0x00b9:
             return r4
+        L_0x00ba:
+            return r5
         */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.PremiumPreviewFragment.severStringToFeatureType(java.lang.String):int");
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.PremiumPreviewFragment.serverStringToFeatureType(java.lang.String):int");
     }
 
     public PremiumPreviewFragment setForcePremium() {
@@ -385,12 +403,13 @@ public class PremiumPreviewFragment extends BaseFragment implements Notification
 
     @SuppressLint({"NotifyDataSetChanged"})
     public View createView(Context context) {
+        Context context2 = context;
         this.hasOwnBackground = true;
-        LinearGradient linearGradient = new LinearGradient(0.0f, 0.0f, 0.0f, 100.0f, new int[]{-816858, -2401123, -5806081, -11164161}, new float[]{0.0f, 0.32f, 0.5f, 1.0f}, Shader.TileMode.CLAMP);
+        LinearGradient linearGradient = new LinearGradient(0.0f, 0.0f, 0.0f, 100.0f, new int[]{Theme.getColor("premiumGradient4"), Theme.getColor("premiumGradient3"), Theme.getColor("premiumGradient2"), Theme.getColor("premiumGradient1"), Theme.getColor("premiumGradient0")}, new float[]{0.0f, 0.32f, 0.5f, 0.7f, 1.0f}, Shader.TileMode.CLAMP);
         this.shader = linearGradient;
         linearGradient.setLocalMatrix(this.matrix);
         this.gradientPaint.setShader(this.shader);
-        this.dummyCell = new PremiumFeatureCell(context);
+        this.dummyCell = new PremiumFeatureCell(context2);
         this.premiumFeatures.clear();
         fillPremiumFeaturesList(this.premiumFeatures, this.currentAccount);
         final Rect rect = new Rect();
@@ -401,7 +420,7 @@ public class PremiumPreviewFragment extends BaseFragment implements Notification
         if (Build.VERSION.SDK_INT >= 21) {
             this.statusBarHeight = AndroidUtilities.isTablet() ? 0 : AndroidUtilities.statusBarHeight;
         }
-        AnonymousClass1 r2 = new FrameLayout(context) {
+        AnonymousClass1 r4 = new FrameLayout(context2) {
             boolean iconInterceptedTouch;
             int lastSize;
 
@@ -560,9 +579,9 @@ public class PremiumPreviewFragment extends BaseFragment implements Notification
                 return true;
             }
         };
-        this.contentView = r2;
-        r2.setFitsSystemWindows(true);
-        AnonymousClass2 r22 = new RecyclerListView(context) {
+        this.contentView = r4;
+        r4.setFitsSystemWindows(true);
+        AnonymousClass2 r42 = new RecyclerListView(context2) {
             public void onDraw(Canvas canvas) {
                 Drawable drawable = PremiumPreviewFragment.this.shadowDrawable;
                 PremiumPreviewFragment premiumPreviewFragment = PremiumPreviewFragment.this;
@@ -571,10 +590,10 @@ public class PremiumPreviewFragment extends BaseFragment implements Notification
                 super.onDraw(canvas);
             }
         };
-        this.listView = r22;
-        FillLastLinearLayoutManager fillLastLinearLayoutManager = new FillLastLinearLayoutManager(context, (AndroidUtilities.dp(68.0f) + this.statusBarHeight) - AndroidUtilities.dp(16.0f), this.listView);
+        this.listView = r42;
+        FillLastLinearLayoutManager fillLastLinearLayoutManager = new FillLastLinearLayoutManager(context2, (AndroidUtilities.dp(68.0f) + this.statusBarHeight) - AndroidUtilities.dp(16.0f), this.listView);
         this.layoutManager = fillLastLinearLayoutManager;
-        r22.setLayoutManager(fillLastLinearLayoutManager);
+        r42.setLayoutManager(fillLastLinearLayoutManager);
         this.layoutManager.setFixedLastItemHeight();
         this.listView.setAdapter(new Adapter());
         this.listView.addOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -604,22 +623,22 @@ public class PremiumPreviewFragment extends BaseFragment implements Notification
                 PremiumPreviewFragment.this.checkButtonDivider();
             }
         });
-        this.backgroundView = new BackgroundView(this, context) {
+        this.backgroundView = new BackgroundView(this, context2) {
             public boolean onInterceptTouchEvent(MotionEvent motionEvent) {
                 return true;
             }
         };
-        this.particlesView = new StarParticlesView(context);
+        this.particlesView = new StarParticlesView(context2);
         this.backgroundView.imageView.setStarParticlesView(this.particlesView);
         this.contentView.addView(this.particlesView, LayoutHelper.createFrame(-1, -2.0f));
         this.contentView.addView(this.backgroundView, LayoutHelper.createFrame(-1, -2.0f));
-        this.listView.setOnItemClickListener((RecyclerListView.OnItemClickListener) new PremiumPreviewFragment$$ExternalSyntheticLambda11(this));
+        this.listView.setOnItemClickListener((RecyclerListView.OnItemClickListener) new PremiumPreviewFragment$$ExternalSyntheticLambda16(this));
         this.contentView.addView(this.listView);
-        PremiumButtonView premiumButtonView2 = new PremiumButtonView(context, false);
+        PremiumButtonView premiumButtonView2 = new PremiumButtonView(context2, false);
         this.premiumButtonView = premiumButtonView2;
         premiumButtonView2.setButton(getPremiumButtonText(this.currentAccount), new PremiumPreviewFragment$$ExternalSyntheticLambda0(this));
-        this.buttonContainer = new FrameLayout(context);
-        View view = new View(context);
+        this.buttonContainer = new FrameLayout(context2);
+        View view = new View(context2);
         this.buttonDivider = view;
         view.setBackgroundColor(Theme.getColor("divider"));
         this.buttonContainer.addView(this.buttonDivider, LayoutHelper.createFrame(-1, 1.0f));
@@ -644,7 +663,7 @@ public class PremiumPreviewFragment extends BaseFragment implements Notification
         updateRows();
         this.backgroundView.imageView.startEnterAnimation(-180, 200);
         if (this.forcePremium) {
-            AndroidUtilities.runOnUIThread(new PremiumPreviewFragment$$ExternalSyntheticLambda3(this), 400);
+            AndroidUtilities.runOnUIThread(new PremiumPreviewFragment$$ExternalSyntheticLambda7(this), 400);
         }
         MediaDataController.getInstance(this.currentAccount).preloadPremiumPreviewStickers();
         sentShowScreenStat(this.source);
@@ -690,12 +709,14 @@ public class PremiumPreviewFragment extends BaseFragment implements Notification
         arrayList.add(new PremiumFeatureData(3, NUM, LocaleController.getString("PremiumPreviewNoAds", NUM), LocaleController.getString("PremiumPreviewNoAdsDescription", NUM)));
         arrayList.add(new PremiumFeatureData(4, NUM, LocaleController.getString("PremiumPreviewReactions", NUM), LocaleController.getString("PremiumPreviewReactionsDescription", NUM)));
         arrayList.add(new PremiumFeatureData(5, NUM, LocaleController.getString("PremiumPreviewStickers", NUM), LocaleController.getString("PremiumPreviewStickersDescription", NUM)));
+        arrayList.add(new PremiumFeatureData(11, NUM, LocaleController.getString("PremiumPreviewEmoji", NUM), LocaleController.getString("PremiumPreviewEmojiDescription", NUM)));
         arrayList.add(new PremiumFeatureData(9, NUM, LocaleController.getString("PremiumPreviewAdvancedChatManagement", NUM), LocaleController.getString("PremiumPreviewAdvancedChatManagementDescription", NUM)));
         arrayList.add(new PremiumFeatureData(6, NUM, LocaleController.getString("PremiumPreviewProfileBadge", NUM), LocaleController.getString("PremiumPreviewProfileBadgeDescription", NUM)));
         arrayList.add(new PremiumFeatureData(7, NUM, LocaleController.getString("PremiumPreviewAnimatedProfiles", NUM), LocaleController.getString("PremiumPreviewAnimatedProfilesDescription", NUM)));
         arrayList.add(new PremiumFeatureData(10, NUM, LocaleController.getString("PremiumPreviewAppIcon", NUM), LocaleController.getString("PremiumPreviewAppIconDescription", NUM)));
         if (instance.premiumFeaturesTypesToPosition.size() > 0) {
             while (i2 < arrayList.size()) {
+                instance.premiumFeaturesTypesToPosition.append(11, 6);
                 if (instance.premiumFeaturesTypesToPosition.get(arrayList.get(i2).type, -1) == -1) {
                     arrayList.remove(i2);
                     i2--;
@@ -703,7 +724,7 @@ public class PremiumPreviewFragment extends BaseFragment implements Notification
                 i2++;
             }
         }
-        Collections.sort(arrayList, new PremiumPreviewFragment$$ExternalSyntheticLambda4(instance));
+        Collections.sort(arrayList, new PremiumPreviewFragment$$ExternalSyntheticLambda8(instance));
     }
 
     /* access modifiers changed from: private */
@@ -750,62 +771,92 @@ public class PremiumPreviewFragment extends BaseFragment implements Notification
             if (productDetails != null) {
                 List<ProductDetails.SubscriptionOfferDetails> subscriptionOfferDetails = productDetails.getSubscriptionOfferDetails();
                 if (!subscriptionOfferDetails.isEmpty()) {
-                    BillingController.getInstance().addResultListener("telegram_premium", new PremiumPreviewFragment$$ExternalSyntheticLambda1(baseFragment));
-                    TLRPC$TL_payments_canPurchasePremium tLRPC$TL_payments_canPurchasePremium = new TLRPC$TL_payments_canPurchasePremium();
-                    baseFragment.getConnectionsManager().sendRequest(tLRPC$TL_payments_canPurchasePremium, new PremiumPreviewFragment$$ExternalSyntheticLambda5(baseFragment, subscriptionOfferDetails, tLRPC$TL_payments_canPurchasePremium));
+                    BillingController.getInstance().queryPurchases("subs", new PremiumPreviewFragment$$ExternalSyntheticLambda2(baseFragment, subscriptionOfferDetails));
                 }
             }
         }
     }
 
     /* access modifiers changed from: private */
-    public static /* synthetic */ void lambda$buyPremium$4(BaseFragment baseFragment, BillingResult billingResult) {
+    public static /* synthetic */ void lambda$buyPremium$10(BillingResult billingResult, BaseFragment baseFragment, List list, List list2) {
         if (billingResult.getResponseCode() == 0) {
-            if (baseFragment instanceof PremiumPreviewFragment) {
-                PremiumPreviewFragment premiumPreviewFragment = (PremiumPreviewFragment) baseFragment;
-                premiumPreviewFragment.setForcePremium();
-                premiumPreviewFragment.getMediaDataController().loadPremiumPromo(false);
-                premiumPreviewFragment.listView.smoothScrollToPosition(0);
-            } else {
-                baseFragment.presentFragment(new PremiumPreviewFragment((String) null).setForcePremium());
-            }
-            if (baseFragment.getParentActivity() instanceof LaunchActivity) {
-                try {
-                    baseFragment.getFragmentView().performHapticFeedback(3, 2);
-                } catch (Exception unused) {
+            PremiumPreviewFragment$$ExternalSyntheticLambda5 premiumPreviewFragment$$ExternalSyntheticLambda5 = new PremiumPreviewFragment$$ExternalSyntheticLambda5(baseFragment);
+            if (list != null && !list.isEmpty()) {
+                Iterator it = list.iterator();
+                while (it.hasNext()) {
+                    Purchase purchase = (Purchase) it.next();
+                    if (purchase.getProducts().contains("telegram_premium")) {
+                        TLRPC$TL_payments_assignPlayMarketTransaction tLRPC$TL_payments_assignPlayMarketTransaction = new TLRPC$TL_payments_assignPlayMarketTransaction();
+                        TLRPC$TL_dataJSON tLRPC$TL_dataJSON = new TLRPC$TL_dataJSON();
+                        tLRPC$TL_payments_assignPlayMarketTransaction.receipt = tLRPC$TL_dataJSON;
+                        tLRPC$TL_dataJSON.data = purchase.getOriginalJson();
+                        tLRPC$TL_payments_assignPlayMarketTransaction.purpose = new TLRPC$TL_inputStorePaymentPremiumSubscription();
+                        baseFragment.getConnectionsManager().sendRequest(tLRPC$TL_payments_assignPlayMarketTransaction, new PremiumPreviewFragment$$ExternalSyntheticLambda9(baseFragment, premiumPreviewFragment$$ExternalSyntheticLambda5, tLRPC$TL_payments_assignPlayMarketTransaction));
+                        return;
+                    }
                 }
-                ((LaunchActivity) baseFragment.getParentActivity()).getFireworksOverlay().start();
             }
-        } else if (billingResult.getResponseCode() == 1) {
-            sentPremiumBuyCanceled();
+            BillingController.getInstance().addResultListener("telegram_premium", new PremiumPreviewFragment$$ExternalSyntheticLambda1(premiumPreviewFragment$$ExternalSyntheticLambda5));
+            TLRPC$TL_payments_canPurchasePremium tLRPC$TL_payments_canPurchasePremium = new TLRPC$TL_payments_canPurchasePremium();
+            baseFragment.getConnectionsManager().sendRequest(tLRPC$TL_payments_canPurchasePremium, new PremiumPreviewFragment$$ExternalSyntheticLambda10(baseFragment, list2, tLRPC$TL_payments_canPurchasePremium));
         }
     }
 
     /* access modifiers changed from: private */
-    public static /* synthetic */ void lambda$buyPremium$5(TLObject tLObject, BaseFragment baseFragment, List list, TLRPC$TL_error tLRPC$TL_error, TLRPC$TL_payments_canPurchasePremium tLRPC$TL_payments_canPurchasePremium) {
+    public static /* synthetic */ void lambda$buyPremium$4(BaseFragment baseFragment) {
+        if (baseFragment instanceof PremiumPreviewFragment) {
+            PremiumPreviewFragment premiumPreviewFragment = (PremiumPreviewFragment) baseFragment;
+            premiumPreviewFragment.setForcePremium();
+            premiumPreviewFragment.getMediaDataController().loadPremiumPromo(false);
+            premiumPreviewFragment.listView.smoothScrollToPosition(0);
+        } else {
+            baseFragment.presentFragment(new PremiumPreviewFragment((String) null).setForcePremium());
+        }
+        if (baseFragment.getParentActivity() instanceof LaunchActivity) {
+            try {
+                baseFragment.getFragmentView().performHapticFeedback(3, 2);
+            } catch (Exception unused) {
+            }
+            ((LaunchActivity) baseFragment.getParentActivity()).getFireworksOverlay().start();
+        }
+    }
+
+    /* access modifiers changed from: private */
+    public static /* synthetic */ void lambda$buyPremium$6(BaseFragment baseFragment, Runnable runnable, TLRPC$TL_payments_assignPlayMarketTransaction tLRPC$TL_payments_assignPlayMarketTransaction, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+        if (tLObject instanceof TLRPC$Updates) {
+            baseFragment.getMessagesController().processUpdates((TLRPC$Updates) tLObject, false);
+            runnable.run();
+        } else if (tLRPC$TL_error != null) {
+            AndroidUtilities.runOnUIThread(new PremiumPreviewFragment$$ExternalSyntheticLambda6(baseFragment, tLRPC$TL_error, tLRPC$TL_payments_assignPlayMarketTransaction));
+        }
+    }
+
+    /* access modifiers changed from: private */
+    public static /* synthetic */ void lambda$buyPremium$7(Runnable runnable, BillingResult billingResult) {
+        if (billingResult.getResponseCode() == 0) {
+            runnable.run();
+        }
+    }
+
+    /* access modifiers changed from: private */
+    public static /* synthetic */ void lambda$buyPremium$8(TLObject tLObject, BaseFragment baseFragment, List list, TLRPC$TL_error tLRPC$TL_error, TLRPC$TL_payments_canPurchasePremium tLRPC$TL_payments_canPurchasePremium) {
         if (tLObject instanceof TLRPC$TL_boolTrue) {
-            BillingController.getInstance().launchBillingFlow(baseFragment.getParentActivity(), Collections.singletonList(BillingFlowParams.ProductDetailsParams.newBuilder().setProductDetails(BillingController.PREMIUM_PRODUCT_DETAILS).setOfferToken(((ProductDetails.SubscriptionOfferDetails) list.get(0)).getOfferToken()).build()));
+            BillingController.getInstance().launchBillingFlow(baseFragment.getParentActivity(), baseFragment.getAccountInstance(), new TLRPC$TL_inputStorePaymentPremiumSubscription(), Collections.singletonList(BillingFlowParams.ProductDetailsParams.newBuilder().setProductDetails(BillingController.PREMIUM_PRODUCT_DETAILS).setOfferToken(((ProductDetails.SubscriptionOfferDetails) list.get(0)).getOfferToken()).build()));
         } else {
             AlertsCreator.processError(baseFragment.getCurrentAccount(), tLRPC$TL_error, baseFragment, tLRPC$TL_payments_canPurchasePremium, new Object[0]);
         }
     }
 
     public static String getPremiumButtonText(int i) {
-        Currency instance;
         if (BuildVars.IS_BILLING_UNAVAILABLE) {
             return LocaleController.getString(NUM);
         }
         if (BuildVars.useInvoiceBilling()) {
             TLRPC$TL_help_premiumPromo premiumPromo = MediaDataController.getInstance(i).getPremiumPromo();
-            if (premiumPromo == null || (instance = Currency.getInstance(premiumPromo.currency)) == null) {
+            if (premiumPromo == null) {
                 return LocaleController.getString(NUM);
             }
-            NumberFormat currencyInstance = NumberFormat.getCurrencyInstance();
-            currencyInstance.setCurrency(instance);
-            double d = (double) premiumPromo.monthly_amount;
-            double pow = Math.pow(10.0d, (double) BillingController.getInstance().getCurrencyExp(premiumPromo.currency));
-            Double.isNaN(d);
-            return LocaleController.formatString(NUM, currencyInstance.format(d / pow));
+            return LocaleController.formatString(NUM, BillingController.getInstance().formatCurrency(premiumPromo.monthly_amount, premiumPromo.currency));
         }
         String str = null;
         ProductDetails productDetails = BillingController.PREMIUM_PRODUCT_DETAILS;
@@ -1188,7 +1239,7 @@ public class PremiumPreviewFragment extends BaseFragment implements Notification
     }
 
     public ArrayList<ThemeDescription> getThemeDescriptions() {
-        return SimpleThemeDescription.createThemeDescriptions(new PremiumPreviewFragment$$ExternalSyntheticLambda10(this), "premiumGradient1", "premiumGradient2", "premiumGradient3", "premiumGradient4", "premiumGradientBackground1", "premiumGradientBackground2", "premiumGradientBackground3", "premiumGradientBackground4", "premiumGradientBackgroundOverlay", "premiumStarGradient1", "premiumStarGradient2", "premiumStartSmallStarsColor", "premiumStartSmallStarsColor2");
+        return SimpleThemeDescription.createThemeDescriptions(new PremiumPreviewFragment$$ExternalSyntheticLambda15(this), "premiumGradient1", "premiumGradient2", "premiumGradient3", "premiumGradient4", "premiumGradientBackground1", "premiumGradientBackground2", "premiumGradientBackground3", "premiumGradientBackground4", "premiumGradientBackgroundOverlay", "premiumStarGradient1", "premiumStarGradient2", "premiumStartSmallStarsColor", "premiumStartSmallStarsColor2");
     }
 
     /* access modifiers changed from: private */
@@ -1261,7 +1312,7 @@ public class PremiumPreviewFragment extends BaseFragment implements Notification
         tLRPC$TL_jsonObjectValue.value = tLRPC$TL_jsonString;
         tLRPC$TL_jsonObject.value.add(tLRPC$TL_jsonObjectValue);
         tLRPC$TL_help_saveAppLog.events.add(tLRPC$TL_inputAppEvent);
-        instance.sendRequest(tLRPC$TL_help_saveAppLog, PremiumPreviewFragment$$ExternalSyntheticLambda8.INSTANCE);
+        instance.sendRequest(tLRPC$TL_help_saveAppLog, PremiumPreviewFragment$$ExternalSyntheticLambda14.INSTANCE);
     }
 
     public static void sentPremiumButtonClick() {
@@ -1271,7 +1322,7 @@ public class PremiumPreviewFragment extends BaseFragment implements Notification
         tLRPC$TL_inputAppEvent.type = "premium.promo_screen_accept";
         tLRPC$TL_inputAppEvent.data = new TLRPC$TL_jsonNull();
         tLRPC$TL_help_saveAppLog.events.add(tLRPC$TL_inputAppEvent);
-        ConnectionsManager.getInstance(UserConfig.selectedAccount).sendRequest(tLRPC$TL_help_saveAppLog, PremiumPreviewFragment$$ExternalSyntheticLambda7.INSTANCE);
+        ConnectionsManager.getInstance(UserConfig.selectedAccount).sendRequest(tLRPC$TL_help_saveAppLog, PremiumPreviewFragment$$ExternalSyntheticLambda12.INSTANCE);
     }
 
     public static void sentPremiumBuyCanceled() {
@@ -1281,7 +1332,7 @@ public class PremiumPreviewFragment extends BaseFragment implements Notification
         tLRPC$TL_inputAppEvent.type = "premium.promo_screen_fail";
         tLRPC$TL_inputAppEvent.data = new TLRPC$TL_jsonNull();
         tLRPC$TL_help_saveAppLog.events.add(tLRPC$TL_inputAppEvent);
-        ConnectionsManager.getInstance(UserConfig.selectedAccount).sendRequest(tLRPC$TL_help_saveAppLog, PremiumPreviewFragment$$ExternalSyntheticLambda9.INSTANCE);
+        ConnectionsManager.getInstance(UserConfig.selectedAccount).sendRequest(tLRPC$TL_help_saveAppLog, PremiumPreviewFragment$$ExternalSyntheticLambda11.INSTANCE);
     }
 
     public static void sentShowFeaturePreview(int i, int i2) {
@@ -1299,6 +1350,6 @@ public class PremiumPreviewFragment extends BaseFragment implements Notification
         tLRPC$TL_jsonObject.value.add(tLRPC$TL_jsonObjectValue);
         tLRPC$TL_help_saveAppLog.events.add(tLRPC$TL_inputAppEvent);
         tLRPC$TL_inputAppEvent.data = tLRPC$TL_jsonObject;
-        ConnectionsManager.getInstance(i).sendRequest(tLRPC$TL_help_saveAppLog, PremiumPreviewFragment$$ExternalSyntheticLambda6.INSTANCE);
+        ConnectionsManager.getInstance(i).sendRequest(tLRPC$TL_help_saveAppLog, PremiumPreviewFragment$$ExternalSyntheticLambda13.INSTANCE);
     }
 }

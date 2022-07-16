@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 public abstract class TLRPC$MessageAction extends TLObject {
     public String address;
+    public long amount;
     public TLRPC$TL_inputGroupCall call;
     public long call_id;
     public long channel_id;
@@ -16,6 +17,7 @@ public abstract class TLRPC$MessageAction extends TLObject {
     public long inviter_id;
     public String invoice_slug;
     public String message;
+    public int months;
     public TLRPC$UserProfilePhoto newUserPhoto;
     public TLRPC$Photo photo;
     public TLRPC$PhoneCallDiscardReason reason;
@@ -70,6 +72,9 @@ public abstract class TLRPC$MessageAction extends TLObject {
                 break;
             case -1434950843:
                 tLRPC$MessageAction = new TLRPC$TL_messageActionSetChatTheme();
+                break;
+            case -1415514682:
+                tLRPC$MessageAction = new TLRPC$TL_messageActionGiftPremium();
                 break;
             case -1410748418:
                 tLRPC$MessageAction = new TLRPC$TL_messageActionBotAllowed();

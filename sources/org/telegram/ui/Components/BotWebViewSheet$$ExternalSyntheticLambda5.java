@@ -8,6 +8,6 @@ public final /* synthetic */ class BotWebViewSheet$$ExternalSyntheticLambda5 imp
     }
 
     public final void run() {
-        this.f$0.lambda$new$10();
+        this.f$0.lambda$new$4();
     }
 }

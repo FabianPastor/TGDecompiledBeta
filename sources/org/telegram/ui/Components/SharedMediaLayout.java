@@ -6815,7 +6815,7 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
             boolean r0 = r0.hasTab(r4)
             if (r0 != 0) goto L_0x0127
             org.telegram.ui.Components.SharedMediaLayout$ScrollSlidingTextTabStripInner r0 = r12.scrollSlidingTextTabStrip
-            r3 = 2131626097(0x7f0e0871, float:1.887942E38)
+            r3 = 2131626134(0x7f0e0896, float:1.8879496E38)
             java.lang.String r10 = "GroupMembers"
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r10, r3)
             r0.addTextTab(r4, r3, r13)
@@ -6843,14 +6843,14 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
             org.telegram.tgnet.TLRPC$ChatFull r0 = r0.chatInfo
             if (r0 != 0) goto L_0x0166
             org.telegram.ui.Components.SharedMediaLayout$ScrollSlidingTextTabStripInner r0 = r12.scrollSlidingTextTabStrip
-            r3 = 2131628305(0x7f0e1111, float:1.8883899E38)
+            r3 = 2131628355(0x7f0e1143, float:1.8884E38)
             java.lang.String r4 = "SharedMediaTabFull2"
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r4, r3)
             r0.addTextTab(r1, r3, r13)
             goto L_0x0174
         L_0x0166:
             org.telegram.ui.Components.SharedMediaLayout$ScrollSlidingTextTabStripInner r0 = r12.scrollSlidingTextTabStrip
-            r3 = 2131628304(0x7f0e1110, float:1.8883897E38)
+            r3 = 2131628354(0x7f0e1142, float:1.8883998E38)
             java.lang.String r4 = "SharedMediaTab2"
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r4, r3)
             r0.addTextTab(r1, r3, r13)
@@ -6862,14 +6862,14 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
             boolean r0 = r0.hasTab(r2)
             if (r0 != 0) goto L_0x0190
             org.telegram.ui.Components.SharedMediaLayout$ScrollSlidingTextTabStripInner r0 = r12.scrollSlidingTextTabStrip
-            r3 = 2131628297(0x7f0e1109, float:1.8883883E38)
+            r3 = 2131628347(0x7f0e113b, float:1.8883984E38)
             java.lang.String r4 = "SharedFilesTab2"
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r4, r3)
             r0.addTextTab(r2, r3, r13)
         L_0x0190:
             long r2 = r12.dialog_id
             boolean r0 = org.telegram.messenger.DialogObject.isEncryptedDialog(r2)
-            r2 = 2131628306(0x7f0e1112, float:1.88839E38)
+            r2 = 2131628356(0x7f0e1144, float:1.8884002E38)
             java.lang.String r3 = "SharedMusicTab2"
             if (r0 != 0) goto L_0x01d1
             int[] r0 = r12.hasMedia
@@ -6879,7 +6879,7 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
             boolean r0 = r0.hasTab(r5)
             if (r0 != 0) goto L_0x01b9
             org.telegram.ui.Components.SharedMediaLayout$ScrollSlidingTextTabStripInner r0 = r12.scrollSlidingTextTabStrip
-            r4 = 2131628301(0x7f0e110d, float:1.888389E38)
+            r4 = 2131628351(0x7f0e113f, float:1.8883992E38)
             java.lang.String r10 = "SharedLinksTab2"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r10, r4)
             r0.addTextTab(r5, r4, r13)
@@ -6912,7 +6912,7 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
             boolean r0 = r0.hasTab(r7)
             if (r0 != 0) goto L_0x0204
             org.telegram.ui.Components.SharedMediaLayout$ScrollSlidingTextTabStripInner r0 = r12.scrollSlidingTextTabStrip
-            r2 = 2131628310(0x7f0e1116, float:1.888391E38)
+            r2 = 2131628360(0x7f0e1148, float:1.888401E38)
             java.lang.String r3 = "SharedVoiceTab2"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             r0.addTextTab(r7, r2, r13)
@@ -6924,7 +6924,7 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
             boolean r0 = r0.hasTab(r8)
             if (r0 != 0) goto L_0x0220
             org.telegram.ui.Components.SharedMediaLayout$ScrollSlidingTextTabStripInner r0 = r12.scrollSlidingTextTabStrip
-            r2 = 2131628298(0x7f0e110a, float:1.8883885E38)
+            r2 = 2131628348(0x7f0e113c, float:1.8883986E38)
             java.lang.String r3 = "SharedGIFsTab2"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             r0.addTextTab(r8, r2, r13)
@@ -6936,7 +6936,7 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
             boolean r0 = r0.hasTab(r9)
             if (r0 != 0) goto L_0x023c
             org.telegram.ui.Components.SharedMediaLayout$ScrollSlidingTextTabStripInner r0 = r12.scrollSlidingTextTabStrip
-            r2 = 2131628299(0x7f0e110b, float:1.8883887E38)
+            r2 = 2131628349(0x7f0e113d, float:1.8883988E38)
             java.lang.String r3 = "SharedGroupsTab2"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             r0.addTextTab(r9, r2, r13)

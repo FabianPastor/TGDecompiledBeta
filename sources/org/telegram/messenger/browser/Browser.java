@@ -497,7 +497,7 @@ public class Browser {
             org.telegram.messenger.support.customtabs.CustomTabsSession r3 = getSession()     // Catch:{ Exception -> 0x0309 }
             r2.<init>(r3)     // Catch:{ Exception -> 0x0309 }
             java.lang.String r3 = "CopyLink"
-            r4 = 2131625258(0x7f0e052a, float:1.8877719E38)
+            r4 = 2131625267(0x7f0e0533, float:1.8877737E38)
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r3, r4)     // Catch:{ Exception -> 0x0309 }
             r2.addMenuItem(r3, r1)     // Catch:{ Exception -> 0x0309 }
             java.lang.String r1 = "actionBarBrowser"
@@ -509,7 +509,7 @@ public class Browser {
             r3 = 2131165729(0x7var_, float:1.7945683E38)
             android.graphics.Bitmap r1 = android.graphics.BitmapFactory.decodeResource(r1, r3)     // Catch:{ Exception -> 0x0309 }
             java.lang.String r3 = "ShareFile"
-            r4 = 2131628274(0x7f0e10f2, float:1.8883836E38)
+            r4 = 2131628324(0x7f0e1124, float:1.8883937E38)
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r3, r4)     // Catch:{ Exception -> 0x0309 }
             android.content.Context r4 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ Exception -> 0x0309 }
             r5 = 0

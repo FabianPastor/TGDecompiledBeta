@@ -90,14 +90,14 @@ public class BotCommandsMenuView extends View {
     /* access modifiers changed from: protected */
     public void onAttachedToWindow() {
         super.onAttachedToWindow();
-        this.webViewAnimation.addParentView(this);
+        this.webViewAnimation.setMasterParent(this);
         this.webViewAnimation.setCurrentParentView(this);
     }
 
     /* access modifiers changed from: protected */
     public void onDetachedFromWindow() {
         super.onDetachedFromWindow();
-        this.webViewAnimation.removeParentView(this);
+        this.webViewAnimation.setMasterParent(this);
     }
 
     public void setWebView(boolean z) {
@@ -380,9 +380,6 @@ public class BotCommandsMenuView extends View {
             this.backDrawable.setRotation(z ? 1.0f : 0.0f, true);
         } else if (this.isWebViewOpened != z) {
             RLottieDrawable rLottieDrawable = this.webViewAnimation;
-            if (!rLottieDrawable.hasParentView()) {
-                rLottieDrawable.addParentView(this);
-            }
             rLottieDrawable.stop();
             rLottieDrawable.setPlayInDirectionOfCustomEndFrame(true);
             if (z) {

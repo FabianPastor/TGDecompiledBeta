@@ -14,6 +14,6 @@ public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda17 imple
     }
 
     public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-        this.f$0.lambda$onCustomTransitionAnimation$247(this.f$1, this.f$2, valueAnimator);
+        this.f$0.lambda$onCustomTransitionAnimation$248(this.f$1, this.f$2, valueAnimator);
     }
 }

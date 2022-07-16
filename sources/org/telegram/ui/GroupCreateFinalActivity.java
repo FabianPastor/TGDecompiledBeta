@@ -259,6 +259,7 @@ public class GroupCreateFinalActivity extends BaseFragment implements Notificati
     public View createView(Context context) {
         String str;
         int i;
+        AnonymousClass2 r19;
         Context context2 = context;
         EditTextEmoji editTextEmoji = this.editText;
         if (editTextEmoji != null) {
@@ -274,7 +275,7 @@ public class GroupCreateFinalActivity extends BaseFragment implements Notificati
                 }
             }
         });
-        AnonymousClass2 r2 = new SizeNotifierFrameLayout(context2) {
+        AnonymousClass2 r9 = new SizeNotifierFrameLayout(context2) {
             private boolean ignoreLayout;
 
             /* access modifiers changed from: protected */
@@ -441,11 +442,11 @@ public class GroupCreateFinalActivity extends BaseFragment implements Notificati
                 }
             }
         };
-        this.fragmentView = r2;
-        r2.setLayoutParams(new ViewGroup.LayoutParams(-1, -1));
+        this.fragmentView = r9;
+        r9.setLayoutParams(new ViewGroup.LayoutParams(-1, -1));
         this.fragmentView.setOnTouchListener(GroupCreateFinalActivity$$ExternalSyntheticLambda3.INSTANCE);
         this.shadowDrawable = context.getResources().getDrawable(NUM).mutate();
-        AnonymousClass3 r4 = new LinearLayout(context2) {
+        AnonymousClass3 r11 = new LinearLayout(context2) {
             /* access modifiers changed from: protected */
             public boolean drawChild(Canvas canvas, View view, long j) {
                 boolean drawChild = super.drawChild(canvas, view, j);
@@ -457,12 +458,12 @@ public class GroupCreateFinalActivity extends BaseFragment implements Notificati
                 return drawChild;
             }
         };
-        r4.setOrientation(1);
-        r2.addView(r4, LayoutHelper.createFrame(-1, -1.0f));
+        r11.setOrientation(1);
+        r9.addView(r11, LayoutHelper.createFrame(-1, -1.0f));
         FrameLayout frameLayout = new FrameLayout(context2);
         this.editTextContainer = frameLayout;
-        r4.addView(frameLayout, LayoutHelper.createLinear(-1, -2));
-        AnonymousClass4 r7 = new BackupImageView(context2) {
+        r11.addView(frameLayout, LayoutHelper.createLinear(-1, -2));
+        AnonymousClass4 r0 = new BackupImageView(context2) {
             public void invalidate() {
                 if (GroupCreateFinalActivity.this.avatarOverlay != null) {
                     GroupCreateFinalActivity.this.avatarOverlay.invalidate();
@@ -477,8 +478,8 @@ public class GroupCreateFinalActivity extends BaseFragment implements Notificati
                 super.invalidate(i, i2, i3, i4);
             }
         };
-        this.avatarImage = r7;
-        r7.setRoundRadius(AndroidUtilities.dp(32.0f));
+        this.avatarImage = r0;
+        r0.setRoundRadius(AndroidUtilities.dp(32.0f));
         this.avatarDrawable.setInfo(5, (String) null, (String) null);
         this.avatarImage.setImageDrawable(this.avatarDrawable);
         this.avatarImage.setContentDescription(LocaleController.getString("ChoosePhoto", NUM));
@@ -489,7 +490,7 @@ public class GroupCreateFinalActivity extends BaseFragment implements Notificati
         frameLayout2.addView(backupImageView, LayoutHelper.createFrame(64, 64.0f, (z ? 5 : 3) | 48, z ? 0.0f : 16.0f, 16.0f, z ? 16.0f : 0.0f, 16.0f));
         final Paint paint = new Paint(1);
         paint.setColor(NUM);
-        AnonymousClass5 r8 = new View(context2) {
+        AnonymousClass5 r1 = new View(context2) {
             /* access modifiers changed from: protected */
             public void onDraw(Canvas canvas) {
                 if (GroupCreateFinalActivity.this.avatarImage != null && GroupCreateFinalActivity.this.avatarProgressView.getVisibility() == 0) {
@@ -498,13 +499,13 @@ public class GroupCreateFinalActivity extends BaseFragment implements Notificati
                 }
             }
         };
-        this.avatarOverlay = r8;
+        this.avatarOverlay = r1;
         FrameLayout frameLayout3 = this.editTextContainer;
         boolean z2 = LocaleController.isRTL;
-        frameLayout3.addView(r8, LayoutHelper.createFrame(64, 64.0f, (z2 ? 5 : 3) | 48, z2 ? 0.0f : 16.0f, 16.0f, z2 ? 16.0f : 0.0f, 16.0f));
+        frameLayout3.addView(r1, LayoutHelper.createFrame(64, 64.0f, (z2 ? 5 : 3) | 48, z2 ? 0.0f : 16.0f, 16.0f, z2 ? 16.0f : 0.0f, 16.0f));
         this.avatarOverlay.setOnClickListener(new GroupCreateFinalActivity$$ExternalSyntheticLambda2(this));
         this.cameraDrawable = new RLottieDrawable(NUM, "NUM", AndroidUtilities.dp(60.0f), AndroidUtilities.dp(60.0f), false, (int[]) null);
-        AnonymousClass6 r72 = new RLottieImageView(context2) {
+        AnonymousClass6 r02 = new RLottieImageView(context2) {
             public void invalidate(int i, int i2, int i3, int i4) {
                 super.invalidate(i, i2, i3, i4);
                 GroupCreateFinalActivity.this.avatarOverlay.invalidate();
@@ -515,8 +516,8 @@ public class GroupCreateFinalActivity extends BaseFragment implements Notificati
                 GroupCreateFinalActivity.this.avatarOverlay.invalidate();
             }
         };
-        this.avatarEditor = r72;
-        r72.setScaleType(ImageView.ScaleType.CENTER);
+        this.avatarEditor = r02;
+        r02.setScaleType(ImageView.ScaleType.CENTER);
         this.avatarEditor.setAnimation(this.cameraDrawable);
         this.avatarEditor.setEnabled(false);
         this.avatarEditor.setClickable(false);
@@ -525,14 +526,14 @@ public class GroupCreateFinalActivity extends BaseFragment implements Notificati
         RLottieImageView rLottieImageView = this.avatarEditor;
         boolean z3 = LocaleController.isRTL;
         frameLayout4.addView(rLottieImageView, LayoutHelper.createFrame(64, 64.0f, (z3 ? 5 : 3) | 48, z3 ? 0.0f : 16.0f, 16.0f, z3 ? 16.0f : 0.0f, 16.0f));
-        AnonymousClass7 r73 = new RadialProgressView(context2) {
+        AnonymousClass7 r03 = new RadialProgressView(context2) {
             public void setAlpha(float f) {
                 super.setAlpha(f);
                 GroupCreateFinalActivity.this.avatarOverlay.invalidate();
             }
         };
-        this.avatarProgressView = r73;
-        r73.setSize(AndroidUtilities.dp(30.0f));
+        this.avatarProgressView = r03;
+        r03.setSize(AndroidUtilities.dp(30.0f));
         this.avatarProgressView.setProgressColor(-1);
         this.avatarProgressView.setNoProgress(false);
         FrameLayout frameLayout5 = this.editTextContainer;
@@ -540,7 +541,8 @@ public class GroupCreateFinalActivity extends BaseFragment implements Notificati
         boolean z4 = LocaleController.isRTL;
         frameLayout5.addView(radialProgressView, LayoutHelper.createFrame(64, 64.0f, (z4 ? 5 : 3) | 48, z4 ? 0.0f : 16.0f, 16.0f, z4 ? 16.0f : 0.0f, 16.0f));
         showAvatarProgress(false, false);
-        EditTextEmoji editTextEmoji2 = new EditTextEmoji(context2, r2, this, 0);
+        EditTextEmoji editTextEmoji2 = r0;
+        EditTextEmoji editTextEmoji3 = new EditTextEmoji(context, r9, this, 0, false);
         this.editText = editTextEmoji2;
         int i3 = this.chatType;
         if (i3 == 0 || i3 == 4) {
@@ -558,9 +560,9 @@ public class GroupCreateFinalActivity extends BaseFragment implements Notificati
         }
         this.editText.setFilters(new InputFilter[]{new InputFilter.LengthFilter(100)});
         FrameLayout frameLayout6 = this.editTextContainer;
-        EditTextEmoji editTextEmoji3 = this.editText;
+        EditTextEmoji editTextEmoji4 = this.editText;
         boolean z5 = LocaleController.isRTL;
-        frameLayout6.addView(editTextEmoji3, LayoutHelper.createFrame(-1, -2.0f, 16, z5 ? 5.0f : 96.0f, 0.0f, z5 ? 96.0f : 5.0f, 0.0f));
+        frameLayout6.addView(editTextEmoji4, LayoutHelper.createFrame(-1, -2.0f, 16, z5 ? 5.0f : 96.0f, 0.0f, z5 ? 96.0f : 5.0f, 0.0f));
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context2, 1, false);
         RecyclerListView recyclerListView = new RecyclerListView(context2);
         this.listView = recyclerListView;
@@ -573,7 +575,7 @@ public class GroupCreateFinalActivity extends BaseFragment implements Notificati
         GroupCreateDividerItemDecoration groupCreateDividerItemDecoration = new GroupCreateDividerItemDecoration();
         groupCreateDividerItemDecoration.setSkipRows(this.currentGroupCreateAddress != null ? 5 : 2);
         this.listView.addItemDecoration(groupCreateDividerItemDecoration);
-        r4.addView(this.listView, LayoutHelper.createLinear(-1, -1));
+        r11.addView(this.listView, LayoutHelper.createLinear(-1, -1));
         this.listView.setOnScrollListener(new RecyclerView.OnScrollListener() {
             public void onScrollStateChanged(RecyclerView recyclerView, int i) {
                 if (i == 1) {
@@ -595,6 +597,7 @@ public class GroupCreateFinalActivity extends BaseFragment implements Notificati
         this.floatingButtonContainer.setBackgroundDrawable(createSimpleSelectorCircleDrawable);
         if (i4 >= 21) {
             StateListAnimator stateListAnimator = new StateListAnimator();
+            r19 = r9;
             stateListAnimator.addState(new int[]{16842919}, ObjectAnimator.ofFloat(this.floatingButtonIcon, "translationZ", new float[]{(float) AndroidUtilities.dp(2.0f), (float) AndroidUtilities.dp(4.0f)}).setDuration(200));
             stateListAnimator.addState(new int[0], ObjectAnimator.ofFloat(this.floatingButtonIcon, "translationZ", new float[]{(float) AndroidUtilities.dp(4.0f), (float) AndroidUtilities.dp(2.0f)}).setDuration(200));
             this.floatingButtonContainer.setStateListAnimator(stateListAnimator);
@@ -604,6 +607,8 @@ public class GroupCreateFinalActivity extends BaseFragment implements Notificati
                     outline.setOval(0, 0, AndroidUtilities.dp(56.0f), AndroidUtilities.dp(56.0f));
                 }
             });
+        } else {
+            r19 = r9;
         }
         VerticalPositionAutoAnimator.attach(this.floatingButtonContainer);
         FrameLayout frameLayout7 = this.floatingButtonContainer;
@@ -614,7 +619,7 @@ public class GroupCreateFinalActivity extends BaseFragment implements Notificati
         if (!z6) {
             i2 = 5;
         }
-        r2.addView(frameLayout7, LayoutHelper.createFrame(i6, f, i2 | 80, z6 ? 14.0f : 0.0f, 0.0f, z6 ? 0.0f : 14.0f, 14.0f));
+        r19.addView(frameLayout7, LayoutHelper.createFrame(i6, f, i2 | 80, z6 ? 14.0f : 0.0f, 0.0f, z6 ? 0.0f : 14.0f, 14.0f));
         this.floatingButtonContainer.setOnClickListener(new GroupCreateFinalActivity$$ExternalSyntheticLambda1(this));
         ImageView imageView = new ImageView(context2);
         this.floatingButtonIcon = imageView;

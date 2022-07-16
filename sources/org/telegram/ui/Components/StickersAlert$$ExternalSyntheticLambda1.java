@@ -9,6 +9,6 @@ public final /* synthetic */ class StickersAlert$$ExternalSyntheticLambda1 imple
     }
 
     public final void onClick(DialogInterface dialogInterface, int i) {
-        StickersAlert.lambda$showNameEnterAlert$21(dialogInterface, i);
+        StickersAlert.lambda$showNameEnterAlert$22(dialogInterface, i);
     }
 }

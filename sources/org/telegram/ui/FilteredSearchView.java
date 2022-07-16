@@ -439,7 +439,7 @@ public class FilteredSearchView extends FrameLayout implements NotificationCente
             arrowSpan = r0
             org.telegram.ui.Components.ColoredImageSpan r1 = new org.telegram.ui.Components.ColoredImageSpan
             android.content.Context r2 = org.telegram.messenger.ApplicationLoader.applicationContext
-            r3 = 2131166120(0x7var_a8, float:1.7946476E38)
+            r3 = 2131166122(0x7var_aa, float:1.794648E38)
             android.graphics.drawable.Drawable r2 = androidx.core.content.ContextCompat.getDrawable(r2, r3)
             android.graphics.drawable.Drawable r2 = r2.mutate()
             r1.<init>((android.graphics.drawable.Drawable) r2)
@@ -1834,7 +1834,7 @@ public class FilteredSearchView extends FrameLayout implements NotificationCente
                 org.telegram.ui.Cells.GraySectionCell r5 = new org.telegram.ui.Cells.GraySectionCell
                 android.content.Context r4 = r4.getContext()
                 r5.<init>(r4)
-                r4 = 2131628119(0x7f0e1057, float:1.8883522E38)
+                r4 = 2131628169(0x7f0e1089, float:1.8883623E38)
                 java.lang.String r0 = "SearchMessages"
                 java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r0, r4)
                 r5.setText(r4)

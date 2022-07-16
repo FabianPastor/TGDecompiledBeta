@@ -11,6 +11,6 @@ public final /* synthetic */ class ChannelCreateActivity$$ExternalSyntheticLambd
     }
 
     public final boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
-        return this.f$0.lambda$createView$8(textView, i, keyEvent);
+        return this.f$0.lambda$createView$10(textView, i, keyEvent);
     }
 }

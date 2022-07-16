@@ -24,6 +24,7 @@ public class PremiumLockIconView extends ImageView {
     int color1;
     int color2;
     private float[] colorFloat = new float[3];
+    boolean colorRetrieved = false;
     int currentColor = -1;
     ImageReceiver imageReceiver;
     private boolean locked;
@@ -74,6 +75,7 @@ public class PremiumLockIconView extends ImageView {
     }
 
     public void setColor(int i) {
+        this.colorRetrieved = true;
         if (this.currentColor != i) {
             this.currentColor = i;
             if (this.type == TYPE_REACTIONS) {
@@ -203,6 +205,10 @@ public class PremiumLockIconView extends ImageView {
         this.waitingImage = true;
         this.wasDrawn = false;
         invalidate();
+    }
+
+    public boolean ready() {
+        return this.colorRetrieved;
     }
 
     public void play(int i) {

@@ -5,6 +5,7 @@ import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
 import android.text.style.ForegroundColorSpan;
@@ -25,6 +26,7 @@ public class StickerSetNameCell extends FrameLayout {
     private ImageView buttonView;
     private boolean empty;
     private boolean isEmoji;
+    public int position;
     private final Theme.ResourcesProvider resourcesProvider;
     private CharSequence stickerSetName;
     private int stickerSetNameSearchIndex;
@@ -38,28 +40,37 @@ public class StickerSetNameCell extends FrameLayout {
         this(context, z, false, resourcesProvider2);
     }
 
+    /* JADX INFO: super call moved to the top of the method (can break code semantics) */
     public StickerSetNameCell(Context context, boolean z, boolean z2, Theme.ResourcesProvider resourcesProvider2) {
         super(context);
         FrameLayout.LayoutParams layoutParams;
         FrameLayout.LayoutParams layoutParams2;
         FrameLayout.LayoutParams layoutParams3;
+        Context context2 = context;
+        boolean z3 = z;
         this.resourcesProvider = resourcesProvider2;
-        this.isEmoji = z;
-        TextView textView2 = new TextView(context);
+        this.isEmoji = z3;
+        TextView textView2 = new TextView(context2);
         this.textView = textView2;
         textView2.setTextColor(getThemedColor("chat_emojiPanelStickerSetName"));
         this.textView.setTextSize(1, 15.0f);
         this.textView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         this.textView.setEllipsize(TextUtils.TruncateAt.END);
         this.textView.setSingleLine(true);
+        if (z3) {
+            this.textView.setGravity(17);
+            if (Build.VERSION.SDK_INT >= 17) {
+                this.textView.setTextAlignment(4);
+            }
+        }
         float f = 17.0f;
         if (z2) {
-            layoutParams = LayoutHelper.createFrameRelatively(-2.0f, -2.0f, 8388659, z ? 15.0f : 17.0f, 2.0f, 57.0f, 0.0f);
+            layoutParams = LayoutHelper.createFrameRelatively(-2.0f, -2.0f, (z3 ? 1 : 8388611) | 48, z3 ? 15.0f : 17.0f, z3 ? 10.0f : 2.0f, z3 ? 15.0f : 57.0f, 0.0f);
         } else {
-            layoutParams = LayoutHelper.createFrame(-2, -2.0f, 51, z ? 15.0f : f, 2.0f, 57.0f, 0.0f);
+            layoutParams = LayoutHelper.createFrame(-2, -2.0f, (z3 ? 1 : 3) | 48, z3 ? 15.0f : f, z3 ? 10.0f : 2.0f, z3 ? 15.0f : 57.0f, 0.0f);
         }
         addView(this.textView, layoutParams);
-        TextView textView3 = new TextView(context);
+        TextView textView3 = new TextView(context2);
         this.urlTextView = textView3;
         textView3.setTextColor(getThemedColor("chat_emojiPanelStickerSetName"));
         this.urlTextView.setTextSize(1, 12.0f);
@@ -72,14 +83,14 @@ public class StickerSetNameCell extends FrameLayout {
             layoutParams2 = LayoutHelper.createFrame(-2, -2.0f, 53, 17.0f, 6.0f, 17.0f, 0.0f);
         }
         addView(this.urlTextView, layoutParams2);
-        ImageView imageView = new ImageView(context);
+        ImageView imageView = new ImageView(context2);
         this.buttonView = imageView;
         imageView.setScaleType(ImageView.ScaleType.CENTER);
         this.buttonView.setColorFilter(new PorterDuffColorFilter(getThemedColor("chat_emojiPanelStickerSetNameIcon"), PorterDuff.Mode.MULTIPLY));
         if (z2) {
-            layoutParams3 = LayoutHelper.createFrameRelatively(24.0f, 24.0f, 8388661, 0.0f, 0.0f, 16.0f, 0.0f);
+            layoutParams3 = LayoutHelper.createFrameRelatively(24.0f, 24.0f, 8388661, 0.0f, 0.0f, 11.0f, 0.0f);
         } else {
-            layoutParams3 = LayoutHelper.createFrame(24, 24.0f, 53, 0.0f, 0.0f, 16.0f, 0.0f);
+            layoutParams3 = LayoutHelper.createFrame(24, 24.0f, 53, 0.0f, 0.0f, 11.0f, 0.0f);
         }
         addView(this.buttonView, layoutParams3);
     }
@@ -129,6 +140,7 @@ public class StickerSetNameCell extends FrameLayout {
             this.buttonView.setVisibility(4);
             return;
         }
+        this.empty = false;
         if (i3 != 0) {
             updateTextSearchSpan();
         } else {
@@ -172,7 +184,7 @@ public class StickerSetNameCell extends FrameLayout {
         if (this.empty) {
             super.onMeasure(View.MeasureSpec.makeMeasureSpec(View.MeasureSpec.getSize(i), NUM), View.MeasureSpec.makeMeasureSpec(1, NUM));
         } else {
-            super.onMeasure(View.MeasureSpec.makeMeasureSpec(View.MeasureSpec.getSize(i), NUM), View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(this.isEmoji ? 28.0f : 24.0f), NUM));
+            super.onMeasure(View.MeasureSpec.makeMeasureSpec(View.MeasureSpec.getSize(i), NUM), View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(this.isEmoji ? 36.0f : 24.0f), NUM));
         }
     }
 
@@ -202,5 +214,9 @@ public class StickerSetNameCell extends FrameLayout {
         Theme.ResourcesProvider resourcesProvider2 = this.resourcesProvider;
         Integer color = resourcesProvider2 != null ? resourcesProvider2.getColor(str) : null;
         return color != null ? color.intValue() : Theme.getColor(str);
+    }
+
+    public TextView getTextView() {
+        return this.textView;
     }
 }

@@ -527,33 +527,34 @@ public class ChatAvatarContainer extends FrameLayout implements NotificationCent
         int currentActionBarHeight = ((ActionBar.getCurrentActionBarHeight() - AndroidUtilities.dp(42.0f)) / 2) + ((Build.VERSION.SDK_INT < 21 || !this.occupyStatusBar) ? 0 : AndroidUtilities.statusBarHeight);
         BackupImageView backupImageView = this.avatarImageView;
         int i6 = this.leftPadding;
-        backupImageView.layout(i6, currentActionBarHeight, AndroidUtilities.dp(42.0f) + i6, AndroidUtilities.dp(42.0f) + currentActionBarHeight);
-        int i7 = this.leftPadding;
+        int i7 = currentActionBarHeight + 1;
+        backupImageView.layout(i6, i7, AndroidUtilities.dp(42.0f) + i6, AndroidUtilities.dp(42.0f) + i7);
+        int i8 = this.leftPadding;
         if (this.avatarImageView.getVisibility() == 0) {
             i5 = AndroidUtilities.dp(54.0f);
         }
-        int i8 = i7 + i5;
+        int i9 = i8 + i5;
         if (this.subtitleTextView.getVisibility() != 8) {
-            this.titleTextView.layout(i8, AndroidUtilities.dp(1.3f) + currentActionBarHeight, this.titleTextView.getMeasuredWidth() + i8, this.titleTextView.getTextHeight() + currentActionBarHeight + AndroidUtilities.dp(1.3f));
+            this.titleTextView.layout(i9, AndroidUtilities.dp(1.3f) + currentActionBarHeight, this.titleTextView.getMeasuredWidth() + i9, this.titleTextView.getTextHeight() + currentActionBarHeight + AndroidUtilities.dp(1.3f));
             SimpleTextView simpleTextView = this.titleTextLargerCopyView;
             if (simpleTextView != null) {
-                simpleTextView.layout(i8, AndroidUtilities.dp(1.3f) + currentActionBarHeight, this.titleTextLargerCopyView.getMeasuredWidth() + i8, this.titleTextLargerCopyView.getTextHeight() + currentActionBarHeight + AndroidUtilities.dp(1.3f));
+                simpleTextView.layout(i9, AndroidUtilities.dp(1.3f) + currentActionBarHeight, this.titleTextLargerCopyView.getMeasuredWidth() + i9, this.titleTextLargerCopyView.getTextHeight() + currentActionBarHeight + AndroidUtilities.dp(1.3f));
             }
         } else {
-            this.titleTextView.layout(i8, AndroidUtilities.dp(11.0f) + currentActionBarHeight, this.titleTextView.getMeasuredWidth() + i8, this.titleTextView.getTextHeight() + currentActionBarHeight + AndroidUtilities.dp(11.0f));
+            this.titleTextView.layout(i9, AndroidUtilities.dp(11.0f) + currentActionBarHeight, this.titleTextView.getMeasuredWidth() + i9, this.titleTextView.getTextHeight() + currentActionBarHeight + AndroidUtilities.dp(11.0f));
             SimpleTextView simpleTextView2 = this.titleTextLargerCopyView;
             if (simpleTextView2 != null) {
-                simpleTextView2.layout(i8, AndroidUtilities.dp(11.0f) + currentActionBarHeight, this.titleTextLargerCopyView.getMeasuredWidth() + i8, this.titleTextLargerCopyView.getTextHeight() + currentActionBarHeight + AndroidUtilities.dp(11.0f));
+                simpleTextView2.layout(i9, AndroidUtilities.dp(11.0f) + currentActionBarHeight, this.titleTextLargerCopyView.getMeasuredWidth() + i9, this.titleTextLargerCopyView.getTextHeight() + currentActionBarHeight + AndroidUtilities.dp(11.0f));
             }
         }
         ImageView imageView = this.timeItem;
         if (imageView != null) {
             imageView.layout(this.leftPadding + AndroidUtilities.dp(16.0f), AndroidUtilities.dp(15.0f) + currentActionBarHeight, this.leftPadding + AndroidUtilities.dp(50.0f), AndroidUtilities.dp(49.0f) + currentActionBarHeight);
         }
-        this.subtitleTextView.layout(i8, AndroidUtilities.dp(24.0f) + currentActionBarHeight, this.subtitleTextView.getMeasuredWidth() + i8, this.subtitleTextView.getTextHeight() + currentActionBarHeight + AndroidUtilities.dp(24.0f));
+        this.subtitleTextView.layout(i9, AndroidUtilities.dp(24.0f) + currentActionBarHeight, this.subtitleTextView.getMeasuredWidth() + i9, this.subtitleTextView.getTextHeight() + currentActionBarHeight + AndroidUtilities.dp(24.0f));
         SimpleTextView simpleTextView3 = this.subtitleTextLargerCopyView;
         if (simpleTextView3 != null) {
-            simpleTextView3.layout(i8, AndroidUtilities.dp(24.0f) + currentActionBarHeight, this.subtitleTextLargerCopyView.getMeasuredWidth() + i8, currentActionBarHeight + this.subtitleTextLargerCopyView.getTextHeight() + AndroidUtilities.dp(24.0f));
+            simpleTextView3.layout(i9, AndroidUtilities.dp(24.0f) + currentActionBarHeight, this.subtitleTextLargerCopyView.getMeasuredWidth() + i9, currentActionBarHeight + this.subtitleTextLargerCopyView.getTextHeight() + AndroidUtilities.dp(24.0f));
         }
     }
 

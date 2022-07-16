@@ -487,7 +487,7 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
             int r2 = r7.getThemedColor(r1)
             r0.setTextColor(r2)
             android.widget.TextView r0 = r7.dropDown
-            r2 = 2131625007(0x7f0e042f, float:1.887721E38)
+            r2 = 2131625016(0x7f0e0438, float:1.8877228E38)
             java.lang.String r4 = "ChatGallery"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r4, r2)
             r0.setText(r2)
@@ -524,26 +524,26 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
             r7.checkCamera(r3)
             org.telegram.ui.Components.ChatAttachAlert r0 = r7.parentAlert
             org.telegram.ui.ActionBar.ActionBarMenuItem r0 = r0.selectedMenuItem
-            r5 = 2131628211(0x7f0e10b3, float:1.8883708E38)
+            r5 = 2131628261(0x7f0e10e5, float:1.888381E38)
             java.lang.String r6 = "SendWithoutGrouping"
             java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r6, r5)
             r0.addSubItem(r3, r5)
             org.telegram.ui.Components.ChatAttachAlert r0 = r7.parentAlert
             org.telegram.ui.ActionBar.ActionBarMenuItem r0 = r0.selectedMenuItem
-            r5 = 2131628210(0x7f0e10b2, float:1.8883706E38)
+            r5 = 2131628260(0x7f0e10e4, float:1.8883808E38)
             java.lang.String r6 = "SendWithoutCompression"
             java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r6, r5)
             r0.addSubItem(r13, r5)
             org.telegram.ui.Components.ChatAttachAlert r0 = r7.parentAlert
             org.telegram.ui.ActionBar.ActionBarMenuItem r0 = r0.selectedMenuItem
-            r5 = 2131165831(0x7var_, float:1.794589E38)
-            r6 = 2131627101(0x7f0e0c5d, float:1.8881457E38)
+            r5 = 2131165832(0x7var_, float:1.7945892E38)
+            r6 = 2131627143(0x7f0e0CLASSNAME, float:1.8881542E38)
             java.lang.String r11 = "OpenInExternalApp"
             java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r11, r6)
             r0.addSubItem(r10, r5, r6)
             org.telegram.ui.Components.ChatAttachAlert r0 = r7.parentAlert
             org.telegram.ui.ActionBar.ActionBarMenuItem r0 = r0.selectedMenuItem
-            r5 = 2131624496(0x7f0e0230, float:1.8876173E38)
+            r5 = 2131624503(0x7f0e0237, float:1.8876188E38)
             java.lang.String r6 = "AttachMediaPreviewButton"
             java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r6, r5)
             r0.addSubItem(r12, r5)
@@ -605,7 +605,7 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
             org.telegram.ui.Components.EmptyTextProgressView r0 = new org.telegram.ui.Components.EmptyTextProgressView
             r0.<init>(r8, r5, r9)
             r7.progressView = r0
-            r6 = 2131626847(0x7f0e0b5f, float:1.8880942E38)
+            r6 = 2131626889(0x7f0e0b89, float:1.8881027E38)
             java.lang.String r11 = "NoPhotos"
             java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r11, r6)
             r0.setText(r6)
@@ -637,7 +637,7 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
             r0 = 1065353216(0x3var_, float:1.0)
             org.telegram.messenger.AndroidUtilities.updateViewVisibilityAnimated(r6, r3, r0, r3)
             android.widget.TextView r0 = r7.recordTime
-            r6 = 2131166177(0x7var_e1, float:1.7946592E38)
+            r6 = 2131166179(0x7var_e3, float:1.7946596E38)
             r0.setBackgroundResource(r6)
             android.widget.TextView r0 = r7.recordTime
             android.graphics.drawable.Drawable r0 = r0.getBackground()
@@ -690,7 +690,7 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
             android.widget.TextView r0 = new android.widget.TextView
             r0.<init>(r8)
             r7.counterTextView = r0
-            r5 = 2131166051(0x7var_, float:1.7946336E38)
+            r5 = 2131166053(0x7var_, float:1.794634E38)
             r0.setBackgroundResource(r5)
             android.widget.TextView r0 = r7.counterTextView
             r0.setVisibility(r4)
@@ -707,7 +707,7 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
             android.graphics.Typeface r2 = org.telegram.messenger.AndroidUtilities.getTypeface(r2)
             r0.setTypeface(r2)
             android.widget.TextView r0 = r7.counterTextView
-            r2 = 2131166049(0x7var_, float:1.7946332E38)
+            r2 = 2131166051(0x7var_, float:1.7946336E38)
             r0.setCompoundDrawablesWithIntrinsicBounds(r3, r3, r2, r3)
             android.widget.TextView r0 = r7.counterTextView
             int r1 = org.telegram.messenger.AndroidUtilities.dp(r1)
@@ -826,7 +826,7 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
             android.widget.TextView r0 = r7.tooltipTextView
             r0.setTextColor(r14)
             android.widget.TextView r0 = r7.tooltipTextView
-            r2 = 2131628537(0x7f0e11f9, float:1.888437E38)
+            r2 = 2131628587(0x7f0e122b, float:1.888447E38)
             java.lang.String r4 = "TapForVideo"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r4, r2)
             r0.setText(r2)

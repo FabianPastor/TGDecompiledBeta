@@ -17,13 +17,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import java.io.InputStream;
-import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
-import java.util.concurrent.atomic.AtomicReference;
 
 public class Emoji {
     private static final int MAX_RECENT_EMOJI_COUNT = 48;
@@ -707,15 +705,7 @@ public class Emoji {
     }
 
     public static CharSequence replaceEmoji(CharSequence charSequence, Paint.FontMetricsInt fontMetricsInt, int i, boolean z) {
-        return replaceEmoji(charSequence, fontMetricsInt, i, z, (int[]) null, false, (AtomicReference<WeakReference<View>>) null);
-    }
-
-    public static CharSequence replaceEmoji(CharSequence charSequence, Paint.FontMetricsInt fontMetricsInt, int i, boolean z, boolean z2, AtomicReference<WeakReference<View>> atomicReference) {
-        return replaceEmoji(charSequence, fontMetricsInt, i, z, (int[]) null, z2, atomicReference);
-    }
-
-    public static CharSequence replaceEmoji(CharSequence charSequence, Paint.FontMetricsInt fontMetricsInt, int i, boolean z, int[] iArr) {
-        return replaceEmoji(charSequence, fontMetricsInt, i, z, iArr, false, (AtomicReference<WeakReference<View>>) null);
+        return replaceEmoji(charSequence, fontMetricsInt, i, z, (int[]) null);
     }
 
     /*  JADX ERROR: IF instruction can be used only in fallback mode
@@ -753,66 +743,92 @@ public class Emoji {
         	at jadx.core.ProcessClass.generateCode(ProcessClass.java:61)
         	at jadx.core.dex.nodes.ClassNode.decompile(ClassNode.java:273)
         */
-    public static java.lang.CharSequence replaceEmoji(java.lang.CharSequence r3, android.graphics.Paint.FontMetricsInt r4, int r5, boolean r6, int[] r7, boolean r8, java.util.concurrent.atomic.AtomicReference<java.lang.ref.WeakReference<android.view.View>> r9) {
+    public static java.lang.CharSequence replaceEmoji(java.lang.CharSequence r7, android.graphics.Paint.FontMetricsInt r8, int r9, boolean r10, int[] r11) {
         /*
-            boolean r8 = org.telegram.messenger.SharedConfig.useSystemEmoji
-            if (r8 != 0) goto L_0x0067
-            if (r3 == 0) goto L_0x0067
-            int r8 = r3.length()
-            if (r8 != 0) goto L_0x000d
-            goto L_0x0067
-        L_0x000d:
-            if (r6 != 0) goto L_0x0016
-            boolean r6 = r3 instanceof android.text.Spannable
-            if (r6 == 0) goto L_0x0016
-            android.text.Spannable r3 = (android.text.Spannable) r3
-            goto L_0x0022
-        L_0x0016:
-            android.text.Spannable$Factory r6 = android.text.Spannable.Factory.getInstance()
-            java.lang.String r3 = r3.toString()
-            android.text.Spannable r3 = r6.newSpannable(r3)
-        L_0x0022:
-            java.util.ArrayList r6 = parseEmojis(r3, r7)
-            r7 = 0
-            r8 = 0
-        L_0x0028:
-            int r9 = r6.size()
-            if (r8 >= r9) goto L_0x0067
-            java.lang.Object r9 = r6.get(r8)
-            org.telegram.messenger.Emoji$EmojiSpanRange r9 = (org.telegram.messenger.Emoji.EmojiSpanRange) r9
-            java.lang.CharSequence r0 = r9.code     // Catch:{ Exception -> 0x004b }
-            org.telegram.messenger.Emoji$EmojiDrawable r0 = getEmojiDrawable(r0)     // Catch:{ Exception -> 0x004b }
-            if (r0 == 0) goto L_0x004f
-            org.telegram.messenger.Emoji$EmojiSpan r1 = new org.telegram.messenger.Emoji$EmojiSpan     // Catch:{ Exception -> 0x004b }
-            r1.<init>(r0, r7, r5, r4)     // Catch:{ Exception -> 0x004b }
-            int r0 = r9.start     // Catch:{ Exception -> 0x004b }
-            int r9 = r9.end     // Catch:{ Exception -> 0x004b }
-            r2 = 33
-            r3.setSpan(r1, r0, r9, r2)     // Catch:{ Exception -> 0x004b }
-            goto L_0x004f
-        L_0x004b:
-            r9 = move-exception
-            org.telegram.messenger.FileLog.e((java.lang.Throwable) r9)
-        L_0x004f:
-            int r9 = android.os.Build.VERSION.SDK_INT
-            r0 = 23
-            if (r9 < r0) goto L_0x0059
-            r0 = 29
-            if (r9 < r0) goto L_0x0064
-        L_0x0059:
-            boolean r9 = org.telegram.messenger.BuildVars.DEBUG_PRIVATE_VERSION
-            if (r9 != 0) goto L_0x0064
-            int r9 = r8 + 1
-            r0 = 50
-            if (r9 < r0) goto L_0x0064
-            goto L_0x0067
+            boolean r0 = org.telegram.messenger.SharedConfig.useSystemEmoji
+            if (r0 != 0) goto L_0x0093
+            if (r7 == 0) goto L_0x0093
+            int r0 = r7.length()
+            if (r0 != 0) goto L_0x000e
+            goto L_0x0093
+        L_0x000e:
+            if (r10 != 0) goto L_0x0017
+            boolean r10 = r7 instanceof android.text.Spannable
+            if (r10 == 0) goto L_0x0017
+            android.text.Spannable r7 = (android.text.Spannable) r7
+            goto L_0x0023
+        L_0x0017:
+            android.text.Spannable$Factory r10 = android.text.Spannable.Factory.getInstance()
+            java.lang.String r7 = r7.toString()
+            android.text.Spannable r7 = r10.newSpannable(r7)
+        L_0x0023:
+            java.util.ArrayList r10 = parseEmojis(r7, r11)
+            int r11 = r7.length()
+            java.lang.Class<org.telegram.ui.Components.AnimatedEmojiSpan> r0 = org.telegram.ui.Components.AnimatedEmojiSpan.class
+            r1 = 0
+            java.lang.Object[] r11 = r7.getSpans(r1, r11, r0)
+            org.telegram.ui.Components.AnimatedEmojiSpan[] r11 = (org.telegram.ui.Components.AnimatedEmojiSpan[]) r11
+            r0 = 0
+        L_0x0035:
+            int r2 = r10.size()
+            if (r0 >= r2) goto L_0x0093
+            java.lang.Object r2 = r10.get(r0)     // Catch:{ Exception -> 0x007b }
+            org.telegram.messenger.Emoji$EmojiSpanRange r2 = (org.telegram.messenger.Emoji.EmojiSpanRange) r2     // Catch:{ Exception -> 0x007b }
+            if (r11 == 0) goto L_0x0064
+            r3 = 0
+        L_0x0044:
+            int r4 = r11.length     // Catch:{ Exception -> 0x007b }
+            if (r3 >= r4) goto L_0x0060
+            r4 = r11[r3]     // Catch:{ Exception -> 0x007b }
+            if (r4 == 0) goto L_0x005d
+            int r5 = r7.getSpanStart(r4)     // Catch:{ Exception -> 0x007b }
+            int r6 = r2.start     // Catch:{ Exception -> 0x007b }
+            if (r5 != r6) goto L_0x005d
+            int r4 = r7.getSpanEnd(r4)     // Catch:{ Exception -> 0x007b }
+            int r5 = r2.end     // Catch:{ Exception -> 0x007b }
+            if (r4 != r5) goto L_0x005d
+            r3 = 1
+            goto L_0x0061
+        L_0x005d:
+            int r3 = r3 + 1
+            goto L_0x0044
+        L_0x0060:
+            r3 = 0
+        L_0x0061:
+            if (r3 == 0) goto L_0x0064
+            goto L_0x0090
         L_0x0064:
-            int r8 = r8 + 1
-            goto L_0x0028
-        L_0x0067:
-            return r3
+            java.lang.CharSequence r3 = r2.code     // Catch:{ Exception -> 0x007b }
+            org.telegram.messenger.Emoji$EmojiDrawable r3 = getEmojiDrawable(r3)     // Catch:{ Exception -> 0x007b }
+            if (r3 == 0) goto L_0x007f
+            org.telegram.messenger.Emoji$EmojiSpan r4 = new org.telegram.messenger.Emoji$EmojiSpan     // Catch:{ Exception -> 0x007b }
+            r4.<init>(r3, r1, r9, r8)     // Catch:{ Exception -> 0x007b }
+            int r3 = r2.start     // Catch:{ Exception -> 0x007b }
+            int r2 = r2.end     // Catch:{ Exception -> 0x007b }
+            r5 = 33
+            r7.setSpan(r4, r3, r2, r5)     // Catch:{ Exception -> 0x007b }
+            goto L_0x007f
+        L_0x007b:
+            r2 = move-exception
+            org.telegram.messenger.FileLog.e((java.lang.Throwable) r2)
+        L_0x007f:
+            int r2 = android.os.Build.VERSION.SDK_INT
+            r3 = 23
+            if (r2 < r3) goto L_0x0089
+            r3 = 29
+            if (r2 < r3) goto L_0x0090
+        L_0x0089:
+            int r2 = r0 + 1
+            r3 = 50
+            if (r2 < r3) goto L_0x0090
+            goto L_0x0093
+        L_0x0090:
+            int r0 = r0 + 1
+            goto L_0x0035
+        L_0x0093:
+            return r7
         */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.Emoji.replaceEmoji(java.lang.CharSequence, android.graphics.Paint$FontMetricsInt, int, boolean, int[], boolean, java.util.concurrent.atomic.AtomicReference):java.lang.CharSequence");
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.Emoji.replaceEmoji(java.lang.CharSequence, android.graphics.Paint$FontMetricsInt, int, boolean, int[]):java.lang.CharSequence");
     }
 
     public static class EmojiSpan extends ImageSpan {

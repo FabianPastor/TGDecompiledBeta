@@ -95,6 +95,7 @@ public class TextMessageEnterTransition implements MessageEnterTransitionContain
         int i3;
         int i4;
         Theme.MessageDrawable currentBackgroundDrawable;
+        int i5;
         ChatMessageCell chatMessageCell2 = chatMessageCell;
         MessageEnterTransitionContainer messageEnterTransitionContainer2 = messageEnterTransitionContainer;
         this.resourcesProvider = resourcesProvider2;
@@ -134,32 +135,33 @@ public class TextMessageEnterTransition implements MessageEnterTransitionContain
                 }
                 if (charSequence instanceof Spannable) {
                     Object[] spans = ((Spannable) charSequence).getSpans(0, charSequence.length(), Object.class);
-                    int i5 = 0;
+                    int i6 = 0;
                     while (true) {
-                        if (i5 >= spans.length) {
+                        if (i6 >= spans.length) {
                             break;
-                        } else if (!(spans[i5] instanceof Emoji.EmojiSpan)) {
+                        } else if (!(spans[i6] instanceof Emoji.EmojiSpan)) {
                             z = true;
                             break;
                         } else {
-                            i5++;
+                            i6++;
                         }
                     }
                 }
                 z = false;
                 if (text.length() != charSequence.length() || z) {
                     this.crossfade = true;
-                    String charSequence2 = text.toString();
-                    String trim = charSequence2.trim();
-                    int indexOf = charSequence2.indexOf(trim);
-                    if (indexOf > 0) {
-                        i = chatActivityEnterView.getEditField().getLayout().getLineTop(chatActivityEnterView.getEditField().getLayout().getLineForOffset(indexOf));
-                        i2 = chatActivityEnterView.getEditField().getLayout().getLineBottom(chatActivityEnterView.getEditField().getLayout().getLineForOffset(indexOf + trim.length())) - i;
+                    int[] iArr = new int[1];
+                    CharSequence trim = AndroidUtilities.trim(text, iArr);
+                    if (iArr[0] > 0) {
+                        i = chatActivityEnterView.getEditField().getLayout().getLineTop(chatActivityEnterView.getEditField().getLayout().getLineForOffset(iArr[0]));
+                        i5 = chatActivityEnterView.getEditField().getLayout().getLineBottom(chatActivityEnterView.getEditField().getLayout().getLineForOffset(iArr[0] + trim.length())) - i;
                     } else {
-                        i2 = height;
+                        i5 = height;
                         i = 0;
                     }
-                    charSequence = Emoji.replaceEmoji(trim, textPaint.getFontMetricsInt(), dp, false);
+                    int i7 = i5;
+                    charSequence = Emoji.replaceEmoji(text, textPaint.getFontMetricsInt(), dp, false);
+                    i2 = i7;
                 } else {
                     i2 = height;
                     i = 0;
@@ -177,8 +179,8 @@ public class TextMessageEnterTransition implements MessageEnterTransitionContain
                 this.fromStartY = ((((float) AndroidUtilities.dp(10.0f)) + y) - ((float) chatActivityEnterView.getEditField().getScrollY())) + ((float) i);
                 this.toXOffset = 0.0f;
                 float f2 = Float.MAX_VALUE;
-                for (int i6 = 0; i6 < this.layout.getLineCount(); i6++) {
-                    float lineLeft = this.layout.getLineLeft(i6);
+                for (int i8 = 0; i8 < this.layout.getLineCount(); i8++) {
+                    float lineLeft = this.layout.getLineLeft(i8);
                     if (lineLeft < f2) {
                         f2 = lineLeft;
                     }
@@ -203,23 +205,23 @@ public class TextMessageEnterTransition implements MessageEnterTransitionContain
                 this.toColor = getThemedColor("chat_messageTextOut");
                 if (staticLayout.getLineCount() == this.layout.getLineCount()) {
                     lineCount = staticLayout.getLineCount();
-                    int i7 = 0;
+                    int i9 = 0;
                     i4 = 0;
                     i3 = 0;
                     while (true) {
-                        if (i7 >= lineCount) {
+                        if (i9 >= lineCount) {
                             break;
                         }
-                        if (isRtlLine(this.layout, i7)) {
+                        if (isRtlLine(this.layout, i9)) {
                             i3++;
                         } else {
                             i4++;
                         }
-                        if (staticLayout.getLineEnd(i7) != this.layout.getLineEnd(i7)) {
+                        if (staticLayout.getLineEnd(i9) != this.layout.getLineEnd(i9)) {
                             this.crossfade = true;
                             break;
                         }
-                        i7++;
+                        i9++;
                     }
                 } else {
                     this.crossfade = true;
@@ -229,17 +231,17 @@ public class TextMessageEnterTransition implements MessageEnterTransitionContain
                 if (!this.crossfade && i3 > 0 && i4 > 0) {
                     SpannableString spannableString = new SpannableString(charSequence);
                     SpannableString spannableString2 = new SpannableString(charSequence);
-                    int i8 = 0;
+                    int i10 = 0;
                     float f3 = Float.MAX_VALUE;
-                    while (i8 < lineCount) {
-                        if (isRtlLine(this.layout, i8)) {
-                            spannableString.setSpan(new EmptyStubSpan(), this.layout.getLineStart(i8), this.layout.getLineEnd(i8), 0);
-                            float lineLeft2 = this.layout.getLineLeft(i8);
+                    while (i10 < lineCount) {
+                        if (isRtlLine(this.layout, i10)) {
+                            spannableString.setSpan(new EmptyStubSpan(), this.layout.getLineStart(i10), this.layout.getLineEnd(i10), 0);
+                            float lineLeft2 = this.layout.getLineLeft(i10);
                             f3 = lineLeft2 < f3 ? lineLeft2 : f3;
                         } else {
-                            spannableString2.setSpan(new EmptyStubSpan(), this.layout.getLineStart(i8), this.layout.getLineEnd(i8), 0);
+                            spannableString2.setSpan(new EmptyStubSpan(), this.layout.getLineStart(i10), this.layout.getLineEnd(i10), 0);
                         }
-                        i8++;
+                        i10++;
                         RecyclerListView recyclerListView2 = recyclerListView;
                     }
                     if (Build.VERSION.SDK_INT >= 24) {
@@ -247,9 +249,9 @@ public class TextMessageEnterTransition implements MessageEnterTransitionContain
                         this.rtlLayout = StaticLayout.Builder.obtain(spannableString2, 0, spannableString2.length(), textPaint, width).setBreakStrategy(1).setHyphenationFrequency(0).setAlignment(Layout.Alignment.ALIGN_NORMAL).build();
                     } else {
                         TextPaint textPaint2 = textPaint;
-                        int i9 = width;
-                        this.layout = new StaticLayout(spannableString, textPaint2, i9, Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
-                        this.rtlLayout = new StaticLayout(spannableString2, textPaint2, i9, Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+                        int i11 = width;
+                        this.layout = new StaticLayout(spannableString, textPaint2, i11, Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+                        this.rtlLayout = new StaticLayout(spannableString2, textPaint2, i11, Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
                     }
                 }
                 this.toXOffsetRtl = (float) (this.layout.getWidth() - chatMessageCell.getMessageObject().textLayoutBlocks.get(0).textLayout.getWidth());
@@ -353,12 +355,12 @@ public class TextMessageEnterTransition implements MessageEnterTransitionContain
         return layout2.getLineRight(i) == ((float) layout2.getWidth()) && layout2.getLineLeft(i) != 0.0f;
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:63:0x0353  */
-    /* JADX WARNING: Removed duplicated region for block: B:64:0x0360  */
-    /* JADX WARNING: Removed duplicated region for block: B:67:0x0392  */
-    /* JADX WARNING: Removed duplicated region for block: B:70:0x03f8  */
-    /* JADX WARNING: Removed duplicated region for block: B:73:0x043d  */
-    /* JADX WARNING: Removed duplicated region for block: B:76:0x0453  */
+    /* JADX WARNING: Removed duplicated region for block: B:63:0x0359  */
+    /* JADX WARNING: Removed duplicated region for block: B:64:0x0366  */
+    /* JADX WARNING: Removed duplicated region for block: B:67:0x0398  */
+    /* JADX WARNING: Removed duplicated region for block: B:70:0x03fe  */
+    /* JADX WARNING: Removed duplicated region for block: B:73:0x0443  */
+    /* JADX WARNING: Removed duplicated region for block: B:76:0x0459  */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public void onDraw(android.graphics.Canvas r38) {
         /*
@@ -368,29 +370,32 @@ public class TextMessageEnterTransition implements MessageEnterTransitionContain
             boolean r1 = r0.drawBitmaps
             r9 = 1
             r10 = 0
-            if (r1 == 0) goto L_0x0039
+            if (r1 == 0) goto L_0x003f
             boolean r1 = r0.initBitmaps
-            if (r1 != 0) goto L_0x0039
+            if (r1 != 0) goto L_0x003f
             android.graphics.Bitmap r1 = r0.crossfadeTextBitmap
-            if (r1 == 0) goto L_0x0039
+            if (r1 == 0) goto L_0x003f
             org.telegram.ui.Cells.ChatMessageCell r1 = r0.messageView
             org.telegram.ui.Cells.ChatMessageCell$TransitionParams r1 = r1.getTransitionParams()
             boolean r1 = r1.wasDraw
-            if (r1 == 0) goto L_0x0039
+            if (r1 == 0) goto L_0x003f
             r0.initBitmaps = r9
-            android.graphics.Canvas r3 = new android.graphics.Canvas
-            android.graphics.Bitmap r1 = r0.crossfadeTextBitmap
-            r3.<init>(r1)
-            float r1 = r0.crossfadeTextOffset
-            r3.translate(r10, r1)
+            android.graphics.Canvas r1 = new android.graphics.Canvas
+            android.graphics.Bitmap r2 = r0.crossfadeTextBitmap
+            r1.<init>(r2)
+            float r2 = r0.crossfadeTextOffset
+            r1.translate(r10, r2)
             org.telegram.ui.Cells.ChatMessageCell r2 = r0.messageView
-            org.telegram.messenger.MessageObject r1 = r2.getMessageObject()
-            java.util.ArrayList<org.telegram.messenger.MessageObject$TextLayoutBlock> r4 = r1.textLayoutBlocks
+            org.telegram.messenger.MessageObject r3 = r2.getMessageObject()
+            java.util.ArrayList<org.telegram.messenger.MessageObject$TextLayoutBlock> r4 = r3.textLayoutBlocks
             r5 = 1
             r6 = 1065353216(0x3var_, float:1.0)
             r7 = 1
+            r3 = r1
             r2.drawMessageText(r3, r4, r5, r6, r7)
-        L_0x0039:
+            org.telegram.ui.Cells.ChatMessageCell r2 = r0.messageView
+            r2.drawAnimatedEmojis(r1)
+        L_0x003f:
             org.telegram.ui.Components.RecyclerListView r1 = r0.listView
             float r1 = r1.getY()
             org.telegram.ui.MessageEnterTransitionContainer r2 = r0.container
@@ -420,9 +425,9 @@ public class TextMessageEnterTransition implements MessageEnterTransitionContain
             org.telegram.messenger.MessageObject r2 = r2.getMessageObject()
             int r2 = r2.stableId
             int r3 = r0.messageId
-            if (r2 == r3) goto L_0x0081
+            if (r2 == r3) goto L_0x0087
             return
-        L_0x0081:
+        L_0x0087:
             org.telegram.ui.Cells.ChatMessageCell r2 = r0.messageView
             float r2 = r2.getX()
             org.telegram.ui.Components.RecyclerListView r3 = r0.listView
@@ -450,13 +455,13 @@ public class TextMessageEnterTransition implements MessageEnterTransitionContain
             r16 = 1053609165(0x3ecccccd, float:0.4)
             r17 = 1065353216(0x3var_, float:1.0)
             int r3 = (r2 > r16 ? 1 : (r2 == r16 ? 0 : -1))
-            if (r3 <= 0) goto L_0x00c9
+            if (r3 <= 0) goto L_0x00cf
             r7 = 1065353216(0x3var_, float:1.0)
-            goto L_0x00cc
-        L_0x00c9:
+            goto L_0x00d2
+        L_0x00cf:
             float r3 = r2 / r16
             r7 = r3
-        L_0x00cc:
+        L_0x00d2:
             org.telegram.ui.Components.CubicBezierInterpolator r3 = org.telegram.ui.Components.CubicBezierInterpolator.EASE_OUT_QUINT
             float r2 = r3.getInterpolation(r2)
             org.telegram.ui.Components.CubicBezierInterpolator r3 = org.telegram.ui.Components.CubicBezierInterpolator.EASE_OUT
@@ -481,13 +486,13 @@ public class TextMessageEnterTransition implements MessageEnterTransitionContain
             org.telegram.ui.Components.RecyclerListView r2 = r0.listView
             int r2 = r2.getMeasuredHeight()
             r5 = 0
-            if (r1 <= r2) goto L_0x0107
+            if (r1 <= r2) goto L_0x010d
             r1 = 1
-            goto L_0x0108
-        L_0x0107:
+            goto L_0x010e
+        L_0x010d:
             r1 = 0
-        L_0x0108:
-            if (r1 == 0) goto L_0x012a
+        L_0x010e:
+            if (r1 == 0) goto L_0x0130
             org.telegram.ui.Cells.ChatMessageCell r1 = r0.messageView
             int r1 = r1.getMeasuredHeight()
             float r1 = (float) r1
@@ -498,16 +503,16 @@ public class TextMessageEnterTransition implements MessageEnterTransitionContain
             float r1 = r1 - r2
             float r2 = (float) r6
             int r1 = (r1 > r2 ? 1 : (r1 == r2 ? 0 : -1))
-            if (r1 <= 0) goto L_0x012a
+            if (r1 <= 0) goto L_0x0130
             org.telegram.ui.MessageEnterTransitionContainer r1 = r0.container
             int r1 = r1.getMeasuredHeight()
-            if (r1 <= 0) goto L_0x012a
+            if (r1 <= 0) goto L_0x0130
             r23 = 1
-            goto L_0x012c
-        L_0x012a:
+            goto L_0x0132
+        L_0x0130:
             r23 = 0
-        L_0x012c:
-            if (r23 == 0) goto L_0x0157
+        L_0x0132:
+            if (r23 == 0) goto L_0x015d
             r2 = 0
             float r3 = java.lang.Math.max(r10, r14)
             org.telegram.ui.MessageEnterTransitionContainer r1 = r0.container
@@ -526,11 +531,11 @@ public class TextMessageEnterTransition implements MessageEnterTransitionContain
             r28 = r7
             r7 = r25
             r1.saveLayerAlpha(r2, r3, r4, r5, r6, r7)
-            goto L_0x015b
-        L_0x0157:
+            goto L_0x0161
+        L_0x015d:
             r27 = r6
             r28 = r7
-        L_0x015b:
+        L_0x0161:
             r38.save()
             org.telegram.ui.Components.RecyclerListView r1 = r0.listView
             float r1 = r1.getY()
@@ -599,7 +604,7 @@ public class TextMessageEnterTransition implements MessageEnterTransitionContain
             org.telegram.ui.Cells.ChatMessageCell r1 = r0.messageView
             org.telegram.ui.ActionBar.Theme$MessageDrawable r1 = r1.getCurrentBackgroundDrawable(r9)
             r25 = 1132396544(0x437var_, float:255.0)
-            if (r1 == 0) goto L_0x0257
+            if (r1 == 0) goto L_0x025d
             org.telegram.ui.Cells.ChatMessageCell r2 = r0.messageView
             org.telegram.ui.MessageEnterTransitionContainer r3 = r0.container
             int r3 = r3.getTop()
@@ -610,9 +615,9 @@ public class TextMessageEnterTransition implements MessageEnterTransitionContain
             android.graphics.drawable.Drawable r2 = r1.getShadowDrawable()
             r10 = r28
             int r3 = (r10 > r17 ? 1 : (r10 == r17 ? 0 : -1))
-            if (r3 == 0) goto L_0x0222
+            if (r3 == 0) goto L_0x0228
             android.graphics.drawable.Drawable r3 = r0.fromMessageDrawable
-            if (r3 == 0) goto L_0x0222
+            if (r3 == 0) goto L_0x0228
             int r9 = (int) r7
             r29 = r11
             int r11 = (int) r6
@@ -621,13 +626,13 @@ public class TextMessageEnterTransition implements MessageEnterTransitionContain
             r3.setBounds(r9, r11, r4, r15)
             android.graphics.drawable.Drawable r3 = r0.fromMessageDrawable
             r3.draw(r8)
-            goto L_0x0226
-        L_0x0222:
+            goto L_0x022c
+        L_0x0228:
             r29 = r11
             r30 = r15
-        L_0x0226:
+        L_0x022c:
             r3 = 255(0xff, float:3.57E-43)
-            if (r2 == 0) goto L_0x023c
+            if (r2 == 0) goto L_0x0242
             float r9 = r18 * r25
             int r9 = (int) r9
             r2.setAlpha(r9)
@@ -637,7 +642,7 @@ public class TextMessageEnterTransition implements MessageEnterTransitionContain
             r2.setBounds(r9, r11, r4, r15)
             r2.draw(r8)
             r2.setAlpha(r3)
-        L_0x023c:
+        L_0x0242:
             float r2 = r10 * r25
             int r2 = (int) r2
             r1.setAlpha(r2)
@@ -651,19 +656,19 @@ public class TextMessageEnterTransition implements MessageEnterTransitionContain
             r9 = 0
             r1.setDrawFullBubble(r9)
             r1.setAlpha(r3)
-            goto L_0x025e
-        L_0x0257:
+            goto L_0x0264
+        L_0x025d:
             r29 = r11
             r30 = r15
             r10 = r28
             r9 = 0
-        L_0x025e:
+        L_0x0264:
             r38.restore()
             r38.save()
             org.telegram.messenger.MessageObject r1 = r0.currentMessageObject
             boolean r1 = r1.isOutOwner()
             r11 = 1092616192(0x41200000, float:10.0)
-            if (r1 == 0) goto L_0x028c
+            if (r1 == 0) goto L_0x0292
             int r1 = org.telegram.messenger.AndroidUtilities.dp(r22)
             float r1 = (float) r1
             float r1 = r1 + r7
@@ -677,8 +682,8 @@ public class TextMessageEnterTransition implements MessageEnterTransitionContain
             float r15 = (float) r15
             float r15 = r5 - r15
             r8.clipRect(r1, r2, r3, r15)
-            goto L_0x02a9
-        L_0x028c:
+            goto L_0x02af
+        L_0x0292:
             int r1 = org.telegram.messenger.AndroidUtilities.dp(r22)
             float r1 = (float) r1
             float r1 = r1 + r7
@@ -692,7 +697,7 @@ public class TextMessageEnterTransition implements MessageEnterTransitionContain
             float r15 = (float) r15
             float r15 = r5 - r15
             r8.clipRect(r1, r2, r3, r15)
-        L_0x02a9:
+        L_0x02af:
             org.telegram.ui.Cells.ChatMessageCell r1 = r0.messageView
             int r1 = r1.getLeft()
             float r1 = (float) r1
@@ -718,7 +723,7 @@ public class TextMessageEnterTransition implements MessageEnterTransitionContain
             r1.drawLinkPreview(r8, r10)
             r38.restore()
             boolean r1 = r0.hasReply
-            if (r1 == 0) goto L_0x04a9
+            if (r1 == 0) goto L_0x04af
             org.telegram.ui.ChatActivity r1 = r0.chatActivity
             org.telegram.ui.ActionBar.SimpleTextView r1 = r1.getReplyNameTextView()
             r2 = 0
@@ -743,44 +748,44 @@ public class TextMessageEnterTransition implements MessageEnterTransitionContain
             float r14 = r14 + r3
             org.telegram.messenger.MessageObject r3 = r0.currentMessageObject
             boolean r3 = r3.hasValidReplyMessageObject()
-            if (r3 == 0) goto L_0x0345
+            if (r3 == 0) goto L_0x034b
             org.telegram.messenger.MessageObject r3 = r0.currentMessageObject
             org.telegram.messenger.MessageObject r3 = r3.replyMessageObject
             int r9 = r3.type
-            if (r9 == 0) goto L_0x032e
+            if (r9 == 0) goto L_0x0334
             java.lang.CharSequence r3 = r3.caption
             boolean r3 = android.text.TextUtils.isEmpty(r3)
-            if (r3 != 0) goto L_0x0345
-        L_0x032e:
+            if (r3 != 0) goto L_0x034b
+        L_0x0334:
             org.telegram.messenger.MessageObject r3 = r0.currentMessageObject
             org.telegram.messenger.MessageObject r3 = r3.replyMessageObject
             org.telegram.tgnet.TLRPC$Message r3 = r3.messageOwner
             org.telegram.tgnet.TLRPC$MessageMedia r3 = r3.media
             boolean r9 = r3 instanceof org.telegram.tgnet.TLRPC$TL_messageMediaGame
-            if (r9 != 0) goto L_0x0345
+            if (r9 != 0) goto L_0x034b
             boolean r3 = r3 instanceof org.telegram.tgnet.TLRPC$TL_messageMediaInvoice
-            if (r3 != 0) goto L_0x0345
+            if (r3 != 0) goto L_0x034b
             java.lang.String r3 = "chat_outReplyMessageText"
             int r3 = r0.getThemedColor(r3)
-            goto L_0x034b
-        L_0x0345:
+            goto L_0x0351
+        L_0x034b:
             java.lang.String r3 = "chat_outReplyMediaMessageText"
             int r3 = r0.getThemedColor(r3)
-        L_0x034b:
+        L_0x0351:
             org.telegram.messenger.MessageObject r9 = r0.currentMessageObject
             boolean r9 = r9.isOutOwner()
-            if (r9 == 0) goto L_0x0360
+            if (r9 == 0) goto L_0x0366
             java.lang.String r9 = "chat_outReplyNameText"
             int r9 = r0.getThemedColor(r9)
             java.lang.String r11 = "chat_outReplyLine"
             int r11 = r0.getThemedColor(r11)
-            goto L_0x036c
-        L_0x0360:
+            goto L_0x0372
+        L_0x0366:
             java.lang.String r9 = "chat_inReplyNameText"
             int r9 = r0.getThemedColor(r9)
             java.lang.String r11 = "chat_inReplyLine"
             int r11 = r0.getThemedColor(r11)
-        L_0x036c:
+        L_0x0372:
             r31 = r4
             android.text.TextPaint r4 = org.telegram.ui.ActionBar.Theme.chat_replyTextPaint
             r32 = r5
@@ -796,11 +801,11 @@ public class TextMessageEnterTransition implements MessageEnterTransitionContain
             org.telegram.ui.Cells.ChatMessageCell r3 = r0.messageView
             boolean r3 = r3.needReplyImage
             r9 = 1110441984(0x42300000, float:44.0)
-            if (r3 == 0) goto L_0x0398
+            if (r3 == 0) goto L_0x039e
             int r3 = org.telegram.messenger.AndroidUtilities.dp(r9)
             float r3 = (float) r3
             float r1 = r1 - r3
-        L_0x0398:
+        L_0x039e:
             r30 = r1
             float r34 = r30 * r21
             float r1 = r13 * r18
@@ -846,7 +851,7 @@ public class TextMessageEnterTransition implements MessageEnterTransitionContain
             r8.translate(r1, r2)
             org.telegram.ui.Cells.ChatMessageCell r1 = r0.messageView
             boolean r1 = r1.needReplyImage
-            if (r1 == 0) goto L_0x0424
+            if (r1 == 0) goto L_0x042a
             r38.save()
             org.telegram.ui.Cells.ChatMessageCell r1 = r0.messageView
             org.telegram.messenger.ImageReceiver r1 = r1.replyImageReceiver
@@ -865,7 +870,7 @@ public class TextMessageEnterTransition implements MessageEnterTransitionContain
             float r1 = (float) r1
             r2 = 0
             r8.translate(r1, r2)
-        L_0x0424:
+        L_0x042a:
             float r1 = r0.replyMessageDx
             float r2 = r13 - r1
             float r3 = r0.replyNameDx
@@ -878,17 +883,17 @@ public class TextMessageEnterTransition implements MessageEnterTransitionContain
             float r2 = r34 + r13
             org.telegram.ui.Cells.ChatMessageCell r3 = r0.messageView
             android.text.StaticLayout r3 = r3.replyNameLayout
-            if (r3 == 0) goto L_0x044d
+            if (r3 == 0) goto L_0x0453
             r38.save()
             r8.translate(r2, r14)
             org.telegram.ui.Cells.ChatMessageCell r2 = r0.messageView
             android.text.StaticLayout r2 = r2.replyNameLayout
             r2.draw(r8)
             r38.restore()
-        L_0x044d:
+        L_0x0453:
             org.telegram.ui.Cells.ChatMessageCell r2 = r0.messageView
             android.text.StaticLayout r2 = r2.replyTextLayout
-            if (r2 == 0) goto L_0x04a5
+            if (r2 == 0) goto L_0x04ab
             r38.save()
             r2 = 1100480512(0x41980000, float:19.0)
             int r2 = org.telegram.messenger.AndroidUtilities.dp(r2)
@@ -906,33 +911,33 @@ public class TextMessageEnterTransition implements MessageEnterTransitionContain
             org.telegram.ui.Cells.ChatMessageCell r1 = r0.messageView
             java.util.List<org.telegram.ui.Components.spoilers.SpoilerEffect> r1 = r1.replySpoilers
             java.util.Iterator r1 = r1.iterator()
-        L_0x047d:
+        L_0x0483:
             boolean r2 = r1.hasNext()
-            if (r2 == 0) goto L_0x04a2
+            if (r2 == 0) goto L_0x04a8
             java.lang.Object r2 = r1.next()
             org.telegram.ui.Components.spoilers.SpoilerEffect r2 = (org.telegram.ui.Components.spoilers.SpoilerEffect) r2
             boolean r3 = r2.shouldInvalidateColor()
-            if (r3 == 0) goto L_0x049e
+            if (r3 == 0) goto L_0x04a4
             org.telegram.ui.Cells.ChatMessageCell r3 = r0.messageView
             android.text.StaticLayout r3 = r3.replyTextLayout
             android.text.TextPaint r3 = r3.getPaint()
             int r3 = r3.getColor()
             r2.setColor(r3)
-        L_0x049e:
+        L_0x04a4:
             r2.draw(r8)
-            goto L_0x047d
-        L_0x04a2:
+            goto L_0x0483
+        L_0x04a8:
             r38.restore()
-        L_0x04a5:
+        L_0x04ab:
             r38.restore()
-            goto L_0x04b3
-        L_0x04a9:
+            goto L_0x04b9
+        L_0x04af:
             r31 = r4
             r32 = r5
             r35 = r6
             r33 = r15
             r15 = r30
-        L_0x04b3:
+        L_0x04b9:
             r38.save()
             int r1 = org.telegram.messenger.AndroidUtilities.dp(r22)
             float r1 = (float) r1
@@ -951,14 +956,14 @@ public class TextMessageEnterTransition implements MessageEnterTransitionContain
             float r1 = r1 * r21
             float r1 = r18 + r1
             boolean r2 = r0.drawBitmaps
-            if (r2 == 0) goto L_0x04e5
+            if (r2 == 0) goto L_0x04eb
             float r2 = r0.scaleY
             float r2 = r2 * r21
             float r2 = r18 + r2
-            goto L_0x04e7
-        L_0x04e5:
+            goto L_0x04ed
+        L_0x04eb:
             r2 = 1065353216(0x3var_, float:1.0)
-        L_0x04e7:
+        L_0x04ed:
             r38.save()
             float r11 = r29 * r21
             float r3 = r0.toXOffset
@@ -976,25 +981,25 @@ public class TextMessageEnterTransition implements MessageEnterTransitionContain
             r3 = 0
             r8.scale(r1, r2, r3, r3)
             boolean r3 = r0.drawBitmaps
-            if (r3 == 0) goto L_0x0522
+            if (r3 == 0) goto L_0x0528
             boolean r3 = r0.crossfade
-            if (r3 == 0) goto L_0x0519
+            if (r3 == 0) goto L_0x051f
             android.graphics.Paint r3 = r0.bitmapPaint
             float r4 = r17 - r10
             float r4 = r4 * r25
             int r4 = (int) r4
             r3.setAlpha(r4)
-        L_0x0519:
+        L_0x051f:
             android.graphics.Bitmap r3 = r0.textLayoutBitmap
             android.graphics.Paint r4 = r0.bitmapPaint
             r5 = 0
             r8.drawBitmap(r3, r5, r5, r4)
-            goto L_0x0585
-        L_0x0522:
+            goto L_0x058b
+        L_0x0528:
             boolean r3 = r0.crossfade
-            if (r3 == 0) goto L_0x0562
+            if (r3 == 0) goto L_0x0568
             boolean r4 = r0.changeColor
-            if (r4 == 0) goto L_0x0562
+            if (r4 == 0) goto L_0x0568
             android.text.StaticLayout r3 = r0.layout
             android.text.TextPaint r3 = r3.getPaint()
             int r3 = r3.getColor()
@@ -1015,9 +1020,9 @@ public class TextMessageEnterTransition implements MessageEnterTransitionContain
             android.text.StaticLayout r4 = r0.layout
             android.text.TextPaint r4 = r4.getPaint()
             r4.setColor(r3)
-            goto L_0x0585
-        L_0x0562:
-            if (r3 == 0) goto L_0x0580
+            goto L_0x058b
+        L_0x0568:
+            if (r3 == 0) goto L_0x0586
             android.text.TextPaint r3 = org.telegram.ui.ActionBar.Theme.chat_msgTextPaint
             int r3 = r3.getAlpha()
             android.text.TextPaint r4 = org.telegram.ui.ActionBar.Theme.chat_msgTextPaint
@@ -1030,14 +1035,14 @@ public class TextMessageEnterTransition implements MessageEnterTransitionContain
             r4.draw(r8)
             android.text.TextPaint r4 = org.telegram.ui.ActionBar.Theme.chat_msgTextPaint
             r4.setAlpha(r3)
-            goto L_0x0585
-        L_0x0580:
+            goto L_0x058b
+        L_0x0586:
             android.text.StaticLayout r3 = r0.layout
             r3.draw(r8)
-        L_0x0585:
+        L_0x058b:
             r38.restore()
             android.text.StaticLayout r3 = r0.rtlLayout
-            if (r3 == 0) goto L_0x0634
+            if (r3 == 0) goto L_0x063a
             r38.save()
             float r3 = r0.toXOffsetRtl
             float r3 = r19 - r3
@@ -1052,25 +1057,25 @@ public class TextMessageEnterTransition implements MessageEnterTransitionContain
             r3 = 0
             r8.scale(r1, r2, r3, r3)
             boolean r3 = r0.drawBitmaps
-            if (r3 == 0) goto L_0x05c2
+            if (r3 == 0) goto L_0x05c8
             boolean r3 = r0.crossfade
-            if (r3 == 0) goto L_0x05b9
+            if (r3 == 0) goto L_0x05bf
             android.graphics.Paint r3 = r0.bitmapPaint
             float r4 = r17 - r10
             float r4 = r4 * r25
             int r4 = (int) r4
             r3.setAlpha(r4)
-        L_0x05b9:
+        L_0x05bf:
             android.graphics.Bitmap r3 = r0.textLayoutBitmapRtl
             android.graphics.Paint r4 = r0.bitmapPaint
             r5 = 0
             r8.drawBitmap(r3, r5, r5, r4)
-            goto L_0x0631
-        L_0x05c2:
+            goto L_0x0637
+        L_0x05c8:
             boolean r3 = r0.crossfade
-            if (r3 == 0) goto L_0x0602
+            if (r3 == 0) goto L_0x0608
             boolean r4 = r0.changeColor
-            if (r4 == 0) goto L_0x0602
+            if (r4 == 0) goto L_0x0608
             android.text.StaticLayout r3 = r0.rtlLayout
             android.text.TextPaint r3 = r3.getPaint()
             int r3 = r3.getColor()
@@ -1091,9 +1096,9 @@ public class TextMessageEnterTransition implements MessageEnterTransitionContain
             android.text.StaticLayout r4 = r0.rtlLayout
             android.text.TextPaint r4 = r4.getPaint()
             r4.setColor(r3)
-            goto L_0x0631
-        L_0x0602:
-            if (r3 == 0) goto L_0x062c
+            goto L_0x0637
+        L_0x0608:
+            if (r3 == 0) goto L_0x0632
             android.text.StaticLayout r3 = r0.rtlLayout
             android.text.TextPaint r3 = r3.getPaint()
             int r3 = r3.getAlpha()
@@ -1109,15 +1114,15 @@ public class TextMessageEnterTransition implements MessageEnterTransitionContain
             android.text.StaticLayout r4 = r0.rtlLayout
             android.text.TextPaint r4 = r4.getPaint()
             r4.setAlpha(r3)
-            goto L_0x0631
-        L_0x062c:
+            goto L_0x0637
+        L_0x0632:
             android.text.StaticLayout r3 = r0.rtlLayout
             r3.draw(r8)
-        L_0x0631:
+        L_0x0637:
             r38.restore()
-        L_0x0634:
+        L_0x063a:
             boolean r3 = r0.crossfade
-            if (r3 == 0) goto L_0x06b3
+            if (r3 == 0) goto L_0x06be
             r38.save()
             org.telegram.ui.Cells.ChatMessageCell r3 = r0.messageView
             int r3 = r3.getLeft()
@@ -1145,7 +1150,7 @@ public class TextMessageEnterTransition implements MessageEnterTransitionContain
             r2 = 0
             r8.translate(r2, r1)
             android.graphics.Bitmap r1 = r0.crossfadeTextBitmap
-            if (r1 == 0) goto L_0x0686
+            if (r1 == 0) goto L_0x068c
             android.graphics.Paint r1 = r0.bitmapPaint
             float r7 = r10 * r25
             int r3 = (int) r7
@@ -1153,8 +1158,8 @@ public class TextMessageEnterTransition implements MessageEnterTransitionContain
             android.graphics.Bitmap r1 = r0.crossfadeTextBitmap
             android.graphics.Paint r3 = r0.bitmapPaint
             r8.drawBitmap(r1, r2, r2, r3)
-            goto L_0x06b0
-        L_0x0686:
+            goto L_0x06bb
+        L_0x068c:
             android.text.TextPaint r1 = org.telegram.ui.ActionBar.Theme.chat_msgTextPaint
             int r7 = r1.getColor()
             android.text.TextPaint r1 = org.telegram.ui.ActionBar.Theme.chat_msgTextPaint
@@ -1168,16 +1173,18 @@ public class TextMessageEnterTransition implements MessageEnterTransitionContain
             r2 = r38
             r5 = r10
             r1.drawMessageText(r2, r3, r4, r5, r6)
+            org.telegram.ui.Cells.ChatMessageCell r1 = r0.messageView
+            r1.drawAnimatedEmojis(r8)
             android.text.TextPaint r1 = org.telegram.ui.ActionBar.Theme.chat_msgTextPaint
             int r1 = r1.getColor()
-            if (r1 == r7) goto L_0x06b0
+            if (r1 == r7) goto L_0x06bb
             android.text.TextPaint r1 = org.telegram.ui.ActionBar.Theme.chat_msgTextPaint
             r1.setColor(r7)
-        L_0x06b0:
+        L_0x06bb:
             r38.restore()
-        L_0x06b3:
+        L_0x06be:
             r38.restore()
-            if (r23 == 0) goto L_0x06e1
+            if (r23 == 0) goto L_0x06ec
             android.graphics.Matrix r1 = r0.gradientMatrix
             r2 = r27
             float r3 = (float) r2
@@ -1197,27 +1204,27 @@ public class TextMessageEnterTransition implements MessageEnterTransitionContain
             r1 = r38
             r1.drawRect(r2, r3, r4, r5, r6)
             r38.restore()
-        L_0x06e1:
+        L_0x06ec:
             float r1 = r0.progress
             int r2 = (r1 > r16 ? 1 : (r1 == r16 ? 0 : -1))
-            if (r2 <= 0) goto L_0x06ea
+            if (r2 <= 0) goto L_0x06f5
             r1 = 1065353216(0x3var_, float:1.0)
-            goto L_0x06ec
-        L_0x06ea:
+            goto L_0x06f7
+        L_0x06f5:
             float r1 = r1 / r16
-        L_0x06ec:
+        L_0x06f7:
             int r2 = (r1 > r17 ? 1 : (r1 == r17 ? 0 : -1))
-            if (r2 != 0) goto L_0x06f6
+            if (r2 != 0) goto L_0x0701
             org.telegram.ui.Components.ChatActivityEnterView r2 = r0.enterView
             r3 = 0
             r2.setTextTransitionIsRunning(r3)
-        L_0x06f6:
+        L_0x0701:
             org.telegram.ui.Components.ChatActivityEnterView r2 = r0.enterView
             android.view.View r2 = r2.getSendButton()
             int r2 = r2.getVisibility()
-            if (r2 != 0) goto L_0x07a1
+            if (r2 != 0) goto L_0x07ac
             int r2 = (r1 > r17 ? 1 : (r1 == r17 ? 0 : -1))
-            if (r2 >= 0) goto L_0x07a1
+            if (r2 >= 0) goto L_0x07ac
             r38.save()
             org.telegram.ui.Components.ChatActivityEnterView r2 = r0.enterView
             float r2 = r2.getX()
@@ -1274,7 +1281,7 @@ public class TextMessageEnterTransition implements MessageEnterTransitionContain
             r1.draw(r8)
             r38.restore()
             r38.restore()
-        L_0x07a1:
+        L_0x07ac:
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.TextMessageEnterTransition.onDraw(android.graphics.Canvas):void");

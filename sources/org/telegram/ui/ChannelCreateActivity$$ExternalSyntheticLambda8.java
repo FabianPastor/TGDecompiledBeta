@@ -10,6 +10,6 @@ public final /* synthetic */ class ChannelCreateActivity$$ExternalSyntheticLambd
     }
 
     public final boolean onTouch(View view, MotionEvent motionEvent) {
-        return ChannelCreateActivity.lambda$createView$4(view, motionEvent);
+        return ChannelCreateActivity.lambda$createView$5(view, motionEvent);
     }
 }

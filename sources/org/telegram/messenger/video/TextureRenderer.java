@@ -415,8 +415,8 @@ public class TextureRenderer {
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public void surfaceCreated() {
         /*
-            r31 = this;
-            r1 = r31
+            r32 = this;
+            r1 = r32
             r2 = 0
             r0 = 0
         L_0x0004:
@@ -697,45 +697,45 @@ public class TextureRenderer {
             org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)
         L_0x0218:
             java.util.ArrayList<org.telegram.messenger.VideoEditedInfo$MediaEntity> r0 = r1.mediaEntities
-            if (r0 == 0) goto L_0x0435
-            android.graphics.Bitmap$Config r0 = android.graphics.Bitmap.Config.ARGB_8888     // Catch:{ all -> 0x0431 }
+            if (r0 == 0) goto L_0x0437
+            android.graphics.Bitmap$Config r0 = android.graphics.Bitmap.Config.ARGB_8888     // Catch:{ all -> 0x0433 }
             r2 = 512(0x200, float:7.175E-43)
-            android.graphics.Bitmap r0 = android.graphics.Bitmap.createBitmap(r2, r2, r0)     // Catch:{ all -> 0x0431 }
-            r1.stickerBitmap = r0     // Catch:{ all -> 0x0431 }
+            android.graphics.Bitmap r0 = android.graphics.Bitmap.createBitmap(r2, r2, r0)     // Catch:{ all -> 0x0433 }
+            r1.stickerBitmap = r0     // Catch:{ all -> 0x0433 }
             r2 = 1
-            int[] r0 = new int[r2]     // Catch:{ all -> 0x0431 }
-            r1.stickerTexture = r0     // Catch:{ all -> 0x0431 }
+            int[] r0 = new int[r2]     // Catch:{ all -> 0x0433 }
+            r1.stickerTexture = r0     // Catch:{ all -> 0x0433 }
             r3 = 0
-            android.opengl.GLES20.glGenTextures(r2, r0, r3)     // Catch:{ all -> 0x0431 }
-            int[] r0 = r1.stickerTexture     // Catch:{ all -> 0x0431 }
-            r0 = r0[r3]     // Catch:{ all -> 0x0431 }
-            android.opengl.GLES20.glBindTexture(r13, r0)     // Catch:{ all -> 0x0431 }
-            android.opengl.GLES20.glTexParameteri(r13, r5, r6)     // Catch:{ all -> 0x0431 }
-            android.opengl.GLES20.glTexParameteri(r13, r7, r6)     // Catch:{ all -> 0x0431 }
+            android.opengl.GLES20.glGenTextures(r2, r0, r3)     // Catch:{ all -> 0x0433 }
+            int[] r0 = r1.stickerTexture     // Catch:{ all -> 0x0433 }
+            r0 = r0[r3]     // Catch:{ all -> 0x0433 }
+            android.opengl.GLES20.glBindTexture(r13, r0)     // Catch:{ all -> 0x0433 }
+            android.opengl.GLES20.glTexParameteri(r13, r5, r6)     // Catch:{ all -> 0x0433 }
+            android.opengl.GLES20.glTexParameteri(r13, r7, r6)     // Catch:{ all -> 0x0433 }
             r2 = 10242(0x2802, float:1.4352E-41)
             r3 = 33071(0x812f, float:4.6342E-41)
-            android.opengl.GLES20.glTexParameteri(r13, r2, r3)     // Catch:{ all -> 0x0431 }
+            android.opengl.GLES20.glTexParameteri(r13, r2, r3)     // Catch:{ all -> 0x0433 }
             r2 = 10243(0x2803, float:1.4354E-41)
-            android.opengl.GLES20.glTexParameteri(r13, r2, r3)     // Catch:{ all -> 0x0431 }
-            java.util.ArrayList<org.telegram.messenger.VideoEditedInfo$MediaEntity> r0 = r1.mediaEntities     // Catch:{ all -> 0x0431 }
-            int r0 = r0.size()     // Catch:{ all -> 0x0431 }
+            android.opengl.GLES20.glTexParameteri(r13, r2, r3)     // Catch:{ all -> 0x0433 }
+            java.util.ArrayList<org.telegram.messenger.VideoEditedInfo$MediaEntity> r0 = r1.mediaEntities     // Catch:{ all -> 0x0433 }
+            int r0 = r0.size()     // Catch:{ all -> 0x0433 }
             r3 = 0
         L_0x0250:
-            if (r3 >= r0) goto L_0x0435
-            java.util.ArrayList<org.telegram.messenger.VideoEditedInfo$MediaEntity> r2 = r1.mediaEntities     // Catch:{ all -> 0x0431 }
-            java.lang.Object r2 = r2.get(r3)     // Catch:{ all -> 0x0431 }
-            org.telegram.messenger.VideoEditedInfo$MediaEntity r2 = (org.telegram.messenger.VideoEditedInfo.MediaEntity) r2     // Catch:{ all -> 0x0431 }
-            byte r4 = r2.type     // Catch:{ all -> 0x0431 }
+            if (r3 >= r0) goto L_0x0437
+            java.util.ArrayList<org.telegram.messenger.VideoEditedInfo$MediaEntity> r2 = r1.mediaEntities     // Catch:{ all -> 0x0433 }
+            java.lang.Object r2 = r2.get(r3)     // Catch:{ all -> 0x0433 }
+            org.telegram.messenger.VideoEditedInfo$MediaEntity r2 = (org.telegram.messenger.VideoEditedInfo.MediaEntity) r2     // Catch:{ all -> 0x0433 }
+            byte r4 = r2.type     // Catch:{ all -> 0x0433 }
             r5 = 0
             r6 = 0
-            if (r4 != 0) goto L_0x0358
-            byte r4 = r2.subType     // Catch:{ all -> 0x0431 }
+            if (r4 != 0) goto L_0x035a
+            byte r4 = r2.subType     // Catch:{ all -> 0x0433 }
             r7 = r4 & 1
             if (r7 == 0) goto L_0x0292
             r7 = 3
-            int[] r4 = new int[r7]     // Catch:{ all -> 0x0431 }
-            r2.metadata = r4     // Catch:{ all -> 0x0431 }
-            java.lang.String r5 = r2.text     // Catch:{ all -> 0x0431 }
+            int[] r4 = new int[r7]     // Catch:{ all -> 0x0433 }
+            r2.metadata = r4     // Catch:{ all -> 0x0433 }
+            java.lang.String r5 = r2.text     // Catch:{ all -> 0x0433 }
             r18 = 0
             r19 = 512(0x200, float:7.175E-43)
             r20 = 512(0x200, float:7.175E-43)
@@ -745,222 +745,223 @@ public class TextureRenderer {
             r25 = 0
             r17 = r5
             r21 = r4
-            long r4 = org.telegram.ui.Components.RLottieDrawable.create(r17, r18, r19, r20, r21, r22, r23, r24, r25)     // Catch:{ all -> 0x0431 }
-            r2.ptr = r4     // Catch:{ all -> 0x0431 }
-            int[] r4 = r2.metadata     // Catch:{ all -> 0x0431 }
+            long r4 = org.telegram.ui.Components.RLottieDrawable.create(r17, r18, r19, r20, r21, r22, r23, r24, r25)     // Catch:{ all -> 0x0433 }
+            r2.ptr = r4     // Catch:{ all -> 0x0433 }
+            int[] r4 = r2.metadata     // Catch:{ all -> 0x0433 }
             r5 = 1
-            r4 = r4[r5]     // Catch:{ all -> 0x0431 }
-            float r4 = (float) r4     // Catch:{ all -> 0x0431 }
-            float r5 = r1.videoFps     // Catch:{ all -> 0x0431 }
+            r4 = r4[r5]     // Catch:{ all -> 0x0433 }
+            float r4 = (float) r4     // Catch:{ all -> 0x0433 }
+            float r5 = r1.videoFps     // Catch:{ all -> 0x0433 }
             float r4 = r4 / r5
-            r2.framesPerDraw = r4     // Catch:{ all -> 0x0431 }
-            goto L_0x0353
+            r2.framesPerDraw = r4     // Catch:{ all -> 0x0433 }
+            goto L_0x0355
         L_0x0292:
             r7 = 3
             r4 = r4 & 4
-            if (r4 == 0) goto L_0x02c8
-            org.telegram.ui.Components.AnimatedFileDrawable r4 = new org.telegram.ui.Components.AnimatedFileDrawable     // Catch:{ all -> 0x0431 }
-            java.io.File r5 = new java.io.File     // Catch:{ all -> 0x0431 }
-            java.lang.String r8 = r2.text     // Catch:{ all -> 0x0431 }
-            r5.<init>(r8)     // Catch:{ all -> 0x0431 }
+            if (r4 == 0) goto L_0x02ca
+            org.telegram.ui.Components.AnimatedFileDrawable r4 = new org.telegram.ui.Components.AnimatedFileDrawable     // Catch:{ all -> 0x0433 }
+            java.io.File r5 = new java.io.File     // Catch:{ all -> 0x0433 }
+            java.lang.String r8 = r2.text     // Catch:{ all -> 0x0433 }
+            r5.<init>(r8)     // Catch:{ all -> 0x0433 }
             r19 = 1
             r20 = 0
             r22 = 0
             r23 = 0
             r24 = 0
             r25 = 0
-            int r27 = org.telegram.messenger.UserConfig.selectedAccount     // Catch:{ all -> 0x0431 }
+            int r27 = org.telegram.messenger.UserConfig.selectedAccount     // Catch:{ all -> 0x0433 }
             r28 = 1
             r29 = 512(0x200, float:7.175E-43)
             r30 = 512(0x200, float:7.175E-43)
+            r31 = 0
             r17 = r4
             r18 = r5
-            r17.<init>(r18, r19, r20, r22, r23, r24, r25, r27, r28, r29, r30)     // Catch:{ all -> 0x0431 }
-            r2.animatedFileDrawable = r4     // Catch:{ all -> 0x0431 }
-            float r4 = r1.videoFps     // Catch:{ all -> 0x0431 }
+            r17.<init>(r18, r19, r20, r22, r23, r24, r25, r27, r28, r29, r30, r31)     // Catch:{ all -> 0x0433 }
+            r2.animatedFileDrawable = r4     // Catch:{ all -> 0x0433 }
+            float r4 = r1.videoFps     // Catch:{ all -> 0x0433 }
             r5 = 1106247680(0x41var_, float:30.0)
             float r4 = r4 / r5
-            r2.framesPerDraw = r4     // Catch:{ all -> 0x0431 }
-            r2.currentFrame = r6     // Catch:{ all -> 0x0431 }
-            goto L_0x0353
-        L_0x02c8:
-            int r4 = android.os.Build.VERSION.SDK_INT     // Catch:{ all -> 0x0431 }
+            r2.framesPerDraw = r4     // Catch:{ all -> 0x0433 }
+            r2.currentFrame = r6     // Catch:{ all -> 0x0433 }
+            goto L_0x0355
+        L_0x02ca:
+            int r4 = android.os.Build.VERSION.SDK_INT     // Catch:{ all -> 0x0433 }
             r6 = 19
-            if (r4 < r6) goto L_0x02d7
-            java.lang.String r4 = r2.text     // Catch:{ all -> 0x0431 }
-            android.graphics.Bitmap r4 = android.graphics.BitmapFactory.decodeFile(r4)     // Catch:{ all -> 0x0431 }
-            r2.bitmap = r4     // Catch:{ all -> 0x0431 }
-            goto L_0x031b
-        L_0x02d7:
-            java.io.File r4 = new java.io.File     // Catch:{ all -> 0x0431 }
-            java.lang.String r6 = r2.text     // Catch:{ all -> 0x0431 }
-            r4.<init>(r6)     // Catch:{ all -> 0x0431 }
-            java.io.RandomAccessFile r6 = new java.io.RandomAccessFile     // Catch:{ all -> 0x0431 }
+            if (r4 < r6) goto L_0x02d9
+            java.lang.String r4 = r2.text     // Catch:{ all -> 0x0433 }
+            android.graphics.Bitmap r4 = android.graphics.BitmapFactory.decodeFile(r4)     // Catch:{ all -> 0x0433 }
+            r2.bitmap = r4     // Catch:{ all -> 0x0433 }
+            goto L_0x031d
+        L_0x02d9:
+            java.io.File r4 = new java.io.File     // Catch:{ all -> 0x0433 }
+            java.lang.String r6 = r2.text     // Catch:{ all -> 0x0433 }
+            r4.<init>(r6)     // Catch:{ all -> 0x0433 }
+            java.io.RandomAccessFile r6 = new java.io.RandomAccessFile     // Catch:{ all -> 0x0433 }
             java.lang.String r8 = "r"
-            r6.<init>(r4, r8)     // Catch:{ all -> 0x0431 }
-            java.nio.channels.FileChannel r17 = r6.getChannel()     // Catch:{ all -> 0x0431 }
-            java.nio.channels.FileChannel$MapMode r18 = java.nio.channels.FileChannel.MapMode.READ_ONLY     // Catch:{ all -> 0x0431 }
+            r6.<init>(r4, r8)     // Catch:{ all -> 0x0433 }
+            java.nio.channels.FileChannel r17 = r6.getChannel()     // Catch:{ all -> 0x0433 }
+            java.nio.channels.FileChannel$MapMode r18 = java.nio.channels.FileChannel.MapMode.READ_ONLY     // Catch:{ all -> 0x0433 }
             r19 = 0
-            long r21 = r4.length()     // Catch:{ all -> 0x0431 }
-            java.nio.MappedByteBuffer r4 = r17.map(r18, r19, r21)     // Catch:{ all -> 0x0431 }
-            android.graphics.BitmapFactory$Options r8 = new android.graphics.BitmapFactory$Options     // Catch:{ all -> 0x0431 }
-            r8.<init>()     // Catch:{ all -> 0x0431 }
+            long r21 = r4.length()     // Catch:{ all -> 0x0433 }
+            java.nio.MappedByteBuffer r4 = r17.map(r18, r19, r21)     // Catch:{ all -> 0x0433 }
+            android.graphics.BitmapFactory$Options r8 = new android.graphics.BitmapFactory$Options     // Catch:{ all -> 0x0433 }
+            r8.<init>()     // Catch:{ all -> 0x0433 }
             r9 = 1
-            r8.inJustDecodeBounds = r9     // Catch:{ all -> 0x0431 }
-            int r10 = r4.limit()     // Catch:{ all -> 0x0431 }
-            org.telegram.messenger.Utilities.loadWebpImage(r5, r4, r10, r8, r9)     // Catch:{ all -> 0x0431 }
-            int r9 = r8.outWidth     // Catch:{ all -> 0x0431 }
-            int r8 = r8.outHeight     // Catch:{ all -> 0x0431 }
-            android.graphics.Bitmap$Config r10 = android.graphics.Bitmap.Config.ARGB_8888     // Catch:{ all -> 0x0431 }
-            android.graphics.Bitmap r8 = org.telegram.messenger.Bitmaps.createBitmap(r9, r8, r10)     // Catch:{ all -> 0x0431 }
-            r2.bitmap = r8     // Catch:{ all -> 0x0431 }
-            int r9 = r4.limit()     // Catch:{ all -> 0x0431 }
+            r8.inJustDecodeBounds = r9     // Catch:{ all -> 0x0433 }
+            int r10 = r4.limit()     // Catch:{ all -> 0x0433 }
+            org.telegram.messenger.Utilities.loadWebpImage(r5, r4, r10, r8, r9)     // Catch:{ all -> 0x0433 }
+            int r9 = r8.outWidth     // Catch:{ all -> 0x0433 }
+            int r8 = r8.outHeight     // Catch:{ all -> 0x0433 }
+            android.graphics.Bitmap$Config r10 = android.graphics.Bitmap.Config.ARGB_8888     // Catch:{ all -> 0x0433 }
+            android.graphics.Bitmap r8 = org.telegram.messenger.Bitmaps.createBitmap(r9, r8, r10)     // Catch:{ all -> 0x0433 }
+            r2.bitmap = r8     // Catch:{ all -> 0x0433 }
+            int r9 = r4.limit()     // Catch:{ all -> 0x0433 }
             r10 = 1
-            org.telegram.messenger.Utilities.loadWebpImage(r8, r4, r9, r5, r10)     // Catch:{ all -> 0x0431 }
-            r6.close()     // Catch:{ all -> 0x0431 }
-        L_0x031b:
-            android.graphics.Bitmap r4 = r2.bitmap     // Catch:{ all -> 0x0431 }
-            if (r4 == 0) goto L_0x0353
-            int r4 = r4.getWidth()     // Catch:{ all -> 0x0431 }
-            float r4 = (float) r4     // Catch:{ all -> 0x0431 }
-            android.graphics.Bitmap r5 = r2.bitmap     // Catch:{ all -> 0x0431 }
-            int r5 = r5.getHeight()     // Catch:{ all -> 0x0431 }
-            float r5 = (float) r5     // Catch:{ all -> 0x0431 }
+            org.telegram.messenger.Utilities.loadWebpImage(r8, r4, r9, r5, r10)     // Catch:{ all -> 0x0433 }
+            r6.close()     // Catch:{ all -> 0x0433 }
+        L_0x031d:
+            android.graphics.Bitmap r4 = r2.bitmap     // Catch:{ all -> 0x0433 }
+            if (r4 == 0) goto L_0x0355
+            int r4 = r4.getWidth()     // Catch:{ all -> 0x0433 }
+            float r4 = (float) r4     // Catch:{ all -> 0x0433 }
+            android.graphics.Bitmap r5 = r2.bitmap     // Catch:{ all -> 0x0433 }
+            int r5 = r5.getHeight()     // Catch:{ all -> 0x0433 }
+            float r5 = (float) r5     // Catch:{ all -> 0x0433 }
             float r4 = r4 / r5
             int r5 = (r4 > r12 ? 1 : (r4 == r12 ? 0 : -1))
-            if (r5 <= 0) goto L_0x0340
-            float r5 = r2.height     // Catch:{ all -> 0x0431 }
+            if (r5 <= 0) goto L_0x0342
+            float r5 = r2.height     // Catch:{ all -> 0x0433 }
             float r4 = r5 / r4
-            float r6 = r2.y     // Catch:{ all -> 0x0431 }
+            float r6 = r2.y     // Catch:{ all -> 0x0433 }
             float r5 = r5 - r4
             r8 = 1073741824(0x40000000, float:2.0)
             float r5 = r5 / r8
             float r6 = r6 + r5
-            r2.y = r6     // Catch:{ all -> 0x0431 }
-            r2.height = r4     // Catch:{ all -> 0x0431 }
-            goto L_0x0353
-        L_0x0340:
+            r2.y = r6     // Catch:{ all -> 0x0433 }
+            r2.height = r4     // Catch:{ all -> 0x0433 }
+            goto L_0x0355
+        L_0x0342:
             int r5 = (r4 > r12 ? 1 : (r4 == r12 ? 0 : -1))
-            if (r5 >= 0) goto L_0x0353
-            float r5 = r2.width     // Catch:{ all -> 0x0431 }
+            if (r5 >= 0) goto L_0x0355
+            float r5 = r2.width     // Catch:{ all -> 0x0433 }
             float r4 = r4 * r5
-            float r6 = r2.x     // Catch:{ all -> 0x0431 }
+            float r6 = r2.x     // Catch:{ all -> 0x0433 }
             float r5 = r5 - r4
             r8 = 1073741824(0x40000000, float:2.0)
             float r5 = r5 / r8
             float r6 = r6 + r5
-            r2.x = r6     // Catch:{ all -> 0x0431 }
-            r2.width = r4     // Catch:{ all -> 0x0431 }
-        L_0x0353:
+            r2.x = r6     // Catch:{ all -> 0x0433 }
+            r2.width = r4     // Catch:{ all -> 0x0433 }
+        L_0x0355:
             r5 = -16777216(0xfffffffffvar_, float:-1.7014118E38)
             r8 = 1
-            goto L_0x042c
-        L_0x0358:
+            goto L_0x042e
+        L_0x035a:
             r7 = 3
             r8 = 1
-            if (r4 != r8) goto L_0x042a
-            org.telegram.ui.Components.Paint.Views.EditTextOutline r4 = new org.telegram.ui.Components.Paint.Views.EditTextOutline     // Catch:{ all -> 0x0431 }
-            android.content.Context r8 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ all -> 0x0431 }
-            r4.<init>(r8)     // Catch:{ all -> 0x0431 }
+            if (r4 != r8) goto L_0x042c
+            org.telegram.ui.Components.Paint.Views.EditTextOutline r4 = new org.telegram.ui.Components.Paint.Views.EditTextOutline     // Catch:{ all -> 0x0433 }
+            android.content.Context r8 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ all -> 0x0433 }
+            r4.<init>(r8)     // Catch:{ all -> 0x0433 }
             r8 = 0
-            r4.setBackgroundColor(r8)     // Catch:{ all -> 0x0431 }
+            r4.setBackgroundColor(r8)     // Catch:{ all -> 0x0433 }
             r8 = 1088421888(0x40e00000, float:7.0)
-            int r9 = org.telegram.messenger.AndroidUtilities.dp(r8)     // Catch:{ all -> 0x0431 }
-            int r10 = org.telegram.messenger.AndroidUtilities.dp(r8)     // Catch:{ all -> 0x0431 }
-            int r11 = org.telegram.messenger.AndroidUtilities.dp(r8)     // Catch:{ all -> 0x0431 }
-            int r8 = org.telegram.messenger.AndroidUtilities.dp(r8)     // Catch:{ all -> 0x0431 }
-            r4.setPadding(r9, r10, r11, r8)     // Catch:{ all -> 0x0431 }
-            int r8 = r2.fontSize     // Catch:{ all -> 0x0431 }
-            float r8 = (float) r8     // Catch:{ all -> 0x0431 }
+            int r9 = org.telegram.messenger.AndroidUtilities.dp(r8)     // Catch:{ all -> 0x0433 }
+            int r10 = org.telegram.messenger.AndroidUtilities.dp(r8)     // Catch:{ all -> 0x0433 }
+            int r11 = org.telegram.messenger.AndroidUtilities.dp(r8)     // Catch:{ all -> 0x0433 }
+            int r8 = org.telegram.messenger.AndroidUtilities.dp(r8)     // Catch:{ all -> 0x0433 }
+            r4.setPadding(r9, r10, r11, r8)     // Catch:{ all -> 0x0433 }
+            int r8 = r2.fontSize     // Catch:{ all -> 0x0433 }
+            float r8 = (float) r8     // Catch:{ all -> 0x0433 }
             r9 = 0
-            r4.setTextSize(r9, r8)     // Catch:{ all -> 0x0431 }
-            java.lang.String r8 = r2.text     // Catch:{ all -> 0x0431 }
-            r4.setText(r8)     // Catch:{ all -> 0x0431 }
-            int r8 = r2.color     // Catch:{ all -> 0x0431 }
-            r4.setTextColor(r8)     // Catch:{ all -> 0x0431 }
+            r4.setTextSize(r9, r8)     // Catch:{ all -> 0x0433 }
+            java.lang.String r8 = r2.text     // Catch:{ all -> 0x0433 }
+            r4.setText(r8)     // Catch:{ all -> 0x0433 }
+            int r8 = r2.color     // Catch:{ all -> 0x0433 }
+            r4.setTextColor(r8)     // Catch:{ all -> 0x0433 }
             r8 = 1
-            r4.setTypeface(r5, r8)     // Catch:{ all -> 0x0431 }
+            r4.setTypeface(r5, r8)     // Catch:{ all -> 0x0433 }
             r5 = 17
-            r4.setGravity(r5)     // Catch:{ all -> 0x0431 }
+            r4.setGravity(r5)     // Catch:{ all -> 0x0433 }
             r5 = 0
-            r4.setHorizontallyScrolling(r5)     // Catch:{ all -> 0x0431 }
+            r4.setHorizontallyScrolling(r5)     // Catch:{ all -> 0x0433 }
             r5 = 268435456(0x10000000, float:2.5243549E-29)
-            r4.setImeOptions(r5)     // Catch:{ all -> 0x0431 }
-            r4.setFocusableInTouchMode(r8)     // Catch:{ all -> 0x0431 }
-            int r5 = r4.getInputType()     // Catch:{ all -> 0x0431 }
+            r4.setImeOptions(r5)     // Catch:{ all -> 0x0433 }
+            r4.setFocusableInTouchMode(r8)     // Catch:{ all -> 0x0433 }
+            int r5 = r4.getInputType()     // Catch:{ all -> 0x0433 }
             r5 = r5 | 16384(0x4000, float:2.2959E-41)
-            r4.setInputType(r5)     // Catch:{ all -> 0x0431 }
-            int r5 = android.os.Build.VERSION.SDK_INT     // Catch:{ all -> 0x0431 }
+            r4.setInputType(r5)     // Catch:{ all -> 0x0433 }
+            int r5 = android.os.Build.VERSION.SDK_INT     // Catch:{ all -> 0x0433 }
             r9 = 23
-            if (r5 < r9) goto L_0x03b4
-            r1.setBreakStrategy(r4)     // Catch:{ all -> 0x0431 }
-        L_0x03b4:
-            byte r5 = r2.subType     // Catch:{ all -> 0x0431 }
+            if (r5 < r9) goto L_0x03b6
+            r1.setBreakStrategy(r4)     // Catch:{ all -> 0x0433 }
+        L_0x03b6:
+            byte r5 = r2.subType     // Catch:{ all -> 0x0433 }
             r9 = r5 & 1
-            if (r9 == 0) goto L_0x03cd
+            if (r9 == 0) goto L_0x03cf
             r5 = -1
-            r4.setTextColor(r5)     // Catch:{ all -> 0x0431 }
-            int r5 = r2.color     // Catch:{ all -> 0x0431 }
-            r4.setStrokeColor(r5)     // Catch:{ all -> 0x0431 }
+            r4.setTextColor(r5)     // Catch:{ all -> 0x0433 }
+            int r5 = r2.color     // Catch:{ all -> 0x0433 }
+            r4.setStrokeColor(r5)     // Catch:{ all -> 0x0433 }
             r5 = 0
-            r4.setFrameColor(r5)     // Catch:{ all -> 0x0431 }
-            r4.setShadowLayer(r6, r6, r6, r5)     // Catch:{ all -> 0x0431 }
+            r4.setFrameColor(r5)     // Catch:{ all -> 0x0433 }
+            r4.setShadowLayer(r6, r6, r6, r5)     // Catch:{ all -> 0x0433 }
             r5 = -16777216(0xfffffffffvar_, float:-1.7014118E38)
-            goto L_0x03f8
-        L_0x03cd:
+            goto L_0x03fa
+        L_0x03cf:
             r5 = r5 & 4
-            if (r5 == 0) goto L_0x03e3
+            if (r5 == 0) goto L_0x03e5
             r5 = -16777216(0xfffffffffvar_, float:-1.7014118E38)
-            r4.setTextColor(r5)     // Catch:{ all -> 0x0431 }
+            r4.setTextColor(r5)     // Catch:{ all -> 0x0433 }
             r9 = 0
-            r4.setStrokeColor(r9)     // Catch:{ all -> 0x0431 }
-            int r10 = r2.color     // Catch:{ all -> 0x0431 }
-            r4.setFrameColor(r10)     // Catch:{ all -> 0x0431 }
-            r4.setShadowLayer(r6, r6, r6, r9)     // Catch:{ all -> 0x0431 }
-            goto L_0x03f8
-        L_0x03e3:
+            r4.setStrokeColor(r9)     // Catch:{ all -> 0x0433 }
+            int r10 = r2.color     // Catch:{ all -> 0x0433 }
+            r4.setFrameColor(r10)     // Catch:{ all -> 0x0433 }
+            r4.setShadowLayer(r6, r6, r6, r9)     // Catch:{ all -> 0x0433 }
+            goto L_0x03fa
+        L_0x03e5:
             r5 = -16777216(0xfffffffffvar_, float:-1.7014118E38)
-            int r9 = r2.color     // Catch:{ all -> 0x0431 }
-            r4.setTextColor(r9)     // Catch:{ all -> 0x0431 }
+            int r9 = r2.color     // Catch:{ all -> 0x0433 }
+            r4.setTextColor(r9)     // Catch:{ all -> 0x0433 }
             r9 = 0
-            r4.setStrokeColor(r9)     // Catch:{ all -> 0x0431 }
-            r4.setFrameColor(r9)     // Catch:{ all -> 0x0431 }
+            r4.setStrokeColor(r9)     // Catch:{ all -> 0x0433 }
+            r4.setFrameColor(r9)     // Catch:{ all -> 0x0433 }
             r9 = 1084227584(0x40a00000, float:5.0)
             r10 = 1711276032(0x66000000, float:1.5111573E23)
-            r4.setShadowLayer(r9, r6, r12, r10)     // Catch:{ all -> 0x0431 }
-        L_0x03f8:
-            int r6 = r2.viewWidth     // Catch:{ all -> 0x0431 }
+            r4.setShadowLayer(r9, r6, r12, r10)     // Catch:{ all -> 0x0433 }
+        L_0x03fa:
+            int r6 = r2.viewWidth     // Catch:{ all -> 0x0433 }
             r9 = 1073741824(0x40000000, float:2.0)
-            int r6 = android.view.View.MeasureSpec.makeMeasureSpec(r6, r9)     // Catch:{ all -> 0x0431 }
-            int r9 = r2.viewHeight     // Catch:{ all -> 0x0431 }
+            int r6 = android.view.View.MeasureSpec.makeMeasureSpec(r6, r9)     // Catch:{ all -> 0x0433 }
+            int r9 = r2.viewHeight     // Catch:{ all -> 0x0433 }
             r10 = 1073741824(0x40000000, float:2.0)
-            int r9 = android.view.View.MeasureSpec.makeMeasureSpec(r9, r10)     // Catch:{ all -> 0x0431 }
-            r4.measure(r6, r9)     // Catch:{ all -> 0x0431 }
-            int r6 = r2.viewWidth     // Catch:{ all -> 0x0431 }
-            int r9 = r2.viewHeight     // Catch:{ all -> 0x0431 }
+            int r9 = android.view.View.MeasureSpec.makeMeasureSpec(r9, r10)     // Catch:{ all -> 0x0433 }
+            r4.measure(r6, r9)     // Catch:{ all -> 0x0433 }
+            int r6 = r2.viewWidth     // Catch:{ all -> 0x0433 }
+            int r9 = r2.viewHeight     // Catch:{ all -> 0x0433 }
             r10 = 0
-            r4.layout(r10, r10, r6, r9)     // Catch:{ all -> 0x0431 }
-            int r6 = r2.viewWidth     // Catch:{ all -> 0x0431 }
-            int r9 = r2.viewHeight     // Catch:{ all -> 0x0431 }
-            android.graphics.Bitmap$Config r11 = android.graphics.Bitmap.Config.ARGB_8888     // Catch:{ all -> 0x0431 }
-            android.graphics.Bitmap r6 = android.graphics.Bitmap.createBitmap(r6, r9, r11)     // Catch:{ all -> 0x0431 }
-            r2.bitmap = r6     // Catch:{ all -> 0x0431 }
-            android.graphics.Canvas r6 = new android.graphics.Canvas     // Catch:{ all -> 0x0431 }
-            android.graphics.Bitmap r2 = r2.bitmap     // Catch:{ all -> 0x0431 }
-            r6.<init>(r2)     // Catch:{ all -> 0x0431 }
-            r4.draw(r6)     // Catch:{ all -> 0x0431 }
-            goto L_0x042d
-        L_0x042a:
-            r5 = -16777216(0xfffffffffvar_, float:-1.7014118E38)
+            r4.layout(r10, r10, r6, r9)     // Catch:{ all -> 0x0433 }
+            int r6 = r2.viewWidth     // Catch:{ all -> 0x0433 }
+            int r9 = r2.viewHeight     // Catch:{ all -> 0x0433 }
+            android.graphics.Bitmap$Config r11 = android.graphics.Bitmap.Config.ARGB_8888     // Catch:{ all -> 0x0433 }
+            android.graphics.Bitmap r6 = android.graphics.Bitmap.createBitmap(r6, r9, r11)     // Catch:{ all -> 0x0433 }
+            r2.bitmap = r6     // Catch:{ all -> 0x0433 }
+            android.graphics.Canvas r6 = new android.graphics.Canvas     // Catch:{ all -> 0x0433 }
+            android.graphics.Bitmap r2 = r2.bitmap     // Catch:{ all -> 0x0433 }
+            r6.<init>(r2)     // Catch:{ all -> 0x0433 }
+            r4.draw(r6)     // Catch:{ all -> 0x0433 }
+            goto L_0x042f
         L_0x042c:
+            r5 = -16777216(0xfffffffffvar_, float:-1.7014118E38)
+        L_0x042e:
             r10 = 0
-        L_0x042d:
+        L_0x042f:
             int r3 = r3 + 1
             goto L_0x0250
-        L_0x0431:
+        L_0x0433:
             r0 = move-exception
             org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)
-        L_0x0435:
+        L_0x0437:
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.video.TextureRenderer.surfaceCreated():void");

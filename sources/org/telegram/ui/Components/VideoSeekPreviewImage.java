@@ -21,6 +21,7 @@ import org.telegram.messenger.DispatchQueue;
 import org.telegram.messenger.FileLoader;
 import org.telegram.messenger.ImageLocation;
 import org.telegram.messenger.Utilities;
+import org.telegram.messenger.utils.BitmapsCache;
 import org.telegram.tgnet.TLRPC$Document;
 import org.telegram.tgnet.TLRPC$TL_document;
 import org.telegram.tgnet.TLRPC$TL_documentAttributeFilename;
@@ -196,9 +197,9 @@ public class VideoSeekPreviewImage extends View {
             } else {
                 str = FileLoader.getInstance(intValue).getPathToAttach(tLRPC$TL_document, false).getAbsolutePath();
             }
-            this.fileDrawable = new AnimatedFileDrawable(new File(str), true, tLRPC$TL_document.size, tLRPC$TL_document, (ImageLocation) null, parentObject, 0, intValue, true);
+            this.fileDrawable = new AnimatedFileDrawable(new File(str), true, tLRPC$TL_document.size, tLRPC$TL_document, (ImageLocation) null, parentObject, 0, intValue, true, (BitmapsCache.CacheOptions) null);
         } else {
-            this.fileDrawable = new AnimatedFileDrawable(new File(uri.getPath()), true, 0, (TLRPC$Document) null, (ImageLocation) null, (Object) null, 0, 0, true);
+            this.fileDrawable = new AnimatedFileDrawable(new File(uri.getPath()), true, 0, (TLRPC$Document) null, (ImageLocation) null, (Object) null, 0, 0, true, (BitmapsCache.CacheOptions) null);
         }
         this.duration = (long) this.fileDrawable.getDurationMs();
         float f = this.pendingProgress;

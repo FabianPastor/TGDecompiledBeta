@@ -1000,7 +1000,7 @@ public class ThemeEditorView {
                 android.animation.AnimatorSet[] r4 = new android.animation.AnimatorSet[r4]
                 r0.shadowAnimation = r4
                 android.content.res.Resources r4 = r18.getResources()
-                r5 = 2131166138(0x7var_ba, float:1.7946513E38)
+                r5 = 2131166140(0x7var_bc, float:1.7946517E38)
                 android.graphics.drawable.Drawable r4 = r4.getDrawable(r5)
                 android.graphics.drawable.Drawable r4 = r4.mutate()
                 r0.shadowDrawable = r4
@@ -1082,7 +1082,7 @@ public class ThemeEditorView {
                 r1.showTextView()
                 org.telegram.ui.Components.EmptyTextProgressView r1 = r0.searchEmptyView
                 java.lang.String r4 = "NoResult"
-                r9 = 2131626858(0x7f0e0b6a, float:1.8880964E38)
+                r9 = 2131626900(0x7f0e0b94, float:1.888105E38)
                 java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r4, r9)
                 r1.setText(r4)
                 org.telegram.ui.Components.RecyclerListView r1 = r0.listView
@@ -1181,7 +1181,7 @@ public class ThemeEditorView {
                 int r9 = org.telegram.messenger.AndroidUtilities.dp(r14)
                 r1.setPadding(r15, r5, r9, r5)
                 java.lang.String r9 = "CloseEditor"
-                r15 = 2131625168(0x7f0e04d0, float:1.8877536E38)
+                r15 = 2131625177(0x7f0e04d9, float:1.8877555E38)
                 java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r9, r15)
                 java.lang.String r9 = r9.toUpperCase()
                 r1.setText(r9)
@@ -1206,7 +1206,7 @@ public class ThemeEditorView {
                 int r15 = org.telegram.messenger.AndroidUtilities.dp(r14)
                 r1.setPadding(r4, r5, r15, r5)
                 java.lang.String r4 = "SaveTheme"
-                r15 = 2131628066(0x7f0e1022, float:1.8883414E38)
+                r15 = 2131628116(0x7f0e1054, float:1.8883516E38)
                 java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r4, r15)
                 java.lang.String r4 = r4.toUpperCase()
                 r1.setText(r4)
@@ -1243,7 +1243,7 @@ public class ThemeEditorView {
                 int r8 = org.telegram.messenger.AndroidUtilities.dp(r14)
                 r1.setPadding(r4, r5, r8, r5)
                 java.lang.String r4 = "Cancel"
-                r8 = 2131624819(0x7f0e0373, float:1.8876828E38)
+                r8 = 2131624828(0x7f0e037c, float:1.8876847E38)
                 java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r4, r8)
                 java.lang.String r4 = r4.toUpperCase()
                 r1.setText(r4)
@@ -1274,7 +1274,7 @@ public class ThemeEditorView {
                 int r15 = org.telegram.messenger.AndroidUtilities.dp(r14)
                 r4.setPadding(r8, r5, r15, r5)
                 java.lang.String r8 = "Default"
-                r15 = 2131625366(0x7f0e0596, float:1.8877938E38)
+                r15 = 2131625375(0x7f0e059f, float:1.8877956E38)
                 java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r8, r15)
                 java.lang.String r8 = r8.toUpperCase()
                 r4.setText(r8)
@@ -1297,7 +1297,7 @@ public class ThemeEditorView {
                 int r3 = org.telegram.messenger.AndroidUtilities.dp(r14)
                 r4.setPadding(r2, r5, r3, r5)
                 java.lang.String r2 = "Save"
-                r3 = 2131628060(0x7f0e101c, float:1.8883402E38)
+                r3 = 2131628110(0x7f0e104e, float:1.8883503E38)
                 java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r2, r3)
                 java.lang.String r2 = r2.toUpperCase()
                 r4.setText(r2)

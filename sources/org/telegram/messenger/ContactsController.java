@@ -57,6 +57,7 @@ import org.telegram.tgnet.TLRPC$TL_inputPrivacyKeyPhoneNumber;
 import org.telegram.tgnet.TLRPC$TL_inputPrivacyKeyPhoneP2P;
 import org.telegram.tgnet.TLRPC$TL_inputPrivacyKeyProfilePhoto;
 import org.telegram.tgnet.TLRPC$TL_inputPrivacyKeyStatusTimestamp;
+import org.telegram.tgnet.TLRPC$TL_inputPrivacyKeyVoiceMessages;
 import org.telegram.tgnet.TLRPC$TL_popularContact;
 import org.telegram.tgnet.TLRPC$TL_user;
 import org.telegram.tgnet.TLRPC$TL_userStatusLastMonth;
@@ -72,13 +73,14 @@ public class ContactsController extends BaseController {
     private static volatile ContactsController[] Instance = new ContactsController[4];
     public static final int PRIVACY_RULES_TYPE_ADDED_BY_PHONE = 7;
     public static final int PRIVACY_RULES_TYPE_CALLS = 2;
-    public static final int PRIVACY_RULES_TYPE_COUNT = 8;
+    public static final int PRIVACY_RULES_TYPE_COUNT = 9;
     public static final int PRIVACY_RULES_TYPE_FORWARDS = 5;
     public static final int PRIVACY_RULES_TYPE_INVITE = 1;
     public static final int PRIVACY_RULES_TYPE_LASTSEEN = 0;
     public static final int PRIVACY_RULES_TYPE_P2P = 3;
     public static final int PRIVACY_RULES_TYPE_PHONE = 6;
     public static final int PRIVACY_RULES_TYPE_PHOTO = 4;
+    public static final int PRIVACY_RULES_TYPE_VOICE_MESSAGES = 8;
     private ArrayList<TLRPC$PrivacyRule> addedByPhonePrivacyRules;
     private ArrayList<TLRPC$PrivacyRule> callPrivacyRules;
     private int completedRequestsCount;
@@ -106,7 +108,7 @@ public class ContactsController extends BaseController {
     private boolean loadingContacts;
     private int loadingDeleteInfo;
     private int loadingGlobalSettings;
-    private int[] loadingPrivacyInfo = new int[8];
+    private int[] loadingPrivacyInfo = new int[9];
     private boolean migratingContacts;
     /* access modifiers changed from: private */
     public final Object observerLock = new Object();
@@ -125,6 +127,7 @@ public class ContactsController extends BaseController {
     private boolean updatingInviteLink;
     public HashMap<String, ArrayList<TLRPC$TL_contact>> usersMutualSectionsDict = new HashMap<>();
     public HashMap<String, ArrayList<TLRPC$TL_contact>> usersSectionsDict = new HashMap<>();
+    private ArrayList<TLRPC$PrivacyRule> voiceMessagesRules;
 
     /* access modifiers changed from: private */
     public static /* synthetic */ void lambda$resetImportedContacts$9(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
@@ -884,7 +887,7 @@ public class ContactsController extends BaseController {
             r1 = 0
             java.lang.Integer r2 = java.lang.Integer.valueOf(r1)     // Catch:{ all -> 0x01eb }
             r0.add(r2)     // Catch:{ all -> 0x01eb }
-            r0 = 2131627492(0x7f0e0de4, float:1.888225E38)
+            r0 = 2131627534(0x7f0e0e0e, float:1.8882335E38)
             java.lang.String r1 = "PhoneMobile"
             if (r14 != 0) goto L_0x0182
             r2 = 3
@@ -903,7 +906,7 @@ public class ContactsController extends BaseController {
             if (r14 != r2) goto L_0x0194
             java.util.ArrayList<java.lang.String> r0 = r13.phoneTypes     // Catch:{ all -> 0x01eb }
             java.lang.String r1 = "PhoneHome"
-            r3 = 2131627490(0x7f0e0de2, float:1.8882246E38)
+            r3 = 2131627532(0x7f0e0e0c, float:1.8882331E38)
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r1, r3)     // Catch:{ all -> 0x01eb }
             r0.add(r1)     // Catch:{ all -> 0x01eb }
             goto L_0x01d4
@@ -919,7 +922,7 @@ public class ContactsController extends BaseController {
             if (r14 != r0) goto L_0x01b3
             java.util.ArrayList<java.lang.String> r0 = r13.phoneTypes     // Catch:{ all -> 0x01eb }
             java.lang.String r1 = "PhoneWork"
-            r3 = 2131627502(0x7f0e0dee, float:1.888227E38)
+            r3 = 2131627544(0x7f0e0e18, float:1.8882355E38)
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r1, r3)     // Catch:{ all -> 0x01eb }
             r0.add(r1)     // Catch:{ all -> 0x01eb }
             goto L_0x01d4
@@ -928,14 +931,14 @@ public class ContactsController extends BaseController {
             if (r14 != r0) goto L_0x01c6
             java.util.ArrayList<java.lang.String> r0 = r13.phoneTypes     // Catch:{ all -> 0x01eb }
             java.lang.String r1 = "PhoneMain"
-            r3 = 2131627491(0x7f0e0de3, float:1.8882248E38)
+            r3 = 2131627533(0x7f0e0e0d, float:1.8882333E38)
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r1, r3)     // Catch:{ all -> 0x01eb }
             r0.add(r1)     // Catch:{ all -> 0x01eb }
             goto L_0x01d4
         L_0x01c6:
             java.util.ArrayList<java.lang.String> r0 = r13.phoneTypes     // Catch:{ all -> 0x01eb }
             java.lang.String r1 = "PhoneOther"
-            r3 = 2131627501(0x7f0e0ded, float:1.8882268E38)
+            r3 = 2131627543(0x7f0e0e17, float:1.8882353E38)
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r1, r3)     // Catch:{ all -> 0x01eb }
             r0.add(r1)     // Catch:{ all -> 0x01eb }
         L_0x01d4:
@@ -3400,6 +3403,9 @@ public class ContactsController extends BaseController {
                         case 6:
                             tLRPC$TL_account_getPrivacy.key = new TLRPC$TL_inputPrivacyKeyPhoneNumber();
                             break;
+                        case 8:
+                            tLRPC$TL_account_getPrivacy.key = new TLRPC$TL_inputPrivacyKeyVoiceMessages();
+                            break;
                         default:
                             tLRPC$TL_account_getPrivacy.key = new TLRPC$TL_inputPrivacyKeyAddedByPhone();
                             break;
@@ -3479,6 +3485,9 @@ public class ContactsController extends BaseController {
                 case 6:
                     this.phonePrivacyRules = tLRPC$TL_account_privacyRules.rules;
                     break;
+                case 8:
+                    this.voiceMessagesRules = tLRPC$TL_account_privacyRules.rules;
+                    break;
                 default:
                     this.addedByPhonePrivacyRules = tLRPC$TL_account_privacyRules.rules;
                     break;
@@ -3506,7 +3515,7 @@ public class ContactsController extends BaseController {
         return this.loadingGlobalSettings != 2;
     }
 
-    public boolean getLoadingPrivicyInfo(int i) {
+    public boolean getLoadingPrivacyInfo(int i) {
         return this.loadingPrivacyInfo[i] != 2;
     }
 
@@ -3532,6 +3541,8 @@ public class ContactsController extends BaseController {
                 return this.phonePrivacyRules;
             case 7:
                 return this.addedByPhonePrivacyRules;
+            case 8:
+                return this.voiceMessagesRules;
             default:
                 return null;
         }
@@ -3562,6 +3573,9 @@ public class ContactsController extends BaseController {
                 break;
             case 7:
                 this.addedByPhonePrivacyRules = arrayList;
+                break;
+            case 8:
+                this.voiceMessagesRules = arrayList;
                 break;
         }
         getNotificationCenter().postNotificationName(NotificationCenter.privacyRulesUpdated, new Object[0]);
