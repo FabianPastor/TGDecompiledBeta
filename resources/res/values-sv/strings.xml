@@ -21,6 +21,12 @@
     <string name="fcm_fallback_notification_channel_label">Diverse</string>
     <string name="google_assistant_verification_channel_name">Verifierare för Google-assistenten</string>
     <string name="google_assistant_verification_notification_title">Google-assistenten skickar meddelandet</string>
+    <string name="hms_apk_not_installed_hints">Vissa funktioner i %1$s kanske inte fungerar korrekt utan HMS Core, som inte är installerad på din enhet.</string>
+    <string name="hms_bindfaildlg_message">%1$s kan inte använda HMS Core. Starta Optimerare (Telefonhanterare) eller gå till Inställningar, aktivera alla behörigheter för %2$s (inklusive autostart och sekundär start) och försök igen.</string>
+    <string name="hms_confirm">OK</string>
+    <string name="hms_is_spoof">Det verkar som om du har en inofficiell version av HMS Core (%1$s) installerad på din enhet. Avinstallera HMS Core från Inställningar och returnera den här appen för att installera den officiella versionen.</string>
+    <string name="hms_push_channel">Standardinställning</string>
+    <string name="hms_spoof_hints">Notera</string>
     <string name="status_bar_notification_info_overflow">999+</string>
     <string name="wallet_buy_button_place_holder">Köp med Google</string>
 </resources>

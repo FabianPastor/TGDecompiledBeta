@@ -250,7 +250,7 @@ public class BillingController implements PurchasesUpdatedListener, BillingClien
                                 BillingController$$ExternalSyntheticLambda7 billingController$$ExternalSyntheticLambda7 = r0;
                                 ConnectionsManager connectionsManager = instance3.getConnectionsManager();
                                 BillingController$$ExternalSyntheticLambda7 billingController$$ExternalSyntheticLambda72 = new BillingController$$ExternalSyntheticLambda7(this, instance3, next, billingResult, tLRPC$TL_payments_assignPlayMarketTransaction);
-                                connectionsManager.sendRequest(tLRPC$TL_payments_assignPlayMarketTransaction, billingController$$ExternalSyntheticLambda7);
+                                connectionsManager.sendRequest(tLRPC$TL_payments_assignPlayMarketTransaction, billingController$$ExternalSyntheticLambda7, 66);
                                 instance3.getUserConfig().billingPaymentPurpose = null;
                                 instance3.getUserConfig().saveConfig(false);
                             }

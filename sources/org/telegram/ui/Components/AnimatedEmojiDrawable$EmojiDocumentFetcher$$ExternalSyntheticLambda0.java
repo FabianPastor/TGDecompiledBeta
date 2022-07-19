@@ -10,6 +10,6 @@ public final /* synthetic */ class AnimatedEmojiDrawable$EmojiDocumentFetcher$$E
     }
 
     public final void run() {
-        this.f$0.lambda$fetchDocument$2();
+        this.f$0.lambda$fetchDocument$0();
     }
 }

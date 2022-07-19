@@ -653,8 +653,8 @@ public class EditTextEmoji extends FrameLayout implements NotificationCenter.Not
 
                 public void onClearEmojiRecent() {
                     AlertDialog.Builder builder = new AlertDialog.Builder(EditTextEmoji.this.getContext(), EditTextEmoji.this.resourcesProvider);
-                    builder.setTitle(LocaleController.getString("AppName", NUM));
-                    builder.setMessage(LocaleController.getString("ClearRecentEmoji", NUM));
+                    builder.setTitle(LocaleController.getString("ClearRecentEmojiTitle", NUM));
+                    builder.setMessage(LocaleController.getString("ClearRecentEmojiText", NUM));
                     builder.setPositiveButton(LocaleController.getString("ClearButton", NUM).toUpperCase(), new EditTextEmoji$5$$ExternalSyntheticLambda0(this));
                     builder.setNegativeButton(LocaleController.getString("Cancel", NUM), (DialogInterface.OnClickListener) null);
                     if (EditTextEmoji.this.parentFragment != null) {

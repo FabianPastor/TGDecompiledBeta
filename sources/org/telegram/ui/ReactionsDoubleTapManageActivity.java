@@ -19,6 +19,7 @@ import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.ActionBar.ThemeDescription;
 import org.telegram.ui.Cells.AvailableReactionCell;
 import org.telegram.ui.Components.LayoutHelper;
+import org.telegram.ui.Components.Premium.PremiumFeatureBottomSheet;
 import org.telegram.ui.Components.RecyclerListView;
 import org.telegram.ui.Components.SimpleThemeDescription;
 
@@ -71,13 +72,13 @@ public class ReactionsDoubleTapManageActivity extends BaseFragment implements No
                     org.telegram.ui.Cells.AvailableReactionCell r3 = new org.telegram.ui.Cells.AvailableReactionCell
                     android.content.Context r4 = r4
                     r0 = 1
-                    r3.<init>(r4, r0)
+                    r3.<init>(r4, r0, r0)
                     goto L_0x003e
                 L_0x000e:
                     org.telegram.ui.Cells.TextInfoPrivacyCell r3 = new org.telegram.ui.Cells.TextInfoPrivacyCell
                     android.content.Context r4 = r4
                     r3.<init>(r4)
-                    r4 = 2131625537(0x7f0e0641, float:1.8878285E38)
+                    r4 = 2131625544(0x7f0e0648, float:1.8878299E38)
                     java.lang.String r0 = "DoubleTapPreviewRational"
                     java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r0, r4)
                     r3.setText(r4)
@@ -108,7 +109,7 @@ public class ReactionsDoubleTapManageActivity extends BaseFragment implements No
             public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int i) {
                 if (getItemViewType(i) == 1) {
                     TLRPC$TL_availableReaction tLRPC$TL_availableReaction = (TLRPC$TL_availableReaction) ReactionsDoubleTapManageActivity.this.getAvailableReactions().get(i - ReactionsDoubleTapManageActivity.this.reactionsStartRow);
-                    ((AvailableReactionCell) viewHolder.itemView).bind(tLRPC$TL_availableReaction, tLRPC$TL_availableReaction.reaction.contains(MediaDataController.getInstance(ReactionsDoubleTapManageActivity.this.currentAccount).getDoubleTapReaction()));
+                    ((AvailableReactionCell) viewHolder.itemView).bind(tLRPC$TL_availableReaction, tLRPC$TL_availableReaction.reaction.contains(MediaDataController.getInstance(ReactionsDoubleTapManageActivity.this.currentAccount).getDoubleTapReaction()), ReactionsDoubleTapManageActivity.this.currentAccount);
                 }
             }
 
@@ -138,8 +139,13 @@ public class ReactionsDoubleTapManageActivity extends BaseFragment implements No
     /* access modifiers changed from: private */
     public /* synthetic */ void lambda$createView$0(View view, int i) {
         if (view instanceof AvailableReactionCell) {
-            MediaDataController.getInstance(this.currentAccount).setDoubleTapReaction(((AvailableReactionCell) view).react.reaction);
-            this.listView.getAdapter().notifyItemRangeChanged(0, this.listView.getAdapter().getItemCount());
+            AvailableReactionCell availableReactionCell = (AvailableReactionCell) view;
+            if (!availableReactionCell.locked || getUserConfig().isPremium()) {
+                MediaDataController.getInstance(this.currentAccount).setDoubleTapReaction(availableReactionCell.react.reaction);
+                this.listView.getAdapter().notifyItemRangeChanged(0, this.listView.getAdapter().getItemCount());
+                return;
+            }
+            showDialog(new PremiumFeatureBottomSheet(this, 4, true));
         }
     }
 

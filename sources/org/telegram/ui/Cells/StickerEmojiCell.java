@@ -536,10 +536,10 @@ public class StickerEmojiCell extends FrameLayout implements NotificationCenter.
 
     /* access modifiers changed from: protected */
     public void dispatchDraw(Canvas canvas) {
-        super.dispatchDraw(canvas);
         if (!this.drawInParentView) {
             drawInternal(this, canvas);
         }
+        super.dispatchDraw(canvas);
     }
 
     public void preDraw(View view, Canvas canvas) {

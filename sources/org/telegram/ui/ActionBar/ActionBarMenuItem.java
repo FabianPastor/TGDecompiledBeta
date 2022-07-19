@@ -790,7 +790,7 @@ public class ActionBarMenuItem extends FrameLayout {
             r11.setAnimationStyle(r2)
             goto L_0x00e5
         L_0x00df:
-            r0 = 2131689479(0x7f0var_, float:1.9007975E38)
+            r0 = 2131689480(0x7f0var_, float:1.9007977E38)
             r11.setAnimationStyle(r0)
         L_0x00e5:
             boolean r11 = r10.animationEnabled

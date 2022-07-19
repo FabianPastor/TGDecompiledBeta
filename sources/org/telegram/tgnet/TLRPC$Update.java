@@ -133,6 +133,9 @@ public abstract class TLRPC$Update extends TLObject {
             case -99664734:
                 tLRPC$Update = new TLRPC$TL_updatePinnedDialogs();
                 break;
+            case -78886548:
+                tLRPC$Update = new TLRPC$TL_updateReadFeaturedEmojiStickers();
+                break;
             case 8703322:
                 tLRPC$Update = new TLRPC$TL_updateTranscribedAudio();
                 break;

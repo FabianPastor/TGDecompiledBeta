@@ -21,6 +21,7 @@
     <string name="fcm_fallback_notification_channel_label">Разно</string>
     <string name="google_assistant_verification_channel_name">Верификатор Помоћника</string>
     <string name="google_assistant_verification_notification_title">Google помоћник шаље поруку</string>
+    <string name="hms_push_channel">Подразумевано</string>
     <string name="status_bar_notification_info_overflow">999+</string>
     <string name="wallet_buy_button_place_holder">Купи помоћу Google-а</string>
 </resources>

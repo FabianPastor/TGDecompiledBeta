@@ -73,8 +73,8 @@ public class MessageContainsEmojiButton extends FrameLayout implements Notificat
 
     public MessageContainsEmojiButton(int i, Context context, Theme.ResourcesProvider resourcesProvider2, ArrayList<TLRPC$InputStickerSet> arrayList) {
         super(context);
-        String str;
         TLRPC$Document tLRPC$Document;
+        String str;
         TLRPC$TL_messages_stickerSet stickerSet;
         TLRPC$StickerSet tLRPC$StickerSet;
         ArrayList<TLRPC$Document> arrayList2;
@@ -146,7 +146,7 @@ public class MessageContainsEmojiButton extends FrameLayout implements Notificat
                     MessageContainsEmojiButton.this.emojiDrawableBounds.set((int) f, (i6 - i7) / 2, (int) (f + ((float) i7)), (i6 + i7) / 2);
                 }
             }, 0, spannableString.length(), 33);
-            AnimatedEmojiDrawable make = AnimatedEmojiDrawable.make(0, tLRPC$Document);
+            AnimatedEmojiDrawable make = AnimatedEmojiDrawable.make(i, 0, tLRPC$Document);
             this.emojiDrawable = make;
             make.addView((View) this);
             SpannableString spannableString2 = new SpannableString(str);
@@ -292,7 +292,7 @@ public class MessageContainsEmojiButton extends FrameLayout implements Notificat
                 tLRPC$Document = null;
             }
             if (str != null && tLRPC$Document != null) {
-                AnimatedEmojiDrawable make = AnimatedEmojiDrawable.make(0, tLRPC$Document);
+                AnimatedEmojiDrawable make = AnimatedEmojiDrawable.make(this.currentAccount, 0, tLRPC$Document);
                 this.emojiDrawable = make;
                 make.addView((View) this);
                 invalidate();
@@ -318,7 +318,7 @@ public class MessageContainsEmojiButton extends FrameLayout implements Notificat
                 spannableString3.setSpan(new BoldAndAccent(), 0, spannableString3.length(), 33);
                 this.secondPartText = new SpannableStringBuilder().append(spannableString).append(spannableString2).append(' ').append(spannableString3).append(this.endText);
                 int measuredHeight = (getMeasuredHeight() - getPaddingTop()) - getPaddingBottom();
-                int updateLayout = updateLayout(this.lastWidth, true);
+                int updateLayout = updateLayout((this.lastWidth - getPaddingLeft()) - getPaddingRight(), true);
                 if (!(this.loadingBoundsFrom == null || this.secondPartTextLayout == null)) {
                     if (this.loadingBoundsTo == null) {
                         this.loadingBoundsTo = new Rect();

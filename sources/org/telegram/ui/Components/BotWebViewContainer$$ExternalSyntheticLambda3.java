@@ -16,6 +16,6 @@ public final /* synthetic */ class BotWebViewContainer$$ExternalSyntheticLambda3
     }
 
     public final void onClick(DialogInterface dialogInterface, int i) {
-        this.f$0.lambda$onEventReceived$8(this.f$1, this.f$2, dialogInterface, i);
+        this.f$0.lambda$onEventReceived$10(this.f$1, this.f$2, dialogInterface, i);
     }
 }

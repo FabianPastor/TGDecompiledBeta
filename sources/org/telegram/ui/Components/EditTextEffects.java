@@ -28,6 +28,7 @@ public class EditTextEffects extends EditText {
     private Layout lastLayout = null;
     private float lastRippleX;
     private float lastRippleY;
+    private int lastTextLength;
     private Path path = new Path();
     private boolean postedSpoilerTimeout;
     private Rect rect = new Rect();
@@ -244,12 +245,14 @@ public class EditTextEffects extends EditText {
             this.path.addRect((float) bounds2.left, (float) bounds2.top, (float) bounds2.right, (float) bounds2.bottom, Path.Direction.CW);
         }
         canvas.clipPath(this.path, Region.Op.DIFFERENCE);
-        super.onDraw(canvas);
+        int length = (getLayout() == null || getLayout().getText() == null) ? 0 : getLayout().getText().length();
         Layout layout = this.lastLayout;
-        if (layout == null || layout != getLayout()) {
+        if (!(layout != null && layout == getLayout() && this.lastTextLength == length)) {
             this.animatedEmojiDrawables = AnimatedEmojiSpan.update(1, (View) this, this.animatedEmojiDrawables, getLayout());
             this.lastLayout = getLayout();
+            this.lastTextLength = length;
         }
+        super.onDraw(canvas);
         if (this.animatedEmojiDrawables != null) {
             AnimatedEmojiSpan.drawAnimatedEmojis(canvas, getLayout(), this.animatedEmojiDrawables, 0.0f, this.spoilers, (float) (computeVerticalScrollOffset() - AndroidUtilities.dp(6.0f)), (float) (computeVerticalScrollOffset() + computeVerticalScrollExtent()), 0.0f, 1.0f);
         }
@@ -303,7 +306,15 @@ public class EditTextEffects extends EditText {
             }
             Layout layout = getLayout();
             if (layout != null && (layout.getText() instanceof Spannable)) {
+                AnimatedEmojiSpan.EmojiGroupedSpans emojiGroupedSpans = this.animatedEmojiDrawables;
+                if (emojiGroupedSpans != null) {
+                    emojiGroupedSpans.recordPositions(false);
+                }
                 SpoilerEffect.addSpoilers(this, this.spoilersPool, this.spoilers);
+                AnimatedEmojiSpan.EmojiGroupedSpans emojiGroupedSpans2 = this.animatedEmojiDrawables;
+                if (emojiGroupedSpans2 != null) {
+                    emojiGroupedSpans2.recordPositions(true);
+                }
             }
             invalidate();
         }

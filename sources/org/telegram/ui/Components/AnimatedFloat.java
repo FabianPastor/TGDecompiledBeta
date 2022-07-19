@@ -94,7 +94,12 @@ public class AnimatedFloat {
         if (this.transition) {
             float clamp = MathUtils.clamp(((float) ((elapsedRealtime - this.transitionStart) - this.transitionDelay)) / ((float) this.transitionDuration), 0.0f, 1.0f);
             if (elapsedRealtime - this.transitionStart >= this.transitionDelay) {
-                this.value = AndroidUtilities.lerp(this.startValue, this.targetValue, this.transitionInterpolator.getInterpolation(clamp));
+                TimeInterpolator timeInterpolator = this.transitionInterpolator;
+                if (timeInterpolator == null) {
+                    this.value = AndroidUtilities.lerp(this.startValue, this.targetValue, clamp);
+                } else {
+                    this.value = AndroidUtilities.lerp(this.startValue, this.targetValue, timeInterpolator.getInterpolation(clamp));
+                }
             }
             if (clamp >= 1.0f) {
                 this.transition = false;
@@ -106,6 +111,21 @@ public class AnimatedFloat {
             }
         }
         return this.value;
+    }
+
+    public float getTransitionProgress() {
+        if (!this.transition) {
+            return 0.0f;
+        }
+        return MathUtils.clamp(((float) ((SystemClock.elapsedRealtime() - this.transitionStart) - this.transitionDelay)) / ((float) this.transitionDuration), 0.0f, 1.0f);
+    }
+
+    public float getTransitionProgressInterpolated() {
+        TimeInterpolator timeInterpolator = this.transitionInterpolator;
+        if (timeInterpolator != null) {
+            return timeInterpolator.getInterpolation(getTransitionProgress());
+        }
+        return getTransitionProgress();
     }
 
     public void setParent(View view) {

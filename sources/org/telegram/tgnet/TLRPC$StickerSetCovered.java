@@ -9,7 +9,9 @@ public abstract class TLRPC$StickerSetCovered extends TLObject {
 
     public static TLRPC$StickerSetCovered TLdeserialize(AbstractSerializedData abstractSerializedData, int i, boolean z) {
         TLRPC$StickerSetCovered tLRPC$StickerSetCovered;
-        if (i != NUM) {
+        if (i == NUM) {
+            tLRPC$StickerSetCovered = new TLRPC$TL_stickerSetFullCovered();
+        } else if (i != NUM) {
             tLRPC$StickerSetCovered = i != NUM ? null : new TLRPC$TL_stickerSetCovered();
         } else {
             tLRPC$StickerSetCovered = new TLRPC$TL_stickerSetMultiCovered();

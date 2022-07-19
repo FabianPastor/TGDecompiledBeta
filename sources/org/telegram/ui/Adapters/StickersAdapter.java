@@ -101,7 +101,7 @@ public class StickersAdapter extends RecyclerListView.SelectionAdapter implement
 
     /* access modifiers changed from: private */
     public /* synthetic */ void lambda$searchEmojiByKeyword$1(String str) {
-        MediaDataController.getInstance(this.currentAccount).getEmojiSuggestions(this.lastSearchKeyboardLanguage, str, true, new StickersAdapter$$ExternalSyntheticLambda1(this, str));
+        MediaDataController.getInstance(this.currentAccount).getEmojiSuggestions(this.lastSearchKeyboardLanguage, str, true, new StickersAdapter$$ExternalSyntheticLambda1(this, str), true);
     }
 
     /* access modifiers changed from: private */

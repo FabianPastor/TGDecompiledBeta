@@ -21,6 +21,12 @@
     <string name="fcm_fallback_notification_channel_label">Iba Pa</string>
     <string name="google_assistant_verification_channel_name">Taga-verify ng Assistant</string>
     <string name="google_assistant_verification_notification_title">Nagpapadala ng mensahe ang Google Assistant</string>
+    <string name="hms_apk_not_installed_hints">Puwedeng hindi gumana nang maayos ang ilang feature sa %1$s kung walang HMS Core, na hindi naka-install sa iyong device.</string>
+    <string name="hms_bindfaildlg_message">Hindi magamit ng %1$s ang HMS Core. Ilunsad ang Optimizer (Manager ng Telepono) o pumunta sa Mga Setting, i-enable ang lahat ng pahintulot para sa %2$s (kabilang ang awtomatikong paglunsad at ikalawang paglunsad), at subukang muli.</string>
+    <string name="hms_confirm">OK</string>
+    <string name="hms_is_spoof">Mukhang mayroon kang hindi opisyal na bersyon ng HMS Core (%1$s) na naka-install sa iyong device. Paki-uninstall ang HMS Core mula sa Mga Setting at bumalik sa app na ito para i-install ang opisyal na bersyon.</string>
+    <string name="hms_push_channel">Default</string>
+    <string name="hms_spoof_hints">Tandaan</string>
     <string name="status_bar_notification_info_overflow">999+</string>
     <string name="wallet_buy_button_place_holder">Bumili gamit ang Google</string>
 </resources>

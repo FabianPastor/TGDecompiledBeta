@@ -21,6 +21,12 @@
     <string name="fcm_fallback_notification_channel_label">විවිධ</string>
     <string name="google_assistant_verification_channel_name">සහකරු සත්‍යාපකය</string>
     <string name="google_assistant_verification_notification_title">Google සහකරු පණිවුඩ යැවීම</string>
+    <string name="hms_apk_not_installed_hints">ඔබගේ උපාංගයේ ස්ථාපනය කර නොමැති HMS Core නොමැතිව %1$s තුළ ඇති සමහර විශේෂාංග නිසි පරිදි ක්‍රියා නොකිරීමට ඉඩ ඇත.</string>
+    <string name="hms_bindfaildlg_message">%1$s ට HMS Core භාවිතා කළ නොහැකිය. %2$s සඳහා වූ සියලු අවසරයන් සක්‍රීය කිරීමට ප්‍රශස්තකාරකය (දුරකථන කලමණාකරු) දියත් කරන්න නැතහොත් සැකසුම් වෙත ගොස් (ස්වයං-දියත්කිරීම සහ ද්විතීය දියත් කිරීම ඇතුළුව) නැවත උත්සාහ කරන්න.</string>
+    <string name="hms_confirm">හරි</string>
+    <string name="hms_is_spoof">ඔබ ඔබගේ උපාංගයේ HMS Core (%1$s) හි නිල නොවන අනුවාදයක් ස්ථාපනය කර ඇති බව පෙනේ. කරුණාකර සැකසුම් වෙතින් HMS Core අස්ථාපනය කර නිල අනුවාදය ස්ථාපනය කිරීමට මෙම යෙදුම වෙත ආපසු යන්න.</string>
+    <string name="hms_push_channel">පෙරනිමි</string>
+    <string name="hms_spoof_hints">සටහන</string>
     <string name="status_bar_notification_info_overflow">999+</string>
     <string name="wallet_buy_button_place_holder">Google සමඟ මිලදී ගන්න</string>
 </resources>

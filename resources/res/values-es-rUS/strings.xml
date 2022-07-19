@@ -19,6 +19,12 @@
     <string name="common_signin_button_text">Acceder</string>
     <string name="common_signin_button_text_long">Acceder con Google</string>
     <string name="fcm_fallback_notification_channel_label">Varios</string>
+    <string name="hms_apk_not_installed_hints">Algunas funciones de %1$s pueden no funcionar correctamente sin HMS Core, que no está instalado en tu dispositivo.</string>
+    <string name="hms_bindfaildlg_message">%1$s no puede usar HMS Core. Abra el Optimizador (Gestor) o acceda a Ajustes, habilite todos los permisos para %2$s (incluso el acceso automático y el secundario) y vuelva a intentarlo.</string>
+    <string name="hms_confirm">Aceptar</string>
+    <string name="hms_is_spoof">Parece que usted tiene una versión no oficial de HMS Core (%1$s) instalada en su dispositivo. Desinstale HMS Core desde Ajustes y vuelva a esta aplicación para instalar la versión oficial.</string>
+    <string name="hms_push_channel">Predeterminado</string>
+    <string name="hms_spoof_hints">Nota</string>
     <string name="status_bar_notification_info_overflow">999+</string>
     <string name="wallet_buy_button_place_holder">Comprar con Google</string>
 </resources>

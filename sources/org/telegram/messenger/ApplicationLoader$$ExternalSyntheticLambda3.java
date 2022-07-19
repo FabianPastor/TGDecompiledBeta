@@ -7,6 +7,6 @@ public final /* synthetic */ class ApplicationLoader$$ExternalSyntheticLambda3 i
     }
 
     public final void run() {
-        ApplicationLoader.startPushService();
+        ApplicationLoader.lambda$initPushServices$1();
     }
 }

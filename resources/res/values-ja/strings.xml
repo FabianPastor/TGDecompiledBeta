@@ -40,6 +40,12 @@
     <string name="fcm_fallback_notification_channel_label">その他</string>
     <string name="google_assistant_verification_channel_name">アシスタント ベリファイア</string>
     <string name="google_assistant_verification_notification_title">Google アシスタントがメッセージを送信中</string>
+    <string name="hms_apk_not_installed_hints">HMS Coreが端末にインストールされていません。インストールしないと、%1$sの機能の一部が適切に動作しないことがあります。</string>
+    <string name="hms_bindfaildlg_message">%1$sはHMS Coreを使用できません。オプティマイザ（デバイス管理）を起動するか[設定]から%2$sのすべての権限を有効にし（自動起動と他のアプリによる起動も含む）、再試行してください。</string>
+    <string name="hms_confirm">OK</string>
+    <string name="hms_is_spoof">非公式バージョンのHMS Core（%1$s）がデバイスにインストールされているようです。[設定]でHMS Coreをアンインストールしてから、このアプリに戻って公式バージョンをインストールしてください。</string>
+    <string name="hms_push_channel">デフォルト</string>
+    <string name="hms_spoof_hints">注意</string>
     <string name="status_bar_notification_info_overflow">999+</string>
     <string name="wallet_buy_button_place_holder">Googleで購入</string>
 </resources>

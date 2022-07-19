@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="hms_apk_not_installed_hints">ئۈسكۈنىدە HMS Core نىڭ يېڭى نەشرى يوق، %1$s نورمال ئىشلىمەيدۇ.</string>
+    <string name="hms_bindfaildlg_message">نۆۋەتتە %1$s مۇلازىمىتى HMS Core ئىشلىتەلمەيدۇ. باشقۇرغۇچ ياكى تەڭشەكتە %2$s ئۈچۈن بارلىق ئىجازەتنى ئېچىڭ («ئۆزلۈكىدىن قوزغىلىش» ۋە «باغلانما قوزغىتىش» مۇ شۇنىڭ ئىچىدە).</string>
+    <string name="hms_confirm">بىلدىم</string>
+    <string name="hms_is_spoof">بۇ ئۈسكۈنىگە قاچىلانغان (%1$s) رەسمىي نەشردىكى HMS Core ئەمەس. سىستېما تەڭشىكىدىكى ئەپ باشقۇرۇش ئورنىدىن ئۇنى ئۆچۈرۈپ، ئاندىن بۇ ئەپكە قايتىپ، ئورگان تەرەپ تارقاتقان HMS Core نى قاچىلاڭ.</string>
+    <string name="hms_push_channel">سۈكۈتتىكى</string>
+    <string name="hms_spoof_hints">ئەسكەرتىش</string>
+</resources>

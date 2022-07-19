@@ -1753,4 +1753,13 @@ public class DownloadController extends BaseController implements NotificationCe
             FileLog.e((Throwable) e2);
         }
     }
+
+    public boolean isDownloading(int i) {
+        for (int i2 = 0; i2 < this.downloadingFiles.size(); i2++) {
+            if (this.downloadingFiles.get(i2).messageOwner.id == i) {
+                return true;
+            }
+        }
+        return false;
+    }
 }

@@ -10,6 +10,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.net.ConnectivityManager;
 import android.net.Network;
@@ -24,6 +25,9 @@ import androidx.multidex.MultiDex;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.messaging.FirebaseMessaging;
+import com.huawei.hms.aaid.HmsInstanceId;
+import com.huawei.hms.common.ApiException;
+import com.huawei.hms.push.HmsMessaging;
 import java.io.File;
 import org.telegram.messenger.voip.VideoCapturerDevice;
 import org.telegram.tgnet.ConnectionsManager;
@@ -41,6 +45,7 @@ public class ApplicationLoader extends Application {
     public static ConnectivityManager connectivityManager = null;
     public static volatile NetworkInfo currentNetworkInfo = null;
     public static volatile boolean externalInterfacePaused = true;
+    public static boolean hasHuaweiServices = false;
     public static boolean hasPlayServices = false;
     public static volatile boolean isScreenOn = false;
     /* access modifiers changed from: private */
@@ -133,7 +138,7 @@ public class ApplicationLoader extends Application {
                     SendMessagesHelper.getInstance(i).checkUnsentMessages();
                 }
             }
-            ((ApplicationLoader) applicationContext).initPlayServices();
+            ((ApplicationLoader) applicationContext).initPushServices();
             if (BuildVars.LOGS_ENABLED) {
                 FileLog.d("app initied");
             }
@@ -180,7 +185,7 @@ public class ApplicationLoader extends Application {
             FileLog.d("load libs time = " + (SystemClock.elapsedRealtime() - startTime));
         }
         applicationHandler = new Handler(applicationContext.getMainLooper());
-        AndroidUtilities.runOnUIThread(ApplicationLoader$$ExternalSyntheticLambda3.INSTANCE);
+        AndroidUtilities.runOnUIThread(ApplicationLoader$$ExternalSyntheticLambda4.INSTANCE);
         LauncherIconController.tryFixLauncherIconIfNeeded();
     }
 
@@ -214,35 +219,45 @@ public class ApplicationLoader extends Application {
         }
     }
 
-    private void initPlayServices() {
-        AndroidUtilities.runOnUIThread(new ApplicationLoader$$ExternalSyntheticLambda1(this), 1000);
+    private void initPushServices() {
+        AndroidUtilities.runOnUIThread(new ApplicationLoader$$ExternalSyntheticLambda2(this), 1000);
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$initPlayServices$2() {
+    public /* synthetic */ void lambda$initPushServices$3() {
         boolean checkPlayServices = checkPlayServices();
         hasPlayServices = checkPlayServices;
         if (checkPlayServices) {
+            HmsMessaging.getInstance(this).setAutoInitEnabled(false);
+            FirebaseMessaging.getInstance().setAutoInitEnabled(true);
             String str = SharedConfig.pushString;
             if (!TextUtils.isEmpty(str)) {
                 if (BuildVars.DEBUG_PRIVATE_VERSION && BuildVars.LOGS_ENABLED) {
-                    FileLog.d("GCM regId = " + str);
+                    FileLog.d("FCM regId = " + str);
                 }
             } else if (BuildVars.LOGS_ENABLED) {
-                FileLog.d("GCM Registration not found.");
+                FileLog.d("FCM Registration not found.");
             }
-            Utilities.globalQueue.postRunnable(ApplicationLoader$$ExternalSyntheticLambda2.INSTANCE);
+            Utilities.globalQueue.postRunnable(ApplicationLoader$$ExternalSyntheticLambda3.INSTANCE);
+            return;
+        }
+        boolean checkHuaweiServices = checkHuaweiServices();
+        hasHuaweiServices = checkHuaweiServices;
+        if (checkHuaweiServices) {
+            FirebaseMessaging.getInstance().setAutoInitEnabled(false);
+            HmsMessaging.getInstance(this).setAutoInitEnabled(true);
+            Utilities.globalQueue.postRunnable(new ApplicationLoader$$ExternalSyntheticLambda1(this));
             return;
         }
         if (BuildVars.LOGS_ENABLED) {
-            FileLog.d("No valid Google Play Services APK found.");
+            FileLog.d("No valid Google Play Services or HMS Core APK found.");
         }
         SharedConfig.pushStringStatus = "__NO_GOOGLE_PLAY_SERVICES__";
-        GcmPushListenerService.sendRegistrationToServer((String) null);
+        PushListenerController.sendRegistrationToServer(2, (String) null);
     }
 
     /* access modifiers changed from: private */
-    public static /* synthetic */ void lambda$initPlayServices$1() {
+    public static /* synthetic */ void lambda$initPushServices$1() {
         try {
             SharedConfig.pushStringGetTimeStart = SystemClock.elapsedRealtime();
             FirebaseMessaging.getInstance().getToken().addOnCompleteListener(ApplicationLoader$$ExternalSyntheticLambda0.INSTANCE);
@@ -252,19 +267,50 @@ public class ApplicationLoader extends Application {
     }
 
     /* access modifiers changed from: private */
-    public static /* synthetic */ void lambda$initPlayServices$0(Task task) {
+    public static /* synthetic */ void lambda$initPushServices$0(Task task) {
         SharedConfig.pushStringGetTimeEnd = SystemClock.elapsedRealtime();
         if (!task.isSuccessful()) {
             if (BuildVars.LOGS_ENABLED) {
                 FileLog.d("Failed to get regid");
             }
             SharedConfig.pushStringStatus = "__FIREBASE_FAILED__";
-            GcmPushListenerService.sendRegistrationToServer((String) null);
+            PushListenerController.sendRegistrationToServer(2, (String) null);
             return;
         }
         String str = (String) task.getResult();
         if (!TextUtils.isEmpty(str)) {
-            GcmPushListenerService.sendRegistrationToServer(str);
+            PushListenerController.sendRegistrationToServer(2, str);
+        }
+    }
+
+    /* access modifiers changed from: private */
+    public /* synthetic */ void lambda$initPushServices$2() {
+        try {
+            String token = HmsInstanceId.getInstance(this).getToken(BuildVars.HUAWEI_APP_ID, "HCM");
+            SharedConfig.pushStringGetTimeEnd = SystemClock.elapsedRealtime();
+            if (!TextUtils.isEmpty(token)) {
+                PushListenerController.sendRegistrationToServer(13, token);
+            }
+        } catch (ApiException e) {
+            FileLog.e((Throwable) e);
+            SharedConfig.pushStringGetTimeEnd = SystemClock.elapsedRealtime();
+            if (BuildVars.LOGS_ENABLED) {
+                FileLog.d("Failed to get regid");
+            }
+            SharedConfig.pushStringStatus = "__HUAWEI_FAILED__";
+            PushListenerController.sendRegistrationToServer(13, (String) null);
+        }
+    }
+
+    private boolean checkHuaweiServices() {
+        try {
+            getPackageManager().getPackageInfo("com.huawei.hwid", 0);
+            return true;
+        } catch (PackageManager.NameNotFoundException unused) {
+            return false;
+        } catch (Exception e) {
+            FileLog.e((Throwable) e);
+            return false;
         }
     }
 

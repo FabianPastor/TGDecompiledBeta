@@ -420,7 +420,7 @@ public class ChatEditActivity extends BaseFragment implements ImageUpdater.Image
             r0.addView(r11, r1)
             r11.setOrientation(r8)
             org.telegram.ui.ActionBar.ActionBar r0 = r6.actionBar
-            r1 = 2131624912(0x7f0e03d0, float:1.8877017E38)
+            r1 = 2131624916(0x7f0e03d4, float:1.8877025E38)
             java.lang.String r2 = "ChannelEdit"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             r0.setTitle(r1)
@@ -600,13 +600,13 @@ public class ChatEditActivity extends BaseFragment implements ImageUpdater.Image
             r6.nameTextView = r15
             boolean r0 = r6.isChannel
             if (r0 == 0) goto L_0x01b2
-            r0 = 2131625675(0x7f0e06cb, float:1.8878565E38)
+            r0 = 2131625682(0x7f0e06d2, float:1.8878579E38)
             java.lang.String r1 = "EnterChannelName"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             r15.setHint(r0)
             goto L_0x01be
         L_0x01b2:
-            r0 = 2131626136(0x7f0e0898, float:1.88795E38)
+            r0 = 2131626146(0x7f0e08a2, float:1.887952E38)
             java.lang.String r1 = "GroupName"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             r15.setHint(r0)
@@ -736,7 +736,7 @@ public class ChatEditActivity extends BaseFragment implements ImageUpdater.Image
             org.telegram.ui.Components.EditTextBoldCursor r2 = r6.descriptionTextView
             r2.setFilters(r0)
             org.telegram.ui.Components.EditTextBoldCursor r0 = r6.descriptionTextView
-            r2 = 2131625471(0x7f0e05ff, float:1.887815E38)
+            r2 = 2131625478(0x7f0e0606, float:1.8878165E38)
             java.lang.String r3 = "DescriptionOptionalPlaceholder"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             r0.setHint(r2)
@@ -912,10 +912,10 @@ public class ChatEditActivity extends BaseFragment implements ImageUpdater.Image
             android.graphics.drawable.Drawable r2 = org.telegram.ui.ActionBar.Theme.getSelectorDrawable(r10)
             r0.setBackgroundDrawable(r2)
             org.telegram.ui.Cells.TextCheckCell r14 = r6.signCell
-            r0 = 2131624974(0x7f0e040e, float:1.8877143E38)
+            r0 = 2131624978(0x7f0e0412, float:1.887715E38)
             java.lang.String r2 = "ChannelSignMessages"
             java.lang.String r15 = org.telegram.messenger.LocaleController.getString(r2, r0)
-            r0 = 2131624975(0x7f0e040f, float:1.8877145E38)
+            r0 = 2131624979(0x7f0e0413, float:1.8877153E38)
             java.lang.String r2 = "ChannelSignMessagesInfo"
             java.lang.String r16 = org.telegram.messenger.LocaleController.getString(r2, r0)
             boolean r0 = r6.signMessages
@@ -948,7 +948,7 @@ public class ChatEditActivity extends BaseFragment implements ImageUpdater.Image
             int r3 = org.telegram.messenger.AndroidUtilities.dp(r3)
             org.telegram.ui.ActionBar.ActionBarMenuItem r0 = r0.addItemWithWidth(r8, r2, r3)
             r6.doneButton = r0
-            r2 = 2131625534(0x7f0e063e, float:1.8878279E38)
+            r2 = 2131625541(0x7f0e0645, float:1.8878293E38)
             java.lang.String r3 = "Done"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             r0.setContentDescription(r2)
@@ -1074,7 +1074,7 @@ public class ChatEditActivity extends BaseFragment implements ImageUpdater.Image
             org.telegram.ui.Cells.TextCell r0 = new org.telegram.ui.Cells.TextCell
             r0.<init>(r7)
             r6.logCell = r0
-            r2 = 2131625698(0x7f0e06e2, float:1.8878611E38)
+            r2 = 2131625707(0x7f0e06eb, float:1.887863E38)
             java.lang.String r3 = "EventLog"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             r3 = 2131165792(0x7var_, float:1.7945811E38)
@@ -1216,7 +1216,7 @@ public class ChatEditActivity extends BaseFragment implements ImageUpdater.Image
             org.telegram.ui.Cells.TextInfoPrivacyCell r0 = new org.telegram.ui.Cells.TextInfoPrivacyCell
             r0.<init>(r7)
             r6.stickersInfoCell = r0
-            r2 = 2131626142(0x7f0e089e, float:1.8879512E38)
+            r2 = 2131626152(0x7f0e08a8, float:1.8879532E38)
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString((int) r2)
             r0.setText(r2)
             org.telegram.ui.Cells.TextInfoPrivacyCell r0 = r6.stickersInfoCell
@@ -1250,14 +1250,14 @@ public class ChatEditActivity extends BaseFragment implements ImageUpdater.Image
             boolean r0 = r6.isChannel
             if (r0 == 0) goto L_0x078f
             org.telegram.ui.Cells.TextSettingsCell r0 = r6.deleteCell
-            r4 = 2131624904(0x7f0e03c8, float:1.8877E38)
+            r4 = 2131624908(0x7f0e03cc, float:1.887701E38)
             java.lang.String r5 = "ChannelDelete"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r5, r4)
             r0.setText(r4, r10)
             goto L_0x079d
         L_0x078f:
             org.telegram.ui.Cells.TextSettingsCell r0 = r6.deleteCell
-            r4 = 2131625392(0x7f0e05b0, float:1.887799E38)
+            r4 = 2131625399(0x7f0e05b7, float:1.8878005E38)
             java.lang.String r5 = "DeleteAndExitButton"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r5, r4)
             r0.setText(r4, r10)

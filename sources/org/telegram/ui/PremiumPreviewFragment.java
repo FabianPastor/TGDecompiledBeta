@@ -180,7 +180,7 @@ public class PremiumPreviewFragment extends BaseFragment implements Notification
             case 10:
                 return "app_icons";
             case 11:
-                return "premium_emoji";
+                return "animated_emoji";
             default:
                 return null;
         }
@@ -232,13 +232,13 @@ public class PremiumPreviewFragment extends BaseFragment implements Notification
             switch(r0) {
                 case -2145993328: goto L_0x00a0;
                 case -1755514268: goto L_0x0094;
-                case -1040323278: goto L_0x0089;
-                case -1023650261: goto L_0x007e;
-                case -730864243: goto L_0x0073;
-                case -448825858: goto L_0x0068;
-                case -165039170: goto L_0x005d;
-                case -96210874: goto L_0x0052;
-                case -3189666: goto L_0x0045;
+                case -1425144150: goto L_0x0089;
+                case -1040323278: goto L_0x007e;
+                case -1023650261: goto L_0x0073;
+                case -730864243: goto L_0x0068;
+                case -448825858: goto L_0x005d;
+                case -165039170: goto L_0x0052;
+                case -96210874: goto L_0x0045;
                 case 1182539900: goto L_0x0038;
                 case 1219849581: goto L_0x002b;
                 case 1832801148: goto L_0x001e;
@@ -272,7 +272,7 @@ public class PremiumPreviewFragment extends BaseFragment implements Notification
             r14 = 9
             goto L_0x00ab
         L_0x0045:
-            java.lang.String r0 = "premium_emoji"
+            java.lang.String r0 = "double_limits"
             boolean r14 = r14.equals(r0)
             if (r14 != 0) goto L_0x004e
             goto L_0x001b
@@ -280,7 +280,7 @@ public class PremiumPreviewFragment extends BaseFragment implements Notification
             r14 = 8
             goto L_0x00ab
         L_0x0052:
-            java.lang.String r0 = "double_limits"
+            java.lang.String r0 = "premium_stickers"
             boolean r14 = r14.equals(r0)
             if (r14 != 0) goto L_0x005b
             goto L_0x001b
@@ -288,7 +288,7 @@ public class PremiumPreviewFragment extends BaseFragment implements Notification
             r14 = 7
             goto L_0x00ab
         L_0x005d:
-            java.lang.String r0 = "premium_stickers"
+            java.lang.String r0 = "faster_download"
             boolean r14 = r14.equals(r0)
             if (r14 != 0) goto L_0x0066
             goto L_0x001b
@@ -296,7 +296,7 @@ public class PremiumPreviewFragment extends BaseFragment implements Notification
             r14 = 6
             goto L_0x00ab
         L_0x0068:
-            java.lang.String r0 = "faster_download"
+            java.lang.String r0 = "profile_badge"
             boolean r14 = r14.equals(r0)
             if (r14 != 0) goto L_0x0071
             goto L_0x001b
@@ -304,7 +304,7 @@ public class PremiumPreviewFragment extends BaseFragment implements Notification
             r14 = 5
             goto L_0x00ab
         L_0x0073:
-            java.lang.String r0 = "profile_badge"
+            java.lang.String r0 = "more_upload"
             boolean r14 = r14.equals(r0)
             if (r14 != 0) goto L_0x007c
             goto L_0x001b
@@ -312,7 +312,7 @@ public class PremiumPreviewFragment extends BaseFragment implements Notification
             r14 = 4
             goto L_0x00ab
         L_0x007e:
-            java.lang.String r0 = "more_upload"
+            java.lang.String r0 = "no_ads"
             boolean r14 = r14.equals(r0)
             if (r14 != 0) goto L_0x0087
             goto L_0x001b
@@ -320,7 +320,7 @@ public class PremiumPreviewFragment extends BaseFragment implements Notification
             r14 = 3
             goto L_0x00ab
         L_0x0089:
-            java.lang.String r0 = "no_ads"
+            java.lang.String r0 = "animated_emoji"
             boolean r14 = r14.equals(r0)
             if (r14 != 0) goto L_0x0092
             goto L_0x001b
@@ -367,19 +367,19 @@ public class PremiumPreviewFragment extends BaseFragment implements Notification
         L_0x00b1:
             return r8
         L_0x00b2:
-            return r1
-        L_0x00b3:
             return r12
-        L_0x00b4:
+        L_0x00b3:
             return r7
-        L_0x00b5:
+        L_0x00b4:
             return r10
-        L_0x00b6:
+        L_0x00b5:
             return r6
-        L_0x00b7:
+        L_0x00b6:
             return r11
-        L_0x00b8:
+        L_0x00b7:
             return r9
+        L_0x00b8:
+            return r1
         L_0x00b9:
             return r4
         L_0x00ba:
@@ -790,14 +790,17 @@ public class PremiumPreviewFragment extends BaseFragment implements Notification
                         TLRPC$TL_dataJSON tLRPC$TL_dataJSON = new TLRPC$TL_dataJSON();
                         tLRPC$TL_payments_assignPlayMarketTransaction.receipt = tLRPC$TL_dataJSON;
                         tLRPC$TL_dataJSON.data = purchase.getOriginalJson();
-                        tLRPC$TL_payments_assignPlayMarketTransaction.purpose = new TLRPC$TL_inputStorePaymentPremiumSubscription();
-                        baseFragment.getConnectionsManager().sendRequest(tLRPC$TL_payments_assignPlayMarketTransaction, new PremiumPreviewFragment$$ExternalSyntheticLambda9(baseFragment, premiumPreviewFragment$$ExternalSyntheticLambda5, tLRPC$TL_payments_assignPlayMarketTransaction));
+                        TLRPC$TL_inputStorePaymentPremiumSubscription tLRPC$TL_inputStorePaymentPremiumSubscription = new TLRPC$TL_inputStorePaymentPremiumSubscription();
+                        tLRPC$TL_inputStorePaymentPremiumSubscription.restore = true;
+                        tLRPC$TL_payments_assignPlayMarketTransaction.purpose = tLRPC$TL_inputStorePaymentPremiumSubscription;
+                        baseFragment.getConnectionsManager().sendRequest(tLRPC$TL_payments_assignPlayMarketTransaction, new PremiumPreviewFragment$$ExternalSyntheticLambda9(baseFragment, premiumPreviewFragment$$ExternalSyntheticLambda5, tLRPC$TL_payments_assignPlayMarketTransaction), 66);
                         return;
                     }
                 }
             }
             BillingController.getInstance().addResultListener("telegram_premium", new PremiumPreviewFragment$$ExternalSyntheticLambda1(premiumPreviewFragment$$ExternalSyntheticLambda5));
             TLRPC$TL_payments_canPurchasePremium tLRPC$TL_payments_canPurchasePremium = new TLRPC$TL_payments_canPurchasePremium();
+            tLRPC$TL_payments_canPurchasePremium.purpose = new TLRPC$TL_inputStorePaymentPremiumSubscription();
             baseFragment.getConnectionsManager().sendRequest(tLRPC$TL_payments_canPurchasePremium, new PremiumPreviewFragment$$ExternalSyntheticLambda10(baseFragment, list2, tLRPC$TL_payments_canPurchasePremium));
         }
     }

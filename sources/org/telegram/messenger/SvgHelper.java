@@ -194,18 +194,21 @@ public class SvgHelper {
                     imageReceiver.getParentPosition(parentPosition);
                     i = parentPosition[0];
                 }
-                this.placeholderMatrix[r2].reset();
-                if (r2 != 0) {
-                    this.placeholderMatrix[r2].postTranslate((((float) (-i)) + totalTranslationBackground) - f5, 0.0f);
-                } else {
-                    this.placeholderMatrix[r2].postTranslate((((float) (-i)) + totalTranslation) - f5, 0.0f);
-                }
-                float var_ = 1.0f / scale;
-                this.placeholderMatrix[r2].postScale(var_, var_);
-                this.placeholderGradient[r2].setLocalMatrix(this.placeholderMatrix[r2]);
-                ImageReceiver imageReceiver2 = this.parentImageReceiver;
-                if (imageReceiver2 != null && r2 == 0) {
-                    imageReceiver2.invalidate();
+                Matrix[] matrixArr = this.placeholderMatrix;
+                if (matrixArr[r2] != null) {
+                    matrixArr[r2].reset();
+                    if (r2 != 0) {
+                        this.placeholderMatrix[r2].postTranslate((((float) (-i)) + totalTranslationBackground) - f5, 0.0f);
+                    } else {
+                        this.placeholderMatrix[r2].postTranslate((((float) (-i)) + totalTranslation) - f5, 0.0f);
+                    }
+                    float var_ = 1.0f / scale;
+                    this.placeholderMatrix[r2].postScale(var_, var_);
+                    this.placeholderGradient[r2].setLocalMatrix(this.placeholderMatrix[r2]);
+                    ImageReceiver imageReceiver2 = this.parentImageReceiver;
+                    if (imageReceiver2 != null && r2 == 0) {
+                        imageReceiver2.invalidate();
+                    }
                 }
             }
             canvas.save();
@@ -1165,7 +1168,7 @@ public class SvgHelper {
             }
         L_0x000f:
             r2 = -1
-            goto L_0x0076
+            goto L_0x0077
         L_0x0012:
             java.lang.String r0 = "magenta"
             boolean r2 = r2.equals(r0)
@@ -1173,7 +1176,7 @@ public class SvgHelper {
             goto L_0x000f
         L_0x001b:
             r2 = 8
-            goto L_0x0076
+            goto L_0x0077
         L_0x001f:
             java.lang.String r0 = "white"
             boolean r2 = r2.equals(r0)
@@ -1181,7 +1184,7 @@ public class SvgHelper {
             goto L_0x000f
         L_0x0028:
             r2 = 7
-            goto L_0x0076
+            goto L_0x0077
         L_0x002a:
             java.lang.String r0 = "green"
             boolean r2 = r2.equals(r0)
@@ -1189,7 +1192,7 @@ public class SvgHelper {
             goto L_0x000f
         L_0x0033:
             r2 = 6
-            goto L_0x0076
+            goto L_0x0077
         L_0x0035:
             java.lang.String r0 = "black"
             boolean r2 = r2.equals(r0)
@@ -1197,7 +1200,7 @@ public class SvgHelper {
             goto L_0x000f
         L_0x003e:
             r2 = 5
-            goto L_0x0076
+            goto L_0x0077
         L_0x0040:
             java.lang.String r0 = "gray"
             boolean r2 = r2.equals(r0)
@@ -1205,7 +1208,7 @@ public class SvgHelper {
             goto L_0x000f
         L_0x0049:
             r2 = 4
-            goto L_0x0076
+            goto L_0x0077
         L_0x004b:
             java.lang.String r0 = "cyan"
             boolean r2 = r2.equals(r0)
@@ -1213,7 +1216,7 @@ public class SvgHelper {
             goto L_0x000f
         L_0x0054:
             r2 = 3
-            goto L_0x0076
+            goto L_0x0077
         L_0x0056:
             java.lang.String r0 = "blue"
             boolean r2 = r2.equals(r0)
@@ -1221,7 +1224,7 @@ public class SvgHelper {
             goto L_0x000f
         L_0x005f:
             r2 = 2
-            goto L_0x0076
+            goto L_0x0077
         L_0x0061:
             java.lang.String r0 = "red"
             boolean r2 = r2.equals(r0)
@@ -1229,62 +1232,62 @@ public class SvgHelper {
             goto L_0x000f
         L_0x006a:
             r2 = 1
-            goto L_0x0076
+            goto L_0x0077
         L_0x006c:
             java.lang.String r0 = "yellow"
             boolean r2 = r2.equals(r0)
-            if (r2 != 0) goto L_0x0075
+            if (r2 != 0) goto L_0x0076
             goto L_0x000f
-        L_0x0075:
-            r2 = 0
         L_0x0076:
+            r2 = 0
+        L_0x0077:
             switch(r2) {
-                case 0: goto L_0x00b6;
-                case 1: goto L_0x00af;
-                case 2: goto L_0x00a7;
-                case 3: goto L_0x009f;
-                case 4: goto L_0x0097;
-                case 5: goto L_0x0090;
-                case 6: goto L_0x0088;
-                case 7: goto L_0x0083;
-                case 8: goto L_0x007b;
-                default: goto L_0x0079;
+                case 0: goto L_0x00b7;
+                case 1: goto L_0x00b0;
+                case 2: goto L_0x00a8;
+                case 3: goto L_0x00a0;
+                case 4: goto L_0x0098;
+                case 5: goto L_0x0091;
+                case 6: goto L_0x0089;
+                case 7: goto L_0x0084;
+                case 8: goto L_0x007c;
+                default: goto L_0x007a;
             }
-        L_0x0079:
+        L_0x007a:
             r2 = 0
             return r2
-        L_0x007b:
+        L_0x007c:
             r2 = -65281(0xfffffffffffvar_ff, float:NaN)
             java.lang.Integer r2 = java.lang.Integer.valueOf(r2)
             return r2
-        L_0x0083:
+        L_0x0084:
             java.lang.Integer r2 = java.lang.Integer.valueOf(r1)
             return r2
-        L_0x0088:
+        L_0x0089:
             r2 = -16711936(0xfffffffffvar_fvar_, float:-1.7146522E38)
             java.lang.Integer r2 = java.lang.Integer.valueOf(r2)
             return r2
-        L_0x0090:
+        L_0x0091:
             r2 = -16777216(0xfffffffffvar_, float:-1.7014118E38)
             java.lang.Integer r2 = java.lang.Integer.valueOf(r2)
             return r2
-        L_0x0097:
+        L_0x0098:
             r2 = -7829368(0xfffffffffvar_, float:NaN)
             java.lang.Integer r2 = java.lang.Integer.valueOf(r2)
             return r2
-        L_0x009f:
+        L_0x00a0:
             r2 = -16711681(0xfffffffffvar_ffff, float:-1.714704E38)
             java.lang.Integer r2 = java.lang.Integer.valueOf(r2)
             return r2
-        L_0x00a7:
+        L_0x00a8:
             r2 = -16776961(0xfffffffffvar_ff, float:-1.7014636E38)
             java.lang.Integer r2 = java.lang.Integer.valueOf(r2)
             return r2
-        L_0x00af:
+        L_0x00b0:
             r2 = -65536(0xfffffffffffvar_, float:NaN)
             java.lang.Integer r2 = java.lang.Integer.valueOf(r2)
             return r2
-        L_0x00b6:
+        L_0x00b7:
             r2 = -256(0xfffffffffffffvar_, float:NaN)
             java.lang.Integer r2 = java.lang.Integer.valueOf(r2)
             return r2

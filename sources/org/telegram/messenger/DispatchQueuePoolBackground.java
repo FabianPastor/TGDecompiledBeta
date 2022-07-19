@@ -33,7 +33,7 @@ public class DispatchQueuePoolBackground {
                 }
             }
             if (!DispatchQueuePoolBackground.this.queues.isEmpty() || !DispatchQueuePoolBackground.this.busyQueues.isEmpty()) {
-                AndroidUtilities.runOnUIThread(this, 30000);
+                Utilities.globalQueue.postRunnable(this, 30000);
                 boolean unused = DispatchQueuePoolBackground.this.cleanupScheduled = true;
                 return;
             }

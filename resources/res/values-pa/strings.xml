@@ -21,6 +21,12 @@
     <string name="fcm_fallback_notification_channel_label">ਫੁਟਕਲ</string>
     <string name="google_assistant_verification_channel_name">\'ਅਸਿਸਟੈਂਟ\' ਪੁਸ਼ਟੀਕਰਤਾ</string>
     <string name="google_assistant_verification_notification_title">\'Google ਅਸਿਸਟੈਂਟ\' ਸੁਨੇਹਾ ਭੇਜ ਰਹੀ ਹੈ</string>
+    <string name="hms_apk_not_installed_hints">%1$s ਵਿੱਚ ਕੁਝ ਵਿਸ਼ੇਸ਼ਤਾਵਾਂ ਸ਼ਾਇਦ HMS Core ਤੋਂ ਬਿਨਾਂ ਠੀਕ ਢੰਗ ਨਾਲ ਕੰਮ ਨਾ ਕਰਨ, ਜੋ ਤੁਹਾਡੇ ਡਿਵਾਈਸ \'ਤੇ ਇੰਸਟਾਲ ਨਹੀਂ ਹੈ।</string>
+    <string name="hms_bindfaildlg_message">%1$s HMS Core ਦੀ ਵਰਤੋਂ ਕਰਨ ਵਿੱਚ ਅਸਮਰੱਥ ਹੈ। ਕਿਰਪਾ ਕਰਕੇ ਆਪਟੀਮਾਈਜ਼ਰ (ਫ਼ੋਨ ਮੈਨੇਜਰ) ਨੂੰ ਲਾਂਚ ਕਰੋ ਜਾਂ ਸੈਟਿੰਗਾਂ ’ਤੇ ਜਾਓ, %2$s ਲਈ ਸਾਰੀਆਂ ਇਜਾਜ਼ਤਾਂ ਨੂੰ ਸਮਰੱਥ ਕਰੋ (ਜਿਸ ਵਿੱਚ ਸਵੈ-ਲਾਂਚ ਅਤੇ ਸੈਕੰਡਰੀ ਲਾਂਚ ਸ਼ਾਮਲ ਹੈ), ਅਤੇ ਦੁਬਾਰਾ ਕੋਸ਼ਿਸ਼ ਕਰੋ।</string>
+    <string name="hms_confirm">ਠੀਕ</string>
+    <string name="hms_is_spoof">ਇੰਝ ਜਾਪਦਾ ਹੈ ਕਿ ਤੁਸੀਂ ਆਪਣੇ ਡਿਵਾਈਸ \'ਤੇ HMS Core (%1$s) ਦਾ ਅਣਅਧਿਕਾਰਤ ਸੰਸਕਰਣ ਇੰਸਟਾਲ ਕੀਤਾ ਹੋਇਆ ਹੈ। ਕਿਰਪਾ ਕਰਕੇ ਸੈਟਿੰਗਾਂ ਵਿੱਚੋਂ HMS Core ਨੂੰ ਇੰਸਟਾਲ ਕਰੋ ਅਤੇ ਅਧਿਕਾਰਤ ਸੰਸਕਰਣ ਇੰਸਟਾਲ ਕਰਨ ਲਈ ਇਸ ਐਪ \'ਤੇ ਵਾਪਸ ਜਾਓ।</string>
+    <string name="hms_push_channel">ਡਿਫੌਲਟ</string>
+    <string name="hms_spoof_hints">ਨੋਟ</string>
     <string name="status_bar_notification_info_overflow">999+</string>
     <string name="wallet_buy_button_place_holder">Google ਨਾਲ ਖਰੀਦੋ</string>
 </resources>

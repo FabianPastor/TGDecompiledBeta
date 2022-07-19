@@ -139,7 +139,7 @@ public class ChatReactionsEditActivity extends BaseFragment implements Notificat
                     return new RecyclerListView.Holder(new TextInfoPrivacyCell(context));
                 }
                 if (i != 1) {
-                    return new RecyclerListView.Holder(new AvailableReactionCell(context, false));
+                    return new RecyclerListView.Holder(new AvailableReactionCell(context, false, false));
                 }
                 return new RecyclerListView.Holder(new HeaderCell(context, 23));
             }
@@ -162,7 +162,7 @@ public class ChatReactionsEditActivity extends BaseFragment implements Notificat
                     headerCell.setBackgroundColor(Theme.getColor("windowBackgroundWhite"));
                 } else if (itemViewType == 2) {
                     TLRPC$TL_availableReaction tLRPC$TL_availableReaction = (TLRPC$TL_availableReaction) ChatReactionsEditActivity.this.availableReactions.get(i - 2);
-                    ((AvailableReactionCell) viewHolder.itemView).bind(tLRPC$TL_availableReaction, ChatReactionsEditActivity.this.chatReactions.contains(tLRPC$TL_availableReaction.reaction));
+                    ((AvailableReactionCell) viewHolder.itemView).bind(tLRPC$TL_availableReaction, ChatReactionsEditActivity.this.chatReactions.contains(tLRPC$TL_availableReaction.reaction), ChatReactionsEditActivity.this.currentAccount);
                 }
             }
 

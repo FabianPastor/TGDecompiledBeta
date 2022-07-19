@@ -9,6 +9,18 @@ public class TLRPC$TL_premiumGiftOption extends TLObject {
     public int months;
     public String store_product;
 
+    public static TLRPC$TL_premiumGiftOption TLdeserialize(AbstractSerializedData abstractSerializedData, int i, boolean z) {
+        if (constructor == i) {
+            TLRPC$TL_premiumGiftOption tLRPC$TL_premiumGiftOption = new TLRPC$TL_premiumGiftOption();
+            tLRPC$TL_premiumGiftOption.readParams(abstractSerializedData, z);
+            return tLRPC$TL_premiumGiftOption;
+        } else if (!z) {
+            return null;
+        } else {
+            throw new RuntimeException(String.format("can't parse magic %x in TL_premiumGiftOption", new Object[]{Integer.valueOf(i)}));
+        }
+    }
+
     public void readParams(AbstractSerializedData abstractSerializedData, boolean z) {
         this.flags = abstractSerializedData.readInt32(z);
         this.months = abstractSerializedData.readInt32(z);

@@ -11,6 +11,6 @@ public final /* synthetic */ class EmojiView$$ExternalSyntheticLambda1 implement
     }
 
     public final boolean onKey(View view, int i, KeyEvent keyEvent) {
-        return this.f$0.lambda$new$7(view, i, keyEvent);
+        return this.f$0.lambda$new$8(view, i, keyEvent);
     }
 }

@@ -120,6 +120,7 @@ import org.telegram.PhoneFormat.PhoneFormat;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.SharedConfig;
 import org.telegram.messenger.browser.Browser;
+import org.telegram.messenger.utils.CustomHtml;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLRPC$Document;
 import org.telegram.tgnet.TLRPC$TL_chatBannedRights;
@@ -1233,7 +1234,7 @@ public class AndroidUtilities {
                 int r0 = r9.type
                 r1 = 5
                 if (r0 != r1) goto L_0x000f
-                r0 = 2131625239(0x7f0e0517, float:1.887768E38)
+                r0 = 2131625246(0x7f0e051e, float:1.8877695E38)
                 java.lang.String r1 = "ContactBirthday"
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
                 return r0
@@ -1245,12 +1246,12 @@ public class AndroidUtilities {
                 java.lang.String r1 = "ORG"
                 boolean r0 = r1.equalsIgnoreCase(r0)
                 if (r0 == 0) goto L_0x0029
-                r0 = 2131625240(0x7f0e0518, float:1.8877682E38)
+                r0 = 2131625247(0x7f0e051f, float:1.8877697E38)
                 java.lang.String r1 = "ContactJob"
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
                 return r0
             L_0x0029:
-                r0 = 2131625241(0x7f0e0519, float:1.8877684E38)
+                r0 = 2131625248(0x7f0e0520, float:1.8877699E38)
                 java.lang.String r1 = "ContactJobTitle"
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
                 return r0
@@ -1368,27 +1369,27 @@ public class AndroidUtilities {
             L_0x00cf:
                 goto L_0x0101
             L_0x00d0:
-                r0 = 2131627543(0x7f0e0e17, float:1.8882353E38)
+                r0 = 2131627553(0x7f0e0e21, float:1.8882374E38)
                 java.lang.String r1 = "PhoneOther"
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
                 goto L_0x0101
             L_0x00da:
-                r0 = 2131627544(0x7f0e0e18, float:1.8882355E38)
+                r0 = 2131627554(0x7f0e0e22, float:1.8882376E38)
                 java.lang.String r1 = "PhoneWork"
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
                 goto L_0x0101
             L_0x00e4:
-                r0 = 2131627533(0x7f0e0e0d, float:1.8882333E38)
+                r0 = 2131627543(0x7f0e0e17, float:1.8882353E38)
                 java.lang.String r1 = "PhoneMain"
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
                 goto L_0x0101
             L_0x00ee:
-                r0 = 2131627532(0x7f0e0e0c, float:1.8882331E38)
+                r0 = 2131627542(0x7f0e0e16, float:1.8882351E38)
                 java.lang.String r1 = "PhoneHome"
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
                 goto L_0x0101
             L_0x00f8:
-                r0 = 2131627534(0x7f0e0e0e, float:1.8882335E38)
+                r0 = 2131627544(0x7f0e0e18, float:1.8882355E38)
                 java.lang.String r1 = "PhoneMobile"
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             L_0x0101:
@@ -2952,7 +2953,12 @@ public class AndroidUtilities {
 
     public static void addToClipboard(CharSequence charSequence) {
         try {
-            ((ClipboardManager) ApplicationLoader.applicationContext.getSystemService("clipboard")).setPrimaryClip(ClipData.newPlainText("label", charSequence));
+            ClipboardManager clipboardManager = (ClipboardManager) ApplicationLoader.applicationContext.getSystemService("clipboard");
+            if (charSequence instanceof Spanned) {
+                clipboardManager.setPrimaryClip(ClipData.newHtmlText("label", charSequence, CustomHtml.toHtml((Spanned) charSequence)));
+            } else {
+                clipboardManager.setPrimaryClip(ClipData.newPlainText("label", charSequence));
+            }
         } catch (Exception e) {
             FileLog.e((Throwable) e);
         }
@@ -3581,9 +3587,9 @@ public class AndroidUtilities {
             if (r5 == 0) goto L_0x015d
             boolean r7 = r5.exists()
             if (r7 == 0) goto L_0x015d
-            r7 = 2131627117(0x7f0e0c6d, float:1.888149E38)
+            r7 = 2131627127(0x7f0e0CLASSNAME, float:1.888151E38)
             java.lang.String r8 = "OK"
-            r9 = 2131624382(0x7f0e01be, float:1.8875942E38)
+            r9 = 2131624384(0x7f0e01c0, float:1.8875946E38)
             java.lang.String r10 = "AppName"
             r11 = 1
             if (r2 == 0) goto L_0x00aa
@@ -3604,7 +3610,7 @@ public class AndroidUtilities {
             r0.<init>((android.content.Context) r1)
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r10, r9)
             r0.setTitle(r1)
-            r1 = 2131626268(0x7f0e091c, float:1.8879767E38)
+            r1 = 2131626278(0x7f0e0926, float:1.8879788E38)
             java.lang.String r3 = "IncorrectTheme"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r3, r1)
             r0.setMessage(r1)
@@ -3688,7 +3694,7 @@ public class AndroidUtilities {
             r3.setTitle(r1)
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r8, r7)
             r3.setPositiveButton(r1, r6)
-            r1 = 2131626870(0x7f0e0b76, float:1.8880988E38)
+            r1 = 2131626880(0x7f0e0b80, float:1.8881009E38)
             r4 = 1
             java.lang.Object[] r4 = new java.lang.Object[r4]
             r5 = 0

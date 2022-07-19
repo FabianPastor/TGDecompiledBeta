@@ -23,7 +23,7 @@ public class SeekBarWaveform {
     private static Paint paintOuter;
     private Path alphaPath;
     private ArrayList<Float> animatedValues;
-    private AnimatedFloat appearFloat = new AnimatedFloat(125, 450, (TimeInterpolator) CubicBezierInterpolator.EASE_OUT_QUINT);
+    private AnimatedFloat appearFloat = new AnimatedFloat(125, 600, (TimeInterpolator) CubicBezierInterpolator.EASE_OUT_QUINT);
     private float clearProgress = 1.0f;
     private SeekBar.SeekBarDelegate delegate;
     private float[] fromHeights;
@@ -305,7 +305,8 @@ public class SeekBarWaveform {
                             if (f5 >= dpf2 || i2 >= this.heights.length) {
                                 break;
                             }
-                            addBar(this.path, AndroidUtilities.dpf2(3.0f) * f5, AndroidUtilities.dpf2(this.heights[i2]) * MathUtils.clamp((f4 * dpf2) - f5, 0.0f, 1.0f));
+                            float clamp = MathUtils.clamp((f4 * dpf2) - f5, 0.0f, 1.0f);
+                            addBar(this.path, AndroidUtilities.dpf2(3.0f) * f5, (AndroidUtilities.dpf2(this.heights[i2]) * clamp) - (AndroidUtilities.dpf2(1.0f) * (1.0f - clamp)));
                             i2++;
                         }
                     }
@@ -330,12 +331,12 @@ public class SeekBarWaveform {
                     while (i6 < max) {
                         float f7 = (float) i6;
                         int i7 = max;
-                        int clamp = MathUtils.clamp((int) Math.floor((double) ((f7 / ((float) max)) * ((float) min))), 0, min - 1);
-                        if (i5 < clamp) {
-                            addBar(this.path, AndroidUtilities.lerp((float) clamp, f7, f6) * AndroidUtilities.dpf2(3.0f), AndroidUtilities.dpf2(AndroidUtilities.lerp(fArr5[clamp], fArr6[i6], f6)));
-                            i5 = clamp;
+                        int clamp2 = MathUtils.clamp((int) Math.floor((double) ((f7 / ((float) max)) * ((float) min))), 0, min - 1);
+                        if (i5 < clamp2) {
+                            addBar(this.path, AndroidUtilities.lerp((float) clamp2, f7, f6) * AndroidUtilities.dpf2(3.0f), AndroidUtilities.dpf2(AndroidUtilities.lerp(fArr5[clamp2], fArr6[i6], f6)));
+                            i5 = clamp2;
                         } else {
-                            addBar(this.alphaPath, AndroidUtilities.lerp((float) clamp, f7, f6) * AndroidUtilities.dpf2(3.0f), AndroidUtilities.dpf2(AndroidUtilities.lerp(fArr5[clamp], fArr6[i6], f6)));
+                            addBar(this.alphaPath, AndroidUtilities.lerp((float) clamp2, f7, f6) * AndroidUtilities.dpf2(3.0f), AndroidUtilities.dpf2(AndroidUtilities.lerp(fArr5[clamp2], fArr6[i6], f6)));
                             f = f6;
                         }
                         i6++;

@@ -27,6 +27,9 @@
     </style>
     <style name="Base.Theme.TMessages.AppWidget">
     </style>
+    <style name="Base_Translucent">
+        <item name="android:windowNoTitle">true</item>
+    </style>
     <style name="DialogNoAnimation">
         <item name="android:windowEnterAnimation">@anim/no_animation</item>
         <item name="android:windowExitAnimation">@anim/no_animation</item>

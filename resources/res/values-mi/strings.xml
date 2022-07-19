@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="hms_apk_not_installed_hints">Kāore pea e mahi tika ētahi āhuahira i %1$s ki te kore te HMS Core, ā, kāore i te tāuta ki tō pūrere.</string>
+    <string name="hms_bindfaildlg_message">Kāore e taea e %1$s te whakamahi HMS Core. Whakarewatia te Pūarotau (Pūwhakahaere Waea), haere rānei ki Ngā Tautuhinga, whakahohea ngā taupānga katoa mō %2$s (tae atu ki whakarewa-aunoa me te whakarewa tuarua), ka ngana anō.</string>
+    <string name="hms_confirm">ĀE</string>
+    <string name="hms_is_spoof">Te āhua nei kua putanga manakore tāu o HMS Core (%1$s) kua tāutahia ki tō pūrere. Me tangotāuta i te HMS Core mai i Ngā tautuhinga ka hoki ki tēnei taupānga hei tāuta i te putanga whaimana.</string>
+    <string name="hms_push_channel">Taunoa</string>
+    <string name="hms_spoof_hints">Kia mōhio</string>
+</resources>

@@ -3,8 +3,6 @@ package org.telegram.ui.Cells;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.ValueAnimator;
-import android.content.ClipData;
-import android.content.ClipboardManager;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.CornerPathEffect;
@@ -2054,7 +2052,7 @@ public abstract class TextSelectionHelper<Cell extends SelectableView> {
     public void copyText() {
         CharSequence selectedText;
         if (isSelectionMode() && (selectedText = getSelectedText()) != null) {
-            ((ClipboardManager) ApplicationLoader.applicationContext.getSystemService("clipboard")).setPrimaryClip(ClipData.newPlainText("label", selectedText));
+            AndroidUtilities.addToClipboard(selectedText);
             hideActions();
             clear(true);
             Callback callback2 = this.callback;

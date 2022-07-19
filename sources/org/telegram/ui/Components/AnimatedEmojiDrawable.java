@@ -7,23 +7,29 @@ import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
 import android.text.TextPaint;
+import android.text.TextUtils;
 import android.view.View;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Locale;
+import org.telegram.SQLite.SQLiteCursor;
+import org.telegram.SQLite.SQLiteDatabase;
+import org.telegram.SQLite.SQLiteException;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.DocumentObject;
 import org.telegram.messenger.FileLoader;
+import org.telegram.messenger.FileLog;
 import org.telegram.messenger.ImageLoader;
 import org.telegram.messenger.ImageLocation;
 import org.telegram.messenger.ImageReceiver;
-import org.telegram.messenger.MessageObject;
+import org.telegram.messenger.MessagesStorage;
 import org.telegram.messenger.SvgHelper;
-import org.telegram.messenger.UserConfig;
 import org.telegram.tgnet.ConnectionsManager;
+import org.telegram.tgnet.NativeByteBuffer;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC$Document;
-import org.telegram.tgnet.TLRPC$InputStickerSet;
 import org.telegram.tgnet.TLRPC$PhotoSize;
 import org.telegram.tgnet.TLRPC$TL_error;
 import org.telegram.tgnet.TLRPC$TL_messages_getCustomEmojiDocuments;
@@ -57,14 +63,15 @@ public class AnimatedEmojiDrawable extends Drawable {
     public void setColorFilter(ColorFilter colorFilter) {
     }
 
-    public static AnimatedEmojiDrawable make(int i, long j) {
+    public static AnimatedEmojiDrawable make(int i, int i2, long j) {
         if (globalEmojiCache == null) {
             globalEmojiCache = new HashMap<>();
         }
-        HashMap hashMap = globalEmojiCache.get(Integer.valueOf(i));
+        int hashCode = Arrays.hashCode(new Object[]{Integer.valueOf(i), Integer.valueOf(i2)});
+        HashMap hashMap = globalEmojiCache.get(Integer.valueOf(hashCode));
         if (hashMap == null) {
             HashMap<Integer, HashMap<Long, AnimatedEmojiDrawable>> hashMap2 = globalEmojiCache;
-            Integer valueOf = Integer.valueOf(i);
+            Integer valueOf = Integer.valueOf(hashCode);
             HashMap hashMap3 = new HashMap();
             hashMap2.put(valueOf, hashMap3);
             hashMap = hashMap3;
@@ -74,19 +81,20 @@ public class AnimatedEmojiDrawable extends Drawable {
             return animatedEmojiDrawable;
         }
         Long valueOf2 = Long.valueOf(j);
-        AnimatedEmojiDrawable animatedEmojiDrawable2 = new AnimatedEmojiDrawable(i, UserConfig.selectedAccount, j);
+        AnimatedEmojiDrawable animatedEmojiDrawable2 = new AnimatedEmojiDrawable(i2, i, j);
         hashMap.put(valueOf2, animatedEmojiDrawable2);
         return animatedEmojiDrawable2;
     }
 
-    public static AnimatedEmojiDrawable make(int i, TLRPC$Document tLRPC$Document) {
+    public static AnimatedEmojiDrawable make(int i, int i2, TLRPC$Document tLRPC$Document) {
         if (globalEmojiCache == null) {
             globalEmojiCache = new HashMap<>();
         }
-        HashMap hashMap = globalEmojiCache.get(Integer.valueOf(i));
+        int hashCode = Arrays.hashCode(new Object[]{Integer.valueOf(i), Integer.valueOf(i2)});
+        HashMap hashMap = globalEmojiCache.get(Integer.valueOf(hashCode));
         if (hashMap == null) {
             HashMap<Integer, HashMap<Long, AnimatedEmojiDrawable>> hashMap2 = globalEmojiCache;
-            Integer valueOf = Integer.valueOf(i);
+            Integer valueOf = Integer.valueOf(hashCode);
             HashMap hashMap3 = new HashMap();
             hashMap2.put(valueOf, hashMap3);
             hashMap = hashMap3;
@@ -96,7 +104,7 @@ public class AnimatedEmojiDrawable extends Drawable {
             return animatedEmojiDrawable;
         }
         Long valueOf2 = Long.valueOf(tLRPC$Document.id);
-        AnimatedEmojiDrawable animatedEmojiDrawable2 = new AnimatedEmojiDrawable(i, UserConfig.selectedAccount, tLRPC$Document);
+        AnimatedEmojiDrawable animatedEmojiDrawable2 = new AnimatedEmojiDrawable(i2, i, tLRPC$Document);
         hashMap.put(valueOf2, animatedEmojiDrawable2);
         return animatedEmojiDrawable2;
     }
@@ -120,7 +128,7 @@ public class AnimatedEmojiDrawable extends Drawable {
         }
     }
 
-    private static EmojiDocumentFetcher getDocumentFetcher(int i) {
+    public static EmojiDocumentFetcher getDocumentFetcher(int i) {
         if (fetchers == null) {
             fetchers = new HashMap<>();
         }
@@ -135,13 +143,12 @@ public class AnimatedEmojiDrawable extends Drawable {
         return emojiDocumentFetcher2;
     }
 
-    private static class EmojiDocumentFetcher {
-        private int currentAccount;
+    public static class EmojiDocumentFetcher {
+        private final int currentAccount;
         /* access modifiers changed from: private */
         public HashMap<Long, TLRPC$Document> emojiDocumentsCache;
         private Runnable fetchRunnable;
         private HashMap<Long, ArrayList<ReceivedDocument>> loadingDocuments;
-        private final Object sync = new Object();
         private ArrayList<Long> toFetchDocuments;
 
         public EmojiDocumentFetcher(int i) {
@@ -150,79 +157,190 @@ public class AnimatedEmojiDrawable extends Drawable {
 
         public void fetchDocument(long j, ReceivedDocument receivedDocument) {
             TLRPC$Document tLRPC$Document;
-            synchronized (this.sync) {
-                HashMap<Long, TLRPC$Document> hashMap = this.emojiDocumentsCache;
-                if (hashMap == null || (tLRPC$Document = hashMap.get(Long.valueOf(j))) == null) {
-                    if (receivedDocument != null) {
-                        if (this.loadingDocuments == null) {
-                            this.loadingDocuments = new HashMap<>();
-                        }
-                        ArrayList arrayList = this.loadingDocuments.get(Long.valueOf(j));
-                        if (arrayList != null) {
-                            arrayList.add(receivedDocument);
-                            return;
-                        }
-                        ArrayList arrayList2 = new ArrayList(1);
-                        arrayList2.add(receivedDocument);
-                        this.loadingDocuments.put(Long.valueOf(j), arrayList2);
+            HashMap<Long, TLRPC$Document> hashMap = this.emojiDocumentsCache;
+            if (hashMap == null || (tLRPC$Document = hashMap.get(Long.valueOf(j))) == null) {
+                if (receivedDocument != null) {
+                    if (this.loadingDocuments == null) {
+                        this.loadingDocuments = new HashMap<>();
                     }
-                    if (this.toFetchDocuments == null) {
-                        this.toFetchDocuments = new ArrayList<>();
+                    ArrayList arrayList = this.loadingDocuments.get(Long.valueOf(j));
+                    if (arrayList != null) {
+                        arrayList.add(receivedDocument);
+                        return;
                     }
-                    this.toFetchDocuments.add(Long.valueOf(j));
-                    AndroidUtilities.cancelRunOnUIThread(this.fetchRunnable);
+                    ArrayList arrayList2 = new ArrayList(1);
+                    arrayList2.add(receivedDocument);
+                    this.loadingDocuments.put(Long.valueOf(j), arrayList2);
+                }
+                if (this.toFetchDocuments == null) {
+                    this.toFetchDocuments = new ArrayList<>();
+                }
+                this.toFetchDocuments.add(Long.valueOf(j));
+                if (this.fetchRunnable == null) {
                     AnimatedEmojiDrawable$EmojiDocumentFetcher$$ExternalSyntheticLambda0 animatedEmojiDrawable$EmojiDocumentFetcher$$ExternalSyntheticLambda0 = new AnimatedEmojiDrawable$EmojiDocumentFetcher$$ExternalSyntheticLambda0(this);
                     this.fetchRunnable = animatedEmojiDrawable$EmojiDocumentFetcher$$ExternalSyntheticLambda0;
-                    AndroidUtilities.runOnUIThread(animatedEmojiDrawable$EmojiDocumentFetcher$$ExternalSyntheticLambda0, 4);
+                    AndroidUtilities.runOnUIThread(animatedEmojiDrawable$EmojiDocumentFetcher$$ExternalSyntheticLambda0);
                     return;
                 }
-                receivedDocument.run(tLRPC$Document);
+                return;
             }
+            receivedDocument.run(tLRPC$Document);
         }
 
         /* access modifiers changed from: private */
-        public /* synthetic */ void lambda$fetchDocument$2() {
+        public /* synthetic */ void lambda$fetchDocument$0() {
             this.fetchRunnable = null;
-            TLRPC$TL_messages_getCustomEmojiDocuments tLRPC$TL_messages_getCustomEmojiDocuments = new TLRPC$TL_messages_getCustomEmojiDocuments();
-            synchronized (this.sync) {
-                ArrayList<Long> arrayList = new ArrayList<>(this.toFetchDocuments.size());
-                tLRPC$TL_messages_getCustomEmojiDocuments.document_id = arrayList;
-                arrayList.addAll(this.toFetchDocuments);
-                this.toFetchDocuments.clear();
+            loadFromDatabase(new ArrayList(this.toFetchDocuments));
+        }
+
+        private void loadFromDatabase(ArrayList<Long> arrayList) {
+            MessagesStorage.getInstance(this.currentAccount).getStorageQueue().postRunnable(new AnimatedEmojiDrawable$EmojiDocumentFetcher$$ExternalSyntheticLambda1(this, arrayList));
+        }
+
+        /* access modifiers changed from: private */
+        public /* synthetic */ void lambda$loadFromDatabase$2(ArrayList arrayList) {
+            SQLiteDatabase database = MessagesStorage.getInstance(this.currentAccount).getDatabase();
+            try {
+                String join = TextUtils.join(",", arrayList);
+                SQLiteCursor queryFinalized = database.queryFinalized(String.format(Locale.US, "SELECT data FROM animated_emoji WHERE document_id IN (%s)", new Object[]{join}), new Object[0]);
+                ArrayList arrayList2 = new ArrayList();
+                ArrayList arrayList3 = new ArrayList(arrayList);
+                while (queryFinalized.next()) {
+                    NativeByteBuffer byteBufferValue = queryFinalized.byteBufferValue(0);
+                    try {
+                        TLRPC$Document TLdeserialize = TLRPC$Document.TLdeserialize(byteBufferValue, byteBufferValue.readInt32(true), true);
+                        if (!(TLdeserialize == null || TLdeserialize.id == 0)) {
+                            arrayList2.add(TLdeserialize);
+                            arrayList3.remove(Long.valueOf(TLdeserialize.id));
+                        }
+                    } catch (Exception e) {
+                        FileLog.e((Throwable) e);
+                    }
+                    if (byteBufferValue != null) {
+                        byteBufferValue.reuse();
+                    }
+                }
+                AndroidUtilities.runOnUIThread(new AnimatedEmojiDrawable$EmojiDocumentFetcher$$ExternalSyntheticLambda3(this, arrayList2, arrayList3));
+                queryFinalized.dispose();
+            } catch (SQLiteException e2) {
+                FileLog.e((Throwable) e2);
             }
-            ConnectionsManager.getInstance(this.currentAccount).sendRequest(tLRPC$TL_messages_getCustomEmojiDocuments, new AnimatedEmojiDrawable$EmojiDocumentFetcher$$ExternalSyntheticLambda2(this, tLRPC$TL_messages_getCustomEmojiDocuments));
         }
 
         /* access modifiers changed from: private */
-        public /* synthetic */ void lambda$fetchDocument$1(TLRPC$TL_messages_getCustomEmojiDocuments tLRPC$TL_messages_getCustomEmojiDocuments, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-            AndroidUtilities.runOnUIThread(new AnimatedEmojiDrawable$EmojiDocumentFetcher$$ExternalSyntheticLambda1(this, tLObject, tLRPC$TL_messages_getCustomEmojiDocuments));
+        public /* synthetic */ void lambda$loadFromDatabase$1(ArrayList arrayList, ArrayList arrayList2) {
+            processDocuments(arrayList);
+            if (!arrayList2.isEmpty()) {
+                loadFromServer(arrayList2);
+            }
+        }
+
+        private void loadFromServer(ArrayList<Long> arrayList) {
+            TLRPC$TL_messages_getCustomEmojiDocuments tLRPC$TL_messages_getCustomEmojiDocuments = new TLRPC$TL_messages_getCustomEmojiDocuments();
+            tLRPC$TL_messages_getCustomEmojiDocuments.document_id = arrayList;
+            this.toFetchDocuments.clear();
+            ConnectionsManager.getInstance(this.currentAccount).sendRequest(tLRPC$TL_messages_getCustomEmojiDocuments, new AnimatedEmojiDrawable$EmojiDocumentFetcher$$ExternalSyntheticLambda5(this, tLRPC$TL_messages_getCustomEmojiDocuments));
         }
 
         /* access modifiers changed from: private */
-        public /* synthetic */ void lambda$fetchDocument$0(TLObject tLObject, TLRPC$TL_messages_getCustomEmojiDocuments tLRPC$TL_messages_getCustomEmojiDocuments) {
+        public /* synthetic */ void lambda$loadFromServer$4(TLRPC$TL_messages_getCustomEmojiDocuments tLRPC$TL_messages_getCustomEmojiDocuments, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+            AndroidUtilities.runOnUIThread(new AnimatedEmojiDrawable$EmojiDocumentFetcher$$ExternalSyntheticLambda4(this, tLObject, tLRPC$TL_messages_getCustomEmojiDocuments));
+        }
+
+        /* access modifiers changed from: private */
+        public /* synthetic */ void lambda$loadFromServer$3(TLObject tLObject, TLRPC$TL_messages_getCustomEmojiDocuments tLRPC$TL_messages_getCustomEmojiDocuments) {
             if (tLObject instanceof TLRPC$Vector) {
                 ArrayList<Object> arrayList = ((TLRPC$Vector) tLObject).objects;
-                synchronized (this.sync) {
-                    for (int i = 0; i < arrayList.size(); i++) {
-                        if (arrayList.get(i) instanceof TLRPC$Document) {
-                            TLRPC$Document tLRPC$Document = (TLRPC$Document) arrayList.get(i);
-                            if (this.emojiDocumentsCache == null) {
-                                this.emojiDocumentsCache = new HashMap<>();
-                            }
-                            this.emojiDocumentsCache.put(Long.valueOf(tLRPC$Document.id), tLRPC$Document);
-                            ArrayList remove = this.loadingDocuments.remove(Long.valueOf(tLRPC$Document.id));
-                            if (remove != null) {
-                                for (int i2 = 0; i2 < remove.size(); i2++) {
-                                    ((ReceivedDocument) remove.get(i2)).run(tLRPC$Document);
-                                }
-                                remove.clear();
-                            }
-                        }
+                putToStorage(arrayList);
+                processDocuments(arrayList);
+                if (tLRPC$TL_messages_getCustomEmojiDocuments.document_id.size() > arrayList.size()) {
+                    for (Long longValue : this.loadingDocuments.keySet()) {
+                        fetchDocument(longValue.longValue(), (ReceivedDocument) null);
                     }
-                    if (tLRPC$TL_messages_getCustomEmojiDocuments.document_id.size() > arrayList.size()) {
-                        for (Long longValue : this.loadingDocuments.keySet()) {
-                            fetchDocument(longValue.longValue(), (ReceivedDocument) null);
+                }
+            }
+        }
+
+        private void putToStorage(ArrayList<Object> arrayList) {
+            MessagesStorage.getInstance(this.currentAccount).getStorageQueue().postRunnable(new AnimatedEmojiDrawable$EmojiDocumentFetcher$$ExternalSyntheticLambda2(this, arrayList));
+        }
+
+        /* access modifiers changed from: private */
+        /* JADX WARNING: Removed duplicated region for block: B:19:0x004d A[Catch:{ SQLiteException -> 0x0057 }] */
+        /* JADX WARNING: Removed duplicated region for block: B:27:0x0050 A[SYNTHETIC] */
+        /* Code decompiled incorrectly, please refer to instructions dump. */
+        public /* synthetic */ void lambda$putToStorage$5(java.util.ArrayList r7) {
+            /*
+                r6 = this;
+                int r0 = r6.currentAccount
+                org.telegram.messenger.MessagesStorage r0 = org.telegram.messenger.MessagesStorage.getInstance(r0)
+                org.telegram.SQLite.SQLiteDatabase r0 = r0.getDatabase()
+                java.lang.String r1 = "REPLACE INTO animated_emoji VALUES(?, ?)"
+                org.telegram.SQLite.SQLitePreparedStatement r0 = r0.executeFast(r1)     // Catch:{ SQLiteException -> 0x0057 }
+                r1 = 0
+            L_0x0011:
+                int r2 = r7.size()     // Catch:{ SQLiteException -> 0x0057 }
+                if (r1 >= r2) goto L_0x0053
+                java.lang.Object r2 = r7.get(r1)     // Catch:{ SQLiteException -> 0x0057 }
+                boolean r2 = r2 instanceof org.telegram.tgnet.TLRPC$Document     // Catch:{ SQLiteException -> 0x0057 }
+                if (r2 == 0) goto L_0x0050
+                java.lang.Object r2 = r7.get(r1)     // Catch:{ SQLiteException -> 0x0057 }
+                org.telegram.tgnet.TLRPC$Document r2 = (org.telegram.tgnet.TLRPC$Document) r2     // Catch:{ SQLiteException -> 0x0057 }
+                r3 = 0
+                org.telegram.tgnet.NativeByteBuffer r4 = new org.telegram.tgnet.NativeByteBuffer     // Catch:{ Exception -> 0x0046 }
+                int r5 = r2.getObjectSize()     // Catch:{ Exception -> 0x0046 }
+                r4.<init>((int) r5)     // Catch:{ Exception -> 0x0046 }
+                r2.serializeToStream(r4)     // Catch:{ Exception -> 0x0043 }
+                r0.requery()     // Catch:{ Exception -> 0x0043 }
+                long r2 = r2.id     // Catch:{ Exception -> 0x0043 }
+                r5 = 1
+                r0.bindLong(r5, r2)     // Catch:{ Exception -> 0x0043 }
+                r2 = 2
+                r0.bindByteBuffer((int) r2, (org.telegram.tgnet.NativeByteBuffer) r4)     // Catch:{ Exception -> 0x0043 }
+                r0.step()     // Catch:{ Exception -> 0x0043 }
+                goto L_0x004b
+            L_0x0043:
+                r2 = move-exception
+                r3 = r4
+                goto L_0x0047
+            L_0x0046:
+                r2 = move-exception
+            L_0x0047:
+                r2.printStackTrace()     // Catch:{ SQLiteException -> 0x0057 }
+                r4 = r3
+            L_0x004b:
+                if (r4 == 0) goto L_0x0050
+                r4.reuse()     // Catch:{ SQLiteException -> 0x0057 }
+            L_0x0050:
+                int r1 = r1 + 1
+                goto L_0x0011
+            L_0x0053:
+                r0.dispose()     // Catch:{ SQLiteException -> 0x0057 }
+                goto L_0x005b
+            L_0x0057:
+                r7 = move-exception
+                org.telegram.messenger.FileLog.e((java.lang.Throwable) r7)
+            L_0x005b:
+                return
+            */
+            throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.AnimatedEmojiDrawable.EmojiDocumentFetcher.lambda$putToStorage$5(java.util.ArrayList):void");
+        }
+
+        public void processDocuments(ArrayList<?> arrayList) {
+            ArrayList remove;
+            for (int i = 0; i < arrayList.size(); i++) {
+                if (arrayList.get(i) instanceof TLRPC$Document) {
+                    TLRPC$Document tLRPC$Document = (TLRPC$Document) arrayList.get(i);
+                    if (this.emojiDocumentsCache == null) {
+                        this.emojiDocumentsCache = new HashMap<>();
+                    }
+                    this.emojiDocumentsCache.put(Long.valueOf(tLRPC$Document.id), tLRPC$Document);
+                    HashMap<Long, ArrayList<ReceivedDocument>> hashMap = this.loadingDocuments;
+                    if (!(hashMap == null || (remove = hashMap.remove(Long.valueOf(tLRPC$Document.id))) == null)) {
+                        for (int i2 = 0; i2 < remove.size(); i2++) {
+                            ((ReceivedDocument) remove.get(i2)).run(tLRPC$Document);
                         }
+                        remove.clear();
                     }
                 }
             }
@@ -230,15 +348,11 @@ public class AnimatedEmojiDrawable extends Drawable {
     }
 
     public static TLRPC$Document findDocument(int i, long j) {
-        return (TLRPC$Document) getDocumentFetcher(i).emojiDocumentsCache.get(Long.valueOf(j));
-    }
-
-    public static TLRPC$InputStickerSet findStickerSet(int i, long j) {
-        TLRPC$Document tLRPC$Document = (TLRPC$Document) getDocumentFetcher(i).emojiDocumentsCache.get(Long.valueOf(j));
-        if (tLRPC$Document == null) {
+        EmojiDocumentFetcher documentFetcher = getDocumentFetcher(i);
+        if (documentFetcher == null || documentFetcher.emojiDocumentsCache == null) {
             return null;
         }
-        return MessageObject.getInputStickerSet(tLRPC$Document);
+        return (TLRPC$Document) documentFetcher.emojiDocumentsCache.get(Long.valueOf(j));
     }
 
     public AnimatedEmojiDrawable(int i, int i2, long j) {
@@ -247,17 +361,16 @@ public class AnimatedEmojiDrawable extends Drawable {
             TextPaint textPaint = Theme.chat_msgTextPaint;
             sizedp = (int) (((Math.abs(textPaint.ascent()) + Math.abs(textPaint.descent())) * 1.15f) / AndroidUtilities.density);
         } else if (i == 1 || i == 3 || i == 2) {
-            Math.max(1, AndroidUtilities.displaySize.x / AndroidUtilities.dp(AndroidUtilities.isTablet() ? 60.0f : 45.0f));
             sizedp = 34;
         }
         this.documentId = j;
-        getDocumentFetcher(i2).fetchDocument(j, new AnimatedEmojiDrawable$$ExternalSyntheticLambda2(this));
+        getDocumentFetcher(i2).fetchDocument(j, new AnimatedEmojiDrawable$$ExternalSyntheticLambda1(this));
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$new$1(TLRPC$Document tLRPC$Document) {
+    public /* synthetic */ void lambda$new$0(TLRPC$Document tLRPC$Document) {
         this.document = tLRPC$Document;
-        AndroidUtilities.runOnUIThread(new AnimatedEmojiDrawable$$ExternalSyntheticLambda1(this));
+        initDocument();
     }
 
     public AnimatedEmojiDrawable(int i, int i2, TLRPC$Document tLRPC$Document) {
@@ -271,8 +384,7 @@ public class AnimatedEmojiDrawable extends Drawable {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: initDocument */
-    public void lambda$new$0() {
+    public void initDocument() {
         String str;
         if (this.document != null && this.imageReceiver == null) {
             AnonymousClass1 r1 = new ImageReceiver() {
@@ -381,7 +493,19 @@ public class AnimatedEmojiDrawable extends Drawable {
             imageReceiver2.setImageCoords(rect);
             this.imageReceiver.setAlpha(f);
             this.imageReceiver.draw(canvas);
+            return;
         }
+        if (placeholderPaint == null) {
+            Paint paint = new Paint(1);
+            placeholderPaint = paint;
+            paint.setColor(Theme.isCurrentThemeDark() ? NUM : NUM);
+        }
+        int alpha2 = placeholderPaint.getAlpha();
+        placeholderPaint.setAlpha((int) (((float) alpha2) * f));
+        RectF rectF = AndroidUtilities.rectTmp;
+        rectF.set(rect);
+        canvas.drawCircle(rectF.centerX(), rectF.centerY(), rectF.width() * 0.4f, placeholderPaint);
+        placeholderPaint.setAlpha(alpha2);
     }
 
     public void draw(Canvas canvas, ImageReceiver.BackgroundThreadDrawHolder backgroundThreadDrawHolder) {

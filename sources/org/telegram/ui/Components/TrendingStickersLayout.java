@@ -504,7 +504,7 @@ public class TrendingStickersLayout extends FrameLayout implements NotificationC
                 this.adapter.refreshStickerSets();
             }
         } else if (i == NotificationCenter.featuredStickersDidLoad) {
-            if (this.hash != MediaDataController.getInstance(this.currentAccount).getFeaturesStickersHashWithoutUnread()) {
+            if (this.hash != MediaDataController.getInstance(this.currentAccount).getFeaturedStickersHashWithoutUnread(false)) {
                 this.loaded = false;
             }
             if (this.loaded) {
@@ -869,7 +869,7 @@ public class TrendingStickersLayout extends FrameLayout implements NotificationC
                 if (r4 == 0) goto L_0x0044
                 org.telegram.tgnet.TLRPC$StickerSet r5 = r1.set
                 long r5 = r5.id
-                r0.markFaturedStickersByIdAsRead(r5)
+                r0.markFeaturedStickersByIdAsRead(r3, r5)
             L_0x0044:
                 r5 = r1
                 r6 = r4
@@ -1137,7 +1137,7 @@ public class TrendingStickersLayout extends FrameLayout implements NotificationC
                 }
                 if (this.totalItems != 0) {
                     boolean unused2 = TrendingStickersLayout.this.loaded = true;
-                    long unused3 = TrendingStickersLayout.this.hash = instance.getFeaturesStickersHashWithoutUnread();
+                    long unused3 = TrendingStickersLayout.this.hash = instance.getFeaturedStickersHashWithoutUnread(false);
                 }
                 notifyDataSetChanged();
             }

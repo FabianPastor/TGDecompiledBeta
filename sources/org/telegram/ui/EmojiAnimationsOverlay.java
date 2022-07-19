@@ -245,7 +245,9 @@ public class EmojiAnimationsOverlay implements NotificationCenter.NotificationCe
                     } else {
                         imageReceiver = null;
                     }
-                    if (messageObject.getId() == drawingObject.messageId) {
+                    if (messageObject == null || messageObject.getId() != drawingObject.messageId) {
+                        i2++;
+                    } else {
                         drawingObject.viewFound = true;
                         float x = this.listView.getX() + childAt.getX();
                         float y = this.listView.getY() + childAt.getY();
@@ -266,8 +268,6 @@ public class EmojiAnimationsOverlay implements NotificationCenter.NotificationCe
                         }
                         drawingObject.lastW = imageReceiver.getImageWidth();
                         drawingObject.lastH = imageReceiver.getImageHeight();
-                    } else {
-                        i2++;
                     }
                 }
                 if (!drawingObject.viewFound || drawingObject.lastH + f < this.chatActivity.getChatListViewPadding() || f > ((float) (this.listView.getMeasuredHeight() - this.chatActivity.blurredViewBottomOffset))) {
@@ -333,7 +333,7 @@ public class EmojiAnimationsOverlay implements NotificationCenter.NotificationCe
         }
     }
 
-    public boolean onTapItem(ChatMessageCell chatMessageCell, ChatActivity chatActivity2) {
+    public boolean onTapItem(ChatMessageCell chatMessageCell, ChatActivity chatActivity2, boolean z) {
         if (chatActivity2.isSecretChat() || chatMessageCell.getMessageObject() == null || chatMessageCell.getMessageObject().getId() < 0) {
             return false;
         }
@@ -341,7 +341,7 @@ public class EmojiAnimationsOverlay implements NotificationCenter.NotificationCe
             return false;
         }
         boolean showAnimationForCell = showAnimationForCell(chatMessageCell, -1, true, false);
-        if (showAnimationForCell && (!EmojiData.hasEmojiSupportVibration(chatMessageCell.getMessageObject().getStickerEmoji()) || chatMessageCell.getMessageObject().isPremiumSticker())) {
+        if (showAnimationForCell && !EmojiData.hasEmojiSupportVibration(chatMessageCell.getMessageObject().getStickerEmoji()) && (!chatMessageCell.getMessageObject().isPremiumSticker() || z)) {
             chatMessageCell.performHapticFeedback(3);
         }
         if (chatMessageCell.getMessageObject().isPremiumSticker()) {
@@ -360,14 +360,14 @@ public class EmojiAnimationsOverlay implements NotificationCenter.NotificationCe
             stickerSetBulletinLayout.titleTextView.setMaxLines(3);
             stickerSetBulletinLayout.titleTextView.setSingleLine(false);
             final Bulletin make = Bulletin.make((BaseFragment) chatActivity2, (Bulletin.Layout) stickerSetBulletinLayout, 2750);
-            AnonymousClass2 r13 = new Runnable() {
+            AnonymousClass2 r12 = new Runnable() {
                 public void run() {
                     make.show();
                     EmojiAnimationsOverlay.this.hintRunnable = null;
                 }
             };
-            this.hintRunnable = r13;
-            AndroidUtilities.runOnUIThread(r13, 1500);
+            this.hintRunnable = r12;
+            AndroidUtilities.runOnUIThread(r12, 1500);
         }
         return showAnimationForCell;
     }

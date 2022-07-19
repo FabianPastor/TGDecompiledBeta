@@ -97,6 +97,10 @@ public class TextSettingsCell extends FrameLayout {
         addView(this.valueImageView, LayoutHelper.createFrame(-2, -2.0f, (LocaleController.isRTL ? 3 : i3) | 16, f, 0.0f, f, 0.0f));
     }
 
+    public ImageView getValueImageView() {
+        return this.valueImageView;
+    }
+
     /* access modifiers changed from: protected */
     public void onMeasure(int i, int i2) {
         setMeasuredDimension(View.MeasureSpec.getSize(i), AndroidUtilities.dp(50.0f) + (this.needDivider ? 1 : 0));
@@ -115,6 +119,14 @@ public class TextSettingsCell extends FrameLayout {
         if (this.valueTextView.getVisibility() == 0) {
             this.valueTextView.measure(View.MeasureSpec.makeMeasureSpec(i3, Integer.MIN_VALUE), View.MeasureSpec.makeMeasureSpec(getMeasuredHeight(), NUM));
             measuredWidth = (measuredWidth - this.valueTextView.getMeasuredWidth()) - AndroidUtilities.dp(8.0f);
+            if (this.valueImageView.getVisibility() == 0) {
+                ViewGroup.MarginLayoutParams marginLayoutParams = (ViewGroup.MarginLayoutParams) this.valueImageView.getLayoutParams();
+                if (LocaleController.isRTL) {
+                    marginLayoutParams.leftMargin = AndroidUtilities.dp((float) (this.padding + 4)) + this.valueTextView.getMeasuredWidth();
+                } else {
+                    marginLayoutParams.rightMargin = AndroidUtilities.dp((float) (this.padding + 4)) + this.valueTextView.getMeasuredWidth();
+                }
+            }
         }
         this.textView.measure(View.MeasureSpec.makeMeasureSpec(measuredWidth, NUM), View.MeasureSpec.makeMeasureSpec(getMeasuredHeight(), NUM));
     }
@@ -171,19 +183,6 @@ public class TextSettingsCell extends FrameLayout {
         this.needDivider = z2;
         setWillNotDraw(!z2);
         requestLayout();
-    }
-
-    public void setTextAndIcon(CharSequence charSequence, int i, boolean z) {
-        this.textView.setText(charSequence);
-        this.valueTextView.setVisibility(4);
-        if (i != 0) {
-            this.valueImageView.setVisibility(0);
-            this.valueImageView.setImageResource(i);
-        } else {
-            this.valueImageView.setVisibility(4);
-        }
-        this.needDivider = z;
-        setWillNotDraw(!z);
     }
 
     public void setIcon(int i) {

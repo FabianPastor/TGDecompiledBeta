@@ -8,6 +8,6 @@ public final /* synthetic */ class ChatActivityEnterViewAnimatedIconView$$Extern
     }
 
     public final void run() {
-        this.f$0.lambda$setState$1();
+        this.f$0.lambda$setState$0();
     }
 }

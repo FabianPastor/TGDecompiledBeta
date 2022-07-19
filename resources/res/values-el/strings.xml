@@ -21,6 +21,12 @@
     <string name="fcm_fallback_notification_channel_label">Διάφορα</string>
     <string name="google_assistant_verification_channel_name">Επαλήθευση Βοηθού</string>
     <string name="google_assistant_verification_notification_title">Αποστολή μηνύματος από τον Βοηθό Google</string>
+    <string name="hms_apk_not_installed_hints">Ορισμένες δυνατότητες στην εφαρμογή %1$s ενδέχεται να μην λειτουργούν σωστά χωρίς το HMS Core, το οποίο δεν είναι εγκατεστημένο στη συσκευή σας.</string>
+    <string name="hms_bindfaildlg_message">Το %1$s αδυνατεί να χρησιμοποιήσει την εφαρμογή HMS Core. Εκκινήστε τη Βελτιστοποίηση (Διαχείριση τηλεφώνου) ή μεταβείτε στις Ρυθμίσεις, ενεργοποιήστε όλες τις άδειες για το %2$s (συμπεριλαμβανομένης της αυτόματης εκκίνησης και της δευτερεύουσας εκκίνησης) και προσπαθήστε ξανά.</string>
+    <string name="hms_confirm">OK</string>
+    <string name="hms_is_spoof">Φαίνεται ότι έχετε μια ανεπίσημη έκδοση του HMS Core (%1$s) εγκατεστημένη στη συσκευή σας. Απεγκαταστήστε το HMS Core από τις Ρυθμίσεις και επιστρέψτε σε αυτήν την εφαρμογή για να εγκαταστήσετε την επίσημη έκδοση.</string>
+    <string name="hms_push_channel">Προεπιλεγμένη ρύθμιση</string>
+    <string name="hms_spoof_hints">Σημείωση</string>
     <string name="status_bar_notification_info_overflow">999+</string>
     <string name="wallet_buy_button_place_holder">Αγορά μέσω Google</string>
 </resources>

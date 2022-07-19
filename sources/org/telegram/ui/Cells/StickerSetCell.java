@@ -161,9 +161,10 @@ public class StickerSetCell extends FrameLayout {
         }
         int indexOf2 = tLRPC$StickerSet.short_name.toLowerCase(locale).indexOf(str);
         if (indexOf2 != -1) {
-            int i = indexOf2 + 17;
-            SpannableString spannableString2 = new SpannableString("t.me/addstickers/" + tLRPC$StickerSet.short_name);
-            spannableString2.setSpan(new ForegroundColorSpanThemable("windowBackgroundWhiteBlueText4", resourcesProvider), i, str.length() + i, 0);
+            String str3 = tLRPC$StickerSet.emojis ? "t.me/addemoji/" : "t.me/addstickers/";
+            int length = indexOf2 + str3.length();
+            SpannableString spannableString2 = new SpannableString(str3 + tLRPC$StickerSet.short_name);
+            spannableString2.setSpan(new ForegroundColorSpanThemable("windowBackgroundWhiteBlueText4", resourcesProvider), length, str.length() + length, 0);
             this.valueTextView.setText(spannableString2);
         }
     }
@@ -190,11 +191,20 @@ public class StickerSetCell extends FrameLayout {
             this.imageView.setAlpha(1.0f);
         }
         ArrayList<TLRPC$Document> arrayList = tLRPC$TL_messages_stickerSet.documents;
+        String str = "EmojiCount";
         if (arrayList == null || arrayList.isEmpty()) {
-            this.valueTextView.setText(LocaleController.formatPluralString("Stickers", 0, new Object[0]));
+            TextView textView2 = this.valueTextView;
+            if (!tLRPC$TL_messages_stickerSet.set.emojis) {
+                str = "Stickers";
+            }
+            textView2.setText(LocaleController.formatPluralString(str, 0, new Object[0]));
             this.imageView.setImageDrawable((Drawable) null);
         } else {
-            this.valueTextView.setText(LocaleController.formatPluralString("Stickers", arrayList.size(), new Object[0]));
+            TextView textView3 = this.valueTextView;
+            if (!tLRPC$TL_messages_stickerSet.set.emojis) {
+                str = "Stickers";
+            }
+            textView3.setText(LocaleController.formatPluralString(str, arrayList.size(), new Object[0]));
             TLRPC$Document tLRPC$Document = arrayList.get(0);
             TLObject closestPhotoSizeWithSize = FileLoader.getClosestPhotoSizeWithSize(tLRPC$TL_messages_stickerSet.set.thumbs, 90);
             if (closestPhotoSizeWithSize == null) {
@@ -220,8 +230,11 @@ public class StickerSetCell extends FrameLayout {
             }
         }
         if (z2) {
-            TextView textView2 = this.valueTextView;
-            textView2.setText("t.me/addstickers/" + tLRPC$TL_messages_stickerSet.set.short_name);
+            TextView textView4 = this.valueTextView;
+            StringBuilder sb = new StringBuilder();
+            sb.append(tLRPC$TL_messages_stickerSet.set.emojis ? "t.me/addemoji/" : "t.me/addstickers/");
+            sb.append(tLRPC$TL_messages_stickerSet.set.short_name);
+            textView4.setText(sb.toString());
         }
     }
 

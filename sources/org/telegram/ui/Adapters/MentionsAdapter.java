@@ -1036,13 +1036,13 @@ public class MentionsAdapter extends RecyclerListView.SelectionAdapter implement
             r8.searchGlobalRunnable = r6
         L_0x0032:
             boolean r5 = android.text.TextUtils.isEmpty(r21)
-            if (r5 != 0) goto L_0x071e
+            if (r5 != 0) goto L_0x071f
             int r5 = r21.length()
             int r10 = r8.currentAccount
             org.telegram.messenger.MessagesController r10 = org.telegram.messenger.MessagesController.getInstance(r10)
             int r10 = r10.maxMessageLength
             if (r5 <= r10) goto L_0x0048
-            goto L_0x071e
+            goto L_0x071f
         L_0x0048:
             int r5 = r21.length()
             if (r5 <= 0) goto L_0x0051
@@ -1814,11 +1814,11 @@ public class MentionsAdapter extends RecyclerListView.SelectionAdapter implement
             r8.searchGlobalRunnable = r12
             r0 = 200(0xc8, double:9.9E-322)
             org.telegram.messenger.AndroidUtilities.runOnUIThread(r12, r0)
-            goto L_0x071d
+            goto L_0x071e
         L_0x05e5:
             r0 = 1
             r8.showUsersResult(r9, r10, r0)
-            goto L_0x071d
+            goto L_0x071e
         L_0x05eb:
             r0 = 1
             if (r6 != r0) goto L_0x0645
@@ -1861,7 +1861,7 @@ public class MentionsAdapter extends RecyclerListView.SelectionAdapter implement
             r2 = 1
             r1 = r1 ^ r2
             r0.needChangePanelVisibility(r1)
-            goto L_0x071d
+            goto L_0x071e
         L_0x0645:
             r0 = 2
             if (r6 != r0) goto L_0x06db
@@ -1930,10 +1930,10 @@ public class MentionsAdapter extends RecyclerListView.SelectionAdapter implement
             r2 = 1
             r0 = r0 ^ r2
             r1.needChangePanelVisibility(r0)
-            goto L_0x071d
+            goto L_0x071e
         L_0x06db:
             r0 = 3
-            if (r6 != r0) goto L_0x070b
+            if (r6 != r0) goto L_0x070c
             java.lang.String[] r0 = org.telegram.messenger.AndroidUtilities.getCurrentKeyboardLanguage()
             java.lang.String[] r1 = r8.lastSearchKeyboardLanguage
             boolean r1 = java.util.Arrays.equals(r0, r1)
@@ -1944,17 +1944,18 @@ public class MentionsAdapter extends RecyclerListView.SelectionAdapter implement
         L_0x06f3:
             r8.lastSearchKeyboardLanguage = r0
             int r0 = r8.currentAccount
-            org.telegram.messenger.MediaDataController r0 = org.telegram.messenger.MediaDataController.getInstance(r0)
-            java.lang.String[] r1 = r8.lastSearchKeyboardLanguage
-            java.lang.String r2 = r10.toString()
-            org.telegram.ui.Adapters.MentionsAdapter$$ExternalSyntheticLambda6 r3 = new org.telegram.ui.Adapters.MentionsAdapter$$ExternalSyntheticLambda6
-            r3.<init>(r8)
+            org.telegram.messenger.MediaDataController r1 = org.telegram.messenger.MediaDataController.getInstance(r0)
+            java.lang.String[] r2 = r8.lastSearchKeyboardLanguage
+            java.lang.String r3 = r10.toString()
             r4 = 0
-            r0.getEmojiSuggestions(r1, r2, r4, r3)
-            goto L_0x071d
-        L_0x070b:
+            org.telegram.ui.Adapters.MentionsAdapter$$ExternalSyntheticLambda6 r5 = new org.telegram.ui.Adapters.MentionsAdapter$$ExternalSyntheticLambda6
+            r5.<init>(r8)
+            r6 = 1
+            r1.getEmojiSuggestions(r2, r3, r4, r5, r6)
+            goto L_0x071e
+        L_0x070c:
             r0 = 4
-            if (r6 != r0) goto L_0x071d
+            if (r6 != r0) goto L_0x071e
             r0 = 0
             r8.searchResultHashtags = r0
             r8.searchResultUsernames = r0
@@ -1963,9 +1964,9 @@ public class MentionsAdapter extends RecyclerListView.SelectionAdapter implement
             r8.searchResultCommands = r0
             r8.searchResultCommandsHelp = r0
             r8.searchResultCommandsUsers = r0
-        L_0x071d:
-            return
         L_0x071e:
+            return
+        L_0x071f:
             r0 = r6
             r8.searchForContextBot(r0, r0)
             org.telegram.ui.Adapters.MentionsAdapter$MentionsAdapterDelegate r1 = r8.delegate

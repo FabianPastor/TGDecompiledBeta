@@ -1,21 +1,18 @@
 package org.telegram.ui.Components;
 
-import org.telegram.tgnet.RequestDelegate;
-import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC$TL_error;
-import org.telegram.tgnet.TLRPC$TL_messages_getCustomEmojiDocuments;
+import java.util.ArrayList;
 import org.telegram.ui.Components.AnimatedEmojiDrawable;
 
-public final /* synthetic */ class AnimatedEmojiDrawable$EmojiDocumentFetcher$$ExternalSyntheticLambda2 implements RequestDelegate {
+public final /* synthetic */ class AnimatedEmojiDrawable$EmojiDocumentFetcher$$ExternalSyntheticLambda2 implements Runnable {
     public final /* synthetic */ AnimatedEmojiDrawable.EmojiDocumentFetcher f$0;
-    public final /* synthetic */ TLRPC$TL_messages_getCustomEmojiDocuments f$1;
+    public final /* synthetic */ ArrayList f$1;
 
-    public /* synthetic */ AnimatedEmojiDrawable$EmojiDocumentFetcher$$ExternalSyntheticLambda2(AnimatedEmojiDrawable.EmojiDocumentFetcher emojiDocumentFetcher, TLRPC$TL_messages_getCustomEmojiDocuments tLRPC$TL_messages_getCustomEmojiDocuments) {
+    public /* synthetic */ AnimatedEmojiDrawable$EmojiDocumentFetcher$$ExternalSyntheticLambda2(AnimatedEmojiDrawable.EmojiDocumentFetcher emojiDocumentFetcher, ArrayList arrayList) {
         this.f$0 = emojiDocumentFetcher;
-        this.f$1 = tLRPC$TL_messages_getCustomEmojiDocuments;
+        this.f$1 = arrayList;
     }
 
-    public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        this.f$0.lambda$fetchDocument$1(this.f$1, tLObject, tLRPC$TL_error);
+    public final void run() {
+        this.f$0.lambda$putToStorage$5(this.f$1);
     }
 }

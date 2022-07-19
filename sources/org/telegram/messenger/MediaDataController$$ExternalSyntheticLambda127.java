@@ -1,15 +1,15 @@
 package org.telegram.messenger;
 
-import java.util.Comparator;
-import org.telegram.tgnet.TLRPC$MessageEntity;
+import org.telegram.ui.Components.Bulletin;
 
-public final /* synthetic */ class MediaDataController$$ExternalSyntheticLambda127 implements Comparator {
-    public static final /* synthetic */ MediaDataController$$ExternalSyntheticLambda127 INSTANCE = new MediaDataController$$ExternalSyntheticLambda127();
+public final /* synthetic */ class MediaDataController$$ExternalSyntheticLambda127 implements Runnable {
+    public final /* synthetic */ Bulletin.UndoButton f$0;
 
-    private /* synthetic */ MediaDataController$$ExternalSyntheticLambda127() {
+    public /* synthetic */ MediaDataController$$ExternalSyntheticLambda127(Bulletin.UndoButton undoButton) {
+        this.f$0 = undoButton;
     }
 
-    public final int compare(Object obj, Object obj2) {
-        return MediaDataController.lambda$getTextStyleRuns$142((TLRPC$MessageEntity) obj, (TLRPC$MessageEntity) obj2);
+    public final void run() {
+        this.f$0.undo();
     }
 }

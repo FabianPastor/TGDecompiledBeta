@@ -28,6 +28,7 @@ import org.telegram.messenger.UserConfig;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC$Document;
 import org.telegram.tgnet.TLRPC$PhotoSize;
+import org.telegram.tgnet.TLRPC$StickerSet;
 import org.telegram.tgnet.TLRPC$StickerSetCovered;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.ActionBar.ThemeDescription;
@@ -170,7 +171,9 @@ public class FeaturedStickerSetCell2 extends FrameLayout {
         } else {
             this.textView.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
         }
-        this.valueTextView.setText(LocaleController.formatPluralString("Stickers", tLRPC$StickerSetCovered2.set.count, new Object[0]));
+        TextView textView3 = this.valueTextView;
+        TLRPC$StickerSet tLRPC$StickerSet = tLRPC$StickerSetCovered2.set;
+        textView3.setText(LocaleController.formatPluralString(tLRPC$StickerSet.emojis ? "EmojiCount" : "Stickers", tLRPC$StickerSet.count, new Object[0]));
         TLRPC$Document tLRPC$Document2 = tLRPC$StickerSetCovered2.cover;
         if (tLRPC$Document2 != null) {
             tLRPC$Document = tLRPC$Document2;
@@ -226,21 +229,21 @@ public class FeaturedStickerSetCell2 extends FrameLayout {
             animatorSet2.setDuration(250);
             AnimatorSet animatorSet3 = this.currentAnimation;
             Animator[] animatorArr = new Animator[6];
-            TextView textView3 = this.delButton;
+            TextView textView4 = this.delButton;
             Property property = View.ALPHA;
             float[] fArr = new float[1];
             fArr[0] = this.isInstalled ? 1.0f : 0.0f;
-            animatorArr[0] = ObjectAnimator.ofFloat(textView3, property, fArr);
-            TextView textView4 = this.delButton;
+            animatorArr[0] = ObjectAnimator.ofFloat(textView4, property, fArr);
+            TextView textView5 = this.delButton;
             Property property2 = View.SCALE_X;
             float[] fArr2 = new float[1];
             fArr2[0] = this.isInstalled ? 1.0f : 0.0f;
-            animatorArr[1] = ObjectAnimator.ofFloat(textView4, property2, fArr2);
-            TextView textView5 = this.delButton;
+            animatorArr[1] = ObjectAnimator.ofFloat(textView5, property2, fArr2);
+            TextView textView6 = this.delButton;
             Property property3 = View.SCALE_Y;
             float[] fArr3 = new float[1];
             fArr3[0] = this.isInstalled ? 1.0f : 0.0f;
-            animatorArr[2] = ObjectAnimator.ofFloat(textView5, property3, fArr3);
+            animatorArr[2] = ObjectAnimator.ofFloat(textView6, property3, fArr3);
             ProgressButton progressButton = this.addButton;
             Property property4 = View.ALPHA;
             float[] fArr4 = new float[1];

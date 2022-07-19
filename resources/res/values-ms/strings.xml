@@ -21,6 +21,12 @@
     <string name="fcm_fallback_notification_channel_label">Pelbagai</string>
     <string name="google_assistant_verification_channel_name">Pengesah Assistant</string>
     <string name="google_assistant_verification_notification_title">Google Assistant menghantar mesej</string>
+    <string name="hms_apk_not_installed_hints">Sesetengah ciri dalam %1$s mungkin tidak berfungsi dengan normal tanpa HMS Core, yang tidak dipasang pada peranti anda.</string>
+    <string name="hms_bindfaildlg_message">%1$s tidak dapat menggunakan HMS Core. Sila lancarkan Pengoptimum (Pengurus Telefon) atau pergi ke Tetapan, dayakan semua kebenaran untuk %2$s (termasuk auto-lancar dan pelancaran sekunder), dan cuba lagi.</string>
+    <string name="hms_confirm">OK</string>
+    <string name="hms_is_spoof">HMS Core (%1$s) yang dipasang pada peranti anda kelihatannya bukan versi yang rasmi. Sila nyahpasang HMS Core dari Tetapan dan kembali ke aplikasi ini untuk memasang versi rasmi.</string>
+    <string name="hms_push_channel">Lalai</string>
+    <string name="hms_spoof_hints">Nota</string>
     <string name="status_bar_notification_info_overflow">999+</string>
     <string name="wallet_buy_button_place_holder">Beli dengan Google</string>
 </resources>

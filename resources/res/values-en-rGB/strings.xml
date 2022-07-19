@@ -21,6 +21,12 @@
     <string name="fcm_fallback_notification_channel_label">Miscellaneous</string>
     <string name="google_assistant_verification_channel_name">Assistant verifier</string>
     <string name="google_assistant_verification_notification_title">Google Assistant sending message</string>
+    <string name="hms_apk_not_installed_hints">Some features in %1$s may not work properly without HMS Core, which is not installed on your device.</string>
+    <string name="hms_bindfaildlg_message">%1$s is unable to use HMS Core. Launch Optimiser (Phone Manager) or go to Settings, enable all permissions for %2$s (including auto-launch and secondary launch), and try again.</string>
+    <string name="hms_confirm">OK</string>
+    <string name="hms_is_spoof">It appears that you have an unofficial version of HMS Core (%1$s) installed on your device. Please uninstall HMS Core from Settings and return to this app to install the official version.</string>
+    <string name="hms_push_channel">Default</string>
+    <string name="hms_spoof_hints">Note</string>
     <string name="status_bar_notification_info_overflow">999+</string>
     <string name="wallet_buy_button_place_holder">Buy with Google</string>
 </resources>

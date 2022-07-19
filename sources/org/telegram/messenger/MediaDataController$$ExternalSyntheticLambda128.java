@@ -1,15 +1,15 @@
 package org.telegram.messenger;
 
-import java.util.Comparator;
-import org.telegram.tgnet.TLRPC$MessageEntity;
+public final /* synthetic */ class MediaDataController$$ExternalSyntheticLambda128 implements Runnable {
+    public final /* synthetic */ boolean[] f$0;
+    public final /* synthetic */ Runnable f$1;
 
-public final /* synthetic */ class MediaDataController$$ExternalSyntheticLambda128 implements Comparator {
-    public static final /* synthetic */ MediaDataController$$ExternalSyntheticLambda128 INSTANCE = new MediaDataController$$ExternalSyntheticLambda128();
-
-    private /* synthetic */ MediaDataController$$ExternalSyntheticLambda128() {
+    public /* synthetic */ MediaDataController$$ExternalSyntheticLambda128(boolean[] zArr, Runnable runnable) {
+        this.f$0 = zArr;
+        this.f$1 = runnable;
     }
 
-    public final int compare(Object obj, Object obj2) {
-        return MediaDataController.lambda$static$124((TLRPC$MessageEntity) obj, (TLRPC$MessageEntity) obj2);
+    public final void run() {
+        MediaDataController.lambda$fillWithAnimatedEmoji$184(this.f$0, this.f$1);
     }
 }

@@ -21,6 +21,12 @@
     <string name="fcm_fallback_notification_channel_label">Askotarikoak</string>
     <string name="google_assistant_verification_channel_name">Laguntzailea eginbidearen egiaztatzailea</string>
     <string name="google_assistant_verification_notification_title">Google Laguntzailea mezu bat bidaltzen ari da</string>
+    <string name="hms_apk_not_installed_hints">Baliteke %1$s zerbitzuko zenbait eginbidek ongi ez funtzionatzea HMS Core-rik gabe, eta programa hori instalatu gabe dago zure gailuan.</string>
+    <string name="hms_bindfaildlg_message">%1$s gailuak ezin izan du erabili HMS Core. Abiarazi Optimizatzailea (Telefono-kudeatzailea) edo joan ezarpenetara, gaitu %2$s gailuen baimen guztiak (abiarazte automatikoa eta bigarren mailako abiaraztea barne) eta saiatu berriro.</string>
+    <string name="hms_confirm">Ados</string>
+    <string name="hms_is_spoof">HMS Core-ren ofiziala ez den bertsio bat (%1$s) daukazu gailuan instalatuta. Desinstalatu HMS Core ezarpenetatik eta itzuli aplikazio honetara, bertsio ofiziala instalatzeko.</string>
+    <string name="hms_push_channel">Lehenetsia</string>
+    <string name="hms_spoof_hints">Oharra</string>
     <string name="status_bar_notification_info_overflow">999+</string>
     <string name="wallet_buy_button_place_holder">Erosi Google-rekin</string>
 </resources>

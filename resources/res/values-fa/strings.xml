@@ -21,6 +21,12 @@
     <string name="fcm_fallback_notification_channel_label">موارد دیگر</string>
     <string name="google_assistant_verification_channel_name">تأییدکننده دستیار</string>
     <string name="google_assistant_verification_notification_title">‏«دستیار Google» درحال ارسال پیام</string>
+    <string name="hms_apk_not_installed_hints">بدون HMS Core، که در دستگاه شما نصب نشده است، برخی از قابلیت‌های %1$s ممکن است به‌درستی کار نکنند.</string>
+    <string name="hms_bindfaildlg_message">%1$s قادر به استفاده از HMS Core نیست. «بهینه‌ساز» (مدیر تلفن) را راه‌اندازی کنید یا به «تنظیمات» بروید، همۀ مجوزها (از جمله راه‌اندازی خودکار و راه‌اندازی ثانویه) را برای %2$s فعال کنید، و دوباره امتحان کنید.</string>
+    <string name="hms_confirm">تأييد</string>
+    <string name="hms_is_spoof">به نظر می‌رسد که نسخۀ غیررسمی HMS Core (%1$s) را بر روی دستگاه خود نصب کرده‌اید. لطفاً HMS Core را از «تنظیمات» حذف‌نصب کرده و برای نصب نسخۀ رسمی به این برنامه بازگردید.</string>
+    <string name="hms_push_channel">پيش‌فرض</string>
+    <string name="hms_spoof_hints">توجه</string>
     <string name="status_bar_notification_info_overflow">999+</string>
     <string name="wallet_buy_button_place_holder">خرید با Google</string>
 </resources>

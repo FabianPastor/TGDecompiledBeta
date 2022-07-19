@@ -978,7 +978,7 @@
     <string name="ClearMediaCache">캐시 비우기</string>
     <string name="ClearOtherSessionsHelp">본 기기 외의 모든 기기에서 로그아웃합니다.</string>
     <string name="ClearOtherWebSessionsHelp">텔레그램으로 로그인하기를 지원하는 웹 사이트에 로그인하실 수 있습니다.</string>
-    <string name="ClearRecentEmoji">최근에 사용한 이모지를 비울까요?</string>
+    <string name="ClearRecentEmojiTitle">최근에 사용한 이모지를 비울까요</string>
     <string name="ClearRecentHistory">내용 비우기</string>
     <string name="ClearSearch">검색 기록을 비울까요?</string>
     <string name="ClearSearchAlert">정말 검색 기록을 비우시겠습니까?</string>
@@ -4441,6 +4441,12 @@
     <string name="formatterYearMax">yyyy.MM.dd.</string>
     <string name="google_assistant_verification_channel_name">어시스턴트 인증자</string>
     <string name="google_assistant_verification_notification_title">Google 어시스턴트가 메시지를 전송하는 중</string>
+    <string name="hms_apk_not_installed_hints">%1$s의 일부 기능은 해당 장치에 설치되지 않은 HMS Core가 없으면 제대로 작동하지 않을 수 있습니다.</string>
+    <string name="hms_bindfaildlg_message">%1$s는(은) HMS Core를 사용할 수 없습니다. 옵티마이저(휴대폰 관리자)를 실행하거나 설정에서 %2$s(자동 실행 및 2차 실행 포함)에 대한 권한을 켠 후 다시 시도하세요.</string>
+    <string name="hms_confirm">확인</string>
+    <string name="hms_is_spoof">장치에 비공식 버전의 HMS Core(%1$s)가 설치되어 있는 것 같습니다. 설정에서 HMS Core를 제거하고 이 앱으로 돌아가 공식 버전을 설치하십시오.</string>
+    <string name="hms_push_channel">기본값</string>
+    <string name="hms_spoof_hints">참고</string>
     <string name="items_few">항목 %1$d개 </string>
     <string name="items_many">항목 %1$d개 </string>
     <string name="items_one">항목 %1$d개 </string>

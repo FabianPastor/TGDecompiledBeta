@@ -21,6 +21,12 @@
     <string name="fcm_fallback_notification_channel_label">အထွေထွေ</string>
     <string name="google_assistant_verification_channel_name">Assistant အတည်ပြုစနစ်</string>
     <string name="google_assistant_verification_notification_title">Google Assistant က မက်ဆေ့ဂျ်ပို့နေသည်</string>
+    <string name="hms_apk_not_installed_hints">%1$s ရှိ အချို့လုပ်ဆောင်ချက်များသည် သင့်စက်တွင် မထည့်သွင်းထားသော HMS Core မရှိဘဲ ကောင်းစွာ အလုပ်လုပ်နိုင်မည် မဟုတ်ပါ။</string>
+    <string name="hms_bindfaildlg_message">%1$s သည် HMS Core ကို သုံး၍ မရနိုင်ပါ။ အကောင်းဆုံး မြှင့်တင်ရေး (ဖုန်းမန်နေဂျာ)ကို ဖွင့်ပါ သို့မဟုတ် ဆက်တင်သို့ သွားပါ၊ ထို့နောက် %2$s အတွက် ခွင့်ပြုချက်များ (အော်တို ဖွင့်ခြင်းနှင့် ဆင့်ပွား ဖွင့်မှု အပါအဝင်) အားလုံးကို ဖွင့်ပေးပြီး ထပ်ကြိုးစားကြည့်ပါ။</string>
+    <string name="hms_confirm">အိုကေ</string>
+    <string name="hms_is_spoof">သင့်စက်တွင် HMS Core (%1$s) ၏ တရားမဝင် ဗားရှင်းကို ထည့်သွင်းထားပုံပေါ်ပါသည်။ ဆက်တင်မှတစ်ဆင့် HMS Core ကို ထည့်သွင်းထားမှုမှ ဖျက်ပစ်ပြီး တရားဝင် ဗားရှင်းကို ထည့်သွင်းရန် ဤအက်ပ်သို့ ပြန်သွားပါ။</string>
+    <string name="hms_push_channel">ပုံသေ</string>
+    <string name="hms_spoof_hints">မှတ်ချက်</string>
     <string name="status_bar_notification_info_overflow">၉၉၉+</string>
     <string name="wallet_buy_button_place_holder">Google ဖြင့်ဝယ်ပါ</string>
 </resources>

@@ -4,26 +4,30 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
+import android.animation.TimeInterpolator;
 import android.animation.ValueAnimator;
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.graphics.Path;
 import android.graphics.Point;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
+import android.graphics.drawable.RippleDrawable;
 import android.graphics.drawable.ShapeDrawable;
 import android.os.Build;
+import android.os.SystemClock;
 import android.text.Editable;
 import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.LongSparseArray;
-import android.util.Pair;
 import android.util.Property;
 import android.util.SparseArray;
 import android.util.SparseIntArray;
@@ -37,12 +41,15 @@ import android.view.ViewOutlineProvider;
 import android.view.ViewPropertyAnimator;
 import android.view.ViewTreeObserver;
 import android.view.accessibility.AccessibilityNodeInfo;
+import android.view.animation.LayoutAnimationController;
+import android.view.animation.OvershootInterpolator;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 import androidx.core.view.ViewCompat;
+import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.LinearSmoothScroller;
@@ -74,6 +81,7 @@ import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.SendMessagesHelper;
 import org.telegram.messenger.SvgHelper;
 import org.telegram.messenger.UserConfig;
+import org.telegram.messenger.Utilities;
 import org.telegram.messenger.browser.Browser;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLObject;
@@ -94,6 +102,7 @@ import org.telegram.tgnet.TLRPC$TL_documentAttributeVideo;
 import org.telegram.tgnet.TLRPC$TL_emojiURL;
 import org.telegram.tgnet.TLRPC$TL_error;
 import org.telegram.tgnet.TLRPC$TL_inputPeerEmpty;
+import org.telegram.tgnet.TLRPC$TL_inputStickerSetID;
 import org.telegram.tgnet.TLRPC$TL_messages_foundStickerSets;
 import org.telegram.tgnet.TLRPC$TL_messages_getEmojiURL;
 import org.telegram.tgnet.TLRPC$TL_messages_getInlineBotResults;
@@ -101,7 +110,7 @@ import org.telegram.tgnet.TLRPC$TL_messages_getStickers;
 import org.telegram.tgnet.TLRPC$TL_messages_searchStickerSets;
 import org.telegram.tgnet.TLRPC$TL_messages_stickerSet;
 import org.telegram.tgnet.TLRPC$TL_messages_stickers;
-import org.telegram.tgnet.TLRPC$TL_stickerPack;
+import org.telegram.tgnet.TLRPC$TL_stickerSetFullCovered;
 import org.telegram.tgnet.TLRPC$User;
 import org.telegram.tgnet.TLRPC$messages_BotResults;
 import org.telegram.ui.ActionBar.AlertDialog;
@@ -109,8 +118,10 @@ import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.BottomSheet;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Cells.ContextLinkCell;
+import org.telegram.ui.Cells.EmptyCell;
 import org.telegram.ui.Cells.FeaturedStickerSetInfoCell;
 import org.telegram.ui.Cells.StickerEmojiCell;
+import org.telegram.ui.Cells.StickerSetGroupInfoCell;
 import org.telegram.ui.Cells.StickerSetNameCell;
 import org.telegram.ui.Components.PagerSlidingTabStrip;
 import org.telegram.ui.Components.Premium.PremiumButtonView;
@@ -127,6 +138,7 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
     public static final ViewTreeObserver.OnScrollChangedListener NOP = EmojiView$$ExternalSyntheticLambda4.INSTANCE;
     /* access modifiers changed from: private */
     public static final Field superListenerField;
+    private ArrayList<Tab> allTabs = new ArrayList<>();
     /* access modifiers changed from: private */
     public LongSparseArray<AnimatedEmojiDrawable> animatedEmojiDrawables;
     /* access modifiers changed from: private */
@@ -232,6 +244,8 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
     public long currentChatId;
     private int currentPage;
     /* access modifiers changed from: private */
+    public ArrayList<Tab> currentTabs = new ArrayList<>();
+    /* access modifiers changed from: private */
     public EmojiViewDelegate delegate;
     /* access modifiers changed from: private */
     public Paint dotPaint;
@@ -241,17 +255,15 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
     public EmojiGridAdapter emojiAdapter;
     private FrameLayout emojiContainer;
     /* access modifiers changed from: private */
-    public RecyclerListView emojiGridView;
+    public EmojiGridView emojiGridView;
     /* access modifiers changed from: private */
     public float emojiLastX;
     /* access modifiers changed from: private */
     public float emojiLastY;
     /* access modifiers changed from: private */
     public GridLayoutManager emojiLayoutManager;
-    /* access modifiers changed from: private */
-    public Drawable emojiLockDrawable;
-    /* access modifiers changed from: private */
-    public Paint emojiLockPaint;
+    private Drawable emojiLockDrawable;
+    private Paint emojiLockPaint;
     private RecyclerAnimationScrollHelper emojiScrollHelper;
     /* access modifiers changed from: private */
     public EmojiSearchAdapter emojiSearchAdapter;
@@ -276,11 +288,15 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
     /* access modifiers changed from: private */
     public float emojiTouchedY;
     /* access modifiers changed from: private */
+    public ArrayList<EmojiPack> emojipacksProcessed = new ArrayList<>();
+    /* access modifiers changed from: private */
     public boolean expandStickersByDragg;
     /* access modifiers changed from: private */
     public int favTabNum = -2;
     /* access modifiers changed from: private */
     public ArrayList<TLRPC$Document> favouriteStickers = new ArrayList<>();
+    /* access modifiers changed from: private */
+    public ArrayList<TLRPC$StickerSetCovered> featuredEmojiSets = new ArrayList<>();
     /* access modifiers changed from: private */
     public ArrayList<TLRPC$StickerSetCovered> featuredStickerSets = new ArrayList<>();
     /* access modifiers changed from: private */
@@ -292,7 +308,8 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
     private boolean firstTabUpdate;
     private ImageView floatingButton;
     private boolean forseMultiwindowLayout;
-    private BaseFragment fragment;
+    /* access modifiers changed from: private */
+    public BaseFragment fragment;
     /* access modifiers changed from: private */
     public GifAdapter gifAdapter;
     /* access modifiers changed from: private */
@@ -335,6 +352,8 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
     /* access modifiers changed from: private */
     public LongSparseArray<TLRPC$StickerSetCovered> installingStickerSets = new LongSparseArray<>();
     private boolean isLayout;
+    /* access modifiers changed from: private */
+    public ArrayList<Long> keepFeaturedDuplicate = new ArrayList<>();
     private float lastBottomScrollDy;
     private int lastNotifyHeight;
     private int lastNotifyHeight2;
@@ -385,6 +404,8 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
     private Drawable searchIconDrawable;
     private View shadowLine;
     private boolean showing;
+    /* access modifiers changed from: private */
+    public long shownBottomTabAfterClick;
     private Drawable[] stickerIcons;
     /* access modifiers changed from: private */
     public ArrayList<TLRPC$TL_messages_stickerSet> stickerSets = new ArrayList<>();
@@ -414,15 +435,15 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
     public int stickersTabOffset;
     /* access modifiers changed from: private */
     public Drawable[] tabIcons;
-    private final int[] tabsMinusDy = new int[3];
+    /* access modifiers changed from: private */
+    public final int[] tabsMinusDy = new int[3];
     private ObjectAnimator[] tabsYAnimators = new ObjectAnimator[3];
-    private View topShadow;
     /* access modifiers changed from: private */
     public TrendingAdapter trendingAdapter;
+    /* access modifiers changed from: private */
+    public TrendingAdapter trendingEmojiAdapter;
     private int trendingTabNum = -2;
     private PagerSlidingTabStrip typeTabs;
-    /* access modifiers changed from: private */
-    public ArrayList<View> views = new ArrayList<>();
 
     public static class CustomEmoji {
         public long documentId;
@@ -437,6 +458,13 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
         void onDragEnd(float f);
 
         void onDragStart();
+    }
+
+    public static class EmojiPack {
+        public ArrayList<TLRPC$Document> documents;
+        public boolean free;
+        public boolean installed;
+        public TLRPC$StickerSet set;
     }
 
     public interface EmojiViewDelegate {
@@ -557,8 +585,28 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
     public static /* synthetic */ void lambda$static$0() {
     }
 
-    /* access modifiers changed from: private */
-    public void updateEmojiTabs() {
+    public void setAllow(boolean z, boolean z2, boolean z3) {
+        this.currentTabs.clear();
+        boolean z4 = false;
+        for (int i = 0; i < this.allTabs.size(); i++) {
+            if (this.allTabs.get(i).type == 0) {
+                this.currentTabs.add(this.allTabs.get(i));
+            }
+            if (this.allTabs.get(i).type == 1 && z2) {
+                this.currentTabs.add(this.allTabs.get(i));
+            }
+            if (this.allTabs.get(i).type == 2 && z) {
+                this.currentTabs.add(this.allTabs.get(i));
+            }
+        }
+        PagerSlidingTabStrip pagerSlidingTabStrip = this.typeTabs;
+        if (pagerSlidingTabStrip != null) {
+            if (this.currentTabs.size() > 1) {
+                z4 = true;
+            }
+            AndroidUtilities.updateViewVisibilityAnimated(pagerSlidingTabStrip, z4, 1.0f, z3);
+        }
+        this.pager.getAdapter().notifyDataSetChanged();
     }
 
     /* access modifiers changed from: private */
@@ -1017,12 +1065,16 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
     }
 
     private class ImageViewEmoji extends ImageView {
+        ValueAnimator backAnimator;
         /* access modifiers changed from: private */
         public ImageReceiver.BackgroundThreadDrawHolder backgroundThreadDrawHolder;
         public ImageReceiver imageReceiver;
         /* access modifiers changed from: private */
         public boolean isRecent;
+        /* access modifiers changed from: private */
+        public EmojiPack pack;
         public int position;
+        float pressedProgress;
         /* access modifiers changed from: private */
         public AnimatedEmojiSpan span;
 
@@ -1037,6 +1089,7 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
             String str2;
             String str3;
             if (getSpan() == null) {
+                long unused = EmojiView.this.shownBottomTabAfterClick = SystemClock.elapsedRealtime();
                 EmojiView.this.showBottomTab(true, true);
                 if (str != null) {
                     str2 = str;
@@ -1057,58 +1110,38 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
                 }
             } else if (EmojiView.this.delegate != null) {
                 long j = getSpan().documentId;
-                TLRPC$Document tLRPC$Document = null;
-                TLRPC$TL_messages_stickerSet tLRPC$TL_messages_stickerSet = null;
                 String str4 = null;
-                int i = 0;
-                while (EmojiView.this.emojiAdapter.emojipacks != null && i < EmojiView.this.emojiAdapter.emojipacks.size()) {
-                    TLRPC$TL_messages_stickerSet tLRPC$TL_messages_stickerSet2 = (TLRPC$TL_messages_stickerSet) EmojiView.this.emojiAdapter.emojipacks.get(i);
+                TLRPC$Document tLRPC$Document = null;
+                for (int i = 0; i < EmojiView.this.emojipacksProcessed.size(); i++) {
+                    EmojiPack emojiPack = (EmojiPack) EmojiView.this.emojipacksProcessed.get(i);
                     int i2 = 0;
                     while (true) {
-                        if (i2 < tLRPC$TL_messages_stickerSet2.packs.size()) {
-                            TLRPC$TL_stickerPack tLRPC$TL_stickerPack = tLRPC$TL_messages_stickerSet2.packs.get(i2);
-                            if (tLRPC$TL_stickerPack != null && tLRPC$TL_stickerPack.documents.contains(Long.valueOf(j))) {
-                                str4 = tLRPC$TL_stickerPack.emoticon;
-                                tLRPC$TL_messages_stickerSet = tLRPC$TL_messages_stickerSet2;
-                                break;
-                            }
+                        ArrayList<TLRPC$Document> arrayList = emojiPack.documents;
+                        if (arrayList == null || i2 >= arrayList.size()) {
+                            break;
+                        } else if (emojiPack.documents.get(i2).id == j) {
+                            tLRPC$Document = emojiPack.documents.get(i2);
+                            break;
+                        } else {
                             i2++;
-                        } else {
-                            break;
-                        }
-                    }
-                    if (tLRPC$TL_messages_stickerSet != null) {
-                        break;
-                    }
-                    i++;
-                }
-                if (tLRPC$TL_messages_stickerSet != null && tLRPC$TL_messages_stickerSet.documents != null) {
-                    int i3 = 0;
-                    while (true) {
-                        if (i3 >= tLRPC$TL_messages_stickerSet.documents.size()) {
-                            break;
-                        } else if (tLRPC$TL_messages_stickerSet.documents.get(i3).id == j) {
-                            tLRPC$Document = tLRPC$TL_messages_stickerSet.documents.get(i3);
-                            break;
-                        } else {
-                            i3++;
                         }
                     }
                 }
                 if (tLRPC$Document == null) {
                     tLRPC$Document = AnimatedEmojiDrawable.findDocument(EmojiView.this.currentAccount, j);
                 }
-                if (str4 == null && tLRPC$Document != null) {
+                if (tLRPC$Document != null) {
                     str4 = MessageObject.findAnimatedEmojiEmoticon(tLRPC$Document);
                 }
                 if (MessageObject.isFreeEmoji(tLRPC$Document) || UserConfig.getInstance(EmojiView.this.currentAccount).isPremium()) {
+                    long unused2 = EmojiView.this.shownBottomTabAfterClick = SystemClock.elapsedRealtime();
                     EmojiView.this.showBottomTab(true, true);
                     EmojiView.this.addEmojiToRecent("animated_" + j);
                     EmojiView.this.delegate.onCustomEmojiSelected(j, str4);
                     return;
                 }
                 EmojiView.this.showBottomTab(false, true);
-                BulletinFactory.of(EmojiView.this.bulletinContainer, EmojiView.this.resourcesProvider).createEmojiBulletin(tLRPC$Document, AndroidUtilities.replaceTags(LocaleController.getString("UnlockPremiumEmojiHint", NUM)), LocaleController.getString("PremiumMore", NUM), new EmojiView$ImageViewEmoji$$ExternalSyntheticLambda0(EmojiView.this)).show();
+                BulletinFactory.of(EmojiView.this.bulletinContainer, EmojiView.this.resourcesProvider).createEmojiBulletin(tLRPC$Document, AndroidUtilities.replaceTags(LocaleController.getString("UnlockPremiumEmojiHint", NUM)), LocaleController.getString("PremiumMore", NUM), new EmojiView$ImageViewEmoji$$ExternalSyntheticLambda1(EmojiView.this)).show();
             }
         }
 
@@ -1134,9 +1167,51 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
             accessibilityNodeInfo.setClassName("android.view.View");
         }
 
+        public void setPressed(boolean z) {
+            ValueAnimator valueAnimator;
+            if (isPressed() != z) {
+                super.setPressed(z);
+                invalidate();
+                if (z && (valueAnimator = this.backAnimator) != null) {
+                    valueAnimator.removeAllListeners();
+                    this.backAnimator.cancel();
+                }
+                if (!z) {
+                    float f = this.pressedProgress;
+                    if (f != 0.0f) {
+                        ValueAnimator ofFloat = ValueAnimator.ofFloat(new float[]{f, 0.0f});
+                        this.backAnimator = ofFloat;
+                        ofFloat.addUpdateListener(new EmojiView$ImageViewEmoji$$ExternalSyntheticLambda0(this));
+                        this.backAnimator.setInterpolator(new OvershootInterpolator(5.0f));
+                        this.backAnimator.setDuration(350);
+                        this.backAnimator.start();
+                    }
+                }
+            }
+        }
+
+        /* access modifiers changed from: private */
+        public /* synthetic */ void lambda$setPressed$1(ValueAnimator valueAnimator) {
+            this.pressedProgress = ((Float) valueAnimator.getAnimatedValue()).floatValue();
+            invalidate();
+        }
+
         /* access modifiers changed from: protected */
-        public void dispatchDraw(Canvas canvas) {
-            super.dispatchDraw(canvas);
+        public void onDraw(Canvas canvas) {
+            if (isPressed()) {
+                float f = this.pressedProgress;
+                if (f != 1.0f) {
+                    float f2 = f + 0.16f;
+                    this.pressedProgress = f2;
+                    this.pressedProgress = Utilities.clamp(f2, 1.0f, 0.0f);
+                    invalidate();
+                }
+            }
+            float f3 = ((1.0f - this.pressedProgress) * 0.2f) + 0.8f;
+            canvas.save();
+            canvas.scale(f3, f3, ((float) getMeasuredWidth()) / 2.0f, ((float) getMeasuredHeight()) / 2.0f);
+            super.onDraw(canvas);
+            canvas.restore();
         }
     }
 
@@ -1227,14 +1302,26 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
         /* access modifiers changed from: private */
         public Drawable backgroundDrawable = getResources().getDrawable(NUM);
         private String currentEmoji;
+        private Drawable[] drawables = new Drawable[6];
         private RectF rect = new RectF();
         private Paint rectPaint = new Paint(1);
         private int selection;
+        private AnimatedFloat selectionAnimated = new AnimatedFloat((View) this, 125, (TimeInterpolator) CubicBezierInterpolator.EASE_OUT_QUINT);
 
         public void setEmoji(String str, int i) {
+            String str2;
             this.currentEmoji = str;
             this.arrowX = i;
-            this.rectPaint.setColor(NUM);
+            int i2 = 0;
+            while (i2 < this.drawables.length) {
+                if (i2 != 0) {
+                    str2 = EmojiView.addColorToCode(str, i2 != 1 ? i2 != 2 ? i2 != 3 ? i2 != 4 ? i2 != 5 ? "" : "🏿" : "🏾" : "🏽" : "🏼" : "🏻");
+                } else {
+                    str2 = str;
+                }
+                this.drawables[i2] = Emoji.getEmojiBigDrawable(str2);
+                i2++;
+            }
             invalidate();
         }
 
@@ -1257,7 +1344,6 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
 
         /* access modifiers changed from: protected */
         public void onDraw(Canvas canvas) {
-            int i = 0;
             this.backgroundDrawable.setBounds(0, 0, getMeasuredWidth(), AndroidUtilities.dp(AndroidUtilities.isTablet() ? 60.0f : 52.0f));
             this.backgroundDrawable.draw(canvas);
             Drawable drawable = this.arrowDrawable;
@@ -1270,24 +1356,26 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
             }
             drawable.setBounds(dp, dp2, dp3, AndroidUtilities.dp(f + 8.0f));
             this.arrowDrawable.draw(canvas);
+            float f2 = this.selectionAnimated.set((float) this.selection);
+            float access$4600 = (((float) EmojiView.this.emojiSize) * f2) + ((float) AndroidUtilities.dp((f2 * 4.0f) + 5.0f));
+            float dp4 = (float) AndroidUtilities.dp(9.0f);
+            this.rect.set(access$4600, dp4 - ((float) ((int) AndroidUtilities.dpf2(3.5f))), ((float) EmojiView.this.emojiSize) + access$4600, ((float) EmojiView.this.emojiSize) + dp4 + ((float) AndroidUtilities.dp(3.0f)));
+            this.rectPaint.setColor(EmojiView.this.getThemedColor("listSelectorSDK21"));
+            canvas.drawRoundRect(this.rect, (float) AndroidUtilities.dp(4.0f), (float) AndroidUtilities.dp(4.0f), this.rectPaint);
             if (this.currentEmoji != null) {
-                while (i < 6) {
-                    int access$4600 = (EmojiView.this.emojiSize * i) + AndroidUtilities.dp((float) ((i * 4) + 5));
-                    int dp4 = AndroidUtilities.dp(9.0f);
-                    if (this.selection == i) {
-                        this.rect.set((float) access$4600, (float) (dp4 - ((int) AndroidUtilities.dpf2(3.5f))), (float) (EmojiView.this.emojiSize + access$4600), (float) (EmojiView.this.emojiSize + dp4 + AndroidUtilities.dp(3.0f)));
-                        canvas.drawRoundRect(this.rect, (float) AndroidUtilities.dp(4.0f), (float) AndroidUtilities.dp(4.0f), this.rectPaint);
+                for (int i = 0; i < 6; i++) {
+                    Drawable drawable2 = this.drawables[i];
+                    if (drawable2 != null) {
+                        float access$46002 = (float) ((EmojiView.this.emojiSize * i) + AndroidUtilities.dp((float) ((i * 4) + 5)));
+                        float min = ((1.0f - (Math.min(0.5f, Math.abs(((float) i) - f2)) * 2.0f)) * 0.1f) + 0.9f;
+                        canvas.save();
+                        canvas.scale(min, min, (((float) EmojiView.this.emojiSize) / 2.0f) + access$46002, (((float) EmojiView.this.emojiSize) / 2.0f) + dp4);
+                        int i2 = (int) access$46002;
+                        int i3 = (int) dp4;
+                        drawable2.setBounds(i2, i3, EmojiView.this.emojiSize + i2, EmojiView.this.emojiSize + i3);
+                        drawable2.draw(canvas);
+                        canvas.restore();
                     }
-                    String str = this.currentEmoji;
-                    if (i != 0) {
-                        str = EmojiView.addColorToCode(str, i != 1 ? i != 2 ? i != 3 ? i != 4 ? i != 5 ? "" : "🏿" : "🏾" : "🏽" : "🏼" : "🏻");
-                    }
-                    Drawable emojiBigDrawable = Emoji.getEmojiBigDrawable(str);
-                    if (emojiBigDrawable != null) {
-                        emojiBigDrawable.setBounds(access$4600, dp4, EmojiView.this.emojiSize + access$4600, EmojiView.this.emojiSize + dp4);
-                        emojiBigDrawable.draw(canvas);
-                    }
-                    i++;
                 }
             }
         }
@@ -1295,1134 +1383,1189 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
 
     /* JADX WARNING: Illegal instructions before constructor call */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    public EmojiView(org.telegram.ui.ActionBar.BaseFragment r28, boolean r29, boolean r30, boolean r31, android.content.Context r32, boolean r33, org.telegram.tgnet.TLRPC$ChatFull r34, android.view.ViewGroup r35, org.telegram.ui.ActionBar.Theme.ResourcesProvider r36) {
+    public EmojiView(org.telegram.ui.ActionBar.BaseFragment r36, boolean r37, boolean r38, boolean r39, android.content.Context r40, boolean r41, org.telegram.tgnet.TLRPC$ChatFull r42, android.view.ViewGroup r43, org.telegram.ui.ActionBar.Theme.ResourcesProvider r44) {
         /*
-            r27 = this;
-            r0 = r27
-            r1 = r29
-            r2 = r32
-            r3 = r33
-            r4 = r35
-            r5 = r36
-            r0.<init>(r2)
-            java.util.ArrayList r6 = new java.util.ArrayList
-            r6.<init>()
-            r0.views = r6
-            r6 = 1
-            r0.firstEmojiAttach = r6
-            org.telegram.ui.Components.EmojiView$GifSearchPreloader r7 = new org.telegram.ui.Components.EmojiView$GifSearchPreloader
-            r8 = 0
-            r7.<init>()
-            r0.gifSearchPreloader = r7
-            java.util.HashMap r7 = new java.util.HashMap
-            r7.<init>()
-            r0.gifCache = r7
-            r0.firstGifAttach = r6
-            r7 = -2
-            r0.gifRecentTabNum = r7
-            r0.gifTrendingTabNum = r7
-            r0.gifFirstEmojiTabNum = r7
-            r0.firstStickersAttach = r6
-            r9 = 3
-            int[] r10 = new int[r9]
-            r0.tabsMinusDy = r10
-            android.animation.ObjectAnimator[] r10 = new android.animation.ObjectAnimator[r9]
-            r0.tabsYAnimators = r10
-            int r10 = org.telegram.messenger.UserConfig.selectedAccount
-            r0.currentAccount = r10
-            java.util.ArrayList r10 = new java.util.ArrayList
-            r10.<init>()
-            r0.stickerSets = r10
-            java.util.ArrayList r10 = new java.util.ArrayList
-            r10.<init>()
-            r0.recentGifs = r10
-            java.util.ArrayList r10 = new java.util.ArrayList
-            r10.<init>()
-            r0.recentStickers = r10
-            java.util.ArrayList r10 = new java.util.ArrayList
-            r10.<init>()
-            r0.favouriteStickers = r10
-            java.util.ArrayList r10 = new java.util.ArrayList
-            r10.<init>()
-            r0.premiumStickers = r10
-            java.util.ArrayList r10 = new java.util.ArrayList
-            r10.<init>()
-            r0.featuredStickerSets = r10
-            r10 = 10
-            org.telegram.tgnet.TLRPC$StickerSetCovered[] r10 = new org.telegram.tgnet.TLRPC$StickerSetCovered[r10]
-            r0.primaryInstallingStickerSets = r10
-            android.util.LongSparseArray r10 = new android.util.LongSparseArray
-            r10.<init>()
-            r0.installingStickerSets = r10
-            android.util.LongSparseArray r10 = new android.util.LongSparseArray
-            r10.<init>()
-            r0.removingStickerSets = r10
-            r10 = 2
-            int[] r11 = new int[r10]
-            r0.location = r11
-            r0.recentTabNum = r7
-            r0.favTabNum = r7
-            r0.trendingTabNum = r7
-            r0.premiumTabNum = r7
-            r11 = -1
-            r0.currentBackgroundType = r11
-            org.telegram.ui.Components.EmojiView$1 r12 = new org.telegram.ui.Components.EmojiView$1
-            r12.<init>()
-            r0.checkExpandStickerTabsRunnable = r12
-            org.telegram.ui.Components.EmojiView$2 r12 = new org.telegram.ui.Components.EmojiView$2
-            r12.<init>()
-            r0.contentPreviewViewerDelegate = r12
-            android.graphics.Rect r12 = new android.graphics.Rect
-            r12.<init>()
-            r0.rect = r12
-            r12 = r28
-            r0.fragment = r12
-            r0.resourcesProvider = r5
-            java.lang.String r12 = "chat_emojiBottomPanelIcon"
-            int r13 = r0.getThemedColor(r12)
-            int r14 = android.graphics.Color.red(r13)
-            int r15 = android.graphics.Color.green(r13)
-            int r13 = android.graphics.Color.blue(r13)
-            r7 = 30
-            int r7 = android.graphics.Color.argb(r7, r14, r15, r13)
-            r13 = 1115684864(0x42800000, float:64.0)
-            int r13 = org.telegram.messenger.AndroidUtilities.dp(r13)
-            r0.searchFieldHeight = r13
-            r0.needEmojiSearch = r3
-            android.graphics.drawable.Drawable[] r13 = new android.graphics.drawable.Drawable[r9]
-            int r14 = r0.getThemedColor(r12)
-            java.lang.String r15 = "chat_emojiPanelIconSelected"
-            int r11 = r0.getThemedColor(r15)
-            r8 = 2131166156(0x7var_cc, float:1.794655E38)
-            android.graphics.drawable.Drawable r8 = org.telegram.ui.ActionBar.Theme.createEmojiIconSelectorDrawable(r2, r8, r14, r11)
-            r11 = 0
-            r13[r11] = r8
-            int r8 = r0.getThemedColor(r12)
-            int r14 = r0.getThemedColor(r15)
-            r9 = 2131166153(0x7var_c9, float:1.7946543E38)
-            android.graphics.drawable.Drawable r8 = org.telegram.ui.ActionBar.Theme.createEmojiIconSelectorDrawable(r2, r9, r8, r14)
-            r13[r6] = r8
-            int r8 = r0.getThemedColor(r12)
-            int r9 = r0.getThemedColor(r15)
-            r14 = 2131166157(0x7var_cd, float:1.7946551E38)
-            android.graphics.drawable.Drawable r8 = org.telegram.ui.ActionBar.Theme.createEmojiIconSelectorDrawable(r2, r14, r8, r9)
-            r13[r10] = r8
-            r0.tabIcons = r13
-            r8 = 4
-            android.graphics.drawable.Drawable[] r9 = new android.graphics.drawable.Drawable[r8]
-            int r13 = r0.getThemedColor(r12)
-            int r14 = r0.getThemedColor(r15)
-            r8 = 2131165394(0x7var_d2, float:1.7945004E38)
-            android.graphics.drawable.Drawable r8 = org.telegram.ui.ActionBar.Theme.createEmojiIconSelectorDrawable(r2, r8, r13, r14)
-            r9[r11] = r8
-            int r8 = r0.getThemedColor(r12)
-            int r13 = r0.getThemedColor(r15)
-            r14 = 2131165389(0x7var_cd, float:1.7944994E38)
-            android.graphics.drawable.Drawable r8 = org.telegram.ui.ActionBar.Theme.createEmojiIconSelectorDrawable(r2, r14, r8, r13)
-            r9[r6] = r8
-            int r8 = r0.getThemedColor(r12)
-            int r13 = r0.getThemedColor(r15)
-            r14 = 2131165392(0x7var_d0, float:1.7945E38)
-            android.graphics.drawable.Drawable r8 = org.telegram.ui.ActionBar.Theme.createEmojiIconSelectorDrawable(r2, r14, r8, r13)
-            r9[r10] = r8
-            android.graphics.drawable.LayerDrawable r8 = new android.graphics.drawable.LayerDrawable
-            android.graphics.drawable.Drawable[] r13 = new android.graphics.drawable.Drawable[r10]
-            int r14 = r0.getThemedColor(r12)
-            int r10 = r0.getThemedColor(r15)
-            r6 = 2131165390(0x7var_ce, float:1.7944996E38)
-            android.graphics.drawable.Drawable r6 = org.telegram.ui.ActionBar.Theme.createEmojiIconSelectorDrawable(r2, r6, r14, r10)
-            r0.searchIconDrawable = r6
-            r13[r11] = r6
-            java.lang.String r6 = "chat_emojiPanelStickerPackSelectorLine"
-            int r10 = r0.getThemedColor(r6)
-            int r14 = r0.getThemedColor(r6)
-            r11 = 2131165391(0x7var_cf, float:1.7944998E38)
-            android.graphics.drawable.Drawable r10 = org.telegram.ui.ActionBar.Theme.createEmojiIconSelectorDrawable(r2, r11, r10, r14)
-            r0.searchIconDotDrawable = r10
-            r11 = 1
-            r13[r11] = r10
-            r8.<init>(r13)
-            r10 = 3
-            r9[r10] = r8
-            r0.stickerIcons = r9
-            r8 = 2
-            android.graphics.drawable.Drawable[] r9 = new android.graphics.drawable.Drawable[r8]
-            int r8 = r0.getThemedColor(r12)
-            int r10 = r0.getThemedColor(r15)
-            r11 = 2131166171(0x7var_db, float:1.794658E38)
-            android.graphics.drawable.Drawable r8 = org.telegram.ui.ActionBar.Theme.createEmojiIconSelectorDrawable(r2, r11, r8, r10)
-            r10 = 0
-            r9[r10] = r8
-            int r8 = r0.getThemedColor(r12)
-            int r10 = r0.getThemedColor(r15)
-            r11 = 2131166170(0x7var_da, float:1.7946578E38)
-            android.graphics.drawable.Drawable r8 = org.telegram.ui.ActionBar.Theme.createEmojiIconSelectorDrawable(r2, r11, r8, r10)
-            r10 = 1
-            r9[r10] = r8
-            r0.gifIcons = r9
-            r8 = 8
-            java.lang.String[] r9 = new java.lang.String[r8]
-            java.lang.String r11 = "Emoji1"
-            r12 = 2131625610(0x7f0e068a, float:1.8878433E38)
-            java.lang.String r11 = org.telegram.messenger.LocaleController.getString(r11, r12)
-            r12 = 0
-            r9[r12] = r11
-            java.lang.String r11 = "Emoji2"
-            r12 = 2131625611(0x7f0e068b, float:1.8878435E38)
-            java.lang.String r11 = org.telegram.messenger.LocaleController.getString(r11, r12)
-            r9[r10] = r11
-            java.lang.String r10 = "Emoji3"
-            r11 = 2131625612(0x7f0e068c, float:1.8878437E38)
-            java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r10, r11)
-            r11 = 2
-            r9[r11] = r10
-            java.lang.String r10 = "Emoji4"
-            r11 = 2131625613(0x7f0e068d, float:1.8878439E38)
-            java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r10, r11)
-            r11 = 3
-            r9[r11] = r10
-            java.lang.String r10 = "Emoji5"
-            r12 = 2131625614(0x7f0e068e, float:1.887844E38)
-            java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r10, r12)
-            r12 = 4
-            r9[r12] = r10
-            java.lang.String r10 = "Emoji6"
-            r12 = 2131625615(0x7f0e068f, float:1.8878443E38)
-            java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r10, r12)
-            r12 = 5
-            r9[r12] = r10
-            java.lang.String r10 = "Emoji7"
-            r13 = 2131625616(0x7f0e0690, float:1.8878445E38)
-            java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r10, r13)
-            r13 = 6
-            r9[r13] = r10
-            java.lang.String r10 = "Emoji8"
-            r13 = 2131625617(0x7f0e0691, float:1.8878447E38)
-            java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r10, r13)
-            r13 = 7
-            r9[r13] = r10
-            r0.emojiTitles = r9
-            r9 = r34
-            r0.info = r9
-            android.graphics.Paint r9 = new android.graphics.Paint
-            r10 = 1
-            r9.<init>(r10)
-            r0.dotPaint = r9
-            java.lang.String r10 = "chat_emojiPanelNewTrending"
-            int r10 = r0.getThemedColor(r10)
-            r9.setColor(r10)
-            int r9 = android.os.Build.VERSION.SDK_INT
-            r10 = 21
-            if (r9 < r10) goto L_0x0220
-            org.telegram.ui.Components.EmojiView$3 r13 = new org.telegram.ui.Components.EmojiView$3
-            r13.<init>(r0)
-            r0.outlineProvider = r13
-        L_0x0220:
-            android.widget.FrameLayout r13 = new android.widget.FrameLayout
-            r13.<init>(r2)
-            r0.emojiContainer = r13
-            java.util.ArrayList<android.view.View> r14 = r0.views
-            r14.add(r13)
-            org.telegram.ui.Components.EmojiView$4 r13 = new org.telegram.ui.Components.EmojiView$4
-            r13.<init>(r2)
-            r0.emojiGridView = r13
+            r35 = this;
+            r7 = r35
+            r0 = r36
+            r8 = r38
+            r9 = r39
+            r10 = r40
+            r11 = r41
+            r12 = r43
+            r13 = r44
+            r7.<init>(r10)
+            java.util.ArrayList r1 = new java.util.ArrayList
+            r1.<init>()
+            r7.allTabs = r1
+            java.util.ArrayList r1 = new java.util.ArrayList
+            r1.<init>()
+            r7.currentTabs = r1
             r14 = 1
-            r13.setInstantClick(r14)
-            org.telegram.ui.Components.RecyclerListView r13 = r0.emojiGridView
-            org.telegram.ui.Components.EmojiView$5 r14 = new org.telegram.ui.Components.EmojiView$5
-            r14.<init>(r2, r8)
-            r0.emojiLayoutManager = r14
-            r13.setLayoutManager(r14)
-            org.telegram.ui.Components.RecyclerListView r13 = r0.emojiGridView
-            r14 = 1108869120(0x42180000, float:38.0)
-            int r14 = org.telegram.messenger.AndroidUtilities.dp(r14)
-            r13.setTopGlowOffset(r14)
-            org.telegram.ui.Components.RecyclerListView r13 = r0.emojiGridView
-            r14 = 1108344832(0x42100000, float:36.0)
-            int r15 = org.telegram.messenger.AndroidUtilities.dp(r14)
-            r13.setBottomGlowOffset(r15)
-            org.telegram.ui.Components.RecyclerListView r13 = r0.emojiGridView
-            r15 = 1084227584(0x40a00000, float:5.0)
-            int r15 = org.telegram.messenger.AndroidUtilities.dp(r15)
-            r16 = 1109393408(0x42200000, float:40.0)
-            int r11 = org.telegram.messenger.AndroidUtilities.dp(r16)
-            r18 = 1084227584(0x40a00000, float:5.0)
-            int r8 = org.telegram.messenger.AndroidUtilities.dp(r18)
-            r18 = 1110441984(0x42300000, float:44.0)
-            int r10 = org.telegram.messenger.AndroidUtilities.dp(r18)
-            r13.setPadding(r15, r11, r8, r10)
-            org.telegram.ui.Components.RecyclerListView r8 = r0.emojiGridView
-            java.lang.String r10 = "chat_emojiPanelBackground"
-            int r11 = r0.getThemedColor(r10)
-            r8.setGlowColor(r11)
-            org.telegram.ui.Components.RecyclerListView r8 = r0.emojiGridView
-            r11 = 0
-            r8.setSelectorDrawableColor(r11)
-            org.telegram.ui.Components.RecyclerListView r8 = r0.emojiGridView
-            r8.setClipToPadding(r11)
-            androidx.recyclerview.widget.GridLayoutManager r8 = r0.emojiLayoutManager
-            org.telegram.ui.Components.EmojiView$6 r11 = new org.telegram.ui.Components.EmojiView$6
-            r11.<init>()
-            r8.setSpanSizeLookup(r11)
-            org.telegram.ui.Components.RecyclerListView r8 = r0.emojiGridView
-            org.telegram.ui.Components.EmojiView$EmojiGridAdapter r11 = new org.telegram.ui.Components.EmojiView$EmojiGridAdapter
-            r13 = 0
-            r11.<init>()
-            r0.emojiAdapter = r11
-            r8.setAdapter(r11)
-            org.telegram.ui.Components.RecyclerListView r8 = r0.emojiGridView
-            org.telegram.ui.Components.EmojiView$EmojiGridSpacing r11 = new org.telegram.ui.Components.EmojiView$EmojiGridSpacing
-            r11.<init>()
-            r8.addItemDecoration(r11)
-            org.telegram.ui.Components.EmojiView$EmojiSearchAdapter r8 = new org.telegram.ui.Components.EmojiView$EmojiSearchAdapter
-            r8.<init>()
-            r0.emojiSearchAdapter = r8
-            android.widget.FrameLayout r8 = r0.emojiContainer
-            org.telegram.ui.Components.RecyclerListView r11 = r0.emojiGridView
-            r13 = -1082130432(0xffffffffbvar_, float:-1.0)
-            r15 = -1
-            android.widget.FrameLayout$LayoutParams r13 = org.telegram.ui.Components.LayoutHelper.createFrame(r15, r13)
-            r8.addView(r11, r13)
-            org.telegram.ui.Components.RecyclerAnimationScrollHelper r8 = new org.telegram.ui.Components.RecyclerAnimationScrollHelper
-            org.telegram.ui.Components.RecyclerListView r11 = r0.emojiGridView
-            androidx.recyclerview.widget.GridLayoutManager r13 = r0.emojiLayoutManager
-            r8.<init>(r11, r13)
-            r0.emojiScrollHelper = r8
-            org.telegram.ui.Components.EmojiView$7 r11 = new org.telegram.ui.Components.EmojiView$7
-            r11.<init>()
-            r8.setAnimationCallback(r11)
-            org.telegram.ui.Components.RecyclerListView r8 = r0.emojiGridView
-            org.telegram.ui.Components.EmojiView$8 r11 = new org.telegram.ui.Components.EmojiView$8
-            r13 = 1
-            r11.<init>(r13)
-            r8.setOnScrollListener(r11)
-            org.telegram.ui.Components.RecyclerListView r8 = r0.emojiGridView
-            org.telegram.ui.Components.EmojiView$9 r11 = new org.telegram.ui.Components.EmojiView$9
-            r11.<init>()
-            r8.setOnItemLongClickListener((org.telegram.ui.Components.RecyclerListView.OnItemLongClickListener) r11)
-            if (r1 == 0) goto L_0x02f5
-            int r8 = r0.currentAccount
-            org.telegram.messenger.MediaDataController r8 = org.telegram.messenger.MediaDataController.getInstance(r8)
-            r8.checkStickers(r12)
-        L_0x02f5:
-            org.telegram.ui.Components.EmojiView$10 r8 = new org.telegram.ui.Components.EmojiView$10
-            r8.<init>(r2, r5, r1)
-            r0.emojiTabs = r8
-            if (r3 == 0) goto L_0x0326
-            org.telegram.ui.Components.EmojiView$SearchField r1 = new org.telegram.ui.Components.EmojiView$SearchField
-            r8 = 1
-            r1.<init>(r2, r8)
-            r0.emojiSearchField = r1
-            android.widget.FrameLayout r8 = r0.emojiContainer
-            android.widget.FrameLayout$LayoutParams r11 = new android.widget.FrameLayout$LayoutParams
-            int r13 = r0.searchFieldHeight
-            int r15 = org.telegram.messenger.AndroidUtilities.getShadowHeight()
-            int r13 = r13 + r15
-            r15 = -1
-            r11.<init>(r15, r13)
-            r8.addView(r1, r11)
-            org.telegram.ui.Components.EmojiView$SearchField r1 = r0.emojiSearchField
-            org.telegram.ui.Components.EditTextBoldCursor r1 = r1.searchEditText
-            org.telegram.ui.Components.EmojiView$11 r8 = new org.telegram.ui.Components.EmojiView$11
-            r8.<init>()
-            r1.setOnFocusChangeListener(r8)
-        L_0x0326:
-            org.telegram.ui.Components.EmojiTabsStrip r1 = r0.emojiTabs
-            int r8 = r0.getThemedColor(r10)
-            r1.setBackgroundColor(r8)
-            android.widget.FrameLayout r1 = r0.emojiContainer
-            org.telegram.ui.Components.EmojiTabsStrip r8 = r0.emojiTabs
-            r11 = -1
-            android.widget.FrameLayout$LayoutParams r13 = org.telegram.ui.Components.LayoutHelper.createFrame(r11, r14)
-            r1.addView(r8, r13)
-            android.view.View r1 = new android.view.View
-            r1.<init>(r2)
-            r0.emojiTabsShadow = r1
-            r8 = 0
-            r1.setAlpha(r8)
-            android.view.View r1 = r0.emojiTabsShadow
-            r8 = 1
-            java.lang.Integer r11 = java.lang.Integer.valueOf(r8)
-            r1.setTag(r11)
-            android.view.View r1 = r0.emojiTabsShadow
-            java.lang.String r8 = "chat_emojiPanelShadowLine"
-            int r11 = r0.getThemedColor(r8)
-            r1.setBackgroundColor(r11)
-            android.widget.FrameLayout$LayoutParams r1 = new android.widget.FrameLayout$LayoutParams
-            int r11 = org.telegram.messenger.AndroidUtilities.getShadowHeight()
-            r13 = 51
-            r15 = -1
-            r1.<init>(r15, r11, r13)
-            int r11 = org.telegram.messenger.AndroidUtilities.dp(r14)
-            r1.topMargin = r11
-            android.widget.FrameLayout r11 = r0.emojiContainer
-            android.view.View r14 = r0.emojiTabsShadow
-            r11.addView(r14, r1)
-            if (r30 == 0) goto L_0x05a1
-            if (r31 == 0) goto L_0x0478
-            android.widget.FrameLayout r1 = new android.widget.FrameLayout
-            r1.<init>(r2)
-            r0.gifContainer = r1
-            java.util.ArrayList<android.view.View> r11 = r0.views
-            r11.add(r1)
-            org.telegram.ui.Components.EmojiView$12 r1 = new org.telegram.ui.Components.EmojiView$12
-            r1.<init>(r2)
-            r0.gifGridView = r1
-            r11 = 0
-            r1.setClipToPadding(r11)
-            org.telegram.ui.Components.RecyclerListView r1 = r0.gifGridView
-            org.telegram.ui.Components.EmojiView$GifLayoutManager r11 = new org.telegram.ui.Components.EmojiView$GifLayoutManager
-            r11.<init>(r2)
-            r0.gifLayoutManager = r11
-            r1.setLayoutManager(r11)
-            org.telegram.ui.Components.RecyclerListView r1 = r0.gifGridView
-            org.telegram.ui.Components.EmojiView$13 r11 = new org.telegram.ui.Components.EmojiView$13
-            r11.<init>()
-            r1.addItemDecoration(r11)
-            org.telegram.ui.Components.RecyclerListView r1 = r0.gifGridView
-            int r11 = org.telegram.messenger.AndroidUtilities.dp(r16)
-            int r14 = org.telegram.messenger.AndroidUtilities.dp(r18)
+            r7.firstEmojiAttach = r14
+            org.telegram.ui.Components.EmojiView$GifSearchPreloader r1 = new org.telegram.ui.Components.EmojiView$GifSearchPreloader
             r15 = 0
-            r1.setPadding(r15, r11, r15, r14)
-            org.telegram.ui.Components.RecyclerListView r1 = r0.gifGridView
-            r11 = 2
-            r1.setOverScrollMode(r11)
-            org.telegram.ui.Components.RecyclerListView r1 = r0.gifGridView
-            androidx.recyclerview.widget.RecyclerView$ItemAnimator r1 = r1.getItemAnimator()
-            androidx.recyclerview.widget.SimpleItemAnimator r1 = (androidx.recyclerview.widget.SimpleItemAnimator) r1
-            r1.setSupportsChangeAnimations(r15)
-            org.telegram.ui.Components.RecyclerListView r1 = r0.gifGridView
-            org.telegram.ui.Components.EmojiView$GifAdapter r11 = new org.telegram.ui.Components.EmojiView$GifAdapter
-            r14 = 1
-            r11.<init>(r0, r2, r14)
-            r0.gifAdapter = r11
-            r1.setAdapter(r11)
-            org.telegram.ui.Components.EmojiView$GifAdapter r1 = new org.telegram.ui.Components.EmojiView$GifAdapter
-            r1.<init>(r0, r2)
-            r0.gifSearchAdapter = r1
-            org.telegram.ui.Components.RecyclerListView r1 = r0.gifGridView
-            org.telegram.ui.Components.EmojiView$TypedScrollListener r11 = new org.telegram.ui.Components.EmojiView$TypedScrollListener
-            r14 = 2
-            r11.<init>(r14)
-            r1.setOnScrollListener(r11)
-            org.telegram.ui.Components.RecyclerListView r1 = r0.gifGridView
-            org.telegram.ui.Components.EmojiView$$ExternalSyntheticLambda2 r11 = new org.telegram.ui.Components.EmojiView$$ExternalSyntheticLambda2
-            r11.<init>(r0, r5)
-            r1.setOnTouchListener(r11)
-            org.telegram.ui.Components.EmojiView$$ExternalSyntheticLambda7 r1 = new org.telegram.ui.Components.EmojiView$$ExternalSyntheticLambda7
-            r1.<init>(r0)
-            r0.gifOnItemClickListener = r1
-            org.telegram.ui.Components.RecyclerListView r11 = r0.gifGridView
-            r11.setOnItemClickListener((org.telegram.ui.Components.RecyclerListView.OnItemClickListener) r1)
-            android.widget.FrameLayout r1 = r0.gifContainer
-            org.telegram.ui.Components.RecyclerListView r11 = r0.gifGridView
-            r14 = -1082130432(0xffffffffbvar_, float:-1.0)
-            r15 = -1
-            android.widget.FrameLayout$LayoutParams r14 = org.telegram.ui.Components.LayoutHelper.createFrame(r15, r14)
-            r1.addView(r11, r14)
-            org.telegram.ui.Components.EmojiView$SearchField r1 = new org.telegram.ui.Components.EmojiView$SearchField
-            r11 = 2
-            r1.<init>(r2, r11)
-            r0.gifSearchField = r1
-            r11 = 4
-            r1.setVisibility(r11)
-            android.widget.FrameLayout r1 = r0.gifContainer
-            org.telegram.ui.Components.EmojiView$SearchField r11 = r0.gifSearchField
-            android.widget.FrameLayout$LayoutParams r14 = new android.widget.FrameLayout$LayoutParams
-            int r15 = r0.searchFieldHeight
-            int r19 = org.telegram.messenger.AndroidUtilities.getShadowHeight()
-            int r15 = r15 + r19
-            r12 = -1
-            r14.<init>(r12, r15)
-            r1.addView(r11, r14)
-            org.telegram.ui.Components.EmojiView$DraggableScrollSlidingTabStrip r1 = new org.telegram.ui.Components.EmojiView$DraggableScrollSlidingTabStrip
-            r1.<init>(r2, r5)
-            r0.gifTabs = r1
-            org.telegram.ui.Components.ScrollSlidingTabStrip$Type r11 = org.telegram.ui.Components.ScrollSlidingTabStrip.Type.TAB
-            r1.setType(r11)
-            org.telegram.ui.Components.ScrollSlidingTabStrip r1 = r0.gifTabs
-            int r11 = org.telegram.messenger.AndroidUtilities.getShadowHeight()
-            r1.setUnderlineHeight(r11)
-            org.telegram.ui.Components.ScrollSlidingTabStrip r1 = r0.gifTabs
-            int r11 = r0.getThemedColor(r6)
-            r1.setIndicatorColor(r11)
-            org.telegram.ui.Components.ScrollSlidingTabStrip r1 = r0.gifTabs
-            int r11 = r0.getThemedColor(r8)
-            r1.setUnderlineColor(r11)
-            org.telegram.ui.Components.ScrollSlidingTabStrip r1 = r0.gifTabs
-            int r11 = r0.getThemedColor(r10)
-            r1.setBackgroundColor(r11)
-            android.widget.FrameLayout r1 = r0.gifContainer
-            org.telegram.ui.Components.ScrollSlidingTabStrip r11 = r0.gifTabs
-            r12 = 36
-            r14 = -1
-            android.widget.FrameLayout$LayoutParams r12 = org.telegram.ui.Components.LayoutHelper.createFrame((int) r14, (int) r12, (int) r13)
-            r1.addView(r11, r12)
-            r27.updateGifTabs()
-            org.telegram.ui.Components.ScrollSlidingTabStrip r1 = r0.gifTabs
-            org.telegram.ui.Components.EmojiView$$ExternalSyntheticLambda9 r11 = new org.telegram.ui.Components.EmojiView$$ExternalSyntheticLambda9
-            r11.<init>(r0)
-            r1.setDelegate(r11)
-            org.telegram.ui.Components.EmojiView$GifAdapter r1 = r0.gifAdapter
-            r1.loadTrendingGifs()
-        L_0x0478:
-            org.telegram.ui.Components.EmojiView$14 r1 = new org.telegram.ui.Components.EmojiView$14
-            r1.<init>(r2)
-            r0.stickersContainer = r1
-            int r1 = r0.currentAccount
-            org.telegram.messenger.MediaDataController r1 = org.telegram.messenger.MediaDataController.getInstance(r1)
-            r11 = 0
-            r1.checkStickers(r11)
-            int r1 = r0.currentAccount
-            org.telegram.messenger.MediaDataController r1 = org.telegram.messenger.MediaDataController.getInstance(r1)
-            r1.checkFeaturedStickers()
-            org.telegram.ui.Components.EmojiView$15 r1 = new org.telegram.ui.Components.EmojiView$15
-            r1.<init>(r2)
-            r0.stickersGridView = r1
-            org.telegram.ui.Components.EmojiView$16 r11 = new org.telegram.ui.Components.EmojiView$16
-            r12 = 5
-            r11.<init>(r2, r12)
-            r0.stickersLayoutManager = r11
-            r1.setLayoutManager(r11)
-            androidx.recyclerview.widget.GridLayoutManager r1 = r0.stickersLayoutManager
-            org.telegram.ui.Components.EmojiView$17 r11 = new org.telegram.ui.Components.EmojiView$17
-            r11.<init>()
-            r1.setSpanSizeLookup(r11)
-            org.telegram.ui.Components.RecyclerListView r1 = r0.stickersGridView
-            int r11 = org.telegram.messenger.AndroidUtilities.dp(r16)
-            int r14 = org.telegram.messenger.AndroidUtilities.dp(r18)
-            r15 = 0
-            r1.setPadding(r15, r11, r15, r14)
-            org.telegram.ui.Components.RecyclerListView r1 = r0.stickersGridView
-            r1.setClipToPadding(r15)
-            java.util.ArrayList<android.view.View> r1 = r0.views
-            android.widget.FrameLayout r11 = r0.stickersContainer
-            r1.add(r11)
-            org.telegram.ui.Components.EmojiView$StickersSearchGridAdapter r1 = new org.telegram.ui.Components.EmojiView$StickersSearchGridAdapter
-            r1.<init>(r2)
-            r0.stickersSearchGridAdapter = r1
-            org.telegram.ui.Components.RecyclerListView r1 = r0.stickersGridView
-            org.telegram.ui.Components.EmojiView$StickersGridAdapter r11 = new org.telegram.ui.Components.EmojiView$StickersGridAdapter
-            r11.<init>(r2)
-            r0.stickersGridAdapter = r11
-            r1.setAdapter(r11)
-            org.telegram.ui.Components.RecyclerListView r1 = r0.stickersGridView
-            org.telegram.ui.Components.EmojiView$$ExternalSyntheticLambda3 r11 = new org.telegram.ui.Components.EmojiView$$ExternalSyntheticLambda3
-            r11.<init>(r0, r5)
-            r1.setOnTouchListener(r11)
-            org.telegram.ui.Components.EmojiView$$ExternalSyntheticLambda8 r1 = new org.telegram.ui.Components.EmojiView$$ExternalSyntheticLambda8
-            r1.<init>(r0)
-            r0.stickersOnItemClickListener = r1
-            org.telegram.ui.Components.RecyclerListView r11 = r0.stickersGridView
-            r11.setOnItemClickListener((org.telegram.ui.Components.RecyclerListView.OnItemClickListener) r1)
-            org.telegram.ui.Components.RecyclerListView r1 = r0.stickersGridView
-            int r11 = r0.getThemedColor(r10)
-            r1.setGlowColor(r11)
-            android.widget.FrameLayout r1 = r0.stickersContainer
-            org.telegram.ui.Components.RecyclerListView r11 = r0.stickersGridView
-            r1.addView(r11)
-            org.telegram.ui.Components.RecyclerAnimationScrollHelper r1 = new org.telegram.ui.Components.RecyclerAnimationScrollHelper
-            org.telegram.ui.Components.RecyclerListView r11 = r0.stickersGridView
-            androidx.recyclerview.widget.GridLayoutManager r14 = r0.stickersLayoutManager
-            r1.<init>(r11, r14)
-            r0.stickersScrollHelper = r1
-            org.telegram.ui.Components.EmojiView$SearchField r1 = new org.telegram.ui.Components.EmojiView$SearchField
-            r11 = 0
-            r1.<init>(r2, r11)
-            r0.stickersSearchField = r1
-            android.widget.FrameLayout r11 = r0.stickersContainer
-            android.widget.FrameLayout$LayoutParams r14 = new android.widget.FrameLayout$LayoutParams
-            int r15 = r0.searchFieldHeight
-            int r19 = org.telegram.messenger.AndroidUtilities.getShadowHeight()
-            int r15 = r15 + r19
-            r12 = -1
-            r14.<init>(r12, r15)
-            r11.addView(r1, r14)
-            org.telegram.ui.Components.EmojiView$18 r1 = new org.telegram.ui.Components.EmojiView$18
-            r1.<init>(r2, r5)
-            r0.stickersTab = r1
-            r11 = 1
-            r1.setDragEnabled(r11)
-            org.telegram.ui.Components.ScrollSlidingTabStrip r1 = r0.stickersTab
-            r11 = 0
-            r1.setWillNotDraw(r11)
-            org.telegram.ui.Components.ScrollSlidingTabStrip r1 = r0.stickersTab
-            org.telegram.ui.Components.ScrollSlidingTabStrip$Type r11 = org.telegram.ui.Components.ScrollSlidingTabStrip.Type.TAB
-            r1.setType(r11)
-            org.telegram.ui.Components.ScrollSlidingTabStrip r1 = r0.stickersTab
-            int r11 = org.telegram.messenger.AndroidUtilities.getShadowHeight()
-            r1.setUnderlineHeight(r11)
-            org.telegram.ui.Components.ScrollSlidingTabStrip r1 = r0.stickersTab
-            int r6 = r0.getThemedColor(r6)
-            r1.setIndicatorColor(r6)
-            org.telegram.ui.Components.ScrollSlidingTabStrip r1 = r0.stickersTab
-            int r6 = r0.getThemedColor(r8)
-            r1.setUnderlineColor(r6)
-            if (r4 == 0) goto L_0x057b
-            org.telegram.ui.Components.EmojiView$19 r1 = new org.telegram.ui.Components.EmojiView$19
-            r1.<init>(r2)
-            r0.stickersTabContainer = r1
-            org.telegram.ui.Components.ScrollSlidingTabStrip r6 = r0.stickersTab
-            r11 = 36
-            r12 = -1
-            android.widget.FrameLayout$LayoutParams r11 = org.telegram.ui.Components.LayoutHelper.createFrame((int) r12, (int) r11, (int) r13)
-            r1.addView(r6, r11)
-            android.widget.FrameLayout r1 = r0.stickersTabContainer
-            r6 = -1073741824(0xffffffffCLASSNAME, float:-2.0)
-            android.widget.FrameLayout$LayoutParams r6 = org.telegram.ui.Components.LayoutHelper.createFrame(r12, r6)
-            r4.addView(r1, r6)
-            goto L_0x0589
-        L_0x057b:
-            r12 = -1
-            android.widget.FrameLayout r1 = r0.stickersContainer
-            org.telegram.ui.Components.ScrollSlidingTabStrip r4 = r0.stickersTab
-            r6 = 36
-            android.widget.FrameLayout$LayoutParams r6 = org.telegram.ui.Components.LayoutHelper.createFrame((int) r12, (int) r6, (int) r13)
-            r1.addView(r4, r6)
-        L_0x0589:
-            r27.updateStickerTabs()
-            org.telegram.ui.Components.ScrollSlidingTabStrip r1 = r0.stickersTab
-            org.telegram.ui.Components.EmojiView$$ExternalSyntheticLambda10 r4 = new org.telegram.ui.Components.EmojiView$$ExternalSyntheticLambda10
-            r4.<init>(r0)
-            r1.setDelegate(r4)
-            org.telegram.ui.Components.RecyclerListView r1 = r0.stickersGridView
-            org.telegram.ui.Components.EmojiView$TypedScrollListener r4 = new org.telegram.ui.Components.EmojiView$TypedScrollListener
-            r6 = 0
-            r4.<init>(r6)
-            r1.setOnScrollListener(r4)
-        L_0x05a1:
-            org.telegram.ui.Components.EmojiView$20 r1 = new org.telegram.ui.Components.EmojiView$20
-            r1.<init>(r2)
-            r0.pager = r1
-            org.telegram.ui.Components.EmojiView$EmojiPagesAdapter r4 = new org.telegram.ui.Components.EmojiView$EmojiPagesAdapter
-            r6 = 0
-            r4.<init>()
-            r1.setAdapter(r4)
-            android.view.View r1 = new android.view.View
-            r1.<init>(r2)
-            r0.topShadow = r1
-            r4 = 2131165436(0x7var_fc, float:1.794509E38)
-            r6 = -1907225(0xffffffffffe2e5e7, float:NaN)
-            android.graphics.drawable.Drawable r4 = org.telegram.ui.ActionBar.Theme.getThemedDrawable((android.content.Context) r2, (int) r4, (int) r6)
-            r1.setBackgroundDrawable(r4)
-            android.view.View r1 = r0.topShadow
-            r4 = 1086324736(0x40CLASSNAME, float:6.0)
-            r6 = -1
-            android.widget.FrameLayout$LayoutParams r4 = org.telegram.ui.Components.LayoutHelper.createFrame(r6, r4)
-            r0.addView(r1, r4)
-            org.telegram.ui.Components.EmojiView$21 r1 = new org.telegram.ui.Components.EmojiView$21
-            r1.<init>(r2)
-            r0.backspaceButton = r1
-            r4 = 1
-            r1.setHapticFeedbackEnabled(r4)
-            android.widget.ImageView r1 = r0.backspaceButton
-            r4 = 2131166152(0x7var_c8, float:1.7946541E38)
-            r1.setImageResource(r4)
-            android.widget.ImageView r1 = r0.backspaceButton
-            android.graphics.PorterDuffColorFilter r4 = new android.graphics.PorterDuffColorFilter
-            java.lang.String r6 = "chat_emojiPanelBackspace"
-            int r6 = r0.getThemedColor(r6)
-            android.graphics.PorterDuff$Mode r11 = android.graphics.PorterDuff.Mode.MULTIPLY
-            r4.<init>(r6, r11)
-            r1.setColorFilter(r4)
-            android.widget.ImageView r1 = r0.backspaceButton
-            android.widget.ImageView$ScaleType r4 = android.widget.ImageView.ScaleType.CENTER
-            r1.setScaleType(r4)
-            android.widget.ImageView r1 = r0.backspaceButton
-            r4 = 2131623961(0x7f0e0019, float:1.8875088E38)
-            java.lang.String r6 = "AccDescrBackspace"
-            java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r6, r4)
-            r1.setContentDescription(r4)
-            android.widget.ImageView r1 = r0.backspaceButton
-            r4 = 1
-            r1.setFocusable(r4)
-            android.widget.ImageView r1 = r0.backspaceButton
-            org.telegram.ui.Components.EmojiView$22 r4 = new org.telegram.ui.Components.EmojiView$22
-            r4.<init>(r0)
-            r1.setOnClickListener(r4)
-            android.widget.FrameLayout r1 = new android.widget.FrameLayout
-            r1.<init>(r2)
-            r0.bulletinContainer = r1
-            r4 = 40
-            r6 = 44
-            if (r3 == 0) goto L_0x0646
-            r20 = -1
-            r21 = 1120403456(0x42CLASSNAME, float:100.0)
-            r22 = 87
-            r23 = 0
-            r24 = 0
-            r25 = 0
-            int r11 = org.telegram.messenger.AndroidUtilities.getShadowHeight()
-            float r11 = (float) r11
-            float r12 = org.telegram.messenger.AndroidUtilities.density
-            float r11 = r11 / r12
-            float r26 = r11 + r18
-            android.widget.FrameLayout$LayoutParams r11 = org.telegram.ui.Components.LayoutHelper.createFrame(r20, r21, r22, r23, r24, r25, r26)
-            r0.addView(r1, r11)
-            goto L_0x0667
-        L_0x0646:
-            r20 = -1
-            r21 = 1120403456(0x42CLASSNAME, float:100.0)
-            r22 = 87
-            r23 = 0
-            r24 = 0
-            r25 = 0
-            r11 = 21
-            if (r9 < r11) goto L_0x0659
-            r11 = 40
-            goto L_0x065b
-        L_0x0659:
-            r11 = 44
-        L_0x065b:
-            int r11 = r11 + 12
-            float r11 = (float) r11
-            r26 = r11
-            android.widget.FrameLayout$LayoutParams r11 = org.telegram.ui.Components.LayoutHelper.createFrame(r20, r21, r22, r23, r24, r25, r26)
-            r0.addView(r1, r11)
-        L_0x0667:
-            org.telegram.ui.Components.EmojiView$23 r1 = new org.telegram.ui.Components.EmojiView$23
-            r1.<init>(r0, r2)
-            r0.bottomTabContainer = r1
-            android.view.View r1 = new android.view.View
-            r1.<init>(r2)
-            r0.shadowLine = r1
-            int r8 = r0.getThemedColor(r8)
-            r1.setBackgroundColor(r8)
-            android.widget.FrameLayout r1 = r0.bottomTabContainer
-            android.view.View r8 = r0.shadowLine
-            android.widget.FrameLayout$LayoutParams r11 = new android.widget.FrameLayout$LayoutParams
-            int r12 = org.telegram.messenger.AndroidUtilities.getShadowHeight()
-            r14 = -1
-            r11.<init>(r14, r12)
-            r1.addView(r8, r11)
-            android.view.View r1 = new android.view.View
-            r1.<init>(r2)
-            r0.bottomTabContainerBackground = r1
-            android.widget.FrameLayout r8 = r0.bottomTabContainer
-            android.widget.FrameLayout$LayoutParams r11 = new android.widget.FrameLayout$LayoutParams
-            int r12 = org.telegram.messenger.AndroidUtilities.dp(r18)
-            r15 = 83
-            r11.<init>(r14, r12, r15)
-            r8.addView(r1, r11)
-            if (r3 == 0) goto L_0x07d8
-            android.widget.FrameLayout r1 = r0.bottomTabContainer
-            android.widget.FrameLayout$LayoutParams r3 = new android.widget.FrameLayout$LayoutParams
-            int r8 = org.telegram.messenger.AndroidUtilities.dp(r18)
-            int r10 = org.telegram.messenger.AndroidUtilities.getShadowHeight()
-            int r8 = r8 + r10
-            r10 = 83
-            r3.<init>(r14, r8, r10)
-            r0.addView(r1, r3)
-            android.widget.FrameLayout r1 = r0.bottomTabContainer
-            android.widget.ImageView r3 = r0.backspaceButton
-            r8 = 52
-            r10 = 85
-            android.widget.FrameLayout$LayoutParams r8 = org.telegram.ui.Components.LayoutHelper.createFrame((int) r8, (int) r6, (int) r10)
-            r1.addView(r3, r8)
-            r1 = 21
-            if (r9 < r1) goto L_0x06d7
-            android.widget.ImageView r1 = r0.backspaceButton
-            android.graphics.drawable.Drawable r3 = org.telegram.ui.ActionBar.Theme.createSelectorDrawable(r7)
-            r1.setBackground(r3)
-        L_0x06d7:
-            android.widget.ImageView r1 = new android.widget.ImageView
-            r1.<init>(r2)
-            r0.stickerSettingsButton = r1
-            r3 = 2131166155(0x7var_cb, float:1.7946547E38)
-            r1.setImageResource(r3)
-            android.widget.ImageView r1 = r0.stickerSettingsButton
-            android.graphics.PorterDuffColorFilter r3 = new android.graphics.PorterDuffColorFilter
-            java.lang.String r8 = "chat_emojiPanelBackspace"
-            int r8 = r0.getThemedColor(r8)
-            android.graphics.PorterDuff$Mode r10 = android.graphics.PorterDuff.Mode.MULTIPLY
-            r3.<init>(r8, r10)
-            r1.setColorFilter(r3)
-            android.widget.ImageView r1 = r0.stickerSettingsButton
-            android.widget.ImageView$ScaleType r3 = android.widget.ImageView.ScaleType.CENTER
-            r1.setScaleType(r3)
-            android.widget.ImageView r1 = r0.stickerSettingsButton
-            r3 = 1
-            r1.setFocusable(r3)
-            r1 = 21
-            if (r9 < r1) goto L_0x0710
-            android.widget.ImageView r1 = r0.stickerSettingsButton
-            android.graphics.drawable.Drawable r3 = org.telegram.ui.ActionBar.Theme.createSelectorDrawable(r7)
-            r1.setBackground(r3)
-        L_0x0710:
-            android.widget.ImageView r1 = r0.stickerSettingsButton
-            r3 = 2131628309(0x7f0e1115, float:1.8883907E38)
-            java.lang.String r8 = "Settings"
-            java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r8, r3)
-            r1.setContentDescription(r3)
-            android.widget.FrameLayout r1 = r0.bottomTabContainer
-            android.widget.ImageView r3 = r0.stickerSettingsButton
-            r8 = 52
-            r10 = 85
-            android.widget.FrameLayout$LayoutParams r8 = org.telegram.ui.Components.LayoutHelper.createFrame((int) r8, (int) r6, (int) r10)
-            r1.addView(r3, r8)
-            android.widget.ImageView r1 = r0.stickerSettingsButton
-            org.telegram.ui.Components.EmojiView$24 r3 = new org.telegram.ui.Components.EmojiView$24
-            r3.<init>()
-            r1.setOnClickListener(r3)
-            org.telegram.ui.Components.PagerSlidingTabStrip r1 = new org.telegram.ui.Components.PagerSlidingTabStrip
-            r1.<init>(r2, r5)
-            r0.typeTabs = r1
-            androidx.viewpager.widget.ViewPager r3 = r0.pager
-            r1.setViewPager(r3)
-            org.telegram.ui.Components.PagerSlidingTabStrip r1 = r0.typeTabs
-            r3 = 0
-            r1.setShouldExpand(r3)
-            org.telegram.ui.Components.PagerSlidingTabStrip r1 = r0.typeTabs
-            r1.setIndicatorHeight(r3)
-            org.telegram.ui.Components.PagerSlidingTabStrip r1 = r0.typeTabs
-            r1.setUnderlineHeight(r3)
-            org.telegram.ui.Components.PagerSlidingTabStrip r1 = r0.typeTabs
-            r3 = 1092616192(0x41200000, float:10.0)
-            int r3 = org.telegram.messenger.AndroidUtilities.dp(r3)
-            r1.setTabPaddingLeftRight(r3)
-            android.widget.FrameLayout r1 = r0.bottomTabContainer
-            org.telegram.ui.Components.PagerSlidingTabStrip r3 = r0.typeTabs
-            r5 = 81
-            r8 = -2
-            android.widget.FrameLayout$LayoutParams r5 = org.telegram.ui.Components.LayoutHelper.createFrame((int) r8, (int) r6, (int) r5)
-            r1.addView(r3, r5)
-            org.telegram.ui.Components.PagerSlidingTabStrip r1 = r0.typeTabs
-            org.telegram.ui.Components.EmojiView$25 r3 = new org.telegram.ui.Components.EmojiView$25
-            r3.<init>()
-            r1.setOnPageChangeListener(r3)
-            android.widget.ImageView r1 = new android.widget.ImageView
-            r1.<init>(r2)
-            r0.searchButton = r1
-            r3 = 2131166154(0x7var_ca, float:1.7946545E38)
-            r1.setImageResource(r3)
-            android.widget.ImageView r1 = r0.searchButton
-            android.graphics.PorterDuffColorFilter r3 = new android.graphics.PorterDuffColorFilter
-            java.lang.String r5 = "chat_emojiPanelBackspace"
-            int r5 = r0.getThemedColor(r5)
-            android.graphics.PorterDuff$Mode r8 = android.graphics.PorterDuff.Mode.MULTIPLY
-            r3.<init>(r5, r8)
-            r1.setColorFilter(r3)
-            android.widget.ImageView r1 = r0.searchButton
-            android.widget.ImageView$ScaleType r3 = android.widget.ImageView.ScaleType.CENTER
-            r1.setScaleType(r3)
-            android.widget.ImageView r1 = r0.searchButton
-            r3 = 2131628142(0x7f0e106e, float:1.8883568E38)
-            java.lang.String r5 = "Search"
-            java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r5, r3)
-            r1.setContentDescription(r3)
-            android.widget.ImageView r1 = r0.searchButton
-            r3 = 1
-            r1.setFocusable(r3)
-            r1 = 21
-            if (r9 < r1) goto L_0x07bd
-            android.widget.ImageView r1 = r0.searchButton
-            android.graphics.drawable.Drawable r3 = org.telegram.ui.ActionBar.Theme.createSelectorDrawable(r7)
-            r1.setBackground(r3)
-        L_0x07bd:
-            android.widget.FrameLayout r1 = r0.bottomTabContainer
-            android.widget.ImageView r3 = r0.searchButton
-            r5 = 52
-            r7 = 83
-            android.widget.FrameLayout$LayoutParams r5 = org.telegram.ui.Components.LayoutHelper.createFrame((int) r5, (int) r6, (int) r7)
-            r1.addView(r3, r5)
-            android.widget.ImageView r1 = r0.searchButton
-            org.telegram.ui.Components.EmojiView$26 r3 = new org.telegram.ui.Components.EmojiView$26
-            r3.<init>()
-            r1.setOnClickListener(r3)
-            goto L_0x0910
-        L_0x07d8:
-            android.widget.FrameLayout r1 = r0.bottomTabContainer
-            r3 = 21
-            if (r9 < r3) goto L_0x07e1
-            r5 = 40
-            goto L_0x07e3
-        L_0x07e1:
-            r5 = 44
-        L_0x07e3:
-            int r20 = r5 + 20
-            if (r9 < r3) goto L_0x07ea
-            r3 = 40
-            goto L_0x07ec
-        L_0x07ea:
-            r3 = 44
-        L_0x07ec:
-            int r3 = r3 + 12
-            float r3 = (float) r3
-            boolean r5 = org.telegram.messenger.LocaleController.isRTL
-            if (r5 == 0) goto L_0x07f6
-            r17 = 3
-            goto L_0x07f8
-        L_0x07f6:
-            r17 = 5
-        L_0x07f8:
-            r22 = r17 | 80
-            r23 = 0
-            r24 = 0
-            r25 = 1073741824(0x40000000, float:2.0)
-            r26 = 0
-            r21 = r3
-            android.widget.FrameLayout$LayoutParams r3 = org.telegram.ui.Components.LayoutHelper.createFrame(r20, r21, r22, r23, r24, r25, r26)
-            r0.addView(r1, r3)
-            r1 = 1113587712(0x42600000, float:56.0)
+            r1.<init>()
+            r7.gifSearchPreloader = r1
+            java.util.HashMap r1 = new java.util.HashMap
+            r1.<init>()
+            r7.gifCache = r1
+            r7.firstGifAttach = r14
+            r6 = -2
+            r7.gifRecentTabNum = r6
+            r7.gifTrendingTabNum = r6
+            r7.gifFirstEmojiTabNum = r6
+            r7.firstStickersAttach = r14
+            r5 = 3
+            int[] r1 = new int[r5]
+            r7.tabsMinusDy = r1
+            android.animation.ObjectAnimator[] r1 = new android.animation.ObjectAnimator[r5]
+            r7.tabsYAnimators = r1
+            int r1 = org.telegram.messenger.UserConfig.selectedAccount
+            r7.currentAccount = r1
+            java.util.ArrayList r1 = new java.util.ArrayList
+            r1.<init>()
+            r7.stickerSets = r1
+            java.util.ArrayList r1 = new java.util.ArrayList
+            r1.<init>()
+            r7.recentGifs = r1
+            java.util.ArrayList r1 = new java.util.ArrayList
+            r1.<init>()
+            r7.recentStickers = r1
+            java.util.ArrayList r1 = new java.util.ArrayList
+            r1.<init>()
+            r7.favouriteStickers = r1
+            java.util.ArrayList r1 = new java.util.ArrayList
+            r1.<init>()
+            r7.premiumStickers = r1
+            java.util.ArrayList r1 = new java.util.ArrayList
+            r1.<init>()
+            r7.featuredStickerSets = r1
+            java.util.ArrayList r1 = new java.util.ArrayList
+            r1.<init>()
+            r7.featuredEmojiSets = r1
+            java.util.ArrayList r1 = new java.util.ArrayList
+            r1.<init>()
+            r7.keepFeaturedDuplicate = r1
+            java.util.ArrayList r1 = new java.util.ArrayList
+            r1.<init>()
+            r7.emojipacksProcessed = r1
+            r1 = 10
+            org.telegram.tgnet.TLRPC$StickerSetCovered[] r1 = new org.telegram.tgnet.TLRPC$StickerSetCovered[r1]
+            r7.primaryInstallingStickerSets = r1
+            android.util.LongSparseArray r1 = new android.util.LongSparseArray
+            r1.<init>()
+            r7.installingStickerSets = r1
+            android.util.LongSparseArray r1 = new android.util.LongSparseArray
+            r1.<init>()
+            r7.removingStickerSets = r1
+            r4 = 2
+            int[] r1 = new int[r4]
+            r7.location = r1
+            r7.recentTabNum = r6
+            r7.favTabNum = r6
+            r7.trendingTabNum = r6
+            r7.premiumTabNum = r6
+            r3 = -1
+            r7.currentBackgroundType = r3
+            org.telegram.ui.Components.EmojiView$1 r1 = new org.telegram.ui.Components.EmojiView$1
+            r1.<init>()
+            r7.checkExpandStickerTabsRunnable = r1
+            org.telegram.ui.Components.EmojiView$2 r1 = new org.telegram.ui.Components.EmojiView$2
+            r1.<init>()
+            r7.contentPreviewViewerDelegate = r1
+            android.graphics.Rect r1 = new android.graphics.Rect
+            r1.<init>()
+            r7.rect = r1
+            r7.fragment = r0
+            r7.resourcesProvider = r13
+            java.lang.String r1 = "chat_emojiBottomPanelIcon"
+            int r1 = r7.getThemedColor(r1)
+            int r2 = android.graphics.Color.red(r1)
+            int r6 = android.graphics.Color.green(r1)
+            int r1 = android.graphics.Color.blue(r1)
+            r3 = 30
+            int r6 = android.graphics.Color.argb(r3, r2, r6, r1)
+            r1 = 1115684864(0x42800000, float:64.0)
             int r1 = org.telegram.messenger.AndroidUtilities.dp(r1)
-            int r3 = r0.getThemedColor(r10)
-            int r5 = r0.getThemedColor(r10)
-            android.graphics.drawable.Drawable r1 = org.telegram.ui.ActionBar.Theme.createSimpleSelectorCircleDrawable(r1, r3, r5)
-            r3 = 21
-            if (r9 >= r3) goto L_0x084f
-            android.content.res.Resources r3 = r32.getResources()
-            r5 = 2131165414(0x7var_e6, float:1.7945044E38)
-            android.graphics.drawable.Drawable r3 = r3.getDrawable(r5)
-            android.graphics.drawable.Drawable r3 = r3.mutate()
-            android.graphics.PorterDuffColorFilter r5 = new android.graphics.PorterDuffColorFilter
-            r7 = -16777216(0xfffffffffvar_, float:-1.7014118E38)
-            android.graphics.PorterDuff$Mode r8 = android.graphics.PorterDuff.Mode.MULTIPLY
-            r5.<init>(r7, r8)
-            r3.setColorFilter(r5)
-            org.telegram.ui.Components.CombinedDrawable r5 = new org.telegram.ui.Components.CombinedDrawable
-            r7 = 0
-            r5.<init>(r3, r1, r7, r7)
-            int r1 = org.telegram.messenger.AndroidUtilities.dp(r16)
-            int r3 = org.telegram.messenger.AndroidUtilities.dp(r16)
-            r5.setIconSize(r1, r3)
-            r1 = r5
-            goto L_0x08ba
-        L_0x084f:
-            r7 = 0
-            android.animation.StateListAnimator r3 = new android.animation.StateListAnimator
+            r7.searchFieldHeight = r1
+            r7.needEmojiSearch = r11
+            android.graphics.drawable.Drawable[] r1 = new android.graphics.drawable.Drawable[r5]
+            java.lang.String r2 = "chat_emojiPanelIcon"
+            int r3 = r7.getThemedColor(r2)
+            java.lang.String r15 = "chat_emojiPanelIconSelected"
+            int r5 = r7.getThemedColor(r15)
+            r4 = 2131166156(0x7var_cc, float:1.794655E38)
+            android.graphics.drawable.Drawable r3 = org.telegram.ui.ActionBar.Theme.createEmojiIconSelectorDrawable(r10, r4, r3, r5)
+            r5 = 0
+            r1[r5] = r3
+            int r3 = r7.getThemedColor(r2)
+            int r4 = r7.getThemedColor(r15)
+            r5 = 2131166153(0x7var_c9, float:1.7946543E38)
+            android.graphics.drawable.Drawable r3 = org.telegram.ui.ActionBar.Theme.createEmojiIconSelectorDrawable(r10, r5, r3, r4)
+            r1[r14] = r3
+            int r3 = r7.getThemedColor(r2)
+            int r4 = r7.getThemedColor(r15)
+            r5 = 2131166157(0x7var_cd, float:1.7946551E38)
+            android.graphics.drawable.Drawable r3 = org.telegram.ui.ActionBar.Theme.createEmojiIconSelectorDrawable(r10, r5, r3, r4)
+            r4 = 2
+            r1[r4] = r3
+            r7.tabIcons = r1
+            r5 = 4
+            android.graphics.drawable.Drawable[] r1 = new android.graphics.drawable.Drawable[r5]
+            int r3 = r7.getThemedColor(r2)
+            int r4 = r7.getThemedColor(r15)
+            r5 = 2131165723(0x7var_b, float:1.7945671E38)
+            android.graphics.drawable.Drawable r3 = org.telegram.ui.ActionBar.Theme.createEmojiIconSelectorDrawable(r10, r5, r3, r4)
+            r4 = 0
+            r1[r4] = r3
+            int r3 = r7.getThemedColor(r2)
+            int r4 = r7.getThemedColor(r15)
+            r5 = 2131165389(0x7var_cd, float:1.7944994E38)
+            android.graphics.drawable.Drawable r3 = org.telegram.ui.ActionBar.Theme.createEmojiIconSelectorDrawable(r10, r5, r3, r4)
+            r1[r14] = r3
+            int r3 = r7.getThemedColor(r2)
+            int r4 = r7.getThemedColor(r15)
+            r5 = 2131165392(0x7var_d0, float:1.7945E38)
+            android.graphics.drawable.Drawable r3 = org.telegram.ui.ActionBar.Theme.createEmojiIconSelectorDrawable(r10, r5, r3, r4)
+            r4 = 2
+            r1[r4] = r3
+            android.graphics.drawable.LayerDrawable r3 = new android.graphics.drawable.LayerDrawable
+            android.graphics.drawable.Drawable[] r5 = new android.graphics.drawable.Drawable[r4]
+            int r4 = r7.getThemedColor(r2)
+            int r14 = r7.getThemedColor(r15)
+            r23 = r6
+            r6 = 2131165390(0x7var_ce, float:1.7944996E38)
+            android.graphics.drawable.Drawable r4 = org.telegram.ui.ActionBar.Theme.createEmojiIconSelectorDrawable(r10, r6, r4, r14)
+            r7.searchIconDrawable = r4
+            r6 = 0
+            r5[r6] = r4
+            java.lang.String r14 = "chat_emojiPanelStickerPackSelectorLine"
+            int r4 = r7.getThemedColor(r14)
+            int r6 = r7.getThemedColor(r14)
+            r12 = 2131165391(0x7var_cf, float:1.7944998E38)
+            android.graphics.drawable.Drawable r4 = org.telegram.ui.ActionBar.Theme.createEmojiIconSelectorDrawable(r10, r12, r4, r6)
+            r7.searchIconDotDrawable = r4
+            r6 = 1
+            r5[r6] = r4
+            r3.<init>(r5)
+            r4 = 3
+            r1[r4] = r3
+            r7.stickerIcons = r1
+            r1 = 2
+            android.graphics.drawable.Drawable[] r3 = new android.graphics.drawable.Drawable[r1]
+            int r1 = r7.getThemedColor(r2)
+            int r4 = r7.getThemedColor(r15)
+            r5 = 2131165723(0x7var_b, float:1.7945671E38)
+            android.graphics.drawable.Drawable r1 = org.telegram.ui.ActionBar.Theme.createEmojiIconSelectorDrawable(r10, r5, r1, r4)
+            r4 = 0
+            r3[r4] = r1
+            int r1 = r7.getThemedColor(r2)
+            int r2 = r7.getThemedColor(r15)
+            r4 = 2131166170(0x7var_da, float:1.7946578E38)
+            android.graphics.drawable.Drawable r1 = org.telegram.ui.ActionBar.Theme.createEmojiIconSelectorDrawable(r10, r4, r1, r2)
+            r2 = 1
+            r3[r2] = r1
+            r7.gifIcons = r3
+            r12 = 8
+            java.lang.String[] r1 = new java.lang.String[r12]
+            java.lang.String r3 = "Emoji1"
+            r4 = 2131625617(0x7f0e0691, float:1.8878447E38)
+            java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r3, r4)
+            r4 = 0
+            r1[r4] = r3
+            java.lang.String r3 = "Emoji2"
+            r4 = 2131625618(0x7f0e0692, float:1.887845E38)
+            java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r3, r4)
+            r1[r2] = r3
+            java.lang.String r2 = "Emoji3"
+            r3 = 2131625619(0x7f0e0693, float:1.8878451E38)
+            java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r2, r3)
+            r4 = 2
+            r1[r4] = r2
+            java.lang.String r2 = "Emoji4"
+            r3 = 2131625620(0x7f0e0694, float:1.8878453E38)
+            java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r2, r3)
+            r5 = 3
+            r1[r5] = r2
+            java.lang.String r2 = "Emoji5"
+            r3 = 2131625621(0x7f0e0695, float:1.8878455E38)
+            java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r2, r3)
+            r6 = 4
+            r1[r6] = r2
+            java.lang.String r2 = "Emoji6"
+            r3 = 2131625622(0x7f0e0696, float:1.8878457E38)
+            java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r2, r3)
+            r15 = 5
+            r1[r15] = r2
+            java.lang.String r2 = "Emoji7"
+            r3 = 2131625623(0x7f0e0697, float:1.887846E38)
+            java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r2, r3)
+            r3 = 6
+            r1[r3] = r2
+            java.lang.String r2 = "Emoji8"
+            r3 = 2131625624(0x7f0e0698, float:1.8878461E38)
+            java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r2, r3)
+            r3 = 7
+            r1[r3] = r2
+            r7.emojiTitles = r1
+            r1 = r42
+            r7.info = r1
+            android.graphics.Paint r1 = new android.graphics.Paint
+            r2 = 1
+            r1.<init>(r2)
+            r7.dotPaint = r1
+            java.lang.String r2 = "chat_emojiPanelNewTrending"
+            int r2 = r7.getThemedColor(r2)
+            r1.setColor(r2)
+            int r3 = android.os.Build.VERSION.SDK_INT
+            r2 = 21
+            if (r3 < r2) goto L_0x0246
+            org.telegram.ui.Components.EmojiView$3 r1 = new org.telegram.ui.Components.EmojiView$3
+            r1.<init>(r7)
+            r7.outlineProvider = r1
+        L_0x0246:
+            android.widget.FrameLayout r1 = new android.widget.FrameLayout
+            r1.<init>(r10)
+            r7.emojiContainer = r1
+            org.telegram.ui.Components.EmojiView$Tab r1 = new org.telegram.ui.Components.EmojiView$Tab
+            r2 = 0
+            r1.<init>()
+            r2 = 0
+            r1.type = r2
+            android.widget.FrameLayout r2 = r7.emojiContainer
+            r1.view = r2
+            java.util.ArrayList<org.telegram.ui.Components.EmojiView$Tab> r2 = r7.allTabs
+            r2.add(r1)
+            org.telegram.ui.Components.EmojiView$EmojiGridView r1 = new org.telegram.ui.Components.EmojiView$EmojiGridView
+            r1.<init>(r10)
+            r7.emojiGridView = r1
+            org.telegram.ui.Components.EmojiView$4 r2 = new org.telegram.ui.Components.EmojiView$4
+            r2.<init>()
+            r1.setOnItemLongClickListener((org.telegram.ui.Components.RecyclerListView.OnItemLongClickListener) r2)
+            org.telegram.ui.Components.EmojiView$EmojiGridView r1 = r7.emojiGridView
+            r2 = 1
+            r1.setInstantClick(r2)
+            org.telegram.ui.Components.EmojiView$EmojiGridView r1 = r7.emojiGridView
+            org.telegram.ui.Components.EmojiView$5 r2 = new org.telegram.ui.Components.EmojiView$5
+            r2.<init>(r10, r12)
+            r7.emojiLayoutManager = r2
+            r1.setLayoutManager(r2)
+            org.telegram.ui.Components.EmojiView$EmojiGridView r1 = r7.emojiGridView
+            r2 = 1108869120(0x42180000, float:38.0)
+            int r2 = org.telegram.messenger.AndroidUtilities.dp(r2)
+            r1.setTopGlowOffset(r2)
+            org.telegram.ui.Components.EmojiView$EmojiGridView r1 = r7.emojiGridView
+            r2 = 1108344832(0x42100000, float:36.0)
+            int r4 = org.telegram.messenger.AndroidUtilities.dp(r2)
+            r1.setBottomGlowOffset(r4)
+            org.telegram.ui.Components.EmojiView$EmojiGridView r1 = r7.emojiGridView
+            r4 = 1084227584(0x40a00000, float:5.0)
+            int r4 = org.telegram.messenger.AndroidUtilities.dp(r4)
+            int r5 = org.telegram.messenger.AndroidUtilities.dp(r2)
+            r22 = 1084227584(0x40a00000, float:5.0)
+            int r2 = org.telegram.messenger.AndroidUtilities.dp(r22)
+            r22 = 1110441984(0x42300000, float:44.0)
+            int r6 = org.telegram.messenger.AndroidUtilities.dp(r22)
+            r1.setPadding(r4, r5, r2, r6)
+            org.telegram.ui.Components.EmojiView$EmojiGridView r1 = r7.emojiGridView
+            java.lang.String r6 = "chat_emojiPanelBackground"
+            int r2 = r7.getThemedColor(r6)
+            r1.setGlowColor(r2)
+            org.telegram.ui.Components.EmojiView$EmojiGridView r1 = r7.emojiGridView
+            r5 = 0
+            r1.setSelectorDrawableColor(r5)
+            org.telegram.ui.Components.EmojiView$EmojiGridView r1 = r7.emojiGridView
+            r1.setClipToPadding(r5)
+            androidx.recyclerview.widget.GridLayoutManager r1 = r7.emojiLayoutManager
+            org.telegram.ui.Components.EmojiView$6 r2 = new org.telegram.ui.Components.EmojiView$6
+            r2.<init>()
+            r1.setSpanSizeLookup(r2)
+            org.telegram.ui.Components.EmojiView$EmojiGridView r1 = r7.emojiGridView
+            org.telegram.ui.Components.EmojiView$EmojiGridAdapter r2 = new org.telegram.ui.Components.EmojiView$EmojiGridAdapter
+            r4 = 0
+            r2.<init>()
+            r7.emojiAdapter = r2
+            r1.setAdapter(r2)
+            org.telegram.ui.Components.EmojiView$EmojiGridView r1 = r7.emojiGridView
+            org.telegram.ui.Components.EmojiView$EmojiGridSpacing r2 = new org.telegram.ui.Components.EmojiView$EmojiGridSpacing
+            r2.<init>()
+            r1.addItemDecoration(r2)
+            org.telegram.ui.Components.EmojiView$EmojiSearchAdapter r1 = new org.telegram.ui.Components.EmojiView$EmojiSearchAdapter
+            r1.<init>()
+            r7.emojiSearchAdapter = r1
+            android.widget.FrameLayout r1 = r7.emojiContainer
+            org.telegram.ui.Components.EmojiView$EmojiGridView r2 = r7.emojiGridView
+            r4 = -1082130432(0xffffffffbvar_, float:-1.0)
+            r5 = -1
+            android.widget.FrameLayout$LayoutParams r4 = org.telegram.ui.Components.LayoutHelper.createFrame(r5, r4)
+            r1.addView(r2, r4)
+            org.telegram.ui.Components.RecyclerAnimationScrollHelper r1 = new org.telegram.ui.Components.RecyclerAnimationScrollHelper
+            org.telegram.ui.Components.EmojiView$EmojiGridView r2 = r7.emojiGridView
+            androidx.recyclerview.widget.GridLayoutManager r4 = r7.emojiLayoutManager
+            r1.<init>(r2, r4)
+            r7.emojiScrollHelper = r1
+            org.telegram.ui.Components.EmojiView$7 r2 = new org.telegram.ui.Components.EmojiView$7
+            r2.<init>()
+            r1.setAnimationCallback(r2)
+            org.telegram.ui.Components.EmojiView$EmojiGridView r1 = r7.emojiGridView
+            org.telegram.ui.Components.EmojiView$8 r2 = new org.telegram.ui.Components.EmojiView$8
+            r4 = 1
+            r2.<init>(r4)
+            r1.setOnScrollListener(r2)
+            if (r37 == 0) goto L_0x032f
+            int r1 = r7.currentAccount
+            org.telegram.messenger.MediaDataController r1 = org.telegram.messenger.MediaDataController.getInstance(r1)
+            r1.checkStickers(r15)
+            int r1 = r7.currentAccount
+            org.telegram.messenger.MediaDataController r1 = org.telegram.messenger.MediaDataController.getInstance(r1)
+            r1.checkFeaturedEmoji()
+        L_0x032f:
+            org.telegram.ui.Components.EmojiView$9 r4 = new org.telegram.ui.Components.EmojiView$9
+            if (r0 == 0) goto L_0x033b
+            org.telegram.ui.Components.EmojiView$$ExternalSyntheticLambda5 r1 = new org.telegram.ui.Components.EmojiView$$ExternalSyntheticLambda5
+            r1.<init>(r0)
+            r17 = r1
+            goto L_0x033d
+        L_0x033b:
+            r17 = 0
+        L_0x033d:
+            r0 = r4
+            r1 = r35
+            r12 = 1108344832(0x42100000, float:36.0)
+            r2 = r40
+            r5 = r3
+            r15 = -1
+            r3 = r44
+            r12 = r4
+            r4 = r37
+            r24 = r5
+            r19 = 3
+            r5 = r35
+            r26 = r6
+            r25 = r23
+            r6 = r17
+            r0.<init>(r2, r3, r4, r5, r6)
+            r7.emojiTabs = r12
+            if (r11 == 0) goto L_0x0385
+            org.telegram.ui.Components.EmojiView$SearchField r0 = new org.telegram.ui.Components.EmojiView$SearchField
+            r1 = 1
+            r0.<init>(r10, r1)
+            r7.emojiSearchField = r0
+            android.widget.FrameLayout r1 = r7.emojiContainer
+            android.widget.FrameLayout$LayoutParams r2 = new android.widget.FrameLayout$LayoutParams
+            int r3 = r7.searchFieldHeight
+            int r4 = org.telegram.messenger.AndroidUtilities.getShadowHeight()
+            int r3 = r3 + r4
+            r2.<init>(r15, r3)
+            r1.addView(r0, r2)
+            org.telegram.ui.Components.EmojiView$SearchField r0 = r7.emojiSearchField
+            org.telegram.ui.Components.EditTextBoldCursor r0 = r0.searchEditText
+            org.telegram.ui.Components.EmojiView$10 r1 = new org.telegram.ui.Components.EmojiView$10
+            r1.<init>()
+            r0.setOnFocusChangeListener(r1)
+        L_0x0385:
+            org.telegram.ui.Components.EmojiTabsStrip r0 = r7.emojiTabs
+            r1 = r26
+            int r2 = r7.getThemedColor(r1)
+            r0.setBackgroundColor(r2)
+            android.widget.FrameLayout r0 = r7.emojiContainer
+            org.telegram.ui.Components.EmojiTabsStrip r2 = r7.emojiTabs
+            r3 = 1108344832(0x42100000, float:36.0)
+            android.widget.FrameLayout$LayoutParams r4 = org.telegram.ui.Components.LayoutHelper.createFrame(r15, r3)
+            r0.addView(r2, r4)
+            android.view.View r0 = new android.view.View
+            r0.<init>(r10)
+            r7.emojiTabsShadow = r0
+            r2 = 0
+            r0.setAlpha(r2)
+            android.view.View r0 = r7.emojiTabsShadow
+            r2 = 1
+            java.lang.Integer r3 = java.lang.Integer.valueOf(r2)
+            r0.setTag(r3)
+            android.view.View r0 = r7.emojiTabsShadow
+            java.lang.String r2 = "chat_emojiPanelShadowLine"
+            int r3 = r7.getThemedColor(r2)
+            r0.setBackgroundColor(r3)
+            android.widget.FrameLayout$LayoutParams r0 = new android.widget.FrameLayout$LayoutParams
+            int r3 = org.telegram.messenger.AndroidUtilities.getShadowHeight()
+            r4 = 51
+            r0.<init>(r15, r3, r4)
+            r3 = 1108344832(0x42100000, float:36.0)
+            int r3 = org.telegram.messenger.AndroidUtilities.dp(r3)
+            r0.topMargin = r3
+            android.widget.FrameLayout r3 = r7.emojiContainer
+            android.view.View r5 = r7.emojiTabsShadow
+            r3.addView(r5, r0)
+            r0 = 1109393408(0x42200000, float:40.0)
+            if (r8 == 0) goto L_0x0617
+            if (r9 == 0) goto L_0x04e5
+            android.widget.FrameLayout r3 = new android.widget.FrameLayout
+            r3.<init>(r10)
+            r7.gifContainer = r3
+            org.telegram.ui.Components.EmojiView$Tab r3 = new org.telegram.ui.Components.EmojiView$Tab
+            r5 = 0
             r3.<init>()
             r5 = 1
-            int[] r8 = new int[r5]
-            r5 = 16842919(0x10100a7, float:2.3694026E-38)
-            r8[r7] = r5
-            android.widget.ImageView r5 = r0.floatingButton
-            android.util.Property r10 = android.view.View.TRANSLATION_Z
-            r11 = 2
-            float[] r12 = new float[r11]
-            r11 = 1073741824(0x40000000, float:2.0)
-            int r11 = org.telegram.messenger.AndroidUtilities.dp(r11)
-            float r11 = (float) r11
-            r12[r7] = r11
-            r11 = 1082130432(0x40800000, float:4.0)
-            int r11 = org.telegram.messenger.AndroidUtilities.dp(r11)
-            float r11 = (float) r11
-            r14 = 1
-            r12[r14] = r11
-            android.animation.ObjectAnimator r5 = android.animation.ObjectAnimator.ofFloat(r5, r10, r12)
-            r11 = 200(0xc8, double:9.9E-322)
-            android.animation.ObjectAnimator r5 = r5.setDuration(r11)
-            r3.addState(r8, r5)
-            int[] r5 = new int[r7]
-            android.widget.ImageView r8 = r0.floatingButton
-            r11 = 2
-            float[] r12 = new float[r11]
-            r11 = 1082130432(0x40800000, float:4.0)
-            int r11 = org.telegram.messenger.AndroidUtilities.dp(r11)
-            float r11 = (float) r11
-            r12[r7] = r11
-            r7 = 1073741824(0x40000000, float:2.0)
-            int r7 = org.telegram.messenger.AndroidUtilities.dp(r7)
-            float r7 = (float) r7
-            r11 = 1
-            r12[r11] = r7
-            android.animation.ObjectAnimator r7 = android.animation.ObjectAnimator.ofFloat(r8, r10, r12)
-            r10 = 200(0xc8, double:9.9E-322)
-            android.animation.ObjectAnimator r7 = r7.setDuration(r10)
-            r3.addState(r5, r7)
-            android.widget.ImageView r5 = r0.backspaceButton
-            r5.setStateListAnimator(r3)
-            android.widget.ImageView r3 = r0.backspaceButton
-            org.telegram.ui.Components.EmojiView$27 r5 = new org.telegram.ui.Components.EmojiView$27
-            r5.<init>(r0)
-            r3.setOutlineProvider(r5)
-        L_0x08ba:
-            android.widget.ImageView r3 = r0.backspaceButton
-            r5 = 1073741824(0x40000000, float:2.0)
-            int r5 = org.telegram.messenger.AndroidUtilities.dp(r5)
-            r7 = 0
-            r3.setPadding(r7, r7, r5, r7)
-            android.widget.ImageView r3 = r0.backspaceButton
-            r3.setBackground(r1)
-            android.widget.ImageView r1 = r0.backspaceButton
-            r3 = 2131623961(0x7f0e0019, float:1.8875088E38)
-            java.lang.String r5 = "AccDescrBackspace"
-            java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r5, r3)
-            r1.setContentDescription(r3)
-            android.widget.ImageView r1 = r0.backspaceButton
-            r3 = 1
-            r1.setFocusable(r3)
-            android.widget.FrameLayout r1 = r0.bottomTabContainer
-            android.widget.ImageView r3 = r0.backspaceButton
-            r5 = 21
-            if (r9 < r5) goto L_0x08ea
-            r19 = 40
-            goto L_0x08ec
-        L_0x08ea:
-            r19 = 44
-        L_0x08ec:
-            if (r9 < r5) goto L_0x08f0
-            r6 = 40
-        L_0x08f0:
-            float r5 = (float) r6
-            r21 = 51
-            r22 = 1092616192(0x41200000, float:10.0)
-            r23 = 0
-            r24 = 1092616192(0x41200000, float:10.0)
-            r25 = 0
-            r20 = r5
-            android.widget.FrameLayout$LayoutParams r5 = org.telegram.ui.Components.LayoutHelper.createFrame(r19, r20, r21, r22, r23, r24, r25)
-            r1.addView(r3, r5)
-            android.view.View r1 = r0.shadowLine
-            r3 = 8
-            r1.setVisibility(r3)
-            android.view.View r1 = r0.bottomTabContainerBackground
-            r1.setVisibility(r3)
-        L_0x0910:
-            androidx.viewpager.widget.ViewPager r1 = r0.pager
-            r3 = -1
-            android.widget.FrameLayout$LayoutParams r3 = org.telegram.ui.Components.LayoutHelper.createFrame((int) r3, (int) r3, (int) r13)
+            r3.type = r5
+            android.widget.FrameLayout r5 = r7.gifContainer
+            r3.view = r5
+            java.util.ArrayList<org.telegram.ui.Components.EmojiView$Tab> r5 = r7.allTabs
+            r5.add(r3)
+            org.telegram.ui.Components.EmojiView$11 r3 = new org.telegram.ui.Components.EmojiView$11
+            r3.<init>(r10)
+            r7.gifGridView = r3
             r5 = 0
-            r0.addView(r1, r5, r3)
-            org.telegram.ui.Components.CorrectlyMeasuringTextView r1 = new org.telegram.ui.Components.CorrectlyMeasuringTextView
-            r1.<init>(r2)
-            r0.mediaBanTooltip = r1
-            r3 = 1077936128(0x40400000, float:3.0)
+            r3.setClipToPadding(r5)
+            org.telegram.ui.Components.RecyclerListView r3 = r7.gifGridView
+            org.telegram.ui.Components.EmojiView$GifLayoutManager r6 = new org.telegram.ui.Components.EmojiView$GifLayoutManager
+            r6.<init>(r10)
+            r7.gifLayoutManager = r6
+            r3.setLayoutManager(r6)
+            org.telegram.ui.Components.RecyclerListView r3 = r7.gifGridView
+            org.telegram.ui.Components.EmojiView$12 r6 = new org.telegram.ui.Components.EmojiView$12
+            r6.<init>()
+            r3.addItemDecoration(r6)
+            org.telegram.ui.Components.RecyclerListView r3 = r7.gifGridView
+            int r6 = org.telegram.messenger.AndroidUtilities.dp(r0)
+            int r12 = org.telegram.messenger.AndroidUtilities.dp(r22)
+            r3.setPadding(r5, r6, r5, r12)
+            org.telegram.ui.Components.RecyclerListView r3 = r7.gifGridView
+            r6 = 2
+            r3.setOverScrollMode(r6)
+            org.telegram.ui.Components.RecyclerListView r3 = r7.gifGridView
+            androidx.recyclerview.widget.RecyclerView$ItemAnimator r3 = r3.getItemAnimator()
+            androidx.recyclerview.widget.SimpleItemAnimator r3 = (androidx.recyclerview.widget.SimpleItemAnimator) r3
+            r3.setSupportsChangeAnimations(r5)
+            org.telegram.ui.Components.RecyclerListView r3 = r7.gifGridView
+            org.telegram.ui.Components.EmojiView$GifAdapter r12 = new org.telegram.ui.Components.EmojiView$GifAdapter
+            r0 = 1
+            r12.<init>(r7, r10, r0)
+            r7.gifAdapter = r12
+            r3.setAdapter(r12)
+            org.telegram.ui.Components.EmojiView$GifAdapter r0 = new org.telegram.ui.Components.EmojiView$GifAdapter
+            r0.<init>(r7, r10)
+            r7.gifSearchAdapter = r0
+            org.telegram.ui.Components.RecyclerListView r0 = r7.gifGridView
+            org.telegram.ui.Components.EmojiView$TypedScrollListener r3 = new org.telegram.ui.Components.EmojiView$TypedScrollListener
+            r3.<init>(r6)
+            r0.setOnScrollListener(r3)
+            org.telegram.ui.Components.RecyclerListView r0 = r7.gifGridView
+            org.telegram.ui.Components.EmojiView$$ExternalSyntheticLambda3 r3 = new org.telegram.ui.Components.EmojiView$$ExternalSyntheticLambda3
+            r3.<init>(r7, r13)
+            r0.setOnTouchListener(r3)
+            org.telegram.ui.Components.EmojiView$$ExternalSyntheticLambda9 r0 = new org.telegram.ui.Components.EmojiView$$ExternalSyntheticLambda9
+            r0.<init>(r7)
+            r7.gifOnItemClickListener = r0
+            org.telegram.ui.Components.RecyclerListView r3 = r7.gifGridView
+            r3.setOnItemClickListener((org.telegram.ui.Components.RecyclerListView.OnItemClickListener) r0)
+            android.widget.FrameLayout r0 = r7.gifContainer
+            org.telegram.ui.Components.RecyclerListView r3 = r7.gifGridView
+            r12 = -1082130432(0xffffffffbvar_, float:-1.0)
+            android.widget.FrameLayout$LayoutParams r12 = org.telegram.ui.Components.LayoutHelper.createFrame(r15, r12)
+            r0.addView(r3, r12)
+            org.telegram.ui.Components.EmojiView$SearchField r0 = new org.telegram.ui.Components.EmojiView$SearchField
+            r0.<init>(r10, r6)
+            r7.gifSearchField = r0
+            r3 = 4
+            r0.setVisibility(r3)
+            android.widget.FrameLayout r0 = r7.gifContainer
+            org.telegram.ui.Components.EmojiView$SearchField r12 = r7.gifSearchField
+            android.widget.FrameLayout$LayoutParams r3 = new android.widget.FrameLayout$LayoutParams
+            int r6 = r7.searchFieldHeight
+            int r16 = org.telegram.messenger.AndroidUtilities.getShadowHeight()
+            int r6 = r6 + r16
+            r3.<init>(r15, r6)
+            r0.addView(r12, r3)
+            org.telegram.ui.Components.EmojiView$DraggableScrollSlidingTabStrip r0 = new org.telegram.ui.Components.EmojiView$DraggableScrollSlidingTabStrip
+            r0.<init>(r10, r13)
+            r7.gifTabs = r0
+            org.telegram.ui.Components.ScrollSlidingTabStrip$Type r3 = org.telegram.ui.Components.ScrollSlidingTabStrip.Type.TAB
+            r0.setType(r3)
+            org.telegram.ui.Components.ScrollSlidingTabStrip r0 = r7.gifTabs
+            int r3 = org.telegram.messenger.AndroidUtilities.getShadowHeight()
+            r0.setUnderlineHeight(r3)
+            org.telegram.ui.Components.ScrollSlidingTabStrip r0 = r7.gifTabs
+            int r3 = r7.getThemedColor(r14)
+            r0.setIndicatorColor(r3)
+            org.telegram.ui.Components.ScrollSlidingTabStrip r0 = r7.gifTabs
+            int r3 = r7.getThemedColor(r2)
+            r0.setUnderlineColor(r3)
+            org.telegram.ui.Components.ScrollSlidingTabStrip r0 = r7.gifTabs
+            int r3 = r7.getThemedColor(r1)
+            r0.setBackgroundColor(r3)
+            android.widget.FrameLayout r0 = r7.gifContainer
+            org.telegram.ui.Components.ScrollSlidingTabStrip r3 = r7.gifTabs
+            r6 = 36
+            android.widget.FrameLayout$LayoutParams r6 = org.telegram.ui.Components.LayoutHelper.createFrame((int) r15, (int) r6, (int) r4)
+            r0.addView(r3, r6)
+            r35.updateGifTabs()
+            org.telegram.ui.Components.ScrollSlidingTabStrip r0 = r7.gifTabs
+            org.telegram.ui.Components.EmojiView$$ExternalSyntheticLambda10 r3 = new org.telegram.ui.Components.EmojiView$$ExternalSyntheticLambda10
+            r3.<init>(r7)
+            r0.setDelegate(r3)
+            org.telegram.ui.Components.EmojiView$GifAdapter r0 = r7.gifAdapter
+            r0.loadTrendingGifs()
+            goto L_0x04e6
+        L_0x04e5:
+            r5 = 0
+        L_0x04e6:
+            org.telegram.ui.Components.EmojiView$13 r0 = new org.telegram.ui.Components.EmojiView$13
+            r0.<init>(r10)
+            r7.stickersContainer = r0
+            int r0 = r7.currentAccount
+            org.telegram.messenger.MediaDataController r0 = org.telegram.messenger.MediaDataController.getInstance(r0)
+            r0.checkStickers(r5)
+            int r0 = r7.currentAccount
+            org.telegram.messenger.MediaDataController r0 = org.telegram.messenger.MediaDataController.getInstance(r0)
+            r0.checkFeaturedStickers()
+            org.telegram.ui.Components.EmojiView$14 r0 = new org.telegram.ui.Components.EmojiView$14
+            r0.<init>(r10)
+            r7.stickersGridView = r0
+            org.telegram.ui.Components.EmojiView$15 r3 = new org.telegram.ui.Components.EmojiView$15
+            r6 = 5
+            r3.<init>(r10, r6)
+            r7.stickersLayoutManager = r3
+            r0.setLayoutManager(r3)
+            androidx.recyclerview.widget.GridLayoutManager r0 = r7.stickersLayoutManager
+            org.telegram.ui.Components.EmojiView$16 r3 = new org.telegram.ui.Components.EmojiView$16
+            r3.<init>()
+            r0.setSpanSizeLookup(r3)
+            org.telegram.ui.Components.RecyclerListView r0 = r7.stickersGridView
+            r3 = 1109393408(0x42200000, float:40.0)
+            int r12 = org.telegram.messenger.AndroidUtilities.dp(r3)
+            int r3 = org.telegram.messenger.AndroidUtilities.dp(r22)
+            r0.setPadding(r5, r12, r5, r3)
+            org.telegram.ui.Components.RecyclerListView r0 = r7.stickersGridView
+            r0.setClipToPadding(r5)
+            org.telegram.ui.Components.EmojiView$Tab r0 = new org.telegram.ui.Components.EmojiView$Tab
+            r3 = 0
+            r0.<init>()
+            r3 = 2
+            r0.type = r3
+            android.widget.FrameLayout r3 = r7.stickersContainer
+            r0.view = r3
+            java.util.ArrayList<org.telegram.ui.Components.EmojiView$Tab> r3 = r7.allTabs
+            r3.add(r0)
+            org.telegram.ui.Components.EmojiView$StickersSearchGridAdapter r0 = new org.telegram.ui.Components.EmojiView$StickersSearchGridAdapter
+            r0.<init>(r10)
+            r7.stickersSearchGridAdapter = r0
+            org.telegram.ui.Components.RecyclerListView r0 = r7.stickersGridView
+            org.telegram.ui.Components.EmojiView$StickersGridAdapter r3 = new org.telegram.ui.Components.EmojiView$StickersGridAdapter
+            r3.<init>(r10)
+            r7.stickersGridAdapter = r3
+            r0.setAdapter(r3)
+            org.telegram.ui.Components.RecyclerListView r0 = r7.stickersGridView
+            org.telegram.ui.Components.EmojiView$$ExternalSyntheticLambda2 r3 = new org.telegram.ui.Components.EmojiView$$ExternalSyntheticLambda2
+            r3.<init>(r7, r13)
+            r0.setOnTouchListener(r3)
+            org.telegram.ui.Components.EmojiView$$ExternalSyntheticLambda8 r0 = new org.telegram.ui.Components.EmojiView$$ExternalSyntheticLambda8
+            r0.<init>(r7)
+            r7.stickersOnItemClickListener = r0
+            org.telegram.ui.Components.RecyclerListView r3 = r7.stickersGridView
+            r3.setOnItemClickListener((org.telegram.ui.Components.RecyclerListView.OnItemClickListener) r0)
+            org.telegram.ui.Components.RecyclerListView r0 = r7.stickersGridView
+            int r3 = r7.getThemedColor(r1)
+            r0.setGlowColor(r3)
+            android.widget.FrameLayout r0 = r7.stickersContainer
+            org.telegram.ui.Components.RecyclerListView r3 = r7.stickersGridView
+            r0.addView(r3)
+            org.telegram.ui.Components.RecyclerAnimationScrollHelper r0 = new org.telegram.ui.Components.RecyclerAnimationScrollHelper
+            org.telegram.ui.Components.RecyclerListView r3 = r7.stickersGridView
+            androidx.recyclerview.widget.GridLayoutManager r12 = r7.stickersLayoutManager
+            r0.<init>(r3, r12)
+            r7.stickersScrollHelper = r0
+            org.telegram.ui.Components.EmojiView$SearchField r0 = new org.telegram.ui.Components.EmojiView$SearchField
+            r0.<init>(r10, r5)
+            r7.stickersSearchField = r0
+            android.widget.FrameLayout r3 = r7.stickersContainer
+            android.widget.FrameLayout$LayoutParams r12 = new android.widget.FrameLayout$LayoutParams
+            int r6 = r7.searchFieldHeight
+            int r16 = org.telegram.messenger.AndroidUtilities.getShadowHeight()
+            int r6 = r6 + r16
+            r12.<init>(r15, r6)
+            r3.addView(r0, r12)
+            org.telegram.ui.Components.EmojiView$17 r0 = new org.telegram.ui.Components.EmojiView$17
+            r0.<init>(r10, r13)
+            r7.stickersTab = r0
+            r3 = 1
+            r0.setDragEnabled(r3)
+            org.telegram.ui.Components.ScrollSlidingTabStrip r0 = r7.stickersTab
+            r0.setWillNotDraw(r5)
+            org.telegram.ui.Components.ScrollSlidingTabStrip r0 = r7.stickersTab
+            org.telegram.ui.Components.ScrollSlidingTabStrip$Type r3 = org.telegram.ui.Components.ScrollSlidingTabStrip.Type.TAB
+            r0.setType(r3)
+            org.telegram.ui.Components.ScrollSlidingTabStrip r0 = r7.stickersTab
+            int r3 = org.telegram.messenger.AndroidUtilities.getShadowHeight()
+            r0.setUnderlineHeight(r3)
+            org.telegram.ui.Components.ScrollSlidingTabStrip r0 = r7.stickersTab
+            int r3 = r7.getThemedColor(r14)
+            r0.setIndicatorColor(r3)
+            org.telegram.ui.Components.ScrollSlidingTabStrip r0 = r7.stickersTab
+            int r3 = r7.getThemedColor(r2)
+            r0.setUnderlineColor(r3)
+            r0 = r43
+            if (r0 == 0) goto L_0x05f2
+            org.telegram.ui.Components.EmojiView$18 r3 = new org.telegram.ui.Components.EmojiView$18
+            r3.<init>(r10)
+            r7.stickersTabContainer = r3
+            org.telegram.ui.Components.ScrollSlidingTabStrip r6 = r7.stickersTab
+            r12 = 36
+            android.widget.FrameLayout$LayoutParams r12 = org.telegram.ui.Components.LayoutHelper.createFrame((int) r15, (int) r12, (int) r4)
+            r3.addView(r6, r12)
+            android.widget.FrameLayout r3 = r7.stickersTabContainer
+            r6 = -1073741824(0xffffffffCLASSNAME, float:-2.0)
+            android.widget.FrameLayout$LayoutParams r6 = org.telegram.ui.Components.LayoutHelper.createFrame(r15, r6)
+            r0.addView(r3, r6)
+            goto L_0x05ff
+        L_0x05f2:
+            android.widget.FrameLayout r0 = r7.stickersContainer
+            org.telegram.ui.Components.ScrollSlidingTabStrip r3 = r7.stickersTab
+            r6 = 36
+            android.widget.FrameLayout$LayoutParams r6 = org.telegram.ui.Components.LayoutHelper.createFrame((int) r15, (int) r6, (int) r4)
+            r0.addView(r3, r6)
+        L_0x05ff:
+            r35.updateStickerTabs()
+            org.telegram.ui.Components.ScrollSlidingTabStrip r0 = r7.stickersTab
+            org.telegram.ui.Components.EmojiView$$ExternalSyntheticLambda11 r3 = new org.telegram.ui.Components.EmojiView$$ExternalSyntheticLambda11
+            r3.<init>(r7)
+            r0.setDelegate(r3)
+            org.telegram.ui.Components.RecyclerListView r0 = r7.stickersGridView
+            org.telegram.ui.Components.EmojiView$TypedScrollListener r3 = new org.telegram.ui.Components.EmojiView$TypedScrollListener
+            r3.<init>(r5)
+            r0.setOnScrollListener(r3)
+            goto L_0x0618
+        L_0x0617:
+            r5 = 0
+        L_0x0618:
+            java.util.ArrayList<org.telegram.ui.Components.EmojiView$Tab> r0 = r7.currentTabs
+            r0.clear()
+            java.util.ArrayList<org.telegram.ui.Components.EmojiView$Tab> r0 = r7.currentTabs
+            java.util.ArrayList<org.telegram.ui.Components.EmojiView$Tab> r3 = r7.allTabs
+            r0.addAll(r3)
+            org.telegram.ui.Components.EmojiView$19 r0 = new org.telegram.ui.Components.EmojiView$19
+            r0.<init>(r10)
+            r7.pager = r0
+            org.telegram.ui.Components.EmojiView$EmojiPagesAdapter r3 = new org.telegram.ui.Components.EmojiView$EmojiPagesAdapter
+            r6 = 0
+            r3.<init>()
+            r0.setAdapter(r3)
+            org.telegram.ui.Components.EmojiView$20 r0 = new org.telegram.ui.Components.EmojiView$20
+            r0.<init>(r10)
+            r7.backspaceButton = r0
+            r3 = 1
+            r0.setHapticFeedbackEnabled(r3)
+            android.widget.ImageView r0 = r7.backspaceButton
+            r3 = 2131166152(0x7var_c8, float:1.7946541E38)
+            r0.setImageResource(r3)
+            android.widget.ImageView r0 = r7.backspaceButton
+            android.graphics.PorterDuffColorFilter r3 = new android.graphics.PorterDuffColorFilter
+            java.lang.String r6 = "chat_emojiPanelBackspace"
+            int r6 = r7.getThemedColor(r6)
+            android.graphics.PorterDuff$Mode r12 = android.graphics.PorterDuff.Mode.MULTIPLY
+            r3.<init>(r6, r12)
+            r0.setColorFilter(r3)
+            android.widget.ImageView r0 = r7.backspaceButton
+            android.widget.ImageView$ScaleType r3 = android.widget.ImageView.ScaleType.CENTER
+            r0.setScaleType(r3)
+            android.widget.ImageView r0 = r7.backspaceButton
+            r3 = 2131623961(0x7f0e0019, float:1.8875088E38)
+            java.lang.String r6 = "AccDescrBackspace"
+            java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r6, r3)
+            r0.setContentDescription(r3)
+            android.widget.ImageView r0 = r7.backspaceButton
+            r3 = 1
+            r0.setFocusable(r3)
+            android.widget.ImageView r0 = r7.backspaceButton
+            org.telegram.ui.Components.EmojiView$21 r3 = new org.telegram.ui.Components.EmojiView$21
+            r3.<init>(r7)
+            r0.setOnClickListener(r3)
+            android.widget.FrameLayout r0 = new android.widget.FrameLayout
+            r0.<init>(r10)
+            r7.bulletinContainer = r0
+            r6 = 40
+            if (r11 == 0) goto L_0x06ad
+            r28 = -1
+            r29 = 1120403456(0x42CLASSNAME, float:100.0)
+            r30 = 87
+            r31 = 0
+            r32 = 0
+            r33 = 0
+            int r12 = org.telegram.messenger.AndroidUtilities.getShadowHeight()
+            float r12 = (float) r12
+            float r14 = org.telegram.messenger.AndroidUtilities.density
+            float r12 = r12 / r14
+            r14 = 1109393408(0x42200000, float:40.0)
+            float r34 = r12 + r14
+            android.widget.FrameLayout$LayoutParams r12 = org.telegram.ui.Components.LayoutHelper.createFrame(r28, r29, r30, r31, r32, r33, r34)
+            r7.addView(r0, r12)
+            r12 = r24
+            r14 = 21
+            goto L_0x06d2
+        L_0x06ad:
+            r28 = -1
+            r29 = 1120403456(0x42CLASSNAME, float:100.0)
+            r30 = 87
+            r31 = 0
+            r32 = 0
+            r33 = 0
+            r12 = r24
+            r14 = 21
+            if (r12 < r14) goto L_0x06c2
+            r16 = 40
+            goto L_0x06c4
+        L_0x06c2:
+            r16 = 44
+        L_0x06c4:
+            r17 = 8
+            int r3 = r16 + 8
+            float r3 = (float) r3
+            r34 = r3
+            android.widget.FrameLayout$LayoutParams r3 = org.telegram.ui.Components.LayoutHelper.createFrame(r28, r29, r30, r31, r32, r33, r34)
+            r7.addView(r0, r3)
+        L_0x06d2:
+            org.telegram.ui.Components.EmojiView$22 r0 = new org.telegram.ui.Components.EmojiView$22
+            r0.<init>(r7, r10)
+            r7.bottomTabContainer = r0
+            android.view.View r0 = new android.view.View
+            r0.<init>(r10)
+            r7.shadowLine = r0
+            int r2 = r7.getThemedColor(r2)
+            r0.setBackgroundColor(r2)
+            android.widget.FrameLayout r0 = r7.bottomTabContainer
+            android.view.View r2 = r7.shadowLine
+            android.widget.FrameLayout$LayoutParams r3 = new android.widget.FrameLayout$LayoutParams
+            int r4 = org.telegram.messenger.AndroidUtilities.getShadowHeight()
+            r3.<init>(r15, r4)
+            r0.addView(r2, r3)
+            android.view.View r0 = new android.view.View
+            r0.<init>(r10)
+            r7.bottomTabContainerBackground = r0
+            android.widget.FrameLayout r2 = r7.bottomTabContainer
+            android.widget.FrameLayout$LayoutParams r3 = new android.widget.FrameLayout$LayoutParams
+            r4 = 1109393408(0x42200000, float:40.0)
+            int r5 = org.telegram.messenger.AndroidUtilities.dp(r4)
+            r14 = 83
+            r3.<init>(r15, r5, r14)
+            r2.addView(r0, r3)
+            if (r11 == 0) goto L_0x085e
+            android.widget.FrameLayout r0 = r7.bottomTabContainer
+            android.widget.FrameLayout$LayoutParams r1 = new android.widget.FrameLayout$LayoutParams
+            int r2 = org.telegram.messenger.AndroidUtilities.dp(r4)
+            int r3 = org.telegram.messenger.AndroidUtilities.getShadowHeight()
+            int r2 = r2 + r3
+            r3 = 83
+            r1.<init>(r15, r2, r3)
+            r7.addView(r0, r1)
+            android.widget.FrameLayout r0 = r7.bottomTabContainer
+            android.widget.ImageView r1 = r7.backspaceButton
+            r2 = 47
+            r3 = 85
+            android.widget.FrameLayout$LayoutParams r2 = org.telegram.ui.Components.LayoutHelper.createFrame((int) r2, (int) r6, (int) r3)
+            r0.addView(r1, r2)
+            r0 = 21
+            if (r12 < r0) goto L_0x074d
+            android.widget.ImageView r0 = r7.backspaceButton
+            r1 = 1099956224(0x41900000, float:18.0)
+            int r1 = org.telegram.messenger.AndroidUtilities.dp(r1)
+            r2 = r25
+            r3 = 1
+            android.graphics.drawable.Drawable r1 = org.telegram.ui.ActionBar.Theme.createSelectorDrawable(r2, r3, r1)
+            r0.setBackground(r1)
+            goto L_0x074f
+        L_0x074d:
+            r2 = r25
+        L_0x074f:
+            android.widget.ImageView r0 = new android.widget.ImageView
+            r0.<init>(r10)
+            r7.stickerSettingsButton = r0
+            r1 = 2131166155(0x7var_cb, float:1.7946547E38)
+            r0.setImageResource(r1)
+            android.widget.ImageView r0 = r7.stickerSettingsButton
+            android.graphics.PorterDuffColorFilter r1 = new android.graphics.PorterDuffColorFilter
+            java.lang.String r3 = "chat_emojiPanelBackspace"
+            int r3 = r7.getThemedColor(r3)
+            android.graphics.PorterDuff$Mode r4 = android.graphics.PorterDuff.Mode.MULTIPLY
+            r1.<init>(r3, r4)
+            r0.setColorFilter(r1)
+            android.widget.ImageView r0 = r7.stickerSettingsButton
+            android.widget.ImageView$ScaleType r1 = android.widget.ImageView.ScaleType.CENTER
+            r0.setScaleType(r1)
+            android.widget.ImageView r0 = r7.stickerSettingsButton
+            r1 = 1
+            r0.setFocusable(r1)
+            r0 = 21
+            if (r12 < r0) goto L_0x078e
+            android.widget.ImageView r0 = r7.stickerSettingsButton
+            r3 = 1099956224(0x41900000, float:18.0)
             int r3 = org.telegram.messenger.AndroidUtilities.dp(r3)
-            java.lang.String r5 = "chat_gifSaveHintBackground"
-            int r5 = r0.getThemedColor(r5)
-            android.graphics.drawable.Drawable r3 = org.telegram.ui.ActionBar.Theme.createRoundRectDrawable(r3, r5)
-            r1.setBackgroundDrawable(r3)
-            android.widget.TextView r1 = r0.mediaBanTooltip
-            java.lang.String r3 = "chat_gifSaveHintText"
-            int r3 = r0.getThemedColor(r3)
-            r1.setTextColor(r3)
-            android.widget.TextView r1 = r0.mediaBanTooltip
-            r3 = 1090519040(0x41000000, float:8.0)
+            android.graphics.drawable.Drawable r3 = org.telegram.ui.ActionBar.Theme.createSelectorDrawable(r2, r1, r3)
+            r0.setBackground(r3)
+        L_0x078e:
+            android.widget.ImageView r0 = r7.stickerSettingsButton
+            r1 = 2131628321(0x7f0e1121, float:1.8883931E38)
+            java.lang.String r3 = "Settings"
+            java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r3, r1)
+            r0.setContentDescription(r1)
+            android.widget.FrameLayout r0 = r7.bottomTabContainer
+            android.widget.ImageView r1 = r7.stickerSettingsButton
+            r3 = 47
+            r4 = 85
+            android.widget.FrameLayout$LayoutParams r3 = org.telegram.ui.Components.LayoutHelper.createFrame((int) r3, (int) r6, (int) r4)
+            r0.addView(r1, r3)
+            android.widget.ImageView r0 = r7.stickerSettingsButton
+            org.telegram.ui.Components.EmojiView$23 r1 = new org.telegram.ui.Components.EmojiView$23
+            r1.<init>()
+            r0.setOnClickListener(r1)
+            org.telegram.ui.Components.PagerSlidingTabStrip r0 = new org.telegram.ui.Components.PagerSlidingTabStrip
+            r0.<init>(r10, r13)
+            r7.typeTabs = r0
+            androidx.viewpager.widget.ViewPager r1 = r7.pager
+            r0.setViewPager(r1)
+            org.telegram.ui.Components.PagerSlidingTabStrip r0 = r7.typeTabs
+            r1 = 0
+            r0.setShouldExpand(r1)
+            org.telegram.ui.Components.PagerSlidingTabStrip r0 = r7.typeTabs
+            r0.setIndicatorHeight(r1)
+            org.telegram.ui.Components.PagerSlidingTabStrip r0 = r7.typeTabs
+            r0.setUnderlineHeight(r1)
+            org.telegram.ui.Components.PagerSlidingTabStrip r0 = r7.typeTabs
+            r1 = 1092616192(0x41200000, float:10.0)
+            int r1 = org.telegram.messenger.AndroidUtilities.dp(r1)
+            r0.setTabPaddingLeftRight(r1)
+            android.widget.FrameLayout r0 = r7.bottomTabContainer
+            org.telegram.ui.Components.PagerSlidingTabStrip r1 = r7.typeTabs
+            r3 = 81
+            r4 = -2
+            android.widget.FrameLayout$LayoutParams r3 = org.telegram.ui.Components.LayoutHelper.createFrame((int) r4, (int) r6, (int) r3)
+            r0.addView(r1, r3)
+            org.telegram.ui.Components.PagerSlidingTabStrip r0 = r7.typeTabs
+            org.telegram.ui.Components.EmojiView$24 r1 = new org.telegram.ui.Components.EmojiView$24
+            r1.<init>()
+            r0.setOnPageChangeListener(r1)
+            android.widget.ImageView r0 = new android.widget.ImageView
+            r0.<init>(r10)
+            r7.searchButton = r0
+            r1 = 2131166154(0x7var_ca, float:1.7946545E38)
+            r0.setImageResource(r1)
+            android.widget.ImageView r0 = r7.searchButton
+            android.graphics.PorterDuffColorFilter r1 = new android.graphics.PorterDuffColorFilter
+            java.lang.String r3 = "chat_emojiPanelBackspace"
+            int r3 = r7.getThemedColor(r3)
+            android.graphics.PorterDuff$Mode r4 = android.graphics.PorterDuff.Mode.MULTIPLY
+            r1.<init>(r3, r4)
+            r0.setColorFilter(r1)
+            android.widget.ImageView r0 = r7.searchButton
+            android.widget.ImageView$ScaleType r1 = android.widget.ImageView.ScaleType.CENTER
+            r0.setScaleType(r1)
+            android.widget.ImageView r0 = r7.searchButton
+            r1 = 2131628154(0x7f0e107a, float:1.8883593E38)
+            java.lang.String r3 = "Search"
+            java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r3, r1)
+            r0.setContentDescription(r1)
+            android.widget.ImageView r0 = r7.searchButton
+            r1 = 1
+            r0.setFocusable(r1)
+            r0 = 21
+            if (r12 < r0) goto L_0x0841
+            android.widget.ImageView r0 = r7.searchButton
+            r3 = 1099956224(0x41900000, float:18.0)
             int r3 = org.telegram.messenger.AndroidUtilities.dp(r3)
+            android.graphics.drawable.Drawable r2 = org.telegram.ui.ActionBar.Theme.createSelectorDrawable(r2, r1, r3)
+            r0.setBackground(r2)
+        L_0x0841:
+            android.widget.FrameLayout r0 = r7.bottomTabContainer
+            android.widget.ImageView r1 = r7.searchButton
+            r2 = 47
+            r3 = 83
+            android.widget.FrameLayout$LayoutParams r2 = org.telegram.ui.Components.LayoutHelper.createFrame((int) r2, (int) r6, (int) r3)
+            r0.addView(r1, r2)
+            android.widget.ImageView r0 = r7.searchButton
+            org.telegram.ui.Components.EmojiView$25 r1 = new org.telegram.ui.Components.EmojiView$25
+            r1.<init>()
+            r0.setOnClickListener(r1)
+            r1 = 1109393408(0x42200000, float:40.0)
+            goto L_0x09a1
+        L_0x085e:
+            android.widget.FrameLayout r0 = r7.bottomTabContainer
+            r2 = 21
+            if (r12 < r2) goto L_0x0867
+            r3 = 40
+            goto L_0x0869
+        L_0x0867:
+            r3 = 44
+        L_0x0869:
+            int r25 = r3 + 16
+            if (r12 < r2) goto L_0x0870
+            r2 = 40
+            goto L_0x0872
+        L_0x0870:
+            r2 = 44
+        L_0x0872:
+            r3 = 8
+            int r2 = r2 + r3
+            float r2 = (float) r2
+            boolean r3 = org.telegram.messenger.LocaleController.isRTL
+            if (r3 == 0) goto L_0x087c
+            r5 = 3
+            goto L_0x087d
+        L_0x087c:
+            r5 = 5
+        L_0x087d:
+            r27 = r5 | 80
+            r28 = 0
+            r29 = 0
+            r30 = 1073741824(0x40000000, float:2.0)
+            r31 = 0
+            r26 = r2
+            android.widget.FrameLayout$LayoutParams r2 = org.telegram.ui.Components.LayoutHelper.createFrame(r25, r26, r27, r28, r29, r30, r31)
+            r7.addView(r0, r2)
+            r0 = 1113587712(0x42600000, float:56.0)
+            int r0 = org.telegram.messenger.AndroidUtilities.dp(r0)
+            int r2 = r7.getThemedColor(r1)
+            int r1 = r7.getThemedColor(r1)
+            android.graphics.drawable.Drawable r0 = org.telegram.ui.ActionBar.Theme.createSimpleSelectorCircleDrawable(r0, r2, r1)
+            r1 = 21
+            if (r12 >= r1) goto L_0x08d6
+            android.content.res.Resources r1 = r40.getResources()
+            r2 = 2131165414(0x7var_e6, float:1.7945044E38)
+            android.graphics.drawable.Drawable r1 = r1.getDrawable(r2)
+            android.graphics.drawable.Drawable r1 = r1.mutate()
+            android.graphics.PorterDuffColorFilter r2 = new android.graphics.PorterDuffColorFilter
+            r3 = -16777216(0xfffffffffvar_, float:-1.7014118E38)
+            android.graphics.PorterDuff$Mode r4 = android.graphics.PorterDuff.Mode.MULTIPLY
+            r2.<init>(r3, r4)
+            r1.setColorFilter(r2)
+            org.telegram.ui.Components.CombinedDrawable r2 = new org.telegram.ui.Components.CombinedDrawable
+            r3 = 0
+            r2.<init>(r1, r0, r3, r3)
+            r1 = 1109393408(0x42200000, float:40.0)
+            int r0 = org.telegram.messenger.AndroidUtilities.dp(r1)
+            int r4 = org.telegram.messenger.AndroidUtilities.dp(r1)
+            r2.setIconSize(r0, r4)
+            r0 = r2
+            goto L_0x0944
+        L_0x08d6:
+            r1 = 1109393408(0x42200000, float:40.0)
+            r3 = 0
+            android.animation.StateListAnimator r2 = new android.animation.StateListAnimator
+            r2.<init>()
+            r4 = 1
+            int[] r5 = new int[r4]
+            r4 = 16842919(0x10100a7, float:2.3694026E-38)
+            r5[r3] = r4
+            android.widget.ImageView r4 = r7.floatingButton
+            android.util.Property r11 = android.view.View.TRANSLATION_Z
+            r13 = 2
+            float[] r14 = new float[r13]
+            r13 = 1073741824(0x40000000, float:2.0)
+            int r13 = org.telegram.messenger.AndroidUtilities.dp(r13)
+            float r13 = (float) r13
+            r14[r3] = r13
+            r13 = 1082130432(0x40800000, float:4.0)
+            int r13 = org.telegram.messenger.AndroidUtilities.dp(r13)
+            float r13 = (float) r13
+            r16 = 1
+            r14[r16] = r13
+            android.animation.ObjectAnimator r4 = android.animation.ObjectAnimator.ofFloat(r4, r11, r14)
+            r13 = 200(0xc8, double:9.9E-322)
+            android.animation.ObjectAnimator r4 = r4.setDuration(r13)
+            r2.addState(r5, r4)
+            int[] r4 = new int[r3]
+            android.widget.ImageView r5 = r7.floatingButton
+            r13 = 2
+            float[] r14 = new float[r13]
+            r13 = 1082130432(0x40800000, float:4.0)
+            int r13 = org.telegram.messenger.AndroidUtilities.dp(r13)
+            float r13 = (float) r13
+            r14[r3] = r13
+            r3 = 1073741824(0x40000000, float:2.0)
+            int r3 = org.telegram.messenger.AndroidUtilities.dp(r3)
+            float r3 = (float) r3
+            r13 = 1
+            r14[r13] = r3
+            android.animation.ObjectAnimator r3 = android.animation.ObjectAnimator.ofFloat(r5, r11, r14)
+            r13 = 200(0xc8, double:9.9E-322)
+            android.animation.ObjectAnimator r3 = r3.setDuration(r13)
+            r2.addState(r4, r3)
+            android.widget.ImageView r3 = r7.backspaceButton
+            r3.setStateListAnimator(r2)
+            android.widget.ImageView r2 = r7.backspaceButton
+            org.telegram.ui.Components.EmojiView$26 r3 = new org.telegram.ui.Components.EmojiView$26
+            r3.<init>(r7)
+            r2.setOutlineProvider(r3)
+        L_0x0944:
+            android.widget.ImageView r2 = r7.backspaceButton
+            r3 = 1073741824(0x40000000, float:2.0)
+            int r3 = org.telegram.messenger.AndroidUtilities.dp(r3)
+            r4 = 0
+            r2.setPadding(r4, r4, r3, r4)
+            android.widget.ImageView r2 = r7.backspaceButton
+            r2.setBackground(r0)
+            android.widget.ImageView r0 = r7.backspaceButton
+            r2 = 2131623961(0x7f0e0019, float:1.8875088E38)
+            java.lang.String r3 = "AccDescrBackspace"
+            java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
+            r0.setContentDescription(r2)
+            android.widget.ImageView r0 = r7.backspaceButton
+            r2 = 1
+            r0.setFocusable(r2)
+            android.widget.FrameLayout r0 = r7.bottomTabContainer
+            android.widget.ImageView r2 = r7.backspaceButton
+            r3 = 21
+            if (r12 < r3) goto L_0x0974
+            r4 = 40
+            goto L_0x0976
+        L_0x0974:
+            r4 = 44
+        L_0x0976:
+            r5 = 4
+            int r16 = r4 + -4
+            if (r12 < r3) goto L_0x097e
+            r3 = 40
+            goto L_0x0980
+        L_0x097e:
+            r3 = 44
+        L_0x0980:
+            int r3 = r3 - r5
+            float r3 = (float) r3
+            r18 = 51
+            r19 = 1092616192(0x41200000, float:10.0)
+            r20 = 0
+            r21 = 1092616192(0x41200000, float:10.0)
+            r22 = 0
+            r17 = r3
+            android.widget.FrameLayout$LayoutParams r3 = org.telegram.ui.Components.LayoutHelper.createFrame(r16, r17, r18, r19, r20, r21, r22)
+            r0.addView(r2, r3)
+            android.view.View r0 = r7.shadowLine
+            r2 = 8
+            r0.setVisibility(r2)
+            android.view.View r0 = r7.bottomTabContainerBackground
+            r0.setVisibility(r2)
+        L_0x09a1:
+            androidx.viewpager.widget.ViewPager r0 = r7.pager
+            r2 = 51
+            android.widget.FrameLayout$LayoutParams r2 = org.telegram.ui.Components.LayoutHelper.createFrame((int) r15, (int) r15, (int) r2)
+            r3 = 0
+            r7.addView(r0, r3, r2)
+            org.telegram.ui.Components.CorrectlyMeasuringTextView r0 = new org.telegram.ui.Components.CorrectlyMeasuringTextView
+            r0.<init>(r10)
+            r7.mediaBanTooltip = r0
+            r2 = 1077936128(0x40400000, float:3.0)
+            int r2 = org.telegram.messenger.AndroidUtilities.dp(r2)
+            java.lang.String r3 = "chat_gifSaveHintBackground"
+            int r3 = r7.getThemedColor(r3)
+            android.graphics.drawable.Drawable r2 = org.telegram.ui.ActionBar.Theme.createRoundRectDrawable(r2, r3)
+            r0.setBackgroundDrawable(r2)
+            android.widget.TextView r0 = r7.mediaBanTooltip
+            java.lang.String r2 = "chat_gifSaveHintText"
+            int r2 = r7.getThemedColor(r2)
+            r0.setTextColor(r2)
+            android.widget.TextView r0 = r7.mediaBanTooltip
+            r2 = 1090519040(0x41000000, float:8.0)
+            int r2 = org.telegram.messenger.AndroidUtilities.dp(r2)
+            r3 = 1088421888(0x40e00000, float:7.0)
+            int r3 = org.telegram.messenger.AndroidUtilities.dp(r3)
+            r4 = 1090519040(0x41000000, float:8.0)
+            int r4 = org.telegram.messenger.AndroidUtilities.dp(r4)
             r5 = 1088421888(0x40e00000, float:7.0)
             int r5 = org.telegram.messenger.AndroidUtilities.dp(r5)
-            r6 = 1090519040(0x41000000, float:8.0)
-            int r6 = org.telegram.messenger.AndroidUtilities.dp(r6)
-            r7 = 1088421888(0x40e00000, float:7.0)
-            int r7 = org.telegram.messenger.AndroidUtilities.dp(r7)
-            r1.setPadding(r3, r5, r6, r7)
-            android.widget.TextView r1 = r0.mediaBanTooltip
-            r3 = 16
-            r1.setGravity(r3)
-            android.widget.TextView r1 = r0.mediaBanTooltip
-            r3 = 1096810496(0x41600000, float:14.0)
-            r5 = 1
-            r1.setTextSize(r5, r3)
-            android.widget.TextView r1 = r0.mediaBanTooltip
-            r3 = 4
-            r1.setVisibility(r3)
-            android.widget.TextView r1 = r0.mediaBanTooltip
-            r5 = -2
-            r6 = -1073741824(0xffffffffCLASSNAME, float:-2.0)
-            r7 = 81
-            r8 = 1084227584(0x40a00000, float:5.0)
-            r9 = 0
-            r10 = 1084227584(0x40a00000, float:5.0)
-            r11 = 1112801280(0x42540000, float:53.0)
-            android.widget.FrameLayout$LayoutParams r3 = org.telegram.ui.Components.LayoutHelper.createFrame(r5, r6, r7, r8, r9, r10, r11)
-            r0.addView(r1, r3)
-            boolean r1 = org.telegram.messenger.AndroidUtilities.isTablet()
-            if (r1 == 0) goto L_0x098e
-            goto L_0x0990
-        L_0x098e:
-            r16 = 1107296256(0x42000000, float:32.0)
-        L_0x0990:
-            int r1 = org.telegram.messenger.AndroidUtilities.dp(r16)
-            r0.emojiSize = r1
-            org.telegram.ui.Components.EmojiView$EmojiColorPickerView r1 = new org.telegram.ui.Components.EmojiView$EmojiColorPickerView
-            r1.<init>(r2)
-            r0.pickerView = r1
-            org.telegram.ui.Components.EmojiView$EmojiPopupWindow r1 = new org.telegram.ui.Components.EmojiView$EmojiPopupWindow
-            org.telegram.ui.Components.EmojiView$EmojiColorPickerView r2 = r0.pickerView
-            boolean r3 = org.telegram.messenger.AndroidUtilities.isTablet()
-            if (r3 == 0) goto L_0x09a8
-            goto L_0x09aa
-        L_0x09a8:
-            r4 = 32
-        L_0x09aa:
-            int r4 = r4 * 6
-            int r4 = r4 + 10
-            int r4 = r4 + 20
-            float r3 = (float) r4
-            int r3 = org.telegram.messenger.AndroidUtilities.dp(r3)
-            r0.popupWidth = r3
-            boolean r4 = org.telegram.messenger.AndroidUtilities.isTablet()
-            if (r4 == 0) goto L_0x09c0
-            r4 = 1115684864(0x42800000, float:64.0)
-            goto L_0x09c2
-        L_0x09c0:
-            r4 = 1113587712(0x42600000, float:56.0)
-        L_0x09c2:
-            int r4 = org.telegram.messenger.AndroidUtilities.dp(r4)
-            r0.popupHeight = r4
-            r1.<init>(r0, r2, r3, r4)
-            r0.pickerViewPopup = r1
-            r2 = 1
-            r1.setOutsideTouchable(r2)
-            org.telegram.ui.Components.EmojiView$EmojiPopupWindow r1 = r0.pickerViewPopup
-            r1.setClippingEnabled(r2)
-            org.telegram.ui.Components.EmojiView$EmojiPopupWindow r1 = r0.pickerViewPopup
-            r3 = 2
-            r1.setInputMethodMode(r3)
-            org.telegram.ui.Components.EmojiView$EmojiPopupWindow r1 = r0.pickerViewPopup
-            r3 = 0
-            r1.setSoftInputMode(r3)
-            org.telegram.ui.Components.EmojiView$EmojiPopupWindow r1 = r0.pickerViewPopup
-            android.view.View r1 = r1.getContentView()
-            r1.setFocusableInTouchMode(r2)
-            org.telegram.ui.Components.EmojiView$EmojiPopupWindow r1 = r0.pickerViewPopup
-            android.view.View r1 = r1.getContentView()
-            org.telegram.ui.Components.EmojiView$$ExternalSyntheticLambda1 r2 = new org.telegram.ui.Components.EmojiView$$ExternalSyntheticLambda1
-            r2.<init>(r0)
-            r1.setOnKeyListener(r2)
-            android.content.SharedPreferences r1 = org.telegram.messenger.MessagesController.getGlobalEmojiSettings()
-            java.lang.String r2 = "selected_page"
-            int r1 = r1.getInt(r2, r3)
-            r0.currentPage = r1
-            org.telegram.messenger.Emoji.loadRecentEmoji()
-            org.telegram.ui.Components.EmojiView$EmojiGridAdapter r1 = r0.emojiAdapter
-            r1.notifyDataSetChanged()
-            org.telegram.ui.Components.PagerSlidingTabStrip r1 = r0.typeTabs
-            if (r1 == 0) goto L_0x0a3f
-            java.util.ArrayList<android.view.View> r1 = r0.views
-            int r1 = r1.size()
-            r2 = 1
-            if (r1 != r2) goto L_0x0a29
-            org.telegram.ui.Components.PagerSlidingTabStrip r1 = r0.typeTabs
-            int r1 = r1.getVisibility()
-            if (r1 != 0) goto L_0x0a29
-            org.telegram.ui.Components.PagerSlidingTabStrip r1 = r0.typeTabs
+            r0.setPadding(r2, r3, r4, r5)
+            android.widget.TextView r0 = r7.mediaBanTooltip
+            r2 = 16
+            r0.setGravity(r2)
+            android.widget.TextView r0 = r7.mediaBanTooltip
+            r2 = 1096810496(0x41600000, float:14.0)
+            r3 = 1
+            r0.setTextSize(r3, r2)
+            android.widget.TextView r0 = r7.mediaBanTooltip
             r2 = 4
-            r1.setVisibility(r2)
-            goto L_0x0a3f
-        L_0x0a29:
-            java.util.ArrayList<android.view.View> r1 = r0.views
-            int r1 = r1.size()
-            if (r1 == r2) goto L_0x0a3f
-            org.telegram.ui.Components.PagerSlidingTabStrip r1 = r0.typeTabs
-            int r1 = r1.getVisibility()
-            if (r1 == 0) goto L_0x0a3f
-            org.telegram.ui.Components.PagerSlidingTabStrip r1 = r0.typeTabs
+            r0.setVisibility(r2)
+            android.widget.TextView r0 = r7.mediaBanTooltip
+            r11 = -2
+            r12 = -1073741824(0xffffffffCLASSNAME, float:-2.0)
+            r13 = 81
+            r14 = 1084227584(0x40a00000, float:5.0)
+            r15 = 0
+            r16 = 1084227584(0x40a00000, float:5.0)
+            r17 = 1112801280(0x42540000, float:53.0)
+            android.widget.FrameLayout$LayoutParams r2 = org.telegram.ui.Components.LayoutHelper.createFrame(r11, r12, r13, r14, r15, r16, r17)
+            r7.addView(r0, r2)
+            boolean r0 = org.telegram.messenger.AndroidUtilities.isTablet()
+            if (r0 == 0) goto L_0x0a22
+            r0 = 1109393408(0x42200000, float:40.0)
+            goto L_0x0a24
+        L_0x0a22:
+            r0 = 1107296256(0x42000000, float:32.0)
+        L_0x0a24:
+            int r0 = org.telegram.messenger.AndroidUtilities.dp(r0)
+            r7.emojiSize = r0
+            org.telegram.ui.Components.EmojiView$EmojiColorPickerView r0 = new org.telegram.ui.Components.EmojiView$EmojiColorPickerView
+            r0.<init>(r10)
+            r7.pickerView = r0
+            org.telegram.ui.Components.EmojiView$EmojiPopupWindow r0 = new org.telegram.ui.Components.EmojiView$EmojiPopupWindow
+            org.telegram.ui.Components.EmojiView$EmojiColorPickerView r1 = r7.pickerView
+            boolean r2 = org.telegram.messenger.AndroidUtilities.isTablet()
+            if (r2 == 0) goto L_0x0a3c
+            goto L_0x0a3e
+        L_0x0a3c:
+            r6 = 32
+        L_0x0a3e:
+            int r6 = r6 * 6
+            int r6 = r6 + 10
+            int r6 = r6 + 20
+            float r2 = (float) r6
+            int r2 = org.telegram.messenger.AndroidUtilities.dp(r2)
+            r7.popupWidth = r2
+            boolean r3 = org.telegram.messenger.AndroidUtilities.isTablet()
+            if (r3 == 0) goto L_0x0a54
+            r3 = 1115684864(0x42800000, float:64.0)
+            goto L_0x0a56
+        L_0x0a54:
+            r3 = 1113587712(0x42600000, float:56.0)
+        L_0x0a56:
+            int r3 = org.telegram.messenger.AndroidUtilities.dp(r3)
+            r7.popupHeight = r3
+            r0.<init>(r7, r1, r2, r3)
+            r7.pickerViewPopup = r0
+            r1 = 1
+            r0.setOutsideTouchable(r1)
+            org.telegram.ui.Components.EmojiView$EmojiPopupWindow r0 = r7.pickerViewPopup
+            r0.setClippingEnabled(r1)
+            org.telegram.ui.Components.EmojiView$EmojiPopupWindow r0 = r7.pickerViewPopup
+            r2 = 2
+            r0.setInputMethodMode(r2)
+            org.telegram.ui.Components.EmojiView$EmojiPopupWindow r0 = r7.pickerViewPopup
             r2 = 0
-            r1.setVisibility(r2)
-        L_0x0a3f:
+            r0.setSoftInputMode(r2)
+            org.telegram.ui.Components.EmojiView$EmojiPopupWindow r0 = r7.pickerViewPopup
+            android.view.View r0 = r0.getContentView()
+            r0.setFocusableInTouchMode(r1)
+            org.telegram.ui.Components.EmojiView$EmojiPopupWindow r0 = r7.pickerViewPopup
+            android.view.View r0 = r0.getContentView()
+            org.telegram.ui.Components.EmojiView$$ExternalSyntheticLambda1 r1 = new org.telegram.ui.Components.EmojiView$$ExternalSyntheticLambda1
+            r1.<init>(r7)
+            r0.setOnKeyListener(r1)
+            android.content.SharedPreferences r0 = org.telegram.messenger.MessagesController.getGlobalEmojiSettings()
+            java.lang.String r1 = "selected_page"
+            int r0 = r0.getInt(r1, r2)
+            r7.currentPage = r0
+            org.telegram.messenger.Emoji.loadRecentEmoji()
+            org.telegram.ui.Components.EmojiView$EmojiGridAdapter r0 = r7.emojiAdapter
+            r0.notifyDataSetChanged()
+            r7.setAllow(r8, r9, r2)
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.EmojiView.<init>(org.telegram.ui.ActionBar.BaseFragment, boolean, boolean, boolean, android.content.Context, boolean, org.telegram.tgnet.TLRPC$ChatFull, android.view.ViewGroup, org.telegram.ui.ActionBar.Theme$ResourcesProvider):void");
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ boolean lambda$new$1(Theme.ResourcesProvider resourcesProvider2, View view, MotionEvent motionEvent) {
+    public /* synthetic */ boolean lambda$new$2(Theme.ResourcesProvider resourcesProvider2, View view, MotionEvent motionEvent) {
         return ContentPreviewViewer.getInstance().onTouch(motionEvent, this.gifGridView, 0, this.gifOnItemClickListener, this.contentPreviewViewerDelegate, resourcesProvider2);
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$new$2(View view, int i) {
+    public /* synthetic */ void lambda$new$3(View view, int i) {
         if (this.delegate != null) {
             int i2 = i - 1;
             RecyclerView.Adapter adapter = this.gifGridView.getAdapter();
@@ -2450,7 +2593,7 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$new$3(int i) {
+    public /* synthetic */ void lambda$new$4(int i) {
         if (i != this.gifTrendingTabNum || !this.gifAdapter.results.isEmpty()) {
             this.gifGridView.stopScroll();
             this.gifTabs.onPageScrolled(i, 0);
@@ -2489,23 +2632,23 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ boolean lambda$new$4(Theme.ResourcesProvider resourcesProvider2, View view, MotionEvent motionEvent) {
+    public /* synthetic */ boolean lambda$new$5(Theme.ResourcesProvider resourcesProvider2, View view, MotionEvent motionEvent) {
         return ContentPreviewViewer.getInstance().onTouch(motionEvent, this.stickersGridView, getMeasuredHeight(), this.stickersOnItemClickListener, this.contentPreviewViewerDelegate, resourcesProvider2);
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$new$5(View view, int i) {
+    public /* synthetic */ void lambda$new$6(View view, int i) {
         String str;
         RecyclerView.Adapter adapter = this.stickersGridView.getAdapter();
         StickersSearchGridAdapter stickersSearchGridAdapter2 = this.stickersSearchGridAdapter;
         if (adapter == stickersSearchGridAdapter2) {
-            String access$17800 = stickersSearchGridAdapter2.searchQuery;
+            String access$18400 = stickersSearchGridAdapter2.searchQuery;
             TLRPC$StickerSetCovered tLRPC$StickerSetCovered = (TLRPC$StickerSetCovered) this.stickersSearchGridAdapter.positionsToSets.get(i);
             if (tLRPC$StickerSetCovered != null) {
                 this.delegate.onShowStickerSet(tLRPC$StickerSetCovered.set, (TLRPC$InputStickerSet) null);
                 return;
             }
-            str = access$17800;
+            str = access$18400;
         } else {
             str = null;
         }
@@ -2525,7 +2668,7 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$new$6(int i) {
+    public /* synthetic */ void lambda$new$7(int i) {
         if (!this.firstTabUpdate) {
             if (i == this.trendingTabNum) {
                 openTrendingStickers((TLRPC$StickerSetCovered) null);
@@ -2574,7 +2717,7 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ boolean lambda$new$7(View view, int i, KeyEvent keyEvent) {
+    public /* synthetic */ boolean lambda$new$8(View view, int i, KeyEvent keyEvent) {
         EmojiPopupWindow emojiPopupWindow;
         if (i != 82 || keyEvent.getRepeatCount() != 0 || keyEvent.getAction() != 1 || (emojiPopupWindow = this.pickerViewPopup) == null || !emojiPopupWindow.isShowing()) {
             return false;
@@ -2583,9 +2726,578 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
         return true;
     }
 
+    class EmojiGridView extends RecyclerListView {
+        private boolean ignoreLayout;
+        ArrayList<DrawingInBackgroundLine> lineDrawables = new ArrayList<>();
+        ArrayList<DrawingInBackgroundLine> lineDrawablesTmp = new ArrayList<>();
+        private HashMap<Integer, TouchDownInfo> touches;
+        ArrayList<ArrayList<ImageViewEmoji>> unusedArrays = new ArrayList<>();
+        ArrayList<DrawingInBackgroundLine> unusedLineDrawables = new ArrayList<>();
+        SparseArray<ArrayList<ImageViewEmoji>> viewsGroupedByLines = new SparseArray<>();
+
+        public EmojiGridView(Context context) {
+            super(context);
+        }
+
+        /* access modifiers changed from: protected */
+        public void onMeasure(int i, int i2) {
+            this.ignoreLayout = true;
+            EmojiView.this.emojiLayoutManager.setSpanCount(Math.max(1, View.MeasureSpec.getSize(i) / AndroidUtilities.dp(AndroidUtilities.isTablet() ? 60.0f : 45.0f)));
+            this.ignoreLayout = false;
+            super.onMeasure(i, i2);
+        }
+
+        /* access modifiers changed from: protected */
+        public void onLayout(boolean z, int i, int i2, int i3, int i4) {
+            if (EmojiView.this.needEmojiSearch && EmojiView.this.firstEmojiAttach) {
+                this.ignoreLayout = true;
+                EmojiView.this.emojiLayoutManager.scrollToPositionWithOffset(1, 0);
+                boolean unused = EmojiView.this.firstEmojiAttach = false;
+                this.ignoreLayout = false;
+            }
+            super.onLayout(z, i, i2, i3, i4);
+            EmojiView.this.checkEmojiSearchFieldScroll(true);
+        }
+
+        public void requestLayout() {
+            if (!this.ignoreLayout) {
+                super.requestLayout();
+            }
+        }
+
+        /* JADX WARNING: Removed duplicated region for block: B:18:0x006f  */
+        /* Code decompiled incorrectly, please refer to instructions dump. */
+        public boolean onTouchEvent(android.view.MotionEvent r12) {
+            /*
+                r11 = this;
+                org.telegram.ui.Components.EmojiView r0 = org.telegram.ui.Components.EmojiView.this
+                org.telegram.ui.Components.EmojiView$ImageViewEmoji r0 = r0.emojiTouchedView
+                if (r0 == 0) goto L_0x01b1
+                int r0 = r12.getAction()
+                r1 = 2
+                r2 = 5
+                r3 = 3
+                r4 = -971227136(0xffffffffCLASSNAMECLASSNAME, float:-10000.0)
+                r5 = 1
+                if (r0 == r5) goto L_0x00da
+                int r0 = r12.getAction()
+                if (r0 != r3) goto L_0x001d
+                goto L_0x00da
+            L_0x001d:
+                int r0 = r12.getAction()
+                if (r0 != r1) goto L_0x01b0
+                org.telegram.ui.Components.EmojiView r0 = org.telegram.ui.Components.EmojiView.this
+                float r0 = r0.emojiTouchedX
+                r1 = 0
+                int r0 = (r0 > r4 ? 1 : (r0 == r4 ? 0 : -1))
+                if (r0 == 0) goto L_0x006c
+                org.telegram.ui.Components.EmojiView r0 = org.telegram.ui.Components.EmojiView.this
+                float r0 = r0.emojiTouchedX
+                float r3 = r12.getX()
+                float r0 = r0 - r3
+                float r0 = java.lang.Math.abs(r0)
+                r3 = 1045220557(0x3e4ccccd, float:0.2)
+                float r6 = org.telegram.messenger.AndroidUtilities.getPixelsInCM(r3, r5)
+                int r0 = (r0 > r6 ? 1 : (r0 == r6 ? 0 : -1))
+                if (r0 > 0) goto L_0x0062
+                org.telegram.ui.Components.EmojiView r0 = org.telegram.ui.Components.EmojiView.this
+                float r0 = r0.emojiTouchedY
+                float r6 = r12.getY()
+                float r0 = r0 - r6
+                float r0 = java.lang.Math.abs(r0)
+                float r3 = org.telegram.messenger.AndroidUtilities.getPixelsInCM(r3, r1)
+                int r0 = (r0 > r3 ? 1 : (r0 == r3 ? 0 : -1))
+                if (r0 <= 0) goto L_0x0060
+                goto L_0x0062
+            L_0x0060:
+                r0 = 1
+                goto L_0x006d
+            L_0x0062:
+                org.telegram.ui.Components.EmojiView r0 = org.telegram.ui.Components.EmojiView.this
+                float unused = r0.emojiTouchedX = r4
+                org.telegram.ui.Components.EmojiView r0 = org.telegram.ui.Components.EmojiView.this
+                float unused = r0.emojiTouchedY = r4
+            L_0x006c:
+                r0 = 0
+            L_0x006d:
+                if (r0 != 0) goto L_0x01b0
+                org.telegram.ui.Components.EmojiView r0 = org.telegram.ui.Components.EmojiView.this
+                int[] r0 = r0.location
+                r11.getLocationOnScreen(r0)
+                org.telegram.ui.Components.EmojiView r0 = org.telegram.ui.Components.EmojiView.this
+                int[] r0 = r0.location
+                r0 = r0[r1]
+                float r0 = (float) r0
+                float r12 = r12.getX()
+                float r0 = r0 + r12
+                org.telegram.ui.Components.EmojiView r12 = org.telegram.ui.Components.EmojiView.this
+                org.telegram.ui.Components.EmojiView$EmojiColorPickerView r12 = r12.pickerView
+                org.telegram.ui.Components.EmojiView r3 = org.telegram.ui.Components.EmojiView.this
+                int[] r3 = r3.location
+                r12.getLocationOnScreen(r3)
+                org.telegram.ui.Components.EmojiView r12 = org.telegram.ui.Components.EmojiView.this
+                int[] r12 = r12.location
+                r12 = r12[r1]
+                r3 = 1077936128(0x40400000, float:3.0)
+                int r3 = org.telegram.messenger.AndroidUtilities.dp(r3)
+                int r12 = r12 + r3
+                float r12 = (float) r12
+                float r0 = r0 - r12
+                org.telegram.ui.Components.EmojiView r12 = org.telegram.ui.Components.EmojiView.this
+                int r12 = r12.emojiSize
+                r3 = 1082130432(0x40800000, float:4.0)
+                int r3 = org.telegram.messenger.AndroidUtilities.dp(r3)
+                int r12 = r12 + r3
+                float r12 = (float) r12
+                float r0 = r0 / r12
+                int r12 = (int) r0
+                if (r12 >= 0) goto L_0x00ba
+                r2 = 0
+                goto L_0x00be
+            L_0x00ba:
+                if (r12 <= r2) goto L_0x00bd
+                goto L_0x00be
+            L_0x00bd:
+                r2 = r12
+            L_0x00be:
+                org.telegram.ui.Components.EmojiView r12 = org.telegram.ui.Components.EmojiView.this
+                org.telegram.ui.Components.EmojiView$EmojiColorPickerView r12 = r12.pickerView
+                int r12 = r12.getSelection()
+                if (r12 == r2) goto L_0x00cf
+                r12 = 9
+                r11.performHapticFeedback(r12, r5)     // Catch:{ Exception -> 0x00cf }
+            L_0x00cf:
+                org.telegram.ui.Components.EmojiView r12 = org.telegram.ui.Components.EmojiView.this
+                org.telegram.ui.Components.EmojiView$EmojiColorPickerView r12 = r12.pickerView
+                r12.setSelection(r2)
+                goto L_0x01b0
+            L_0x00da:
+                org.telegram.ui.Components.EmojiView r12 = org.telegram.ui.Components.EmojiView.this
+                org.telegram.ui.Components.EmojiView$EmojiPopupWindow r12 = r12.pickerViewPopup
+                r0 = 0
+                if (r12 == 0) goto L_0x01a1
+                org.telegram.ui.Components.EmojiView r12 = org.telegram.ui.Components.EmojiView.this
+                org.telegram.ui.Components.EmojiView$EmojiPopupWindow r12 = r12.pickerViewPopup
+                boolean r12 = r12.isShowing()
+                if (r12 == 0) goto L_0x01a1
+                org.telegram.ui.Components.EmojiView r12 = org.telegram.ui.Components.EmojiView.this
+                org.telegram.ui.Components.EmojiView$EmojiPopupWindow r12 = r12.pickerViewPopup
+                r12.dismiss()
+                org.telegram.ui.Components.EmojiView r12 = org.telegram.ui.Components.EmojiView.this
+                org.telegram.ui.Components.EmojiView$EmojiColorPickerView r12 = r12.pickerView
+                int r12 = r12.getSelection()
+                java.lang.String r6 = "🏿"
+                java.lang.String r7 = "🏾"
+                java.lang.String r8 = "🏽"
+                java.lang.String r9 = "🏼"
+                java.lang.String r10 = "🏻"
+                if (r12 == r5) goto L_0x0121
+                if (r12 == r1) goto L_0x011f
+                if (r12 == r3) goto L_0x011d
+                r1 = 4
+                if (r12 == r1) goto L_0x011b
+                if (r12 == r2) goto L_0x0119
+                r12 = r0
+                goto L_0x0122
+            L_0x0119:
+                r12 = r6
+                goto L_0x0122
+            L_0x011b:
+                r12 = r7
+                goto L_0x0122
+            L_0x011d:
+                r12 = r8
+                goto L_0x0122
+            L_0x011f:
+                r12 = r9
+                goto L_0x0122
+            L_0x0121:
+                r12 = r10
+            L_0x0122:
+                org.telegram.ui.Components.EmojiView r1 = org.telegram.ui.Components.EmojiView.this
+                org.telegram.ui.Components.EmojiView$ImageViewEmoji r1 = r1.emojiTouchedView
+                java.lang.Object r1 = r1.getTag()
+                java.lang.String r1 = (java.lang.String) r1
+                org.telegram.ui.Components.EmojiView r2 = org.telegram.ui.Components.EmojiView.this
+                org.telegram.ui.Components.EmojiView$ImageViewEmoji r2 = r2.emojiTouchedView
+                boolean r2 = r2.isRecent
+                if (r2 != 0) goto L_0x0172
+                if (r12 == 0) goto L_0x0146
+                java.util.HashMap<java.lang.String, java.lang.String> r2 = org.telegram.messenger.Emoji.emojiColor
+                r2.put(r1, r12)
+                java.lang.String r1 = org.telegram.ui.Components.EmojiView.addColorToCode(r1, r12)
+                goto L_0x014b
+            L_0x0146:
+                java.util.HashMap<java.lang.String, java.lang.String> r12 = org.telegram.messenger.Emoji.emojiColor
+                r12.remove(r1)
+            L_0x014b:
+                org.telegram.ui.Components.EmojiView r12 = org.telegram.ui.Components.EmojiView.this
+                org.telegram.ui.Components.EmojiView$ImageViewEmoji r12 = r12.emojiTouchedView
+                android.graphics.drawable.Drawable r1 = org.telegram.messenger.Emoji.getEmojiBigDrawable(r1)
+                org.telegram.ui.Components.EmojiView r2 = org.telegram.ui.Components.EmojiView.this
+                org.telegram.ui.Components.EmojiView$ImageViewEmoji r2 = r2.emojiTouchedView
+                boolean r2 = r2.isRecent
+                r12.setImageDrawable(r1, r2)
+                org.telegram.ui.Components.EmojiView r12 = org.telegram.ui.Components.EmojiView.this
+                org.telegram.ui.Components.EmojiView$ImageViewEmoji r12 = r12.emojiTouchedView
+                r12.sendEmoji(r0)
+                r11.performHapticFeedback(r3, r5)     // Catch:{ Exception -> 0x016e }
+            L_0x016e:
+                org.telegram.messenger.Emoji.saveEmojiColors()
+                goto L_0x01a1
+            L_0x0172:
+                java.lang.String r2 = ""
+                java.lang.String r1 = r1.replace(r10, r2)
+                java.lang.String r1 = r1.replace(r9, r2)
+                java.lang.String r1 = r1.replace(r8, r2)
+                java.lang.String r1 = r1.replace(r7, r2)
+                java.lang.String r1 = r1.replace(r6, r2)
+                if (r12 == 0) goto L_0x0198
+                org.telegram.ui.Components.EmojiView r2 = org.telegram.ui.Components.EmojiView.this
+                org.telegram.ui.Components.EmojiView$ImageViewEmoji r2 = r2.emojiTouchedView
+                java.lang.String r12 = org.telegram.ui.Components.EmojiView.addColorToCode(r1, r12)
+                r2.sendEmoji(r12)
+                goto L_0x01a1
+            L_0x0198:
+                org.telegram.ui.Components.EmojiView r12 = org.telegram.ui.Components.EmojiView.this
+                org.telegram.ui.Components.EmojiView$ImageViewEmoji r12 = r12.emojiTouchedView
+                r12.sendEmoji(r1)
+            L_0x01a1:
+                org.telegram.ui.Components.EmojiView r12 = org.telegram.ui.Components.EmojiView.this
+                org.telegram.ui.Components.EmojiView.ImageViewEmoji unused = r12.emojiTouchedView = r0
+                org.telegram.ui.Components.EmojiView r12 = org.telegram.ui.Components.EmojiView.this
+                float unused = r12.emojiTouchedX = r4
+                org.telegram.ui.Components.EmojiView r12 = org.telegram.ui.Components.EmojiView.this
+                float unused = r12.emojiTouchedY = r4
+            L_0x01b0:
+                return r5
+            L_0x01b1:
+                org.telegram.ui.Components.EmojiView r0 = org.telegram.ui.Components.EmojiView.this
+                float r1 = r12.getX()
+                float unused = r0.emojiLastX = r1
+                org.telegram.ui.Components.EmojiView r0 = org.telegram.ui.Components.EmojiView.this
+                float r1 = r12.getY()
+                float unused = r0.emojiLastY = r1
+                boolean r12 = super.onTouchEvent(r12)
+                return r12
+            */
+            throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.EmojiView.EmojiGridView.onTouchEvent(android.view.MotionEvent):boolean");
+        }
+
+        public void onScrolled(int i, int i2) {
+            super.onScrolled(i, i2);
+            EmojiView emojiView = EmojiView.this;
+            LongSparseArray unused = emojiView.animatedEmojiDrawables = AnimatedEmojiSpan.update(1, (View) this, emojiView.getAnimatedEmojiSpans(), (LongSparseArray<AnimatedEmojiDrawable>) EmojiView.this.animatedEmojiDrawables);
+        }
+
+        public void onScrollStateChanged(int i) {
+            super.onScrollStateChanged(i);
+            if (i == 0) {
+                if (!canScrollVertically(-1) || !canScrollVertically(1)) {
+                    EmojiView.this.showBottomTab(true, true);
+                }
+                if (!canScrollVertically(1)) {
+                    EmojiView.this.checkTabsY(1, AndroidUtilities.dp(36.0f));
+                }
+            }
+        }
+
+        /* access modifiers changed from: protected */
+        public void dispatchDraw(Canvas canvas) {
+            DrawingInBackgroundLine drawingInBackgroundLine;
+            super.dispatchDraw(canvas);
+            for (int i = 0; i < this.viewsGroupedByLines.size(); i++) {
+                ArrayList valueAt = this.viewsGroupedByLines.valueAt(i);
+                valueAt.clear();
+                this.unusedArrays.add(valueAt);
+            }
+            this.viewsGroupedByLines.clear();
+            if (!(EmojiView.this.animatedEmojiDrawables == null || EmojiView.this.emojiGridView == null)) {
+                for (int i2 = 0; i2 < EmojiView.this.emojiGridView.getChildCount(); i2++) {
+                    View childAt = EmojiView.this.emojiGridView.getChildAt(i2);
+                    if (childAt instanceof ImageViewEmoji) {
+                        ArrayList arrayList = this.viewsGroupedByLines.get(childAt.getTop());
+                        if (arrayList == null) {
+                            if (!this.unusedArrays.isEmpty()) {
+                                ArrayList<ArrayList<ImageViewEmoji>> arrayList2 = this.unusedArrays;
+                                arrayList = arrayList2.remove(arrayList2.size() - 1);
+                            } else {
+                                arrayList = new ArrayList();
+                            }
+                            this.viewsGroupedByLines.put(childAt.getTop(), arrayList);
+                        }
+                        arrayList.add((ImageViewEmoji) childAt);
+                    }
+                }
+            }
+            this.lineDrawablesTmp.clear();
+            this.lineDrawablesTmp.addAll(this.lineDrawables);
+            this.lineDrawables.clear();
+            long currentTimeMillis = System.currentTimeMillis();
+            int i3 = 0;
+            while (true) {
+                DrawingInBackgroundLine drawingInBackgroundLine2 = null;
+                if (i3 >= this.viewsGroupedByLines.size()) {
+                    break;
+                }
+                ArrayList<ImageViewEmoji> valueAt2 = this.viewsGroupedByLines.valueAt(i3);
+                ImageViewEmoji imageViewEmoji = valueAt2.get(0);
+                int childAdapterPosition = getChildAdapterPosition(imageViewEmoji);
+                int i4 = 0;
+                while (true) {
+                    if (i4 >= this.lineDrawablesTmp.size()) {
+                        break;
+                    } else if (this.lineDrawablesTmp.get(i4).position == childAdapterPosition) {
+                        drawingInBackgroundLine2 = this.lineDrawablesTmp.get(i4);
+                        this.lineDrawablesTmp.remove(i4);
+                        break;
+                    } else {
+                        i4++;
+                    }
+                }
+                if (drawingInBackgroundLine == null) {
+                    if (!this.unusedLineDrawables.isEmpty()) {
+                        ArrayList<DrawingInBackgroundLine> arrayList3 = this.unusedLineDrawables;
+                        drawingInBackgroundLine = arrayList3.remove(arrayList3.size() - 1);
+                    } else {
+                        drawingInBackgroundLine = new DrawingInBackgroundLine();
+                    }
+                    drawingInBackgroundLine.position = childAdapterPosition;
+                    drawingInBackgroundLine.onAttachToWindow();
+                }
+                this.lineDrawables.add(drawingInBackgroundLine);
+                drawingInBackgroundLine.imageViewEmojis = valueAt2;
+                canvas.save();
+                canvas.translate(0.0f, imageViewEmoji.getY() + ((float) imageViewEmoji.getPaddingTop()));
+                drawingInBackgroundLine.draw(canvas, currentTimeMillis, getMeasuredWidth(), imageViewEmoji.getMeasuredHeight() - imageViewEmoji.getPaddingBottom(), 1.0f);
+                canvas.restore();
+                i3++;
+            }
+            for (int i5 = 0; i5 < this.lineDrawablesTmp.size(); i5++) {
+                if (this.unusedLineDrawables.size() < 3) {
+                    this.unusedLineDrawables.add(this.lineDrawablesTmp.get(i5));
+                    this.lineDrawablesTmp.get(i5).imageViewEmojis = null;
+                    this.lineDrawablesTmp.get(i5).reset();
+                } else {
+                    this.lineDrawablesTmp.get(i5).onDetachFromWindow();
+                }
+            }
+            this.lineDrawablesTmp.clear();
+        }
+
+        /* access modifiers changed from: protected */
+        public void onAttachedToWindow() {
+            super.onAttachedToWindow();
+            EmojiView emojiView = EmojiView.this;
+            LongSparseArray unused = emojiView.animatedEmojiDrawables = AnimatedEmojiSpan.update(1, (View) this, emojiView.getAnimatedEmojiSpans(), (LongSparseArray<AnimatedEmojiDrawable>) EmojiView.this.animatedEmojiDrawables);
+        }
+
+        /* access modifiers changed from: protected */
+        public void onDetachedFromWindow() {
+            super.onDetachedFromWindow();
+            AnimatedEmojiSpan.release((View) this, (LongSparseArray<AnimatedEmojiDrawable>) EmojiView.this.animatedEmojiDrawables);
+            for (int i = 0; i < this.lineDrawables.size(); i++) {
+                this.lineDrawables.get(i).onDetachFromWindow();
+            }
+            for (int i2 = 0; i2 < this.unusedLineDrawables.size(); i2++) {
+                this.unusedLineDrawables.get(i2).onDetachFromWindow();
+            }
+            this.lineDrawables.clear();
+        }
+
+        class TouchDownInfo {
+            long time;
+            View view;
+            float x;
+            float y;
+
+            TouchDownInfo(EmojiGridView emojiGridView) {
+            }
+        }
+
+        public void clearTouchesFor(View view) {
+            TouchDownInfo remove;
+            HashMap<Integer, TouchDownInfo> hashMap = this.touches;
+            if (hashMap != null) {
+                for (Map.Entry next : hashMap.entrySet()) {
+                    if (!(next == null || ((TouchDownInfo) next.getValue()).view != view || (remove = this.touches.remove(next.getKey())) == null)) {
+                        View view2 = remove.view;
+                        if (view2 != null && Build.VERSION.SDK_INT >= 21 && (view2.getBackground() instanceof RippleDrawable)) {
+                            remove.view.getBackground().setState(new int[0]);
+                        }
+                        View view3 = remove.view;
+                        if (view3 != null) {
+                            view3.setPressed(false);
+                        }
+                    }
+                }
+            }
+        }
+
+        class DrawingInBackgroundLine extends DrawingInBackgroundThreadDrawable {
+            ArrayList<ImageViewEmoji> drawInBackgroundViews = new ArrayList<>();
+            ArrayList<ImageViewEmoji> imageViewEmojis;
+            public int position;
+
+            DrawingInBackgroundLine() {
+            }
+
+            public void draw(Canvas canvas, long j, int i, int i2, float f) {
+                ArrayList<ImageViewEmoji> arrayList = this.imageViewEmojis;
+                if (arrayList != null) {
+                    int i3 = 0;
+                    boolean z = true;
+                    boolean z2 = arrayList.size() >= 4;
+                    if (!z2) {
+                        while (true) {
+                            if (i3 >= this.imageViewEmojis.size()) {
+                                break;
+                            } else if (this.imageViewEmojis.get(i3).pressedProgress != 0.0f) {
+                                break;
+                            } else {
+                                i3++;
+                            }
+                        }
+                    }
+                    z = z2;
+                    if (z) {
+                        prepareDraw(System.currentTimeMillis());
+                        drawInUiThread(canvas);
+                        reset();
+                        EmojiGridView.this.invalidate();
+                        return;
+                    }
+                    super.draw(canvas, j, i, i2, f);
+                }
+            }
+
+            public void prepareDraw(long j) {
+                AnimatedEmojiDrawable animatedEmojiDrawable;
+                this.drawInBackgroundViews.clear();
+                for (int i = 0; i < this.imageViewEmojis.size(); i++) {
+                    ImageViewEmoji imageViewEmoji = this.imageViewEmojis.get(i);
+                    if (!(imageViewEmoji.getSpan() == null || (animatedEmojiDrawable = (AnimatedEmojiDrawable) EmojiView.this.animatedEmojiDrawables.get(imageViewEmoji.span.getDocumentId())) == null || animatedEmojiDrawable.getImageReceiver() == null)) {
+                        animatedEmojiDrawable.update(j);
+                        ImageReceiver.BackgroundThreadDrawHolder unused = imageViewEmoji.backgroundThreadDrawHolder = animatedEmojiDrawable.getImageReceiver().setDrawInBackgroundThread(imageViewEmoji.backgroundThreadDrawHolder);
+                        imageViewEmoji.backgroundThreadDrawHolder.time = j;
+                        animatedEmojiDrawable.setAlpha(255);
+                        Rect rect = AndroidUtilities.rectTmp2;
+                        rect.set(imageViewEmoji.getLeft() + imageViewEmoji.getPaddingLeft(), 0, imageViewEmoji.getRight() - imageViewEmoji.getPaddingRight(), (imageViewEmoji.getMeasuredHeight() - imageViewEmoji.getPaddingTop()) - imageViewEmoji.getPaddingBottom());
+                        imageViewEmoji.backgroundThreadDrawHolder.setBounds(rect);
+                        imageViewEmoji.imageReceiver = animatedEmojiDrawable.getImageReceiver();
+                        this.drawInBackgroundViews.add(imageViewEmoji);
+                    }
+                }
+            }
+
+            public void drawInBackground(Canvas canvas) {
+                for (int i = 0; i < this.drawInBackgroundViews.size(); i++) {
+                    ImageViewEmoji imageViewEmoji = this.drawInBackgroundViews.get(i);
+                    imageViewEmoji.imageReceiver.draw(canvas, imageViewEmoji.backgroundThreadDrawHolder);
+                }
+            }
+
+            /* access modifiers changed from: protected */
+            public void drawInUiThread(Canvas canvas) {
+                AnimatedEmojiDrawable animatedEmojiDrawable;
+                if (this.imageViewEmojis != null) {
+                    for (int i = 0; i < this.imageViewEmojis.size(); i++) {
+                        ImageViewEmoji imageViewEmoji = this.imageViewEmojis.get(i);
+                        if (!(imageViewEmoji.getSpan() == null || (animatedEmojiDrawable = (AnimatedEmojiDrawable) EmojiView.this.animatedEmojiDrawables.get(imageViewEmoji.span.getDocumentId())) == null || animatedEmojiDrawable.getImageReceiver() == null || animatedEmojiDrawable.getImageReceiver() == null)) {
+                            animatedEmojiDrawable.setAlpha(255);
+                            Rect rect = AndroidUtilities.rectTmp2;
+                            rect.set(imageViewEmoji.getLeft() + imageViewEmoji.getPaddingLeft(), 0, imageViewEmoji.getRight() - imageViewEmoji.getPaddingRight(), (imageViewEmoji.getMeasuredHeight() - imageViewEmoji.getPaddingBottom()) - imageViewEmoji.getPaddingTop());
+                            animatedEmojiDrawable.getImageReceiver().setImageCoords(rect);
+                            float f = imageViewEmoji.pressedProgress;
+                            if (f != 0.0f) {
+                                float f2 = ((1.0f - f) * 0.2f) + 0.8f;
+                                canvas.save();
+                                canvas.scale(f2, f2, animatedEmojiDrawable.getImageReceiver().getCenterX(), animatedEmojiDrawable.getImageReceiver().getCenterY());
+                                animatedEmojiDrawable.getImageReceiver().draw(canvas);
+                                canvas.restore();
+                            } else {
+                                animatedEmojiDrawable.getImageReceiver().draw(canvas);
+                            }
+                        }
+                    }
+                }
+            }
+
+            public void onFrameReady() {
+                super.onFrameReady();
+                for (int i = 0; i < this.drawInBackgroundViews.size(); i++) {
+                    ImageViewEmoji imageViewEmoji = this.drawInBackgroundViews.get(i);
+                    if (imageViewEmoji.backgroundThreadDrawHolder != null) {
+                        imageViewEmoji.backgroundThreadDrawHolder.release();
+                    }
+                }
+                EmojiView.this.emojiGridView.invalidate();
+            }
+        }
+
+        public boolean dispatchTouchEvent(MotionEvent motionEvent) {
+            View view;
+            View view2;
+            boolean z = motionEvent.getActionMasked() == 5 || motionEvent.getActionMasked() == 0;
+            boolean z2 = motionEvent.getActionMasked() == 6 || motionEvent.getActionMasked() == 1;
+            boolean z3 = motionEvent.getActionMasked() == 3;
+            if (z || z2 || z3) {
+                int actionIndex = motionEvent.getActionIndex();
+                int pointerId = motionEvent.getPointerId(actionIndex);
+                if (this.touches == null) {
+                    this.touches = new HashMap<>();
+                }
+                float x = motionEvent.getX(actionIndex);
+                float y = motionEvent.getY(actionIndex);
+                View findChildViewUnder = findChildViewUnder(x, y);
+                if (!z) {
+                    TouchDownInfo remove = this.touches.remove(Integer.valueOf(pointerId));
+                    if (findChildViewUnder != null && remove != null && Math.sqrt(Math.pow((double) (x - remove.x), 2.0d) + Math.pow((double) (y - remove.y), 2.0d)) < ((double) (AndroidUtilities.touchSlop * 3.0f)) && !z3 && (!EmojiView.this.pickerViewPopup.isShowing() || SystemClock.elapsedRealtime() - remove.time < ((long) ViewConfiguration.getLongPressTimeout()))) {
+                        View view3 = remove.view;
+                        if (view3 instanceof ImageViewEmoji) {
+                            ImageViewEmoji imageViewEmoji = (ImageViewEmoji) view3;
+                            if (imageViewEmoji.pack == null || imageViewEmoji.pack.set == null || imageViewEmoji.pack.installed || EmojiView.this.keepFeaturedDuplicate.contains(Long.valueOf(imageViewEmoji.pack.set.id))) {
+                                imageViewEmoji.sendEmoji((String) null);
+                                try {
+                                    performHapticFeedback(3, 1);
+                                } catch (Exception unused) {
+                                }
+                            } else {
+                                EmojiView.this.openEmojiPackAlert(imageViewEmoji.pack.set);
+                            }
+                        }
+                    }
+                    if (remove != null && (view2 = remove.view) != null && Build.VERSION.SDK_INT >= 21 && (view2.getBackground() instanceof RippleDrawable)) {
+                        remove.view.getBackground().setState(new int[0]);
+                    }
+                    if (!(remove == null || (view = remove.view) == null)) {
+                        view.setPressed(false);
+                    }
+                } else if (findChildViewUnder instanceof ImageViewEmoji) {
+                    TouchDownInfo touchDownInfo = new TouchDownInfo(this);
+                    touchDownInfo.x = x;
+                    touchDownInfo.y = y;
+                    touchDownInfo.time = SystemClock.elapsedRealtime();
+                    touchDownInfo.view = findChildViewUnder;
+                    if (Build.VERSION.SDK_INT >= 21 && (findChildViewUnder.getBackground() instanceof RippleDrawable)) {
+                        findChildViewUnder.getBackground().setState(new int[]{16842919, 16842910});
+                    }
+                    touchDownInfo.view.setPressed(true);
+                    this.touches.put(Integer.valueOf(pointerId), touchDownInfo);
+                } else {
+                    this.touches.remove(Integer.valueOf(pointerId));
+                }
+            }
+            if (super.dispatchTouchEvent(motionEvent) || (!z3 && !this.touches.isEmpty())) {
+                return true;
+            }
+            return false;
+        }
+    }
+
     /* access modifiers changed from: private */
     public void createStickersChooseActionTracker() {
-        AnonymousClass28 r0 = new ChooseStickerActionTracker(this.currentAccount, this.delegate.getDialogId(), this.delegate.getThreadId()) {
+        AnonymousClass27 r0 = new ChooseStickerActionTracker(this.currentAccount, this.delegate.getDialogId(), this.delegate.getThreadId()) {
             public boolean isShown() {
                 return EmojiView.this.delegate != null && EmojiView.this.getVisibility() == 0 && EmojiView.this.stickersContainerAttached;
             }
@@ -2637,6 +3349,329 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
         }
     }
 
+    private class EmojiPackHeader extends FrameLayout implements NotificationCenter.NotificationCenterDelegate {
+        private int addButtonBackgroundAlpha = 255;
+        AnimatedTextView addButtonView;
+        boolean divider;
+        boolean free;
+        TextView headerView;
+        private ValueAnimator installAnimator;
+        private float installT;
+        private Boolean installed;
+        private ValueAnimator lockAnimator;
+        private Boolean lockShow;
+        private float lockT;
+        RLottieImageView lockView;
+        private boolean packInstalled;
+        Path path = new Path();
+        PremiumButtonView premiumButtonView;
+        private TLRPC$StickerSet set;
+        private TLRPC$InputStickerSet toInstall;
+
+        public EmojiPackHeader(Context context) {
+            super(context);
+            RLottieImageView rLottieImageView = new RLottieImageView(context);
+            this.lockView = rLottieImageView;
+            rLottieImageView.setAnimation(NUM, 24, 24);
+            this.lockView.setColorFilter(EmojiView.this.getThemedColor("chat_emojiPanelStickerSetName"));
+            addView(this.lockView, LayoutHelper.createFrameRelatively(20.0f, 20.0f, 8388611, 10.0f, 15.0f, 0.0f, 0.0f));
+            TextView textView = new TextView(context);
+            this.headerView = textView;
+            textView.setTextColor(EmojiView.this.getThemedColor("chat_emojiPanelStickerSetName"));
+            this.headerView.setTextSize(1, 14.0f);
+            this.headerView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
+            addView(this.headerView, LayoutHelper.createFrameRelatively(-1.0f, -1.0f, 8388611, 15.0f, 15.0f, 52.0f, 0.0f));
+            AnonymousClass1 r5 = new AnimatedTextView(context, EmojiView.this) {
+                public void invalidate() {
+                    super.invalidate();
+                    EmojiPackHeader.this.invalidate();
+                }
+            };
+            this.addButtonView = r5;
+            r5.setAnimationProperties(0.25f, 0, 450, CubicBezierInterpolator.EASE_OUT_QUINT);
+            this.addButtonView.setTextSize((float) AndroidUtilities.dp(14.0f));
+            this.addButtonView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
+            this.addButtonView.setTextColor(EmojiView.this.getThemedColor("featuredStickers_buttonText"));
+            this.addButtonView.setBackground(Theme.AdaptiveRipple.filledRect(EmojiView.this.getThemedColor("featuredStickers_addButton")));
+            this.addButtonView.setText(LocaleController.getString("Add", NUM));
+            this.addButtonView.setPadding(AndroidUtilities.dp(14.0f), 0, AndroidUtilities.dp(14.0f), 0);
+            this.addButtonView.setGravity(5);
+            addView(this.addButtonView, LayoutHelper.createFrameRelatively(-2.0f, 26.0f, 8388661, 0.0f, 11.0f, 11.0f, 0.0f));
+            PremiumButtonView premiumButtonView2 = new PremiumButtonView(context, AndroidUtilities.dp(16.0f), false);
+            this.premiumButtonView = premiumButtonView2;
+            premiumButtonView2.setIcon(NUM);
+            this.premiumButtonView.setButton(LocaleController.getString("Unlock", NUM), new EmojiView$EmojiPackHeader$$ExternalSyntheticLambda2(this));
+            try {
+                ViewGroup.MarginLayoutParams marginLayoutParams = (ViewGroup.MarginLayoutParams) this.premiumButtonView.getIconView().getLayoutParams();
+                marginLayoutParams.leftMargin = AndroidUtilities.dp(1.0f);
+                marginLayoutParams.topMargin = AndroidUtilities.dp(1.0f);
+                int dp = AndroidUtilities.dp(20.0f);
+                marginLayoutParams.height = dp;
+                marginLayoutParams.width = dp;
+                ((ViewGroup.MarginLayoutParams) this.premiumButtonView.getTextView().getLayoutParams()).leftMargin = AndroidUtilities.dp(3.0f);
+                this.premiumButtonView.getChildAt(0).setPadding(AndroidUtilities.dp(8.0f), 0, AndroidUtilities.dp(8.0f), 0);
+            } catch (Exception unused) {
+            }
+            addView(this.premiumButtonView, LayoutHelper.createFrameRelatively(-2.0f, 26.0f, 8388661, 0.0f, 11.0f, 11.0f, 0.0f));
+            setWillNotDraw(false);
+        }
+
+        /* access modifiers changed from: private */
+        public /* synthetic */ void lambda$new$0(View view) {
+            EmojiView.this.openPremiumAnimatedEmojiFeature();
+        }
+
+        /* access modifiers changed from: protected */
+        public boolean drawChild(Canvas canvas, View view, long j) {
+            if (view != this.addButtonView) {
+                return super.drawChild(canvas, view, j);
+            }
+            canvas.save();
+            this.path.rewind();
+            RectF rectF = AndroidUtilities.rectTmp;
+            rectF.set((float) (view.getRight() - this.addButtonView.width()), (float) view.getTop(), (float) view.getRight(), (float) view.getBottom());
+            this.path.addRoundRect(rectF, (float) AndroidUtilities.dp(16.0f), (float) AndroidUtilities.dp(16.0f), Path.Direction.CW);
+            canvas.clipPath(this.path);
+            if (view.getBackground() != null) {
+                view.getBackground().setAlpha(this.addButtonBackgroundAlpha);
+            }
+            boolean drawChild = super.drawChild(canvas, view, j);
+            canvas.restore();
+            return drawChild;
+        }
+
+        /* access modifiers changed from: protected */
+        public void onMeasure(int i, int i2) {
+            super.onMeasure(View.MeasureSpec.makeMeasureSpec(View.MeasureSpec.getSize(i), NUM), View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(42.0f), NUM));
+        }
+
+        public void setStickerSet(EmojiPack emojiPack, boolean z) {
+            if (emojiPack != null) {
+                this.divider = z;
+                this.free = emojiPack.free;
+                TLRPC$StickerSet tLRPC$StickerSet = emojiPack.set;
+                this.set = tLRPC$StickerSet;
+                try {
+                    this.headerView.setText(tLRPC$StickerSet.title);
+                } catch (Exception unused) {
+                }
+                boolean z2 = emojiPack.installed;
+                this.packInstalled = z2;
+                if (z2) {
+                    this.addButtonView.setVisibility(8);
+                } else {
+                    this.addButtonView.setVisibility(0);
+                    this.addButtonView.setOnClickListener(new EmojiView$EmojiPackHeader$$ExternalSyntheticLambda3(this, emojiPack));
+                }
+                boolean z3 = true;
+                boolean z4 = !this.free && !UserConfig.getInstance(EmojiView.this.currentAccount).isPremium();
+                if ((!this.packInstalled || z4) && (emojiPack.set == null || !EmojiView.this.keepFeaturedDuplicate.contains(Long.valueOf(emojiPack.set.id)))) {
+                    z3 = false;
+                }
+                updateInstall(z3, false);
+                updateLock(z4, false);
+                invalidate();
+            }
+        }
+
+        /* access modifiers changed from: private */
+        public /* synthetic */ void lambda$setStickerSet$2(EmojiPack emojiPack, View view) {
+            if (this.toInstall == null && !this.packInstalled) {
+                TLRPC$TL_messages_stickerSet stickerSetById = MediaDataController.getInstance(EmojiView.this.currentAccount).getStickerSetById(emojiPack.set.id);
+                if (stickerSetById == null || stickerSetById.set == null) {
+                    TLRPC$TL_inputStickerSetID tLRPC$TL_inputStickerSetID = new TLRPC$TL_inputStickerSetID();
+                    TLRPC$StickerSet tLRPC$StickerSet = emojiPack.set;
+                    tLRPC$TL_inputStickerSetID.id = tLRPC$StickerSet.id;
+                    tLRPC$TL_inputStickerSetID.access_hash = tLRPC$StickerSet.access_hash;
+                    NotificationCenter.getInstance(EmojiView.this.currentAccount).addObserver(this, NotificationCenter.groupStickersDidLoad);
+                    MediaDataController instance = MediaDataController.getInstance(EmojiView.this.currentAccount);
+                    this.toInstall = tLRPC$TL_inputStickerSetID;
+                    instance.getStickerSet(tLRPC$TL_inputStickerSetID, false);
+                    return;
+                }
+                EmojiView.this.keepFeaturedDuplicate.add(Long.valueOf(stickerSetById.set.id));
+                EmojiPacksAlert.installSet(EmojiView.this.fragment, stickerSetById, true, new EmojiView$EmojiPackHeader$$ExternalSyntheticLambda4(this));
+            }
+        }
+
+        /* access modifiers changed from: private */
+        public /* synthetic */ void lambda$setStickerSet$1() {
+            updateInstall(true, true);
+        }
+
+        public void didReceivedNotification(int i, int i2, Object... objArr) {
+            TLRPC$TL_messages_stickerSet stickerSetById;
+            int i3 = NotificationCenter.groupStickersDidLoad;
+            if (i == i3 && this.toInstall != null && (stickerSetById = MediaDataController.getInstance(EmojiView.this.currentAccount).getStickerSetById(this.toInstall.id)) != null && stickerSetById.set != null) {
+                EmojiView.this.keepFeaturedDuplicate.add(Long.valueOf(stickerSetById.set.id));
+                EmojiPacksAlert.installSet(EmojiView.this.fragment, stickerSetById, true, new EmojiView$EmojiPackHeader$$ExternalSyntheticLambda5(this));
+                NotificationCenter.getInstance(EmojiView.this.currentAccount).removeObserver(this, i3);
+                this.toInstall = null;
+            }
+        }
+
+        /* access modifiers changed from: private */
+        public /* synthetic */ void lambda$didReceivedNotification$3() {
+            updateInstall(true, true);
+        }
+
+        /* access modifiers changed from: protected */
+        public void onDetachedFromWindow() {
+            super.onDetachedFromWindow();
+            NotificationCenter.getInstance(EmojiView.this.currentAccount).removeObserver(this, NotificationCenter.groupStickersDidLoad);
+        }
+
+        /* access modifiers changed from: protected */
+        public void onDraw(Canvas canvas) {
+            if (this.divider) {
+                canvas.drawRect(0.0f, 0.0f, (float) getMeasuredWidth(), (float) AndroidUtilities.getShadowHeight(), Theme.dividerPaint);
+            }
+            super.onDraw(canvas);
+        }
+
+        private void updateInstall(boolean z, boolean z2) {
+            int i;
+            String str;
+            ValueAnimator valueAnimator = this.installAnimator;
+            if (valueAnimator != null) {
+                valueAnimator.cancel();
+                this.installAnimator = null;
+            }
+            Boolean bool = this.installed;
+            if (bool == null || bool.booleanValue() != z) {
+                this.installed = Boolean.valueOf(z);
+                this.addButtonView.setClickable(!z);
+                AnimatedTextView animatedTextView = this.addButtonView;
+                if (z) {
+                    i = NUM;
+                    str = "Added";
+                } else {
+                    i = NUM;
+                    str = "Add";
+                }
+                animatedTextView.setText(LocaleController.getString(str, i), z2);
+                float f = 0.0f;
+                if (z2) {
+                    float[] fArr = new float[2];
+                    fArr[0] = this.lockT;
+                    if (this.installed.booleanValue()) {
+                        f = 1.0f;
+                    }
+                    fArr[1] = f;
+                    ValueAnimator ofFloat = ValueAnimator.ofFloat(fArr);
+                    this.installAnimator = ofFloat;
+                    ofFloat.addUpdateListener(new EmojiView$EmojiPackHeader$$ExternalSyntheticLambda1(this));
+                    this.installAnimator.setInterpolator(CubicBezierInterpolator.EASE_OUT_QUINT);
+                    this.installAnimator.setDuration(500);
+                    this.installAnimator.start();
+                    return;
+                }
+                if (this.installed.booleanValue()) {
+                    f = 1.0f;
+                }
+                this.installT = f;
+                this.addButtonBackgroundAlpha = (int) ((((1.0f - f) * 0.5f) + 0.5f) * 255.0f);
+                this.addButtonView.invalidate();
+            }
+        }
+
+        /* access modifiers changed from: private */
+        public /* synthetic */ void lambda$updateInstall$4(ValueAnimator valueAnimator) {
+            float floatValue = ((Float) valueAnimator.getAnimatedValue()).floatValue();
+            this.installT = floatValue;
+            this.addButtonBackgroundAlpha = (int) ((((1.0f - floatValue) * 0.5f) + 0.5f) * 255.0f);
+            this.addButtonView.invalidate();
+        }
+
+        public void updateLock() {
+            boolean z = !this.free && !UserConfig.getInstance(EmojiView.this.currentAccount).isPremium();
+            updateInstall((this.packInstalled && !z) || (this.set != null && EmojiView.this.keepFeaturedDuplicate.contains(Long.valueOf(this.set.id))), false);
+            updateLock(z, true);
+        }
+
+        private void updateLock(final boolean z, boolean z2) {
+            ValueAnimator valueAnimator = this.lockAnimator;
+            if (valueAnimator != null) {
+                valueAnimator.cancel();
+                this.lockAnimator = null;
+            }
+            Boolean bool = this.lockShow;
+            if (bool == null || bool.booleanValue() != z) {
+                Boolean valueOf = Boolean.valueOf(z);
+                this.lockShow = valueOf;
+                int i = 0;
+                float f = 0.0f;
+                if (z2) {
+                    this.lockView.setProgress(0.0f);
+                    this.lockView.playAnimation();
+                    this.premiumButtonView.setVisibility(0);
+                    float[] fArr = new float[2];
+                    fArr[0] = this.lockT;
+                    if (z) {
+                        f = 1.0f;
+                    }
+                    fArr[1] = f;
+                    ValueAnimator ofFloat = ValueAnimator.ofFloat(fArr);
+                    this.lockAnimator = ofFloat;
+                    ofFloat.addUpdateListener(new EmojiView$EmojiPackHeader$$ExternalSyntheticLambda0(this));
+                    this.lockAnimator.addListener(new AnimatorListenerAdapter() {
+                        public void onAnimationEnd(Animator animator) {
+                            if (!z) {
+                                EmojiPackHeader.this.premiumButtonView.setVisibility(8);
+                            }
+                        }
+                    });
+                    this.lockAnimator.setInterpolator(CubicBezierInterpolator.EASE_OUT_QUINT);
+                    this.lockAnimator.setDuration(350);
+                    this.lockAnimator.start();
+                    return;
+                }
+                if (valueOf.booleanValue()) {
+                    f = 1.0f;
+                }
+                this.lockT = f;
+                this.lockView.setAlpha(f);
+                this.lockView.setTranslationX(((float) (-AndroidUtilities.dp(15.0f))) * (1.0f - this.lockT));
+                this.headerView.setTranslationX(((float) AndroidUtilities.dp(15.0f)) * this.lockT);
+                this.addButtonView.setAlpha(1.0f - this.lockT);
+                this.premiumButtonView.setAlpha(this.lockT);
+                this.premiumButtonView.setScaleX(this.lockT);
+                this.premiumButtonView.setScaleY(this.lockT);
+                PremiumButtonView premiumButtonView2 = this.premiumButtonView;
+                if (!this.lockShow.booleanValue()) {
+                    i = 8;
+                }
+                premiumButtonView2.setVisibility(i);
+            }
+        }
+
+        /* access modifiers changed from: private */
+        public /* synthetic */ void lambda$updateLock$5(ValueAnimator valueAnimator) {
+            float floatValue = ((Float) valueAnimator.getAnimatedValue()).floatValue();
+            this.lockT = floatValue;
+            this.lockView.setAlpha(floatValue);
+            this.lockView.setTranslationX(((float) (-AndroidUtilities.dp(15.0f))) * (1.0f - this.lockT));
+            this.headerView.setTranslationX(((float) AndroidUtilities.dp(15.0f)) * this.lockT);
+            this.addButtonView.setAlpha(1.0f - this.lockT);
+            this.premiumButtonView.setAlpha(this.lockT);
+            this.premiumButtonView.setScaleX(this.lockT);
+            this.premiumButtonView.setScaleY(this.lockT);
+        }
+    }
+
+    public void openEmojiPackAlert(TLRPC$StickerSet tLRPC$StickerSet) {
+        ArrayList arrayList = new ArrayList(1);
+        TLRPC$TL_inputStickerSetID tLRPC$TL_inputStickerSetID = new TLRPC$TL_inputStickerSetID();
+        tLRPC$TL_inputStickerSetID.id = tLRPC$StickerSet.id;
+        tLRPC$TL_inputStickerSetID.access_hash = tLRPC$StickerSet.access_hash;
+        arrayList.add(tLRPC$TL_inputStickerSetID);
+        new EmojiPacksAlert(this, this.fragment, getContext(), this.resourcesProvider, arrayList) {
+            public void dismiss() {
+                super.dismiss();
+            }
+        }.show();
+    }
+
     public class EmojiGridSpacing extends RecyclerView.ItemDecoration {
         public EmojiGridSpacing() {
         }
@@ -2648,8 +3683,20 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
                 if (recyclerView.getChildAdapterPosition(view) + 1 > EmojiView.this.emojiAdapter.plainEmojisCount && !UserConfig.getInstance(EmojiView.this.currentAccount).isPremium()) {
                     rect.top = AndroidUtilities.dp(10.0f);
                 }
-            } else if ((view instanceof PremiumButtonHolder) && ((PremiumButtonHolder) view).position + 1 >= EmojiView.this.emojiAdapter.getItemCount()) {
-                rect.bottom = AndroidUtilities.dp(7.0f);
+            } else if ((view instanceof RecyclerListView) || (view instanceof EmojiPackHeader)) {
+                rect.left = -EmojiView.this.emojiGridView.getPaddingLeft();
+                rect.right = -EmojiView.this.emojiGridView.getPaddingRight();
+                if (view instanceof EmojiPackHeader) {
+                    rect.top = AndroidUtilities.dp(8.0f);
+                    if (recyclerView.getChildAdapterPosition(view) == EmojiView.this.emojiAdapter.firstTrendingRow) {
+                        rect.top = AndroidUtilities.dp(32.0f);
+                        return;
+                    }
+                    return;
+                }
+                rect.bottom = AndroidUtilities.dp(6.0f);
+            } else if (view instanceof BackupImageView) {
+                rect.bottom = AndroidUtilities.dp(12.0f);
             }
         }
     }
@@ -3127,7 +4174,6 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
         if (!z2) {
             this.delegate.onSearchOpenClose(0);
         }
-        showBottomTab(false, false);
         showBottomTab(true, z2);
     }
 
@@ -3161,19 +4207,21 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
     /* access modifiers changed from: private */
     public void checkBottomTabScroll(float f) {
         int i;
-        this.lastBottomScrollDy += f;
-        if (this.pager.getCurrentItem() == 0) {
-            i = AndroidUtilities.dp(38.0f);
-        } else {
-            i = AndroidUtilities.dp(48.0f);
-        }
-        float f2 = this.lastBottomScrollDy;
-        if (f2 >= ((float) i)) {
-            showBottomTab(false, true);
-        } else if (f2 <= ((float) (-i))) {
-            showBottomTab(true, true);
-        } else if ((this.bottomTabContainer.getTag() == null && this.lastBottomScrollDy < 0.0f) || (this.bottomTabContainer.getTag() != null && this.lastBottomScrollDy > 0.0f)) {
-            this.lastBottomScrollDy = 0.0f;
+        if (SystemClock.elapsedRealtime() - this.shownBottomTabAfterClick >= ((long) ViewConfiguration.getTapTimeout())) {
+            this.lastBottomScrollDy += f;
+            if (this.pager.getCurrentItem() == 0) {
+                i = AndroidUtilities.dp(38.0f);
+            } else {
+                i = AndroidUtilities.dp(48.0f);
+            }
+            float f2 = this.lastBottomScrollDy;
+            if (f2 >= ((float) i)) {
+                showBottomTab(false, true);
+            } else if (f2 <= ((float) (-i))) {
+                showBottomTab(true, true);
+            } else if ((this.bottomTabContainer.getTag() == null && this.lastBottomScrollDy < 0.0f) || (this.bottomTabContainer.getTag() != null && this.lastBottomScrollDy > 0.0f)) {
+                this.lastBottomScrollDy = 0.0f;
+            }
         }
     }
 
@@ -3349,7 +4397,7 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
                     i = 1;
                 }
                 frameLayout.setTag(i);
-                float f6 = 54.0f;
+                float f6 = 50.0f;
                 if (z2) {
                     AnimatorSet animatorSet2 = new AnimatorSet();
                     this.bottomTabContainerAnimation = animatorSet2;
@@ -3360,7 +4408,7 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
                     if (z) {
                         f3 = 0.0f;
                     } else {
-                        f3 = (float) AndroidUtilities.dp(this.needEmojiSearch ? 49.0f : 54.0f);
+                        f3 = (float) AndroidUtilities.dp(this.needEmojiSearch ? 45.0f : 50.0f);
                     }
                     fArr[0] = f3;
                     animatorArr[0] = ObjectAnimator.ofFloat(frameLayout2, property, fArr);
@@ -3371,7 +4419,7 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
                         f4 = 0.0f;
                     } else {
                         if (this.needEmojiSearch) {
-                            f6 = 49.0f;
+                            f6 = 45.0f;
                         }
                         f4 = (float) AndroidUtilities.dp(f6);
                     }
@@ -3381,7 +4429,7 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
                     Property property3 = View.TRANSLATION_Y;
                     float[] fArr3 = new float[1];
                     if (!z) {
-                        f5 = (float) AndroidUtilities.dp(49.0f);
+                        f5 = (float) AndroidUtilities.dp(45.0f);
                     }
                     fArr3[0] = f5;
                     animatorArr[2] = ObjectAnimator.ofFloat(view, property3, fArr3);
@@ -3395,7 +4443,7 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
                 if (z) {
                     f = 0.0f;
                 } else {
-                    f = (float) AndroidUtilities.dp(this.needEmojiSearch ? 49.0f : 54.0f);
+                    f = (float) AndroidUtilities.dp(this.needEmojiSearch ? 45.0f : 50.0f);
                 }
                 frameLayout4.setTranslationY(f);
                 FrameLayout frameLayout5 = this.bulletinContainer;
@@ -3403,14 +4451,14 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
                     f2 = 0.0f;
                 } else {
                     if (this.needEmojiSearch) {
-                        f6 = 49.0f;
+                        f6 = 45.0f;
                     }
                     f2 = (float) AndroidUtilities.dp(f6);
                 }
                 frameLayout5.setTranslationY(f2);
                 View view2 = this.shadowLine;
                 if (!z) {
-                    f5 = (float) AndroidUtilities.dp(49.0f);
+                    f5 = (float) AndroidUtilities.dp(45.0f);
                 }
                 view2.setTranslationY(f5);
             }
@@ -3457,7 +4505,7 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
     public void animateTabsY(int i) {
         EmojiViewDelegate emojiViewDelegate = this.delegate;
         if ((emojiViewDelegate == null || !emojiViewDelegate.isSearchOpened()) && i != 0) {
-            float dpf2 = AndroidUtilities.dpf2(i == 1 ? 38.0f : 48.0f);
+            float dpf2 = AndroidUtilities.dpf2(i == 1 ? 36.0f : 48.0f);
             float f = ((float) this.tabsMinusDy[i]) / (-dpf2);
             if (f <= 0.0f || f >= 1.0f) {
                 animateSearchField(i);
@@ -3484,7 +4532,7 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$animateTabsY$8(int i, ValueAnimator valueAnimator) {
+    public /* synthetic */ void lambda$animateTabsY$9(int i, ValueAnimator valueAnimator) {
         this.tabsMinusDy[i] = (int) ((Float) valueAnimator.getAnimatedValue()).floatValue();
     }
 
@@ -3591,7 +4639,7 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
 
     /* access modifiers changed from: private */
     public void checkEmojiSearchFieldScroll(boolean z) {
-        RecyclerListView recyclerListView;
+        EmojiGridView emojiGridView2;
         EmojiViewDelegate emojiViewDelegate = this.delegate;
         if (emojiViewDelegate != null && emojiViewDelegate.isSearchOpened()) {
             RecyclerView.ViewHolder findViewHolderForAdapterPosition = this.emojiGridView.findViewHolderForAdapterPosition(0);
@@ -3601,8 +4649,8 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
                 this.emojiSearchField.showShadow(findViewHolderForAdapterPosition.itemView.getTop() < this.emojiGridView.getPaddingTop(), !z);
             }
             showEmojiShadow(false, !z);
-        } else if (this.emojiSearchField != null && (recyclerListView = this.emojiGridView) != null) {
-            RecyclerView.ViewHolder findViewHolderForAdapterPosition2 = recyclerListView.findViewHolderForAdapterPosition(0);
+        } else if (this.emojiSearchField != null && (emojiGridView2 = this.emojiGridView) != null) {
+            RecyclerView.ViewHolder findViewHolderForAdapterPosition2 = emojiGridView2.findViewHolderForAdapterPosition(0);
             if (findViewHolderForAdapterPosition2 != null) {
                 this.emojiSearchField.setTranslationY((float) findViewHolderForAdapterPosition2.itemView.getTop());
             } else {
@@ -3628,7 +4676,7 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
 
     /* access modifiers changed from: private */
     public void checkEmojiTabY(View view, int i) {
-        RecyclerListView recyclerListView;
+        EmojiGridView emojiGridView2;
         RecyclerView.ViewHolder findViewHolderForAdapterPosition;
         if (view == null) {
             EmojiTabsStrip emojiTabsStrip = this.emojiTabs;
@@ -3637,7 +4685,7 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
         } else if (view.getVisibility() == 0 && !this.emojiSmoothScrolling) {
             EmojiViewDelegate emojiViewDelegate = this.delegate;
             if (emojiViewDelegate == null || !emojiViewDelegate.isSearchOpened()) {
-                if (i > 0 && (recyclerListView = this.emojiGridView) != null && recyclerListView.getVisibility() == 0 && (findViewHolderForAdapterPosition = this.emojiGridView.findViewHolderForAdapterPosition(0)) != null) {
+                if (i > 0 && (emojiGridView2 = this.emojiGridView) != null && emojiGridView2.getVisibility() == 0 && (findViewHolderForAdapterPosition = this.emojiGridView.findViewHolderForAdapterPosition(0)) != null) {
                     if (findViewHolderForAdapterPosition.itemView.getTop() + (this.needEmojiSearch ? this.searchFieldHeight : 0) >= this.emojiGridView.getPaddingTop()) {
                         return;
                     }
@@ -3756,11 +4804,11 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
 
     /* access modifiers changed from: private */
     public void postBackspaceRunnable(int i) {
-        AndroidUtilities.runOnUIThread(new EmojiView$$ExternalSyntheticLambda6(this, i), (long) i);
+        AndroidUtilities.runOnUIThread(new EmojiView$$ExternalSyntheticLambda7(this, i), (long) i);
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$postBackspaceRunnable$9(int i) {
+    public /* synthetic */ void lambda$postBackspaceRunnable$10(int i) {
         if (this.backspacePressed) {
             EmojiViewDelegate emojiViewDelegate = this.delegate;
             if (emojiViewDelegate != null && emojiViewDelegate.onBackspace()) {
@@ -3775,6 +4823,17 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
         showBackspaceButton(false, false);
         showStickerSettingsButton(false, false);
         this.pager.setCurrentItem(1, false);
+    }
+
+    private void updateEmojiHeaders() {
+        if (this.emojiGridView != null) {
+            for (int i = 0; i < this.emojiGridView.getChildCount(); i++) {
+                View childAt = this.emojiGridView.getChildAt(i);
+                if (childAt instanceof EmojiPackHeader) {
+                    ((EmojiPackHeader) childAt).updateLock();
+                }
+            }
+        }
     }
 
     /* access modifiers changed from: private */
@@ -4095,13 +5154,13 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
         if (paint != null) {
             paint.setColor(getThemedColor("chat_emojiPanelNewTrending"));
         }
-        RecyclerListView recyclerListView = this.emojiGridView;
+        EmojiGridView emojiGridView2 = this.emojiGridView;
+        if (emojiGridView2 != null) {
+            emojiGridView2.setGlowColor(getThemedColor("chat_emojiPanelBackground"));
+        }
+        RecyclerListView recyclerListView = this.stickersGridView;
         if (recyclerListView != null) {
             recyclerListView.setGlowColor(getThemedColor("chat_emojiPanelBackground"));
-        }
-        RecyclerListView recyclerListView2 = this.stickersGridView;
-        if (recyclerListView2 != null) {
-            recyclerListView2.setGlowColor(getThemedColor("chat_emojiPanelBackground"));
         }
         ScrollSlidingTabStrip scrollSlidingTabStrip = this.stickersTab;
         if (scrollSlidingTabStrip != null) {
@@ -4304,7 +5363,7 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
         if (!(this.currentPage == 0 || this.currentChatId == 0)) {
             this.currentPage = 0;
         }
-        if (this.currentPage == 0 || z || this.views.size() == 1) {
+        if (this.currentPage == 0 || z || this.currentTabs.size() == 1) {
             showBackspaceButton(true, false);
             showStickerSettingsButton(false, false);
             if (this.pager.getCurrentItem() != 0) {
@@ -4361,12 +5420,12 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
             NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.featuredStickersDidLoad);
             NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.groupStickersDidLoad);
             NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.currentUserPremiumStatusChanged);
-            AndroidUtilities.runOnUIThread(new EmojiView$$ExternalSyntheticLambda5(this));
+            AndroidUtilities.runOnUIThread(new EmojiView$$ExternalSyntheticLambda6(this));
         }
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$onAttachedToWindow$10() {
+    public /* synthetic */ void lambda$onAttachedToWindow$11() {
         updateStickerTabs();
         reloadStickersAdapter();
     }
@@ -4593,7 +5652,7 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
                             }
                             featuredStickerSetInfoCell.setStickerSet(stickerSet, z2, true, 0, 0, z);
                             if (z2) {
-                                MediaDataController.getInstance(this.currentAccount).markFaturedStickersByIdAsRead(stickerSet.set.id);
+                                MediaDataController.getInstance(this.currentAccount).markFeaturedStickersByIdAsRead(false, stickerSet.set.id);
                             }
                             boolean z3 = this.installingStickerSets.indexOfKey(stickerSet.set.id) >= 0;
                             boolean z4 = this.removingStickerSets.indexOfKey(stickerSet.set.id) >= 0;
@@ -4631,10 +5690,6 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
                 checkPanels();
             } else if (objArr[0].intValue() == 5) {
                 this.emojiAdapter.notifyDataSetChanged();
-                EmojiTabsStrip emojiTabsStrip = this.emojiTabs;
-                if (emojiTabsStrip != null) {
-                    emojiTabsStrip.updateEmojiPacks();
-                }
             }
         } else if (i == NotificationCenter.recentDocumentsDidLoad) {
             boolean booleanValue = objArr[0].booleanValue();
@@ -4653,6 +5708,11 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
                 }
             }
             updateStickerTabs();
+        } else if (i == NotificationCenter.featuredEmojiDidLoad) {
+            EmojiGridAdapter emojiGridAdapter = this.emojiAdapter;
+            if (emojiGridAdapter != null) {
+                emojiGridAdapter.notifyDataSetChanged();
+            }
         } else if (i == NotificationCenter.groupStickersDidLoad) {
             TLRPC$ChatFull tLRPC$ChatFull = this.info;
             if (tLRPC$ChatFull != null && (tLRPC$StickerSet = tLRPC$ChatFull.stickerset) != null && tLRPC$StickerSet.id == objArr[0].longValue()) {
@@ -4686,11 +5746,12 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
                 }
             }
         } else if (i == NotificationCenter.currentUserPremiumStatusChanged) {
-            updateStickerTabs();
-            EmojiGridAdapter emojiGridAdapter = this.emojiAdapter;
-            if (emojiGridAdapter != null) {
-                emojiGridAdapter.notifyDataSetChanged();
+            EmojiGridAdapter emojiGridAdapter2 = this.emojiAdapter;
+            if (emojiGridAdapter2 != null) {
+                emojiGridAdapter2.notifyDataSetChanged();
             }
+            updateEmojiHeaders();
+            updateStickerTabs();
         }
     }
 
@@ -4702,6 +5763,9 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
     }
 
     private class TrendingAdapter extends RecyclerListView.SelectionAdapter {
+        /* access modifiers changed from: private */
+        public boolean emoji;
+
         public int getItemViewType(int i) {
             return 0;
         }
@@ -4710,30 +5774,36 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
             return true;
         }
 
-        private TrendingAdapter() {
+        public TrendingAdapter(boolean z) {
+            this.emoji = z;
         }
 
         public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
-            AnonymousClass1 r3 = new BackupImageView(EmojiView.this.getContext()) {
+            AnonymousClass1 r4 = new BackupImageView(EmojiView.this.getContext()) {
                 /* access modifiers changed from: protected */
                 public void onDraw(Canvas canvas) {
                     super.onDraw(canvas);
-                    if (MediaDataController.getInstance(EmojiView.this.currentAccount).isStickerPackUnread(((TLRPC$StickerSetCovered) getTag()).set.id) && EmojiView.this.dotPaint != null) {
+                    if (MediaDataController.getInstance(EmojiView.this.currentAccount).isStickerPackUnread(TrendingAdapter.this.emoji, ((TLRPC$StickerSetCovered) getTag()).set.id) && EmojiView.this.dotPaint != null) {
                         canvas.drawCircle((float) (canvas.getWidth() - AndroidUtilities.dp(8.0f)), (float) AndroidUtilities.dp(14.0f), (float) AndroidUtilities.dp(3.0f), EmojiView.this.dotPaint);
                     }
                 }
             };
-            r3.setSize(AndroidUtilities.dp(30.0f), AndroidUtilities.dp(30.0f));
-            r3.setLayerNum(1);
-            r3.setAspectFit(true);
-            r3.setLayoutParams(new RecyclerView.LayoutParams(AndroidUtilities.dp(52.0f), AndroidUtilities.dp(52.0f)));
-            return new RecyclerListView.Holder(r3);
+            float f = 36.0f;
+            int dp = AndroidUtilities.dp(this.emoji ? 36.0f : 30.0f);
+            if (!this.emoji) {
+                f = 30.0f;
+            }
+            r4.setSize(dp, AndroidUtilities.dp(f));
+            r4.setLayerNum(1);
+            r4.setAspectFit(true);
+            r4.setLayoutParams(new RecyclerView.LayoutParams(AndroidUtilities.dp(42.0f), AndroidUtilities.dp(42.0f)));
+            return new RecyclerListView.Holder(r4);
         }
 
         public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int i) {
             ImageLocation forSticker;
             BackupImageView backupImageView = (BackupImageView) viewHolder.itemView;
-            TLRPC$StickerSetCovered tLRPC$StickerSetCovered = (TLRPC$StickerSetCovered) EmojiView.this.featuredStickerSets.get(i);
+            TLRPC$StickerSetCovered tLRPC$StickerSetCovered = (TLRPC$StickerSetCovered) (this.emoji ? EmojiView.this.featuredEmojiSets : EmojiView.this.featuredStickerSets).get(i);
             backupImageView.setTag(tLRPC$StickerSetCovered);
             TLRPC$Document tLRPC$Document = tLRPC$StickerSetCovered.cover;
             if (!tLRPC$StickerSetCovered.covers.isEmpty()) {
@@ -4772,7 +5842,35 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
         }
 
         public int getItemCount() {
-            return EmojiView.this.featuredStickerSets.size();
+            return (this.emoji ? EmojiView.this.featuredEmojiSets : EmojiView.this.featuredStickerSets).size();
+        }
+    }
+
+    private class TrendingListView extends RecyclerListView {
+        public TrendingListView(Context context, RecyclerView.Adapter adapter) {
+            super(context);
+            setNestedScrollingEnabled(true);
+            setSelectorRadius(AndroidUtilities.dp(4.0f));
+            setSelectorDrawableColor(getThemedColor("listSelectorSDK21"));
+            setTag(9);
+            setItemAnimator((RecyclerView.ItemAnimator) null);
+            setLayoutAnimation((LayoutAnimationController) null);
+            AnonymousClass1 r0 = new LinearLayoutManager(this, context, EmojiView.this) {
+                public boolean supportsPredictiveItemAnimations() {
+                    return false;
+                }
+            };
+            r0.setOrientation(0);
+            setLayoutManager(r0);
+            setAdapter(adapter);
+        }
+
+        public boolean onInterceptTouchEvent(MotionEvent motionEvent) {
+            if (!(getParent() == null || getParent().getParent() == null)) {
+                getParent().getParent().requestDisallowInterceptTouchEvent(canScrollHorizontally(-1) || canScrollHorizontally(1));
+                EmojiView.this.pager.requestDisallowInterceptTouchEvent(true);
+            }
+            return super.onInterceptTouchEvent(motionEvent);
         }
     }
 
@@ -4921,131 +6019,58 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
             }
         }
 
-        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r1v0, resolved type: org.telegram.ui.Cells.StickerSetNameCell} */
-        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r1v1, resolved type: org.telegram.ui.Cells.StickerSetNameCell} */
-        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r1v10, resolved type: org.telegram.ui.Cells.StickerSetNameCell} */
-        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r1v11, resolved type: org.telegram.ui.Components.EmojiView$StickersGridAdapter$1} */
-        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r1v12, resolved type: org.telegram.ui.Cells.EmptyCell} */
-        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r1v13, resolved type: org.telegram.ui.Cells.StickerSetNameCell} */
-        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r1v14, resolved type: org.telegram.ui.Cells.StickerSetGroupInfoCell} */
-        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r1v16, resolved type: org.telegram.ui.Cells.StickerSetNameCell} */
-        /* JADX WARNING: type inference failed for: r6v11, types: [org.telegram.ui.Components.EmojiView$StickersGridAdapter$2, android.view.View, androidx.recyclerview.widget.RecyclerView, org.telegram.ui.Components.RecyclerListView, android.view.ViewGroup] */
-        /* JADX WARNING: Multi-variable type inference failed */
-        /* JADX WARNING: Unknown variable types count: 1 */
-        @android.annotation.SuppressLint({"NotifyDataSetChanged"})
-        /* Code decompiled incorrectly, please refer to instructions dump. */
-        public androidx.recyclerview.widget.RecyclerView.ViewHolder onCreateViewHolder(android.view.ViewGroup r5, int r6) {
-            /*
-                r4 = this;
-                r5 = -1
-                r0 = 0
-                r1 = 0
-                switch(r6) {
-                    case 0: goto L_0x00c8;
-                    case 1: goto L_0x00c0;
-                    case 2: goto L_0x00aa;
-                    case 3: goto L_0x0091;
-                    case 4: goto L_0x007b;
-                    case 5: goto L_0x0065;
-                    case 6: goto L_0x0008;
-                    default: goto L_0x0006;
-                }
-            L_0x0006:
-                goto L_0x00d0
-            L_0x0008:
-                org.telegram.ui.Components.EmojiView$StickersGridAdapter$2 r6 = new org.telegram.ui.Components.EmojiView$StickersGridAdapter$2
-                android.content.Context r2 = r4.context
-                r6.<init>(r2)
-                r2 = 1082130432(0x40800000, float:4.0)
-                int r2 = org.telegram.messenger.AndroidUtilities.dp(r2)
-                r6.setSelectorRadius(r2)
-                org.telegram.ui.Components.EmojiView r2 = org.telegram.ui.Components.EmojiView.this
-                java.lang.String r3 = "listSelectorSDK21"
-                int r2 = r2.getThemedColor(r3)
-                r6.setSelectorDrawableColor(r2)
-                r2 = 9
-                java.lang.Integer r2 = java.lang.Integer.valueOf(r2)
-                r6.setTag(r2)
-                r6.setItemAnimator(r1)
-                r6.setLayoutAnimation(r1)
-                org.telegram.ui.Components.EmojiView$StickersGridAdapter$3 r2 = new org.telegram.ui.Components.EmojiView$StickersGridAdapter$3
-                android.content.Context r3 = r4.context
-                r2.<init>(r4, r3)
-                r2.setOrientation(r0)
-                r6.setLayoutManager(r2)
-                org.telegram.ui.Components.EmojiView r0 = org.telegram.ui.Components.EmojiView.this
-                org.telegram.ui.Components.EmojiView$TrendingAdapter r2 = new org.telegram.ui.Components.EmojiView$TrendingAdapter
-                r2.<init>()
-                org.telegram.ui.Components.EmojiView$TrendingAdapter r0 = r0.trendingAdapter = r2
-                r6.setAdapter(r0)
-                org.telegram.ui.Components.EmojiView$StickersGridAdapter$$ExternalSyntheticLambda4 r0 = new org.telegram.ui.Components.EmojiView$StickersGridAdapter$$ExternalSyntheticLambda4
-                r0.<init>(r4)
-                r6.setOnItemClickListener((org.telegram.ui.Components.RecyclerListView.OnItemClickListener) r0)
-                androidx.recyclerview.widget.RecyclerView$LayoutParams r0 = new androidx.recyclerview.widget.RecyclerView$LayoutParams
-                r1 = 1112539136(0x42500000, float:52.0)
-                int r1 = org.telegram.messenger.AndroidUtilities.dp(r1)
-                r0.<init>((int) r5, (int) r1)
-                r6.setLayoutParams(r0)
-                r1 = r6
-                goto L_0x00d0
-            L_0x0065:
-                org.telegram.ui.Cells.StickerSetNameCell r1 = new org.telegram.ui.Cells.StickerSetNameCell
-                android.content.Context r5 = r4.context
-                org.telegram.ui.Components.EmojiView r6 = org.telegram.ui.Components.EmojiView.this
-                org.telegram.ui.ActionBar.Theme$ResourcesProvider r6 = r6.resourcesProvider
-                r1.<init>(r5, r0, r6)
-                org.telegram.ui.Components.EmojiView$StickersGridAdapter$$ExternalSyntheticLambda1 r5 = new org.telegram.ui.Components.EmojiView$StickersGridAdapter$$ExternalSyntheticLambda1
-                r5.<init>(r4)
-                r1.setOnIconClickListener(r5)
-                goto L_0x00d0
-            L_0x007b:
-                android.view.View r1 = new android.view.View
-                android.content.Context r6 = r4.context
-                r1.<init>(r6)
-                androidx.recyclerview.widget.RecyclerView$LayoutParams r6 = new androidx.recyclerview.widget.RecyclerView$LayoutParams
-                org.telegram.ui.Components.EmojiView r0 = org.telegram.ui.Components.EmojiView.this
-                int r0 = r0.searchFieldHeight
-                r6.<init>((int) r5, (int) r0)
-                r1.setLayoutParams(r6)
-                goto L_0x00d0
-            L_0x0091:
-                org.telegram.ui.Cells.StickerSetGroupInfoCell r1 = new org.telegram.ui.Cells.StickerSetGroupInfoCell
-                android.content.Context r6 = r4.context
-                r1.<init>(r6)
-                org.telegram.ui.Components.EmojiView$StickersGridAdapter$$ExternalSyntheticLambda2 r6 = new org.telegram.ui.Components.EmojiView$StickersGridAdapter$$ExternalSyntheticLambda2
-                r6.<init>(r4)
-                r1.setAddOnClickListener(r6)
-                androidx.recyclerview.widget.RecyclerView$LayoutParams r6 = new androidx.recyclerview.widget.RecyclerView$LayoutParams
-                r0 = -2
-                r6.<init>((int) r5, (int) r0)
-                r1.setLayoutParams(r6)
-                goto L_0x00d0
-            L_0x00aa:
-                org.telegram.ui.Cells.StickerSetNameCell r1 = new org.telegram.ui.Cells.StickerSetNameCell
-                android.content.Context r5 = r4.context
-                org.telegram.ui.Components.EmojiView r6 = org.telegram.ui.Components.EmojiView.this
-                org.telegram.ui.ActionBar.Theme$ResourcesProvider r6 = r6.resourcesProvider
-                r1.<init>(r5, r0, r6)
-                org.telegram.ui.Components.EmojiView$StickersGridAdapter$$ExternalSyntheticLambda3 r5 = new org.telegram.ui.Components.EmojiView$StickersGridAdapter$$ExternalSyntheticLambda3
-                r5.<init>(r4, r1)
-                r1.setOnIconClickListener(r5)
-                goto L_0x00d0
-            L_0x00c0:
-                org.telegram.ui.Cells.EmptyCell r1 = new org.telegram.ui.Cells.EmptyCell
-                android.content.Context r5 = r4.context
-                r1.<init>(r5)
-                goto L_0x00d0
-            L_0x00c8:
-                org.telegram.ui.Components.EmojiView$StickersGridAdapter$1 r1 = new org.telegram.ui.Components.EmojiView$StickersGridAdapter$1
-                android.content.Context r5 = r4.context
-                r6 = 1
-                r1.<init>(r4, r5, r6)
-            L_0x00d0:
-                org.telegram.ui.Components.RecyclerListView$Holder r5 = new org.telegram.ui.Components.RecyclerListView$Holder
-                r5.<init>(r1)
-                return r5
-            */
-            throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.EmojiView.StickersGridAdapter.onCreateViewHolder(android.view.ViewGroup, int):androidx.recyclerview.widget.RecyclerView$ViewHolder");
+        @SuppressLint({"NotifyDataSetChanged"})
+        public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
+            TrendingListView trendingListView;
+            switch (i) {
+                case 0:
+                    trendingListView = new StickerEmojiCell(this, this.context, true) {
+                        public void onMeasure(int i, int i2) {
+                            super.onMeasure(i, View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(82.0f), NUM));
+                        }
+                    };
+                    break;
+                case 1:
+                    trendingListView = new EmptyCell(this.context);
+                    break;
+                case 2:
+                    StickerSetNameCell stickerSetNameCell = new StickerSetNameCell(this.context, false, EmojiView.this.resourcesProvider);
+                    stickerSetNameCell.setOnIconClickListener(new EmojiView$StickersGridAdapter$$ExternalSyntheticLambda3(this, stickerSetNameCell));
+                    trendingListView = stickerSetNameCell;
+                    break;
+                case 3:
+                    StickerSetGroupInfoCell stickerSetGroupInfoCell = new StickerSetGroupInfoCell(this.context);
+                    stickerSetGroupInfoCell.setAddOnClickListener(new EmojiView$StickersGridAdapter$$ExternalSyntheticLambda2(this));
+                    stickerSetGroupInfoCell.setLayoutParams(new RecyclerView.LayoutParams(-1, -2));
+                    trendingListView = stickerSetGroupInfoCell;
+                    break;
+                case 4:
+                    View view = new View(this.context);
+                    view.setLayoutParams(new RecyclerView.LayoutParams(-1, EmojiView.this.searchFieldHeight));
+                    trendingListView = view;
+                    break;
+                case 5:
+                    StickerSetNameCell stickerSetNameCell2 = new StickerSetNameCell(this.context, false, EmojiView.this.resourcesProvider);
+                    stickerSetNameCell2.setOnIconClickListener(new EmojiView$StickersGridAdapter$$ExternalSyntheticLambda1(this));
+                    trendingListView = stickerSetNameCell2;
+                    break;
+                case 6:
+                    EmojiView emojiView = EmojiView.this;
+                    TrendingListView trendingListView2 = new TrendingListView(this.context, emojiView.trendingAdapter = new TrendingAdapter(false));
+                    trendingListView2.addItemDecoration(new RecyclerView.ItemDecoration(this) {
+                        public void getItemOffsets(Rect rect, View view, RecyclerView recyclerView, RecyclerView.State state) {
+                            rect.right = AndroidUtilities.dp(8.0f);
+                        }
+                    });
+                    trendingListView2.setOnItemClickListener((RecyclerListView.OnItemClickListener) new EmojiView$StickersGridAdapter$$ExternalSyntheticLambda4(this));
+                    trendingListView2.setLayoutParams(new RecyclerView.LayoutParams(-1, AndroidUtilities.dp(52.0f)));
+                    trendingListView = trendingListView2;
+                    break;
+                default:
+                    trendingListView = null;
+                    break;
+            }
+            return new RecyclerListView.Holder(trendingListView);
         }
 
         /* access modifiers changed from: private */
@@ -5087,11 +6112,11 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
                 org.telegram.messenger.MediaDataController r10 = org.telegram.messenger.MediaDataController.getInstance(r10)
                 boolean r10 = r10.loadFeaturedPremium
                 if (r10 == 0) goto L_0x0031
-                r10 = 2131625834(0x7f0e076a, float:1.8878887E38)
+                r10 = 2131625844(0x7f0e0774, float:1.8878907E38)
                 java.lang.String r0 = "FeaturedStickersPremium"
                 goto L_0x0036
             L_0x0031:
-                r10 = 2131625832(0x7f0e0768, float:1.8878883E38)
+                r10 = 2131625842(0x7f0e0772, float:1.8878903E38)
                 java.lang.String r0 = "FeaturedStickers"
             L_0x0036:
                 java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r0, r10)
@@ -5139,7 +6164,7 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
                 java.lang.Long r0 = java.lang.Long.valueOf(r6)
                 org.telegram.tgnet.TLRPC$Chat r2 = r10.getChat(r0)
             L_0x0099:
-                r10 = 2131625302(0x7f0e0556, float:1.8877808E38)
+                r10 = 2131625309(0x7f0e055d, float:1.8877822E38)
                 java.lang.Object[] r0 = new java.lang.Object[r3]
                 if (r2 == 0) goto L_0x00a3
                 java.lang.String r2 = r2.title
@@ -5167,10 +6192,10 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
                 org.telegram.ui.Components.EmojiView r0 = org.telegram.ui.Components.EmojiView.this
                 java.util.ArrayList r0 = r0.recentStickers
                 if (r10 != r0) goto L_0x00e6
-                r10 = 2131627912(0x7f0e0var_, float:1.8883102E38)
+                r10 = 2131627924(0x7f0e0var_, float:1.8883126E38)
                 java.lang.String r0 = "RecentStickers"
                 java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r0, r10)
-                r0 = 2131625161(0x7f0e04c9, float:1.8877522E38)
+                r0 = 2131625168(0x7f0e04d0, float:1.8877536E38)
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString((int) r0)
                 r9.setText(r10, r5, r0)
                 goto L_0x01bb
@@ -5178,7 +6203,7 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
                 org.telegram.ui.Components.EmojiView r0 = org.telegram.ui.Components.EmojiView.this
                 java.util.ArrayList r0 = r0.favouriteStickers
                 if (r10 != r0) goto L_0x00fc
-                r10 = 2131625827(0x7f0e0763, float:1.8878873E38)
+                r10 = 2131625836(0x7f0e076c, float:1.8878891E38)
                 java.lang.String r0 = "FavoriteStickers"
                 java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r0, r10)
                 r9.setText(r10, r1)
@@ -5187,7 +6212,7 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
                 org.telegram.ui.Components.EmojiView r0 = org.telegram.ui.Components.EmojiView.this
                 java.util.ArrayList r0 = r0.premiumStickers
                 if (r10 != r0) goto L_0x01bb
-                r10 = 2131627665(0x7f0e0e91, float:1.88826E38)
+                r10 = 2131627676(0x7f0e0e9c, float:1.8882623E38)
                 java.lang.String r0 = "PremiumStickers"
                 java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r0, r10)
                 r9.setText(r10, r1)
@@ -5296,11 +6321,11 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
             this.cache.clear();
             int i2 = 0;
             this.totalItems = 0;
-            ArrayList access$10100 = EmojiView.this.stickerSets;
+            ArrayList access$9500 = EmojiView.this.stickerSets;
             int i3 = -5;
             int i4 = -5;
             int i5 = 0;
-            while (i4 < access$10100.size()) {
+            while (i4 < access$9500.size()) {
                 if (i4 == i3) {
                     SparseArray<Object> sparseArray = this.cache;
                     int i6 = this.totalItems;
@@ -5337,7 +6362,7 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
                         this.packStartPosition.put("premium", Integer.valueOf(this.totalItems));
                         obj = "premium";
                     } else {
-                        TLRPC$TL_messages_stickerSet tLRPC$TL_messages_stickerSet2 = (TLRPC$TL_messages_stickerSet) access$10100.get(i4);
+                        TLRPC$TL_messages_stickerSet tLRPC$TL_messages_stickerSet2 = (TLRPC$TL_messages_stickerSet) access$9500.get(i4);
                         ArrayList<TLRPC$Document> arrayList3 = tLRPC$TL_messages_stickerSet2.documents;
                         this.packStartPosition.put(tLRPC$TL_messages_stickerSet2, Integer.valueOf(this.totalItems));
                         tLRPC$TL_messages_stickerSet = tLRPC$TL_messages_stickerSet2;
@@ -5360,10 +6385,10 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
                             int i11 = this.totalItems;
                             this.totalItems = i11 + 1;
                             sparseArray5.put(i11, "group");
-                            arrayList = access$10100;
+                            arrayList = access$9500;
                             i5 = i9 + 1;
                             i4++;
-                            access$10100 = arrayList;
+                            access$9500 = arrayList;
                             i2 = 0;
                             i3 = -5;
                         }
@@ -5388,9 +6413,9 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
                             }
                             this.positionToRow.put(this.totalItems + i13, i5 + 1 + (i12 / this.stickersPerRow));
                             i12 = i13;
-                            access$10100 = access$10100;
+                            access$9500 = access$9500;
                         }
-                        arrayList = access$10100;
+                        arrayList = access$9500;
                         int i15 = 0;
                         while (true) {
                             i = ceil + 1;
@@ -5414,14 +6439,14 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
                         this.totalItems += (ceil * this.stickersPerRow) + 1;
                         i5 += i;
                         i4++;
-                        access$10100 = arrayList;
+                        access$9500 = arrayList;
                         i2 = 0;
                         i3 = -5;
                     }
                 }
-                arrayList = access$10100;
+                arrayList = access$9500;
                 i4++;
-                access$10100 = arrayList;
+                access$9500 = arrayList;
                 i2 = 0;
                 i3 = -5;
             }
@@ -5438,23 +6463,9 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
         }
     }
 
-    private class PremiumButtonHolder extends FrameLayout {
-        public PremiumButtonView buttonView;
-        public int position;
-
-        public PremiumButtonHolder(EmojiView emojiView, Context context) {
-            super(context);
-            PremiumButtonView premiumButtonView = new PremiumButtonView(getContext(), false);
-            this.buttonView = premiumButtonView;
-            addView(premiumButtonView, LayoutHelper.createFrame(-1, 48.0f, 119, 5.0f, 5.0f, 5.0f, 5.0f));
-        }
-    }
-
     private class EmojiGridAdapter extends RecyclerListView.SelectionAdapter {
         /* access modifiers changed from: private */
-        public ArrayList<TLRPC$TL_messages_stickerSet> emojipacks;
-        /* access modifiers changed from: private */
-        public ArrayList<EmojiPack> emojipacksProcessed;
+        public int firstTrendingRow;
         private int itemCount;
         public int plainEmojisCount;
         /* access modifiers changed from: private */
@@ -5462,29 +6473,26 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
         /* access modifiers changed from: private */
         public SparseIntArray positionToUnlock;
         /* access modifiers changed from: private */
-        public ArrayList<Pair<Integer, Integer>> premiumPackPositions;
+        public ArrayList<Integer> rowHashCodes;
         /* access modifiers changed from: private */
         public SparseIntArray sectionToPosition;
-        private Boolean wasPremium;
+        /* access modifiers changed from: private */
+        public int trendingHeaderRow;
+        /* access modifiers changed from: private */
+        public int trendingRow;
 
         public long getItemId(int i) {
             return (long) i;
         }
 
         private EmojiGridAdapter() {
+            this.trendingHeaderRow = -1;
+            this.trendingRow = -1;
+            this.firstTrendingRow = -1;
+            this.rowHashCodes = new ArrayList<>();
             this.positionToSection = new SparseIntArray();
             this.sectionToPosition = new SparseIntArray();
             this.positionToUnlock = new SparseIntArray();
-        }
-
-        private class EmojiPack {
-            public ArrayList<TLRPC$Document> documents;
-            public boolean free;
-            public int index;
-            public TLRPC$TL_messages_stickerSet stickerSet;
-
-            private EmojiPack(EmojiGridAdapter emojiGridAdapter) {
-            }
         }
 
         public int getItemCount() {
@@ -5492,282 +6500,555 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
         }
 
         public boolean isEnabled(RecyclerView.ViewHolder viewHolder) {
-            return viewHolder.getItemViewType() == 0;
-        }
-
-        public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
-            View view;
-            if (i == 0) {
-                EmojiView emojiView = EmojiView.this;
-                view = new ImageViewEmoji(emojiView.getContext());
-            } else if (i == 1) {
-                view = new StickerSetNameCell(EmojiView.this.getContext(), true, EmojiView.this.resourcesProvider);
-            } else if (i != 3) {
-                view = new View(EmojiView.this.getContext());
-                view.setLayoutParams(new RecyclerView.LayoutParams(-1, EmojiView.this.searchFieldHeight));
-            } else {
-                EmojiView emojiView2 = EmojiView.this;
-                view = new PremiumButtonHolder(emojiView2, emojiView2.getContext());
-            }
-            return new RecyclerListView.Holder(view);
-        }
-
-        public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int i) {
-            Long l;
-            String str;
-            String str2;
-            String str3;
-            String str4;
-            int i2;
-            int itemViewType = viewHolder.getItemViewType();
-            boolean z = true;
-            if (itemViewType != 0) {
-                String str5 = "";
-                if (itemViewType == 1) {
-                    StickerSetNameCell stickerSetNameCell = (StickerSetNameCell) viewHolder.itemView;
-                    stickerSetNameCell.position = i;
-                    int i3 = this.positionToSection.get(i);
-                    if (i3 >= EmojiView.this.emojiTitles.length) {
-                        try {
-                            str5 = this.emojipacksProcessed.get(i3 - EmojiView.this.emojiTitles.length).stickerSet.set.title;
-                        } catch (Exception unused) {
-                        }
-                    } else {
-                        str5 = EmojiView.this.emojiTitles[i3];
-                    }
-                    stickerSetNameCell.setText(str5, 0);
-                } else if (itemViewType == 3) {
-                    PremiumButtonHolder premiumButtonHolder = (PremiumButtonHolder) viewHolder.itemView;
-                    premiumButtonHolder.position = i;
-                    PremiumButtonView premiumButtonView = premiumButtonHolder.buttonView;
-                    int i4 = this.positionToUnlock.get(i);
-                    if (i4 >= 0 && i4 < this.emojipacksProcessed.size()) {
-                        try {
-                            str5 = this.emojipacksProcessed.get(i4).stickerSet.set.title;
-                        } catch (Exception unused2) {
-                        }
-                    }
-                    premiumButtonView.setButton(LocaleController.formatString("UnlockPremiumEmojiPack", NUM, str5), new EmojiView$EmojiGridAdapter$$ExternalSyntheticLambda0(this));
-                }
-            } else {
-                ImageViewEmoji imageViewEmoji = (ImageViewEmoji) viewHolder.itemView;
-                imageViewEmoji.position = i;
-                if (EmojiView.this.needEmojiSearch) {
-                    i--;
-                }
-                int size = Emoji.recentEmoji.size();
-                if (i < size) {
-                    String str6 = Emoji.recentEmoji.get(i);
-                    if (str6 != null && str6.startsWith("animated_")) {
-                        try {
-                            l = Long.valueOf(Long.parseLong(str6.substring(9)));
-                            str2 = null;
-                            str = null;
-                        } catch (Exception unused3) {
-                        }
-                    }
-                    str2 = str6;
-                    str = str2;
-                    l = null;
-                } else {
-                    int i5 = 0;
-                    while (true) {
-                        String[][] strArr = EmojiData.dataColored;
-                        if (i5 >= strArr.length) {
-                            str3 = null;
-                            break;
-                        }
-                        int length = strArr[i5].length + 1 + size;
-                        if (i < length) {
-                            str3 = strArr[i5][(i - size) - 1];
-                            String str7 = Emoji.emojiColor.get(str3);
-                            if (str7 != null) {
-                                String access$4200 = EmojiView.addColorToCode(str3, str7);
-                                str4 = str3;
-                                str3 = access$4200;
-                            }
-                        } else {
-                            i5++;
-                            size = length;
-                        }
-                    }
-                    str4 = str3;
-                    if (str4 == null && this.emojipacksProcessed != null) {
-                        int i6 = 0;
-                        while (true) {
-                            if (i6 >= this.emojipacksProcessed.size()) {
-                                break;
-                            }
-                            int size2 = this.emojipacksProcessed.get(i6).documents.size() + 1;
-                            if (!this.emojipacksProcessed.get(i6).free && !UserConfig.getInstance(EmojiView.this.currentAccount).isPremium()) {
-                                size2++;
-                            }
-                            int i7 = size2 + size;
-                            if (i >= i7 || (i2 = (i - size) - 1) < 0) {
-                                i6++;
-                                size = i7;
-                            } else {
-                                TLRPC$Document tLRPC$Document = this.emojipacksProcessed.get(i6).documents.get(i2);
-                                if (tLRPC$Document != null) {
-                                    l = Long.valueOf(tLRPC$Document.id);
-                                }
-                            }
-                        }
-                        str2 = str3;
-                        str = str4;
-                        z = false;
-                    }
-                    l = null;
-                    str2 = str3;
-                    str = str4;
-                    z = false;
-                }
-                if (l != null) {
-                    imageViewEmoji.setPadding(AndroidUtilities.dp(3.0f), AndroidUtilities.dp(3.0f), AndroidUtilities.dp(3.0f), AndroidUtilities.dp(3.0f));
-                } else {
-                    imageViewEmoji.setPadding(0, 0, 0, 0);
-                }
-                if (l != null) {
-                    imageViewEmoji.setImageDrawable((Drawable) null, z);
-                    if (imageViewEmoji.getSpan() == null || imageViewEmoji.getSpan().getDocumentId() != l.longValue()) {
-                        imageViewEmoji.setSpan(new AnimatedEmojiSpan(l.longValue(), (Paint.FontMetricsInt) null));
-                    }
-                } else {
-                    imageViewEmoji.setImageDrawable(Emoji.getEmojiBigDrawable(str2), z);
-                    imageViewEmoji.setSpan((AnimatedEmojiSpan) null);
-                }
-                imageViewEmoji.setTag(str);
-                imageViewEmoji.setContentDescription(str2);
-            }
+            return viewHolder.getItemViewType() == 0 || viewHolder.getItemViewType() == 4;
         }
 
         /* access modifiers changed from: private */
-        public /* synthetic */ void lambda$onBindViewHolder$0(View view) {
-            EmojiView.this.openPremiumAnimatedEmojiFeature();
+        public /* synthetic */ void lambda$onCreateViewHolder$0(View view, int i) {
+            ArrayList arrayList = new ArrayList();
+            ArrayList<TLRPC$StickerSetCovered> featuredEmojiSets = MediaDataController.getInstance(EmojiView.this.currentAccount).getFeaturedEmojiSets();
+            int i2 = 0;
+            while (featuredEmojiSets != null && i2 < featuredEmojiSets.size()) {
+                TLRPC$StickerSetCovered tLRPC$StickerSetCovered = featuredEmojiSets.get(i2);
+                if (!(tLRPC$StickerSetCovered == null || tLRPC$StickerSetCovered.set == null)) {
+                    TLRPC$TL_inputStickerSetID tLRPC$TL_inputStickerSetID = new TLRPC$TL_inputStickerSetID();
+                    TLRPC$StickerSet tLRPC$StickerSet = tLRPC$StickerSetCovered.set;
+                    tLRPC$TL_inputStickerSetID.id = tLRPC$StickerSet.id;
+                    tLRPC$TL_inputStickerSetID.access_hash = tLRPC$StickerSet.access_hash;
+                    arrayList.add(tLRPC$TL_inputStickerSetID);
+                }
+                i2++;
+            }
+            MediaDataController.getInstance(EmojiView.this.currentAccount).markFeaturedStickersAsRead(true, true);
+            if (EmojiView.this.fragment != null) {
+                EmojiView.this.fragment.showDialog(new EmojiPacksAlert(EmojiView.this.fragment, EmojiView.this.getContext(), EmojiView.this.fragment.getResourceProvider(), arrayList));
+            } else {
+                new EmojiPacksAlert((BaseFragment) null, EmojiView.this.getContext(), EmojiView.this.resourcesProvider, arrayList).show();
+            }
+        }
+
+        /* JADX WARNING: type inference failed for: r6v5, types: [org.telegram.ui.Components.EmojiView$TrendingListView, androidx.recyclerview.widget.RecyclerView, android.view.ViewGroup, org.telegram.ui.Components.RecyclerListView] */
+        /* JADX WARNING: Multi-variable type inference failed */
+        /* JADX WARNING: Unknown variable types count: 1 */
+        /* Code decompiled incorrectly, please refer to instructions dump. */
+        public androidx.recyclerview.widget.RecyclerView.ViewHolder onCreateViewHolder(android.view.ViewGroup r5, int r6) {
+            /*
+                r4 = this;
+                if (r6 == 0) goto L_0x007d
+                r5 = 1
+                if (r6 == r5) goto L_0x006a
+                r0 = 4
+                if (r6 == r0) goto L_0x0032
+                r5 = 5
+                if (r6 == r5) goto L_0x0026
+                android.view.View r5 = new android.view.View
+                org.telegram.ui.Components.EmojiView r6 = org.telegram.ui.Components.EmojiView.this
+                android.content.Context r6 = r6.getContext()
+                r5.<init>(r6)
+                androidx.recyclerview.widget.RecyclerView$LayoutParams r6 = new androidx.recyclerview.widget.RecyclerView$LayoutParams
+                r0 = -1
+                org.telegram.ui.Components.EmojiView r1 = org.telegram.ui.Components.EmojiView.this
+                int r1 = r1.searchFieldHeight
+                r6.<init>((int) r0, (int) r1)
+                r5.setLayoutParams(r6)
+                goto L_0x0088
+            L_0x0026:
+                org.telegram.ui.Components.EmojiView$EmojiPackHeader r5 = new org.telegram.ui.Components.EmojiView$EmojiPackHeader
+                org.telegram.ui.Components.EmojiView r6 = org.telegram.ui.Components.EmojiView.this
+                android.content.Context r0 = r6.getContext()
+                r5.<init>(r0)
+                goto L_0x0088
+            L_0x0032:
+                org.telegram.ui.Components.EmojiView$TrendingListView r6 = new org.telegram.ui.Components.EmojiView$TrendingListView
+                org.telegram.ui.Components.EmojiView r0 = org.telegram.ui.Components.EmojiView.this
+                android.content.Context r1 = r0.getContext()
+                org.telegram.ui.Components.EmojiView r2 = org.telegram.ui.Components.EmojiView.this
+                org.telegram.ui.Components.EmojiView$TrendingAdapter r3 = new org.telegram.ui.Components.EmojiView$TrendingAdapter
+                r3.<init>(r5)
+                org.telegram.ui.Components.EmojiView$TrendingAdapter r5 = r2.trendingEmojiAdapter = r3
+                r6.<init>(r1, r5)
+                r5 = 1090519040(0x41000000, float:8.0)
+                int r0 = org.telegram.messenger.AndroidUtilities.dp(r5)
+                int r5 = org.telegram.messenger.AndroidUtilities.dp(r5)
+                r1 = 0
+                r6.setPadding(r0, r1, r5, r1)
+                r6.setClipToPadding(r1)
+                org.telegram.ui.Components.EmojiView$EmojiGridAdapter$1 r5 = new org.telegram.ui.Components.EmojiView$EmojiGridAdapter$1
+                r5.<init>(r4)
+                r6.addItemDecoration(r5)
+                org.telegram.ui.Components.EmojiView$EmojiGridAdapter$$ExternalSyntheticLambda0 r5 = new org.telegram.ui.Components.EmojiView$EmojiGridAdapter$$ExternalSyntheticLambda0
+                r5.<init>(r4)
+                r6.setOnItemClickListener((org.telegram.ui.Components.RecyclerListView.OnItemClickListener) r5)
+                goto L_0x007b
+            L_0x006a:
+                org.telegram.ui.Cells.StickerSetNameCell r6 = new org.telegram.ui.Cells.StickerSetNameCell
+                org.telegram.ui.Components.EmojiView r0 = org.telegram.ui.Components.EmojiView.this
+                android.content.Context r0 = r0.getContext()
+                org.telegram.ui.Components.EmojiView r1 = org.telegram.ui.Components.EmojiView.this
+                org.telegram.ui.ActionBar.Theme$ResourcesProvider r1 = r1.resourcesProvider
+                r6.<init>(r0, r5, r1)
+            L_0x007b:
+                r5 = r6
+                goto L_0x0088
+            L_0x007d:
+                org.telegram.ui.Components.EmojiView$ImageViewEmoji r5 = new org.telegram.ui.Components.EmojiView$ImageViewEmoji
+                org.telegram.ui.Components.EmojiView r6 = org.telegram.ui.Components.EmojiView.this
+                android.content.Context r0 = r6.getContext()
+                r5.<init>(r0)
+            L_0x0088:
+                org.telegram.ui.Components.RecyclerListView$Holder r6 = new org.telegram.ui.Components.RecyclerListView$Holder
+                r6.<init>(r5)
+                return r6
+            */
+            throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.EmojiView.EmojiGridAdapter.onCreateViewHolder(android.view.ViewGroup, int):androidx.recyclerview.widget.RecyclerView$ViewHolder");
+        }
+
+        /* JADX WARNING: Code restructure failed: missing block: B:50:0x00fb, code lost:
+            r5 = r4;
+         */
+        /* Code decompiled incorrectly, please refer to instructions dump. */
+        public void onBindViewHolder(androidx.recyclerview.widget.RecyclerView.ViewHolder r12, @android.annotation.SuppressLint({"RecyclerView"}) int r13) {
+            /*
+                r11 = this;
+                int r0 = r12.getItemViewType()
+                r1 = 0
+                r2 = 1
+                if (r0 == 0) goto L_0x0085
+                if (r0 == r2) goto L_0x0039
+                r3 = 5
+                if (r0 == r3) goto L_0x000f
+                goto L_0x01de
+            L_0x000f:
+                android.view.View r12 = r12.itemView
+                org.telegram.ui.Components.EmojiView$EmojiPackHeader r12 = (org.telegram.ui.Components.EmojiView.EmojiPackHeader) r12
+                android.util.SparseIntArray r0 = r11.positionToSection
+                int r13 = r0.get(r13)
+                org.telegram.ui.Components.EmojiView r0 = org.telegram.ui.Components.EmojiView.this
+                java.util.ArrayList r0 = r0.emojipacksProcessed
+                org.telegram.ui.Components.EmojiView r3 = org.telegram.ui.Components.EmojiView.this
+                java.lang.String[] r3 = r3.emojiTitles
+                int r3 = r3.length
+                int r13 = r13 - r3
+                java.lang.Object r13 = r0.get(r13)
+                org.telegram.ui.Components.EmojiView$EmojiPack r13 = (org.telegram.ui.Components.EmojiView.EmojiPack) r13
+                if (r13 == 0) goto L_0x0034
+                boolean r0 = r13.installed
+                if (r0 != 0) goto L_0x0034
+                r1 = 1
+            L_0x0034:
+                r12.setStickerSet(r13, r1)
+                goto L_0x01de
+            L_0x0039:
+                android.view.View r12 = r12.itemView
+                org.telegram.ui.Cells.StickerSetNameCell r12 = (org.telegram.ui.Cells.StickerSetNameCell) r12
+                r12.position = r13
+                android.util.SparseIntArray r0 = r11.positionToSection
+                int r0 = r0.get(r13)
+                int r2 = r11.trendingHeaderRow
+                if (r13 != r2) goto L_0x0053
+                r13 = 2131625840(0x7f0e0770, float:1.88789E38)
+                java.lang.String r0 = "FeaturedEmojiPacks"
+                java.lang.String r13 = org.telegram.messenger.LocaleController.getString(r0, r13)
+                goto L_0x0080
+            L_0x0053:
+                org.telegram.ui.Components.EmojiView r13 = org.telegram.ui.Components.EmojiView.this
+                java.lang.String[] r13 = r13.emojiTitles
+                int r13 = r13.length
+                if (r0 < r13) goto L_0x0078
+                org.telegram.ui.Components.EmojiView r13 = org.telegram.ui.Components.EmojiView.this     // Catch:{ Exception -> 0x0075 }
+                java.util.ArrayList r13 = r13.emojipacksProcessed     // Catch:{ Exception -> 0x0075 }
+                org.telegram.ui.Components.EmojiView r2 = org.telegram.ui.Components.EmojiView.this     // Catch:{ Exception -> 0x0075 }
+                java.lang.String[] r2 = r2.emojiTitles     // Catch:{ Exception -> 0x0075 }
+                int r2 = r2.length     // Catch:{ Exception -> 0x0075 }
+                int r0 = r0 - r2
+                java.lang.Object r13 = r13.get(r0)     // Catch:{ Exception -> 0x0075 }
+                org.telegram.ui.Components.EmojiView$EmojiPack r13 = (org.telegram.ui.Components.EmojiView.EmojiPack) r13     // Catch:{ Exception -> 0x0075 }
+                org.telegram.tgnet.TLRPC$StickerSet r13 = r13.set     // Catch:{ Exception -> 0x0075 }
+                java.lang.String r13 = r13.title     // Catch:{ Exception -> 0x0075 }
+                goto L_0x0080
+            L_0x0075:
+                java.lang.String r13 = ""
+                goto L_0x0080
+            L_0x0078:
+                org.telegram.ui.Components.EmojiView r13 = org.telegram.ui.Components.EmojiView.this
+                java.lang.String[] r13 = r13.emojiTitles
+                r13 = r13[r0]
+            L_0x0080:
+                r12.setText(r13, r1)
+                goto L_0x01de
+            L_0x0085:
+                android.view.View r12 = r12.itemView
+                org.telegram.ui.Components.EmojiView$ImageViewEmoji r12 = (org.telegram.ui.Components.EmojiView.ImageViewEmoji) r12
+                r12.position = r13
+                r0 = 0
+                org.telegram.ui.Components.EmojiView.EmojiPack unused = r12.pack = r0
+                org.telegram.ui.Components.EmojiView r3 = org.telegram.ui.Components.EmojiView.this
+                boolean r3 = r3.needEmojiSearch
+                if (r3 == 0) goto L_0x0099
+                int r13 = r13 + -1
+            L_0x0099:
+                int r3 = r11.trendingRow
+                if (r3 < 0) goto L_0x009f
+                int r13 = r13 + -2
+            L_0x009f:
+                java.util.ArrayList<java.lang.String> r3 = org.telegram.messenger.Emoji.recentEmoji
+                int r3 = r3.size()
+                if (r13 >= r3) goto L_0x00d0
+                java.util.ArrayList<java.lang.String> r3 = org.telegram.messenger.Emoji.recentEmoji
+                java.lang.Object r13 = r3.get(r13)
+                java.lang.String r13 = (java.lang.String) r13
+                if (r13 == 0) goto L_0x00cb
+                java.lang.String r3 = "animated_"
+                boolean r3 = r13.startsWith(r3)
+                if (r3 == 0) goto L_0x00cb
+                r3 = 9
+                java.lang.String r3 = r13.substring(r3)     // Catch:{ Exception -> 0x00cb }
+                long r3 = java.lang.Long.parseLong(r3)     // Catch:{ Exception -> 0x00cb }
+                java.lang.Long r13 = java.lang.Long.valueOf(r3)     // Catch:{ Exception -> 0x00cb }
+                r3 = r0
+                r4 = r3
+                goto L_0x018b
+            L_0x00cb:
+                r3 = r13
+                r4 = r3
+                r13 = r0
+                goto L_0x018b
+            L_0x00d0:
+                r4 = 0
+            L_0x00d1:
+                java.lang.String[][] r5 = org.telegram.messenger.EmojiData.dataColored
+                int r6 = r5.length
+                if (r4 >= r6) goto L_0x00fa
+                r6 = r5[r4]
+                int r6 = r6.length
+                int r6 = r6 + r2
+                int r6 = r6 + r3
+                if (r13 >= r6) goto L_0x00f6
+                r4 = r5[r4]
+                int r5 = r13 - r3
+                int r5 = r5 - r2
+                r4 = r4[r5]
+                java.util.HashMap<java.lang.String, java.lang.String> r5 = org.telegram.messenger.Emoji.emojiColor
+                java.lang.Object r5 = r5.get(r4)
+                java.lang.String r5 = (java.lang.String) r5
+                if (r5 == 0) goto L_0x00fb
+                java.lang.String r5 = org.telegram.ui.Components.EmojiView.addColorToCode(r4, r5)
+                r10 = r5
+                r5 = r4
+                r4 = r10
+                goto L_0x00fc
+            L_0x00f6:
+                int r4 = r4 + 1
+                r3 = r6
+                goto L_0x00d1
+            L_0x00fa:
+                r4 = r0
+            L_0x00fb:
+                r5 = r4
+            L_0x00fc:
+                if (r5 != 0) goto L_0x0187
+                r6 = 0
+            L_0x00ff:
+                org.telegram.ui.Components.EmojiView r7 = org.telegram.ui.Components.EmojiView.this
+                java.util.ArrayList r7 = r7.emojipacksProcessed
+                int r7 = r7.size()
+                if (r6 >= r7) goto L_0x0187
+                org.telegram.ui.Components.EmojiView r7 = org.telegram.ui.Components.EmojiView.this
+                java.util.ArrayList r7 = r7.emojipacksProcessed
+                java.lang.Object r7 = r7.get(r6)
+                org.telegram.ui.Components.EmojiView$EmojiPack r7 = (org.telegram.ui.Components.EmojiView.EmojiPack) r7
+                boolean r7 = r7.installed
+                if (r7 != 0) goto L_0x013e
+                org.telegram.ui.Components.EmojiView r7 = org.telegram.ui.Components.EmojiView.this
+                androidx.recyclerview.widget.GridLayoutManager r7 = r7.emojiLayoutManager
+                int r7 = r7.getSpanCount()
+                int r7 = r7 * 2
+                org.telegram.ui.Components.EmojiView r8 = org.telegram.ui.Components.EmojiView.this
+                java.util.ArrayList r8 = r8.emojipacksProcessed
+                java.lang.Object r8 = r8.get(r6)
+                org.telegram.ui.Components.EmojiView$EmojiPack r8 = (org.telegram.ui.Components.EmojiView.EmojiPack) r8
+                java.util.ArrayList<org.telegram.tgnet.TLRPC$Document> r8 = r8.documents
+                int r8 = r8.size()
+                int r7 = java.lang.Math.min(r7, r8)
+                goto L_0x0150
+            L_0x013e:
+                org.telegram.ui.Components.EmojiView r7 = org.telegram.ui.Components.EmojiView.this
+                java.util.ArrayList r7 = r7.emojipacksProcessed
+                java.lang.Object r7 = r7.get(r6)
+                org.telegram.ui.Components.EmojiView$EmojiPack r7 = (org.telegram.ui.Components.EmojiView.EmojiPack) r7
+                java.util.ArrayList<org.telegram.tgnet.TLRPC$Document> r7 = r7.documents
+                int r7 = r7.size()
+            L_0x0150:
+                int r7 = r7 + r2
+                float r7 = (float) r7
+                float r8 = (float) r13
+                float r9 = (float) r3
+                float r9 = r9 + r7
+                int r7 = (r8 > r9 ? 1 : (r8 == r9 ? 0 : -1))
+                if (r7 >= 0) goto L_0x0182
+                int r3 = r13 - r3
+                int r3 = r3 - r2
+                if (r3 < 0) goto L_0x0182
+                org.telegram.ui.Components.EmojiView r13 = org.telegram.ui.Components.EmojiView.this
+                java.util.ArrayList r13 = r13.emojipacksProcessed
+                java.lang.Object r13 = r13.get(r6)
+                org.telegram.ui.Components.EmojiView$EmojiPack r13 = (org.telegram.ui.Components.EmojiView.EmojiPack) r13
+                org.telegram.ui.Components.EmojiView.EmojiPack unused = r12.pack = r13
+                org.telegram.ui.Components.EmojiView$EmojiPack r13 = r12.pack
+                java.util.ArrayList<org.telegram.tgnet.TLRPC$Document> r13 = r13.documents
+                java.lang.Object r13 = r13.get(r3)
+                org.telegram.tgnet.TLRPC$Document r13 = (org.telegram.tgnet.TLRPC$Document) r13
+                if (r13 == 0) goto L_0x0187
+                long r2 = r13.id
+                java.lang.Long r13 = java.lang.Long.valueOf(r2)
+                goto L_0x0188
+            L_0x0182:
+                int r3 = (int) r9
+                int r6 = r6 + 1
+                goto L_0x00ff
+            L_0x0187:
+                r13 = r0
+            L_0x0188:
+                r3 = r4
+                r4 = r5
+                r2 = 0
+            L_0x018b:
+                if (r13 == 0) goto L_0x01a3
+                r1 = 1077936128(0x40400000, float:3.0)
+                int r5 = org.telegram.messenger.AndroidUtilities.dp(r1)
+                int r6 = org.telegram.messenger.AndroidUtilities.dp(r1)
+                int r7 = org.telegram.messenger.AndroidUtilities.dp(r1)
+                int r1 = org.telegram.messenger.AndroidUtilities.dp(r1)
+                r12.setPadding(r5, r6, r7, r1)
+                goto L_0x01a6
+            L_0x01a3:
+                r12.setPadding(r1, r1, r1, r1)
+            L_0x01a6:
+                if (r13 == 0) goto L_0x01ce
+                r12.setImageDrawable(r0, r2)
+                org.telegram.ui.Components.AnimatedEmojiSpan r1 = r12.getSpan()
+                if (r1 == 0) goto L_0x01c1
+                org.telegram.ui.Components.AnimatedEmojiSpan r1 = r12.getSpan()
+                long r1 = r1.getDocumentId()
+                long r5 = r13.longValue()
+                int r7 = (r1 > r5 ? 1 : (r1 == r5 ? 0 : -1))
+                if (r7 == 0) goto L_0x01d8
+            L_0x01c1:
+                org.telegram.ui.Components.AnimatedEmojiSpan r1 = new org.telegram.ui.Components.AnimatedEmojiSpan
+                long r5 = r13.longValue()
+                r1.<init>((long) r5, (android.graphics.Paint.FontMetricsInt) r0)
+                r12.setSpan(r1)
+                goto L_0x01d8
+            L_0x01ce:
+                android.graphics.drawable.Drawable r13 = org.telegram.messenger.Emoji.getEmojiBigDrawable(r3)
+                r12.setImageDrawable(r13, r2)
+                r12.setSpan(r0)
+            L_0x01d8:
+                r12.setTag(r4)
+                r12.setContentDescription(r3)
+            L_0x01de:
+                return
+            */
+            throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.EmojiView.EmojiGridAdapter.onBindViewHolder(androidx.recyclerview.widget.RecyclerView$ViewHolder, int):void");
         }
 
         public int getItemViewType(int i) {
-            if (EmojiView.this.needEmojiSearch && i == 0) {
-                return 2;
+            if (i == this.trendingRow) {
+                return 4;
             }
-            if (this.positionToSection.indexOfKey(i) >= 0) {
+            if (i == this.trendingHeaderRow) {
                 return 1;
             }
-            return this.positionToUnlock.indexOfKey(i) >= 0 ? 3 : 0;
+            if (this.positionToSection.indexOfKey(i) >= 0) {
+                if (this.positionToSection.get(i) < EmojiData.dataColored.length) {
+                    return 1;
+                }
+                return 5;
+            } else if (!EmojiView.this.needEmojiSearch || i != 0) {
+                return this.positionToUnlock.indexOfKey(i) >= 0 ? 3 : 0;
+            } else {
+                return 2;
+            }
+        }
+
+        public void processEmoji() {
+            boolean z;
+            ArrayList<TLRPC$TL_messages_stickerSet> stickerSets = MediaDataController.getInstance(EmojiView.this.currentAccount).getStickerSets(5);
+            EmojiView.this.emojipacksProcessed.clear();
+            for (int i = 0; i < stickerSets.size(); i++) {
+                TLRPC$TL_messages_stickerSet tLRPC$TL_messages_stickerSet = stickerSets.get(i);
+                if (UserConfig.getInstance(EmojiView.this.currentAccount).isPremium()) {
+                    EmojiPack emojiPack = new EmojiPack();
+                    emojiPack.set = tLRPC$TL_messages_stickerSet.set;
+                    emojiPack.documents = tLRPC$TL_messages_stickerSet.documents;
+                    emojiPack.free = false;
+                    emojiPack.installed = true;
+                    EmojiView.this.emojipacksProcessed.add(emojiPack);
+                } else {
+                    ArrayList arrayList = new ArrayList();
+                    ArrayList arrayList2 = new ArrayList();
+                    if (!(tLRPC$TL_messages_stickerSet == null || tLRPC$TL_messages_stickerSet.documents == null)) {
+                        for (int i2 = 0; i2 < tLRPC$TL_messages_stickerSet.documents.size(); i2++) {
+                            if (MessageObject.isFreeEmoji(tLRPC$TL_messages_stickerSet.documents.get(i2))) {
+                                arrayList.add(tLRPC$TL_messages_stickerSet.documents.get(i2));
+                            } else {
+                                arrayList2.add(tLRPC$TL_messages_stickerSet.documents.get(i2));
+                            }
+                        }
+                    }
+                    if (arrayList.size() > 0) {
+                        EmojiPack emojiPack2 = new EmojiPack();
+                        emojiPack2.set = tLRPC$TL_messages_stickerSet.set;
+                        emojiPack2.documents = new ArrayList<>(arrayList);
+                        emojiPack2.free = true;
+                        emojiPack2.installed = true;
+                        EmojiView.this.emojipacksProcessed.add(emojiPack2);
+                    }
+                    if (arrayList2.size() > 0) {
+                        EmojiPack emojiPack3 = new EmojiPack();
+                        emojiPack3.set = tLRPC$TL_messages_stickerSet.set;
+                        emojiPack3.documents = new ArrayList<>(arrayList2);
+                        emojiPack3.free = false;
+                        emojiPack3.installed = true;
+                        EmojiView.this.emojipacksProcessed.add(emojiPack3);
+                    }
+                }
+            }
+            for (int i3 = 0; i3 < EmojiView.this.featuredEmojiSets.size(); i3++) {
+                TLRPC$StickerSetCovered tLRPC$StickerSetCovered = (TLRPC$StickerSetCovered) EmojiView.this.featuredEmojiSets.get(i3);
+                EmojiPack emojiPack4 = new EmojiPack();
+                emojiPack4.installed = false;
+                emojiPack4.set = tLRPC$StickerSetCovered.set;
+                emojiPack4.documents = tLRPC$StickerSetCovered instanceof TLRPC$TL_stickerSetFullCovered ? ((TLRPC$TL_stickerSetFullCovered) tLRPC$StickerSetCovered).documents : tLRPC$StickerSetCovered.covers;
+                int i4 = 0;
+                while (true) {
+                    if (i4 >= emojiPack4.documents.size()) {
+                        z = false;
+                        break;
+                    } else if (!MessageObject.isFreeEmoji(emojiPack4.documents.get(i4))) {
+                        z = true;
+                        break;
+                    } else {
+                        i4++;
+                    }
+                }
+                emojiPack4.free = !z;
+                EmojiView.this.emojipacksProcessed.add(emojiPack4);
+            }
+        }
+
+        public void updateRows() {
+            this.positionToSection.clear();
+            this.sectionToPosition.clear();
+            this.rowHashCodes.clear();
+            this.itemCount = 0;
+            if (EmojiView.this.needEmojiSearch) {
+                this.itemCount++;
+                this.rowHashCodes.add(-NUM);
+            }
+            this.itemCount += Emoji.recentEmoji.size();
+            for (int i = 0; i < Emoji.recentEmoji.size(); i++) {
+                this.rowHashCodes.add(Integer.valueOf(Arrays.hashCode(new Object[]{0, Emoji.recentEmoji.get(i)})));
+            }
+            int i2 = 0;
+            int i3 = 0;
+            while (true) {
+                String[][] strArr = EmojiData.dataColored;
+                if (i2 >= strArr.length) {
+                    break;
+                }
+                this.positionToSection.put(this.itemCount, i3);
+                this.sectionToPosition.put(i3, this.itemCount);
+                this.itemCount += strArr[i2].length + 1;
+                this.rowHashCodes.add(Integer.valueOf(Arrays.hashCode(new Object[]{1, Integer.valueOf(i2)})));
+                int i4 = 0;
+                while (true) {
+                    String[][] strArr2 = EmojiData.dataColored;
+                    if (i4 >= strArr2[i2].length) {
+                        break;
+                    }
+                    this.rowHashCodes.add(Integer.valueOf(strArr2[i2][i4].hashCode()));
+                    i4++;
+                }
+                i2++;
+                i3++;
+            }
+            int spanCount = EmojiView.this.emojiLayoutManager.getSpanCount() * 2;
+            this.plainEmojisCount = this.itemCount;
+            this.firstTrendingRow = -1;
+            if (EmojiView.this.emojipacksProcessed != null) {
+                int i5 = 0;
+                while (i5 < EmojiView.this.emojipacksProcessed.size()) {
+                    this.positionToSection.put(this.itemCount, i3);
+                    this.sectionToPosition.put(i3, this.itemCount);
+                    EmojiPack emojiPack = (EmojiPack) EmojiView.this.emojipacksProcessed.get(i5);
+                    boolean z = emojiPack.installed;
+                    if (!z && this.firstTrendingRow < 0) {
+                        this.firstTrendingRow = this.itemCount;
+                    }
+                    int size = (z ? emojiPack.documents.size() : Math.min(spanCount, emojiPack.documents.size())) + 1;
+                    ArrayList<Integer> arrayList = this.rowHashCodes;
+                    Object[] objArr = new Object[2];
+                    objArr[0] = Integer.valueOf(emojiPack.installed ? 2 : 3);
+                    TLRPC$StickerSet tLRPC$StickerSet = emojiPack.set;
+                    objArr[1] = Long.valueOf(tLRPC$StickerSet == null ? (long) i5 : tLRPC$StickerSet.id);
+                    arrayList.add(Integer.valueOf(Arrays.hashCode(objArr)));
+                    for (int i6 = 1; i6 < size; i6++) {
+                        ArrayList<Integer> arrayList2 = this.rowHashCodes;
+                        Object[] objArr2 = new Object[2];
+                        objArr2[0] = Integer.valueOf(emojiPack.installed ? 4 : 5);
+                        objArr2[1] = Long.valueOf(emojiPack.documents.get(i6 - 1).id);
+                        arrayList2.add(Integer.valueOf(Arrays.hashCode(objArr2)));
+                    }
+                    this.itemCount += size;
+                    i5++;
+                    i3++;
+                }
+            }
         }
 
         public void notifyDataSetChanged() {
-            this.positionToSection.clear();
-            this.sectionToPosition.clear();
-            this.positionToUnlock.clear();
-            this.itemCount = Emoji.recentEmoji.size() + (EmojiView.this.needEmojiSearch ? 1 : 0);
-            this.emojipacks = MediaDataController.getInstance(EmojiView.this.currentAccount).getStickerSets(5);
-            ArrayList<EmojiPack> arrayList = this.emojipacksProcessed;
-            if (arrayList != null) {
-                arrayList.clear();
-            } else {
-                this.emojipacksProcessed = new ArrayList<>();
-            }
-            ArrayList<Pair<Integer, Integer>> arrayList2 = this.premiumPackPositions;
-            if (arrayList2 != null) {
-                arrayList2.clear();
-            } else {
-                this.premiumPackPositions = new ArrayList<>();
-            }
-            int i = 0;
-            while (true) {
-                ArrayList<TLRPC$TL_messages_stickerSet> arrayList3 = this.emojipacks;
-                if (arrayList3 == null || i >= arrayList3.size()) {
-                    int i2 = 0;
-                } else {
-                    TLRPC$TL_messages_stickerSet tLRPC$TL_messages_stickerSet = this.emojipacks.get(i);
-                    if (UserConfig.getInstance(EmojiView.this.currentAccount).isPremium()) {
-                        EmojiPack emojiPack = new EmojiPack();
-                        emojiPack.index = i;
-                        emojiPack.stickerSet = tLRPC$TL_messages_stickerSet;
-                        emojiPack.documents = tLRPC$TL_messages_stickerSet.documents;
-                        emojiPack.free = false;
-                        this.emojipacksProcessed.add(emojiPack);
-                    } else {
-                        ArrayList<TLRPC$Document> arrayList4 = new ArrayList<>();
-                        ArrayList<TLRPC$Document> arrayList5 = new ArrayList<>();
-                        if (!(tLRPC$TL_messages_stickerSet == null || tLRPC$TL_messages_stickerSet.documents == null)) {
-                            for (int i3 = 0; i3 < tLRPC$TL_messages_stickerSet.documents.size(); i3++) {
-                                if (MessageObject.isFreeEmoji(tLRPC$TL_messages_stickerSet.documents.get(i3))) {
-                                    arrayList4.add(tLRPC$TL_messages_stickerSet.documents.get(i3));
-                                } else {
-                                    arrayList5.add(tLRPC$TL_messages_stickerSet.documents.get(i3));
-                                }
-                            }
-                        }
-                        if (arrayList4.size() > 0) {
-                            EmojiPack emojiPack2 = new EmojiPack();
-                            emojiPack2.index = i;
-                            emojiPack2.stickerSet = tLRPC$TL_messages_stickerSet;
-                            emojiPack2.documents = arrayList4;
-                            emojiPack2.free = true;
-                            this.emojipacksProcessed.add(emojiPack2);
-                        }
-                        if (arrayList5.size() > 0) {
-                            EmojiPack emojiPack3 = new EmojiPack();
-                            emojiPack3.index = i;
-                            emojiPack3.stickerSet = tLRPC$TL_messages_stickerSet;
-                            emojiPack3.documents = arrayList5;
-                            emojiPack3.free = false;
-                            this.emojipacksProcessed.add(emojiPack3);
-                        }
-                    }
-                    i++;
+            final ArrayList arrayList = new ArrayList(this.rowHashCodes);
+            MediaDataController instance = MediaDataController.getInstance(EmojiView.this.currentAccount);
+            ArrayList<TLRPC$StickerSetCovered> featuredEmojiSets = instance.getFeaturedEmojiSets();
+            EmojiView.this.featuredEmojiSets.clear();
+            int size = featuredEmojiSets.size();
+            for (int i = 0; i < size; i++) {
+                TLRPC$StickerSetCovered tLRPC$StickerSetCovered = featuredEmojiSets.get(i);
+                if (!instance.isStickerPackInstalled(tLRPC$StickerSetCovered.set.id) || (tLRPC$StickerSetCovered.set != null && EmojiView.this.keepFeaturedDuplicate.contains(Long.valueOf(tLRPC$StickerSetCovered.set.id)))) {
+                    EmojiView.this.featuredEmojiSets.add(tLRPC$StickerSetCovered);
                 }
             }
-            int i22 = 0;
-            while (true) {
-                String[][] strArr = EmojiData.dataColored;
-                if (i22 >= strArr.length) {
-                    break;
-                }
-                this.positionToSection.put(this.itemCount, i22);
-                this.sectionToPosition.put(i22, this.itemCount);
-                this.itemCount += strArr[i22].length + 1;
-                i22++;
+            processEmoji();
+            updateRows();
+            if (EmojiView.this.emojiTabs != null) {
+                EmojiView.this.emojiTabs.updateEmojiPacks();
             }
-            boolean isPremium = UserConfig.getInstance(EmojiView.this.currentAccount).isPremium();
-            this.plainEmojisCount = this.itemCount;
-            if (this.emojipacks != null) {
-                for (int i4 = 0; i4 < this.emojipacksProcessed.size(); i4++) {
-                    SparseIntArray sparseIntArray = this.positionToSection;
-                    int i5 = this.itemCount;
-                    String[][] strArr2 = EmojiData.dataColored;
-                    sparseIntArray.put(i5, strArr2.length + i4);
-                    this.sectionToPosition.put(strArr2.length + i4, this.itemCount);
-                    int size = this.emojipacksProcessed.get(i4).documents.size() + 1;
-                    if (!this.emojipacksProcessed.get(i4).free) {
-                        if (!isPremium) {
-                            size++;
-                            this.positionToUnlock.put((this.itemCount + size) - 1, i4);
-                        }
-                        Boolean bool = this.wasPremium;
-                        if (bool == null || isPremium != bool.booleanValue()) {
-                            if (isPremium) {
-                                notifyItemRemoved((this.itemCount + size) - 1);
-                            } else {
-                                notifyItemInserted((this.itemCount + size) - 1);
-                            }
-                        }
-                        this.premiumPackPositions.add(new Pair(Integer.valueOf(this.itemCount), Integer.valueOf((this.itemCount + size) - 1)));
-                    }
-                    this.itemCount += size;
-                }
+            if (EmojiView.this.trendingEmojiAdapter != null) {
+                EmojiView.this.trendingEmojiAdapter.notifyDataSetChanged();
             }
-            this.wasPremium = Boolean.valueOf(isPremium);
-            EmojiView.this.updateEmojiTabs();
-            AndroidUtilities.runOnUIThread(new EmojiView$EmojiGridAdapter$$ExternalSyntheticLambda1(this));
-        }
+            DiffUtil.calculateDiff(new DiffUtil.Callback() {
+                public boolean areContentsTheSame(int i, int i2) {
+                    return true;
+                }
 
-        /* access modifiers changed from: private */
-        public /* synthetic */ void lambda$notifyDataSetChanged$1() {
-            super.notifyDataSetChanged();
+                public int getOldListSize() {
+                    return arrayList.size();
+                }
+
+                public int getNewListSize() {
+                    return EmojiGridAdapter.this.rowHashCodes.size();
+                }
+
+                public boolean areItemsTheSame(int i, int i2) {
+                    return ((Integer) arrayList.get(i)).equals(EmojiGridAdapter.this.rowHashCodes.get(i2));
+                }
+            }, false).dispatchUpdatesTo((RecyclerView.Adapter) this);
         }
+    }
+
+    public ArrayList<EmojiPack> getEmojipacks() {
+        return this.emojipacksProcessed;
     }
 
     private class EmojiSearchAdapter extends RecyclerListView.SelectionAdapter {
@@ -5922,22 +7203,93 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
             return new RecyclerListView.Holder(r12);
         }
 
-        public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int i) {
-            String str;
-            boolean z;
-            if (viewHolder.getItemViewType() == 0) {
-                ImageViewEmoji imageViewEmoji = (ImageViewEmoji) viewHolder.itemView;
-                int i2 = i - 1;
-                if (!this.result.isEmpty() || this.searchWas) {
-                    str = this.result.get(i2).emoji;
-                    z = false;
-                } else {
-                    str = Emoji.recentEmoji.get(i2);
-                    z = true;
-                }
-                imageViewEmoji.setImageDrawable(Emoji.getEmojiBigDrawable(str), z);
-                imageViewEmoji.setTag(str);
-            }
+        /* JADX WARNING: Removed duplicated region for block: B:18:0x0054  */
+        /* JADX WARNING: Removed duplicated region for block: B:19:0x006a  */
+        /* JADX WARNING: Removed duplicated region for block: B:21:0x006f  */
+        /* JADX WARNING: Removed duplicated region for block: B:26:0x0095  */
+        /* Code decompiled incorrectly, please refer to instructions dump. */
+        public void onBindViewHolder(androidx.recyclerview.widget.RecyclerView.ViewHolder r9, int r10) {
+            /*
+                r8 = this;
+                int r0 = r9.getItemViewType()
+                if (r0 == 0) goto L_0x0008
+                goto L_0x00a2
+            L_0x0008:
+                android.view.View r9 = r9.itemView
+                org.telegram.ui.Components.EmojiView$ImageViewEmoji r9 = (org.telegram.ui.Components.EmojiView.ImageViewEmoji) r9
+                r0 = 0
+                org.telegram.ui.Components.EmojiView.EmojiPack unused = r9.pack = r0
+                int r10 = r10 + -1
+                java.util.ArrayList<org.telegram.messenger.MediaDataController$KeywordResult> r1 = r8.result
+                boolean r1 = r1.isEmpty()
+                r2 = 0
+                if (r1 == 0) goto L_0x0029
+                boolean r1 = r8.searchWas
+                if (r1 != 0) goto L_0x0029
+                java.util.ArrayList<java.lang.String> r1 = org.telegram.messenger.Emoji.recentEmoji
+                java.lang.Object r10 = r1.get(r10)
+                java.lang.String r10 = (java.lang.String) r10
+                r1 = 1
+                goto L_0x0034
+            L_0x0029:
+                java.util.ArrayList<org.telegram.messenger.MediaDataController$KeywordResult> r1 = r8.result
+                java.lang.Object r10 = r1.get(r10)
+                org.telegram.messenger.MediaDataController$KeywordResult r10 = (org.telegram.messenger.MediaDataController.KeywordResult) r10
+                java.lang.String r10 = r10.emoji
+                r1 = 0
+            L_0x0034:
+                if (r10 == 0) goto L_0x004f
+                java.lang.String r3 = "animated_"
+                boolean r3 = r10.startsWith(r3)
+                if (r3 == 0) goto L_0x004f
+                r3 = 9
+                java.lang.String r3 = r10.substring(r3)     // Catch:{ Exception -> 0x004f }
+                long r3 = java.lang.Long.parseLong(r3)     // Catch:{ Exception -> 0x004f }
+                java.lang.Long r10 = java.lang.Long.valueOf(r3)     // Catch:{ Exception -> 0x004f }
+                r3 = r0
+                r4 = r3
+                goto L_0x0052
+            L_0x004f:
+                r3 = r10
+                r4 = r3
+                r10 = r0
+            L_0x0052:
+                if (r10 == 0) goto L_0x006a
+                r2 = 1077936128(0x40400000, float:3.0)
+                int r5 = org.telegram.messenger.AndroidUtilities.dp(r2)
+                int r6 = org.telegram.messenger.AndroidUtilities.dp(r2)
+                int r7 = org.telegram.messenger.AndroidUtilities.dp(r2)
+                int r2 = org.telegram.messenger.AndroidUtilities.dp(r2)
+                r9.setPadding(r5, r6, r7, r2)
+                goto L_0x006d
+            L_0x006a:
+                r9.setPadding(r2, r2, r2, r2)
+            L_0x006d:
+                if (r10 == 0) goto L_0x0095
+                r9.setImageDrawable(r0, r1)
+                org.telegram.ui.Components.AnimatedEmojiSpan r1 = r9.getSpan()
+                if (r1 == 0) goto L_0x0088
+                org.telegram.ui.Components.AnimatedEmojiSpan r1 = r9.getSpan()
+                long r1 = r1.getDocumentId()
+                long r5 = r10.longValue()
+                int r3 = (r1 > r5 ? 1 : (r1 == r5 ? 0 : -1))
+                if (r3 == 0) goto L_0x009f
+            L_0x0088:
+                org.telegram.ui.Components.AnimatedEmojiSpan r1 = new org.telegram.ui.Components.AnimatedEmojiSpan
+                long r2 = r10.longValue()
+                r1.<init>((long) r2, (android.graphics.Paint.FontMetricsInt) r0)
+                r9.setSpan(r1)
+                goto L_0x009f
+            L_0x0095:
+                android.graphics.drawable.Drawable r10 = org.telegram.messenger.Emoji.getEmojiBigDrawable(r3)
+                r9.setImageDrawable(r10, r1)
+                r9.setSpan(r0)
+            L_0x009f:
+                r9.setTag(r4)
+            L_0x00a2:
+                return
+            */
+            throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.EmojiView.EmojiSearchAdapter.onBindViewHolder(androidx.recyclerview.widget.RecyclerView$ViewHolder, int):void");
         }
 
         public int getItemViewType(int i) {
@@ -5985,7 +7337,7 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
                                     EmojiSearchAdapter.this.notifyDataSetChanged();
                                 }
                             }
-                        });
+                        }, true);
                     }
                 };
                 this.searchRunnable = r3;
@@ -6003,7 +7355,7 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
         }
 
         public void destroyItem(ViewGroup viewGroup, int i, Object obj) {
-            viewGroup.removeView((View) EmojiView.this.views.get(i));
+            viewGroup.removeView((View) obj);
         }
 
         public boolean canScrollToTab(int i) {
@@ -6020,7 +7372,7 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
         }
 
         public int getCount() {
-            return EmojiView.this.views.size();
+            return EmojiView.this.currentTabs.size();
         }
 
         public Drawable getPageIconDrawable(int i) {
@@ -6047,7 +7399,7 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
         }
 
         public Object instantiateItem(ViewGroup viewGroup, int i) {
-            View view = (View) EmojiView.this.views.get(i);
+            View view = ((Tab) EmojiView.this.currentTabs.get(i)).view;
             viewGroup.addView(view);
             return view;
         }
@@ -6811,7 +8163,7 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
                     org.telegram.ui.Components.EmojiView$StickersSearchGridAdapter r0 = org.telegram.ui.Components.EmojiView.StickersSearchGridAdapter.this
                     r1 = 0
                     r0.cleared = r1
-                    int r0 = org.telegram.ui.Components.EmojiView.StickersSearchGridAdapter.access$17904(r0)
+                    int r0 = org.telegram.ui.Components.EmojiView.StickersSearchGridAdapter.access$18504(r0)
                     java.util.ArrayList r2 = new java.util.ArrayList
                     r2.<init>(r1)
                     android.util.LongSparseArray r3 = new android.util.LongSparseArray
@@ -6920,13 +8272,13 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
                     java.util.ArrayList r5 = r5.emojiArrays
                     r5.add(r2)
                 L_0x0122:
-                    if (r4 == 0) goto L_0x0180
+                    if (r4 == 0) goto L_0x0182
                     boolean r5 = r4.isEmpty()
-                    if (r5 != 0) goto L_0x0180
+                    if (r5 != 0) goto L_0x0182
                     org.telegram.ui.Components.EmojiView$StickersSearchGridAdapter r5 = org.telegram.ui.Components.EmojiView.StickersSearchGridAdapter.this
                     java.lang.String r5 = r5.searchQuery
                     int r5 = r5.length()
-                    if (r5 <= r7) goto L_0x0180
+                    if (r5 <= r7) goto L_0x0182
                     java.lang.String[] r5 = org.telegram.messenger.AndroidUtilities.getCurrentKeyboardLanguage()
                     org.telegram.ui.Components.EmojiView$StickersSearchGridAdapter r6 = org.telegram.ui.Components.EmojiView.StickersSearchGridAdapter.this
                     org.telegram.ui.Components.EmojiView r6 = org.telegram.ui.Components.EmojiView.this
@@ -6945,16 +8297,18 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
                     org.telegram.ui.Components.EmojiView$StickersSearchGridAdapter r5 = org.telegram.ui.Components.EmojiView.StickersSearchGridAdapter.this
                     org.telegram.ui.Components.EmojiView r5 = org.telegram.ui.Components.EmojiView.this
                     int r5 = r5.currentAccount
-                    org.telegram.messenger.MediaDataController r5 = org.telegram.messenger.MediaDataController.getInstance(r5)
-                    org.telegram.ui.Components.EmojiView$StickersSearchGridAdapter r6 = org.telegram.ui.Components.EmojiView.StickersSearchGridAdapter.this
-                    org.telegram.ui.Components.EmojiView r6 = org.telegram.ui.Components.EmojiView.this
-                    java.lang.String[] r6 = r6.lastSearchKeyboardLanguage
-                    org.telegram.ui.Components.EmojiView$StickersSearchGridAdapter r7 = org.telegram.ui.Components.EmojiView.StickersSearchGridAdapter.this
-                    java.lang.String r7 = r7.searchQuery
-                    org.telegram.ui.Components.EmojiView$StickersSearchGridAdapter$1$1 r8 = new org.telegram.ui.Components.EmojiView$StickersSearchGridAdapter$1$1
-                    r8.<init>(r0, r4)
-                    r5.getEmojiSuggestions(r6, r7, r1, r8)
-                L_0x0180:
+                    org.telegram.messenger.MediaDataController r6 = org.telegram.messenger.MediaDataController.getInstance(r5)
+                    org.telegram.ui.Components.EmojiView$StickersSearchGridAdapter r5 = org.telegram.ui.Components.EmojiView.StickersSearchGridAdapter.this
+                    org.telegram.ui.Components.EmojiView r5 = org.telegram.ui.Components.EmojiView.this
+                    java.lang.String[] r7 = r5.lastSearchKeyboardLanguage
+                    org.telegram.ui.Components.EmojiView$StickersSearchGridAdapter r5 = org.telegram.ui.Components.EmojiView.StickersSearchGridAdapter.this
+                    java.lang.String r8 = r5.searchQuery
+                    r9 = 0
+                    org.telegram.ui.Components.EmojiView$StickersSearchGridAdapter$1$1 r10 = new org.telegram.ui.Components.EmojiView$StickersSearchGridAdapter$1$1
+                    r10.<init>(r0, r4)
+                    r11 = 0
+                    r6.getEmojiSuggestions(r7, r8, r9, r10, r11)
+                L_0x0182:
                     org.telegram.ui.Components.EmojiView$StickersSearchGridAdapter r0 = org.telegram.ui.Components.EmojiView.StickersSearchGridAdapter.this
                     org.telegram.ui.Components.EmojiView r0 = org.telegram.ui.Components.EmojiView.this
                     int r0 = r0.currentAccount
@@ -6967,9 +8321,9 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
                     r4.filterPremiumStickers((java.util.ArrayList<org.telegram.tgnet.TLRPC$TL_messages_stickerSet>) r0)
                     int r4 = r0.size()
                     r5 = 0
-                L_0x01a4:
+                L_0x01a6:
                     r6 = 32
-                    if (r5 >= r4) goto L_0x0220
+                    if (r5 >= r4) goto L_0x0222
                     java.lang.Object r7 = r0.get(r5)
                     org.telegram.tgnet.TLRPC$TL_messages_stickerSet r7 = (org.telegram.tgnet.TLRPC$TL_messages_stickerSet) r7
                     org.telegram.tgnet.TLRPC$StickerSet r8 = r7.set
@@ -6977,14 +8331,14 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
                     org.telegram.ui.Components.EmojiView$StickersSearchGridAdapter r9 = org.telegram.ui.Components.EmojiView.StickersSearchGridAdapter.this
                     java.lang.String r9 = r9.searchQuery
                     int r8 = org.telegram.messenger.AndroidUtilities.indexOfIgnoreCase(r8, r9)
-                    if (r8 < 0) goto L_0x01e6
-                    if (r8 == 0) goto L_0x01cc
+                    if (r8 < 0) goto L_0x01e8
+                    if (r8 == 0) goto L_0x01ce
                     org.telegram.tgnet.TLRPC$StickerSet r9 = r7.set
                     java.lang.String r9 = r9.title
                     int r10 = r8 + -1
                     char r9 = r9.charAt(r10)
-                    if (r9 != r6) goto L_0x021d
-                L_0x01cc:
+                    if (r9 != r6) goto L_0x021f
+                L_0x01ce:
                     r13.clear()
                     org.telegram.ui.Components.EmojiView$StickersSearchGridAdapter r6 = org.telegram.ui.Components.EmojiView.StickersSearchGridAdapter.this
                     java.util.ArrayList r6 = r6.localPacks
@@ -6993,22 +8347,22 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
                     java.util.HashMap r6 = r6.localPacksByName
                     java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
                     r6.put(r7, r8)
-                    goto L_0x021d
-                L_0x01e6:
+                    goto L_0x021f
+                L_0x01e8:
                     org.telegram.tgnet.TLRPC$StickerSet r8 = r7.set
                     java.lang.String r8 = r8.short_name
-                    if (r8 == 0) goto L_0x021d
+                    if (r8 == 0) goto L_0x021f
                     org.telegram.ui.Components.EmojiView$StickersSearchGridAdapter r9 = org.telegram.ui.Components.EmojiView.StickersSearchGridAdapter.this
                     java.lang.String r9 = r9.searchQuery
                     int r8 = org.telegram.messenger.AndroidUtilities.indexOfIgnoreCase(r8, r9)
-                    if (r8 < 0) goto L_0x021d
-                    if (r8 == 0) goto L_0x0206
+                    if (r8 < 0) goto L_0x021f
+                    if (r8 == 0) goto L_0x0208
                     org.telegram.tgnet.TLRPC$StickerSet r9 = r7.set
                     java.lang.String r9 = r9.short_name
                     int r8 = r8 + -1
                     char r8 = r9.charAt(r8)
-                    if (r8 != r6) goto L_0x021d
-                L_0x0206:
+                    if (r8 != r6) goto L_0x021f
+                L_0x0208:
                     r13.clear()
                     org.telegram.ui.Components.EmojiView$StickersSearchGridAdapter r6 = org.telegram.ui.Components.EmojiView.StickersSearchGridAdapter.this
                     java.util.ArrayList r6 = r6.localPacks
@@ -7017,10 +8371,10 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
                     java.util.HashMap r6 = r6.localPacksByShortName
                     java.lang.Boolean r8 = java.lang.Boolean.TRUE
                     r6.put(r7, r8)
-                L_0x021d:
+                L_0x021f:
                     int r5 = r5 + 1
-                    goto L_0x01a4
-                L_0x0220:
+                    goto L_0x01a6
+                L_0x0222:
                     org.telegram.ui.Components.EmojiView$StickersSearchGridAdapter r0 = org.telegram.ui.Components.EmojiView.StickersSearchGridAdapter.this
                     org.telegram.ui.Components.EmojiView r0 = org.telegram.ui.Components.EmojiView.this
                     int r0 = r0.currentAccount
@@ -7033,8 +8387,8 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
                     org.telegram.messenger.MessagesController r4 = org.telegram.messenger.MessagesController.getInstance(r4)
                     r4.filterPremiumStickers((java.util.ArrayList<org.telegram.tgnet.TLRPC$TL_messages_stickerSet>) r0)
                     int r4 = r0.size()
-                L_0x0244:
-                    if (r1 >= r4) goto L_0x02be
+                L_0x0246:
+                    if (r1 >= r4) goto L_0x02c0
                     java.lang.Object r5 = r0.get(r1)
                     org.telegram.tgnet.TLRPC$TL_messages_stickerSet r5 = (org.telegram.tgnet.TLRPC$TL_messages_stickerSet) r5
                     org.telegram.tgnet.TLRPC$StickerSet r7 = r5.set
@@ -7042,14 +8396,14 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
                     org.telegram.ui.Components.EmojiView$StickersSearchGridAdapter r8 = org.telegram.ui.Components.EmojiView.StickersSearchGridAdapter.this
                     java.lang.String r8 = r8.searchQuery
                     int r7 = org.telegram.messenger.AndroidUtilities.indexOfIgnoreCase(r7, r8)
-                    if (r7 < 0) goto L_0x0284
-                    if (r7 == 0) goto L_0x026a
+                    if (r7 < 0) goto L_0x0286
+                    if (r7 == 0) goto L_0x026c
                     org.telegram.tgnet.TLRPC$StickerSet r8 = r5.set
                     java.lang.String r8 = r8.title
                     int r9 = r7 + -1
                     char r8 = r8.charAt(r9)
-                    if (r8 != r6) goto L_0x02bb
-                L_0x026a:
+                    if (r8 != r6) goto L_0x02bd
+                L_0x026c:
                     r13.clear()
                     org.telegram.ui.Components.EmojiView$StickersSearchGridAdapter r8 = org.telegram.ui.Components.EmojiView.StickersSearchGridAdapter.this
                     java.util.ArrayList r8 = r8.localPacks
@@ -7058,22 +8412,22 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
                     java.util.HashMap r8 = r8.localPacksByName
                     java.lang.Integer r7 = java.lang.Integer.valueOf(r7)
                     r8.put(r5, r7)
-                    goto L_0x02bb
-                L_0x0284:
+                    goto L_0x02bd
+                L_0x0286:
                     org.telegram.tgnet.TLRPC$StickerSet r7 = r5.set
                     java.lang.String r7 = r7.short_name
-                    if (r7 == 0) goto L_0x02bb
+                    if (r7 == 0) goto L_0x02bd
                     org.telegram.ui.Components.EmojiView$StickersSearchGridAdapter r8 = org.telegram.ui.Components.EmojiView.StickersSearchGridAdapter.this
                     java.lang.String r8 = r8.searchQuery
                     int r7 = org.telegram.messenger.AndroidUtilities.indexOfIgnoreCase(r7, r8)
-                    if (r7 < 0) goto L_0x02bb
-                    if (r7 == 0) goto L_0x02a4
+                    if (r7 < 0) goto L_0x02bd
+                    if (r7 == 0) goto L_0x02a6
                     org.telegram.tgnet.TLRPC$StickerSet r8 = r5.set
                     java.lang.String r8 = r8.short_name
                     int r7 = r7 + -1
                     char r7 = r8.charAt(r7)
-                    if (r7 != r6) goto L_0x02bb
-                L_0x02a4:
+                    if (r7 != r6) goto L_0x02bd
+                L_0x02a6:
                     r13.clear()
                     org.telegram.ui.Components.EmojiView$StickersSearchGridAdapter r7 = org.telegram.ui.Components.EmojiView.StickersSearchGridAdapter.this
                     java.util.ArrayList r7 = r7.localPacks
@@ -7082,19 +8436,19 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
                     java.util.HashMap r7 = r7.localPacksByShortName
                     java.lang.Boolean r8 = java.lang.Boolean.TRUE
                     r7.put(r5, r8)
-                L_0x02bb:
+                L_0x02bd:
                     int r1 = r1 + 1
-                    goto L_0x0244
-                L_0x02be:
+                    goto L_0x0246
+                L_0x02c0:
                     org.telegram.ui.Components.EmojiView$StickersSearchGridAdapter r0 = org.telegram.ui.Components.EmojiView.StickersSearchGridAdapter.this
                     java.util.ArrayList r0 = r0.localPacks
                     boolean r0 = r0.isEmpty()
-                    if (r0 == 0) goto L_0x02d6
+                    if (r0 == 0) goto L_0x02d8
                     org.telegram.ui.Components.EmojiView$StickersSearchGridAdapter r0 = org.telegram.ui.Components.EmojiView.StickersSearchGridAdapter.this
                     java.util.HashMap r0 = r0.emojiStickers
                     boolean r0 = r0.isEmpty()
-                    if (r0 != 0) goto L_0x02ff
-                L_0x02d6:
+                    if (r0 != 0) goto L_0x0301
+                L_0x02d8:
                     org.telegram.ui.Components.EmojiView$StickersSearchGridAdapter r0 = org.telegram.ui.Components.EmojiView.StickersSearchGridAdapter.this
                     org.telegram.ui.Components.EmojiView r0 = org.telegram.ui.Components.EmojiView.this
                     org.telegram.ui.Components.RecyclerListView r0 = r0.stickersGridView
@@ -7102,7 +8456,7 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
                     org.telegram.ui.Components.EmojiView$StickersSearchGridAdapter r1 = org.telegram.ui.Components.EmojiView.StickersSearchGridAdapter.this
                     org.telegram.ui.Components.EmojiView r1 = org.telegram.ui.Components.EmojiView.this
                     org.telegram.ui.Components.EmojiView$StickersSearchGridAdapter r1 = r1.stickersSearchGridAdapter
-                    if (r0 == r1) goto L_0x02ff
+                    if (r0 == r1) goto L_0x0301
                     org.telegram.ui.Components.EmojiView$StickersSearchGridAdapter r0 = org.telegram.ui.Components.EmojiView.StickersSearchGridAdapter.this
                     org.telegram.ui.Components.EmojiView r0 = org.telegram.ui.Components.EmojiView.this
                     org.telegram.ui.Components.RecyclerListView r0 = r0.stickersGridView
@@ -7110,7 +8464,7 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
                     org.telegram.ui.Components.EmojiView r1 = org.telegram.ui.Components.EmojiView.this
                     org.telegram.ui.Components.EmojiView$StickersSearchGridAdapter r1 = r1.stickersSearchGridAdapter
                     r0.setAdapter(r1)
-                L_0x02ff:
+                L_0x0301:
                     org.telegram.tgnet.TLRPC$TL_messages_searchStickerSets r0 = new org.telegram.tgnet.TLRPC$TL_messages_searchStickerSets
                     r0.<init>()
                     org.telegram.ui.Components.EmojiView$StickersSearchGridAdapter r1 = org.telegram.ui.Components.EmojiView.StickersSearchGridAdapter.this
@@ -7127,7 +8481,7 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
                     org.telegram.ui.Components.EmojiView$StickersSearchGridAdapter r0 = org.telegram.ui.Components.EmojiView.StickersSearchGridAdapter.this
                     java.lang.String r0 = r0.searchQuery
                     boolean r0 = org.telegram.messenger.Emoji.isValidEmoji(r0)
-                    if (r0 == 0) goto L_0x0359
+                    if (r0 == 0) goto L_0x035b
                     org.telegram.tgnet.TLRPC$TL_messages_getStickers r0 = new org.telegram.tgnet.TLRPC$TL_messages_getStickers
                     r0.<init>()
                     org.telegram.ui.Components.EmojiView$StickersSearchGridAdapter r1 = org.telegram.ui.Components.EmojiView.StickersSearchGridAdapter.this
@@ -7143,7 +8497,7 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
                     r5.<init>(r13, r0, r2, r3)
                     int r0 = r4.sendRequest(r0, r5)
                     int unused = r1.reqId2 = r0
-                L_0x0359:
+                L_0x035b:
                     org.telegram.ui.Components.EmojiView$StickersSearchGridAdapter r0 = org.telegram.ui.Components.EmojiView.StickersSearchGridAdapter.this
                     r0.notifyDataSetChanged()
                     return
@@ -7211,7 +8565,7 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
             return false;
         }
 
-        static /* synthetic */ int access$17904(StickersSearchGridAdapter stickersSearchGridAdapter) {
+        static /* synthetic */ int access$18504(StickersSearchGridAdapter stickersSearchGridAdapter) {
             int i = stickersSearchGridAdapter.emojiSearchId + 1;
             stickersSearchGridAdapter.emojiSearchId = i;
             return i;
@@ -7349,7 +8703,7 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
                 android.widget.TextView r0 = new android.widget.TextView
                 android.content.Context r2 = r13.context
                 r0.<init>(r2)
-                r2 = 2131626916(0x7f0e0ba4, float:1.8881082E38)
+                r2 = 2131626926(0x7f0e0bae, float:1.8881102E38)
                 java.lang.String r3 = "NoStickersFound"
                 java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
                 r0.setText(r2)
@@ -8009,6 +9363,14 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
             if (!isShown) {
                 reset();
             }
+        }
+    }
+
+    private class Tab {
+        int type;
+        View view;
+
+        private Tab(EmojiView emojiView) {
         }
     }
 }

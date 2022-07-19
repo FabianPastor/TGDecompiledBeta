@@ -11,6 +11,6 @@ public final /* synthetic */ class EmojiView$$ExternalSyntheticLambda8 implement
     }
 
     public final void onItemClick(View view, int i) {
-        this.f$0.lambda$new$5(view, i);
+        this.f$0.lambda$new$6(view, i);
     }
 }

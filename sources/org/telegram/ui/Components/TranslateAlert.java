@@ -284,7 +284,7 @@ public class TranslateAlert extends Dialog {
             r1 = r38
             r8 = r39
             r9 = r41
-            r2 = 2131689509(0x7f0var_, float:1.9008035E38)
+            r2 = 2131689510(0x7f0var_, float:1.9008037E38)
             r6.<init>(r7, r2)
             r10 = 0
             r6.blockIndex = r10
@@ -448,7 +448,7 @@ public class TranslateAlert extends Dialog {
             android.widget.TextView r0 = r6.titleView
             r0.setLines(r13)
             android.widget.TextView r0 = r6.titleView
-            r2 = 2131624634(0x7f0e02ba, float:1.8876453E38)
+            r2 = 2131624638(0x7f0e02be, float:1.8876461E38)
             java.lang.String r3 = "AutomaticTranslation"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             r0.setText(r2)
@@ -872,7 +872,7 @@ public class TranslateAlert extends Dialog {
             r1 = 1096810496(0x41600000, float:14.0)
             r0.setTextSize(r13, r1)
             android.widget.TextView r0 = r6.buttonTextView
-            r1 = 2131625178(0x7f0e04da, float:1.8877557E38)
+            r1 = 2131625185(0x7f0e04e1, float:1.887757E38)
             java.lang.String r3 = "CloseTranslation"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r3, r1)
             r0.setText(r1)

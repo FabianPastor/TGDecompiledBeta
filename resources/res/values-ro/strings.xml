@@ -21,6 +21,12 @@
     <string name="fcm_fallback_notification_channel_label">Diverse</string>
     <string name="google_assistant_verification_channel_name">Verificator pentru Asistent</string>
     <string name="google_assistant_verification_notification_title">Asistentul Google trimite un mesaj</string>
+    <string name="hms_apk_not_installed_hints">Este posibil ca unele funcții din %1$s să nu funcționeze corect fără HMS Core, care nu este instalat pe dispozitivul dvs.</string>
+    <string name="hms_bindfaildlg_message">%1$s nu poate utiliza HMS Core. Lansați Optimizare (Manager telefon) sau mergeți la Setări, activați toate permisiunile pentru %2$s (inclusiv cele de lansare automată și lansare secundară), și încercați din nou.</string>
+    <string name="hms_confirm">OK</string>
+    <string name="hms_is_spoof">Se pare că aveți o versiune neoficială de HMS Core (%1$s) instalată pe dispozitiv. Vă rugăm să dezinstalați HMS Core din Setări și să reveniți la versiunea oficială a acestei aplicații.</string>
+    <string name="hms_push_channel">Implicit</string>
+    <string name="hms_spoof_hints">Notă</string>
     <string name="status_bar_notification_info_overflow">999+</string>
     <string name="wallet_buy_button_place_holder">Buy with Google</string>
 </resources>

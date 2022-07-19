@@ -21,6 +21,12 @@
     <string name="fcm_fallback_notification_channel_label">विविध</string>
     <string name="google_assistant_verification_channel_name">सहायकको प्रमाणक</string>
     <string name="google_assistant_verification_notification_title">Google सहायकले सन्देश पठाउँदै छ</string>
+    <string name="hms_apk_not_installed_hints">%1$s का केही सुविधाहरूले तपाईंको यन्त्रमा स्थापना नगरिएको HMS Core विना राम्रोसँग काम नगर्न सक्छन् ।</string>
+    <string name="hms_bindfaildlg_message">%1$s HMS Core प्रयोग गर्न असमर्थ छ । अप्टिमाइजर (फोन व्यवस्थापक) लन्च गर्नुहोस् वा सेटिङहरूमा जानुहोस्, %2$s को लागि (स्वत: लन्च र सेकेण्डरी लन्च सहित) सबै अनुमतिहरूलाई सक्षम गर्नुहोस् र फेरि प्रयास गर्नुहोस् ।</string>
+    <string name="hms_confirm">ठीक छ</string>
+    <string name="hms_is_spoof">तपाईंको यन्त्रमा HMS Core (%1$s) को अनाधिकारिक संस्करण स्थापना भएको जस्तो देखिन्छ । कृपया सेटिङहरूबाट HMS Core को स्थापना हटाउनुहोस् र आधिकारिक संस्करण स्थापना गर्नका लागि यो एपमा फर्कनुहोस् ।</string>
+    <string name="hms_push_channel">पूर्वनिर्धारित</string>
+    <string name="hms_spoof_hints">नोट</string>
     <string name="status_bar_notification_info_overflow">९९९+</string>
     <string name="wallet_buy_button_place_holder">Google मार्फत किन्नुहोस्</string>
 </resources>

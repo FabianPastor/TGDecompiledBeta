@@ -21,6 +21,12 @@
     <string name="fcm_fallback_notification_channel_label">Har xil</string>
     <string name="google_assistant_verification_channel_name">Assistent yordamida tekshirish</string>
     <string name="google_assistant_verification_notification_title">Google Assistent xabar yubormoqda</string>
+    <string name="hms_apk_not_installed_hints">HMS Core qurilmangizga oʻrnatilmagani sababli, ayrim %1$s funksiyalari kutilganidek ishlamasligi mumkin.</string>
+    <string name="hms_bindfaildlg_message">%1$s HMS Core ilovasidan foydalana olmadi. Optimizatsiya (Telefon menejeri) yoki Sozlamalarga kirib, %2$s uchun barcha ruxsatlarni (jumladan, avtomatik ishga tushish va faollashtirish ruxsatlarini) bering hamda qayta urining.</string>
+    <string name="hms_confirm">OK</string>
+    <string name="hms_is_spoof">Qurilmangizga HMS Core ilovasining norasmiy versiyasi (%1$s) oʻrnatilgan shekilli. HMS Core ilovasini Sozlamalardan oʻchirib tashlang va rasmiy versiyasini oʻrnatish uchun ushbu ilovaga qayting.</string>
+    <string name="hms_push_channel">Standart</string>
+    <string name="hms_spoof_hints">Eslatma</string>
     <string name="status_bar_notification_info_overflow">999+</string>
     <string name="wallet_buy_button_place_holder">Google orqali sotib olish</string>
 </resources>

@@ -765,6 +765,10 @@ public class SimpleTextView extends View {
         if (this.fullAlpha <= 0.0f || this.fullLayoutLeftOffset == 0) {
             canvas.save();
             clipOutSpoilers(canvas);
+            AnimatedEmojiSpan.EmojiGroupedSpans emojiGroupedSpans = this.emojiStack;
+            if (emojiGroupedSpans != null) {
+                emojiGroupedSpans.clearPositions();
+            }
             this.layout.draw(canvas);
             canvas.restore();
             AnimatedEmojiSpan.drawAnimatedEmojis(canvas, this.layout, this.emojiStack, 0.0f, (List<SpoilerEffect>) null, 0.0f, 0.0f, 0.0f, 1.0f);
@@ -776,6 +780,10 @@ public class SimpleTextView extends View {
         canvas.translate((((float) (-this.fullLayoutLeftOffset)) * f) + (this.fullLayoutLeftCharactersOffset * f), 0.0f);
         canvas.save();
         clipOutSpoilers(canvas);
+        AnimatedEmojiSpan.EmojiGroupedSpans emojiGroupedSpans2 = this.emojiStack;
+        if (emojiGroupedSpans2 != null) {
+            emojiGroupedSpans2.clearPositions();
+        }
         this.layout.draw(canvas);
         canvas.restore();
         AnimatedEmojiSpan.drawAnimatedEmojis(canvas, this.layout, this.emojiStack, 0.0f, (List<SpoilerEffect>) null, 0.0f, 0.0f, 0.0f, 1.0f);

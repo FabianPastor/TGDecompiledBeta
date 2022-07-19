@@ -10,6 +10,6 @@ public final /* synthetic */ class ApplicationLoader$$ExternalSyntheticLambda0 i
     }
 
     public final void onComplete(Task task) {
-        ApplicationLoader.lambda$initPlayServices$0(task);
+        ApplicationLoader.lambda$initPushServices$0(task);
     }
 }

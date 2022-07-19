@@ -21,6 +21,12 @@
     <string name="fcm_fallback_notification_channel_label">ផ្សេងៗ</string>
     <string name="google_assistant_verification_channel_name">កម្មវិធីផ្ទៀងផ្ទាត់​ជំនួយការ</string>
     <string name="google_assistant_verification_notification_title">Google ជំនួយការកំពុងផ្ញើសារ</string>
+    <string name="hms_apk_not_installed_hints">មុខងារមួយចំនួន​នៅក្នុង %1$s ប្រហែលជា​មិនដំណើរការ​ត្រឹមត្រូវ​ដោយគ្មាន HMS Core ដែល​មិនបាន​ដំឡើង​នៅលើ​ឧបករណ៍​របស់អ្នក​នោះទេ។</string>
+    <string name="hms_bindfaildlg_message">%1$s មិនអាច​ប្រើ HMS Core បានទេ។ បើកដំណើរការ​កម្មវិធីធ្វើឱ្យប្រសើរឡើង (កម្មវិធីគ្រប់គ្រងទូរស័ព្ទ) ឬទៅកាន់​ការកំណត់ និង​បើក​ការអនុញ្ញាតិ​ទាំងអស់​សម្រាប់ %2$s (រួម​ទាំង​ការបើកដំណើរការ​កម្មវិធីស្វ័យ​ប្រវត្តិ និង​ការបើកដំណើរការ​កម្មវិធីបន្ទាប់បន្សំ) រួចព្យាយាមម្ដងទៀត។</string>
+    <string name="hms_confirm">យល់ព្រម</string>
+    <string name="hms_is_spoof">អ្នកហាក់ដូចជា​មានកំណែក្រៅផ្លូវការ​របស់ HMS Core (%1$s) ដែល​បានដំឡើង​នៅលើ​ឧបករណ៍​របស់អ្នក។ សូមដកការដំឡើង HMS Core ចេញនៅក្នុង​ការកំណត់ និង​ត្រឡប់ទៅកម្មវិធីនេះ​វិញ ដើម្បី​ដំឡើង​កំណែ​ផ្លូវការ។</string>
+    <string name="hms_push_channel">លំនាំដើម</string>
+    <string name="hms_spoof_hints">កំណត់សម្គាល់</string>
     <string name="status_bar_notification_info_overflow">999+</string>
     <string name="wallet_buy_button_place_holder">ទិញ​ជា​មួយ Google</string>
 </resources>

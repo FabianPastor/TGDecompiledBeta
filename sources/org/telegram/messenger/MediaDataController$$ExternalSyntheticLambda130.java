@@ -1,15 +1,17 @@
 package org.telegram.messenger;
 
+import java.util.ArrayList;
 import java.util.Comparator;
-import org.telegram.tgnet.TLRPC$TL_topPeer;
+import org.telegram.messenger.MediaDataController;
 
 public final /* synthetic */ class MediaDataController$$ExternalSyntheticLambda130 implements Comparator {
-    public static final /* synthetic */ MediaDataController$$ExternalSyntheticLambda130 INSTANCE = new MediaDataController$$ExternalSyntheticLambda130();
+    public final /* synthetic */ ArrayList f$0;
 
-    private /* synthetic */ MediaDataController$$ExternalSyntheticLambda130() {
+    public /* synthetic */ MediaDataController$$ExternalSyntheticLambda130(ArrayList arrayList) {
+        this.f$0 = arrayList;
     }
 
     public final int compare(Object obj, Object obj2) {
-        return MediaDataController.lambda$increasePeerRaiting$119((TLRPC$TL_topPeer) obj, (TLRPC$TL_topPeer) obj2);
+        return MediaDataController.lambda$getEmojiSuggestions$176(this.f$0, (MediaDataController.KeywordResult) obj, (MediaDataController.KeywordResult) obj2);
     }
 }

@@ -21,6 +21,12 @@
     <string name="fcm_fallback_notification_channel_label">የተለያዩ</string>
     <string name="google_assistant_verification_channel_name">ረዳት ማረጋገጫ</string>
     <string name="google_assistant_verification_notification_title">Google ረዳት መልዕክት በመላክ ላይ</string>
+    <string name="hms_apk_not_installed_hints">በ%1$s ውስጥ ያሉ አንዳንድ ባህሪያት ያለHMS Core በአግባቡ ላይሰሩ ይችላሉ፣ እሱ ደግሞ በመሳሪያዎ ላይ አልተጫነም።</string>
+    <string name="hms_bindfaildlg_message">%1$s HMS Coreን ለመጠቀም አይችልም። ማትቢያን (የስልክ አስተዳዳሪ) ያስጀምሩ ወይም ወደ ቅንብሮች ይሂዱ እና ለ %2$s (ራስሰር ማስጀመሪያ እና ሁለተኛ ደረጃ ማስጀመሪያን ጨምሮ) ሁሉንም ፈቃዶች ያንቁ እና እንደገና ይሞክሩ።</string>
+    <string name="hms_confirm">ይሁን</string>
+    <string name="hms_is_spoof">በመሳሪያዎ ላይ ኦፊሴላዊ ያልሆነ የHMS Core ስሪት (%1$s) የጫኑ ይመስላሉ። ኦፊሴላዊውን ስሪት ለመጫን እባክዎ ከቅንብሮች ሆነው HMS Coreን ያራግፉትና ወደዚህ መተግበሪያ ይመለሱ።</string>
+    <string name="hms_push_channel">ነባሪ</string>
+    <string name="hms_spoof_hints">ማስታወሻ</string>
     <string name="status_bar_notification_info_overflow">999+</string>
     <string name="wallet_buy_button_place_holder">በGoogle ይግዙ</string>
 </resources>

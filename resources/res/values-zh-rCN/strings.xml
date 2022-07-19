@@ -40,6 +40,12 @@
     <string name="fcm_fallback_notification_channel_label">其他</string>
     <string name="google_assistant_verification_channel_name">Google 助理验证程序</string>
     <string name="google_assistant_verification_notification_title">Google 助理正在发送消息</string>
+    <string name="hms_apk_not_installed_hints">您的设备未安装最新版本的 HMS Core，%1$s无法正常运行。</string>
+    <string name="hms_bindfaildlg_message">%1$s无法正常使用 HMS Core。请尝试打开“手机管家”或“设置”，开启%2$s的所有权限 (“自启动”、“关联启动”等)，并重试。</string>
+    <string name="hms_confirm">知道了</string>
+    <string name="hms_is_spoof">本设备安装的 (%1$s) 为非法 HMS Core 版本。请先进入系统设置的应用管理中卸载该版本，然后回到本应用安装合法的 HMS Core 版本。</string>
+    <string name="hms_push_channel">默认</string>
+    <string name="hms_spoof_hints">提示</string>
     <string name="status_bar_notification_info_overflow">999+</string>
     <string name="wallet_buy_button_place_holder">通过 Google 购买</string>
 </resources>

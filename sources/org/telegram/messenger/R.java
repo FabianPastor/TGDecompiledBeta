@@ -183,6 +183,9 @@ public final class R {
         public static final int common_google_signin_btn_text_light_pressed = NUM;
         public static final int common_google_signin_btn_tint = NUM;
         public static final int divider = NUM;
+        public static final int emui_color_gray_1 = NUM;
+        public static final int emui_color_gray_10 = NUM;
+        public static final int emui_color_gray_7 = NUM;
         public static final int notification_action_color_filter = NUM;
         public static final int notification_icon_bg_color = NUM;
         public static final int wallet_bright_foreground_disabled_holo_light = NUM;
@@ -1242,140 +1245,6 @@ public final class R {
         public static final int zoom_round_b = NUM;
         public static final int zoom_slide = NUM;
         public static final int zoom_slide_a = NUM;
-        /* added by JADX */
-        public static final int $avd_flip__0 = NUM;
-        /* added by JADX */
-        public static final int $avd_flip__1 = NUM;
-        /* added by JADX */
-        public static final int $avd_flip__2 = NUM;
-        /* added by JADX */
-        public static final int $avd_flip__3 = NUM;
-        /* added by JADX */
-        public static final int $avd_flip__4 = NUM;
-        /* added by JADX */
-        public static final int $fingerprint_dialog_error_to_fp__0 = NUM;
-        /* added by JADX */
-        public static final int $fingerprint_dialog_error_to_fp__1 = NUM;
-        /* added by JADX */
-        public static final int $fingerprint_dialog_error_to_fp__10 = NUM;
-        /* added by JADX */
-        public static final int $fingerprint_dialog_error_to_fp__11 = NUM;
-        /* added by JADX */
-        public static final int $fingerprint_dialog_error_to_fp__12 = NUM;
-        /* added by JADX */
-        public static final int $fingerprint_dialog_error_to_fp__13 = NUM;
-        /* added by JADX */
-        public static final int $fingerprint_dialog_error_to_fp__14 = NUM;
-        /* added by JADX */
-        public static final int $fingerprint_dialog_error_to_fp__15 = NUM;
-        /* added by JADX */
-        public static final int $fingerprint_dialog_error_to_fp__16 = NUM;
-        /* added by JADX */
-        public static final int $fingerprint_dialog_error_to_fp__17 = NUM;
-        /* added by JADX */
-        public static final int $fingerprint_dialog_error_to_fp__18 = NUM;
-        /* added by JADX */
-        public static final int $fingerprint_dialog_error_to_fp__19 = NUM;
-        /* added by JADX */
-        public static final int $fingerprint_dialog_error_to_fp__2 = NUM;
-        /* added by JADX */
-        public static final int $fingerprint_dialog_error_to_fp__20 = NUM;
-        /* added by JADX */
-        public static final int $fingerprint_dialog_error_to_fp__21 = NUM;
-        /* added by JADX */
-        public static final int $fingerprint_dialog_error_to_fp__22 = NUM;
-        /* added by JADX */
-        public static final int $fingerprint_dialog_error_to_fp__23 = NUM;
-        /* added by JADX */
-        public static final int $fingerprint_dialog_error_to_fp__24 = NUM;
-        /* added by JADX */
-        public static final int $fingerprint_dialog_error_to_fp__25 = NUM;
-        /* added by JADX */
-        public static final int $fingerprint_dialog_error_to_fp__26 = NUM;
-        /* added by JADX */
-        public static final int $fingerprint_dialog_error_to_fp__27 = NUM;
-        /* added by JADX */
-        public static final int $fingerprint_dialog_error_to_fp__28 = NUM;
-        /* added by JADX */
-        public static final int $fingerprint_dialog_error_to_fp__29 = NUM;
-        /* added by JADX */
-        public static final int $fingerprint_dialog_error_to_fp__3 = NUM;
-        /* added by JADX */
-        public static final int $fingerprint_dialog_error_to_fp__4 = NUM;
-        /* added by JADX */
-        public static final int $fingerprint_dialog_error_to_fp__5 = NUM;
-        /* added by JADX */
-        public static final int $fingerprint_dialog_error_to_fp__6 = NUM;
-        /* added by JADX */
-        public static final int $fingerprint_dialog_error_to_fp__7 = NUM;
-        /* added by JADX */
-        public static final int $fingerprint_dialog_error_to_fp__8 = NUM;
-        /* added by JADX */
-        public static final int $fingerprint_dialog_error_to_fp__9 = NUM;
-        /* added by JADX */
-        public static final int $fingerprint_dialog_fp_to_error__0 = NUM;
-        /* added by JADX */
-        public static final int $fingerprint_dialog_fp_to_error__1 = NUM;
-        /* added by JADX */
-        public static final int $fingerprint_dialog_fp_to_error__10 = NUM;
-        /* added by JADX */
-        public static final int $fingerprint_dialog_fp_to_error__11 = NUM;
-        /* added by JADX */
-        public static final int $fingerprint_dialog_fp_to_error__12 = NUM;
-        /* added by JADX */
-        public static final int $fingerprint_dialog_fp_to_error__13 = NUM;
-        /* added by JADX */
-        public static final int $fingerprint_dialog_fp_to_error__14 = NUM;
-        /* added by JADX */
-        public static final int $fingerprint_dialog_fp_to_error__15 = NUM;
-        /* added by JADX */
-        public static final int $fingerprint_dialog_fp_to_error__16 = NUM;
-        /* added by JADX */
-        public static final int $fingerprint_dialog_fp_to_error__17 = NUM;
-        /* added by JADX */
-        public static final int $fingerprint_dialog_fp_to_error__18 = NUM;
-        /* added by JADX */
-        public static final int $fingerprint_dialog_fp_to_error__19 = NUM;
-        /* added by JADX */
-        public static final int $fingerprint_dialog_fp_to_error__2 = NUM;
-        /* added by JADX */
-        public static final int $fingerprint_dialog_fp_to_error__20 = NUM;
-        /* added by JADX */
-        public static final int $fingerprint_dialog_fp_to_error__21 = NUM;
-        /* added by JADX */
-        public static final int $fingerprint_dialog_fp_to_error__22 = NUM;
-        /* added by JADX */
-        public static final int $fingerprint_dialog_fp_to_error__23 = NUM;
-        /* added by JADX */
-        public static final int $fingerprint_dialog_fp_to_error__24 = NUM;
-        /* added by JADX */
-        public static final int $fingerprint_dialog_fp_to_error__25 = NUM;
-        /* added by JADX */
-        public static final int $fingerprint_dialog_fp_to_error__26 = NUM;
-        /* added by JADX */
-        public static final int $fingerprint_dialog_fp_to_error__27 = NUM;
-        /* added by JADX */
-        public static final int $fingerprint_dialog_fp_to_error__3 = NUM;
-        /* added by JADX */
-        public static final int $fingerprint_dialog_fp_to_error__4 = NUM;
-        /* added by JADX */
-        public static final int $fingerprint_dialog_fp_to_error__5 = NUM;
-        /* added by JADX */
-        public static final int $fingerprint_dialog_fp_to_error__6 = NUM;
-        /* added by JADX */
-        public static final int $fingerprint_dialog_fp_to_error__7 = NUM;
-        /* added by JADX */
-        public static final int $fingerprint_dialog_fp_to_error__8 = NUM;
-        /* added by JADX */
-        public static final int $fingerprint_dialog_fp_to_error__9 = NUM;
-        /* added by JADX */
-        public static final int $tg_splash_320__0 = NUM;
-        /* added by JADX */
-        public static final int $tg_splash_320__1 = NUM;
-        /* added by JADX */
-        public static final int $tg_splash_320__2 = NUM;
-        /* added by JADX */
-        public static final int $tg_splash_320__3 = NUM;
 
         private drawable() {
         }
@@ -1476,6 +1345,7 @@ public final class R {
         public static final int donate_with_google = NUM;
         public static final int email = NUM;
         public static final int empty_view = NUM;
+        public static final int enable_service_text = NUM;
         public static final int end = NUM;
         public static final int feed_widget_item_image = NUM;
         public static final int feed_widget_item_text = NUM;
@@ -1642,6 +1512,7 @@ public final class R {
     }
 
     public static final class layout {
+        public static final int activity_endisable_service = NUM;
         public static final int call_notification = NUM;
         public static final int call_notification_rtl = NUM;
         public static final int contacts_widget_item = NUM;
@@ -1655,6 +1526,7 @@ public final class R {
         public static final int custom_dialog = NUM;
         public static final int feed_widget_item = NUM;
         public static final int feed_widget_layout = NUM;
+        public static final int hwpush_trans_activity = NUM;
         public static final int notification_action = NUM;
         public static final int notification_action_tombstone = NUM;
         public static final int notification_template_custom_big = NUM;
@@ -1770,6 +1642,7 @@ public final class R {
         public static final int folder_out = NUM;
         public static final int forward = NUM;
         public static final int gif_to_keyboard = NUM;
+        public static final int gif_to_smile = NUM;
         public static final int gigagroup = NUM;
         public static final int gigagroup_convert = NUM;
         public static final int group_pip_delete_icon = NUM;
@@ -1803,6 +1676,14 @@ public final class R {
         public static final int mac_30 = NUM;
         public static final int mapstyle_night = NUM;
         public static final int media_forbidden = NUM;
+        public static final int msg_emoji_activities = NUM;
+        public static final int msg_emoji_cat = NUM;
+        public static final int msg_emoji_flags = NUM;
+        public static final int msg_emoji_food = NUM;
+        public static final int msg_emoji_objects = NUM;
+        public static final int msg_emoji_other = NUM;
+        public static final int msg_emoji_smiles = NUM;
+        public static final int msg_emoji_travel = NUM;
         public static final int mute_for = NUM;
         public static final int passcode_lock_close = NUM;
         public static final int payment_success = NUM;
@@ -1851,7 +1732,9 @@ public final class R {
         public static final int shared_link_enter = NUM;
         public static final int silent_mute = NUM;
         public static final int silent_unmute = NUM;
+        public static final int smile_to_gif = NUM;
         public static final int smile_to_keyboard = NUM;
+        public static final int smile_to_sticker = NUM;
         public static final int sms_incoming_info = NUM;
         public static final int sound_download = NUM;
         public static final int sound_in = NUM;
@@ -1863,6 +1746,7 @@ public final class R {
         public static final int start_texture = NUM;
         public static final int statistic_preload = NUM;
         public static final int sticker_to_keyboard = NUM;
+        public static final int sticker_to_smile = NUM;
         public static final int sun = NUM;
         public static final int sun_outline = NUM;
         public static final int swipe_delete = NUM;
@@ -2270,6 +2154,7 @@ public final class R {
         public static final int AddContactTitle = NUM;
         public static final int AddEmojiInstalled = NUM;
         public static final int AddEmojiInstalledInfo = NUM;
+        public static final int AddEmojiNotFound = NUM;
         public static final int AddExceptions = NUM;
         public static final int AddMasks = NUM;
         public static final int AddMasksInstalled = NUM;
@@ -2307,6 +2192,7 @@ public final class R {
         public static final int AddToTheGroupAlertTitle = NUM;
         public static final int AddToTheGroupForwardCount = NUM;
         public static final int AddUserErrorBlacklisted = NUM;
+        public static final int Added = NUM;
         public static final int AddedBy = NUM;
         public static final int AddedToFavorites = NUM;
         public static final int AdditionalReactions = NUM;
@@ -2414,6 +2300,8 @@ public final class R {
         public static final int ArchiveStickerSetsAlertTitle = NUM;
         public static final int ArchiveStickersAlertMessage = NUM;
         public static final int ArchivedChats = NUM;
+        public static final int ArchivedEmojiPacks = NUM;
+        public static final int ArchivedEmojiPacksEmpty = NUM;
         public static final int ArchivedMasks = NUM;
         public static final int ArchivedMasksAlertInfo = NUM;
         public static final int ArchivedMasksAlertTitle = NUM;
@@ -3119,6 +3007,7 @@ public final class R {
         public static final int ChoosePhoto = NUM;
         public static final int ChoosePhotoOrVideo = NUM;
         public static final int ChooseRecordVideo = NUM;
+        public static final int ChooseStickerMyEmojiPacks = NUM;
         public static final int ChooseStickerMyStickerSets = NUM;
         public static final int ChooseStickerNoResultsFound = NUM;
         public static final int ChooseStickerSet = NUM;
@@ -3154,7 +3043,8 @@ public final class R {
         public static final int ClearMediaCache = NUM;
         public static final int ClearOtherSessionsHelp = NUM;
         public static final int ClearOtherWebSessionsHelp = NUM;
-        public static final int ClearRecentEmoji = NUM;
+        public static final int ClearRecentEmojiText = NUM;
+        public static final int ClearRecentEmojiTitle = NUM;
         public static final int ClearRecentHistory = NUM;
         public static final int ClearRecentStickersAlertMessage = NUM;
         public static final int ClearRecentStickersAlertTitle = NUM;
@@ -3692,6 +3582,8 @@ public final class R {
         public static final int ErrorSendRestrictedMediaAll = NUM;
         public static final int ErrorSendRestrictedPolls = NUM;
         public static final int ErrorSendRestrictedPollsAll = NUM;
+        public static final int ErrorSendRestrictedPrivacyVideoMessages = NUM;
+        public static final int ErrorSendRestrictedPrivacyVoiceMessages = NUM;
         public static final int ErrorSendRestrictedStickers = NUM;
         public static final int ErrorSendRestrictedStickersAll = NUM;
         public static final int EventLog = NUM;
@@ -3827,6 +3719,7 @@ public final class R {
         public static final int FavoriteStickersLimitSubtitle = NUM;
         public static final int FavoriteStickersLimitTitle = NUM;
         public static final int FavoriteStickersShort = NUM;
+        public static final int FeaturedEmojiPacks = NUM;
         public static final int FeaturedGifs = NUM;
         public static final int FeaturedStickers = NUM;
         public static final int FeaturedStickersInfo = NUM;
@@ -5641,6 +5534,7 @@ public final class R {
         public static final int PremiumPreviewDownloadSpeedDescription = NUM;
         public static final int PremiumPreviewEmoji = NUM;
         public static final int PremiumPreviewEmojiDescription = NUM;
+        public static final int PremiumPreviewEmojiPack = NUM;
         public static final int PremiumPreviewLimits = NUM;
         public static final int PremiumPreviewLimitsDescription = NUM;
         public static final int PremiumPreviewNoAds = NUM;
@@ -5779,6 +5673,7 @@ public final class R {
         public static final int PrivacyVoiceMessages = NUM;
         public static final int PrivacyVoiceMessagesInfo = NUM;
         public static final int PrivacyVoiceMessagesInfo2 = NUM;
+        public static final int PrivacyVoiceMessagesPremiumOnly = NUM;
         public static final int PrivacyVoiceMessagesTitle = NUM;
         public static final int PrivateShares = NUM;
         public static final int ProfileJoinChannel = NUM;
@@ -6381,6 +6276,7 @@ public final class R {
         public static final int ShowInChat = NUM;
         public static final int ShowLess = NUM;
         public static final int ShowMore = NUM;
+        public static final int ShowMoreEmojiPacks = NUM;
         public static final int ShowMoreStickers = NUM;
         public static final int ShowNotificationsFor = NUM;
         public static final int ShowNotificationsForInfo = NUM;
@@ -6764,6 +6660,7 @@ public final class R {
         public static final int TypeScheduleMessage = NUM;
         public static final int Typing = NUM;
         public static final int URL = NUM;
+        public static final int UnableForward = NUM;
         public static final int Unarchive = NUM;
         public static final int Unavailable = NUM;
         public static final int Unban = NUM;
@@ -7415,6 +7312,15 @@ public final class R {
         public static final int google_assistant_verification_notification_title = NUM;
         public static final int google_crash_reporting_api_key = NUM;
         public static final int google_storage_bucket = NUM;
+        public static final int hms_apk_not_installed_hints = NUM;
+        public static final int hms_bindfaildlg_message = NUM;
+        public static final int hms_bindfaildlg_title = NUM;
+        public static final int hms_confirm = NUM;
+        public static final int hms_is_spoof = NUM;
+        public static final int hms_push_channel = NUM;
+        public static final int hms_push_google = NUM;
+        public static final int hms_push_vmall = NUM;
+        public static final int hms_spoof_hints = NUM;
         public static final int items_few = NUM;
         public static final int items_many = NUM;
         public static final int items_one = NUM;
@@ -7428,6 +7334,8 @@ public final class R {
         public static final int messages_two = NUM;
         public static final int messages_zero = NUM;
         public static final int project_id = NUM;
+        public static final int push_cat_body = NUM;
+        public static final int push_cat_head = NUM;
         public static final int status_bar_notification_info_overflow = NUM;
         public static final int wallet_buy_button_place_holder = NUM;
 
@@ -7441,6 +7349,7 @@ public final class R {
         public static final int Base_TMessages_AppWidget_Background = NUM;
         public static final int Base_TMessages_AppWidget_Badge = NUM;
         public static final int Base_Theme_TMessages_AppWidget = NUM;
+        public static final int Base_Translucent = NUM;
         public static final int DialogNoAnimation = NUM;
         public static final int MyTextViewStyle = NUM;
         public static final int PopupAnimation = NUM;

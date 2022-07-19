@@ -21,6 +21,12 @@
     <string name="fcm_fallback_notification_channel_label">Diversas</string>
     <string name="google_assistant_verification_channel_name">Validador do Assistente</string>
     <string name="google_assistant_verification_notification_title">O Assistente Google está a enviar uma mensagem</string>
+    <string name="hms_apk_not_installed_hints">Algumas funcionalidades na aplicação %1$s podem não funcionar corretamente sem o HMS Core, que não está instalado no seu dispositivo.</string>
+    <string name="hms_bindfaildlg_message">%1$s não consegue utilizar o HMS Core. Aceda ao Gestor (Gestor do Telefone) ou às Definições, conceda todas as permissões a %2$s (incluindo início automático e secundário) e tente novamente.</string>
+    <string name="hms_confirm">OK</string>
+    <string name="hms_is_spoof">Aparenta ter uma versão não oficial do HMS Core (%1$s) instalada no dispositivo. Desinstale o HMS Core a partir das Definições e volte a esta aplicação para instalar a versão oficial.</string>
+    <string name="hms_push_channel">Predefinido</string>
+    <string name="hms_spoof_hints">Nota</string>
     <string name="status_bar_notification_info_overflow">999+</string>
     <string name="wallet_buy_button_place_holder">Comprar com a Google</string>
 </resources>

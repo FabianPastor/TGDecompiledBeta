@@ -1,13 +1,16 @@
 package org.telegram.ui.Components;
 
-public final /* synthetic */ class EmojiView$$ExternalSyntheticLambda5 implements Runnable {
-    public final /* synthetic */ EmojiView f$0;
+import org.telegram.ui.ActionBar.BaseFragment;
+import org.telegram.ui.StickersActivity;
 
-    public /* synthetic */ EmojiView$$ExternalSyntheticLambda5(EmojiView emojiView) {
-        this.f$0 = emojiView;
+public final /* synthetic */ class EmojiView$$ExternalSyntheticLambda5 implements Runnable {
+    public final /* synthetic */ BaseFragment f$0;
+
+    public /* synthetic */ EmojiView$$ExternalSyntheticLambda5(BaseFragment baseFragment) {
+        this.f$0 = baseFragment;
     }
 
     public final void run() {
-        this.f$0.lambda$onAttachedToWindow$10();
+        this.f$0.presentFragment(new StickersActivity(5));
     }
 }

@@ -941,46 +941,46 @@ public class BotWebViewContainer extends FrameLayout implements NotificationCent
     /* JADX WARNING: type inference failed for: r12v10 */
     /* access modifiers changed from: private */
     /* JADX WARNING: Can't fix incorrect switch cases order */
-    /* JADX WARNING: Code restructure failed: missing block: B:172:0x02a7, code lost:
+    /* JADX WARNING: Code restructure failed: missing block: B:175:0x02b6, code lost:
         r9 = 65535;
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:173:0x02a8, code lost:
-        if (r9 == 0) goto L_0x02bf;
+    /* JADX WARNING: Code restructure failed: missing block: B:176:0x02b7, code lost:
+        if (r9 == 0) goto L_0x02ce;
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:174:0x02aa, code lost:
-        if (r9 == 1) goto L_0x02bc;
+    /* JADX WARNING: Code restructure failed: missing block: B:177:0x02b9, code lost:
+        if (r9 == 1) goto L_0x02cb;
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:175:0x02ac, code lost:
-        if (r9 == 2) goto L_0x02b9;
+    /* JADX WARNING: Code restructure failed: missing block: B:178:0x02bb, code lost:
+        if (r9 == 2) goto L_0x02c8;
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:176:0x02ae, code lost:
-        if (r9 == 3) goto L_0x02b6;
+    /* JADX WARNING: Code restructure failed: missing block: B:179:0x02bd, code lost:
+        if (r9 == 3) goto L_0x02c5;
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:177:0x02b0, code lost:
-        if (r9 == 4) goto L_0x02b3;
+    /* JADX WARNING: Code restructure failed: missing block: B:180:0x02bf, code lost:
+        if (r9 == 4) goto L_0x02c2;
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:179:0x02b3, code lost:
+    /* JADX WARNING: Code restructure failed: missing block: B:182:0x02c2, code lost:
         r0 = org.telegram.messenger.BotWebViewVibrationEffect.IMPACT_SOFT;
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:180:0x02b6, code lost:
+    /* JADX WARNING: Code restructure failed: missing block: B:183:0x02c5, code lost:
         r0 = org.telegram.messenger.BotWebViewVibrationEffect.IMPACT_RIGID;
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:181:0x02b9, code lost:
+    /* JADX WARNING: Code restructure failed: missing block: B:184:0x02c8, code lost:
         r0 = org.telegram.messenger.BotWebViewVibrationEffect.IMPACT_HEAVY;
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:182:0x02bc, code lost:
+    /* JADX WARNING: Code restructure failed: missing block: B:185:0x02cb, code lost:
         r0 = org.telegram.messenger.BotWebViewVibrationEffect.IMPACT_MEDIUM;
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:183:0x02bf, code lost:
+    /* JADX WARNING: Code restructure failed: missing block: B:186:0x02ce, code lost:
         r0 = org.telegram.messenger.BotWebViewVibrationEffect.IMPACT_LIGHT;
      */
     /* JADX WARNING: Multi-variable type inference failed */
-    /* JADX WARNING: Removed duplicated region for block: B:125:0x0214 A[Catch:{ Exception -> 0x02e2 }] */
-    /* JADX WARNING: Removed duplicated region for block: B:147:0x0258 A[Catch:{ Exception -> 0x02e2 }] */
-    /* JADX WARNING: Removed duplicated region for block: B:152:0x0264 A[Catch:{ Exception -> 0x02e2 }] */
-    /* JADX WARNING: Removed duplicated region for block: B:154:0x0268 A[Catch:{ Exception -> 0x02e2 }] */
-    /* JADX WARNING: Removed duplicated region for block: B:185:0x02c4 A[Catch:{ Exception -> 0x02e2 }] */
-    /* JADX WARNING: Removed duplicated region for block: B:287:? A[RETURN, SYNTHETIC] */
+    /* JADX WARNING: Removed duplicated region for block: B:128:0x0223 A[Catch:{ Exception -> 0x02f1 }] */
+    /* JADX WARNING: Removed duplicated region for block: B:150:0x0267 A[Catch:{ Exception -> 0x02f1 }] */
+    /* JADX WARNING: Removed duplicated region for block: B:155:0x0273 A[Catch:{ Exception -> 0x02f1 }] */
+    /* JADX WARNING: Removed duplicated region for block: B:157:0x0277 A[Catch:{ Exception -> 0x02f1 }] */
+    /* JADX WARNING: Removed duplicated region for block: B:188:0x02d3 A[Catch:{ Exception -> 0x02f1 }] */
+    /* JADX WARNING: Removed duplicated region for block: B:291:? A[RETURN, SYNTHETIC] */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public void onEventReceived(java.lang.String r20, java.lang.String r21) {
         /*
@@ -990,10 +990,10 @@ public class BotWebViewContainer extends FrameLayout implements NotificationCent
             r2 = r21
             java.lang.String r3 = "text_color"
             android.webkit.WebView r4 = r1.webView
-            if (r4 == 0) goto L_0x053e
+            if (r4 == 0) goto L_0x054d
             org.telegram.ui.Components.BotWebViewContainer$Delegate r4 = r1.delegate
             if (r4 != 0) goto L_0x0012
-            goto L_0x053e
+            goto L_0x054d
         L_0x0012:
             r20.hashCode()
             int r4 = r20.hashCode()
@@ -1004,13 +1004,14 @@ public class BotWebViewContainer extends FrameLayout implements NotificationCent
             r9 = 0
             r10 = 1
             switch(r4) {
-                case -1717314938: goto L_0x00df;
-                case -1693280352: goto L_0x00d3;
-                case -1390641887: goto L_0x00c7;
-                case -1341039673: goto L_0x00bb;
-                case -1259935152: goto L_0x00af;
-                case -921083201: goto L_0x00a3;
-                case -439770054: goto L_0x0098;
+                case -1717314938: goto L_0x00ee;
+                case -1693280352: goto L_0x00e2;
+                case -1390641887: goto L_0x00d6;
+                case -1341039673: goto L_0x00ca;
+                case -1263619595: goto L_0x00be;
+                case -1259935152: goto L_0x00b2;
+                case -921083201: goto L_0x00a6;
+                case -439770054: goto L_0x009a;
                 case -71726289: goto L_0x008d;
                 case -58095910: goto L_0x0080;
                 case 668142772: goto L_0x0073;
@@ -1024,747 +1025,734 @@ public class BotWebViewContainer extends FrameLayout implements NotificationCent
             }
         L_0x0022:
             r0 = -1
-            goto L_0x00ea
+            goto L_0x00f9
         L_0x0025:
             java.lang.String r4 = "web_app_expand"
             boolean r0 = r0.equals(r4)
             if (r0 != 0) goto L_0x002e
             goto L_0x0022
         L_0x002e:
-            r0 = 15
-            goto L_0x00ea
+            r0 = 16
+            goto L_0x00f9
         L_0x0032:
             java.lang.String r4 = "web_app_set_background_color"
             boolean r0 = r0.equals(r4)
             if (r0 != 0) goto L_0x003b
             goto L_0x0022
         L_0x003b:
-            r0 = 14
-            goto L_0x00ea
+            r0 = 15
+            goto L_0x00f9
         L_0x003f:
             java.lang.String r4 = "web_app_set_header_color"
             boolean r0 = r0.equals(r4)
             if (r0 != 0) goto L_0x0048
             goto L_0x0022
         L_0x0048:
-            r0 = 13
-            goto L_0x00ea
+            r0 = 14
+            goto L_0x00f9
         L_0x004c:
             java.lang.String r4 = "web_app_setup_main_button"
             boolean r0 = r0.equals(r4)
             if (r0 != 0) goto L_0x0055
             goto L_0x0022
         L_0x0055:
-            r0 = 12
-            goto L_0x00ea
+            r0 = 13
+            goto L_0x00f9
         L_0x0059:
             java.lang.String r4 = "web_app_trigger_haptic_feedback"
             boolean r0 = r0.equals(r4)
             if (r0 != 0) goto L_0x0062
             goto L_0x0022
         L_0x0062:
-            r0 = 11
-            goto L_0x00ea
+            r0 = 12
+            goto L_0x00f9
         L_0x0066:
             java.lang.String r4 = "web_app_setup_back_button"
             boolean r0 = r0.equals(r4)
             if (r0 != 0) goto L_0x006f
             goto L_0x0022
         L_0x006f:
-            r0 = 10
-            goto L_0x00ea
+            r0 = 11
+            goto L_0x00f9
         L_0x0073:
             java.lang.String r4 = "web_app_data_send"
             boolean r0 = r0.equals(r4)
             if (r0 != 0) goto L_0x007c
             goto L_0x0022
         L_0x007c:
-            r0 = 9
-            goto L_0x00ea
+            r0 = 10
+            goto L_0x00f9
         L_0x0080:
             java.lang.String r4 = "web_app_ready"
             boolean r0 = r0.equals(r4)
             if (r0 != 0) goto L_0x0089
             goto L_0x0022
         L_0x0089:
-            r0 = 8
-            goto L_0x00ea
+            r0 = 9
+            goto L_0x00f9
         L_0x008d:
             java.lang.String r4 = "web_app_close"
             boolean r0 = r0.equals(r4)
             if (r0 != 0) goto L_0x0096
             goto L_0x0022
         L_0x0096:
-            r0 = 7
-            goto L_0x00ea
-        L_0x0098:
+            r0 = 8
+            goto L_0x00f9
+        L_0x009a:
             java.lang.String r4 = "web_app_open_tg_link"
             boolean r0 = r0.equals(r4)
-            if (r0 != 0) goto L_0x00a1
+            if (r0 != 0) goto L_0x00a4
             goto L_0x0022
-        L_0x00a1:
-            r0 = 6
-            goto L_0x00ea
-        L_0x00a3:
+        L_0x00a4:
+            r0 = 7
+            goto L_0x00f9
+        L_0x00a6:
             java.lang.String r4 = "web_app_request_viewport"
             boolean r0 = r0.equals(r4)
-            if (r0 != 0) goto L_0x00ad
+            if (r0 != 0) goto L_0x00b0
             goto L_0x0022
-        L_0x00ad:
-            r0 = 5
-            goto L_0x00ea
-        L_0x00af:
+        L_0x00b0:
+            r0 = 6
+            goto L_0x00f9
+        L_0x00b2:
             java.lang.String r4 = "web_app_request_theme"
             boolean r0 = r0.equals(r4)
-            if (r0 != 0) goto L_0x00b9
+            if (r0 != 0) goto L_0x00bc
             goto L_0x0022
-        L_0x00b9:
+        L_0x00bc:
+            r0 = 5
+            goto L_0x00f9
+        L_0x00be:
+            java.lang.String r4 = "web_app_request_phone"
+            boolean r0 = r0.equals(r4)
+            if (r0 != 0) goto L_0x00c8
+            goto L_0x0022
+        L_0x00c8:
             r0 = 4
-            goto L_0x00ea
-        L_0x00bb:
+            goto L_0x00f9
+        L_0x00ca:
             java.lang.String r4 = "web_app_setup_closing_behavior"
             boolean r0 = r0.equals(r4)
-            if (r0 != 0) goto L_0x00c5
+            if (r0 != 0) goto L_0x00d4
             goto L_0x0022
-        L_0x00c5:
+        L_0x00d4:
             r0 = 3
-            goto L_0x00ea
-        L_0x00c7:
+            goto L_0x00f9
+        L_0x00d6:
             java.lang.String r4 = "web_app_open_invoice"
             boolean r0 = r0.equals(r4)
-            if (r0 != 0) goto L_0x00d1
+            if (r0 != 0) goto L_0x00e0
             goto L_0x0022
-        L_0x00d1:
+        L_0x00e0:
             r0 = 2
-            goto L_0x00ea
-        L_0x00d3:
+            goto L_0x00f9
+        L_0x00e2:
             java.lang.String r4 = "web_app_open_popup"
             boolean r0 = r0.equals(r4)
-            if (r0 != 0) goto L_0x00dd
+            if (r0 != 0) goto L_0x00ec
             goto L_0x0022
-        L_0x00dd:
+        L_0x00ec:
             r0 = 1
-            goto L_0x00ea
-        L_0x00df:
+            goto L_0x00f9
+        L_0x00ee:
             java.lang.String r4 = "web_app_open_link"
             boolean r0 = r0.equals(r4)
-            if (r0 != 0) goto L_0x00e9
+            if (r0 != 0) goto L_0x00f8
             goto L_0x0022
-        L_0x00e9:
+        L_0x00f8:
             r0 = 0
-        L_0x00ea:
+        L_0x00f9:
             java.lang.String r4 = "is_visible"
             java.lang.String r11 = "color"
             r12 = 0
             switch(r0) {
-                case 0: goto L_0x051b;
-                case 1: goto L_0x03da;
-                case 2: goto L_0x039e;
-                case 3: goto L_0x0386;
-                case 4: goto L_0x0381;
-                case 5: goto L_0x0365;
-                case 6: goto L_0x032e;
-                case 7: goto L_0x0327;
-                case 8: goto L_0x031c;
-                case 9: goto L_0x0304;
-                case 10: goto L_0x02e8;
-                case 11: goto L_0x01d4;
-                case 12: goto L_0x0162;
-                case 13: goto L_0x011c;
-                case 14: goto L_0x00fb;
-                case 15: goto L_0x00f4;
-                default: goto L_0x00f2;
+                case 0: goto L_0x052a;
+                case 1: goto L_0x03e9;
+                case 2: goto L_0x03ad;
+                case 3: goto L_0x0395;
+                case 4: goto L_0x054d;
+                case 5: goto L_0x0390;
+                case 6: goto L_0x0374;
+                case 7: goto L_0x033d;
+                case 8: goto L_0x0336;
+                case 9: goto L_0x032b;
+                case 10: goto L_0x0313;
+                case 11: goto L_0x02f7;
+                case 12: goto L_0x01e3;
+                case 13: goto L_0x0171;
+                case 14: goto L_0x012b;
+                case 15: goto L_0x010a;
+                case 16: goto L_0x0103;
+                default: goto L_0x0101;
             }
-        L_0x00f2:
-            goto L_0x053e
-        L_0x00f4:
+        L_0x0101:
+            goto L_0x054d
+        L_0x0103:
             org.telegram.ui.Components.BotWebViewContainer$Delegate r0 = r1.delegate
             r0.onWebAppExpand()
-            goto L_0x053e
-        L_0x00fb:
-            org.json.JSONObject r0 = new org.json.JSONObject     // Catch:{ JSONException -> 0x0116, IllegalArgumentException -> 0x0114 }
-            r0.<init>(r2)     // Catch:{ JSONException -> 0x0116, IllegalArgumentException -> 0x0114 }
-            org.telegram.ui.Components.BotWebViewContainer$Delegate r2 = r1.delegate     // Catch:{ JSONException -> 0x0116, IllegalArgumentException -> 0x0114 }
+            goto L_0x054d
+        L_0x010a:
+            org.json.JSONObject r0 = new org.json.JSONObject     // Catch:{ JSONException -> 0x0125, IllegalArgumentException -> 0x0123 }
+            r0.<init>(r2)     // Catch:{ JSONException -> 0x0125, IllegalArgumentException -> 0x0123 }
+            org.telegram.ui.Components.BotWebViewContainer$Delegate r2 = r1.delegate     // Catch:{ JSONException -> 0x0125, IllegalArgumentException -> 0x0123 }
             java.lang.String r3 = "#ffffff"
-            java.lang.String r0 = r0.optString(r11, r3)     // Catch:{ JSONException -> 0x0116, IllegalArgumentException -> 0x0114 }
-            int r0 = android.graphics.Color.parseColor(r0)     // Catch:{ JSONException -> 0x0116, IllegalArgumentException -> 0x0114 }
+            java.lang.String r0 = r0.optString(r11, r3)     // Catch:{ JSONException -> 0x0125, IllegalArgumentException -> 0x0123 }
+            int r0 = android.graphics.Color.parseColor(r0)     // Catch:{ JSONException -> 0x0125, IllegalArgumentException -> 0x0123 }
             r3 = -16777216(0xfffffffffvar_, float:-1.7014118E38)
             r0 = r0 | r3
-            r2.onWebAppSetBackgroundColor(r0)     // Catch:{ JSONException -> 0x0116, IllegalArgumentException -> 0x0114 }
-            goto L_0x053e
-        L_0x0114:
+            r2.onWebAppSetBackgroundColor(r0)     // Catch:{ JSONException -> 0x0125, IllegalArgumentException -> 0x0123 }
+            goto L_0x054d
+        L_0x0123:
             r0 = move-exception
-            goto L_0x0117
-        L_0x0116:
+            goto L_0x0126
+        L_0x0125:
             r0 = move-exception
-        L_0x0117:
+        L_0x0126:
             org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)
-            goto L_0x053e
-        L_0x011c:
-            org.json.JSONObject r0 = new org.json.JSONObject     // Catch:{ JSONException -> 0x015c }
-            r0.<init>(r2)     // Catch:{ JSONException -> 0x015c }
+            goto L_0x054d
+        L_0x012b:
+            org.json.JSONObject r0 = new org.json.JSONObject     // Catch:{ JSONException -> 0x016b }
+            r0.<init>(r2)     // Catch:{ JSONException -> 0x016b }
             java.lang.String r2 = "color_key"
-            java.lang.String r0 = r0.getString(r2)     // Catch:{ JSONException -> 0x015c }
-            int r2 = r0.hashCode()     // Catch:{ JSONException -> 0x015c }
+            java.lang.String r0 = r0.getString(r2)     // Catch:{ JSONException -> 0x016b }
+            int r2 = r0.hashCode()     // Catch:{ JSONException -> 0x016b }
             r3 = -1265068311(0xffffffffb49896e9, float:-2.8422008E-7)
-            if (r2 == r3) goto L_0x0140
+            if (r2 == r3) goto L_0x014f
             r3 = -210781868(0xffffffffvar_fb954, float:-1.8992887E31)
-            if (r2 == r3) goto L_0x0136
-            goto L_0x0149
-        L_0x0136:
+            if (r2 == r3) goto L_0x0145
+            goto L_0x0158
+        L_0x0145:
             java.lang.String r2 = "secondary_bg_color"
-            boolean r0 = r0.equals(r2)     // Catch:{ JSONException -> 0x015c }
-            if (r0 == 0) goto L_0x0149
+            boolean r0 = r0.equals(r2)     // Catch:{ JSONException -> 0x016b }
+            if (r0 == 0) goto L_0x0158
             r7 = 1
-            goto L_0x0149
-        L_0x0140:
+            goto L_0x0158
+        L_0x014f:
             java.lang.String r2 = "bg_color"
-            boolean r0 = r0.equals(r2)     // Catch:{ JSONException -> 0x015c }
-            if (r0 == 0) goto L_0x0149
+            boolean r0 = r0.equals(r2)     // Catch:{ JSONException -> 0x016b }
+            if (r0 == 0) goto L_0x0158
             r7 = 0
-        L_0x0149:
-            if (r7 == 0) goto L_0x0151
-            if (r7 == r10) goto L_0x014e
-            goto L_0x0153
-        L_0x014e:
+        L_0x0158:
+            if (r7 == 0) goto L_0x0160
+            if (r7 == r10) goto L_0x015d
+            goto L_0x0162
+        L_0x015d:
             java.lang.String r12 = "windowBackgroundGray"
-            goto L_0x0153
-        L_0x0151:
+            goto L_0x0162
+        L_0x0160:
             java.lang.String r12 = "windowBackgroundWhite"
-        L_0x0153:
-            if (r12 == 0) goto L_0x053e
-            org.telegram.ui.Components.BotWebViewContainer$Delegate r0 = r1.delegate     // Catch:{ JSONException -> 0x015c }
-            r0.onWebAppSetActionBarColor(r12)     // Catch:{ JSONException -> 0x015c }
-            goto L_0x053e
-        L_0x015c:
+        L_0x0162:
+            if (r12 == 0) goto L_0x054d
+            org.telegram.ui.Components.BotWebViewContainer$Delegate r0 = r1.delegate     // Catch:{ JSONException -> 0x016b }
+            r0.onWebAppSetActionBarColor(r12)     // Catch:{ JSONException -> 0x016b }
+            goto L_0x054d
+        L_0x016b:
             r0 = move-exception
             org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)
-            goto L_0x053e
-        L_0x0162:
-            org.json.JSONObject r0 = new org.json.JSONObject     // Catch:{ JSONException -> 0x01ce, IllegalArgumentException -> 0x01cc }
-            r0.<init>(r2)     // Catch:{ JSONException -> 0x01ce, IllegalArgumentException -> 0x01cc }
+            goto L_0x054d
+        L_0x0171:
+            org.json.JSONObject r0 = new org.json.JSONObject     // Catch:{ JSONException -> 0x01dd, IllegalArgumentException -> 0x01db }
+            r0.<init>(r2)     // Catch:{ JSONException -> 0x01dd, IllegalArgumentException -> 0x01db }
             java.lang.String r5 = "is_active"
-            boolean r14 = r0.optBoolean(r5, r9)     // Catch:{ JSONException -> 0x01ce, IllegalArgumentException -> 0x01cc }
+            boolean r14 = r0.optBoolean(r5, r9)     // Catch:{ JSONException -> 0x01dd, IllegalArgumentException -> 0x01db }
             java.lang.String r5 = "text"
-            java.lang.String r6 = r1.lastButtonText     // Catch:{ JSONException -> 0x01ce, IllegalArgumentException -> 0x01cc }
-            java.lang.String r5 = r0.optString(r5, r6)     // Catch:{ JSONException -> 0x01ce, IllegalArgumentException -> 0x01cc }
-            java.lang.String r15 = r5.trim()     // Catch:{ JSONException -> 0x01ce, IllegalArgumentException -> 0x01cc }
-            boolean r4 = r0.optBoolean(r4, r9)     // Catch:{ JSONException -> 0x01ce, IllegalArgumentException -> 0x01cc }
-            if (r4 == 0) goto L_0x0187
-            boolean r4 = android.text.TextUtils.isEmpty(r15)     // Catch:{ JSONException -> 0x01ce, IllegalArgumentException -> 0x01cc }
-            if (r4 != 0) goto L_0x0187
+            java.lang.String r6 = r1.lastButtonText     // Catch:{ JSONException -> 0x01dd, IllegalArgumentException -> 0x01db }
+            java.lang.String r5 = r0.optString(r5, r6)     // Catch:{ JSONException -> 0x01dd, IllegalArgumentException -> 0x01db }
+            java.lang.String r15 = r5.trim()     // Catch:{ JSONException -> 0x01dd, IllegalArgumentException -> 0x01db }
+            boolean r4 = r0.optBoolean(r4, r9)     // Catch:{ JSONException -> 0x01dd, IllegalArgumentException -> 0x01db }
+            if (r4 == 0) goto L_0x0196
+            boolean r4 = android.text.TextUtils.isEmpty(r15)     // Catch:{ JSONException -> 0x01dd, IllegalArgumentException -> 0x01db }
+            if (r4 != 0) goto L_0x0196
             r13 = 1
-            goto L_0x0188
-        L_0x0187:
+            goto L_0x0197
+        L_0x0196:
             r13 = 0
-        L_0x0188:
-            boolean r4 = r0.has(r11)     // Catch:{ JSONException -> 0x01ce, IllegalArgumentException -> 0x01cc }
-            if (r4 == 0) goto L_0x0197
-            java.lang.String r4 = r0.optString(r11)     // Catch:{ JSONException -> 0x01ce, IllegalArgumentException -> 0x01cc }
-            int r4 = android.graphics.Color.parseColor(r4)     // Catch:{ JSONException -> 0x01ce, IllegalArgumentException -> 0x01cc }
-            goto L_0x0199
         L_0x0197:
-            int r4 = r1.lastButtonColor     // Catch:{ JSONException -> 0x01ce, IllegalArgumentException -> 0x01cc }
-        L_0x0199:
-            boolean r5 = r0.has(r3)     // Catch:{ JSONException -> 0x01ce, IllegalArgumentException -> 0x01cc }
-            if (r5 == 0) goto L_0x01a8
-            java.lang.String r3 = r0.optString(r3)     // Catch:{ JSONException -> 0x01ce, IllegalArgumentException -> 0x01cc }
-            int r3 = android.graphics.Color.parseColor(r3)     // Catch:{ JSONException -> 0x01ce, IllegalArgumentException -> 0x01cc }
-            goto L_0x01aa
+            boolean r4 = r0.has(r11)     // Catch:{ JSONException -> 0x01dd, IllegalArgumentException -> 0x01db }
+            if (r4 == 0) goto L_0x01a6
+            java.lang.String r4 = r0.optString(r11)     // Catch:{ JSONException -> 0x01dd, IllegalArgumentException -> 0x01db }
+            int r4 = android.graphics.Color.parseColor(r4)     // Catch:{ JSONException -> 0x01dd, IllegalArgumentException -> 0x01db }
+            goto L_0x01a8
+        L_0x01a6:
+            int r4 = r1.lastButtonColor     // Catch:{ JSONException -> 0x01dd, IllegalArgumentException -> 0x01db }
         L_0x01a8:
-            int r3 = r1.lastButtonTextColor     // Catch:{ JSONException -> 0x01ce, IllegalArgumentException -> 0x01cc }
-        L_0x01aa:
-            java.lang.String r5 = "is_progress_visible"
-            boolean r0 = r0.optBoolean(r5, r9)     // Catch:{ JSONException -> 0x01ce, IllegalArgumentException -> 0x01cc }
-            if (r0 == 0) goto L_0x01b7
-            if (r13 == 0) goto L_0x01b7
-            r18 = 1
+            boolean r5 = r0.has(r3)     // Catch:{ JSONException -> 0x01dd, IllegalArgumentException -> 0x01db }
+            if (r5 == 0) goto L_0x01b7
+            java.lang.String r3 = r0.optString(r3)     // Catch:{ JSONException -> 0x01dd, IllegalArgumentException -> 0x01db }
+            int r3 = android.graphics.Color.parseColor(r3)     // Catch:{ JSONException -> 0x01dd, IllegalArgumentException -> 0x01db }
             goto L_0x01b9
         L_0x01b7:
-            r18 = 0
+            int r3 = r1.lastButtonTextColor     // Catch:{ JSONException -> 0x01dd, IllegalArgumentException -> 0x01db }
         L_0x01b9:
-            r1.lastButtonColor = r4     // Catch:{ JSONException -> 0x01ce, IllegalArgumentException -> 0x01cc }
-            r1.lastButtonTextColor = r3     // Catch:{ JSONException -> 0x01ce, IllegalArgumentException -> 0x01cc }
-            r1.lastButtonText = r15     // Catch:{ JSONException -> 0x01ce, IllegalArgumentException -> 0x01cc }
-            r1.buttonData = r2     // Catch:{ JSONException -> 0x01ce, IllegalArgumentException -> 0x01cc }
-            org.telegram.ui.Components.BotWebViewContainer$Delegate r12 = r1.delegate     // Catch:{ JSONException -> 0x01ce, IllegalArgumentException -> 0x01cc }
+            java.lang.String r5 = "is_progress_visible"
+            boolean r0 = r0.optBoolean(r5, r9)     // Catch:{ JSONException -> 0x01dd, IllegalArgumentException -> 0x01db }
+            if (r0 == 0) goto L_0x01c6
+            if (r13 == 0) goto L_0x01c6
+            r18 = 1
+            goto L_0x01c8
+        L_0x01c6:
+            r18 = 0
+        L_0x01c8:
+            r1.lastButtonColor = r4     // Catch:{ JSONException -> 0x01dd, IllegalArgumentException -> 0x01db }
+            r1.lastButtonTextColor = r3     // Catch:{ JSONException -> 0x01dd, IllegalArgumentException -> 0x01db }
+            r1.lastButtonText = r15     // Catch:{ JSONException -> 0x01dd, IllegalArgumentException -> 0x01db }
+            r1.buttonData = r2     // Catch:{ JSONException -> 0x01dd, IllegalArgumentException -> 0x01db }
+            org.telegram.ui.Components.BotWebViewContainer$Delegate r12 = r1.delegate     // Catch:{ JSONException -> 0x01dd, IllegalArgumentException -> 0x01db }
             r16 = r4
             r17 = r3
-            r12.onSetupMainButton(r13, r14, r15, r16, r17, r18)     // Catch:{ JSONException -> 0x01ce, IllegalArgumentException -> 0x01cc }
-            goto L_0x053e
-        L_0x01cc:
+            r12.onSetupMainButton(r13, r14, r15, r16, r17, r18)     // Catch:{ JSONException -> 0x01dd, IllegalArgumentException -> 0x01db }
+            goto L_0x054d
+        L_0x01db:
             r0 = move-exception
-            goto L_0x01cf
-        L_0x01ce:
+            goto L_0x01de
+        L_0x01dd:
             r0 = move-exception
-        L_0x01cf:
+        L_0x01de:
             org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)
-            goto L_0x053e
-        L_0x01d4:
-            org.json.JSONObject r0 = new org.json.JSONObject     // Catch:{ Exception -> 0x02e2 }
-            r0.<init>(r2)     // Catch:{ Exception -> 0x02e2 }
+            goto L_0x054d
+        L_0x01e3:
+            org.json.JSONObject r0 = new org.json.JSONObject     // Catch:{ Exception -> 0x02f1 }
+            r0.<init>(r2)     // Catch:{ Exception -> 0x02f1 }
             java.lang.String r2 = "type"
-            java.lang.String r2 = r0.optString(r2)     // Catch:{ Exception -> 0x02e2 }
-            int r3 = r2.hashCode()     // Catch:{ Exception -> 0x02e2 }
+            java.lang.String r2 = r0.optString(r2)     // Catch:{ Exception -> 0x02f1 }
+            int r3 = r2.hashCode()     // Catch:{ Exception -> 0x02f1 }
             r4 = -1184809658(0xffffffffb9613d46, float:-2.1480498E-4)
-            if (r3 == r4) goto L_0x0207
+            if (r3 == r4) goto L_0x0216
             r4 = 193071555(0xb8209c3, float:5.0088866E-32)
-            if (r3 == r4) goto L_0x01fd
+            if (r3 == r4) goto L_0x020c
             r4 = 595233003(0x237a88eb, float:1.3581521E-17)
-            if (r3 == r4) goto L_0x01f3
-            goto L_0x0211
-        L_0x01f3:
+            if (r3 == r4) goto L_0x0202
+            goto L_0x0220
+        L_0x0202:
             java.lang.String r3 = "notification"
-            boolean r2 = r2.equals(r3)     // Catch:{ Exception -> 0x02e2 }
-            if (r2 == 0) goto L_0x0211
+            boolean r2 = r2.equals(r3)     // Catch:{ Exception -> 0x02f1 }
+            if (r2 == 0) goto L_0x0220
             r2 = 1
-            goto L_0x0212
-        L_0x01fd:
+            goto L_0x0221
+        L_0x020c:
             java.lang.String r3 = "selection_change"
-            boolean r2 = r2.equals(r3)     // Catch:{ Exception -> 0x02e2 }
-            if (r2 == 0) goto L_0x0211
+            boolean r2 = r2.equals(r3)     // Catch:{ Exception -> 0x02f1 }
+            if (r2 == 0) goto L_0x0220
             r2 = 2
-            goto L_0x0212
-        L_0x0207:
+            goto L_0x0221
+        L_0x0216:
             java.lang.String r3 = "impact"
-            boolean r2 = r2.equals(r3)     // Catch:{ Exception -> 0x02e2 }
-            if (r2 == 0) goto L_0x0211
+            boolean r2 = r2.equals(r3)     // Catch:{ Exception -> 0x02f1 }
+            if (r2 == 0) goto L_0x0220
             r2 = 0
-            goto L_0x0212
-        L_0x0211:
+            goto L_0x0221
+        L_0x0220:
             r2 = -1
-        L_0x0212:
-            if (r2 == 0) goto L_0x0268
-            if (r2 == r10) goto L_0x021e
-            if (r2 == r8) goto L_0x021a
-            goto L_0x02c2
-        L_0x021a:
-            org.telegram.messenger.BotWebViewVibrationEffect r12 = org.telegram.messenger.BotWebViewVibrationEffect.SELECTION_CHANGE     // Catch:{ Exception -> 0x02e2 }
-            goto L_0x02c2
-        L_0x021e:
+        L_0x0221:
+            if (r2 == 0) goto L_0x0277
+            if (r2 == r10) goto L_0x022d
+            if (r2 == r8) goto L_0x0229
+            goto L_0x02d1
+        L_0x0229:
+            org.telegram.messenger.BotWebViewVibrationEffect r12 = org.telegram.messenger.BotWebViewVibrationEffect.SELECTION_CHANGE     // Catch:{ Exception -> 0x02f1 }
+            goto L_0x02d1
+        L_0x022d:
             java.lang.String r2 = "notification_type"
-            java.lang.String r0 = r0.optString(r2)     // Catch:{ Exception -> 0x02e2 }
-            int r2 = r0.hashCode()     // Catch:{ Exception -> 0x02e2 }
+            java.lang.String r0 = r0.optString(r2)     // Catch:{ Exception -> 0x02f1 }
+            int r2 = r0.hashCode()     // Catch:{ Exception -> 0x02f1 }
             r3 = -1867169789(0xfffffffvar_b54003, float:-7.149054E-29)
-            if (r2 == r3) goto L_0x024b
+            if (r2 == r3) goto L_0x025a
             r3 = 96784904(0x5c4d208, float:1.8508905E-35)
-            if (r2 == r3) goto L_0x0242
+            if (r2 == r3) goto L_0x0251
             r3 = 1124446108(0x4305af9c, float:133.68597)
-            if (r2 == r3) goto L_0x0238
-            goto L_0x0255
-        L_0x0238:
+            if (r2 == r3) goto L_0x0247
+            goto L_0x0264
+        L_0x0247:
             java.lang.String r2 = "warning"
-            boolean r0 = r0.equals(r2)     // Catch:{ Exception -> 0x02e2 }
-            if (r0 == 0) goto L_0x0255
+            boolean r0 = r0.equals(r2)     // Catch:{ Exception -> 0x02f1 }
+            if (r0 == 0) goto L_0x0264
             r9 = 2
-            goto L_0x0256
-        L_0x0242:
+            goto L_0x0265
+        L_0x0251:
             java.lang.String r2 = "error"
-            boolean r0 = r0.equals(r2)     // Catch:{ Exception -> 0x02e2 }
-            if (r0 == 0) goto L_0x0255
-            goto L_0x0256
-        L_0x024b:
+            boolean r0 = r0.equals(r2)     // Catch:{ Exception -> 0x02f1 }
+            if (r0 == 0) goto L_0x0264
+            goto L_0x0265
+        L_0x025a:
             java.lang.String r2 = "success"
-            boolean r0 = r0.equals(r2)     // Catch:{ Exception -> 0x02e2 }
-            if (r0 == 0) goto L_0x0255
+            boolean r0 = r0.equals(r2)     // Catch:{ Exception -> 0x02f1 }
+            if (r0 == 0) goto L_0x0264
             r9 = 1
-            goto L_0x0256
-        L_0x0255:
-            r9 = -1
-        L_0x0256:
-            if (r9 == 0) goto L_0x0264
-            if (r9 == r10) goto L_0x0261
-            if (r9 == r8) goto L_0x025e
-            goto L_0x02c2
-        L_0x025e:
-            org.telegram.messenger.BotWebViewVibrationEffect r0 = org.telegram.messenger.BotWebViewVibrationEffect.NOTIFICATION_WARNING     // Catch:{ Exception -> 0x02e2 }
-            goto L_0x0266
-        L_0x0261:
-            org.telegram.messenger.BotWebViewVibrationEffect r0 = org.telegram.messenger.BotWebViewVibrationEffect.NOTIFICATION_SUCCESS     // Catch:{ Exception -> 0x02e2 }
-            goto L_0x0266
+            goto L_0x0265
         L_0x0264:
-            org.telegram.messenger.BotWebViewVibrationEffect r0 = org.telegram.messenger.BotWebViewVibrationEffect.NOTIFICATION_ERROR     // Catch:{ Exception -> 0x02e2 }
-        L_0x0266:
-            r12 = r0
-            goto L_0x02c2
-        L_0x0268:
-            java.lang.String r2 = "impact_style"
-            java.lang.String r0 = r0.optString(r2)     // Catch:{ Exception -> 0x02e2 }
-            int r2 = r0.hashCode()     // Catch:{ Exception -> 0x02e2 }
-            switch(r2) {
-                case -1078030475: goto L_0x029d;
-                case 3535914: goto L_0x0293;
-                case 99152071: goto L_0x0289;
-                case 102970646: goto L_0x0280;
-                case 108511787: goto L_0x0276;
-                default: goto L_0x0275;
-            }     // Catch:{ Exception -> 0x02e2 }
-        L_0x0275:
-            goto L_0x02a7
-        L_0x0276:
-            java.lang.String r2 = "rigid"
-            boolean r0 = r0.equals(r2)     // Catch:{ Exception -> 0x02e2 }
-            if (r0 == 0) goto L_0x02a7
-            r9 = 3
-            goto L_0x02a8
-        L_0x0280:
-            java.lang.String r2 = "light"
-            boolean r0 = r0.equals(r2)     // Catch:{ Exception -> 0x02e2 }
-            if (r0 == 0) goto L_0x02a7
-            goto L_0x02a8
-        L_0x0289:
-            java.lang.String r2 = "heavy"
-            boolean r0 = r0.equals(r2)     // Catch:{ Exception -> 0x02e2 }
-            if (r0 == 0) goto L_0x02a7
-            r9 = 2
-            goto L_0x02a8
-        L_0x0293:
-            java.lang.String r2 = "soft"
-            boolean r0 = r0.equals(r2)     // Catch:{ Exception -> 0x02e2 }
-            if (r0 == 0) goto L_0x02a7
-            r9 = 4
-            goto L_0x02a8
-        L_0x029d:
-            java.lang.String r2 = "medium"
-            boolean r0 = r0.equals(r2)     // Catch:{ Exception -> 0x02e2 }
-            if (r0 == 0) goto L_0x02a7
-            r9 = 1
-            goto L_0x02a8
-        L_0x02a7:
             r9 = -1
-        L_0x02a8:
-            if (r9 == 0) goto L_0x02bf
-            if (r9 == r10) goto L_0x02bc
-            if (r9 == r8) goto L_0x02b9
-            if (r9 == r6) goto L_0x02b6
-            if (r9 == r5) goto L_0x02b3
-            goto L_0x02c2
-        L_0x02b3:
-            org.telegram.messenger.BotWebViewVibrationEffect r0 = org.telegram.messenger.BotWebViewVibrationEffect.IMPACT_SOFT     // Catch:{ Exception -> 0x02e2 }
-            goto L_0x0266
+        L_0x0265:
+            if (r9 == 0) goto L_0x0273
+            if (r9 == r10) goto L_0x0270
+            if (r9 == r8) goto L_0x026d
+            goto L_0x02d1
+        L_0x026d:
+            org.telegram.messenger.BotWebViewVibrationEffect r0 = org.telegram.messenger.BotWebViewVibrationEffect.NOTIFICATION_WARNING     // Catch:{ Exception -> 0x02f1 }
+            goto L_0x0275
+        L_0x0270:
+            org.telegram.messenger.BotWebViewVibrationEffect r0 = org.telegram.messenger.BotWebViewVibrationEffect.NOTIFICATION_SUCCESS     // Catch:{ Exception -> 0x02f1 }
+            goto L_0x0275
+        L_0x0273:
+            org.telegram.messenger.BotWebViewVibrationEffect r0 = org.telegram.messenger.BotWebViewVibrationEffect.NOTIFICATION_ERROR     // Catch:{ Exception -> 0x02f1 }
+        L_0x0275:
+            r12 = r0
+            goto L_0x02d1
+        L_0x0277:
+            java.lang.String r2 = "impact_style"
+            java.lang.String r0 = r0.optString(r2)     // Catch:{ Exception -> 0x02f1 }
+            int r2 = r0.hashCode()     // Catch:{ Exception -> 0x02f1 }
+            switch(r2) {
+                case -1078030475: goto L_0x02ac;
+                case 3535914: goto L_0x02a2;
+                case 99152071: goto L_0x0298;
+                case 102970646: goto L_0x028f;
+                case 108511787: goto L_0x0285;
+                default: goto L_0x0284;
+            }     // Catch:{ Exception -> 0x02f1 }
+        L_0x0284:
+            goto L_0x02b6
+        L_0x0285:
+            java.lang.String r2 = "rigid"
+            boolean r0 = r0.equals(r2)     // Catch:{ Exception -> 0x02f1 }
+            if (r0 == 0) goto L_0x02b6
+            r9 = 3
+            goto L_0x02b7
+        L_0x028f:
+            java.lang.String r2 = "light"
+            boolean r0 = r0.equals(r2)     // Catch:{ Exception -> 0x02f1 }
+            if (r0 == 0) goto L_0x02b6
+            goto L_0x02b7
+        L_0x0298:
+            java.lang.String r2 = "heavy"
+            boolean r0 = r0.equals(r2)     // Catch:{ Exception -> 0x02f1 }
+            if (r0 == 0) goto L_0x02b6
+            r9 = 2
+            goto L_0x02b7
+        L_0x02a2:
+            java.lang.String r2 = "soft"
+            boolean r0 = r0.equals(r2)     // Catch:{ Exception -> 0x02f1 }
+            if (r0 == 0) goto L_0x02b6
+            r9 = 4
+            goto L_0x02b7
+        L_0x02ac:
+            java.lang.String r2 = "medium"
+            boolean r0 = r0.equals(r2)     // Catch:{ Exception -> 0x02f1 }
+            if (r0 == 0) goto L_0x02b6
+            r9 = 1
+            goto L_0x02b7
         L_0x02b6:
-            org.telegram.messenger.BotWebViewVibrationEffect r0 = org.telegram.messenger.BotWebViewVibrationEffect.IMPACT_RIGID     // Catch:{ Exception -> 0x02e2 }
-            goto L_0x0266
-        L_0x02b9:
-            org.telegram.messenger.BotWebViewVibrationEffect r0 = org.telegram.messenger.BotWebViewVibrationEffect.IMPACT_HEAVY     // Catch:{ Exception -> 0x02e2 }
-            goto L_0x0266
-        L_0x02bc:
-            org.telegram.messenger.BotWebViewVibrationEffect r0 = org.telegram.messenger.BotWebViewVibrationEffect.IMPACT_MEDIUM     // Catch:{ Exception -> 0x02e2 }
-            goto L_0x0266
-        L_0x02bf:
-            org.telegram.messenger.BotWebViewVibrationEffect r0 = org.telegram.messenger.BotWebViewVibrationEffect.IMPACT_LIGHT     // Catch:{ Exception -> 0x02e2 }
-            goto L_0x0266
+            r9 = -1
+        L_0x02b7:
+            if (r9 == 0) goto L_0x02ce
+            if (r9 == r10) goto L_0x02cb
+            if (r9 == r8) goto L_0x02c8
+            if (r9 == r6) goto L_0x02c5
+            if (r9 == r5) goto L_0x02c2
+            goto L_0x02d1
         L_0x02c2:
-            if (r12 == 0) goto L_0x053e
-            int r0 = android.os.Build.VERSION.SDK_INT     // Catch:{ Exception -> 0x02e2 }
+            org.telegram.messenger.BotWebViewVibrationEffect r0 = org.telegram.messenger.BotWebViewVibrationEffect.IMPACT_SOFT     // Catch:{ Exception -> 0x02f1 }
+            goto L_0x0275
+        L_0x02c5:
+            org.telegram.messenger.BotWebViewVibrationEffect r0 = org.telegram.messenger.BotWebViewVibrationEffect.IMPACT_RIGID     // Catch:{ Exception -> 0x02f1 }
+            goto L_0x0275
+        L_0x02c8:
+            org.telegram.messenger.BotWebViewVibrationEffect r0 = org.telegram.messenger.BotWebViewVibrationEffect.IMPACT_HEAVY     // Catch:{ Exception -> 0x02f1 }
+            goto L_0x0275
+        L_0x02cb:
+            org.telegram.messenger.BotWebViewVibrationEffect r0 = org.telegram.messenger.BotWebViewVibrationEffect.IMPACT_MEDIUM     // Catch:{ Exception -> 0x02f1 }
+            goto L_0x0275
+        L_0x02ce:
+            org.telegram.messenger.BotWebViewVibrationEffect r0 = org.telegram.messenger.BotWebViewVibrationEffect.IMPACT_LIGHT     // Catch:{ Exception -> 0x02f1 }
+            goto L_0x0275
+        L_0x02d1:
+            if (r12 == 0) goto L_0x054d
+            int r0 = android.os.Build.VERSION.SDK_INT     // Catch:{ Exception -> 0x02f1 }
             r2 = 26
-            if (r0 < r2) goto L_0x02d7
-            android.os.Vibrator r0 = org.telegram.messenger.AndroidUtilities.getVibrator()     // Catch:{ Exception -> 0x02e2 }
-            android.os.VibrationEffect r2 = r12.getVibrationEffectForOreo()     // Catch:{ Exception -> 0x02e2 }
-            r0.vibrate(r2)     // Catch:{ Exception -> 0x02e2 }
-            goto L_0x053e
-        L_0x02d7:
-            android.os.Vibrator r0 = org.telegram.messenger.AndroidUtilities.getVibrator()     // Catch:{ Exception -> 0x02e2 }
-            long[] r2 = r12.fallbackTimings     // Catch:{ Exception -> 0x02e2 }
-            r0.vibrate(r2, r7)     // Catch:{ Exception -> 0x02e2 }
-            goto L_0x053e
-        L_0x02e2:
+            if (r0 < r2) goto L_0x02e6
+            android.os.Vibrator r0 = org.telegram.messenger.AndroidUtilities.getVibrator()     // Catch:{ Exception -> 0x02f1 }
+            android.os.VibrationEffect r2 = r12.getVibrationEffectForOreo()     // Catch:{ Exception -> 0x02f1 }
+            r0.vibrate(r2)     // Catch:{ Exception -> 0x02f1 }
+            goto L_0x054d
+        L_0x02e6:
+            android.os.Vibrator r0 = org.telegram.messenger.AndroidUtilities.getVibrator()     // Catch:{ Exception -> 0x02f1 }
+            long[] r2 = r12.fallbackTimings     // Catch:{ Exception -> 0x02f1 }
+            r0.vibrate(r2, r7)     // Catch:{ Exception -> 0x02f1 }
+            goto L_0x054d
+        L_0x02f1:
             r0 = move-exception
             org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)
-            goto L_0x053e
-        L_0x02e8:
-            org.json.JSONObject r0 = new org.json.JSONObject     // Catch:{ JSONException -> 0x02fe }
-            r0.<init>(r2)     // Catch:{ JSONException -> 0x02fe }
-            boolean r0 = r0.optBoolean(r4)     // Catch:{ JSONException -> 0x02fe }
-            boolean r2 = r1.isBackButtonVisible     // Catch:{ JSONException -> 0x02fe }
-            if (r0 == r2) goto L_0x053e
-            r1.isBackButtonVisible = r0     // Catch:{ JSONException -> 0x02fe }
-            org.telegram.ui.Components.BotWebViewContainer$Delegate r2 = r1.delegate     // Catch:{ JSONException -> 0x02fe }
-            r2.onSetBackButtonVisible(r0)     // Catch:{ JSONException -> 0x02fe }
-            goto L_0x053e
-        L_0x02fe:
+            goto L_0x054d
+        L_0x02f7:
+            org.json.JSONObject r0 = new org.json.JSONObject     // Catch:{ JSONException -> 0x030d }
+            r0.<init>(r2)     // Catch:{ JSONException -> 0x030d }
+            boolean r0 = r0.optBoolean(r4)     // Catch:{ JSONException -> 0x030d }
+            boolean r2 = r1.isBackButtonVisible     // Catch:{ JSONException -> 0x030d }
+            if (r0 == r2) goto L_0x054d
+            r1.isBackButtonVisible = r0     // Catch:{ JSONException -> 0x030d }
+            org.telegram.ui.Components.BotWebViewContainer$Delegate r2 = r1.delegate     // Catch:{ JSONException -> 0x030d }
+            r2.onSetBackButtonVisible(r0)     // Catch:{ JSONException -> 0x030d }
+            goto L_0x054d
+        L_0x030d:
             r0 = move-exception
             org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)
-            goto L_0x053e
-        L_0x0304:
-            org.json.JSONObject r0 = new org.json.JSONObject     // Catch:{ JSONException -> 0x0316 }
-            r0.<init>(r2)     // Catch:{ JSONException -> 0x0316 }
-            org.telegram.ui.Components.BotWebViewContainer$Delegate r2 = r1.delegate     // Catch:{ JSONException -> 0x0316 }
+            goto L_0x054d
+        L_0x0313:
+            org.json.JSONObject r0 = new org.json.JSONObject     // Catch:{ JSONException -> 0x0325 }
+            r0.<init>(r2)     // Catch:{ JSONException -> 0x0325 }
+            org.telegram.ui.Components.BotWebViewContainer$Delegate r2 = r1.delegate     // Catch:{ JSONException -> 0x0325 }
             java.lang.String r3 = "data"
-            java.lang.String r0 = r0.optString(r3)     // Catch:{ JSONException -> 0x0316 }
-            r2.onSendWebViewData(r0)     // Catch:{ JSONException -> 0x0316 }
-            goto L_0x053e
-        L_0x0316:
+            java.lang.String r0 = r0.optString(r3)     // Catch:{ JSONException -> 0x0325 }
+            r2.onSendWebViewData(r0)     // Catch:{ JSONException -> 0x0325 }
+            goto L_0x054d
+        L_0x0325:
             r0 = move-exception
             org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)
-            goto L_0x053e
-        L_0x031c:
+            goto L_0x054d
+        L_0x032b:
             android.webkit.WebView r0 = r1.webView
             java.lang.String r0 = r0.getUrl()
             r1.setPageLoaded(r0)
-            goto L_0x053e
-        L_0x0327:
+            goto L_0x054d
+        L_0x0336:
             org.telegram.ui.Components.BotWebViewContainer$Delegate r0 = r1.delegate
             r0.onCloseRequested(r12)
-            goto L_0x053e
-        L_0x032e:
-            org.json.JSONObject r0 = new org.json.JSONObject     // Catch:{ JSONException -> 0x035f }
-            r0.<init>(r2)     // Catch:{ JSONException -> 0x035f }
+            goto L_0x054d
+        L_0x033d:
+            org.json.JSONObject r0 = new org.json.JSONObject     // Catch:{ JSONException -> 0x036e }
+            r0.<init>(r2)     // Catch:{ JSONException -> 0x036e }
             java.lang.String r2 = "path_full"
-            java.lang.String r0 = r0.optString(r2)     // Catch:{ JSONException -> 0x035f }
+            java.lang.String r0 = r0.optString(r2)     // Catch:{ JSONException -> 0x036e }
             java.lang.String r2 = "/"
-            boolean r2 = r0.startsWith(r2)     // Catch:{ JSONException -> 0x035f }
-            if (r2 == 0) goto L_0x0345
-            java.lang.String r0 = r0.substring(r10)     // Catch:{ JSONException -> 0x035f }
-        L_0x0345:
-            java.lang.StringBuilder r2 = new java.lang.StringBuilder     // Catch:{ JSONException -> 0x035f }
-            r2.<init>()     // Catch:{ JSONException -> 0x035f }
+            boolean r2 = r0.startsWith(r2)     // Catch:{ JSONException -> 0x036e }
+            if (r2 == 0) goto L_0x0354
+            java.lang.String r0 = r0.substring(r10)     // Catch:{ JSONException -> 0x036e }
+        L_0x0354:
+            java.lang.StringBuilder r2 = new java.lang.StringBuilder     // Catch:{ JSONException -> 0x036e }
+            r2.<init>()     // Catch:{ JSONException -> 0x036e }
             java.lang.String r3 = "https://t.me/"
-            r2.append(r3)     // Catch:{ JSONException -> 0x035f }
-            r2.append(r0)     // Catch:{ JSONException -> 0x035f }
-            java.lang.String r0 = r2.toString()     // Catch:{ JSONException -> 0x035f }
-            android.net.Uri r0 = android.net.Uri.parse(r0)     // Catch:{ JSONException -> 0x035f }
-            r1.onOpenUri(r0)     // Catch:{ JSONException -> 0x035f }
-            goto L_0x053e
-        L_0x035f:
+            r2.append(r3)     // Catch:{ JSONException -> 0x036e }
+            r2.append(r0)     // Catch:{ JSONException -> 0x036e }
+            java.lang.String r0 = r2.toString()     // Catch:{ JSONException -> 0x036e }
+            android.net.Uri r0 = android.net.Uri.parse(r0)     // Catch:{ JSONException -> 0x036e }
+            r1.onOpenUri(r0)     // Catch:{ JSONException -> 0x036e }
+            goto L_0x054d
+        L_0x036e:
             r0 = move-exception
             org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)
-            goto L_0x053e
-        L_0x0365:
+            goto L_0x054d
+        L_0x0374:
             android.view.ViewParent r0 = r19.getParent()
             boolean r0 = r0 instanceof org.telegram.ui.Components.ChatAttachAlertBotWebViewLayout.WebViewSwipeContainer
-            if (r0 == 0) goto L_0x037a
+            if (r0 == 0) goto L_0x0389
             android.view.ViewParent r0 = r19.getParent()
             org.telegram.ui.Components.ChatAttachAlertBotWebViewLayout$WebViewSwipeContainer r0 = (org.telegram.ui.Components.ChatAttachAlertBotWebViewLayout.WebViewSwipeContainer) r0
             boolean r0 = r0.isSwipeInProgress()
-            if (r0 == 0) goto L_0x037a
+            if (r0 == 0) goto L_0x0389
             r9 = 1
-        L_0x037a:
+        L_0x0389:
             r0 = r9 ^ 1
             r1.invalidateViewPortHeight(r0, r10)
-            goto L_0x053e
-        L_0x0381:
+            goto L_0x054d
+        L_0x0390:
             r19.notifyThemeChanged()
-            goto L_0x053e
-        L_0x0386:
-            org.json.JSONObject r0 = new org.json.JSONObject     // Catch:{ JSONException -> 0x0398 }
-            r0.<init>(r2)     // Catch:{ JSONException -> 0x0398 }
-            org.telegram.ui.Components.BotWebViewContainer$Delegate r2 = r1.delegate     // Catch:{ JSONException -> 0x0398 }
+            goto L_0x054d
+        L_0x0395:
+            org.json.JSONObject r0 = new org.json.JSONObject     // Catch:{ JSONException -> 0x03a7 }
+            r0.<init>(r2)     // Catch:{ JSONException -> 0x03a7 }
+            org.telegram.ui.Components.BotWebViewContainer$Delegate r2 = r1.delegate     // Catch:{ JSONException -> 0x03a7 }
             java.lang.String r3 = "need_confirmation"
-            boolean r0 = r0.optBoolean(r3)     // Catch:{ JSONException -> 0x0398 }
-            r2.onWebAppSetupClosingBehavior(r0)     // Catch:{ JSONException -> 0x0398 }
-            goto L_0x053e
-        L_0x0398:
+            boolean r0 = r0.optBoolean(r3)     // Catch:{ JSONException -> 0x03a7 }
+            r2.onWebAppSetupClosingBehavior(r0)     // Catch:{ JSONException -> 0x03a7 }
+            goto L_0x054d
+        L_0x03a7:
             r0 = move-exception
             org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)
-            goto L_0x053e
-        L_0x039e:
-            org.json.JSONObject r0 = new org.json.JSONObject     // Catch:{ JSONException -> 0x03d4 }
-            r0.<init>(r2)     // Catch:{ JSONException -> 0x03d4 }
+            goto L_0x054d
+        L_0x03ad:
+            org.json.JSONObject r0 = new org.json.JSONObject     // Catch:{ JSONException -> 0x03e3 }
+            r0.<init>(r2)     // Catch:{ JSONException -> 0x03e3 }
             java.lang.String r2 = "slug"
-            java.lang.String r0 = r0.optString(r2)     // Catch:{ JSONException -> 0x03d4 }
-            java.lang.String r2 = r1.currentPaymentSlug     // Catch:{ JSONException -> 0x03d4 }
-            if (r2 == 0) goto L_0x03b4
+            java.lang.String r0 = r0.optString(r2)     // Catch:{ JSONException -> 0x03e3 }
+            java.lang.String r2 = r1.currentPaymentSlug     // Catch:{ JSONException -> 0x03e3 }
+            if (r2 == 0) goto L_0x03c3
             java.lang.String r2 = "cancelled"
-            r1.onInvoiceStatusUpdate(r0, r2, r10)     // Catch:{ JSONException -> 0x03d4 }
-            goto L_0x053e
-        L_0x03b4:
-            r1.currentPaymentSlug = r0     // Catch:{ JSONException -> 0x03d4 }
-            org.telegram.tgnet.TLRPC$TL_payments_getPaymentForm r2 = new org.telegram.tgnet.TLRPC$TL_payments_getPaymentForm     // Catch:{ JSONException -> 0x03d4 }
-            r2.<init>()     // Catch:{ JSONException -> 0x03d4 }
-            org.telegram.tgnet.TLRPC$TL_inputInvoiceSlug r3 = new org.telegram.tgnet.TLRPC$TL_inputInvoiceSlug     // Catch:{ JSONException -> 0x03d4 }
-            r3.<init>()     // Catch:{ JSONException -> 0x03d4 }
-            r3.slug = r0     // Catch:{ JSONException -> 0x03d4 }
-            r2.invoice = r3     // Catch:{ JSONException -> 0x03d4 }
-            int r3 = r1.currentAccount     // Catch:{ JSONException -> 0x03d4 }
-            org.telegram.tgnet.ConnectionsManager r3 = org.telegram.tgnet.ConnectionsManager.getInstance(r3)     // Catch:{ JSONException -> 0x03d4 }
-            org.telegram.ui.Components.BotWebViewContainer$$ExternalSyntheticLambda11 r4 = new org.telegram.ui.Components.BotWebViewContainer$$ExternalSyntheticLambda11     // Catch:{ JSONException -> 0x03d4 }
-            r4.<init>(r1, r0)     // Catch:{ JSONException -> 0x03d4 }
-            r3.sendRequest(r2, r4)     // Catch:{ JSONException -> 0x03d4 }
-            goto L_0x053e
-        L_0x03d4:
+            r1.onInvoiceStatusUpdate(r0, r2, r10)     // Catch:{ JSONException -> 0x03e3 }
+            goto L_0x054d
+        L_0x03c3:
+            r1.currentPaymentSlug = r0     // Catch:{ JSONException -> 0x03e3 }
+            org.telegram.tgnet.TLRPC$TL_payments_getPaymentForm r2 = new org.telegram.tgnet.TLRPC$TL_payments_getPaymentForm     // Catch:{ JSONException -> 0x03e3 }
+            r2.<init>()     // Catch:{ JSONException -> 0x03e3 }
+            org.telegram.tgnet.TLRPC$TL_inputInvoiceSlug r3 = new org.telegram.tgnet.TLRPC$TL_inputInvoiceSlug     // Catch:{ JSONException -> 0x03e3 }
+            r3.<init>()     // Catch:{ JSONException -> 0x03e3 }
+            r3.slug = r0     // Catch:{ JSONException -> 0x03e3 }
+            r2.invoice = r3     // Catch:{ JSONException -> 0x03e3 }
+            int r3 = r1.currentAccount     // Catch:{ JSONException -> 0x03e3 }
+            org.telegram.tgnet.ConnectionsManager r3 = org.telegram.tgnet.ConnectionsManager.getInstance(r3)     // Catch:{ JSONException -> 0x03e3 }
+            org.telegram.ui.Components.BotWebViewContainer$$ExternalSyntheticLambda11 r4 = new org.telegram.ui.Components.BotWebViewContainer$$ExternalSyntheticLambda11     // Catch:{ JSONException -> 0x03e3 }
+            r4.<init>(r1, r0)     // Catch:{ JSONException -> 0x03e3 }
+            r3.sendRequest(r2, r4)     // Catch:{ JSONException -> 0x03e3 }
+            goto L_0x054d
+        L_0x03e3:
             r0 = move-exception
             org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)
-            goto L_0x053e
-        L_0x03da:
-            org.telegram.ui.ActionBar.AlertDialog r0 = r1.currentDialog     // Catch:{ JSONException -> 0x0516 }
-            if (r0 == 0) goto L_0x03e0
-            goto L_0x053e
-        L_0x03e0:
-            long r3 = java.lang.System.currentTimeMillis()     // Catch:{ JSONException -> 0x0516 }
-            long r13 = r1.lastDialogClosed     // Catch:{ JSONException -> 0x0516 }
+            goto L_0x054d
+        L_0x03e9:
+            org.telegram.ui.ActionBar.AlertDialog r0 = r1.currentDialog     // Catch:{ JSONException -> 0x0525 }
+            if (r0 == 0) goto L_0x03ef
+            goto L_0x054d
+        L_0x03ef:
+            long r3 = java.lang.System.currentTimeMillis()     // Catch:{ JSONException -> 0x0525 }
+            long r13 = r1.lastDialogClosed     // Catch:{ JSONException -> 0x0525 }
             long r3 = r3 - r13
             r13 = 150(0x96, double:7.4E-322)
             int r0 = (r3 > r13 ? 1 : (r3 == r13 ? 0 : -1))
-            if (r0 > 0) goto L_0x03fe
-            int r0 = r1.dialogSequentialOpenTimes     // Catch:{ JSONException -> 0x0516 }
+            if (r0 > 0) goto L_0x040d
+            int r0 = r1.dialogSequentialOpenTimes     // Catch:{ JSONException -> 0x0525 }
             int r0 = r0 + r10
-            r1.dialogSequentialOpenTimes = r0     // Catch:{ JSONException -> 0x0516 }
-            if (r0 < r6) goto L_0x03fe
-            r1.dialogSequentialOpenTimes = r9     // Catch:{ JSONException -> 0x0516 }
-            long r2 = java.lang.System.currentTimeMillis()     // Catch:{ JSONException -> 0x0516 }
-            r1.lastDialogCooldownTime = r2     // Catch:{ JSONException -> 0x0516 }
-            goto L_0x053e
-        L_0x03fe:
-            long r3 = java.lang.System.currentTimeMillis()     // Catch:{ JSONException -> 0x0516 }
-            long r13 = r1.lastDialogCooldownTime     // Catch:{ JSONException -> 0x0516 }
+            r1.dialogSequentialOpenTimes = r0     // Catch:{ JSONException -> 0x0525 }
+            if (r0 < r6) goto L_0x040d
+            r1.dialogSequentialOpenTimes = r9     // Catch:{ JSONException -> 0x0525 }
+            long r2 = java.lang.System.currentTimeMillis()     // Catch:{ JSONException -> 0x0525 }
+            r1.lastDialogCooldownTime = r2     // Catch:{ JSONException -> 0x0525 }
+            goto L_0x054d
+        L_0x040d:
+            long r3 = java.lang.System.currentTimeMillis()     // Catch:{ JSONException -> 0x0525 }
+            long r13 = r1.lastDialogCooldownTime     // Catch:{ JSONException -> 0x0525 }
             long r3 = r3 - r13
             r13 = 3000(0xbb8, double:1.482E-320)
             int r0 = (r3 > r13 ? 1 : (r3 == r13 ? 0 : -1))
-            if (r0 > 0) goto L_0x040d
-            goto L_0x053e
-        L_0x040d:
-            org.json.JSONObject r0 = new org.json.JSONObject     // Catch:{ JSONException -> 0x0516 }
-            r0.<init>(r2)     // Catch:{ JSONException -> 0x0516 }
+            if (r0 > 0) goto L_0x041c
+            goto L_0x054d
+        L_0x041c:
+            org.json.JSONObject r0 = new org.json.JSONObject     // Catch:{ JSONException -> 0x0525 }
+            r0.<init>(r2)     // Catch:{ JSONException -> 0x0525 }
             java.lang.String r2 = "title"
-            java.lang.String r2 = r0.optString(r2, r12)     // Catch:{ JSONException -> 0x0516 }
+            java.lang.String r2 = r0.optString(r2, r12)     // Catch:{ JSONException -> 0x0525 }
             java.lang.String r3 = "message"
-            java.lang.String r3 = r0.getString(r3)     // Catch:{ JSONException -> 0x0516 }
+            java.lang.String r3 = r0.getString(r3)     // Catch:{ JSONException -> 0x0525 }
             java.lang.String r4 = "buttons"
-            org.json.JSONArray r0 = r0.getJSONArray(r4)     // Catch:{ JSONException -> 0x0516 }
-            org.telegram.ui.ActionBar.AlertDialog$Builder r4 = new org.telegram.ui.ActionBar.AlertDialog$Builder     // Catch:{ JSONException -> 0x0516 }
-            android.content.Context r5 = r19.getContext()     // Catch:{ JSONException -> 0x0516 }
-            r4.<init>((android.content.Context) r5)     // Catch:{ JSONException -> 0x0516 }
-            org.telegram.ui.ActionBar.AlertDialog$Builder r2 = r4.setTitle(r2)     // Catch:{ JSONException -> 0x0516 }
-            org.telegram.ui.ActionBar.AlertDialog$Builder r2 = r2.setMessage(r3)     // Catch:{ JSONException -> 0x0516 }
-            java.util.ArrayList r3 = new java.util.ArrayList     // Catch:{ JSONException -> 0x0516 }
-            r3.<init>()     // Catch:{ JSONException -> 0x0516 }
+            org.json.JSONArray r0 = r0.getJSONArray(r4)     // Catch:{ JSONException -> 0x0525 }
+            org.telegram.ui.ActionBar.AlertDialog$Builder r4 = new org.telegram.ui.ActionBar.AlertDialog$Builder     // Catch:{ JSONException -> 0x0525 }
+            android.content.Context r5 = r19.getContext()     // Catch:{ JSONException -> 0x0525 }
+            r4.<init>((android.content.Context) r5)     // Catch:{ JSONException -> 0x0525 }
+            org.telegram.ui.ActionBar.AlertDialog$Builder r2 = r4.setTitle(r2)     // Catch:{ JSONException -> 0x0525 }
+            org.telegram.ui.ActionBar.AlertDialog$Builder r2 = r2.setMessage(r3)     // Catch:{ JSONException -> 0x0525 }
+            java.util.ArrayList r3 = new java.util.ArrayList     // Catch:{ JSONException -> 0x0525 }
+            r3.<init>()     // Catch:{ JSONException -> 0x0525 }
             r4 = 0
-        L_0x043b:
-            int r5 = r0.length()     // Catch:{ JSONException -> 0x0516 }
-            if (r4 >= r5) goto L_0x0450
-            org.telegram.ui.Components.BotWebViewContainer$PopupButton r5 = new org.telegram.ui.Components.BotWebViewContainer$PopupButton     // Catch:{ JSONException -> 0x0516 }
-            org.json.JSONObject r11 = r0.getJSONObject(r4)     // Catch:{ JSONException -> 0x0516 }
-            r5.<init>(r11)     // Catch:{ JSONException -> 0x0516 }
-            r3.add(r5)     // Catch:{ JSONException -> 0x0516 }
+        L_0x044a:
+            int r5 = r0.length()     // Catch:{ JSONException -> 0x0525 }
+            if (r4 >= r5) goto L_0x045f
+            org.telegram.ui.Components.BotWebViewContainer$PopupButton r5 = new org.telegram.ui.Components.BotWebViewContainer$PopupButton     // Catch:{ JSONException -> 0x0525 }
+            org.json.JSONObject r11 = r0.getJSONObject(r4)     // Catch:{ JSONException -> 0x0525 }
+            r5.<init>(r11)     // Catch:{ JSONException -> 0x0525 }
+            r3.add(r5)     // Catch:{ JSONException -> 0x0525 }
             int r4 = r4 + 1
-            goto L_0x043b
-        L_0x0450:
-            int r0 = r3.size()     // Catch:{ JSONException -> 0x0516 }
-            if (r0 <= r6) goto L_0x0458
-            goto L_0x053e
-        L_0x0458:
-            java.util.Collections.reverse(r3)     // Catch:{ JSONException -> 0x0516 }
-            java.util.concurrent.atomic.AtomicBoolean r0 = new java.util.concurrent.atomic.AtomicBoolean     // Catch:{ JSONException -> 0x0516 }
-            r0.<init>()     // Catch:{ JSONException -> 0x0516 }
-            int r4 = r3.size()     // Catch:{ JSONException -> 0x0516 }
-            if (r4 < r10) goto L_0x0476
-            java.lang.Object r4 = r3.get(r9)     // Catch:{ JSONException -> 0x0516 }
-            org.telegram.ui.Components.BotWebViewContainer$PopupButton r4 = (org.telegram.ui.Components.BotWebViewContainer.PopupButton) r4     // Catch:{ JSONException -> 0x0516 }
-            java.lang.String r5 = r4.text     // Catch:{ JSONException -> 0x0516 }
-            org.telegram.ui.Components.BotWebViewContainer$$ExternalSyntheticLambda2 r11 = new org.telegram.ui.Components.BotWebViewContainer$$ExternalSyntheticLambda2     // Catch:{ JSONException -> 0x0516 }
-            r11.<init>(r1, r4, r0)     // Catch:{ JSONException -> 0x0516 }
-            r2.setPositiveButton(r5, r11)     // Catch:{ JSONException -> 0x0516 }
-        L_0x0476:
-            int r4 = r3.size()     // Catch:{ JSONException -> 0x0516 }
-            if (r4 < r8) goto L_0x048c
-            java.lang.Object r4 = r3.get(r10)     // Catch:{ JSONException -> 0x0516 }
-            org.telegram.ui.Components.BotWebViewContainer$PopupButton r4 = (org.telegram.ui.Components.BotWebViewContainer.PopupButton) r4     // Catch:{ JSONException -> 0x0516 }
-            java.lang.String r5 = r4.text     // Catch:{ JSONException -> 0x0516 }
-            org.telegram.ui.Components.BotWebViewContainer$$ExternalSyntheticLambda3 r11 = new org.telegram.ui.Components.BotWebViewContainer$$ExternalSyntheticLambda3     // Catch:{ JSONException -> 0x0516 }
-            r11.<init>(r1, r4, r0)     // Catch:{ JSONException -> 0x0516 }
-            r2.setNegativeButton(r5, r11)     // Catch:{ JSONException -> 0x0516 }
-        L_0x048c:
-            int r4 = r3.size()     // Catch:{ JSONException -> 0x0516 }
-            if (r4 != r6) goto L_0x04a2
-            java.lang.Object r4 = r3.get(r8)     // Catch:{ JSONException -> 0x0516 }
-            org.telegram.ui.Components.BotWebViewContainer$PopupButton r4 = (org.telegram.ui.Components.BotWebViewContainer.PopupButton) r4     // Catch:{ JSONException -> 0x0516 }
-            java.lang.String r5 = r4.text     // Catch:{ JSONException -> 0x0516 }
-            org.telegram.ui.Components.BotWebViewContainer$$ExternalSyntheticLambda1 r11 = new org.telegram.ui.Components.BotWebViewContainer$$ExternalSyntheticLambda1     // Catch:{ JSONException -> 0x0516 }
-            r11.<init>(r1, r4, r0)     // Catch:{ JSONException -> 0x0516 }
-            r2.setNeutralButton(r5, r11)     // Catch:{ JSONException -> 0x0516 }
-        L_0x04a2:
-            org.telegram.ui.Components.BotWebViewContainer$$ExternalSyntheticLambda5 r4 = new org.telegram.ui.Components.BotWebViewContainer$$ExternalSyntheticLambda5     // Catch:{ JSONException -> 0x0516 }
-            r4.<init>(r1, r0)     // Catch:{ JSONException -> 0x0516 }
-            r2.setOnDismissListener(r4)     // Catch:{ JSONException -> 0x0516 }
-            org.telegram.ui.ActionBar.AlertDialog r0 = r2.show()     // Catch:{ JSONException -> 0x0516 }
-            r1.currentDialog = r0     // Catch:{ JSONException -> 0x0516 }
-            int r0 = r3.size()     // Catch:{ JSONException -> 0x0516 }
-            if (r0 < r10) goto L_0x04d1
-            java.lang.Object r0 = r3.get(r9)     // Catch:{ JSONException -> 0x0516 }
-            org.telegram.ui.Components.BotWebViewContainer$PopupButton r0 = (org.telegram.ui.Components.BotWebViewContainer.PopupButton) r0     // Catch:{ JSONException -> 0x0516 }
-            java.lang.String r2 = r0.textColorKey     // Catch:{ JSONException -> 0x0516 }
-            if (r2 == 0) goto L_0x04d1
-            org.telegram.ui.ActionBar.AlertDialog r2 = r1.currentDialog     // Catch:{ JSONException -> 0x0516 }
-            android.view.View r2 = r2.getButton(r7)     // Catch:{ JSONException -> 0x0516 }
-            android.widget.TextView r2 = (android.widget.TextView) r2     // Catch:{ JSONException -> 0x0516 }
-            java.lang.String r0 = r0.textColorKey     // Catch:{ JSONException -> 0x0516 }
-            int r0 = r1.getColor(r0)     // Catch:{ JSONException -> 0x0516 }
-            r2.setTextColor(r0)     // Catch:{ JSONException -> 0x0516 }
-        L_0x04d1:
-            int r0 = r3.size()     // Catch:{ JSONException -> 0x0516 }
-            if (r0 < r8) goto L_0x04f3
-            java.lang.Object r0 = r3.get(r10)     // Catch:{ JSONException -> 0x0516 }
-            org.telegram.ui.Components.BotWebViewContainer$PopupButton r0 = (org.telegram.ui.Components.BotWebViewContainer.PopupButton) r0     // Catch:{ JSONException -> 0x0516 }
-            java.lang.String r2 = r0.textColorKey     // Catch:{ JSONException -> 0x0516 }
-            if (r2 == 0) goto L_0x04f3
-            org.telegram.ui.ActionBar.AlertDialog r2 = r1.currentDialog     // Catch:{ JSONException -> 0x0516 }
+            goto L_0x044a
+        L_0x045f:
+            int r0 = r3.size()     // Catch:{ JSONException -> 0x0525 }
+            if (r0 <= r6) goto L_0x0467
+            goto L_0x054d
+        L_0x0467:
+            java.util.Collections.reverse(r3)     // Catch:{ JSONException -> 0x0525 }
+            java.util.concurrent.atomic.AtomicBoolean r0 = new java.util.concurrent.atomic.AtomicBoolean     // Catch:{ JSONException -> 0x0525 }
+            r0.<init>()     // Catch:{ JSONException -> 0x0525 }
+            int r4 = r3.size()     // Catch:{ JSONException -> 0x0525 }
+            if (r4 < r10) goto L_0x0485
+            java.lang.Object r4 = r3.get(r9)     // Catch:{ JSONException -> 0x0525 }
+            org.telegram.ui.Components.BotWebViewContainer$PopupButton r4 = (org.telegram.ui.Components.BotWebViewContainer.PopupButton) r4     // Catch:{ JSONException -> 0x0525 }
+            java.lang.String r5 = r4.text     // Catch:{ JSONException -> 0x0525 }
+            org.telegram.ui.Components.BotWebViewContainer$$ExternalSyntheticLambda1 r11 = new org.telegram.ui.Components.BotWebViewContainer$$ExternalSyntheticLambda1     // Catch:{ JSONException -> 0x0525 }
+            r11.<init>(r1, r4, r0)     // Catch:{ JSONException -> 0x0525 }
+            r2.setPositiveButton(r5, r11)     // Catch:{ JSONException -> 0x0525 }
+        L_0x0485:
+            int r4 = r3.size()     // Catch:{ JSONException -> 0x0525 }
+            if (r4 < r8) goto L_0x049b
+            java.lang.Object r4 = r3.get(r10)     // Catch:{ JSONException -> 0x0525 }
+            org.telegram.ui.Components.BotWebViewContainer$PopupButton r4 = (org.telegram.ui.Components.BotWebViewContainer.PopupButton) r4     // Catch:{ JSONException -> 0x0525 }
+            java.lang.String r5 = r4.text     // Catch:{ JSONException -> 0x0525 }
+            org.telegram.ui.Components.BotWebViewContainer$$ExternalSyntheticLambda3 r11 = new org.telegram.ui.Components.BotWebViewContainer$$ExternalSyntheticLambda3     // Catch:{ JSONException -> 0x0525 }
+            r11.<init>(r1, r4, r0)     // Catch:{ JSONException -> 0x0525 }
+            r2.setNegativeButton(r5, r11)     // Catch:{ JSONException -> 0x0525 }
+        L_0x049b:
+            int r4 = r3.size()     // Catch:{ JSONException -> 0x0525 }
+            if (r4 != r6) goto L_0x04b1
+            java.lang.Object r4 = r3.get(r8)     // Catch:{ JSONException -> 0x0525 }
+            org.telegram.ui.Components.BotWebViewContainer$PopupButton r4 = (org.telegram.ui.Components.BotWebViewContainer.PopupButton) r4     // Catch:{ JSONException -> 0x0525 }
+            java.lang.String r5 = r4.text     // Catch:{ JSONException -> 0x0525 }
+            org.telegram.ui.Components.BotWebViewContainer$$ExternalSyntheticLambda2 r11 = new org.telegram.ui.Components.BotWebViewContainer$$ExternalSyntheticLambda2     // Catch:{ JSONException -> 0x0525 }
+            r11.<init>(r1, r4, r0)     // Catch:{ JSONException -> 0x0525 }
+            r2.setNeutralButton(r5, r11)     // Catch:{ JSONException -> 0x0525 }
+        L_0x04b1:
+            org.telegram.ui.Components.BotWebViewContainer$$ExternalSyntheticLambda5 r4 = new org.telegram.ui.Components.BotWebViewContainer$$ExternalSyntheticLambda5     // Catch:{ JSONException -> 0x0525 }
+            r4.<init>(r1, r0)     // Catch:{ JSONException -> 0x0525 }
+            r2.setOnDismissListener(r4)     // Catch:{ JSONException -> 0x0525 }
+            org.telegram.ui.ActionBar.AlertDialog r0 = r2.show()     // Catch:{ JSONException -> 0x0525 }
+            r1.currentDialog = r0     // Catch:{ JSONException -> 0x0525 }
+            int r0 = r3.size()     // Catch:{ JSONException -> 0x0525 }
+            if (r0 < r10) goto L_0x04e0
+            java.lang.Object r0 = r3.get(r9)     // Catch:{ JSONException -> 0x0525 }
+            org.telegram.ui.Components.BotWebViewContainer$PopupButton r0 = (org.telegram.ui.Components.BotWebViewContainer.PopupButton) r0     // Catch:{ JSONException -> 0x0525 }
+            java.lang.String r2 = r0.textColorKey     // Catch:{ JSONException -> 0x0525 }
+            if (r2 == 0) goto L_0x04e0
+            org.telegram.ui.ActionBar.AlertDialog r2 = r1.currentDialog     // Catch:{ JSONException -> 0x0525 }
+            android.view.View r2 = r2.getButton(r7)     // Catch:{ JSONException -> 0x0525 }
+            android.widget.TextView r2 = (android.widget.TextView) r2     // Catch:{ JSONException -> 0x0525 }
+            java.lang.String r0 = r0.textColorKey     // Catch:{ JSONException -> 0x0525 }
+            int r0 = r1.getColor(r0)     // Catch:{ JSONException -> 0x0525 }
+            r2.setTextColor(r0)     // Catch:{ JSONException -> 0x0525 }
+        L_0x04e0:
+            int r0 = r3.size()     // Catch:{ JSONException -> 0x0525 }
+            if (r0 < r8) goto L_0x0502
+            java.lang.Object r0 = r3.get(r10)     // Catch:{ JSONException -> 0x0525 }
+            org.telegram.ui.Components.BotWebViewContainer$PopupButton r0 = (org.telegram.ui.Components.BotWebViewContainer.PopupButton) r0     // Catch:{ JSONException -> 0x0525 }
+            java.lang.String r2 = r0.textColorKey     // Catch:{ JSONException -> 0x0525 }
+            if (r2 == 0) goto L_0x0502
+            org.telegram.ui.ActionBar.AlertDialog r2 = r1.currentDialog     // Catch:{ JSONException -> 0x0525 }
             r4 = -2
-            android.view.View r2 = r2.getButton(r4)     // Catch:{ JSONException -> 0x0516 }
-            android.widget.TextView r2 = (android.widget.TextView) r2     // Catch:{ JSONException -> 0x0516 }
-            java.lang.String r0 = r0.textColorKey     // Catch:{ JSONException -> 0x0516 }
-            int r0 = r1.getColor(r0)     // Catch:{ JSONException -> 0x0516 }
-            r2.setTextColor(r0)     // Catch:{ JSONException -> 0x0516 }
-        L_0x04f3:
-            int r0 = r3.size()     // Catch:{ JSONException -> 0x0516 }
-            if (r0 != r6) goto L_0x053e
-            java.lang.Object r0 = r3.get(r8)     // Catch:{ JSONException -> 0x0516 }
-            org.telegram.ui.Components.BotWebViewContainer$PopupButton r0 = (org.telegram.ui.Components.BotWebViewContainer.PopupButton) r0     // Catch:{ JSONException -> 0x0516 }
-            java.lang.String r2 = r0.textColorKey     // Catch:{ JSONException -> 0x0516 }
-            if (r2 == 0) goto L_0x053e
-            org.telegram.ui.ActionBar.AlertDialog r2 = r1.currentDialog     // Catch:{ JSONException -> 0x0516 }
+            android.view.View r2 = r2.getButton(r4)     // Catch:{ JSONException -> 0x0525 }
+            android.widget.TextView r2 = (android.widget.TextView) r2     // Catch:{ JSONException -> 0x0525 }
+            java.lang.String r0 = r0.textColorKey     // Catch:{ JSONException -> 0x0525 }
+            int r0 = r1.getColor(r0)     // Catch:{ JSONException -> 0x0525 }
+            r2.setTextColor(r0)     // Catch:{ JSONException -> 0x0525 }
+        L_0x0502:
+            int r0 = r3.size()     // Catch:{ JSONException -> 0x0525 }
+            if (r0 != r6) goto L_0x054d
+            java.lang.Object r0 = r3.get(r8)     // Catch:{ JSONException -> 0x0525 }
+            org.telegram.ui.Components.BotWebViewContainer$PopupButton r0 = (org.telegram.ui.Components.BotWebViewContainer.PopupButton) r0     // Catch:{ JSONException -> 0x0525 }
+            java.lang.String r2 = r0.textColorKey     // Catch:{ JSONException -> 0x0525 }
+            if (r2 == 0) goto L_0x054d
+            org.telegram.ui.ActionBar.AlertDialog r2 = r1.currentDialog     // Catch:{ JSONException -> 0x0525 }
             r3 = -3
-            android.view.View r2 = r2.getButton(r3)     // Catch:{ JSONException -> 0x0516 }
-            android.widget.TextView r2 = (android.widget.TextView) r2     // Catch:{ JSONException -> 0x0516 }
-            java.lang.String r0 = r0.textColorKey     // Catch:{ JSONException -> 0x0516 }
-            int r0 = r1.getColor(r0)     // Catch:{ JSONException -> 0x0516 }
-            r2.setTextColor(r0)     // Catch:{ JSONException -> 0x0516 }
-            goto L_0x053e
-        L_0x0516:
+            android.view.View r2 = r2.getButton(r3)     // Catch:{ JSONException -> 0x0525 }
+            android.widget.TextView r2 = (android.widget.TextView) r2     // Catch:{ JSONException -> 0x0525 }
+            java.lang.String r0 = r0.textColorKey     // Catch:{ JSONException -> 0x0525 }
+            int r0 = r1.getColor(r0)     // Catch:{ JSONException -> 0x0525 }
+            r2.setTextColor(r0)     // Catch:{ JSONException -> 0x0525 }
+            goto L_0x054d
+        L_0x0525:
             r0 = move-exception
             org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)
-            goto L_0x053e
-        L_0x051b:
-            org.json.JSONObject r0 = new org.json.JSONObject     // Catch:{ Exception -> 0x053a }
-            r0.<init>(r2)     // Catch:{ Exception -> 0x053a }
+            goto L_0x054d
+        L_0x052a:
+            org.json.JSONObject r0 = new org.json.JSONObject     // Catch:{ Exception -> 0x0549 }
+            r0.<init>(r2)     // Catch:{ Exception -> 0x0549 }
             java.lang.String r2 = "url"
-            java.lang.String r0 = r0.optString(r2)     // Catch:{ Exception -> 0x053a }
-            android.net.Uri r0 = android.net.Uri.parse(r0)     // Catch:{ Exception -> 0x053a }
-            java.util.List<java.lang.String> r2 = WHITELISTED_SCHEMES     // Catch:{ Exception -> 0x053a }
-            java.lang.String r3 = r0.getScheme()     // Catch:{ Exception -> 0x053a }
-            boolean r2 = r2.contains(r3)     // Catch:{ Exception -> 0x053a }
-            if (r2 == 0) goto L_0x053e
-            r1.onOpenUri(r0, r10)     // Catch:{ Exception -> 0x053a }
-            goto L_0x053e
-        L_0x053a:
+            java.lang.String r0 = r0.optString(r2)     // Catch:{ Exception -> 0x0549 }
+            android.net.Uri r0 = android.net.Uri.parse(r0)     // Catch:{ Exception -> 0x0549 }
+            java.util.List<java.lang.String> r2 = WHITELISTED_SCHEMES     // Catch:{ Exception -> 0x0549 }
+            java.lang.String r3 = r0.getScheme()     // Catch:{ Exception -> 0x0549 }
+            boolean r2 = r2.contains(r3)     // Catch:{ Exception -> 0x0549 }
+            if (r2 == 0) goto L_0x054d
+            r1.onOpenUri(r0, r10)     // Catch:{ Exception -> 0x0549 }
+            goto L_0x054d
+        L_0x0549:
             r0 = move-exception
             org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)
-        L_0x053e:
+        L_0x054d:
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.BotWebViewContainer.onEventReceived(java.lang.String, java.lang.String):void");
-    }
-
-    /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$onEventReceived$7(PopupButton popupButton, AtomicBoolean atomicBoolean, DialogInterface dialogInterface, int i) {
-        dialogInterface.dismiss();
-        try {
-            notifyEvent("popup_closed", new JSONObject().put("button_id", popupButton.id));
-            atomicBoolean.set(true);
-        } catch (JSONException e) {
-            FileLog.e((Throwable) e);
-        }
-    }
-
-    /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$onEventReceived$8(PopupButton popupButton, AtomicBoolean atomicBoolean, DialogInterface dialogInterface, int i) {
-        dialogInterface.dismiss();
-        try {
-            notifyEvent("popup_closed", new JSONObject().put("button_id", popupButton.id));
-            atomicBoolean.set(true);
-        } catch (JSONException e) {
-            FileLog.e((Throwable) e);
-        }
     }
 
     /* access modifiers changed from: private */
@@ -1779,7 +1767,29 @@ public class BotWebViewContainer extends FrameLayout implements NotificationCent
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$onEventReceived$10(AtomicBoolean atomicBoolean, DialogInterface dialogInterface) {
+    public /* synthetic */ void lambda$onEventReceived$10(PopupButton popupButton, AtomicBoolean atomicBoolean, DialogInterface dialogInterface, int i) {
+        dialogInterface.dismiss();
+        try {
+            notifyEvent("popup_closed", new JSONObject().put("button_id", popupButton.id));
+            atomicBoolean.set(true);
+        } catch (JSONException e) {
+            FileLog.e((Throwable) e);
+        }
+    }
+
+    /* access modifiers changed from: private */
+    public /* synthetic */ void lambda$onEventReceived$11(PopupButton popupButton, AtomicBoolean atomicBoolean, DialogInterface dialogInterface, int i) {
+        dialogInterface.dismiss();
+        try {
+            notifyEvent("popup_closed", new JSONObject().put("button_id", popupButton.id));
+            atomicBoolean.set(true);
+        } catch (JSONException e) {
+            FileLog.e((Throwable) e);
+        }
+    }
+
+    /* access modifiers changed from: private */
+    public /* synthetic */ void lambda$onEventReceived$12(AtomicBoolean atomicBoolean, DialogInterface dialogInterface) {
         if (!atomicBoolean.get()) {
             notifyEvent("popup_closed", new JSONObject());
         }
@@ -1788,12 +1798,12 @@ public class BotWebViewContainer extends FrameLayout implements NotificationCent
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$onEventReceived$12(String str, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+    public /* synthetic */ void lambda$onEventReceived$14(String str, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         AndroidUtilities.runOnUIThread(new BotWebViewContainer$$ExternalSyntheticLambda10(this, tLRPC$TL_error, str, tLObject));
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$onEventReceived$11(TLRPC$TL_error tLRPC$TL_error, String str, TLObject tLObject) {
+    public /* synthetic */ void lambda$onEventReceived$13(TLRPC$TL_error tLRPC$TL_error, String str, TLObject tLObject) {
         if (tLRPC$TL_error != null) {
             onInvoiceStatusUpdate(str, "failed");
         } else {
@@ -1932,17 +1942,17 @@ public class BotWebViewContainer extends FrameLayout implements NotificationCent
                 r7.textColorKey = r0
                 goto L_0x007d
             L_0x005f:
-                r0 = 2131624828(0x7f0e037c, float:1.8876847E38)
+                r0 = 2131624832(0x7f0e0380, float:1.8876855E38)
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString((int) r0)
                 r7.text = r0
                 goto L_0x007c
             L_0x0069:
-                r0 = 2131625176(0x7f0e04d8, float:1.8877553E38)
+                r0 = 2131625183(0x7f0e04df, float:1.8877567E38)
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString((int) r0)
                 r7.text = r0
                 goto L_0x007c
             L_0x0073:
-                r0 = 2131627117(0x7f0e0c6d, float:1.888149E38)
+                r0 = 2131627127(0x7f0e0CLASSNAME, float:1.888151E38)
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString((int) r0)
                 r7.text = r0
             L_0x007c:

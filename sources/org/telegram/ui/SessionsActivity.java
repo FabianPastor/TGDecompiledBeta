@@ -394,7 +394,7 @@ public class SessionsActivity extends BaseFragment implements NotificationCenter
             if (instance.isClientActivated()) {
                 instance.registeredForPush = false;
                 instance.saveConfig(false);
-                MessagesController.getInstance(i).registerForPush(SharedConfig.pushString);
+                MessagesController.getInstance(i).registerForPush(SharedConfig.pushType, SharedConfig.pushString);
                 ConnectionsManager.getInstance(i).setUserId(instance.getClientUserId());
             }
         }

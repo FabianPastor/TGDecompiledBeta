@@ -171,7 +171,7 @@ public class FeaturedStickersActivity extends BaseFragment implements Notificati
         if (listAdapter2 != null) {
             listAdapter2.notifyDataSetChanged();
         }
-        MediaDataController.getInstance(this.currentAccount).markFaturedStickersAsRead(true);
+        MediaDataController.getInstance(this.currentAccount).markFeaturedStickersAsRead(false, true);
     }
 
     public void onResume() {

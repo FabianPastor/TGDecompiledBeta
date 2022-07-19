@@ -65,9 +65,9 @@ public class StickerSetNameCell extends FrameLayout {
         }
         float f = 17.0f;
         if (z2) {
-            layoutParams = LayoutHelper.createFrameRelatively(-2.0f, -2.0f, (z3 ? 1 : 8388611) | 48, z3 ? 15.0f : 17.0f, z3 ? 10.0f : 2.0f, z3 ? 15.0f : 57.0f, 0.0f);
+            layoutParams = LayoutHelper.createFrameRelatively(-2.0f, -2.0f, 8388659, z3 ? 11.0f : 17.0f, z3 ? 10.0f : 2.0f, z3 ? 15.0f : 57.0f, 0.0f);
         } else {
-            layoutParams = LayoutHelper.createFrame(-2, -2.0f, (z3 ? 1 : 3) | 48, z3 ? 15.0f : f, z3 ? 10.0f : 2.0f, z3 ? 15.0f : 57.0f, 0.0f);
+            layoutParams = LayoutHelper.createFrame(-2, -2.0f, 48, z3 ? 11.0f : f, z3 ? 10.0f : 2.0f, z3 ? 15.0f : 57.0f, 0.0f);
         }
         addView(this.textView, layoutParams);
         TextView textView3 = new TextView(context2);
@@ -78,9 +78,9 @@ public class StickerSetNameCell extends FrameLayout {
         this.urlTextView.setSingleLine(true);
         this.urlTextView.setVisibility(4);
         if (z2) {
-            layoutParams2 = LayoutHelper.createFrameRelatively(-2.0f, -2.0f, 8388661, 17.0f, 6.0f, 17.0f, 0.0f);
+            layoutParams2 = LayoutHelper.createFrameRelatively(-2.0f, -2.0f, 8388661, 12.0f, 6.0f, 17.0f, 0.0f);
         } else {
-            layoutParams2 = LayoutHelper.createFrame(-2, -2.0f, 53, 17.0f, 6.0f, 17.0f, 0.0f);
+            layoutParams2 = LayoutHelper.createFrame(-2, -2.0f, 53, 12.0f, 6.0f, 17.0f, 0.0f);
         }
         addView(this.urlTextView, layoutParams2);
         ImageView imageView = new ImageView(context2);
@@ -184,7 +184,7 @@ public class StickerSetNameCell extends FrameLayout {
         if (this.empty) {
             super.onMeasure(View.MeasureSpec.makeMeasureSpec(View.MeasureSpec.getSize(i), NUM), View.MeasureSpec.makeMeasureSpec(1, NUM));
         } else {
-            super.onMeasure(View.MeasureSpec.makeMeasureSpec(View.MeasureSpec.getSize(i), NUM), View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(this.isEmoji ? 36.0f : 24.0f), NUM));
+            super.onMeasure(View.MeasureSpec.makeMeasureSpec(View.MeasureSpec.getSize(i), NUM), View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(this.isEmoji ? 32.0f : 24.0f), NUM));
         }
     }
 

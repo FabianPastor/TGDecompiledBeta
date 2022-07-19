@@ -212,6 +212,16 @@ public class FilterTabsView extends FrameLayout {
         return this.positionToStableId.get(i, -1);
     }
 
+    public void selectTabWithStableId(int i) {
+        for (int i2 = 0; i2 < this.tabs.size(); i2++) {
+            if (this.positionToStableId.get(i2, -1) == i) {
+                this.currentPosition = i2;
+                this.selectedTabId = this.positionToId.get(i2);
+                return;
+            }
+        }
+    }
+
     public class Tab {
         public int counter;
         public int id;

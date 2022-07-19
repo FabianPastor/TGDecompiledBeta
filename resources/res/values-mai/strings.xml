@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="hms_apk_not_installed_hints">HMS Core केर बिना %1$s मे किछु फीचर नीक जेकां काज नहियो कए सकैत अछि, जे अहांक डिवाइस पर इंस्टॉल नहि कयल अछि।</string>
+    <string name="hms_bindfaildlg_message">HMS Core सभक उपयोग करबामे %1$s असफल भय गेल। ऑप्टिमाइजर (फोन प्रबंधक) शुरू करू वा सेटिंग्समे जाउ, %2$s क लेल सभटा अनुमति सक्षम करू (स्वतः प्रारंभ आ द्वितीयक प्रारंभ सहित), आ पुनः प्रयास करू।</string>
+    <string name="hms_confirm">ठीक</string>
+    <string name="hms_is_spoof">एहन लगैत अछि जे अहां डिवाइस पर HMS Coreक (%1$s) अनाधिकारिक वर्जन इंस्टॉल कयने छी। कृपाकए सेटिंग्स सँ HMS Core केँ अनइंस्टॉल करू आ आधिकारिक वर्जन केँ इंस्टॉल करबाक लेल एहि एप पर घुरि कए आउ।</string>
+    <string name="hms_push_channel">डिफ़ॉल्ट</string>
+    <string name="hms_spoof_hints">ध्यान दिअ</string>
+</resources>

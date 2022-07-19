@@ -14,6 +14,6 @@ public final /* synthetic */ class EmojiView$$ExternalSyntheticLambda2 implement
     }
 
     public final boolean onTouch(View view, MotionEvent motionEvent) {
-        return this.f$0.lambda$new$1(this.f$1, view, motionEvent);
+        return this.f$0.lambda$new$5(this.f$1, view, motionEvent);
     }
 }

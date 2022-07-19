@@ -40,6 +40,12 @@
     <string name="fcm_fallback_notification_channel_label">Другое</string>
     <string name="google_assistant_verification_channel_name">Проверка с помощью Ассистента</string>
     <string name="google_assistant_verification_notification_title">Google Ассистент отправляет сообщение…</string>
+    <string name="hms_apk_not_installed_hints">Некоторые функции приложения %1$s могут работать некорректно без пакета HMS Core, который не установлен на Вашем устройстве.</string>
+    <string name="hms_bindfaildlg_message">%1$s не может использовать HMS Core. Перейдите в Диспетчер (Диспетчер телефона) или Настройки, предоставьте все права для %2$s (включая автозапуск и косвенный запуск) и повторите попытку.</string>
+    <string name="hms_confirm">OK</string>
+    <string name="hms_is_spoof">Кажется, на Вашем устройстве установлена неофициальная версия HMS Core (%1$s). В разделе Настройки удалите HMS Core и вернитесь в это приложение, чтобы установить официальную версию.</string>
+    <string name="hms_push_channel">По умолчанию</string>
+    <string name="hms_spoof_hints">Внимание</string>
     <string name="status_bar_notification_info_overflow">&gt;999</string>
     <string name="wallet_buy_button_place_holder">Купить через Google</string>
 </resources>

@@ -422,6 +422,13 @@ public class AnimatedTextView extends View {
             return Math.max(this.currentWidth, this.oldWidth);
         }
 
+        public int getCurrentWidth() {
+            if (this.currentLayout == null || this.oldLayout == null) {
+                return this.currentWidth;
+            }
+            return AndroidUtilities.lerp(this.oldWidth, this.currentWidth, this.t);
+        }
+
         private StaticLayout makeLayout(CharSequence charSequence, int i) {
             if (i <= 0) {
                 Point point = AndroidUtilities.displaySize;
@@ -659,15 +666,15 @@ public class AnimatedTextView extends View {
                     int i14 = i10 - i12;
                     int i15 = i11 - i13;
                     if (i14 > 0 || i15 > 0) {
-                        if (i14 == i15 && z6) {
-                            regionCallback4.run(charSequence4.subSequence(i12, i10), i12, i10);
-                        } else if (!z6) {
+                        if (i14 != i15 || !z6) {
                             if (i14 > 0) {
                                 regionCallback5.run(charSequence4.subSequence(i12, i10), i12, i10);
                             }
                             if (i15 > 0) {
                                 regionCallback6.run(charSequence3.subSequence(i13, i11), i13, i11);
                             }
+                        } else {
+                            regionCallback4.run(charSequence4.subSequence(i12, i10), i12, i10);
                         }
                     }
                     i12 = i10;
@@ -806,6 +813,10 @@ public class AnimatedTextView extends View {
         this.toSetMoveDown = z2;
     }
 
+    public int width() {
+        return getPaddingLeft() + this.drawable.getCurrentWidth() + getPaddingRight();
+    }
+
     public CharSequence getText() {
         return this.drawable.getText();
     }
@@ -828,6 +839,10 @@ public class AnimatedTextView extends View {
 
     public void setAnimationProperties(float f, long j, long j2, TimeInterpolator timeInterpolator) {
         this.drawable.setAnimationProperties(f, j, j2, timeInterpolator);
+    }
+
+    public AnimatedTextDrawable getDrawable() {
+        return this.drawable;
     }
 
     public TextPaint getPaint() {
