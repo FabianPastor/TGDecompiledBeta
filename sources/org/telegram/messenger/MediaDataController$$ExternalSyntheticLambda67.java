@@ -14,6 +14,6 @@ public final /* synthetic */ class MediaDataController$$ExternalSyntheticLambda6
     }
 
     public final void run() {
-        this.f$0.lambda$clearBotKeyboard$155(this.f$1, this.f$2);
+        this.f$0.lambda$savePinnedMessages$138(this.f$1, this.f$2);
     }
 }

@@ -14,6 +14,6 @@ public final /* synthetic */ class ChatActivityEnterView$$ExternalSyntheticLambd
     }
 
     public final void onClick(DialogInterface dialogInterface, int i) {
-        this.f$0.lambda$didPressedBotButton$47(this.f$1, this.f$2, dialogInterface, i);
+        this.f$0.lambda$didPressedBotButton$48(this.f$1, this.f$2, dialogInterface, i);
     }
 }

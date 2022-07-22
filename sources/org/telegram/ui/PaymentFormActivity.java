@@ -5176,12 +5176,14 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
     }
 
     private void showPayAlert(String str) {
-        AlertDialog.Builder builder = new AlertDialog.Builder((Context) getParentActivity());
-        builder.setTitle(LocaleController.getString("PaymentTransactionReview", NUM));
-        builder.setMessage(AndroidUtilities.replaceTags(LocaleController.formatString("PaymentTransactionMessage2", NUM, str, this.currentBotName, this.currentItemName)));
-        builder.setPositiveButton(LocaleController.getString("Continue", NUM), new PaymentFormActivity$$ExternalSyntheticLambda2(this));
-        builder.setNegativeButton(LocaleController.getString("Cancel", NUM), (DialogInterface.OnClickListener) null);
-        showDialog(builder.create());
+        if (getParentActivity() != null) {
+            AlertDialog.Builder builder = new AlertDialog.Builder((Context) getParentActivity());
+            builder.setTitle(LocaleController.getString("PaymentTransactionReview", NUM));
+            builder.setMessage(AndroidUtilities.replaceTags(LocaleController.formatString("PaymentTransactionMessage2", NUM, str, this.currentBotName, this.currentItemName)));
+            builder.setPositiveButton(LocaleController.getString("Continue", NUM), new PaymentFormActivity$$ExternalSyntheticLambda2(this));
+            builder.setNegativeButton(LocaleController.getString("Cancel", NUM), (DialogInterface.OnClickListener) null);
+            showDialog(builder.create());
+        }
     }
 
     /* access modifiers changed from: private */

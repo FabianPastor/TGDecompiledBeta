@@ -4928,6 +4928,12 @@ public class MessageObject {
         }
     }
 
+    /* JADX WARNING: Code restructure failed: missing block: B:124:0x0286, code lost:
+        if (r0 == null) goto L_0x0291;
+     */
+    /* JADX WARNING: Code restructure failed: missing block: B:125:0x0288, code lost:
+        r0 = new android.text.SpannableStringBuilder(r0).append("...");
+     */
     /* JADX WARNING: Failed to insert additional move for type inference */
     /* JADX WARNING: Incorrect type for immutable var: ssa=org.telegram.tgnet.TLRPC$User, code=org.telegram.tgnet.TLRPC$Chat, for r9v0, types: [org.telegram.tgnet.TLRPC$User] */
     /* Code decompiled incorrectly, please refer to instructions dump. */
@@ -4974,14 +4980,14 @@ public class MessageObject {
             r1 = 2131624203(0x7f0e010b, float:1.887558E38)
             java.lang.String r2 = "ActionPinnedNoText"
             java.lang.String r3 = "un1"
-            if (r0 == 0) goto L_0x029c
+            if (r0 == 0) goto L_0x02bc
             org.telegram.tgnet.TLRPC$Message r4 = r0.messageOwner
             boolean r5 = r4 instanceof org.telegram.tgnet.TLRPC$TL_messageEmpty
-            if (r5 != 0) goto L_0x029c
+            if (r5 != 0) goto L_0x02bc
             org.telegram.tgnet.TLRPC$MessageAction r4 = r4.action
             boolean r4 = r4 instanceof org.telegram.tgnet.TLRPC$TL_messageActionHistoryClear
             if (r4 == 0) goto L_0x006e
-            goto L_0x029c
+            goto L_0x02bc
         L_0x006e:
             boolean r0 = r0.isMusic()
             if (r0 == 0) goto L_0x0089
@@ -4995,7 +5001,7 @@ public class MessageObject {
         L_0x0081:
             java.lang.CharSequence r9 = replaceWithLink(r0, r3, r9)
             r8.messageText = r9
-            goto L_0x02aa
+            goto L_0x02ca
         L_0x0089:
             org.telegram.messenger.MessageObject r0 = r8.replyMessageObject
             boolean r0 = r0.isVideo()
@@ -5010,7 +5016,7 @@ public class MessageObject {
         L_0x009e:
             java.lang.CharSequence r9 = replaceWithLink(r0, r3, r9)
             r8.messageText = r9
-            goto L_0x02aa
+            goto L_0x02ca
         L_0x00a6:
             org.telegram.messenger.MessageObject r0 = r8.replyMessageObject
             boolean r0 = r0.isGif()
@@ -5025,7 +5031,7 @@ public class MessageObject {
         L_0x00bb:
             java.lang.CharSequence r9 = replaceWithLink(r0, r3, r9)
             r8.messageText = r9
-            goto L_0x02aa
+            goto L_0x02ca
         L_0x00c3:
             org.telegram.messenger.MessageObject r0 = r8.replyMessageObject
             boolean r0 = r0.isVoice()
@@ -5040,7 +5046,7 @@ public class MessageObject {
         L_0x00d8:
             java.lang.CharSequence r9 = replaceWithLink(r0, r3, r9)
             r8.messageText = r9
-            goto L_0x02aa
+            goto L_0x02ca
         L_0x00e0:
             org.telegram.messenger.MessageObject r0 = r8.replyMessageObject
             boolean r0 = r0.isRoundVideo()
@@ -5055,7 +5061,7 @@ public class MessageObject {
         L_0x00f5:
             java.lang.CharSequence r9 = replaceWithLink(r0, r3, r9)
             r8.messageText = r9
-            goto L_0x02aa
+            goto L_0x02ca
         L_0x00fd:
             org.telegram.messenger.MessageObject r0 = r8.replyMessageObject
             boolean r0 = r0.isSticker()
@@ -5077,7 +5083,7 @@ public class MessageObject {
         L_0x0122:
             java.lang.CharSequence r9 = replaceWithLink(r0, r3, r9)
             r8.messageText = r9
-            goto L_0x02aa
+            goto L_0x02ca
         L_0x012a:
             org.telegram.messenger.MessageObject r0 = r8.replyMessageObject
             org.telegram.tgnet.TLRPC$Message r4 = r0.messageOwner
@@ -5094,7 +5100,7 @@ public class MessageObject {
         L_0x0141:
             java.lang.CharSequence r9 = replaceWithLink(r0, r3, r9)
             r8.messageText = r9
-            goto L_0x02aa
+            goto L_0x02ca
         L_0x0149:
             boolean r5 = r4 instanceof org.telegram.tgnet.TLRPC$TL_messageMediaGeo
             if (r5 == 0) goto L_0x0162
@@ -5108,7 +5114,7 @@ public class MessageObject {
         L_0x015a:
             java.lang.CharSequence r9 = replaceWithLink(r0, r3, r9)
             r8.messageText = r9
-            goto L_0x02aa
+            goto L_0x02ca
         L_0x0162:
             boolean r5 = r4 instanceof org.telegram.tgnet.TLRPC$TL_messageMediaGeoLive
             if (r5 == 0) goto L_0x017b
@@ -5122,7 +5128,7 @@ public class MessageObject {
         L_0x0173:
             java.lang.CharSequence r9 = replaceWithLink(r0, r3, r9)
             r8.messageText = r9
-            goto L_0x02aa
+            goto L_0x02ca
         L_0x017b:
             boolean r5 = r4 instanceof org.telegram.tgnet.TLRPC$TL_messageMediaContact
             if (r5 == 0) goto L_0x0194
@@ -5136,7 +5142,7 @@ public class MessageObject {
         L_0x018c:
             java.lang.CharSequence r9 = replaceWithLink(r0, r3, r9)
             r8.messageText = r9
-            goto L_0x02aa
+            goto L_0x02ca
         L_0x0194:
             boolean r5 = r4 instanceof org.telegram.tgnet.TLRPC$TL_messageMediaPoll
             if (r5 == 0) goto L_0x01ca
@@ -5154,7 +5160,7 @@ public class MessageObject {
         L_0x01ad:
             java.lang.CharSequence r9 = replaceWithLink(r0, r3, r9)
             r8.messageText = r9
-            goto L_0x02aa
+            goto L_0x02ca
         L_0x01b5:
             r0 = 2131624205(0x7f0e010d, float:1.8875583E38)
             java.lang.String r1 = "ActionPinnedPoll"
@@ -5166,7 +5172,7 @@ public class MessageObject {
         L_0x01c2:
             java.lang.CharSequence r9 = replaceWithLink(r0, r3, r9)
             r8.messageText = r9
-            goto L_0x02aa
+            goto L_0x02ca
         L_0x01ca:
             boolean r5 = r4 instanceof org.telegram.tgnet.TLRPC$TL_messageMediaPhoto
             if (r5 == 0) goto L_0x01e3
@@ -5180,7 +5186,7 @@ public class MessageObject {
         L_0x01db:
             java.lang.CharSequence r9 = replaceWithLink(r0, r3, r9)
             r8.messageText = r9
-            goto L_0x02aa
+            goto L_0x02ca
         L_0x01e3:
             boolean r4 = r4 instanceof org.telegram.tgnet.TLRPC$TL_messageMediaGame
             r5 = 1101004800(0x41a00000, float:20.0)
@@ -5215,67 +5221,88 @@ public class MessageObject {
             int r0 = org.telegram.messenger.AndroidUtilities.dp(r5)
             java.lang.CharSequence r9 = org.telegram.messenger.Emoji.replaceEmoji(r9, r10, r0, r7)
             r8.messageText = r9
-            goto L_0x02aa
+            goto L_0x02ca
         L_0x0230:
             java.lang.CharSequence r0 = r0.messageText
-            if (r0 == 0) goto L_0x028d
+            if (r0 == 0) goto L_0x02ad
             int r0 = r0.length()
-            if (r0 <= 0) goto L_0x028d
+            if (r0 <= 0) goto L_0x02ad
             org.telegram.messenger.MessageObject r0 = r8.replyMessageObject
             java.lang.CharSequence r0 = r0.messageText
             int r1 = r0.length()
             r2 = 20
-            if (r1 <= r2) goto L_0x025b
-            java.lang.StringBuilder r1 = new java.lang.StringBuilder
-            r1.<init>()
+            if (r1 <= r2) goto L_0x024c
             java.lang.CharSequence r0 = r0.subSequence(r7, r2)
-            r1.append(r0)
-            java.lang.String r0 = "..."
-            r1.append(r0)
-            java.lang.String r0 = r1.toString()
-        L_0x025b:
-            android.text.TextPaint r1 = org.telegram.ui.ActionBar.Theme.chat_msgTextPaint
-            android.graphics.Paint$FontMetricsInt r1 = r1.getFontMetricsInt()
-            int r2 = org.telegram.messenger.AndroidUtilities.dp(r5)
-            java.lang.CharSequence r0 = org.telegram.messenger.Emoji.replaceEmoji(r0, r1, r2, r7)
-            org.telegram.messenger.MessageObject r1 = r8.replyMessageObject
-            r2 = r0
-            android.text.Spannable r2 = (android.text.Spannable) r2
-            org.telegram.messenger.MediaDataController.addTextStyleRuns(r1, r2)
+            r1 = 1
+            goto L_0x024d
+        L_0x024c:
+            r1 = 0
+        L_0x024d:
+            android.text.TextPaint r2 = org.telegram.ui.ActionBar.Theme.chat_msgTextPaint
+            android.graphics.Paint$FontMetricsInt r2 = r2.getFontMetricsInt()
+            int r4 = org.telegram.messenger.AndroidUtilities.dp(r5)
+            java.lang.CharSequence r0 = org.telegram.messenger.Emoji.replaceEmoji(r0, r2, r4, r7)
+            org.telegram.messenger.MessageObject r2 = r8.replyMessageObject
+            if (r2 == 0) goto L_0x026f
+            org.telegram.tgnet.TLRPC$Message r2 = r2.messageOwner
+            if (r2 == 0) goto L_0x026f
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$MessageEntity> r2 = r2.entities
+            android.text.TextPaint r4 = org.telegram.ui.ActionBar.Theme.chat_msgTextPaint
+            android.graphics.Paint$FontMetricsInt r4 = r4.getFontMetricsInt()
+            android.text.Spannable r0 = replaceAnimatedEmoji(r0, r2, r4)
+        L_0x026f:
+            org.telegram.messenger.MessageObject r2 = r8.replyMessageObject
+            r4 = r0
+            android.text.Spannable r4 = (android.text.Spannable) r4
+            org.telegram.messenger.MediaDataController.addTextStyleRuns(r2, r4)
+            if (r1 == 0) goto L_0x0291
+            boolean r1 = r0 instanceof android.text.SpannableStringBuilder
+            java.lang.String r2 = "..."
+            if (r1 == 0) goto L_0x0286
+            r1 = r0
+            android.text.SpannableStringBuilder r1 = (android.text.SpannableStringBuilder) r1
+            r1.append(r2)
+            goto L_0x0291
+        L_0x0286:
+            if (r0 == 0) goto L_0x0291
+            android.text.SpannableStringBuilder r1 = new android.text.SpannableStringBuilder
+            r1.<init>(r0)
+            android.text.SpannableStringBuilder r0 = r1.append(r2)
+        L_0x0291:
             r1 = 2131624209(0x7f0e0111, float:1.8875591E38)
             java.lang.String r2 = "ActionPinnedText"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             java.lang.CharSequence[] r2 = new java.lang.CharSequence[r6]
             r2[r7] = r0
             android.text.SpannableStringBuilder r0 = org.telegram.messenger.AndroidUtilities.formatSpannable(r1, r2)
-            if (r9 == 0) goto L_0x0285
-            goto L_0x0286
-        L_0x0285:
+            if (r9 == 0) goto L_0x02a5
+            goto L_0x02a6
+        L_0x02a5:
             r9 = r10
-        L_0x0286:
+        L_0x02a6:
             java.lang.CharSequence r9 = replaceWithLink(r0, r3, r9)
             r8.messageText = r9
-            goto L_0x02aa
-        L_0x028d:
+            goto L_0x02ca
+        L_0x02ad:
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r2, r1)
-            if (r9 == 0) goto L_0x0294
-            goto L_0x0295
-        L_0x0294:
+            if (r9 == 0) goto L_0x02b4
+            goto L_0x02b5
+        L_0x02b4:
             r9 = r10
-        L_0x0295:
+        L_0x02b5:
             java.lang.CharSequence r9 = replaceWithLink(r0, r3, r9)
             r8.messageText = r9
-            goto L_0x02aa
-        L_0x029c:
+            goto L_0x02ca
+        L_0x02bc:
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r2, r1)
-            if (r9 == 0) goto L_0x02a3
-            goto L_0x02a4
-        L_0x02a3:
+            if (r9 == 0) goto L_0x02c3
+            goto L_0x02c4
+        L_0x02c3:
             r9 = r10
-        L_0x02a4:
+        L_0x02c4:
             java.lang.CharSequence r9 = replaceWithLink(r0, r3, r9)
             r8.messageText = r9
-        L_0x02aa:
+        L_0x02ca:
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessageObject.generatePinMessageText(org.telegram.tgnet.TLRPC$User, org.telegram.tgnet.TLRPC$Chat):void");

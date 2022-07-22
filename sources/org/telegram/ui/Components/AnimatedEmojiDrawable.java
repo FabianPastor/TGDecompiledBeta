@@ -1,15 +1,16 @@
 package org.telegram.ui.Components;
 
+import android.animation.TimeInterpolator;
 import android.graphics.Canvas;
 import android.graphics.ColorFilter;
 import android.graphics.Paint;
 import android.graphics.Rect;
-import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
 import android.os.Looper;
 import android.text.TextPaint;
 import android.text.TextUtils;
 import android.view.View;
+import android.view.animation.LinearInterpolator;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -43,14 +44,20 @@ public class AnimatedEmojiDrawable extends Drawable {
     private float alpha = 1.0f;
     private boolean attached;
     private int cacheType;
+    private int currentAccount;
     private TLRPC$Document document;
     private long documentId;
     private ArrayList<AnimatedEmojiSpan.AnimatedEmojiHolder> holders;
     private ImageReceiver imageReceiver;
+    private AnimatedFloat placeholderAlpha = new AnimatedFloat(1.0f, (Runnable) new AnimatedEmojiDrawable$$ExternalSyntheticLambda0(this), 0, 150, (TimeInterpolator) new LinearInterpolator());
+    private boolean shouldDrawPlaceholder = false;
     private ArrayList<View> views;
 
     interface ReceivedDocument {
         void run(TLRPC$Document tLRPC$Document);
+    }
+
+    private void drawDebugCacheType(Canvas canvas) {
     }
 
     public int getOpacity() {
@@ -370,6 +377,7 @@ public class AnimatedEmojiDrawable extends Drawable {
     }
 
     public AnimatedEmojiDrawable(int i, int i2, long j) {
+        this.currentAccount = i2;
         this.cacheType = i;
         if (i == 0) {
             TextPaint textPaint = Theme.chat_msgTextPaint;
@@ -378,7 +386,7 @@ public class AnimatedEmojiDrawable extends Drawable {
             sizedp = 34;
         }
         this.documentId = j;
-        getDocumentFetcher(i2).fetchDocument(j, new AnimatedEmojiDrawable$$ExternalSyntheticLambda1(this));
+        getDocumentFetcher(i2).fetchDocument(j, new AnimatedEmojiDrawable$$ExternalSyntheticLambda2(this));
     }
 
     /* access modifiers changed from: private */
@@ -389,8 +397,9 @@ public class AnimatedEmojiDrawable extends Drawable {
 
     public AnimatedEmojiDrawable(int i, int i2, TLRPC$Document tLRPC$Document) {
         this.cacheType = i;
+        this.currentAccount = i2;
         this.document = tLRPC$Document;
-        AndroidUtilities.runOnUIThread(new AnimatedEmojiDrawable$$ExternalSyntheticLambda0(this));
+        AndroidUtilities.runOnUIThread(new AnimatedEmojiDrawable$$ExternalSyntheticLambda1(this));
     }
 
     public long getDocumentId() {
@@ -620,63 +629,56 @@ public class AnimatedEmojiDrawable extends Drawable {
     }
 
     public void draw(Canvas canvas) {
+        drawDebugCacheType(canvas);
         ImageReceiver imageReceiver2 = this.imageReceiver;
         if (imageReceiver2 != null) {
             imageReceiver2.setImageCoords(getBounds());
             this.imageReceiver.draw(canvas);
-            return;
+        } else {
+            this.shouldDrawPlaceholder = true;
         }
-        if (placeholderPaint == null) {
-            Paint paint = new Paint(1);
-            placeholderPaint = paint;
-            paint.setColor(Theme.isCurrentThemeDark() ? NUM : NUM);
-        }
-        int alpha2 = placeholderPaint.getAlpha();
-        placeholderPaint.setAlpha((int) (((float) alpha2) * this.alpha));
-        RectF rectF = AndroidUtilities.rectTmp;
-        rectF.set(getBounds());
-        canvas.drawCircle(rectF.centerX(), rectF.centerY(), rectF.width() * 0.4f, placeholderPaint);
-        placeholderPaint.setAlpha(alpha2);
+        drawPlaceholder(canvas, getBounds());
     }
 
     public void draw(Canvas canvas, Rect rect, float f) {
+        drawDebugCacheType(canvas);
         ImageReceiver imageReceiver2 = this.imageReceiver;
         if (imageReceiver2 != null) {
             imageReceiver2.setImageCoords(rect);
             this.imageReceiver.setAlpha(f);
             this.imageReceiver.draw(canvas);
-            return;
+        } else {
+            this.shouldDrawPlaceholder = true;
         }
-        if (placeholderPaint == null) {
-            Paint paint = new Paint(1);
-            placeholderPaint = paint;
-            paint.setColor(Theme.isCurrentThemeDark() ? NUM : NUM);
-        }
-        int alpha2 = placeholderPaint.getAlpha();
-        placeholderPaint.setAlpha((int) (((float) alpha2) * f));
-        RectF rectF = AndroidUtilities.rectTmp;
-        rectF.set(rect);
-        canvas.drawCircle(rectF.centerX(), rectF.centerY(), rectF.width() * 0.4f, placeholderPaint);
-        placeholderPaint.setAlpha(alpha2);
+        drawPlaceholder(canvas, getBounds());
     }
 
     public void draw(Canvas canvas, ImageReceiver.BackgroundThreadDrawHolder backgroundThreadDrawHolder) {
+        drawDebugCacheType(canvas);
         ImageReceiver imageReceiver2 = this.imageReceiver;
         if (imageReceiver2 != null) {
             imageReceiver2.draw(canvas, backgroundThreadDrawHolder);
-            return;
+        } else {
+            this.shouldDrawPlaceholder = true;
         }
-        if (placeholderPaint == null) {
-            Paint paint = new Paint(1);
-            placeholderPaint = paint;
-            paint.setColor(Theme.isCurrentThemeDark() ? NUM : NUM);
+        drawPlaceholder(canvas, getBounds());
+    }
+
+    private void drawPlaceholder(Canvas canvas, Rect rect) {
+        if (this.shouldDrawPlaceholder) {
+            float f = this.placeholderAlpha.set(this.imageReceiver == null ? 1.0f : 0.0f);
+            if (f >= 0.0f) {
+                if (placeholderPaint == null) {
+                    Paint paint = new Paint(1);
+                    placeholderPaint = paint;
+                    paint.setColor(Theme.isCurrentThemeDark() ? NUM : NUM);
+                }
+                int alpha2 = placeholderPaint.getAlpha();
+                placeholderPaint.setAlpha((int) (((float) alpha2) * f));
+                canvas.drawCircle((float) rect.centerX(), (float) rect.centerY(), ((float) rect.width()) * 0.4f, placeholderPaint);
+                placeholderPaint.setAlpha(alpha2);
+            }
         }
-        int alpha2 = placeholderPaint.getAlpha();
-        placeholderPaint.setAlpha((int) (((float) alpha2) * this.alpha));
-        RectF rectF = AndroidUtilities.rectTmp;
-        rectF.set(getBounds());
-        canvas.drawCircle(rectF.centerX(), rectF.centerY(), rectF.width() * 0.4f, placeholderPaint);
-        placeholderPaint.setAlpha(alpha2);
     }
 
     public void addView(View view) {
@@ -759,6 +761,26 @@ public class AnimatedEmojiDrawable extends Drawable {
             org.telegram.messenger.ImageReceiver r0 = r3.imageReceiver
             r0.onDetachedFromWindow()
         L_0x003a:
+            java.util.ArrayList<android.view.View> r0 = r3.views
+            if (r0 == 0) goto L_0x0044
+            int r0 = r0.size()
+            if (r0 > 0) goto L_0x0067
+        L_0x0044:
+            java.util.ArrayList<org.telegram.ui.Components.AnimatedEmojiSpan$AnimatedEmojiHolder> r0 = r3.holders
+            if (r0 == 0) goto L_0x004e
+            int r0 = r0.size()
+            if (r0 > 0) goto L_0x0067
+        L_0x004e:
+            java.util.HashMap<java.lang.Integer, java.util.HashMap<java.lang.Long, org.telegram.ui.Components.AnimatedEmojiDrawable>> r0 = globalEmojiCache
+            int r1 = r3.currentAccount
+            java.lang.Integer r1 = java.lang.Integer.valueOf(r1)
+            java.lang.Object r0 = r0.get(r1)
+            java.util.HashMap r0 = (java.util.HashMap) r0
+            if (r0 == 0) goto L_0x0067
+            long r1 = r3.documentId
+            java.lang.Long r1 = java.lang.Long.valueOf(r1)
+            r0.remove(r1)
+        L_0x0067:
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.AnimatedEmojiDrawable.updateAttachState():void");

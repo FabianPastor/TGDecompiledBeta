@@ -2397,10 +2397,10 @@ public class ImageReceiver implements NotificationCenter.NotificationCenterDeleg
                         long j = this.lastUpdateAlphaTime;
                         long j2 = currentTimeMillis - j;
                         if (j == 0) {
-                            j2 = 18;
+                            j2 = 16;
                         }
-                        if (j2 > 36) {
-                            j2 = 36;
+                        if (j2 > 30 && AndroidUtilities.screenRefreshRate > 60.0f) {
+                            j2 = 30;
                         }
                         this.currentAlpha += ((float) j2) / ((float) this.crossfadeDuration);
                     } else {

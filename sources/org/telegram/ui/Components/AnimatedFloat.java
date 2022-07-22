@@ -8,6 +8,7 @@ import org.telegram.messenger.AndroidUtilities;
 
 public class AnimatedFloat {
     private boolean firstSet;
+    private Runnable invalidate;
     private View parent;
     private float startValue;
     private float targetValue;
@@ -70,6 +71,19 @@ public class AnimatedFloat {
         this.firstSet = false;
     }
 
+    public AnimatedFloat(float f, Runnable runnable, long j, long j2, TimeInterpolator timeInterpolator) {
+        this.transitionDelay = 0;
+        this.transitionDuration = 200;
+        this.transitionInterpolator = CubicBezierInterpolator.DEFAULT;
+        this.invalidate = runnable;
+        this.targetValue = f;
+        this.value = f;
+        this.transitionDelay = j;
+        this.transitionDuration = j2;
+        this.transitionInterpolator = timeInterpolator;
+        this.firstSet = false;
+    }
+
     public float get() {
         return this.value;
     }
@@ -107,6 +121,10 @@ public class AnimatedFloat {
                 View view = this.parent;
                 if (view != null) {
                     view.invalidate();
+                }
+                Runnable runnable = this.invalidate;
+                if (runnable != null) {
+                    runnable.run();
                 }
             }
         }

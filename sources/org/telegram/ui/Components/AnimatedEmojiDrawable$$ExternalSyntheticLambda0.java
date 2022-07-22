@@ -8,6 +8,6 @@ public final /* synthetic */ class AnimatedEmojiDrawable$$ExternalSyntheticLambd
     }
 
     public final void run() {
-        this.f$0.initDocument();
+        this.f$0.invalidate();
     }
 }

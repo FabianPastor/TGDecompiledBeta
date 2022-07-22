@@ -1,17 +1,18 @@
 package org.telegram.messenger;
 
 import java.util.ArrayList;
-import java.util.Comparator;
-import org.telegram.tgnet.TLRPC$TL_messages_stickerSet;
+import org.telegram.messenger.Utilities;
 
-public final /* synthetic */ class MediaDataController$$ExternalSyntheticLambda131 implements Comparator {
-    public final /* synthetic */ ArrayList f$0;
+public final /* synthetic */ class MediaDataController$$ExternalSyntheticLambda131 implements Runnable {
+    public final /* synthetic */ Utilities.Callback f$0;
+    public final /* synthetic */ ArrayList f$1;
 
-    public /* synthetic */ MediaDataController$$ExternalSyntheticLambda131(ArrayList arrayList) {
-        this.f$0 = arrayList;
+    public /* synthetic */ MediaDataController$$ExternalSyntheticLambda131(Utilities.Callback callback, ArrayList arrayList) {
+        this.f$0 = callback;
+        this.f$1 = arrayList;
     }
 
-    public final int compare(Object obj, Object obj2) {
-        return MediaDataController.lambda$reorderStickers$39(this.f$0, (TLRPC$TL_messages_stickerSet) obj, (TLRPC$TL_messages_stickerSet) obj2);
+    public final void run() {
+        MediaDataController.lambda$loadStickers$70(this.f$0, this.f$1);
     }
 }

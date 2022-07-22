@@ -194,7 +194,7 @@ public class Bulletin {
                             }
                             if (Bulletin.isTransitionsEnabled()) {
                                 Bulletin.this.ensureLayoutTransitionCreated();
-                                Bulletin.this.layout.transitionRunning = true;
+                                Bulletin.this.layout.transitionRunningEnter = true;
                                 Bulletin.this.layout.delegate = Bulletin.this.currentDelegate;
                                 Bulletin.this.layout.invalidate();
                                 Layout.Transition access$900 = Bulletin.this.layoutTransition;
@@ -216,7 +216,7 @@ public class Bulletin {
 
                     /* access modifiers changed from: private */
                     public /* synthetic */ void lambda$onLayoutChange$0() {
-                        Bulletin.this.layout.transitionRunning = false;
+                        Bulletin.this.layout.transitionRunningEnter = false;
                         Bulletin.this.layout.onEnterTransitionEnd();
                         Bulletin.this.setCanHide(true);
                     }
@@ -287,7 +287,7 @@ public class Bulletin {
                 this.layout.removeCallbacks(this.hideRunnable);
                 if (z) {
                     Layout layout3 = this.layout;
-                    layout3.transitionRunning = true;
+                    layout3.transitionRunningExit = true;
                     layout3.delegate = this.currentDelegate;
                     layout3.invalidate();
                     if (j >= 0) {
@@ -327,7 +327,7 @@ public class Bulletin {
             this.currentDelegate.onHide(this);
         }
         Layout layout2 = this.layout;
-        layout2.transitionRunning = false;
+        layout2.transitionRunningExit = false;
         layout2.onExitTransitionEnd();
         this.layout.onHide();
         this.containerLayout.removeView(this.parentLayout);
@@ -569,7 +569,8 @@ public class Bulletin {
         Delegate delegate;
         public float inOutOffset;
         private final Theme.ResourcesProvider resourcesProvider;
-        public boolean transitionRunning;
+        public boolean transitionRunningEnter;
+        public boolean transitionRunningExit;
         private int wideScreenGravity = 1;
         private int wideScreenWidth = -2;
 
@@ -600,6 +601,10 @@ public class Bulletin {
         /* access modifiers changed from: protected */
         public CharSequence getAccessibilityText() {
             return null;
+        }
+
+        public boolean isTransitionRunning() {
+            return this.transitionRunningEnter || this.transitionRunningExit;
         }
 
         public Layout(Context context, Theme.ResourcesProvider resourcesProvider2) {
@@ -898,7 +903,7 @@ public class Bulletin {
         /* access modifiers changed from: protected */
         public void dispatchDraw(Canvas canvas) {
             this.background.setBounds(AndroidUtilities.dp(8.0f), AndroidUtilities.dp(8.0f), getMeasuredWidth() - AndroidUtilities.dp(8.0f), getMeasuredHeight() - AndroidUtilities.dp(8.0f));
-            if (!this.transitionRunning || this.delegate == null) {
+            if (!isTransitionRunning() || this.delegate == null) {
                 this.background.draw(canvas);
                 super.dispatchDraw(canvas);
                 return;

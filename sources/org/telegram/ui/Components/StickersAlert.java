@@ -1639,13 +1639,28 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
                 if (context == null) {
                     context = getContext();
                 }
-                ShareAlert shareAlert = new ShareAlert(context, (ArrayList<MessageObject>) null, str2, false, str2, false, this.resourcesProvider);
+                AnonymousClass10 r1 = new ShareAlert(context, (ArrayList) null, str2, false, str2, false, this.resourcesProvider) {
+                    public void dismissInternal() {
+                        super.dismissInternal();
+                        if (StickersAlert.this.parentFragment instanceof ChatActivity) {
+                            AndroidUtilities.requestAdjustResize(StickersAlert.this.parentFragment.getParentActivity(), StickersAlert.this.parentFragment.getClassGuid());
+                            if (((ChatActivity) StickersAlert.this.parentFragment).getChatActivityEnterView().getVisibility() == 0) {
+                                StickersAlert.this.parentFragment.getFragmentView().requestLayout();
+                            }
+                        }
+                    }
+                };
                 BaseFragment baseFragment2 = this.parentFragment;
                 if (baseFragment2 != null) {
-                    baseFragment2.showDialog(shareAlert);
-                } else {
-                    shareAlert.show();
+                    baseFragment2.showDialog(r1);
+                    BaseFragment baseFragment3 = this.parentFragment;
+                    if (baseFragment3 instanceof ChatActivity) {
+                        r1.setCalcMandatoryInsets(((ChatActivity) baseFragment3).isKeyboardVisible());
+                        return;
+                    }
+                    return;
                 }
+                r1.show();
             } else if (i == 2) {
                 try {
                     AndroidUtilities.addToClipboard(str2);
@@ -1725,7 +1740,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
             if (r8 == r9) goto L_0x0061
             int r6 = r6 + 1
         L_0x0061:
-            org.telegram.ui.Components.StickersAlert$10 r8 = new org.telegram.ui.Components.StickersAlert$10     // Catch:{ Exception -> 0x007a }
+            org.telegram.ui.Components.StickersAlert$11 r8 = new org.telegram.ui.Components.StickersAlert$11     // Catch:{ Exception -> 0x007a }
             org.telegram.tgnet.TLRPC$TL_messages_stickerSet r9 = r12.stickerSet     // Catch:{ Exception -> 0x007a }
             org.telegram.tgnet.TLRPC$StickerSet r9 = r9.set     // Catch:{ Exception -> 0x007a }
             java.lang.String r9 = r9.title     // Catch:{ Exception -> 0x007a }

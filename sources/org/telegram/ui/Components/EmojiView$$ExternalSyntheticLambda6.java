@@ -8,6 +8,6 @@ public final /* synthetic */ class EmojiView$$ExternalSyntheticLambda6 implement
     }
 
     public final void run() {
-        this.f$0.lambda$onAttachedToWindow$11();
+        this.f$0.lambda$new$1();
     }
 }

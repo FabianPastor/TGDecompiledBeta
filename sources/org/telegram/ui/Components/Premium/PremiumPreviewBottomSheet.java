@@ -435,8 +435,10 @@ public class PremiumPreviewBottomSheet extends BottomSheetWithRecyclerListView {
             float f3 = measuredHeight / intrinsicWidth;
             float f4 = intrinsicWidth / measuredHeight;
             float measuredWidth = ((float) this.iconTextureView.getMeasuredWidth()) / 2.0f;
-            for (View view = this.iconTextureView; view != this.container; view = (View) view.getParent()) {
+            View view = this.iconTextureView;
+            while (view != this.container && view != null) {
                 measuredWidth += view.getX();
+                view = (View) view.getParent();
             }
             float y = this.iconTextureView.getY() + ((View) this.iconTextureView.getParent()).getY() + ((View) this.iconTextureView.getParent().getParent()).getY() + (((float) this.iconTextureView.getMeasuredHeight()) / 2.0f);
             float lerp = AndroidUtilities.lerp(f, measuredWidth, CubicBezierInterpolator.EASE_OUT_QUINT.getInterpolation(this.enterTransitionProgress));

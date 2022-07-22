@@ -11,6 +11,6 @@ public final /* synthetic */ class EmojiTabsStrip$EmojiTabButton$$ExternalSynthe
     }
 
     public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-        this.f$0.lambda$updateSelect$2(valueAnimator);
+        this.f$0.lambda$updateSelect$1(valueAnimator);
     }
 }

@@ -14,6 +14,6 @@ public final /* synthetic */ class MediaDataController$$ExternalSyntheticLambda1
     }
 
     public final void run() {
-        this.f$0.lambda$updateBotInfo$162(this.f$1, this.f$2);
+        this.f$0.lambda$updateBotInfo$170(this.f$1, this.f$2);
     }
 }

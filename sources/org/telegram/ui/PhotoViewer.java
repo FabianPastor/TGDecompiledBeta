@@ -9174,6 +9174,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
     public TextView lambda$setParentActivity$6() {
         AnonymousClass38 r0 = new SpoilersTextView(this.activityContext) {
             private AnimatedEmojiSpan.EmojiGroupedSpans animatedEmojiDrawables;
+            private Layout lastLayout = null;
             private LinkSpanDrawable.LinkCollector links = new LinkSpanDrawable.LinkCollector(this);
             private LinkSpanDrawable<ClickableSpan> pressedLink;
 
@@ -9360,11 +9361,6 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 super.onDraw(canvas);
             }
 
-            public void setText(CharSequence charSequence, TextView.BufferType bufferType) {
-                super.setText(charSequence, bufferType);
-                this.animatedEmojiDrawables = AnimatedEmojiSpan.update(0, (View) this, this.animatedEmojiDrawables, getLayout());
-            }
-
             /* access modifiers changed from: protected */
             public void onDetachedFromWindow() {
                 super.onDetachedFromWindow();
@@ -9377,6 +9373,10 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 canvas.save();
                 canvas.translate((float) getPaddingLeft(), (float) getPaddingTop());
                 canvas.clipRect(0.0f, (float) getScrollY(), (float) (getWidth() - getPaddingRight()), ((float) (getHeight() + getScrollY())) - (((float) getPaddingBottom()) * 0.75f));
+                if (this.lastLayout != getLayout()) {
+                    this.animatedEmojiDrawables = AnimatedEmojiSpan.update(0, (View) this, this.animatedEmojiDrawables, getLayout());
+                    this.lastLayout = getLayout();
+                }
                 AnimatedEmojiSpan.drawAnimatedEmojis(canvas, getLayout(), this.animatedEmojiDrawables, 0.0f, (List<SpoilerEffect>) null, 0.0f, 0.0f, 0.0f, 1.0f);
                 canvas.restore();
             }

@@ -562,6 +562,10 @@ public class EditTextEmoji extends FrameLayout implements NotificationCenter.Not
                     return EmojiView.EmojiViewDelegate.CC.$default$isSearchOpened(this);
                 }
 
+                public /* synthetic */ void onEmojiSettingsClick() {
+                    EmojiView.EmojiViewDelegate.CC.$default$onEmojiSettingsClick(this);
+                }
+
                 public /* synthetic */ void onGifSelected(View view, Object obj, String str, Object obj2, boolean z, int i) {
                     EmojiView.EmojiViewDelegate.CC.$default$onGifSelected(this, view, obj, str, obj2, z, i);
                 }

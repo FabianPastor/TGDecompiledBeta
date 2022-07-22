@@ -10,6 +10,6 @@ public final /* synthetic */ class ChatActivityEnterView$$ExternalSyntheticLambd
     }
 
     public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-        this.f$0.lambda$updateRecordInterface$42(valueAnimator);
+        this.f$0.lambda$updateRecordInterface$43(valueAnimator);
     }
 }

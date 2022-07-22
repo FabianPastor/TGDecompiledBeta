@@ -1,5 +1,6 @@
 package org.telegram.ui.Components;
 
+import android.animation.TimeInterpolator;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -93,7 +94,7 @@ public class VideoPlayerSeekBar {
         this.parentView = view;
         thumbWidth = AndroidUtilities.dp(24.0f);
         this.currentRadius = (float) AndroidUtilities.dp(6.0f);
-        this.animateThumbLoopBackProgress = new AnimatedFloat(0.0f, view, 0, 300, CubicBezierInterpolator.EASE_OUT_QUINT);
+        this.animateThumbLoopBackProgress = new AnimatedFloat(0.0f, view, 0, 300, (TimeInterpolator) CubicBezierInterpolator.EASE_OUT_QUINT);
     }
 
     public void setDelegate(SeekBarDelegate seekBarDelegate) {

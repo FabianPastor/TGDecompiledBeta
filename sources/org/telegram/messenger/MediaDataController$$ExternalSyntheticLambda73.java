@@ -16,6 +16,6 @@ public final /* synthetic */ class MediaDataController$$ExternalSyntheticLambda7
     }
 
     public final void run() {
-        this.f$0.lambda$broadcastPinnedMessage$131(this.f$1, this.f$2, this.f$3);
+        this.f$0.lambda$broadcastPinnedMessage$139(this.f$1, this.f$2, this.f$3);
     }
 }

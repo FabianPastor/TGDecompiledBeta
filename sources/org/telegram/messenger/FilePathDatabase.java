@@ -5,10 +5,8 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.concurrent.CountDownLatch;
-import org.telegram.SQLite.SQLiteCursor;
 import org.telegram.SQLite.SQLiteDatabase;
 import org.telegram.SQLite.SQLiteException;
-import org.telegram.SQLite.SQLitePreparedStatement;
 
 public class FilePathDatabase {
     private static final String DATABASE_BACKUP_NAME = "file_to_path_backup";
@@ -125,57 +123,207 @@ public class FilePathDatabase {
         }
     }
 
-    public String getPath(long j, int i, int i2, boolean z) {
-        long j2 = j;
-        int i3 = i;
-        int i4 = i2;
-        if (!z) {
-            String str = null;
-            try {
-                SQLiteDatabase sQLiteDatabase = this.database;
-                SQLiteCursor queryFinalized = sQLiteDatabase.queryFinalized("SELECT path FROM paths WHERE document_id = " + j2 + " AND dc_id = " + i3 + " AND type = " + i4, new Object[0]);
-                if (queryFinalized.next()) {
-                    str = queryFinalized.stringValue(0);
-                    if (BuildVars.DEBUG_VERSION) {
-                        FileLog.d("get file path id=" + j2 + " dc=" + i3 + " type=" + i4 + " path=" + str);
-                    }
-                }
-                queryFinalized.dispose();
-            } catch (SQLiteException e) {
-                FileLog.e((Throwable) e);
-            }
-            return str;
-        } else if (!BuildVars.DEBUG_VERSION || this.dispatchQueue.getHandler() == null || Thread.currentThread() != this.dispatchQueue.getHandler().getLooper().getThread()) {
-            CountDownLatch countDownLatch = new CountDownLatch(1);
-            String[] strArr = new String[1];
-            System.currentTimeMillis();
-            this.dispatchQueue.postRunnable(new FilePathDatabase$$ExternalSyntheticLambda4(this, j, i, i2, strArr, countDownLatch));
-            try {
-                countDownLatch.await();
-            } catch (Exception unused) {
-            }
-            return strArr[0];
-        } else {
-            throw new RuntimeException("Error, lead to infinity loop");
-        }
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r1v2, resolved type: org.telegram.SQLite.SQLiteCursor} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r1v6, resolved type: java.lang.String} */
+    /* JADX WARNING: type inference failed for: r1v0 */
+    /* JADX WARNING: type inference failed for: r1v4 */
+    /* JADX WARNING: type inference failed for: r1v16 */
+    /* JADX WARNING: type inference failed for: r1v17 */
+    /* JADX WARNING: Multi-variable type inference failed */
+    /* JADX WARNING: Removed duplicated region for block: B:36:0x00d5  */
+    /* JADX WARNING: Removed duplicated region for block: B:39:0x00dc  */
+    /* Code decompiled incorrectly, please refer to instructions dump. */
+    public java.lang.String getPath(long r17, int r19, int r20, boolean r21) {
+        /*
+            r16 = this;
+            r9 = r16
+            r3 = r17
+            r0 = r19
+            r6 = r20
+            r10 = 0
+            if (r21 == 0) goto L_0x005a
+            boolean r1 = org.telegram.messenger.BuildVars.DEBUG_VERSION
+            if (r1 == 0) goto L_0x0034
+            org.telegram.messenger.DispatchQueue r1 = r9.dispatchQueue
+            android.os.Handler r1 = r1.getHandler()
+            if (r1 == 0) goto L_0x0034
+            java.lang.Thread r1 = java.lang.Thread.currentThread()
+            org.telegram.messenger.DispatchQueue r2 = r9.dispatchQueue
+            android.os.Handler r2 = r2.getHandler()
+            android.os.Looper r2 = r2.getLooper()
+            java.lang.Thread r2 = r2.getThread()
+            if (r1 == r2) goto L_0x002c
+            goto L_0x0034
+        L_0x002c:
+            java.lang.RuntimeException r0 = new java.lang.RuntimeException
+            java.lang.String r1 = "Error, lead to infinity loop"
+            r0.<init>(r1)
+            throw r0
+        L_0x0034:
+            java.util.concurrent.CountDownLatch r11 = new java.util.concurrent.CountDownLatch
+            r1 = 1
+            r11.<init>(r1)
+            java.lang.String[] r12 = new java.lang.String[r1]
+            java.lang.System.currentTimeMillis()
+            org.telegram.messenger.DispatchQueue r13 = r9.dispatchQueue
+            org.telegram.messenger.FilePathDatabase$$ExternalSyntheticLambda4 r14 = new org.telegram.messenger.FilePathDatabase$$ExternalSyntheticLambda4
+            r1 = r14
+            r2 = r16
+            r3 = r17
+            r5 = r19
+            r6 = r20
+            r7 = r12
+            r8 = r11
+            r1.<init>(r2, r3, r5, r6, r7, r8)
+            r13.postRunnable(r14)
+            r11.await()     // Catch:{ Exception -> 0x0057 }
+        L_0x0057:
+            r0 = r12[r10]
+            return r0
+        L_0x005a:
+            r1 = 0
+            org.telegram.SQLite.SQLiteDatabase r2 = r9.database     // Catch:{ SQLiteException -> 0x00cd }
+            java.lang.StringBuilder r5 = new java.lang.StringBuilder     // Catch:{ SQLiteException -> 0x00cd }
+            r5.<init>()     // Catch:{ SQLiteException -> 0x00cd }
+            java.lang.String r7 = "SELECT path FROM paths WHERE document_id = "
+            r5.append(r7)     // Catch:{ SQLiteException -> 0x00cd }
+            r5.append(r3)     // Catch:{ SQLiteException -> 0x00cd }
+            java.lang.String r7 = " AND dc_id = "
+            r5.append(r7)     // Catch:{ SQLiteException -> 0x00cd }
+            r5.append(r0)     // Catch:{ SQLiteException -> 0x00cd }
+            java.lang.String r7 = " AND type = "
+            r5.append(r7)     // Catch:{ SQLiteException -> 0x00cd }
+            r5.append(r6)     // Catch:{ SQLiteException -> 0x00cd }
+            java.lang.String r5 = r5.toString()     // Catch:{ SQLiteException -> 0x00cd }
+            java.lang.Object[] r7 = new java.lang.Object[r10]     // Catch:{ SQLiteException -> 0x00cd }
+            org.telegram.SQLite.SQLiteCursor r2 = r2.queryFinalized(r5, r7)     // Catch:{ SQLiteException -> 0x00cd }
+            boolean r5 = r2.next()     // Catch:{ SQLiteException -> 0x00c5, all -> 0x00c2 }
+            if (r5 == 0) goto L_0x00be
+            java.lang.String r1 = r2.stringValue(r10)     // Catch:{ SQLiteException -> 0x00c5, all -> 0x00c2 }
+            boolean r5 = org.telegram.messenger.BuildVars.DEBUG_VERSION     // Catch:{ SQLiteException -> 0x00c5, all -> 0x00c2 }
+            if (r5 == 0) goto L_0x00be
+            java.lang.StringBuilder r5 = new java.lang.StringBuilder     // Catch:{ SQLiteException -> 0x00c5, all -> 0x00c2 }
+            r5.<init>()     // Catch:{ SQLiteException -> 0x00c5, all -> 0x00c2 }
+            java.lang.String r7 = "get file path id="
+            r5.append(r7)     // Catch:{ SQLiteException -> 0x00c5, all -> 0x00c2 }
+            r5.append(r3)     // Catch:{ SQLiteException -> 0x00c5, all -> 0x00c2 }
+            java.lang.String r3 = " dc="
+            r5.append(r3)     // Catch:{ SQLiteException -> 0x00c5, all -> 0x00c2 }
+            r5.append(r0)     // Catch:{ SQLiteException -> 0x00c5, all -> 0x00c2 }
+            java.lang.String r0 = " type="
+            r5.append(r0)     // Catch:{ SQLiteException -> 0x00c5, all -> 0x00c2 }
+            r5.append(r6)     // Catch:{ SQLiteException -> 0x00c5, all -> 0x00c2 }
+            java.lang.String r0 = " path="
+            r5.append(r0)     // Catch:{ SQLiteException -> 0x00c5, all -> 0x00c2 }
+            r5.append(r1)     // Catch:{ SQLiteException -> 0x00c5, all -> 0x00c2 }
+            java.lang.String r0 = r5.toString()     // Catch:{ SQLiteException -> 0x00c5, all -> 0x00c2 }
+            org.telegram.messenger.FileLog.d(r0)     // Catch:{ SQLiteException -> 0x00c5, all -> 0x00c2 }
+        L_0x00be:
+            r2.dispose()
+            goto L_0x00d9
+        L_0x00c2:
+            r0 = move-exception
+            r1 = r2
+            goto L_0x00da
+        L_0x00c5:
+            r0 = move-exception
+            r15 = r2
+            r2 = r0
+            r0 = r1
+            r1 = r15
+            goto L_0x00d0
+        L_0x00cb:
+            r0 = move-exception
+            goto L_0x00da
+        L_0x00cd:
+            r0 = move-exception
+            r2 = r0
+            r0 = r1
+        L_0x00d0:
+            org.telegram.messenger.FileLog.e((java.lang.Throwable) r2)     // Catch:{ all -> 0x00cb }
+            if (r1 == 0) goto L_0x00d8
+            r1.dispose()
+        L_0x00d8:
+            r1 = r0
+        L_0x00d9:
+            return r1
+        L_0x00da:
+            if (r1 == 0) goto L_0x00df
+            r1.dispose()
+        L_0x00df:
+            throw r0
+        */
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.FilePathDatabase.getPath(long, int, int, boolean):java.lang.String");
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$getPath$1(long j, int i, int i2, String[] strArr, CountDownLatch countDownLatch) {
-        try {
-            SQLiteDatabase sQLiteDatabase = this.database;
-            SQLiteCursor queryFinalized = sQLiteDatabase.queryFinalized("SELECT path FROM paths WHERE document_id = " + j + " AND dc_id = " + i + " AND type = " + i2, new Object[0]);
-            if (queryFinalized.next()) {
-                strArr[0] = queryFinalized.stringValue(0);
-                if (BuildVars.DEBUG_VERSION) {
-                    FileLog.d("get file path id=" + j + " dc=" + i + " type=" + i2 + " path=" + strArr[0]);
-                }
-            }
-            queryFinalized.dispose();
-        } catch (SQLiteException e) {
-            FileLog.e((Throwable) e);
-        }
-        countDownLatch.countDown();
+    /* JADX WARNING: Code restructure failed: missing block: B:11:0x0070, code lost:
+        if (r0 == null) goto L_0x0075;
+     */
+    /* Code decompiled incorrectly, please refer to instructions dump. */
+    public /* synthetic */ void lambda$getPath$1(long r6, int r8, int r9, java.lang.String[] r10, java.util.concurrent.CountDownLatch r11) {
+        /*
+            r5 = this;
+            r0 = 0
+            org.telegram.SQLite.SQLiteDatabase r1 = r5.database     // Catch:{ SQLiteException -> 0x006c }
+            java.lang.StringBuilder r2 = new java.lang.StringBuilder     // Catch:{ SQLiteException -> 0x006c }
+            r2.<init>()     // Catch:{ SQLiteException -> 0x006c }
+            java.lang.String r3 = "SELECT path FROM paths WHERE document_id = "
+            r2.append(r3)     // Catch:{ SQLiteException -> 0x006c }
+            r2.append(r6)     // Catch:{ SQLiteException -> 0x006c }
+            java.lang.String r3 = " AND dc_id = "
+            r2.append(r3)     // Catch:{ SQLiteException -> 0x006c }
+            r2.append(r8)     // Catch:{ SQLiteException -> 0x006c }
+            java.lang.String r3 = " AND type = "
+            r2.append(r3)     // Catch:{ SQLiteException -> 0x006c }
+            r2.append(r9)     // Catch:{ SQLiteException -> 0x006c }
+            java.lang.String r2 = r2.toString()     // Catch:{ SQLiteException -> 0x006c }
+            r3 = 0
+            java.lang.Object[] r4 = new java.lang.Object[r3]     // Catch:{ SQLiteException -> 0x006c }
+            org.telegram.SQLite.SQLiteCursor r0 = r1.queryFinalized(r2, r4)     // Catch:{ SQLiteException -> 0x006c }
+            boolean r1 = r0.next()     // Catch:{ SQLiteException -> 0x006c }
+            if (r1 == 0) goto L_0x0072
+            java.lang.String r1 = r0.stringValue(r3)     // Catch:{ SQLiteException -> 0x006c }
+            r10[r3] = r1     // Catch:{ SQLiteException -> 0x006c }
+            boolean r1 = org.telegram.messenger.BuildVars.DEBUG_VERSION     // Catch:{ SQLiteException -> 0x006c }
+            if (r1 == 0) goto L_0x0072
+            java.lang.StringBuilder r1 = new java.lang.StringBuilder     // Catch:{ SQLiteException -> 0x006c }
+            r1.<init>()     // Catch:{ SQLiteException -> 0x006c }
+            java.lang.String r2 = "get file path id="
+            r1.append(r2)     // Catch:{ SQLiteException -> 0x006c }
+            r1.append(r6)     // Catch:{ SQLiteException -> 0x006c }
+            java.lang.String r6 = " dc="
+            r1.append(r6)     // Catch:{ SQLiteException -> 0x006c }
+            r1.append(r8)     // Catch:{ SQLiteException -> 0x006c }
+            java.lang.String r6 = " type="
+            r1.append(r6)     // Catch:{ SQLiteException -> 0x006c }
+            r1.append(r9)     // Catch:{ SQLiteException -> 0x006c }
+            java.lang.String r6 = " path="
+            r1.append(r6)     // Catch:{ SQLiteException -> 0x006c }
+            r6 = r10[r3]     // Catch:{ SQLiteException -> 0x006c }
+            r1.append(r6)     // Catch:{ SQLiteException -> 0x006c }
+            java.lang.String r6 = r1.toString()     // Catch:{ SQLiteException -> 0x006c }
+            org.telegram.messenger.FileLog.d(r6)     // Catch:{ SQLiteException -> 0x006c }
+            goto L_0x0072
+        L_0x006a:
+            r6 = move-exception
+            goto L_0x0079
+        L_0x006c:
+            r6 = move-exception
+            org.telegram.messenger.FileLog.e((java.lang.Throwable) r6)     // Catch:{ all -> 0x006a }
+            if (r0 == 0) goto L_0x0075
+        L_0x0072:
+            r0.dispose()
+        L_0x0075:
+            r11.countDown()
+            return
+        L_0x0079:
+            if (r0 == 0) goto L_0x007e
+            r0.dispose()
+        L_0x007e:
+            throw r6
+        */
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.FilePathDatabase.lambda$getPath$1(long, int, int, java.lang.String[], java.util.concurrent.CountDownLatch):void");
     }
 
     public void putPath(long j, int i, int i2, String str) {
@@ -183,28 +331,121 @@ public class FilePathDatabase {
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$putPath$2(long j, int i, int i2, String str) {
-        if (BuildVars.DEBUG_VERSION) {
-            FileLog.d("put file path id=" + j + " dc=" + i + " type=" + i2 + " path=" + str);
-        }
-        if (str != null) {
-            try {
-                SQLiteDatabase sQLiteDatabase = this.database;
-                sQLiteDatabase.executeFast("DELETE FROM paths WHERE path = '" + str + "'");
-                SQLitePreparedStatement executeFast = this.database.executeFast("REPLACE INTO paths VALUES(?, ?, ?, ?)");
-                executeFast.requery();
-                executeFast.bindLong(1, j);
-                executeFast.bindInteger(2, i);
-                executeFast.bindInteger(3, i2);
-                executeFast.bindString(4, str);
-                executeFast.step();
-            } catch (SQLiteException e) {
-                FileLog.e((Throwable) e);
-            }
-        } else {
-            SQLiteDatabase sQLiteDatabase2 = this.database;
-            sQLiteDatabase2.executeFast("DELETE FROM paths WHERE document_id = " + j + " AND dc_id = " + i + " AND type = " + i2).stepThis().dispose();
-        }
+    /* JADX WARNING: Removed duplicated region for block: B:29:0x00b1  */
+    /* JADX WARNING: Removed duplicated region for block: B:31:0x00b6  */
+    /* JADX WARNING: Removed duplicated region for block: B:34:0x00bd  */
+    /* JADX WARNING: Removed duplicated region for block: B:36:0x00c2  */
+    /* JADX WARNING: Removed duplicated region for block: B:41:? A[RETURN, SYNTHETIC] */
+    /* Code decompiled incorrectly, please refer to instructions dump. */
+    public /* synthetic */ void lambda$putPath$2(long r6, int r8, int r9, java.lang.String r10) {
+        /*
+            r5 = this;
+            boolean r0 = org.telegram.messenger.BuildVars.DEBUG_VERSION
+            if (r0 == 0) goto L_0x0030
+            java.lang.StringBuilder r0 = new java.lang.StringBuilder
+            r0.<init>()
+            java.lang.String r1 = "put file path id="
+            r0.append(r1)
+            r0.append(r6)
+            java.lang.String r1 = " dc="
+            r0.append(r1)
+            r0.append(r8)
+            java.lang.String r1 = " type="
+            r0.append(r1)
+            r0.append(r9)
+            java.lang.String r1 = " path="
+            r0.append(r1)
+            r0.append(r10)
+            java.lang.String r0 = r0.toString()
+            org.telegram.messenger.FileLog.d(r0)
+        L_0x0030:
+            r0 = 0
+            if (r10 == 0) goto L_0x006d
+            org.telegram.SQLite.SQLiteDatabase r1 = r5.database     // Catch:{ SQLiteException -> 0x00aa, all -> 0x00a7 }
+            java.lang.String r2 = "DELETE FROM paths WHERE path = ?"
+            org.telegram.SQLite.SQLitePreparedStatement r1 = r1.executeFast(r2)     // Catch:{ SQLiteException -> 0x00aa, all -> 0x00a7 }
+            r2 = 1
+            r1.bindString(r2, r10)     // Catch:{ SQLiteException -> 0x0069, all -> 0x0065 }
+            r1.step()     // Catch:{ SQLiteException -> 0x0069, all -> 0x0065 }
+            org.telegram.SQLite.SQLiteDatabase r3 = r5.database     // Catch:{ SQLiteException -> 0x0069, all -> 0x0065 }
+            java.lang.String r4 = "REPLACE INTO paths VALUES(?, ?, ?, ?)"
+            org.telegram.SQLite.SQLitePreparedStatement r0 = r3.executeFast(r4)     // Catch:{ SQLiteException -> 0x0069, all -> 0x0065 }
+            r0.requery()     // Catch:{ SQLiteException -> 0x0069, all -> 0x0065 }
+            r0.bindLong(r2, r6)     // Catch:{ SQLiteException -> 0x0069, all -> 0x0065 }
+            r6 = 2
+            r0.bindInteger(r6, r8)     // Catch:{ SQLiteException -> 0x0069, all -> 0x0065 }
+            r6 = 3
+            r0.bindInteger(r6, r9)     // Catch:{ SQLiteException -> 0x0069, all -> 0x0065 }
+            r6 = 4
+            r0.bindString(r6, r10)     // Catch:{ SQLiteException -> 0x0069, all -> 0x0065 }
+            r0.step()     // Catch:{ SQLiteException -> 0x0069, all -> 0x0065 }
+            r0.dispose()     // Catch:{ SQLiteException -> 0x0069, all -> 0x0065 }
+            r6 = r0
+            r0 = r1
+            goto L_0x009c
+        L_0x0065:
+            r6 = move-exception
+            r7 = r0
+            r0 = r1
+            goto L_0x00bb
+        L_0x0069:
+            r6 = move-exception
+            r7 = r0
+            r0 = r1
+            goto L_0x00ac
+        L_0x006d:
+            org.telegram.SQLite.SQLiteDatabase r10 = r5.database     // Catch:{ SQLiteException -> 0x00aa, all -> 0x00a7 }
+            java.lang.StringBuilder r1 = new java.lang.StringBuilder     // Catch:{ SQLiteException -> 0x00aa, all -> 0x00a7 }
+            r1.<init>()     // Catch:{ SQLiteException -> 0x00aa, all -> 0x00a7 }
+            java.lang.String r2 = "DELETE FROM paths WHERE document_id = "
+            r1.append(r2)     // Catch:{ SQLiteException -> 0x00aa, all -> 0x00a7 }
+            r1.append(r6)     // Catch:{ SQLiteException -> 0x00aa, all -> 0x00a7 }
+            java.lang.String r6 = " AND dc_id = "
+            r1.append(r6)     // Catch:{ SQLiteException -> 0x00aa, all -> 0x00a7 }
+            r1.append(r8)     // Catch:{ SQLiteException -> 0x00aa, all -> 0x00a7 }
+            java.lang.String r6 = " AND type = "
+            r1.append(r6)     // Catch:{ SQLiteException -> 0x00aa, all -> 0x00a7 }
+            r1.append(r9)     // Catch:{ SQLiteException -> 0x00aa, all -> 0x00a7 }
+            java.lang.String r6 = r1.toString()     // Catch:{ SQLiteException -> 0x00aa, all -> 0x00a7 }
+            org.telegram.SQLite.SQLitePreparedStatement r6 = r10.executeFast(r6)     // Catch:{ SQLiteException -> 0x00aa, all -> 0x00a7 }
+            org.telegram.SQLite.SQLitePreparedStatement r6 = r6.stepThis()     // Catch:{ SQLiteException -> 0x00aa, all -> 0x00a7 }
+            r6.dispose()     // Catch:{ SQLiteException -> 0x00aa, all -> 0x00a7 }
+            r6 = r0
+        L_0x009c:
+            if (r0 == 0) goto L_0x00a1
+            r0.dispose()
+        L_0x00a1:
+            if (r6 == 0) goto L_0x00b9
+            r6.dispose()
+            goto L_0x00b9
+        L_0x00a7:
+            r6 = move-exception
+            r7 = r0
+            goto L_0x00bb
+        L_0x00aa:
+            r6 = move-exception
+            r7 = r0
+        L_0x00ac:
+            org.telegram.messenger.FileLog.e((java.lang.Throwable) r6)     // Catch:{ all -> 0x00ba }
+            if (r0 == 0) goto L_0x00b4
+            r0.dispose()
+        L_0x00b4:
+            if (r7 == 0) goto L_0x00b9
+            r7.dispose()
+        L_0x00b9:
+            return
+        L_0x00ba:
+            r6 = move-exception
+        L_0x00bb:
+            if (r0 == 0) goto L_0x00c0
+            r0.dispose()
+        L_0x00c0:
+            if (r7 == 0) goto L_0x00c5
+            r7.dispose()
+        L_0x00c5:
+            throw r6
+        */
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.FilePathDatabase.lambda$putPath$2(long, int, int, java.lang.String):void");
     }
 
     public void checkMediaExistance(ArrayList<MessageObject> arrayList) {
