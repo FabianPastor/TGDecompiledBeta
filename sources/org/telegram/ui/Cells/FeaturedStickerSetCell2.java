@@ -1,34 +1,18 @@
 package org.telegram.ui.Cells;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
-import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.graphics.Canvas;
-import android.graphics.ColorFilter;
 import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
 import android.text.TextUtils;
-import android.util.Property;
 import android.view.View;
-import android.view.animation.OvershootInterpolator;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 import java.util.List;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.DocumentObject;
-import org.telegram.messenger.FileLoader;
-import org.telegram.messenger.ImageLocation;
 import org.telegram.messenger.LocaleController;
-import org.telegram.messenger.MediaDataController;
-import org.telegram.messenger.MessageObject;
-import org.telegram.messenger.SvgHelper;
 import org.telegram.messenger.UserConfig;
-import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC$Document;
-import org.telegram.tgnet.TLRPC$PhotoSize;
-import org.telegram.tgnet.TLRPC$StickerSet;
 import org.telegram.tgnet.TLRPC$StickerSetCovered;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.ActionBar.ThemeDescription;
@@ -120,179 +104,406 @@ public class FeaturedStickerSetCell2 extends FrameLayout {
         measureChildWithMargins(this.textView, i, measuredWidth, i2, 0);
     }
 
-    public void setStickersSet(TLRPC$StickerSetCovered tLRPC$StickerSetCovered, boolean z, boolean z2, boolean z3, boolean z4) {
-        ImageLocation imageLocation;
-        TLRPC$StickerSetCovered tLRPC$StickerSetCovered2 = tLRPC$StickerSetCovered;
-        boolean z5 = z;
-        AnimatorSet animatorSet = this.currentAnimation;
-        TLRPC$Document tLRPC$Document = null;
-        if (animatorSet != null) {
-            animatorSet.cancel();
-            this.currentAnimation = null;
-        }
-        this.needDivider = z5;
-        this.stickersSet = tLRPC$StickerSetCovered2;
-        setWillNotDraw(!z5);
-        this.textView.setText(this.stickersSet.set.title);
-        if (z2) {
-            AnonymousClass1 r1 = new Drawable(this) {
-                Paint paint = new Paint(1);
-
-                public int getOpacity() {
-                    return -2;
-                }
-
-                public void setAlpha(int i) {
-                }
-
-                public void setColorFilter(ColorFilter colorFilter) {
-                }
-
-                public void draw(Canvas canvas) {
-                    this.paint.setColor(-12277526);
-                    canvas.drawCircle((float) AndroidUtilities.dp(4.0f), (float) AndroidUtilities.dp(5.0f), (float) AndroidUtilities.dp(3.0f), this.paint);
-                }
-
-                public int getIntrinsicWidth() {
-                    return AndroidUtilities.dp(12.0f);
-                }
-
-                public int getIntrinsicHeight() {
-                    return AndroidUtilities.dp(8.0f);
-                }
-            };
-            TextView textView2 = this.textView;
-            boolean z6 = LocaleController.isRTL;
-            AnonymousClass1 r5 = z6 ? null : r1;
-            if (!z6) {
-                r1 = null;
-            }
-            textView2.setCompoundDrawablesWithIntrinsicBounds(r5, (Drawable) null, r1, (Drawable) null);
-        } else {
-            this.textView.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
-        }
-        TextView textView3 = this.valueTextView;
-        TLRPC$StickerSet tLRPC$StickerSet = tLRPC$StickerSetCovered2.set;
-        textView3.setText(LocaleController.formatPluralString(tLRPC$StickerSet.emojis ? "EmojiCount" : "Stickers", tLRPC$StickerSet.count, new Object[0]));
-        TLRPC$Document tLRPC$Document2 = tLRPC$StickerSetCovered2.cover;
-        if (tLRPC$Document2 != null) {
-            tLRPC$Document = tLRPC$Document2;
-        } else if (!tLRPC$StickerSetCovered2.covers.isEmpty()) {
-            tLRPC$Document = tLRPC$StickerSetCovered2.covers.get(0);
-        }
-        float f = 1.0f;
-        if (tLRPC$Document == null) {
-            this.imageView.setImage((ImageLocation) null, (String) null, "webp", (Drawable) null, (Object) tLRPC$StickerSetCovered);
-        } else if (MessageObject.canAutoplayAnimatedSticker(tLRPC$Document)) {
-            TLObject closestPhotoSizeWithSize = FileLoader.getClosestPhotoSizeWithSize(tLRPC$StickerSetCovered2.set.thumbs, 90);
-            if (closestPhotoSizeWithSize == null) {
-                closestPhotoSizeWithSize = tLRPC$Document;
-            }
-            SvgHelper.SvgDrawable svgThumb = DocumentObject.getSvgThumb(tLRPC$StickerSetCovered2.set.thumbs, "windowBackgroundGray", 1.0f);
-            boolean z7 = closestPhotoSizeWithSize instanceof TLRPC$Document;
-            if (z7) {
-                imageLocation = ImageLocation.getForDocument(FileLoader.getClosestPhotoSizeWithSize(tLRPC$Document.thumbs, 90), tLRPC$Document);
-            } else {
-                imageLocation = ImageLocation.getForSticker((TLRPC$PhotoSize) closestPhotoSizeWithSize, tLRPC$Document, tLRPC$StickerSetCovered2.set.thumb_version);
-            }
-            ImageLocation imageLocation2 = imageLocation;
-            if (!z7 || !MessageObject.isAnimatedStickerDocument(tLRPC$Document, true)) {
-                if (imageLocation2 == null || imageLocation2.imageType != 1) {
-                    this.imageView.setImage(imageLocation2, "50_50", "webp", (Drawable) svgThumb, (Object) tLRPC$StickerSetCovered);
-                } else {
-                    this.imageView.setImage(imageLocation2, "50_50", "tgs", (Drawable) svgThumb, (Object) tLRPC$StickerSetCovered);
-                }
-            } else if (svgThumb != null) {
-                this.imageView.setImage(ImageLocation.getForDocument(tLRPC$Document), "50_50", (Drawable) svgThumb, 0, (Object) tLRPC$StickerSetCovered);
-            } else {
-                this.imageView.setImage(ImageLocation.getForDocument(tLRPC$Document), "50_50", imageLocation2, (String) null, 0, (Object) tLRPC$StickerSetCovered);
-            }
-        } else {
-            TLRPC$PhotoSize closestPhotoSizeWithSize2 = FileLoader.getClosestPhotoSizeWithSize(tLRPC$Document.thumbs, 90);
-            if (closestPhotoSizeWithSize2 != null) {
-                this.imageView.setImage(ImageLocation.getForDocument(closestPhotoSizeWithSize2, tLRPC$Document), "50_50", "webp", (Drawable) null, (Object) tLRPC$StickerSetCovered);
-            } else {
-                this.imageView.setImage(ImageLocation.getForDocument(tLRPC$Document), "50_50", "webp", (Drawable) null, (Object) tLRPC$StickerSetCovered);
-            }
-        }
-        this.addButton.setVisibility(0);
-        boolean z8 = z3 || MediaDataController.getInstance(this.currentAccount).isStickerPackInstalled(tLRPC$StickerSetCovered2.set.id);
-        this.isInstalled = z8;
-        if (z4) {
-            if (z8) {
-                this.delButton.setVisibility(0);
-            } else {
-                this.addButton.setVisibility(0);
-            }
-            AnimatorSet animatorSet2 = new AnimatorSet();
-            this.currentAnimation = animatorSet2;
-            animatorSet2.setDuration(250);
-            AnimatorSet animatorSet3 = this.currentAnimation;
-            Animator[] animatorArr = new Animator[6];
-            TextView textView4 = this.delButton;
-            Property property = View.ALPHA;
-            float[] fArr = new float[1];
-            fArr[0] = this.isInstalled ? 1.0f : 0.0f;
-            animatorArr[0] = ObjectAnimator.ofFloat(textView4, property, fArr);
-            TextView textView5 = this.delButton;
-            Property property2 = View.SCALE_X;
-            float[] fArr2 = new float[1];
-            fArr2[0] = this.isInstalled ? 1.0f : 0.0f;
-            animatorArr[1] = ObjectAnimator.ofFloat(textView5, property2, fArr2);
-            TextView textView6 = this.delButton;
-            Property property3 = View.SCALE_Y;
-            float[] fArr3 = new float[1];
-            fArr3[0] = this.isInstalled ? 1.0f : 0.0f;
-            animatorArr[2] = ObjectAnimator.ofFloat(textView6, property3, fArr3);
-            ProgressButton progressButton = this.addButton;
-            Property property4 = View.ALPHA;
-            float[] fArr4 = new float[1];
-            fArr4[0] = this.isInstalled ? 0.0f : 1.0f;
-            animatorArr[3] = ObjectAnimator.ofFloat(progressButton, property4, fArr4);
-            ProgressButton progressButton2 = this.addButton;
-            Property property5 = View.SCALE_X;
-            float[] fArr5 = new float[1];
-            fArr5[0] = this.isInstalled ? 0.0f : 1.0f;
-            animatorArr[4] = ObjectAnimator.ofFloat(progressButton2, property5, fArr5);
-            ProgressButton progressButton3 = this.addButton;
-            Property property6 = View.SCALE_Y;
-            float[] fArr6 = new float[1];
-            if (this.isInstalled) {
-                f = 0.0f;
-            }
-            fArr6[0] = f;
-            animatorArr[5] = ObjectAnimator.ofFloat(progressButton3, property6, fArr6);
-            animatorSet3.playTogether(animatorArr);
-            this.currentAnimation.addListener(new AnimatorListenerAdapter() {
-                public void onAnimationEnd(Animator animator) {
-                    if (FeaturedStickerSetCell2.this.isInstalled) {
-                        FeaturedStickerSetCell2.this.addButton.setVisibility(4);
-                    } else {
-                        FeaturedStickerSetCell2.this.delButton.setVisibility(4);
-                    }
-                }
-            });
-            this.currentAnimation.setInterpolator(new OvershootInterpolator(1.02f));
-            this.currentAnimation.start();
-        } else if (z8) {
-            this.delButton.setVisibility(0);
-            this.delButton.setAlpha(1.0f);
-            this.delButton.setScaleX(1.0f);
-            this.delButton.setScaleY(1.0f);
-            this.addButton.setVisibility(4);
-            this.addButton.setAlpha(0.0f);
-            this.addButton.setScaleX(0.0f);
-            this.addButton.setScaleY(0.0f);
-        } else {
-            this.addButton.setVisibility(0);
-            this.addButton.setAlpha(1.0f);
-            this.addButton.setScaleX(1.0f);
-            this.addButton.setScaleY(1.0f);
-            this.delButton.setVisibility(4);
-            this.delButton.setAlpha(0.0f);
-            this.delButton.setScaleX(0.0f);
-            this.delButton.setScaleY(0.0f);
-        }
+    /* JADX WARNING: Removed duplicated region for block: B:104:0x026d  */
+    /* JADX WARNING: Removed duplicated region for block: B:43:0x00d2  */
+    /* JADX WARNING: Removed duplicated region for block: B:68:0x017f  */
+    /* JADX WARNING: Removed duplicated region for block: B:73:0x01a2  */
+    /* JADX WARNING: Removed duplicated region for block: B:74:0x01a4  */
+    /* JADX WARNING: Removed duplicated region for block: B:77:0x01ab  */
+    /* Code decompiled incorrectly, please refer to instructions dump. */
+    public void setStickersSet(org.telegram.tgnet.TLRPC$StickerSetCovered r14, boolean r15, boolean r16, boolean r17, boolean r18) {
+        /*
+            r13 = this;
+            r0 = r13
+            r8 = r14
+            r1 = r15
+            android.animation.AnimatorSet r2 = r0.currentAnimation
+            r3 = 0
+            if (r2 == 0) goto L_0x000d
+            r2.cancel()
+            r0.currentAnimation = r3
+        L_0x000d:
+            r0.needDivider = r1
+            r0.stickersSet = r8
+            r9 = 1
+            r1 = r1 ^ r9
+            r13.setWillNotDraw(r1)
+            android.widget.TextView r1 = r0.textView
+            org.telegram.tgnet.TLRPC$StickerSetCovered r2 = r0.stickersSet
+            org.telegram.tgnet.TLRPC$StickerSet r2 = r2.set
+            java.lang.String r2 = r2.title
+            r1.setText(r2)
+            r10 = 0
+            if (r16 == 0) goto L_0x003a
+            org.telegram.ui.Cells.FeaturedStickerSetCell2$1 r1 = new org.telegram.ui.Cells.FeaturedStickerSetCell2$1
+            r1.<init>(r13)
+            android.widget.TextView r2 = r0.textView
+            boolean r4 = org.telegram.messenger.LocaleController.isRTL
+            if (r4 == 0) goto L_0x0031
+            r5 = r3
+            goto L_0x0032
+        L_0x0031:
+            r5 = r1
+        L_0x0032:
+            if (r4 == 0) goto L_0x0035
+            goto L_0x0036
+        L_0x0035:
+            r1 = r3
+        L_0x0036:
+            r2.setCompoundDrawablesWithIntrinsicBounds(r5, r3, r1, r3)
+            goto L_0x003f
+        L_0x003a:
+            android.widget.TextView r1 = r0.textView
+            r1.setCompoundDrawablesWithIntrinsicBounds(r10, r10, r10, r10)
+        L_0x003f:
+            android.widget.TextView r1 = r0.valueTextView
+            org.telegram.tgnet.TLRPC$StickerSet r2 = r8.set
+            boolean r4 = r2.emojis
+            if (r4 == 0) goto L_0x004a
+            java.lang.String r4 = "EmojiCount"
+            goto L_0x004c
+        L_0x004a:
+            java.lang.String r4 = "Stickers"
+        L_0x004c:
+            int r2 = r2.count
+            java.lang.Object[] r5 = new java.lang.Object[r10]
+            java.lang.String r2 = org.telegram.messenger.LocaleController.formatPluralString(r4, r2, r5)
+            r1.setText(r2)
+            org.telegram.tgnet.TLRPC$Document r1 = r8.cover
+            if (r1 == 0) goto L_0x005e
+        L_0x005b:
+            r3 = r1
+            goto L_0x00ce
+        L_0x005e:
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$Document> r1 = r8.covers
+            boolean r1 = r1.isEmpty()
+            if (r1 != 0) goto L_0x0095
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$Document> r1 = r8.covers
+            java.lang.Object r1 = r1.get(r10)
+            org.telegram.tgnet.TLRPC$Document r1 = (org.telegram.tgnet.TLRPC$Document) r1
+            r2 = 0
+        L_0x006f:
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$Document> r3 = r8.covers
+            int r3 = r3.size()
+            if (r2 >= r3) goto L_0x005b
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$Document> r3 = r8.covers
+            java.lang.Object r3 = r3.get(r2)
+            org.telegram.tgnet.TLRPC$Document r3 = (org.telegram.tgnet.TLRPC$Document) r3
+            long r3 = r3.id
+            org.telegram.tgnet.TLRPC$StickerSet r5 = r8.set
+            long r5 = r5.thumb_document_id
+            int r7 = (r3 > r5 ? 1 : (r3 == r5 ? 0 : -1))
+            if (r7 != 0) goto L_0x0092
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$Document> r1 = r8.covers
+            java.lang.Object r1 = r1.get(r2)
+            org.telegram.tgnet.TLRPC$Document r1 = (org.telegram.tgnet.TLRPC$Document) r1
+            goto L_0x005b
+        L_0x0092:
+            int r2 = r2 + 1
+            goto L_0x006f
+        L_0x0095:
+            boolean r1 = r8 instanceof org.telegram.tgnet.TLRPC$TL_stickerSetFullCovered
+            if (r1 == 0) goto L_0x00ce
+            r1 = r8
+            org.telegram.tgnet.TLRPC$TL_stickerSetFullCovered r1 = (org.telegram.tgnet.TLRPC$TL_stickerSetFullCovered) r1
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$Document> r2 = r1.documents
+            boolean r2 = r2.isEmpty()
+            if (r2 != 0) goto L_0x00ce
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$Document> r1 = r1.documents
+            java.lang.Object r2 = r1.get(r10)
+            org.telegram.tgnet.TLRPC$Document r2 = (org.telegram.tgnet.TLRPC$Document) r2
+            r3 = 0
+        L_0x00ad:
+            int r4 = r1.size()
+            if (r3 >= r4) goto L_0x00cd
+            java.lang.Object r4 = r1.get(r3)
+            org.telegram.tgnet.TLRPC$Document r4 = (org.telegram.tgnet.TLRPC$Document) r4
+            long r4 = r4.id
+            org.telegram.tgnet.TLRPC$StickerSet r6 = r8.set
+            long r6 = r6.thumb_document_id
+            int r11 = (r4 > r6 ? 1 : (r4 == r6 ? 0 : -1))
+            if (r11 != 0) goto L_0x00ca
+            java.lang.Object r1 = r1.get(r3)
+            org.telegram.tgnet.TLRPC$Document r1 = (org.telegram.tgnet.TLRPC$Document) r1
+            goto L_0x005b
+        L_0x00ca:
+            int r3 = r3 + 1
+            goto L_0x00ad
+        L_0x00cd:
+            r3 = r2
+        L_0x00ce:
+            r11 = 1065353216(0x3var_, float:1.0)
+            if (r3 == 0) goto L_0x017f
+            boolean r1 = org.telegram.messenger.MessageObject.canAutoplayAnimatedSticker(r3)
+            r2 = 90
+            if (r1 == 0) goto L_0x0153
+            org.telegram.tgnet.TLRPC$StickerSet r1 = r8.set
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$PhotoSize> r1 = r1.thumbs
+            org.telegram.tgnet.TLRPC$PhotoSize r1 = org.telegram.messenger.FileLoader.getClosestPhotoSizeWithSize(r1, r2)
+            if (r1 != 0) goto L_0x00e5
+            r1 = r3
+        L_0x00e5:
+            org.telegram.tgnet.TLRPC$StickerSet r4 = r8.set
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$PhotoSize> r4 = r4.thumbs
+            java.lang.String r5 = "windowBackgroundGray"
+            org.telegram.messenger.SvgHelper$SvgDrawable r5 = org.telegram.messenger.DocumentObject.getSvgThumb((java.util.ArrayList<org.telegram.tgnet.TLRPC$PhotoSize>) r4, (java.lang.String) r5, (float) r11)
+            boolean r4 = r1 instanceof org.telegram.tgnet.TLRPC$Document
+            if (r4 == 0) goto L_0x00fe
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$PhotoSize> r1 = r3.thumbs
+            org.telegram.tgnet.TLRPC$PhotoSize r1 = org.telegram.messenger.FileLoader.getClosestPhotoSizeWithSize(r1, r2)
+            org.telegram.messenger.ImageLocation r1 = org.telegram.messenger.ImageLocation.getForDocument((org.telegram.tgnet.TLRPC$PhotoSize) r1, (org.telegram.tgnet.TLRPC$Document) r3)
+            goto L_0x0108
+        L_0x00fe:
+            org.telegram.tgnet.TLRPC$PhotoSize r1 = (org.telegram.tgnet.TLRPC$PhotoSize) r1
+            org.telegram.tgnet.TLRPC$StickerSet r2 = r8.set
+            int r2 = r2.thumb_version
+            org.telegram.messenger.ImageLocation r1 = org.telegram.messenger.ImageLocation.getForSticker(r1, r3, r2)
+        L_0x0108:
+            r6 = r1
+            if (r4 == 0) goto L_0x0135
+            boolean r1 = org.telegram.messenger.MessageObject.isAnimatedStickerDocument(r3, r9)
+            if (r1 == 0) goto L_0x0135
+            if (r5 == 0) goto L_0x0124
+            org.telegram.ui.Components.BackupImageView r1 = r0.imageView
+            org.telegram.messenger.ImageLocation r2 = org.telegram.messenger.ImageLocation.getForDocument(r3)
+            r6 = 0
+            java.lang.String r3 = "50_50"
+            r4 = r5
+            r5 = r6
+            r6 = r14
+            r1.setImage((org.telegram.messenger.ImageLocation) r2, (java.lang.String) r3, (android.graphics.drawable.Drawable) r4, (int) r5, (java.lang.Object) r6)
+            goto L_0x018a
+        L_0x0124:
+            org.telegram.ui.Components.BackupImageView r1 = r0.imageView
+            org.telegram.messenger.ImageLocation r2 = org.telegram.messenger.ImageLocation.getForDocument(r3)
+            r5 = 0
+            r7 = 0
+            java.lang.String r3 = "50_50"
+            r4 = r6
+            r6 = r7
+            r7 = r14
+            r1.setImage((org.telegram.messenger.ImageLocation) r2, (java.lang.String) r3, (org.telegram.messenger.ImageLocation) r4, (java.lang.String) r5, (int) r6, (java.lang.Object) r7)
+            goto L_0x018a
+        L_0x0135:
+            if (r6 == 0) goto L_0x0147
+            int r1 = r6.imageType
+            if (r1 != r9) goto L_0x0147
+            org.telegram.ui.Components.BackupImageView r1 = r0.imageView
+            java.lang.String r3 = "50_50"
+            java.lang.String r4 = "tgs"
+            r2 = r6
+            r6 = r14
+            r1.setImage((org.telegram.messenger.ImageLocation) r2, (java.lang.String) r3, (java.lang.String) r4, (android.graphics.drawable.Drawable) r5, (java.lang.Object) r6)
+            goto L_0x018a
+        L_0x0147:
+            org.telegram.ui.Components.BackupImageView r1 = r0.imageView
+            java.lang.String r3 = "50_50"
+            java.lang.String r4 = "webp"
+            r2 = r6
+            r6 = r14
+            r1.setImage((org.telegram.messenger.ImageLocation) r2, (java.lang.String) r3, (java.lang.String) r4, (android.graphics.drawable.Drawable) r5, (java.lang.Object) r6)
+            goto L_0x018a
+        L_0x0153:
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$PhotoSize> r1 = r3.thumbs
+            org.telegram.tgnet.TLRPC$PhotoSize r1 = org.telegram.messenger.FileLoader.getClosestPhotoSizeWithSize(r1, r2)
+            if (r1 == 0) goto L_0x016f
+            org.telegram.ui.Components.BackupImageView r2 = r0.imageView
+            org.telegram.messenger.ImageLocation r3 = org.telegram.messenger.ImageLocation.getForDocument((org.telegram.tgnet.TLRPC$PhotoSize) r1, (org.telegram.tgnet.TLRPC$Document) r3)
+            r5 = 0
+            java.lang.String r4 = "50_50"
+            java.lang.String r6 = "webp"
+            r1 = r2
+            r2 = r3
+            r3 = r4
+            r4 = r6
+            r6 = r14
+            r1.setImage((org.telegram.messenger.ImageLocation) r2, (java.lang.String) r3, (java.lang.String) r4, (android.graphics.drawable.Drawable) r5, (java.lang.Object) r6)
+            goto L_0x018a
+        L_0x016f:
+            org.telegram.ui.Components.BackupImageView r1 = r0.imageView
+            org.telegram.messenger.ImageLocation r2 = org.telegram.messenger.ImageLocation.getForDocument(r3)
+            r5 = 0
+            java.lang.String r3 = "50_50"
+            java.lang.String r4 = "webp"
+            r6 = r14
+            r1.setImage((org.telegram.messenger.ImageLocation) r2, (java.lang.String) r3, (java.lang.String) r4, (android.graphics.drawable.Drawable) r5, (java.lang.Object) r6)
+            goto L_0x018a
+        L_0x017f:
+            org.telegram.ui.Components.BackupImageView r1 = r0.imageView
+            r2 = 0
+            r3 = 0
+            r5 = 0
+            java.lang.String r4 = "webp"
+            r6 = r14
+            r1.setImage((org.telegram.messenger.ImageLocation) r2, (java.lang.String) r3, (java.lang.String) r4, (android.graphics.drawable.Drawable) r5, (java.lang.Object) r6)
+        L_0x018a:
+            org.telegram.ui.Components.ProgressButton r1 = r0.addButton
+            r1.setVisibility(r10)
+            if (r17 != 0) goto L_0x01a4
+            int r1 = r0.currentAccount
+            org.telegram.messenger.MediaDataController r1 = org.telegram.messenger.MediaDataController.getInstance(r1)
+            org.telegram.tgnet.TLRPC$StickerSet r2 = r8.set
+            long r2 = r2.id
+            boolean r1 = r1.isStickerPackInstalled((long) r2)
+            if (r1 == 0) goto L_0x01a2
+            goto L_0x01a4
+        L_0x01a2:
+            r1 = 0
+            goto L_0x01a5
+        L_0x01a4:
+            r1 = 1
+        L_0x01a5:
+            r0.isInstalled = r1
+            r2 = 4
+            r3 = 0
+            if (r18 == 0) goto L_0x026d
+            if (r1 == 0) goto L_0x01b3
+            android.widget.TextView r1 = r0.delButton
+            r1.setVisibility(r10)
+            goto L_0x01b8
+        L_0x01b3:
+            org.telegram.ui.Components.ProgressButton r1 = r0.addButton
+            r1.setVisibility(r10)
+        L_0x01b8:
+            android.animation.AnimatorSet r1 = new android.animation.AnimatorSet
+            r1.<init>()
+            r0.currentAnimation = r1
+            r4 = 250(0xfa, double:1.235E-321)
+            r1.setDuration(r4)
+            android.animation.AnimatorSet r1 = r0.currentAnimation
+            r4 = 6
+            android.animation.Animator[] r4 = new android.animation.Animator[r4]
+            android.widget.TextView r5 = r0.delButton
+            android.util.Property r6 = android.view.View.ALPHA
+            float[] r7 = new float[r9]
+            boolean r8 = r0.isInstalled
+            if (r8 == 0) goto L_0x01d6
+            r8 = 1065353216(0x3var_, float:1.0)
+            goto L_0x01d7
+        L_0x01d6:
+            r8 = 0
+        L_0x01d7:
+            r7[r10] = r8
+            android.animation.ObjectAnimator r5 = android.animation.ObjectAnimator.ofFloat(r5, r6, r7)
+            r4[r10] = r5
+            android.widget.TextView r5 = r0.delButton
+            android.util.Property r6 = android.view.View.SCALE_X
+            float[] r7 = new float[r9]
+            boolean r8 = r0.isInstalled
+            if (r8 == 0) goto L_0x01ec
+            r8 = 1065353216(0x3var_, float:1.0)
+            goto L_0x01ed
+        L_0x01ec:
+            r8 = 0
+        L_0x01ed:
+            r7[r10] = r8
+            android.animation.ObjectAnimator r5 = android.animation.ObjectAnimator.ofFloat(r5, r6, r7)
+            r4[r9] = r5
+            r5 = 2
+            android.widget.TextView r6 = r0.delButton
+            android.util.Property r7 = android.view.View.SCALE_Y
+            float[] r8 = new float[r9]
+            boolean r12 = r0.isInstalled
+            if (r12 == 0) goto L_0x0203
+            r12 = 1065353216(0x3var_, float:1.0)
+            goto L_0x0204
+        L_0x0203:
+            r12 = 0
+        L_0x0204:
+            r8[r10] = r12
+            android.animation.ObjectAnimator r6 = android.animation.ObjectAnimator.ofFloat(r6, r7, r8)
+            r4[r5] = r6
+            r5 = 3
+            org.telegram.ui.Components.ProgressButton r6 = r0.addButton
+            android.util.Property r7 = android.view.View.ALPHA
+            float[] r8 = new float[r9]
+            boolean r12 = r0.isInstalled
+            if (r12 == 0) goto L_0x0219
+            r12 = 0
+            goto L_0x021b
+        L_0x0219:
+            r12 = 1065353216(0x3var_, float:1.0)
+        L_0x021b:
+            r8[r10] = r12
+            android.animation.ObjectAnimator r6 = android.animation.ObjectAnimator.ofFloat(r6, r7, r8)
+            r4[r5] = r6
+            org.telegram.ui.Components.ProgressButton r5 = r0.addButton
+            android.util.Property r6 = android.view.View.SCALE_X
+            float[] r7 = new float[r9]
+            boolean r8 = r0.isInstalled
+            if (r8 == 0) goto L_0x022f
+            r8 = 0
+            goto L_0x0231
+        L_0x022f:
+            r8 = 1065353216(0x3var_, float:1.0)
+        L_0x0231:
+            r7[r10] = r8
+            android.animation.ObjectAnimator r5 = android.animation.ObjectAnimator.ofFloat(r5, r6, r7)
+            r4[r2] = r5
+            r2 = 5
+            org.telegram.ui.Components.ProgressButton r5 = r0.addButton
+            android.util.Property r6 = android.view.View.SCALE_Y
+            float[] r7 = new float[r9]
+            boolean r8 = r0.isInstalled
+            if (r8 == 0) goto L_0x0245
+            r11 = 0
+        L_0x0245:
+            r7[r10] = r11
+            android.animation.ObjectAnimator r3 = android.animation.ObjectAnimator.ofFloat(r5, r6, r7)
+            r4[r2] = r3
+            r1.playTogether(r4)
+            android.animation.AnimatorSet r1 = r0.currentAnimation
+            org.telegram.ui.Cells.FeaturedStickerSetCell2$2 r2 = new org.telegram.ui.Cells.FeaturedStickerSetCell2$2
+            r2.<init>()
+            r1.addListener(r2)
+            android.animation.AnimatorSet r1 = r0.currentAnimation
+            android.view.animation.OvershootInterpolator r2 = new android.view.animation.OvershootInterpolator
+            r3 = 1065520988(0x3var_f5c, float:1.02)
+            r2.<init>(r3)
+            r1.setInterpolator(r2)
+            android.animation.AnimatorSet r1 = r0.currentAnimation
+            r1.start()
+            goto L_0x02c0
+        L_0x026d:
+            if (r1 == 0) goto L_0x0298
+            android.widget.TextView r1 = r0.delButton
+            r1.setVisibility(r10)
+            android.widget.TextView r1 = r0.delButton
+            r1.setAlpha(r11)
+            android.widget.TextView r1 = r0.delButton
+            r1.setScaleX(r11)
+            android.widget.TextView r1 = r0.delButton
+            r1.setScaleY(r11)
+            org.telegram.ui.Components.ProgressButton r1 = r0.addButton
+            r1.setVisibility(r2)
+            org.telegram.ui.Components.ProgressButton r1 = r0.addButton
+            r1.setAlpha(r3)
+            org.telegram.ui.Components.ProgressButton r1 = r0.addButton
+            r1.setScaleX(r3)
+            org.telegram.ui.Components.ProgressButton r1 = r0.addButton
+            r1.setScaleY(r3)
+            goto L_0x02c0
+        L_0x0298:
+            org.telegram.ui.Components.ProgressButton r1 = r0.addButton
+            r1.setVisibility(r10)
+            org.telegram.ui.Components.ProgressButton r1 = r0.addButton
+            r1.setAlpha(r11)
+            org.telegram.ui.Components.ProgressButton r1 = r0.addButton
+            r1.setScaleX(r11)
+            org.telegram.ui.Components.ProgressButton r1 = r0.addButton
+            r1.setScaleY(r11)
+            android.widget.TextView r1 = r0.delButton
+            r1.setVisibility(r2)
+            android.widget.TextView r1 = r0.delButton
+            r1.setAlpha(r3)
+            android.widget.TextView r1 = r0.delButton
+            r1.setScaleX(r3)
+            android.widget.TextView r1 = r0.delButton
+            r1.setScaleY(r3)
+        L_0x02c0:
+            return
+        */
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Cells.FeaturedStickerSetCell2.setStickersSet(org.telegram.tgnet.TLRPC$StickerSetCovered, boolean, boolean, boolean, boolean):void");
     }
 
     public TLRPC$StickerSetCovered getStickerSet() {

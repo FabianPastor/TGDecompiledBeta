@@ -374,23 +374,23 @@ public class DataSettingsActivity extends BaseFragment {
         L_0x00bc:
             android.app.Activity r13 = r9.getParentActivity()
             java.lang.String[] r14 = new java.lang.String[r0]
-            r0 = 2131628851(0x7f0e1333, float:1.8885006E38)
+            r0 = 2131628852(0x7f0e1334, float:1.8885008E38)
             java.lang.String r5 = "UseLessDataNever"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r5, r0)
             r14[r2] = r0
-            r0 = 2131628853(0x7f0e1335, float:1.888501E38)
+            r0 = 2131628854(0x7f0e1336, float:1.8885012E38)
             java.lang.String r2 = "UseLessDataOnRoaming"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r2, r0)
             r14[r3] = r0
-            r0 = 2131628852(0x7f0e1334, float:1.8885008E38)
+            r0 = 2131628853(0x7f0e1335, float:1.888501E38)
             java.lang.String r2 = "UseLessDataOnMobile"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r2, r0)
             r14[r1] = r0
-            r0 = 2131628850(0x7f0e1332, float:1.8885004E38)
+            r0 = 2131628851(0x7f0e1333, float:1.8885006E38)
             java.lang.String r1 = "UseLessDataAlways"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             r14[r4] = r0
-            r0 = 2131629275(0x7f0e14db, float:1.8885866E38)
+            r0 = 2131629276(0x7f0e14dc, float:1.8885868E38)
             java.lang.String r1 = "VoipUseLessData"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             org.telegram.ui.DataSettingsActivity$$ExternalSyntheticLambda2 r1 = new org.telegram.ui.DataSettingsActivity$$ExternalSyntheticLambda2
@@ -412,7 +412,7 @@ public class DataSettingsActivity extends BaseFragment {
             org.telegram.ui.ActionBar.AlertDialog$Builder r11 = new org.telegram.ui.ActionBar.AlertDialog$Builder
             android.app.Activity r12 = r9.getParentActivity()
             r11.<init>((android.content.Context) r12)
-            r12 = 2131628543(0x7f0e11ff, float:1.8884382E38)
+            r12 = 2131628544(0x7f0e1200, float:1.8884384E38)
             java.lang.String r13 = "StoragePath"
             java.lang.String r12 = org.telegram.messenger.LocaleController.getString(r13, r12)
             r11.setTitle(r12)

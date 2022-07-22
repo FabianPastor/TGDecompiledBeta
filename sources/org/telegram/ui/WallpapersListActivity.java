@@ -2438,20 +2438,20 @@ public class WallpapersListActivity extends BaseFragment implements Notification
                 org.telegram.ui.WallpapersListActivity r0 = org.telegram.ui.WallpapersListActivity.this
                 int r0 = r0.uploadImageRow
                 if (r14 != r0) goto L_0x0252
-                r14 = 2131628230(0x7f0e10c6, float:1.8883747E38)
+                r14 = 2131628231(0x7f0e10c7, float:1.8883749E38)
                 java.lang.String r0 = "SelectFromGallery"
                 java.lang.String r14 = org.telegram.messenger.LocaleController.getString(r0, r14)
-                r0 = 2131165859(0x7var_a3, float:1.7945947E38)
+                r0 = 2131165862(0x7var_a6, float:1.7945953E38)
                 r13.setTextAndIcon((java.lang.String) r14, (int) r0, (boolean) r2)
                 goto L_0x027e
             L_0x0252:
                 org.telegram.ui.WallpapersListActivity r0 = org.telegram.ui.WallpapersListActivity.this
                 int r0 = r0.setColorRow
                 if (r14 != r0) goto L_0x026a
-                r14 = 2131628304(0x7f0e1110, float:1.8883897E38)
+                r14 = 2131628305(0x7f0e1111, float:1.8883899E38)
                 java.lang.String r0 = "SetColor"
                 java.lang.String r14 = org.telegram.messenger.LocaleController.getString(r0, r14)
-                r0 = 2131165834(0x7var_a, float:1.7945896E38)
+                r0 = 2131165837(0x7var_d, float:1.7945902E38)
                 r13.setTextAndIcon((java.lang.String) r14, (int) r0, (boolean) r2)
                 goto L_0x027e
             L_0x026a:

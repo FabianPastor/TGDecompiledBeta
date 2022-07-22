@@ -161,7 +161,7 @@ public class ClearHistoryAlert extends BottomSheet {
             r0.newTimer = r8
         L_0x0060:
             android.content.res.Resources r7 = r28.getResources()
-            r10 = 2131166140(0x7var_bc, float:1.7946517E38)
+            r10 = 2131166143(0x7var_bf, float:1.7946523E38)
             android.graphics.drawable.Drawable r7 = r7.getDrawable(r10)
             android.graphics.drawable.Drawable r7 = r7.mutate()
             r0.shadowDrawable = r7

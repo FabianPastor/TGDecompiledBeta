@@ -10,6 +10,6 @@ public final /* synthetic */ class PaymentFormActivity$$ExternalSyntheticLambda6
     }
 
     public final void didSelectCountry(CountrySelectActivity.Country country) {
-        this.f$0.lambda$createView$5(country);
+        this.f$0.lambda$createView$0(country);
     }
 }

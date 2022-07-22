@@ -845,10 +845,13 @@ public final class R {
         public static final int msg_media = NUM;
         public static final int msg_mention = NUM;
         public static final int msg_message = NUM;
+        public static final int msg_mini_addemoji = NUM;
         public static final int msg_mini_autodelete = NUM;
         public static final int msg_mini_autodelete_empty = NUM;
         public static final int msg_mini_autodelete_timer = NUM;
         public static final int msg_mini_customize = NUM;
+        public static final int msg_mini_lock2 = NUM;
+        public static final int msg_mini_lockedemoji = NUM;
         public static final int msg_mini_premiumlock = NUM;
         public static final int msg_mini_qr = NUM;
         public static final int msg_mini_stickerstar = NUM;
@@ -5975,6 +5978,7 @@ public final class R {
         public static final int ResetStatistics = NUM;
         public static final int ResetStatisticsAlert = NUM;
         public static final int ResetStatisticsAlertTitle = NUM;
+        public static final int Restore = NUM;
         public static final int RestoreEmailNoAccess = NUM;
         public static final int RestoreEmailSent = NUM;
         public static final int RestoreEmailSentInfo = NUM;

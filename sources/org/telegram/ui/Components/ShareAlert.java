@@ -549,7 +549,7 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
             r8 = r29
             r0.parentFragment = r8
             android.content.res.Resources r8 = r28.getResources()
-            r9 = 2131166140(0x7var_bc, float:1.7946517E38)
+            r9 = 2131166143(0x7var_bf, float:1.7946523E38)
             android.graphics.drawable.Drawable r8 = r8.getDrawable(r9)
             android.graphics.drawable.Drawable r8 = r8.mutate()
             r0.shadowDrawable = r8
@@ -1003,7 +1003,7 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
             r3 = r3[r5]
             if (r3 == 0) goto L_0x0461
             android.widget.TextView r3 = r0.pickerBottomLayout
-            r9 = 2131629119(0x7f0e143f, float:1.888555E38)
+            r9 = 2131629120(0x7f0e1440, float:1.8885552E38)
             java.lang.String r15 = "VoipGroupCopySpeakerLink"
             java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r15, r9)
             java.lang.String r9 = r9.toUpperCase()
@@ -1082,7 +1082,7 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
             r9.setOnClickListener(r14)
             android.widget.ImageView r9 = new android.widget.ImageView
             r9.<init>(r1)
-            r14 = 2131166138(0x7var_ba, float:1.7946513E38)
+            r14 = 2131166141(0x7var_bd, float:1.7946519E38)
             r9.setImageResource(r14)
             android.graphics.PorterDuffColorFilter r14 = new android.graphics.PorterDuffColorFilter
             boolean r15 = r0.darkTheme
@@ -1188,7 +1188,7 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
             org.telegram.ui.Components.EditTextEmoji r2 = r0.commentTextView
             r2.setBackgroundColor(r8)
             org.telegram.ui.Components.EditTextEmoji r2 = r0.commentTextView
-            r3 = 2131628333(0x7f0e112d, float:1.8883956E38)
+            r3 = 2131628334(0x7f0e112e, float:1.8883958E38)
             java.lang.String r4 = "ShareComment"
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r4, r3)
             r2.setHint(r3)
@@ -1731,15 +1731,30 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
                 }
             } else {
                 if (this.sendingMessageObjects != null) {
+                    ArrayList<Long> arrayList = new ArrayList<>();
                     while (i < this.selectedDialogs.size()) {
                         long keyAt2 = this.selectedDialogs.keyAt(i);
                         if (this.frameLayout2.getTag() != null && this.commentTextView.length() > 0) {
                             SendMessagesHelper.getInstance(this.currentAccount).sendMessage(this.commentTextView.getText().toString(), keyAt2, (MessageObject) null, (MessageObject) null, (TLRPC$WebPage) null, true, (ArrayList<TLRPC$MessageEntity>) null, (TLRPC$ReplyMarkup) null, (HashMap<String, String>) null, z, 0, (MessageObject.SendAnimationData) null);
                         }
-                        SendMessagesHelper.getInstance(this.currentAccount).sendMessage(this.sendingMessageObjects, keyAt2, !this.showSendersName, false, z, 0);
+                        int sendMessage = SendMessagesHelper.getInstance(this.currentAccount).sendMessage(this.sendingMessageObjects, keyAt2, !this.showSendersName, false, z, 0);
+                        if (sendMessage != 0) {
+                            arrayList.add(Long.valueOf(keyAt2));
+                        }
+                        if (this.selectedDialogs.size() == 1) {
+                            AlertsCreator.showSendMediaAlert(sendMessage, this.parentFragment, (Theme.ResourcesProvider) null);
+                            if (sendMessage != 0) {
+                                break;
+                            }
+                        }
                         i++;
                     }
-                    onSend(this.selectedDialogs, this.sendingMessageObjects.size());
+                    for (Long longValue : arrayList) {
+                        this.selectedDialogs.remove(longValue.longValue());
+                    }
+                    if (!this.selectedDialogs.isEmpty()) {
+                        onSend(this.selectedDialogs, this.sendingMessageObjects.size());
+                    }
                 } else {
                     SwitchView switchView2 = this.switchView;
                     int access$10400 = switchView2 != null ? switchView2.currentTab : 0;

@@ -10,6 +10,6 @@ public final /* synthetic */ class PaymentFormActivity$$ExternalSyntheticLambda1
     }
 
     public final void onClick(DialogInterface dialogInterface, int i) {
-        this.f$0.lambda$createView$29(dialogInterface, i);
+        this.f$0.lambda$createView$28(dialogInterface, i);
     }
 }

@@ -1,16 +1,14 @@
 package org.telegram.ui.Components.Premium;
 
-import androidx.core.util.Consumer;
-import com.android.billingclient.api.BillingResult;
+import android.view.View;
 
-public final /* synthetic */ class GiftPremiumBottomSheet$$ExternalSyntheticLambda1 implements Consumer {
-    public final /* synthetic */ GiftPremiumBottomSheet f$0;
+public final /* synthetic */ class GiftPremiumBottomSheet$$ExternalSyntheticLambda1 implements View.OnClickListener {
+    public static final /* synthetic */ GiftPremiumBottomSheet$$ExternalSyntheticLambda1 INSTANCE = new GiftPremiumBottomSheet$$ExternalSyntheticLambda1();
 
-    public /* synthetic */ GiftPremiumBottomSheet$$ExternalSyntheticLambda1(GiftPremiumBottomSheet giftPremiumBottomSheet) {
-        this.f$0 = giftPremiumBottomSheet;
+    private /* synthetic */ GiftPremiumBottomSheet$$ExternalSyntheticLambda1() {
     }
 
-    public final void accept(Object obj) {
-        this.f$0.lambda$onGiftPremium$6((BillingResult) obj);
+    public final void onClick(View view) {
+        GiftPremiumBottomSheet.lambda$updateButtonText$4(view);
     }
 }

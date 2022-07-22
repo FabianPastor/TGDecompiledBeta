@@ -1,15 +1,15 @@
 package org.telegram.ui.Cells;
 
-public final /* synthetic */ class StickerSetCell$$ExternalSyntheticLambda1 implements Runnable {
-    public final /* synthetic */ StickerSetCell f$0;
-    public final /* synthetic */ boolean f$1;
+import android.view.View;
 
-    public /* synthetic */ StickerSetCell$$ExternalSyntheticLambda1(StickerSetCell stickerSetCell, boolean z) {
+public final /* synthetic */ class StickerSetCell$$ExternalSyntheticLambda1 implements View.OnClickListener {
+    public final /* synthetic */ StickerSetCell f$0;
+
+    public /* synthetic */ StickerSetCell$$ExternalSyntheticLambda1(StickerSetCell stickerSetCell) {
         this.f$0 = stickerSetCell;
-        this.f$1 = z;
     }
 
-    public final void run() {
-        this.f$0.lambda$setReorderable$0(this.f$1);
+    public final void onClick(View view) {
+        this.f$0.lambda$new$1(view);
     }
 }

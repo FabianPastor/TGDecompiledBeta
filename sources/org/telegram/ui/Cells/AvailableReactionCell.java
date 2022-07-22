@@ -117,7 +117,7 @@ public class AvailableReactionCell extends FrameLayout {
             r12.locked = r0
             if (r0 == 0) goto L_0x0071
             android.content.Context r13 = r12.getContext()
-            r15 = 2131166027(0x7var_b, float:1.7946288E38)
+            r15 = 2131166030(0x7var_e, float:1.7946294E38)
             android.graphics.drawable.Drawable r13 = androidx.core.content.ContextCompat.getDrawable(r13, r15)
             android.graphics.PorterDuffColorFilter r15 = new android.graphics.PorterDuffColorFilter
             java.lang.String r0 = "stickers_menu"

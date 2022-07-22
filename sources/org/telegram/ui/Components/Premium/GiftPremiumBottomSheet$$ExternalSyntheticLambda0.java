@@ -10,6 +10,6 @@ public final /* synthetic */ class GiftPremiumBottomSheet$$ExternalSyntheticLamb
     }
 
     public final void onClick(View view) {
-        this.f$0.lambda$updateButtonText$4(view);
+        this.f$0.lambda$updateButtonText$5(view);
     }
 }

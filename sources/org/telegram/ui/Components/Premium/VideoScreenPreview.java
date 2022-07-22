@@ -149,10 +149,10 @@ public class VideoScreenPreview extends FrameLayout implements PagerHeaderView, 
             drawable2.roundEffect = false;
             drawable2.init();
         }
-        if (i2 == 1 || i2 == 3) {
+        if (i2 == 1 || i2 == 3 || i2 == 11) {
             this.fromTop = true;
         }
-        AnonymousClass1 r10 = new AspectRatioFrameLayout(context) {
+        AnonymousClass1 r11 = new AspectRatioFrameLayout(context) {
             Path clipPath = new Path();
 
             /* access modifiers changed from: protected */
@@ -177,8 +177,8 @@ public class VideoScreenPreview extends FrameLayout implements PagerHeaderView, 
                 canvas.restore();
             }
         };
-        this.aspectRatioFrameLayout = r10;
-        r10.setResizeMode(0);
+        this.aspectRatioFrameLayout = r11;
+        r11.setResizeMode(0);
         TextureView textureView2 = new TextureView(context);
         this.textureView = textureView2;
         this.aspectRatioFrameLayout.addView(textureView2);

@@ -1303,11 +1303,11 @@ public class ManageLinksActivity extends BaseFragment {
                 org.telegram.ui.Cells.CreationTextCell r9 = (org.telegram.ui.Cells.CreationTextCell) r9
                 android.content.Context r10 = r8.mContext
                 android.content.res.Resources r10 = r10.getResources()
-                r0 = 2131166080(0x7var_, float:1.7946395E38)
+                r0 = 2131166083(0x7var_, float:1.7946401E38)
                 android.graphics.drawable.Drawable r10 = r10.getDrawable(r0)
                 android.content.Context r0 = r8.mContext
                 android.content.res.Resources r0 = r0.getResources()
-                r2 = 2131166081(0x7var_, float:1.7946397E38)
+                r2 = 2131166084(0x7var_, float:1.7946403E38)
                 android.graphics.drawable.Drawable r0 = r0.getDrawable(r2)
                 android.graphics.PorterDuffColorFilter r2 = new android.graphics.PorterDuffColorFilter
                 java.lang.String r3 = "switchTrackChecked"
@@ -1445,7 +1445,7 @@ public class ManageLinksActivity extends BaseFragment {
                 org.telegram.ui.ManageLinksActivity r0 = org.telegram.ui.ManageLinksActivity.this
                 int r0 = r0.revokedHeader
                 if (r10 != r0) goto L_0x0261
-                r10 = 2131628118(0x7f0e1056, float:1.888352E38)
+                r10 = 2131628119(0x7f0e1057, float:1.8883522E38)
                 java.lang.String r0 = "RevokedLinks"
                 java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r0, r10)
                 r9.setText(r10)
@@ -1663,11 +1663,11 @@ public class ManageLinksActivity extends BaseFragment {
                 r0.add(r2)
                 java.lang.Integer r2 = java.lang.Integer.valueOf(r4)
                 r1.add(r2)
-                r2 = 2131628337(0x7f0e1131, float:1.8883964E38)
+                r2 = 2131628338(0x7f0e1132, float:1.8883966E38)
                 java.lang.String r6 = "ShareLink"
                 java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r6, r2)
                 r8.add(r2)
-                r2 = 2131165939(0x7var_f3, float:1.794611E38)
+                r2 = 2131165942(0x7var_f6, float:1.7946115E38)
                 java.lang.Integer r2 = java.lang.Integer.valueOf(r2)
                 r0.add(r2)
                 java.lang.Integer r2 = java.lang.Integer.valueOf(r5)
@@ -1692,7 +1692,7 @@ public class ManageLinksActivity extends BaseFragment {
                 org.telegram.ui.ManageLinksActivity r2 = org.telegram.ui.ManageLinksActivity.this
                 boolean r2 = r2.canEdit
                 if (r2 == 0) goto L_0x00c8
-                r2 = 2131628105(0x7f0e1049, float:1.8883493E38)
+                r2 = 2131628106(0x7f0e104a, float:1.8883495E38)
                 java.lang.String r6 = "RevokeLink"
                 java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r6, r2)
                 r8.add(r2)

@@ -1339,7 +1339,7 @@ public class NotificationsSettingsActivity extends BaseFragment implements Notif
             java.lang.String r2 = "NotificationsExceptions"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r2, r0)
             r3.setTitle(r0)
-            r0 = 2131628988(0x7f0e13bc, float:1.8885284E38)
+            r0 = 2131628989(0x7f0e13bd, float:1.8885286E38)
             java.lang.String r2 = "ViewExceptions"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r2, r0)
             org.telegram.ui.NotificationsSettingsActivity$$ExternalSyntheticLambda2 r2 = new org.telegram.ui.NotificationsSettingsActivity$$ExternalSyntheticLambda2

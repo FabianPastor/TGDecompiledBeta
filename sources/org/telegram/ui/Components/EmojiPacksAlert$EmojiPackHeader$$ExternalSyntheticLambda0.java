@@ -11,6 +11,6 @@ public final /* synthetic */ class EmojiPacksAlert$EmojiPackHeader$$ExternalSynt
     }
 
     public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-        this.f$0.lambda$toggle$4(valueAnimator);
+        this.f$0.lambda$toggle$6(valueAnimator);
     }
 }

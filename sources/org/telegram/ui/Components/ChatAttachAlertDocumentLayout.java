@@ -285,7 +285,7 @@ public class ChatAttachAlertDocumentLayout extends ChatAttachAlert.AttachAlertLa
             org.telegram.ui.ActionBar.ActionBarMenuItem r1 = r1.setActionBarMenuItemSearchListener(r2)
             r7.searchItem = r1
             java.lang.String r2 = "Search"
-            r3 = 2131628154(0x7f0e107a, float:1.8883593E38)
+            r3 = 2131628155(0x7f0e107b, float:1.8883595E38)
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r2, r3)
             r1.setSearchFieldHint(r4)
             org.telegram.ui.ActionBar.ActionBarMenuItem r1 = r7.searchItem
@@ -1467,7 +1467,7 @@ public class ChatAttachAlertDocumentLayout extends ChatAttachAlert.AttachAlertLa
             r6 = 2131625832(0x7f0e0768, float:1.8878883E38)
             java.lang.String r7 = "ExternalFolderInfo"
             r8 = 2131165402(0x7var_da, float:1.794502E38)
-            r9 = 2131628153(0x7f0e1079, float:1.888359E38)
+            r9 = 2131628154(0x7f0e107a, float:1.8883593E38)
             java.lang.String r10 = "SdCard"
             if (r5 != 0) goto L_0x0048
             java.lang.String r5 = "mounted_ro"

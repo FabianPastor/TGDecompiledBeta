@@ -59,7 +59,7 @@ public class BackButtonMenu {
             r7.<init>()
             android.app.Activity r8 = r25.getParentActivity()
             android.content.res.Resources r8 = r8.getResources()
-            r9 = 2131166087(0x7var_, float:1.794641E38)
+            r9 = 2131166090(0x7var_a, float:1.7946416E38)
             android.graphics.drawable.Drawable r8 = r8.getDrawable(r9)
             android.graphics.drawable.Drawable r8 = r8.mutate()
             r8.getPadding(r7)
@@ -151,7 +151,7 @@ public class BackButtonMenu {
             if (r5 != r7) goto L_0x0121
             boolean r5 = org.telegram.messenger.UserObject.isUserSelf(r14)
             if (r5 == 0) goto L_0x0121
-            r5 = 2131628139(0x7f0e106b, float:1.8883562E38)
+            r5 = 2131628140(0x7f0e106c, float:1.8883564E38)
             java.lang.String r6 = "SavedMessages"
             java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r6, r5)
             r6 = 1

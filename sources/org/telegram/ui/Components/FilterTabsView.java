@@ -1336,7 +1336,7 @@ public class FilterTabsView extends FrameLayout {
                 if (r1 != 0) goto L_0x07ac
                 org.telegram.ui.Components.FilterTabsView r1 = org.telegram.ui.Components.FilterTabsView.this
                 android.content.Context r2 = r34.getContext()
-                r3 = 2131166026(0x7var_a, float:1.7946286E38)
+                r3 = 2131166029(0x7var_d, float:1.7946292E38)
                 android.graphics.drawable.Drawable r2 = androidx.core.content.ContextCompat.getDrawable(r2, r3)
                 android.graphics.drawable.Drawable unused = r1.lockDrawable = r2
             L_0x07ac:

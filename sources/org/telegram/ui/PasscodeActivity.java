@@ -253,7 +253,7 @@ public class PasscodeActivity extends BaseFragment implements NotificationCenter
             r5 = 2131165453(0x7var_d, float:1.7945124E38)
             org.telegram.ui.ActionBar.ActionBarMenuItem r3 = r3.addItem((int) r4, (int) r5)
             r0.otherItem = r3
-            r5 = 2131165842(0x7var_, float:1.7945913E38)
+            r5 = 2131165845(0x7var_, float:1.7945919E38)
             r12 = 2131627222(0x7f0e0cd6, float:1.8881702E38)
             java.lang.String r12 = org.telegram.messenger.LocaleController.getString((int) r12)
             org.telegram.ui.ActionBar.ActionBarMenuSubItem r3 = r3.addSubItem(r8, r5, r12)

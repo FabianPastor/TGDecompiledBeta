@@ -1028,7 +1028,7 @@ public class MessageStatisticActivity extends BaseFragment implements Notificati
                 org.telegram.ui.MessageStatisticActivity r0 = org.telegram.ui.MessageStatisticActivity.this
                 int r0 = r0.overviewHeaderRow
                 if (r11 != r0) goto L_0x0053
-                r11 = 2131628497(0x7f0e11d1, float:1.8884288E38)
+                r11 = 2131628498(0x7f0e11d2, float:1.888429E38)
                 java.lang.Object[] r0 = new java.lang.Object[r3]
                 java.lang.String r1 = "StatisticOverview"
                 java.lang.String r11 = org.telegram.messenger.LocaleController.formatString(r1, r11, r0)

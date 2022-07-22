@@ -93,7 +93,7 @@ public class PremiumPreviewBottomSheet extends BottomSheetWithRecyclerListView {
         this.giftTier = giftTier2;
         this.dummyCell = new PremiumFeatureCell(getContext());
         PremiumPreviewFragment.fillPremiumFeaturesList(this.premiumFeatures, i);
-        if (this.giftTier != null) {
+        if (this.giftTier != null || UserConfig.getInstance(i).isPremium()) {
             this.buttonContainer.setVisibility(8);
         }
         PremiumGradient.GradientTools gradientTools2 = new PremiumGradient.GradientTools("premiumGradient1", "premiumGradient2", "premiumGradient3", "premiumGradient4");

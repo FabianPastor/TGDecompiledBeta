@@ -238,7 +238,7 @@ public class QuickRepliesSettingsActivity extends BaseFragment {
                 java.lang.String r1 = "windowBackgroundGrayShadow"
                 android.graphics.drawable.Drawable r9 = org.telegram.ui.ActionBar.Theme.getThemedDrawable((android.content.Context) r9, (int) r0, (java.lang.String) r1)
                 r8.setBackgroundDrawable(r9)
-                r9 = 2131629251(0x7f0e14c3, float:1.8885818E38)
+                r9 = 2131629252(0x7f0e14c4, float:1.888582E38)
                 java.lang.String r0 = "VoipQuickRepliesExplain"
                 java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r0, r9)
                 r8.setText(r9)

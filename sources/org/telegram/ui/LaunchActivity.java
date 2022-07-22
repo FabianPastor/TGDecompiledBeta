@@ -344,7 +344,7 @@ public class LaunchActivity extends BasePermissionsActivity implements ActionBar
         L_0x00c5:
         L_0x00c6:
             android.view.Window r2 = r12.getWindow()
-            r5 = 2131166189(0x7var_ed, float:1.7946616E38)
+            r5 = 2131166192(0x7var_f0, float:1.7946622E38)
             r2.setBackgroundDrawableResource(r5)
             java.lang.String r2 = org.telegram.messenger.SharedConfig.passcodeHash
             int r2 = r2.length()
@@ -7340,7 +7340,7 @@ public class LaunchActivity extends BasePermissionsActivity implements ActionBar
             r0.putBoolean(r1, r2)
             java.util.ArrayList<org.telegram.tgnet.TLRPC$User> r1 = r10.contactsToSend
             java.lang.String r3 = "selectAlertStringGroup"
-            r4 = 2131628267(0x7f0e10eb, float:1.8883822E38)
+            r4 = 2131628268(0x7f0e10ec, float:1.8883824E38)
             java.lang.String r5 = "selectAlertString"
             if (r1 == 0) goto L_0x003d
             int r1 = r1.size()
@@ -7348,7 +7348,7 @@ public class LaunchActivity extends BasePermissionsActivity implements ActionBar
             java.lang.String r1 = "SendContactToText"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r1, r4)
             r0.putString(r5, r1)
-            r1 = 2131628243(0x7f0e10d3, float:1.8883773E38)
+            r1 = 2131628244(0x7f0e10d4, float:1.8883775E38)
             java.lang.String r4 = "SendContactToGroupText"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r4, r1)
             r0.putString(r3, r1)
@@ -7357,7 +7357,7 @@ public class LaunchActivity extends BasePermissionsActivity implements ActionBar
             java.lang.String r1 = "SendMessagesToText"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r1, r4)
             r0.putString(r5, r1)
-            r1 = 2131628266(0x7f0e10ea, float:1.888382E38)
+            r1 = 2131628267(0x7f0e10eb, float:1.8883822E38)
             java.lang.String r4 = "SendMessagesToGroupText"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r4, r1)
             r0.putString(r3, r1)
@@ -8661,12 +8661,12 @@ public class LaunchActivity extends BasePermissionsActivity implements ActionBar
             java.lang.String r3 = "cantSendToChannels"
             r2.putBoolean(r3, r10)
             r2.putInt(r0, r10)
-            r0 = 2131628249(0x7f0e10d9, float:1.8883785E38)
+            r0 = 2131628250(0x7f0e10da, float:1.8883787E38)
             java.lang.String r3 = "SendGameToText"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r3, r0)
             java.lang.String r3 = "selectAlertString"
             r2.putString(r3, r0)
-            r0 = 2131628248(0x7f0e10d8, float:1.8883783E38)
+            r0 = 2131628249(0x7f0e10d9, float:1.8883785E38)
             java.lang.String r3 = "SendGameToGroupText"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r3, r0)
             java.lang.String r3 = "selectAlertStringGroup"
@@ -9930,11 +9930,11 @@ public class LaunchActivity extends BasePermissionsActivity implements ActionBar
             r6 = move-exception
             org.telegram.messenger.FileLog.e((java.lang.Throwable) r6)
         L_0x00a3:
-            r6 = 2131628665(0x7f0e1279, float:1.888463E38)
+            r6 = 2131628666(0x7f0e127a, float:1.8884631E38)
             java.lang.String r7 = "Theme"
             if (r2 != r1) goto L_0x00bf
             java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r7, r6)
-            r7 = 2131628687(0x7f0e128f, float:1.8884674E38)
+            r7 = 2131628688(0x7f0e1290, float:1.8884676E38)
             java.lang.String r8 = "ThemeNotSupported"
             java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r8, r7)
             org.telegram.ui.ActionBar.AlertDialog$Builder r6 = org.telegram.ui.Components.AlertsCreator.createSimpleAlert(r5, r6, r7)
@@ -9942,7 +9942,7 @@ public class LaunchActivity extends BasePermissionsActivity implements ActionBar
             goto L_0x00d3
         L_0x00bf:
             java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r7, r6)
-            r7 = 2131628686(0x7f0e128e, float:1.8884672E38)
+            r7 = 2131628687(0x7f0e128f, float:1.8884674E38)
             java.lang.String r8 = "ThemeNotFound"
             java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r8, r7)
             org.telegram.ui.ActionBar.AlertDialog$Builder r6 = org.telegram.ui.Components.AlertsCreator.createSimpleAlert(r5, r6, r7)
@@ -10175,7 +10175,7 @@ public class LaunchActivity extends BasePermissionsActivity implements ActionBar
         L_0x00f4:
             boolean r13 = r12.self
             if (r13 == 0) goto L_0x0107
-            r13 = 2131628139(0x7f0e106b, float:1.8883562E38)
+            r13 = 2131628140(0x7f0e106c, float:1.8883564E38)
             java.lang.String r15 = "SavedMessages"
             java.lang.String r13 = org.telegram.messenger.LocaleController.getString(r15, r13)
             java.lang.String r13 = r13.toLowerCase()
@@ -11496,7 +11496,7 @@ public class LaunchActivity extends BasePermissionsActivity implements ActionBar
             java.lang.String r1 = "Proxy"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             r3.setTitle(r0)
-            r0 = 2131628866(0x7f0e1342, float:1.8885037E38)
+            r0 = 2131628867(0x7f0e1343, float:1.8885039E38)
             java.lang.String r1 = "UseProxyTelegramError"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             r3.setMessage(r0)
@@ -11534,13 +11534,13 @@ public class LaunchActivity extends BasePermissionsActivity implements ActionBar
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r15, r3)
             r4 = 0
             r2.setPositiveButton(r3, r4)
-            r3 = 2131628354(0x7f0e1142, float:1.8883998E38)
+            r3 = 2131628355(0x7f0e1143, float:1.8884E38)
             java.lang.String r4 = "ShareYouLocationUnableManually"
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r4, r3)
             org.telegram.ui.LaunchActivity$$ExternalSyntheticLambda12 r4 = new org.telegram.ui.LaunchActivity$$ExternalSyntheticLambda12
             r4.<init>(r8, r0, r1)
             r2.setNegativeButton(r3, r4)
-            r0 = 2131628353(0x7f0e1141, float:1.8883996E38)
+            r0 = 2131628354(0x7f0e1142, float:1.8883998E38)
             java.lang.String r1 = "ShareYouLocationUnable"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             r2.setMessage(r0)
@@ -11688,11 +11688,11 @@ public class LaunchActivity extends BasePermissionsActivity implements ActionBar
             java.lang.String r11 = "dialogTopBackground"
             int r11 = org.telegram.ui.ActionBar.Theme.getColor(r11)
             r7.setTopAnimation(r9, r10, r4, r11)
-            r9 = 2131628832(0x7f0e1320, float:1.8884968E38)
+            r9 = 2131628833(0x7f0e1321, float:1.888497E38)
             java.lang.String r10 = "UpdateContactsTitle"
             java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r10, r9)
             r7.setTitle(r9)
-            r9 = 2131628831(0x7f0e131f, float:1.8884966E38)
+            r9 = 2131628832(0x7f0e1320, float:1.8884968E38)
             java.lang.String r10 = "UpdateContactsMessage"
             java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r10, r9)
             r7.setMessage(r9)
@@ -12348,7 +12348,7 @@ public class LaunchActivity extends BasePermissionsActivity implements ActionBar
             long r0 = r0.longValue()
             int r2 = (r0 > r3 ? 1 : (r0 == r3 ? 0 : -1))
             if (r2 <= 0) goto L_0x0873
-            r0 = 2131629365(0x7f0e1535, float:1.8886049E38)
+            r0 = 2131629366(0x7f0e1536, float:1.888605E38)
             java.lang.String r1 = "YourNameChanged"
             goto L_0x0878
         L_0x0873:
@@ -12372,7 +12372,7 @@ public class LaunchActivity extends BasePermissionsActivity implements ActionBar
             long r0 = r0.longValue()
             int r2 = (r0 > r3 ? 1 : (r0 == r3 ? 0 : -1))
             if (r2 <= 0) goto L_0x08a3
-            r0 = 2131629348(0x7f0e1524, float:1.8886014E38)
+            r0 = 2131629349(0x7f0e1525, float:1.8886016E38)
             java.lang.String r1 = "YourBioChanged"
             goto L_0x08a8
         L_0x08a3:

@@ -3334,7 +3334,7 @@ public class NotificationsController extends BaseController {
             boolean r13 = r5 instanceof org.telegram.tgnet.TLRPC$TL_messageActionLoginUnknownLocation
             r15 = 3
             if (r13 == 0) goto L_0x02e5
-            r1 = 2131629423(0x7f0e156f, float:1.8886166E38)
+            r1 = 2131629424(0x7f0e1570, float:1.8886169E38)
             r2 = 2
             java.lang.Object[] r3 = new java.lang.Object[r2]
             org.telegram.messenger.LocaleController r2 = org.telegram.messenger.LocaleController.getInstance()
@@ -5446,7 +5446,7 @@ public class NotificationsController extends BaseController {
         L_0x0162:
             boolean r7 = org.telegram.messenger.DialogObject.isEncryptedDialog(r2)
             if (r7 == 0) goto L_0x0173
-            r0 = 2131629343(0x7f0e151f, float:1.8886004E38)
+            r0 = 2131629344(0x7f0e1520, float:1.8886006E38)
             java.lang.String r1 = "YouHaveNewMessage"
             java.lang.String r13 = org.telegram.messenger.LocaleController.getString(r1, r0)
             goto L_0x161d
@@ -5499,7 +5499,7 @@ public class NotificationsController extends BaseController {
         L_0x01d0:
             boolean r5 = r4 instanceof org.telegram.tgnet.TLRPC$TL_messageActionLoginUnknownLocation
             if (r5 == 0) goto L_0x0234
-            r1 = 2131629423(0x7f0e156f, float:1.8886166E38)
+            r1 = 2131629424(0x7f0e1570, float:1.8886169E38)
             r2 = 2
             java.lang.Object[] r3 = new java.lang.Object[r2]
             org.telegram.messenger.LocaleController r2 = org.telegram.messenger.LocaleController.getInstance()
@@ -8092,7 +8092,7 @@ public class NotificationsController extends BaseController {
         L_0x161d:
             return r13
         L_0x161e:
-            r0 = 2131629343(0x7f0e151f, float:1.8886004E38)
+            r0 = 2131629344(0x7f0e1520, float:1.8886006E38)
             java.lang.String r1 = "YouHaveNewMessage"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             return r0
@@ -9377,7 +9377,7 @@ public class NotificationsController extends BaseController {
             r10 = r5
             android.app.NotificationChannel r5 = new android.app.NotificationChannel
             if (r16 == 0) goto L_0x04bd
-            r6 = 2131628208(0x7f0e10b0, float:1.8883702E38)
+            r6 = 2131628209(0x7f0e10b1, float:1.8883704E38)
             java.lang.String r7 = "SecretChatName"
             java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r7, r6)
             goto L_0x04bf
@@ -10471,7 +10471,7 @@ public class NotificationsController extends BaseController {
             r9 = r41
             r8 = r42
             androidx.core.app.NotificationCompat$Builder r9 = r8.setContentTitle(r9)     // Catch:{ Exception -> 0x0b0c }
-            r10 = 2131166007(0x7var_, float:1.7946247E38)
+            r10 = 2131166010(0x7var_a, float:1.7946253E38)
             androidx.core.app.NotificationCompat$Builder r9 = r9.setSmallIcon(r10)     // Catch:{ Exception -> 0x0b0c }
             r10 = 1
             androidx.core.app.NotificationCompat$Builder r9 = r9.setAutoCancel(r10)     // Catch:{ Exception -> 0x0b0c }
@@ -11499,7 +11499,7 @@ public class NotificationsController extends BaseController {
         L_0x0328:
             r0 = 0
         L_0x0329:
-            r1 = 2131628208(0x7f0e10b0, float:1.8883702E38)
+            r1 = 2131628209(0x7f0e10b1, float:1.8883704E38)
             java.lang.String r4 = "SecretChatName"
             java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r4, r1)
             r1 = 0
@@ -12451,7 +12451,7 @@ public class NotificationsController extends BaseController {
             r10 = r58
             androidx.core.app.NotificationCompat$Builder r9 = r9.setContentTitle(r10)
             r27 = r13
-            r13 = 2131166007(0x7var_, float:1.7946247E38)
+            r13 = 2131166010(0x7var_a, float:1.7946253E38)
             androidx.core.app.NotificationCompat$Builder r9 = r9.setSmallIcon(r13)
             java.lang.String r13 = r60.toString()
             androidx.core.app.NotificationCompat$Builder r9 = r9.setContentText(r13)

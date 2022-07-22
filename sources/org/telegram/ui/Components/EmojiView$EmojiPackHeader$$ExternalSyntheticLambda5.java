@@ -10,6 +10,6 @@ public final /* synthetic */ class EmojiView$EmojiPackHeader$$ExternalSyntheticL
     }
 
     public final void run() {
-        this.f$0.lambda$didReceivedNotification$3();
+        this.f$0.lambda$install$5();
     }
 }

@@ -1823,7 +1823,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
             r0.setBackground(r3)
             r12.setButton(r3, r3, r3)
             org.telegram.ui.Components.Premium.PremiumButtonView r0 = r12.premiumButtonView
-            r1 = 2131628802(0x7f0e1302, float:1.8884907E38)
+            r1 = 2131628803(0x7f0e1303, float:1.888491E38)
             java.lang.String r2 = "UnlockPremiumEmoji"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             org.telegram.ui.Components.StickersAlert$$ExternalSyntheticLambda12 r2 = new org.telegram.ui.Components.StickersAlert$$ExternalSyntheticLambda12

@@ -382,7 +382,7 @@ public class SharedPhotoVideoCell2 extends View {
             if (r12 == 0) goto L_0x0240
             org.telegram.messenger.ImageReceiver r1 = r0.imageReceiver
             android.content.Context r2 = r16.getContext()
-            r3 = 2131166045(0x7var_d, float:1.7946324E38)
+            r3 = 2131166048(0x7var_, float:1.794633E38)
             android.graphics.drawable.Drawable r2 = androidx.core.content.ContextCompat.getDrawable(r2, r3)
             r1.setImageBitmap((android.graphics.drawable.Drawable) r2)
         L_0x0240:

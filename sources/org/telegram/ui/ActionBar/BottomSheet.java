@@ -2285,6 +2285,7 @@ public class BottomSheet extends Dialog {
 
     public void dismiss() {
         long j;
+        ObjectAnimator objectAnimator;
         BottomSheetDelegateInterface bottomSheetDelegateInterface = this.delegate;
         if ((bottomSheetDelegateInterface == null || bottomSheetDelegateInterface.canDismiss()) && !this.dismissed) {
             this.dismissed = true;
@@ -2307,10 +2308,15 @@ public class BottomSheet extends Dialog {
                 AnimatorSet animatorSet = this.currentSheetAnimation;
                 Animator[] animatorArr = new Animator[3];
                 ViewGroup viewGroup = this.containerView;
-                Property property = View.TRANSLATION_Y;
-                float[] fArr = new float[1];
-                fArr[0] = (float) (getContainerViewHeight() + this.container.keyboardHeight + AndroidUtilities.dp(10.0f) + (this.scrollNavBar ? getBottomInset() : 0));
-                animatorArr[0] = ObjectAnimator.ofFloat(viewGroup, property, fArr);
+                if (viewGroup == null) {
+                    objectAnimator = null;
+                } else {
+                    Property property = View.TRANSLATION_Y;
+                    float[] fArr = new float[1];
+                    fArr[0] = (float) (getContainerViewHeight() + this.container.keyboardHeight + AndroidUtilities.dp(10.0f) + (this.scrollNavBar ? getBottomInset() : 0));
+                    objectAnimator = ObjectAnimator.ofFloat(viewGroup, property, fArr);
+                }
+                animatorArr[0] = objectAnimator;
                 animatorArr[1] = ObjectAnimator.ofInt(this.backDrawable, AnimationProperties.COLOR_DRAWABLE_ALPHA, new int[]{0});
                 animatorArr[2] = this.navigationBarAnimation;
                 animatorSet.playTogether(animatorArr);

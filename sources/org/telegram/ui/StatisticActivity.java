@@ -3186,22 +3186,22 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
                 r4 = 0
                 r12 = 0
             L_0x0072:
-                r5 = 2131628496(0x7f0e11d0, float:1.8884286E38)
+                r5 = 2131628497(0x7f0e11d1, float:1.8884288E38)
                 java.lang.String r6 = "StatisticOpenProfile"
                 java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r6, r5)
                 r1.add(r5)
-                r5 = 2131165833(0x7var_, float:1.7945894E38)
+                r5 = 2131165836(0x7var_c, float:1.79459E38)
                 java.lang.Integer r5 = java.lang.Integer.valueOf(r5)
                 r6 = r16
                 r6.add(r5)
                 r5 = 2
                 java.lang.Integer r5 = java.lang.Integer.valueOf(r5)
                 r2.add(r5)
-                r5 = 2131628498(0x7f0e11d2, float:1.888429E38)
+                r5 = 2131628499(0x7f0e11d3, float:1.8884292E38)
                 java.lang.String r9 = "StatisticSearchUserHistory"
                 java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r9, r5)
                 r1.add(r5)
-                r5 = 2131165816(0x7var_, float:1.794586E38)
+                r5 = 2131165819(0x7var_b, float:1.7945866E38)
                 java.lang.Integer r5 = java.lang.Integer.valueOf(r5)
                 r6.add(r5)
                 r5 = 1
@@ -3316,7 +3316,7 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
                 r5 = 0
             L_0x018c:
                 if (r5 == 0) goto L_0x0194
-                r0 = 2131628300(0x7f0e110c, float:1.8883889E38)
+                r0 = 2131628301(0x7f0e110d, float:1.888389E38)
                 java.lang.String r9 = "SetAsAdmin"
                 goto L_0x0199
             L_0x0194:
@@ -3329,7 +3329,7 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
                 r0 = 2131165635(0x7var_c3, float:1.7945493E38)
                 goto L_0x01a9
             L_0x01a6:
-                r0 = 2131165842(0x7var_, float:1.7945913E38)
+                r0 = 2131165845(0x7var_, float:1.7945919E38)
             L_0x01a9:
                 java.lang.Integer r0 = java.lang.Integer.valueOf(r0)
                 r6.add(r0)

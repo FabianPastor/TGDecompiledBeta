@@ -1282,7 +1282,7 @@ public class FileLoader extends BaseController {
             long dialogId = messageObject.getDialogId();
             if (!messageObject.isRoundVideo() && !messageObject.isVoice() && !messageObject.isAnyKindOfSticker()) {
                 long j = -dialogId;
-                if (!getMessagesController().isChatNoForwards(getMessagesController().getChat(Long.valueOf(j))) && !messageObject.messageOwner.noforwards) {
+                if (!getMessagesController().isChatNoForwards(getMessagesController().getChat(Long.valueOf(j))) && !messageObject.messageOwner.noforwards && !DialogObject.isEncryptedDialog(dialogId)) {
                     if (dialogId >= 0) {
                         i = 1;
                     } else {

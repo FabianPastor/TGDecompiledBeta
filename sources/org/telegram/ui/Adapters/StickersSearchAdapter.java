@@ -641,7 +641,7 @@ public class StickersSearchAdapter extends RecyclerListView.SelectionAdapter {
             android.widget.ImageView$ScaleType r0 = android.widget.ImageView.ScaleType.CENTER
             r8.setScaleType(r0)
             android.widget.ImageView r8 = r6.emptyImageView
-            r0 = 2131166168(0x7var_d8, float:1.7946574E38)
+            r0 = 2131166171(0x7var_db, float:1.794658E38)
             r8.setImageResource(r0)
             android.widget.ImageView r8 = r6.emptyImageView
             android.graphics.PorterDuffColorFilter r0 = new android.graphics.PorterDuffColorFilter

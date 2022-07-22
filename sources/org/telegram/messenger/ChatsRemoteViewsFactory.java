@@ -90,7 +90,7 @@ class ChatsRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
             r3 = 2131427358(0x7f0b001e, float:1.847633E38)
             r0.<init>(r2, r3)
             r2 = 2131230952(0x7var_e8, float:1.8077971E38)
-            r3 = 2131629318(0x7f0e1506, float:1.8885954E38)
+            r3 = 2131629319(0x7f0e1507, float:1.8885956E38)
             java.lang.String r4 = "WidgetLoggedOff"
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r4, r3)
             r0.setTextViewText(r2, r3)
@@ -107,7 +107,7 @@ class ChatsRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
             r5 = 2131427359(0x7f0b001f, float:1.8476332E38)
             r0.<init>(r2, r5)
             r2 = 2131230954(0x7var_ea, float:1.8077975E38)
-            r5 = 2131628611(0x7f0e1243, float:1.888452E38)
+            r5 = 2131628612(0x7f0e1244, float:1.8884522E38)
             java.lang.String r6 = "TapToEditWidget"
             java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r6, r5)
             r0.setTextViewText(r2, r5)
@@ -144,7 +144,7 @@ class ChatsRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
             if (r0 == 0) goto L_0x00f3
             boolean r10 = org.telegram.messenger.UserObject.isUserSelf(r0)
             if (r10 == 0) goto L_0x00ab
-            r10 = 2131628139(0x7f0e106b, float:1.8883562E38)
+            r10 = 2131628140(0x7f0e106c, float:1.8883564E38)
             java.lang.String r11 = "SavedMessages"
             java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r11, r10)
             goto L_0x00d3
@@ -774,13 +774,13 @@ class ChatsRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
             java.lang.String r10 = "setEnabled"
             if (r6 == 0) goto L_0x05b9
             r7.setBoolean(r4, r10, r8)
-            r6 = 2131166230(0x7var_, float:1.79467E38)
+            r6 = 2131166233(0x7var_, float:1.7946706E38)
             r7.setInt(r4, r9, r6)
             goto L_0x05c8
         L_0x05b9:
             r6 = 1
             r7.setBoolean(r4, r10, r6)
-            r6 = 2131166229(0x7var_, float:1.7946697E38)
+            r6 = 2131166232(0x7var_, float:1.7946704E38)
             r7.setInt(r4, r9, r6)
             goto L_0x05c8
         L_0x05c4:

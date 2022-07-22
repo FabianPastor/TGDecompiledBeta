@@ -2505,7 +2505,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
         L_0x012a:
             org.telegram.ui.ActionBar.ActionBarMenuItem r0 = r10.searchItem
             java.lang.String r1 = "Search"
-            r2 = 2131628154(0x7f0e107a, float:1.8883593E38)
+            r2 = 2131628155(0x7f0e107b, float:1.8883595E38)
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r1, r2)
             r0.setSearchFieldHint(r3)
             org.telegram.ui.ActionBar.ActionBarMenuItem r0 = r10.searchItem
@@ -2531,14 +2531,14 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
         L_0x0168:
             if (r0 != r5) goto L_0x0179
             org.telegram.ui.ActionBar.ActionBar r0 = r10.actionBar
-            r1 = 2131628222(0x7f0e10be, float:1.888373E38)
+            r1 = 2131628223(0x7f0e10bf, float:1.8883733E38)
             java.lang.String r2 = "SelectChats"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             r0.setTitle(r1)
             goto L_0x0187
         L_0x0179:
             org.telegram.ui.ActionBar.ActionBar r0 = r10.actionBar
-            r1 = 2131628221(0x7f0e10bd, float:1.8883729E38)
+            r1 = 2131628222(0x7f0e10be, float:1.888373E38)
             java.lang.String r2 = "SelectChat"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             r0.setTitle(r1)

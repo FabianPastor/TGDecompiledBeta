@@ -132,14 +132,14 @@ public class DoubledLimitsBottomSheet extends BottomSheetWithRecyclerListView im
             r3.add(r6)
             org.telegram.ui.Components.Premium.DoubledLimitsBottomSheet$Limit r6 = new org.telegram.ui.Components.Premium.DoubledLimitsBottomSheet$Limit
             java.lang.String r7 = "SavedGifsLimitTitle"
-            r8 = 2131628138(0x7f0e106a, float:1.888356E38)
+            r8 = 2131628139(0x7f0e106b, float:1.8883562E38)
             java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r7, r8)
             java.lang.Object[] r7 = new java.lang.Object[r4]
             int r8 = r5.savedGifsLimitPremium
             java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
             r7[r2] = r8
             java.lang.String r8 = "SavedGifsLimitSubtitle"
-            r9 = 2131628137(0x7f0e1069, float:1.8883558E38)
+            r9 = 2131628138(0x7f0e106a, float:1.888356E38)
             java.lang.String r11 = org.telegram.messenger.LocaleController.formatString(r8, r9, r7)
             int r12 = r5.savedGifsLimitDefault
             int r13 = r5.savedGifsLimitPremium
@@ -298,7 +298,7 @@ public class DoubledLimitsBottomSheet extends BottomSheetWithRecyclerListView im
             r0.titleImage = r3
             org.telegram.ui.Components.Premium.PremiumGradient r5 = org.telegram.ui.Components.Premium.PremiumGradient.getInstance()
             android.content.Context r6 = r25.getContext()
-            r8 = 2131166025(0x7var_, float:1.7946284E38)
+            r8 = 2131166028(0x7var_c, float:1.794629E38)
             android.graphics.drawable.Drawable r6 = androidx.core.content.ContextCompat.getDrawable(r6, r8)
             org.telegram.ui.Components.Premium.PremiumGradient$InternalDrawable r5 = r5.createGradientDrawable(r6)
             r3.setImageDrawable(r5)

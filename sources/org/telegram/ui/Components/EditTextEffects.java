@@ -175,7 +175,7 @@ public class EditTextEffects extends EditText {
                 }
             }
         }
-        this.animatedEmojiDrawables = AnimatedEmojiSpan.update(1, (View) this, this.animatedEmojiDrawables, getLayout());
+        this.animatedEmojiDrawables = AnimatedEmojiSpan.update(AnimatedEmojiDrawable.getCacheTypeForEnterView(), (View) this, this.animatedEmojiDrawables, getLayout());
     }
 
     public void setText(CharSequence charSequence, TextView.BufferType bufferType) {
@@ -192,7 +192,7 @@ public class EditTextEffects extends EditText {
     /* access modifiers changed from: protected */
     public void onLayout(boolean z, int i, int i2, int i3, int i4) {
         super.onLayout(z, i, i2, i3, i4);
-        this.animatedEmojiDrawables = AnimatedEmojiSpan.update(1, (View) this, this.animatedEmojiDrawables, getLayout());
+        this.animatedEmojiDrawables = AnimatedEmojiSpan.update(AnimatedEmojiDrawable.getCacheTypeForEnterView(), (View) this, this.animatedEmojiDrawables, getLayout());
     }
 
     public void setShouldRevealSpoilersByTouch(boolean z) {
@@ -248,7 +248,7 @@ public class EditTextEffects extends EditText {
         int length = (getLayout() == null || getLayout().getText() == null) ? 0 : getLayout().getText().length();
         Layout layout = this.lastLayout;
         if (!(layout != null && layout == getLayout() && this.lastTextLength == length)) {
-            this.animatedEmojiDrawables = AnimatedEmojiSpan.update(1, (View) this, this.animatedEmojiDrawables, getLayout());
+            this.animatedEmojiDrawables = AnimatedEmojiSpan.update(AnimatedEmojiDrawable.getCacheTypeForEnterView(), (View) this, this.animatedEmojiDrawables, getLayout());
             this.lastLayout = getLayout();
             this.lastTextLength = length;
         }

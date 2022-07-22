@@ -3120,7 +3120,7 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
             r1 = 8
             r0.setVisibility(r1)
             android.widget.ImageView r0 = r7.scheduledButton
-            r1 = 2131628146(0x7f0e1072, float:1.8883576E38)
+            r1 = 2131628147(0x7f0e1073, float:1.8883578E38)
             java.lang.String r2 = "ScheduledMessages"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             r0.setContentDescription(r1)
@@ -3814,7 +3814,7 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
             java.lang.String r0 = "chat_messagePanelSend"
             int r0 = r7.getThemedColor(r0)
             android.view.View r5 = r7.sendButton
-            r9 = 2131628237(0x7f0e10cd, float:1.888376E38)
+            r9 = 2131628238(0x7f0e10ce, float:1.8883763E38)
             java.lang.String r10 = "Send"
             java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r10, r9)
             r5.setContentDescription(r9)
@@ -9933,7 +9933,7 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
                         }
                         SpannableString spannableString = new SpannableString(str);
                         AnimatedEmojiSpan animatedEmojiSpan = new AnimatedEmojiSpan(j, ChatActivityEnterView.this.messageEditText.getPaint().getFontMetricsInt());
-                        animatedEmojiSpan.cacheType = 1;
+                        animatedEmojiSpan.cacheType = AnimatedEmojiDrawable.getCacheTypeForEnterView();
                         spannableString.setSpan(animatedEmojiSpan, 0, spannableString.length(), 33);
                         EditTextCaption editTextCaption = ChatActivityEnterView.this.messageEditText;
                         editTextCaption.setText(editTextCaption.getText().insert(selectionEnd, spannableString));

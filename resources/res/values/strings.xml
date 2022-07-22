@@ -446,8 +446,8 @@
     <string name="AppIconPremium">Premium</string>
     <string name="AppIconTurbo">Turbo</string>
     <string name="AppIconVintage">Vintage</string>
-    <string name="AppName">Bold Wolf Telegram</string>
-    <string name="AppNameBeta">Bold Wolf Telegram Beta</string>
+    <string name="AppName">Telegram</string>
+    <string name="AppNameBeta">Telegram Beta</string>
     <string name="AppUpdate">Update Telegram</string>
     <string name="AppUpdateChangelogEmpty">**What\'s new?**\10\10• Bug fixes and improvements.</string>
     <string name="AppUpdateDownloadNow">Download Now</string>
@@ -4126,6 +4126,7 @@
     <string name="ResetStatistics">Reset Statistics</string>
     <string name="ResetStatisticsAlert">Do you want to reset your usage statistics?</string>
     <string name="ResetStatisticsAlertTitle">Reset statistics</string>
+    <string name="Restore">Restore</string>
     <string name="RestoreEmailNoAccess">Unable to access %1$s?</string>
     <string name="RestoreEmailSent">We have sent a recovery code to the email address you provided:\10\10%1$s</string>
     <string name="RestoreEmailSentInfo">Please check your email and enter the 6-digit code we sent you.</string>

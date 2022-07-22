@@ -2019,36 +2019,34 @@ public class MessageObject {
     private void checkEmojiOnly(int[] iArr) {
         TextPaint textPaint;
         int i;
-        if (iArr != null) {
-            if (iArr[0] >= 1 && iArr[0] <= 3) {
-                int i2 = iArr[0];
-                if (i2 == 1) {
-                    textPaint = Theme.chat_msgTextPaintOneEmoji;
-                    i = AndroidUtilities.dp(32.0f);
-                    this.emojiOnlyCount = 1;
-                } else if (i2 != 2) {
-                    textPaint = Theme.chat_msgTextPaintThreeEmoji;
-                    i = AndroidUtilities.dp(24.0f);
-                    this.emojiOnlyCount = 3;
-                } else {
-                    textPaint = Theme.chat_msgTextPaintTwoEmoji;
-                    int dp = AndroidUtilities.dp(28.0f);
-                    this.emojiOnlyCount = 2;
-                    i = dp;
+        if (iArr != null && iArr[0] >= 1 && iArr[0] <= 3) {
+            int i2 = iArr[0];
+            if (i2 == 1) {
+                textPaint = Theme.chat_msgTextPaintOneEmoji;
+                i = AndroidUtilities.dp(32.0f);
+                this.emojiOnlyCount = 1;
+            } else if (i2 != 2) {
+                textPaint = Theme.chat_msgTextPaintThreeEmoji;
+                i = AndroidUtilities.dp(24.0f);
+                this.emojiOnlyCount = 3;
+            } else {
+                textPaint = Theme.chat_msgTextPaintTwoEmoji;
+                int dp = AndroidUtilities.dp(28.0f);
+                this.emojiOnlyCount = 2;
+                i = dp;
+            }
+            CharSequence charSequence = this.messageText;
+            Emoji.EmojiSpan[] emojiSpanArr = (Emoji.EmojiSpan[]) ((Spannable) charSequence).getSpans(0, charSequence.length(), Emoji.EmojiSpan.class);
+            if (emojiSpanArr != null && emojiSpanArr.length > 0) {
+                for (Emoji.EmojiSpan replaceFontMetrics : emojiSpanArr) {
+                    replaceFontMetrics.replaceFontMetrics(textPaint.getFontMetricsInt(), i);
                 }
-                CharSequence charSequence = this.messageText;
-                Emoji.EmojiSpan[] emojiSpanArr = (Emoji.EmojiSpan[]) ((Spannable) charSequence).getSpans(0, charSequence.length(), Emoji.EmojiSpan.class);
-                if (emojiSpanArr != null && emojiSpanArr.length > 0) {
-                    for (Emoji.EmojiSpan replaceFontMetrics : emojiSpanArr) {
-                        replaceFontMetrics.replaceFontMetrics(textPaint.getFontMetricsInt(), i);
-                    }
-                }
-                CharSequence charSequence2 = this.messageText;
-                AnimatedEmojiSpan[] animatedEmojiSpanArr = (AnimatedEmojiSpan[]) ((Spannable) charSequence2).getSpans(0, charSequence2.length(), AnimatedEmojiSpan.class);
-                if (animatedEmojiSpanArr != null && animatedEmojiSpanArr.length > 0) {
-                    for (AnimatedEmojiSpan replaceFontMetrics2 : animatedEmojiSpanArr) {
-                        replaceFontMetrics2.replaceFontMetrics(textPaint.getFontMetricsInt(), i, 1);
-                    }
+            }
+            CharSequence charSequence2 = this.messageText;
+            AnimatedEmojiSpan[] animatedEmojiSpanArr = (AnimatedEmojiSpan[]) ((Spannable) charSequence2).getSpans(0, charSequence2.length(), AnimatedEmojiSpan.class);
+            if (animatedEmojiSpanArr != null && animatedEmojiSpanArr.length > 0) {
+                for (AnimatedEmojiSpan replaceFontMetrics2 : animatedEmojiSpanArr) {
+                    replaceFontMetrics2.replaceFontMetrics(textPaint.getFontMetricsInt(), i, 0);
                 }
             }
         }
@@ -2693,7 +2691,7 @@ public class MessageObject {
         L_0x04f4:
             r23 = r14
             java.lang.StringBuilder r4 = new java.lang.StringBuilder
-            r0 = 2131628912(0x7f0e1370, float:1.888513E38)
+            r0 = 2131628913(0x7f0e1371, float:1.8885132E38)
             java.lang.String r5 = "UserRestrictionsUntilForever"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r5, r0)
             r4.<init>(r0)
@@ -6756,7 +6754,7 @@ public class MessageObject {
             org.telegram.messenger.LocaleController r2 = org.telegram.messenger.LocaleController.getInstance()
             org.telegram.messenger.time.FastDateFormat r2 = r2.formatterYear
             if (r2 == 0) goto L_0x081d
-            r2 = 2131629423(0x7f0e156f, float:1.8886166E38)
+            r2 = 2131629424(0x7f0e1570, float:1.8886169E38)
             r3 = 2
             java.lang.Object[] r7 = new java.lang.Object[r3]
             org.telegram.messenger.LocaleController r3 = org.telegram.messenger.LocaleController.getInstance()
@@ -6922,7 +6920,7 @@ public class MessageObject {
         L_0x095a:
             boolean r11 = r9 instanceof org.telegram.tgnet.TLRPC$TL_messageActionCreatedBroadcastList
             if (r11 == 0) goto L_0x096e
-            r0 = 2131629342(0x7f0e151e, float:1.8886002E38)
+            r0 = 2131629343(0x7f0e151f, float:1.8886004E38)
             r1 = 0
             java.lang.Object[] r1 = new java.lang.Object[r1]
             java.lang.String r2 = "YouCreatedBroadcastList"
@@ -7401,7 +7399,7 @@ public class MessageObject {
             r6.messageText = r0
             goto L_0x0var_
         L_0x0d4f:
-            r0 = 2131628870(0x7f0e1346, float:1.8885045E38)
+            r0 = 2131628871(0x7f0e1347, float:1.8885047E38)
             java.lang.String r1 = "UserAcceptedToGroupAction"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             java.lang.CharSequence r0 = replaceWithLink(r0, r7, r8)
@@ -7553,7 +7551,7 @@ public class MessageObject {
         L_0x0e8f:
             boolean r0 = r1 instanceof org.telegram.tgnet.TLRPC$TL_messageMediaUnsupported
             if (r0 == 0) goto L_0x0ea0
-            r0 = 2131628826(0x7f0e131a, float:1.8884956E38)
+            r0 = 2131628827(0x7f0e131b, float:1.8884958E38)
             java.lang.String r1 = "UnsupportedMedia"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             r6.messageText = r0

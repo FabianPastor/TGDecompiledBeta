@@ -3,57 +3,16 @@ package org.telegram.messenger.utils;
 import android.text.Spanned;
 import org.telegram.ui.Components.AnimatedEmojiSpan;
 import org.telegram.ui.Components.TextStyleSpan;
+import org.telegram.ui.Components.URLSpanReplacement;
 
 public class CustomHtml {
     public static String toHtml(Spanned spanned) {
         StringBuilder sb = new StringBuilder();
-        sb.append("<root>");
-        wrapTextStyle(sb, spanned, 0, spanned.length());
-        sb.append("</root>");
+        toHTML_1_wrapTextStyle(sb, spanned, 0, spanned.length());
         return sb.toString();
     }
 
-    private static void withinStyle(StringBuilder sb, CharSequence charSequence, int i, int i2) {
-        int i3;
-        char charAt;
-        while (i < i2) {
-            char charAt2 = charSequence.charAt(i);
-            if (charAt2 == '<') {
-                sb.append("&lt;");
-            } else if (charAt2 == '>') {
-                sb.append("&gt;");
-            } else if (charAt2 == '&') {
-                sb.append("&amp;");
-            } else if (charAt2 < 55296 || charAt2 > 57343) {
-                if (charAt2 > '~' || charAt2 < ' ') {
-                    sb.append("&#");
-                    sb.append(charAt2);
-                    sb.append(";");
-                } else if (charAt2 == ' ') {
-                    while (true) {
-                        int i4 = i + 1;
-                        if (i4 >= i2 || charSequence.charAt(i4) != ' ') {
-                            sb.append(' ');
-                        } else {
-                            sb.append("&nbsp;");
-                            i = i4;
-                        }
-                    }
-                    sb.append(' ');
-                } else {
-                    sb.append(charAt2);
-                }
-            } else if (charAt2 < 56320 && (i3 = i + 1) < i2 && (charAt = charSequence.charAt(i3)) >= 56320 && charAt <= 57343) {
-                sb.append("&#");
-                sb.append(65536 | ((charAt2 - 55296) << 10) | (charAt - 56320));
-                sb.append(";");
-                i = i3;
-            }
-            i++;
-        }
-    }
-
-    private static void wrapTextStyle(StringBuilder sb, Spanned spanned, int i, int i2) {
+    private static void toHTML_1_wrapTextStyle(StringBuilder sb, Spanned spanned, int i, int i2) {
         while (i < i2) {
             int nextSpanTransition = spanned.nextSpanTransition(i, i2, TextStyleSpan.class);
             if (nextSpanTransition < 0) {
@@ -90,7 +49,7 @@ public class CustomHtml {
                     }
                 }
             }
-            toHTML_4_wrapAnimatedEmoji(sb, spanned, i, nextSpanTransition);
+            toHTML_2_wrapURLReplacements(sb, spanned, i, nextSpanTransition);
             if (textStyleSpanArr != null) {
                 for (TextStyleSpan textStyleSpan2 : textStyleSpanArr) {
                     if (textStyleSpan2 != null) {
@@ -123,7 +82,31 @@ public class CustomHtml {
         }
     }
 
-    private static void toHTML_4_wrapAnimatedEmoji(StringBuilder sb, Spanned spanned, int i, int i2) {
+    private static void toHTML_2_wrapURLReplacements(StringBuilder sb, Spanned spanned, int i, int i2) {
+        while (i < i2) {
+            int nextSpanTransition = spanned.nextSpanTransition(i, i2, URLSpanReplacement.class);
+            if (nextSpanTransition < 0) {
+                nextSpanTransition = i2;
+            }
+            URLSpanReplacement[] uRLSpanReplacementArr = (URLSpanReplacement[]) spanned.getSpans(i, nextSpanTransition, URLSpanReplacement.class);
+            if (uRLSpanReplacementArr != null) {
+                for (URLSpanReplacement url : uRLSpanReplacementArr) {
+                    sb.append("<a href=\"");
+                    sb.append(url.getURL());
+                    sb.append("\">");
+                }
+            }
+            toHTML_3_wrapAnimatedEmoji(sb, spanned, i, nextSpanTransition);
+            if (uRLSpanReplacementArr != null) {
+                for (int i3 = 0; i3 < uRLSpanReplacementArr.length; i3++) {
+                    sb.append("</a>");
+                }
+            }
+            i = nextSpanTransition;
+        }
+    }
+
+    private static void toHTML_3_wrapAnimatedEmoji(StringBuilder sb, Spanned spanned, int i, int i2) {
         while (i < i2) {
             int nextSpanTransition = spanned.nextSpanTransition(i, i2, AnimatedEmojiSpan.class);
             if (nextSpanTransition < 0) {
@@ -133,19 +116,61 @@ public class CustomHtml {
             if (animatedEmojiSpanArr != null) {
                 for (AnimatedEmojiSpan animatedEmojiSpan : animatedEmojiSpanArr) {
                     if (animatedEmojiSpan != null) {
-                        sb.append("<animated_emoji_documentId=\"" + animatedEmojiSpan.documentId + "\">");
+                        sb.append("<animated-emoji data-document-id=\"" + animatedEmojiSpan.documentId + "\">");
                     }
                 }
             }
-            withinStyle(sb, spanned, i, nextSpanTransition);
+            toHTML_4_withinStyle(sb, spanned, i, nextSpanTransition);
             if (animatedEmojiSpanArr != null) {
                 for (AnimatedEmojiSpan animatedEmojiSpan2 : animatedEmojiSpanArr) {
                     if (animatedEmojiSpan2 != null) {
-                        sb.append("</animated_emoji_documentId=\"" + animatedEmojiSpan2.documentId + "\">");
+                        sb.append("</animated-emoji>");
                     }
                 }
             }
             i = nextSpanTransition;
+        }
+    }
+
+    private static void toHTML_4_withinStyle(StringBuilder sb, CharSequence charSequence, int i, int i2) {
+        int i3;
+        char charAt;
+        while (i < i2) {
+            char charAt2 = charSequence.charAt(i);
+            if (charAt2 == 10) {
+                sb.append("<br>");
+            } else if (charAt2 == '<') {
+                sb.append("&lt;");
+            } else if (charAt2 == '>') {
+                sb.append("&gt;");
+            } else if (charAt2 == '&') {
+                sb.append("&amp;");
+            } else if (charAt2 < 55296 || charAt2 > 57343) {
+                if (charAt2 > '~' || charAt2 < ' ') {
+                    sb.append("&#");
+                    sb.append(charAt2);
+                    sb.append(";");
+                } else if (charAt2 == ' ') {
+                    while (true) {
+                        int i4 = i + 1;
+                        if (i4 >= i2 || charSequence.charAt(i4) != ' ') {
+                            sb.append(' ');
+                        } else {
+                            sb.append("&nbsp;");
+                            i = i4;
+                        }
+                    }
+                    sb.append(' ');
+                } else {
+                    sb.append(charAt2);
+                }
+            } else if (charAt2 < 56320 && (i3 = i + 1) < i2 && (charAt = charSequence.charAt(i3)) >= 56320 && charAt <= 57343) {
+                sb.append("&#");
+                sb.append(65536 | ((charAt2 - 55296) << 10) | (charAt - 56320));
+                sb.append(";");
+                i = i3;
+            }
+            i++;
         }
     }
 }

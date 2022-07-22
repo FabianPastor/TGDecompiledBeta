@@ -2951,16 +2951,18 @@ public class AndroidUtilities {
         return Build.VERSION.SDK_INT < 31 || !OneUIUtilities.hasBuiltInClipboardToasts();
     }
 
-    public static void addToClipboard(CharSequence charSequence) {
+    public static boolean addToClipboard(CharSequence charSequence) {
         try {
             ClipboardManager clipboardManager = (ClipboardManager) ApplicationLoader.applicationContext.getSystemService("clipboard");
             if (charSequence instanceof Spanned) {
                 clipboardManager.setPrimaryClip(ClipData.newHtmlText("label", charSequence, CustomHtml.toHtml((Spanned) charSequence)));
-            } else {
-                clipboardManager.setPrimaryClip(ClipData.newPlainText("label", charSequence));
+                return true;
             }
+            clipboardManager.setPrimaryClip(ClipData.newPlainText("label", charSequence));
+            return true;
         } catch (Exception e) {
             FileLog.e((Throwable) e);
+            return false;
         }
     }
 

@@ -875,7 +875,7 @@ public class DataAutoDownloadActivity extends BaseFragment {
             r15.setGravity(r4)
             android.graphics.Typeface r1 = org.telegram.messenger.AndroidUtilities.getTypeface(r5)
             r15.setTypeface(r1)
-            r1 = 2131628122(0x7f0e105a, float:1.8883528E38)
+            r1 = 2131628123(0x7f0e105b, float:1.888353E38)
             java.lang.String r2 = "Save"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             java.lang.String r1 = r1.toUpperCase()

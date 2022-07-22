@@ -823,10 +823,13 @@
     <public type="drawable" name="msg_media" id="NUM" />
     <public type="drawable" name="msg_mention" id="NUM" />
     <public type="drawable" name="msg_message" id="NUM" />
+    <public type="drawable" name="msg_mini_addemoji" id="NUM" />
     <public type="drawable" name="msg_mini_autodelete" id="NUM" />
     <public type="drawable" name="msg_mini_autodelete_empty" id="NUM" />
     <public type="drawable" name="msg_mini_autodelete_timer" id="NUM" />
     <public type="drawable" name="msg_mini_customize" id="NUM" />
+    <public type="drawable" name="msg_mini_lock2" id="NUM" />
+    <public type="drawable" name="msg_mini_lockedemoji" id="NUM" />
     <public type="drawable" name="msg_mini_premiumlock" id="NUM" />
     <public type="drawable" name="msg_mini_qr" id="NUM" />
     <public type="drawable" name="msg_mini_stickerstar" id="NUM" />
@@ -5932,6 +5935,7 @@
     <public type="string" name="ResetStatistics" id="NUM" />
     <public type="string" name="ResetStatisticsAlert" id="NUM" />
     <public type="string" name="ResetStatisticsAlertTitle" id="NUM" />
+    <public type="string" name="Restore" id="NUM" />
     <public type="string" name="RestoreEmailNoAccess" id="NUM" />
     <public type="string" name="RestoreEmailSent" id="NUM" />
     <public type="string" name="RestoreEmailSentInfo" id="NUM" />
