@@ -8,6 +8,6 @@ public final /* synthetic */ class LaunchActivity$$ExternalSyntheticLambda34 imp
     }
 
     public final void run() {
-        this.f$0.lambda$updateCurrentConnectionState$103();
+        this.f$0.lambda$checkFreeDiscSpace$96();
     }
 }

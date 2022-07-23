@@ -15,6 +15,7 @@ import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.HashMap;
 import javax.xml.parsers.SAXParserFactory;
+import org.telegram.ui.ActionBar.Theme;
 import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
 import org.xml.sax.XMLReader;
@@ -41,7 +42,7 @@ public class SvgHelper {
         }
     }
 
-    private static class Circle {
+    public static class Circle {
         float rad;
         float x1;
         float y1;
@@ -90,6 +91,7 @@ public class SvgHelper {
         private float crossfadeAlpha = 1.0f;
         private int[] currentColor = new int[2];
         private String currentColorKey;
+        private Theme.ResourcesProvider currentResourcesProvider;
         protected int height;
         private Paint overridePaint;
         protected HashMap<Object, Paint> paints = new HashMap<>();
@@ -137,7 +139,7 @@ public class SvgHelper {
             float f7 = f4;
             String str = this.currentColorKey;
             if (str != null) {
-                setupGradient(str, this.colorAlpha, r2);
+                setupGradient(str, this.currentResourcesProvider, this.colorAlpha, r2);
             }
             float scale = getScale((int) f6, (int) f7);
             if (this.placeholderGradient != null) {
@@ -286,25 +288,31 @@ public class SvgHelper {
             this.parentImageReceiver = imageReceiver;
         }
 
+        public void setupGradient(String str, float f, boolean z) {
+            setupGradient(str, (Theme.ResourcesProvider) null, f, z);
+        }
+
         /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v6, resolved type: android.graphics.LinearGradient} */
         /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v8, resolved type: android.graphics.BitmapShader} */
         /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v12, resolved type: android.graphics.LinearGradient} */
         /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r6v8, resolved type: android.graphics.LinearGradient} */
         /* JADX WARNING: Multi-variable type inference failed */
         /* Code decompiled incorrectly, please refer to instructions dump. */
-        public void setupGradient(java.lang.String r21, float r22, boolean r23) {
+        public void setupGradient(java.lang.String r21, org.telegram.ui.ActionBar.Theme.ResourcesProvider r22, float r23, boolean r24) {
             /*
                 r20 = this;
                 r0 = r20
-                int r1 = org.telegram.ui.ActionBar.Theme.getColor(r21)
+                int r1 = org.telegram.ui.ActionBar.Theme.getColor((java.lang.String) r21, (org.telegram.ui.ActionBar.Theme.ResourcesProvider) r22)
+                r2 = r22
+                r0.currentResourcesProvider = r2
                 int[] r2 = r0.currentColor
-                r3 = r2[r23]
-                if (r3 == r1) goto L_0x0138
-                r3 = r22
+                r3 = r2[r24]
+                if (r3 == r1) goto L_0x013c
+                r3 = r23
                 r0.colorAlpha = r3
                 r3 = r21
                 r0.currentColorKey = r3
-                r2[r23] = r1
+                r2[r24] = r1
                 android.graphics.Point r2 = org.telegram.messenger.AndroidUtilities.displaySize
                 int r2 = r2.x
                 r3 = 2
@@ -364,10 +372,10 @@ public class SvgHelper {
                 r4 = 1
                 r15 = r2
                 r8.<init>(r9, r10, r11, r12, r13, r14, r15)
-                r7[r23] = r16
+                r7[r24] = r16
                 int r2 = android.os.Build.VERSION.SDK_INT
                 r5 = 28
-                if (r2 < r5) goto L_0x00a2
+                if (r2 < r5) goto L_0x00a6
                 android.graphics.LinearGradient r5 = new android.graphics.LinearGradient
                 r7 = 0
                 r8 = 0
@@ -380,85 +388,85 @@ public class SvgHelper {
                 android.graphics.Shader$TileMode r13 = android.graphics.Shader.TileMode.REPEAT
                 r6 = r5
                 r6.<init>(r7, r8, r9, r10, r11, r12, r13)
-                goto L_0x00cf
-            L_0x00a2:
+                goto L_0x00d3
+            L_0x00a6:
                 android.graphics.Bitmap[] r3 = r0.backgroundBitmap
-                r5 = r3[r23]
-                if (r5 != 0) goto L_0x00bd
+                r5 = r3[r24]
+                if (r5 != 0) goto L_0x00c1
                 android.graphics.Bitmap$Config r5 = android.graphics.Bitmap.Config.ARGB_8888
                 android.graphics.Bitmap r5 = android.graphics.Bitmap.createBitmap(r4, r4, r5)
-                r3[r23] = r5
+                r3[r24] = r5
                 android.graphics.Canvas[] r3 = r0.backgroundCanvas
                 android.graphics.Canvas r5 = new android.graphics.Canvas
                 android.graphics.Bitmap[] r6 = r0.backgroundBitmap
-                r6 = r6[r23]
+                r6 = r6[r24]
                 r5.<init>(r6)
-                r3[r23] = r5
-            L_0x00bd:
+                r3[r24] = r5
+            L_0x00c1:
                 android.graphics.Canvas[] r3 = r0.backgroundCanvas
-                r3 = r3[r23]
+                r3 = r3[r24]
                 r3.drawColor(r1)
                 android.graphics.BitmapShader r5 = new android.graphics.BitmapShader
                 android.graphics.Bitmap[] r1 = r0.backgroundBitmap
-                r1 = r1[r23]
+                r1 = r1[r24]
                 android.graphics.Shader$TileMode r3 = android.graphics.Shader.TileMode.REPEAT
                 r5.<init>(r1, r3, r3)
-            L_0x00cf:
+            L_0x00d3:
                 android.graphics.Matrix[] r1 = r0.placeholderMatrix
                 android.graphics.Matrix r3 = new android.graphics.Matrix
                 r3.<init>()
-                r1[r23] = r3
+                r1[r24] = r3
                 android.graphics.LinearGradient[] r1 = r0.placeholderGradient
-                r1 = r1[r23]
+                r1 = r1[r24]
                 android.graphics.Matrix[] r3 = r0.placeholderMatrix
-                r3 = r3[r23]
+                r3 = r3[r24]
                 r1.setLocalMatrix(r3)
                 r1 = 22
-                if (r23 == 0) goto L_0x010b
+                if (r24 == 0) goto L_0x010f
                 android.graphics.Paint r3 = r0.backgroundPaint
-                if (r3 != 0) goto L_0x00f2
+                if (r3 != 0) goto L_0x00f6
                 android.graphics.Paint r3 = new android.graphics.Paint
                 r3.<init>(r4)
                 r0.backgroundPaint = r3
-            L_0x00f2:
-                if (r2 > r1) goto L_0x00fa
+            L_0x00f6:
+                if (r2 > r1) goto L_0x00fe
                 android.graphics.Paint r1 = r0.backgroundPaint
                 r1.setShader(r5)
-                goto L_0x0138
-            L_0x00fa:
+                goto L_0x013c
+            L_0x00fe:
                 android.graphics.Paint r1 = r0.backgroundPaint
                 android.graphics.ComposeShader r2 = new android.graphics.ComposeShader
                 android.graphics.LinearGradient[] r3 = r0.placeholderGradient
-                r3 = r3[r23]
+                r3 = r3[r24]
                 android.graphics.PorterDuff$Mode r4 = android.graphics.PorterDuff.Mode.ADD
                 r2.<init>(r3, r5, r4)
                 r1.setShader(r2)
-                goto L_0x0138
-            L_0x010b:
+                goto L_0x013c
+            L_0x010f:
                 java.util.HashMap<java.lang.Object, android.graphics.Paint> r2 = r0.paints
                 java.util.Collection r2 = r2.values()
                 java.util.Iterator r2 = r2.iterator()
-            L_0x0115:
+            L_0x0119:
                 boolean r3 = r2.hasNext()
-                if (r3 == 0) goto L_0x0138
+                if (r3 == 0) goto L_0x013c
                 java.lang.Object r3 = r2.next()
                 android.graphics.Paint r3 = (android.graphics.Paint) r3
                 int r4 = android.os.Build.VERSION.SDK_INT
-                if (r4 > r1) goto L_0x0129
+                if (r4 > r1) goto L_0x012d
                 r3.setShader(r5)
-                goto L_0x0115
-            L_0x0129:
+                goto L_0x0119
+            L_0x012d:
                 android.graphics.ComposeShader r4 = new android.graphics.ComposeShader
                 android.graphics.LinearGradient[] r6 = r0.placeholderGradient
-                r6 = r6[r23]
+                r6 = r6[r24]
                 android.graphics.PorterDuff$Mode r7 = android.graphics.PorterDuff.Mode.ADD
                 r4.<init>(r6, r5, r7)
                 r3.setShader(r4)
-                goto L_0x0115
-            L_0x0138:
+                goto L_0x0119
+            L_0x013c:
                 return
             */
-            throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.SvgHelper.SvgDrawable.setupGradient(java.lang.String, float, boolean):void");
+            throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.SvgHelper.SvgDrawable.setupGradient(java.lang.String, org.telegram.ui.ActionBar.Theme$ResourcesProvider, float, boolean):void");
         }
 
         public void setPaint(Paint paint) {

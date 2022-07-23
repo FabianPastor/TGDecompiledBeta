@@ -1993,7 +1993,6 @@ public class RLottieDrawable extends BitmapDrawable implements Animatable, Bitma
         this.masterParent = view;
     }
 
-    /* access modifiers changed from: private */
     public boolean canLoadFrames() {
         if (this.precache) {
             if (this.bitmapsCache != null) {

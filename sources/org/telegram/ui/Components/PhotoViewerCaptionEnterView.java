@@ -795,7 +795,8 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
                     return true;
                 }
 
-                public void onCustomEmojiSelected(long j, String str) {
+                public void onCustomEmojiSelected(long j, TLRPC$Document tLRPC$Document, String str) {
+                    AnimatedEmojiSpan animatedEmojiSpan;
                     int selectionEnd = PhotoViewerCaptionEnterView.this.messageEditText.getSelectionEnd();
                     if (selectionEnd < 0) {
                         selectionEnd = 0;
@@ -803,7 +804,12 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
                     try {
                         boolean unused = PhotoViewerCaptionEnterView.this.innerTextChange = true;
                         SpannableString spannableString = new SpannableString(str);
-                        spannableString.setSpan(new AnimatedEmojiSpan(j, PhotoViewerCaptionEnterView.this.messageEditText.getPaint().getFontMetricsInt()), 0, spannableString.length(), 33);
+                        if (tLRPC$Document != null) {
+                            animatedEmojiSpan = new AnimatedEmojiSpan(tLRPC$Document, PhotoViewerCaptionEnterView.this.messageEditText.getPaint().getFontMetricsInt());
+                        } else {
+                            animatedEmojiSpan = new AnimatedEmojiSpan(j, PhotoViewerCaptionEnterView.this.messageEditText.getPaint().getFontMetricsInt());
+                        }
+                        spannableString.setSpan(animatedEmojiSpan, 0, spannableString.length(), 33);
                         PhotoViewerCaptionEnterView.this.messageEditText.setText(PhotoViewerCaptionEnterView.this.messageEditText.getText().insert(selectionEnd, spannableString));
                         int length = selectionEnd + spannableString.length();
                         PhotoViewerCaptionEnterView.this.messageEditText.setSelection(length, length);

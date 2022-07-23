@@ -6153,7 +6153,7 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
         if (this.parentFragment != null) {
             new PremiumFeatureBottomSheet(this.parentFragment, 11, false).show();
         } else if (getContext() instanceof LaunchActivity) {
-            ((LaunchActivity) getContext()).lambda$runLinkRequest$59(new PremiumPreviewFragment((String) null));
+            ((LaunchActivity) getContext()).lambda$runLinkRequest$60(new PremiumPreviewFragment((String) null));
         }
     }
 
@@ -8592,6 +8592,7 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
         boolean z2;
         CharSequence charSequence;
         ArrayList<TLRPC$MessageEntity> arrayList;
+        AnimatedEmojiSpan animatedEmojiSpan;
         MessageObject messageObject3 = messageObject;
         boolean z3 = z;
         if (this.audioToSend == null && this.videoToSendMessageObject == null && (messageObject2 = this.editingMessageObject) != messageObject3) {
@@ -8694,7 +8695,12 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
                                                     int i10 = tLRPC$MessageEntity.offset;
                                                     MediaDataController.addStyleToText(textStyleSpan5, i10, tLRPC$MessageEntity.length + i10, spannableStringBuilder, true);
                                                 } else if (tLRPC$MessageEntity instanceof TLRPC$TL_messageEntityCustomEmoji) {
-                                                    AnimatedEmojiSpan animatedEmojiSpan = new AnimatedEmojiSpan(((TLRPC$TL_messageEntityCustomEmoji) tLRPC$MessageEntity).document_id, this.messageEditText.getPaint().getFontMetricsInt());
+                                                    TLRPC$TL_messageEntityCustomEmoji tLRPC$TL_messageEntityCustomEmoji = (TLRPC$TL_messageEntityCustomEmoji) tLRPC$MessageEntity;
+                                                    if (tLRPC$TL_messageEntityCustomEmoji.document != null) {
+                                                        animatedEmojiSpan = new AnimatedEmojiSpan(tLRPC$TL_messageEntityCustomEmoji.document, this.messageEditText.getPaint().getFontMetricsInt());
+                                                    } else {
+                                                        animatedEmojiSpan = new AnimatedEmojiSpan(tLRPC$TL_messageEntityCustomEmoji.document_id, this.messageEditText.getPaint().getFontMetricsInt());
+                                                    }
                                                     int i11 = tLRPC$MessageEntity.offset;
                                                     spannableStringBuilder.setSpan(animatedEmojiSpan, i11, tLRPC$MessageEntity.length + i11, 33);
                                                 }
@@ -9943,12 +9949,13 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
                     int unused3 = ChatActivityEnterView.this.innerTextChange = 0;
                 }
 
-                public void onCustomEmojiSelected(long j, String str) {
-                    AndroidUtilities.runOnUIThread(new ChatActivityEnterView$57$$ExternalSyntheticLambda1(this, str, j));
+                public void onCustomEmojiSelected(long j, TLRPC$Document tLRPC$Document, String str) {
+                    AndroidUtilities.runOnUIThread(new ChatActivityEnterView$57$$ExternalSyntheticLambda1(this, str, tLRPC$Document, j));
                 }
 
                 /* access modifiers changed from: private */
-                public /* synthetic */ void lambda$onCustomEmojiSelected$0(String str, long j) {
+                public /* synthetic */ void lambda$onCustomEmojiSelected$0(String str, TLRPC$Document tLRPC$Document, long j) {
+                    AnimatedEmojiSpan animatedEmojiSpan;
                     int selectionEnd = ChatActivityEnterView.this.messageEditText.getSelectionEnd();
                     if (selectionEnd < 0) {
                         selectionEnd = 0;
@@ -9959,7 +9966,11 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
                             str = "😀";
                         }
                         SpannableString spannableString = new SpannableString(str);
-                        AnimatedEmojiSpan animatedEmojiSpan = new AnimatedEmojiSpan(j, ChatActivityEnterView.this.messageEditText.getPaint().getFontMetricsInt());
+                        if (tLRPC$Document != null) {
+                            animatedEmojiSpan = new AnimatedEmojiSpan(tLRPC$Document, ChatActivityEnterView.this.messageEditText.getPaint().getFontMetricsInt());
+                        } else {
+                            animatedEmojiSpan = new AnimatedEmojiSpan(j, ChatActivityEnterView.this.messageEditText.getPaint().getFontMetricsInt());
+                        }
                         animatedEmojiSpan.cacheType = AnimatedEmojiDrawable.getCacheTypeForEnterView();
                         spannableString.setSpan(animatedEmojiSpan, 0, spannableString.length(), 33);
                         EditTextCaption editTextCaption = ChatActivityEnterView.this.messageEditText;

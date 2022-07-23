@@ -14,6 +14,6 @@ public final /* synthetic */ class LaunchActivity$$ExternalSyntheticLambda102 im
     }
 
     public final void didSelectLocation(TLRPC$MessageMedia tLRPC$MessageMedia, int i, boolean z, int i2) {
-        LaunchActivity.lambda$didReceivedNotification$83(this.f$0, this.f$1, tLRPC$MessageMedia, i, z, i2);
+        LaunchActivity.lambda$didReceivedNotification$84(this.f$0, this.f$1, tLRPC$MessageMedia, i, z, i2);
     }
 }

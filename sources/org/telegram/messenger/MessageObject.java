@@ -10,6 +10,7 @@ import android.text.Layout;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
+import android.text.Spanned;
 import android.text.StaticLayout;
 import android.text.TextPaint;
 import android.text.TextUtils;
@@ -59,6 +60,7 @@ import org.telegram.tgnet.TLRPC$Photo;
 import org.telegram.tgnet.TLRPC$PhotoSize;
 import org.telegram.tgnet.TLRPC$PollResults;
 import org.telegram.tgnet.TLRPC$StickerSet;
+import org.telegram.tgnet.TLRPC$StickerSetCovered;
 import org.telegram.tgnet.TLRPC$TL_channelAdminLogEvent;
 import org.telegram.tgnet.TLRPC$TL_chatAdminRights;
 import org.telegram.tgnet.TLRPC$TL_chatBannedRights;
@@ -132,6 +134,7 @@ import org.telegram.tgnet.TLRPC$TL_pollAnswer;
 import org.telegram.tgnet.TLRPC$TL_pollAnswerVoters;
 import org.telegram.tgnet.TLRPC$TL_reactionCount;
 import org.telegram.tgnet.TLRPC$TL_replyInlineMarkup;
+import org.telegram.tgnet.TLRPC$TL_stickerSetFullCovered;
 import org.telegram.tgnet.TLRPC$TL_webPage;
 import org.telegram.tgnet.TLRPC$TL_webPageAttributeTheme;
 import org.telegram.tgnet.TLRPC$User;
@@ -140,6 +143,7 @@ import org.telegram.tgnet.TLRPC$WebDocument;
 import org.telegram.tgnet.TLRPC$WebPage;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Cells.ChatMessageCell;
+import org.telegram.ui.Components.AnimatedEmojiDrawable;
 import org.telegram.ui.Components.AnimatedEmojiSpan;
 import org.telegram.ui.Components.URLSpanNoUnderlineBold;
 import org.telegram.ui.Components.spoilers.SpoilerEffect;
@@ -192,6 +196,7 @@ public class MessageObject {
     public boolean editingMessageSearchWebPage;
     public TLRPC$Document emojiAnimatedSticker;
     public String emojiAnimatedStickerColor;
+    public Long emojiAnimatedStickerId;
     private int emojiOnlyCount;
     public long eventId;
     public boolean forcePlayEffect;
@@ -1850,6 +1855,7 @@ public class MessageObject {
         AbstractMap<Long, TLRPC$Chat> abstractMap3;
         TLRPC$User tLRPC$User;
         TextPaint textPaint;
+        AnimatedEmojiSpan[] animatedEmojiSpanArr;
         int i2;
         TLRPC$Message tLRPC$Message2 = tLRPC$Message;
         AbstractMap<Long, TLRPC$User> abstractMap4 = abstractMap;
@@ -1906,9 +1912,8 @@ public class MessageObject {
             this.emojiAnimatedSticker = null;
             if (this.emojiOnlyCount == 1) {
                 TLRPC$MessageMedia tLRPC$MessageMedia = tLRPC$Message2.media;
-                if (!(tLRPC$MessageMedia instanceof TLRPC$TL_messageMediaWebPage) && !(tLRPC$MessageMedia instanceof TLRPC$TL_messageMediaInvoice) && tLRPC$Message2.entities.isEmpty()) {
-                    TLRPC$MessageMedia tLRPC$MessageMedia2 = tLRPC$Message2.media;
-                    if (((tLRPC$MessageMedia2 instanceof TLRPC$TL_messageMediaEmpty) || tLRPC$MessageMedia2 == null) && this.messageOwner.grouped_id == 0) {
+                if (!(tLRPC$MessageMedia instanceof TLRPC$TL_messageMediaWebPage) && !(tLRPC$MessageMedia instanceof TLRPC$TL_messageMediaInvoice) && (((tLRPC$MessageMedia instanceof TLRPC$TL_messageMediaEmpty) || tLRPC$MessageMedia == null) && this.messageOwner.grouped_id == 0)) {
+                    if (tLRPC$Message2.entities.isEmpty()) {
                         CharSequence charSequence = this.messageText;
                         int indexOf = TextUtils.indexOf(charSequence, "🏻");
                         if (indexOf >= 0) {
@@ -1951,10 +1956,24 @@ public class MessageObject {
                         if (TextUtils.isEmpty(this.emojiAnimatedStickerColor) || EmojiData.emojiColoredMap.contains(charSequence.toString())) {
                             this.emojiAnimatedSticker = MediaDataController.getInstance(this.currentAccount).getEmojiAnimatedSticker(charSequence);
                         }
+                    } else if (tLRPC$Message2.entities.size() == 1 && (tLRPC$Message2.entities.get(0) instanceof TLRPC$TL_messageEntityCustomEmoji)) {
+                        try {
+                            Long valueOf = Long.valueOf(((TLRPC$TL_messageEntityCustomEmoji) tLRPC$Message2.entities.get(0)).document_id);
+                            this.emojiAnimatedStickerId = valueOf;
+                            TLRPC$Document findDocument = AnimatedEmojiDrawable.findDocument(this.currentAccount, valueOf.longValue());
+                            this.emojiAnimatedSticker = findDocument;
+                            if (findDocument == null) {
+                                CharSequence charSequence3 = this.messageText;
+                                if ((charSequence3 instanceof Spanned) && (animatedEmojiSpanArr = (AnimatedEmojiSpan[]) ((Spanned) charSequence3).getSpans(0, charSequence3.length(), AnimatedEmojiSpan.class)) != null && animatedEmojiSpanArr.length == 1) {
+                                    this.emojiAnimatedSticker = animatedEmojiSpanArr[0].document;
+                                }
+                            }
+                        } catch (Exception unused) {
+                        }
                     }
                 }
             }
-            if (this.emojiAnimatedSticker == null) {
+            if (this.emojiAnimatedSticker == null && this.emojiAnimatedStickerId == null) {
                 generateLayout(tLRPC$User);
             } else {
                 this.type = 1000;
@@ -7716,79 +7735,79 @@ public class MessageObject {
         if ((tLRPC$Message instanceof TLRPC$TL_message) || (tLRPC$Message instanceof TLRPC$TL_messageForwarded_old2)) {
             if (this.isRestrictedMessage) {
                 this.type = 0;
-            } else if (this.emojiAnimatedSticker != null) {
-                if (isSticker()) {
-                    this.type = 13;
-                } else {
-                    this.type = 15;
-                }
-            } else if (isMediaEmpty()) {
-                this.type = 0;
-                if (TextUtils.isEmpty(this.messageText) && this.eventId == 0) {
-                    this.messageText = "Empty message";
-                }
-            } else {
-                TLRPC$MessageMedia tLRPC$MessageMedia = this.messageOwner.media;
-                if (tLRPC$MessageMedia.ttl_seconds == 0 || (!(tLRPC$MessageMedia.photo instanceof TLRPC$TL_photoEmpty) && !(getDocument() instanceof TLRPC$TL_documentEmpty))) {
-                    TLRPC$MessageMedia tLRPC$MessageMedia2 = this.messageOwner.media;
-                    if (tLRPC$MessageMedia2 instanceof TLRPC$TL_messageMediaDice) {
-                        this.type = 15;
-                        if (tLRPC$MessageMedia2.document == null) {
-                            tLRPC$MessageMedia2.document = new TLRPC$TL_document();
-                            TLRPC$Document tLRPC$Document = this.messageOwner.media.document;
-                            tLRPC$Document.file_reference = new byte[0];
-                            tLRPC$Document.mime_type = "application/x-tgsdice";
-                            tLRPC$Document.dc_id = Integer.MIN_VALUE;
-                            tLRPC$Document.id = -2147483648L;
-                            TLRPC$TL_documentAttributeImageSize tLRPC$TL_documentAttributeImageSize = new TLRPC$TL_documentAttributeImageSize();
-                            tLRPC$TL_documentAttributeImageSize.w = 512;
-                            tLRPC$TL_documentAttributeImageSize.h = 512;
-                            this.messageOwner.media.document.attributes.add(tLRPC$TL_documentAttributeImageSize);
-                        }
-                    } else if (tLRPC$MessageMedia2 instanceof TLRPC$TL_messageMediaPhoto) {
-                        this.type = 1;
-                    } else if ((tLRPC$MessageMedia2 instanceof TLRPC$TL_messageMediaGeo) || (tLRPC$MessageMedia2 instanceof TLRPC$TL_messageMediaVenue) || (tLRPC$MessageMedia2 instanceof TLRPC$TL_messageMediaGeoLive)) {
-                        this.type = 4;
-                    } else if (isRoundVideo()) {
-                        this.type = 5;
-                    } else if (isVideo()) {
-                        this.type = 3;
-                    } else if (isVoice()) {
-                        this.type = 2;
-                    } else if (isMusic()) {
-                        this.type = 14;
-                    } else {
-                        TLRPC$MessageMedia tLRPC$MessageMedia3 = this.messageOwner.media;
-                        if (tLRPC$MessageMedia3 instanceof TLRPC$TL_messageMediaContact) {
-                            this.type = 12;
-                        } else if (tLRPC$MessageMedia3 instanceof TLRPC$TL_messageMediaPoll) {
-                            this.type = 17;
-                            this.checkedVotes = new ArrayList<>();
-                        } else if (tLRPC$MessageMedia3 instanceof TLRPC$TL_messageMediaUnsupported) {
-                            this.type = 0;
-                        } else if (tLRPC$MessageMedia3 instanceof TLRPC$TL_messageMediaDocument) {
-                            TLRPC$Document document = getDocument();
-                            if (document == null || document.mime_type == null) {
-                                this.type = 9;
-                            } else if (isGifDocument(document, hasValidGroupId())) {
-                                this.type = 8;
-                            } else if (isSticker()) {
-                                this.type = 13;
-                            } else if (isAnimatedSticker()) {
-                                this.type = 15;
-                            } else {
-                                this.type = 9;
-                            }
-                        } else if (tLRPC$MessageMedia3 instanceof TLRPC$TL_messageMediaGame) {
-                            this.type = 0;
-                        } else if (tLRPC$MessageMedia3 instanceof TLRPC$TL_messageMediaInvoice) {
-                            this.type = 0;
-                        }
+            } else if (this.emojiAnimatedSticker == null && this.emojiAnimatedStickerId == null) {
+                if (isMediaEmpty()) {
+                    this.type = 0;
+                    if (TextUtils.isEmpty(this.messageText) && this.eventId == 0) {
+                        this.messageText = "Empty message";
                     }
                 } else {
-                    this.contentType = 1;
-                    this.type = 10;
+                    TLRPC$MessageMedia tLRPC$MessageMedia = this.messageOwner.media;
+                    if (tLRPC$MessageMedia.ttl_seconds == 0 || (!(tLRPC$MessageMedia.photo instanceof TLRPC$TL_photoEmpty) && !(getDocument() instanceof TLRPC$TL_documentEmpty))) {
+                        TLRPC$MessageMedia tLRPC$MessageMedia2 = this.messageOwner.media;
+                        if (tLRPC$MessageMedia2 instanceof TLRPC$TL_messageMediaDice) {
+                            this.type = 15;
+                            if (tLRPC$MessageMedia2.document == null) {
+                                tLRPC$MessageMedia2.document = new TLRPC$TL_document();
+                                TLRPC$Document tLRPC$Document = this.messageOwner.media.document;
+                                tLRPC$Document.file_reference = new byte[0];
+                                tLRPC$Document.mime_type = "application/x-tgsdice";
+                                tLRPC$Document.dc_id = Integer.MIN_VALUE;
+                                tLRPC$Document.id = -2147483648L;
+                                TLRPC$TL_documentAttributeImageSize tLRPC$TL_documentAttributeImageSize = new TLRPC$TL_documentAttributeImageSize();
+                                tLRPC$TL_documentAttributeImageSize.w = 512;
+                                tLRPC$TL_documentAttributeImageSize.h = 512;
+                                this.messageOwner.media.document.attributes.add(tLRPC$TL_documentAttributeImageSize);
+                            }
+                        } else if (tLRPC$MessageMedia2 instanceof TLRPC$TL_messageMediaPhoto) {
+                            this.type = 1;
+                        } else if ((tLRPC$MessageMedia2 instanceof TLRPC$TL_messageMediaGeo) || (tLRPC$MessageMedia2 instanceof TLRPC$TL_messageMediaVenue) || (tLRPC$MessageMedia2 instanceof TLRPC$TL_messageMediaGeoLive)) {
+                            this.type = 4;
+                        } else if (isRoundVideo()) {
+                            this.type = 5;
+                        } else if (isVideo()) {
+                            this.type = 3;
+                        } else if (isVoice()) {
+                            this.type = 2;
+                        } else if (isMusic()) {
+                            this.type = 14;
+                        } else {
+                            TLRPC$MessageMedia tLRPC$MessageMedia3 = this.messageOwner.media;
+                            if (tLRPC$MessageMedia3 instanceof TLRPC$TL_messageMediaContact) {
+                                this.type = 12;
+                            } else if (tLRPC$MessageMedia3 instanceof TLRPC$TL_messageMediaPoll) {
+                                this.type = 17;
+                                this.checkedVotes = new ArrayList<>();
+                            } else if (tLRPC$MessageMedia3 instanceof TLRPC$TL_messageMediaUnsupported) {
+                                this.type = 0;
+                            } else if (tLRPC$MessageMedia3 instanceof TLRPC$TL_messageMediaDocument) {
+                                TLRPC$Document document = getDocument();
+                                if (document == null || document.mime_type == null) {
+                                    this.type = 9;
+                                } else if (isGifDocument(document, hasValidGroupId())) {
+                                    this.type = 8;
+                                } else if (isSticker()) {
+                                    this.type = 13;
+                                } else if (isAnimatedSticker()) {
+                                    this.type = 15;
+                                } else {
+                                    this.type = 9;
+                                }
+                            } else if (tLRPC$MessageMedia3 instanceof TLRPC$TL_messageMediaGame) {
+                                this.type = 0;
+                            } else if (tLRPC$MessageMedia3 instanceof TLRPC$TL_messageMediaInvoice) {
+                                this.type = 0;
+                            }
+                        }
+                    } else {
+                        this.contentType = 1;
+                        this.type = 10;
+                    }
                 }
+            } else if (isSticker()) {
+                this.type = 13;
+            } else {
+                this.type = 15;
             }
         } else if (tLRPC$Message instanceof TLRPC$TL_messageService) {
             TLRPC$MessageAction tLRPC$MessageAction = tLRPC$Message.action;
@@ -8081,12 +8100,12 @@ public class MessageObject {
                 }
                 this.photoThumbsObject = this.messageOwner.action.photo;
             }
-        } else if (this.emojiAnimatedSticker == null) {
+        } else if (this.emojiAnimatedSticker == null && this.emojiAnimatedStickerId == null) {
             TLRPC$MessageMedia tLRPC$MessageMedia = tLRPC$Message.media;
             if (tLRPC$MessageMedia != null && !(tLRPC$MessageMedia instanceof TLRPC$TL_messageMediaEmpty)) {
                 if (tLRPC$MessageMedia instanceof TLRPC$TL_messageMediaPhoto) {
                     TLRPC$Photo tLRPC$Photo2 = tLRPC$MessageMedia.photo;
-                    if (!z || !((arrayList5 = this.photoThumbs) == null || arrayList5.size() == tLRPC$Photo2.sizes.size())) {
+                    if (!z || !((arrayList6 = this.photoThumbs) == null || arrayList6.size() == tLRPC$Photo2.sizes.size())) {
                         this.photoThumbs = new ArrayList<>(tLRPC$Photo2.sizes);
                     } else {
                         ArrayList<TLRPC$PhotoSize> arrayList9 = this.photoThumbs;
@@ -8121,11 +8140,11 @@ public class MessageObject {
                 } else if (tLRPC$MessageMedia instanceof TLRPC$TL_messageMediaDocument) {
                     TLRPC$Document document = getDocument();
                     if (isDocumentHasThumb(document)) {
-                        if (!z || (arrayList4 = this.photoThumbs) == null) {
+                        if (!z || (arrayList5 = this.photoThumbs) == null) {
                             ArrayList<TLRPC$PhotoSize> arrayList10 = new ArrayList<>();
                             this.photoThumbs = arrayList10;
                             arrayList10.addAll(document.thumbs);
-                        } else if (!arrayList4.isEmpty()) {
+                        } else if (!arrayList5.isEmpty()) {
                             updatePhotoSizeLocations(this.photoThumbs, document.thumbs);
                         }
                         this.photoThumbsObject = document;
@@ -8147,15 +8166,15 @@ public class MessageObject {
                     }
                     TLRPC$Photo tLRPC$Photo3 = this.messageOwner.media.game.photo;
                     if (tLRPC$Photo3 != null) {
-                        if (!z || (arrayList3 = this.photoThumbs2) == null) {
+                        if (!z || (arrayList4 = this.photoThumbs2) == null) {
                             this.photoThumbs2 = new ArrayList<>(tLRPC$Photo3.sizes);
-                        } else if (!arrayList3.isEmpty()) {
+                        } else if (!arrayList4.isEmpty()) {
                             updatePhotoSizeLocations(this.photoThumbs2, tLRPC$Photo3.sizes);
                         }
                         this.photoThumbsObject2 = tLRPC$Photo3;
                     }
-                    if (this.photoThumbs == null && (arrayList2 = this.photoThumbs2) != null) {
-                        this.photoThumbs = arrayList2;
+                    if (this.photoThumbs == null && (arrayList3 = this.photoThumbs2) != null) {
+                        this.photoThumbs = arrayList3;
                         this.photoThumbs2 = null;
                         this.photoThumbsObject = this.photoThumbsObject2;
                         this.photoThumbsObject2 = null;
@@ -8165,9 +8184,9 @@ public class MessageObject {
                     TLRPC$Photo tLRPC$Photo4 = tLRPC$WebPage.photo;
                     TLRPC$Document tLRPC$Document2 = tLRPC$WebPage.document;
                     if (tLRPC$Photo4 != null) {
-                        if (!z || (arrayList = this.photoThumbs) == null) {
+                        if (!z || (arrayList2 = this.photoThumbs) == null) {
                             this.photoThumbs = new ArrayList<>(tLRPC$Photo4.sizes);
-                        } else if (!arrayList.isEmpty()) {
+                        } else if (!arrayList2.isEmpty()) {
                             updatePhotoSizeLocations(this.photoThumbs, tLRPC$Photo4.sizes);
                         }
                         this.photoThumbsObject = tLRPC$Photo4;
@@ -8187,11 +8206,11 @@ public class MessageObject {
                 }
             }
         } else if (TextUtils.isEmpty(this.emojiAnimatedStickerColor) && isDocumentHasThumb(this.emojiAnimatedSticker)) {
-            if (!z || (arrayList6 = this.photoThumbs) == null) {
+            if (!z || (arrayList = this.photoThumbs) == null) {
                 ArrayList<TLRPC$PhotoSize> arrayList15 = new ArrayList<>();
                 this.photoThumbs = arrayList15;
                 arrayList15.addAll(this.emojiAnimatedSticker.thumbs);
-            } else if (!arrayList6.isEmpty()) {
+            } else if (!arrayList.isEmpty()) {
                 updatePhotoSizeLocations(this.photoThumbs, this.emojiAnimatedSticker.thumbs);
             }
             this.photoThumbsObject = this.emojiAnimatedSticker;
@@ -9136,6 +9155,7 @@ public class MessageObject {
     }
 
     public static Spannable replaceAnimatedEmoji(CharSequence charSequence, ArrayList<TLRPC$MessageEntity> arrayList, Paint.FontMetricsInt fontMetricsInt) {
+        AnimatedEmojiSpan animatedEmojiSpan;
         Spannable spannableString = charSequence instanceof Spannable ? (Spannable) charSequence : new SpannableString(charSequence);
         if (arrayList == null) {
             return spannableString;
@@ -9157,7 +9177,11 @@ public class MessageObject {
                     }
                 }
                 if (tLRPC$MessageEntity.offset + tLRPC$MessageEntity.length <= spannableString.length()) {
-                    AnimatedEmojiSpan animatedEmojiSpan = new AnimatedEmojiSpan(tLRPC$TL_messageEntityCustomEmoji.document_id, fontMetricsInt);
+                    if (tLRPC$TL_messageEntityCustomEmoji.document != null) {
+                        animatedEmojiSpan = new AnimatedEmojiSpan(tLRPC$TL_messageEntityCustomEmoji.document, fontMetricsInt);
+                    } else {
+                        animatedEmojiSpan = new AnimatedEmojiSpan(tLRPC$TL_messageEntityCustomEmoji.document_id, fontMetricsInt);
+                    }
                     int i3 = tLRPC$MessageEntity.offset;
                     spannableString.setSpan(animatedEmojiSpan, i3, tLRPC$MessageEntity.length + i3, 33);
                 }
@@ -11118,6 +11142,9 @@ public class MessageObject {
                 if (tLRPC$DocumentAttribute instanceof TLRPC$TL_documentAttributeSticker) {
                     return tLRPC$DocumentAttribute.stickerset instanceof TLRPC$TL_inputStickerSetShortName;
                 }
+                if (tLRPC$DocumentAttribute instanceof TLRPC$TL_documentAttributeCustomEmoji) {
+                    return true;
+                }
             }
         }
         return false;
@@ -11406,6 +11433,19 @@ public class MessageObject {
         return str;
     }
 
+    public static boolean isAnimatedEmoji(TLRPC$Document tLRPC$Document) {
+        if (tLRPC$Document == null) {
+            return false;
+        }
+        int size = tLRPC$Document.attributes.size();
+        for (int i = 0; i < size; i++) {
+            if (tLRPC$Document.attributes.get(i) instanceof TLRPC$TL_documentAttributeCustomEmoji) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public static boolean isFreeEmoji(TLRPC$Document tLRPC$Document) {
         if (tLRPC$Document == null) {
             return false;
@@ -11425,6 +11465,22 @@ public class MessageObject {
         if (!((tLRPC$TL_messages_stickerSet != null && (tLRPC$StickerSet = tLRPC$TL_messages_stickerSet.set) != null && !tLRPC$StickerSet.emojis) || tLRPC$TL_messages_stickerSet == null || tLRPC$TL_messages_stickerSet.documents == null)) {
             for (int i = 0; i < tLRPC$TL_messages_stickerSet.documents.size(); i++) {
                 if (!isFreeEmoji(tLRPC$TL_messages_stickerSet.documents.get(i))) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    public static boolean isPremiumEmojiPack(TLRPC$StickerSetCovered tLRPC$StickerSetCovered) {
+        TLRPC$StickerSet tLRPC$StickerSet;
+        if (tLRPC$StickerSetCovered != null && (tLRPC$StickerSet = tLRPC$StickerSetCovered.set) != null && !tLRPC$StickerSet.emojis) {
+            return false;
+        }
+        ArrayList<TLRPC$Document> arrayList = tLRPC$StickerSetCovered instanceof TLRPC$TL_stickerSetFullCovered ? ((TLRPC$TL_stickerSetFullCovered) tLRPC$StickerSetCovered).documents : tLRPC$StickerSetCovered.covers;
+        if (!(tLRPC$StickerSetCovered == null || arrayList == null)) {
+            for (int i = 0; i < arrayList.size(); i++) {
+                if (!isFreeEmoji(arrayList.get(i))) {
                     return true;
                 }
             }
@@ -11529,21 +11585,23 @@ public class MessageObject {
                 }
                 float f2 = ((float) i) * 0.5f;
                 TLRPC$Document document = getDocument();
-                int size = document.attributes.size();
-                int i9 = 0;
-                while (true) {
-                    if (i9 >= size) {
-                        i2 = 0;
-                        break;
+                if (document != null) {
+                    int size = document.attributes.size();
+                    int i9 = 0;
+                    while (true) {
+                        if (i9 >= size) {
+                            break;
+                        }
+                        TLRPC$DocumentAttribute tLRPC$DocumentAttribute = document.attributes.get(i9);
+                        if (tLRPC$DocumentAttribute instanceof TLRPC$TL_documentAttributeImageSize) {
+                            i6 = tLRPC$DocumentAttribute.w;
+                            i2 = tLRPC$DocumentAttribute.h;
+                            break;
+                        }
+                        i9++;
                     }
-                    TLRPC$DocumentAttribute tLRPC$DocumentAttribute = document.attributes.get(i9);
-                    if (tLRPC$DocumentAttribute instanceof TLRPC$TL_documentAttributeImageSize) {
-                        i6 = tLRPC$DocumentAttribute.w;
-                        i2 = tLRPC$DocumentAttribute.h;
-                        break;
-                    }
-                    i9++;
                 }
+                i2 = 0;
                 if (i6 == 0) {
                     i2 = (int) f;
                     i6 = AndroidUtilities.dp(100.0f) + i2;
@@ -11641,7 +11699,7 @@ public class MessageObject {
     }
 
     public boolean isAnimatedEmoji() {
-        return this.emojiAnimatedSticker != null;
+        return (this.emojiAnimatedSticker == null && this.emojiAnimatedStickerId == null) ? false : true;
     }
 
     public boolean isDice() {
@@ -11687,6 +11745,9 @@ public class MessageObject {
         boolean isEncryptedDialog = DialogObject.isEncryptedDialog(getDialogId());
         if (isEncryptedDialog && this.messageOwner.stickerVerified != 1) {
             return false;
+        }
+        if (this.emojiAnimatedStickerId != null && this.emojiAnimatedSticker == null) {
+            return true;
         }
         TLRPC$Document document = getDocument();
         if (this.emojiAnimatedSticker != null || !isEncryptedDialog || isOut()) {

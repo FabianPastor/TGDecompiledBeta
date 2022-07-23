@@ -11,6 +11,6 @@ public final /* synthetic */ class GiftPremiumBottomSheet$$ExternalSyntheticLamb
     }
 
     public final void accept(Object obj) {
-        this.f$0.lambda$onGiftPremium$7((BillingResult) obj);
+        this.f$0.lambda$onGiftPremium$8((BillingResult) obj);
     }
 }

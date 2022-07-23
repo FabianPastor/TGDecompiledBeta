@@ -8,6 +8,6 @@ public final /* synthetic */ class LaunchActivity$$ExternalSyntheticLambda29 imp
     }
 
     public final void run() {
-        this.f$0.lambda$runLinkRequest$62();
+        this.f$0.lambda$didReceivedNotification$90();
     }
 }

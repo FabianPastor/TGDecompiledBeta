@@ -58,6 +58,16 @@ public class AnimatedFloat {
         this.firstSet = true;
     }
 
+    public AnimatedFloat(Runnable runnable, long j, TimeInterpolator timeInterpolator) {
+        this.transitionDelay = 0;
+        this.transitionDuration = 200;
+        this.transitionInterpolator = CubicBezierInterpolator.DEFAULT;
+        this.invalidate = runnable;
+        this.transitionDuration = j;
+        this.transitionInterpolator = timeInterpolator;
+        this.firstSet = true;
+    }
+
     public AnimatedFloat(float f, View view, long j, long j2, TimeInterpolator timeInterpolator) {
         this.transitionDelay = 0;
         this.transitionDuration = 200;

@@ -1,10 +1,10 @@
 Signature-Version: 1.0
 Created-By: Android Gradle 7.0.3
-SHA1-Digest-Manifest: Y/3tjZ5iwWljcuHaKSBEbXElUCg=
+SHA1-Digest-Manifest: 5j2dhLOLYiMvPD56n8UlaVyDopA=
 X-Android-APK-Signed: 2
 
 Name: AndroidManifest.xml
-SHA1-Digest: 89MDMy8VkxuvDjGRmYvxe1IPKYM=
+SHA1-Digest: 0hzTKDX0DF9B1FCgtJav6dipJfw=
 
 Name: HMSCore-availableupdate.properties
 SHA1-Digest: 11kR5f59uvf/yQtBM+bMIjc7dwg=
@@ -10597,13 +10597,13 @@ Name: builddef.lst
 SHA1-Digest: b4iFOKGOQFQJO7IF+KXHSQsv2sI=
 
 Name: classes.dex
-SHA1-Digest: XpS9/YpQSvi1esvR1l/tqER4pD8=
+SHA1-Digest: RcEfA7iEKHBJ+Y1X7/J243glNU0=
 
 Name: classes2.dex
 SHA1-Digest: 52oBuDOObTnPNTz1yTfsDd6NAWA=
 
 Name: classes3.dex
-SHA1-Digest: uZHEbcqaVQifWMGfdc+Akk5kbB8=
+SHA1-Digest: fJhvcGBgaKjra20GrrZUON7TOjM=
 
 Name: com/google/android/search/verification/client/R.java
 SHA1-Digest: CIvj9T4PvsdJr6yfeJo7sTlaGfQ=
@@ -21136,7 +21136,7 @@ Name: res/mj2.png
 SHA1-Digest: V6MxsubilSR63qfyp3JEvuxsQbw=
 
 Name: res/mj5.json
-SHA1-Digest: 1qyQ6FD4SUwDSZ74huyWTPJpGg0=
+SHA1-Digest: eWeVCD61b2qAjV9AXpGIzvQwzpY=
 
 Name: res/mjJ.png
 SHA1-Digest: vXx171g6KbCf0+GZKGA97t9XDB0=
@@ -21841,7 +21841,7 @@ Name: res/qCW.png
 SHA1-Digest: MBWso+5FPt7bhYplG0d1bBmZ3D8=
 
 Name: res/qDk.json
-SHA1-Digest: yyGqulKHexp6p1SsHHoDJHkN6U8=
+SHA1-Digest: 7ZUl7q/jIesLj2ulVQt/AM5h9Nk=
 
 Name: res/qE1.png
 SHA1-Digest: MNbBmFX0ooxcWxn9ehLPVqJFPSM=

@@ -22,6 +22,6 @@ public final /* synthetic */ class LaunchActivity$$ExternalSyntheticLambda98 imp
     }
 
     public final void didSelectDialogs(DialogsActivity dialogsActivity, ArrayList arrayList, CharSequence charSequence, boolean z) {
-        this.f$0.lambda$runLinkRequest$42(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, dialogsActivity, arrayList, charSequence, z);
+        this.f$0.lambda$runLinkRequest$43(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, dialogsActivity, arrayList, charSequence, z);
     }
 }

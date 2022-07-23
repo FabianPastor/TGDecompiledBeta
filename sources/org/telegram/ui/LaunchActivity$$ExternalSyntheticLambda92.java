@@ -22,6 +22,6 @@ public final /* synthetic */ class LaunchActivity$$ExternalSyntheticLambda92 imp
     }
 
     public final void didSelectContact(TLRPC$User tLRPC$User, boolean z, int i) {
-        this.f$0.lambda$didSelectDialogs$77(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, tLRPC$User, z, i);
+        this.f$0.lambda$didSelectDialogs$78(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, tLRPC$User, z, i);
     }
 }

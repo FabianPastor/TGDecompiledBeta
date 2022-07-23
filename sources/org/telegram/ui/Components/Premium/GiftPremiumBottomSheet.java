@@ -8,6 +8,7 @@ import android.graphics.Path;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.net.Uri;
+import android.os.Bundle;
 import android.text.TextPaint;
 import android.text.style.ClickableSpan;
 import android.view.View;
@@ -40,7 +41,9 @@ import org.telegram.tgnet.TLRPC$TL_payments_canPurchasePremium;
 import org.telegram.tgnet.TLRPC$TL_premiumGiftOption;
 import org.telegram.tgnet.TLRPC$User;
 import org.telegram.tgnet.TLRPC$UserFull;
+import org.telegram.ui.ActionBar.ActionBarLayout;
 import org.telegram.ui.ActionBar.BaseFragment;
+import org.telegram.ui.ChatActivity;
 import org.telegram.ui.Components.AlertsCreator;
 import org.telegram.ui.Components.BottomSheetWithRecyclerListView;
 import org.telegram.ui.Components.LayoutHelper;
@@ -48,6 +51,7 @@ import org.telegram.ui.Components.Premium.PremiumGradient;
 import org.telegram.ui.Components.RecyclerListView;
 import org.telegram.ui.LaunchActivity;
 import org.telegram.ui.PremiumPreviewFragment;
+import org.telegram.ui.ProfileActivity;
 
 public class GiftPremiumBottomSheet extends BottomSheetWithRecyclerListView {
     /* access modifiers changed from: private */
@@ -131,7 +135,7 @@ public class GiftPremiumBottomSheet extends BottomSheetWithRecyclerListView {
         this.footerRow = size;
         this.rowsCount = i3 + 1;
         this.buttonRow = i3;
-        this.recyclerListView.setOnItemClickListener((RecyclerListView.OnItemClickListener) new GiftPremiumBottomSheet$$ExternalSyntheticLambda9(this));
+        this.recyclerListView.setOnItemClickListener((RecyclerListView.OnItemClickListener) new GiftPremiumBottomSheet$$ExternalSyntheticLambda10(this));
         this.recyclerListView.setOverScrollMode(2);
         this.recyclerListView.setSelectorTransformer(new GiftPremiumBottomSheet$$ExternalSyntheticLambda3(this, new Path()));
     }
@@ -154,7 +158,7 @@ public class GiftPremiumBottomSheet extends BottomSheetWithRecyclerListView {
                 }
             }
         }
-        AndroidUtilities.runOnUIThread(new GiftPremiumBottomSheet$$ExternalSyntheticLambda6(this, j));
+        AndroidUtilities.runOnUIThread(new GiftPremiumBottomSheet$$ExternalSyntheticLambda7(this, j));
     }
 
     /* access modifiers changed from: private */
@@ -234,13 +238,44 @@ public class GiftPremiumBottomSheet extends BottomSheetWithRecyclerListView {
         onGiftPremium();
     }
 
+    private void onGiftSuccess(boolean z) {
+        if (getBaseFragment() != null) {
+            ArrayList<BaseFragment> arrayList = new ArrayList<>(((LaunchActivity) getBaseFragment().getParentActivity()).getActionBarLayout().fragmentsStack);
+            ActionBarLayout parentLayout = getBaseFragment().getParentLayout();
+            ChatActivity chatActivity = null;
+            for (BaseFragment baseFragment : arrayList) {
+                if (baseFragment instanceof ChatActivity) {
+                    chatActivity = baseFragment;
+                    if (chatActivity.getDialogId() != this.user.id) {
+                        baseFragment.removeSelfFromStack();
+                    }
+                } else if (baseFragment instanceof ProfileActivity) {
+                    if (!z || parentLayout.getLastFragment() != baseFragment) {
+                        baseFragment.removeSelfFromStack();
+                    } else {
+                        baseFragment.finishFragment();
+                    }
+                }
+            }
+            if (chatActivity == null || chatActivity.getDialogId() != this.user.id) {
+                Bundle bundle = new Bundle();
+                bundle.putLong("user_id", this.user.id);
+                parentLayout.presentFragment(new ChatActivity(bundle), true);
+            }
+        }
+    }
+
     private void onGiftPremium() {
         GiftTier giftTier = this.giftTiers.get(this.selectedTierIndex);
         if (BuildVars.useInvoiceBilling()) {
             if (getBaseFragment().getParentActivity() instanceof LaunchActivity) {
                 Uri parse = Uri.parse(giftTier.giftOption.bot_url);
-                if (parse.getHost().equals("t.me") && !parse.getPath().startsWith("/$") && !parse.getPath().startsWith("/invoice/")) {
-                    ((LaunchActivity) getBaseFragment().getParentActivity()).setNavigateToPremiumBot(true);
+                if (parse.getHost().equals("t.me")) {
+                    if (parse.getPath().startsWith("/$") || parse.getPath().startsWith("/invoice/")) {
+                        ((LaunchActivity) getBaseFragment().getParentActivity()).setNavigateToPremiumGiftCallback(new GiftPremiumBottomSheet$$ExternalSyntheticLambda5(this));
+                    } else {
+                        ((LaunchActivity) getBaseFragment().getParentActivity()).setNavigateToPremiumBot(true);
+                    }
                 }
                 Browser.openUrl((Context) getBaseFragment().getParentActivity(), giftTier.giftOption.bot_url);
             }
@@ -256,31 +291,34 @@ public class GiftPremiumBottomSheet extends BottomSheetWithRecyclerListView {
             BillingController.getInstance().addResultListener(giftTier.giftOption.store_product, new GiftPremiumBottomSheet$$ExternalSyntheticLambda2(this));
             TLRPC$TL_payments_canPurchasePremium tLRPC$TL_payments_canPurchasePremium = new TLRPC$TL_payments_canPurchasePremium();
             tLRPC$TL_payments_canPurchasePremium.purpose = tLRPC$TL_inputStorePaymentGiftPremium;
-            ConnectionsManager.getInstance(this.currentAccount).sendRequest(tLRPC$TL_payments_canPurchasePremium, new GiftPremiumBottomSheet$$ExternalSyntheticLambda8(this, tLRPC$TL_inputStorePaymentGiftPremium, giftTier, tLRPC$TL_payments_canPurchasePremium));
-        }
-    }
-
-    /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$onGiftPremium$7(BillingResult billingResult) {
-        if (billingResult.getResponseCode() == 0) {
-            AndroidUtilities.runOnUIThread(new GiftPremiumBottomSheet$$ExternalSyntheticLambda5(this));
+            ConnectionsManager.getInstance(this.currentAccount).sendRequest(tLRPC$TL_payments_canPurchasePremium, new GiftPremiumBottomSheet$$ExternalSyntheticLambda9(this, tLRPC$TL_inputStorePaymentGiftPremium, giftTier, tLRPC$TL_payments_canPurchasePremium));
         }
     }
 
     /* access modifiers changed from: private */
     public /* synthetic */ void lambda$onGiftPremium$6() {
-        if (getBaseFragment() != null) {
-            getBaseFragment().finishFragment();
+        onGiftSuccess(false);
+    }
+
+    /* access modifiers changed from: private */
+    public /* synthetic */ void lambda$onGiftPremium$8(BillingResult billingResult) {
+        if (billingResult.getResponseCode() == 0) {
+            AndroidUtilities.runOnUIThread(new GiftPremiumBottomSheet$$ExternalSyntheticLambda6(this));
         }
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$onGiftPremium$9(TLRPC$TL_inputStorePaymentGiftPremium tLRPC$TL_inputStorePaymentGiftPremium, GiftTier giftTier, TLRPC$TL_payments_canPurchasePremium tLRPC$TL_payments_canPurchasePremium, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        AndroidUtilities.runOnUIThread(new GiftPremiumBottomSheet$$ExternalSyntheticLambda7(this, tLObject, tLRPC$TL_inputStorePaymentGiftPremium, giftTier, tLRPC$TL_error, tLRPC$TL_payments_canPurchasePremium));
+    public /* synthetic */ void lambda$onGiftPremium$7() {
+        onGiftSuccess(true);
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$onGiftPremium$8(TLObject tLObject, TLRPC$TL_inputStorePaymentGiftPremium tLRPC$TL_inputStorePaymentGiftPremium, GiftTier giftTier, TLRPC$TL_error tLRPC$TL_error, TLRPC$TL_payments_canPurchasePremium tLRPC$TL_payments_canPurchasePremium) {
+    public /* synthetic */ void lambda$onGiftPremium$10(TLRPC$TL_inputStorePaymentGiftPremium tLRPC$TL_inputStorePaymentGiftPremium, GiftTier giftTier, TLRPC$TL_payments_canPurchasePremium tLRPC$TL_payments_canPurchasePremium, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+        AndroidUtilities.runOnUIThread(new GiftPremiumBottomSheet$$ExternalSyntheticLambda8(this, tLObject, tLRPC$TL_inputStorePaymentGiftPremium, giftTier, tLRPC$TL_error, tLRPC$TL_payments_canPurchasePremium));
+    }
+
+    /* access modifiers changed from: private */
+    public /* synthetic */ void lambda$onGiftPremium$9(TLObject tLObject, TLRPC$TL_inputStorePaymentGiftPremium tLRPC$TL_inputStorePaymentGiftPremium, GiftTier giftTier, TLRPC$TL_error tLRPC$TL_error, TLRPC$TL_payments_canPurchasePremium tLRPC$TL_payments_canPurchasePremium) {
         if (tLObject instanceof TLRPC$TL_boolTrue) {
             BillingController.getInstance().launchBillingFlow(getBaseFragment().getParentActivity(), AccountInstance.getInstance(this.currentAccount), tLRPC$TL_inputStorePaymentGiftPremium, Collections.singletonList(BillingFlowParams.ProductDetailsParams.newBuilder().setProductDetails(giftTier.googlePlayProductDetails).build()));
         } else if (tLRPC$TL_error != null) {
@@ -508,27 +546,32 @@ public class GiftPremiumBottomSheet extends BottomSheetWithRecyclerListView {
         }
 
         public int getDiscount() {
+            long j;
             if (this.discount == 0) {
                 if (getPricePerMonth() == 0) {
                     return 0;
                 }
-                long j = BuildVars.useInvoiceBilling() ? MediaDataController.getInstance(UserConfig.selectedAccount).getPremiumPromo().monthly_amount : 0;
-                ProductDetails productDetails = BillingController.PREMIUM_PRODUCT_DETAILS;
-                if (productDetails != null) {
-                    List<ProductDetails.SubscriptionOfferDetails> subscriptionOfferDetails = productDetails.getSubscriptionOfferDetails();
-                    if (!subscriptionOfferDetails.isEmpty()) {
-                        Iterator<ProductDetails.PricingPhase> it = subscriptionOfferDetails.get(0).getPricingPhases().getPricingPhaseList().iterator();
-                        while (true) {
-                            if (!it.hasNext()) {
-                                break;
-                            }
-                            ProductDetails.PricingPhase next = it.next();
-                            if (next.getBillingPeriod().equals("P1M")) {
-                                j = next.getPriceAmountMicros();
-                                break;
+                if (BuildVars.useInvoiceBilling()) {
+                    j = MediaDataController.getInstance(UserConfig.selectedAccount).getPremiumPromo().monthly_amount;
+                } else {
+                    ProductDetails productDetails = BillingController.PREMIUM_PRODUCT_DETAILS;
+                    if (productDetails != null) {
+                        List<ProductDetails.SubscriptionOfferDetails> subscriptionOfferDetails = productDetails.getSubscriptionOfferDetails();
+                        if (!subscriptionOfferDetails.isEmpty()) {
+                            Iterator<ProductDetails.PricingPhase> it = subscriptionOfferDetails.get(0).getPricingPhases().getPricingPhaseList().iterator();
+                            while (true) {
+                                if (!it.hasNext()) {
+                                    break;
+                                }
+                                ProductDetails.PricingPhase next = it.next();
+                                if (next.getBillingPeriod().equals("P1M")) {
+                                    j = next.getPriceAmountMicros();
+                                    break;
+                                }
                             }
                         }
                     }
+                    j = 0;
                 }
                 if (j != 0) {
                     double pricePerMonth2 = (double) getPricePerMonth();

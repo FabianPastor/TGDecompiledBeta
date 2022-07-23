@@ -634,7 +634,8 @@ public class EditTextEmoji extends FrameLayout implements NotificationCenter.Not
                     int unused3 = EditTextEmoji.this.innerTextChange = 0;
                 }
 
-                public void onCustomEmojiSelected(long j, String str) {
+                public void onCustomEmojiSelected(long j, TLRPC$Document tLRPC$Document, String str) {
+                    AnimatedEmojiSpan animatedEmojiSpan;
                     int selectionEnd = EditTextEmoji.this.editText.getSelectionEnd();
                     if (selectionEnd < 0) {
                         selectionEnd = 0;
@@ -642,7 +643,12 @@ public class EditTextEmoji extends FrameLayout implements NotificationCenter.Not
                     try {
                         int unused = EditTextEmoji.this.innerTextChange = 2;
                         SpannableString spannableString = new SpannableString(str);
-                        spannableString.setSpan(new AnimatedEmojiSpan(j, EditTextEmoji.this.editText.getPaint().getFontMetricsInt()), 0, spannableString.length(), 33);
+                        if (tLRPC$Document != null) {
+                            animatedEmojiSpan = new AnimatedEmojiSpan(tLRPC$Document, EditTextEmoji.this.editText.getPaint().getFontMetricsInt());
+                        } else {
+                            animatedEmojiSpan = new AnimatedEmojiSpan(j, EditTextEmoji.this.editText.getPaint().getFontMetricsInt());
+                        }
+                        spannableString.setSpan(animatedEmojiSpan, 0, spannableString.length(), 33);
                         EditTextEmoji.this.editText.setText(EditTextEmoji.this.editText.getText().insert(selectionEnd, spannableString));
                         int length = selectionEnd + spannableString.length();
                         EditTextEmoji.this.editText.setSelection(length, length);

@@ -27,6 +27,6 @@ public final /* synthetic */ class LaunchActivity$$ExternalSyntheticLambda66 imp
     }
 
     public final void run(boolean z, TLRPC$TL_chatAdminRights tLRPC$TL_chatAdminRights, String str) {
-        this.f$0.lambda$runLinkRequest$40(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6, this.f$7, z, tLRPC$TL_chatAdminRights, str);
+        this.f$0.lambda$runLinkRequest$41(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6, this.f$7, z, tLRPC$TL_chatAdminRights, str);
     }
 }

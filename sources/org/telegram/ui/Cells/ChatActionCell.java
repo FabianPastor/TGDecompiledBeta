@@ -19,6 +19,7 @@ import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.accessibility.AccessibilityNodeInfo;
+import androidx.core.util.ObjectsCompat$$ExternalSyntheticBackport0;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -74,6 +75,7 @@ public class ChatActionCell extends BaseCell implements DownloadController.FileD
     private CharSequence customText;
     /* access modifiers changed from: private */
     public ChatActionCellDelegate delegate;
+    private boolean forceWasUnread;
     private boolean giftButtonPressed;
     private RectF giftButtonRect;
     private TLRPC$VideoSize giftEffectAnimation;
@@ -191,8 +193,13 @@ public class ChatActionCell extends BaseCell implements DownloadController.FileD
             setSpoilersSuppressed(false);
         } else if (i == NotificationCenter.stopSpoilers) {
             setSpoilersSuppressed(true);
-        } else if (i == NotificationCenter.didUpdatePremiumGiftStickers && (messageObject = this.currentMessageObject) != null) {
-            setMessageObject(messageObject);
+        } else if (i == NotificationCenter.didUpdatePremiumGiftStickers) {
+            MessageObject messageObject2 = this.currentMessageObject;
+            if (messageObject2 != null) {
+                setMessageObject(messageObject2, true);
+            }
+        } else if (i == NotificationCenter.diceStickersDidLoad && ObjectsCompat$$ExternalSyntheticBackport0.m(objArr[0], UserConfig.getInstance(this.currentAccount).premiumGiftsStickerPack) && (messageObject = this.currentMessageObject) != null) {
+            setMessageObject(messageObject, true);
         }
     }
 
@@ -208,12 +215,13 @@ public class ChatActionCell extends BaseCell implements DownloadController.FileD
         ChatActionCellDelegate chatActionCellDelegate;
         if (z && (lottieAnimation = this.imageReceiver.getLottieAnimation()) != null) {
             MessageObject messageObject = this.currentMessageObject;
-            if (messageObject == null || !messageObject.wasUnread) {
+            if ((messageObject == null || !messageObject.wasUnread) && !this.forceWasUnread) {
                 lottieAnimation.stop();
                 lottieAnimation.setCurrentFrame(lottieAnimation.getFramesCount() - 1, false);
                 return;
             }
             messageObject.wasUnread = false;
+            this.forceWasUnread = false;
             try {
                 performHapticFeedback(3, 2);
             } catch (Exception unused) {
@@ -334,54 +342,61 @@ public class ChatActionCell extends BaseCell implements DownloadController.FileD
         this.overrideText = str2;
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:92:0x0225  */
-    /* JADX WARNING: Removed duplicated region for block: B:93:0x0244  */
+    public void setMessageObject(MessageObject messageObject) {
+        setMessageObject(messageObject, false);
+    }
+
+    /* JADX WARNING: Removed duplicated region for block: B:102:0x024f  */
+    /* JADX WARNING: Removed duplicated region for block: B:103:0x026e  */
+    /* JADX WARNING: Removed duplicated region for block: B:112:0x010b A[EDGE_INSN: B:112:0x010b->B:54:0x010b ?: BREAK  , SYNTHETIC] */
+    /* JADX WARNING: Removed duplicated region for block: B:52:0x0105 A[LOOP:0: B:33:0x00ad->B:52:0x0105, LOOP_END] */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    public void setMessageObject(org.telegram.messenger.MessageObject r18) {
+    public void setMessageObject(org.telegram.messenger.MessageObject r19, boolean r20) {
         /*
-            r17 = this;
-            r0 = r17
-            r12 = r18
+            r18 = this;
+            r0 = r18
+            r12 = r19
             org.telegram.messenger.MessageObject r1 = r0.currentMessageObject
-            if (r1 != r12) goto L_0x0021
+            if (r1 != r12) goto L_0x0023
             android.text.StaticLayout r1 = r0.textLayout
             if (r1 == 0) goto L_0x0018
             java.lang.CharSequence r1 = r1.getText()
             java.lang.CharSequence r2 = r12.messageText
             boolean r1 = android.text.TextUtils.equals(r1, r2)
-            if (r1 == 0) goto L_0x0021
+            if (r1 == 0) goto L_0x0023
         L_0x0018:
             boolean r1 = r0.hasReplyMessage
             if (r1 != 0) goto L_0x0020
             org.telegram.messenger.MessageObject r1 = r12.replyMessageObject
-            if (r1 != 0) goto L_0x0021
+            if (r1 != 0) goto L_0x0023
         L_0x0020:
+            if (r20 != 0) goto L_0x0023
             return
-        L_0x0021:
+        L_0x0023:
             boolean r1 = org.telegram.messenger.BuildVars.DEBUG_PRIVATE_VERSION
-            if (r1 == 0) goto L_0x003f
+            if (r1 == 0) goto L_0x0041
             java.lang.Thread r1 = java.lang.Thread.currentThread()
             android.os.Handler r2 = org.telegram.messenger.ApplicationLoader.applicationHandler
             android.os.Looper r2 = r2.getLooper()
             java.lang.Thread r2 = r2.getThread()
-            if (r1 == r2) goto L_0x003f
+            if (r1 == r2) goto L_0x0041
             java.lang.IllegalStateException r1 = new java.lang.IllegalStateException
             java.lang.String r2 = "Wrong thread!!!"
             r1.<init>(r2)
             org.telegram.messenger.FileLog.e((java.lang.Throwable) r1)
-        L_0x003f:
+        L_0x0041:
             r1 = 0
             r0.accessibilityText = r1
             r0.currentMessageObject = r12
             org.telegram.messenger.MessageObject r2 = r12.replyMessageObject
             r13 = 1
             r14 = 0
-            if (r2 == 0) goto L_0x004c
+            if (r2 == 0) goto L_0x004e
             r2 = 1
-            goto L_0x004d
-        L_0x004c:
+            goto L_0x004f
+        L_0x004e:
             r2 = 0
-        L_0x004d:
+        L_0x004f:
             r0.hasReplyMessage = r2
             int r2 = r0.currentAccount
             org.telegram.messenger.DownloadController r2 = org.telegram.messenger.DownloadController.getInstance(r2)
@@ -389,100 +404,111 @@ public class ChatActionCell extends BaseCell implements DownloadController.FileD
             r0.previousWidth = r14
             int r2 = r12.type
             r15 = 18
-            if (r2 != r15) goto L_0x0181
+            if (r2 != r15) goto L_0x01ae
             org.telegram.messenger.ImageReceiver r2 = r0.imageReceiver
             r2.setRoundRadius((int) r14)
             int r2 = r0.currentAccount
             org.telegram.messenger.UserConfig r2 = org.telegram.messenger.UserConfig.getInstance(r2)
             java.lang.String r2 = r2.premiumGiftsStickerPack
+            if (r2 != 0) goto L_0x007b
+            int r1 = r0.currentAccount
+            org.telegram.messenger.MediaDataController r1 = org.telegram.messenger.MediaDataController.getInstance(r1)
+            r1.checkPremiumGiftStickers()
+            return
+        L_0x007b:
             int r3 = r0.currentAccount
             org.telegram.messenger.MediaDataController r3 = org.telegram.messenger.MediaDataController.getInstance(r3)
             org.telegram.tgnet.TLRPC$TL_messages_stickerSet r3 = r3.getStickerSetByName(r2)
-            if (r3 != 0) goto L_0x0083
+            if (r3 != 0) goto L_0x0091
             int r3 = r0.currentAccount
             org.telegram.messenger.MediaDataController r3 = org.telegram.messenger.MediaDataController.getInstance(r3)
             org.telegram.tgnet.TLRPC$TL_messages_stickerSet r3 = r3.getStickerSetByEmojiOrName(r2)
-        L_0x0083:
+        L_0x0091:
             r9 = r3
-            if (r9 == 0) goto L_0x010a
-            org.telegram.tgnet.TLRPC$Message r2 = r12.messageOwner
-            org.telegram.tgnet.TLRPC$MessageAction r2 = r2.action
-            int r2 = r2.months
-            java.util.Map<java.lang.Integer, java.lang.String> r3 = monthsToEmoticon
-            java.lang.Integer r2 = java.lang.Integer.valueOf(r2)
-            java.lang.Object r2 = r3.get(r2)
-            java.lang.String r2 = (java.lang.String) r2
-            java.util.ArrayList<org.telegram.tgnet.TLRPC$TL_stickerPack> r3 = r9.packs
-            java.util.Iterator r3 = r3.iterator()
-            r4 = r1
-        L_0x009f:
-            boolean r5 = r3.hasNext()
-            if (r5 == 0) goto L_0x00f5
-            java.lang.Object r5 = r3.next()
-            org.telegram.tgnet.TLRPC$TL_stickerPack r5 = (org.telegram.tgnet.TLRPC$TL_stickerPack) r5
-            java.lang.String r6 = r5.emoticon
-            boolean r6 = androidx.core.util.ObjectsCompat$$ExternalSyntheticBackport0.m(r6, r2)
-            if (r6 == 0) goto L_0x00ee
-            java.util.ArrayList<java.lang.Long> r5 = r5.documents
-            java.util.Iterator r5 = r5.iterator()
-        L_0x00b9:
-            boolean r6 = r5.hasNext()
-            if (r6 == 0) goto L_0x00ee
-            java.lang.Object r6 = r5.next()
-            java.lang.Long r6 = (java.lang.Long) r6
-            long r6 = r6.longValue()
-            java.util.ArrayList<org.telegram.tgnet.TLRPC$Document> r8 = r9.documents
-            java.util.Iterator r8 = r8.iterator()
-        L_0x00cf:
-            boolean r10 = r8.hasNext()
-            if (r10 == 0) goto L_0x00e7
-            java.lang.Object r10 = r8.next()
-            org.telegram.tgnet.TLRPC$Document r10 = (org.telegram.tgnet.TLRPC$Document) r10
-            r13 = r2
-            long r1 = r10.id
-            int r16 = (r1 > r6 ? 1 : (r1 == r6 ? 0 : -1))
-            if (r16 != 0) goto L_0x00e4
-            r4 = r10
-            goto L_0x00e8
-        L_0x00e4:
-            r2 = r13
+            if (r9 == 0) goto L_0x0120
+            org.telegram.tgnet.TLRPC$Message r3 = r12.messageOwner
+            org.telegram.tgnet.TLRPC$MessageAction r3 = r3.action
+            int r3 = r3.months
+            java.util.Map<java.lang.Integer, java.lang.String> r4 = monthsToEmoticon
+            java.lang.Integer r3 = java.lang.Integer.valueOf(r3)
+            java.lang.Object r3 = r4.get(r3)
+            java.lang.String r3 = (java.lang.String) r3
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$TL_stickerPack> r4 = r9.packs
+            java.util.Iterator r4 = r4.iterator()
+            r5 = r1
+        L_0x00ad:
+            boolean r6 = r4.hasNext()
+            if (r6 == 0) goto L_0x0109
+            java.lang.Object r6 = r4.next()
+            org.telegram.tgnet.TLRPC$TL_stickerPack r6 = (org.telegram.tgnet.TLRPC$TL_stickerPack) r6
+            java.lang.String r7 = r6.emoticon
+            boolean r7 = androidx.core.util.ObjectsCompat$$ExternalSyntheticBackport0.m(r7, r3)
+            if (r7 == 0) goto L_0x0100
+            java.util.ArrayList<java.lang.Long> r6 = r6.documents
+            java.util.Iterator r6 = r6.iterator()
+        L_0x00c7:
+            boolean r7 = r6.hasNext()
+            if (r7 == 0) goto L_0x0100
+            java.lang.Object r7 = r6.next()
+            java.lang.Long r7 = (java.lang.Long) r7
+            long r7 = r7.longValue()
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$Document> r10 = r9.documents
+            java.util.Iterator r10 = r10.iterator()
+        L_0x00dd:
+            boolean r11 = r10.hasNext()
+            if (r11 == 0) goto L_0x00f7
+            java.lang.Object r11 = r10.next()
+            org.telegram.tgnet.TLRPC$Document r11 = (org.telegram.tgnet.TLRPC$Document) r11
+            r16 = r2
+            long r1 = r11.id
+            int r17 = (r1 > r7 ? 1 : (r1 == r7 ? 0 : -1))
+            if (r17 != 0) goto L_0x00f3
+            r5 = r11
+            goto L_0x00f9
+        L_0x00f3:
+            r2 = r16
             r1 = 0
-            goto L_0x00cf
-        L_0x00e7:
-            r13 = r2
-        L_0x00e8:
-            if (r4 == 0) goto L_0x00eb
-            goto L_0x00ef
-        L_0x00eb:
-            r2 = r13
+            goto L_0x00dd
+        L_0x00f7:
+            r16 = r2
+        L_0x00f9:
+            if (r5 == 0) goto L_0x00fc
+            goto L_0x0102
+        L_0x00fc:
+            r2 = r16
             r1 = 0
-            goto L_0x00b9
-        L_0x00ee:
-            r13 = r2
-        L_0x00ef:
-            if (r4 == 0) goto L_0x00f2
-            goto L_0x00f5
-        L_0x00f2:
-            r2 = r13
+            goto L_0x00c7
+        L_0x0100:
+            r16 = r2
+        L_0x0102:
+            if (r5 == 0) goto L_0x0105
+            goto L_0x010b
+        L_0x0105:
+            r2 = r16
             r1 = 0
-            goto L_0x009f
-        L_0x00f5:
-            if (r4 != 0) goto L_0x0108
+            goto L_0x00ad
+        L_0x0109:
+            r16 = r2
+        L_0x010b:
+            if (r5 != 0) goto L_0x011e
             java.util.ArrayList<org.telegram.tgnet.TLRPC$Document> r1 = r9.documents
             boolean r1 = r1.isEmpty()
-            if (r1 != 0) goto L_0x0108
+            if (r1 != 0) goto L_0x011e
             java.util.ArrayList<org.telegram.tgnet.TLRPC$Document> r1 = r9.documents
             java.lang.Object r1 = r1.get(r14)
             org.telegram.tgnet.TLRPC$Document r1 = (org.telegram.tgnet.TLRPC$Document) r1
-            goto L_0x010b
-        L_0x0108:
-            r1 = r4
-            goto L_0x010b
-        L_0x010a:
+            goto L_0x0123
+        L_0x011e:
+            r1 = r5
+            goto L_0x0123
+        L_0x0120:
+            r16 = r2
             r1 = 0
-        L_0x010b:
+        L_0x0123:
+            boolean r2 = r12.wasUnread
+            r0.forceWasUnread = r2
             r0.giftSticker = r1
-            if (r1 == 0) goto L_0x028a
+            if (r1 == 0) goto L_0x019d
             org.telegram.messenger.ImageReceiver r2 = r0.imageReceiver
             r2.setAllowStartLottieAnimation(r14)
             org.telegram.messenger.ImageReceiver r2 = r0.imageReceiver
@@ -491,41 +517,41 @@ public class ChatActionCell extends BaseCell implements DownloadController.FileD
             r2 = 0
             r0.giftEffectAnimation = r2
             r2 = 0
-        L_0x011f:
+        L_0x013b:
             java.util.ArrayList<org.telegram.tgnet.TLRPC$VideoSize> r3 = r1.video_thumbs
             int r3 = r3.size()
-            if (r2 >= r3) goto L_0x0147
+            if (r2 >= r3) goto L_0x0163
             java.util.ArrayList<org.telegram.tgnet.TLRPC$VideoSize> r3 = r1.video_thumbs
             java.lang.Object r3 = r3.get(r2)
             org.telegram.tgnet.TLRPC$VideoSize r3 = (org.telegram.tgnet.TLRPC$VideoSize) r3
             java.lang.String r3 = r3.type
             java.lang.String r4 = "f"
             boolean r3 = r4.equals(r3)
-            if (r3 == 0) goto L_0x0144
+            if (r3 == 0) goto L_0x0160
             java.util.ArrayList<org.telegram.tgnet.TLRPC$VideoSize> r3 = r1.video_thumbs
             java.lang.Object r2 = r3.get(r2)
             org.telegram.tgnet.TLRPC$VideoSize r2 = (org.telegram.tgnet.TLRPC$VideoSize) r2
             r0.giftEffectAnimation = r2
-            goto L_0x0147
-        L_0x0144:
+            goto L_0x0163
+        L_0x0160:
             int r2 = r2 + 1
-            goto L_0x011f
-        L_0x0147:
+            goto L_0x013b
+        L_0x0163:
             java.util.ArrayList<org.telegram.tgnet.TLRPC$PhotoSize> r2 = r1.thumbs
             r3 = 1045220557(0x3e4ccccd, float:0.2)
             java.lang.String r4 = "emptyListPlaceholder"
             org.telegram.messenger.SvgHelper$SvgDrawable r7 = org.telegram.messenger.DocumentObject.getSvgThumb((java.util.ArrayList<org.telegram.tgnet.TLRPC$PhotoSize>) r2, (java.lang.String) r4, (float) r3)
-            if (r7 == 0) goto L_0x0159
+            if (r7 == 0) goto L_0x0175
             r2 = 512(0x200, float:7.175E-43)
             r7.overrideWidthAndHeight(r2, r2)
-        L_0x0159:
+        L_0x0175:
             org.telegram.messenger.ImageReceiver r2 = r0.imageReceiver
             r2.setAutoRepeat(r14)
             org.telegram.messenger.ImageReceiver r4 = r0.imageReceiver
             org.telegram.messenger.ImageLocation r5 = org.telegram.messenger.ImageLocation.getForDocument(r1)
             java.lang.StringBuilder r1 = new java.lang.StringBuilder
             r1.<init>()
-            int r2 = r18.getId()
+            int r2 = r19.getId()
             r1.append(r2)
             java.lang.String r2 = "_130_130"
             r1.append(r2)
@@ -533,10 +559,21 @@ public class ChatActionCell extends BaseCell implements DownloadController.FileD
             r10 = 1
             java.lang.String r8 = "tgs"
             r4.setImage(r5, r6, r7, r8, r9, r10)
-            goto L_0x028a
-        L_0x0181:
+            goto L_0x02b4
+        L_0x019d:
+            int r1 = r0.currentAccount
+            org.telegram.messenger.MediaDataController r1 = org.telegram.messenger.MediaDataController.getInstance(r1)
+            r2 = r16
+            if (r9 != 0) goto L_0x01a8
+            goto L_0x01a9
+        L_0x01a8:
+            r13 = 0
+        L_0x01a9:
+            r1.loadStickersByEmojiOrName(r2, r14, r13)
+            goto L_0x02b4
+        L_0x01ae:
             r1 = 11
-            if (r2 != r1) goto L_0x027a
+            if (r2 != r1) goto L_0x02a4
             org.telegram.messenger.ImageReceiver r1 = r0.imageReceiver
             r1.setAllowStartLottieAnimation(r13)
             org.telegram.messenger.ImageReceiver r1 = r0.imageReceiver
@@ -546,81 +583,77 @@ public class ChatActionCell extends BaseCell implements DownloadController.FileD
             int r3 = org.telegram.messenger.AndroidUtilities.roundMessageSize
             int r3 = r3 / 2
             r1.setRoundRadius((int) r3)
-            long r3 = r18.getDialogId()
+            long r3 = r19.getDialogId()
             org.telegram.ui.Components.AvatarDrawable r1 = r0.avatarDrawable
             r1.setInfo(r3, r2, r2)
             org.telegram.tgnet.TLRPC$Message r1 = r12.messageOwner
             org.telegram.tgnet.TLRPC$MessageAction r1 = r1.action
             boolean r1 = r1 instanceof org.telegram.tgnet.TLRPC$TL_messageActionUserUpdatedPhoto
-            if (r1 == 0) goto L_0x01b9
+            if (r1 == 0) goto L_0x01e6
             org.telegram.messenger.ImageReceiver r1 = r0.imageReceiver
             r2 = 0
             r3 = 0
             org.telegram.ui.Components.AvatarDrawable r4 = r0.avatarDrawable
             r5 = 0
             r7 = 0
-            r6 = r18
+            r6 = r19
             r1.setImage(r2, r3, r4, r5, r6, r7)
-            goto L_0x026f
-        L_0x01b9:
+            goto L_0x0299
+        L_0x01e6:
             java.util.ArrayList<org.telegram.tgnet.TLRPC$PhotoSize> r1 = r12.photoThumbs
             int r1 = r1.size()
             r2 = 0
-        L_0x01c0:
-            if (r2 >= r1) goto L_0x01d3
+        L_0x01ed:
+            if (r2 >= r1) goto L_0x0200
             java.util.ArrayList<org.telegram.tgnet.TLRPC$PhotoSize> r3 = r12.photoThumbs
             java.lang.Object r3 = r3.get(r2)
             org.telegram.tgnet.TLRPC$PhotoSize r3 = (org.telegram.tgnet.TLRPC$PhotoSize) r3
             boolean r4 = r3 instanceof org.telegram.tgnet.TLRPC$TL_photoStrippedSize
-            if (r4 == 0) goto L_0x01d0
+            if (r4 == 0) goto L_0x01fd
             r2 = r3
-            goto L_0x01d4
-        L_0x01d0:
+            goto L_0x0201
+        L_0x01fd:
             int r2 = r2 + 1
-            goto L_0x01c0
-        L_0x01d3:
+            goto L_0x01ed
+        L_0x0200:
             r2 = 0
-        L_0x01d4:
+        L_0x0201:
             java.util.ArrayList<org.telegram.tgnet.TLRPC$PhotoSize> r1 = r12.photoThumbs
             r3 = 640(0x280, float:8.97E-43)
             org.telegram.tgnet.TLRPC$PhotoSize r1 = org.telegram.messenger.FileLoader.getClosestPhotoSizeWithSize(r1, r3)
-            if (r1 == 0) goto L_0x0268
+            if (r1 == 0) goto L_0x0292
             org.telegram.tgnet.TLRPC$Message r3 = r12.messageOwner
             org.telegram.tgnet.TLRPC$MessageAction r3 = r3.action
             org.telegram.tgnet.TLRPC$Photo r3 = r3.photo
             java.util.ArrayList<org.telegram.tgnet.TLRPC$VideoSize> r4 = r3.video_sizes
             boolean r4 = r4.isEmpty()
-            if (r4 != 0) goto L_0x0222
+            if (r4 != 0) goto L_0x024c
             boolean r4 = org.telegram.messenger.SharedConfig.autoplayGifs
-            if (r4 == 0) goto L_0x0222
+            if (r4 == 0) goto L_0x024c
             java.util.ArrayList<org.telegram.tgnet.TLRPC$VideoSize> r4 = r3.video_sizes
             java.lang.Object r4 = r4.get(r14)
             org.telegram.tgnet.TLRPC$VideoSize r4 = (org.telegram.tgnet.TLRPC$VideoSize) r4
             boolean r5 = r12.mediaExists
-            if (r5 != 0) goto L_0x0220
+            if (r5 != 0) goto L_0x024d
             int r5 = r0.currentAccount
             org.telegram.messenger.DownloadController r5 = org.telegram.messenger.DownloadController.getInstance(r5)
             r6 = 4
             int r7 = r4.size
             long r7 = (long) r7
             boolean r5 = r5.canDownloadMedia(r6, r7)
-            if (r5 != 0) goto L_0x0220
+            if (r5 != 0) goto L_0x024d
             org.telegram.messenger.ImageLocation r5 = org.telegram.messenger.ImageLocation.getForPhoto((org.telegram.tgnet.TLRPC$VideoSize) r4, (org.telegram.tgnet.TLRPC$Photo) r3)
             r0.currentVideoLocation = r5
             java.lang.String r4 = org.telegram.messenger.FileLoader.getAttachFileName(r4)
             int r5 = r0.currentAccount
             org.telegram.messenger.DownloadController r5 = org.telegram.messenger.DownloadController.getInstance(r5)
             r5.addLoadingFileObserver(r4, r12, r0)
-            goto L_0x0222
-        L_0x0220:
-            r11 = r4
-            goto L_0x0223
-        L_0x0222:
-            r11 = 0
-        L_0x0223:
-            if (r11 == 0) goto L_0x0244
+        L_0x024c:
+            r4 = 0
+        L_0x024d:
+            if (r4 == 0) goto L_0x026e
             org.telegram.messenger.ImageReceiver r1 = r0.imageReceiver
-            org.telegram.messenger.ImageLocation r3 = org.telegram.messenger.ImageLocation.getForPhoto((org.telegram.tgnet.TLRPC$VideoSize) r11, (org.telegram.tgnet.TLRPC$Photo) r3)
+            org.telegram.messenger.ImageLocation r3 = org.telegram.messenger.ImageLocation.getForPhoto((org.telegram.tgnet.TLRPC$VideoSize) r4, (org.telegram.tgnet.TLRPC$Photo) r3)
             org.telegram.tgnet.TLObject r4 = r12.photoThumbsObject
             org.telegram.messenger.ImageLocation r4 = org.telegram.messenger.ImageLocation.getForObject(r2, r4)
             org.telegram.ui.Components.AvatarDrawable r6 = r0.avatarDrawable
@@ -632,10 +665,10 @@ public class ChatActionCell extends BaseCell implements DownloadController.FileD
             r2 = r3
             r3 = r5
             r5 = r10
-            r10 = r18
+            r10 = r19
             r1.setImage(r2, r3, r4, r5, r6, r7, r9, r10, r11)
-            goto L_0x026f
-        L_0x0244:
+            goto L_0x0299
+        L_0x026e:
             org.telegram.messenger.ImageReceiver r3 = r0.imageReceiver
             org.telegram.tgnet.TLObject r4 = r12.photoThumbsObject
             org.telegram.messenger.ImageLocation r4 = org.telegram.messenger.ImageLocation.getForObject(r1, r4)
@@ -652,20 +685,20 @@ public class ChatActionCell extends BaseCell implements DownloadController.FileD
             r3 = r10
             r4 = r5
             r5 = r16
-            r10 = r18
+            r10 = r19
             r1.setImage(r2, r3, r4, r5, r6, r7, r9, r10, r11)
-            goto L_0x026f
-        L_0x0268:
+            goto L_0x0299
+        L_0x0292:
             org.telegram.messenger.ImageReceiver r1 = r0.imageReceiver
             org.telegram.ui.Components.AvatarDrawable r2 = r0.avatarDrawable
             r1.setImageBitmap((android.graphics.drawable.Drawable) r2)
-        L_0x026f:
+        L_0x0299:
             org.telegram.messenger.ImageReceiver r1 = r0.imageReceiver
-            boolean r2 = org.telegram.ui.PhotoViewer.isShowingImage((org.telegram.messenger.MessageObject) r18)
+            boolean r2 = org.telegram.ui.PhotoViewer.isShowingImage((org.telegram.messenger.MessageObject) r19)
             r2 = r2 ^ r13
             r1.setVisible(r2, r14)
-            goto L_0x028a
-        L_0x027a:
+            goto L_0x02b4
+        L_0x02a4:
             org.telegram.messenger.ImageReceiver r1 = r0.imageReceiver
             r1.setAllowStartLottieAnimation(r13)
             org.telegram.messenger.ImageReceiver r1 = r0.imageReceiver
@@ -673,19 +706,19 @@ public class ChatActionCell extends BaseCell implements DownloadController.FileD
             r1.setDelegate(r2)
             org.telegram.messenger.ImageReceiver r1 = r0.imageReceiver
             r1.setImageBitmap((android.graphics.Bitmap) r2)
-        L_0x028a:
+        L_0x02b4:
             android.view.View r1 = r0.rippleView
             int r2 = r12.type
-            if (r2 != r15) goto L_0x0291
-            goto L_0x0293
-        L_0x0291:
+            if (r2 != r15) goto L_0x02bb
+            goto L_0x02bd
+        L_0x02bb:
             r14 = 8
-        L_0x0293:
+        L_0x02bd:
             r1.setVisibility(r14)
-            r17.requestLayout()
+            r18.requestLayout()
             return
         */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Cells.ChatActionCell.setMessageObject(org.telegram.messenger.MessageObject):void");
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Cells.ChatActionCell.setMessageObject(org.telegram.messenger.MessageObject, boolean):void");
     }
 
     public MessageObject getMessageObject() {
@@ -727,6 +760,7 @@ public class ChatActionCell extends BaseCell implements DownloadController.FileD
         this.wasLayout = false;
         AnimatedEmojiSpan.release((View) this, this.animatedEmojiStack);
         NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.didUpdatePremiumGiftStickers);
+        NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.diceStickersDidLoad);
     }
 
     /* access modifiers changed from: protected */
@@ -736,6 +770,7 @@ public class ChatActionCell extends BaseCell implements DownloadController.FileD
         setStarsPaused(false);
         this.animatedEmojiStack = AnimatedEmojiSpan.update(0, (View) this, this.animatedEmojiStack, this.textLayout);
         NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.didUpdatePremiumGiftStickers);
+        NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.diceStickersDidLoad);
     }
 
     private void setStarsPaused(boolean z) {

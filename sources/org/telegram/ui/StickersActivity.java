@@ -544,7 +544,10 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
             }
             arrayList2.clear();
             arrayList.clear();
-            arrayList.addAll(this.emojiPacks);
+            ArrayList<TLRPC$TL_messages_stickerSet> arrayList3 = this.emojiPacks;
+            if (arrayList3 != null) {
+                arrayList.addAll(arrayList3);
+            }
         }
         DiffUtil.DiffResult diffResult2 = null;
         if (this.listAdapter != null) {

@@ -21681,17 +21681,48 @@ public class MessagesStorage extends BaseController {
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$hasAuthMessage$140(int i, boolean[] zArr, CountDownLatch countDownLatch) {
-        try {
-            this.database.queryFinalized(String.format(Locale.US, "SELECT mid FROM messages_v2 WHERE uid = 777000 AND date = %d AND mid < 0 LIMIT 1", new Object[]{Integer.valueOf(i)}), new Object[0]);
-            throw null;
-        } catch (Exception e) {
-            FileLog.e((Throwable) e);
-            countDownLatch.countDown();
-        } catch (Throwable th) {
-            countDownLatch.countDown();
-            throw th;
-        }
+    /* JADX WARNING: Code restructure failed: missing block: B:7:0x0028, code lost:
+        if (r0 == null) goto L_0x002d;
+     */
+    /* Code decompiled incorrectly, please refer to instructions dump. */
+    public /* synthetic */ void lambda$hasAuthMessage$140(int r7, boolean[] r8, java.util.concurrent.CountDownLatch r9) {
+        /*
+            r6 = this;
+            r0 = 0
+            org.telegram.SQLite.SQLiteDatabase r1 = r6.database     // Catch:{ Exception -> 0x0024 }
+            java.util.Locale r2 = java.util.Locale.US     // Catch:{ Exception -> 0x0024 }
+            java.lang.String r3 = "SELECT mid FROM messages_v2 WHERE uid = 777000 AND date = %d AND mid < 0 LIMIT 1"
+            r4 = 1
+            java.lang.Object[] r4 = new java.lang.Object[r4]     // Catch:{ Exception -> 0x0024 }
+            java.lang.Integer r7 = java.lang.Integer.valueOf(r7)     // Catch:{ Exception -> 0x0024 }
+            r5 = 0
+            r4[r5] = r7     // Catch:{ Exception -> 0x0024 }
+            java.lang.String r7 = java.lang.String.format(r2, r3, r4)     // Catch:{ Exception -> 0x0024 }
+            java.lang.Object[] r2 = new java.lang.Object[r5]     // Catch:{ Exception -> 0x0024 }
+            org.telegram.SQLite.SQLiteCursor r0 = r1.queryFinalized(r7, r2)     // Catch:{ Exception -> 0x0024 }
+            boolean r7 = r0.next()     // Catch:{ Exception -> 0x0024 }
+            r8[r5] = r7     // Catch:{ Exception -> 0x0024 }
+            goto L_0x002a
+        L_0x0022:
+            r7 = move-exception
+            goto L_0x0031
+        L_0x0024:
+            r7 = move-exception
+            org.telegram.messenger.FileLog.e((java.lang.Throwable) r7)     // Catch:{ all -> 0x0022 }
+            if (r0 == 0) goto L_0x002d
+        L_0x002a:
+            r0.dispose()
+        L_0x002d:
+            r9.countDown()
+            return
+        L_0x0031:
+            if (r0 == 0) goto L_0x0036
+            r0.dispose()
+        L_0x0036:
+            r9.countDown()
+            throw r7
+        */
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$hasAuthMessage$140(int, boolean[], java.util.concurrent.CountDownLatch):void");
     }
 
     public void getEncryptedChat(long j, CountDownLatch countDownLatch, ArrayList<TLObject> arrayList) {
@@ -23833,9 +23864,11 @@ public class MessagesStorage extends BaseController {
     }
 
     /* access modifiers changed from: private */
-    /* JADX WARNING: Removed duplicated region for block: B:25:0x0057  */
-    /* JADX WARNING: Removed duplicated region for block: B:27:0x005e  */
-    /* JADX WARNING: Removed duplicated region for block: B:33:? A[RETURN, SYNTHETIC] */
+    /* JADX WARNING: Removed duplicated region for block: B:31:0x005f  */
+    /* JADX WARNING: Removed duplicated region for block: B:33:0x0066  */
+    /* JADX WARNING: Removed duplicated region for block: B:35:0x006c  */
+    /* JADX WARNING: Removed duplicated region for block: B:37:0x0073  */
+    /* JADX WARNING: Removed duplicated region for block: B:44:? A[RETURN, SYNTHETIC] */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public /* synthetic */ void lambda$updateMessageVerifyFlags$157(java.util.ArrayList r11) {
         /*
@@ -23843,19 +23876,19 @@ public class MessagesStorage extends BaseController {
             r0 = 0
             r1 = 0
             r2 = 1
-            org.telegram.SQLite.SQLiteDatabase r3 = r10.database     // Catch:{ Exception -> 0x0051 }
-            r3.beginTransaction()     // Catch:{ Exception -> 0x0051 }
-            org.telegram.SQLite.SQLiteDatabase r3 = r10.database     // Catch:{ Exception -> 0x004e }
+            org.telegram.SQLite.SQLiteDatabase r3 = r10.database     // Catch:{ Exception -> 0x0059 }
+            r3.beginTransaction()     // Catch:{ Exception -> 0x0059 }
+            org.telegram.SQLite.SQLiteDatabase r3 = r10.database     // Catch:{ Exception -> 0x0054, all -> 0x0051 }
             java.lang.String r4 = "UPDATE messages_v2 SET imp = ? WHERE mid = ? AND uid = ?"
-            org.telegram.SQLite.SQLitePreparedStatement r3 = r3.executeFast(r4)     // Catch:{ Exception -> 0x004e }
-            int r4 = r11.size()     // Catch:{ Exception -> 0x004b }
+            org.telegram.SQLite.SQLitePreparedStatement r3 = r3.executeFast(r4)     // Catch:{ Exception -> 0x0054, all -> 0x0051 }
+            int r4 = r11.size()     // Catch:{ Exception -> 0x004e, all -> 0x004b }
             r5 = 0
         L_0x0015:
             if (r5 >= r4) goto L_0x0042
-            java.lang.Object r6 = r11.get(r5)     // Catch:{ Exception -> 0x004b }
-            org.telegram.tgnet.TLRPC$Message r6 = (org.telegram.tgnet.TLRPC$Message) r6     // Catch:{ Exception -> 0x004b }
-            r3.requery()     // Catch:{ Exception -> 0x004b }
-            int r7 = r6.stickerVerified     // Catch:{ Exception -> 0x004b }
+            java.lang.Object r6 = r11.get(r5)     // Catch:{ Exception -> 0x004e, all -> 0x004b }
+            org.telegram.tgnet.TLRPC$Message r6 = (org.telegram.tgnet.TLRPC$Message) r6     // Catch:{ Exception -> 0x004e, all -> 0x004b }
+            r3.requery()     // Catch:{ Exception -> 0x004e, all -> 0x004b }
+            int r7 = r6.stickerVerified     // Catch:{ Exception -> 0x004e, all -> 0x004b }
             r8 = 2
             if (r7 != 0) goto L_0x0027
             r7 = 1
@@ -23867,41 +23900,66 @@ public class MessagesStorage extends BaseController {
         L_0x002b:
             r7 = 0
         L_0x002c:
-            r3.bindInteger(r2, r7)     // Catch:{ Exception -> 0x004b }
-            int r7 = r6.id     // Catch:{ Exception -> 0x004b }
-            r3.bindInteger(r8, r7)     // Catch:{ Exception -> 0x004b }
+            r3.bindInteger(r2, r7)     // Catch:{ Exception -> 0x004e, all -> 0x004b }
+            int r7 = r6.id     // Catch:{ Exception -> 0x004e, all -> 0x004b }
+            r3.bindInteger(r8, r7)     // Catch:{ Exception -> 0x004e, all -> 0x004b }
             r7 = 3
-            long r8 = org.telegram.messenger.MessageObject.getDialogId(r6)     // Catch:{ Exception -> 0x004b }
-            r3.bindLong(r7, r8)     // Catch:{ Exception -> 0x004b }
-            r3.step()     // Catch:{ Exception -> 0x004b }
+            long r8 = org.telegram.messenger.MessageObject.getDialogId(r6)     // Catch:{ Exception -> 0x004e, all -> 0x004b }
+            r3.bindLong(r7, r8)     // Catch:{ Exception -> 0x004e, all -> 0x004b }
+            r3.step()     // Catch:{ Exception -> 0x004e, all -> 0x004b }
             int r5 = r5 + 1
             goto L_0x0015
         L_0x0042:
-            r3.dispose()     // Catch:{ Exception -> 0x004b }
-            org.telegram.SQLite.SQLiteDatabase r11 = r10.database     // Catch:{ Exception -> 0x004e }
-            r11.commitTransaction()     // Catch:{ Exception -> 0x004e }
-            goto L_0x0061
+            r3.dispose()     // Catch:{ Exception -> 0x004e, all -> 0x004b }
+            org.telegram.SQLite.SQLiteDatabase r11 = r10.database     // Catch:{ Exception -> 0x0054, all -> 0x0051 }
+            r11.commitTransaction()     // Catch:{ Exception -> 0x0054, all -> 0x0051 }
+            goto L_0x0069
         L_0x004b:
             r11 = move-exception
             r0 = r3
-            goto L_0x004f
+            goto L_0x0052
         L_0x004e:
             r11 = move-exception
-        L_0x004f:
-            r1 = 1
-            goto L_0x0052
+            r0 = r3
+            goto L_0x0055
         L_0x0051:
             r11 = move-exception
         L_0x0052:
-            org.telegram.messenger.FileLog.e((java.lang.Throwable) r11)
-            if (r1 == 0) goto L_0x005c
+            r1 = 1
+            goto L_0x006a
+        L_0x0054:
+            r11 = move-exception
+        L_0x0055:
+            r1 = 1
+            goto L_0x005a
+        L_0x0057:
+            r11 = move-exception
+            goto L_0x006a
+        L_0x0059:
+            r11 = move-exception
+        L_0x005a:
+            org.telegram.messenger.FileLog.e((java.lang.Throwable) r11)     // Catch:{ all -> 0x0057 }
+            if (r1 == 0) goto L_0x0064
             org.telegram.SQLite.SQLiteDatabase r11 = r10.database
             r11.commitTransaction()
-        L_0x005c:
-            if (r0 == 0) goto L_0x0061
+        L_0x0064:
+            if (r0 == 0) goto L_0x0069
             r0.dispose()
-        L_0x0061:
+        L_0x0069:
             return
+        L_0x006a:
+            if (r1 == 0) goto L_0x0071
+            org.telegram.SQLite.SQLiteDatabase r1 = r10.database
+            r1.commitTransaction()
+        L_0x0071:
+            if (r0 == 0) goto L_0x0076
+            r0.dispose()
+        L_0x0076:
+            goto L_0x0078
+        L_0x0077:
+            throw r11
+        L_0x0078:
+            goto L_0x0077
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$updateMessageVerifyFlags$157(java.util.ArrayList):void");
     }

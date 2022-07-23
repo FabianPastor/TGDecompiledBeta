@@ -733,7 +733,10 @@ public class QrActivity extends BaseFragment {
 
     /* access modifiers changed from: private */
     public /* synthetic */ void lambda$performShare$10() {
-        this.themesViewController.shareButton.setClickable(true);
+        ThemeListViewController themeListViewController = this.themesViewController;
+        if (themeListViewController != null) {
+            themeListViewController.shareButton.setClickable(true);
+        }
     }
 
     public ArrayList<ThemeDescription> getThemeDescriptions() {

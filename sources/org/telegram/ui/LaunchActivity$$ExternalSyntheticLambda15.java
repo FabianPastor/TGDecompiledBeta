@@ -10,6 +10,6 @@ public final /* synthetic */ class LaunchActivity$$ExternalSyntheticLambda15 imp
     }
 
     public final void onClick(View view) {
-        this.f$0.lambda$createUpdateUI$71(view);
+        this.f$0.lambda$createUpdateUI$72(view);
     }
 }

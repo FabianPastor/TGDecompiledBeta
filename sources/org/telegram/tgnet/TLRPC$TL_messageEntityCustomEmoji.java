@@ -2,6 +2,7 @@ package org.telegram.tgnet;
 
 public class TLRPC$TL_messageEntityCustomEmoji extends TLRPC$MessageEntity {
     public static int constructor = -NUM;
+    public TLRPC$Document document;
     public long document_id;
 
     public void readParams(AbstractSerializedData abstractSerializedData, boolean z) {

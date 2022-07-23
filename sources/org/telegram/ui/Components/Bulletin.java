@@ -902,19 +902,21 @@ public class Bulletin {
 
         /* access modifiers changed from: protected */
         public void dispatchDraw(Canvas canvas) {
-            this.background.setBounds(AndroidUtilities.dp(8.0f), AndroidUtilities.dp(8.0f), getMeasuredWidth() - AndroidUtilities.dp(8.0f), getMeasuredHeight() - AndroidUtilities.dp(8.0f));
-            if (!isTransitionRunning() || this.delegate == null) {
+            if (this.bulletin != null) {
+                this.background.setBounds(AndroidUtilities.dp(8.0f), AndroidUtilities.dp(8.0f), getMeasuredWidth() - AndroidUtilities.dp(8.0f), getMeasuredHeight() - AndroidUtilities.dp(8.0f));
+                if (!isTransitionRunning() || this.delegate == null) {
+                    this.background.draw(canvas);
+                    super.dispatchDraw(canvas);
+                    return;
+                }
+                int measuredHeight = ((View) getParent()).getMeasuredHeight() - this.delegate.getBottomOffset(this.bulletin.tag);
+                canvas.save();
+                canvas.clipRect(0, 0, getMeasuredWidth(), getMeasuredHeight() - (((int) (getY() + ((float) getMeasuredHeight()))) - measuredHeight));
                 this.background.draw(canvas);
                 super.dispatchDraw(canvas);
-                return;
+                canvas.restore();
+                invalidate();
             }
-            int measuredHeight = ((View) getParent()).getMeasuredHeight() - this.delegate.getBottomOffset(this.bulletin.tag);
-            canvas.save();
-            canvas.clipRect(0, 0, getMeasuredWidth(), getMeasuredHeight() - (((int) (getY() + ((float) getMeasuredHeight()))) - measuredHeight));
-            this.background.draw(canvas);
-            super.dispatchDraw(canvas);
-            canvas.restore();
-            invalidate();
         }
 
         /* access modifiers changed from: protected */

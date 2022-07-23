@@ -80,6 +80,26 @@ public class DocumentObject {
         return null;
     }
 
+    public static SvgHelper.SvgDrawable getCircleThumb(float f, String str, float f2) {
+        return getCircleThumb(f, str, (Theme.ResourcesProvider) null, f2);
+    }
+
+    public static SvgHelper.SvgDrawable getCircleThumb(float f, String str, Theme.ResourcesProvider resourcesProvider, float f2) {
+        try {
+            SvgHelper.SvgDrawable svgDrawable = new SvgHelper.SvgDrawable();
+            SvgHelper.Circle circle = new SvgHelper.Circle(256.0f, 256.0f, f * 512.0f);
+            svgDrawable.commands.add(circle);
+            svgDrawable.paints.put(circle, new Paint(1));
+            svgDrawable.width = 512;
+            svgDrawable.height = 512;
+            svgDrawable.setupGradient(str, f2, false);
+            return svgDrawable;
+        } catch (Exception e) {
+            FileLog.e((Throwable) e);
+            return null;
+        }
+    }
+
     public static SvgHelper.SvgDrawable getSvgThumb(TLRPC$Document tLRPC$Document, String str, float f) {
         return getSvgThumb(tLRPC$Document, str, f, 1.0f);
     }

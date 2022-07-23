@@ -3,13 +3,17 @@ package org.telegram.ui.Components;
 import org.telegram.ui.Components.EmojiView;
 
 public final /* synthetic */ class EmojiView$EmojiGridAdapter$$ExternalSyntheticLambda1 implements Runnable {
-    public final /* synthetic */ EmojiView.EmojiPackButton f$0;
+    public final /* synthetic */ EmojiView.EmojiGridAdapter f$0;
+    public final /* synthetic */ float f$1;
+    public final /* synthetic */ int f$2;
 
-    public /* synthetic */ EmojiView$EmojiGridAdapter$$ExternalSyntheticLambda1(EmojiView.EmojiPackButton emojiPackButton) {
-        this.f$0 = emojiPackButton;
+    public /* synthetic */ EmojiView$EmojiGridAdapter$$ExternalSyntheticLambda1(EmojiView.EmojiGridAdapter emojiGridAdapter, float f, int i) {
+        this.f$0 = emojiGridAdapter;
+        this.f$1 = f;
+        this.f$2 = i;
     }
 
     public final void run() {
-        this.f$0.updateInstall(true, true);
+        this.f$0.lambda$expand$5(this.f$1, this.f$2);
     }
 }

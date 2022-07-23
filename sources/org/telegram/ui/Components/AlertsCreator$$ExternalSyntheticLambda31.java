@@ -12,6 +12,6 @@ public final /* synthetic */ class AlertsCreator$$ExternalSyntheticLambda31 impl
     }
 
     public final void onClick(DialogInterface dialogInterface, int i) {
-        this.f$0.lambda$runLinkRequest$59(new LanguageSelectActivity());
+        this.f$0.lambda$runLinkRequest$60(new LanguageSelectActivity());
     }
 }

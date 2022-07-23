@@ -548,7 +548,7 @@ public class ContentPreviewViewer {
             if (!(launchActivity.getActionBarLayout() == null || launchActivity.getActionBarLayout().getLastFragment() == null)) {
                 launchActivity.getActionBarLayout().getLastFragment().dismissCurrentDialog();
             }
-            launchActivity.lambda$runLinkRequest$59(new PremiumPreviewFragment(PremiumPreviewFragment.featureTypeToServerString(5)));
+            launchActivity.lambda$runLinkRequest$60(new PremiumPreviewFragment(PremiumPreviewFragment.featureTypeToServerString(5)));
         }
         this.menuVisible = false;
         this.containerView.invalidate();
@@ -1101,7 +1101,7 @@ public class ContentPreviewViewer {
             recyclerListView.setOnItemClickListener((RecyclerListView.OnItemClickListener) null);
             recyclerListView.requestDisallowInterceptTouchEvent(true);
             this.openPreviewRunnable = null;
-            setParentActivity((Activity) recyclerListView.getContext());
+            setParentActivity(AndroidUtilities.findActivity(recyclerListView.getContext()));
             this.clearsInputField = false;
             View view = this.currentPreviewCell;
             if (view instanceof StickerEmojiCell) {

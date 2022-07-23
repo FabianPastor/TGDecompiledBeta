@@ -1,10 +1,11 @@
 package org.telegram.ui.Components;
 
 import android.animation.TimeInterpolator;
+import android.graphics.BitmapShader;
 import android.graphics.Canvas;
 import android.graphics.ColorFilter;
-import android.graphics.Paint;
 import android.graphics.Rect;
+import android.graphics.Shader;
 import android.graphics.drawable.Drawable;
 import android.os.Looper;
 import android.text.TextPaint;
@@ -39,25 +40,24 @@ public class AnimatedEmojiDrawable extends Drawable {
     static int count = 0;
     private static HashMap<Integer, EmojiDocumentFetcher> fetchers = null;
     private static HashMap<Integer, HashMap<Long, AnimatedEmojiDrawable>> globalEmojiCache = null;
-    private static Paint placeholderPaint = null;
     public static int sizedp = 30;
     private float alpha = 1.0f;
     private boolean attached;
     private int cacheType;
-    private int currentAccount;
     private TLRPC$Document document;
     private long documentId;
     private ArrayList<AnimatedEmojiSpan.AnimatedEmojiHolder> holders;
-    private ImageReceiver imageReceiver;
-    private AnimatedFloat placeholderAlpha = new AnimatedFloat(1.0f, (Runnable) new AnimatedEmojiDrawable$$ExternalSyntheticLambda0(this), 0, 150, (TimeInterpolator) new LinearInterpolator());
-    private boolean shouldDrawPlaceholder = false;
+    private EmojiImageReceiver imageReceiver;
     private ArrayList<View> views;
 
-    interface ReceivedDocument {
+    public interface ReceivedDocument {
         void run(TLRPC$Document tLRPC$Document);
     }
 
     private void drawDebugCacheType(Canvas canvas) {
+    }
+
+    private void drawPlaceholder(Canvas canvas, float f, float f2, float f3) {
     }
 
     public int getOpacity() {
@@ -118,16 +118,16 @@ public class AnimatedEmojiDrawable extends Drawable {
     }
 
     public void setTime(long j) {
-        ImageReceiver imageReceiver2 = this.imageReceiver;
-        if (imageReceiver2 != null) {
-            imageReceiver2.setCurrentTime(j);
+        EmojiImageReceiver emojiImageReceiver = this.imageReceiver;
+        if (emojiImageReceiver != null) {
+            emojiImageReceiver.setCurrentTime(j);
         }
     }
 
     public void update(long j) {
-        ImageReceiver imageReceiver2 = this.imageReceiver;
-        if (imageReceiver2 != null) {
-            if (imageReceiver2.getLottieAnimation() != null) {
+        EmojiImageReceiver emojiImageReceiver = this.imageReceiver;
+        if (emojiImageReceiver != null) {
+            if (emojiImageReceiver.getLottieAnimation() != null) {
                 this.imageReceiver.getLottieAnimation().updateCurrentFrame(j, true);
             }
             if (this.imageReceiver.getAnimation() != null) {
@@ -377,7 +377,7 @@ public class AnimatedEmojiDrawable extends Drawable {
     }
 
     public AnimatedEmojiDrawable(int i, int i2, long j) {
-        this.currentAccount = i2;
+        new AnimatedFloat(1.0f, (Runnable) new AnimatedEmojiDrawable$$ExternalSyntheticLambda0(this), 0, 150, (TimeInterpolator) new LinearInterpolator());
         this.cacheType = i;
         if (i == 0) {
             TextPaint textPaint = Theme.chat_msgTextPaint;
@@ -396,18 +396,23 @@ public class AnimatedEmojiDrawable extends Drawable {
     }
 
     public AnimatedEmojiDrawable(int i, int i2, TLRPC$Document tLRPC$Document) {
+        new AnimatedFloat(1.0f, (Runnable) new AnimatedEmojiDrawable$$ExternalSyntheticLambda0(this), 0, 150, (TimeInterpolator) new LinearInterpolator());
         this.cacheType = i;
-        this.currentAccount = i2;
         this.document = tLRPC$Document;
         AndroidUtilities.runOnUIThread(new AnimatedEmojiDrawable$$ExternalSyntheticLambda1(this));
     }
 
     public long getDocumentId() {
-        return this.documentId;
+        TLRPC$Document tLRPC$Document = this.document;
+        return tLRPC$Document != null ? tLRPC$Document.id : this.documentId;
+    }
+
+    public TLRPC$Document getDocument() {
+        return this.document;
     }
 
     /* access modifiers changed from: private */
-    /* JADX WARNING: Code restructure failed: missing block: B:12:0x0065, code lost:
+    /* JADX WARNING: Code restructure failed: missing block: B:12:0x006a, code lost:
         r4 = r0.cacheType;
      */
     /* Code decompiled incorrectly, please refer to instructions dump. */
@@ -416,17 +421,19 @@ public class AnimatedEmojiDrawable extends Drawable {
             r23 = this;
             r0 = r23
             org.telegram.tgnet.TLRPC$Document r1 = r0.document
-            if (r1 == 0) goto L_0x0199
-            org.telegram.messenger.ImageReceiver r1 = r0.imageReceiver
+            if (r1 == 0) goto L_0x019e
+            org.telegram.ui.Components.AnimatedEmojiDrawable$EmojiImageReceiver r1 = r0.imageReceiver
             if (r1 == 0) goto L_0x000c
-            goto L_0x0199
+            goto L_0x019e
         L_0x000c:
-            org.telegram.ui.Components.AnimatedEmojiDrawable$1 r1 = new org.telegram.ui.Components.AnimatedEmojiDrawable$1
-            r1.<init>()
+            org.telegram.ui.Components.AnimatedEmojiDrawable$EmojiImageReceiver r1 = new org.telegram.ui.Components.AnimatedEmojiDrawable$EmojiImageReceiver
+            org.telegram.ui.Components.AnimatedEmojiDrawable$$ExternalSyntheticLambda0 r2 = new org.telegram.ui.Components.AnimatedEmojiDrawable$$ExternalSyntheticLambda0
+            r2.<init>(r0)
+            r1.<init>(r2)
             r0.imageReceiver = r1
             int r2 = r0.cacheType
             java.lang.String r3 = "_"
-            if (r2 == 0) goto L_0x002d
+            if (r2 == 0) goto L_0x0032
             java.lang.StringBuilder r2 = new java.lang.StringBuilder
             r2.<init>()
             int r4 = r0.cacheType
@@ -434,7 +441,7 @@ public class AnimatedEmojiDrawable extends Drawable {
             r2.append(r3)
             java.lang.String r2 = r2.toString()
             r1.setUniqKeyPrefix(r2)
-        L_0x002d:
+        L_0x0032:
             java.lang.StringBuilder r1 = new java.lang.StringBuilder
             r1.<init>()
             int r2 = sizedp
@@ -446,39 +453,39 @@ public class AnimatedEmojiDrawable extends Drawable {
             r1.append(r2)
             java.lang.String r1 = r1.toString()
             int r4 = r0.cacheType
-            if (r4 == 0) goto L_0x005d
+            if (r4 == 0) goto L_0x0062
             java.lang.StringBuilder r4 = new java.lang.StringBuilder
             r4.<init>()
             r4.append(r1)
             java.lang.String r1 = "_compress"
             r4.append(r1)
             java.lang.String r1 = r4.toString()
-        L_0x005d:
+        L_0x0062:
             int r4 = org.telegram.messenger.SharedConfig.getDevicePerformanceClass()
             r5 = 2
             r6 = 1
-            if (r4 != 0) goto L_0x006d
+            if (r4 != 0) goto L_0x0072
             int r4 = r0.cacheType
-            if (r4 == r6) goto L_0x006b
-            if (r4 != r5) goto L_0x006d
-        L_0x006b:
+            if (r4 == r6) goto L_0x0070
+            if (r4 != r5) goto L_0x0072
+        L_0x0070:
             r4 = 1
-            goto L_0x006e
-        L_0x006d:
+            goto L_0x0073
+        L_0x0072:
             r4 = 0
-        L_0x006e:
+        L_0x0073:
             org.telegram.tgnet.TLRPC$Document r7 = r0.document
             java.lang.String r7 = r7.mime_type
             java.lang.String r8 = "video/webm"
             boolean r7 = r8.equals(r7)
             r8 = 90
             r9 = 0
-            if (r7 == 0) goto L_0x00b0
+            if (r7 == 0) goto L_0x00b5
             org.telegram.tgnet.TLRPC$Document r2 = r0.document
             java.util.ArrayList<org.telegram.tgnet.TLRPC$PhotoSize> r2 = r2.thumbs
             org.telegram.messenger.FileLoader.getClosestPhotoSizeWithSize(r2, r8)
-            org.telegram.messenger.ImageReceiver r2 = r0.imageReceiver
-            org.telegram.ui.Components.AnimatedEmojiDrawable$2 r7 = new org.telegram.ui.Components.AnimatedEmojiDrawable$2
+            org.telegram.ui.Components.AnimatedEmojiDrawable$EmojiImageReceiver r2 = r0.imageReceiver
+            org.telegram.ui.Components.AnimatedEmojiDrawable$1 r7 = new org.telegram.ui.Components.AnimatedEmojiDrawable$1
             android.content.Context r8 = org.telegram.messenger.ApplicationLoader.applicationContext
             r7.<init>(r8)
             r2.setParentView(r7)
@@ -494,22 +501,22 @@ public class AnimatedEmojiDrawable extends Drawable {
             r12 = r1
             r7 = r9
             r17 = r7
-            goto L_0x013e
-        L_0x00b0:
+            goto L_0x0143
+        L_0x00b5:
             java.lang.StringBuilder r1 = new java.lang.StringBuilder
             r1.<init>()
             int r7 = r0.cacheType
-            if (r7 == 0) goto L_0x00cb
+            if (r7 == 0) goto L_0x00d0
             java.lang.StringBuilder r7 = new java.lang.StringBuilder
             r7.<init>()
             int r10 = r0.cacheType
             r7.append(r10)
             r7.append(r3)
             java.lang.String r7 = r7.toString()
-            goto L_0x00cd
-        L_0x00cb:
+            goto L_0x00d2
+        L_0x00d0:
             java.lang.String r7 = ""
-        L_0x00cd:
+        L_0x00d2:
             r1.append(r7)
             long r10 = r0.documentId
             r1.append(r10)
@@ -523,24 +530,24 @@ public class AnimatedEmojiDrawable extends Drawable {
             r1.append(r2)
             java.lang.String r1 = r1.toString()
             int r7 = r0.cacheType
-            if (r7 == r6) goto L_0x00ff
+            if (r7 == r6) goto L_0x0104
             org.telegram.messenger.ImageLoader r7 = org.telegram.messenger.ImageLoader.getInstance()
             boolean r1 = r7.hasLottieMemCache(r1)
-            if (r1 != 0) goto L_0x00fd
-            goto L_0x00ff
-        L_0x00fd:
+            if (r1 != 0) goto L_0x0102
+            goto L_0x0104
+        L_0x0102:
             r1 = r9
-            goto L_0x0113
-        L_0x00ff:
+            goto L_0x0118
+        L_0x0104:
             org.telegram.tgnet.TLRPC$Document r1 = r0.document
             java.util.ArrayList<org.telegram.tgnet.TLRPC$PhotoSize> r1 = r1.thumbs
             r7 = 1045220557(0x3e4ccccd, float:0.2)
             java.lang.String r10 = "windowBackgroundWhiteGrayIcon"
             org.telegram.messenger.SvgHelper$SvgDrawable r1 = org.telegram.messenger.DocumentObject.getSvgThumb((java.util.ArrayList<org.telegram.tgnet.TLRPC$PhotoSize>) r1, (java.lang.String) r10, (float) r7)
-            if (r1 == 0) goto L_0x0113
+            if (r1 == 0) goto L_0x0118
             r7 = 512(0x200, float:7.175E-43)
             r1.overrideWidthAndHeight(r7, r7)
-        L_0x0113:
+        L_0x0118:
             org.telegram.tgnet.TLRPC$Document r7 = r0.document
             java.util.ArrayList<org.telegram.tgnet.TLRPC$PhotoSize> r7 = r7.thumbs
             org.telegram.tgnet.TLRPC$PhotoSize r7 = org.telegram.messenger.FileLoader.getClosestPhotoSizeWithSize(r7, r8)
@@ -558,14 +565,14 @@ public class AnimatedEmojiDrawable extends Drawable {
             r17 = r1
             r12 = r2
             r2 = r8
-        L_0x013e:
-            if (r4 == 0) goto L_0x0142
-            r11 = r9
-            goto L_0x0143
-        L_0x0142:
-            r11 = r2
         L_0x0143:
-            org.telegram.messenger.ImageReceiver r10 = r0.imageReceiver
+            if (r4 == 0) goto L_0x0147
+            r11 = r9
+            goto L_0x0148
+        L_0x0147:
+            r11 = r2
+        L_0x0148:
+            org.telegram.ui.Components.AnimatedEmojiDrawable$EmojiImageReceiver r10 = r0.imageReceiver
             org.telegram.tgnet.TLRPC$Document r1 = r0.document
             org.telegram.messenger.ImageLocation r13 = org.telegram.messenger.ImageLocation.getForDocument((org.telegram.tgnet.TLRPC$PhotoSize) r7, (org.telegram.tgnet.TLRPC$Document) r1)
             java.lang.StringBuilder r1 = new java.lang.StringBuilder
@@ -586,23 +593,23 @@ public class AnimatedEmojiDrawable extends Drawable {
             r21 = r1
             r10.setImage(r11, r12, r13, r14, r15, r16, r17, r18, r20, r21, r22)
             int r1 = r0.cacheType
-            if (r1 != r5) goto L_0x017d
-            org.telegram.messenger.ImageReceiver r1 = r0.imageReceiver
+            if (r1 != r5) goto L_0x0182
+            org.telegram.ui.Components.AnimatedEmojiDrawable$EmojiImageReceiver r1 = r0.imageReceiver
             r2 = 7
             r1.setLayerNum(r2)
-        L_0x017d:
-            org.telegram.messenger.ImageReceiver r1 = r0.imageReceiver
+        L_0x0182:
+            org.telegram.ui.Components.AnimatedEmojiDrawable$EmojiImageReceiver r1 = r0.imageReceiver
             r1.setAspectFit(r6)
-            org.telegram.messenger.ImageReceiver r1 = r0.imageReceiver
+            org.telegram.ui.Components.AnimatedEmojiDrawable$EmojiImageReceiver r1 = r0.imageReceiver
             r1.setAllowStartLottieAnimation(r6)
-            org.telegram.messenger.ImageReceiver r1 = r0.imageReceiver
+            org.telegram.ui.Components.AnimatedEmojiDrawable$EmojiImageReceiver r1 = r0.imageReceiver
             r1.setAllowStartAnimation(r6)
-            org.telegram.messenger.ImageReceiver r1 = r0.imageReceiver
+            org.telegram.ui.Components.AnimatedEmojiDrawable$EmojiImageReceiver r1 = r0.imageReceiver
             r1.setAutoRepeat(r6)
-            org.telegram.messenger.ImageReceiver r1 = r0.imageReceiver
+            org.telegram.ui.Components.AnimatedEmojiDrawable$EmojiImageReceiver r1 = r0.imageReceiver
             r1.setAllowDecodeSingleFrame(r6)
             r23.updateAttachState()
-        L_0x0199:
+        L_0x019e:
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.AnimatedEmojiDrawable.initDocument():void");
@@ -630,54 +637,39 @@ public class AnimatedEmojiDrawable extends Drawable {
 
     public void draw(Canvas canvas) {
         drawDebugCacheType(canvas);
-        ImageReceiver imageReceiver2 = this.imageReceiver;
-        if (imageReceiver2 != null) {
-            imageReceiver2.setImageCoords(getBounds());
+        EmojiImageReceiver emojiImageReceiver = this.imageReceiver;
+        if (emojiImageReceiver != null) {
+            emojiImageReceiver.setImageCoords(getBounds());
+            this.imageReceiver.setAlpha(this.alpha);
             this.imageReceiver.draw(canvas);
-        } else {
-            this.shouldDrawPlaceholder = true;
         }
-        drawPlaceholder(canvas, getBounds());
+        drawPlaceholder(canvas, (float) getBounds().centerX(), (float) getBounds().centerY(), ((float) getBounds().width()) / 2.0f);
     }
 
     public void draw(Canvas canvas, Rect rect, float f) {
         drawDebugCacheType(canvas);
-        ImageReceiver imageReceiver2 = this.imageReceiver;
-        if (imageReceiver2 != null) {
-            imageReceiver2.setImageCoords(rect);
+        EmojiImageReceiver emojiImageReceiver = this.imageReceiver;
+        if (emojiImageReceiver != null) {
+            emojiImageReceiver.setImageCoords(rect);
             this.imageReceiver.setAlpha(f);
             this.imageReceiver.draw(canvas);
-        } else {
-            this.shouldDrawPlaceholder = true;
         }
-        drawPlaceholder(canvas, getBounds());
+        if (rect != null) {
+            drawPlaceholder(canvas, (float) rect.centerX(), (float) rect.centerY(), ((float) rect.width()) / 2.0f);
+        }
     }
 
     public void draw(Canvas canvas, ImageReceiver.BackgroundThreadDrawHolder backgroundThreadDrawHolder) {
         drawDebugCacheType(canvas);
-        ImageReceiver imageReceiver2 = this.imageReceiver;
-        if (imageReceiver2 != null) {
-            imageReceiver2.draw(canvas, backgroundThreadDrawHolder);
-        } else {
-            this.shouldDrawPlaceholder = true;
+        EmojiImageReceiver emojiImageReceiver = this.imageReceiver;
+        if (emojiImageReceiver != null) {
+            emojiImageReceiver.setAlpha(this.alpha);
+            this.imageReceiver.draw(canvas, backgroundThreadDrawHolder);
         }
-        drawPlaceholder(canvas, getBounds());
-    }
-
-    private void drawPlaceholder(Canvas canvas, Rect rect) {
-        if (this.shouldDrawPlaceholder) {
-            float f = this.placeholderAlpha.set(this.imageReceiver == null ? 1.0f : 0.0f);
-            if (f >= 0.0f) {
-                if (placeholderPaint == null) {
-                    Paint paint = new Paint(1);
-                    placeholderPaint = paint;
-                    paint.setColor(Theme.isCurrentThemeDark() ? NUM : NUM);
-                }
-                int alpha2 = placeholderPaint.getAlpha();
-                placeholderPaint.setAlpha((int) (((float) alpha2) * f));
-                canvas.drawCircle((float) rect.centerX(), (float) rect.centerY(), ((float) rect.width()) * 0.4f, placeholderPaint);
-                placeholderPaint.setAlpha(alpha2);
-            }
+        if (backgroundThreadDrawHolder != null) {
+            float f = backgroundThreadDrawHolder.imageX;
+            float f2 = backgroundThreadDrawHolder.imageW;
+            drawPlaceholder(canvas, f + (f2 / 2.0f), backgroundThreadDrawHolder.imageY + (backgroundThreadDrawHolder.imageH / 2.0f), f2 / 2.0f);
         }
     }
 
@@ -724,7 +716,7 @@ public class AnimatedEmojiDrawable extends Drawable {
     private void updateAttachState() {
         /*
             r3 = this;
-            org.telegram.messenger.ImageReceiver r0 = r3.imageReceiver
+            org.telegram.ui.Components.AnimatedEmojiDrawable$EmojiImageReceiver r0 = r3.imageReceiver
             if (r0 != 0) goto L_0x0005
             return
         L_0x0005:
@@ -751,36 +743,16 @@ public class AnimatedEmojiDrawable extends Drawable {
             int r0 = count
             int r0 = r0 + r1
             count = r0
-            org.telegram.messenger.ImageReceiver r0 = r3.imageReceiver
+            org.telegram.ui.Components.AnimatedEmojiDrawable$EmojiImageReceiver r0 = r3.imageReceiver
             r0.onAttachedToWindow()
             goto L_0x003a
         L_0x0030:
             int r0 = count
             int r0 = r0 - r1
             count = r0
-            org.telegram.messenger.ImageReceiver r0 = r3.imageReceiver
+            org.telegram.ui.Components.AnimatedEmojiDrawable$EmojiImageReceiver r0 = r3.imageReceiver
             r0.onDetachedFromWindow()
         L_0x003a:
-            java.util.ArrayList<android.view.View> r0 = r3.views
-            if (r0 == 0) goto L_0x0044
-            int r0 = r0.size()
-            if (r0 > 0) goto L_0x0067
-        L_0x0044:
-            java.util.ArrayList<org.telegram.ui.Components.AnimatedEmojiSpan$AnimatedEmojiHolder> r0 = r3.holders
-            if (r0 == 0) goto L_0x004e
-            int r0 = r0.size()
-            if (r0 > 0) goto L_0x0067
-        L_0x004e:
-            java.util.HashMap<java.lang.Integer, java.util.HashMap<java.lang.Long, org.telegram.ui.Components.AnimatedEmojiDrawable>> r0 = globalEmojiCache
-            int r1 = r3.currentAccount
-            java.lang.Integer r1 = java.lang.Integer.valueOf(r1)
-            java.lang.Object r0 = r0.get(r1)
-            java.util.HashMap r0 = (java.util.HashMap) r0
-            if (r0 == 0) goto L_0x0067
-            long r1 = r3.documentId
-            java.lang.Long r1 = java.lang.Long.valueOf(r1)
-            r0.remove(r1)
-        L_0x0067:
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.AnimatedEmojiDrawable.updateAttachState():void");
@@ -789,13 +761,72 @@ public class AnimatedEmojiDrawable extends Drawable {
     public void setAlpha(int i) {
         float f = ((float) i) / 255.0f;
         this.alpha = f;
-        ImageReceiver imageReceiver2 = this.imageReceiver;
-        if (imageReceiver2 != null) {
-            imageReceiver2.setAlpha(f);
+        EmojiImageReceiver emojiImageReceiver = this.imageReceiver;
+        if (emojiImageReceiver != null) {
+            emojiImageReceiver.setAlpha(f);
         }
     }
 
-    public ImageReceiver getImageReceiver() {
+    public EmojiImageReceiver getImageReceiver() {
         return this.imageReceiver;
+    }
+
+    public static class EmojiImageReceiver extends ImageReceiver {
+        private AnimatedFloat crossfadeAlpha;
+        private AnimatedFloat crossfadeAlphaForced;
+        private boolean forcedThumb = false;
+        private Runnable invalidate;
+        private AnimatedFloat usedCrossfade;
+
+        public EmojiImageReceiver(Runnable runnable) {
+            AnimatedEmojiDrawable$EmojiImageReceiver$$ExternalSyntheticLambda0 animatedEmojiDrawable$EmojiImageReceiver$$ExternalSyntheticLambda0 = new AnimatedEmojiDrawable$EmojiImageReceiver$$ExternalSyntheticLambda0(this);
+            CubicBezierInterpolator cubicBezierInterpolator = CubicBezierInterpolator.DEFAULT;
+            this.crossfadeAlpha = new AnimatedFloat((Runnable) animatedEmojiDrawable$EmojiImageReceiver$$ExternalSyntheticLambda0, 200, (TimeInterpolator) cubicBezierInterpolator);
+            this.crossfadeAlphaForced = new AnimatedFloat((Runnable) new AnimatedEmojiDrawable$EmojiImageReceiver$$ExternalSyntheticLambda0(this), 200, (TimeInterpolator) cubicBezierInterpolator);
+            this.usedCrossfade = this.crossfadeAlpha;
+            this.invalidate = runnable;
+        }
+
+        public void invalidate() {
+            super.invalidate();
+            Runnable runnable = this.invalidate;
+            if (runnable != null) {
+                runnable.run();
+            }
+        }
+
+        /* access modifiers changed from: protected */
+        public boolean setImageBitmapByKey(Drawable drawable, String str, int i, boolean z, int i2) {
+            Runnable runnable = this.invalidate;
+            if (runnable != null) {
+                runnable.run();
+            }
+            return super.setImageBitmapByKey(drawable, str, i, z, i2);
+        }
+
+        public void forceThumb(boolean z) {
+            AnimatedFloat animatedFloat = this.crossfadeAlphaForced;
+            this.usedCrossfade = animatedFloat;
+            this.forcedThumb = z;
+            animatedFloat.set(z ? 0.0f : 1.0f, z);
+        }
+
+        public void switchBackAnimator() {
+            this.usedCrossfade = this.crossfadeAlpha;
+        }
+
+        /* access modifiers changed from: protected */
+        public boolean customDraw(Canvas canvas, AnimatedFileDrawable animatedFileDrawable, RLottieDrawable rLottieDrawable, Drawable drawable, Shader shader, Drawable drawable2, Shader shader2, Drawable drawable3, Shader shader3, boolean z, boolean z2, Drawable drawable4, BitmapShader bitmapShader, Drawable drawable5, float f, float f2, float f3, int[] iArr, ImageReceiver.BackgroundThreadDrawHolder backgroundThreadDrawHolder) {
+            AnimatedFloat animatedFloat = this.usedCrossfade;
+            float f4 = animatedFloat.set(((animatedFloat != this.crossfadeAlphaForced || !this.forcedThumb) && rLottieDrawable != null && rLottieDrawable.hasBitmap() && rLottieDrawable.canLoadFrames()) ? 1.0f : 0.0f);
+            if (rLottieDrawable != null && rLottieDrawable.hasBitmap() && f4 > 0.0f) {
+                drawDrawable(canvas, rLottieDrawable, (int) (f4 * 255.0f * f3), (BitmapShader) null, 0, 0, backgroundThreadDrawHolder);
+            }
+            if (drawable5 == null || f4 >= 1.0f) {
+                return true;
+            }
+            drawDrawable(canvas, drawable5, (int) ((1.0f - f4) * 255.0f * f3), (BitmapShader) null, this.imageOrientation, 0, backgroundThreadDrawHolder);
+            return true;
+        }
     }
 }

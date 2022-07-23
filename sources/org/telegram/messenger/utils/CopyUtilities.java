@@ -63,7 +63,9 @@ public class CopyUtilities {
                     arrayList.add(setEntityStartEnd(new TLRPC$TL_messageEntitySpoiler(), spanStart, spanEnd));
                 } else if (obj instanceof AnimatedEmojiSpan) {
                     TLRPC$TL_messageEntityCustomEmoji tLRPC$TL_messageEntityCustomEmoji = new TLRPC$TL_messageEntityCustomEmoji();
-                    tLRPC$TL_messageEntityCustomEmoji.document_id = ((AnimatedEmojiSpan) obj).documentId;
+                    AnimatedEmojiSpan animatedEmojiSpan = (AnimatedEmojiSpan) obj;
+                    tLRPC$TL_messageEntityCustomEmoji.document_id = animatedEmojiSpan.documentId;
+                    tLRPC$TL_messageEntityCustomEmoji.document = animatedEmojiSpan.document;
                     arrayList.add(setEntityStartEnd(tLRPC$TL_messageEntityCustomEmoji, spanStart, spanEnd));
                 }
             }

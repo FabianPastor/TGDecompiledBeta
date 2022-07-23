@@ -19,6 +19,6 @@ public final /* synthetic */ class LaunchActivity$$ExternalSyntheticLambda72 imp
     }
 
     public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        this.f$0.lambda$runLinkRequest$30(this.f$1, this.f$2, this.f$3, tLObject, tLRPC$TL_error);
+        this.f$0.lambda$runLinkRequest$31(this.f$1, this.f$2, this.f$3, tLObject, tLRPC$TL_error);
     }
 }

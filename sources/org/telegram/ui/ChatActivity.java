@@ -31368,10 +31368,10 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         /*
             r14 = this;
             org.telegram.ui.Components.ChatActivityEnterView r0 = r14.chatActivityEnterView
-            if (r0 == 0) goto L_0x020c
+            if (r0 == 0) goto L_0x0218
             int r0 = r14.chatMode
             if (r0 == 0) goto L_0x000a
-            goto L_0x020c
+            goto L_0x0218
         L_0x000a:
             org.telegram.messenger.MediaDataController r0 = r14.getMediaDataController()
             long r1 = r14.dialog_id
@@ -31394,8 +31394,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             java.lang.CharSequence r2 = r2.getFieldText()
             java.lang.String r3 = ""
             r4 = 1
-            if (r2 != 0) goto L_0x01e3
-            if (r0 == 0) goto L_0x01ef
+            if (r2 != 0) goto L_0x01ef
+            if (r0 == 0) goto L_0x01fb
             org.telegram.ui.Components.ChatActivityEnterView r15 = r14.chatActivityEnterView
             boolean r2 = r0.no_webpage
             r2 = r2 ^ r4
@@ -31403,7 +31403,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             java.util.ArrayList<org.telegram.tgnet.TLRPC$MessageEntity> r15 = r0.entities
             boolean r15 = r15.isEmpty()
             r2 = 0
-            if (r15 != 0) goto L_0x01b7
+            if (r15 != 0) goto L_0x01c3
             java.lang.String r15 = r0.message
             android.text.SpannableStringBuilder r15 = android.text.SpannableStringBuilder.valueOf(r15)
             java.util.ArrayList<org.telegram.tgnet.TLRPC$MessageEntity> r6 = r0.entities
@@ -31412,22 +31412,22 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         L_0x0056:
             java.util.ArrayList<org.telegram.tgnet.TLRPC$MessageEntity> r7 = r0.entities
             int r7 = r7.size()
-            if (r6 >= r7) goto L_0x01b9
+            if (r6 >= r7) goto L_0x01c5
             java.util.ArrayList<org.telegram.tgnet.TLRPC$MessageEntity> r7 = r0.entities
             java.lang.Object r7 = r7.get(r6)
             org.telegram.tgnet.TLRPC$MessageEntity r7 = (org.telegram.tgnet.TLRPC$MessageEntity) r7
             boolean r8 = r7 instanceof org.telegram.tgnet.TLRPC$TL_inputMessageEntityMentionName
             r9 = 33
-            if (r8 != 0) goto L_0x016a
+            if (r8 != 0) goto L_0x0176
             boolean r10 = r7 instanceof org.telegram.tgnet.TLRPC$TL_messageEntityMentionName
             if (r10 == 0) goto L_0x0072
-            goto L_0x016a
+            goto L_0x0176
         L_0x0072:
             boolean r8 = r7 instanceof org.telegram.tgnet.TLRPC$TL_messageEntityCode
-            if (r8 != 0) goto L_0x0151
+            if (r8 != 0) goto L_0x015d
             boolean r8 = r7 instanceof org.telegram.tgnet.TLRPC$TL_messageEntityPre
             if (r8 == 0) goto L_0x007c
-            goto L_0x0151
+            goto L_0x015d
         L_0x007c:
             boolean r8 = r7 instanceof org.telegram.tgnet.TLRPC$TL_messageEntityBold
             if (r8 == 0) goto L_0x0099
@@ -31442,7 +31442,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             int r7 = r7.length
             int r7 = r7 + r8
             org.telegram.messenger.MediaDataController.addStyleToText(r9, r8, r7, r15, r4)
-            goto L_0x01b3
+            goto L_0x01bf
         L_0x0099:
             boolean r8 = r7 instanceof org.telegram.tgnet.TLRPC$TL_messageEntityItalic
             if (r8 == 0) goto L_0x00b7
@@ -31457,7 +31457,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             int r7 = r7.length
             int r7 = r7 + r8
             org.telegram.messenger.MediaDataController.addStyleToText(r9, r8, r7, r15, r4)
-            goto L_0x01b3
+            goto L_0x01bf
         L_0x00b7:
             boolean r8 = r7 instanceof org.telegram.tgnet.TLRPC$TL_messageEntityStrike
             if (r8 == 0) goto L_0x00d5
@@ -31472,7 +31472,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             int r7 = r7.length
             int r7 = r7 + r8
             org.telegram.messenger.MediaDataController.addStyleToText(r9, r8, r7, r15, r4)
-            goto L_0x01b3
+            goto L_0x01bf
         L_0x00d5:
             boolean r8 = r7 instanceof org.telegram.tgnet.TLRPC$TL_messageEntityUnderline
             if (r8 == 0) goto L_0x00f3
@@ -31487,7 +31487,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             int r7 = r7.length
             int r7 = r7 + r8
             org.telegram.messenger.MediaDataController.addStyleToText(r9, r8, r7, r15, r4)
-            goto L_0x01b3
+            goto L_0x01bf
         L_0x00f3:
             boolean r8 = r7 instanceof org.telegram.tgnet.TLRPC$TL_messageEntityTextUrl
             if (r8 == 0) goto L_0x0108
@@ -31498,7 +31498,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             int r7 = r7.length
             int r7 = r7 + r10
             r15.setSpan(r8, r10, r7, r9)
-            goto L_0x01b3
+            goto L_0x01bf
         L_0x0108:
             boolean r8 = r7 instanceof org.telegram.tgnet.TLRPC$TL_messageEntitySpoiler
             if (r8 == 0) goto L_0x0126
@@ -31513,10 +31513,10 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             int r7 = r7.length
             int r7 = r7 + r8
             org.telegram.messenger.MediaDataController.addStyleToText(r9, r8, r7, r15, r4)
-            goto L_0x01b3
+            goto L_0x01bf
         L_0x0126:
             boolean r8 = r7 instanceof org.telegram.tgnet.TLRPC$TL_messageEntityCustomEmoji
-            if (r8 == 0) goto L_0x01b3
+            if (r8 == 0) goto L_0x01bf
             org.telegram.ui.Components.ChatActivityEnterView r8 = r14.chatActivityEnterView     // Catch:{ Exception -> 0x0139 }
             org.telegram.ui.Components.EditTextCaption r8 = r8.getEditField()     // Catch:{ Exception -> 0x0139 }
             android.text.TextPaint r8 = r8.getPaint()     // Catch:{ Exception -> 0x0139 }
@@ -31529,15 +31529,23 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         L_0x013e:
             r10 = r7
             org.telegram.tgnet.TLRPC$TL_messageEntityCustomEmoji r10 = (org.telegram.tgnet.TLRPC$TL_messageEntityCustomEmoji) r10
+            org.telegram.tgnet.TLRPC$Document r11 = r10.document
+            if (r11 == 0) goto L_0x014d
+            org.telegram.ui.Components.AnimatedEmojiSpan r11 = new org.telegram.ui.Components.AnimatedEmojiSpan
+            org.telegram.tgnet.TLRPC$Document r10 = r10.document
+            r11.<init>((org.telegram.tgnet.TLRPC$Document) r10, (android.graphics.Paint.FontMetricsInt) r8)
+            goto L_0x0154
+        L_0x014d:
             org.telegram.ui.Components.AnimatedEmojiSpan r11 = new org.telegram.ui.Components.AnimatedEmojiSpan
             long r12 = r10.document_id
             r11.<init>((long) r12, (android.graphics.Paint.FontMetricsInt) r8)
+        L_0x0154:
             int r8 = r7.offset
             int r7 = r7.length
             int r7 = r7 + r8
             r15.setSpan(r11, r8, r7, r9)
-            goto L_0x01b3
-        L_0x0151:
+            goto L_0x01bf
+        L_0x015d:
             org.telegram.ui.Components.TextStyleSpan$TextStyleRun r8 = new org.telegram.ui.Components.TextStyleSpan$TextStyleRun
             r8.<init>()
             int r9 = r8.flags
@@ -31549,34 +31557,34 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             int r7 = r7.length
             int r7 = r7 + r8
             org.telegram.messenger.MediaDataController.addStyleToText(r9, r8, r7, r15, r4)
-            goto L_0x01b3
-        L_0x016a:
-            if (r8 == 0) goto L_0x0174
+            goto L_0x01bf
+        L_0x0176:
+            if (r8 == 0) goto L_0x0180
             r8 = r7
             org.telegram.tgnet.TLRPC$TL_inputMessageEntityMentionName r8 = (org.telegram.tgnet.TLRPC$TL_inputMessageEntityMentionName) r8
             org.telegram.tgnet.TLRPC$InputUser r8 = r8.user_id
             long r10 = r8.user_id
-            goto L_0x0179
-        L_0x0174:
+            goto L_0x0185
+        L_0x0180:
             r8 = r7
             org.telegram.tgnet.TLRPC$TL_messageEntityMentionName r8 = (org.telegram.tgnet.TLRPC$TL_messageEntityMentionName) r8
             long r10 = r8.user_id
-        L_0x0179:
+        L_0x0185:
             int r8 = r7.offset
             int r12 = r7.length
             int r8 = r8 + r12
             int r12 = r15.length()
-            if (r8 >= r12) goto L_0x0196
+            if (r8 >= r12) goto L_0x01a2
             int r8 = r7.offset
             int r12 = r7.length
             int r8 = r8 + r12
             char r8 = r15.charAt(r8)
             r12 = 32
-            if (r8 != r12) goto L_0x0196
+            if (r8 != r12) goto L_0x01a2
             int r8 = r7.length
             int r8 = r8 + r4
             r7.length = r8
-        L_0x0196:
+        L_0x01a2:
             org.telegram.ui.Components.URLSpanUserMention r8 = new org.telegram.ui.Components.URLSpanUserMention
             java.lang.StringBuilder r12 = new java.lang.StringBuilder
             r12.<init>()
@@ -31589,18 +31597,18 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             int r7 = r7.length
             int r7 = r7 + r10
             r15.setSpan(r8, r10, r7, r9)
-        L_0x01b3:
+        L_0x01bf:
             int r6 = r6 + 1
             goto L_0x0056
-        L_0x01b7:
+        L_0x01c3:
             java.lang.String r15 = r0.message
-        L_0x01b9:
+        L_0x01c5:
             org.telegram.ui.Components.ChatActivityEnterView r1 = r14.chatActivityEnterView
             r1.setFieldText(r15)
             android.os.Bundle r15 = r14.getArguments()
             java.lang.String r1 = "hasUrl"
             boolean r15 = r15.getBoolean(r1, r2)
-            if (r15 == 0) goto L_0x01ef
+            if (r15 == 0) goto L_0x01fb
             org.telegram.ui.Components.ChatActivityEnterView r15 = r14.chatActivityEnterView
             java.lang.String r0 = r0.message
             r1 = 10
@@ -31611,17 +31619,17 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             r15.<init>(r14)
             r0 = 700(0x2bc, double:3.46E-321)
             org.telegram.messenger.AndroidUtilities.runOnUIThread(r15, r0)
-            goto L_0x01ef
-        L_0x01e3:
-            if (r15 == 0) goto L_0x01ef
-            if (r0 != 0) goto L_0x01ef
+            goto L_0x01fb
+        L_0x01ef:
+            if (r15 == 0) goto L_0x01fb
+            if (r0 != 0) goto L_0x01fb
             org.telegram.ui.Components.ChatActivityEnterView r15 = r14.chatActivityEnterView
             r15.setFieldText(r3)
             r14.hideFieldPanel(r4)
-        L_0x01ef:
+        L_0x01fb:
             org.telegram.messenger.MessageObject r15 = r14.replyingMessageObject
-            if (r15 != 0) goto L_0x020c
-            if (r5 == 0) goto L_0x020c
+            if (r15 != 0) goto L_0x0218
+            if (r5 == 0) goto L_0x0218
             org.telegram.messenger.MessageObject r15 = new org.telegram.messenger.MessageObject
             int r4 = r14.currentAccount
             org.telegram.messenger.MessagesController r0 = r14.getMessagesController()
@@ -31632,7 +31640,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             r3.<init>((int) r4, (org.telegram.tgnet.TLRPC$Message) r5, (java.util.AbstractMap<java.lang.Long, org.telegram.tgnet.TLRPC$User>) r6, (boolean) r7, (boolean) r8)
             r14.replyingMessageObject = r15
             r14.showFieldPanelForReply(r15)
-        L_0x020c:
+        L_0x0218:
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ChatActivity.applyDraftMaybe(boolean):void");

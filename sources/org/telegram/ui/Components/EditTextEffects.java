@@ -239,6 +239,7 @@ public class EditTextEffects extends EditText {
     /* access modifiers changed from: protected */
     public void onDraw(Canvas canvas) {
         canvas.save();
+        canvas.clipRect(0, getScrollY(), getMeasuredWidth(), getMeasuredHeight() + getScrollY());
         this.path.rewind();
         for (SpoilerEffect bounds : this.spoilers) {
             Rect bounds2 = bounds.getBounds();

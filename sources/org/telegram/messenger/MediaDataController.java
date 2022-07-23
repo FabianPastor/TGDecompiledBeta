@@ -17,6 +17,7 @@ import android.text.style.URLSpan;
 import android.util.SparseArray;
 import androidx.collection.LongSparseArray;
 import androidx.core.content.pm.ShortcutManagerCompat;
+import androidx.core.util.ObjectsCompat$$ExternalSyntheticBackport0;
 import j$.util.concurrent.ConcurrentHashMap;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -3172,7 +3173,17 @@ public class MediaDataController extends BaseController {
     }
 
     public void checkPremiumGiftStickers() {
-        if (!this.loadingPremiumGiftStickers && getUserConfig().premiumGiftsStickerPack == null && System.currentTimeMillis() - getUserConfig().lastUpdatedPremiumGiftsStickerPack >= 86400000) {
+        if (getUserConfig().premiumGiftsStickerPack != null) {
+            String str = getUserConfig().premiumGiftsStickerPack;
+            TLRPC$TL_messages_stickerSet stickerSetByName = getStickerSetByName(str);
+            if (stickerSetByName == null) {
+                stickerSetByName = getStickerSetByEmojiOrName(str);
+            }
+            if (stickerSetByName == null) {
+                getInstance(this.currentAccount).loadStickersByEmojiOrName(str, false, true);
+            }
+        }
+        if (!this.loadingPremiumGiftStickers && System.currentTimeMillis() - getUserConfig().lastUpdatedPremiumGiftsStickerPack >= 86400000) {
             this.loadingPremiumGiftStickers = true;
             TLRPC$TL_messages_getStickerSet tLRPC$TL_messages_getStickerSet = new TLRPC$TL_messages_getStickerSet();
             tLRPC$TL_messages_getStickerSet.stickerset = new TLRPC$TL_inputStickerSetPremiumGifts();
@@ -3188,9 +3199,11 @@ public class MediaDataController extends BaseController {
     /* access modifiers changed from: private */
     public /* synthetic */ void lambda$checkPremiumGiftStickers$59(TLObject tLObject) {
         if (tLObject instanceof TLRPC$TL_messages_stickerSet) {
-            getUserConfig().premiumGiftsStickerPack = ((TLRPC$TL_messages_stickerSet) tLObject).set.short_name;
+            TLRPC$TL_messages_stickerSet tLRPC$TL_messages_stickerSet = (TLRPC$TL_messages_stickerSet) tLObject;
+            getUserConfig().premiumGiftsStickerPack = tLRPC$TL_messages_stickerSet.set.short_name;
             getUserConfig().lastUpdatedPremiumGiftsStickerPack = System.currentTimeMillis();
             getUserConfig().saveConfig(false);
+            processLoadedDiceStickers(getUserConfig().premiumGiftsStickerPack, false, tLRPC$TL_messages_stickerSet, false, (int) (System.currentTimeMillis() / 1000));
             getNotificationCenter().postNotificationName(NotificationCenter.didUpdatePremiumGiftStickers, new Object[0]);
         }
     }
@@ -3206,7 +3219,9 @@ public class MediaDataController extends BaseController {
                 return;
             }
             TLRPC$TL_messages_getStickerSet tLRPC$TL_messages_getStickerSet = new TLRPC$TL_messages_getStickerSet();
-            if (z) {
+            if (ObjectsCompat$$ExternalSyntheticBackport0.m(getUserConfig().premiumGiftsStickerPack, str)) {
+                tLRPC$TL_messages_getStickerSet.stickerset = new TLRPC$TL_inputStickerSetPremiumGifts();
+            } else if (z) {
                 TLRPC$TL_inputStickerSetDice tLRPC$TL_inputStickerSetDice = new TLRPC$TL_inputStickerSetDice();
                 tLRPC$TL_inputStickerSetDice.emoticon = str;
                 tLRPC$TL_messages_getStickerSet.stickerset = tLRPC$TL_inputStickerSetDice;
@@ -8353,12 +8368,13 @@ public class MediaDataController extends BaseController {
     }
 
     public static void addAnimatedEmojiSpans(ArrayList<TLRPC$MessageEntity> arrayList, CharSequence charSequence, Paint.FontMetricsInt fontMetricsInt) {
+        AnimatedEmojiSpan animatedEmojiSpan;
         if ((charSequence instanceof Spannable) && arrayList != null) {
             Spannable spannable = (Spannable) charSequence;
             AnimatedEmojiSpan[] animatedEmojiSpanArr = (AnimatedEmojiSpan[]) spannable.getSpans(0, spannable.length(), AnimatedEmojiSpan.class);
-            for (AnimatedEmojiSpan animatedEmojiSpan : animatedEmojiSpanArr) {
-                if (animatedEmojiSpan != null) {
-                    spannable.removeSpan(animatedEmojiSpan);
+            for (AnimatedEmojiSpan animatedEmojiSpan2 : animatedEmojiSpanArr) {
+                if (animatedEmojiSpan2 != null) {
+                    spannable.removeSpan(animatedEmojiSpan2);
                 }
             }
             for (int i = 0; i < arrayList.size(); i++) {
@@ -8368,7 +8384,12 @@ public class MediaDataController extends BaseController {
                     int i2 = tLRPC$MessageEntity.offset;
                     int i3 = tLRPC$MessageEntity.length + i2;
                     if (i2 < i3 && i3 <= spannable.length()) {
-                        spannable.setSpan(new AnimatedEmojiSpan(tLRPC$TL_messageEntityCustomEmoji.document_id, fontMetricsInt), i2, i3, 33);
+                        if (tLRPC$TL_messageEntityCustomEmoji.document != null) {
+                            animatedEmojiSpan = new AnimatedEmojiSpan(tLRPC$TL_messageEntityCustomEmoji.document, fontMetricsInt);
+                        } else {
+                            animatedEmojiSpan = new AnimatedEmojiSpan(tLRPC$TL_messageEntityCustomEmoji.document_id, fontMetricsInt);
+                        }
+                        spannable.setSpan(animatedEmojiSpan, i2, i3, 33);
                     }
                 }
             }
@@ -8668,11 +8689,11 @@ public class MediaDataController extends BaseController {
             r18 = this;
             r1 = r18
             r0 = 0
-            if (r19 == 0) goto L_0x039a
+            if (r19 == 0) goto L_0x039e
             r2 = 0
             r3 = r19[r2]
             if (r3 != 0) goto L_0x000c
-            goto L_0x039a
+            goto L_0x039e
         L_0x000c:
             r3 = -1
             r4 = 0
@@ -8900,7 +8921,7 @@ public class MediaDataController extends BaseController {
         L_0x0197:
             r3 = r19[r2]
             boolean r3 = r3 instanceof android.text.Spanned
-            if (r3 == 0) goto L_0x036d
+            if (r3 == 0) goto L_0x0371
             r3 = r19[r2]
             android.text.Spanned r3 = (android.text.Spanned) r3
             r4 = r19[r2]
@@ -9037,9 +9058,9 @@ public class MediaDataController extends BaseController {
             java.lang.Class<org.telegram.ui.Components.AnimatedEmojiSpan> r5 = org.telegram.ui.Components.AnimatedEmojiSpan.class
             java.lang.Object[] r4 = r3.getSpans(r2, r4, r5)
             org.telegram.ui.Components.AnimatedEmojiSpan[] r4 = (org.telegram.ui.Components.AnimatedEmojiSpan[]) r4
-            if (r4 == 0) goto L_0x0308
+            if (r4 == 0) goto L_0x030c
             int r5 = r4.length
-            if (r5 <= 0) goto L_0x0308
+            if (r5 <= 0) goto L_0x030c
             if (r0 != 0) goto L_0x02cf
             java.util.ArrayList r0 = new java.util.ArrayList
             r0.<init>()
@@ -9048,35 +9069,37 @@ public class MediaDataController extends BaseController {
             r6 = 0
         L_0x02d1:
             int r0 = r4.length
-            if (r6 >= r0) goto L_0x0307
+            if (r6 >= r0) goto L_0x030b
             r0 = r4[r6]
-            if (r0 == 0) goto L_0x0304
-            org.telegram.tgnet.TLRPC$TL_messageEntityCustomEmoji r7 = new org.telegram.tgnet.TLRPC$TL_messageEntityCustomEmoji     // Catch:{ Exception -> 0x0300 }
-            r7.<init>()     // Catch:{ Exception -> 0x0300 }
-            int r8 = r3.getSpanStart(r0)     // Catch:{ Exception -> 0x0300 }
-            r7.offset = r8     // Catch:{ Exception -> 0x0300 }
-            int r8 = r3.getSpanEnd(r0)     // Catch:{ Exception -> 0x0300 }
-            r10 = r19[r2]     // Catch:{ Exception -> 0x0300 }
-            int r10 = r10.length()     // Catch:{ Exception -> 0x0300 }
-            int r8 = java.lang.Math.min(r8, r10)     // Catch:{ Exception -> 0x0300 }
-            int r10 = r7.offset     // Catch:{ Exception -> 0x0300 }
+            if (r0 == 0) goto L_0x0308
+            org.telegram.tgnet.TLRPC$TL_messageEntityCustomEmoji r7 = new org.telegram.tgnet.TLRPC$TL_messageEntityCustomEmoji     // Catch:{ Exception -> 0x0304 }
+            r7.<init>()     // Catch:{ Exception -> 0x0304 }
+            int r8 = r3.getSpanStart(r0)     // Catch:{ Exception -> 0x0304 }
+            r7.offset = r8     // Catch:{ Exception -> 0x0304 }
+            int r8 = r3.getSpanEnd(r0)     // Catch:{ Exception -> 0x0304 }
+            r10 = r19[r2]     // Catch:{ Exception -> 0x0304 }
+            int r10 = r10.length()     // Catch:{ Exception -> 0x0304 }
+            int r8 = java.lang.Math.min(r8, r10)     // Catch:{ Exception -> 0x0304 }
+            int r10 = r7.offset     // Catch:{ Exception -> 0x0304 }
             int r8 = r8 - r10
-            r7.length = r8     // Catch:{ Exception -> 0x0300 }
-            long r10 = r0.getDocumentId()     // Catch:{ Exception -> 0x0300 }
-            r7.document_id = r10     // Catch:{ Exception -> 0x0300 }
-            r5.add(r7)     // Catch:{ Exception -> 0x0300 }
-            goto L_0x0304
-        L_0x0300:
+            r7.length = r8     // Catch:{ Exception -> 0x0304 }
+            long r10 = r0.getDocumentId()     // Catch:{ Exception -> 0x0304 }
+            r7.document_id = r10     // Catch:{ Exception -> 0x0304 }
+            org.telegram.tgnet.TLRPC$Document r0 = r0.document     // Catch:{ Exception -> 0x0304 }
+            r7.document = r0     // Catch:{ Exception -> 0x0304 }
+            r5.add(r7)     // Catch:{ Exception -> 0x0304 }
+            goto L_0x0308
+        L_0x0304:
             r0 = move-exception
             org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)
-        L_0x0304:
+        L_0x0308:
             int r6 = r6 + 1
             goto L_0x02d1
-        L_0x0307:
+        L_0x030b:
             r0 = r5
-        L_0x0308:
+        L_0x030c:
             boolean r4 = r3 instanceof android.text.Spannable
-            if (r4 == 0) goto L_0x036d
+            if (r4 == 0) goto L_0x0371
             r4 = r3
             android.text.Spannable r4 = (android.text.Spannable) r4
             org.telegram.messenger.AndroidUtilities.addLinks(r4, r9)
@@ -9085,25 +9108,25 @@ public class MediaDataController extends BaseController {
             java.lang.Class<android.text.style.URLSpan> r5 = android.text.style.URLSpan.class
             java.lang.Object[] r4 = r3.getSpans(r2, r4, r5)
             android.text.style.URLSpan[] r4 = (android.text.style.URLSpan[]) r4
-            if (r4 == 0) goto L_0x036d
+            if (r4 == 0) goto L_0x0371
             int r5 = r4.length
-            if (r5 <= 0) goto L_0x036d
-            if (r0 != 0) goto L_0x032c
+            if (r5 <= 0) goto L_0x0371
+            if (r0 != 0) goto L_0x0330
             java.util.ArrayList r0 = new java.util.ArrayList
             r0.<init>()
-        L_0x032c:
+        L_0x0330:
             r5 = 0
-        L_0x032d:
+        L_0x0331:
             int r6 = r4.length
-            if (r5 >= r6) goto L_0x036d
+            if (r5 >= r6) goto L_0x0371
             r6 = r4[r5]
             boolean r6 = r6 instanceof org.telegram.ui.Components.URLSpanReplacement
-            if (r6 != 0) goto L_0x036a
+            if (r6 != 0) goto L_0x036e
             r6 = r4[r5]
             boolean r6 = r6 instanceof org.telegram.ui.Components.URLSpanUserMention
-            if (r6 == 0) goto L_0x033d
-            goto L_0x036a
-        L_0x033d:
+            if (r6 == 0) goto L_0x0341
+            goto L_0x036e
+        L_0x0341:
             org.telegram.tgnet.TLRPC$TL_messageEntityUrl r6 = new org.telegram.tgnet.TLRPC$TL_messageEntityUrl
             r6.<init>()
             r7 = r4[r5]
@@ -9121,15 +9144,15 @@ public class MediaDataController extends BaseController {
             java.lang.String r7 = r7.getURL()
             r6.url = r7
             r0.add(r6)
-        L_0x036a:
+        L_0x036e:
             int r5 = r5 + 1
-            goto L_0x032d
-        L_0x036d:
+            goto L_0x0331
+        L_0x0371:
             r3 = r19[r2]
-            if (r0 != 0) goto L_0x0376
+            if (r0 != 0) goto L_0x037a
             java.util.ArrayList r0 = new java.util.ArrayList
             r0.<init>()
-        L_0x0376:
+        L_0x037a:
             java.util.regex.Pattern r4 = BOLD_PATTERN
             org.telegram.messenger.MediaDataController$$ExternalSyntheticLambda142 r5 = org.telegram.messenger.MediaDataController$$ExternalSyntheticLambda142.INSTANCE
             java.lang.CharSequence r3 = r1.parsePattern(r3, r4, r0, r5)
@@ -9139,13 +9162,13 @@ public class MediaDataController extends BaseController {
             java.util.regex.Pattern r4 = SPOILER_PATTERN
             org.telegram.messenger.MediaDataController$$ExternalSyntheticLambda144 r5 = org.telegram.messenger.MediaDataController$$ExternalSyntheticLambda144.INSTANCE
             java.lang.CharSequence r3 = r1.parsePattern(r3, r4, r0, r5)
-            if (r20 == 0) goto L_0x0398
+            if (r20 == 0) goto L_0x039c
             java.util.regex.Pattern r4 = STRIKE_PATTERN
             org.telegram.messenger.MediaDataController$$ExternalSyntheticLambda143 r5 = org.telegram.messenger.MediaDataController$$ExternalSyntheticLambda143.INSTANCE
             java.lang.CharSequence r3 = r1.parsePattern(r3, r4, r0, r5)
-        L_0x0398:
+        L_0x039c:
             r19[r2] = r3
-        L_0x039a:
+        L_0x039e:
             return r0
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MediaDataController.getEntities(java.lang.CharSequence[], boolean):java.util.ArrayList");
