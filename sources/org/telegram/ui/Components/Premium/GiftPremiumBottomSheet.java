@@ -28,9 +28,7 @@ import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.BillingController;
 import org.telegram.messenger.BuildVars;
 import org.telegram.messenger.LocaleController;
-import org.telegram.messenger.MediaDataController;
 import org.telegram.messenger.MessagesController;
-import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.browser.Browser;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLObject;
@@ -106,15 +104,24 @@ public class GiftPremiumBottomSheet extends BottomSheetWithRecyclerListView {
         TLRPC$UserFull userFull = MessagesController.getInstance(this.currentAccount).getUserFull(tLRPC$User.id);
         if (userFull != null) {
             ArrayList arrayList = new ArrayList();
+            long j = 0;
             Iterator<TLRPC$TL_premiumGiftOption> it = userFull.premium_gifts.iterator();
             while (it.hasNext()) {
                 GiftTier giftTier = new GiftTier(it.next());
                 this.giftTiers.add(giftTier);
-                if (!BuildVars.useInvoiceBilling() && giftTier.giftOption.store_product != null) {
+                if (BuildVars.useInvoiceBilling()) {
+                    if (giftTier.getPricePerMonth() > j) {
+                        j = giftTier.getPricePerMonth();
+                    }
+                } else if (giftTier.giftOption.store_product != null) {
                     arrayList.add(QueryProductDetailsParams.Product.newBuilder().setProductType("inapp").setProductId(giftTier.giftOption.store_product).build());
                 }
             }
-            if (!arrayList.isEmpty()) {
+            if (BuildVars.useInvoiceBilling()) {
+                for (GiftTier pricePerMonthRegular : this.giftTiers) {
+                    pricePerMonthRegular.setPricePerMonthRegular(j);
+                }
+            } else if (!arrayList.isEmpty()) {
                 BillingController.getInstance().queryProductDetails(arrayList, new GiftPremiumBottomSheet$$ExternalSyntheticLambda4(this, System.currentTimeMillis()));
             }
         }
@@ -527,6 +534,7 @@ public class GiftPremiumBottomSheet extends BottomSheetWithRecyclerListView {
         /* access modifiers changed from: private */
         public ProductDetails googlePlayProductDetails;
         private long pricePerMonth;
+        private long pricePerMonthRegular;
         public int yOffset;
 
         public GiftTier(TLRPC$TL_premiumGiftOption tLRPC$TL_premiumGiftOption) {
@@ -541,6 +549,10 @@ public class GiftPremiumBottomSheet extends BottomSheetWithRecyclerListView {
             this.googlePlayProductDetails = productDetails;
         }
 
+        public void setPricePerMonthRegular(long j) {
+            this.pricePerMonthRegular = j;
+        }
+
         public int getMonths() {
             return this.giftOption.months;
         }
@@ -552,7 +564,7 @@ public class GiftPremiumBottomSheet extends BottomSheetWithRecyclerListView {
                     return 0;
                 }
                 if (BuildVars.useInvoiceBilling()) {
-                    j = MediaDataController.getInstance(UserConfig.selectedAccount).getPremiumPromo().monthly_amount;
+                    j = this.pricePerMonthRegular;
                 } else {
                     ProductDetails productDetails = BillingController.PREMIUM_PRODUCT_DETAILS;
                     if (productDetails != null) {
@@ -578,7 +590,11 @@ public class GiftPremiumBottomSheet extends BottomSheetWithRecyclerListView {
                     double d = (double) j;
                     Double.isNaN(pricePerMonth2);
                     Double.isNaN(d);
-                    this.discount = (int) ((1.0d - (pricePerMonth2 / d)) * 100.0d);
+                    int i = (int) ((1.0d - (pricePerMonth2 / d)) * 100.0d);
+                    this.discount = i;
+                    if (i == 0) {
+                        this.discount = -1;
+                    }
                 }
             }
             return this.discount;

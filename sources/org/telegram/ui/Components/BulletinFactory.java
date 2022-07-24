@@ -198,7 +198,7 @@ public final class BulletinFactory {
                 super.updateDrawState(textPaint);
                 textPaint.setUnderlineText(false);
             }
-        }, indexOf - 1, lastIndexOf - 1, 33);
+        }, indexOf, lastIndexOf - 1, 33);
         lottieLayout.textView.setText(spannableStringBuilder);
         lottieLayout.textView.setSingleLine(false);
         lottieLayout.textView.setMaxLines(2);

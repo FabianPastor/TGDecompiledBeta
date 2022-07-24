@@ -197,6 +197,7 @@ public class MessageObject {
     public TLRPC$Document emojiAnimatedSticker;
     public String emojiAnimatedStickerColor;
     public Long emojiAnimatedStickerId;
+    private boolean emojiAnimatedStickerLoading;
     private int emojiOnlyCount;
     public long eventId;
     public boolean forcePlayEffect;
@@ -377,6 +378,13 @@ public class MessageObject {
             }
         }
         return null;
+    }
+
+    public void copyStableParams(MessageObject messageObject) {
+        this.stableId = messageObject.stableId;
+        this.messageOwner.premiumEffectWasPlayed = messageObject.messageOwner.premiumEffectWasPlayed;
+        this.forcePlayEffect = messageObject.forcePlayEffect;
+        this.wasJustSent = messageObject.wasJustSent;
     }
 
     public static class VCardData {
@@ -1910,6 +1918,7 @@ public class MessageObject {
             replaceAnimatedEmoji(replaceEmoji, this.messageOwner.entities, textPaint.getFontMetricsInt());
             checkEmojiOnly(iArr);
             this.emojiAnimatedSticker = null;
+            this.emojiAnimatedStickerId = null;
             if (this.emojiOnlyCount == 1) {
                 TLRPC$MessageMedia tLRPC$MessageMedia = tLRPC$Message2.media;
                 if (!(tLRPC$MessageMedia instanceof TLRPC$TL_messageMediaWebPage) && !(tLRPC$MessageMedia instanceof TLRPC$TL_messageMediaInvoice) && (((tLRPC$MessageMedia instanceof TLRPC$TL_messageMediaEmpty) || tLRPC$MessageMedia == null) && this.messageOwner.grouped_id == 0)) {
@@ -5446,6 +5455,24 @@ public class MessageObject {
                 tLRPC$PollResults5.flags |= 16;
             }
         }
+    }
+
+    public void loadAnimatedEmojiDocument() {
+        if (this.emojiAnimatedSticker == null && this.emojiAnimatedStickerId != null && !this.emojiAnimatedStickerLoading) {
+            this.emojiAnimatedStickerLoading = true;
+            AnimatedEmojiDrawable.getDocumentFetcher(this.currentAccount).fetchDocument(this.emojiAnimatedStickerId.longValue(), new MessageObject$$ExternalSyntheticLambda3(this));
+        }
+    }
+
+    /* access modifiers changed from: private */
+    public /* synthetic */ void lambda$loadAnimatedEmojiDocument$1(TLRPC$Document tLRPC$Document) {
+        AndroidUtilities.runOnUIThread(new MessageObject$$ExternalSyntheticLambda0(this, tLRPC$Document));
+    }
+
+    /* access modifiers changed from: private */
+    public /* synthetic */ void lambda$loadAnimatedEmojiDocument$0(TLRPC$Document tLRPC$Document) {
+        this.emojiAnimatedSticker = tLRPC$Document;
+        NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.animatedEmojiDocumentLoaded, this);
     }
 
     public boolean isPollClosed() {
@@ -9237,7 +9264,7 @@ public class MessageObject {
             java.util.ArrayList r6 = new java.util.ArrayList
             r7 = r18
             r6.<init>(r7)
-            org.telegram.messenger.MessageObject$$ExternalSyntheticLambda1 r7 = org.telegram.messenger.MessageObject$$ExternalSyntheticLambda1.INSTANCE
+            org.telegram.messenger.MessageObject$$ExternalSyntheticLambda2 r7 = org.telegram.messenger.MessageObject$$ExternalSyntheticLambda2.INSTANCE
             java.util.Collections.sort(r6, r7)
             int r7 = r6.size()
             r8 = 0
@@ -9776,7 +9803,7 @@ public class MessageObject {
     }
 
     /* access modifiers changed from: private */
-    public static /* synthetic */ int lambda$addEntitiesToText$0(TLRPC$MessageEntity tLRPC$MessageEntity, TLRPC$MessageEntity tLRPC$MessageEntity2) {
+    public static /* synthetic */ int lambda$addEntitiesToText$2(TLRPC$MessageEntity tLRPC$MessageEntity, TLRPC$MessageEntity tLRPC$MessageEntity2) {
         int i = tLRPC$MessageEntity.offset;
         int i2 = tLRPC$MessageEntity2.offset;
         if (i > i2) {
@@ -13129,7 +13156,7 @@ public class MessageObject {
                     i3++;
                 }
                 if (arrayList.size() > 0) {
-                    Collections.sort(arrayList, MessageObject$$ExternalSyntheticLambda0.INSTANCE);
+                    Collections.sort(arrayList, MessageObject$$ExternalSyntheticLambda1.INSTANCE);
                     arrayList.clear();
                     arrayList.add(arrayList.get(0));
                 }
@@ -13153,7 +13180,7 @@ public class MessageObject {
     }
 
     /* access modifiers changed from: private */
-    public static /* synthetic */ int lambda$handleFoundWords$1(String str, String str2) {
+    public static /* synthetic */ int lambda$handleFoundWords$3(String str, String str2) {
         return str2.length() - str.length();
     }
 

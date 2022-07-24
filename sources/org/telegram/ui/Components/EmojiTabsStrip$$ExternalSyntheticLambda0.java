@@ -14,6 +14,6 @@ public final /* synthetic */ class EmojiTabsStrip$$ExternalSyntheticLambda0 impl
     }
 
     public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-        this.f$0.lambda$select$4(this.f$1, this.f$2, valueAnimator);
+        this.f$0.lambda$select$5(this.f$1, this.f$2, valueAnimator);
     }
 }

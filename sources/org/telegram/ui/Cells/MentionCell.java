@@ -164,7 +164,7 @@ public class MentionCell extends LinearLayout {
                 if (drawable instanceof AnimatedEmojiDrawable) {
                     ((AnimatedEmojiDrawable) drawable).removeView((View) this);
                 }
-                AnimatedEmojiDrawable make = AnimatedEmojiDrawable.make(UserConfig.selectedAccount, 1, Long.parseLong(keywordResult.emoji.substring(9)));
+                AnimatedEmojiDrawable make = AnimatedEmojiDrawable.make(UserConfig.selectedAccount, 0, Long.parseLong(keywordResult.emoji.substring(9)));
                 this.emojiDrawable = make;
                 make.addView((View) this);
             } catch (Exception unused) {

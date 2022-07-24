@@ -12,6 +12,6 @@ public final /* synthetic */ class EmojiTabsStrip$$ExternalSyntheticLambda3 impl
     }
 
     public final void onClick(View view) {
-        this.f$0.lambda$updateClickListeners$1(this.f$1, view);
+        this.f$0.lambda$updateClickListeners$3(this.f$1, view);
     }
 }

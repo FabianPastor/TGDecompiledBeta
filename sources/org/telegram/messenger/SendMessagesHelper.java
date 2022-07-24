@@ -1503,7 +1503,6 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
             messageObject.generateCaption();
         } else {
             messageObject.resetLayout();
-            messageObject.checkLayout();
         }
         ArrayList arrayList2 = new ArrayList();
         arrayList2.add(messageObject.messageOwner);

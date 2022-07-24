@@ -251,6 +251,10 @@ public class PremiumButtonView extends FrameLayout {
         this.buttonLayout.setEnabled(z);
     }
 
+    public boolean isEnabled() {
+        return this.buttonLayout.isEnabled();
+    }
+
     public void setButton(String str, View.OnClickListener onClickListener) {
         setButton(str, onClickListener, false);
     }

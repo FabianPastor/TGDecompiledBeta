@@ -661,6 +661,22 @@ public class EditTextBoldCursor extends EditTextEffects {
         return super.onTouchEvent(motionEvent);
     }
 
+    public void invalidateForce() {
+        Object obj;
+        if (!isHardwareAccelerated()) {
+            invalidate();
+            return;
+        }
+        try {
+            Method method = mEditorInvalidateDisplayList;
+            if (!(method == null || (obj = this.editor) == null)) {
+                method.invoke(obj, new Object[0]);
+            }
+        } catch (Exception unused) {
+        }
+        invalidate();
+    }
+
     /* access modifiers changed from: protected */
     public void onDraw(Canvas canvas) {
         boolean z;

@@ -817,15 +817,14 @@ public class AnimatedEmojiDrawable extends Drawable {
 
         /* access modifiers changed from: protected */
         public boolean customDraw(Canvas canvas, AnimatedFileDrawable animatedFileDrawable, RLottieDrawable rLottieDrawable, Drawable drawable, Shader shader, Drawable drawable2, Shader shader2, Drawable drawable3, Shader shader3, boolean z, boolean z2, Drawable drawable4, BitmapShader bitmapShader, Drawable drawable5, float f, float f2, float f3, int[] iArr, ImageReceiver.BackgroundThreadDrawHolder backgroundThreadDrawHolder) {
-            AnimatedFloat animatedFloat = this.usedCrossfade;
-            float f4 = animatedFloat.set(((animatedFloat != this.crossfadeAlphaForced || !this.forcedThumb) && rLottieDrawable != null && rLottieDrawable.hasBitmap() && rLottieDrawable.canLoadFrames()) ? 1.0f : 0.0f);
+            boolean z3 = rLottieDrawable == null || !rLottieDrawable.hasBitmap() || (this.forcedThumb && this.usedCrossfade == this.crossfadeAlphaForced);
+            float f4 = this.usedCrossfade.set(z3 ? 0.0f : 1.0f, z3);
+            if (drawable5 != null && f4 < 1.0f) {
+                drawDrawable(canvas, drawable5, (int) ((1.0f - f4) * 255.0f * f3), (BitmapShader) null, this.imageOrientation, 0, backgroundThreadDrawHolder);
+            }
             if (rLottieDrawable != null && rLottieDrawable.hasBitmap() && f4 > 0.0f) {
-                drawDrawable(canvas, rLottieDrawable, (int) (f4 * 255.0f * f3), (BitmapShader) null, 0, 0, backgroundThreadDrawHolder);
+                drawDrawable(canvas, rLottieDrawable, (int) (f4 * 255.0f * f3), (BitmapShader) null, this.imageOrientation, 0, backgroundThreadDrawHolder);
             }
-            if (drawable5 == null || f4 >= 1.0f) {
-                return true;
-            }
-            drawDrawable(canvas, drawable5, (int) ((1.0f - f4) * 255.0f * f3), (BitmapShader) null, this.imageOrientation, 0, backgroundThreadDrawHolder);
             return true;
         }
     }

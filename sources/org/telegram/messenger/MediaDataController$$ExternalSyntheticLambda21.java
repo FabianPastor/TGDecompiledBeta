@@ -7,6 +7,7 @@ import java.util.HashMap;
 public final /* synthetic */ class MediaDataController$$ExternalSyntheticLambda21 implements Runnable {
     public final /* synthetic */ MediaDataController f$0;
     public final /* synthetic */ int f$1;
+    public final /* synthetic */ Runnable f$10;
     public final /* synthetic */ LongSparseArray f$2;
     public final /* synthetic */ HashMap f$3;
     public final /* synthetic */ ArrayList f$4;
@@ -16,7 +17,7 @@ public final /* synthetic */ class MediaDataController$$ExternalSyntheticLambda2
     public final /* synthetic */ HashMap f$8;
     public final /* synthetic */ LongSparseArray f$9;
 
-    public /* synthetic */ MediaDataController$$ExternalSyntheticLambda21(MediaDataController mediaDataController, int i, LongSparseArray longSparseArray, HashMap hashMap, ArrayList arrayList, long j, int i2, LongSparseArray longSparseArray2, HashMap hashMap2, LongSparseArray longSparseArray3) {
+    public /* synthetic */ MediaDataController$$ExternalSyntheticLambda21(MediaDataController mediaDataController, int i, LongSparseArray longSparseArray, HashMap hashMap, ArrayList arrayList, long j, int i2, LongSparseArray longSparseArray2, HashMap hashMap2, LongSparseArray longSparseArray3, Runnable runnable) {
         this.f$0 = mediaDataController;
         this.f$1 = i;
         this.f$2 = longSparseArray;
@@ -27,9 +28,10 @@ public final /* synthetic */ class MediaDataController$$ExternalSyntheticLambda2
         this.f$7 = longSparseArray2;
         this.f$8 = hashMap2;
         this.f$9 = longSparseArray3;
+        this.f$10 = runnable;
     }
 
     public final void run() {
-        this.f$0.lambda$processLoadedStickers$83(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6, this.f$7, this.f$8, this.f$9);
+        this.f$0.lambda$processLoadedStickers$83(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6, this.f$7, this.f$8, this.f$9, this.f$10);
     }
 }

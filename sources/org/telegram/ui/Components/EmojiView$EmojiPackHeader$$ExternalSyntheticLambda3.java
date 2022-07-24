@@ -11,6 +11,6 @@ public final /* synthetic */ class EmojiView$EmojiPackHeader$$ExternalSyntheticL
     }
 
     public final void onClick(View view) {
-        this.f$0.lambda$setStickerSet$3(view);
+        this.f$0.lambda$setStickerSet$6(view);
     }
 }

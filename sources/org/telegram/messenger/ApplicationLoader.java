@@ -303,6 +303,9 @@ public class ApplicationLoader extends Application {
     }
 
     private boolean checkHuaweiServices() {
+        if (!BuildVars.isHuaweiStoreApp()) {
+            return false;
+        }
         try {
             getPackageManager().getPackageInfo("com.huawei.hwid", 0);
             return true;

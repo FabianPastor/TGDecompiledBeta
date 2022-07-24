@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.DispatchQueue;
 import org.telegram.messenger.NotificationCenter;
+import org.telegram.messenger.SharedConfig;
 
 public class DrawingInBackgroundThreadDrawable implements NotificationCenter.NotificationCenterDelegate {
     private static DispatchQueue backgroundQueue;
@@ -79,7 +80,7 @@ public class DrawingInBackgroundThreadDrawable implements NotificationCenter.Not
     };
     /* access modifiers changed from: private */
     public boolean bitmapUpdating;
-    private int currentLayerNum;
+    public int currentLayerNum = 1;
     private int currentOpenedLayerFlags;
     boolean error;
     int frameGuid;
@@ -186,6 +187,14 @@ public class DrawingInBackgroundThreadDrawable implements NotificationCenter.Not
 
     public void onAttachToWindow() {
         this.attachedToWindow = true;
+        int currentHeavyOperationFlags = NotificationCenter.getGlobalInstance().getCurrentHeavyOperationFlags();
+        this.currentOpenedLayerFlags = currentHeavyOperationFlags;
+        int i = currentHeavyOperationFlags & (this.currentLayerNum ^ -1);
+        this.currentOpenedLayerFlags = i;
+        if (i == 0 && this.paused) {
+            this.paused = false;
+            onResume();
+        }
         NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.stopAllHeavyOperations);
         NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.startAllHeavyOperations);
     }
@@ -212,7 +221,10 @@ public class DrawingInBackgroundThreadDrawable implements NotificationCenter.Not
         int i3;
         if (i == NotificationCenter.stopAllHeavyOperations) {
             Integer num = objArr[0];
-            if (this.currentLayerNum < num.intValue()) {
+            if (this.currentLayerNum >= num.intValue()) {
+                return;
+            }
+            if (num.intValue() != 512 || SharedConfig.getDevicePerformanceClass() < 2) {
                 int intValue = num.intValue() | this.currentOpenedLayerFlags;
                 this.currentOpenedLayerFlags = intValue;
                 if (intValue != 0 && !this.paused) {

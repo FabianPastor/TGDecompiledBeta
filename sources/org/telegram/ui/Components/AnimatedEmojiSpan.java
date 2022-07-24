@@ -4,7 +4,9 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.text.Layout;
+import android.text.SpannableString;
 import android.text.Spanned;
+import android.text.style.CharacterStyle;
 import android.text.style.ReplacementSpan;
 import android.util.LongSparseArray;
 import android.view.View;
@@ -66,6 +68,8 @@ public class AnimatedEmojiSpan extends ReplacementSpan {
     }
 
     public void replaceFontMetrics(Paint.FontMetricsInt fontMetricsInt, int i, int i2) {
+        this.fontMetrics = fontMetricsInt;
+        this.size = (float) i;
         this.cacheType = i2;
     }
 
@@ -537,13 +541,24 @@ public class AnimatedEmojiSpan extends ReplacementSpan {
                 boolean unused = this.holders.get(i).span.recordPositions = z;
             }
         }
+
+        public void replaceLayout(Layout layout, Layout layout2) {
+            SpansChunk remove;
+            if (layout2 != null && (remove = this.groupedByLayout.remove(layout2)) != null) {
+                remove.layout = layout;
+                for (int i = 0; i < remove.holders.size(); i++) {
+                    remove.holders.get(i).layout = layout;
+                }
+                this.groupedByLayout.put(layout, remove);
+            }
+        }
     }
 
     private static class SpansChunk {
         private boolean allowBackgroundRendering;
         DrawingInBackgroundThreadDrawable backgroundThreadDrawable;
         ArrayList<AnimatedEmojiHolder> holders = new ArrayList<>();
-        final Layout layout;
+        Layout layout;
         final View view;
 
         public SpansChunk(View view2, Layout layout2, boolean z) {
@@ -674,5 +689,42 @@ public class AnimatedEmojiSpan extends ReplacementSpan {
             spansChunk.checkBackgroundRendering();
             return spansChunk;
         }
+    }
+
+    public static CharSequence cloneSpans(CharSequence charSequence) {
+        AnimatedEmojiSpan animatedEmojiSpan;
+        if (!(charSequence instanceof Spanned)) {
+            return charSequence;
+        }
+        Spanned spanned = (Spanned) charSequence;
+        CharacterStyle[] characterStyleArr = (CharacterStyle[]) spanned.getSpans(0, spanned.length(), CharacterStyle.class);
+        SpannableString spannableString = charSequence;
+        if (characterStyleArr != null) {
+            spannableString = charSequence;
+            if (characterStyleArr.length > 0) {
+                AnimatedEmojiSpan[] animatedEmojiSpanArr = (AnimatedEmojiSpan[]) spanned.getSpans(0, spanned.length(), AnimatedEmojiSpan.class);
+                if (animatedEmojiSpanArr != null && animatedEmojiSpanArr.length <= 0) {
+                    return charSequence;
+                }
+                SpannableString spannableString2 = new SpannableString(spanned);
+                for (int i = 0; i < characterStyleArr.length; i++) {
+                    if (characterStyleArr[i] != null && (characterStyleArr[i] instanceof AnimatedEmojiSpan)) {
+                        int spanStart = spanned.getSpanStart(characterStyleArr[i]);
+                        int spanEnd = spanned.getSpanEnd(characterStyleArr[i]);
+                        AnimatedEmojiSpan animatedEmojiSpan2 = (AnimatedEmojiSpan) characterStyleArr[i];
+                        spannableString2.removeSpan(animatedEmojiSpan2);
+                        TLRPC$Document tLRPC$Document = animatedEmojiSpan2.document;
+                        if (tLRPC$Document != null) {
+                            animatedEmojiSpan = new AnimatedEmojiSpan(tLRPC$Document, animatedEmojiSpan2.fontMetrics);
+                        } else {
+                            animatedEmojiSpan = new AnimatedEmojiSpan(animatedEmojiSpan2.documentId, animatedEmojiSpan2.scale, animatedEmojiSpan2.fontMetrics);
+                        }
+                        spannableString2.setSpan(animatedEmojiSpan, spanStart, spanEnd, 33);
+                    }
+                }
+                spannableString = spannableString2;
+            }
+        }
+        return spannableString;
     }
 }

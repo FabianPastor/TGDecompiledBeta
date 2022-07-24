@@ -24,6 +24,7 @@ import org.telegram.ui.Components.spoilers.SpoilersClickDetector;
 public class EditTextEffects extends EditText {
     private AnimatedEmojiSpan.EmojiGroupedSpans animatedEmojiDrawables;
     private SpoilersClickDetector clickDetector = new SpoilersClickDetector(this, this.spoilers, new EditTextEffects$$ExternalSyntheticLambda5(this));
+    private boolean clipToPadding;
     private boolean isSpoilersRevealed;
     private Layout lastLayout = null;
     private float lastRippleX;
@@ -144,6 +145,12 @@ public class EditTextEffects extends EditText {
     }
 
     /* access modifiers changed from: protected */
+    public void onAttachedToWindow() {
+        super.onAttachedToWindow();
+        updateAnimatedEmoji();
+    }
+
+    /* access modifiers changed from: protected */
     public void onSizeChanged(int i, int i2, int i3, int i4) {
         super.onSizeChanged(i, i2, i3, i4);
         invalidateEffects();
@@ -175,7 +182,8 @@ public class EditTextEffects extends EditText {
                 }
             }
         }
-        this.animatedEmojiDrawables = AnimatedEmojiSpan.update(AnimatedEmojiDrawable.getCacheTypeForEnterView(), (View) this, this.animatedEmojiDrawables, getLayout());
+        updateAnimatedEmoji();
+        invalidate();
     }
 
     public void setText(CharSequence charSequence, TextView.BufferType bufferType) {
@@ -192,7 +200,7 @@ public class EditTextEffects extends EditText {
     /* access modifiers changed from: protected */
     public void onLayout(boolean z, int i, int i2, int i3, int i4) {
         super.onLayout(z, i, i2, i3, i4);
-        this.animatedEmojiDrawables = AnimatedEmojiSpan.update(AnimatedEmojiDrawable.getCacheTypeForEnterView(), (View) this, this.animatedEmojiDrawables, getLayout());
+        updateAnimatedEmoji();
     }
 
     public void setShouldRevealSpoilersByTouch(boolean z) {
@@ -239,7 +247,9 @@ public class EditTextEffects extends EditText {
     /* access modifiers changed from: protected */
     public void onDraw(Canvas canvas) {
         canvas.save();
-        canvas.clipRect(0, getScrollY(), getMeasuredWidth(), getMeasuredHeight() + getScrollY());
+        if (this.clipToPadding && getScrollY() != 0) {
+            canvas.clipRect(0, getScrollY(), getMeasuredWidth(), getMeasuredHeight() + getScrollY());
+        }
         this.path.rewind();
         for (SpoilerEffect bounds : this.spoilers) {
             Rect bounds2 = bounds.getBounds();
@@ -249,9 +259,7 @@ public class EditTextEffects extends EditText {
         int length = (getLayout() == null || getLayout().getText() == null) ? 0 : getLayout().getText().length();
         Layout layout = this.lastLayout;
         if (!(layout != null && layout == getLayout() && this.lastTextLength == length)) {
-            this.animatedEmojiDrawables = AnimatedEmojiSpan.update(AnimatedEmojiDrawable.getCacheTypeForEnterView(), (View) this, this.animatedEmojiDrawables, getLayout());
-            this.lastLayout = getLayout();
-            this.lastTextLength = length;
+            updateAnimatedEmoji();
         }
         super.onDraw(canvas);
         if (this.animatedEmojiDrawables != null) {
@@ -282,6 +290,18 @@ public class EditTextEffects extends EditText {
             }
         }
         canvas.restore();
+    }
+
+    public void updateAnimatedEmoji() {
+        int i = 0;
+        this.animatedEmojiDrawables = AnimatedEmojiSpan.update(AnimatedEmojiDrawable.getCacheTypeForEnterView(), (View) this, this.animatedEmojiDrawables, getLayout());
+        if (!(getLayout() == null || getLayout().getText() == null)) {
+            i = getLayout().getText().length();
+        }
+        if (this.lastLayout != getLayout() || this.lastTextLength != i) {
+            this.lastLayout = getLayout();
+            this.lastTextLength = i;
+        }
     }
 
     public void invalidateEffects() {
@@ -319,5 +339,9 @@ public class EditTextEffects extends EditText {
             }
             invalidate();
         }
+    }
+
+    public void setClipToPadding(boolean z) {
+        this.clipToPadding = z;
     }
 }

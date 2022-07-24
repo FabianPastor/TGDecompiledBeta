@@ -1,19 +1,17 @@
 package org.telegram.ui.Components;
 
+import android.view.View;
 import org.telegram.ui.Components.EmojiView;
+import org.telegram.ui.Components.RecyclerListView;
 
-public final /* synthetic */ class EmojiView$EmojiGridAdapter$$ExternalSyntheticLambda1 implements Runnable {
+public final /* synthetic */ class EmojiView$EmojiGridAdapter$$ExternalSyntheticLambda1 implements RecyclerListView.OnItemClickListener {
     public final /* synthetic */ EmojiView.EmojiGridAdapter f$0;
-    public final /* synthetic */ float f$1;
-    public final /* synthetic */ int f$2;
 
-    public /* synthetic */ EmojiView$EmojiGridAdapter$$ExternalSyntheticLambda1(EmojiView.EmojiGridAdapter emojiGridAdapter, float f, int i) {
+    public /* synthetic */ EmojiView$EmojiGridAdapter$$ExternalSyntheticLambda1(EmojiView.EmojiGridAdapter emojiGridAdapter) {
         this.f$0 = emojiGridAdapter;
-        this.f$1 = f;
-        this.f$2 = i;
     }
 
-    public final void run() {
-        this.f$0.lambda$expand$5(this.f$1, this.f$2);
+    public final void onItemClick(View view, int i) {
+        this.f$0.lambda$onCreateViewHolder$0(view, i);
     }
 }

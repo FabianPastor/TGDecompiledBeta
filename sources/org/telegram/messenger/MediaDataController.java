@@ -3111,41 +3111,44 @@ public class MediaDataController extends BaseController {
         ArrayList arrayList = new ArrayList();
         long j = 1000;
         if (tLRPC$TL_messages_allStickers2.sets.isEmpty()) {
-            processLoadedStickers(i, arrayList, false, (int) (System.currentTimeMillis() / 1000), tLRPC$TL_messages_allStickers2.hash);
-        } else {
-            LongSparseArray longSparseArray = new LongSparseArray();
-            int i2 = 0;
-            while (i2 < tLRPC$TL_messages_allStickers2.sets.size()) {
-                TLRPC$StickerSet tLRPC$StickerSet = tLRPC$TL_messages_allStickers2.sets.get(i2);
-                TLRPC$TL_messages_stickerSet tLRPC$TL_messages_stickerSet = this.stickerSetsById.get(tLRPC$StickerSet.id);
-                if (tLRPC$TL_messages_stickerSet != null) {
-                    TLRPC$StickerSet tLRPC$StickerSet2 = tLRPC$TL_messages_stickerSet.set;
-                    if (tLRPC$StickerSet2.hash == tLRPC$StickerSet.hash) {
-                        tLRPC$StickerSet2.archived = tLRPC$StickerSet.archived;
-                        tLRPC$StickerSet2.installed = tLRPC$StickerSet.installed;
-                        tLRPC$StickerSet2.official = tLRPC$StickerSet.official;
-                        longSparseArray.put(tLRPC$StickerSet2.id, tLRPC$TL_messages_stickerSet);
-                        arrayList.add(tLRPC$TL_messages_stickerSet);
-                        if (longSparseArray.size() == tLRPC$TL_messages_allStickers2.sets.size()) {
-                            processLoadedStickers(i, arrayList, false, (int) (System.currentTimeMillis() / j), tLRPC$TL_messages_allStickers2.hash);
-                        }
-                        i2++;
-                        j = 1000;
+            processLoadedStickers(i, arrayList, false, (int) (System.currentTimeMillis() / 1000), tLRPC$TL_messages_allStickers2.hash, runnable);
+            return;
+        }
+        LongSparseArray longSparseArray = new LongSparseArray();
+        int i2 = 0;
+        while (i2 < tLRPC$TL_messages_allStickers2.sets.size()) {
+            TLRPC$StickerSet tLRPC$StickerSet = tLRPC$TL_messages_allStickers2.sets.get(i2);
+            TLRPC$TL_messages_stickerSet tLRPC$TL_messages_stickerSet = this.stickerSetsById.get(tLRPC$StickerSet.id);
+            if (tLRPC$TL_messages_stickerSet != null) {
+                TLRPC$StickerSet tLRPC$StickerSet2 = tLRPC$TL_messages_stickerSet.set;
+                if (tLRPC$StickerSet2.hash == tLRPC$StickerSet.hash) {
+                    tLRPC$StickerSet2.archived = tLRPC$StickerSet.archived;
+                    tLRPC$StickerSet2.installed = tLRPC$StickerSet.installed;
+                    tLRPC$StickerSet2.official = tLRPC$StickerSet.official;
+                    longSparseArray.put(tLRPC$StickerSet2.id, tLRPC$TL_messages_stickerSet);
+                    arrayList.add(tLRPC$TL_messages_stickerSet);
+                    if (longSparseArray.size() == tLRPC$TL_messages_allStickers2.sets.size()) {
+                        processLoadedStickers(i, arrayList, false, (int) (System.currentTimeMillis() / j), tLRPC$TL_messages_allStickers2.hash);
                     }
+                    i2++;
+                    j = 1000;
                 }
-                arrayList.add((Object) null);
-                TLRPC$TL_messages_getStickerSet tLRPC$TL_messages_getStickerSet = new TLRPC$TL_messages_getStickerSet();
-                TLRPC$TL_inputStickerSetID tLRPC$TL_inputStickerSetID = new TLRPC$TL_inputStickerSetID();
-                tLRPC$TL_messages_getStickerSet.stickerset = tLRPC$TL_inputStickerSetID;
-                tLRPC$TL_inputStickerSetID.id = tLRPC$StickerSet.id;
-                tLRPC$TL_inputStickerSetID.access_hash = tLRPC$StickerSet.access_hash;
-                MediaDataController$$ExternalSyntheticLambda182 mediaDataController$$ExternalSyntheticLambda182 = r0;
-                ConnectionsManager connectionsManager = getConnectionsManager();
-                MediaDataController$$ExternalSyntheticLambda182 mediaDataController$$ExternalSyntheticLambda1822 = new MediaDataController$$ExternalSyntheticLambda182(this, arrayList, i2, longSparseArray, tLRPC$StickerSet, tLRPC$TL_messages_allStickers, i);
-                connectionsManager.sendRequest(tLRPC$TL_messages_getStickerSet, mediaDataController$$ExternalSyntheticLambda182);
-                i2++;
-                j = 1000;
             }
+            arrayList.add((Object) null);
+            TLRPC$TL_messages_getStickerSet tLRPC$TL_messages_getStickerSet = new TLRPC$TL_messages_getStickerSet();
+            TLRPC$TL_inputStickerSetID tLRPC$TL_inputStickerSetID = new TLRPC$TL_inputStickerSetID();
+            tLRPC$TL_messages_getStickerSet.stickerset = tLRPC$TL_inputStickerSetID;
+            tLRPC$TL_inputStickerSetID.id = tLRPC$StickerSet.id;
+            tLRPC$TL_inputStickerSetID.access_hash = tLRPC$StickerSet.access_hash;
+            MediaDataController$$ExternalSyntheticLambda182 mediaDataController$$ExternalSyntheticLambda182 = r0;
+            ConnectionsManager connectionsManager = getConnectionsManager();
+            MediaDataController$$ExternalSyntheticLambda182 mediaDataController$$ExternalSyntheticLambda1822 = new MediaDataController$$ExternalSyntheticLambda182(this, arrayList, i2, longSparseArray, tLRPC$StickerSet, tLRPC$TL_messages_allStickers, i);
+            connectionsManager.sendRequest(tLRPC$TL_messages_getStickerSet, mediaDataController$$ExternalSyntheticLambda182);
+            i2++;
+            j = 1000;
+        }
+        if (runnable != null) {
+            runnable.run();
         }
     }
 
@@ -3434,60 +3437,71 @@ public class MediaDataController extends BaseController {
             r6 = this;
             boolean[] r0 = r6.loadingStickers
             boolean r0 = r0[r7]
-            if (r0 == 0) goto L_0x0012
-            if (r10 == 0) goto L_0x0011
+            r1 = 0
+            if (r0 == 0) goto L_0x0019
+            if (r10 == 0) goto L_0x0013
             java.lang.Runnable[] r8 = r6.scheduledLoadStickers
             org.telegram.messenger.MediaDataController$$ExternalSyntheticLambda26 r10 = new org.telegram.messenger.MediaDataController$$ExternalSyntheticLambda26
             r10.<init>(r6, r7, r9, r11)
             r8[r7] = r10
-        L_0x0011:
+            goto L_0x0018
+        L_0x0013:
+            if (r11 == 0) goto L_0x0018
+            r11.run(r1)
+        L_0x0018:
             return
-        L_0x0012:
+        L_0x0019:
             r10 = 4
             r0 = 3
-            r1 = 0
-            r2 = 6
-            r3 = 1
-            if (r7 != r0) goto L_0x002c
-            java.util.ArrayList<org.telegram.tgnet.TLRPC$StickerSetCovered>[] r4 = r6.featuredStickerSets
-            r4 = r4[r1]
-            boolean r4 = r4.isEmpty()
-            if (r4 != 0) goto L_0x002b
-            org.telegram.messenger.MessagesController r4 = r6.getMessagesController()
-            boolean r4 = r4.preloadFeaturedStickers
-            if (r4 != 0) goto L_0x0046
-        L_0x002b:
+            r2 = 0
+            r3 = 6
+            r4 = 1
+            if (r7 != r0) goto L_0x0038
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$StickerSetCovered>[] r5 = r6.featuredStickerSets
+            r5 = r5[r2]
+            boolean r5 = r5.isEmpty()
+            if (r5 != 0) goto L_0x0032
+            org.telegram.messenger.MessagesController r5 = r6.getMessagesController()
+            boolean r5 = r5.preloadFeaturedStickers
+            if (r5 != 0) goto L_0x0057
+        L_0x0032:
+            if (r11 == 0) goto L_0x0037
+            r11.run(r1)
+        L_0x0037:
             return
-        L_0x002c:
-            if (r7 != r2) goto L_0x0041
-            java.util.ArrayList<org.telegram.tgnet.TLRPC$StickerSetCovered>[] r4 = r6.featuredStickerSets
-            r4 = r4[r3]
-            boolean r4 = r4.isEmpty()
-            if (r4 != 0) goto L_0x0040
-            org.telegram.messenger.MessagesController r4 = r6.getMessagesController()
-            boolean r4 = r4.preloadFeaturedStickers
-            if (r4 != 0) goto L_0x0046
-        L_0x0040:
+        L_0x0038:
+            if (r7 != r3) goto L_0x0052
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$StickerSetCovered>[] r5 = r6.featuredStickerSets
+            r5 = r5[r4]
+            boolean r5 = r5.isEmpty()
+            if (r5 != 0) goto L_0x004c
+            org.telegram.messenger.MessagesController r5 = r6.getMessagesController()
+            boolean r5 = r5.preloadFeaturedStickers
+            if (r5 != 0) goto L_0x0057
+        L_0x004c:
+            if (r11 == 0) goto L_0x0051
+            r11.run(r1)
+        L_0x0051:
             return
-        L_0x0041:
-            if (r7 == r10) goto L_0x0046
+        L_0x0052:
+            if (r7 == r10) goto L_0x0057
             r6.loadArchivedStickersCount(r7, r8)
-        L_0x0046:
-            boolean[] r4 = r6.loadingStickers
-            r4[r7] = r3
-            if (r8 == 0) goto L_0x005e
+        L_0x0057:
+            boolean[] r1 = r6.loadingStickers
+            r1[r7] = r4
+            if (r8 == 0) goto L_0x006f
             org.telegram.messenger.MessagesStorage r8 = r6.getMessagesStorage()
             org.telegram.messenger.DispatchQueue r8 = r8.getStorageQueue()
             org.telegram.messenger.MediaDataController$$ExternalSyntheticLambda23 r9 = new org.telegram.messenger.MediaDataController$$ExternalSyntheticLambda23
             r9.<init>(r6, r7, r11)
             r8.postRunnable(r9)
-            goto L_0x00fb
-        L_0x005e:
-            if (r7 == r0) goto L_0x00c6
-            if (r7 != r2) goto L_0x0064
-            goto L_0x00c6
-        L_0x0064:
-            if (r7 != r10) goto L_0x0080
+            goto L_0x010c
+        L_0x006f:
+            if (r7 == r0) goto L_0x00d7
+            if (r7 != r3) goto L_0x0075
+            goto L_0x00d7
+        L_0x0075:
+            if (r7 != r10) goto L_0x0091
             org.telegram.tgnet.TLRPC$TL_messages_getStickerSet r8 = new org.telegram.tgnet.TLRPC$TL_messages_getStickerSet
             r8.<init>()
             org.telegram.tgnet.TLRPC$TL_inputStickerSetAnimatedEmoji r9 = new org.telegram.tgnet.TLRPC$TL_inputStickerSetAnimatedEmoji
@@ -3497,47 +3511,47 @@ public class MediaDataController extends BaseController {
             org.telegram.messenger.MediaDataController$$ExternalSyntheticLambda162 r10 = new org.telegram.messenger.MediaDataController$$ExternalSyntheticLambda162
             r10.<init>(r6, r7, r11)
             r9.sendRequest(r8, r10)
-            goto L_0x00fb
-        L_0x0080:
+            goto L_0x010c
+        L_0x0091:
             r0 = 0
-            if (r7 != 0) goto L_0x0094
+            if (r7 != 0) goto L_0x00a5
             org.telegram.tgnet.TLRPC$TL_messages_getAllStickers r8 = new org.telegram.tgnet.TLRPC$TL_messages_getAllStickers
             r8.<init>()
-            if (r9 == 0) goto L_0x008c
-            goto L_0x0090
-        L_0x008c:
+            if (r9 == 0) goto L_0x009d
+            goto L_0x00a1
+        L_0x009d:
             long[] r9 = r6.loadHash
             r0 = r9[r7]
-        L_0x0090:
+        L_0x00a1:
             r8.hash = r0
-        L_0x0092:
+        L_0x00a3:
             r4 = r0
-            goto L_0x00b5
-        L_0x0094:
+            goto L_0x00c6
+        L_0x00a5:
             r8 = 5
-            if (r7 != r8) goto L_0x00a6
+            if (r7 != r8) goto L_0x00b7
             org.telegram.tgnet.TLRPC$TL_messages_getEmojiStickers r8 = new org.telegram.tgnet.TLRPC$TL_messages_getEmojiStickers
             r8.<init>()
-            if (r9 == 0) goto L_0x009f
-            goto L_0x00a3
-        L_0x009f:
+            if (r9 == 0) goto L_0x00b0
+            goto L_0x00b4
+        L_0x00b0:
             long[] r9 = r6.loadHash
             r0 = r9[r7]
-        L_0x00a3:
+        L_0x00b4:
             r8.hash = r0
-            goto L_0x0092
-        L_0x00a6:
+            goto L_0x00a3
+        L_0x00b7:
             org.telegram.tgnet.TLRPC$TL_messages_getMaskStickers r8 = new org.telegram.tgnet.TLRPC$TL_messages_getMaskStickers
             r8.<init>()
-            if (r9 == 0) goto L_0x00ae
-            goto L_0x00b2
-        L_0x00ae:
+            if (r9 == 0) goto L_0x00bf
+            goto L_0x00c3
+        L_0x00bf:
             long[] r9 = r6.loadHash
             r0 = r9[r7]
-        L_0x00b2:
+        L_0x00c3:
             r8.hash = r0
-            goto L_0x0092
-        L_0x00b5:
+            goto L_0x00a3
+        L_0x00c6:
             org.telegram.tgnet.ConnectionsManager r9 = r6.getConnectionsManager()
             org.telegram.messenger.MediaDataController$$ExternalSyntheticLambda163 r10 = new org.telegram.messenger.MediaDataController$$ExternalSyntheticLambda163
             r0 = r10
@@ -3546,37 +3560,37 @@ public class MediaDataController extends BaseController {
             r3 = r11
             r0.<init>(r1, r2, r3, r4)
             r9.sendRequest(r8, r10)
-            goto L_0x00fb
-        L_0x00c6:
-            if (r7 != r2) goto L_0x00c9
-            goto L_0x00ca
-        L_0x00c9:
-            r3 = 0
-        L_0x00ca:
+            goto L_0x010c
+        L_0x00d7:
+            if (r7 != r3) goto L_0x00da
+            goto L_0x00db
+        L_0x00da:
+            r4 = 0
+        L_0x00db:
             org.telegram.tgnet.TLRPC$TL_messages_allStickers r8 = new org.telegram.tgnet.TLRPC$TL_messages_allStickers
             r8.<init>()
             long[] r9 = r6.loadFeaturedHash
-            r4 = r9[r3]
-            r8.hash = r4
+            r0 = r9[r4]
+            r8.hash = r0
             java.util.ArrayList<org.telegram.tgnet.TLRPC$StickerSetCovered>[] r9 = r6.featuredStickerSets
-            r9 = r9[r3]
+            r9 = r9[r4]
             int r9 = r9.size()
-        L_0x00dd:
-            if (r1 >= r9) goto L_0x00f3
+        L_0x00ee:
+            if (r2 >= r9) goto L_0x0104
             java.util.ArrayList<org.telegram.tgnet.TLRPC$StickerSet> r10 = r8.sets
             java.util.ArrayList<org.telegram.tgnet.TLRPC$StickerSetCovered>[] r0 = r6.featuredStickerSets
-            r0 = r0[r3]
-            java.lang.Object r0 = r0.get(r1)
+            r0 = r0[r4]
+            java.lang.Object r0 = r0.get(r2)
             org.telegram.tgnet.TLRPC$StickerSetCovered r0 = (org.telegram.tgnet.TLRPC$StickerSetCovered) r0
             org.telegram.tgnet.TLRPC$StickerSet r0 = r0.set
             r10.add(r0)
-            int r1 = r1 + 1
-            goto L_0x00dd
-        L_0x00f3:
+            int r2 = r2 + 1
+            goto L_0x00ee
+        L_0x0104:
             org.telegram.messenger.MediaDataController$$ExternalSyntheticLambda129 r9 = new org.telegram.messenger.MediaDataController$$ExternalSyntheticLambda129
             r9.<init>(r11)
             r6.processLoadStickersResponse(r7, r8, r9)
-        L_0x00fb:
+        L_0x010c:
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MediaDataController.loadStickers(int, boolean, boolean, boolean, org.telegram.messenger.Utilities$Callback):void");
@@ -3829,7 +3843,7 @@ public class MediaDataController extends BaseController {
 
     private void processLoadedStickers(int i, ArrayList<TLRPC$TL_messages_stickerSet> arrayList, boolean z, int i2, long j, Runnable runnable) {
         AndroidUtilities.runOnUIThread(new MediaDataController$$ExternalSyntheticLambda18(this, i));
-        Utilities.stageQueue.postRunnable(new MediaDataController$$ExternalSyntheticLambda118(this, z, arrayList, i2, j, i));
+        Utilities.stageQueue.postRunnable(new MediaDataController$$ExternalSyntheticLambda118(this, z, arrayList, i2, j, i, runnable));
     }
 
     /* access modifiers changed from: private */
@@ -3844,7 +3858,7 @@ public class MediaDataController extends BaseController {
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$processLoadedStickers$85(boolean z, ArrayList arrayList, int i, long j, int i2) {
+    public /* synthetic */ void lambda$processLoadedStickers$85(boolean z, ArrayList arrayList, int i, long j, int i2, Runnable runnable) {
         int i3;
         int i4;
         MediaDataController mediaDataController = this;
@@ -3858,6 +3872,10 @@ public class MediaDataController extends BaseController {
             }
             AndroidUtilities.runOnUIThread(mediaDataController$$ExternalSyntheticLambda68, j2);
             if (arrayList2 == null) {
+                if (runnable != null) {
+                    runnable.run();
+                    return;
+                }
                 return;
             }
         }
@@ -3945,15 +3963,24 @@ public class MediaDataController extends BaseController {
                 if (!z) {
                     putStickersToCache(i2, arrayList3, i, j);
                 }
-                AndroidUtilities.runOnUIThread(new MediaDataController$$ExternalSyntheticLambda21(this, i2, longSparseArray, hashMap, arrayList3, j, i, longSparseArray3, hashMap4, longSparseArray2));
+                AndroidUtilities.runOnUIThread(new MediaDataController$$ExternalSyntheticLambda21(this, i2, longSparseArray, hashMap, arrayList3, j, i, longSparseArray3, hashMap4, longSparseArray2, runnable));
             } catch (Throwable th) {
                 FileLog.e(th);
+                if (runnable != null) {
+                    runnable.run();
+                }
             }
         } else if (!z) {
             int i10 = i2;
             AndroidUtilities.runOnUIThread(new MediaDataController$$ExternalSyntheticLambda19(this, i10, i5));
             putStickersToCache(i10, (ArrayList<TLRPC$TL_messages_stickerSet>) null, i, 0);
-            return;
+            if (runnable != null) {
+                runnable.run();
+            }
+        } else {
+            if (runnable != null) {
+                runnable.run();
+            }
         }
     }
 
@@ -3966,7 +3993,7 @@ public class MediaDataController extends BaseController {
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$processLoadedStickers$83(int i, LongSparseArray longSparseArray, HashMap hashMap, ArrayList arrayList, long j, int i2, LongSparseArray longSparseArray2, HashMap hashMap2, LongSparseArray longSparseArray3) {
+    public /* synthetic */ void lambda$processLoadedStickers$83(int i, LongSparseArray longSparseArray, HashMap hashMap, ArrayList arrayList, long j, int i2, LongSparseArray longSparseArray2, HashMap hashMap2, LongSparseArray longSparseArray3, Runnable runnable) {
         int i3 = i;
         LongSparseArray longSparseArray4 = longSparseArray;
         HashMap hashMap3 = hashMap2;
@@ -3994,6 +4021,9 @@ public class MediaDataController extends BaseController {
             this.stickersByEmoji = longSparseArray3;
         } else if (i3 == 3) {
             this.allStickersFeatured = hashMap3;
+        }
+        if (runnable != null) {
+            runnable.run();
         }
         getNotificationCenter().postNotificationName(NotificationCenter.stickersDidLoad, Integer.valueOf(i));
     }

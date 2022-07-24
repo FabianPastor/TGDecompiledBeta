@@ -228,12 +228,12 @@ public class StickerSetCell extends FrameLayout {
 
     /* access modifiers changed from: private */
     public /* synthetic */ void lambda$new$3(View view) {
-        if (this.premiumButtonView.getVisibility() == 0) {
-            onPremiumButtonClick();
-        } else if (this.addButtonView.getVisibility() == 0) {
-            onAddButtonClick();
-        } else if (this.removeButtonView.getVisibility() == 0) {
-            onRemoveButtonClick();
+        if (this.premiumButtonView.getVisibility() == 0 && this.premiumButtonView.isEnabled()) {
+            this.premiumButtonView.performClick();
+        } else if (this.addButtonView.getVisibility() == 0 && this.addButtonView.isEnabled()) {
+            this.addButtonView.performClick();
+        } else if (this.removeButtonView.getVisibility() == 0 && this.removeButtonView.isEnabled()) {
+            this.removeButtonView.performClick();
         }
     }
 

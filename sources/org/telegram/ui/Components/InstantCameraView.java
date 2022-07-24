@@ -220,7 +220,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
         super(context);
         Context context2 = context;
         Theme.ResourcesProvider resourcesProvider3 = resourcesProvider2;
-        this.aspectRatio = SharedConfig.roundCamera16to9 ? new Size(1, 1) : new Size(4, 3);
+        this.aspectRatio = SharedConfig.roundCamera16to9 ? new Size(16, 9) : new Size(4, 3);
         this.mMVPMatrix = new float[16];
         this.mSTMatrix = new float[16];
         this.moldSTMatrix = new float[16];
@@ -1093,16 +1093,24 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
         CameraSession cameraSession2 = this.cameraSession;
         if (cameraSession2 != null) {
             boolean z = false;
-            Camera.Size currentPreviewSize = cameraSession2.getCurrentPreviewSize();
-            if (!(currentPreviewSize.width == this.previewSize.getWidth() && currentPreviewSize.height == this.previewSize.getHeight())) {
-                this.previewSize = new Size(currentPreviewSize.width, currentPreviewSize.height);
-                FileLog.d("change preview size to w = " + this.previewSize.getWidth() + " h = " + this.previewSize.getHeight());
+            try {
+                Camera.Size currentPreviewSize = cameraSession2.getCurrentPreviewSize();
+                if (!(currentPreviewSize.width == this.previewSize.getWidth() && currentPreviewSize.height == this.previewSize.getHeight())) {
+                    this.previewSize = new Size(currentPreviewSize.width, currentPreviewSize.height);
+                    FileLog.d("change preview size to w = " + this.previewSize.getWidth() + " h = " + this.previewSize.getHeight());
+                }
+            } catch (Exception e) {
+                FileLog.e((Throwable) e);
             }
-            Camera.Size currentPictureSize = this.cameraSession.getCurrentPictureSize();
-            if (!(currentPictureSize.width == this.pictureSize.getWidth() && currentPictureSize.height == this.pictureSize.getHeight())) {
-                this.pictureSize = new Size(currentPictureSize.width, currentPictureSize.height);
-                FileLog.d("change picture size to w = " + this.pictureSize.getWidth() + " h = " + this.pictureSize.getHeight());
-                z = true;
+            try {
+                Camera.Size currentPictureSize = this.cameraSession.getCurrentPictureSize();
+                if (!(currentPictureSize.width == this.pictureSize.getWidth() && currentPictureSize.height == this.pictureSize.getHeight())) {
+                    this.pictureSize = new Size(currentPictureSize.width, currentPictureSize.height);
+                    FileLog.d("change picture size to w = " + this.pictureSize.getWidth() + " h = " + this.pictureSize.getHeight());
+                    z = true;
+                }
+            } catch (Exception e2) {
+                FileLog.e((Throwable) e2);
             }
             if (BuildVars.LOGS_ENABLED) {
                 FileLog.d("camera initied");

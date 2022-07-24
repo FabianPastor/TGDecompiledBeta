@@ -9174,7 +9174,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
     public TextView lambda$setParentActivity$6() {
         AnonymousClass38 r0 = new SpoilersTextView(this.activityContext) {
             private AnimatedEmojiSpan.EmojiGroupedSpans animatedEmojiDrawables;
-            private Layout lastLayout = null;
+            private Layout lastLayout;
             private LinkSpanDrawable.LinkCollector links = new LinkSpanDrawable.LinkCollector(this);
             private LinkSpanDrawable<ClickableSpan> pressedLink;
 
@@ -9359,6 +9359,10 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 }
                 canvas.restore();
                 super.onDraw(canvas);
+                if (this.lastLayout != getLayout()) {
+                    this.animatedEmojiDrawables = AnimatedEmojiSpan.update(0, (View) this, this.animatedEmojiDrawables, getLayout());
+                    this.lastLayout = getLayout();
+                }
             }
 
             /* access modifiers changed from: protected */
@@ -9368,15 +9372,17 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
             }
 
             /* access modifiers changed from: protected */
+            public void onTextChanged(CharSequence charSequence, int i, int i2, int i3) {
+                super.onTextChanged(charSequence, i, i2, i3);
+                this.animatedEmojiDrawables = AnimatedEmojiSpan.update(0, (View) this, this.animatedEmojiDrawables, getLayout());
+            }
+
+            /* access modifiers changed from: protected */
             public void dispatchDraw(Canvas canvas) {
                 super.dispatchDraw(canvas);
                 canvas.save();
                 canvas.translate((float) getPaddingLeft(), (float) getPaddingTop());
                 canvas.clipRect(0.0f, (float) getScrollY(), (float) (getWidth() - getPaddingRight()), ((float) (getHeight() + getScrollY())) - (((float) getPaddingBottom()) * 0.75f));
-                if (this.lastLayout != getLayout()) {
-                    this.animatedEmojiDrawables = AnimatedEmojiSpan.update(0, (View) this, this.animatedEmojiDrawables, getLayout());
-                    this.lastLayout = getLayout();
-                }
                 AnimatedEmojiSpan.drawAnimatedEmojis(canvas, getLayout(), this.animatedEmojiDrawables, 0.0f, (List<SpoilerEffect>) null, 0.0f, 0.0f, 0.0f, 1.0f);
                 canvas.restore();
             }
@@ -10035,6 +10041,10 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
             this.selectedPhotosListView.setEnabled(false);
             this.photosCounterView.setRotationX(0.0f);
             this.isPhotosListViewVisible = false;
+            if (this.captionEditText.getMessageEditText() != null) {
+                this.captionEditText.getMessageEditText().invalidateEffects();
+                this.captionEditText.getMessageEditText().setText(this.captionEditText.getMessageEditText().getText());
+            }
             this.captionEditText.setTag(1);
             this.captionEditText.openKeyboard();
             this.captionEditText.setImportantForAccessibility(0);
@@ -18775,8 +18785,8 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
         int i;
         int i2;
         MessageObject messageObject2 = messageObject;
-        CharSequence charSequence3 = charSequence;
         boolean z3 = z;
+        CharSequence cloneSpans = AnimatedEmojiSpan.cloneSpans(charSequence);
         boolean z4 = true;
         int i3 = 0;
         if (!this.needCaptionLayout) {
@@ -18802,7 +18812,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
             this.captionTextViewSwitcher.setMeasureAllChildren(false);
             this.pickerView.addView(this.captionTextViewSwitcher, LayoutHelper.createFrame(-1, -2.0f, 83, 0.0f, 0.0f, 76.0f, 48.0f));
         }
-        final boolean isEmpty = TextUtils.isEmpty(charSequence);
+        final boolean isEmpty = TextUtils.isEmpty(cloneSpans);
         final boolean isEmpty2 = TextUtils.isEmpty(this.captionTextViewSwitcher.getCurrentView().getText());
         CaptionTextViewSwitcher captionTextViewSwitcher2 = this.captionTextViewSwitcher;
         TextView nextView = z3 ? captionTextViewSwitcher2.getNextView() : captionTextViewSwitcher2.getCurrentView();
@@ -18958,9 +18968,9 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
         if (!isEmpty) {
             Theme.createChatResources((Context) null, true);
             if (messageObject2 == null || messageObject2.messageOwner.entities.isEmpty()) {
-                charSequence2 = Emoji.replaceEmoji(new SpannableStringBuilder(charSequence3), nextView.getPaint().getFontMetricsInt(), AndroidUtilities.dp(20.0f), false);
+                charSequence2 = Emoji.replaceEmoji(new SpannableStringBuilder(cloneSpans), nextView.getPaint().getFontMetricsInt(), AndroidUtilities.dp(20.0f), false);
             } else {
-                SpannableString spannableString = new SpannableString(charSequence3);
+                SpannableString spannableString = new SpannableString(cloneSpans);
                 messageObject2.addEntitiesToText(spannableString, true, false);
                 if (messageObject.isVideo()) {
                     MessageObject.addUrlsByPattern(messageObject.isOutOwner(), spannableString, false, 3, messageObject.getDuration(), false);

@@ -27,6 +27,7 @@ import org.telegram.messenger.UserConfig;
 import org.telegram.tgnet.TLRPC$Chat;
 import org.telegram.tgnet.TLRPC$KeyboardButton;
 import org.telegram.tgnet.TLRPC$TL_message;
+import org.telegram.tgnet.TLRPC$TL_messageEntityCustomEmoji;
 import org.telegram.tgnet.TLRPC$TL_messageEntityTextUrl;
 import org.telegram.tgnet.TLRPC$TL_messageMediaEmpty;
 import org.telegram.tgnet.TLRPC$TL_messageReplyHeader;
@@ -65,20 +66,21 @@ public class ThemePreviewMessagesCell extends LinearLayout {
     @SuppressLint({"ClickableViewAccessibility"})
     public ThemePreviewMessagesCell(Context context, ActionBarLayout actionBarLayout, int i) {
         super(context);
+        int i2;
         MessageObject messageObject;
         MessageObject messageObject2;
         Context context2 = context;
-        int i2 = i;
+        int i3 = i;
         new ThemePreviewMessagesCell$$ExternalSyntheticLambda0(this);
-        this.type = i2;
-        int i3 = UserConfig.selectedAccount;
+        this.type = i3;
+        int i4 = UserConfig.selectedAccount;
         this.parentLayout = actionBarLayout;
         setWillNotDraw(false);
         setOrientation(1);
         setPadding(0, AndroidUtilities.dp(11.0f), 0, AndroidUtilities.dp(11.0f));
         this.shadowDrawable = Theme.getThemedDrawable(context2, NUM, "windowBackgroundGrayShadow");
         int currentTimeMillis = ((int) (System.currentTimeMillis() / 1000)) - 3600;
-        if (i2 == 2) {
+        if (i3 == 2) {
             TLRPC$TL_message tLRPC$TL_message = new TLRPC$TL_message();
             tLRPC$TL_message.message = LocaleController.getString("DoubleTapPreviewMessage", NUM);
             tLRPC$TL_message.date = currentTimeMillis + 60;
@@ -99,16 +101,28 @@ public class ThemePreviewMessagesCell extends LinearLayout {
             messageObject3.customName = LocaleController.getString("DoubleTapPreviewSenderName", NUM);
             messageObject3.customAvatarDrawable = ContextCompat.getDrawable(context2, NUM);
             messageObject2 = messageObject3;
+            i2 = i4;
             messageObject = null;
         } else {
             TLRPC$TL_message tLRPC$TL_message2 = new TLRPC$TL_message();
-            if (i2 == 0) {
+            if (i3 == 0) {
                 tLRPC$TL_message2.message = LocaleController.getString("FontSizePreviewReply", NUM);
             } else {
                 tLRPC$TL_message2.message = LocaleController.getString("NewThemePreviewReply", NUM);
             }
-            int i4 = currentTimeMillis + 60;
-            tLRPC$TL_message2.date = i4;
+            int indexOf = tLRPC$TL_message2.message.indexOf("👋");
+            if (indexOf >= 0) {
+                TLRPC$TL_messageEntityCustomEmoji tLRPC$TL_messageEntityCustomEmoji = new TLRPC$TL_messageEntityCustomEmoji();
+                tLRPC$TL_messageEntityCustomEmoji.offset = indexOf;
+                tLRPC$TL_messageEntityCustomEmoji.length = 2;
+                i2 = i4;
+                tLRPC$TL_messageEntityCustomEmoji.document_id = 5386654653003864312L;
+                tLRPC$TL_message2.entities.add(tLRPC$TL_messageEntityCustomEmoji);
+            } else {
+                i2 = i4;
+            }
+            int i5 = currentTimeMillis + 60;
+            tLRPC$TL_message2.date = i5;
             tLRPC$TL_message2.dialog_id = 1;
             tLRPC$TL_message2.flags = 259;
             TLRPC$TL_peerUser tLRPC$TL_peerUser3 = new TLRPC$TL_peerUser();
@@ -122,23 +136,31 @@ public class ThemePreviewMessagesCell extends LinearLayout {
             tLRPC$TL_peerUser4.user_id = 0;
             MessageObject messageObject4 = new MessageObject(UserConfig.selectedAccount, tLRPC$TL_message2, true, false);
             TLRPC$TL_message tLRPC$TL_message3 = new TLRPC$TL_message();
-            if (i2 == 0) {
+            if (i3 == 0) {
                 tLRPC$TL_message3.message = LocaleController.getString("FontSizePreviewLine2", NUM);
             } else {
                 String string = LocaleController.getString("NewThemePreviewLine3", NUM);
                 StringBuilder sb = new StringBuilder(string);
-                int indexOf = string.indexOf(42);
+                int indexOf2 = string.indexOf(42);
                 int lastIndexOf = string.lastIndexOf(42);
-                if (!(indexOf == -1 || lastIndexOf == -1)) {
+                if (!(indexOf2 == -1 || lastIndexOf == -1)) {
                     sb.replace(lastIndexOf, lastIndexOf + 1, "");
-                    sb.replace(indexOf, indexOf + 1, "");
+                    sb.replace(indexOf2, indexOf2 + 1, "");
                     TLRPC$TL_messageEntityTextUrl tLRPC$TL_messageEntityTextUrl = new TLRPC$TL_messageEntityTextUrl();
-                    tLRPC$TL_messageEntityTextUrl.offset = indexOf;
-                    tLRPC$TL_messageEntityTextUrl.length = (lastIndexOf - indexOf) - 1;
+                    tLRPC$TL_messageEntityTextUrl.offset = indexOf2;
+                    tLRPC$TL_messageEntityTextUrl.length = (lastIndexOf - indexOf2) - 1;
                     tLRPC$TL_messageEntityTextUrl.url = "https://telegram.org";
                     tLRPC$TL_message3.entities.add(tLRPC$TL_messageEntityTextUrl);
                 }
                 tLRPC$TL_message3.message = sb.toString();
+            }
+            int indexOf3 = tLRPC$TL_message3.message.indexOf("😎");
+            if (indexOf3 >= 0) {
+                TLRPC$TL_messageEntityCustomEmoji tLRPC$TL_messageEntityCustomEmoji2 = new TLRPC$TL_messageEntityCustomEmoji();
+                tLRPC$TL_messageEntityCustomEmoji2.offset = indexOf3;
+                tLRPC$TL_messageEntityCustomEmoji2.length = 2;
+                tLRPC$TL_messageEntityCustomEmoji2.document_id = 5390808818387000886L;
+                tLRPC$TL_message3.entities.add(tLRPC$TL_messageEntityCustomEmoji2);
             }
             tLRPC$TL_message3.date = currentTimeMillis + 960;
             tLRPC$TL_message3.dialog_id = 1;
@@ -156,12 +178,12 @@ public class ThemePreviewMessagesCell extends LinearLayout {
             messageObject5.resetLayout();
             messageObject5.eventId = 1;
             TLRPC$TL_message tLRPC$TL_message4 = new TLRPC$TL_message();
-            if (i2 == 0) {
+            if (i3 == 0) {
                 tLRPC$TL_message4.message = LocaleController.getString("FontSizePreviewLine1", NUM);
             } else {
                 tLRPC$TL_message4.message = LocaleController.getString("NewThemePreviewLine1", NUM);
             }
-            tLRPC$TL_message4.date = i4;
+            tLRPC$TL_message4.date = i5;
             tLRPC$TL_message4.dialog_id = 1;
             tLRPC$TL_message4.flags = 265;
             tLRPC$TL_message4.from_id = new TLRPC$TL_peerUser();
@@ -175,7 +197,7 @@ public class ThemePreviewMessagesCell extends LinearLayout {
             tLRPC$TL_message4.peer_id = tLRPC$TL_peerUser7;
             tLRPC$TL_peerUser7.user_id = UserConfig.getInstance(UserConfig.selectedAccount).getClientUserId();
             MessageObject messageObject6 = new MessageObject(UserConfig.selectedAccount, tLRPC$TL_message4, true, false);
-            if (i2 == 0) {
+            if (i3 == 0) {
                 messageObject6.customReplyName = LocaleController.getString("FontSizePreviewName", NUM);
             } else {
                 messageObject6.customReplyName = LocaleController.getString("NewThemePreviewName", NUM);
@@ -186,11 +208,11 @@ public class ThemePreviewMessagesCell extends LinearLayout {
             messageObject2 = messageObject5;
             messageObject = messageObject6;
         }
-        int i5 = 0;
+        int i6 = 0;
         while (true) {
             ChatMessageCell[] chatMessageCellArr = this.cells;
-            if (i5 < chatMessageCellArr.length) {
-                chatMessageCellArr[i5] = new ChatMessageCell(context, context, i3, i) {
+            if (i6 < chatMessageCellArr.length) {
+                chatMessageCellArr[i6] = new ChatMessageCell(context, context, i2, i) {
                     private GestureDetector gestureDetector;
                     final /* synthetic */ Context val$context;
                     final /* synthetic */ int val$currentAccount;
@@ -261,7 +283,7 @@ public class ThemePreviewMessagesCell extends LinearLayout {
                         super.dispatchDraw(canvas);
                     }
                 };
-                this.cells[i5].setDelegate(new ChatMessageCell.ChatMessageCellDelegate(this) {
+                this.cells[i6].setDelegate(new ChatMessageCell.ChatMessageCellDelegate(this) {
                     public /* synthetic */ boolean canDrawOutboundsContent() {
                         return ChatMessageCell.ChatMessageCellDelegate.CC.$default$canDrawOutboundsContent(this);
                     }
@@ -431,14 +453,14 @@ public class ThemePreviewMessagesCell extends LinearLayout {
                     }
                 });
                 ChatMessageCell[] chatMessageCellArr2 = this.cells;
-                chatMessageCellArr2[i5].isChat = i2 == 2;
-                chatMessageCellArr2[i5].setFullyDraw(true);
-                MessageObject messageObject7 = i5 == 0 ? messageObject : messageObject2;
+                chatMessageCellArr2[i6].isChat = i3 == 2;
+                chatMessageCellArr2[i6].setFullyDraw(true);
+                MessageObject messageObject7 = i6 == 0 ? messageObject : messageObject2;
                 if (messageObject7 != null) {
-                    this.cells[i5].setMessageObject(messageObject7, (MessageObject.GroupedMessages) null, false, false);
-                    addView(this.cells[i5], LayoutHelper.createLinear(-1, -2));
+                    this.cells[i6].setMessageObject(messageObject7, (MessageObject.GroupedMessages) null, false, false);
+                    addView(this.cells[i6], LayoutHelper.createLinear(-1, -2));
                 }
-                i5++;
+                i6++;
             } else {
                 return;
             }

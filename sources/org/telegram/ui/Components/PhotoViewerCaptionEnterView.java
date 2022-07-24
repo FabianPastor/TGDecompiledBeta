@@ -26,6 +26,7 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import androidx.core.graphics.ColorUtils;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.Emoji;
@@ -208,6 +209,11 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
             public boolean requestRectangleOnScreen(Rect rect) {
                 rect.bottom += AndroidUtilities.dp(1000.0f);
                 return super.requestRectangleOnScreen(rect);
+            }
+
+            public void setText(CharSequence charSequence, TextView.BufferType bufferType) {
+                super.setText(charSequence, bufferType);
+                invalidateForce();
             }
         };
         this.messageEditText = r7;
