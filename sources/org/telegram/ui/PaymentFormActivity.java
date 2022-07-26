@@ -4683,7 +4683,6 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
                 } else {
                     i = 0;
                 }
-                this.paymentStatusSent = true;
                 if (i != 2 || tLRPC$TL_payments_paymentForm.additional_methods.isEmpty()) {
                     presentFragment(new PaymentFormActivity(this.paymentForm, this.messageObject, this.invoiceSlug, i, this.requestedInfo, this.shippingOption, this.tipAmount, this.paymentJson, this.cardName, this.validateRequest, this.saveCardInfo, (TLRPC$TL_inputPaymentCredentialsGooglePay) null, this.parentFragment));
                     return;

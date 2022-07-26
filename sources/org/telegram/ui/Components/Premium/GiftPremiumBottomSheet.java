@@ -114,7 +114,7 @@ public class GiftPremiumBottomSheet extends BottomSheetWithRecyclerListView {
                     if (giftTier.getPricePerMonth() > j) {
                         j = giftTier.getPricePerMonth();
                     }
-                } else if (giftTier.giftOption.store_product != null) {
+                } else if (giftTier.giftOption.store_product != null && BillingController.getInstance().isReady()) {
                     arrayList.add(QueryProductDetailsParams.Product.newBuilder().setProductType("inapp").setProductId(giftTier.giftOption.store_product).build());
                 }
             }
@@ -151,6 +151,7 @@ public class GiftPremiumBottomSheet extends BottomSheetWithRecyclerListView {
     /* access modifiers changed from: private */
     public /* synthetic */ void lambda$new$1(long j, BillingResult billingResult, List list) {
         Iterator it = list.iterator();
+        long j2 = 0;
         while (it.hasNext()) {
             ProductDetails productDetails = (ProductDetails) it.next();
             Iterator<GiftTier> it2 = this.giftTiers.iterator();
@@ -162,9 +163,14 @@ public class GiftPremiumBottomSheet extends BottomSheetWithRecyclerListView {
                 String str = next.giftOption.store_product;
                 if (str != null && str.equals(productDetails.getProductId())) {
                     next.setGooglePlayProductDetails(productDetails);
-                    break;
+                    if (next.getPricePerMonth() > j2) {
+                        j2 = next.getPricePerMonth();
+                    }
                 }
             }
+        }
+        for (GiftTier pricePerMonthRegular : this.giftTiers) {
+            pricePerMonthRegular.setPricePerMonthRegular(j2);
         }
         AndroidUtilities.runOnUIThread(new GiftPremiumBottomSheet$$ExternalSyntheticLambda7(this, j));
     }
@@ -565,36 +571,13 @@ public class GiftPremiumBottomSheet extends BottomSheetWithRecyclerListView {
         }
 
         public int getDiscount() {
-            long j;
             if (this.discount == 0) {
                 if (getPricePerMonth() == 0) {
                     return 0;
                 }
-                if (BuildVars.useInvoiceBilling()) {
-                    j = this.pricePerMonthRegular;
-                } else {
-                    ProductDetails productDetails = BillingController.PREMIUM_PRODUCT_DETAILS;
-                    if (productDetails != null) {
-                        List<ProductDetails.SubscriptionOfferDetails> subscriptionOfferDetails = productDetails.getSubscriptionOfferDetails();
-                        if (!subscriptionOfferDetails.isEmpty()) {
-                            Iterator<ProductDetails.PricingPhase> it = subscriptionOfferDetails.get(0).getPricingPhases().getPricingPhaseList().iterator();
-                            while (true) {
-                                if (!it.hasNext()) {
-                                    break;
-                                }
-                                ProductDetails.PricingPhase next = it.next();
-                                if (next.getBillingPeriod().equals("P1M")) {
-                                    j = next.getPriceAmountMicros();
-                                    break;
-                                }
-                            }
-                        }
-                    }
-                    j = 0;
-                }
-                if (j != 0) {
+                if (this.pricePerMonthRegular != 0) {
                     double pricePerMonth2 = (double) getPricePerMonth();
-                    double d = (double) j;
+                    double d = (double) this.pricePerMonthRegular;
                     Double.isNaN(pricePerMonth2);
                     Double.isNaN(d);
                     int i = (int) ((1.0d - (pricePerMonth2 / d)) * 100.0d);

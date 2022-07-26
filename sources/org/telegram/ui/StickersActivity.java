@@ -1692,7 +1692,7 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
                 if (!isActionModeShowed) {
                     StickersActivity.this.actionBar.showActionMode();
                     notifyStickersItemsChanged(2);
-                    if (!SharedConfig.stickersReorderingHintUsed) {
+                    if (!SharedConfig.stickersReorderingHintUsed && StickersActivity.this.currentType != 5) {
                         SharedConfig.setStickersReorderingHintUsed(true);
                         Bulletin.make((FrameLayout) StickersActivity.this.parentLayout, (Bulletin.Layout) new ReorderingBulletinLayout(this.mContext, LocaleController.getString("StickersReorderHint", NUM), (Theme.ResourcesProvider) null), 3250).show();
                     }

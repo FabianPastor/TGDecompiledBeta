@@ -2280,7 +2280,9 @@ public abstract class TextSelectionHelper<Cell extends SelectableView> {
                 Rect rect2 = this.textArea;
                 int i2 = this.maybeTextX;
                 rect2.set(i2, this.maybeTextY, chatMessageCell.getCaptionLayout().getWidth() + i2, this.maybeTextY + chatMessageCell.getCaptionLayout().getHeight());
-            } else if (messageObject != null && (arrayList = messageObject.textLayoutBlocks) != null && arrayList.size() > 0) {
+            } else if (messageObject == null || (arrayList = messageObject.textLayoutBlocks) == null || arrayList.size() <= 0) {
+                this.maybeSelectedView = null;
+            } else {
                 ArrayList<MessageObject.TextLayoutBlock> arrayList2 = messageObject.textLayoutBlocks;
                 MessageObject.TextLayoutBlock textLayoutBlock = arrayList2.get(arrayList2.size() - 1);
                 Rect rect3 = this.textArea;

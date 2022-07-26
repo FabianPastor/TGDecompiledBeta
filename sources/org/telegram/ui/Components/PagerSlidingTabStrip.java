@@ -200,19 +200,21 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
                 canvas.drawRect(0.0f, (float) (height - this.underlineHeight), (float) this.tabsContainer.getWidth(), (float) height, this.rectPaint);
             }
             View childAt = this.tabsContainer.getChildAt(this.currentPosition);
-            float left = (float) childAt.getLeft();
-            float right = (float) childAt.getRight();
-            if (this.currentPositionOffset > 0.0f && (i = this.currentPosition) < this.tabCount - 1) {
-                View childAt2 = this.tabsContainer.getChildAt(i + 1);
-                float f = this.currentPositionOffset;
-                left = (((float) childAt2.getLeft()) * f) + ((1.0f - f) * left);
-                right = (((float) childAt2.getRight()) * f) + ((1.0f - f) * right);
-            }
-            float f2 = right;
-            float f3 = left;
-            if (this.indicatorHeight != 0) {
-                this.rectPaint.setColor(this.indicatorColor);
-                canvas.drawRect(f3, (float) (height - this.indicatorHeight), f2, (float) height, this.rectPaint);
+            if (childAt != null) {
+                float left = (float) childAt.getLeft();
+                float right = (float) childAt.getRight();
+                if (this.currentPositionOffset > 0.0f && (i = this.currentPosition) < this.tabCount - 1) {
+                    View childAt2 = this.tabsContainer.getChildAt(i + 1);
+                    float f = this.currentPositionOffset;
+                    left = (((float) childAt2.getLeft()) * f) + ((1.0f - f) * left);
+                    right = (((float) childAt2.getRight()) * f) + ((1.0f - f) * right);
+                }
+                float f2 = right;
+                float f3 = left;
+                if (this.indicatorHeight != 0) {
+                    this.rectPaint.setColor(this.indicatorColor);
+                    canvas.drawRect(f3, (float) (height - this.indicatorHeight), f2, (float) height, this.rectPaint);
+                }
             }
         }
     }
