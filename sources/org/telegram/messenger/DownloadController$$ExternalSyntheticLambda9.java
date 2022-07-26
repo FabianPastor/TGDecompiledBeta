@@ -3,13 +3,15 @@ package org.telegram.messenger;
 public final /* synthetic */ class DownloadController$$ExternalSyntheticLambda9 implements Runnable {
     public final /* synthetic */ DownloadController f$0;
     public final /* synthetic */ MessageObject f$1;
+    public final /* synthetic */ int f$2;
 
-    public /* synthetic */ DownloadController$$ExternalSyntheticLambda9(DownloadController downloadController, MessageObject messageObject) {
+    public /* synthetic */ DownloadController$$ExternalSyntheticLambda9(DownloadController downloadController, MessageObject messageObject, int i) {
         this.f$0 = downloadController;
         this.f$1 = messageObject;
+        this.f$2 = i;
     }
 
     public final void run() {
-        this.f$0.lambda$startDownloadFile$5(this.f$1);
+        this.f$0.lambda$onDownloadFail$8(this.f$1, this.f$2);
     }
 }

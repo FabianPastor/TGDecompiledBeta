@@ -15,6 +15,6 @@ public final /* synthetic */ class PaymentFormActivity$$ExternalSyntheticLambda4
     }
 
     public final void run() {
-        this.f$0.lambda$sendData$59(this.f$1, this.f$2);
+        this.f$0.lambda$sendData$60(this.f$1, this.f$2);
     }
 }

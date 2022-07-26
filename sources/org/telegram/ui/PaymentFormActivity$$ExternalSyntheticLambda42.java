@@ -14,6 +14,6 @@ public final /* synthetic */ class PaymentFormActivity$$ExternalSyntheticLambda4
     }
 
     public final void run() {
-        this.f$0.lambda$checkPassword$63(this.f$1, this.f$2);
+        this.f$0.lambda$checkPassword$64(this.f$1, this.f$2);
     }
 }

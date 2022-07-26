@@ -508,14 +508,14 @@ public class JoinCallAlert extends BottomSheet {
             boolean r9 = org.telegram.messenger.ChatObject.isChannelOrGiga(r8)
             if (r9 == 0) goto L_0x01fa
             android.widget.TextView r9 = r0.textView
-            r10 = 2131628489(0x7f0e11c9, float:1.8884272E38)
+            r10 = 2131628497(0x7f0e11d1, float:1.8884288E38)
             java.lang.String r11 = "StartVoipChannelTitle"
             java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r11, r10)
             r9.setText(r10)
             goto L_0x0208
         L_0x01fa:
             android.widget.TextView r9 = r0.textView
-            r10 = 2131628493(0x7f0e11cd, float:1.888428E38)
+            r10 = 2131628501(0x7f0e11d5, float:1.8884296E38)
             java.lang.String r11 = "StartVoipChatTitle"
             java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r11, r10)
             r9.setText(r10)
@@ -534,7 +534,7 @@ public class JoinCallAlert extends BottomSheet {
         L_0x021e:
             if (r2 != r6) goto L_0x022f
             android.widget.TextView r9 = r0.textView
-            r10 = 2131629121(0x7f0e1441, float:1.8885554E38)
+            r10 = 2131629129(0x7f0e1449, float:1.888557E38)
             java.lang.String r11 = "VoipGroupDisplayAs"
             java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r11, r10)
             r9.setText(r10)
@@ -543,14 +543,14 @@ public class JoinCallAlert extends BottomSheet {
             boolean r9 = org.telegram.messenger.ChatObject.isChannelOrGiga(r8)
             if (r9 == 0) goto L_0x0244
             android.widget.TextView r9 = r0.textView
-            r10 = 2131629050(0x7f0e13fa, float:1.888541E38)
+            r10 = 2131629058(0x7f0e1402, float:1.8885426E38)
             java.lang.String r11 = "VoipChannelJoinAs"
             java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r11, r10)
             r9.setText(r10)
             goto L_0x0252
         L_0x0244:
             android.widget.TextView r9 = r0.textView
-            r10 = 2131629139(0x7f0e1453, float:1.888559E38)
+            r10 = 2131629147(0x7f0e145b, float:1.8885607E38)
             java.lang.String r11 = "VoipGroupJoinAs"
             java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r11, r10)
             r9.setText(r10)
@@ -629,13 +629,13 @@ public class JoinCallAlert extends BottomSheet {
             if (r10 == 0) goto L_0x02fd
             boolean r10 = r8.megagroup
             if (r10 != 0) goto L_0x02fd
-            r10 = 2131629064(0x7f0e1408, float:1.8885438E38)
+            r10 = 2131629072(0x7f0e1410, float:1.8885455E38)
             java.lang.String r11 = "VoipChannelStart2"
             java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r11, r10)
             r6.append(r10)
             goto L_0x0309
         L_0x02fd:
-            r10 = 2131629178(0x7f0e147a, float:1.888567E38)
+            r10 = 2131629186(0x7f0e1482, float:1.8885686E38)
             java.lang.String r11 = "VoipGroupStart2"
             java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r11, r10)
             r6.append(r10)
@@ -645,7 +645,7 @@ public class JoinCallAlert extends BottomSheet {
             if (r10 <= r7) goto L_0x0323
             java.lang.String r10 = "\n\n"
             r6.append(r10)
-            r10 = 2131629078(0x7f0e1416, float:1.8885467E38)
+            r10 = 2131629086(0x7f0e141e, float:1.8885483E38)
             java.lang.String r11 = "VoipChatDisplayedAs"
             java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r11, r10)
             r6.append(r10)
@@ -674,14 +674,14 @@ public class JoinCallAlert extends BottomSheet {
         L_0x034b:
             if (r6 == 0) goto L_0x035c
             android.widget.TextView r6 = r0.messageTextView
-            r10 = 2131629181(0x7f0e147d, float:1.8885676E38)
+            r10 = 2131629189(0x7f0e1485, float:1.8885692E38)
             java.lang.String r11 = "VoipGroupStartAsInfoGroup"
             java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r11, r10)
             r6.setText(r10)
             goto L_0x036a
         L_0x035c:
             android.widget.TextView r6 = r0.messageTextView
-            r10 = 2131629180(0x7f0e147c, float:1.8885674E38)
+            r10 = 2131629188(0x7f0e1484, float:1.888569E38)
             java.lang.String r11 = "VoipGroupStartAsInfo"
             java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r11, r10)
             r6.setText(r10)
@@ -751,13 +751,13 @@ public class JoinCallAlert extends BottomSheet {
             r2.<init>(r1, r7)
             boolean r1 = org.telegram.messenger.ChatObject.isChannelOrGiga(r8)
             if (r1 == 0) goto L_0x03ee
-            r1 = 2131629060(0x7f0e1404, float:1.888543E38)
+            r1 = 2131629068(0x7f0e140c, float:1.8885446E38)
             java.lang.String r3 = "VoipChannelScheduleVoiceChat"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r3, r1)
             r2.setText(r1, r4)
             goto L_0x03fa
         L_0x03ee:
-            r1 = 2131629170(0x7f0e1472, float:1.8885653E38)
+            r1 = 2131629178(0x7f0e147a, float:1.888567E38)
             java.lang.String r3 = "VoipGroupScheduleVoiceChat"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r3, r1)
             r2.setText(r1, r4)

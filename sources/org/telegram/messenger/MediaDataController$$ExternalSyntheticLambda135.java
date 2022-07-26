@@ -1,12 +1,15 @@
 package org.telegram.messenger;
 
-public final /* synthetic */ class MediaDataController$$ExternalSyntheticLambda135 implements Runnable {
-    public static final /* synthetic */ MediaDataController$$ExternalSyntheticLambda135 INSTANCE = new MediaDataController$$ExternalSyntheticLambda135();
+import org.telegram.ui.Components.Bulletin;
 
-    private /* synthetic */ MediaDataController$$ExternalSyntheticLambda135() {
+public final /* synthetic */ class MediaDataController$$ExternalSyntheticLambda135 implements Runnable {
+    public final /* synthetic */ Bulletin.UndoButton f$0;
+
+    public /* synthetic */ MediaDataController$$ExternalSyntheticLambda135(Bulletin.UndoButton undoButton) {
+        this.f$0 = undoButton;
     }
 
     public final void run() {
-        MediaDataController.lambda$cleanup$0();
+        this.f$0.undo();
     }
 }

@@ -10,6 +10,6 @@ public final /* synthetic */ class DownloadController$$ExternalSyntheticLambda5 
     }
 
     public final void run() {
-        this.f$0.lambda$onDownloadComplete$7(this.f$1);
+        this.f$0.lambda$onDownloadComplete$6(this.f$1);
     }
 }

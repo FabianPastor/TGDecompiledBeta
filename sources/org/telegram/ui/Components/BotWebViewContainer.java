@@ -1942,17 +1942,17 @@ public class BotWebViewContainer extends FrameLayout implements NotificationCent
                 r7.textColorKey = r0
                 goto L_0x007d
             L_0x005f:
-                r0 = 2131624832(0x7f0e0380, float:1.8876855E38)
+                r0 = 2131624836(0x7f0e0384, float:1.8876863E38)
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString((int) r0)
                 r7.text = r0
                 goto L_0x007c
             L_0x0069:
-                r0 = 2131625183(0x7f0e04df, float:1.8877567E38)
+                r0 = 2131625187(0x7f0e04e3, float:1.8877575E38)
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString((int) r0)
                 r7.text = r0
                 goto L_0x007c
             L_0x0073:
-                r0 = 2131627127(0x7f0e0CLASSNAME, float:1.888151E38)
+                r0 = 2131627135(0x7f0e0c7f, float:1.8881526E38)
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString((int) r0)
                 r7.text = r0
             L_0x007c:

@@ -3,7 +3,7 @@ package org.telegram.tgnet;
 import java.util.ArrayList;
 
 public class TLRPC$TL_payments_paymentForm extends TLObject {
-    public static int constructor = NUM;
+    public static int constructor = -NUM;
     public ArrayList<TLRPC$TL_paymentFormMethod> additional_methods = new ArrayList<>();
     public long bot_id;
     public boolean can_save_credentials;
@@ -16,7 +16,7 @@ public class TLRPC$TL_payments_paymentForm extends TLObject {
     public boolean password_missing;
     public TLRPC$WebDocument photo;
     public long provider_id;
-    public TLRPC$TL_paymentSavedCredentialsCard saved_credentials;
+    public ArrayList<TLRPC$TL_paymentSavedCredentialsCard> saved_credentials = new ArrayList<>();
     public TLRPC$TL_paymentRequestedInfo saved_info;
     public String title;
     public String url;
@@ -80,22 +80,39 @@ public class TLRPC$TL_payments_paymentForm extends TLObject {
             this.saved_info = TLRPC$TL_paymentRequestedInfo.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
         }
         if ((this.flags & 2) != 0) {
-            this.saved_credentials = TLRPC$TL_paymentSavedCredentialsCard.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
+            int readInt324 = abstractSerializedData.readInt32(z);
+            if (readInt324 == NUM) {
+                int readInt325 = abstractSerializedData.readInt32(z);
+                int i3 = 0;
+                while (i3 < readInt325) {
+                    TLRPC$TL_paymentSavedCredentialsCard TLdeserialize2 = TLRPC$TL_paymentSavedCredentialsCard.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
+                    if (TLdeserialize2 != null) {
+                        this.saved_credentials.add(TLdeserialize2);
+                        i3++;
+                    } else {
+                        return;
+                    }
+                }
+            } else if (z) {
+                throw new RuntimeException(String.format("wrong Vector magic, got %x", new Object[]{Integer.valueOf(readInt324)}));
+            } else {
+                return;
+            }
         }
-        int readInt324 = abstractSerializedData.readInt32(z);
-        if (readInt324 == NUM) {
-            int readInt325 = abstractSerializedData.readInt32(z);
-            while (i < readInt325) {
-                TLRPC$User TLdeserialize2 = TLRPC$User.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
-                if (TLdeserialize2 != null) {
-                    this.users.add(TLdeserialize2);
+        int readInt326 = abstractSerializedData.readInt32(z);
+        if (readInt326 == NUM) {
+            int readInt327 = abstractSerializedData.readInt32(z);
+            while (i < readInt327) {
+                TLRPC$User TLdeserialize3 = TLRPC$User.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
+                if (TLdeserialize3 != null) {
+                    this.users.add(TLdeserialize3);
                     i++;
                 } else {
                     return;
                 }
             }
         } else if (z) {
-            throw new RuntimeException(String.format("wrong Vector magic, got %x", new Object[]{Integer.valueOf(readInt324)}));
+            throw new RuntimeException(String.format("wrong Vector magic, got %x", new Object[]{Integer.valueOf(readInt326)}));
         }
     }
 
@@ -134,13 +151,18 @@ public class TLRPC$TL_payments_paymentForm extends TLObject {
             this.saved_info.serializeToStream(abstractSerializedData);
         }
         if ((this.flags & 2) != 0) {
-            this.saved_credentials.serializeToStream(abstractSerializedData);
+            abstractSerializedData.writeInt32(NUM);
+            int size2 = this.saved_credentials.size();
+            abstractSerializedData.writeInt32(size2);
+            for (int i4 = 0; i4 < size2; i4++) {
+                this.saved_credentials.get(i4).serializeToStream(abstractSerializedData);
+            }
         }
         abstractSerializedData.writeInt32(NUM);
-        int size2 = this.users.size();
-        abstractSerializedData.writeInt32(size2);
-        for (int i4 = 0; i4 < size2; i4++) {
-            this.users.get(i4).serializeToStream(abstractSerializedData);
+        int size3 = this.users.size();
+        abstractSerializedData.writeInt32(size3);
+        for (int i5 = 0; i5 < size3; i5++) {
+            this.users.get(i5).serializeToStream(abstractSerializedData);
         }
     }
 }

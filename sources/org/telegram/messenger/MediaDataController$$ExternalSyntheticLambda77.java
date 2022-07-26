@@ -12,6 +12,6 @@ public final /* synthetic */ class MediaDataController$$ExternalSyntheticLambda7
     }
 
     public final void run() {
-        this.f$0.lambda$loadHints$120(this.f$1);
+        this.f$0.lambda$checkPremiumGiftStickers$59(this.f$1);
     }
 }

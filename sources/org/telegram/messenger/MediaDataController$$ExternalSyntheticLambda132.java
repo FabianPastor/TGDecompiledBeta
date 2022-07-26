@@ -1,15 +1,15 @@
 package org.telegram.messenger;
 
-import org.telegram.tgnet.TLRPC$Document;
+import org.telegram.messenger.Utilities;
 
 public final /* synthetic */ class MediaDataController$$ExternalSyntheticLambda132 implements Runnable {
-    public final /* synthetic */ TLRPC$Document f$0;
+    public final /* synthetic */ Utilities.Callback f$0;
 
-    public /* synthetic */ MediaDataController$$ExternalSyntheticLambda132(TLRPC$Document tLRPC$Document) {
-        this.f$0 = tLRPC$Document;
+    public /* synthetic */ MediaDataController$$ExternalSyntheticLambda132(Utilities.Callback callback) {
+        this.f$0 = callback;
     }
 
     public final void run() {
-        NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.showBulletin, 0, this.f$0, 7);
+        MediaDataController.lambda$loadStickers$77(this.f$0);
     }
 }

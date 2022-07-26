@@ -12,6 +12,6 @@ public final /* synthetic */ class PaymentFormActivity$$ExternalSyntheticLambda5
     }
 
     public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        this.f$0.lambda$loadPasswordInfo$35(tLObject, tLRPC$TL_error);
+        this.f$0.lambda$sendSavePassword$42(tLObject, tLRPC$TL_error);
     }
 }

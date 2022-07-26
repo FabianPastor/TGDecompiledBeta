@@ -1163,12 +1163,10 @@ public class PipVideoOverlay {
 
     /* access modifiers changed from: private */
     public /* synthetic */ void lambda$showInternal$10(boolean z, View view) {
+        List<ActivityManager.RunningAppProcessInfo> runningAppProcesses;
         boolean z2 = true;
-        if (Build.VERSION.SDK_INT >= 21) {
-            List<ActivityManager.RunningAppProcessInfo> runningAppProcesses = ((ActivityManager) view.getContext().getSystemService("activity")).getRunningAppProcesses();
-            if (!runningAppProcesses.isEmpty() && runningAppProcesses.get(0).importance != 100) {
-                z2 = false;
-            }
+        if (Build.VERSION.SDK_INT >= 21 && (runningAppProcesses = ((ActivityManager) view.getContext().getSystemService("activity")).getRunningAppProcesses()) != null && !runningAppProcesses.isEmpty() && runningAppProcesses.get(0).importance != 100) {
+            z2 = false;
         }
         if (z || (z2 && LaunchActivity.isResumed)) {
             EmbedBottomSheet embedBottomSheet = this.parentSheet;

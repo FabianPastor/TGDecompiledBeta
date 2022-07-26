@@ -1,17 +1,19 @@
 package org.telegram.messenger;
 
-import org.telegram.tgnet.RequestDelegate;
-import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC$TL_error;
+import java.util.ArrayList;
+import org.telegram.messenger.Utilities;
+import org.telegram.tgnet.TLRPC$StickerSet;
 
-public final /* synthetic */ class MediaDataController$$ExternalSyntheticLambda149 implements RequestDelegate {
+public final /* synthetic */ class MediaDataController$$ExternalSyntheticLambda149 implements Utilities.Callback {
     public final /* synthetic */ MediaDataController f$0;
+    public final /* synthetic */ TLRPC$StickerSet f$1;
 
-    public /* synthetic */ MediaDataController$$ExternalSyntheticLambda149(MediaDataController mediaDataController) {
+    public /* synthetic */ MediaDataController$$ExternalSyntheticLambda149(MediaDataController mediaDataController, TLRPC$StickerSet tLRPC$StickerSet) {
         this.f$0 = mediaDataController;
+        this.f$1 = tLRPC$StickerSet;
     }
 
-    public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        this.f$0.lambda$loadHints$122(tLObject, tLRPC$TL_error);
+    public final void run(Object obj) {
+        this.f$0.lambda$toggleStickerSetInternal$93(this.f$1, (ArrayList) obj);
     }
 }

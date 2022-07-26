@@ -75,13 +75,11 @@ public class SvgHelper {
     public static class SvgDrawable extends Drawable {
         private static float gradientWidth;
         private static long lastUpdateTime;
-        private static long lastUpdateTimeBackground;
         private static int[] parentPosition = new int[2];
         private static WeakReference<Drawable> shiftDrawable;
         /* access modifiers changed from: private */
         public static Runnable shiftRunnable;
         private static float totalTranslation;
-        private static float totalTranslationBackground;
         private boolean aspectFill = true;
         private Bitmap[] backgroundBitmap = new Bitmap[2];
         private Canvas[] backgroundCanvas = new Canvas[2];
@@ -146,20 +144,20 @@ public class SvgHelper {
                 long j2 = 0;
                 long j3 = 64;
                 if (r2 != 0) {
-                    long j4 = j - lastUpdateTimeBackground;
+                    long j4 = j - lastUpdateTime;
                     if (j4 <= 64) {
                         j3 = j4;
                     }
                     if (j3 > 0) {
-                        lastUpdateTimeBackground = j;
-                        totalTranslationBackground += (((float) j3) * gradientWidth) / 1800.0f;
+                        lastUpdateTime = j;
+                        totalTranslation += (((float) j3) * gradientWidth) / 1800.0f;
                         while (true) {
-                            float f8 = totalTranslationBackground;
+                            float f8 = totalTranslation;
                             float f9 = gradientWidth;
                             if (f8 < f9 * 2.0f) {
                                 break;
                             }
-                            totalTranslationBackground = f8 - (f9 * 2.0f);
+                            totalTranslation = f8 - (f9 * 2.0f);
                         }
                     }
                 } else if (shiftRunnable == null || shiftDrawable.get() == this) {
@@ -200,7 +198,7 @@ public class SvgHelper {
                 if (matrixArr[r2] != null) {
                     matrixArr[r2].reset();
                     if (r2 != 0) {
-                        this.placeholderMatrix[r2].postTranslate((((float) (-i)) + totalTranslationBackground) - f5, 0.0f);
+                        this.placeholderMatrix[r2].postTranslate((((float) (-i)) + totalTranslation) - f5, 0.0f);
                     } else {
                         this.placeholderMatrix[r2].postTranslate((((float) (-i)) + totalTranslation) - f5, 0.0f);
                     }

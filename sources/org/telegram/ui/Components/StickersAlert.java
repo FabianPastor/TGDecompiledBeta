@@ -1838,7 +1838,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
             r0.setBackground(r3)
             r12.setButton(r3, r3, r3)
             org.telegram.ui.Components.Premium.PremiumButtonView r0 = r12.premiumButtonView
-            r1 = 2131628803(0x7f0e1303, float:1.888491E38)
+            r1 = 2131628811(0x7f0e130b, float:1.8884925E38)
             java.lang.String r2 = "UnlockPremiumEmoji"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             org.telegram.ui.Components.StickersAlert$$ExternalSyntheticLambda12 r2 = new org.telegram.ui.Components.StickersAlert$$ExternalSyntheticLambda12
@@ -1927,7 +1927,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
             java.lang.String r3 = "MasksCount"
             if (r0 == 0) goto L_0x0237
             org.telegram.tgnet.TLRPC$TL_messages_stickerSet r0 = r12.stickerSet
-            r6 = 2131624291(0x7f0e0163, float:1.8875758E38)
+            r6 = 2131624295(0x7f0e0167, float:1.8875766E38)
             java.lang.String r7 = "AddStickersCount"
             if (r0 == 0) goto L_0x01ef
             org.telegram.tgnet.TLRPC$StickerSet r8 = r0.set
@@ -1985,7 +1985,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
             org.telegram.tgnet.TLRPC$TL_messages_stickerSet r0 = r12.stickerSet
             org.telegram.tgnet.TLRPC$StickerSet r6 = r0.set
             boolean r7 = r6.masks
-            r8 = 2131627966(0x7f0e0fbe, float:1.8883211E38)
+            r8 = 2131627974(0x7f0e0fc6, float:1.8883228E38)
             java.lang.String r9 = "RemoveStickersCount"
             if (r7 == 0) goto L_0x0259
             java.lang.Object[] r1 = new java.lang.Object[r4]
@@ -2053,7 +2053,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
             if (r0 == 0) goto L_0x02cf
             goto L_0x02e3
         L_0x02cf:
-            r0 = 2131626258(0x7f0e0912, float:1.8879747E38)
+            r0 = 2131626266(0x7f0e091a, float:1.8879763E38)
             java.lang.String r1 = "ImportStickersProcessing"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             java.lang.String r1 = "dialogTextGray2"
@@ -2064,7 +2064,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
         L_0x02e3:
             org.telegram.ui.Components.StickersAlert$$ExternalSyntheticLambda7 r0 = new org.telegram.ui.Components.StickersAlert$$ExternalSyntheticLambda7
             r0.<init>(r12)
-            r1 = 2131626245(0x7f0e0905, float:1.887972E38)
+            r1 = 2131626253(0x7f0e090d, float:1.8879737E38)
             java.lang.Object[] r3 = new java.lang.Object[r4]
             java.util.ArrayList<org.telegram.messenger.SendMessagesHelper$ImportingSticker> r7 = r12.importingStickersPaths
             if (r7 == 0) goto L_0x02f2
@@ -2083,7 +2083,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
             r0.setEnabled(r4)
             goto L_0x0320
         L_0x030f:
-            r0 = 2131625183(0x7f0e04df, float:1.8877567E38)
+            r0 = 2131625187(0x7f0e04e3, float:1.8877575E38)
             java.lang.String r1 = "Close"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             org.telegram.ui.Components.StickersAlert$$ExternalSyntheticLambda8 r1 = new org.telegram.ui.Components.StickersAlert$$ExternalSyntheticLambda8

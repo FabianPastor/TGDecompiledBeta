@@ -68,13 +68,13 @@ public class BitmapsCache {
     /* JADX WARNING: Exception block dominator not found, dom blocks: [] */
     /* JADX WARNING: Missing exception handler attribute for start block: B:12:0x002f */
     /* JADX WARNING: Missing exception handler attribute for start block: B:41:0x00b5 */
-    /* JADX WARNING: Removed duplicated region for block: B:16:0x0047 A[Catch:{ FileNotFoundException -> 0x019c, IOException -> 0x0197, all -> 0x0195 }, LOOP:0: B:14:0x0043->B:16:0x0047, LOOP_END] */
+    /* JADX WARNING: Removed duplicated region for block: B:16:0x0047 A[Catch:{ FileNotFoundException -> 0x019e, IOException -> 0x0199, all -> 0x0197 }, LOOP:0: B:14:0x0043->B:16:0x0047, LOOP_END] */
     /* JADX WARNING: Removed duplicated region for block: B:20:0x0080 A[SYNTHETIC, Splitter:B:20:0x0080] */
-    /* JADX WARNING: Removed duplicated region for block: B:30:0x009e A[Catch:{ FileNotFoundException -> 0x019c, IOException -> 0x0197, all -> 0x0195 }] */
-    /* JADX WARNING: Removed duplicated region for block: B:44:0x00b9 A[Catch:{ FileNotFoundException -> 0x019c, IOException -> 0x0197, all -> 0x0195 }] */
-    /* JADX WARNING: Removed duplicated region for block: B:49:0x00dd A[Catch:{ FileNotFoundException -> 0x019c, IOException -> 0x0197, all -> 0x0195 }, LOOP:3: B:47:0x00d7->B:49:0x00dd, LOOP_END] */
-    /* JADX WARNING: Removed duplicated region for block: B:52:0x0106 A[Catch:{ FileNotFoundException -> 0x019c, IOException -> 0x0197, all -> 0x0195 }] */
-    /* JADX WARNING: Removed duplicated region for block: B:53:0x014c A[Catch:{ FileNotFoundException -> 0x019c, IOException -> 0x0197, all -> 0x0195 }] */
+    /* JADX WARNING: Removed duplicated region for block: B:30:0x009e A[Catch:{ FileNotFoundException -> 0x019e, IOException -> 0x0199, all -> 0x0197 }] */
+    /* JADX WARNING: Removed duplicated region for block: B:44:0x00b9 A[Catch:{ FileNotFoundException -> 0x019e, IOException -> 0x0199, all -> 0x0197 }] */
+    /* JADX WARNING: Removed duplicated region for block: B:49:0x00dd A[Catch:{ FileNotFoundException -> 0x019e, IOException -> 0x0199, all -> 0x0197 }, LOOP:3: B:47:0x00d7->B:49:0x00dd, LOOP_END] */
+    /* JADX WARNING: Removed duplicated region for block: B:52:0x0106 A[Catch:{ FileNotFoundException -> 0x019e, IOException -> 0x0199, all -> 0x0197 }] */
+    /* JADX WARNING: Removed duplicated region for block: B:53:0x014e A[Catch:{ FileNotFoundException -> 0x019e, IOException -> 0x0199, all -> 0x0197 }] */
     /* JADX WARNING: Removed duplicated region for block: B:69:0x0099 A[EDGE_INSN: B:69:0x0099->B:27:0x0099 ?: BREAK  , SYNTHETIC] */
     /* JADX WARNING: Removed duplicated region for block: B:74:0x00be A[SYNTHETIC] */
     /* Code decompiled incorrectly, please refer to instructions dump. */
@@ -83,12 +83,12 @@ public class BitmapsCache {
             r26 = this;
             r10 = r26
             java.lang.String r0 = "rw"
-            long r11 = java.lang.System.currentTimeMillis()     // Catch:{ FileNotFoundException -> 0x019c, IOException -> 0x0197 }
-            java.io.RandomAccessFile r1 = new java.io.RandomAccessFile     // Catch:{ FileNotFoundException -> 0x019c, IOException -> 0x0197 }
-            java.io.File r2 = r10.file     // Catch:{ FileNotFoundException -> 0x019c, IOException -> 0x0197 }
-            r1.<init>(r2, r0)     // Catch:{ FileNotFoundException -> 0x019c, IOException -> 0x0197 }
-            java.io.File r2 = r10.file     // Catch:{ FileNotFoundException -> 0x019c, IOException -> 0x0197 }
-            boolean r2 = r2.exists()     // Catch:{ FileNotFoundException -> 0x019c, IOException -> 0x0197 }
+            long r11 = java.lang.System.currentTimeMillis()     // Catch:{ FileNotFoundException -> 0x019e, IOException -> 0x0199 }
+            java.io.RandomAccessFile r1 = new java.io.RandomAccessFile     // Catch:{ FileNotFoundException -> 0x019e, IOException -> 0x0199 }
+            java.io.File r2 = r10.file     // Catch:{ FileNotFoundException -> 0x019e, IOException -> 0x0199 }
+            r1.<init>(r2, r0)     // Catch:{ FileNotFoundException -> 0x019e, IOException -> 0x0199 }
+            java.io.File r2 = r10.file     // Catch:{ FileNotFoundException -> 0x019e, IOException -> 0x0199 }
+            boolean r2 = r2.exists()     // Catch:{ FileNotFoundException -> 0x019e, IOException -> 0x0199 }
             if (r2 == 0) goto L_0x002f
             boolean r2 = r1.readBoolean()     // Catch:{ Exception -> 0x002f }
             r10.cacheCreated = r2     // Catch:{ Exception -> 0x002f }
@@ -102,150 +102,151 @@ public class BitmapsCache {
             java.io.File r2 = r10.file     // Catch:{ Exception -> 0x002f }
             r2.delete()     // Catch:{ Exception -> 0x002f }
         L_0x002f:
-            r1.close()     // Catch:{ FileNotFoundException -> 0x019c, IOException -> 0x0197 }
-            java.io.RandomAccessFile r13 = new java.io.RandomAccessFile     // Catch:{ FileNotFoundException -> 0x019c, IOException -> 0x0197 }
-            java.io.File r1 = r10.file     // Catch:{ FileNotFoundException -> 0x019c, IOException -> 0x0197 }
-            r13.<init>(r1, r0)     // Catch:{ FileNotFoundException -> 0x019c, IOException -> 0x0197 }
-            int r0 = N     // Catch:{ FileNotFoundException -> 0x019c, IOException -> 0x0197 }
-            android.graphics.Bitmap[] r14 = new android.graphics.Bitmap[r0]     // Catch:{ FileNotFoundException -> 0x019c, IOException -> 0x0197 }
-            org.telegram.messenger.utils.BitmapsCache$ByteArrayOutputStream[] r15 = new org.telegram.messenger.utils.BitmapsCache.ByteArrayOutputStream[r0]     // Catch:{ FileNotFoundException -> 0x019c, IOException -> 0x0197 }
-            java.util.concurrent.CountDownLatch[] r9 = new java.util.concurrent.CountDownLatch[r0]     // Catch:{ FileNotFoundException -> 0x019c, IOException -> 0x0197 }
+            r1.close()     // Catch:{ FileNotFoundException -> 0x019e, IOException -> 0x0199 }
+            java.io.RandomAccessFile r13 = new java.io.RandomAccessFile     // Catch:{ FileNotFoundException -> 0x019e, IOException -> 0x0199 }
+            java.io.File r1 = r10.file     // Catch:{ FileNotFoundException -> 0x019e, IOException -> 0x0199 }
+            r13.<init>(r1, r0)     // Catch:{ FileNotFoundException -> 0x019e, IOException -> 0x0199 }
+            int r0 = N     // Catch:{ FileNotFoundException -> 0x019e, IOException -> 0x0199 }
+            android.graphics.Bitmap[] r14 = new android.graphics.Bitmap[r0]     // Catch:{ FileNotFoundException -> 0x019e, IOException -> 0x0199 }
+            org.telegram.messenger.utils.BitmapsCache$ByteArrayOutputStream[] r15 = new org.telegram.messenger.utils.BitmapsCache.ByteArrayOutputStream[r0]     // Catch:{ FileNotFoundException -> 0x019e, IOException -> 0x0199 }
+            java.util.concurrent.CountDownLatch[] r9 = new java.util.concurrent.CountDownLatch[r0]     // Catch:{ FileNotFoundException -> 0x019e, IOException -> 0x0199 }
             r8 = 0
             r0 = 0
         L_0x0043:
-            int r1 = N     // Catch:{ FileNotFoundException -> 0x019c, IOException -> 0x0197 }
+            int r1 = N     // Catch:{ FileNotFoundException -> 0x019e, IOException -> 0x0199 }
             if (r0 >= r1) goto L_0x0065
-            int r1 = r10.w     // Catch:{ FileNotFoundException -> 0x019c, IOException -> 0x0197 }
-            int r2 = r10.h     // Catch:{ FileNotFoundException -> 0x019c, IOException -> 0x0197 }
-            android.graphics.Bitmap$Config r3 = android.graphics.Bitmap.Config.ARGB_8888     // Catch:{ FileNotFoundException -> 0x019c, IOException -> 0x0197 }
-            android.graphics.Bitmap r1 = android.graphics.Bitmap.createBitmap(r1, r2, r3)     // Catch:{ FileNotFoundException -> 0x019c, IOException -> 0x0197 }
-            r14[r0] = r1     // Catch:{ FileNotFoundException -> 0x019c, IOException -> 0x0197 }
-            org.telegram.messenger.utils.BitmapsCache$ByteArrayOutputStream r1 = new org.telegram.messenger.utils.BitmapsCache$ByteArrayOutputStream     // Catch:{ FileNotFoundException -> 0x019c, IOException -> 0x0197 }
-            int r2 = r10.w     // Catch:{ FileNotFoundException -> 0x019c, IOException -> 0x0197 }
-            int r3 = r10.h     // Catch:{ FileNotFoundException -> 0x019c, IOException -> 0x0197 }
+            int r1 = r10.w     // Catch:{ FileNotFoundException -> 0x019e, IOException -> 0x0199 }
+            int r2 = r10.h     // Catch:{ FileNotFoundException -> 0x019e, IOException -> 0x0199 }
+            android.graphics.Bitmap$Config r3 = android.graphics.Bitmap.Config.ARGB_8888     // Catch:{ FileNotFoundException -> 0x019e, IOException -> 0x0199 }
+            android.graphics.Bitmap r1 = android.graphics.Bitmap.createBitmap(r1, r2, r3)     // Catch:{ FileNotFoundException -> 0x019e, IOException -> 0x0199 }
+            r14[r0] = r1     // Catch:{ FileNotFoundException -> 0x019e, IOException -> 0x0199 }
+            org.telegram.messenger.utils.BitmapsCache$ByteArrayOutputStream r1 = new org.telegram.messenger.utils.BitmapsCache$ByteArrayOutputStream     // Catch:{ FileNotFoundException -> 0x019e, IOException -> 0x0199 }
+            int r2 = r10.w     // Catch:{ FileNotFoundException -> 0x019e, IOException -> 0x0199 }
+            int r3 = r10.h     // Catch:{ FileNotFoundException -> 0x019e, IOException -> 0x0199 }
             int r2 = r2 * r3
             int r2 = r2 * 2
-            r1.<init>(r2)     // Catch:{ FileNotFoundException -> 0x019c, IOException -> 0x0197 }
-            r15[r0] = r1     // Catch:{ FileNotFoundException -> 0x019c, IOException -> 0x0197 }
+            r1.<init>(r2)     // Catch:{ FileNotFoundException -> 0x019e, IOException -> 0x0199 }
+            r15[r0] = r1     // Catch:{ FileNotFoundException -> 0x019e, IOException -> 0x0199 }
             int r0 = r0 + 1
             goto L_0x0043
         L_0x0065:
-            java.util.ArrayList r7 = new java.util.ArrayList     // Catch:{ FileNotFoundException -> 0x019c, IOException -> 0x0197 }
-            r7.<init>()     // Catch:{ FileNotFoundException -> 0x019c, IOException -> 0x0197 }
-            r13.writeBoolean(r8)     // Catch:{ FileNotFoundException -> 0x019c, IOException -> 0x0197 }
-            r13.writeInt(r8)     // Catch:{ FileNotFoundException -> 0x019c, IOException -> 0x0197 }
-            org.telegram.messenger.utils.BitmapsCache$Cacheable r0 = r10.source     // Catch:{ FileNotFoundException -> 0x019c, IOException -> 0x0197 }
-            r0.prepareForGenerateCache()     // Catch:{ FileNotFoundException -> 0x019c, IOException -> 0x0197 }
+            java.util.ArrayList r7 = new java.util.ArrayList     // Catch:{ FileNotFoundException -> 0x019e, IOException -> 0x0199 }
+            r7.<init>()     // Catch:{ FileNotFoundException -> 0x019e, IOException -> 0x0199 }
+            r13.writeBoolean(r8)     // Catch:{ FileNotFoundException -> 0x019e, IOException -> 0x0199 }
+            r13.writeInt(r8)     // Catch:{ FileNotFoundException -> 0x019e, IOException -> 0x0199 }
+            org.telegram.messenger.utils.BitmapsCache$Cacheable r0 = r10.source     // Catch:{ FileNotFoundException -> 0x019e, IOException -> 0x0199 }
+            r0.prepareForGenerateCache()     // Catch:{ FileNotFoundException -> 0x019e, IOException -> 0x0199 }
             r5 = 0
             r1 = r5
             r16 = 0
             r17 = 0
         L_0x007c:
-            r0 = r9[r16]     // Catch:{ FileNotFoundException -> 0x019c, IOException -> 0x0197 }
+            r0 = r9[r16]     // Catch:{ FileNotFoundException -> 0x019e, IOException -> 0x0199 }
             if (r0 == 0) goto L_0x008a
             r0 = r9[r16]     // Catch:{ InterruptedException -> 0x0086 }
             r0.await()     // Catch:{ InterruptedException -> 0x0086 }
             goto L_0x008a
         L_0x0086:
             r0 = move-exception
-            r0.printStackTrace()     // Catch:{ FileNotFoundException -> 0x019c, IOException -> 0x0197 }
+            r0.printStackTrace()     // Catch:{ FileNotFoundException -> 0x019e, IOException -> 0x0199 }
         L_0x008a:
-            long r3 = java.lang.System.currentTimeMillis()     // Catch:{ FileNotFoundException -> 0x019c, IOException -> 0x0197 }
-            org.telegram.messenger.utils.BitmapsCache$Cacheable r0 = r10.source     // Catch:{ FileNotFoundException -> 0x019c, IOException -> 0x0197 }
-            r8 = r14[r16]     // Catch:{ FileNotFoundException -> 0x019c, IOException -> 0x0197 }
-            int r0 = r0.getNextFrame(r8)     // Catch:{ FileNotFoundException -> 0x019c, IOException -> 0x0197 }
+            long r3 = java.lang.System.currentTimeMillis()     // Catch:{ FileNotFoundException -> 0x019e, IOException -> 0x0199 }
+            org.telegram.messenger.utils.BitmapsCache$Cacheable r0 = r10.source     // Catch:{ FileNotFoundException -> 0x019e, IOException -> 0x0199 }
+            r8 = r14[r16]     // Catch:{ FileNotFoundException -> 0x019e, IOException -> 0x0199 }
+            int r0 = r0.getNextFrame(r8)     // Catch:{ FileNotFoundException -> 0x019e, IOException -> 0x0199 }
             r8 = 1
-            if (r0 == r8) goto L_0x014c
+            if (r0 == r8) goto L_0x014e
             r3 = 0
         L_0x009a:
-            int r0 = N     // Catch:{ FileNotFoundException -> 0x019c, IOException -> 0x0197 }
+            int r0 = N     // Catch:{ FileNotFoundException -> 0x019e, IOException -> 0x0199 }
             if (r3 >= r0) goto L_0x00c1
-            r0 = r9[r3]     // Catch:{ FileNotFoundException -> 0x019c, IOException -> 0x0197 }
+            r0 = r9[r3]     // Catch:{ FileNotFoundException -> 0x019e, IOException -> 0x0199 }
             if (r0 == 0) goto L_0x00ac
             r0 = r9[r3]     // Catch:{ InterruptedException -> 0x00a8 }
             r0.await()     // Catch:{ InterruptedException -> 0x00a8 }
             goto L_0x00ac
         L_0x00a8:
             r0 = move-exception
-            r0.printStackTrace()     // Catch:{ FileNotFoundException -> 0x019c, IOException -> 0x0197 }
+            r0.printStackTrace()     // Catch:{ FileNotFoundException -> 0x019e, IOException -> 0x0199 }
         L_0x00ac:
-            r0 = r14[r3]     // Catch:{ FileNotFoundException -> 0x019c, IOException -> 0x0197 }
+            r0 = r14[r3]     // Catch:{ FileNotFoundException -> 0x019e, IOException -> 0x0199 }
             if (r0 == 0) goto L_0x00b5
             r0 = r14[r3]     // Catch:{ Exception -> 0x00b5 }
             r0.recycle()     // Catch:{ Exception -> 0x00b5 }
         L_0x00b5:
-            r0 = r15[r3]     // Catch:{ FileNotFoundException -> 0x019c, IOException -> 0x0197 }
+            r0 = r15[r3]     // Catch:{ FileNotFoundException -> 0x019e, IOException -> 0x0199 }
             if (r0 == 0) goto L_0x00be
-            r0 = r15[r3]     // Catch:{ FileNotFoundException -> 0x019c, IOException -> 0x0197 }
+            r0 = r15[r3]     // Catch:{ FileNotFoundException -> 0x019e, IOException -> 0x0199 }
             r4 = 0
-            r0.buf = r4     // Catch:{ FileNotFoundException -> 0x019c, IOException -> 0x0197 }
+            r0.buf = r4     // Catch:{ FileNotFoundException -> 0x019e, IOException -> 0x0199 }
         L_0x00be:
             int r3 = r3 + 1
             goto L_0x009a
         L_0x00c1:
-            long r3 = r13.length()     // Catch:{ FileNotFoundException -> 0x019c, IOException -> 0x0197 }
-            int r0 = (int) r3     // Catch:{ FileNotFoundException -> 0x019c, IOException -> 0x0197 }
-            org.telegram.messenger.utils.BitmapsCache$$ExternalSyntheticLambda1 r3 = org.telegram.messenger.utils.BitmapsCache$$ExternalSyntheticLambda1.INSTANCE     // Catch:{ FileNotFoundException -> 0x019c, IOException -> 0x0197 }
-            java.util.Comparator r3 = j$.util.Comparator$CC.comparingInt(r3)     // Catch:{ FileNotFoundException -> 0x019c, IOException -> 0x0197 }
-            java.util.Collections.sort(r7, r3)     // Catch:{ FileNotFoundException -> 0x019c, IOException -> 0x0197 }
-            int r3 = r7.size()     // Catch:{ FileNotFoundException -> 0x019c, IOException -> 0x0197 }
-            r13.writeInt(r3)     // Catch:{ FileNotFoundException -> 0x019c, IOException -> 0x0197 }
+            long r3 = r13.length()     // Catch:{ FileNotFoundException -> 0x019e, IOException -> 0x0199 }
+            int r0 = (int) r3     // Catch:{ FileNotFoundException -> 0x019e, IOException -> 0x0199 }
+            org.telegram.messenger.utils.BitmapsCache$$ExternalSyntheticLambda1 r3 = org.telegram.messenger.utils.BitmapsCache$$ExternalSyntheticLambda1.INSTANCE     // Catch:{ FileNotFoundException -> 0x019e, IOException -> 0x0199 }
+            java.util.Comparator r3 = j$.util.Comparator$CC.comparingInt(r3)     // Catch:{ FileNotFoundException -> 0x019e, IOException -> 0x0199 }
+            java.util.Collections.sort(r7, r3)     // Catch:{ FileNotFoundException -> 0x019e, IOException -> 0x0199 }
+            int r3 = r7.size()     // Catch:{ FileNotFoundException -> 0x019e, IOException -> 0x0199 }
+            r13.writeInt(r3)     // Catch:{ FileNotFoundException -> 0x019e, IOException -> 0x0199 }
             r3 = 0
         L_0x00d7:
-            int r4 = r7.size()     // Catch:{ FileNotFoundException -> 0x019c, IOException -> 0x0197 }
+            int r4 = r7.size()     // Catch:{ FileNotFoundException -> 0x019e, IOException -> 0x0199 }
             if (r3 >= r4) goto L_0x00f6
-            java.lang.Object r4 = r7.get(r3)     // Catch:{ FileNotFoundException -> 0x019c, IOException -> 0x0197 }
-            org.telegram.messenger.utils.BitmapsCache$FrameOffset r4 = (org.telegram.messenger.utils.BitmapsCache.FrameOffset) r4     // Catch:{ FileNotFoundException -> 0x019c, IOException -> 0x0197 }
-            int r4 = r4.frameOffset     // Catch:{ FileNotFoundException -> 0x019c, IOException -> 0x0197 }
-            r13.writeInt(r4)     // Catch:{ FileNotFoundException -> 0x019c, IOException -> 0x0197 }
-            java.lang.Object r4 = r7.get(r3)     // Catch:{ FileNotFoundException -> 0x019c, IOException -> 0x0197 }
-            org.telegram.messenger.utils.BitmapsCache$FrameOffset r4 = (org.telegram.messenger.utils.BitmapsCache.FrameOffset) r4     // Catch:{ FileNotFoundException -> 0x019c, IOException -> 0x0197 }
-            int r4 = r4.frameSize     // Catch:{ FileNotFoundException -> 0x019c, IOException -> 0x0197 }
-            r13.writeInt(r4)     // Catch:{ FileNotFoundException -> 0x019c, IOException -> 0x0197 }
+            java.lang.Object r4 = r7.get(r3)     // Catch:{ FileNotFoundException -> 0x019e, IOException -> 0x0199 }
+            org.telegram.messenger.utils.BitmapsCache$FrameOffset r4 = (org.telegram.messenger.utils.BitmapsCache.FrameOffset) r4     // Catch:{ FileNotFoundException -> 0x019e, IOException -> 0x0199 }
+            int r4 = r4.frameOffset     // Catch:{ FileNotFoundException -> 0x019e, IOException -> 0x0199 }
+            r13.writeInt(r4)     // Catch:{ FileNotFoundException -> 0x019e, IOException -> 0x0199 }
+            java.lang.Object r4 = r7.get(r3)     // Catch:{ FileNotFoundException -> 0x019e, IOException -> 0x0199 }
+            org.telegram.messenger.utils.BitmapsCache$FrameOffset r4 = (org.telegram.messenger.utils.BitmapsCache.FrameOffset) r4     // Catch:{ FileNotFoundException -> 0x019e, IOException -> 0x0199 }
+            int r4 = r4.frameSize     // Catch:{ FileNotFoundException -> 0x019e, IOException -> 0x0199 }
+            r13.writeInt(r4)     // Catch:{ FileNotFoundException -> 0x019e, IOException -> 0x0199 }
             int r3 = r3 + 1
             goto L_0x00d7
         L_0x00f6:
-            r13.seek(r5)     // Catch:{ FileNotFoundException -> 0x019c, IOException -> 0x0197 }
-            r13.writeBoolean(r8)     // Catch:{ FileNotFoundException -> 0x019c, IOException -> 0x0197 }
-            r13.writeInt(r0)     // Catch:{ FileNotFoundException -> 0x019c, IOException -> 0x0197 }
-            r13.close()     // Catch:{ FileNotFoundException -> 0x019c, IOException -> 0x0197 }
-            boolean r0 = org.telegram.messenger.BuildVars.DEBUG_VERSION     // Catch:{ FileNotFoundException -> 0x019c, IOException -> 0x0197 }
-            if (r0 == 0) goto L_0x01a0
-            java.lang.StringBuilder r0 = new java.lang.StringBuilder     // Catch:{ FileNotFoundException -> 0x019c, IOException -> 0x0197 }
-            r0.<init>()     // Catch:{ FileNotFoundException -> 0x019c, IOException -> 0x0197 }
+            r13.seek(r5)     // Catch:{ FileNotFoundException -> 0x019e, IOException -> 0x0199 }
+            r13.writeBoolean(r8)     // Catch:{ FileNotFoundException -> 0x019e, IOException -> 0x0199 }
+            r13.writeInt(r0)     // Catch:{ FileNotFoundException -> 0x019e, IOException -> 0x0199 }
+            r13.close()     // Catch:{ FileNotFoundException -> 0x019e, IOException -> 0x0199 }
+            boolean r0 = org.telegram.messenger.BuildVars.DEBUG_VERSION     // Catch:{ FileNotFoundException -> 0x019e, IOException -> 0x0199 }
+            if (r0 == 0) goto L_0x01a2
+            java.lang.StringBuilder r0 = new java.lang.StringBuilder     // Catch:{ FileNotFoundException -> 0x019e, IOException -> 0x0199 }
+            r0.<init>()     // Catch:{ FileNotFoundException -> 0x019e, IOException -> 0x0199 }
             java.lang.String r3 = "generate cache for time = "
-            r0.append(r3)     // Catch:{ FileNotFoundException -> 0x019c, IOException -> 0x0197 }
-            long r3 = java.lang.System.currentTimeMillis()     // Catch:{ FileNotFoundException -> 0x019c, IOException -> 0x0197 }
+            r0.append(r3)     // Catch:{ FileNotFoundException -> 0x019e, IOException -> 0x0199 }
+            long r3 = java.lang.System.currentTimeMillis()     // Catch:{ FileNotFoundException -> 0x019e, IOException -> 0x0199 }
             long r3 = r3 - r11
-            r0.append(r3)     // Catch:{ FileNotFoundException -> 0x019c, IOException -> 0x0197 }
+            r0.append(r3)     // Catch:{ FileNotFoundException -> 0x019e, IOException -> 0x0199 }
             java.lang.String r3 = " drawFrameTime = "
-            r0.append(r3)     // Catch:{ FileNotFoundException -> 0x019c, IOException -> 0x0197 }
-            r0.append(r1)     // Catch:{ FileNotFoundException -> 0x019c, IOException -> 0x0197 }
-            java.lang.String r1 = " comressTime = "
-            r0.append(r1)     // Catch:{ FileNotFoundException -> 0x019c, IOException -> 0x0197 }
-            r0.append(r5)     // Catch:{ FileNotFoundException -> 0x019c, IOException -> 0x0197 }
+            r0.append(r3)     // Catch:{ FileNotFoundException -> 0x019e, IOException -> 0x0199 }
+            r0.append(r1)     // Catch:{ FileNotFoundException -> 0x019e, IOException -> 0x0199 }
+            java.lang.String r1 = " comressQuality = "
+            r0.append(r1)     // Catch:{ FileNotFoundException -> 0x019e, IOException -> 0x0199 }
+            int r1 = r10.compressQuality     // Catch:{ FileNotFoundException -> 0x019e, IOException -> 0x0199 }
+            r0.append(r1)     // Catch:{ FileNotFoundException -> 0x019e, IOException -> 0x0199 }
             java.lang.String r1 = " fileSize = "
-            r0.append(r1)     // Catch:{ FileNotFoundException -> 0x019c, IOException -> 0x0197 }
-            java.io.File r1 = r10.file     // Catch:{ FileNotFoundException -> 0x019c, IOException -> 0x0197 }
-            long r1 = r1.length()     // Catch:{ FileNotFoundException -> 0x019c, IOException -> 0x0197 }
-            java.lang.String r1 = org.telegram.messenger.AndroidUtilities.formatFileSize(r1)     // Catch:{ FileNotFoundException -> 0x019c, IOException -> 0x0197 }
-            r0.append(r1)     // Catch:{ FileNotFoundException -> 0x019c, IOException -> 0x0197 }
+            r0.append(r1)     // Catch:{ FileNotFoundException -> 0x019e, IOException -> 0x0199 }
+            java.io.File r1 = r10.file     // Catch:{ FileNotFoundException -> 0x019e, IOException -> 0x0199 }
+            long r1 = r1.length()     // Catch:{ FileNotFoundException -> 0x019e, IOException -> 0x0199 }
+            java.lang.String r1 = org.telegram.messenger.AndroidUtilities.formatFileSize(r1)     // Catch:{ FileNotFoundException -> 0x019e, IOException -> 0x0199 }
+            r0.append(r1)     // Catch:{ FileNotFoundException -> 0x019e, IOException -> 0x0199 }
             java.lang.String r1 = " "
-            r0.append(r1)     // Catch:{ FileNotFoundException -> 0x019c, IOException -> 0x0197 }
-            java.lang.String r1 = r10.fileName     // Catch:{ FileNotFoundException -> 0x019c, IOException -> 0x0197 }
-            r0.append(r1)     // Catch:{ FileNotFoundException -> 0x019c, IOException -> 0x0197 }
-            java.lang.String r0 = r0.toString()     // Catch:{ FileNotFoundException -> 0x019c, IOException -> 0x0197 }
-            org.telegram.messenger.FileLog.d(r0)     // Catch:{ FileNotFoundException -> 0x019c, IOException -> 0x0197 }
-            goto L_0x01a0
-        L_0x014c:
-            long r19 = java.lang.System.currentTimeMillis()     // Catch:{ FileNotFoundException -> 0x019c, IOException -> 0x0197 }
+            r0.append(r1)     // Catch:{ FileNotFoundException -> 0x019e, IOException -> 0x0199 }
+            java.lang.String r1 = r10.fileName     // Catch:{ FileNotFoundException -> 0x019e, IOException -> 0x0199 }
+            r0.append(r1)     // Catch:{ FileNotFoundException -> 0x019e, IOException -> 0x0199 }
+            java.lang.String r0 = r0.toString()     // Catch:{ FileNotFoundException -> 0x019e, IOException -> 0x0199 }
+            org.telegram.messenger.FileLog.d(r0)     // Catch:{ FileNotFoundException -> 0x019e, IOException -> 0x0199 }
+            goto L_0x01a2
+        L_0x014e:
+            long r19 = java.lang.System.currentTimeMillis()     // Catch:{ FileNotFoundException -> 0x019e, IOException -> 0x0199 }
             long r19 = r19 - r3
             long r19 = r1 + r19
-            java.util.concurrent.CountDownLatch r0 = new java.util.concurrent.CountDownLatch     // Catch:{ FileNotFoundException -> 0x019c, IOException -> 0x0197 }
-            r0.<init>(r8)     // Catch:{ FileNotFoundException -> 0x019c, IOException -> 0x0197 }
-            r9[r16] = r0     // Catch:{ FileNotFoundException -> 0x019c, IOException -> 0x0197 }
-            java.util.concurrent.ThreadPoolExecutor r0 = bitmapCompressExecutor     // Catch:{ FileNotFoundException -> 0x019c, IOException -> 0x0197 }
-            org.telegram.messenger.utils.BitmapsCache$$ExternalSyntheticLambda0 r8 = new org.telegram.messenger.utils.BitmapsCache$$ExternalSyntheticLambda0     // Catch:{ FileNotFoundException -> 0x019c, IOException -> 0x0197 }
+            java.util.concurrent.CountDownLatch r0 = new java.util.concurrent.CountDownLatch     // Catch:{ FileNotFoundException -> 0x019e, IOException -> 0x0199 }
+            r0.<init>(r8)     // Catch:{ FileNotFoundException -> 0x019e, IOException -> 0x0199 }
+            r9[r16] = r0     // Catch:{ FileNotFoundException -> 0x019e, IOException -> 0x0199 }
+            java.util.concurrent.ThreadPoolExecutor r0 = bitmapCompressExecutor     // Catch:{ FileNotFoundException -> 0x019e, IOException -> 0x0199 }
+            org.telegram.messenger.utils.BitmapsCache$$ExternalSyntheticLambda0 r8 = new org.telegram.messenger.utils.BitmapsCache$$ExternalSyntheticLambda0     // Catch:{ FileNotFoundException -> 0x019e, IOException -> 0x0199 }
             r1 = r8
             r2 = r26
             r3 = r14
@@ -260,17 +261,17 @@ public class BitmapsCache {
             r11 = r8
             r8 = r23
             r18 = r9
-            r1.<init>(r2, r3, r4, r5, r6, r7, r8, r9)     // Catch:{ FileNotFoundException -> 0x019c, IOException -> 0x0197 }
-            r0.execute(r11)     // Catch:{ FileNotFoundException -> 0x019c, IOException -> 0x0197 }
+            r1.<init>(r2, r3, r4, r5, r6, r7, r8, r9)     // Catch:{ FileNotFoundException -> 0x019e, IOException -> 0x0199 }
+            r0.execute(r11)     // Catch:{ FileNotFoundException -> 0x019e, IOException -> 0x0199 }
             int r0 = r16 + 1
             int r17 = r17 + 1
-            int r1 = N     // Catch:{ FileNotFoundException -> 0x019c, IOException -> 0x0197 }
-            if (r0 < r1) goto L_0x0186
+            int r1 = N     // Catch:{ FileNotFoundException -> 0x019e, IOException -> 0x0199 }
+            if (r0 < r1) goto L_0x0188
             r16 = 0
-            goto L_0x0188
-        L_0x0186:
-            r16 = r0
+            goto L_0x018a
         L_0x0188:
+            r16 = r0
+        L_0x018a:
             r9 = r18
             r1 = r19
             r5 = r21
@@ -278,28 +279,28 @@ public class BitmapsCache {
             r11 = r24
             r8 = 0
             goto L_0x007c
-        L_0x0195:
-            r0 = move-exception
-            goto L_0x01a6
         L_0x0197:
             r0 = move-exception
-            r0.printStackTrace()     // Catch:{ all -> 0x0195 }
-            goto L_0x01a0
-        L_0x019c:
+            goto L_0x01a8
+        L_0x0199:
             r0 = move-exception
-            r0.printStackTrace()     // Catch:{ all -> 0x0195 }
-        L_0x01a0:
+            r0.printStackTrace()     // Catch:{ all -> 0x0197 }
+            goto L_0x01a2
+        L_0x019e:
+            r0 = move-exception
+            r0.printStackTrace()     // Catch:{ all -> 0x0197 }
+        L_0x01a2:
             org.telegram.messenger.utils.BitmapsCache$Cacheable r0 = r10.source
             r0.releaseForGenerateCache()
             return
-        L_0x01a6:
+        L_0x01a8:
             org.telegram.messenger.utils.BitmapsCache$Cacheable r1 = r10.source
             r1.releaseForGenerateCache()
-            goto L_0x01ad
-        L_0x01ac:
+            goto L_0x01af
+        L_0x01ae:
             throw r0
-        L_0x01ad:
-            goto L_0x01ac
+        L_0x01af:
+            goto L_0x01ae
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.utils.BitmapsCache.createCache():void");
     }

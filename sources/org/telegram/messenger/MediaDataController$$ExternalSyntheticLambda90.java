@@ -5,13 +5,15 @@ import org.telegram.tgnet.TLRPC$StickerSet;
 public final /* synthetic */ class MediaDataController$$ExternalSyntheticLambda90 implements Runnable {
     public final /* synthetic */ MediaDataController f$0;
     public final /* synthetic */ TLRPC$StickerSet f$1;
+    public final /* synthetic */ int f$2;
 
-    public /* synthetic */ MediaDataController$$ExternalSyntheticLambda90(MediaDataController mediaDataController, TLRPC$StickerSet tLRPC$StickerSet) {
+    public /* synthetic */ MediaDataController$$ExternalSyntheticLambda90(MediaDataController mediaDataController, TLRPC$StickerSet tLRPC$StickerSet, int i) {
         this.f$0 = mediaDataController;
         this.f$1 = tLRPC$StickerSet;
+        this.f$2 = i;
     }
 
     public final void run() {
-        this.f$0.lambda$loadGroupStickerSet$29(this.f$1);
+        this.f$0.lambda$toggleStickerSetInternal$94(this.f$1, this.f$2);
     }
 }

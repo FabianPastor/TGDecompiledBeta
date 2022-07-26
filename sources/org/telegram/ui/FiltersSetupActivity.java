@@ -368,7 +368,7 @@ public class FiltersSetupActivity extends BaseFragment implements NotificationCe
                 java.lang.StringBuilder r1 = new java.lang.StringBuilder
                 r1.<init>()
                 boolean r3 = r10.isDefault()
-                r4 = 2131625870(0x7f0e078e, float:1.887896E38)
+                r4 = 2131625878(0x7f0e0796, float:1.8878976E38)
                 java.lang.String r5 = "FilterAllChats"
                 java.lang.String r6 = ", "
                 if (r3 != 0) goto L_0x00bd
@@ -385,7 +385,7 @@ public class FiltersSetupActivity extends BaseFragment implements NotificationCe
                 if (r3 == 0) goto L_0x0040
                 r1.append(r6)
             L_0x0040:
-                r3 = 2131625886(0x7f0e079e, float:1.8878993E38)
+                r3 = 2131625894(0x7f0e07a6, float:1.8879009E38)
                 java.lang.String r7 = "FilterContacts"
                 java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r7, r3)
                 r1.append(r3)
@@ -398,7 +398,7 @@ public class FiltersSetupActivity extends BaseFragment implements NotificationCe
                 if (r3 == 0) goto L_0x005c
                 r1.append(r6)
             L_0x005c:
-                r3 = 2131625916(0x7f0e07bc, float:1.8879053E38)
+                r3 = 2131625924(0x7f0e07c4, float:1.887907E38)
                 java.lang.String r7 = "FilterNonContacts"
                 java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r7, r3)
                 r1.append(r3)
@@ -411,7 +411,7 @@ public class FiltersSetupActivity extends BaseFragment implements NotificationCe
                 if (r3 == 0) goto L_0x0078
                 r1.append(r6)
             L_0x0078:
-                r3 = 2131625903(0x7f0e07af, float:1.8879027E38)
+                r3 = 2131625911(0x7f0e07b7, float:1.8879043E38)
                 java.lang.String r7 = "FilterGroups"
                 java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r7, r3)
                 r1.append(r3)
@@ -424,7 +424,7 @@ public class FiltersSetupActivity extends BaseFragment implements NotificationCe
                 if (r3 == 0) goto L_0x0094
                 r1.append(r6)
             L_0x0094:
-                r3 = 2131625877(0x7f0e0795, float:1.8878974E38)
+                r3 = 2131625885(0x7f0e079d, float:1.887899E38)
                 java.lang.String r7 = "FilterChannels"
                 java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r7, r3)
                 r1.append(r3)
@@ -437,7 +437,7 @@ public class FiltersSetupActivity extends BaseFragment implements NotificationCe
                 if (r3 == 0) goto L_0x00b0
                 r1.append(r6)
             L_0x00b0:
-                r3 = 2131625876(0x7f0e0794, float:1.8878972E38)
+                r3 = 2131625884(0x7f0e079c, float:1.8878989E38)
                 java.lang.String r7 = "FilterBots"
                 java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r7, r3)
                 r1.append(r3)
@@ -469,7 +469,7 @@ public class FiltersSetupActivity extends BaseFragment implements NotificationCe
             L_0x00f5:
                 int r3 = r1.length()
                 if (r3 != 0) goto L_0x0107
-                r3 = 2131625912(0x7f0e07b8, float:1.8879045E38)
+                r3 = 2131625920(0x7f0e07c0, float:1.8879062E38)
                 java.lang.String r6 = "FilterNoChats"
                 java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r6, r3)
                 r1.append(r3)
@@ -956,11 +956,12 @@ public class FiltersSetupActivity extends BaseFragment implements NotificationCe
                 dialogFilter.flags |= MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_MUTED;
             }
             boolean unused = FiltersSetupActivity.this.ignoreUpdates = true;
-            FilterCreateActivity.saveFilterToServer(dialogFilter, dialogFilter.flags, dialogFilter.name, dialogFilter.alwaysShow, dialogFilter.neverShow, dialogFilter.pinnedDialogs, true, true, true, true, false, FiltersSetupActivity.this, new FiltersSetupActivity$ListAdapter$$ExternalSyntheticLambda5(this, suggestedFilter));
+            FilterCreateActivity.saveFilterToServer(dialogFilter, dialogFilter.flags, dialogFilter.name, dialogFilter.alwaysShow, dialogFilter.neverShow, dialogFilter.pinnedDialogs, true, true, true, true, false, FiltersSetupActivity.this, new FiltersSetupActivity$ListAdapter$$ExternalSyntheticLambda5(this, suggestedFilter, dialogFilter));
         }
 
         /* access modifiers changed from: private */
-        public /* synthetic */ void lambda$onCreateViewHolder$6(TLRPC$TL_dialogFilterSuggested tLRPC$TL_dialogFilterSuggested) {
+        public /* synthetic */ void lambda$onCreateViewHolder$6(TLRPC$TL_dialogFilterSuggested tLRPC$TL_dialogFilterSuggested, MessagesController.DialogFilter dialogFilter) {
+            int i = 0;
             FiltersSetupActivity.this.getNotificationCenter().postNotificationName(NotificationCenter.dialogFiltersUpdated, new Object[0]);
             boolean unused = FiltersSetupActivity.this.ignoreUpdates = false;
             ArrayList<TLRPC$TL_dialogFilterSuggested> arrayList = FiltersSetupActivity.this.getMessagesController().suggestedFilters;
@@ -984,7 +985,19 @@ public class FiltersSetupActivity extends BaseFragment implements NotificationCe
                 if (z) {
                     FiltersSetupActivity.this.adapter.notifyItemInserted(FiltersSetupActivity.this.filtersHeaderRow);
                 }
-                FiltersSetupActivity.this.adapter.notifyItemInserted(FiltersSetupActivity.this.filtersStartRow);
+                int i2 = 0;
+                for (int i3 = 0; i3 < FiltersSetupActivity.this.getMessagesController().dialogFilters.size(); i3++) {
+                    if (dialogFilter.id == FiltersSetupActivity.this.getMessagesController().dialogFilters.get(i3).id) {
+                        i2 = i3;
+                    }
+                }
+                if (!FiltersSetupActivity.this.getUserConfig().isPremium()) {
+                    i2--;
+                }
+                if (i2 >= 0) {
+                    i = i2;
+                }
+                FiltersSetupActivity.this.adapter.notifyItemInserted(FiltersSetupActivity.this.filtersStartRow + i);
                 return;
             }
             FiltersSetupActivity.this.updateRows(true);

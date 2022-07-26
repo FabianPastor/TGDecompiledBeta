@@ -95,7 +95,7 @@ public class StickerTabView extends FrameLayout {
         if (i != 2) {
             this.expanded = z;
             float f = i == 1 ? 24.0f : 26.0f;
-            float f2 = i == 1 ? 38.0f : 49.0f;
+            float f2 = i == 1 ? 38.0f : 44.0f;
             this.visibleView.getLayoutParams().width = AndroidUtilities.dp(z ? f2 : f);
             ViewGroup.LayoutParams layoutParams = this.visibleView.getLayoutParams();
             if (z) {
@@ -114,7 +114,7 @@ public class StickerTabView extends FrameLayout {
         if (i != 2) {
             if (this.expanded) {
                 float f2 = i == 1 ? 24.0f : 26.0f;
-                float f3 = i == 1 ? 38.0f : 49.0f;
+                float f3 = i == 1 ? 38.0f : 44.0f;
                 float f4 = 1.0f - f;
                 this.visibleView.setTranslationY((((((float) AndroidUtilities.dp(36.0f - f2)) / 2.0f) - (((float) AndroidUtilities.dp(86.0f - f3)) / 2.0f)) * f4) - (((float) AndroidUtilities.dp(8.0f)) * f));
                 this.visibleView.setTranslationX(((((float) AndroidUtilities.dp(33.0f - f2)) / 2.0f) - (((float) AndroidUtilities.dp(ScrollSlidingTabStrip.EXPANDED_WIDTH - f3)) / 2.0f)) * f4);

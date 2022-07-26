@@ -304,7 +304,7 @@ public class DataSettingsActivity extends BaseFragment {
             java.lang.String r14 = "dialogTextRed2"
             r5 = -1
             r6 = 0
-            r7 = 2131624832(0x7f0e0380, float:1.8876855E38)
+            r7 = 2131624836(0x7f0e0384, float:1.8876863E38)
             java.lang.String r8 = "Cancel"
             if (r12 != r13) goto L_0x008d
             android.app.Activity r10 = r9.getParentActivity()
@@ -316,15 +316,15 @@ public class DataSettingsActivity extends BaseFragment {
             org.telegram.ui.ActionBar.AlertDialog$Builder r10 = new org.telegram.ui.ActionBar.AlertDialog$Builder
             android.app.Activity r11 = r9.getParentActivity()
             r10.<init>((android.content.Context) r11)
-            r11 = 2131628051(0x7f0e1013, float:1.8883384E38)
+            r11 = 2131628059(0x7f0e101b, float:1.88834E38)
             java.lang.String r12 = "ResetAutomaticMediaDownloadAlertTitle"
             java.lang.String r11 = org.telegram.messenger.LocaleController.getString(r12, r11)
             r10.setTitle(r11)
-            r11 = 2131628050(0x7f0e1012, float:1.8883382E38)
+            r11 = 2131628058(0x7f0e101a, float:1.8883398E38)
             java.lang.String r12 = "ResetAutomaticMediaDownloadAlert"
             java.lang.String r11 = org.telegram.messenger.LocaleController.getString(r12, r11)
             r10.setMessage(r11)
-            r11 = 2131628042(0x7f0e100a, float:1.8883365E38)
+            r11 = 2131628050(0x7f0e1012, float:1.8883382E38)
             java.lang.String r12 = "Reset"
             java.lang.String r11 = org.telegram.messenger.LocaleController.getString(r12, r11)
             org.telegram.ui.DataSettingsActivity$$ExternalSyntheticLambda0 r12 = new org.telegram.ui.DataSettingsActivity$$ExternalSyntheticLambda0
@@ -374,23 +374,23 @@ public class DataSettingsActivity extends BaseFragment {
         L_0x00bc:
             android.app.Activity r13 = r9.getParentActivity()
             java.lang.String[] r14 = new java.lang.String[r0]
-            r0 = 2131628852(0x7f0e1334, float:1.8885008E38)
+            r0 = 2131628860(0x7f0e133c, float:1.8885025E38)
             java.lang.String r5 = "UseLessDataNever"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r5, r0)
             r14[r2] = r0
-            r0 = 2131628854(0x7f0e1336, float:1.8885012E38)
+            r0 = 2131628862(0x7f0e133e, float:1.8885029E38)
             java.lang.String r2 = "UseLessDataOnRoaming"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r2, r0)
             r14[r3] = r0
-            r0 = 2131628853(0x7f0e1335, float:1.888501E38)
+            r0 = 2131628861(0x7f0e133d, float:1.8885027E38)
             java.lang.String r2 = "UseLessDataOnMobile"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r2, r0)
             r14[r1] = r0
-            r0 = 2131628851(0x7f0e1333, float:1.8885006E38)
+            r0 = 2131628859(0x7f0e133b, float:1.8885023E38)
             java.lang.String r1 = "UseLessDataAlways"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             r14[r4] = r0
-            r0 = 2131629276(0x7f0e14dc, float:1.8885868E38)
+            r0 = 2131629284(0x7f0e14e4, float:1.8885885E38)
             java.lang.String r1 = "VoipUseLessData"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             org.telegram.ui.DataSettingsActivity$$ExternalSyntheticLambda2 r1 = new org.telegram.ui.DataSettingsActivity$$ExternalSyntheticLambda2
@@ -412,7 +412,7 @@ public class DataSettingsActivity extends BaseFragment {
             org.telegram.ui.ActionBar.AlertDialog$Builder r11 = new org.telegram.ui.ActionBar.AlertDialog$Builder
             android.app.Activity r12 = r9.getParentActivity()
             r11.<init>((android.content.Context) r12)
-            r12 = 2131628544(0x7f0e1200, float:1.8884384E38)
+            r12 = 2131628552(0x7f0e1208, float:1.88844E38)
             java.lang.String r13 = "StoragePath"
             java.lang.String r12 = org.telegram.messenger.LocaleController.getString(r13, r12)
             r11.setTitle(r12)
@@ -554,15 +554,15 @@ public class DataSettingsActivity extends BaseFragment {
             org.telegram.ui.ActionBar.AlertDialog$Builder r10 = new org.telegram.ui.ActionBar.AlertDialog$Builder
             android.app.Activity r11 = r9.getParentActivity()
             r10.<init>((android.content.Context) r11)
-            r11 = 2131624435(0x7f0e01f3, float:1.887605E38)
+            r11 = 2131624439(0x7f0e01f7, float:1.8876058E38)
             java.lang.String r12 = "AreYouSureClearDraftsTitle"
             java.lang.String r11 = org.telegram.messenger.LocaleController.getString(r12, r11)
             r10.setTitle(r11)
-            r11 = 2131624434(0x7f0e01f2, float:1.8876048E38)
+            r11 = 2131624438(0x7f0e01f6, float:1.8876056E38)
             java.lang.String r12 = "AreYouSureClearDrafts"
             java.lang.String r11 = org.telegram.messenger.LocaleController.getString(r12, r11)
             r10.setMessage(r11)
-            r11 = 2131625384(0x7f0e05a8, float:1.8877974E38)
+            r11 = 2131625388(0x7f0e05ac, float:1.8877983E38)
             java.lang.String r12 = "Delete"
             java.lang.String r11 = org.telegram.messenger.LocaleController.getString(r12, r11)
             org.telegram.ui.DataSettingsActivity$$ExternalSyntheticLambda1 r12 = new org.telegram.ui.DataSettingsActivity$$ExternalSyntheticLambda1

@@ -29,6 +29,7 @@ import org.telegram.messenger.BillingController;
 import org.telegram.messenger.BuildVars;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
+import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.browser.Browser;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLObject;
@@ -246,6 +247,12 @@ public class GiftPremiumBottomSheet extends BottomSheetWithRecyclerListView {
     }
 
     private void onGiftSuccess(boolean z) {
+        TLRPC$UserFull userFull = MessagesController.getInstance(this.currentAccount).getUserFull(this.user.id);
+        if (userFull != null) {
+            this.user.premium = true;
+            MessagesController.getInstance(this.currentAccount).putUser(this.user, true);
+            NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.userInfoDidLoad, Long.valueOf(this.user.id), userFull);
+        }
         if (getBaseFragment() != null) {
             ArrayList<BaseFragment> arrayList = new ArrayList<>(((LaunchActivity) getBaseFragment().getParentActivity()).getActionBarLayout().fragmentsStack);
             ActionBarLayout parentLayout = getBaseFragment().getParentLayout();
@@ -405,7 +412,7 @@ public class GiftPremiumBottomSheet extends BottomSheetWithRecyclerListView {
                     r9.setTopPadding(r0)
                     android.widget.TextView r0 = r9.getTextView()
                     r0.setGravity(r8)
-                    r0 = 2131626104(0x7f0e0878, float:1.8879435E38)
+                    r0 = 2131626112(0x7f0e0880, float:1.887945E38)
                     java.lang.String r0 = org.telegram.messenger.LocaleController.getString((int) r0)
                     r1 = 42
                     int r2 = r0.indexOf(r1)

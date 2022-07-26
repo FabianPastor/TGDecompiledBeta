@@ -2157,6 +2157,10 @@ public final class R {
         public static final int AddContactTitle = NUM;
         public static final int AddEmojiInstalled = NUM;
         public static final int AddEmojiInstalledInfo = NUM;
+        public static final int AddEmojiMultipleInstalledInfo_few = NUM;
+        public static final int AddEmojiMultipleInstalledInfo_many = NUM;
+        public static final int AddEmojiMultipleInstalledInfo_other = NUM;
+        public static final int AddEmojiMultipleInstalledInfo_two = NUM;
         public static final int AddEmojiNotFound = NUM;
         public static final int AddExceptions = NUM;
         public static final int AddMasks = NUM;
@@ -3530,6 +3534,10 @@ public final class R {
         public static final int EmojiPackCount_zero = NUM;
         public static final int EmojiRemoved = NUM;
         public static final int EmojiRemovedInfo = NUM;
+        public static final int EmojiRemovedMultipleInfo_few = NUM;
+        public static final int EmojiRemovedMultipleInfo_many = NUM;
+        public static final int EmojiRemovedMultipleInfo_other = NUM;
+        public static final int EmojiRemovedMultipleInfo_two = NUM;
         public static final int EmojiSuggestions = NUM;
         public static final int EmojiSuggestionsInfo = NUM;
         public static final int EmojiSuggestionsUrl = NUM;

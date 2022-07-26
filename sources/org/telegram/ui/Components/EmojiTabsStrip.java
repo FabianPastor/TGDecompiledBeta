@@ -26,11 +26,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.ImageReceiver;
 import org.telegram.messenger.MessageObject;
 import org.telegram.tgnet.TLRPC$Document;
 import org.telegram.tgnet.TLRPC$StickerSet;
 import org.telegram.ui.ActionBar.Theme;
-import org.telegram.ui.Components.AnimatedEmojiDrawable;
 import org.telegram.ui.Components.Premium.PremiumLockIconView;
 
 public class EmojiTabsStrip extends ScrollableHorizontalScrollView {
@@ -273,6 +273,7 @@ public class EmojiTabsStrip extends ScrollableHorizontalScrollView {
                 this.settingsTab.id = NUM;
                 this.settingsTab.setAlpha(0.0f);
             }
+            updateClickListeners();
             updateEmojiPacks();
         }
     }
@@ -332,8 +333,9 @@ public class EmojiTabsStrip extends ScrollableHorizontalScrollView {
         return arrayList.get(0);
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:111:0x0222 A[SYNTHETIC] */
-    /* JADX WARNING: Removed duplicated region for block: B:94:0x0220  */
+    /* JADX WARNING: Code restructure failed: missing block: B:66:0x0184, code lost:
+        if (r0.getDocumentId() != r2.id) goto L_0x0189;
+     */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public void updateEmojiPacks() {
         /*
@@ -367,93 +369,84 @@ public class EmojiTabsStrip extends ScrollableHorizontalScrollView {
         L_0x0030:
             java.util.ArrayList<org.telegram.ui.Components.EmojiTabsStrip$EmojiTabButton> r0 = r7.emojipackTabs
             int r0 = r0.size()
-            r10 = 1
-            if (r0 != 0) goto L_0x004d
+            if (r0 != 0) goto L_0x0048
             int r0 = r9.size()
-            if (r0 <= 0) goto L_0x004d
+            if (r0 <= 0) goto L_0x0048
             int r0 = r7.appearCount
             int r1 = r9.size()
-            if (r0 == r1) goto L_0x004d
+            if (r0 == r1) goto L_0x0048
             boolean r0 = r7.wasDrawn
-            if (r0 == 0) goto L_0x004d
-            r11 = 1
-            goto L_0x004e
-        L_0x004d:
-            r11 = 0
-        L_0x004e:
+        L_0x0048:
             android.animation.ValueAnimator r0 = r7.appearAnimation
-            r12 = 0
-            if (r0 == 0) goto L_0x0062
+            r10 = 0
+            if (r0 == 0) goto L_0x005c
             int r0 = r7.appearCount
             int r1 = r9.size()
-            if (r0 == r1) goto L_0x0062
+            if (r0 == r1) goto L_0x005c
             android.animation.ValueAnimator r0 = r7.appearAnimation
             r0.cancel()
-            r7.appearAnimation = r12
-        L_0x0062:
+            r7.appearAnimation = r10
+        L_0x005c:
             int r0 = r9.size()
             r7.appearCount = r0
             int r0 = org.telegram.messenger.UserConfig.selectedAccount
             org.telegram.messenger.UserConfig r0 = org.telegram.messenger.UserConfig.getInstance(r0)
-            boolean r13 = r0.isPremium()
+            boolean r11 = r0.isPremium()
             r0 = 0
-        L_0x0073:
+        L_0x006d:
             java.util.ArrayList<org.telegram.ui.Components.EmojiTabsStrip$EmojiTabButton> r1 = r7.emojipackTabs
             int r1 = r1.size()
-            r14 = 200(0xc8, double:9.9E-322)
-            r6 = 2
-            if (r0 >= r1) goto L_0x0123
+            r12 = 200(0xc8, double:9.9E-322)
+            r14 = 2
+            r15 = 1
+            if (r0 >= r1) goto L_0x0114
             java.util.ArrayList<org.telegram.ui.Components.EmojiTabsStrip$EmojiTabButton> r1 = r7.emojipackTabs
             java.lang.Object r1 = r1.get(r0)
             org.telegram.ui.Components.EmojiTabsStrip$EmojiTabButton r1 = (org.telegram.ui.Components.EmojiTabsStrip.EmojiTabButton) r1
-            if (r1 == 0) goto L_0x00c2
+            if (r1 == 0) goto L_0x00b8
             java.lang.Integer r2 = r1.id
-            if (r2 == 0) goto L_0x00c2
+            if (r2 == 0) goto L_0x00b8
             r2 = 0
-        L_0x008d:
+        L_0x0088:
             int r3 = r9.size()
-            if (r2 >= r3) goto L_0x00c2
+            if (r2 >= r3) goto L_0x00b8
             java.lang.Object r3 = r9.get(r2)
             org.telegram.ui.Components.EmojiView$EmojiPack r3 = (org.telegram.ui.Components.EmojiView.EmojiPack) r3
-            java.lang.Object[] r4 = new java.lang.Object[r6]
+            java.lang.Object[] r4 = new java.lang.Object[r14]
             org.telegram.tgnet.TLRPC$StickerSet r5 = r3.set
-            r16 = r13
-            long r12 = r5.id
-            java.lang.Long r5 = java.lang.Long.valueOf(r12)
+            long r5 = r5.id
+            java.lang.Long r5 = java.lang.Long.valueOf(r5)
             r4[r8] = r5
             boolean r5 = r3.featured
             java.lang.Boolean r5 = java.lang.Boolean.valueOf(r5)
-            r4[r10] = r5
+            r4[r15] = r5
             int r4 = java.util.Arrays.hashCode(r4)
             java.lang.Integer r5 = r1.id
             int r5 = r5.intValue()
-            if (r4 != r5) goto L_0x00bc
-            goto L_0x00c5
-        L_0x00bc:
+            if (r4 != r5) goto L_0x00b5
+            goto L_0x00b9
+        L_0x00b5:
             int r2 = r2 + 1
-            r13 = r16
-            r12 = 0
-            goto L_0x008d
-        L_0x00c2:
-            r16 = r13
-            r3 = 0
-        L_0x00c5:
-            if (r3 != 0) goto L_0x0118
-            if (r1 == 0) goto L_0x0118
+            goto L_0x0088
+        L_0x00b8:
+            r3 = r10
+        L_0x00b9:
+            if (r3 != 0) goto L_0x010c
+            if (r1 == 0) goto L_0x010c
             android.graphics.Rect r2 = new android.graphics.Rect
             r2.<init>()
             int r3 = r1.getLeft()
             int r4 = r1.getTop()
             int r5 = r1.getRight()
-            int r12 = r1.getBottom()
-            r2.set(r3, r4, r5, r12)
+            int r6 = r1.getBottom()
+            r2.set(r3, r4, r5, r6)
             java.util.HashMap<android.view.View, android.graphics.Rect> r3 = r7.removingViews
             r3.put(r1, r2)
-            float[] r2 = new float[r6]
+            float[] r2 = new float[r14]
             float r3 = r1.getAlpha()
             r2[r8] = r3
             r3 = 0
-            r2[r10] = r3
+            r2[r15] = r3
             android.animation.ValueAnimator r2 = android.animation.ValueAnimator.ofFloat(r2)
             org.telegram.ui.Components.EmojiTabsStrip$$ExternalSyntheticLambda1 r3 = new org.telegram.ui.Components.EmojiTabsStrip$$ExternalSyntheticLambda1
             r3.<init>(r7, r1)
@@ -461,7 +454,7 @@ public class EmojiTabsStrip extends ScrollableHorizontalScrollView {
             org.telegram.ui.Components.EmojiTabsStrip$2 r3 = new org.telegram.ui.Components.EmojiTabsStrip$2
             r3.<init>(r1)
             r2.addListener(r3)
-            r2.setDuration(r14)
+            r2.setDuration(r12)
             org.telegram.ui.Components.CubicBezierInterpolator r3 = org.telegram.ui.Components.CubicBezierInterpolator.EASE_OUT_QUINT
             r2.setInterpolator(r3)
             r2.start()
@@ -469,166 +462,173 @@ public class EmojiTabsStrip extends ScrollableHorizontalScrollView {
             int r3 = r0 + -1
             r2.remove(r0)
             r0 = r3
-        L_0x0118:
+        L_0x010c:
             android.widget.LinearLayout r2 = r7.contentView
             r2.removeView(r1)
-            int r0 = r0 + r10
-            r13 = r16
-            r12 = 0
-            goto L_0x0073
-        L_0x0123:
-            r16 = r13
-            r12 = 0
-        L_0x0126:
+            int r0 = r0 + r15
+            goto L_0x006d
+        L_0x0114:
+            r6 = 0
+        L_0x0115:
             int r0 = r9.size()
-            if (r12 >= r0) goto L_0x022e
-            java.lang.Object r0 = r9.get(r12)
-            r13 = r0
-            org.telegram.ui.Components.EmojiView$EmojiPack r13 = (org.telegram.ui.Components.EmojiView.EmojiPack) r13
-            java.lang.Object[] r0 = new java.lang.Object[r6]
-            org.telegram.tgnet.TLRPC$StickerSet r1 = r13.set
+            if (r6 >= r0) goto L_0x0233
+            java.lang.Object r0 = r9.get(r6)
+            r5 = r0
+            org.telegram.ui.Components.EmojiView$EmojiPack r5 = (org.telegram.ui.Components.EmojiView.EmojiPack) r5
+            java.lang.Object[] r0 = new java.lang.Object[r14]
+            org.telegram.tgnet.TLRPC$StickerSet r1 = r5.set
             long r1 = r1.id
             java.lang.Long r1 = java.lang.Long.valueOf(r1)
             r0[r8] = r1
-            boolean r1 = r13.featured
+            boolean r1 = r5.featured
             java.lang.Boolean r1 = java.lang.Boolean.valueOf(r1)
-            r0[r10] = r1
-            int r5 = java.util.Arrays.hashCode(r0)
+            r0[r15] = r1
+            int r4 = java.util.Arrays.hashCode(r0)
             r0 = 0
-        L_0x014c:
+        L_0x013b:
             java.util.ArrayList<org.telegram.ui.Components.EmojiTabsStrip$EmojiTabButton> r1 = r7.emojipackTabs
             int r1 = r1.size()
-            if (r0 >= r1) goto L_0x016c
+            if (r0 >= r1) goto L_0x015b
             java.util.ArrayList<org.telegram.ui.Components.EmojiTabsStrip$EmojiTabButton> r1 = r7.emojipackTabs
             java.lang.Object r1 = r1.get(r0)
             org.telegram.ui.Components.EmojiTabsStrip$EmojiTabButton r1 = (org.telegram.ui.Components.EmojiTabsStrip.EmojiTabButton) r1
-            if (r1 == 0) goto L_0x0169
+            if (r1 == 0) goto L_0x0158
             java.lang.Integer r2 = r1.id
-            if (r2 == 0) goto L_0x0169
+            if (r2 == 0) goto L_0x0158
             int r2 = r2.intValue()
-            if (r2 != r5) goto L_0x0169
-            goto L_0x016d
-        L_0x0169:
+            if (r2 != r4) goto L_0x0158
+            goto L_0x015c
+        L_0x0158:
             int r0 = r0 + 1
-            goto L_0x014c
-        L_0x016c:
-            r1 = 0
-        L_0x016d:
-            org.telegram.tgnet.TLRPC$StickerSet r0 = r13.set
-            java.util.ArrayList<org.telegram.tgnet.TLRPC$Document> r2 = r13.documents
-            boolean r17 = r7.isFreeEmojiPack(r0, r2)
-            if (r1 != 0) goto L_0x0179
-            r0 = 0
-            goto L_0x017f
-        L_0x0179:
+            goto L_0x013b
+        L_0x015b:
+            r1 = r10
+        L_0x015c:
+            org.telegram.tgnet.TLRPC$StickerSet r0 = r5.set
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$Document> r2 = r5.documents
+            boolean r16 = r7.isFreeEmojiPack(r0, r2)
+            if (r1 != 0) goto L_0x0168
+            r0 = r10
+            goto L_0x016e
+        L_0x0168:
             android.graphics.drawable.Drawable r0 = r1.getDrawable()
             org.telegram.ui.Components.AnimatedEmojiDrawable r0 = (org.telegram.ui.Components.AnimatedEmojiDrawable) r0
-        L_0x017f:
-            org.telegram.tgnet.TLRPC$StickerSet r2 = r13.set
-            java.util.ArrayList<org.telegram.tgnet.TLRPC$Document> r3 = r13.documents
+        L_0x016e:
+            org.telegram.tgnet.TLRPC$StickerSet r2 = r5.set
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$Document> r3 = r5.documents
             org.telegram.tgnet.TLRPC$Document r2 = r7.getThumbDocument(r2, r3)
-            if (r2 == 0) goto L_0x019c
-            if (r0 == 0) goto L_0x0195
-            long r3 = r0.getDocumentId()
-            long r14 = r2.id
-            int r18 = (r3 > r14 ? 1 : (r3 == r14 ? 0 : -1))
-            if (r18 == 0) goto L_0x019c
-        L_0x0195:
+            if (r2 == 0) goto L_0x0191
+            if (r0 == 0) goto L_0x0187
+            long r17 = r0.getDocumentId()
+            r19 = r9
+            long r8 = r2.id
+            int r3 = (r17 > r8 ? 1 : (r17 == r8 ? 0 : -1))
+            if (r3 == 0) goto L_0x0193
+            goto L_0x0189
+        L_0x0187:
+            r19 = r9
+        L_0x0189:
             int r0 = org.telegram.messenger.UserConfig.selectedAccount
             r3 = 3
             org.telegram.ui.Components.AnimatedEmojiDrawable r0 = org.telegram.ui.Components.AnimatedEmojiDrawable.make((int) r0, (int) r3, (org.telegram.tgnet.TLRPC$Document) r2)
-        L_0x019c:
-            r14 = r0
-            if (r1 != 0) goto L_0x01d0
-            org.telegram.ui.Components.EmojiTabsStrip$EmojiTabButton r15 = new org.telegram.ui.Components.EmojiTabsStrip$EmojiTabButton
+            goto L_0x0193
+        L_0x0191:
+            r19 = r9
+        L_0x0193:
+            r8 = r0
+            if (r1 != 0) goto L_0x01c8
+            org.telegram.ui.Components.EmojiTabsStrip$EmojiTabButton r9 = new org.telegram.ui.Components.EmojiTabsStrip$EmojiTabButton
             android.content.Context r2 = r21.getContext()
+            r17 = 0
             r18 = 0
-            r19 = 0
-            r0 = r15
+            r0 = r9
             r1 = r21
-            r3 = r14
-            r4 = r17
-            r20 = r5
-            r5 = r18
-            r18 = 2
-            r6 = r19
+            r3 = r8
+            r20 = r4
+            r4 = r16
+            r14 = r5
+            r5 = r17
+            r17 = r6
+            r6 = r18
             r0.<init>((android.content.Context) r2, (android.graphics.drawable.Drawable) r3, (boolean) r4, (boolean) r5, (boolean) r6)
             java.lang.Integer r0 = java.lang.Integer.valueOf(r20)
-            r15.id = r0
-            if (r14 == 0) goto L_0x01c9
-            android.widget.ImageView r0 = r15.imageView
-            r14.addView((android.view.View) r0)
-        L_0x01c9:
+            r9.id = r0
+            if (r8 == 0) goto L_0x01c1
+            android.widget.ImageView r0 = r9.imageView
+            r8.addView((android.view.View) r0)
+        L_0x01c1:
             java.util.ArrayList<org.telegram.ui.Components.EmojiTabsStrip$EmojiTabButton> r0 = r7.emojipackTabs
-            r0.add(r15)
-            r1 = r15
-            goto L_0x01f3
-        L_0x01d0:
-            r18 = 2
+            r0.add(r9)
+            r1 = r9
+            goto L_0x01ec
+        L_0x01c8:
+            r14 = r5
+            r17 = r6
             android.graphics.drawable.Drawable r0 = r1.getDrawable()
             boolean r0 = r0 instanceof org.telegram.ui.Components.AnimatedEmojiDrawable
-            if (r0 == 0) goto L_0x01e7
+            if (r0 == 0) goto L_0x01e0
             android.graphics.drawable.Drawable r0 = r1.getDrawable()
             org.telegram.ui.Components.AnimatedEmojiDrawable r0 = (org.telegram.ui.Components.AnimatedEmojiDrawable) r0
             android.widget.ImageView r2 = r1.imageView
             r0.removeView((android.view.View) r2)
-        L_0x01e7:
-            r1.setDrawable(r14)
-            if (r14 == 0) goto L_0x01f3
+        L_0x01e0:
+            r1.setDrawable(r8)
+            if (r8 == 0) goto L_0x01ec
             android.widget.ImageView r0 = r1.imageView
-            r14.addView((android.view.View) r0)
-        L_0x01f3:
-            if (r16 != 0) goto L_0x01fe
-            if (r17 != 0) goto L_0x01fe
+            r8.addView((android.view.View) r0)
+        L_0x01ec:
+            if (r11 != 0) goto L_0x01f6
+            if (r16 != 0) goto L_0x01f6
             java.lang.Boolean r0 = java.lang.Boolean.TRUE
             r1.setLock(r0)
-        L_0x01fc:
-            r0 = 0
-            goto L_0x021e
-        L_0x01fe:
-            boolean r0 = r13.installed
-            if (r0 != 0) goto L_0x021a
+            goto L_0x0215
+        L_0x01f6:
+            boolean r0 = r14.installed
+            if (r0 != 0) goto L_0x0212
             org.telegram.ui.Components.EmojiView r0 = r7.parent
             java.util.ArrayList<java.lang.Long> r0 = r0.installedEmojiSets
-            org.telegram.tgnet.TLRPC$StickerSet r2 = r13.set
+            org.telegram.tgnet.TLRPC$StickerSet r2 = r14.set
             long r2 = r2.id
             java.lang.Long r2 = java.lang.Long.valueOf(r2)
             boolean r0 = r0.contains(r2)
-            if (r0 != 0) goto L_0x021a
+            if (r0 != 0) goto L_0x0212
             java.lang.Boolean r0 = java.lang.Boolean.FALSE
             r1.setLock(r0)
-            goto L_0x01fc
-        L_0x021a:
-            r0 = 0
-            r1.setLock(r0)
-        L_0x021e:
-            if (r11 == 0) goto L_0x0222
-            r1.newly = r8
-        L_0x0222:
-            android.widget.LinearLayout r2 = r7.contentView
-            r2.addView(r1)
-            int r12 = r12 + 1
-            r6 = 2
-            r14 = 200(0xc8, double:9.9E-322)
-            goto L_0x0126
-        L_0x022e:
+            goto L_0x0215
+        L_0x0212:
+            r1.setLock(r10)
+        L_0x0215:
+            android.view.ViewParent r0 = r1.getParent()
+            boolean r0 = r0 instanceof android.view.ViewGroup
+            if (r0 == 0) goto L_0x0226
+            android.view.ViewParent r0 = r1.getParent()
+            android.view.ViewGroup r0 = (android.view.ViewGroup) r0
+            r0.removeView(r1)
+        L_0x0226:
+            android.widget.LinearLayout r0 = r7.contentView
+            r0.addView(r1)
+            int r6 = r17 + 1
+            r9 = r19
+            r8 = 0
+            r14 = 2
+            goto L_0x0115
+        L_0x0233:
             org.telegram.ui.Components.EmojiTabsStrip$EmojiTabButton r0 = r7.settingsTab
-            if (r0 == 0) goto L_0x025a
+            if (r0 == 0) goto L_0x025d
             r0.bringToFront()
             org.telegram.ui.Components.EmojiTabsStrip$EmojiTabButton r0 = r7.settingsTab
             float r0 = r0.getAlpha()
             r1 = 1065353216(0x3var_, float:1.0)
             int r0 = (r0 > r1 ? 1 : (r0 == r1 ? 0 : -1))
-            if (r0 >= 0) goto L_0x025a
+            if (r0 >= 0) goto L_0x025d
             org.telegram.ui.Components.EmojiTabsStrip$EmojiTabButton r0 = r7.settingsTab
             android.view.ViewPropertyAnimator r0 = r0.animate()
             android.view.ViewPropertyAnimator r0 = r0.alpha(r1)
-            r1 = 200(0xc8, double:9.9E-322)
-            android.view.ViewPropertyAnimator r0 = r0.setDuration(r1)
+            android.view.ViewPropertyAnimator r0 = r0.setDuration(r12)
             org.telegram.ui.Components.CubicBezierInterpolator r1 = org.telegram.ui.Components.CubicBezierInterpolator.DEFAULT
             android.view.ViewPropertyAnimator r0 = r0.setInterpolator(r1)
             r0.start()
-        L_0x025a:
+        L_0x025d:
             r21.updateClickListeners()
             return
         */
@@ -969,7 +969,7 @@ public class EmojiTabsStrip extends ScrollableHorizontalScrollView {
         }
 
         public void updateLockImageReceiver() {
-            AnimatedEmojiDrawable.EmojiImageReceiver imageReceiver;
+            ImageReceiver imageReceiver;
             PremiumLockIconView premiumLockIconView = this.lockView;
             if (premiumLockIconView != null && !premiumLockIconView.ready() && (getDrawable() instanceof AnimatedEmojiDrawable) && (imageReceiver = ((AnimatedEmojiDrawable) getDrawable()).getImageReceiver()) != null) {
                 this.lockView.setImageReceiver(imageReceiver);
@@ -1015,7 +1015,7 @@ public class EmojiTabsStrip extends ScrollableHorizontalScrollView {
         }
 
         public void setDrawable(Drawable drawable) {
-            AnimatedEmojiDrawable.EmojiImageReceiver imageReceiver;
+            ImageReceiver imageReceiver;
             if (!(this.lockView == null || !(drawable instanceof AnimatedEmojiDrawable) || (imageReceiver = ((AnimatedEmojiDrawable) drawable).getImageReceiver()) == null)) {
                 this.lockView.setImageReceiver(imageReceiver);
             }

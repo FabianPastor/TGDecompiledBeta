@@ -2414,7 +2414,11 @@ public class MessagesController extends BaseController implements NotificationCe
                 i = Math.min(i, this.dialogFilters.get(i2).order);
             }
             dialogFilter.order = i - 1;
-            this.dialogFilters.add(0, dialogFilter);
+            if (!this.dialogFilters.get(0).isDefault() || getUserConfig().isPremium()) {
+                this.dialogFilters.add(0, dialogFilter);
+            } else {
+                this.dialogFilters.add(1, dialogFilter);
+            }
         } else {
             int size2 = this.dialogFilters.size();
             int i3 = 0;

@@ -364,7 +364,9 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
 
                 /* access modifiers changed from: private */
                 public static /* synthetic */ void lambda$onWebAppOpenInvoice$2(OverlayActionBarLayoutDialog overlayActionBarLayoutDialog, ChatAttachAlertBotWebViewLayout chatAttachAlertBotWebViewLayout, String str, PaymentFormActivity.InvoiceStatus invoiceStatus) {
-                    overlayActionBarLayoutDialog.dismiss();
+                    if (invoiceStatus != PaymentFormActivity.InvoiceStatus.PENDING) {
+                        overlayActionBarLayoutDialog.dismiss();
+                    }
                     chatAttachAlertBotWebViewLayout.getWebViewContainer().onInvoiceStatusUpdate(str, invoiceStatus.name().toLowerCase(Locale.ROOT));
                 }
 
@@ -1336,7 +1338,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
             r8.doneItem = r13
             r13.setLongClickEnabled(r12)
             org.telegram.ui.ActionBar.ActionBarMenuItem r0 = r8.doneItem
-            r1 = 2131625284(0x7f0e0544, float:1.8877772E38)
+            r1 = 2131625288(0x7f0e0548, float:1.887778E38)
             java.lang.String r2 = "Create"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             java.lang.String r1 = r1.toUpperCase()
@@ -1374,7 +1376,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
             r1 = 2131165456(0x7var_, float:1.794513E38)
             r0.setIcon((int) r1)
             org.telegram.ui.ActionBar.ActionBarMenuItem r0 = r8.searchItem
-            r1 = 2131628155(0x7f0e107b, float:1.8883595E38)
+            r1 = 2131628163(0x7f0e1083, float:1.888361E38)
             java.lang.String r2 = "Search"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             r0.setContentDescription(r1)
@@ -1514,7 +1516,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
             r3 = 19
             r0.setGravity(r3)
             android.widget.TextView r0 = r8.mediaPreviewTextView
-            r3 = 2131624506(0x7f0e023a, float:1.8876194E38)
+            r3 = 2131624510(0x7f0e023e, float:1.8876202E38)
             java.lang.String r5 = "AttachMediaPreview"
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r5, r3)
             r0.setText(r3)

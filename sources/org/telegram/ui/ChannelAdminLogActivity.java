@@ -1618,7 +1618,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
         return this.videoTextureView;
     }
 
-    /* JADX WARNING: Code restructure failed: missing block: B:89:0x0246, code lost:
+    /* JADX WARNING: Code restructure failed: missing block: B:90:0x0246, code lost:
         if (r0.exists() != false) goto L_0x024a;
      */
     /* Code decompiled incorrectly, please refer to instructions dump. */
@@ -1889,12 +1889,12 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
             android.net.Uri r0 = android.net.Uri.fromFile(r3)
             r2.putExtra(r5, r0)
         L_0x0215:
-            android.app.Activity r0 = r10.getParentActivity()
-            r3 = 2131628337(0x7f0e1131, float:1.8883964E38)
-            java.lang.String r4 = "ShareFile"
-            java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r4, r3)
-            android.content.Intent r2 = android.content.Intent.createChooser(r2, r3)
-            r0.startActivityForResult(r2, r1)
+            android.app.Activity r0 = r10.getParentActivity()     // Catch:{ Exception -> 0x03b5 }
+            java.lang.String r3 = "ShareFile"
+            r4 = 2131628345(0x7f0e1139, float:1.888398E38)
+            java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r3, r4)     // Catch:{ Exception -> 0x03b5 }
+            android.content.Intent r2 = android.content.Intent.createChooser(r2, r3)     // Catch:{ Exception -> 0x03b5 }
+            r0.startActivityForResult(r2, r1)     // Catch:{ Exception -> 0x03b5 }
             goto L_0x03b5
         L_0x022b:
             org.telegram.tgnet.TLRPC$Message r0 = r0.messageOwner
@@ -1927,9 +1927,9 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
             java.lang.String r1 = r1.toLowerCase()
             java.lang.String r2 = "attheme"
             boolean r1 = r1.endsWith(r2)
-            r2 = 2131627127(0x7f0e0CLASSNAME, float:1.888151E38)
+            r2 = 2131627135(0x7f0e0c7f, float:1.8881526E38)
             java.lang.String r3 = "OK"
-            r4 = 2131624384(0x7f0e01c0, float:1.8875946E38)
+            r4 = 2131624388(0x7f0e01c4, float:1.8875954E38)
             java.lang.String r5 = "AppName"
             if (r1 == 0) goto L_0x02fa
             androidx.recyclerview.widget.LinearLayoutManager r1 = r10.chatLayoutManager
@@ -1977,7 +1977,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
             r0.<init>((android.content.Context) r1)
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r5, r4)
             r0.setTitle(r1)
-            r1 = 2131626278(0x7f0e0926, float:1.8879788E38)
+            r1 = 2131626286(0x7f0e092e, float:1.8879804E38)
             java.lang.String r4 = "IncorrectTheme"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r4, r1)
             r0.setMessage(r1)
@@ -2006,7 +2006,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
             r0.<init>((android.content.Context) r1)
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r5, r4)
             r0.setTitle(r1)
-            r1 = 2131626277(0x7f0e0925, float:1.8879786E38)
+            r1 = 2131626285(0x7f0e092d, float:1.8879802E38)
             java.lang.String r4 = "IncorrectLocalization"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r4, r1)
             r0.setMessage(r1)

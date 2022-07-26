@@ -151,7 +151,7 @@ public class BackButtonMenu {
             if (r5 != r7) goto L_0x0121
             boolean r5 = org.telegram.messenger.UserObject.isUserSelf(r14)
             if (r5 == 0) goto L_0x0121
-            r5 = 2131628140(0x7f0e106c, float:1.8883564E38)
+            r5 = 2131628148(0x7f0e1074, float:1.888358E38)
             java.lang.String r6 = "SavedMessages"
             java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r6, r5)
             r6 = 1
@@ -161,7 +161,7 @@ public class BackButtonMenu {
         L_0x0121:
             boolean r5 = org.telegram.messenger.UserObject.isReplyUser((org.telegram.tgnet.TLRPC$User) r14)
             if (r5 == 0) goto L_0x0139
-            r5 = 2131627982(0x7f0e0fce, float:1.8883244E38)
+            r5 = 2131627990(0x7f0e0fd6, float:1.888326E38)
             java.lang.String r6 = "RepliesTitle"
             java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r6, r5)
             r6 = 12
@@ -171,7 +171,7 @@ public class BackButtonMenu {
         L_0x0139:
             boolean r5 = org.telegram.messenger.UserObject.isDeleted(r14)
             if (r5 == 0) goto L_0x0154
-            r5 = 2131626178(0x7f0e08c2, float:1.8879585E38)
+            r5 = 2131626186(0x7f0e08ca, float:1.8879601E38)
             java.lang.String r7 = "HiddenName"
             java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r7, r5)
             r4.setInfo((org.telegram.tgnet.TLRPC$User) r14)

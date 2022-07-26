@@ -20,7 +20,6 @@ import org.telegram.messenger.ImageReceiver;
 import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.UserConfig;
 import org.telegram.tgnet.TLRPC$Document;
-import org.telegram.ui.Components.AnimatedEmojiDrawable;
 import org.telegram.ui.Components.spoilers.SpoilerEffect;
 
 public class AnimatedEmojiSpan extends ReplacementSpan {
@@ -193,7 +192,7 @@ public class AnimatedEmojiSpan extends ReplacementSpan {
         public void prepareForBackgroundDraw(long j) {
             AnimatedEmojiDrawable animatedEmojiDrawable = this.drawable;
             if (animatedEmojiDrawable != null) {
-                AnimatedEmojiDrawable.EmojiImageReceiver imageReceiver = animatedEmojiDrawable.getImageReceiver();
+                ImageReceiver imageReceiver = animatedEmojiDrawable.getImageReceiver();
                 this.drawable.update(j);
                 this.drawable.setBounds(this.drawableBounds);
                 if (imageReceiver != null) {

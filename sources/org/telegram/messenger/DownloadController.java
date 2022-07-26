@@ -380,7 +380,7 @@ public class DownloadController extends BaseController implements NotificationCe
 
     /* access modifiers changed from: private */
     public /* synthetic */ void lambda$loadAutoDownloadConfig$2(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        AndroidUtilities.runOnUIThread(new DownloadController$$ExternalSyntheticLambda11(this, tLObject));
+        AndroidUtilities.runOnUIThread(new DownloadController$$ExternalSyntheticLambda10(this, tLObject));
     }
 
     /* access modifiers changed from: private */
@@ -1372,7 +1372,7 @@ public class DownloadController extends BaseController implements NotificationCe
 
     public void startDownloadFile(TLRPC$Document tLRPC$Document, MessageObject messageObject) {
         if (messageObject.getDocument() != null) {
-            AndroidUtilities.runOnUIThread(new DownloadController$$ExternalSyntheticLambda9(this, messageObject));
+            AndroidUtilities.runOnUIThread(new DownloadController$$ExternalSyntheticLambda8(this, messageObject));
         }
     }
 
@@ -1443,7 +1443,7 @@ public class DownloadController extends BaseController implements NotificationCe
             r1.add(r10)
             org.telegram.messenger.MessagesStorage r1 = r9.getMessagesStorage()
             org.telegram.messenger.DispatchQueue r1 = r1.getStorageQueue()
-            org.telegram.messenger.DownloadController$$ExternalSyntheticLambda7 r2 = new org.telegram.messenger.DownloadController$$ExternalSyntheticLambda7
+            org.telegram.messenger.DownloadController$$ExternalSyntheticLambda6 r2 = new org.telegram.messenger.DownloadController$$ExternalSyntheticLambda6
             r2.<init>(r9, r10)
             r1.postRunnable(r2)
         L_0x0084:
@@ -1476,39 +1476,41 @@ public class DownloadController extends BaseController implements NotificationCe
     }
 
     public void onDownloadComplete(MessageObject messageObject) {
-        if (messageObject != null) {
-            AndroidUtilities.runOnUIThread(new DownloadController$$ExternalSyntheticLambda5(this, messageObject));
+        if (messageObject != null && messageObject.getDocument() != null) {
+            AndroidUtilities.runOnUIThread(new DownloadController$$ExternalSyntheticLambda11(this, messageObject.getDocument(), messageObject));
         }
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$onDownloadComplete$7(MessageObject messageObject) {
+    public /* synthetic */ void lambda$onDownloadComplete$7(TLRPC$Document tLRPC$Document, MessageObject messageObject) {
         boolean z;
         boolean z2;
         int i = 0;
         while (true) {
             z = true;
-            if (i >= this.downloadingFiles.size()) {
+            if (i < this.downloadingFiles.size()) {
+                if (this.downloadingFiles.get(i).getDocument() != null && this.downloadingFiles.get(i).getDocument().id == tLRPC$Document.id) {
+                    this.downloadingFiles.remove(i);
+                    z2 = true;
+                    break;
+                }
+                i++;
+            } else {
                 z2 = false;
                 break;
-            } else if (this.downloadingFiles.get(i).getDocument().id == messageObject.getDocument().id) {
-                this.downloadingFiles.remove(i);
-                z2 = true;
-                break;
-            } else {
-                i++;
             }
         }
         if (z2) {
             int i2 = 0;
             while (true) {
-                if (i2 >= this.recentDownloadingFiles.size()) {
+                if (i2 < this.recentDownloadingFiles.size()) {
+                    if (this.recentDownloadingFiles.get(i2).getDocument() != null && this.recentDownloadingFiles.get(i2).getDocument().id == tLRPC$Document.id) {
+                        break;
+                    }
+                    i2++;
+                } else {
                     z = false;
                     break;
-                } else if (this.recentDownloadingFiles.get(i2).getDocument().id == messageObject.getDocument().id) {
-                    break;
-                } else {
-                    i2++;
                 }
             }
             if (!z) {
@@ -1516,7 +1518,7 @@ public class DownloadController extends BaseController implements NotificationCe
                 putToUnviewedDownloads(messageObject);
             }
             getNotificationCenter().postNotificationName(NotificationCenter.onDownloadingFilesChanged, new Object[0]);
-            getMessagesStorage().getStorageQueue().postRunnable(new DownloadController$$ExternalSyntheticLambda6(this, messageObject));
+            getMessagesStorage().getStorageQueue().postRunnable(new DownloadController$$ExternalSyntheticLambda5(this, messageObject));
         }
     }
 
@@ -1559,8 +1561,8 @@ public class DownloadController extends BaseController implements NotificationCe
 
     public void onDownloadFail(MessageObject messageObject, int i) {
         if (messageObject != null) {
-            AndroidUtilities.runOnUIThread(new DownloadController$$ExternalSyntheticLambda10(this, messageObject, i));
-            getMessagesStorage().getStorageQueue().postRunnable(new DownloadController$$ExternalSyntheticLambda8(this, messageObject));
+            AndroidUtilities.runOnUIThread(new DownloadController$$ExternalSyntheticLambda9(this, messageObject, i));
+            getMessagesStorage().getStorageQueue().postRunnable(new DownloadController$$ExternalSyntheticLambda7(this, messageObject));
         }
     }
 

@@ -334,6 +334,10 @@
     <string name="AddContactTitle">Add Contact</string>
     <string name="AddEmojiInstalled">Emoji added.</string>
     <string name="AddEmojiInstalledInfo">%1$s has been added to your emoji packs.</string>
+    <string name="AddEmojiMultipleInstalledInfo_few">%1$d emoji packs have been added to your emoji.</string>
+    <string name="AddEmojiMultipleInstalledInfo_many">%1$d emoji packs have been added to your emoji.</string>
+    <string name="AddEmojiMultipleInstalledInfo_other">%1$d emoji pack has been added to your emoji.</string>
+    <string name="AddEmojiMultipleInstalledInfo_two">%1$d emoji packs have been added to your emoji.</string>
     <string name="AddEmojiNotFound">Emoji pack not found.</string>
     <string name="AddExceptions">Add exceptions</string>
     <string name="AddMasks">Add Masks</string>
@@ -1707,6 +1711,10 @@
     <string name="EmojiPackCount_zero">%1$d Emoji Pack</string>
     <string name="EmojiRemoved">Emoji removed.</string>
     <string name="EmojiRemovedInfo">%1$s is no longer in your emoji packs.</string>
+    <string name="EmojiRemovedMultipleInfo_few">%1$d emoji packs have been added to your emoji.</string>
+    <string name="EmojiRemovedMultipleInfo_many">%1$d emoji packs have been added to your emoji.</string>
+    <string name="EmojiRemovedMultipleInfo_other">%1$d emoji pack has been added to your emoji.</string>
+    <string name="EmojiRemovedMultipleInfo_two">%1$d emoji packs have been added to your emoji.</string>
     <string name="EmojiSuggestions">Emoji suggestions</string>
     <string name="EmojiSuggestionsInfo">**Telegram** lets you find emoji by thousands of keywords, but there is always something missing. If you want to suggest a new emoji replacement, you can help us by visiting:</string>
     <string name="EmojiSuggestionsUrl">https://translations.telegram.org/%1$s/emoji</string>

@@ -746,11 +746,11 @@ public class Emoji {
     public static java.lang.CharSequence replaceEmoji(java.lang.CharSequence r7, android.graphics.Paint.FontMetricsInt r8, int r9, boolean r10, int[] r11) {
         /*
             boolean r0 = org.telegram.messenger.SharedConfig.useSystemEmoji
-            if (r0 != 0) goto L_0x0093
-            if (r7 == 0) goto L_0x0093
+            if (r0 != 0) goto L_0x008f
+            if (r7 == 0) goto L_0x008f
             int r0 = r7.length()
             if (r0 != 0) goto L_0x000e
-            goto L_0x0093
+            goto L_0x008f
         L_0x000e:
             if (r10 != 0) goto L_0x0017
             boolean r10 = r7 instanceof android.text.Spannable
@@ -771,7 +771,7 @@ public class Emoji {
             r0 = 0
         L_0x0035:
             int r2 = r10.size()
-            if (r0 >= r2) goto L_0x0093
+            if (r0 >= r2) goto L_0x008f
             java.lang.Object r2 = r10.get(r0)     // Catch:{ Exception -> 0x007b }
             org.telegram.messenger.Emoji$EmojiSpanRange r2 = (org.telegram.messenger.Emoji.EmojiSpanRange) r2     // Catch:{ Exception -> 0x007b }
             if (r11 == 0) goto L_0x0064
@@ -796,7 +796,7 @@ public class Emoji {
             r3 = 0
         L_0x0061:
             if (r3 == 0) goto L_0x0064
-            goto L_0x0090
+            goto L_0x008c
         L_0x0064:
             java.lang.CharSequence r3 = r2.code     // Catch:{ Exception -> 0x007b }
             org.telegram.messenger.Emoji$EmojiDrawable r3 = getEmojiDrawable(r3)     // Catch:{ Exception -> 0x007b }
@@ -812,20 +812,16 @@ public class Emoji {
             r2 = move-exception
             org.telegram.messenger.FileLog.e((java.lang.Throwable) r2)
         L_0x007f:
-            int r2 = android.os.Build.VERSION.SDK_INT
-            r3 = 23
-            if (r2 < r3) goto L_0x0089
-            r3 = 29
-            if (r2 < r3) goto L_0x0090
-        L_0x0089:
+            int r2 = org.telegram.messenger.SharedConfig.getDevicePerformanceClass()
+            if (r2 != 0) goto L_0x008c
             int r2 = r0 + 1
             r3 = 50
-            if (r2 < r3) goto L_0x0090
-            goto L_0x0093
-        L_0x0090:
+            if (r2 < r3) goto L_0x008c
+            goto L_0x008f
+        L_0x008c:
             int r0 = r0 + 1
             goto L_0x0035
-        L_0x0093:
+        L_0x008f:
             return r7
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.Emoji.replaceEmoji(java.lang.CharSequence, android.graphics.Paint$FontMetricsInt, int, boolean, int[]):java.lang.CharSequence");

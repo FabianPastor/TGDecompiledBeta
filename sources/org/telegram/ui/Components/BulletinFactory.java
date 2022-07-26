@@ -287,7 +287,7 @@ public final class BulletinFactory {
             r1 = 5
             r2 = 4
             r3 = 3
-            r4 = 2131627098(0x7f0e0c5a, float:1.888145E38)
+            r4 = 2131627106(0x7f0e0CLASSNAME, float:1.8881467E38)
             java.lang.String r5 = "NotificationsMutedForHint"
             r6 = 2
             r7 = 0
@@ -309,14 +309,14 @@ public final class BulletinFactory {
             r10.<init>()
             throw r10
         L_0x0036:
-            r11 = 2131627123(0x7f0e0CLASSNAME, float:1.8881502E38)
+            r11 = 2131627131(0x7f0e0c7b, float:1.8881518E38)
             java.lang.String r12 = "NotificationsUnmutedHint"
             java.lang.String r11 = org.telegram.messenger.LocaleController.getString(r12, r11)
             r12 = 0
             r13 = 0
             goto L_0x007e
         L_0x0042:
-            r11 = 2131627099(0x7f0e0c5b, float:1.8881453E38)
+            r11 = 2131627107(0x7f0e0CLASSNAME, float:1.888147E38)
             java.lang.String r12 = "NotificationsMutedHint"
             java.lang.String r11 = org.telegram.messenger.LocaleController.getString(r12, r11)
             goto L_0x007c
@@ -426,12 +426,12 @@ public final class BulletinFactory {
             r10[r4] = r0
             r9.setAnimation(r3, r6, r6, r10)
             android.widget.TextView r10 = r9.titleTextView
-            r0 = 2131627607(0x7f0e0e57, float:1.8882483E38)
+            r0 = 2131627615(0x7f0e0e5f, float:1.88825E38)
             java.lang.String r1 = "PinnedMessagesHidden"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             r10.setText(r0)
             android.widget.TextView r10 = r9.subtitleTextView
-            r0 = 2131627608(0x7f0e0e58, float:1.8882485E38)
+            r0 = 2131627616(0x7f0e0e60, float:1.8882501E38)
             java.lang.String r1 = "PinnedMessagesHiddenInfo"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             r10.setText(r0)
@@ -504,7 +504,7 @@ public final class BulletinFactory {
             long r2 = r6.clientUserId
             int r6 = (r7 > r2 ? 1 : (r7 == r2 ? 0 : -1))
             if (r6 != 0) goto L_0x0034
-            r4 = 2131626291(0x7f0e0933, float:1.8879814E38)
+            r4 = 2131626299(0x7f0e093b, float:1.887983E38)
             java.lang.String r6 = "InvLinkToSavedMessages"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r6, r4)
             android.text.SpannableStringBuilder r4 = org.telegram.messenger.AndroidUtilities.replaceTags(r4)
@@ -521,7 +521,7 @@ public final class BulletinFactory {
             long r7 = -r7
             java.lang.Long r7 = java.lang.Long.valueOf(r7)
             org.telegram.tgnet.TLRPC$Chat r6 = r6.getChat(r7)
-            r7 = 2131626290(0x7f0e0932, float:1.8879812E38)
+            r7 = 2131626298(0x7f0e093a, float:1.8879828E38)
             java.lang.Object[] r8 = new java.lang.Object[r11]
             java.lang.String r6 = r6.title
             r8[r1] = r6
@@ -534,7 +534,7 @@ public final class BulletinFactory {
             org.telegram.messenger.MessagesController r6 = org.telegram.messenger.MessagesController.getInstance(r6)
             java.lang.Long r7 = java.lang.Long.valueOf(r7)
             org.telegram.tgnet.TLRPC$User r6 = r6.getUser(r7)
-            r7 = 2131626292(0x7f0e0934, float:1.8879816E38)
+            r7 = 2131626300(0x7f0e093c, float:1.8879832E38)
             java.lang.Object[] r8 = new java.lang.Object[r11]
             java.lang.String r6 = org.telegram.messenger.UserObject.getFirstName(r6)
             r8[r1] = r6
@@ -546,7 +546,7 @@ public final class BulletinFactory {
             r9.setAnimation((int) r10, (int) r0, (int) r0, (java.lang.String[]) r7)
             goto L_0x00a4
         L_0x0086:
-            r7 = 2131626289(0x7f0e0931, float:1.887981E38)
+            r7 = 2131626297(0x7f0e0939, float:1.8879826E38)
             java.lang.Object[] r8 = new java.lang.Object[r11]
             java.lang.Object[] r11 = new java.lang.Object[r1]
             java.lang.String r2 = "Chats"
@@ -595,13 +595,13 @@ public final class BulletinFactory {
             int r7 = (r8 > r3 ? 1 : (r8 == r3 ? 0 : -1))
             if (r7 != 0) goto L_0x0045
             if (r10 > r2) goto L_0x002d
-            r5 = 2131626080(0x7f0e0860, float:1.8879386E38)
+            r5 = 2131626088(0x7f0e0868, float:1.8879402E38)
             java.lang.String r7 = "FwdMessageToSavedMessages"
             java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r7, r5)
             android.text.SpannableStringBuilder r5 = org.telegram.messenger.AndroidUtilities.replaceTags(r5)
             goto L_0x003a
         L_0x002d:
-            r5 = 2131626084(0x7f0e0864, float:1.8879394E38)
+            r5 = 2131626092(0x7f0e086c, float:1.887941E38)
             java.lang.String r7 = "FwdMessagesToSavedMessages"
             java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r7, r5)
             android.text.SpannableStringBuilder r5 = org.telegram.messenger.AndroidUtilities.replaceTags(r5)
@@ -620,7 +620,7 @@ public final class BulletinFactory {
             java.lang.Long r8 = java.lang.Long.valueOf(r8)
             org.telegram.tgnet.TLRPC$Chat r7 = r7.getChat(r8)
             if (r10 > r2) goto L_0x0070
-            r8 = 2131626079(0x7f0e085f, float:1.8879384E38)
+            r8 = 2131626087(0x7f0e0867, float:1.88794E38)
             java.lang.Object[] r9 = new java.lang.Object[r2]
             java.lang.String r7 = r7.title
             r9[r1] = r7
@@ -629,7 +629,7 @@ public final class BulletinFactory {
             android.text.SpannableStringBuilder r7 = org.telegram.messenger.AndroidUtilities.replaceTags(r7)
             goto L_0x00bf
         L_0x0070:
-            r8 = 2131626083(0x7f0e0863, float:1.8879392E38)
+            r8 = 2131626091(0x7f0e086b, float:1.8879408E38)
             java.lang.Object[] r9 = new java.lang.Object[r2]
             java.lang.String r7 = r7.title
             r9[r1] = r7
@@ -643,7 +643,7 @@ public final class BulletinFactory {
             java.lang.Long r8 = java.lang.Long.valueOf(r8)
             org.telegram.tgnet.TLRPC$User r7 = r7.getUser(r8)
             if (r10 > r2) goto L_0x00aa
-            r8 = 2131626081(0x7f0e0861, float:1.8879388E38)
+            r8 = 2131626089(0x7f0e0869, float:1.8879404E38)
             java.lang.Object[] r9 = new java.lang.Object[r2]
             java.lang.String r7 = org.telegram.messenger.UserObject.getFirstName(r7)
             r9[r1] = r7
@@ -652,7 +652,7 @@ public final class BulletinFactory {
             android.text.SpannableStringBuilder r7 = org.telegram.messenger.AndroidUtilities.replaceTags(r7)
             goto L_0x00bf
         L_0x00aa:
-            r8 = 2131626085(0x7f0e0865, float:1.8879396E38)
+            r8 = 2131626093(0x7f0e086d, float:1.8879412E38)
             java.lang.Object[] r9 = new java.lang.Object[r2]
             java.lang.String r7 = org.telegram.messenger.UserObject.getFirstName(r7)
             r9[r1] = r7
@@ -666,7 +666,7 @@ public final class BulletinFactory {
         L_0x00c5:
             java.lang.String r8 = "Chats"
             if (r10 > r2) goto L_0x00e1
-            r9 = 2131626078(0x7f0e085e, float:1.8879382E38)
+            r9 = 2131626086(0x7f0e0866, float:1.8879398E38)
             java.lang.Object[] r10 = new java.lang.Object[r2]
             java.lang.Object[] r2 = new java.lang.Object[r1]
             java.lang.String r7 = org.telegram.messenger.LocaleController.formatPluralString(r8, r7, r2)
@@ -676,7 +676,7 @@ public final class BulletinFactory {
             android.text.SpannableStringBuilder r7 = org.telegram.messenger.AndroidUtilities.replaceTags(r7)
             goto L_0x00f8
         L_0x00e1:
-            r9 = 2131626082(0x7f0e0862, float:1.887939E38)
+            r9 = 2131626090(0x7f0e086a, float:1.8879406E38)
             java.lang.Object[] r10 = new java.lang.Object[r2]
             java.lang.Object[] r2 = new java.lang.Object[r1]
             java.lang.String r7 = org.telegram.messenger.LocaleController.formatPluralString(r8, r7, r2)

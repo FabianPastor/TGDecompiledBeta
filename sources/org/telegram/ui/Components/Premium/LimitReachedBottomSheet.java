@@ -566,13 +566,13 @@ public class LimitReachedBottomSheet extends BottomSheetWithRecyclerListView {
                 r4.setTypeface(r5)
                 int r1 = r1.type
                 if (r1 != r3) goto L_0x0179
-                r1 = 2131625848(0x7f0e0778, float:1.8878916E38)
+                r1 = 2131625856(0x7f0e0780, float:1.8878932E38)
                 java.lang.String r3 = "FileTooLarge"
                 java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r3, r1)
                 r4.setText(r1)
                 goto L_0x0185
             L_0x0179:
-                r1 = 2131626449(0x7f0e09d1, float:1.8880135E38)
+                r1 = 2131626457(0x7f0e09d9, float:1.888015E38)
                 java.lang.String r3 = "LimitReached"
                 java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r3, r1)
                 r4.setText(r1)

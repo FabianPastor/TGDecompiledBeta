@@ -1,18 +1,15 @@
 package org.telegram.messenger;
 
-import java.util.ArrayList;
 import org.telegram.messenger.Utilities;
 
 public final /* synthetic */ class MediaDataController$$ExternalSyntheticLambda131 implements Runnable {
     public final /* synthetic */ Utilities.Callback f$0;
-    public final /* synthetic */ ArrayList f$1;
 
-    public /* synthetic */ MediaDataController$$ExternalSyntheticLambda131(Utilities.Callback callback, ArrayList arrayList) {
+    public /* synthetic */ MediaDataController$$ExternalSyntheticLambda131(Utilities.Callback callback) {
         this.f$0 = callback;
-        this.f$1 = arrayList;
     }
 
     public final void run() {
-        MediaDataController.lambda$loadStickers$70(this.f$0, this.f$1);
+        MediaDataController.lambda$loadStickers$72(this.f$0);
     }
 }

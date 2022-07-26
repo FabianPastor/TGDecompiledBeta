@@ -5304,7 +5304,7 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
             r7.sendCallback(r3, r4, r5, r6)
             goto L_0x049d
         L_0x001d:
-            r8 = 2131627127(0x7f0e0CLASSNAME, float:1.888151E38)
+            r8 = 2131627135(0x7f0e0c7f, float:1.8881526E38)
             java.lang.String r9 = "OK"
             r10 = 0
             r11 = 1
@@ -5493,24 +5493,24 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
             java.lang.String r0 = r2.text
             java.lang.String r1 = "PASSWORD_HASH_INVALID"
             boolean r0 = r1.equals(r0)
-            r12 = 2131624832(0x7f0e0380, float:1.8876855E38)
+            r12 = 2131624836(0x7f0e0384, float:1.8876863E38)
             java.lang.String r13 = "Cancel"
             if (r0 == 0) goto L_0x01f1
             if (r37 != 0) goto L_0x049d
             org.telegram.ui.ActionBar.AlertDialog$Builder r8 = new org.telegram.ui.ActionBar.AlertDialog$Builder
             android.app.Activity r0 = r33.getParentActivity()
             r8.<init>((android.content.Context) r0)
-            r0 = 2131624732(0x7f0e031c, float:1.8876652E38)
+            r0 = 2131624736(0x7f0e0320, float:1.887666E38)
             java.lang.String r1 = "BotOwnershipTransfer"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             r8.setTitle(r0)
-            r0 = 2131624735(0x7f0e031f, float:1.8876658E38)
+            r0 = 2131624739(0x7f0e0323, float:1.8876666E38)
             java.lang.Object[] r1 = new java.lang.Object[r3]
             java.lang.String r2 = "BotOwnershipTransferReadyAlertText"
             java.lang.String r0 = org.telegram.messenger.LocaleController.formatString(r2, r0, r1)
             android.text.SpannableStringBuilder r0 = org.telegram.messenger.AndroidUtilities.replaceTags(r0)
             r8.setMessage(r0)
-            r0 = 2131624734(0x7f0e031e, float:1.8876656E38)
+            r0 = 2131624738(0x7f0e0322, float:1.8876664E38)
             java.lang.String r1 = "BotOwnershipTransferChangeOwner"
             java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r1, r0)
             org.telegram.messenger.SendMessagesHelper$$ExternalSyntheticLambda0 r11 = new org.telegram.messenger.SendMessagesHelper$$ExternalSyntheticLambda0
@@ -5574,7 +5574,7 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
             org.telegram.ui.ActionBar.AlertDialog$Builder r0 = new org.telegram.ui.ActionBar.AlertDialog$Builder
             android.app.Activity r4 = r33.getParentActivity()
             r0.<init>((android.content.Context) r4)
-            r4 = 2131625579(0x7f0e066b, float:1.887837E38)
+            r4 = 2131625583(0x7f0e066f, float:1.8878378E38)
             java.lang.String r5 = "EditAdminTransferAlertTitle"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r5, r4)
             r0.setTitle(r4)
@@ -5607,7 +5607,7 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
         L_0x02a6:
             r10 = r16 | 48
             r5.setGravity(r10)
-            r10 = 2131624733(0x7f0e031d, float:1.8876654E38)
+            r10 = 2131624737(0x7f0e0321, float:1.8876662E38)
             java.lang.Object[] r12 = new java.lang.Object[r3]
             java.lang.String r8 = "BotOwnershipTransferAlertText"
             java.lang.String r8 = org.telegram.messenger.LocaleController.formatString(r8, r10, r12)
@@ -5675,7 +5675,7 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
         L_0x0340:
             r10 = r10 | 48
             r8.setGravity(r10)
-            r10 = 2131625576(0x7f0e0668, float:1.8878364E38)
+            r10 = 2131625580(0x7f0e066c, float:1.8878372E38)
             java.lang.String r11 = "EditAdminTransferAlertText1"
             java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r11, r10)
             android.text.SpannableStringBuilder r10 = org.telegram.messenger.AndroidUtilities.replaceTags(r10)
@@ -5753,7 +5753,7 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
         L_0x03ef:
             r10 = r10 | 48
             r3.setGravity(r10)
-            r10 = 2131625577(0x7f0e0669, float:1.8878366E38)
+            r10 = 2131625581(0x7f0e066d, float:1.8878374E38)
             java.lang.String r11 = "EditAdminTransferAlertText2"
             java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r11, r10)
             android.text.SpannableStringBuilder r10 = org.telegram.messenger.AndroidUtilities.replaceTags(r10)
@@ -5780,13 +5780,13 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
             java.lang.String r2 = r2.text
             boolean r1 = r1.equals(r2)
             if (r1 == 0) goto L_0x0450
-            r1 = 2131625584(0x7f0e0670, float:1.887838E38)
+            r1 = 2131625588(0x7f0e0674, float:1.8878388E38)
             java.lang.String r2 = "EditAdminTransferSetPassword"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             org.telegram.messenger.SendMessagesHelper$$ExternalSyntheticLambda1 r2 = new org.telegram.messenger.SendMessagesHelper$$ExternalSyntheticLambda1
             r2.<init>(r6)
             r0.setPositiveButton(r1, r2)
-            r1 = 2131624832(0x7f0e0380, float:1.8876855E38)
+            r1 = 2131624836(0x7f0e0384, float:1.8876863E38)
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r13, r1)
             r2 = 0
             r0.setNegativeButton(r1, r2)
@@ -5806,7 +5806,7 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
         L_0x046c:
             r2 = r17 | 48
             r1.setGravity(r2)
-            r2 = 2131625578(0x7f0e066a, float:1.8878368E38)
+            r2 = 2131625582(0x7f0e066e, float:1.8878376E38)
             java.lang.String r3 = "EditAdminTransferAlertText3"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             r1.setText(r2)
@@ -5818,7 +5818,7 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
             r15 = 0
             android.widget.LinearLayout$LayoutParams r2 = org.telegram.ui.Components.LayoutHelper.createLinear(r10, r11, r12, r13, r14, r15)
             r4.addView(r1, r2)
-            r1 = 2131627127(0x7f0e0CLASSNAME, float:1.888151E38)
+            r1 = 2131627135(0x7f0e0c7f, float:1.8881526E38)
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r9, r1)
             r2 = 0
             r0.setNegativeButton(r1, r2)

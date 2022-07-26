@@ -8,6 +8,6 @@ public final /* synthetic */ class PaymentFormActivity$$ExternalSyntheticLambda3
     }
 
     public final void run() {
-        this.f$0.lambda$onTransitionAnimationEnd$38();
+        this.f$0.lambda$goToNextStep$40();
     }
 }

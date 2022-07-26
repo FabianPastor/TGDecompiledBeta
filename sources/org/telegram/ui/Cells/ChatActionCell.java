@@ -215,26 +215,29 @@ public class ChatActionCell extends BaseCell implements DownloadController.FileD
         ChatActionCellDelegate chatActionCellDelegate;
         if (z && (lottieAnimation = this.imageReceiver.getLottieAnimation()) != null) {
             MessageObject messageObject = this.currentMessageObject;
-            if ((messageObject == null || !messageObject.wasUnread) && !this.forceWasUnread) {
+            if (messageObject == null || messageObject.playedGiftAnimation) {
                 lottieAnimation.stop();
                 lottieAnimation.setCurrentFrame(lottieAnimation.getFramesCount() - 1, false);
                 return;
             }
-            messageObject.wasUnread = false;
-            this.forceWasUnread = false;
-            try {
-                performHapticFeedback(3, 2);
-            } catch (Exception unused) {
-            }
-            if (getContext() instanceof LaunchActivity) {
-                ((LaunchActivity) getContext()).getFireworksOverlay().start();
-            }
-            TLRPC$VideoSize tLRPC$VideoSize = this.giftEffectAnimation;
-            if (!(tLRPC$VideoSize == null || (chatActionCellDelegate = this.delegate) == null)) {
-                chatActionCellDelegate.needShowEffectOverlay(this, this.giftSticker, tLRPC$VideoSize);
-            }
+            messageObject.playedGiftAnimation = true;
             lottieAnimation.setCurrentFrame(0, false);
             AndroidUtilities.runOnUIThread(new ChatActionCell$$ExternalSyntheticLambda2(lottieAnimation));
+            if (messageObject.wasUnread || this.forceWasUnread) {
+                messageObject.wasUnread = false;
+                this.forceWasUnread = false;
+                try {
+                    performHapticFeedback(3, 2);
+                } catch (Exception unused) {
+                }
+                if (getContext() instanceof LaunchActivity) {
+                    ((LaunchActivity) getContext()).getFireworksOverlay().start();
+                }
+                TLRPC$VideoSize tLRPC$VideoSize = this.giftEffectAnimation;
+                if (tLRPC$VideoSize != null && (chatActionCellDelegate = this.delegate) != null) {
+                    chatActionCellDelegate.needShowEffectOverlay(this, this.giftSticker, tLRPC$VideoSize);
+                }
+            }
         }
     }
 
@@ -866,7 +869,7 @@ public class ChatActionCell extends BaseCell implements DownloadController.FileD
             r10.imagePressed = r6
             int r3 = r0.type
             if (r3 != r4) goto L_0x0085
-            r10.openGift()
+            r10.openPremiumGiftPreview()
             goto L_0x00c8
         L_0x0085:
             org.telegram.ui.Cells.ChatActionCell$ChatActionCellDelegate r3 = r10.delegate
@@ -902,7 +905,7 @@ public class ChatActionCell extends BaseCell implements DownloadController.FileD
             org.telegram.ui.Cells.ChatActionCell$ChatActionCellDelegate r3 = r10.delegate
             if (r3 == 0) goto L_0x00c8
             r10.playSoundEffect(r6)
-            r10.openGift()
+            r10.openPremiumGiftPreview()
         L_0x00c8:
             r3 = 0
         L_0x00c9:
@@ -991,12 +994,6 @@ public class ChatActionCell extends BaseCell implements DownloadController.FileD
             return r3
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Cells.ChatActionCell.onTouchEvent(android.view.MotionEvent):boolean");
-    }
-
-    private void openGift() {
-        if (this.imageReceiver.getLottieAnimation() == null || !this.imageReceiver.getLottieAnimation().isRunning()) {
-            openPremiumGiftPreview();
-        }
     }
 
     private void openPremiumGiftPreview() {
