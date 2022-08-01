@@ -6722,6 +6722,7 @@ public final class R {
         public static final int UnlockFingerprint = NUM;
         public static final int UnlockPremiumEmoji = NUM;
         public static final int UnlockPremiumEmojiHint = NUM;
+        public static final int UnlockPremiumEmojiHint2 = NUM;
         public static final int UnlockPremiumEmojiPack = NUM;
         public static final int UnlockPremiumIcons = NUM;
         public static final int UnlockPremiumReactions = NUM;

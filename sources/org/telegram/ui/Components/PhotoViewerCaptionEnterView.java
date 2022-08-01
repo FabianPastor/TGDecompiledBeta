@@ -3,7 +3,10 @@ package org.telegram.ui.Components;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.ValueAnimator;
+import android.app.Activity;
+import android.app.Dialog;
 import android.content.Context;
+import android.content.ContextWrapper;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -42,11 +45,15 @@ import org.telegram.tgnet.TLRPC$Document;
 import org.telegram.tgnet.TLRPC$InputStickerSet;
 import org.telegram.tgnet.TLRPC$StickerSet;
 import org.telegram.tgnet.TLRPC$StickerSetCovered;
+import org.telegram.ui.ActionBar.ActionBarLayout;
 import org.telegram.ui.ActionBar.AdjustPanLayoutHelper;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.EmojiView;
+import org.telegram.ui.Components.Premium.PremiumFeatureBottomSheet;
 import org.telegram.ui.Components.SizeNotifierFrameLayoutPhoto;
+import org.telegram.ui.LaunchActivity;
+import org.telegram.ui.PhotoViewer;
 
 public class PhotoViewerCaptionEnterView extends FrameLayout implements NotificationCenter.NotificationCenterDelegate, SizeNotifierFrameLayoutPhoto.SizeNotifierFrameLayoutPhotoDelegate {
     /* access modifiers changed from: private */
@@ -745,6 +752,10 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
                     return EmojiView.EmojiViewDelegate.CC.$default$isSearchOpened(this);
                 }
 
+                public /* synthetic */ boolean isUserSelf() {
+                    return EmojiView.EmojiViewDelegate.CC.$default$isUserSelf(this);
+                }
+
                 public /* synthetic */ void onClearEmojiRecent() {
                     EmojiView.EmojiViewDelegate.CC.$default$onClearEmojiRecent(this);
                 }
@@ -799,6 +810,47 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
                     }
                     PhotoViewerCaptionEnterView.this.messageEditText.dispatchKeyEvent(new KeyEvent(0, 67));
                     return true;
+                }
+
+                public void onAnimatedEmojiUnlockClick() {
+                    new PremiumFeatureBottomSheet(new BaseFragment() {
+                        public int getCurrentAccount() {
+                            return this.currentAccount;
+                        }
+
+                        public Context getContext() {
+                            return PhotoViewerCaptionEnterView.this.getContext();
+                        }
+
+                        public Activity getParentActivity() {
+                            for (Context context = getContext(); context instanceof ContextWrapper; context = ((ContextWrapper) context).getBaseContext()) {
+                                if (context instanceof Activity) {
+                                    return (Activity) context;
+                                }
+                            }
+                            return null;
+                        }
+
+                        public Dialog getVisibleDialog() {
+                            return new Dialog(PhotoViewerCaptionEnterView.this.getContext()) {
+                                public void dismiss() {
+                                    if ((AnonymousClass1.this.getParentActivity() instanceof LaunchActivity) && ((LaunchActivity) AnonymousClass1.this.getParentActivity()).getActionBarLayout() != null) {
+                                        AnonymousClass1 r0 = AnonymousClass1.this;
+                                        ActionBarLayout unused = r0.parentLayout = ((LaunchActivity) r0.getParentActivity()).getActionBarLayout();
+                                        if (!(AnonymousClass1.this.parentLayout == null || AnonymousClass1.this.parentLayout.getLastFragment() == null || AnonymousClass1.this.parentLayout.getLastFragment().getVisibleDialog() == null)) {
+                                            Dialog visibleDialog = AnonymousClass1.this.parentLayout.getLastFragment().getVisibleDialog();
+                                            if (visibleDialog instanceof ChatAttachAlert) {
+                                                ((ChatAttachAlert) visibleDialog).dismiss(true);
+                                            } else {
+                                                visibleDialog.dismiss();
+                                            }
+                                        }
+                                    }
+                                    PhotoViewer.getInstance().closePhoto(false, false);
+                                }
+                            };
+                        }
+                    }, 11, false).show();
                 }
 
                 public void onCustomEmojiSelected(long j, TLRPC$Document tLRPC$Document, String str) {

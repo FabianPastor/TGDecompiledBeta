@@ -1,12 +1,15 @@
 package org.telegram.ui;
 
 public final /* synthetic */ class LaunchActivity$$ExternalSyntheticLambda63 implements Runnable {
-    public static final /* synthetic */ LaunchActivity$$ExternalSyntheticLambda63 INSTANCE = new LaunchActivity$$ExternalSyntheticLambda63();
+    public final /* synthetic */ LaunchActivity f$0;
+    public final /* synthetic */ ThemePreviewActivity f$1;
 
-    private /* synthetic */ LaunchActivity$$ExternalSyntheticLambda63() {
+    public /* synthetic */ LaunchActivity$$ExternalSyntheticLambda63(LaunchActivity launchActivity, ThemePreviewActivity themePreviewActivity) {
+        this.f$0 = launchActivity;
+        this.f$1 = themePreviewActivity;
     }
 
     public final void run() {
-        LaunchActivity.lambda$onResume$81();
+        this.f$0.lambda$runLinkRequest$61(this.f$1);
     }
 }

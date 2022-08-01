@@ -1130,13 +1130,13 @@ public class ChatActionCell extends BaseCell implements DownloadController.FileD
         if (messageObject != null) {
             TLRPC$Message tLRPC$Message = messageObject.messageOwner;
             if (tLRPC$Message == null || (tLRPC$MessageMedia = tLRPC$Message.media) == null || tLRPC$MessageMedia.ttl_seconds == 0) {
-                charSequence = messageObject.messageText;
+                charSequence = AnimatedEmojiSpan.cloneSpans(messageObject.messageText);
             } else if (tLRPC$MessageMedia.photo instanceof TLRPC$TL_photoEmpty) {
                 charSequence = LocaleController.getString("AttachPhotoExpired", NUM);
             } else if (tLRPC$MessageMedia.document instanceof TLRPC$TL_documentEmpty) {
                 charSequence = LocaleController.getString("AttachVideoExpired", NUM);
             } else {
-                charSequence = messageObject.messageText;
+                charSequence = AnimatedEmojiSpan.cloneSpans(messageObject.messageText);
             }
         } else {
             charSequence = this.customText;

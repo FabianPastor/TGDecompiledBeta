@@ -363,10 +363,10 @@ public class Emoji {
             r0 = r24
             java.util.ArrayList r1 = new java.util.ArrayList
             r1.<init>()
-            if (r0 == 0) goto L_0x0253
+            if (r0 == 0) goto L_0x025f
             int r2 = r24.length()
             if (r2 > 0) goto L_0x0011
-            goto L_0x0253
+            goto L_0x025f
         L_0x0011:
             java.lang.StringBuilder r2 = new java.lang.StringBuilder
             r3 = 16
@@ -381,8 +381,8 @@ public class Emoji {
             r15 = 0
             r16 = 0
         L_0x0027:
-            if (r10 >= r4) goto L_0x0248
-            char r8 = r0.charAt(r10)     // Catch:{ Exception -> 0x0244 }
+            if (r10 >= r4) goto L_0x0254
+            char r8 = r0.charAt(r10)     // Catch:{ Exception -> 0x0250 }
             r3 = 55356(0xd83c, float:7.757E-41)
             r7 = 1
             if (r8 < r3) goto L_0x003b
@@ -413,19 +413,19 @@ public class Emoji {
             if (r13 != r3) goto L_0x0064
             r13 = r10
         L_0x0064:
-            r2.append(r8)     // Catch:{ Exception -> 0x0244 }
+            r2.append(r8)     // Catch:{ Exception -> 0x0250 }
             int r14 = r14 + 1
             r3 = 16
             long r11 = r11 << r3
             r17 = r4
-            long r3 = (long) r8     // Catch:{ Exception -> 0x0244 }
+            long r3 = (long) r8     // Catch:{ Exception -> 0x0250 }
             long r11 = r11 | r3
         L_0x0070:
             r3 = 0
-            goto L_0x0106
+            goto L_0x0112
         L_0x0073:
             r17 = r4
-            int r3 = r2.length()     // Catch:{ Exception -> 0x0244 }
+            int r3 = r2.length()     // Catch:{ Exception -> 0x0250 }
             if (r3 <= 0) goto L_0x0092
             r3 = 9792(0x2640, float:1.3722E-41)
             if (r8 == r3) goto L_0x0087
@@ -434,14 +434,14 @@ public class Emoji {
             r3 = 9877(0x2695, float:1.384E-41)
             if (r8 != r3) goto L_0x0092
         L_0x0087:
-            r2.append(r8)     // Catch:{ Exception -> 0x0244 }
+            r2.append(r8)     // Catch:{ Exception -> 0x0250 }
         L_0x008a:
             int r14 = r14 + 1
             r11 = r5
         L_0x008d:
             r3 = 0
             r16 = 1
-            goto L_0x0106
+            goto L_0x0112
         L_0x0092:
             int r3 = (r11 > r5 ? 1 : (r11 == r5 ? 0 : -1))
             if (r3 <= 0) goto L_0x00a3
@@ -449,13 +449,13 @@ public class Emoji {
             r3 = r3 & r8
             r4 = 53248(0xd000, float:7.4616E-41)
             if (r3 != r4) goto L_0x00a3
-            r2.append(r8)     // Catch:{ Exception -> 0x0244 }
+            r2.append(r8)     // Catch:{ Exception -> 0x0250 }
             goto L_0x008a
         L_0x00a3:
             r3 = 8419(0x20e3, float:1.1798E-41)
             if (r8 != r3) goto L_0x00cb
             if (r10 <= 0) goto L_0x0070
-            char r3 = r0.charAt(r15)     // Catch:{ Exception -> 0x0244 }
+            char r3 = r0.charAt(r15)     // Catch:{ Exception -> 0x0250 }
             r4 = 48
             if (r3 < r4) goto L_0x00b5
             r4 = 57
@@ -468,8 +468,8 @@ public class Emoji {
         L_0x00bd:
             int r4 = r10 - r15
             int r14 = r4 + 1
-            r2.append(r3)     // Catch:{ Exception -> 0x0244 }
-            r2.append(r8)     // Catch:{ Exception -> 0x0244 }
+            r2.append(r3)     // Catch:{ Exception -> 0x0250 }
+            r2.append(r8)     // Catch:{ Exception -> 0x0250 }
             r13 = r15
             r16 = 1
             goto L_0x0070
@@ -487,218 +487,224 @@ public class Emoji {
             r3 = -1
             goto L_0x00f4
         L_0x00de:
-            java.util.HashMap<java.lang.Character, java.lang.Boolean> r3 = org.telegram.messenger.EmojiData.dataCharsMap     // Catch:{ Exception -> 0x0244 }
-            java.lang.Character r4 = java.lang.Character.valueOf(r8)     // Catch:{ Exception -> 0x0244 }
-            boolean r3 = r3.containsKey(r4)     // Catch:{ Exception -> 0x0244 }
+            java.util.HashMap<java.lang.Character, java.lang.Boolean> r3 = org.telegram.messenger.EmojiData.dataCharsMap     // Catch:{ Exception -> 0x0250 }
+            java.lang.Character r4 = java.lang.Character.valueOf(r8)     // Catch:{ Exception -> 0x0250 }
+            boolean r3 = r3.containsKey(r4)     // Catch:{ Exception -> 0x0250 }
             if (r3 == 0) goto L_0x00dc
             r3 = -1
             if (r13 != r3) goto L_0x00ee
             r13 = r10
         L_0x00ee:
             int r14 = r14 + 1
-            r2.append(r8)     // Catch:{ Exception -> 0x0244 }
+            r2.append(r8)     // Catch:{ Exception -> 0x0250 }
             goto L_0x008d
         L_0x00f4:
             if (r13 == r3) goto L_0x0100
             r3 = 0
-            r2.setLength(r3)     // Catch:{ Exception -> 0x0244 }
+            r2.setLength(r3)     // Catch:{ Exception -> 0x0250 }
             r3 = 0
             r13 = -1
             r14 = 0
             r16 = 0
-            goto L_0x0106
+            goto L_0x0112
         L_0x0100:
             r3 = 65039(0xfe0f, float:9.1139E-41)
             if (r8 == r3) goto L_0x0070
+            r3 = 10
+            if (r8 == r3) goto L_0x0070
+            r3 = 32
+            if (r8 == r3) goto L_0x0070
+            r3 = 9
+            if (r8 == r3) goto L_0x0070
             r3 = 1
-        L_0x0106:
-            if (r16 == 0) goto L_0x0171
+        L_0x0112:
+            if (r16 == 0) goto L_0x017d
             int r5 = r10 + 2
             r6 = r17
-            if (r5 >= r6) goto L_0x0173
+            if (r5 >= r6) goto L_0x017f
             int r7 = r10 + 1
-            char r4 = r0.charAt(r7)     // Catch:{ Exception -> 0x0244 }
+            char r4 = r0.charAt(r7)     // Catch:{ Exception -> 0x0250 }
             r15 = 55356(0xd83c, float:7.757E-41)
-            if (r4 != r15) goto L_0x0134
-            char r4 = r0.charAt(r5)     // Catch:{ Exception -> 0x0244 }
+            if (r4 != r15) goto L_0x0140
+            char r4 = r0.charAt(r5)     // Catch:{ Exception -> 0x0250 }
             r15 = 57339(0xdffb, float:8.0349E-41)
-            if (r4 < r15) goto L_0x0173
+            if (r4 < r15) goto L_0x017f
             r15 = 57343(0xdfff, float:8.0355E-41)
-            if (r4 > r15) goto L_0x0173
+            if (r4 > r15) goto L_0x017f
             int r10 = r10 + 3
-            java.lang.CharSequence r4 = r0.subSequence(r7, r10)     // Catch:{ Exception -> 0x0244 }
-            r2.append(r4)     // Catch:{ Exception -> 0x0244 }
+            java.lang.CharSequence r4 = r0.subSequence(r7, r10)     // Catch:{ Exception -> 0x0250 }
+            r2.append(r4)     // Catch:{ Exception -> 0x0250 }
             int r14 = r14 + 2
             r15 = r5
-            goto L_0x0174
-        L_0x0134:
-            int r5 = r2.length()     // Catch:{ Exception -> 0x0244 }
+            goto L_0x0180
+        L_0x0140:
+            int r5 = r2.length()     // Catch:{ Exception -> 0x0250 }
             r15 = 2
-            if (r5 < r15) goto L_0x0173
+            if (r5 < r15) goto L_0x017f
             r5 = 0
-            char r15 = r2.charAt(r5)     // Catch:{ Exception -> 0x0244 }
+            char r15 = r2.charAt(r5)     // Catch:{ Exception -> 0x0250 }
             r5 = 55356(0xd83c, float:7.757E-41)
-            if (r15 != r5) goto L_0x0173
+            if (r15 != r5) goto L_0x017f
             r5 = 1
-            char r15 = r2.charAt(r5)     // Catch:{ Exception -> 0x0244 }
+            char r15 = r2.charAt(r5)     // Catch:{ Exception -> 0x0250 }
             r5 = 57332(0xdff4, float:8.0339E-41)
-            if (r15 != r5) goto L_0x0173
+            if (r15 != r5) goto L_0x017f
             r5 = 56128(0xdb40, float:7.8652E-41)
-            if (r4 != r5) goto L_0x0173
-        L_0x0154:
+            if (r4 != r5) goto L_0x017f
+        L_0x0160:
             int r4 = r7 + 2
-            java.lang.CharSequence r7 = r0.subSequence(r7, r4)     // Catch:{ Exception -> 0x0244 }
-            r2.append(r7)     // Catch:{ Exception -> 0x0244 }
+            java.lang.CharSequence r7 = r0.subSequence(r7, r4)     // Catch:{ Exception -> 0x0250 }
+            r2.append(r7)     // Catch:{ Exception -> 0x0250 }
             r7 = 2
             int r14 = r14 + r7
-            int r10 = r24.length()     // Catch:{ Exception -> 0x0244 }
-            if (r4 >= r10) goto L_0x016e
-            char r10 = r0.charAt(r4)     // Catch:{ Exception -> 0x0244 }
-            if (r10 == r5) goto L_0x016c
-            goto L_0x016e
-        L_0x016c:
+            int r10 = r24.length()     // Catch:{ Exception -> 0x0250 }
+            if (r4 >= r10) goto L_0x017a
+            char r10 = r0.charAt(r4)     // Catch:{ Exception -> 0x0250 }
+            if (r10 == r5) goto L_0x0178
+            goto L_0x017a
+        L_0x0178:
             r7 = r4
-            goto L_0x0154
-        L_0x016e:
+            goto L_0x0160
+        L_0x017a:
             int r10 = r4 + -1
-            goto L_0x0173
-        L_0x0171:
+            goto L_0x017f
+        L_0x017d:
             r6 = r17
-        L_0x0173:
+        L_0x017f:
             r15 = r10
-        L_0x0174:
+        L_0x0180:
             r4 = r3
             r5 = r15
             r3 = 0
-        L_0x0177:
+        L_0x0183:
             r7 = 3
-            if (r3 >= r7) goto L_0x01dc
+            if (r3 >= r7) goto L_0x01e8
             int r7 = r5 + 1
-            if (r7 >= r6) goto L_0x01d0
-            char r10 = r0.charAt(r7)     // Catch:{ Exception -> 0x0244 }
+            if (r7 >= r6) goto L_0x01dc
+            char r10 = r0.charAt(r7)     // Catch:{ Exception -> 0x0250 }
             r22 = r11
             r11 = 1
-            if (r3 != r11) goto L_0x01a0
+            if (r3 != r11) goto L_0x01ac
             r11 = 8205(0x200d, float:1.1498E-41)
-            if (r10 != r11) goto L_0x01d2
-            int r11 = r2.length()     // Catch:{ Exception -> 0x0244 }
-            if (r11 <= 0) goto L_0x01d2
-            r2.append(r10)     // Catch:{ Exception -> 0x0244 }
+            if (r10 != r11) goto L_0x01de
+            int r11 = r2.length()     // Catch:{ Exception -> 0x0250 }
+            if (r11 <= 0) goto L_0x01de
+            r2.append(r10)     // Catch:{ Exception -> 0x0250 }
             int r14 = r14 + 1
             r5 = r7
             r4 = 0
             r11 = 65039(0xfe0f, float:9.1139E-41)
             r12 = 42
             r16 = 0
-            goto L_0x01d7
-        L_0x01a0:
+            goto L_0x01e3
+        L_0x01ac:
             r11 = -1
             r12 = 42
-            if (r13 != r11) goto L_0x01b3
-            if (r8 == r12) goto L_0x01b3
+            if (r13 != r11) goto L_0x01bf
+            if (r8 == r12) goto L_0x01bf
             r11 = 35
-            if (r8 == r11) goto L_0x01b3
+            if (r8 == r11) goto L_0x01bf
             r11 = 48
-            if (r8 < r11) goto L_0x01cc
+            if (r8 < r11) goto L_0x01d8
             r11 = 57
-            if (r8 > r11) goto L_0x01cc
-        L_0x01b3:
+            if (r8 > r11) goto L_0x01d8
+        L_0x01bf:
             r11 = 65024(0xfe00, float:9.1118E-41)
-            if (r10 < r11) goto L_0x01cc
+            if (r10 < r11) goto L_0x01d8
             r11 = 65039(0xfe0f, float:9.1139E-41)
-            if (r10 > r11) goto L_0x01d7
+            if (r10 > r11) goto L_0x01e3
             int r14 = r14 + 1
-            if (r16 != 0) goto L_0x01ca
+            if (r16 != 0) goto L_0x01d6
             int r5 = r7 + 1
-            if (r5 < r6) goto L_0x01c7
+            if (r5 < r6) goto L_0x01d3
             r5 = 1
-            goto L_0x01c8
-        L_0x01c7:
+            goto L_0x01d4
+        L_0x01d3:
             r5 = 0
-        L_0x01c8:
+        L_0x01d4:
             r16 = r5
-        L_0x01ca:
+        L_0x01d6:
             r5 = r7
-            goto L_0x01d7
-        L_0x01cc:
+            goto L_0x01e3
+        L_0x01d8:
             r11 = 65039(0xfe0f, float:9.1139E-41)
-            goto L_0x01d7
-        L_0x01d0:
-            r22 = r11
-        L_0x01d2:
-            r11 = 65039(0xfe0f, float:9.1139E-41)
-            r12 = 42
-        L_0x01d7:
-            int r3 = r3 + 1
-            r11 = r22
-            goto L_0x0177
+            goto L_0x01e3
         L_0x01dc:
             r22 = r11
-            if (r4 == 0) goto L_0x01e7
-            if (r9 == 0) goto L_0x01e7
+        L_0x01de:
+            r11 = 65039(0xfe0f, float:9.1139E-41)
+            r12 = 42
+        L_0x01e3:
+            int r3 = r3 + 1
+            r11 = r22
+            goto L_0x0183
+        L_0x01e8:
+            r22 = r11
+            if (r4 == 0) goto L_0x01f3
+            if (r9 == 0) goto L_0x01f3
             r3 = 0
-            r9[r3] = r3     // Catch:{ Exception -> 0x0244 }
+            r9[r3] = r3     // Catch:{ Exception -> 0x0250 }
             r3 = 0
             r9 = r3
-        L_0x01e7:
-            if (r16 == 0) goto L_0x0212
+        L_0x01f3:
+            if (r16 == 0) goto L_0x021e
             int r3 = r5 + 2
-            if (r3 >= r6) goto L_0x0212
+            if (r3 >= r6) goto L_0x021e
             int r4 = r5 + 1
-            char r7 = r0.charAt(r4)     // Catch:{ Exception -> 0x0244 }
+            char r7 = r0.charAt(r4)     // Catch:{ Exception -> 0x0250 }
             r8 = 55356(0xd83c, float:7.757E-41)
-            if (r7 != r8) goto L_0x0212
-            char r7 = r0.charAt(r3)     // Catch:{ Exception -> 0x0244 }
+            if (r7 != r8) goto L_0x021e
+            char r7 = r0.charAt(r3)     // Catch:{ Exception -> 0x0250 }
             r8 = 57339(0xdffb, float:8.0349E-41)
-            if (r7 < r8) goto L_0x0212
+            if (r7 < r8) goto L_0x021e
             r8 = 57343(0xdfff, float:8.0355E-41)
-            if (r7 > r8) goto L_0x0212
+            if (r7 > r8) goto L_0x021e
             int r5 = r5 + 3
-            java.lang.CharSequence r4 = r0.subSequence(r4, r5)     // Catch:{ Exception -> 0x0244 }
-            r2.append(r4)     // Catch:{ Exception -> 0x0244 }
+            java.lang.CharSequence r4 = r0.subSequence(r4, r5)     // Catch:{ Exception -> 0x0250 }
+            r2.append(r4)     // Catch:{ Exception -> 0x0250 }
             int r14 = r14 + 2
             r5 = r3
-        L_0x0212:
-            if (r16 == 0) goto L_0x0238
-            if (r9 == 0) goto L_0x021d
+        L_0x021e:
+            if (r16 == 0) goto L_0x0244
+            if (r9 == 0) goto L_0x0229
             r3 = 0
-            r4 = r9[r3]     // Catch:{ Exception -> 0x0244 }
+            r4 = r9[r3]     // Catch:{ Exception -> 0x0250 }
             r7 = 1
             int r4 = r4 + r7
-            r9[r3] = r4     // Catch:{ Exception -> 0x0244 }
-        L_0x021d:
-            org.telegram.messenger.Emoji$EmojiSpanRange r3 = new org.telegram.messenger.Emoji$EmojiSpanRange     // Catch:{ Exception -> 0x0244 }
+            r9[r3] = r4     // Catch:{ Exception -> 0x0250 }
+        L_0x0229:
+            org.telegram.messenger.Emoji$EmojiSpanRange r3 = new org.telegram.messenger.Emoji$EmojiSpanRange     // Catch:{ Exception -> 0x0250 }
             int r14 = r14 + r13
-            int r4 = r2.length()     // Catch:{ Exception -> 0x0244 }
+            int r4 = r2.length()     // Catch:{ Exception -> 0x0250 }
             r7 = 0
-            java.lang.CharSequence r4 = r2.subSequence(r7, r4)     // Catch:{ Exception -> 0x0244 }
-            r3.<init>(r13, r14, r4)     // Catch:{ Exception -> 0x0244 }
-            r1.add(r3)     // Catch:{ Exception -> 0x0244 }
-            r2.setLength(r7)     // Catch:{ Exception -> 0x0244 }
+            java.lang.CharSequence r4 = r2.subSequence(r7, r4)     // Catch:{ Exception -> 0x0250 }
+            r3.<init>(r13, r14, r4)     // Catch:{ Exception -> 0x0250 }
+            r1.add(r3)     // Catch:{ Exception -> 0x0250 }
+            r2.setLength(r7)     // Catch:{ Exception -> 0x0250 }
             r3 = 1
             r13 = -1
             r14 = 0
             r16 = 0
-            goto L_0x0239
-        L_0x0238:
+            goto L_0x0245
+        L_0x0244:
             r3 = 1
-        L_0x0239:
+        L_0x0245:
             int r10 = r5 + 1
             r4 = r6
             r11 = r22
             r3 = 16
             r5 = 0
             goto L_0x0027
-        L_0x0244:
+        L_0x0250:
             r0 = move-exception
             org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)
-        L_0x0248:
-            if (r9 == 0) goto L_0x0253
+        L_0x0254:
+            if (r9 == 0) goto L_0x025f
             int r0 = r2.length()
-            if (r0 == 0) goto L_0x0253
+            if (r0 == 0) goto L_0x025f
             r2 = 0
             r9[r2] = r2
-        L_0x0253:
+        L_0x025f:
             return r1
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.Emoji.parseEmojis(java.lang.CharSequence, int[]):java.util.ArrayList");
@@ -746,11 +752,11 @@ public class Emoji {
     public static java.lang.CharSequence replaceEmoji(java.lang.CharSequence r7, android.graphics.Paint.FontMetricsInt r8, int r9, boolean r10, int[] r11) {
         /*
             boolean r0 = org.telegram.messenger.SharedConfig.useSystemEmoji
-            if (r0 != 0) goto L_0x008f
-            if (r7 == 0) goto L_0x008f
+            if (r0 != 0) goto L_0x009b
+            if (r7 == 0) goto L_0x009b
             int r0 = r7.length()
             if (r0 != 0) goto L_0x000e
-            goto L_0x008f
+            goto L_0x009b
         L_0x000e:
             if (r10 != 0) goto L_0x0017
             boolean r10 = r7 instanceof android.text.Spannable
@@ -771,21 +777,21 @@ public class Emoji {
             r0 = 0
         L_0x0035:
             int r2 = r10.size()
-            if (r0 >= r2) goto L_0x008f
-            java.lang.Object r2 = r10.get(r0)     // Catch:{ Exception -> 0x007b }
-            org.telegram.messenger.Emoji$EmojiSpanRange r2 = (org.telegram.messenger.Emoji.EmojiSpanRange) r2     // Catch:{ Exception -> 0x007b }
+            if (r0 >= r2) goto L_0x009b
+            java.lang.Object r2 = r10.get(r0)     // Catch:{ Exception -> 0x0087 }
+            org.telegram.messenger.Emoji$EmojiSpanRange r2 = (org.telegram.messenger.Emoji.EmojiSpanRange) r2     // Catch:{ Exception -> 0x0087 }
             if (r11 == 0) goto L_0x0064
             r3 = 0
         L_0x0044:
-            int r4 = r11.length     // Catch:{ Exception -> 0x007b }
+            int r4 = r11.length     // Catch:{ Exception -> 0x0087 }
             if (r3 >= r4) goto L_0x0060
-            r4 = r11[r3]     // Catch:{ Exception -> 0x007b }
+            r4 = r11[r3]     // Catch:{ Exception -> 0x0087 }
             if (r4 == 0) goto L_0x005d
-            int r5 = r7.getSpanStart(r4)     // Catch:{ Exception -> 0x007b }
-            int r6 = r2.start     // Catch:{ Exception -> 0x007b }
+            int r5 = r7.getSpanStart(r4)     // Catch:{ Exception -> 0x0087 }
+            int r6 = r2.start     // Catch:{ Exception -> 0x0087 }
             if (r5 != r6) goto L_0x005d
-            int r4 = r7.getSpanEnd(r4)     // Catch:{ Exception -> 0x007b }
-            int r5 = r2.end     // Catch:{ Exception -> 0x007b }
+            int r4 = r7.getSpanEnd(r4)     // Catch:{ Exception -> 0x0087 }
+            int r5 = r2.end     // Catch:{ Exception -> 0x0087 }
             if (r4 != r5) goto L_0x005d
             r3 = 1
             goto L_0x0061
@@ -796,40 +802,52 @@ public class Emoji {
             r3 = 0
         L_0x0061:
             if (r3 == 0) goto L_0x0064
-            goto L_0x008c
+            goto L_0x0098
         L_0x0064:
-            java.lang.CharSequence r3 = r2.code     // Catch:{ Exception -> 0x007b }
-            org.telegram.messenger.Emoji$EmojiDrawable r3 = getEmojiDrawable(r3)     // Catch:{ Exception -> 0x007b }
-            if (r3 == 0) goto L_0x007f
-            org.telegram.messenger.Emoji$EmojiSpan r4 = new org.telegram.messenger.Emoji$EmojiSpan     // Catch:{ Exception -> 0x007b }
-            r4.<init>(r3, r1, r9, r8)     // Catch:{ Exception -> 0x007b }
-            int r3 = r2.start     // Catch:{ Exception -> 0x007b }
-            int r2 = r2.end     // Catch:{ Exception -> 0x007b }
-            r5 = 33
-            r7.setSpan(r4, r3, r2, r5)     // Catch:{ Exception -> 0x007b }
-            goto L_0x007f
+            java.lang.CharSequence r3 = r2.code     // Catch:{ Exception -> 0x0087 }
+            org.telegram.messenger.Emoji$EmojiDrawable r3 = getEmojiDrawable(r3)     // Catch:{ Exception -> 0x0087 }
+            if (r3 == 0) goto L_0x008b
+            org.telegram.messenger.Emoji$EmojiSpan r4 = new org.telegram.messenger.Emoji$EmojiSpan     // Catch:{ Exception -> 0x0087 }
+            r4.<init>(r3, r1, r9, r8)     // Catch:{ Exception -> 0x0087 }
+            java.lang.CharSequence r3 = r2.code     // Catch:{ Exception -> 0x0087 }
+            if (r3 != 0) goto L_0x0077
+            r3 = 0
+            goto L_0x007b
+        L_0x0077:
+            java.lang.String r3 = r3.toString()     // Catch:{ Exception -> 0x0087 }
         L_0x007b:
+            r4.emoji = r3     // Catch:{ Exception -> 0x0087 }
+            int r3 = r2.start     // Catch:{ Exception -> 0x0087 }
+            int r2 = r2.end     // Catch:{ Exception -> 0x0087 }
+            r5 = 33
+            r7.setSpan(r4, r3, r2, r5)     // Catch:{ Exception -> 0x0087 }
+            goto L_0x008b
+        L_0x0087:
             r2 = move-exception
             org.telegram.messenger.FileLog.e((java.lang.Throwable) r2)
-        L_0x007f:
+        L_0x008b:
             int r2 = org.telegram.messenger.SharedConfig.getDevicePerformanceClass()
-            if (r2 != 0) goto L_0x008c
+            if (r2 != 0) goto L_0x0098
             int r2 = r0 + 1
             r3 = 50
-            if (r2 < r3) goto L_0x008c
-            goto L_0x008f
-        L_0x008c:
+            if (r2 < r3) goto L_0x0098
+            goto L_0x009b
+        L_0x0098:
             int r0 = r0 + 1
             goto L_0x0035
-        L_0x008f:
+        L_0x009b:
             return r7
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.Emoji.replaceEmoji(java.lang.CharSequence, android.graphics.Paint$FontMetricsInt, int, boolean, int[]):java.lang.CharSequence");
     }
 
     public static class EmojiSpan extends ImageSpan {
-        private Paint.FontMetricsInt fontMetrics;
-        private int size = AndroidUtilities.dp(20.0f);
+        public boolean drawn;
+        public String emoji;
+        public Paint.FontMetricsInt fontMetrics;
+        public float lastDrawX;
+        public float lastDrawY;
+        public int size = AndroidUtilities.dp(20.0f);
 
         public EmojiSpan(Drawable drawable, int i, int i2, Paint.FontMetricsInt fontMetricsInt) {
             super(drawable, i);
@@ -880,7 +898,10 @@ public class Emoji {
 
         public void draw(Canvas canvas, CharSequence charSequence, int i, int i2, float f, int i3, int i4, int i5, Paint paint) {
             boolean z;
+            this.lastDrawX = (((float) this.size) / 2.0f) + f;
+            this.lastDrawY = ((float) i3) + (((float) (i5 - i3)) / 2.0f);
             boolean z2 = true;
+            this.drawn = true;
             if (paint.getAlpha() == 255 || !Emoji.emojiDrawingUseAlpha) {
                 z = false;
             } else {

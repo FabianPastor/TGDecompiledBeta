@@ -1010,6 +1010,9 @@ public class ScrollSlidingTabStrip extends HorizontalScrollView {
                     int i2 = this.currentDragPosition;
                     if (i != i2) {
                         stickerSetPositionChanged(i, i2);
+                        for (int i3 = 0; i3 < this.tabsContainer.getChildCount(); i3++) {
+                            this.tabsContainer.getChildAt(i3).setTag(NUM, Integer.valueOf(i3));
+                        }
                     }
                     ValueAnimator ofFloat = ValueAnimator.ofFloat(new float[]{0.0f, 1.0f});
                     ofFloat.addUpdateListener(new ScrollSlidingTabStrip$$ExternalSyntheticLambda0(this));
@@ -1033,9 +1036,9 @@ public class ScrollSlidingTabStrip extends HorizontalScrollView {
             return false;
         }
         int ceil = ((int) Math.ceil((double) ((((float) getScrollX()) + motionEvent.getX()) / ((float) getTabSize())))) - 1;
-        int i3 = this.currentDragPosition;
-        if (ceil != i3) {
-            if (ceil < i3) {
+        int i4 = this.currentDragPosition;
+        if (ceil != i4) {
+            if (ceil < i4) {
                 while (!canSwap(ceil) && ceil != this.currentDragPosition) {
                     ceil++;
                 }
@@ -1046,9 +1049,9 @@ public class ScrollSlidingTabStrip extends HorizontalScrollView {
             }
         }
         if (this.currentDragPosition != ceil && canSwap(ceil)) {
-            for (int i4 = 0; i4 < this.tabsContainer.getChildCount(); i4++) {
-                if (i4 != this.currentDragPosition) {
-                    ((StickerTabView) this.tabsContainer.getChildAt(i4)).saveXPosition();
+            for (int i5 = 0; i5 < this.tabsContainer.getChildCount(); i5++) {
+                if (i5 != this.currentDragPosition) {
+                    ((StickerTabView) this.tabsContainer.getChildAt(i5)).saveXPosition();
                 }
             }
             this.startDragFromX += (float) ((ceil - this.currentDragPosition) * getTabSize());

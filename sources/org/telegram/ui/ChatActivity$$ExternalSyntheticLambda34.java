@@ -15,6 +15,6 @@ public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda34 imple
     }
 
     public final void onClick(DialogInterface dialogInterface, int i) {
-        this.f$0.lambda$shareMyContact$92(this.f$1, this.f$2, dialogInterface, i);
+        this.f$0.lambda$shareMyContact$89(this.f$1, this.f$2, dialogInterface, i);
     }
 }

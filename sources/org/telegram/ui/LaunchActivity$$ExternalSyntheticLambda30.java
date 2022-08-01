@@ -8,6 +8,6 @@ public final /* synthetic */ class LaunchActivity$$ExternalSyntheticLambda30 imp
     }
 
     public final void run() {
-        this.f$0.lambda$checkFreeDiscSpace$95();
+        this.f$0.lambda$runLinkRequest$64();
     }
 }

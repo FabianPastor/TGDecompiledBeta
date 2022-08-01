@@ -1,15 +1,17 @@
 package org.telegram.ui;
 
 import androidx.core.util.Consumer;
+import java.util.List;
+import org.telegram.ui.Components.ReactedUsersListView;
 
 public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda113 implements Consumer {
-    public final /* synthetic */ ChatActivity f$0;
+    public final /* synthetic */ ReactedUsersListView f$0;
 
-    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda113(ChatActivity chatActivity) {
-        this.f$0 = chatActivity;
+    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda113(ReactedUsersListView reactedUsersListView) {
+        this.f$0 = reactedUsersListView;
     }
 
     public final void accept(Object obj) {
-        this.f$0.lambda$createView$49((Integer) obj);
+        this.f$0.setSeenUsers((List) obj);
     }
 }

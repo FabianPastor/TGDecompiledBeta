@@ -119,6 +119,17 @@ public final class BulletinFactory {
         return create(lottieLayout, 1500);
     }
 
+    public Bulletin createSimpleBulletin(int i, CharSequence charSequence, CharSequence charSequence2, Runnable runnable) {
+        Bulletin.LottieLayout lottieLayout = new Bulletin.LottieLayout(getContext(), this.resourcesProvider);
+        lottieLayout.setAnimation(i, 36, 36, new String[0]);
+        lottieLayout.textView.setTextSize(1, 14.0f);
+        lottieLayout.textView.setSingleLine(false);
+        lottieLayout.textView.setMaxLines(2);
+        lottieLayout.textView.setText(charSequence);
+        lottieLayout.setButton(new Bulletin.UndoButton(getContext(), true, this.resourcesProvider).setText(charSequence2).setUndoAction(runnable));
+        return create(lottieLayout, 1500);
+    }
+
     public Bulletin createEmojiBulletin(TLRPC$Document tLRPC$Document, CharSequence charSequence, CharSequence charSequence2, Runnable runnable) {
         Bulletin.LottieLayout lottieLayout = new Bulletin.LottieLayout(getContext(), this.resourcesProvider);
         lottieLayout.setAnimation(tLRPC$Document, 36, 36, new String[0]);

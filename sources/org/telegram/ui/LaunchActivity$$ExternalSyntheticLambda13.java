@@ -13,6 +13,6 @@ public final /* synthetic */ class LaunchActivity$$ExternalSyntheticLambda13 imp
     }
 
     public final void onClick(DialogInterface dialogInterface, int i) {
-        this.f$0.lambda$showLanguageAlertInternal$99(this.f$1, dialogInterface, i);
+        this.f$0.lambda$showLanguageAlertInternal$100(this.f$1, dialogInterface, i);
     }
 }

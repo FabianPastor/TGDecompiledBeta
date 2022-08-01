@@ -1,16 +1,21 @@
 package org.telegram.ui;
 
-import org.telegram.tgnet.RequestDelegate;
-import org.telegram.tgnet.TLObject;
+import org.telegram.tgnet.ResultCallback;
 import org.telegram.tgnet.TLRPC$TL_error;
+import org.telegram.ui.ActionBar.EmojiThemes;
 
-public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda233 implements RequestDelegate {
-    public static final /* synthetic */ ChatActivity$$ExternalSyntheticLambda233 INSTANCE = new ChatActivity$$ExternalSyntheticLambda233();
+public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda233 implements ResultCallback {
+    public final /* synthetic */ ChatActivity f$0;
 
-    private /* synthetic */ ChatActivity$$ExternalSyntheticLambda233() {
+    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda233(ChatActivity chatActivity) {
+        this.f$0 = chatActivity;
     }
 
-    public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        ChatActivity.lambda$markSponsoredAsRead$246(tLObject, tLRPC$TL_error);
+    public final void onComplete(Object obj) {
+        this.f$0.lambda$setChatThemeEmoticon$248((EmojiThemes) obj);
+    }
+
+    public /* synthetic */ void onError(TLRPC$TL_error tLRPC$TL_error) {
+        ResultCallback.CC.$default$onError((ResultCallback) this, tLRPC$TL_error);
     }
 }

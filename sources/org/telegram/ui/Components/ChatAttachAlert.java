@@ -483,6 +483,14 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
         }
     }
 
+    public boolean checkCaption(CharSequence charSequence) {
+        BaseFragment baseFragment2 = this.baseFragment;
+        if (!(baseFragment2 instanceof ChatActivity)) {
+            return false;
+        }
+        return ChatActivityEnterView.checkPremiumAnimatedEmoji(this.currentAccount, ((ChatActivity) baseFragment2).getDialogId(), this.baseFragment, this.sizeNotifierFrameLayout, charSequence);
+    }
+
     public interface ChatAttachViewDelegate {
         void didPressedButton(int i, boolean z, boolean z2, int i2, boolean z3);
 
@@ -2420,9 +2428,11 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
                     edit.putBoolean("silent_" + chatActivity.getDialogId(), !z).commit();
                 }
             }
-            applyCaption();
-            this.buttonPressed = true;
-            this.delegate.didPressedButton(7, true, z, i, false);
+            if (!checkCaption(this.commentTextView.getText())) {
+                applyCaption();
+                this.buttonPressed = true;
+                this.delegate.didPressedButton(7, true, z, i, false);
+            }
         }
     }
 

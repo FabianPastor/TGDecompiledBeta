@@ -4828,7 +4828,7 @@ public class PushListenerController {
             goto L_0x1d8a
         L_0x0b08:
             java.lang.String r2 = "YouHaveNewMessage"
-            r7 = 2131629357(0x7f0e152d, float:1.8886033E38)
+            r7 = 2131629358(0x7f0e152e, float:1.8886035E38)
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r2, r7)     // Catch:{ all -> 0x1ea3 }
             java.lang.String r7 = "SecretChatName"
             r8 = 2131628222(0x7f0e10be, float:1.888373E38)
@@ -5777,7 +5777,7 @@ public class PushListenerController {
             r8 = r17
             r9 = r25
             java.lang.String r2 = "UserAcceptedToGroupPushWithGroup"
-            r7 = 2131628886(0x7f0e1356, float:1.8885077E38)
+            r7 = 2131628887(0x7f0e1357, float:1.888508E38)
             r11 = 2
             java.lang.Object[] r11 = new java.lang.Object[r11]     // Catch:{ all -> 0x1ea3 }
             r12 = 0

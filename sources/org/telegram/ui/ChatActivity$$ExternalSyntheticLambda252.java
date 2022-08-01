@@ -1,16 +1,15 @@
 package org.telegram.ui;
 
-import android.view.View;
-import org.telegram.ui.Components.RecyclerListView;
+import org.telegram.ui.Delegates.ChatActivityMemberRequestsDelegate;
 
-public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda252 implements RecyclerListView.OnItemLongClickListener {
+public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda252 implements ChatActivityMemberRequestsDelegate.Callback {
     public final /* synthetic */ ChatActivity f$0;
 
     public /* synthetic */ ChatActivity$$ExternalSyntheticLambda252(ChatActivity chatActivity) {
         this.f$0 = chatActivity;
     }
 
-    public final boolean onItemClick(View view, int i) {
-        return this.f$0.lambda$createView$48(view, i);
+    public final void onEnterOffsetChanged() {
+        this.f$0.invalidateChatListViewTopPadding();
     }
 }

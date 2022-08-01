@@ -4870,6 +4870,7 @@
     <string name="UnlockFingerprint">Unlock with Fingerprint</string>
     <string name="UnlockPremiumEmoji">Unlock Premium Emoji</string>
     <string name="UnlockPremiumEmojiHint">Subscribe to **Telegram Premium** to unlock this emoji.</string>
+    <string name="UnlockPremiumEmojiHint2">Try sending these emoji in **Saved Messages** for free to test.</string>
     <string name="UnlockPremiumEmojiPack">Unlock %1$s</string>
     <string name="UnlockPremiumIcons">Unlock Premium Icons</string>
     <string name="UnlockPremiumReactions">Unlock Premium Reactions</string>

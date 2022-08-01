@@ -16,6 +16,6 @@ public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda90 imple
     }
 
     public final void onClick(View view) {
-        this.f$0.lambda$updatePinnedMessageView$143(this.f$1, this.f$2, view);
+        this.f$0.lambda$updatePinnedMessageView$140(this.f$1, this.f$2, view);
     }
 }

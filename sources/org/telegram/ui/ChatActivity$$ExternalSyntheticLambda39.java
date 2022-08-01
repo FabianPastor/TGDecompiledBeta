@@ -17,6 +17,6 @@ public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda39 imple
     }
 
     public final void onClick(DialogInterface dialogInterface, int i) {
-        this.f$0.lambda$searchLinks$96(this.f$1, this.f$2, this.f$3, dialogInterface, i);
+        this.f$0.lambda$searchLinks$93(this.f$1, this.f$2, this.f$3, dialogInterface, i);
     }
 }

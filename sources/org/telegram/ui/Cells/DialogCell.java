@@ -2858,7 +2858,7 @@ public class DialogCell extends BaseCell {
             int r2 = r11.promoDialogType
             int r3 = org.telegram.messenger.MessagesController.PROMO_TYPE_PROXY
             if (r2 != r3) goto L_0x1066
-            r2 = 2131628877(0x7f0e134d, float:1.888506E38)
+            r2 = 2131628878(0x7f0e134e, float:1.8885061E38)
             java.lang.String r3 = "UseProxySponsor"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
         L_0x1060:

@@ -10,6 +10,6 @@ public final /* synthetic */ class LaunchActivity$$ExternalSyntheticLambda22 imp
     }
 
     public final void run() {
-        LaunchActivity.lambda$updateAppUpdateViews$73(this.f$0);
+        LaunchActivity.lambda$updateAppUpdateViews$74(this.f$0);
     }
 }

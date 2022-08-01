@@ -12,6 +12,6 @@ public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda216 impl
     }
 
     public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        this.f$0.lambda$createMenu$154(tLObject, tLRPC$TL_error);
+        this.f$0.lambda$createMenu$151(tLObject, tLRPC$TL_error);
     }
 }

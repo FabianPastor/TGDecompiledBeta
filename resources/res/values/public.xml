@@ -6679,6 +6679,7 @@
     <public type="string" name="UnlockFingerprint" id="NUM" />
     <public type="string" name="UnlockPremiumEmoji" id="NUM" />
     <public type="string" name="UnlockPremiumEmojiHint" id="NUM" />
+    <public type="string" name="UnlockPremiumEmojiHint2" id="NUM" />
     <public type="string" name="UnlockPremiumEmojiPack" id="NUM" />
     <public type="string" name="UnlockPremiumIcons" id="NUM" />
     <public type="string" name="UnlockPremiumReactions" id="NUM" />

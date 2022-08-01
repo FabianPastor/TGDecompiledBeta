@@ -14,6 +14,6 @@ public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda199 impl
     }
 
     public final void run() {
-        this.f$0.lambda$showRequestUrlAlert$234(this.f$1, this.f$2);
+        this.f$0.lambda$showRequestUrlAlert$231(this.f$1, this.f$2);
     }
 }

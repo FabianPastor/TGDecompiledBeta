@@ -231,7 +231,7 @@ public class ArchivedStickersActivity extends BaseFragment implements Notificati
             if (i != 5) {
                 z = false;
             }
-            tLRPC$TL_messages_getArchivedStickers.masks = z;
+            tLRPC$TL_messages_getArchivedStickers.emojis = z;
             getConnectionsManager().bindRequestToGuid(getConnectionsManager().sendRequest(tLRPC$TL_messages_getArchivedStickers, new ArchivedStickersActivity$$ExternalSyntheticLambda2(this)), this.classGuid);
         }
     }

@@ -1,25 +1,19 @@
 package org.telegram.ui;
 
-import org.telegram.tgnet.TLObject;
-import org.telegram.ui.ActionBar.AlertDialog;
-import org.telegram.ui.Cells.ChatMessageCell;
-
 public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda203 implements Runnable {
     public final /* synthetic */ ChatActivity f$0;
-    public final /* synthetic */ AlertDialog[] f$1;
-    public final /* synthetic */ TLObject f$2;
-    public final /* synthetic */ String f$3;
-    public final /* synthetic */ ChatMessageCell f$4;
+    public final /* synthetic */ boolean[] f$1;
+    public final /* synthetic */ int f$2;
+    public final /* synthetic */ ChatActivity f$3;
 
-    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda203(ChatActivity chatActivity, AlertDialog[] alertDialogArr, TLObject tLObject, String str, ChatMessageCell chatMessageCell) {
+    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda203(ChatActivity chatActivity, boolean[] zArr, int i, ChatActivity chatActivity2) {
         this.f$0 = chatActivity;
-        this.f$1 = alertDialogArr;
-        this.f$2 = tLObject;
-        this.f$3 = str;
-        this.f$4 = chatMessageCell;
+        this.f$1 = zArr;
+        this.f$2 = i;
+        this.f$3 = chatActivity2;
     }
 
     public final void run() {
-        this.f$0.lambda$didPressMessageUrl$240(this.f$1, this.f$2, this.f$3, this.f$4);
+        this.f$0.lambda$processLoadedDiscussionMessage$219(this.f$1, this.f$2, this.f$3);
     }
 }

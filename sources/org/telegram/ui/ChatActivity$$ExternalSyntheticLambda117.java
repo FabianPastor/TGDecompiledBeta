@@ -1,19 +1,13 @@
 package org.telegram.ui;
 
-import org.telegram.ui.ActionBar.Theme;
-
 public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda117 implements Runnable {
-    public final /* synthetic */ Theme.ThemeAccent f$0;
-    public final /* synthetic */ Theme.ThemeInfo f$1;
-    public final /* synthetic */ boolean f$2;
+    public final /* synthetic */ ChatActivity f$0;
 
-    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda117(Theme.ThemeAccent themeAccent, Theme.ThemeInfo themeInfo, boolean z) {
-        this.f$0 = themeAccent;
-        this.f$1 = themeInfo;
-        this.f$2 = z;
+    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda117(ChatActivity chatActivity) {
+        this.f$0 = chatActivity;
     }
 
     public final void run() {
-        ChatActivity.lambda$didReceivedNotification$120(this.f$0, this.f$1, this.f$2);
+        this.f$0.lambda$createMenu$176();
     }
 }

@@ -171,6 +171,7 @@ public class MessageObject {
     public static Pattern urlPattern;
     public static Pattern videoTimeUrlPattern;
     public boolean animateComments;
+    private int animatedEmojiCount;
     public boolean attachPathExists;
     public int audioPlayerDuration;
     public float audioProgress;
@@ -1917,7 +1918,11 @@ public class MessageObject {
             int[] iArr = allowsBigEmoji() ? new int[1] : null;
             CharSequence replaceEmoji = Emoji.replaceEmoji(this.messageText, textPaint.getFontMetricsInt(), AndroidUtilities.dp(20.0f), false, iArr);
             this.messageText = replaceEmoji;
-            this.messageText = replaceAnimatedEmoji(replaceEmoji, this.messageOwner.entities, textPaint.getFontMetricsInt());
+            Spannable replaceAnimatedEmoji = replaceAnimatedEmoji(replaceEmoji, this.messageOwner.entities, textPaint.getFontMetricsInt());
+            this.messageText = replaceAnimatedEmoji;
+            if (iArr != null && iArr[0] > 1) {
+                replaceEmojiToLottieAnimated(replaceAnimatedEmoji);
+            }
             checkEmojiOnly(iArr);
             setType();
             this.emojiAnimatedSticker = null;
@@ -1993,7 +1998,7 @@ public class MessageObject {
                     this.type = 13;
                 } else if (isAnimatedSticker()) {
                     this.type = 15;
-                } else if (iArr != null && iArr[0] > 1) {
+                } else if (iArr != null && iArr[0] >= 1) {
                     this.type = 19;
                 }
             }
@@ -2050,42 +2055,234 @@ public class MessageObject {
     }
 
     private void checkEmojiOnly(int[] iArr) {
-        TextPaint textPaint;
-        if (iArr == null || iArr[0] < 1 || iArr[0] > 3) {
-            CharSequence charSequence = this.messageText;
-            AnimatedEmojiSpan[] animatedEmojiSpanArr = (AnimatedEmojiSpan[]) ((Spannable) charSequence).getSpans(0, charSequence.length(), AnimatedEmojiSpan.class);
-            if (animatedEmojiSpanArr != null && animatedEmojiSpanArr.length > 0) {
-                for (AnimatedEmojiSpan replaceFontMetrics : animatedEmojiSpanArr) {
-                    replaceFontMetrics.replaceFontMetrics(Theme.chat_msgTextPaint.getFontMetricsInt(), (int) (Theme.chat_msgTextPaint.getTextSize() + ((float) AndroidUtilities.dp(4.0f))), 0);
-                }
-                return;
+        checkEmojiOnly(iArr == null ? null : Integer.valueOf(iArr[0]));
+    }
+
+    /* JADX WARNING: Code restructure failed: missing block: B:22:0x006b, code lost:
+        r0 = 2;
+     */
+    /* JADX WARNING: Code restructure failed: missing block: B:24:0x0071, code lost:
+        r0 = 1;
+     */
+    /* JADX WARNING: Code restructure failed: missing block: B:30:0x0082, code lost:
+        if (r6 == false) goto L_0x0089;
+     */
+    /* JADX WARNING: Code restructure failed: missing block: B:31:0x0084, code lost:
+        r9 = org.telegram.ui.ActionBar.Theme.chat_msgTextPaintEmoji[0];
+     */
+    /* JADX WARNING: Code restructure failed: missing block: B:32:0x0089, code lost:
+        r9 = org.telegram.ui.ActionBar.Theme.chat_msgTextPaintOneEmoji;
+     */
+    /* JADX WARNING: Code restructure failed: missing block: B:33:0x008c, code lost:
+        r1 = (int) (r9.getTextSize() + ((float) org.telegram.messenger.AndroidUtilities.dp(4.0f)));
+     */
+    /* JADX WARNING: Code restructure failed: missing block: B:34:0x0097, code lost:
+        if (r3 == null) goto L_0x00ac;
+     */
+    /* JADX WARNING: Code restructure failed: missing block: B:36:0x009a, code lost:
+        if (r3.length <= 0) goto L_0x00ac;
+     */
+    /* JADX WARNING: Code restructure failed: missing block: B:37:0x009c, code lost:
+        r4 = 0;
+     */
+    /* JADX WARNING: Code restructure failed: missing block: B:39:0x009e, code lost:
+        if (r4 >= r3.length) goto L_0x00ac;
+     */
+    /* JADX WARNING: Code restructure failed: missing block: B:40:0x00a0, code lost:
+        r3[r4].replaceFontMetrics(r9.getFontMetricsInt(), r1);
+        r4 = r4 + 1;
+     */
+    /* JADX WARNING: Code restructure failed: missing block: B:41:0x00ac, code lost:
+        if (r5 == null) goto L_?;
+     */
+    /* JADX WARNING: Code restructure failed: missing block: B:43:0x00af, code lost:
+        if (r5.length <= 0) goto L_?;
+     */
+    /* JADX WARNING: Code restructure failed: missing block: B:45:0x00b2, code lost:
+        if (r2 >= r5.length) goto L_0x00f9;
+     */
+    /* JADX WARNING: Code restructure failed: missing block: B:46:0x00b4, code lost:
+        r5[r2].replaceFontMetrics(r9.getFontMetricsInt(), r1, r0);
+        r2 = r2 + 1;
+     */
+    /* JADX WARNING: Code restructure failed: missing block: B:63:?, code lost:
+        return;
+     */
+    /* JADX WARNING: Code restructure failed: missing block: B:64:?, code lost:
+        return;
+     */
+    /* JADX WARNING: Code restructure failed: missing block: B:65:?, code lost:
+        return;
+     */
+    /* Code decompiled incorrectly, please refer to instructions dump. */
+    private void checkEmojiOnly(java.lang.Integer r9) {
+        /*
+            r8 = this;
+            r0 = -1
+            r1 = 1082130432(0x40800000, float:4.0)
+            r2 = 0
+            if (r9 == 0) goto L_0x00c0
+            int r3 = r9.intValue()
+            r4 = 1
+            if (r3 < r4) goto L_0x00c0
+            java.lang.CharSequence r3 = r8.messageText
+            r5 = r3
+            android.text.Spannable r5 = (android.text.Spannable) r5
+            int r3 = r3.length()
+            java.lang.Class<org.telegram.messenger.Emoji$EmojiSpan> r6 = org.telegram.messenger.Emoji.EmojiSpan.class
+            java.lang.Object[] r3 = r5.getSpans(r2, r3, r6)
+            org.telegram.messenger.Emoji$EmojiSpan[] r3 = (org.telegram.messenger.Emoji.EmojiSpan[]) r3
+            java.lang.CharSequence r5 = r8.messageText
+            r6 = r5
+            android.text.Spannable r6 = (android.text.Spannable) r6
+            int r5 = r5.length()
+            java.lang.Class<org.telegram.ui.Components.AnimatedEmojiSpan> r7 = org.telegram.ui.Components.AnimatedEmojiSpan.class
+            java.lang.Object[] r5 = r6.getSpans(r2, r5, r7)
+            org.telegram.ui.Components.AnimatedEmojiSpan[] r5 = (org.telegram.ui.Components.AnimatedEmojiSpan[]) r5
+            r8.animatedEmojiCount = r2
+            if (r5 == 0) goto L_0x0045
+            r6 = 0
+        L_0x0034:
+            int r7 = r5.length
+            if (r6 >= r7) goto L_0x0045
+            r7 = r5[r6]
+            boolean r7 = r7.standard
+            if (r7 != 0) goto L_0x0042
+            int r7 = r8.animatedEmojiCount
+            int r7 = r7 + r4
+            r8.animatedEmojiCount = r7
+        L_0x0042:
+            int r6 = r6 + 1
+            goto L_0x0034
+        L_0x0045:
+            int r6 = r9.intValue()
+            int r7 = r8.animatedEmojiCount
+            if (r6 != r7) goto L_0x004f
+            r6 = 1
+            goto L_0x0050
+        L_0x004f:
+            r6 = 0
+        L_0x0050:
+            int r9 = r9.intValue()
+            r8.emojiOnlyCount = r9
+            r7 = 2
+            switch(r9) {
+                case 0: goto L_0x007d;
+                case 1: goto L_0x007d;
+                case 2: goto L_0x0082;
+                case 3: goto L_0x0073;
+                case 4: goto L_0x006d;
+                case 5: goto L_0x0066;
+                case 6: goto L_0x0060;
+                default: goto L_0x005a;
             }
-            return;
-        }
-        int i = iArr[0];
-        this.emojiOnlyCount = i;
-        if (i == 1) {
-            textPaint = Theme.chat_msgTextPaintOneEmoji;
-        } else if (i != 2) {
-            textPaint = Theme.chat_msgTextPaintThreeEmoji;
-        } else {
-            textPaint = Theme.chat_msgTextPaintTwoEmoji;
-        }
-        int textSize = (int) (textPaint.getTextSize() + ((float) AndroidUtilities.dp(4.0f)));
-        CharSequence charSequence2 = this.messageText;
-        Emoji.EmojiSpan[] emojiSpanArr = (Emoji.EmojiSpan[]) ((Spannable) charSequence2).getSpans(0, charSequence2.length(), Emoji.EmojiSpan.class);
-        if (emojiSpanArr != null && emojiSpanArr.length > 0) {
-            for (Emoji.EmojiSpan replaceFontMetrics2 : emojiSpanArr) {
-                replaceFontMetrics2.replaceFontMetrics(textPaint.getFontMetricsInt(), textSize);
-            }
-        }
-        CharSequence charSequence3 = this.messageText;
-        AnimatedEmojiSpan[] animatedEmojiSpanArr2 = (AnimatedEmojiSpan[]) ((Spannable) charSequence3).getSpans(0, charSequence3.length(), AnimatedEmojiSpan.class);
-        if (animatedEmojiSpanArr2 != null && animatedEmojiSpanArr2.length > 0) {
-            for (AnimatedEmojiSpan replaceFontMetrics3 : animatedEmojiSpanArr2) {
-                replaceFontMetrics3.replaceFontMetrics(textPaint.getFontMetricsInt(), textSize, 1);
-            }
-        }
+        L_0x005a:
+            android.text.TextPaint[] r9 = org.telegram.ui.ActionBar.Theme.chat_msgTextPaintEmoji
+            r4 = 5
+            r9 = r9[r4]
+            goto L_0x008c
+        L_0x0060:
+            android.text.TextPaint[] r9 = org.telegram.ui.ActionBar.Theme.chat_msgTextPaintEmoji
+            r0 = 4
+            r9 = r9[r0]
+            goto L_0x006b
+        L_0x0066:
+            android.text.TextPaint[] r9 = org.telegram.ui.ActionBar.Theme.chat_msgTextPaintEmoji
+            r0 = 3
+            r9 = r9[r0]
+        L_0x006b:
+            r0 = 2
+            goto L_0x008c
+        L_0x006d:
+            android.text.TextPaint[] r9 = org.telegram.ui.ActionBar.Theme.chat_msgTextPaintEmoji
+            r9 = r9[r7]
+        L_0x0071:
+            r0 = 1
+            goto L_0x008c
+        L_0x0073:
+            if (r6 == 0) goto L_0x007a
+            android.text.TextPaint[] r9 = org.telegram.ui.ActionBar.Theme.chat_msgTextPaintEmoji
+            r9 = r9[r4]
+            goto L_0x0071
+        L_0x007a:
+            android.text.TextPaint r9 = org.telegram.ui.ActionBar.Theme.chat_msgTextPaintThreeEmoji
+            goto L_0x0071
+        L_0x007d:
+            if (r6 != 0) goto L_0x0082
+            android.text.TextPaint r9 = org.telegram.ui.ActionBar.Theme.chat_msgTextPaintOneEmoji
+            goto L_0x008c
+        L_0x0082:
+            if (r6 == 0) goto L_0x0089
+            android.text.TextPaint[] r9 = org.telegram.ui.ActionBar.Theme.chat_msgTextPaintEmoji
+            r9 = r9[r2]
+            goto L_0x0071
+        L_0x0089:
+            android.text.TextPaint r9 = org.telegram.ui.ActionBar.Theme.chat_msgTextPaintOneEmoji
+            goto L_0x0071
+        L_0x008c:
+            float r4 = r9.getTextSize()
+            int r1 = org.telegram.messenger.AndroidUtilities.dp(r1)
+            float r1 = (float) r1
+            float r4 = r4 + r1
+            int r1 = (int) r4
+            if (r3 == 0) goto L_0x00ac
+            int r4 = r3.length
+            if (r4 <= 0) goto L_0x00ac
+            r4 = 0
+        L_0x009d:
+            int r6 = r3.length
+            if (r4 >= r6) goto L_0x00ac
+            r6 = r3[r4]
+            android.graphics.Paint$FontMetricsInt r7 = r9.getFontMetricsInt()
+            r6.replaceFontMetrics(r7, r1)
+            int r4 = r4 + 1
+            goto L_0x009d
+        L_0x00ac:
+            if (r5 == 0) goto L_0x00f9
+            int r3 = r5.length
+            if (r3 <= 0) goto L_0x00f9
+        L_0x00b1:
+            int r3 = r5.length
+            if (r2 >= r3) goto L_0x00f9
+            r3 = r5[r2]
+            android.graphics.Paint$FontMetricsInt r4 = r9.getFontMetricsInt()
+            r3.replaceFontMetrics(r4, r1, r0)
+            int r2 = r2 + 1
+            goto L_0x00b1
+        L_0x00c0:
+            java.lang.CharSequence r9 = r8.messageText
+            r3 = r9
+            android.text.Spannable r3 = (android.text.Spannable) r3
+            int r9 = r9.length()
+            java.lang.Class<org.telegram.ui.Components.AnimatedEmojiSpan> r4 = org.telegram.ui.Components.AnimatedEmojiSpan.class
+            java.lang.Object[] r9 = r3.getSpans(r2, r9, r4)
+            org.telegram.ui.Components.AnimatedEmojiSpan[] r9 = (org.telegram.ui.Components.AnimatedEmojiSpan[]) r9
+            if (r9 == 0) goto L_0x00f7
+            int r3 = r9.length
+            if (r3 <= 0) goto L_0x00f7
+            int r3 = r9.length
+            r8.animatedEmojiCount = r3
+        L_0x00d9:
+            int r3 = r9.length
+            if (r2 >= r3) goto L_0x00f9
+            r3 = r9[r2]
+            android.text.TextPaint r4 = org.telegram.ui.ActionBar.Theme.chat_msgTextPaint
+            android.graphics.Paint$FontMetricsInt r4 = r4.getFontMetricsInt()
+            android.text.TextPaint r5 = org.telegram.ui.ActionBar.Theme.chat_msgTextPaint
+            float r5 = r5.getTextSize()
+            int r6 = org.telegram.messenger.AndroidUtilities.dp(r1)
+            float r6 = (float) r6
+            float r5 = r5 + r6
+            int r5 = (int) r5
+            r3.replaceFontMetrics(r4, r5, r0)
+            int r2 = r2 + 1
+            goto L_0x00d9
+        L_0x00f7:
+            r8.animatedEmojiCount = r2
+        L_0x00f9:
+            return
+        */
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessageObject.checkEmojiOnly(java.lang.Integer):void");
     }
 
     /* JADX WARNING: Code restructure failed: missing block: B:430:0x0bd7, code lost:
@@ -2103,8 +2300,8 @@ public class MessageObject {
     /* JADX WARNING: Removed duplicated region for block: B:738:0x14da  */
     /* JADX WARNING: Removed duplicated region for block: B:750:0x1556  */
     /* JADX WARNING: Removed duplicated region for block: B:754:0x155d  */
-    /* JADX WARNING: Removed duplicated region for block: B:773:0x0504 A[EDGE_INSN: B:773:0x0504->B:190:0x0504 ?: BREAK  , SYNTHETIC] */
-    /* JADX WARNING: Removed duplicated region for block: B:775:? A[RETURN, SYNTHETIC] */
+    /* JADX WARNING: Removed duplicated region for block: B:778:0x0504 A[EDGE_INSN: B:778:0x0504->B:190:0x0504 ?: BREAK  , SYNTHETIC] */
+    /* JADX WARNING: Removed duplicated region for block: B:780:? A[RETURN, SYNTHETIC] */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public MessageObject(int r27, org.telegram.tgnet.TLRPC$TL_channelAdminLogEvent r28, java.util.ArrayList<org.telegram.messenger.MessageObject> r29, java.util.HashMap<java.lang.String, java.util.ArrayList<org.telegram.messenger.MessageObject>> r30, org.telegram.tgnet.TLRPC$Chat r31, int[] r32, boolean r33) {
         /*
@@ -2729,7 +2926,7 @@ public class MessageObject {
         L_0x04f4:
             r23 = r14
             java.lang.StringBuilder r4 = new java.lang.StringBuilder
-            r0 = 2131628926(0x7f0e137e, float:1.8885158E38)
+            r0 = 2131628927(0x7f0e137f, float:1.888516E38)
             java.lang.String r5 = "UserRestrictionsUntilForever"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r5, r0)
             r4.<init>(r0)
@@ -4745,7 +4942,7 @@ public class MessageObject {
             r9 = 0
         L_0x1559:
             int r0 = r6.contentType
-            if (r0 < 0) goto L_0x15e4
+            if (r0 < 0) goto L_0x15ee
             int r1 = r6.currentAccount
             r0 = r26
             r2 = r28
@@ -4793,25 +4990,31 @@ public class MessageObject {
             android.graphics.Paint$FontMetricsInt r0 = r0.getFontMetricsInt()
             android.text.Spannable r0 = replaceAnimatedEmoji(r1, r2, r0)
             r6.messageText = r0
-            r6.checkEmojiOnly(r9)
+            if (r9 == 0) goto L_0x15c3
+            r1 = r9[r4]
+            r2 = 1
+            if (r1 <= r2) goto L_0x15c3
+            r6.replaceEmojiToLottieAnimated(r0)
+        L_0x15c3:
+            r6.checkEmojiOnly((int[]) r9)
             r26.setType()
             r26.measureInlineBotButtons()
             r26.generateCaption()
             boolean r0 = r11.isPlayingMessage(r6)
-            if (r0 == 0) goto L_0x15d7
+            if (r0 == 0) goto L_0x15e1
             org.telegram.messenger.MessageObject r0 = r11.getPlayingMessageObject()
             float r1 = r0.audioProgress
             r6.audioProgress = r1
             int r0 = r0.audioProgressSec
             r6.audioProgressSec = r0
-        L_0x15d7:
+        L_0x15e1:
             r6.generateLayout(r10)
             r0 = 1
             r6.layoutCreated = r0
             r0 = 0
             r6.generateThumbs(r0)
             r26.checkMediaExistance()
-        L_0x15e4:
+        L_0x15ee:
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessageObject.<init>(int, org.telegram.tgnet.TLRPC$TL_channelAdminLogEvent, java.util.ArrayList, java.util.HashMap, org.telegram.tgnet.TLRPC$Chat, int[], boolean):void");
@@ -4888,7 +5091,11 @@ public class MessageObject {
             }
             CharSequence replaceEmoji = Emoji.replaceEmoji(this.messageText, textPaint.getFontMetricsInt(), AndroidUtilities.dp(20.0f), false, iArr);
             this.messageText = replaceEmoji;
-            this.messageText = replaceAnimatedEmoji(replaceEmoji, this.messageOwner.entities, textPaint.getFontMetricsInt());
+            Spannable replaceAnimatedEmoji = replaceAnimatedEmoji(replaceEmoji, this.messageOwner.entities, textPaint.getFontMetricsInt());
+            this.messageText = replaceAnimatedEmoji;
+            if (iArr != null && iArr[0] > 1) {
+                replaceEmojiToLottieAnimated(replaceAnimatedEmoji);
+            }
             checkEmojiOnly(iArr);
             generateLayout(user);
             setType();
@@ -6855,7 +7062,7 @@ public class MessageObject {
             org.telegram.messenger.LocaleController r2 = org.telegram.messenger.LocaleController.getInstance()
             org.telegram.messenger.time.FastDateFormat r2 = r2.formatterYear
             if (r2 == 0) goto L_0x081d
-            r2 = 2131629437(0x7f0e157d, float:1.8886195E38)
+            r2 = 2131629438(0x7f0e157e, float:1.8886197E38)
             r3 = 2
             java.lang.Object[] r7 = new java.lang.Object[r3]
             org.telegram.messenger.LocaleController r3 = org.telegram.messenger.LocaleController.getInstance()
@@ -7021,7 +7228,7 @@ public class MessageObject {
         L_0x095a:
             boolean r11 = r9 instanceof org.telegram.tgnet.TLRPC$TL_messageActionCreatedBroadcastList
             if (r11 == 0) goto L_0x096e
-            r0 = 2131629356(0x7f0e152c, float:1.888603E38)
+            r0 = 2131629357(0x7f0e152d, float:1.8886033E38)
             r1 = 0
             java.lang.Object[] r1 = new java.lang.Object[r1]
             java.lang.String r2 = "YouCreatedBroadcastList"
@@ -7500,7 +7707,7 @@ public class MessageObject {
             r6.messageText = r0
             goto L_0x0var_
         L_0x0d4f:
-            r0 = 2131628884(0x7f0e1354, float:1.8885073E38)
+            r0 = 2131628885(0x7f0e1355, float:1.8885075E38)
             java.lang.String r1 = "UserAcceptedToGroupAction"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             java.lang.CharSequence r0 = replaceWithLink(r0, r7, r8)
@@ -7652,7 +7859,7 @@ public class MessageObject {
         L_0x0e8f:
             boolean r0 = r1 instanceof org.telegram.tgnet.TLRPC$TL_messageMediaUnsupported
             if (r0 == 0) goto L_0x0ea0
-            r0 = 2131628840(0x7f0e1328, float:1.8884984E38)
+            r0 = 2131628841(0x7f0e1329, float:1.8884986E38)
             java.lang.String r1 = "UnsupportedMedia"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             r6.messageText = r0
@@ -7792,7 +7999,7 @@ public class MessageObject {
             if (this.isRestrictedMessage) {
                 this.type = 0;
             } else if (this.emojiAnimatedSticker == null && this.emojiAnimatedStickerId == null) {
-                if (this.emojiOnlyCount > 1) {
+                if (this.emojiOnlyCount >= 1) {
                     this.type = 19;
                 } else if (isMediaEmpty()) {
                     this.type = 0;
@@ -7914,21 +8121,23 @@ public class MessageObject {
             }
             if (!this.layoutCreated) {
                 this.layoutCreated = true;
-                int[] iArr = null;
-                TLRPC$User user = isFromUser() ? MessagesController.getInstance(this.currentAccount).getUser(Long.valueOf(this.messageOwner.from_id.user_id)) : null;
+                if (isFromUser()) {
+                    MessagesController.getInstance(this.currentAccount).getUser(Long.valueOf(this.messageOwner.from_id.user_id));
+                }
                 if (this.messageOwner.media instanceof TLRPC$TL_messageMediaGame) {
                     textPaint = Theme.chat_msgGameTextPaint;
                 } else {
                     textPaint = Theme.chat_msgTextPaint;
                 }
-                if (allowsBigEmoji()) {
-                    iArr = new int[1];
-                }
+                int[] iArr = allowsBigEmoji() ? new int[1] : null;
                 CharSequence replaceEmoji = Emoji.replaceEmoji(this.messageText, textPaint.getFontMetricsInt(), AndroidUtilities.dp(20.0f), false, iArr);
                 this.messageText = replaceEmoji;
-                this.messageText = replaceAnimatedEmoji(replaceEmoji, this.messageOwner.entities, textPaint.getFontMetricsInt());
+                Spannable replaceAnimatedEmoji = replaceAnimatedEmoji(replaceEmoji, this.messageOwner.entities, textPaint.getFontMetricsInt());
+                this.messageText = replaceAnimatedEmoji;
+                if (iArr != null && iArr[0] > 1) {
+                    replaceEmojiToLottieAnimated(replaceAnimatedEmoji);
+                }
                 checkEmojiOnly(iArr);
-                generateLayout(user);
                 setType();
                 return true;
             }
@@ -9226,6 +9435,24 @@ public class MessageObject {
             return addEntitiesToText(charSequence, arrayList, isOutOwner(), true, z, z2);
         }
         return addEntitiesToText(charSequence, this.messageOwner.entities, isOutOwner(), true, z, z2);
+    }
+
+    public void replaceEmojiToLottieAnimated(CharSequence charSequence) {
+        if (charSequence instanceof Spannable) {
+            Spannable spannable = (Spannable) charSequence;
+            Emoji.EmojiSpan[] emojiSpanArr = (Emoji.EmojiSpan[]) spannable.getSpans(0, spannable.length(), Emoji.EmojiSpan.class);
+            for (int i = 0; i < emojiSpanArr.length; i++) {
+                TLRPC$Document emojiAnimatedSticker2 = MediaDataController.getInstance(this.currentAccount).getEmojiAnimatedSticker(emojiSpanArr[i].emoji);
+                if (emojiAnimatedSticker2 != null) {
+                    int spanStart = spannable.getSpanStart(emojiSpanArr[i]);
+                    int spanEnd = spannable.getSpanEnd(emojiSpanArr[i]);
+                    spannable.removeSpan(emojiSpanArr[i].emoji);
+                    AnimatedEmojiSpan animatedEmojiSpan = new AnimatedEmojiSpan(emojiAnimatedSticker2, emojiSpanArr[i].fontMetrics);
+                    animatedEmojiSpan.standard = true;
+                    spannable.setSpan(animatedEmojiSpan, spanStart, spanEnd, 33);
+                }
+            }
+        }
     }
 
     public static Spannable replaceAnimatedEmoji(CharSequence charSequence, ArrayList<TLRPC$MessageEntity> arrayList, Paint.FontMetricsInt fontMetricsInt) {
@@ -11503,7 +11730,7 @@ public class MessageObject {
         int size = tLRPC$Document.attributes.size();
         for (int i = 0; i < size; i++) {
             TLRPC$DocumentAttribute tLRPC$DocumentAttribute = tLRPC$Document.attributes.get(i);
-            if (tLRPC$DocumentAttribute instanceof TLRPC$TL_documentAttributeCustomEmoji) {
+            if ((tLRPC$DocumentAttribute instanceof TLRPC$TL_documentAttributeCustomEmoji) || (tLRPC$DocumentAttribute instanceof TLRPC$TL_documentAttributeSticker)) {
                 return tLRPC$DocumentAttribute.alt;
             }
         }
@@ -11614,16 +11841,16 @@ public class MessageObject {
         return null;
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:100:0x0177  */
-    /* JADX WARNING: Removed duplicated region for block: B:103:0x0183  */
-    /* JADX WARNING: Removed duplicated region for block: B:97:0x016b  */
+    /* JADX WARNING: Removed duplicated region for block: B:93:0x015c  */
+    /* JADX WARNING: Removed duplicated region for block: B:96:0x0167  */
+    /* JADX WARNING: Removed duplicated region for block: B:99:0x0173  */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public int getApproximateHeight() {
         /*
             r10 = this;
             int r0 = r10.type
-            r1 = 1120403456(0x42CLASSNAME, float:100.0)
-            r2 = 0
+            r1 = 0
+            r2 = 1120403456(0x42CLASSNAME, float:100.0)
             if (r0 != 0) goto L_0x002a
             int r0 = r10.textHeight
             org.telegram.tgnet.TLRPC$Message r3 = r10.messageOwner
@@ -11633,9 +11860,9 @@ public class MessageObject {
             org.telegram.tgnet.TLRPC$WebPage r3 = r3.webpage
             boolean r3 = r3 instanceof org.telegram.tgnet.TLRPC$TL_webPage
             if (r3 == 0) goto L_0x001b
-            int r2 = org.telegram.messenger.AndroidUtilities.dp(r1)
+            int r1 = org.telegram.messenger.AndroidUtilities.dp(r2)
         L_0x001b:
-            int r0 = r0 + r2
+            int r0 = r0 + r1
             boolean r1 = r10.isReply()
             if (r1 == 0) goto L_0x0029
             r1 = 1109917696(0x42280000, float:42.0)
@@ -11658,7 +11885,7 @@ public class MessageObject {
         L_0x003f:
             r3 = 9
             if (r0 != r3) goto L_0x0048
-            int r0 = org.telegram.messenger.AndroidUtilities.dp(r1)
+            int r0 = org.telegram.messenger.AndroidUtilities.dp(r2)
             return r0
         L_0x0048:
             r3 = 4
@@ -11674,16 +11901,16 @@ public class MessageObject {
             return r0
         L_0x005d:
             r3 = 10
+            r4 = 1106247680(0x41var_, float:30.0)
             if (r0 != r3) goto L_0x0068
-            r0 = 1106247680(0x41var_, float:30.0)
-            int r0 = org.telegram.messenger.AndroidUtilities.dp(r0)
+            int r0 = org.telegram.messenger.AndroidUtilities.dp(r4)
             return r0
         L_0x0068:
             r3 = 11
-            if (r0 == r3) goto L_0x018e
+            if (r0 == r3) goto L_0x017e
             r3 = 18
             if (r0 != r3) goto L_0x0072
-            goto L_0x018e
+            goto L_0x017e
         L_0x0072:
             r3 = 5
             if (r0 != r3) goto L_0x0078
@@ -11691,54 +11918,48 @@ public class MessageObject {
             return r0
         L_0x0078:
             r3 = 19
-            if (r0 != r3) goto L_0x0091
-            java.util.ArrayList<org.telegram.messenger.MessageObject$TextLayoutBlock> r0 = r10.textLayoutBlocks
-            if (r0 == 0) goto L_0x0091
-            int r0 = r0.size()
-            if (r0 <= 0) goto L_0x0091
-            java.util.ArrayList<org.telegram.messenger.MessageObject$TextLayoutBlock> r0 = r10.textLayoutBlocks
-            java.lang.Object r0 = r0.get(r2)
-            org.telegram.messenger.MessageObject$TextLayoutBlock r0 = (org.telegram.messenger.MessageObject.TextLayoutBlock) r0
-            int r0 = r0.height
+            if (r0 != r3) goto L_0x0084
+            int r0 = r10.textHeight
+            int r1 = org.telegram.messenger.AndroidUtilities.dp(r4)
+            int r0 = r0 + r1
             return r0
-        L_0x0091:
-            int r0 = r10.type
+        L_0x0084:
             r3 = 13
             r4 = 1096810496(0x41600000, float:14.0)
             r5 = 1056964608(0x3var_, float:0.5)
-            if (r0 == r3) goto L_0x0129
+            if (r0 == r3) goto L_0x011a
             r3 = 15
-            if (r0 != r3) goto L_0x00a1
-            goto L_0x0129
-        L_0x00a1:
+            if (r0 != r3) goto L_0x0092
+            goto L_0x011a
+        L_0x0092:
             boolean r0 = org.telegram.messenger.AndroidUtilities.isTablet()
-            r2 = 1060320051(0x3var_, float:0.7)
-            if (r0 == 0) goto L_0x00af
+            r1 = 1060320051(0x3var_, float:0.7)
+            if (r0 == 0) goto L_0x00a0
             int r0 = org.telegram.messenger.AndroidUtilities.getMinTabletSide()
-            goto L_0x00b9
-        L_0x00af:
+            goto L_0x00aa
+        L_0x00a0:
             android.graphics.Point r0 = org.telegram.messenger.AndroidUtilities.displaySize
             int r3 = r0.x
             int r0 = r0.y
             int r0 = java.lang.Math.min(r3, r0)
-        L_0x00b9:
+        L_0x00aa:
             float r0 = (float) r0
-            float r0 = r0 * r2
+            float r0 = r0 * r1
             int r0 = (int) r0
-            int r2 = org.telegram.messenger.AndroidUtilities.dp(r1)
-            int r2 = r2 + r0
+            int r1 = org.telegram.messenger.AndroidUtilities.dp(r2)
+            int r1 = r1 + r0
             int r3 = org.telegram.messenger.AndroidUtilities.getPhotoSize()
-            if (r0 <= r3) goto L_0x00cc
+            if (r0 <= r3) goto L_0x00bd
             int r0 = org.telegram.messenger.AndroidUtilities.getPhotoSize()
-        L_0x00cc:
+        L_0x00bd:
             int r3 = org.telegram.messenger.AndroidUtilities.getPhotoSize()
-            if (r2 <= r3) goto L_0x00d6
-            int r2 = org.telegram.messenger.AndroidUtilities.getPhotoSize()
-        L_0x00d6:
+            if (r1 <= r3) goto L_0x00c7
+            int r1 = org.telegram.messenger.AndroidUtilities.getPhotoSize()
+        L_0x00c7:
             java.util.ArrayList<org.telegram.tgnet.TLRPC$PhotoSize> r3 = r10.photoThumbs
             int r6 = org.telegram.messenger.AndroidUtilities.getPhotoSize()
             org.telegram.tgnet.TLRPC$PhotoSize r3 = org.telegram.messenger.FileLoader.getClosestPhotoSizeWithSize(r3, r6)
-            if (r3 == 0) goto L_0x0123
+            if (r3 == 0) goto L_0x0114
             int r6 = r3.w
             float r6 = (float) r6
             float r0 = (float) r0
@@ -11747,103 +11968,103 @@ public class MessageObject {
             float r0 = (float) r0
             float r0 = r0 / r6
             int r0 = (int) r0
-            if (r0 != 0) goto L_0x00f2
-            int r0 = org.telegram.messenger.AndroidUtilities.dp(r1)
-        L_0x00f2:
-            if (r0 <= r2) goto L_0x00f5
-            goto L_0x0103
-        L_0x00f5:
+            if (r0 != 0) goto L_0x00e3
+            int r0 = org.telegram.messenger.AndroidUtilities.dp(r2)
+        L_0x00e3:
+            if (r0 <= r1) goto L_0x00e6
+            goto L_0x00f4
+        L_0x00e6:
             r1 = 1123024896(0x42var_, float:120.0)
             int r2 = org.telegram.messenger.AndroidUtilities.dp(r1)
-            if (r0 >= r2) goto L_0x0102
-            int r2 = org.telegram.messenger.AndroidUtilities.dp(r1)
-            goto L_0x0103
-        L_0x0102:
-            r2 = r0
-        L_0x0103:
+            if (r0 >= r2) goto L_0x00f3
+            int r1 = org.telegram.messenger.AndroidUtilities.dp(r1)
+            goto L_0x00f4
+        L_0x00f3:
+            r1 = r0
+        L_0x00f4:
             boolean r0 = r10.needDrawBluredPreview()
-            if (r0 == 0) goto L_0x0123
-            boolean r0 = org.telegram.messenger.AndroidUtilities.isTablet()
             if (r0 == 0) goto L_0x0114
+            boolean r0 = org.telegram.messenger.AndroidUtilities.isTablet()
+            if (r0 == 0) goto L_0x0105
             int r0 = org.telegram.messenger.AndroidUtilities.getMinTabletSide()
-            goto L_0x011e
-        L_0x0114:
+            goto L_0x010f
+        L_0x0105:
             android.graphics.Point r0 = org.telegram.messenger.AndroidUtilities.displaySize
             int r1 = r0.x
             int r0 = r0.y
             int r0 = java.lang.Math.min(r1, r0)
-        L_0x011e:
+        L_0x010f:
             float r0 = (float) r0
             float r0 = r0 * r5
             int r0 = (int) r0
-            r2 = r0
-        L_0x0123:
+            r1 = r0
+        L_0x0114:
             int r0 = org.telegram.messenger.AndroidUtilities.dp(r4)
-            int r2 = r2 + r0
-            return r2
-        L_0x0129:
+            int r1 = r1 + r0
+            return r1
+        L_0x011a:
             android.graphics.Point r0 = org.telegram.messenger.AndroidUtilities.displaySize
             int r0 = r0.y
             float r0 = (float) r0
             r3 = 1053609165(0x3ecccccd, float:0.4)
             float r0 = r0 * r3
             boolean r3 = org.telegram.messenger.AndroidUtilities.isTablet()
-            if (r3 == 0) goto L_0x013e
+            if (r3 == 0) goto L_0x012f
             int r3 = org.telegram.messenger.AndroidUtilities.getMinTabletSide()
-            goto L_0x0142
-        L_0x013e:
+            goto L_0x0133
+        L_0x012f:
             android.graphics.Point r3 = org.telegram.messenger.AndroidUtilities.displaySize
             int r3 = r3.x
-        L_0x0142:
+        L_0x0133:
             float r3 = (float) r3
             float r3 = r3 * r5
             org.telegram.tgnet.TLRPC$Document r5 = r10.getDocument()
-            if (r5 == 0) goto L_0x0168
+            if (r5 == 0) goto L_0x0159
             java.util.ArrayList<org.telegram.tgnet.TLRPC$DocumentAttribute> r6 = r5.attributes
             int r6 = r6.size()
             r7 = 0
-        L_0x0152:
-            if (r7 >= r6) goto L_0x0168
+        L_0x0143:
+            if (r7 >= r6) goto L_0x0159
             java.util.ArrayList<org.telegram.tgnet.TLRPC$DocumentAttribute> r8 = r5.attributes
             java.lang.Object r8 = r8.get(r7)
             org.telegram.tgnet.TLRPC$DocumentAttribute r8 = (org.telegram.tgnet.TLRPC$DocumentAttribute) r8
             boolean r9 = r8 instanceof org.telegram.tgnet.TLRPC$TL_documentAttributeImageSize
-            if (r9 == 0) goto L_0x0165
-            int r2 = r8.w
+            if (r9 == 0) goto L_0x0156
+            int r1 = r8.w
             int r5 = r8.h
-            goto L_0x0169
-        L_0x0165:
+            goto L_0x015a
+        L_0x0156:
             int r7 = r7 + 1
-            goto L_0x0152
-        L_0x0168:
+            goto L_0x0143
+        L_0x0159:
             r5 = 0
-        L_0x0169:
-            if (r2 != 0) goto L_0x0172
+        L_0x015a:
+            if (r1 != 0) goto L_0x0162
             int r5 = (int) r0
-            int r1 = org.telegram.messenger.AndroidUtilities.dp(r1)
-            int r2 = r5 + r1
-        L_0x0172:
-            float r1 = (float) r5
-            int r6 = (r1 > r0 ? 1 : (r1 == r0 ? 0 : -1))
-            if (r6 <= 0) goto L_0x017e
-            float r2 = (float) r2
-            float r1 = r0 / r1
-            float r2 = r2 * r1
-            int r2 = (int) r2
+            int r1 = org.telegram.messenger.AndroidUtilities.dp(r2)
+            int r1 = r1 + r5
+        L_0x0162:
+            float r2 = (float) r5
+            int r6 = (r2 > r0 ? 1 : (r2 == r0 ? 0 : -1))
+            if (r6 <= 0) goto L_0x016e
+            float r1 = (float) r1
+            float r2 = r0 / r2
+            float r1 = r1 * r2
+            int r1 = (int) r1
             int r5 = (int) r0
-        L_0x017e:
-            float r0 = (float) r2
+        L_0x016e:
+            float r0 = (float) r1
             int r1 = (r0 > r3 ? 1 : (r0 == r3 ? 0 : -1))
-            if (r1 <= 0) goto L_0x0188
+            if (r1 <= 0) goto L_0x0178
             float r1 = (float) r5
             float r3 = r3 / r0
             float r1 = r1 * r3
             int r5 = (int) r1
-        L_0x0188:
+        L_0x0178:
             int r0 = org.telegram.messenger.AndroidUtilities.dp(r4)
             int r5 = r5 + r0
             return r5
-        L_0x018e:
+        L_0x017e:
             r0 = 1112014848(0x42480000, float:50.0)
             int r0 = org.telegram.messenger.AndroidUtilities.dp(r0)
             return r0

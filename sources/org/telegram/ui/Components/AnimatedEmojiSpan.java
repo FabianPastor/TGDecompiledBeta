@@ -35,6 +35,7 @@ public class AnimatedEmojiSpan extends ReplacementSpan {
     private float scale;
     private float size;
     boolean spanDrawn;
+    public boolean standard;
 
     public AnimatedEmojiSpan(TLRPC$Document tLRPC$Document, Paint.FontMetricsInt fontMetricsInt) {
         this(tLRPC$Document.id, 1.2f, fontMetricsInt);

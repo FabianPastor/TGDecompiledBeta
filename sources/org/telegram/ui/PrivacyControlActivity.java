@@ -1439,7 +1439,7 @@ public class PrivacyControlActivity extends BaseFragment implements Notification
                 org.telegram.ui.PrivacyControlActivity r13 = org.telegram.ui.PrivacyControlActivity.this
                 int r13 = r13.rulesType
                 if (r13 != r9) goto L_0x01ae
-                r13 = 2131629329(0x7f0e1511, float:1.8885976E38)
+                r13 = 2131629330(0x7f0e1512, float:1.8885978E38)
                 java.lang.String r0 = "WhoCanCallMe"
                 java.lang.String r13 = org.telegram.messenger.LocaleController.getString(r0, r13)
                 r12.setText(r13)
@@ -1448,7 +1448,7 @@ public class PrivacyControlActivity extends BaseFragment implements Notification
                 org.telegram.ui.PrivacyControlActivity r13 = org.telegram.ui.PrivacyControlActivity.this
                 int r13 = r13.rulesType
                 if (r13 != r4) goto L_0x01c4
-                r13 = 2131629324(0x7f0e150c, float:1.8885966E38)
+                r13 = 2131629325(0x7f0e150d, float:1.8885968E38)
                 java.lang.String r0 = "WhoCanAddMe"
                 java.lang.String r13 = org.telegram.messenger.LocaleController.getString(r0, r13)
                 r12.setText(r13)
@@ -1588,7 +1588,7 @@ public class PrivacyControlActivity extends BaseFragment implements Notification
                 org.telegram.ui.PrivacyControlActivity r13 = org.telegram.ui.PrivacyControlActivity.this
                 int r13 = r13.rulesType
                 if (r13 != r9) goto L_0x031c
-                r13 = 2131629330(0x7f0e1512, float:1.8885978E38)
+                r13 = 2131629331(0x7f0e1513, float:1.888598E38)
                 java.lang.String r0 = "WhoCanCallMeInfo"
                 java.lang.String r13 = org.telegram.messenger.LocaleController.getString(r0, r13)
                 r12.setText(r13)
@@ -1597,7 +1597,7 @@ public class PrivacyControlActivity extends BaseFragment implements Notification
                 org.telegram.ui.PrivacyControlActivity r13 = org.telegram.ui.PrivacyControlActivity.this
                 int r13 = r13.rulesType
                 if (r13 != r4) goto L_0x0331
-                r13 = 2131629325(0x7f0e150d, float:1.8885968E38)
+                r13 = 2131629326(0x7f0e150e, float:1.888597E38)
                 java.lang.String r0 = "WhoCanAddMeInfo"
                 java.lang.String r13 = org.telegram.messenger.LocaleController.getString(r0, r13)
                 r12.setText(r13)

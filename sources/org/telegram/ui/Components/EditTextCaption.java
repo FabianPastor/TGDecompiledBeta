@@ -63,6 +63,14 @@ public class EditTextCaption extends EditTextBoldCursor {
     }
 
     /* access modifiers changed from: protected */
+    public void onContextMenuClose() {
+    }
+
+    /* access modifiers changed from: protected */
+    public void onContextMenuOpen() {
+    }
+
+    /* access modifiers changed from: protected */
     public void onLineCountChanged(int i, int i2) {
     }
 
@@ -272,6 +280,7 @@ public class EditTextCaption extends EditTextBoldCursor {
         final AnonymousClass3 r0 = new ActionMode.Callback() {
             public boolean onCreateActionMode(ActionMode actionMode, Menu menu) {
                 boolean unused = EditTextCaption.this.copyPasteShowed = true;
+                EditTextCaption.this.onContextMenuOpen();
                 return callback.onCreateActionMode(actionMode, menu);
             }
 
@@ -293,6 +302,7 @@ public class EditTextCaption extends EditTextBoldCursor {
 
             public void onDestroyActionMode(ActionMode actionMode) {
                 boolean unused = EditTextCaption.this.copyPasteShowed = false;
+                EditTextCaption.this.onContextMenuClose();
                 callback.onDestroyActionMode(actionMode);
             }
         };

@@ -442,7 +442,7 @@ public class TwoStepVerificationActivity extends BaseFragment implements Notific
             r13 = r13 | 48
             r4.setGravity(r13)
             android.widget.TextView r4 = r0.bottomTextView
-            r13 = 2131629371(0x7f0e153b, float:1.8886061E38)
+            r13 = 2131629372(0x7f0e153c, float:1.8886063E38)
             java.lang.String r15 = "YourEmailInfo"
             java.lang.String r13 = org.telegram.messenger.LocaleController.getString(r15, r13)
             r4.setText(r13)
@@ -801,7 +801,7 @@ public class TwoStepVerificationActivity extends BaseFragment implements Notific
             goto L_0x0569
         L_0x054c:
             android.widget.TextView r1 = r0.titleTextView
-            r2 = 2131629381(0x7f0e1545, float:1.8886081E38)
+            r2 = 2131629382(0x7f0e1546, float:1.8886083E38)
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString((int) r2)
             r1.setText(r2)
             android.widget.TextView r1 = r0.subtitleTextView

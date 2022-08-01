@@ -12,6 +12,6 @@ public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda218 impl
     }
 
     public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        this.f$0.lambda$onTransitionAnimationEnd$137(tLObject, tLRPC$TL_error);
+        this.f$0.lambda$createView$20(tLObject, tLRPC$TL_error);
     }
 }

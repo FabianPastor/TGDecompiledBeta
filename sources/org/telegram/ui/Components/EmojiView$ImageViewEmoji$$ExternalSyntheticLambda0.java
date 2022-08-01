@@ -11,6 +11,6 @@ public final /* synthetic */ class EmojiView$ImageViewEmoji$$ExternalSyntheticLa
     }
 
     public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-        this.f$0.lambda$setPressed$1(valueAnimator);
+        this.f$0.lambda$setPressed$2(valueAnimator);
     }
 }

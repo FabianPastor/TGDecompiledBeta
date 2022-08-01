@@ -19,6 +19,7 @@ import org.telegram.tgnet.TLRPC$MessageEntity;
 import org.telegram.tgnet.TLRPC$TL_messageEntityBold;
 import org.telegram.tgnet.TLRPC$TL_messageEntityCustomEmoji;
 import org.telegram.tgnet.TLRPC$TL_messageEntityItalic;
+import org.telegram.tgnet.TLRPC$TL_messageEntityPre;
 import org.telegram.tgnet.TLRPC$TL_messageEntitySpoiler;
 import org.telegram.tgnet.TLRPC$TL_messageEntityStrike;
 import org.telegram.tgnet.TLRPC$TL_messageEntityUnderline;
@@ -59,8 +60,13 @@ public class CopyUtilities {
                     arrayList.add(setEntityStartEnd(new TLRPC$TL_messageEntityUnderline(), spanStart, spanEnd));
                 } else if (obj instanceof StrikethroughSpan) {
                     arrayList.add(setEntityStartEnd(new TLRPC$TL_messageEntityStrike(), spanStart, spanEnd));
-                } else if (obj instanceof ParsedSpoilerSpan) {
-                    arrayList.add(setEntityStartEnd(new TLRPC$TL_messageEntitySpoiler(), spanStart, spanEnd));
+                } else if (obj instanceof ParsedSpan) {
+                    int i = ((ParsedSpan) obj).type;
+                    if (i == 0) {
+                        arrayList.add(setEntityStartEnd(new TLRPC$TL_messageEntitySpoiler(), spanStart, spanEnd));
+                    } else if (i == 1) {
+                        arrayList.add(setEntityStartEnd(new TLRPC$TL_messageEntityPre(), spanStart, spanEnd));
+                    }
                 } else if (obj instanceof AnimatedEmojiSpan) {
                     TLRPC$TL_messageEntityCustomEmoji tLRPC$TL_messageEntityCustomEmoji = new TLRPC$TL_messageEntityCustomEmoji();
                     AnimatedEmojiSpan animatedEmojiSpan = (AnimatedEmojiSpan) obj;
@@ -96,11 +102,6 @@ public class CopyUtilities {
         tLRPC$MessageEntity.offset = i;
         tLRPC$MessageEntity.length = i2 - i;
         return tLRPC$MessageEntity;
-    }
-
-    private static class ParsedSpoilerSpan {
-        private ParsedSpoilerSpan() {
-        }
     }
 
     public static class HTMLTagAttributesHandler implements Html.TagHandler, ContentHandler {
@@ -194,43 +195,55 @@ public class CopyUtilities {
         }
 
         public boolean handleTag(boolean z, String str, Editable editable, Attributes attributes) {
+            Class<ParsedSpan> cls = ParsedSpan.class;
             if (str.startsWith("animated-emoji")) {
                 if (z) {
                     String value = HTMLTagAttributesHandler.getValue(attributes, "data-document-id");
-                    if (value == null) {
-                        return false;
+                    if (value != null) {
+                        editable.setSpan(new AnimatedEmojiSpan(Long.parseLong(value), (Paint.FontMetricsInt) null), editable.length(), editable.length(), 17);
+                        return true;
                     }
-                    editable.setSpan(new AnimatedEmojiSpan(Long.parseLong(value), (Paint.FontMetricsInt) null), editable.length(), editable.length(), 17);
-                    return true;
+                } else {
+                    AnimatedEmojiSpan animatedEmojiSpan = (AnimatedEmojiSpan) getLast(editable, AnimatedEmojiSpan.class);
+                    if (animatedEmojiSpan != null) {
+                        int spanStart = editable.getSpanStart(animatedEmojiSpan);
+                        editable.removeSpan(animatedEmojiSpan);
+                        if (spanStart != editable.length()) {
+                            editable.setSpan(animatedEmojiSpan, spanStart, editable.length(), 33);
+                        }
+                        return true;
+                    }
                 }
-                AnimatedEmojiSpan animatedEmojiSpan = (AnimatedEmojiSpan) getLast(editable, AnimatedEmojiSpan.class);
-                if (animatedEmojiSpan == null) {
-                    return false;
-                }
-                int spanStart = editable.getSpanStart(animatedEmojiSpan);
-                editable.removeSpan(animatedEmojiSpan);
-                if (spanStart != editable.length()) {
-                    editable.setSpan(animatedEmojiSpan, spanStart, editable.length(), 33);
-                }
-                return true;
-            } else if (!str.equals("spoiler")) {
-                return false;
-            } else {
+            } else if (str.equals("spoiler")) {
                 if (z) {
-                    editable.setSpan(new ParsedSpoilerSpan(), editable.length(), editable.length(), 17);
+                    editable.setSpan(new ParsedSpan(0), editable.length(), editable.length(), 17);
                     return true;
                 }
-                ParsedSpoilerSpan parsedSpoilerSpan = (ParsedSpoilerSpan) getLast(editable, ParsedSpoilerSpan.class);
-                if (parsedSpoilerSpan == null) {
-                    return false;
+                ParsedSpan last = getLast(editable, cls, 0);
+                if (last != null) {
+                    int spanStart2 = editable.getSpanStart(last);
+                    editable.removeSpan(last);
+                    if (spanStart2 != editable.length()) {
+                        editable.setSpan(last, spanStart2, editable.length(), 33);
+                    }
+                    return true;
                 }
-                int spanStart2 = editable.getSpanStart(parsedSpoilerSpan);
-                editable.removeSpan(parsedSpoilerSpan);
-                if (spanStart2 != editable.length()) {
-                    editable.setSpan(parsedSpoilerSpan, spanStart2, editable.length(), 33);
+            } else if (str.equals("pre")) {
+                if (z) {
+                    editable.setSpan(new ParsedSpan(1), editable.length(), editable.length(), 17);
+                    return true;
                 }
-                return true;
+                ParsedSpan last2 = getLast(editable, cls, 1);
+                if (last2 != null) {
+                    int spanStart3 = editable.getSpanStart(last2);
+                    editable.removeSpan(last2);
+                    if (spanStart3 != editable.length()) {
+                        editable.setSpan(last2, spanStart3, editable.length(), 33);
+                    }
+                    return true;
+                }
             }
+            return false;
         }
 
         private <T> T getLast(Editable editable, Class<T> cls) {
@@ -245,6 +258,28 @@ public class CopyUtilities {
                 }
             }
             return null;
+        }
+
+        private <T extends ParsedSpan> T getLast(Editable editable, Class<T> cls, int i) {
+            T[] tArr = (ParsedSpan[]) editable.getSpans(0, editable.length(), cls);
+            if (tArr.length == 0) {
+                return null;
+            }
+            for (int length = tArr.length; length > 0; length--) {
+                int i2 = length - 1;
+                if (editable.getSpanFlags(tArr[i2]) == 17 && tArr[i2].type == i) {
+                    return tArr[i2];
+                }
+            }
+            return null;
+        }
+    }
+
+    private static class ParsedSpan {
+        final int type;
+
+        private ParsedSpan(int i) {
+            this.type = i;
         }
     }
 }

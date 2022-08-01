@@ -1139,7 +1139,7 @@ public class Bulletin {
             this.textView.setTextSize(1, 15.0f);
             this.textView.setEllipsize(TextUtils.TruncateAt.END);
             this.textView.setPadding(0, AndroidUtilities.dp(8.0f), 0, AndroidUtilities.dp(8.0f));
-            addView(this.textView, LayoutHelper.createFrameRelatively(-2.0f, -2.0f, 8388627, 56.0f, 0.0f, 16.0f, 0.0f));
+            addView(this.textView, LayoutHelper.createFrameRelatively(-2.0f, -2.0f, 8388627, 56.0f, 0.0f, 8.0f, 0.0f));
             this.textView.setLinkTextColor(getThemedColor("undo_cancelColor"));
             setTextColor(getThemedColor("undo_infoColor"));
             setBackground(getThemedColor("undo_background"));

@@ -3,7 +3,10 @@ package org.telegram.ui.Components;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.ValueAnimator;
+import android.app.Activity;
+import android.app.Dialog;
 import android.content.Context;
+import android.content.ContextWrapper;
 import android.content.DialogInterface;
 import android.graphics.Point;
 import android.graphics.PorterDuff;
@@ -37,6 +40,7 @@ import org.telegram.ui.ActionBar.AlertDialog;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.EmojiView;
+import org.telegram.ui.Components.Premium.PremiumFeatureBottomSheet;
 import org.telegram.ui.Components.SizeNotifierFrameLayout;
 
 public class EditTextEmoji extends FrameLayout implements NotificationCenter.NotificationCenterDelegate, SizeNotifierFrameLayout.SizeNotifierFrameLayoutDelegate {
@@ -82,6 +86,10 @@ public class EditTextEmoji extends FrameLayout implements NotificationCenter.Not
 
     /* access modifiers changed from: protected */
     public void bottomPanelTranslationY(float f) {
+    }
+
+    /* access modifiers changed from: protected */
+    public void closeParent() {
     }
 
     /* access modifiers changed from: protected */
@@ -562,6 +570,10 @@ public class EditTextEmoji extends FrameLayout implements NotificationCenter.Not
                     return EmojiView.EmojiViewDelegate.CC.$default$isSearchOpened(this);
                 }
 
+                public /* synthetic */ boolean isUserSelf() {
+                    return EmojiView.EmojiViewDelegate.CC.$default$isUserSelf(this);
+                }
+
                 public /* synthetic */ void onEmojiSettingsClick() {
                     EmojiView.EmojiViewDelegate.CC.$default$onEmojiSettingsClick(this);
                 }
@@ -612,6 +624,41 @@ public class EditTextEmoji extends FrameLayout implements NotificationCenter.Not
                     }
                     EditTextEmoji.this.editText.dispatchKeyEvent(new KeyEvent(0, 67));
                     return true;
+                }
+
+                public void onAnimatedEmojiUnlockClick() {
+                    BaseFragment access$700 = EditTextEmoji.this.parentFragment;
+                    if (access$700 == null) {
+                        new PremiumFeatureBottomSheet(new BaseFragment() {
+                            public int getCurrentAccount() {
+                                return this.currentAccount;
+                            }
+
+                            public Context getContext() {
+                                return EditTextEmoji.this.getContext();
+                            }
+
+                            public Activity getParentActivity() {
+                                for (Context context = getContext(); context instanceof ContextWrapper; context = ((ContextWrapper) context).getBaseContext()) {
+                                    if (context instanceof Activity) {
+                                        return (Activity) context;
+                                    }
+                                }
+                                return null;
+                            }
+
+                            public Dialog getVisibleDialog() {
+                                return new Dialog(EditTextEmoji.this.getContext()) {
+                                    public void dismiss() {
+                                        EditTextEmoji.this.hidePopup(false);
+                                        EditTextEmoji.this.closeParent();
+                                    }
+                                };
+                            }
+                        }, 11, false).show();
+                    } else {
+                        access$700.showDialog(new PremiumFeatureBottomSheet(access$700, 11, false));
+                    }
                 }
 
                 public void onEmojiSelected(String str) {

@@ -707,6 +707,7 @@ public class EmojiTabsStrip extends ScrollableHorizontalScrollView {
 
     public void select(int i, boolean z) {
         int i2;
+        boolean z2 = z && !this.first;
         if (!this.recentIsShown) {
             i = Math.max(1, i);
         }
@@ -722,7 +723,7 @@ public class EmojiTabsStrip extends ScrollableHorizontalScrollView {
                 while (i7 < emojiTabsView.contentView.getChildCount()) {
                     View childAt2 = emojiTabsView.contentView.getChildAt(i7);
                     if (childAt2 instanceof EmojiTabButton) {
-                        ((EmojiTabButton) childAt2).updateSelect(i == i6, z);
+                        ((EmojiTabButton) childAt2).updateSelect(i == i6, z2);
                     }
                     i7++;
                     i6++;
@@ -730,7 +731,7 @@ public class EmojiTabsStrip extends ScrollableHorizontalScrollView {
                 i2 = i6 - 1;
             } else {
                 if (childAt instanceof EmojiTabButton) {
-                    ((EmojiTabButton) childAt).updateSelect(i == i5, z);
+                    ((EmojiTabButton) childAt).updateSelect(i == i5, z2);
                 }
                 i2 = i5;
             }
@@ -747,7 +748,7 @@ public class EmojiTabsStrip extends ScrollableHorizontalScrollView {
             }
             float f = this.selectT;
             float f2 = (float) this.selected;
-            if (z) {
+            if (z2) {
                 ValueAnimator ofFloat = ValueAnimator.ofFloat(new float[]{0.0f, 1.0f});
                 this.selectAnimator = ofFloat;
                 ofFloat.addUpdateListener(new EmojiTabsStrip$$ExternalSyntheticLambda0(this, f, f2));
@@ -761,7 +762,7 @@ public class EmojiTabsStrip extends ScrollableHorizontalScrollView {
             }
             EmojiTabsView emojiTabsView2 = this.emojiTabs;
             if (emojiTabsView2 != null) {
-                emojiTabsView2.show(this.selected == 1, z);
+                emojiTabsView2.show(this.selected == 1, z2);
             }
             View childAt3 = this.contentView.getChildAt(this.selected);
             if (this.selected >= 2) {
@@ -1130,7 +1131,7 @@ public class EmojiTabsStrip extends ScrollableHorizontalScrollView {
 
                 /* access modifiers changed from: protected */
                 public void onMeasure(int i, int i2) {
-                    super.onMeasure(Math.max(View.MeasureSpec.getSize(i), View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp((float) ((EmojiTabsView.this.contentView.getChildCount() * 32) - 2)), NUM)), i2);
+                    super.onMeasure(Math.max(View.MeasureSpec.getSize(i), View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp((float) (EmojiTabsView.this.contentView.getChildCount() * 32)), NUM)), i2);
                 }
             };
             this.contentView = r1;
@@ -1152,7 +1153,7 @@ public class EmojiTabsStrip extends ScrollableHorizontalScrollView {
         }
 
         public int maxWidth() {
-            return AndroidUtilities.dp((Math.min(5.7f, (float) this.contentView.getChildCount()) * 32.0f) - 2.0f);
+            return AndroidUtilities.dp(Math.min(5.7f, (float) this.contentView.getChildCount()) * 32.0f);
         }
 
         /* access modifiers changed from: protected */

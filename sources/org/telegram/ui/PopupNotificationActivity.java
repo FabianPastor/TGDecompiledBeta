@@ -404,6 +404,18 @@ public class PopupNotificationActivity extends Activity implements NotificationC
             public void onAudioVideoInterfaceUpdated() {
             }
 
+            public /* synthetic */ void onContextMenuClose() {
+                ChatActivityEnterView.ChatActivityEnterViewDelegate.CC.$default$onContextMenuClose(this);
+            }
+
+            public /* synthetic */ void onContextMenuOpen() {
+                ChatActivityEnterView.ChatActivityEnterViewDelegate.CC.$default$onContextMenuOpen(this);
+            }
+
+            public /* synthetic */ void onEditTextScroll() {
+                ChatActivityEnterView.ChatActivityEnterViewDelegate.CC.$default$onEditTextScroll(this);
+            }
+
             public void onMessageEditEnd(boolean z) {
             }
 

@@ -337,39 +337,39 @@ public class BitmapsCache {
         return frame;
     }
 
-    /* JADX WARNING: Code restructure failed: missing block: B:47:?, code lost:
+    /* JADX WARNING: Code restructure failed: missing block: B:44:?, code lost:
         r0 = new android.graphics.BitmapFactory.Options();
         r0.inBitmap = r11;
         android.graphics.BitmapFactory.decodeByteArray(r9.bufferTmp, 0, r10.frameSize, r0);
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:48:0x00bc, code lost:
+    /* JADX WARNING: Code restructure failed: missing block: B:45:0x00b9, code lost:
         return 0;
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:49:0x00bd, code lost:
+    /* JADX WARNING: Code restructure failed: missing block: B:46:0x00ba, code lost:
         r10 = e;
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:50:0x00be, code lost:
+    /* JADX WARNING: Code restructure failed: missing block: B:47:0x00bb, code lost:
         r0 = r3;
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:51:0x00c0, code lost:
+    /* JADX WARNING: Code restructure failed: missing block: B:48:0x00bd, code lost:
         r0 = r3;
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:63:0x00ce, code lost:
-        if (r0 != null) goto L_0x00d0;
+    /* JADX WARNING: Code restructure failed: missing block: B:60:0x00cb, code lost:
+        if (r0 != null) goto L_0x00cd;
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:65:?, code lost:
+    /* JADX WARNING: Code restructure failed: missing block: B:62:?, code lost:
         r0.close();
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:66:0x00d4, code lost:
+    /* JADX WARNING: Code restructure failed: missing block: B:63:0x00d1, code lost:
         r10 = move-exception;
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:67:0x00d5, code lost:
+    /* JADX WARNING: Code restructure failed: missing block: B:64:0x00d2, code lost:
         r10.printStackTrace();
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:68:0x00d8, code lost:
+    /* JADX WARNING: Code restructure failed: missing block: B:65:0x00d5, code lost:
         return -1;
      */
-    /* JADX WARNING: Removed duplicated region for block: B:64:0x00d0 A[SYNTHETIC, Splitter:B:64:0x00d0] */
+    /* JADX WARNING: Removed duplicated region for block: B:61:0x00cd A[SYNTHETIC, Splitter:B:61:0x00cd] */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public int getFrame(int r10, android.graphics.Bitmap r11) {
         /*
@@ -380,127 +380,126 @@ public class BitmapsCache {
             return r1
         L_0x0006:
             r0 = 0
-            java.lang.Object r2 = r9.mutex     // Catch:{ FileNotFoundException -> 0x00cd, IOException -> 0x00c8 }
-            monitor-enter(r2)     // Catch:{ FileNotFoundException -> 0x00cd, IOException -> 0x00c8 }
-            boolean r3 = r9.cacheCreated     // Catch:{ all -> 0x00c5 }
+            java.lang.Object r2 = r9.mutex     // Catch:{ FileNotFoundException -> 0x00ca, IOException -> 0x00c5 }
+            monitor-enter(r2)     // Catch:{ FileNotFoundException -> 0x00ca, IOException -> 0x00c5 }
+            boolean r3 = r9.cacheCreated     // Catch:{ all -> 0x00c2 }
             r4 = 0
             if (r3 == 0) goto L_0x0013
-            java.io.RandomAccessFile r3 = r9.cachedFile     // Catch:{ all -> 0x00c5 }
-            if (r3 != 0) goto L_0x0071
+            java.io.RandomAccessFile r3 = r9.cachedFile     // Catch:{ all -> 0x00c2 }
+            if (r3 != 0) goto L_0x006e
         L_0x0013:
-            java.io.RandomAccessFile r3 = new java.io.RandomAccessFile     // Catch:{ all -> 0x00c5 }
-            java.io.File r5 = r9.file     // Catch:{ all -> 0x00c5 }
+            java.io.RandomAccessFile r3 = new java.io.RandomAccessFile     // Catch:{ all -> 0x00c2 }
+            java.io.File r5 = r9.file     // Catch:{ all -> 0x00c2 }
             java.lang.String r6 = "r"
-            r3.<init>(r5, r6)     // Catch:{ all -> 0x00c5 }
-            boolean r5 = r3.readBoolean()     // Catch:{ all -> 0x00c2 }
-            r9.cacheCreated = r5     // Catch:{ all -> 0x00c2 }
-            boolean r5 = r9.cacheCreated     // Catch:{ all -> 0x00c2 }
+            r3.<init>(r5, r6)     // Catch:{ all -> 0x00c2 }
+            boolean r5 = r3.readBoolean()     // Catch:{ all -> 0x00bf }
+            r9.cacheCreated = r5     // Catch:{ all -> 0x00bf }
+            boolean r5 = r9.cacheCreated     // Catch:{ all -> 0x00bf }
             if (r5 == 0) goto L_0x0056
-            java.util.ArrayList<org.telegram.messenger.utils.BitmapsCache$FrameOffset> r5 = r9.frameOffsets     // Catch:{ all -> 0x00c2 }
-            boolean r5 = r5.isEmpty()     // Catch:{ all -> 0x00c2 }
+            java.util.ArrayList<org.telegram.messenger.utils.BitmapsCache$FrameOffset> r5 = r9.frameOffsets     // Catch:{ all -> 0x00bf }
+            boolean r5 = r5.isEmpty()     // Catch:{ all -> 0x00bf }
             if (r5 == 0) goto L_0x0056
-            int r5 = r3.readInt()     // Catch:{ all -> 0x00c2 }
-            long r5 = (long) r5     // Catch:{ all -> 0x00c2 }
-            r3.seek(r5)     // Catch:{ all -> 0x00c2 }
-            int r5 = r3.readInt()     // Catch:{ all -> 0x00c2 }
+            int r5 = r3.readInt()     // Catch:{ all -> 0x00bf }
+            long r5 = (long) r5     // Catch:{ all -> 0x00bf }
+            r3.seek(r5)     // Catch:{ all -> 0x00bf }
+            int r5 = r3.readInt()     // Catch:{ all -> 0x00bf }
             r6 = 0
         L_0x003b:
             if (r6 >= r5) goto L_0x0056
-            org.telegram.messenger.utils.BitmapsCache$FrameOffset r7 = new org.telegram.messenger.utils.BitmapsCache$FrameOffset     // Catch:{ all -> 0x00c2 }
-            r7.<init>(r6)     // Catch:{ all -> 0x00c2 }
-            int r8 = r3.readInt()     // Catch:{ all -> 0x00c2 }
-            r7.frameOffset = r8     // Catch:{ all -> 0x00c2 }
-            int r8 = r3.readInt()     // Catch:{ all -> 0x00c2 }
-            r7.frameSize = r8     // Catch:{ all -> 0x00c2 }
-            java.util.ArrayList<org.telegram.messenger.utils.BitmapsCache$FrameOffset> r8 = r9.frameOffsets     // Catch:{ all -> 0x00c2 }
-            r8.add(r7)     // Catch:{ all -> 0x00c2 }
+            org.telegram.messenger.utils.BitmapsCache$FrameOffset r7 = new org.telegram.messenger.utils.BitmapsCache$FrameOffset     // Catch:{ all -> 0x00bf }
+            r7.<init>(r6)     // Catch:{ all -> 0x00bf }
+            int r8 = r3.readInt()     // Catch:{ all -> 0x00bf }
+            r7.frameOffset = r8     // Catch:{ all -> 0x00bf }
+            int r8 = r3.readInt()     // Catch:{ all -> 0x00bf }
+            r7.frameSize = r8     // Catch:{ all -> 0x00bf }
+            java.util.ArrayList<org.telegram.messenger.utils.BitmapsCache$FrameOffset> r8 = r9.frameOffsets     // Catch:{ all -> 0x00bf }
+            r8.add(r7)     // Catch:{ all -> 0x00bf }
             int r6 = r6 + 1
             goto L_0x003b
         L_0x0056:
-            boolean r5 = r9.cacheCreated     // Catch:{ all -> 0x00c2 }
+            boolean r5 = r9.cacheCreated     // Catch:{ all -> 0x00bf }
             if (r5 != 0) goto L_0x0064
-            r3.close()     // Catch:{ all -> 0x00c2 }
-            org.telegram.messenger.utils.BitmapsCache$Cacheable r10 = r9.source     // Catch:{ all -> 0x00c5 }
-            r10.getFirstFrame(r11)     // Catch:{ all -> 0x00c5 }
-            monitor-exit(r2)     // Catch:{ all -> 0x00c5 }
+            r3.close()     // Catch:{ all -> 0x00bf }
+            org.telegram.messenger.utils.BitmapsCache$Cacheable r10 = r9.source     // Catch:{ all -> 0x00c2 }
+            r10.getFirstFrame(r11)     // Catch:{ all -> 0x00c2 }
+            monitor-exit(r2)     // Catch:{ all -> 0x00c2 }
             return r4
         L_0x0064:
-            java.util.ArrayList<org.telegram.messenger.utils.BitmapsCache$FrameOffset> r5 = r9.frameOffsets     // Catch:{ all -> 0x00c2 }
-            boolean r5 = r5.isEmpty()     // Catch:{ all -> 0x00c2 }
-            if (r5 == 0) goto L_0x0071
-            r3.close()     // Catch:{ all -> 0x00c2 }
-            monitor-exit(r2)     // Catch:{ all -> 0x00c5 }
+            java.util.ArrayList<org.telegram.messenger.utils.BitmapsCache$FrameOffset> r5 = r9.frameOffsets     // Catch:{ all -> 0x00bf }
+            boolean r5 = r5.isEmpty()     // Catch:{ all -> 0x00bf }
+            if (r5 == 0) goto L_0x006e
+            monitor-exit(r2)     // Catch:{ all -> 0x00bf }
             return r1
-        L_0x0071:
-            java.util.ArrayList<org.telegram.messenger.utils.BitmapsCache$FrameOffset> r5 = r9.frameOffsets     // Catch:{ all -> 0x00c2 }
-            int r5 = r5.size()     // Catch:{ all -> 0x00c2 }
+        L_0x006e:
+            java.util.ArrayList<org.telegram.messenger.utils.BitmapsCache$FrameOffset> r5 = r9.frameOffsets     // Catch:{ all -> 0x00bf }
+            int r5 = r5.size()     // Catch:{ all -> 0x00bf }
             int r5 = r5 + -1
-            int r10 = org.telegram.messenger.Utilities.clamp((int) r10, (int) r5, (int) r4)     // Catch:{ all -> 0x00c2 }
-            java.util.ArrayList<org.telegram.messenger.utils.BitmapsCache$FrameOffset> r5 = r9.frameOffsets     // Catch:{ all -> 0x00c2 }
-            java.lang.Object r10 = r5.get(r10)     // Catch:{ all -> 0x00c2 }
-            org.telegram.messenger.utils.BitmapsCache$FrameOffset r10 = (org.telegram.messenger.utils.BitmapsCache.FrameOffset) r10     // Catch:{ all -> 0x00c2 }
-            int r5 = r10.frameOffset     // Catch:{ all -> 0x00c2 }
-            long r5 = (long) r5     // Catch:{ all -> 0x00c2 }
-            r3.seek(r5)     // Catch:{ all -> 0x00c2 }
-            byte[] r5 = r9.bufferTmp     // Catch:{ all -> 0x00c2 }
-            if (r5 == 0) goto L_0x0094
-            int r5 = r5.length     // Catch:{ all -> 0x00c2 }
-            int r6 = r10.frameSize     // Catch:{ all -> 0x00c2 }
-            if (r5 >= r6) goto L_0x009a
-        L_0x0094:
-            int r5 = r10.frameSize     // Catch:{ all -> 0x00c2 }
-            byte[] r5 = new byte[r5]     // Catch:{ all -> 0x00c2 }
-            r9.bufferTmp = r5     // Catch:{ all -> 0x00c2 }
-        L_0x009a:
-            byte[] r5 = r9.bufferTmp     // Catch:{ all -> 0x00c2 }
-            int r6 = r10.frameSize     // Catch:{ all -> 0x00c2 }
-            r3.readFully(r5, r4, r6)     // Catch:{ all -> 0x00c2 }
-            boolean r5 = r9.recycled     // Catch:{ all -> 0x00c2 }
-            if (r5 != 0) goto L_0x00a8
-            r9.cachedFile = r3     // Catch:{ all -> 0x00c2 }
-            goto L_0x00ad
-        L_0x00a8:
-            r9.cachedFile = r0     // Catch:{ all -> 0x00c2 }
-            r3.close()     // Catch:{ all -> 0x00c2 }
-        L_0x00ad:
-            monitor-exit(r2)     // Catch:{ all -> 0x00c2 }
-            android.graphics.BitmapFactory$Options r0 = new android.graphics.BitmapFactory$Options     // Catch:{ FileNotFoundException -> 0x00c0, IOException -> 0x00bd }
-            r0.<init>()     // Catch:{ FileNotFoundException -> 0x00c0, IOException -> 0x00bd }
-            r0.inBitmap = r11     // Catch:{ FileNotFoundException -> 0x00c0, IOException -> 0x00bd }
-            byte[] r11 = r9.bufferTmp     // Catch:{ FileNotFoundException -> 0x00c0, IOException -> 0x00bd }
-            int r10 = r10.frameSize     // Catch:{ FileNotFoundException -> 0x00c0, IOException -> 0x00bd }
-            android.graphics.BitmapFactory.decodeByteArray(r11, r4, r10, r0)     // Catch:{ FileNotFoundException -> 0x00c0, IOException -> 0x00bd }
+            int r10 = org.telegram.messenger.Utilities.clamp((int) r10, (int) r5, (int) r4)     // Catch:{ all -> 0x00bf }
+            java.util.ArrayList<org.telegram.messenger.utils.BitmapsCache$FrameOffset> r5 = r9.frameOffsets     // Catch:{ all -> 0x00bf }
+            java.lang.Object r10 = r5.get(r10)     // Catch:{ all -> 0x00bf }
+            org.telegram.messenger.utils.BitmapsCache$FrameOffset r10 = (org.telegram.messenger.utils.BitmapsCache.FrameOffset) r10     // Catch:{ all -> 0x00bf }
+            int r5 = r10.frameOffset     // Catch:{ all -> 0x00bf }
+            long r5 = (long) r5     // Catch:{ all -> 0x00bf }
+            r3.seek(r5)     // Catch:{ all -> 0x00bf }
+            byte[] r5 = r9.bufferTmp     // Catch:{ all -> 0x00bf }
+            if (r5 == 0) goto L_0x0091
+            int r5 = r5.length     // Catch:{ all -> 0x00bf }
+            int r6 = r10.frameSize     // Catch:{ all -> 0x00bf }
+            if (r5 >= r6) goto L_0x0097
+        L_0x0091:
+            int r5 = r10.frameSize     // Catch:{ all -> 0x00bf }
+            byte[] r5 = new byte[r5]     // Catch:{ all -> 0x00bf }
+            r9.bufferTmp = r5     // Catch:{ all -> 0x00bf }
+        L_0x0097:
+            byte[] r5 = r9.bufferTmp     // Catch:{ all -> 0x00bf }
+            int r6 = r10.frameSize     // Catch:{ all -> 0x00bf }
+            r3.readFully(r5, r4, r6)     // Catch:{ all -> 0x00bf }
+            boolean r5 = r9.recycled     // Catch:{ all -> 0x00bf }
+            if (r5 != 0) goto L_0x00a5
+            r9.cachedFile = r3     // Catch:{ all -> 0x00bf }
+            goto L_0x00aa
+        L_0x00a5:
+            r9.cachedFile = r0     // Catch:{ all -> 0x00bf }
+            r3.close()     // Catch:{ all -> 0x00bf }
+        L_0x00aa:
+            monitor-exit(r2)     // Catch:{ all -> 0x00bf }
+            android.graphics.BitmapFactory$Options r0 = new android.graphics.BitmapFactory$Options     // Catch:{ FileNotFoundException -> 0x00bd, IOException -> 0x00ba }
+            r0.<init>()     // Catch:{ FileNotFoundException -> 0x00bd, IOException -> 0x00ba }
+            r0.inBitmap = r11     // Catch:{ FileNotFoundException -> 0x00bd, IOException -> 0x00ba }
+            byte[] r11 = r9.bufferTmp     // Catch:{ FileNotFoundException -> 0x00bd, IOException -> 0x00ba }
+            int r10 = r10.frameSize     // Catch:{ FileNotFoundException -> 0x00bd, IOException -> 0x00ba }
+            android.graphics.BitmapFactory.decodeByteArray(r11, r4, r10, r0)     // Catch:{ FileNotFoundException -> 0x00bd, IOException -> 0x00ba }
             return r4
-        L_0x00bd:
-            r10 = move-exception
-            r0 = r3
-            goto L_0x00c9
-        L_0x00c0:
-            r0 = r3
-            goto L_0x00ce
-        L_0x00c2:
+        L_0x00ba:
             r10 = move-exception
             r0 = r3
             goto L_0x00c6
+        L_0x00bd:
+            r0 = r3
+            goto L_0x00cb
+        L_0x00bf:
+            r10 = move-exception
+            r0 = r3
+            goto L_0x00c3
+        L_0x00c2:
+            r10 = move-exception
+        L_0x00c3:
+            monitor-exit(r2)     // Catch:{ all -> 0x00c2 }
+            throw r10     // Catch:{ FileNotFoundException -> 0x00ca, IOException -> 0x00c5 }
         L_0x00c5:
             r10 = move-exception
         L_0x00c6:
-            monitor-exit(r2)     // Catch:{ all -> 0x00c5 }
-            throw r10     // Catch:{ FileNotFoundException -> 0x00cd, IOException -> 0x00c8 }
-        L_0x00c8:
-            r10 = move-exception
-        L_0x00c9:
             org.telegram.messenger.FileLog.e((java.lang.Throwable) r10)
-            goto L_0x00ce
-        L_0x00cd:
-        L_0x00ce:
-            if (r0 == 0) goto L_0x00d8
-            r0.close()     // Catch:{ IOException -> 0x00d4 }
-            goto L_0x00d8
-        L_0x00d4:
+            goto L_0x00cb
+        L_0x00ca:
+        L_0x00cb:
+            if (r0 == 0) goto L_0x00d5
+            r0.close()     // Catch:{ IOException -> 0x00d1 }
+            goto L_0x00d5
+        L_0x00d1:
             r10 = move-exception
             r10.printStackTrace()
-        L_0x00d8:
+        L_0x00d5:
             return r1
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.utils.BitmapsCache.getFrame(int, android.graphics.Bitmap):int");

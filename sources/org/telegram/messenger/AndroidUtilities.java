@@ -79,6 +79,7 @@ import android.widget.ListView;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import androidx.core.content.ContextCompat;
+import androidx.core.math.MathUtils;
 import androidx.dynamicanimation.animation.DynamicAnimation;
 import androidx.dynamicanimation.animation.SpringAnimation;
 import androidx.dynamicanimation.animation.SpringForce;
@@ -4649,6 +4650,12 @@ public class AndroidUtilities {
         if (rect3 != null) {
             rect3.set(lerp(rect.left, rect2.left, f), lerp(rect.top, rect2.top, f), lerp(rect.right, rect2.right, f), lerp(rect.bottom, rect2.bottom, f));
         }
+    }
+
+    public static float cascade(float f, int i, int i2, float f2) {
+        float f3 = (float) i2;
+        float f4 = (1.0f / f3) * f2;
+        return MathUtils.clamp((f - ((((float) i) / f3) * (1.0f - f4))) / f4, 0.0f, 1.0f);
     }
 
     public static float computeDampingRatio(float f, float f2, float f3) {

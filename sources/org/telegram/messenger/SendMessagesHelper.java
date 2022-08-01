@@ -14150,35 +14150,36 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
         }
     }
 
-    public static void prepareSendingAudioDocuments(AccountInstance accountInstance, ArrayList<MessageObject> arrayList, String str, long j, MessageObject messageObject, MessageObject messageObject2, MessageObject messageObject3, boolean z, int i) {
-        new Thread(new SendMessagesHelper$$ExternalSyntheticLambda10(arrayList, j, accountInstance, str, messageObject3, messageObject, messageObject2, z, i)).start();
+    public static void prepareSendingAudioDocuments(AccountInstance accountInstance, ArrayList<MessageObject> arrayList, CharSequence charSequence, long j, MessageObject messageObject, MessageObject messageObject2, MessageObject messageObject3, boolean z, int i) {
+        new Thread(new SendMessagesHelper$$ExternalSyntheticLambda10(arrayList, j, accountInstance, charSequence, messageObject3, messageObject, messageObject2, z, i)).start();
     }
 
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r13v3, resolved type: java.lang.Object[]} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r20v3, resolved type: org.telegram.tgnet.TLRPC$TL_document} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r13v5, resolved type: java.lang.Object[]} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r20v5, resolved type: org.telegram.tgnet.TLRPC$TL_document} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r11v8, resolved type: java.lang.Object[]} */
     /* access modifiers changed from: private */
     /* JADX WARNING: Multi-variable type inference failed */
     /* JADX WARNING: Removed duplicated region for block: B:23:0x0082  */
     /* JADX WARNING: Removed duplicated region for block: B:24:0x008b  */
     /* JADX WARNING: Removed duplicated region for block: B:26:0x008f  */
-    /* JADX WARNING: Removed duplicated region for block: B:30:0x00a4  */
-    /* JADX WARNING: Removed duplicated region for block: B:31:0x00a7  */
-    /* JADX WARNING: Removed duplicated region for block: B:34:0x00b0  */
-    /* JADX WARNING: Removed duplicated region for block: B:36:0x00b7  */
-    /* JADX WARNING: Removed duplicated region for block: B:41:0x00db  */
-    /* JADX WARNING: Removed duplicated region for block: B:47:0x00e2 A[SYNTHETIC] */
+    /* JADX WARNING: Removed duplicated region for block: B:31:0x00a8  */
+    /* JADX WARNING: Removed duplicated region for block: B:32:0x00b3  */
+    /* JADX WARNING: Removed duplicated region for block: B:34:0x00b7  */
+    /* JADX WARNING: Removed duplicated region for block: B:37:0x00c6  */
+    /* JADX WARNING: Removed duplicated region for block: B:39:0x00cd  */
+    /* JADX WARNING: Removed duplicated region for block: B:44:0x00f1  */
+    /* JADX WARNING: Removed duplicated region for block: B:50:0x00f8 A[SYNTHETIC] */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    public static /* synthetic */ void lambda$prepareSendingAudioDocuments$75(java.util.ArrayList r22, long r23, org.telegram.messenger.AccountInstance r25, java.lang.String r26, org.telegram.messenger.MessageObject r27, org.telegram.messenger.MessageObject r28, org.telegram.messenger.MessageObject r29, boolean r30, int r31) {
+    public static /* synthetic */ void lambda$prepareSendingAudioDocuments$75(java.util.ArrayList r23, long r24, org.telegram.messenger.AccountInstance r26, java.lang.CharSequence r27, org.telegram.messenger.MessageObject r28, org.telegram.messenger.MessageObject r29, org.telegram.messenger.MessageObject r30, boolean r31, int r32) {
         /*
-            int r0 = r22.size()
+            int r0 = r23.size()
             r1 = 0
             r2 = 0
             r4 = 0
             r5 = 0
         L_0x0009:
-            if (r4 >= r0) goto L_0x00fd
-            r6 = r22
+            if (r4 >= r0) goto L_0x0113
+            r6 = r23
             java.lang.Object r7 = r6.get(r4)
             r12 = r7
             org.telegram.messenger.MessageObject r12 = (org.telegram.messenger.MessageObject) r12
@@ -14186,7 +14187,7 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
             java.lang.String r7 = r7.attachPath
             java.io.File r8 = new java.io.File
             r8.<init>(r7)
-            boolean r9 = org.telegram.messenger.DialogObject.isEncryptedDialog(r23)
+            boolean r9 = org.telegram.messenger.DialogObject.isEncryptedDialog(r24)
             r10 = 1
             if (r9 != 0) goto L_0x0031
             if (r0 <= r10) goto L_0x0031
@@ -14208,7 +14209,7 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
         L_0x004b:
             r8 = 0
             if (r9 != 0) goto L_0x007d
-            org.telegram.messenger.MessagesStorage r11 = r25.getMessagesStorage()
+            org.telegram.messenger.MessagesStorage r11 = r26.getMessagesStorage()
             if (r9 != 0) goto L_0x0056
             r13 = 1
             goto L_0x0057
@@ -14227,7 +14228,7 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
             java.lang.String r11 = (java.lang.String) r11
             r17 = 0
             r18 = 0
-            r13 = r25
+            r13 = r26
             r14 = r9
             r15 = r20
             r16 = r7
@@ -14248,29 +14249,38 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
             r11 = r20
         L_0x008d:
             if (r9 == 0) goto L_0x00a2
-            int r9 = org.telegram.messenger.DialogObject.getEncryptedChatId(r23)
-            org.telegram.messenger.MessagesController r13 = r25.getMessagesController()
+            int r9 = org.telegram.messenger.DialogObject.getEncryptedChatId(r24)
+            org.telegram.messenger.MessagesController r13 = r26.getMessagesController()
             java.lang.Integer r9 = java.lang.Integer.valueOf(r9)
             org.telegram.tgnet.TLRPC$EncryptedChat r9 = r13.getEncryptedChat(r9)
             if (r9 != 0) goto L_0x00a2
             return
         L_0x00a2:
-            if (r4 != 0) goto L_0x00a7
-            r19 = r26
-            goto L_0x00a9
-        L_0x00a7:
+            java.lang.CharSequence[] r9 = new java.lang.CharSequence[r10]
+            r9[r1] = r27
+            if (r4 != 0) goto L_0x00b3
+            org.telegram.messenger.MediaDataController r13 = r26.getMediaDataController()
+            java.util.ArrayList r13 = r13.getEntities(r9, r10)
+            r20 = r13
+            goto L_0x00b5
+        L_0x00b3:
+            r20 = r8
+        L_0x00b5:
+            if (r4 != 0) goto L_0x00bd
+            r8 = r9[r1]
+            java.lang.String r8 = r8.toString()
+        L_0x00bd:
             r19 = r8
-        L_0x00a9:
             java.util.HashMap r13 = new java.util.HashMap
             r13.<init>()
-            if (r7 == 0) goto L_0x00b5
+            if (r7 == 0) goto L_0x00cb
             java.lang.String r8 = "originalPath"
             r13.put(r8, r7)
-        L_0x00b5:
-            if (r14 == 0) goto L_0x00bc
+        L_0x00cb:
+            if (r14 == 0) goto L_0x00d2
             java.lang.String r7 = "parentObject"
             r13.put(r7, r14)
-        L_0x00bc:
+        L_0x00d2:
             int r5 = r5 + r10
             java.lang.StringBuilder r7 = new java.lang.StringBuilder
             r7.<init>()
@@ -14281,41 +14291,41 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
             java.lang.String r8 = "groupId"
             r13.put(r8, r7)
             r7 = 10
-            if (r5 == r7) goto L_0x00db
+            if (r5 == r7) goto L_0x00f1
             int r7 = r0 + -1
-            if (r4 != r7) goto L_0x00e2
-        L_0x00db:
+            if (r4 != r7) goto L_0x00f8
+        L_0x00f1:
             java.lang.String r7 = "final"
             java.lang.String r8 = "1"
             r13.put(r7, r8)
-        L_0x00e2:
+        L_0x00f8:
             org.telegram.messenger.SendMessagesHelper$$ExternalSyntheticLambda15 r7 = new org.telegram.messenger.SendMessagesHelper$$ExternalSyntheticLambda15
             r8 = r7
-            r9 = r27
-            r10 = r25
-            r15 = r23
-            r17 = r28
-            r18 = r29
-            r20 = r30
+            r9 = r28
+            r10 = r26
+            r15 = r24
+            r17 = r29
+            r18 = r30
             r21 = r31
-            r8.<init>(r9, r10, r11, r12, r13, r14, r15, r17, r18, r19, r20, r21)
+            r22 = r32
+            r8.<init>(r9, r10, r11, r12, r13, r14, r15, r17, r18, r19, r20, r21, r22)
             org.telegram.messenger.AndroidUtilities.runOnUIThread(r7)
             int r4 = r4 + 1
             goto L_0x0009
-        L_0x00fd:
+        L_0x0113:
             return
         */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.SendMessagesHelper.lambda$prepareSendingAudioDocuments$75(java.util.ArrayList, long, org.telegram.messenger.AccountInstance, java.lang.String, org.telegram.messenger.MessageObject, org.telegram.messenger.MessageObject, org.telegram.messenger.MessageObject, boolean, int):void");
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.SendMessagesHelper.lambda$prepareSendingAudioDocuments$75(java.util.ArrayList, long, org.telegram.messenger.AccountInstance, java.lang.CharSequence, org.telegram.messenger.MessageObject, org.telegram.messenger.MessageObject, org.telegram.messenger.MessageObject, boolean, int):void");
     }
 
     /* access modifiers changed from: private */
-    public static /* synthetic */ void lambda$prepareSendingAudioDocuments$74(MessageObject messageObject, AccountInstance accountInstance, TLRPC$TL_document tLRPC$TL_document, MessageObject messageObject2, HashMap hashMap, String str, long j, MessageObject messageObject3, MessageObject messageObject4, String str2, boolean z, int i) {
+    public static /* synthetic */ void lambda$prepareSendingAudioDocuments$74(MessageObject messageObject, AccountInstance accountInstance, TLRPC$TL_document tLRPC$TL_document, MessageObject messageObject2, HashMap hashMap, String str, long j, MessageObject messageObject3, MessageObject messageObject4, String str2, ArrayList arrayList, boolean z, int i) {
         MessageObject messageObject5 = messageObject2;
         if (messageObject != null) {
             accountInstance.getSendMessagesHelper().editMessage(messageObject, (TLRPC$TL_photo) null, (VideoEditedInfo) null, tLRPC$TL_document, messageObject5.messageOwner.attachPath, hashMap, false, str);
             return;
         }
-        accountInstance.getSendMessagesHelper().sendMessage(tLRPC$TL_document, (VideoEditedInfo) null, messageObject5.messageOwner.attachPath, j, messageObject3, messageObject4, str2, (ArrayList<TLRPC$MessageEntity>) null, (TLRPC$ReplyMarkup) null, hashMap, z, i, 0, str, (MessageObject.SendAnimationData) null);
+        accountInstance.getSendMessagesHelper().sendMessage(tLRPC$TL_document, (VideoEditedInfo) null, messageObject5.messageOwner.attachPath, j, messageObject3, messageObject4, str2, arrayList, (TLRPC$ReplyMarkup) null, hashMap, z, i, 0, str, (MessageObject.SendAnimationData) null);
     }
 
     private static void finishGroup(AccountInstance accountInstance, long j, int i) {

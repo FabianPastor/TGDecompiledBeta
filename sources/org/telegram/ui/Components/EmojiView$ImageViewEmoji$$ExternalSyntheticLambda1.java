@@ -1,13 +1,15 @@
 package org.telegram.ui.Components;
 
-public final /* synthetic */ class EmojiView$ImageViewEmoji$$ExternalSyntheticLambda1 implements Runnable {
-    public final /* synthetic */ EmojiView f$0;
+import org.telegram.ui.Components.EmojiView;
 
-    public /* synthetic */ EmojiView$ImageViewEmoji$$ExternalSyntheticLambda1(EmojiView emojiView) {
-        this.f$0 = emojiView;
+public final /* synthetic */ class EmojiView$ImageViewEmoji$$ExternalSyntheticLambda1 implements Runnable {
+    public final /* synthetic */ EmojiView.ImageViewEmoji f$0;
+
+    public /* synthetic */ EmojiView$ImageViewEmoji$$ExternalSyntheticLambda1(EmojiView.ImageViewEmoji imageViewEmoji) {
+        this.f$0 = imageViewEmoji;
     }
 
     public final void run() {
-        this.f$0.openPremiumAnimatedEmojiFeature();
+        this.f$0.lambda$sendEmoji$1();
     }
 }

@@ -3,7 +3,6 @@ package org.telegram.ui.Components.Premium;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.ValueAnimator;
-import android.app.Activity;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.RectF;
@@ -36,6 +35,7 @@ import org.telegram.ui.ActionBar.BottomSheet;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.ChatActivity;
 import org.telegram.ui.Components.BottomPagesView;
+import org.telegram.ui.Components.ChatAttachAlert;
 import org.telegram.ui.Components.CubicBezierInterpolator;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.Premium.PremiumGradient;
@@ -60,15 +60,15 @@ public class PremiumFeatureBottomSheet extends BottomSheet implements Notificati
 
     /* JADX INFO: super call moved to the top of the method (can break code semantics) */
     public PremiumFeatureBottomSheet(BaseFragment baseFragment, int i, boolean z) {
-        super(baseFragment.getParentActivity(), false);
+        super(baseFragment.getContext(), false);
         int i2 = i;
         boolean z2 = z;
         fixNavigationBar();
         this.startType = i2;
         this.onlySelectedType = z2;
         this.svgIcon = SvgHelper.getDrawable(RLottieDrawable.readRes((File) null, NUM));
-        final Activity parentActivity = baseFragment.getParentActivity();
-        AnonymousClass1 r6 = new FrameLayout(parentActivity) {
+        final Context context = baseFragment.getContext();
+        AnonymousClass1 r6 = new FrameLayout(context) {
             /* access modifiers changed from: protected */
             public void onMeasure(int i, int i2) {
                 if (PremiumFeatureBottomSheet.this.isPortrait) {
@@ -108,7 +108,7 @@ public class PremiumFeatureBottomSheet extends BottomSheet implements Notificati
         gradientTools.x2 = 1.5f;
         gradientTools.y2 = -0.2f;
         gradientTools.exactly = true;
-        this.content = new FrameLayout(parentActivity) {
+        this.content = new FrameLayout(context) {
             /* access modifiers changed from: protected */
             public void onMeasure(int i, int i2) {
                 super.onMeasure(i, View.MeasureSpec.makeMeasureSpec(PremiumFeatureBottomSheet.this.contentHeight + AndroidUtilities.dp(2.0f), NUM));
@@ -126,14 +126,14 @@ public class PremiumFeatureBottomSheet extends BottomSheet implements Notificati
                 super.dispatchDraw(canvas);
             }
         };
-        FrameLayout frameLayout = new FrameLayout(parentActivity);
-        ImageView imageView = new ImageView(parentActivity);
+        FrameLayout frameLayout = new FrameLayout(context);
+        ImageView imageView = new ImageView(context);
         imageView.setImageResource(NUM);
         imageView.setBackground(Theme.createSimpleSelectorRoundRectDrawable(AndroidUtilities.dp(12.0f), ColorUtils.setAlphaComponent(-1, 40), ColorUtils.setAlphaComponent(-1, 100)));
         frameLayout.addView(imageView, LayoutHelper.createFrame(24, 24, 17));
         frameLayout.setOnClickListener(new PremiumFeatureBottomSheet$$ExternalSyntheticLambda1(this));
         r6.addView(this.content, LayoutHelper.createLinear(-1, -2, 1, 0, 16, 0, 0));
-        AnonymousClass3 r8 = new ViewPager(parentActivity) {
+        AnonymousClass3 r8 = new ViewPager(context) {
             /* access modifiers changed from: protected */
             public void onMeasure(int i, int i2) {
                 int dp = AndroidUtilities.dp(100.0f);
@@ -171,7 +171,7 @@ public class PremiumFeatureBottomSheet extends BottomSheet implements Notificati
             }
 
             public Object instantiateItem(ViewGroup viewGroup, int i) {
-                ViewPage viewPage = new ViewPage(parentActivity, i);
+                ViewPage viewPage = new ViewPage(context, i);
                 viewGroup.addView(viewPage);
                 viewPage.position = i;
                 viewPage.setFeatureDate(PremiumFeatureBottomSheet.this.premiumFeatures.get(i));
@@ -185,7 +185,7 @@ public class PremiumFeatureBottomSheet extends BottomSheet implements Notificati
         this.viewPager.setCurrentItem(i3);
         r6.addView(this.viewPager, LayoutHelper.createFrame(-1, 100.0f, 0, 0.0f, 18.0f, 0.0f, 0.0f));
         r6.addView(frameLayout, LayoutHelper.createFrame(52, 52.0f, 53, 0.0f, 16.0f, 0.0f, 0.0f));
-        final BottomPagesView bottomPagesView = new BottomPagesView(parentActivity, this.viewPager, this.premiumFeatures.size());
+        final BottomPagesView bottomPagesView = new BottomPagesView(context, this.viewPager, this.premiumFeatures.size());
         this.viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             float progress;
             int selectedPosition;
@@ -241,18 +241,18 @@ public class PremiumFeatureBottomSheet extends BottomSheet implements Notificati
                 premiumFeatureBottomSheet.containerViewsForward = z;
             }
         });
-        LinearLayout linearLayout = new LinearLayout(parentActivity);
+        LinearLayout linearLayout = new LinearLayout(context);
         linearLayout.addView(r6);
         linearLayout.setOrientation(1);
         bottomPagesView.setColor("chats_unreadCounterMuted", "chats_actionBackground");
         if (!z2) {
             linearLayout.addView(bottomPagesView, LayoutHelper.createLinear(this.premiumFeatures.size() * 11, 5, 1, 0, 0, 0, 10));
         }
-        PremiumButtonView premiumButtonView2 = new PremiumButtonView(parentActivity, true);
+        PremiumButtonView premiumButtonView2 = new PremiumButtonView(context, true);
         this.premiumButtonView = premiumButtonView2;
         premiumButtonView2.buttonLayout.setOnClickListener(new PremiumFeatureBottomSheet$$ExternalSyntheticLambda2(this, baseFragment, z2, premiumFeatureData));
         this.premiumButtonView.overlayTextView.setOnClickListener(new PremiumFeatureBottomSheet$$ExternalSyntheticLambda0(this));
-        FrameLayout frameLayout2 = new FrameLayout(parentActivity);
+        FrameLayout frameLayout2 = new FrameLayout(context);
         this.buttonContainer = frameLayout2;
         frameLayout2.addView(this.premiumButtonView, LayoutHelper.createFrame(-1, 48.0f, 16, 16.0f, 0.0f, 16.0f, 0.0f));
         this.buttonContainer.setBackgroundColor(getThemedColor("dialogBackground"));
@@ -260,7 +260,7 @@ public class PremiumFeatureBottomSheet extends BottomSheet implements Notificati
         if (UserConfig.getInstance(this.currentAccount).isPremium()) {
             this.premiumButtonView.setOverlayText(LocaleController.getString("OK", NUM), false, false);
         }
-        ScrollView scrollView = new ScrollView(parentActivity);
+        ScrollView scrollView = new ScrollView(context);
         scrollView.addView(linearLayout);
         setCustomView(scrollView);
         MediaDataController.getInstance(this.currentAccount).preloadPremiumPreviewStickers();
@@ -274,11 +274,16 @@ public class PremiumFeatureBottomSheet extends BottomSheet implements Notificati
 
     /* access modifiers changed from: private */
     public /* synthetic */ void lambda$new$1(BaseFragment baseFragment, boolean z, PremiumPreviewFragment.PremiumFeatureData premiumFeatureData, View view) {
+        if (baseFragment instanceof ChatActivity) {
+            ChatActivity chatActivity = (ChatActivity) baseFragment;
+            chatActivity.closeMenu();
+            ChatAttachAlert chatAttachAlert = chatActivity.chatAttachAlert;
+            if (chatAttachAlert != null) {
+                chatAttachAlert.dismiss(true);
+            }
+        }
         if (baseFragment.getVisibleDialog() != null) {
             baseFragment.getVisibleDialog().dismiss();
-        }
-        if (baseFragment instanceof ChatActivity) {
-            ((ChatActivity) baseFragment).closeMenu();
         }
         if (z) {
             baseFragment.presentFragment(new PremiumPreviewFragment(PremiumPreviewFragment.featureTypeToServerString(premiumFeatureData.type)));

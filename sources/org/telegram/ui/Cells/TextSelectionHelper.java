@@ -45,6 +45,7 @@ import org.telegram.ui.ActionBar.FloatingToolbar;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.ArticleViewer;
 import org.telegram.ui.Cells.TextSelectionHelper.SelectableView;
+import org.telegram.ui.Components.AnimatedEmojiSpan;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.RecyclerListView;
 
@@ -292,6 +293,7 @@ public abstract class TextSelectionHelper<Cell extends SelectableView> {
         };
         this.startSelectionRunnable = new Runnable() {
             public void run() {
+                boolean z;
                 TextSelectionHelper textSelectionHelper = TextSelectionHelper.this;
                 Cell cell = textSelectionHelper.maybeSelectedView;
                 if (cell != null && textSelectionHelper.textSelectionOverlay != null) {
@@ -360,6 +362,7 @@ public abstract class TextSelectionHelper<Cell extends SelectableView> {
                             int i10 = 0;
                             while (true) {
                                 if (i10 >= length) {
+                                    z = false;
                                     break;
                                 }
                                 Emoji.EmojiSpan emojiSpan = emojiSpanArr[i10];
@@ -369,16 +372,37 @@ public abstract class TextSelectionHelper<Cell extends SelectableView> {
                                     TextSelectionHelper textSelectionHelper9 = TextSelectionHelper.this;
                                     textSelectionHelper9.selectionStart = spanStart;
                                     textSelectionHelper9.selectionEnd = spanEnd;
+                                    z = true;
                                     break;
                                 }
                                 i10++;
                             }
+                            if (!z) {
+                                AnimatedEmojiSpan[] animatedEmojiSpanArr = (AnimatedEmojiSpan[]) spanned.getSpans(0, text.length(), AnimatedEmojiSpan.class);
+                                int length2 = animatedEmojiSpanArr.length;
+                                int i11 = 0;
+                                while (true) {
+                                    if (i11 >= length2) {
+                                        break;
+                                    }
+                                    AnimatedEmojiSpan animatedEmojiSpan = animatedEmojiSpanArr[i11];
+                                    int spanStart2 = spanned.getSpanStart(animatedEmojiSpan);
+                                    int spanEnd2 = spanned.getSpanEnd(animatedEmojiSpan);
+                                    if (charOffsetFromCord >= spanStart2 && charOffsetFromCord <= spanEnd2) {
+                                        TextSelectionHelper textSelectionHelper10 = TextSelectionHelper.this;
+                                        textSelectionHelper10.selectionStart = spanStart2;
+                                        textSelectionHelper10.selectionEnd = spanEnd2;
+                                        break;
+                                    }
+                                    i11++;
+                                }
+                            }
                         }
-                        TextSelectionHelper textSelectionHelper10 = TextSelectionHelper.this;
-                        if (textSelectionHelper10.selectionStart == textSelectionHelper10.selectionEnd) {
+                        TextSelectionHelper textSelectionHelper11 = TextSelectionHelper.this;
+                        if (textSelectionHelper11.selectionStart == textSelectionHelper11.selectionEnd) {
                             while (true) {
-                                int i11 = TextSelectionHelper.this.selectionStart;
-                                if (i11 > 0 && TextSelectionHelper.isInterruptedCharacter(text.charAt(i11 - 1))) {
+                                int i12 = TextSelectionHelper.this.selectionStart;
+                                if (i12 > 0 && TextSelectionHelper.isInterruptedCharacter(text.charAt(i12 - 1))) {
                                     TextSelectionHelper.this.selectionStart--;
                                 }
                             }
@@ -386,11 +410,11 @@ public abstract class TextSelectionHelper<Cell extends SelectableView> {
                                 TextSelectionHelper.this.selectionEnd++;
                             }
                         }
-                        TextSelectionHelper textSelectionHelper11 = TextSelectionHelper.this;
-                        textSelectionHelper11.textX = i8;
-                        textSelectionHelper11.textY = i9;
-                        textSelectionHelper11.selectedView = cell;
-                        textSelectionHelper11.textSelectionOverlay.performHapticFeedback(0, 1);
+                        TextSelectionHelper textSelectionHelper12 = TextSelectionHelper.this;
+                        textSelectionHelper12.textX = i8;
+                        textSelectionHelper12.textY = i9;
+                        textSelectionHelper12.selectedView = cell;
+                        textSelectionHelper12.textSelectionOverlay.performHapticFeedback(0, 1);
                         TextSelectionHelper.this.showActions();
                         TextSelectionHelper.this.invalidate();
                         if (cell2 != null) {
@@ -400,13 +424,13 @@ public abstract class TextSelectionHelper<Cell extends SelectableView> {
                             TextSelectionHelper.this.callback.onStateChanged(true);
                         }
                         boolean unused = TextSelectionHelper.this.movingHandle = true;
-                        TextSelectionHelper textSelectionHelper12 = TextSelectionHelper.this;
-                        textSelectionHelper12.movingDirectionSettling = true;
-                        boolean unused2 = textSelectionHelper12.isOneTouch = true;
                         TextSelectionHelper textSelectionHelper13 = TextSelectionHelper.this;
-                        textSelectionHelper13.movingOffsetY = 0.0f;
-                        textSelectionHelper13.movingOffsetX = 0.0f;
-                        textSelectionHelper13.onOffsetChanged();
+                        textSelectionHelper13.movingDirectionSettling = true;
+                        boolean unused2 = textSelectionHelper13.isOneTouch = true;
+                        TextSelectionHelper textSelectionHelper14 = TextSelectionHelper.this;
+                        textSelectionHelper14.movingOffsetY = 0.0f;
+                        textSelectionHelper14.movingOffsetX = 0.0f;
+                        textSelectionHelper14.onOffsetChanged();
                     }
                     boolean unused3 = TextSelectionHelper.this.tryCapture = false;
                 }

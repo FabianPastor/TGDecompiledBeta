@@ -3,6 +3,7 @@ package org.telegram.messenger.utils;
 import android.text.Spanned;
 import org.telegram.ui.Components.AnimatedEmojiSpan;
 import org.telegram.ui.Components.TextStyleSpan;
+import org.telegram.ui.Components.URLSpanMono;
 import org.telegram.ui.Components.URLSpanReplacement;
 
 public class CustomHtml {
@@ -18,10 +19,11 @@ public class CustomHtml {
             if (nextSpanTransition < 0) {
                 nextSpanTransition = i2;
             }
-            TextStyleSpan[] textStyleSpanArr = (TextStyleSpan[]) spanned.getSpans(i, nextSpanTransition, TextStyleSpan.class);
-            if (textStyleSpanArr != null) {
-                for (TextStyleSpan textStyleSpan : textStyleSpanArr) {
-                    if (textStyleSpan != null) {
+            Object[] spans = spanned.getSpans(i, nextSpanTransition, Object.class);
+            if (spans != null) {
+                for (Object obj : spans) {
+                    if (obj instanceof TextStyleSpan) {
+                        TextStyleSpan textStyleSpan = (TextStyleSpan) obj;
                         int styleFlags = textStyleSpan.getStyleFlags();
                         if ((styleFlags & 768) > 0) {
                             sb.append("<spoiler>");
@@ -47,12 +49,19 @@ public class CustomHtml {
                             sb.append("\">");
                         }
                     }
+                    if (obj instanceof URLSpanMono) {
+                        sb.append("<pre>");
+                    }
                 }
             }
             toHTML_2_wrapURLReplacements(sb, spanned, i, nextSpanTransition);
-            if (textStyleSpanArr != null) {
-                for (TextStyleSpan textStyleSpan2 : textStyleSpanArr) {
-                    if (textStyleSpan2 != null) {
+            if (spans != null) {
+                for (Object obj2 : spans) {
+                    if (obj2 instanceof URLSpanMono) {
+                        sb.append("</pre>");
+                    }
+                    if (obj2 instanceof TextStyleSpan) {
+                        TextStyleSpan textStyleSpan2 = (TextStyleSpan) obj2;
                         int styleFlags2 = textStyleSpan2.getStyleFlags();
                         if (!((styleFlags2 & 128) <= 0 || textStyleSpan2.getTextStyleRun() == null || textStyleSpan2.getTextStyleRun().urlEntity == null)) {
                             sb.append("</a>");

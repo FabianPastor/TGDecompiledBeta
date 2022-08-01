@@ -1677,7 +1677,7 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
                 int i2 = 0;
                 while (true) {
                     if (i2 < size) {
-                        if (this.selectedItems.get(this.stickerSets.get(i2).set.id, Boolean.FALSE).booleanValue() && this.stickerSets.get(i2).set.official) {
+                        if (this.selectedItems.get(this.stickerSets.get(i2).set.id, Boolean.FALSE).booleanValue() && this.stickerSets.get(i2).set.official && !this.stickerSets.get(i2).set.emojis) {
                             z = false;
                             break;
                         }

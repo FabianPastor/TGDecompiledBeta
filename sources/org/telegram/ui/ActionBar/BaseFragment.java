@@ -625,6 +625,10 @@ public abstract class BaseFragment {
         return null;
     }
 
+    public Context getContext() {
+        return getParentActivity();
+    }
+
     /* access modifiers changed from: protected */
     public void setParentActivityTitle(CharSequence charSequence) {
         Activity parentActivity = getParentActivity();
