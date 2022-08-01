@@ -215,7 +215,7 @@ public class HintView extends FrameLayout {
             r14 = -1
             if (r2 != r14) goto L_0x009f
             android.widget.TextView r2 = r0.textView
-            r10 = 2131627646(0x7f0e0e7e, float:1.8882562E38)
+            r10 = 2131627651(0x7f0e0e83, float:1.8882572E38)
             java.lang.String r14 = "PollSelectOption"
             java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r14, r10)
             r2.setText(r10)
@@ -227,7 +227,7 @@ public class HintView extends FrameLayout {
             int r2 = r10.intValue()
             if (r2 != 0) goto L_0x00be
             android.widget.TextView r2 = r0.textView
-            r10 = 2131626939(0x7f0e0bbb, float:1.8881128E38)
+            r10 = 2131626944(0x7f0e0bc0, float:1.8881138E38)
             java.lang.String r14 = "NoVotesQuiz"
             java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r14, r10)
             r2.setText(r10)
@@ -244,7 +244,7 @@ public class HintView extends FrameLayout {
             int r2 = r10.intValue()
             if (r2 != 0) goto L_0x00e5
             android.widget.TextView r2 = r0.textView
-            r10 = 2131626938(0x7f0e0bba, float:1.8881126E38)
+            r10 = 2131626943(0x7f0e0bbf, float:1.8881136E38)
             java.lang.String r14 = "NoVotes"
             java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r14, r10)
             r2.setText(r10)
@@ -267,7 +267,7 @@ public class HintView extends FrameLayout {
             java.lang.String r10 = r0.overrideText
             if (r10 != 0) goto L_0x011c
             android.widget.TextView r10 = r0.textView
-            r14 = 2131626185(0x7f0e08c9, float:1.88796E38)
+            r14 = 2131626190(0x7f0e08ce, float:1.887961E38)
             java.lang.String r15 = "HidAccount"
             java.lang.String r14 = org.telegram.messenger.LocaleController.getString(r15, r14)
             r10.setText(r14)

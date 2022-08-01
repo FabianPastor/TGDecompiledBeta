@@ -15269,9 +15269,9 @@ public class Theme {
                 chat_msgBotButtonPaint = textPaint;
                 textPaint.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
             }
-            chat_msgTextPaintOneEmoji.setTextSize((float) AndroidUtilities.dp(28.0f));
-            chat_msgTextPaintTwoEmoji.setTextSize((float) AndroidUtilities.dp(24.0f));
-            chat_msgTextPaintThreeEmoji.setTextSize((float) AndroidUtilities.dp(20.0f));
+            chat_msgTextPaintOneEmoji.setTextSize((float) AndroidUtilities.dp(48.0f));
+            chat_msgTextPaintTwoEmoji.setTextSize((float) AndroidUtilities.dp(44.0f));
+            chat_msgTextPaintThreeEmoji.setTextSize((float) AndroidUtilities.dp(40.0f));
             chat_msgTextPaint.setTextSize((float) AndroidUtilities.dp((float) SharedConfig.fontSize));
             chat_msgGameTextPaint.setTextSize((float) AndroidUtilities.dp(14.0f));
             chat_msgBotButtonPaint.setTextSize((float) AndroidUtilities.dp(15.0f));

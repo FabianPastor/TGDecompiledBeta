@@ -3125,7 +3125,7 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
             r1 = 8
             r0.setVisibility(r1)
             android.widget.ImageView r0 = r7.scheduledButton
-            r1 = 2131628155(0x7f0e107b, float:1.8883595E38)
+            r1 = 2131628160(0x7f0e1080, float:1.8883605E38)
             java.lang.String r2 = "ScheduledMessages"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             r0.setContentDescription(r1)
@@ -3443,7 +3443,7 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
             r0.setInvalidateOnProgressSet(r2)
             r36.updateRecordedDeleteIconColors()
             org.telegram.ui.Components.RLottieImageView r0 = r7.recordDeleteImageView
-            r2 = 2131625388(0x7f0e05ac, float:1.8877983E38)
+            r2 = 2131625390(0x7f0e05ae, float:1.8877987E38)
             java.lang.String r3 = "Delete"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             r0.setContentDescription(r2)
@@ -3751,7 +3751,7 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
             r7.progressDrawable = r5
             r0.setImageDrawable(r5)
             android.widget.ImageView r0 = r7.cancelBotButton
-            r5 = 2131624836(0x7f0e0384, float:1.8876863E38)
+            r5 = 2131624838(0x7f0e0386, float:1.8876867E38)
             java.lang.String r9 = "Cancel"
             java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r9, r5)
             r0.setContentDescription(r5)
@@ -3819,7 +3819,7 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
             java.lang.String r0 = "chat_messagePanelSend"
             int r0 = r7.getThemedColor(r0)
             android.view.View r5 = r7.sendButton
-            r9 = 2131628246(0x7f0e10d6, float:1.888378E38)
+            r9 = 2131628251(0x7f0e10db, float:1.888379E38)
             java.lang.String r10 = "Send"
             java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r10, r9)
             r5.setContentDescription(r9)
@@ -3989,7 +3989,7 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
             android.widget.ImageView r0 = r7.doneButtonImage
             r0.setImageDrawable(r3)
             android.widget.ImageView r0 = r7.doneButtonImage
-            r1 = 2131625545(0x7f0e0649, float:1.88783E38)
+            r1 = 2131625547(0x7f0e064b, float:1.8878305E38)
             java.lang.String r3 = "Done"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r3, r1)
             r0.setContentDescription(r1)

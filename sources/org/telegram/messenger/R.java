@@ -2159,8 +2159,10 @@ public final class R {
         public static final int AddEmojiInstalledInfo = NUM;
         public static final int AddEmojiMultipleInstalledInfo_few = NUM;
         public static final int AddEmojiMultipleInstalledInfo_many = NUM;
+        public static final int AddEmojiMultipleInstalledInfo_one = NUM;
         public static final int AddEmojiMultipleInstalledInfo_other = NUM;
         public static final int AddEmojiMultipleInstalledInfo_two = NUM;
+        public static final int AddEmojiMultipleInstalledInfo_zero = NUM;
         public static final int AddEmojiNotFound = NUM;
         public static final int AddExceptions = NUM;
         public static final int AddMasks = NUM;
@@ -3513,6 +3515,7 @@ public final class R {
         public static final int Emoji8 = NUM;
         public static final int EmojiArchived = NUM;
         public static final int EmojiArchivedInfo = NUM;
+        public static final int EmojiBotInfo = NUM;
         public static final int EmojiCountButton_few = NUM;
         public static final int EmojiCountButton_many = NUM;
         public static final int EmojiCountButton_one = NUM;
@@ -3536,8 +3539,10 @@ public final class R {
         public static final int EmojiRemovedInfo = NUM;
         public static final int EmojiRemovedMultipleInfo_few = NUM;
         public static final int EmojiRemovedMultipleInfo_many = NUM;
+        public static final int EmojiRemovedMultipleInfo_one = NUM;
         public static final int EmojiRemovedMultipleInfo_other = NUM;
         public static final int EmojiRemovedMultipleInfo_two = NUM;
+        public static final int EmojiRemovedMultipleInfo_zero = NUM;
         public static final int EmojiSuggestions = NUM;
         public static final int EmojiSuggestionsInfo = NUM;
         public static final int EmojiSuggestionsUrl = NUM;

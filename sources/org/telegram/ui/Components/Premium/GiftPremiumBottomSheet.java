@@ -418,7 +418,7 @@ public class GiftPremiumBottomSheet extends BottomSheetWithRecyclerListView {
                     r9.setTopPadding(r0)
                     android.widget.TextView r0 = r9.getTextView()
                     r0.setGravity(r8)
-                    r0 = 2131626112(0x7f0e0880, float:1.887945E38)
+                    r0 = 2131626117(0x7f0e0885, float:1.8879461E38)
                     java.lang.String r0 = org.telegram.messenger.LocaleController.getString((int) r0)
                     r1 = 42
                     int r2 = r0.indexOf(r1)

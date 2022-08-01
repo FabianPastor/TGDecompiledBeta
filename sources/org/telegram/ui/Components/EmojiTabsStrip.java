@@ -529,7 +529,7 @@ public class EmojiTabsStrip extends ScrollableHorizontalScrollView {
             r19 = r9
         L_0x0189:
             int r0 = org.telegram.messenger.UserConfig.selectedAccount
-            r3 = 3
+            r3 = 4
             org.telegram.ui.Components.AnimatedEmojiDrawable r0 = org.telegram.ui.Components.AnimatedEmojiDrawable.make((int) r0, (int) r3, (org.telegram.tgnet.TLRPC$Document) r2)
             goto L_0x0193
         L_0x0191:

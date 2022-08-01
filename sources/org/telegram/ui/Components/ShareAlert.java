@@ -847,7 +847,7 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
         L_0x02f4:
             org.telegram.ui.Components.StickerEmptyView r3 = r0.searchEmptyView
             android.widget.TextView r3 = r3.title
-            r13 = 2131626918(0x7f0e0ba6, float:1.8881086E38)
+            r13 = 2131626923(0x7f0e0bab, float:1.8881096E38)
             java.lang.String r14 = "NoResult"
             java.lang.String r13 = org.telegram.messenger.LocaleController.getString(r14, r13)
             r3.setText(r13)
@@ -1009,7 +1009,7 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
             r3 = r3[r5]
             if (r3 == 0) goto L_0x046b
             android.widget.TextView r3 = r0.pickerBottomLayout
-            r10 = 2131629128(0x7f0e1448, float:1.8885568E38)
+            r10 = 2131629133(0x7f0e144d, float:1.8885578E38)
             java.lang.String r15 = "VoipGroupCopySpeakerLink"
             java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r15, r10)
             java.lang.String r10 = r10.toUpperCase()
@@ -1017,7 +1017,7 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
             goto L_0x047d
         L_0x046b:
             android.widget.TextView r3 = r0.pickerBottomLayout
-            r10 = 2131625278(0x7f0e053e, float:1.887776E38)
+            r10 = 2131625280(0x7f0e0540, float:1.8877763E38)
             java.lang.String r15 = "CopyLink"
             java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r15, r10)
             java.lang.String r10 = r10.toUpperCase()
@@ -1194,7 +1194,7 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
             org.telegram.ui.Components.EditTextEmoji r2 = r0.commentTextView
             r2.setBackgroundColor(r9)
             org.telegram.ui.Components.EditTextEmoji r2 = r0.commentTextView
-            r3 = 2131628342(0x7f0e1136, float:1.8883974E38)
+            r3 = 2131628347(0x7f0e113b, float:1.8883984E38)
             java.lang.String r4 = "ShareComment"
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r4, r3)
             r2.setHint(r3)
@@ -1719,41 +1719,65 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
 
     /* access modifiers changed from: protected */
     public void sendInternal(boolean z) {
-        int i = 0;
-        int i2 = 0;
+        int i;
+        String str;
+        ArrayList<Long> arrayList;
+        int i2;
+        char c = 0;
+        int i3 = 0;
         while (true) {
             boolean z2 = true;
-            if (i2 < this.selectedDialogs.size()) {
-                long keyAt = this.selectedDialogs.keyAt(i2);
+            if (i3 < this.selectedDialogs.size()) {
+                long keyAt = this.selectedDialogs.keyAt(i3);
                 Context context = getContext();
-                int i3 = this.currentAccount;
+                int i4 = this.currentAccount;
                 if (this.frameLayout2.getTag() == null || this.commentTextView.length() <= 0) {
                     z2 = false;
                 }
-                if (!AlertsCreator.checkSlowMode(context, i3, keyAt, z2)) {
-                    i2++;
+                if (!AlertsCreator.checkSlowMode(context, i4, keyAt, z2)) {
+                    i3++;
                 } else {
                     return;
                 }
             } else {
+                CharSequence[] charSequenceArr = {this.commentTextView.getText()};
+                ArrayList<TLRPC$MessageEntity> entities = MediaDataController.getInstance(this.currentAccount).getEntities(charSequenceArr, true);
+                String str2 = null;
                 if (this.sendingMessageObjects != null) {
-                    ArrayList<Long> arrayList = new ArrayList<>();
-                    while (i < this.selectedDialogs.size()) {
-                        long keyAt2 = this.selectedDialogs.keyAt(i);
-                        if (this.frameLayout2.getTag() != null && this.commentTextView.length() > 0) {
-                            SendMessagesHelper.getInstance(this.currentAccount).sendMessage(this.commentTextView.getText().toString(), keyAt2, (MessageObject) null, (MessageObject) null, (TLRPC$WebPage) null, true, (ArrayList<TLRPC$MessageEntity>) null, (TLRPC$ReplyMarkup) null, (HashMap<String, String>) null, z, 0, (MessageObject.SendAnimationData) null);
+                    ArrayList arrayList2 = new ArrayList();
+                    int i5 = 0;
+                    while (true) {
+                        if (i5 >= this.selectedDialogs.size()) {
+                            arrayList = arrayList2;
+                            break;
+                        }
+                        long keyAt2 = this.selectedDialogs.keyAt(i5);
+                        if (this.frameLayout2.getTag() == null || this.commentTextView.length() <= 0) {
+                            i2 = i5;
+                            arrayList = arrayList2;
+                        } else {
+                            SendMessagesHelper instance = SendMessagesHelper.getInstance(this.currentAccount);
+                            String charSequence = charSequenceArr[c] == null ? str2 : charSequenceArr[c].toString();
+                            i2 = i5;
+                            arrayList = arrayList2;
+                            instance.sendMessage(charSequence, keyAt2, (MessageObject) null, (MessageObject) null, (TLRPC$WebPage) null, true, entities, (TLRPC$ReplyMarkup) null, (HashMap<String, String>) null, z, 0, (MessageObject.SendAnimationData) null);
                         }
                         int sendMessage = SendMessagesHelper.getInstance(this.currentAccount).sendMessage(this.sendingMessageObjects, keyAt2, !this.showSendersName, false, z, 0);
                         if (sendMessage != 0) {
                             arrayList.add(Long.valueOf(keyAt2));
                         }
                         if (this.selectedDialogs.size() == 1) {
+                            str2 = null;
                             AlertsCreator.showSendMediaAlert(sendMessage, this.parentFragment, (Theme.ResourcesProvider) null);
                             if (sendMessage != 0) {
                                 break;
                             }
+                        } else {
+                            str2 = null;
                         }
-                        i++;
+                        i5 = i2 + 1;
+                        arrayList2 = arrayList;
+                        c = 0;
                     }
                     for (Long longValue : arrayList) {
                         this.selectedDialogs.remove(longValue.longValue());
@@ -1765,13 +1789,20 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
                     SwitchView switchView2 = this.switchView;
                     int access$10500 = switchView2 != null ? switchView2.currentTab : 0;
                     if (this.sendingText[access$10500] != null) {
-                        while (i < this.selectedDialogs.size()) {
-                            long keyAt3 = this.selectedDialogs.keyAt(i);
-                            if (this.frameLayout2.getTag() != null && this.commentTextView.length() > 0) {
-                                SendMessagesHelper.getInstance(this.currentAccount).sendMessage(this.commentTextView.getText().toString(), keyAt3, (MessageObject) null, (MessageObject) null, (TLRPC$WebPage) null, true, (ArrayList<TLRPC$MessageEntity>) null, (TLRPC$ReplyMarkup) null, (HashMap<String, String>) null, z, 0, (MessageObject.SendAnimationData) null);
+                        int i6 = 0;
+                        while (i6 < this.selectedDialogs.size()) {
+                            long keyAt3 = this.selectedDialogs.keyAt(i6);
+                            if (this.frameLayout2.getTag() == null || this.commentTextView.length() <= 0) {
+                                i = i6;
+                                str = str2;
+                            } else {
+                                i = i6;
+                                str = str2;
+                                SendMessagesHelper.getInstance(this.currentAccount).sendMessage(charSequenceArr[0] == null ? str2 : charSequenceArr[0].toString(), keyAt3, (MessageObject) null, (MessageObject) null, (TLRPC$WebPage) null, true, entities, (TLRPC$ReplyMarkup) null, (HashMap<String, String>) null, z, 0, (MessageObject.SendAnimationData) null);
                             }
                             SendMessagesHelper.getInstance(this.currentAccount).sendMessage(this.sendingText[access$10500], keyAt3, (MessageObject) null, (MessageObject) null, (TLRPC$WebPage) null, true, (ArrayList<TLRPC$MessageEntity>) null, (TLRPC$ReplyMarkup) null, (HashMap<String, String>) null, z, 0, (MessageObject.SendAnimationData) null);
-                            i++;
+                            i6 = i + 1;
+                            str2 = str;
                         }
                     }
                     onSend(this.selectedDialogs, 1);
@@ -3063,7 +3094,7 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
             L_0x006c:
                 int r4 = r4.getThemedColor(r0)
                 r5.setBackgroundColor(r4)
-                r4 = 2131627928(0x7f0e0var_, float:1.8883134E38)
+                r4 = 2131627933(0x7f0e0f9d, float:1.8883144E38)
                 java.lang.String r0 = "Recent"
                 java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r0, r4)
                 r5.setText(r4)

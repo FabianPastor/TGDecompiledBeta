@@ -77,14 +77,14 @@ public class DoubledLimitsBottomSheet extends BottomSheetWithRecyclerListView im
             org.telegram.messenger.MessagesController r5 = org.telegram.messenger.MessagesController.getInstance(r27)
             org.telegram.ui.Components.Premium.DoubledLimitsBottomSheet$Limit r12 = new org.telegram.ui.Components.Premium.DoubledLimitsBottomSheet$Limit
             java.lang.String r6 = "GroupsAndChannelsLimitTitle"
-            r7 = 2131626171(0x7f0e08bb, float:1.887957E38)
+            r7 = 2131626176(0x7f0e08c0, float:1.887958E38)
             java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r6, r7)
             java.lang.Object[] r6 = new java.lang.Object[r4]
             int r8 = r5.channelsLimitPremium
             java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
             r6[r2] = r8
             java.lang.String r8 = "GroupsAndChannelsLimitSubtitle"
-            r9 = 2131626170(0x7f0e08ba, float:1.8879569E38)
+            r9 = 2131626175(0x7f0e08bf, float:1.8879579E38)
             java.lang.String r8 = org.telegram.messenger.LocaleController.formatString(r8, r9, r6)
             int r9 = r5.channelsLimitDefault
             int r10 = r5.channelsLimitPremium
@@ -94,14 +94,14 @@ public class DoubledLimitsBottomSheet extends BottomSheetWithRecyclerListView im
             r3.add(r12)
             org.telegram.ui.Components.Premium.DoubledLimitsBottomSheet$Limit r6 = new org.telegram.ui.Components.Premium.DoubledLimitsBottomSheet$Limit
             java.lang.String r7 = "PinChatsLimitTitle"
-            r8 = 2131627587(0x7f0e0e43, float:1.8882443E38)
+            r8 = 2131627592(0x7f0e0e48, float:1.8882453E38)
             java.lang.String r14 = org.telegram.messenger.LocaleController.getString(r7, r8)
             java.lang.Object[] r7 = new java.lang.Object[r4]
             int r8 = r5.dialogFiltersPinnedLimitPremium
             java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
             r7[r2] = r8
             java.lang.String r8 = "PinChatsLimitSubtitle"
-            r9 = 2131627586(0x7f0e0e42, float:1.888244E38)
+            r9 = 2131627591(0x7f0e0e47, float:1.888245E38)
             java.lang.String r15 = org.telegram.messenger.LocaleController.formatString(r8, r9, r7)
             int r7 = r5.dialogFiltersPinnedLimitDefault
             int r8 = r5.dialogFiltersPinnedLimitPremium
@@ -113,14 +113,14 @@ public class DoubledLimitsBottomSheet extends BottomSheetWithRecyclerListView im
             r3.add(r6)
             org.telegram.ui.Components.Premium.DoubledLimitsBottomSheet$Limit r6 = new org.telegram.ui.Components.Premium.DoubledLimitsBottomSheet$Limit
             java.lang.String r7 = "PublicLinksLimitTitle"
-            r8 = 2131627837(0x7f0e0f3d, float:1.888295E38)
+            r8 = 2131627842(0x7f0e0var_, float:1.888296E38)
             java.lang.String r20 = org.telegram.messenger.LocaleController.getString(r7, r8)
             java.lang.Object[] r7 = new java.lang.Object[r4]
             int r8 = r5.publicLinksLimitPremium
             java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
             r7[r2] = r8
             java.lang.String r8 = "PublicLinksLimitSubtitle"
-            r9 = 2131627836(0x7f0e0f3c, float:1.8882948E38)
+            r9 = 2131627841(0x7f0e0var_, float:1.8882958E38)
             java.lang.String r21 = org.telegram.messenger.LocaleController.formatString(r8, r9, r7)
             int r7 = r5.publicLinksLimitDefault
             int r8 = r5.publicLinksLimitPremium
@@ -132,14 +132,14 @@ public class DoubledLimitsBottomSheet extends BottomSheetWithRecyclerListView im
             r3.add(r6)
             org.telegram.ui.Components.Premium.DoubledLimitsBottomSheet$Limit r6 = new org.telegram.ui.Components.Premium.DoubledLimitsBottomSheet$Limit
             java.lang.String r7 = "SavedGifsLimitTitle"
-            r8 = 2131628147(0x7f0e1073, float:1.8883578E38)
+            r8 = 2131628152(0x7f0e1078, float:1.8883589E38)
             java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r7, r8)
             java.lang.Object[] r7 = new java.lang.Object[r4]
             int r8 = r5.savedGifsLimitPremium
             java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
             r7[r2] = r8
             java.lang.String r8 = "SavedGifsLimitSubtitle"
-            r9 = 2131628146(0x7f0e1072, float:1.8883576E38)
+            r9 = 2131628151(0x7f0e1077, float:1.8883587E38)
             java.lang.String r11 = org.telegram.messenger.LocaleController.formatString(r8, r9, r7)
             int r12 = r5.savedGifsLimitDefault
             int r13 = r5.savedGifsLimitPremium
@@ -149,14 +149,14 @@ public class DoubledLimitsBottomSheet extends BottomSheetWithRecyclerListView im
             r3.add(r6)
             org.telegram.ui.Components.Premium.DoubledLimitsBottomSheet$Limit r6 = new org.telegram.ui.Components.Premium.DoubledLimitsBottomSheet$Limit
             java.lang.String r7 = "FavoriteStickersLimitTitle"
-            r8 = 2131625846(0x7f0e0776, float:1.8878911E38)
+            r8 = 2131625851(0x7f0e077b, float:1.8878922E38)
             java.lang.String r16 = org.telegram.messenger.LocaleController.getString(r7, r8)
             java.lang.Object[] r7 = new java.lang.Object[r4]
             int r8 = r5.stickersFavedLimitPremium
             java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
             r7[r2] = r8
             java.lang.String r8 = "FavoriteStickersLimitSubtitle"
-            r9 = 2131625845(0x7f0e0775, float:1.887891E38)
+            r9 = 2131625850(0x7f0e077a, float:1.887892E38)
             java.lang.String r17 = org.telegram.messenger.LocaleController.formatString(r8, r9, r7)
             int r7 = r5.stickersFavedLimitDefault
             int r8 = r5.stickersFavedLimitPremium
@@ -168,14 +168,14 @@ public class DoubledLimitsBottomSheet extends BottomSheetWithRecyclerListView im
             r3.add(r6)
             org.telegram.ui.Components.Premium.DoubledLimitsBottomSheet$Limit r6 = new org.telegram.ui.Components.Premium.DoubledLimitsBottomSheet$Limit
             java.lang.String r7 = "BioLimitTitle"
-            r8 = 2131624689(0x7f0e02f1, float:1.8876565E38)
+            r8 = 2131624691(0x7f0e02f3, float:1.8876569E38)
             java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r7, r8)
             java.lang.Object[] r7 = new java.lang.Object[r4]
             int r8 = r5.stickersFavedLimitPremium
             java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
             r7[r2] = r8
             java.lang.String r8 = "BioLimitSubtitle"
-            r9 = 2131624688(0x7f0e02f0, float:1.8876563E38)
+            r9 = 2131624690(0x7f0e02f2, float:1.8876567E38)
             java.lang.String r11 = org.telegram.messenger.LocaleController.formatString(r8, r9, r7)
             int r12 = r5.aboutLengthLimitDefault
             int r13 = r5.aboutLengthLimitPremium
@@ -184,14 +184,14 @@ public class DoubledLimitsBottomSheet extends BottomSheetWithRecyclerListView im
             r3.add(r6)
             org.telegram.ui.Components.Premium.DoubledLimitsBottomSheet$Limit r6 = new org.telegram.ui.Components.Premium.DoubledLimitsBottomSheet$Limit
             java.lang.String r7 = "CaptionsLimitTitle"
-            r8 = 2131624862(0x7f0e039e, float:1.8876916E38)
+            r8 = 2131624864(0x7f0e03a0, float:1.887692E38)
             java.lang.String r16 = org.telegram.messenger.LocaleController.getString(r7, r8)
             java.lang.Object[] r7 = new java.lang.Object[r4]
             int r8 = r5.stickersFavedLimitPremium
             java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
             r7[r2] = r8
             java.lang.String r8 = "CaptionsLimitSubtitle"
-            r9 = 2131624861(0x7f0e039d, float:1.8876914E38)
+            r9 = 2131624863(0x7f0e039f, float:1.8876918E38)
             java.lang.String r17 = org.telegram.messenger.LocaleController.formatString(r8, r9, r7)
             int r7 = r5.captionLengthLimitDefault
             int r8 = r5.captionLengthLimitPremium
@@ -202,14 +202,14 @@ public class DoubledLimitsBottomSheet extends BottomSheetWithRecyclerListView im
             r3.add(r6)
             org.telegram.ui.Components.Premium.DoubledLimitsBottomSheet$Limit r6 = new org.telegram.ui.Components.Premium.DoubledLimitsBottomSheet$Limit
             java.lang.String r7 = "FoldersLimitTitle"
-            r8 = 2131625961(0x7f0e07e9, float:1.8879145E38)
+            r8 = 2131625966(0x7f0e07ee, float:1.8879155E38)
             java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r7, r8)
             java.lang.Object[] r7 = new java.lang.Object[r4]
             int r8 = r5.dialogFiltersLimitPremium
             java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
             r7[r2] = r8
             java.lang.String r8 = "FoldersLimitSubtitle"
-            r9 = 2131625960(0x7f0e07e8, float:1.8879143E38)
+            r9 = 2131625965(0x7f0e07ed, float:1.8879153E38)
             java.lang.String r11 = org.telegram.messenger.LocaleController.formatString(r8, r9, r7)
             int r12 = r5.dialogFiltersLimitDefault
             int r13 = r5.dialogFiltersLimitPremium
@@ -218,14 +218,14 @@ public class DoubledLimitsBottomSheet extends BottomSheetWithRecyclerListView im
             r3.add(r6)
             org.telegram.ui.Components.Premium.DoubledLimitsBottomSheet$Limit r6 = new org.telegram.ui.Components.Premium.DoubledLimitsBottomSheet$Limit
             java.lang.String r7 = "ChatPerFolderLimitTitle"
-            r8 = 2131625042(0x7f0e0452, float:1.887728E38)
+            r8 = 2131625044(0x7f0e0454, float:1.8877285E38)
             java.lang.String r16 = org.telegram.messenger.LocaleController.getString(r7, r8)
             java.lang.Object[] r7 = new java.lang.Object[r4]
             int r8 = r5.dialogFiltersChatsLimitPremium
             java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
             r7[r2] = r8
             java.lang.String r8 = "ChatPerFolderLimitSubtitle"
-            r9 = 2131625041(0x7f0e0451, float:1.8877279E38)
+            r9 = 2131625043(0x7f0e0453, float:1.8877283E38)
             java.lang.String r17 = org.telegram.messenger.LocaleController.formatString(r8, r9, r7)
             int r7 = r5.dialogFiltersChatsLimitDefault
             int r5 = r5.dialogFiltersChatsLimitPremium
@@ -236,14 +236,14 @@ public class DoubledLimitsBottomSheet extends BottomSheetWithRecyclerListView im
             r3.add(r6)
             org.telegram.ui.Components.Premium.DoubledLimitsBottomSheet$Limit r5 = new org.telegram.ui.Components.Premium.DoubledLimitsBottomSheet$Limit
             java.lang.String r6 = "ConnectedAccountsLimitTitle"
-            r7 = 2131625244(0x7f0e051c, float:1.887769E38)
+            r7 = 2131625246(0x7f0e051e, float:1.8877695E38)
             java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r6, r7)
             java.lang.Object[] r6 = new java.lang.Object[r4]
             r7 = 4
             java.lang.Integer r7 = java.lang.Integer.valueOf(r7)
             r6[r2] = r7
             java.lang.String r7 = "ConnectedAccountsLimitSubtitle"
-            r8 = 2131625243(0x7f0e051b, float:1.8877688E38)
+            r8 = 2131625245(0x7f0e051d, float:1.8877693E38)
             java.lang.String r10 = org.telegram.messenger.LocaleController.formatString(r7, r8, r6)
             r11 = 3
             r12 = 4
@@ -269,7 +269,7 @@ public class DoubledLimitsBottomSheet extends BottomSheetWithRecyclerListView im
             r3.<init>(r5)
             r0.titleView = r3
             java.lang.String r5 = "DoubledLimits"
-            r6 = 2131625551(0x7f0e064f, float:1.8878313E38)
+            r6 = 2131625553(0x7f0e0651, float:1.8878317E38)
             java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r5, r6)
             r3.setText(r5)
             android.widget.TextView r3 = r0.titleView

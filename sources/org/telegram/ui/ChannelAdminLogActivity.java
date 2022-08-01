@@ -1891,7 +1891,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
         L_0x0215:
             android.app.Activity r0 = r10.getParentActivity()     // Catch:{ Exception -> 0x03b5 }
             java.lang.String r3 = "ShareFile"
-            r4 = 2131628345(0x7f0e1139, float:1.888398E38)
+            r4 = 2131628350(0x7f0e113e, float:1.888399E38)
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r3, r4)     // Catch:{ Exception -> 0x03b5 }
             android.content.Intent r2 = android.content.Intent.createChooser(r2, r3)     // Catch:{ Exception -> 0x03b5 }
             r0.startActivityForResult(r2, r1)     // Catch:{ Exception -> 0x03b5 }
@@ -1927,9 +1927,9 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
             java.lang.String r1 = r1.toLowerCase()
             java.lang.String r2 = "attheme"
             boolean r1 = r1.endsWith(r2)
-            r2 = 2131627135(0x7f0e0c7f, float:1.8881526E38)
+            r2 = 2131627140(0x7f0e0CLASSNAME, float:1.8881536E38)
             java.lang.String r3 = "OK"
-            r4 = 2131624388(0x7f0e01c4, float:1.8875954E38)
+            r4 = 2131624390(0x7f0e01c6, float:1.8875958E38)
             java.lang.String r5 = "AppName"
             if (r1 == 0) goto L_0x02fa
             androidx.recyclerview.widget.LinearLayoutManager r1 = r10.chatLayoutManager
@@ -1977,7 +1977,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
             r0.<init>((android.content.Context) r1)
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r5, r4)
             r0.setTitle(r1)
-            r1 = 2131626286(0x7f0e092e, float:1.8879804E38)
+            r1 = 2131626291(0x7f0e0933, float:1.8879814E38)
             java.lang.String r4 = "IncorrectTheme"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r4, r1)
             r0.setMessage(r1)
@@ -2006,7 +2006,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
             r0.<init>((android.content.Context) r1)
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r5, r4)
             r0.setTitle(r1)
-            r1 = 2131626285(0x7f0e092d, float:1.8879802E38)
+            r1 = 2131626290(0x7f0e0932, float:1.8879812E38)
             java.lang.String r4 = "IncorrectLocalization"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r4, r1)
             r0.setMessage(r1)

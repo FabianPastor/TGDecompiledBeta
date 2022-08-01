@@ -986,7 +986,7 @@ public class EmojiPacksAlert extends BottomSheet implements NotificationCenter.N
                 int r9 = org.telegram.messenger.AndroidUtilities.dp(r11)
                 r10.<init>(r3, r9, r8)
                 r0.unlockButtonView = r10
-                r9 = 2131628809(0x7f0e1309, float:1.8884921E38)
+                r9 = 2131628814(0x7f0e130e, float:1.8884931E38)
                 java.lang.String r11 = "Unlock"
                 java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r11, r9)
                 org.telegram.ui.Components.EmojiPacksAlert$EmojiPackHeader$$ExternalSyntheticLambda2 r11 = new org.telegram.ui.Components.EmojiPacksAlert$EmojiPackHeader$$ExternalSyntheticLambda2
@@ -1117,7 +1117,7 @@ public class EmojiPacksAlert extends BottomSheet implements NotificationCenter.N
                 android.graphics.drawable.Drawable r10 = org.telegram.ui.ActionBar.Theme.createRadSelectorDrawable(r10, r11, r11)
                 r7.setBackground(r10)
                 android.widget.TextView r7 = r0.removeButtonView
-                r10 = 2131628523(0x7f0e11eb, float:1.8884341E38)
+                r10 = 2131628528(0x7f0e11f0, float:1.8884351E38)
                 java.lang.String r11 = "StickersRemove"
                 java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r11, r10)
                 r7.setText(r10)
@@ -1277,14 +1277,14 @@ public class EmojiPacksAlert extends BottomSheet implements NotificationCenter.N
                 r0.addView(r2, r4)
                 org.telegram.ui.ActionBar.ActionBarMenuItem r2 = r0.optionsButton
                 r4 = 2131165942(0x7var_f6, float:1.7946115E38)
-                r5 = 2131628528(0x7f0e11f0, float:1.8884351E38)
+                r5 = 2131628533(0x7f0e11f5, float:1.8884361E38)
                 java.lang.String r6 = "StickersShare"
                 java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r6, r5)
                 r6 = 1
                 r2.addSubItem(r6, r4, r5)
                 org.telegram.ui.ActionBar.ActionBarMenuItem r2 = r0.optionsButton
                 r4 = 2131165783(0x7var_, float:1.7945793E38)
-                r5 = 2131625278(0x7f0e053e, float:1.887776E38)
+                r5 = 2131625280(0x7f0e0540, float:1.8877763E38)
                 java.lang.String r6 = "CopyLink"
                 java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r6, r5)
                 r2.addSubItem(r3, r4, r5)

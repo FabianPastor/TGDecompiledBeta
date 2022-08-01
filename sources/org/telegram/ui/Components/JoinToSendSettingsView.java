@@ -56,7 +56,7 @@ public class JoinToSendSettingsView extends LinearLayout {
             r1.<init>((android.content.Context) r6, (int) r2)
             r5.joinHeaderCell = r1
             java.lang.String r2 = "ChannelSettingsJoinTitle"
-            r3 = 2131624978(0x7f0e0412, float:1.887715E38)
+            r3 = 2131624980(0x7f0e0414, float:1.8877155E38)
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r2, r3)
             r1.setText(r2)
             org.telegram.ui.Cells.HeaderCell r1 = r5.joinHeaderCell
@@ -72,7 +72,7 @@ public class JoinToSendSettingsView extends LinearLayout {
             r1.setBackground(r2)
             org.telegram.ui.Cells.TextCheckCell r1 = r5.joinToSendCell
             java.lang.String r2 = "ChannelSettingsJoinToSend"
-            r3 = 2131624979(0x7f0e0413, float:1.8877153E38)
+            r3 = 2131624981(0x7f0e0415, float:1.8877157E38)
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r2, r3)
             boolean r3 = r5.isJoinToSend
             r1.setTextAndCheck(r2, r3, r3)
@@ -104,7 +104,7 @@ public class JoinToSendSettingsView extends LinearLayout {
             android.graphics.drawable.Drawable r2 = org.telegram.ui.ActionBar.Theme.getSelectorDrawable(r0)
             r1.setBackground(r2)
             org.telegram.ui.Cells.TextCheckCell r1 = r5.joinRequestCell
-            r2 = 2131624976(0x7f0e0410, float:1.8877147E38)
+            r2 = 2131624978(0x7f0e0412, float:1.887715E38)
             java.lang.String r4 = "ChannelSettingsJoinRequest"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r4, r2)
             boolean r4 = r5.isJoinRequest
@@ -133,7 +133,7 @@ public class JoinToSendSettingsView extends LinearLayout {
             org.telegram.ui.Cells.TextInfoPrivacyCell r7 = new org.telegram.ui.Cells.TextInfoPrivacyCell
             r7.<init>(r6)
             r5.joinToSendInfoCell = r7
-            r0 = 2131624980(0x7f0e0414, float:1.8877155E38)
+            r0 = 2131624982(0x7f0e0416, float:1.887716E38)
             java.lang.String r1 = "ChannelSettingsJoinToSendInfo"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             r7.setText(r0)
@@ -142,7 +142,7 @@ public class JoinToSendSettingsView extends LinearLayout {
             org.telegram.ui.Cells.TextInfoPrivacyCell r7 = new org.telegram.ui.Cells.TextInfoPrivacyCell
             r7.<init>(r6)
             r5.joinRequestInfoCell = r7
-            r6 = 2131624977(0x7f0e0411, float:1.8877149E38)
+            r6 = 2131624979(0x7f0e0413, float:1.8877153E38)
             java.lang.String r0 = "ChannelSettingsJoinRequestInfo"
             java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r0, r6)
             r7.setText(r6)
