@@ -16,6 +16,6 @@ public final /* synthetic */ class MediaDataController$$ExternalSyntheticLambda1
     }
 
     public final void run() {
-        this.f$0.lambda$putDiceStickersToCache$68(this.f$1, this.f$2, this.f$3);
+        this.f$0.lambda$putDiceStickersToCache$69(this.f$1, this.f$2, this.f$3);
     }
 }

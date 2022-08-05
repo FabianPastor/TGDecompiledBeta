@@ -1,15 +1,23 @@
 package org.telegram.ui.ActionBar;
 
-import java.util.Comparator;
 import org.telegram.ui.ActionBar.Theme;
 
-public final /* synthetic */ class Theme$$ExternalSyntheticLambda8 implements Comparator {
-    public static final /* synthetic */ Theme$$ExternalSyntheticLambda8 INSTANCE = new Theme$$ExternalSyntheticLambda8();
+public final /* synthetic */ class Theme$$ExternalSyntheticLambda8 implements Runnable {
+    public final /* synthetic */ String[] f$0;
+    public final /* synthetic */ Theme.ThemeInfo f$1;
+    public final /* synthetic */ boolean f$2;
+    public final /* synthetic */ boolean f$3;
+    public final /* synthetic */ Runnable f$4;
 
-    private /* synthetic */ Theme$$ExternalSyntheticLambda8() {
+    public /* synthetic */ Theme$$ExternalSyntheticLambda8(String[] strArr, Theme.ThemeInfo themeInfo, boolean z, boolean z2, Runnable runnable) {
+        this.f$0 = strArr;
+        this.f$1 = themeInfo;
+        this.f$2 = z;
+        this.f$3 = z2;
+        this.f$4 = runnable;
     }
 
-    public final int compare(Object obj, Object obj2) {
-        return Theme.lambda$sortThemes$1((Theme.ThemeInfo) obj, (Theme.ThemeInfo) obj2);
+    public final void run() {
+        Theme.lambda$applyThemeInBackground$2(this.f$0, this.f$1, this.f$2, this.f$3, this.f$4);
     }
 }

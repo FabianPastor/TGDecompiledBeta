@@ -1,7 +1,10 @@
 package org.telegram.ui;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Point;
@@ -9,8 +12,10 @@ import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 import android.graphics.drawable.Drawable;
 import android.view.View;
+import android.view.Window;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
+import androidx.core.graphics.ColorUtils;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -106,255 +111,226 @@ public class DefaultThemesPreviewCell extends LinearLayout {
             textCell3.setTextAndIcon(LocaleController.getString("SettingsBrowseThemes", NUM), NUM, false);
             addView(this.browseThemesCell, LayoutHelper.createFrame(-1, -2.0f));
             this.dayNightCell.setOnClickListener(new View.OnClickListener() {
-                /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r12v3, resolved type: java.lang.Object[]} */
+                /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v2, resolved type: java.lang.Object[]} */
                 /* JADX WARNING: Multi-variable type inference failed */
-                /* JADX WARNING: Removed duplicated region for block: B:26:0x0078  */
-                /* JADX WARNING: Removed duplicated region for block: B:27:0x007d  */
-                /* JADX WARNING: Removed duplicated region for block: B:30:0x0087  */
-                /* JADX WARNING: Removed duplicated region for block: B:31:0x008d  */
-                /* JADX WARNING: Removed duplicated region for block: B:34:0x0151  */
-                /* JADX WARNING: Removed duplicated region for block: B:35:0x0158  */
-                /* JADX WARNING: Removed duplicated region for block: B:38:0x015c  */
-                /* JADX WARNING: Removed duplicated region for block: B:50:0x01d1  */
-                /* JADX WARNING: Removed duplicated region for block: B:51:0x01e6  */
+                /* JADX WARNING: Removed duplicated region for block: B:26:0x0079  */
+                /* JADX WARNING: Removed duplicated region for block: B:27:0x007e  */
+                /* JADX WARNING: Removed duplicated region for block: B:30:0x0089  */
+                /* JADX WARNING: Removed duplicated region for block: B:31:0x008f  */
                 @android.annotation.SuppressLint({"NotifyDataSetChanged"})
                 /* Code decompiled incorrectly, please refer to instructions dump. */
-                public void onClick(android.view.View r14) {
+                public void onClick(android.view.View r13) {
                     /*
-                        r13 = this;
-                        boolean r0 = org.telegram.ui.Cells.DrawerProfileCell.switchingTheme
-                        if (r0 == 0) goto L_0x0005
+                        r12 = this;
+                        boolean r13 = org.telegram.ui.Cells.DrawerProfileCell.switchingTheme
+                        if (r13 == 0) goto L_0x0005
                         return
                     L_0x0005:
-                        java.lang.String r0 = "windowBackgroundWhiteBlueText4"
-                        int r1 = org.telegram.ui.ActionBar.Theme.getColor(r0)
-                        java.lang.String r2 = "windowBackgroundGray"
-                        int r3 = org.telegram.ui.ActionBar.Theme.getColor(r2)
-                        r6 = 1
-                        org.telegram.ui.Cells.DrawerProfileCell.switchingTheme = r6
-                        android.content.Context r4 = org.telegram.messenger.ApplicationLoader.applicationContext
-                        java.lang.String r5 = "themeconfig"
-                        r7 = 0
-                        android.content.SharedPreferences r4 = r4.getSharedPreferences(r5, r7)
-                        java.lang.String r5 = "lastDayTheme"
-                        java.lang.String r8 = "Blue"
-                        java.lang.String r5 = r4.getString(r5, r8)
-                        org.telegram.ui.ActionBar.Theme$ThemeInfo r9 = org.telegram.ui.ActionBar.Theme.getTheme(r5)
-                        if (r9 == 0) goto L_0x0035
-                        org.telegram.ui.ActionBar.Theme$ThemeInfo r9 = org.telegram.ui.ActionBar.Theme.getTheme(r5)
-                        boolean r9 = r9.isDark()
-                        if (r9 == 0) goto L_0x0036
+                        java.lang.String r13 = "windowBackgroundWhiteBlueText4"
+                        int r2 = org.telegram.ui.ActionBar.Theme.getColor(r13)
+                        java.lang.String r13 = "windowBackgroundGray"
+                        int r4 = org.telegram.ui.ActionBar.Theme.getColor(r13)
+                        r13 = 1
+                        org.telegram.ui.Cells.DrawerProfileCell.switchingTheme = r13
+                        android.content.Context r0 = org.telegram.messenger.ApplicationLoader.applicationContext
+                        java.lang.String r1 = "themeconfig"
+                        r6 = 0
+                        android.content.SharedPreferences r0 = r0.getSharedPreferences(r1, r6)
+                        java.lang.String r1 = "lastDayTheme"
+                        java.lang.String r3 = "Blue"
+                        java.lang.String r1 = r0.getString(r1, r3)
+                        org.telegram.ui.ActionBar.Theme$ThemeInfo r5 = org.telegram.ui.ActionBar.Theme.getTheme(r1)
+                        if (r5 == 0) goto L_0x0035
+                        org.telegram.ui.ActionBar.Theme$ThemeInfo r5 = org.telegram.ui.ActionBar.Theme.getTheme(r1)
+                        boolean r5 = r5.isDark()
+                        if (r5 == 0) goto L_0x0036
                     L_0x0035:
-                        r5 = r8
+                        r1 = r3
                     L_0x0036:
-                        java.lang.String r9 = "lastDarkTheme"
-                        java.lang.String r10 = "Dark Blue"
-                        java.lang.String r4 = r4.getString(r9, r10)
-                        org.telegram.ui.ActionBar.Theme$ThemeInfo r9 = org.telegram.ui.ActionBar.Theme.getTheme(r4)
-                        if (r9 == 0) goto L_0x004e
-                        org.telegram.ui.ActionBar.Theme$ThemeInfo r9 = org.telegram.ui.ActionBar.Theme.getTheme(r4)
-                        boolean r9 = r9.isDark()
-                        if (r9 != 0) goto L_0x004f
+                        java.lang.String r5 = "lastDarkTheme"
+                        java.lang.String r7 = "Dark Blue"
+                        java.lang.String r0 = r0.getString(r5, r7)
+                        org.telegram.ui.ActionBar.Theme$ThemeInfo r5 = org.telegram.ui.ActionBar.Theme.getTheme(r0)
+                        if (r5 == 0) goto L_0x004e
+                        org.telegram.ui.ActionBar.Theme$ThemeInfo r5 = org.telegram.ui.ActionBar.Theme.getTheme(r0)
+                        boolean r5 = r5.isDark()
+                        if (r5 != 0) goto L_0x004f
                     L_0x004e:
-                        r4 = r10
+                        r0 = r7
                     L_0x004f:
-                        org.telegram.ui.ActionBar.Theme$ThemeInfo r9 = org.telegram.ui.ActionBar.Theme.getActiveTheme()
-                        boolean r11 = r5.equals(r4)
-                        if (r11 == 0) goto L_0x006f
-                        boolean r9 = r9.isDark()
-                        if (r9 != 0) goto L_0x006d
-                        boolean r9 = r5.equals(r10)
-                        if (r9 != 0) goto L_0x006d
-                        java.lang.String r9 = "Night"
-                        boolean r9 = r5.equals(r9)
-                        if (r9 == 0) goto L_0x0070
+                        org.telegram.ui.ActionBar.Theme$ThemeInfo r5 = org.telegram.ui.ActionBar.Theme.getActiveTheme()
+                        boolean r8 = r1.equals(r0)
+                        if (r8 == 0) goto L_0x006f
+                        boolean r5 = r5.isDark()
+                        if (r5 != 0) goto L_0x006d
+                        boolean r5 = r1.equals(r7)
+                        if (r5 != 0) goto L_0x006d
+                        java.lang.String r5 = "Night"
+                        boolean r5 = r1.equals(r5)
+                        if (r5 == 0) goto L_0x0070
                     L_0x006d:
-                        r10 = r4
+                        r7 = r0
                         goto L_0x0071
                     L_0x006f:
-                        r10 = r4
+                        r7 = r0
                     L_0x0070:
-                        r8 = r5
+                        r3 = r1
                     L_0x0071:
-                        boolean r4 = org.telegram.ui.ActionBar.Theme.isCurrentThemeDark()
-                        r4 = r4 ^ r6
-                        if (r4 == 0) goto L_0x007d
-                        org.telegram.ui.ActionBar.Theme$ThemeInfo r5 = org.telegram.ui.ActionBar.Theme.getTheme(r10)
-                        goto L_0x0081
-                    L_0x007d:
-                        org.telegram.ui.ActionBar.Theme$ThemeInfo r5 = org.telegram.ui.ActionBar.Theme.getTheme(r8)
-                    L_0x0081:
-                        org.telegram.ui.DefaultThemesPreviewCell r8 = org.telegram.ui.DefaultThemesPreviewCell.this
-                        org.telegram.ui.Components.RLottieDrawable r8 = r8.darkThemeDrawable
-                        if (r4 == 0) goto L_0x008d
-                        int r9 = r8.getFramesCount()
-                        int r9 = r9 - r6
-                        goto L_0x008e
-                    L_0x008d:
-                        r9 = 0
-                    L_0x008e:
-                        r8.setCustomEndFrame(r9)
-                        org.telegram.ui.DefaultThemesPreviewCell r8 = org.telegram.ui.DefaultThemesPreviewCell.this
-                        org.telegram.ui.Cells.TextCell r8 = r8.dayNightCell
-                        org.telegram.ui.Components.RLottieImageView r8 = r8.getImageView()
-                        r8.playAnimation()
-                        r8 = 2
-                        int[] r9 = new int[r8]
-                        org.telegram.ui.DefaultThemesPreviewCell r10 = org.telegram.ui.DefaultThemesPreviewCell.this
-                        org.telegram.ui.Cells.TextCell r10 = r10.dayNightCell
-                        org.telegram.ui.Components.RLottieImageView r10 = r10.getImageView()
-                        r10.getLocationInWindow(r9)
-                        r10 = r9[r7]
-                        org.telegram.ui.DefaultThemesPreviewCell r11 = org.telegram.ui.DefaultThemesPreviewCell.this
-                        org.telegram.ui.Cells.TextCell r11 = r11.dayNightCell
-                        org.telegram.ui.Components.RLottieImageView r11 = r11.getImageView()
-                        int r11 = r11.getMeasuredWidth()
-                        int r11 = r11 / r8
-                        int r10 = r10 + r11
-                        r9[r7] = r10
-                        r10 = r9[r6]
-                        org.telegram.ui.DefaultThemesPreviewCell r11 = org.telegram.ui.DefaultThemesPreviewCell.this
-                        org.telegram.ui.Cells.TextCell r11 = r11.dayNightCell
-                        org.telegram.ui.Components.RLottieImageView r11 = r11.getImageView()
-                        int r11 = r11.getMeasuredHeight()
-                        int r11 = r11 / r8
-                        r12 = 1077936128(0x40400000, float:3.0)
-                        int r12 = org.telegram.messenger.AndroidUtilities.dp(r12)
-                        int r11 = r11 + r12
-                        int r10 = r10 + r11
-                        r9[r6] = r10
-                        org.telegram.messenger.NotificationCenter r10 = org.telegram.messenger.NotificationCenter.getGlobalInstance()
-                        int r11 = org.telegram.messenger.NotificationCenter.needSetDayNightTheme
-                        r12 = 7
-                        java.lang.Object[] r12 = new java.lang.Object[r12]
-                        r12[r7] = r5
-                        java.lang.Boolean r5 = java.lang.Boolean.FALSE
-                        r12[r6] = r5
-                        r12[r8] = r9
-                        r5 = 3
-                        r7 = -1
-                        java.lang.Integer r7 = java.lang.Integer.valueOf(r7)
-                        r12[r5] = r7
-                        r5 = 4
-                        java.lang.Boolean r7 = java.lang.Boolean.valueOf(r4)
-                        r12[r5] = r7
-                        r5 = 5
-                        org.telegram.ui.DefaultThemesPreviewCell r7 = org.telegram.ui.DefaultThemesPreviewCell.this
-                        org.telegram.ui.Cells.TextCell r7 = r7.dayNightCell
-                        org.telegram.ui.Components.RLottieImageView r7 = r7.getImageView()
-                        r12[r5] = r7
-                        r5 = 6
-                        org.telegram.ui.DefaultThemesPreviewCell r7 = org.telegram.ui.DefaultThemesPreviewCell.this
-                        org.telegram.ui.Cells.TextCell r7 = r7.dayNightCell
-                        r12[r5] = r7
-                        r10.postNotificationName(r11, r12)
-                        org.telegram.ui.DefaultThemesPreviewCell r5 = org.telegram.ui.DefaultThemesPreviewCell.this
-                        r5.updateDayNightMode()
-                        org.telegram.ui.DefaultThemesPreviewCell r5 = org.telegram.ui.DefaultThemesPreviewCell.this
-                        r5.updateSelectedPosition()
-                        int r0 = org.telegram.ui.ActionBar.Theme.getColor(r0)
-                        org.telegram.ui.DefaultThemesPreviewCell r5 = org.telegram.ui.DefaultThemesPreviewCell.this
-                        org.telegram.ui.Components.RLottieDrawable r5 = r5.darkThemeDrawable
-                        android.graphics.PorterDuffColorFilter r7 = new android.graphics.PorterDuffColorFilter
-                        android.graphics.PorterDuff$Mode r9 = android.graphics.PorterDuff.Mode.SRC_IN
-                        r7.<init>(r0, r9)
-                        r5.setColorFilter(r7)
-                        float[] r5 = new float[r8]
-                        r5 = {0, NUM} // fill-array
-                        android.animation.ValueAnimator r5 = android.animation.ValueAnimator.ofFloat(r5)
-                        org.telegram.ui.DefaultThemesPreviewCell$1$1 r7 = new org.telegram.ui.DefaultThemesPreviewCell$1$1
-                        r7.<init>(r1, r0)
-                        r5.addUpdateListener(r7)
-                        org.telegram.ui.DefaultThemesPreviewCell$1$2 r1 = new org.telegram.ui.DefaultThemesPreviewCell$1$2
-                        r1.<init>(r0)
-                        r5.addListener(r1)
-                        r9 = 350(0x15e, double:1.73E-321)
-                        r5.setDuration(r9)
-                        r5.start()
-                        int r7 = org.telegram.ui.ActionBar.Theme.getColor(r2)
-                        android.content.Context r0 = r1
-                        boolean r1 = r0 instanceof android.app.Activity
-                        if (r1 == 0) goto L_0x0158
-                        android.app.Activity r0 = (android.app.Activity) r0
-                        android.view.Window r0 = r0.getWindow()
-                        goto L_0x0159
-                    L_0x0158:
-                        r0 = 0
-                    L_0x0159:
-                        r11 = r0
-                        if (r11 == 0) goto L_0x01cb
+                        boolean r0 = org.telegram.ui.ActionBar.Theme.isCurrentThemeDark()
+                        r8 = r0 ^ 1
+                        if (r8 == 0) goto L_0x007e
+                        org.telegram.ui.ActionBar.Theme$ThemeInfo r0 = org.telegram.ui.ActionBar.Theme.getTheme(r7)
+                        goto L_0x0082
+                    L_0x007e:
+                        org.telegram.ui.ActionBar.Theme$ThemeInfo r0 = org.telegram.ui.ActionBar.Theme.getTheme(r3)
+                    L_0x0082:
+                        r7 = r0
                         org.telegram.ui.DefaultThemesPreviewCell r0 = org.telegram.ui.DefaultThemesPreviewCell.this
-                        android.animation.ValueAnimator r0 = r0.navBarAnimator
-                        if (r0 == 0) goto L_0x0180
+                        org.telegram.ui.Components.RLottieDrawable r0 = r0.darkThemeDrawable
+                        if (r8 == 0) goto L_0x008f
+                        int r1 = r0.getFramesCount()
+                        int r1 = r1 - r13
+                        goto L_0x0090
+                    L_0x008f:
+                        r1 = 0
+                    L_0x0090:
+                        r0.setCustomEndFrame(r1)
                         org.telegram.ui.DefaultThemesPreviewCell r0 = org.telegram.ui.DefaultThemesPreviewCell.this
-                        android.animation.ValueAnimator r0 = r0.navBarAnimator
-                        boolean r0 = r0.isRunning()
-                        if (r0 == 0) goto L_0x0180
+                        org.telegram.ui.Cells.TextCell r0 = r0.dayNightCell
+                        org.telegram.ui.Components.RLottieImageView r0 = r0.getImageView()
+                        r0.playAnimation()
+                        r9 = 2
+                        int[] r10 = new int[r9]
                         org.telegram.ui.DefaultThemesPreviewCell r0 = org.telegram.ui.DefaultThemesPreviewCell.this
-                        int r0 = r0.navBarColor
+                        org.telegram.ui.Cells.TextCell r0 = r0.dayNightCell
+                        org.telegram.ui.Components.RLottieImageView r0 = r0.getImageView()
+                        r0.getLocationInWindow(r10)
+                        r0 = r10[r6]
                         org.telegram.ui.DefaultThemesPreviewCell r1 = org.telegram.ui.DefaultThemesPreviewCell.this
-                        android.animation.ValueAnimator r1 = r1.navBarAnimator
-                        r1.cancel()
-                        r3 = r0
-                    L_0x0180:
-                        org.telegram.ui.DefaultThemesPreviewCell r0 = org.telegram.ui.DefaultThemesPreviewCell.this
-                        float[] r1 = new float[r8]
-                        r1 = {0, NUM} // fill-array
-                        android.animation.ValueAnimator r1 = android.animation.ValueAnimator.ofFloat(r1)
-                        android.animation.ValueAnimator unused = r0.navBarAnimator = r1
-                        if (r4 == 0) goto L_0x0195
-                        r0 = 1112014848(0x42480000, float:50.0)
-                        r2 = 1112014848(0x42480000, float:50.0)
-                        goto L_0x0199
-                    L_0x0195:
-                        r0 = 1128792064(0x43480000, float:200.0)
-                        r2 = 1128792064(0x43480000, float:200.0)
-                    L_0x0199:
-                        org.telegram.ui.DefaultThemesPreviewCell r0 = org.telegram.ui.DefaultThemesPreviewCell.this
-                        android.animation.ValueAnimator r8 = r0.navBarAnimator
-                        org.telegram.ui.DefaultThemesPreviewCell$1$3 r12 = new org.telegram.ui.DefaultThemesPreviewCell$1$3
-                        r0 = r12
-                        r1 = r13
-                        r4 = r7
-                        r5 = r11
-                        r0.<init>(r2, r3, r4, r5)
-                        r8.addUpdateListener(r12)
-                        org.telegram.ui.DefaultThemesPreviewCell r0 = org.telegram.ui.DefaultThemesPreviewCell.this
-                        android.animation.ValueAnimator r0 = r0.navBarAnimator
-                        org.telegram.ui.DefaultThemesPreviewCell$1$4 r1 = new org.telegram.ui.DefaultThemesPreviewCell$1$4
-                        r1.<init>(r13, r11, r7)
-                        r0.addListener(r1)
-                        org.telegram.ui.DefaultThemesPreviewCell r0 = org.telegram.ui.DefaultThemesPreviewCell.this
-                        android.animation.ValueAnimator r0 = r0.navBarAnimator
-                        r0.setDuration(r9)
-                        org.telegram.ui.DefaultThemesPreviewCell r0 = org.telegram.ui.DefaultThemesPreviewCell.this
-                        android.animation.ValueAnimator r0 = r0.navBarAnimator
-                        r0.start()
-                    L_0x01cb:
-                        boolean r0 = org.telegram.ui.ActionBar.Theme.isCurrentThemeDay()
-                        if (r0 == 0) goto L_0x01e6
-                        org.telegram.ui.DefaultThemesPreviewCell r0 = org.telegram.ui.DefaultThemesPreviewCell.this
-                        org.telegram.ui.Cells.TextCell r0 = r0.dayNightCell
-                        r1 = 2131628345(0x7f0e1139, float:1.888398E38)
-                        java.lang.String r2 = "SettingsSwitchToNightMode"
-                        java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
-                        org.telegram.ui.DefaultThemesPreviewCell r2 = org.telegram.ui.DefaultThemesPreviewCell.this
-                        org.telegram.ui.Components.RLottieDrawable r2 = r2.darkThemeDrawable
-                        r0.setTextAndIcon((java.lang.String) r1, (android.graphics.drawable.Drawable) r2, (boolean) r6)
-                        goto L_0x01fa
-                    L_0x01e6:
-                        org.telegram.ui.DefaultThemesPreviewCell r0 = org.telegram.ui.DefaultThemesPreviewCell.this
-                        org.telegram.ui.Cells.TextCell r0 = r0.dayNightCell
-                        r1 = 2131628344(0x7f0e1138, float:1.8883978E38)
-                        java.lang.String r2 = "SettingsSwitchToDayMode"
-                        java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
-                        org.telegram.ui.DefaultThemesPreviewCell r2 = org.telegram.ui.DefaultThemesPreviewCell.this
-                        org.telegram.ui.Components.RLottieDrawable r2 = r2.darkThemeDrawable
-                        r0.setTextAndIcon((java.lang.String) r1, (android.graphics.drawable.Drawable) r2, (boolean) r6)
-                    L_0x01fa:
+                        org.telegram.ui.Cells.TextCell r1 = r1.dayNightCell
+                        org.telegram.ui.Components.RLottieImageView r1 = r1.getImageView()
+                        int r1 = r1.getMeasuredWidth()
+                        int r1 = r1 / r9
+                        int r0 = r0 + r1
+                        r10[r6] = r0
+                        r0 = r10[r13]
+                        org.telegram.ui.DefaultThemesPreviewCell r1 = org.telegram.ui.DefaultThemesPreviewCell.this
+                        org.telegram.ui.Cells.TextCell r1 = r1.dayNightCell
+                        org.telegram.ui.Components.RLottieImageView r1 = r1.getImageView()
+                        int r1 = r1.getMeasuredHeight()
+                        int r1 = r1 / r9
+                        r3 = 1077936128(0x40400000, float:3.0)
+                        int r3 = org.telegram.messenger.AndroidUtilities.dp(r3)
+                        int r1 = r1 + r3
+                        int r0 = r0 + r1
+                        r10[r13] = r0
+                        android.content.Context r3 = r1
+                        org.telegram.ui.DefaultThemesPreviewCell$1$$ExternalSyntheticLambda1 r11 = new org.telegram.ui.DefaultThemesPreviewCell$1$$ExternalSyntheticLambda1
+                        r0 = r11
+                        r1 = r12
+                        r5 = r8
+                        r0.<init>(r1, r2, r3, r4, r5)
+                        org.telegram.messenger.NotificationCenter r0 = org.telegram.messenger.NotificationCenter.getGlobalInstance()
+                        int r1 = org.telegram.messenger.NotificationCenter.needSetDayNightTheme
+                        r2 = 8
+                        java.lang.Object[] r2 = new java.lang.Object[r2]
+                        r2[r6] = r7
+                        java.lang.Boolean r3 = java.lang.Boolean.FALSE
+                        r2[r13] = r3
+                        r2[r9] = r10
+                        r13 = 3
+                        r3 = -1
+                        java.lang.Integer r3 = java.lang.Integer.valueOf(r3)
+                        r2[r13] = r3
+                        r13 = 4
+                        java.lang.Boolean r3 = java.lang.Boolean.valueOf(r8)
+                        r2[r13] = r3
+                        r13 = 5
+                        org.telegram.ui.DefaultThemesPreviewCell r3 = org.telegram.ui.DefaultThemesPreviewCell.this
+                        org.telegram.ui.Cells.TextCell r3 = r3.dayNightCell
+                        org.telegram.ui.Components.RLottieImageView r3 = r3.getImageView()
+                        r2[r13] = r3
+                        r13 = 6
+                        org.telegram.ui.DefaultThemesPreviewCell r3 = org.telegram.ui.DefaultThemesPreviewCell.this
+                        org.telegram.ui.Cells.TextCell r3 = r3.dayNightCell
+                        r2[r13] = r3
+                        r13 = 7
+                        r2[r13] = r11
+                        r0.postNotificationName(r1, r2)
                         return
                     */
                     throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.DefaultThemesPreviewCell.AnonymousClass1.onClick(android.view.View):void");
+                }
+
+                /* access modifiers changed from: private */
+                public /* synthetic */ void lambda$onClick$1(int i, Context context, int i2, boolean z) {
+                    AndroidUtilities.runOnUIThread(new DefaultThemesPreviewCell$1$$ExternalSyntheticLambda0(this, i, context, i2, z));
+                }
+
+                /* access modifiers changed from: private */
+                public /* synthetic */ void lambda$onClick$0(int i, Context context, int i2, boolean z) {
+                    Context context2 = context;
+                    DefaultThemesPreviewCell.this.updateDayNightMode();
+                    DefaultThemesPreviewCell.this.updateSelectedPosition();
+                    final int color = Theme.getColor("windowBackgroundWhiteBlueText4");
+                    DefaultThemesPreviewCell.this.darkThemeDrawable.setColorFilter(new PorterDuffColorFilter(color, PorterDuff.Mode.SRC_IN));
+                    ValueAnimator ofFloat = ValueAnimator.ofFloat(new float[]{0.0f, 1.0f});
+                    final int i3 = i;
+                    ofFloat.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                        public void onAnimationUpdate(ValueAnimator valueAnimator) {
+                            DefaultThemesPreviewCell.this.darkThemeDrawable.setColorFilter(new PorterDuffColorFilter(ColorUtils.blendARGB(i3, color, ((Float) valueAnimator.getAnimatedValue()).floatValue()), PorterDuff.Mode.SRC_IN));
+                        }
+                    });
+                    ofFloat.addListener(new AnimatorListenerAdapter() {
+                        public void onAnimationEnd(Animator animator) {
+                            DefaultThemesPreviewCell.this.darkThemeDrawable.setColorFilter(new PorterDuffColorFilter(color, PorterDuff.Mode.SRC_IN));
+                            super.onAnimationEnd(animator);
+                        }
+                    });
+                    ofFloat.setDuration(350);
+                    ofFloat.start();
+                    final int color2 = Theme.getColor("windowBackgroundGray");
+                    final Window window = context2 instanceof Activity ? ((Activity) context2).getWindow() : null;
+                    if (window != null) {
+                        if (DefaultThemesPreviewCell.this.navBarAnimator != null && DefaultThemesPreviewCell.this.navBarAnimator.isRunning()) {
+                            DefaultThemesPreviewCell.this.navBarAnimator.cancel();
+                        }
+                        final int access$200 = (DefaultThemesPreviewCell.this.navBarAnimator == null || !DefaultThemesPreviewCell.this.navBarAnimator.isRunning()) ? i2 : DefaultThemesPreviewCell.this.navBarColor;
+                        ValueAnimator unused = DefaultThemesPreviewCell.this.navBarAnimator = ValueAnimator.ofFloat(new float[]{0.0f, 1.0f});
+                        final float f = z ? 50.0f : 200.0f;
+                        final int i4 = color2;
+                        final Window window2 = window;
+                        DefaultThemesPreviewCell.this.navBarAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener(350.0f, 150.0f) {
+                            public void onAnimationUpdate(ValueAnimator valueAnimator) {
+                                int unused = DefaultThemesPreviewCell.this.navBarColor = ColorUtils.blendARGB(access$200, i4, Math.max(0.0f, Math.min(1.0f, ((((Float) valueAnimator.getAnimatedValue()).floatValue() * 350.0f) - f) / 150.0f)));
+                                boolean z = false;
+                                AndroidUtilities.setNavigationBarColor(window2, DefaultThemesPreviewCell.this.navBarColor, false);
+                                Window window = window2;
+                                if (AndroidUtilities.computePerceivedBrightness(DefaultThemesPreviewCell.this.navBarColor) >= 0.721f) {
+                                    z = true;
+                                }
+                                AndroidUtilities.setLightNavigationBar(window, z);
+                            }
+                        });
+                        DefaultThemesPreviewCell.this.navBarAnimator.addListener(new AnimatorListenerAdapter(this) {
+                            public void onAnimationEnd(Animator animator) {
+                                boolean z = false;
+                                AndroidUtilities.setNavigationBarColor(window, color2, false);
+                                Window window = window;
+                                if (AndroidUtilities.computePerceivedBrightness(color2) >= 0.721f) {
+                                    z = true;
+                                }
+                                AndroidUtilities.setLightNavigationBar(window, z);
+                            }
+                        });
+                        DefaultThemesPreviewCell.this.navBarAnimator.setDuration(350);
+                        DefaultThemesPreviewCell.this.navBarAnimator.start();
+                    }
+                    if (Theme.isCurrentThemeDay()) {
+                        DefaultThemesPreviewCell.this.dayNightCell.setTextAndIcon(LocaleController.getString("SettingsSwitchToNightMode", NUM), (Drawable) DefaultThemesPreviewCell.this.darkThemeDrawable, true);
+                    } else {
+                        DefaultThemesPreviewCell.this.dayNightCell.setTextAndIcon(LocaleController.getString("SettingsSwitchToDayMode", NUM), (Drawable) DefaultThemesPreviewCell.this.darkThemeDrawable, true);
+                    }
                 }
             });
             this.darkThemeDrawable.setPlayInDirectionOfCustomEndFrame(true);

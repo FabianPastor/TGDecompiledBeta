@@ -1416,7 +1416,7 @@ public class ActionBarLayout extends FrameLayout {
                 this.transitionAnimationPreviewMode = z7;
                 this.transitionAnimationStartTime = System.currentTimeMillis();
                 this.transitionAnimationInProgress = true;
-                this.onOpenAnimationEndRunnable = new ActionBarLayout$$ExternalSyntheticLambda4(this, z4, actionBarPopupWindowLayout, z, baseFragment2, baseFragment);
+                this.onOpenAnimationEndRunnable = new ActionBarLayout$$ExternalSyntheticLambda6(this, z4, actionBarPopupWindowLayout, z, baseFragment2, baseFragment);
                 final boolean z9 = !baseFragment.needDelayOpenAnimation();
                 if (z9) {
                     if (baseFragment2 != null) {
@@ -1427,7 +1427,7 @@ public class ActionBarLayout extends FrameLayout {
                 this.delayedAnimationResumed = false;
                 this.oldFragment = baseFragment2;
                 this.newFragment = baseFragment3;
-                AnimatorSet onCustomTransitionAnimation = !z7 ? baseFragment3.onCustomTransitionAnimation(true, new ActionBarLayout$$ExternalSyntheticLambda1(this)) : null;
+                AnimatorSet onCustomTransitionAnimation = !z7 ? baseFragment3.onCustomTransitionAnimation(true, new ActionBarLayout$$ExternalSyntheticLambda2(this)) : null;
                 if (onCustomTransitionAnimation == null) {
                     this.containerView.setAlpha(0.0f);
                     if (z7) {
@@ -1509,7 +1509,7 @@ public class ActionBarLayout extends FrameLayout {
                 presentFragmentInternalRemoveOld(z5, baseFragment2);
                 this.transitionAnimationStartTime = System.currentTimeMillis();
                 this.transitionAnimationInProgress = true;
-                this.onOpenAnimationEndRunnable = new ActionBarLayout$$ExternalSyntheticLambda5(baseFragment2, baseFragment3);
+                this.onOpenAnimationEndRunnable = new ActionBarLayout$$ExternalSyntheticLambda7(baseFragment2, baseFragment3);
                 ArrayList arrayList2 = new ArrayList();
                 arrayList2.add(ObjectAnimator.ofFloat(this, View.ALPHA, new float[]{0.0f, 1.0f}));
                 View view3 = this.backgroundView;
@@ -1814,9 +1814,9 @@ public class ActionBarLayout extends FrameLayout {
                     this.transitionAnimationStartTime = System.currentTimeMillis();
                     this.transitionAnimationInProgress = true;
                     baseFragment2.setRemovingFromStack(true);
-                    this.onCloseAnimationEndRunnable = new ActionBarLayout$$ExternalSyntheticLambda3(this, baseFragment2, baseFragment);
+                    this.onCloseAnimationEndRunnable = new ActionBarLayout$$ExternalSyntheticLambda5(this, baseFragment2, baseFragment);
                     if (!this.inPreviewMode && !this.transitionAnimationPreviewMode) {
-                        animatorSet = baseFragment2.onCustomTransitionAnimation(false, new ActionBarLayout$$ExternalSyntheticLambda0(this));
+                        animatorSet = baseFragment2.onCustomTransitionAnimation(false, new ActionBarLayout$$ExternalSyntheticLambda1(this));
                     }
                     if (animatorSet != null) {
                         this.currentAnimation = animatorSet;
@@ -1854,7 +1854,7 @@ public class ActionBarLayout extends FrameLayout {
             } else {
                 this.transitionAnimationStartTime = System.currentTimeMillis();
                 this.transitionAnimationInProgress = true;
-                this.onCloseAnimationEndRunnable = new ActionBarLayout$$ExternalSyntheticLambda2(this, baseFragment2);
+                this.onCloseAnimationEndRunnable = new ActionBarLayout$$ExternalSyntheticLambda4(this, baseFragment2);
                 ArrayList arrayList3 = new ArrayList();
                 arrayList3.add(ObjectAnimator.ofFloat(this, View.ALPHA, new float[]{1.0f, 0.0f}));
                 View view3 = this.backgroundView;
@@ -2096,17 +2096,24 @@ public class ActionBarLayout extends FrameLayout {
     }
 
     public void animateThemedValues(Theme.ThemeInfo themeInfo, int i, boolean z, boolean z2) {
-        animateThemedValues(new ThemeAnimationSettings(themeInfo, i, z, z2));
+        animateThemedValues(new ThemeAnimationSettings(themeInfo, i, z, z2), (Runnable) null);
     }
 
-    public void animateThemedValues(final ThemeAnimationSettings themeAnimationSettings) {
-        BaseFragment baseFragment;
+    public void animateThemedValues(Theme.ThemeInfo themeInfo, int i, boolean z, boolean z2, Runnable runnable) {
+        animateThemedValues(new ThemeAnimationSettings(themeInfo, i, z, z2), runnable);
+    }
+
+    public void animateThemedValues(ThemeAnimationSettings themeAnimationSettings, Runnable runnable) {
         Theme.ThemeInfo themeInfo;
         if (this.transitionAnimationInProgress || this.startedTracking) {
             this.animateThemeAfterAnimation = true;
             this.animateSetThemeAfterAnimation = themeAnimationSettings.theme;
             this.animateSetThemeNightAfterAnimation = themeAnimationSettings.nightTheme;
             this.animateSetThemeAccentIdAfterAnimation = themeAnimationSettings.accentId;
+            if (runnable != null) {
+                runnable.run();
+                return;
+            }
             return;
         }
         AnimatorSet animatorSet = this.themeAnimatorSet;
@@ -2115,9 +2122,31 @@ public class ActionBarLayout extends FrameLayout {
             this.themeAnimatorSet = null;
         }
         int size = themeAnimationSettings.onlyTopFragment ? 1 : this.fragmentsStack.size();
+        ActionBarLayout$$ExternalSyntheticLambda3 actionBarLayout$$ExternalSyntheticLambda3 = new ActionBarLayout$$ExternalSyntheticLambda3(this, size, themeAnimationSettings, runnable);
+        if (size < 1 || !themeAnimationSettings.applyTheme) {
+            actionBarLayout$$ExternalSyntheticLambda3.run();
+            return;
+        }
+        int i = themeAnimationSettings.accentId;
+        if (!(i == -1 || (themeInfo = themeAnimationSettings.theme) == null)) {
+            themeInfo.setCurrentAccentId(i);
+            Theme.saveThemeAccents(themeAnimationSettings.theme, true, false, true, false);
+        }
+        if (runnable == null) {
+            Theme.applyTheme(themeAnimationSettings.theme, themeAnimationSettings.nightTheme);
+            actionBarLayout$$ExternalSyntheticLambda3.run();
+            return;
+        }
+        Theme.applyThemeInBackground(themeAnimationSettings.theme, themeAnimationSettings.nightTheme, new ActionBarLayout$$ExternalSyntheticLambda0(actionBarLayout$$ExternalSyntheticLambda3));
+    }
+
+    /* access modifiers changed from: private */
+    public /* synthetic */ void lambda$animateThemedValues$6(int i, final ThemeAnimationSettings themeAnimationSettings, Runnable runnable) {
+        BaseFragment baseFragment;
+        Runnable runnable2;
         boolean z = false;
-        for (int i = 0; i < size; i++) {
-            if (i == 0) {
+        for (int i2 = 0; i2 < i; i2++) {
+            if (i2 == 0) {
                 baseFragment = getLastFragment();
             } else {
                 if ((this.inPreviewMode || this.transitionAnimationPreviewMode) && this.fragmentsStack.size() > 1) {
@@ -2145,19 +2174,8 @@ public class ActionBarLayout extends FrameLayout {
                 } else if (dialog instanceof AlertDialog) {
                     addStartDescriptions(((AlertDialog) dialog).getThemeDescriptions());
                 }
-                if (i == 0) {
-                    if (themeAnimationSettings.applyTheme) {
-                        int i2 = themeAnimationSettings.accentId;
-                        if (!(i2 == -1 || (themeInfo = themeAnimationSettings.theme) == null)) {
-                            themeInfo.setCurrentAccentId(i2);
-                            Theme.saveThemeAccents(themeAnimationSettings.theme, true, false, true, false);
-                        }
-                        Theme.applyTheme(themeAnimationSettings.theme, themeAnimationSettings.nightTheme);
-                    }
-                    Runnable runnable = themeAnimationSettings.afterStartDescriptionsAddedRunnable;
-                    if (runnable != null) {
-                        runnable.run();
-                    }
+                if (i2 == 0 && (runnable2 = themeAnimationSettings.afterStartDescriptionsAddedRunnable) != null) {
+                    runnable2.run();
                 }
                 addEndDescriptions(themeDescriptions);
                 Dialog dialog2 = baseFragment.visibleDialog;
@@ -2171,8 +2189,8 @@ public class ActionBarLayout extends FrameLayout {
         }
         if (z) {
             if (!themeAnimationSettings.onlyTopFragment) {
-                int size2 = this.fragmentsStack.size() - ((this.inPreviewMode || this.transitionAnimationPreviewMode) ? 2 : 1);
-                for (int i3 = 0; i3 < size2; i3++) {
+                int size = this.fragmentsStack.size() - ((this.inPreviewMode || this.transitionAnimationPreviewMode) ? 2 : 1);
+                for (int i3 = 0; i3 < size; i3++) {
                     BaseFragment baseFragment2 = this.fragmentsStack.get(i3);
                     baseFragment2.clearViews();
                     baseFragment2.setParentLayout(this);
@@ -2185,26 +2203,29 @@ public class ActionBarLayout extends FrameLayout {
                 this.animateEndColors.clear();
                 this.themeAnimatorDelegate.clear();
                 this.presentingFragmentDescriptions = null;
-                Runnable runnable2 = themeAnimationSettings.afterAnimationRunnable;
-                if (runnable2 != null) {
-                    runnable2.run();
+                Runnable runnable3 = themeAnimationSettings.afterAnimationRunnable;
+                if (runnable3 != null) {
+                    runnable3.run();
+                }
+                if (runnable != null) {
+                    runnable.run();
                     return;
                 }
                 return;
             }
             Theme.setAnimatingColor(true);
-            Runnable runnable3 = themeAnimationSettings.beforeAnimationRunnable;
-            if (runnable3 != null) {
-                runnable3.run();
+            Runnable runnable4 = themeAnimationSettings.beforeAnimationRunnable;
+            if (runnable4 != null) {
+                runnable4.run();
             }
             ThemeAnimationSettings.onAnimationProgress onanimationprogress = themeAnimationSettings.animationProgress;
             this.animationProgressListener = onanimationprogress;
             if (onanimationprogress != null) {
                 onanimationprogress.setProgress(0.0f);
             }
-            AnimatorSet animatorSet2 = new AnimatorSet();
-            this.themeAnimatorSet = animatorSet2;
-            animatorSet2.addListener(new AnimatorListenerAdapter() {
+            AnimatorSet animatorSet = new AnimatorSet();
+            this.themeAnimatorSet = animatorSet;
+            animatorSet.addListener(new AnimatorListenerAdapter() {
                 public void onAnimationEnd(Animator animator) {
                     if (animator.equals(ActionBarLayout.this.themeAnimatorSet)) {
                         ActionBarLayout.this.themeAnimatorDescriptions.clear();
@@ -2240,6 +2261,9 @@ public class ActionBarLayout extends FrameLayout {
             this.themeAnimatorSet.playTogether(new Animator[]{ObjectAnimator.ofFloat(this, "themeAnimationValue", new float[]{0.0f, 1.0f})});
             this.themeAnimatorSet.setDuration(themeAnimationSettings.duration);
             this.themeAnimatorSet.start();
+        }
+        if (runnable != null) {
+            runnable.run();
         }
     }
 

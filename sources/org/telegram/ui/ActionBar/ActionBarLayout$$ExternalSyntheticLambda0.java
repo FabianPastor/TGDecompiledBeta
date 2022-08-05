@@ -1,13 +1,15 @@
 package org.telegram.ui.ActionBar;
 
-public final /* synthetic */ class ActionBarLayout$$ExternalSyntheticLambda0 implements Runnable {
-    public final /* synthetic */ ActionBarLayout f$0;
+import org.telegram.messenger.AndroidUtilities;
 
-    public /* synthetic */ ActionBarLayout$$ExternalSyntheticLambda0(ActionBarLayout actionBarLayout) {
-        this.f$0 = actionBarLayout;
+public final /* synthetic */ class ActionBarLayout$$ExternalSyntheticLambda0 implements Runnable {
+    public final /* synthetic */ Runnable f$0;
+
+    public /* synthetic */ ActionBarLayout$$ExternalSyntheticLambda0(Runnable runnable) {
+        this.f$0 = runnable;
     }
 
     public final void run() {
-        this.f$0.lambda$closeLastFragment$4();
+        AndroidUtilities.runOnUIThread(this.f$0);
     }
 }

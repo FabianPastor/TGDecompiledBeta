@@ -1,18 +1,17 @@
 package org.telegram.ui.Components;
 
-import java.util.ArrayList;
-import org.telegram.messenger.MediaDataController;
-
-public final /* synthetic */ class SuggestEmojiView$$ExternalSyntheticLambda3 implements MediaDataController.KeywordResultCallback {
+public final /* synthetic */ class SuggestEmojiView$$ExternalSyntheticLambda3 implements Runnable {
     public final /* synthetic */ SuggestEmojiView f$0;
-    public final /* synthetic */ String f$1;
+    public final /* synthetic */ String[] f$1;
+    public final /* synthetic */ String f$2;
 
-    public /* synthetic */ SuggestEmojiView$$ExternalSyntheticLambda3(SuggestEmojiView suggestEmojiView, String str) {
+    public /* synthetic */ SuggestEmojiView$$ExternalSyntheticLambda3(SuggestEmojiView suggestEmojiView, String[] strArr, String str) {
         this.f$0 = suggestEmojiView;
-        this.f$1 = str;
+        this.f$1 = strArr;
+        this.f$2 = str;
     }
 
-    public final void run(ArrayList arrayList, String str) {
-        this.f$0.lambda$searchKeywords$1(this.f$1, arrayList, str);
+    public final void run() {
+        this.f$0.lambda$searchKeywords$2(this.f$1, this.f$2);
     }
 }

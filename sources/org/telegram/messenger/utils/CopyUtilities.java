@@ -36,9 +36,9 @@ public class CopyUtilities {
         Spanned spanned;
         try {
             if (Build.VERSION.SDK_INT >= 24) {
-                spanned = Html.fromHtml("<inject/>" + str, 63, (Html.ImageGetter) null, new HTMLTagAttributesHandler(new HTMLTagHandler()));
+                spanned = Html.fromHtml("<inject>" + str + "</inject>", 63, (Html.ImageGetter) null, new HTMLTagAttributesHandler(new HTMLTagHandler()));
             } else {
-                spanned = Html.fromHtml("<inject/>" + str, (Html.ImageGetter) null, new HTMLTagAttributesHandler(new HTMLTagHandler()));
+                spanned = Html.fromHtml("<inject>" + str + "</inject>", (Html.ImageGetter) null, new HTMLTagAttributesHandler(new HTMLTagHandler()));
             }
             if (spanned == null) {
                 return null;

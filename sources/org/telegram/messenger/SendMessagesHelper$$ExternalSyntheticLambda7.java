@@ -16,6 +16,6 @@ public final /* synthetic */ class SendMessagesHelper$$ExternalSyntheticLambda7 
     }
 
     public final void run() {
-        Utilities.stageQueue.postRunnable(new SendMessagesHelper$$ExternalSyntheticLambda8(this.f$0, this.f$1, this.f$2, this.f$3, this.f$4));
+        SendMessagesHelper.lambda$prepareSendingText$83(this.f$0, this.f$1, this.f$2, this.f$3, this.f$4);
     }
 }

@@ -40,6 +40,7 @@ public class ImageReceiver implements NotificationCenter.NotificationCenterDeleg
     private static PorterDuffColorFilter selectedGroupColorFilter = new PorterDuffColorFilter(-4473925, PorterDuff.Mode.MULTIPLY);
     private boolean allowDecodeSingleFrame;
     private boolean allowLoadingOnAttachedOnly;
+    private boolean allowLottieVibration;
     private boolean allowStartAnimation;
     private boolean allowStartLottieAnimation;
     private int animateFromIsPressed;
@@ -333,6 +334,7 @@ public class ImageReceiver implements NotificationCenter.NotificationCenterDeleg
 
     public ImageReceiver(View view) {
         this.useRoundForThumb = true;
+        this.allowLottieVibration = true;
         this.allowStartAnimation = true;
         this.allowStartLottieAnimation = true;
         this.autoRepeat = 1;
@@ -678,16 +680,7 @@ public class ImageReceiver implements NotificationCenter.NotificationCenterDeleg
                     ((SvgHelper.SvgDrawable) drawable2).setParent(this);
                 }
                 ImageLoader.getInstance().cancelLoadingForImageReceiver(this, true);
-                View view = this.parentView;
-                if (view != null) {
-                    if (this.invalidateAll) {
-                        view.invalidate();
-                    } else {
-                        float f = this.imageX;
-                        float f2 = this.imageY;
-                        view.invalidate((int) f, (int) f2, (int) (f + this.imageW), (int) (f2 + this.imageH));
-                    }
-                }
+                invalidate();
                 ImageReceiverDelegate imageReceiverDelegate = this.delegate;
                 if (imageReceiverDelegate != null) {
                     Drawable drawable3 = this.currentImageDrawable;
@@ -860,17 +853,7 @@ public class ImageReceiver implements NotificationCenter.NotificationCenterDeleg
 
     private void loadImage() {
         ImageLoader.getInstance().loadImageForImageReceiver(this);
-        View view = this.parentView;
-        if (view == null) {
-            return;
-        }
-        if (this.invalidateAll) {
-            view.invalidate();
-            return;
-        }
-        float f = this.imageX;
-        float f2 = this.imageY;
-        view.invalidate((int) f, (int) f2, (int) (f + this.imageW), (int) (f2 + this.imageH));
+        invalidate();
     }
 
     public boolean canInvertBitmap() {
@@ -995,6 +978,9 @@ public class ImageReceiver implements NotificationCenter.NotificationCenterDeleg
             if (this.attachedToWindow) {
                 rLottieDrawable.addParentView(this);
             }
+            if (rLottieDrawable != null) {
+                rLottieDrawable.setAllowVibration(this.allowLottieVibration);
+            }
             if (this.allowStartLottieAnimation && (!rLottieDrawable.isHeavyDrawable() || this.currentOpenedLayerFlags == 0)) {
                 rLottieDrawable.start();
             }
@@ -1043,16 +1029,7 @@ public class ImageReceiver implements NotificationCenter.NotificationCenterDeleg
         if (imageReceiverDelegate != null) {
             imageReceiverDelegate.didSetImage(this, (this.currentThumbDrawable == null && this.staticThumbDrawable == null) ? false : true, true, false);
         }
-        View view = this.parentView;
-        if (view != null) {
-            if (this.invalidateAll) {
-                view.invalidate();
-            } else {
-                float f = this.imageX;
-                float f2 = this.imageY;
-                view.invalidate((int) f, (int) f2, (int) (f + this.imageW), (int) (f2 + this.imageH));
-            }
-        }
+        invalidate();
         if (this.forceCrossfade && this.crossfadeWithOldImage && this.crossfadeImage != null) {
             this.currentAlpha = 0.0f;
             this.lastUpdateAlphaTime = System.currentTimeMillis();
@@ -1177,6 +1154,9 @@ public class ImageReceiver implements NotificationCenter.NotificationCenterDeleg
         setImageBackup3.clear();
         this.setImageBackup = setImageBackup3;
         RLottieDrawable lottieAnimation = getLottieAnimation();
+        if (lottieAnimation != null) {
+            lottieAnimation.setAllowVibration(this.allowLottieVibration);
+        }
         if (lottieAnimation == null || !this.allowStartLottieAnimation) {
             return true;
         }
@@ -1203,6 +1183,7 @@ public class ImageReceiver implements NotificationCenter.NotificationCenterDeleg
         RLottieDrawable lottieAnimation = getLottieAnimation();
         if (lottieAnimation != null) {
             lottieAnimation.addParentView(this);
+            lottieAnimation.setAllowVibration(this.allowLottieVibration);
         }
         if (lottieAnimation != null && this.allowStartLottieAnimation && (!lottieAnimation.isHeavyDrawable() || this.currentOpenedLayerFlags == 0)) {
             lottieAnimation.start();
@@ -1213,10 +1194,7 @@ public class ImageReceiver implements NotificationCenter.NotificationCenterDeleg
         }
         if (animation != null && this.allowStartAnimation && this.currentOpenedLayerFlags == 0) {
             animation.checkRepeat();
-            View view = this.parentView;
-            if (view != null) {
-                view.invalidate();
-            }
+            invalidate();
         }
         if (NotificationCenter.getGlobalInstance().isAnimationInProgress()) {
             didReceivedNotification(i, this.currentAccount, 512);
@@ -1233,10 +1211,7 @@ public class ImageReceiver implements NotificationCenter.NotificationCenterDeleg
                 if (f2 < 0.0f) {
                     this.pressedProgress = 0.0f;
                 }
-                View view = this.parentView;
-                if (view != null) {
-                    view.invalidate();
-                }
+                invalidate();
             }
         }
         int i3 = this.isPressed;
@@ -2420,17 +2395,7 @@ public class ImageReceiver implements NotificationCenter.NotificationCenterDeleg
                         }
                     }
                 }
-                View view = this.parentView;
-                if (view == null) {
-                    return;
-                }
-                if (this.invalidateAll) {
-                    view.invalidate();
-                    return;
-                }
-                float f2 = this.imageX;
-                float f3 = this.imageY;
-                view.invalidate((int) f2, (int) f3, (int) (f2 + this.imageW), (int) (f3 + this.imageH));
+                invalidate();
             }
         }
     }
@@ -2439,10 +2404,8 @@ public class ImageReceiver implements NotificationCenter.NotificationCenterDeleg
         return draw(canvas, (BackgroundThreadDrawHolder) null);
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:127:0x0276 A[Catch:{ Exception -> 0x0150 }] */
-    /* JADX WARNING: Removed duplicated region for block: B:139:0x02a6 A[Catch:{ Exception -> 0x0150 }] */
-    /* JADX WARNING: Removed duplicated region for block: B:149:0x02de A[Catch:{ Exception -> 0x0150 }] */
-    /* JADX WARNING: Removed duplicated region for block: B:79:0x01ea A[Catch:{ Exception -> 0x0150 }] */
+    /* JADX WARNING: Removed duplicated region for block: B:125:0x0290 A[Catch:{ Exception -> 0x0150 }] */
+    /* JADX WARNING: Removed duplicated region for block: B:137:0x02c0 A[Catch:{ Exception -> 0x0150 }] */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public boolean draw(android.graphics.Canvas r42, org.telegram.messenger.ImageReceiver.BackgroundThreadDrawHolder r43) {
         /*
@@ -2473,25 +2436,25 @@ public class ImageReceiver implements NotificationCenter.NotificationCenterDeleg
             r12 = 0
         L_0x002a:
             if (r12 == 0) goto L_0x0093
-            org.telegram.ui.Components.AnimatedFileDrawable r1 = r43.animation     // Catch:{ Exception -> 0x030d }
-            org.telegram.ui.Components.RLottieDrawable r2 = r43.lottieDrawable     // Catch:{ Exception -> 0x030d }
-            int[] r3 = r43.roundRadius     // Catch:{ Exception -> 0x030d }
-            android.graphics.drawable.Drawable r4 = r43.mediaDrawable     // Catch:{ Exception -> 0x030d }
-            android.graphics.BitmapShader r5 = r43.mediaShader     // Catch:{ Exception -> 0x030d }
-            android.graphics.drawable.Drawable r6 = r43.imageDrawable     // Catch:{ Exception -> 0x030d }
-            android.graphics.BitmapShader r7 = r43.imageShader     // Catch:{ Exception -> 0x030d }
-            android.graphics.BitmapShader r8 = r43.thumbShader     // Catch:{ Exception -> 0x030d }
-            android.graphics.drawable.Drawable r9 = r43.crossfadeImage     // Catch:{ Exception -> 0x030d }
-            boolean r10 = r43.crossfadeWithOldImage     // Catch:{ Exception -> 0x030d }
-            boolean r11 = r43.crossfadingWithThumb     // Catch:{ Exception -> 0x030d }
-            android.graphics.drawable.Drawable r16 = r43.thumbDrawable     // Catch:{ Exception -> 0x030d }
-            android.graphics.drawable.Drawable r17 = r43.staticThumbDrawable     // Catch:{ Exception -> 0x030d }
-            float r18 = r43.currentAlpha     // Catch:{ Exception -> 0x030d }
-            float r19 = r43.previousAlpha     // Catch:{ Exception -> 0x030d }
-            android.graphics.BitmapShader r20 = r43.crossfadeShader     // Catch:{ Exception -> 0x030d }
-            boolean r13 = r0.animationNotReady     // Catch:{ Exception -> 0x030d }
+            org.telegram.ui.Components.AnimatedFileDrawable r1 = r43.animation     // Catch:{ Exception -> 0x0323 }
+            org.telegram.ui.Components.RLottieDrawable r2 = r43.lottieDrawable     // Catch:{ Exception -> 0x0323 }
+            int[] r3 = r43.roundRadius     // Catch:{ Exception -> 0x0323 }
+            android.graphics.drawable.Drawable r4 = r43.mediaDrawable     // Catch:{ Exception -> 0x0323 }
+            android.graphics.BitmapShader r5 = r43.mediaShader     // Catch:{ Exception -> 0x0323 }
+            android.graphics.drawable.Drawable r6 = r43.imageDrawable     // Catch:{ Exception -> 0x0323 }
+            android.graphics.BitmapShader r7 = r43.imageShader     // Catch:{ Exception -> 0x0323 }
+            android.graphics.BitmapShader r8 = r43.thumbShader     // Catch:{ Exception -> 0x0323 }
+            android.graphics.drawable.Drawable r9 = r43.crossfadeImage     // Catch:{ Exception -> 0x0323 }
+            boolean r10 = r43.crossfadeWithOldImage     // Catch:{ Exception -> 0x0323 }
+            boolean r11 = r43.crossfadingWithThumb     // Catch:{ Exception -> 0x0323 }
+            android.graphics.drawable.Drawable r16 = r43.thumbDrawable     // Catch:{ Exception -> 0x0323 }
+            android.graphics.drawable.Drawable r17 = r43.staticThumbDrawable     // Catch:{ Exception -> 0x0323 }
+            float r18 = r43.currentAlpha     // Catch:{ Exception -> 0x0323 }
+            float r19 = r43.previousAlpha     // Catch:{ Exception -> 0x0323 }
+            android.graphics.BitmapShader r20 = r43.crossfadeShader     // Catch:{ Exception -> 0x0323 }
+            boolean r13 = r0.animationNotReady     // Catch:{ Exception -> 0x0323 }
             r22 = r1
-            float r1 = r0.overrideAlpha     // Catch:{ Exception -> 0x030d }
+            float r1 = r0.overrideAlpha     // Catch:{ Exception -> 0x0323 }
             r23 = r5
             r24 = r7
             r25 = r8
@@ -2512,33 +2475,33 @@ public class ImageReceiver implements NotificationCenter.NotificationCenterDeleg
             r10 = r3
             goto L_0x00f6
         L_0x0093:
-            org.telegram.ui.Components.AnimatedFileDrawable r1 = r41.getAnimation()     // Catch:{ Exception -> 0x030d }
-            org.telegram.ui.Components.RLottieDrawable r2 = r41.getLottieAnimation()     // Catch:{ Exception -> 0x030d }
-            int[] r3 = r15.roundRadius     // Catch:{ Exception -> 0x030d }
-            android.graphics.drawable.Drawable r4 = r15.currentMediaDrawable     // Catch:{ Exception -> 0x030d }
-            android.graphics.BitmapShader r5 = r15.mediaShader     // Catch:{ Exception -> 0x030d }
-            android.graphics.drawable.Drawable r6 = r15.currentImageDrawable     // Catch:{ Exception -> 0x030d }
-            android.graphics.BitmapShader r7 = r15.imageShader     // Catch:{ Exception -> 0x030d }
-            android.graphics.drawable.Drawable r8 = r15.currentThumbDrawable     // Catch:{ Exception -> 0x030d }
-            android.graphics.BitmapShader r9 = r15.thumbShader     // Catch:{ Exception -> 0x030d }
-            boolean r10 = r15.crossfadeWithOldImage     // Catch:{ Exception -> 0x030d }
-            boolean r11 = r15.crossfadingWithThumb     // Catch:{ Exception -> 0x030d }
-            android.graphics.drawable.Drawable r13 = r15.crossfadeImage     // Catch:{ Exception -> 0x030d }
-            android.graphics.drawable.Drawable r0 = r15.staticThumbDrawable     // Catch:{ Exception -> 0x030d }
+            org.telegram.ui.Components.AnimatedFileDrawable r1 = r41.getAnimation()     // Catch:{ Exception -> 0x0323 }
+            org.telegram.ui.Components.RLottieDrawable r2 = r41.getLottieAnimation()     // Catch:{ Exception -> 0x0323 }
+            int[] r3 = r15.roundRadius     // Catch:{ Exception -> 0x0323 }
+            android.graphics.drawable.Drawable r4 = r15.currentMediaDrawable     // Catch:{ Exception -> 0x0323 }
+            android.graphics.BitmapShader r5 = r15.mediaShader     // Catch:{ Exception -> 0x0323 }
+            android.graphics.drawable.Drawable r6 = r15.currentImageDrawable     // Catch:{ Exception -> 0x0323 }
+            android.graphics.BitmapShader r7 = r15.imageShader     // Catch:{ Exception -> 0x0323 }
+            android.graphics.drawable.Drawable r8 = r15.currentThumbDrawable     // Catch:{ Exception -> 0x0323 }
+            android.graphics.BitmapShader r9 = r15.thumbShader     // Catch:{ Exception -> 0x0323 }
+            boolean r10 = r15.crossfadeWithOldImage     // Catch:{ Exception -> 0x0323 }
+            boolean r11 = r15.crossfadingWithThumb     // Catch:{ Exception -> 0x0323 }
+            android.graphics.drawable.Drawable r13 = r15.crossfadeImage     // Catch:{ Exception -> 0x0323 }
+            android.graphics.drawable.Drawable r0 = r15.staticThumbDrawable     // Catch:{ Exception -> 0x0323 }
             r16 = r0
-            float r0 = r15.currentAlpha     // Catch:{ Exception -> 0x030d }
+            float r0 = r15.currentAlpha     // Catch:{ Exception -> 0x0323 }
             r17 = r0
-            float r0 = r15.previousAlpha     // Catch:{ Exception -> 0x030d }
+            float r0 = r15.previousAlpha     // Catch:{ Exception -> 0x0323 }
             r18 = r0
-            android.graphics.BitmapShader r0 = r15.crossfadeShader     // Catch:{ Exception -> 0x030d }
+            android.graphics.BitmapShader r0 = r15.crossfadeShader     // Catch:{ Exception -> 0x0323 }
             r19 = r0
-            float r0 = r15.overrideAlpha     // Catch:{ Exception -> 0x030d }
+            float r0 = r15.overrideAlpha     // Catch:{ Exception -> 0x0323 }
             if (r1 == 0) goto L_0x00c9
-            boolean r20 = r1.hasBitmap()     // Catch:{ Exception -> 0x030d }
+            boolean r20 = r1.hasBitmap()     // Catch:{ Exception -> 0x0323 }
             if (r20 == 0) goto L_0x00d1
         L_0x00c9:
             if (r2 == 0) goto L_0x00d4
-            boolean r20 = r2.hasBitmap()     // Catch:{ Exception -> 0x030d }
+            boolean r20 = r2.hasBitmap()     // Catch:{ Exception -> 0x0323 }
             if (r20 != 0) goto L_0x00d4
         L_0x00d1:
             r20 = 1
@@ -2596,14 +2559,14 @@ public class ImageReceiver implements NotificationCenter.NotificationCenterDeleg
             r18 = r22
             r19 = r35
             r20 = r43
-            boolean r1 = r1.customDraw(r2, r3, r4, r5, r6, r7, r8, r9, r10, r11, r12, r13, r14, r15, r16, r17, r18, r19, r20)     // Catch:{ Exception -> 0x0309 }
+            boolean r1 = r1.customDraw(r2, r3, r4, r5, r6, r7, r8, r9, r10, r11, r12, r13, r14, r15, r16, r17, r18, r19, r20)     // Catch:{ Exception -> 0x031f }
             if (r1 == 0) goto L_0x0134
             return r0
         L_0x0134:
             if (r38 == 0) goto L_0x013e
             r3 = r35
             r1 = r38
-            r1.setRoundRadius(r3)     // Catch:{ Exception -> 0x0309 }
+            r1.setRoundRadius(r3)     // Catch:{ Exception -> 0x031f }
             goto L_0x0140
         L_0x013e:
             r1 = r38
@@ -2618,7 +2581,7 @@ public class ImageReceiver implements NotificationCenter.NotificationCenterDeleg
             goto L_0x015a
         L_0x0150:
             r0 = move-exception
-            goto L_0x030f
+            goto L_0x0325
         L_0x0153:
             r8 = r41
             goto L_0x015a
@@ -2641,185 +2604,197 @@ public class ImageReceiver implements NotificationCenter.NotificationCenterDeleg
             boolean r1 = r8.forcePreview     // Catch:{ Exception -> 0x0150 }
             r11 = 0
             r9 = r34
-            if (r1 != 0) goto L_0x018b
-            if (r9 == 0) goto L_0x018b
-            if (r27 != 0) goto L_0x018b
+            if (r1 != 0) goto L_0x018f
+            if (r9 == 0) goto L_0x018f
+            if (r27 != 0) goto L_0x018f
             int r1 = r8.imageOrientation     // Catch:{ Exception -> 0x0150 }
             r16 = r1
             r7 = r9
+            r1 = r25
             r6 = r27
             r15 = r31
             r12 = r32
             r10 = r33
-        L_0x0187:
             r14 = r36
-            goto L_0x01e6
-        L_0x018b:
+            r25 = r23
+            goto L_0x01f6
+        L_0x018f:
             r10 = r33
-            if (r1 != 0) goto L_0x01a4
-            if (r10 == 0) goto L_0x01a4
-            if (r27 == 0) goto L_0x0195
-            if (r9 == 0) goto L_0x01a4
-        L_0x0195:
+            if (r1 != 0) goto L_0x01aa
+            if (r10 == 0) goto L_0x01aa
+            if (r27 == 0) goto L_0x0199
+            if (r9 == 0) goto L_0x01aa
+        L_0x0199:
             int r1 = r8.imageOrientation     // Catch:{ Exception -> 0x0150 }
             r16 = r1
             r7 = r10
-            r23 = r24
+            r1 = r25
             r15 = r31
             r12 = r32
             r14 = r36
             r6 = 0
-            goto L_0x01e6
-        L_0x01a4:
+            r25 = r24
+            goto L_0x01f6
+        L_0x01aa:
             r12 = r32
-            if (r12 == 0) goto L_0x01b6
-            if (r26 != 0) goto L_0x01b6
+            if (r12 == 0) goto L_0x01c0
+            if (r26 != 0) goto L_0x01c0
             int r1 = r8.imageOrientation     // Catch:{ Exception -> 0x0150 }
             r16 = r1
             r7 = r12
+            r1 = r25
             r6 = r27
-            r23 = r30
+            r25 = r30
             r15 = r31
-            goto L_0x0187
-        L_0x01b6:
+            r14 = r36
+            goto L_0x01f6
+        L_0x01c0:
             r14 = r36
             boolean r1 = r14 instanceof android.graphics.drawable.BitmapDrawable     // Catch:{ Exception -> 0x0150 }
-            if (r1 == 0) goto L_0x01d1
+            if (r1 == 0) goto L_0x01df
             boolean r1 = r8.useRoundForThumb     // Catch:{ Exception -> 0x0150 }
-            if (r1 == 0) goto L_0x01c5
-            if (r25 != 0) goto L_0x01c5
+            if (r1 == 0) goto L_0x01d3
+            if (r25 != 0) goto L_0x01d3
             r8.updateDrawableRadius(r14)     // Catch:{ Exception -> 0x0150 }
-        L_0x01c5:
+            android.graphics.BitmapShader r1 = r8.thumbShader     // Catch:{ Exception -> 0x0150 }
+            r25 = r1
+        L_0x01d3:
             int r1 = r8.thumbOrientation     // Catch:{ Exception -> 0x0150 }
             r16 = r1
             r7 = r14
-            r23 = r25
+            r1 = r25
             r6 = r27
             r15 = r31
-            goto L_0x01e6
-        L_0x01d1:
+            goto L_0x01f6
+        L_0x01df:
             r15 = r31
-            if (r15 == 0) goto L_0x01df
+            if (r15 == 0) goto L_0x01ed
             int r1 = r8.thumbOrientation     // Catch:{ Exception -> 0x0150 }
             r16 = r1
             r7 = r15
-            r23 = r25
+            r1 = r25
             r6 = r27
-            goto L_0x01e6
-        L_0x01df:
+            goto L_0x01f6
+        L_0x01ed:
             r7 = r11
-            r23 = r7
+            r1 = r25
             r6 = r27
             r16 = 0
-        L_0x01e6:
+            r25 = r7
+        L_0x01f6:
             r17 = 1132396544(0x437var_, float:255.0)
-            if (r7 == 0) goto L_0x02de
-            byte r1 = r8.crossfadeAlpha     // Catch:{ Exception -> 0x0150 }
-            if (r1 == 0) goto L_0x02be
+            if (r7 == 0) goto L_0x02f8
+            byte r2 = r8.crossfadeAlpha     // Catch:{ Exception -> 0x0150 }
+            if (r2 == 0) goto L_0x02d8
             r18 = 1065353216(0x3var_, float:1.0)
-            int r1 = (r29 > r18 ? 1 : (r29 == r18 ? 0 : -1))
-            if (r1 == 0) goto L_0x0218
-            if (r7 == r10) goto L_0x01f8
-            if (r7 != r9) goto L_0x0218
-        L_0x01f8:
-            if (r14 == 0) goto L_0x0218
-            boolean r1 = r8.useRoundForThumb     // Catch:{ Exception -> 0x0150 }
-            if (r1 == 0) goto L_0x0203
-            if (r25 != 0) goto L_0x0203
+            int r2 = (r29 > r18 ? 1 : (r29 == r18 ? 0 : -1))
+            if (r2 == 0) goto L_0x022e
+            if (r7 == r10) goto L_0x0208
+            if (r7 != r9) goto L_0x022e
+        L_0x0208:
+            if (r14 == 0) goto L_0x022e
+            boolean r2 = r8.useRoundForThumb     // Catch:{ Exception -> 0x0150 }
+            if (r2 == 0) goto L_0x0215
+            if (r1 != 0) goto L_0x0215
             r8.updateDrawableRadius(r14)     // Catch:{ Exception -> 0x0150 }
-        L_0x0203:
+            android.graphics.BitmapShader r1 = r8.thumbShader     // Catch:{ Exception -> 0x0150 }
+        L_0x0215:
+            r19 = r1
             float r1 = r22 * r17
             int r4 = (int) r1     // Catch:{ Exception -> 0x0150 }
             r1 = r41
             r2 = r42
             r3 = r14
-            r5 = r25
+            r5 = r19
             r0 = r6
             r6 = r16
-            r19 = r7
+            r20 = r7
             r7 = r43
             r1.drawDrawable(r2, r3, r4, r5, r6, r7)     // Catch:{ Exception -> 0x0150 }
-            goto L_0x021b
-        L_0x0218:
+            r1 = r19
+            goto L_0x0231
+        L_0x022e:
             r0 = r6
-            r19 = r7
-        L_0x021b:
-            boolean r1 = r8.crossfadeWithThumb     // Catch:{ Exception -> 0x0150 }
-            if (r1 == 0) goto L_0x0237
-            if (r0 == 0) goto L_0x0237
+            r20 = r7
+        L_0x0231:
+            boolean r2 = r8.crossfadeWithThumb     // Catch:{ Exception -> 0x0150 }
+            if (r2 == 0) goto L_0x024d
+            if (r0 == 0) goto L_0x024d
             float r1 = r22 * r17
             int r4 = (int) r1     // Catch:{ Exception -> 0x0150 }
             r1 = r41
             r2 = r42
-            r3 = r19
-            r5 = r23
+            r3 = r20
+            r5 = r25
             r6 = r16
             r7 = r43
             r1.drawDrawable(r2, r3, r4, r5, r6, r7)     // Catch:{ Exception -> 0x0150 }
-            r15 = r19
-            goto L_0x02d1
-        L_0x0237:
-            if (r1 == 0) goto L_0x02a8
-            int r1 = (r28 > r18 ? 1 : (r28 == r18 ? 0 : -1))
-            if (r1 == 0) goto L_0x02a8
-            r7 = r19
-            if (r7 == r10) goto L_0x025a
-            if (r7 != r9) goto L_0x0244
-            goto L_0x025a
-        L_0x0244:
-            if (r7 == r15) goto L_0x024e
-            if (r7 != r12) goto L_0x0249
-            goto L_0x024e
-        L_0x0249:
-            if (r7 != r14) goto L_0x0273
-            if (r12 == 0) goto L_0x0273
-            goto L_0x025c
-        L_0x024e:
-            if (r14 == 0) goto L_0x0273
-            boolean r1 = r8.useRoundForThumb     // Catch:{ Exception -> 0x0150 }
-            if (r1 == 0) goto L_0x0271
-            if (r25 != 0) goto L_0x0271
-            r8.updateDrawableRadius(r14)     // Catch:{ Exception -> 0x0150 }
-            goto L_0x0271
+            r15 = r20
+            goto L_0x02eb
+        L_0x024d:
+            if (r2 == 0) goto L_0x02c2
+            int r2 = (r28 > r18 ? 1 : (r28 == r18 ? 0 : -1))
+            if (r2 == 0) goto L_0x02c2
+            r7 = r20
+            if (r7 == r10) goto L_0x0272
+            if (r7 != r9) goto L_0x025a
+            goto L_0x0272
         L_0x025a:
-            if (r12 == 0) goto L_0x0260
-        L_0x025c:
+            if (r7 == r15) goto L_0x0264
+            if (r7 != r12) goto L_0x025f
+            goto L_0x0264
+        L_0x025f:
+            if (r7 != r14) goto L_0x028d
+            if (r12 == 0) goto L_0x028d
+            goto L_0x0274
+        L_0x0264:
+            if (r14 == 0) goto L_0x028d
+            boolean r2 = r8.useRoundForThumb     // Catch:{ Exception -> 0x0150 }
+            if (r2 == 0) goto L_0x028a
+            if (r1 != 0) goto L_0x028a
+            r8.updateDrawableRadius(r14)     // Catch:{ Exception -> 0x0150 }
+            android.graphics.BitmapShader r1 = r8.thumbShader     // Catch:{ Exception -> 0x0150 }
+            goto L_0x028a
+        L_0x0272:
+            if (r12 == 0) goto L_0x0278
+        L_0x0274:
             r11 = r12
             r5 = r30
-            goto L_0x0274
-        L_0x0260:
-            if (r15 == 0) goto L_0x0266
+            goto L_0x028e
+        L_0x0278:
+            if (r15 == 0) goto L_0x027d
+            r5 = r1
             r11 = r15
-        L_0x0263:
-            r5 = r25
-            goto L_0x0274
-        L_0x0266:
-            if (r14 == 0) goto L_0x0273
-            boolean r1 = r8.useRoundForThumb     // Catch:{ Exception -> 0x0150 }
-            if (r1 == 0) goto L_0x0271
-            if (r25 != 0) goto L_0x0271
+            goto L_0x028e
+        L_0x027d:
+            if (r14 == 0) goto L_0x028d
+            boolean r2 = r8.useRoundForThumb     // Catch:{ Exception -> 0x0150 }
+            if (r2 == 0) goto L_0x028a
+            if (r1 != 0) goto L_0x028a
             r8.updateDrawableRadius(r14)     // Catch:{ Exception -> 0x0150 }
-        L_0x0271:
+            android.graphics.BitmapShader r1 = r8.thumbShader     // Catch:{ Exception -> 0x0150 }
+        L_0x028a:
+            r5 = r1
             r11 = r14
-            goto L_0x0263
-        L_0x0273:
+            goto L_0x028e
+        L_0x028d:
             r5 = r11
-        L_0x0274:
-            if (r11 == 0) goto L_0x02a6
+        L_0x028e:
+            if (r11 == 0) goto L_0x02c0
             boolean r1 = r11 instanceof org.telegram.messenger.SvgHelper.SvgDrawable     // Catch:{ Exception -> 0x0150 }
-            if (r1 != 0) goto L_0x0284
+            if (r1 != 0) goto L_0x029e
             boolean r1 = r11 instanceof org.telegram.messenger.Emoji.EmojiDrawable     // Catch:{ Exception -> 0x0150 }
-            if (r1 == 0) goto L_0x027f
-            goto L_0x0284
-        L_0x027f:
+            if (r1 == 0) goto L_0x0299
+            goto L_0x029e
+        L_0x0299:
             float r29 = r29 * r22
             float r1 = r29 * r17
-            goto L_0x028a
-        L_0x0284:
+            goto L_0x02a4
+        L_0x029e:
             float r1 = r22 * r17
             float r18 = r18 - r28
             float r1 = r1 * r18
-        L_0x028a:
+        L_0x02a4:
             int r1 = (int) r1     // Catch:{ Exception -> 0x0150 }
             r9 = r1
             int r6 = r8.thumbOrientation     // Catch:{ Exception -> 0x0150 }
@@ -2831,29 +2806,29 @@ public class ImageReceiver implements NotificationCenter.NotificationCenterDeleg
             r7 = r43
             r1.drawDrawable(r2, r3, r4, r5, r6, r7)     // Catch:{ Exception -> 0x0150 }
             r1 = 255(0xff, float:3.57E-43)
-            if (r9 == r1) goto L_0x02aa
+            if (r9 == r1) goto L_0x02c4
             boolean r2 = r11 instanceof org.telegram.messenger.Emoji.EmojiDrawable     // Catch:{ Exception -> 0x0150 }
-            if (r2 == 0) goto L_0x02aa
+            if (r2 == 0) goto L_0x02c4
             r11.setAlpha(r1)     // Catch:{ Exception -> 0x0150 }
-            goto L_0x02aa
-        L_0x02a6:
+            goto L_0x02c4
+        L_0x02c0:
             r15 = r7
-            goto L_0x02aa
-        L_0x02a8:
-            r15 = r19
-        L_0x02aa:
+            goto L_0x02c4
+        L_0x02c2:
+            r15 = r20
+        L_0x02c4:
             float r22 = r22 * r28
             float r1 = r22 * r17
             int r4 = (int) r1     // Catch:{ Exception -> 0x0150 }
             r1 = r41
             r2 = r42
             r3 = r15
-            r5 = r23
+            r5 = r25
             r6 = r16
             r7 = r43
             r1.drawDrawable(r2, r3, r4, r5, r6, r7)     // Catch:{ Exception -> 0x0150 }
-            goto L_0x02d1
-        L_0x02be:
+            goto L_0x02eb
+        L_0x02d8:
             r0 = r6
             r15 = r7
             float r1 = r22 * r17
@@ -2861,25 +2836,25 @@ public class ImageReceiver implements NotificationCenter.NotificationCenterDeleg
             r1 = r41
             r2 = r42
             r3 = r15
-            r5 = r23
+            r5 = r25
             r6 = r16
             r7 = r43
             r1.drawDrawable(r2, r3, r4, r5, r6, r7)     // Catch:{ Exception -> 0x0150 }
-        L_0x02d1:
-            if (r0 == 0) goto L_0x02d9
+        L_0x02eb:
+            if (r0 == 0) goto L_0x02f3
             boolean r1 = r8.crossfadeWithThumb     // Catch:{ Exception -> 0x0150 }
-            if (r1 == 0) goto L_0x02d9
+            if (r1 == 0) goto L_0x02f3
             r1 = 1
-            goto L_0x02da
-        L_0x02d9:
+            goto L_0x02f4
+        L_0x02f3:
             r1 = 0
-        L_0x02da:
+        L_0x02f4:
             r8.checkAlphaAnimation(r1, r13)     // Catch:{ Exception -> 0x0150 }
-            goto L_0x02f5
-        L_0x02de:
+            goto L_0x030f
+        L_0x02f8:
             r0 = r6
             r15 = r7
-            if (r14 == 0) goto L_0x02f8
+            if (r14 == 0) goto L_0x0312
             float r1 = r22 * r17
             int r4 = (int) r1     // Catch:{ Exception -> 0x0150 }
             r5 = 0
@@ -2890,35 +2865,33 @@ public class ImageReceiver implements NotificationCenter.NotificationCenterDeleg
             r7 = r43
             r1.drawDrawable(r2, r3, r4, r5, r6, r7)     // Catch:{ Exception -> 0x0150 }
             r8.checkAlphaAnimation(r0, r13)     // Catch:{ Exception -> 0x0150 }
-        L_0x02f5:
+        L_0x030f:
             r21 = 1
-            goto L_0x02fb
-        L_0x02f8:
+            goto L_0x0315
+        L_0x0312:
             r8.checkAlphaAnimation(r0, r13)     // Catch:{ Exception -> 0x0150 }
-        L_0x02fb:
-            if (r15 != 0) goto L_0x0312
-            if (r0 == 0) goto L_0x0312
-            android.view.View r0 = r8.parentView     // Catch:{ Exception -> 0x0150 }
-            if (r0 == 0) goto L_0x0312
-            if (r13 != 0) goto L_0x0312
-            r0.invalidate()     // Catch:{ Exception -> 0x0150 }
-            goto L_0x0312
-        L_0x0309:
+        L_0x0315:
+            if (r15 != 0) goto L_0x0328
+            if (r0 == 0) goto L_0x0328
+            if (r13 != 0) goto L_0x0328
+            r41.invalidate()     // Catch:{ Exception -> 0x0150 }
+            goto L_0x0328
+        L_0x031f:
             r0 = move-exception
             r8 = r41
-            goto L_0x030f
-        L_0x030d:
+            goto L_0x0325
+        L_0x0323:
             r0 = move-exception
             r8 = r15
-        L_0x030f:
+        L_0x0325:
             org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)
-        L_0x0312:
+        L_0x0328:
             android.graphics.Bitmap r0 = r8.gradientBitmap
-            if (r0 == 0) goto L_0x031d
+            if (r0 == 0) goto L_0x0333
             java.lang.String r0 = r8.currentImageKey
-            if (r0 == 0) goto L_0x031d
+            if (r0 == 0) goto L_0x0333
             r42.restore()
-        L_0x031d:
+        L_0x0333:
             return r21
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.ImageReceiver.draw(android.graphics.Canvas, org.telegram.messenger.ImageReceiver$BackgroundThreadDrawHolder):boolean");
@@ -3522,6 +3495,10 @@ public class ImageReceiver implements NotificationCenter.NotificationCenterDeleg
         this.allowStartAnimation = z;
     }
 
+    public void setAllowLottieVibration(boolean z) {
+        this.allowLottieVibration = z;
+    }
+
     public boolean getAllowStartAnimation() {
         return this.allowStartAnimation;
     }
@@ -3672,11 +3649,11 @@ public class ImageReceiver implements NotificationCenter.NotificationCenterDeleg
         /*
             r7 = this;
             r0 = 0
-            if (r8 == 0) goto L_0x02a9
-            if (r9 == 0) goto L_0x02a9
+            if (r8 == 0) goto L_0x028f
+            if (r9 == 0) goto L_0x028f
             int r1 = r7.currentGuid
             if (r1 == r12) goto L_0x000b
-            goto L_0x02a9
+            goto L_0x028f
         L_0x000b:
             r12 = 0
             r1 = 1065353216(0x3var_, float:1.0)
@@ -4051,27 +4028,9 @@ public class ImageReceiver implements NotificationCenter.NotificationCenterDeleg
             r8.setAutoRepeatTimeout(r9)
             r7.animationReadySent = r0
         L_0x028b:
-            android.view.View r8 = r7.parentView
-            if (r8 == 0) goto L_0x02a8
-            boolean r9 = r7.invalidateAll
-            if (r9 == 0) goto L_0x0297
-            r8.invalidate()
-            goto L_0x02a8
-        L_0x0297:
-            float r9 = r7.imageX
-            int r10 = (int) r9
-            float r11 = r7.imageY
-            int r12 = (int) r11
-            float r0 = r7.imageW
-            float r9 = r9 + r0
-            int r9 = (int) r9
-            float r0 = r7.imageH
-            float r11 = r11 + r0
-            int r11 = (int) r11
-            r8.invalidate(r10, r12, r9, r11)
-        L_0x02a8:
+            r7.invalidate()
             return r2
-        L_0x02a9:
+        L_0x028f:
             return r0
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.ImageReceiver.setImageBitmapByKey(android.graphics.drawable.Drawable, java.lang.String, int, boolean, int):boolean");
@@ -4216,16 +4175,16 @@ public class ImageReceiver implements NotificationCenter.NotificationCenterDeleg
                 this.currentOpenedLayerFlags = intValue2;
                 if (intValue2 == 0) {
                     RLottieDrawable lottieAnimation2 = getLottieAnimation();
+                    if (lottieAnimation2 != null) {
+                        lottieAnimation2.setAllowVibration(this.allowLottieVibration);
+                    }
                     if (this.allowStartLottieAnimation && lottieAnimation2 != null && lottieAnimation2.isHeavyDrawable()) {
                         lottieAnimation2.start();
                     }
                     AnimatedFileDrawable animation2 = getAnimation();
                     if (this.allowStartAnimation && animation2 != null) {
                         animation2.checkRepeat();
-                        View view = this.parentView;
-                        if (view != null) {
-                            view.invalidate();
-                        }
+                        invalidate();
                     }
                 }
             }

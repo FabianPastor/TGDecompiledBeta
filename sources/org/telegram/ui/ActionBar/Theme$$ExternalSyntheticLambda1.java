@@ -10,6 +10,6 @@ public final /* synthetic */ class Theme$$ExternalSyntheticLambda1 implements Ru
     }
 
     public final void run() {
-        Theme.lambda$loadWallpaper$7(this.f$0);
+        Theme.lambda$loadWallpaper$11(this.f$0);
     }
 }

@@ -10,6 +10,6 @@ public final /* synthetic */ class Theme$$ExternalSyntheticLambda3 implements Ru
     }
 
     public final void run() {
-        Theme.lambda$unrefAudioVisualizeDrawable$9(this.f$0);
+        Theme.lambda$unrefAudioVisualizeDrawable$13(this.f$0);
     }
 }

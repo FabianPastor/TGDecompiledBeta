@@ -1703,7 +1703,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
             java.lang.String r7 = "@"
             boolean r6 = r6.startsWith(r7)
             if (r6 == 0) goto L_0x0132
-            r6 = 2131628933(0x7f0e1385, float:1.8885173E38)
+            r6 = 2131628935(0x7f0e1387, float:1.8885177E38)
             java.lang.String r7 = "UsernameCopied"
             java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r7, r6)
             goto L_0x013b
@@ -3041,8 +3041,10 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
         public void onDraw(Canvas canvas) {
             PhotoViewer.this.onDraw(canvas);
             if (PhotoViewer.this.isStatusBarVisible() && AndroidUtilities.statusBarHeight != 0 && PhotoViewer.this.actionBar != null) {
-                this.paint.setAlpha((int) (PhotoViewer.this.actionBar.getAlpha() * 255.0f * 0.2f));
-                canvas.drawRect(0.0f, PhotoViewer.this.currentPanTranslationY, (float) getMeasuredWidth(), PhotoViewer.this.currentPanTranslationY + ((float) AndroidUtilities.statusBarHeight), this.paint);
+                if (Build.VERSION.SDK_INT < 21) {
+                    this.paint.setAlpha((int) (PhotoViewer.this.actionBar.getAlpha() * 255.0f * 0.2f));
+                    canvas.drawRect(0.0f, PhotoViewer.this.currentPanTranslationY, (float) getMeasuredWidth(), PhotoViewer.this.currentPanTranslationY + ((float) AndroidUtilities.statusBarHeight), this.paint);
+                }
                 this.paint.setAlpha((int) (PhotoViewer.this.actionBar.getAlpha() * 255.0f * 0.498f));
                 if (getPaddingRight() > 0) {
                     canvas.drawRect((float) (getMeasuredWidth() - getPaddingRight()), 0.0f, (float) getMeasuredWidth(), (float) getMeasuredHeight(), this.paint);
@@ -5984,11 +5986,11 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                     java.lang.String r8 = "voipgroup_listeningText"
                     org.telegram.ui.ActionBar.AlertDialog$Builder r3 = r3.setDialogButtonColorKey(r8)
                     if (r1 == 0) goto L_0x0381
-                    r8 = 2131628735(0x7f0e12bf, float:1.8884771E38)
+                    r8 = 2131628737(0x7f0e12c1, float:1.8884775E38)
                     java.lang.String r9 = "ThisPhoto"
                     goto L_0x0386
                 L_0x0381:
-                    r8 = 2131628734(0x7f0e12be, float:1.888477E38)
+                    r8 = 2131628736(0x7f0e12c0, float:1.8884773E38)
                     java.lang.String r9 = "ThisMedia"
                 L_0x0386:
                     java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r9, r8)
@@ -16526,7 +16528,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
             long r8 = (long) r8
             r11 = 1000(0x3e8, double:4.94E-321)
             long r8 = r8 * r11
-            r11 = 2131629438(0x7f0e157e, float:1.8886197E38)
+            r11 = 2131629440(0x7f0e1580, float:1.88862E38)
             r12 = 2
             java.lang.Object[] r13 = new java.lang.Object[r12]
             org.telegram.messenger.LocaleController r12 = org.telegram.messenger.LocaleController.getInstance()

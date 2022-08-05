@@ -716,10 +716,15 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
     }
 
     private void createEmojiView() {
+        EmojiView emojiView2 = this.emojiView;
+        if (!(emojiView2 == null || emojiView2.currentAccount == UserConfig.selectedAccount)) {
+            this.sizeNotifierLayout.removeView(emojiView2);
+            this.emojiView = null;
+        }
         if (this.emojiView == null) {
-            EmojiView emojiView2 = new EmojiView((BaseFragment) null, true, false, false, getContext(), false, (TLRPC$ChatFull) null, (ViewGroup) null, (Theme.ResourcesProvider) null);
-            this.emojiView = emojiView2;
-            emojiView2.setDelegate(new EmojiView.EmojiViewDelegate() {
+            EmojiView emojiView3 = new EmojiView((BaseFragment) null, true, false, false, getContext(), false, (TLRPC$ChatFull) null, (ViewGroup) null, (Theme.ResourcesProvider) null);
+            this.emojiView = emojiView3;
+            emojiView3.setDelegate(new EmojiView.EmojiViewDelegate() {
                 public /* synthetic */ boolean canSchedule() {
                     return EmojiView.EmojiViewDelegate.CC.$default$canSchedule(this);
                 }
@@ -963,9 +968,7 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
     private void showPopup(int i, boolean z) {
         EmojiView emojiView2;
         if (i == 1) {
-            if (this.emojiView == null) {
-                createEmojiView();
-            }
+            createEmojiView();
             this.emojiView.setVisibility(0);
             this.delegate.onEmojiViewOpen();
             if (this.keyboardHeight <= 0) {

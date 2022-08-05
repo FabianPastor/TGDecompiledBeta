@@ -10,6 +10,6 @@ public final /* synthetic */ class MediaDataController$$ExternalSyntheticLambda2
     }
 
     public final void run() {
-        this.f$0.lambda$increasePeerRaiting$131(this.f$1);
+        this.f$0.lambda$loadPinnedMessages$136(this.f$1);
     }
 }

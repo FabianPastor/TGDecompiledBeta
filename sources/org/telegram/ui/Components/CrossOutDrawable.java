@@ -180,13 +180,13 @@ public class CrossOutDrawable extends Drawable {
             boolean r4 = r12.cross
             if (r4 == 0) goto L_0x00d2
             float r1 = r1 - r0
-            float r3 = r12.progress
-            float r1 = r1 * r3
+            float r4 = r12.progress
+            float r1 = r1 * r4
             float r1 = r1 + r0
             float r5 = r5 - r2
-            float r5 = r5 * r3
+            float r5 = r5 * r4
             float r5 = r5 + r2
-            goto L_0x00e1
+            goto L_0x00e2
         L_0x00d2:
             float r4 = r1 - r0
             float r6 = r12.progress
@@ -194,20 +194,33 @@ public class CrossOutDrawable extends Drawable {
             float r4 = r4 * r7
             float r0 = r0 + r4
             float r4 = r5 - r2
-            float r3 = r3 - r6
-            float r4 = r4 * r3
+            float r6 = r3 - r6
+            float r4 = r4 * r6
             float r2 = r2 + r4
-        L_0x00e1:
-            android.graphics.Paint r3 = r12.paint
-            float r3 = r3.getStrokeWidth()
-            float r8 = r2 - r3
-            android.graphics.Paint r3 = r12.paint
-            float r3 = r3.getStrokeWidth()
-            float r10 = r5 - r3
+        L_0x00e2:
+            android.graphics.Paint r4 = r12.paint
+            float r4 = r4.getStrokeWidth()
+            float r8 = r2 - r4
+            android.graphics.Paint r4 = r12.paint
+            float r4 = r4.getStrokeWidth()
+            float r10 = r5 - r4
             android.graphics.Paint r11 = r12.xRefPaint
             r6 = r13
             r7 = r0
             r9 = r1
+            r6.drawLine(r7, r8, r9, r10, r11)
+            android.graphics.Paint r4 = r12.xRefPaint
+            float r4 = r4.getStrokeWidth()
+            android.graphics.Paint r6 = r12.paint
+            float r6 = r6.getStrokeWidth()
+            float r4 = r4 - r6
+            r6 = 1073741824(0x40000000, float:2.0)
+            float r4 = r4 / r6
+            float r4 = r4 + r3
+            float r8 = r2 - r4
+            float r10 = r5 - r4
+            android.graphics.Paint r11 = r12.xRefPaint
+            r6 = r13
             r6.drawLine(r7, r8, r9, r10, r11)
             android.graphics.Paint r11 = r12.paint
             r8 = r2

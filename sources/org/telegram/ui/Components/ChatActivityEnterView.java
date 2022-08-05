@@ -8751,7 +8751,7 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
                             }
                         }
                     }
-                    charSequence2 = Emoji.replaceEmoji(new SpannableStringBuilder(spannableStringBuilder), this.messageEditText.getPaint().getFontMetricsInt(), AndroidUtilities.dp(20.0f), false);
+                    charSequence2 = Emoji.replaceEmoji(new SpannableStringBuilder(spannableStringBuilder), this.messageEditText.getPaint().getFontMetricsInt(), AndroidUtilities.dp(20.0f), false, (int[]) null, true);
                 }
                 if (this.draftMessage == null && !z4) {
                     this.draftMessage = this.messageEditText.length() > 0 ? this.messageEditText.getText() : null;
@@ -9928,6 +9928,11 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
     }
 
     private void createEmojiView() {
+        EmojiView emojiView2 = this.emojiView;
+        if (!(emojiView2 == null || emojiView2.currentAccount == UserConfig.selectedAccount)) {
+            this.sizeNotifierLayout.removeView(emojiView2);
+            this.emojiView = null;
+        }
         if (this.emojiView == null) {
             AnonymousClass56 r1 = new EmojiView(this.parentFragment, this.allowAnimatedEmoji, true, true, getContext(), true, this.info, this.sizeNotifierLayout, this.resourcesProvider) {
                 public void setTranslationY(float f) {
@@ -10090,7 +10095,7 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
                             hashMap.put("id", tLRPC$BotInlineResult.id);
                             hashMap.put("query_id", "" + tLRPC$BotInlineResult.query_id);
                             hashMap.put("force_gif", "1");
-                            SendMessagesHelper.prepareSendingBotContextResult(ChatActivityEnterView.this.accountInstance, tLRPC$BotInlineResult, hashMap, ChatActivityEnterView.this.dialog_id, ChatActivityEnterView.this.replyingMessageObject, ChatActivityEnterView.this.getThreadMessage(), z, i);
+                            SendMessagesHelper.prepareSendingBotContextResult(ChatActivityEnterView.this.parentFragment, ChatActivityEnterView.this.accountInstance, tLRPC$BotInlineResult, hashMap, ChatActivityEnterView.this.dialog_id, ChatActivityEnterView.this.replyingMessageObject, ChatActivityEnterView.this.getThreadMessage(), z, i);
                             if (ChatActivityEnterView.this.searchingType != 0) {
                                 ChatActivityEnterView.this.setSearchingTypeInternal(0, true);
                                 ChatActivityEnterView.this.emojiView.closeSearch(true);
@@ -10366,8 +10371,8 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
         int i6 = i2;
         if (i5 != 2) {
             if (i5 == 1) {
-                if (i6 == 0 && this.emojiView == null) {
-                    if (this.parentActivity != null) {
+                if (i6 == 0) {
+                    if (this.parentActivity != null || this.emojiView != null) {
                         createEmojiView();
                     } else {
                         return;

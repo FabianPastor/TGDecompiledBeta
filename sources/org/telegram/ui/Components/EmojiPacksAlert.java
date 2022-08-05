@@ -283,8 +283,15 @@ public class EmojiPacksAlert extends BottomSheet implements NotificationCenter.N
             org.telegram.ui.Components.Premium.PremiumButtonView r3 = new org.telegram.ui.Components.Premium.PremiumButtonView
             r3.<init>(r2, r5)
             r0.premiumButtonView = r3
-            r2 = 2131558588(0x7f0d00bc, float:1.8742496E38)
-            r3.setIcon(r2)
+            r2 = 2131628818(0x7f0e1312, float:1.888494E38)
+            java.lang.String r4 = "UnlockPremiumEmoji"
+            java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r4, r2)
+            org.telegram.ui.Components.EmojiPacksAlert$$ExternalSyntheticLambda1 r4 = new org.telegram.ui.Components.EmojiPacksAlert$$ExternalSyntheticLambda1
+            r4.<init>(r0)
+            r3.setButton(r2, r4)
+            org.telegram.ui.Components.Premium.PremiumButtonView r2 = r0.premiumButtonView
+            r3 = 2131558588(0x7f0d00bc, float:1.8742496E38)
+            r2.setIcon(r3)
             org.telegram.ui.Components.Premium.PremiumButtonView r2 = r0.premiumButtonView
             android.widget.FrameLayout r2 = r2.buttonLayout
             r2.setClickable(r6)
@@ -341,6 +348,11 @@ public class EmojiPacksAlert extends BottomSheet implements NotificationCenter.N
                 new EmojiPacksAlert(baseFragment, getContext(), resourcesProvider, arrayList3).show();
             }
         }
+    }
+
+    /* access modifiers changed from: private */
+    public /* synthetic */ void lambda$new$1(View view) {
+        showPremiumAlert();
     }
 
     private void updateShowButton(boolean z, boolean z2) {
@@ -450,7 +462,7 @@ public class EmojiPacksAlert extends BottomSheet implements NotificationCenter.N
     }
 
     /* access modifiers changed from: private */
-    public static /* synthetic */ void lambda$installSet$2(TLRPC$TL_messages_stickerSet tLRPC$TL_messages_stickerSet, TLRPC$TL_error tLRPC$TL_error, boolean z, BaseFragment baseFragment, TLObject tLObject, Utilities.Callback callback, Runnable runnable) {
+    public static /* synthetic */ void lambda$installSet$3(TLRPC$TL_messages_stickerSet tLRPC$TL_messages_stickerSet, TLRPC$TL_error tLRPC$TL_error, boolean z, BaseFragment baseFragment, TLObject tLObject, Utilities.Callback callback, Runnable runnable) {
         int i;
         TLRPC$StickerSet tLRPC$StickerSet = tLRPC$TL_messages_stickerSet.set;
         if (tLRPC$StickerSet.masks) {
@@ -486,7 +498,7 @@ public class EmojiPacksAlert extends BottomSheet implements NotificationCenter.N
     }
 
     /* access modifiers changed from: private */
-    public static /* synthetic */ void lambda$installSet$1(Runnable runnable, ArrayList arrayList) {
+    public static /* synthetic */ void lambda$installSet$2(Runnable runnable, ArrayList arrayList) {
         if (runnable != null) {
             runnable.run();
         }
@@ -500,8 +512,7 @@ public class EmojiPacksAlert extends BottomSheet implements NotificationCenter.N
 
     private void loadAnimation() {
         if (this.loadAnimator == null) {
-            this.loadT = 0.0f;
-            this.loadAnimator = ValueAnimator.ofFloat(new float[]{0.0f, 1.0f});
+            this.loadAnimator = ValueAnimator.ofFloat(new float[]{this.loadT, 1.0f});
             this.fromY = Float.valueOf(this.lastY + this.containerView.getY());
             this.loadAnimator.addUpdateListener(new EmojiPacksAlert$$ExternalSyntheticLambda0(this));
             this.loadAnimator.setDuration(250);
@@ -511,13 +522,12 @@ public class EmojiPacksAlert extends BottomSheet implements NotificationCenter.N
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$loadAnimation$4(ValueAnimator valueAnimator) {
+    public /* synthetic */ void lambda$loadAnimation$5(ValueAnimator valueAnimator) {
         float floatValue = ((Float) valueAnimator.getAnimatedValue()).floatValue();
         this.loadT = floatValue;
         this.listView.setAlpha(floatValue);
         this.addButtonView.setAlpha(this.loadT);
         this.removeButtonView.setAlpha(this.loadT);
-        this.premiumButtonView.setAlpha(this.loadT);
         this.containerView.invalidate();
     }
 
@@ -557,15 +567,15 @@ public class EmojiPacksAlert extends BottomSheet implements NotificationCenter.N
                 }
                 i3++;
             }
-            if (!this.loaded && arrayList.size() > 0) {
+            boolean z = this.customEmojiPacks.inputStickerSets != null && arrayList.size() == this.customEmojiPacks.inputStickerSets.size();
+            if (!this.loaded && z) {
                 loadAnimation();
             }
-            boolean z = arrayList.size() > 0;
             this.loaded = z;
             if (!z) {
                 this.listView.setAlpha(0.0f);
             }
-            if (arrayList4.size() > 0 || arrayList3.size() <= 0 || isPremium) {
+            if ((arrayList4.size() > 0 || arrayList3.size() < 0 || isPremium) && this.loaded) {
                 this.premiumButtonView.setVisibility(4);
                 if (arrayList4.size() > 0) {
                     this.addButtonView.setVisibility(0);
@@ -596,16 +606,10 @@ public class EmojiPacksAlert extends BottomSheet implements NotificationCenter.N
                 this.premiumButtonView.setVisibility(0);
                 this.addButtonView.setVisibility(8);
                 this.removeButtonView.setVisibility(8);
-                this.premiumButtonView.setButton(LocaleController.getString("UnlockPremiumEmoji", NUM), new EmojiPacksAlert$$ExternalSyntheticLambda1(this));
                 updateShowButton(true, !this.first);
             }
             this.first = false;
         }
-    }
-
-    /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$updateButton$5(View view) {
-        showPremiumAlert();
     }
 
     /* access modifiers changed from: private */
@@ -818,7 +822,7 @@ public class EmojiPacksAlert extends BottomSheet implements NotificationCenter.N
                 textView.setTextSize(1, 13.0f);
                 textView.setTextColor(EmojiPacksAlert.this.getThemedColor("chat_emojiPanelTrendingDescription"));
                 textView.setText(AndroidUtilities.replaceTags(LocaleController.getString("PremiumPreviewEmojiPack", NUM)));
-                textView.setPadding(AndroidUtilities.dp(14.0f), 0, AndroidUtilities.dp(14.0f), AndroidUtilities.dp(14.0f));
+                textView.setPadding(AndroidUtilities.dp(14.0f), 0, AndroidUtilities.dp(30.0f), AndroidUtilities.dp(14.0f));
             }
         }
 
@@ -986,7 +990,7 @@ public class EmojiPacksAlert extends BottomSheet implements NotificationCenter.N
                 int r9 = org.telegram.messenger.AndroidUtilities.dp(r11)
                 r10.<init>(r3, r9, r8)
                 r0.unlockButtonView = r10
-                r9 = 2131628814(0x7f0e130e, float:1.8884931E38)
+                r9 = 2131628816(0x7f0e1310, float:1.8884935E38)
                 java.lang.String r11 = "Unlock"
                 java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r11, r9)
                 org.telegram.ui.Components.EmojiPacksAlert$EmojiPackHeader$$ExternalSyntheticLambda2 r11 = new org.telegram.ui.Components.EmojiPacksAlert$EmojiPackHeader$$ExternalSyntheticLambda2

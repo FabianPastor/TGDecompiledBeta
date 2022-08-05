@@ -11,6 +11,6 @@ public final /* synthetic */ class EmojiPacksAlert$$ExternalSyntheticLambda5 imp
     }
 
     public final void run(Object obj) {
-        EmojiPacksAlert.lambda$installSet$1(this.f$0, (ArrayList) obj);
+        EmojiPacksAlert.lambda$installSet$2(this.f$0, (ArrayList) obj);
     }
 }

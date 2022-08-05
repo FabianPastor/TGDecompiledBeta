@@ -159,7 +159,7 @@ public class ThemePreviewMessagesCell extends LinearLayout {
                 TLRPC$TL_messageEntityCustomEmoji tLRPC$TL_messageEntityCustomEmoji2 = new TLRPC$TL_messageEntityCustomEmoji();
                 tLRPC$TL_messageEntityCustomEmoji2.offset = indexOf3;
                 tLRPC$TL_messageEntityCustomEmoji2.length = 2;
-                tLRPC$TL_messageEntityCustomEmoji2.document_id = 5390808818387000886L;
+                tLRPC$TL_messageEntityCustomEmoji2.document_id = 5373141891321699086L;
                 tLRPC$TL_message3.entities.add(tLRPC$TL_messageEntityCustomEmoji2);
             }
             tLRPC$TL_message3.date = currentTimeMillis + 960;

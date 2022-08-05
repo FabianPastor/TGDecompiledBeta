@@ -14,6 +14,6 @@ public final /* synthetic */ class MediaDataController$$ExternalSyntheticLambda1
     }
 
     public final void run(Object obj) {
-        this.f$0.lambda$toggleStickerSetInternal$93(this.f$1, (ArrayList) obj);
+        this.f$0.lambda$toggleStickerSetInternal$94(this.f$1, (ArrayList) obj);
     }
 }

@@ -648,7 +648,7 @@ public class QrActivity extends BaseFragment {
             this.resourcesProvider.initColors(this.currentTheme, this.isCurrentThemeDark);
         }
         themeAnimationSettings.afterStartDescriptionsAddedRunnable = new QrActivity$$ExternalSyntheticLambda6(this);
-        this.parentLayout.animateThemedValues(themeAnimationSettings);
+        this.parentLayout.animateThemedValues(themeAnimationSettings, (Runnable) null);
     }
 
     /* access modifiers changed from: private */

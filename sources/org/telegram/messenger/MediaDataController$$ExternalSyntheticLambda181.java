@@ -6,14 +6,14 @@ import org.telegram.tgnet.TLRPC$TL_error;
 
 public final /* synthetic */ class MediaDataController$$ExternalSyntheticLambda181 implements RequestDelegate {
     public final /* synthetic */ MediaDataController f$0;
-    public final /* synthetic */ String f$1;
+    public final /* synthetic */ Runnable f$1;
 
-    public /* synthetic */ MediaDataController$$ExternalSyntheticLambda181(MediaDataController mediaDataController, String str) {
+    public /* synthetic */ MediaDataController$$ExternalSyntheticLambda181(MediaDataController mediaDataController, Runnable runnable) {
         this.f$0 = mediaDataController;
-        this.f$1 = str;
+        this.f$1 = runnable;
     }
 
     public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        this.f$0.lambda$verifyAnimatedStickerMessageInternal$54(this.f$1, tLObject, tLRPC$TL_error);
+        this.f$0.lambda$getStickerSet$28(this.f$1, tLObject, tLRPC$TL_error);
     }
 }

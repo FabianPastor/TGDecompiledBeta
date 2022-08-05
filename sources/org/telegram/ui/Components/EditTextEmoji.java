@@ -30,6 +30,7 @@ import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.SharedConfig;
+import org.telegram.messenger.UserConfig;
 import org.telegram.tgnet.TLRPC$ChatFull;
 import org.telegram.tgnet.TLRPC$Document;
 import org.telegram.tgnet.TLRPC$InputStickerSet;
@@ -435,9 +436,7 @@ public class EditTextEmoji extends FrameLayout implements NotificationCenter.Not
         if (i == 1) {
             EmojiView emojiView2 = this.emojiView;
             boolean z = emojiView2 != null && emojiView2.getVisibility() == 0;
-            if (this.emojiView == null) {
-                createEmojiView();
-            }
+            createEmojiView();
             this.emojiView.setVisibility(0);
             this.emojiViewVisible = true;
             EmojiView emojiView3 = this.emojiView;
@@ -530,10 +529,15 @@ public class EditTextEmoji extends FrameLayout implements NotificationCenter.Not
 
     /* access modifiers changed from: protected */
     public void createEmojiView() {
+        EmojiView emojiView2 = this.emojiView;
+        if (!(emojiView2 == null || emojiView2.currentAccount == UserConfig.selectedAccount)) {
+            this.sizeNotifierLayout.removeView(emojiView2);
+            this.emojiView = null;
+        }
         if (this.emojiView == null) {
-            EmojiView emojiView2 = new EmojiView(this.parentFragment, this.allowAnimatedEmoji, false, false, getContext(), false, (TLRPC$ChatFull) null, (ViewGroup) null, this.resourcesProvider);
-            this.emojiView = emojiView2;
-            emojiView2.setVisibility(8);
+            EmojiView emojiView3 = new EmojiView(this.parentFragment, this.allowAnimatedEmoji, false, false, getContext(), false, (TLRPC$ChatFull) null, (ViewGroup) null, this.resourcesProvider);
+            this.emojiView = emojiView3;
+            emojiView3.setVisibility(8);
             if (AndroidUtilities.isTablet()) {
                 this.emojiView.setForseMultiwindowLayout(true);
             }

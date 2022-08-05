@@ -17,59 +17,71 @@ public class DrawingInBackgroundThreadDrawable implements NotificationCenter.Not
     Bitmap bitmap;
     Canvas bitmapCanvas;
     Runnable bitmapCreateTask = new Runnable() {
-        /* JADX WARNING: Code restructure failed: missing block: B:6:0x001a, code lost:
-            if (r1.backgroundBitmap.getHeight() == r4.this$0.height) goto L_0x0040;
+        /* JADX WARNING: Code restructure failed: missing block: B:6:0x001b, code lost:
+            if (r2.backgroundBitmap.getHeight() == r1) goto L_0x003f;
          */
         /* Code decompiled incorrectly, please refer to instructions dump. */
         public void run() {
             /*
                 r4 = this;
-                org.telegram.ui.Components.DrawingInBackgroundThreadDrawable r0 = org.telegram.ui.Components.DrawingInBackgroundThreadDrawable.this     // Catch:{ Exception -> 0x0050 }
-                android.graphics.Bitmap r0 = r0.backgroundBitmap     // Catch:{ Exception -> 0x0050 }
-                if (r0 == 0) goto L_0x001c
-                int r0 = r0.getWidth()     // Catch:{ Exception -> 0x0050 }
-                org.telegram.ui.Components.DrawingInBackgroundThreadDrawable r1 = org.telegram.ui.Components.DrawingInBackgroundThreadDrawable.this     // Catch:{ Exception -> 0x0050 }
-                int r2 = r1.width     // Catch:{ Exception -> 0x0050 }
-                if (r0 != r2) goto L_0x001c
-                android.graphics.Bitmap r0 = r1.backgroundBitmap     // Catch:{ Exception -> 0x0050 }
-                int r0 = r0.getHeight()     // Catch:{ Exception -> 0x0050 }
-                org.telegram.ui.Components.DrawingInBackgroundThreadDrawable r1 = org.telegram.ui.Components.DrawingInBackgroundThreadDrawable.this     // Catch:{ Exception -> 0x0050 }
-                int r1 = r1.height     // Catch:{ Exception -> 0x0050 }
-                if (r0 == r1) goto L_0x0040
-            L_0x001c:
-                org.telegram.ui.Components.DrawingInBackgroundThreadDrawable r0 = org.telegram.ui.Components.DrawingInBackgroundThreadDrawable.this     // Catch:{ Exception -> 0x0050 }
-                android.graphics.Bitmap r0 = r0.backgroundBitmap     // Catch:{ Exception -> 0x0050 }
-                if (r0 == 0) goto L_0x0025
-                r0.recycle()     // Catch:{ Exception -> 0x0050 }
-            L_0x0025:
-                org.telegram.ui.Components.DrawingInBackgroundThreadDrawable r0 = org.telegram.ui.Components.DrawingInBackgroundThreadDrawable.this     // Catch:{ Exception -> 0x0050 }
-                int r1 = r0.width     // Catch:{ Exception -> 0x0050 }
-                int r2 = r0.height     // Catch:{ Exception -> 0x0050 }
-                android.graphics.Bitmap$Config r3 = android.graphics.Bitmap.Config.ARGB_8888     // Catch:{ Exception -> 0x0050 }
-                android.graphics.Bitmap r1 = android.graphics.Bitmap.createBitmap(r1, r2, r3)     // Catch:{ Exception -> 0x0050 }
-                r0.backgroundBitmap = r1     // Catch:{ Exception -> 0x0050 }
-                org.telegram.ui.Components.DrawingInBackgroundThreadDrawable r0 = org.telegram.ui.Components.DrawingInBackgroundThreadDrawable.this     // Catch:{ Exception -> 0x0050 }
-                android.graphics.Canvas r1 = new android.graphics.Canvas     // Catch:{ Exception -> 0x0050 }
-                org.telegram.ui.Components.DrawingInBackgroundThreadDrawable r2 = org.telegram.ui.Components.DrawingInBackgroundThreadDrawable.this     // Catch:{ Exception -> 0x0050 }
-                android.graphics.Bitmap r2 = r2.backgroundBitmap     // Catch:{ Exception -> 0x0050 }
-                r1.<init>(r2)     // Catch:{ Exception -> 0x0050 }
-                r0.backgroundCanvas = r1     // Catch:{ Exception -> 0x0050 }
-            L_0x0040:
-                org.telegram.ui.Components.DrawingInBackgroundThreadDrawable r0 = org.telegram.ui.Components.DrawingInBackgroundThreadDrawable.this     // Catch:{ Exception -> 0x0050 }
-                android.graphics.Bitmap r0 = r0.backgroundBitmap     // Catch:{ Exception -> 0x0050 }
+                org.telegram.ui.Components.DrawingInBackgroundThreadDrawable r0 = org.telegram.ui.Components.DrawingInBackgroundThreadDrawable.this     // Catch:{ Exception -> 0x0068 }
+                int r1 = r0.height     // Catch:{ Exception -> 0x0068 }
+                int r2 = r0.padding     // Catch:{ Exception -> 0x0068 }
+                int r1 = r1 + r2
+                android.graphics.Bitmap r0 = r0.backgroundBitmap     // Catch:{ Exception -> 0x0068 }
+                if (r0 == 0) goto L_0x001d
+                int r0 = r0.getWidth()     // Catch:{ Exception -> 0x0068 }
+                org.telegram.ui.Components.DrawingInBackgroundThreadDrawable r2 = org.telegram.ui.Components.DrawingInBackgroundThreadDrawable.this     // Catch:{ Exception -> 0x0068 }
+                int r3 = r2.width     // Catch:{ Exception -> 0x0068 }
+                if (r0 != r3) goto L_0x001d
+                android.graphics.Bitmap r0 = r2.backgroundBitmap     // Catch:{ Exception -> 0x0068 }
+                int r0 = r0.getHeight()     // Catch:{ Exception -> 0x0068 }
+                if (r0 == r1) goto L_0x003f
+            L_0x001d:
+                org.telegram.ui.Components.DrawingInBackgroundThreadDrawable r0 = org.telegram.ui.Components.DrawingInBackgroundThreadDrawable.this     // Catch:{ Exception -> 0x0068 }
+                android.graphics.Bitmap r0 = r0.backgroundBitmap     // Catch:{ Exception -> 0x0068 }
+                if (r0 == 0) goto L_0x0026
+                r0.recycle()     // Catch:{ Exception -> 0x0068 }
+            L_0x0026:
+                org.telegram.ui.Components.DrawingInBackgroundThreadDrawable r0 = org.telegram.ui.Components.DrawingInBackgroundThreadDrawable.this     // Catch:{ Exception -> 0x0068 }
+                int r2 = r0.width     // Catch:{ Exception -> 0x0068 }
+                android.graphics.Bitmap$Config r3 = android.graphics.Bitmap.Config.ARGB_8888     // Catch:{ Exception -> 0x0068 }
+                android.graphics.Bitmap r1 = android.graphics.Bitmap.createBitmap(r2, r1, r3)     // Catch:{ Exception -> 0x0068 }
+                r0.backgroundBitmap = r1     // Catch:{ Exception -> 0x0068 }
+                org.telegram.ui.Components.DrawingInBackgroundThreadDrawable r0 = org.telegram.ui.Components.DrawingInBackgroundThreadDrawable.this     // Catch:{ Exception -> 0x0068 }
+                android.graphics.Canvas r1 = new android.graphics.Canvas     // Catch:{ Exception -> 0x0068 }
+                org.telegram.ui.Components.DrawingInBackgroundThreadDrawable r2 = org.telegram.ui.Components.DrawingInBackgroundThreadDrawable.this     // Catch:{ Exception -> 0x0068 }
+                android.graphics.Bitmap r2 = r2.backgroundBitmap     // Catch:{ Exception -> 0x0068 }
+                r1.<init>(r2)     // Catch:{ Exception -> 0x0068 }
+                r0.backgroundCanvas = r1     // Catch:{ Exception -> 0x0068 }
+            L_0x003f:
+                org.telegram.ui.Components.DrawingInBackgroundThreadDrawable r0 = org.telegram.ui.Components.DrawingInBackgroundThreadDrawable.this     // Catch:{ Exception -> 0x0068 }
+                android.graphics.Bitmap r0 = r0.backgroundBitmap     // Catch:{ Exception -> 0x0068 }
                 r1 = 0
-                r0.eraseColor(r1)     // Catch:{ Exception -> 0x0050 }
-                org.telegram.ui.Components.DrawingInBackgroundThreadDrawable r0 = org.telegram.ui.Components.DrawingInBackgroundThreadDrawable.this     // Catch:{ Exception -> 0x0050 }
-                android.graphics.Canvas r1 = r0.backgroundCanvas     // Catch:{ Exception -> 0x0050 }
-                r0.drawInBackground(r1)     // Catch:{ Exception -> 0x0050 }
-                goto L_0x0059
-            L_0x0050:
+                r0.eraseColor(r1)     // Catch:{ Exception -> 0x0068 }
+                org.telegram.ui.Components.DrawingInBackgroundThreadDrawable r0 = org.telegram.ui.Components.DrawingInBackgroundThreadDrawable.this     // Catch:{ Exception -> 0x0068 }
+                android.graphics.Canvas r0 = r0.backgroundCanvas     // Catch:{ Exception -> 0x0068 }
+                r0.save()     // Catch:{ Exception -> 0x0068 }
+                org.telegram.ui.Components.DrawingInBackgroundThreadDrawable r0 = org.telegram.ui.Components.DrawingInBackgroundThreadDrawable.this     // Catch:{ Exception -> 0x0068 }
+                android.graphics.Canvas r1 = r0.backgroundCanvas     // Catch:{ Exception -> 0x0068 }
+                r2 = 0
+                int r0 = r0.padding     // Catch:{ Exception -> 0x0068 }
+                float r0 = (float) r0     // Catch:{ Exception -> 0x0068 }
+                r1.translate(r2, r0)     // Catch:{ Exception -> 0x0068 }
+                org.telegram.ui.Components.DrawingInBackgroundThreadDrawable r0 = org.telegram.ui.Components.DrawingInBackgroundThreadDrawable.this     // Catch:{ Exception -> 0x0068 }
+                android.graphics.Canvas r1 = r0.backgroundCanvas     // Catch:{ Exception -> 0x0068 }
+                r0.drawInBackground(r1)     // Catch:{ Exception -> 0x0068 }
+                org.telegram.ui.Components.DrawingInBackgroundThreadDrawable r0 = org.telegram.ui.Components.DrawingInBackgroundThreadDrawable.this     // Catch:{ Exception -> 0x0068 }
+                android.graphics.Canvas r0 = r0.backgroundCanvas     // Catch:{ Exception -> 0x0068 }
+                r0.restore()     // Catch:{ Exception -> 0x0068 }
+                goto L_0x0071
+            L_0x0068:
                 r0 = move-exception
                 org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)
                 org.telegram.ui.Components.DrawingInBackgroundThreadDrawable r0 = org.telegram.ui.Components.DrawingInBackgroundThreadDrawable.this
                 r1 = 1
                 r0.error = r1
-            L_0x0059:
+            L_0x0071:
                 org.telegram.ui.Components.DrawingInBackgroundThreadDrawable r0 = org.telegram.ui.Components.DrawingInBackgroundThreadDrawable.this
                 java.lang.Runnable r0 = r0.uiFrameRunnable
                 org.telegram.messenger.AndroidUtilities.runOnUIThread(r0)
@@ -89,6 +101,7 @@ public class DrawingInBackgroundThreadDrawable implements NotificationCenter.Not
     public int lastFrameId;
     Bitmap nextRenderingBitmap;
     Canvas nextRenderingCanvas;
+    int padding;
     private Paint paint = new Paint(1);
     protected boolean paused;
     private boolean reset;
@@ -159,14 +172,18 @@ public class DrawingInBackgroundThreadDrawable implements NotificationCenter.Not
                     AndroidUtilities.recycleBitmaps(arrayList);
                     this.bitmap = null;
                 }
+                int i3 = this.height + this.padding;
                 Bitmap bitmap3 = this.nextRenderingBitmap;
-                if (bitmap3 != null && bitmap3.getHeight() == this.height && this.nextRenderingBitmap.getWidth() == this.width) {
+                if (bitmap3 != null && bitmap3.getHeight() == i3 && this.nextRenderingBitmap.getWidth() == this.width) {
                     this.nextRenderingBitmap.eraseColor(0);
                 } else {
-                    this.nextRenderingBitmap = Bitmap.createBitmap(this.width, this.height, Bitmap.Config.ARGB_8888);
+                    this.nextRenderingBitmap = Bitmap.createBitmap(this.width, i3, Bitmap.Config.ARGB_8888);
                     this.nextRenderingCanvas = new Canvas(this.nextRenderingBitmap);
                 }
+                this.nextRenderingCanvas.save();
+                this.nextRenderingCanvas.translate(0.0f, (float) this.padding);
                 drawInUiThread(this.nextRenderingCanvas);
+                this.nextRenderingCanvas.restore();
             }
             if (!this.bitmapUpdating && !this.paused) {
                 this.bitmapUpdating = true;
@@ -180,7 +197,10 @@ public class DrawingInBackgroundThreadDrawable implements NotificationCenter.Not
                     bitmap4 = this.nextRenderingBitmap;
                 }
                 this.paint.setAlpha((int) (f * 255.0f));
+                canvas.save();
+                canvas.translate(0.0f, (float) (-this.padding));
                 canvas.drawBitmap(bitmap4, 0.0f, 0.0f, this.paint);
+                canvas.restore();
             }
         }
     }

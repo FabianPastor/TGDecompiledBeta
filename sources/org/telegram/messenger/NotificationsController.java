@@ -3334,7 +3334,7 @@ public class NotificationsController extends BaseController {
             boolean r13 = r5 instanceof org.telegram.tgnet.TLRPC$TL_messageActionLoginUnknownLocation
             r15 = 3
             if (r13 == 0) goto L_0x02e5
-            r1 = 2131629438(0x7f0e157e, float:1.8886197E38)
+            r1 = 2131629440(0x7f0e1580, float:1.88862E38)
             r2 = 2
             java.lang.Object[] r3 = new java.lang.Object[r2]
             org.telegram.messenger.LocaleController r2 = org.telegram.messenger.LocaleController.getInstance()
@@ -5446,7 +5446,7 @@ public class NotificationsController extends BaseController {
         L_0x0162:
             boolean r7 = org.telegram.messenger.DialogObject.isEncryptedDialog(r2)
             if (r7 == 0) goto L_0x0173
-            r0 = 2131629358(0x7f0e152e, float:1.8886035E38)
+            r0 = 2131629360(0x7f0e1530, float:1.8886039E38)
             java.lang.String r1 = "YouHaveNewMessage"
             java.lang.String r13 = org.telegram.messenger.LocaleController.getString(r1, r0)
             goto L_0x161d
@@ -5499,7 +5499,7 @@ public class NotificationsController extends BaseController {
         L_0x01d0:
             boolean r5 = r4 instanceof org.telegram.tgnet.TLRPC$TL_messageActionLoginUnknownLocation
             if (r5 == 0) goto L_0x0234
-            r1 = 2131629438(0x7f0e157e, float:1.8886197E38)
+            r1 = 2131629440(0x7f0e1580, float:1.88862E38)
             r2 = 2
             java.lang.Object[] r3 = new java.lang.Object[r2]
             org.telegram.messenger.LocaleController r2 = org.telegram.messenger.LocaleController.getInstance()
@@ -8092,7 +8092,7 @@ public class NotificationsController extends BaseController {
         L_0x161d:
             return r13
         L_0x161e:
-            r0 = 2131629358(0x7f0e152e, float:1.8886035E38)
+            r0 = 2131629360(0x7f0e1530, float:1.8886039E38)
             java.lang.String r1 = "YouHaveNewMessage"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             return r0

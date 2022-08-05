@@ -124,7 +124,7 @@ public final class BulletinFactory {
         lottieLayout.setAnimation(i, 36, 36, new String[0]);
         lottieLayout.textView.setTextSize(1, 14.0f);
         lottieLayout.textView.setSingleLine(false);
-        lottieLayout.textView.setMaxLines(2);
+        lottieLayout.textView.setMaxLines(3);
         lottieLayout.textView.setText(charSequence);
         lottieLayout.setButton(new Bulletin.UndoButton(getContext(), true, this.resourcesProvider).setText(charSequence2).setUndoAction(runnable));
         return create(lottieLayout, 1500);
@@ -136,7 +136,7 @@ public final class BulletinFactory {
         lottieLayout.textView.setText(charSequence);
         lottieLayout.textView.setTextSize(1, 14.0f);
         lottieLayout.textView.setSingleLine(false);
-        lottieLayout.textView.setMaxLines(2);
+        lottieLayout.textView.setMaxLines(3);
         lottieLayout.setButton(new Bulletin.UndoButton(getContext(), true, this.resourcesProvider).setText(charSequence2).setUndoAction(runnable));
         return create(lottieLayout, 2750);
     }

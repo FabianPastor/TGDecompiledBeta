@@ -4626,6 +4626,8 @@
     <string name="Subscribers_other">%1$d subscribers</string>
     <string name="Subscribers_two">%1$d subscribers</string>
     <string name="Subscribers_zero">%1$d subscribers</string>
+    <string name="SuggestAnimatedEmoji">Suggest Animated Emoji</string>
+    <string name="SuggestAnimatedEmojiInfo">Each time you enter an emoji you can replace it with an alternative animated emoji.</string>
     <string name="SuggestClearDatabaseMessage">Your local database size %s. It\'s may affect to speed of application work.</string>
     <string name="SuggestClearDatabaseTitle">Clear Database</string>
     <string name="SuggestContacts">Suggest Frequent Contacts</string>

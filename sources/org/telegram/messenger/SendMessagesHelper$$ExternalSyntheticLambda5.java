@@ -47,6 +47,6 @@ public final /* synthetic */ class SendMessagesHelper$$ExternalSyntheticLambda5 
     public final void run() {
         Bitmap bitmap = this.f$0;
         Bitmap bitmap2 = bitmap;
-        SendMessagesHelper.lambda$prepareSendingVideo$90(bitmap2, this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6, this.f$7, this.f$8, this.f$9, this.f$10, this.f$11, this.f$12, this.f$13, this.f$14, this.f$15, this.f$16);
+        SendMessagesHelper.lambda$prepareSendingVideo$92(bitmap2, this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6, this.f$7, this.f$8, this.f$9, this.f$10, this.f$11, this.f$12, this.f$13, this.f$14, this.f$15, this.f$16);
     }
 }

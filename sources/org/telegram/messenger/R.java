@@ -6449,6 +6449,8 @@ public final class R {
         public static final int Subscribers_other = NUM;
         public static final int Subscribers_two = NUM;
         public static final int Subscribers_zero = NUM;
+        public static final int SuggestAnimatedEmoji = NUM;
+        public static final int SuggestAnimatedEmojiInfo = NUM;
         public static final int SuggestClearDatabaseMessage = NUM;
         public static final int SuggestClearDatabaseTitle = NUM;
         public static final int SuggestContacts = NUM;

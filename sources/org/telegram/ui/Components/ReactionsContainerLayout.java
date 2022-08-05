@@ -151,7 +151,7 @@ public class ReactionsContainerLayout extends FrameLayout implements Notificatio
         rect2.top = dp2;
         rect2.left = dp2;
         this.shadow.setColorFilter(new PorterDuffColorFilter(Theme.getColor("chat_messagePanelShadow"), PorterDuff.Mode.MULTIPLY));
-        AnonymousClass2 r5 = new RecyclerListView(context) {
+        AnonymousClass2 r6 = new RecyclerListView(context) {
             public boolean drawChild(Canvas canvas, View view, long j) {
                 if (ReactionsContainerLayout.this.pressedReaction == null || !(view instanceof ReactionHolderView) || !((ReactionHolderView) view).currentReaction.reaction.equals(ReactionsContainerLayout.this.pressedReaction)) {
                     return super.drawChild(canvas, view, j);
@@ -159,9 +159,9 @@ public class ReactionsContainerLayout extends FrameLayout implements Notificatio
                 return true;
             }
         };
-        this.recyclerListView = r5;
+        this.recyclerListView = r6;
         this.linearLayoutManager = new LinearLayoutManager(context, 0, false);
-        r5.addItemDecoration(new RecyclerView.ItemDecoration() {
+        r6.addItemDecoration(new RecyclerView.ItemDecoration() {
             public void getItemOffsets(Rect rect, View view, RecyclerView recyclerView, RecyclerView.State state) {
                 super.getItemOffsets(rect, view, recyclerView, state);
                 int childAdapterPosition = recyclerView.getChildAdapterPosition(view);
@@ -179,9 +179,9 @@ public class ReactionsContainerLayout extends FrameLayout implements Notificatio
                 }
             }
         });
-        r5.setLayoutManager(this.linearLayoutManager);
-        r5.setOverScrollMode(2);
-        AnonymousClass4 r7 = new RecyclerView.Adapter() {
+        r6.setLayoutManager(this.linearLayoutManager);
+        r6.setOverScrollMode(2);
+        AnonymousClass4 r0 = new RecyclerView.Adapter() {
             public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
                 View view;
                 if (i != 1) {
@@ -228,10 +228,10 @@ public class ReactionsContainerLayout extends FrameLayout implements Notificatio
                 return (i < 0 || i >= ReactionsContainerLayout.this.reactionsList.size()) ? 1 : 0;
             }
         };
-        this.listAdapter = r7;
-        r5.setAdapter(r7);
-        r5.addOnScrollListener(new LeftRightShadowsListener());
-        r5.addOnScrollListener(new RecyclerView.OnScrollListener() {
+        this.listAdapter = r0;
+        r6.setAdapter(r0);
+        r6.addOnScrollListener(new LeftRightShadowsListener());
+        r6.addOnScrollListener(new RecyclerView.OnScrollListener() {
             public void onScrolled(RecyclerView recyclerView, int i, int i2) {
                 if (recyclerView.getChildCount() > 2) {
                     recyclerView.getLocationInWindow(ReactionsContainerLayout.this.location);
@@ -257,7 +257,7 @@ public class ReactionsContainerLayout extends FrameLayout implements Notificatio
                 ReactionsContainerLayout.this.invalidate();
             }
         });
-        r5.addItemDecoration(new RecyclerView.ItemDecoration() {
+        r6.addItemDecoration(new RecyclerView.ItemDecoration() {
             public void getItemOffsets(Rect rect, View view, RecyclerView recyclerView, RecyclerView.State state) {
                 int childAdapterPosition = recyclerView.getChildAdapterPosition(view);
                 if (childAdapterPosition == 0) {
@@ -268,11 +268,12 @@ public class ReactionsContainerLayout extends FrameLayout implements Notificatio
                 }
             }
         });
-        r5.setOnItemClickListener((RecyclerListView.OnItemClickListener) new ReactionsContainerLayout$$ExternalSyntheticLambda0(this));
-        r5.setOnItemLongClickListener((RecyclerListView.OnItemLongClickListener) new ReactionsContainerLayout$$ExternalSyntheticLambda1(this));
-        addView(r5, LayoutHelper.createFrame(-1, -1.0f));
+        r6.setOnItemClickListener((RecyclerListView.OnItemClickListener) new ReactionsContainerLayout$$ExternalSyntheticLambda0(this));
+        r6.setOnItemLongClickListener((RecyclerListView.OnItemLongClickListener) new ReactionsContainerLayout$$ExternalSyntheticLambda1(this));
+        addView(r6, LayoutHelper.createFrame(-1, -1.0f));
         invalidateShaders();
         this.bgPaint.setColor(Theme.getColor("actionBarDefaultSubmenuBackground", resourcesProvider2));
+        MediaDataController.getInstance(i).preloadReactions();
     }
 
     /* access modifiers changed from: private */
@@ -464,6 +465,7 @@ public class ReactionsContainerLayout extends FrameLayout implements Notificatio
         this.shadow.draw(canvas2);
         canvas2.drawCircle(width3, height2, f8, this.bgPaint);
         canvas.restore();
+        invalidate();
     }
 
     private void checkPressedProgress(Canvas canvas, ReactionHolderView reactionHolderView) {

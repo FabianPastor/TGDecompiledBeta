@@ -32,6 +32,7 @@ public class RLottieDrawable extends BitmapDrawable implements Animatable, Bitma
     public static DispatchQueue lottieCacheGenerateQueue;
     private static ThreadLocal<byte[]> readBufferLocal = new ThreadLocal<>();
     protected static final Handler uiHandler = new Handler(Looper.getMainLooper());
+    private boolean allowVibration;
     private boolean applyTransformation;
     private boolean applyingLayerColors;
     NativePtrArgs args;
@@ -207,6 +208,7 @@ public class RLottieDrawable extends BitmapDrawable implements Animatable, Bitma
         this.customEndFrame = -1;
         this.newColorUpdates = new HashMap<>();
         this.pendingColorUpdates = new HashMap<>();
+        this.allowVibration = true;
         this.parentViews = new ArrayList<>();
         this.diceSwitchFramesCount = -1;
         this.autoRepeat = 1;
@@ -491,6 +493,7 @@ public class RLottieDrawable extends BitmapDrawable implements Animatable, Bitma
         this.customEndFrame = -1;
         this.newColorUpdates = new HashMap<>();
         this.pendingColorUpdates = new HashMap<>();
+        this.allowVibration = true;
         this.parentViews = new ArrayList<>();
         this.diceSwitchFramesCount = -1;
         this.autoRepeat = 1;
@@ -779,6 +782,7 @@ public class RLottieDrawable extends BitmapDrawable implements Animatable, Bitma
         this.customEndFrame = -1;
         this.newColorUpdates = new HashMap<>();
         this.pendingColorUpdates = new HashMap<>();
+        this.allowVibration = true;
         this.parentViews = new ArrayList<>();
         this.diceSwitchFramesCount = -1;
         this.autoRepeat = 1;
@@ -1134,6 +1138,7 @@ public class RLottieDrawable extends BitmapDrawable implements Animatable, Bitma
         this.customEndFrame = -1;
         this.newColorUpdates = new HashMap<>();
         this.pendingColorUpdates = new HashMap<>();
+        this.allowVibration = true;
         this.parentViews = new ArrayList<>();
         this.diceSwitchFramesCount = -1;
         this.autoRepeat = 1;
@@ -1891,7 +1896,7 @@ public class RLottieDrawable extends BitmapDrawable implements Animatable, Bitma
             } else {
                 if (this.renderingBitmap == null || (j3 >= ((long) i) && !this.skipFrameUpdate)) {
                     HashMap<Integer, Integer> hashMap = this.vibrationPattern;
-                    if (!(hashMap == null || this.currentParentView == null || (num = hashMap.get(Integer.valueOf(this.currentFrame - 1))) == null)) {
+                    if (!(hashMap == null || this.currentParentView == null || !this.allowVibration || (num = hashMap.get(Integer.valueOf(this.currentFrame - 1))) == null)) {
                         this.currentParentView.performHapticFeedback(num.intValue() == 1 ? 0 : 3, 2);
                     }
                     setCurrentFrame(j2, j3, (long) i, false);
@@ -1900,6 +1905,10 @@ public class RLottieDrawable extends BitmapDrawable implements Animatable, Bitma
         } else if ((this.forceFrameRedraw || (this.decodeSingleFrame && j3 >= ((long) i))) && this.nextRenderingBitmap != null) {
             setCurrentFrame(j2, j3, (long) i, true);
         }
+    }
+
+    public void setAllowVibration(boolean z) {
+        this.allowVibration = z;
     }
 
     public int getMinimumHeight() {

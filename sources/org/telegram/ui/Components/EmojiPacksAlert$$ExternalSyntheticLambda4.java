@@ -26,6 +26,6 @@ public final /* synthetic */ class EmojiPacksAlert$$ExternalSyntheticLambda4 imp
     }
 
     public final void run() {
-        EmojiPacksAlert.lambda$installSet$2(this.f$0, this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6);
+        EmojiPacksAlert.lambda$installSet$3(this.f$0, this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6);
     }
 }

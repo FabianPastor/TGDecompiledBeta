@@ -1,17 +1,20 @@
 package org.telegram.messenger;
 
-import org.telegram.tgnet.RequestDelegate;
-import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC$TL_error;
+import java.util.ArrayList;
+import org.telegram.messenger.Utilities;
 
-public final /* synthetic */ class MediaDataController$$ExternalSyntheticLambda151 implements RequestDelegate {
-    public final /* synthetic */ MediaDataController f$0;
+public final /* synthetic */ class MediaDataController$$ExternalSyntheticLambda151 implements Utilities.Callback {
+    public final /* synthetic */ boolean[] f$0;
+    public final /* synthetic */ ArrayList[] f$1;
+    public final /* synthetic */ Runnable f$2;
 
-    public /* synthetic */ MediaDataController$$ExternalSyntheticLambda151(MediaDataController mediaDataController) {
-        this.f$0 = mediaDataController;
+    public /* synthetic */ MediaDataController$$ExternalSyntheticLambda151(boolean[] zArr, ArrayList[] arrayListArr, Runnable runnable) {
+        this.f$0 = zArr;
+        this.f$1 = arrayListArr;
+        this.f$2 = runnable;
     }
 
-    public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        this.f$0.lambda$clearRecentStickers$16(tLObject, tLRPC$TL_error);
+    public final void run(Object obj) {
+        MediaDataController.lambda$fillWithAnimatedEmoji$193(this.f$0, this.f$1, this.f$2, (ArrayList) obj);
     }
 }

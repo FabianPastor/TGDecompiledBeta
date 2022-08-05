@@ -7,6 +7,7 @@ import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
 import android.text.TextUtils;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 import java.util.List;
@@ -18,6 +19,7 @@ import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.ActionBar.ThemeDescription;
 import org.telegram.ui.Components.BackupImageView;
 import org.telegram.ui.Components.LayoutHelper;
+import org.telegram.ui.Components.Premium.PremiumButtonView;
 import org.telegram.ui.Components.ProgressButton;
 import org.telegram.ui.Components.RecyclerListView;
 
@@ -31,11 +33,19 @@ public class FeaturedStickerSetCell2 extends FrameLayout {
     private final BackupImageView imageView;
     /* access modifiers changed from: private */
     public boolean isInstalled;
+    /* access modifiers changed from: private */
+    public boolean isLocked;
     private boolean needDivider;
     private final Theme.ResourcesProvider resourcesProvider;
     private TLRPC$StickerSetCovered stickersSet;
     private final TextView textView;
+    /* access modifiers changed from: private */
+    public final PremiumButtonView unlockButton;
     private final TextView valueTextView;
+
+    /* access modifiers changed from: protected */
+    public void onPremiumButtonClick() {
+    }
 
     public FeaturedStickerSetCell2(Context context, Theme.ResourcesProvider resourcesProvider2) {
         super(context);
@@ -83,7 +93,29 @@ public class FeaturedStickerSetCell2 extends FrameLayout {
         textView4.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         textView4.setText(LocaleController.getString("StickersRemove", NUM));
         addView(textView4, LayoutHelper.createFrameRelatively(-2.0f, 28.0f, 8388661, 0.0f, 16.0f, 14.0f, 0.0f));
+        PremiumButtonView premiumButtonView = new PremiumButtonView(context, AndroidUtilities.dp(4.0f), false);
+        this.unlockButton = premiumButtonView;
+        premiumButtonView.setIcon(NUM);
+        premiumButtonView.setButton(LocaleController.getString("Unlock", NUM), new FeaturedStickerSetCell2$$ExternalSyntheticLambda0(this));
+        premiumButtonView.setVisibility(8);
+        try {
+            ViewGroup.MarginLayoutParams marginLayoutParams = (ViewGroup.MarginLayoutParams) premiumButtonView.getIconView().getLayoutParams();
+            marginLayoutParams.leftMargin = AndroidUtilities.dp(1.0f);
+            marginLayoutParams.topMargin = AndroidUtilities.dp(1.0f);
+            int dp = AndroidUtilities.dp(20.0f);
+            marginLayoutParams.height = dp;
+            marginLayoutParams.width = dp;
+            ((ViewGroup.MarginLayoutParams) premiumButtonView.getTextView().getLayoutParams()).leftMargin = AndroidUtilities.dp(3.0f);
+            premiumButtonView.getChildAt(0).setPadding(AndroidUtilities.dp(8.0f), 0, AndroidUtilities.dp(8.0f), 0);
+        } catch (Exception unused) {
+        }
+        addView(this.unlockButton, LayoutHelper.createFrameRelatively(-2.0f, 28.0f, 8388661, 0.0f, 16.0f, 10.0f, 0.0f));
         updateColors();
+    }
+
+    /* access modifiers changed from: private */
+    public /* synthetic */ void lambda$new$0(View view) {
+        onPremiumButtonClick();
     }
 
     public TextView getTextView() {
@@ -104,12 +136,14 @@ public class FeaturedStickerSetCell2 extends FrameLayout {
         measureChildWithMargins(this.textView, i, measuredWidth, i2, 0);
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:104:0x026d  */
+    /* JADX WARNING: Removed duplicated region for block: B:131:0x02de  */
     /* JADX WARNING: Removed duplicated region for block: B:43:0x00d2  */
     /* JADX WARNING: Removed duplicated region for block: B:68:0x017f  */
     /* JADX WARNING: Removed duplicated region for block: B:73:0x01a2  */
     /* JADX WARNING: Removed duplicated region for block: B:74:0x01a4  */
-    /* JADX WARNING: Removed duplicated region for block: B:77:0x01ab  */
+    /* JADX WARNING: Removed duplicated region for block: B:79:0x01b9  */
+    /* JADX WARNING: Removed duplicated region for block: B:80:0x01bb  */
+    /* JADX WARNING: Removed duplicated region for block: B:83:0x01c2  */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public void setStickersSet(org.telegram.tgnet.TLRPC$StickerSetCovered r14, boolean r15, boolean r16, boolean r17, boolean r18) {
         /*
@@ -354,35 +388,59 @@ public class FeaturedStickerSetCell2 extends FrameLayout {
             r1 = 1
         L_0x01a5:
             r0.isInstalled = r1
+            int r1 = r0.currentAccount
+            org.telegram.messenger.UserConfig r1 = org.telegram.messenger.UserConfig.getInstance(r1)
+            boolean r1 = r1.isPremium()
+            if (r1 != 0) goto L_0x01bb
+            boolean r1 = org.telegram.messenger.MessageObject.isPremiumEmojiPack((org.telegram.tgnet.TLRPC$StickerSetCovered) r14)
+            if (r1 == 0) goto L_0x01bb
+            r1 = 1
+            goto L_0x01bc
+        L_0x01bb:
+            r1 = 0
+        L_0x01bc:
+            r0.isLocked = r1
             r2 = 4
             r3 = 0
-            if (r18 == 0) goto L_0x026d
-            if (r1 == 0) goto L_0x01b3
+            if (r18 == 0) goto L_0x02de
+            if (r1 == 0) goto L_0x01cf
             android.widget.TextView r1 = r0.delButton
             r1.setVisibility(r10)
-            goto L_0x01b8
-        L_0x01b3:
             org.telegram.ui.Components.ProgressButton r1 = r0.addButton
             r1.setVisibility(r10)
-        L_0x01b8:
+            goto L_0x01e3
+        L_0x01cf:
+            org.telegram.ui.Components.Premium.PremiumButtonView r1 = r0.unlockButton
+            r1.setVisibility(r10)
+            boolean r1 = r0.isInstalled
+            if (r1 == 0) goto L_0x01de
+            android.widget.TextView r1 = r0.delButton
+            r1.setVisibility(r10)
+            goto L_0x01e3
+        L_0x01de:
+            org.telegram.ui.Components.ProgressButton r1 = r0.addButton
+            r1.setVisibility(r10)
+        L_0x01e3:
             android.animation.AnimatorSet r1 = new android.animation.AnimatorSet
             r1.<init>()
             r0.currentAnimation = r1
             r4 = 250(0xfa, double:1.235E-321)
             r1.setDuration(r4)
             android.animation.AnimatorSet r1 = r0.currentAnimation
-            r4 = 6
+            r4 = 8
             android.animation.Animator[] r4 = new android.animation.Animator[r4]
             android.widget.TextView r5 = r0.delButton
             android.util.Property r6 = android.view.View.ALPHA
             float[] r7 = new float[r9]
             boolean r8 = r0.isInstalled
-            if (r8 == 0) goto L_0x01d6
+            if (r8 == 0) goto L_0x0206
+            boolean r8 = r0.isLocked
+            if (r8 != 0) goto L_0x0206
             r8 = 1065353216(0x3var_, float:1.0)
-            goto L_0x01d7
-        L_0x01d6:
+            goto L_0x0207
+        L_0x0206:
             r8 = 0
-        L_0x01d7:
+        L_0x0207:
             r7[r10] = r8
             android.animation.ObjectAnimator r5 = android.animation.ObjectAnimator.ofFloat(r5, r6, r7)
             r4[r10] = r5
@@ -390,12 +448,14 @@ public class FeaturedStickerSetCell2 extends FrameLayout {
             android.util.Property r6 = android.view.View.SCALE_X
             float[] r7 = new float[r9]
             boolean r8 = r0.isInstalled
-            if (r8 == 0) goto L_0x01ec
+            if (r8 == 0) goto L_0x0220
+            boolean r8 = r0.isLocked
+            if (r8 != 0) goto L_0x0220
             r8 = 1065353216(0x3var_, float:1.0)
-            goto L_0x01ed
-        L_0x01ec:
+            goto L_0x0221
+        L_0x0220:
             r8 = 0
-        L_0x01ed:
+        L_0x0221:
             r7[r10] = r8
             android.animation.ObjectAnimator r5 = android.animation.ObjectAnimator.ofFloat(r5, r6, r7)
             r4[r9] = r5
@@ -404,12 +464,14 @@ public class FeaturedStickerSetCell2 extends FrameLayout {
             android.util.Property r7 = android.view.View.SCALE_Y
             float[] r8 = new float[r9]
             boolean r12 = r0.isInstalled
-            if (r12 == 0) goto L_0x0203
+            if (r12 == 0) goto L_0x023b
+            boolean r12 = r0.isLocked
+            if (r12 != 0) goto L_0x023b
             r12 = 1065353216(0x3var_, float:1.0)
-            goto L_0x0204
-        L_0x0203:
+            goto L_0x023c
+        L_0x023b:
             r12 = 0
-        L_0x0204:
+        L_0x023c:
             r8[r10] = r12
             android.animation.ObjectAnimator r6 = android.animation.ObjectAnimator.ofFloat(r6, r7, r8)
             r4[r5] = r6
@@ -418,12 +480,16 @@ public class FeaturedStickerSetCell2 extends FrameLayout {
             android.util.Property r7 = android.view.View.ALPHA
             float[] r8 = new float[r9]
             boolean r12 = r0.isInstalled
-            if (r12 == 0) goto L_0x0219
-            r12 = 0
-            goto L_0x021b
-        L_0x0219:
+            if (r12 != 0) goto L_0x0257
+            boolean r12 = r0.isLocked
+            if (r12 == 0) goto L_0x0254
+            goto L_0x0257
+        L_0x0254:
             r12 = 1065353216(0x3var_, float:1.0)
-        L_0x021b:
+            goto L_0x0258
+        L_0x0257:
+            r12 = 0
+        L_0x0258:
             r8[r10] = r12
             android.animation.ObjectAnimator r6 = android.animation.ObjectAnimator.ofFloat(r6, r7, r8)
             r4[r5] = r6
@@ -431,23 +497,55 @@ public class FeaturedStickerSetCell2 extends FrameLayout {
             android.util.Property r6 = android.view.View.SCALE_X
             float[] r7 = new float[r9]
             boolean r8 = r0.isInstalled
-            if (r8 == 0) goto L_0x022f
-            r8 = 0
-            goto L_0x0231
-        L_0x022f:
+            if (r8 != 0) goto L_0x0272
+            boolean r8 = r0.isLocked
+            if (r8 == 0) goto L_0x026f
+            goto L_0x0272
+        L_0x026f:
             r8 = 1065353216(0x3var_, float:1.0)
-        L_0x0231:
+            goto L_0x0273
+        L_0x0272:
+            r8 = 0
+        L_0x0273:
             r7[r10] = r8
             android.animation.ObjectAnimator r5 = android.animation.ObjectAnimator.ofFloat(r5, r6, r7)
             r4[r2] = r5
             r2 = 5
-            org.telegram.ui.Components.ProgressButton r5 = r0.addButton
+            org.telegram.ui.Components.Premium.PremiumButtonView r5 = r0.unlockButton
             android.util.Property r6 = android.view.View.SCALE_Y
             float[] r7 = new float[r9]
-            boolean r8 = r0.isInstalled
-            if (r8 == 0) goto L_0x0245
+            boolean r8 = r0.isLocked
+            if (r8 != 0) goto L_0x0288
+            r8 = 0
+            goto L_0x028a
+        L_0x0288:
+            r8 = 1065353216(0x3var_, float:1.0)
+        L_0x028a:
+            r7[r10] = r8
+            android.animation.ObjectAnimator r5 = android.animation.ObjectAnimator.ofFloat(r5, r6, r7)
+            r4[r2] = r5
+            r2 = 6
+            org.telegram.ui.Components.Premium.PremiumButtonView r5 = r0.unlockButton
+            android.util.Property r6 = android.view.View.SCALE_X
+            float[] r7 = new float[r9]
+            boolean r8 = r0.isLocked
+            if (r8 != 0) goto L_0x029f
+            r8 = 0
+            goto L_0x02a1
+        L_0x029f:
+            r8 = 1065353216(0x3var_, float:1.0)
+        L_0x02a1:
+            r7[r10] = r8
+            android.animation.ObjectAnimator r5 = android.animation.ObjectAnimator.ofFloat(r5, r6, r7)
+            r4[r2] = r5
+            r2 = 7
+            org.telegram.ui.Components.Premium.PremiumButtonView r5 = r0.unlockButton
+            android.util.Property r6 = android.view.View.SCALE_Y
+            float[] r7 = new float[r9]
+            boolean r8 = r0.isLocked
+            if (r8 != 0) goto L_0x02b5
             r11 = 0
-        L_0x0245:
+        L_0x02b5:
             r7[r10] = r11
             android.animation.ObjectAnimator r3 = android.animation.ObjectAnimator.ofFloat(r5, r6, r7)
             r4[r2] = r3
@@ -463,9 +561,45 @@ public class FeaturedStickerSetCell2 extends FrameLayout {
             r1.setInterpolator(r2)
             android.animation.AnimatorSet r1 = r0.currentAnimation
             r1.start()
-            goto L_0x02c0
-        L_0x026d:
-            if (r1 == 0) goto L_0x0298
+            goto L_0x0386
+        L_0x02de:
+            if (r1 == 0) goto L_0x031d
+            org.telegram.ui.Components.Premium.PremiumButtonView r1 = r0.unlockButton
+            r1.setVisibility(r10)
+            org.telegram.ui.Components.Premium.PremiumButtonView r1 = r0.unlockButton
+            r1.setAlpha(r11)
+            org.telegram.ui.Components.Premium.PremiumButtonView r1 = r0.unlockButton
+            r1.setScaleX(r11)
+            org.telegram.ui.Components.Premium.PremiumButtonView r1 = r0.unlockButton
+            r1.setScaleY(r11)
+            org.telegram.ui.Components.ProgressButton r1 = r0.addButton
+            r1.setVisibility(r2)
+            org.telegram.ui.Components.ProgressButton r1 = r0.addButton
+            r1.setAlpha(r3)
+            org.telegram.ui.Components.ProgressButton r1 = r0.addButton
+            r1.setScaleX(r3)
+            org.telegram.ui.Components.ProgressButton r1 = r0.addButton
+            r1.setScaleY(r3)
+            android.widget.TextView r1 = r0.delButton
+            r1.setVisibility(r2)
+            android.widget.TextView r1 = r0.delButton
+            r1.setAlpha(r3)
+            android.widget.TextView r1 = r0.delButton
+            r1.setScaleX(r3)
+            android.widget.TextView r1 = r0.delButton
+            r1.setScaleY(r3)
+            goto L_0x0386
+        L_0x031d:
+            org.telegram.ui.Components.Premium.PremiumButtonView r1 = r0.unlockButton
+            r1.setVisibility(r2)
+            org.telegram.ui.Components.Premium.PremiumButtonView r1 = r0.unlockButton
+            r1.setAlpha(r3)
+            org.telegram.ui.Components.Premium.PremiumButtonView r1 = r0.unlockButton
+            r1.setScaleX(r3)
+            org.telegram.ui.Components.Premium.PremiumButtonView r1 = r0.unlockButton
+            r1.setScaleY(r3)
+            boolean r1 = r0.isInstalled
+            if (r1 == 0) goto L_0x035e
             android.widget.TextView r1 = r0.delButton
             r1.setVisibility(r10)
             android.widget.TextView r1 = r0.delButton
@@ -482,8 +616,8 @@ public class FeaturedStickerSetCell2 extends FrameLayout {
             r1.setScaleX(r3)
             org.telegram.ui.Components.ProgressButton r1 = r0.addButton
             r1.setScaleY(r3)
-            goto L_0x02c0
-        L_0x0298:
+            goto L_0x0386
+        L_0x035e:
             org.telegram.ui.Components.ProgressButton r1 = r0.addButton
             r1.setVisibility(r10)
             org.telegram.ui.Components.ProgressButton r1 = r0.addButton
@@ -500,7 +634,7 @@ public class FeaturedStickerSetCell2 extends FrameLayout {
             r1.setScaleX(r3)
             android.widget.TextView r1 = r0.delButton
             r1.setScaleY(r3)
-        L_0x02c0:
+        L_0x0386:
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Cells.FeaturedStickerSetCell2.setStickersSet(org.telegram.tgnet.TLRPC$StickerSetCovered, boolean, boolean, boolean, boolean):void");

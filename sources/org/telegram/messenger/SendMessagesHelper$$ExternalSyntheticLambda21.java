@@ -16,6 +16,6 @@ public final /* synthetic */ class SendMessagesHelper$$ExternalSyntheticLambda21
     }
 
     public final void run() {
-        SendMessagesHelper.lambda$prepareSendingMedia$84(this.f$0, this.f$1, this.f$2, this.f$3);
+        SendMessagesHelper.lambda$prepareSendingMedia$86(this.f$0, this.f$1, this.f$2, this.f$3);
     }
 }

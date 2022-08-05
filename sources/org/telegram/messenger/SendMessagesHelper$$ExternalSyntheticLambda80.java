@@ -6,14 +6,14 @@ import org.telegram.tgnet.TLRPC$TL_error;
 
 public final /* synthetic */ class SendMessagesHelper$$ExternalSyntheticLambda80 implements RequestDelegate {
     public final /* synthetic */ SendMessagesHelper f$0;
-    public final /* synthetic */ Runnable f$1;
+    public final /* synthetic */ long f$1;
 
-    public /* synthetic */ SendMessagesHelper$$ExternalSyntheticLambda80(SendMessagesHelper sendMessagesHelper, Runnable runnable) {
+    public /* synthetic */ SendMessagesHelper$$ExternalSyntheticLambda80(SendMessagesHelper sendMessagesHelper, long j) {
         this.f$0 = sendMessagesHelper;
-        this.f$1 = runnable;
+        this.f$1 = j;
     }
 
     public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        this.f$0.lambda$sendReaction$22(this.f$1, tLObject, tLRPC$TL_error);
+        this.f$0.lambda$sendGame$31(this.f$1, tLObject, tLRPC$TL_error);
     }
 }

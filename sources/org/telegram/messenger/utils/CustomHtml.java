@@ -19,17 +19,13 @@ public class CustomHtml {
             if (nextSpanTransition < 0) {
                 nextSpanTransition = i2;
             }
-            Object[] spans = spanned.getSpans(i, nextSpanTransition, Object.class);
-            if (spans != null) {
-                for (Object obj : spans) {
-                    if (obj instanceof TextStyleSpan) {
-                        TextStyleSpan textStyleSpan = (TextStyleSpan) obj;
+            TextStyleSpan[] textStyleSpanArr = (TextStyleSpan[]) spanned.getSpans(i, nextSpanTransition, TextStyleSpan.class);
+            if (textStyleSpanArr != null) {
+                for (TextStyleSpan textStyleSpan : textStyleSpanArr) {
+                    if (textStyleSpan != null) {
                         int styleFlags = textStyleSpan.getStyleFlags();
                         if ((styleFlags & 768) > 0) {
                             sb.append("<spoiler>");
-                        }
-                        if ((styleFlags & 4) > 0) {
-                            sb.append("<pre>");
                         }
                         if ((styleFlags & 1) > 0) {
                             sb.append("<b>");
@@ -48,20 +44,15 @@ public class CustomHtml {
                             sb.append(textStyleSpan.getTextStyleRun().urlEntity.url);
                             sb.append("\">");
                         }
-                    }
-                    if (obj instanceof URLSpanMono) {
+                    } else if (textStyleSpan instanceof URLSpanMono) {
                         sb.append("<pre>");
                     }
                 }
             }
             toHTML_2_wrapURLReplacements(sb, spanned, i, nextSpanTransition);
-            if (spans != null) {
-                for (Object obj2 : spans) {
-                    if (obj2 instanceof URLSpanMono) {
-                        sb.append("</pre>");
-                    }
-                    if (obj2 instanceof TextStyleSpan) {
-                        TextStyleSpan textStyleSpan2 = (TextStyleSpan) obj2;
+            if (textStyleSpanArr != null) {
+                for (TextStyleSpan textStyleSpan2 : textStyleSpanArr) {
+                    if (textStyleSpan2 != null) {
                         int styleFlags2 = textStyleSpan2.getStyleFlags();
                         if (!((styleFlags2 & 128) <= 0 || textStyleSpan2.getTextStyleRun() == null || textStyleSpan2.getTextStyleRun().urlEntity == null)) {
                             sb.append("</a>");
@@ -77,9 +68,6 @@ public class CustomHtml {
                         }
                         if ((styleFlags2 & 1) > 0) {
                             sb.append("</b>");
-                        }
-                        if ((styleFlags2 & 4) > 0) {
-                            sb.append("</pre>");
                         }
                         if ((styleFlags2 & 768) > 0) {
                             sb.append("</spoiler>");
@@ -105,7 +93,7 @@ public class CustomHtml {
                     sb.append("\">");
                 }
             }
-            toHTML_3_wrapAnimatedEmoji(sb, spanned, i, nextSpanTransition);
+            toHTML_3_wrapMonoscape(sb, spanned, i, nextSpanTransition);
             if (uRLSpanReplacementArr != null) {
                 for (int i3 = 0; i3 < uRLSpanReplacementArr.length; i3++) {
                     sb.append("</a>");
@@ -115,7 +103,33 @@ public class CustomHtml {
         }
     }
 
-    private static void toHTML_3_wrapAnimatedEmoji(StringBuilder sb, Spanned spanned, int i, int i2) {
+    private static void toHTML_3_wrapMonoscape(StringBuilder sb, Spanned spanned, int i, int i2) {
+        while (i < i2) {
+            int nextSpanTransition = spanned.nextSpanTransition(i, i2, URLSpanMono.class);
+            if (nextSpanTransition < 0) {
+                nextSpanTransition = i2;
+            }
+            URLSpanMono[] uRLSpanMonoArr = (URLSpanMono[]) spanned.getSpans(i, nextSpanTransition, URLSpanMono.class);
+            if (uRLSpanMonoArr != null) {
+                for (URLSpanMono uRLSpanMono : uRLSpanMonoArr) {
+                    if (uRLSpanMono != null) {
+                        sb.append("<pre>");
+                    }
+                }
+            }
+            toHTML_4_wrapAnimatedEmoji(sb, spanned, i, nextSpanTransition);
+            if (uRLSpanMonoArr != null) {
+                for (URLSpanMono uRLSpanMono2 : uRLSpanMonoArr) {
+                    if (uRLSpanMono2 != null) {
+                        sb.append("</pre>");
+                    }
+                }
+            }
+            i = nextSpanTransition;
+        }
+    }
+
+    private static void toHTML_4_wrapAnimatedEmoji(StringBuilder sb, Spanned spanned, int i, int i2) {
         while (i < i2) {
             int nextSpanTransition = spanned.nextSpanTransition(i, i2, AnimatedEmojiSpan.class);
             if (nextSpanTransition < 0) {
@@ -124,15 +138,15 @@ public class CustomHtml {
             AnimatedEmojiSpan[] animatedEmojiSpanArr = (AnimatedEmojiSpan[]) spanned.getSpans(i, nextSpanTransition, AnimatedEmojiSpan.class);
             if (animatedEmojiSpanArr != null) {
                 for (AnimatedEmojiSpan animatedEmojiSpan : animatedEmojiSpanArr) {
-                    if (animatedEmojiSpan != null) {
+                    if (animatedEmojiSpan != null && !animatedEmojiSpan.standard) {
                         sb.append("<animated-emoji data-document-id=\"" + animatedEmojiSpan.documentId + "\">");
                     }
                 }
             }
-            toHTML_4_withinStyle(sb, spanned, i, nextSpanTransition);
+            toHTML_5_withinStyle(sb, spanned, i, nextSpanTransition);
             if (animatedEmojiSpanArr != null) {
                 for (AnimatedEmojiSpan animatedEmojiSpan2 : animatedEmojiSpanArr) {
-                    if (animatedEmojiSpan2 != null) {
+                    if (animatedEmojiSpan2 != null && !animatedEmojiSpan2.standard) {
                         sb.append("</animated-emoji>");
                     }
                 }
@@ -141,7 +155,7 @@ public class CustomHtml {
         }
     }
 
-    private static void toHTML_4_withinStyle(StringBuilder sb, CharSequence charSequence, int i, int i2) {
+    private static void toHTML_5_withinStyle(StringBuilder sb, CharSequence charSequence, int i, int i2) {
         int i3;
         char charAt;
         while (i < i2) {

@@ -258,6 +258,10 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
         return true;
     }
 
+    public boolean hasForceLightStatusBar() {
+        return true;
+    }
+
     public boolean isSwipeBackEnabled(MotionEvent motionEvent) {
         return false;
     }

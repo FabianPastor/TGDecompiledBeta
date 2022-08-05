@@ -12,6 +12,6 @@ public final /* synthetic */ class Theme$$ExternalSyntheticLambda0 implements Ru
     }
 
     public final void run() {
-        Theme.lambda$loadRemoteThemes$5(this.f$0, this.f$1);
+        Theme.lambda$loadRemoteThemes$8(this.f$0, this.f$1);
     }
 }

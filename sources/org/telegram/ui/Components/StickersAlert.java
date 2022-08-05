@@ -758,6 +758,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
             private boolean fullHeight;
             private int lastNotifyWidth;
             private RectF rect = new RectF();
+            private Boolean statusBarOpen;
 
             public boolean onInterceptTouchEvent(MotionEvent motionEvent) {
                 if (motionEvent.getAction() != 0 || StickersAlert.this.scrollOffsetY == 0 || motionEvent.getY() >= ((float) StickersAlert.this.scrollOffsetY)) {
@@ -1081,10 +1082,26 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
                 }
             }
 
+            private void updateLightStatusBar(boolean z) {
+                Boolean bool = this.statusBarOpen;
+                if (bool == null || bool.booleanValue() != z) {
+                    boolean z2 = true;
+                    boolean z3 = AndroidUtilities.computePerceivedBrightness(StickersAlert.this.getThemedColor("dialogBackground")) > 0.721f;
+                    if (AndroidUtilities.computePerceivedBrightness(Theme.blendOver(StickersAlert.this.getThemedColor("actionBarDefault"), NUM)) <= 0.721f) {
+                        z2 = false;
+                    }
+                    if (!z) {
+                        z3 = z2;
+                    }
+                    AndroidUtilities.setLightStatusBar(StickersAlert.this.getWindow(), z3);
+                }
+            }
+
             /* access modifiers changed from: protected */
             /* JADX WARNING: Removed duplicated region for block: B:15:0x00b1  */
-            /* JADX WARNING: Removed duplicated region for block: B:18:0x0148  */
-            /* JADX WARNING: Removed duplicated region for block: B:20:? A[RETURN, SYNTHETIC] */
+            /* JADX WARNING: Removed duplicated region for block: B:18:0x016d  */
+            /* JADX WARNING: Removed duplicated region for block: B:21:0x0173  */
+            /* JADX WARNING: Removed duplicated region for block: B:23:? A[RETURN, SYNTHETIC] */
             /* Code decompiled incorrectly, please refer to instructions dump. */
             public void onDraw(android.graphics.Canvas r14) {
                 /*
@@ -1172,94 +1189,101 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
                     android.graphics.drawable.Drawable r2 = r2.shadowDrawable
                     r2.draw(r14)
                     java.lang.String r2 = "dialogBackground"
-                    int r4 = (r3 > r5 ? 1 : (r3 == r5 ? 0 : -1))
-                    if (r4 == 0) goto L_0x0102
-                    android.graphics.Paint r4 = org.telegram.ui.ActionBar.Theme.dialogs_onlineCirclePaint
-                    org.telegram.ui.Components.StickersAlert r5 = org.telegram.ui.Components.StickersAlert.this
-                    int r5 = r5.getThemedColor(r2)
-                    r4.setColor(r5)
-                    android.graphics.RectF r4 = r13.rect
-                    org.telegram.ui.Components.StickersAlert r5 = org.telegram.ui.Components.StickersAlert.this
-                    int r5 = r5.backgroundPaddingLeft
-                    float r5 = (float) r5
-                    org.telegram.ui.Components.StickersAlert r7 = org.telegram.ui.Components.StickersAlert.this
-                    int r7 = r7.backgroundPaddingTop
-                    int r7 = r7 + r1
-                    float r7 = (float) r7
-                    int r8 = r13.getMeasuredWidth()
-                    org.telegram.ui.Components.StickersAlert r9 = org.telegram.ui.Components.StickersAlert.this
-                    int r9 = r9.backgroundPaddingLeft
-                    int r8 = r8 - r9
+                    int r7 = (r3 > r5 ? 1 : (r3 == r5 ? 0 : -1))
+                    if (r7 == 0) goto L_0x0102
+                    android.graphics.Paint r7 = org.telegram.ui.ActionBar.Theme.dialogs_onlineCirclePaint
+                    org.telegram.ui.Components.StickersAlert r8 = org.telegram.ui.Components.StickersAlert.this
+                    int r8 = r8.getThemedColor(r2)
+                    r7.setColor(r8)
+                    android.graphics.RectF r7 = r13.rect
+                    org.telegram.ui.Components.StickersAlert r8 = org.telegram.ui.Components.StickersAlert.this
+                    int r8 = r8.backgroundPaddingLeft
                     float r8 = (float) r8
                     org.telegram.ui.Components.StickersAlert r9 = org.telegram.ui.Components.StickersAlert.this
                     int r9 = r9.backgroundPaddingTop
                     int r9 = r9 + r1
+                    float r9 = (float) r9
+                    int r10 = r13.getMeasuredWidth()
+                    org.telegram.ui.Components.StickersAlert r11 = org.telegram.ui.Components.StickersAlert.this
+                    int r11 = r11.backgroundPaddingLeft
+                    int r10 = r10 - r11
+                    float r10 = (float) r10
+                    org.telegram.ui.Components.StickersAlert r11 = org.telegram.ui.Components.StickersAlert.this
+                    int r11 = r11.backgroundPaddingTop
+                    int r11 = r11 + r1
                     r1 = 1103101952(0x41CLASSNAME, float:24.0)
                     int r1 = org.telegram.messenger.AndroidUtilities.dp(r1)
-                    int r9 = r9 + r1
-                    float r1 = (float) r9
-                    r4.set(r5, r7, r8, r1)
+                    int r11 = r11 + r1
+                    float r1 = (float) r11
+                    r7.set(r8, r9, r10, r1)
                     android.graphics.RectF r1 = r13.rect
-                    r4 = 1094713344(0x41400000, float:12.0)
-                    int r5 = org.telegram.messenger.AndroidUtilities.dp(r4)
-                    float r5 = (float) r5
-                    float r5 = r5 * r3
-                    int r4 = org.telegram.messenger.AndroidUtilities.dp(r4)
-                    float r4 = (float) r4
-                    float r4 = r4 * r3
+                    r7 = 1094713344(0x41400000, float:12.0)
+                    int r8 = org.telegram.messenger.AndroidUtilities.dp(r7)
+                    float r8 = (float) r8
+                    float r8 = r8 * r3
+                    int r7 = org.telegram.messenger.AndroidUtilities.dp(r7)
+                    float r7 = (float) r7
+                    float r7 = r7 * r3
                     android.graphics.Paint r3 = org.telegram.ui.ActionBar.Theme.dialogs_onlineCirclePaint
-                    r14.drawRoundRect(r1, r5, r4, r3)
+                    r14.drawRoundRect(r1, r8, r7, r3)
                 L_0x0102:
+                    int r1 = org.telegram.messenger.AndroidUtilities.statusBarHeight
                     r1 = 1108344832(0x42100000, float:36.0)
                     int r1 = org.telegram.messenger.AndroidUtilities.dp(r1)
                     android.graphics.RectF r3 = r13.rect
-                    int r4 = r13.getMeasuredWidth()
-                    int r4 = r4 - r1
-                    int r4 = r4 / 2
-                    float r4 = (float) r4
-                    float r5 = (float) r0
                     int r7 = r13.getMeasuredWidth()
-                    int r7 = r7 + r1
+                    int r7 = r7 - r1
                     int r7 = r7 / 2
-                    float r1 = (float) r7
-                    r7 = 1082130432(0x40800000, float:4.0)
-                    int r7 = org.telegram.messenger.AndroidUtilities.dp(r7)
-                    int r0 = r0 + r7
+                    float r7 = (float) r7
+                    float r8 = (float) r0
+                    int r9 = r13.getMeasuredWidth()
+                    int r9 = r9 + r1
+                    int r9 = r9 / 2
+                    float r1 = (float) r9
+                    r9 = 1082130432(0x40800000, float:4.0)
+                    int r9 = org.telegram.messenger.AndroidUtilities.dp(r9)
+                    int r9 = r9 + r0
+                    float r9 = (float) r9
+                    r3.set(r7, r8, r1, r9)
+                    android.graphics.Paint r1 = org.telegram.ui.ActionBar.Theme.dialogs_onlineCirclePaint
+                    org.telegram.ui.Components.StickersAlert r3 = org.telegram.ui.Components.StickersAlert.this
+                    java.lang.String r7 = "key_sheet_scrollUp"
+                    int r3 = r3.getThemedColor(r7)
+                    r1.setColor(r3)
+                    android.graphics.Paint r1 = org.telegram.ui.ActionBar.Theme.dialogs_onlineCirclePaint
+                    r3 = 1132396544(0x437var_, float:255.0)
+                    r7 = 0
+                    int r8 = org.telegram.messenger.AndroidUtilities.statusBarHeight
+                    int r0 = r0 - r8
                     float r0 = (float) r0
-                    r3.set(r4, r5, r1, r0)
-                    android.graphics.Paint r0 = org.telegram.ui.ActionBar.Theme.dialogs_onlineCirclePaint
-                    org.telegram.ui.Components.StickersAlert r1 = org.telegram.ui.Components.StickersAlert.this
-                    java.lang.String r3 = "key_sheet_scrollUp"
-                    int r1 = r1.getThemedColor(r3)
-                    r0.setColor(r1)
+                    r8 = 1098907648(0x41800000, float:16.0)
+                    int r8 = org.telegram.messenger.AndroidUtilities.dp(r8)
+                    float r8 = (float) r8
+                    float r0 = r0 / r8
+                    float r0 = java.lang.Math.min(r5, r0)
+                    float r0 = java.lang.Math.max(r7, r0)
+                    float r0 = r0 * r3
+                    int r0 = (int) r0
+                    r1.setAlpha(r0)
                     android.graphics.RectF r0 = r13.rect
                     r1 = 1073741824(0x40000000, float:2.0)
                     int r3 = org.telegram.messenger.AndroidUtilities.dp(r1)
                     float r3 = (float) r3
                     int r1 = org.telegram.messenger.AndroidUtilities.dp(r1)
                     float r1 = (float) r1
-                    android.graphics.Paint r4 = org.telegram.ui.ActionBar.Theme.dialogs_onlineCirclePaint
-                    r14.drawRoundRect(r0, r3, r1, r4)
-                    if (r6 <= 0) goto L_0x0194
-                    org.telegram.ui.Components.StickersAlert r0 = org.telegram.ui.Components.StickersAlert.this
-                    int r0 = r0.getThemedColor(r2)
-                    r1 = 255(0xff, float:3.57E-43)
-                    int r2 = android.graphics.Color.red(r0)
-                    float r2 = (float) r2
-                    r3 = 1061997773(0x3f4ccccd, float:0.8)
-                    float r2 = r2 * r3
-                    int r2 = (int) r2
-                    int r4 = android.graphics.Color.green(r0)
-                    float r4 = (float) r4
-                    float r4 = r4 * r3
-                    int r4 = (int) r4
-                    int r0 = android.graphics.Color.blue(r0)
-                    float r0 = (float) r0
-                    float r0 = r0 * r3
-                    int r0 = (int) r0
-                    int r0 = android.graphics.Color.argb(r1, r2, r4, r0)
-                    android.graphics.Paint r1 = org.telegram.ui.ActionBar.Theme.dialogs_onlineCirclePaint
-                    r1.setColor(r0)
+                    android.graphics.Paint r5 = org.telegram.ui.ActionBar.Theme.dialogs_onlineCirclePaint
+                    r14.drawRoundRect(r0, r3, r1, r5)
+                    int r0 = org.telegram.messenger.AndroidUtilities.statusBarHeight
+                    int r0 = r0 / 2
+                    if (r6 <= r0) goto L_0x016e
+                    r4 = 1
+                L_0x016e:
+                    r13.updateLightStatusBar(r4)
+                    if (r6 <= 0) goto L_0x019e
+                    android.graphics.Paint r0 = org.telegram.ui.ActionBar.Theme.dialogs_onlineCirclePaint
+                    org.telegram.ui.Components.StickersAlert r1 = org.telegram.ui.Components.StickersAlert.this
+                    int r1 = r1.getThemedColor(r2)
+                    r0.setColor(r1)
                     org.telegram.ui.Components.StickersAlert r0 = org.telegram.ui.Components.StickersAlert.this
                     int r0 = r0.backgroundPaddingLeft
                     float r8 = (float) r0
@@ -1276,7 +1300,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
                     android.graphics.Paint r12 = org.telegram.ui.ActionBar.Theme.dialogs_onlineCirclePaint
                     r7 = r14
                     r7.drawRect(r8, r9, r10, r11, r12)
-                L_0x0194:
+                L_0x019e:
                     return
                 */
                 throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.StickersAlert.AnonymousClass3.onDraw(android.graphics.Canvas):void");
@@ -1838,7 +1862,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
             r0.setBackground(r3)
             r12.setButton(r3, r3, r3)
             org.telegram.ui.Components.Premium.PremiumButtonView r0 = r12.premiumButtonView
-            r1 = 2131628816(0x7f0e1310, float:1.8884935E38)
+            r1 = 2131628818(0x7f0e1312, float:1.888494E38)
             java.lang.String r2 = "UnlockPremiumEmoji"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             org.telegram.ui.Components.StickersAlert$$ExternalSyntheticLambda12 r2 = new org.telegram.ui.Components.StickersAlert$$ExternalSyntheticLambda12

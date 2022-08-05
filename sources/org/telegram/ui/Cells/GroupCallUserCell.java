@@ -891,7 +891,7 @@ public class GroupCallUserCell extends FrameLayout {
             if (r5 == 0) goto L_0x01a8
             org.telegram.ui.ActionBar.SimpleTextView[] r5 = r0.statusTextView
             r5 = r5[r15]
-            r10 = 2131628620(0x7f0e124c, float:1.8884538E38)
+            r10 = 2131628622(0x7f0e124e, float:1.8884542E38)
             java.lang.String r11 = "TapToAddPhotoOrBio"
             java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r11, r10)
             r5.setText(r10)
@@ -899,7 +899,7 @@ public class GroupCallUserCell extends FrameLayout {
         L_0x01a8:
             org.telegram.ui.ActionBar.SimpleTextView[] r5 = r0.statusTextView
             r5 = r5[r15]
-            r10 = 2131628621(0x7f0e124d, float:1.888454E38)
+            r10 = 2131628623(0x7f0e124f, float:1.8884544E38)
             java.lang.String r11 = "TapToAddPhotoOrDescription"
             java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r11, r10)
             r5.setText(r10)
@@ -916,7 +916,7 @@ public class GroupCallUserCell extends FrameLayout {
             if (r5 == 0) goto L_0x01dd
             org.telegram.ui.ActionBar.SimpleTextView[] r5 = r0.statusTextView
             r5 = r5[r15]
-            r10 = 2131628617(0x7f0e1249, float:1.8884532E38)
+            r10 = 2131628619(0x7f0e124b, float:1.8884536E38)
             java.lang.String r11 = "TapToAddBio"
             java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r11, r10)
             r5.setText(r10)
@@ -924,7 +924,7 @@ public class GroupCallUserCell extends FrameLayout {
         L_0x01dd:
             org.telegram.ui.ActionBar.SimpleTextView[] r5 = r0.statusTextView
             r5 = r5[r15]
-            r10 = 2131628618(0x7f0e124a, float:1.8884534E38)
+            r10 = 2131628620(0x7f0e124c, float:1.8884538E38)
             java.lang.String r11 = "TapToAddDescription"
             java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r11, r10)
             r5.setText(r10)
@@ -940,7 +940,7 @@ public class GroupCallUserCell extends FrameLayout {
             if (r5 != 0) goto L_0x021d
             org.telegram.ui.ActionBar.SimpleTextView[] r5 = r0.statusTextView
             r5 = r5[r15]
-            r10 = 2131628619(0x7f0e124b, float:1.8884536E38)
+            r10 = 2131628621(0x7f0e124d, float:1.888454E38)
             java.lang.String r11 = "TapToAddPhoto"
             java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r11, r10)
             r5.setText(r10)
@@ -953,7 +953,7 @@ public class GroupCallUserCell extends FrameLayout {
         L_0x021d:
             org.telegram.ui.ActionBar.SimpleTextView[] r5 = r0.statusTextView
             r5 = r5[r15]
-            r10 = 2131628733(0x7f0e12bd, float:1.8884767E38)
+            r10 = 2131628735(0x7f0e12bf, float:1.8884771E38)
             java.lang.String r11 = "ThisIsYou"
             java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r11, r10)
             r5.setText(r10)

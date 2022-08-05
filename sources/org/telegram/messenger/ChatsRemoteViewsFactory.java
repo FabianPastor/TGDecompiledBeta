@@ -90,7 +90,7 @@ class ChatsRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
             r3 = 2131427358(0x7f0b001e, float:1.847633E38)
             r0.<init>(r2, r3)
             r2 = 2131230952(0x7var_e8, float:1.8077971E38)
-            r3 = 2131629333(0x7f0e1515, float:1.8885984E38)
+            r3 = 2131629335(0x7f0e1517, float:1.8885988E38)
             java.lang.String r4 = "WidgetLoggedOff"
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r4, r3)
             r0.setTextViewText(r2, r3)
@@ -107,7 +107,7 @@ class ChatsRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
             r5 = 2131427359(0x7f0b001f, float:1.8476332E38)
             r0.<init>(r2, r5)
             r2 = 2131230954(0x7var_ea, float:1.8077975E38)
-            r5 = 2131628625(0x7f0e1251, float:1.8884548E38)
+            r5 = 2131628627(0x7f0e1253, float:1.8884552E38)
             java.lang.String r6 = "TapToEditWidget"
             java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r6, r5)
             r0.setTextViewText(r2, r5)

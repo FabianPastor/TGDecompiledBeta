@@ -118,6 +118,9 @@ public class AnimatedEmojiDrawable extends Drawable {
     public void setTime(long j) {
         ImageReceiver imageReceiver2 = this.imageReceiver;
         if (imageReceiver2 != null) {
+            if (this.cacheType == 5) {
+                j = 0;
+            }
             imageReceiver2.setCurrentTime(j);
         }
     }
@@ -125,6 +128,9 @@ public class AnimatedEmojiDrawable extends Drawable {
     public void update(long j) {
         ImageReceiver imageReceiver2 = this.imageReceiver;
         if (imageReceiver2 != null) {
+            if (this.cacheType == 5) {
+                j = 0;
+            }
             if (imageReceiver2.getLottieAnimation() != null) {
                 this.imageReceiver.getLottieAnimation().updateCurrentFrame(j, true);
             }
@@ -383,6 +389,8 @@ public class AnimatedEmojiDrawable extends Drawable {
             this.sizedp = (int) (((Math.abs(Theme.chat_msgTextPaintEmoji[2].ascent()) + Math.abs(Theme.chat_msgTextPaintEmoji[2].descent())) * 1.15f) / AndroidUtilities.density);
         } else if (i == 2 || i == 4 || i == 3) {
             this.sizedp = 34;
+        } else if (i == 5) {
+            this.sizedp = (int) (((Math.abs(Theme.chat_msgTextPaintEmoji[0].ascent()) + Math.abs(Theme.chat_msgTextPaintEmoji[0].descent())) * 1.15f) / AndroidUtilities.density);
         } else {
             this.sizedp = 34;
         }
@@ -406,6 +414,8 @@ public class AnimatedEmojiDrawable extends Drawable {
             this.sizedp = (int) (((Math.abs(Theme.chat_msgTextPaintEmoji[2].ascent()) + Math.abs(Theme.chat_msgTextPaintEmoji[2].descent())) * 1.15f) / AndroidUtilities.density);
         } else if (i == 2 || i == 4 || i == 3) {
             this.sizedp = 34;
+        } else if (i == 5) {
+            this.sizedp = (int) (((Math.abs(Theme.chat_msgTextPaintEmoji[0].ascent()) + Math.abs(Theme.chat_msgTextPaintEmoji[0].descent())) * 1.15f) / AndroidUtilities.density);
         } else {
             this.sizedp = 34;
         }
@@ -421,19 +431,19 @@ public class AnimatedEmojiDrawable extends Drawable {
         return this.document;
     }
 
-    /* JADX WARNING: Code restructure failed: missing block: B:18:0x007e, code lost:
-        r2 = r0.cacheType;
+    /* JADX WARNING: Code restructure failed: missing block: B:9:0x0037, code lost:
+        r1 = r0.cacheType;
      */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     private void initDocument() {
         /*
-            r23 = this;
-            r0 = r23
+            r25 = this;
+            r0 = r25
             org.telegram.tgnet.TLRPC$Document r1 = r0.document
-            if (r1 == 0) goto L_0x0180
+            if (r1 == 0) goto L_0x01c5
             org.telegram.messenger.ImageReceiver r1 = r0.imageReceiver
             if (r1 == 0) goto L_0x000c
-            goto L_0x0180
+            goto L_0x01c5
         L_0x000c:
             org.telegram.ui.Components.AnimatedEmojiDrawable$1 r1 = new org.telegram.ui.Components.AnimatedEmojiDrawable$1
             r1.<init>()
@@ -449,167 +459,203 @@ public class AnimatedEmojiDrawable extends Drawable {
             java.lang.String r2 = r2.toString()
             r1.setUniqKeyPrefix(r2)
         L_0x002d:
-            java.lang.StringBuilder r1 = new java.lang.StringBuilder
-            r1.<init>()
-            int r2 = r0.sizedp
-            r1.append(r2)
-            r1.append(r3)
-            int r2 = r0.sizedp
-            r1.append(r2)
-            java.lang.String r1 = r1.toString()
-            int r2 = r0.cacheType
+            int r1 = org.telegram.messenger.SharedConfig.getDevicePerformanceClass()
+            r2 = 3
             r4 = 2
-            r5 = 1
-            if (r2 != r5) goto L_0x004f
-            int r2 = org.telegram.messenger.SharedConfig.getDevicePerformanceClass()
-            if (r2 >= r4) goto L_0x0060
-        L_0x004f:
-            java.lang.StringBuilder r2 = new java.lang.StringBuilder
-            r2.<init>()
-            r2.append(r1)
-            java.lang.String r1 = "_pcache"
-            r2.append(r1)
-            java.lang.String r1 = r2.toString()
-        L_0x0060:
-            int r2 = r0.cacheType
-            if (r2 == 0) goto L_0x0077
-            if (r2 == r5) goto L_0x0077
-            java.lang.StringBuilder r2 = new java.lang.StringBuilder
-            r2.<init>()
-            r2.append(r1)
-            java.lang.String r1 = "_compress"
-            r2.append(r1)
-            java.lang.String r1 = r2.toString()
-        L_0x0077:
-            int r2 = org.telegram.messenger.SharedConfig.getDevicePerformanceClass()
-            r6 = 3
-            if (r2 != 0) goto L_0x0086
-            int r2 = r0.cacheType
-            if (r2 == r4) goto L_0x0084
-            if (r2 != r6) goto L_0x0086
-        L_0x0084:
-            r2 = 1
-            goto L_0x0087
-        L_0x0086:
-            r2 = 0
-        L_0x0087:
-            org.telegram.tgnet.TLRPC$Document r7 = r0.document
-            java.lang.String r7 = r7.mime_type
-            java.lang.String r8 = "video/webm"
-            boolean r7 = r8.equals(r7)
-            r8 = 90
-            r9 = 0
-            if (r7 == 0) goto L_0x00bc
-            org.telegram.tgnet.TLRPC$Document r4 = r0.document
-            java.util.ArrayList<org.telegram.tgnet.TLRPC$PhotoSize> r4 = r4.thumbs
-            org.telegram.tgnet.TLRPC$PhotoSize r4 = org.telegram.messenger.FileLoader.getClosestPhotoSizeWithSize(r4, r8)
-            org.telegram.tgnet.TLRPC$Document r7 = r0.document
-            org.telegram.messenger.ImageLocation r7 = org.telegram.messenger.ImageLocation.getForDocument(r7)
-            java.lang.StringBuilder r8 = new java.lang.StringBuilder
-            r8.<init>()
-            r8.append(r1)
-            r8.append(r3)
-            java.lang.String r1 = "g"
-            r8.append(r1)
-            java.lang.String r1 = r8.toString()
-            r12 = r1
-            r17 = r9
-            goto L_0x0125
-        L_0x00bc:
+            r5 = 0
+            r6 = 1
+            if (r1 != 0) goto L_0x003f
+            int r1 = r0.cacheType
+            if (r1 == r4) goto L_0x003d
+            if (r1 != r2) goto L_0x003f
+        L_0x003d:
+            r1 = 1
+            goto L_0x0040
+        L_0x003f:
+            r1 = 0
+        L_0x0040:
             java.lang.StringBuilder r7 = new java.lang.StringBuilder
             r7.<init>()
-            int r10 = r0.cacheType
-            if (r10 == 0) goto L_0x00d7
+            int r8 = r0.sizedp
+            r7.append(r8)
+            r7.append(r3)
+            int r8 = r0.sizedp
+            r7.append(r8)
+            java.lang.String r7 = r7.toString()
+            int r8 = r0.cacheType
+            r9 = 5
+            if (r8 == r9) goto L_0x0074
+            if (r8 != r6) goto L_0x0063
+            int r8 = org.telegram.messenger.SharedConfig.getDevicePerformanceClass()
+            if (r8 >= r4) goto L_0x0074
+        L_0x0063:
+            java.lang.StringBuilder r8 = new java.lang.StringBuilder
+            r8.<init>()
+            r8.append(r7)
+            java.lang.String r7 = "_pcache"
+            r8.append(r7)
+            java.lang.String r7 = r8.toString()
+        L_0x0074:
+            int r8 = r0.cacheType
+            if (r8 == 0) goto L_0x008b
+            if (r8 == r6) goto L_0x008b
+            java.lang.StringBuilder r8 = new java.lang.StringBuilder
+            r8.<init>()
+            r8.append(r7)
+            java.lang.String r7 = "_compress"
+            r8.append(r7)
+            java.lang.String r7 = r8.toString()
+        L_0x008b:
+            int r8 = r0.cacheType
+            if (r8 != r9) goto L_0x00a0
+            java.lang.StringBuilder r8 = new java.lang.StringBuilder
+            r8.<init>()
+            r8.append(r7)
+            java.lang.String r7 = "firstframe"
+            r8.append(r7)
+            java.lang.String r7 = r8.toString()
+        L_0x00a0:
+            org.telegram.tgnet.TLRPC$Document r8 = r0.document
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$PhotoSize> r8 = r8.thumbs
+            r10 = 90
+            org.telegram.tgnet.TLRPC$PhotoSize r8 = org.telegram.messenger.FileLoader.getClosestPhotoSizeWithSize(r8, r10)
+            org.telegram.tgnet.TLRPC$Document r10 = r0.document
+            java.lang.String r10 = r10.mime_type
+            java.lang.String r11 = "video/webm"
+            boolean r10 = r11.equals(r10)
+            r11 = 0
+            if (r10 == 0) goto L_0x00d4
+            org.telegram.tgnet.TLRPC$Document r4 = r0.document
+            org.telegram.messenger.ImageLocation r4 = org.telegram.messenger.ImageLocation.getForDocument(r4)
             java.lang.StringBuilder r10 = new java.lang.StringBuilder
             r10.<init>()
-            int r11 = r0.cacheType
-            r10.append(r11)
+            r10.append(r7)
             r10.append(r3)
+            java.lang.String r7 = "g"
+            r10.append(r7)
+            java.lang.String r7 = r10.toString()
+            r19 = r11
+            goto L_0x0133
+        L_0x00d4:
+            java.lang.StringBuilder r10 = new java.lang.StringBuilder
+            r10.<init>()
+            int r12 = r0.cacheType
+            if (r12 == 0) goto L_0x00ef
+            java.lang.StringBuilder r12 = new java.lang.StringBuilder
+            r12.<init>()
+            int r13 = r0.cacheType
+            r12.append(r13)
+            r12.append(r3)
+            java.lang.String r12 = r12.toString()
+            goto L_0x00f1
+        L_0x00ef:
+            java.lang.String r12 = ""
+        L_0x00f1:
+            r10.append(r12)
+            long r12 = r0.documentId
+            r10.append(r12)
+            java.lang.String r12 = "@"
+            r10.append(r12)
+            r10.append(r7)
             java.lang.String r10 = r10.toString()
-            goto L_0x00d9
-        L_0x00d7:
-            java.lang.String r10 = ""
-        L_0x00d9:
-            r7.append(r10)
-            long r10 = r0.documentId
-            r7.append(r10)
-            java.lang.String r10 = "@"
-            r7.append(r10)
-            r7.append(r1)
-            java.lang.String r7 = r7.toString()
-            int r10 = r0.cacheType
-            if (r10 == r4) goto L_0x00fe
+            int r12 = r0.cacheType
+            if (r12 == r4) goto L_0x0116
             org.telegram.messenger.ImageLoader r4 = org.telegram.messenger.ImageLoader.getInstance()
-            boolean r4 = r4.hasLottieMemCache(r7)
-            if (r4 != 0) goto L_0x00fc
-            goto L_0x00fe
-        L_0x00fc:
-            r4 = r9
-            goto L_0x0112
-        L_0x00fe:
+            boolean r4 = r4.hasLottieMemCache(r10)
+            if (r4 != 0) goto L_0x0114
+            goto L_0x0116
+        L_0x0114:
+            r4 = r11
+            goto L_0x012a
+        L_0x0116:
             org.telegram.tgnet.TLRPC$Document r4 = r0.document
             java.util.ArrayList<org.telegram.tgnet.TLRPC$PhotoSize> r4 = r4.thumbs
-            r7 = 1045220557(0x3e4ccccd, float:0.2)
-            java.lang.String r10 = "windowBackgroundWhiteGrayIcon"
-            org.telegram.messenger.SvgHelper$SvgDrawable r4 = org.telegram.messenger.DocumentObject.getSvgThumb((java.util.ArrayList<org.telegram.tgnet.TLRPC$PhotoSize>) r4, (java.lang.String) r10, (float) r7)
-            if (r4 == 0) goto L_0x0112
-            r7 = 512(0x200, float:7.175E-43)
-            r4.overrideWidthAndHeight(r7, r7)
-        L_0x0112:
-            org.telegram.tgnet.TLRPC$Document r7 = r0.document
-            java.util.ArrayList<org.telegram.tgnet.TLRPC$PhotoSize> r7 = r7.thumbs
-            org.telegram.tgnet.TLRPC$PhotoSize r7 = org.telegram.messenger.FileLoader.getClosestPhotoSizeWithSize(r7, r8)
-            org.telegram.tgnet.TLRPC$Document r8 = r0.document
-            org.telegram.messenger.ImageLocation r8 = org.telegram.messenger.ImageLocation.getForDocument(r8)
-            r12 = r1
-            r17 = r4
-            r4 = r7
-            r7 = r8
-        L_0x0125:
-            if (r2 == 0) goto L_0x0129
-            r11 = r9
-            goto L_0x012a
-        L_0x0129:
-            r11 = r7
+            r10 = 1045220557(0x3e4ccccd, float:0.2)
+            java.lang.String r12 = "windowBackgroundWhiteGrayIcon"
+            org.telegram.messenger.SvgHelper$SvgDrawable r4 = org.telegram.messenger.DocumentObject.getSvgThumb((java.util.ArrayList<org.telegram.tgnet.TLRPC$PhotoSize>) r4, (java.lang.String) r12, (float) r10)
+            if (r4 == 0) goto L_0x012a
+            r10 = 512(0x200, float:7.175E-43)
+            r4.overrideWidthAndHeight(r10, r10)
         L_0x012a:
-            org.telegram.messenger.ImageReceiver r10 = r0.imageReceiver
+            org.telegram.tgnet.TLRPC$Document r10 = r0.document
+            org.telegram.messenger.ImageLocation r10 = org.telegram.messenger.ImageLocation.getForDocument(r10)
+            r19 = r4
+            r4 = r10
+        L_0x0133:
+            if (r1 == 0) goto L_0x0136
+            r4 = r11
+        L_0x0136:
+            int r1 = r0.cacheType
+            if (r1 != r9) goto L_0x0155
+            org.telegram.messenger.ImageReceiver r12 = r0.imageReceiver
+            r13 = 0
+            r14 = 0
+            r17 = 0
+            r18 = 0
             org.telegram.tgnet.TLRPC$Document r1 = r0.document
-            org.telegram.messenger.ImageLocation r13 = org.telegram.messenger.ImageLocation.getForDocument((org.telegram.tgnet.TLRPC$PhotoSize) r4, (org.telegram.tgnet.TLRPC$Document) r1)
+            long r10 = r1.size
+            r22 = 0
+            r24 = 1
+            r15 = r4
+            r16 = r7
+            r20 = r10
+            r23 = r1
+            r12.setImage(r13, r14, r15, r16, r17, r18, r19, r20, r22, r23, r24)
+            goto L_0x0188
+        L_0x0155:
+            org.telegram.messenger.ImageReceiver r12 = r0.imageReceiver
+            org.telegram.tgnet.TLRPC$Document r1 = r0.document
+            org.telegram.messenger.ImageLocation r15 = org.telegram.messenger.ImageLocation.getForDocument((org.telegram.tgnet.TLRPC$PhotoSize) r8, (org.telegram.tgnet.TLRPC$Document) r1)
             java.lang.StringBuilder r1 = new java.lang.StringBuilder
             r1.<init>()
-            int r2 = r0.sizedp
-            r1.append(r2)
+            int r8 = r0.sizedp
+            r1.append(r8)
             r1.append(r3)
-            int r2 = r0.sizedp
-            r1.append(r2)
-            java.lang.String r14 = r1.toString()
-            r15 = 0
-            r16 = 0
+            int r3 = r0.sizedp
+            r1.append(r3)
+            java.lang.String r16 = r1.toString()
+            r17 = 0
+            r18 = 0
             org.telegram.tgnet.TLRPC$Document r1 = r0.document
-            long r2 = r1.size
-            r20 = 0
-            r22 = 1
-            r18 = r2
-            r21 = r1
-            r10.setImage(r11, r12, r13, r14, r15, r16, r17, r18, r20, r21, r22)
+            long r10 = r1.size
+            r22 = 0
+            r24 = 1
+            r13 = r4
+            r14 = r7
+            r20 = r10
+            r23 = r1
+            r12.setImage(r13, r14, r15, r16, r17, r18, r19, r20, r22, r23, r24)
+        L_0x0188:
             int r1 = r0.cacheType
-            if (r1 != r6) goto L_0x0164
+            if (r1 != r2) goto L_0x0192
             org.telegram.messenger.ImageReceiver r1 = r0.imageReceiver
             r2 = 7
             r1.setLayerNum(r2)
-        L_0x0164:
+        L_0x0192:
             org.telegram.messenger.ImageReceiver r1 = r0.imageReceiver
-            r1.setAspectFit(r5)
+            r1.setAspectFit(r6)
+            int r1 = r0.cacheType
+            if (r1 == r9) goto L_0x01ab
             org.telegram.messenger.ImageReceiver r1 = r0.imageReceiver
-            r1.setAllowStartLottieAnimation(r5)
+            r1.setAllowStartLottieAnimation(r6)
+            org.telegram.messenger.ImageReceiver r1 = r0.imageReceiver
+            r1.setAllowStartAnimation(r6)
+            org.telegram.messenger.ImageReceiver r1 = r0.imageReceiver
+            r1.setAutoRepeat(r6)
+            goto L_0x01ba
+        L_0x01ab:
             org.telegram.messenger.ImageReceiver r1 = r0.imageReceiver
             r1.setAllowStartAnimation(r5)
             org.telegram.messenger.ImageReceiver r1 = r0.imageReceiver
-            r1.setAutoRepeat(r5)
+            r1.setAllowStartLottieAnimation(r5)
             org.telegram.messenger.ImageReceiver r1 = r0.imageReceiver
-            r1.setAllowDecodeSingleFrame(r5)
-            r23.updateAttachState()
-        L_0x0180:
+            r1.setAutoRepeat(r5)
+        L_0x01ba:
+            org.telegram.messenger.ImageReceiver r1 = r0.imageReceiver
+            r1.setAllowDecodeSingleFrame(r6)
+            r25.updateAttachState()
+            r25.invalidate()
+        L_0x01c5:
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.AnimatedEmojiDrawable.initDocument():void");

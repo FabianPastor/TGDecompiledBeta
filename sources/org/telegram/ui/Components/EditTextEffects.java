@@ -147,7 +147,7 @@ public class EditTextEffects extends EditText {
     /* access modifiers changed from: protected */
     public void onAttachedToWindow() {
         super.onAttachedToWindow();
-        updateAnimatedEmoji();
+        updateAnimatedEmoji(false);
     }
 
     /* access modifiers changed from: protected */
@@ -182,7 +182,7 @@ public class EditTextEffects extends EditText {
                 }
             }
         }
-        updateAnimatedEmoji();
+        updateAnimatedEmoji(true);
         invalidate();
     }
 
@@ -200,7 +200,7 @@ public class EditTextEffects extends EditText {
     /* access modifiers changed from: protected */
     public void onLayout(boolean z, int i, int i2, int i3, int i4) {
         super.onLayout(z, i, i2, i3, i4);
-        updateAnimatedEmoji();
+        updateAnimatedEmoji(false);
     }
 
     public void setShouldRevealSpoilersByTouch(boolean z) {
@@ -256,11 +256,7 @@ public class EditTextEffects extends EditText {
             this.path.addRect((float) bounds2.left, (float) bounds2.top, (float) bounds2.right, (float) bounds2.bottom, Path.Direction.CW);
         }
         canvas.clipPath(this.path, Region.Op.DIFFERENCE);
-        int length = (getLayout() == null || getLayout().getText() == null) ? 0 : getLayout().getText().length();
-        Layout layout = this.lastLayout;
-        if (!(layout != null && layout == getLayout() && this.lastTextLength == length)) {
-            updateAnimatedEmoji();
-        }
+        updateAnimatedEmoji(false);
         super.onDraw(canvas);
         if (this.animatedEmojiDrawables != null) {
             AnimatedEmojiSpan.drawAnimatedEmojis(canvas, getLayout(), this.animatedEmojiDrawables, 0.0f, this.spoilers, (float) (computeVerticalScrollOffset() - AndroidUtilities.dp(6.0f)), (float) (computeVerticalScrollOffset() + computeVerticalScrollExtent()), 0.0f, 1.0f);
@@ -292,15 +288,12 @@ public class EditTextEffects extends EditText {
         canvas.restore();
     }
 
-    public void updateAnimatedEmoji() {
-        int i = 0;
-        this.animatedEmojiDrawables = AnimatedEmojiSpan.update(AnimatedEmojiDrawable.getCacheTypeForEnterView(), (View) this, this.animatedEmojiDrawables, getLayout());
-        if (!(getLayout() == null || getLayout().getText() == null)) {
-            i = getLayout().getText().length();
-        }
-        if (this.lastLayout != getLayout() || this.lastTextLength != i) {
+    public void updateAnimatedEmoji(boolean z) {
+        int length = (getLayout() == null || getLayout().getText() == null) ? 0 : getLayout().getText().length();
+        if (z || this.lastLayout != getLayout() || this.lastTextLength != length) {
+            this.animatedEmojiDrawables = AnimatedEmojiSpan.update(AnimatedEmojiDrawable.getCacheTypeForEnterView(), (View) this, this.animatedEmojiDrawables, getLayout());
             this.lastLayout = getLayout();
-            this.lastTextLength = i;
+            this.lastTextLength = length;
         }
     }
 

@@ -10,6 +10,6 @@ public final /* synthetic */ class EmojiPacksAlert$$ExternalSyntheticLambda0 imp
     }
 
     public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-        this.f$0.lambda$loadAnimation$4(valueAnimator);
+        this.f$0.lambda$loadAnimation$5(valueAnimator);
     }
 }

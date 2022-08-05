@@ -72,10 +72,10 @@ public class ReactionsEffectOverlay {
         return f2;
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:111:0x05d0  */
-    /* JADX WARNING: Removed duplicated region for block: B:74:0x02e8  */
-    /* JADX WARNING: Removed duplicated region for block: B:75:0x02f9  */
-    /* JADX WARNING: Removed duplicated region for block: B:82:0x0399  */
+    /* JADX WARNING: Removed duplicated region for block: B:110:0x05ce  */
+    /* JADX WARNING: Removed duplicated region for block: B:73:0x02e7  */
+    /* JADX WARNING: Removed duplicated region for block: B:74:0x02fa  */
+    /* JADX WARNING: Removed duplicated region for block: B:81:0x0397  */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     private ReactionsEffectOverlay(android.content.Context r33, org.telegram.ui.ActionBar.BaseFragment r34, org.telegram.ui.Components.ReactionsContainerLayout r35, org.telegram.ui.Cells.ChatMessageCell r36, float r37, float r38, java.lang.String r39, int r40, int r41) {
         /*
@@ -368,7 +368,7 @@ public class ReactionsEffectOverlay {
         L_0x0245:
             r9 = 1
         L_0x0246:
-            if (r0 == 0) goto L_0x0283
+            if (r0 == 0) goto L_0x0284
             int[] r1 = r13.loc
             r0.getLocationOnScreen(r1)
             int[] r0 = r13.loc
@@ -394,14 +394,15 @@ public class ReactionsEffectOverlay {
             org.telegram.ui.Components.ReactionsContainerLayout$ReactionHolderView r3 = r13.holderView
             float r3 = r3.getScaleX()
             float r2 = r2 * r3
-            r17 = r0
-            r18 = r1
+            r16 = r0
+            r17 = r1
             r1 = r2
         L_0x0281:
+            r8 = 2
             r10 = 0
-            goto L_0x02e3
-        L_0x0283:
-            if (r2 == 0) goto L_0x02c5
+            goto L_0x02e5
+        L_0x0284:
+            if (r2 == 0) goto L_0x02c6
             int[] r0 = r13.loc
             r15.getLocationInWindow(r0)
             int[] r0 = r13.loc
@@ -432,11 +433,11 @@ public class ReactionsEffectOverlay {
             float r3 = r3.getImageHeight()
             org.telegram.messenger.ImageReceiver r2 = r2.imageReceiver
             r2.getImageWidth()
-            r17 = r0
-            r18 = r1
+            r16 = r0
+            r17 = r1
             r1 = r3
             goto L_0x0281
-        L_0x02c5:
+        L_0x02c6:
             android.view.ViewParent r0 = r36.getParent()
             android.view.View r0 = (android.view.View) r0
             int[] r1 = r13.loc
@@ -450,36 +451,32 @@ public class ReactionsEffectOverlay {
             r0 = r0[r2]
             float r0 = (float) r0
             float r0 = r0 + r38
-            r18 = r0
-            r17 = r1
+            r17 = r0
+            r16 = r1
             r1 = 0
-        L_0x02e3:
-            r0 = 1073741824(0x40000000, float:2.0)
             r8 = 2
-            if (r11 != r8) goto L_0x02f9
-            r2 = 1107820544(0x42080000, float:34.0)
-            int r2 = org.telegram.messenger.AndroidUtilities.dp(r2)
-            float r3 = (float) r2
-            float r3 = r3 * r0
-            float r0 = org.telegram.messenger.AndroidUtilities.density
-            float r3 = r3 / r0
-            int r0 = (int) r3
+        L_0x02e5:
+            if (r11 != r8) goto L_0x02fa
+            r0 = 1107820544(0x42080000, float:34.0)
+            int r0 = org.telegram.messenger.AndroidUtilities.dp(r0)
+            r2 = 1073741824(0x40000000, float:2.0)
+            float r3 = (float) r0
+            float r3 = r3 * r2
+            float r2 = org.telegram.messenger.AndroidUtilities.density
+            float r3 = r3 / r2
+            int r2 = (int) r3
             r5 = r0
             r4 = r2
             r7 = 1
-            goto L_0x032e
-        L_0x02f9:
-            r7 = 1
-            if (r11 != r7) goto L_0x030a
-            r2 = 1117782016(0x42a00000, float:80.0)
-            int r2 = org.telegram.messenger.AndroidUtilities.dp(r2)
-            float r3 = (float) r2
-            float r3 = r3 * r0
-            float r0 = org.telegram.messenger.AndroidUtilities.density
-            float r3 = r3 / r0
-            int r0 = (int) r3
             goto L_0x032c
-        L_0x030a:
+        L_0x02fa:
+            r7 = 1
+            if (r11 != r7) goto L_0x0308
+            r0 = 1117782016(0x42a00000, float:80.0)
+            int r0 = org.telegram.messenger.AndroidUtilities.dp(r0)
+            int r2 = sizeForAroundReaction()
+            goto L_0x032a
+        L_0x0308:
             r0 = 1135542272(0x43avar_, float:350.0)
             int r0 = org.telegram.messenger.AndroidUtilities.dp(r0)
             android.graphics.Point r2 = org.telegram.messenger.AndroidUtilities.displaySize
@@ -490,16 +487,16 @@ public class ReactionsEffectOverlay {
             float r0 = (float) r0
             r2 = 1061997773(0x3f4ccccd, float:0.8)
             float r0 = r0 * r2
-            int r2 = java.lang.Math.round(r0)
-            int r0 = sizeForBigReaction()
-        L_0x032c:
+            int r0 = java.lang.Math.round(r0)
+            int r2 = sizeForBigReaction()
+        L_0x032a:
             r5 = r0
             r4 = r2
-        L_0x032e:
-            int r3 = r4 >> 1
-            int r2 = r5 >> 1
+        L_0x032c:
+            int r3 = r5 >> 1
+            int r2 = r4 >> 1
             float r0 = (float) r3
-            float r16 = r1 / r0
+            float r18 = r1 / r0
             r0 = 0
             r13.animateInProgress = r0
             r13.animateOutProgress = r0
@@ -515,10 +512,10 @@ public class ReactionsEffectOverlay {
             r2 = r33
             r37 = r3
             r3 = r34
-            r31 = r4
-            r4 = r36
             r20 = r15
-            r15 = r5
+            r15 = r4
+            r4 = r36
+            r31 = r5
             r5 = r39
             r21 = 1
             r7 = r37
@@ -527,11 +524,11 @@ public class ReactionsEffectOverlay {
             r21 = 2
             r8 = r41
             r15 = 2
-            r10 = r16
+            r10 = r18
             r15 = r11
-            r11 = r17
+            r11 = r16
             r15 = r12
-            r12 = r18
+            r12 = r17
             r0.<init>(r2, r3, r4, r5, r6, r7, r8, r9, r10, r11, r12)
             r13.windowView = r0
             org.telegram.ui.Components.Reactions.ReactionsEffectOverlay$AnimationView r0 = new org.telegram.ui.Components.Reactions.ReactionsEffectOverlay$AnimationView
@@ -548,18 +545,18 @@ public class ReactionsEffectOverlay {
             java.lang.Object r1 = r1.get(r15)
             r10 = r1
             org.telegram.tgnet.TLRPC$TL_availableReaction r10 = (org.telegram.tgnet.TLRPC$TL_availableReaction) r10
-            if (r10 == 0) goto L_0x05d0
+            if (r10 == 0) goto L_0x05ce
             java.lang.String r11 = "_"
             r12 = r41
             r1 = 2
-            if (r12 == r1) goto L_0x0428
+            if (r12 == r1) goto L_0x0426
             r1 = 1
-            if (r12 != r1) goto L_0x03a6
+            if (r12 != r1) goto L_0x03a4
             org.telegram.tgnet.TLRPC$Document r1 = r10.around_animation
-            goto L_0x03a8
-        L_0x03a6:
+            goto L_0x03a6
+        L_0x03a4:
             org.telegram.tgnet.TLRPC$Document r1 = r10.effect_animation
-        L_0x03a8:
+        L_0x03a6:
             org.telegram.messenger.ImageReceiver r2 = r0.getImageReceiver()
             java.lang.StringBuilder r3 = new java.lang.StringBuilder
             r3.<init>()
@@ -597,20 +594,20 @@ public class ReactionsEffectOverlay {
             r1.setAllowStartAnimation(r14)
             org.telegram.messenger.ImageReceiver r1 = r0.getImageReceiver()
             org.telegram.ui.Components.RLottieDrawable r1 = r1.getLottieAnimation()
-            if (r1 == 0) goto L_0x0426
+            if (r1 == 0) goto L_0x0424
             org.telegram.messenger.ImageReceiver r1 = r0.getImageReceiver()
             org.telegram.ui.Components.RLottieDrawable r1 = r1.getLottieAnimation()
             r1.setCurrentFrame(r14, r14)
             org.telegram.messenger.ImageReceiver r1 = r0.getImageReceiver()
             org.telegram.ui.Components.RLottieDrawable r1 = r1.getLottieAnimation()
             r1.start()
-        L_0x0426:
+        L_0x0424:
             r1 = 2
-            goto L_0x0429
-        L_0x0428:
+            goto L_0x0427
+        L_0x0426:
             r14 = 0
-        L_0x0429:
-            if (r12 != r1) goto L_0x0478
+        L_0x0427:
+            if (r12 != r1) goto L_0x0476
             org.telegram.tgnet.TLRPC$Document r1 = r10.appear_animation
             org.telegram.messenger.ImageReceiver r2 = r8.getImageReceiver()
             java.lang.StringBuilder r3 = new java.lang.StringBuilder
@@ -640,10 +637,10 @@ public class ReactionsEffectOverlay {
             r7 = 0
             r1 = r8
             r1.setImage((org.telegram.messenger.ImageLocation) r2, (java.lang.String) r3, (org.telegram.messenger.ImageLocation) r4, (java.lang.String) r5, (int) r6, (java.lang.Object) r7)
-            goto L_0x04c6
-        L_0x0478:
+            goto L_0x04c4
+        L_0x0476:
             r3 = r20
-            if (r12 != 0) goto L_0x04c6
+            if (r12 != 0) goto L_0x04c4
             org.telegram.tgnet.TLRPC$Document r1 = r10.activate_animation
             org.telegram.messenger.ImageReceiver r2 = r8.getImageReceiver()
             java.lang.StringBuilder r4 = new java.lang.StringBuilder
@@ -672,16 +669,16 @@ public class ReactionsEffectOverlay {
             r7 = 0
             r1 = r8
             r1.setImage((org.telegram.messenger.ImageLocation) r2, (java.lang.String) r3, (org.telegram.messenger.ImageLocation) r4, (java.lang.String) r5, (int) r6, (java.lang.Object) r7)
-        L_0x04c6:
+        L_0x04c4:
             org.telegram.messenger.ImageReceiver r1 = r8.getImageReceiver()
             r1.setAutoRepeat(r14)
             org.telegram.messenger.ImageReceiver r1 = r8.getImageReceiver()
             r1.setAllowStartAnimation(r14)
             org.telegram.messenger.ImageReceiver r1 = r8.getImageReceiver()
             org.telegram.ui.Components.RLottieDrawable r1 = r1.getLottieAnimation()
-            if (r1 == 0) goto L_0x0511
+            if (r1 == 0) goto L_0x050f
             r1 = 2
-            if (r12 != r1) goto L_0x04fb
+            if (r12 != r1) goto L_0x04f9
             org.telegram.messenger.ImageReceiver r1 = r8.getImageReceiver()
             org.telegram.ui.Components.RLottieDrawable r1 = r1.getLottieAnimation()
             org.telegram.messenger.ImageReceiver r2 = r8.getImageReceiver()
@@ -690,37 +687,37 @@ public class ReactionsEffectOverlay {
             r3 = 1
             int r2 = r2 - r3
             r1.setCurrentFrame(r2, r14)
-            goto L_0x0511
-        L_0x04fb:
+            goto L_0x050f
+        L_0x04f9:
             org.telegram.messenger.ImageReceiver r1 = r8.getImageReceiver()
             org.telegram.ui.Components.RLottieDrawable r1 = r1.getLottieAnimation()
             r1.setCurrentFrame(r14, r14)
             org.telegram.messenger.ImageReceiver r1 = r8.getImageReceiver()
             org.telegram.ui.Components.RLottieDrawable r1 = r1.getLottieAnimation()
             r1.start()
-        L_0x0511:
-            r1 = r37
-            r2 = r31
-            int r4 = r2 - r1
-            int r3 = r4 >> 1
-            r5 = 1
-            if (r12 != r5) goto L_0x051d
-            r4 = r3
-        L_0x051d:
-            r5 = r19
-            r5.addView(r8)
+        L_0x050f:
+            r2 = r37
+            r1 = r31
+            int r5 = r1 - r2
+            int r3 = r5 >> 1
+            r4 = 1
+            if (r12 != r4) goto L_0x051b
+            r5 = r3
+        L_0x051b:
+            r4 = r19
+            r4.addView(r8)
             android.view.ViewGroup$LayoutParams r6 = r8.getLayoutParams()
-            r6.width = r1
+            r6.width = r2
             android.view.ViewGroup$LayoutParams r6 = r8.getLayoutParams()
-            r6.height = r1
+            r6.height = r2
             android.view.ViewGroup$LayoutParams r6 = r8.getLayoutParams()
             android.widget.FrameLayout$LayoutParams r6 = (android.widget.FrameLayout.LayoutParams) r6
             r6.topMargin = r3
             android.view.ViewGroup$LayoutParams r6 = r8.getLayoutParams()
             android.widget.FrameLayout$LayoutParams r6 = (android.widget.FrameLayout.LayoutParams) r6
-            r6.leftMargin = r4
+            r6.leftMargin = r5
             r6 = 1
-            if (r12 == r6) goto L_0x0558
+            if (r12 == r6) goto L_0x0556
             org.telegram.messenger.ImageReceiver r23 = r9.getImageReceiver()
             org.telegram.tgnet.TLRPC$Document r6 = r10.center_icon
             org.telegram.messenger.ImageLocation r24 = org.telegram.messenger.ImageLocation.getForDocument(r6)
@@ -730,57 +727,57 @@ public class ReactionsEffectOverlay {
             java.lang.String r27 = "webp"
             r28 = r10
             r23.setImage(r24, r25, r26, r27, r28, r29)
-        L_0x0558:
-            r5.addView(r9)
+        L_0x0556:
+            r4.addView(r9)
             android.view.ViewGroup$LayoutParams r6 = r9.getLayoutParams()
-            r6.width = r1
+            r6.width = r2
             android.view.ViewGroup$LayoutParams r6 = r9.getLayoutParams()
-            r6.height = r1
-            android.view.ViewGroup$LayoutParams r1 = r9.getLayoutParams()
-            android.widget.FrameLayout$LayoutParams r1 = (android.widget.FrameLayout.LayoutParams) r1
-            r1.topMargin = r3
-            android.view.ViewGroup$LayoutParams r1 = r9.getLayoutParams()
-            android.widget.FrameLayout$LayoutParams r1 = (android.widget.FrameLayout.LayoutParams) r1
-            r1.leftMargin = r4
-            android.widget.FrameLayout r1 = r13.windowView
-            r1.addView(r5)
-            android.view.ViewGroup$LayoutParams r1 = r5.getLayoutParams()
-            r1.width = r2
-            android.view.ViewGroup$LayoutParams r1 = r5.getLayoutParams()
-            r1.height = r2
-            android.view.ViewGroup$LayoutParams r1 = r5.getLayoutParams()
-            android.widget.FrameLayout$LayoutParams r1 = (android.widget.FrameLayout.LayoutParams) r1
+            r6.height = r2
+            android.view.ViewGroup$LayoutParams r2 = r9.getLayoutParams()
+            android.widget.FrameLayout$LayoutParams r2 = (android.widget.FrameLayout.LayoutParams) r2
+            r2.topMargin = r3
+            android.view.ViewGroup$LayoutParams r2 = r9.getLayoutParams()
+            android.widget.FrameLayout$LayoutParams r2 = (android.widget.FrameLayout.LayoutParams) r2
+            r2.leftMargin = r5
+            android.widget.FrameLayout r2 = r13.windowView
+            r2.addView(r4)
+            android.view.ViewGroup$LayoutParams r2 = r4.getLayoutParams()
+            r2.width = r1
+            android.view.ViewGroup$LayoutParams r2 = r4.getLayoutParams()
+            r2.height = r1
+            android.view.ViewGroup$LayoutParams r2 = r4.getLayoutParams()
+            android.widget.FrameLayout$LayoutParams r2 = (android.widget.FrameLayout.LayoutParams) r2
             int r6 = -r3
-            r1.topMargin = r6
-            android.view.ViewGroup$LayoutParams r1 = r5.getLayoutParams()
-            android.widget.FrameLayout$LayoutParams r1 = (android.widget.FrameLayout.LayoutParams) r1
-            int r7 = -r4
-            r1.leftMargin = r7
-            android.widget.FrameLayout r1 = r13.windowView
-            r1.addView(r0)
-            android.view.ViewGroup$LayoutParams r1 = r0.getLayoutParams()
-            r1.width = r2
-            android.view.ViewGroup$LayoutParams r1 = r0.getLayoutParams()
-            r1.height = r2
-            android.view.ViewGroup$LayoutParams r1 = r0.getLayoutParams()
-            r1.width = r2
-            android.view.ViewGroup$LayoutParams r1 = r0.getLayoutParams()
-            r1.height = r2
+            r2.topMargin = r6
+            android.view.ViewGroup$LayoutParams r2 = r4.getLayoutParams()
+            android.widget.FrameLayout$LayoutParams r2 = (android.widget.FrameLayout.LayoutParams) r2
+            int r7 = -r5
+            r2.leftMargin = r7
+            android.widget.FrameLayout r2 = r13.windowView
+            r2.addView(r0)
+            android.view.ViewGroup$LayoutParams r2 = r0.getLayoutParams()
+            r2.width = r1
+            android.view.ViewGroup$LayoutParams r2 = r0.getLayoutParams()
+            r2.height = r1
+            android.view.ViewGroup$LayoutParams r2 = r0.getLayoutParams()
+            r2.width = r1
+            android.view.ViewGroup$LayoutParams r2 = r0.getLayoutParams()
+            r2.height = r1
             android.view.ViewGroup$LayoutParams r1 = r0.getLayoutParams()
             android.widget.FrameLayout$LayoutParams r1 = (android.widget.FrameLayout.LayoutParams) r1
             r1.topMargin = r6
             android.view.ViewGroup$LayoutParams r0 = r0.getLayoutParams()
             android.widget.FrameLayout$LayoutParams r0 = (android.widget.FrameLayout.LayoutParams) r0
             r0.leftMargin = r7
-            float r0 = (float) r4
-            r5.setPivotX(r0)
+            float r0 = (float) r5
+            r4.setPivotX(r0)
             float r0 = (float) r3
-            r5.setPivotY(r0)
-            goto L_0x05d3
-        L_0x05d0:
+            r4.setPivotY(r0)
+            goto L_0x05d1
+        L_0x05ce:
             r0 = 1
             r13.dismissed = r0
-        L_0x05d3:
+        L_0x05d1:
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.Reactions.ReactionsEffectOverlay.<init>(android.content.Context, org.telegram.ui.ActionBar.BaseFragment, org.telegram.ui.Components.ReactionsContainerLayout, org.telegram.ui.Cells.ChatMessageCell, float, float, java.lang.String, int, int):void");
@@ -941,6 +938,10 @@ public class ReactionsEffectOverlay {
         int dp = AndroidUtilities.dp(350.0f);
         Point point = AndroidUtilities.displaySize;
         return (int) (((float) Math.round(((float) Math.min(dp, Math.min(point.x, point.y))) * 0.7f)) / AndroidUtilities.density);
+    }
+
+    public static int sizeForAroundReaction() {
+        return (int) ((((float) AndroidUtilities.dp(80.0f)) * 2.0f) / AndroidUtilities.density);
     }
 
     private class AvatarParticle {
