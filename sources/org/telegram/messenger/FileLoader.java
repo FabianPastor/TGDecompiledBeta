@@ -682,23 +682,17 @@ public class FileLoader extends BaseController {
         }
     }
 
-    /* JADX WARNING: Code restructure failed: missing block: B:105:0x01e9, code lost:
-        r0 = r38;
+    /* JADX WARNING: Code restructure failed: missing block: B:107:0x0209, code lost:
+        if (r0.imageType == 2) goto L_0x020e;
      */
-    /* JADX WARNING: Removed duplicated region for block: B:100:0x01e0  */
-    /* JADX WARNING: Removed duplicated region for block: B:128:0x0224  */
-    /* JADX WARNING: Removed duplicated region for block: B:135:0x0253  */
-    /* JADX WARNING: Removed duplicated region for block: B:15:0x0046  */
-    /* JADX WARNING: Removed duplicated region for block: B:161:0x02b6  */
-    /* JADX WARNING: Removed duplicated region for block: B:165:0x02cd  */
-    /* JADX WARNING: Removed duplicated region for block: B:168:0x02fb  */
-    /* JADX WARNING: Removed duplicated region for block: B:180:0x0322  */
-    /* JADX WARNING: Removed duplicated region for block: B:226:0x03aa  */
-    /* JADX WARNING: Removed duplicated region for block: B:228:0x03e4  */
-    /* JADX WARNING: Removed duplicated region for block: B:231:? A[RETURN, SYNTHETIC] */
-    /* JADX WARNING: Removed duplicated region for block: B:99:0x01de  */
+    /* JADX WARNING: Removed duplicated region for block: B:135:0x026e  */
+    /* JADX WARNING: Removed duplicated region for block: B:165:0x02e8  */
+    /* JADX WARNING: Removed duplicated region for block: B:168:0x0317  */
+    /* JADX WARNING: Removed duplicated region for block: B:178:0x0339  */
+    /* JADX WARNING: Removed duplicated region for block: B:220:0x03b4  */
+    /* JADX WARNING: Removed duplicated region for block: B:222:0x03ee  */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    private org.telegram.messenger.FileLoadOperation loadFileInternal(org.telegram.tgnet.TLRPC$Document r34, org.telegram.messenger.SecureDocument r35, org.telegram.messenger.WebFile r36, org.telegram.tgnet.TLRPC$TL_fileLocationToBeDeprecated r37, org.telegram.messenger.ImageLocation r38, java.lang.Object r39, java.lang.String r40, long r41, int r43, org.telegram.messenger.FileLoadOperationStream r44, int r45, boolean r46, int r47) {
+    private org.telegram.messenger.FileLoadOperation loadFileInternal(org.telegram.tgnet.TLRPC$Document r34, org.telegram.messenger.SecureDocument r35, org.telegram.messenger.WebFile r36, org.telegram.tgnet.TLRPC$TL_fileLocationToBeDeprecated r37, org.telegram.messenger.ImageLocation r38, java.lang.Object r39, java.lang.String r40, long r41, int r43, org.telegram.messenger.FileLoadOperationStream r44, long r45, boolean r47, int r48) {
         /*
             r33 = this;
             r7 = r33
@@ -710,562 +704,561 @@ public class FileLoader extends BaseController {
             r4 = r39
             r15 = r43
             r6 = r44
-            r5 = r45
-            r13 = r46
-            r14 = r47
-            if (r2 == 0) goto L_0x0022
-            r12 = r40
-            java.lang.String r10 = getAttachFileName(r2, r12)
-        L_0x0020:
-            r11 = r10
-            goto L_0x003a
-        L_0x0022:
-            r12 = r40
-            if (r0 == 0) goto L_0x002b
+            r13 = r45
+            r5 = r47
+            r12 = r48
+            if (r2 == 0) goto L_0x0021
+            r11 = r40
+            java.lang.String r10 = getAttachFileName(r2, r11)
+            goto L_0x0039
+        L_0x0021:
+            r11 = r40
+            if (r0 == 0) goto L_0x002a
             java.lang.String r10 = getAttachFileName(r35)
-            goto L_0x0020
-        L_0x002b:
-            if (r8 == 0) goto L_0x0032
+            goto L_0x0039
+        L_0x002a:
+            if (r8 == 0) goto L_0x0031
             java.lang.String r10 = getAttachFileName(r34)
-            goto L_0x0020
-        L_0x0032:
-            if (r1 == 0) goto L_0x0039
+            goto L_0x0039
+        L_0x0031:
+            if (r1 == 0) goto L_0x0038
             java.lang.String r10 = getAttachFileName(r36)
-            goto L_0x0020
+            goto L_0x0039
+        L_0x0038:
+            r10 = 0
         L_0x0039:
+            if (r10 == 0) goto L_0x03f6
+            java.lang.String r9 = "-NUM"
+            boolean r17 = r10.contains(r9)
+            if (r17 == 0) goto L_0x0045
+            goto L_0x03f6
+        L_0x0045:
+            r3 = 10
+            if (r12 == r3) goto L_0x0060
+            boolean r17 = android.text.TextUtils.isEmpty(r10)
+            if (r17 != 0) goto L_0x0060
+            boolean r9 = r10.contains(r9)
+            if (r9 != 0) goto L_0x0060
+            j$.util.concurrent.ConcurrentHashMap<java.lang.String, org.telegram.messenger.FileLoader$LoadOperationUIObject> r9 = r7.loadOperationPathsUI
+            org.telegram.messenger.FileLoader$LoadOperationUIObject r3 = new org.telegram.messenger.FileLoader$LoadOperationUIObject
             r11 = 0
-        L_0x003a:
-            if (r11 == 0) goto L_0x03ec
-            java.lang.String r10 = "-NUM"
-            boolean r16 = r11.contains(r10)
-            if (r16 == 0) goto L_0x0046
-            goto L_0x03ec
-        L_0x0046:
-            r9 = 10
-            if (r14 == r9) goto L_0x0061
-            boolean r17 = android.text.TextUtils.isEmpty(r11)
-            if (r17 != 0) goto L_0x0061
-            boolean r10 = r11.contains(r10)
-            if (r10 != 0) goto L_0x0061
-            j$.util.concurrent.ConcurrentHashMap<java.lang.String, org.telegram.messenger.FileLoader$LoadOperationUIObject> r10 = r7.loadOperationPathsUI
-            org.telegram.messenger.FileLoader$LoadOperationUIObject r9 = new org.telegram.messenger.FileLoader$LoadOperationUIObject
-            r12 = 0
+            r3.<init>()
+            r9.put(r10, r3)
+        L_0x0060:
+            if (r8 == 0) goto L_0x007a
+            boolean r3 = r4 instanceof org.telegram.messenger.MessageObject
+            if (r3 == 0) goto L_0x007a
+            r3 = r4
+            org.telegram.messenger.MessageObject r3 = (org.telegram.messenger.MessageObject) r3
+            boolean r9 = r3.putInDownloadsStore
+            if (r9 == 0) goto L_0x007a
+            boolean r9 = r3.isAnyKindOfSticker()
+            if (r9 != 0) goto L_0x007a
+            org.telegram.messenger.DownloadController r9 = r33.getDownloadController()
+            r9.startDownloadFile(r8, r3)
+        L_0x007a:
+            j$.util.concurrent.ConcurrentHashMap<java.lang.String, org.telegram.messenger.FileLoadOperation> r3 = r7.loadOperationPaths
+            java.lang.Object r3 = r3.get(r10)
+            org.telegram.messenger.FileLoadOperation r3 = (org.telegram.messenger.FileLoadOperation) r3
+            boolean r9 = org.telegram.messenger.BuildVars.LOGS_ENABLED
+            java.lang.String r11 = " documentName="
+            if (r9 == 0) goto L_0x00ae
+            java.lang.StringBuilder r9 = new java.lang.StringBuilder
             r9.<init>()
-            r10.put(r11, r9)
-        L_0x0061:
-            if (r8 == 0) goto L_0x007b
-            boolean r9 = r4 instanceof org.telegram.messenger.MessageObject
-            if (r9 == 0) goto L_0x007b
-            r9 = r4
-            org.telegram.messenger.MessageObject r9 = (org.telegram.messenger.MessageObject) r9
-            boolean r10 = r9.putInDownloadsStore
-            if (r10 == 0) goto L_0x007b
-            boolean r10 = r9.isAnyKindOfSticker()
-            if (r10 != 0) goto L_0x007b
-            org.telegram.messenger.DownloadController r10 = r33.getDownloadController()
-            r10.startDownloadFile(r8, r9)
-        L_0x007b:
-            j$.util.concurrent.ConcurrentHashMap<java.lang.String, org.telegram.messenger.FileLoadOperation> r9 = r7.loadOperationPaths
-            java.lang.Object r9 = r9.get(r11)
-            org.telegram.messenger.FileLoadOperation r9 = (org.telegram.messenger.FileLoadOperation) r9
-            boolean r10 = org.telegram.messenger.BuildVars.LOGS_ENABLED
-            java.lang.String r12 = " documentName="
-            if (r10 == 0) goto L_0x00af
-            java.lang.StringBuilder r10 = new java.lang.StringBuilder
-            r10.<init>()
-            java.lang.String r3 = "checkFile operation fileName="
-            r10.append(r3)
-            r10.append(r11)
-            r10.append(r12)
-            java.lang.String r3 = getDocumentFileName(r34)
-            r10.append(r3)
-            java.lang.String r3 = " operation="
-            r10.append(r3)
-            r10.append(r9)
-            java.lang.String r3 = r10.toString()
-            org.telegram.messenger.FileLog.d(r3)
-        L_0x00af:
-            r3 = 0
-            if (r9 == 0) goto L_0x012d
-            r10 = 10
-            if (r14 == r10) goto L_0x00bf
-            boolean r0 = r9.isPreloadVideoOperation()
-            if (r0 == 0) goto L_0x00bf
-            r9.setIsPreloadVideoOperation(r3)
-        L_0x00bf:
-            if (r6 != 0) goto L_0x00c3
-            if (r15 <= 0) goto L_0x0129
-        L_0x00c3:
-            int r0 = r9.getDatacenterId()
-            r1 = 1
-            r9.setForceRequest(r1)
-            int r1 = r9.getQueueType()
-            java.util.LinkedList r2 = r7.getLoadOperationQueue(r0, r1)
-            android.util.SparseIntArray r4 = r7.getLoadOperationCount(r1)
-            int r8 = r2.indexOf(r9)
-            if (r8 < 0) goto L_0x0111
-            r2.remove(r8)
-            if (r6 == 0) goto L_0x010d
-            long r2 = (long) r5
-            boolean r2 = r9.start(r6, r2, r13)
-            if (r2 == 0) goto L_0x00f4
-            int r2 = r4.get(r0)
-            r16 = 1
-            int r2 = r2 + 1
-            r4.put(r0, r2)
-        L_0x00f4:
-            if (r1 != 0) goto L_0x0129
-            boolean r0 = r9.wasStarted()
-            if (r0 == 0) goto L_0x0129
+            java.lang.String r1 = "checkFile operation fileName="
+            r9.append(r1)
+            r9.append(r10)
+            r9.append(r11)
+            java.lang.String r1 = getDocumentFileName(r34)
+            r9.append(r1)
+            java.lang.String r1 = " operation="
+            r9.append(r1)
+            r9.append(r3)
+            java.lang.String r1 = r9.toString()
+            org.telegram.messenger.FileLog.d(r1)
+        L_0x00ae:
+            r1 = 0
+            if (r3 == 0) goto L_0x0127
+            r9 = 10
+            if (r12 == r9) goto L_0x00be
+            boolean r0 = r3.isPreloadVideoOperation()
+            if (r0 == 0) goto L_0x00be
+            r3.setIsPreloadVideoOperation(r1)
+        L_0x00be:
+            if (r6 != 0) goto L_0x00c2
+            if (r15 <= 0) goto L_0x0123
+        L_0x00c2:
+            int r0 = r3.getDatacenterId()
+            r2 = 1
+            r3.setForceRequest(r2)
+            int r4 = r3.getQueueType()
+            java.util.LinkedList r8 = r7.getLoadOperationQueue(r0, r4)
+            android.util.SparseIntArray r9 = r7.getLoadOperationCount(r4)
+            int r10 = r8.indexOf(r3)
+            if (r10 < 0) goto L_0x010c
+            r8.remove(r10)
+            if (r6 == 0) goto L_0x0108
+            boolean r1 = r3.start(r6, r13, r5)
+            if (r1 == 0) goto L_0x00ef
+            int r1 = r9.get(r0)
+            int r1 = r1 + r2
+            r9.put(r0, r1)
+        L_0x00ef:
+            if (r4 != 0) goto L_0x0123
+            boolean r0 = r3.wasStarted()
+            if (r0 == 0) goto L_0x0123
             java.util.ArrayList<org.telegram.messenger.FileLoadOperation> r0 = r7.activeFileLoadOperation
-            boolean r0 = r0.contains(r9)
-            if (r0 != 0) goto L_0x0129
-            r7.pauseCurrentFileLoadOperations(r9)
+            boolean r0 = r0.contains(r3)
+            if (r0 != 0) goto L_0x0123
+            r7.pauseCurrentFileLoadOperations(r3)
             java.util.ArrayList<org.telegram.messenger.FileLoadOperation> r0 = r7.activeFileLoadOperation
-            r0.add(r9)
-            goto L_0x0129
-        L_0x010d:
-            r2.add(r3, r9)
-            goto L_0x0129
+            r0.add(r3)
+            goto L_0x0123
+        L_0x0108:
+            r8.add(r1, r3)
+            goto L_0x0123
+        L_0x010c:
+            if (r6 == 0) goto L_0x0111
+            r7.pauseCurrentFileLoadOperations(r3)
         L_0x0111:
-            if (r6 == 0) goto L_0x0116
-            r7.pauseCurrentFileLoadOperations(r9)
-        L_0x0116:
-            long r2 = (long) r5
-            r9.start(r6, r2, r13)
-            if (r1 != 0) goto L_0x0129
+            r3.start(r6, r13, r5)
+            if (r4 != 0) goto L_0x0123
             java.util.ArrayList<org.telegram.messenger.FileLoadOperation> r0 = r7.activeFileLoadOperation
-            boolean r0 = r0.contains(r9)
-            if (r0 != 0) goto L_0x0129
+            boolean r0 = r0.contains(r3)
+            if (r0 != 0) goto L_0x0123
             java.util.ArrayList<org.telegram.messenger.FileLoadOperation> r0 = r7.activeFileLoadOperation
-            r0.add(r9)
-        L_0x0129:
-            r9.updateProgress()
-            return r9
-        L_0x012d:
-            r10 = 10
+            r0.add(r3)
+        L_0x0123:
+            r3.updateProgress()
+            return r3
+        L_0x0127:
+            r9 = 10
             r16 = 1
             r23 = 4
             java.io.File r21 = getDirectory(r23)
             r17 = 0
-            if (r0 == 0) goto L_0x014c
-            org.telegram.messenger.FileLoadOperation r9 = new org.telegram.messenger.FileLoadOperation
-            r9.<init>(r0)
-            r3 = r4
-            r24 = r11
-            r25 = r12
-            r15 = r14
-        L_0x0146:
-            r10 = r17
-            r4 = 0
-            r12 = 3
-            goto L_0x01da
-        L_0x014c:
-            if (r2 == 0) goto L_0x0171
-            long r3 = r2.volume_id
-            int r9 = r2.dc_id
-            org.telegram.messenger.FileLoadOperation r19 = new org.telegram.messenger.FileLoadOperation
-            r20 = r9
-            r9 = r19
+            if (r0 == 0) goto L_0x014b
+            org.telegram.messenger.FileLoadOperation r3 = new org.telegram.messenger.FileLoadOperation
+            r3.<init>(r0)
+            r5 = r36
+            r9 = r3
+            r24 = r10
+            r25 = r11
+            r1 = r12
+            r11 = r17
+            r3 = 0
+            r10 = 3
             r15 = 1
+            r16 = 10
+            goto L_0x01ee
+        L_0x014b:
+            if (r2 == 0) goto L_0x016e
+            long r5 = r2.volume_id
+            int r3 = r2.dc_id
+            org.telegram.messenger.FileLoadOperation r19 = new org.telegram.messenger.FileLoadOperation
+            r15 = 1
+            r16 = 10
+            r9 = r19
+            r24 = r10
             r10 = r38
-            r24 = r11
+            r25 = r11
             r11 = r39
-            r25 = r12
+            r1 = r12
             r12 = r40
-            r15 = r14
             r13 = r41
             r9.<init>(r10, r11, r12, r13)
-            r10 = r3
-            r4 = r20
-            r12 = 0
-            r3 = r39
-            goto L_0x01da
-        L_0x0171:
-            r24 = r11
-            r25 = r12
-            r15 = r14
-            if (r8 == 0) goto L_0x01a5
-            org.telegram.messenger.FileLoadOperation r9 = new org.telegram.messenger.FileLoadOperation
-            r3 = r39
-            r9.<init>((org.telegram.tgnet.TLRPC$Document) r8, (java.lang.Object) r3)
-            boolean r4 = org.telegram.messenger.MessageObject.isVoiceDocument(r34)
-            if (r4 == 0) goto L_0x018a
-            r10 = r17
-            r4 = 0
-            r12 = 1
-            goto L_0x019b
-        L_0x018a:
-            boolean r4 = org.telegram.messenger.MessageObject.isVideoDocument(r34)
-            if (r4 == 0) goto L_0x0196
-            long r10 = r8.id
-            int r4 = r8.dc_id
-            r12 = 2
-            goto L_0x019b
-        L_0x0196:
-            long r10 = r8.id
-            int r4 = r8.dc_id
-            r12 = 3
-        L_0x019b:
-            boolean r13 = org.telegram.messenger.MessageObject.isRoundVideoDocument(r34)
-            if (r13 == 0) goto L_0x01da
-            r10 = r17
-            r4 = 0
-            goto L_0x01da
-        L_0x01a5:
-            r3 = r39
-            if (r1 == 0) goto L_0x01d6
-            org.telegram.messenger.FileLoadOperation r9 = new org.telegram.messenger.FileLoadOperation
-            int r4 = r7.currentAccount
-            r9.<init>((int) r4, (org.telegram.messenger.WebFile) r1)
-            org.telegram.tgnet.TLRPC$InputWebFileLocation r4 = r1.location
-            if (r4 == 0) goto L_0x01b5
-            goto L_0x01d6
-        L_0x01b5:
-            boolean r4 = org.telegram.messenger.MessageObject.isVoiceWebDocument(r36)
-            if (r4 == 0) goto L_0x01c0
-            r10 = r17
-            r4 = 0
-            r12 = 1
-            goto L_0x01da
-        L_0x01c0:
-            boolean r4 = org.telegram.messenger.MessageObject.isVideoWebDocument(r36)
-            if (r4 == 0) goto L_0x01cb
-            r10 = r17
-            r4 = 0
-            r12 = 2
-            goto L_0x01da
+            r11 = r5
+            r10 = 0
+            r5 = r36
+            goto L_0x01ee
+        L_0x016e:
+            r24 = r10
+            r25 = r11
+            r1 = r12
+            r15 = 1
+            r16 = 10
+            if (r8 == 0) goto L_0x01af
+            org.telegram.messenger.FileLoadOperation r3 = new org.telegram.messenger.FileLoadOperation
+            r3.<init>((org.telegram.tgnet.TLRPC$Document) r8, (java.lang.Object) r4)
+            boolean r5 = org.telegram.messenger.MessageObject.isVoiceDocument(r34)
+            if (r5 == 0) goto L_0x0188
+            r5 = r17
+            r9 = 0
+            r10 = 1
+            goto L_0x0199
+        L_0x0188:
+            boolean r5 = org.telegram.messenger.MessageObject.isVideoDocument(r34)
+            if (r5 == 0) goto L_0x0194
+            long r5 = r8.id
+            int r9 = r8.dc_id
+            r10 = 2
+            goto L_0x0199
+        L_0x0194:
+            long r5 = r8.id
+            int r9 = r8.dc_id
+            r10 = 3
+        L_0x0199:
+            boolean r11 = org.telegram.messenger.MessageObject.isRoundVideoDocument(r34)
+            if (r11 == 0) goto L_0x01a6
+            r5 = r36
+            r9 = r3
+            r11 = r17
+            r3 = 0
+            goto L_0x01ee
+        L_0x01a6:
+            r11 = r5
+            r5 = r36
+            r32 = r9
+            r9 = r3
+            r3 = r32
+            goto L_0x01ee
+        L_0x01af:
+            r5 = r36
+            if (r5 == 0) goto L_0x01e9
+            org.telegram.messenger.FileLoadOperation r3 = new org.telegram.messenger.FileLoadOperation
+            int r6 = r7.currentAccount
+            r3.<init>((int) r6, (org.telegram.messenger.WebFile) r5)
+            org.telegram.tgnet.TLRPC$InputWebFileLocation r6 = r5.location
+            if (r6 == 0) goto L_0x01bf
+            goto L_0x01e9
+        L_0x01bf:
+            boolean r6 = org.telegram.messenger.MessageObject.isVoiceWebDocument(r36)
+            if (r6 == 0) goto L_0x01cb
+            r9 = r3
+            r11 = r17
+            r3 = 0
+            r10 = 1
+            goto L_0x01ee
         L_0x01cb:
-            boolean r4 = org.telegram.messenger.MessageObject.isImageWebDocument(r36)
-            if (r4 == 0) goto L_0x0146
-            r10 = r17
-            r4 = 0
-            r12 = 0
-            goto L_0x01da
-        L_0x01d6:
-            r10 = r17
-            r4 = 0
-            r12 = 4
-        L_0x01da:
-            r13 = 11
-            if (r15 != r13) goto L_0x01e0
+            boolean r6 = org.telegram.messenger.MessageObject.isVideoWebDocument(r36)
+            if (r6 == 0) goto L_0x01d7
+            r9 = r3
+            r11 = r17
+            r3 = 0
+            r10 = 2
+            goto L_0x01ee
+        L_0x01d7:
+            boolean r6 = org.telegram.messenger.MessageObject.isImageWebDocument(r36)
+            if (r6 == 0) goto L_0x01e3
+            r9 = r3
+            r11 = r17
+            r3 = 0
+            r10 = 0
+            goto L_0x01ee
+        L_0x01e3:
+            r9 = r3
+            r11 = r17
+            r3 = 0
+            r10 = 3
+            goto L_0x01ee
+        L_0x01e9:
+            r9 = r3
+            r11 = r17
+            r3 = 0
+            r10 = 4
+        L_0x01ee:
+            r6 = 11
+            if (r1 != r6) goto L_0x01f6
+            r2 = 10
             r13 = 3
-            goto L_0x020e
-        L_0x01e0:
-            r13 = 1
-            if (r12 != r13) goto L_0x01e5
+            goto L_0x022c
+        L_0x01f6:
+            if (r10 != r15) goto L_0x01fc
+            r2 = 10
             r13 = 2
-            goto L_0x020e
-        L_0x01e5:
-            if (r0 != 0) goto L_0x020d
-            if (r2 == 0) goto L_0x01f2
+            goto L_0x022c
+        L_0x01fc:
+            if (r0 != 0) goto L_0x0229
+            if (r2 == 0) goto L_0x020c
             r0 = r38
-            if (r0 == 0) goto L_0x020d
+            r2 = 10
+            if (r0 == 0) goto L_0x022b
             int r0 = r0.imageType
-            r2 = 2
-            if (r0 != r2) goto L_0x020d
-        L_0x01f2:
-            boolean r0 = org.telegram.messenger.MessageObject.isImageWebDocument(r36)
-            if (r0 != 0) goto L_0x020d
-            boolean r0 = org.telegram.messenger.MessageObject.isStickerDocument(r34)
-            if (r0 != 0) goto L_0x020d
-            boolean r0 = org.telegram.messenger.MessageObject.isAnimatedStickerDocument(r34)
-            if (r0 != 0) goto L_0x020d
-            boolean r0 = org.telegram.messenger.MessageObject.isVideoStickerDocument(r34)
-            if (r0 == 0) goto L_0x020b
-            goto L_0x020d
-        L_0x020b:
-            r13 = 0
+            r6 = 2
+            if (r0 != r6) goto L_0x022b
             goto L_0x020e
-        L_0x020d:
-            r13 = 1
+        L_0x020c:
+            r2 = 10
         L_0x020e:
-            r0 = 10
-            if (r15 == 0) goto L_0x0220
-            if (r15 != r0) goto L_0x0215
-            goto L_0x0220
-        L_0x0215:
-            r1 = 2
-            if (r15 != r1) goto L_0x021c
-            r1 = 1
-            r9.setEncryptFile(r1)
-        L_0x021c:
+            boolean r0 = org.telegram.messenger.MessageObject.isImageWebDocument(r36)
+            if (r0 != 0) goto L_0x022b
+            boolean r0 = org.telegram.messenger.MessageObject.isStickerDocument(r34)
+            if (r0 != 0) goto L_0x022b
+            boolean r0 = org.telegram.messenger.MessageObject.isAnimatedStickerDocument(r34)
+            if (r0 != 0) goto L_0x022b
+            boolean r0 = org.telegram.messenger.MessageObject.isVideoStickerDocument(r34)
+            if (r0 == 0) goto L_0x0227
+            goto L_0x022b
+        L_0x0227:
+            r13 = 0
+            goto L_0x022c
+        L_0x0229:
+            r2 = 10
+        L_0x022b:
+            r13 = 1
+        L_0x022c:
+            if (r1 == 0) goto L_0x023b
+            if (r1 != r2) goto L_0x0231
+            goto L_0x023b
+        L_0x0231:
+            r0 = 2
+            if (r1 != r0) goto L_0x0237
+            r9.setEncryptFile(r15)
+        L_0x0237:
             r20 = r21
-            goto L_0x02bc
-        L_0x0220:
-            int r1 = (r10 > r17 ? 1 : (r10 == r17 ? 0 : -1))
-            if (r1 == 0) goto L_0x02b6
+            goto L_0x02d7
+        L_0x023b:
+            int r0 = (r11 > r17 ? 1 : (r11 == r17 ? 0 : -1))
+            if (r0 == 0) goto L_0x02d1
             org.telegram.messenger.FilePathDatabase r26 = r33.getFileDatabase()
             r31 = 1
-            r27 = r10
-            r29 = r4
-            r30 = r12
-            java.lang.String r1 = r26.getPath(r27, r29, r30, r31)
-            if (r1 == 0) goto L_0x024c
-            java.io.File r2 = new java.io.File
-            r2.<init>(r1)
-            boolean r1 = r2.exists()
-            if (r1 == 0) goto L_0x024c
-            java.lang.String r1 = r2.getName()
-            java.io.File r2 = r2.getParentFile()
-            r14 = r1
-            r1 = 1
-            goto L_0x0251
-        L_0x024c:
-            r2 = r21
-            r14 = r24
-            r1 = 0
-        L_0x0251:
-            if (r1 != 0) goto L_0x02b1
-            java.io.File r1 = getDirectory(r12)
-            if (r12 == 0) goto L_0x025c
-            r2 = 2
-            if (r12 != r2) goto L_0x027f
-        L_0x025c:
-            boolean r2 = r7.canSaveToPublicStorage(r3)
-            if (r2 == 0) goto L_0x027f
-            if (r12 != 0) goto L_0x026b
-            r2 = 100
-            java.io.File r2 = getDirectory(r2)
-            goto L_0x0271
-        L_0x026b:
-            r2 = 101(0x65, float:1.42E-43)
-            java.io.File r2 = getDirectory(r2)
-        L_0x0271:
-            if (r2 == 0) goto L_0x0276
-            r1 = r2
-            r2 = 1
-            goto L_0x0277
-        L_0x0276:
-            r2 = 0
+            r27 = r11
+            r29 = r3
+            r30 = r10
+            java.lang.String r0 = r26.getPath(r27, r29, r30, r31)
+            if (r0 == 0) goto L_0x0267
+            java.io.File r5 = new java.io.File
+            r5.<init>(r0)
+            boolean r0 = r5.exists()
+            if (r0 == 0) goto L_0x0267
+            java.lang.String r0 = r5.getName()
+            java.io.File r5 = r5.getParentFile()
+            r6 = r0
+            r0 = 1
+            goto L_0x026c
+        L_0x0267:
+            r5 = r21
+            r6 = r24
+            r0 = 0
+        L_0x026c:
+            if (r0 != 0) goto L_0x02cc
+            java.io.File r0 = getDirectory(r10)
+            if (r10 == 0) goto L_0x0277
+            r5 = 2
+            if (r10 != r5) goto L_0x029a
         L_0x0277:
-            r14 = r24
-            r32 = r2
-            r2 = r1
-            r1 = r32
-            goto L_0x02a8
-        L_0x027f:
-            java.lang.String r2 = getDocumentFileName(r34)
-            boolean r2 = android.text.TextUtils.isEmpty(r2)
-            if (r2 != 0) goto L_0x02a4
-            boolean r2 = r7.canSaveAsFile(r3)
-            if (r2 == 0) goto L_0x02a4
-            java.lang.String r2 = getDocumentFileName(r34)
-            r14 = 5
-            java.io.File r14 = getDirectory(r14)
-            if (r14 == 0) goto L_0x02a1
-            r1 = 1
-            r32 = r14
-            r14 = r2
-            r2 = r32
-            goto L_0x02a8
-        L_0x02a1:
-            r14 = r2
-            r2 = r1
-            goto L_0x02a7
-        L_0x02a4:
-            r2 = r1
-            r14 = r24
-        L_0x02a7:
-            r1 = 0
-        L_0x02a8:
-            if (r1 == 0) goto L_0x02b1
-            org.telegram.messenger.FilePathDatabase$PathData r1 = new org.telegram.messenger.FilePathDatabase$PathData
-            r1.<init>(r10, r4, r12)
-            r9.pathSaveData = r1
-        L_0x02b1:
-            r20 = r2
-            r22 = r14
-            goto L_0x02be
-        L_0x02b6:
-            java.io.File r1 = getDirectory(r12)
-            r20 = r1
+            boolean r5 = r7.canSaveToPublicStorage(r4)
+            if (r5 == 0) goto L_0x029a
+            if (r10 != 0) goto L_0x0286
+            r5 = 100
+            java.io.File r5 = getDirectory(r5)
+            goto L_0x028c
+        L_0x0286:
+            r5 = 101(0x65, float:1.42E-43)
+            java.io.File r5 = getDirectory(r5)
+        L_0x028c:
+            if (r5 == 0) goto L_0x0291
+            r0 = r5
+            r5 = 1
+            goto L_0x0292
+        L_0x0291:
+            r5 = 0
+        L_0x0292:
+            r6 = r24
+            r32 = r5
+            r5 = r0
+            r0 = r32
+            goto L_0x02c3
+        L_0x029a:
+            java.lang.String r5 = getDocumentFileName(r34)
+            boolean r5 = android.text.TextUtils.isEmpty(r5)
+            if (r5 != 0) goto L_0x02bf
+            boolean r5 = r7.canSaveAsFile(r4)
+            if (r5 == 0) goto L_0x02bf
+            java.lang.String r5 = getDocumentFileName(r34)
+            r6 = 5
+            java.io.File r6 = getDirectory(r6)
+            if (r6 == 0) goto L_0x02bc
+            r0 = 1
+            r32 = r6
+            r6 = r5
+            r5 = r32
+            goto L_0x02c3
         L_0x02bc:
+            r6 = r5
+            r5 = r0
+            goto L_0x02c2
+        L_0x02bf:
+            r5 = r0
+            r6 = r24
+        L_0x02c2:
+            r0 = 0
+        L_0x02c3:
+            if (r0 == 0) goto L_0x02cc
+            org.telegram.messenger.FilePathDatabase$PathData r0 = new org.telegram.messenger.FilePathDatabase$PathData
+            r0.<init>(r11, r3, r10)
+            r9.pathSaveData = r0
+        L_0x02cc:
+            r20 = r5
+            r22 = r6
+            goto L_0x02d9
+        L_0x02d1:
+            java.io.File r0 = getDirectory(r10)
+            r20 = r0
+        L_0x02d7:
             r22 = r24
-        L_0x02be:
-            int r1 = r7.currentAccount
+        L_0x02d9:
+            int r0 = r7.currentAccount
             r16 = r9
-            r17 = r1
+            r17 = r0
             r18 = r24
             r19 = r13
             r16.setPaths(r17, r18, r19, r20, r21, r22)
-            if (r15 != r0) goto L_0x02d1
-            r0 = 1
-            r9.setIsPreloadVideoOperation(r0)
-        L_0x02d1:
-            org.telegram.messenger.FileLoader$2 r10 = new org.telegram.messenger.FileLoader$2
-            r0 = r10
+            if (r1 != r2) goto L_0x02eb
+            r9.setIsPreloadVideoOperation(r15)
+        L_0x02eb:
+            org.telegram.messenger.FileLoader$2 r11 = new org.telegram.messenger.FileLoader$2
+            r0 = r11
+            r12 = 0
             r1 = r33
             r2 = r34
-            r11 = 0
             r3 = r39
             r4 = r24
-            r14 = r5
-            r5 = r12
-            r12 = r6
+            r14 = r47
+            r5 = r10
+            r10 = r44
             r6 = r13
             r0.<init>(r2, r3, r4, r5, r6)
-            r9.setDelegate(r10)
+            r9.setDelegate(r11)
             int r0 = r9.getDatacenterId()
             j$.util.concurrent.ConcurrentHashMap<java.lang.String, org.telegram.messenger.FileLoadOperation> r1 = r7.loadOperationPaths
-            r10 = r24
-            r1.put(r10, r9)
+            r2 = r24
+            r1.put(r2, r9)
             r1 = r43
-            r2 = 3
+            r3 = 3
             r9.setPriority(r1)
-            r3 = 6
-            if (r13 != r2) goto L_0x0322
-            if (r1 <= 0) goto L_0x02ff
-            r15 = 6
-            goto L_0x0300
-        L_0x02ff:
-            r15 = 2
-        L_0x0300:
+            r4 = 6
+            if (r13 != r3) goto L_0x0339
+            if (r1 <= 0) goto L_0x031a
+            goto L_0x031b
+        L_0x031a:
+            r4 = 2
+        L_0x031b:
             android.util.SparseIntArray r1 = r7.preloadingLoadOperationsCount
             int r1 = r1.get(r0)
-            if (r12 != 0) goto L_0x030d
-            if (r1 >= r15) goto L_0x030b
-            goto L_0x030d
-        L_0x030b:
-            r3 = 0
-            goto L_0x030e
-        L_0x030d:
+            if (r10 != 0) goto L_0x0325
+            if (r1 >= r4) goto L_0x0326
+        L_0x0325:
+            r12 = 1
+        L_0x0326:
+            if (r12 == 0) goto L_0x03b0
+            r5 = r45
+            boolean r3 = r9.start(r10, r5, r14)
+            if (r3 == 0) goto L_0x03b0
+            android.util.SparseIntArray r3 = r7.preloadingLoadOperationsCount
+            int r5 = r1 + 1
+            r3.put(r0, r5)
+            goto L_0x03b0
+        L_0x0339:
+            r5 = r45
+            r11 = 2
+            if (r13 != r11) goto L_0x035e
+            if (r1 <= 0) goto L_0x0341
+            goto L_0x0342
+        L_0x0341:
             r3 = 1
-        L_0x030e:
-            if (r3 == 0) goto L_0x03a6
-            long r4 = (long) r14
-            r6 = r46
-            boolean r2 = r9.start(r12, r4, r6)
-            if (r2 == 0) goto L_0x03a6
-            android.util.SparseIntArray r2 = r7.preloadingLoadOperationsCount
-            int r4 = r1 + 1
-            r2.put(r0, r4)
-            goto L_0x03a6
-        L_0x0322:
-            r6 = r46
-            r4 = 2
-            if (r13 != r4) goto L_0x034b
-            if (r1 <= 0) goto L_0x032a
-            goto L_0x032b
-        L_0x032a:
-            r2 = 1
-        L_0x032b:
+        L_0x0342:
             android.util.SparseIntArray r1 = r7.audioLoadOperationsCount
             int r1 = r1.get(r0)
-            if (r12 != 0) goto L_0x0338
-            if (r1 >= r2) goto L_0x0336
-            goto L_0x0338
-        L_0x0336:
-            r3 = 0
-            goto L_0x0339
-        L_0x0338:
-            r3 = 1
-        L_0x0339:
-            if (r3 == 0) goto L_0x0349
-            long r4 = (long) r14
-            boolean r4 = r9.start(r12, r4, r6)
-            if (r4 == 0) goto L_0x0349
+            if (r10 != 0) goto L_0x034c
+            if (r1 >= r3) goto L_0x034d
+        L_0x034c:
+            r12 = 1
+        L_0x034d:
+            if (r12 == 0) goto L_0x035c
+            boolean r4 = r9.start(r10, r5, r14)
+            if (r4 == 0) goto L_0x035c
             android.util.SparseIntArray r4 = r7.audioLoadOperationsCount
             int r5 = r1 + 1
             r4.put(r0, r5)
-        L_0x0349:
-            r15 = r2
-            goto L_0x03a6
-        L_0x034b:
-            r2 = 1
-            if (r13 != r2) goto L_0x0372
-            if (r1 <= 0) goto L_0x0352
-            r15 = 6
-            goto L_0x0353
-        L_0x0352:
-            r15 = 2
-        L_0x0353:
+        L_0x035c:
+            r4 = r3
+            goto L_0x03b0
+        L_0x035e:
+            if (r13 != r15) goto L_0x037f
+            if (r1 <= 0) goto L_0x0363
+            goto L_0x0364
+        L_0x0363:
+            r4 = 2
+        L_0x0364:
             android.util.SparseIntArray r1 = r7.imageLoadOperationsCount
             int r1 = r1.get(r0)
-            if (r12 != 0) goto L_0x0360
-            if (r1 >= r15) goto L_0x035e
-            goto L_0x0360
-        L_0x035e:
-            r3 = 0
-            goto L_0x0361
-        L_0x0360:
-            r3 = 1
-        L_0x0361:
-            if (r3 == 0) goto L_0x03a6
-            long r4 = (long) r14
-            boolean r2 = r9.start(r12, r4, r6)
-            if (r2 == 0) goto L_0x03a6
-            android.util.SparseIntArray r2 = r7.imageLoadOperationsCount
-            int r4 = r1 + 1
-            r2.put(r0, r4)
-            goto L_0x03a6
-        L_0x0372:
-            if (r1 <= 0) goto L_0x0376
+            if (r10 != 0) goto L_0x036e
+            if (r1 >= r4) goto L_0x036f
+        L_0x036e:
+            r12 = 1
+        L_0x036f:
+            if (r12 == 0) goto L_0x03b0
+            boolean r3 = r9.start(r10, r5, r14)
+            if (r3 == 0) goto L_0x03b0
+            android.util.SparseIntArray r3 = r7.imageLoadOperationsCount
+            int r5 = r1 + 1
+            r3.put(r0, r5)
+            goto L_0x03b0
+        L_0x037f:
+            if (r1 <= 0) goto L_0x0383
             r1 = 4
-            goto L_0x0377
-        L_0x0376:
+            goto L_0x0384
+        L_0x0383:
             r1 = 1
-        L_0x0377:
+        L_0x0384:
             android.util.SparseIntArray r3 = r7.fileLoadOperationsCount
             int r3 = r3.get(r0)
-            if (r12 != 0) goto L_0x0383
-            if (r3 >= r1) goto L_0x0382
-            goto L_0x0383
-        L_0x0382:
-            r2 = 0
-        L_0x0383:
-            if (r2 == 0) goto L_0x03a3
-            long r4 = (long) r14
-            boolean r4 = r9.start(r12, r4, r6)
-            if (r4 == 0) goto L_0x0398
+            if (r10 != 0) goto L_0x038e
+            if (r3 >= r1) goto L_0x038f
+        L_0x038e:
+            r12 = 1
+        L_0x038f:
+            if (r12 == 0) goto L_0x03ae
+            boolean r4 = r9.start(r10, r5, r14)
+            if (r4 == 0) goto L_0x03a3
             android.util.SparseIntArray r4 = r7.fileLoadOperationsCount
             int r5 = r3 + 1
             r4.put(r0, r5)
             java.util.ArrayList<org.telegram.messenger.FileLoadOperation> r4 = r7.activeFileLoadOperation
             r4.add(r9)
-        L_0x0398:
-            boolean r4 = r9.wasStarted()
-            if (r4 == 0) goto L_0x03a3
-            if (r12 == 0) goto L_0x03a3
-            r7.pauseCurrentFileLoadOperations(r9)
         L_0x03a3:
-            r15 = r1
+            boolean r4 = r9.wasStarted()
+            if (r4 == 0) goto L_0x03ae
+            if (r10 == 0) goto L_0x03ae
+            r7.pauseCurrentFileLoadOperations(r9)
+        L_0x03ae:
+            r4 = r1
             r1 = r3
-            r3 = r2
-        L_0x03a6:
-            boolean r2 = org.telegram.messenger.BuildVars.LOGS_ENABLED
-            if (r2 == 0) goto L_0x03e2
-            java.lang.StringBuilder r2 = new java.lang.StringBuilder
-            r2.<init>()
-            java.lang.String r4 = "loadFileInternal fileName="
-            r2.append(r4)
-            r2.append(r10)
-            r4 = r25
-            r2.append(r4)
-            java.lang.String r4 = getDocumentFileName(r34)
-            r2.append(r4)
-            java.lang.String r4 = " queueType="
-            r2.append(r4)
-            r2.append(r13)
-            java.lang.String r4 = " maxCount="
-            r2.append(r4)
-            r2.append(r15)
-            java.lang.String r4 = " count="
-            r2.append(r4)
-            r2.append(r1)
-            java.lang.String r1 = r2.toString()
+        L_0x03b0:
+            boolean r3 = org.telegram.messenger.BuildVars.LOGS_ENABLED
+            if (r3 == 0) goto L_0x03ec
+            java.lang.StringBuilder r3 = new java.lang.StringBuilder
+            r3.<init>()
+            java.lang.String r5 = "loadFileInternal fileName="
+            r3.append(r5)
+            r3.append(r2)
+            r2 = r25
+            r3.append(r2)
+            java.lang.String r2 = getDocumentFileName(r34)
+            r3.append(r2)
+            java.lang.String r2 = " queueType="
+            r3.append(r2)
+            r3.append(r13)
+            java.lang.String r2 = " maxCount="
+            r3.append(r2)
+            r3.append(r4)
+            java.lang.String r2 = " count="
+            r3.append(r2)
+            r3.append(r1)
+            java.lang.String r1 = r3.toString()
             org.telegram.messenger.FileLog.d(r1)
-        L_0x03e2:
-            if (r3 != 0) goto L_0x03eb
+        L_0x03ec:
+            if (r12 != 0) goto L_0x03f5
             java.util.LinkedList r0 = r7.getLoadOperationQueue(r0, r13)
             r7.addOperationToQueue(r9, r0)
-        L_0x03eb:
+        L_0x03f5:
             return r9
-        L_0x03ec:
+        L_0x03f6:
             r0 = 0
             return r0
         */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.FileLoader.loadFileInternal(org.telegram.tgnet.TLRPC$Document, org.telegram.messenger.SecureDocument, org.telegram.messenger.WebFile, org.telegram.tgnet.TLRPC$TL_fileLocationToBeDeprecated, org.telegram.messenger.ImageLocation, java.lang.Object, java.lang.String, long, int, org.telegram.messenger.FileLoadOperationStream, int, boolean, int):org.telegram.messenger.FileLoadOperation");
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.FileLoader.loadFileInternal(org.telegram.tgnet.TLRPC$Document, org.telegram.messenger.SecureDocument, org.telegram.messenger.WebFile, org.telegram.tgnet.TLRPC$TL_fileLocationToBeDeprecated, org.telegram.messenger.ImageLocation, java.lang.Object, java.lang.String, long, int, org.telegram.messenger.FileLoadOperationStream, long, boolean, int):org.telegram.messenger.FileLoadOperation");
     }
 
     private boolean canSaveAsFile(Object obj) {
@@ -1390,10 +1383,10 @@ public class FileLoader extends BaseController {
     }
 
     /* access modifiers changed from: protected */
-    public FileLoadOperation loadStreamFile(FileLoadOperationStream fileLoadOperationStream, TLRPC$Document tLRPC$Document, ImageLocation imageLocation, Object obj, int i, boolean z) {
+    public FileLoadOperation loadStreamFile(FileLoadOperationStream fileLoadOperationStream, TLRPC$Document tLRPC$Document, ImageLocation imageLocation, Object obj, long j, boolean z) {
         CountDownLatch countDownLatch = new CountDownLatch(1);
         FileLoadOperation[] fileLoadOperationArr = new FileLoadOperation[1];
-        fileLoaderQueue.postRunnable(new FileLoader$$ExternalSyntheticLambda13(this, fileLoadOperationArr, tLRPC$Document, imageLocation, obj, fileLoadOperationStream, i, z, countDownLatch));
+        fileLoaderQueue.postRunnable(new FileLoader$$ExternalSyntheticLambda13(this, fileLoadOperationArr, tLRPC$Document, imageLocation, obj, fileLoadOperationStream, j, z, countDownLatch));
         try {
             countDownLatch.await();
         } catch (Exception e) {
@@ -1403,14 +1396,14 @@ public class FileLoader extends BaseController {
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$loadStreamFile$10(FileLoadOperation[] fileLoadOperationArr, TLRPC$Document tLRPC$Document, ImageLocation imageLocation, Object obj, FileLoadOperationStream fileLoadOperationStream, int i, boolean z, CountDownLatch countDownLatch) {
+    public /* synthetic */ void lambda$loadStreamFile$10(FileLoadOperation[] fileLoadOperationArr, TLRPC$Document tLRPC$Document, ImageLocation imageLocation, Object obj, FileLoadOperationStream fileLoadOperationStream, long j, boolean z, CountDownLatch countDownLatch) {
         ImageLocation imageLocation2 = imageLocation;
         String str = null;
         TLRPC$TL_fileLocationToBeDeprecated tLRPC$TL_fileLocationToBeDeprecated = (tLRPC$Document != null || imageLocation2 == null) ? null : imageLocation2.location;
         if (tLRPC$Document == null && imageLocation2 != null) {
             str = "mp4";
         }
-        fileLoadOperationArr[0] = loadFileInternal(tLRPC$Document, (SecureDocument) null, (WebFile) null, tLRPC$TL_fileLocationToBeDeprecated, imageLocation, obj, str, (tLRPC$Document != null || imageLocation2 == null) ? 0 : imageLocation2.currentSize, 1, fileLoadOperationStream, i, z, tLRPC$Document == null ? 1 : 0);
+        fileLoadOperationArr[0] = loadFileInternal(tLRPC$Document, (SecureDocument) null, (WebFile) null, tLRPC$TL_fileLocationToBeDeprecated, imageLocation, obj, str, (tLRPC$Document != null || imageLocation2 == null) ? 0 : imageLocation2.currentSize, 1, fileLoadOperationStream, j, z, tLRPC$Document == null ? 1 : 0);
         countDownLatch.countDown();
     }
 

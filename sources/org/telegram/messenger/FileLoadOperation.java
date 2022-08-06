@@ -786,10 +786,10 @@ public class FileLoadOperation {
     }
 
     /* access modifiers changed from: protected */
-    public long[] getDownloadedLengthFromOffset(int i, long j) {
+    public long[] getDownloadedLengthFromOffset(long j, long j2) {
         CountDownLatch countDownLatch = new CountDownLatch(1);
         long[] jArr = new long[2];
-        Utilities.stageQueue.postRunnable(new FileLoadOperation$$ExternalSyntheticLambda8(this, jArr, i, j, countDownLatch));
+        Utilities.stageQueue.postRunnable(new FileLoadOperation$$ExternalSyntheticLambda8(this, jArr, j, j2, countDownLatch));
         try {
             countDownLatch.await();
         } catch (Exception unused) {
@@ -798,8 +798,8 @@ public class FileLoadOperation {
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$getDownloadedLengthFromOffset$2(long[] jArr, int i, long j, CountDownLatch countDownLatch) {
-        jArr[0] = getDownloadedLengthFromOffsetInternal(this.notLoadedBytesRanges, (long) i, j);
+    public /* synthetic */ void lambda$getDownloadedLengthFromOffset$2(long[] jArr, long j, long j2, CountDownLatch countDownLatch) {
+        jArr[0] = getDownloadedLengthFromOffsetInternal(this.notLoadedBytesRanges, j, j2);
         if (this.state == 3) {
             jArr[1] = 1;
         }

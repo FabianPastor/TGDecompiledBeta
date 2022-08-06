@@ -120,6 +120,7 @@ public class TrendingStickersAlert extends BottomSheet {
         private float[] radii = new float[8];
         private float statusBarAlpha = 0.0f;
         private ValueAnimator statusBarAnimator;
+        private boolean statusBarOpen;
         private boolean statusBarVisible = false;
 
         public AlertContainerView(Context context) {
@@ -221,33 +222,52 @@ public class TrendingStickersAlert extends BottomSheet {
             canvas.restore();
         }
 
+        private void updateLightStatusBar(boolean z) {
+            if (this.statusBarOpen != z) {
+                this.statusBarOpen = z;
+                boolean z2 = true;
+                boolean z3 = AndroidUtilities.computePerceivedBrightness(TrendingStickersAlert.this.getThemedColor("dialogBackground")) > 0.721f;
+                if (AndroidUtilities.computePerceivedBrightness(Theme.blendOver(TrendingStickersAlert.this.getThemedColor("actionBarDefault"), NUM)) <= 0.721f) {
+                    z2 = false;
+                }
+                if (!z) {
+                    z3 = z2;
+                }
+                AndroidUtilities.setLightStatusBar(TrendingStickersAlert.this.getWindow(), z3);
+            }
+        }
+
         /* access modifiers changed from: protected */
         public void dispatchDraw(Canvas canvas) {
-            super.dispatchDraw(canvas);
             float fraction = getFraction();
+            boolean z = true;
+            int i = 0;
+            setStatusBarVisible(fraction == 0.0f && Build.VERSION.SDK_INT >= 21 && !TrendingStickersAlert.this.isDismissed(), true);
+            if (this.statusBarAlpha <= 0.5f) {
+                z = false;
+            }
+            updateLightStatusBar(z);
+            if (this.statusBarAlpha > 0.0f) {
+                this.paint.setColor(TrendingStickersAlert.this.getThemedColor("dialogBackground"));
+                int max = (int) Math.max(0.0f, ((float) TrendingStickersAlert.this.scrollOffsetY) + (((float) TrendingStickersAlert.this.topOffset) * (1.0f - getFraction())) + ((float) AndroidUtilities.dp(24.0f)) + TrendingStickersAlert.this.layout.getTranslationY() + ((float) ((Build.VERSION.SDK_INT >= 21 ? AndroidUtilities.statusBarHeight : 0) - TrendingStickersAlert.this.topOffset)));
+                canvas.drawRect((float) TrendingStickersAlert.this.backgroundPaddingLeft, (float) AndroidUtilities.lerp(max, -AndroidUtilities.statusBarHeight, this.statusBarAlpha), (float) (getMeasuredWidth() - TrendingStickersAlert.this.backgroundPaddingLeft), (float) max, this.paint);
+            }
+            super.dispatchDraw(canvas);
             canvas.save();
             float translationY = TrendingStickersAlert.this.layout.getTranslationY();
-            int i = Build.VERSION.SDK_INT;
-            boolean z = false;
-            canvas.translate(0.0f, (translationY + ((float) (i >= 21 ? AndroidUtilities.statusBarHeight : 0))) - ((float) TrendingStickersAlert.this.topOffset));
+            if (Build.VERSION.SDK_INT >= 21) {
+                i = AndroidUtilities.statusBarHeight;
+            }
+            canvas.translate(0.0f, (translationY + ((float) i)) - ((float) TrendingStickersAlert.this.topOffset));
             int dp = AndroidUtilities.dp(36.0f);
             int dp2 = AndroidUtilities.dp(4.0f);
             int i2 = (int) (((float) dp2) * 2.0f * (1.0f - fraction));
             TrendingStickersAlert.this.shapeDrawable.setCornerRadius((float) AndroidUtilities.dp(2.0f));
-            int access$1600 = TrendingStickersAlert.this.getThemedColor("key_sheet_scrollUp");
-            TrendingStickersAlert.this.shapeDrawable.setColor(ColorUtils.setAlphaComponent(access$1600, (int) (((float) Color.alpha(access$1600)) * fraction)));
+            int access$2100 = TrendingStickersAlert.this.getThemedColor("key_sheet_scrollUp");
+            TrendingStickersAlert.this.shapeDrawable.setColor(ColorUtils.setAlphaComponent(access$2100, (int) (((float) Color.alpha(access$2100)) * fraction)));
             TrendingStickersAlert.this.shapeDrawable.setBounds((getWidth() - dp) / 2, TrendingStickersAlert.this.scrollOffsetY + AndroidUtilities.dp(10.0f) + i2, (getWidth() + dp) / 2, TrendingStickersAlert.this.scrollOffsetY + AndroidUtilities.dp(10.0f) + i2 + dp2);
             TrendingStickersAlert.this.shapeDrawable.draw(canvas);
             canvas.restore();
-            if (fraction == 0.0f && i >= 21 && !TrendingStickersAlert.this.isDismissed()) {
-                z = true;
-            }
-            setStatusBarVisible(z, true);
-            if (this.statusBarAlpha > 0.0f) {
-                int access$1700 = TrendingStickersAlert.this.getThemedColor("dialogBackground");
-                this.paint.setColor(Color.argb((int) (this.statusBarAlpha * 255.0f), (int) (((float) Color.red(access$1700)) * 0.8f), (int) (((float) Color.green(access$1700)) * 0.8f), (int) (((float) Color.blue(access$1700)) * 0.8f)));
-                canvas.drawRect((float) TrendingStickersAlert.this.backgroundPaddingLeft, 0.0f, (float) (getMeasuredWidth() - TrendingStickersAlert.this.backgroundPaddingLeft), (float) AndroidUtilities.statusBarHeight, this.paint);
-            }
         }
 
         public void setTranslationY(float f) {

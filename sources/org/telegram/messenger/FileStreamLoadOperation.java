@@ -21,7 +21,7 @@ public class FileStreamLoadOperation extends BaseDataSource implements FileLoadO
     private long bytesRemaining;
     private CountDownLatch countDownLatch;
     private int currentAccount;
-    private int currentOffset;
+    private long currentOffset;
     private TLRPC$Document document;
     private RandomAccessFile file;
     private FileLoadOperation loadOperation;
@@ -70,21 +70,21 @@ public class FileStreamLoadOperation extends BaseDataSource implements FileLoadO
         FileLoader instance = FileLoader.getInstance(this.currentAccount);
         TLRPC$Document tLRPC$Document = this.document;
         Object obj = this.parentObject;
-        int i = (int) dataSpec.position;
-        this.currentOffset = i;
-        this.loadOperation = instance.loadStreamFile(this, tLRPC$Document, (ImageLocation) null, obj, i, false);
-        long j = dataSpec.length;
-        if (j == -1) {
-            j = this.document.size - dataSpec.position;
+        long j = dataSpec.position;
+        this.currentOffset = j;
+        this.loadOperation = instance.loadStreamFile(this, tLRPC$Document, (ImageLocation) null, obj, j, false);
+        long j2 = dataSpec.length;
+        if (j2 == -1) {
+            j2 = this.document.size - dataSpec.position;
         }
-        this.bytesRemaining = j;
-        if (j >= 0) {
+        this.bytesRemaining = j2;
+        if (j2 >= 0) {
             this.opened = true;
             transferStarted(dataSpec);
             if (this.loadOperation != null) {
                 RandomAccessFile randomAccessFile = new RandomAccessFile(this.loadOperation.getCurrentFile(), "r");
                 this.file = randomAccessFile;
-                randomAccessFile.seek((long) this.currentOffset);
+                randomAccessFile.seek(this.currentOffset);
             }
             return this.bytesRemaining;
         }
@@ -123,8 +123,9 @@ public class FileStreamLoadOperation extends BaseDataSource implements FileLoadO
             return 0;
         }
         this.file.readFully(bArr, i, i3);
-        this.currentOffset += i3;
-        this.bytesRemaining -= (long) i3;
+        long j2 = (long) i3;
+        this.currentOffset += j2;
+        this.bytesRemaining -= j2;
         bytesTransferred(i3);
         return i3;
     }

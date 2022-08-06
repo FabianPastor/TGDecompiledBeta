@@ -202,6 +202,10 @@ public class MentionCell extends LinearLayout {
             int dp = AndroidUtilities.dp(drawable instanceof AnimatedEmojiDrawable ? 24.0f : 20.0f);
             int dp2 = AndroidUtilities.dp(this.emojiDrawable instanceof AnimatedEmojiDrawable ? -2.0f : 0.0f);
             this.emojiDrawable.setBounds(this.nameTextView.getLeft() + dp2, ((this.nameTextView.getTop() + this.nameTextView.getBottom()) - dp) / 2, this.nameTextView.getLeft() + dp2 + dp, ((this.nameTextView.getTop() + this.nameTextView.getBottom()) + dp) / 2);
+            Drawable drawable2 = this.emojiDrawable;
+            if (drawable2 instanceof AnimatedEmojiDrawable) {
+                ((AnimatedEmojiDrawable) drawable2).setTime(System.currentTimeMillis());
+            }
             this.emojiDrawable.draw(canvas);
         }
     }

@@ -10,18 +10,18 @@ public final /* synthetic */ class FileLoader$$ExternalSyntheticLambda13 impleme
     public final /* synthetic */ ImageLocation f$3;
     public final /* synthetic */ Object f$4;
     public final /* synthetic */ FileLoadOperationStream f$5;
-    public final /* synthetic */ int f$6;
+    public final /* synthetic */ long f$6;
     public final /* synthetic */ boolean f$7;
     public final /* synthetic */ CountDownLatch f$8;
 
-    public /* synthetic */ FileLoader$$ExternalSyntheticLambda13(FileLoader fileLoader, FileLoadOperation[] fileLoadOperationArr, TLRPC$Document tLRPC$Document, ImageLocation imageLocation, Object obj, FileLoadOperationStream fileLoadOperationStream, int i, boolean z, CountDownLatch countDownLatch) {
+    public /* synthetic */ FileLoader$$ExternalSyntheticLambda13(FileLoader fileLoader, FileLoadOperation[] fileLoadOperationArr, TLRPC$Document tLRPC$Document, ImageLocation imageLocation, Object obj, FileLoadOperationStream fileLoadOperationStream, long j, boolean z, CountDownLatch countDownLatch) {
         this.f$0 = fileLoader;
         this.f$1 = fileLoadOperationArr;
         this.f$2 = tLRPC$Document;
         this.f$3 = imageLocation;
         this.f$4 = obj;
         this.f$5 = fileLoadOperationStream;
-        this.f$6 = i;
+        this.f$6 = j;
         this.f$7 = z;
         this.f$8 = countDownLatch;
     }

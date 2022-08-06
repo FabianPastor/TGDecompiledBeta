@@ -19,6 +19,7 @@ public class BackDrawable extends Drawable {
     private DecelerateInterpolator interpolator = new DecelerateInterpolator();
     private long lastFrameTime;
     private Paint paint = new Paint(1);
+    private Paint prevPaint = new Paint(1);
     private boolean reverseAngle;
     private boolean rotated = true;
     private int rotatedColor = -9079435;
@@ -30,6 +31,8 @@ public class BackDrawable extends Drawable {
     public BackDrawable(boolean z) {
         this.paint.setStrokeWidth((float) AndroidUtilities.dp(2.0f));
         this.paint.setStrokeCap(Paint.Cap.ROUND);
+        this.prevPaint.setStrokeWidth((float) AndroidUtilities.dp(2.0f));
+        this.prevPaint.setColor(-65536);
         this.alwaysClose = z;
     }
 
@@ -77,7 +80,7 @@ public class BackDrawable extends Drawable {
     }
 
     public void draw(Canvas canvas) {
-        float f = 1.0f;
+        float f;
         if (this.currentRotation != this.finalRotation) {
             if (this.lastFrameTime != 0) {
                 int currentTimeMillis = (int) (((long) this.currentAnimationTime) + (System.currentTimeMillis() - this.lastFrameTime));
@@ -113,15 +116,16 @@ public class BackDrawable extends Drawable {
             f = f3;
         } else {
             canvas.rotate((f3 * ((float) (this.reverseAngle ? -180 : 180))) + 135.0f);
+            f = 1.0f;
         }
-        Canvas canvas2 = canvas;
-        canvas2.drawLine((float) AndroidUtilities.dp(AndroidUtilities.lerp(-6.75f, -8.0f, f)), 0.0f, (float) AndroidUtilities.dp(8.0f), 0.0f, this.paint);
+        float f4 = 1.0f - f;
+        canvas.drawLine((float) AndroidUtilities.dp(AndroidUtilities.lerp(-6.75f, -8.0f, f)), 0.0f, ((float) AndroidUtilities.dp(8.0f)) - ((this.paint.getStrokeWidth() / 2.0f) * f4), 0.0f, this.paint);
         float dp = (float) AndroidUtilities.dp(-0.25f);
-        float dp2 = (float) AndroidUtilities.dp(AndroidUtilities.lerp(7.0f, 8.0f, f));
+        float dp2 = ((float) AndroidUtilities.dp(AndroidUtilities.lerp(7.0f, 8.0f, f))) - ((this.paint.getStrokeWidth() / 4.0f) * f4);
+        Canvas canvas2 = canvas;
         float dp3 = (float) AndroidUtilities.dp(AndroidUtilities.lerp(-7.25f, 0.0f, f));
-        float dp4 = (float) AndroidUtilities.dp(AndroidUtilities.lerp(0.5f, 0.0f, f));
-        canvas.drawLine(dp3, -dp, dp4, -dp2, this.paint);
-        canvas2.drawLine(dp3, dp, dp4, dp2, this.paint);
+        canvas2.drawLine(dp3, -dp, 0.0f, -dp2, this.paint);
+        canvas2.drawLine(dp3, dp, 0.0f, dp2, this.paint);
         canvas.restore();
     }
 

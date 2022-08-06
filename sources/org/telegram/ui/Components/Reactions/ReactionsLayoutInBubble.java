@@ -225,12 +225,10 @@ public class ReactionsLayoutInBubble {
                     }
                 }
                 int size = this.reactionButtons.size() - 1;
-                if (i10 != size) {
-                    int i14 = i3 - (this.reactionButtons.get(size).x + this.reactionButtons.get(size).width);
-                    while (i10 <= size) {
-                        this.reactionButtons.get(i10).x += i14;
-                        i10++;
-                    }
+                int i14 = i3 - (this.reactionButtons.get(size).x + this.reactionButtons.get(size).width);
+                while (i10 <= size) {
+                    this.reactionButtons.get(i10).x += i14;
+                    i10++;
                 }
             }
             this.lastLineX = i5;

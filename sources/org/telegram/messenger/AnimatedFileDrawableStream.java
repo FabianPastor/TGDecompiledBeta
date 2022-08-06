@@ -36,216 +36,230 @@ public class AnimatedFileDrawableStream implements FileLoadOperationStream {
     }
 
     /* JADX WARNING: Code restructure failed: missing block: B:10:0x0014, code lost:
+        r12 = 0;
         r1 = 0;
      */
     /* JADX WARNING: Code restructure failed: missing block: B:12:0x0019, code lost:
-        if (r1 != 0) goto L_0x00a7;
+        if (r1 != r12) goto L_0x00af;
      */
     /* JADX WARNING: Code restructure failed: missing block: B:14:?, code lost:
-        r3 = r8.loadOperation.getDownloadedLengthFromOffset(r0, (long) r9);
-        r13 = r3[0];
+        r6 = (long) r0;
+        r3 = r9.loadOperation.getDownloadedLengthFromOffset(r6, (long) r10);
+        r14 = r3[0];
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:17:0x0027, code lost:
-        if (r8.finishedLoadingFile != false) goto L_0x003d;
+    /* JADX WARNING: Code restructure failed: missing block: B:17:0x0028, code lost:
+        if (r9.finishedLoadingFile != false) goto L_0x003e;
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:19:0x002d, code lost:
-        if (r3[1] == 0) goto L_0x003d;
+    /* JADX WARNING: Code restructure failed: missing block: B:19:0x002e, code lost:
+        if (r3[1] == r12) goto L_0x003e;
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:20:0x002f, code lost:
-        r8.finishedLoadingFile = true;
-        r8.finishedFilePath = r8.loadOperation.getCacheFileFinal().getAbsolutePath();
+    /* JADX WARNING: Code restructure failed: missing block: B:20:0x0030, code lost:
+        r9.finishedLoadingFile = true;
+        r9.finishedFilePath = r9.loadOperation.getCacheFileFinal().getAbsolutePath();
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:22:0x003f, code lost:
-        if (r13 != 0) goto L_0x00a1;
+    /* JADX WARNING: Code restructure failed: missing block: B:22:0x0040, code lost:
+        if (r14 != r12) goto L_0x00a7;
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:24:0x0047, code lost:
-        if (r8.loadOperation.isPaused() != false) goto L_0x0054;
+    /* JADX WARNING: Code restructure failed: missing block: B:24:0x0048, code lost:
+        if (r9.loadOperation.isPaused() != false) goto L_0x0057;
      */
     /* JADX WARNING: Code restructure failed: missing block: B:26:0x004e, code lost:
-        if (r8.lastOffset != ((long) r0)) goto L_0x0054;
+        if (r9.lastOffset != r6) goto L_0x0057;
      */
     /* JADX WARNING: Code restructure failed: missing block: B:28:0x0052, code lost:
-        if (r8.preview == false) goto L_0x0069;
+        if (r9.preview == false) goto L_0x0055;
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:29:0x0054, code lost:
-        org.telegram.messenger.FileLoader.getInstance(r8.currentAccount).loadStreamFile(r16, r8.document, r8.location, r8.parentObject, r17, r8.preview);
+    /* JADX WARNING: Code restructure failed: missing block: B:30:0x0055, code lost:
+        r12 = true;
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:30:0x0069, code lost:
-        r1 = r8.sync;
+    /* JADX WARNING: Code restructure failed: missing block: B:31:0x0057, code lost:
+        r12 = true;
+        org.telegram.messenger.FileLoader.getInstance(r9.currentAccount).loadStreamFile(r17, r9.document, r9.location, r9.parentObject, r6, r9.preview);
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:31:0x006b, code lost:
+    /* JADX WARNING: Code restructure failed: missing block: B:32:0x006f, code lost:
+        r1 = r9.sync;
+     */
+    /* JADX WARNING: Code restructure failed: missing block: B:33:0x0071, code lost:
         monitor-enter(r1);
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:34:0x006e, code lost:
-        if (r8.canceled == false) goto L_0x007d;
+    /* JADX WARNING: Code restructure failed: missing block: B:36:0x0074, code lost:
+        if (r9.canceled == false) goto L_0x0083;
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:35:0x0070, code lost:
-        org.telegram.messenger.FileLoader.getInstance(r8.currentAccount).cancelLoadFile(r8.document);
+    /* JADX WARNING: Code restructure failed: missing block: B:37:0x0076, code lost:
+        org.telegram.messenger.FileLoader.getInstance(r9.currentAccount).cancelLoadFile(r9.document);
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:36:0x007b, code lost:
+    /* JADX WARNING: Code restructure failed: missing block: B:38:0x0081, code lost:
         monitor-exit(r1);
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:37:0x007c, code lost:
+    /* JADX WARNING: Code restructure failed: missing block: B:39:0x0082, code lost:
         return 0;
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:38:0x007d, code lost:
-        r8.countDownLatch = new java.util.concurrent.CountDownLatch(1);
+    /* JADX WARNING: Code restructure failed: missing block: B:40:0x0083, code lost:
+        r9.countDownLatch = new java.util.concurrent.CountDownLatch(r12 ? 1 : 0);
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:39:0x0084, code lost:
+    /* JADX WARNING: Code restructure failed: missing block: B:41:0x008a, code lost:
         monitor-exit(r1);
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:42:0x0087, code lost:
-        if (r8.preview != false) goto L_0x0094;
+    /* JADX WARNING: Code restructure failed: missing block: B:44:0x008d, code lost:
+        if (r9.preview != false) goto L_0x009a;
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:43:0x0089, code lost:
-        org.telegram.messenger.FileLoader.getInstance(r8.currentAccount).setLoadingVideo(r8.document, false, true);
+    /* JADX WARNING: Code restructure failed: missing block: B:45:0x008f, code lost:
+        org.telegram.messenger.FileLoader.getInstance(r9.currentAccount).setLoadingVideo(r9.document, false, r12);
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:44:0x0094, code lost:
-        r8.waitingForLoad = true;
-        r8.countDownLatch.await();
-        r8.waitingForLoad = false;
+    /* JADX WARNING: Code restructure failed: missing block: B:46:0x009a, code lost:
+        r9.waitingForLoad = r12;
+        r9.countDownLatch.await();
+        r9.waitingForLoad = false;
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:50:0x00a1, code lost:
-        r1 = r13;
+    /* JADX WARNING: Code restructure failed: missing block: B:52:0x00a7, code lost:
+        r1 = r14;
+        r12 = 0;
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:51:0x00a4, code lost:
+    /* JADX WARNING: Code restructure failed: missing block: B:53:0x00ac, code lost:
         r0 = e;
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:52:0x00a5, code lost:
-        r1 = r13;
+    /* JADX WARNING: Code restructure failed: missing block: B:54:0x00ad, code lost:
+        r1 = r14;
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:55:?, code lost:
-        r8.lastOffset = ((long) r0) + r1;
+    /* JADX WARNING: Code restructure failed: missing block: B:57:?, code lost:
+        r9.lastOffset = ((long) r0) + r1;
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:56:0x00ac, code lost:
+    /* JADX WARNING: Code restructure failed: missing block: B:58:0x00b4, code lost:
         r0 = e;
      */
     /* JADX WARNING: Code restructure failed: missing block: B:8:0x0011, code lost:
-        if (r9 != 0) goto L_0x0014;
+        if (r10 != 0) goto L_0x0014;
      */
     /* JADX WARNING: Code restructure failed: missing block: B:9:0x0013, code lost:
         return 0;
      */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    public int read(int r17, int r18) {
+    public int read(int r18, int r19) {
         /*
-            r16 = this;
-            r8 = r16
-            r0 = r17
-            r9 = r18
-            java.lang.Object r1 = r8.sync
+            r17 = this;
+            r9 = r17
+            r0 = r18
+            r10 = r19
+            java.lang.Object r1 = r9.sync
             monitor-enter(r1)
-            boolean r2 = r8.canceled     // Catch:{ all -> 0x00b2 }
-            r10 = 0
-            if (r2 == 0) goto L_0x0010
-            monitor-exit(r1)     // Catch:{ all -> 0x00b2 }
-            return r10
-        L_0x0010:
-            monitor-exit(r1)     // Catch:{ all -> 0x00b2 }
-            if (r9 != 0) goto L_0x0014
-            return r10
-        L_0x0014:
+            boolean r2 = r9.canceled     // Catch:{ all -> 0x00ba }
             r11 = 0
-            r1 = r11
+            if (r2 == 0) goto L_0x0010
+            monitor-exit(r1)     // Catch:{ all -> 0x00ba }
+            return r11
+        L_0x0010:
+            monitor-exit(r1)     // Catch:{ all -> 0x00ba }
+            if (r10 != 0) goto L_0x0014
+            return r11
+        L_0x0014:
+            r12 = 0
+            r1 = r12
         L_0x0017:
-            int r3 = (r1 > r11 ? 1 : (r1 == r11 ? 0 : -1))
-            if (r3 != 0) goto L_0x00a7
-            org.telegram.messenger.FileLoadOperation r3 = r8.loadOperation     // Catch:{ Exception -> 0x00ac }
-            long r4 = (long) r9     // Catch:{ Exception -> 0x00ac }
-            long[] r3 = r3.getDownloadedLengthFromOffset(r0, r4)     // Catch:{ Exception -> 0x00ac }
-            r13 = r3[r10]     // Catch:{ Exception -> 0x00ac }
-            boolean r1 = r8.finishedLoadingFile     // Catch:{ Exception -> 0x00a4 }
-            r15 = 1
-            if (r1 != 0) goto L_0x003d
-            r1 = r3[r15]     // Catch:{ Exception -> 0x00a4 }
-            int r3 = (r1 > r11 ? 1 : (r1 == r11 ? 0 : -1))
-            if (r3 == 0) goto L_0x003d
-            r8.finishedLoadingFile = r15     // Catch:{ Exception -> 0x00a4 }
-            org.telegram.messenger.FileLoadOperation r1 = r8.loadOperation     // Catch:{ Exception -> 0x00a4 }
-            java.io.File r1 = r1.getCacheFileFinal()     // Catch:{ Exception -> 0x00a4 }
-            java.lang.String r1 = r1.getAbsolutePath()     // Catch:{ Exception -> 0x00a4 }
-            r8.finishedFilePath = r1     // Catch:{ Exception -> 0x00a4 }
-        L_0x003d:
-            int r1 = (r13 > r11 ? 1 : (r13 == r11 ? 0 : -1))
-            if (r1 != 0) goto L_0x00a1
-            org.telegram.messenger.FileLoadOperation r1 = r8.loadOperation     // Catch:{ Exception -> 0x00a4 }
-            boolean r1 = r1.isPaused()     // Catch:{ Exception -> 0x00a4 }
-            if (r1 != 0) goto L_0x0054
-            long r1 = r8.lastOffset     // Catch:{ Exception -> 0x00a4 }
-            long r3 = (long) r0     // Catch:{ Exception -> 0x00a4 }
-            int r5 = (r1 > r3 ? 1 : (r1 == r3 ? 0 : -1))
-            if (r5 != 0) goto L_0x0054
-            boolean r1 = r8.preview     // Catch:{ Exception -> 0x00a4 }
-            if (r1 == 0) goto L_0x0069
-        L_0x0054:
-            int r1 = r8.currentAccount     // Catch:{ Exception -> 0x00a4 }
-            org.telegram.messenger.FileLoader r1 = org.telegram.messenger.FileLoader.getInstance(r1)     // Catch:{ Exception -> 0x00a4 }
-            org.telegram.tgnet.TLRPC$Document r3 = r8.document     // Catch:{ Exception -> 0x00a4 }
-            org.telegram.messenger.ImageLocation r4 = r8.location     // Catch:{ Exception -> 0x00a4 }
-            java.lang.Object r5 = r8.parentObject     // Catch:{ Exception -> 0x00a4 }
-            boolean r7 = r8.preview     // Catch:{ Exception -> 0x00a4 }
-            r2 = r16
-            r6 = r17
-            r1.loadStreamFile(r2, r3, r4, r5, r6, r7)     // Catch:{ Exception -> 0x00a4 }
-        L_0x0069:
-            java.lang.Object r1 = r8.sync     // Catch:{ Exception -> 0x00a4 }
-            monitor-enter(r1)     // Catch:{ Exception -> 0x00a4 }
-            boolean r2 = r8.canceled     // Catch:{ all -> 0x009e }
-            if (r2 == 0) goto L_0x007d
-            int r0 = r8.currentAccount     // Catch:{ all -> 0x009e }
-            org.telegram.messenger.FileLoader r0 = org.telegram.messenger.FileLoader.getInstance(r0)     // Catch:{ all -> 0x009e }
-            org.telegram.tgnet.TLRPC$Document r2 = r8.document     // Catch:{ all -> 0x009e }
-            r0.cancelLoadFile((org.telegram.tgnet.TLRPC$Document) r2)     // Catch:{ all -> 0x009e }
-            monitor-exit(r1)     // Catch:{ all -> 0x009e }
-            return r10
-        L_0x007d:
-            java.util.concurrent.CountDownLatch r2 = new java.util.concurrent.CountDownLatch     // Catch:{ all -> 0x009e }
-            r2.<init>(r15)     // Catch:{ all -> 0x009e }
-            r8.countDownLatch = r2     // Catch:{ all -> 0x009e }
-            monitor-exit(r1)     // Catch:{ all -> 0x009e }
-            boolean r1 = r8.preview     // Catch:{ Exception -> 0x00a4 }
-            if (r1 != 0) goto L_0x0094
-            int r1 = r8.currentAccount     // Catch:{ Exception -> 0x00a4 }
-            org.telegram.messenger.FileLoader r1 = org.telegram.messenger.FileLoader.getInstance(r1)     // Catch:{ Exception -> 0x00a4 }
-            org.telegram.tgnet.TLRPC$Document r2 = r8.document     // Catch:{ Exception -> 0x00a4 }
-            r1.setLoadingVideo(r2, r10, r15)     // Catch:{ Exception -> 0x00a4 }
-        L_0x0094:
-            r8.waitingForLoad = r15     // Catch:{ Exception -> 0x00a4 }
-            java.util.concurrent.CountDownLatch r1 = r8.countDownLatch     // Catch:{ Exception -> 0x00a4 }
-            r1.await()     // Catch:{ Exception -> 0x00a4 }
-            r8.waitingForLoad = r10     // Catch:{ Exception -> 0x00a4 }
-            goto L_0x00a1
-        L_0x009e:
-            r0 = move-exception
-            monitor-exit(r1)     // Catch:{ all -> 0x009e }
-            throw r0     // Catch:{ Exception -> 0x00a4 }
-        L_0x00a1:
-            r1 = r13
-            goto L_0x0017
+            int r3 = (r1 > r12 ? 1 : (r1 == r12 ? 0 : -1))
+            if (r3 != 0) goto L_0x00af
+            org.telegram.messenger.FileLoadOperation r3 = r9.loadOperation     // Catch:{ Exception -> 0x00b4 }
+            long r6 = (long) r0     // Catch:{ Exception -> 0x00b4 }
+            long r4 = (long) r10     // Catch:{ Exception -> 0x00b4 }
+            long[] r3 = r3.getDownloadedLengthFromOffset(r6, r4)     // Catch:{ Exception -> 0x00b4 }
+            r14 = r3[r11]     // Catch:{ Exception -> 0x00b4 }
+            boolean r1 = r9.finishedLoadingFile     // Catch:{ Exception -> 0x00ac }
+            r8 = 1
+            if (r1 != 0) goto L_0x003e
+            r1 = r3[r8]     // Catch:{ Exception -> 0x00ac }
+            int r3 = (r1 > r12 ? 1 : (r1 == r12 ? 0 : -1))
+            if (r3 == 0) goto L_0x003e
+            r9.finishedLoadingFile = r8     // Catch:{ Exception -> 0x00ac }
+            org.telegram.messenger.FileLoadOperation r1 = r9.loadOperation     // Catch:{ Exception -> 0x00ac }
+            java.io.File r1 = r1.getCacheFileFinal()     // Catch:{ Exception -> 0x00ac }
+            java.lang.String r1 = r1.getAbsolutePath()     // Catch:{ Exception -> 0x00ac }
+            r9.finishedFilePath = r1     // Catch:{ Exception -> 0x00ac }
+        L_0x003e:
+            int r1 = (r14 > r12 ? 1 : (r14 == r12 ? 0 : -1))
+            if (r1 != 0) goto L_0x00a7
+            org.telegram.messenger.FileLoadOperation r1 = r9.loadOperation     // Catch:{ Exception -> 0x00ac }
+            boolean r1 = r1.isPaused()     // Catch:{ Exception -> 0x00ac }
+            if (r1 != 0) goto L_0x0057
+            long r1 = r9.lastOffset     // Catch:{ Exception -> 0x00ac }
+            int r3 = (r1 > r6 ? 1 : (r1 == r6 ? 0 : -1))
+            if (r3 != 0) goto L_0x0057
+            boolean r1 = r9.preview     // Catch:{ Exception -> 0x00ac }
+            if (r1 == 0) goto L_0x0055
+            goto L_0x0057
+        L_0x0055:
+            r12 = 1
+            goto L_0x006f
+        L_0x0057:
+            int r1 = r9.currentAccount     // Catch:{ Exception -> 0x00ac }
+            org.telegram.messenger.FileLoader r1 = org.telegram.messenger.FileLoader.getInstance(r1)     // Catch:{ Exception -> 0x00ac }
+            org.telegram.tgnet.TLRPC$Document r3 = r9.document     // Catch:{ Exception -> 0x00ac }
+            org.telegram.messenger.ImageLocation r4 = r9.location     // Catch:{ Exception -> 0x00ac }
+            java.lang.Object r5 = r9.parentObject     // Catch:{ Exception -> 0x00ac }
+            boolean r2 = r9.preview     // Catch:{ Exception -> 0x00ac }
+            r16 = r2
+            r2 = r17
+            r12 = 1
+            r8 = r16
+            r1.loadStreamFile(r2, r3, r4, r5, r6, r8)     // Catch:{ Exception -> 0x00ac }
+        L_0x006f:
+            java.lang.Object r1 = r9.sync     // Catch:{ Exception -> 0x00ac }
+            monitor-enter(r1)     // Catch:{ Exception -> 0x00ac }
+            boolean r2 = r9.canceled     // Catch:{ all -> 0x00a4 }
+            if (r2 == 0) goto L_0x0083
+            int r0 = r9.currentAccount     // Catch:{ all -> 0x00a4 }
+            org.telegram.messenger.FileLoader r0 = org.telegram.messenger.FileLoader.getInstance(r0)     // Catch:{ all -> 0x00a4 }
+            org.telegram.tgnet.TLRPC$Document r2 = r9.document     // Catch:{ all -> 0x00a4 }
+            r0.cancelLoadFile((org.telegram.tgnet.TLRPC$Document) r2)     // Catch:{ all -> 0x00a4 }
+            monitor-exit(r1)     // Catch:{ all -> 0x00a4 }
+            return r11
+        L_0x0083:
+            java.util.concurrent.CountDownLatch r2 = new java.util.concurrent.CountDownLatch     // Catch:{ all -> 0x00a4 }
+            r2.<init>(r12)     // Catch:{ all -> 0x00a4 }
+            r9.countDownLatch = r2     // Catch:{ all -> 0x00a4 }
+            monitor-exit(r1)     // Catch:{ all -> 0x00a4 }
+            boolean r1 = r9.preview     // Catch:{ Exception -> 0x00ac }
+            if (r1 != 0) goto L_0x009a
+            int r1 = r9.currentAccount     // Catch:{ Exception -> 0x00ac }
+            org.telegram.messenger.FileLoader r1 = org.telegram.messenger.FileLoader.getInstance(r1)     // Catch:{ Exception -> 0x00ac }
+            org.telegram.tgnet.TLRPC$Document r2 = r9.document     // Catch:{ Exception -> 0x00ac }
+            r1.setLoadingVideo(r2, r11, r12)     // Catch:{ Exception -> 0x00ac }
+        L_0x009a:
+            r9.waitingForLoad = r12     // Catch:{ Exception -> 0x00ac }
+            java.util.concurrent.CountDownLatch r1 = r9.countDownLatch     // Catch:{ Exception -> 0x00ac }
+            r1.await()     // Catch:{ Exception -> 0x00ac }
+            r9.waitingForLoad = r11     // Catch:{ Exception -> 0x00ac }
+            goto L_0x00a7
         L_0x00a4:
             r0 = move-exception
-            r1 = r13
-            goto L_0x00ad
+            monitor-exit(r1)     // Catch:{ all -> 0x00a4 }
+            throw r0     // Catch:{ Exception -> 0x00ac }
         L_0x00a7:
-            long r3 = (long) r0
-            long r3 = r3 + r1
-            r8.lastOffset = r3     // Catch:{ Exception -> 0x00ac }
-            goto L_0x00b0
+            r1 = r14
+            r12 = 0
+            goto L_0x0017
         L_0x00ac:
             r0 = move-exception
-        L_0x00ad:
-            org.telegram.messenger.FileLog.e((java.lang.Throwable) r0, (boolean) r10)
-        L_0x00b0:
+            r1 = r14
+            goto L_0x00b5
+        L_0x00af:
+            long r3 = (long) r0
+            long r3 = r3 + r1
+            r9.lastOffset = r3     // Catch:{ Exception -> 0x00b4 }
+            goto L_0x00b8
+        L_0x00b4:
+            r0 = move-exception
+        L_0x00b5:
+            org.telegram.messenger.FileLog.e((java.lang.Throwable) r0, (boolean) r11)
+        L_0x00b8:
             int r0 = (int) r1
             return r0
-        L_0x00b2:
+        L_0x00ba:
             r0 = move-exception
-            monitor-exit(r1)     // Catch:{ all -> 0x00b2 }
-            goto L_0x00b6
-        L_0x00b5:
+            monitor-exit(r1)     // Catch:{ all -> 0x00ba }
+            goto L_0x00be
+        L_0x00bd:
             throw r0
-        L_0x00b6:
-            goto L_0x00b5
+        L_0x00be:
+            goto L_0x00bd
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.AnimatedFileDrawableStream.read(int, int):int");
     }
